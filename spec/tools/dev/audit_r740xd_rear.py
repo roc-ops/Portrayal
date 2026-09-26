@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
     # ---- B.3, the measured geometry ------------------------------------------
     checks = []
-    riser = comp('dell/riser-2a-14g@1')
+    riser = comp('dell/riser-2a-14g@2')
     rows = sorted(v['at'][1] for v in (riser.get('bays') or {}).values())
     if len(rows) >= 2:
         pitch = (rows[-1] - rows[0]) / (len(rows) - 1)

@@ -1,0 +1,151 @@
+format: 1
+kind: module
+name: riser-2d-14g
+version: 2.0.0
+class: riser
+behaviour: fills
+profile: server
+description: >-
+  Dell riser 2D - 3 wired slots on the shared riser 2 plate
+attrs:
+  riser: '2D'
+  bracket-envelope: '120.02 x 62.0'
+  appears-in: 'riser configuration 9'
+  slot-4: 'x16, full height, full length, processor 2'
+  slot-5: 'x8, full height, full length, processor 2'
+  slot-6: 'x8, low profile, half length, processor 1'
+provenance:
+  depth: >-
+    THE BODY IS IN PIECES AND IT IS THE WHOLE RISER: the plate the face
+    paints, the PCB standing behind it at the bay's outer edge, and a slot
+    connector on the PCB's inboard face per slot that takes a card - each a
+    box in `body.boxes`, so that ejecting the riser takes the riser, and
+    the chassis interior stays visible around it. `size.d` and `body.depth`
+    are the reach from the face to the PCB's far end. A first pass drew one
+    box the full reach and it hid the interior; a second cut it to 20, the
+    plate and its latch, and stood the PCB in the top view as a part of its
+    own, which stayed behind when the riser came out. Each box says where
+    its numbers are from.
+    estimated from a measurement of a different riser. Dell's service model
+    carries no full-height riser 2; it carries riser 1, the full-height
+    three-slot card, at 170.9 into the chassis, and the low-profile 2C at
+    211.4. This riser is the full-height form, which is riser 1's cage
+    turned to face the other bay, so it is given riser 1's reach and body.
+    A model of riser 2A would settle it.
+  identity: >-
+    A REMOVABLE ASSEMBLY THAT BRINGS ITS OWN SLOTS, which is why it is a
+    module with `bays` rather than openings drawn on the chassis. The ISM
+    carries removal and installation procedures for risers 1, 2, 2A, 2B and
+    3, and the component schema names exactly this case: `bays` is for
+    "MODULES THAT THEMSELVES HOST BAYS - a PCIe riser, a SIP carrying SPAs".
+    WHAT THIS PART IS, PRECISELY, is the card that plugs into the system
+    board. The sheet metal a photograph of the rear shows is common to every
+    variant sharing this plate and is composed rather than redrawn - which is
+    the whole point of the split, because the two copies of the riser 1
+    artwork that used to exist were byte-identical apart from their comments.
+  the-slot-block: >-
+    `slot:` on each bay is the same facts as the prose attrs, structured for
+    a card feature: `lanes` and `processor` are Technical Guide Table 11 and
+    the Information Update Tech Sheet Table 3, as below; `generation` 3 is
+    the platform's, Technical Guide 'PCIe Gen3'; `connector` x16 is measured
+    on riser 1 - the model's three connectors are 91 long, the x16 length,
+    on the x8-wired 1B as on the x16-wired 1A - and is taken as the family's
+    mechanical connector on every other slot, full-height and low-profile
+    alike, which is an inference from that riser and not a figure the guide
+    prints. A card feature reads `connector` for whether a card fits and
+    `lanes` for the width it will run at.
+  where-the-electrical-facts-come-from: >-
+    datasheet - PowerEdge R740 and R740xd Technical Guide, Table 11, which
+    gives height, length and link width for every slot on every riser, and
+    the Information Update Tech Sheet Table 3, which gives the processor each
+    slot is wired to. THESE ARE ATTRS AND NOT `accepts` ENTRIES. Lane width
+    does not decide what fits an opening - height and length do, and those
+    are enforced structurally by which brackets each bay names. A consumer
+    that cares about x8 against x16 reads the attribute; one asking what can
+    physically be installed reads `accepts`, and the two questions stay
+    apart. WHAT LINK WIDTH CANNOT DO IS TELL 2A, 2D, 2E AND 2F APART: Table
+    11 puts all four on one row, identical in height, length and width on all
+    three slots. They are separate parts because Table 5 gives them different
+    GPU support, and that fact belongs to the configuration rather than to
+    this drawing.
+  slot-numbering: >-
+    THE NUMBERS BELONG TO THE RISER, NOT THE CHASSIS, and that is what
+    resolves the puzzle in ISM table 25: the low-profile slot is numbered 4
+    when riser 2 presents only that one, and 6 when riser 2 presents three.
+    An opening cannot change size in place - a full-height card will not fit
+    where the half-height one goes, with the power supply directly beneath it
+    - so the metal is fixed and the numbering travels with the part.
+  the-slots-hold-the-standard-bracket-now: >-
+    THEY USED TO HOLD A PLATE THIS PROJECT DREW, sized to the connector
+    opening. The 90.0 x 12.2 rectangles read off the figure were RIGHT - they
+    are the PCIe opening, 89.90 x 12.06, to a tenth of a percent - but an
+    opening is not a bracket. std/pcie-bracket-fh is 120.02 long: 19.96 of it
+    runs on past the opening at the tip end and 10.16 at the flange end,
+    behind this riser's own sheet, which is why a face-on reading never sees
+    it. Each slot is positioned by its OPENING, so what shows through the
+    window has not moved; the module grew instead, to hold the metal that was
+    always there.
+  adjacent-brackets-overlap-by-1.27-on-purpose: >-
+    THE SLOT BAYS OVERLAP IN Y AND THE PARTS STILL FIT. A PCIe bracket is
+    21.59 across overall on a 20.32 slot pitch, because its flange end is
+    KEYED - the top of the plate is offset sideways so the mounting tab
+    reaches over the neighbouring slot and keys against it. Consecutive
+    brackets interleave by exactly 1.27 and that is why a row of them nests.
+    Any overlap check working on bounding boxes will report these; it is the
+    check unable to express a real interlock, not a fault in the placement.
+size: {w: 111.715, h: 42.2, d: 184.8}
+body:
+  depth: 184.8
+  color: '#4a5057'
+  boxes:
+  - {id: pcb, at: [0.07, -1.40], size: [1.6, 77.0],
+     from: 13.9, depth: 170.9, color: '#1f5138',
+     confidence: estimated, source: 'estimated by analogy with dell/riser-1b-14g@2: the same cage in its own bay, the PCB at the bay''s outer edge'}
+  - {id: slot-4-connector, at: [1.67, -0.58], size: [11.3, 10.8],
+     from: 47.9, depth: 91.0, color: '#15171b',
+     confidence: estimated, source: 'estimated by analogy with dell/riser-1b-14g@2: the same cage in its own bay, the PCB at the bay''s outer edge'}
+  - {id: slot-5-connector, at: [1.67, 19.74], size: [11.3, 10.8],
+     from: 47.9, depth: 91.0, color: '#15171b',
+     confidence: estimated, source: 'estimated by analogy with dell/riser-1b-14g@2: the same cage in its own bay, the PCB at the bay''s outer edge'}
+  - {id: slot-6-connector, at: [1.67, 40.06], size: [11.3, 10.8],
+     from: 47.9, depth: 91.0, color: '#15171b',
+     confidence: estimated, source: 'estimated by analogy with dell/riser-1b-14g@2: the same cage in its own bay, the PCB at the bay''s outer edge'}
+# SEEN FROM ABOVE IT IS ITS PCB: the part that stood in the top view as a
+# placement of its own, now this part's plan, drawn where the rear bay says.
+plan: {ref: dell/riser-card-14g@1}
+insert: {w: 120.02, h: 62.0}
+parts:
+  # THE METAL, DRAWN OVER THE CARDS. The bays are `behind: true`, so a seated
+  # card renders beneath this component's own skin; the plate is composed with
+  # the default (over), which puts it above the cards. What shows of a card is
+  # its working area through a punched window and its retention tab clear of the
+  # metal - the flange end is covered, which is what the hardware does.
+  - {ref: dell/riser-2-fh-plate-14g@1, id: plate, at: [0, 0]}
+bays:
+  slot-4:
+    slot: {connector: x16, lanes: 16, height: full, length: full, processor: 2, generation: 3}
+    plan: {at: [-97.9, -13.9]}
+    behind: true
+    at: [-10.115, -1.35]
+    size: [120.02, 21.59]
+    accepts: [dell/pcie-filler-fh-14g@2, std/pcie-bracket-fh@2, common/pcie-card-fh@2]
+    default: dell/pcie-filler-fh-14g@2
+  slot-5:
+    slot: {connector: x16, lanes: 8, height: full, length: full, processor: 2, generation: 3}
+    plan: {at: [-97.9, -13.9]}
+    behind: true
+    at: [-10.115, 18.97]
+    size: [120.02, 21.59]
+    accepts: [dell/pcie-filler-fh-14g@2, std/pcie-bracket-fh@2, common/pcie-card-fh@2]
+    default: dell/pcie-filler-fh-14g@2
+  slot-6:
+    slot: {connector: x16, lanes: 8, height: low, length: half, processor: 1, generation: 3}
+    # the low-profile card's plan is 79.2 wide, so its offset is the
+    # low-profile riser's: the card still ends 10.2 past the PCB
+    plan: {at: [-69.0, -13.9]}
+    behind: true
+    at: [-10.115, 42.46]
+    size: [79.2, 18.42]
+    accepts: [dell/pcie-filler-lp-14g@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1]
+    default: dell/pcie-filler-lp-14g@1
+skins: [default]

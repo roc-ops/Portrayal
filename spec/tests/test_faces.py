@@ -266,7 +266,7 @@ def test_the_self_reference_check_is_reachable_from_a_real_lint_run(tmp_path):
     assert "[L83]" in out and "its own rear" in out, out
 
 
-CARDS = ["common/pcie-card-fh/v1", "common/pcie-card-lp/v1"]
+CARDS = ["common/pcie-card-fh/v2", "common/pcie-card-lp/v1"]
 
 
 @pytest.mark.parametrize("rel", CARDS)
