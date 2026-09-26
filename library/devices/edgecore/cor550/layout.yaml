@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: cor550
-version: 2.1.0
+version: 3.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: COR550
@@ -417,7 +417,7 @@ groups:
     role: traffic
     index-origin: 0
     attrs: {media: qsfp28, speed: 100g}
-  qsfpdd-fabric:
+  qsfpdd-400g-fabric:
     term: Port
     role: fabric
     index-origin: 0
@@ -494,7 +494,7 @@ views:
         - {at: [5.55, 78.66], size: [29.36, 4.37], fill: '#d8dcdf', rx: 0.3}
       cutouts:
         - {block: qsfp28-100g}
-        - {block: qsfpdd-fabric}
+        - {block: qsfpdd-400g-fabric}
         - {id: fab-12, at: [269.58, 35.52], size: [19.0, 10.0], shape: rect}
         - {id: led-fab-a, at: [132.10, 37.96], size: [2.0, 2.0], shape: circle}
         - {id: led-fab-b, at: [132.10, 41.08], size: [2.0, 2.0], shape: circle}
@@ -694,7 +694,7 @@ views:
             dy-bottom: -16.53
             font-size: 1.5
             fill: '#d8dcdf'
-        - id: qsfpdd-fabric
+        - id: qsfpdd-400g-fabric
           ref: std/qsfp-dd@1
           at: [135.30, 35.52]
           count: 12
@@ -711,8 +711,8 @@ views:
         - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.25], skin: left, optional: ears, group: furniture, rel-pos: 1}
         - {ref: common/rack-ear@1, id: ear-right, at: [440, 0.25], skin: right, optional: ears, group: furniture, rel-pos: 2}
         - {block: qsfp28-100g}
-        - {block: qsfpdd-fabric}
-        - {ref: std/qsfp-dd@1, id: fab-12, at: [269.58, 35.52], rotate: 180, group: qsfpdd-fabric, rel-pos: 12}
+        - {block: qsfpdd-400g-fabric}
+        - {ref: std/qsfp-dd@1, id: fab-12, at: [269.58, 35.52], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 12}
         - {ref: common/led-dot@1, id: led-fab-a, at: [132.10, 37.96], group: port-lamps, rel-pos: 40, for: [fab-0, fab-2]}
         - {ref: common/led-dot@1, id: led-fab-b, at: [132.10, 41.08], group: port-lamps, rel-pos: 41, for: [fab-0, fab-2]}
         - {ref: common/led-dot@1, id: led-fab-c, at: [132.10, 52.66], group: port-lamps, rel-pos: 42, for: [fab-1, fab-3]}

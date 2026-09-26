@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9701-82dc
-version: 3.0.5
+version: 4.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9701-82DC
@@ -600,7 +600,7 @@ groups:
       '12 x 40/100G QSFP28 service ports'. The vendor numbers them 64-75, continuing the
       SFP28 run rather than starting again; index-origin records that the run starts at
       the low end of its own space
-  qsfpdd-fabric:
+  qsfpdd-400g-fabric:
     term: Port
     role: fabric
     index-origin: 0
@@ -1162,12 +1162,12 @@ views:
       - {ref: std/qsfp-ganged@1, id: port-73, at: [316, 61.38], rotate: 180, group: qsfp28, rel-pos: 10}
       - {ref: std/qsfp-ganged@1, id: port-74, at: [339.6, 45.77], group: qsfp28, rel-pos: 11}
       - {ref: std/qsfp-ganged@1, id: port-75, at: [339.6, 61.38], rotate: 180, group: qsfp28, rel-pos: 12}
-      - {ref: std/qsfp-dd@1, id: fabric-0, at: [361.56, 31.83], group: qsfpdd-fabric, rel-pos: 1}
-      - {ref: std/qsfp-dd@1, id: fabric-1, at: [361.56, 45.41], rotate: 180, group: qsfpdd-fabric, rel-pos: 2}
-      - {ref: std/qsfp-dd@1, id: fabric-2, at: [385.38, 31.83], group: qsfpdd-fabric, rel-pos: 3}
-      - {ref: std/qsfp-dd@1, id: fabric-3, at: [385.38, 45.41], rotate: 180, group: qsfpdd-fabric, rel-pos: 4}
-      - {ref: std/qsfp-dd@1, id: fabric-4, at: [408.87, 31.83], group: qsfpdd-fabric, rel-pos: 5}
-      - {ref: std/qsfp-dd@1, id: fabric-5, at: [408.87, 45.41], rotate: 180, group: qsfpdd-fabric, rel-pos: 6}
+      - {ref: std/qsfp-dd@1, id: fabric-0, at: [361.56, 31.83], group: qsfpdd-400g-fabric, rel-pos: 1}
+      - {ref: std/qsfp-dd@1, id: fabric-1, at: [361.56, 45.41], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 2}
+      - {ref: std/qsfp-dd@1, id: fabric-2, at: [385.38, 31.83], group: qsfpdd-400g-fabric, rel-pos: 3}
+      - {ref: std/qsfp-dd@1, id: fabric-3, at: [385.38, 45.41], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 4}
+      - {ref: std/qsfp-dd@1, id: fabric-4, at: [408.87, 31.83], group: qsfpdd-400g-fabric, rel-pos: 5}
+      - {ref: std/qsfp-dd@1, id: fabric-5, at: [408.87, 45.41], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 6}
       - {ref: common/led-dot@1, id: led-sync, at: [12.53, 67.19], for: chassis, group: status-leds, rel-pos: 1, states: ['off', {name: locked, color: '#22c55e'}, {name: syncing, color: '#22c55e', behavior: blinking}, {name: holdover, color: '#f59e0b'}, {name: fail, color: '#f59e0b', behavior: blinking}], description: 'HIG SYNC row - Off (system timing synchronization disabled or in free-run mode), Solid Green (timing core synchronized to PTP packet phase or one of the external timing sources, frequency also locked), Blinking Green (synchronized with a PTP frequency profile or an external SyncE clock source), Solid Amber (timing core acquiring or in holdover), Blinking Amber (synchronization failed, or acquiring/holdover timed out)'}
       - {ref: common/led-dot@1, id: led-sys, at: [12.53, 69.59], for: chassis, group: status-leds, rel-pos: 2, states: ['off', {name: boot-complete, color: '#22c55e'}, {name: boot-failed, color: '#f59e0b'}], description: 'HIG SYS row - OFF (no power), Solid Green (host CPU/BMC boot complete), Solid Amber (power is up but host CPU/BMC boot failed)'}
       - {ref: common/led-dot@1, id: led-fan, at: [12.53, 71.99], for: [rear/fan-0, rear/fan-1, rear/fan-2, rear/fan-3], group: status-leds, rel-pos: 3, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b', behavior: blinking}], description: 'HIG FAN row - OFF (fan modules are not initialized), Solid Green (all fan modules are working well), Blinking Amber (fan failed: one or more fans need service)'}
