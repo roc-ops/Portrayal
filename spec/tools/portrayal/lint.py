@@ -284,7 +284,7 @@ RULES = {
     "L120": ("device",     "a configuration's `power` agrees with the supplies it seats - `dc` over an `-ac` supply is a contradiction - warning at `modelled`, error at `verified`", "correct `power`, or seat the supply the build actually ships with"),
     "L121": ("component",  "a pluggable that conforms to a module envelope declares its `head:` - the box it occupies outside the cage - and the head fits the MSA's outside envelope, or lists each dimension it exceeds with a source; no relief feature of its own that starts inside the head stands past it (one lifted to the head's rear or beyond is the cable's, not the head's), and the head's node draws it", "add `head:` from the part's drawing, list a real overhang under `head.exceeds` with the document that shows it, drop a waiver that no longer applies, or shorten the feature that stands past the head"),
     "L122": ("component",  "a `cable-od` value is a diameter in millimetres from 2 to 15 - on a field's default and on a composing part's attrs - written as plain ASCII digits and a point, the only number the build and the kit draw", "give the cable's outside diameter in mm as a number, from the product's own document"),
-    "L123": ("library",    "one module, one bay size - every bay that accepts a module, in any device or carrier, reserves the same size for it, to within a millimetre", "reserve one figure everywhere - the module's own `insert` or `size` - or record in the chassis why it really reserves more"),
+    "L123": ("library",    "one module, one bay size - every bay that accepts a module, in any device or carrier, reserves the same size for it, to within a millimetre", "reserve one figure everywhere - the module's own `insert` or `size`; a difference that is real stays in the baseline, with the reason in the provenance of the chassis that reserves more (the warning is filed on the module, so a chassis `lint.waive` cannot clear it)"),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -9614,12 +9614,34 @@ def _bays_of(doc):
         yield b.get("id"), b
 
 
-def bay_sizes_by_module(docs):
-    """{module ref: [((w, h), owner, bay id), ...]} - each bay's size in the
-    MODULE's frame, so a bay turned 90 on a horizontal chassis compares with an
-    upright one on a vertical chassis."""
-    seen = {}
+def _envelope(ref, lib_roots, cache):
+    """(w, h) a module needs - its `insert` where stated, else its `size` - or
+    None when the ref does not resolve (L5 reports that)."""
+    if ref not in cache:
+        found = resolve_component(ref, lib_roots)
+        doc = (load_yaml(found) or {}) if found else {}
+        ext = doc.get("insert") or doc.get("size") or {}
+        w, h = ext.get("w"), ext.get("h")
+        cache[ref] = (float(w), float(h)) if w is not None and h is not None else None
+    return cache[ref]
+
+
+def bay_sizes_by_module(docs, lib_roots=None):
+    """{module ref: [((w, h), owner, bay id, path), ...]} - each bay's size in
+    the MODULE's frame, so a bay turned 90 on a horizontal chassis compares with
+    an upright one on a vertical chassis.
+
+    A BAY SPEAKS ONLY FOR ITS LARGEST OCCUPANTS. L33 asks a bay to be sized to
+    the largest thing it accepts, so a double-width bay that also takes a
+    single-width card is right to be wider than that card - and counting it
+    against the card would make the two rules contradict each other. So where a
+    bay accepts modules of different envelopes, it is recorded only against the
+    ones whose envelope is the largest. With `lib_roots` None every accepted ref
+    counts, which is what the synthetic tests use."""
+    seen, cache = {}, {}
     for path, doc in docs:
+        if not isinstance(doc, dict):
+            continue
         owner = doc.get("name") or Path(path).parent.name
         for bid, b in _bays_of(doc):
             sz = b.get("size")
@@ -9633,23 +9655,25 @@ def bay_sizes_by_module(docs):
                 continue
             if (b.get("rotate") or 0) % 180 == 90:
                 w, h = h, w
-            for ref in b.get("accepts") or []:
-                seen.setdefault(ref, []).append(((float(w), float(h)), owner, bid))
+            refs = list(b.get("accepts") or [])
+            if lib_roots is not None:
+                env = {r: _envelope(r, lib_roots, cache) for r in refs}
+                known = [e for e in env.values() if e]
+                if known:
+                    big = max(known, key=lambda e: e[0] * e[1])
+                    refs = [r for r in refs if env[r] is None
+                            or (abs(env[r][0] - big[0]) <= BAY_SIZE_TOL
+                                and abs(env[r][1] - big[1]) <= BAY_SIZE_TOL)]
+            for ref in refs:
+                seen.setdefault(ref, []).append(((float(w), float(h)), owner, bid, path))
     return seen
 
 
-def _size_clusters(entries, tol=BAY_SIZE_TOL):
-    """Group bay sizes that agree to within `tol` on both axes."""
-    clusters = []
-    for (w, h), owner, bid in sorted(entries):
-        for c in clusters:
-            cw, ch = c[0][0]
-            if abs(w - cw) <= tol and abs(h - ch) <= tol:
-                c.append(((w, h), owner, bid))
-                break
-        else:
-            clusters.append([((w, h), owner, bid)])
-    return clusters
+def _spread(entries):
+    """The largest disagreement between two bays for one module, per axis."""
+    ws = [s[0] for s, *_ in entries]
+    hs = [s[1] for s, *_ in entries]
+    return max(ws) - min(ws), max(hs) - min(hs)
 
 
 def lint_library_bay_size_per_module(docs, lib_roots):
@@ -9673,31 +9697,40 @@ def lint_library_bay_size_per_module(docs, lib_roots):
     smaller spreads - a power supply reserved 91.0, 93.5 and 97.0 mm across three
     sibling chassis - which is why it is a library rule and not a family one.
 
-    A WARNING WITH A MILLIMETRE OF SLACK. Two drawings of one slot measured off
-    two vendor figures agree to about a millimetre and no better, so smaller
-    differences are noise rather than a finding. Past that, the fix is to pick
-    ONE figure - the module's own `insert` or `size` where it states one - and
-    reserve it everywhere, or to record why a chassis genuinely reserves more.
+    A WARNING WITH A MILLIMETRE OF SLACK, measured as the SPREAD - the widest
+    disagreement between any two bays on either axis - so the answer does not
+    depend on which bay is read first. Two drawings of one slot measured off two
+    vendor figures agree to about a millimetre and no better. Past that, the fix
+    is to pick ONE figure - the module's own `insert` or `size` where it states
+    one - and reserve it everywhere. The warning is filed on the module's own
+    contract (or, when that does not resolve, on the host of the odd size out),
+    so a chassis `lint.waive` cannot clear it: a difference that is real stays
+    in the baseline, with the reason in the provenance of the chassis.
     """
-    for ref, entries in sorted(bay_sizes_by_module(docs).items()):
-        clusters = _size_clusters(entries)
-        if len(clusters) < 2:
+    for ref, entries in sorted(bay_sizes_by_module(docs, lib_roots).items()):
+        dw, dh = _spread(entries)
+        if dw <= BAY_SIZE_TOL and dh <= BAY_SIZE_TOL:
             continue
-        found = resolve_component(ref, lib_roots)
-        where = found or docs[0][0]
+        by_size = {}
+        for (w, h), owner, _bid, path in entries:
+            by_size.setdefault((w, h), []).append((owner, path))
+        groups = sorted(by_size.items(), key=lambda kv: (-len(kv[1]), kv[0]))
+        # the module's own contract, or the host of the odd one out
+        where = resolve_component(ref, lib_roots) or groups[-1][1][0][1]
         parts = []
-        for c in sorted(clusters, key=len, reverse=True):
-            (w, h) = c[0][0]
-            hosts = sorted({o for _, o, _ in c})
-            shown = ", ".join(hosts[:4]) + (f" and {len(hosts) - 4} more" if len(hosts) > 4 else "")
+        for (w, h), hosts in groups:
+            names = sorted({o for o, _ in hosts})
+            shown = ", ".join(names[:4]) + (f" and {len(names) - 4} more" if len(names) > 4 else "")
             parts.append(f"{w:g} x {h:g} ({shown})")
         warn(where, "L123",
-             f"{ref} seats in bays of {len(clusters)} different sizes - "
-             f"{'; '.join(parts)}. One module is one piece of metal, so every "
-             f"bay that takes it should reserve the same space; otherwise the "
-             f"same card draws larger in one chassis than in another. Reserve "
-             f"one figure everywhere - the module's own `insert` or `size` - or "
-             f"record in the chassis why it really reserves more")
+             f"{ref} seats in bays of {len(groups)} different sizes, "
+             f"{max(dw, dh):.2f} mm apart - {'; '.join(parts)}. One module is one "
+             f"piece of metal, so every bay that takes it should reserve the "
+             f"same space; otherwise the same card draws larger in one chassis "
+             f"than in another. Reserve one figure everywhere - the module's own "
+             f"`insert` or `size`. A difference that is real stays in the "
+             f"baseline, with the reason in the provenance of the chassis that "
+             f"reserves more")
 
 
 # ---------------------------------------------------------------- L34
@@ -10034,6 +10067,7 @@ def main():
 
     n = 0
     matrix = []
+    comp_matrix = []
     dev_maturity = {}
     # With --device, check only the components those devices actually reach.
     # Linting all 254 was most of a filtered run - and a component no selected
@@ -10055,6 +10089,7 @@ def main():
             # a file that would not parse has already been reported; running the
             # rest against None just buries that message under a traceback
             if d is not None:
+                comp_matrix.append((f, d))
                 lint_attrs_null(f, d)
                 _skin_checks(f, d)
                 lint_component_parts(f, d, args.library)
@@ -10169,13 +10204,7 @@ def main():
     if not args.device:
         lint_library_comparable_facts([Path(r) for r in args.library], matrix)
         lint_library_aliases(matrix)
-        comp_docs = []
-        for r in [Path(r) for r in args.library]:
-            for cf in libwalk.iter_components([r]):
-                cd = load_yaml(cf)
-                if isinstance(cd, dict):
-                    comp_docs.append((cf, cd))
-        lint_library_bay_size_per_module(matrix + comp_docs, args.library)
+        lint_library_bay_size_per_module(matrix + comp_matrix, args.library)
         for root in [Path(r) for r in args.library]:
             lint_vendor_registry(root)
             lint_unplaced_majors(root)
