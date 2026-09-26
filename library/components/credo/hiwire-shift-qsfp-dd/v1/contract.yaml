@@ -1,0 +1,70 @@
+format: 1
+kind: module
+name: hiwire-shift-qsfp-dd
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: qsfp-dd
+profile: networking
+description: >-
+  Credo HiWire SHIFT active electrical cable, the 400G QSFP-DD end of a 400G to
+  four 100G QSFP28 breakout - a QSFP-DD Type 2 end with a gearbox, on 4P 30 AWG
+  cable in a purple jacket. It composes generic/qsfp-dd-cable-type2@1 and sets
+  the cable's diameter and colour.
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+size: {w: 18.35, h: 8.5, d: 58.26}
+size-confidence: {w: borrowed, h: borrowed, d: borrowed}
+attrs:
+  model: CAC4XXXX1D4P-A0-HW
+  cable-kind: aec
+  media: qsfp-dd
+  speed: 400g
+  power-draw-typical-w: 8.5
+parts:
+  - {ref: generic/qsfp-dd-cable-type2@1, id: body, at: [0, 0],
+     attrs: {cable-od: 5.3, jacket-color: '#6b3fa0'}}
+provenance:
+  size: >-
+    borrowed - generic/qsfp-dd-cable-type2@1, the generic this wraps, whose own
+    figures are the qsfp-dd-module registry entry's (QSFP-DD/QSFP-DD800/QSFP112
+    Hardware Specification Rev 6.3 Figure 52). These are the generic's numbers
+    restated; neither Credo document dimensions the end.
+  documents: >-
+    Two Credo documents: the SHIFT AEC Specification data sheet, REV 07082021
+    (the primary source, page 1 and page 2), and the 2025 SHIFT AEC
+    Specification product brief, REV 092625 (the ZeroFlap D1 build). Where they
+    differ, the data sheet is followed and the difference noted.
+  model: >-
+    datasheet - SHIFT AEC data sheet REV 07082021 page 1, "CAC4XXXX1D4P-A0-HW",
+    with Product Selections CAC43X301D4P-A0-HW (3 m) and CAC45X301D4P-A0-HW
+    (5 m). The 2025 brief lists the D1 build (CAC41X301D4P-D1-HW to
+    CAC45X301D4P-D1-HW), not modelled separately.
+  cable-kind: >-
+    datasheet - page 1, "HiWire SHIFT Active Electrical Cable (SHIFT AEC)".
+  speed: >-
+    datasheet - page 2 General Product Characteristics, Maximum Aggregate Data
+    Rate 400Gbps; the QSFP-DD end runs 8 lanes of 53.125Gbps PAM4.
+  media: >-
+    datasheet - page 2, Module Form Factor "QSFP-DD type 2 and QSFP28"; this
+    wrapper is the QSFP-DD end, and the Type 2 generic is the one it wraps. The
+    2025 brief says "QSFP-DD Type 2" too.
+  cable-od: >-
+    datasheet - page 1 Mechanicals, Diameter 4P 30AWG 5.3mm typical. The same
+    table gives the QSFP-DD end's minimum bend radius as "4P 30AWG x 4", 90.0 mm:
+    FOUR such cables leave this end, one per QSFP28 leg. The stub is drawn as a
+    single cable of the one diameter the document states; the four-cable bundle
+    is not drawn.
+  jacket-color: >-
+    estimated - page 1, "Recognizable, purple PVC jacket (with fire retardant
+    coating)"; the 2025 brief says a purple mesh braided jacket. Neither states
+    a shade, so #6b3fa0 is an estimated purple, not a reading.
+  latch-color: >-
+    NOT STATED - neither document gives a pull tab colour, so the generic's
+    neutral #6f6f6f default stands.
+  power: >-
+    datasheet - SHIFT AEC data sheet REV 07082021 page 1, "Typ 8.5W power
+    dissipation (QSFP-DD end)" (3.5 W typical at each QSFP28 end); a typical,
+    no maximum is given, at no stated ambient. The 2025 brief gives typ. 4.5 W
+    for its D1 build's QSFP-DD end; that is a different build and not used.
+connection-points:
+  mate: {at: [9.175, 4.25], direction: front}

@@ -164,19 +164,27 @@ def seat_point(at, size, rotate, local):
 
 
 def _seat_out(contract, point):
-    """The `out` of the relief feature a connection point sits `on:`, or 0.0.
+    """The rear of the relief feature a connection point sits `on:`, or 0.0.
+
+    An `out` feature's rear is its `out`, absolute from the part's face. A
+    `cyl` feature's is its far end, `lift + cyl`: the lift is where it starts
+    and the cyl its length from there.
 
     A point with no `on:` sits on the part's own face. One whose `on:` names
-    nothing, or a feature with no `out`, also answers 0.0 here - lint L106
-    refuses both, and a renderer that guessed a depth would hide the error L106
-    exists to report.
+    nothing, or a feature with neither `out` nor `cyl`, also answers 0.0 here -
+    lint L106 refuses both, and a renderer that guessed a depth would hide the
+    error L106 exists to report.
     """
     node = point.get("on")
     if not node:
         return 0.0
     for f in ((contract.get("relief") or {}).get("features") or []):
-        if f.get("node") == node and f.get("out") is not None:
+        if f.get("node") != node:
+            continue
+        if f.get("out") is not None:
             return float(f["out"])
+        if f.get("cyl") is not None:
+            return float(f.get("lift") or 0.0) + float(f["cyl"])
     return 0.0
 
 
@@ -192,7 +200,8 @@ def presented_interface(contract, resolve):
     plane behind whatever the aperture is mounted on. A host that presents its
     own point forwards nothing, and lifts only when that point - `mate`, or the
     one `interface-at` names - sits `on:` a relief feature, by that feature's
-    `out`: a boot on a plug stands on the plug body's rear face.
+    rear (its `out`, or a `cyl`'s `lift + cyl`): a boot on a plug stands on the
+    plug body's rear face.
 
     WHY THIS LOOKS THROUGH `parts`. Seating an optic worked end to end and was
     used by exactly one configuration on one device, out of 7,058 ports. Not
@@ -225,7 +234,8 @@ def presented_interface(contract, resolve):
     # names the relief feature it sits on, and the seat stands off by that
     # feature's `out`, which is ABSOLUTE from this part's own face - a
     # feature's `lift` is where it starts, not where its rear face is. Without
-    # either key this is exactly the old answer: `mate`, 0.0.
+    # either key this is exactly the old answer: `mate`, 0.0. A `cyl`
+    # feature has no `out`; its rear is its far end, `lift + cyl`.
     point = cps.get(contract.get("interface-at") or "mate")
     if contract.get("interface") and point:
         return contract["interface"], list(point["at"]), _seat_out(contract, point)
