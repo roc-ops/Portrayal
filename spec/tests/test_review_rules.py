@@ -260,6 +260,27 @@ def test_ganged_cages_sharing_a_wall_are_not_reported():
     assert not caught("L46", lint.lint_component_collisions, P, ok, [str(LIB)])
 
 
+def test_a_backing_composed_behind_is_not_a_collision():
+    """A PCIe card composes its bracket `behind: true` and seats its cages on it:
+    every port sits 100 percent inside the bracket, and that is the layering the
+    key declares, not two things drawn in one place by mistake."""
+    ok = _component([
+        {"id": "bracket", "ref": "std/pcie-bracket-fh@2", "at": [0.0, 0.0], "behind": True},
+        {"id": "p0", "ref": "std/sfp-ganged@1", "at": [30.0, 6.6]},
+    ])
+    assert not caught("L46", lint.lint_component_collisions, P, ok, [str(LIB)])
+
+
+def test_two_backings_in_one_place_still_collide():
+    """`behind` says what lies under the art. It does not excuse two backings
+    stacked on each other."""
+    bad = _component([
+        {"id": "b0", "ref": "std/pcie-bracket-fh@2", "at": [0.0, 0.0], "behind": True},
+        {"id": "b1", "ref": "std/pcie-bracket-fh@2", "at": [0.0, 2.0], "behind": True},
+    ])
+    assert caught("L46", lint.lint_component_collisions, P, bad, [str(LIB)])
+
+
 def test_a_lamp_state_nothing_draws_is_reported(tmp_path):
     """A part may declare ok/fail, generate CSS, offer the state in the viewer
     and change no pixel, because only `var(--led-color, ...)` lights anything.

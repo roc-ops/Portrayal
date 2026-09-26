@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 21.0.14
+version: 22.0.0
 maturity: draft
 manufacturer: Dell
 model: PowerEdge R740xd
@@ -1185,9 +1185,9 @@ views:
                      sff24-rc1-1b2b, sff24-rc2-1b2c, sff24-rc3-1a2a]}
         - {id: riser-1, at: [13.95, 4.0], size: {w: 107.59, h: 62.0},
            plan: {view: top, at: [408.00, 13.90], in: system-board, under: [air-shroud, system-cover]},
-           accepts: [dell/riser-1b-14g@1, dell/riser-1a-14g@1, dell/riser-1d-14g@1,
-                     dell/riser-1-none-14g@1],
-           default: dell/riser-1b-14g@1,
+           accepts: [dell/riser-1b-14g@2, dell/riser-1a-14g@2, dell/riser-1d-14g@2,
+                     dell/riser-1-none-14g@2],
+           default: dell/riser-1b-14g@2,
            group: risers, rel-pos: 1}
         # RISER 2 IS TWO DIFFERENT HOLES, not one hole with two occupants. The
         # standards-only render against ISM figure 8 caught this: the figure
@@ -1212,12 +1212,12 @@ views:
         # bay also hid the plate's overlap with the power supply from L13.
         - {id: riser-2, at: [155.335, 4.0], size: {w: 111.715, h: 42.20},
            plan: {view: top, at: [265.80, 13.90], in: system-board, under: [air-shroud, system-cover]},
-           accepts: [dell/riser-2a-14g@1, dell/riser-2d-14g@1, dell/riser-2e-14g@1,
-                     dell/riser-2f-14g@1, dell/riser-2-3-blank-14g@1],
-           default: dell/riser-2a-14g@1,
+           accepts: [dell/riser-2a-14g@2, dell/riser-2d-14g@2, dell/riser-2e-14g@2,
+                     dell/riser-2f-14g@2, dell/riser-2-3-blank-14g@1],
+           default: dell/riser-2a-14g@2,
            group: risers, rel-pos: 2, only-in: [lff12-rc3-1a2a, lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a, lff12-rc9-1a2d3a,
                      lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b, sff24-rc3-1a2a,
-                     sff24-rc4-1a2a3a, sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a,
+                     sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-n3100-4c, sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a,
                      sff24-rc15-1a2e3b, sff24-rc16-1d2e3b, sff24-rc17-1a2f3b]}
         # A 12 mm DISAGREEMENT WAS REPORTED AGAINST THE CAD HERE AND IT WAS
         # NOT REAL. It came from the rear handle's upper 'window', read off a
@@ -1255,10 +1255,10 @@ views:
         # closed by rear-storage-3, which scopes to the `rc3-1a2a` configurations below.
         - {id: riser-3, at: [309.085, 4.0], size: {w: 107.59, h: 41.68},
            plan: {view: top, at: [14.10, 13.90], in: system-board, under: [air-shroud, system-cover], mirror: true},
-           accepts: [dell/riser-3a-14g@1, dell/riser-3b-14g@1],
-           default: dell/riser-3a-14g@1,
+           accepts: [dell/riser-3a-14g@2, dell/riser-3b-14g@2],
+           default: dell/riser-3a-14g@2,
            group: risers, rel-pos: 3, only-in: [lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a, lff12-rc9-1a2d3a,
-                     lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b, sff24-rc4-1a2a3a,
+                     lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b, sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-n3100-4c,
                      sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a, sff24-rc15-1a2e3b,
                      sff24-rc16-1d2e3b, sff24-rc17-1a2f3b]}
         - {id: ndc, at: [139.6, 66.4], size: {w: 90.3, h: 14.5},
@@ -1440,7 +1440,7 @@ views:
         - {ref: dell/pcie-slot-strip-r3-14g@1, id: slot-strip-r3,
            at: [416.375, 4.0], group: furniture, rel-pos: 23,
            only-in: [lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a, lff12-rc9-1a2d3a,
-                     lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b, sff24-rc4-1a2a3a,
+                     lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b, sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-n3100-4c,
                      sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a, sff24-rc15-1a2e3b,
                      sff24-rc16-1d2e3b, sff24-rc17-1a2f3b]}
         # THE TAB THE LEFT THUMBSCREW IS BOLTED TO, drawn after the bays
@@ -1504,14 +1504,14 @@ views:
            at: [267.32, 1.81], group: furniture, rel-pos: 24,
            only-in: [lff12-rc3-1a2a, lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a,
                      lff12-rc9-1a2d3a, lff12-rc15-1a2e3b, lff12-rc16-1d2e3b,
-                     lff12-rc17-1a2f3b, sff24-rc3-1a2a, sff24-rc4-1a2a3a, sff24-rc5-1b2a3a,
+                     lff12-rc17-1a2f3b, sff24-rc3-1a2a, sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-n3100-4c, sff24-rc5-1b2a3a,
                      sff24-rc6-1d2a3a, sff24-rc9-1a2d3a, sff24-rc15-1a2e3b, sff24-rc16-1d2e3b,
                      sff24-rc17-1a2f3b]}
         - {ref: dell/riser-divider-plate-14g@1, id: riser-3-divider-plate,
            at: [297.10, 1.81], group: furniture, rel-pos: 25,
            only-in: [lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a, lff12-rc9-1a2d3a,
                      lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b,
-                     sff24-rc4-1a2a3a, sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a,
+                     sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-n3100-4c, sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a,
                      sff24-rc15-1a2e3b, sff24-rc16-1d2e3b, sff24-rc17-1a2f3b]}
         - {ref: dell/rear-bay-screw-tab-14g@1, id: rear-bay-screw-tab,
            at: [144.26, 3.09], group: furniture, rel-pos: 20}
@@ -1928,7 +1928,7 @@ views:
                      lff12-rsff4-rc0-noriser, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
                      sff24-rc0-noriser, sff24-rc1-1b2b, sff24-rc15-1a2e3b,
                      sff24-rc16-1d2e3b, sff24-rc17-1a2f3b, sff24-rc2-1b2c, sff24-rc3-1a2a,
-                     sff24-rc4-1a2a3a, sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a,
+                     sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-n3100-4c, sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a,
                      sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c]}
         # THE MID-DRIVE TRAY, on the nine configurations that have one. It is
         # UNDER THE LID, so it is placed before the cover and the cover draws
@@ -2011,7 +2011,7 @@ configurations:
       0-11; no rear storage.
     views: {front: front-lff-12}
     bays:
-      riser-1: dell/riser-1-none-14g@1
+      riser-1: dell/riser-1-none-14g@2
       riser-2-lp: dell/riser-2-none-14g@1
   lff12-rc1-1b2b:
     kind: orderable
@@ -2021,7 +2021,7 @@ configurations:
       0-11; no rear storage.
     views: {front: front-lff-12}
     bays:
-      riser-1: dell/riser-1b-14g@1
+      riser-1: dell/riser-1b-14g@2
       riser-2-lp: dell/riser-2b-14g@1
   lff12-rc2-1b2c:
     kind: orderable
@@ -2031,7 +2031,7 @@ configurations:
       0-11; no rear storage. Requires two processors.
     views: {front: front-lff-12}
     bays:
-      riser-1: dell/riser-1b-14g@1
+      riser-1: dell/riser-1b-14g@2
       riser-2-lp: dell/riser-2c-14g@1
   lff12-rc3-1a2a:
     kind: orderable
@@ -2041,8 +2041,8 @@ configurations:
       0-11; no rear storage. Requires two processors.
     views: {front: front-lff-12}
     bays:
-      riser-1: dell/riser-1a-14g@1
-      riser-2: dell/riser-2a-14g@1
+      riser-1: dell/riser-1a-14g@2
+      riser-2: dell/riser-2a-14g@2
   lff12-rc4-1a2a3a:
     kind: orderable
     skins: {db9: teal}
@@ -2051,9 +2051,9 @@ configurations:
       0-11; no rear storage. Requires two processors.
     views: {front: front-lff-12}
     bays:
-      riser-1: dell/riser-1a-14g@1
-      riser-2: dell/riser-2a-14g@1
-      riser-3: dell/riser-3a-14g@1
+      riser-1: dell/riser-1a-14g@2
+      riser-2: dell/riser-2a-14g@2
+      riser-3: dell/riser-3a-14g@2
   lff12-rc5-1b2a3a:
     kind: orderable
     skins: {db9: teal}
@@ -2062,9 +2062,9 @@ configurations:
       0-11; no rear storage. Requires two processors.
     views: {front: front-lff-12}
     bays:
-      riser-1: dell/riser-1b-14g@1
-      riser-2: dell/riser-2a-14g@1
-      riser-3: dell/riser-3a-14g@1
+      riser-1: dell/riser-1b-14g@2
+      riser-2: dell/riser-2a-14g@2
+      riser-3: dell/riser-3a-14g@2
   lff12-rc6-1d2a3a:
     kind: orderable
     skins: {db9: teal}
@@ -2073,9 +2073,9 @@ configurations:
       0-11; no rear storage. Requires two processors.
     views: {front: front-lff-12}
     bays:
-      riser-1: dell/riser-1d-14g@1
-      riser-2: dell/riser-2a-14g@1
-      riser-3: dell/riser-3a-14g@1
+      riser-1: dell/riser-1d-14g@2
+      riser-2: dell/riser-2a-14g@2
+      riser-3: dell/riser-3a-14g@2
   lff12-rc9-1a2d3a:
     kind: orderable
     skins: {db9: teal}
@@ -2084,9 +2084,9 @@ configurations:
       0-11; no rear storage. Requires two processors.
     views: {front: front-lff-12}
     bays:
-      riser-1: dell/riser-1a-14g@1
-      riser-2: dell/riser-2d-14g@1
-      riser-3: dell/riser-3a-14g@1
+      riser-1: dell/riser-1a-14g@2
+      riser-2: dell/riser-2d-14g@2
+      riser-3: dell/riser-3a-14g@2
   lff12-rc15-1a2e3b:
     kind: orderable
     skins: {db9: teal}
@@ -2095,9 +2095,9 @@ configurations:
       0-11; no rear storage. Requires two processors.
     views: {front: front-lff-12}
     bays:
-      riser-1: dell/riser-1a-14g@1
-      riser-2: dell/riser-2e-14g@1
-      riser-3: dell/riser-3b-14g@1
+      riser-1: dell/riser-1a-14g@2
+      riser-2: dell/riser-2e-14g@2
+      riser-3: dell/riser-3b-14g@2
   lff12-rc16-1d2e3b:
     kind: orderable
     skins: {db9: teal}
@@ -2106,9 +2106,9 @@ configurations:
       0-11; no rear storage. Requires two processors.
     views: {front: front-lff-12}
     bays:
-      riser-1: dell/riser-1d-14g@1
-      riser-2: dell/riser-2e-14g@1
-      riser-3: dell/riser-3b-14g@1
+      riser-1: dell/riser-1d-14g@2
+      riser-2: dell/riser-2e-14g@2
+      riser-3: dell/riser-3b-14g@2
   lff12-rc17-1a2f3b:
     kind: orderable
     skins: {db9: teal}
@@ -2117,9 +2117,9 @@ configurations:
       0-11; no rear storage. Requires two processors.
     views: {front: front-lff-12}
     bays:
-      riser-1: dell/riser-1a-14g@1
-      riser-2: dell/riser-2f-14g@1
-      riser-3: dell/riser-3b-14g@1
+      riser-1: dell/riser-1a-14g@2
+      riser-2: dell/riser-2f-14g@2
+      riser-3: dell/riser-3b-14g@2
   lff12-rlff2-rc0-noriser:
     kind: orderable
     skins: {db9: teal}
@@ -2128,7 +2128,7 @@ configurations:
       0-11; rear 2 x 3.5in at slots 12-13.
     views: {front: front-lff-12}
     bays:
-      riser-1: dell/riser-1-none-14g@1
+      riser-1: dell/riser-1-none-14g@2
       riser-2-lp: dell/riser-2-none-14g@1
   lff12-rlff2-rc1-1b2b:
     kind: orderable
@@ -2138,7 +2138,7 @@ configurations:
       0-11; rear 2 x 3.5in at slots 12-13.
     views: {front: front-lff-12}
     bays:
-      riser-1: dell/riser-1b-14g@1
+      riser-1: dell/riser-1b-14g@2
       riser-2-lp: dell/riser-2b-14g@1
   lff12-rlff2-rc2-1b2c:
     kind: orderable
@@ -2148,7 +2148,7 @@ configurations:
       0-11; rear 2 x 3.5in at slots 12-13. Requires two processors.
     views: {front: front-lff-12}
     bays:
-      riser-1: dell/riser-1b-14g@1
+      riser-1: dell/riser-1b-14g@2
       riser-2-lp: dell/riser-2c-14g@1
   lff12-rsff4-rc0-noriser:
     kind: orderable
@@ -2158,7 +2158,7 @@ configurations:
       0-11; rear 4 x 2.5in at slots 12-15.
     views: {front: front-lff-12}
     bays:
-      riser-1: dell/riser-1-none-14g@1
+      riser-1: dell/riser-1-none-14g@2
       riser-2-lp: dell/riser-2-none-14g@1
   lff12-rsff4-rc1-1b2b:
     kind: orderable
@@ -2168,7 +2168,7 @@ configurations:
       0-11; rear 4 x 2.5in at slots 12-15.
     views: {front: front-lff-12}
     bays:
-      riser-1: dell/riser-1b-14g@1
+      riser-1: dell/riser-1b-14g@2
       riser-2-lp: dell/riser-2b-14g@1
   lff12-rsff4-rc2-1b2c:
     kind: orderable
@@ -2178,7 +2178,7 @@ configurations:
       0-11; rear 4 x 2.5in at slots 12-15. Requires two processors.
     views: {front: front-lff-12}
     bays:
-      riser-1: dell/riser-1b-14g@1
+      riser-1: dell/riser-1b-14g@2
       riser-2-lp: dell/riser-2c-14g@1
   lff12-mlff4-rlff2-rc0-noriser:
     kind: orderable
@@ -2191,7 +2191,7 @@ configurations:
       without it. See the mid-drive-tray gap.
     views: {front: front-lff-12}
     bays:
-      riser-1: dell/riser-1-none-14g@1
+      riser-1: dell/riser-1-none-14g@2
       riser-2-lp: dell/riser-2-none-14g@1
   lff12-mlff4-rlff2-rc1-1b2b:
     kind: orderable
@@ -2204,7 +2204,7 @@ configurations:
       without it. See the mid-drive-tray gap.
     views: {front: front-lff-12}
     bays:
-      riser-1: dell/riser-1b-14g@1
+      riser-1: dell/riser-1b-14g@2
       riser-2-lp: dell/riser-2b-14g@1
   lff12-mlff4-rlff2-rc2-1b2c:
     kind: orderable
@@ -2217,7 +2217,7 @@ configurations:
       without it. See the mid-drive-tray gap. Requires two processors.
     views: {front: front-lff-12}
     bays:
-      riser-1: dell/riser-1b-14g@1
+      riser-1: dell/riser-1b-14g@2
       riser-2-lp: dell/riser-2c-14g@1
   lff12-mlff4-rsff4-rc0-noriser:
     kind: orderable
@@ -2230,7 +2230,7 @@ configurations:
       without it. See the mid-drive-tray gap.
     views: {front: front-lff-12}
     bays:
-      riser-1: dell/riser-1-none-14g@1
+      riser-1: dell/riser-1-none-14g@2
       riser-2-lp: dell/riser-2-none-14g@1
   lff12-mlff4-rsff4-rc1-1b2b:
     kind: orderable
@@ -2243,7 +2243,7 @@ configurations:
       without it. See the mid-drive-tray gap.
     views: {front: front-lff-12}
     bays:
-      riser-1: dell/riser-1b-14g@1
+      riser-1: dell/riser-1b-14g@2
       riser-2-lp: dell/riser-2b-14g@1
   lff12-mlff4-rsff4-rc2-1b2c:
     kind: orderable
@@ -2256,7 +2256,7 @@ configurations:
       without it. See the mid-drive-tray gap. Requires two processors.
     views: {front: front-lff-12}
     bays:
-      riser-1: dell/riser-1b-14g@1
+      riser-1: dell/riser-1b-14g@2
       riser-2-lp: dell/riser-2c-14g@1
   sff24-rc0-noriser:
     kind: orderable
@@ -2265,7 +2265,7 @@ configurations:
       24-drive, riser configuration 0 (no riser). Front 24 x 2.5in at slots
       0-23; no rear storage.
     bays:
-      riser-1: dell/riser-1-none-14g@1
+      riser-1: dell/riser-1-none-14g@2
       riser-2-lp: dell/riser-2-none-14g@1
   sff24-rc1-1b2b:
     kind: orderable
@@ -2274,7 +2274,7 @@ configurations:
       24-drive, riser configuration 1 (1B+2B). Front 24 x 2.5in at slots
       0-23; no rear storage.
     bays:
-      riser-1: dell/riser-1b-14g@1
+      riser-1: dell/riser-1b-14g@2
       riser-2-lp: dell/riser-2b-14g@1
   sff24-rc2-1b2c:
     kind: orderable
@@ -2283,7 +2283,7 @@ configurations:
       24-drive, riser configuration 2 (1B+2C). Front 24 x 2.5in at slots
       0-23; no rear storage. Requires two processors.
     bays:
-      riser-1: dell/riser-1b-14g@1
+      riser-1: dell/riser-1b-14g@2
       riser-2-lp: dell/riser-2c-14g@1
   sff24-rc3-1a2a:
     kind: orderable
@@ -2292,8 +2292,8 @@ configurations:
       24-drive, riser configuration 3 (1A+2A). Front 24 x 2.5in at slots
       0-23; no rear storage. Requires two processors.
     bays:
-      riser-1: dell/riser-1a-14g@1
-      riser-2: dell/riser-2a-14g@1
+      riser-1: dell/riser-1a-14g@2
+      riser-2: dell/riser-2a-14g@2
   sff24-rc4-1a2a3a:
     kind: orderable
     skins: {db9: teal}
@@ -2301,9 +2301,24 @@ configurations:
       24-drive, riser configuration 4 (1A+2A+3A). Front 24 x 2.5in at slots
       0-23; no rear storage. Requires two processors.
     bays:
-      riser-1: dell/riser-1a-14g@1
-      riser-2: dell/riser-2a-14g@1
-      riser-3: dell/riser-3a-14g@1
+      riser-1: dell/riser-1a-14g@2
+      riser-2: dell/riser-2a-14g@2
+      riser-3: dell/riser-3a-14g@2
+  sff24-rc4-1a2a3a-n3100-4c:
+    kind: example
+    skins: {db9: teal}
+    description: >-
+      Riser configuration 4 with two UfiSpace N3100-4C timing adapters seated:
+      one in riser 1 slot 1 and one in riser 3 slot 8, both x16-wired
+      full-height slots. The two risers present their cards opposite ways
+      round, so the riser 1 card reads upside down and the riser 3 card
+      upright, as the vendor draws it.
+    bays:
+      riser-1: dell/riser-1a-14g@2
+      riser-2: dell/riser-2a-14g@2
+      riser-3: dell/riser-3a-14g@2
+      riser-1/slot-1: ufispace/n3100-4c@1
+      riser-3/slot-8: ufispace/n3100-4c@1
   sff24-rc5-1b2a3a:
     kind: orderable
     default: true
@@ -2312,9 +2327,9 @@ configurations:
       24-drive, riser configuration 5 (1B+2A+3A). Front 24 x 2.5in at slots
       0-23; no rear storage. Requires two processors.
     bays:
-      riser-1: dell/riser-1b-14g@1
-      riser-2: dell/riser-2a-14g@1
-      riser-3: dell/riser-3a-14g@1
+      riser-1: dell/riser-1b-14g@2
+      riser-2: dell/riser-2a-14g@2
+      riser-3: dell/riser-3a-14g@2
   sff24-rc6-1d2a3a:
     kind: orderable
     skins: {db9: teal}
@@ -2322,9 +2337,9 @@ configurations:
       24-drive, riser configuration 6 (1D+2A+3A). Front 24 x 2.5in at slots
       0-23; no rear storage. Requires two processors.
     bays:
-      riser-1: dell/riser-1d-14g@1
-      riser-2: dell/riser-2a-14g@1
-      riser-3: dell/riser-3a-14g@1
+      riser-1: dell/riser-1d-14g@2
+      riser-2: dell/riser-2a-14g@2
+      riser-3: dell/riser-3a-14g@2
   sff24-rc9-1a2d3a:
     kind: orderable
     skins: {db9: teal}
@@ -2332,9 +2347,9 @@ configurations:
       24-drive, riser configuration 9 (1A+2D+3A). Front 24 x 2.5in at slots
       0-23; no rear storage. Requires two processors.
     bays:
-      riser-1: dell/riser-1a-14g@1
-      riser-2: dell/riser-2d-14g@1
-      riser-3: dell/riser-3a-14g@1
+      riser-1: dell/riser-1a-14g@2
+      riser-2: dell/riser-2d-14g@2
+      riser-3: dell/riser-3a-14g@2
   sff24-rc15-1a2e3b:
     kind: orderable
     skins: {db9: teal}
@@ -2342,9 +2357,9 @@ configurations:
       24-drive, riser configuration 15 (1A+2E+3B). Front 24 x 2.5in at slots
       0-23; no rear storage. Requires two processors.
     bays:
-      riser-1: dell/riser-1a-14g@1
-      riser-2: dell/riser-2e-14g@1
-      riser-3: dell/riser-3b-14g@1
+      riser-1: dell/riser-1a-14g@2
+      riser-2: dell/riser-2e-14g@2
+      riser-3: dell/riser-3b-14g@2
   sff24-rc16-1d2e3b:
     kind: orderable
     skins: {db9: teal}
@@ -2352,9 +2367,9 @@ configurations:
       24-drive, riser configuration 16 (1D+2E+3B). Front 24 x 2.5in at slots
       0-23; no rear storage. Requires two processors.
     bays:
-      riser-1: dell/riser-1d-14g@1
-      riser-2: dell/riser-2e-14g@1
-      riser-3: dell/riser-3b-14g@1
+      riser-1: dell/riser-1d-14g@2
+      riser-2: dell/riser-2e-14g@2
+      riser-3: dell/riser-3b-14g@2
   sff24-rc17-1a2f3b:
     kind: orderable
     skins: {db9: teal}
@@ -2362,9 +2377,9 @@ configurations:
       24-drive, riser configuration 17 (1A+2F+3B). Front 24 x 2.5in at slots
       0-23; no rear storage. Requires two processors.
     bays:
-      riser-1: dell/riser-1a-14g@1
-      riser-2: dell/riser-2f-14g@1
-      riser-3: dell/riser-3b-14g@1
+      riser-1: dell/riser-1a-14g@2
+      riser-2: dell/riser-2f-14g@2
+      riser-3: dell/riser-3b-14g@2
   sff24-rsff4-rc0-noriser:
     kind: orderable
     skins: {db9: teal}
@@ -2372,7 +2387,7 @@ configurations:
       28-drive, riser configuration 0 (no riser). Front 24 x 2.5in at slots
       0-23; rear 4 x 2.5in at slots 24-27.
     bays:
-      riser-1: dell/riser-1-none-14g@1
+      riser-1: dell/riser-1-none-14g@2
       riser-2-lp: dell/riser-2-none-14g@1
   sff24-rsff4-rc1-1b2b:
     kind: orderable
@@ -2381,7 +2396,7 @@ configurations:
       28-drive, riser configuration 1 (1B+2B). Front 24 x 2.5in at slots
       0-23; rear 4 x 2.5in at slots 24-27.
     bays:
-      riser-1: dell/riser-1b-14g@1
+      riser-1: dell/riser-1b-14g@2
       riser-2-lp: dell/riser-2b-14g@1
   sff24-rsff4-rc2-1b2c:
     kind: orderable
@@ -2390,7 +2405,7 @@ configurations:
       28-drive, riser configuration 2 (1B+2C). Front 24 x 2.5in at slots
       0-23; rear 4 x 2.5in at slots 24-27. Requires two processors.
     bays:
-      riser-1: dell/riser-1b-14g@1
+      riser-1: dell/riser-1b-14g@2
       riser-2-lp: dell/riser-2c-14g@1
   sff24-msff4-rsff4-rc0-noriser:
     kind: orderable
@@ -2402,7 +2417,7 @@ configurations:
       device has no cover-off view, so this renders exactly like the machine
       without it. See the mid-drive-tray gap.
     bays:
-      riser-1: dell/riser-1-none-14g@1
+      riser-1: dell/riser-1-none-14g@2
       riser-2-lp: dell/riser-2-none-14g@1
   sff24-msff4-rsff4-rc1-1b2b:
     kind: orderable
@@ -2414,7 +2429,7 @@ configurations:
       device has no cover-off view, so this renders exactly like the machine
       without it. See the mid-drive-tray gap.
     bays:
-      riser-1: dell/riser-1b-14g@1
+      riser-1: dell/riser-1b-14g@2
       riser-2-lp: dell/riser-2b-14g@1
   sff24-msff4-rsff4-rc2-1b2c:
     kind: orderable
@@ -2426,7 +2441,7 @@ configurations:
       device has no cover-off view, so this renders exactly like the machine
       without it. See the mid-drive-tray gap. Requires two processors.
     bays:
-      riser-1: dell/riser-1b-14g@1
+      riser-1: dell/riser-1b-14g@2
       riser-2-lp: dell/riser-2c-14g@1
 datasheet:
   title: 'Dell EMC PowerEdge R740xd Spec Sheet'

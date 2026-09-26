@@ -647,9 +647,25 @@ export function createViewer(container, opts = {}) {
       // where the part says it is - the riser alone shows its PCB and its
       // connectors standing off the plate, as it does in the chassis.
       const plain = () => new THREE.MeshLambertMaterial({color: COMP_ENTRY.body.color || '#3a3f44'});
+      // `body.plate` TRIMS THE SLAB here as it does for a footprint. A PCIe
+      // card's face is its bracket, which is not a rectangle: a full-face slab
+      // showed its sides as L-shaped fins round the tip tab and the keyed
+      // flange, where the drawing is transparent. The texture is cloned before
+      // it is retargeted, so the full-face plane that paints the outline keeps
+      // its own mapping.
+      const pl = COMP_ENTRY.body.plate || {at: [0, 0], size: [W, H]};
       const plateMats = mats.map((m, i) => i === 4 ? m : plain());
-      box = new THREE.Mesh(new THREE.BoxGeometry(W, H, 1.2), plateMats);
-      box.position.set(0, 0, D / 2 - 0.6);
+      if (COMP_ENTRY.body.plate && mats[4] && mats[4].map) {
+        const face = mats[4].clone();
+        face.map = mats[4].map.clone();
+        face.map.repeat.set(pl.size[0] / W, pl.size[1] / H);
+        face.map.offset.set(pl.at[0] / W, 1 - (pl.at[1] + pl.size[1]) / H);
+        face.map.needsUpdate = true;
+        plateMats[4] = face;
+      }
+      box = new THREE.Mesh(new THREE.BoxGeometry(pl.size[0], pl.size[1], 1.2), plateMats);
+      box.position.set(pl.at[0] + pl.size[0] / 2 - W / 2,
+                       H / 2 - (pl.at[1] + pl.size[1] / 2), D / 2 - 0.6);
       const bodyBox = new THREE.Group();
       for (const b of bodyBoxes(COMP_ENTRY.body, W, H)) {
         const m = new THREE.Mesh(new THREE.BoxGeometry(b.w, b.h, b.z1 - b.z0),
