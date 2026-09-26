@@ -128,6 +128,13 @@ PART_IFACE = {
     "std/xfp": "10gbase-x-xfp",
     "std/qsfp-ganged": "40gbase-x-qsfpp",
     "std/qsfp28": "100gbase-x-qsfp28",
+    # THE NEWER CAGES HAD NO DEFAULT, so a card that did not type one dropped it
+    # from the export entirely - sixteen ConnectX QSFP56 ports did (the
+    # silent-drops census). Each default is the cage's own top rate; a card or
+    # placement that runs it lower says so. Slugs in both targets (NetBox
+    # 9bcfd739, Nautobot f9cdca3d).
+    "std/qsfp56": "200gbase-x-qsfp56",
+    "std/osfp": "400gbase-x-osfp",
     "std/qsfp-dd": "400gbase-x-qsfpdd",
     # CFP, CFP2 AND CXP ARE NOBODY'S SUBSTRING, exactly as XFP was not, and for
     # the same reason they were absent here: the family test in `iface_type`
@@ -163,6 +170,7 @@ CAGE_FAMILY = {
     "std/sfp": "sfp",
     "std/qsfp-ganged": "qsfp",
     "std/qsfp28": "qsfp",
+    "std/qsfp56": "qsfp",
     "std/qsfp-dd": "qsfp-dd",
     "std/xfp": "xfp",
 }
@@ -636,6 +644,12 @@ PART_MEDIA = {
     ("qsfp112", "400g"): "400gbase-x-qsfp112",
     ("osfp", "400g"): "400gbase-x-osfp",
     ("osfp", "800g"): "800gbase-x-osfp",
+    # A CAGE RUN BELOW ITS TOP RATE TYPES BY THE MODULES IT TAKES. Neither
+    # target has a 100G-QSFP56 or a 200G-QSFP112 type; a QSFP56 cage at 100GbE
+    # runs QSFP28 modules (MCX623106A) and a QSFP112 cage at 200GbE QSFP56 ones
+    # (MCX713106A, MCX755106A), and those are the types that exist.
+    ("qsfp56", "100g"): "100gbase-x-qsfp28",
+    ("qsfp112", "200g"): "200gbase-x-qsfp56",
 }
 
 

@@ -772,3 +772,25 @@ def test_no_sfp28_media_row_so_a_pon_port_stays_pon():
     assert ("sfp28", "25g") not in dx.PART_MEDIA
     part = {"ref": "std/sfp@1", "attrs": {"media": "sfp28", "speed": "25g", "pon": "25gs-pon"}}
     assert dx.placed_type(part) is None
+
+
+@pytest.mark.parametrize("media,speed,expected", [
+    # the rate names the modules the port takes; neither target has a
+    # 100G-QSFP56 or a 200G-QSFP112 type
+    ("qsfp56", "100g", "100gbase-x-qsfp28"),
+    ("qsfp112", "200g", "200gbase-x-qsfp56"),
+])
+def test_a_cage_run_below_its_top_rate_types_by_the_modules_it_takes(media, speed, expected):
+    """MCX623106A runs 100GbE in QSFP56 cages and MCX713106A 200GbE in QSFP112
+    ones; with no row, and no std/qsfp56 default, their ports exported as
+    nothing at all (test_silent_drops caught sixteen)."""
+    part = {"ref": "std/qsfp56@1", "attrs": {"media": media, "speed": speed}}
+    assert dx.placed_type(part) == expected
+
+
+def test_newer_cages_have_a_family_and_a_default():
+    """A QSFP56 or OSFP cage the card does not type falls to a default instead
+    of out of the export, and a QSFP56 cage is asked L96's question."""
+    assert dx.PART_IFACE["std/qsfp56"] == "200gbase-x-qsfp56"
+    assert dx.PART_IFACE["std/osfp"] == "400gbase-x-osfp"
+    assert dx.CAGE_FAMILY["std/qsfp56"] == "qsfp"
