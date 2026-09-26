@@ -15,6 +15,11 @@ the *published build*, not about the hardware.
 ## Unreleased
 
 ### Added
+- Lint L123, library-wide: one module, one bay size. Every bay that accepts a
+  module, in any device or carrier, reserves the same size for it to within a
+  millimetre, compared in the module's own frame so a turned bay matches an
+  upright one. A warning; four remain - the A99-RP-F between the ASR 9902 and
+  9903, and three outside Cisco.
 - `presents` on a `components.json` entry for a part that mates into something:
   what it offers the next tier when it is itself seated - `interface`, `mate`
   and `lift` in its own frame (the point a boot or a plug stands on, and that
@@ -228,6 +233,23 @@ the *published build*, not about the hardware.
   from the cylinder's far end (`lift` + `cyl`), in the build and in the kit.
 
 ### Changed
+- THE ASR 9000 CARD STANDARD. Every full-size ASR 9000 card and every bay that
+  takes one is 41.4 x 395.7 mm, with a 355.6 mm `opening`, so a card seats and
+  draws the same in each chassis that accepts it. RSPs and RPs are no longer
+  drawn larger than the line cards beside them (the RSP-880 was 46.0 x 428.5,
+  32.8 mm past its slot on the ASR 9006). Majors, each a new directory with the
+  old one removed, for the 48 cards whose size changed: `cisco/a99-10x400ge-x-se`, `cisco/a99-10x400ge-x-tr`, `cisco/a99-4hg-flex-se`, `cisco/a99-4hg-flex-tr`, `cisco/a99-rp3-se`, `cisco/a99-rp3-tr`, `cisco/a99-rsp-se`, `cisco/a9k-16t-8-b`, `cisco/a9k-24x10ge-se`, `cisco/a9k-2x100ge-se`, `cisco/a9k-36x10ge-se`, `cisco/a9k-400g-dwdm-tr`, `cisco/a9k-40ge-b`, `cisco/a9k-40ge-e`, `cisco/a9k-40ge-l`, `cisco/a9k-4hg-flex-se`, `cisco/a9k-4hg-flex-tr`, `cisco/a9k-4t-b`, `cisco/a9k-4t-e`, `cisco/a9k-4t-l`, `cisco/a9k-8t-4-b`, `cisco/a9k-8t-4-e`, `cisco/a9k-8t-4-l`, `cisco/a9k-8t-b`, `cisco/a9k-8t-e`, `cisco/a9k-8t-l`, `cisco/a9k-mod160-se`, `cisco/a9k-mod160-tr`, `cisco/a9k-mod200-se`, `cisco/a9k-mod200-tr`, `cisco/a9k-mod400-se`, `cisco/a9k-mod400-tr`, `cisco/a9k-mod80-se`, `cisco/a9k-mod80-tr`, `cisco/a9k-rsp-8g`, `cisco/a9k-rsp`, `cisco/a9k-rsp440-se`, `cisco/a9k-rsp440-tr`, `cisco/a9k-rsp5-se`, `cisco/a9k-rsp5-tr`, `cisco/a9k-rsp880-lt-se`, `cisco/a9k-rsp880-lt-tr`, `cisco/a9k-rsp880-se`, `cisco/a9k-rsp880-tr`, `cisco/a9k-sip-700-8g`, `cisco/a9k-sip-700`, `cisco/asr-9922-rp-se`, `cisco/asr-9922-rp-tr`, all @1 to @2.
+  A ref naming an old major resolves to nothing; the dist `contract` number is
+  unchanged. Their art keeps every port, lamp and legend at its drawn size and
+  moves it in proportion. Bays on the ASR 9006, 9010, 9904, 9906, 9910, 9912 and
+  9922 keep their centres; the ASR 9010 slots are evenly spaced again. Cards
+  that had been left out of `accepts` only for size now seat: `a9k-2x100ge-se`
+  and `a9k-400g-dwdm-tr` on the 9006 and 9922, `a9k-400g-dwdm-tr` on the 9912,
+  and `a99-10x400ge-x-se`/`-tr` and `a9k-400g-dwdm-tr` on the 9904
+  (roc-ops/Portrayal#16).
+- The ASR 9001 MPA bays reserve the MPA envelope, 34.54 x 161.8, with the
+  measured hole as their `opening`, matching the A9K-MOD carriers; both SIP-700
+  cards reserve 167.87 for all four SPA subslots.
 - Pluggable cage accept lists (`cages[].accepts`) now apply the rate ceiling
   to the vendor cable ends: a part is offered only in a cage at or above its
   rung. The seven cable-end wrappers (1.1.0) state that rung as `attrs.rate`;
