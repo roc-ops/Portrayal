@@ -66,7 +66,8 @@ EMAIL = re.compile(r"\b[A-Za-z0-9._%+-]+@((?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,})\b")
 FILE_EXTENSIONS = frozenset({"png", "svg", "jpg", "jpeg", "webp", "gif", "js", "mjs",
                              "json", "yaml", "yml", "md", "css", "html", "glb", "py"})
 EMAIL_DOMAINS_ALLOWED = ("example.com", "example.org", "example.net",
-                         "users.noreply.github.com", "anthropic.com")
+                         "users.noreply.github.com", "anthropic.com",
+                         "portrayal.dev")   # the project's own role addresses
 
 
 def _allowed_email(m):

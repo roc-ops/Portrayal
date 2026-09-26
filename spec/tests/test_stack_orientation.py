@@ -261,7 +261,7 @@ def test_two_real_cards_pair_the_way_the_hardware_stacks():
     """The proof the pairing was checked against before the sweep: an ASR 9000
     card on its side pairs its two columns across the band between them, and a
     Casa card's single column of cages is not a stack at all."""
-    a9k = stacks.cages(_resolve("cisco/a9k-40ge-b@1")["parts"], _resolve)
+    a9k = stacks.cages(_resolve("cisco/a9k-40ge-b@2")["parts"], _resolve)
     got = {(p["first"]["id"], p["second"]["id"]) for p in stacks.pairs(a9k)}
     assert got == {(f"p{i}", f"p{i + 1}") for i in range(0, 40, 2)}
     casa = stacks.cages(_resolve("casa/smm-300g@1")["parts"], _resolve)

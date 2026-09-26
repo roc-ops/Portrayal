@@ -588,7 +588,7 @@ def test_a_module_in_a_nested_bay_is_refused_the_same_way(tmp_path, lib):
                           tmp_path / "asr-9010") / "device.yaml"
     d = yaml.safe_load(dev.read_text())
     cfg = d["configurations"]["ac"]
-    cfg["bays"] = {**(cfg.get("bays") or {}), "slot-0": "cisco/a9k-mod160-tr@1",
+    cfg["bays"] = {**(cfg.get("bays") or {}), "slot-0": "cisco/a9k-mod160-tr@2",
                    "slot-0/bay-0": "test/self-adapter@1"}
     dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
     r = run(dev, tmp_path / "o", lib)

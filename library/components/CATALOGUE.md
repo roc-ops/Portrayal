@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices name it and
 how many other components compose it. Search this page before drawing a part;
 the [components README](README.md) says which namespace a new one belongs in.
 
-998 component majors in 23 namespaces.
+997 component majors in 23 namespaces.
 
 A `std/x` and a `common/x` with the same name are two layers rather than two
 copies: `std/` is the aperture, `common/` is the bezel, shell or nut around it and
@@ -239,19 +239,19 @@ aperture when it is a bare opening - never both at one position. The README's
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
-| `cisco/a99-10x400ge-x-se@1` | module | line-card | 42.67 × 403.1 × 609.6 |  | 4 | 0 | Cisco ASR 9900 Series 4T Service Edge Line Card, 5th generation |
-| `cisco/a99-10x400ge-x-tr@1` | module | line-card | 42.67 × 403.1 × 609.6 |  | 4 | 0 | Cisco ASR 9900 Series 4T Packet Transport Line Card, 5th generation |
+| `cisco/a99-10x400ge-x-se@2` | module | line-card | 41.4 × 395.7 × 609.6 |  | 5 | 0 | Cisco ASR 9900 Series 4T Service Edge Line Card, 5th generation |
+| `cisco/a99-10x400ge-x-tr@2` | module | line-card | 41.4 × 395.7 × 609.6 |  | 5 | 0 | Cisco ASR 9900 Series 4T Packet Transport Line Card, 5th generation |
 | `cisco/a99-12x100ge@1` | module | line-card | 41.4 × 395.7 × 559.3 |  | 4 | 0 | Cisco ASR 9000 Series 12-Port 100 Gigabit Ethernet Line Card |
 | `cisco/a99-32x100ge-se@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 0 | 0 | Cisco ASR 9900 Series 32-Port 100 Gigabit Ethernet Service Edge Line Card, 4th generation |
 | `cisco/a99-32x100ge-tr@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 5 | 0 | Cisco ASR 9900 Series 32-Port 100 Gigabit Ethernet Packet Transport Line Card, 4th generation |
 | `cisco/a99-32x100ge-x-se@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 5 | 0 | Cisco ASR 9900 Series 3.2T Service Edge Line Card, 5th generation |
 | `cisco/a99-32x100ge-x-tr@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 5 | 0 | Cisco ASR 9900 Series 3.2T Packet Transport Line Card, 5th generation |
-| `cisco/a99-4hg-flex-se@1` | module | line-card | 42.67 × 403.1 × 609.6 |  | 4 | 0 | Cisco A99 400GE Combo Service Edge Line Card, 5th generation |
-| `cisco/a99-4hg-flex-tr@1` | module | line-card | 42.67 × 403.1 × 609.6 |  | 4 | 0 | Cisco A99 400GE Combo Packet Transport Line Card, 5th generation |
+| `cisco/a99-4hg-flex-se@2` | module | line-card | 41.4 × 395.7 × 609.6 |  | 4 | 0 | Cisco A99 400GE Combo Service Edge Line Card, 5th generation |
+| `cisco/a99-4hg-flex-tr@2` | module | line-card | 41.4 × 395.7 × 609.6 |  | 4 | 0 | Cisco A99 400GE Combo Packet Transport Line Card, 5th generation |
 | `cisco/a99-rp-f@1` | module | supervisor | 221.84 × 39.52 |  | 3 | 0 | Cisco ASR 9900 Fixed Chassis Route Processor |
-| `cisco/a99-rp3-se@1` | module | supervisor | 41.4 × 428.2 × 626.6 |  | 2 | 0 | Cisco ASR 9900 Series Route Processor 3, Service Edge optimised, for the ASR 9912 and ASR 9922 |
-| `cisco/a99-rp3-tr@1` | module | supervisor | 41.4 × 428.2 × 626.6 |  | 2 | 2 | Cisco ASR 9900 Series Route Processor 3, Packet Transport optimised, for the ASR 9912 and ASR 9922 |
-| `cisco/a99-rsp-se@1` | module | supervisor | 44.2 × 403.4 × 625.6 |  | 2 | 0 | Cisco ASR 9910 and ASR 9906 Route Switch Processor, Service Edge optimised - the card Cisco's guides call the… |
+| `cisco/a99-rp3-se@2` | module | supervisor | 41.4 × 395.7 × 626.6 |  | 2 | 0 | Cisco ASR 9900 Series Route Processor 3, Service Edge optimised, for the ASR 9912 and ASR 9922 |
+| `cisco/a99-rp3-tr@2` | module | supervisor | 41.4 × 395.7 × 626.6 |  | 2 | 2 | Cisco ASR 9900 Series Route Processor 3, Packet Transport optimised, for the ASR 9912 and ASR 9922 |
+| `cisco/a99-rsp-se@2` | module | supervisor | 41.4 × 395.7 × 625.6 |  | 2 | 0 | Cisco ASR 9910 and ASR 9906 Route Switch Processor, Service Edge optimised - the card Cisco's guides call the… |
 | `cisco/a99-sfc-s@1` | module | fabric | 76.2 × 492.1 |  | 1 | 0 | Cisco ASR 9900 switch fabric card for the ASR 9910, the generation the A99-SFC3-S replaced |
 | `cisco/a99-sfc3@1` | module | fabric | 41.4 × 395.7 |  | 2 | 0 | Cisco ASR 9900 Series Third Generation Switch Fabric Card |
 | `cisco/a99-sfc3-s@1` | module | fabric | 76.2 × 492.1 |  | 1 | 0 | Cisco ASR 9900 Series Third Generation Switch Fabric Card for the ASR 9910 |
@@ -260,37 +260,37 @@ aperture when it is a bare opening - never both at one position. The README's
 | `cisco/a9903-8hg-pec@1` | module | line-card | 436.58 × 38.73 × 383.28 |  | 1 | 0 | Cisco ASR 9903 Series 800G (0.8T) Port Expansion Card |
 | `cisco/a9k-1600w-ac@1` | module | psu | 71.21 × 39.21 |  | 1 | 1 | Cisco ASR 9901 1600 W AC power module |
 | `cisco/a9k-1600w-dc@1` | module | psu | 71.21 × 39.21 |  | 1 | 0 | Cisco ASR 9901 1600 W DC power module |
-| `cisco/a9k-16t-8-b@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 16-Port 10 Gigabit Ethernet Oversubscribed Line Card |
+| `cisco/a9k-16t-8-b@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 16-Port 10 Gigabit Ethernet Oversubscribed Line Card |
 | `cisco/a9k-16x100ge-se@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 0 | 0 | Cisco ASR 9000 Series 16-Port 100 Gigabit Ethernet Service Edge Line Card, 4th generation |
 | `cisco/a9k-16x100ge-tr@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 7 | 0 | Cisco ASR 9000 Series 16-Port 100 Gigabit Ethernet Packet Transport Line Card, 4th generation |
 | `cisco/a9k-20hg-flex-se@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 7 | 0 | Cisco ASR 9000 Series 2T Service Edge Combo Line Card, 5th generation |
 | `cisco/a9k-20hg-flex-tr@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 7 | 0 | Cisco ASR 9000 Series 2T Packet Transport Combo Line Card, 5th generation |
 | `cisco/a9k-24x10ge-1g-se@1` | module | line-card | 41.4 × 395.7 × 559.3 |  | 7 | 0 | Cisco ASR 9000 Series 24-Port Dual-Rate 10GE/1GE Line Card, Service Edge optimised |
-| `cisco/a9k-24x10ge-se@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 24-Port 10 Gigabit Ethernet Line Card, original generation |
-| `cisco/a9k-2x100ge-se@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 2-Port 100 Gigabit Ethernet DX Line Card with CFP |
-| `cisco/a9k-36x10ge-se@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 36-Port 10 Gigabit Ethernet Line Card, original generation |
-| `cisco/a9k-400g-dwdm-tr@1` | module | line-card | 43.7 × 395.7 × 569 |  | 1 | 0 | Cisco ASR 9000 400-Gbps IPoDWDM Line Card |
-| `cisco/a9k-40ge-b@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 40-Port Gigabit Ethernet Line Card with SFP, original generation |
-| `cisco/a9k-40ge-e@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 40-Port Gigabit Ethernet Line Card with SFP, original generation |
-| `cisco/a9k-40ge-l@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 40-Port Gigabit Ethernet Line Card with SFP, original generation |
+| `cisco/a9k-24x10ge-se@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 24-Port 10 Gigabit Ethernet Line Card, original generation |
+| `cisco/a9k-2x100ge-se@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 3 | 0 | Cisco ASR 9000 Series 2-Port 100 Gigabit Ethernet DX Line Card with CFP |
+| `cisco/a9k-36x10ge-se@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 36-Port 10 Gigabit Ethernet Line Card, original generation |
+| `cisco/a9k-400g-dwdm-tr@2` | module | line-card | 41.4 × 395.7 × 569 |  | 5 | 0 | Cisco ASR 9000 400-Gbps IPoDWDM Line Card |
+| `cisco/a9k-40ge-b@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 40-Port Gigabit Ethernet Line Card with SFP, original generation |
+| `cisco/a9k-40ge-e@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 40-Port Gigabit Ethernet Line Card with SFP, original generation |
+| `cisco/a9k-40ge-l@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 40-Port Gigabit Ethernet Line Card with SFP, original generation |
 | `cisco/a9k-48x10ge-1g-se@1` | module | line-card | 41.4 × 395.7 × 559.3 |  | 7 | 0 | Cisco ASR 9000 Series 48-Port Dual-Rate 10GE/1GE Line Card, Service Edge optimised |
-| `cisco/a9k-4hg-flex-se@1` | module | line-card | 42.67 × 403.1 × 609.6 |  | 5 | 0 | Cisco A9K 400GE Combo Service Edge Line Card, 5th generation |
-| `cisco/a9k-4hg-flex-tr@1` | module | line-card | 42.67 × 403.1 × 609.6 |  | 5 | 0 | Cisco A9K 400GE Combo Packet Transport Line Card, 5th generation |
-| `cisco/a9k-4t-b@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 4-Port 10 Gigabit Ethernet Line Card with XFP, original generation |
-| `cisco/a9k-4t-e@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 4-Port 10 Gigabit Ethernet Line Card with XFP, original generation |
-| `cisco/a9k-4t-l@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 4-Port 10 Gigabit Ethernet Line Card with XFP, original generation |
+| `cisco/a9k-4hg-flex-se@2` | module | line-card | 41.4 × 395.7 × 609.6 |  | 5 | 0 | Cisco A9K 400GE Combo Service Edge Line Card, 5th generation |
+| `cisco/a9k-4hg-flex-tr@2` | module | line-card | 41.4 × 395.7 × 609.6 |  | 5 | 0 | Cisco A9K 400GE Combo Packet Transport Line Card, 5th generation |
+| `cisco/a9k-4t-b@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 4-Port 10 Gigabit Ethernet Line Card with XFP, original generation |
+| `cisco/a9k-4t-e@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 4-Port 10 Gigabit Ethernet Line Card with XFP, original generation |
+| `cisco/a9k-4t-l@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 4-Port 10 Gigabit Ethernet Line Card with XFP, original generation |
 | `cisco/a9k-4x100ge@1` | module | line-card | 41.4 × 395.7 × 559.3 |  | 5 | 0 | Cisco ASR 9000 Series 4-Port 100 Gigabit Ethernet LAN Line Card |
 | `cisco/a9k-4x100ge-se@1` | module | line-card | 41.4 × 395.7 × 559.3 |  | 5 | 0 | Cisco ASR 9000 Series 4-Port 100 Gigabit Ethernet Line Card with CPAK |
 | `cisco/a9k-750w-ac@1` | module | psu | 55.2 × 39.9 |  | 1 | 0 | Cisco ASR 9001 and ASR 9001-S AC power entry module, 750 W |
 | `cisco/a9k-750w-dc@1` | module | psu | 55.2 × 39.9 |  | 1 | 0 | Cisco ASR 9001 and ASR 9001-S DC power entry module, 750 W |
 | `cisco/a9k-8hg-flex-se@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 7 | 0 | Cisco ASR 9000 Series 800G Service Edge Combo Line Card, 5th generation |
 | `cisco/a9k-8hg-flex-tr@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 7 | 0 | Cisco ASR 9000 Series 800G Packet Transport Combo Line Card, 5th generation |
-| `cisco/a9k-8t-4-b@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 8-Port 10 Gigabit Ethernet Line Card with XFP, 2:1 oversubscribed, original generation |
-| `cisco/a9k-8t-4-e@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 8-Port 10 Gigabit Ethernet Line Card with XFP, 2:1 oversubscribed, original generation |
-| `cisco/a9k-8t-4-l@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 8-Port 10 Gigabit Ethernet Line Card with XFP, 2:1 oversubscribed, original generation |
-| `cisco/a9k-8t-b@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 8-Port 10 Gigabit Ethernet Line Card with XFP, 80 Gbps line rate, original generation |
-| `cisco/a9k-8t-e@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 8-Port 10 Gigabit Ethernet Line Card with XFP, 80 Gbps line rate, original generation |
-| `cisco/a9k-8t-l@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 8-Port 10 Gigabit Ethernet Line Card with XFP, 80 Gbps line rate, original generation |
+| `cisco/a9k-8t-4-b@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 8-Port 10 Gigabit Ethernet Line Card with XFP, 2:1 oversubscribed, original generation |
+| `cisco/a9k-8t-4-e@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 8-Port 10 Gigabit Ethernet Line Card with XFP, 2:1 oversubscribed, original generation |
+| `cisco/a9k-8t-4-l@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 8-Port 10 Gigabit Ethernet Line Card with XFP, 2:1 oversubscribed, original generation |
+| `cisco/a9k-8t-b@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 8-Port 10 Gigabit Ethernet Line Card with XFP, 80 Gbps line rate, original generation |
+| `cisco/a9k-8t-e@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 8-Port 10 Gigabit Ethernet Line Card with XFP, 80 Gbps line rate, original generation |
+| `cisco/a9k-8t-l@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 8-Port 10 Gigabit Ethernet Line Card with XFP, 80 Gbps line rate, original generation |
 | `cisco/a9k-8x100g-lb-se@1` | module | line-card | 41.4 × 395.7 × 559.3 |  | 5 | 0 | Cisco ASR 9000 Series 8-Port 100 Gigabit Ethernet Line Card with CPAK |
 | `cisco/a9k-8x100ge-se@1` | module | line-card | 41.4 × 395.7 × 559.3 |  | 5 | 0 | Cisco ASR 9000 Series 8-Port 100 Gigabit Ethernet Line Card with CPAK |
 | `cisco/a9k-8x100ge-x-se@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 0 | 0 | Cisco ASR 9000 Series 8-Port 100 Gigabit Ethernet QSFP SE Line Card, 4th generation |
@@ -300,14 +300,14 @@ aperture when it is a bare opening - never both at one position. The README's
 | `cisco/a9k-dc-pem-v3@1` | module | power | 468.12 × 48.03 |  | 0 | 0 | Cisco ASR 9000 version 3 DC power entry module - a power TRAY, not a supply |
 | `cisco/a9k-fan-tray-door@1` | module | blank | 444.5 × 70.97 × 20 |  | 1 | 0 | Hinged fan tray door for the Cisco ASR 9006 Router |
 | `cisco/a9k-ground-pad@1` | component | ground | 46 × 20 |  | 10 | 0 | Cisco ASR 9000 NEBS bonding and grounding pad - the two-hole lug landing every chassis in the family cuts, wi… |
-| `cisco/a9k-mod160-se@1` | module | line-card | 43.7 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 160 Gigabyte Modular Line Card, Service Edge Optimized |
-| `cisco/a9k-mod160-tr@1` | module | line-card | 43.7 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 160 Gigabyte Modular Line Card, Packet Transport Optimized |
-| `cisco/a9k-mod200-se@1` | module | line-card | 43.7 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 200 Gigabyte Modular Line Card, Service Edge Optimized |
-| `cisco/a9k-mod200-tr@1` | module | line-card | 43.7 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 200 Gigabyte Modular Line Card, Packet Transport Optimized |
-| `cisco/a9k-mod400-se@1` | module | line-card | 43.7 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 400 Gigabyte Modular Line Card, Service Edge Optimized |
-| `cisco/a9k-mod400-tr@1` | module | line-card | 43.7 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 400 Gigabyte Modular Line Card, Packet Transport Optimized |
-| `cisco/a9k-mod80-se@1` | module | line-card | 43.7 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 80 Gigabyte Modular Line Card, Service Edge Optimized |
-| `cisco/a9k-mod80-tr@1` | module | line-card | 43.7 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 80 Gigabyte Modular Line Card, Packet Transport Optimized |
+| `cisco/a9k-mod160-se@2` | module | line-card | 41.4 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 160 Gigabyte Modular Line Card, Service Edge Optimized |
+| `cisco/a9k-mod160-tr@2` | module | line-card | 41.4 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 160 Gigabyte Modular Line Card, Packet Transport Optimized |
+| `cisco/a9k-mod200-se@2` | module | line-card | 41.4 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 200 Gigabyte Modular Line Card, Service Edge Optimized |
+| `cisco/a9k-mod200-tr@2` | module | line-card | 41.4 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 200 Gigabyte Modular Line Card, Packet Transport Optimized |
+| `cisco/a9k-mod400-se@2` | module | line-card | 41.4 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 400 Gigabyte Modular Line Card, Service Edge Optimized |
+| `cisco/a9k-mod400-tr@2` | module | line-card | 41.4 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 400 Gigabyte Modular Line Card, Packet Transport Optimized |
+| `cisco/a9k-mod80-se@2` | module | line-card | 41.4 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 80 Gigabyte Modular Line Card, Service Edge Optimized |
+| `cisco/a9k-mod80-tr@2` | module | line-card | 41.4 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 80 Gigabyte Modular Line Card, Packet Transport Optimized |
 | `cisco/a9k-mpa-1x100ge@1` | module | line-card | 34.54 × 161.8 × 170.18 |  | 0 | 0 | Cisco 1-Port 100 Gigabit Ethernet Modular Port Adapter with CFP2 |
 | `cisco/a9k-mpa-1x40ge@1` | module | line-card | 34.54 × 161.8 × 170.18 |  | 1 | 8 | Cisco 1-Port 40 Gigabit Ethernet Modular Port Adapter with QSFP+ |
 | `cisco/a9k-mpa-20x10ge@1` | module | line-card | 34.54 × 161.8 × 170.18 |  | 0 | 8 | Cisco 20-Port 10 Gigabit Ethernet Modular Port Adapter with SFP+ |
@@ -324,18 +324,18 @@ aperture when it is a bare opening - never both at one position. The README's
 | `cisco/a9k-pwr-1p5kw-dc@1` | module | psu | 139.12 × 44.45 |  | 2 | 0 | Cisco ASR 9000 version 1 power module for a modular-chassis power tray |
 | `cisco/a9k-pwr-2kw-dc@1` | module | psu | 139.12 × 44.45 |  | 2 | 0 | Cisco ASR 9000 version 1 power module for a modular-chassis power tray |
 | `cisco/a9k-pwr-3kw-ac@1` | module | psu | 139.12 × 44.45 |  | 2 | 0 | Cisco ASR 9000 version 1 power module for a modular-chassis power tray |
-| `cisco/a9k-rsp@1` | module | supervisor | 41.9 × 406.4 × 673.8 |  | 1 | 1 | Cisco ASR 9000 Series Route Switch Processor with 4 GB of DRAM, the ORIGINAL generation - the card the ASR 90… |
-| `cisco/a9k-rsp-8g@1` | module | supervisor | 41.9 × 406.4 × 673.8 |  | 0 | 0 | Cisco ASR 9000 Series Route Switch Processor with 8 GB of DRAM, the ORIGINAL generation - the card the ASR 90… |
-| `cisco/a9k-rsp440-se@1` | module | supervisor | 42 × 406 × 674 |  | 0 | 0 | Cisco ASR 9000 Series Route Switch Processor 440, Service Edge optimised |
-| `cisco/a9k-rsp440-tr@1` | module | supervisor | 42 × 406 × 674 |  | 0 | 0 | Cisco ASR 9000 Series Route Switch Processor 440, Packet Transport optimised |
-| `cisco/a9k-rsp5-se@1` | module | supervisor | 41 × 402.8 × 625.3 |  | 0 | 0 | Cisco ASR 9000 Series Route Switch Processor 5, Service Edge optimised |
-| `cisco/a9k-rsp5-tr@1` | module | supervisor | 41 × 402.8 × 625.3 |  | 0 | 0 | Cisco ASR 9000 Series Route Switch Processor 5, Packet Transport optimised |
-| `cisco/a9k-rsp880-lt-se@1` | module | supervisor | 46 × 428.5 × 628.9 |  | 5 | 0 | Cisco ASR 9000 Route Switch Processor 880-LT, Service Edge optimised - four cores at 2.4 GHz and two 128 GB S… |
-| `cisco/a9k-rsp880-lt-tr@1` | module | supervisor | 46 × 428.5 × 628.9 |  | 5 | 0 | Cisco ASR 9000 Route Switch Processor 880-LT, Packet Transport optimised - four cores at 2.4 GHz and two 128 … |
-| `cisco/a9k-rsp880-se@1` | module | supervisor | 46 × 428.5 × 628.9 |  | 3 | 0 | Cisco ASR 9000 Route Switch Processor 880, Service Edge optimised, with eight cores at 1.9 GHz and four 10-GE… |
-| `cisco/a9k-rsp880-tr@1` | module | supervisor | 46 × 428.5 × 628.9 |  | 3 | 0 | Cisco ASR 9000 Route Switch Processor 880, Packet Transport optimised, with eight cores at 1.9 GHz and four 1… |
-| `cisco/a9k-sip-700@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 SIP-700 SPA Interface Processor with 4 GB of memory |
-| `cisco/a9k-sip-700-8g@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 SIP-700 SPA Interface Processor with 8 GB of memory |
+| `cisco/a9k-rsp@2` | module | supervisor | 41.4 × 395.7 × 673.8 |  | 1 | 1 | Cisco ASR 9000 Series Route Switch Processor with 4 GB of DRAM, the ORIGINAL generation - the card the ASR 90… |
+| `cisco/a9k-rsp-8g@2` | module | supervisor | 41.4 × 395.7 × 673.8 |  | 0 | 0 | Cisco ASR 9000 Series Route Switch Processor with 8 GB of DRAM, the ORIGINAL generation - the card the ASR 90… |
+| `cisco/a9k-rsp440-se@2` | module | supervisor | 41.4 × 395.7 × 674 |  | 0 | 0 | Cisco ASR 9000 Series Route Switch Processor 440, Service Edge optimised |
+| `cisco/a9k-rsp440-tr@2` | module | supervisor | 41.4 × 395.7 × 674 |  | 0 | 0 | Cisco ASR 9000 Series Route Switch Processor 440, Packet Transport optimised |
+| `cisco/a9k-rsp5-se@2` | module | supervisor | 41.4 × 395.7 × 625.3 |  | 0 | 0 | Cisco ASR 9000 Series Route Switch Processor 5, Service Edge optimised |
+| `cisco/a9k-rsp5-tr@2` | module | supervisor | 41.4 × 395.7 × 625.3 |  | 0 | 0 | Cisco ASR 9000 Series Route Switch Processor 5, Packet Transport optimised |
+| `cisco/a9k-rsp880-lt-se@2` | module | supervisor | 41.4 × 395.7 × 628.9 |  | 5 | 0 | Cisco ASR 9000 Route Switch Processor 880-LT, Service Edge optimised - four cores at 2.4 GHz and two 128 GB S… |
+| `cisco/a9k-rsp880-lt-tr@2` | module | supervisor | 41.4 × 395.7 × 628.9 |  | 5 | 0 | Cisco ASR 9000 Route Switch Processor 880-LT, Packet Transport optimised - four cores at 2.4 GHz and two 128 … |
+| `cisco/a9k-rsp880-se@2` | module | supervisor | 41.4 × 395.7 × 628.9 |  | 3 | 0 | Cisco ASR 9000 Route Switch Processor 880, Service Edge optimised, with eight cores at 1.9 GHz and four 10-GE… |
+| `cisco/a9k-rsp880-tr@2` | module | supervisor | 41.4 × 395.7 × 628.9 |  | 3 | 0 | Cisco ASR 9000 Route Switch Processor 880, Packet Transport optimised, with eight cores at 1.9 GHz and four 1… |
+| `cisco/a9k-sip-700@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 SIP-700 SPA Interface Processor with 4 GB of memory |
+| `cisco/a9k-sip-700-8g@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 SIP-700 SPA Interface Processor with 8 GB of memory |
 | `cisco/a9k-slot-cover@1` | module | blank | 41.4 × 395.7 × 25 |  | 7 | 0 | Line card and RSP/RP blank filler for a Cisco ASR 9000 modular chassis |
 | `cisco/asr-9001-fan@1` | module | fan | 54.76 × 88.19 |  | 1 | 0 | Cisco ASR 9001 fan module |
 | `cisco/asr-9006-fan@1` | module | fan | 175.65 × 70.97 |  | 1 | 0 | Cisco ASR 9006 Router fan tray |
@@ -346,8 +346,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `cisco/asr-9910-fan@1` | module | fan | 447.09 × 41.07 |  | 1 | 0 | Cisco ASR 9910 Router fan tray |
 | `cisco/asr-9912-sfc110@1` | module | fabric | 41.4 × 395.7 |  | 1 | 0 | Cisco ASR 9912 Router Switch Fabric Card, first generation |
 | `cisco/asr-9922-fan-v3@1` | module | fan | 475.95 × 38.1 × 584.2 |  | 1 | 3 | Cisco ASR 9922 Router fan tray, version 3 |
-| `cisco/asr-9922-rp-se@1` | module | supervisor | 46 × 428.5 × 628.9 |  | 2 | 0 | Cisco ASR 9900 Route Processor, Service Edge optimised, for the ASR 9922 and ASR 9912 |
-| `cisco/asr-9922-rp-tr@1` | module | supervisor | 46 × 428.5 × 628.9 |  | 2 | 0 | Cisco ASR 9900 Route Processor, Packet Transport optimised, for the ASR 9922 and ASR 9912 |
+| `cisco/asr-9922-rp-se@2` | module | supervisor | 41.4 × 395.7 × 628.9 |  | 2 | 0 | Cisco ASR 9900 Route Processor, Service Edge optimised, for the ASR 9922 and ASR 9912 |
+| `cisco/asr-9922-rp-tr@2` | module | supervisor | 41.4 × 395.7 × 628.9 |  | 2 | 0 | Cisco ASR 9900 Route Processor, Packet Transport optimised, for the ASR 9922 and ASR 9912 |
 | `cisco/asr-9922-sfc110@1` | module | fabric | 41.4 × 395.7 |  | 1 | 0 | Cisco ASR 9922 Router Switch Fabric Card, first generation |
 | `cisco/led-matrix-4@1` | component | display | 14 × 25 |  | 1 | 1 | The four-character LED matrix a Cisco ASR 9000 route processor shows its boot stage on, as the ASR 9901 carri… |
 | `cisco/pwr-1p6kw-ac@1` | module | psu | 74.69 × 40.2 |  | 2 | 2 | Cisco ASR 9900 fixed-chassis 1.6 kW AC power module |
@@ -461,7 +461,7 @@ aperture when it is a bare opening - never both at one position. The README's
 |---|---|---|---|---|---|---|---|
 | `credo/hiwire-shift-qsfp-dd@1` | module | transceiver | 18.35 × 8.5 × 58.26 | qsfp-dd | 0 | 0 | Credo HiWire SHIFT active electrical cable, the 400G QSFP-DD end of a 400G to four 100G QSFP28 breakout - a Q… |
 
-## dell/ (57)
+## dell/ (56)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -494,7 +494,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/rear-handle-14g@1` | component | mechanical | 111.69 × 41.85 × 49.59 |  | 1 | 0 | The moulded rear grab handle of a 14G PowerEdge - a block on the left, a rail running right and a leg falling… |
 | `dell/riser-1-none-14g@2` | module | riser | 107.59 × 62 |  | 1 | 0 | Dell riser none - no card; the three openings take fillers only |
 | `dell/riser-1-plate-14g@1` | component | riser | 107.59 × 62 |  | 0 | 4 | the riser 1 plate on a 14th-generation PowerEdge - one pressing with three windows, shared by every riser 1 a… |
-| `dell/riser-1-shroud-14g@1` | component | mechanical | 25.62 × 64.43 × 17.76 |  | 1 | 4 | The sheet metal right of riser 1 on a 14G PowerEdge - the outer skin over the PCIe retention bracket, and the… |
+| `dell/riser-1-shroud-14g@1` | component | mechanical | 25.62 × 64.43 × 17.76 |  | 1 | 3 | The sheet metal right of riser 1 on a 14G PowerEdge - the outer skin over the PCIe retention bracket, and the… |
 | `dell/riser-1-top-shelf-14g@1` | component | mechanical | 41.5 × 14.75 × 14.68 |  | 1 | 1 | The shelf of chassis metal closing the top of riser 1's bay on a 14G PowerEdge, between the riser shroud and … |
 | `dell/riser-1a-14g@2` | module | riser | 107.59 × 62 × 184.8 |  | 1 | 0 | Dell riser 1A - two x16 full-height slots on the three-window riser 1 plate; the middle opening has no connec… |
 | `dell/riser-1b-14g@2` | module | riser | 107.59 × 62 × 184.8 |  | 1 | 8 | Dell riser 1B - 3 wired slots on the shared riser 1 plate |
@@ -516,7 +516,6 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/riser-card-clip-14g@1` | component | mechanical | 8.4 × 16.4 |  | 0 | 3 | The blue card-retention clip at the end of a riser's slots on a 14G PowerEdge, where the L of a PCIe bracket … |
 | `dell/riser-card-lp-14g@1` | component | riser | 27.4 × 211.4 |  | 0 | 2 | The low-profile riser card of a 2U 14G PowerEdge seen from above - the short card that carries riser 2's sing… |
 | `dell/riser-divider-plate-14g@1` | component | mechanical | 11.32 × 40.61 |  | 1 | 0 | The sheet metal either side of the rear-bay divider on a 14G PowerEdge - the plate right of riser 2 and the p… |
-| `dell/riser-lower-trim-14g@1` | component | mechanical | 121.06 × 1.81 × 2 |  | 1 | 0 | The strip of chassis metal below riser 1 on a 14G PowerEdge, covering the bottom card's keyed end |
 | `dell/rj45-port-14g@1` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 0 | 3 | A 14G PowerEdge network port - common/rj45-eth@1 carrying the link and activity states ISM table 11 gives it |
 | `dell/system-board-14g@1` | component | mechanical | 422.8 × 456.5 × 79.9 |  | 1 | 2 | The system board of a 14G PowerEdge seen from above - the floor of the chassis, visible between the fan cage,… |
 | `dell/system-cover-14g@1` | component | mechanical | 434 × 540.6 |  | 1 | 0 | The system cover of a 14G PowerEdge - the lid over the mid-drive tray, the risers and the processor tray, rel… |
