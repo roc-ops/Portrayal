@@ -216,9 +216,14 @@ def test_the_index_carries_a_parts_other_faces():
     # fhd-1mtp24-lc-om3-a - each declare their OS2 twin's `faces.rear`.
     # 35, not 33: the 36-fibre pair, fhd-3mtp18-lc-os2-a and -om4-a, declare
     # fs/fhd-3mtp18-lc-rear@1.
+    # 48, not 35: the thirteen FHD fibre adapter panels (fhd-fap12lcd-os2 and
+    # its APC, OM4 and OM5 twins; fhd-fap18lcd-os2, -om4; fhd-fap6scd-apc-os2,
+    # -os2, -om4; fhd-fap12mtp-a, -b, fhd-fap8mtp-b, fhd-fap12mtp16-a) each
+    # declare a rear face - the adapters seen from behind. The modular panel
+    # and the blank have none.
     with_faces = [e for e in entries if e.get("faces")]
-    assert len(with_faces) == 35, \
-        f"expected exactly 35 of {len(entries)} entries to carry a faces " \
+    assert len(with_faces) == 48, \
+        f"expected exactly 48 of {len(entries)} entries to carry a faces " \
         f"key, found {len(with_faces)}"
 
 

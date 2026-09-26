@@ -70,6 +70,7 @@ SHIPS = {
     "common/mpo-adapter@2": ("self", MPO_CAP),
     "common/mpo-flange-adapter@2": ("self", MPO_CAP),
     "common/mpo24-flange-adapter@2": ("self", MPO_CAP),
+    "common/mpo16-adapter@1": ("self", "common/mpo16-dust-cap@1"),
 }
 SHUTTERED = "common/lc-duplex-shuttered-adapter@2"
 ADAPTERS = tuple(SHIPS) + (SHUTTERED,)
@@ -113,19 +114,24 @@ def adapters_in(root, refs=ADAPTERS):
 
 
 def rear_flanges(root):
-    """[path] for every flanged MPO bulkhead on a PROJECTED cassette back,
-    which a rear drawing draws without its refs: a port presenting `mpo`
-    under a projection."""
+    """[path] for every MPO port on a PROJECTED module back - a cassette's
+    flanged bulkhead or an adapter panel's tile -
+    which a rear drawing draws without its refs: a port presenting `mpo` or
+    `mpo16` under a projection."""
     out = []
     for proj in root.iter():
         if not (_is_g(proj) and proj.get("data-projection")):
             continue
         for el in proj.iter():
-            if (_is_g(el) and el.get("data-connector") == "mpo"
+            of = el.get("data-of") or ""
+            # a panel tile composes the opening it forwards: the opening inside
+            # an already-counted port is that port, not a second one
+            if (_is_g(el) and el.get("data-connector") in ("mpo", "mpo16")
                     and el.get("data-class") == "port"
-                    and not (el.get("data-of") or "").endswith("-occupant")
-                    and "-occupant/" not in (el.get("data-of") or "")):
-                out.append(el.get("data-of"))
+                    and not of.endswith("-occupant")
+                    and "-occupant/" not in of
+                    and not any(of.startswith(o + "/") for o in out)):
+                out.append(of)
     return out
 
 
@@ -396,7 +402,8 @@ def test_every_device_that_reaches_an_adapter_ships_its_ports_capped(tmp_path):
     devs = devices_reaching_adapters()
     names = sorted(f.parent.name for f in devs)
     assert names == ["ch3000", "dcp-2", "dcp-m32-cso-zr", "dcp-r-34d-cs",
-                     "dcp-r-9d-cs", "fhd-1ufce"], names
+                     "dcp-r-9d-cs", "fhd-1ube", "fhd-1ufce", "fhd-1ufmt-n",
+                     "fhd-1ufmt-s", "fhd-1ume", "fhd-2ufce", "fhd-4ufce"], names
     total, bad_caps, rear_total = defaultdict(int), [], 0
     for f in devs:
         out = tmp_path / f.parent.name
@@ -433,9 +440,28 @@ def test_every_device_that_reaches_an_adapter_ships_its_ports_capped(tmp_path):
 # BP-F2-AL is accepted but seated in no configuration, so it adds nothing. Its
 # half-depth-mix adds the CWDM half-depth modules' duplex rows - NP34M08 6,
 # OP34M8C 6, OP34M10C 7 and NP34B10S 6, 25 in all - for 101.
+# THE FHD ADAPTER PANELS AND ENCLOSURES (2026-09-25), counted by hand before
+# the build confirmed them - each front face only, since a back is counted
+# below. Five 1U example builds each seat one 24F LC panel (12 vertical
+# adapters), one 12x MTP panel (12 tiles) and, in four of them, one SC panel
+# (6 adapters, 2 bores each): fhd-1ufce, -1ufmt-n and -1ufmt-s `panels`,
+# fhd-1ube `panels`, fhd-1ume `multimedia` (LC and MTP, no SC). fhd-2ufce
+# `populated` is four fhd-1mtp6lcd-os2-a (6 each) and four LC panels (12
+# each), 72; fhd-4ufce `populated` six fhd-2mtp12-lc-os2-a and six LC panels,
+# 12 each, 144. So LC vertical 101 + 60 + 72 + 144 = 377, MPO tiles 5 x 12 =
+# 60, SC bores 4 x 12 = 48.
 EXPECTED_DEVICE_SLOTS = {"common/lc-duplex-adapter@6": 478,
-                         "common/lc-duplex-v-adapter@6": 101}
-EXPECTED_DEVICE_REAR_SLOTS = 4
+                         "common/lc-duplex-v-adapter@6": 377,
+                         "common/mpo-adapter@2": 60,
+                         "common/sc-duplex-adapter@5": 48}
+# The backs, one cap per MPO port: fhd-1ufce `populated`'s four cassette
+# bulkheads, then the 12x MTP panel's back seen through the open rears of
+# fhd-1ufce `panels`, fhd-1ube `panels` and fhd-1ume `multimedia` (12 each),
+# fhd-2ufce `populated`'s four cassette bulkheads, and fhd-4ufce `populated`'s
+# six fhd-2mtp12-lc-os2-a backs, two bulkheads each, turned with their modules
+# (#614) - 4 + 36 + 4 + 12. The fixed and tilt-down 1Us show no backs
+# (test_nested_slots_js BACKS_NOT_SEEN).
+EXPECTED_DEVICE_REAR_SLOTS = 56
 
 
 def _fhd_bays():
@@ -482,7 +508,8 @@ def test_every_fhd_cassette_ships_capped_front_and_rear(tmp_path, group):
         if not back:
             continue
         for q in load_yaml(_contract_path(back.split(":")[0])).get("parts") or []:
-            if q["ref"] in ("common/mpo-flange-adapter@2", "common/mpo24-flange-adapter@2"):
+            if q["ref"] in ("common/mpo-flange-adapter@2", "common/mpo24-flange-adapter@2",
+                            "common/mpo-adapter@2", "common/mpo16-adapter@1"):
                 want.append(f"{bay}/module/{q['id']}")
     assert sorted(rear_flanges(rear)) == sorted(want)
     assert all(held.get(h) == ["cap"] for h in want), {h: held.get(h) for h in want}

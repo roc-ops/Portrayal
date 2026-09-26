@@ -51,7 +51,12 @@ ABSOLUTE_OUT = {LC_CAP: 9.525, LC_DUPLEX_CAP: 5.5, SC_CAP: 3.3}
 ADAPTER_OF = {LC_CAP: ("common/lc-duplex-adapter", 6),
               LC_DUPLEX_CAP: ("common/lc-duplex-v-adapter", 6),
               SC_CAP: ("common/sc-duplex-adapter", 5)}
-MATES = {LC_CAP: "lc", LC_DUPLEX_CAP: "lc-duplex", SC_CAP: "sc", MPO_CAP: "mpo"}
+# the fifth, common/mpo16-dust-cap@1 (2026-09-25): the MPO cap's shape on the
+# MTP-16 interface, which is keyed apart from `mpo` (std/mpo16@1), so a cap
+# for it must mate `mpo16` - FS ships its 12x MTP-16 panel capped.
+MPO16_CAP = "common/mpo16-dust-cap@1"
+MATES = {LC_CAP: "lc", LC_DUPLEX_CAP: "lc-duplex", SC_CAP: "sc", MPO_CAP: "mpo",
+         MPO16_CAP: "mpo16"}
 # WHICH PART EACH CAP SEATS ON inside its adapter: a bore id, or None where the
 # cap spans the adapter's own slot.
 BORE_OF = {LC_CAP: "1", LC_DUPLEX_CAP: None, SC_CAP: "1"}
@@ -83,7 +88,7 @@ def test_a_cap_is_an_occupying_cap_that_mates_one_interface(ref):
     assert ref.startswith("common/"), "no standard governs a cap's shape"
 
 
-def test_the_four_caps_are_the_librarys_only_caps_and_there_are_four():
+def test_the_five_caps_are_the_librarys_only_caps_and_there_are_five():
     """A census, and it asserts it measured something. `class: cap` is new with
     this work; if a fifth appears it needs its own paragraph here.
 
@@ -96,7 +101,7 @@ def test_the_four_caps_are_the_librarys_only_caps_and_there_are_four():
         if c.get("class") == "cap":
             ns = f.parents[2].name
             found[f"{ns}/{c['name']}@{c['version'].split('.')[0]}"] = c
-    assert len(found) == 4, sorted(found)
+    assert len(found) == 5, sorted(found)
     assert set(found) == set(MATES), sorted(found)
     for ref, c in found.items():
         assert c.get("behaviour") == "occupies", ref

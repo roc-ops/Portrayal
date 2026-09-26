@@ -122,6 +122,10 @@ SHALLOW_BY_DESIGN = {
     # 13.8 x 9.4 bbox; std/mpo@2's own cavity is the recess a plug seats in.
     "common/mpo-adapter/v2/contract.yaml":
         "raised flange; the composed aperture's own cavity is the recess",
+    # the MTP-16 tile is common/mpo-adapter@2 with sixteen fibres, for the
+    # same reason.
+    "common/mpo16-adapter/v1/contract.yaml":
+        "raised flange; the composed aperture's own cavity is the recess",
 }
 
 

@@ -218,6 +218,42 @@ def named_as_faces(roots):
             if (r := face_ref(load_yaml(cf) or {}, k))}
 
 
+def seated_in_bays(roots):
+    """Every part some BAY can hold - named in a bay's `accepts` or `default`,
+    or seated in one by a configuration - on a device or on a card.
+
+    A MODULE IN A BAY IS NEVER A PLACED SLOT, which is the build's own rule
+    (manifest.slot_in_slot_at). A card that happens to compose exactly one
+    interface-bearing part - casa/smm-8x10g@1's console, the IRIG-B card's
+    RS-422 jack - does not forward it: the build seats a plug at
+    `front-6/console` like any other card port. component_cages could not see
+    that from the contract alone and hid the jack as a wrapper's aperture, so
+    the kit had no slot where the build had one (#610). This is the set it is
+    told instead, gathered the way named_as_faces gathers faces.
+    """
+    found = set()
+
+    def walk(o, key=None):
+        if isinstance(o, dict):
+            for k, v in o.items():
+                walk(v, k)
+        elif isinstance(o, list):
+            for v in o:
+                if key == "bays" and isinstance(v, dict):
+                    found.update(r for r in v.get("accepts") or [] if isinstance(r, str))
+                    if isinstance(v.get("default"), str):
+                        found.add(v["default"])
+                walk(v, key)
+
+    for f in libwalk.iter_devices(roots) + libwalk.iter_components(roots):
+        doc = load_yaml(f) or {}
+        walk(doc)
+        for cfg in (doc.get("configurations") or {}).values():
+            found.update(r for r in ((cfg or {}).get("bays") or {}).values()
+                         if isinstance(r, str))
+    return found
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--library", action="append", required=True)
@@ -235,6 +271,7 @@ def main():
     load_ref = lambda ref: libwalk.load_contract(ref, args.library)  # noqa: E731
     index = []
     faces_named = named_as_faces(args.library)
+    in_bays = seated_in_bays(args.library)
     for root in args.library:
         for cf in sorted(Path(root).glob("components/*/*/v*/contract.yaml")):
             data = load_yaml(cf)
@@ -345,7 +382,7 @@ def main():
             # card group's side for a cage in one of the card's own `groups:`
             # (#511), empty otherwise. Omitted when there are none.
             cages = component_cages(data, lib, families, candidates, connectors,
-                                    face=ref in faces_named)
+                                    face=ref in faces_named, module=ref in in_bays)
             if cages:
                 entry["cages"] = cages
             # THE CARD'S OWN PORT GROUPS (#511), in the device `groups:` shape.

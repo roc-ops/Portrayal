@@ -36,10 +36,10 @@ def placements(dev, group):
 # (device, group, first index, count, block spec) - origins read off the files,
 # so a failure means the MODEL disagrees, not that a number was mistyped here.
 CASES = [
-    ("ufispace/s9705-48d", "fabric", 0, 24,
+    ("ufispace/s9705-48d", "qsfpdd-400g-fabric", 0, 24,
      {"ref": "std/qsfp-dd@1", "at": [85.7, 9.65], "rows": 2, "row-pitch": 13.16,
       "pitch": {"registry": "qsfp-ganged"}, "gang": 2, "gutter": 13.16}),
-    ("ufispace/s9705-48d", "fabric", 24, 24,
+    ("ufispace/s9705-48d", "qsfpdd-400g-fabric", 24, 24,
      {"ref": "std/qsfp-dd@1", "at": [85.7, 53.48], "rows": 2, "row-pitch": 13.16,
       "pitch": {"registry": "qsfp-ganged"}, "gang": 2, "gutter": 13.16}),
     ("ufispace/s9620-54dc", "sfp28", 0, 40,

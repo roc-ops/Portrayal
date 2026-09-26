@@ -4114,7 +4114,8 @@ def _forwarded_part(contract, lib):
     return cores[0] if len(cores) == 1 else None
 
 
-def component_cages(contract, lib, families, candidates, connectors=None, face=False):
+def component_cages(contract, lib, families, candidates, connectors=None, face=False,
+                    module=False):
     """A component's OWN cages, in its own frame: one entry per `parts:` entry
     that presents a pluggable interface, by the same core as a device view's
     `cages[]` (cage_entry). components_index.py publishes it on the
@@ -4174,11 +4175,19 @@ def component_cages(contract, lib, families, candidates, connectors=None, face=F
     else - would publish its only slot nowhere, while the two- and three-MTP
     backs published theirs. On a face the bulkhead is published as its own
     slot, under the id the build keys it by (`bay-1/mtp`).
+
+    A MODULE IN A BAY FORWARDS NOTHING EITHER (#610). `module` is True for a
+    component some bay can hold. The build never treats a module in a bay as a
+    placed slot (manifest.slot_in_slot_at), so a card composing exactly one
+    interface-bearing part - a supervisor's lone console jack - keeps it as its
+    own slot, keyed `front-6/console` as the build keys it. An OCCUPANT still
+    forwards: an optic with one bore is a slot at its own key, and its bore is
+    not a second one.
     """
     if connectors is None:
         connectors = _connector_registry()
     fwd = _forwarded_part(contract, lib)
-    forwarded = (fwd[0] if not face and fwd and fwd[1] in (connectors or {})
+    forwarded = (fwd[0] if not face and not module and fwd and fwd[1] in (connectors or {})
                  and _family_by_interface(families, fwd[1]) is None else None)
     out = []
     groups = contract.get("groups") or {}

@@ -129,9 +129,16 @@ def test_the_librarys_fibre_plugs_are_these_five_and_there_are_five():
     the MPO boot the connectors design reserves will each trip this."""
     connectors = yaml.safe_load(
         (SPEC / "schemas/connectors.yaml").read_text())["interfaces"]
+    # RJ45 IS A CONNECTOR SINCE #610 AND IT IS NOT FIBRE. generic/rj45-plug@1
+    # mates `rj45`, which the registry now holds so a copper jack is a slot, and
+    # without this line it would be the sixth plug here. It is left out by what
+    # it IS - its own `attrs.media` is `rj45` - not by name, and its census is
+    # spec/tests/test_rj45_slots.py.
     found = {}
     for f in (LIB / "components").rglob("v*/contract.yaml"):
         c = load_yaml(f) or {}
+        if (c.get("attrs") or {}).get("media") == "rj45":
+            continue
         if c.get("mates") in connectors and c.get("class") != "cap":
             ns = f.parents[2].name
             found[f"{ns}/{c['name']}@{c['version'].split('.')[0]}"] = c

@@ -20,6 +20,8 @@ FAMILY = {
     "common/mpo-adapter": "mpo",
     "common/mpo-flange-adapter": "mpo",
     "common/mpo24-flange-adapter": "mpo",
+    # DCIM has one MPO port type; the fibre count is the port's `positions`
+    "common/mpo16-adapter": "mpo",
     "common/st-simplex-adapter": "st",
     "common/fc-simplex-adapter": "fc",
     "common/lsh-simplex-adapter": "lsh",
@@ -110,6 +112,44 @@ def front_label(entry, endpoint, load_ref):
     return None
 
 
+# WHICH FAMILIES ARE ONE PORT PER CONNECTOR ON THE FRONT. A front LC or SC bore
+# is one fibre and one DCIM port, which is why the front numbering counts
+# fibres. An MPO adapter on a panel's FRONT is one connector a 12- or 16-fibre
+# trunk plugs into whole - twelve one-fibre "mpo" ports would be a port nobody
+# can cable. So an MPO front is one port with a position per fibre, exactly as
+# a rear connector already is. `front_label` keeps counting fibres: it is the
+# explorer's and L109's number, not a DCIM port name.
+GROUPED_FRONT = ("mpo",)
+
+
+def front_port(entry, endpoint, load_ref):
+    """`(port name, position)` for a front endpoint in the DCIM export, or None.
+
+    A fibre-per-port family names its port with the fibre's `front_label` at
+    position 1; a GROUPED_FRONT family names one port per connector, counted in
+    front order, and the fibre is a position on it. Both counters advance over
+    the same front order, so a module mixing the two numbers each kind on.
+    """
+    face, part, pos = optical.split_endpoint(endpoint)
+    if face:
+        return None
+    for name, pid, _ref, grouped in _front_port_names(entry, load_ref):
+        if pid == part:
+            return (name, pos) if grouped else (front_label(entry, endpoint, load_ref), 1)
+    return None
+
+
+def _front_port_names(entry, load_ref):
+    """[(first port name, part id, ref, grouped)] in front order."""
+    caps = optical.capacities(entry, load_ref)
+    out, n = [], 0
+    for _x, pid, ref in _front_parts(entry):
+        grouped = family_of(ref) in GROUPED_FRONT
+        out.append((str(n + 1), pid, ref, grouped))
+        n += 1 if grouped else (caps.get(pid) or 0)
+    return out
+
+
 def ports(entry, load_ref):
     """`{"front": [...], "rear": [...]}` for one module entry.
 
@@ -125,6 +165,10 @@ def ports(entry, load_ref):
     front, n = [], 0
     for _x, pid, ref in _front_parts(entry):
         t = port_type(family_of(ref), polish)
+        if family_of(ref) in GROUPED_FRONT:
+            n += 1
+            front.append({"name": str(n), "type": t, "positions": caps.get(pid) or 0})
+            continue
         for i in range(1, (caps.get(pid) or 0) + 1):
             n += 1
             front.append({"name": str(n), "type": t, "positions": 1})
@@ -214,8 +258,8 @@ def _row(entry, a, b, ratio, rear_name, load_ref):
         return None                      # front-to-front or rear-to-rear
     _f, rpid, rpos = rear_ep
     _g, _fpid, _fpos = front_ep
-    label = front_label(entry, f"{_fpid}.{_fpos}", load_ref)
-    row = {"front": label, "front_position": 1,
+    label, fpos = front_port(entry, f"{_fpid}.{_fpos}", load_ref) or (None, 1)
+    row = {"front": label, "front_position": fpos,
            "rear": rear_name.get(rpid, rpid.upper()), "rear_position": rpos}
     if ratio is not None:
         row["ratio"] = ratio

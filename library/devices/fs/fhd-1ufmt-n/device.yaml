@@ -1,0 +1,343 @@
+format: 1
+kind: device
+name: fhd-1ufmt-n
+version: 1.0.0
+maturity: modelled
+manufacturer: FS.com
+model: FHD-1UFMT-N
+description: >-
+  1U 19in fixed fiber enclosure. FS SKU 96427 - a steel tray with a tool-less
+  removable top cover and no drawer, holding up to four FHD adapter panels, MTP/MPO
+  cassettes or splice trays for up to 144 fibres (LC) in 1U; the modules mount on
+  its front plate.
+profile: optical
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      FROM THE VENDOR'S VECTOR DRAWING. Every figure is read off p4 of fhd-1ufmt-n-fiber-
+      enclosure-datasheet.pdf (front, side and top views, inches with millimetres), rendered
+      at 2400 dpi where it needs measuring; what the drawing does not show is estimated
+      below or left undrawn.
+  chassis:
+    confidence: drawing
+    note: >-
+      spec table: 1.73 x 19.00 x 11.17in (44.0 x 482.6 x 283.6). The top view dimensions the
+      body behind the front plate 16.93in [430] across - the figure the 2026-09-11 intake
+      could not place, and which is this width: the plate's small edge notches in the front
+      view sit 26.3 in from each end, (482.6 - 430) / 2. Depth 283.6 is the top view's body
+      line; the side view's 11.6in [295.1] includes the front plate and knobs.
+  cutouts:
+    confidence: drawing
+    note: >-
+      front view at 2400 dpi, 19.47 px/mm on the 482.6 plate (the plate then reads 44.34
+      against 44.0, 0.8%), taken on stroke centres: openings 89.74 x 36.26, centres at 75.81
+      186.29 296.57 406.85 of the plate (pitches 110.48 110.28 110.28), top edge 4.26. FS
+      prints 3.54in [89.8] across; 1.42in on the tilt-down sibling. The front view is the
+      plate, so these are its own coordinates.
+  bays:
+    confidence: drawing
+    note: >-
+      THE MODULES MOUNT ON THE FRONT PLATE, NOT INSIDE IT. The front view punches four
+      openings 3.54in [90] across and 1.42in [36] tall; a module's 108.97 plate covers its
+      opening, its thumb-knobs landing in the pair of holes either side (3.91in, 99.4 apart
+      on the panel drawings), and only the adapter block behind passes through. So each bay
+      is the module plate's 108.97 x 35.05, centred on its opening, and `opening` is the
+      hole an empty slot shows. Adjacent plates stand about 1.0 apart. FOUR MODULES SPAN 440
+      ACROSS A 430 BODY: the outer plates overhang the body line by 5.0 onto the flat flange
+      - the plate is one flat sheet, so nothing stops them - which is why this front view is
+      the whole plate, 482.6, and lint L43's warning that a rack-wide face still has its
+      ears in it is true and left standing: here the ears are the same flat sheet the
+      modules overlap. Bays are in the plate's own frame, 0 at its left end. every FHD
+      cassette and adapter panel this library models is in every bay's `accepts`. FS states
+      it on this datasheet's features list ('Compatible with all FHD cassettes and panels')
+      and prints the same loading list with every one of them as fs/fhd-1ufce does; the
+      module face is one 4.29 x 1.38in (108.97 x 35.05) envelope.
+  ears:
+    confidence: drawing
+    note: >-
+      NOT A SEPARATE PART HERE: the plate's own ends, 26.3 each side of the 430 body (the
+      notches in the front view), carry the rack holes. The front view includes them and no
+      common/rack-ear@1 is placed; the other five faces are the 430 body.
+  interior:
+    confidence: drawing
+    note: >-
+      the two slack spools drawn behind openings 1 and 4 in the front view are inside the
+      tray, seen through an empty slot; a seated module hides them. Not drawn.
+  envelope-faces:
+    confidence: drawing
+    note: >-
+      rear, top, bottom, left and right are the envelope from `chassis`; the rear cable
+      entries and grommets the datasheet lists are not dimensioned. See `gaps`.
+chassis:
+  width: 430.0
+  height: 44.0
+  depth: 283.6
+  ru: 1
+  color: '#1b1e21'
+  airflow: passive
+gaps:
+  - what: face-detail
+    scope: [front, rear, top, bottom, left, right]
+    reason: needs-photo
+    note: >-
+      the drawing locates the openings and nothing else a face carries - no rear grommet
+      positions, no cover fixings, no printing. FS's gallery for 96427 is three-quarter
+      renders only.
+    wanted: >-
+      a square-on photograph of the front and rear, or a dimensioned rear view.
+groups:
+  slots:
+    term: Slot
+    role: service
+    index-origin: 1
+    description: >-
+      four slots, each taking one FHD module - an adapter panel or an MTP/MPO cassette -
+      numbered left to right. The datasheet's capacity row reads 4 ports, 144 fibres (LC).
+views:
+  front:
+    size:
+      w: 482.6
+      h: 44.0
+    panel:
+      decor:
+        - {at: [0, 0], size: [482.6, 44.0], fill: '#1b1e21'}
+    components:
+      bays:
+        - id: bay-1
+          at: [21.325, 4.475]
+          size: {w: 108.97, h: 35.05}
+          opening: {w: 89.74, h: 36.26}
+          accepts:
+            - fs/fhd-1mtp6lcd-os2-a@4
+            - fs/fhd-splice-12-lc@3
+            - fs/fhd-2mtp12-lc-os2-a@4
+            - fs/fhd-1mtp12-sc-os2-a@3
+            - fs/fhd-1mtp24-lc-os2-a@4
+            - fs/fhd-1mtp6lcd-os2-af@3
+            - fs/fhd-1mtp6lcd-os2-u@3
+            - fs/fhd-2mtp12-lc-os2-af@4
+            - fs/fhd-2mtp12-lc-os2-u@4
+            - fs/fhd-1mtp24-lc-os2-af@4
+            - fs/fhd-1mtp6lcd-om4-a@2
+            - fs/fhd-2mtp12-lc-om4-a@2
+            - fs/fhd-1mtp24-lc-om4-a@2
+            - fs/fhd-1mtp6lcd-om5-a@2
+            - fs/fhd-2mtp12-lc-om5-a@2
+            - fs/fhd-1mtp24-lc-om5-a@2
+            - fs/fhd-1mtp6lcd-om4-u@2
+            - fs/fhd-2mtp12-lc-om4-u@2
+            - fs/fhd-2mtp12-lc-om3-a@2
+            - fs/fhd-1mtp24-lc-om3-a@2
+            - fs/fhd-3mtp18-lc-os2-a@1
+            - fs/fhd-3mtp18-lc-om4-a@1
+            - fs/fhd-fap12lcd-os2@1
+            - fs/fhd-fap18lcd-os2@1
+            - fs/fhd-fap6scd-apc-os2@1
+            - fs/fhd-fap12mtp-a@1
+            - fs/fhd-fap12mtp-b@1
+            - fs/fhd-fap8mtp-b@1
+            - fs/fhd-fap12mtp16-a@1
+            - fs/fhd-fapm6@1
+            - fs/fhd-fapb@1
+            - fs/fhd-fap12lcd-apc-os2@1
+            - fs/fhd-fap12lcd-om4@1
+            - fs/fhd-fap12lcd-om5@1
+            - fs/fhd-fap18lcd-om4@1
+            - fs/fhd-fap6scd-os2@1
+            - fs/fhd-fap6scd-om4@1
+          group: slots
+          rel-pos: 1
+        - id: bay-2
+          at: [131.805, 4.475]
+          size: {w: 108.97, h: 35.05}
+          opening: {w: 89.74, h: 36.26}
+          accepts:
+            - fs/fhd-1mtp6lcd-os2-a@4
+            - fs/fhd-splice-12-lc@3
+            - fs/fhd-2mtp12-lc-os2-a@4
+            - fs/fhd-1mtp12-sc-os2-a@3
+            - fs/fhd-1mtp24-lc-os2-a@4
+            - fs/fhd-1mtp6lcd-os2-af@3
+            - fs/fhd-1mtp6lcd-os2-u@3
+            - fs/fhd-2mtp12-lc-os2-af@4
+            - fs/fhd-2mtp12-lc-os2-u@4
+            - fs/fhd-1mtp24-lc-os2-af@4
+            - fs/fhd-1mtp6lcd-om4-a@2
+            - fs/fhd-2mtp12-lc-om4-a@2
+            - fs/fhd-1mtp24-lc-om4-a@2
+            - fs/fhd-1mtp6lcd-om5-a@2
+            - fs/fhd-2mtp12-lc-om5-a@2
+            - fs/fhd-1mtp24-lc-om5-a@2
+            - fs/fhd-1mtp6lcd-om4-u@2
+            - fs/fhd-2mtp12-lc-om4-u@2
+            - fs/fhd-2mtp12-lc-om3-a@2
+            - fs/fhd-1mtp24-lc-om3-a@2
+            - fs/fhd-3mtp18-lc-os2-a@1
+            - fs/fhd-3mtp18-lc-om4-a@1
+            - fs/fhd-fap12lcd-os2@1
+            - fs/fhd-fap18lcd-os2@1
+            - fs/fhd-fap6scd-apc-os2@1
+            - fs/fhd-fap12mtp-a@1
+            - fs/fhd-fap12mtp-b@1
+            - fs/fhd-fap8mtp-b@1
+            - fs/fhd-fap12mtp16-a@1
+            - fs/fhd-fapm6@1
+            - fs/fhd-fapb@1
+            - fs/fhd-fap12lcd-apc-os2@1
+            - fs/fhd-fap12lcd-om4@1
+            - fs/fhd-fap12lcd-om5@1
+            - fs/fhd-fap18lcd-om4@1
+            - fs/fhd-fap6scd-os2@1
+            - fs/fhd-fap6scd-om4@1
+          group: slots
+          rel-pos: 2
+        - id: bay-3
+          at: [242.085, 4.475]
+          size: {w: 108.97, h: 35.05}
+          opening: {w: 89.74, h: 36.26}
+          accepts:
+            - fs/fhd-1mtp6lcd-os2-a@4
+            - fs/fhd-splice-12-lc@3
+            - fs/fhd-2mtp12-lc-os2-a@4
+            - fs/fhd-1mtp12-sc-os2-a@3
+            - fs/fhd-1mtp24-lc-os2-a@4
+            - fs/fhd-1mtp6lcd-os2-af@3
+            - fs/fhd-1mtp6lcd-os2-u@3
+            - fs/fhd-2mtp12-lc-os2-af@4
+            - fs/fhd-2mtp12-lc-os2-u@4
+            - fs/fhd-1mtp24-lc-os2-af@4
+            - fs/fhd-1mtp6lcd-om4-a@2
+            - fs/fhd-2mtp12-lc-om4-a@2
+            - fs/fhd-1mtp24-lc-om4-a@2
+            - fs/fhd-1mtp6lcd-om5-a@2
+            - fs/fhd-2mtp12-lc-om5-a@2
+            - fs/fhd-1mtp24-lc-om5-a@2
+            - fs/fhd-1mtp6lcd-om4-u@2
+            - fs/fhd-2mtp12-lc-om4-u@2
+            - fs/fhd-2mtp12-lc-om3-a@2
+            - fs/fhd-1mtp24-lc-om3-a@2
+            - fs/fhd-3mtp18-lc-os2-a@1
+            - fs/fhd-3mtp18-lc-om4-a@1
+            - fs/fhd-fap12lcd-os2@1
+            - fs/fhd-fap18lcd-os2@1
+            - fs/fhd-fap6scd-apc-os2@1
+            - fs/fhd-fap12mtp-a@1
+            - fs/fhd-fap12mtp-b@1
+            - fs/fhd-fap8mtp-b@1
+            - fs/fhd-fap12mtp16-a@1
+            - fs/fhd-fapm6@1
+            - fs/fhd-fapb@1
+            - fs/fhd-fap12lcd-apc-os2@1
+            - fs/fhd-fap12lcd-om4@1
+            - fs/fhd-fap12lcd-om5@1
+            - fs/fhd-fap18lcd-om4@1
+            - fs/fhd-fap6scd-os2@1
+            - fs/fhd-fap6scd-om4@1
+          group: slots
+          rel-pos: 3
+        - id: bay-4
+          at: [352.365, 4.475]
+          size: {w: 108.97, h: 35.05}
+          opening: {w: 89.74, h: 36.26}
+          accepts:
+            - fs/fhd-1mtp6lcd-os2-a@4
+            - fs/fhd-splice-12-lc@3
+            - fs/fhd-2mtp12-lc-os2-a@4
+            - fs/fhd-1mtp12-sc-os2-a@3
+            - fs/fhd-1mtp24-lc-os2-a@4
+            - fs/fhd-1mtp6lcd-os2-af@3
+            - fs/fhd-1mtp6lcd-os2-u@3
+            - fs/fhd-2mtp12-lc-os2-af@4
+            - fs/fhd-2mtp12-lc-os2-u@4
+            - fs/fhd-1mtp24-lc-os2-af@4
+            - fs/fhd-1mtp6lcd-om4-a@2
+            - fs/fhd-2mtp12-lc-om4-a@2
+            - fs/fhd-1mtp24-lc-om4-a@2
+            - fs/fhd-1mtp6lcd-om5-a@2
+            - fs/fhd-2mtp12-lc-om5-a@2
+            - fs/fhd-1mtp24-lc-om5-a@2
+            - fs/fhd-1mtp6lcd-om4-u@2
+            - fs/fhd-2mtp12-lc-om4-u@2
+            - fs/fhd-2mtp12-lc-om3-a@2
+            - fs/fhd-1mtp24-lc-om3-a@2
+            - fs/fhd-3mtp18-lc-os2-a@1
+            - fs/fhd-3mtp18-lc-om4-a@1
+            - fs/fhd-fap12lcd-os2@1
+            - fs/fhd-fap18lcd-os2@1
+            - fs/fhd-fap6scd-apc-os2@1
+            - fs/fhd-fap12mtp-a@1
+            - fs/fhd-fap12mtp-b@1
+            - fs/fhd-fap8mtp-b@1
+            - fs/fhd-fap12mtp16-a@1
+            - fs/fhd-fapm6@1
+            - fs/fhd-fapb@1
+            - fs/fhd-fap12lcd-apc-os2@1
+            - fs/fhd-fap12lcd-om4@1
+            - fs/fhd-fap12lcd-om5@1
+            - fs/fhd-fap18lcd-om4@1
+            - fs/fhd-fap6scd-os2@1
+            - fs/fhd-fap6scd-om4@1
+          group: slots
+          rel-pos: 4
+
+  rear:
+    size:
+      w: 430.0
+      h: 44.0
+    panel:
+      decor:
+        - {at: [0, 0], size: [430.0, 44.0], fill: '#1b1e21'}
+
+  top:
+    size:
+      w: 430.0
+      h: 283.6
+    panel:
+      decor:
+        - {at: [0, 0], size: [430.0, 283.6], fill: '#b9bec4'}
+
+  bottom:
+    size:
+      w: 430.0
+      h: 283.6
+    panel:
+      decor:
+        - {at: [0, 0], size: [430.0, 283.6], fill: '#b9bec4'}
+
+  left:
+    size:
+      w: 283.6
+      h: 44.0
+    panel:
+      decor:
+        - {at: [0, 0], size: [283.6, 44.0], fill: '#b9bec4'}
+
+  right:
+    size:
+      w: 283.6
+      h: 44.0
+    panel:
+      decor:
+        - {at: [0, 0], size: [283.6, 44.0], fill: '#b9bec4'}
+
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The enclosure as FS ships 96427: an empty tray, all four slots open. Panels and
+      cassettes are separate SKUs from the datasheet's loading list.
+  panels:
+    kind: example
+    description: >-
+      Three FHD adapter panels and a blank - LC, MTP Type A and SC APC - an illustrative
+      load: FS ships the enclosure empty and every module is a separate SKU.
+    bays:
+      bay-1: fs/fhd-fap12lcd-os2@1
+      bay-2: fs/fhd-fap12mtp-a@1
+      bay-3: fs/fhd-fap6scd-apc-os2@1
+      bay-4: fs/fhd-fapb@1
+datasheet:
+  title: 'FS FHD-1UFMT-N Rack Mount Fiber Enclosure datasheet'
+  sha256: 43d446b6afa74a455f76631630aa806b5cf4b79d705a51e021c248ac67684e12
