@@ -1,0 +1,66 @@
+format: 1
+kind: module
+name: qsfp-dd-passive-dac
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: qsfp-dd
+profile: networking
+description: >-
+  Volex 400G QSFP-DD passive direct-attach copper cable, one end - the 30 AWG
+  build, 16-pair twinax under a black braided-mesh jacket, 9.0 mm across. It
+  composes generic/qsfp-dd-cable-type2@1, whose head is this product's own
+  drawing, and sets the cable's diameter and colour.
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+size: {w: 18.35, h: 8.5, d: 58.26}
+size-confidence: {w: borrowed, h: borrowed, d: borrowed}
+attrs:
+  model: DQ50BDG
+  cable-kind: dac
+  media: qsfp-dd
+  speed: 400g
+  power-absent: not-published
+parts:
+  - {ref: generic/qsfp-dd-cable-type2@1, id: body, at: [0, 0],
+     attrs: {cable-od: 9.0, jacket-color: '#1c1c1c'}}
+provenance:
+  size: >-
+    borrowed - generic/qsfp-dd-cable-type2@1, the generic this wraps, whose own
+    figures are the qsfp-dd-module registry entry's (QSFP-DD/QSFP-DD800/QSFP112
+    Hardware Specification Rev 6.3 Figure 52). These are the generic's numbers
+    restated; the Volex drawing gives the same 18.35 +/-0.1 and 8.50 +/-0.1.
+  model: >-
+    datasheet - Volex 400G QSFP-DD Passive DAC Cable data sheet, EN (2/22), page
+    2 part number table: DQ50BDG05BS, DQ50BDG10BS, DQ50BDG15BS and DQ50BDG20BS,
+    the 30 AWG rows. The 28 AWG (DQ58BDG25BS) and 26 AWG (DQ56BDG30BS) builds
+    are thicker cables and are not this wrapper.
+  cable-kind: >-
+    datasheet - page 1 Product Type, "400G QSFP-DD Passive DAC Cable".
+  speed: >-
+    datasheet - page 1: 400Gbps with 50Gbps/lane PAM-4 (it also runs 200Gbps at
+    25Gbps/lane NRZ).
+  media: >-
+    datasheet - page 2 Standards Compliance, QSFP-DD/QSFP-DD800 HW MSA. The head
+    is Type 2; generic/qsfp-dd-cable-type2@1 takes its head from this same
+    drawing.
+  cable-od: >-
+    datasheet - page 2 table, Cable OD 9.0 mm for 30 AWG. The table's 11.6 mm is
+    the 26 AWG build (and 10.4 mm the 28 AWG one); it is noted here only. Above
+    about 11 mm the stub would rise into the generic's strap, and 11.6 is not
+    this wrapper's cable in any case.
+  jacket-color: >-
+    datasheet - page 1, Cable Colour Black (Cable Jacket: plastic braided mesh).
+    Black is written as the library's near-black #1c1c1c, which is also the
+    generic's default; it is set here because this document states it.
+  latch-color: >-
+    NOT STATED - the data sheet offers "custom colours for pull tab" and gives
+    no standard colour, so the generic's neutral #6f6f6f default stands.
+  power: >-
+    not-published - the data sheet, page 1, gives Power Consumption 0 and "near
+    zero power consumption and no heat generated". Zero is not a figure the
+    schema takes (a draw must be above 0), and the EEPROM each end carries does
+    draw a little, so no wattage is recorded: the vendor publishes a nominal
+    zero and no measured draw. A chassis total holding this end is short by
+    that EEPROM, nothing more.
+connection-points:
+  mate: {at: [9.175, 4.25], direction: front}
