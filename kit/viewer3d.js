@@ -565,7 +565,7 @@ export function createViewer(container, opts = {}) {
     // is not clamped; a part that declares a depth is, as before.
     const compDeep = () => (COMP_ENTRY.body || COMP_ENTRY.size?.d) ? D : Infinity;
     const FACES = COMP ? [
-      {view: 'comp', url: DIST + COMP_ENTRY.files[cfg],
+      {view: 'comp', url: DIST + COMP_ENTRY.files[cfg], sizeBox: true,
        fw: () => W, fh: () => H, deep: compDeep, pos: () => [0, 0, D / 2], rot: [0, 0, 0]},
     ] : [
       {view: 'front', fw: () => W, fh: () => H, deep: () => D, pos: () => [0, 0, D / 2], rot: [0, 0, 0]},

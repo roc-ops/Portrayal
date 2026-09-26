@@ -246,17 +246,15 @@ def test_placed_overhangs_are_inside_the_device_viewbox(built):
             node = parents.get(node)
 
 
-@pytest.mark.xfail(strict=True, raises=AssertionError, reason=(
-    "the standalone component SVG (library/dist/components/<ns>--<name>--vN--<skin>.svg, "
-    "the Explorer's module preview) keeps the contract's size as its root viewBox, so "
-    "the root viewport clips art above y=0 and past the size: the copper head's "
-    "-2.50..10.70 against 0..8.55 and the QSFP tab's y -1.07 and x -0.325..18.675 "
-    "against 0..18.35 x 0..8.5"))
 @pytest.mark.parametrize("stem, suffixes", [
     ("generic--sfp-rj45--v1--default", ("--head",)),
     ("generic--qsfp-lc--v2--default", ("--tab--grip", "--tab--arm-l", "--tab--arm-r")),
 ])
 def test_standalone_preview_holds_its_overhangs(stem, suffixes):
+    """The standalone component SVG is the Explorer's module preview. A part
+    that declares `head:` gets a root viewBox that is the union of its size,
+    its head and its composed parts, so the copper head's -2.50..10.70 and the
+    QSFP tab's y -1.07 and x -0.325..18.675 are inside it."""
     import xml.etree.ElementTree as ET
     path = DIST / f"{stem}.svg"
     if not path.exists():
@@ -269,3 +267,25 @@ def test_standalone_preview_holds_its_overhangs(stem, suffixes):
     for s in suffixes:
         el = by_suffix(root, s)
         assert _inside(box(apply(device_matrix(parents, el), rect_corners(el))), vb), (stem, s)
+
+
+@pytest.mark.parametrize("stem, ref", [
+    # its head box equals its size, so the union is the size box
+    ("generic--sfp-lc--v1--default", "generic/sfp-lc/v1"),
+    # no `head:` at all
+    ("std--rj45-ganged--v2--default", "std/rj45-ganged/v2"),
+])
+def test_a_preview_without_an_overhanging_head_keeps_its_size(stem, ref):
+    """Only a part that declares `head:` grows its preview, and only by what it
+    overhangs: every other preview keeps `0 0 w h` and mm width/height from
+    `size`, byte for byte as before."""
+    import xml.etree.ElementTree as ET
+    import yaml
+    path = DIST / f"{stem}.svg"
+    if not path.exists():
+        pytest.skip(f"needs a build: {path.name}")
+    lib = DIST.parents[1] / "components"
+    size = yaml.safe_load((lib / ref / "contract.yaml").read_text())["size"]
+    root = ET.parse(path).getroot()
+    assert root.get("viewBox") == f"0 0 {size['w']} {size['h']}", root.get("viewBox")
+    assert root.get("width") == f"{size['w']}mm" and root.get("height") == f"{size['h']}mm"
