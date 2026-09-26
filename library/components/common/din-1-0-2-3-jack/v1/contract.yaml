@@ -1,0 +1,44 @@
+format: 1
+kind: component
+name: din-1-0-2-3-jack
+version: 1.0.0
+class: port
+profile: networking
+description: Rear-mount 1.0/2.3 bulkhead jack - the round spanner nut in front
+  of the panel (bezel) around a std/din-1-0-2-3 core, which presents the
+  interface.
+unplaced: placed by the stand-in moves of docs/connectors-coax-design.md section 6 (the Cisco T3/E3 SPAs), which land after this part
+size: {w: 7.01, h: 7.01}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  The round spanner nut, dia 7.01, L-com RFPCB-1.0/2.3FS-4G72 rev A, SPANNER
+  NUT view - the widest thing in front of the panel.
+attrs: {media: coax-din-1-0-2-3}
+provenance:
+  size: >-
+    drawing - the spanner nut envelope, dia 7.01 (L-com RFPCB-1.0/2.3FS-4G72
+    rev A, SPANNER NUT view; Pasternack PE44259 scales 7.09). The size box is
+    the nut, so the overlap rule and the hit box see what stands in front of
+    the panel.
+  core: drawing (via std/din-1-0-2-3), placed so its centre is the nut centre
+  nut: >-
+    drawing - L-com RFPCB-1.0/2.3FS-4G72 rev A, SPANNER NUT view: a round
+    spanner nut dia 7.01, 2.41 thick, clamped on the front of the panel (the
+    jack is rear-mounted: PE44259, PE44254 and the L-com sheet agree). Drawn
+    as an annulus whose hole is the core collar, 4.735, as common/sma-jack
+    draws its nut. The spanner slots are not dimensioned and are not drawn.
+elements: {}
+parts:
+  - {ref: std/din-1-0-2-3@1, id: jack, at: [0.71, 0.71]}
+relief:
+  features:
+    - node: nut
+      cyl: 2.41
+      color: '#c0c4c8'
+      confidence: drawing
+      source: >-
+        common/din-1-0-2-3-jack@1 nut key - L-com RFPCB-1.0/2.3FS-4G72 rev A, SPANNER NUT
+        view, dia 7.01 and 2.41 thick, clamped on the front of the panel.
+connection-points:
+  rf: {at: [3.505, 3.505], direction: front}
+skins: [default]

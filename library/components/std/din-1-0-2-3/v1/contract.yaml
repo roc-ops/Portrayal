@@ -6,12 +6,13 @@ class: port
 profile: networking
 conforms: din-1-0-2-3
 interface: din-1-0-2-3
-description: 1.0/2.3 push-pull coaxial panel jack (IEC 61169-29, DIN 41626/2) -
-  a rear-mount bulkhead on an M5.5 x 0.5 thread, so the round spanner nut and
-  the plain barrel with its latch groove stand in front of the panel. The small
-  T3/E3 and video jack; 50 and 75 ohm variants share the interface, so a
-  placement that knows says attrs.impedance.
-unplaced: placed by the stand-in moves of docs/connectors-coax-design.md section 6 (the Cisco T3/E3 SPAs), which land after this part
+description: 1.0/2.3 push-pull coaxial panel jack core (DIN 41626/2) - the round
+  hole and the plain barrel with its collar, latch groove, bore and contact.
+  The spanner nut in front of the panel is wider than the hole and belongs to
+  the bezel, common/din-1-0-2-3-jack, which composes this core. 50 and 75 ohm
+  variants share the interface, so a placement that knows says
+  attrs.impedance.
+unplaced: composed by common/din-1-0-2-3-jack, which the stand-in moves of docs/connectors-coax-design.md section 6 place (the Cisco T3/E3 SPAs)
 size: {w: 5.59, h: 5.59}
 size-confidence: {w: drawing, h: drawing}
 size-notes: >-
@@ -24,36 +25,42 @@ provenance:
     Pasternack drawing PE44259 REV 1.1 (1.0/2.3 jack bulkhead mount, solder
     attachment, thru hole PCB), for the M5.5 x 0.5 thread that PE44259,
     Pasternack PE44254 and L-com RFPCB-1.0/2.3FS-4G72 rev A all dimension.
-  rear-mount: >-
-    The three mounting drawings agree: the flange is behind the panel and the
-    nut is IN FRONT of it, the other way round from the BNC jack. So the nut is
-    drawn, and it is wider than the hole; the art overhangs the viewBox on
-    purpose, because that is what stands in front of the panel.
-  nut: >-
-    drawing - L-com RFPCB-1.0/2.3FS-4G72 rev A, SPANNER NUT view: a round
-    spanner nut dia 7.01, 2.41 thick (PE44259 scales 7.09). Drawn as a plain
-    disc; the spanner slots are not dimensioned in the findings and are not
-    drawn.
+  standard: >-
+    The HUBER+SUHNER general catalogue 2020 (3628 78Z034, p.239) says its 1.0/2.3
+    interface dimensions conform to DIN 41626/2 and names no other standard.
+    IEC 61169-29 is the international part for the series, cited by the design
+    note and not held here.
+  core-and-bezel: >-
+    This is the CORE, as std/sma is to common/sma-jack. The three mounting
+    drawings agree that the jack is rear-mounted, flange behind the panel and
+    the round spanner nut IN FRONT of it. The nut is 7.01 across, wider than
+    the hole, so it is the bezel common/din-1-0-2-3-jack; everything drawn
+    here lies inside the hole box.
   barrel: >-
     drawing - HUBER+SUHNER general catalogue 2020 (3628 78Z034), p.239, jack
     table: tube outside dia I 4.03-4.15 (drawn 4.09; PE44259 scales 4.16),
     tube inside dia N 3.00-3.06 (drawn 3.03, the dark bore), and a collar dia
     K 4.72-4.75 (drawn 4.735) starting C/D 5.80-6.50 behind the front face
     (drawn 6.15). The front ring before the latch groove is 1.4 long (L-com
-    RFPCB-1.0/2.3FS-4G72 rev A side view, .055 [1.4]); the latch groove runs
-    about 1.4 to 2.2 behind the front at about dia 3.6 (PE44259 p.3, scaled).
+    RFPCB-1.0/2.3FS-4G72 rev A side view, .055 [1.4], dimensioned). The latch
+    groove, about 1.4 to 2.2 behind the front at about dia 3.6, is SCALED off
+    PE44259 p.3 (checked against its dimensioned M5.5 thread, read 5.47).
   projection: >-
-    drawing (scaled) - PE44259 p.3 shows about 6.7 of barrel in front of the
-    nut, so with the 2.41 nut the front face is 9.11 in front of the panel.
-    Because the jack is rear-mounted the projection depends on the panel: the
-    same sheet dimensions flange to front face 13.5 (L-com 13.39) with a max
-    panel 4.1, so a thin panel leaves more standing (13.5 less the panel).
-    9.11 is the drawn case, not a property of the interface.
+    drawing (derived) - PE44259 p.3 dimensions flange to front face 0.530
+    [13.5] and a maximum panel 0.162 [4.1] (L-com gives 13.39), so the front
+    face stands at least 13.5 - 4.1 = 9.4 in front of the panel. The floor is
+    drawn: a thinner panel leaves more standing, up to 13.5 less its
+    thickness. The sheet also shows about 6.7 of barrel in front of the nut,
+    which would give 9.11 - below this dimensioned floor, so it is not used.
   insulator: >-
     drawing (derived) - H+S p.239: the jack dielectric sits C 5.80-5.90 behind
     the front, inside the 3.03 bore, and the socket contact tip is B 1.15-1.45
     behind it. Drawn as a dimmed disc 2.76 across inside the bore (the bore
     less its edge, so the tube wall reads) and a contact circle.
+  opening-colour: >-
+    the hole is painted thread-grey, not black: the M5.5 threaded body fills
+    it, and seen through the bezel nut a black ring read as a recess that is
+    not there.
   centre-contact: >-
     estimated - the 0.8 contact circle is art only; no source used here
     dimensions the contact face on.
@@ -61,47 +68,43 @@ elements:
   opening: {at: [0.0, 0.0], size: [5.59, 5.59], class: cutout}
 relief:
   features:
-    - node: nut
-      cyl: 2.41
-      color: '#c0c4c8'
-      confidence: drawing
-      source: >-
-        std/din-1-0-2-3@1 nut key - L-com RFPCB-1.0/2.3FS-4G72 rev A, SPANNER NUT view,
-        dia 7.01 and 2.41 thick, clamped on the front of the panel.
     - node: collar
-      cyl: 0.55
+      cyl: 0.84
       lift: 2.41
       color: '#d7dade'
       confidence: drawing
       source: >-
         std/din-1-0-2-3@1 barrel key - H+S catalogue 2020 p.239 jack K 4.72-4.75 starting
-        6.15 behind the front face (C/D midpoint); with the front at 9.11 it shows from the
-        nut face at 2.41 to 2.96.
+        6.15 behind the front face (C/D midpoint); with the front at 9.4 it shows from the
+        nut face at 2.41 to 3.25. Dimensioned figures.
     - node: barrel
       cyl: 3.95
-      lift: 2.96
+      lift: 3.25
       color: '#d7dade'
       confidence: drawing
       source: >-
-        std/din-1-0-2-3@1 barrel key - H+S catalogue 2020 p.239 jack I 4.03-4.15, from
-        the collar at 2.96 to the latch groove 2.2 behind the front, 6.91.
+        std/din-1-0-2-3@1 barrel key - H+S catalogue 2020 p.239 jack I 4.03-4.15, from the
+        collar at 3.25 to the latch groove 2.2 behind the front, 7.2. The groove end is
+        scaled (see the groove feature).
     - node: groove
       cyl: 0.8
-      lift: 6.91
+      lift: 7.2
       color: '#a9aeb3'
       confidence: drawing
       source: >-
-        std/din-1-0-2-3@1 barrel key - PE44259 p.3 latch groove about 1.4 to 2.2 behind the
-        front at about dia 3.6, scaled against the dimensioned M5.5 thread (5.47 read).
+        std/din-1-0-2-3@1 barrel key - SCALED, not dimensioned: PE44259 p.3 latch groove
+        about 1.4 to 2.2 behind the front at about dia 3.6, read at 600 dpi and checked
+        against the dimensioned M5.5 thread (5.47 read).
     - node: ring
       cyl: 1.4
-      lift: 7.71
+      lift: 8.0
       color: '#d7dade'
       confidence: drawing
       source: >-
-        std/din-1-0-2-3@1 barrel and projection keys - L-com RFPCB-1.0/2.3FS-4G72 rev A
-        front ring .055 [1.4] at the tube dia; its front at 9.11 is the PE44259 drawn
-        projection, 2.41 nut plus about 6.7 of barrel.
+        std/din-1-0-2-3@1 barrel and projection keys - the 1.4 length is dimensioned (L-com
+        RFPCB-1.0/2.3FS-4G72 rev A, .055 [1.4]); where it starts rests on the SCALED
+        groove. Its front at 9.4 is 13.5 flange-to-front less the 4.1 maximum panel, both
+        dimensioned on PE44259 p.3.
 connection-points:
   mate: {at: [2.795, 2.795], direction: front}
 skins: [default]
