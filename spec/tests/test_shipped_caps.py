@@ -457,10 +457,11 @@ EXPECTED_DEVICE_SLOTS = {"common/lc-duplex-adapter@6": 478,
 # The backs, one cap per MPO port: fhd-1ufce `populated`'s four cassette
 # bulkheads, then the 12x MTP panel's back seen through the open rears of
 # fhd-1ufce `panels`, fhd-1ube `panels` and fhd-1ume `multimedia` (12 each),
-# and fhd-2ufce `populated`'s four cassette bulkheads - 4 + 36 + 4. The fixed
-# and tilt-down 1Us and the 4U show no backs (test_nested_slots_js
-# BACKS_NOT_SEEN).
-EXPECTED_DEVICE_REAR_SLOTS = 44
+# fhd-2ufce `populated`'s four cassette bulkheads, and fhd-4ufce `populated`'s
+# six fhd-2mtp12-lc-os2-a backs, two bulkheads each, turned with their modules
+# (#614) - 4 + 36 + 4 + 12. The fixed and tilt-down 1Us show no backs
+# (test_nested_slots_js BACKS_NOT_SEEN).
+EXPECTED_DEVICE_REAR_SLOTS = 56
 
 
 def _fhd_bays():

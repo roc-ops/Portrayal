@@ -52,7 +52,18 @@ provenance:
   envelope-faces:
     confidence: drawing
     note: >-
-      rear, top, bottom, left and right are the envelope. No photograph of 73206 is held.
+      top, bottom, left and right are the envelope, and the rear is too but for its slot
+      holes (rear-opening). No photograph of 73206 is held.
+  rear-opening:
+    confidence: estimated
+    note: >-
+      the back is open behind each slot, as fs/fhd-1ufce's is, so the modules' backs - and
+      their MTP trunks - are reached from behind. Twelve holes, each its bay's turned box
+      mirrored left to right, since the back is seen from behind; their real outline, and
+      whether they are twelve holes or one, is open (the `face-detail` gap). Each runs
+      407.8 - the 408.8 drawer less a 1.0 front plate, which is ESTIMATED as it is on the
+      1U. A back is drawn turned with its module, the other way round (a clockwise turn at
+      the front reads anticlockwise from behind), where its own body stands.
 chassis:
   width: 442.0
   height: 173.0
@@ -75,7 +86,7 @@ gaps:
     reason: needs-photo
     note: >-
       the envelope faces carry nothing; bend-radius posts, rails and rear brackets are
-      undimensioned.
+      undimensioned, and the rear's twelve slot holes are the bays mirrored, not measured.
     wanted: >-
       a rear photograph.
 groups:
@@ -141,6 +152,7 @@ views:
             - fs/fhd-fap6scd-om4@1
           group: slots
           rel-pos: 1
+          rear: {view: rear, cutout: back-1}
         - id: bay-2
           at: [41.475, 32.015]
           size: {w: 35.05, h: 108.97}
@@ -185,6 +197,7 @@ views:
             - fs/fhd-fap6scd-om4@1
           group: slots
           rel-pos: 2
+          rear: {view: rear, cutout: back-2}
         - id: bay-3
           at: [77.475, 32.015]
           size: {w: 35.05, h: 108.97}
@@ -229,6 +242,7 @@ views:
             - fs/fhd-fap6scd-om4@1
           group: slots
           rel-pos: 3
+          rear: {view: rear, cutout: back-3}
         - id: bay-4
           at: [113.475, 32.015]
           size: {w: 35.05, h: 108.97}
@@ -273,6 +287,7 @@ views:
             - fs/fhd-fap6scd-om4@1
           group: slots
           rel-pos: 4
+          rear: {view: rear, cutout: back-4}
         - id: bay-5
           at: [149.475, 32.015]
           size: {w: 35.05, h: 108.97}
@@ -317,6 +332,7 @@ views:
             - fs/fhd-fap6scd-om4@1
           group: slots
           rel-pos: 5
+          rear: {view: rear, cutout: back-5}
         - id: bay-6
           at: [185.475, 32.015]
           size: {w: 35.05, h: 108.97}
@@ -361,6 +377,7 @@ views:
             - fs/fhd-fap6scd-om4@1
           group: slots
           rel-pos: 6
+          rear: {view: rear, cutout: back-6}
         - id: bay-7
           at: [221.475, 32.015]
           size: {w: 35.05, h: 108.97}
@@ -405,6 +422,7 @@ views:
             - fs/fhd-fap6scd-om4@1
           group: slots
           rel-pos: 7
+          rear: {view: rear, cutout: back-7}
         - id: bay-8
           at: [257.475, 32.015]
           size: {w: 35.05, h: 108.97}
@@ -449,6 +467,7 @@ views:
             - fs/fhd-fap6scd-om4@1
           group: slots
           rel-pos: 8
+          rear: {view: rear, cutout: back-8}
         - id: bay-9
           at: [293.475, 32.015]
           size: {w: 35.05, h: 108.97}
@@ -493,6 +512,7 @@ views:
             - fs/fhd-fap6scd-om4@1
           group: slots
           rel-pos: 9
+          rear: {view: rear, cutout: back-9}
         - id: bay-10
           at: [329.475, 32.015]
           size: {w: 35.05, h: 108.97}
@@ -537,6 +557,7 @@ views:
             - fs/fhd-fap6scd-om4@1
           group: slots
           rel-pos: 10
+          rear: {view: rear, cutout: back-10}
         - id: bay-11
           at: [365.475, 32.015]
           size: {w: 35.05, h: 108.97}
@@ -581,6 +602,7 @@ views:
             - fs/fhd-fap6scd-om4@1
           group: slots
           rel-pos: 11
+          rear: {view: rear, cutout: back-11}
         - id: bay-12
           at: [401.475, 32.015]
           size: {w: 35.05, h: 108.97}
@@ -625,6 +647,7 @@ views:
             - fs/fhd-fap6scd-om4@1
           group: slots
           rel-pos: 12
+          rear: {view: rear, cutout: back-12}
 
   rear:
     size:
@@ -633,6 +656,24 @@ views:
     panel:
       decor:
         - {at: [0, 0], size: [442.0, 173.0], fill: '#1b1e21'}
+      # THE BACK IS OPEN behind every slot, as the 1U's is: one hole per front
+      # bay, the bay's own turned box (35.05 x 108.97), MIRRORED - seen from
+      # behind, bay-1 is on the right. Each runs the drawer's length to the back
+      # of an ESTIMATED 1.0 front plate (408.8 - 1.0), so a slot is a passage a
+      # seated module's body stands in. See provenance.rear-opening.
+      cutouts:
+        - {id: back-1, at: [401.475, 32.015], size: [35.05, 108.97], depth: 407.8}
+        - {id: back-2, at: [365.475, 32.015], size: [35.05, 108.97], depth: 407.8}
+        - {id: back-3, at: [329.475, 32.015], size: [35.05, 108.97], depth: 407.8}
+        - {id: back-4, at: [293.475, 32.015], size: [35.05, 108.97], depth: 407.8}
+        - {id: back-5, at: [257.475, 32.015], size: [35.05, 108.97], depth: 407.8}
+        - {id: back-6, at: [221.475, 32.015], size: [35.05, 108.97], depth: 407.8}
+        - {id: back-7, at: [185.475, 32.015], size: [35.05, 108.97], depth: 407.8}
+        - {id: back-8, at: [149.475, 32.015], size: [35.05, 108.97], depth: 407.8}
+        - {id: back-9, at: [113.475, 32.015], size: [35.05, 108.97], depth: 407.8}
+        - {id: back-10, at: [77.475, 32.015], size: [35.05, 108.97], depth: 407.8}
+        - {id: back-11, at: [41.475, 32.015], size: [35.05, 108.97], depth: 407.8}
+        - {id: back-12, at: [5.475, 32.015], size: [35.05, 108.97], depth: 407.8}
 
   top:
     size:

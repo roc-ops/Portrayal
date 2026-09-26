@@ -909,8 +909,6 @@ BACKS_NOT_SEEN = {
                    "cover, and a rear hole would be invented",
     "fhd-1ufmt-s": "a closed tray behind a slotted cable comb (FS renders "
                    "145167.p3/p5); the backs are inside, not seen from behind",
-    "fhd-4ufce": "its modules stand on edge (rotate 90) and a bay's `rear:` "
-                 "projection cannot turn, so a back would be drawn lying flat",
 }
 
 
