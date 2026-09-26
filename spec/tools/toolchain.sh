@@ -12,14 +12,15 @@
 export PYTHONPATH="$PWD/spec/tools${PYTHONPATH:+:$PYTHONPATH}"
 
 # THE GUARD, because silence is the whole defect. It imports portrayal the way
-# the stages do, with the script's directory at sys.path[0], and refuses any
+# the stages do, with the script's directory INSERTED at sys.path[0] - not
+# written over it, which under PYTHONSAFEPATH is the pin itself - and refuses any
 # answer that is not this checkout. A PYTHONPATH the caller set, or a .pth file,
 # can still get there first, and then the build stops and prints both paths.
 toolchain_check() {
   python3 -c '
 import pathlib, sys
 here = pathlib.Path(sys.argv[1]).resolve()
-sys.path[0] = str(here)
+sys.path.insert(0, str(here))
 import portrayal
 got = pathlib.Path(portrayal.__file__).resolve().parent
 if got != here:

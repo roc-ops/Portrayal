@@ -30,8 +30,8 @@ def decoy(tmp_path):
     return d
 
 
-def run(cwd, script, pythonpath):
-    env = {**os.environ, "PYTHONPATH": str(pythonpath)}
+def run(cwd, script, pythonpath, **extra):
+    env = {**os.environ, "PYTHONPATH": str(pythonpath), **extra}
     return subprocess.run(["bash", "-c", f"set -euo pipefail\n{script}"], cwd=cwd,
                           env=env, capture_output=True, text=True, timeout=60)
 
@@ -65,6 +65,16 @@ def test_the_guard_stops_the_build_when_portrayal_resolves_elsewhere(tmp_path):
     assert "refusing to build" in r.stderr, r.stderr
     assert str(foreign.resolve() / "portrayal") in r.stderr, r.stderr
     assert str((fake / "spec/tools/portrayal").resolve()) in r.stderr, r.stderr
+
+
+def test_the_guard_passes_a_correct_build_under_pythonsafepath(tmp_path):
+    """PYTHONSAFEPATH drops the '' that `python3 -c` would put first, so
+    sys.path[0] is the pin itself. A guard that overwrote sys.path[0] deleted the
+    pin it was checking and refused a build whose stages resolve correctly."""
+    env = {"PYTHONSAFEPATH": "1"}
+    r = run(ROOT, ". spec/tools/toolchain.sh\necho REACHED", decoy(tmp_path), **env)
+    assert r.returncode == 0, r.stderr
+    assert "REACHED" in r.stdout
 
 
 @pytest.mark.parametrize("script", ["build.sh", "publish.sh"])
