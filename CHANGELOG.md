@@ -268,6 +268,11 @@ the *published build*, not about the hardware.
   that family's rungs as `media` instead of `rate`. Lint L12 refuses a
   configuration that seats a part whose `rate` is above its cage's media on
   the part's own family ladder.
+- Lint L12 now lets a configuration seat what a cage's accept list offers
+  through its family's `also-accepts` (a QSFP part in a QSFP-DD cage), which
+  it refused; a QSFP cage still refuses a QSFP-DD part. The rate check also
+  covers a cage on a seated card, reading the card's own part and group
+  media (#630).
 - `generic/qsfp-lc@1` and `generic/qsfp-dd-lc@1` are superseded by `@2`
   (above); `@1` is kept for fixtures pinned to it.
 - `common/qsfp-pull-tab@1` is superseded by `@2` (above); `@1` is kept, with

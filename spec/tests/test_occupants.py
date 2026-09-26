@@ -237,3 +237,41 @@ def test_a_200g_qsfp_cable_in_a_100g_qsfp28_cage_is_an_error():
     assert len(got) == 1, got
     assert "'qsfp56'" in got[0] and "'qsfp28'" in got[0]
 
+
+
+# --- #630: a seat answers as the cage's offer does ----------------------------
+
+def test_a_qsfp_part_in_a_qsfp_dd_cage_is_clean():
+    """The build offers every `mates: qsfp` part in a QSFP-DD cage through
+    `also-accepts` (pluggables.yaml; QSFP-DD HW 6.3 section 1). The seat
+    check refused it, so lint failed what the explorer offered."""
+    assert _seat("edgecore/agr560", "qsfpdd-0", "amphenol/qsfp56-linear-active@1") == []
+    assert _seat("edgecore/agr560", "qsfpdd-0", "generic/qsfp-lc@2") == []
+
+
+def test_a_qsfp_dd_part_in_a_qsfp_cage_is_still_an_error():
+    """`also-accepts` runs one way: a QSFP cage does not take QSFP-DD."""
+    got = _seat("edgecore/agr560", "qsfp28-0", "volex/qsfp-dd-passive-dac@1")
+    assert len(got) == 1, got
+    assert "'qsfp-dd'" in got[0] and "'qsfp'" in got[0]
+
+
+def _seat_on_card(ref):
+    """The MX240 with a DPCE 20x1GE card in `dpc2`, and `ref` seated in the
+    card's SFP cage `port-0-0` (the card states `media: sfp`, the 1G rung,
+    on the part itself)."""
+    data = yaml.safe_load((LIB / "devices/juniper/mx240/device.yaml").read_text())
+    cfg = data["configurations"]["base"]
+    cfg.setdefault("bays", {})["dpc2"] = "juniper/dpce-20ge-2xge@1"
+    cfg["occupants"] = {"dpc2/port-0-0": ref}
+    return errors_for("juniper/mx240/device.yaml", data)
+
+
+def test_a_10g_dac_on_a_1g_card_cage_is_an_error():
+    got = _seat_on_card("molex/sfp-plus-passive-dac@1")
+    assert len(got) == 1, got
+    assert "'sfp-plus'" in got[0] and "'sfp'" in got[0]
+
+
+def test_a_generic_on_a_1g_card_cage_is_clean():
+    assert _seat_on_card("generic/sfp-cable@1") == []
