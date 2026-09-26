@@ -69,8 +69,8 @@ def test_the_enclosure_accepts_every_fs_cassette_in_the_library():
         doc = yaml.safe_load(c.read_text()) or {}
         if doc.get("kind") != "module":
             continue                       # a rear face is not a seatable part
-        if doc.get("class") != "cassette":
-            continue                       # fs/qsfp28-aoc is a cable end, seated by a cage
+        if doc.get("class") == "transceiver":
+            continue                       # a cage-seated pluggable is not an enclosure module
         modelled.add(f"fs/{doc['name']}@{c.parent.name[1:]}")
     missing = sorted(modelled - accepted)
     assert not missing, f"cassettes the enclosure does not accept: {missing}"
