@@ -1,0 +1,125 @@
+format: 1
+kind: module
+name: mcx4111a-lp
+version: 1.0.0
+class: expansion-card
+behaviour: fills
+profile: networking
+description: >-
+  NVIDIA ConnectX-4 Lx MCX4111A single-port 10/25GbE SFP28 adapter, PCIe Gen3
+  x8, on its short (low-profile) bracket. The same board ships with both
+  brackets; nvidia/mcx4111a-fh@1 is the other.
+size: {w: 79.2, h: 18.42, d: 142.24}
+size-confidence: {w: registry, h: registry, d: drawing}
+attrs:
+  model: 'MCX4111A short bracket'
+  part-numbers: 'MCX4111A-XCAT, MCX4111A-ACAT, MCX4111A-ACUT'
+  role: nic
+  power-draw-max-w: 10.7
+  power-draw-typical-w: 8.9
+  power-input: host PCIe slot
+  pcie-connector: x8
+  pcie-generation: 3
+  pcie-height: low
+  sfp28: 1
+groups:
+  sfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp28, speed: 25g}
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+provenance:
+  sources: >-
+    CX-4 Lx EN user manual: p12 LED interface, p49-50 spec tables, p54 board
+    drawing Single-port 10/25 Gb/s (142.24 x 68.90). Face borrowed from the
+    CX-5 EN user manual p58 MCX512F-ACAT tall bracket.
+  size: >-
+    registry - the face is std/pcie-bracket-lp@1, 79.2 x 18.42, composed
+    behind a punched plate; `d` is the board drawing's 142.24, the card's
+    length back from its bracket.
+  depth: >-
+    drawing - 142.24, the board mechanical drawing's length.
+  the-face-is-derived-from-the-board: >-
+    EVERY POSITION IS THE CARD'S, NOT THE BRACKET'S. The cages are placed at
+    their distance above datum W on the dimensioned board drawing - port 1
+    49.70 - with W at x' 11.11 on this bracket (PCIe CEM 5.0: 79.20 - 68.09,
+    fig 11-8). Vents, light-pipe slots, lamps and numerals keep their
+    measured offset from their nearest cage (or from W), read off NVIDIA's
+    bracket drawings. Face confidence BORROWED from nvidia/mcx512f: cx5en
+    p58's MCX512F-ACAT tall bracket is a real SFP28 bracket. Its two 15.2 x
+    10.8 windows sit at d 49.80 / 25.49 by its own 121.05, which is within
+    0.29 / 0.64 of the 512A x8 board (pitch 24.31 against 24.66). Its
+    hexagonal vent field, the six 1.5 squares beside each window and the LED
+    windows and numerals keep their offsets from the nearest window. The
+    across-bracket positions are anchored at the cage's y_lp 8.24, because
+    the art puts the window 0.48 higher. There is no short-bracket drawing,
+    so the low-profile face is the tall one moved through the CEM W offsets.
+    Features that would fall off the short metal are drawn on the tall
+    bracket only. This card has no SFP bracket drawing of its own; the cx4lx
+    p54 'Single-port Tall Bracket' is QSFP28 art. So the 512F bracket's
+    port-1 features, and the vent block it puts on port 1's tip side, are
+    placed around this board's own cage. The port-2 features are dropped,
+    and so is the numeral, because NVIDIA's single-port art carries none.
+  orientation: >-
+    drawn TIP-LEFT, so NVIDIA's tip-right figures are turned a half-turn:
+    cages and lamps are placed `rotate: 180` and the numerals read upside
+    down. In a turned bay - Dell riser 3 - the card lands as NVIDIA draws
+    it.
+  lamps: >-
+    drawing - one bi-colour LED (cx4lx p12, amber/green), shown through an
+    oval window about 3.0 x 1.5 on the keyed side, 13.09 flange-ward of the
+    cage (from the 512F art). common/led-rect-sm@1 at 2.8 x 1.6 is 0.2
+    short. The cx4lx p54 board puts this card's only LED at d 62.53, which
+    is 12.83 from the cage; that is 0.26 from the lamp.
+  body: >-
+    the board, edge tab and pads are PCIe CEM 5.0's (figs 6-5, 11-3, 11-8)
+    at the board drawing's size; the heatsink is the board drawing's U1
+    outline at its drawn position (the manual says a heatsink is attached to
+    the IC by push pins or screws but does not draw it); its 6.0 height is
+    an estimate.
+  power: >-
+    datasheet - cx4lx p49-50 spec tables, typical at ATIS load and maximum
+    with passive cables: MCX4111A-ACAT/-ACUT 8.9 W typical, 10.7 W maximum
+    (12.3 W with a 1.5 W active cable); MCX4111A-XCAT 8.7 / 10.4 W (11.6 W
+    with a 1 W active cable). The largest passive figures are carried.
+body:
+  depth: 142.24
+  color: '#2f7d3a'
+  # the slab stops where the bracket stops being a rectangle
+  plate: {at: [11.85, 0.00], size: [56.18, 18.42]}
+  boxes:
+  - {id: board, at: [19.51, 1.27], size: [60.50, 1.57], from: 0.00, depth: 142.24,
+     color: '#2f7d3a', confidence: drawing,
+     source: 'the board drawing''s 142.24 x 68.90; CEM 5.0 fig 6-5 shoulder 8.40 above W'}
+  - {id: edge-tab-short, at: [11.11, 1.27], size: [8.40, 1.57], from: 46.90, depth: 11.20,
+     color: '#2f7d3a', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: key centre 59.05 behind the bracket, 12.15 to the tab end, notch 1.90'}
+  - {id: edge-tab-long, at: [11.11, 1.27], size: [8.40, 1.57], from: 60.00, depth: 38.20,
+     color: '#2f7d3a', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: x8 DIM B 39.15 from the key centre'}
+  - {id: edge-pads-short, at: [13.71, 1.22], size: [3.00, 1.67], from: 47.25, depth: 10.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: pads 2.60..5.60 up the tab, pins 1-11 on 1.00 pitch'}
+  - {id: edge-pads-long, at: [13.71, 1.22], size: [3.00, 1.67], from: 60.25, depth: 37.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: the x8 pad run on 1.00 pitch'}
+  - {id: heatsink, at: [43.48, 2.84], size: [17.00, 6.00], from: 79.06, depth: 17.10,
+     color: '#b8bcc0', confidence: estimated,
+     source: 'cx4lx p54 Single-port 10/25 board: U1 outline 17.0 x 17.1 centred 40.87 above W and 87.61 behind the bracket; height not drawn'}
+faces:
+  plan:
+    ref: common/pcie-card-plan-lp@1
+parts:
+  - {ref: std/pcie-bracket-lp@1, id: bracket, at: [0, 0], behind: true}
+  - {ref: std/sfp@1, id: port-1, at: [53.56, 3.24], rotate: 180, group: sfp28}
+  - ref: common/led-rect-sm@1
+    id: led-port-1
+    at: [72.50, 2.78]
+    rotate: 180
+    group: port-leds
+    states: {lamp: ['off', {name: link-up, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: error, color: '#f59e0b', behavior: blinking}, {name: beacon, color: '#f59e0b', behavior: blinking}]}
+skins: [default]

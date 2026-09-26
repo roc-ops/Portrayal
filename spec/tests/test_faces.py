@@ -104,7 +104,8 @@ def test_lint_reads_a_plan_through_the_accessor():
 def test_the_accessor_answers_for_every_part_that_names_a_plan():
     """Fourteen parts name a plan drawing; the accessor must find all of them.
     The fourteenth is ufispace/n3100-4c@1, the first real PCIe card, whose
-    plan is ufispace/n3100-4c-plan@1.
+    plan is ufispace/n3100-4c-plan@1. Fifty since the 36 NVIDIA ConnectX card
+    modules, each naming the generic card plan of its bracket height.
 
     Reads the real library rather than a fixture. Spelling-agnostic on purpose -
     it passes before Task 5's migration and after it, because what it watches is
@@ -113,8 +114,8 @@ def test_the_accessor_answers_for_every_part_that_names_a_plan():
     lib = ROOT / "library/components"
     named = [p for p in lib.glob("*/*/v*/contract.yaml")
              if F.face_ref(yaml.safe_load(p.read_text()) or {}, "plan")]
-    assert len(named) == 14, \
-        f"expected 14 parts naming a plan drawing, found {len(named)}"
+    assert len(named) == 50, \
+        f"expected 50 parts naming a plan drawing, found {len(named)}"
 
 
 def run83(doc, path="t/contract.yaml", name="t/thing@1", lib=LIB):
@@ -225,9 +226,11 @@ def test_the_index_carries_a_parts_other_faces():
     # and the blank have none.
     # 49, not 48: ufispace/n3100-4c@1, a PCIe card, declares its plan face
     # ufispace/n3100-4c-plan@1 - the card seen from above in a riser slot.
+    # 85, not 49: the 36 nvidia/ ConnectX card modules each declare the generic
+    # card plan of their bracket height, common/pcie-card-plan@1 or -lp@1.
     with_faces = [e for e in entries if e.get("faces")]
-    assert len(with_faces) == 49, \
-        f"expected exactly 49 of {len(entries)} entries to carry a faces " \
+    assert len(with_faces) == 85, \
+        f"expected exactly 85 of {len(entries)} entries to carry a faces " \
         f"key, found {len(with_faces)}"
 
 
