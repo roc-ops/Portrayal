@@ -9905,6 +9905,7 @@ def main():
                 lint_component_size_confidence(f, d)
                 lint_component_display(f, d)
                 lint_component_generic(f, d)
+                lint_component_head(f, d)
                 lint_component_size_sourced(f, d)
                 lint_component_role(f, d)
                 lint_component_forwarded_mate(f, d, args.library)

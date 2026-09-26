@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: sfp-lc
-version: 1.0.4
+version: 1.1.0
 class: transceiver
 behaviour: occupies
 mates: sfp
@@ -16,6 +16,10 @@ description: >-
   (docs/pluggables-design.md, decision 5), never here.
 size: {w: 13.55, h: 8.55, d: 47.50}
 size-confidence: {w: registry, h: registry, d: registry}
+head:
+  at: [0.0, 0.0]
+  size: {w: 13.55, h: 8.55, d: 10.0}
+  size-confidence: {w: registry, h: registry, d: drawing}
 attrs: {power-absent: not-applicable, form-factor: sfp, face: lc-duplex, media: fiber}
 fields:
   latch-color:
@@ -111,6 +115,19 @@ provenance:
     standing forward of the stop, UNDER the 10.0 Recommended Maximum. One
     drawing, one datum, and a real module inside the recommendation - which is
     what a Recommended Maximum should look like.
+  head: >-
+    the face is the registry's `sfp-module` 13.55 x 8.55 (designators E and S,
+    same as `size`), and the 10.0 length is SFF-8432 Rev 5.2a Table 4-3
+    designator A, module length extending outside of cage, Recommended
+    Maximum - the same figure `relief.features[body].out` and
+    `provenance.protrusion` already carry, so the head is the same protrusion
+    stated as an envelope rather than a render depth. `at: [0, 0]` because A
+    is measured from the body's own top and bottom (S, 8.55) with no offset.
+    No `node:`: the skin's `body` is a rounded-corner path with the two bores
+    cut as holes (evenodd), not a plain rect, so there is no single rect
+    element for L121's node check to compare against `head.size` - see
+    generic/qsfp-lc@2's `body`, which IS a rect and does carry `node: body`,
+    for the case this omits.
   bail-colour: >-
     A FIELD, not a fact, and the default is a NEUTRAL GREY (#6f6f6f) because
     every chromatic default is a claim. SFF-8432 Rev 5.2a Note 13 makes the
