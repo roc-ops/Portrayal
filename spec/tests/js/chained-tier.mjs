@@ -50,8 +50,15 @@ const out = {};
 for (const s of input.scenarios) {
   try {
     const dev = input.devices[s.dev];
-    const root = build(dev.faces[s.from]);
     const cages = dev.cages;
+    // THE RELOAD'S GATE, drawing-less: which keys of a swap= map survive
+    if (s.accept) {
+      const built = s.builtOcc || {};
+      out[s.name] = m.acceptSwaps(s.accept, {bays: [], cages, compByRef,
+        builtOcc: k => Object.prototype.hasOwnProperty.call(built, k) ? built[k] : undefined});
+      continue;
+    }
+    const root = build(dev.faces[s.from]);
     const res = s.overrides
       ? await m.applyFaceOverrides(root, {bays: [], cages}, s.overrides, loadSkin, compByRef)
       : null;

@@ -84,6 +84,16 @@ SCENARIOS = [
      "empty": [CARD["plug"] + "-occupant", CARD["boot"] + "-occupant"]},
     {"name": "upBoot", "dev": "as7726", "from": "plugged",
      "overrides": {UP["boot"]: LCBOOT}, "keys": [UP["boot"]]},
+    # THE RELOAD'S GATE (acceptSwaps): a swap= map naming the chained tier
+    {"name": "acceptFlat", "dev": "eps201",
+     "accept": {DEV["plug"]: RJPLUG, DEV["boot"]: RJBOOT}},
+    {"name": "acceptNested", "dev": "as7726",
+     "accept": {UP["optic"]: QSFP, UP["plug"]: LCPLUG, UP["boot"]: LCBOOT}},
+    {"name": "acceptOnBuilt", "dev": "eps201",
+     "accept": {DEV["boot"]: RJBOOT}, "builtOcc": {DEV["plug"]: RJPLUG}},
+    {"name": "acceptNoPlug", "dev": "eps201", "accept": {DEV["boot"]: RJBOOT}},
+    {"name": "acceptWrongBoot", "dev": "eps201",
+     "accept": {DEV["plug"]: RJPLUG, DEV["boot"]: LCBOOT}},
     {"name": "devBoot", "dev": "eps201", "from": "plugged",
      "overrides": {DEV["boot"]: RJBOOT}, "keys": [DEV["boot"]]},
     {"name": "devChain", "dev": "eps201", "from": "bare",
@@ -249,3 +259,32 @@ def test_what_a_part_presents_is_what_the_build_seats_on(world, ref, iface, acce
     assert (p["interface"], p["mate"], p["lift"], p["accepts"]) == (
         iface, list(want_at), float(want_lift), accepts)
     assert iface == want_iface
+
+
+# ---------------------------------------------------------------- a reload
+
+@needs_node
+@pytest.mark.parametrize("name,want", [
+    ("acceptFlat", {DEV["plug"]: RJPLUG, DEV["boot"]: RJBOOT}),
+    ("acceptNested", {UP["optic"]: QSFP, UP["plug"]: LCPLUG, UP["boot"]: LCBOOT}),
+    ("acceptOnBuilt", {DEV["boot"]: RJBOOT}),
+])
+def test_a_shared_link_keeps_the_chained_tier(world, name, want):
+    """The gate a reload and a shared swap= link go through (acceptSwaps)
+    reads keys with no drawing (slotResolver.entryAt). It knew no chained key,
+    so every boot in a link was ignored and the page came back without them -
+    3D too, which is handed what the gate accepts. The nested form is the
+    issue's own `port-1-occupant/tx-occupant`; the third is a boot on the plug
+    the BUILD seated, which the map does not name."""
+    s = scenario(world, name)
+    assert s["accepted"] == want and s["ignored"] == [], s
+
+
+@needs_node
+@pytest.mark.parametrize("name", ["acceptNoPlug", "acceptWrongBoot"])
+def test_the_gate_still_refuses_a_tier_with_nothing_to_stand_on(world, name):
+    """A boot where no plug is, or a boot the plug does not take, is still no
+    slot's answer - the chained entry comes from what the host holds."""
+    s = scenario(world, name)
+    assert s["ignored"] == [DEV["boot"]], s
+    assert DEV["boot"] not in s["accepted"]

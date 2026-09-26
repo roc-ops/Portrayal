@@ -1803,7 +1803,9 @@ export function acceptSwaps(map, {bays = [], cages = [], built = () => null,
     // same answer the exclusion below reads
     occRef: path => holds(path)});
   const depth = k => k.split('/module/').length;
-  const chain = k => k.split(`${OCC}/`).length;
+  // every `-occupant` step, the chained tier's included (#611): a boot is
+  // judged after the plug it goes on has been
+  const chain = k => k.split(OCC).length;
   const keys = Object.keys(map && typeof map === 'object' ? map : {})
     .sort((a, b) => depth(a) - depth(b) || chain(a) - chain(b) || (a < b ? -1 : 1));
   const isCage = new Set();
@@ -1903,6 +1905,18 @@ export function slotResolver({bays = [], cages = [], bayRef = (p, b) => b.defaul
     if (bay) return bay;
     const cage = cages.find(c => c.id === path);
     if (cage) return {...cage, key: slotKey(path), isCage: true};
+    // THE CHAINED TIER (#611): `<slot>-occupant` is a slot when what the slot
+    // holds - the caller's answer, `occRef` - presents something (components.
+    // json `presents`): a boot on the plug in `port-1`, a plug in the optic in
+    // `xg0`. nestedSlots reads the same slot off a drawing (chainedSlots);
+    // without this the reload's gate ignored every such key, so a shared link
+    // lost the boots it named.
+    if (path.endsWith(OCC)) {
+      const hostPath = path.slice(0, -OCC.length);
+      const host = entryAt(hostPath);
+      const p = host?.isCage ? comp(occRef(hostPath, host))?.presents : null;
+      if (p) return {...p, id: path, key: slotKey(path), isCage: true, chained: true};
+    }
     const cut = path.lastIndexOf('/');
     if (cut <= 0) return null;
     const parent = path.slice(0, cut), name = path.slice(cut + 1);
