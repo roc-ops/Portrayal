@@ -56,7 +56,9 @@ python3 spec/tools/portrayal/render.py library/devices/edgecore/as7726-32x/devic
 ```
 
 The build and lint gates need Python 3.12 and `pip install -e .`, which brings
-`pyyaml` and `jsonschema` and makes the `portrayal` package importable. They are
+`pyyaml` and `jsonschema` and makes the `portrayal` package importable. The PNG
+pictures `./publish.sh` renders beside the DCIM exports also need cairosvg:
+`pip install -e ".[render]"`, or run `./publish.sh --no-images`. They are
 **macOS and Linux only**: `build.sh` and `publish.sh` are shell scripts and run
 one renderer per device under `xargs -P`. (`python -m portrayal lint|lock|test`
 is pure Python and runs anywhere.) **Preparing a new vendor line** additionally needs

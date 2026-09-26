@@ -2073,6 +2073,19 @@ def main():
     global RASTER
     RASTER = not args.no_raster
     images = args.dist if args.images else None
+    # PICTURES ASKED FOR ARE PICTURES MADE, OR THE RUN SAYS WHY NOT (#462).
+    # rasterize() answers None without cairosvg, and this run used to finish,
+    # exit 0 and write the image booleans over no PNG at all - a local
+    # `./publish.sh` without the `render` extra "succeeded" with 0 pictures.
+    # Checked once, before anything is written.
+    if images and RASTER:
+        try:
+            import cairosvg  # noqa: F401
+        except ImportError:
+            raise SystemExit(
+                "--images needs cairosvg, which is not installed. Install the render "
+                "extra - pip install -e \".[render]\" - or run publish.sh with "
+                "--no-images to write the exports without the pictures")
 
     if args.modules:
         export_modules(dist, args.out, images)
