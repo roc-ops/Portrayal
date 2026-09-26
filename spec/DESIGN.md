@@ -47,7 +47,9 @@ Three layers:
    core vocabulary (profiles extend); compiled SVG ships `.state-*` CSS rules;
    consumers toggle classes; skins expose CSS custom-property color hooks.
 5. **Labels as data**: contracts define anchors; text comes from manifests and
-   NOS overlays. One open project font; optional outline-to-paths build flag.
+   NOS overlays. Skins set their text in a system sans-serif (Arial or
+   Helvetica, falling back to `sans-serif`). *Planned, not built:* one open
+   project font, and a build flag that converts text to outlines.
 6. **Regions**: addressable areas (sensor context via Redfish PhysicalContext
    vocabulary, grouping, doc callouts); may declare member components; NOS
    entity-map rules may target regions (e.g. a per-NOS "port bank" container).
@@ -62,8 +64,11 @@ Three layers:
    registered by title/URL/SHA-256/archive link. Device dumps stored sanitized
    (serials, MACs, IPs, hostnames, communities stripped/hashed).
 8. **Builds**: byte-deterministic (no timestamps; toolchain version in
-   `<metadata>`); source-only repos, compiled SVGs as release artifacts/gallery;
-   CI = schema validation + contract↔skin linter + pixel-diff regression.
+   `<metadata>`); source-only repos. CI = schema validation, the
+   contract↔skin linter and the test suite, including a check that the
+   committed DCIM exports match a fresh build. *Planned, not built:* compiled
+   SVGs published as release artifacts (#64), and a pixel-diff regression step
+   in CI.
    **A configuration says what OCCUPIES a bay AND what is TRUE of a part, and
    still not what is true of the DEVICE.** That sentence is the decision #193
    asked for, and the shape it names came from two vendors at once
