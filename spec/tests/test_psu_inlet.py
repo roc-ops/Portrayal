@@ -82,7 +82,7 @@ def test_a_declared_terminal_block_exports_a_power_port():
     d = _module_exports().get("PSU-302-DESR")
     if d is None:
         pytest.skip("PSU-302-DESR is not in this library")
-    assert d.get("power-ports") == [{"name": "Inlet", "type": "dc-terminal"}]
+    assert d.get("power-ports") == [{"name": dx.module_scoped("Inlet"), "type": "dc-terminal"}]
 
 
 def test_none_is_a_claim_and_exports_nothing():
@@ -105,7 +105,7 @@ def test_a_composed_part_still_wins():
     d = _module_exports().get("psu-1100w-ac-14g")
     if d is None:
         pytest.skip("the Dell 1100 W AC supply is not in this library")
-    assert d.get("power-ports") == [{"name": "inlet", "type": "iec-60320-c14"}]
+    assert d.get("power-ports") == [{"name": dx.module_scoped("inlet"), "type": "iec-60320-c14"}]
 
 
 def test_a_typed_inlet_is_not_also_listed_as_a_fact_with_no_field():

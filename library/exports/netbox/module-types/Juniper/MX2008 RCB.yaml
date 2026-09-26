@@ -4,20 +4,20 @@ model: MX2008 RCB
 description: Juniper MX2008 Routing and Control Board (RCB) - the integrated RE-plus-control-board FRU,
   one at each end of the short upper cage
 console-ports:
-  - name: aux
+  - name: '{module}/aux'
     type: rj-45
-  - name: console
+  - name: '{module}/console'
     type: rj-45
-  - name: usb
+  - name: '{module}/usb'
     type: usb-a
 interfaces:
-  - name: bits
+  - name: '{module}/bits'
     type: other
     label: BITS
-  - name: mgmt0
+  - name: '{module}/mgmt0'
     type: 1000base-t
     mgmt_only: true
-  - name: mgmt1
+  - name: '{module}/mgmt1'
     type: 1000base-t
     mgmt_only: true
 comments: 'Juniper MX2008 Routing and Control Board (RCB) - the integrated RE-plus-control-board FRU,

@@ -216,7 +216,8 @@ CSFP_CARDS = [("FELT-B", 36), ("FELT-C", 32), ("FELT-D", 36), ("NELT-B", 36), ("
 def test_a_csfp_card_exports_every_port_it_numbers(target, model, ports):
     d = _module_export(target, model)
     assert d is not None, model
-    names = [i["name"] for i in d.get("interfaces") or []]
+    # A card's names are bay-scoped in the file; the test reads the card's.
+    names = [i["name"].removeprefix(dx.module_scoped("")) for i in d.get("interfaces") or []]
     assert len(names) == len(set(names)), "a name exported twice"
     assert {n for n in names if n.startswith("port-")} == {f"port-{n}" for n in range(1, ports + 1)}
     # the cages are where the ports live, not ports themselves
