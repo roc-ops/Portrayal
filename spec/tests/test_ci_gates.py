@@ -127,6 +127,18 @@ def test_the_suite_log_is_not_in_a_shared_tmp(workflow):
     assert "$RUNNER_TEMP/pytest.txt" in build
 
 
+def test_the_suite_keeps_its_temporary_files_in_the_job(workflow):
+    """pytest's default basetemp, /tmp/pytest-of-<user>, keeps old runs' trees.
+    Three self-hosted runners share one user and one /tmp, and the kept trees
+    filled it (ENOSPC, three PRs failed at once). Each job's temp lives under
+    its own RUNNER_TEMP, which the runner deletes after the job."""
+    run = next(s["run"] for s in steps(workflow["jobs"]["build"])
+               if s.get("name") == "tests")
+    assert '--basetemp "$RUNNER_TEMP/pytest"' in run, run
+    assert 'export TMPDIR="$RUNNER_TEMP/tmp"' in run, run
+    assert run.index("TMPDIR") < run.index("python3 -m pytest"), run
+
+
 def _pyproject():
     import tomllib
     return tomllib.loads((ROOT / "pyproject.toml").read_text())
