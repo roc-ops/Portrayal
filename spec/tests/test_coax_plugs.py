@@ -188,4 +188,71 @@ def test_it_renders_seated_on_its_jack(seated, ref):
     ox, oy = device_point(parents, occ, own_mate(occ))
     assert abs(hx - ox) < 1e-6 and abs(hy - oy) < 1e-6
     stub = [e for e in occ.iter() if e.get("id") == f"{occ.get('id')}--stub"]
-    assert len(stub) == 1 and stub[0].get("data-z-cyl") == "30"
+    # a float compare: a seat at a nonzero lift writes its features through
+    # the inset path, which spells 30 as "30.0"
+    assert len(stub) == 1 and float(stub[0].get("data-z-cyl")) == 30
+
+
+# jack -> the plane a mated plug's coupling front sits on, in mm in front of
+# the jack's own face (docs/connectors-coax-design.md section 5 item 1: the
+# coupling overlaps the jack's barrel by the mated engagement, so the front of
+# the coupling is the barrel's front less that engagement).
+#   SMA 0: the nut covers the whole 5.0 barrel of std/sma (MIL-STD-348B H + C
+#     is about 5.3; the nut stops at the panel).
+#   SMB 0: the body covers the whole 5.0 barrel of std/smb (MIL-STD-348B
+#     3.33-5.21).
+#   MCX 2.0: nothing overlaps; the plug shoulder stops at the jack's front
+#     face, which is the front of std/mcx's 2.0 barrel (Radiall D1C004XEe
+#     p.4-14 item 1), and the jack's mate sits `on:` that barrel.
+MATED_PLANE = {
+    "generic/sma-plug@1": 0.0,
+    "generic/smb-plug@1": 0.0,
+    "generic/mcx-plug@1": 2.0,
+}
+# plug -> the jack node whose compiled front IS the mated plane, where the jack
+# draws a face there (a plane of 0 is the jack's own face).
+MATED_FACE = {"generic/mcx-plug@1": "barrel"}
+
+
+def _z_base(parents, el):
+    """The summed `data-z-lift` of `el` and every ancestor: where a feature of
+    `el` with no lift of its own starts, in the device frame."""
+    z = 0.0
+    while el is not None:
+        z += float(el.get("data-z-lift") or 0)
+        el = parents.get(el)
+    return z
+
+
+def _jack_group(host, ref):
+    """The group drawing the jack PLUGS names: the host itself, or the core
+    the SWAPS bezel composes."""
+    core = PLUGS[ref][2]
+    if host.get("data-ref", "").startswith(core):
+        return host
+    hits = [n for n in host.iter() if n is not host
+            and n.get("data-ref", "").startswith(core)]
+    assert len(hits) == 1, (ref, core, len(hits))
+    return hits[0]
+
+
+@pytest.mark.parametrize("ref", sorted(MATED_PLANE))
+def test_the_coupling_front_sits_on_the_jacks_mated_plane(seated, ref):
+    root, parents, _ = seated[ref]
+    host_path = SEATS[ref][4]
+    host = by_path(root, host_path)
+    occ = by_path(root, f"{host_path}-occupant")
+    coupling = [e for e in occ.iter() if e.get("id") == f"{occ.get('id')}--coupling"]
+    assert len(coupling) == 1, ref
+    got = _z_base(parents, coupling[0])
+    jack = _jack_group(host, ref)
+    want = _z_base(parents, jack) + MATED_PLANE[ref]
+    assert got == pytest.approx(want, abs=0.05), (ref, got, want)
+    face = MATED_FACE.get(ref)
+    if face:
+        node = [e for e in jack.iter() if e.get("id") == f"{jack.get('id')}--{face}"]
+        assert len(node) == 1, (ref, face)
+        n = node[0]
+        front = (float(n.get("data-z-out")) if n.get("data-z-out") is not None
+                 else float(n.get("data-z-cyl") or 0))
+        assert _z_base(parents, n) + front == pytest.approx(got, abs=0.05), (ref, face)
