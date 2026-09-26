@@ -23,6 +23,10 @@
 #   ./publish.sh [--no-images] [OUT]        default OUT is library/dist
 set -euo pipefail
 cd "$(dirname "$0")"
+# Every stage below runs a tool by path, and by path the tools import whichever
+# checkout was pip-installed, not this one. This pins them here and stops the
+# build if anything still resolves elsewhere (#561).
+. spec/tools/toolchain.sh
 IMAGES=(--images)
 if [ "${1:-}" = "--no-images" ]; then IMAGES=(--images --no-raster); shift; fi
 OUT="${1:-library/dist}"
