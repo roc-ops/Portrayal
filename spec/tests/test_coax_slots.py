@@ -295,3 +295,113 @@ def test_the_bnc_lugs_sit_where_mil_std_348_puts_them():
         assert (start, end) == (6.97, 8.96)
         assert abs((start + end) / 2 - (12.2 - 4.2375)) < 0.01
         assert abs((end - start) - 1.985) < 0.01
+
+
+# THE STAND-IN MOVES (#650 Task 6, docs/connectors-coax-design.md section 6).
+# The Cisco clear channel T3/E3 SPAs drew their 1.0/2.3 jacks as skin art; they
+# now place common/din-1-0-2-3-jack@1 (the bezel, never the bare core) at the
+# centres the skin drew. The Juniper DS3/E3 MIC does not move: its faceplate
+# jack is 75-ohm mini-SMB, which no modelled interface fits.
+KNOWN_CARD["din-1-0-2-3"] = ("cisco/spa-4xt3e3@1", "p0-tx")
+
+SPA_JACKS = {
+    "cisco/spa-4xt3e3@1": {
+        "p0-tx": 10.29, "p0-rx": 22.77, "p1-tx": 53.26, "p1-rx": 65.38,
+        "p2-tx": 96.24, "p2-rx": 108.0, "p3-tx": 138.85, "p3-rx": 151.34,
+    },
+    "cisco/spa-2xt3e3@1": {
+        "p0-tx": 10.29, "p0-rx": 22.77, "p1-tx": 53.26, "p1-rx": 65.38,
+    },
+    # Fix round 1: the two channelized T3 cards the guide also gives 1.0/2.3
+    # (Siemax / DIN 1.0/2.3) jacks.
+    "cisco/spa-4xct3-ds0@1": {
+        "p0-tx": 10.29, "p0-rx": 22.77, "p1-tx": 53.26, "p1-rx": 65.38,
+        "p2-tx": 96.24, "p2-rx": 108.0, "p3-tx": 138.85, "p3-rx": 151.34,
+    },
+    "cisco/spa-2cht3-ce-atm@1": {
+        "p0-tx": 15.43, "p0-rx": 27.92, "p1-tx": 49.59, "p1-rx": 61.34,
+    },
+}
+SPA_JACK_X = {"cisco/spa-2cht3-ce-atm@1": 8.64}  # every other card: 9.88
+DIN_PLUG = LIB / "components/generic/din-1-0-2-3-plug/v1/contract.yaml"
+
+
+def test_the_known_din_card_port_publishes_a_connector_slot(comps):
+    ref, cage_id = KNOWN_CARD["din-1-0-2-3"]
+    slot = _card_slot(comps, ref, cage_id)
+    assert (slot["kind"], slot["interface"]) == ("connector", "din-1-0-2-3"), slot
+
+
+@pytest.mark.parametrize("ref", sorted(SPA_JACKS))
+def test_each_t3e3_spa_jack_is_a_placed_din_bezel_at_the_drawn_centre(ref, comps):
+    doc = _contract(ref)
+    parts = {p["id"]: p for p in doc.get("parts") or []}
+    for pid, cy in SPA_JACKS[ref].items():
+        p = parts[pid]
+        assert p["ref"] == "common/din-1-0-2-3-jack@1", p
+        assert p["attrs"] == {"impedance": 75, "media": "coax-din-1-0-2-3"}, p
+        # the bezel box is the 7.01 nut, so its centre is at + 3.505
+        cx = SPA_JACK_X.get(ref, 9.88)
+        assert abs(p["at"][0] + 3.505 - cx) < 1e-6 and abs(p["at"][1] + 3.505 - cy) < 1e-6, p
+        slot = _card_slot(comps, ref, pid)
+        assert (slot["kind"], slot["interface"]) == ("connector", "din-1-0-2-3"), slot
+
+
+@pytest.mark.skipif(not DIN_PLUG.exists(), reason="the 1.0/2.3 plug lands in Task 5")
+@pytest.mark.parametrize("ref", sorted(SPA_JACKS))
+def test_each_t3e3_spa_jack_accepts_the_din_plug(ref, comps):
+    for pid in SPA_JACKS[ref]:
+        assert "generic/din-1-0-2-3-plug@1" in _card_slot(comps, ref, pid)["accepts"]
+
+
+def test_the_t3e3_skins_no_longer_draw_the_jacks():
+    for ref, jacks in SPA_JACKS.items():
+        svg = _skin_path(ref).read_text()
+        for pid in jacks:
+            assert f'id="{pid}"' not in svg, (ref, pid)
+        assert 'id="silkscreen"' in svg and 'id="status"' in svg, ref
+
+
+CORE_BEZEL = {"std/bnc@1": "common/bnc-jack@1",
+              "std/din-1-0-2-3@1": "common/din-1-0-2-3-jack@1"}
+
+
+def _refs(node, out):
+    if isinstance(node, dict):
+        if isinstance(node.get("ref"), str):
+            out.append(node["ref"])
+        for v in node.values():
+            _refs(v, out)
+    elif isinstance(node, list):
+        for v in node:
+            _refs(v, out)
+    return out
+
+
+def test_no_device_or_card_places_a_bare_bnc_or_din_core():
+    """The BNC and 1.0/2.3 cores paint past their own box (the BNC collar over
+    its D-flat, and neither draws the flange or nut a panel shows), so every
+    placement goes through the common/*-jack bezel. Walks every device.yaml and
+    every contract in the real library, not a list."""
+    seen, bad, bezel_places, din_placers = 0, [], set(), set()
+    for f in sorted((LIB / "devices").glob("*/*/device.yaml")):
+        seen += 1
+        bad += [(str(f.relative_to(LIB)), r) for r in _refs(yaml.safe_load(f.read_text()), [])
+                if r in CORE_BEZEL]
+    for f in sorted((LIB / "components").glob("*/*/v*/contract.yaml")):
+        seen += 1
+        doc = yaml.safe_load(f.read_text())
+        me = f"{f.parts[-4]}/{f.parts[-3]}@{f.parts[-2][1:]}"
+        for r in _refs(doc.get("parts") or [], []) + _refs(doc.get("bays") or {}, []):
+            if r == "common/din-1-0-2-3-jack@1":
+                din_placers.add(me)
+            if r in CORE_BEZEL:
+                if CORE_BEZEL[r] == me:
+                    bezel_places.add(me)
+                else:
+                    bad.append((str(f.relative_to(LIB)), r))
+    assert seen > 1000, f"walked only {seen} files"
+    assert bezel_places == set(CORE_BEZEL.values()), bezel_places  # the walk sees the cores
+    # and it reaches every moved card, each through the bezel
+    assert set(SPA_JACKS) <= din_placers, set(SPA_JACKS) - din_placers
+    assert not bad, bad

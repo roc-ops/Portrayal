@@ -1,8 +1,9 @@
 ---
 manufacturer: Juniper
 model: MIC-3D-8DS3-E3
-description: Juniper DS3/E3 MIC - eight ports as sixteen 75-ohm coax pairs (RX over TX); the coax jacks
-  are drawn with the SMB registry opening because no BNC standard exists in the registry yet - recorded
+description: Juniper DS3/E3 MIC - eight ports as sixteen 75-ohm coax pairs (RX over TX); the faceplate
+  jack is 75-ohm mini-SMB (the MX2020 and MX2010 3D Universal Edge Routers datasheet 1000417-010-EN and
+  the...
 interfaces:
   - name: '{module}/port-0-0'
     type: other
@@ -52,8 +53,10 @@ interfaces:
   - name: '{module}/port-0-15'
     type: other
     label: SMB
-comments: 'Juniper DS3/E3 MIC - eight ports as sixteen 75-ohm coax pairs (RX over TX); the coax jacks
-  are drawn with the SMB registry opening because no BNC standard exists in the registry yet - recorded.
+comments: 'Juniper DS3/E3 MIC - eight ports as sixteen 75-ohm coax pairs (RX over TX); the faceplate jack
+  is 75-ohm mini-SMB (the MX2020 and MX2010 3D Universal Edge Routers datasheet 1000417-010-EN and the
+  MX104 3D Universal Edge Router datasheet 1000446-002-EN), which is not an interface the library models,
+  so the SMB registry opening stands in - recorded. BNC is only the far end of the CBL-DS3-E3-M-S cable.
   MIC form (168 x 27 window; the earlier 31 mm reading was the bay opening with bezel - a MIC must seat
   inside the 29.5 mm MPC face, so the window is 27).
 
@@ -64,4 +67,4 @@ comments: 'Juniper DS3/E3 MIC - eight ports as sixteen 75-ohm coax pairs (RX ove
 
   - power-draw-max-w: 36
 
-  Contract version 1.1.0 (juniper/mic-3d-8ds3-e3), 1.1.0 (juniper/mic-3d-8ds3-e3-v).'
+  Contract version 1.1.1 (juniper/mic-3d-8ds3-e3), 1.1.1 (juniper/mic-3d-8ds3-e3-v).'
