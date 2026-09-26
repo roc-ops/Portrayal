@@ -116,8 +116,8 @@ def adapters_in(root, refs=ADAPTERS):
 def rear_flanges(root):
     """[path] for every MPO port on a PROJECTED module back - a cassette's
     flanged bulkhead or an adapter panel's tile -
-    which a rear drawing draws without its refs: a port presenting `mpo`
-    under a projection."""
+    which a rear drawing draws without its refs: a port presenting `mpo` or
+    `mpo16` under a projection."""
     out = []
     for proj in root.iter():
         if not (_is_g(proj) and proj.get("data-projection")):
@@ -126,7 +126,7 @@ def rear_flanges(root):
             of = el.get("data-of") or ""
             # a panel tile composes the opening it forwards: the opening inside
             # an already-counted port is that port, not a second one
-            if (_is_g(el) and el.get("data-connector") == "mpo"
+            if (_is_g(el) and el.get("data-connector") in ("mpo", "mpo16")
                     and el.get("data-class") == "port"
                     and not of.endswith("-occupant")
                     and "-occupant/" not in of

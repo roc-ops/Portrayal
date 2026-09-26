@@ -105,7 +105,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/mpo-adapter@2` | component | port | 13.8 × 9.4 |  | 0 | 15 | Panel-mount MPO/MTP adapter - one opening in a bezel, as fitted to an FS FHD adapter panel |
 | `common/mpo-dust-cap@2` | component | cap | 12.8 × 8.1 | mpo | 0 | 9 | The grey dust cap FS ships in an MTP/MPO port - a 12.8 x 8.1 moulding that fills the port's mouth, with a thi… |
 | `common/mpo-flange-adapter@2` | component | port | 30 × 11 | mpo | 0 | 9 | Flanged MPO/MTP bulkhead adapter carrying 12 fibres - a black flange held by two screws, a raised housing, an… |
-| `common/mpo16-adapter@1` | component | port | 13.8 × 9.4 |  | 0 | 3 | Panel-mount MTP-16 adapter - one opening in a bezel, as fitted to FS's FHD 12x MTP-16 adapter panel (SKU 3828… |
+| `common/mpo16-adapter@1` | component | port | 13.8 × 9.4 |  | 0 | 4 | Panel-mount MTP-16 adapter - one opening in a bezel, as fitted to FS's FHD 12x MTP-16 adapter panel (SKU 3828… |
 | `common/mpo16-dust-cap@1` | component | cap | 12.8 × 8.1 | mpo16 | 0 | 1 | The grey dust cap FS ships in each opening of its FHD 12x MTP-16 adapter panel (SKU 382885) - common/mpo-dust… |
 | `common/mpo24-flange-adapter@2` | component | port | 30 × 11 | mpo | 0 | 4 | Flanged MPO/MTP bulkhead adapter carrying 24 fibres - a black flange held by two screws, a raised housing, an… |
 | `common/nic-symbol@1` | component | silkscreen | 5.4 × 4.6 |  | 0 | 0 | The network mark printed beside an Ethernet port - a node above three nodes on a bus, which is the figure ven… |
