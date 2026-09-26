@@ -458,6 +458,13 @@ the *published build*, not about the hardware.
   `components.json` and in the NetBox and Nautobot module-type exports, so a
   consumer matching on an old name finds nothing where it used to find a module
   type (roc-ops/Portrayal#426).
+- `dell/riser-lower-trim-14g@1` is retired and leaves `components.json`, and
+  the R740xd's rear placement `riser-1-trim` (`rear/placements/riser-1-trim`)
+  is gone from every configuration; the R740xd takes a major, 24.0.0. The
+  strip hid the bottom riser-1 card's keyed flange, which
+  `std/pcie-bracket-fh@1` drew stepping down past the plate; `@2` steps it up,
+  and Dell's service model has no metal there in front of the rear sheet
+  (roc-ops/Portrayal#623).
 
 The dist `contract:` number does not move for the pluggable-heads entries in
 this section (the superseded QSFP generics and pull tab, the wider head
