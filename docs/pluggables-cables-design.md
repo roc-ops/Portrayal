@@ -1,6 +1,6 @@
 # Pluggables: cable ends
 
-Status: draft, 2026-09-25. The second of two pieces of work that add cable ends and the copper
+Status: implemented, 2026-09-26. The second of two pieces of work that add cable ends and the copper
 SFP. It builds on [pluggables-heads-design.md](pluggables-heads-design.md), which gave every
 module-shaped pluggable a declared `head:`, checked by L121, and let a composed part take its
 host's field.
@@ -58,9 +58,12 @@ So there is ONE generic per form, and the kind lives on the vendor wrapper (deci
    its head length carries the confidence `registry` (the library's term for a figure taken
    from spec/schemas/standards.yaml, where the MSA maximum lives), not `drawing` (decided
    2026-09-25).
-7. **The pull strap is its own part**, `common/cable-pull-strap`. It is not the optic's U-loop:
-   a cable's strap lies on top of the cable and ends in a ring, where an optic's loop straddles
-   the face. It takes `latch-color` through the field inheritance from the heads work.
+7. **The pull strap is drawn in each generic**, not as a shared part. It is not the optic's
+   U-loop: a cable's strap lies on top of the cable and ends in a ring, where an optic's loop
+   straddles the face. Its length and width follow the form (about 43, 44, 40 and 50 past the
+   head), and one shared part could not carry three lengths without a second
+   geometry-from-field mechanism. It takes `latch-color` as the optics' latch does (decided
+   2026-09-25; the draft planned a `common/cable-pull-strap` part).
 8. **Breakout cables are ends.** A QSFP-DD to 8 x SFP56 breakout is one `qsfp-dd-cable` end and
    eight `sfp-cable` ends. Nothing here relates them.
 
@@ -70,21 +73,27 @@ Every head figure is checked by L121 against the registry envelope for its form.
 
 | part | head outside the cage (w x h x d) | source | stub | default `cable-od` |
 |---|---|---|---|---|
-| `generic/sfp-cable` | 13.55 x 11.50 x 10.8 | Molex customer drawing 747520001 rev V1: 13.55 +/-0.25 wide, backshell 11.50 REF tall, 58.30 REF from the front less the 47.50 in-cage body; 10Gtek SFP+ passive DAC V1.3 corroborates (58.4 +/-0.2, 11.65 +/-0.1) | 30 | 4.8 (Amphenol C-NJDDGN-0099: 25AWG dual-drain with braid) |
-| `generic/qsfp-cable` | 18.35 x 13.10 x 19.8 | FCI 10121178 rev J: 72.20 head, 18.35 wide, 12.76 at the backshell, 13.10 at the tab; Amphenol C-NDAAFR-0099 and C-NDAAXF-0099: diecast 72.2 REF; 72.2 less the 52.4 in-cage body | 45 | 6.9 (NVIDIA MCP1600 and MCA1J00, 30AWG) |
-| `generic/qsfp-dd-cable` (Type 1) | 18.35 x 8.5 x 20 | QSFP-DD HW 6.3 Figure 52: 20 MAX for Type 1 - the MSA maximum, confidence `registry`; no drawing | 45 (borrowed from QSFP) | 9.0 (Volex, 30AWG) |
-| `generic/qsfp-dd-cable-type2` | 18.35 x 8.5 x 28.3 | Volex 400G QSFP-DD passive DAC data sheet: head 86.56 +/-0.15 less the 58.26 in-cage body; within Type 2's 35 MAX | 45 (borrowed) | 9.0 (Volex, 30AWG) |
+| `generic/sfp-cable` | 13.55 x 11.50 x 10.8 | Molex customer drawing 747520001 rev V1: 13.55 +/-0.25 wide, backshell 11.50 REF tall, 58.30 REF from the front less the 47.50 in-cage body; 10Gtek SFP+ passive DAC V1.3 corroborates (58.4 +/-0.2, 11.65 +/-0.1) | 30 past the boot | 4.8 (Amphenol C-NJDDGN-0099: 25AWG dual-drain with braid) |
+| `generic/qsfp-cable` | 18.35 x 13.10 x 19.8 | FCI 10121178 rev J: 72.20 head, 18.35 wide, 12.76 at the backshell, 13.10 at the tab; Amphenol C-NDAAFR-0099 and C-NDAAXF-0099: diecast 72.2 REF; 72.2 less the 52.4 in-cage body | 30 past the boot | 6.9 (NVIDIA MCP1600 and MCA1J00, 30AWG) |
+| `generic/qsfp-dd-cable` (Type 1) | 18.35 x 13.5 x 20 | QSFP-DD HW 6.3 Figure 52: 20 MAX for Type 1 - the MSA maximum, confidence `registry`; no drawing | 30 past the boot (estimated) | 9.0 (Volex, 30AWG) |
+| `generic/qsfp-dd-cable-type2` | 18.35 x 13.5 x 28.3 | Volex 400G QSFP-DD passive DAC data sheet: head 86.56 +/-0.15 less the 58.26 in-cage body; within Type 2's 35 MAX | 30 past the boot (estimated) | 9.0 (Volex, 30AWG) |
 
 The head's HEIGHT above and below the body comes from each drawing's side view at modelling
 time, measured against the body height the drawing itself gives, as the copper SFP's did.
 
-The pull strap's length per form: SFP about 50 (Amphenol C-NJDDGN: 50 APPROX from the diecast;
-Molex: the loop at 103 +/-10 from the front); QSFP 50 +/-15 (FCI) to 61.5-75 REF (Amphenol
-lanyards); QSFP-DD 150 +/-10 (Volex). The generic takes the drawing's nominal and says which.
+The pull strap's reach past the head, per form: SFP 43.1, scaled off the Molex drawing
+(estimated); QSFP 61.5 to the ring's far edge (Amphenol lanyards, 61.5-75 REF); QSFP-DD Type 2
+40, the Volex loop (estimated; QSFP-DD HW 6.3 Appendix B's 41.5 corroborates); Type 1 50
+(Appendix B, informative). Three figures read in the draft as strap lengths are not: Molex's
+103 +/-10 and Volex's 150 +/-10 locate the cable LABEL, and FCI's 50 +/-15 (Note 5) is the
+label position too. Amphenol's 50 APPROX runs to the braid end, not to the loop.
 
-The stub's length is the straight run before the first allowed bend: SFP 30 (Amphenol
-C-NJDDGN: bend distance measured 30 from the diecast edge); QSFP 45 (Amphenol C-NDAAFR: 45 MIN
-required to bend the cable). QSFP-DD borrows 45 and says so.
+The stub is 30 long and starts at the boot's end, one rule for every form. For QSFP that ends
+exactly at Amphenol C-NDAAFR's 45 MIN bend clearance from the diecast. For SFP it is
+estimated: Amphenol C-NJDDGN's 30 is measured from the diecast edge and would leave a 2 mm stub
+past the 27.9 boot. No QSFP-DD drawing shows a strain relief, so both QSFP-DD generics carry
+the QSFP boot figures with confidence `estimated` (the source names the QSFP part); the FS
+QSFP-DD bend figures show the resulting 45 is conservative.
 
 ## 4. The new mechanism: a radius from a field
 
@@ -98,7 +107,9 @@ required to bend the cable). QSFP-DD borrows 45 and says so.
 - **Relief:** the stub is a `cyl` feature. It stands off the strain relief's end (`lift`) for
   the stub length (`cyl`), and its radius comes from the node's box, which the binding has
   already sized.
-- **Lint:** a `cable-od` value on a placement or wrapper is a number from 2 to 15. A
+- **Lint:** a `cable-od` value in a component's `parts` attrs (a wrapper) is a number from 2
+  to 15 (L122). A device placement cannot set it yet: a configuration's occupants carry refs,
+  not attrs, so the rule is component-scoped until occupants take attrs. A
   `data-r-from` names a declared field, which the existing field-wiring rule L73 is extended to
   check.
 
@@ -117,8 +128,13 @@ wrapper leaves the default and says so.
 | FS 100G QSFP28 AOC | `qsfp-cable` | aoc | head per its own drawing if it differs; OD and jacket from the data sheet where stated |
 | Volex 400G QSFP-DD passive | `qsfp-dd-cable-type2` | dac | 30AWG OD 9.0 (26AWG 11.6 noted); 400G |
 | Credo HiWire SHIFT (QSFP-DD end) | `qsfp-dd-cable-type2` | aec | purple PVC jacket; 4P 30AWG 5.3 typical; "QSFP-DD type 2" |
+| Siemon QSFP28 100G AOC | `qsfp-cable` | aoc | OD 3.0 +/-0.15; 1.78 W per end; 850 nm |
 
-New vendor namespaces (molex, amphenol, volex, credo) join `spec/schemas/vendors.yaml` the way
+The FS AOC's data sheet states no cable diameter, so it keeps the 6.9 default; the Siemon
+wrapper is the thin AOC, added at review for that reason. The FS drawing shows a smaller head
+than the generic and a paddle tab with no ring; its provenance records the difference.
+
+New vendor namespaces (molex, amphenol, volex, credo, siemon) join `spec/schemas/vendors.yaml` the way
 existing vendors do.
 
 ## 6. A correction carried from the heads work
@@ -159,3 +175,9 @@ the merge queue.
 - 2026-09-25: a second generic for the QSFP-DD Type 2 head.
 - 2026-09-25: ship the generics plus the sourced vendor wrappers in section 5.
 - 2026-09-25: ship the Type 1 QSFP-DD generic at the MSA maximum, labelled as such.
+- 2026-09-25: draw the pull strap in each generic rather than as a shared part (decision 7).
+- 2026-09-25: one stub rule, 30 past the boot's end, for every form (section 3).
+- 2026-09-25: L121 exempts features that start at or behind the head's back (strap, ring);
+  a `cable` point may sit on a `cyl` feature and leaves from its far end.
+- 2026-09-26: add the Siemon QSFP28 AOC wrapper so a thin AOC cable is shown (section 5).
+- Follow-up: the wrappers carry no rate ceiling, so a 200G cable is offered in a 100G cage.
