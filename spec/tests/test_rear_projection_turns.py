@@ -243,7 +243,8 @@ def test_the_3d_body_turns_with_its_module():
     half = {"a": -1, "b": 0, "c": 0, "d": -1, "e": 100, "f": 40}
     plain = {"a": 1, "b": 0, "c": 0, "d": 1, "e": 5, "f": 5}
     mirrored = {"a": -1, "b": 0, "c": 0, "d": 1, "e": 100, "f": 0}
-    p90, p180, p0, pm = run_js({"poses": [{"m": m, "fp": fp}
+    body = {"depth": 60, "footprint": fp}
+    p90, p180, p0, pm = run_js({"poses": [{"m": m, "body": body}
                                           for m in (rot90, half, plain, mirrored)]})["poses"]
     # turned 90 clockwise on the drawing, the body stands 30 wide and 60 tall,
     # at the top - the face's y runs down and the scene's up, so -pi/2 in 3D
@@ -253,3 +254,17 @@ def test_the_3d_body_turns_with_its_module():
     assert p180["r"] == {"x": 40, "y": 7, "w": 60, "h": 30}
     # unturned and mirrored modules are placed from their drawn box, as before
     assert p0 is None and pm is None
+
+
+def test_a_turned_body_with_no_footprint_is_placed_from_its_drawn_box():
+    # a body with no footprint fills its face, and the kit sizes that face from
+    # the DRAWN box, already turned - through the module's frame it was turned
+    # twice. An ASR 9006 slot-2 card (41.4 x 395.7, rotate 90 into a 395.7 x
+    # 41.4 slot) and a Dell R740xd rear drive (rotate 270) keep the drawn-box
+    # path, exactly as before the turn existed
+    rot90 = {"a": 0, "b": 1, "c": -1, "d": 0, "e": 435.08, "f": 247.05}
+    rot270 = {"a": 0, "b": -1, "c": 1, "d": 0, "e": 10, "f": 110}
+    bare = {"depth": 300.0}
+    out = run_js({"poses": [{"m": rot90, "body": bare}, {"m": rot270, "body": bare},
+                            {"m": rot90, "body": None}]})["poses"]
+    assert out == [None, None, None]

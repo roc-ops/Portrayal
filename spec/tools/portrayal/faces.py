@@ -127,8 +127,11 @@ def rear_place(bay, cutout, contract, back):
     cx, cy = cutout["at"][0] + bw / 2, cutout["at"][1] + bh / 2
     uw, uh = (bh, bw) if turn in (90.0, 270.0) else (bw, bh)
     tl = rear_at({"size": {"w": uw, "h": uh}}, {"at": [cx - uw / 2, cy - uh / 2]}, contract)
-    # no drawing to measure: the back is the body's, so it is the footprint's size
-    fp = (contract.get("body") or {}).get("footprint") or {"size": [uw, uh]}
+    # no drawing to measure: the back is the body's, so it is the footprint's
+    # size, or the module's own with no footprint (as swap.js's rearAt reads it)
+    size = contract.get("size") or {}
+    fp = (contract.get("body") or {}).get("footprint") or {
+        "size": [float(size.get("w") or uw), float(size.get("h") or uh)]}
     dw = float((back or {}).get("w") or fp["size"][0])
     dh = float((back or {}).get("h") or fp["size"][1])
     vx, vy = tl[0] + dw / 2 - cx, tl[1] + dh / 2 - cy

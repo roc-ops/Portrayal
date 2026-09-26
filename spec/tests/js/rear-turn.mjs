@@ -6,7 +6,7 @@
 //
 // argv[2] is a JSON object:
 //   places: [{box, comp, turn, back}]  - rearAt(box, comp, turn, back) each
-//   poses:  [{m, fp}]                  - bodyPose(m, fp) each
+//   poses:  [{m, body}]                - bodyPose(m, body) each
 //   hole:   {box, turn, ref, comp, back} - one hole swapped to `ref`, whose
 //           contract is `comp` and whose back drawing is `back` ({w, h})
 globalThis.location = { search: '' };
@@ -19,7 +19,7 @@ const relief = await import('../../../kit/relief.js');
 const inp = JSON.parse(process.argv[2]);
 const out = {};
 out.places = (inp.places || []).map(c => swap.rearAt(c.box, c.comp, c.turn, c.back));
-out.poses = (inp.poses || []).map(c => relief.bodyPose(c.m, c.fp));
+out.poses = (inp.poses || []).map(c => relief.bodyPose(c.m, c.body));
 
 if (inp.hole) {
   const h = inp.hole;

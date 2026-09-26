@@ -39,8 +39,15 @@ export function localToFace(m, r) {
 // clockwise turn on the drawing is a negative one here. `null` for a frame with
 // no turn, or a mirrored one, whose body is placed from its drawn box as it
 // always was. Pure, so it is checked under node.
-export function bodyPose(m, fp) {
-  if (!m || m.a * m.d - m.b * m.c <= 0 || (Math.abs(m.b) < 1e-9 && m.a > 0)) return null;
+//
+// ONLY A DECLARED FOOTPRINT. A body with none fills its face, and bodyBoxMesh
+// sizes that from the DRAWN box - already turned - so sending it through the
+// frame turned it twice: an ASR 9001's MPA blanks, seated rotate 90, stood 34.5
+// wide and 161.8 tall in a 2RU chassis. The drawn box is already where such a
+// body stands, so it keeps the drawn-box path.
+export function bodyPose(m, body) {
+  const fp = body && body.footprint;
+  if (!fp || !m || m.a * m.d - m.b * m.c <= 0 || (Math.abs(m.b) < 1e-9 && m.a > 0)) return null;
   const r = localToFace(m, {x: fp.at[0], y: fp.at[1], w: fp.size[0], h: fp.size[1]});
   return {r, turn: -Math.atan2(m.b, m.a)};
 }
@@ -2905,10 +2912,11 @@ export async function buildFaceRelief(F, ctx) {
         // the module's own frame, and `f.x`/`f.w` are its DRAWN box: in a bay
         // with `rotate: 90` (fs/fhd-4ufce's on-edge slots) that box is 35.05
         // wide and the footprint 99 wide, so the body stood across the slot
-        // through both neighbours. A turned module goes through its own frame
-        // (`bodyPose`) and its body, and the back hung on it, turn with it;
-        // an unturned one is placed from its drawn box, exactly as before.
-        const pose = bodyPose(f.toFace, fp);
+        // through both neighbours. A turned module with a footprint goes
+        // through its own frame (`bodyPose`) and its body, and the back hung
+        // on it, turn with it; anything else is placed from its drawn box,
+        // exactly as before.
+        const pose = bodyPose(f.toFace, meta.body);
         const at = pose || {x: LX(f.x + fp.at[0], fp.size[0]), y: LY(f.y + fp.at[1], fp.size[1]), turn: 0};
         if (pose) at.x = LX(pose.r.x, pose.r.w), at.y = LY(pose.r.y, pose.r.h);
         mesh.position.set(at.x, at.y, zf - d / 2 - 0.05);
