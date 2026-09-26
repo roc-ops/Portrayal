@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9006
-version: 1.0.3
+version: 2.0.0
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9006
@@ -84,16 +84,18 @@ provenance:
       Figure 19 shows the same, and the power shelf below - which has no such strip - is
       symmetric.
   rotate:
-    confidence: datasheet
+    confidence: drawing
     note: >-
-      datasheet - this chassis mounts its cards HORIZONTALLY (see card-orientation), so each bay
-      carries `rotate: 90` and the rotated footprint. OPEN, and flagged rather than asserted:
-      rotate 90 puts the card's part-number end at the RIGHT of the view, and on a real card the
-      printing reads with that end at the LEFT, which would make `rotate: 270` correct instead. No
-      document we hold fixes which end of an ASR 9006 slot the ejector sits at - the guide says
-      only "ejector levers and captive screws at the left and right ends of each card", i.e. BOTH
-      ends - so 90 is the placeholder and the question is real. It affects only which way the
-      card's own artwork reads, not the bay's position or size.
+      drawing, confirmed by photo - this chassis mounts its cards HORIZONTALLY (see card-orientation), so each bay
+      carries `rotate: 270`, a quarter turn counter-clockwise, and the rotated footprint.
+      1.0.3 carried `rotate: 90` and every seated card rendered upside down. What settles it is
+      which way the printing reads. Cisco's own card masters in the ASR 9000 Visio stencil
+      (a9k-rsp880-se, a9k-24x10ge-1g-se) set their legends reading top to bottom, so only a
+      counter-clockwise turn brings them upright. A reseller photograph of a populated ASR 9006
+      (eBay item 365572881093) confirms the result. Read left to right, the RSP880 runs SYNC 0,
+      SYNC 1, SFP, IEEE 1588, the GPS 10MHz and 1PPS pair, ALARM OUT, USB, MGT LAN, CONSOLE, AUX
+      and the lamps, all upright, with the yellow part-number label at the RIGHT end. That is
+      the 270 render. The earlier guess that the part-number end sat at the left was wrong.
   cage-opening-not-drawn-separately:
     note: >-
       the card cage is NOT declared as its own cutout. It was, and it hid the thing it was meant
@@ -770,12 +772,12 @@ views:
         - {id: pm-0, at: [13.51, 386.33], size: {w: 139.12, h: 44.45}, accepts: ['cisco/a9k-pwr-3kw-ac@1', 'cisco/a9k-pwr-2kw-dc@1', 'cisco/a9k-pwr-1p5kw-dc@1'], group: power-modules, rel-pos: 0, default: cisco/a9k-pwr-3kw-ac@1}
         - {id: pm-1, at: [152.63, 386.33], size: {w: 139.12, h: 44.45}, accepts: ['cisco/a9k-pwr-3kw-ac@1', 'cisco/a9k-pwr-2kw-dc@1', 'cisco/a9k-pwr-1p5kw-dc@1'], group: power-modules, rel-pos: 1, default: cisco/a9k-pwr-3kw-ac@1}
         - {id: pm-2, at: [291.75, 386.33], size: {w: 139.12, h: 44.45}, accepts: ['cisco/a9k-pwr-3kw-ac@1', 'cisco/a9k-pwr-2kw-dc@1', 'cisco/a9k-pwr-1p5kw-dc@1'], group: power-modules, rel-pos: 2, default: cisco/a9k-pwr-3kw-ac@1}
-        - {id: slot-5, at: [39.38, 107.232], size: {w: 395.7, h: 41.4}, opening: {w: 352.59, h: 46.605}, rotate: 90, accepts: ['cisco/a9k-16x100ge-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-24x10ge-1g-se@1', 'cisco/a9k-48x10ge-1g-se@1', 'cisco/a9k-4x100ge-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-8x100g-lb-se@1', 'cisco/a9k-8x100ge-se@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 5, default: cisco/a9k-slot-cover@1}
-        - {id: slot-4, at: [39.38, 153.837], size: {w: 395.7, h: 41.4}, opening: {w: 352.59, h: 46.605}, rotate: 90, accepts: ['cisco/a9k-16x100ge-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-24x10ge-1g-se@1', 'cisco/a9k-48x10ge-1g-se@1', 'cisco/a9k-4x100ge-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-8x100g-lb-se@1', 'cisco/a9k-8x100ge-se@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 4, default: cisco/a9k-slot-cover@1}
-        - {id: slot-3, at: [39.38, 200.442], size: {w: 395.7, h: 41.4}, opening: {w: 352.59, h: 46.605}, rotate: 90, accepts: ['cisco/a9k-16x100ge-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-24x10ge-1g-se@1', 'cisco/a9k-48x10ge-1g-se@1', 'cisco/a9k-4x100ge-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-8x100g-lb-se@1', 'cisco/a9k-8x100ge-se@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3, default: cisco/a9k-slot-cover@1}
-        - {id: slot-2, at: [39.38, 247.047], size: {w: 395.7, h: 41.4}, opening: {w: 352.59, h: 46.605}, rotate: 90, accepts: ['cisco/a9k-16x100ge-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-24x10ge-1g-se@1', 'cisco/a9k-48x10ge-1g-se@1', 'cisco/a9k-4x100ge-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-8x100g-lb-se@1', 'cisco/a9k-8x100ge-se@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2, default: cisco/a9k-slot-cover@1}
-        - {id: slot-1, at: [39.38, 293.652], size: {w: 395.7, h: 41.4}, opening: {w: 352.59, h: 46.605}, rotate: 90, accepts: ['cisco/a9k-rsp880-se@1', 'cisco/a9k-rsp880-tr@1', 'cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1, default: cisco/a9k-slot-cover@1}
-        - {id: slot-0, at: [39.38, 340.257], size: {w: 395.7, h: 41.4}, opening: {w: 352.59, h: 46.605}, rotate: 90, accepts: ['cisco/a9k-rsp880-se@1', 'cisco/a9k-rsp880-tr@1', 'cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0, default: cisco/a9k-slot-cover@1}
+        - {id: slot-5, at: [39.38, 107.232], size: {w: 395.7, h: 41.4}, opening: {w: 352.59, h: 46.605}, rotate: 270, accepts: ['cisco/a9k-16x100ge-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-24x10ge-1g-se@1', 'cisco/a9k-48x10ge-1g-se@1', 'cisco/a9k-4x100ge-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-8x100g-lb-se@1', 'cisco/a9k-8x100ge-se@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 5, default: cisco/a9k-slot-cover@1}
+        - {id: slot-4, at: [39.38, 153.837], size: {w: 395.7, h: 41.4}, opening: {w: 352.59, h: 46.605}, rotate: 270, accepts: ['cisco/a9k-16x100ge-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-24x10ge-1g-se@1', 'cisco/a9k-48x10ge-1g-se@1', 'cisco/a9k-4x100ge-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-8x100g-lb-se@1', 'cisco/a9k-8x100ge-se@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 4, default: cisco/a9k-slot-cover@1}
+        - {id: slot-3, at: [39.38, 200.442], size: {w: 395.7, h: 41.4}, opening: {w: 352.59, h: 46.605}, rotate: 270, accepts: ['cisco/a9k-16x100ge-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-24x10ge-1g-se@1', 'cisco/a9k-48x10ge-1g-se@1', 'cisco/a9k-4x100ge-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-8x100g-lb-se@1', 'cisco/a9k-8x100ge-se@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3, default: cisco/a9k-slot-cover@1}
+        - {id: slot-2, at: [39.38, 247.047], size: {w: 395.7, h: 41.4}, opening: {w: 352.59, h: 46.605}, rotate: 270, accepts: ['cisco/a9k-16x100ge-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-24x10ge-1g-se@1', 'cisco/a9k-48x10ge-1g-se@1', 'cisco/a9k-4x100ge-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-8x100g-lb-se@1', 'cisco/a9k-8x100ge-se@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2, default: cisco/a9k-slot-cover@1}
+        - {id: slot-1, at: [39.38, 293.652], size: {w: 395.7, h: 41.4}, opening: {w: 352.59, h: 46.605}, rotate: 270, accepts: ['cisco/a9k-rsp880-se@1', 'cisco/a9k-rsp880-tr@1', 'cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1, default: cisco/a9k-slot-cover@1}
+        - {id: slot-0, at: [39.38, 340.257], size: {w: 395.7, h: 41.4}, opening: {w: 352.59, h: 46.605}, rotate: 270, accepts: ['cisco/a9k-rsp880-se@1', 'cisco/a9k-rsp880-tr@1', 'cisco/a9k-rsp880-lt-se@1', 'cisco/a9k-rsp880-lt-tr@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0, default: cisco/a9k-slot-cover@1}
       placements:
         - {id: esd-jack, ref: common/esd-jack@1, at: [30.0, 300.0], for: chassis, group: grounding, rel-pos: 0}
         - {ref: cisco/a9k-fan-tray-door@1, id: fan-tray-door, at: [0, 33.66], group: doors, rel-pos: 0}

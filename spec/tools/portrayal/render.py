@@ -22,7 +22,7 @@ import yaml
 APPLIED_CLASSES = {"sticker", "label", "marking"}
 
 from portrayal import attrsections as attrs_mod
-from portrayal.faces import face_ref, rear_at
+from portrayal.faces import face_ref, rear_place, rear_turn
 from portrayal import libwalk
 from portrayal.manifest import (back_hosts, back_parts, key_on_back, slot_in_slot_at, slot_in_slot_error,
                                 view_parts, targets, split_target, component_refs,
@@ -2280,11 +2280,15 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                 # direct child. The explorer finds the slots on a back (its MTP
                 # bulkheads) through that module's `faces.rear` (B3, Task 10b).
                 # WHERE IT LANDS is the seated module's, not the bay's: its
-                # body's footprint, mirrored in the hole (faces.rear_at).
+                # body's footprint, mirrored in the hole (faces.rear_at). HOW
+                # IT IS TURNED is the bay's: a module seated on its side shows
+                # its back on its side, the other way round (faces.rear_place).
                 cut = next(c for c in ((view.get("panel") or {}).get("cutouts") or [])
                            if c.get("id") == pl["cutout"])
+                pose = rear_place(b, cut, oc or {}, (lib.resolve(pref)[0] or {}).get("size") or {})
                 parts["placements"].append({
-                    "ref": pref, "id": f"{b['id']}-rear", "at": rear_at(b, cut, oc or {}),
+                    "ref": pref, "id": f"{b['id']}-rear", "at": pose["at"],
+                    **({"rotate": pose["rotate"]} if pose["rotate"] else {}),
                     "projection-of": f"{b['id']}/module",
                     "cutout": pl["cutout"]})
                 continue
@@ -2623,16 +2627,24 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                     # carries the bay as seen from behind - its own origin,
                     # the bay's size - and `data-rear-at`, where the SEATED
                     # module's back was drawn in it (faces.rear_at). A swap
-                    # reads the first and rewrites the second.
+                    # reads the first and rewrites the second. A TURNED bay
+                    # also says how far a back in it is turned
+                    # (`data-rear-rotate`, faces.rear_turn), occupied or not,
+                    # since a swap into an empty hole needs it too; `at` is
+                    # then the back's unturned top-left, as a placement's is.
                     e.set("data-rear-bay", f"{x:g},{y:g},{float(rear_bay['size']['w']):g},"
                                            f"{float(rear_bay['size']['h']):g}")
+                    if rear_turn(rear_bay):
+                        e.set("data-rear-rotate", f"{rear_turn(rear_bay):g}")
                     # A HOLE A SLOT IS SEEN THROUGH IS THAT SLOT, FROM BEHIND.
                     # The tree rows it as the bay, in the bay's group and order,
                     # named for what sits in it; the path stays cutout:<id>.
                     occ = (config.get("bays") or {}).get(rear_bay["id"], rear_bay.get("default"))
                     if occ:
                         e.set("data-rear-ref", occ)
-                        rx_, ry_ = rear_at(rear_bay, c, lib.resolve(occ)[0] or {})
+                        occ_c = lib.resolve(occ)[0] or {}
+                        back_c = lib.resolve(face_ref(occ_c, "rear"))[0] if face_ref(occ_c, "rear") else None
+                        rx_, ry_ = rear_place(rear_bay, c, occ_c, (back_c or {}).get("size") or {})["at"]
                         e.set("data-rear-at", f"{rx_:g},{ry_:g}")
                     grp_name = rear_bay.get("group")
                     if grp_name:

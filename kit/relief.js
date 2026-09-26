@@ -33,6 +33,25 @@ export function localToFace(m, r) {
   return {x: Math.min(p.x, q.x), y: Math.min(p.y, q.y), w: Math.abs(q.x - p.x), h: Math.abs(q.y - p.y)};
 }
 
+// WHERE A TURNED MODULE'S BODY STANDS: its footprint through the module's own
+// frame (`toFace`, local mm -> face mm), and the turn that frame carries, as a
+// three.js z rotation - the face's y runs down and the scene's up, so a
+// clockwise turn on the drawing is a negative one here. `null` for a frame with
+// no turn, or a mirrored one, whose body is placed from its drawn box as it
+// always was. Pure, so it is checked under node.
+//
+// ONLY A DECLARED FOOTPRINT. A body with none fills its face, and bodyBoxMesh
+// sizes that from the DRAWN box - already turned - so sending it through the
+// frame turned it twice: an ASR 9001's MPA blanks, seated rotate 90, stood 34.5
+// wide and 161.8 tall in a 2RU chassis. The drawn box is already where such a
+// body stands, so it keeps the drawn-box path.
+export function bodyPose(m, body) {
+  const fp = body && body.footprint;
+  if (!fp || !m || m.a * m.d - m.b * m.c <= 0 || (Math.abs(m.b) < 1e-9 && m.a > 0)) return null;
+  const r = localToFace(m, {x: fp.at[0], y: fp.at[1], w: fp.size[0], h: fp.size[1]});
+  return {r, turn: -Math.atan2(m.b, m.a)};
+}
+
 // WHICH RAISED SURFACE DOES A LIFTED CAVITY BELONG TO. Exported because it is
 // the whole of a rule that is easy to state and easy to get subtly wrong, and a
 // pure function of two rectangles and two depths is worth testing without a
@@ -2910,8 +2929,19 @@ export async function buildFaceRelief(F, ctx) {
         }
       } else if (meta.body) {   // full module body travels with the FRU
         const {mesh, fp, d} = await bodyBoxMesh(meta.body, f.w, f.h);
-        mesh.position.set(LX(f.x + fp.at[0], fp.size[0]),
-                          LY(f.y + fp.at[1], fp.size[1]), zf - d / 2 - 0.05);
+        // A MODULE SEATED ON ITS SIDE HAS ITS BODY ON ITS SIDE. `fp` is in
+        // the module's own frame, and `f.x`/`f.w` are its DRAWN box: in a bay
+        // with `rotate: 90` (fs/fhd-4ufce's on-edge slots) that box is 35.05
+        // wide and the footprint 99 wide, so the body stood across the slot
+        // through both neighbours. A turned module with a footprint goes
+        // through its own frame (`bodyPose`) and its body, and the back hung
+        // on it, turn with it; anything else is placed from its drawn box,
+        // exactly as before.
+        const pose = bodyPose(f.toFace, meta.body);
+        const at = pose || {x: LX(f.x + fp.at[0], fp.size[0]), y: LY(f.y + fp.at[1], fp.size[1]), turn: 0};
+        if (pose) at.x = LX(pose.r.x, pose.r.w), at.y = LY(pose.r.y, pose.r.h);
+        mesh.position.set(at.x, at.y, zf - d / 2 - 0.05);
+        mesh.rotation.z = at.turn;
         fg.add(mesh);
         // A MODULE'S BACK IS A FACE, NOT A PICTURE. `body.sides.rear` is a
         // compiled drawing - for a cassette it IS the module's rear face, the
@@ -2944,9 +2974,18 @@ export async function buildFaceRelief(F, ctx) {
           await buildFaceRelief(back, {...ctx, src, deep: d, back: true});
           if (meshes.length > before) {
             const bg = meshes.pop();
-            bg.position.set(LX(f.x + fp.at[0], fp.size[0]),
-                            LY(f.y + fp.at[1], fp.size[1]), zf - d - 0.05);
-            fg.add(bg);
+            if (at.turn) {
+              // turned about the chassis's depth axis, outside the back's own
+              // half turn - a group of its own, so the two do not compose
+              const tg = new THREE.Group();
+              tg.add(bg);
+              tg.position.set(at.x, at.y, zf - d - 0.05);
+              tg.rotation.z = at.turn;
+              fg.add(tg);
+            } else {
+              bg.position.set(at.x, at.y, zf - d - 0.05);
+              fg.add(bg);
+            }
           }
           // and the box's own back takes the face's punched texture, so the
           // recesses the pass just built are not covered by a flat copy of
