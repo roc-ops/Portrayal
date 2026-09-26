@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-rsp5-se
-version: 1.4.1
+version: 2.0.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -18,7 +18,8 @@ unplaced: >-
   name the RSP880 generation and nothing else. Drawn off the route-processor stencil master;
   seating it needs the datasheet's own Chassis compatibility row, tracked in
   roc-ops/Portrayal#262.
-size: {w: 41.0, h: 402.8, d: 625.3}
+size: {w: 41.4, h: 395.7, d: 625.3}
+size-confidence: {w: borrowed, h: borrowed}
 attrs:
   model: 'A9K-RSP5-SE'
   role: 'route-switch-processor'
@@ -88,23 +89,38 @@ provenance:
     It does not sanction inventing an APERTURE, which is a dimension a specification is
     withholding rather than one nobody has measured.
   one-drawing: >-
-    READ THIS BEFORE TRUSTING A FEATURE POSITION TO THE MILLIMETRE. Nine RSP and RP
-    masters in this stencil are ONE DRAWING: extracted jack, SMB, USB, DB9, LED-matrix
-    and lamp coordinates agree to 0.00 mm across a9k-rsp5-se and -tr, a9k-rsp880-se and
-    -tr, a9k-rsp880-lt-se and -tr, a99-rp3-se and -tr, and a99-rsp-se. The DATASHEETS do
-    not agree: these cards are 402.8, 428.5, 428.2 and 403.4 mm wide and 41.0 to 46.0 mm
-    high. So the drawing is generic across the family and cannot be all four sizes. Each
-    card here is scaled to its OWN stated envelope - long axis to its width, short axis
-    to its height, two factors, exactly as the line cards were - which makes the OUTLINE
-    right for every one and makes the interior positions proportional rather than
-    measured. A jack centre is therefore good to a few millimetres, not to a tenth, and
-    anyone needing better needs a mechanical drawing Cisco has not published.
+    READ THIS BEFORE TRUSTING A FEATURE POSITION TO THE MILLIMETRE. Nine RSP and RP masters
+    in this stencil are ONE DRAWING: extracted jack, SMB, USB, DB9, LED-matrix and lamp
+    coordinates agree to 0.00 mm across a9k-rsp5-se and -tr, a9k-rsp880-se and -tr,
+    a9k-rsp880-lt-se and -tr, a99-rp3-se and -tr, and a99-rsp-se. The DATASHEETS do not
+    agree: these cards are 402.8, 428.5, 428.2 and 403.4 mm wide and 41.0 to 46.0 mm high.
+    So the drawing is generic across the family and cannot be all four sizes. Each card here
+    is scaled to its OWN stated envelope - long axis to its width, short axis to its height,
+    two factors, exactly as the line cards were - which makes the OUTLINE right for every
+    one and makes the interior positions proportional rather than measured. A jack centre is
+    therefore good to a few millimetres, not to a tenth, and anyone needing better needs a
+    mechanical drawing Cisco has not published. 2.0.0 put every one of these cards on the
+    ASR 9000 card standard of 41.4 x 395.7, so the outlines now agree as well, and the four
+    stated widths survive only as history in each size note.
   size: >-
-    datasheet - Cisco ASR 9000 Series Route Switch Processor 5 Data Sheet, 'Physical
-    specifications (includes ejector bracket/lever)': Height 1.63 in. (4.10 cm), Width
-    15.86 in. (40.28 cm), Depth 24.62 in. (62.53 cm), Weight 20.39 lb (9.25 kg). 'Each
-    route switch processor occupies 1 slot; a redundant route switch processor
-    configuration occupies 2 slots.'
+    ASR 9000 CARD STANDARD - 41.4 x 395.7 mm, where this part carried 41 x 402.8 until
+    2.0.0. Every full-size ASR 9000 card, and every slot that takes one, is that one
+    envelope in this library, so a card seats the same way in each chassis that accepts it
+    and no two cards in one cage draw at different sizes. The long axis is the
+    ejector-inclusive figure of the fourth-generation line card data sheets, 'Physical
+    dimensions (includes ejector bracket/lever)', and a lab measurement across a real
+    A9K-RSP880 agrees with it - about 15 1/2 in, where the data sheet for that card says 16.87
+    (roc-ops/Portrayal#16). The thickness is the figure Cisco states most often, 1.63 in.
+    Both axes are borrowed from the family rather than read off this part, which is what
+    size-confidence says. THE ART WAS RE-ENVELOPED, NOT REDRAWN, on both axes. The plate
+    scales to the new size, while every port, lamp, button and legend keeps its drawn size
+    and moves in proportion, so a feature position is good to about a millimetre rather than
+    to a tenth. WHAT THIS PART CARRIED BEFORE, kept because a source that disagrees is still
+    evidence: datasheet - Cisco ASR 9000 Series Route Switch Processor 5 Data Sheet,
+    'Physical specifications (includes ejector bracket/lever)': Height 1.63 in. (4.10 cm),
+    Width 15.86 in. (40.28 cm), Depth 24.62 in. (62.53 cm), Weight 20.39 lb (9.25 kg). 'Each
+    route switch processor occupies 1 slot; a redundant route switch processor configuration
+    occupies 2 slots.'
   ports: >-
     install guide - the Overview and Reference Guide's per-card 'Front Panel and Access
     Ports' section, corroborated feature by feature by the artwork. For the RSP5: two
@@ -185,7 +201,7 @@ provenance:
     searched - no end-of-life notice for this part number is in the intake.
 elements:
   led-matrix:
-    at: [14.23, 354.25]
+    at: [14.45, 347.94]
     size: [17.31, 7.74]
     class: display
     characters: 4
@@ -196,7 +212,7 @@ elements:
       rather than a lamp state list, so it is modelled as a display and not as an
       indicator with states.
   aco-button:
-    at: [9.26, 309.45]
+    at: [9.37, 303.96]
     size: [3.54, 3.66]
     class: button
     description: >-
@@ -204,7 +220,7 @@ elements:
       lamp: 'Alarm Cutoff has been enabled. The ACO push button was pressed after at least
       one alarm has occurred.'
   lamp-test:
-    at: [9.26, 319.24]
+    at: [9.37, 313.58]
     size: [3.54, 3.66]
     class: button
     description: >-
@@ -212,7 +228,7 @@ elements:
       buttons 'can be used to eject the RSP5 card', which is why they are modelled as
       buttons and not as decoration.
   ssd:
-    at: [20.43, 331.33]
+    at: [20.64, 325.47]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -222,7 +238,7 @@ elements:
     - {name: green, color: '#39b54a'}
     - 'off'
   fc-fault:
-    at: [20.43, 339.25]
+    at: [20.64, 333.25]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -240,7 +256,7 @@ elements:
     - 'off'
     - 'on'
   gps:
-    at: [20.43, 347.17]
+    at: [20.64, 341.03]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -251,7 +267,7 @@ elements:
     - {name: green, color: '#39b54a'}
     - 'off'
   crit:
-    at: [16.1, 331.33]
+    at: [16.27, 325.47]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -261,7 +277,7 @@ elements:
     - {name: red, color: '#d0021b'}
     - 'off'
   maj:
-    at: [16.1, 339.25]
+    at: [16.27, 333.25]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -271,7 +287,7 @@ elements:
     - {name: red, color: '#d0021b'}
     - 'off'
   min:
-    at: [16.1, 347.17]
+    at: [16.27, 341.03]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -281,7 +297,7 @@ elements:
     - {name: amber, color: '#f5a623'}
     - 'off'
   fail:
-    at: [11.38, 331.33]
+    at: [11.5, 325.47]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -291,7 +307,7 @@ elements:
     - {name: red, color: '#d0021b'}
     - 'off'
   aco:
-    at: [11.38, 339.25]
+    at: [11.5, 333.25]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -302,7 +318,7 @@ elements:
     - {name: amber, color: '#f5a623'}
     - 'off'
   sync:
-    at: [11.38, 347.17]
+    at: [11.5, 341.03]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -418,20 +434,20 @@ relief:
         common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
         estimated' and the dome carries none
 parts:
-  - {ref: std/rj45-ganged@2, id: sync-0, at: [7.3, 44.23], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: sync-1, at: [7.3, 62.54], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: ieee-1588, at: [7.3, 120.78], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: ics-0, at: [21.44, 142.81], rotate: 270}
-  - {ref: std/rj45-ganged@2, id: ics-1-tod, at: [7.3, 142.81], rotate: 90}
-  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-0, at: [22.62, 231.29], rotate: 270}
-  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-1, at: [7.3, 231.29], rotate: 90}
-  - {ref: common/rj45-ganged-eth@1, id: cmp, at: [7.3, 250.84], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: console, at: [7.3, 270.72], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: aux, at: [7.3, 290.28], rotate: 90}
-  - {ref: std/smb@1, id: gps-10mhz, at: [9.55, 163.19]}
-  - {ref: std/smb@1, id: gps-1pps, at: [9.55, 172.91]}
-  - {ref: std/usb-a@1, id: usb, at: [10.16, 219.87]}
-  - {ref: common/db9-receptacle@1, id: alarm-out, at: [-0.415, 192.935], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: sync-0, at: [7.42, 43.34], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: sync-1, at: [7.42, 61.33], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: ieee-1588, at: [7.42, 118.54], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: ics-0, at: [21.7, 140.18], rotate: 270}
+  - {ref: std/rj45-ganged@2, id: ics-1-tod, at: [7.42, 140.18], rotate: 90}
+  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-0, at: [22.89, 227.1], rotate: 270}
+  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-1, at: [7.42, 227.1], rotate: 90}
+  - {ref: common/rj45-ganged-eth@1, id: cmp, at: [7.42, 246.31], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: console, at: [7.42, 265.84], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: aux, at: [7.42, 285.05], rotate: 90}
+  - {ref: std/smb@1, id: gps-10mhz, at: [9.67, 160.27]}
+  - {ref: std/smb@1, id: gps-1pps, at: [9.67, 169.82]}
+  - {ref: std/usb-a@1, id: usb, at: [10.32, 215.95]}
+  - {ref: common/db9-receptacle@1, id: alarm-out, at: [-0.36, 189.26], rotate: 90}
 body:
   depth: 625.3
   color: '#b9bec4'

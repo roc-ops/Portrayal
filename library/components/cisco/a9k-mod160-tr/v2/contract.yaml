@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-mod160-tr
-version: 1.0.2
+version: 2.0.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -10,7 +10,8 @@ description: >-
   carrier, not a port card: the faceplate is two bays for Modular Port Adapters and
   almost nothing else - a Status lamp, an ejector and a captive screw at each end. Every
   port this card presents belongs to the MPA seated in one of its bays.
-size: {w: 43.7, h: 395.7, d: 616.0}
+size: {w: 41.4, h: 395.7, d: 616.0}
+size-confidence: {w: borrowed, h: borrowed}
 attrs:
   model: 'A9K-MOD160-TR'
   role: 'modular-line-card'
@@ -57,33 +58,46 @@ provenance:
     point, so they settle the ARRANGEMENT - bracket off the plate, lever along it, domed
     screw head proud of both - and nothing about size.
   size: >-
-    install guide - Table A-10, 'Ethernet Line Card Physical Dimensions', of the
-    OL-17500-09 revision of the Ethernet Line Card Installation Guide, which lists THIS
-    PART NUMBER by name: Height 14 inches / 35.56 cm, Width 1.72 inches / 4.37 cm, Depth
-    20.5 inches / 52.07 cm, Weight 16.34 pounds / 7.4117 kg '(without EPs)'. Note the
-    axis order - H is the LONG dimension and W the thickness, the original generation's
-    convention. 355.6 is the PLATE; the component carries the family's ejector-inclusive
-    395.7, the same step and the same reasoning as the original-generation line cards
-    already in this library, and the drawn plate here measures 358.13. WORTH KNOWING
-    THAT THIS TABLE IS GONE: the CURRENT revision of the same guide replaced it with a
-    section whose entire content is 'For physical specifications, refer to the ASR 9000
-    Series line card data sheets' and a URL. The older revision is in the intake and it
-    is the source. Anything sized from the newer guide alone would have had to guess.
-    AND A SECOND DIRECT SOURCE, found later than the measurement above and kept beside
-    it because it settles what the parenthetical means. Two Cisco data sheets carry this
-    family in a 'Physical Dimensions' table. data_sheet_c78-663866, the ASR 9000 Modular
-    Line Cards sheet, gives the 80 and 160 Gigabyte carriers in TWO LINES each: '14.5 W
-    x 1.72 H x 22.40 L' and, underneath, '14.5 W x 1.72 H x 24.25 L (including ejector
-    levers)'. datasheet-c78-735809 gives the 200 and 400 in ONE line, which is the
+    ASR 9000 CARD STANDARD - 41.4 x 395.7 mm, where this part carried 43.7 x 395.7 until
+    2.0.0. Every full-size ASR 9000 card, and every slot that takes one, is that one
+    envelope in this library, so a card seats the same way in each chassis that accepts it
+    and no two cards in one cage draw at different sizes. The long axis is the
+    ejector-inclusive figure of the fourth-generation line card data sheets, 'Physical
+    dimensions (includes ejector bracket/lever)', and a lab measurement across a real
+    A9K-RSP880 agrees with it - about 15 1/2 in, where the data sheet for that card says 16.87
+    (roc-ops/Portrayal#16). The thickness is the figure Cisco states most often, 1.63 in.
+    Both axes are borrowed from the family rather than read off this part, which is what
+    size-confidence says. THE THICKNESS IS A STANDARD, NOT A CORRECTION: Cisco states this
+    generation as 1.72 in thick in two independent places, the data sheet quoted below and
+    Table A-10 of the line card installation guide, and nothing we hold contradicts it. THE
+    ART MOVED 0.17 mm ACROSS THE CARD to centre it in the thinner envelope, and nothing was
+    resized - the drawn plate was already narrower than 41.4. WHAT THIS PART CARRIED BEFORE,
+    kept because a source that disagrees is still evidence: install guide - Table A-10,
+    'Ethernet Line Card Physical Dimensions', of the OL-17500-09 revision of the Ethernet
+    Line Card Installation Guide, which lists THIS PART NUMBER by name: Height 14 inches /
+    35.56 cm, Width 1.72 inches / 4.37 cm, Depth 20.5 inches / 52.07 cm, Weight 16.34 pounds
+    / 7.4117 kg '(without EPs)'. Note the axis order - H is the LONG dimension and W the
+    thickness, the original generation's convention. 355.6 is the PLATE; the component
+    carries the family's ejector-inclusive 395.7, the same step and the same reasoning as
+    the original-generation line cards already in this library, and the drawn plate here
+    measures 358.13. WORTH KNOWING THAT THIS TABLE IS GONE: the CURRENT revision of the same
+    guide replaced it with a section whose entire content is 'For physical specifications,
+    refer to the ASR 9000 Series line card data sheets' and a URL. The older revision is in
+    the intake and it is the source. Anything sized from the newer guide alone would have
+    had to guess. AND A SECOND DIRECT SOURCE, found later than the measurement above and
+    kept beside it because it settles what the parenthetical means. Two Cisco data sheets
+    carry this family in a 'Physical Dimensions' table. data_sheet_c78-663866, the ASR 9000
+    Modular Line Cards sheet, gives the 80 and 160 Gigabyte carriers in TWO LINES each:
+    '14.5 W x 1.72 H x 22.40 L' and, underneath, '14.5 W x 1.72 H x 24.25 L (including
+    ejector levers)'. datasheet-c78-735809 gives the 200 and 400 in ONE line, which is the
     second of those two: '14.5 W x 1.72 H x 24.25 L (including ejector levers)'. SO THE
-    PARENTHETICAL ATTACHES TO L. The ejector levers add 1.85 in = 47.0 mm to the DEPTH
-    and nothing to the width - which is physically right, since a card's levers protrude
-    forward of its faceplate - and 14.5 in = 368.3 mm is the PLATE width in both sheets.
-    The ejector-inclusive width, 395.7, is simply not stated on either; it comes from
-    the family's own sheets, which give 368.3 and 15.58 in = 395.7 for the same cards,
-    and from the MPA measurement above. An earlier version of this provenance said the
-    parenthetical was misplaced. It is not; it was the two-line layout collapsing to
-    one.
+    PARENTHETICAL ATTACHES TO L. The ejector levers add 1.85 in = 47.0 mm to the DEPTH and
+    nothing to the width - which is physically right, since a card's levers protrude forward
+    of its faceplate - and 14.5 in = 368.3 mm is the PLATE width in both sheets. The
+    ejector-inclusive width, 395.7, is simply not stated on either; it comes from the
+    family's own sheets, which give 368.3 and 15.58 in = 395.7 for the same cards, and from
+    the MPA measurement above. An earlier version of this provenance said the parenthetical
+    was misplaced. It is not; it was the two-line layout collapsing to one.
   depth: >-
     THREE CISCO FIGURES FOR THIS DEPTH AND ONE IS CARRIED. Table A-10 of the OL-17500-09
     line card guide gives the 80 and 160 Gigabyte carriers 20.5 in = 520.7 mm,
@@ -176,7 +190,7 @@ provenance:
     searched - no end-of-life notice for this part number is in the intake.
 elements:
   status:
-    at: [27.26, 372.18]
+    at: [27.09, 372.18]
     size: [3.54, 3.54]
     class: led
     description: >-
@@ -214,7 +228,7 @@ skins: [default]
 bays:
   bay-0:
     default: cisco/a9k-mpa-blank@1
-    at: [6.93, 31.95]
+    at: [6.76, 31.95]
     size: [34.54, 161.8]
     accepts:
     - 'cisco/a9k-mpa-blank@1'
@@ -227,7 +241,7 @@ bays:
     - 'cisco/a9k-mpa-20x10ge@1'
   bay-1:
     default: cisco/a9k-mpa-blank@1
-    at: [6.93, 202.35]
+    at: [6.76, 202.35]
     size: [34.54, 161.8]
     accepts:
     - 'cisco/a9k-mpa-blank@1'

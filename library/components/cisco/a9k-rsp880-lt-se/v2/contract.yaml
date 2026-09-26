@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-rsp880-lt-se
-version: 1.4.1
+version: 2.0.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -14,7 +14,8 @@ description: >-
   auxiliary port - plus 10 MHz and 1 PPS SMB clock inputs, a nine-pin alarm output, a
   USB 2.0 type A port, nine discrete status lamps, a four-character LED dot-matrix
   display and a LAMP TEST push button.
-size: {w: 46.0, h: 428.5, d: 628.9}
+size: {w: 41.4, h: 395.7, d: 628.9}
+size-confidence: {w: borrowed, h: borrowed}
 attrs:
   model: 'A9K-RSP880-LT-SE'
   role: 'route-switch-processor'
@@ -84,56 +85,68 @@ provenance:
     It does not sanction inventing an APERTURE, which is a dimension a specification is
     withholding rather than one nobody has measured.
   one-drawing: >-
-    READ THIS BEFORE TRUSTING A FEATURE POSITION TO THE MILLIMETRE. Nine RSP and RP
-    masters in this stencil are ONE DRAWING: extracted jack, SMB, USB, DB9, LED-matrix
-    and lamp coordinates agree to 0.00 mm across a9k-rsp5-se and -tr, a9k-rsp880-se and
-    -tr, a9k-rsp880-lt-se and -tr, a99-rp3-se and -tr, and a99-rsp-se. The DATASHEETS do
-    not agree: these cards are 402.8, 428.5, 428.2 and 403.4 mm wide and 41.0 to 46.0 mm
-    high. So the drawing is generic across the family and cannot be all four sizes. Each
-    card here is scaled to its OWN stated envelope - long axis to its width, short axis
-    to its height, two factors, exactly as the line cards were - which makes the OUTLINE
-    right for every one and makes the interior positions proportional rather than
-    measured. A jack centre is therefore good to a few millimetres, not to a tenth, and
-    anyone needing better needs a mechanical drawing Cisco has not published.
+    READ THIS BEFORE TRUSTING A FEATURE POSITION TO THE MILLIMETRE. Nine RSP and RP masters
+    in this stencil are ONE DRAWING: extracted jack, SMB, USB, DB9, LED-matrix and lamp
+    coordinates agree to 0.00 mm across a9k-rsp5-se and -tr, a9k-rsp880-se and -tr,
+    a9k-rsp880-lt-se and -tr, a99-rp3-se and -tr, and a99-rsp-se. The DATASHEETS do not
+    agree: these cards are 402.8, 428.5, 428.2 and 403.4 mm wide and 41.0 to 46.0 mm high.
+    So the drawing is generic across the family and cannot be all four sizes. Each card here
+    is scaled to its OWN stated envelope - long axis to its width, short axis to its height,
+    two factors, exactly as the line cards were - which makes the OUTLINE right for every
+    one and makes the interior positions proportional rather than measured. A jack centre is
+    therefore good to a few millimetres, not to a tenth, and anyone needing better needs a
+    mechanical drawing Cisco has not published. 2.0.0 put every one of these cards on the
+    ASR 9000 card standard of 41.4 x 395.7, so the outlines now agree as well, and the four
+    stated widths survive only as history in each size note.
   size: >-
-    REFUTED BY MEASUREMENT AND NOT YET CORRECTED - read this before trusting 428.5. A
-    physical A9K-RSP880 pulled from the ASR 9904 in the lab was photographed against a
-    rule laid along its faceplate. The card ends in the FIFTEEN-inch band, about 15 1/2
-    in, with the 16-inch mark falling clear past the end of it. 428.5 mm is 16 14/16 in,
-    excluded by more than a whole inch, which is far outside the error in reading a
-    photograph - only the whole inch was read, because that is all that was needed.
-    THREE LINES OF EVIDENCE AGREE and they were independent before the tape. (1) The ASR
-    9904's own cage reserves 395.7 mm for this card, and that reservation is the card
-    INCLUDING its ejector brackets - Cisco's fourth-generation envelope, their own
-    figure, and 15 9/16 in, agreeing with the photograph to about 2 mm. (2) The
-    neighbour constraint recorded on three chassis excludes a 428 mm card outright: the
-    ASR 9010 has 399.96 mm of clear vertical space between the cable tray and the card
-    guide bar, the ASR 9910 421.79, the ASR 9922 420.30, and a card cannot be installed
-    where something else already is. (3) The card measured.
-    WHY THE NUMBER BELOW STILL SAYS 428.5. Correcting it is not an edit to one field.
-    This part's skin is drawn to a 428.5 envelope and lint L4 ties a viewBox to its
-    contract size, so the artwork has to come with it - and rescaling it mechanically
-    would be inventing geometry. A y-only scale turns 24 round LEDs into ellipses; a
-    uniform scale shrinks features that did not shrink, because a card being 8 percent
-    shorter than modelled does not make its lamps smaller. Which of the two is right is
-    a question about the source figure the art was derived from, not about arithmetic.
-    The correction is therefore a re-derivation of the faceplate, tracked in roc-ops/Portrayal#16.
-    NOR IS IT SETTLED WHICH FIGURE REPLACES IT. The 9006 and 9904 reserve 395.7, the
-    9906 and 9910 403.4, the 9010 406.4 - an 11 mm spread, under half an inch, inside
-    the photograph's precision. 395.7 is the leading candidate: smallest, Cisco's own
-    ejector-inclusive envelope rather than a reconciliation, and the chassis the
-    measured card came out of.
-    THE OTHER AXIS IS UNTOUCHED BY THIS. The same data sheet gives Height 1.81 in (46.0
-    mm), and 46.0 still exceeds every pitch that holds this card - 41.4 on the 9006 and
-    9904, 42.67 on the 9906 and 9910. A photograph does not measure thickness.
-    THE REFUTED SOURCE, kept because a source that turned out wrong is still evidence:
-    datasheet - Cisco ASR 9000 Route Switch Processor 880 Data Sheet, 'Physical
-    specifications': Height 1.81 in. (4.60 cm), Width 16.87 in. (42.85 cm), Depth 24.74
-    in. (62.89 cm), Weight 17.8 lb (8.07 kg). That data sheet covers all four part
-    numbers - A9K-RSP880-SE, -TR, A9K-RSP880-LT-SE and -LT-TR - with ONE physical block,
-    so the LT variants take the same envelope from Cisco's own scoping rather than by
-    inference. Note this card is 46.0 mm high where the RSP5 is 41.0: it is a thicker
-    card, and a bay sized for one is not sized for the other.
+    ASR 9000 CARD STANDARD - 41.4 x 395.7 mm, where this part carried 46 x 428.5 until
+    2.0.0. Every full-size ASR 9000 card, and every slot that takes one, is that one
+    envelope in this library, so a card seats the same way in each chassis that accepts it
+    and no two cards in one cage draw at different sizes. The long axis is the
+    ejector-inclusive figure of the fourth-generation line card data sheets, 'Physical
+    dimensions (includes ejector bracket/lever)', and a lab measurement across a real
+    A9K-RSP880 agrees with it - about 15 1/2 in, where the data sheet for that card says 16.87
+    (roc-ops/Portrayal#16). The thickness is the figure Cisco states most often, 1.63 in.
+    Both axes are borrowed from the family rather than read off this part, which is what
+    size-confidence says. The 1.81 in thickness below was never measured, and it is thicker
+    than every slot pitch that holds this card. THE ART WAS RE-ENVELOPED, NOT REDRAWN, on
+    both axes. The plate scales to the new size, while every port, lamp, button and legend
+    keeps its drawn size and moves in proportion, so a feature position is good to about a
+    millimetre rather than to a tenth. WHAT THIS PART CARRIED BEFORE, kept because a source
+    that disagrees is still evidence: REFUTED BY MEASUREMENT, AND CORRECTED BY THE STANDARD ABOVE AT 2.0.0. A physical A9K-RSP880 pulled from the ASR 9904 in the lab
+    was photographed against a rule laid along its faceplate. The card ends in the
+    FIFTEEN-inch band, about 15 1/2 in, with the 16-inch mark falling clear past the end of
+    it. 428.5 mm is 16 14/16 in, excluded by more than a whole inch, which is far outside
+    the error in reading a photograph - only the whole inch was read, because that is all
+    that was needed. THREE LINES OF EVIDENCE AGREE and they were independent before the
+    tape. (1) The ASR 9904's own cage reserves 395.7 mm for this card, and that reservation
+    is the card INCLUDING its ejector brackets - Cisco's fourth-generation envelope, their
+    own figure, and 15 9/16 in, agreeing with the photograph to about 2 mm. (2) The
+    neighbour constraint recorded on three chassis excludes a 428 mm card outright: the ASR
+    9010 has 399.96 mm of clear vertical space between the cable tray and the card guide
+    bar, the ASR 9910 421.79, the ASR 9922 420.30, and a card cannot be installed where
+    something else already is. (3) The card measured. WHY 1.x KEPT 428.5 AFTER THE MEASUREMENT.
+    Correcting it is not an edit to one field. This part's skin is drawn to a 428.5 envelope
+    and lint L4 ties a viewBox to its contract size, so the artwork has to come with it -
+    and rescaling it mechanically would be inventing geometry. A y-only scale turns 24 round
+    LEDs into ellipses; a uniform scale shrinks features that did not shrink, because a card
+    being 8 percent shorter than modelled does not make its lamps smaller. Which of the two
+    is right is a question about the source figure the art was derived from, not about
+    arithmetic. The correction was therefore a re-derivation of the faceplate, tracked in roc-ops/Portrayal#16, and 2.0.0 made it: features keep their size and move, the plate scales. NOR WAS IT SETTLED WHICH FIGURE REPLACED IT, until the family standard chose one. The 9006 and 9904
+    reserve 395.7, the 9906 and 9910 403.4, the 9010 406.4 - an 11 mm spread, under half an
+    inch, inside the photograph's precision. 395.7 was the leading candidate and is the one taken: smallest,
+    Cisco's own ejector-inclusive envelope rather than a reconciliation, and the chassis the
+    measured card came out of. THE OTHER AXIS WAS UNTOUCHED BY THIS, and the standard sets it to 41.4 without a measurement. The same data sheet
+    gives Height 1.81 in (46.0 mm), and 46.0 still exceeds every pitch that holds this card
+    - 41.4 on the 9006 and 9904, 42.67 on the 9906 and 9910. A photograph does not measure
+    thickness. THE REFUTED SOURCE, kept because a source that turned out wrong is still
+    evidence: datasheet - Cisco ASR 9000 Route Switch Processor 880 Data Sheet, 'Physical
+    specifications': Height 1.81 in. (4.60 cm), Width 16.87 in. (42.85 cm), Depth 24.74 in.
+    (62.89 cm), Weight 17.8 lb (8.07 kg). That data sheet covers all four part numbers -
+    A9K-RSP880-SE, -TR, A9K-RSP880-LT-SE and -LT-TR - with ONE physical block, so the LT
+    variants take the same envelope from Cisco's own scoping rather than by inference. Note
+    this card is 46.0 mm high where the RSP5 is 41.0: it is a thicker card, and a bay sized
+    for one is not sized for the other.
   ports: >-
     install guide - the Overview and Reference Guide's per-card 'Front Panel and Access
     Ports' section, corroborated feature by feature by the artwork. For the RSP5: two
@@ -215,7 +228,7 @@ provenance:
     searched - no end-of-life notice for this part number is in the intake.
 elements:
   led-matrix:
-    at: [15.96, 376.86]
+    at: [13.39, 347.7]
     size: [19.43, 8.23]
     class: display
     characters: 4
@@ -226,7 +239,7 @@ elements:
       rather than a lamp state list, so it is modelled as a display and not as an
       indicator with states.
   aco-button:
-    at: [10.39, 329.2]
+    at: [9.15, 303.85]
     size: [3.97, 3.9]
     class: button
     description: >-
@@ -234,7 +247,7 @@ elements:
       lamp: 'Alarm Cutoff has been enabled. The ACO push button was pressed after at least
       one alarm has occurred.'
   lamp-test:
-    at: [10.39, 339.61]
+    at: [9.15, 313.46]
     size: [3.97, 3.9]
     class: button
     description: >-
@@ -242,7 +255,7 @@ elements:
       buttons 'can be used to eject the RSP5 card', which is why they are modelled as
       buttons and not as decoration.
   ssd:
-    at: [22.92, 352.47]
+    at: [20.52, 325.41]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -252,7 +265,7 @@ elements:
     - {name: green, color: '#39b54a'}
     - 'off'
   fc-fault:
-    at: [22.92, 360.9]
+    at: [20.52, 333.19]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -270,7 +283,7 @@ elements:
     - 'off'
     - 'on'
   gps:
-    at: [22.92, 369.32]
+    at: [20.52, 340.97]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -281,7 +294,7 @@ elements:
     - {name: green, color: '#39b54a'}
     - 'off'
   crit:
-    at: [18.06, 352.47]
+    at: [16.15, 325.41]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -291,7 +304,7 @@ elements:
     - {name: red, color: '#d0021b'}
     - 'off'
   maj:
-    at: [18.06, 360.9]
+    at: [16.15, 333.19]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -301,7 +314,7 @@ elements:
     - {name: red, color: '#d0021b'}
     - 'off'
   min:
-    at: [18.06, 369.32]
+    at: [16.15, 340.97]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -311,7 +324,7 @@ elements:
     - {name: amber, color: '#f5a623'}
     - 'off'
   fail:
-    at: [12.76, 352.47]
+    at: [11.38, 325.41]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -321,7 +334,7 @@ elements:
     - {name: red, color: '#d0021b'}
     - 'off'
   aco:
-    at: [12.76, 360.9]
+    at: [11.38, 333.19]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -332,7 +345,7 @@ elements:
     - {name: amber, color: '#f5a623'}
     - 'off'
   sync:
-    at: [12.76, 369.32]
+    at: [11.38, 340.97]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -448,20 +461,20 @@ relief:
         common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
         estimated' and the dome carries none
 parts:
-  - {ref: std/rj45-ganged@2, id: sync-0, at: [8.97, 47.4], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: sync-1, at: [8.97, 66.89], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: ieee-1588, at: [8.97, 128.84], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: ics-0, at: [24.83, 152.27], rotate: 270}
-  - {ref: std/rj45-ganged@2, id: ics-1-tod, at: [8.97, 152.27], rotate: 90}
-  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-0, at: [26.15, 246.4], rotate: 270}
-  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-1, at: [8.97, 246.4], rotate: 90}
-  - {ref: common/rj45-ganged-eth@1, id: cmp, at: [8.97, 267.2], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: console, at: [8.97, 288.35], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: aux, at: [8.97, 309.15], rotate: 90}
-  - {ref: std/smb@1, id: gps-10mhz, at: [11.0, 173.75]}
-  - {ref: std/smb@1, id: gps-1pps, at: [11.0, 184.09]}
-  - {ref: std/usb-a@1, id: usb, at: [12.13, 234.04]}
-  - {ref: common/db9-receptacle@1, id: alarm-out, at: [1.42, 205.635], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: sync-0, at: [7.52, 43.29], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: sync-1, at: [7.52, 61.28], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: ieee-1588, at: [7.52, 118.49], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: ics-0, at: [21.8, 140.13], rotate: 270}
+  - {ref: std/rj45-ganged@2, id: ics-1-tod, at: [7.52, 140.13], rotate: 90}
+  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-0, at: [22.98, 227.05], rotate: 270}
+  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-1, at: [7.52, 227.05], rotate: 90}
+  - {ref: common/rj45-ganged-eth@1, id: cmp, at: [7.52, 246.26], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: console, at: [7.52, 265.79], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: aux, at: [7.52, 285], rotate: 90}
+  - {ref: std/smb@1, id: gps-10mhz, at: [9.66, 160.27]}
+  - {ref: std/smb@1, id: gps-1pps, at: [9.66, 169.81]}
+  - {ref: std/usb-a@1, id: usb, at: [10.32, 215.95]}
+  - {ref: common/db9-receptacle@1, id: alarm-out, at: [0.65, 188.72], rotate: 90}
 body:
   depth: 628.9
   color: '#b9bec4'

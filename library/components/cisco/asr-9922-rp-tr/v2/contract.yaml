@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: asr-9922-rp-tr
-version: 1.4.0
+version: 2.0.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -12,7 +12,8 @@ description: >-
   Nine RJ-45 jacks, 10 MHz and 1 PPS SMB clock inputs under a GPS INTERFACE bracket, a
   nine-pin alarm output, a USB port, ACO and LAMP TEST push buttons, a discrete lamp
   cluster and a four-character LED dot-matrix display.
-size: {w: 46.0, h: 428.5, d: 628.9}
+size: {w: 41.4, h: 395.7, d: 628.9}
+size-confidence: {w: borrowed, h: borrowed}
 attrs:
   model: 'ASR-9922-RP-TR'
   role: 'route-processor'
@@ -77,16 +78,32 @@ provenance:
     realistic view. It does not sanction inventing an APERTURE, which is a dimension a
     specification is withholding rather than one nobody has measured.
   size: >-
-    datasheet - Cisco ASR 9900 Route Processor Data Sheet, 'Physical specifications':
-    Height 1.81" (4.60 cm), Width 16.87" (42.85 cm), Depth 24.74" (62.89 cm), Weight 13
-    lb (5.90 kg). That sheet names ASR-9922-RP-SE and -TR alongside ASR-9900-RP-SE and
-    -TR, so the four part numbers share this envelope by Cisco's own scoping.
+    ASR 9000 CARD STANDARD - 41.4 x 395.7 mm, where this part carried 46 x 428.5 until
+    2.0.0. Every full-size ASR 9000 card, and every slot that takes one, is that one
+    envelope in this library, so a card seats the same way in each chassis that accepts it
+    and no two cards in one cage draw at different sizes. The long axis is the
+    ejector-inclusive figure of the fourth-generation line card data sheets, 'Physical
+    dimensions (includes ejector bracket/lever)', and a lab measurement across a real
+    A9K-RSP880 agrees with it - about 15 1/2 in, where the data sheet for that card says 16.87
+    (roc-ops/Portrayal#16). The thickness is the figure Cisco states most often, 1.63 in.
+    Both axes are borrowed from the family rather than read off this part, which is what
+    size-confidence says. The 1.81 in thickness below was never measured, and it is thicker
+    than every slot pitch that holds this card. THE ART WAS RE-ENVELOPED, NOT REDRAWN, on
+    both axes. The plate scales to the new size, while every port, lamp, button and legend
+    keeps its drawn size and moves in proportion, so a feature position is good to about a
+    millimetre rather than to a tenth. WHAT THIS PART CARRIED BEFORE, kept because a source
+    that disagrees is still evidence: datasheet - Cisco ASR 9900 Route Processor Data Sheet,
+    'Physical specifications': Height 1.81" (4.60 cm), Width 16.87" (42.85 cm), Depth 24.74"
+    (62.89 cm), Weight 13 lb (5.90 kg). That sheet names ASR-9922-RP-SE and -TR alongside
+    ASR-9900-RP-SE and -TR, so the four part numbers share this envelope by Cisco's own
+    scoping.
   layout: >-
     drawing - the Cisco Visio master, scaled to the datasheet's own overall dimensions.
-    index.json's shape box is the Visio drawing box, not the card - it reads 1.73 x
-    14.75 in for every control-card master - so the ART is the ruler and the box is not,
-    the same correction the line cards needed. Long axis scaled to the card's stated
-    width, short axis to its stated height, two factors.
+    index.json's shape box is the Visio drawing box, not the card - it reads 1.73 x 14.75 in
+    for every control-card master - so the ART is the ruler and the box is not, the same
+    correction the line cards needed. Long axis scaled to the card's stated width, short
+    axis to its stated height, two factors. That describes how 1.x drew the art; 2.0.0
+    re-enveloped it to the ASR 9000 card standard, and the size note says how.
   family: >-
     these masters are NOT the one-drawing family the RSP5, RSP-880, RP3 and RSP4-S
     masters are. Each has its own jack column, its own lamp cluster and its own legends
@@ -143,7 +160,7 @@ provenance:
     searched - no end-of-life notice for this part number is in the intake.
 elements:
   fail:
-    at: [12.75, 348.11]
+    at: [11.37, 321.38]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -153,7 +170,7 @@ elements:
     - {name: red, color: '#d0021b'}
     - 'off'
   aco:
-    at: [12.75, 354.89]
+    at: [11.37, 327.64]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -163,7 +180,7 @@ elements:
     - {name: amber, color: '#f5a623'}
     - 'off'
   sync:
-    at: [12.75, 362.5]
+    at: [11.37, 334.67]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -181,7 +198,7 @@ elements:
     - {name: amber, color: '#f5a623'}
     - 'off'
   crit:
-    at: [18.04, 348.11]
+    at: [16.13, 321.38]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -190,7 +207,7 @@ elements:
     - {name: red, color: '#d0021b'}
     - 'off'
   maj:
-    at: [18.04, 354.89]
+    at: [16.13, 327.64]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -199,7 +216,7 @@ elements:
     - {name: red, color: '#d0021b'}
     - 'off'
   min:
-    at: [18.04, 362.5]
+    at: [16.13, 334.67]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -208,7 +225,7 @@ elements:
     - {name: amber, color: '#f5a623'}
     - 'off'
   ssd:
-    at: [23.61, 348.11]
+    at: [21.14, 321.38]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -217,7 +234,7 @@ elements:
     - {name: green, color: '#39b54a'}
     - 'off'
   fc-fault:
-    at: [23.61, 354.89]
+    at: [21.14, 327.64]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -231,7 +248,7 @@ elements:
     - {name: amber, color: '#f5a623'}
     - 'off'
   led-matrix:
-    at: [14.19, 370.79]
+    at: [11.8, 342.12]
     size: [19.4, 7.57]
     class: display
     characters: 4
@@ -240,13 +257,13 @@ elements:
       - the guide gives it two sections, boot-stage/runtime and CAN bus controller errors
       - not a lamp state list, so it is a display and not an indicator.
   aco-button:
-    at: [10.39, 327.03]
+    at: [9.15, 301.85]
     size: [3.97, 3.9]
     class: button
     description: >-
       the ACO momentary push button.
   lamp-test:
-    at: [10.39, 337.43]
+    at: [9.15, 311.45]
     size: [3.97, 3.9]
     class: button
     description: >-
@@ -351,21 +368,21 @@ relief:
         casa/pem@1 hs-button - 'NO PRECEDENT - a panel pushbutton. Invented here'. Reused
         rather than re-invented so the library carries ONE pushbutton number
 parts:
-  - {ref: std/rj45-ganged@2, id: sync-0, at: [8.96, 47.63], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: sync-1, at: [8.96, 67.09], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: ieee-1588, at: [8.96, 112.55], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: nv-sync-0, at: [8.96, 132.47], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: nv-sync-1-tod, at: [8.96, 152.37], rotate: 90}
-  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-0, at: [8.96, 246.39], rotate: 90}
-  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-1, at: [8.96, 267.17], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: console, at: [8.96, 288.28], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: aux, at: [8.96, 309.05], rotate: 90}
-  - {ref: std/smb@1, id: gps-10mhz, at: [10.98, 175.36]}
-  - {ref: std/smb@1, id: gps-1pps, at: [10.98, 185.66]}
-  - {ref: std/sfp-ganged@1, id: sfp-plus-0, at: [22.05, 90.0], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: sfp-plus-1, at: [9.7, 90.0], rotate: 270}
-  - {ref: std/usb-a@1, id: usb, at: [12.11, 234.04], rotate: 90}
-  - {ref: common/db9-receptacle@1, id: alarm-out, at: [1.4, 206.12], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: sync-0, at: [7.51, 43.5], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: sync-1, at: [7.51, 61.47], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: ieee-1588, at: [7.51, 103.45], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: nv-sync-0, at: [7.51, 121.84], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: nv-sync-1-tod, at: [7.51, 140.22], rotate: 90}
+  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-0, at: [7.51, 227.04], rotate: 90}
+  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-1, at: [7.51, 246.23], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: console, at: [7.51, 265.73], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: aux, at: [7.51, 284.91], rotate: 90}
+  - {ref: std/smb@1, id: gps-10mhz, at: [9.64, 161.75]}
+  - {ref: std/smb@1, id: gps-1pps, at: [9.64, 171.26]}
+  - {ref: std/sfp-ganged@1, id: sfp-plus-0, at: [19.33, 82.57], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: sfp-plus-1, at: [8.21, 82.57], rotate: 270}
+  - {ref: std/usb-a@1, id: usb, at: [10.67, 215.67], rotate: 90}
+  - {ref: common/db9-receptacle@1, id: alarm-out, at: [0.64, 189.16], rotate: 90}
 body:
   depth: 628.9
   color: '#b9bec4'

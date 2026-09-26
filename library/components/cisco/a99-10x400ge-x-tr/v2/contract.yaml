@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a99-10x400ge-x-tr
-version: 1.0.2
+version: 2.0.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -9,7 +9,8 @@ description: >-
   Cisco ASR 9900 Series 4T Packet Transport Line Card, 5th generation. Ten QSFP-DD
   ports, each capable of 10, 40, 100, 200 or 400 Gigabit Ethernet, for 4 Tbps of
   aggregate bandwidth.
-size: {w: 42.67, h: 403.1, d: 609.6}
+size: {w: 41.4, h: 395.7, d: 609.6}
+size-confidence: {w: borrowed, h: borrowed}
 attrs:
   model: 'A99-10X400GE-X-TR'
   power-absent: not-published
@@ -69,21 +70,34 @@ provenance:
     view. It does not sanction inventing an APERTURE, which is a dimension a specification
     is withholding rather than one nobody has measured.
   size: >-
-    datasheet - Cisco ASR 9900 Series 5th Generation 10-Port 400 Gigabit Ethernet Line
-    Card Data Sheet: 'ASR 9900 4T 5th Generation Service Edge Line Card: 1.68 x 15.87 x
-    24.00 in.; 28.40 lb (42.67 x 403.10 x 609.60 mm; 12.88 kg)'. Note this is a LONGER
-    card than the 2T and the 4th generation, which are 395.7 - the shell art scales with
-    it.
+    ASR 9000 CARD STANDARD - 41.4 x 395.7 mm, where this part carried 42.67 x 403.1 until
+    2.0.0. Every full-size ASR 9000 card, and every slot that takes one, is that one
+    envelope in this library, so a card seats the same way in each chassis that accepts it
+    and no two cards in one cage draw at different sizes. The long axis is the
+    ejector-inclusive figure of the fourth-generation line card data sheets, 'Physical
+    dimensions (includes ejector bracket/lever)', and a lab measurement across a real
+    A9K-RSP880 agrees with it - about 15 1/2 in, where the data sheet for that card says 16.87
+    (roc-ops/Portrayal#16). The thickness is the figure Cisco states most often, 1.63 in.
+    Both axes are borrowed from the family rather than read off this part, which is what
+    size-confidence says. THE ART WAS RE-ENVELOPED, NOT REDRAWN, on both axes. The plate
+    scales to the new size, while every port, lamp, button and legend keeps its drawn size
+    and moves in proportion, so a feature position is good to about a millimetre rather than
+    to a tenth. WHAT THIS PART CARRIED BEFORE, kept because a source that disagrees is still
+    evidence: datasheet - Cisco ASR 9900 Series 5th Generation 10-Port 400 Gigabit Ethernet
+    Line Card Data Sheet: 'ASR 9900 4T 5th Generation Service Edge Line Card: 1.68 x 15.87 x
+    24.00 in.; 28.40 lb (42.67 x 403.10 x 609.60 mm; 12.88 kg)'. Note this is a LONGER card
+    than the 2T and the 4th generation, which are 395.7 - the shell art scales with it.
   layout: >-
     drawing - the Cisco Visio master, scaled to the datasheet's own overall dimensions.
-    CAUTION for anyone re-deriving this: index.json's props.height_in and width_in are
-    the Visio SHAPE box, not the card. They read 1.72 x 14.75 in for EVERY card master,
-    against the datasheet's 1.63 x 15.58 in, and are 5 percent out in both axes. The ART
-    is orthographic and does carry geometry: taking Cisco's stated W - which the spec
-    table says 'includes ejector bracket/lever' - as the full long extent of the art
-    puts the faceplate rectangle at 41.6 mm against a stated H of 41.4, inside half a
-    percent, which is the gate-1 check. So the drawing is the ruler and the shape box is
-    not.
+    CAUTION for anyone re-deriving this: index.json's props.height_in and width_in are the
+    Visio SHAPE box, not the card. They read 1.72 x 14.75 in for EVERY card master, against
+    the datasheet's 1.63 x 15.58 in, and are 5 percent out in both axes. The ART is
+    orthographic and does carry geometry: taking Cisco's stated W - which the spec table
+    says 'includes ejector bracket/lever' - as the full long extent of the art puts the
+    faceplate rectangle at 41.6 mm against a stated H of 41.4, inside half a percent, which
+    is the gate-1 check. So the drawing is the ruler and the shape box is not. That
+    describes how 1.x drew the art; 2.0.0 re-enveloped it to the ASR 9000 card standard, and
+    the size note says how.
   frame: >-
     the card is modelled PORTRAIT - x across the card's thickness, y along its width -
     which is the stencil's own frame and casa's. WHICH WAY A CHASSIS CARRIES IT is the
@@ -151,7 +165,7 @@ provenance:
     searched - no end-of-life notice for this part number is in the intake.
 elements:
   led-p0:
-    at: [6.96, 40.67]
+    at: [6.72, 39.89]
     size: [2.05, 3.26]
     class: led
     states:
@@ -160,7 +174,7 @@ elements:
     - {name: red, color: '#d0021b'}
     - 'off'
   led-p1:
-    at: [6.96, 72.47]
+    at: [6.72, 71.11]
     size: [2.05, 3.26]
     class: led
     states:
@@ -169,7 +183,7 @@ elements:
     - {name: red, color: '#d0021b'}
     - 'off'
   led-p2:
-    at: [6.96, 104.27]
+    at: [6.72, 102.33]
     size: [2.05, 3.26]
     class: led
     states:
@@ -178,7 +192,7 @@ elements:
     - {name: red, color: '#d0021b'}
     - 'off'
   led-p3:
-    at: [6.96, 136.07]
+    at: [6.72, 133.54]
     size: [2.05, 3.26]
     class: led
     states:
@@ -187,7 +201,7 @@ elements:
     - {name: red, color: '#d0021b'}
     - 'off'
   led-p4:
-    at: [36.66, 180.28]
+    at: [35.54, 176.94]
     size: [2.05, 3.26]
     class: led
     states:
@@ -196,7 +210,7 @@ elements:
     - {name: red, color: '#d0021b'}
     - 'off'
   led-p5:
-    at: [36.66, 212.08]
+    at: [35.54, 208.16]
     size: [2.05, 3.26]
     class: led
     states:
@@ -205,7 +219,7 @@ elements:
     - {name: red, color: '#d0021b'}
     - 'off'
   led-p6:
-    at: [36.66, 243.88]
+    at: [35.54, 239.37]
     size: [2.05, 3.26]
     class: led
     states:
@@ -214,7 +228,7 @@ elements:
     - {name: red, color: '#d0021b'}
     - 'off'
   led-p7:
-    at: [36.66, 275.68]
+    at: [35.54, 270.59]
     size: [2.05, 3.26]
     class: led
     states:
@@ -223,7 +237,7 @@ elements:
     - {name: red, color: '#d0021b'}
     - 'off'
   led-p8:
-    at: [36.66, 307.48]
+    at: [35.54, 301.81]
     size: [2.05, 3.26]
     class: led
     states:
@@ -232,7 +246,7 @@ elements:
     - {name: red, color: '#d0021b'}
     - 'off'
   led-p9:
-    at: [36.66, 339.27]
+    at: [35.54, 333.01]
     size: [2.05, 3.26]
     class: led
     states:
@@ -241,7 +255,7 @@ elements:
     - {name: red, color: '#d0021b'}
     - 'off'
   status:
-    at: [19.2, 378.05]
+    at: [18.57, 371.08]
     size: [3.79, 3.79]
     class: led
     description: >-
@@ -365,16 +379,16 @@ relief:
         common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
         estimated' and the dome carries none
 parts:
-  - {ref: std/qsfp-dd@1, id: p0, at: [8.42, 37.31], rotate: 90}
-  - {ref: std/qsfp-dd@1, id: p1, at: [8.42, 69.11], rotate: 90}
-  - {ref: std/qsfp-dd@1, id: p2, at: [8.42, 100.91], rotate: 90}
-  - {ref: std/qsfp-dd@1, id: p3, at: [8.42, 132.7], rotate: 90}
-  - {ref: std/qsfp-dd@1, id: p4, at: [21.53, 176.91], rotate: 90}
-  - {ref: std/qsfp-dd@1, id: p5, at: [21.53, 208.71], rotate: 90}
-  - {ref: std/qsfp-dd@1, id: p6, at: [21.53, 240.5], rotate: 90}
-  - {ref: std/qsfp-dd@1, id: p7, at: [21.53, 272.31], rotate: 90}
-  - {ref: std/qsfp-dd@1, id: p8, at: [21.53, 304.1], rotate: 90}
-  - {ref: std/qsfp-dd@1, id: p9, at: [21.53, 335.9], rotate: 90}
+  - {ref: std/qsfp-dd@1, id: p0, at: [8.02, 36.45], rotate: 90}
+  - {ref: std/qsfp-dd@1, id: p1, at: [8.02, 67.67], rotate: 90}
+  - {ref: std/qsfp-dd@1, id: p2, at: [8.02, 98.88], rotate: 90}
+  - {ref: std/qsfp-dd@1, id: p3, at: [8.02, 130.09], rotate: 90}
+  - {ref: std/qsfp-dd@1, id: p4, at: [20.74, 173.49], rotate: 90}
+  - {ref: std/qsfp-dd@1, id: p5, at: [20.74, 204.7], rotate: 90}
+  - {ref: std/qsfp-dd@1, id: p6, at: [20.74, 235.91], rotate: 90}
+  - {ref: std/qsfp-dd@1, id: p7, at: [20.74, 267.14], rotate: 90}
+  - {ref: std/qsfp-dd@1, id: p8, at: [20.74, 298.34], rotate: 90}
+  - {ref: std/qsfp-dd@1, id: p9, at: [20.74, 329.56], rotate: 90}
 body:
   depth: 609.6
   color: '#b9bec4'

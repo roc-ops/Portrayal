@@ -1,14 +1,15 @@
 format: 1
 kind: module
 name: a9k-8t-l
-version: 1.1.0
+version: 2.0.0
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
   Cisco ASR 9000 Series 8-Port 10 Gigabit Ethernet Line Card with XFP, 80 Gbps line
   rate, original generation. Eight XFP cages down the faceplate.
-size: {w: 43.7, h: 395.7, d: 520.7}
+size: {w: 41.4, h: 395.7, d: 520.7}
+size-confidence: {w: borrowed, h: borrowed}
 attrs:
   xfp-10g: 8
   model: 'A9K-8T-L'
@@ -63,16 +64,33 @@ provenance:
     drawings with a vanishing point, so they settle the ARRANGEMENT - bracket off the plate,
     lever along it, domed screw head proud of both - and nothing about size.
   size: >-
-    datasheet - Cisco ASR 9000 Series Ethernet Line Cards data sheet, 'Physical
-    dimensions (H x W x D); weight: 14 x 1.72 x 20.5 in. (35.56 x 4.37 x 52.07 cm)'. The
-    24-port and 36-port sheets repeat it verbatim, so one envelope covers the whole
-    original generation. NOTE THE AXIS ORDER IS THE OTHER WAY ROUND from the 4th and 5th
-    generation sheets: here H is the LONG dimension and W the thickness, where the newer
-    sheets give H as the thickness. THE THICKNESS IS THE FINDING: 1.72 in = 43.7 mm
-    against the 4th generation's 1.63 in = 41.4. These are physically thicker cards. And
-    43.7 is exactly the shape-box width that had to be DISCARDED as padding for the
-    newer masters - for this generation it is the real number, which is a good reminder
-    that the shape box is not wrong so much as it is not always the same thing.
+    ASR 9000 CARD STANDARD - 41.4 x 395.7 mm, where this part carried 43.7 x 395.7 until
+    2.0.0. Every full-size ASR 9000 card, and every slot that takes one, is that one
+    envelope in this library, so a card seats the same way in each chassis that accepts it
+    and no two cards in one cage draw at different sizes. The long axis is the
+    ejector-inclusive figure of the fourth-generation line card data sheets, 'Physical
+    dimensions (includes ejector bracket/lever)', and a lab measurement across a real
+    A9K-RSP880 agrees with it - about 15 1/2 in, where the data sheet for that card says 16.87
+    (roc-ops/Portrayal#16). The thickness is the figure Cisco states most often, 1.63 in.
+    Both axes are borrowed from the family rather than read off this part, which is what
+    size-confidence says. THE THICKNESS IS A STANDARD, NOT A CORRECTION: Cisco states this
+    generation as 1.72 in thick in two independent places, the data sheet quoted below and
+    Table A-10 of the line card installation guide, and nothing we hold contradicts it. THE
+    ART WAS RE-ENVELOPED ACROSS THE CARD, NOT REDRAWN; along it nothing moved, because the
+    long axis was already 395.7. The plate scales to the new size, while every port, lamp,
+    button and legend keeps its drawn size and moves in proportion, so a feature position is
+    good to about a millimetre rather than to a tenth. WHAT THIS PART CARRIED BEFORE, kept
+    because a source that disagrees is still evidence: datasheet - Cisco ASR 9000 Series
+    Ethernet Line Cards data sheet, 'Physical dimensions (H x W x D); weight: 14 x 1.72 x
+    20.5 in. (35.56 x 4.37 x 52.07 cm)'. The 24-port and 36-port sheets repeat it verbatim,
+    so one envelope covers the whole original generation. NOTE THE AXIS ORDER IS THE OTHER
+    WAY ROUND from the 4th and 5th generation sheets: here H is the LONG dimension and W the
+    thickness, where the newer sheets give H as the thickness. THE THICKNESS IS THE FINDING:
+    1.72 in = 43.7 mm against the 4th generation's 1.63 in = 41.4. These are physically
+    thicker cards. And 43.7 is exactly the shape-box width that had to be DISCARDED as
+    padding for the newer masters - for this generation it is the real number, which is a
+    good reminder that the shape box is not wrong so much as it is not always the same
+    thing.
   anchor: >-
     the long axis is anchored at 395.7 mm, which is the 4th generation's stated ejector-
     inclusive width and NOT this generation's stated 355.6 - so here is the reasoning,
@@ -120,7 +138,7 @@ provenance:
     Cisco's own scoping.
 elements:
   status:
-    at: [31.43, 372.0]
+    at: [29.69, 372]
     size: [3.2, 3.2]
     class: led
     description: >-
@@ -178,14 +196,14 @@ relief:
         common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
         estimated' and the dome carries none
 parts:
-  - {ref: std/xfp@1, id: p0, at: [20.08, 57.37], rotate: 90}
-  - {ref: std/xfp@1, id: p1, at: [20.08, 94.54], rotate: 90}
-  - {ref: std/xfp@1, id: p2, at: [20.08, 131.71], rotate: 90}
-  - {ref: std/xfp@1, id: p3, at: [20.08, 168.89], rotate: 90}
-  - {ref: std/xfp@1, id: p4, at: [20.08, 221.62], rotate: 90}
-  - {ref: std/xfp@1, id: p5, at: [20.08, 258.77], rotate: 90}
-  - {ref: std/xfp@1, id: p6, at: [20.08, 295.96], rotate: 90}
-  - {ref: std/xfp@1, id: p7, at: [20.08, 333.13], rotate: 90}
+  - {ref: std/xfp@1, id: p0, at: [18.77, 57.37], rotate: 90}
+  - {ref: std/xfp@1, id: p1, at: [18.77, 94.54], rotate: 90}
+  - {ref: std/xfp@1, id: p2, at: [18.77, 131.71], rotate: 90}
+  - {ref: std/xfp@1, id: p3, at: [18.77, 168.89], rotate: 90}
+  - {ref: std/xfp@1, id: p4, at: [18.77, 221.62], rotate: 90}
+  - {ref: std/xfp@1, id: p5, at: [18.77, 258.77], rotate: 90}
+  - {ref: std/xfp@1, id: p6, at: [18.77, 295.96], rotate: 90}
+  - {ref: std/xfp@1, id: p7, at: [18.77, 333.13], rotate: 90}
 body:
   depth: 520.7
   color: '#b9bec4'

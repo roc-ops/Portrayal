@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-rsp440-se
-version: 1.4.0
+version: 2.0.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -17,7 +17,8 @@ unplaced: >-
   name the RSP880 generation and nothing else. Drawn off the route-processor stencil master;
   seating it needs the datasheet's own Chassis compatibility row, tracked in
   roc-ops/Portrayal#262.
-size: {w: 42.0, h: 406.0, d: 674.0}
+size: {w: 41.4, h: 395.7, d: 674.0}
+size-confidence: {w: borrowed, h: borrowed}
 attrs:
   model: 'A9K-RSP440-SE'
   role: 'route-switch-processor'
@@ -83,16 +84,30 @@ provenance:
     realistic view. It does not sanction inventing an APERTURE, which is a dimension a
     specification is withholding rather than one nobody has measured.
   size: >-
-    datasheet - Cisco ASR 9000 Series Route Switch Processor 440 Data Sheet, 'Physical
-    specifications': Height 1.65 inches (4.2 cm), Width 16 inches (40.6 cm), Depth 26.53
-    inches (67.4 cm), Weight 20 lb (9 kg). Note the DEPTH: 674 mm, the deepest control
-    card in this family and 49 mm deeper than the RSP5.
+    ASR 9000 CARD STANDARD - 41.4 x 395.7 mm, where this part carried 42 x 406 until 2.0.0.
+    Every full-size ASR 9000 card, and every slot that takes one, is that one envelope in
+    this library, so a card seats the same way in each chassis that accepts it and no two
+    cards in one cage draw at different sizes. The long axis is the ejector-inclusive figure
+    of the fourth-generation line card data sheets, 'Physical dimensions (includes ejector
+    bracket/lever)', and a lab measurement across a real A9K-RSP880 agrees with it - about
+    15 1/2 in, where the data sheet for that card says 16.87 (roc-ops/Portrayal#16). The thickness
+    is the figure Cisco states most often, 1.63 in. Both axes are borrowed from the family
+    rather than read off this part, which is what size-confidence says. THE ART WAS
+    RE-ENVELOPED, NOT REDRAWN, on both axes. The plate scales to the new size, while every
+    port, lamp, button and legend keeps its drawn size and moves in proportion, so a feature
+    position is good to about a millimetre rather than to a tenth. WHAT THIS PART CARRIED
+    BEFORE, kept because a source that disagrees is still evidence: datasheet - Cisco ASR
+    9000 Series Route Switch Processor 440 Data Sheet, 'Physical specifications': Height
+    1.65 inches (4.2 cm), Width 16 inches (40.6 cm), Depth 26.53 inches (67.4 cm), Weight 20
+    lb (9 kg). Note the DEPTH: 674 mm, the deepest control card in this family and 49 mm
+    deeper than the RSP5.
   layout: >-
     drawing - the Cisco Visio master, scaled to the datasheet's own overall dimensions.
-    index.json's shape box is the Visio drawing box, not the card - it reads 1.73 x
-    14.75 in for every control-card master - so the ART is the ruler and the box is not,
-    the same correction the line cards needed. Long axis scaled to the card's stated
-    width, short axis to its stated height, two factors.
+    index.json's shape box is the Visio drawing box, not the card - it reads 1.73 x 14.75 in
+    for every control-card master - so the ART is the ruler and the box is not, the same
+    correction the line cards needed. Long axis scaled to the card's stated width, short
+    axis to its stated height, two factors. That describes how 1.x drew the art; 2.0.0
+    re-enveloped it to the ASR 9000 card standard, and the size note says how.
   family: >-
     these masters are NOT the one-drawing family the RSP5, RSP-880, RP3 and RSP4-S
     masters are. Each has its own jack column, its own lamp cluster and its own legends
@@ -166,7 +181,7 @@ provenance:
     searched - no end-of-life notice for this part number is in the intake.
 elements:
   fail:
-    at: [11.64, 333.84]
+    at: [11.46, 325.34]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -176,7 +191,7 @@ elements:
     - {name: red, color: '#d0021b'}
     - 'off'
   aco:
-    at: [11.64, 341.8]
+    at: [11.46, 333.1]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -186,7 +201,7 @@ elements:
     - {name: amber, color: '#f5a623'}
     - 'off'
   sync:
-    at: [11.64, 349.78]
+    at: [11.46, 340.88]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -197,7 +212,7 @@ elements:
     - {name: amber, color: '#f5a623'}
     - 'off'
   crit:
-    at: [16.47, 333.84]
+    at: [16.22, 325.34]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -206,7 +221,7 @@ elements:
     - {name: red, color: '#d0021b'}
     - 'off'
   maj:
-    at: [16.47, 341.8]
+    at: [16.22, 333.1]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -215,7 +230,7 @@ elements:
     - {name: red, color: '#d0021b'}
     - 'off'
   min:
-    at: [16.47, 349.78]
+    at: [16.22, 340.88]
     size: [2.11, 2.11]
     class: led
     description: >-
@@ -224,7 +239,7 @@ elements:
     - {name: amber, color: '#f5a623'}
     - 'off'
   led-matrix:
-    at: [14.56, 356.79]
+    at: [14.23, 347.64]
     size: [17.72, 7.93]
     class: display
     characters: 4
@@ -233,13 +248,13 @@ elements:
       - the guide gives it two sections, boot-stage/runtime and CAN bus controller errors
       - not a lamp state list, so it is a display and not an indicator.
   aco-button:
-    at: [9.49, 309.86]
+    at: [9.33, 301.95]
     size: [3.63, 3.69]
     class: button
     description: >-
       the ACO momentary push button.
   lamp-test:
-    at: [9.49, 319.71]
+    at: [9.33, 311.55]
     size: [3.63, 3.69]
     class: button
     description: >-
@@ -332,21 +347,21 @@ relief:
         casa/pem@1 hs-button - 'NO PRECEDENT - a panel pushbutton. Invented here'. Reused
         rather than re-invented so the library carries ONE pushbutton number
 parts:
-  - {ref: std/rj45-ganged@2, id: sync-0, at: [7.56, 44.82], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: sync-1, at: [7.56, 63.34], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: ieee-1588, at: [7.56, 106.34], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: ics-0, at: [7.56, 125.2], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: ics-1-tod, at: [7.56, 144.06], rotate: 90}
-  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-0, at: [7.56, 233.17], rotate: 90}
-  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-1, at: [7.56, 252.86], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: console, at: [7.56, 272.84], rotate: 90}
-  - {ref: std/rj45-ganged@2, id: aux, at: [7.56, 292.52], rotate: 90}
-  - {ref: std/smb@1, id: gps-10mhz, at: [9.82, 166.02]}
-  - {ref: std/smb@1, id: gps-1pps, at: [9.82, 175.78]}
-  - {ref: std/sfp-ganged@1, id: sfp-plus-0, at: [19.52, 85.02], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: sfp-plus-1, at: [8.23, 85.02], rotate: 270}
-  - {ref: std/usb-a@1, id: usb, at: [10.57, 221.63], rotate: 90}
-  - {ref: common/db9-receptacle@1, id: alarm-out, at: [-0.065, 194.965], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: sync-0, at: [7.37, 43.52], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: sync-1, at: [7.37, 61.57], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: ieee-1588, at: [7.37, 103.48], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: ics-0, at: [7.37, 121.86], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: ics-1-tod, at: [7.37, 140.24], rotate: 90}
+  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-0, at: [7.37, 227.09], rotate: 90}
+  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-1, at: [7.37, 246.28], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: console, at: [7.37, 265.76], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: aux, at: [7.37, 284.94], rotate: 90}
+  - {ref: std/smb@1, id: gps-10mhz, at: [9.65, 161.75]}
+  - {ref: std/smb@1, id: gps-1pps, at: [9.65, 171.26]}
+  - {ref: std/sfp-ganged@1, id: sfp-plus-0, at: [19.17, 82.68], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: sfp-plus-1, at: [8.04, 82.68], rotate: 270}
+  - {ref: std/usb-a@1, id: usb, at: [10.39, 215.86], rotate: 90}
+  - {ref: common/db9-receptacle@1, id: alarm-out, at: [-0.15, 189.63], rotate: 90}
 body:
   depth: 674.0
   color: '#b9bec4'

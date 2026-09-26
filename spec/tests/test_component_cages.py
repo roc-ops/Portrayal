@@ -15,7 +15,7 @@ picked by reading their contracts:
 
   - casa/smm-300gm@1    ten `std/sfp-ganged@1` at rotate 90 with
                         `attrs.media: sfp-plus`, plus two QSFP28 cages;
-  - cisco/a9k-40ge-b@1  a vertical card, forty SFP cages alternating rotate
+  - cisco/a9k-40ge-b@2  a vertical card, forty SFP cages alternating rotate
                         270 / 90, declaring no media (no ceiling);
   - juniper/mic3-3d-10xge-sfpp@1  a MIC, ten SFP+ cages at rotate 0 / 180.
 """
@@ -35,7 +35,7 @@ LIB = SPEC.parent / "library"
 INDEXER = SPEC / "tools/portrayal/components_index.py"
 RENDER = SPEC / "tools/portrayal/render.py"
 
-NAMED = ["casa/smm-300gm@1", "cisco/a9k-40ge-b@1", "juniper/mic3-3d-10xge-sfpp@1"]
+NAMED = ["casa/smm-300gm@1", "cisco/a9k-40ge-b@2", "juniper/mic3-3d-10xge-sfpp@1"]
 
 
 def _ref(entry):
@@ -180,7 +180,7 @@ def test_the_vertical_card_carries_both_of_its_turns(index):
     """The a9k-40ge-b is the one whose cages are turned both ways: a mate
     point that ignored the rotation would land every 270 cage on the wrong
     side of its opening."""
-    turns = {c["rotate"] for c in index["cisco/a9k-40ge-b@1"]["cages"]}
+    turns = {c["rotate"] for c in index["cisco/a9k-40ge-b@2"]["cages"]}
     assert turns == {90, 270}
 
 

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-sip-700-8g
-version: 1.0.2
+version: 2.0.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -12,7 +12,8 @@ description: >-
   double-height SPAs, up to 4 single-width single-height SPAs, or up to 2 double-width
   single-height SPAs, and does not take double-width double-height SPAs.
   Supported on all ASR 9000 Series routers except the ASR 9906.
-size: {w: 43.7, h: 395.7, d: 520.7}
+size: {w: 41.4, h: 395.7, d: 520.7}
+size-confidence: {w: borrowed, h: borrowed}
 attrs:
   model: 'A9K-SIP-700-8G'
   role: 'spa-interface-processor'
@@ -61,19 +62,33 @@ provenance:
     point, so they settle the ARRANGEMENT - bracket off the plate, lever along it, domed
     screw head proud of both - and nothing about size.
   size: >-
-    datasheet + install guide, and they say it two ways. THE DATA SHEET GIVES NUMBERS:
-    data_sheet_c78-573452, the Cisco ASR 9000 SIP-700 data sheet, 'Physical dimensions
-    (H x W x D); weight: 14 x 1.72 x 20.5 in.; 14 lb' - 355.6 x 43.7 x 520.7 mm and 6.35
-    kg, the original generation's envelope exactly. The INSTALL GUIDE gives the same
-    fact by reference: Table 6, 'Cisco ASR 9000 SIP-700 Physical Specifications', says
-    'Physical dimensions: Occupies one line card slot on a Cisco ASR 9000 Series
-    Aggregation Services Router' and no numbers at all. 355.6 is the PLATE; the
-    component carries 395.7, the ejector-inclusive step every original-generation card
-    in this library uses and which Cisco's own sheets write as 15.58 in where the plate
-    is 14.5. Depth 520.7 is the sheet's own 20.5 in. AN EARLIER VERSION OF THIS
-    COMPONENT modelled no depth at all, on the reasoning that 'occupies one line card
-    slot' fixes the opening and not how far back the card reaches. That reasoning was
-    sound and the conclusion was unnecessary - the number was stated in a data sheet I
+    ASR 9000 CARD STANDARD - 41.4 x 395.7 mm, where this part carried 43.7 x 395.7 until
+    2.0.0. Every full-size ASR 9000 card, and every slot that takes one, is that one
+    envelope in this library, so a card seats the same way in each chassis that accepts it
+    and no two cards in one cage draw at different sizes. The long axis is the
+    ejector-inclusive figure of the fourth-generation line card data sheets, 'Physical
+    dimensions (includes ejector bracket/lever)', and a lab measurement across a real
+    A9K-RSP880 agrees with it - about 15 1/2 in, where the data sheet for that card says 16.87
+    (roc-ops/Portrayal#16). The thickness is the figure Cisco states most often, 1.63 in.
+    Both axes are borrowed from the family rather than read off this part, which is what
+    size-confidence says. THE THICKNESS IS A STANDARD, NOT A CORRECTION: Cisco states this
+    generation as 1.72 in thick in two independent places, the data sheet quoted below and
+    Table A-10 of the line card installation guide, and nothing we hold contradicts it. THE
+    ART MOVED 0.22 mm ACROSS THE CARD to centre it in the thinner envelope, and nothing was
+    resized - the drawn plate was already narrower than 41.4. WHAT THIS PART CARRIED BEFORE,
+    kept because a source that disagrees is still evidence: datasheet + install guide, and
+    they say it two ways. THE DATA SHEET GIVES NUMBERS: data_sheet_c78-573452, the Cisco ASR
+    9000 SIP-700 data sheet, 'Physical dimensions (H x W x D); weight: 14 x 1.72 x 20.5 in.;
+    14 lb' - 355.6 x 43.7 x 520.7 mm and 6.35 kg, the original generation's envelope
+    exactly. The INSTALL GUIDE gives the same fact by reference: Table 6, 'Cisco ASR 9000
+    SIP-700 Physical Specifications', says 'Physical dimensions: Occupies one line card slot
+    on a Cisco ASR 9000 Series Aggregation Services Router' and no numbers at all. 355.6 is
+    the PLATE; the component carries 395.7, the ejector-inclusive step every
+    original-generation card in this library uses and which Cisco's own sheets write as
+    15.58 in where the plate is 14.5. Depth 520.7 is the sheet's own 20.5 in. AN EARLIER
+    VERSION OF THIS COMPONENT modelled no depth at all, on the reasoning that 'occupies one
+    line card slot' fixes the opening and not how far back the card reaches. That reasoning
+    was sound and the conclusion was unnecessary - the number was stated in a data sheet I
     had not found.
   power: >-
     datasheet - data_sheet_c78-573452, the Cisco ASR 9000 SIP-700 data sheet: 'Power:
@@ -122,14 +137,18 @@ provenance:
     runs across the card and height along it, and a single-width single-height subslot
     is half of one of those panels. The four bays here are those halves.
   bay-split: >-
-    THE SPLIT DOWN THE MIDDLE IS MINE. The master draws only the two double-width
-    panels, at 6.98, 27.71 and 6.98, 195.59, each 34.58 mm across and 167.87 and 165.47
-    mm long - those two bands are measured. Where the dividing line falls between the
-    left and right subslots inside a band is NOT drawn, because the SPAs installed in
-    the figure span both. It is taken as the middle. The guide supports halves rather
-    than any other split - 'up to 4 single-width, single-height SPAs' in a 2 x 2 grid -
-    but not the exact millimetre, and the printed numerals at x 21.19 and 37.42 fall on
-    either side of that middle, which is consistent with it without proving it.
+    THE SPLIT DOWN THE MIDDLE IS MINE. The master draws only the two double-width panels, at
+    6.98, 27.71 and 6.98, 195.59, each 34.58 mm across and 167.87 and 165.47 mm long - those
+    two bands are measured. Where the dividing line falls between the left and right
+    subslots inside a band is NOT drawn, because the SPAs installed in the figure span both.
+    It is taken as the middle. The guide supports halves rather than any other split - 'up
+    to 4 single-width, single-height SPAs' in a 2 x 2 grid - but not the exact millimetre,
+    and the printed numerals at x 21.19 and 37.42 fall on either side of that middle, which
+    is consistent with it without proving it. THE LOWER BAND IS 2.4 mm SHORT OF THE SPA, and
+    the bays no longer follow it. Every SPA is 17.29 x 167.87, derived from the upper band,
+    so a lower bay of 165.47 drew the same SPA 2.4 mm larger than its slot in one row and
+    flush in the other - one module, one bay size (lint L123). Both rows now reserve 167.87
+    from the same top edge, and the measured 165.47 stays here as what the master drew.
   bays-accept-spas: >-
     THE NOTE THAT USED TO SIT HERE WAS RIGHT WHEN IT WAS WRITTEN AND WENT STALE, and
     keeping the shape of it is the point. It said component-level `bays:` was
@@ -193,7 +212,7 @@ body:
   color: '#b9bec4'
 elements:
   status:
-    at: [25.25, 370.39]
+    at: [25.04, 370.39]
     size: [3.54, 3.54]
     class: led
     description: >-
@@ -217,7 +236,7 @@ relief:
 skins: [default]
 bays:
   bay-2:
-    at: [6.98, 27.71]
+    at: [6.77, 27.71]
     size: [17.29, 167.87]
     accepts:
     - cisco/spa-1choc3-ce-atm@1
@@ -243,7 +262,7 @@ bays:
     - cisco/spa-8xoc3-pos@1
     - cisco/spa-oc192pos-xfp@1
   bay-0:
-    at: [24.27, 27.71]
+    at: [24.05, 27.71]
     size: [17.29, 167.87]
     accepts:
     - cisco/spa-1choc3-ce-atm@1
@@ -269,8 +288,8 @@ bays:
     - cisco/spa-8xoc3-pos@1
     - cisco/spa-oc192pos-xfp@1
   bay-3:
-    at: [6.98, 195.59]
-    size: [17.29, 165.47]
+    at: [6.77, 195.59]
+    size: [17.29, 167.87]
     accepts:
     - cisco/spa-1choc3-ce-atm@1
     - cisco/spa-1xchstm1-oc3@1
@@ -295,8 +314,8 @@ bays:
     - cisco/spa-8xoc3-pos@1
     - cisco/spa-oc192pos-xfp@1
   bay-1:
-    at: [24.27, 195.59]
-    size: [17.29, 165.47]
+    at: [24.05, 195.59]
+    size: [17.29, 167.87]
     accepts:
     - cisco/spa-1choc3-ce-atm@1
     - cisco/spa-1xchstm1-oc3@1
