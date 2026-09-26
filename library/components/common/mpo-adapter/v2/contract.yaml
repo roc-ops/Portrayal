@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: mpo-adapter
-version: 2.1.0
+version: 2.1.1
 class: port
 profile: networking
 description: >-
@@ -16,14 +16,6 @@ attrs: {media: fiber, connector: mpo}
 # composed std/mpo@2 (P2) - seated wherever a panel composes it, and
 # overridden there or by a configuration (provenance.shipped-cap).
 default: common/mpo-dust-cap@2
-unplaced: >-
-  NOTHING SEATS THIS UNTIL AN FHD ADAPTER PANEL IS MODELLED. It is one opening
-  tile in FS's continuous MTP adapter panel (the 12x MTP panel, SKU 35510, its
-  13.8 width being that panel's aperture pitch), and no panel in the FHD
-  catalogue is modelled yet - the cassettes are. The cassette rears carried it
-  until they moved to common/mpo-flange-adapter@1, the flanged bulkhead FS
-  actually fits to a cassette back; this tile is the panel's part, not the
-  cassette's, so it waits for the panel rather than following them.
 optical:
   # TWELVE FIBRES IN ONE FERRULE, which is the whole point of the connector and
   # the reason a cassette needs only one of these on its rear. MPO-8, -16 and
@@ -105,14 +97,15 @@ provenance:
     docs/pluggables-caps-design.md, "The shipped default"): FS's face-on
     renders of SKU 35510, the 12x MTP adapter panel this tile is read off,
     show all twelve ports holding the grey cap common/mpo-dust-cap@2 is
-    drawn from (that part's `size-notes`). Nothing places this tile yet
-    (`unplaced`), so the default seats nowhere until a panel composes it.
+    drawn from (that part's `size-notes`). The FHD MTP adapter panels compose
+    it, so the cap seats in every opening they carry.
   face-detail-gap: >-
     no orthographic photograph of an MPO adapter exists here; the reading is off
     a product RENDER. The latch, the key orientation and any keying mark are not
-    modelled, and the key direction matters - FS sells `Up-Down Type A` and
-    `Up-Up Type B` panels as different SKUs, which this part does not yet
-    distinguish.
+    modelled. The key direction matters - FS sells `Up-Down Type A` and
+    `Up-Up Type B` panels as different SKUs - and the panels that compose this
+    tile say which by how they turn it on each face (fs/fhd-fap12mtp-a@1 and
+    its siblings, provenance.optical); the tile itself draws no key.
   connection-point: >-
     `optical.at` is the plain centre of the 13.8 x 9.4 mating face - (13.8/2,
     9.4/2) = (6.9, 4.7). That figure is corroborated, not just asserted: the

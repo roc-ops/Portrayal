@@ -1,0 +1,736 @@
+format: 1
+kind: device
+name: fhd-4ufce
+version: 1.0.0
+maturity: modelled
+manufacturer: FS.com
+model: FHD-4UFCE
+description: >-
+  4U 19in slide-out fiber enclosure. FS SKU 73206 - twelve FHD adapter panels or
+  MTP/MPO cassettes standing on edge in one row across a sliding drawer, behind a
+  door, up to 432 fibres (LC). NOT a taller 1U: it is wider and shallower, and its
+  modules are turned on their side.
+profile: optical
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      from the family datasheet fhd-slide-out-fiber-enclosure-datasheet.pdf: p2 spec table,
+      p9 front view and assembly illustration, p10 top view.
+  chassis:
+    confidence: drawing
+    note: >-
+      p9 front view: body 17.4in [442.0] across within 19.21in [488.0] - the 4U's ears stand
+      wider than 19in - and 6.81in [173.0] tall. p10 top view: body 16.09in [408.8] deep,
+      17.34in [440.5] overall. Wider and shallower than the 1U and 2U (448 / 447, 432.8 /
+      430.7).
+  bays:
+    confidence: estimated
+    note: >-
+      THE MODULES STAND ON EDGE. The p9 assembly illustration draws twelve FHD modules
+      upright in one row across the drawer, knob ends top and bottom, one pulled out to show
+      the slot. Each bay is the module envelope turned 90 - 35.05 wide, 108.97 tall - and
+      `rotate: 90` turns the occupant into it. The illustration is three-quarter and nothing
+      dimensions a slot, so the pitch is ESTIMATED: twelve on a 36.0 pitch (1.0 between
+      plates, as the fixed 1U's plates stand) centred across the 442 body, margins 5.48, and
+      centred in the 173 height. Which end of a module is up is read off the illustration's
+      port legends and is also estimated. every FHD cassette and adapter panel this library
+      models is in every bay's `accepts`. FS states it on this datasheet's features list
+      ('Compatible with all FHD cassettes and panels') and prints the same loading list with
+      every one of them as fs/fhd-1ufce does; the module face is one 4.29 x 1.38in (108.97 x
+      35.05) envelope.
+  ears:
+    confidence: drawing
+    note: >-
+      not drawn: the generic ear is 1U. The ears span 488.0, wider than a 19in rack face
+      (p9).
+  front-is-a-door:
+    confidence: drawing
+    note: >-
+      the drawn front is the populated face behind the door, as fs/fhd-1ufce draws it; the
+      door (p9 front view) is not drawn.
+  envelope-faces:
+    confidence: drawing
+    note: >-
+      top, bottom, left and right are the envelope, and the rear is too but for its slot
+      holes (rear-opening). No photograph of 73206 is held.
+  rear-opening:
+    confidence: estimated
+    note: >-
+      the back is open behind each slot, as fs/fhd-1ufce's is, so the modules' backs - and
+      their MTP trunks - are reached from behind. Twelve holes, each its bay's turned box
+      mirrored left to right, since the back is seen from behind; their real outline, and
+      whether they are twelve holes or one, is open (the `face-detail` gap). Each runs
+      407.8 - the 408.8 drawer less a 1.0 front plate, which is ESTIMATED as it is on the
+      1U. A back is drawn turned with its module, the other way round (a clockwise turn at
+      the front reads anticlockwise from behind), where its own body stands.
+chassis:
+  width: 442.0
+  height: 173.0
+  depth: 408.8
+  ru: 4
+  color: '#1b1e21'
+  airflow: passive
+gaps:
+  - what: slot-layout
+    scope: [front]
+    reason: needs-photo
+    note: >-
+      twelve on-edge slots placed on an estimated 36.0 pitch; the illustration is three-
+      quarter and FS's gallery for 73206 was not reached (human-verification check,
+      2026-09-25, not pursued).
+    wanted: >-
+      a square-on photograph of the open drawer front, or FS's gallery for 73206.
+  - what: face-detail
+    scope: [rear, top, bottom, left, right]
+    reason: needs-photo
+    note: >-
+      the envelope faces carry nothing; bend-radius posts, rails and rear brackets are
+      undimensioned, and the rear's twelve slot holes are the bays mirrored, not measured.
+    wanted: >-
+      a rear photograph.
+groups:
+  slots:
+    term: Slot
+    role: service
+    index-origin: 1
+    description: >-
+      twelve slots in one row, each taking one FHD module turned on its side, numbered left
+      to right (the order is this model's; FS prints none). The datasheet's capacity row
+      reads 12 ports, 432F.
+views:
+  front:
+    size:
+      w: 442.0
+      h: 173.0
+    panel:
+      decor:
+        - {at: [0, 0], size: [442.0, 173.0], fill: '#1b1e21'}
+    components:
+      bays:
+        - id: bay-1
+          at: [5.475, 32.015]
+          size: {w: 35.05, h: 108.97}
+          rotate: 90
+          accepts:
+            - fs/fhd-1mtp6lcd-os2-a@4
+            - fs/fhd-splice-12-lc@3
+            - fs/fhd-2mtp12-lc-os2-a@4
+            - fs/fhd-1mtp12-sc-os2-a@3
+            - fs/fhd-1mtp24-lc-os2-a@4
+            - fs/fhd-1mtp6lcd-os2-af@3
+            - fs/fhd-1mtp6lcd-os2-u@3
+            - fs/fhd-2mtp12-lc-os2-af@4
+            - fs/fhd-2mtp12-lc-os2-u@4
+            - fs/fhd-1mtp24-lc-os2-af@4
+            - fs/fhd-1mtp6lcd-om4-a@2
+            - fs/fhd-2mtp12-lc-om4-a@2
+            - fs/fhd-1mtp24-lc-om4-a@2
+            - fs/fhd-1mtp6lcd-om5-a@2
+            - fs/fhd-2mtp12-lc-om5-a@2
+            - fs/fhd-1mtp24-lc-om5-a@2
+            - fs/fhd-1mtp6lcd-om4-u@2
+            - fs/fhd-2mtp12-lc-om4-u@2
+            - fs/fhd-2mtp12-lc-om3-a@2
+            - fs/fhd-1mtp24-lc-om3-a@2
+            - fs/fhd-3mtp18-lc-os2-a@1
+            - fs/fhd-3mtp18-lc-om4-a@1
+            - fs/fhd-fap12lcd-os2@1
+            - fs/fhd-fap18lcd-os2@1
+            - fs/fhd-fap6scd-apc-os2@1
+            - fs/fhd-fap12mtp-a@1
+            - fs/fhd-fap12mtp-b@1
+            - fs/fhd-fap8mtp-b@1
+            - fs/fhd-fap12mtp16-a@1
+            - fs/fhd-fapm6@1
+            - fs/fhd-fapb@1
+            - fs/fhd-fap12lcd-apc-os2@1
+            - fs/fhd-fap12lcd-om4@1
+            - fs/fhd-fap12lcd-om5@1
+            - fs/fhd-fap18lcd-om4@1
+            - fs/fhd-fap6scd-os2@1
+            - fs/fhd-fap6scd-om4@1
+          group: slots
+          rel-pos: 1
+          rear: {view: rear, cutout: back-1}
+        - id: bay-2
+          at: [41.475, 32.015]
+          size: {w: 35.05, h: 108.97}
+          rotate: 90
+          accepts:
+            - fs/fhd-1mtp6lcd-os2-a@4
+            - fs/fhd-splice-12-lc@3
+            - fs/fhd-2mtp12-lc-os2-a@4
+            - fs/fhd-1mtp12-sc-os2-a@3
+            - fs/fhd-1mtp24-lc-os2-a@4
+            - fs/fhd-1mtp6lcd-os2-af@3
+            - fs/fhd-1mtp6lcd-os2-u@3
+            - fs/fhd-2mtp12-lc-os2-af@4
+            - fs/fhd-2mtp12-lc-os2-u@4
+            - fs/fhd-1mtp24-lc-os2-af@4
+            - fs/fhd-1mtp6lcd-om4-a@2
+            - fs/fhd-2mtp12-lc-om4-a@2
+            - fs/fhd-1mtp24-lc-om4-a@2
+            - fs/fhd-1mtp6lcd-om5-a@2
+            - fs/fhd-2mtp12-lc-om5-a@2
+            - fs/fhd-1mtp24-lc-om5-a@2
+            - fs/fhd-1mtp6lcd-om4-u@2
+            - fs/fhd-2mtp12-lc-om4-u@2
+            - fs/fhd-2mtp12-lc-om3-a@2
+            - fs/fhd-1mtp24-lc-om3-a@2
+            - fs/fhd-3mtp18-lc-os2-a@1
+            - fs/fhd-3mtp18-lc-om4-a@1
+            - fs/fhd-fap12lcd-os2@1
+            - fs/fhd-fap18lcd-os2@1
+            - fs/fhd-fap6scd-apc-os2@1
+            - fs/fhd-fap12mtp-a@1
+            - fs/fhd-fap12mtp-b@1
+            - fs/fhd-fap8mtp-b@1
+            - fs/fhd-fap12mtp16-a@1
+            - fs/fhd-fapm6@1
+            - fs/fhd-fapb@1
+            - fs/fhd-fap12lcd-apc-os2@1
+            - fs/fhd-fap12lcd-om4@1
+            - fs/fhd-fap12lcd-om5@1
+            - fs/fhd-fap18lcd-om4@1
+            - fs/fhd-fap6scd-os2@1
+            - fs/fhd-fap6scd-om4@1
+          group: slots
+          rel-pos: 2
+          rear: {view: rear, cutout: back-2}
+        - id: bay-3
+          at: [77.475, 32.015]
+          size: {w: 35.05, h: 108.97}
+          rotate: 90
+          accepts:
+            - fs/fhd-1mtp6lcd-os2-a@4
+            - fs/fhd-splice-12-lc@3
+            - fs/fhd-2mtp12-lc-os2-a@4
+            - fs/fhd-1mtp12-sc-os2-a@3
+            - fs/fhd-1mtp24-lc-os2-a@4
+            - fs/fhd-1mtp6lcd-os2-af@3
+            - fs/fhd-1mtp6lcd-os2-u@3
+            - fs/fhd-2mtp12-lc-os2-af@4
+            - fs/fhd-2mtp12-lc-os2-u@4
+            - fs/fhd-1mtp24-lc-os2-af@4
+            - fs/fhd-1mtp6lcd-om4-a@2
+            - fs/fhd-2mtp12-lc-om4-a@2
+            - fs/fhd-1mtp24-lc-om4-a@2
+            - fs/fhd-1mtp6lcd-om5-a@2
+            - fs/fhd-2mtp12-lc-om5-a@2
+            - fs/fhd-1mtp24-lc-om5-a@2
+            - fs/fhd-1mtp6lcd-om4-u@2
+            - fs/fhd-2mtp12-lc-om4-u@2
+            - fs/fhd-2mtp12-lc-om3-a@2
+            - fs/fhd-1mtp24-lc-om3-a@2
+            - fs/fhd-3mtp18-lc-os2-a@1
+            - fs/fhd-3mtp18-lc-om4-a@1
+            - fs/fhd-fap12lcd-os2@1
+            - fs/fhd-fap18lcd-os2@1
+            - fs/fhd-fap6scd-apc-os2@1
+            - fs/fhd-fap12mtp-a@1
+            - fs/fhd-fap12mtp-b@1
+            - fs/fhd-fap8mtp-b@1
+            - fs/fhd-fap12mtp16-a@1
+            - fs/fhd-fapm6@1
+            - fs/fhd-fapb@1
+            - fs/fhd-fap12lcd-apc-os2@1
+            - fs/fhd-fap12lcd-om4@1
+            - fs/fhd-fap12lcd-om5@1
+            - fs/fhd-fap18lcd-om4@1
+            - fs/fhd-fap6scd-os2@1
+            - fs/fhd-fap6scd-om4@1
+          group: slots
+          rel-pos: 3
+          rear: {view: rear, cutout: back-3}
+        - id: bay-4
+          at: [113.475, 32.015]
+          size: {w: 35.05, h: 108.97}
+          rotate: 90
+          accepts:
+            - fs/fhd-1mtp6lcd-os2-a@4
+            - fs/fhd-splice-12-lc@3
+            - fs/fhd-2mtp12-lc-os2-a@4
+            - fs/fhd-1mtp12-sc-os2-a@3
+            - fs/fhd-1mtp24-lc-os2-a@4
+            - fs/fhd-1mtp6lcd-os2-af@3
+            - fs/fhd-1mtp6lcd-os2-u@3
+            - fs/fhd-2mtp12-lc-os2-af@4
+            - fs/fhd-2mtp12-lc-os2-u@4
+            - fs/fhd-1mtp24-lc-os2-af@4
+            - fs/fhd-1mtp6lcd-om4-a@2
+            - fs/fhd-2mtp12-lc-om4-a@2
+            - fs/fhd-1mtp24-lc-om4-a@2
+            - fs/fhd-1mtp6lcd-om5-a@2
+            - fs/fhd-2mtp12-lc-om5-a@2
+            - fs/fhd-1mtp24-lc-om5-a@2
+            - fs/fhd-1mtp6lcd-om4-u@2
+            - fs/fhd-2mtp12-lc-om4-u@2
+            - fs/fhd-2mtp12-lc-om3-a@2
+            - fs/fhd-1mtp24-lc-om3-a@2
+            - fs/fhd-3mtp18-lc-os2-a@1
+            - fs/fhd-3mtp18-lc-om4-a@1
+            - fs/fhd-fap12lcd-os2@1
+            - fs/fhd-fap18lcd-os2@1
+            - fs/fhd-fap6scd-apc-os2@1
+            - fs/fhd-fap12mtp-a@1
+            - fs/fhd-fap12mtp-b@1
+            - fs/fhd-fap8mtp-b@1
+            - fs/fhd-fap12mtp16-a@1
+            - fs/fhd-fapm6@1
+            - fs/fhd-fapb@1
+            - fs/fhd-fap12lcd-apc-os2@1
+            - fs/fhd-fap12lcd-om4@1
+            - fs/fhd-fap12lcd-om5@1
+            - fs/fhd-fap18lcd-om4@1
+            - fs/fhd-fap6scd-os2@1
+            - fs/fhd-fap6scd-om4@1
+          group: slots
+          rel-pos: 4
+          rear: {view: rear, cutout: back-4}
+        - id: bay-5
+          at: [149.475, 32.015]
+          size: {w: 35.05, h: 108.97}
+          rotate: 90
+          accepts:
+            - fs/fhd-1mtp6lcd-os2-a@4
+            - fs/fhd-splice-12-lc@3
+            - fs/fhd-2mtp12-lc-os2-a@4
+            - fs/fhd-1mtp12-sc-os2-a@3
+            - fs/fhd-1mtp24-lc-os2-a@4
+            - fs/fhd-1mtp6lcd-os2-af@3
+            - fs/fhd-1mtp6lcd-os2-u@3
+            - fs/fhd-2mtp12-lc-os2-af@4
+            - fs/fhd-2mtp12-lc-os2-u@4
+            - fs/fhd-1mtp24-lc-os2-af@4
+            - fs/fhd-1mtp6lcd-om4-a@2
+            - fs/fhd-2mtp12-lc-om4-a@2
+            - fs/fhd-1mtp24-lc-om4-a@2
+            - fs/fhd-1mtp6lcd-om5-a@2
+            - fs/fhd-2mtp12-lc-om5-a@2
+            - fs/fhd-1mtp24-lc-om5-a@2
+            - fs/fhd-1mtp6lcd-om4-u@2
+            - fs/fhd-2mtp12-lc-om4-u@2
+            - fs/fhd-2mtp12-lc-om3-a@2
+            - fs/fhd-1mtp24-lc-om3-a@2
+            - fs/fhd-3mtp18-lc-os2-a@1
+            - fs/fhd-3mtp18-lc-om4-a@1
+            - fs/fhd-fap12lcd-os2@1
+            - fs/fhd-fap18lcd-os2@1
+            - fs/fhd-fap6scd-apc-os2@1
+            - fs/fhd-fap12mtp-a@1
+            - fs/fhd-fap12mtp-b@1
+            - fs/fhd-fap8mtp-b@1
+            - fs/fhd-fap12mtp16-a@1
+            - fs/fhd-fapm6@1
+            - fs/fhd-fapb@1
+            - fs/fhd-fap12lcd-apc-os2@1
+            - fs/fhd-fap12lcd-om4@1
+            - fs/fhd-fap12lcd-om5@1
+            - fs/fhd-fap18lcd-om4@1
+            - fs/fhd-fap6scd-os2@1
+            - fs/fhd-fap6scd-om4@1
+          group: slots
+          rel-pos: 5
+          rear: {view: rear, cutout: back-5}
+        - id: bay-6
+          at: [185.475, 32.015]
+          size: {w: 35.05, h: 108.97}
+          rotate: 90
+          accepts:
+            - fs/fhd-1mtp6lcd-os2-a@4
+            - fs/fhd-splice-12-lc@3
+            - fs/fhd-2mtp12-lc-os2-a@4
+            - fs/fhd-1mtp12-sc-os2-a@3
+            - fs/fhd-1mtp24-lc-os2-a@4
+            - fs/fhd-1mtp6lcd-os2-af@3
+            - fs/fhd-1mtp6lcd-os2-u@3
+            - fs/fhd-2mtp12-lc-os2-af@4
+            - fs/fhd-2mtp12-lc-os2-u@4
+            - fs/fhd-1mtp24-lc-os2-af@4
+            - fs/fhd-1mtp6lcd-om4-a@2
+            - fs/fhd-2mtp12-lc-om4-a@2
+            - fs/fhd-1mtp24-lc-om4-a@2
+            - fs/fhd-1mtp6lcd-om5-a@2
+            - fs/fhd-2mtp12-lc-om5-a@2
+            - fs/fhd-1mtp24-lc-om5-a@2
+            - fs/fhd-1mtp6lcd-om4-u@2
+            - fs/fhd-2mtp12-lc-om4-u@2
+            - fs/fhd-2mtp12-lc-om3-a@2
+            - fs/fhd-1mtp24-lc-om3-a@2
+            - fs/fhd-3mtp18-lc-os2-a@1
+            - fs/fhd-3mtp18-lc-om4-a@1
+            - fs/fhd-fap12lcd-os2@1
+            - fs/fhd-fap18lcd-os2@1
+            - fs/fhd-fap6scd-apc-os2@1
+            - fs/fhd-fap12mtp-a@1
+            - fs/fhd-fap12mtp-b@1
+            - fs/fhd-fap8mtp-b@1
+            - fs/fhd-fap12mtp16-a@1
+            - fs/fhd-fapm6@1
+            - fs/fhd-fapb@1
+            - fs/fhd-fap12lcd-apc-os2@1
+            - fs/fhd-fap12lcd-om4@1
+            - fs/fhd-fap12lcd-om5@1
+            - fs/fhd-fap18lcd-om4@1
+            - fs/fhd-fap6scd-os2@1
+            - fs/fhd-fap6scd-om4@1
+          group: slots
+          rel-pos: 6
+          rear: {view: rear, cutout: back-6}
+        - id: bay-7
+          at: [221.475, 32.015]
+          size: {w: 35.05, h: 108.97}
+          rotate: 90
+          accepts:
+            - fs/fhd-1mtp6lcd-os2-a@4
+            - fs/fhd-splice-12-lc@3
+            - fs/fhd-2mtp12-lc-os2-a@4
+            - fs/fhd-1mtp12-sc-os2-a@3
+            - fs/fhd-1mtp24-lc-os2-a@4
+            - fs/fhd-1mtp6lcd-os2-af@3
+            - fs/fhd-1mtp6lcd-os2-u@3
+            - fs/fhd-2mtp12-lc-os2-af@4
+            - fs/fhd-2mtp12-lc-os2-u@4
+            - fs/fhd-1mtp24-lc-os2-af@4
+            - fs/fhd-1mtp6lcd-om4-a@2
+            - fs/fhd-2mtp12-lc-om4-a@2
+            - fs/fhd-1mtp24-lc-om4-a@2
+            - fs/fhd-1mtp6lcd-om5-a@2
+            - fs/fhd-2mtp12-lc-om5-a@2
+            - fs/fhd-1mtp24-lc-om5-a@2
+            - fs/fhd-1mtp6lcd-om4-u@2
+            - fs/fhd-2mtp12-lc-om4-u@2
+            - fs/fhd-2mtp12-lc-om3-a@2
+            - fs/fhd-1mtp24-lc-om3-a@2
+            - fs/fhd-3mtp18-lc-os2-a@1
+            - fs/fhd-3mtp18-lc-om4-a@1
+            - fs/fhd-fap12lcd-os2@1
+            - fs/fhd-fap18lcd-os2@1
+            - fs/fhd-fap6scd-apc-os2@1
+            - fs/fhd-fap12mtp-a@1
+            - fs/fhd-fap12mtp-b@1
+            - fs/fhd-fap8mtp-b@1
+            - fs/fhd-fap12mtp16-a@1
+            - fs/fhd-fapm6@1
+            - fs/fhd-fapb@1
+            - fs/fhd-fap12lcd-apc-os2@1
+            - fs/fhd-fap12lcd-om4@1
+            - fs/fhd-fap12lcd-om5@1
+            - fs/fhd-fap18lcd-om4@1
+            - fs/fhd-fap6scd-os2@1
+            - fs/fhd-fap6scd-om4@1
+          group: slots
+          rel-pos: 7
+          rear: {view: rear, cutout: back-7}
+        - id: bay-8
+          at: [257.475, 32.015]
+          size: {w: 35.05, h: 108.97}
+          rotate: 90
+          accepts:
+            - fs/fhd-1mtp6lcd-os2-a@4
+            - fs/fhd-splice-12-lc@3
+            - fs/fhd-2mtp12-lc-os2-a@4
+            - fs/fhd-1mtp12-sc-os2-a@3
+            - fs/fhd-1mtp24-lc-os2-a@4
+            - fs/fhd-1mtp6lcd-os2-af@3
+            - fs/fhd-1mtp6lcd-os2-u@3
+            - fs/fhd-2mtp12-lc-os2-af@4
+            - fs/fhd-2mtp12-lc-os2-u@4
+            - fs/fhd-1mtp24-lc-os2-af@4
+            - fs/fhd-1mtp6lcd-om4-a@2
+            - fs/fhd-2mtp12-lc-om4-a@2
+            - fs/fhd-1mtp24-lc-om4-a@2
+            - fs/fhd-1mtp6lcd-om5-a@2
+            - fs/fhd-2mtp12-lc-om5-a@2
+            - fs/fhd-1mtp24-lc-om5-a@2
+            - fs/fhd-1mtp6lcd-om4-u@2
+            - fs/fhd-2mtp12-lc-om4-u@2
+            - fs/fhd-2mtp12-lc-om3-a@2
+            - fs/fhd-1mtp24-lc-om3-a@2
+            - fs/fhd-3mtp18-lc-os2-a@1
+            - fs/fhd-3mtp18-lc-om4-a@1
+            - fs/fhd-fap12lcd-os2@1
+            - fs/fhd-fap18lcd-os2@1
+            - fs/fhd-fap6scd-apc-os2@1
+            - fs/fhd-fap12mtp-a@1
+            - fs/fhd-fap12mtp-b@1
+            - fs/fhd-fap8mtp-b@1
+            - fs/fhd-fap12mtp16-a@1
+            - fs/fhd-fapm6@1
+            - fs/fhd-fapb@1
+            - fs/fhd-fap12lcd-apc-os2@1
+            - fs/fhd-fap12lcd-om4@1
+            - fs/fhd-fap12lcd-om5@1
+            - fs/fhd-fap18lcd-om4@1
+            - fs/fhd-fap6scd-os2@1
+            - fs/fhd-fap6scd-om4@1
+          group: slots
+          rel-pos: 8
+          rear: {view: rear, cutout: back-8}
+        - id: bay-9
+          at: [293.475, 32.015]
+          size: {w: 35.05, h: 108.97}
+          rotate: 90
+          accepts:
+            - fs/fhd-1mtp6lcd-os2-a@4
+            - fs/fhd-splice-12-lc@3
+            - fs/fhd-2mtp12-lc-os2-a@4
+            - fs/fhd-1mtp12-sc-os2-a@3
+            - fs/fhd-1mtp24-lc-os2-a@4
+            - fs/fhd-1mtp6lcd-os2-af@3
+            - fs/fhd-1mtp6lcd-os2-u@3
+            - fs/fhd-2mtp12-lc-os2-af@4
+            - fs/fhd-2mtp12-lc-os2-u@4
+            - fs/fhd-1mtp24-lc-os2-af@4
+            - fs/fhd-1mtp6lcd-om4-a@2
+            - fs/fhd-2mtp12-lc-om4-a@2
+            - fs/fhd-1mtp24-lc-om4-a@2
+            - fs/fhd-1mtp6lcd-om5-a@2
+            - fs/fhd-2mtp12-lc-om5-a@2
+            - fs/fhd-1mtp24-lc-om5-a@2
+            - fs/fhd-1mtp6lcd-om4-u@2
+            - fs/fhd-2mtp12-lc-om4-u@2
+            - fs/fhd-2mtp12-lc-om3-a@2
+            - fs/fhd-1mtp24-lc-om3-a@2
+            - fs/fhd-3mtp18-lc-os2-a@1
+            - fs/fhd-3mtp18-lc-om4-a@1
+            - fs/fhd-fap12lcd-os2@1
+            - fs/fhd-fap18lcd-os2@1
+            - fs/fhd-fap6scd-apc-os2@1
+            - fs/fhd-fap12mtp-a@1
+            - fs/fhd-fap12mtp-b@1
+            - fs/fhd-fap8mtp-b@1
+            - fs/fhd-fap12mtp16-a@1
+            - fs/fhd-fapm6@1
+            - fs/fhd-fapb@1
+            - fs/fhd-fap12lcd-apc-os2@1
+            - fs/fhd-fap12lcd-om4@1
+            - fs/fhd-fap12lcd-om5@1
+            - fs/fhd-fap18lcd-om4@1
+            - fs/fhd-fap6scd-os2@1
+            - fs/fhd-fap6scd-om4@1
+          group: slots
+          rel-pos: 9
+          rear: {view: rear, cutout: back-9}
+        - id: bay-10
+          at: [329.475, 32.015]
+          size: {w: 35.05, h: 108.97}
+          rotate: 90
+          accepts:
+            - fs/fhd-1mtp6lcd-os2-a@4
+            - fs/fhd-splice-12-lc@3
+            - fs/fhd-2mtp12-lc-os2-a@4
+            - fs/fhd-1mtp12-sc-os2-a@3
+            - fs/fhd-1mtp24-lc-os2-a@4
+            - fs/fhd-1mtp6lcd-os2-af@3
+            - fs/fhd-1mtp6lcd-os2-u@3
+            - fs/fhd-2mtp12-lc-os2-af@4
+            - fs/fhd-2mtp12-lc-os2-u@4
+            - fs/fhd-1mtp24-lc-os2-af@4
+            - fs/fhd-1mtp6lcd-om4-a@2
+            - fs/fhd-2mtp12-lc-om4-a@2
+            - fs/fhd-1mtp24-lc-om4-a@2
+            - fs/fhd-1mtp6lcd-om5-a@2
+            - fs/fhd-2mtp12-lc-om5-a@2
+            - fs/fhd-1mtp24-lc-om5-a@2
+            - fs/fhd-1mtp6lcd-om4-u@2
+            - fs/fhd-2mtp12-lc-om4-u@2
+            - fs/fhd-2mtp12-lc-om3-a@2
+            - fs/fhd-1mtp24-lc-om3-a@2
+            - fs/fhd-3mtp18-lc-os2-a@1
+            - fs/fhd-3mtp18-lc-om4-a@1
+            - fs/fhd-fap12lcd-os2@1
+            - fs/fhd-fap18lcd-os2@1
+            - fs/fhd-fap6scd-apc-os2@1
+            - fs/fhd-fap12mtp-a@1
+            - fs/fhd-fap12mtp-b@1
+            - fs/fhd-fap8mtp-b@1
+            - fs/fhd-fap12mtp16-a@1
+            - fs/fhd-fapm6@1
+            - fs/fhd-fapb@1
+            - fs/fhd-fap12lcd-apc-os2@1
+            - fs/fhd-fap12lcd-om4@1
+            - fs/fhd-fap12lcd-om5@1
+            - fs/fhd-fap18lcd-om4@1
+            - fs/fhd-fap6scd-os2@1
+            - fs/fhd-fap6scd-om4@1
+          group: slots
+          rel-pos: 10
+          rear: {view: rear, cutout: back-10}
+        - id: bay-11
+          at: [365.475, 32.015]
+          size: {w: 35.05, h: 108.97}
+          rotate: 90
+          accepts:
+            - fs/fhd-1mtp6lcd-os2-a@4
+            - fs/fhd-splice-12-lc@3
+            - fs/fhd-2mtp12-lc-os2-a@4
+            - fs/fhd-1mtp12-sc-os2-a@3
+            - fs/fhd-1mtp24-lc-os2-a@4
+            - fs/fhd-1mtp6lcd-os2-af@3
+            - fs/fhd-1mtp6lcd-os2-u@3
+            - fs/fhd-2mtp12-lc-os2-af@4
+            - fs/fhd-2mtp12-lc-os2-u@4
+            - fs/fhd-1mtp24-lc-os2-af@4
+            - fs/fhd-1mtp6lcd-om4-a@2
+            - fs/fhd-2mtp12-lc-om4-a@2
+            - fs/fhd-1mtp24-lc-om4-a@2
+            - fs/fhd-1mtp6lcd-om5-a@2
+            - fs/fhd-2mtp12-lc-om5-a@2
+            - fs/fhd-1mtp24-lc-om5-a@2
+            - fs/fhd-1mtp6lcd-om4-u@2
+            - fs/fhd-2mtp12-lc-om4-u@2
+            - fs/fhd-2mtp12-lc-om3-a@2
+            - fs/fhd-1mtp24-lc-om3-a@2
+            - fs/fhd-3mtp18-lc-os2-a@1
+            - fs/fhd-3mtp18-lc-om4-a@1
+            - fs/fhd-fap12lcd-os2@1
+            - fs/fhd-fap18lcd-os2@1
+            - fs/fhd-fap6scd-apc-os2@1
+            - fs/fhd-fap12mtp-a@1
+            - fs/fhd-fap12mtp-b@1
+            - fs/fhd-fap8mtp-b@1
+            - fs/fhd-fap12mtp16-a@1
+            - fs/fhd-fapm6@1
+            - fs/fhd-fapb@1
+            - fs/fhd-fap12lcd-apc-os2@1
+            - fs/fhd-fap12lcd-om4@1
+            - fs/fhd-fap12lcd-om5@1
+            - fs/fhd-fap18lcd-om4@1
+            - fs/fhd-fap6scd-os2@1
+            - fs/fhd-fap6scd-om4@1
+          group: slots
+          rel-pos: 11
+          rear: {view: rear, cutout: back-11}
+        - id: bay-12
+          at: [401.475, 32.015]
+          size: {w: 35.05, h: 108.97}
+          rotate: 90
+          accepts:
+            - fs/fhd-1mtp6lcd-os2-a@4
+            - fs/fhd-splice-12-lc@3
+            - fs/fhd-2mtp12-lc-os2-a@4
+            - fs/fhd-1mtp12-sc-os2-a@3
+            - fs/fhd-1mtp24-lc-os2-a@4
+            - fs/fhd-1mtp6lcd-os2-af@3
+            - fs/fhd-1mtp6lcd-os2-u@3
+            - fs/fhd-2mtp12-lc-os2-af@4
+            - fs/fhd-2mtp12-lc-os2-u@4
+            - fs/fhd-1mtp24-lc-os2-af@4
+            - fs/fhd-1mtp6lcd-om4-a@2
+            - fs/fhd-2mtp12-lc-om4-a@2
+            - fs/fhd-1mtp24-lc-om4-a@2
+            - fs/fhd-1mtp6lcd-om5-a@2
+            - fs/fhd-2mtp12-lc-om5-a@2
+            - fs/fhd-1mtp24-lc-om5-a@2
+            - fs/fhd-1mtp6lcd-om4-u@2
+            - fs/fhd-2mtp12-lc-om4-u@2
+            - fs/fhd-2mtp12-lc-om3-a@2
+            - fs/fhd-1mtp24-lc-om3-a@2
+            - fs/fhd-3mtp18-lc-os2-a@1
+            - fs/fhd-3mtp18-lc-om4-a@1
+            - fs/fhd-fap12lcd-os2@1
+            - fs/fhd-fap18lcd-os2@1
+            - fs/fhd-fap6scd-apc-os2@1
+            - fs/fhd-fap12mtp-a@1
+            - fs/fhd-fap12mtp-b@1
+            - fs/fhd-fap8mtp-b@1
+            - fs/fhd-fap12mtp16-a@1
+            - fs/fhd-fapm6@1
+            - fs/fhd-fapb@1
+            - fs/fhd-fap12lcd-apc-os2@1
+            - fs/fhd-fap12lcd-om4@1
+            - fs/fhd-fap12lcd-om5@1
+            - fs/fhd-fap18lcd-om4@1
+            - fs/fhd-fap6scd-os2@1
+            - fs/fhd-fap6scd-om4@1
+          group: slots
+          rel-pos: 12
+          rear: {view: rear, cutout: back-12}
+
+  rear:
+    size:
+      w: 442.0
+      h: 173.0
+    panel:
+      decor:
+        - {at: [0, 0], size: [442.0, 173.0], fill: '#1b1e21'}
+      # THE BACK IS OPEN behind every slot, as the 1U's is: one hole per front
+      # bay, the bay's own turned box (35.05 x 108.97), MIRRORED - seen from
+      # behind, bay-1 is on the right. Each runs the drawer's length to the back
+      # of an ESTIMATED 1.0 front plate (408.8 - 1.0), so a slot is a passage a
+      # seated module's body stands in. See provenance.rear-opening.
+      cutouts:
+        - {id: back-1, at: [401.475, 32.015], size: [35.05, 108.97], depth: 407.8}
+        - {id: back-2, at: [365.475, 32.015], size: [35.05, 108.97], depth: 407.8}
+        - {id: back-3, at: [329.475, 32.015], size: [35.05, 108.97], depth: 407.8}
+        - {id: back-4, at: [293.475, 32.015], size: [35.05, 108.97], depth: 407.8}
+        - {id: back-5, at: [257.475, 32.015], size: [35.05, 108.97], depth: 407.8}
+        - {id: back-6, at: [221.475, 32.015], size: [35.05, 108.97], depth: 407.8}
+        - {id: back-7, at: [185.475, 32.015], size: [35.05, 108.97], depth: 407.8}
+        - {id: back-8, at: [149.475, 32.015], size: [35.05, 108.97], depth: 407.8}
+        - {id: back-9, at: [113.475, 32.015], size: [35.05, 108.97], depth: 407.8}
+        - {id: back-10, at: [77.475, 32.015], size: [35.05, 108.97], depth: 407.8}
+        - {id: back-11, at: [41.475, 32.015], size: [35.05, 108.97], depth: 407.8}
+        - {id: back-12, at: [5.475, 32.015], size: [35.05, 108.97], depth: 407.8}
+
+  top:
+    size:
+      w: 442.0
+      h: 408.8
+    panel:
+      decor:
+        - {at: [0, 0], size: [442.0, 408.8], fill: '#b9bec4'}
+
+  bottom:
+    size:
+      w: 442.0
+      h: 408.8
+    panel:
+      decor:
+        - {at: [0, 0], size: [442.0, 408.8], fill: '#b9bec4'}
+
+  left:
+    size:
+      w: 408.8
+      h: 173.0
+    panel:
+      decor:
+        - {at: [0, 0], size: [408.8, 173.0], fill: '#b9bec4'}
+
+  right:
+    size:
+      w: 408.8
+      h: 173.0
+    panel:
+      decor:
+        - {at: [0, 0], size: [408.8, 173.0], fill: '#b9bec4'}
+
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The enclosure as FS ships 73206, empty.
+  populated:
+    kind: example
+    description: >-
+      Six two-MTP cassettes and six LC adapter panels, on edge - illustrative; every module
+      is a separate SKU.
+    bays:
+      bay-1: fs/fhd-2mtp12-lc-os2-a@4
+      bay-2: fs/fhd-2mtp12-lc-os2-a@4
+      bay-3: fs/fhd-2mtp12-lc-os2-a@4
+      bay-4: fs/fhd-2mtp12-lc-os2-a@4
+      bay-5: fs/fhd-2mtp12-lc-os2-a@4
+      bay-6: fs/fhd-2mtp12-lc-os2-a@4
+      bay-7: fs/fhd-fap12lcd-os2@1
+      bay-8: fs/fhd-fap12lcd-os2@1
+      bay-9: fs/fhd-fap12lcd-os2@1
+      bay-10: fs/fhd-fap12lcd-os2@1
+      bay-11: fs/fhd-fap12lcd-os2@1
+      bay-12: fs/fhd-fap12lcd-os2@1
+datasheet:
+  title: 'FS FHD Slide-out Rack Mount Fiber Enclosure datasheet'
+  sha256: 272a860222dd2a76f2162a2fb0bc67ca67e520d39260195654000c5f122d23e1

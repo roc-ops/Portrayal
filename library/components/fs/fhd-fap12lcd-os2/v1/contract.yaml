@@ -1,0 +1,137 @@
+format: 1
+kind: module
+name: fhd-fap12lcd-os2
+version: 1.0.0
+class: adapter-panel
+behaviour: fills
+description: >-
+  FS FHD-FAP12LCDXSMF - FHD fiber adapter panel, twelve LC UPC duplex adapters
+  (blue), 24 fibres, OS2. FS SKU 35488.
+size: {w: 108.97, h: 35.05, d: 29.5}
+size-confidence: {w: drawing, h: drawing, d: drawing}
+size-notes: >-
+  THE FHD MODULE FACE, 4.29 x 1.38 in, which FS's adapter-panels datasheet
+  dimensions on every panel drawing (pp5-9) as 109 x 35 mm; 108.97 x 35.05 is
+  the same two inch figures unrounded, the face every FHD cassette in this
+  library already declares. THE DEPTH IS THE PANEL's, NOT A CASSETTE's: FS's
+  top views give the adapters' reach in front of and behind a plate about 1.7
+  thick, and 29.5 is the plate plus what stands behind it - see
+  provenance.depth. A panel is a plate of adapters, not a box, which is why it
+  is not class cassette.
+attrs: {media: fiber, model: FHD-FAP12LCDXSMF, vendor-sku: '35488'}
+body:
+  depth: 29.5
+  # THE ADAPTER BLOCK BEHIND THE PLATE, 3.46in (88) across on FS's top views
+  # and 1.37in (34.8) tall on its side views, centred behind the plate. It is
+  # what a pulled panel's box is drawn as, and what the rear face is painted on.
+  footprint: {at: [10.485, 0.125], size: [88.0, 34.8]}
+elements:
+  logo-zone: {at: [1.6, 3.2], size: [5.3, 5.0], class: label}
+parts:
+  - {id: lc01, ref: common/lc-duplex-v-adapter@6, at: [14.91, 18.615]}
+  - {id: lc02, ref: common/lc-duplex-v-adapter@6, at: [28.89, 18.615]}
+  - {id: lc03, ref: common/lc-duplex-v-adapter@6, at: [42.87, 18.615]}
+  - {id: lc04, ref: common/lc-duplex-v-adapter@6, at: [56.85, 18.615]}
+  - {id: lc05, ref: common/lc-duplex-v-adapter@6, at: [70.85, 18.615]}
+  - {id: lc06, ref: common/lc-duplex-v-adapter@6, at: [84.83, 18.615]}
+  - {id: lc07, ref: common/lc-duplex-v-adapter@6, at: [14.91, 2.635]}
+  - {id: lc08, ref: common/lc-duplex-v-adapter@6, at: [28.89, 2.635]}
+  - {id: lc09, ref: common/lc-duplex-v-adapter@6, at: [42.87, 2.635]}
+  - {id: lc10, ref: common/lc-duplex-v-adapter@6, at: [56.85, 2.635]}
+  - {id: lc11, ref: common/lc-duplex-v-adapter@6, at: [70.85, 2.635]}
+  - {id: lc12, ref: common/lc-duplex-v-adapter@6, at: [84.83, 2.635]}
+faces:
+  rear: {ref: fs/fhd-fap12lcd-os2-rear@1}
+optical:
+  media: os2
+  polish: upc
+  front-order:
+    [lc01, lc02, lc03, lc04, lc05, lc06, lc07, lc08, lc09, lc10, lc11, lc12]
+  paths:
+    - {from: lc01.1, to: 'rear:b01.1'}
+    - {from: lc01.2, to: 'rear:b01.2'}
+    - {from: lc02.1, to: 'rear:b02.1'}
+    - {from: lc02.2, to: 'rear:b02.2'}
+    - {from: lc03.1, to: 'rear:b03.1'}
+    - {from: lc03.2, to: 'rear:b03.2'}
+    - {from: lc04.1, to: 'rear:b04.1'}
+    - {from: lc04.2, to: 'rear:b04.2'}
+    - {from: lc05.1, to: 'rear:b05.1'}
+    - {from: lc05.2, to: 'rear:b05.2'}
+    - {from: lc06.1, to: 'rear:b06.1'}
+    - {from: lc06.2, to: 'rear:b06.2'}
+    - {from: lc07.1, to: 'rear:b07.1'}
+    - {from: lc07.2, to: 'rear:b07.2'}
+    - {from: lc08.1, to: 'rear:b08.1'}
+    - {from: lc08.2, to: 'rear:b08.2'}
+    - {from: lc09.1, to: 'rear:b09.1'}
+    - {from: lc09.2, to: 'rear:b09.2'}
+    - {from: lc10.1, to: 'rear:b10.1'}
+    - {from: lc10.2, to: 'rear:b10.2'}
+    - {from: lc11.1, to: 'rear:b11.1'}
+    - {from: lc11.2, to: 'rear:b11.2'}
+    - {from: lc12.1, to: 'rear:b12.1'}
+    - {from: lc12.2, to: 'rear:b12.2'}
+provenance:
+  size: >-
+    drawing - see size-notes.
+  parts: >-
+    THE TWELVE BODY CENTRES ARE READ OFF FS's OWN VECTOR DRAWING, not a render:
+    fhd-fiber-adapter-panels-datasheet.pdf p5, 24F LC/12F SC Adapter Panel,
+    front view, rendered at 1200 dpi and scaled on the plate's 109 mm (4.29in)
+    width - 23.25 px/mm, and the plate then reads 35.01 mm tall against the 35
+    printed, 0.1%, so the view is orthographic. Six body outlines per row at x
+    14.80 ... 84.70, 9.51 wide, centres 19.55 33.53 47.51 61.49 75.49 89.47 - a
+    13.98 pitch with 0.04 spread - in two rows centred at y 9.51 and 25.49. Each
+    common/lc-duplex-v-adapter@6 (9.28 x 13.75, its own photo-measured box) is
+    centred on a drawn body. The drawing draws the body 9.51 x 12.99 and the
+    bores as squares 5.79 apart; FS's own adapter drawing (the LC UPC Duplex SC
+    Footprint adapter datasheet, p3) dimensions the same part 9.3 wide, 14.8
+    tall, bores 6.25 apart. The adapter keeps its own geometry; the panel
+    supplies only where each one sits. THE PITCH IS NOT THE CASSETTE'S: FS lays
+    these twelve 13.98 apart where the cassettes carry the same adapter about
+    13.0 apart (standards.yaml fhd-lc-cassette); the drawing's bores sit 1.14
+    right of each body centre, as the adapter's own bores sit 1.21 right of its
+    centre, which is the cross-check that the body - not the bore - is what was
+    centred.
+  face-legends: >-
+    read off the same drawing: FS prints only the end pairs - 2 over 1 and 14
+    over 13 left of the first column, 12 over 11 and 24 over 23 right of the
+    last - with 2.58 mm digits, drawn at a 3.5 font-size as the cassettes' 2.61
+    are. The lower row is 1-12 and the upper 13-24, both left to right; the odd
+    number is the lower bore of its adapter.
+  knobs: >-
+    THE THUMB-KNOBS ARE DRAWN, and not at the cassettes' positions. FS's panel
+    drawings dimension the two knob centres 3.91in (99.4) apart on every panel,
+    so each sits 4.785 in from its edge; the 36F drawing (p6) draws the knob
+    face 8.47 across, r 4.24. The cassettes carry knobs at 5.10 from the edge, r
+    4.10, read off renders of a different part.
+  depth: >-
+    drawing - the top view beside each front view gives the reach in front of
+    the plate, the reach behind it and the total, in inches with millimetres:
+    24F LC 0.27 [6.9] / 1.09 [27.8] / 1.43 [36.4], MTP 0.49 [12.5] / 1.20 [30.4]
+    / 1.76 [44.6], 36F LC 0.65 [16.4] / 0.57 [14.6] / 1.27 [32.2]; the SC panel
+    is noted as the 24F LC's size. The front and rear reaches leave about 1.7
+    for the plate on the LC and MTP views, and `d` is the plate plus the rear
+    reach. The adapters' own relief does not reproduce the front reach - common
+    adapters stand 1.0 to 1.2 proud, estimated - and is not overridden here.
+  optical: >-
+    EVERY PATH IS ONE MATING SLEEVE, NOT A STRAND. An adapter panel holds no
+    glass: a fibre entering bore n of a front adapter leaves through the same
+    bore of the same adapter at the back, so front `lcNN.k` reaches rear
+    `bNN.k`, the adapter seen from behind. The rear face composes each adapter
+    at the mirrored column - seen from behind, the first column is on the right
+    - and its bores are stacked, so the lower bore is lower from either side and
+    position k is the same sleeve on both faces. The adapter is NOT mirrored,
+    although seen from behind its latch notch is on the other hand: each bore
+    ships holding a dust cap, and a mirrored host cannot seat an occupant
+    (render.py refuses it). The notch is drawn on the wrong side of the rear, a
+    stated art error, rather than the caps dropped.
+  face: >-
+    the face-on render 35488.p4 agrees with the drawing: two rows of six blue
+    duplex adapters, white caps, numbers at the row ends.
+  logo-zone: >-
+    reserved, not drawn - FS prints its mark top left on every panel face
+    (drawings p5-p9, the renders); the library reproduces no vendor logo. Box
+    read off the drawings, to about half a millimetre.
+skins: [default]

@@ -1,0 +1,114 @@
+format: 1
+kind: module
+name: fhd-fap6scd-os2
+version: 1.0.0
+class: adapter-panel
+behaviour: fills
+description: >-
+  FS FHD-FAP6SCDXSMF - FHD fiber adapter panel, six SC UPC duplex adapters
+  (blue), 12 fibres, OS2. FS SKU 35484.
+size: {w: 108.97, h: 35.05, d: 29.5}
+size-confidence: {w: drawing, h: drawing, d: drawing}
+size-notes: >-
+  THE FHD MODULE FACE, 4.29 x 1.38 in, which FS's adapter-panels datasheet
+  dimensions on every panel drawing (pp5-9) as 109 x 35 mm; 108.97 x 35.05 is
+  the same two inch figures unrounded, the face every FHD cassette in this
+  library already declares. THE DEPTH IS THE PANEL's, NOT A CASSETTE's: FS's
+  top views give the adapters' reach in front of and behind a plate about 1.7
+  thick, and 29.5 is the plate plus what stands behind it - see
+  provenance.depth. A panel is a plate of adapters, not a box, which is why it
+  is not class cassette.
+attrs: {media: fiber, model: FHD-FAP6SCDXSMF, vendor-sku: '35484'}
+body:
+  depth: 29.5
+  # THE ADAPTER BLOCK BEHIND THE PLATE, 3.46in (88) across on FS's top views
+  # and 1.37in (34.8) tall on its side views, centred behind the plate. It is
+  # what a pulled panel's box is drawn as, and what the rear face is painted on.
+  footprint: {at: [10.485, 0.125], size: [88.0, 34.8]}
+elements:
+  logo-zone: {at: [1.6, 3.2], size: [5.3, 5.0], class: label}
+parts:
+  - {id: sc01, ref: common/sc-duplex-adapter@5, at: [14.85, 4.825]}
+  - {id: sc02, ref: common/sc-duplex-adapter@5, at: [28.83, 4.825]}
+  - {id: sc03, ref: common/sc-duplex-adapter@5, at: [42.81, 4.825]}
+  - {id: sc04, ref: common/sc-duplex-adapter@5, at: [56.79, 4.825]}
+  - {id: sc05, ref: common/sc-duplex-adapter@5, at: [70.79, 4.825]}
+  - {id: sc06, ref: common/sc-duplex-adapter@5, at: [84.77, 4.825]}
+faces:
+  rear: {ref: fs/fhd-fap6scd-os2-rear@1}
+optical:
+  media: os2
+  polish: upc
+  paths:
+    - {from: sc01.1, to: 'rear:b01.1'}
+    - {from: sc01.2, to: 'rear:b01.2'}
+    - {from: sc02.1, to: 'rear:b02.1'}
+    - {from: sc02.2, to: 'rear:b02.2'}
+    - {from: sc03.1, to: 'rear:b03.1'}
+    - {from: sc03.2, to: 'rear:b03.2'}
+    - {from: sc04.1, to: 'rear:b04.1'}
+    - {from: sc04.2, to: 'rear:b04.2'}
+    - {from: sc05.1, to: 'rear:b05.1'}
+    - {from: sc05.2, to: 'rear:b05.2'}
+    - {from: sc06.1, to: 'rear:b06.1'}
+    - {from: sc06.2, to: 'rear:b06.2'}
+provenance:
+  size: >-
+    drawing - see size-notes.
+  parts: >-
+    READ ON fs/fhd-fap6scd-apc-os2@1 (SKU 41986), THE SAME PANEL IN ANOTHER
+    FIBRE OR POLISH, not on this SKU: 'this panel' below is that one. COLUMNS
+    FROM THE LC PANEL's DRAWING, CONFIRMED ON THIS PANEL's RENDER. FS's
+    datasheet draws this panel with the 24F LC one (p5) and notes that the two
+    are of the same dimensions; it draws only the LC face. FS's face-on render
+    of 41986 (41986.p3) shows six vertical SC duplex adapters whose centres read
+    19.4 33.2 47.4 61.2 75.4 89.3 across a plate scaled on its width - the LC
+    drawing's 19.55 ... 89.47 on its 13.98 pitch, within 0.2 - so each
+    common/sc-duplex-adapter@5 (9.4 x 25.4) is centred on an LC drawing column
+    and centred on the plate vertically, as the render shows it (frames 4.5 to
+    30.1 of 35, 25.6 tall against the part's 25.4).
+  face-legends: >-
+    READ ON fs/fhd-fap6scd-apc-os2@1 (SKU 41986), THE SAME PANEL IN ANOTHER
+    FIBRE OR POLISH, not on this SKU: 'this panel' below is that one. read off
+    41986.p3: 2 over 1 left of the first adapter and 12 over 11 right of the
+    last, each beside its bore - the lower bore is the odd port, as common/sc-
+    duplex-adapter@5 composes it.
+  knobs: >-
+    THE THUMB-KNOBS ARE DRAWN, and not at the cassettes' positions. FS's panel
+    drawings dimension the two knob centres 3.91in (99.4) apart on every panel,
+    so each sits 4.785 in from its edge; the 36F drawing (p6) draws the knob
+    face 8.47 across, r 4.24. The cassettes carry knobs at 5.10 from the edge, r
+    4.10, read off renders of a different part.
+  depth: >-
+    drawing - the top view beside each front view gives the reach in front of
+    the plate, the reach behind it and the total, in inches with millimetres:
+    24F LC 0.27 [6.9] / 1.09 [27.8] / 1.43 [36.4], MTP 0.49 [12.5] / 1.20 [30.4]
+    / 1.76 [44.6], 36F LC 0.65 [16.4] / 0.57 [14.6] / 1.27 [32.2]; the SC panel
+    is noted as the 24F LC's size. The front and rear reaches leave about 1.7
+    for the plate on the LC and MTP views, and `d` is the plate plus the rear
+    reach. The adapters' own relief does not reproduce the front reach - common
+    adapters stand 1.0 to 1.2 proud, estimated - and is not overridden here.
+  optical: >-
+    EVERY PATH IS ONE MATING SLEEVE, NOT A STRAND. An adapter panel holds no
+    glass: a fibre entering bore n of a front adapter leaves through the same
+    bore of the same adapter at the back, so front `lcNN.k` reaches rear
+    `bNN.k`, the adapter seen from behind. The rear face composes each adapter
+    at the mirrored column - seen from behind, the first column is on the right
+    - and its bores are stacked, so the lower bore is lower from either side and
+    position k is the same sleeve on both faces. The adapter is NOT mirrored,
+    although seen from behind its latch notch is on the other hand: each bore
+    ships holding a dust cap, and a mirrored host cannot seat an occupant
+    (render.py refuses it). The notch is drawn on the wrong side of the rear, a
+    stated art error, rather than the caps dropped.
+  face: >-
+    NO RENDER OF THIS VARIANT IS STAGED. It is fs/fhd-fap6scd-apc-os2@1 - FS's
+    own variant selector on that SKU's page lists it as the same panel in
+    another fibre or polish, and the adapter-panels datasheet draws them once -
+    so the geometry, legends and knobs are that panel's. Colour: the SC
+    adapter's own default blue, #3078c0, sampled off the FHD SC cassette (57058)
+    - the UPC colour FS uses on SC.
+  logo-zone: >-
+    reserved, not drawn - FS prints its mark top left on every panel face
+    (drawings p5-p9, the renders); the library reproduces no vendor logo. Box
+    read off the drawings, to about half a millimetre.
+skins: [default]
