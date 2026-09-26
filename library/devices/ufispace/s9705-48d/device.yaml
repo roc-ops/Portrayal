@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9705-48d
-version: 3.0.4
+version: 4.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9705-48D
@@ -364,7 +364,7 @@ chassis:
 
 gaps:
 - what: port-led-semantics
-  scope: [port-leds, fabric]
+  scope: [port-leds, qsfpdd-400g-fabric]
   reason: vendor-silent
   note: >-
     Every one of the forty-eight fabric ports carries one lamp, on its own red tab, and
@@ -428,7 +428,7 @@ gaps:
     exact setting, and whether the plate carries anything else besides the four words.
   wanted: a faceplate photograph at 2000 px or better
 - what: port-tab-construction
-  scope: [fabric, port-leds]
+  scope: [qsfpdd-400g-fabric, port-leds]
   reason: vendor-silent
   note: >-
     What the red tab beside each port physically IS is not stated. It is drawn here as
@@ -477,7 +477,7 @@ gaps:
     configurations carry no part numbers rather than invented ones.
   wanted: a UfiSpace ordering guide or a quote naming the chassis SKUs
 groups:
-  fabric:
+  qsfpdd-400g-fabric:
     term: Port
     role: fabric
     index-origin: 0
@@ -707,54 +707,54 @@ views:
       - {at: [417.80, 82.30], text: 'S9705-48D', font-size: 3.6, anchor: middle, for: chassis}
     components:
       placements:
-        - {ref: std/qsfp-dd@1, id: port-0, at: [85.70, 9.65], group: fabric, rel-pos: 0}
-        - {ref: std/qsfp-dd@1, id: port-1, at: [85.70, 22.81], rotate: 180, group: fabric, rel-pos: 1}
-        - {ref: std/qsfp-dd@1, id: port-2, at: [104.70, 9.65], group: fabric, rel-pos: 2}
-        - {ref: std/qsfp-dd@1, id: port-3, at: [104.70, 22.81], rotate: 180, group: fabric, rel-pos: 3}
-        - {ref: std/qsfp-dd@1, id: port-24, at: [85.70, 53.48], group: fabric, rel-pos: 24}
-        - {ref: std/qsfp-dd@1, id: port-25, at: [85.70, 66.64], rotate: 180, group: fabric, rel-pos: 25}
-        - {ref: std/qsfp-dd@1, id: port-26, at: [104.70, 53.48], group: fabric, rel-pos: 26}
-        - {ref: std/qsfp-dd@1, id: port-27, at: [104.70, 66.64], rotate: 180, group: fabric, rel-pos: 27}
-        - {ref: std/qsfp-dd@1, id: port-4, at: [136.86, 9.65], group: fabric, rel-pos: 4}
-        - {ref: std/qsfp-dd@1, id: port-5, at: [136.86, 22.81], rotate: 180, group: fabric, rel-pos: 5}
-        - {ref: std/qsfp-dd@1, id: port-6, at: [155.86, 9.65], group: fabric, rel-pos: 6}
-        - {ref: std/qsfp-dd@1, id: port-7, at: [155.86, 22.81], rotate: 180, group: fabric, rel-pos: 7}
-        - {ref: std/qsfp-dd@1, id: port-28, at: [136.86, 53.48], group: fabric, rel-pos: 28}
-        - {ref: std/qsfp-dd@1, id: port-29, at: [136.86, 66.64], rotate: 180, group: fabric, rel-pos: 29}
-        - {ref: std/qsfp-dd@1, id: port-30, at: [155.86, 53.48], group: fabric, rel-pos: 30}
-        - {ref: std/qsfp-dd@1, id: port-31, at: [155.86, 66.64], rotate: 180, group: fabric, rel-pos: 31}
-        - {ref: std/qsfp-dd@1, id: port-8, at: [188.02, 9.65], group: fabric, rel-pos: 8}
-        - {ref: std/qsfp-dd@1, id: port-9, at: [188.02, 22.81], rotate: 180, group: fabric, rel-pos: 9}
-        - {ref: std/qsfp-dd@1, id: port-10, at: [207.02, 9.65], group: fabric, rel-pos: 10}
-        - {ref: std/qsfp-dd@1, id: port-11, at: [207.02, 22.81], rotate: 180, group: fabric, rel-pos: 11}
-        - {ref: std/qsfp-dd@1, id: port-32, at: [188.02, 53.48], group: fabric, rel-pos: 32}
-        - {ref: std/qsfp-dd@1, id: port-33, at: [188.02, 66.64], rotate: 180, group: fabric, rel-pos: 33}
-        - {ref: std/qsfp-dd@1, id: port-34, at: [207.02, 53.48], group: fabric, rel-pos: 34}
-        - {ref: std/qsfp-dd@1, id: port-35, at: [207.02, 66.64], rotate: 180, group: fabric, rel-pos: 35}
-        - {ref: std/qsfp-dd@1, id: port-12, at: [239.18, 9.65], group: fabric, rel-pos: 12}
-        - {ref: std/qsfp-dd@1, id: port-13, at: [239.18, 22.81], rotate: 180, group: fabric, rel-pos: 13}
-        - {ref: std/qsfp-dd@1, id: port-14, at: [258.18, 9.65], group: fabric, rel-pos: 14}
-        - {ref: std/qsfp-dd@1, id: port-15, at: [258.18, 22.81], rotate: 180, group: fabric, rel-pos: 15}
-        - {ref: std/qsfp-dd@1, id: port-36, at: [239.18, 53.48], group: fabric, rel-pos: 36}
-        - {ref: std/qsfp-dd@1, id: port-37, at: [239.18, 66.64], rotate: 180, group: fabric, rel-pos: 37}
-        - {ref: std/qsfp-dd@1, id: port-38, at: [258.18, 53.48], group: fabric, rel-pos: 38}
-        - {ref: std/qsfp-dd@1, id: port-39, at: [258.18, 66.64], rotate: 180, group: fabric, rel-pos: 39}
-        - {ref: std/qsfp-dd@1, id: port-16, at: [290.34, 9.65], group: fabric, rel-pos: 16}
-        - {ref: std/qsfp-dd@1, id: port-17, at: [290.34, 22.81], rotate: 180, group: fabric, rel-pos: 17}
-        - {ref: std/qsfp-dd@1, id: port-18, at: [309.34, 9.65], group: fabric, rel-pos: 18}
-        - {ref: std/qsfp-dd@1, id: port-19, at: [309.34, 22.81], rotate: 180, group: fabric, rel-pos: 19}
-        - {ref: std/qsfp-dd@1, id: port-40, at: [290.34, 53.48], group: fabric, rel-pos: 40}
-        - {ref: std/qsfp-dd@1, id: port-41, at: [290.34, 66.64], rotate: 180, group: fabric, rel-pos: 41}
-        - {ref: std/qsfp-dd@1, id: port-42, at: [309.34, 53.48], group: fabric, rel-pos: 42}
-        - {ref: std/qsfp-dd@1, id: port-43, at: [309.34, 66.64], rotate: 180, group: fabric, rel-pos: 43}
-        - {ref: std/qsfp-dd@1, id: port-20, at: [341.50, 9.65], group: fabric, rel-pos: 20}
-        - {ref: std/qsfp-dd@1, id: port-21, at: [341.50, 22.81], rotate: 180, group: fabric, rel-pos: 21}
-        - {ref: std/qsfp-dd@1, id: port-22, at: [360.50, 9.65], group: fabric, rel-pos: 22}
-        - {ref: std/qsfp-dd@1, id: port-23, at: [360.50, 22.81], rotate: 180, group: fabric, rel-pos: 23}
-        - {ref: std/qsfp-dd@1, id: port-44, at: [341.50, 53.48], group: fabric, rel-pos: 44}
-        - {ref: std/qsfp-dd@1, id: port-45, at: [341.50, 66.64], rotate: 180, group: fabric, rel-pos: 45}
-        - {ref: std/qsfp-dd@1, id: port-46, at: [360.50, 53.48], group: fabric, rel-pos: 46}
-        - {ref: std/qsfp-dd@1, id: port-47, at: [360.50, 66.64], rotate: 180, group: fabric, rel-pos: 47}
+        - {ref: std/qsfp-dd@1, id: port-0, at: [85.70, 9.65], group: qsfpdd-400g-fabric, rel-pos: 0}
+        - {ref: std/qsfp-dd@1, id: port-1, at: [85.70, 22.81], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 1}
+        - {ref: std/qsfp-dd@1, id: port-2, at: [104.70, 9.65], group: qsfpdd-400g-fabric, rel-pos: 2}
+        - {ref: std/qsfp-dd@1, id: port-3, at: [104.70, 22.81], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 3}
+        - {ref: std/qsfp-dd@1, id: port-24, at: [85.70, 53.48], group: qsfpdd-400g-fabric, rel-pos: 24}
+        - {ref: std/qsfp-dd@1, id: port-25, at: [85.70, 66.64], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 25}
+        - {ref: std/qsfp-dd@1, id: port-26, at: [104.70, 53.48], group: qsfpdd-400g-fabric, rel-pos: 26}
+        - {ref: std/qsfp-dd@1, id: port-27, at: [104.70, 66.64], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 27}
+        - {ref: std/qsfp-dd@1, id: port-4, at: [136.86, 9.65], group: qsfpdd-400g-fabric, rel-pos: 4}
+        - {ref: std/qsfp-dd@1, id: port-5, at: [136.86, 22.81], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 5}
+        - {ref: std/qsfp-dd@1, id: port-6, at: [155.86, 9.65], group: qsfpdd-400g-fabric, rel-pos: 6}
+        - {ref: std/qsfp-dd@1, id: port-7, at: [155.86, 22.81], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 7}
+        - {ref: std/qsfp-dd@1, id: port-28, at: [136.86, 53.48], group: qsfpdd-400g-fabric, rel-pos: 28}
+        - {ref: std/qsfp-dd@1, id: port-29, at: [136.86, 66.64], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 29}
+        - {ref: std/qsfp-dd@1, id: port-30, at: [155.86, 53.48], group: qsfpdd-400g-fabric, rel-pos: 30}
+        - {ref: std/qsfp-dd@1, id: port-31, at: [155.86, 66.64], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 31}
+        - {ref: std/qsfp-dd@1, id: port-8, at: [188.02, 9.65], group: qsfpdd-400g-fabric, rel-pos: 8}
+        - {ref: std/qsfp-dd@1, id: port-9, at: [188.02, 22.81], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 9}
+        - {ref: std/qsfp-dd@1, id: port-10, at: [207.02, 9.65], group: qsfpdd-400g-fabric, rel-pos: 10}
+        - {ref: std/qsfp-dd@1, id: port-11, at: [207.02, 22.81], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 11}
+        - {ref: std/qsfp-dd@1, id: port-32, at: [188.02, 53.48], group: qsfpdd-400g-fabric, rel-pos: 32}
+        - {ref: std/qsfp-dd@1, id: port-33, at: [188.02, 66.64], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 33}
+        - {ref: std/qsfp-dd@1, id: port-34, at: [207.02, 53.48], group: qsfpdd-400g-fabric, rel-pos: 34}
+        - {ref: std/qsfp-dd@1, id: port-35, at: [207.02, 66.64], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 35}
+        - {ref: std/qsfp-dd@1, id: port-12, at: [239.18, 9.65], group: qsfpdd-400g-fabric, rel-pos: 12}
+        - {ref: std/qsfp-dd@1, id: port-13, at: [239.18, 22.81], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 13}
+        - {ref: std/qsfp-dd@1, id: port-14, at: [258.18, 9.65], group: qsfpdd-400g-fabric, rel-pos: 14}
+        - {ref: std/qsfp-dd@1, id: port-15, at: [258.18, 22.81], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 15}
+        - {ref: std/qsfp-dd@1, id: port-36, at: [239.18, 53.48], group: qsfpdd-400g-fabric, rel-pos: 36}
+        - {ref: std/qsfp-dd@1, id: port-37, at: [239.18, 66.64], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 37}
+        - {ref: std/qsfp-dd@1, id: port-38, at: [258.18, 53.48], group: qsfpdd-400g-fabric, rel-pos: 38}
+        - {ref: std/qsfp-dd@1, id: port-39, at: [258.18, 66.64], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 39}
+        - {ref: std/qsfp-dd@1, id: port-16, at: [290.34, 9.65], group: qsfpdd-400g-fabric, rel-pos: 16}
+        - {ref: std/qsfp-dd@1, id: port-17, at: [290.34, 22.81], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 17}
+        - {ref: std/qsfp-dd@1, id: port-18, at: [309.34, 9.65], group: qsfpdd-400g-fabric, rel-pos: 18}
+        - {ref: std/qsfp-dd@1, id: port-19, at: [309.34, 22.81], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 19}
+        - {ref: std/qsfp-dd@1, id: port-40, at: [290.34, 53.48], group: qsfpdd-400g-fabric, rel-pos: 40}
+        - {ref: std/qsfp-dd@1, id: port-41, at: [290.34, 66.64], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 41}
+        - {ref: std/qsfp-dd@1, id: port-42, at: [309.34, 53.48], group: qsfpdd-400g-fabric, rel-pos: 42}
+        - {ref: std/qsfp-dd@1, id: port-43, at: [309.34, 66.64], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 43}
+        - {ref: std/qsfp-dd@1, id: port-20, at: [341.50, 9.65], group: qsfpdd-400g-fabric, rel-pos: 20}
+        - {ref: std/qsfp-dd@1, id: port-21, at: [341.50, 22.81], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 21}
+        - {ref: std/qsfp-dd@1, id: port-22, at: [360.50, 9.65], group: qsfpdd-400g-fabric, rel-pos: 22}
+        - {ref: std/qsfp-dd@1, id: port-23, at: [360.50, 22.81], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 23}
+        - {ref: std/qsfp-dd@1, id: port-44, at: [341.50, 53.48], group: qsfpdd-400g-fabric, rel-pos: 44}
+        - {ref: std/qsfp-dd@1, id: port-45, at: [341.50, 66.64], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 45}
+        - {ref: std/qsfp-dd@1, id: port-46, at: [360.50, 53.48], group: qsfpdd-400g-fabric, rel-pos: 46}
+        - {ref: std/qsfp-dd@1, id: port-47, at: [360.50, 66.64], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 47}
         - {ref: common/led-dot@1, id: led-port-0, at: [81.73, 13.35], for: port-0, group: port-leds, rel-pos: 1}
         - {ref: common/led-dot@1, id: led-port-1, at: [81.73, 27.49], for: port-1, group: port-leds, rel-pos: 2}
         - {ref: common/led-dot@1, id: led-port-2, at: [125.67, 13.35], for: port-2, group: port-leds, rel-pos: 3}

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9700-53dx
-version: 4.0.4
+version: 5.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9700-53DX
@@ -446,7 +446,7 @@ chassis:
 
 gaps:
 - what: port-led-semantics
-  scope: [qsfp28, qsfpdd-400g, port-leds]
+  scope: [qsfp28, qsfpdd-400g-fabric, port-leds]
   reason: vendor-silent
   note: >-
     HIG section 10 tables the four front-panel lamps (SYS, FAN, PS0, PS1), the PSU FRU lamp,
@@ -587,7 +587,7 @@ groups:
     description: >-
       the forty 40/100G service ports, '40 x 40/100G QSFP28 service ports' in the datasheet
       and green-labelled in the HIG's port figure. Ports 0-19 break out to 4x25GE or 4x10GE
-  qsfpdd-400g:
+  qsfpdd-400g-fabric:
     term: Port
     role: fabric
     index-origin: 0
@@ -941,31 +941,31 @@ views:
         - {ref: std/qsfp-ganged@1, id: port-39, at: [254.59, 60.11], rotate: 180, group: qsfp28, rel-pos: 39}
         - {ref: common/led-dot@1, id: led-port-38, at: [260.91, 72.60], for: port-38, attrs: {port: '38'}, group: port-leds, rel-pos: 39}
         - {ref: common/led-dot@1, id: led-port-39, at: [264.77, 72.60], for: port-39, attrs: {port: '39'}, group: port-leds, rel-pos: 40}
-        - {ref: std/qsfp-dd@1, id: fab-0, at: [282.93, 28.77], group: qsfpdd-400g, rel-pos: 0}
-        - {ref: std/qsfp-dd@1, id: fab-1, at: [282.93, 44.34], group: qsfpdd-400g, rel-pos: 1}
+        - {ref: std/qsfp-dd@1, id: fab-0, at: [282.93, 28.77], group: qsfpdd-400g-fabric, rel-pos: 0}
+        - {ref: std/qsfp-dd@1, id: fab-1, at: [282.93, 44.34], group: qsfpdd-400g-fabric, rel-pos: 1}
         - {ref: common/led-dot@1, id: leds-f0, at: [289.55, 25.60], for: fab-0, attrs: {port: '0'}, group: port-leds, rel-pos: 41}
         - {ref: common/led-dot@1, id: leds-f1, at: [293.31, 25.60], for: fab-1, attrs: {port: '1'}, group: port-leds, rel-pos: 42}
-        - {ref: std/qsfp-dd@1, id: fab-2, at: [301.93, 28.77], group: qsfpdd-400g, rel-pos: 2}
-        - {ref: std/qsfp-dd@1, id: fab-3, at: [301.93, 44.34], group: qsfpdd-400g, rel-pos: 3}
+        - {ref: std/qsfp-dd@1, id: fab-2, at: [301.93, 28.77], group: qsfpdd-400g-fabric, rel-pos: 2}
+        - {ref: std/qsfp-dd@1, id: fab-3, at: [301.93, 44.34], group: qsfpdd-400g-fabric, rel-pos: 3}
         - {ref: common/led-dot@1, id: leds-f2, at: [308.55, 25.60], for: fab-2, attrs: {port: '2'}, group: port-leds, rel-pos: 43}
         - {ref: common/led-dot@1, id: leds-f3, at: [312.31, 25.60], for: fab-3, attrs: {port: '3'}, group: port-leds, rel-pos: 44}
-        - {ref: std/qsfp-dd@1, id: fab-4, at: [325.56, 28.77], group: qsfpdd-400g, rel-pos: 4}
-        - {ref: std/qsfp-dd@1, id: fab-5, at: [325.56, 44.34], group: qsfpdd-400g, rel-pos: 5}
+        - {ref: std/qsfp-dd@1, id: fab-4, at: [325.56, 28.77], group: qsfpdd-400g-fabric, rel-pos: 4}
+        - {ref: std/qsfp-dd@1, id: fab-5, at: [325.56, 44.34], group: qsfpdd-400g-fabric, rel-pos: 5}
         - {ref: common/led-dot@1, id: leds-f4, at: [332.18, 25.60], for: fab-4, attrs: {port: '4'}, group: port-leds, rel-pos: 45}
         - {ref: common/led-dot@1, id: leds-f5, at: [335.94, 25.60], for: fab-5, attrs: {port: '5'}, group: port-leds, rel-pos: 46}
-        - {ref: std/qsfp-dd@1, id: fab-6, at: [344.57, 28.77], group: qsfpdd-400g, rel-pos: 6}
-        - {ref: std/qsfp-dd@1, id: fab-7, at: [344.57, 44.34], group: qsfpdd-400g, rel-pos: 7}
+        - {ref: std/qsfp-dd@1, id: fab-6, at: [344.57, 28.77], group: qsfpdd-400g-fabric, rel-pos: 6}
+        - {ref: std/qsfp-dd@1, id: fab-7, at: [344.57, 44.34], group: qsfpdd-400g-fabric, rel-pos: 7}
         - {ref: common/led-dot@1, id: leds-f6, at: [351.19, 25.60], for: fab-6, attrs: {port: '6'}, group: port-leds, rel-pos: 47}
         - {ref: common/led-dot@1, id: leds-f7, at: [354.95, 25.60], for: fab-7, attrs: {port: '7'}, group: port-leds, rel-pos: 48}
-        - {ref: std/qsfp-dd@1, id: fab-8, at: [368.05, 28.77], group: qsfpdd-400g, rel-pos: 8}
-        - {ref: std/qsfp-dd@1, id: fab-9, at: [368.05, 44.34], group: qsfpdd-400g, rel-pos: 9}
+        - {ref: std/qsfp-dd@1, id: fab-8, at: [368.05, 28.77], group: qsfpdd-400g-fabric, rel-pos: 8}
+        - {ref: std/qsfp-dd@1, id: fab-9, at: [368.05, 44.34], group: qsfpdd-400g-fabric, rel-pos: 9}
         - {ref: common/led-dot@1, id: leds-f8, at: [374.67, 25.60], for: fab-8, attrs: {port: '8'}, group: port-leds, rel-pos: 49}
         - {ref: common/led-dot@1, id: leds-f9, at: [378.43, 25.60], for: fab-9, attrs: {port: '9'}, group: port-leds, rel-pos: 50}
-        - {ref: std/qsfp-dd@1, id: fab-10, at: [387.05, 28.77], group: qsfpdd-400g, rel-pos: 10}
-        - {ref: std/qsfp-dd@1, id: fab-11, at: [387.05, 44.34], group: qsfpdd-400g, rel-pos: 11}
+        - {ref: std/qsfp-dd@1, id: fab-10, at: [387.05, 28.77], group: qsfpdd-400g-fabric, rel-pos: 10}
+        - {ref: std/qsfp-dd@1, id: fab-11, at: [387.05, 44.34], group: qsfpdd-400g-fabric, rel-pos: 11}
         - {ref: common/led-dot@1, id: leds-f10, at: [393.67, 25.60], for: fab-10, attrs: {port: '10'}, group: port-leds, rel-pos: 51}
         - {ref: common/led-dot@1, id: leds-f11, at: [397.43, 25.60], for: fab-11, attrs: {port: '11'}, group: port-leds, rel-pos: 52}
-        - {ref: std/qsfp-dd@1, id: fab-12, at: [410.85, 28.77], group: qsfpdd-400g, rel-pos: 12}
+        - {ref: std/qsfp-dd@1, id: fab-12, at: [410.85, 28.77], group: qsfpdd-400g-fabric, rel-pos: 12}
         - {ref: common/led-dot@1, id: leds-f12, at: [417.47, 25.60], for: fab-12, attrs: {port: '12'}, group: port-leds, rel-pos: 53}
     regions:
       - {id: mgmt-block, at: [1.0, 7.6], size: {w: 40.0, h: 70.0}, label: Management,
