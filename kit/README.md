@@ -1,4 +1,4 @@
-# portrayal-kit
+# @portrayal/kit
 
 The consumer half of [Portrayal](../README.md). It reads compiled artifacts and
 does something with them — draws them, lets you inspect them, exports them.
