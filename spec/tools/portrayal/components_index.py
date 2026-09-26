@@ -262,6 +262,12 @@ def main():
             # Omitted when the contract declares none, like `cages`.
             if data.get("groups"):
                 entry["groups"] = data["groups"]
+            # THE HEAD (docs/pluggables-heads-design.md 4.2), verbatim from the
+            # contract: the box a pluggable occupies outside its cage, which a
+            # downstream tool that never builds 3D still needs. Omitted when
+            # the contract declares none, like `groups`.
+            if data.get("head"):
+                entry["head"] = data["head"]
             # WHERE IT MATES, in its own frame - the contract's own `mate.at`,
             # never a forwarded one: an occupant mates with its own point
             # (L11). A consumer seating it in a cage solves its `at` from this
