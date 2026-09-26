@@ -459,6 +459,34 @@ def summed_rotate(rotate, axis):
     return int(turn) if turn == int(turn) else turn
 
 
+def presented_turn(contract, resolve, connectors):
+    """THE TURN AN OCCUPANT TAKES ON THIS HOST beyond the host placement's own
+    `rotate`, or None when there is none (#548).
+
+    A seated part turns with what it seats in (solve_seat, D3). A host that
+    presents its OWN interface seats at its own turn, plus the axis a
+    spanning pair runs on (spanning_axis). A host that FORWARDS a composed
+    part's aperture (forwarded_part) seats the occupant in THAT part, so the
+    part's own `rotate` is part of the turn as well: generic/sfp-lc-simplex@2
+    composes its bore at 180 (tongue up), and a plug seated through the optic
+    took the optic's turn alone - 180 out, its latch off the side opposite
+    the keyway, where a plug in a composed bore seated directly faces it. The
+    same was true of an optic `mate-to` a card whose cage is a part at 90: it
+    was drawn crosswise over its cage.
+
+    None, not 0, for an unturned forward, for the reason summed_rotate keeps
+    None: a published entry's `rotate` and a drawn `rotate()` do not change
+    for the port wrappers, which all compose their aperture upright.
+    """
+    part = forwarded_part(contract, resolve)
+    if part is None:
+        return spanning_axis(contract, resolve, connectors)
+    core = resolve(part["ref"]) if part.get("ref") else None
+    turn = summed_rotate(part.get("rotate"), spanning_axis(core, resolve, connectors)
+                         if core else None)
+    return turn if float(turn or 0) % 360 else None
+
+
 def resolve_views(device, cfg):
     """{face: (view-name, view)} for one configuration.
 

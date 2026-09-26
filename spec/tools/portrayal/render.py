@@ -30,7 +30,7 @@ from portrayal.manifest import (back_hosts, back_parts, key_on_back, slot_in_slo
                       load_yaml, resolve_views, slot_key_prefix,
                       seated_ref, occupants_under, occupant_local_id,
                       occupant_spec, nested_key_host, slot_default, drawn_refs,
-                      spanned_slots, spanning_axis, summed_rotate,
+                      spanned_slots, spanning_axis, summed_rotate, presented_turn,
                       alias_names, config_airflow,
                       config_power, device_options)
 from portrayal import capability
@@ -860,7 +860,7 @@ def solve_seat(lib, who, occ_ref, host_name, host, occ_rotate=None, occ_in=None,
     # OCCUPANT's drawing, not about where the host's slot is. The published
     # entry splits them the same way (`_slot_dict`: `mate` by the placement's
     # rotate, `rotate` by the sum), so the kit seats what the build draws.
-    orot = summed_rotate(hrot, spanning_axis(hc, _res, _connector_registry()))
+    orot = summed_rotate(hrot, presented_turn(hc, _res, _connector_registry()))
     if host.get("mirror"):
         raise ValueError(
             f"{who}: its host {host_name!r} is mirrored, and a "
@@ -3890,7 +3890,7 @@ def slot_entry(p, lib, families, connectors, candidates, group=None,
         return _slot_dict(p, contract, interface, None, refs, occupant, mate_at,
                           lift, extra_lift, group, "connector",
                           spanned_slots(contract, _resolve, connectors),
-                          spanning_axis(contract, _resolve, connectors))
+                          presented_turn(contract, _resolve, connectors))
     _family_name, family = found
     # `media` is the port's declared media - the cage's ceiling on its
     # family's ladder. THE PLACEMENT'S OWN `attrs.media` IS READ FIRST,
@@ -3930,7 +3930,7 @@ def slot_entry(p, lib, families, connectors, candidates, group=None,
                       _cage_accepts(candidates, families, accept_family, media),
                       occupant, mate_at, lift, extra_lift, group, "cage",
                       spanned_slots(contract, _resolve, connectors),
-                      spanning_axis(contract, _resolve, connectors))
+                      presented_turn(contract, _resolve, connectors))
 
 
 def _slot_dict(p, contract, interface, media, accepts, occupant, mate_at, lift,
@@ -4100,7 +4100,7 @@ def component_presents(ref, lib, families, candidates, connectors=None):
     entry = _slot_dict({"id": "", "at": [0.0, 0.0]}, contract, interface, None, refs,
                        None, mate_at, lift, 0.0, None, kind,
                        spanned_slots(contract, _resolve, connectors),
-                       spanning_axis(contract, _resolve, connectors))
+                       presented_turn(contract, _resolve, connectors))
     for k in ("id", "at", "group", "rel-pos", "occupant", "occupant-attrs"):
         entry.pop(k, None)
     return entry
