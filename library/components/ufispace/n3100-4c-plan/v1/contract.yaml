@@ -1,0 +1,43 @@
+format: 1
+kind: component
+name: n3100-4c-plan
+version: 1.0.0
+class: expansion-card
+behaviour: fills
+profile: networking
+description: >-
+  The UfiSpace N3100-4C seen from above, lying in a riser slot - its bracket at
+  the rear, its grey cover running forward into the chassis over the board
+size: {w: 120.9, h: 173.8}
+size-confidence: {w: borrowed, h: borrowed}
+attrs:
+  role: expansion-card
+  power-absent: not-applicable
+provenance:
+  kind: >-
+    A FACE, NOT AN ORDERABLE PART, so `kind: component` like every other
+    vendor plan face: as a module it exported to NetBox and Nautobot as a
+    second module type beside the card it is a view of. AND NO DEPTH: a
+    component with `size.d` compiles to an aperture that deep over its whole
+    area, and a face is not a hole - the card's own body carries the depth.
+  size: >-
+    borrowed from common/pcie-card-plan@1, the plan footprint of the generic
+    card Dell's service model seats in these slots: 120.9 across the bracket,
+    173.8 inside the chassis. The N3100-4C is 181.07 long against that
+    card's 181.0, so the same footprint is this card's to within a tenth, and
+    sharing the frame is what lets a riser bay's one `plan.at` land either.
+  the-face: >-
+    estimated - the datasheet's angled render shows the grey cover over
+    nearly the whole card with a strip of green board along the edge-connector
+    side; the cover stops 26.0 from the bracket's tip end, clear of the
+    riser connector, as ufispace/n3100-4c@1's cover box does. Nothing should
+    be measured off the art.
+  power: >-
+    not applicable - this is the card seen from above, a face of
+    ufispace/n3100-4c@1, which states the card's 48 W maximum and 34 W
+    typical draw. Stating it twice would count one card's load twice.
+relief:
+  wall: '#1a1d21'
+elements:
+  body: {at: [0.0, 0.0], size: [120.9, 173.8], class: bezel}
+skins: [default]

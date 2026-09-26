@@ -67,7 +67,11 @@ def test_every_riser_carries_its_pcb_and_a_connector_per_card_slot():
     """The point of the exercise: the riser IS its PCB, and a slot that takes
     a card has a connector behind it while one that takes only a filler has
     none - riser 1A's middle opening."""
-    for p in sorted((LIB / "components/dell").glob("riser-[123][a-f]-14g/v1/contract.yaml")):
+    risers = sorted((LIB / "components/dell").glob("riser-[123][a-f]-14g/v*/contract.yaml"))
+    # EVERY MAJOR, AND COUNTED: the glob named v1, and when the full-height
+    # risers moved to v2 it went on passing over the two that had not.
+    assert len(risers) >= 11, [str(r) for r in risers]
+    for p in risers:
         c = yaml.safe_load(p.read_text())
         boxes = {b["id"]: b for b in c["body"]["boxes"]}
         assert "pcb" in boxes, p
@@ -89,7 +93,7 @@ def test_a_configuration_can_seat_a_riser_slot():
     lib = render.Library([str(LIB)])
     view = {"size": {"w": 434.0, "h": 86.8}, "components": {"bays": [
         {"id": "riser-1", "at": [13.95, 4.0], "size": {"w": 107.59, "h": 62.0},
-         "accepts": ["dell/riser-1b-14g@1"], "default": "dell/riser-1b-14g@1"}]}}
+         "accepts": ["dell/riser-1b-14g@2"], "default": "dell/riser-1b-14g@2"}]}}
     d = {"name": "f", "manufacturer": "F", "model": "F", "version": "0.1.0",
          "chassis": {"width": 434.0, "height": 86.8, "depth": 700.0},
          "views": {"rear": view}}
@@ -97,25 +101,25 @@ def test_a_configuration_can_seat_a_riser_slot():
         out = render.render_view(d, "rear", view, lib, config={"bays": bays})
         return out if isinstance(out, str) else render.ET.tostring(out, encoding="unicode")
     plain = render_with({})
-    assert re.search(r'data-path="riser-1/module/slot-1/module"[^>]*data-ref="dell/pcie-filler-fh-14g@1', plain)
-    seated = render_with({"riser-1/slot-1": "common/pcie-card-fh@1", "riser-1/slot-3": ""})
-    assert re.search(r'data-path="riser-1/module/slot-1/module"[^>]*data-ref="common/pcie-card-fh@1', seated)
-    assert re.search(r'data-path="riser-1/module/slot-2/module"[^>]*data-ref="dell/pcie-filler-fh-14g@1', seated)
+    assert re.search(r'data-path="riser-1/module/slot-1/module"[^>]*data-ref="dell/pcie-filler-fh-14g@2', plain)
+    seated = render_with({"riser-1/slot-1": "common/pcie-card-fh@2", "riser-1/slot-3": ""})
+    assert re.search(r'data-path="riser-1/module/slot-1/module"[^>]*data-ref="common/pcie-card-fh@2', seated)
+    assert re.search(r'data-path="riser-1/module/slot-2/module"[^>]*data-ref="dell/pcie-filler-fh-14g@2', seated)
     assert not re.search(r'data-path="riser-1/module/slot-3/module"', seated), "an empty string empties the slot"
 
 
 def test_lint_walks_a_nested_configuration_key():
     dev = lambda bays: {"views": {"rear": {"size": {"w": 434.0, "h": 86.8}, "components": {"bays": [
                             {"id": "riser-1", "at": [13.95, 4.0], "size": {"w": 107.59, "h": 62.0},
-                             "accepts": ["dell/riser-1b-14g@1"], "default": "dell/riser-1b-14g@1"}]}}},
+                             "accepts": ["dell/riser-1b-14g@2"], "default": "dell/riser-1b-14g@2"}]}}},
                         "configurations": {"c": {"bays": bays}}}
     run = lambda bays: _caught("L8", lint.lint_device_configuration_bays, pathlib.Path("x.yaml"), dev(bays), [str(LIB)])
-    assert not run({"riser-1/slot-1": "common/pcie-card-fh@1", "riser-1/slot-2": ""})
-    hits = run({"riser-1/slot-9": "common/pcie-card-fh@1"})
+    assert not run({"riser-1/slot-1": "common/pcie-card-fh@2", "riser-1/slot-2": ""})
+    hits = run({"riser-1/slot-9": "common/pcie-card-fh@2"})
     assert hits and "unknown nested bay" in hits[0], hits
     hits = run({"riser-1/slot-1": "common/pcie-card-lp@1"})
     assert hits and "does not accept" in hits[0], hits
-    hits = run({"riser-9": "dell/riser-1b-14g@1"})
+    hits = run({"riser-9": "dell/riser-1b-14g@2"})
     assert hits and "unknown bay" in hits[0], hits
 
 
@@ -130,10 +134,10 @@ def test_a_seated_part_is_projected_into_another_view_once():
     lib = render.Library([str(LIB)])
     rear = {"size": {"w": 434.0, "h": 86.8}, "components": {"bays": [
         {"id": "riser-1", "at": [13.95, 4.0], "size": {"w": 107.59, "h": 62.0},
-         "accepts": ["dell/riser-1b-14g@1"], "default": "dell/riser-1b-14g@1",
+         "accepts": ["dell/riser-1b-14g@2"], "default": "dell/riser-1b-14g@2",
          "plan": {"view": "top", "at": [408.0, 13.9], "in": "board", "under": ["lid"]}},
         {"id": "riser-3", "at": [309.085, 4.0], "size": {"w": 107.59, "h": 41.68},
-         "accepts": ["dell/riser-3a-14g@1"], "default": "dell/riser-3a-14g@1",
+         "accepts": ["dell/riser-3a-14g@2"], "default": "dell/riser-3a-14g@2",
          "plan": {"view": "top", "at": [14.1, 13.9], "in": "board", "mirror": True}}]}}
     top = {"size": {"w": 434.0, "h": 737.5}, "components": {"placements": [
         {"ref": "dell/system-board-14g@1", "id": "board", "at": [5.5, 6.2]},
@@ -141,7 +145,7 @@ def test_a_seated_part_is_projected_into_another_view_once():
     d = {"name": "f", "manufacturer": "F", "model": "F", "version": "0.1.0",
          "chassis": {"width": 434.0, "height": 86.8, "depth": 737.5},
          "views": {"rear": rear, "top": top}}
-    out = render.render_view(d, "top", top, lib, config={"bays": {"riser-1/slot-1": "common/pcie-card-fh@1"}})
+    out = render.render_view(d, "top", top, lib, config={"bays": {"riser-1/slot-1": "common/pcie-card-fh@2"}})
     svg = out if isinstance(out, str) else render.ET.tostring(out, encoding="unicode")
     g = re.search(r'<g id="riser-1-plan"[^>]*>', svg)
     assert g, "the riser's plan is not in the top view"
