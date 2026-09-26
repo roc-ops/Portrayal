@@ -1,0 +1,66 @@
+format: 1
+kind: module
+name: qsfp28-passive-dac
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: qsfp
+profile: networking
+description: >-
+  Amphenol NDAAFR QSFP28 to QSFP28 100G passive direct-attach copper cable, one
+  end - 32 AWG eight-pair PVC-jacketed cable and a green lanyard pull. It
+  composes generic/qsfp-cable@1 and sets the lanyard's colour; the shape is the
+  generic's.
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+size: {w: 18.35, h: 8.5, d: 52.4}
+size-confidence: {w: borrowed, h: borrowed, d: borrowed}
+attrs:
+  model: NDAAFR
+  cable-kind: dac
+  media: qsfp28
+  speed: 100g
+  power-absent: not-published
+parts:
+  - {ref: generic/qsfp-cable@1, id: body, at: [0, 0],
+     attrs: {latch-color: '#009a44'}}
+provenance:
+  size: >-
+    borrowed - generic/qsfp-cable@1, the generic this wraps, whose own figures
+    are the qsfp-module registry entry's (SFF-8661 Rev 2.5 Figure 5-1). These are
+    the generic's numbers restated, not a new reading; the Amphenol drawing this
+    wrapper cites gives the same 18.35 REF and 8.5 REF.
+  model: >-
+    datasheet - Amphenol customer use drawing C-NDAAFR-0099 rev F, sheet 1,
+    Table 1: AHSP part numbers NDAAFR-0001 to NDAAFR-0006 by length. One cable
+    end stands for every length in that table.
+  cable-kind: >-
+    datasheet - C-NDAAFR-0099 rev F title block, "CABLE ASSEMBLY, QSFP/QSFP,
+    PSV, 100 ohm, 100 GbE, 32 AWG" (PSV, passive).
+  speed: >-
+    datasheet - C-NDAAFR-0099 rev F title block (100 GbE) and note 2,
+    compliant to the 100GBASE-CR4 specification.
+  media: >-
+    datasheet - C-NDAAFR-0099 rev F note 2 (100GBASE-CR4) and title (100 GbE):
+    a QSFP28 end. The BOM's item 2 names the plug "QSFP+, REFERENCE SFF-8661",
+    which is the shared envelope, not the rate.
+  cable: >-
+    datasheet - C-NDAAFR-0099 rev F BOM item 1: 32 AWG, 8-pair, PVC jacket, AWM
+    style 20276. Kept in this sentence and the description, not as an attr.
+  latch-color: >-
+    datasheet - C-NDAAFR-0099 rev F BOM item 5, "LANYARD - PANTONE 347C
+    (GREEN)". Pantone 347C, sRGB approximation: #009a44. The drawing gives the
+    Pantone reference; the hex value is the conversion, not a reading.
+  cable-od: >-
+    NOT STATED - C-NDAAFR-0099 rev F dimensions no cable diameter (item 1 gives
+    the gauge and pair count only), so the wrapper does not set cable-od and
+    generic/qsfp-cable@1's 6.9 default stands. That default is another vendor's
+    figure, not Amphenol's for this cable.
+  jacket-color: >-
+    NOT STATED - item 1 says PVC jacket and names no colour, so the generic's
+    neutral #1c1c1c default stands.
+  power: >-
+    not-published - C-NDAAFR-0099 rev F states no power figure; it is a passive
+    assembly (title, PSV) whose only powered part is the SFF-8636 EEPROM (note
+    5). No other Amphenol document for NDAAFR is held.
+connection-points:
+  mate: {at: [9.175, 4.25], direction: front}

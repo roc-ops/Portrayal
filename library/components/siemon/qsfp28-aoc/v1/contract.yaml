@@ -1,0 +1,80 @@
+format: 1
+kind: module
+name: qsfp28-aoc
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: qsfp
+profile: networking
+description: >-
+  Siemon 100G QSFP28 active optical cable, one end - four 25G lanes at 850 nm
+  over a 3.0 mm multimode fibre cable, 0.5 to 100 m. It composes
+  generic/qsfp-cable@1 and sets the cable's diameter, which makes this the thin
+  cable end of the set; the head is the generic's.
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+size: {w: 18.35, h: 8.5, d: 52.4}
+size-confidence: {w: borrowed, h: borrowed, d: borrowed}
+attrs:
+  model: Q1Q28F
+  cable-kind: aoc
+  media: qsfp28
+  speed: 100g
+  power-draw-max-w: 1.78
+parts:
+  - {ref: generic/qsfp-cable@1, id: body, at: [0, 0],
+     attrs: {cable-od: 3.0, jacket-color: '#49eaf8'}}
+provenance:
+  size: >-
+    borrowed - generic/qsfp-cable@1, the generic this wraps, whose own figures
+    are the qsfp-module registry entry's (SFF-8661 Rev 2.5 Figure 5-1). These are
+    the generic's numbers restated, not a new reading. The Siemon sheet draws
+    only an Overall Dimensions sketch with two reference figures, (8.50) and
+    (18.35), the same height and width, and no head, boot or pull tab
+    dimension, so the head, boot and strap drawn are the generic's.
+  document: >-
+    Siemon spec sheet Active Optical Cables QSFP28 100G, SS_QSFP28 100G Rev. E
+    09/19, two pages, marked PRELIMINARY VERSION 3 on page 2. Every value here
+    is from that sheet; a preliminary sheet may change, so a later release
+    supersedes these figures.
+  model: >-
+    datasheet - page 1 part number table: Q1Q28F-Y00.5M13 to Q1Q28F-Y50.0M13
+    (PVC) and Q1Q28F-V00.5M13 to Q1Q28F-V50.0M13 (LS0H), with the 100 m length
+    as Q1Q28F-X0100M13 and Q1Q28F-T0100M13. The model is the series stem
+    Q1Q28F that every part number shares; the letter after the hyphen is the
+    jacket (Y or X PVC, V or T LS0H) and the rest is the length, so one cable
+    end stands for every length and both jackets.
+  cable-kind: >-
+    datasheet - page 1 title and first paragraph, "Active Optical Cable (AOC)
+    assemblies" on "a flexible, multimode fiber cable".
+  speed: >-
+    datasheet - page 1, "transmitting data up to 100Gb/s", and page 2 Channel
+    Parameters, 4 lanes at 25.78 Gb/s channel max; Standards Compliance lists
+    100GBASE-SR4.
+  media: >-
+    datasheet - page 1 title and Standards Compliance, QSFP28 MSA.
+  cable-od: >-
+    datasheet - page 2 Mechanical Specifications, Cable Diameter 3.0mm +/-
+    0.15; the nominal is used. The same table gives Minimum Bend Radius 30mm
+    and Fiber Type OM3 multimode below 70 m, OM4 multimode at 70 m and over;
+    page 2 Channel Parameters gives the 850nm operating wavelength. At 3.0 this
+    is the THIN cable end: its stub is less than half the diameter of the
+    generic's 6.9 default, which every wrapper that states no diameter
+    keeps.
+  jacket-color: >-
+    photo-measured - the page 1 product photograph (the embedded 1535 x 738
+    image at 300 ppi): #49eaf8 is the per-channel median of the 164,214 pixels
+    of hue 0.45-0.55, saturation over 0.35 and value over 0.4, which are the
+    jacket (the heads are grey and the pull tabs black); the middle half by
+    value gives the same colour. The text states no colour and names only the
+    jacket material (PVC or LS0H, by part number); aqua is the usual jacket for
+    the OM3 and OM4 fibre the sheet specifies. A studio photograph lit bright,
+    so a real jacket may read darker.
+  latch-color: >-
+    NOT STATED - page 1 describes "a high-strength pull tab latching system"
+    and gives no colour, so the generic's neutral #6f6f6f default stands.
+  power: >-
+    datasheet - page 2 Electrical Specifications, Maximum Power Consumption Per
+    End 1.78W, at the 0 to 70 C case operating range the same table gives. One
+    end of the cable, so the per-end figure.
+connection-points:
+  mate: {at: [9.175, 4.25], direction: front}

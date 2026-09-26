@@ -67,7 +67,11 @@ def test_every_riser_carries_its_pcb_and_a_connector_per_card_slot():
     """The point of the exercise: the riser IS its PCB, and a slot that takes
     a card has a connector behind it while one that takes only a filler has
     none - riser 1A's middle opening."""
-    for p in sorted((LIB / "components/dell").glob("riser-[123][a-f]-14g/v1/contract.yaml")):
+    risers = sorted((LIB / "components/dell").glob("riser-[123][a-f]-14g/v*/contract.yaml"))
+    # EVERY MAJOR, AND COUNTED: the glob named v1, and when the full-height
+    # risers moved to v2 it went on passing over the two that had not.
+    assert len(risers) >= 11, [str(r) for r in risers]
+    for p in risers:
         c = yaml.safe_load(p.read_text())
         boxes = {b["id"]: b for b in c["body"]["boxes"]}
         assert "pcb" in boxes, p

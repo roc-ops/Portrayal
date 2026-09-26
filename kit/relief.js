@@ -769,6 +769,15 @@ export function bodyBoxes(body, faceW, faceH) {
 // above forbid. `lift` still comes back as the part's own face. A point with
 // no `on:`, or whose feature is missing or unreadable, keeps z = lift.
 //
+// A CYLINDER HAS NO data-z-out, AND ITS REAR IS ITS FAR END. A `cyl` feature
+// (a round stub a cable leaves from) is built by relief.js from its node's
+// summed lift to that plus data-z-cyl, so its rear is RELATIVE, not absolute:
+// `cylLift` is the feature node's own lift, summed from the feature up to the
+// marker's parent (cablePoints walks it), and z = the ancestors' lift +
+// cylLift + cyl - the same sum liftOf makes, with the cyl added. `rear`, when
+// present, still wins: an `out` feature resolves exactly as it did. An
+// unreadable cyl keeps z = lift, like an unreadable rear.
+//
 // A LIFT THAT DOES NOT PARSE IS ZERO; A POINT THAT DOES NOT PARSE IS NULL,
 // and the asymmetry is deliberate. A junk lift has a safe reading - the
 // feature is not displaced - and a NaN there would silently delete the cable
@@ -783,13 +792,16 @@ export function resolveCablePoint(marker, ancestors = []) {
   const lift = ancestors.reduce((z, a) => z + num(a && a.lift), 0);
   const raw = marker.at || [];
   const ok = raw.length === 2 && raw.every(v => v !== '' && v !== null && Number.isFinite(+v));
+  const given = v => v !== undefined && v !== null && v !== '' && Number.isFinite(+v);
   const rear = marker.rear;
-  const onFace = rear === undefined || rear === null || rear === '' || !Number.isFinite(+rear);
+  const z = given(rear) ? +rear
+    : given(marker.cyl) ? lift + num(marker.cylLift) + +marker.cyl
+    : lift;
   return {
     name: marker.name,
     at: ok ? [+raw[0], +raw[1]] : null,
     dir: marker.dir ?? null,
-    lift, z: onFace ? lift : +rear,
+    lift, z,
   };
 }
 
@@ -800,7 +812,7 @@ export function resolveCablePoint(marker, ancestors = []) {
 // WHAT IS AND IS NOT RESOLVED, stated plainly because the spec's phrase
 // "resolved chassis-frame position and direction" promises more than this
 // returns. `z` IS resolved, in millimetres off the panel: the summed ancestor
-// lift, or - for a point `on:` a relief feature - that feature's data-z-out. `at` IS NOT: it is the marker's OWN-FRAME point, exactly as the
+// lift, or - for a point `on:` a relief feature - that feature's data-z-out (a cyl's far end, lift + data-z-cyl). `at` IS NOT: it is the marker's OWN-FRAME point, exactly as the
 // part's contract declared it, with none of the group transforms between the
 // part and the svg applied. `dir` is the declared direction, unrotated.
 //
@@ -956,9 +968,18 @@ export function cablePoints(svg) {
       const feat = host && host.querySelector
         ? host.querySelector(`[id="${on.replace(/"/g, '\\"')}"]`) : null;
       if (feat && feat.dataset.zOut !== undefined) marker.rear = feat.dataset.zOut;
+      else if (feat && feat.dataset.zCyl !== undefined) {
+        // a cyl's rear is its far end: its own lift, summed from the feature
+        // up to (not including) the marker's parent, plus its length
+        let own = 0;
+        for (let n = feat; n && n !== host; n = n.parentElement)
+          own += Number.isFinite(+n.dataset.zLift) ? +(n.dataset.zLift || 0) : 0;
+        marker.cyl = feat.dataset.zCyl;
+        marker.cylLift = own;
+      }
       else console.warn(`cablePoints: ${owner ? owner.dataset.path : '(no data-path)'} ` +
                         `declares its cable point on ${JSON.stringify(on)}, which ` +
-                        `carries no data-z-out here; z falls back to the part's face`);
+                        `carries no data-z-out or data-z-cyl here; z falls back to the part's face`);
     }
     const pt = {...resolveCablePoint(marker, ancestors),
                 path: owner ? owner.dataset.path : '', el: mk};

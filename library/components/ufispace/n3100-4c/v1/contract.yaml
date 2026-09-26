@@ -1,0 +1,303 @@
+format: 1
+kind: module
+name: n3100-4c
+version: 1.0.0
+class: expansion-card
+behaviour: fills
+profile: networking
+description: >-
+  UfiSpace N3100-4C 5G timing adapter - a full-height PCIe Gen4 x16 add-in card
+  that offloads the PTP stack and servo from a COTS server for O-RAN fronthaul
+  timing. Stratum 3E OCXO, Cyclone V SoC FPGA and an Intel E-810 controller
+  behind 4x 10G/25G SFP28 ports, with GNSS in on SMA and 1PPS / 10MHz in/out
+  on SMB. Class C timing accuracy (G.8273.2), T-GM / T-BC / OC roles, SyncE
+  and G.8275.1. The face is its bracket, seen from outside the chassis.
+size: {w: 120.02, h: 21.59, d: 181.07}
+size-confidence: {w: registry, h: registry, d: datasheet}
+attrs:
+  model: N3100-4C
+  role: timing-adapter
+  sfp28: 4
+  power-draw-max-w: 48
+  power-draw-typical-w: 34
+  power-input: host PCIe slot
+  weight-kg: 0.44
+  bus: PCIe Gen4 x16 (Gen3 compatible)
+  pcie-connector: x16
+  pcie-generation: 4
+  pcie-height: full
+  slot-compatibility: one open PCIe slot, x4, x8 or x16, Gen3 or Gen4
+  controller: Intel E-810
+  fpga: Intel Cyclone V SoC
+  oscillator: Stratum 3E OCXO
+  timing-accuracy: ITU-T G.8273.2 Class C
+  timing-roles: IEEE 1588v2 T-GM, T-BC/OC (G.8275.1 telecom profile); SyncE with ESMC; PTP offload and redundancy; Assisted FTS
+  clock-specs: G.8271.1, G.8272 PRTC, G.8273.2 T-BC/T-TSC, G.8273.4 APTS (via firmware upgrade), G.8262 EEC, G.8262.1 eEEC, G.8264 ESMC
+  oran-sync: O-RAN LLS C1, C2, C3 synchronization topologies
+  optics-sfp28: '25G SFP28 SR/LR, 25G SFP28 CR DAC, 10G SFP+ SR/LR, SFP+ Twinax (datasheet supported-accessories list)'
+  timing-cables: SMA coax with 1/4-36UNS-2B connector for GNSS; SMB coax with 10-32UNF-2A connector for 1PPS and 10MHz
+  cooling: host airflow, 500 LFM required (no onboard fans)
+  operating-temp-c: 0 to 55
+  operating-humidity: 5 to 95 percent RH noncondensing
+  storage-temp-c: -40 to 70
+  storage-humidity: 5 to 93 percent RH noncondensing
+  os-support: CentOS, Ubuntu (ice driver 1.7.16+, NVM 3.20+)
+  management-interface: managed from the host DU server - ufiCardMgmt CLI over the E-810 network interface to the card's management IP; UFI PTP Timing Software
+  safety: UL 62368-1, IEC 62368-1
+  emc: FCC Part 15, Subpart B, Class A
+  eol: none-announced
+groups:
+  sfp28:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp28, speed: 25g}
+  sfp28-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+  timing:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: external timing references - GNSS antenna in on SMA, 1PPS and 10MHz in/out on SMB
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+  plate-screws:
+    term: Screw
+    role: furniture
+    index-origin: 1
+provenance:
+  sources: >-
+    vendor datasheet (sha256 ddbf965db74251ca56e294aabbe7aed7118b0903733485b43913d9aa74f89cf6 -
+    dimensions row, interfaces, power, environment, compliance); Hardware Installation Guide
+    v1.1, 17-Jul-2023 (sha256 cc842fac6fcb3e659f8f44f7a9f0b7fafcf1005a120246ee13dae30ba7f63400 -
+    the straight-on faceplate render fig-0005 with the Sync LED callout, the LED tables, the
+    slot requirements); the vendor's single angled product render (counts and colour only).
+  identity: >-
+    A CARD IS A MODULE, NOT A DEVICE. This part was a `kind: device` until a
+    riser had to seat it: a device cannot go in a bay, and a DCIM carries a
+    NIC as a module type in a host's slot rather than as a rack device. The
+    face is the card's full-height bracket, because that is all of a card
+    anybody sees - a riser slot is a bay on the host's rear face, and the
+    rest of the card lies inside the chassis as `body.boxes`.
+  size: >-
+    standard - the face is std/pcie-bracket-fh@2, 120.02 x 21.59, which this
+    part composes rather than redraws; `d` is the datasheet's 181.07 ('Dimension
+    (WxDxH) 126.35 x 181.07 x 21.95 mm', the card lying flat). The datasheet's
+    126.35 is the card along its bracket and is NOT the face: it is the
+    bracket's 120.02 plus 6.33 of board and cover standing past the flange end,
+    which the render shows breaking below the plate's own outline. That
+    overhang is inside the chassis and is carried by the body boxes, not the
+    face.
+  depth: >-
+    datasheet - 181.07, the card's length back from its bracket. Dell's
+    service model seats a generic card of 181.0 in the same slots, so this
+    card fills a slot exactly as the model's placeholder does.
+  orientation: >-
+    DRAWN TIP-LEFT AND THEREFORE UPSIDE DOWN against the vendor's figure. The
+    render is the card seen from outside with its retention tip at the RIGHT
+    and its legends upright; every std/ and riser frame in this library puts
+    the tip at the LEFT, which is the same metal half-turned. So every reading
+    below was turned about the bracket's centre (x' = L - x, y' = H - y), the
+    cages are placed `rotate: 180`, and the printing reads upside down here.
+    In a bay that is itself turned - Dell riser 3 - the card lands upright,
+    as the vendor drew it.
+  front-layout: >-
+    drawing - HIG fig-0005, 1471 x 259 px, itself a 1.45x upsample of the
+    PDF's embedded 1016 x 174 image, so the native reading is about 8 px/mm.
+    GATE 1: the tip tab's 45 degree chamfers run 43 px across by 42 down,
+    so the figure is isotropic, and one scale serves both axes - 11.648
+    px/mm, anchored on the bracket's governed 120.02 between its flange end
+    (px 68) and its tip (px 1466). The tip tab reads 118 px, 10.13 mm
+    against the specification's 10.20 (0.7 percent). THE BODY READS SHORT:
+    202 px, 17.34 mm against 18.42, so vertical positions are taken from
+    the body's centre row (px 107) rather than from an edge, which halves
+    the error at the edges; the worst case is about 0.5 mm at the lamp row.
+    Readings, px (x, y): cage apertures centred 513.5 / 678.5 / 843.5 /
+    1008.5 at row 114; lamps 478 / 643 / 808 / 973 at row 45; number tags
+    centred 543.5 / 708.5 / 875 / 1042, 59 x 29 px; SMB nuts (240.5, 107.5)
+    and (358, 107); SMA nut (1175.5, 96); Sync lamp 288..310 x 168..178;
+    screw head centre (123, 75), 62 px across.
+  the-cage-pitch-is-the-registry-share: >-
+    registry - measured centres fall on a 14.16 pitch; the four cages share
+    walls (one unbroken dark run across the block in the figure), so they are
+    std/sfp-ganged@1 on its 14.25 share, centred on the measured block, and
+    every measured centre lands within 0.13 of the fitted one.
+  the-plate-fills-the-opening: >-
+    THIS BRACKET IS NOT OPEN. The connector opening a standard bracket
+    carries is 89.9 x 12.06; the N3100-4C's vents and jacks are holes in
+    solid metal, and one vent column stands at x' 109.3..111.3, past the
+    opening's end at 109.86 - so the metal the figure shows is a punched
+    plate. It is drawn as dell/pcie-filler-fh-14g@2 draws its own: seamless,
+    the bracket's colour, 0.3 proud of the opening all round so the opening's
+    stroke leaves no ghost, with the bracket composed BEHIND it.
+  colour: >-
+    the vendor render's plate is a lighter, warmer grey than the bracket's
+    #9aa1a8. The plate takes the bracket's colour so the two read as one
+    sheet, which they are; the delta is recorded here rather than drawn as a
+    seam.
+  vents: >-
+    drawing - eleven square perforations round the SMB pair, 2.0 square on a
+    3.35 pitch: a row of six along the lamp side, a column of three beyond
+    the 1PPS jack (outside the opening, in bracket metal), and a column of
+    two between the jacks, the Sync lamp continuing that column. Sizes and
+    pitch from the same readings.
+  sync-led: >-
+    drawing - the HIG's callout leader points at a small dark rectangular lamp
+    (22 x 10 px, 1.89 x 0.86 mm) between the 1PPS and 10MHZ legends; the HIG
+    names it the Sync LED, and it carries no printed legend. Drawn with
+    common/led-dot@1 (2.0 round), the closest library part. States are the
+    HIG section 3.1 table - Off (card not activated or not fully seated in
+    the PCIe slot), Solid Green (an Ethernet port is up and synchronized to a
+    timing source), Solid Amber (Ethernet and synchronization link status
+    down or lost), Blinking Green (Ethernet up but system timing sync
+    disabled, or in free-run or holdover), Blinking Amber 1/s (thermal
+    alert), Blinking Amber 4/s (thermal NMI, all Ethernet ports disabled).
+  port-leds: >-
+    drawing - one green lamp per SFP28 port, beside that port's yellow
+    number tag; led-port-N serves port-N. HIG 3.1: Off (no cable or no
+    traffic), Blinking Green (25G TX/RX activity), Blinking Amber (10G or
+    less TX/RX activity).
+  printing: >-
+    drawing - 1PPS, 10MHZ (a capital Z, as printed) and GNSS ANT below
+    their jacks, and the port numerals 0-3 in black on yellow tags; cap
+    height 20 px, 1.72 mm, which is a 2.4 face. Transcribed from fig-0005
+    and confirmed against the angled render.
+  screw: >-
+    drawing - the bracket's hold-down screw head reads 5.32 across at the
+    flange end; drawn with common/screw-head@1 at its 3.6 contract size.
+  pcb-edge: >-
+    drawing - a dark band 1.8 deep runs beyond the bracket's body along its
+    keyed side from x' 32.8 to the flange end: the card's underside standing
+    past the metal, as the render shows it. It is face art only; the board
+    itself is placed by the specification (see `body`), 1.27 inside the
+    bracket, where this band would be hidden.
+  body: >-
+    THE CARD BEHIND THE BRACKET, FROM THE SPECIFICATION WHERE IT SPEAKS.
+    PCIe CEM 5.0 figure 6-5 gives the x16 edge: a tab 8.40 deep (MIN, to the
+    board's shoulder), pads 3.00 long from 2.60 to 5.60 up it on a 1.00
+    pitch, a key notch 1.90 wide at full radius, 12.15 from the key's centre
+    to the tab's bracket end and 72.15 (DIM B, x16) to the other. Figure 11-3
+    puts the key centre (datum X) 59.05 behind the bracket and fixes a
+    standard-height card at 111.15 from the tab's edge. So the tab runs
+    46.90..131.20 back from the bracket. ITS EDGE IS AT x' 15.20: the
+    datasheet's 126.35 is the card's top edge along the bracket, less 111.15
+    - and Dell's service model draws its generic card starting at 15.5, a
+    second reading 0.3 away. The board is 1.57 (CEM nominal), its solder face
+    1.27 inside the bracket's keyed edge (figure 11-5), which also centres it
+    in Dell's measured riser connector to within a millimetre.
+    ESTIMATED, NOT SPECIFIED: the cover. The vendor's renders show a grey
+    cover over nearly the whole component side; it is drawn from x' 26.0
+    (clear of the riser connector) to the top edge and from the board to the
+    bracket's far edge, starting 42.0 back - behind the SFP cages, which are
+    41 deep and stand on the board in front of it. The board runs the
+    datasheet's full 181.07.
+  not-on-this-face: >-
+    A MICRO-USB RECEPTACLE on the card's edge near the bracket (datasheet
+    fig-0002) is inside the chassis once the card is seated and is not drawn;
+    no document names its function. An SFP-cage-like connector standing on
+    the card's rear edge (datasheet fig-0002, HIG fig-0003) is likewise
+    unnamed by any document and not drawn.
+  environment: >-
+    datasheet - operating 0-55 C, 5-95 percent RH; storage humidity 5-93
+    percent. STORAGE TEMPERATURE DISAGREES: the datasheet says -40 to 70 C,
+    the HIG's installation requirements -40 to 65 C - same measure, same
+    scope; this part carries the datasheet figure.
+  power: >-
+    datasheet - 'Max power Consumption: 48 Watts, Typical Power Consumption:
+    34 Watts' under the Power Supply row; the HIG repeats the 48 W maximum.
+    Neither says what optics population the figures assume. Drawn from the
+    host's PCIe slot; the card has no supply.
+  weight: >-
+    datasheet - net weight 0.44 kg / 0.97 lbs.
+  lifecycle: >-
+    no end-of-life announcement found for the N3100-4C.
+body:
+  depth: 181.07
+  color: '#b4b7b9'
+  # THE SLAB STOPS WHERE THE BRACKET STOPS BEING A RECTANGLE. A plate defaults
+  # to the whole face, and the bracket is not a rectangle: the face's
+  # transparent corners round the tip tab and the keyed flange showed the
+  # slab's sides as L-shaped fins in the card's colour. Trimmed to the body
+  # band between the tip's and the flange's chamfers, 11.38..114.28 by
+  # 3.17..21.59; the tab and the key still draw, from the face itself.
+  plate: {at: [11.38, 3.17], size: [102.90, 18.42]}
+  # THE CARD, BUILT FROM PCIe CEM 5.0 - see provenance `body`. x runs along
+  # the bracket from its tip, y across it from the keyed edge, `from` back
+  # from the bracket. The edge tab is two boxes either side of the key notch
+  # and the gold pads stand 0.05 proud of it on both faces.
+  boxes:
+  - {id: board, at: [23.60, 4.44], size: [102.75, 1.57], from: 0.0, depth: 181.07,
+     color: '#2f7d3a', confidence: estimated,
+     source: 'CEM 5.0 fig 11-3: 111.15 card height from the tab edge, shoulder 8.40 up (fig 6-5), 1.57 board 1.27 inside the bracket; length from the datasheet'}
+  - {id: edge-tab-short, at: [15.20, 4.44], size: [8.40, 1.57], from: 46.90, depth: 11.20,
+     color: '#2f7d3a', confidence: registry,
+     source: 'CEM 5.0 fig 6-5 and 11-3: key centre 59.05 behind the bracket, 12.15 to the tab end, notch 1.90 wide'}
+  - {id: edge-tab-long, at: [15.20, 4.44], size: [8.40, 1.57], from: 60.00, depth: 71.20,
+     color: '#2f7d3a', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: x16 DIM B 72.15 from the key centre'}
+  - {id: edge-pads-short, at: [17.80, 4.39], size: [3.00, 1.67], from: 47.25, depth: 10.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: pads 2.60..5.60 up the tab, pins 1-11 on 1.00 pitch, 1.50 from the key'}
+  - {id: edge-pads-long, at: [17.80, 4.39], size: [3.00, 1.67], from: 60.25, depth: 70.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: pins 12-82, N = 70 spaces on 1.00 pitch'}
+  # BEHIND THE CAGES, NOT FROM THE BRACKET. Each std/sfp-ganged@1 is a pocket
+  # 41 deep; a cover starting at the bracket filled it, and every cage mouth
+  # looked onto the cover's flat front.
+  - {id: cover, at: [26.00, 6.01], size: [100.35, 15.58], from: 42.0, depth: 139.07,
+     color: '#c3c6c8', confidence: estimated,
+     source: 'the grey cover of the vendor renders, on the component side up to the bracket edge, clear of the riser connector and behind the 41-deep cages'}
+faces:
+  plan:
+    ref: ufispace/n3100-4c-plan@1
+elements:
+  plate: {at: [19.66, 6.05], size: [90.5, 12.66], class: bezel}
+  pcb-edge: {at: [32.8, 1.37], size: [87.31, 1.8], class: bezel}
+parts:
+  - {ref: std/pcie-bracket-fh@2, id: bracket, at: [0, 0], behind: true}
+  - {ref: std/sfp-ganged@1, id: port-0, at: [74.78, 6.58], rotate: 180, group: sfp28}
+  - {ref: std/sfp-ganged@1, id: port-1, at: [60.53, 6.58], rotate: 180, group: sfp28}
+  - {ref: std/sfp-ganged@1, id: port-2, at: [46.27, 6.58], rotate: 180, group: sfp28}
+  - {ref: std/sfp-ganged@1, id: port-3, at: [32.02, 6.58], rotate: 180, group: sfp28}
+  - ref: common/led-dot@1
+    id: led-port-0
+    at: [83.82, 16.7]
+    group: sfp28-leds
+    states: {lamp: ['off', {name: activity-25g, color: '#22c55e', behavior: blinking},
+                   {name: activity-10g, color: '#eab308', behavior: blinking}]}
+  - ref: common/led-dot@1
+    id: led-port-1
+    at: [69.66, 16.7]
+    group: sfp28-leds
+    states: {lamp: ['off', {name: activity-25g, color: '#22c55e', behavior: blinking},
+                   {name: activity-10g, color: '#eab308', behavior: blinking}]}
+  - ref: common/led-dot@1
+    id: led-port-2
+    at: [55.49, 16.7]
+    group: sfp28-leds
+    states: {lamp: ['off', {name: activity-25g, color: '#22c55e', behavior: blinking},
+                   {name: activity-10g, color: '#eab308', behavior: blinking}]}
+  - ref: common/led-dot@1
+    id: led-port-3
+    at: [41.32, 16.7]
+    group: sfp28-leds
+    states: {lamp: ['off', {name: activity-25g, color: '#22c55e', behavior: blinking},
+                   {name: activity-10g, color: '#eab308', behavior: blinking}]}
+  - {ref: common/smb-jack@1, id: clk-1pps, at: [101.71, 8.84], rotate: 180, group: timing, attrs: {role: 1pps-io}}
+  - {ref: common/smb-jack@1, id: clk-10mhz, at: [91.62, 8.88], rotate: 180, group: timing, attrs: {role: 10mhz-io}}
+  - {ref: common/sma-jack@1, id: gnss-ant, at: [20.19, 8.57], rotate: 180, group: timing, attrs: {role: gnss-in}}
+  - ref: common/led-dot@1
+    id: led-sync
+    at: [99.19, 5.71]
+    group: status-leds
+    states: {lamp: ['off',
+                   {name: synced, color: '#22c55e'},
+                   {name: link-down, color: '#eab308'},
+                   {name: free-run, color: '#22c55e', behavior: blinking},
+                   {name: thermal-alert, color: '#eab308', behavior: blinking}]}
+  - {ref: common/screw-head@1, id: plate-screw, at: [113.5, 13.33], group: plate-screws}
+skins: [default]

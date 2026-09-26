@@ -56,7 +56,7 @@ def test_lint_refuses_a_field_that_prints_nowhere(tmp_path):
     (d / "skins" / "default.svg").write_text('<svg><text data-from="watts">1W</text><text data-from="ghost">?</text></svg>')
     p = d / "contract.yaml"
     hits = _caught("L73", lint.lint_component_fields, p, {"skins": ["default"], "fields": {"watts": {}, "speed": {}}})
-    assert any("speed has no data-from, data-fill-from or data-stroke-from node" in h for h in hits), hits
+    assert any("speed has no data-from, data-fill-from, data-stroke-from, data-stroke-derive or data-r-from node" in h for h in hits), hits
     assert any("ghost" in h for h in hits), hits
     hits = _caught("L73", lint.lint_component_fields, p, {"skins": ["default"], "fields": {"watts": {"type": "choice"}}})
     assert any("no options" in h for h in hits), hits
@@ -97,7 +97,7 @@ def test_every_riser_slot_says_what_it_is():
     """A card feature reads `slot:`: connector, lanes, height, length. Every
     wired slot on every R740xd riser carries it, agreeing with its prose."""
     wired = 0
-    for p in sorted(LIB.glob("components/dell/riser-[123][a-f]-14g/v1/contract.yaml")):
+    for p in sorted(LIB.glob("components/dell/riser-[123][a-f]-14g/v*/contract.yaml")):
         c = yaml.safe_load(p.read_text())
         for bid, b in c["bays"].items():
             prose = c["attrs"].get(bid, "")

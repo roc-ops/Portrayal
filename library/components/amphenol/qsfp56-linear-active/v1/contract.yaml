@@ -1,0 +1,72 @@
+format: 1
+kind: module
+name: qsfp56-linear-active
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: qsfp
+profile: networking
+description: >-
+  Amphenol NJAAF3 QSFP56 to QSFP56 200G active copper cable, one end - 30 AWG
+  eight-pair dual-drain cable in a black PVC jacket, with a blue lanyard pull.
+  It composes generic/qsfp-cable@1 and sets the lanyard and jacket colours; the
+  shape is the generic's.
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+size: {w: 18.35, h: 8.5, d: 52.4}
+size-confidence: {w: borrowed, h: borrowed, d: borrowed}
+attrs:
+  model: NJAAF3
+  cable-kind: acc
+  media: qsfp56
+  speed: 200g
+  power-absent: not-published
+parts:
+  - {ref: generic/qsfp-cable@1, id: body, at: [0, 0],
+     attrs: {latch-color: '#5b77cc', jacket-color: '#1c1c1c'}}
+provenance:
+  size: >-
+    borrowed - generic/qsfp-cable@1, the generic this wraps, whose own figures
+    are the qsfp-module registry entry's (SFF-8661 Rev 2.5 Figure 5-1). These are
+    the generic's numbers restated, not a new reading; the Amphenol drawing this
+    wrapper cites gives the same 18.35MM REF and 8.5MM REF.
+  model: >-
+    datasheet - Amphenol customer use drawing C-NJAAF3-0099 rev A, sheet 1,
+    Table 1 (AHSP part numbers by length, NJAAF3-0003 among them). One cable end
+    stands for every length.
+  cable-kind: >-
+    datasheet - C-NJAAF3-0099 rev A title block, "CABLE ASSEMBLY, QSFP/QSFP,
+    ACTIVE, 100 ohm, 200 GbE, 30 AWG": an active copper cable (acc). The
+    schematic draws an equaliser (EQ) in the signal path; the directory name's
+    "linear" is that, and is a description, not a separate attr.
+  speed: >-
+    datasheet - C-NJAAF3-0099 rev A title block (200 GbE) and note 2, compliant
+    to IEEE 802.3cd 200GBASE-CR4.
+  media: >-
+    datasheet - C-NJAAF3-0099 rev A note 2: 200GBASE-CR4 is four 50G lanes, a
+    QSFP56 end. The BOM's item 2 names the plug "QSFP+, REFERENCE SFF-8661",
+    which is the shared envelope, not the rate.
+  cable: >-
+    datasheet - C-NJAAF3-0099 rev A BOM item 1: 30 AWG, 8-pair, dual drain, PVC
+    black, UL AWM style 20276. Kept in this sentence and the description, not as
+    an attr.
+  latch-color: >-
+    datasheet - C-NJAAF3-0099 rev A BOM item 4, "LANYARD - PANTONE 2718 (BLUE)".
+    Pantone 2718, sRGB approximation: #5b77cc. The drawing gives the Pantone
+    reference; the hex value is the conversion, not a reading.
+  jacket-color: >-
+    datasheet - C-NJAAF3-0099 rev A BOM item 1, "PVC BLACK". Black is written as
+    the library's near-black #1c1c1c, which is also the generic's default; it is
+    set here because this document states it.
+  cable-od: >-
+    NOT STATED - C-NJAAF3-0099 rev A dimensions no cable diameter (item 1 gives
+    gauge and construction only; the bend view gives R37MM MIN and 45MM from the
+    diecast, not a diameter), so the wrapper does not set cable-od and
+    generic/qsfp-cable@1's 6.9 default stands. That default is another vendor's
+    figure, not Amphenol's for this cable.
+  power: >-
+    not-published - C-NJAAF3-0099 rev A states no power figure for this active
+    assembly anywhere on its one sheet; no other Amphenol document for NJAAF3 is
+    held. It draws power (the title says ACTIVE), so a chassis total holding it
+    is a floor.
+connection-points:
+  mate: {at: [9.175, 4.25], direction: front}
