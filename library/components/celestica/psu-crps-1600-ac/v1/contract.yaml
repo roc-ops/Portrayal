@@ -1,0 +1,75 @@
+format: 1
+kind: module
+name: psu-crps-1600-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  1600 W AC CRPS supply of the Celestica ES1000-48P and -48CP (PoE++) - 1000 W on a 100-127 V feed. C14 inlet turned portrait, 40 mm fan, black release tab, fold-down handle, DC OK and AC OK lamps. Offered F2B and B2F; the vendor part number is not published.
+size: {w: 73.5, h: 40.0, d: 185.0}
+size-confidence: {w: registry, h: registry, d: registry}
+conforms: crps-1u
+attrs: {power-output-w: 1600, input: ac, form-factor: crps-1u, power-output-low-line-w: 1000}
+provenance:
+  size: >-
+    registry - the CRPS 1U module envelope (73.5 x 40, 185 deep). The ES1000 rear figure agrees: each supply face measures 73.5 wide on the ES1010 guide's 5736 px copy of the same rear art (256.0 to 329.5 and 346.3 to 419.8 mm across the body)
+  depth: >-
+    registry - CRPS 1U nominal 185; no Celestica document states the supply depth
+  face: >-
+    measured - every feature is read off the ES1010/ES1050/EG1050 guide Rear Panel figure 1 (5736 x 634 px, 11.5 px/mm across, orthographic CAD render), which is the same rear art as the ES1000 guide's own Rear Panel figure 2 (1681 x 182, 3.35 px/mm) - checked by placing both at matched scale: fan, inlet, latch and the two bottom lamps land within 0.5 mm. Fan left, C14 portrait at right with its earth pin outboard, the black release tab to the right of the inlet ('Press the black tab next to the power receptacle', ES1000 guide PSU Removal step 2), fold-down handle along the bottom, two lamp windows either side of a dark round boss nobody documents.
+  power: >-
+    datasheet - ES1000 guide PSU Power Options, 1600W PSU: 1600 W in high line mode (200-240 V), reduced to 1000 W in low line mode (100-127 V) High line in power-output-w, low line beside it, the way celestica/psu-1600@1 records the ES1010's supply.
+  leds: >-
+    datasheet - ES1000 guide PSU LEDs Table 1, the 920W & 1600W rows: Left LED (DC OK), Right LED (AC OK), with the four combinations transcribed as states. Which window is left is the figure's (as seen from the rear).
+  sibling: >-
+    NOT celestica/psu-1600@1, deliberately. That contract is the ES1010's Gospower G1482-1600WRA drawn from bench photographs with a purple latch and ONE status lamp. The ES1000 guide draws this supply with a black tab and TWO lamps and tables it as DC OK / AC OK - and so does the ES1010 guide's own PSU LED table for its 1600 W supply. They may be one part photographed and drawn differently; nothing held settles it, so this is a separate contract and a question for review.
+states: [ok, fail, absent]
+elements:
+  handle: {at: [1.8, 28.0], size: [39.4, 10.8], class: handle}
+  latch: {at: [67.0, 13.8], size: [4.6, 18.2], class: latch}
+  led-dc-ok:
+    at: [43.8, 35.1]
+    size: [3.0, 3.0]
+    class: led
+    states:
+      - 'off'
+      - {name: ok, color: '#22c55e'}
+      - {name: standby, color: '#22c55e', behavior: {mode: blinking, rate: 0.5}}
+      - {name: fail, color: '#ef4444'}
+  led-ac-ok:
+    at: [66.6, 35.1]
+    size: [3.0, 3.0]
+    class: led
+    states:
+      - 'off'
+      - {name: ok, color: '#22c55e'}
+      - {name: peer-ac-fault, color: '#ef4444', behavior: {mode: blinking, rate: 0.5}}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [40.75, 5.1], rotate: 90}
+relief:
+  features:
+    - node: handle
+      uhandle: 10.0
+      confidence: estimated
+      source: >-
+        the ES1000 guide shows the supply only face-on and in a three-quarter view, so every out-of-plane depth here is a proportion of the three-quarter render, not a measurement.
+    - node: latch
+      out: 2.5
+      confidence: estimated
+      source: >-
+        the ES1000 guide shows the supply only face-on and in a three-quarter view, so every out-of-plane depth here is a proportion of the three-quarter render, not a measurement; the tab hangs proud of the inlet in ES1000 guide PSU Removal figure 2.
+    - node: led-dc-ok
+      dome: 0.3
+      confidence: estimated
+      source: common/led-dot@1 - the lamp dome the library carries for small panel lamps; unmeasured here.
+    - node: led-ac-ok
+      dome: 0.3
+      confidence: estimated
+      source: common/led-dot@1 - the lamp dome the library carries for small panel lamps; unmeasured here.
+connection-points:
+  power: {at: [54.8, 15.1], direction: rear}
+body:
+  depth: 185.0
+  color: '#c3c7cc'
+skins: [default]
