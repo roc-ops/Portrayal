@@ -462,7 +462,17 @@ def test_the_comparison_layer_can_now_reach_them():
     (p80), and the chassis rides through a missing tray for only two minutes at 35 C. That
     is a stated form with a zero in it, not an absence, so the census counts it. The SR-7
     beside it has one tray and states no form, and is not counted.
+
+    SEVENTY-TWO AND SEVENTY-THREE ARE THE CELESTICA DS4000 AND DS4001, the first Celestica
+    entries, and they are the AIS800-32D case again from another vendor: 6+1 over SEVEN
+    bays, one fan per tray, so the digit form and the bay count agree without argument.
+    Both datasheets say it ("6+1 redundant fans" on the DS4000, "6+1
+    Redundant/Hot-Swappable fans" on the DS4001) and the DS4000's own SKU descriptions
+    count "7 FAN". They share one installation guide and one rear elevation, and one fan
+    part, celestica/fan-40@1, serves both - counted twice because two datasheets state it
+    twice, not because there are two rears. The two models' FRONTS differ; nothing about
+    the cooling does.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 71, n
+    assert n == 73, n
