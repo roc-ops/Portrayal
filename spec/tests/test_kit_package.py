@@ -23,8 +23,20 @@ pytestmark = pytest.mark.skipif(shutil.which("node") is None, reason="node not i
 
 
 @pytest.fixture(scope="module")
-def packed():
-    out = subprocess.run(["npm", "pack", "--dry-run", "--json"], cwd=KIT,
+def staged(tmp_path_factory):
+    # Pack a copy, laid out like the repository, so `prepack` and `postpack`
+    # never touch the tree. The suite runs under xdist, and two workers packing
+    # kit/ itself would race each other's copy and removal.
+    root = tmp_path_factory.mktemp("pack")
+    shutil.copytree(KIT, root / "kit", ignore=shutil.ignore_patterns("node_modules"))
+    for name in ("LICENSE", "NOTICE"):
+        shutil.copy(ROOT / name, root / name)
+    return root / "kit"
+
+
+@pytest.fixture(scope="module")
+def packed(staged):
+    out = subprocess.run(["npm", "pack", "--dry-run", "--json"], cwd=staged,
                          capture_output=True, text=True, check=True)
     return {f["path"] for f in json.loads(out.stdout)[0]["files"]}
 
@@ -33,10 +45,10 @@ def test_the_tarball_carries_the_licence_and_the_notice(packed):
     assert {"LICENSE", "NOTICE"} <= packed
 
 
-def test_packing_leaves_no_copies_behind(packed):
+def test_packing_leaves_no_copies_behind(staged, packed):
     # `postpack` removes them. A copy left in kit/ would drift from the root.
-    assert not (KIT / "LICENSE").exists()
-    assert not (KIT / "NOTICE").exists()
+    assert not (staged / "LICENSE").exists()
+    assert not (staged / "NOTICE").exists()
 
 
 def test_every_export_is_in_the_tarball(packed):
