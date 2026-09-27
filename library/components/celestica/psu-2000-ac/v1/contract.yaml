@@ -1,0 +1,123 @@
+format: 1
+kind: module
+name: psu-2000-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Celestica's 2000 W hot-swap supply as the DS5000 seats it - a 40 mm tall module in a bright
+  housing with a perforated face at its left carrying two round status lamps, a black pull
+  bail standing vertically beside them, an IEC C20 inlet turned on its side at the right and a
+  black release tab hanging at the inlet's lower right. Input is 100-240 VAC or 180-300 VDC
+  on the same inlet. Four seat the DS5000's rear, two stacked at each end. No vendor part
+  number is published for it, so it is named for its rating and its inlet.
+size: {w: 56.4, h: 40.0}
+size-confidence: {w: drawing, h: drawing}
+attrs:
+  power-output-w: 2000
+  input: ac
+  input-range: '100-240 VAC 47-63 Hz, or 180-300 VDC (auto input)'
+provenance:
+  size: >-
+    drawing - Measured on the DS5000 hardware guide's Figure 2 "DS5000 Rear View" (docs portal page
+    "DS5000 System Overview", 3121 x 663 px), whose chassis body between the ear folds is
+    2417 x 482 px against the stated 438.5 x 87 mm - 5.512 px/mm across and 5.540 down, 0.5%
+    apart, so the figure is a CAD elevation and carries geometry. Each supply's opening
+    reads 56.4-56.8 wide including its frame line (left pair x 10.1-66.9, right pair
+    371.6-428.2 in chassis millimetres) and 39.9-40.0 tall on a 40.9-41.0 stacking pitch
+    (3.6-43.3 and 44.3-84.6). 40.0 is taken as the CRPS-family height; 56.4 is the face
+    between the frame lines. The width is NOT the CRPS 73.5 mm and not the M-CRPS 60 mm
+    either; no document names the form factor.
+  depth: >-
+    estimated - 185 mm is the CRPS-family module length the library's other 40 mm supplies carry. The
+    guide's PSU Removal figure is an isometric render of the pulled module and dimensions
+    nothing.
+  power: >-
+    datasheet - 2000 W per supply - DS5000 datasheet POWER AND COOLING "2+2 redundant, hot swappable
+    2000W PSUs", repeated on the guide's Hardware Overview page. Neither document says
+    whether 2000 W holds at low line; the PSU is recorded at the one figure published.
+  input: >-
+    datasheet - Datasheet and guide spec table: "100-240VAC auto-ranging, 47-63Hz or 180-300VDC auto
+    input". The same C20 inlet takes both.
+  face: >-
+    drawing - Every feature read off the same Figure 2 at 5.51 px/mm, in module coordinates (left
+    supply's frame at chassis x 10.3, y 3.7): two lamps centred at (7.46, 6.70) and (7.46,
+    12.95), each a green lens about 2.7 across in a dark bezel about 5.4 across; the bail
+    a vertical bar x 15.8-22.1, y 0.8-39.0; the inlet's dark housing x 24.5-51.6, y
+    0.2-35.7, with the rounded coupler recess x 26.9-49.5, y 2.6-32.7; the release tab x
+    51.8-55.3, y 24.6-39.3. The right-hand pair and the lower row draw the same face in
+    the same orientation - the supplies are not turned against each other.
+  the-inlet-is-a-c20-on-its-side: >-
+    drawing - The recess is 22.6 wide by 30.1 tall and holds three blades all standing vertical - two
+    in a column on the left and one centred on the right - which is std/c20-inlet@1's
+    earth-up face turned a quarter turn clockwise (rotate 90), the earth blade to the right.
+    Its 32.4 x 24.4 envelope turned is 24.4 x 32.4, centred on the recess at (38.2, 17.65).
+    Neither document names the inlet; a 2000 W supply on a 100-240 V range needs the 16 A
+    C20, and the blade layout is the C20's rather than the C14's.
+  lamps: >-
+    drawing - TWO LAMPS, AND WHAT THEY MEAN IS NOT PUBLISHED. Each has a tiny rotated legend beside
+    it that the figure does not resolve - at 66 px/mm upsampled it reads as roughly two
+    and three characters, plausibly IN and OUT, which is not a reading. No legend is drawn
+    and the states are the generic ok/fault pair. See the DS5000's psu-lamp-legend gap.
+  the-grille: >-
+    drawing - The left of the face is a square-hole perforation over the supply's fan, about 2.7 mm
+    cells, drawn light because the elevation and the pulled-module render both show a
+    bright perforated plate there.
+states: [absent]
+elements:
+  grille: {at: [0.80, 0.80], size: [14.40, 38.40], class: rotor}
+  led-1: {at: [6.11, 5.35], size: [2.70, 2.70], class: led,
+          states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+  led-2: {at: [6.11, 11.60], size: [2.70, 2.70], class: led,
+          states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+  handle: {at: [15.80, 0.80], size: [6.30, 38.20], class: handle}
+  inlet-housing: {at: [24.50, 0.20], size: [27.10, 35.50], class: bezel}
+  latch: {at: [51.80, 24.60], size: [3.50, 14.70], class: latch}
+parts:
+  - {ref: std/c20-inlet@1, id: inlet, at: [22.00, 5.45], rotate: 90}
+relief:
+  wall: '#3a3e43'
+  # THE FACE ITSELF GETS NO RELIEF - a full-face `out` is a slab and a slab buries whatever is
+  # recessed beneath it, the composed inlet included.
+  features:
+    - node: grille
+      vent: 30
+      confidence: estimated
+      source: >-
+        celestica/psu-2000-ac@1's own face key - the perforation's extent is drawn; the depth
+        of the fan behind it is not stated anywhere.
+    - node: handle
+      uhandle: 27
+      confidence: estimated
+      source: >-
+        The PSU Removal figure shows a black D-loop bail on two pivots at the face's left,
+        standing proud; it dimensions nothing. 27 is the projection the library's other 40 mm
+        supplies' U-handles carry (edgecore/ais800-64-psu-ac@1 and its siblings), and the tube
+        is the drawn bar's 6.3 mm short axis.
+    - node: latch
+      out: 1.2
+      confidence: estimated
+      source: >-
+        celestica/psu-2000-ac@1 itself - a moulded black release tab hanging below the inlet,
+        drawn in the elevation and the removal render; no drawing dimensions how far it
+        stands.
+    - node: led-1
+      dome: 0.3
+      confidence: estimated
+      source: >-
+        common/led-dot@1 - the library's one panel-lamp figure; its own size is estimated
+        and the dome carries none.
+    - node: led-2
+      dome: 0.3
+      confidence: estimated
+      source: >-
+        common/led-dot@1 - the library's one panel-lamp figure; its own size is estimated
+        and the dome carries none.
+connection-points:
+  power: {at: [38.20, 17.65], direction: front}
+skins: [default]
+body:
+  depth: 185
+  color: '#c9cdd1'
+  footprint: {at: [0, 0], size: [56.4, 40.0]}
