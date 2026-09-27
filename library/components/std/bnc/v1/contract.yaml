@@ -1,0 +1,92 @@
+format: 1
+kind: component
+name: bnc
+version: 1.0.0
+class: port
+profile: networking
+conforms: bnc
+interface: bnc
+description: BNC bayonet coaxial panel jack core (IEC 61169-8) - the D-hole and
+  the collar with its bore, insulator and centre contact. The front-mount
+  flange and the two bayonet lugs are wider than the hole and belong to the
+  bezel, common/bnc-jack, which composes this core. 50 and 75 ohm intermate,
+  so a placement that knows says attrs.impedance.
+unplaced: composed by common/bnc-jack, which is itself unplaced - no held source puts a BNC on any modelled faceplate (docs/connectors-coax-design.md section 6)
+size: {w: 9.70, h: 8.85}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  The PANEL CUT OUT table of the Radiall technical data sheet R141.557.000
+  (issue 0431 E, p.1), midpoints of A (bore 9.65-9.75) and B (across the flat
+  8.81-8.89). See the registry key bnc.
+attrs: {media: coax-bnc}
+provenance:
+  size: >-
+    drawing - registry key bnc, the D-hole of the Radiall R141.557.000 data
+    sheet (bulkhead jack receptacle, front mounting, solder pot contact; issue
+    0431 E, p.1), PANEL CUT OUT dimensions A 9.65-9.75 and B 8.81-8.89. The
+    sheet is a 1181 x 1181 CCITT stencil at 194 ppi; both figures are
+    dimensioned, not scaled.
+  core-and-bezel: >-
+    This is the CORE, as std/sma is to common/sma-jack. The part drawn is a
+    FRONT-MOUNT bulkhead: the 12.7 flange sits on the front of the panel and
+    the hex nut clamps it from behind (Radiall R141.557.000 p.1). The flange
+    and the lugs (11.02 over their tips) are wider than the hole, so they are
+    the bezel common/bnc-jack, whose size box holds them; the nut is behind
+    the panel and drawn by neither.
+  collar-overhangs-the-flat: >-
+    THE COLLAR IS WIDER THAN THE FLAT. It is 9.65 across, inside the 9.70 bore
+    of the D-hole but 0.825 past its flat, which is 4.0 from the centre (0.895
+    as painted, 0.825 plus half the skin's 0.14 stroke): on
+    the real part the collar stands in front of the flange and never passes
+    through the hole, so nothing about the hole bounds it. Drawn true rather
+    than squeezed, because the core cyl takes its radius from the node box.
+    Composed in common/bnc-jack the overhang lies inside the bezel box; a
+    device placing this core bare should know it paints 0.895 past the flat
+    (0.825 plus half the 0.14 stroke).
+  collar: >-
+    drawing - MIL-STD-348B with CHANGE 3, Figure 301-2 (series BNC, socket
+    contact), p.36-37, dimension B 9.60-9.70; drawn at 9.65. Its front face is
+    12.2 in front of the panel, the Radiall R141.557.000 figure from the front
+    face to the rear face of the flange, which is the panel front. So the
+    collar runs from the flange front at 1.4 to 12.2.
+  bore-and-insulator: >-
+    drawing - MIL-STD-348B with CHANGE 3, Figure 301-2: mouth bore C 8.31-8.46
+    (drawn 8.38, the dark ring inside the collar wall), dielectric step at the
+    reference plane P 6.50 max (drawn 6.50, dimmed because it sits 8.4 behind
+    the front face), insulator boss E 4.72 max (drawn 4.72), whose face is
+    about 3.1-3.7 behind the front face (G less T). Face-on art on the collar
+    cap, not solids.
+  centre-contact: >-
+    estimated - the socket contact circle, 1.1 across with a 0.44 socket hole,
+    is art only; neither source used here dimensions the contact face on.
+  flat: >-
+    the flat is drawn at the BOTTOM of the aperture, the same clocking the MCX
+    jack uses. Nothing in the Radiall sheet fixes it; a panel that shows
+    another places the part with rotate.
+  mated-plane: >-
+    drawing (derived) - THE MATE CARRIES `seat-out: 3.7`, the plane a mated
+    plug's coupling front sits on, absolute from this part's face. The collar
+    front is 12.2 in front of the panel (Radiall R141.557.000, issue 0431 E,
+    p.1; the `collar` feature, 1.4 + 10.8), and a mated plug's sleeve runs
+    8.5 over the jack from that face (MIL-STD-348B with CHANGE 3, Figure 301-2
+    dim G 8.31-8.51 plus Figure 301-1 dim F 0.15 min, so 8.46 min; S 10.52 min
+    bounds it from above): 12.2 - 8.5 = 3.7. No drawn face stands there - the
+    plane lies along the plain collar, and the plug's real stop is its inner
+    face against the jack's front face - so the figure is stated, not an
+    `on:`. common/bnc-jack forwards it with the core.
+elements:
+  opening: {at: [0.0, 0.0], size: [9.70, 8.85], class: cutout}
+relief:
+  features:
+    - node: collar
+      cyl: 10.8
+      lift: 1.4
+      color: '#d7dade'
+      confidence: drawing
+      source: >-
+        std/bnc@1 collar key - MIL-STD-348B with CHANGE 3, Figure 301-2, dimension B
+        9.60-9.70; Radiall R141.557.000 puts the front face 12.2 in front of the panel,
+        so the collar runs from the flange front at 1.4 for 12.2 - 1.4 = 10.8.
+connection-points:
+  mate: {at: [4.85, 4.85], direction: front, seat-out: 3.7}
+skins: [default]

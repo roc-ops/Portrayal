@@ -133,4 +133,4 @@ def test_the_version_field_says_where_its_rules_live():
     could point at."""
     schema = json.loads((ROOT / "spec/schemas/device.schema.json").read_text())
     desc = schema["properties"]["version"].get("description", "")
-    assert "devices.lock.json" in desc and "DESIGN.md" in desc, desc[:120]
+    assert "device.lock.json" in desc and "DESIGN.md" in desc, desc[:120]

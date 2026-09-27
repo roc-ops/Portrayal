@@ -1,0 +1,91 @@
+format: 1
+kind: module
+name: fan-module-82
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Rear fan module of the Celestica DS6000 - a near-square 81.8 x 83.4 mm face of square
+  perforations, a red pull bar standing down its centre, a red release latch at its left edge
+  and one green lens at its lower left. Five fill the DS6000's upper rear row (4+1, each a
+  dual-rotor fan). No Celestica document names the FRU, so the part is named for its face
+  width rather than for a model number.
+size: {w: 81.8, h: 83.4}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs:
+  power-absent: not-published
+  airflow: front-to-back
+  rotors: 2
+provenance:
+  size: >-
+    photo-measured on the STORDIS-hosted DS6000 rear render (ds6000-B, 1200 px), whose body
+    spans 916 px for the datasheet's 438 mm (2.091 px/mm across) and 266.5 px for its
+    129.8 mm (2.053 px/mm down; the two axes disagree by 1.8%, so each is scaled by its own
+    datasheet dimension and the face is 81.8 x 83.4 rather than a square). Five module frames
+    at 156.3, 335.0, 692.5 and 871.3 px (the middle one sits under a callout disc) give a
+    178.75 px, 85.47 mm pitch; each frame is 171 px across and 171 px tall, 90.0 to 261.3.
+  face: >-
+    photo-measured on ds6000-B at the scales above: twelve columns of square perforations on
+    a 6.15 mm pitch (4.4 mm holes) and twelve rows on 6.1, the corner holes absent in the top
+    row and three absent in the bottom row where the lens sits; the red pull bar 37.7-44.2 mm
+    across, 5.5-76.7 mm down; the red latch 3.9-7.2 mm across, 35.3-49.9 down; the lens at
+    (12.3, 77.9). The Foleon three-quarter render ds6000-A-3 shows the same face and adds that
+    the holes carry a fine honeycomb behind them and that the latch is a flip tab; neither is
+    drawn. Every figure is +/-0.5 mm at 2 px/mm.
+  rotors: >-
+    datasheet - DS6000 rev 100725: "4+1 field replaceable fans (dual-rotor, 9+1 redundancy)".
+    Five modules of two rotors is ten, which is the 9+1 the datasheet counts.
+  power: >-
+    NOT PUBLISHED. The datasheet gives no per-module or chassis draw, and no install guide
+    exists for the DS6000 (Celestica's documentation portal stops at the DS5000).
+  status-led: >-
+    photo - a green lens in a black bezel at the lower left of every module on both renders.
+    No document names it or gives its states; the two declared are the library's usual pair.
+  handle-colour: >-
+    photo - red on both renders, which STORDIS labels front-to-back. A field, so the
+    back-to-front build can recolour it once its colour is seen; the device records it as
+    unseen.
+  depth: >-
+    NOT STATED. body.depth is an estimate by proportion from ds6000-A-3, where the module is
+    not drawn out of the chassis; no document gives it.
+states: [ok, fail, absent]
+elements:
+  status-led:
+    at: [11.1, 76.7]
+    size: [2.4, 2.4]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: fail, color: '#f59e0b'}]
+  handle: {at: [37.7, 5.5], size: [6.5, 71.2], class: handle}
+  latch: {at: [3.9, 35.3], size: [3.3, 14.6], class: latch}
+  screw: {at: [2.3, 78.1], size: [3.8, 3.8], class: screw}
+fields:
+  handle-finish:
+    label: Handle and latch colour
+    type: text
+    default: '#d32f2f'
+relief:
+  features:
+    - node: handle
+      uhandle: 16
+      confidence: estimated
+      source: >-
+        celestica/fan-module-82@1's own face key - the three-quarter render ds6000-A-3 shows
+        the bar as a D-loop standing off the grille; its reach is read by eye against the
+        module height, not measured.
+    - node: latch
+      out: 2.0
+      confidence: estimated
+      source: >-
+        celestica/fan-module-82@1's own face key - the flip tab stands proud in ds6000-A-3;
+        the render gives no scale in depth.
+    - node: grille
+      vent: 20
+      confidence: estimated
+      source: >-
+        celestica/fan-module-82@1's own face key - the perforations open onto the rotor; how
+        deep the rotor sits behind them is not visible in either render.
+body:
+  depth: 60
+  color: '#9aa0a8'
+skins: [default]

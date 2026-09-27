@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: f-type
-version: 1.0.0
+version: 1.0.1
 class: port
 profile: networking
 conforms: f-type
@@ -25,6 +25,17 @@ provenance:
     across flats, WIDER than the 9.7 x 7.9 aperture in one axis, so the art here
     draws it inscribed in the aperture rather than overhanging - a component may
     not paint outside its own opening
+  mated-plane: >-
+    drawing (derived), a midpoint - THE MATE CARRIES `seat-out: 7.8`, the
+    plane a mated plug's nut leading edge sits on, absolute from this part's
+    face. The thread front is 13.0 in front of the panel (the `nut` 2.4 plus
+    the `thread` 10.6, Pasternack PE44327 REV 1.1), and with the plug's
+    mandrel face on the port's front face the nut runs D past it, 4.29-6.10
+    (ANSI/SCTE 123 2021, Table 1, dim D, mandrel face depth to nut leading
+    edge): 13.0 - 6.10 = 6.90 to 13.0 - 4.29 = 8.71, and 7.8 is the midpoint
+    of that drawing-derived range (D is the plug's tolerance, not how tight
+    it is run). No drawn face stands there - the plane lies along the plain
+    thread - so the figure is stated, not an `on:`.
 elements:
   opening: {at: [0.0, 0.0], size: [9.7, 7.9], class: cutout}
 relief:
@@ -49,5 +60,5 @@ relief:
         thread stands 10.6 proud from a 2.4 lift. The 0.794 pitch is 25.4/32 computed for 32
         TPI, not read off anything.
 connection-points:
-  mate: {at: [4.85, 3.95], direction: front}
+  mate: {at: [4.85, 3.95], direction: front, seat-out: 7.8}
 skins: [default]
