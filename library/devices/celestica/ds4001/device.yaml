@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ds4001
-version: 0.1.0
+version: 0.2.0
 maturity: modelled
 manufacturer: Celestica
 model: DS4001
@@ -163,6 +163,13 @@ provenance:
       datasheet 'Temperature: 0 C to 45 C @ 900m, Humidity: 5% to 90%, non-condensing'; the shared
       guide's table says 5 - 40 C for either airflow and 40 - 60 % operating humidity, 5 - 95 %
       storage. Both carried, as on the DS4000.
+  part-numbers:
+    confidence: datasheet
+    note: >-
+      R3240-F9102-A0 (front-to-back) and R3240-F9103-A0 (back-to-front), both 4C D1627, 1 x 16 GB DDR4,
+      64 GB SSD - the datasheet's ordering lines and the guide's What's in the Box Table 2 agree. One per
+      configuration, so the DCIM exporter makes a device type for each. The DC build R3240-F9104-A1 has
+      no configuration; see the dc-build gap.
   lifecycle:
     note: >-
       searched 2026-09-26 for a DS4000/DS4001 end-of-life or end-of-sale announcement; none found.
@@ -727,6 +734,8 @@ configurations:
     description: >-
       Front-to-back airflow, two 1500 W AC supplies and seven fans - R3240-F9102-A0 (4C D1627,
       1x16 GB DDR4, 64 GB SSD). The build the renders show.
+    part-numbers:
+      R3240-F9102-A0: {part: R3240-F9102-A0}
   b2f:
     kind: orderable
     airflow: back-to-front
@@ -736,6 +745,8 @@ configurations:
       colour for this build, so the art is the f2b art (see the b2f-finish gap).
     region-context:
       exhaust: Intake
+    part-numbers:
+      R3240-F9103-A0: {part: R3240-F9103-A0}
 datasheet:
   title: Celestica DS4001 1U 32-port 400GbE Data Center Switch datasheet
   url: https://www.celestica.com/hps/ds4001
