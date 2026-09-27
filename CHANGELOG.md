@@ -253,6 +253,9 @@ the *published build*, not about the hardware.
   (roc-ops/Portrayal#650).
 
 ### Changed
+- Lint L122 now also reads a `cable-od` a device sets on a placement (a
+  cable end placed `mate-to` a jack or cage), with the same number and range
+  check as a wrapper's (roc-ops/Portrayal#644).
 - **`contract: 2`. A drawing no longer embeds the device's source manifest.**
   Every face carried the same whole manifest in its `<metadata>`: 139 MB of a
   249 MB build, 107 KB in each of the R740xd's 252 faces. It is now published
