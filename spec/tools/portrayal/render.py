@@ -2,11 +2,13 @@
 """Portrayal renderer v0: compile a device manifest + component skins into flat SVG.
 
 One SVG per view. Deterministic output: no timestamps; tool version stamped in
-<metadata> along with resolved component versions and the embedded source manifest.
+<metadata> along with resolved component versions and the digest of the device's
+published <device>.source.json.
 """
 import argparse
 import copy
 import functools
+import hashlib
 import json
 import math
 import re
@@ -3632,7 +3634,12 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         "view": view_name,
         "config": config_name,
         "resolved-components": dict(sorted(resolved.items())),
-        "source": device,
+        # THE SOURCE IS NAMED, NOT CARRIED (#665). Every face of a device held
+        # the same manifest - 139 MB of a 249 MB build, and 107 KB in each of
+        # the R740xd's 252 faces. It is written once, as <device>.source.json,
+        # and a face carries the digest of those exact bytes, so one SVG on its
+        # own still says which source it was drawn from and can be checked.
+        "source-sha256": hashlib.sha256(source_bytes(device)).hexdigest(),
     }
     meta.text = json.dumps(meta_payload, sort_keys=True, separators=(",", ":"))
     if extents != [0.0, 0.0, w, h]:
@@ -3672,8 +3679,13 @@ def _inputs(device, device_yaml, lib):
     return {f for f in files if f.exists()}
 
 
+def source_bytes(device):
+    """<device>.source.json, byte for byte. Faces hash exactly this."""
+    return (json.dumps(device, sort_keys=True, indent=1) + "\n").encode()
+
+
 def _outputs(device, configs, default_cfg, outdir):
-    names = {f"{device['name']}.configs.json"}
+    names = {f"{device['name']}.configs.json", f"{device['name']}.source.json"}
     for cfg_name in configs:
         for view_name in device.get("views") or {}:
             names.add(f"{device['name']}.{cfg_name}.{view_name}.svg")
@@ -4333,6 +4345,7 @@ def main():
             for nm in names:
                 (outdir / nm).write_text('<?xml version="1.0" encoding="UTF-8"?>\n' + data + "\n")
         print(f"wrote config {cfg_name}")
+    (outdir / f"{device['name']}.source.json").write_bytes(source_bytes(device))
     ch = device.get("chassis") or {}
     # What this model can and cannot do, and why. The viewer has to know before
     # it offers a control: a two-view device opened in 3D used to draw a wrong

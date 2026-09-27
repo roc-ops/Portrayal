@@ -21,7 +21,8 @@ export it to a DCIM without a checkout of this repository.
 
 | file | what a consumer gets from it |
 |---|---|
-| `<device>.<config>.<view>.svg` | the drawing, with `--` DOM ids and `/` data-paths — and the whole source manifest embedded in `<metadata>`, every view of it |
+| `<device>.<config>.<view>.svg` | the drawing, with `--` DOM ids and `/` data-paths; its `<metadata>` names the source it was drawn from by `source-sha256` |
+| `<device>.source.json` | the whole source manifest, every view of it — once per device; the digest in each drawing is of these exact bytes |
 | `<device>.configs.json` | the device's configurations — each with its `kind` (base, orderable, example, model), its `airflow` (front-to-back, back-to-front, side, passive, or `null` where unstated), part numbers, bays and view bindings |
 | `devices.json` | the portfolio index: identity (with `aliases`, the other names a box is sold or listed under), capability, gaps, search blob |
 | `components.json` | the lean component index — identity, size, skins, attrs, parts (with each part's `group`), the component's own `groups` and `cages` |

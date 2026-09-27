@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Publish the two source-tree files a consumer needs to export DCIM YAML.
 
-Everything else the exporter reads already ships: the compiled SVG embeds the
-whole device manifest in its <metadata>, and components.json carries the five
+Everything else the exporter reads already ships: <device>.source.json is the
+whole device manifest, and components.json carries the five
 contract fields the exporter takes off a component (attrs, description, kind,
 name, parts). These two were the remainder, and both were reachable only by
 someone holding a checkout - which made "export a NetBox document" a task that
