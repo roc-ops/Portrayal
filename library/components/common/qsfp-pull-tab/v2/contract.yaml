@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: qsfp-pull-tab
-version: 2.0.3
+version: 2.1.0
 class: latch
 profile: networking
 description: >-
@@ -9,12 +9,13 @@ description: >-
   forward along the module's side edges and join in a wider grip at the far end,
   open in the middle so the fibre connector passes through. The grip straddles
   the module's top edge, its top 1.07 above it, inside the MSA's 3.4 MAX
-  allowance above the module. Not
-  modelled: the strap's S-bend (it dips about 1.8 mid-span between the arm roots
-  and the grip) and the riser block at each arm root (about 7.5 long, flush with
-  the strap top). No speed lettering: the generic that composes it carries no
-  rate.
-size: {w: 19.0, h: 3.4}
+  allowance above the module. Each arm roots in a riser block, a tall
+  square post moulded with the strap that stands against the nose front at
+  the module's side edge, 7.5 long and 7.8 tall from the strap top. Not
+  modelled: the strap's S-bend (it dips about 1.8 mid-span between the arm
+  roots and the grip). No speed lettering: the generic that composes it carries
+  no rate.
+size: {w: 19.0, h: 8.3}
 size-confidence: {w: drawing, h: photo-measured}
 attrs: {role: pull-latch}
 fields:
@@ -22,10 +23,12 @@ fields:
 provenance:
   size: >-
     w 19.0 is the 19.00 MAX across the tab (ProLabs PAN-QSFP28-100GBASE-CWDM4-C,
-    drawing), also SFF-8661 Figure 5-1's 19 MAX outside-the-cage width; h 3.4 is
-    the grip thickness 2.9 plus the grip's 0.5 rise above the arms, both measured
-    off the maintainer's photographs of a QSFP28-SR4 module (side view, scale
-    module height 8.5)
+    drawing), also SFF-8661 Figure 5-1's 19 MAX outside-the-cage width; h 8.3 is
+    the arm top's 0.5 below the grip top plus the riser block's 7.8 below the
+    arm top (see provenance.riser). It was 3.4, the grip thickness 2.9 plus the
+    grip's 0.5 rise above the arms, before the riser was drawn; the grip and
+    arms are unchanged. All measured off the maintainer's photographs of a QSFP
+    SR4 module (side view, scale module height 8.5)
   shape: >-
     photo-measured - the maintainer's photographs of a QSFP28-SR4 module (top,
     side and end views). The top view (scale: module width 18.35, passes the
@@ -50,6 +53,26 @@ provenance:
     grip's top sits 1.07 above the host face's top edge, as measured, and the
     strap top 0.57 above it - the grip straddles the body's top edge, as the
     part does; it does not sit wholly above the face.
+  riser: >-
+    photo-measured - the maintainer's photographs of a QSFP SR4 module, the two
+    side views, each scaled on the 8.5 module height READ AT THE RISER: both
+    views are slightly rotated and one is keystoned (its module height grows 5
+    percent from the rear to the nose), so each body edge was fitted as a line
+    along the in-cage body and evaluated at the riser, not read as one median.
+    Length along the axis 7.41 and 7.53 (mean 7.47, +/-0.15); height from the
+    strap top 7.67 and 7.87 (mean 7.77, +/-0.2). Its top is flush with the strap
+    top in both views (within 0.05) and its lower edge sits 7.39 and 7.33 below
+    the body top (+/-0.15), 1.1 above the body bottom. It stands 0.14 and 0.28
+    off the nose front, drawn as touching. In plan it is the arm's width at the
+    module's side edge (the end view shows the two posts there). The same
+    views' strap thickness at this scale, 2.85 in both, agrees with the 2.9 the
+    arms were drawn at, which checks the scale. The riser is beige, the strap's
+    own moulding with no seam, and rides with the tab, so it belongs to this
+    part and not to the module's head. Drawn as `riser-l`/`riser-r` BELOW the
+    arms' 2.9 cross-section (tab y 3.4 to 8.3): the arm root is the riser's top,
+    and two boxes sharing that volume would z-fight. The lower corners are
+    chamfered on the part (about 1 mm); relief builds boxes and does not draw
+    them.
   colour: >-
     the neutral grey #6f6f6f, not a wavelength code (decision taken in #473); a
     vendor wrapper or placement sets latch-color
@@ -57,6 +80,8 @@ elements:
   grip: {at: [0.0, 0.0], size: [19.0, 2.9], class: latch}
   arm-l: {at: [0.0, 0.5], size: [1.95, 2.9], class: latch}
   arm-r: {at: [17.05, 0.5], size: [1.95, 2.9], class: latch}
+  riser-l: {at: [0.0, 3.4], size: [1.95, 4.9], class: latch}
+  riser-r: {at: [17.05, 3.4], size: [1.95, 4.9], class: latch}
 relief:
   features:
     - node: arm-l
@@ -83,4 +108,17 @@ relief:
         corroborated by the photographs within 8%). The 38.6 lift is REACH
         49.8 less the arm-l/arm-r out of 38.6, the subtraction that puts the
         grip at the far end of the arms, not a separate reading.
+    - node: riser-l
+      out: 7.5
+      confidence: photo-measured
+      source: >-
+        the riser block's length along the axis, 7.41 and 7.53 in the two side
+        views of the maintainer's photographs of a QSFP SR4 module, each scaled
+        on the 8.5 module height at the riser (see provenance.riser).
+    - node: riser-r
+      out: 7.5
+      confidence: photo-measured
+      source: >-
+        the same reading as riser-l - one measurement covering both posts of
+        one tab.
 skins: [default]

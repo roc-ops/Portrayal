@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: qsfp-lc
-version: 2.0.0
+version: 2.1.0
 class: transceiver
 behaviour: occupies
 mates: qsfp
@@ -18,9 +18,9 @@ description: >-
 size: {w: 18.35, h: 8.5, d: 52.4}
 size-confidence: {w: registry, h: registry, d: registry}
 head:
-  at: [0.0, 0.0]
-  size: {w: 18.35, h: 8.5, d: 20.0}
-  size-confidence: {w: registry, h: registry, d: drawing}
+  at: [0.0, -1.4]
+  size: {w: 18.35, h: 11.3, d: 20.0}
+  size-confidence: {w: registry, h: photo-measured, d: drawing}
   node: body
 attrs: {power-absent: not-applicable, form-factor: qsfp, face: lc-duplex, media: fiber}
 fields:
@@ -95,9 +95,24 @@ provenance:
     name (docs/pluggables-design.md decision 4).
   head: >-
     registry - qsfp-module's `head` (19 MAX wide, 3.4 MAX above, 1.6 MAX below,
-    20 MAX long), which L121 checks this key against. The head is the 18.35 x
-    8.5 face itself, drawn by the skin's `body` rect. The protrusion is SFF-8661
-    Rev 2.5 Figure 5-1's 20 MAX, read as follows.
+    20 MAX long), which L121 checks this key against. THE NOSE IS TALLER THAN
+    THE BODY: 1.4 above the body top and 1.4 below the body bottom, so 11.3
+    tall, photo-measured off the maintainer's photographs of a QSFP SR4 module.
+    Both side views were scaled on the 8.5 module height read AT THE NOSE: each
+    body edge was fitted as a line along the in-cage body and evaluated at the
+    nose, because both views are slightly rotated and one is keystoned (its
+    module height grows 5 percent toward the nose). They read 1.36 above and
+    1.38 below, and 1.48 above and 1.45 below (+/-0.15 each; 11.24 and 11.43
+    tall). The second quantity is the nose's own length at the same scale,
+    19.69 and 19.96 against Figure 5-1's 20 MAX. An earlier reading of the same
+    photographs, taken on median body edges, split them 1.6 above and 1.4
+    below; the difference was the rotation, and the two views agree only once
+    it is removed. In plan the nose is not wider than the body, so the width
+    stays the registry's 18.35. Both offsets are inside the envelope (1.4 of
+    3.4 above, 1.4 of 1.6 below), so nothing is listed in `exceeds`. The skin's
+    `body` rect draws the nose's front outline, 0.1 inside the head box for
+    its stroke; the 8.5 in-cage body behind it cannot be seen from the front.
+    The protrusion is SFF-8661 Rev 2.5 Figure 5-1's 20 MAX, read as follows.
     SFF-8661 Rev 2.5 Figure 5-1 draws the module in two lengthwise sections: a 20mm MAX
     nose at the front (hatched in both the top and side basic views, with matching 19 MAX
     width and 3.4 MAX / 1.6 MAX thickness callouts on the same nose) and a 52.4 REF body
@@ -123,6 +138,13 @@ provenance:
     decision 4), so the tab still wears this generic's `latch-color`. At
     `at: [-0.325, -1.07]` the grip's top sits 1.07 above the module top, as
     measured, and the grip straddles the face's top edge (y -1.07 to 1.83).
+    The tab's riser blocks (common/qsfp-pull-tab@2 2.1.0 and later: `riser-l`,
+    `riser-r`) stand on the nose front at the side edges, face y 2.33 to 7.23,
+    clear of the receptacle housing (x 3.40 to 14.95).
+    THE LAYERING IS DELIBERATE (lint L46): the tab's size box is now 19 x 8.3
+    and holds both bores, but the tab is a loop open in the middle and draws
+    nothing over them - its arms and risers stop at x 1.625 and start at
+    16.725.
   tab-colour: >-
     A FIELD, not a fact, and the default is a NEUTRAL GREY (#6f6f6f) because
     every chromatic default is a claim. SFF-8661 Rev 2.5, this module's own
@@ -162,7 +184,9 @@ relief:
       source: >-
         SFF-8661 Rev 2.5 Figure 5-1, Note 1 - "enlarged section of transceiver that
         extends outside of cage to accomodate [sic] mating plug and actuator mechanism",
-        the 20mm MAX nose dimension - see provenance.head
+        the 20mm MAX nose dimension - see provenance.head. The node is the nose's
+        front outline, 11.3 tall (photo-measured, provenance.head), so the solid
+        is the nose as photographed and not the 8.5 face
 connection-points:
   mate: {at: [9.175, 4.25], direction: front}
   optical-tx: {at: [6.05, 4.9], direction: front}
