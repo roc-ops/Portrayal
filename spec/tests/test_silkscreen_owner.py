@@ -123,9 +123,18 @@ def test_the_modelled_devices_are_nearly_all_owned():
     '1' on a rear that has psu-1 and psu-2 and no fan bay at all, because its
     fans are not modelled. Pointing those at something would be inventing an
     owner, which is the one thing this test exists to prevent.
+
+    SIXTEEN TO TWENTY-TWO IS THE CELESTICA DS6000's REAR, six marks and one question.
+    Its two legend panels print pointers, not labels: "fan 3 >>>", "PSU 2 >>", "PSU 3 <<"
+    with its PSU icon, read as "the module that many bays that way". The owner exists and
+    is known - fan-3, psu-2, psu-3 - but it stands 40-170 mm from its legend, and L14
+    rightly refuses a `for:` that far off, because distance is how it catches a mark
+    attached to the wrong part. So these six own nothing rather than something false, and
+    whether the format should grow a way to say "this mark points at that part" is left
+    open on the DS6000's own PR rather than decided here.
     """
     own, tot = _ownership(True)
-    assert tot - own <= 16, f"{tot - own} unowned marks on modelled devices"
+    assert tot - own <= 22, f"{tot - own} unowned marks on modelled devices"
     assert own / tot > 0.99
 
 
