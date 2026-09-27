@@ -12,8 +12,36 @@ somebody else, against a contract rather than against a checkout.
 This module is that contract, in code. Nothing here opens a file under
 `library/devices/` or `library/components/`.
 """
+import functools
 import json
 from pathlib import Path
+
+
+@functools.lru_cache(maxsize=None)
+def _files_at(path, _mtime):
+    idx = json.loads(Path(path).read_text())
+    return {c["name"]: c.get("files") or {} for c in idx.get("configs") or []}
+
+
+def _files(root, name):
+    # keyed on the file's mtime too, so a build rewritten in place is re-read
+    p = Path(root) / f"{name}.configs.json"
+    try:
+        return _files_at(str(p), p.stat().st_mtime_ns)
+    except OSError:
+        return {}
+
+
+def face_file(root, name, config, view):
+    """The compiled face `config` draws for `view`, or None where it draws none.
+
+    Looked up in `<device>.configs.json` `configs[].files`, never built from
+    the configuration's name: a drawing is written once and shared by every
+    configuration that draws it identically (#665), so most configurations'
+    faces carry another configuration's name.
+    """
+    f = _files(str(root), name).get(config, {}).get(view)
+    return Path(root) / f if f else None
 
 
 class Dist:

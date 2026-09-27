@@ -234,7 +234,7 @@ RULES = {
     "L70": ("device",     "a `fact:` gap names a real fact and does not contradict the device", "fix the gap's scope or remove it"),
     "L71": ("component",  "a body box reaches no further than the part says it is deep", "shrink the body box or raise `body.depth`"),
     "L72": ("device",     "a bay's `plan:` or `rear:` lands in a view that exists, inside the chassis", "fix the plan view name or the coordinates"),
-    "L73": ("component",  "a field prints somewhere, and what prints is a field", "add a `data-from` text node for each field, or remove the field"),
+    "L73": ("component",  "a field prints somewhere, and what prints is a field; a node a field paints states no relief `color`, so its 3D sides follow the field", "add a `data-from` text node for each field, or remove the field; drop a relief feature's `color` on a field-painted node"),
     "L74": ("component",  "a lamp that declares states is painted from the lamp-colour variable", "fill or stroke the lamp node with `var(--led-color, <off colour>)`, not a literal colour"),
     "L75": ("component",  "a slot's structured facts agree with its prose, and lanes fit the connector", "fix `lanes`/`connector` or the description"),
     "L76": ("device",     "the RJ45 census: every Ethernet jack says whether it has lamps", "use std/rj45@2 with the lamp parts, or say in provenance the jack is bare"),
@@ -283,7 +283,7 @@ RULES = {
     "L119": ("device",     "a device with supplies says what feeds each build - `power` on the chassis or on every orderable configuration", "state `chassis.power` (one feed) or `power` on each configuration (`ac`, `dc`, `hvdc`) from the supplies it seats and the datasheet's input rows"),
     "L120": ("device",     "a configuration's `power` agrees with the supplies it seats - `dc` over an `-ac` supply is a contradiction - warning at `modelled`, error at `verified`", "correct `power`, or seat the supply the build actually ships with"),
     "L121": ("component",  "a pluggable that conforms to a module envelope declares its `head:` - the box it occupies outside the cage - and the head fits the MSA's outside envelope, or lists each dimension it exceeds with a source; no relief feature of its own that starts inside the head stands past it (one lifted to the head's rear or beyond is the cable's, not the head's), and the head's node draws it", "add `head:` from the part's drawing, list a real overhang under `head.exceeds` with the document that shows it, drop a waiver that no longer applies, or shorten the feature that stands past the head"),
-    "L122": ("component",  "a `cable-od` value is a diameter in millimetres from 2 to 15 - on a field's default and on a composing part's attrs - written as plain ASCII digits and a point, the only number the build and the kit draw", "give the cable's outside diameter in mm as a number, from the product's own document"),
+    "L122": ("component, device", "a `cable-od` value is a diameter in millimetres from 2 to 15 - on a field's default, a composing part's attrs, and a device placement's attrs - written as plain ASCII digits and a point, the only number the build and the kit draw", "give the cable's outside diameter in mm as a number, from the product's own document"),
     "L123": ("library",    "one module, one bay size - every bay that accepts a module, in any device or carrier, reserves the same size for it, to within a millimetre", "reserve one figure everywhere - the module's own `insert` or `size`; a difference that is real stays in the baseline, with the reason in the provenance of the chassis that reserves more (the warning is filed on the module, so a chassis `lint.waive` cannot clear it)"),
 }
 
@@ -3245,6 +3245,33 @@ def lint_component_fields(path, data, _lib_roots=None):
                 err(path, "L73", f"field {k} has no data-from, data-fill-from, "
                                  f"data-stroke-from, data-stroke-derive or data-r-from "
                                  f"node in skin {skin}")
+        # A FIELD-PAINTED NODE TAKES ITS 3D SIDES FROM ITS ART (#643). relief.js
+        # derives a solid's side colour from the node's painted art, and reads
+        # it again on every repaint, so a field change recolours the sides -
+        # but only when the feature states no `color`: a `data-z-color` is a
+        # statement and is never overridden (#481). A literal `color` on a node
+        # wired to a field left the Amphenol DAC's green strap and the Siemon
+        # AOC's aqua jacket with grey and black sides.
+        colored = {f.get("node"): f.get("color")
+                   for f in ((data.get("relief") or {}).get("features") or [])
+                   if isinstance(f, dict) and f.get("color")}
+        if colored:
+            try:
+                root_el = ET.fromstring(text)
+            except ET.ParseError:
+                root_el = None
+            for el in (root_el.iter() if root_el is not None else []):
+                node = el.get("id")
+                if node not in colored:
+                    continue
+                wired = sorted({e.get(a) for e in el.iter()
+                                for a in ("data-fill-from", "data-stroke-from")
+                                if e.get(a)})
+                if wired:
+                    err(path, "L73", f"relief feature {node!r} states color "
+                                     f"{colored[node]} but skin {skin} paints it "
+                                     f"from {', '.join(wired)} - drop the color, "
+                                     "so its 3D sides follow the field")
     undeclared = set().union(*seen.values()) - set(fields) if seen else set()
     if undeclared:
         warn(path, "L73", f"skin reads {', '.join(sorted(undeclared))} from attrs but the "
@@ -3275,6 +3302,32 @@ def lint_component_cable_od(path, data, _lib_roots=None):
         a = (p.get("attrs") or {}) if isinstance(p, dict) else {}
         if "cable-od" in a:
             vals.append((f"parts[{p.get('id')}].attrs.cable-od", a["cable-od"]))
+    _check_cable_od(path, data.get("name"), vals)
+
+
+def lint_device_cable_od(path, data, _lib_roots=None):
+    """L122 on a device (#644): a device that PLACES a cable end - `mate-to` a
+    jack or cage, with its own attrs - sets `cable-od` on that placement, and
+    the build's data-r-from binding draws it exactly as it draws a wrapper's.
+    A configuration's `occupants` carry refs, not attrs, so a placement is the
+    only place a device can set one. Sectioned placement attrs are read the
+    same way as a flat bag."""
+    if not isinstance(data, dict):
+        return
+    vals = []
+    for vname, view in (data.get("views") or {}).items():
+        for q in view_parts(view or {})["placements"]:
+            raw = q.get("attrs") or {}
+            # a placement's attrs are a flat bag; a sectioned one is read too
+            a = {**raw, **attrs_mod.flatten(raw)} if isinstance(raw, dict) else {}
+            if "cable-od" in a:
+                vals.append((f"views.{vname}.{q.get('id')}.attrs.cable-od", a["cable-od"]))
+    _check_cable_od(path, data.get("name"), vals)
+
+
+def _check_cable_od(path, name, vals):
+    """One number check and one range for every place L122 reads a
+    `cable-od`, so the component and device rules cannot disagree."""
     # THE BUILD'S OWN QUESTION FIRST. float() alone takes "1e1", "1_0" and
     # non-ASCII digits, which render and the kit leave undrawn, so a value
     # lint passed could draw nothing. R_FROM_NUMBER is the one pattern all
@@ -3287,10 +3340,10 @@ def lint_component_cable_od(path, data, _lib_roots=None):
                 raise ValueError(v)
             d = float(str(v).strip())
         except (TypeError, ValueError):
-            err(path, "L122", f"{data.get('name')}: {where} is {v!r}, not a number of mm")
+            err(path, "L122", f"{name}: {where} is {v!r}, not a number of mm")
             continue
         if not lo <= d <= hi:
-            err(path, "L122", f"{data.get('name')}: {where} is {d:g} mm, outside {lo:g}-{hi:g}")
+            err(path, "L122", f"{name}: {where} is {d:g} mm, outside {lo:g}-{hi:g}")
 
 
 def lint_component_lamp_colour(path, data, _lib_roots=None):
@@ -8994,6 +9047,7 @@ def lint_device(path, validator, lib_roots):
     lint_device_bay_pitch(path, data)
     lint_device_empty_views(path, data)
     lint_device_occupants(path, data, lib_roots)
+    lint_device_cable_od(path, data)
     # Every id each view offers, indexed by view name. A `for:` may name a target
     # in ANOTHER view of the same device (`rear/psu-0`), so the check below cannot
     # be answered from the view it is standing in.

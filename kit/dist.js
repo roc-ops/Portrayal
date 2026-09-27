@@ -35,5 +35,20 @@ export function jdist(url) {
   return INFLIGHT.get(key);
 }
 
+/**
+ * The file that draws `view` of configuration `config`, from a loaded
+ * `<device>.configs.json`. A drawing is written once and shared by every
+ * configuration that draws it identically, so most configurations' faces carry
+ * another configuration's name: look it up, never build it from `config`.
+ *
+ * A face the configuration does not draw falls back to the name it would have
+ * had, which is not on disk: the fetch misses exactly as it always did, and
+ * every caller already treats a miss as "no such face".
+ */
+export function faceFile(index, config, view) {
+  const f = index?.configs?.find(c => c.name === config)?.files?.[view];
+  return f || `${index?.device}.${config}.${view}.svg`;
+}
+
 /** Forget everything fetched so far. For harnesses that rebuild dist in place. */
 export function clearDistCache() { INFLIGHT.clear(); }

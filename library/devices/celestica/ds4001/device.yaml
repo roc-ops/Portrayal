@@ -1,0 +1,744 @@
+format: 1
+kind: device
+name: ds4001
+version: 0.1.0
+maturity: modelled
+manufacturer: Celestica
+model: DS4001
+portfolio:
+  family: Data Center Switch
+description: >-
+  Celestica DS4001 1U 32-port 400GbE data center switch - 32 QSFP-DD in two
+  belly-to-belly rows of sixteen (ports 1, 2, 31 and 32 printed '-HP', the 20 W
+  high-power positions), a stacked pair of 10G SFP+ management ports (M1/M2) at
+  the LEFT end, and at the right four status lamps and a vertical console RJ45 /
+  USB-A / management RJ45 stack; at the rear two 1500 W supplies (1+1) either side
+  of seven hot-swap fans (6+1). 12.8 Tbps, 70 MB buffer. The DS4000 shares its
+  installation guide and rear but has a different faceplate.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      DS4001 datasheet (cls_datasheet_DS4001.pdf, 2 pp) for dimensions, interfaces, power, cooling,
+      environment, approvals and ordering lines; the shared DS4000/DS4001 Installation Guide (docs
+      portal pages staged in the intake, and the 49-page PDF rev 1.4.0, 2/2026) for the
+      specifications table, the rear elevation (Product Overview Figure 4), the LED tables, the
+      QSFP-DD LED locations and power classes, and What's in the Box; and the vendor's product
+      renders for the FRONT - the Foleon page's ds4001_front.png (3840 x 1688, three-quarter view,
+      pull tab printed 'DS4001'), the DS4001 datasheet's embedded render (992 x 603) and the
+      Foleon ds4001-side-by-side (front and rear). No photograph of a real unit is held.
+  model-split:
+    note: >-
+      The guide's three front elevations are the DS4000's faceplate (SFP+ at the right, beside the
+      lamps; see celestica/ds4000). Every DS4001 image held - its datasheet render, the Foleon
+      ds4001_front render and the Foleon side-by-side - shows a different faceplate: the SFP+
+      pair at the LEFT end with a green lamp above and below it, legends 'M1 up-down M2',
+      '1-HP up-down 2-HP' and '31-HP up-down 32-HP', a hexagon-perforated black face, and the
+      lug tag printed 'DS4001'. So this front is modelled from the renders and carries no
+      guide front figure at all.
+  front-geometry:
+    confidence: photo-measured
+    note: >-
+      THE FRONT IS FROM A PERSPECTIVE RENDER, MEASURED THROUGH A ONE-DIMENSIONAL HOMOGRAPHY. On
+      ds4001_front.png the face recedes to the left, so no scale can be taken straight off it (a
+      straight-line fit of the sixteen column centres leaves 16.2 px rms). Positions along the
+      face were measured on FLAT features only - the white port-lamp dots, which sit on the face
+      plane, not the cage bezels, which stand proud: each column's upper-left and upper-right dot
+      pair was located by connected-component search in the black face and its midpoint taken as
+      the column centre. A projective map x = (a i + b)/(c i + 1) over column index i fits those
+      sixteen centres to 0.10 px rms. Mapping the face's two outer edges through it gives a face
+      19.147 pitches wide, so the pitch is 438.5 / 19.147 = 22.902 mm - against 22.894 measured
+      square-on on the DS4000's orthographic guide elevation, 0.03 percent apart. That agreement
+      is the check: a wrong geometry does not reproduce the sibling's pitch from the face width.
+      With the DS4000 pitch: column 1 centre 39.19 mm from the left edge (the DS4000's is 24.33,
+      so the whole QSFP-DD block sits 14.86 mm further right, making room for the SFP+ pair);
+      SFP+ lamp 16.93, so SFP+ centre 20.06 using the DS4000's lamp-to-cage offset (3.13 mm; the
+      protruding cage's own blob centroid gives 20.1-21.1, biased right by its visible side
+      wall); status lamps 400.4; management plate 403.6-420.65; lug tag centred 427.3. Image
+      x was corrected for the face's vertical lean (0.0625 px per px, from the left edge at two
+      heights) before mapping features measured off the dot line. Vertical positions are NOT
+      measured on the render; they are carried from the DS4000's orthographic elevation (same
+      cages on the same pitch), which is recorded as borrowed.
+  front-vertical:
+    confidence: borrowed
+    note: >-
+      borrowed from celestica/ds4000's qsfp-layout, port-leds, sfp-and-status and mgmt
+      provenance (guide front elevation, y as a fraction of 43.1 mm): QSFP-DD openings at y 9.36
+      (top row) and 22.97 (bottom), lamp windows at 4.54/7.26 and 35.16/37.85, SFP+ cages at 9.45
+      and 22.9, SFP+ lamps at 6.73 and 35.8, status lamps from 11.9 on 5.0 mm, management plate
+      6.73-38.63. The render agrees with this ordering and with the lamps being above and below
+      the SFP+ pair, but is not measured for it.
+  port-leds:
+    confidence: photo-measured
+    note: >-
+      The render shows the same arrangement the guide's QSFP-DD Port LED Locations page draws -
+      two lamps stacked at the upper left and two at the upper right of each top-row cage, the
+      same below each bottom-row cage - and the dot-pair spacing is 0.70 of the column pitch
+      on the render (e.g. 80.0 of 115.5 px at column 4) against 0.70 on the DS4000 elevation
+      (55.65 of 79.67 px), so the DS4000's +/-8.0 mm is used. Four tri-colour lamps per port per
+      the guide; lower-port lamp numbering follows the upper port's reading order (inference, as
+      on the DS4000). THE -HP COLUMNS DIFFER, AND THIS IS A READING, NOT A GUESS: at 5x on the
+      native render, columns 1 and 16 (ports 1, 2, 31, 32) show ONE white window at each side
+      above the top cage and one at each side below the bottom cage, where every other column
+      shows a stacked pair; on the rectified render they sit at column centre -11.3 and +11.3 mm,
+      y 5.8 and 36.4, outside the cage bezel. The -HP cages are also drawn flush where the others
+      stand proud with spring fingers - a different cage. So those four ports carry two lamp
+      windows each here (ids -1 left, -2 right), against the guide's general 'four tri-color
+      LEDs' per port, which its own close-up shows on the DS4000's port 31; see the
+      hp-port-lamps gap.
+  legends:
+    confidence: photo-measured
+    note: >-
+      read off ds4001_front at 3x: '1-HP up-down 2-HP', '3 up-down 4' ... '29 up-down 30',
+      '31-HP up-down 32-HP' between the rows, solid triangles; 'M1 up-down M2' between the SFP+
+      cages; 'STAT', 'FAN', 'PWR', 'ALM' set diagonally left of the four lamps; 'IOIOI', a USB
+      trident and a network symbol to the right of the jacks; 'Celestica' set in plain type
+      above the jacks (a wordmark in text, not a logo); 'DS4001' along the lug tag. The -HP
+      ports are the guide's high-power positions (QSFP-DD Port Power Outputs: F2B 20 W on ports
+      1, 2, 31 and 32).
+  mgmt:
+    confidence: photo-measured
+    note: >-
+      render - a silver plate holding, top to bottom, an RJ45 with its keyway UP (console, IOIOI),
+      a USB-A, and an RJ45 with its keyway DOWN and two lamp windows in its lower corners
+      (management, network symbol) - the DS4000's arrangement. Jack cells std/rj45-ganged@2 as
+      on the DS4000. The USB is USB 2.0 (datasheet), so std/usb-a@1 is seated with its usb2
+      skin.
+  vents:
+    confidence: estimated
+    note: >-
+      The render's face is perforated with hexagonal cells - a column at each end, and a cluster
+      between each column's lamp pairs above and below the cages. Drawn with the library's
+      hexagon vent pattern over a backing plate (left x 0.8-9.4, right 430.4-437.6, and an
+      11.6 x 5.4 patch per column above and below) - the right area and cell shape, the cell
+      count and exact outline estimated.
+  colour:
+    confidence: photo-measured
+    note: >-
+      render - black face, white legends, silver cage bezels and jack plate; light grey sheet
+      metal. So chassis.color is the sheet metal (#c4c8cc, which the top, bottom, sides and the
+      rear frame between the modules wear - the rear webs are grey in the guide CAD and silver in the
+      DS4001 rear render), and the black front bezel is a full-face decor rect under everything
+      else on the front, since a view carries no colour of its own.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - height 43.1 mm (1.73 in, 1 EIA unit), width 438.5 mm (17.3 in), depth 657.5 mm
+      (25.8 in); the guide's specifications table agrees. No weight stated in any held document.
+  rear:
+    confidence: measured
+    note: >-
+      the shared guide's Figure 4 rear elevation, measured exactly as recorded on celestica/ds4000
+      (3.8404 px/mm across, 3.898 down): ground strip with an earth symbol and two screws at the
+      left, PSU2, seven fans on 43.96 mm with FAN7 leftmost, PSU1 at the right. The DS4001 rear
+      render (Foleon ds4001-side-by-side) agrees in every count and arrangement and supplies the
+      colours: black fans with blue latches, silver supplies with black U-handles and orange
+      latches. Positions are the guide figure's, not the render's.
+  views:
+    confidence: estimated
+    note: >-
+      TOP (y = 0 at the rear), BOTTOM, LEFT (x = 0 rear) and RIGHT (x = 0 front) as on
+      celestica/ds4000 - the DS4001 renders show the same lid (two perforated fields at the side
+      edges, perforated strips along the front third of each side edge, a recessed lid-release
+      plate on the centreline in the rear third), positions estimated from the renders; side rail
+      fasteners at estimated positions.
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet - '1+1 redundant, hot swap PSUs, 1500W each'; 'AC 47~63Hz, 100 ~ 240 V nominal,
+      90~264V max'. Unlike the DS4000's, the DS4001 datasheet states no system consumption
+      figure, so no power-max-w is carried. The guide's What's in the Box (docs-portal HTML) lists
+      a DC build, R3240-F9104-A1 'DC PSU 2x1500W', which the PDF revision 1.4.0 no longer lists;
+      no DC supply is drawn anywhere held, so it is a gap, not a configuration.
+  port-power:
+    confidence: datasheet
+    note: >-
+      guide, QSFP-DD Port Power Outputs (shared) - F2B 28 x 15 W + 4 x 20 W (ports 1, 2, 31, 32);
+      B2F 24 x 5 W + 8 x 12 W (ports 25-32). DS4001 datasheet: 'Up to 12W in Back to Front
+      airflow', 'Up to 20W in Front to Back airflow'.
+  environment:
+    confidence: datasheet
+    note: >-
+      datasheet 'Temperature: 0 C to 45 C @ 900m, Humidity: 5% to 90%, non-condensing'; the shared
+      guide's table says 5 - 40 C for either airflow and 40 - 60 % operating humidity, 5 - 95 %
+      storage. Both carried, as on the DS4000.
+  lifecycle:
+    note: >-
+      searched 2026-09-26 for a DS4000/DS4001 end-of-life or end-of-sale announcement; none found.
+attrs:
+  performance:
+    switching-capacity: 12.8 Tbps
+    packet-buffer: 70 MB
+    latency: low-latency cut-through mode supported
+  power:
+    input-ac: 100-240 V nominal (90-264 V max), 47-63 Hz
+    psu-redundancy: 1+1 hot-swappable, 1500 W each
+  thermal:
+    fan-redundancy: 6+1 hot-swappable
+    port-power-f2b: 28 x 15 W + 4 x 20 W (ports 1, 2, 31, 32)
+    port-power-b2f: 24 x 5 W + 8 x 12 W (ports 25-32)
+  environmental:
+    operating-temp: 0 to 45 C at 900 m
+    operating-humidity: 5 to 90% non-condensing
+    operating-temp-guide: 5 to 40 C, either airflow
+    operating-humidity-guide: 40 to 60% RH
+    storage-humidity: 5 to 95% RH
+  platform:
+    cpu: Intel Xeon D, 4-core D-1627 on a COMe module (both SKUs); up to 8 cores per datasheet
+    memory: 16 GB DDR4 ECC (both SKUs; up to 32 GB per datasheet)
+    storage: 64 GB M.2 SSD (both SKUs)
+    bmc: BMC with 1 GB DDR4, dual 32 MB flash, NC-SI shared port, SOL, IPMI 2.0
+  features:
+    breakout: >-
+      168 x 50GbE, 128 x 100GbE or 64 x 200GbE using breakout cables
+    optics-qsfp-dd: >-
+      10GBASE-CR/SR/LR/ER, 25GBASE-CR/SR/LR/ER, 40GBASE-CR4/SR4/LR4/ER4, 100GBASE-CR4/SR4/LR4/ER4/DR1/PSM4/CWDM4,
+      400GBASE-CR4/SR4/FR4/DR4/LR8 (shared guide Port Descriptions); DAC up to 3 m (datasheet)
+    optics-sfp-plus: 10GbE (shared guide Port Descriptions)
+    tunnelling: IPinIP, IPinGRE, VXLAN
+  management:
+    console: RJ45 RS-232, 115200 8N1, flow control XON/XOFF (labelled IOIOI)
+    oob: RJ45 10/100/1000, CPU/BMC shared
+    usb: USB 2.0 type A, data only (does not supply power)
+  compliance:
+    emc: CN (GB/T9254-2008 Class A), EU (EN550032, EN55035, EN300386), FCC, VCCI, CCC
+    safety: UL/CSA/IEC/EN60950-1/62368-1, UL, CB, CCC (GB4943.1-2011)
+    environment: RoHS
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 438.5
+  height: 43.1
+  depth: 657.5
+  ru: 1
+  color: '#c4c8cc'
+  airflow: front-to-back
+  power: ac
+gaps:
+- what: dc-build
+  scope: [psus]
+  reason: needs-photo
+  note: >-
+    The docs-portal What's in the Box lists R3240-F9104-A1, '1U,32X400GBE,DC PSU 2x1500W,COMe
+    4C/16G DDR4/64G SSD,F2B', and the Ground Lug Installation page exists because a DC build does
+    ('The GLA is not applicable to the AC SKU versions'). The PDF revision 1.4.0 of the same
+    guide lists only the two AC SKUs, and no held image shows the DC supply's face, so no DC
+    supply component or configuration is drawn.
+  wanted: a rear image of the DC build and its supply's input connector
+- what: front-vertical-measure
+  scope: [qsfpdd-400g, sfp-plus-mgmt, mgmt, status-leds]
+  reason: needs-photo
+  note: >-
+    Every vertical position on this front is carried from the DS4000's orthographic guide
+    elevation; the DS4001 is known only from three-quarter renders, which give x through a
+    homography but were not used for y. A square-on DS4001 front photograph or elevation would
+    settle it.
+  wanted: a square-on front image of a DS4001
+- what: hp-port-lamps
+  scope: [port-leds]
+  reason: sources-disagree
+  note: >-
+    The shared guide says each QSFP-DD port has four tri-colour LEDs; the DS4001 render shows two
+    windows per port on the four -HP ports (1, 2, 31, 32) and four on the rest. Modelled as the
+    render shows; which of LED1-LED4 the two windows carry is not stated.
+  wanted: a DS4001 LED table or a front photograph of a lit unit
+- what: b2f-finish
+  scope: [fans, psus, b2f]
+  reason: needs-photo
+  note: >-
+    The one rear render held (black fans, blue latches, orange PSU latches) does not state its
+    airflow. The DS4100 rear, from the same vendor, is orange-faced, which may be an airflow
+    colour code; no held DS4000/DS4001 document says so.
+  wanted: a rear photograph of each airflow build
+- what: system-led-signs
+  scope: [status-leds]
+  reason: sources-disagree
+  note: >-
+    The artwork prints STAT, FAN, PWR, ALM top to bottom; the shared guide's Front Panel Status
+    LEDs table signs the four SYS, ALM, PSU, FAN. The silkscreen follows the artwork and each
+    lamp takes the table row for its function.
+  wanted: a front photograph of a DS4001
+- what: psu-and-fan-part-numbers
+  scope: [psus, fans]
+  reason: vendor-silent
+  note: >-
+    No held document names the FRU part numbers of the 1500 W supply or the fan module; the
+    components are named for their form (celestica/psu-1500-ac, celestica/fan-40).
+  wanted: a Celestica FRU list
+- what: asic
+  scope: [qsfpdd-400g]
+  reason: vendor-silent
+  note: >-
+    Neither the DS4001 datasheet nor the shared guide names the switching silicon.
+  wanted: a Celestica document naming the ASIC
+groups:
+  qsfpdd-400g:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp-dd, speed: 400g}
+  sfp-plus-mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: the M1/M2 SFP+ pair at the left end of the face - 10GbE per the shared guide's port table
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the management stack - RS-232 console RJ45, USB 2.0 port and the CPU/BMC shared Ethernet
+      management RJ45, on one silver plate
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the four chassis lamps - STAT, FAN, PWR, ALM
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: >-
+      four tri-colour lamps per QSFP-DD port (LED1-LED4) and one per SFP+. Shared guide LED table:
+      8x10G amber (or white), 8x25G green (or white), 2x40G amber on LED1 and LED3, 4x40G amber,
+      4x50G green, 8x50G blue (or white), 2x100G green on LED1 and LED3, 4x100G blue, 2x200G blue
+      on LED1 and LED3, 1x400G blue on LED1.
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 - DS4001 datasheet, Power and Cooling: ''1+1 redundant, hot swap PSUs, 1500W each''; two bays at the rear ends'
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '6+1'
+      redundancy-note: '6+1 - DS4001 datasheet, Power and Cooling: ''6+1 Redundant/Hot-Swappable fans, front to back and back to front airflow''; seven bays'
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 1
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 1
+views:
+  front:
+    size:
+      w: 438.5
+      h: 43.1
+    panel:
+      decor:
+        - {at: [0, 0], size: [438.5, 43.1], fill: '#1b1e21', kind: bezel}
+        - {at: [0.8, 2.0], size: [8.6, 39.1], fill: '#2b2f33', kind: vent-backing}
+        - {at: [0.8, 2.0], size: [8.6, 39.1], pattern: vent, kind: vent}
+        - {at: [430.4, 2.0], size: [7.2, 39.1], fill: '#2b2f33', kind: vent-backing}
+        - {at: [430.4, 2.0], size: [7.2, 39.1], pattern: vent, kind: vent}
+        - {at: [33.39, 2.6], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [33.39, 2.6], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [33.39, 34.5], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [33.39, 34.5], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [56.28, 2.6], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [56.28, 2.6], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [56.28, 34.5], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [56.28, 34.5], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [79.18, 2.6], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [79.18, 2.6], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [79.18, 34.5], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [79.18, 34.5], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [102.07, 2.6], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [102.07, 2.6], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [102.07, 34.5], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [102.07, 34.5], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [124.97, 2.6], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [124.97, 2.6], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [124.97, 34.5], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [124.97, 34.5], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [147.86, 2.6], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [147.86, 2.6], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [147.86, 34.5], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [147.86, 34.5], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [170.75, 2.6], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [170.75, 2.6], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [170.75, 34.5], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [170.75, 34.5], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [193.65, 2.6], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [193.65, 2.6], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [193.65, 34.5], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [193.65, 34.5], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [216.54, 2.6], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [216.54, 2.6], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [216.54, 34.5], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [216.54, 34.5], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [239.44, 2.6], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [239.44, 2.6], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [239.44, 34.5], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [239.44, 34.5], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [262.33, 2.6], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [262.33, 2.6], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [262.33, 34.5], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [262.33, 34.5], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [285.22, 2.6], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [285.22, 2.6], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [285.22, 34.5], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [285.22, 34.5], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [308.12, 2.6], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [308.12, 2.6], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [308.12, 34.5], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [308.12, 34.5], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [331.01, 2.6], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [331.01, 2.6], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [331.01, 34.5], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [331.01, 34.5], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [353.91, 2.6], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [353.91, 2.6], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [353.91, 34.5], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [353.91, 34.5], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [376.8, 2.6], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [376.8, 2.6], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [376.8, 34.5], size: [11.6, 5.4], fill: '#2b2f33', kind: vent-backing}
+        - {at: [376.8, 34.5], size: [11.6, 5.4], pattern: vent, kind: vent}
+        - {at: [29.19, 9.33], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [29.19, 22.84], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [52.08, 9.33], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [52.08, 22.84], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [74.98, 9.33], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [74.98, 22.84], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [97.87, 9.33], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [97.87, 22.84], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [120.77, 9.33], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [120.77, 22.84], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [143.66, 9.33], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [143.66, 22.84], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [166.55, 9.33], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [166.55, 22.84], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [189.45, 9.33], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [189.45, 22.84], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [212.34, 9.33], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [212.34, 22.84], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [235.24, 9.33], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [235.24, 22.84], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [258.13, 9.33], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [258.13, 22.84], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [281.02, 9.33], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [281.02, 22.84], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [303.92, 9.33], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [303.92, 22.84], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [326.81, 9.33], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [326.81, 22.84], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [349.71, 9.33], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [349.71, 22.84], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [372.6, 9.33], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [372.6, 22.84], size: [20.0, 10.3], fill: '#a3a9b0', rx: 0.4, kind: cage-shell}
+        - {at: [403.6, 6.73], size: [17.05, 31.9], fill: '#b0b5bb', rx: 0.6, kind: jack-shell}
+    silkscreen:
+      - {at: [39.19, 21.66], text: '1-HP▲▼2-HP', font-size: 1.6, anchor: middle, fill: '#f5f7fa', for: [port-1, port-2]}
+      - {at: [62.08, 21.66], text: '3▲▼4', font-size: 1.6, anchor: middle, fill: '#f5f7fa', for: [port-3, port-4]}
+      - {at: [84.98, 21.66], text: '5▲▼6', font-size: 1.6, anchor: middle, fill: '#f5f7fa', for: [port-5, port-6]}
+      - {at: [107.87, 21.66], text: '7▲▼8', font-size: 1.6, anchor: middle, fill: '#f5f7fa', for: [port-7, port-8]}
+      - {at: [130.77, 21.66], text: '9▲▼10', font-size: 1.6, anchor: middle, fill: '#f5f7fa', for: [port-9, port-10]}
+      - {at: [153.66, 21.66], text: '11▲▼12', font-size: 1.6, anchor: middle, fill: '#f5f7fa', for: [port-11, port-12]}
+      - {at: [176.55, 21.66], text: '13▲▼14', font-size: 1.6, anchor: middle, fill: '#f5f7fa', for: [port-13, port-14]}
+      - {at: [199.45, 21.66], text: '15▲▼16', font-size: 1.6, anchor: middle, fill: '#f5f7fa', for: [port-15, port-16]}
+      - {at: [222.34, 21.66], text: '17▲▼18', font-size: 1.6, anchor: middle, fill: '#f5f7fa', for: [port-17, port-18]}
+      - {at: [245.24, 21.66], text: '19▲▼20', font-size: 1.6, anchor: middle, fill: '#f5f7fa', for: [port-19, port-20]}
+      - {at: [268.13, 21.66], text: '21▲▼22', font-size: 1.6, anchor: middle, fill: '#f5f7fa', for: [port-21, port-22]}
+      - {at: [291.02, 21.66], text: '23▲▼24', font-size: 1.6, anchor: middle, fill: '#f5f7fa', for: [port-23, port-24]}
+      - {at: [313.92, 21.66], text: '25▲▼26', font-size: 1.6, anchor: middle, fill: '#f5f7fa', for: [port-25, port-26]}
+      - {at: [336.81, 21.66], text: '27▲▼28', font-size: 1.6, anchor: middle, fill: '#f5f7fa', for: [port-27, port-28]}
+      - {at: [359.71, 21.66], text: '29▲▼30', font-size: 1.6, anchor: middle, fill: '#f5f7fa', for: [port-29, port-30]}
+      - {at: [382.6, 21.66], text: '31-HP▲▼32-HP', font-size: 1.6, anchor: middle, fill: '#f5f7fa', for: [port-31, port-32]}
+      - {at: [20.06, 21.66], text: 'M1▲▼M2', font-size: 1.5, anchor: middle, fill: '#f5f7fa', for: [m1, m2]}
+      - {at: [396.9, 12.3], text: STAT, font-size: 1.3, anchor: middle, rotate: -60, fill: '#f5f7fa', for: led-stat}
+      - {at: [396.9, 17.3], text: FAN, font-size: 1.3, anchor: middle, rotate: -60, fill: '#f5f7fa', for: led-fan}
+      - {at: [396.9, 22.3], text: PWR, font-size: 1.3, anchor: middle, rotate: -60, fill: '#f5f7fa', for: led-pwr}
+      - {at: [396.9, 27.3], text: ALM, font-size: 1.3, anchor: middle, rotate: -60, fill: '#f5f7fa', for: led-alm}
+      - {at: [412.12, 5.6], text: Celestica, font-size: 3.6, anchor: middle, fill: '#f5f7fa', for: chassis}
+      - {at: [424.05, 14.27], text: IOIOI, font-size: 1.2, anchor: middle, fill: '#f5f7fa', for: console}
+      - {id: usb-trident, at: [421.75, 22.6], path: 'M 0 0 L 2.0 0 M 1.3 0 L 1.7 -0.6 M 0.8 0 L 1.2 0.6', stroke-width: 0.25, for: usb}
+      - {id: mgmt-lan, at: [421.75, 31.3], path: 'M 0.9 0 L 0.9 1.0 M 0 1.8 L 0 1.0 L 1.8 1.0 L 1.8 1.8', stroke-width: 0.25, for: mgmt}
+    components:
+      placements:
+        - {ref: std/qsfp-dd@1, id: port-1, at: [29.69, 9.36], group: qsfpdd-400g, rel-pos: 1}
+        - {ref: std/qsfp-dd@1, id: port-2, at: [29.69, 22.97], rotate: 180, group: qsfpdd-400g, rel-pos: 2}
+        - {ref: std/qsfp-dd@1, id: port-3, at: [52.58, 9.36], group: qsfpdd-400g, rel-pos: 3}
+        - {ref: std/qsfp-dd@1, id: port-4, at: [52.58, 22.97], rotate: 180, group: qsfpdd-400g, rel-pos: 4}
+        - {ref: std/qsfp-dd@1, id: port-5, at: [75.48, 9.36], group: qsfpdd-400g, rel-pos: 5}
+        - {ref: std/qsfp-dd@1, id: port-6, at: [75.48, 22.97], rotate: 180, group: qsfpdd-400g, rel-pos: 6}
+        - {ref: std/qsfp-dd@1, id: port-7, at: [98.37, 9.36], group: qsfpdd-400g, rel-pos: 7}
+        - {ref: std/qsfp-dd@1, id: port-8, at: [98.37, 22.97], rotate: 180, group: qsfpdd-400g, rel-pos: 8}
+        - {ref: std/qsfp-dd@1, id: port-9, at: [121.27, 9.36], group: qsfpdd-400g, rel-pos: 9}
+        - {ref: std/qsfp-dd@1, id: port-10, at: [121.27, 22.97], rotate: 180, group: qsfpdd-400g, rel-pos: 10}
+        - {ref: std/qsfp-dd@1, id: port-11, at: [144.16, 9.36], group: qsfpdd-400g, rel-pos: 11}
+        - {ref: std/qsfp-dd@1, id: port-12, at: [144.16, 22.97], rotate: 180, group: qsfpdd-400g, rel-pos: 12}
+        - {ref: std/qsfp-dd@1, id: port-13, at: [167.05, 9.36], group: qsfpdd-400g, rel-pos: 13}
+        - {ref: std/qsfp-dd@1, id: port-14, at: [167.05, 22.97], rotate: 180, group: qsfpdd-400g, rel-pos: 14}
+        - {ref: std/qsfp-dd@1, id: port-15, at: [189.95, 9.36], group: qsfpdd-400g, rel-pos: 15}
+        - {ref: std/qsfp-dd@1, id: port-16, at: [189.95, 22.97], rotate: 180, group: qsfpdd-400g, rel-pos: 16}
+        - {ref: std/qsfp-dd@1, id: port-17, at: [212.84, 9.36], group: qsfpdd-400g, rel-pos: 17}
+        - {ref: std/qsfp-dd@1, id: port-18, at: [212.84, 22.97], rotate: 180, group: qsfpdd-400g, rel-pos: 18}
+        - {ref: std/qsfp-dd@1, id: port-19, at: [235.74, 9.36], group: qsfpdd-400g, rel-pos: 19}
+        - {ref: std/qsfp-dd@1, id: port-20, at: [235.74, 22.97], rotate: 180, group: qsfpdd-400g, rel-pos: 20}
+        - {ref: std/qsfp-dd@1, id: port-21, at: [258.63, 9.36], group: qsfpdd-400g, rel-pos: 21}
+        - {ref: std/qsfp-dd@1, id: port-22, at: [258.63, 22.97], rotate: 180, group: qsfpdd-400g, rel-pos: 22}
+        - {ref: std/qsfp-dd@1, id: port-23, at: [281.52, 9.36], group: qsfpdd-400g, rel-pos: 23}
+        - {ref: std/qsfp-dd@1, id: port-24, at: [281.52, 22.97], rotate: 180, group: qsfpdd-400g, rel-pos: 24}
+        - {ref: std/qsfp-dd@1, id: port-25, at: [304.42, 9.36], group: qsfpdd-400g, rel-pos: 25}
+        - {ref: std/qsfp-dd@1, id: port-26, at: [304.42, 22.97], rotate: 180, group: qsfpdd-400g, rel-pos: 26}
+        - {ref: std/qsfp-dd@1, id: port-27, at: [327.31, 9.36], group: qsfpdd-400g, rel-pos: 27}
+        - {ref: std/qsfp-dd@1, id: port-28, at: [327.31, 22.97], rotate: 180, group: qsfpdd-400g, rel-pos: 28}
+        - {ref: std/qsfp-dd@1, id: port-29, at: [350.21, 9.36], group: qsfpdd-400g, rel-pos: 29}
+        - {ref: std/qsfp-dd@1, id: port-30, at: [350.21, 22.97], rotate: 180, group: qsfpdd-400g, rel-pos: 30}
+        - {ref: std/qsfp-dd@1, id: port-31, at: [373.1, 9.36], group: qsfpdd-400g, rel-pos: 31}
+        - {ref: std/qsfp-dd@1, id: port-32, at: [373.1, 22.97], rotate: 180, group: qsfpdd-400g, rel-pos: 32}
+        - {ref: common/led-dot@1, id: led-port-1-1, at: [26.89, 4.8], for: port-1, group: port-leds, rel-pos: 1, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-1-2, at: [49.49, 4.8], for: port-1, group: port-leds, rel-pos: 2, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-2-1, at: [26.89, 35.4], for: port-2, group: port-leds, rel-pos: 3, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-2-2, at: [49.49, 35.4], for: port-2, group: port-leds, rel-pos: 4, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-3-1, at: [53.08, 3.54], for: port-3, group: port-leds, rel-pos: 5, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-3-2, at: [53.08, 6.26], for: port-3, group: port-leds, rel-pos: 6, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-3-3, at: [69.08, 3.54], for: port-3, group: port-leds, rel-pos: 7, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-3-4, at: [69.08, 6.26], for: port-3, group: port-leds, rel-pos: 8, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-4-1, at: [53.08, 34.16], for: port-4, group: port-leds, rel-pos: 9, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-4-2, at: [53.08, 36.85], for: port-4, group: port-leds, rel-pos: 10, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-4-3, at: [69.08, 34.16], for: port-4, group: port-leds, rel-pos: 11, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-4-4, at: [69.08, 36.85], for: port-4, group: port-leds, rel-pos: 12, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-5-1, at: [75.98, 3.54], for: port-5, group: port-leds, rel-pos: 13, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-5-2, at: [75.98, 6.26], for: port-5, group: port-leds, rel-pos: 14, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-5-3, at: [91.98, 3.54], for: port-5, group: port-leds, rel-pos: 15, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-5-4, at: [91.98, 6.26], for: port-5, group: port-leds, rel-pos: 16, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-6-1, at: [75.98, 34.16], for: port-6, group: port-leds, rel-pos: 17, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-6-2, at: [75.98, 36.85], for: port-6, group: port-leds, rel-pos: 18, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-6-3, at: [91.98, 34.16], for: port-6, group: port-leds, rel-pos: 19, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-6-4, at: [91.98, 36.85], for: port-6, group: port-leds, rel-pos: 20, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-7-1, at: [98.87, 3.54], for: port-7, group: port-leds, rel-pos: 21, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-7-2, at: [98.87, 6.26], for: port-7, group: port-leds, rel-pos: 22, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-7-3, at: [114.87, 3.54], for: port-7, group: port-leds, rel-pos: 23, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-7-4, at: [114.87, 6.26], for: port-7, group: port-leds, rel-pos: 24, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-8-1, at: [98.87, 34.16], for: port-8, group: port-leds, rel-pos: 25, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-8-2, at: [98.87, 36.85], for: port-8, group: port-leds, rel-pos: 26, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-8-3, at: [114.87, 34.16], for: port-8, group: port-leds, rel-pos: 27, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-8-4, at: [114.87, 36.85], for: port-8, group: port-leds, rel-pos: 28, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-9-1, at: [121.77, 3.54], for: port-9, group: port-leds, rel-pos: 29, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-9-2, at: [121.77, 6.26], for: port-9, group: port-leds, rel-pos: 30, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-9-3, at: [137.77, 3.54], for: port-9, group: port-leds, rel-pos: 31, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-9-4, at: [137.77, 6.26], for: port-9, group: port-leds, rel-pos: 32, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-10-1, at: [121.77, 34.16], for: port-10, group: port-leds, rel-pos: 33, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-10-2, at: [121.77, 36.85], for: port-10, group: port-leds, rel-pos: 34, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-10-3, at: [137.77, 34.16], for: port-10, group: port-leds, rel-pos: 35, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-10-4, at: [137.77, 36.85], for: port-10, group: port-leds, rel-pos: 36, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-11-1, at: [144.66, 3.54], for: port-11, group: port-leds, rel-pos: 37, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-11-2, at: [144.66, 6.26], for: port-11, group: port-leds, rel-pos: 38, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-11-3, at: [160.66, 3.54], for: port-11, group: port-leds, rel-pos: 39, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-11-4, at: [160.66, 6.26], for: port-11, group: port-leds, rel-pos: 40, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-12-1, at: [144.66, 34.16], for: port-12, group: port-leds, rel-pos: 41, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-12-2, at: [144.66, 36.85], for: port-12, group: port-leds, rel-pos: 42, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-12-3, at: [160.66, 34.16], for: port-12, group: port-leds, rel-pos: 43, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-12-4, at: [160.66, 36.85], for: port-12, group: port-leds, rel-pos: 44, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-13-1, at: [167.55, 3.54], for: port-13, group: port-leds, rel-pos: 45, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-13-2, at: [167.55, 6.26], for: port-13, group: port-leds, rel-pos: 46, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-13-3, at: [183.55, 3.54], for: port-13, group: port-leds, rel-pos: 47, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-13-4, at: [183.55, 6.26], for: port-13, group: port-leds, rel-pos: 48, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-14-1, at: [167.55, 34.16], for: port-14, group: port-leds, rel-pos: 49, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-14-2, at: [167.55, 36.85], for: port-14, group: port-leds, rel-pos: 50, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-14-3, at: [183.55, 34.16], for: port-14, group: port-leds, rel-pos: 51, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-14-4, at: [183.55, 36.85], for: port-14, group: port-leds, rel-pos: 52, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-15-1, at: [190.45, 3.54], for: port-15, group: port-leds, rel-pos: 53, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-15-2, at: [190.45, 6.26], for: port-15, group: port-leds, rel-pos: 54, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-15-3, at: [206.45, 3.54], for: port-15, group: port-leds, rel-pos: 55, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-15-4, at: [206.45, 6.26], for: port-15, group: port-leds, rel-pos: 56, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-16-1, at: [190.45, 34.16], for: port-16, group: port-leds, rel-pos: 57, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-16-2, at: [190.45, 36.85], for: port-16, group: port-leds, rel-pos: 58, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-16-3, at: [206.45, 34.16], for: port-16, group: port-leds, rel-pos: 59, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-16-4, at: [206.45, 36.85], for: port-16, group: port-leds, rel-pos: 60, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-17-1, at: [213.34, 3.54], for: port-17, group: port-leds, rel-pos: 61, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-17-2, at: [213.34, 6.26], for: port-17, group: port-leds, rel-pos: 62, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-17-3, at: [229.34, 3.54], for: port-17, group: port-leds, rel-pos: 63, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-17-4, at: [229.34, 6.26], for: port-17, group: port-leds, rel-pos: 64, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-18-1, at: [213.34, 34.16], for: port-18, group: port-leds, rel-pos: 65, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-18-2, at: [213.34, 36.85], for: port-18, group: port-leds, rel-pos: 66, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-18-3, at: [229.34, 34.16], for: port-18, group: port-leds, rel-pos: 67, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-18-4, at: [229.34, 36.85], for: port-18, group: port-leds, rel-pos: 68, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-19-1, at: [236.24, 3.54], for: port-19, group: port-leds, rel-pos: 69, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-19-2, at: [236.24, 6.26], for: port-19, group: port-leds, rel-pos: 70, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-19-3, at: [252.24, 3.54], for: port-19, group: port-leds, rel-pos: 71, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-19-4, at: [252.24, 6.26], for: port-19, group: port-leds, rel-pos: 72, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-20-1, at: [236.24, 34.16], for: port-20, group: port-leds, rel-pos: 73, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-20-2, at: [236.24, 36.85], for: port-20, group: port-leds, rel-pos: 74, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-20-3, at: [252.24, 34.16], for: port-20, group: port-leds, rel-pos: 75, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-20-4, at: [252.24, 36.85], for: port-20, group: port-leds, rel-pos: 76, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-21-1, at: [259.13, 3.54], for: port-21, group: port-leds, rel-pos: 77, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-21-2, at: [259.13, 6.26], for: port-21, group: port-leds, rel-pos: 78, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-21-3, at: [275.13, 3.54], for: port-21, group: port-leds, rel-pos: 79, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-21-4, at: [275.13, 6.26], for: port-21, group: port-leds, rel-pos: 80, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-22-1, at: [259.13, 34.16], for: port-22, group: port-leds, rel-pos: 81, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-22-2, at: [259.13, 36.85], for: port-22, group: port-leds, rel-pos: 82, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-22-3, at: [275.13, 34.16], for: port-22, group: port-leds, rel-pos: 83, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-22-4, at: [275.13, 36.85], for: port-22, group: port-leds, rel-pos: 84, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-23-1, at: [282.02, 3.54], for: port-23, group: port-leds, rel-pos: 85, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-23-2, at: [282.02, 6.26], for: port-23, group: port-leds, rel-pos: 86, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-23-3, at: [298.02, 3.54], for: port-23, group: port-leds, rel-pos: 87, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-23-4, at: [298.02, 6.26], for: port-23, group: port-leds, rel-pos: 88, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-24-1, at: [282.02, 34.16], for: port-24, group: port-leds, rel-pos: 89, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-24-2, at: [282.02, 36.85], for: port-24, group: port-leds, rel-pos: 90, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-24-3, at: [298.02, 34.16], for: port-24, group: port-leds, rel-pos: 91, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-24-4, at: [298.02, 36.85], for: port-24, group: port-leds, rel-pos: 92, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-25-1, at: [304.92, 3.54], for: port-25, group: port-leds, rel-pos: 93, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-25-2, at: [304.92, 6.26], for: port-25, group: port-leds, rel-pos: 94, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-25-3, at: [320.92, 3.54], for: port-25, group: port-leds, rel-pos: 95, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-25-4, at: [320.92, 6.26], for: port-25, group: port-leds, rel-pos: 96, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-26-1, at: [304.92, 34.16], for: port-26, group: port-leds, rel-pos: 97, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-26-2, at: [304.92, 36.85], for: port-26, group: port-leds, rel-pos: 98, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-26-3, at: [320.92, 34.16], for: port-26, group: port-leds, rel-pos: 99, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-26-4, at: [320.92, 36.85], for: port-26, group: port-leds, rel-pos: 100, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-27-1, at: [327.81, 3.54], for: port-27, group: port-leds, rel-pos: 101, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-27-2, at: [327.81, 6.26], for: port-27, group: port-leds, rel-pos: 102, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-27-3, at: [343.81, 3.54], for: port-27, group: port-leds, rel-pos: 103, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-27-4, at: [343.81, 6.26], for: port-27, group: port-leds, rel-pos: 104, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-28-1, at: [327.81, 34.16], for: port-28, group: port-leds, rel-pos: 105, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-28-2, at: [327.81, 36.85], for: port-28, group: port-leds, rel-pos: 106, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-28-3, at: [343.81, 34.16], for: port-28, group: port-leds, rel-pos: 107, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-28-4, at: [343.81, 36.85], for: port-28, group: port-leds, rel-pos: 108, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-29-1, at: [350.71, 3.54], for: port-29, group: port-leds, rel-pos: 109, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-29-2, at: [350.71, 6.26], for: port-29, group: port-leds, rel-pos: 110, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-29-3, at: [366.71, 3.54], for: port-29, group: port-leds, rel-pos: 111, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-29-4, at: [366.71, 6.26], for: port-29, group: port-leds, rel-pos: 112, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-30-1, at: [350.71, 34.16], for: port-30, group: port-leds, rel-pos: 113, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-30-2, at: [350.71, 36.85], for: port-30, group: port-leds, rel-pos: 114, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-30-3, at: [366.71, 34.16], for: port-30, group: port-leds, rel-pos: 115, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-30-4, at: [366.71, 36.85], for: port-30, group: port-leds, rel-pos: 116, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-31-1, at: [370.3, 4.8], for: port-31, group: port-leds, rel-pos: 117, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-31-2, at: [392.9, 4.8], for: port-31, group: port-leds, rel-pos: 118, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-32-1, at: [370.3, 35.4], for: port-32, group: port-leds, rel-pos: 119, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/led-dot@1, id: led-port-32-2, at: [392.9, 35.4], for: port-32, group: port-leds, rel-pos: 120, states: ['off', {name: blue, color: '#3b82f6'}, {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}, {name: white, color: '#f5f7fa'}]}
+        - {ref: common/sfp-plus-cage@2, id: m1, at: [12.06, 9.45], group: sfp-plus-mgmt, rel-pos: 1}
+        - {ref: common/led-dot@1, id: led-m1, at: [15.93, 5.73], for: m1, group: port-leds, rel-pos: 121, states: ['off', {name: link-10g, color: '#22c55e'}, {name: activity-10g, color: '#22c55e', behavior: blinking}, {name: link-1g, color: '#f59e0b'}, {name: activity-1g, color: '#f59e0b', behavior: blinking}]}
+        - {ref: common/sfp-plus-cage@2, id: m2, at: [12.06, 22.9], rotate: 180, group: sfp-plus-mgmt, rel-pos: 2}
+        - {ref: common/led-dot@1, id: led-m2, at: [15.93, 34.8], for: m2, group: port-leds, rel-pos: 122, states: ['off', {name: link-10g, color: '#22c55e'}, {name: activity-10g, color: '#22c55e', behavior: blinking}, {name: link-1g, color: '#f59e0b'}, {name: activity-1g, color: '#f59e0b', behavior: blinking}]}
+        - {ref: common/led-indicator@1, id: led-stat, at: [398.4, 9.9], for: chassis, group: status-leds, rel-pos: 1,
+           states: ['off', {name: ok, color: '#22c55e', behavior: blinking}],
+           description: 'guide Table 1 Front Panel Status LEDs, System row (sign SYS in the table, STAT on the artwork) - Green/Amber alternate blinking (normal operation), Off (no power to system)'}
+        - {ref: common/led-indicator@1, id: led-fan, at: [398.4, 14.9], for: [rear/fan-1, rear/fan-2, rear/fan-3, rear/fan-4, rear/fan-5, rear/fan-6, rear/fan-7], group: status-leds, rel-pos: 2,
+           states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}],
+           description: 'guide Table 1, Fan row - Green On (all fans operating normally), Amber On (one or more fans absent or operating abnormally), Off (no power to system)'}
+        - {ref: common/led-indicator@1, id: led-pwr, at: [398.4, 19.9], for: [rear/psu-1, rear/psu-2], group: status-leds, rel-pos: 3,
+           states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}],
+           description: 'guide Table 1, Power Supply Unit row (sign PSU in the table, PWR on the artwork) - Green On (all PSUs operating normally), Amber On (one or more PSUs absent or operating abnormally), Off (no power to system)'}
+        - {ref: common/led-indicator@1, id: led-alm, at: [398.4, 24.9], for: chassis, group: status-leds, rel-pos: 4,
+           states: ['off', {name: ok, color: '#22c55e'}, {name: critical, color: '#f59e0b'}, {name: minor, color: '#f59e0b', behavior: blinking}, {name: major, color: '#f59e0b', behavior: blinking}],
+           description: 'guide Table 1, Alarm row - Green On (no alarm), Amber On (critical alarm), Amber 1Hz blinking (minor alarm), Amber 4Hz blinking (major alarm)'}
+        - {ref: std/rj45-ganged@2, id: console, at: [405.77, 8.4], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
+        - {ref: std/usb-a@1, id: usb, at: [406.12, 20.35], skin: usb2, group: mgmt, rel-pos: 2, attrs: {role: storage, usb: '2.0'}}
+        - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [405.77, 26.7], group: mgmt, rel-pos: 3, attrs: {role: mgmt, speed: 1g}, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {color: '#f59e0b', name: link-10-100m}], led-b: ['off', {behavior: blinking, color: '#22c55e', name: activity}]}, description: 'guide Table 3 Port Indicator Lights - Ethernet port active (left): Green on (link at 1000Mbps), Amber on (link in 10/100Mbps), Off (link down); Ethernet port active (right): Green blinking (link active with traffic), Off (no traffic)'}
+        - {ref: celestica/lug-tag@1, id: lug-tag, at: [415.8, 25.7], rotate: 270, group: furniture, rel-pos: 1, attrs: {label: DS4001}}
+    regions:
+      - {id: mgmt-block, at: [403.1, 1], size: {w: 18.05, h: 40.5}, label: Management, members: [console, usb, mgmt]}
+  rear:
+    size:
+      w: 438.5
+      h: 43.1
+    panel:
+      decor:
+        - {at: [2.45, 20.5], size: [7.4, 7.4], rx: 3.7, fill: '#b8763a', kind: washer}
+        - {at: [2.45, 29.65], size: [7.4, 7.4], rx: 3.7, fill: '#b8763a', kind: washer}
+    silkscreen:
+      - {at: [376.2, 23], text: FAN1, font-size: 1.6, anchor: middle, rotate: -90, fill: '#2b2f33', for: fan-1}
+      - {at: [375.6, 18.8], text: '◁', font-size: 1.6, anchor: middle, fill: '#2b2f33', for: fan-1}
+      - {at: [332.24, 23], text: FAN2, font-size: 1.6, anchor: middle, rotate: -90, fill: '#2b2f33', for: fan-2}
+      - {at: [331.64, 18.8], text: '◁', font-size: 1.6, anchor: middle, fill: '#2b2f33', for: fan-2}
+      - {at: [288.28, 23], text: FAN3, font-size: 1.6, anchor: middle, rotate: -90, fill: '#2b2f33', for: fan-3}
+      - {at: [287.68, 18.8], text: '◁', font-size: 1.6, anchor: middle, fill: '#2b2f33', for: fan-3}
+      - {at: [244.32, 23], text: FAN4, font-size: 1.6, anchor: middle, rotate: -90, fill: '#2b2f33', for: fan-4}
+      - {at: [243.72, 18.8], text: '◁', font-size: 1.6, anchor: middle, fill: '#2b2f33', for: fan-4}
+      - {at: [200.36, 23], text: FAN5, font-size: 1.6, anchor: middle, rotate: -90, fill: '#2b2f33', for: fan-5}
+      - {at: [199.76, 18.8], text: '◁', font-size: 1.6, anchor: middle, fill: '#2b2f33', for: fan-5}
+      - {at: [156.4, 23], text: FAN6, font-size: 1.6, anchor: middle, rotate: -90, fill: '#2b2f33', for: fan-6}
+      - {at: [155.8, 18.8], text: '◁', font-size: 1.6, anchor: middle, fill: '#2b2f33', for: fan-6}
+      - {at: [112.44, 23], text: FAN7, font-size: 1.6, anchor: middle, rotate: -90, fill: '#2b2f33', for: fan-7}
+      - {at: [111.84, 18.8], text: '◁', font-size: 1.6, anchor: middle, fill: '#2b2f33', for: fan-7}
+      - {at: [68.78, 20.4], text: PWR2, font-size: 1.6, anchor: middle, rotate: -90, fill: '#2b2f33', for: psu-2}
+      - {at: [68.18, 25.9], text: '◁', font-size: 1.6, anchor: middle, fill: '#2b2f33', for: psu-2}
+      - {at: [436.1, 20.4], text: PWR1, font-size: 1.6, anchor: middle, rotate: -90, fill: '#2b2f33', for: psu-1}
+      - {at: [435.5, 25.9], text: '◁', font-size: 1.6, anchor: middle, fill: '#2b2f33', for: psu-1}
+      - {id: earth-symbol, at: [6.15, 15.4], path: 'M 0 -1.8 L 0 0 M -1.6 0 L 1.6 0 M -1.0 0.9 L 1.0 0.9 M -0.45 1.8 L 0.45 1.8', stroke-width: 0.3, fill: '#2b2f33', for: [ground-screw-1, ground-screw-2]}
+    components:
+      bays:
+        - {id: psu-2, at: [10.95, 2.3], size: {w: 55.2, h: 39.0}, accepts: [celestica/psu-1500-ac@1], group: psus, rel-pos: 2, default: celestica/psu-1500-ac@1}
+        - {id: fan-7, at: [70.21, 2.3], size: {w: 39.3, h: 39.0}, accepts: [celestica/fan-40@1], group: fans, rel-pos: 7, default: celestica/fan-40@1}
+        - {id: fan-6, at: [114.17, 2.3], size: {w: 39.3, h: 39.0}, accepts: [celestica/fan-40@1], group: fans, rel-pos: 6, default: celestica/fan-40@1}
+        - {id: fan-5, at: [158.13, 2.3], size: {w: 39.3, h: 39.0}, accepts: [celestica/fan-40@1], group: fans, rel-pos: 5, default: celestica/fan-40@1}
+        - {id: fan-4, at: [202.09, 2.3], size: {w: 39.3, h: 39.0}, accepts: [celestica/fan-40@1], group: fans, rel-pos: 4, default: celestica/fan-40@1}
+        - {id: fan-3, at: [246.05, 2.3], size: {w: 39.3, h: 39.0}, accepts: [celestica/fan-40@1], group: fans, rel-pos: 3, default: celestica/fan-40@1}
+        - {id: fan-2, at: [290.01, 2.3], size: {w: 39.3, h: 39.0}, accepts: [celestica/fan-40@1], group: fans, rel-pos: 2, default: celestica/fan-40@1}
+        - {id: fan-1, at: [333.97, 2.3], size: {w: 39.3, h: 39.0}, accepts: [celestica/fan-40@1], group: fans, rel-pos: 1, default: celestica/fan-40@1}
+        - {id: psu-1, at: [377.3, 2.3], size: {w: 55.2, h: 39.0}, accepts: [celestica/psu-1500-ac@1], group: psus, rel-pos: 1, default: celestica/psu-1500-ac@1}
+      placements:
+        - {ref: common/screw-head@1, id: ground-screw-1, at: [4.35, 22.4], group: grounding, rel-pos: 1}
+        - {ref: common/screw-head@1, id: ground-screw-2, at: [4.35, 31.55], group: grounding, rel-pos: 2}
+    regions:
+      - {id: exhaust, at: [70.21, 0], size: {w: 303.06, h: 43.1}, physical-context: Exhaust, label: Fan exhaust, members: [fan-1, fan-2, fan-3, fan-4, fan-5, fan-6, fan-7]}
+  top:
+    size:
+      w: 438.5
+      h: 657.5
+    panel:
+      decor:
+        - {at: [2.0, 368.0], size: [70.0, 42.0], pattern: holes, kind: vent}
+        - {at: [366.5, 250.0], size: [70.0, 42.0], pattern: holes, kind: vent}
+        - {at: [2.0, 457.5], size: [8.0, 196.0], pattern: holes, kind: vent}
+        - {at: [428.5, 457.5], size: [8.0, 196.0], pattern: holes, kind: vent}
+        - {at: [196.0, 110.0], size: [46.0, 22.0], fill: '#c9ced3', rx: 2.0, sink: 0.8, kind: lid-latch-recess}
+  bottom:
+    size:
+      w: 438.5
+      h: 657.5
+    components:
+      placements:
+        - {ref: common/compliance-sticker@1, id: bottom-label, at: [110, 220], group: furniture, rel-pos: 2}
+  left:
+    size:
+      w: 657.5
+      h: 43.1
+    components:
+      placements:
+        - {ref: common/screw-head@1, id: side-l1, at: [93.2, 19.75], group: furniture, rel-pos: 3}
+        - {ref: common/screw-head@1, id: side-l2, at: [293.2, 19.75], group: furniture, rel-pos: 4}
+        - {ref: common/screw-head@1, id: side-l3, at: [493.2, 19.75], group: furniture, rel-pos: 5}
+        - {ref: common/screw-head@1, id: side-l4, at: [613.2, 19.75], group: furniture, rel-pos: 6}
+  right:
+    size:
+      w: 657.5
+      h: 43.1
+    components:
+      placements:
+        - {ref: common/screw-head@1, id: side-r1, at: [40.7, 19.75], group: furniture, rel-pos: 7}
+        - {ref: common/screw-head@1, id: side-r2, at: [160.7, 19.75], group: furniture, rel-pos: 8}
+        - {ref: common/screw-head@1, id: side-r3, at: [360.7, 19.75], group: furniture, rel-pos: 9}
+        - {ref: common/screw-head@1, id: side-r4, at: [560.7, 19.75], group: furniture, rel-pos: 10}
+configurations:
+  f2b:
+    kind: base
+    default: true
+    description: >-
+      Front-to-back airflow, two 1500 W AC supplies and seven fans - R3240-F9102-A0 (4C D1627,
+      1x16 GB DDR4, 64 GB SSD). The build the renders show.
+  b2f:
+    kind: orderable
+    airflow: back-to-front
+    description: >-
+      Back-to-front airflow - R3240-F9103-A0 (same control plane). QSFP-DD power drops to 24 x 5 W
+      + 8 x 12 W (ports 25-32). No held document shows whether the fans or supply latches change
+      colour for this build, so the art is the f2b art (see the b2f-finish gap).
+    region-context:
+      exhaust: Intake
+datasheet:
+  title: Celestica DS4001 1U 32-port 400GbE Data Center Switch datasheet
+  url: https://www.celestica.com/hps/ds4001
+references:
+  - {title: 'Celestica DS4000/DS4001 Installation Guide (rev 1.4.0, 2/2026)', url: 'https://www.celestica.com/DS4000-installation-guide-v1'}
+  - {title: Celestica DS4000/DS4001 product page, url: 'https://cls.celestica.com/hardware-platforms/ds4000ds4001/'}

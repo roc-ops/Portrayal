@@ -30,6 +30,7 @@ import warmrender
 from test_lifted_seat_js import LIB, RENDER, SPEC, build_components, skin_file, spec_of
 from test_nested_slots_js import built_occupant
 from test_lifted_seat_js import mismatches
+from portrayal.artifacts import face_file
 
 SCRIPT = SPEC / "tests/js/chained-slots.mjs"
 DEVICE = "nokia/nfxs-d-ba"
@@ -78,7 +79,7 @@ def world(tmp_path_factory):
     dist = tmp / "dist"
     comps = build_components(dist)
     out, name = render(tmp)
-    faces = {c: ET.parse(out / f"{name}.{c}.front.svg").getroot() for c in CONFIGS}
+    faces = {c: ET.parse(face_file(out, name, c, "front")).getroot() for c in CONFIGS}
     meta = json.loads((out / f"{name}.configs.json").read_text())
     idx = json.loads((dist / "components.json").read_text())["components"]
     payload = {

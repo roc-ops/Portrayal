@@ -1,0 +1,796 @@
+format: 1
+kind: device
+name: es1000
+version: 0.1.0
+maturity: modelled
+manufacturer: Celestica
+model: ES1000
+description: >-
+  Celestica ES1000 - 1U enterprise access switch, 24 or 48 x 1000BASE-T RJ45 (PoE++ 802.3bt Type 4
+  Class 8 on the -P builds) and 4 x 1/10/25G SFP28 uplinks, Marvell AC5X, integrated ARM A55 CPU (Intel
+  Denverton x86 on the -48C/-48CP), 2+1 fixed fans, 1+1 hot-swap CRPS AC supplies, F2B or B2F airflow.
+  Six SKUs on one chassis: the 24-port builds wear the front-24 panel, the 48-port builds the front
+  panel, and all share one rear.
+profile: networking
+provenance:
+  sku-split:
+    confidence: datasheet
+    note: >-
+      ONE DEVICE, TWELVE ORDERABLE CONFIGURATIONS. The six SKUs (ES1000-24, -24P, -48, -48P, -48C, -48CP)
+      share one datasheet column (438.2 x 43.4 x 371.6, one weight), one rear ('The rear panel of all
+      ES1000 systems are identical', guide Rear Panel) and one management/uplink cluster, measured
+      identical to 0.5 mm on the 24-port and 48-port close-ups. They differ in front port count, PoE,
+      CPU and supply wattage. PoE-or-not and airflow are configurations as on celestica/es1010 (ES1010-48C
+      and -48CP are configurations of one device there). The 24-port front is a different panel on the
+      same chassis, so it is a VARIANT VIEW (`front-24`, `face: front`) bound by the 24-port
+      configurations - the dell/r740xd precedent, where the 12 x 3.5 in front is `front-lff-12` bound by
+      the lff12 configurations. dcim_export.views_for makes each configuration export only the front it
+      wears.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet PHYSICAL DIMENSIONS: height 43.4 mm, width 438.2 mm, depth 371.6 mm. The hardware guide's
+      Key System Specifications gives 371.7 deep; 0.1 mm, recorded here and not filed. Weight 7.6 +/- 0.3
+      kg with two PSUs (guide). 438.2 is the body between the ear folds: both guide front figures draw the
+      grey ears outside it, and the body measures 438.2 against its own height to 0.1 and 0.4 percent.
+  front-figures:
+    confidence: measured
+    note: >-
+      GATE 1. Four ES1000 guide figures, all orthographic CAD renders: Front Panels fig 1 (24-port, 1725
+      x 193, body 1506.5 x 149 px, aspect 10.111 against 438.2/43.4 = 10.097, +0.14 percent, 3.438 px/mm)
+      and its close-up (1537 x 465, body 440.5 px tall, 10.15 px/mm, anchored on the right body edge);
+      fig 2 (48-port, 1421 x 163, body 1247 x 124 px, aspect 10.056, -0.4 percent, 2.846 px/mm) and its
+      close-up (1281 x 365, 7.823 px/mm, byte-identical to the System Status LEDs figure 2). No
+      perspective: the RJ45 wall positions fit one pitch across all four blocks with no drift (block
+      starts 15.8, 107.8, 199.6, 291.7 on the 48-port figure), and the right-hand cluster measured on
+      the two close-ups agrees to 0.5 mm.
+  port-layout:
+    confidence: measured
+    note: >-
+      measured on the shared walls of the RJ45 blocks (a flat feature, one per port) on both full front
+      figures: column pitch 13.96 (the 13.97 of std/rj45-ganged@2), block pitch 92.00 (so 8.04 extra
+      between blocks), column 1 centred 15.86 from the left body edge. Both figures agree to 0.2 mm on
+      every wall. Rows: the bright block shell runs y 16.1 to 39.5 with the bar between rows centred at
+      27.75, so the two 11.0 cells sit at 16.25 and 28.25. Each block is one bright shell 86.8 x 23.4
+      drawn as panel decor behind its jacks.
+  rj45-orientation:
+    confidence: measured
+    note: >-
+      read off the 24-port close-up at 10 px/mm: every UPPER jack shows its two lamp windows in its TOP
+      corners and its contact comb below the plug bar, every LOWER jack the mirror - windows at the
+      bottom. The lamps sit on the keyway side (common/rj45-ganged-eth@1 which-is-which), so upper jacks
+      are keyway-up (rotate 180) and lower keyway-down (rotate 0), tab-up over tab-down. Same reading on
+      the stacked management jack (windows top, rotate 180) and console (latch notch at the bottom, no
+      windows, rotate 0). NOTE this is the opposite of celestica/es1010's data ports (upper 0, lower 180),
+      which were read off an oblique photograph; the ES1010 guide's own front figure has not been checked
+      against it.
+  port-leds:
+    confidence: datasheet
+    note: >-
+      guide Port LEDs table: RJ45 data ports carry a left bi-colour link lamp (green 1000M, amber 10/100M)
+      and a right bi-colour activity/PoE lamp - led-a and led-b of common/rj45-ganged-eth@1, whose windows
+      the figure shows in each housing. The combo RJ45 management port: left bi-colour link, right green
+      activity. Each SFP28 port one bi-colour lamp (green 25G, amber 1/10G) - drawn as the up/down
+      triangles in the band between the stacked cages, which the figures show one per port (the System
+      Status LEDs table's 'two bi-colored LEDs' per SFP28 port disagrees with the Port LEDs table and the
+      drawing; the drawing and the Port LEDs table are followed). The combo SFP management port has one
+      lamp: the green round lamp left of its cage with a printed arrowhead pointing at it.
+  uplink-cluster:
+    confidence: measured
+    note: >-
+      measured on the 24-port close-up (10.15 px/mm) and confirmed on the 48-port close-up (7.82 px/mm):
+      SFP28 2 x 2 bezel 375.0 to 403.6 x 10.5 to 35.1 (28.5 wide = two std/sfp-ganged@1), cages at y 10.5
+      and 24.7 with a 3.8 mm lamp band between; management SFP cage 355.6 to 370.7 x 2.6 to 12.3
+      (std/sfp@1 14.5 x 10 centred on it); its lamp centred (352.1, 9.5); USB-A shell 329.1 to 342.2 x
+      5.5 to 11.4; the stacked management shell 407.0 to 423.6 x 5.4 to 35.4 holding the RJ45 (7.9 to
+      16.5 opening), USB-A (19.2 to 23.4) and console (26.3 to 35.2); status lamps centred on x 428.79 at y 17.68,
+      22.71, 27.83, 32.96 (bright-blob centres), 2.5 across; their legends centred on x 425.3. The lamp component is common/led-indicator@1 (a 2 mm lens in a 4 mm
+      box), smaller than the drawn 2.5 lens; right pitch, compromise shape.
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      rule, not a reading: the SFP28 pairs (upper 0 over lower 180) follow the library's belly-to-belly
+      convention (L108). The figures draw the cage lips in the lamp band between the rows, which is what
+      the convention draws; nothing seen overturns it.
+  vents:
+    confidence: measured
+    note: >-
+      the face is perforated with square holes, and the perforation STOPS at flat metal around every
+      port, lamp and legend. Fields measured on contrast-stretched copies of the two close-ups (10.15
+      and 7.82 px/mm) and the full 48-port figure: two lattices, 3.2 x 3.2 mm left of the uplinks
+      (holes centred on x 323.9 + 3.2n, y 3.9 + 3.2n) and 4.0 x 3.2 around them (x 374.0 + 4.0n,
+      y 6.65 + 3.2n), drawn as the grille pattern with pattern-pitch and pattern-offset on those
+      lattices; the pattern's holes are about 85 percent of the pitch, larger than the real 2.2 to
+      2.5 mm. Fields: a top-edge row and the block above RJ45 blocks 1-2 (x 47.5 to 186.5, beside the
+      lug tag); above block 4 to x 325.3 and two rows over the USB on the 48-port panel; on the
+      24-port panel a left column at 322.2, the two rows over the USB and the full-height field below
+      y 15.3 to x 371.2; around the uplinks a top-edge row, one row between MGMT COMBO and the SFP28
+      bezel, a block over the status lamps, a column right of them and the bottom rows (under the SFP28
+      legends from y 37.9, under IOIOI from 40.6). Flat: the USB 1 plate (325.3 to the management SFP,
+      y 4.4 to 15.3), the lamp and management SFP, the MGMT COMBO band, the SFP28 bezel and its
+      legends, the stacked management shell and the lamp column. The 24-port panel is plain metal from
+      x 187 to 322.2 where blocks 3 and 4 would be. The renders show interior parts through the holes
+      in places; those are not drawn.
+  legends:
+    confidence: measured
+    note: >-
+      every legend as printed: port pairs 'N ▲▼ N+1' centred under each column, 1.4 mm tall at baseline
+      41.7; SFP28 pairs under the bezel; MGMT COMBO with its bracket joining the management SFP and the
+      management RJ45; the arrowhead over the management SFP lamp; IOIOI under the console; STAT, FAN, PWR,
+      ALM set at about 60 degrees beside the lamps; a USB trident under USB 1 and one turned vertical
+      beside USB 2. The 48-port close-up prints the SuperSpeed 'SS' with both tridents, the 24-port
+      close-up does not. The Celestica wordmark is plain text, no logo art. The lug tag is the dark
+      pull-out tab printed ES1000 with LUG TAG under it.
+  usb:
+    confidence: datasheet
+    note: >-
+      SOURCES DISAGREE, see the usb-generation gap. The guide's Table of Ports gives USB 2.0 on the -24,
+      -24P, -48 and -48P and USB 3.0 on the -48C/-48CP; the datasheet FEATURES says '2x USB 3.0 Type A'
+      for all. Placements carry the guide's figure for each panel's own art (2.0 on front-24, 3.0 on
+      front, whose figure prints SS) and component-attrs sets 2.0 on usb-1/usb-2 for the -48 and -48P
+      configurations, which also wear std/usb-a@1's usb2 skin (black tongue) through `skins:`; the
+      front-24 placements name that skin directly. The guide notes the ports carry data only, no power.
+  rear-figures:
+    confidence: measured
+    note: >-
+      ES1000 guide Rear Panel figure 2 (1681 x 182, body 1470 x 145 px, aspect 10.14, +0.4 percent, 3.35
+      px/mm) is the device's own; the positions are taken off the ES1010/ES1050/EG1050 guide's Rear Panel
+      figure 1 (5736 x 634, 11.5 px/mm), which is the same rear art at 3.4 times the resolution - checked
+      by overlaying both at matched scale (supply edges 256.0/329.5/346.3/419.8, fan centres, labels, all
+      within 0.5 mm). x is taken as a fraction of the body between the outer seams, y as a fraction of its
+      height, because that figure's seams make it 1.7 percent wide against its height. This borrowing is
+      of a sibling guide's figure; the ES1000 figure is the check.
+  rear-layout:
+    confidence: measured
+    note: >-
+      three fixed fans behind round honeycomb grilles centred at 50.14, 105.59 and 161.09 (55.47 pitch),
+      y 22.1, about 38.5 across, each labelled with an arrowhead, a fan glyph and its number to its left;
+      two CRPS bays at 256.0 and 346.3 (73.5 x 40), PSU 1 labelled to its left and PSU 2 in the strip at
+      the right edge (arrowhead pointing at it, a boxed lightning glyph, the number); a fixed divider
+      panel 330.2 to 345.6 between the supplies. Left edge: a standoff at the top and two cross-head
+      screws beside an earth symbol - the grounding point; the right strip carries a second earth symbol
+      over one screw. Two round bosses sit left of fan labels 2 and 3; the guide does not say what they
+      are, so they are outlines only. The fan and PSU glyphs are drawn as simple strokes, not traced.
+  fans:
+    confidence: datasheet
+    note: >-
+      '2+1 fixed fans' (datasheet); 'three fixed fans' (guide Rear Panel). Not FRUs, so decor plus a
+      region each, as on celestica/es1010. No fan power figure is published.
+  psu:
+    confidence: datasheet
+    note: >-
+      guide PSU Power Options and Table of Attributes: 2 x 550 W on the -24, -48 and -48C; 2 x 920 W on the
+      -24P; 2 x 1600 W (1000 W at 100-127 V) on the -48P and -48CP; all F2B and B2F. 'The airflow of the
+      PSUs and Fans must be same F2B or B2F.' The three supplies share one face in every figure, so the
+      three contracts share one skin.
+  power:
+    confidence: datasheet
+    note: >-
+      guide Key System Specifications, Power Consumption: 'ES1000-24P, ES1000-48P, ES1000-48CP: <3200W,
+      ES1000-24, ES1000-48, ES1000-48C: <550W'. Stated as upper bounds with no ambient or load; filed as
+      max. The per-SKU figure cannot be carried per configuration (config-scoped-device-attrs gap), so the
+      PoE maximum is power-max-w and the non-PoE one power-max-no-poe-w, the edgecore/eps112 spelling.
+      PoE budgets from the guide's power distribution tables: 1550 W (24P, 2 x 920), 2910 W high line /
+      1710 W low line (48P/48CP, 2 x 1600).
+  sides-top-bottom:
+    confidence: estimated
+    note: >-
+      no document draws the sides, top or bottom square-on. The three-quarter renders (datasheet page 1,
+      the cls.celestica.com product-page renders) show a plain silver lid with two pressed rounded pads
+      and a label outline, and screws along the sides. Counted from the renders, placed by proportion,
+      every position estimated.
+attrs:
+  physical:
+    weight-kg: '7.6'
+    weight-note: 7.6 +/- 0.3 kg with two PSUs
+  performance:
+    switching-capacity: 148 Gbps
+    port-modes-rj45: 10/100/1000BASE-T
+    port-modes-sfp28: 1/10/25G
+  power:
+    power-max-w: '3200'
+    power-max-no-poe-w: '550'
+    input-ac: 100-240 VAC, 50-60 Hz
+    psus: 1+1 hot-swap AC CRPS (550 W, 920 W or 1600 W by SKU), 0:1 / 1:1 modes
+    poe-budget-w: '2910'
+    poe-budget-note: >-
+      high line, two supplies: 1550 W on the -24P (up to 17 ports at 90 W), 2910 W on the -48P/-48CP (up
+      to 32 ports at 90 W); low line 1550 W and 1710 W
+  thermal:
+    fans: 2+1 fixed (not field-replaceable)
+  environmental:
+    operating-temp: 0 to 45 C (front to back airflow), 900 m; derate 1 C per 175 m above 900 m
+    storage-temp: -40 to 70 C (guide); -40 to 60 C (datasheet)
+    humidity-operating: 5 to 85 percent non-condensing
+    humidity-storage: 5 to 95 percent
+    altitude: 3050 m maximum
+  platform:
+    asic: Marvell AC5X
+    cpu: integrated ARM A55, 2C 1.5 GHz; Intel Denverton x86 4C 2.1 GHz (COMe) on the -48C/-48CP
+    memory: 8 GB DDR4 (16 GB option on the -48C/-48CP)
+    storage: 32 GB eMMC (ARM builds); 32 or 64 GB M.2 SSD (-48C/-48CP)
+  features:
+    encryption: 256b MACsec
+    poe: IEEE 802.3af/at/bt Type 4 Class 8, 90 W per port, persistent PoE - on the -24P, -48P and -48CP
+  management:
+    mgmt-ports: >-
+      RJ45 console (9600 / 115200 default, 8N1), out-of-band combo pair (RJ45 in the stack and SFP left of
+      the uplinks - one interface, not usable together), 2 x USB-A (data only)
+  compliance:
+    acoustic: ISO 7779, ISO 3744
+    environment: EU RoHS, SVHC requirements of REACH directive
+    emc: Class B - USA, Canada, Europe, Japan, China
+    safety: UL / CSA / IEC / EN 60950-1 / 62368-1
+    psu-approvals: CE, FCC, CCC, KC, TUV, UL / cUL, BIS and BSMI
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 438.2
+  height: 43.4
+  depth: 371.6
+  ru: 1
+  weight-kg: 7.6
+  color: '#c9ccd0'
+  power: ac
+gaps:
+- what: usb-generation
+  scope: [usb-1, usb-2]
+  reason: sources-disagree
+  wanted: >-
+    WHICH USB GENERATION THE -24, -24P, -48 AND -48P CARRY. The guide's Table of Ports and Port
+    Descriptions give USB 2.0 on those four and USB 3.0 on the -48C/-48CP; the datasheet FEATURES says
+    '2x USB 3.0 Type A' with no SKU split. The one 48-port front figure (captioned for all four 48-port
+    SKUs) prints the SuperSpeed 'SS' mark and the 24-port figure does not. Modelled per the guide table;
+    the front panel's SS legend is drawn on all four 48-port builds because only one 48-port panel
+    exists. A photograph of an ES1000-48 or -48P front closes it.
+- what: config-scoped-device-attrs
+  scope: [24-f2b, 24-b2f, 48-f2b, 48-b2f, 48c-f2b, 48c-b2f]
+  reason: vendor-silent
+  wanted: >-
+    A way to carry the per-SKU power maximum (<3200 W PoE, <550 W non-PoE), the PoE budget and the CPU
+    per configuration. Today they are device attrs stated for the whole family with the split in words,
+    as on cisco/asr-9001's gap of the same name.
+- what: psu-part-numbers
+  scope: [psu-1, psu-2]
+  reason: vendor-silent
+  wanted: >-
+    The vendor part numbers of the 550 W, 920 W and 1600 W supplies. Neither the guide nor the datasheet
+    names them, and the ordering table lists only chassis SKUs. Whether the 1600 W supply is the same
+    Gospower G1482-1600WRA already modelled for the ES1010 (celestica/psu-1600@1, drawn from bench photos
+    with a purple latch and one lamp, against this guide's black tab and two lamps) is the open question.
+- what: psu-550-lamp-count
+  scope: [psu-1, psu-2]
+  reason: sources-disagree
+  wanted: >-
+    Whether the 550 W supply has one lamp or two. The PSU LEDs table describes one bi-colour lamp for the
+    550 W and a DC OK / AC OK pair for the 920 W and 1600 W; the rear figures draw two windows on every
+    supply and the guide says the rear of all ES1000 systems is visually identical. A photograph of a
+    550 W supply closes it.
+- what: rear-bosses
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    What the two round bosses left of fan labels 2 and 3 are (light pipes for per-fan lamps, or plugged
+    holes). The guide documents no fan lamps; they are drawn as outlines only.
+- what: side-top-bottom-geometry
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  wanted: >-
+    A mechanical drawing or square-on photographs of the lid, underside and sides. Everything on those
+    faces is placed by proportion from three-quarter renders.
+groups:
+  rj45-1g:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+  sfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp28, speed: 25g}
+  sfp28-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the management cluster - two USB-A service ports, the out-of-band RJ45 and its combo SFP (one
+      interface, either medium), and the RJ45 console. Four media, one job
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+  marks:
+    term: Mark
+    role: furniture
+    index-origin: 1
+    description: the printed USB tridents beside the two USB-A ports
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: >-
+        0:1 / 1:1 modes; 'the PSUs would not support 1+1 redundancy' when the total demand exceeds one
+        supply (guide PSU Power Options)
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 1
+    description: >-
+      the rear grounding point - two screws beside an earth symbol at the left edge - and the second
+      earth symbol with its screw in the right-hand strip
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 1
+    description: fan screws, the rear standoff and the side screws
+views:
+  front:
+    size: {w: 438.2, h: 43.4}
+    panel:
+      decor:
+        - {id: faceplate, at: [0, 0], size: [438.2, 43.4], fill: '#24272b', kind: faceplate}
+        - {id: vent-top-edge-backing, at: [3, 0.4], size: [44.5, 1.6], fill: '#24272b', kind: vent-backing}
+        - {id: vent-top-edge, at: [3, 0.4], size: [44.5, 1.6], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
+        - {id: vent-top-left-backing, at: [47.5, 0.4], size: [139, 14.4], fill: '#24272b', kind: vent-backing}
+        - {id: vent-top-left, at: [47.5, 0.4], size: [139, 14.4], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
+        - {id: vent-block4-top-backing, at: [283, 0.4], size: [42.3, 14.4], fill: '#24272b', kind: vent-backing}
+        - {id: vent-block4-top, at: [283, 0.4], size: [42.3, 14.4], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
+        - {id: vent-usb-top-backing, at: [325.3, 0.4], size: [29.9, 4], fill: '#24272b', kind: vent-backing}
+        - {id: vent-usb-top, at: [325.3, 0.4], size: [29.9, 4], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
+        - {id: vent-top-edge-r-backing, at: [371.5, 0.4], size: [53.3, 1], fill: '#24272b', kind: vent-backing}
+        - {id: vent-top-edge-r, at: [371.5, 0.4], size: [53.3, 1], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-over-sfp28-backing, at: [371.2, 5.4], size: [32.6, 2.7], fill: '#24272b', kind: vent-backing}
+        - {id: vent-over-sfp28, at: [371.2, 5.4], size: [32.6, 2.7], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-over-lamps-backing, at: [424.8, 1.4], size: [7.2, 13.2], fill: '#24272b', kind: vent-backing}
+        - {id: vent-over-lamps, at: [424.8, 1.4], size: [7.2, 13.2], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-right-col-backing, at: [432, 1.4], size: [4.4, 35.4], fill: '#24272b', kind: vent-backing}
+        - {id: vent-right-col, at: [432, 1.4], size: [4.4, 35.4], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-bottom-left-backing, at: [371.2, 37.9], size: [34.4, 5.1], fill: '#24272b', kind: vent-backing}
+        - {id: vent-bottom-left, at: [371.2, 37.9], size: [34.4, 5.1], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-under-stack-backing, at: [405.6, 40.6], size: [19.4, 2.4], fill: '#24272b', kind: vent-backing}
+        - {id: vent-under-stack, at: [405.6, 40.6], size: [19.4, 2.4], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-bottom-right-backing, at: [425, 36.8], size: [12.5, 6.2], fill: '#24272b', kind: vent-backing}
+        - {id: vent-bottom-right, at: [425, 36.8], size: [12.5, 6.2], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: rj45-shell-1, at: [7.36, 16.1], size: [86.8, 23.4], rx: 0.4, fill: '#b0b5bb', kind: port-shell}
+        - {id: rj45-shell-2, at: [99.36, 16.1], size: [86.8, 23.4], rx: 0.4, fill: '#b0b5bb', kind: port-shell}
+        - {id: rj45-shell-3, at: [191.36, 16.1], size: [86.8, 23.4], rx: 0.4, fill: '#b0b5bb', kind: port-shell}
+        - {id: rj45-shell-4, at: [283.36, 16.1], size: [86.8, 23.4], rx: 0.4, fill: '#b0b5bb', kind: port-shell}
+        - {id: sfp28-bezel, at: [375.0, 10.5], size: [28.5, 24.6], rx: 0.3, fill: '#a9aeb4', kind: cage-bezel}
+        - {id: mgmt-stack-shell, at: [407.0, 5.4], size: [16.6, 30.2], rx: 0.4, fill: '#b0b5bb', kind: port-shell}
+        - {id: usb-1-shell, at: [329.1, 5.5], size: [13.1, 5.9], rx: 0.6, fill: '#b0b5bb', kind: port-shell}
+        - {id: lug-tag, at: [23.1, 3.6], size: [23.3, 2.6], rx: 0.6, fill: '#3a3e43', kind: lug-tag}
+    silkscreen:
+      - {text: Celestica, at: [3.4, 14.2], font-size: 5.2, anchor: start, for: chassis}
+      - {text: ES1000, at: [34.75, 5.45], font-size: 1.5, anchor: middle, for: chassis}
+      - {text: LUG TAG, at: [34.4, 10.6], font-size: 1.8, anchor: middle, for: chassis}
+      - {text: '1 ▲▼ 2', at: [15.86, 41.7], font-size: 1.6, anchor: middle, for: [port-1, port-2]}
+      - {text: '3 ▲▼ 4', at: [29.82, 41.7], font-size: 1.6, anchor: middle, for: [port-3, port-4]}
+      - {text: '5 ▲▼ 6', at: [43.78, 41.7], font-size: 1.6, anchor: middle, for: [port-5, port-6]}
+      - {text: '7 ▲▼ 8', at: [57.74, 41.7], font-size: 1.6, anchor: middle, for: [port-7, port-8]}
+      - {text: '9 ▲▼ 10', at: [71.7, 41.7], font-size: 1.6, anchor: middle, for: [port-9, port-10]}
+      - {text: '11 ▲▼ 12', at: [85.66, 41.7], font-size: 1.6, anchor: middle, for: [port-11, port-12]}
+      - {text: '13 ▲▼ 14', at: [107.86, 41.7], font-size: 1.6, anchor: middle, for: [port-13, port-14]}
+      - {text: '15 ▲▼ 16', at: [121.82, 41.7], font-size: 1.6, anchor: middle, for: [port-15, port-16]}
+      - {text: '17 ▲▼ 18', at: [135.78, 41.7], font-size: 1.6, anchor: middle, for: [port-17, port-18]}
+      - {text: '19 ▲▼ 20', at: [149.74, 41.7], font-size: 1.6, anchor: middle, for: [port-19, port-20]}
+      - {text: '21 ▲▼ 22', at: [163.7, 41.7], font-size: 1.6, anchor: middle, for: [port-21, port-22]}
+      - {text: '23 ▲▼ 24', at: [177.66, 41.7], font-size: 1.6, anchor: middle, for: [port-23, port-24]}
+      - {text: '25 ▲▼ 26', at: [199.86, 41.7], font-size: 1.6, anchor: middle, for: [port-25, port-26]}
+      - {text: '27 ▲▼ 28', at: [213.82, 41.7], font-size: 1.6, anchor: middle, for: [port-27, port-28]}
+      - {text: '29 ▲▼ 30', at: [227.78, 41.7], font-size: 1.6, anchor: middle, for: [port-29, port-30]}
+      - {text: '31 ▲▼ 32', at: [241.74, 41.7], font-size: 1.6, anchor: middle, for: [port-31, port-32]}
+      - {text: '33 ▲▼ 34', at: [255.7, 41.7], font-size: 1.6, anchor: middle, for: [port-33, port-34]}
+      - {text: '35 ▲▼ 36', at: [269.66, 41.7], font-size: 1.6, anchor: middle, for: [port-35, port-36]}
+      - {text: '37 ▲▼ 38', at: [291.86, 41.7], font-size: 1.6, anchor: middle, for: [port-37, port-38]}
+      - {text: '39 ▲▼ 40', at: [305.82, 41.7], font-size: 1.6, anchor: middle, for: [port-39, port-40]}
+      - {text: '41 ▲▼ 42', at: [319.78, 41.7], font-size: 1.6, anchor: middle, for: [port-41, port-42]}
+      - {text: '43 ▲▼ 44', at: [333.74, 41.7], font-size: 1.6, anchor: middle, for: [port-43, port-44]}
+      - {text: '45 ▲▼ 46', at: [347.7, 41.7], font-size: 1.6, anchor: middle, for: [port-45, port-46]}
+      - {text: '47 ▲▼ 48', at: [361.66, 41.7], font-size: 1.6, anchor: middle, for: [port-47, port-48]}
+      - {text: '49 ▲▼ 50', at: [382.12, 37.5], font-size: 1.7, anchor: middle, for: [port-49, port-50]}
+      - {text: '51 ▲▼ 52', at: [396.38, 37.5], font-size: 1.7, anchor: middle, for: [port-51, port-52]}
+      - {text: MGMT COMBO, at: [393.3, 4.85], font-size: 1.8, anchor: middle, for: [mgmt-sfp, mgmt]}
+      - {id: combo-bar-sfp, at: [371.1, 4.2], path: 'M 0 0 L 13.2 0', stroke-width: 0.25, for: [mgmt-sfp, mgmt]}
+      - {id: combo-bar-rj45, at: [402.3, 4.2], path: 'M 0 0 L 13.0 0', stroke-width: 0.25, for: [mgmt-sfp, mgmt]}
+      - {id: combo-drop-rj45, at: [415.3, 4.2], path: 'M 0 0 L 0 1.2', stroke-width: 0.25, for: mgmt}
+      - {id: arrow-mgmt-sfp-led, at: [352.1, 6.3], path: 'M -0.7 -0.8 L 0.8 0 L -0.7 0.8 Z', filled: true, for: led-mgmt-sfp}
+      - {text: IOIOI, at: [415.3, 40.3], font-size: 1.7, anchor: middle, for: console}
+      - {text: STAT, at: [425.7, 18.11], font-size: 1.4, anchor: middle, rotate: -60, for: led-stat}
+      - {text: FAN, at: [425.7, 23.14], font-size: 1.4, anchor: middle, rotate: -60, for: led-fan}
+      - {text: PWR, at: [425.7, 28.26], font-size: 1.4, anchor: middle, rotate: -60, for: led-pwr}
+      - {text: ALM, at: [425.7, 33.39], font-size: 1.4, anchor: middle, rotate: -60, for: led-alm}
+      - {text: SS, at: [331.9, 14.0], font-size: 1.5, anchor: end, for: usb-1}
+      - {text: SS, at: [405.9, 26.0], font-size: 1.4, anchor: middle, rotate: -90, for: usb-2}
+    components:
+      placements:
+        - {ref: common/rj45-ganged-eth@1, id: port-1, at: [9.51, 16.25], rotate: 180, group: rj45-1g, rel-pos: 1, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-2, at: [9.51, 28.25], group: rj45-1g, rel-pos: 2, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-3, at: [23.47, 16.25], rotate: 180, group: rj45-1g, rel-pos: 3, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-4, at: [23.47, 28.25], group: rj45-1g, rel-pos: 4, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-5, at: [37.43, 16.25], rotate: 180, group: rj45-1g, rel-pos: 5, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-6, at: [37.43, 28.25], group: rj45-1g, rel-pos: 6, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-7, at: [51.39, 16.25], rotate: 180, group: rj45-1g, rel-pos: 7, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-8, at: [51.39, 28.25], group: rj45-1g, rel-pos: 8, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-9, at: [65.35, 16.25], rotate: 180, group: rj45-1g, rel-pos: 9, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-10, at: [65.35, 28.25], group: rj45-1g, rel-pos: 10, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-11, at: [79.31, 16.25], rotate: 180, group: rj45-1g, rel-pos: 11, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-12, at: [79.31, 28.25], group: rj45-1g, rel-pos: 12, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-13, at: [101.51, 16.25], rotate: 180, group: rj45-1g, rel-pos: 13, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-14, at: [101.51, 28.25], group: rj45-1g, rel-pos: 14, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-15, at: [115.47, 16.25], rotate: 180, group: rj45-1g, rel-pos: 15, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-16, at: [115.47, 28.25], group: rj45-1g, rel-pos: 16, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-17, at: [129.43, 16.25], rotate: 180, group: rj45-1g, rel-pos: 17, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-18, at: [129.43, 28.25], group: rj45-1g, rel-pos: 18, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-19, at: [143.39, 16.25], rotate: 180, group: rj45-1g, rel-pos: 19, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-20, at: [143.39, 28.25], group: rj45-1g, rel-pos: 20, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-21, at: [157.35, 16.25], rotate: 180, group: rj45-1g, rel-pos: 21, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-22, at: [157.35, 28.25], group: rj45-1g, rel-pos: 22, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-23, at: [171.31, 16.25], rotate: 180, group: rj45-1g, rel-pos: 23, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-24, at: [171.31, 28.25], group: rj45-1g, rel-pos: 24, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-25, at: [193.51, 16.25], rotate: 180, group: rj45-1g, rel-pos: 25, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-26, at: [193.51, 28.25], group: rj45-1g, rel-pos: 26, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-27, at: [207.47, 16.25], rotate: 180, group: rj45-1g, rel-pos: 27, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-28, at: [207.47, 28.25], group: rj45-1g, rel-pos: 28, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-29, at: [221.43, 16.25], rotate: 180, group: rj45-1g, rel-pos: 29, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-30, at: [221.43, 28.25], group: rj45-1g, rel-pos: 30, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-31, at: [235.39, 16.25], rotate: 180, group: rj45-1g, rel-pos: 31, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-32, at: [235.39, 28.25], group: rj45-1g, rel-pos: 32, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-33, at: [249.35, 16.25], rotate: 180, group: rj45-1g, rel-pos: 33, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-34, at: [249.35, 28.25], group: rj45-1g, rel-pos: 34, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-35, at: [263.31, 16.25], rotate: 180, group: rj45-1g, rel-pos: 35, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-36, at: [263.31, 28.25], group: rj45-1g, rel-pos: 36, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-37, at: [285.51, 16.25], rotate: 180, group: rj45-1g, rel-pos: 37, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-38, at: [285.51, 28.25], group: rj45-1g, rel-pos: 38, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-39, at: [299.47, 16.25], rotate: 180, group: rj45-1g, rel-pos: 39, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-40, at: [299.47, 28.25], group: rj45-1g, rel-pos: 40, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-41, at: [313.43, 16.25], rotate: 180, group: rj45-1g, rel-pos: 41, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-42, at: [313.43, 28.25], group: rj45-1g, rel-pos: 42, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-43, at: [327.39, 16.25], rotate: 180, group: rj45-1g, rel-pos: 43, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-44, at: [327.39, 28.25], group: rj45-1g, rel-pos: 44, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-45, at: [341.35, 16.25], rotate: 180, group: rj45-1g, rel-pos: 45, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-46, at: [341.35, 28.25], group: rj45-1g, rel-pos: 46, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-47, at: [355.31, 16.25], rotate: 180, group: rj45-1g, rel-pos: 47, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-48, at: [355.31, 28.25], group: rj45-1g, rel-pos: 48, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: std/sfp-ganged@1, id: port-49, at: [375, 10.5], group: sfp28, rel-pos: 49}
+        - {ref: std/sfp-ganged@1, id: port-50, at: [375, 24.7], rotate: 180, group: sfp28, rel-pos: 50}
+        - {ref: std/sfp-ganged@1, id: port-51, at: [389.25, 10.5], group: sfp28, rel-pos: 51}
+        - {ref: std/sfp-ganged@1, id: port-52, at: [389.25, 24.7], rotate: 180, group: sfp28, rel-pos: 52}
+        - {ref: common/led-arrow-sm@1, id: led-port-49, skin: up, at: [376.38, 21.6], for: port-49, group: sfp28-leds, rel-pos: 1, states: ['off', {name: link-25g, color: '#22c55e'}, {name: activity-25g, color: '#22c55e', behavior: blinking}, {name: link-10g, color: '#f59e0b'}, {name: activity-10g, color: '#f59e0b', behavior: blinking}]}
+        - {ref: common/led-arrow-sm@1, id: led-port-50, skin: down, at: [385.57, 21.6], for: port-50, group: sfp28-leds, rel-pos: 2, states: ['off', {name: link-25g, color: '#22c55e'}, {name: activity-25g, color: '#22c55e', behavior: blinking}, {name: link-10g, color: '#f59e0b'}, {name: activity-10g, color: '#f59e0b', behavior: blinking}]}
+        - {ref: common/led-arrow-sm@1, id: led-port-51, skin: up, at: [390.68, 21.6], for: port-51, group: sfp28-leds, rel-pos: 3, states: ['off', {name: link-25g, color: '#22c55e'}, {name: activity-25g, color: '#22c55e', behavior: blinking}, {name: link-10g, color: '#f59e0b'}, {name: activity-10g, color: '#f59e0b', behavior: blinking}]}
+        - {ref: common/led-arrow-sm@1, id: led-port-52, skin: down, at: [399.77, 21.6], for: port-52, group: sfp28-leds, rel-pos: 4, states: ['off', {name: link-25g, color: '#22c55e'}, {name: activity-25g, color: '#22c55e', behavior: blinking}, {name: link-10g, color: '#f59e0b'}, {name: activity-10g, color: '#f59e0b', behavior: blinking}]}
+        - {ref: std/usb-a@1, id: usb-1, at: [329.65, 6.2], group: mgmt, rel-pos: 1, attrs: {role: storage, usb: '3.0'}}
+        - {ref: common/usb-symbol@1, id: mark-usb-1, at: [332.45, 11.3], for: usb-1, group: marks, rel-pos: 1}
+        - {ref: common/led-indicator@1, id: led-mgmt-sfp, at: [350.1, 7.5], for: mgmt-sfp, group: status-leds, rel-pos: 5, states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]}
+        - {ref: std/sfp@1, id: mgmt-sfp, at: [355.9, 2.45], group: mgmt, rel-pos: 2, attrs: {media: sfp, speed: 1g, role: mgmt-combo, combo-with: mgmt}}
+        - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [408.95, 6.3], rotate: 180, group: mgmt, rel-pos: 3, attrs: {role: mgmt, speed: 1g, combo-with: mgmt-sfp}, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}]}}
+        - {ref: std/usb-a@1, id: usb-2, at: [409.3, 19.05], group: mgmt, rel-pos: 4, attrs: {role: storage, usb: '3.0'}}
+        - {ref: common/usb-symbol@1, id: mark-usb-2, at: [402.3, 19.3], rotate: 270, for: usb-2, group: marks, rel-pos: 2}
+        - {ref: std/rj45-ganged@2, id: console, at: [408.95, 24.75], group: mgmt, rel-pos: 5, attrs: {media: rj45-serial, role: console}}
+        - {ref: common/led-indicator@1, id: led-stat, at: [426.79, 15.68], for: chassis, group: status-leds, rel-pos: 1, states: ['off', {name: normal, color: '#22c55e', behavior: {mode: alternating, color: '#f59e0b'}}]}
+        - {ref: common/led-indicator@1, id: led-fan, at: [426.79, 20.71], for: chassis, group: status-leds, rel-pos: 2, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+        - {ref: common/led-indicator@1, id: led-pwr, at: [426.79, 25.83], for: chassis, group: status-leds, rel-pos: 3, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+        - {ref: common/led-indicator@1, id: led-alm, at: [426.79, 30.96], for: chassis, group: status-leds, rel-pos: 4, states: ['off', {name: no-alarm, color: '#22c55e'}, {name: critical, color: '#f59e0b'}, {name: major, color: '#f59e0b', behavior: {mode: blinking, rate: 4}}, {name: minor, color: '#f59e0b', behavior: {mode: blinking, rate: 1}}]}
+    regions:
+      - {id: mgmt-block, at: [324, 0], size: {w: 114.2, h: 43.4}, label: Uplinks and management}
+  front-24:
+    face: front
+    size: {w: 438.2, h: 43.4}
+    panel:
+      decor:
+        - {id: faceplate, at: [0, 0], size: [438.2, 43.4], fill: '#24272b', kind: faceplate}
+        - {id: vent-top-edge-backing, at: [3, 0.4], size: [44.5, 1.6], fill: '#24272b', kind: vent-backing}
+        - {id: vent-top-edge, at: [3, 0.4], size: [44.5, 1.6], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
+        - {id: vent-top-left-backing, at: [47.5, 0.4], size: [139, 14.4], fill: '#24272b', kind: vent-backing}
+        - {id: vent-top-left, at: [47.5, 0.4], size: [139, 14.4], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
+        - {id: vent-left-col-backing, at: [322.2, 0.4], size: [3.1, 14.9], fill: '#24272b', kind: vent-backing}
+        - {id: vent-left-col, at: [322.2, 0.4], size: [3.1, 14.9], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
+        - {id: vent-usb-top-backing, at: [325.3, 0.4], size: [29.9, 4], fill: '#24272b', kind: vent-backing}
+        - {id: vent-usb-top, at: [325.3, 0.4], size: [29.9, 4], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
+        - {id: vent-lower-backing, at: [322.2, 15.3], size: [49, 27.7], fill: '#24272b', kind: vent-backing}
+        - {id: vent-lower, at: [322.2, 15.3], size: [49, 27.7], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
+        - {id: vent-top-edge-r-backing, at: [371.5, 0.4], size: [53.3, 1], fill: '#24272b', kind: vent-backing}
+        - {id: vent-top-edge-r, at: [371.5, 0.4], size: [53.3, 1], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-over-sfp28-backing, at: [371.2, 5.4], size: [32.6, 2.7], fill: '#24272b', kind: vent-backing}
+        - {id: vent-over-sfp28, at: [371.2, 5.4], size: [32.6, 2.7], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-over-lamps-backing, at: [424.8, 1.4], size: [7.2, 13.2], fill: '#24272b', kind: vent-backing}
+        - {id: vent-over-lamps, at: [424.8, 1.4], size: [7.2, 13.2], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-right-col-backing, at: [432, 1.4], size: [4.4, 35.4], fill: '#24272b', kind: vent-backing}
+        - {id: vent-right-col, at: [432, 1.4], size: [4.4, 35.4], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-bottom-left-backing, at: [371.2, 37.9], size: [34.4, 5.1], fill: '#24272b', kind: vent-backing}
+        - {id: vent-bottom-left, at: [371.2, 37.9], size: [34.4, 5.1], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-under-stack-backing, at: [405.6, 40.6], size: [19.4, 2.4], fill: '#24272b', kind: vent-backing}
+        - {id: vent-under-stack, at: [405.6, 40.6], size: [19.4, 2.4], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-bottom-right-backing, at: [425, 36.8], size: [12.5, 6.2], fill: '#24272b', kind: vent-backing}
+        - {id: vent-bottom-right, at: [425, 36.8], size: [12.5, 6.2], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: rj45-shell-1, at: [7.36, 16.1], size: [86.8, 23.4], rx: 0.4, fill: '#b0b5bb', kind: port-shell}
+        - {id: rj45-shell-2, at: [99.36, 16.1], size: [86.8, 23.4], rx: 0.4, fill: '#b0b5bb', kind: port-shell}
+        - {id: sfp28-bezel, at: [375.0, 10.5], size: [28.5, 24.6], rx: 0.3, fill: '#a9aeb4', kind: cage-bezel}
+        - {id: mgmt-stack-shell, at: [407.0, 5.4], size: [16.6, 30.2], rx: 0.4, fill: '#b0b5bb', kind: port-shell}
+        - {id: usb-1-shell, at: [329.1, 5.5], size: [13.1, 5.9], rx: 0.6, fill: '#b0b5bb', kind: port-shell}
+        - {id: lug-tag, at: [23.1, 3.6], size: [23.3, 2.6], rx: 0.6, fill: '#3a3e43', kind: lug-tag}
+    silkscreen:
+      - {text: Celestica, at: [3.4, 14.2], font-size: 5.2, anchor: start, for: chassis}
+      - {text: ES1000, at: [34.75, 5.45], font-size: 1.5, anchor: middle, for: chassis}
+      - {text: LUG TAG, at: [34.4, 10.6], font-size: 1.8, anchor: middle, for: chassis}
+      - {text: '1 ▲▼ 2', at: [15.86, 41.7], font-size: 1.6, anchor: middle, for: [port-1, port-2]}
+      - {text: '3 ▲▼ 4', at: [29.82, 41.7], font-size: 1.6, anchor: middle, for: [port-3, port-4]}
+      - {text: '5 ▲▼ 6', at: [43.78, 41.7], font-size: 1.6, anchor: middle, for: [port-5, port-6]}
+      - {text: '7 ▲▼ 8', at: [57.74, 41.7], font-size: 1.6, anchor: middle, for: [port-7, port-8]}
+      - {text: '9 ▲▼ 10', at: [71.7, 41.7], font-size: 1.6, anchor: middle, for: [port-9, port-10]}
+      - {text: '11 ▲▼ 12', at: [85.66, 41.7], font-size: 1.6, anchor: middle, for: [port-11, port-12]}
+      - {text: '13 ▲▼ 14', at: [107.86, 41.7], font-size: 1.6, anchor: middle, for: [port-13, port-14]}
+      - {text: '15 ▲▼ 16', at: [121.82, 41.7], font-size: 1.6, anchor: middle, for: [port-15, port-16]}
+      - {text: '17 ▲▼ 18', at: [135.78, 41.7], font-size: 1.6, anchor: middle, for: [port-17, port-18]}
+      - {text: '19 ▲▼ 20', at: [149.74, 41.7], font-size: 1.6, anchor: middle, for: [port-19, port-20]}
+      - {text: '21 ▲▼ 22', at: [163.7, 41.7], font-size: 1.6, anchor: middle, for: [port-21, port-22]}
+      - {text: '23 ▲▼ 24', at: [177.66, 41.7], font-size: 1.6, anchor: middle, for: [port-23, port-24]}
+      - {text: '25 ▲▼ 26', at: [382.12, 37.5], font-size: 1.7, anchor: middle, for: [port-25, port-26]}
+      - {text: '27 ▲▼ 28', at: [396.38, 37.5], font-size: 1.7, anchor: middle, for: [port-27, port-28]}
+      - {text: MGMT COMBO, at: [393.3, 4.85], font-size: 1.8, anchor: middle, for: [mgmt-sfp, mgmt]}
+      - {id: combo-bar-sfp, at: [371.1, 4.2], path: 'M 0 0 L 13.2 0', stroke-width: 0.25, for: [mgmt-sfp, mgmt]}
+      - {id: combo-bar-rj45, at: [402.3, 4.2], path: 'M 0 0 L 13.0 0', stroke-width: 0.25, for: [mgmt-sfp, mgmt]}
+      - {id: combo-drop-rj45, at: [415.3, 4.2], path: 'M 0 0 L 0 1.2', stroke-width: 0.25, for: mgmt}
+      - {id: arrow-mgmt-sfp-led, at: [352.1, 6.3], path: 'M -0.7 -0.8 L 0.8 0 L -0.7 0.8 Z', filled: true, for: led-mgmt-sfp}
+      - {text: IOIOI, at: [415.3, 40.3], font-size: 1.7, anchor: middle, for: console}
+      - {text: STAT, at: [425.7, 18.11], font-size: 1.4, anchor: middle, rotate: -60, for: led-stat}
+      - {text: FAN, at: [425.7, 23.14], font-size: 1.4, anchor: middle, rotate: -60, for: led-fan}
+      - {text: PWR, at: [425.7, 28.26], font-size: 1.4, anchor: middle, rotate: -60, for: led-pwr}
+      - {text: ALM, at: [425.7, 33.39], font-size: 1.4, anchor: middle, rotate: -60, for: led-alm}
+    components:
+      placements:
+        - {ref: common/rj45-ganged-eth@1, id: port-1, at: [9.51, 16.25], rotate: 180, group: rj45-1g, rel-pos: 1, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-2, at: [9.51, 28.25], group: rj45-1g, rel-pos: 2, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-3, at: [23.47, 16.25], rotate: 180, group: rj45-1g, rel-pos: 3, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-4, at: [23.47, 28.25], group: rj45-1g, rel-pos: 4, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-5, at: [37.43, 16.25], rotate: 180, group: rj45-1g, rel-pos: 5, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-6, at: [37.43, 28.25], group: rj45-1g, rel-pos: 6, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-7, at: [51.39, 16.25], rotate: 180, group: rj45-1g, rel-pos: 7, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-8, at: [51.39, 28.25], group: rj45-1g, rel-pos: 8, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-9, at: [65.35, 16.25], rotate: 180, group: rj45-1g, rel-pos: 9, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-10, at: [65.35, 28.25], group: rj45-1g, rel-pos: 10, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-11, at: [79.31, 16.25], rotate: 180, group: rj45-1g, rel-pos: 11, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-12, at: [79.31, 28.25], group: rj45-1g, rel-pos: 12, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-13, at: [101.51, 16.25], rotate: 180, group: rj45-1g, rel-pos: 13, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-14, at: [101.51, 28.25], group: rj45-1g, rel-pos: 14, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-15, at: [115.47, 16.25], rotate: 180, group: rj45-1g, rel-pos: 15, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-16, at: [115.47, 28.25], group: rj45-1g, rel-pos: 16, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-17, at: [129.43, 16.25], rotate: 180, group: rj45-1g, rel-pos: 17, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-18, at: [129.43, 28.25], group: rj45-1g, rel-pos: 18, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-19, at: [143.39, 16.25], rotate: 180, group: rj45-1g, rel-pos: 19, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-20, at: [143.39, 28.25], group: rj45-1g, rel-pos: 20, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-21, at: [157.35, 16.25], rotate: 180, group: rj45-1g, rel-pos: 21, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-22, at: [157.35, 28.25], group: rj45-1g, rel-pos: 22, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-23, at: [171.31, 16.25], rotate: 180, group: rj45-1g, rel-pos: 23, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: common/rj45-ganged-eth@1, id: port-24, at: [171.31, 28.25], group: rj45-1g, rel-pos: 24, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
+        - {ref: std/sfp-ganged@1, id: port-25, at: [375, 10.5], group: sfp28, rel-pos: 25}
+        - {ref: std/sfp-ganged@1, id: port-26, at: [375, 24.7], rotate: 180, group: sfp28, rel-pos: 26}
+        - {ref: std/sfp-ganged@1, id: port-27, at: [389.25, 10.5], group: sfp28, rel-pos: 27}
+        - {ref: std/sfp-ganged@1, id: port-28, at: [389.25, 24.7], rotate: 180, group: sfp28, rel-pos: 28}
+        - {ref: common/led-arrow-sm@1, id: led-port-25, skin: up, at: [376.38, 21.6], for: port-25, group: sfp28-leds, rel-pos: 1, states: ['off', {name: link-25g, color: '#22c55e'}, {name: activity-25g, color: '#22c55e', behavior: blinking}, {name: link-10g, color: '#f59e0b'}, {name: activity-10g, color: '#f59e0b', behavior: blinking}]}
+        - {ref: common/led-arrow-sm@1, id: led-port-26, skin: down, at: [385.57, 21.6], for: port-26, group: sfp28-leds, rel-pos: 2, states: ['off', {name: link-25g, color: '#22c55e'}, {name: activity-25g, color: '#22c55e', behavior: blinking}, {name: link-10g, color: '#f59e0b'}, {name: activity-10g, color: '#f59e0b', behavior: blinking}]}
+        - {ref: common/led-arrow-sm@1, id: led-port-27, skin: up, at: [390.68, 21.6], for: port-27, group: sfp28-leds, rel-pos: 3, states: ['off', {name: link-25g, color: '#22c55e'}, {name: activity-25g, color: '#22c55e', behavior: blinking}, {name: link-10g, color: '#f59e0b'}, {name: activity-10g, color: '#f59e0b', behavior: blinking}]}
+        - {ref: common/led-arrow-sm@1, id: led-port-28, skin: down, at: [399.77, 21.6], for: port-28, group: sfp28-leds, rel-pos: 4, states: ['off', {name: link-25g, color: '#22c55e'}, {name: activity-25g, color: '#22c55e', behavior: blinking}, {name: link-10g, color: '#f59e0b'}, {name: activity-10g, color: '#f59e0b', behavior: blinking}]}
+        - {ref: std/usb-a@1, id: usb-1, at: [329.65, 6.2], skin: usb2, group: mgmt, rel-pos: 1, attrs: {role: storage, usb: '2.0'}}
+        - {ref: common/usb-symbol@1, id: mark-usb-1, at: [332.45, 11.3], for: usb-1, group: marks, rel-pos: 1}
+        - {ref: common/led-indicator@1, id: led-mgmt-sfp, at: [350.1, 7.5], for: mgmt-sfp, group: status-leds, rel-pos: 5, states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]}
+        - {ref: std/sfp@1, id: mgmt-sfp, at: [355.9, 2.45], group: mgmt, rel-pos: 2, attrs: {media: sfp, speed: 1g, role: mgmt-combo, combo-with: mgmt}}
+        - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [408.95, 6.3], rotate: 180, group: mgmt, rel-pos: 3, attrs: {role: mgmt, speed: 1g, combo-with: mgmt-sfp}, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}]}}
+        - {ref: std/usb-a@1, id: usb-2, at: [409.3, 19.05], skin: usb2, group: mgmt, rel-pos: 4, attrs: {role: storage, usb: '2.0'}}
+        - {ref: common/usb-symbol@1, id: mark-usb-2, at: [402.3, 19.3], rotate: 270, for: usb-2, group: marks, rel-pos: 2}
+        - {ref: std/rj45-ganged@2, id: console, at: [408.95, 24.75], group: mgmt, rel-pos: 5, attrs: {media: rj45-serial, role: console}}
+        - {ref: common/led-indicator@1, id: led-stat, at: [426.79, 15.68], for: chassis, group: status-leds, rel-pos: 1, states: ['off', {name: normal, color: '#22c55e', behavior: {mode: alternating, color: '#f59e0b'}}]}
+        - {ref: common/led-indicator@1, id: led-fan, at: [426.79, 20.71], for: chassis, group: status-leds, rel-pos: 2, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+        - {ref: common/led-indicator@1, id: led-pwr, at: [426.79, 25.83], for: chassis, group: status-leds, rel-pos: 3, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+        - {ref: common/led-indicator@1, id: led-alm, at: [426.79, 30.96], for: chassis, group: status-leds, rel-pos: 4, states: ['off', {name: no-alarm, color: '#22c55e'}, {name: critical, color: '#f59e0b'}, {name: major, color: '#f59e0b', behavior: {mode: blinking, rate: 4}}, {name: minor, color: '#f59e0b', behavior: {mode: blinking, rate: 1}}]}
+    regions:
+      - {id: mgmt-block, at: [324, 0], size: {w: 114.2, h: 43.4}, label: Uplinks and management}
+  rear:
+    size: {w: 438.2, h: 43.4}
+    panel:
+      decor:
+        - {id: fan-plate, at: [2.6, 0.5], size: [233.5, 12.4], rx: 1.0, fill: '#cfd2d6', kind: stiffener-plate, confidence: estimated, source: 'ES1010 guide Rear Panel figure 1 - the lighter formed plate across the top of the fan wall; outline only, its notches not drawn'}
+        - {id: fan-1-backing, at: [30.89, 2.85], size: [38.5, 38.5], rx: 19.25, fill: '#4a4f55', kind: vent-backing}
+        - {id: fan-1-grille, at: [30.89, 2.85], size: [38.5, 38.5], rx: 19.25, pattern: vent, vent: 6}
+        - {id: fan-2-backing, at: [86.34, 2.85], size: [38.5, 38.5], rx: 19.25, fill: '#4a4f55', kind: vent-backing}
+        - {id: fan-2-grille, at: [86.34, 2.85], size: [38.5, 38.5], rx: 19.25, pattern: vent, vent: 6}
+        - {id: fan-3-backing, at: [141.84, 2.85], size: [38.5, 38.5], rx: 19.25, fill: '#4a4f55', kind: vent-backing}
+        - {id: fan-3-grille, at: [141.84, 2.85], size: [38.5, 38.5], rx: 19.25, pattern: vent, vent: 6}
+        - {id: fan-1-screw-a-land, at: [31.94, 35.8], size: [4.0, 4.0], fill: '#c9ccd0', kind: print-island}
+        - {id: fan-1-screw-b-land, at: [64.34, 35.8], size: [4.0, 4.0], fill: '#c9ccd0', kind: print-island}
+        - {id: fan-2-screw-a-land, at: [87.39, 35.8], size: [4.0, 4.0], fill: '#c9ccd0', kind: print-island}
+        - {id: fan-2-screw-b-land, at: [119.79, 35.8], size: [4.0, 4.0], fill: '#c9ccd0', kind: print-island}
+        - {id: fan-3-screw-a-land, at: [142.89, 35.8], size: [4.0, 4.0], fill: '#c9ccd0', kind: print-island}
+        - {id: fan-3-screw-b-land, at: [175.29, 35.8], size: [4.0, 4.0], fill: '#c9ccd0', kind: print-island}
+        - {id: boss-1, at: [74.1, 27.2], size: [4.2, 4.2], rx: 2.1, stroke: '#8d9297', stroke-width: 0.35, kind: boss}
+        - {id: boss-2, at: [129.6, 27.2], size: [4.2, 4.2], rx: 2.1, stroke: '#8d9297', stroke-width: 0.35, kind: boss}
+        - {id: psu-wall-seam, at: [237.6, 13.0], size: [0.4, 29.9], fill: '#8d9297', kind: seam}
+        - {id: psu-divider, at: [330.2, 1.7], size: [15.4, 40.0], rx: 0.4, stroke: '#8d9297', stroke-width: 0.35, kind: divider}
+        - {id: strip-seam, at: [421.9, 1.0], size: [0.4, 41.4], fill: '#8d9297', kind: seam}
+    silkscreen:
+      - {id: fan-1-arrow, at: [25.1, 17.3], path: 'M -0.9 -1.1 L 1.1 0 L -0.9 1.1 Z', filled: true, fill: '#1f2226', for: chassis}
+      - {id: fan-1-symbol, at: [25.1, 22.4], path: 'M -1.1 -1.1 L 1.1 1.1 M 1.1 -1.1 L -1.1 1.1', fill: '#1f2226', stroke-width: 0.5, for: chassis}
+      - {text: '1', at: [25.1, 28.9], font-size: 3.4, anchor: middle, fill: '#1f2226', for: chassis}
+      - {id: fan-2-arrow, at: [80.55, 17.3], path: 'M -0.9 -1.1 L 1.1 0 L -0.9 1.1 Z', filled: true, fill: '#1f2226', for: chassis}
+      - {id: fan-2-symbol, at: [80.55, 22.4], path: 'M -1.1 -1.1 L 1.1 1.1 M 1.1 -1.1 L -1.1 1.1', fill: '#1f2226', stroke-width: 0.5, for: chassis}
+      - {text: '2', at: [80.55, 28.9], font-size: 3.4, anchor: middle, fill: '#1f2226', for: chassis}
+      - {id: fan-3-arrow, at: [136, 17.3], path: 'M -0.9 -1.1 L 1.1 0 L -0.9 1.1 Z', filled: true, fill: '#1f2226', for: chassis}
+      - {id: fan-3-symbol, at: [136, 22.4], path: 'M -1.1 -1.1 L 1.1 1.1 M 1.1 -1.1 L -1.1 1.1', fill: '#1f2226', stroke-width: 0.5, for: chassis}
+      - {text: '3', at: [136, 28.9], font-size: 3.4, anchor: middle, fill: '#1f2226', for: chassis}
+      - {id: psu-1-arrow, at: [246.7, 17.3], path: 'M -0.9 -1.1 L 1.1 0 L -0.9 1.1 Z', filled: true, fill: '#1f2226', for: psu-1}
+      - {id: psu-1-symbol, at: [246.7, 22.6], path: 'M -1.1 -1.1 L 1.1 -1.1 L 1.1 1.1 L -1.1 1.1 L -1.1 -1.1 M 0.35 -0.7 L -0.35 0.1 L 0.35 -0.1 L -0.35 0.7', fill: '#1f2226', stroke-width: 0.3, for: psu-1}
+      - {text: '1', at: [246.7, 28.9], font-size: 3.4, anchor: middle, fill: '#1f2226', for: psu-1}
+      - {id: psu-2-arrow, at: [429.6, 9.8], path: 'M 0.9 -1.1 L -1.1 0 L 0.9 1.1 Z', filled: true, fill: '#1f2226', for: psu-2}
+      - {id: psu-2-symbol, at: [429.6, 14.4], path: 'M -1.1 -1.1 L 1.1 -1.1 L 1.1 1.1 L -1.1 1.1 L -1.1 -1.1 M 0.35 -0.7 L -0.35 0.1 L 0.35 -0.1 L -0.35 0.7', fill: '#1f2226', stroke-width: 0.3, for: psu-2}
+      - {text: '2', at: [429.6, 21.3], font-size: 3.4, anchor: middle, fill: '#1f2226', for: psu-2}
+      - {id: earth-left, at: [15.8, 35.9], path: 'M 2.2 0 L 1.56 1.56 L 0 2.2 L -1.56 1.56 L -2.2 0 L -1.56 -1.56 L 0 -2.2 L 1.56 -1.56 L 2.2 0 M 0 -1.3 L 0 -0.1 M -1.2 -0.1 L 1.2 -0.1 M -0.8 0.65 L 0.8 0.65 M -0.4 1.4 L 0.4 1.4', fill: '#1f2226', stroke-width: 0.3, for: [ground-screw-1, ground-screw-2]}
+      - {id: earth-right, at: [429.6, 28.3], path: 'M 2.2 0 L 1.56 1.56 L 0 2.2 L -1.56 1.56 L -2.2 0 L -1.56 -1.56 L 0 -2.2 L 1.56 -1.56 L 2.2 0 M 0 -1.3 L 0 -0.1 M -1.2 -0.1 L 1.2 -0.1 M -0.8 0.65 L 0.8 0.65 M -0.4 1.4 L 0.4 1.4', fill: '#1f2226', stroke-width: 0.3, for: ground-screw-3}
+    components:
+      bays:
+        - {id: psu-1, at: [256.0, 1.7], size: {w: 73.5, h: 40}, accepts: [celestica/psu-crps-550-ac@1, celestica/psu-crps-920-ac@1, celestica/psu-crps-1600-ac@1], group: psus, rel-pos: 1, default: celestica/psu-crps-1600-ac@1}
+        - {id: psu-2, at: [346.3, 1.7], size: {w: 73.5, h: 40}, accepts: [celestica/psu-crps-550-ac@1, celestica/psu-crps-920-ac@1, celestica/psu-crps-1600-ac@1], group: psus, rel-pos: 2, default: celestica/psu-crps-1600-ac@1}
+      placements:
+        - {ref: common/screw-head@1, id: ground-screw-1, at: [5.5, 24.2], group: grounding, rel-pos: 1}
+        - {ref: common/screw-head@1, id: ground-screw-2, at: [5.5, 34.1], group: grounding, rel-pos: 2}
+        - {ref: common/screw-head@1, id: ground-screw-3, at: [427.8, 33.9], group: grounding, rel-pos: 3}
+        - {ref: common/screw-head@1, id: standoff-1, at: [8.8, 3.8], group: furniture, rel-pos: 1}
+        - {ref: common/screw-head@1, id: screw-psu-wall, at: [231.5, 24.4], group: furniture, rel-pos: 2}
+        - {ref: common/screw-head@1, id: fan-1-screw-a, at: [32.14, 36.0], group: furniture, rel-pos: 3}
+        - {ref: common/screw-head@1, id: fan-1-screw-b, at: [64.54, 36.0], group: furniture, rel-pos: 4}
+        - {ref: common/screw-head@1, id: fan-2-screw-a, at: [87.59, 36.0], group: furniture, rel-pos: 5}
+        - {ref: common/screw-head@1, id: fan-2-screw-b, at: [119.99, 36.0], group: furniture, rel-pos: 6}
+        - {ref: common/screw-head@1, id: fan-3-screw-a, at: [143.09, 36.0], group: furniture, rel-pos: 7}
+        - {ref: common/screw-head@1, id: fan-3-screw-b, at: [175.49, 36.0], group: furniture, rel-pos: 8}
+    regions:
+      - {id: fan-1, at: [30.89, 2.85], size: {w: 38.5, h: 38.5}, physical-context: Fan, label: 'Fan 1 (fixed)'}
+      - {id: fan-2, at: [86.34, 2.85], size: {w: 38.5, h: 38.5}, physical-context: Fan, label: 'Fan 2 (fixed)'}
+      - {id: fan-3, at: [141.84, 2.85], size: {w: 38.5, h: 38.5}, physical-context: Fan, label: 'Fan 3 (fixed)'}
+  left:
+    size: {w: 371.6, h: 43.4}
+    components:
+      placements:
+        - {ref: common/screw-head@1, id: screw-l1, at: [20, 20], group: furniture, rel-pos: 21}
+        - {ref: common/screw-head@1, id: screw-l2, at: [120, 20], group: furniture, rel-pos: 22}
+        - {ref: common/screw-head@1, id: screw-l3, at: [250, 20], group: furniture, rel-pos: 23}
+        - {ref: common/screw-head@1, id: screw-l4, at: [350, 20], group: furniture, rel-pos: 24}
+  right:
+    size: {w: 371.6, h: 43.4}
+    components:
+      placements:
+        - {ref: common/screw-head@1, id: screw-r1, at: [20, 20], group: furniture, rel-pos: 25}
+        - {ref: common/screw-head@1, id: screw-r2, at: [120, 20], group: furniture, rel-pos: 26}
+        - {ref: common/screw-head@1, id: screw-r3, at: [250, 20], group: furniture, rel-pos: 27}
+        - {ref: common/screw-head@1, id: screw-r4, at: [350, 20], group: furniture, rel-pos: 28}
+  top:
+    size: {w: 438.2, h: 371.6}
+    panel:
+      decor:
+        - {id: lid-pad-1, at: [150, 40], size: [60, 30], rx: 8, fill: '#bfc3c7', sink: 0.8, kind: pressed-pad, confidence: estimated, source: 'placed by proportion from the three-quarter renders (datasheet page 1, product-page render); not measurable'}
+        - {id: lid-pad-2, at: [300, 290], size: [60, 30], rx: 8, fill: '#bfc3c7', sink: 0.8, kind: pressed-pad, confidence: estimated, source: 'placed by proportion from the three-quarter renders; not measurable'}
+        - {id: lid-label-outline, at: [270, 250], size: [110, 60], stroke: '#a5aaaf', stroke-width: 0.4, kind: label-outline, confidence: estimated, source: 'placed by proportion from the three-quarter renders; not measurable'}
+  bottom:
+    size: {w: 438.2, h: 371.6}
+    empty: >-
+      Nothing documented. No ES1000 document or render shows the underside; the guide's Chassis
+      Installation section covers rack rails only. Searched: every ES1000 guide page, the datasheet, the
+      two product-page renders.
+configurations:
+  24-f2b:
+    kind: orderable
+    description: ES1000-24, 24 x 1GbE, no PoE, integrated ARM 2C / 8 GB / 32 GB eMMC, 2 x 550 W AC, F2B (R3194-F9007-A1)
+    airflow: front-to-back
+    part-numbers:
+      R3194-F9007-A1: {part: R3194-F9007-A1}
+    views: {front: front-24}
+    bays: {psu-1: celestica/psu-crps-550-ac@1, psu-2: celestica/psu-crps-550-ac@1}
+  24-b2f:
+    kind: orderable
+    description: ES1000-24, 24 x 1GbE, no PoE, integrated ARM 2C / 8 GB / 32 GB eMMC, 2 x 550 W AC, B2F (R3194-F9107-A1)
+    airflow: back-to-front
+    part-numbers:
+      R3194-F9107-A1: {part: R3194-F9107-A1}
+    views: {front: front-24}
+    bays: {psu-1: celestica/psu-crps-550-ac@1, psu-2: celestica/psu-crps-550-ac@1}
+  24p-f2b:
+    kind: orderable
+    description: ES1000-24P, 24 x 1GbE PoE++, integrated ARM 2C / 8 GB / 32 GB eMMC, 2 x 920 W AC, F2B (R3194-F9001-A1)
+    airflow: front-to-back
+    part-numbers:
+      R3194-F9001-A1: {part: R3194-F9001-A1}
+    views: {front: front-24}
+    bays: {psu-1: celestica/psu-crps-920-ac@1, psu-2: celestica/psu-crps-920-ac@1}
+  24p-b2f:
+    kind: orderable
+    description: ES1000-24P, 24 x 1GbE PoE++, integrated ARM 2C / 8 GB / 32 GB eMMC, 2 x 920 W AC, B2F (R3194-F9101-A1)
+    airflow: back-to-front
+    part-numbers:
+      R3194-F9101-A1: {part: R3194-F9101-A1}
+    views: {front: front-24}
+    bays: {psu-1: celestica/psu-crps-920-ac@1, psu-2: celestica/psu-crps-920-ac@1}
+  48-f2b:
+    kind: orderable
+    description: ES1000-48, 48 x 1GbE, no PoE, integrated ARM 2C / 8 GB / 32 GB eMMC, 2 x 550 W AC, F2B (R3194-F9008-A1)
+    airflow: front-to-back
+    part-numbers:
+      R3194-F9008-A1: {part: R3194-F9008-A1}
+    bays: {psu-1: celestica/psu-crps-550-ac@1, psu-2: celestica/psu-crps-550-ac@1}
+    skins: {usb-a: usb2}
+    component-attrs:
+      usb-1: {usb: '2.0'}
+      usb-2: {usb: '2.0'}
+  48-b2f:
+    kind: orderable
+    description: ES1000-48, 48 x 1GbE, no PoE, integrated ARM 2C / 8 GB / 32 GB eMMC, 2 x 550 W AC, B2F (R3194-F9108-A1)
+    airflow: back-to-front
+    part-numbers:
+      R3194-F9108-A1: {part: R3194-F9108-A1}
+    bays: {psu-1: celestica/psu-crps-550-ac@1, psu-2: celestica/psu-crps-550-ac@1}
+    skins: {usb-a: usb2}
+    component-attrs:
+      usb-1: {usb: '2.0'}
+      usb-2: {usb: '2.0'}
+  48p-f2b:
+    kind: orderable
+    description: ES1000-48P, 48 x 1GbE PoE++, integrated ARM 2C / 8 GB / 32 GB eMMC, 2 x 1600 W AC, F2B (R3194-F9002-A1)
+    default: true
+    airflow: front-to-back
+    part-numbers:
+      R3194-F9002-A1: {part: R3194-F9002-A1}
+    bays: {psu-1: celestica/psu-crps-1600-ac@1, psu-2: celestica/psu-crps-1600-ac@1}
+    skins: {usb-a: usb2}
+    component-attrs:
+      usb-1: {usb: '2.0'}
+      usb-2: {usb: '2.0'}
+  48p-b2f:
+    kind: orderable
+    description: ES1000-48P, 48 x 1GbE PoE++, integrated ARM 2C / 8 GB / 32 GB eMMC, 2 x 1600 W AC, B2F (R3194-F9102-A1)
+    airflow: back-to-front
+    part-numbers:
+      R3194-F9102-A1: {part: R3194-F9102-A1}
+    bays: {psu-1: celestica/psu-crps-1600-ac@1, psu-2: celestica/psu-crps-1600-ac@1}
+    skins: {usb-a: usb2}
+    component-attrs:
+      usb-1: {usb: '2.0'}
+      usb-2: {usb: '2.0'}
+  48c-f2b:
+    kind: orderable
+    description: ES1000-48C, 48 x 1GbE, no PoE, COMe x86 4C / 8 GB / 32 GB SSD, 2 x 550 W AC, F2B (R3194-F9019-A1)
+    airflow: front-to-back
+    part-numbers:
+      R3194-F9019-A1: {part: R3194-F9019-A1}
+    bays: {psu-1: celestica/psu-crps-550-ac@1, psu-2: celestica/psu-crps-550-ac@1}
+  48c-b2f:
+    kind: orderable
+    description: ES1000-48C, 48 x 1GbE, no PoE, COMe x86 4C / 8 GB / 32 GB SSD, 2 x 550 W AC, B2F (R3194-F9119-A1)
+    airflow: back-to-front
+    part-numbers:
+      R3194-F9119-A1: {part: R3194-F9119-A1}
+    bays: {psu-1: celestica/psu-crps-550-ac@1, psu-2: celestica/psu-crps-550-ac@1}
+  48cp-f2b:
+    kind: orderable
+    description: ES1000-48CP, 48 x 1GbE PoE++, COMe x86 4C / 8 GB / 32 GB SSD, 2 x 1600 W AC, F2B (R3194-F9016-A1)
+    airflow: front-to-back
+    part-numbers:
+      R3194-F9016-A1: {part: R3194-F9016-A1}
+    bays: {psu-1: celestica/psu-crps-1600-ac@1, psu-2: celestica/psu-crps-1600-ac@1}
+  48cp-b2f:
+    kind: orderable
+    description: ES1000-48CP, 48 x 1GbE PoE++, COMe x86 4C / 8 GB / 32 GB SSD, 2 x 1600 W AC, B2F (R3194-F9116-A1)
+    airflow: back-to-front
+    part-numbers:
+      R3194-F9116-A1: {part: R3194-F9116-A1}
+    bays: {psu-1: celestica/psu-crps-1600-ac@1, psu-2: celestica/psu-crps-1600-ac@1}
+datasheet:
+  title: Celestica ES1000 1U 24-port / 48-port 1GbE (PoE) Access Switch datasheet
+  url: https://www.celestica.com/hps/es1000
+  sha256: f0bf9ba185ead49cd52cd5b7c2d154d0e5f17aeb775a32106e1fd6145f596d4e
+references:
+  - {title: 'Celestica ES1000 hardware guide (documentation portal, release 1.4.0, 4/2026)', url: 'https://documentationportal.celestica.com/en/networking/es1000/front-panels'}
+  - {title: 'Celestica ES1010/ES1050/EG1050 hardware guide, Rear Panel figure 1 (same rear art, used for measurement)', url: 'https://documentationportal.celestica.com/en/networking/es1010es1050eg1050/rear-panel'}
