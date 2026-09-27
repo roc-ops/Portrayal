@@ -4,6 +4,7 @@ import json
 import pathlib
 
 import jsonschema
+import pytest
 import yaml
 
 from portrayal import lint
@@ -105,11 +106,71 @@ def test_the_pull_tab_is_the_composed_loop_and_takes_the_colour():
 
 def test_it_declares_its_head_inside_the_msa_envelope():
     d = yaml.safe_load(P.read_text())
-    assert d["head"]["size"] == {"w": 18.35, "h": 8.5, "d": 20.0}
+    assert d["head"]["size"] == {"w": 18.35, "h": 11.3, "d": 20.0}
     assert not d["head"].get("exceeds")
     with lint.collecting() as got:
         lint.lint_component_head(P, d)
     assert not [e for e in got.errors if "[L121]" in e]
+
+
+def test_the_nose_stands_1_4_above_and_1_4_below_the_body():
+    """The nose as photographed (roc-ops/Portrayal#646): 1.4 above the 8.5 body
+    top and 1.4 below its bottom, 11.3 tall, read off two side views scaled on
+    the module height at the nose. Pinned against the registry's envelope
+    (SFF-8661 Figure 5-1: 3.4 above, 1.6 below, 19 wide, 20 long), computed the
+    way L121 computes it, so a reading that drifts outside fails here by name."""
+    d = contract()
+    head, size = d["head"], d["size"]
+    env = lint.STANDARDS["qsfp-module"]["head"]
+    above = -head["at"][1]
+    below = head["at"][1] + head["size"]["h"] - size["h"]
+    assert head["at"] == [0.0, -1.4]
+    assert above == pytest.approx(1.4) and below == pytest.approx(1.4)
+    assert above <= env["above-max"] and below <= env["below-max"]
+    assert head["size"]["w"] <= env["w-max"] and head["size"]["d"] <= env["length-max"]
+    assert head["size-confidence"]["h"] == "photo-measured"
+    assert "photographs" in d["provenance"]["head"]
+
+
+def test_the_head_node_draws_the_nose():
+    """L121 point 5: the head's node carries the head's box to within 0.25. The
+    node is `body`, now the nose's outline, 0.1 inside for its stroke; the
+    relief extrudes that node, so the 3D nose is the photographed 11.3 too."""
+    import xml.etree.ElementTree as ET
+    d = contract()
+    body = next(e for e in ET.parse(P.parent / "skins/default.svg").getroot().iter()
+                if e.get("id") == d["head"]["node"])
+    x, y = float(body.get("x")), float(body.get("y"))
+    w, h = float(body.get("width")), float(body.get("height"))
+    hx, hy = d["head"]["at"]
+    hw, hh = d["head"]["size"]["w"], d["head"]["size"]["h"]
+    for got, want in ((x, hx), (y, hy), (x + w, hx + hw), (y + h, hy + hh)):
+        assert abs(got - want) <= 0.25, (got, want)
+    assert y < 0 and y + h > d["size"]["h"], "the nose overhangs the 8.5 face both ways"
+    feats = {f["node"]: f for f in d["relief"]["features"]}
+    assert d["head"]["node"] in feats
+
+
+def test_the_tab_risers_stand_clear_of_the_receptacle():
+    """The composed tab's risers (common/qsfp-pull-tab@2 2.1.0) stand on the nose
+    front at the side edges; in this face's frame they must miss the receptacle
+    housing the bores sit in, or the tab would paint over a bore."""
+    import xml.etree.ElementTree as ET
+    d = contract()
+    tab = next(p for p in d["parts"] if p["id"] == "tab")
+    tab_svg = ET.parse(LIB / "components/common/qsfp-pull-tab/v2/skins/default.svg").getroot()
+    nodes = {e.get("id"): e for e in tab_svg.iter() if e.get("id")}
+    face = {e.get("id"): e for e in ET.parse(P.parent / "skins/default.svg").getroot().iter()
+            if e.get("id")}
+    ox0 = float(face["opening"].get("x"))
+    ox1 = ox0 + float(face["opening"].get("width"))
+    for n in ("riser-l", "riser-r"):
+        x0 = tab["at"][0] + float(nodes[n].get("x"))
+        x1 = x0 + float(nodes[n].get("width"))
+        assert x1 <= ox0 or x0 >= ox1, (n, x0, x1, ox0, ox1)
+        y1 = tab["at"][1] + float(nodes[n].get("y")) + float(nodes[n].get("height"))
+        # and the post ends on the nose front, not below it
+        assert y1 <= d["head"]["at"][1] + d["head"]["size"]["h"], (n, y1)
 
 
 def test_v1_is_superseded_by_v2():
