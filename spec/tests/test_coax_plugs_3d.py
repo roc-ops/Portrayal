@@ -117,11 +117,15 @@ def test_the_seated_plug_builds_right_side_out(seated, ref):
 @EACH
 def test_the_seat_carries_a_depth(seated, ref):
     """Not a flat-panel pass: every jack but SMA and SMB presents at a plane in
-    front of its face, so those seats are measured at a nonzero base."""
+    front of its face, so those seats are measured at a nonzero base. SMA and
+    SMB present at the jack's own face, so their coupling starts exactly at
+    the jack placement's own lift (test_coax_plugs.MATED_PLANE gives 0.0)."""
     parents, occ = seat_of(seated, ref)
     base = lift_of(parents, nodes(occ)["coupling"])
     if ref in ("generic/sma-plug@1", "generic/smb-plug@1"):
-        assert base >= 0, (ref, base)
+        root = seated[ref][0]
+        host = by_path(root, SEATS[ref][4])
+        assert base == pytest.approx(lift_of(parents, host), abs=EPS), (ref, base)
     else:
         assert base > EPS, (ref, base)
 
@@ -259,5 +263,6 @@ def test_a_placements_cable_od_sets_the_stub(overridden):
     assert stub_diameter(parents, stub) == pytest.approx(od, abs=EPS)
     # only the stub follows the cable: the boot keeps its drawn size
     boot = el["relief-boot"]
-    if boot.tag.endswith("circle"):
-        assert float(boot.get("r")) * 2 != pytest.approx(od, abs=0.01)
+    assert boot.tag.endswith("circle"), (
+        f"{ref} relief-boot is a {boot.tag}; this check reads a circle's r")
+    assert float(boot.get("r")) * 2 != pytest.approx(od, abs=0.01)
