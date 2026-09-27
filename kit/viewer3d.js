@@ -26,6 +26,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { toGLB, toUSDZ } from './share.js';
 import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, svgSource, setSvgOverride, clearSvgOverrides,
          setNodeStates, nodeStates, setNodeFields, restyleText,
+         setNodeLampColors, nodeLampColors, markHex,
          setPulled as setReliefPulled, pulledPaths,
          buildFaceRelief, bodyBoxes, fruFor,
          nodeTools, tiltOf, tiltTools, tiltGroupIn, unproject, openFrameFaces } from './relief.js';
@@ -79,6 +80,9 @@ export function createViewer(container, opts = {}) {
   const DIST = opts.dist || '../dist/';
   const PXMM = opts.pxmm || 4;
   const HL_COLOR = opts.highlight || '#f59e0b';
+  // how a mark is drawn when it does not say (#664): 'plate', the selection's
+  // translucent plate and outline, or 'ring', 2D marks.js's pair of rings
+  const MARK_STYLE = opts.markStyle === 'ring' ? 'ring' : 'plate';
 
   let DEV = null, CFG = null, disposed = false;
   // Runtime bay swaps, bay id -> ref (or null for an emptied bay). The 3D scene
@@ -939,15 +943,56 @@ export function createViewer(container, opts = {}) {
     return null;
   }
 
-  function select(path, o = {}) {
-    clearHighlight();
-    selected = path || null;
-    if (!path) return false;
+  // ONE HALO, TWO USERS (#664): the selection and every mark. A halo stands on
+  // the part's face or facet, with its tilt and its flip, inside the FRU group
+  // that owns it so it rides a pulled module out, drawn last with the depth test
+  // off - only its colour differs. Built here once so the two cannot drift.
+  // Returns {obj, grp, lx, ly, w, h, exact} with `obj` already in the scene, or
+  // null for a path no face draws.
+  // THE RING STYLE, 2D marks.js's halo() in 3D: a soft wide ring under a
+  // crisp narrow one, each a rounded rectangle band around the part at the
+  // same outsets, widths and opacities in the same millimetres (ring(): pad,
+  // stroke width, stroke opacity, corner radius min(0.9, pad)). A band is the
+  // stroke drawn as a surface: the rounded rectangle at pad + width/2 with the
+  // one at pad - width/2 cut out of it, so it is exactly the 2D stroke.
+  const RINGS = [{pad: 1.35, width: 1.8, opacity: 0.28, order: 999},
+                 {pad: 0.45, width: 0.7, opacity: 1, order: 1000}];
+  function roundedRect(target, w, h, r) {
+    const x = -w / 2, y = -h / 2, rr = Math.max(0, Math.min(r, w / 2, h / 2));
+    target.moveTo(x + rr, y);
+    target.lineTo(x + w - rr, y);
+    target.absarc(x + w - rr, y + rr, rr, -Math.PI / 2, 0, false);
+    target.lineTo(x + w, y + h - rr);
+    target.absarc(x + w - rr, y + h - rr, rr, 0, Math.PI / 2, false);
+    target.lineTo(x + rr, y + h);
+    target.absarc(x + rr, y + h - rr, rr, Math.PI / 2, Math.PI, false);
+    target.lineTo(x, y + rr);
+    target.absarc(x + rr, y + rr, rr, Math.PI, Math.PI * 1.5, false);
+    return target;
+  }
+  function ringBand(w, h, {pad, width, opacity, order}, colour) {
+    const corner = Math.min(0.9, pad);
+    const outer = pad + width / 2, inner = Math.max(pad - width / 2, 0);
+    const shape = roundedRect(new THREE.Shape(), w + 2 * outer, h + 2 * outer, corner + width / 2);
+    shape.holes.push(roundedRect(new THREE.Path(), w + 2 * inner, h + 2 * inner,
+                                 Math.max(corner - width / 2, 0)));
+    const mesh = new THREE.Mesh(new THREE.ShapeGeometry(shape, 6),
+      // transparent at any opacity: three.js draws every opaque mesh before
+      // every transparent one whatever its renderOrder, so an opaque crisp ring
+      // was drawn first and the soft ring painted over its edge. One pass, and
+      // renderOrder puts the crisp band on top.
+      new THREE.MeshBasicMaterial({color: colour, transparent: true, opacity,
+                                   depthTest: false, depthWrite: false, side: THREE.DoubleSide}));
+    mesh.renderOrder = order;
+    return mesh;
+  }
+
+  function halo(path, colour, style = 'plate') {
     const found = locate(path);
-    if (!found) return false;
-    const {view, c} = found;
+    if (!found) return null;
+    const {view, c, exact} = found;
     const grp = faceGroups[view];
-    if (!grp) return false;
+    if (!grp) return null;
     const w = Math.max(c.x1 - c.x0, 0.4), h = Math.max(c.y1 - c.y0, 0.4);
     // Local x=0 is the centre of the face the relief was built on, which for a
     // rack face is the 482.6 mm plate. Centring on the 434 mm body put the
@@ -969,25 +1014,87 @@ export function createViewer(container, opts = {}) {
       hy = (flipY ? -1 : 1) * (fh / 2 - (u.y + u.h / 2));
       into = tiltGroupIn(into, c.tilt, {fw, fh, flipLX: flipX, flipLY: flipY});
     }
-    hl = new THREE.Group();
-    const geo = new THREE.PlaneGeometry(hw, hh);
+    const obj = new THREE.Group();
+    // what this is, for a host or a harness counting halos without guessing
+    // from a material
+    obj.userData.portrayalHalo = {path, colour, style};
     // depthTest off, drawn last: the same argument hl.js makes in 2D - a halo that
     // neighbours can paint over is not a halo. Here the neighbour is a handle or a
     // cage standing proud of the face.
-    const fillMat = new THREE.MeshBasicMaterial({color: HL_COLOR, transparent: true,
-      opacity: 0.18, depthTest: false, depthWrite: false});
-    const lineMat = new THREE.LineBasicMaterial({color: HL_COLOR, depthTest: false,
-      transparent: true});
-    hl.add(new THREE.Mesh(geo, fillMat));
-    hl.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo), lineMat));
-    hl.traverse(o2 => { o2.renderOrder = 999; });
-    hl.position.set(hx, hy, 0.8);
+    if (style === 'ring') {
+      for (const r of RINGS) obj.add(ringBand(hw, hh, r, colour));
+    } else {
+      const geo = new THREE.PlaneGeometry(hw, hh);
+      const fillMat = new THREE.MeshBasicMaterial({color: colour, transparent: true,
+        opacity: 0.18, depthTest: false, depthWrite: false});
+      const lineMat = new THREE.LineBasicMaterial({color: colour, depthTest: false,
+        transparent: true});
+      obj.add(new THREE.Mesh(geo, fillMat));
+      obj.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo), lineMat));
+      obj.traverse(o2 => { o2.renderOrder = 999; });
+    }
+    obj.position.set(hx, hy, 0.8);
     // ride with the module if it is a FRU, so ejecting it does not leave the
     // marker behind on the chassis
     // (the longest prefix that is one - a card's optic is a FRU inside its card)
-    into.add(hl);
-    if (o.frame !== false) frameOn(grp, lx, ly, w, h);
+    into.add(obj);
+    return {obj, grp, lx, ly, w, h, exact};
+  }
+
+  function select(path, o = {}) {
+    clearHighlight();
+    selected = path || null;
+    if (!path) return false;
+    const got = halo(path, HL_COLOR);
+    if (!got) return false;
+    hl = got.obj;
+    if (o.frame !== false) frameOn(got.grp, got.lx, got.ly, got.w, got.h);
     return true;
+  }
+
+  // MARKS (#664): many halos at once, each in its own colour, independent of
+  // the selection - a reader selects one part while five others stay marked.
+  // `list` is the whole truth, [{path, color, style?}], and [] clears. `style`
+  // is 'plate' (the selection's look) or 'ring' (2D's pair of rings); a mark
+  // that does not say takes the viewer's `markStyle`, 'plate' by default. Paths, never
+  // selectors (the host resolves those against its 2D drawing). A mark never
+  // moves the camera and never touches `selected`. It is held here and drawn
+  // again after every rebuild, as STATES and PULLED are, and a pulled module's
+  // marks ride out in its FRU group like the selection halo.
+  // Returns what could not be drawn so the host can say "not in 3D":
+  //   missing  - no face draws the path, or any ancestor of it
+  //   nearest  - drawn on the nearest ancestor that is (the rule select() uses)
+  //   invalid  - the colour is not a hex (it lands in a material, never a string)
+  let MARKS = [], markObjs = [], markReport = {missing: [], nearest: [], invalid: []};
+  function clearMarkObjs() {
+    for (const o of markObjs) { o.parent && o.parent.remove(o); disposeTree(o); }
+    markObjs = [];
+  }
+  function drawMarks() {
+    clearMarkObjs();
+    const r = {missing: [], nearest: [], invalid: []};
+    for (const m of MARKS) {
+      const colour = markHex(m.color);   // #rgb/#rrggbb, alpha dropped (#667)
+      if (!colour) { r.invalid.push(m.path); continue; }
+      const got = box ? halo(m.path, colour, m.style) : null;
+      if (!got) { r.missing.push(m.path); continue; }
+      if (!got.exact) r.nearest.push(m.path);
+      markObjs.push(got.obj);
+    }
+    markReport = r;
+    // ON EVERY DRAW, a clean report included: a host that marked before the
+    // first load finished was told every path was missing, and when the load
+    // then drew them all, an event sent only on trouble never said so - its
+    // "not in 3D" note stayed up over parts that were shown
+    emit('marks', r);
+    return r;
+  }
+  function setMarks(list) {
+    MARKS = (Array.isArray(list) ? list : [])
+      .filter(m => m && m.path)
+      .map(m => ({path: String(m.path), color: String(m.color || ''),
+                  style: m.style === 'ring' || m.style === 'plate' ? m.style : MARK_STYLE}));
+    return drawMarks();
   }
 
   function frameOn(grp, lx, ly, w, h) {
@@ -1098,6 +1205,8 @@ export function createViewer(container, opts = {}) {
       else await loadDevice(spec.device || DEV, spec.config);
       // a config switch keeps the host's selection; the boxes were rebuilt
       if (selected) select(selected, {frame: false});
+      // and its marks (#664): the halos went with the old scene
+      if (MARKS.length) drawMarks();
     });
   }
 
@@ -1139,6 +1248,7 @@ export function createViewer(container, opts = {}) {
     el.removeEventListener('pointerup', onPointerUp);
     controls.dispose();
     clearHighlight();
+    clearMarkObjs();
     LAMPS.clear();
     disposeTree(scene);
     scene.clear();
@@ -1252,6 +1362,40 @@ export function createViewer(container, opts = {}) {
   const setPulled = paths => coalesce('pulled', paths, applyPulledNow);
   const setStates = map => coalesce('states', map, applyStatesNow);
   const setFields = map => coalesce('fields', map, applyFieldsNow);   // same queue: latest wins
+  const setLampColors = map => coalesce('lamps', map, applyLampColorsNow);
+
+  // A LAMP IN THE HOST'S COLOUR (#664): `{path: '#ff00ff'}`, the whole map each
+  // time, {} clears. The colour goes into the text every texture is painted
+  // from (relief.js applyNodeLampColors), so it repaints and never re-shapes,
+  // survives a rebuild from the scope's registry, and an animated lamp's frames
+  // (lamps.js) are rasterised from the same text. A lamp registered `state-off`
+  // stays unlit, as in 2D. Returns the paths whose colour was not a hex.
+  let lampRejected = [];
+  async function applyLampColorsNow(map) {
+    const before = nodeLampColors(SCOPE);
+    lampRejected = setNodeLampColors(map, SCOPE);
+    const after = nodeLampColors(SCOPE);
+    const changed = new Set();
+    for (const k of new Set([...before.keys(), ...after.keys()]))
+      if (before.get(k) !== after.get(k)) changed.add(k);
+    if (!changed.size || !box) return {repainted: 0, rejected: lampRejected};
+    const touches = text => [...changed].some(p => text.includes(`data-path="${p}"`));
+    let n = 0;
+    for (const e of RESTYLE) {
+      if (!touches(e.svgText)) continue;
+      try { await e.run(restyleText(e.svgText, SCOPE)); n++; }
+      catch (err) { console.warn('[portrayal] restyle failed', err); }
+    }
+    for (const rec of LOD) {
+      if (!touches(rec.svgText)) continue;
+      rec.svgText = restyleText(rec.svgText, SCOPE);
+      rec.rev++;
+      await refineFace(rec, rec.level);
+      n++;
+    }
+    await syncLamps(changed);
+    return {repainted: n, rejected: lampRejected};
+  }
 
   async function syncLamps(changed) {
     if (!box) return;
@@ -1332,6 +1476,9 @@ export function createViewer(container, opts = {}) {
 
   return {
     load, select, on, resize, dispose, setStates, setFields, fields: () => JSON.parse(JSON.stringify(FIELDS)),
+    // #664: persistent coloured marks, and a host's lamp colours
+    setMarks, marks: () => MARKS.map(m => ({...m})), get markReport() { return {...markReport}; },
+    setLampColors, lampColors: () => Object.fromEntries(nodeLampColors(SCOPE)),
     // the backdrop, for a host that lets its reader choose one - the loop
     // redraws every frame, so setting it is all there is to do
     setBackground: c => { scene.background = new THREE.Color(c); },
