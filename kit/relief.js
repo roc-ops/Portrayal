@@ -82,6 +82,48 @@ export function cavityShell(c, INTO) {
   return {walls: true, floor: !open, back: !open, depth};
 }
 
+// A CAVITY'S WALLS FOLLOW ITS OUTLINE. A cavity that names its outline node
+// (`relief.cavity`) was always PUNCHED in that shape, and its walls were still
+// a box round the shape's bounding rect. On an RJ45 that box is most of the
+// housing: the stepped face beside the latch slot stood in front of nothing,
+// and the floor 18 mm back repainted the whole face, so from any angle the
+// jack read as two stencils with air between them. The outline, extruded from
+// `zTop` to `zBottom`, is the socket the plug goes into.
+//
+// `regions` is ringsOf's [{shell, holes}] in face mm; `toWorld` maps a face
+// point to the face group's frame, mirror included. Every triangle faces OUT
+// of the cavity, as a BoxGeometry's do, so BackSide still means "seen from
+// inside": a shell is wound counter-clockwise in the mapped frame and a hole
+// clockwise, which is what makes the winding survive a mirrored face.
+export function outlineWalls(regions, toWorld, zTop, zBottom) {
+  const pos = [], idx = [];
+  const area = r => {
+    let a = 0;
+    for (let i = 0, j = r.length - 1; i < r.length; j = i++)
+      a += (r[j][0] - r[i][0]) * (r[j][1] + r[i][1]);
+    return a / 2;   // positive for counter-clockwise, y up
+  };
+  const add = (ring, ccw) => {
+    let w = simplifyRing(ring, 0.01).map(([x, y]) => toWorld(x, y));
+    const a = w[0], b = w[w.length - 1];
+    if (w.length > 1 && Math.hypot(a[0] - b[0], a[1] - b[1]) < 1e-6) w.pop();
+    if (w.length < 3) return;
+    if ((area(w) > 0) !== ccw) w = w.reverse();
+    const base = pos.length / 3;
+    for (const [x, y] of w) pos.push(x, y, zTop, x, y, zBottom);
+    for (let k = 0; k < w.length; k++) {
+      const t0 = base + 2 * k, b0 = t0 + 1;
+      const t1 = base + 2 * ((k + 1) % w.length), b1 = t1 + 1;
+      idx.push(t0, b0, t1, t1, b0, b1);
+    }
+  };
+  for (const {shell, holes = []} of regions || []) {
+    add(shell, true);
+    for (const h of holes) add(h, false);
+  }
+  return {pos, idx};
+}
+
 // WHICH FACES DECLARED AN OPEN FRAME (render.py sets `data-open-frame` on the
 // root of a view whose `open-frame` is true). {face: svg text or null} in, the
 // face names out. viewer3d lines the inside of the box when any face is one, so
@@ -507,6 +549,39 @@ export function tiltGroupIn(parent, t, {fw, fh, flipLX = false, flipLY = false})
   return g;
 }
 
+// A SAMPLED RING, THINNED. Douglas-Peucker to `eps` mm: ringsOf samples an
+// outline at a fixed step, so a straight edge arrives as a run of collinear
+// points and only its corners carry information.
+export function simplifyRing(r, eps = 0.02) {
+  if (r.length < 4) return r.slice();
+  const keep = new Array(r.length).fill(false);
+  const seg = (p, a, b) => {
+    const dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy);
+    return L < 1e-12 ? Math.hypot(p[0] - a[0], p[1] - a[1])
+                     : Math.abs(dy * p[0] - dx * p[1] + b[0] * a[1] - b[1] * a[0]) / L;
+  };
+  const stack = [[0, r.length - 1]];
+  keep[0] = keep[r.length - 1] = true;
+  // split the closed ring at its far point so the open run has two ends
+  let far = 0, fd = -1;
+  for (let k = 1; k < r.length; k++) {
+    const d = Math.hypot(r[k][0] - r[0][0], r[k][1] - r[0][1]);
+    if (d > fd) { fd = d; far = k; }
+  }
+  keep[far] = true;
+  stack.length = 0; stack.push([0, far], [far, r.length - 1]);
+  while (stack.length) {
+    const [i0, i1] = stack.pop();
+    let bi = -1, bd = eps;
+    for (let k = i0 + 1; k < i1; k++) {
+      const d = seg(r[k], r[i0], r[i1]);
+      if (d > bd) { bd = d; bi = k; }
+    }
+    if (bi >= 0) { keep[bi] = true; stack.push([i0, bi], [bi, i1]); }
+  }
+  return r.filter((_, k) => keep[k]);
+}
+
 // A DEPTH THAT VARIES ACROSS A NODE, INSIDE THE NODE'S OWN OUTLINE. `profile`
 // and `profile-y` built their height field over the bounding box, so a sloped
 // moulding could only be a rectangle; the MaiaEdge PBC-2000's centre pane has
@@ -620,38 +695,10 @@ export function shapedHeightField(regions, xs, ys, depthAt, lift = 0) {
     return outer;
   };
 
-  // Douglas-Peucker: the outline arrives sampled every 0.25 mm, and the ear
-  // clipper below is quadratic in it. Walls keep every sample; only the
-  // triangulation works from the simplified ring.
-  const simplify = (r, eps = 0.02) => {
-    if (r.length < 4) return r.slice();
-    const keep = new Array(r.length).fill(false);
-    const seg = (p, a, b) => {
-      const dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy);
-      return L < 1e-12 ? Math.hypot(p[0] - a[0], p[1] - a[1])
-                       : Math.abs(dy * p[0] - dx * p[1] + b[0] * a[1] - b[1] * a[0]) / L;
-    };
-    const stack = [[0, r.length - 1]];
-    keep[0] = keep[r.length - 1] = true;
-    // split the closed ring at its far point so the open run has two ends
-    let far = 0, fd = -1;
-    for (let k = 1; k < r.length; k++) {
-      const d = Math.hypot(r[k][0] - r[0][0], r[k][1] - r[0][1]);
-      if (d > fd) { fd = d; far = k; }
-    }
-    keep[far] = true;
-    stack.length = 0; stack.push([0, far], [far, r.length - 1]);
-    while (stack.length) {
-      const [i0, i1] = stack.pop();
-      let bi = -1, bd = eps;
-      for (let k = i0 + 1; k < i1; k++) {
-        const d = seg(r[k], r[i0], r[i1]);
-        if (d > bd) { bd = d; bi = k; }
-      }
-      if (bi >= 0) { keep[bi] = true; stack.push([i0, bi], [bi, i1]); }
-    }
-    return r.filter((_, k) => keep[k]);
-  };
+  // Douglas-Peucker (simplifyRing): the outline arrives sampled every 0.25
+  // mm, and the ear clipper below is quadratic in it. Walls keep every sample;
+  // only the triangulation works from the simplified ring.
+  const simplify = simplifyRing;
   const cutTriangle = (tri, x0, x1, y0, y1) => {
     let p = tri;
     p = clip(p, q => q[0] >= x0, atX(x0));
@@ -1194,6 +1241,85 @@ export function applyNodeFields(root, scope) {
 }
 export function nodeStates(scope) { return new Map(_sc(scope).states); }
 
+// A LAMP COLOUR THE HOST CHOOSES (#664). In 2D a mark's `lamp` is any hex,
+// written on the lamp as an inline `--led-color` - how a reader paints a lamp
+// whose vendor never published a colour table. In 3D a lamp is part of a
+// face texture, so the colour has to be in the TEXT a texture is painted
+// from: the route a state takes, repaint and never re-shape. Inline, so it
+// wins over the drawing's `#id.state-*` rules as it does in 2D.
+//
+// HEX ONLY, and validated here, because it lands in a CSS value slot: the
+// rule is marks.js's HEX_RE, repeated (and held equal by a test) so relief
+// does not import the 2D marks module.
+//
+// OFF STAYS OFF, as in 2D (`mark.state !== 'off'`): a lamp whose registered
+// state is `state-off` keeps its drawing, so a custom colour never lights a
+// lamp that is out.
+export const LAMP_HEX = /^#(?:[0-9a-f]{3}|[0-9a-f]{4}|[0-9a-f]{6}|[0-9a-f]{8})$/i;
+
+// A MARK'S COLOUR FOR A MATERIAL (#667). A 3D mark takes the same hex a lamp
+// does, but it lands in a three.js material, and Color.setStyle reads only
+// #rgb and #rrggbb: it warns on #rgba or #rrggbbaa and leaves the material
+// white, so a mark would draw white while nothing reported it. The alpha is
+// dropped - the halo's own opacity is its style's - and anything that is not a
+// LAMP_HEX is null, which setMarks reports as `invalid`.
+export function markHex(colour) {
+  const c = String(colour ?? '');
+  if (!LAMP_HEX.test(c)) return null;
+  const h = c.slice(1).toLowerCase();
+  if (h.length === 4) return '#' + h.slice(0, 3);
+  if (h.length === 8) return '#' + h.slice(0, 6);
+  return '#' + h;
+}
+// The declaration is written between two CSS comments so an unlit copy of the
+// art (lamps.js withBase) can take exactly it out again and nothing else.
+export const LAMP_MARK = '/*portrayal-lamp*/';
+const LAMP_END = '/*portrayal-lamp-end*/';
+const LAMP_DECL = new RegExp(`${LAMP_MARK.replace(/[*/]/g, '\\$&')}[^/]*${LAMP_END.replace(/[*/]/g, '\\$&')}`, 'g');
+/** Strip the host's lamp colours from a fragment of text (an unlit copy). */
+export function withoutLampColors(text) { return String(text).replace(LAMP_DECL, ''); }
+
+/** Replace the host's lamp colours, keyed by data-path. Returns the rejected paths. */
+export function setNodeLampColors(map, scope) {
+  const st = _sc(scope).lampColors || (_sc(scope).lampColors = new Map());
+  st.clear();
+  const rejected = [];
+  for (const [path, colour] of map instanceof Map ? map : Object.entries(map || {})) {
+    if (!colour) continue;
+    if (LAMP_HEX.test(String(colour))) st.set(String(path), String(colour).toLowerCase());
+    else rejected.push(String(path));
+  }
+  return rejected;
+}
+export function nodeLampColors(scope) { return new Map(_sc(scope).lampColors || []); }
+
+/** Paint the registered lamp colours onto a parsed document, clearing first. */
+export function applyNodeLampColors(root, scope) {
+  if (!root) return root;
+  // put back what this painted, over the whole document: a colour taken out
+  // of the registry arrives as a path that is no longer there
+  for (const el of root.querySelectorAll('[data-portrayal-lamp]')) {
+    const was = el.getAttribute('data-portrayal-lamp-style');
+    if (was) el.setAttribute('style', was); else el.removeAttribute('style');
+    el.removeAttribute('data-portrayal-lamp');
+    el.removeAttribute('data-portrayal-lamp-style');
+  }
+  const st = _sc(scope).lampColors;
+  if (!st || !st.size) return root;
+  const states = _sc(scope).states;
+  for (const [path, colour] of st) {
+    if (/(^|\s)state-off(\s|$)/.test(states.get(path) || '')) continue;
+    for (const el of root.querySelectorAll(`[data-path="${CSS.escape(path)}"]`)) {
+      const was = el.getAttribute('style') || '';
+      el.setAttribute('data-portrayal-lamp', colour);
+      if (was) el.setAttribute('data-portrayal-lamp-style', was);
+      el.setAttribute('style', `${was}${was && !/;\s*$/.test(was) ? ';' : ''}`
+                               + `${LAMP_MARK}--led-color:${colour}${LAMP_END}`);
+    }
+  }
+  return root;
+}
+
 // WHAT A VIEWER HAS TAKEN OFF. A cover hides what is behind it, which is the
 // whole reason it is on the device and the whole reason someone wants it off. In
 // 2D that is a CSS rule; in 3D the face is a rasterised canvas, so the part is
@@ -1275,6 +1401,7 @@ export function restyleText(text, scope) {
   div.innerHTML = text;
   applyNodeStates(div, scope);
   applyNodeFields(div, scope);
+  applyNodeLampColors(div, scope);
   applyPulled(div, scope);
   return div.innerHTML;
 }
@@ -1604,11 +1731,19 @@ export function nodeTools(svg, {back = false} = {}) {
       // colour - same defect as the id case, one attribute over.
       const id = p.getAttribute('id'), cls = p.getAttribute('class'),
             path = p.getAttribute('data-path'), ref = p.getAttribute('data-ref'),
-            dc = p.getAttribute('data-class');
-      if (!id && !cls && !ref && !dc) continue;      // a pure layout group changes no selector
+            dc = p.getAttribute('data-class'), lamp = p.getAttribute('data-portrayal-lamp');
+      if (!id && !cls && !ref && !dc && !lamp) continue;   // a pure layout group changes no selector
+      // THE HOST'S LAMP COLOUR RIDES TOO (#664), and only it: it is an inline
+      // custom property on the lamp's group, and a dome or a lens cut out
+      // below the group took the group's class (so its state rule applied)
+      // and not the colour - the face showed the host's magenta around a
+      // dome in the stylesheet's own colour. Marked as applyNodeLampColors
+      // marks it, so an unlit copy strips it and a repaint replaces it.
+      const lampStyle = lamp && LAMP_HEX.test(lamp)
+        ? ` data-portrayal-lamp="${lamp}" style="${LAMP_MARK}--led-color:${lamp}${LAMP_END}"` : '';
       inner = `<g${id ? ` id="${id}"` : ''}${cls ? ` class="${cls}"` : ''}` +
               `${ref ? ` data-ref="${ref}"` : ''}${dc ? ` data-class="${dc}"` : ''}` +
-              `${path ? ` data-path="${path}"` : ''}>${inner}</g>`;
+              `${path ? ` data-path="${path}"` : ''}${lampStyle}>${inner}</g>`;
     }
     return inner;
   };
@@ -1661,6 +1796,9 @@ export async function extractRelief(url, scope, {back = false} = {}) {
   // while the registry still said the value was set, and a repeated setFields
   // would see nothing changed and never put it back
   applyNodeFields(svg, scope);
+  // and the host's lamp colours (#664), so a rebuild paints a custom-coloured
+  // lamp the colour the registry says rather than its stylesheet default
+  applyNodeLampColors(svg, scope);
   // A part the viewer has taken off is REMOVED here rather than hidden, and only
   // here: this document is built to be measured and then discarded, so nothing
   // has to put it back. Left as display:none it would measure 0x0 and extrude a
@@ -1716,7 +1854,7 @@ export async function extractRelief(url, scope, {back = false} = {}) {
     }
     return hit;
   };
-  const ringsOf = el => {
+  const ringsOf = (el, stepMm = RING_STEP) => {
     const m = inv.multiply(el.getScreenCTM());
     const paths = el.tagName === 'path' ? [el] : [...el.querySelectorAll('path')];
     const rings = [];
@@ -1725,7 +1863,7 @@ export async function extractRelief(url, scope, {back = false} = {}) {
       let total = 0;
       try { total = q.getTotalLength(); } catch (e) { continue; }
       if (!(total > 0)) continue;
-      const n = Math.max(8, Math.min(4000, Math.ceil(total / RING_STEP)));
+      const n = Math.max(8, Math.min(4000, Math.ceil(total / stepMm)));
       const step = total / n;
       let cur = [], prev = null;
       for (let i = 0; i <= n; i++) {
@@ -1818,6 +1956,11 @@ export async function extractRelief(url, scope, {back = false} = {}) {
               round: !!el.dataset.round, cavSvg: nodeSvg(cavNode || el, rect),
               grpRect, grpSvg: nodeSvg(el, grpRect), features};
       const t = tiltOf(el);
+      // THE OUTLINE THE WALLS FOLLOW (outlineWalls): the named cavity node's
+      // own, sampled finely so a corner stays a corner once it is thinned. A
+      // rect or circle node has no path and keeps its box or cylinder; a tilted
+      // cavity keeps its box, its outline being the front-view projection.
+      if (cavNode && !e.round && !t) e.rings = ringsOf(cavNode, 0.05);
       if (!t) return e;
       // its features are unprojected about the same anchor; grpRect stays
       // projected, since it is only ever the raster they are cut from
@@ -2278,7 +2421,19 @@ export async function buildFaceRelief(F, ctx) {
       const floorClears = mirrorClears(facetFloorClears(c, outs, {
         cavities, depthOf: builtDepth,
         floorZ: c.lift - (d - 0.1), backZ: c.lift - (d + sinkBack + 0.15)}), pc, !!F.flipLX, !!F.flipLY);
-      clearFloor(floorCv, floorClears, pc.x, pc.y, PX);
+      // A SHAPED CAVITY'S FLOOR IS ITS OUTLINE. The group art round the opening
+      // is the housing's face; at the bottom of the socket it was a second copy
+      // of that face. Cut to the outline, what is left is what the walls enclose.
+      const cavCv = c.rings ? await rasterize(c.cavSvg, c.w, c.h, PX) : null;
+      const shapeFloor = cvs => {
+        if (!cavCv) return cvs;
+        const x = cvs.getContext('2d');
+        x.globalCompositeOperation = 'destination-in';
+        x.drawImage(cavCv, 0, 0, cvs.width, cvs.height);
+        x.globalCompositeOperation = 'source-over';
+        return cvs;
+      };
+      clearFloor(shapeFloor(floorCv), floorClears, pc.x, pc.y, PX);
       // shape-accurate punch: the cavity node's own art defines the hole
       if (!c.lift && !c.tilt) {   // a lifted cavity recesses from a raised part, so the
         // chassis face beneath it is already covered - punching it would leave
@@ -2286,7 +2441,7 @@ export async function buildFaceRelief(F, ctx) {
         // facet it stands on instead (the outs loop).
         const pctx = cv.getContext('2d');
         pctx.globalCompositeOperation = 'destination-out';
-        pctx.drawImage(await rasterize(c.cavSvg, c.w, c.h, PX),
+        pctx.drawImage(cavCv || await rasterize(c.cavSvg, c.w, c.h, PX),
                        Math.round(c.x * PX), Math.round(c.y * PX));
         pctx.globalCompositeOperation = 'source-over';
         facePunch[F.view].push({kind: 'shape', svg: c.cavSvg,
@@ -2309,7 +2464,14 @@ export async function buildFaceRelief(F, ctx) {
         side: c.wallsInside ? THREE.BackSide : THREE.DoubleSide});
       const backMat = new THREE.MeshLambertMaterial({color: 0x23262b, side: THREE.DoubleSide});
       let walls;
-      if (c.round) {
+      if (c.rings) {
+        const g = outlineWalls(c.rings, (x, y) => [LX(x, 0), LY(y, 0)], c.lift, c.lift - d);
+        const geo = new THREE.BufferGeometry();
+        geo.setAttribute('position', new THREE.Float32BufferAttribute(g.pos, 3));
+        geo.setIndex(g.idx);
+        geo.computeVertexNormals();
+        walls = new THREE.Mesh(geo, wallMat);
+      } else if (c.round) {
         walls = new THREE.Mesh(
           new THREE.CylinderGeometry(c.w / 2, c.w / 2, d, 24, 1, true), wallMat);
         walls.rotation.x = Math.PI / 2;
@@ -2326,7 +2488,8 @@ export async function buildFaceRelief(F, ctx) {
       if (!Number.isFinite(zc) || !Number.isFinite(LX(c.x, c.w)) || !Number.isFinite(LY(c.y, c.h)))
         console.error('relief: cavity has a non-finite position and will not render',
                       {owner: c.owner, x: c.x, y: c.y, d, lift: c.lift});
-      walls.position.set(LX(c.x, c.w), LY(c.y, c.h), zc);
+      // an outline's walls are built in the face frame already
+      if (!c.rings) walls.position.set(LX(c.x, c.w), LY(c.y, c.h), zc);
       addTo(walls);
       if (!shell.floor) continue;
       // textured floor: the aperture art, pushed to the back of the recess
@@ -2340,8 +2503,8 @@ export async function buildFaceRelief(F, ctx) {
       reg(c.grpSvg, async text => {
         const g2 = await rasterize(text, c.grpRect.w, c.grpRect.h, PX);
         // the facet clear is REAPPLIED: a restyle re-cuts the floor from the art
-        remap(floorMat, clearFloor(
-          crop(g2, {x: pc.x - c.grpRect.x, y: pc.y - c.grpRect.y, w: pc.w, h: pc.h}, PX),
+        remap(floorMat, clearFloor(shapeFloor(
+          crop(g2, {x: pc.x - c.grpRect.x, y: pc.y - c.grpRect.y, w: pc.w, h: pc.h}, PX)),
           floorClears, pc.x, pc.y, PX));
         for (const ft of cavCrops) {
           const pf = projOf(ft);
@@ -2353,13 +2516,14 @@ export async function buildFaceRelief(F, ctx) {
       const maxSink = Math.max(0, ...c.features.filter(f => f.kind === 'sink').map(f => f.val));
       // ...and the closed back, 0.25 behind the floor, is cleared under a sunk
       // facet the same way, or it is the plane that crosses the cage wells
-      if (floorClears.length) {
+      // (and a shaped cavity's back is its outline, as its floor is)
+      if (floorClears.length || cavCv) {
         const acv = document.createElement('canvas');
         acv.width = floorCv.width; acv.height = floorCv.height;
         const actx = acv.getContext('2d');
         actx.fillStyle = '#fff';
         actx.fillRect(0, 0, acv.width, acv.height);
-        backMat.alphaMap = canvasTex(clearFloor(acv, floorClears, pc.x, pc.y, PX));
+        backMat.alphaMap = canvasTex(clearFloor(shapeFloor(acv), floorClears, pc.x, pc.y, PX));
         backMat.alphaTest = 0.5;
       }
       const back = new THREE.Mesh(new THREE.PlaneGeometry(c.w, c.h), backMat);

@@ -130,8 +130,8 @@ def _device(only_in):
 def _printed(only_in, config_name):
     """The words actually PRINTED, not the whole document.
 
-    The rendered SVG embeds the source manifest in `<metadata>`, so a substring
-    search on the file finds every legend whether it was drawn or not - which is
+    The rendered SVG once embedded the source manifest in `<metadata>`, so a
+    substring search on the file found every legend whether it was drawn or not - which is
     how the first version of this test passed a rule that was working and failed
     one that was too. Read the text nodes.
     """

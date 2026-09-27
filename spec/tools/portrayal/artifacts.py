@@ -3,21 +3,45 @@
 
 THE POINT. The DCIM export knew the schema and also knew where the source tree
 was, and only the first of those is essential. Everything it took off `library/`
-is published: the compiled SVG carries the whole device manifest in its
-`<metadata>`, components.json carries every contract field the export reads,
-and vendors.json and overlays.json carry the rest. So the export can run against
+is published: `<device>.source.json` is the whole device manifest (each
+compiled SVG names it by digest in its `<metadata>`), components.json carries every contract field the export reads,
+and vendors.json and listings.json carry the rest. So the export can run against
 `dist/` alone, which is what lets it live somewhere else - or be written by
 somebody else, against a contract rather than against a checkout.
 
 This module is that contract, in code. Nothing here opens a file under
 `library/devices/` or `library/components/`.
 """
+import functools
 import json
-import re
 from pathlib import Path
-from xml.sax.saxutils import unescape
 
-_META = re.compile(r"<metadata[^>]*>(.*?)</metadata>", re.S)
+
+@functools.lru_cache(maxsize=None)
+def _files_at(path, _mtime):
+    idx = json.loads(Path(path).read_text())
+    return {c["name"]: c.get("files") or {} for c in idx.get("configs") or []}
+
+
+def _files(root, name):
+    # keyed on the file's mtime too, so a build rewritten in place is re-read
+    p = Path(root) / f"{name}.configs.json"
+    try:
+        return _files_at(str(p), p.stat().st_mtime_ns)
+    except OSError:
+        return {}
+
+
+def face_file(root, name, config, view):
+    """The compiled face `config` draws for `view`, or None where it draws none.
+
+    Looked up in `<device>.configs.json` `configs[].files`, never built from
+    the configuration's name: a drawing is written once and shared by every
+    configuration that draws it identically (#665), so most configurations'
+    faces carry another configuration's name.
+    """
+    f = _files(str(root), name).get(config, {}).get(view)
+    return Path(root) / f if f else None
 
 
 class Dist:
@@ -28,7 +52,7 @@ class Dist:
         self._devices = self._load("devices.json").get("devices") or []
         self._components = self._load("components.json").get("components") or []
         self._vendors = self._load("vendors.json")
-        self._overlays = (self._load("overlays.json").get("overlays") or {})
+        self._listings = (self._load("listings.json").get("listings") or {})
         self._manifests = {}
 
     def _load(self, name):
@@ -51,38 +75,27 @@ class Dist:
         raise SystemExit(f"no device {name!r} in {self.root}/devices.json")
 
     def manifest(self, name):
-        """The device's own manifest, read back out of a drawing of it.
+        """The device's own manifest - all six views, attrs, chassis,
+        configurations, groups - as published in `<device>.source.json`.
 
-        Every compiled SVG embeds the source it was made from - all six views,
-        attrs, chassis, configurations, groups - so ANY view of ANY configuration
-        answers this. The first one found is used and the result memoised,
-        because a 2 MB SVG is not a thing to parse twice.
+        It used to be read back out of whichever drawing turned up first,
+        because every face embedded it. They name it by digest now (#665) and
+        it is published once per device. Memoised; it can run to 100 KB.
         """
         if name in self._manifests:
             return self._manifests[name]
-        for svg in sorted(self.root.glob(f"{name}.*.svg")) + \
-                   sorted(self.root.glob(f"{name}.svg")):
-            m = _META.search(svg.read_text())
-            if not m:
-                continue
-            # THE MANIFEST LIVES INSIDE XML, SO IT ARRIVES ESCAPED. The
-            # renderer writes JSON into a <metadata> text node and ElementTree
-            # escapes &, < and > on the way in. Reading it back with a regex
-            # gets those literally: an Edgecore compliance string came out as
-            # "IEC/EN60950-1 &amp; IEC/EN 62368-1", which is not what any
-            # consumer of the source ever saw. Caught by diffing this exporter's
-            # output against the source-read version it replaces.
-            src = (json.loads(unescape(m.group(1))) or {}).get("source")
-            if src:
-                # the index carries what the manifest does not: `datasheet` is a
-                # citation rather than geometry and is not embedded in a drawing
-                idx = self.device(name)
-                for k in ("datasheet", "ns"):
-                    if idx.get(k) and not src.get(k):
-                        src[k] = idx[k]
-                self._manifests[name] = src
-                return src
-        raise SystemExit(f"no drawing of {name!r} in {self.root} carries a manifest")
+        p = self.root / f"{name}.source.json"
+        if not p.exists():
+            raise SystemExit(f"{p} is missing - run build.sh, or point --dist at a build")
+        src = json.loads(p.read_text())
+        # the index carries what the manifest does not: `datasheet` is a
+        # citation rather than geometry and is not part of the source
+        idx = self.device(name)
+        for k in ("datasheet", "ns"):
+            if idx.get(k) and not src.get(k):
+                src[k] = idx[k]
+        self._manifests[name] = src
+        return src
 
     # ---- components ---------------------------------------------------------
 
@@ -141,13 +154,18 @@ class Dist:
     def vendors(self):
         return self._vendors.get("vendors") or {}
 
-    def overlay(self, ns, model, profile):
-        """A NOS overlay for a device, or None. Keyed <ns>/<model>."""
-        if not profile:
-            return None
-        return (self._overlays.get(f"{ns}/{model}") or {}).get(profile)
+    def listings_for(self, ns, name):
+        """Every listing of the device `<ns>/<name>`, as (key, listing), sorted.
 
-    def profiles(self):
-        """Every NOS some overlay in this build declares - the only NOSes an
-        export can name interfaces for."""
-        return {p for profs in self._overlays.values() for p in (profs or {})}
+        A listing names its hardware; the hardware does not name its listings.
+        That direction is the point - a NOS vendor adding a box to its list is a
+        change to the NOS vendor's entry, not to the metal - so the reverse
+        lookup is built here rather than stored anywhere.
+        """
+        hw = f"{ns}/{name}"
+        return [(k, v) for k, v in sorted(self._listings.items())
+                if v.get("hardware") == hw]
+
+    @property
+    def listings(self):
+        return dict(self._listings)

@@ -1,0 +1,1759 @@
+format: 1
+kind: device
+name: ds3001
+version: '0.1.0'
+maturity: modelled
+manufacturer: Celestica
+model: DS3001
+description: >-
+  Celestica DS3001 - 2RU 64 x 100G QSFP28 data-center switch (sixteen columns of 2-high stacked
+  cages) with two SFP+, an RJ-45 management / USB / console stack and a reset button at the right,
+  and two 1300 W CRPS supplies and four hot-swap fan trays on the rear; front-to-back, back-to-front
+  and DC builds.
+profile: networking
+provenance:
+  sources:
+    confidence: drawing
+    note: >-
+      THE DOCUMENTATION PORTAL'S FRONT AND REAR ELEVATIONS ARE ORTHOGRAPHIC CAD RENDERS WITH THE
+      PANEL PRINTING ON THEM, and they are the model. The DS3001 installation guide on
+      documentationportal.celestica.com draws the front (Front Panel, Figure 1,
+      ds3001--front-panel-1.jpg, 3840 x 1953) and the rear (Rear Panel, Figure 1,
+      ds3001--rear-panel-1.jpg, 3840 x 2375) of a shipping build: black front, every port numeral,
+      the lamp legends, MGMT / CONSOLE / RST and the LUG TAG legend are all legible at 5.4 px/mm.
+      The fan-removal and PSU-removal figures (7680 px wide three-quarter renders) confirm
+      construction, and the vendor product page (cls.celestica.com/hardware-platforms/ds3001/)
+      serves two three-quarter renders, staged as photos/ds3001-A.png and ds3001-AA.png, which agree
+      on every feature and were not measured. The datasheet (ds3001-datasheet.pdf) carries
+      dimensions, power and ordering codes; the guide's What's in the Box table adds a DC build.
+  gate-1:
+    confidence: measured
+    note: >-
+      BOTH ELEVATIONS PASS AT ONE SCALE PER FACE. Front: the black body spans x 847.5-3232.5 px and
+      y 703-1177 (the lower lip included), 2385 x 474 px - aspect 5.032 against the datasheet's
+      438.5 x 87 = 5.040, 0.2% - so 5.4390 px/mm on both axes. Rear: x 510.5-3368.5, y 836.5-1403.5,
+      2858 x 567 px, aspect 5.0406 against 5.0402 - 6.5177 px/mm. THE FRONT SCALE IS PROVED BY A
+      SECOND QUANTITY IT DID NOT USE: every QSFP opening's dark interior reads 101 px across, 18.57
+      mm against std/qsfp-ganged@1's 18.5. The ears (with their pull handles) stand outside both
+      bodies and are not drawn.
+  port-block:
+    confidence: measured
+    note: >-
+      SIXTEEN COLUMNS, EACH TWO 2-HIGH STACKED CAGES. The bright perforated band between each
+      stack's two openings segments cleanly on row 862 (8-row mean): sixteen 105-106 px runs centred
+      972.5, 1101, 1230, 1359, 1487.5, 1616.5, 1745.5, 1874.5, 2003.5, 2132.5, 2261.5, 2390, 2519,
+      2648, 2776.5, 2905.5 px, a linear fit giving first column 22.93 mm and pitch 23.698 mm, worst
+      residual 0.06 mm. Down column 940 px the upper stack's frame runs 801-936 px and the lower's
+      961-1096; aperture centres read 827, 909.5, 986.5 and 1069.5 px, 22.80, 37.97, 52.12, 67.38
+      mm. Each stack is a silver cage body 19.5 x 24.8 mm with the perforated EMI band between its
+      apertures; std/qsfp-ganged@1 draws only an opening, so the body and the band are panel decor
+      under each pair, as ufispace/s9311-64d draws its 2-high QSFP-DD stacks.
+  port-numbering:
+    confidence: photo-measured
+    note: >-
+      Read off the front render, which prints every number: each column carries two lamp rows above
+      its upper stack numbered N and N+1 (1 and 2 on the first column) and two below its lower stack
+      numbered N+32 and N+33 (33 and 34), and the band between the two stacks reads '1 (barred up) 2
+      (up)(down) 33 (barred down) 34'. So down each column the four ports are 2c+1, 2c+2, 2c+33,
+      2c+34 - the upper stack carries 1-32 and the lower stack 33-64. The barred triangles are drawn
+      as a triangle with a stroked bar; each numeral and triangle is its own mark at its measured
+      offset from the column centre.
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      DECIDED BY THE RULE, AND THE RENDER MAY SAY OTHERWISE. The library's stack convention
+      (docs/pluggables-3d-design.md, S1-S4) is applied to every stack: upper cage upright (rotate 0)
+      over the lower turned 180. THE RENDER READS DIFFERENTLY, AND COHERENTLY. At 20x on column 1
+      the upper stack draws its connector card slot at the BOTTOM of both openings, with the latch
+      windows along the stack's top edge; the lower stack is the same drawing turned over -
+      connector slots at the TOP of both openings, windows along its bottom edge. On the DS3000's
+      render a connector-at-bottom cage is the upright (rotate 0) one, so read that way ports 1 and
+      2 are both upright, 33 and 34 both inverted, the two STACKS are belly-to-belly about the
+      printed band, and every bail faces outward - which is how a 2x1 stacked QSFP connector is
+      built. That is a reading of the connector slot and the window rows, not of the cage lip
+      itself, and only a lip or tab reading may override the rule, so the rule is drawn and the
+      reading is the stacked-cage-orientation gap for the reviewer. The SFP+ pair is mirrored in the
+      render (upper slot at the bottom, lower at the top) and follows the rule without question.
+  port-lamps:
+    confidence: measured
+    note: >-
+      FOUR LAMPS PER QSFP28 PORT, in a row beside the port's printed number. Column 940 crosses port
+      1's row at y 766 px and port 2's at 786, and port 33's and 34's at 1110.5 and 1130, 11.58,
+      15.26, 74.92, 78.51 mm; port 1's four lamps read 940, 961.5, 982.5 and 1004 px across, a 3.93
+      mm pitch centred on the column. The guide's Table 3: 1x100G uses the first lamp, 2x50G the
+      first and third, 4x25G all four, green; 40G / 4x10G amber; blinking with traffic. Lane 1 is
+      taken as the left lamp. common/led-dot@1 is the part.
+  sfp-plus:
+    confidence: measured
+    note: >-
+      TWO SFP+ CAGES STACKED BETWEEN THE PORT BLOCK AND THE MANAGEMENT CLUSTER, numbered 65 over 66:
+      centres x 398.33, y 38.70 and 51.57 (frames 886-941 and 957-1010 px), each lamp a single dot
+      beside its numeral, 65 above the pair at y 30.61 and 66 below at 59.57, and '65 (up)(down) 66'
+      printed between them. Guide: 2 x SFP+ at 10GbE; Table 3 gives one green lamp each (on = link
+      up, blinking = activity).
+  management:
+    confidence: measured
+    note: >-
+      ONE STACKED MOULDING, RJ-45 OVER USB-A OVER RJ-45, labelled on the panel MGMT, the USB trident
+      and CONSOLE, set on end to its left and reading upward. Shell x 3113.75-3203 px, y
+      778.75-952.5 (16.4 x 31.9 mm); the upper jack 782.5-845, the USB 850-881, the lower jack
+      885-950. The upper jack carries two green lamps along its top edge with its latch keyway at
+      the top, which is common/rj45-eth@1 turned 180 (the std housing draws its keyway at the bottom
+      when unturned); the console's keyway is at the bottom, std/rj45@2 unturned. Both were checked
+      against the render at 7x after placing. Guide: 10/100/1000Base-T Ethernet, an RJ-45 serial
+      console (9600 and 115200 baud, 8-N-1), a USB 2.0 host Type-A that 'cannot be used for charging
+      devices', and a reset button - 'press for about 5 seconds and then release' to restart without
+      removing power.
+  status-lamps:
+    confidence: measured
+    note: >-
+      FOUR LAMPS AND THE RESET PINHOLE IN ONE COLUMN at x 410.92, labelled FAN, PSU, ALM, STAT and
+      RST top to bottom (text on end, reading upward, to their left): centres y 10.94, 17.37, 23.81,
+      30.24 and the reset at 37.83, read at 4x on the render. Guide Table 1 agrees on the four: FAN
+      and PSU green / amber / off, ALM green / amber and amber at 1 Hz and 4 Hz, STAT green-amber
+      alternating.
+  vents:
+    confidence: measured
+    note: >-
+      Three perforations, each drawn as the individual openings the render shows rather than as a
+      pattern: a row of 101 shallow notches along the top edge (bright runs on row 714 px, about 2.2
+      x 1.8 mm on a 4.0 mm pitch) with 76 dark slots under them (row 735, 2.9 x 2.8 mm, from x 1020
+      px so they stop short of the wordmark), a row of 77 slots near the bottom edge (dark runs on
+      row 1151, about 3 x 2.2 mm) with 94 notches in the bottom lip under them (row 1174), and a 9 x
+      11 grid of 1.84 mm square holes on a 3.0 mm pitch below the management stack (x 3077.7-3208
+      px, y 969.5-1133.5). The cavity depths are not measured.
+  wordmark-and-tag:
+    confidence: measured
+    note: >-
+      'Celestica' is printed top left as a text wordmark (set as sans-serif text; no logo mark is
+      drawn). The LUG TAG legend sits to the right of the pull tab at the bottom right, which is
+      celestica/lug-tag@1 printed DS3001, x 3019-3143 px and y 1149-1171. It is seated unturned, so
+      the text reads left to right as printed and the part's grip end lands on the right. The render
+      cannot confirm the grip end: at 8x the card is a symmetric paddle, stepping out of its slot
+      equally at both ends, with no lip drawn at either end.
+  rear:
+    confidence: measured
+    note: >-
+      TWO SUPPLIES ON END AT THE LEFT, FOUR FAN TRAYS. At 6.5177 px/mm the supplies' faces run x
+      552-806 and 823-1077 px between dark seams, y 901-1381 - 39.0 x 73.5 mm, the CRPS face on end
+      - at 6.37 and 47.95; their green lamps read 611 and 882.5 px across at 925 down. A legend
+      strip above them prints a power mark, '1' or '2' and an open down-triangle for each. The fan
+      trays' faces start at 1109, 1662, 2214 and 2770 px (91.83, 176.67, 261.37, 346.67 mm), 79.9
+      wide on an 84.85 mm pitch, y 859-1387. At the right-hand end an earth symbol at y 50.4 over
+      two hex-nut ground studs at y 69.3 and 78.0, x 432.1. The datasheet: '1+1 redundant, hot swap
+      PSUs, 1300W each', '3+1 Redundant/Hot-Swappable Fans, front to back and back to front
+      airflow'; the guide numbers the rear lamps P-1 / P-2 and FAN1-FAN4.
+  rear-numbering:
+    confidence: estimated
+    note: >-
+      The supplies are numbered as printed, 1 left and 2 right. The fan trays carry no legible
+      number on the render; they are numbered 1 to 4 from the left as seen from behind, the same way
+      as the supplies. A reading of the real rear overturns it.
+  power:
+    confidence: datasheet
+    note: >-
+      No chassis consumption figure is published in the datasheet or guide; only the supplies' 1300
+      W output each, and the input: AC 47-63 Hz, 100~127 V / 200~240 V nominal (datasheet), 100-240
+      VAC (guide), 240 VDC in China only (guide). The DC build R3250-F9103-A1 ('DC PSU 2x1300W') is
+      in the guide's What's in the Box table and has no drawing.
+attrs:
+  performance:
+    switching-capacity: 6.4 Tbps
+    packet-buffer: 70 MB
+    latency: low-latency cut-through mode support
+  power:
+    power-envelope: unstated
+    input-ac: 'AC 47-63 Hz, 100~127 V / 200~240 V nominal (datasheet); 100-240 VAC (guide)'
+    input-hvdc: '240 VDC, China only (guide)'
+  thermal:
+    fans: >-
+      3+1 redundant hot-swap fan trays, front-to-back or back-to-front (four in the standard
+      configuration)
+  environmental:
+    operating-temp: '0 to 45 C at 900 m (datasheet); 15-35 C long term, 0-45 C short term (guide)'
+    humidity: '5% to 90% non-condensing (datasheet); 40-65% long term, 10-90% short term (guide)'
+  platform:
+    cpu: 'Intel Denverton / Hewitt Lake-DE, 4 or 8 core, on a COM-Express module'
+    memory: up to 32 GB ECC DDR4
+    storage: up to 1 TB M.2 SSD
+    bmc: 'BMC with 1 GB DDR4, dual 32 MB flash, NC-SI shared management port, IPMI 2.0'
+    nos-installer: ONIE
+  features:
+    breakout: >-
+      each QSFP28 splits to 4x25G; system maximum 168 x 10/25GbE, physically 128 x 50GbE or 64 x
+      100GbE (datasheet)
+    transceiver-power: QSFP28 modules up to 5 W; DAC to 5 m (guide) or 3 m (datasheet)
+    optics-qsfp28: >-
+      guide Port Description: 100GBASE-CR4/SR4/LR4 and 40GBASE-CR4/SR4/LR4, any QSFP28-compliant
+      module up to 5 W; qualified list Avago AFBR-89CDDZ and Innolight TR-FC85S-N00 (100GBASE-SR4),
+      Molex and TE DAC at 1, 3 and 5 m
+    optics-sfp-plus: 10GbE (guide Port Description); no module list
+  management:
+    console: 'RJ-45 serial, 9600 and 115200 baud, 8-N-1; cable G400-10199-01 RJ45 to DB9'
+    usb: 'USB 2.0 host, Type A, not for charging'
+  compliance:
+    acoustic: EN300753
+    weee: Directive 2012/19/E (as printed)
+    rohs: '2011/65/EU & 2015/863'
+    reach: (EC) No. 1907/2006
+    emc: 'Class A - USA, Canada, Europe, China, Japan'
+    safety: UL/CSA/IEC/EN 60950-1/62368-1
+    psu-approvals: 'CE, CCC, KC, TUV, UL/cUL, BIS and BSMI'
+  lifecycle: {eol: none-announced}
+chassis: {width: 438.5, height: 87.0, depth: 520.0, ru: 2, color: '#c3c7cb'}
+gaps:
+- what: stacked-cage-orientation
+  scope: [front]
+  reason: needs-photo
+  wanted: >-
+    Whether each 2-high QSFP28 stack is belly-to-belly (the library rule, drawn: 2c+1 at 0, 2c+2 at
+    180, 2c+33 at 0, 2c+34 at 180) or, as the render reads, both ports of a stack the same way up
+    with the two stacks mirrored (2c+1 and 2c+2 at 0, 2c+33 and 2c+34 at 180). A photograph of the
+    cage lips, or of modules seated in one stack, settles it; if the render's reading is confirmed
+    the change is sixty-four rotations and a stack-exceptions entry.
+- what: dc-build
+  scope: [rear]
+  reason: needs-drawing
+  wanted: >-
+    The DC supply of R3250-F9103-A1 (2U, 64x100GbE, DC PSU 2x1300W, F2B). No figure of it is held,
+    so no DC supply part exists and the build is declared without one.
+- what: fan-and-psu-power
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    Per-fan draw and a chassis consumption figure. Neither document gives either.
+- what: airflow-finish
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    How the F2B and B2F builds differ on the outside. Every render held shows orange fan latches and
+    nothing says which airflow that is.
+- what: psu-legend-mark
+  scope: [rear]
+  reason: needs-photo
+  wanted: >-
+    The small power symbol printed before each supply's number in the legend strip is about 1.5 mm
+    across on the render and is not drawn; the numeral and the triangle are.
+- what: side-faces
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  wanted: >-
+    A drawing of the lid, underside and side walls; only three-quarter renders show them.
+groups:
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    description: >-
+      the sixty-four QSFP28 ports, sixteen columns of two 2-high stacks: 1-32 in the upper stacks
+      and 33-64 in the lower, two to a stack, numbered along the columns left to right.
+    attrs: {media: qsfp28, speed: 100g}
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    description: >-
+      the two SFP+ cages, 65 over 66, stacked right of the port block.
+    attrs: {media: sfp-plus, speed: 10g}
+  port-leds: {term: LED, role: indicator, index-origin: 1}
+  status-leds: {term: LED, role: indicator, index-origin: 1}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the out-of-band stack at the right-hand end - a 10/100/1000 RJ-45 management port over a USB
+      2.0 Type-A over an RJ-45 serial console in one moulding, and the reset button beside it.
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs: {redundancy: 1+1, redundancy-note: 'datasheet: 1+1 redundant, hot swap PSUs, 1300W each'}
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    attrs: {redundancy: 3+1, redundancy-note: 'datasheet: 3+1 Redundant/Hot-Swappable Fans'}
+  grounding: {term: Point, role: furniture, index-origin: 1}
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 1
+    description: the pull-out lug tag and the printed port-type marks
+views:
+  front:
+    size: {w: 438.5, h: 87.0}
+    panel:
+      decor:
+      - {id: bezel, at: [0.0, 0.0], size: [438.5, 87.0], fill: '#262a2e', kind: bezel}
+      - {id: vent-top-1, at: [15.63, 1.3], size: [2.02, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-2, at: [19.67, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-3, at: [23.72, 1.3], size: [2.02, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-4, at: [27.58, 1.3], size: [2.76, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-5, at: [31.81, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-6, at: [35.67, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-7, at: [39.71, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-8, at: [43.76, 1.3], size: [2.21, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-9, at: [47.8, 1.3], size: [2.21, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-10, at: [51.85, 1.3], size: [2.21, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-11, at: [55.71, 1.3], size: [2.57, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-12, at: [59.75, 1.3], size: [2.02, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-13, at: [63.61, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-14, at: [67.84, 1.3], size: [2.21, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-15, at: [71.7, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-16, at: [75.75, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-17, at: [79.61, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-18, at: [83.84, 1.3], size: [2.21, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-19, at: [87.7, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-20, at: [91.74, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-21, at: [95.61, 1.3], size: [2.57, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-22, at: [99.65, 1.3], size: [2.21, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-23, at: [103.88, 1.3], size: [2.21, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-24, at: [107.74, 1.3], size: [2.21, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-25, at: [111.79, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-26, at: [115.83, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-27, at: [120.06, 1.3], size: [1.84, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-28, at: [123.74, 1.3], size: [2.02, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-29, at: [127.78, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-30, at: [131.64, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-31, at: [135.69, 1.3], size: [2.57, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-32, at: [139.92, 1.3], size: [2.02, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-33, at: [143.78, 1.3], size: [2.21, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-34, at: [147.64, 1.3], size: [2.57, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-35, at: [151.68, 1.3], size: [2.57, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-36, at: [155.73, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-37, at: [159.77, 1.3], size: [2.02, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-38, at: [163.63, 1.3], size: [2.57, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-39, at: [167.68, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-40, at: [171.72, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-41, at: [175.77, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-42, at: [179.81, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-43, at: [184.04, 1.3], size: [2.02, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-44, at: [187.9, 1.3], size: [2.21, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-45, at: [191.76, 1.3], size: [2.57, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-46, at: [195.62, 1.3], size: [2.21, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-47, at: [199.67, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-48, at: [203.9, 1.3], size: [2.21, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-49, at: [207.76, 1.3], size: [2.21, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-50, at: [211.8, 1.3], size: [2.21, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-51, at: [215.85, 1.3], size: [1.84, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-52, at: [219.71, 1.3], size: [2.57, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-53, at: [223.57, 1.3], size: [2.57, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-54, at: [227.62, 1.3], size: [2.57, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-55, at: [231.66, 1.3], size: [2.57, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-56, at: [235.71, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-57, at: [239.75, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-58, at: [243.61, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-59, at: [247.66, 1.3], size: [2.57, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-60, at: [251.7, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-61, at: [255.75, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-62, at: [259.61, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-63, at: [263.84, 1.3], size: [2.21, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-64, at: [267.88, 1.3], size: [2.02, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-65, at: [271.74, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-66, at: [275.79, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-67, at: [279.65, 1.3], size: [2.02, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-68, at: [283.69, 1.3], size: [2.57, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-69, at: [287.74, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-70, at: [291.78, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-71, at: [295.64, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-72, at: [299.69, 1.3], size: [2.21, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-73, at: [303.73, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-74, at: [307.78, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-75, at: [311.64, 1.3], size: [2.57, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-76, at: [315.68, 1.3], size: [2.57, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-77, at: [319.73, 1.3], size: [2.21, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-78, at: [323.77, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-79, at: [327.63, 1.3], size: [2.57, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-80, at: [331.68, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-81, at: [335.72, 1.3], size: [2.57, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-82, at: [339.58, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-83, at: [343.63, 1.3], size: [2.57, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-84, at: [347.67, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-85, at: [351.9, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-86, at: [355.58, 1.3], size: [2.57, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-87, at: [359.63, 1.3], size: [2.57, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-88, at: [363.85, 1.3], size: [2.57, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-89, at: [367.9, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-90, at: [371.76, 1.3], size: [2.21, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-91, at: [375.62, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-92, at: [379.85, 1.3], size: [2.21, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-93, at: [383.71, 1.3], size: [2.57, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-94, at: [387.76, 1.3], size: [2.02, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-95, at: [407.8, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-96, at: [411.84, 1.3], size: [2.21, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-97, at: [415.7, 1.3], size: [2.57, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-98, at: [419.75, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-99, at: [423.79, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-100, at: [427.84, 1.3], size: [2.39, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-top-101, at: [431.88, 1.3], size: [2.21, 1.8], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom-1, at: [19.67, 81.26], size: [2.76, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-2, at: [24.64, 81.26], size: [1.65, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-3, at: [27.58, 81.26], size: [2.94, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-4, at: [33.09, 81.26], size: [1.47, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-5, at: [35.67, 81.26], size: [2.76, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-6, at: [39.53, 81.26], size: [2.57, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-7, at: [43.57, 81.26], size: [2.57, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-8, at: [47.62, 81.26], size: [2.57, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-9, at: [51.66, 81.26], size: [2.76, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-10, at: [55.52, 81.26], size: [2.94, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-11, at: [59.57, 81.26], size: [2.94, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-12, at: [63.61, 81.26], size: [2.21, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-13, at: [67.66, 81.26], size: [2.21, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-14, at: [71.52, 81.26], size: [2.39, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-15, at: [75.57, 81.26], size: [2.21, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-16, at: [83.66, 81.26], size: [2.76, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-17, at: [87.52, 81.26], size: [2.02, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-18, at: [99.65, 81.26], size: [2.76, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-19, at: [103.51, 81.26], size: [2.94, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-20, at: [111.6, 81.26], size: [1.65, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-21, at: [115.65, 81.26], size: [1.65, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-22, at: [119.51, 81.26], size: [1.65, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-23, at: [123.55, 81.26], size: [2.94, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-24, at: [127.6, 81.26], size: [2.94, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-25, at: [131.64, 81.26], size: [2.76, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-26, at: [139.55, 81.26], size: [1.47, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-27, at: [147.64, 81.26], size: [2.76, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-28, at: [151.68, 81.26], size: [2.76, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-29, at: [156.28, 81.26], size: [2.21, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-30, at: [171.54, 81.26], size: [2.76, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-31, at: [175.58, 81.26], size: [1.84, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-32, at: [179.63, 81.26], size: [1.65, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-33, at: [196.18, 81.26], size: [2.39, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-34, at: [199.67, 81.26], size: [2.76, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-35, at: [203.53, 81.26], size: [2.94, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-36, at: [209.05, 81.26], size: [1.47, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-37, at: [212.91, 81.26], size: [1.65, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-38, at: [216.95, 81.26], size: [1.47, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-39, at: [219.53, 81.26], size: [2.94, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-40, at: [223.57, 81.26], size: [2.94, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-41, at: [227.62, 81.26], size: [2.94, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-42, at: [232.76, 81.26], size: [1.65, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-43, at: [236.62, 81.26], size: [1.84, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-44, at: [243.61, 81.26], size: [2.94, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-45, at: [247.84, 81.26], size: [1.47, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-46, at: [251.52, 81.26], size: [2.94, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-47, at: [256.48, 81.26], size: [2.02, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-48, at: [260.34, 81.26], size: [2.02, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-49, at: [267.7, 81.26], size: [2.76, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-50, at: [271.56, 81.26], size: [2.94, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-51, at: [275.6, 81.26], size: [2.76, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-52, at: [284.06, 81.26], size: [1.84, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-53, at: [288.1, 81.26], size: [2.39, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-54, at: [291.6, 81.26], size: [2.94, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-55, at: [295.64, 81.26], size: [2.76, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-56, at: [299.5, 81.26], size: [2.94, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-57, at: [303.73, 81.26], size: [2.76, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-58, at: [307.78, 81.26], size: [2.76, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-59, at: [311.82, 81.26], size: [2.57, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-60, at: [315.68, 81.26], size: [2.76, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-61, at: [323.59, 81.26], size: [2.21, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-62, at: [327.63, 81.26], size: [2.76, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-63, at: [332.6, 81.26], size: [1.84, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-64, at: [336.09, 81.26], size: [2.39, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-65, at: [339.58, 81.26], size: [1.65, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-66, at: [343.63, 81.26], size: [2.21, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-67, at: [347.67, 81.26], size: [2.57, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-68, at: [351.54, 81.26], size: [2.76, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-69, at: [355.58, 81.26], size: [2.57, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-70, at: [359.63, 81.26], size: [2.76, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-71, at: [363.67, 81.26], size: [2.76, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-72, at: [367.53, 81.26], size: [2.94, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-73, at: [371.58, 81.26], size: [2.39, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-74, at: [375.62, 81.26], size: [2.39, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-75, at: [379.67, 81.26], size: [2.21, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-76, at: [383.53, 81.26], size: [2.94, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-bottom-77, at: [387.57, 81.26], size: [2.94, 2.2], fill: '#030304', vent: 8}
+      - {id: vent-top2-1, at: [31.62, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-2, at: [35.67, 4.8], size: [2.76, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-3, at: [39.53, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-4, at: [43.57, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-5, at: [47.62, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-6, at: [51.66, 4.8], size: [2.76, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-7, at: [56.44, 4.8], size: [2.02, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-8, at: [59.57, 4.8], size: [1.84, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-9, at: [71.52, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-10, at: [75.57, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-11, at: [79.61, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-12, at: [83.66, 4.8], size: [2.76, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-13, at: [87.52, 4.8], size: [2.39, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-14, at: [96.71, 4.8], size: [1.84, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-15, at: [100.2, 4.8], size: [2.21, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-16, at: [103.7, 4.8], size: [2.76, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-17, at: [107.56, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-18, at: [111.6, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-19, at: [115.65, 4.8], size: [2.76, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-20, at: [119.51, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-21, at: [123.55, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-22, at: [131.64, 4.8], size: [2.76, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-23, at: [135.69, 4.8], size: [2.76, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-24, at: [143.59, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-25, at: [155.54, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-26, at: [159.59, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-27, at: [163.63, 4.8], size: [2.76, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-28, at: [167.68, 4.8], size: [2.76, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-29, at: [171.54, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-30, at: [179.63, 4.8], size: [2.02, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-31, at: [188.45, 4.8], size: [2.02, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-32, at: [191.58, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-33, at: [195.62, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-34, at: [199.67, 4.8], size: [2.76, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-35, at: [203.53, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-36, at: [215.66, 4.8], size: [2.76, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-37, at: [219.89, 4.8], size: [2.57, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-38, at: [227.62, 4.8], size: [2.76, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-39, at: [231.66, 4.8], size: [2.21, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-40, at: [235.52, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-41, at: [239.57, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-42, at: [243.61, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-43, at: [247.66, 4.8], size: [2.76, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-44, at: [251.7, 4.8], size: [2.76, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-45, at: [255.56, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-46, at: [259.61, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-47, at: [264.2, 4.8], size: [1.84, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-48, at: [271.56, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-49, at: [276.71, 4.8], size: [1.84, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-50, at: [279.65, 4.8], size: [2.76, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-51, at: [283.69, 4.8], size: [2.76, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-52, at: [287.55, 4.8], size: [2.76, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-53, at: [291.6, 4.8], size: [2.02, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-54, at: [295.64, 4.8], size: [2.76, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-55, at: [304.65, 4.8], size: [1.84, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-56, at: [311.64, 4.8], size: [2.76, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-57, at: [315.5, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-58, at: [319.54, 4.8], size: [2.39, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-59, at: [323.59, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-60, at: [331.68, 4.8], size: [2.76, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-61, at: [336.46, 4.8], size: [2.02, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-62, at: [339.95, 4.8], size: [2.57, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-63, at: [343.63, 4.8], size: [2.76, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-64, at: [347.67, 4.8], size: [2.57, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-65, at: [351.54, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-66, at: [355.58, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-67, at: [359.63, 4.8], size: [2.76, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-68, at: [363.67, 4.8], size: [2.76, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-69, at: [367.53, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-70, at: [371.58, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-71, at: [375.62, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-72, at: [379.67, 4.8], size: [2.76, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-73, at: [383.53, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-74, at: [387.57, 4.8], size: [2.94, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-75, at: [407.61, 4.8], size: [2.57, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-top2-76, at: [432.43, 4.8], size: [2.02, 2.8], fill: '#030304', vent: 8}
+      - {id: vent-bottom2-1, at: [15.63, 85.4], size: [2.76, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-2, at: [19.67, 85.4], size: [2.76, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-3, at: [23.53, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-4, at: [27.58, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-5, at: [31.62, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-6, at: [35.67, 85.4], size: [2.76, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-7, at: [39.53, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-8, at: [43.57, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-9, at: [47.62, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-10, at: [51.66, 85.4], size: [2.76, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-11, at: [55.52, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-12, at: [59.57, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-13, at: [63.61, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-14, at: [67.66, 85.4], size: [2.76, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-15, at: [71.52, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-16, at: [75.57, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-17, at: [79.61, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-18, at: [83.66, 85.4], size: [2.76, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-19, at: [87.52, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-20, at: [91.56, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-21, at: [95.61, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-22, at: [99.65, 85.4], size: [2.76, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-23, at: [103.51, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-24, at: [107.56, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-25, at: [111.6, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-26, at: [115.65, 85.4], size: [2.76, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-27, at: [119.51, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-28, at: [123.55, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-29, at: [127.6, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-30, at: [131.64, 85.4], size: [2.76, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-31, at: [135.5, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-32, at: [139.55, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-33, at: [143.59, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-34, at: [147.64, 85.4], size: [2.76, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-35, at: [151.5, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-36, at: [155.54, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-37, at: [159.59, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-38, at: [163.63, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-39, at: [167.49, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-40, at: [171.54, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-41, at: [175.58, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-42, at: [179.63, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-43, at: [183.67, 85.4], size: [2.76, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-44, at: [187.53, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-45, at: [191.58, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-46, at: [195.62, 85.4], size: [2.76, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-47, at: [199.67, 85.4], size: [2.76, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-48, at: [203.53, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-49, at: [207.58, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-50, at: [211.62, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-51, at: [215.66, 85.4], size: [2.76, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-52, at: [219.53, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-53, at: [223.57, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-54, at: [227.62, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-55, at: [231.66, 85.4], size: [2.76, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-56, at: [235.52, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-57, at: [239.57, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-58, at: [243.61, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-59, at: [247.66, 85.4], size: [2.76, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-60, at: [251.52, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-61, at: [255.56, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-62, at: [259.61, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-63, at: [263.65, 85.4], size: [2.76, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-64, at: [267.51, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-65, at: [271.56, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-66, at: [275.6, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-67, at: [279.65, 85.4], size: [2.76, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-68, at: [283.51, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-69, at: [287.55, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-70, at: [291.6, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-71, at: [295.64, 85.4], size: [2.76, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-72, at: [299.5, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-73, at: [303.55, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-74, at: [307.59, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-75, at: [311.64, 85.4], size: [2.76, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-76, at: [315.5, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-77, at: [319.54, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-78, at: [323.59, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-79, at: [327.63, 85.4], size: [2.76, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-80, at: [331.49, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-81, at: [335.54, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-82, at: [339.58, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-83, at: [343.63, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-84, at: [347.49, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-85, at: [351.54, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-86, at: [355.58, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-87, at: [359.63, 85.4], size: [2.76, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-88, at: [363.67, 85.4], size: [2.76, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-89, at: [367.53, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-90, at: [371.58, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-91, at: [375.62, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-92, at: [379.67, 85.4], size: [2.76, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-93, at: [383.53, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-bottom2-94, at: [387.57, 85.4], size: [2.94, 1.4], fill: '#8e9398', vent: 8}
+      - {id: vent-grid-1, at: [409.12, 48.08], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-2, at: [412.12, 48.08], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-3, at: [415.11, 48.08], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-4, at: [418.11, 48.08], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-5, at: [421.11, 48.08], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-6, at: [424.1, 48.08], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-7, at: [427.1, 48.08], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-8, at: [430.1, 48.08], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-9, at: [433.09, 48.08], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-10, at: [409.12, 51.09], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-11, at: [412.12, 51.09], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-12, at: [415.11, 51.09], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-13, at: [418.11, 51.09], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-14, at: [421.11, 51.09], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-15, at: [424.1, 51.09], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-16, at: [427.1, 51.09], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-17, at: [430.1, 51.09], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-18, at: [433.09, 51.09], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-19, at: [409.12, 54.11], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-20, at: [412.12, 54.11], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-21, at: [415.11, 54.11], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-22, at: [418.11, 54.11], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-23, at: [421.11, 54.11], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-24, at: [424.1, 54.11], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-25, at: [427.1, 54.11], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-26, at: [430.1, 54.11], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-27, at: [433.09, 54.11], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-28, at: [409.12, 57.12], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-29, at: [412.12, 57.12], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-30, at: [415.11, 57.12], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-31, at: [418.11, 57.12], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-32, at: [421.11, 57.12], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-33, at: [424.1, 57.12], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-34, at: [427.1, 57.12], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-35, at: [430.1, 57.12], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-36, at: [433.09, 57.12], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-37, at: [409.12, 60.14], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-38, at: [412.12, 60.14], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-39, at: [415.11, 60.14], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-40, at: [418.11, 60.14], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-41, at: [421.11, 60.14], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-42, at: [424.1, 60.14], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-43, at: [427.1, 60.14], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-44, at: [430.1, 60.14], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-45, at: [433.09, 60.14], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-46, at: [409.12, 63.15], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-47, at: [412.12, 63.15], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-48, at: [415.11, 63.15], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-49, at: [418.11, 63.15], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-50, at: [421.11, 63.15], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-51, at: [424.1, 63.15], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-52, at: [427.1, 63.15], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-53, at: [430.1, 63.15], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-54, at: [433.09, 63.15], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-55, at: [409.12, 66.17], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-56, at: [412.12, 66.17], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-57, at: [415.11, 66.17], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-58, at: [418.11, 66.17], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-59, at: [421.11, 66.17], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-60, at: [424.1, 66.17], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-61, at: [427.1, 66.17], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-62, at: [430.1, 66.17], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-63, at: [433.09, 66.17], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-64, at: [409.12, 69.18], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-65, at: [412.12, 69.18], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-66, at: [415.11, 69.18], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-67, at: [418.11, 69.18], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-68, at: [421.11, 69.18], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-69, at: [424.1, 69.18], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-70, at: [427.1, 69.18], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-71, at: [430.1, 69.18], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-72, at: [433.09, 69.18], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-73, at: [409.12, 72.2], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-74, at: [412.12, 72.2], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-75, at: [415.11, 72.2], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-76, at: [418.11, 72.2], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-77, at: [421.11, 72.2], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-78, at: [424.1, 72.2], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-79, at: [427.1, 72.2], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-80, at: [430.1, 72.2], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-81, at: [433.09, 72.2], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-82, at: [409.12, 75.22], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-83, at: [412.12, 75.22], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-84, at: [415.11, 75.22], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-85, at: [418.11, 75.22], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-86, at: [421.11, 75.22], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-87, at: [424.1, 75.22], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-88, at: [427.1, 75.22], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-89, at: [430.1, 75.22], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-90, at: [433.09, 75.22], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-91, at: [409.12, 78.23], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-92, at: [412.12, 78.23], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-93, at: [415.11, 78.23], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-94, at: [418.11, 78.23], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-95, at: [421.11, 78.23], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-96, at: [424.1, 78.23], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-97, at: [427.1, 78.23], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-98, at: [430.1, 78.23], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: vent-grid-99, at: [433.09, 78.23], size: [1.84, 1.84], fill: '#030304', vent: 8}
+      - {id: cage-1-upper, at: [13.18, 18.02], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-1-upper, at: [13.68, 27.89], size: [18.5, 4.99], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-1-lower, at: [13.18, 47.44], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-1-lower, at: [13.68, 57.21], size: [18.5, 5.08], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-2-upper, at: [36.88, 18.02], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-2-upper, at: [37.38, 27.89], size: [18.5, 4.99], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-2-lower, at: [36.88, 47.44], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-2-lower, at: [37.38, 57.21], size: [18.5, 5.08], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-3-upper, at: [60.58, 18.02], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-3-upper, at: [61.08, 27.89], size: [18.5, 4.99], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-3-lower, at: [60.58, 47.44], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-3-lower, at: [61.08, 57.21], size: [18.5, 5.08], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-4-upper, at: [84.28, 18.02], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-4-upper, at: [84.78, 27.89], size: [18.5, 4.99], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-4-lower, at: [84.28, 47.44], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-4-lower, at: [84.78, 57.21], size: [18.5, 5.08], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-5-upper, at: [107.98, 18.02], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-5-upper, at: [108.48, 27.89], size: [18.5, 4.99], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-5-lower, at: [107.98, 47.44], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-5-lower, at: [108.48, 57.21], size: [18.5, 5.08], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-6-upper, at: [131.67, 18.02], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-6-upper, at: [132.17, 27.89], size: [18.5, 4.99], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-6-lower, at: [131.67, 47.44], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-6-lower, at: [132.17, 57.21], size: [18.5, 5.08], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-7-upper, at: [155.37, 18.02], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-7-upper, at: [155.87, 27.89], size: [18.5, 4.99], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-7-lower, at: [155.37, 47.44], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-7-lower, at: [155.87, 57.21], size: [18.5, 5.08], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-8-upper, at: [179.07, 18.02], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-8-upper, at: [179.57, 27.89], size: [18.5, 4.99], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-8-lower, at: [179.07, 47.44], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-8-lower, at: [179.57, 57.21], size: [18.5, 5.08], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-9-upper, at: [202.77, 18.02], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-9-upper, at: [203.27, 27.89], size: [18.5, 4.99], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-9-lower, at: [202.77, 47.44], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-9-lower, at: [203.27, 57.21], size: [18.5, 5.08], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-10-upper, at: [226.47, 18.02], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-10-upper, at: [226.97, 27.89], size: [18.5, 4.99], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-10-lower, at: [226.47, 47.44], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-10-lower, at: [226.97, 57.21], size: [18.5, 5.08], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-11-upper, at: [250.16, 18.02], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-11-upper, at: [250.66, 27.89], size: [18.5, 4.99], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-11-lower, at: [250.16, 47.44], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-11-lower, at: [250.66, 57.21], size: [18.5, 5.08], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-12-upper, at: [273.86, 18.02], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-12-upper, at: [274.36, 27.89], size: [18.5, 4.99], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-12-lower, at: [273.86, 47.44], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-12-lower, at: [274.36, 57.21], size: [18.5, 5.08], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-13-upper, at: [297.56, 18.02], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-13-upper, at: [298.06, 27.89], size: [18.5, 4.99], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-13-lower, at: [297.56, 47.44], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-13-lower, at: [298.06, 57.21], size: [18.5, 5.08], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-14-upper, at: [321.26, 18.02], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-14-upper, at: [321.76, 27.89], size: [18.5, 4.99], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-14-lower, at: [321.26, 47.44], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-14-lower, at: [321.76, 57.21], size: [18.5, 5.08], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-15-upper, at: [344.96, 18.02], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-15-upper, at: [345.46, 27.89], size: [18.5, 4.99], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-15-lower, at: [344.96, 47.44], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-15-lower, at: [345.46, 57.21], size: [18.5, 5.08], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-16-upper, at: [368.65, 18.02], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-16-upper, at: [369.15, 27.89], size: [18.5, 4.99], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: cage-16-lower, at: [368.65, 47.44], size: [19.5, 24.82], fill: '#b9bdc2', kind: port-shell}
+      - {id: emi-16-lower, at: [369.15, 57.21], size: [18.5, 5.08], pattern: holes, pattern-pitch: [2.2, 2.3], kind: emi-band}
+      - {id: sfp-shell-65, at: [390.98, 33.6], size: [14.7, 10.2], fill: '#b9bdc2', kind: port-shell}
+      - {id: sfp-shell-66, at: [390.98, 46.47], size: [14.7, 10.2], fill: '#b9bdc2', kind: port-shell}
+      - {id: mgmt-stack, at: [416.6, 13.9], size: [16.4, 32.0], fill: '#d6d9dc', kind: port-shell}
+      cutouts:
+      - {id: port-1, at: [13.68, 18.01], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-1-l1, at: [16.03, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-1-l2, at: [19.96, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-1-l3, at: [23.9, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-1-l4, at: [27.83, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: port-2, at: [13.68, 33.18], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-2-l1, at: [16.03, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-2-l2, at: [19.96, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-2-l3, at: [23.9, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-2-l4, at: [27.83, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: port-33, at: [13.68, 47.33], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-33-l1, at: [16.03, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-33-l2, at: [19.96, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-33-l3, at: [23.9, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-33-l4, at: [27.83, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: port-34, at: [13.68, 62.59], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-34-l1, at: [16.03, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-34-l2, at: [19.96, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-34-l3, at: [23.9, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-34-l4, at: [27.83, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: port-3, at: [37.38, 18.01], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-3-l1, at: [39.73, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-3-l2, at: [43.66, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-3-l3, at: [47.6, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-3-l4, at: [51.53, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: port-4, at: [37.38, 33.18], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-4-l1, at: [39.73, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-4-l2, at: [43.66, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-4-l3, at: [47.6, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-4-l4, at: [51.53, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: port-35, at: [37.38, 47.33], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-35-l1, at: [39.73, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-35-l2, at: [43.66, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-35-l3, at: [47.6, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-35-l4, at: [51.53, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: port-36, at: [37.38, 62.59], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-36-l1, at: [39.73, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-36-l2, at: [43.66, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-36-l3, at: [47.6, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-36-l4, at: [51.53, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: port-5, at: [61.08, 18.01], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-5-l1, at: [63.43, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-5-l2, at: [67.36, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-5-l3, at: [71.3, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-5-l4, at: [75.23, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: port-6, at: [61.08, 33.18], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-6-l1, at: [63.43, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-6-l2, at: [67.36, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-6-l3, at: [71.3, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-6-l4, at: [75.23, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: port-37, at: [61.08, 47.33], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-37-l1, at: [63.43, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-37-l2, at: [67.36, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-37-l3, at: [71.3, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-37-l4, at: [75.23, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: port-38, at: [61.08, 62.59], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-38-l1, at: [63.43, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-38-l2, at: [67.36, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-38-l3, at: [71.3, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-38-l4, at: [75.23, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: port-7, at: [84.78, 18.01], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-7-l1, at: [87.13, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-7-l2, at: [91.06, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-7-l3, at: [95.0, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-7-l4, at: [98.93, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: port-8, at: [84.78, 33.18], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-8-l1, at: [87.13, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-8-l2, at: [91.06, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-8-l3, at: [95.0, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-8-l4, at: [98.93, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: port-39, at: [84.78, 47.33], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-39-l1, at: [87.13, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-39-l2, at: [91.06, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-39-l3, at: [95.0, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-39-l4, at: [98.93, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: port-40, at: [84.78, 62.59], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-40-l1, at: [87.13, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-40-l2, at: [91.06, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-40-l3, at: [95.0, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-40-l4, at: [98.93, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: port-9, at: [108.48, 18.01], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-9-l1, at: [110.83, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-9-l2, at: [114.76, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-9-l3, at: [118.7, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-9-l4, at: [122.63, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: port-10, at: [108.48, 33.18], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-10-l1, at: [110.83, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-10-l2, at: [114.76, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-10-l3, at: [118.7, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-10-l4, at: [122.63, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: port-41, at: [108.48, 47.33], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-41-l1, at: [110.83, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-41-l2, at: [114.76, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-41-l3, at: [118.7, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-41-l4, at: [122.63, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: port-42, at: [108.48, 62.59], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-42-l1, at: [110.83, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-42-l2, at: [114.76, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-42-l3, at: [118.7, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-42-l4, at: [122.63, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: port-11, at: [132.17, 18.01], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-11-l1, at: [134.52, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-11-l2, at: [138.45, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-11-l3, at: [142.39, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-11-l4, at: [146.32, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: port-12, at: [132.17, 33.18], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-12-l1, at: [134.52, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-12-l2, at: [138.45, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-12-l3, at: [142.39, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-12-l4, at: [146.32, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: port-43, at: [132.17, 47.33], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-43-l1, at: [134.52, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-43-l2, at: [138.45, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-43-l3, at: [142.39, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-43-l4, at: [146.32, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: port-44, at: [132.17, 62.59], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-44-l1, at: [134.52, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-44-l2, at: [138.45, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-44-l3, at: [142.39, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-44-l4, at: [146.32, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: port-13, at: [155.87, 18.01], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-13-l1, at: [158.22, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-13-l2, at: [162.15, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-13-l3, at: [166.09, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-13-l4, at: [170.02, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: port-14, at: [155.87, 33.18], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-14-l1, at: [158.22, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-14-l2, at: [162.15, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-14-l3, at: [166.09, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-14-l4, at: [170.02, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: port-45, at: [155.87, 47.33], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-45-l1, at: [158.22, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-45-l2, at: [162.15, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-45-l3, at: [166.09, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-45-l4, at: [170.02, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: port-46, at: [155.87, 62.59], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-46-l1, at: [158.22, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-46-l2, at: [162.15, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-46-l3, at: [166.09, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-46-l4, at: [170.02, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: port-15, at: [179.57, 18.01], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-15-l1, at: [181.92, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-15-l2, at: [185.85, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-15-l3, at: [189.79, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-15-l4, at: [193.72, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: port-16, at: [179.57, 33.18], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-16-l1, at: [181.92, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-16-l2, at: [185.85, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-16-l3, at: [189.79, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-16-l4, at: [193.72, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: port-47, at: [179.57, 47.33], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-47-l1, at: [181.92, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-47-l2, at: [185.85, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-47-l3, at: [189.79, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-47-l4, at: [193.72, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: port-48, at: [179.57, 62.59], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-48-l1, at: [181.92, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-48-l2, at: [185.85, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-48-l3, at: [189.79, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-48-l4, at: [193.72, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: port-17, at: [203.27, 18.01], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-17-l1, at: [205.62, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-17-l2, at: [209.55, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-17-l3, at: [213.49, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-17-l4, at: [217.42, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: port-18, at: [203.27, 33.18], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-18-l1, at: [205.62, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-18-l2, at: [209.55, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-18-l3, at: [213.49, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-18-l4, at: [217.42, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: port-49, at: [203.27, 47.33], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-49-l1, at: [205.62, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-49-l2, at: [209.55, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-49-l3, at: [213.49, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-49-l4, at: [217.42, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: port-50, at: [203.27, 62.59], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-50-l1, at: [205.62, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-50-l2, at: [209.55, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-50-l3, at: [213.49, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-50-l4, at: [217.42, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: port-19, at: [226.97, 18.01], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-19-l1, at: [229.32, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-19-l2, at: [233.25, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-19-l3, at: [237.19, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-19-l4, at: [241.12, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: port-20, at: [226.97, 33.18], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-20-l1, at: [229.32, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-20-l2, at: [233.25, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-20-l3, at: [237.19, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-20-l4, at: [241.12, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: port-51, at: [226.97, 47.33], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-51-l1, at: [229.32, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-51-l2, at: [233.25, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-51-l3, at: [237.19, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-51-l4, at: [241.12, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: port-52, at: [226.97, 62.59], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-52-l1, at: [229.32, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-52-l2, at: [233.25, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-52-l3, at: [237.19, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-52-l4, at: [241.12, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: port-21, at: [250.66, 18.01], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-21-l1, at: [253.01, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-21-l2, at: [256.94, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-21-l3, at: [260.88, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-21-l4, at: [264.81, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: port-22, at: [250.66, 33.18], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-22-l1, at: [253.01, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-22-l2, at: [256.94, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-22-l3, at: [260.88, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-22-l4, at: [264.81, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: port-53, at: [250.66, 47.33], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-53-l1, at: [253.01, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-53-l2, at: [256.94, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-53-l3, at: [260.88, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-53-l4, at: [264.81, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: port-54, at: [250.66, 62.59], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-54-l1, at: [253.01, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-54-l2, at: [256.94, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-54-l3, at: [260.88, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-54-l4, at: [264.81, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: port-23, at: [274.36, 18.01], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-23-l1, at: [276.71, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-23-l2, at: [280.64, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-23-l3, at: [284.58, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-23-l4, at: [288.51, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: port-24, at: [274.36, 33.18], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-24-l1, at: [276.71, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-24-l2, at: [280.64, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-24-l3, at: [284.58, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-24-l4, at: [288.51, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: port-55, at: [274.36, 47.33], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-55-l1, at: [276.71, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-55-l2, at: [280.64, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-55-l3, at: [284.58, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-55-l4, at: [288.51, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: port-56, at: [274.36, 62.59], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-56-l1, at: [276.71, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-56-l2, at: [280.64, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-56-l3, at: [284.58, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-56-l4, at: [288.51, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: port-25, at: [298.06, 18.01], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-25-l1, at: [300.41, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-25-l2, at: [304.34, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-25-l3, at: [308.28, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-25-l4, at: [312.21, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: port-26, at: [298.06, 33.18], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-26-l1, at: [300.41, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-26-l2, at: [304.34, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-26-l3, at: [308.28, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-26-l4, at: [312.21, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: port-57, at: [298.06, 47.33], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-57-l1, at: [300.41, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-57-l2, at: [304.34, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-57-l3, at: [308.28, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-57-l4, at: [312.21, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: port-58, at: [298.06, 62.59], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-58-l1, at: [300.41, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-58-l2, at: [304.34, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-58-l3, at: [308.28, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-58-l4, at: [312.21, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: port-27, at: [321.76, 18.01], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-27-l1, at: [324.11, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-27-l2, at: [328.04, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-27-l3, at: [331.98, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-27-l4, at: [335.91, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: port-28, at: [321.76, 33.18], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-28-l1, at: [324.11, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-28-l2, at: [328.04, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-28-l3, at: [331.98, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-28-l4, at: [335.91, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: port-59, at: [321.76, 47.33], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-59-l1, at: [324.11, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-59-l2, at: [328.04, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-59-l3, at: [331.98, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-59-l4, at: [335.91, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: port-60, at: [321.76, 62.59], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-60-l1, at: [324.11, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-60-l2, at: [328.04, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-60-l3, at: [331.98, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-60-l4, at: [335.91, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: port-29, at: [345.46, 18.01], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-29-l1, at: [347.81, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-29-l2, at: [351.74, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-29-l3, at: [355.68, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-29-l4, at: [359.61, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: port-30, at: [345.46, 33.18], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-30-l1, at: [347.81, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-30-l2, at: [351.74, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-30-l3, at: [355.68, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-30-l4, at: [359.61, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: port-61, at: [345.46, 47.33], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-61-l1, at: [347.81, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-61-l2, at: [351.74, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-61-l3, at: [355.68, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-61-l4, at: [359.61, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: port-62, at: [345.46, 62.59], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-62-l1, at: [347.81, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-62-l2, at: [351.74, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-62-l3, at: [355.68, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-62-l4, at: [359.61, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: port-31, at: [369.15, 18.01], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-31-l1, at: [371.5, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-31-l2, at: [375.43, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-31-l3, at: [379.37, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-31-l4, at: [383.3, 10.58], size: [2.0, 2.0], shape: circle}
+      - {id: port-32, at: [369.15, 33.18], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-32-l1, at: [371.5, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-32-l2, at: [375.43, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-32-l3, at: [379.37, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-32-l4, at: [383.3, 14.26], size: [2.0, 2.0], shape: circle}
+      - {id: port-63, at: [369.15, 47.33], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-63-l1, at: [371.5, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-63-l2, at: [375.43, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-63-l3, at: [379.37, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-63-l4, at: [383.3, 73.92], size: [2.0, 2.0], shape: circle}
+      - {id: port-64, at: [369.15, 62.59], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-64-l1, at: [371.5, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-64-l2, at: [375.43, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-64-l3, at: [379.37, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-64-l4, at: [383.3, 77.51], size: [2.0, 2.0], shape: circle}
+      - {id: port-65, at: [391.08, 33.7], size: [14.5, 10.0], shape: rect}
+      - {id: led-port-65, at: [394.29, 29.61], size: [2.0, 2.0], shape: circle}
+      - {id: port-66, at: [391.08, 46.57], size: [14.5, 10.0], shape: rect}
+      - {id: led-port-66, at: [394.29, 58.57], size: [2.0, 2.0], shape: circle}
+      - {id: mgmt, at: [416.9, 14.1], size: [15.8, 13.2], shape: rect}
+      - {id: usb, at: [419.1, 27.6], size: [12.0, 4.5], shape: rect}
+      - {id: console, at: [416.9, 32.4], size: [15.8, 13.2], shape: rect}
+      - {id: led-fan, at: [409.92, 9.94], size: [2.0, 2.0], shape: circle}
+      - {id: led-psu, at: [409.92, 16.37], size: [2.0, 2.0], shape: circle}
+      - {id: led-alm, at: [409.92, 22.81], size: [2.0, 2.0], shape: circle}
+      - {id: led-stat, at: [409.92, 29.24], size: [2.0, 2.0], shape: circle}
+      - {id: reset, at: [408.92, 35.83], size: [4.0, 4.0], shape: circle}
+      - {id: lug-tag, at: [399.25, 82.0], size: [23.0, 4.0], shape: rect}
+    silkscreen:
+    - {at: [15.43, 12.12], text: '1', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-1}
+    - {at: [15.43, 15.8], text: '2', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-2}
+    - {at: [15.43, 75.46], text: '33', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-33}
+    - {at: [15.43, 79.05], text: '34', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-34}
+    - {at: [13.85, 45.65], text: '1', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-1}
+    - {at: [16.27, 45.65], text: ▲, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-1}
+    - {at: [19.6, 45.65], text: '2', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-2}
+    - {at: [22.93, 45.65], text: ▲▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: [port-2, port-33]}
+    - {at: [25.47, 45.65], text: '33', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-33}
+    - {at: [28.34, 45.65], text: ▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-34}
+    - {at: [31.09, 45.65], text: '34', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-34}
+    - {at: [15.52, 44.13], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-1}
+    - {at: [27.59, 46.06], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-34}
+    - {at: [39.13, 12.12], text: '3', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-3}
+    - {at: [39.13, 15.8], text: '4', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-4}
+    - {at: [39.13, 75.46], text: '35', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-35}
+    - {at: [39.13, 79.05], text: '36', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-36}
+    - {at: [37.55, 45.65], text: '3', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-3}
+    - {at: [39.97, 45.65], text: ▲, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-3}
+    - {at: [43.3, 45.65], text: '4', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-4}
+    - {at: [46.63, 45.65], text: ▲▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: [port-4, port-35]}
+    - {at: [49.17, 45.65], text: '35', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-35}
+    - {at: [52.04, 45.65], text: ▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-36}
+    - {at: [54.79, 45.65], text: '36', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-36}
+    - {at: [39.22, 44.13], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-3}
+    - {at: [51.29, 46.06], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-36}
+    - {at: [62.83, 12.12], text: '5', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-5}
+    - {at: [62.83, 15.8], text: '6', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-6}
+    - {at: [62.83, 75.46], text: '37', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-37}
+    - {at: [62.83, 79.05], text: '38', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-38}
+    - {at: [61.25, 45.65], text: '5', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-5}
+    - {at: [63.67, 45.65], text: ▲, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-5}
+    - {at: [67.0, 45.65], text: '6', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-6}
+    - {at: [70.33, 45.65], text: ▲▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: [port-6, port-37]}
+    - {at: [72.87, 45.65], text: '37', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-37}
+    - {at: [75.74, 45.65], text: ▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-38}
+    - {at: [78.49, 45.65], text: '38', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-38}
+    - {at: [62.92, 44.13], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-5}
+    - {at: [74.99, 46.06], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-38}
+    - {at: [86.53, 12.12], text: '7', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-7}
+    - {at: [86.53, 15.8], text: '8', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-8}
+    - {at: [86.53, 75.46], text: '39', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-39}
+    - {at: [86.53, 79.05], text: '40', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-40}
+    - {at: [84.95, 45.65], text: '7', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-7}
+    - {at: [87.37, 45.65], text: ▲, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-7}
+    - {at: [90.7, 45.65], text: '8', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-8}
+    - {at: [94.03, 45.65], text: ▲▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: [port-8, port-39]}
+    - {at: [96.57, 45.65], text: '39', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-39}
+    - {at: [99.44, 45.65], text: ▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-40}
+    - {at: [102.19, 45.65], text: '40', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-40}
+    - {at: [86.62, 44.13], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-7}
+    - {at: [98.69, 46.06], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-40}
+    - {at: [110.23, 12.12], text: '9', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-9}
+    - {at: [110.23, 15.8], text: '10', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-10}
+    - {at: [110.23, 75.46], text: '41', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-41}
+    - {at: [110.23, 79.05], text: '42', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-42}
+    - {at: [108.65, 45.65], text: '9', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-9}
+    - {at: [111.07, 45.65], text: ▲, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-9}
+    - {at: [114.4, 45.65], text: '10', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-10}
+    - {at: [117.73, 45.65], text: ▲▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: [port-10, port-41]}
+    - {at: [120.27, 45.65], text: '41', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-41}
+    - {at: [123.14, 45.65], text: ▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-42}
+    - {at: [125.89, 45.65], text: '42', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-42}
+    - {at: [110.32, 44.13], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-9}
+    - {at: [122.39, 46.06], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-42}
+    - {at: [133.92, 12.12], text: '11', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-11}
+    - {at: [133.92, 15.8], text: '12', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-12}
+    - {at: [133.92, 75.46], text: '43', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-43}
+    - {at: [133.92, 79.05], text: '44', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-44}
+    - {at: [132.34, 45.65], text: '11', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-11}
+    - {at: [134.76, 45.65], text: ▲, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-11}
+    - {at: [138.09, 45.65], text: '12', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-12}
+    - {at: [141.42, 45.65], text: ▲▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: [port-12, port-43]}
+    - {at: [143.96, 45.65], text: '43', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-43}
+    - {at: [146.83, 45.65], text: ▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-44}
+    - {at: [149.58, 45.65], text: '44', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-44}
+    - {at: [134.01, 44.13], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-11}
+    - {at: [146.08, 46.06], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-44}
+    - {at: [157.62, 12.12], text: '13', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-13}
+    - {at: [157.62, 15.8], text: '14', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-14}
+    - {at: [157.62, 75.46], text: '45', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-45}
+    - {at: [157.62, 79.05], text: '46', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-46}
+    - {at: [156.04, 45.65], text: '13', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-13}
+    - {at: [158.46, 45.65], text: ▲, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-13}
+    - {at: [161.79, 45.65], text: '14', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-14}
+    - {at: [165.12, 45.65], text: ▲▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: [port-14, port-45]}
+    - {at: [167.66, 45.65], text: '45', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-45}
+    - {at: [170.53, 45.65], text: ▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-46}
+    - {at: [173.28, 45.65], text: '46', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-46}
+    - {at: [157.71, 44.13], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-13}
+    - {at: [169.78, 46.06], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-46}
+    - {at: [181.32, 12.12], text: '15', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-15}
+    - {at: [181.32, 15.8], text: '16', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-16}
+    - {at: [181.32, 75.46], text: '47', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-47}
+    - {at: [181.32, 79.05], text: '48', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-48}
+    - {at: [179.74, 45.65], text: '15', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-15}
+    - {at: [182.16, 45.65], text: ▲, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-15}
+    - {at: [185.49, 45.65], text: '16', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-16}
+    - {at: [188.82, 45.65], text: ▲▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: [port-16, port-47]}
+    - {at: [191.36, 45.65], text: '47', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-47}
+    - {at: [194.23, 45.65], text: ▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-48}
+    - {at: [196.98, 45.65], text: '48', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-48}
+    - {at: [181.41, 44.13], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-15}
+    - {at: [193.48, 46.06], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-48}
+    - {at: [205.02, 12.12], text: '17', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-17}
+    - {at: [205.02, 15.8], text: '18', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-18}
+    - {at: [205.02, 75.46], text: '49', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-49}
+    - {at: [205.02, 79.05], text: '50', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-50}
+    - {at: [203.44, 45.65], text: '17', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-17}
+    - {at: [205.86, 45.65], text: ▲, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-17}
+    - {at: [209.19, 45.65], text: '18', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-18}
+    - {at: [212.52, 45.65], text: ▲▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: [port-18, port-49]}
+    - {at: [215.06, 45.65], text: '49', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-49}
+    - {at: [217.93, 45.65], text: ▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-50}
+    - {at: [220.68, 45.65], text: '50', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-50}
+    - {at: [205.11, 44.13], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-17}
+    - {at: [217.18, 46.06], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-50}
+    - {at: [228.72, 12.12], text: '19', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-19}
+    - {at: [228.72, 15.8], text: '20', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-20}
+    - {at: [228.72, 75.46], text: '51', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-51}
+    - {at: [228.72, 79.05], text: '52', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-52}
+    - {at: [227.14, 45.65], text: '19', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-19}
+    - {at: [229.56, 45.65], text: ▲, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-19}
+    - {at: [232.89, 45.65], text: '20', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-20}
+    - {at: [236.22, 45.65], text: ▲▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: [port-20, port-51]}
+    - {at: [238.76, 45.65], text: '51', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-51}
+    - {at: [241.63, 45.65], text: ▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-52}
+    - {at: [244.38, 45.65], text: '52', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-52}
+    - {at: [228.81, 44.13], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-19}
+    - {at: [240.88, 46.06], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-52}
+    - {at: [252.41, 12.12], text: '21', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-21}
+    - {at: [252.41, 15.8], text: '22', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-22}
+    - {at: [252.41, 75.46], text: '53', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-53}
+    - {at: [252.41, 79.05], text: '54', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-54}
+    - {at: [250.83, 45.65], text: '21', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-21}
+    - {at: [253.25, 45.65], text: ▲, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-21}
+    - {at: [256.58, 45.65], text: '22', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-22}
+    - {at: [259.91, 45.65], text: ▲▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: [port-22, port-53]}
+    - {at: [262.45, 45.65], text: '53', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-53}
+    - {at: [265.32, 45.65], text: ▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-54}
+    - {at: [268.07, 45.65], text: '54', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-54}
+    - {at: [252.5, 44.13], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-21}
+    - {at: [264.57, 46.06], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-54}
+    - {at: [276.11, 12.12], text: '23', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-23}
+    - {at: [276.11, 15.8], text: '24', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-24}
+    - {at: [276.11, 75.46], text: '55', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-55}
+    - {at: [276.11, 79.05], text: '56', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-56}
+    - {at: [274.53, 45.65], text: '23', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-23}
+    - {at: [276.95, 45.65], text: ▲, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-23}
+    - {at: [280.28, 45.65], text: '24', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-24}
+    - {at: [283.61, 45.65], text: ▲▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: [port-24, port-55]}
+    - {at: [286.15, 45.65], text: '55', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-55}
+    - {at: [289.02, 45.65], text: ▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-56}
+    - {at: [291.77, 45.65], text: '56', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-56}
+    - {at: [276.2, 44.13], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-23}
+    - {at: [288.27, 46.06], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-56}
+    - {at: [299.81, 12.12], text: '25', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-25}
+    - {at: [299.81, 15.8], text: '26', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-26}
+    - {at: [299.81, 75.46], text: '57', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-57}
+    - {at: [299.81, 79.05], text: '58', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-58}
+    - {at: [298.23, 45.65], text: '25', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-25}
+    - {at: [300.65, 45.65], text: ▲, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-25}
+    - {at: [303.98, 45.65], text: '26', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-26}
+    - {at: [307.31, 45.65], text: ▲▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: [port-26, port-57]}
+    - {at: [309.85, 45.65], text: '57', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-57}
+    - {at: [312.72, 45.65], text: ▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-58}
+    - {at: [315.47, 45.65], text: '58', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-58}
+    - {at: [299.9, 44.13], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-25}
+    - {at: [311.97, 46.06], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-58}
+    - {at: [323.51, 12.12], text: '27', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-27}
+    - {at: [323.51, 15.8], text: '28', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-28}
+    - {at: [323.51, 75.46], text: '59', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-59}
+    - {at: [323.51, 79.05], text: '60', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-60}
+    - {at: [321.93, 45.65], text: '27', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-27}
+    - {at: [324.35, 45.65], text: ▲, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-27}
+    - {at: [327.68, 45.65], text: '28', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-28}
+    - {at: [331.01, 45.65], text: ▲▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: [port-28, port-59]}
+    - {at: [333.55, 45.65], text: '59', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-59}
+    - {at: [336.42, 45.65], text: ▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-60}
+    - {at: [339.17, 45.65], text: '60', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-60}
+    - {at: [323.6, 44.13], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-27}
+    - {at: [335.67, 46.06], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-60}
+    - {at: [347.21, 12.12], text: '29', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-29}
+    - {at: [347.21, 15.8], text: '30', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-30}
+    - {at: [347.21, 75.46], text: '61', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-61}
+    - {at: [347.21, 79.05], text: '62', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-62}
+    - {at: [345.63, 45.65], text: '29', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-29}
+    - {at: [348.05, 45.65], text: ▲, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-29}
+    - {at: [351.38, 45.65], text: '30', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-30}
+    - {at: [354.71, 45.65], text: ▲▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: [port-30, port-61]}
+    - {at: [357.25, 45.65], text: '61', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-61}
+    - {at: [360.12, 45.65], text: ▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-62}
+    - {at: [362.87, 45.65], text: '62', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-62}
+    - {at: [347.3, 44.13], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-29}
+    - {at: [359.37, 46.06], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-62}
+    - {at: [370.9, 12.12], text: '31', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-31}
+    - {at: [370.9, 15.8], text: '32', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-32}
+    - {at: [370.9, 75.46], text: '63', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-63}
+    - {at: [370.9, 79.05], text: '64', font-size: 1.8, anchor: end, fill: '#eceef0', for: port-64}
+    - {at: [369.32, 45.65], text: '31', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-31}
+    - {at: [371.74, 45.65], text: ▲, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-31}
+    - {at: [375.07, 45.65], text: '32', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-32}
+    - {at: [378.4, 45.65], text: ▲▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: [port-32, port-63]}
+    - {at: [380.94, 45.65], text: '63', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-63}
+    - {at: [383.81, 45.65], text: ▼, font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-64}
+    - {at: [386.56, 45.65], text: '64', font-size: 2.0, anchor: middle, fill: '#eceef0', for: port-64}
+    - {at: [370.99, 44.13], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-31}
+    - {at: [383.06, 46.06], path: M 0 0 L 1.5 0, stroke-width: 0.3, for: port-64}
+    - {at: [398.33, 31.15], text: '65', font-size: 1.8, anchor: middle, fill: '#eceef0', for: port-65}
+    - {at: [398.33, 60.11], text: '66', font-size: 1.8, anchor: middle, fill: '#eceef0', for: port-66}
+    - {at: [398.33, 45.77], text: 65 ▲▼ 66, font-size: 1.8, anchor: middle, fill: '#eceef0', for: [port-65, port-66]}
+    - {at: [408.13, 10.94], text: FAN, font-size: 1.7, anchor: middle, rotate: -90, fill: '#eceef0', for: led-fan}
+    - {at: [408.13, 17.37], text: PSU, font-size: 1.7, anchor: middle, rotate: -90, fill: '#eceef0', for: led-psu}
+    - {at: [408.13, 23.81], text: ALM, font-size: 1.7, anchor: middle, rotate: -90, fill: '#eceef0', for: led-alm}
+    - {at: [408.13, 30.24], text: STAT, font-size: 1.7, anchor: middle, rotate: -90, fill: '#eceef0', for: led-stat}
+    - {at: [408.13, 37.83], text: RST, font-size: 1.7, anchor: middle, rotate: -90, fill: '#eceef0', for: reset}
+    - {at: [415.11, 20.7], text: MGMT, font-size: 1.7, anchor: middle, rotate: -90, fill: '#eceef0', for: mgmt}
+    - {at: [415.11, 39.0], text: CONSOLE, font-size: 1.7, anchor: middle, rotate: -90, fill: '#eceef0', for: console}
+    - {at: [424.25, 84.59], text: LUG TAG, font-size: 1.9, anchor: start, fill: '#eceef0', for: lug-tag}
+    - {id: wordmark, at: [3.7, 8.6], text: Celestica, font-size: 5.0, anchor: start, fill: '#eceef0', for: chassis}
+    components:
+      placements:
+      - {ref: 'std/qsfp-ganged@1', id: port-1, at: [13.68, 18.01], group: qsfp28, rel-pos: 1}
+      - {ref: 'std/qsfp-ganged@1', id: port-2, at: [13.68, 33.18], rotate: 180, group: qsfp28, rel-pos: 2}
+      - {ref: 'std/qsfp-ganged@1', id: port-3, at: [37.38, 18.01], group: qsfp28, rel-pos: 3}
+      - {ref: 'std/qsfp-ganged@1', id: port-4, at: [37.38, 33.18], rotate: 180, group: qsfp28, rel-pos: 4}
+      - {ref: 'std/qsfp-ganged@1', id: port-5, at: [61.08, 18.01], group: qsfp28, rel-pos: 5}
+      - {ref: 'std/qsfp-ganged@1', id: port-6, at: [61.08, 33.18], rotate: 180, group: qsfp28, rel-pos: 6}
+      - {ref: 'std/qsfp-ganged@1', id: port-7, at: [84.78, 18.01], group: qsfp28, rel-pos: 7}
+      - {ref: 'std/qsfp-ganged@1', id: port-8, at: [84.78, 33.18], rotate: 180, group: qsfp28, rel-pos: 8}
+      - {ref: 'std/qsfp-ganged@1', id: port-9, at: [108.48, 18.01], group: qsfp28, rel-pos: 9}
+      - {ref: 'std/qsfp-ganged@1', id: port-10, at: [108.48, 33.18], rotate: 180, group: qsfp28, rel-pos: 10}
+      - {ref: 'std/qsfp-ganged@1', id: port-11, at: [132.17, 18.01], group: qsfp28, rel-pos: 11}
+      - {ref: 'std/qsfp-ganged@1', id: port-12, at: [132.17, 33.18], rotate: 180, group: qsfp28, rel-pos: 12}
+      - {ref: 'std/qsfp-ganged@1', id: port-13, at: [155.87, 18.01], group: qsfp28, rel-pos: 13}
+      - {ref: 'std/qsfp-ganged@1', id: port-14, at: [155.87, 33.18], rotate: 180, group: qsfp28, rel-pos: 14}
+      - {ref: 'std/qsfp-ganged@1', id: port-15, at: [179.57, 18.01], group: qsfp28, rel-pos: 15}
+      - {ref: 'std/qsfp-ganged@1', id: port-16, at: [179.57, 33.18], rotate: 180, group: qsfp28, rel-pos: 16}
+      - {ref: 'std/qsfp-ganged@1', id: port-17, at: [203.27, 18.01], group: qsfp28, rel-pos: 17}
+      - {ref: 'std/qsfp-ganged@1', id: port-18, at: [203.27, 33.18], rotate: 180, group: qsfp28, rel-pos: 18}
+      - {ref: 'std/qsfp-ganged@1', id: port-19, at: [226.97, 18.01], group: qsfp28, rel-pos: 19}
+      - {ref: 'std/qsfp-ganged@1', id: port-20, at: [226.97, 33.18], rotate: 180, group: qsfp28, rel-pos: 20}
+      - {ref: 'std/qsfp-ganged@1', id: port-21, at: [250.66, 18.01], group: qsfp28, rel-pos: 21}
+      - {ref: 'std/qsfp-ganged@1', id: port-22, at: [250.66, 33.18], rotate: 180, group: qsfp28, rel-pos: 22}
+      - {ref: 'std/qsfp-ganged@1', id: port-23, at: [274.36, 18.01], group: qsfp28, rel-pos: 23}
+      - {ref: 'std/qsfp-ganged@1', id: port-24, at: [274.36, 33.18], rotate: 180, group: qsfp28, rel-pos: 24}
+      - {ref: 'std/qsfp-ganged@1', id: port-25, at: [298.06, 18.01], group: qsfp28, rel-pos: 25}
+      - {ref: 'std/qsfp-ganged@1', id: port-26, at: [298.06, 33.18], rotate: 180, group: qsfp28, rel-pos: 26}
+      - {ref: 'std/qsfp-ganged@1', id: port-27, at: [321.76, 18.01], group: qsfp28, rel-pos: 27}
+      - {ref: 'std/qsfp-ganged@1', id: port-28, at: [321.76, 33.18], rotate: 180, group: qsfp28, rel-pos: 28}
+      - {ref: 'std/qsfp-ganged@1', id: port-29, at: [345.46, 18.01], group: qsfp28, rel-pos: 29}
+      - {ref: 'std/qsfp-ganged@1', id: port-30, at: [345.46, 33.18], rotate: 180, group: qsfp28, rel-pos: 30}
+      - {ref: 'std/qsfp-ganged@1', id: port-31, at: [369.15, 18.01], group: qsfp28, rel-pos: 31}
+      - {ref: 'std/qsfp-ganged@1', id: port-32, at: [369.15, 33.18], rotate: 180, group: qsfp28, rel-pos: 32}
+      - {ref: 'std/qsfp-ganged@1', id: port-33, at: [13.68, 47.33], group: qsfp28, rel-pos: 33}
+      - {ref: 'std/qsfp-ganged@1', id: port-34, at: [13.68, 62.59], rotate: 180, group: qsfp28, rel-pos: 34}
+      - {ref: 'std/qsfp-ganged@1', id: port-35, at: [37.38, 47.33], group: qsfp28, rel-pos: 35}
+      - {ref: 'std/qsfp-ganged@1', id: port-36, at: [37.38, 62.59], rotate: 180, group: qsfp28, rel-pos: 36}
+      - {ref: 'std/qsfp-ganged@1', id: port-37, at: [61.08, 47.33], group: qsfp28, rel-pos: 37}
+      - {ref: 'std/qsfp-ganged@1', id: port-38, at: [61.08, 62.59], rotate: 180, group: qsfp28, rel-pos: 38}
+      - {ref: 'std/qsfp-ganged@1', id: port-39, at: [84.78, 47.33], group: qsfp28, rel-pos: 39}
+      - {ref: 'std/qsfp-ganged@1', id: port-40, at: [84.78, 62.59], rotate: 180, group: qsfp28, rel-pos: 40}
+      - {ref: 'std/qsfp-ganged@1', id: port-41, at: [108.48, 47.33], group: qsfp28, rel-pos: 41}
+      - {ref: 'std/qsfp-ganged@1', id: port-42, at: [108.48, 62.59], rotate: 180, group: qsfp28, rel-pos: 42}
+      - {ref: 'std/qsfp-ganged@1', id: port-43, at: [132.17, 47.33], group: qsfp28, rel-pos: 43}
+      - {ref: 'std/qsfp-ganged@1', id: port-44, at: [132.17, 62.59], rotate: 180, group: qsfp28, rel-pos: 44}
+      - {ref: 'std/qsfp-ganged@1', id: port-45, at: [155.87, 47.33], group: qsfp28, rel-pos: 45}
+      - {ref: 'std/qsfp-ganged@1', id: port-46, at: [155.87, 62.59], rotate: 180, group: qsfp28, rel-pos: 46}
+      - {ref: 'std/qsfp-ganged@1', id: port-47, at: [179.57, 47.33], group: qsfp28, rel-pos: 47}
+      - {ref: 'std/qsfp-ganged@1', id: port-48, at: [179.57, 62.59], rotate: 180, group: qsfp28, rel-pos: 48}
+      - {ref: 'std/qsfp-ganged@1', id: port-49, at: [203.27, 47.33], group: qsfp28, rel-pos: 49}
+      - {ref: 'std/qsfp-ganged@1', id: port-50, at: [203.27, 62.59], rotate: 180, group: qsfp28, rel-pos: 50}
+      - {ref: 'std/qsfp-ganged@1', id: port-51, at: [226.97, 47.33], group: qsfp28, rel-pos: 51}
+      - {ref: 'std/qsfp-ganged@1', id: port-52, at: [226.97, 62.59], rotate: 180, group: qsfp28, rel-pos: 52}
+      - {ref: 'std/qsfp-ganged@1', id: port-53, at: [250.66, 47.33], group: qsfp28, rel-pos: 53}
+      - {ref: 'std/qsfp-ganged@1', id: port-54, at: [250.66, 62.59], rotate: 180, group: qsfp28, rel-pos: 54}
+      - {ref: 'std/qsfp-ganged@1', id: port-55, at: [274.36, 47.33], group: qsfp28, rel-pos: 55}
+      - {ref: 'std/qsfp-ganged@1', id: port-56, at: [274.36, 62.59], rotate: 180, group: qsfp28, rel-pos: 56}
+      - {ref: 'std/qsfp-ganged@1', id: port-57, at: [298.06, 47.33], group: qsfp28, rel-pos: 57}
+      - {ref: 'std/qsfp-ganged@1', id: port-58, at: [298.06, 62.59], rotate: 180, group: qsfp28, rel-pos: 58}
+      - {ref: 'std/qsfp-ganged@1', id: port-59, at: [321.76, 47.33], group: qsfp28, rel-pos: 59}
+      - {ref: 'std/qsfp-ganged@1', id: port-60, at: [321.76, 62.59], rotate: 180, group: qsfp28, rel-pos: 60}
+      - {ref: 'std/qsfp-ganged@1', id: port-61, at: [345.46, 47.33], group: qsfp28, rel-pos: 61}
+      - {ref: 'std/qsfp-ganged@1', id: port-62, at: [345.46, 62.59], rotate: 180, group: qsfp28, rel-pos: 62}
+      - {ref: 'std/qsfp-ganged@1', id: port-63, at: [369.15, 47.33], group: qsfp28, rel-pos: 63}
+      - {ref: 'std/qsfp-ganged@1', id: port-64, at: [369.15, 62.59], rotate: 180, group: qsfp28, rel-pos: 64}
+      - {ref: 'common/led-dot@1', id: led-port-1-l1, at: [16.03, 10.58], for: port-1, group: port-leds, rel-pos: 1, attrs: {port: '1', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-1-l2, at: [19.96, 10.58], for: port-1, group: port-leds, rel-pos: 2, attrs: {port: '1', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-1-l3, at: [23.9, 10.58], for: port-1, group: port-leds, rel-pos: 3, attrs: {port: '1', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-1-l4, at: [27.83, 10.58], for: port-1, group: port-leds, rel-pos: 4, attrs: {port: '1', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-2-l1, at: [16.03, 14.26], for: port-2, group: port-leds, rel-pos: 5, attrs: {port: '2', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-2-l2, at: [19.96, 14.26], for: port-2, group: port-leds, rel-pos: 6, attrs: {port: '2', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-2-l3, at: [23.9, 14.26], for: port-2, group: port-leds, rel-pos: 7, attrs: {port: '2', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-2-l4, at: [27.83, 14.26], for: port-2, group: port-leds, rel-pos: 8, attrs: {port: '2', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-3-l1, at: [39.73, 10.58], for: port-3, group: port-leds, rel-pos: 9, attrs: {port: '3', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-3-l2, at: [43.66, 10.58], for: port-3, group: port-leds, rel-pos: 10, attrs: {port: '3', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-3-l3, at: [47.6, 10.58], for: port-3, group: port-leds, rel-pos: 11, attrs: {port: '3', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-3-l4, at: [51.53, 10.58], for: port-3, group: port-leds, rel-pos: 12, attrs: {port: '3', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-4-l1, at: [39.73, 14.26], for: port-4, group: port-leds, rel-pos: 13, attrs: {port: '4', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-4-l2, at: [43.66, 14.26], for: port-4, group: port-leds, rel-pos: 14, attrs: {port: '4', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-4-l3, at: [47.6, 14.26], for: port-4, group: port-leds, rel-pos: 15, attrs: {port: '4', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-4-l4, at: [51.53, 14.26], for: port-4, group: port-leds, rel-pos: 16, attrs: {port: '4', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-5-l1, at: [63.43, 10.58], for: port-5, group: port-leds, rel-pos: 17, attrs: {port: '5', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-5-l2, at: [67.36, 10.58], for: port-5, group: port-leds, rel-pos: 18, attrs: {port: '5', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-5-l3, at: [71.3, 10.58], for: port-5, group: port-leds, rel-pos: 19, attrs: {port: '5', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-5-l4, at: [75.23, 10.58], for: port-5, group: port-leds, rel-pos: 20, attrs: {port: '5', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-6-l1, at: [63.43, 14.26], for: port-6, group: port-leds, rel-pos: 21, attrs: {port: '6', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-6-l2, at: [67.36, 14.26], for: port-6, group: port-leds, rel-pos: 22, attrs: {port: '6', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-6-l3, at: [71.3, 14.26], for: port-6, group: port-leds, rel-pos: 23, attrs: {port: '6', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-6-l4, at: [75.23, 14.26], for: port-6, group: port-leds, rel-pos: 24, attrs: {port: '6', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-7-l1, at: [87.13, 10.58], for: port-7, group: port-leds, rel-pos: 25, attrs: {port: '7', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-7-l2, at: [91.06, 10.58], for: port-7, group: port-leds, rel-pos: 26, attrs: {port: '7', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-7-l3, at: [95.0, 10.58], for: port-7, group: port-leds, rel-pos: 27, attrs: {port: '7', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-7-l4, at: [98.93, 10.58], for: port-7, group: port-leds, rel-pos: 28, attrs: {port: '7', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-8-l1, at: [87.13, 14.26], for: port-8, group: port-leds, rel-pos: 29, attrs: {port: '8', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-8-l2, at: [91.06, 14.26], for: port-8, group: port-leds, rel-pos: 30, attrs: {port: '8', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-8-l3, at: [95.0, 14.26], for: port-8, group: port-leds, rel-pos: 31, attrs: {port: '8', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-8-l4, at: [98.93, 14.26], for: port-8, group: port-leds, rel-pos: 32, attrs: {port: '8', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-9-l1, at: [110.83, 10.58], for: port-9, group: port-leds, rel-pos: 33, attrs: {port: '9', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-9-l2, at: [114.76, 10.58], for: port-9, group: port-leds, rel-pos: 34, attrs: {port: '9', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-9-l3, at: [118.7, 10.58], for: port-9, group: port-leds, rel-pos: 35, attrs: {port: '9', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-9-l4, at: [122.63, 10.58], for: port-9, group: port-leds, rel-pos: 36, attrs: {port: '9', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-10-l1, at: [110.83, 14.26], for: port-10, group: port-leds, rel-pos: 37, attrs: {port: '10', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-10-l2, at: [114.76, 14.26], for: port-10, group: port-leds, rel-pos: 38, attrs: {port: '10', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-10-l3, at: [118.7, 14.26], for: port-10, group: port-leds, rel-pos: 39, attrs: {port: '10', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-10-l4, at: [122.63, 14.26], for: port-10, group: port-leds, rel-pos: 40, attrs: {port: '10', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-11-l1, at: [134.52, 10.58], for: port-11, group: port-leds, rel-pos: 41, attrs: {port: '11', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-11-l2, at: [138.45, 10.58], for: port-11, group: port-leds, rel-pos: 42, attrs: {port: '11', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-11-l3, at: [142.39, 10.58], for: port-11, group: port-leds, rel-pos: 43, attrs: {port: '11', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-11-l4, at: [146.32, 10.58], for: port-11, group: port-leds, rel-pos: 44, attrs: {port: '11', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-12-l1, at: [134.52, 14.26], for: port-12, group: port-leds, rel-pos: 45, attrs: {port: '12', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-12-l2, at: [138.45, 14.26], for: port-12, group: port-leds, rel-pos: 46, attrs: {port: '12', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-12-l3, at: [142.39, 14.26], for: port-12, group: port-leds, rel-pos: 47, attrs: {port: '12', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-12-l4, at: [146.32, 14.26], for: port-12, group: port-leds, rel-pos: 48, attrs: {port: '12', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-13-l1, at: [158.22, 10.58], for: port-13, group: port-leds, rel-pos: 49, attrs: {port: '13', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-13-l2, at: [162.15, 10.58], for: port-13, group: port-leds, rel-pos: 50, attrs: {port: '13', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-13-l3, at: [166.09, 10.58], for: port-13, group: port-leds, rel-pos: 51, attrs: {port: '13', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-13-l4, at: [170.02, 10.58], for: port-13, group: port-leds, rel-pos: 52, attrs: {port: '13', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-14-l1, at: [158.22, 14.26], for: port-14, group: port-leds, rel-pos: 53, attrs: {port: '14', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-14-l2, at: [162.15, 14.26], for: port-14, group: port-leds, rel-pos: 54, attrs: {port: '14', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-14-l3, at: [166.09, 14.26], for: port-14, group: port-leds, rel-pos: 55, attrs: {port: '14', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-14-l4, at: [170.02, 14.26], for: port-14, group: port-leds, rel-pos: 56, attrs: {port: '14', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-15-l1, at: [181.92, 10.58], for: port-15, group: port-leds, rel-pos: 57, attrs: {port: '15', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-15-l2, at: [185.85, 10.58], for: port-15, group: port-leds, rel-pos: 58, attrs: {port: '15', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-15-l3, at: [189.79, 10.58], for: port-15, group: port-leds, rel-pos: 59, attrs: {port: '15', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-15-l4, at: [193.72, 10.58], for: port-15, group: port-leds, rel-pos: 60, attrs: {port: '15', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-16-l1, at: [181.92, 14.26], for: port-16, group: port-leds, rel-pos: 61, attrs: {port: '16', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-16-l2, at: [185.85, 14.26], for: port-16, group: port-leds, rel-pos: 62, attrs: {port: '16', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-16-l3, at: [189.79, 14.26], for: port-16, group: port-leds, rel-pos: 63, attrs: {port: '16', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-16-l4, at: [193.72, 14.26], for: port-16, group: port-leds, rel-pos: 64, attrs: {port: '16', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-17-l1, at: [205.62, 10.58], for: port-17, group: port-leds, rel-pos: 65, attrs: {port: '17', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-17-l2, at: [209.55, 10.58], for: port-17, group: port-leds, rel-pos: 66, attrs: {port: '17', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-17-l3, at: [213.49, 10.58], for: port-17, group: port-leds, rel-pos: 67, attrs: {port: '17', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-17-l4, at: [217.42, 10.58], for: port-17, group: port-leds, rel-pos: 68, attrs: {port: '17', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-18-l1, at: [205.62, 14.26], for: port-18, group: port-leds, rel-pos: 69, attrs: {port: '18', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-18-l2, at: [209.55, 14.26], for: port-18, group: port-leds, rel-pos: 70, attrs: {port: '18', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-18-l3, at: [213.49, 14.26], for: port-18, group: port-leds, rel-pos: 71, attrs: {port: '18', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-18-l4, at: [217.42, 14.26], for: port-18, group: port-leds, rel-pos: 72, attrs: {port: '18', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-19-l1, at: [229.32, 10.58], for: port-19, group: port-leds, rel-pos: 73, attrs: {port: '19', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-19-l2, at: [233.25, 10.58], for: port-19, group: port-leds, rel-pos: 74, attrs: {port: '19', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-19-l3, at: [237.19, 10.58], for: port-19, group: port-leds, rel-pos: 75, attrs: {port: '19', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-19-l4, at: [241.12, 10.58], for: port-19, group: port-leds, rel-pos: 76, attrs: {port: '19', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-20-l1, at: [229.32, 14.26], for: port-20, group: port-leds, rel-pos: 77, attrs: {port: '20', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-20-l2, at: [233.25, 14.26], for: port-20, group: port-leds, rel-pos: 78, attrs: {port: '20', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-20-l3, at: [237.19, 14.26], for: port-20, group: port-leds, rel-pos: 79, attrs: {port: '20', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-20-l4, at: [241.12, 14.26], for: port-20, group: port-leds, rel-pos: 80, attrs: {port: '20', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-21-l1, at: [253.01, 10.58], for: port-21, group: port-leds, rel-pos: 81, attrs: {port: '21', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-21-l2, at: [256.94, 10.58], for: port-21, group: port-leds, rel-pos: 82, attrs: {port: '21', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-21-l3, at: [260.88, 10.58], for: port-21, group: port-leds, rel-pos: 83, attrs: {port: '21', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-21-l4, at: [264.81, 10.58], for: port-21, group: port-leds, rel-pos: 84, attrs: {port: '21', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-22-l1, at: [253.01, 14.26], for: port-22, group: port-leds, rel-pos: 85, attrs: {port: '22', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-22-l2, at: [256.94, 14.26], for: port-22, group: port-leds, rel-pos: 86, attrs: {port: '22', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-22-l3, at: [260.88, 14.26], for: port-22, group: port-leds, rel-pos: 87, attrs: {port: '22', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-22-l4, at: [264.81, 14.26], for: port-22, group: port-leds, rel-pos: 88, attrs: {port: '22', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-23-l1, at: [276.71, 10.58], for: port-23, group: port-leds, rel-pos: 89, attrs: {port: '23', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-23-l2, at: [280.64, 10.58], for: port-23, group: port-leds, rel-pos: 90, attrs: {port: '23', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-23-l3, at: [284.58, 10.58], for: port-23, group: port-leds, rel-pos: 91, attrs: {port: '23', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-23-l4, at: [288.51, 10.58], for: port-23, group: port-leds, rel-pos: 92, attrs: {port: '23', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-24-l1, at: [276.71, 14.26], for: port-24, group: port-leds, rel-pos: 93, attrs: {port: '24', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-24-l2, at: [280.64, 14.26], for: port-24, group: port-leds, rel-pos: 94, attrs: {port: '24', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-24-l3, at: [284.58, 14.26], for: port-24, group: port-leds, rel-pos: 95, attrs: {port: '24', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-24-l4, at: [288.51, 14.26], for: port-24, group: port-leds, rel-pos: 96, attrs: {port: '24', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-25-l1, at: [300.41, 10.58], for: port-25, group: port-leds, rel-pos: 97, attrs: {port: '25', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-25-l2, at: [304.34, 10.58], for: port-25, group: port-leds, rel-pos: 98, attrs: {port: '25', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-25-l3, at: [308.28, 10.58], for: port-25, group: port-leds, rel-pos: 99, attrs: {port: '25', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-25-l4, at: [312.21, 10.58], for: port-25, group: port-leds, rel-pos: 100, attrs: {port: '25', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-26-l1, at: [300.41, 14.26], for: port-26, group: port-leds, rel-pos: 101, attrs: {port: '26', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-26-l2, at: [304.34, 14.26], for: port-26, group: port-leds, rel-pos: 102, attrs: {port: '26', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-26-l3, at: [308.28, 14.26], for: port-26, group: port-leds, rel-pos: 103, attrs: {port: '26', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-26-l4, at: [312.21, 14.26], for: port-26, group: port-leds, rel-pos: 104, attrs: {port: '26', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-27-l1, at: [324.11, 10.58], for: port-27, group: port-leds, rel-pos: 105, attrs: {port: '27', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-27-l2, at: [328.04, 10.58], for: port-27, group: port-leds, rel-pos: 106, attrs: {port: '27', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-27-l3, at: [331.98, 10.58], for: port-27, group: port-leds, rel-pos: 107, attrs: {port: '27', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-27-l4, at: [335.91, 10.58], for: port-27, group: port-leds, rel-pos: 108, attrs: {port: '27', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-28-l1, at: [324.11, 14.26], for: port-28, group: port-leds, rel-pos: 109, attrs: {port: '28', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-28-l2, at: [328.04, 14.26], for: port-28, group: port-leds, rel-pos: 110, attrs: {port: '28', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-28-l3, at: [331.98, 14.26], for: port-28, group: port-leds, rel-pos: 111, attrs: {port: '28', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-28-l4, at: [335.91, 14.26], for: port-28, group: port-leds, rel-pos: 112, attrs: {port: '28', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-29-l1, at: [347.81, 10.58], for: port-29, group: port-leds, rel-pos: 113, attrs: {port: '29', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-29-l2, at: [351.74, 10.58], for: port-29, group: port-leds, rel-pos: 114, attrs: {port: '29', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-29-l3, at: [355.68, 10.58], for: port-29, group: port-leds, rel-pos: 115, attrs: {port: '29', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-29-l4, at: [359.61, 10.58], for: port-29, group: port-leds, rel-pos: 116, attrs: {port: '29', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-30-l1, at: [347.81, 14.26], for: port-30, group: port-leds, rel-pos: 117, attrs: {port: '30', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-30-l2, at: [351.74, 14.26], for: port-30, group: port-leds, rel-pos: 118, attrs: {port: '30', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-30-l3, at: [355.68, 14.26], for: port-30, group: port-leds, rel-pos: 119, attrs: {port: '30', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-30-l4, at: [359.61, 14.26], for: port-30, group: port-leds, rel-pos: 120, attrs: {port: '30', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-31-l1, at: [371.5, 10.58], for: port-31, group: port-leds, rel-pos: 121, attrs: {port: '31', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-31-l2, at: [375.43, 10.58], for: port-31, group: port-leds, rel-pos: 122, attrs: {port: '31', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-31-l3, at: [379.37, 10.58], for: port-31, group: port-leds, rel-pos: 123, attrs: {port: '31', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-31-l4, at: [383.3, 10.58], for: port-31, group: port-leds, rel-pos: 124, attrs: {port: '31', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-32-l1, at: [371.5, 14.26], for: port-32, group: port-leds, rel-pos: 125, attrs: {port: '32', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-32-l2, at: [375.43, 14.26], for: port-32, group: port-leds, rel-pos: 126, attrs: {port: '32', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-32-l3, at: [379.37, 14.26], for: port-32, group: port-leds, rel-pos: 127, attrs: {port: '32', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-32-l4, at: [383.3, 14.26], for: port-32, group: port-leds, rel-pos: 128, attrs: {port: '32', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-33-l1, at: [16.03, 73.92], for: port-33, group: port-leds, rel-pos: 129, attrs: {port: '33', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-33-l2, at: [19.96, 73.92], for: port-33, group: port-leds, rel-pos: 130, attrs: {port: '33', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-33-l3, at: [23.9, 73.92], for: port-33, group: port-leds, rel-pos: 131, attrs: {port: '33', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-33-l4, at: [27.83, 73.92], for: port-33, group: port-leds, rel-pos: 132, attrs: {port: '33', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-34-l1, at: [16.03, 77.51], for: port-34, group: port-leds, rel-pos: 133, attrs: {port: '34', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-34-l2, at: [19.96, 77.51], for: port-34, group: port-leds, rel-pos: 134, attrs: {port: '34', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-34-l3, at: [23.9, 77.51], for: port-34, group: port-leds, rel-pos: 135, attrs: {port: '34', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-34-l4, at: [27.83, 77.51], for: port-34, group: port-leds, rel-pos: 136, attrs: {port: '34', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-35-l1, at: [39.73, 73.92], for: port-35, group: port-leds, rel-pos: 137, attrs: {port: '35', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-35-l2, at: [43.66, 73.92], for: port-35, group: port-leds, rel-pos: 138, attrs: {port: '35', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-35-l3, at: [47.6, 73.92], for: port-35, group: port-leds, rel-pos: 139, attrs: {port: '35', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-35-l4, at: [51.53, 73.92], for: port-35, group: port-leds, rel-pos: 140, attrs: {port: '35', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-36-l1, at: [39.73, 77.51], for: port-36, group: port-leds, rel-pos: 141, attrs: {port: '36', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-36-l2, at: [43.66, 77.51], for: port-36, group: port-leds, rel-pos: 142, attrs: {port: '36', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-36-l3, at: [47.6, 77.51], for: port-36, group: port-leds, rel-pos: 143, attrs: {port: '36', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-36-l4, at: [51.53, 77.51], for: port-36, group: port-leds, rel-pos: 144, attrs: {port: '36', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-37-l1, at: [63.43, 73.92], for: port-37, group: port-leds, rel-pos: 145, attrs: {port: '37', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-37-l2, at: [67.36, 73.92], for: port-37, group: port-leds, rel-pos: 146, attrs: {port: '37', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-37-l3, at: [71.3, 73.92], for: port-37, group: port-leds, rel-pos: 147, attrs: {port: '37', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-37-l4, at: [75.23, 73.92], for: port-37, group: port-leds, rel-pos: 148, attrs: {port: '37', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-38-l1, at: [63.43, 77.51], for: port-38, group: port-leds, rel-pos: 149, attrs: {port: '38', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-38-l2, at: [67.36, 77.51], for: port-38, group: port-leds, rel-pos: 150, attrs: {port: '38', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-38-l3, at: [71.3, 77.51], for: port-38, group: port-leds, rel-pos: 151, attrs: {port: '38', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-38-l4, at: [75.23, 77.51], for: port-38, group: port-leds, rel-pos: 152, attrs: {port: '38', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-39-l1, at: [87.13, 73.92], for: port-39, group: port-leds, rel-pos: 153, attrs: {port: '39', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-39-l2, at: [91.06, 73.92], for: port-39, group: port-leds, rel-pos: 154, attrs: {port: '39', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-39-l3, at: [95.0, 73.92], for: port-39, group: port-leds, rel-pos: 155, attrs: {port: '39', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-39-l4, at: [98.93, 73.92], for: port-39, group: port-leds, rel-pos: 156, attrs: {port: '39', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-40-l1, at: [87.13, 77.51], for: port-40, group: port-leds, rel-pos: 157, attrs: {port: '40', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-40-l2, at: [91.06, 77.51], for: port-40, group: port-leds, rel-pos: 158, attrs: {port: '40', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-40-l3, at: [95.0, 77.51], for: port-40, group: port-leds, rel-pos: 159, attrs: {port: '40', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-40-l4, at: [98.93, 77.51], for: port-40, group: port-leds, rel-pos: 160, attrs: {port: '40', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-41-l1, at: [110.83, 73.92], for: port-41, group: port-leds, rel-pos: 161, attrs: {port: '41', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-41-l2, at: [114.76, 73.92], for: port-41, group: port-leds, rel-pos: 162, attrs: {port: '41', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-41-l3, at: [118.7, 73.92], for: port-41, group: port-leds, rel-pos: 163, attrs: {port: '41', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-41-l4, at: [122.63, 73.92], for: port-41, group: port-leds, rel-pos: 164, attrs: {port: '41', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-42-l1, at: [110.83, 77.51], for: port-42, group: port-leds, rel-pos: 165, attrs: {port: '42', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-42-l2, at: [114.76, 77.51], for: port-42, group: port-leds, rel-pos: 166, attrs: {port: '42', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-42-l3, at: [118.7, 77.51], for: port-42, group: port-leds, rel-pos: 167, attrs: {port: '42', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-42-l4, at: [122.63, 77.51], for: port-42, group: port-leds, rel-pos: 168, attrs: {port: '42', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-43-l1, at: [134.52, 73.92], for: port-43, group: port-leds, rel-pos: 169, attrs: {port: '43', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-43-l2, at: [138.45, 73.92], for: port-43, group: port-leds, rel-pos: 170, attrs: {port: '43', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-43-l3, at: [142.39, 73.92], for: port-43, group: port-leds, rel-pos: 171, attrs: {port: '43', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-43-l4, at: [146.32, 73.92], for: port-43, group: port-leds, rel-pos: 172, attrs: {port: '43', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-44-l1, at: [134.52, 77.51], for: port-44, group: port-leds, rel-pos: 173, attrs: {port: '44', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-44-l2, at: [138.45, 77.51], for: port-44, group: port-leds, rel-pos: 174, attrs: {port: '44', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-44-l3, at: [142.39, 77.51], for: port-44, group: port-leds, rel-pos: 175, attrs: {port: '44', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-44-l4, at: [146.32, 77.51], for: port-44, group: port-leds, rel-pos: 176, attrs: {port: '44', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-45-l1, at: [158.22, 73.92], for: port-45, group: port-leds, rel-pos: 177, attrs: {port: '45', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-45-l2, at: [162.15, 73.92], for: port-45, group: port-leds, rel-pos: 178, attrs: {port: '45', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-45-l3, at: [166.09, 73.92], for: port-45, group: port-leds, rel-pos: 179, attrs: {port: '45', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-45-l4, at: [170.02, 73.92], for: port-45, group: port-leds, rel-pos: 180, attrs: {port: '45', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-46-l1, at: [158.22, 77.51], for: port-46, group: port-leds, rel-pos: 181, attrs: {port: '46', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-46-l2, at: [162.15, 77.51], for: port-46, group: port-leds, rel-pos: 182, attrs: {port: '46', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-46-l3, at: [166.09, 77.51], for: port-46, group: port-leds, rel-pos: 183, attrs: {port: '46', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-46-l4, at: [170.02, 77.51], for: port-46, group: port-leds, rel-pos: 184, attrs: {port: '46', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-47-l1, at: [181.92, 73.92], for: port-47, group: port-leds, rel-pos: 185, attrs: {port: '47', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-47-l2, at: [185.85, 73.92], for: port-47, group: port-leds, rel-pos: 186, attrs: {port: '47', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-47-l3, at: [189.79, 73.92], for: port-47, group: port-leds, rel-pos: 187, attrs: {port: '47', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-47-l4, at: [193.72, 73.92], for: port-47, group: port-leds, rel-pos: 188, attrs: {port: '47', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-48-l1, at: [181.92, 77.51], for: port-48, group: port-leds, rel-pos: 189, attrs: {port: '48', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-48-l2, at: [185.85, 77.51], for: port-48, group: port-leds, rel-pos: 190, attrs: {port: '48', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-48-l3, at: [189.79, 77.51], for: port-48, group: port-leds, rel-pos: 191, attrs: {port: '48', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-48-l4, at: [193.72, 77.51], for: port-48, group: port-leds, rel-pos: 192, attrs: {port: '48', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-49-l1, at: [205.62, 73.92], for: port-49, group: port-leds, rel-pos: 193, attrs: {port: '49', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-49-l2, at: [209.55, 73.92], for: port-49, group: port-leds, rel-pos: 194, attrs: {port: '49', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-49-l3, at: [213.49, 73.92], for: port-49, group: port-leds, rel-pos: 195, attrs: {port: '49', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-49-l4, at: [217.42, 73.92], for: port-49, group: port-leds, rel-pos: 196, attrs: {port: '49', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-50-l1, at: [205.62, 77.51], for: port-50, group: port-leds, rel-pos: 197, attrs: {port: '50', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-50-l2, at: [209.55, 77.51], for: port-50, group: port-leds, rel-pos: 198, attrs: {port: '50', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-50-l3, at: [213.49, 77.51], for: port-50, group: port-leds, rel-pos: 199, attrs: {port: '50', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-50-l4, at: [217.42, 77.51], for: port-50, group: port-leds, rel-pos: 200, attrs: {port: '50', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-51-l1, at: [229.32, 73.92], for: port-51, group: port-leds, rel-pos: 201, attrs: {port: '51', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-51-l2, at: [233.25, 73.92], for: port-51, group: port-leds, rel-pos: 202, attrs: {port: '51', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-51-l3, at: [237.19, 73.92], for: port-51, group: port-leds, rel-pos: 203, attrs: {port: '51', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-51-l4, at: [241.12, 73.92], for: port-51, group: port-leds, rel-pos: 204, attrs: {port: '51', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-52-l1, at: [229.32, 77.51], for: port-52, group: port-leds, rel-pos: 205, attrs: {port: '52', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-52-l2, at: [233.25, 77.51], for: port-52, group: port-leds, rel-pos: 206, attrs: {port: '52', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-52-l3, at: [237.19, 77.51], for: port-52, group: port-leds, rel-pos: 207, attrs: {port: '52', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-52-l4, at: [241.12, 77.51], for: port-52, group: port-leds, rel-pos: 208, attrs: {port: '52', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-53-l1, at: [253.01, 73.92], for: port-53, group: port-leds, rel-pos: 209, attrs: {port: '53', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-53-l2, at: [256.94, 73.92], for: port-53, group: port-leds, rel-pos: 210, attrs: {port: '53', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-53-l3, at: [260.88, 73.92], for: port-53, group: port-leds, rel-pos: 211, attrs: {port: '53', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-53-l4, at: [264.81, 73.92], for: port-53, group: port-leds, rel-pos: 212, attrs: {port: '53', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-54-l1, at: [253.01, 77.51], for: port-54, group: port-leds, rel-pos: 213, attrs: {port: '54', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-54-l2, at: [256.94, 77.51], for: port-54, group: port-leds, rel-pos: 214, attrs: {port: '54', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-54-l3, at: [260.88, 77.51], for: port-54, group: port-leds, rel-pos: 215, attrs: {port: '54', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-54-l4, at: [264.81, 77.51], for: port-54, group: port-leds, rel-pos: 216, attrs: {port: '54', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-55-l1, at: [276.71, 73.92], for: port-55, group: port-leds, rel-pos: 217, attrs: {port: '55', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-55-l2, at: [280.64, 73.92], for: port-55, group: port-leds, rel-pos: 218, attrs: {port: '55', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-55-l3, at: [284.58, 73.92], for: port-55, group: port-leds, rel-pos: 219, attrs: {port: '55', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-55-l4, at: [288.51, 73.92], for: port-55, group: port-leds, rel-pos: 220, attrs: {port: '55', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-56-l1, at: [276.71, 77.51], for: port-56, group: port-leds, rel-pos: 221, attrs: {port: '56', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-56-l2, at: [280.64, 77.51], for: port-56, group: port-leds, rel-pos: 222, attrs: {port: '56', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-56-l3, at: [284.58, 77.51], for: port-56, group: port-leds, rel-pos: 223, attrs: {port: '56', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-56-l4, at: [288.51, 77.51], for: port-56, group: port-leds, rel-pos: 224, attrs: {port: '56', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-57-l1, at: [300.41, 73.92], for: port-57, group: port-leds, rel-pos: 225, attrs: {port: '57', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-57-l2, at: [304.34, 73.92], for: port-57, group: port-leds, rel-pos: 226, attrs: {port: '57', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-57-l3, at: [308.28, 73.92], for: port-57, group: port-leds, rel-pos: 227, attrs: {port: '57', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-57-l4, at: [312.21, 73.92], for: port-57, group: port-leds, rel-pos: 228, attrs: {port: '57', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-58-l1, at: [300.41, 77.51], for: port-58, group: port-leds, rel-pos: 229, attrs: {port: '58', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-58-l2, at: [304.34, 77.51], for: port-58, group: port-leds, rel-pos: 230, attrs: {port: '58', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-58-l3, at: [308.28, 77.51], for: port-58, group: port-leds, rel-pos: 231, attrs: {port: '58', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-58-l4, at: [312.21, 77.51], for: port-58, group: port-leds, rel-pos: 232, attrs: {port: '58', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-59-l1, at: [324.11, 73.92], for: port-59, group: port-leds, rel-pos: 233, attrs: {port: '59', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-59-l2, at: [328.04, 73.92], for: port-59, group: port-leds, rel-pos: 234, attrs: {port: '59', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-59-l3, at: [331.98, 73.92], for: port-59, group: port-leds, rel-pos: 235, attrs: {port: '59', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-59-l4, at: [335.91, 73.92], for: port-59, group: port-leds, rel-pos: 236, attrs: {port: '59', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-60-l1, at: [324.11, 77.51], for: port-60, group: port-leds, rel-pos: 237, attrs: {port: '60', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-60-l2, at: [328.04, 77.51], for: port-60, group: port-leds, rel-pos: 238, attrs: {port: '60', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-60-l3, at: [331.98, 77.51], for: port-60, group: port-leds, rel-pos: 239, attrs: {port: '60', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-60-l4, at: [335.91, 77.51], for: port-60, group: port-leds, rel-pos: 240, attrs: {port: '60', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-61-l1, at: [347.81, 73.92], for: port-61, group: port-leds, rel-pos: 241, attrs: {port: '61', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-61-l2, at: [351.74, 73.92], for: port-61, group: port-leds, rel-pos: 242, attrs: {port: '61', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-61-l3, at: [355.68, 73.92], for: port-61, group: port-leds, rel-pos: 243, attrs: {port: '61', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-61-l4, at: [359.61, 73.92], for: port-61, group: port-leds, rel-pos: 244, attrs: {port: '61', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-62-l1, at: [347.81, 77.51], for: port-62, group: port-leds, rel-pos: 245, attrs: {port: '62', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-62-l2, at: [351.74, 77.51], for: port-62, group: port-leds, rel-pos: 246, attrs: {port: '62', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-62-l3, at: [355.68, 77.51], for: port-62, group: port-leds, rel-pos: 247, attrs: {port: '62', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-62-l4, at: [359.61, 77.51], for: port-62, group: port-leds, rel-pos: 248, attrs: {port: '62', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-63-l1, at: [371.5, 73.92], for: port-63, group: port-leds, rel-pos: 249, attrs: {port: '63', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-63-l2, at: [375.43, 73.92], for: port-63, group: port-leds, rel-pos: 250, attrs: {port: '63', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-63-l3, at: [379.37, 73.92], for: port-63, group: port-leds, rel-pos: 251, attrs: {port: '63', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-63-l4, at: [383.3, 73.92], for: port-63, group: port-leds, rel-pos: 252, attrs: {port: '63', lane: '4'}}
+      - {ref: 'common/led-dot@1', id: led-port-64-l1, at: [371.5, 77.51], for: port-64, group: port-leds, rel-pos: 253, attrs: {port: '64', lane: '1'}}
+      - {ref: 'common/led-dot@1', id: led-port-64-l2, at: [375.43, 77.51], for: port-64, group: port-leds, rel-pos: 254, attrs: {port: '64', lane: '2'}}
+      - {ref: 'common/led-dot@1', id: led-port-64-l3, at: [379.37, 77.51], for: port-64, group: port-leds, rel-pos: 255, attrs: {port: '64', lane: '3'}}
+      - {ref: 'common/led-dot@1', id: led-port-64-l4, at: [383.3, 77.51], for: port-64, group: port-leds, rel-pos: 256, attrs: {port: '64', lane: '4'}}
+      - {ref: 'std/sfp@1', id: port-65, at: [391.08, 33.7], group: sfp-plus, rel-pos: 1}
+      - {ref: 'common/led-dot@1', id: led-port-65, at: [394.29, 29.61], for: port-65, group: port-leds, rel-pos: 257}
+      - {ref: 'std/sfp@1', id: port-66, at: [391.08, 46.57], rotate: 180, group: sfp-plus, rel-pos: 2}
+      - {ref: 'common/led-dot@1', id: led-port-66, at: [394.29, 58.57], for: port-66, group: port-leds, rel-pos: 258}
+      - {ref: 'common/rj45-eth@1', id: mgmt, at: [416.9, 14.1], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45, speed: 1g, role: mgmt}}
+      - {ref: 'std/usb-a@1', id: usb, at: [419.1, 27.6], skin: usb2, group: mgmt, rel-pos: 2, attrs: {role: storage, usb: '2.0'}}
+      - {ref: 'std/rj45@2', id: console, at: [416.9, 32.4], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
+      - {ref: 'common/led-dot@1', id: led-fan, at: [409.92, 9.94], for: chassis, group: status-leds, rel-pos: 1, attrs: {label: FAN}, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+      - {ref: 'common/led-dot@1', id: led-psu, at: [409.92, 16.37], for: chassis, group: status-leds, rel-pos: 2, attrs: {label: PSU}, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+      - {ref: 'common/led-dot@1', id: led-alm, at: [409.92, 22.81], for: chassis, group: status-leds, rel-pos: 3, attrs: {label: ALM}, states: ['off', {name: ok, color: '#22c55e'}, {name: alarm, color: '#f59e0b'}]}
+      - {ref: 'common/led-dot@1', id: led-stat, at: [409.92, 29.24], for: chassis, group: status-leds, rel-pos: 4, attrs: {label: STAT}, states: ['off', {name: normal, color: '#22c55e'}]}
+      - {ref: 'common/reset-button@1', id: reset, at: [408.92, 35.83], for: chassis, group: mgmt, rel-pos: 4}
+      - {ref: 'common/usb-symbol@1', id: usb-mark, at: [411.4, 27.78], rotate: 270, for: usb, group: furniture, rel-pos: 1}
+      - {ref: 'celestica/lug-tag@1', id: lug-tag, at: [399.25, 82.0], group: furniture, rel-pos: 2, attrs: {label: DS3001}}
+    regions:
+    - {id: port-block, at: [11.93, 0.0], size: {w: 377.47, h: 87.0}, label: 64 x QSFP28}
+    - {id: mgmt-block, at: [388.0, 0.0], size: {w: 48.0, h: 87.0}, label: 'SFP+, status and management'}
+  rear:
+    size: {w: 438.5, h: 87.0}
+    panel:
+      decor:
+      - {id: psu-legend-strip, at: [5.29, 2.38], size: [82.08, 6.9], fill: '#d8dbde', kind: label-plate}
+      - {id: ground-boss-1, at: [428.33, 65.47], size: [7.6, 7.6], fill: '#6d7278', rx: 3.8, kind: boss}
+      - {id: ground-boss-2, at: [428.33, 74.22], size: [7.6, 7.6], fill: '#6d7278', rx: 3.8, kind: boss}
+    silkscreen:
+    - {at: [19.1, 6.63], text: '1', font-size: 2.4, anchor: middle, fill: '#4a4f55', for: psu-1}
+    - {at: [22.9, 6.51], text: ▽, font-size: 2.0, anchor: middle, fill: '#4a4f55', for: psu-1}
+    - {at: [60.68, 6.63], text: '2', font-size: 2.4, anchor: middle, fill: '#4a4f55', for: psu-2}
+    - {at: [64.48, 6.51], text: ▽, font-size: 2.0, anchor: middle, fill: '#4a4f55', for: psu-2}
+    components:
+      bays:
+      - {id: psu-1, at: [6.37, 9.9], size: {w: 39.0, h: 73.5}, group: psus, rel-pos: 1, accepts: ['celestica/psu-1300@1'], default: 'celestica/psu-1300@1'}
+      - {id: psu-2, at: [47.95, 9.9], size: {w: 39.0, h: 73.5}, group: psus, rel-pos: 2, accepts: ['celestica/psu-1300@1'], default: 'celestica/psu-1300@1'}
+      - {id: fan-1, at: [91.83, 3.45], size: {w: 80.0, h: 80.8}, group: fans, rel-pos: 1, accepts: ['celestica/fan-80@1'], default: 'celestica/fan-80@1'}
+      - {id: fan-2, at: [176.67, 3.45], size: {w: 80.0, h: 80.8}, group: fans, rel-pos: 2, accepts: ['celestica/fan-80@1'], default: 'celestica/fan-80@1'}
+      - {id: fan-3, at: [261.37, 3.45], size: {w: 80.0, h: 80.8}, group: fans, rel-pos: 3, accepts: ['celestica/fan-80@1'], default: 'celestica/fan-80@1'}
+      - {id: fan-4, at: [346.67, 3.45], size: {w: 80.0, h: 80.8}, group: fans, rel-pos: 4, accepts: ['celestica/fan-80@1'], default: 'celestica/fan-80@1'}
+      placements:
+      - {ref: 'common/ground-symbol@1', id: ground-mark, at: [429.13, 47.4], for: ground-1, group: grounding, rel-pos: 3}
+      - {ref: 'common/screw-head@1', id: ground-1, at: [430.33, 67.47], group: grounding, rel-pos: 1, attrs: {role: ground}}
+      - {ref: 'common/screw-head@1', id: ground-2, at: [430.33, 76.22], group: grounding, rel-pos: 2, attrs: {role: ground}}
+    regions:
+    - {id: fan-block, at: [90.83, 1.0], size: {w: 336.85, h: 85.0}, label: 3+1 fan trays, members: [fan-1, fan-2, fan-3, fan-4]}
+  top: {size: {w: 438.5, h: 520.0}, empty: No figure of the lid is held; the three-quarter renders show a plain cover that cannot be measured.}
+  bottom: {size: {w: 438.5, h: 520.0}, empty: Not drawn by any source held. A face that sits on rails and carries no connectors gets no figure.}
+  left: {size: {w: 520.0, h: 87.0}, empty: 'No figure of this face is held. The guide draws only the front and rear; the three-quarter renders show a plain side wall with rail screws, which cannot be measured.'}
+  right: {size: {w: 520.0, h: 87.0}, empty: 'No figure of this face is held. The guide draws only the front and rear; the three-quarter renders show a plain side wall with rail screws, which cannot be measured.'}
+configurations:
+  f2b:
+    kind: base
+    default: true
+    airflow: front-to-back
+    power: ac
+    description: >-
+      R3250-F9101-A0: DS3001, 2U, 64x 100GbE, COMe 4C/16GB-DDR/64GB-SSD, front-to-back airflow, two
+      1300 W AC supplies and four fan trays (datasheet ordering information and the guide's What's
+      in the Box).
+    part-numbers: {R3250-F9101-A0: {part: R3250-F9101-A0}}
+  b2f:
+    kind: orderable
+    airflow: back-to-front
+    power: ac
+    description: >-
+      R3250-F9102-A0: the same, back-to-front airflow. How its fans and supplies differ on the
+      outside is not documented (airflow-finish gap).
+    part-numbers: {R3250-F9102-A0: {part: R3250-F9102-A0}}
+  dc-f2b:
+    kind: orderable
+    airflow: front-to-back
+    power: dc
+    description: >-
+      R3250-F9103-A1: 2U, 64X100GBE, DC PSU 2x1300W, COMe 4C/16G DDR4/64G SSD, F2B (guide What's in
+      the Box). NO DC SUPPLY IS DRAWN - no figure of it is held - so this build still seats the AC
+      part in the drawing; see the dc-build gap.
+    part-numbers: {R3250-F9103-A1: {part: R3250-F9103-A1}}
+references:
+- title: >-
+    Celestica DS3001 Installation Guide, documentationportal.celestica.com/en/networking/ds3001
+- {title: Celestica DS3001 2U 64-Port 100GbE Data Center Switch datasheet}
+- {title: 'Celestica DS3001 product page, cls.celestica.com/hardware-platforms/ds3001/'}

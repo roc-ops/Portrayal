@@ -30,6 +30,7 @@ import warmrender
 from test_lifted_seat_js import LIB, RENDER, SPEC, build_components, skin_file, spec_of
 from test_nested_slots_js import built_occupant
 from test_lifted_seat_js import mismatches
+from portrayal.artifacts import face_file
 
 SCRIPT = SPEC / "tests/js/chained-slots.mjs"
 DEVICE = "nokia/nfxs-d-ba"
@@ -78,7 +79,7 @@ def world(tmp_path_factory):
     dist = tmp / "dist"
     comps = build_components(dist)
     out, name = render(tmp)
-    faces = {c: ET.parse(out / f"{name}.{c}.front.svg").getroot() for c in CONFIGS}
+    faces = {c: ET.parse(face_file(out, name, c, "front")).getroot() for c in CONFIGS}
     meta = json.loads((out / f"{name}.configs.json").read_text())
     idx = json.loads((dist / "components.json").read_text())["components"]
     payload = {
@@ -202,7 +203,12 @@ def test_an_optic_the_kit_seats_in_a_tilted_cage_is_the_builds(world):
 @needs_node
 def test_a_plug_for_a_replacement_optic_lands_in_the_replacement(world):
     s = scenario(world, "replaceUnderPlugs")
-    assert s == {"applied": 2, "optic": ["generic/qsfp-lc-twin@1:2.0.0"], "tx": 1, "rx": 0, "ntb": 1}, s
+    # the twin is OPTIC under another name, so it carries OPTIC's version
+    # string, read from its contract rather than pinned to a release
+    name, major = OPTIC.split("@")
+    ver = yaml.safe_load((LIB / "components" / name / f"v{major}" / "contract.yaml")
+                         .read_text())["version"]
+    assert s == {"applied": 2, "optic": [f"generic/qsfp-lc-twin@1:{ver}"], "tx": 1, "rx": 0, "ntb": 1}, s
 
 
 @needs_node

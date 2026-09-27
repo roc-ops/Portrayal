@@ -47,6 +47,7 @@ import yaml
 import warmrender
 from portrayal import render as R
 from test_lifted_seat_js import LIB, RENDER, SPEC, build_components, numbers, skin_file, spec_of
+from portrayal.artifacts import face_file
 
 SCRIPT = SPEC / "tests/js/explorer-3d.mjs"
 SWAP = SPEC.parent / "kit/swap.js"
@@ -126,7 +127,7 @@ def render_merged(tmp, device, cfg, occupants):
                         "--out", str(out)], capture_output=True, text=True)
     assert r.returncode == 0, r.stderr[-800:]
     meta = json.loads((out / f"{name}.configs.json").read_text())
-    return ET.parse(out / f"{name}.{cfg}.front.svg").getroot(), meta
+    return ET.parse(face_file(out, name, cfg, "front")).getroot(), meta
 
 
 def node(mode, payload, swap=None, relief=None):
@@ -186,9 +187,9 @@ def world(tmp_path_factory):
     faces = {}
     for cfg in ["populated", *FHD]:
         for view in ("front", "rear"):
-            faces[f"fhd:{cfg}:{view}"] = ET.parse(fhd_out / f"{fhd}.{cfg}.{view}.svg").getroot()
+            faces[f"fhd:{cfg}:{view}"] = ET.parse(face_file(fhd_out, fhd, cfg, view)).getroot()
     for cfg in ["default", *DCP]:
-        faces[f"dcp:{cfg}:front"] = ET.parse(dcp_out / f"{dcp}.{cfg}.front.svg").getroot()
+        faces[f"dcp:{cfg}:front"] = ET.parse(face_file(dcp_out, dcp, cfg, "front")).getroot()
     # an optic that declares its depth, seated on a card: the eject pin's
     # reference for "a part with a depth travels as it always did"
     faces["dcp2:sfp:front"], dcp2_meta = render_merged(tmp, "smartoptics/dcp-2", "ila-node",

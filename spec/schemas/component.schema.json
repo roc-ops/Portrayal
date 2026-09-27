@@ -762,6 +762,11 @@
      "on": {
       "$ref": "#/$defs/segment",
       "description": "the `relief.features[]` node this point sits on. A part seated at this point stands off by that feature's `out` - ABSOLUTE from this part's own face, so a feature's `lift` does not add to it. Read on the point the `interface` is presented at (`interface-at`, default `mate`), where it sets how far a part seated there stands off, and on a `cable` point, where it sets the depth the cable leaves from (render.py writes it as `data-cp-on` for the viewer's cable points); lint L106 requires the node to exist and to carry an `out`."
+     },
+     "seat-out": {
+      "type": "number",
+      "minimum": 0,
+      "description": "mm a part seated at this point stands off, ABSOLUTE from this part's own face, where no drawn feature has its rear at that plane. A coax jack presents at the plane a mated plug's coupling front sits on - the jack's front face less the mated engagement the standard gives - which lies partway along a plain collar, barrel or thread. Read only on the presented point - the one `interface-at` names, default `mate` - by manifest._seat_out, and mutually exclusive with `on:`: lint L106 refuses a point with both, a value that is not a number at or above 0, and a `seat-out` on any other point (a `cable` point reads `on:` but never `seat-out`). State the source figures and the arithmetic in the contract's provenance."
      }
     }
    },

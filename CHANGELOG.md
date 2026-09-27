@@ -30,6 +30,25 @@ states it in full:
 The entries below are what 0.1.0 ships.
 
 ### Added
+- **Listings** (roc-ops/Portrayal#674). A NOS vendor lists the hardware it
+  supports: `library/devices/<nos vendor>/<id>/listing.yaml` points at one device
+  and carries only what the NOS vendor changes - interface names, its own model
+  name and catalogue family, and its own part numbers where it has them. This is
+  how NetBox and Nautobot file a disaggregated box: one device type per
+  manufacturer that sells it, with one copy of the metal behind them all.
+  - `listings.json`: every listing, whole, keyed `<ns>/<id>`, with `ns` and the
+    resolved `manufacturer` added.
+  - `devices.json`: each device carries `listings`, the keys of the listings
+    that list it, and its `search` blob gains each listing's vendor, NOS and
+    names, so "arrcus" or "ocnos" finds the hardware.
+  - `devices.lock.json`: a `listings` map beside `devices`. A listing is
+    versioned (`listing.lock.json` beside it): a changed port name, model or
+    part number is major, an added configuration override minor, wording a
+    patch.
+  - `vendors.json`: IP Infusion (OcNOS), DriveNets (DNOS) and SONiC join Arrcus
+    as software vendors.
+  - Lint L124: under one NOS vendor, no two listings export the same DCIM model,
+    and an alias names one listing unless each claimant marks it `shared`.
 - Lint L123, library-wide: one module, one bay size. Every bay that accepts a
   module, in any device or carrier, reserves the same size for it to within a
   millimetre, compared in the module's own frame so a turned bay matches an
@@ -246,8 +265,106 @@ The entries below are what 0.1.0 ships.
   the build and the kit read. Lint L73 counts `data-r-from` as wiring a field.
 - A `cable` connection point may sit `on` a `cyl` relief feature; it leaves
   from the cylinder's far end (`lift` + `cyl`), in the build and in the kit.
+- Six coax interfaces - `f-type`, `bnc`, `sma`, `smb`, `mcx` and `din-1-0-2-3`
+  (spelled with hyphens; the schema's interface/mates pattern refuses a dot) -
+  each citing its standard, so every existing coax port publishes a
+  `kind: connector` slot alongside its cage. Two new jacks: `std/bnc@1` and
+  `std/din-1-0-2-3@1` (cores), composed by the bezels `common/bnc-jack@1` and
+  `common/din-1-0-2-3-jack@1`, following the existing SMA/SMB core-plus-bezel
+  pattern. Six generic plugs, one per interface -
+  `generic/f-type-plug@1`, `generic/bnc-plug@1`, `generic/sma-plug@1`,
+  `generic/smb-plug@1`, `generic/mcx-plug@1` and `generic/din-1-0-2-3-plug@1` -
+  each a coupling part, a crimp ferrule and strain relief, and a 30 mm cable
+  stub sized by a `cable-od` field. A `seat-out` connection-point key: a
+  number of mm a part seated at that point stands off, absolute from the
+  part's own face, where no drawn feature's rear already sits at that plane;
+  mutually exclusive with `on:` and read only on the presented point
+  (`interface-at`, default `mate`; `manifest._seat_out`). Lint L106 refuses a
+  point that carries both, a `seat-out` that is not a number at or above 0,
+  and a `seat-out` on any other point. The kit now labels the coax media
+  (BNC, 1.0/2.3, F, MCX) in its port rows. See
+  [connectors-coax-design.md](docs/connectors-coax-design.md)
+  (roc-ops/Portrayal#650).
 
 ### Changed
+- `juniper/mic-3d-8ds3-e3` and `mic-3d-8ds3-e3-v` (1.1.2): their 16 jacks
+  state `impedance: 75`, and the description no longer calls 75-ohm
+  mini-SMB an unmodelled interface. Mini-SMB is the 75-ohm SMB series, the
+  SMB interface and intermateable with 50-ohm SMB, so the jacks were
+  correctly SMB (roc-ops/Portrayal#672). The MX80, MX240, MX480, MX960,
+  MX2008, MX2010 and MX2020 take a patch for the composed card.
+- `common/qsfp-pull-tab@2` (2.2.0) models the strap's S-bend: each arm is six
+  relief boxes along the reach (`arm-l`, then `arm-l-2` to `arm-l-6`, and the
+  same on the right) that follow the side-view curve, down 1.5 into a dip
+  about 31 from the nose front and back up to the grip, meeting end to end.
+  The tab's vertical figures were read again on fitted body edges: the grip
+  top is 1.23 above the module top (was 1.07) and the strap top 0.47 (was
+  0.57), so the size is 19 x 8.56 and the risers end 7.33 below the module top,
+  where they were measured. `generic/qsfp-lc@2` and `generic/qsfp-dd-lc@2`
+  (2.2.0) compose the tab at `at: [-0.325, -1.23]`. The face-on drawing is
+  unchanged apart from that 0.16 shift. No device seats these parts, so no
+  lock moved (roc-ops/Portrayal#647, roc-ops/Portrayal#685).
+- `std/c20-inlet` (1.3.1) lays all three blades along the long side of the
+  recess, as IEC 60320 C19/C20 has them and the SCHURTER C20 front view it
+  cites draws them: line and neutral 13.0 apart, earth 8.0 off their line, in a
+  29.0 x 21.0 recess. It had drawn them across the long side. Ids, size and
+  connection point are unchanged; the 27 devices that seat it take a patch.
+- `generic/qsfp-lc@2` (2.1.0) draws its nose at the height the maintainer's
+  photographs of a QSFP SR4 module show: 1.4 above and 1.4 below the 8.5 body,
+  11.3 tall, so `head` is `at: [0, -1.4]`, `h: 11.3` in `components.json`, and
+  the `body` outline and its 20 mm solid grow to match. `common/qsfp-pull-tab@2`
+  (2.1.0) gains `riser-l` and `riser-r`, the posts at the arm roots (7.5 out
+  from the nose front, 7.8 tall from the strap top), and its size grows from
+  19 x 3.4 to 19 x 8.3. `generic/qsfp-dd-lc@2` (2.1.0) wears the risers through
+  the tab; its head is unchanged, since no QSFP-DD module has been measured.
+  Ids, connection points and placements are unchanged, and no device seats
+  these parts, so no lock moved (roc-ops/Portrayal#646).
+- In 3D, a solid painted from a field now takes its side colour from the
+  field: the QSFP cable end's strap, ring and stub (so a wrapper's green or
+  blue strap and the Siemon AOC's aqua jacket show on every face), every coax
+  plug's cable stub, and the DCS201 and DCS240 fan handles. Their relief
+  features stated a literal `color`, which the kit never overrides; the parts
+  take a patch, and the DCS201, DCS202, DCS240 and DCS511 a patch for the
+  fans. Lint L73 now refuses a relief `color` on a node a field paints
+  (roc-ops/Portrayal#643).
+- Lint L122 now also reads a `cable-od` a device sets on a placement (a
+  cable end placed `mate-to` a jack or cage), with the same number and range
+  check as a wrapper's (roc-ops/Portrayal#644).
+- `siemon/qsfp28-aoc` (1.1.1) draws its pull tabs black (`latch-color:
+  #090502`), read off the product photograph the aqua jacket came from, in
+  place of the generic's neutral grey (roc-ops/Portrayal#645).
+- **`contract: 2`. A drawing no longer embeds the device's source manifest.**
+  Every face carried the same whole manifest in its `<metadata>`: 139 MB of a
+  249 MB build, 107 KB in each of the R740xd's 252 faces. It is now published
+  once per device as `<device>.source.json`, and the `source` key in a face's
+  metadata is replaced by `source-sha256`, the digest of that file's exact
+  bytes. A reader that took the manifest from any drawing reads the one file
+  instead. What is published is unchanged; only where (roc-ops/Portrayal#665).
+- **Each distinct drawing is written once.** Configurations that differ only in
+  a part a face cannot see draw that face identically, and each wrote its own
+  copy: the R740xd's 42 configurations wrote 252 faces holding 35 distinct
+  drawings. A drawing is now written once, named after the first configuration
+  (in manifest order) that draws it, and `configs[].files` in
+  `<device>.configs.json` maps each configuration's faces to their files. **Find
+  a face through `files`**; `<device>.<config>.<view>.svg` exists only for the
+  configuration that names it. A face no longer carries its configuration's
+  name: `data-config` on the root and `config` in `<metadata>` are gone, since
+  a shared drawing belongs to several. The default configuration's
+  `<device>.<view>.svg` copies are unchanged (roc-ops/Portrayal#665).
+- **Also in `contract: 2`: `overlays.json` is gone;** `listings.json` replaces
+  it (roc-ops/Portrayal#674). The NOS naming an overlay carried under the
+  hardware (`devices/edgecore/as7726-32x/overlays/arcos.yaml`) now lives in the
+  NOS vendor's listing (`devices/arrcus/as7726-32x/listing.yaml`), and the
+  overlay's `identity:` block is retired - the listing's namespace is the
+  vendor. Lint L56 now checks a listing: it lives under a software vendor and
+  names only configurations, ports and components its hardware has.
+- **BREAKING for DCIM data already imported.** The Arrcus device types are
+  renamed from `Arrcus/ArcOS on <SKU>` to `Arrcus/<SKU>` - the hardware's SKU,
+  under the NOS vendor, as NetBox's and Nautobot's own libraries file a
+  disaggregated box - and they now carry the hardware's part number, which the
+  identity export dropped. The metal is the same metal and its part number
+  still orders it; a listing that publishes its own replaces it per
+  configuration. `dcim_export.py --nos` is removed: every listing exports.
 - **BREAKING for DCIM data already imported.** A module type names its ports per
   bay. Every interface, console, power, front and rear port name on a card
   starts with `{module}/`, which NetBox and Nautobot both fill with the position
@@ -508,11 +625,39 @@ The entries below are what 0.1.0 ships.
   and Dell's service model has no metal there in front of the rear sheet
   (roc-ops/Portrayal#623).
 
+- A forwarding wrapper's presented depth now includes its composed core's own
+  seat out, not only the wrapper's placement `lift`: `common/sma-jack@1`,
+  `common/smb-jack@1`, `common/bnc-jack@1` and `common/din-1-0-2-3-jack@1` (and
+  the library's other bezels) present as deep as their core stands bare.
+  `std/mcx@1`'s mate moves `on: barrel` (2.0), so a seated MCX plug now stands
+  proud of the panel by the barrel's height rather than at the panel plane;
+  the MCX cages on `casa/c100g` and `casa/c40g` (104 placements) published
+  lift 0 before this and 2.0 after, and both took a patch bump. `std/bnc@1`, `std/din-1-0-2-3@1`
+  and `std/f-type@1` each carry a `seat-out` (3.7, 3.85 and 7.8 respectively),
+  so a seated plug on those jacks now presents at the mated plane instead of
+  the panel face.
+- The Cisco T3/E3 SPAs `spa-2xt3e3`, `spa-4xt3e3`, `spa-2cht3-ce-atm`
+  and `spa-4xct3-ds0` (1.1.0) draw their 1.0/2.3 jacks as real
+  `common/din-1-0-2-3-jack@1` placements instead of skin art, so they now
+  publish `kind: connector` slots; `cisco/asr-9010`, the only device that
+  seats one of them, took the patch bump devicelock asked for.
+- `juniper/mic-3d-8ds3-e3` and `mic-3d-8ds3-e3-v` (1.1.1) correct their
+  description: the SMB-opening jacks are drawn because the hardware is
+  75-ohm mini-SMB, not because "no BNC standard exists in the registry yet".
+  The jacks and their placements are unchanged.
+- Devices bumped for the coax jack and seat-out changes above:
+  `casa/c100g`, `casa/c40g`, `cisco/asr-9010`, `commscope/ch3000`,
+  `juniper/mx2008`, `mx2010`, `mx2020`, `mx240`, `mx480`, `mx80` and `mx960`
+  (roc-ops/Portrayal#650).
+
 The dist `contract:` number does not move for the pluggable-heads entries in
 this section (the superseded QSFP generics and pull tab, the wider head
 previews and the S8901-54XC finish correction): each is additive (a new key,
 a new part, a superseded-not-removed part, a wider preview frame, a colour
-correction), per this file's own rule.
+correction), per this file's own rule. Nor does it move for the coax entries
+above: the six interfaces, the new jacks, plugs and `seat-out` key are all
+additions, and the moved SPA jacks and the corrected MIC description change
+no field a reader already depends on.
 
 ### Fixed
 - A seated part turns with the aperture it is in when its host FORWARDS that

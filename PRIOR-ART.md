@@ -72,7 +72,7 @@ vendors. Convergent design is reassuring.
 **Where the two models differ.** NDX names interfaces once per device (`cd0`,
 `ce0`, `xe0`). On white-box hardware the NOS is chosen separately from the box
 and the same silicon gets different names under ArcOS and SONiC, which is why
-this library carries per-NOS overlays; a single name per interface does not
+this library carries a listing per NOS vendor; a single name per interface does not
 express that. NDX's scope also leaves out USB, timing and grounding hardware,
 and it has no gaps register - nothing that says *this is unknown, and here is
 what would close it*. Those are differences of scope rather than of quality: NDX

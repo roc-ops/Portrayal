@@ -1,0 +1,124 @@
+format: 1
+kind: component
+name: sma-plug
+version: 1.0.1
+class: port
+mates: sma
+conforms: sma-plug
+profile: networking
+description: >-
+  A straight SMA crimp plug on a coax cable, seen from the face: the hex
+  coupling nut, the crimp ferrule and a short straight stub of cable whose
+  diameter is the cable-od field. Seats in an `sma` jack at its own mate
+  point; the cable leaves from the stub's far end.
+size: {w: 9.17, h: 7.94}
+size-confidence: {w: drawing, h: drawing}
+attrs: {media: coax-sma, connector: sma}
+fields:
+  cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 2.49}
+  jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    drawing - registry `sma-plug`. Radiall technical data sheet "Straight plug
+    full crimp type cable 2.6/50 S", R125.071.120, issue 0315 A, p.1 side and
+    end views: Hex 7,94 across the flats, which is `h`, inside MIL-STD-348B
+    w/CHANGE 3 Figure 310-1's HEX .315/.309 FLAT (7.85-8.00). `w` is the same
+    hex across its corners, 7.94 / cos 30 = 9.17 (drawing, derived; the side
+    view drawn on the corners scales 9.02). The hex is turned corners left and
+    right, the way std/f-type@1 draws its nut.
+  no-depth: >-
+    NO `size.d`, DELIBERATELY. The overall length (24,3, dimensioned) is in
+    the registry entry and in the relief below, but a `size.d` on a
+    component with no `behaviour` compiles to `data-depth`, and the kit
+    builds that as a pit behind the part's whole box (render.py, the
+    `size.d` block of the placement writer). This plug's box, 9.17 x 7.94, is
+    wider than the 6.35 jack hole it sits over, so the pit would widen the
+    hole in the panel around every seated plug. The depth the plug does have
+    is carried by the three relief features instead.
+  frame: >-
+    THE PLUG'S RELIEF IS MEASURED FROM THE HOST'S PRESENTED LIFT, the frame
+    generic/rj45-plug@1 and generic/lc-plug@2 use: each seats at its jack's
+    presented lift by `mate`, and its features run from there toward the
+    viewer (rj45-plug's body `out` 13.0 is the part standing out of the jack;
+    provenance.standoff there). std/sma@1 presents at its own face, the panel
+    plane, with its threaded barrel standing 5.0 proud of it. So the nut's
+    front face sits AT the presented lift (the coupling has no lift) and the
+    nut covers the whole barrel.
+  engagement: >-
+    drawing (derived) - the mated nut runs about 5.3 over the jack's barrel,
+    measured from the jack's front face: MIL-STD-348B w/CHANGE 3 Figure 310-2
+    dim H (jack front face 1.88-1.98 ahead of the reference plane, 1.93
+    nominal) plus Figure 310-1 dim C (plug nut 3.43 max past it); Figure
+    310-2 dim C (5.54 min clearance for the mating nut) says it never reaches
+    the jack's shoulder. std/sma@1's barrel stands 5.0 proud, 0.3 SHORT of
+    that run, so a nut placed by the standard's figure would start 0.3 behind
+    the panel. It does not: the nut's front stops at the presented lift and
+    the modelled overlap is the barrel's whole 5.0. A NEGATIVE LIFT WAS
+    CONSIDERED AND REFUSED - the plug does not know which jack it is in, and
+    behind the presented lift is the panel. THE JACK PRESENTS AT ITS MATED
+    PLANE, and for std/sma@1 that plane is its own face: the nut covering
+    the whole barrel puts the nut's front there.
+  coupling: >-
+    drawing - R125.071.120 p.1 side view, scaled at 71.0 px/mm on the
+    dimensioned 24,3 overall and checked on the dimensioned hex 7,94 and the
+    dimensioned 10 ferrule: a turned rim (7.9 across) 0 to 2.7, the hex 2.9
+    to 8.4, and the body behind it (7.9 round) 9.2 to 14.3. The coupling
+    feature is all of that as ONE extrusion of the hex outline, 0 to 14.3:
+    the rim and the body are round and fall inside the hex, so the solid
+    overstates them by the hex's corners and nothing else. 14.3 is itself
+    drawing, derived from two dimensioned figures: 24,3 overall less the 10
+    ferrule.
+  relief-boot: >-
+    drawing - the crimp ferrule, the part behind the body the cable is
+    crimped into: 10 long (dimensioned, 14.3 to 24.3) and 4.0 across
+    (scaled, 4.04), on R125.071.120 p.1.
+  stub: >-
+    estimated - the stub rule, docs/connectors-coax-design.md section 5: a
+    straight run of cable 30 long starting where the strain relief ends
+    (24.3). The cable's bend is the installation's, not the plug's.
+  cable-od: >-
+    datasheet - RG-316, the cable R125.071.120 is made for (its 2.6/50 S
+    group). Belden 83284 technical data sheet, revision 0.513, 2026-02-20,
+    p.1, Overall Cable Diameter (Nominal) 0.098 in, 2.49 mm. A placement or a
+    wrapper sets the cable it actually carries.
+  jacket-colour: a FIELD; the neutral near-black default is no product in particular
+  impedance: >-
+    NOT STATED. SMA is a 50 ohm interface, but a generic states no impedance
+    (docs/connectors-coax-design.md decision 2); a vendor wrapper would.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on generic/rj45-plug@1 - every class port
+    contract states none (spec/tests/test_behaviour.py).
+  axis: >-
+    derived - `mate` and `cable` share one point, the centre of the hex
+    (4.585, 3.97): the cable runs straight through the plug, so its front and
+    its rear are one axis seen from two directions, as on generic/lc-plug@2
+    and generic/rj45-plug@1.
+elements: {}
+relief:
+  features:
+    - node: coupling
+      out: 14.3
+      shape: true
+      color: '#c9ccd0'
+      confidence: drawing
+      source: >-
+        Radiall R125.071.120 issue 0315 A p.1: the nut and the body behind it
+        run from the nut's front face to the crimp ferrule, 24,3 overall less
+        the 10 ferrule, both dimensioned. The front sits at the host's
+        presented lift (provenance.frame, provenance.engagement).
+    - node: relief-boot
+      lift: 14.3
+      cyl: 10.0
+      color: '#b8bcc0'
+      confidence: drawing
+      source: Radiall R125.071.120 issue 0315 A p.1, the crimp ferrule, dimensioned 10 long; 4.0 across scaled at 71.0 px/mm
+    - node: stub
+      lift: 24.3
+      cyl: 30
+      confidence: estimated
+      source: the stub rule, docs/connectors-coax-design.md section 5
+connection-points:
+  mate: {at: [4.585, 3.97], direction: front}
+  cable: {at: [4.585, 3.97], direction: front, 'on': stub}
+skins: [default]
