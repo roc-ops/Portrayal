@@ -199,28 +199,141 @@ def _skin_path(ref):
     return LIB / f"components/{ns}/{name}/v{major}/skins/default.svg"
 
 
-def _painted_box(ref, pad=10.0, pxmm=20):
-    """The box a skin really paints, in its own mm frame: rasterised on a canvas
-    `pad` mm wider than the viewBox on every side, so art past the viewBox is
-    measured rather than clipped. A reading, not a parse - arcs, strokes and
-    evenodd holes all count as they render."""
-    import io
+def _arc_extent(x0, y0, rx, ry, phi, large, sweep, x1, y1):
+    """The exact box of one SVG elliptical arc (SVG 1.1 appendix F.6.5): the
+    two endpoints plus every axis extreme of the ellipse that the sweep passes.
+    Only unrotated arcs are handled - a rotated one raises, so a skin that grows
+    one fails here rather than being measured wrong."""
+    import math
+    if phi % 360:
+        raise AssertionError("rotated arc - extend _arc_extent")
+    rx, ry = abs(rx), abs(ry)
+    xs, ys = [x0, x1], [y0, y1]
+    if rx == 0 or ry == 0:
+        return xs, ys
+    dx, dy = (x0 - x1) / 2, (y0 - y1) / 2
+    lam = (dx / rx) ** 2 + (dy / ry) ** 2
+    if lam > 1:
+        rx, ry = rx * math.sqrt(lam), ry * math.sqrt(lam)
+    num = rx * rx * ry * ry - rx * rx * dy * dy - ry * ry * dx * dx
+    den = rx * rx * dy * dy + ry * ry * dx * dx
+    k = math.sqrt(max(num, 0) / den) if den else 0.0
+    if large == sweep:
+        k = -k
+    cxp, cyp = k * rx * dy / ry, -k * ry * dx / rx
+    cx, cy = cxp + (x0 + x1) / 2, cyp + (y0 + y1) / 2
+    def ang(ux, uy, vx, vy):
+        a = math.atan2(ux * vy - uy * vx, ux * vx + uy * vy)
+        return a
+    t1 = ang(1, 0, (dx - cxp) / rx, (dy - cyp) / ry)
+    dt = ang((dx - cxp) / rx, (dy - cyp) / ry, (-dx - cxp) / rx, (-dy - cyp) / ry)
+    if not sweep and dt > 0:
+        dt -= 2 * math.pi
+    elif sweep and dt < 0:
+        dt += 2 * math.pi
+    for q in range(-8, 9):
+        a = q * math.pi / 2
+        rel = (a - t1) if dt >= 0 else (t1 - a)
+        if 0 <= rel <= abs(dt):
+            xs.append(cx + rx * math.cos(a))
+            ys.append(cy + ry * math.sin(a))
+    return xs, ys
+
+
+def _path_points(d):
+    """Absolute M/L/H/V/A/Z path data to the x and y extents it can reach.
+    Anything else raises: a new command is extended here, never skipped."""
     import re
-    cairosvg = pytest.importorskip("cairosvg")
-    from PIL import Image
-    doc = _contract(ref)
-    w, h = doc["size"]["w"], doc["size"]["h"]
-    src = _skin_path(ref).read_text()
-    W, H = w + 2 * pad, h + 2 * pad
-    src = re.sub(r'viewBox="[^"]*"', f'viewBox="{-pad} {-pad} {W} {H}"', src, count=1)
-    src = re.sub(r'width="[^"]*mm"', f'width="{W}mm"', src, count=1)
-    src = re.sub(r'height="[^"]*mm"', f'height="{H}mm"', src, count=1)
-    png = cairosvg.svg2png(bytestring=src.encode(), output_width=int(W * pxmm),
-                           output_height=int(H * pxmm))
-    bb = Image.open(io.BytesIO(png)).getchannel("A").point(lambda a: 255 if a > 8 else 0).getbbox()
-    assert bb, f"{ref} paints nothing"
-    x0, y0, x1, y1 = (v / pxmm - pad for v in bb)
+    toks = re.findall(r"[A-Za-z]|-?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?", d)
+    xs, ys = [], []
+    i, cmd, x, y = 0, None, 0.0, 0.0
+    while i < len(toks):
+        if toks[i].isalpha():
+            cmd = toks[i]
+            i += 1
+            if cmd in "Zz":
+                continue
+        if cmd == "M" or cmd == "L":
+            x, y = float(toks[i]), float(toks[i + 1]); i += 2
+        elif cmd == "H":
+            x = float(toks[i]); i += 1
+        elif cmd == "V":
+            y = float(toks[i]); i += 1
+        elif cmd == "A":
+            rx, ry, phi, large, sweep, nx, ny = (float(t) for t in toks[i:i + 7]); i += 7
+            ax, ay = _arc_extent(x, y, rx, ry, phi, int(large), int(sweep), nx, ny)
+            xs += ax; ys += ay
+            x, y = nx, ny
+        else:
+            raise AssertionError(f"path command {cmd!r} - extend _path_points")
+        xs.append(x); ys.append(y)
+    return xs, ys
+
+
+def _drawn_box(ref):
+    """The box a skin draws, in its own mm frame, read from its geometry:
+    every circle, ellipse, rect, line, polygon and path, each widened by half
+    its stroke. Exact for the shapes these skins use, with no rasteriser (the
+    CI runners install none). A transform, or a shape this does not read,
+    raises - so the check cannot pass by ignoring part of the drawing."""
+    import xml.etree.ElementTree as ET
+    root = ET.parse(_skin_path(ref)).getroot()
+    x0 = y0 = float("inf")
+    x1 = y1 = float("-inf")
+    for el in root.iter():
+        tag = el.tag.rsplit("}", 1)[-1]
+        if el.get("transform"):
+            raise AssertionError(f"{ref}: a transform on <{tag}> - extend _drawn_box")
+        a = {k: el.get(k) for k in el.keys()}
+        sw = float(a.get("stroke-width") or 0) if a.get("stroke") not in (None, "none") else 0.0
+        h = sw / 2
+        if tag == "circle":
+            cx, cy, r = float(a["cx"]), float(a["cy"]), float(a["r"])
+            xs, ys = [cx - r, cx + r], [cy - r, cy + r]
+        elif tag == "ellipse":
+            cx, cy, rx, ry = (float(a[k]) for k in ("cx", "cy", "rx", "ry"))
+            xs, ys = [cx - rx, cx + rx], [cy - ry, cy + ry]
+        elif tag == "rect":
+            x, y, w, hh = (float(a.get(k) or 0) for k in ("x", "y", "width", "height"))
+            xs, ys = [x, x + w], [y, y + hh]
+        elif tag == "line":
+            xs = [float(a.get("x1") or 0), float(a.get("x2") or 0)]
+            ys = [float(a.get("y1") or 0), float(a.get("y2") or 0)]
+        elif tag in ("polygon", "polyline"):
+            nums = [float(v) for v in a["points"].replace(",", " ").split()]
+            xs, ys = nums[0::2], nums[1::2]
+        elif tag == "path":
+            xs, ys = _path_points(a["d"])
+        elif tag in ("svg", "g", "title", "desc", "defs", "metadata"):
+            continue
+        else:
+            raise AssertionError(f"{ref}: <{tag}> - extend _drawn_box")
+        x0, y0 = min(x0, min(xs) - h), min(y0, min(ys) - h)
+        x1, y1 = max(x1, max(xs) + h), max(y1, max(ys) + h)
+    assert x0 < x1, f"{ref} draws nothing"
     return x0, y0, x1, y1
+
+
+def test_the_drawn_box_reads_a_known_skin_exactly():
+    """The reader is exact on shapes whose extent is known without it: the BNC
+    bezel's flange is a full 6.35 circle, drawn as two arcs, filling its 12.7
+    box; the core's D-hole is an arc cut by a flat at 8.85, so its box ends
+    there and not at the full circle's 9.7."""
+    x0, y0, x1, y1 = _drawn_box("common/bnc-jack@1")
+    assert (x0, y0, x1, y1) == pytest.approx((0, 0, 12.7, 12.7), abs=1e-9)
+    # the D-hole's endpoints are written to 3 decimals, so the arc's centre
+    # sits a fraction of a micron off (4.85, 4.85): hold it to the skin's own
+    # precision, not float noise
+    ox0, oy0, ox1, oy1 = _path_points_box("std/bnc@1", "opening")
+    assert (ox0, oy0, ox1, oy1) == pytest.approx((0, 0, 9.7, 8.85), abs=1e-3)
+
+
+def _path_points_box(ref, node_id):
+    import xml.etree.ElementTree as ET
+    root = ET.parse(_skin_path(ref)).getroot()
+    el = next(e for e in root.iter() if e.get("id") == node_id)
+    xs, ys = _path_points(el.get("d"))
+    return min(xs), min(ys), max(xs), max(ys)
 
 
 @pytest.mark.parametrize("ref", sorted(BEZELS))
@@ -239,15 +352,16 @@ def test_each_bezel_presents_its_interface_through_its_core(ref):
 
 @pytest.mark.parametrize("ref", sorted(BEZELS))
 def test_each_bezel_box_holds_everything_it_draws(ref):
-    """Its own skin AND its composed core, placed where the contract puts it.
-    0.06 mm is one raster pixel of anti-aliasing at 20 px/mm."""
-    tol = 0.06
+    """Its own skin AND its composed core, placed where the contract puts it,
+    read from the skins' geometry (strokes included) - exact, so the only
+    tolerance is float noise."""
+    tol = 1e-9
     doc = _contract(ref)
     w, h = doc["size"]["w"], doc["size"]["h"]
-    boxes = [_painted_box(ref)]
+    boxes = [_drawn_box(ref)]
     for part in doc["parts"]:
         ax, ay = part["at"]
-        x0, y0, x1, y1 = _painted_box(part["ref"])
+        x0, y0, x1, y1 = _drawn_box(part["ref"])
         boxes.append((x0 + ax, y0 + ay, x1 + ax, y1 + ay))
     for x0, y0, x1, y1 in boxes:
         assert x0 >= -tol and y0 >= -tol and x1 <= w + tol and y1 <= h + tol, (ref, boxes)
