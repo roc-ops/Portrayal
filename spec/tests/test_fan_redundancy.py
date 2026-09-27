@@ -480,7 +480,17 @@ def test_the_comparison_layer_can_now_reach_them():
     with the number left out; the guide supplies the number and the metal confirms it. How
     many rotors sit inside each module is not stated anywhere, so the figure is read at the
     module level, which is the level the guide counts at.
+
+    SEVENTY-FIVE AND SEVENTY-SIX ARE THE CELESTICA DS6000 AND DS6001, and unlike the
+    DS4000 pair they are two different rears. The DS6000 states 4+1 over FIVE module bays
+    ("4+1 field replaceable fans (dual-rotor, 9+1 redundancy)") - the form counts modules,
+    and the 9+1 in the same sentence counts the ten rotors behind them, two per module, so
+    the bay count and the form agree and the rotor figure is carried in the note. The
+    DS6001 is the first entry whose form comes from NO VENDOR DOCUMENT: its datasheet gives
+    no fan count at all, and the 3+1 over four bays is the STORDIS rear render's own
+    callout, "3+1 FANS". It is counted because a stated figure is a stated figure, and its
+    note says where it was read so the thinner source is visible.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 74, n
+    assert n == 76, n

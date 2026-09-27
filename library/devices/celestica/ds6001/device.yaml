@@ -133,8 +133,8 @@ attrs:
     input-dc: '48 VDC bus bar (ORv3)'
   thermal:
     cooling: 'hybrid - air (3+1 fan modules) and direct liquid through quick-disconnect couplers'
-    liquid-inlet-temp: '35 C, data center facility water'
   environmental:
+    liquid-inlet-temp: '35 C, data center facility water (datasheet ENVIRONMENTAL: OPERATING)'
     operating-temp: '0 to 40 C'
     humidity: '5% to 95% non-condensing'
     mtbf: 'in excess of 150,000 hours'
@@ -254,7 +254,9 @@ groups:
     term: Fan
     role: service
     index-origin: 1
-    attrs: {redundancy: '3+1'}
+    attrs:
+      redundancy: '3+1'
+      redundancy-note: 'STORDIS rear-render callout "3+1 FANS" over four module bays; the datasheet gives no fan count'
   liquid-cooling:
     term: Coupler
     role: service
