@@ -128,7 +128,8 @@ provenance:
       -24P, -48 and -48P and USB 3.0 on the -48C/-48CP; the datasheet FEATURES says '2x USB 3.0 Type A'
       for all. Placements carry the guide's figure for each panel's own art (2.0 on front-24, 3.0 on
       front, whose figure prints SS) and component-attrs sets 2.0 on usb-1/usb-2 for the -48 and -48P
-      configurations. The guide notes the ports carry data only, no power.
+      configurations, which also wear std/usb-a@1's usb2 skin (black tongue) through `skins:`; the
+      front-24 placements name that skin directly. The guide notes the ports carry data only, no power.
   rear-figures:
     confidence: measured
     note: >-
@@ -577,12 +578,12 @@ views:
         - {ref: common/led-arrow-sm@1, id: led-port-26, skin: down, at: [385.57, 21.6], for: port-26, group: sfp28-leds, rel-pos: 2, states: ['off', {name: link-25g, color: '#22c55e'}, {name: activity-25g, color: '#22c55e', behavior: blinking}, {name: link-10g, color: '#f59e0b'}, {name: activity-10g, color: '#f59e0b', behavior: blinking}]}
         - {ref: common/led-arrow-sm@1, id: led-port-27, skin: up, at: [390.68, 21.6], for: port-27, group: sfp28-leds, rel-pos: 3, states: ['off', {name: link-25g, color: '#22c55e'}, {name: activity-25g, color: '#22c55e', behavior: blinking}, {name: link-10g, color: '#f59e0b'}, {name: activity-10g, color: '#f59e0b', behavior: blinking}]}
         - {ref: common/led-arrow-sm@1, id: led-port-28, skin: down, at: [399.77, 21.6], for: port-28, group: sfp28-leds, rel-pos: 4, states: ['off', {name: link-25g, color: '#22c55e'}, {name: activity-25g, color: '#22c55e', behavior: blinking}, {name: link-10g, color: '#f59e0b'}, {name: activity-10g, color: '#f59e0b', behavior: blinking}]}
-        - {ref: std/usb-a@1, id: usb-1, at: [329.65, 6.2], group: mgmt, rel-pos: 1, attrs: {role: storage, usb: '2.0'}}
+        - {ref: std/usb-a@1, id: usb-1, at: [329.65, 6.2], skin: usb2, group: mgmt, rel-pos: 1, attrs: {role: storage, usb: '2.0'}}
         - {ref: common/usb-symbol@1, id: mark-usb-1, at: [332.45, 11.3], for: usb-1, group: marks, rel-pos: 1}
         - {ref: common/led-indicator@1, id: led-mgmt-sfp, at: [350.1, 7.5], for: mgmt-sfp, group: status-leds, rel-pos: 5, states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]}
         - {ref: std/sfp@1, id: mgmt-sfp, at: [355.9, 2.45], group: mgmt, rel-pos: 2, attrs: {media: sfp, speed: 1g, role: mgmt-combo, combo-with: mgmt}}
         - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [408.95, 6.3], rotate: 180, group: mgmt, rel-pos: 3, attrs: {role: mgmt, speed: 1g, combo-with: mgmt-sfp}, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}]}}
-        - {ref: std/usb-a@1, id: usb-2, at: [409.3, 19.05], group: mgmt, rel-pos: 4, attrs: {role: storage, usb: '2.0'}}
+        - {ref: std/usb-a@1, id: usb-2, at: [409.3, 19.05], skin: usb2, group: mgmt, rel-pos: 4, attrs: {role: storage, usb: '2.0'}}
         - {ref: common/usb-symbol@1, id: mark-usb-2, at: [402.3, 19.3], rotate: 270, for: usb-2, group: marks, rel-pos: 2}
         - {ref: std/rj45-ganged@2, id: console, at: [408.95, 24.75], group: mgmt, rel-pos: 5, attrs: {media: rj45-serial, role: console}}
         - {ref: common/led-indicator@1, id: led-stat, at: [426.79, 15.68], for: chassis, group: status-leds, rel-pos: 1, states: ['off', {name: normal, color: '#22c55e', behavior: {mode: alternating, color: '#f59e0b'}}]}
@@ -720,6 +721,7 @@ configurations:
     part-numbers:
       R3194-F9008-A1: {part: R3194-F9008-A1}
     bays: {psu-1: celestica/psu-crps-550-ac@1, psu-2: celestica/psu-crps-550-ac@1}
+    skins: {usb-a: usb2}
     component-attrs:
       usb-1: {usb: '2.0'}
       usb-2: {usb: '2.0'}
@@ -730,6 +732,7 @@ configurations:
     part-numbers:
       R3194-F9108-A1: {part: R3194-F9108-A1}
     bays: {psu-1: celestica/psu-crps-550-ac@1, psu-2: celestica/psu-crps-550-ac@1}
+    skins: {usb-a: usb2}
     component-attrs:
       usb-1: {usb: '2.0'}
       usb-2: {usb: '2.0'}
@@ -741,6 +744,7 @@ configurations:
     part-numbers:
       R3194-F9002-A1: {part: R3194-F9002-A1}
     bays: {psu-1: celestica/psu-crps-1600-ac@1, psu-2: celestica/psu-crps-1600-ac@1}
+    skins: {usb-a: usb2}
     component-attrs:
       usb-1: {usb: '2.0'}
       usb-2: {usb: '2.0'}
@@ -751,6 +755,7 @@ configurations:
     part-numbers:
       R3194-F9102-A1: {part: R3194-F9102-A1}
     bays: {psu-1: celestica/psu-crps-1600-ac@1, psu-2: celestica/psu-crps-1600-ac@1}
+    skins: {usb-a: usb2}
     component-attrs:
       usb-1: {usb: '2.0'}
       usb-2: {usb: '2.0'}
