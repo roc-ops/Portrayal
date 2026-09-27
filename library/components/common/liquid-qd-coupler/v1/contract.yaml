@@ -1,0 +1,42 @@
+format: 1
+kind: component
+name: liquid-qd-coupler
+version: 1.0.0
+class: coupler
+behaviour: mounts
+profile: networking
+description: >-
+  Liquid-cooling quick-disconnect (QD) coupler on an equipment rear - a hex-bodied fitting
+  with a flush valve face, standing in a round dished recess. The point where a liquid-cooled
+  tray's cold-plate loop meets the rack manifold's facility-water supply or return. Drawn as
+  a class of part: no maker or model is stated for the one it was drawn from.
+size: {w: 38.4, h: 38.4}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  medium: liquid
+provenance:
+  size: >-
+    estimated - the dished recess on the Celestica DS6001 rear render (ds6001-B), 71.7 px
+    across against 1.868 px/mm by the datasheet width, 38.4 mm; the fitting inside it reads
+    about 12.5 mm across the valve face. The render fails Gate 1 (2.9% aspect), so these are
+    fractions of the datasheet width, not measurements.
+  identity: >-
+    photo - STORDIS's legend on ds6001-B calls the four of them "QD Direct Liquid Cooling";
+    the datasheet (rev 120325) says only "Hybrid cooling technology" and "35 C liquid inlet
+    with data center facility water". Which standard the couplers follow (OCP ORv3 blind-mate
+    or UQD, manual or blind-mate), their size and which are supply and which return are not
+    stated anywhere held; the part is drawn as the render shows it and says no more.
+  depth: >-
+    NOT STATED. The three-quarter render ds6001-A-3 shows the fittings standing proud of the
+    recess; the relief below is proportion by eye.
+elements:
+  valve: {at: [16.0, 16.0], size: [6.4, 6.4], class: port}
+relief:
+  features:
+    - node: fitting
+      out: 8.0
+      confidence: estimated
+      source: >-
+        common/liquid-qd-coupler@1's own depth key - the fitting stands proud in the
+        Foleon three-quarter render ds6001-A-3; no dimension is published.
+skins: [default]
