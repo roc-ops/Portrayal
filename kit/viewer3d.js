@@ -26,7 +26,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { toGLB, toUSDZ } from './share.js';
 import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, svgSource, setSvgOverride, clearSvgOverrides,
          setNodeStates, nodeStates, setNodeFields, restyleText,
-         setNodeLampColors, nodeLampColors, LAMP_HEX,
+         setNodeLampColors, nodeLampColors, LAMP_HEX, markHex,
          setPulled as setReliefPulled, pulledPaths,
          buildFaceRelief, bodyBoxes, fruFor,
          nodeTools, tiltOf, tiltTools, tiltGroupIn, unproject, openFrameFaces } from './relief.js';
@@ -1074,8 +1074,9 @@ export function createViewer(container, opts = {}) {
     clearMarkObjs();
     const r = {missing: [], nearest: [], invalid: []};
     for (const m of MARKS) {
-      if (!LAMP_HEX.test(m.color)) { r.invalid.push(m.path); continue; }
-      const got = box ? halo(m.path, m.color, m.style) : null;
+      const colour = markHex(m.color);   // #rgb/#rrggbb, alpha dropped (#667)
+      if (!colour) { r.invalid.push(m.path); continue; }
+      const got = box ? halo(m.path, colour, m.style) : null;
       if (!got) { r.missing.push(m.path); continue; }
       if (!got.exact) r.nearest.push(m.path);
       markObjs.push(got.obj);

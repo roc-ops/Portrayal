@@ -90,3 +90,12 @@ def test_a_dome_cut_below_the_lamp_carries_the_colour(out):
     assert 'class="state-ok"' in w and 'data-path="led-sys"' in w, w
     assert f"{MARK}--led-color:#ff00ff{END}" in w, w
     assert "--led-color" not in out["wrappedCleared"], out["wrappedCleared"]
+
+
+def test_a_mark_colour_is_one_a_material_reads(out):
+    """three's Color.setStyle reads #rgb and #rrggbb and leaves a material
+    white for anything else, so a mark given #rrggbbaa drew white and was not
+    reported. markHex keeps the colour and drops the alpha (#667)."""
+    assert out["markHex"] == {
+        "#F0a": "#f0a", "#f0a8": "#f0a", "#FF00AA": "#ff00aa", "#ff00aa80": "#ff00aa",
+        "red": None, "#ff00a": None, "": None, "null": None}

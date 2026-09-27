@@ -100,4 +100,9 @@ R.setNodeLampColors({}, s2);
 R.applyNodeLampColors(svg, s2);
 out.wrappedCleared = R.nodeTools(svg).scopeWrap(dome, '<circle/>');
 
+// a 3D mark's colour goes into a three.js material, which reads #rgb and
+// #rrggbb only: the alpha forms are cut down, anything else is null (#667)
+out.markHex = Object.fromEntries(['#F0a', '#f0a8', '#FF00AA', '#ff00aa80', 'red', '#ff00a', '', null]
+  .map(c => [String(c), R.markHex(c)]));
+
 console.log(JSON.stringify(out));

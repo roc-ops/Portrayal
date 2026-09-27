@@ -1256,6 +1256,21 @@ export function nodeStates(scope) { return new Map(_sc(scope).states); }
 // state is `state-off` keeps its drawing, so a custom colour never lights a
 // lamp that is out.
 export const LAMP_HEX = /^#(?:[0-9a-f]{3}|[0-9a-f]{4}|[0-9a-f]{6}|[0-9a-f]{8})$/i;
+
+// A MARK'S COLOUR FOR A MATERIAL (#667). A 3D mark takes the same hex a lamp
+// does, but it lands in a three.js material, and Color.setStyle reads only
+// #rgb and #rrggbb: it warns on #rgba or #rrggbbaa and leaves the material
+// white, so a mark would draw white while nothing reported it. The alpha is
+// dropped - the halo's own opacity is its style's - and anything that is not a
+// LAMP_HEX is null, which setMarks reports as `invalid`.
+export function markHex(colour) {
+  const c = String(colour ?? '');
+  if (!LAMP_HEX.test(c)) return null;
+  const h = c.slice(1).toLowerCase();
+  if (h.length === 4) return '#' + h.slice(0, 3);
+  if (h.length === 8) return '#' + h.slice(0, 6);
+  return '#' + h;
+}
 // The declaration is written between two CSS comments so an unlit copy of the
 // art (lamps.js withBase) can take exactly it out again and nothing else.
 export const LAMP_MARK = '/*portrayal-lamp*/';
