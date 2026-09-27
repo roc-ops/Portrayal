@@ -194,8 +194,6 @@ attrs:
     switching-capacity: 12.8 Tbps
     packet-buffer: 64 MB
     latency: less than 700 ns port to port (cut-through)
-    breakout: >-
-      144 sub-rate ports maximum (10/25/50GbE) or 128 at 40/100GbE using breakout cables
   power:
     power-max-w: 1100
     power-envelope: fully-configured
@@ -218,8 +216,10 @@ attrs:
     memory: 16 or 32 GB DDR4 ECC (per SKU)
     storage: 64, 128 or 256 GB M.2 SSD (per SKU)
     bmc: BMC management option (DDR3, SPI flash dual boot, NC-SI shared port, IPMI 2.0)
-    timing: IEEE 1588 1-step and 2-step, TC and BC, SyncE (timing option)
   features:
+    breakout: >-
+      144 sub-rate ports maximum (10/25/50GbE) or 128 at 40/100GbE using breakout cables
+    timing: IEEE 1588 1-step and 2-step, TC and BC, SyncE (timing option)
     optics-qsfp-dd: >-
       10GBASE-CR/SR/LR/ER, 25GBASE-CR/SR/LR/ER, 40GBASE-CR4/SR4/LR4/ER4, 100GBASE-CR4/SR4/LR4/ER4/DR1/PSM4/CWDM4,
       400GBASE-CR4/SR4/FR4/DR4/LR8 (guide Port Descriptions); DAC up to 3 m (datasheet)
@@ -716,7 +716,7 @@ views:
         - {ref: std/rj45-ganged@2, id: console, at: [409, 8.4], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
         - {ref: std/usb-a@1, id: usb, at: [409.35, 20.35], group: mgmt, rel-pos: 2, attrs: {role: storage, usb: '2.0'}}
         - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [409, 26.7], group: mgmt, rel-pos: 3, attrs: {role: mgmt, speed: 1g}, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {color: '#f59e0b', name: link-10-100m}], led-b: ['off', {behavior: blinking, color: '#22c55e', name: activity}]}, description: 'guide Table 3 Port Indicator Lights - Ethernet port active (left): Green on (link at 1000Mbps), Amber on (link in 10/100Mbps), Off (link down); Ethernet port active (right): Green blinking (link active with traffic), Off (no traffic)'}
-        - {ref: celestica/lug-tag@1, id: lug-tag, at: [420.5, 25.7], rotate: 90, group: furniture, rel-pos: 1}
+        - {ref: celestica/lug-tag@1, id: lug-tag, at: [420.5, 25.7], rotate: 270, group: furniture, rel-pos: 1}
     regions:
       - {id: mgmt-block, at: [406.4, 1], size: {w: 17.9, h: 40.5}, label: Management, members: [console, usb, mgmt]}
   rear:
@@ -1181,7 +1181,7 @@ views:
         - {ref: std/rj45-ganged@2, id: console, at: [409, 8.4], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
         - {ref: std/usb-a@1, id: usb, at: [409.35, 20.35], group: mgmt, rel-pos: 2, attrs: {role: storage, usb: '2.0'}}
         - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [409, 26.7], group: mgmt, rel-pos: 3, attrs: {role: mgmt, speed: 1g}, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {color: '#f59e0b', name: link-10-100m}], led-b: ['off', {behavior: blinking, color: '#22c55e', name: activity}]}, description: 'guide Table 3 Port Indicator Lights - Ethernet port active (left): Green on (link at 1000Mbps), Amber on (link in 10/100Mbps), Off (link down); Ethernet port active (right): Green blinking (link active with traffic), Off (no traffic)'}
-        - {ref: celestica/lug-tag@1, id: lug-tag, at: [420.5, 25.7], rotate: 90, group: furniture, rel-pos: 1}
+        - {ref: celestica/lug-tag@1, id: lug-tag, at: [420.5, 25.7], rotate: 270, group: furniture, rel-pos: 1}
     regions:
       - {id: mgmt-block, at: [406.4, 1], size: {w: 17.9, h: 40.5}, label: Management, members: [console, usb, mgmt]}
   front-kr:
@@ -1559,7 +1559,7 @@ views:
         - {ref: std/rj45-ganged@2, id: console, at: [409, 8.4], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
         - {ref: std/usb-a@1, id: usb, at: [409.35, 20.35], group: mgmt, rel-pos: 2, attrs: {role: storage, usb: '2.0'}}
         - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [409, 26.7], group: mgmt, rel-pos: 3, attrs: {role: mgmt, speed: 1g}, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {color: '#f59e0b', name: link-10-100m}], led-b: ['off', {behavior: blinking, color: '#22c55e', name: activity}]}, description: 'guide Table 3 Port Indicator Lights - Ethernet port active (left): Green on (link at 1000Mbps), Amber on (link in 10/100Mbps), Off (link down); Ethernet port active (right): Green blinking (link active with traffic), Off (no traffic)'}
-        - {ref: celestica/lug-tag@1, id: lug-tag, at: [420.5, 25.7], rotate: 90, group: furniture, rel-pos: 1}
+        - {ref: celestica/lug-tag@1, id: lug-tag, at: [420.5, 25.7], rotate: 270, group: furniture, rel-pos: 1}
     regions:
       - {id: mgmt-block, at: [406.4, 1], size: {w: 17.9, h: 40.5}, label: Management, members: [console, usb, mgmt]}
 configurations:

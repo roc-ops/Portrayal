@@ -170,8 +170,6 @@ attrs:
     switching-capacity: 12.8 Tbps
     packet-buffer: 70 MB
     latency: low-latency cut-through mode supported
-    breakout: >-
-      168 x 50GbE, 128 x 100GbE or 64 x 200GbE using breakout cables
   power:
     input-ac: 100-240 V nominal (90-264 V max), 47-63 Hz
     psu-redundancy: 1+1 hot-swappable, 1500 W each
@@ -191,6 +189,8 @@ attrs:
     storage: 64 GB M.2 SSD (both SKUs)
     bmc: BMC with 1 GB DDR4, dual 32 MB flash, NC-SI shared port, SOL, IPMI 2.0
   features:
+    breakout: >-
+      168 x 50GbE, 128 x 100GbE or 64 x 200GbE using breakout cables
     optics-qsfp-dd: >-
       10GBASE-CR/SR/LR/ER, 25GBASE-CR/SR/LR/ER, 40GBASE-CR4/SR4/LR4/ER4, 100GBASE-CR4/SR4/LR4/ER4/DR1/PSM4/CWDM4,
       400GBASE-CR4/SR4/FR4/DR4/LR8 (shared guide Port Descriptions); DAC up to 3 m (datasheet)
@@ -632,7 +632,7 @@ views:
         - {ref: std/rj45-ganged@2, id: console, at: [405.77, 8.4], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
         - {ref: std/usb-a@1, id: usb, at: [406.12, 20.35], group: mgmt, rel-pos: 2, attrs: {role: storage, usb: '2.0'}}
         - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [405.77, 26.7], group: mgmt, rel-pos: 3, attrs: {role: mgmt, speed: 1g}, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {color: '#f59e0b', name: link-10-100m}], led-b: ['off', {behavior: blinking, color: '#22c55e', name: activity}]}, description: 'guide Table 3 Port Indicator Lights - Ethernet port active (left): Green on (link at 1000Mbps), Amber on (link in 10/100Mbps), Off (link down); Ethernet port active (right): Green blinking (link active with traffic), Off (no traffic)'}
-        - {ref: celestica/lug-tag@1, id: lug-tag, at: [415.8, 25.7], rotate: 90, group: furniture, rel-pos: 1, attrs: {label: DS4001}}
+        - {ref: celestica/lug-tag@1, id: lug-tag, at: [415.8, 25.7], rotate: 270, group: furniture, rel-pos: 1, attrs: {label: DS4001}}
     regions:
       - {id: mgmt-block, at: [403.1, 1], size: {w: 18.05, h: 40.5}, label: Management, members: [console, usb, mgmt]}
   rear:
