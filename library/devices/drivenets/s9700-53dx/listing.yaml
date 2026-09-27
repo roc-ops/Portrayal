@@ -1,0 +1,33 @@
+format: 1
+kind: listing
+hardware: ufispace/s9700-53dx
+version: 1.0.0
+model: NCP-40C
+type-name: '{model} ({sku})'
+portfolio: {line: Network Cloud, family: Network Cloud Packet Forwarder (NCP)}
+description: >-
+  Sold by DriveNets as the NCP-40C: the reference's own example configures `model NCP-40C hw-model S9700-53DX`.
+source: >-
+  DNOS CLI Reference Guide 26.2, `system ncp model`: S9700-53DX is among the hardware
+  models DNOS accepts for an NCP.
+  Port names from the same reference: a service port is ge<speed>-<ncp>/<slot>/<port>
+  and a fabric port fab-ncp400-<ncp>/0/<port>, the port being the id printed on the
+  box ('as shown at the WB') and counted from 0 on each NCP. Named here for a
+  standalone box, NCP 0 and slot 0; in a cluster DNOS renames every port with the
+  NCP id the deployment gives this box.
+gaps:
+  - what: dnos-management-names
+    reason: vendor-silent
+    note: >-
+      DNOS names management ports mgmt-ncp-<ncp>/<n> and IPMI ports ipmi-ncp-<ncp>/<n> (show
+      interfaces management), but not which jack on this box is which n, so the management
+      jacks are left out of `interfaces` and the DriveNets type does not list them.
+    wanted: >-
+      `show interfaces management` from this box running DNOS.
+interfaces:
+  - {physical: 'port-{n}', name: 'ge100-0/0/{n}', range: '0-19',
+     breakout: {modes: [4x10g], child-name: 'ge10-0/0/{n}/{i}'}}
+  - {physical: 'port-{n}', name: 'ge100-0/0/{n}', range: '20-39'}
+  - {physical: 'fab-{n}', name: 'fab-ncp400-0/0/{n}', range: '0-12'}
+nos: dnos
+nos-versions: '>=26.2'

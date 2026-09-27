@@ -174,6 +174,18 @@ def test_a_listed_type_written_by_another_run_for_other_metal_stops_the_run(tmp_
     dx.WRITTEN.clear(); dx._FRESH.clear()
 
 
+def test_a_type_name_keeps_one_vendor_name_distinct_per_box():
+    """DriveNets sells one NCP-40C on a UfiSpace, an Edgecore and a Delta box.
+    `type-name: '{model} ({sku})'` files each under its own DCIM model."""
+    ls = {"ns": "drivenets", "manufacturer": "DriveNets", "model": "NCP-40C",
+          "type-name": "{model} ({sku})"}
+    a = dx.apply_listing({"manufacturer": "UfiSpace", "model": "S9700-53DX", "slug": "x"}, ls, "base")
+    b = dx.apply_listing({"manufacturer": "Edgecore", "model": "7926-40XKFB-O-AC-F", "slug": "x"}, ls, "ac")
+    assert a["model"] == "NCP-40C (S9700-53DX)"
+    assert b["model"] == "NCP-40C (7926-40XKFB-O-AC-F)"
+    assert a["slug"] != b["slug"]
+
+
 def test_the_exporter_and_l124_agree_on_the_sku():
     assert dx.listing_config_model(
         {"part-numbers": {"A-EU": {"power-cord": "EU"}, "Y": {}}}) == ("Y", "Y")

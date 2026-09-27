@@ -5712,12 +5712,17 @@ def lint_library_listings(roots):
                         if (Path(r) / "devices" / hw / "device.yaml").exists()), None)
             dev = (load_yaml(man) or {}) if man else {}
             over = d.get("configurations") or {}
-            for cname, c in over.items():
-                m, _ = listing_config_model(c)
-                if m:
-                    overrides.setdefault(str(m).lower(), []).append(f"{f.parent.name}:{cname}")
+            if d.get("type-name"):
+                # `{sku}` is in every name it makes, so the types stay as distinct
+                # as the SKUs underneath them; what is left to check is the aliases
+                pass
+            else:
+                for cname, c in over.items():
+                    m, _ = listing_config_model(c)
+                    if m:
+                        overrides.setdefault(str(m).lower(), []).append(f"{f.parent.name}:{cname}")
             for cname, c in (dev.get("configurations") or {}).items():
-                if listing_config_model(over.get(cname))[0]:
+                if d.get("type-name") or listing_config_model(over.get(cname))[0]:
                     continue                     # renamed: the hardware SKU is not exported
                 for sku in ((c or {}).get("part-numbers") or {}):
                     inherited.setdefault(str(sku).lower(), set()).add(f"{f.parent.name}:{cname}")
