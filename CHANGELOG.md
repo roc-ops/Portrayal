@@ -264,6 +264,11 @@ the *published build*, not about the hardware.
   (2.2.0) compose the tab at `at: [-0.325, -1.23]`. The face-on drawing is
   unchanged apart from that 0.16 shift. No device seats these parts, so no
   lock moved (roc-ops/Portrayal#647, roc-ops/Portrayal#685).
+- `std/c20-inlet` (1.3.1) lays all three blades along the long side of the
+  recess, as IEC 60320 C19/C20 has them and the SCHURTER C20 front view it
+  cites draws them: line and neutral 13.0 apart, earth 8.0 off their line, in a
+  29.0 x 21.0 recess. It had drawn them across the long side. Ids, size and
+  connection point are unchanged; the 27 devices that seat it take a patch.
 - `generic/qsfp-lc@2` (2.1.0) draws its nose at the height the maintainer's
   photographs of a QSFP SR4 module show: 1.4 above and 1.4 below the 8.5 body,
   11.3 tall, so `head` is `at: [0, -1.4]`, `h: 11.3` in `components.json`, and
