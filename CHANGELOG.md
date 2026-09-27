@@ -253,6 +253,14 @@ the *published build*, not about the hardware.
   (roc-ops/Portrayal#650).
 
 ### Changed
+- In 3D, a solid painted from a field now takes its side colour from the
+  field: the QSFP cable end's strap, ring and stub (so a wrapper's green or
+  blue strap and the Siemon AOC's aqua jacket show on every face), every coax
+  plug's cable stub, and the DCS201 and DCS240 fan handles. Their relief
+  features stated a literal `color`, which the kit never overrides; the parts
+  take a patch, and the DCS201, DCS202, DCS240 and DCS511 a patch for the
+  fans. Lint L73 now refuses a relief `color` on a node a field paints
+  (roc-ops/Portrayal#643).
 - Lint L122 now also reads a `cable-od` a device sets on a placement (a
   cable end placed `mate-to` a jack or cage), with the same number and range
   check as a wrapper's (roc-ops/Portrayal#644).

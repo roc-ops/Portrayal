@@ -215,3 +215,37 @@ def test_a_field_a_composed_part_declares_satisfies_l73(tmp_path):
     bare = {"skins": ["default"], "fields": fields, "parts": [{"ref": "t/nope@1", "id": "x"}]}
     hits = _caught("L73", lint.lint_component_fields, host / "contract.yaml", bare)
     assert any("latch-color has no data-from" in h for h in hits), hits
+
+
+# --- #643: a field-painted node's 3D sides follow the field ----------------
+
+def _field_part(tmp_path, color):
+    d = tmp_path / "components/generic/strapped/v1"
+    (d / "skins").mkdir(parents=True)
+    (d / "skins/default.svg").write_text(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10">'
+        '<rect id="strap" x="0" y="0" width="10" height="1" fill="#6f6f6f" '
+        'data-fill-from="latch-color"/></svg>')
+    feat = {"node": "strap", "out": 5.0}
+    if color:
+        feat["color"] = color
+    doc = {"name": "strapped", "skins": ["default"],
+           "fields": {"latch-color": {"type": "text", "default": "#6f6f6f"}},
+           "relief": {"features": [feat]}}
+    return d / "contract.yaml", doc
+
+
+def _l73_errors(path, doc):
+    from portrayal import lint
+    with lint.collecting() as got:
+        lint.lint_component_fields(path, doc)
+    return [e for e in got.errors if "[L73]" in e]
+
+
+def test_a_literal_color_on_a_field_painted_node_is_an_error(tmp_path):
+    errs = _l73_errors(*_field_part(tmp_path, "#6f6f6f"))
+    assert len(errs) == 1 and "strap" in errs[0] and "latch-color" in errs[0]
+
+
+def test_a_field_painted_node_with_no_color_is_clean(tmp_path):
+    assert _l73_errors(*_field_part(tmp_path, None)) == []
