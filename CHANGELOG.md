@@ -253,6 +253,12 @@ the *published build*, not about the hardware.
   (roc-ops/Portrayal#650).
 
 ### Changed
+- `juniper/mic-3d-8ds3-e3` and `mic-3d-8ds3-e3-v` (1.1.2): their 16 jacks
+  state `impedance: 75`, and the description no longer calls 75-ohm
+  mini-SMB an unmodelled interface. Mini-SMB is the 75-ohm SMB series, the
+  SMB interface and intermateable with 50-ohm SMB, so the jacks were
+  correctly SMB (roc-ops/Portrayal#672). The MX80, MX240, MX480, MX960,
+  MX2008, MX2010 and MX2020 take a patch for the composed card.
 - `std/c20-inlet` (1.3.1) lays all three blades along the long side of the
   recess, as IEC 60320 C19/C20 has them and the SCHURTER C20 front view it
   cites draws them: line and neutral 13.0 apart, earth 8.0 off their line, in a
