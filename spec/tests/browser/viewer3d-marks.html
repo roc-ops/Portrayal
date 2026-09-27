@@ -105,6 +105,20 @@ window.harness = {
     r.defaultStyleRing = (await V2.load({device: DEVICE}), V2.setMarks([{path: A, color: '#e0574f'}]),
                           V2.marks()[0].style);
     V2.dispose();
+    // both ring bands are in the transparent pass, so renderOrder puts the
+    // crisp one over the soft one (an opaque band is drawn before all of them)
+    r.ringPasses = [];
+    V.three.scene.traverse(o => { if (o.userData.portrayalHalo && o.userData.portrayalHalo.style === 'ring')
+      o.children.forEach(c => r.ringPasses.push({order: c.renderOrder, transparent: c.material.transparent})); });
+    // a host that marks before the first load finishes hears the clean report
+    // once the load has drawn them
+    const V3 = createViewer(document.createElement('div'), {dist: '../../../library/dist/'});
+    const heard = [];
+    V3.on('marks', m => heard.push(m));
+    r.earlyReport = V3.setMarks([{path: A, color: '#e0574f'}]);
+    await V3.load({device: DEVICE});
+    r.lastHeard = heard[heard.length - 1];
+    V3.dispose();
     // 4. clearing
     V.setMarks([]);
     r.afterClear = halos();

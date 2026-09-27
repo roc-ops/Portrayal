@@ -974,7 +974,11 @@ export function createViewer(container, opts = {}) {
     shape.holes.push(roundedRect(new THREE.Path(), w + 2 * inner, h + 2 * inner,
                                  Math.max(corner - width / 2, 0)));
     const mesh = new THREE.Mesh(new THREE.ShapeGeometry(shape, 6),
-      new THREE.MeshBasicMaterial({color: colour, transparent: opacity < 1, opacity,
+      // transparent at any opacity: three.js draws every opaque mesh before
+      // every transparent one whatever its renderOrder, so an opaque crisp ring
+      // was drawn first and the soft ring painted over its edge. One pass, and
+      // renderOrder puts the crisp band on top.
+      new THREE.MeshBasicMaterial({color: colour, transparent: true, opacity,
                                    depthTest: false, depthWrite: false, side: THREE.DoubleSide}));
     mesh.renderOrder = order;
     return mesh;
@@ -1074,7 +1078,11 @@ export function createViewer(container, opts = {}) {
       markObjs.push(got.obj);
     }
     markReport = r;
-    if (r.missing.length || r.nearest.length || r.invalid.length) emit('marks', r);
+    // ON EVERY DRAW, a clean report included: a host that marked before the
+    // first load finished was told every path was missing, and when the load
+    // then drew them all, an event sent only on trouble never said so - its
+    // "not in 3D" note stayed up over parts that were shown
+    emit('marks', r);
     return r;
   }
   function setMarks(list) {
