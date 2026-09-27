@@ -253,6 +253,17 @@ the *published build*, not about the hardware.
   (roc-ops/Portrayal#650).
 
 ### Changed
+- `common/qsfp-pull-tab@2` (2.2.0) models the strap's S-bend: each arm is six
+  relief boxes along the reach (`arm-l`, then `arm-l-2` to `arm-l-6`, and the
+  same on the right) that follow the side-view curve, down 1.5 into a dip
+  about 31 from the nose front and back up to the grip, meeting end to end.
+  The tab's vertical figures were read again on fitted body edges: the grip
+  top is 1.23 above the module top (was 1.07) and the strap top 0.47 (was
+  0.57), so the size is 19 x 8.56 and the risers end 7.33 below the module top,
+  where they were measured. `generic/qsfp-lc@2` and `generic/qsfp-dd-lc@2`
+  (2.2.0) compose the tab at `at: [-0.325, -1.23]`. The face-on drawing is
+  unchanged apart from that 0.16 shift. No device seats these parts, so no
+  lock moved (roc-ops/Portrayal#647, roc-ops/Portrayal#685).
 - `generic/qsfp-lc@2` (2.1.0) draws its nose at the height the maintainer's
   photographs of a QSFP SR4 module show: 1.4 above and 1.4 below the 8.5 body,
   11.3 tall, so `head` is `at: [0, -1.4]`, `h: 11.3` in `components.json`, and
