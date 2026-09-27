@@ -25,7 +25,7 @@ The core is domain-neutral. Networking is the first profile, not the only one.
 
 ```
 spec/          schemas, compiler, linter, tests
-library/       component contracts + skins, device manifests, NOS overlays
+library/       component contracts + skins, device manifests, NOS listings
 kit/           @portrayal/kit: the JS consumer — draw, inspect, export
 docs/          how the model works
 ```
@@ -92,9 +92,9 @@ populated. Chassis silkscreen paints *under* the components that cover it, becau
 that is what happens to the real panel. `--without silkscreen` gives you the bare
 panel-and-components drawing to hand to whoever does the artwork.
 
-**Physical ids follow the silkscreen.** What the NOS calls an interface is an
-overlay, because two operating systems on the same hardware disagree and the
-hardware does not care.
+**Physical ids follow the silkscreen.** What the NOS calls an interface belongs
+to the NOS vendor's listing of the box, because two operating systems on the
+same hardware disagree and the hardware does not care.
 
 **No vendor material is redistributed.** Facts are transcribed and cited; the
 source documents stay out of the repository. See `PRIOR-ART.md`.

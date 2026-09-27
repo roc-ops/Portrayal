@@ -5,7 +5,7 @@ THE POINT. The DCIM export knew the schema and also knew where the source tree
 was, and only the first of those is essential. Everything it took off `library/`
 is published: `<device>.source.json` is the whole device manifest (each
 compiled SVG names it by digest in its `<metadata>`), components.json carries every contract field the export reads,
-and vendors.json and overlays.json carry the rest. So the export can run against
+and vendors.json and listings.json carry the rest. So the export can run against
 `dist/` alone, which is what lets it live somewhere else - or be written by
 somebody else, against a contract rather than against a checkout.
 
@@ -52,7 +52,7 @@ class Dist:
         self._devices = self._load("devices.json").get("devices") or []
         self._components = self._load("components.json").get("components") or []
         self._vendors = self._load("vendors.json")
-        self._overlays = (self._load("overlays.json").get("overlays") or {})
+        self._listings = (self._load("listings.json").get("listings") or {})
         self._manifests = {}
 
     def _load(self, name):
@@ -154,13 +154,18 @@ class Dist:
     def vendors(self):
         return self._vendors.get("vendors") or {}
 
-    def overlay(self, ns, model, profile):
-        """A NOS overlay for a device, or None. Keyed <ns>/<model>."""
-        if not profile:
-            return None
-        return (self._overlays.get(f"{ns}/{model}") or {}).get(profile)
+    def listings_for(self, ns, name):
+        """Every listing of the device `<ns>/<name>`, as (key, listing), sorted.
 
-    def profiles(self):
-        """Every NOS some overlay in this build declares - the only NOSes an
-        export can name interfaces for."""
-        return {p for profs in self._overlays.values() for p in (profs or {})}
+        A listing names its hardware; the hardware does not name its listings.
+        That direction is the point - a NOS vendor adding a box to its list is a
+        change to the NOS vendor's entry, not to the metal - so the reverse
+        lookup is built here rather than stored anywhere.
+        """
+        hw = f"{ns}/{name}"
+        return [(k, v) for k, v in sorted(self._listings.items())
+                if v.get("hardware") == hw]
+
+    @property
+    def listings(self):
+        return dict(self._listings)
