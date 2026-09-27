@@ -766,7 +766,7 @@
      "seat-out": {
       "type": "number",
       "minimum": 0,
-      "description": "mm a part seated at this point stands off, ABSOLUTE from this part's own face, where no drawn feature has its rear at that plane. A coax jack presents at the plane a mated plug's coupling front sits on - the jack's front face less the mated engagement the standard gives - which lies partway along a plain collar, barrel or thread. Read only where `on:` would be (manifest._seat_out), and mutually exclusive with it: lint L106 refuses a point with both, and a value that is not a number at or above 0. State the source figures and the arithmetic in the contract's provenance."
+      "description": "mm a part seated at this point stands off, ABSOLUTE from this part's own face, where no drawn feature has its rear at that plane. A coax jack presents at the plane a mated plug's coupling front sits on - the jack's front face less the mated engagement the standard gives - which lies partway along a plain collar, barrel or thread. Read only on the presented point - the one `interface-at` names, default `mate` - by manifest._seat_out, and mutually exclusive with `on:`: lint L106 refuses a point with both, a value that is not a number at or above 0, and a `seat-out` on any other point (a `cable` point reads `on:` but never `seat-out`). State the source figures and the arithmetic in the contract's provenance."
      }
     }
    },

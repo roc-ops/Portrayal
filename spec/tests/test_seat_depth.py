@@ -198,7 +198,8 @@ def test_a_seat_out_presents_its_own_plane():
 
 def test_the_schema_accepts_a_seat_out_and_refuses_a_negative_one():
     assert _validate(_seat_out_jack(**{"seat-out": 3.7})) == []
-    assert _validate(_seat_out_jack(**{"seat-out": -1})) != []
+    errs = _validate(_seat_out_jack(**{"seat-out": -1}))
+    assert errs and any("minimum" in e or "-1" in e for e in errs), errs
 
 
 def test_a_seat_out_lints_clean(tmp_path):
@@ -217,6 +218,37 @@ def test_a_seat_out_that_is_no_depth_is_an_error(tmp_path, bad):
 def test_a_seat_out_beside_on_is_an_error(tmp_path):
     errs, _ = _l105(tmp_path, _seat_out_jack(**{"seat-out": 3.7, "on": "collar"}))
     assert len(errs) == 1 and "both seat-out and on" in errs[0], errs
+
+
+def test_a_seat_out_off_the_presented_point_is_an_error(tmp_path):
+    """Only the presented point is read for `seat-out` (manifest._seat_out); on
+    a `cable` point, which reads `on:` but never `seat-out`, it would do
+    nothing and say nothing (final review M1)."""
+    d = _seat_out_jack()
+    d["connection-points"]["cable"] = {"at": [4.85, 4.85], "direction": "rear",
+                                       "seat-out": 3.7}
+    errs, _ = _l105(tmp_path, d)
+    assert len(errs) == 1 and "'cable' has seat-out" in errs[0] \
+        and "presented point ('mate'" in errs[0], errs
+
+
+def test_a_seat_out_on_mate_is_refused_when_interface_at_names_another(tmp_path):
+    d = _seat_out_jack(**{"seat-out": 3.7})
+    d["connection-points"]["rear"] = {"at": [4.85, 4.85], "direction": "rear"}
+    d["interface-at"] = "rear"
+    errs, _ = _l105(tmp_path, d)
+    assert len(errs) == 1 and "'mate' has seat-out" in errs[0] \
+        and "presented point ('rear'" in errs[0], errs
+
+
+def test_a_seat_out_on_the_point_interface_at_names_lints_clean(tmp_path):
+    d = _seat_out_jack()
+    d["connection-points"]["rear"] = {"at": [4.85, 4.85], "direction": "rear",
+                                      "seat-out": 3.7}
+    d["interface-at"] = "rear"
+    assert presented_interface(d, _res({}))[2] == 3.7
+    errs, warns = _l105(tmp_path, d)
+    assert errs == [] and warns == [], (errs, warns)
 
 
 def test_an_integer_key_is_not_an_unquoted_on(tmp_path):
