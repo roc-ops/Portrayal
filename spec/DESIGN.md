@@ -25,8 +25,9 @@ Three layers:
      drawn — only joined. Unmapped NOS nodes are legal (linter warns on unmapped
      port/psu/fan classes only).
 3. **Compiled SVG** — build artifact. Flat (components inline-expanded), stable
-   hierarchical IDs, `data-*` semantics, `.state-*` stylesheet, full source
-   definition embedded in `<metadata>`. `<use>` only for decoration.
+   hierarchical IDs, `data-*` semantics, `.state-*` stylesheet, and a digest of the
+   full source definition in `<metadata>`; the source itself is published once
+   per device beside the drawings. `<use>` only for decoration.
 
 ## The ten resolved decisions (Aug 2026)
 

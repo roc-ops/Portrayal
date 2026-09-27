@@ -233,6 +233,13 @@ the *published build*, not about the hardware.
   from the cylinder's far end (`lift` + `cyl`), in the build and in the kit.
 
 ### Changed
+- **`contract: 2`. A drawing no longer embeds the device's source manifest.**
+  Every face carried the same whole manifest in its `<metadata>`: 139 MB of a
+  249 MB build, 107 KB in each of the R740xd's 252 faces. It is now published
+  once per device as `<device>.source.json`, and the `source` key in a face's
+  metadata is replaced by `source-sha256`, the digest of that file's exact
+  bytes. A reader that took the manifest from any drawing reads the one file
+  instead. What is published is unchanged; only where (roc-ops/Portrayal#665).
 - **BREAKING for DCIM data already imported.** A module type names its ports per
   bay. Every interface, console, power, front and rear port name on a card
   starts with `{module}/`, which NetBox and Nautobot both fill with the position
