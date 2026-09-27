@@ -251,7 +251,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `celestica/lug-tag-ridge-23@1` | component | tab | 23.3 × 3.8 |  | 1 | 1 | Celestica pull-out luggage tag, the TOP-RIDGE form in its long 23.3 mm length - a flat black card in a slot i… |
 | `celestica/psu-1500-ac@1` | module | psu | 55.2 × 39 |  | 3 | 0 | Celestica 1500 W AC hot-swap power supply, 55.2 x 39.0 mm face - a square-mesh grille on the left crossed by … |
 | `celestica/psu-1600@1` | module | psu | 73.5 × 40 |  | 1 | 1 | Gospower G1482-1600WRA 1600W AC PSU (Celestica ES1010 FRU) - 54.5V output for PoE++, CRPS form factor, C14 in… |
-| `celestica/psu-2000-ac@1` | module | psu | 56.2 × 40 |  | 1 | 0 | Celestica 2000 W hot-swap AC power supply, the one the DS4101 ships two of - a pale module with two stacked l… |
+| `celestica/psu-2000-ac@1` | module | psu | 56.2 × 40 |  | 1 | 0 | Celestica's 2000 W hot-swap supply - a 56.2 x 40 mm face in a bright housing with a perforated plate at its l… |
 | `celestica/psu-crps-1600-ac@1` | module | psu | 73.5 × 40 × 185 | crps-1u | 1 | 0 | 1600 W AC CRPS supply of the Celestica ES1000-48P and -48CP (PoE++) - 1000 W on a 100-127 V feed |
 | `celestica/psu-crps-550-ac@1` | module | psu | 73.5 × 40 × 185 | crps-1u | 1 | 0 | 550 W AC CRPS supply of the Celestica ES1000-24, -48 and -48C - C14 inlet turned portrait, 40 mm fan, black r… |
 | `celestica/psu-crps-920-ac@1` | module | psu | 73.5 × 40 × 185 | crps-1u | 1 | 0 | 920 W AC CRPS supply of the Celestica ES1000-24P (PoE++) - C14 inlet turned portrait, 40 mm fan, black releas… |
@@ -562,7 +562,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `edgecore/agr420-filter-top@1` | module | filter | 417 × 8.6 × 12 |  | 1 | 1 | Removable TOP air filter for the Edgecore AGR420 (AS7946-74XKSB) - the full-width band of it |
 | `edgecore/agr560-psu-ac@1` | module | psu | 73.5 × 40 |  | 1 | 1 | The 2000 W AC power supply of the Edgecore AGR560 (AS9947-36XKB), sold as the FRU PS-2202-8L - a 73.5 x 40 CR… |
 | `edgecore/agr560-psu-dc@1` | module | psu | 73.5 × 40 |  | 1 | 0 | The 2000 W -48 VDC power supply of the Edgecore AGR560 (AS9947-36XKB), sold as the FRU DD-2202-1L - the AC un… |
-| `edgecore/ais800-64-psu-ac@1` | module | psu | 73.5 × 40 |  | 2 | 3 | The 3000 W AC power supply of the Edgecore AIS800-64D and AIS800-64O - a CRPS-form module in a bright housing… |
+| `edgecore/ais800-64-psu-ac@1` | module | psu | 73.5 × 40 |  | 2 | 4 | The 3000 W AC power supply of the Edgecore AIS800-64D and AIS800-64O - a CRPS-form module in a bright housing… |
 | `edgecore/ais800-64-psu-dc@1` | module | psu | 73.5 × 40 |  | 2 | 1 | The 3000 W DC power supply of the Edgecore AIS800-64D and AIS800-64O - the AC unit's 73.5 x 40 CRPS shell wit… |
 | `edgecore/ais800-fan@1` | module | fan | 41.65 × 40.6 |  | 2 | 5 | A rear fan module of the Edgecore AIS800-32D and AIS800-32O - a honeycomb-grilled black tray with a large col… |
 | `edgecore/ais800-psu-ac@1` | module | psu | 53.7 × 40.6 |  | 2 | 7 | The 2400 W AC power supply of the Edgecore AIS800-32D and AIS800-32O - a bright CRPS-style module with a latt… |
