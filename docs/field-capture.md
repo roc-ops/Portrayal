@@ -77,7 +77,7 @@ photo is the map between them.
 | Detail shots | skin art, LED semantics, silkscreen text |
 | FRU scans (glTF) | future extruded/replaceable 3D modules; reference for skins |
 | Shell scan | 3D-tab reference geometry beyond the flat box |
-| Entity dump | overlay entity-map, live-state demos |
+| Entity dump | listing entity-map, live-state demos |
 
 File everything under `working/intake/<vendor>/<line>/` — the gitignored
 staging tree the intake process uses — and record each file in that

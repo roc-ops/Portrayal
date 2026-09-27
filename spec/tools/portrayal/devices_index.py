@@ -33,7 +33,7 @@ CONTRACT = 2
 SEARCH_ATTRS = ("media", "speed", "role", "function", "type", "slot")
 
 
-def search_blob(d, ddir=None):
+def search_blob(d, listings=()):
     """Everything a reader might type that is not already in the index entry.
 
     The filter searched manufacturer, model, series, family and description, and
@@ -90,14 +90,17 @@ def search_blob(d, ddir=None):
                     words.append(str(q["attrs"][k]))
         for b in vp["bays"]:
             refs.update(b.get("accepts") or [])
-    # The NOS an overlay exists for. "arcos" used to be findable on the
+    # WHO LISTS IT, AND WHAT THEY CALL IT. "arcos" used to be findable on the
     # AS7326-56X because somebody had written it into an attr; the attr moved to
-    # overlays/arcos.yaml, which is its right home, and the word would have gone
-    # with it. What a device can be joined to is a fact worth searching for, so
-    # it is indexed from the overlay itself rather than from a sentence.
-    for f in sorted((ddir / "overlays").glob("*.yaml")) if ddir else []:
-        o = load_yaml(f) or {}
-        words.append(str(o.get("nos") or ""))
+    # the NOS naming, which is its right home, and the word would have gone with
+    # it. A NOS vendor's listing is a fact about the box worth searching for -
+    # "arrcus", "ocnos", or DriveNets' own name for the metal - so each listing
+    # of this device folds its vendor, NOS and names into the hardware's blob.
+    for ls in listings:
+        words += [str(ls.get("ns") or ""), str(ls.get("manufacturer") or ""),
+                  str(ls.get("nos") or ""), str(ls.get("model") or "")]
+        take([a.get("name") for a in (ls.get("aliases") or []) if isinstance(a, dict)])
+        take((ls.get("portfolio") or {}))
     # sorted, because `refs` is a set and set iteration order varies between
     # processes. Everything else feeding `words` is already ordered; this was the
     # one leak, and it made devices.json differ between two builds of an
@@ -161,6 +164,19 @@ def main():
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
 
+    # THE LISTINGS, INVERTED. A listing names its hardware and the hardware does
+    # not name its listings, so the reverse is built once here for every device.
+    vendors = (load_yaml(SCHEMAS / "vendors.yaml") or {}).get("vendors") or {}
+    listed = {}
+    for root in args.library:
+        for f in libwalk.iter_listings([root]):
+            ls = load_yaml(f) or {}
+            key = libwalk.listing_key(f)
+            ns = key.split("/")[0]
+            listed.setdefault(ls.get("hardware"), []).append(
+                {**ls, "key": key, "ns": ns,
+                 "manufacturer": (vendors.get(ns) or {}).get("display") or ns})
+
     devices = []
     for root in args.library:
         for man in libwalk.iter_devices([root]):
@@ -168,6 +184,7 @@ def main():
             if d.get("kind") != "device":
                 continue
             cap = capability.report(man, d, args.library, SCHEMAS)
+            hw = f"{man.parent.parent.name}/{man.parent.name}"
             devices.append({
                 "name": d["name"],
                 # the picker greys out what a model cannot do rather than
@@ -204,7 +221,10 @@ def main():
                 # the library without opening every configs.json (#513).
                 "options": device_options(d),
                 # what the type-ahead filter matches on beyond the fields above
-                "search": search_blob(d, man.parent),
+                "search": search_blob(d, listed.get(hw, [])),
+                # WHICH NOS VENDORS LIST IT, as listings.json keys - so a picker
+                # can offer "Arrcus" without opening listings.json first
+                "listings": [ls["key"] for ls in listed.get(hw, [])],
                 # where this chassis's own 3D projections came from, counted
                 "decor-confidence": decor_confidence(d),
             })

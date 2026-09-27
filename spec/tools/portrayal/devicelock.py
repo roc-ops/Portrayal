@@ -35,6 +35,7 @@ from portrayal import libwalk
 # `device.lock.json` beside its manifest - see `load_lock`.
 LOCK_NAME = "devices.lock.json"
 DEVICE_LOCK_NAME = "device.lock.json"
+LISTING_LOCK_NAME = "listing.lock.json"
 FORMAT = 1
 
 
@@ -821,6 +822,109 @@ def stale_gap_scopes(doc):
     return out
 
 
+# ---- listings ---------------------------------------------------------------
+#
+# A LISTING IS VERSIONED LIKE A DEVICE, AND FOR THE SAME REASON. What a NOS
+# vendor calls a port, and what model and part number it files the box under,
+# are exactly what a DCIM import keys on - an overlay edit used to change the
+# exported names with nothing recording it (#56). Its buckets are simpler than a
+# device's because it draws nothing:
+#
+#   `names`   hardware, nos, model, interfaces, entity-map, terms - what a
+#             consumer holds. Any change is major.
+#   `configs` per configuration override, recorded whole so an ADDED one can be
+#             told from a changed or removed one: added is minor, the rest major.
+#   `surface` everything else - source, portfolio, aliases, prose. A patch.
+
+LISTING_NAMES = ("hardware", "nos", "model", "interfaces", "entity-map", "terms")
+
+
+def listing_entry(doc):
+    names = {k: doc.get(k) for k in LISTING_NAMES}
+    configs = {k: _digest(v) for k, v in (doc.get("configurations") or {}).items()}
+    rest = {k: v for k, v in doc.items()
+            if k not in LISTING_NAMES + ("configurations", "version")}
+    return {"version": str(doc.get("version") or ""),
+            "names": _digest(names), "configs": configs, "surface": _digest(rest)}
+
+
+def listing_bump(old, new):
+    """The smallest bump a listing change allows, or None if nothing moved."""
+    if old is None:
+        return None
+    if old.get("names") != new["names"]:
+        return "major"
+    was, now = old.get("configs") or {}, new["configs"]
+    if any(k not in now or now[k] != v for k, v in was.items()):
+        return "major"
+    if set(now) - set(was):
+        return "minor"
+    if old.get("surface") != new["surface"]:
+        return "patch"
+    return None
+
+
+def listing_files(library: pathlib.Path):
+    return list(libwalk.iter_listings([library]))
+
+
+def listing_lock_path(library: pathlib.Path, key: str):
+    return library / "devices" / key / LISTING_LOCK_NAME
+
+
+def load_listing_locks(library: pathlib.Path):
+    out = {}
+    for path in listing_files(library):
+        key = libwalk.listing_key(path)
+        f = listing_lock_path(library, key)
+        if f.exists():
+            out[key] = json.loads(f.read_text())
+    return out
+
+
+def check_listings(library: pathlib.Path):
+    findings = []
+    known = load_listing_locks(library)
+    for path in listing_files(library):
+        key = libwalk.listing_key(path)
+        now = listing_entry(manifest.load_yaml(path) or {})
+        was = known.get(key)
+        if was is None:
+            findings.append((key, "unlocked",
+                             f"listing {key} has no {LISTING_LOCK_NAME}. Run devicelock.py "
+                             "--update to record it"))
+            continue
+        need = listing_bump(was, now)
+        took = bump_taken(was.get("version"), now["version"])
+        if took == "backwards":
+            findings.append((key, "backwards",
+                             f"listing {key} version went from {was.get('version')} to "
+                             f"{now['version']}. A version is a promise, and it only counts up"))
+        elif not sufficient(took, need):
+            findings.append((key, "unbumped",
+                             f"listing {key} changed since version {was.get('version')} "
+                             "and the version "
+                             + (f"is still {now['version']}" if took is None
+                                else f"only took a {took} bump")
+                             + f". This change needs at least a {need} bump"
+                             + (" - a changed port name, model or part number is what a "
+                                "DCIM import keys on" if need == "major" else "")))
+    return findings
+
+
+def update_listings(library: pathlib.Path):
+    changed = []
+    known = load_listing_locks(library)
+    for path in listing_files(library):
+        key = libwalk.listing_key(path)
+        now = listing_entry(manifest.load_yaml(path) or {})
+        if {k: v for k, v in (known.get(key) or {}).items() if k != "format"} != now:
+            listing_lock_path(library, key).write_text(
+                json.dumps({"format": FORMAT, **now}, indent=1, sort_keys=True) + "\n")
+            changed.append(f"listing {key}")
+    return changed
+
+
 def device_files(library: pathlib.Path):
     return list(libwalk.iter_devices([library]))
 
@@ -886,7 +990,9 @@ def aggregate(library: pathlib.Path, out: pathlib.Path):
     `dist/` for the same reason `devices.json` is - so a reader without a clone
     has the whole picture in one fetch.
     """
-    out.write_text(json.dumps(load_lock(library), indent=1, sort_keys=True) + "\n")
+    body = load_lock(library)
+    body["listings"] = load_listing_locks(library)
+    out.write_text(json.dumps(body, indent=1, sort_keys=True) + "\n")
     return out
 
 
@@ -982,7 +1088,7 @@ def check(library: pathlib.Path):
                              "must go, a gap the change opened must be added, and a gap "
                              "still true is fine - but it has to be the third one on "
                              "purpose rather than by omission"))
-    return findings
+    return findings + check_listings(library)
 
 
 def update(library: pathlib.Path):
@@ -1006,7 +1112,7 @@ def update(library: pathlib.Path):
     for name in sorted(set(known) - set(live)):
         lock_path(library, name).unlink(missing_ok=True)
         changed.append(f"{name} (removed)")
-    return changed
+    return changed + update_listings(library)
 
 
 def main(argv=None):

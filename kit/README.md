@@ -21,7 +21,7 @@ Everything in `library/dist/`, documented as a contract in
 - `<device>.source.json` — the **whole source manifest**, every view of it: the
   device's configurations, groups, attrs and chassis. One per device.
 - `devices.json`, `components.json` (+ `components-detail.json`), `labs.json`,
-  `gaps.json`, `vendors.json`, `overlays.json`.
+  `gaps.json`, `vendors.json`, `listings.json`.
 
 ## Modules
 

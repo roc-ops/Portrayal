@@ -15,6 +15,25 @@ the *published build*, not about the hardware.
 ## Unreleased
 
 ### Added
+- **Listings** (roc-ops/Portrayal#674). A NOS vendor lists the hardware it
+  supports: `library/devices/<nos vendor>/<id>/listing.yaml` points at one device
+  and carries only what the NOS vendor changes - interface names, its own model
+  name and catalogue family, and its own part numbers where it has them. This is
+  how NetBox and Nautobot file a disaggregated box: one device type per
+  manufacturer that sells it, with one copy of the metal behind them all.
+  - `listings.json`: every listing, whole, keyed `<ns>/<id>`, with `ns` and the
+    resolved `manufacturer` added.
+  - `devices.json`: each device carries `listings`, the keys of the listings
+    that list it, and its `search` blob gains each listing's vendor, NOS and
+    names, so "arrcus" or "ocnos" finds the hardware.
+  - `devices.lock.json`: a `listings` map beside `devices`. A listing is
+    versioned (`listing.lock.json` beside it): a changed port name, model or
+    part number is major, an added configuration override minor, wording a
+    patch.
+  - `vendors.json`: IP Infusion (OcNOS), DriveNets (DNOS) and SONiC join Arrcus
+    as software vendors.
+  - Lint L124: under one NOS vendor, no two listings export the same DCIM model,
+    and an alias names one listing unless each claimant marks it `shared`.
 - Lint L123, library-wide: one module, one bay size. Every bay that accepts a
   module, in any device or carrier, reserves the same size for it to within a
   millimetre, compared in the module's own frame so a turned bay matches an
@@ -277,6 +296,20 @@ the *published build*, not about the hardware.
   name: `data-config` on the root and `config` in `<metadata>` are gone, since
   a shared drawing belongs to several. The default configuration's
   `<device>.<view>.svg` copies are unchanged (roc-ops/Portrayal#665).
+- **Also in `contract: 2`: `overlays.json` is gone;** `listings.json` replaces
+  it (roc-ops/Portrayal#674). The NOS naming an overlay carried under the
+  hardware (`devices/edgecore/as7726-32x/overlays/arcos.yaml`) now lives in the
+  NOS vendor's listing (`devices/arrcus/as7726-32x/listing.yaml`), and the
+  overlay's `identity:` block is retired - the listing's namespace is the
+  vendor. Lint L56 now checks a listing: it lives under a software vendor and
+  names only configurations, ports and components its hardware has.
+- **BREAKING for DCIM data already imported.** The Arrcus device types are
+  renamed from `Arrcus/ArcOS on <SKU>` to `Arrcus/<SKU>` - the hardware's SKU,
+  under the NOS vendor, as NetBox's and Nautobot's own libraries file a
+  disaggregated box - and they now carry the hardware's part number, which the
+  identity export dropped. The metal is the same metal and its part number
+  still orders it; a listing that publishes its own replaces it per
+  configuration. `dcim_export.py --nos` is removed: every listing exports.
 - **BREAKING for DCIM data already imported.** A module type names its ports per
   bay. Every interface, console, power, front and rear port name on a card
   starts with `{module}/`, which NetBox and Nautobot both fill with the position

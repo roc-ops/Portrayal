@@ -50,7 +50,7 @@ def test_every_internal_ref_resolves(path):
 def test_some_schema_actually_uses_internal_refs():
     """NON-VACUITY for the sweep above: it passes when a schema has no refs at
     all, which is also what it does if the pattern stops matching. Two of the
-    three schemas here use them heavily; overlay.schema.json uses none."""
+    three schemas here use them heavily; listing.schema.json uses none."""
     total = sum(len(set(re.findall(r'"#/\$defs/([^"]+)"', f.read_text())))
                 for f in _schema_files())
     assert total >= 10, f"only {total} internal refs across all schemas"
