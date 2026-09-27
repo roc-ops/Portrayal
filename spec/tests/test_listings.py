@@ -186,15 +186,22 @@ def test_l124_checks_configuration_aliases_too(tmp_path):
     assert any(r == "L124" and "ncp-40c-ac" in m for r, m in got), got
 
 
-def test_l56_refuses_an_override_on_an_illustration():
-    hw = load_yaml(LIB / "devices/edgecore/as7726-32x/device.yaml")
-    examples = [k for k, v in (hw.get("configurations") or {}).items()
-                if (v or {}).get("kind") == "example"]
-    if not examples:
-        import pytest
-        pytest.skip("the AS7726-32X has no example configuration to override")
-    doc = dict(load_yaml(ARRCUS), configurations={examples[0]: {"model": "X"}})
-    got = findings(lint.lint_listing, ARRCUS, doc, [str(LIB)])
+def test_l56_refuses_an_override_on_an_illustration(tmp_path):
+    # The AS7726-32X ships no `kind: example` configuration, so the test gives a
+    # copy of it one rather than skipping: a skip here would leave the rule
+    # untested for as long as the real box has none.
+    import shutil
+    lib = tmp_path / "library"
+    shutil.copytree(LIB / "devices/edgecore/as7726-32x", lib / "devices/edgecore/as7726-32x")
+    dev = lib / "devices/edgecore/as7726-32x/device.yaml"
+    hw = load_yaml(dev)
+    base = next(iter(hw["configurations"]))
+    hw["configurations"]["illustration"] = {
+        **copy.deepcopy(hw["configurations"][base]), "kind": "example"}
+    hw["configurations"]["illustration"].pop("part-numbers", None)
+    dev.write_text(json.dumps(hw))
+    doc = dict(load_yaml(ARRCUS), configurations={"illustration": {"model": "X"}})
+    got = findings(lint.lint_listing, ARRCUS, doc, [str(lib)])
     assert any(r == "L56" and "example" in m for r, m in got), got
 
 
