@@ -261,6 +261,9 @@ the *published build*, not about the hardware.
   take a patch, and the DCS201, DCS202, DCS240 and DCS511 a patch for the
   fans. Lint L73 now refuses a relief `color` on a node a field paints
   (roc-ops/Portrayal#643).
+- Lint L122 now also reads a `cable-od` a device sets on a placement (a
+  cable end placed `mate-to` a jack or cage), with the same number and range
+  check as a wrapper's (roc-ops/Portrayal#644).
 - `siemon/qsfp28-aoc` (1.1.1) draws its pull tabs black (`latch-color:
   #090502`), read off the product photograph the aqua jacket came from, in
   place of the generic's neutral grey (roc-ops/Portrayal#645).
