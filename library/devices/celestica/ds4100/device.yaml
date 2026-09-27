@@ -1,0 +1,530 @@
+format: 1
+kind: device
+name: ds4100
+version: 0.1.0
+maturity: modelled
+manufacturer: Celestica
+model: DS4100
+description: >-
+  Celestica DS4100 - a 1RU 16-port 800G data-centre switch: sixteen OSFP ports in two blocks of four stacked
+  columns across the middle of a black front panel, a stacked pair of 10G SFP+ management cages (M1/M2)
+  to their left, and at the right four system lamps beside one silver housing that stacks an RJ45 console,
+  a USB 3.0 Type-A and an RJ45 1000BASE-T management port. The rear carries two 1500 W hot-swap AC supplies
+  at the ends and seven hot-swap orange fan modules between them (6+1). A COM-E x86 control plane, an
+  optional RunBMC and 12.8 Tbps of switching.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Two documents and two vendor renders. The DS4100 installation guide (Celestica documentation portal,
+      HTML, release 1.3.1 3/2026) carries the System Specifications table, a front elevation and a rear
+      elevation (system-overview-1/-3, 2.3-2.5 px/mm), a Front Panel Callouts figure with the LED and
+      port tables, a Rear Panel Callouts figure with its LED table, the What's in the Box SKU table and
+      the Ground Lug Installation photographs. The DS4100 datasheet carries the features, power, dimensions
+      and approvals. cls.celestica.com/hardware-platforms/ds4100/ serves two three-quarter renders (front,
+      and front+rear side by side), saved as working/intake/celestica/photos/ds4100-A.png and -AB.png;
+      they are perspective and are used only for colour, counts and legends, never for position.
+  gate-1:
+    confidence: measured
+    note: >-
+      BOTH CALLOUT FIGURES ARE ORTHOGRAPHIC. The Front Panel Callouts figure's dark face box reads 1789
+      x 176 px (x 20-1808, y 196-371) against the stated 438.5 x 43.1 mm: aspect 10.165 against 10.174,
+      0.09% out, 4.080 px/mm across and 4.083 down. The Rear Panel Callouts figure reads 1710 x 169 px
+      (x 15-1724, y 111-279), aspect 10.118, 0.55% out, 3.900 and 3.921 px/mm. Both are about 1.7x the
+      resolution of the System Overview elevations of the same faces (2.34 and 2.50 px/mm), so every position
+      on this device is read off the two callout figures. The side thumbscrew knobs drawn beyond both
+      ends of the front are outside the body box and are not modelled; no ear is drawn.
+  the-osfp-wall:
+    confidence: measured
+    note: >-
+      TWO BLOCKS OF FOUR STACKED COLUMNS. The bright cage walls inside the openings, profiled across the
+      face at y 8, 12, 16, 28 and 34 mm, put the inner dividers of block 1 at 144.49, 167.66 and 190.94
+      and of block 2 at 245.85, 269.13 and 292.36 - an in-block pitch of 23.24 (23.225 and 23.255 per
+      block) and a block pitch of 101.48, which leaves an 8.5 mm gutter between blocks. Column 1 is centred
+      at 132.87. The aperture rows read 6.12-19.10 and 24.98-37.96 on a vertical profile through column
+      1, so 12.98 mm tall against std/osfp@1's 23.1 x 13.5 registry-drawn aperture, which is seated centred
+      on each (the part owns the aperture, the device owns the pitch, as on edgecore/ais800-32o). Row
+      pitch 18.86. At 4.08 px/mm every figure here is good to about a quarter of a millimetre. NUMBERING:
+      the panel prints `1 (up) (down) 2` between each column's two cages and on to `15 (up) (down) 16`,
+      so odd ports are the upper row and even the lower, numbering left to right. Upper cages are rotate
+      0 and lower 180, the library's belly-to-belly rule (L108) - the drawing is consistent with it (each
+      cage's dark latch notches hang into the band between the rows) but that is the rule, not a separate
+      reading.
+  legends:
+    confidence: measured
+    note: >-
+      Read on the Front Panel Callouts figure and confirmed as printed on the three-quarter render: `N
+      (up)(down) N+1` centred on each column in the band between the rows, digits about 1.6 mm tall (cap)
+      - column 1's spans x 129.2-136.2 centred 21.9; `M1 (up)(down) M2` between the SFP+ cages; SYS, FAN,
+      PSU and ALM to the left of the four system lamps; CONSOLE, the USB SuperSpeed mark and MGMT printed
+      vertically to the right of the management housing, reading bottom to top; LUG TAG above the pull-out
+      tag; and the Celestica wordmark as plain text at upper left (x 17.5-40.5). The SS mark is drawn
+      as the letters SS only - the trident beside it is not drawn. The triangles are drawn as ink, not
+      lamps: they are the same white as the numerals on both the figure and the render, and the SFP+ legend
+      carries the same triangles while its lamps are separate green domes.
+  the-sfp-pair-and-its-lamps:
+    confidence: measured
+    note: >-
+      A stacked 1x2 SFP cage at x 93.63-108.58, frames y 10.29-20.82 and 23.26-33.55; std/sfp@1 (14.5
+      x 10) is centred on each, upper 0 and lower 180. One green lamp above (98.17, 7.72) and one below
+      (98.17, 36.61), each 2.2 mm across - common/led-dot@1. The guide's callout names them "Indicator
+      LED - SFP28" and the LED table's SFP+ rows give Green 10GbE / Amber 1GbE, on and blinking. The upper
+      lamp is taken as M1's and the lower as M2's by position; no document says so. THE FIGURE ALSO DRAWS
+      A GREY DOT at (104.3, 7.6), right of the upper lamp, 1.8 mm across. The render shows a vent cell
+      there, not a dot. It is not drawn; see the grey-dot gap.
+  the-management-housing:
+    confidence: measured
+    note: >-
+      ONE SILVER HOUSING, x 328.4-345.2 by y 7.4-40.0, stacking console (top, latch slot up), USB Type-A
+      (middle) and MGMT (bottom, its latch slot and lamps at the bottom) - the guide's callout: "Top -
+      1 x Console, Middle - 1 x USB Type A 3.0, Bottom - 1 x Ethernet RJ45". The housing is panel decor
+      (the metal shell the jacks sit in); the jacks are std/rj45-ganged@2 cells (12.7 x 11.0, which is
+      what a stacked shell's cells measure - about 11 mm per jack here) and std/usb-a@1, centred on the
+      housing at x 336.8. the console cell is turned 180 so its latch slot is at the top, as drawn, and
+      MGMT is common/rj45-ganged-eth@1 upright, whose lamps sit in the latch-side (bottom) corners, where
+      the figure draws two small light squares; the LED table names them (right: green 1000M / amber 10-100M;
+      left: green link / blinking activity).
+  the-system-lamps:
+    confidence: measured
+    note: >-
+      Four green domes 3.4 mm across at x 324.15, y 12.25, 17.39, 22.53 and 27.68 - a 5.14 mm pitch. common/led-indicator@1
+      (4 x 4, 2 mm lamp) is seated on the centres. States from the guide's LED Descriptions table: SYS
+      green/amber alternate blinking = normal, off = no power; FAN and PSU green = all normal, amber =
+      one absent or abnormal; ALM green = no alarm, amber = critical, amber 4 Hz = major, amber 1 Hz =
+      minor. The alternate green/amber blink is recorded as green blinking; the table gives no rate for
+      it.
+  vent-fields:
+    confidence: measured
+    note: >-
+      Extents read on the Front Panel Callouts figure: a left column x 1.0-13.4, a two-row strip x 15.0-75.5
+      by y 3.0-7.8, a field x 20.8-59.4 by y 15.0-35.6 under the wordmark, a two-row patch x 79.0-92.0
+      by y 26.5-31.6 beside the SFP+ cages, and on the right a band x 350-425 by y 1.5-10.5, a field x
+      378-416.5 by y 15-35.5 and a column x 424-433. The cells are drawn with the grille pattern (dark
+      square cells; the slots pattern paints its cells lighter than this plate) at the measured pitches
+      (about 2.45 x 3.0); the true cells are narrower rectangles than the pattern draws, so the texture
+      is indicative and the extents are the measurement.
+  rear:
+    confidence: measured
+    note: >-
+      Rear Panel Callouts figure at 3.90 px/mm. Two supplies in the SAME orientation (not mirrored): frames
+      x 10.5-66.4 and 377.2-432.9, about 55.7 wide and 40.5 tall; each carries a lattice grille at left
+      with two lamps at its foot - "!" over a check mark, the callout's "Top - alarm, Bottom - OK" - a
+      black U-grip, a C14 inlet turned a quarter and a latch at the far right. Bays are drawn at celestica/psu-1500-ac@1's
+      own 55.2 x 39.0 (read by the DS4000 modeller on that guide) centred on the frames measured here.
+      Seven orange fan modules: the orange faces at y 3 run 70.52-108.73, 114.63-152.83 ... 334.64- 372.85,
+      a 44.02 mm pitch; across the handle bar they read 40.26 wide and top to bottom 2.30 to 40.80. Bays
+      use celestica/fan-40@1's 39.3 x 39.0 centred on those. At the far left two round screw heads (x
+      5.7, y 24.1 and 33.4, about 5 mm across) - the two M3 holes the Ground Lug Installation page fixes
+      the ground-lug bracket to at this corner.
+  fans-and-supplies-are-shared-with-the-ds4000:
+    confidence: measured
+    note: >-
+      THE SAME SHAPES, MEASURED ON THIS DEVICE'S OWN FIGURE. celestica/psu-1500-ac@1 and celestica/fan-40@1
+      were drawn off the DS4000 guide. Checked against the DS4100 rear here: PSU lamps at module (6.65,
+      25.55) and (6.65, 31.75) against the part's (6.5, 25.4) and (6.5, 32.1); the fan lamp at module
+      (3.05, 3.55) against (3.7, 3.6); fan pitch 44.02 against 43.96. Faces here measure 0.5 wider than
+      the parts on both (55.7 against 55.2, and the orange tray about 40 against 39.3), which is the frame
+      gap being read as module at 3.9 px/mm and is recorded, not reconciled. THE FAN IS ORANGE HERE AND
+      BLACK ON THE DS4000. Face and handle are sampled at #dd8817 on the figure and on the render; they
+      are fan-40's face-finish and handle-finish fields, set by the configuration, not a second part.
+      The supplies' latch at the far right is drawn black on this figure where the DS4000 part defaults
+      to orange, so latch-finish is set #1f2124 too.
+  power:
+    confidence: datasheet
+    note: >-
+      The datasheet's Power and Cooling: "1+1 redundant, hot swap PSUs, 1500W", "AC 47~63Hz, 100~240 V
+      nominal, 90~264V max", "6+1 redundant fans, front to back and back to front airflow", "Power consumption,
+      Max 1310W". The guide's table repeats 1310 W max. 1310 W is the chassis maximum and is recorded
+      as the vendor's figure; it is not reconciled against module draws.
+  airflow:
+    confidence: datasheet
+    note: >-
+      The What's in the Box table lists R4035-F9001-A1 (F2B), R4035-F9005-A1 (B2F) and R4035-F9007-A1
+      (DC PSU 2x1500W, F2B). Every figure shows the F2B build's orange fans; no document shows what the
+      B2F build's trays or latches look like, so the B2F configuration is drawn identically and says so.
+  colour:
+    confidence: photo-measured
+    note: >-
+      Front plate #2a2a2a sampled between features on the Front Panel Callouts figure; the three-quarter
+      render agrees (black). Rear sheet metal #a7a9ac sampled on the rear figure's left strip.
+  lifecycle:
+    confidence: datasheet
+    note: >-
+      Listed as a current platform on cls.celestica.com/hardware-platforms/ds4100/ when fetched on 2026-09-26;
+      no end-of-life notice was found there or on the documentation portal, whose guide was last revised
+      3/2026.
+attrs:
+  physical:
+    dimensions-note: W 438.5 x D 657.5 x H 43.1 mm (datasheet and guide)
+  performance:
+    switching-capacity: 12.8 Tbps
+    packet-buffer: 56.83 MB integrated SmartBuffer
+    serdes: 112G PAM4
+    jumbo-frames: up to 9416 bytes
+    breakout: 8 x 100GbE, 4 x 200GbE or 2 x 400GbE per 800G port
+  power:
+    power-draw-max-w: 1310
+    psu-rating-note: 1+1 redundant hot-swap 1500 W PSUs
+    input-ac: AC 100 ~ 127 V / 200 ~ 240 V nominal (90-264 V max) at 47-63 Hz
+  thermal:
+    airflow-options: front-to-back and back-to-front (separate SKUs)
+  environmental:
+    operating-temp: 0 to 40 C at 900 m (datasheet); 0 to 40 C at 950 m (guide)
+    humidity: 5% to 95% non-condensing
+  platform:
+    cpu: Intel Xeon-D class, 4 or 8 core, on a COM-E module
+    memory: up to 32 GB ECC DDR4
+    storage: 128 GB or 256 GB SSD
+    bmc: RunBMC option (OpenBMC, 2 GB DDR4, dual 128 MB flash)
+    software: ONIE installer for third-party NOS
+  features:
+    optics-osfp: up to 30 W OSFP optics; LPO/LRO support; DAC up to 2.5 m
+    timing: precise timing option (datasheet, unspecified)
+  compliance:
+    emc: EMC CN (GB9254-2008), EU (EN55022, EN55024), FCC, VCCI
+    safety: UL/CSA/IEC/EN 60950-1/62368-1
+    environment: EU RoHS, SVHC requirements of REACH, China RoHS
+  lifecycle:
+    eol: none-announced
+chassis: {width: 438.5, height: 43.1, depth: 657.5, ru: 1, color: '#2a2a2a', airflow: front-to-back, power: ac}
+gaps:
+- what: osfp-port-lamps
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    Where the OSFP ports' own lamps are. The guide's Port Descriptions table gives every OSFP port a lamp
+    (green 100G per lane, amber 50G or lower, on or blinking) and the Front Panel callout points "Indicator
+    LED - OSFP" at the port block, but neither the figure nor the render shows a window for one: the band
+    between the rows carries only the printed legend and the cages' latch notches, and the triangles are
+    ink. No lamp is placed rather than one guessed at. A photograph of a powered unit settles it.
+- what: grey-dot-beside-the-sfp-lamp
+  scope: [front]
+  reason: sources-disagree
+  wanted: >-
+    What the round grey dot at (104.3, 7.6) on the Front Panel figure is. It sits beside the upper SFP+
+    lamp, the size of the lamp but grey; the three-quarter render draws a vent cell there. It could be
+    an unlit lamp, a reset pinhole or a drawing artefact. Two small dark squares above the SYS lamp (about
+    319.8 and 322.2, y 7.2) are equally unexplained. Neither is drawn.
+- what: dc-supply-face
+  scope: [rear]
+  reason: needs-drawing
+  wanted: >-
+    The DC build's supply. The What's in the Box table lists R4035-F9007-A1, "DC PSU 2x1500W, F2B", and
+    the Ground Lug Installation page exists for it ("not applicable to the AC SKU versions"), but no figure
+    draws a DC supply's face, so the DC build is not offered as a configuration.
+- what: fan-and-psu-numbering
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    Which end FAN1 and PSU1 are. The Rear Panel LEDs table names FAN1-FAN7 and PSU1/PSU2 and no figure
+    labels a bay. The bays are numbered left to right as seen from the rear because a view has to order
+    them somehow; no numeral is printed.
+- what: b2f-finish
+  scope: [rear]
+  reason: needs-drawing
+  wanted: >-
+    What colour the back-to-front build's fan handles and latches are. Only the F2B build is drawn anywhere;
+    many vendors mark B2F modules in a second colour, and whether this one does is not shown.
+- what: the-four-undrawn-faces
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  wanted: >-
+    Orthographic drawings of the lid, underside and side walls. The three-quarter renders show a plain
+    grey lid with a recessed label or handle plate towards the rear and slide-rail screw heads along the
+    sides, which cannot be measured from a perspective render.
+groups:
+  osfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    description: >-
+      the sixteen 800G OSFP ports, two blocks of four stacked columns on a 23.24 mm pitch with an 8.5
+      mm gutter, odd ports the upper row and even the lower, as the panel's `N (up)(down) N+1` legends
+      say. Each breaks out to 2 x 400G, 4 x 200G or 8 x 100G.
+    attrs: {media: osfp, speed: 800g}
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the out-of-band ports: the RJ45 console, the USB 3.0 Type-A and the 1000BASE-T management jack in
+      one stacked housing, and the two 10G SFP+ cages the panel legends M1 and M2 and the datasheet calls
+      the "2x10G SFP+ Traffic Management port".
+  leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+  furniture:
+    term: Part
+    role: furniture
+    index-origin: 1
+    description: >-
+      the pull-out LUG TAG at the foot of the front panel and the two ground-lug bracket screws at the
+      rear left corner - things you neither connect to nor read.
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: 1+1
+      redundancy-note: >-
+        datasheet: "1+1 redundant, hot swap PSUs, 1500W", against a 1310 W maximum draw, and the rear
+        figure counts two.
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: 6+1
+      redundancy-note: >-
+        datasheet: "6+1 redundant fans", and the rear figure and the LED table (FAN1-FAN7) count seven
+        bays.
+views:
+  front:
+    size: {w: 438.5, h: 43.1}
+    panel:
+      decor:
+      - {id: vent-left, at: [1.0, 2.6], size: [12.4, 38.2], pattern: grille, pattern-pitch: [2.45, 3.0],
+        vent: 20}
+      - {id: vent-top-left, at: [15.0, 3.0], size: [60.5, 4.8], pattern: grille, pattern-pitch: [2.45,
+          2.4], vent: 20}
+      - {id: vent-mid-left, at: [20.8, 15.0], size: [38.6, 20.6], pattern: grille, pattern-pitch: [2.45,
+          2.95], vent: 20}
+      - {id: vent-sfp-side, at: [79.0, 26.5], size: [13.0, 5.1], pattern: grille, pattern-pitch: [2.6,
+          2.55], vent: 20}
+      - {id: mgmt-shell, at: [328.4, 7.4], size: [16.8, 32.6], fill: '#c9cdd1', rx: 0.8, kind: port-shell}
+      - {id: vent-top-right, at: [350.0, 1.5], size: [75.0, 9.0], pattern: grille, pattern-pitch: [2.5,
+          3.0], vent: 20}
+      - {id: vent-mid-right, at: [378.0, 15.0], size: [38.5, 20.5], pattern: grille, pattern-pitch: [
+          2.45, 2.95], vent: 20}
+      - {id: vent-right, at: [424.0, 3.0], size: [9.0, 38.0], pattern: grille, pattern-pitch: [2.25, 3.0],
+        vent: 20}
+      cutouts:
+      - {id: port-1, at: &id002 [121.32, 5.86], size: [23.1, 13.5], shape: rect}
+      - {id: port-2, at: &id003 [121.32, 24.72], size: [23.1, 13.5], shape: rect}
+      - {id: port-3, at: &id004 [144.56, 5.86], size: [23.1, 13.5], shape: rect}
+      - {id: port-4, at: &id005 [144.56, 24.72], size: [23.1, 13.5], shape: rect}
+      - {id: port-5, at: &id006 [167.8, 5.86], size: [23.1, 13.5], shape: rect}
+      - {id: port-6, at: &id007 [167.8, 24.72], size: [23.1, 13.5], shape: rect}
+      - {id: port-7, at: &id008 [191.04, 5.86], size: [23.1, 13.5], shape: rect}
+      - {id: port-8, at: &id009 [191.04, 24.72], size: [23.1, 13.5], shape: rect}
+      - {id: port-9, at: &id010 [222.8, 5.86], size: [23.1, 13.5], shape: rect}
+      - {id: port-10, at: &id011 [222.8, 24.72], size: [23.1, 13.5], shape: rect}
+      - {id: port-11, at: &id012 [246.04, 5.86], size: [23.1, 13.5], shape: rect}
+      - {id: port-12, at: &id013 [246.04, 24.72], size: [23.1, 13.5], shape: rect}
+      - {id: port-13, at: &id014 [269.28, 5.86], size: [23.1, 13.5], shape: rect}
+      - {id: port-14, at: &id015 [269.28, 24.72], size: [23.1, 13.5], shape: rect}
+      - {id: port-15, at: &id016 [292.52, 5.86], size: [23.1, 13.5], shape: rect}
+      - {id: port-16, at: &id017 [292.52, 24.72], size: [23.1, 13.5], shape: rect}
+      - {id: mgmt-sfp-1, at: [93.85, 10.55], size: [14.5, 10.0], shape: rect}
+      - {id: mgmt-sfp-2, at: [93.85, 23.4], size: [14.5, 10.0], shape: rect}
+      - {id: led-sfp-1, at: [97.17, 6.72], size: [2.0, 2.0], shape: circle}
+      - {id: led-sfp-2, at: [97.17, 35.61], size: [2.0, 2.0], shape: circle}
+      - {id: led-sys, at: [322.15, 10.25], size: [4.0, 4.0], shape: circle}
+      - {id: led-fan, at: [322.15, 15.39], size: [4.0, 4.0], shape: circle}
+      - {id: led-psu, at: [322.15, 20.53], size: [4.0, 4.0], shape: circle}
+      - {id: led-alm, at: [322.15, 25.68], size: [4.0, 4.0], shape: circle}
+      - {id: console, at: [330.45, 8.0], size: [12.7, 11.0], shape: rect}
+      - {id: usb, at: [330.8, 20.6], size: [12.0, 4.5], shape: rect}
+      - {id: mgmt-eth, at: [330.45, 28.2], size: [12.7, 11.0], shape: rect}
+    silkscreen:
+    - {id: silk-port-1, at: [131.07, 22.65], text: '1', font-size: 2.2, anchor: end, fill: '#e8eaec',
+      for: port-1}
+    - {id: silk-arrows-1-2, at: [132.87, 22.65], text: ▲▼, font-size: 1.9, anchor: middle, fill: '#e8eaec',
+      for: [port-1, port-2]}
+    - {id: silk-port-2, at: [134.67, 22.65], text: '2', font-size: 2.2, anchor: start, fill: '#e8eaec',
+      for: port-2}
+    - {id: silk-port-3, at: [154.31, 22.65], text: '3', font-size: 2.2, anchor: end, fill: '#e8eaec',
+      for: port-3}
+    - {id: silk-arrows-3-4, at: [156.11, 22.65], text: ▲▼, font-size: 1.9, anchor: middle, fill: '#e8eaec',
+      for: [port-3, port-4]}
+    - {id: silk-port-4, at: [157.91, 22.65], text: '4', font-size: 2.2, anchor: start, fill: '#e8eaec',
+      for: port-4}
+    - {id: silk-port-5, at: [177.55, 22.65], text: '5', font-size: 2.2, anchor: end, fill: '#e8eaec',
+      for: port-5}
+    - {id: silk-arrows-5-6, at: [179.35, 22.65], text: ▲▼, font-size: 1.9, anchor: middle, fill: '#e8eaec',
+      for: [port-5, port-6]}
+    - {id: silk-port-6, at: [181.15, 22.65], text: '6', font-size: 2.2, anchor: start, fill: '#e8eaec',
+      for: port-6}
+    - {id: silk-port-7, at: [200.79, 22.65], text: '7', font-size: 2.2, anchor: end, fill: '#e8eaec',
+      for: port-7}
+    - {id: silk-arrows-7-8, at: [202.59, 22.65], text: ▲▼, font-size: 1.9, anchor: middle, fill: '#e8eaec',
+      for: [port-7, port-8]}
+    - {id: silk-port-8, at: [204.39, 22.65], text: '8', font-size: 2.2, anchor: start, fill: '#e8eaec',
+      for: port-8}
+    - {id: silk-port-9, at: [232.55, 22.65], text: '9', font-size: 2.2, anchor: end, fill: '#e8eaec',
+      for: port-9}
+    - {id: silk-arrows-9-10, at: [234.35, 22.65], text: ▲▼, font-size: 1.9, anchor: middle, fill: '#e8eaec',
+      for: [port-9, port-10]}
+    - {id: silk-port-10, at: [236.15, 22.65], text: '10', font-size: 2.2, anchor: start, fill: '#e8eaec',
+      for: port-10}
+    - {id: silk-port-11, at: [255.79, 22.65], text: '11', font-size: 2.2, anchor: end, fill: '#e8eaec',
+      for: port-11}
+    - {id: silk-arrows-11-12, at: [257.59, 22.65], text: ▲▼, font-size: 1.9, anchor: middle, fill: '#e8eaec',
+      for: [port-11, port-12]}
+    - {id: silk-port-12, at: [259.39, 22.65], text: '12', font-size: 2.2, anchor: start, fill: '#e8eaec',
+      for: port-12}
+    - {id: silk-port-13, at: [279.03, 22.65], text: '13', font-size: 2.2, anchor: end, fill: '#e8eaec',
+      for: port-13}
+    - {id: silk-arrows-13-14, at: [280.83, 22.65], text: ▲▼, font-size: 1.9, anchor: middle, fill: '#e8eaec',
+      for: [port-13, port-14]}
+    - {id: silk-port-14, at: [282.63, 22.65], text: '14', font-size: 2.2, anchor: start, fill: '#e8eaec',
+      for: port-14}
+    - {id: silk-port-15, at: [302.27, 22.65], text: '15', font-size: 2.2, anchor: end, fill: '#e8eaec',
+      for: port-15}
+    - {id: silk-arrows-15-16, at: [304.07, 22.65], text: ▲▼, font-size: 1.9, anchor: middle, fill: '#e8eaec',
+      for: [port-15, port-16]}
+    - {id: silk-port-16, at: [305.87, 22.65], text: '16', font-size: 2.2, anchor: start, fill: '#e8eaec',
+      for: port-16}
+    - {id: silk-sfp-m1, at: [98.9, 22.6], text: M1, font-size: 1.9, anchor: end, fill: '#e8eaec', for: mgmt-sfp-1}
+    - {id: silk-sfp-arrows, at: [101.1, 22.51], text: ▲▼, font-size: 1.7, anchor: middle, fill: '#e8eaec',
+      for: [mgmt-sfp-1, mgmt-sfp-2]}
+    - {id: silk-sfp-m2, at: [103.3, 22.6], text: M2, font-size: 1.9, anchor: start, fill: '#e8eaec', for: mgmt-sfp-2}
+    - {id: silk-sys, at: [321.9, 12.75], text: SYS, font-size: 1.6, anchor: end, fill: '#e8eaec', for: led-sys}
+    - {id: silk-fan, at: [321.9, 17.89], text: FAN, font-size: 1.6, anchor: end, fill: '#e8eaec', for: led-fan}
+    - {id: silk-psu, at: [321.9, 23.03], text: PSU, font-size: 1.6, anchor: end, fill: '#e8eaec', for: led-psu}
+    - {id: silk-alm, at: [321.9, 28.18], text: ALM, font-size: 1.6, anchor: end, fill: '#e8eaec', for: led-alm}
+    - {id: silk-console, at: [348.0, 13.5], text: CONSOLE, font-size: 1.5, anchor: middle, rotate: -90,
+      fill: '#e8eaec', for: console}
+    - {id: silk-usb, at: [348.0, 22.85], text: SS, font-size: 1.5, anchor: middle, rotate: -90, fill: '#e8eaec',
+      for: usb}
+    - {id: silk-mgmt, at: [348.0, 36.3], text: MGMT, font-size: 1.5, anchor: middle, rotate: -90, fill: '#e8eaec',
+      for: mgmt-eth}
+    - {id: silk-lug-tag, at: [394.4, 37.95], text: LUG TAG, font-size: 1.8, anchor: middle, fill: '#e8eaec',
+      for: lug-tag}
+    - {id: silk-wordmark, at: [17.5, 14.0], text: Celestica, font-size: 4.2, anchor: start, fill: '#d5d8db',
+      for: chassis}
+    components:
+      placements:
+      - {ref: std/rj45-ganged@2, id: console, at: [330.45, 8.0], rotate: 180, group: mgmt, rel-pos: 1,
+        attrs: {media: rj45-serial, role: console}}
+      - {ref: std/usb-a@1, id: usb, at: [330.8, 20.6], group: mgmt, rel-pos: 2, attrs: {media: usb-a,
+          role: storage, usb: '3.0'}}
+      - {ref: common/rj45-ganged-eth@1, id: mgmt-eth, at: [330.45, 28.2], group: mgmt, rel-pos: 3, attrs: {
+          media: rj45, speed: 1g, role: mgmt}}
+      - {ref: std/sfp@1, id: mgmt-sfp-1, at: [93.85, 10.55], group: mgmt, rel-pos: 4, attrs: {media: sfp-plus,
+          speed: 10g, role: mgmt}}
+      - {ref: std/sfp@1, id: mgmt-sfp-2, at: [93.85, 23.4], rotate: 180, group: mgmt, rel-pos: 5, attrs: {
+          media: sfp-plus, speed: 10g, role: mgmt}}
+      - {ref: common/led-dot@1, id: led-sfp-1, at: [97.17, 6.72], group: port-leds, rel-pos: 1, for: mgmt-sfp-1,
+        states: &id001 ['off', {name: link, color: '#22c55e'}, {name: activity, behavior: blinking, color: '#22c55e'},
+          {name: link-1g, color: '#f59e0b'}, {name: activity-1g, behavior: blinking, color: '#f59e0b'}]}
+      - {ref: common/led-dot@1, id: led-sfp-2, at: [97.17, 35.61], group: port-leds, rel-pos: 2, for: mgmt-sfp-2,
+        states: *id001}
+      - {ref: common/led-indicator@1, id: led-sys, at: [322.15, 10.25], group: leds, rel-pos: 1, for: chassis,
+        states: ['off', {name: normal, behavior: blinking, color: '#22c55e'}]}
+      - {ref: common/led-indicator@1, id: led-fan, at: [322.15, 15.39], group: leds, rel-pos: 2, for: chassis,
+        states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+      - {ref: common/led-indicator@1, id: led-psu, at: [322.15, 20.53], group: leds, rel-pos: 3, for: chassis,
+        states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+      - {ref: common/led-indicator@1, id: led-alm, at: [322.15, 25.68], group: leds, rel-pos: 4, for: chassis,
+        states: ['off', {name: no-alarm, color: '#22c55e'}, {name: critical, color: '#f59e0b'}, {name: major,
+            behavior: blinking, color: '#f59e0b'}, {name: minor, behavior: blinking, color: '#f59e0b'}]}
+      - {ref: celestica/lug-tag-23@1, id: lug-tag, at: [383.0, 38.3], group: furniture, rel-pos: 1, attrs: {
+          label: DS4100}}
+      - {ref: std/osfp@1, id: port-1, at: *id002, group: osfp, rel-pos: 1}
+      - {ref: std/osfp@1, id: port-2, at: *id003, rotate: 180, group: osfp, rel-pos: 2}
+      - {ref: std/osfp@1, id: port-3, at: *id004, group: osfp, rel-pos: 3}
+      - {ref: std/osfp@1, id: port-4, at: *id005, rotate: 180, group: osfp, rel-pos: 4}
+      - {ref: std/osfp@1, id: port-5, at: *id006, group: osfp, rel-pos: 5}
+      - {ref: std/osfp@1, id: port-6, at: *id007, rotate: 180, group: osfp, rel-pos: 6}
+      - {ref: std/osfp@1, id: port-7, at: *id008, group: osfp, rel-pos: 7}
+      - {ref: std/osfp@1, id: port-8, at: *id009, rotate: 180, group: osfp, rel-pos: 8}
+      - {ref: std/osfp@1, id: port-9, at: *id010, group: osfp, rel-pos: 9}
+      - {ref: std/osfp@1, id: port-10, at: *id011, rotate: 180, group: osfp, rel-pos: 10}
+      - {ref: std/osfp@1, id: port-11, at: *id012, group: osfp, rel-pos: 11}
+      - {ref: std/osfp@1, id: port-12, at: *id013, rotate: 180, group: osfp, rel-pos: 12}
+      - {ref: std/osfp@1, id: port-13, at: *id014, group: osfp, rel-pos: 13}
+      - {ref: std/osfp@1, id: port-14, at: *id015, rotate: 180, group: osfp, rel-pos: 14}
+      - {ref: std/osfp@1, id: port-15, at: *id016, group: osfp, rel-pos: 15}
+      - {ref: std/osfp@1, id: port-16, at: *id017, rotate: 180, group: osfp, rel-pos: 16}
+    regions:
+    - {id: optics, at: [120.0, 4.5], size: {w: 196.0, h: 35.0}, label: 16 x 800G OSFP, members: [port-1,
+        port-2, port-3, port-4, port-5, port-6, port-7, port-8, port-9, port-10, port-11, port-12, port-13,
+        port-14, port-15, port-16]}
+    - {id: out-of-band, at: [92.5, 6.0], size: {w: 17.0, h: 32.0}, label: '2 x 10G SFP+ (M1, M2)', members: [
+        mgmt-sfp-1, mgmt-sfp-2]}
+    - {id: management, at: [318.0, 6.5], size: {w: 31.5, h: 34.0}, label: 'System LEDs, console, USB and
+        management', members: [led-sys, led-fan, led-psu, led-alm, console, usb, mgmt-eth]}
+  rear:
+    size: {w: 438.5, h: 43.1}
+    panel:
+      decor:
+      - {id: rear-plate, at: [0.0, 0.0], size: [438.5, 43.1], fill: '#a7a9ac', rx: 0.3, kind: plate}
+    components:
+      bays:
+      - {id: psu-1, at: [10.85, 2.05], size: {w: 55.2, h: 39.0}, group: psus, rel-pos: 1, accepts: [celestica/psu-1500-ac@1],
+        default: celestica/psu-1500-ac@1}
+      - {id: fan-1, at: [69.85, 2.05], size: {w: 39.3, h: 39.0}, group: fans, rel-pos: 1, accepts: [celestica/fan-40@1],
+        default: celestica/fan-40@1}
+      - {id: fan-2, at: [113.87, 2.05], size: {w: 39.3, h: 39.0}, group: fans, rel-pos: 2, accepts: [
+          celestica/fan-40@1], default: celestica/fan-40@1}
+      - {id: fan-3, at: [157.89, 2.05], size: {w: 39.3, h: 39.0}, group: fans, rel-pos: 3, accepts: [
+          celestica/fan-40@1], default: celestica/fan-40@1}
+      - {id: fan-4, at: [201.91, 2.05], size: {w: 39.3, h: 39.0}, group: fans, rel-pos: 4, accepts: [
+          celestica/fan-40@1], default: celestica/fan-40@1}
+      - {id: fan-5, at: [245.93, 2.05], size: {w: 39.3, h: 39.0}, group: fans, rel-pos: 5, accepts: [
+          celestica/fan-40@1], default: celestica/fan-40@1}
+      - {id: fan-6, at: [289.95, 2.05], size: {w: 39.3, h: 39.0}, group: fans, rel-pos: 6, accepts: [
+          celestica/fan-40@1], default: celestica/fan-40@1}
+      - {id: fan-7, at: [333.97, 2.05], size: {w: 39.3, h: 39.0}, group: fans, rel-pos: 7, accepts: [
+          celestica/fan-40@1], default: celestica/fan-40@1}
+      - {id: psu-2, at: [377.45, 2.05], size: {w: 55.2, h: 39.0}, group: psus, rel-pos: 2, accepts: [
+          celestica/psu-1500-ac@1], default: celestica/psu-1500-ac@1}
+      placements:
+      - {ref: common/screw-head@1, id: ground-screw-1, at: [3.9, 22.3], group: furniture, rel-pos: 2}
+      - {ref: common/screw-head@1, id: ground-screw-2, at: [3.9, 31.6], group: furniture, rel-pos: 3}
+    regions:
+    - {id: power-1, at: [10.0, 1.3], size: {w: 57.0, h: 40.5}, label: Power supply 1, members: [psu-1]}
+    - {id: exhaust, at: [68.5, 1.3], size: {w: 306.5, h: 40.5}, label: 6+1 fan modules, members: [fan-1,
+        fan-2, fan-3, fan-4, fan-5, fan-6, fan-7]}
+    - {id: power-2, at: [376.5, 1.3], size: {w: 57.0, h: 40.5}, label: Power supply 2, members: [psu-2]}
+  top:
+    size: {w: 438.5, h: 657.5}
+    empty: >-
+      Not drawn orthographically by any staged source. The guide's System Overview isometrics and the
+      cls.celestica.com renders show a plain lid with a recessed plate towards the rear; perspective only.
+  bottom:
+    size: {w: 438.5, h: 657.5}
+    empty: >-
+      Not drawn by any staged source; the underside is never shown in the guide or on the product page.
+  left:
+    size: {w: 657.5, h: 43.1}
+    empty: >-
+      Not drawn orthographically. The renders show a plain side wall with slide-rail fixing screws and
+      no perforation - the chassis breathes end to end.
+  right:
+    size: {w: 657.5, h: 43.1}
+    empty: >-
+      Not drawn orthographically. The other side wall, as the left.
+configurations:
+  ac-f2b:
+    kind: base
+    default: true
+    description: >-
+      Two 1500 W AC supplies, front-to-back airflow - the build every figure draws, with orange fan modules.
+    component-attrs:
+      fan-40: {face-finish: '#dd8817', handle-finish: '#dd8817', latch-finish: '#dd8817'}
+      psu-1500-ac: {latch-finish: '#1f2124'}
+    part-numbers:
+      R4035-F9001-A1: {part: R4035-F9001-A1}
+  ac-b2f:
+    kind: orderable
+    airflow: back-to-front
+    description: >-
+      Two 1500 W AC supplies, back-to-front airflow. No document draws this build, so it is drawn like
+      the F2B one; see the b2f-finish gap.
+    region-context: {exhaust: Intake}
+    component-attrs:
+      fan-40: {face-finish: '#dd8817', handle-finish: '#dd8817', latch-finish: '#dd8817'}
+      psu-1500-ac: {latch-finish: '#1f2124'}
+    part-numbers:
+      R4035-F9005-A1: {part: R4035-F9005-A1}
+references:
+- {title: 'Celestica DS4100 Installation Guide (documentation portal, release 1.3.1, 3/2026)'}
+- {title: Celestica DS4100 1U 16-port 800G Data Center Switch datasheet}

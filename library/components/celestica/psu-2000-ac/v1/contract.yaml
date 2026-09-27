@@ -1,0 +1,110 @@
+format: 1
+kind: module
+name: psu-2000-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Celestica 2000 W hot-swap AC power supply, the one the DS4101 ships two of - a pale module
+  with two stacked lamps at its top left over a square-lattice grille, a black vertical grip,
+  an IEC C20 inlet turned on its side in a black inlet plate, and a yellow release latch down
+  its right edge.
+size: {w: 56.2, h: 40.0}
+size-confidence: {w: measured, h: measured}
+attrs:
+  power-output-w: 2000
+  input: ac
+provenance:
+  size: >-
+    measured on the DS4101 installation guide's Product Overview Figure 3 (DS4101 Rear View),
+    a 6150 x 1517 px orthographic render whose face box reads 5986 x 589 px against the stated
+    438.5 x 43.1 mm, aspect 10.163 against 10.174 (0.11% out) at 13.65 px/mm. The JPEG is an
+    upscale - edges are about 3 px soft - so every figure here is good to roughly 0.3 mm.
+    PSU1's frame reads x 10.4 to 66.6 by y 1.8 to 41.8 and PSU2's 376.8 to 433.0, so 56.2
+    wide on both; 40.0 tall.
+  power: >-
+    datasheet - DS4101 datasheet, Power and Cooling: "1+1 redundant, hot swappable 2000W PSUs",
+    input "AC 47~63Hz, 100~240 V nominal, 90~264V max". The guide's own specification table
+    leaves Power Consumption blank ("\"). The datasheet does not say whether 2000 W holds at
+    low line; the figure is filed as the output rating and no low-line figure is claimed.
+  inlet: >-
+    the guide's What's in the Box table ships a "CABLE,POWER CORD,2.0M,C20-C21,16A 250V~",
+    and a C21 plug mates a C20 inlet. The rear render draws three vertical slots - two stacked
+    at the left and one at the right, mid-height - inside a dark plate at module x 24.6-51.8,
+    which is a C20's earth-up layout turned a quarter clockwise. std/c20-inlet@1 is composed
+    `rotate: 90`, centred at module (38.1, 18.0) on the slots' own centre.
+    THE SAME GUIDE'S PSU REMOVAL FIGURES DRAW A DIFFERENT SUPPLY. Its Figure 1 close-up shows a
+    C14 (three horizontal blades, turned a quarter) beside a grey U-grip and a check-mark lamp,
+    and Figures 2 and 3 show a silver module with a grey grip and a black latch - the DS4100's
+    1500 W supply's look, not this face's black grip and yellow latch. The overview elevation and
+    the shipped C20-C21 cord agree with each other and are what this part draws; the removal
+    artwork is recorded here as disagreeing, not reconciled.
+  elements: >-
+    all positions read on the same Figure 3 and translated into the module frame by the PSU1
+    frame corner (10.4, 1.8). Lamps: two green domes at face (17.8, 8.4) and (17.8, 14.5), about
+    2.4 mm lenses in 5.5 mm dark rings. Grip: a black rounded bar x 26.7-32.5 by y 2.8-41.3.
+    Latch: yellow, x 62.8-66.4 by y 26.3-42.0. Grille: square lattice from x 12.3 to 26.3.
+    PSU2 draws the same features at the same offsets.
+  lamps: >-
+    NOT NAMED BY ANY STAGED DOCUMENT. The DS4101 guide has no LED table at all; its sibling
+    DS4100's rear-panel table names a PSU module lamp "PSU1 / PSU2 - Green On: operating
+    normally; Red On: error(s) detected; Off: no input" and the DS4100 figure labels its two
+    PSU lamps "Top - alarm, Bottom - OK". That is a different supply and is recorded, not
+    borrowed: these two lamps carry plain off/on states.
+  body: >-
+    estimated - no staged document gives the supply's length. 230 mm is the order of a 1U
+    CRPS-class 2000 W module and is a placeholder.
+states: [absent]
+elements:
+  led-alarm:
+    at: [5.2, 4.4]
+    size: [4.4, 4.4]
+    class: led
+    states: ['off', 'on']
+  led-ok:
+    at: [5.2, 10.5]
+    size: [4.4, 4.4]
+    class: led
+    states: ['off', 'on']
+  handle: {at: [16.3, 1.0], size: [5.8, 38.5], class: handle}
+  latch: {at: [52.4, 24.5], size: [3.6, 15.5], class: latch}
+  vent-field: {at: [1.9, 16.0], size: [14.0, 22.4], class: vent}
+parts:
+  - {ref: std/c20-inlet@1, id: inlet, at: [21.9, 5.8], rotate: 90}
+relief:
+  wall: '#2a2d31'
+  # The face itself gets no relief: a full-face `out` buries the composed inlet (#364).
+  features:
+    - node: handle
+      uhandle: 20.0
+      confidence: estimated
+      source: >-
+        celestica/psu-2000-ac@1's own elements key - the grip's outline is drawn on the rear
+        render and how far it stands off the face is not stated anywhere. The three-quarter
+        marketing render (cls.celestica.com DS4101 side-by-side) shows it standing well proud
+        as a loop, which is `uhandle`.
+    - node: latch
+      out: 2.0
+      confidence: estimated
+      source: >-
+        celestica/psu-2000-ac@1's own elements key - outline drawn, projection not stated.
+    - node: vent-field
+      vent: 20
+      confidence: estimated
+      source: >-
+        celestica/psu-2000-ac@1's own elements key - the lattice's extent is drawn and the
+        cavity behind it is not.
+    - node: led-alarm
+      dome: 0.3
+      confidence: estimated
+      source: common/led-dot@1 - the library's panel-lamp figure, itself estimated.
+    - node: led-ok
+      dome: 0.3
+      confidence: estimated
+      source: common/led-dot@1 - the library's panel-lamp figure, itself estimated.
+skins: [default]
+body:
+  depth: 230
+  color: '#c9ccd0'
+  footprint: {at: [0, 0], size: [56.2, 40.0]}
