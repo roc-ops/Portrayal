@@ -256,6 +256,9 @@ the *published build*, not about the hardware.
 - Lint L122 now also reads a `cable-od` a device sets on a placement (a
   cable end placed `mate-to` a jack or cage), with the same number and range
   check as a wrapper's (roc-ops/Portrayal#644).
+- `siemon/qsfp28-aoc` (1.1.1) draws its pull tabs black (`latch-color:
+  #090502`), read off the product photograph the aqua jacket came from, in
+  place of the generic's neutral grey (roc-ops/Portrayal#645).
 - **`contract: 2`. A drawing no longer embeds the device's source manifest.**
   Every face carried the same whole manifest in its `<metadata>`: 139 MB of a
   249 MB build, 107 KB in each of the R740xd's 252 faces. It is now published
@@ -263,6 +266,17 @@ the *published build*, not about the hardware.
   metadata is replaced by `source-sha256`, the digest of that file's exact
   bytes. A reader that took the manifest from any drawing reads the one file
   instead. What is published is unchanged; only where (roc-ops/Portrayal#665).
+- **Each distinct drawing is written once.** Configurations that differ only in
+  a part a face cannot see draw that face identically, and each wrote its own
+  copy: the R740xd's 42 configurations wrote 252 faces holding 35 distinct
+  drawings. A drawing is now written once, named after the first configuration
+  (in manifest order) that draws it, and `configs[].files` in
+  `<device>.configs.json` maps each configuration's faces to their files. **Find
+  a face through `files`**; `<device>.<config>.<view>.svg` exists only for the
+  configuration that names it. A face no longer carries its configuration's
+  name: `data-config` on the root and `config` in `<metadata>` are gone, since
+  a shared drawing belongs to several. The default configuration's
+  `<device>.<view>.svg` copies are unchanged (roc-ops/Portrayal#665).
 - **BREAKING for DCIM data already imported.** A module type names its ports per
   bay. Every interface, console, power, front and rear port name on a card
   starts with `{module}/`, which NetBox and Nautobot both fill with the position

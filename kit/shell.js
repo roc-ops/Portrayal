@@ -22,7 +22,7 @@ import { nestedBays, applyOverrides, applyOccupantOverrides, applyRearOverrides,
          builtOccupants, builtBays, faceCages, cageAt, pruneCarrier,
          freshBaysUnder, seatFace, faceQueue, swapOverrides, faceEntries, ownerPath,
          slotOptions, slotResolver } from './swap.js';
-import { jdist } from './dist.js';
+import { jdist, faceFile } from './dist.js';
 import { paintFields, unpaintFields } from './fields.js';
 import { fibreOf, farPath, fibreLabel, connectorLabel, moduleOf } from './optical.js';
 
@@ -1595,7 +1595,7 @@ export function createShell(opts = {}) {
       live: () => state.facesFor === key && !state.module,
       has: view => !!state.faces[view],
       fetch: async view => {
-        const r = await fetch(`${DIST}/${state.device}.${state.cfg}.${view}.svg`);
+        const r = await fetch(`${DIST}/${faceFile(state.meta, state.cfg, view)}`);
         if (!r.ok) return null;
         const doc = new DOMParser().parseFromString(await r.text(), 'image/svg+xml');
         return document.importNode(doc.documentElement, true);
@@ -1669,7 +1669,7 @@ export function createShell(opts = {}) {
       const skin = c.skins.includes('default') ? 'default' : c.skins[0];
       file = `${DIST}/components/${c.ns}--${c.name}--${c.major}--${skin}.svg`;
     } else {
-      file = `${DIST}/${state.device}.${state.cfg}.${state.view}.svg`;
+      file = `${DIST}/${faceFile(state.meta, state.cfg, state.view)}`;
     }
     const txt = await (await fetch(file)).text();
     const doc = new DOMParser().parseFromString(txt, 'image/svg+xml');
