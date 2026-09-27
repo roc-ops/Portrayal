@@ -231,6 +231,26 @@ the *published build*, not about the hardware.
   the build and the kit read. Lint L73 counts `data-r-from` as wiring a field.
 - A `cable` connection point may sit `on` a `cyl` relief feature; it leaves
   from the cylinder's far end (`lift` + `cyl`), in the build and in the kit.
+- Six coax interfaces - `f-type`, `bnc`, `sma`, `smb`, `mcx` and `din-1-0-2-3`
+  (spelled with hyphens; the schema's interface/mates pattern refuses a dot) -
+  each citing its standard, so every existing coax port publishes a
+  `kind: connector` slot alongside its cage. Two new jacks: `std/bnc@1` and
+  `std/din-1-0-2-3@1` (cores), composed by the bezels `common/bnc-jack@1` and
+  `common/din-1-0-2-3-jack@1`, following the existing SMA/SMB core-plus-bezel
+  pattern. Six generic plugs, one per interface -
+  `generic/f-type-plug@1`, `generic/bnc-plug@1`, `generic/sma-plug@1`,
+  `generic/smb-plug@1`, `generic/mcx-plug@1` and `generic/din-1-0-2-3-plug@1` -
+  each a coupling part, a crimp ferrule and strain relief, and a 30 mm cable
+  stub sized by a `cable-od` field. A `seat-out` connection-point key: a
+  number of mm a part seated at that point stands off, absolute from the
+  part's own face, where no drawn feature's rear already sits at that plane;
+  mutually exclusive with `on:` and read only on the presented point
+  (`interface-at`, default `mate`; `manifest._seat_out`). Lint L106 refuses a
+  point that carries both, a `seat-out` that is not a number at or above 0,
+  and a `seat-out` on any other point. The kit now labels the coax media
+  (BNC, 1.0/2.3, F, MCX) in its port rows. See
+  [connectors-coax-design.md](docs/connectors-coax-design.md)
+  (roc-ops/Portrayal#650).
 
 ### Changed
 - **`contract: 2`. A drawing no longer embeds the device's source manifest.**
@@ -500,11 +520,39 @@ the *published build*, not about the hardware.
   and Dell's service model has no metal there in front of the rear sheet
   (roc-ops/Portrayal#623).
 
+- A forwarding wrapper's presented depth now includes its composed core's own
+  seat out, not only the wrapper's placement `lift`: `common/sma-jack@1`,
+  `common/smb-jack@1`, `common/bnc-jack@1` and `common/din-1-0-2-3-jack@1` (and
+  the library's other bezels) present as deep as their core stands bare.
+  `std/mcx@1`'s mate moves `on: barrel` (2.0), so a seated MCX plug now stands
+  proud of the panel by the barrel's height rather than at the panel plane;
+  the MCX cages on `casa/c100g` and `casa/c40g` (104 placements) published
+  lift 0 before this and 2.0 after, and both took a patch bump. `std/bnc@1`, `std/din-1-0-2-3@1`
+  and `std/f-type@1` each carry a `seat-out` (3.7, 3.85 and 7.8 respectively),
+  so a seated plug on those jacks now presents at the mated plane instead of
+  the panel face.
+- The Cisco T3/E3 SPAs `spa-2xt3e3`, `spa-4xt3e3`, `spa-2cht3-ce-atm`
+  and `spa-4xct3-ds0` (1.1.0) draw their 1.0/2.3 jacks as real
+  `common/din-1-0-2-3-jack@1` placements instead of skin art, so they now
+  publish `kind: connector` slots; `cisco/asr-9010`, the only device that
+  seats one of them, took the patch bump devicelock asked for.
+- `juniper/mic-3d-8ds3-e3` and `mic-3d-8ds3-e3-v` (1.1.1) correct their
+  description: the SMB-opening jacks are drawn because the hardware is
+  75-ohm mini-SMB, not because "no BNC standard exists in the registry yet".
+  The jacks and their placements are unchanged.
+- Devices bumped for the coax jack and seat-out changes above:
+  `casa/c100g`, `casa/c40g`, `cisco/asr-9010`, `commscope/ch3000`,
+  `juniper/mx2008`, `mx2010`, `mx2020`, `mx240`, `mx480`, `mx80` and `mx960`
+  (roc-ops/Portrayal#650).
+
 The dist `contract:` number does not move for the pluggable-heads entries in
 this section (the superseded QSFP generics and pull tab, the wider head
 previews and the S8901-54XC finish correction): each is additive (a new key,
 a new part, a superseded-not-removed part, a wider preview frame, a colour
-correction), per this file's own rule.
+correction), per this file's own rule. Nor does it move for the coax entries
+above: the six interfaces, the new jacks, plugs and `seat-out` key are all
+additions, and the moved SPA jacks and the corrected MIC description change
+no field a reader already depends on.
 
 ### Fixed
 - A seated part turns with the aperture it is in when its host FORWARDS that

@@ -174,7 +174,14 @@ def _seat_out(contract, point):
     nothing, or a feature with neither `out` nor `cyl`, also answers 0.0 here -
     lint L106 refuses both, and a renderer that guessed a depth would hide the
     error L106 exists to report.
+
+    A point may instead carry a numeric `seat-out`: the plane itself, absolute
+    from the part's face, where no drawn feature has its rear there (a coax
+    jack's mated plane lies partway along a plain barrel). L106 refuses a
+    point with both it and `on:`.
     """
+    if point.get("seat-out") is not None:
+        return float(point["seat-out"])
     node = point.get("on")
     if not node:
         return 0.0
@@ -250,10 +257,19 @@ def presented_interface(contract, resolve):
         # y - (x, 4.10) where the bore, and the part's own `optical` point,
         # is at (x, 5.70). The part is drawn translate(at) rotate(deg w/2
         # h/2) with its own contract's size, so its mate lands by seat_point.
+        #
+        # AND THROUGH THE CORE'S OWN SEAT OUT. The part's `lift` is how far the
+        # core stands off the wrapper's face; the core's mate may itself sit
+        # `on:` a feature whose rear stands further out still. A coax jack's
+        # mate sits on the face a mated plug's coupling front reaches, and a
+        # bezel that composes the jack must present it there too, or a plug
+        # seated through the bezel stands nearer the panel than the same plug
+        # seated in the bare jack. The same sum presented_turn makes for the
+        # part's `rotate`.
         at = part.get("at") or [0, 0]
         return (core["interface"],
                 seat_point(at, core["size"], part.get("rotate"), cm["at"]),
-                float(part.get("lift") or 0))
+                float(part.get("lift") or 0) + _seat_out(core, cm))
     return contract.get("interface"), (list(mate["at"]) if mate else None), 0.0
 
 

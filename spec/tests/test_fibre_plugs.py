@@ -139,6 +139,13 @@ def test_the_librarys_fibre_plugs_are_these_five_and_there_are_five():
         c = load_yaml(f) or {}
         if (c.get("attrs") or {}).get("media") == "rj45":
             continue
+        # NOR ARE THE COAX PLUGS (#650). generic/sma-plug@1, smb-plug@1 and
+        # mcx-plug@1 mate `sma`, `smb` and `mcx`, which the registry holds so a
+        # coax jack is a slot. Left out the same way: by what each IS - its
+        # `attrs.media` is `coax-<family>` - and their census is
+        # spec/tests/test_coax_plugs.py.
+        if str((c.get("attrs") or {}).get("media") or "").startswith("coax-"):
+            continue
         if c.get("mates") in connectors and c.get("class") != "cap":
             ns = f.parents[2].name
             found[f"{ns}/{c['name']}@{c['version'].split('.')[0]}"] = c

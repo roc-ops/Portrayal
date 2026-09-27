@@ -1,0 +1,124 @@
+format: 1
+kind: component
+name: f-type-plug
+version: 1.0.0
+class: port
+mates: f-type
+conforms: f-type-plug
+profile: networking
+description: >-
+  A straight F crimp plug on a 75 ohm coax cable, seen from the face: the
+  7/16 hex coupling nut, the ribbed crimp ferrule and a short straight stub
+  of cable whose diameter is the cable-od field. Seats in an `f-type` jack at
+  its own mate point; the cable leaves from the stub's far end.
+size: {w: 12.83, h: 11.11}
+size-confidence: {w: drawing, h: drawing}
+attrs: {media: coax-f, connector: f-type, impedance: 75}
+fields:
+  cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 6.96}
+  jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    drawing - registry `f-type-plug`. Pasternack "75 Ohm F Male Connector
+    Crimp/Crimp Attachment for RG6", PE44312 REV 1.2, p.3 CAD drawing: the
+    coupling nut is a 7/16 HEX, 11.11 across the flats, which is `h`. `w` is
+    the same hex across its corners, 11.11 / cos 30 = 12.83 (drawing,
+    derived; the side view drawn on the corners scales 12.59, 2 percent
+    under), inside the 12.95 maximum envelope of ANSI/SCTE 123 2021
+    "Specification for F Connector, Male, Feed-Through", Table 1 dim H, p.8.
+    The hex is turned corners left and right, the way std/f-type@1 draws its
+    nut.
+  no-depth: >-
+    NO `size.d`, DELIBERATELY, as on generic/sma-plug@1. The overall length
+    (0.78 [19.8], dimensioned) is in the registry entry and in the relief
+    below, but a `size.d` on a component with no `behaviour` compiles to
+    `data-depth`, and the kit builds that as a pit behind the part's whole
+    box (render.py, the `size.d` block of the placement writer). This plug's
+    box, 12.83 x 11.11, is wider than the 9.7 x 7.9 jack hole it sits over,
+    so the pit would widen the hole in the panel around every seated plug.
+    The depth the plug does have is carried by the three relief features.
+  frame: >-
+    THE PLUG'S RELIEF IS MEASURED FROM THE HOST'S PRESENTED LIFT, the frame
+    generic/sma-plug@1, generic/rj45-plug@1 and generic/lc-plug@2 use: each
+    seats at its jack's presented lift by `mate`, and its features run from
+    there toward the viewer. std/f-type@1 presents at its mated plane, 7.8 in
+    front of the panel (provenance.engagement), with its nut and threaded
+    neck standing 13.0 proud (2.4 + 10.6). So the coupling nut's front face
+    sits AT the presented lift (the coupling has no lift), and the last 5.2
+    of the neck lies inside the plug's nut.
+  engagement: >-
+    drawing - the mated nut runs 4.29 to 6.10 past the port's reference
+    plane: ANSI/SCTE 123 2021 Table 1 dim D, "Mandrel face depth to nut
+    leading edge". On std/f-type@1's 13.0 neck a real plug's nut front
+    therefore stands 6.90 to 8.71 in front of the panel. THE JACK PRESENTS AT
+    THAT MATED PLANE: std/f-type@1's mate carries `seat-out: 7.8`, the
+    midpoint of that range (its provenance.mated-plane), so the nut's front
+    face, at the presented lift, stands where a real seated nut's does and
+    the nut runs over the neck rather than swallowing it. The plug itself
+    still does not know which jack it is in (ANSI/SCTE 02 2021 Table 1 dim D
+    gives the port only a MINIMUM thread, 8.26); the plane is the jack's
+    statement.
+  coupling: >-
+    drawing - PE44312 p.3 side view, scaled at 120.4 px/mm on the
+    dimensioned 19.8 overall and checked on the hex (12.59 against the
+    computed 12.83 across the corners): the nut, round collars either side
+    of the 7/16 hex, from the front face to 7.1. The coupling feature is the
+    hex outline extruded 0 to 7.1; the round collars fall inside the hex.
+  relief-boot: >-
+    drawing, scaled - the crimp ferrule on PE44312 p.3, 10.2 across its core
+    and 11.0 over its ribs, from 7.4 to the 19.8 end. The feature starts at
+    7.1, where the nut ends, so it overstates the 0.3 neck between them at
+    the ferrule's width; the drawn circle is the 11.0 over the ribs, the
+    outline a front elevation sees.
+  stub: >-
+    estimated - the stub rule, docs/connectors-coax-design.md section 5: a
+    straight run of cable 30 long starting where the strain relief ends
+    (19.8). The cable's bend is the installation's, not the plug's.
+  cable-od: >-
+    datasheet - RG-6, the cable PE44312 is made for. Belden 1694A technical
+    data sheet, revision 0.716, 2026-05-27, p.1, Overall Cable Diameter
+    (Nominal) 0.274 in, 6.96 mm. A placement or a wrapper sets the cable it
+    actually carries.
+  jacket-colour: a FIELD; the neutral near-black default is no product in particular
+  impedance: >-
+    STATED, 75, the one generic coax plug that does
+    (docs/connectors-coax-design.md decision 2): F exists only as a 75 ohm
+    interface, and PE44312's own title says 75 Ohm.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on generic/rj45-plug@1 - every class port
+    contract states none (spec/tests/test_behaviour.py).
+  axis: >-
+    derived - `mate` and `cable` share one point, the centre of the hex
+    (6.415, 5.555): the cable runs straight through the plug, so its front
+    and its rear are one axis seen from two directions, as on
+    generic/sma-plug@1.
+elements: {}
+relief:
+  features:
+    - node: coupling
+      out: 7.1
+      shape: true
+      color: '#c9ccd0'
+      confidence: drawing
+      source: >-
+        Pasternack PE44312 REV 1.2 p.3 side view, scaled on the dimensioned
+        19.8 overall: the 7/16 hex nut and its collars, front face to 7.1. The
+        front sits at the host's presented lift (provenance.frame,
+        provenance.engagement).
+    - node: relief-boot
+      lift: 7.1
+      cyl: 12.7
+      color: '#b8bcc0'
+      confidence: drawing
+      source: Pasternack PE44312 REV 1.2 p.3 side view, the ribbed crimp ferrule to the dimensioned 19.8 end, 11.0 over the ribs, scaled at 120.4 px/mm
+    - node: stub
+      lift: 19.8
+      cyl: 30
+      color: '#1c1c1c'
+      confidence: estimated
+      source: the stub rule, docs/connectors-coax-design.md section 5
+connection-points:
+  mate: {at: [6.415, 5.555], direction: front}
+  cable: {at: [6.415, 5.555], direction: front, 'on': stub}
+skins: [default]

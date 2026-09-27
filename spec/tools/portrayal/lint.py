@@ -267,7 +267,7 @@ RULES = {
     "L103": ("library",    "a pluggable family's `interface` matches at least one component's `interface`", "model the cage, or leave the family as-is if the vocabulary needs it ahead of the metal (sfp-dd today)"),
     "L104": ("device",     "a port's declared media and its cage's presented interface name the same pluggable family", "the declared media governs the accept list render.py's cages[] builds - check the source and fix whichever of the drawing's aperture or the declared media is wrong"),
     "L105": ("component, device", "a placement's or part's `interfaces:` are held by a port the export files as a switch interface, named once in the view or component, and never the id of a placement, part, element or bay", "rename the colliding placement or interface - both are real and a DCIM needs a name for each - or move `interfaces:` onto the cage that presents them"),
-    "L106": ("component",  "`interface-at` names a declared connection point, and a connection point's `on:` names a `relief.features[]` node that carries an `out`, or a `cyl` whose far end (`lift + cyl`) is its rear", "fix the name, or give the feature the `out` (or `cyl`) a part seated on it stands off by; a point on the part's own face needs no `on:`; quote the key (`'on':`) - a bare `on` is YAML boolean true"),
+    "L106": ("component",  "`interface-at` names a declared connection point, and a connection point's `on:` names a `relief.features[]` node that carries an `out`, or a `cyl` whose far end (`lift + cyl`) is its rear; a numeric `seat-out` is a number at or above 0, never beside `on:`, and only on the presented point (`interface-at`, default `mate`)", "fix the name, or give the feature the `out` (or `cyl`) a part seated on it stands off by; a point on the part's own face needs no `on:`; move a `seat-out` to the presented point; quote the key (`'on':`) - a bare `on` is YAML boolean true"),
     "L107": ("component, device", "no quoted run in a contract or manifest is longer than 25 words - a vendor's facts are transcribed, its prose is not reproduced", "paraphrase and cite the section (\"the ASR 9903 guide, Power Supply LEDs, says a flashing green lamp means...\"); a state table becomes `state = meaning` pairs, not a quotation"),
     "L109": ("component",  "a declared `optical.polarity` is what the paths actually wire - A straight, AF pair-flipped (and its rows exchanged at 24 fibres), universal", "fix the paths or the polarity; the paths are the evidence, `polarity` is only the claim"),
     "L110": ("component, device", "a port's `speed` is one of the closed set in spec/schemas/speeds.yaml - the highest native rate the port runs at, and nothing else", "spell the rate from the set (a 10/100/1000 jack is `1g`); media goes in `media`, a USB generation in `usb`, a PON flavour in `pon`, a caveat in the placement's `description`"),
@@ -4977,6 +4977,7 @@ def lint_component_seat_point(path, data, _lib_roots=None):
     features = {f.get("node"): f for f in
                 ((data.get("relief") or {}).get("features") or [])
                 if isinstance(f, dict)}
+    presented = at or "mate"
     for name, cp in cps.items():
         # AN UNQUOTED `on:` IS NOT THE KEY `on`. YAML 1.1 - which yaml.safe_load
         # speaks - reads a bare `on` as boolean true, so `{..., on: body}` loads
@@ -4989,6 +4990,31 @@ def lint_component_seat_point(path, data, _lib_roots=None):
             err(path, "L106", f"connection-point {name!r} has a key YAML read as "
                               "boolean true - an unquoted `on:`; write it `'on':`")
         on = cp.get("on") if isinstance(cp, dict) else None
+        # A NUMERIC `seat-out` STATES THE PLANE ITSELF, where no drawn feature
+        # has its rear at it (a coax jack's mated plane, partway along a plain
+        # barrel). It and `on:` are two answers to one question, so a point
+        # carries one or the other; and it is a depth, so a number >= 0.
+        so = cp.get("seat-out") if isinstance(cp, dict) else None
+        if so is not None:
+            if isinstance(so, bool) or not isinstance(so, (int, float)) or so < 0:
+                err(path, "L106", f"connection-point {name!r} has seat-out: {so!r} - "
+                                  "it is a depth in mm from this part's face, a "
+                                  "number at or above 0")
+            # ONLY THE PRESENTED POINT IS READ. manifest._seat_out is called on
+            # the point `interface-at` names (default `mate`) and nowhere else:
+            # a `seat-out` on a `cable` point, or any other, passes the schema
+            # and does nothing. `on:` has a second reader (a cable point's
+            # depth); `seat-out` has none.
+            if name != presented:
+                err(path, "L106", f"connection-point {name!r} has seat-out: {so!r}, "
+                                  f"but only the presented point ({presented!r}, "
+                                  "named by interface-at, default mate) is read "
+                                  "for it - here it would do nothing")
+            if on is not None:
+                err(path, "L106", f"connection-point {name!r} has both seat-out and "
+                                  f"on: {on!r} - a seated part stands on one plane; "
+                                  "keep `on:` where a drawn feature's rear is that "
+                                  "plane, `seat-out` where none is")
         if on is None:
             continue
         f = features.get(on)

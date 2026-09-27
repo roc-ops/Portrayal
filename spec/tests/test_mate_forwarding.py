@@ -79,6 +79,59 @@ def test_a_multi_bore_adapter_presents_its_own_interface_not_a_bore():
                       for q in d["parts"]]
 
 
+def _bezel(core_mate, features, part_lift):
+    """A synthetic bezel composing one core whose mate may sit `on:` a
+    feature, and a resolver that knows only the core."""
+    core = {"interface": "bnc", "size": {"w": 10.0, "h": 10.0},
+            "connection-points": {"mate": core_mate},
+            "relief": {"features": features}}
+    part = {"id": "jack", "ref": "std/core@1", "at": [2.0, 3.0]}
+    if part_lift is not None:
+        part["lift"] = part_lift
+    bezel = {"size": {"w": 14.0, "h": 16.0}, "parts": [part]}
+    return bezel, (lambda ref: core if ref == "std/core@1" else None)
+
+
+def test_a_forwarded_mate_on_a_feature_presents_that_features_rear_plus_the_part_lift():
+    """A bezel FORWARDS its core's aperture, and the core's mate may itself sit
+    `on:` a feature whose rear stands proud of the core's face (a coax jack's
+    barrel, where a mated plug's coupling front sits). The bezel presents the
+    same plane: the part's placement `lift` plus the core's own seat out - an
+    `out` feature's `out`, or a `cyl` feature's `lift + cyl`."""
+    bezel, res = _bezel({"at": [5.0, 5.0], "on": "barrel"},
+                        [{"node": "barrel", "out": 2.0}], 1.5)
+    assert presented_interface(bezel, res) == ("bnc", [7.0, 8.0], 3.5)
+    bezel, res = _bezel({"at": [5.0, 5.0], "on": "barrel"},
+                        [{"node": "barrel", "lift": 1.0, "cyl": 3.7}], None)
+    assert presented_interface(bezel, res)[2] == 4.7
+
+
+def test_a_forwarded_mate_on_no_feature_presents_the_part_lift_alone():
+    bezel, res = _bezel({"at": [5.0, 5.0]}, [{"node": "barrel", "out": 2.0}], 1.5)
+    assert presented_interface(bezel, res)[2] == 1.5
+    bezel, res = _bezel({"at": [5.0, 5.0]}, [], None)
+    assert presented_interface(bezel, res)[2] == 0.0
+
+
+def test_a_forwarding_wrapper_presents_as_deep_as_its_core_placed_bare():
+    """Every forwarding wrapper in the library: what it presents is the part's
+    lift plus exactly what the core presents placed on its own, so an occupant
+    seats at the same depth through the wrapper as in the bare core."""
+    from portrayal.manifest import forwarded_part
+    checked = 0
+    for p in sorted(glob.glob(str(ROOT / "library/components/*/*/v*/contract.yaml"))):
+        d = yaml.safe_load(open(p)) or {}
+        part = forwarded_part(d, resolve)
+        if part is None:
+            continue
+        core = resolve(part["ref"])
+        _, _, bare = presented_interface(core, resolve)
+        _, _, got = presented_interface(d, resolve)
+        assert abs(got - (float(part.get("lift") or 0) + bare)) < 1e-9, p
+        checked += 1
+    assert checked > 10, "the walk measured almost nothing"
+
+
 def test_the_optical_form_factors_can_all_host():
     """Every optical aperture in the library presents an interface, so nothing
     blocks an optic being seated once the optic itself is modelled."""
