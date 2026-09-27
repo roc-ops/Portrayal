@@ -1,0 +1,110 @@
+<!doctype html>
+<!--
+  A browser harness for viewer3d's marks and lamp colours (#664). WebGL does not
+  run under node, so this is driven by hand or from a browser tool:
+
+    python3 tools/serve.py 8931          # from the repository root, after ./build.sh
+    open http://localhost:8931/spec/tests/browser/viewer3d-marks.html
+
+  The page loads a device, then `window.harness` runs each check from the
+  issue's "done when" and writes the results as JSON into #out. Verify what the
+  COMPOSITOR shows with a screenshot as well: a buffer read outside a frame
+  reports a correct scene as blank.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>viewer3d marks harness</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #16181c; color: #d8dce2; font: 12px/1.4 system-ui, sans-serif; }
+  #stage { position: absolute; inset: 0 320px 0 0; }
+  #side { position: absolute; top: 0; right: 0; width: 320px; bottom: 0; overflow: auto; padding: 8px; box-sizing: border-box; }
+  pre { white-space: pre-wrap; font-size: 11px; }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://unpkg.com/three@0.161.0/build/three.module.js",
+  "three/addons/": "https://unpkg.com/three@0.161.0/examples/jsm/"
+}}
+</script>
+</head>
+<body>
+<div id="stage"></div>
+<div id="side"><b>viewer3d marks harness</b><pre id="out">loading...</pre></div>
+<script type="module">
+import { createViewer } from '../../../kit/viewer3d.js';
+
+const params = new URLSearchParams(location.search);
+const DEVICE = params.get('device') || 's9700-23d';
+const V = createViewer(document.getElementById('stage'), {dist: '../../../library/dist/'});
+window.V = V;
+const out = document.getElementById('out');
+const events = [];
+V.on('marks', r => events.push(r));
+const cameraPose = () => {
+  const c = V.three.camera.position;
+  return [c.x, c.y, c.z].map(v => Math.round(v * 100) / 100);
+};
+// every halo in the scene, as {colour, visible}: the selection's and the marks'
+const halos = () => {
+  const found = [];
+  V.three.scene.traverse(o => {
+    if (o.isMesh && o.renderOrder === 999 && o.material && o.material.opacity === 0.18) {
+      let vis = true;
+      for (let n = o; n; n = n.parent) if (n.visible === false) vis = false;
+      found.push({colour: '#' + o.material.color.getHexString(), visible: vis});
+    }
+  });
+  return found;
+};
+
+window.harness = {
+  events, cameraPose, halos,
+  async run() {
+    const r = {};
+    await V.load({device: DEVICE});
+    const paths = V.paths().map(p => p.path);
+    r.device = DEVICE;
+    const pick = re => paths.find(p => re.test(p));
+    const A = pick(/^port-0$/), B = pick(/^fabric-3$/), C = pick(/^led-sys$/), SEL = pick(/^port-5$/);
+    r.picked = {A, B, C, SEL};
+
+    // 1. N parts in N colours, and a selection beside them, without the
+    //    marks moving the camera or clearing
+    const before = cameraPose();
+    r.setMarks = V.setMarks([{path: A, color: '#e0574f'}, {path: B, color: '#2bb3c8'},
+                             {path: 'no-such-part', color: '#ffffff'},
+                             {path: C, color: 'red; x'}]);
+    r.cameraUnmoved = JSON.stringify(cameraPose()) === JSON.stringify(before);
+    r.afterMarks = halos();
+    V.select(SEL, {frame: false});
+    r.afterSelect = halos();
+    r.selection = V.selection;
+
+    // 2. the marks survive a state change, a lamp colour, a swap-style reload and a pull
+    await V.setStates({[C]: 'state-ok'});
+    r.afterStates = halos().length;
+    await V.setLampColors({[C]: '#ff00ff'});
+    r.lampColors = V.lampColors();
+    await V.load({device: DEVICE, overrides: {}});
+    r.afterReload = halos().length;
+    const fru = (V.frus && V.frus()) || [];
+    r.fru = fru.length ? (fru[0].path || fru[0]) : null;
+    if (r.fru) {
+      V.setMarks([...V.marks(), {path: r.fru, color: '#9b5de5'}]);
+      await V.setPulled([r.fru]);
+      r.afterPull = halos();
+      await V.setPulled([]);
+    }
+    // 3. clearing
+    V.setMarks([]);
+    r.afterClear = halos();
+    r.events = events;
+    out.textContent = JSON.stringify(r, null, 1);
+    return r;
+  },
+};
+window.harness.run().catch(e => { out.textContent = 'ERROR ' + (e && e.stack || e); });
+</script>
+</body>
+</html>
