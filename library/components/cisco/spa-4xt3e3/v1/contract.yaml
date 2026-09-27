@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: spa-4xt3e3
-version: 1.0.2
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -150,6 +150,21 @@ provenance:
     A-22 'Card and Fan Tray Power Consumption Specifications', which is staged and does not
     list SPAs. A SPA-specific datasheet, or the same appendix from a SIP-700-bearing
     platform's guide, is the thing to stage next.
+  jacks: >-
+    install guide - the interface connectors are 75-ohm coaxial Siemax, and the cables are
+    CAB-T3E3-RF-BNC-M / -F / -OPEN, '1.0/2.3 RF to BNC', so the faceplate jack is the 1.0/2.3
+    series (Cisco ASR 9000 Series Aggregation Services Router SIP and SPA Hardware
+    Installation Guide, '2-Port and 4-Port Clear Channel T3/E3 SPA Cables and Connectors').
+    Table 20 on the same page says BNC, which is read as the far end of the cable, as the
+    cable names say. Each jack is placed as common/din-1-0-2-3-jack@1, the rear-mount
+    bulkhead jack with its 7.01 spanner nut in front of the plate, centred where the
+    faceplate figure puts the jack (the same centres the skin drew before, a fraction of
+    the drawn plate: see provenance.figure). The nut, collar and barrel sizes are that
+    part's drawing figures, not a reading of this card. Ids are pN-tx and pN-rx, port N
+    as the plate legend numbers it. The nut is wider than the 4.6 disc the skin drew, so
+    two legends moved clear of it and nothing else did: every TX and RX legend from x 13.08
+    to 13.45, and the A/L legend of port 1 from x 7.21 to 5.51, the column the other A/L
+    legends already use.
   lifecycle: >-
     searched - no end-of-life notice for SPA-4XT3E3 is in this intake. Table 10 gives this
     part a minimum IOS XR release of 4.0.1 and a minimum hardware revision of 1.0, which is
@@ -329,4 +344,13 @@ relief:
       source: >-
         common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
         estimated' and the dome carries none
+parts:
+  - {ref: common/din-1-0-2-3-jack@1, id: p0-tx, at: [6.375, 6.785], attrs: {impedance: 75, media: coax-din-1-0-2-3}}
+  - {ref: common/din-1-0-2-3-jack@1, id: p0-rx, at: [6.375, 19.265], attrs: {impedance: 75, media: coax-din-1-0-2-3}}
+  - {ref: common/din-1-0-2-3-jack@1, id: p1-tx, at: [6.375, 49.755], attrs: {impedance: 75, media: coax-din-1-0-2-3}}
+  - {ref: common/din-1-0-2-3-jack@1, id: p1-rx, at: [6.375, 61.875], attrs: {impedance: 75, media: coax-din-1-0-2-3}}
+  - {ref: common/din-1-0-2-3-jack@1, id: p2-tx, at: [6.375, 92.735], attrs: {impedance: 75, media: coax-din-1-0-2-3}}
+  - {ref: common/din-1-0-2-3-jack@1, id: p2-rx, at: [6.375, 104.495], attrs: {impedance: 75, media: coax-din-1-0-2-3}}
+  - {ref: common/din-1-0-2-3-jack@1, id: p3-tx, at: [6.375, 135.345], attrs: {impedance: 75, media: coax-din-1-0-2-3}}
+  - {ref: common/din-1-0-2-3-jack@1, id: p3-rx, at: [6.375, 147.835], attrs: {impedance: 75, media: coax-din-1-0-2-3}}
 skins: [default]

@@ -24,7 +24,7 @@ SCHEMAS = Path(__file__).resolve().parents[2] / "schemas"
 # (#185). This number goes up when a field a reader depends on is removed,
 # renamed or changes meaning; adding one does not move it. CHANGELOG.md records
 # what each change was.
-CONTRACT = 1
+CONTRACT = 2
 
 # Placement and group attrs worth indexing. An allowlist, not everything: `states`
 # and `leds` hold transcribed vendor prose ("Blue = all lanes linked, Off = not

@@ -15,6 +15,7 @@ import json
 import pathlib
 import re
 import sys
+from xml.sax.saxutils import unescape
 
 import pytest
 import yaml
@@ -127,18 +128,34 @@ def test_a_published_part_is_shaped_like_the_one_it_stands_for():
     assert any(p.get("attrs") for e in withparts for p in e["parts"]), "no part carries attrs"
 
 
-def test_the_compiled_svg_embeds_the_device_manifest():
+def test_the_device_manifest_is_published_once_beside_its_drawings():
     """Why a consumer needs no device.yaml. Not a stripped summary - the source
-    manifest, every view of it."""
-    svg = (DIST / "as7726-32x.ac-f2b.front.svg").read_text()
-    meta = json.loads(re.search(r"<metadata[^>]*>(.*?)</metadata>", svg, re.S).group(1))
-    src = meta["source"]
+    manifest, every view of it - in `<device>.source.json`."""
+    src = json.loads((DIST / "as7726-32x.source.json").read_text())
     for key in ("attrs", "chassis", "configurations", "groups", "manufacturer", "model"):
-        assert key in src, f"the embedded manifest is missing {key!r}"
-    assert len(src["views"]) > 1, "only one view embedded; a consumer sees one face"
+        assert key in src, f"the published manifest is missing {key!r}"
+    assert len(src["views"]) > 1, "only one view published; a consumer sees one face"
 
 
-# ---- the gap this did NOT close ---------------------------------------------
+def test_every_drawing_names_its_source_and_carries_none_of_it():
+    """Each face held the whole manifest once, identical across a device - most
+    of the build (#665). A face now carries the digest of the published file,
+    and the digest has to be of THAT file, byte for byte, for every face."""
+    import hashlib
+    faces = sorted(DIST.glob("*.svg"))
+    assert faces, "no compiled faces in dist"
+    digests = {}
+    for svg in faces:
+        device = svg.name.split(".")[0]
+        if device not in digests:
+            digests[device] = hashlib.sha256(
+                (DIST / f"{device}.source.json").read_bytes()).hexdigest()
+        meta = json.loads(unescape(re.search(r"<metadata[^>]*>(.*?)</metadata>",
+                                             svg.read_text(), re.S).group(1)))
+        assert "source" not in meta, f"{svg.name} still embeds its source"
+        assert meta.get("source-sha256") == digests[device], \
+            f"{svg.name} names a source that is not {device}.source.json"
+
 
 def test_the_overlays_declared_interface_names_are_what_the_exporter_reads():
     """THE JOIN, NOW A READ RATHER THAN A PIN.
@@ -194,7 +211,8 @@ def test_the_dcim_export_needs_no_source_tree():
         # dist/ is the ONLY input. Copied by name so that anything not on the
         # published contract is genuinely absent rather than merely unused.
         (sand / "dist").mkdir()
-        for name in ("devices.json", "components.json", "vendors.json", "overlays.json"):
+        for name in ("devices.json", "components.json", "vendors.json", "overlays.json",
+                     "as7726-32x.source.json"):
             shutil.copy(DIST / name, sand / "dist" / name)
         for svg in DIST.glob("as7726-32x.*.svg"):
             shutil.copy(svg, sand / "dist" / svg.name)

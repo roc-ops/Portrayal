@@ -14,9 +14,12 @@ Everything in `library/dist/`, documented as a contract in
 [`library/README.md`](../library/README.md). The short version:
 
 - `<device>.<config>.<view>.svg` — the drawing. Addressable: `--` DOM ids, `/`
-  data-paths. The **whole source manifest is embedded in `<metadata>`**, every
-  view of it, so a page holding one SVG already knows the device's
-  configurations, groups, attrs and chassis.
+  data-paths. Its `<metadata>` names the source it was drawn from by
+  `source-sha256`. Configurations that draw a face identically share one file,
+  so the kit finds a configuration's face through `configs[].files` in
+  `<device>.configs.json` (`faceFile` in `dist.js`), never by its name.
+- `<device>.source.json` — the **whole source manifest**, every view of it: the
+  device's configurations, groups, attrs and chassis. One per device.
 - `devices.json`, `components.json` (+ `components-detail.json`), `labs.json`,
   `gaps.json`, `vendors.json`, `overlays.json`.
 

@@ -1,0 +1,87 @@
+format: 1
+kind: component
+name: lug-tag
+version: 1.0.0
+class: tab
+behaviour: fills
+profile: networking
+description: >-
+  Celestica pull-out luggage tag - the flat black asset / information card that slides out of
+  a slot in the faceplate, printed with the model name along its visible edge, with a thicker
+  pull lip at one end. Celestica's own front panel calls it LUG TAG (printed beside it on the
+  DS3001). Drawn landscape, text reading left to right and the lip at the RIGHT; a device
+  that stands it on end seats it with rotate 270, which puts the lip at the top and the text
+  reading bottom to top, as every render of an upright tag shows it.
+  The same card is fitted to the DS3000, DS3001, DS4000 and DS4001.
+size: {w: 23.0, h: 4.0}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs: {role: info-tab}
+provenance:
+  size: >-
+    photo-measured on two orthographic vendor renders at two scales, the same part both times.
+    DS3001 docs-portal front panel (ds3001--front-panel-1.jpg, 5.439 px/mm, body 2385 px for
+    the datasheet's 438.5 mm): the tab spans x 3019-3143 px and y 1149-1171, 22.8 x 4.0 mm,
+    horizontal under the management vent grid. DS3000 docs-portal front panel
+    (ds3000--product-overview-front.png, 4.180 px/mm across, 4.114 down): x 1895-1911 and y
+    93-189, 4.1 x 23.4 mm, standing on end right of the management stack. 23.0 x 4.0 is the
+    mean of the two long readings and the DS3001's short one. A third, independent reading on
+    the DS4000/DS4001 installation guide's orthographic front elevations (3.480 px/mm across,
+    3.527 down) gives the CARD alone as 3.0 x 23.2 mm (x 1500-1510.6, y 59.4-141.3 px) - the
+    long axis agrees; the short axis there measures the card without its slot, which is what the
+    3.3 mm card inside this 4.0 mm slot draws.
+  label: >-
+    render - the DS3001 docs-portal figure prints "DS3001" on the tab, the DS3000 vendor
+    three-quarter render (cls.celestica.com Foleon page, ds3000_front) prints "DS3000", and the
+    DS4001 one (ds4001_front) prints "DS4001", each reading bottom-to-top along the upright tab.
+    The text is a field so one drawing serves every model; nothing else printed on the card is
+    visible.
+  colour: >-
+    render - dark grey on the DS3001 figure, black on the DS3000 and DS4001 three-quarter renders;
+    drawn near-black. The DS3000 docs-portal figure and the DS4001 render both show a thicker,
+    curled pull lip at the upper end of the upright tab, with the model name reading bottom to
+    top beneath it - so the grip is drawn at the RIGHT of the landscape part, and rotate 270
+    brings both round the right way.
+  relief: >-
+    estimated throughout, following common/pull-tab@1 (the Edgecore information tab, the
+    library's precedent for a captive pull-out card): the card stands a little proud of its slot
+    and the lip stands further, so the tab reads in 3D as something a finger can take hold of.
+    Both renders that show the lip are three-quarter views without a scale on the depth axis,
+    so no standoff is measured.
+  body: >-
+    estimated - no document dimensions the card's length behind the faceplate or how far it
+    pulls. The depth and travel are chosen so the card slides clear of the face by most of its
+    length, as the Edgecore pull-tab does (115 deep, 88 of travel); this card is shorter than
+    that one and is given proportionally less. A captive part: `travel` keeps it in the chassis.
+  size-variant: >-
+    The DS4101 face carries a tag measured 15.9 mm long by the DS4100/DS4101 modeller - a
+    candidate size variant of this card, not modelled here. If it is confirmed as the same card
+    in a shorter length it is a separate contract (a different shape), not a skin.
+elements:
+  tab: {at: [0.3, 0.35], size: [22.4, 3.3], class: tab}
+fields:
+  label:
+    label: Printed model name
+    type: text
+    default: ''
+relief:
+  features:
+    - node: tab
+      out: 1.2
+      color: '#26292d'
+      confidence: estimated
+      source: >-
+        celestica/lug-tag@1 provenance.relief - the card's standoff from its slot is not
+        dimensioned; common/pull-tab@1 is the precedent for a raised captive tab.
+    - node: tab-grip
+      out: 2.4
+      color: '#34383d'
+      confidence: estimated
+      source: >-
+        celestica/lug-tag@1 provenance.relief and .colour - the DS3000 docs-portal figure and the
+        DS4001 render both show a thicker curled lip at the pull end; its height is not
+        dimensioned.
+skins: [default]
+body:
+  depth: 70
+  travel: 55
+  color: '#26292d'

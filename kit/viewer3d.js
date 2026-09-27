@@ -31,7 +31,7 @@ import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, sv
          buildFaceRelief, bodyBoxes, fruFor,
          nodeTools, tiltOf, tiltTools, tiltGroupIn, unproject, openFrameFaces } from './relief.js';
 import { seatViews, seatBack, refusalReason } from './swap.js';
-import { jdist } from './dist.js';
+import { jdist, faceFile } from './dist.js';
 import { createLamps } from './lamps.js';
 
 const CLS_LABEL = {fan: 'Fan module', psu: 'Power supply', tab: 'Info tab'};
@@ -437,7 +437,7 @@ export function createViewer(container, opts = {}) {
     // rear pass here re-seated swapped bays only (B3 Task 10c).
     const roots = {};
     for (const view of ALL_VIEWS) {
-      const url = `${DIST}${DEV}.${cfg}.${view}.svg`;
+      const url = `${DIST}${faceFile(devIndex, cfg, view)}`;
       let text;
       try { text = await svgSource(url, SCOPE); } catch { continue; }
       if (!text) continue;
@@ -475,7 +475,10 @@ export function createViewer(container, opts = {}) {
                      + `override(s) not applied - the optic's skin did not load, `
                      + `so the cage keeps what the build seated`, failed);
       if (!viewApplied) continue;
-      setSvgOverride(`${DIST}${DEV}.${cfg}.${view}.svg`,
+      // Keyed by the file, which other configurations may share. The
+      // overrides are cleared at the top of every pass and a pass is one
+      // configuration, so no other configuration reads this one's.
+      setSvgOverride(`${DIST}${faceFile(devIndex, cfg, view)}`,
                      new XMLSerializer().serializeToString(roots[view].ownerDocument), SCOPE);
       total += viewApplied;
     }
@@ -525,7 +528,7 @@ export function createViewer(container, opts = {}) {
     setReliefPulled(PULLED, SCOPE);
     RESTYLE = [];
     gen++;
-    const f = v => `${DIST}${DEV}.${cfg}.${v}.svg`;
+    const f = v => `${DIST}${faceFile(devIndex, cfg, v)}`;
     const meshes = [];
     FRU_PATHS.clear();
     for (const k of Object.keys(FRU_GROUPS)) delete FRU_GROUPS[k];
@@ -806,7 +809,7 @@ export function createViewer(container, opts = {}) {
   async function buildHitIndex(cfg) {
     for (const view of ALL_VIEWS) {
       hitIndex[view] = []; pathIndex[view] = [];
-      const text = await svgSource(`${DIST}${DEV}.${cfg}.${view}.svg`, SCOPE);
+      const text = await svgSource(`${DIST}${faceFile(devIndex, cfg, view)}`, SCOPE);
       if (!text) continue;                 // a face the device does not draw
       const div = document.createElement('div');
       div.style.cssText = 'position:absolute;left:-10000px;top:0;width:1000px;visibility:hidden';
