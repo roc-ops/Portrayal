@@ -24,7 +24,7 @@ SNIPPET = textwrap.dedent(f"""
     from portrayal.devices_index import search_blob
     man = {str(LIB / "devices/ufispace/s9510-28dc/device.yaml")!r}
     d = yaml.safe_load(open(man).read())
-    print(search_blob(d, __import__("pathlib").Path(man).parent))
+    print(search_blob(d))
 """)
 
 
@@ -57,7 +57,7 @@ def test_the_tokens_themselves_did_not_change():
     blob = _blob("0")
     # component refs, a group attr and a device attr - one of each source that
     # feeds the blob, so a regression in any of them fails here. NOT "arcos":
-    # the S9510 has no overlay of its own, and asserting it would be asserting
-    # a fact about a different device.
+    # nobody lists the S9510 yet, and asserting it would be asserting a fact
+    # about a different device.
     for token in ("qsfp-cage", "sfp-ganged", "400g", "800"):
         assert token in blob.split(), f"{token!r} fell out of the haystack"
