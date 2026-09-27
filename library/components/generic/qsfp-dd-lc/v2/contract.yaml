@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: qsfp-dd-lc
-version: 2.0.0
+version: 2.1.0
 class: transceiver
 behaviour: occupies
 mates: qsfp-dd
@@ -124,6 +124,14 @@ provenance:
     out of this figure for the same reason it was rejected for `size.d` - a subtraction against an
     estimated figure would trade a drawing figure for a guess. 20.0 comes from section 7.3's own text
     and Note 4's own callout, nothing derived.
+    THE NOSE IS NOT DRAWN TALLER HERE, although generic/qsfp-lc@2 (2.1.0) draws
+    its nose 1.4 above and 1.4 below the body. That figure is photo-measured off
+    a QSFP28 module, and no photograph of a QSFP-DD module is held. The one
+    QSFP-DD figure for the nose's height, QSFP-DD HW Rev 6.3 Appendix B Figure
+    102's 13.5 REF ("the height of latch"), is informative and equals 8.5 plus
+    Figure 52's two maxima (3.4 above, 1.6 below): it is the envelope drawn at
+    its limit, not a module's nose. So the head stays the 18.35 x 8.5 face
+    until a QSFP-DD module is measured.
   tab: >-
     composed - common/qsfp-pull-tab@2; see that part's provenance for the reach
     and the measurements (the U-loop as photographed, arms out 38.6 and grip out
@@ -135,6 +143,18 @@ provenance:
     decision 4), so the tab still wears this generic's `latch-color`. At
     `at: [-0.325, -1.07]` the grip's top sits 1.07 above the module top, as
     measured, and the grip straddles the face's top edge (y -1.07 to 1.83).
+    The tab's riser blocks (common/qsfp-pull-tab@2 2.1.0 and later) arrive
+    with it: they are the tab's own moulding, and this generic already wears
+    the tab's photo-measured QSFP28 geometry for its arms and grip. On this
+    8.5 face they stand at the side edges from y 2.33 to 7.23, clear of the
+    receptacle housing. THE LAYERING IS DELIBERATE (lint L46): the tab's
+    size box is now 19 x 8.3 and holds both bores, but the tab is a loop open
+    in the middle and draws nothing over them. QSFP-DD HW Rev 6.3 Figure
+    102's informative handle also stands a block against the nose front at
+    the handle's root, the height of the latch, so a riser there is not a QSFP28 peculiarity; but its
+    strap leaves that block near the BOTTOM, which the photographed QSFP28 tab
+    does not do, and its proportions are an illustration, so none of its
+    figures are used.
   tab-colour: >-
     A FIELD, not a fact, and the default is a NEUTRAL GREY (#6f6f6f) because
     every chromatic default is a claim. QSFP-DD HW Rev 6.3 section 6.3

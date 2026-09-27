@@ -4,6 +4,7 @@ rises above the module top, coloured by the host's latch-color
 import pathlib
 import xml.etree.ElementTree as ET
 
+import pytest
 import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
@@ -59,3 +60,54 @@ def test_every_relief_figure_says_where_it_came_from():
     for f in C2["relief"]["features"]:
         assert f.get("confidence") in {"drawing", "measured", "photo-measured", "estimated"}, f
         assert f.get("source", "").strip(), f
+
+
+# --- the riser blocks (roc-ops/Portrayal#646) ----------------------------------
+
+def _box(n):
+    e = NODES[n]
+    x, y = float(e.get("x")), float(e.get("y"))
+    return x, y, x + float(e.get("width")), y + float(e.get("height"))
+
+
+def test_each_arm_roots_in_a_riser_7_5_long_and_7_8_tall():
+    """The photographed riser: 7.5 along the axis (7.41 and 7.53 in the two side
+    views) and 7.8 tall from the strap top (7.67 and 7.87), flush with the strap
+    top. Drawn as the part BELOW the arm's cross-section, so the arm root is the
+    post's top and the two solids share no volume."""
+    feats = {f["node"]: f for f in C2["relief"]["features"]}
+    for side in ("l", "r"):
+        arm, riser = _box(f"arm-{side}"), _box(f"riser-{side}")
+        assert riser[0] == pytest.approx(arm[0]) and riser[2] == pytest.approx(arm[2]), side
+        assert riser[1] == pytest.approx(arm[3]), "the riser starts where the arm's section ends"
+        assert riser[3] - arm[1] == pytest.approx(7.8), "7.8 tall from the strap top"
+        f = feats[f"riser-{side}"]
+        assert f["out"] == pytest.approx(7.5) and not f.get("lift")
+        assert f["out"] < feats[f"arm-{side}"]["out"], "the arm runs on past its riser"
+        assert f["confidence"] == "photo-measured" and f["source"].strip()
+        assert C2["elements"][f"riser-{side}"]["size"] == [1.95, 4.9]
+
+
+def test_the_size_box_holds_the_risers():
+    """size.h is the whole part now: the grip top to the risers' lower ends."""
+    lowest = max(_box(n)[3] for n in NODES if n in C2["elements"])
+    assert C2["size"]["h"] == pytest.approx(lowest) == pytest.approx(8.3)
+    assert SVG.get("viewBox") == f"0 0 {C2['size']['w']} {C2['size']['h']}"
+
+
+def test_the_risers_paint_first_because_they_are_farthest():
+    """2D paint order is depth order here: risers (7.5 out) under arms (38.6)
+    under nothing - so a riser never covers its own arm's end."""
+    order = [e.get("id") for e in SVG if e.get("id")]
+    for side in ("l", "r"):
+        assert order.index(f"riser-{side}") < order.index(f"arm-{side}")
+    for n in ("riser-l", "riser-r"):
+        assert NODES[n].get("data-fill-from") == "latch-color", n
+        assert NODES[n].get("data-stroke-derive") == "latch-color", n
+
+
+def test_the_riser_belongs_to_the_tab():
+    """Ownership, stated where the next reader looks: the riser is the strap's
+    own moulding, so the tab carries it and the module head does not."""
+    assert "belongs to this" in C2["provenance"]["riser"]
+    assert "riser" in C2["description"]
