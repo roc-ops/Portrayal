@@ -665,7 +665,7 @@ views:
       - {id: psu-2, at: [352.4, 2.0], size: {w: 73.5, h: 40.0}, group: psus, rel-pos: 2, accepts: [celestica/psu-r3059-f8001@1], default: celestica/psu-r3059-f8001@1}
       placements:
       - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [207.85, 3.0], rotate: 180, group: mgmt, rel-pos: 1, attrs: {role: mgmt, speed: 1g}}
-      - {ref: std/usb-a@1, id: usb, at: [208.2, 16.35], group: mgmt, rel-pos: 2, attrs: {role: storage, usb: '2.0'}}
+      - {ref: std/usb-a@1, id: usb, at: [208.2, 16.35], skin: usb2, group: mgmt, rel-pos: 2, attrs: {role: storage, usb: '2.0'}}
       - {ref: std/rj45-ganged@2, id: console, at: [207.85, 22.3], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
       - {ref: common/usb-symbol@1, id: usb-mark, at: [222.0, 16.6], rotate: 270, for: usb, group: furniture, rel-pos: 2}
       - {ref: common/led-dot@1, id: led-psu, at: [227.7, 13.9], for: chassis, group: status-leds, rel-pos: 1}
@@ -725,3 +725,11 @@ configurations:
     region-context: {exhaust: Intake}
     part-numbers:
       R4041-F9005-A0: {part: R4041-F9005-A0}
+datasheet:
+  title: Celestica DS2000 1U 48-port 10GbE/25GbE Data Center Switch datasheet (revision 091024)
+  url: https://www.celestica.com/hps/ds2500_ds2000
+  sha256: 915b743a36ef278d7bf80dfbdf22aeb35a8bcba049aa85da6a1575b92f679947
+references:
+  - {title: 'Celestica DS2500/DS2000 datasheet, revision 011524 (STORDIS mirror)', url: 'https://stordis.com/wp-content/uploads/2024/06/DS2000_R4041-F900x_Datasheet.pdf', sha256: 558d27b69d395f965e36cbb9df997931a895ad89c85ab22d69058de3f9c78095}
+  - {title: 'Celestica documentation portal - DS2000 Installation Guide (rev 1.4.0, 2/2026)', url: 'https://documentationportal.celestica.com/en/networking/ds2000/ds2000-product-overview'}
+  - {title: Celestica hardware platforms - DS2000 product page (Foleon renders), url: 'https://cls.celestica.com/hardware-platforms/ds2000/'}

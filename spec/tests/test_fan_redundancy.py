@@ -472,7 +472,16 @@ def test_the_comparison_layer_can_now_reach_them():
     part, celestica/fan-40@1, serves both - counted twice because two datasheets state it
     twice, not because there are two rears. The two models' FRONTS differ; nothing about
     the cooling does.
+
+    SEVENTY-FOUR IS THE CELESTICA DS2000, 3+1 over four bays: its datasheet says "3+1
+    redundant fans" and its installation guide "four fan modules in the standard
+    configuration", and the guide's rear elevation draws four modules, two either side of
+    the rear management cluster. Its fan is not the DS4000's: the outline, grille and
+    handle band agree to 0.3 mm but the latch sits at the other end of the handle, so it
+    is celestica/fan-40-right-latch@1. Its sibling the DS1000 is not counted, and should
+    not be: its datasheet's "2+1 Fixed 40 mm x 40 mm x 28 mm fans" are fixed fans behind
+    round grilles, not bays, so there is no group for the comparison layer to reach.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 73, n
+    assert n == 74, n
