@@ -80,6 +80,9 @@ export function createViewer(container, opts = {}) {
   const DIST = opts.dist || '../dist/';
   const PXMM = opts.pxmm || 4;
   const HL_COLOR = opts.highlight || '#f59e0b';
+  // how a mark is drawn when it does not say (#664): 'plate', the selection's
+  // translucent plate and outline, or 'ring', 2D marks.js's pair of rings
+  const MARK_STYLE = opts.markStyle === 'ring' ? 'ring' : 'plate';
 
   let DEV = null, CFG = null, disposed = false;
   // Runtime bay swaps, bay id -> ref (or null for an emptied bay). The 3D scene
@@ -943,7 +946,41 @@ export function createViewer(container, opts = {}) {
   // off - only its colour differs. Built here once so the two cannot drift.
   // Returns {obj, grp, lx, ly, w, h, exact} with `obj` already in the scene, or
   // null for a path no face draws.
-  function halo(path, colour) {
+  // THE RING STYLE, 2D marks.js's halo() in 3D: a soft wide ring under a
+  // crisp narrow one, each a rounded rectangle band around the part at the
+  // same outsets, widths and opacities in the same millimetres (ring(): pad,
+  // stroke width, stroke opacity, corner radius min(0.9, pad)). A band is the
+  // stroke drawn as a surface: the rounded rectangle at pad + width/2 with the
+  // one at pad - width/2 cut out of it, so it is exactly the 2D stroke.
+  const RINGS = [{pad: 1.35, width: 1.8, opacity: 0.28, order: 999},
+                 {pad: 0.45, width: 0.7, opacity: 1, order: 1000}];
+  function roundedRect(target, w, h, r) {
+    const x = -w / 2, y = -h / 2, rr = Math.max(0, Math.min(r, w / 2, h / 2));
+    target.moveTo(x + rr, y);
+    target.lineTo(x + w - rr, y);
+    target.absarc(x + w - rr, y + rr, rr, -Math.PI / 2, 0, false);
+    target.lineTo(x + w, y + h - rr);
+    target.absarc(x + w - rr, y + h - rr, rr, 0, Math.PI / 2, false);
+    target.lineTo(x + rr, y + h);
+    target.absarc(x + rr, y + h - rr, rr, Math.PI / 2, Math.PI, false);
+    target.lineTo(x, y + rr);
+    target.absarc(x + rr, y + rr, rr, Math.PI, Math.PI * 1.5, false);
+    return target;
+  }
+  function ringBand(w, h, {pad, width, opacity, order}, colour) {
+    const corner = Math.min(0.9, pad);
+    const outer = pad + width / 2, inner = Math.max(pad - width / 2, 0);
+    const shape = roundedRect(new THREE.Shape(), w + 2 * outer, h + 2 * outer, corner + width / 2);
+    shape.holes.push(roundedRect(new THREE.Path(), w + 2 * inner, h + 2 * inner,
+                                 Math.max(corner - width / 2, 0)));
+    const mesh = new THREE.Mesh(new THREE.ShapeGeometry(shape, 6),
+      new THREE.MeshBasicMaterial({color: colour, transparent: opacity < 1, opacity,
+                                   depthTest: false, depthWrite: false, side: THREE.DoubleSide}));
+    mesh.renderOrder = order;
+    return mesh;
+  }
+
+  function halo(path, colour, style = 'plate') {
     const found = locate(path);
     if (!found) return null;
     const {view, c, exact} = found;
@@ -971,17 +1008,24 @@ export function createViewer(container, opts = {}) {
       into = tiltGroupIn(into, c.tilt, {fw, fh, flipLX: flipX, flipLY: flipY});
     }
     const obj = new THREE.Group();
-    const geo = new THREE.PlaneGeometry(hw, hh);
+    // what this is, for a host or a harness counting halos without guessing
+    // from a material
+    obj.userData.portrayalHalo = {path, colour, style};
     // depthTest off, drawn last: the same argument hl.js makes in 2D - a halo that
     // neighbours can paint over is not a halo. Here the neighbour is a handle or a
     // cage standing proud of the face.
-    const fillMat = new THREE.MeshBasicMaterial({color: colour, transparent: true,
-      opacity: 0.18, depthTest: false, depthWrite: false});
-    const lineMat = new THREE.LineBasicMaterial({color: colour, depthTest: false,
-      transparent: true});
-    obj.add(new THREE.Mesh(geo, fillMat));
-    obj.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo), lineMat));
-    obj.traverse(o2 => { o2.renderOrder = 999; });
+    if (style === 'ring') {
+      for (const r of RINGS) obj.add(ringBand(hw, hh, r, colour));
+    } else {
+      const geo = new THREE.PlaneGeometry(hw, hh);
+      const fillMat = new THREE.MeshBasicMaterial({color: colour, transparent: true,
+        opacity: 0.18, depthTest: false, depthWrite: false});
+      const lineMat = new THREE.LineBasicMaterial({color: colour, depthTest: false,
+        transparent: true});
+      obj.add(new THREE.Mesh(geo, fillMat));
+      obj.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo), lineMat));
+      obj.traverse(o2 => { o2.renderOrder = 999; });
+    }
     obj.position.set(hx, hy, 0.8);
     // ride with the module if it is a FRU, so ejecting it does not leave the
     // marker behind on the chassis
@@ -1003,7 +1047,9 @@ export function createViewer(container, opts = {}) {
 
   // MARKS (#664): many halos at once, each in its own colour, independent of
   // the selection - a reader selects one part while five others stay marked.
-  // `list` is the whole truth, [{path, color}], and [] clears; paths, never
+  // `list` is the whole truth, [{path, color, style?}], and [] clears. `style`
+  // is 'plate' (the selection's look) or 'ring' (2D's pair of rings); a mark
+  // that does not say takes the viewer's `markStyle`, 'plate' by default. Paths, never
   // selectors (the host resolves those against its 2D drawing). A mark never
   // moves the camera and never touches `selected`. It is held here and drawn
   // again after every rebuild, as STATES and PULLED are, and a pulled module's
@@ -1022,7 +1068,7 @@ export function createViewer(container, opts = {}) {
     const r = {missing: [], nearest: [], invalid: []};
     for (const m of MARKS) {
       if (!LAMP_HEX.test(m.color)) { r.invalid.push(m.path); continue; }
-      const got = box ? halo(m.path, m.color) : null;
+      const got = box ? halo(m.path, m.color, m.style) : null;
       if (!got) { r.missing.push(m.path); continue; }
       if (!got.exact) r.nearest.push(m.path);
       markObjs.push(got.obj);
@@ -1034,7 +1080,8 @@ export function createViewer(container, opts = {}) {
   function setMarks(list) {
     MARKS = (Array.isArray(list) ? list : [])
       .filter(m => m && m.path)
-      .map(m => ({path: String(m.path), color: String(m.color || '')}));
+      .map(m => ({path: String(m.path), color: String(m.color || ''),
+                  style: m.style === 'ring' || m.style === 'plate' ? m.style : MARK_STYLE}));
     return drawMarks();
   }
 

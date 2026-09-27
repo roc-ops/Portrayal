@@ -45,15 +45,16 @@ const cameraPose = () => {
   const c = V.three.camera.position;
   return [c.x, c.y, c.z].map(v => Math.round(v * 100) / 100);
 };
-// every halo in the scene, as {colour, visible}: the selection's and the marks'
+// every halo in the scene, the selection's and the marks', by the tag viewer3d
+// puts on each: {path, colour, style, parts, visible}
 const halos = () => {
   const found = [];
   V.three.scene.traverse(o => {
-    if (o.isMesh && o.renderOrder === 999 && o.material && o.material.opacity === 0.18) {
-      let vis = true;
-      for (let n = o; n; n = n.parent) if (n.visible === false) vis = false;
-      found.push({colour: '#' + o.material.color.getHexString(), visible: vis});
-    }
+    const h = o.userData && o.userData.portrayalHalo;
+    if (!h) return;
+    let vis = true;
+    for (let n = o; n; n = n.parent) if (n.visible === false) vis = false;
+    found.push({path: h.path, colour: h.colour, style: h.style, parts: o.children.length, visible: vis});
   });
   return found;
 };
@@ -96,7 +97,15 @@ window.harness = {
       r.afterPull = halos();
       await V.setPulled([]);
     }
-    // 3. clearing
+    // 3. the ring style: a mark that asks for it gets 2D's pair of rings (two
+    //    bands), beside plate marks and the plate selection
+    V.setMarks([{path: A, color: '#e0574f', style: 'ring'}, {path: B, color: '#2bb3c8'}]);
+    r.rings = halos();
+    const V2 = createViewer(document.createElement('div'), {dist: '../../../library/dist/', markStyle: 'ring'});
+    r.defaultStyleRing = (await V2.load({device: DEVICE}), V2.setMarks([{path: A, color: '#e0574f'}]),
+                          V2.marks()[0].style);
+    V2.dispose();
+    // 4. clearing
     V.setMarks([]);
     r.afterClear = halos();
     r.events = events;
