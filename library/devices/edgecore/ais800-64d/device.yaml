@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ais800-64d
-version: 3.0.2
+version: 3.0.3
 maturity: modelled
 manufacturer: Edgecore
 model: AIS800-64D
@@ -162,7 +162,7 @@ provenance:
       buried; centring the aperture (above) gives both ends the same 0.8 mm and the rows come out symmetric.
       THE PORT LAMP IS THE SINGLE ROUND ONE ON THE POST, one per port, and it is a different thing in
       a different place. See the-port-lamps-are-one-round-window-each.
-  the-ac-inlet-is-named-c20-and-the-photograph-agrees-about-everything-but-the-blades:
+  the-ac-inlet-is-named-c20-and-the-photograph-agrees:
     confidence: datasheet
     note: >-
       THE DOCUMENTS NAME IT THREE TIMES: the datasheet's power section reads "AC PSU Inlet: IEC 60320
@@ -173,14 +173,12 @@ provenance:
       28.98): a pair 13.46 mm apart with the third blade 8.4 mm off their line, which is the C19/C20 triangle,
       and each blade is about 1 x 3 mm, which is a C19/C20 blade. The part is turned so that pair stands
       vertical at the right and the odd blade sits at the left, which is `rotate: 270` and is what the
-      render draws. WHAT DOES NOT AGREE IS THE BLADES' OWN ORIENTATION. On the photograph each blade is
-      narrow and TALL - its long axis parallel to the line joining the pair. std/c20-inlet@1 draws its
-      blades across that line, so once the part is turned they come out short and wide. THAT DETAIL IS
-      UNSOURCED IN THE PART: its contract says the recess and pins are "proportional from the same drawing,
-      NOT dimensioned", and the SCHURTER drawing it cites dimensions the panel cutout only. So this is
-      the shared part's unsourced detail and not a wrong part on this device, and it is not silently corrected
-      here on the strength of one photograph: eleven modules across five vendors seat std/c20-inlet@1
-      and they would all move. See roc-ops/Portrayal#398.
+      render draws.
+      THE BLADES AGREE TOO. On the photograph each blade is narrow and TALL - its long axis parallel to
+      the line joining the pair - and std/c20-inlet@1 has drawn them that way since 1.3.1, which lays
+      all three blades along the long side of the coupler as IEC 60320 C19/C20 has them (the SCHURTER
+      C20 front view it cites draws the same). Turned 270, they stand tall. Until 1.3.1 the part drew
+      them across that line; see roc-ops/Portrayal#398.
   the-rj45s-are-not-all-the-same-way-up:
     confidence: measured
     note: >-

@@ -204,19 +204,88 @@ def test_the_latch_slot_is_in_the_upper_half_of_the_head(built):
 
 # --- the tab's absolute extent ------------------------------------------------
 
-def test_the_tab_arms_span_20_to_58_6_and_the_grip_58_6_to_69_8(built):
-    """From the cage face. The tab is composed at lift 20.0; its arms are out 38.6
-    and its grip lift 38.6 out 49.8 in its own frame. render.py writes `out`
-    absolute (38.6 + 20 = 58.6, 49.8 + 20 = 69.8) and leaves `lift` to be summed,
-    so a lift counted twice would put the grip's base at 78.6 - past its own front."""
+STEPS = ("", "-2", "-3", "-4", "-5", "-6")
+
+
+def test_the_tab_arms_step_from_20_to_58_6_and_the_grip_58_6_to_69_8(built):
+    """From the cage face. The tab is composed at lift 20.0; each arm is six
+    boxes stepping along the strap's S-bend from the nose front to 38.6 in its
+    own frame, and its grip lift 38.6 out 49.8. render.py writes `out` absolute
+    and leaves `lift` to be summed, so every box must run from where the last
+    one ended to its own absolute out - a lift counted twice would put the
+    second box's base at 62.0, past its own front."""
     root, parents = built
-    for n in ("--tab--arm-l", "--tab--arm-r"):
-        arm = by_suffix(root, f"cg0-occupant{n}")
-        assert lift_of(parents, arm) == pytest.approx(20.0, abs=1e-6), n
-        assert float(arm.get("data-z-out")) == pytest.approx(58.6, abs=1e-6), n
+    for side in ("l", "r"):
+        spans = []
+        for step in STEPS:
+            el = by_suffix(root, f"cg0-occupant--tab--arm-{side}{step}")
+            spans.append((lift_of(parents, el), float(el.get("data-z-out"))))
+        assert spans[0][0] == pytest.approx(20.0, abs=1e-6), side
+        for (_, out), (lift, _) in zip(spans, spans[1:]):
+            assert lift == pytest.approx(out, abs=1e-6), (side, spans)
+        assert all(out - lift > 3.0 for lift, out in spans), spans
+        assert spans[-1][1] == pytest.approx(58.6, abs=1e-6), side
+        assert [round(o, 4) for _, o in spans] == [42.0, 45.3, 48.6, 52.0, 55.3, 58.6]
     grip = by_suffix(root, "cg0-occupant--tab--grip")
     assert lift_of(parents, grip) == pytest.approx(58.6, abs=1e-6)
     assert float(grip.get("data-z-out")) == pytest.approx(69.8, abs=1e-6)
+
+
+def test_the_tab_dips_and_rises_in_the_module_frame(built):
+    """The boxes' tops in the seated module's own frame (y up is negative):
+    the strap leaves the riser 0.47 above the module top, the deepest box sits
+    1.03 below it, and the grip top is 1.23 above - the fitted-edge figures of
+    common/qsfp-pull-tab@2 2.2.0 (#647, #685). Each box is the 1.95 x 2.9
+    section at the module's side edge."""
+    root, parents = built
+    occ = by_suffix(root, "--cg0-occupant")
+    want = [-0.47, -0.07, 0.69, 1.03, 0.94, 0.39]
+    for side, x0 in (("l", -0.325), ("r", 16.725)):
+        for step, y in zip(STEPS, want):
+            el = by_suffix(root, f"cg0-occupant--tab--arm-{side}{step}")
+            bx0, by0, bx1, by1 = box(apply(relative(parents, el, occ), rect_corners(el)))
+            assert by0 == pytest.approx(y, abs=1e-6), (side, step, by0)
+            assert by1 - by0 == pytest.approx(2.9, abs=1e-6)
+            assert (bx0, bx1) == (pytest.approx(x0, abs=1e-6), pytest.approx(x0 + 1.95, abs=1e-6))
+    grip = by_suffix(root, "cg0-occupant--tab--grip")
+    assert box(apply(relative(parents, grip, occ), rect_corners(grip)))[1] == pytest.approx(-1.23, abs=1e-6)
+    riser = by_suffix(root, "cg0-occupant--tab--riser-l")
+    ry0, ry1 = box(apply(relative(parents, riser, occ), rect_corners(riser)))[1::2]
+    assert ry0 == pytest.approx(2.43, abs=1e-6) and ry1 == pytest.approx(7.33, abs=1e-6)
+
+
+def test_the_steps_stay_clear_of_the_bores_and_the_risers(built):
+    """No box of the S-bend stands in front of a bore: the arms stop at the
+    module's side edges and the receptacle housing is between them. And no box
+    shares volume with a riser - the riser ends at 27.5 and only the root,
+    which sits above it, overlaps it along the reach."""
+    root, parents = built
+    occ = by_suffix(root, "--cg0-occupant")
+    for side in ("l", "r"):
+        riser = by_suffix(root, f"cg0-occupant--tab--riser-{side}")
+        r = box(apply(relative(parents, riser, occ), rect_corners(riser)))
+        r_out = float(riser.get("data-z-out"))
+        for step in STEPS:
+            el = by_suffix(root, f"cg0-occupant--tab--arm-{side}{step}")
+            b = box(apply(relative(parents, el, occ), rect_corners(el)))
+            assert b[2] <= 3.40 or b[0] >= 14.95, (side, step, b)
+            if lift_of(parents, el) < r_out - 1e-6:
+                assert b[3] <= r[1] + 1e-6, (side, step, "shares volume with the riser")
+
+
+def test_the_risers_span_20_to_27_5_and_the_nose_is_11_3_tall(built):
+    """The riser posts stand on the nose front (lift 20.0, summed from the tab's
+    group) to 7.5 out of it, absolute 27.5 - a lift counted twice would build
+    them inside out. The nose is the body node, extruded 0 to 20 over its
+    11.3-tall outline, 1.4 past the 8.5 face at both edges (#646)."""
+    root, parents = built
+    for n in ("--tab--riser-l", "--tab--riser-r"):
+        r = by_suffix(root, f"cg0-occupant{n}")
+        assert lift_of(parents, r) == pytest.approx(20.0, abs=1e-6), n
+        assert float(r.get("data-z-out")) == pytest.approx(27.5, abs=1e-6), n
+    body = by_suffix(root, "cg0-occupant--body")
+    assert float(body.get("data-z-out")) - lift_of(parents, body) == pytest.approx(20.0, abs=1e-6)
+    assert float(body.get("y")) == pytest.approx(-1.3) and float(body.get("height")) == pytest.approx(11.1)
 
 
 # --- art outside the viewBox ---------------------------------------------------
@@ -231,12 +300,15 @@ def _inside(b, vb):
 
 
 def test_placed_overhangs_are_inside_the_device_viewbox(built):
-    """PLACED: the head's 2.50 and the tab's 1.07 above the part's own y=0 are
+    """PLACED: the head's 2.50 and the tab's 1.23 above the part's own y=0 are
     inside the device drawing, and nothing on the chain up to it clips."""
     root, parents = built
     vb = _viewbox(root)
     for suffix in ("xg0-occupant--head", "cg0-occupant--tab--grip",
-                   "cg0-occupant--tab--arm-l", "cg0-occupant--tab--arm-r"):
+                   "cg0-occupant--tab--arm-l", "cg0-occupant--tab--arm-r",
+                   *(f"cg0-occupant--tab--arm-{s}-{i}" for s in "lr" for i in range(2, 7)),
+                   "cg0-occupant--tab--riser-l", "cg0-occupant--tab--riser-r",
+                   "cg0-occupant--body"):
         el = by_suffix(root, suffix)
         b = box(apply(device_matrix(parents, el), rect_corners(el)))
         assert _inside(b, vb), (suffix, b, vb)
@@ -248,13 +320,15 @@ def test_placed_overhangs_are_inside_the_device_viewbox(built):
 
 @pytest.mark.parametrize("stem, suffixes", [
     ("generic--sfp-rj45--v1--default", ("--head",)),
-    ("generic--qsfp-lc--v2--default", ("--tab--grip", "--tab--arm-l", "--tab--arm-r")),
+    ("generic--qsfp-lc--v2--default", ("--tab--grip", "--tab--arm-l", "--tab--arm-r",
+                                       "--tab--arm-l-4", "--tab--arm-r-4",
+                                       "--tab--riser-l", "--tab--riser-r", "--body")),
 ])
 def test_standalone_preview_holds_its_overhangs(stem, suffixes):
     """The standalone component SVG is the Explorer's module preview. A part
     that declares `head:` gets a root viewBox that is the union of its size,
     its head and its composed parts, so the copper head's -2.50..10.70 and the
-    QSFP tab's y -1.07 and x -0.325..18.675 are inside it."""
+    QSFP tab's y -1.23 and x -0.325..18.675 are inside it."""
     import xml.etree.ElementTree as ET
     path = DIST / f"{stem}.svg"
     if not path.exists():

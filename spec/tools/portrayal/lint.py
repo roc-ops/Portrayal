@@ -237,7 +237,7 @@ RULES = {
     "L70": ("device",     "a `fact:` gap names a real fact and does not contradict the device", "fix the gap's scope or remove it"),
     "L71": ("component",  "a body box reaches no further than the part says it is deep", "shrink the body box or raise `body.depth`"),
     "L72": ("device",     "a bay's `plan:` or `rear:` lands in a view that exists, inside the chassis", "fix the plan view name or the coordinates"),
-    "L73": ("component",  "a field prints somewhere, and what prints is a field", "add a `data-from` text node for each field, or remove the field"),
+    "L73": ("component",  "a field prints somewhere, and what prints is a field; a node a field paints states no relief `color`, so its 3D sides follow the field", "add a `data-from` text node for each field, or remove the field; drop a relief feature's `color` on a field-painted node"),
     "L74": ("component",  "a lamp that declares states is painted from the lamp-colour variable", "fill or stroke the lamp node with `var(--led-color, <off colour>)`, not a literal colour"),
     "L75": ("component",  "a slot's structured facts agree with its prose, and lanes fit the connector", "fix `lanes`/`connector` or the description"),
     "L76": ("device",     "the RJ45 census: every Ethernet jack says whether it has lamps", "use std/rj45@2 with the lamp parts, or say in provenance the jack is bare"),
@@ -3249,6 +3249,33 @@ def lint_component_fields(path, data, _lib_roots=None):
                 err(path, "L73", f"field {k} has no data-from, data-fill-from, "
                                  f"data-stroke-from, data-stroke-derive or data-r-from "
                                  f"node in skin {skin}")
+        # A FIELD-PAINTED NODE TAKES ITS 3D SIDES FROM ITS ART (#643). relief.js
+        # derives a solid's side colour from the node's painted art, and reads
+        # it again on every repaint, so a field change recolours the sides -
+        # but only when the feature states no `color`: a `data-z-color` is a
+        # statement and is never overridden (#481). A literal `color` on a node
+        # wired to a field left the Amphenol DAC's green strap and the Siemon
+        # AOC's aqua jacket with grey and black sides.
+        colored = {f.get("node"): f.get("color")
+                   for f in ((data.get("relief") or {}).get("features") or [])
+                   if isinstance(f, dict) and f.get("color")}
+        if colored:
+            try:
+                root_el = ET.fromstring(text)
+            except ET.ParseError:
+                root_el = None
+            for el in (root_el.iter() if root_el is not None else []):
+                node = el.get("id")
+                if node not in colored:
+                    continue
+                wired = sorted({e.get(a) for e in el.iter()
+                                for a in ("data-fill-from", "data-stroke-from")
+                                if e.get(a)})
+                if wired:
+                    err(path, "L73", f"relief feature {node!r} states color "
+                                     f"{colored[node]} but skin {skin} paints it "
+                                     f"from {', '.join(wired)} - drop the color, "
+                                     "so its 3D sides follow the field")
     undeclared = set().union(*seen.values()) - set(fields) if seen else set()
     if undeclared:
         warn(path, "L73", f"skin reads {', '.join(sorted(undeclared))} from attrs but the "

@@ -272,6 +272,40 @@ the *published build*, not about the hardware.
   (roc-ops/Portrayal#650).
 
 ### Changed
+- `common/qsfp-pull-tab@2` (2.2.0) models the strap's S-bend: each arm is six
+  relief boxes along the reach (`arm-l`, then `arm-l-2` to `arm-l-6`, and the
+  same on the right) that follow the side-view curve, down 1.5 into a dip
+  about 31 from the nose front and back up to the grip, meeting end to end.
+  The tab's vertical figures were read again on fitted body edges: the grip
+  top is 1.23 above the module top (was 1.07) and the strap top 0.47 (was
+  0.57), so the size is 19 x 8.56 and the risers end 7.33 below the module top,
+  where they were measured. `generic/qsfp-lc@2` and `generic/qsfp-dd-lc@2`
+  (2.2.0) compose the tab at `at: [-0.325, -1.23]`. The face-on drawing is
+  unchanged apart from that 0.16 shift. No device seats these parts, so no
+  lock moved (roc-ops/Portrayal#647, roc-ops/Portrayal#685).
+- `std/c20-inlet` (1.3.1) lays all three blades along the long side of the
+  recess, as IEC 60320 C19/C20 has them and the SCHURTER C20 front view it
+  cites draws them: line and neutral 13.0 apart, earth 8.0 off their line, in a
+  29.0 x 21.0 recess. It had drawn them across the long side. Ids, size and
+  connection point are unchanged; the 27 devices that seat it take a patch.
+- `generic/qsfp-lc@2` (2.1.0) draws its nose at the height the maintainer's
+  photographs of a QSFP SR4 module show: 1.4 above and 1.4 below the 8.5 body,
+  11.3 tall, so `head` is `at: [0, -1.4]`, `h: 11.3` in `components.json`, and
+  the `body` outline and its 20 mm solid grow to match. `common/qsfp-pull-tab@2`
+  (2.1.0) gains `riser-l` and `riser-r`, the posts at the arm roots (7.5 out
+  from the nose front, 7.8 tall from the strap top), and its size grows from
+  19 x 3.4 to 19 x 8.3. `generic/qsfp-dd-lc@2` (2.1.0) wears the risers through
+  the tab; its head is unchanged, since no QSFP-DD module has been measured.
+  Ids, connection points and placements are unchanged, and no device seats
+  these parts, so no lock moved (roc-ops/Portrayal#646).
+- In 3D, a solid painted from a field now takes its side colour from the
+  field: the QSFP cable end's strap, ring and stub (so a wrapper's green or
+  blue strap and the Siemon AOC's aqua jacket show on every face), every coax
+  plug's cable stub, and the DCS201 and DCS240 fan handles. Their relief
+  features stated a literal `color`, which the kit never overrides; the parts
+  take a patch, and the DCS201, DCS202, DCS240 and DCS511 a patch for the
+  fans. Lint L73 now refuses a relief `color` on a node a field paints
+  (roc-ops/Portrayal#643).
 - Lint L122 now also reads a `cable-od` a device sets on a placement (a
   cable end placed `mate-to` a jack or cage), with the same number and range
   check as a wrapper's (roc-ops/Portrayal#644).
