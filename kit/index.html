@@ -12,7 +12,10 @@
       python3 tools/serve.py 8931      # from the repository root
       open http://localhost:8931/kit/index.html?device=<name>
 
-  Everything it draws comes from ../library/dist. The shell and the viewer are
+  Everything it draws comes from ../library/dist. `?dist=packages` reads the
+  npm packages instead, as `npm_packages.py` (or `./publish.sh`) left them in
+  ../library/packages; `?dist=cdn` reads them from jsDelivr, at `&index=` a
+  version of @portrayal/index (latest if not given). The shell and the viewer are
   the kit modules the README lists; what this page adds is the wiring BETWEEN
   them, because three of the things Gate 5 asks you to check live in that gap:
 
@@ -122,8 +125,16 @@
 import { createShell, esc } from './shell.js';
 import { statesOfEl, messagesOfEl, charactersOfEl } from './states.js';
 import { encodeSwaps, searchWith } from './swap.js';
+import { flatDist, packageDist } from './dist.js';
 
-const DIST = '../library/dist';
+// WHERE THE FILES COME FROM. The build directory by default; the npm packages
+// (#528) on `?dist=packages` (a local npm_packages.py run) or `?dist=cdn`.
+const page = new URLSearchParams(location.search);
+const DIST = page.get('dist') === 'packages'
+  ? await packageDist({at: name => `../library/packages/${name.split('/')[1]}/`})
+  : page.get('dist') === 'cdn'
+    ? await packageDist({index: page.get('index') || 'latest'})
+    : flatDist('../library/dist');
 const shell = createShell({ title: 'Portrayal explorer', dist: DIST });
 const state = shell.state;
 
@@ -580,7 +591,7 @@ async function ensureViewer() {
   if (viewer) return viewer;
   if (!loading) loading = (async () => {
     const { createViewer } = await import('./viewer3d.js');
-    const v = createViewer(host3d, { dist: DIST + '/', background: shell.stage() });
+    const v = createViewer(host3d, { dist: DIST, background: shell.stage() });
     shell.on('stage', c => v.setBackground(c));
     v.on('select', p => {
       if (!p) return;

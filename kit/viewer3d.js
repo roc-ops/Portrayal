@@ -30,7 +30,7 @@ import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, sv
          buildFaceRelief, bodyBoxes, fruFor,
          nodeTools, tiltOf, tiltTools, tiltGroupIn, unproject, openFrameFaces } from './relief.js';
 import { seatViews, seatBack, refusalReason } from './swap.js';
-import { jdist, faceFile } from './dist.js';
+import { jdist, faceFile, distResolver } from './dist.js';
 import { createLamps } from './lamps.js';
 
 const CLS_LABEL = {fan: 'Fan module', psu: 'Power supply', tab: 'Info tab'};
@@ -70,13 +70,16 @@ const save = (data, filename, type) => {
 /**
  * Mount a viewer into `container`.
  *
- * @param opts.dist       where the compiled SVGs and indexes live ('../dist/')
+ * @param opts.dist       where the compiled SVGs and indexes live: a build
+ *                        directory's base ('../dist/'), or a path -> URL
+ *                        function such as dist.js `packageDist` returns
  * @param opts.pxmm       base face raster density (4)
  * @param opts.background scene background
  * @param opts.highlight  selection colour
  */
 export function createViewer(container, opts = {}) {
-  const DIST = opts.dist || '../dist/';
+  // a build directory's base, or a path -> URL function (dist.js)
+  const distAt = distResolver(opts.dist, '../dist/');
   const PXMM = opts.pxmm || 4;
   const HL_COLOR = opts.highlight || '#f59e0b';
 
@@ -381,7 +384,7 @@ export function createViewer(container, opts = {}) {
     const plain = () => new THREE.MeshLambertMaterial({color: body.color || '#3a3f44'});
     const sideMat = async (name, wmm, hmm, flipX, flipY) => {
       if (!body.sides || !body.sides[name]) return plain();
-      const c = await svgCanvas(DIST + body.sides[name], wmm, hmm, flipX, flipY, SCOPE);
+      const c = await svgCanvas(distAt(body.sides[name]), wmm, hmm, flipX, flipY, SCOPE);
       return new THREE.MeshBasicMaterial({map: canvasTex(c)});
     };
     const fp = body.footprint || {at: [0, 0], size: [faceW, faceH]};
@@ -417,7 +420,7 @@ export function createViewer(container, opts = {}) {
     const c = byRef(ref);
     if (!c) return null;
     const skin = c.skins?.includes('default') ? 'default' : c.skins?.[0];
-    const url = `${DIST}components/${c.ns}--${c.name}--${c.major}--${skin}.svg`;
+    const url = distAt(`components/${c.ns}--${c.name}--${c.major}--${skin}.svg`);
     return {comp: c, text: await svgSource(url, SCOPE)};
   };
   async function applyBayOverrides(cfg) {
@@ -433,7 +436,7 @@ export function createViewer(container, opts = {}) {
     // rear pass here re-seated swapped bays only (B3 Task 10c).
     const roots = {};
     for (const view of ALL_VIEWS) {
-      const url = `${DIST}${faceFile(devIndex, cfg, view)}`;
+      const url = distAt(faceFile(devIndex, cfg, view));
       let text;
       try { text = await svgSource(url, SCOPE); } catch { continue; }
       if (!text) continue;
@@ -474,7 +477,7 @@ export function createViewer(container, opts = {}) {
       // Keyed by the file, which other configurations may share. The
       // overrides are cleared at the top of every pass and a pass is one
       // configuration, so no other configuration reads this one's.
-      setSvgOverride(`${DIST}${faceFile(devIndex, cfg, view)}`,
+      setSvgOverride(distAt(faceFile(devIndex, cfg, view)),
                      new XMLSerializer().serializeToString(roots[view].ownerDocument), SCOPE);
       total += viewApplied;
     }
@@ -524,7 +527,7 @@ export function createViewer(container, opts = {}) {
     setReliefPulled(PULLED, SCOPE);
     RESTYLE = [];
     gen++;
-    const f = v => `${DIST}${faceFile(devIndex, cfg, v)}`;
+    const f = v => distAt(faceFile(devIndex, cfg, v));
     const meshes = [];
     FRU_PATHS.clear();
     for (const k of Object.keys(FRU_GROUPS)) delete FRU_GROUPS[k];
@@ -568,7 +571,7 @@ export function createViewer(container, opts = {}) {
     // is not clamped; a part that declares a depth is, as before.
     const compDeep = () => (COMP_ENTRY.body || COMP_ENTRY.size?.d) ? D : Infinity;
     const FACES = COMP ? [
-      {view: 'comp', url: DIST + COMP_ENTRY.files[cfg], sizeBox: true,
+      {view: 'comp', url: distAt(COMP_ENTRY.files[cfg]), sizeBox: true,
        fw: () => W, fh: () => H, deep: compDeep, pos: () => [0, 0, D / 2], rot: [0, 0, 0]},
     ] : [
       {view: 'front', fw: () => W, fh: () => H, deep: () => D, pos: () => [0, 0, D / 2], rot: [0, 0, 0]},
@@ -588,7 +591,7 @@ export function createViewer(container, opts = {}) {
       await buildFaceRelief(F, {src: F.url || f(F.view), faceCv, faceSvg, facePunch,
                                 faceMM,
                                 meshes, FRU_GROUPS, FRU_META, BODY_META, D, deep: F.deep(),
-                                bodyBoxMesh, dist: DIST, backSource,
+                                bodyBoxMesh, dist: distAt, backSource,
                                 restyle: RESTYLE, scope: SCOPE});
       // a face with no drawing falls back to flat colour and contributes no group
       if (meshes.length > before) built[F.view] = meshes[meshes.length - 1];
@@ -600,7 +603,7 @@ export function createViewer(container, opts = {}) {
       const plain = new THREE.MeshLambertMaterial({color: body.color || '#3a3f44'});
       const sideMat = async (name, wmm, hmm, flipX, flipY) => {
         if (!body.sides || !body.sides[name]) return plain;
-        const c = await svgCanvas(DIST + body.sides[name], wmm, hmm, flipX, flipY, SCOPE);
+        const c = await svgCanvas(distAt(body.sides[name]), wmm, hmm, flipX, flipY, SCOPE);
         return new THREE.MeshBasicMaterial({map: canvasTex(c)});
       };
       mats = [
@@ -805,7 +808,7 @@ export function createViewer(container, opts = {}) {
   async function buildHitIndex(cfg) {
     for (const view of ALL_VIEWS) {
       hitIndex[view] = []; pathIndex[view] = [];
-      const text = await svgSource(`${DIST}${faceFile(devIndex, cfg, view)}`, SCOPE);
+      const text = await svgSource(distAt(faceFile(devIndex, cfg, view)), SCOPE);
       if (!text) continue;                 // a face the device does not draw
       const div = document.createElement('div');
       div.style.cssText = 'position:absolute;left:-10000px;top:0;width:1000px;visibility:hidden';
@@ -1030,7 +1033,7 @@ export function createViewer(container, opts = {}) {
   // bytes arrive once per page even with the shell asking for them too.
   async function ensureComponents() {
     if (COMP_INDEX) return;
-    const cidx = await jdist(`${DIST}components.json`);
+    const cidx = await jdist(distAt('components.json'));
     COMP_INDEX = cidx.components;
     BODY_META = Object.fromEntries(cidx.components.filter(c => c.body)
       .map(c => [`${c.ns}/${c.name}@${c.major.slice(1)}`, c.body]));
@@ -1042,7 +1045,7 @@ export function createViewer(container, opts = {}) {
     COMP = COMP_ENTRY = null;
     await ensureComponents();
     if (first || !devIndex) {
-      devIndex = await jdist(`${DIST}${DEV}.configs.json`);
+      devIndex = await jdist(distAt(`${DEV}.configs.json`));
       if (devIndex.chassis && devIndex.chassis.w) {
         W = devIndex.chassis.w; H = devIndex.chassis.h; D = devIndex.chassis.d;
       }
