@@ -1,0 +1,120 @@
+format: 1
+kind: component
+name: mcx-plug
+version: 1.0.0
+class: port
+mates: mcx
+conforms: mcx-plug
+profile: networking
+description: >-
+  A straight MCX crimp plug on a coax cable, seen from the face: the ribbed
+  snap-on grip, the crimp ferrule and a short straight stub of cable whose
+  diameter is the cable-od field. Its slotted outer contact goes inside the
+  jack and is not drawn. Seats in an `mcx` jack at its own mate point; the
+  cable leaves from the stub's far end.
+size: {w: 5.0, h: 5.0}
+size-confidence: {w: drawing, h: drawing}
+attrs: {media: coax-mcx, connector: mcx}
+fields:
+  cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 2.49}
+  jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    drawing - registry `mcx-plug`. Radiall technical data sheet "Straight
+    plug crimp type cable 2.6/50 S", R113.082.000, issue 0210 D, p.1: the
+    ribbed grip is dimensioned 5 across. On a ruler fixed by the dimensioned
+    16,1 overall (a raster, 194 ppi) it reads 4.86, 3 percent under, which is
+    the line weight.
+  no-depth: >-
+    NO `size.d`, DELIBERATELY. The overall length (16,1) is in the registry
+    entry, but a `size.d` on a component with no `behaviour` compiles to
+    `data-depth`, and the kit builds that as a pit behind the part's whole
+    box (render.py, the `size.d` block of the placement writer). This plug's
+    5.0 box is wider than the 4.95 x 4.50 jack hole it sits over. The depth
+    the plug has in front of the jack is carried by the three relief
+    features instead.
+  mates-inside: >-
+    drawing (derived) - MCX MATES THE OTHER WAY ROUND FROM SMB. The plug's
+    slotted outer contact (3.8 max across, 0 to 4.4 on the R113.082.000 side
+    view) goes INSIDE the jack, whose front face is 4.00-4.12 ahead of its
+    reference plane (Radiall catalogue "MMBX / MCX series R223 / R113 /
+    R213", D1C004XEe, p.4-14, INTERFACE, JACK table item 1); the plug's body
+    shoulder is 4.15 min behind the same plane (PLUG table item 1), so it
+    stops 0.03-0.15 in front of the jack's front face. Nothing of this plug
+    overlaps a barrel, and the part inside the jack is not modelled: the
+    coupling starts at the shoulder.
+  frame: >-
+    THE PLUG'S RELIEF IS MEASURED FROM THE HOST'S PRESENTED LIFT, the frame
+    generic/rj45-plug@1 and generic/lc-plug@2 use: each seats at its jack's
+    presented lift by `mate`, and its features run from there toward the
+    viewer. Here the shoulder sits AT the presented lift (the coupling has no
+    lift), with the 0.03-0.15 gap above taken as none. std/mcx@1's 2.0 of
+    flange and interface standing proud is NOT BAKED IN, deliberately: that
+    figure is the Radiall front-mount jack's, and the registry's `mcx` entry
+    records a vendor (Casa) whose MCX jacks are recessed into the faceplate
+    and stand nothing. THE JACK PRESENTS AT ITS MATED PLANE instead: std/mcx@1
+    puts its mate `on: barrel`, so it presents at the barrel front, 2.0 proud,
+    and the shoulder seats on that face, not over it. A recessed port that
+    presents at its own face gets the plug there.
+  coupling: >-
+    drawing, scaled - R113.082.000 p.1 side view on the 16,1 ruler: the
+    shoulder at 4.4, the ribbed grip (5 across, dimensioned) from 4.6 to
+    10.4, and the crimp ferrule from 10.5. The coupling is one cylinder at
+    the grip's 5.0 from the shoulder to the ferrule, 10.5 - 4.4 = 6.1.
+  relief-boot: >-
+    drawing, scaled - the crimp ferrule on R113.082.000 p.1, 4.0 across
+    (reads 3.98) and 5.6 long (10.5 to the 16,1 end).
+  stub: >-
+    estimated - the stub rule, docs/connectors-coax-design.md section 5: a
+    straight run of cable 30 long starting where the strain relief ends
+    (11.7 in front of the jack). The cable's bend is the installation's, not
+    the plug's.
+  cable-od: >-
+    datasheet - RG-316, the cable R113.082.000 is made for (its 2.6/50 S
+    group). Belden 83284 technical data sheet, revision 0.513, 2026-02-20,
+    p.1, Overall Cable Diameter (Nominal) 0.098 in, 2.49 mm. A placement or a
+    wrapper sets the cable it actually carries; a 75 ohm MCX drop on a
+    headend card carries a 75 ohm cable, which is a wrapper's statement.
+  jacket-colour: a FIELD; the neutral near-black default is no product in particular
+  impedance: >-
+    NOT STATED. MCX comes in 50 and 75 ohm versions, and a generic states no
+    impedance (docs/connectors-coax-design.md decision 2); a vendor wrapper
+    would.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on generic/rj45-plug@1 - every class port
+    contract states none (spec/tests/test_behaviour.py).
+  axis: >-
+    derived - `mate` and `cable` share one point, the centre of the grip
+    (2.5, 2.5): the cable runs straight through the plug, so its front and
+    its rear are one axis seen from two directions, as on generic/lc-plug@2
+    and generic/rj45-plug@1.
+elements: {}
+relief:
+  features:
+    - node: coupling
+      cyl: 6.1
+      color: '#c9ccd0'
+      confidence: drawing
+      source: >-
+        Radiall R113.082.000 issue 0210 D p.1 side view, scaled on the
+        dimensioned 16,1 overall: the ribbed grip (dimensioned 5 across) from
+        the body shoulder at 4.4 to the crimp ferrule at 10.5. The shoulder
+        sits at the host's presented lift (provenance.mates-inside,
+        provenance.frame).
+    - node: relief-boot
+      lift: 6.1
+      cyl: 5.6
+      color: '#b8bcc0'
+      confidence: drawing
+      source: Radiall R113.082.000 issue 0210 D p.1 side view, the crimp ferrule, 10.5 to the dimensioned 16,1 end and 4.0 across, scaled on the 16,1
+    - node: stub
+      lift: 11.7
+      cyl: 30
+      color: '#1c1c1c'
+      confidence: estimated
+      source: the stub rule, docs/connectors-coax-design.md section 5
+connection-points:
+  mate: {at: [2.5, 2.5], direction: front}
+  cable: {at: [2.5, 2.5], direction: front, 'on': stub}
+skins: [default]

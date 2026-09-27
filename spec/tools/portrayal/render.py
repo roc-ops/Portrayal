@@ -2,7 +2,8 @@
 """Portrayal renderer v0: compile a device manifest + component skins into flat SVG.
 
 One SVG per view. Deterministic output: no timestamps; tool version stamped in
-<metadata> along with resolved component versions and the embedded source manifest.
+<metadata> along with resolved component versions and the digest of the device's
+published <device>.source.json.
 """
 import argparse
 import copy
@@ -25,7 +26,7 @@ APPLIED_CLASSES = {"sticker", "label", "marking"}
 from portrayal import attrsections as attrs_mod
 from portrayal.faces import face_ref, rear_place, rear_turn
 from portrayal import libwalk
-from portrayal.manifest import (back_hosts, back_parts, key_on_back, slot_in_slot_at, slot_in_slot_error,
+from portrayal.manifest import (presented_point, back_hosts, back_parts, key_on_back, slot_in_slot_at, slot_in_slot_error,
                                 view_parts, targets, split_target, component_refs,
                       presented_interface, forwarded_part, seat_point, _turn,
                       load_yaml, resolve_views, slot_key_prefix,
@@ -2868,7 +2869,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                     # then the facet's scale), landed in card's frame, then
                     # carried out by card's own (untilted) placement.
                     core = _res(fpart["ref"])
-                    core_mate = (core.get("connection-points") or {}).get("mate")
+                    core_mate = presented_point(core)
                     ox, oy = _tilt_offset(core_mate["at"], core["size"],
                                           fpart.get("rotate"), tilt_facet)
                     target = seat_point(host["at"], hc["size"], host.get("rotate"),
@@ -4186,10 +4187,11 @@ def _forwarded_part(contract, lib):
 
     The same reading `manifest.presented_interface` makes: a contract with its
     own `interface` and point forwards nothing; otherwise, exactly one composed
-    part whose contract has an `interface` and a `mate` is the one forwarded.
+    part whose contract has an `interface` and a presented point
+    (`manifest.presented_point`: `interface-at`, default `mate`) is the one
+    forwarded.
     """
-    cps = contract.get("connection-points") or {}
-    if contract.get("interface") and cps.get(contract.get("interface-at") or "mate"):
+    if contract.get("interface") and presented_point(contract):
         return None
     cores = []
     for part in contract.get("parts") or []:
@@ -4199,7 +4201,7 @@ def _forwarded_part(contract, lib):
             core = lib.resolve(part["ref"])[0]
         except Exception:
             continue
-        if core.get("interface") and (core.get("connection-points") or {}).get("mate"):
+        if core.get("interface") and presented_point(core):
             cores.append((part, core["interface"]))
     return cores[0] if len(cores) == 1 else None
 

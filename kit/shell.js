@@ -445,7 +445,9 @@ export function createShell(opts = {}) {
   // genuinely undeclared, which is how you find them.
   const MEDIA = {
     'sfp-plus': 'SFP+', 'qsfp-dd': 'QSFP-DD', 'rj45-serial': 'RJ45 serial',
-    'coax-sma': 'SMA', 'coax-smb': 'SMB', 'micro-usb-b': 'micro-USB B',
+    'coax-sma': 'SMA', 'coax-smb': 'SMB', 'coax-bnc': 'BNC',
+    'coax-din-1-0-2-3': '1.0/2.3', 'coax-f': 'F', 'coax-mcx': 'MCX',
+    'micro-usb-b': 'micro-USB B',
     'usb-a': 'USB-A', 'usb-c': 'USB-C', 'sc-apc': 'SC/APC', 'fiber': 'fibre',
     'coax': 'coax', 'ac': 'AC',
   };

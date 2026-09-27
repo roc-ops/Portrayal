@@ -1,0 +1,117 @@
+format: 1
+kind: component
+name: smb-plug
+version: 1.0.0
+class: port
+mates: smb
+conforms: smb-plug
+profile: networking
+description: >-
+  A straight SMB crimp plug on a coax cable, seen from the face: the plain
+  snap-on body, the crimp ferrule and a short straight stub of cable whose
+  diameter is the cable-od field. Seats in an `smb` jack at its own mate
+  point; the cable leaves from the stub's far end.
+size: {w: 6.2, h: 6.2}
+size-confidence: {w: drawing, h: drawing}
+attrs: {media: coax-smb, connector: smb}
+fields:
+  cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 2.49}
+  jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    drawing, SCALED ON A MAX FIGURE - registry `smb-plug`. Radiall technical
+    data sheet "Straight plug crimp type cable 2.6/50+75 S", R114.082.000,
+    issue 1008 A, p.1 side view (a raster, 387 ppi): the snap-on body reads
+    6.2 across. The drawing's only axial dimension is "19.8max", so the ruler
+    is a maximum; the crimp ferrule reads 3.85 on it against the 3.98 the
+    sister Radiall sheet for the same cable group (R113.082.000, the MCX
+    plug) gives, which is the cross-check. An SMB plug drawing with a
+    dimensioned body would settle it.
+  no-depth: >-
+    NO `size.d`, DELIBERATELY. The overall length (19.8 max) is in the
+    registry entry and in the relief below, but a `size.d` on a component
+    with no `behaviour` compiles to `data-depth`, and the kit builds that as
+    a pit behind the part's whole box (render.py, the `size.d` block of the
+    placement writer). This plug's 6.2 box is wider than the 4.83 jack hole
+    it sits over, so the pit would widen the hole in the panel around every
+    seated plug. The depth is carried by the three relief features instead.
+  frame: >-
+    THE PLUG'S RELIEF IS MEASURED FROM THE HOST'S PRESENTED LIFT, the frame
+    generic/rj45-plug@1 and generic/lc-plug@2 use: each seats at its jack's
+    presented lift by `mate`, and its features run from there toward the
+    viewer. std/smb@1 presents at its own face, the panel plane, with its
+    barrel standing 5.0 proud of it. So the body's front face sits AT the
+    presented lift (the coupling has no lift) and the body covers the whole
+    barrel.
+  engagement: >-
+    drawing (derived) - the mated body runs about 5.0 over the jack's barrel
+    (3.33 to 5.21), measured from the jack's front face: MIL-STD-348B
+    w/CHANGE 3 Figure 311-1 dim C (jack front face 3.33-3.58 ahead of the
+    reference plane) plus Figure 311-2 dim F (plug front face up to 1.63 past
+    it). std/smb@1's barrel stands 5.0 proud (an estimate that part flags
+    itself), so the modelled overlap, the barrel's whole 5.0, is inside that
+    range. Nothing here depends on the jack's figure being right: the body
+    starts at the presented lift whatever the barrel is. THE JACK PRESENTS AT
+    ITS MATED PLANE, and for std/smb@1 that plane is its own face: the body
+    covering the whole barrel puts the body's front there.
+  coupling: >-
+    drawing, scaled on the 19.8 max - R114.082.000 p.1 side view: the snap-on
+    body, 6.2 across, 0 to 8.1 (grip rings at 1.9 to 3.9), then a neck (4.0
+    across, 8.1 to 9.7) and a collar (5.1 across, 9.8 to 11.0). The coupling
+    feature is all of that as ONE cylinder at the body's 6.2, 0 to 11.1,
+    where the crimp ferrule begins: the neck and collar are narrower and the
+    solid overstates them, 1.1 and 0.55 on the radius, over 2.9 of length.
+  relief-boot: >-
+    drawing, scaled on the 19.8 max - the crimp ferrule on R114.082.000 p.1,
+    3.85 across and 8.7 long (11.1 to 19.8).
+  stub: >-
+    estimated - the stub rule, docs/connectors-coax-design.md section 5: a
+    straight run of cable 30 long starting where the strain relief ends
+    (19.8). The cable's bend is the installation's, not the plug's.
+  cable-od: >-
+    datasheet - RG-316, the cable R114.082.000 is made for (its 2.6/50+75 S
+    group). Belden 83284 technical data sheet, revision 0.513, 2026-02-20,
+    p.1, Overall Cable Diameter (Nominal) 0.098 in, 2.49 mm. A placement or a
+    wrapper sets the cable it actually carries.
+  jacket-colour: a FIELD; the neutral near-black default is no product in particular
+  impedance: >-
+    NOT STATED. SMB comes in 50 and 75 ohm versions (this sheet's own cable
+    group is 50+75), and a generic states no impedance
+    (docs/connectors-coax-design.md decision 2); a vendor wrapper would.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on generic/rj45-plug@1 - every class port
+    contract states none (spec/tests/test_behaviour.py).
+  axis: >-
+    derived - `mate` and `cable` share one point, the centre of the body
+    (3.1, 3.1): the cable runs straight through the plug, so its front and
+    its rear are one axis seen from two directions, as on generic/lc-plug@2
+    and generic/rj45-plug@1.
+elements: {}
+relief:
+  features:
+    - node: coupling
+      cyl: 11.1
+      color: '#c9ccd0'
+      confidence: drawing
+      source: >-
+        Radiall R114.082.000 issue 1008 A p.1 side view, scaled on the 19.8 max
+        overall: the snap-on body, neck and collar, from the plug's front face
+        to the crimp ferrule. The front sits at the host's presented lift
+        (provenance.frame, provenance.engagement).
+    - node: relief-boot
+      lift: 11.1
+      cyl: 8.7
+      color: '#b8bcc0'
+      confidence: drawing
+      source: Radiall R114.082.000 issue 1008 A p.1 side view, the crimp ferrule, 11.1 to 19.8 and 3.85 across, scaled on the 19.8 max overall
+    - node: stub
+      lift: 19.8
+      cyl: 30
+      color: '#1c1c1c'
+      confidence: estimated
+      source: the stub rule, docs/connectors-coax-design.md section 5
+connection-points:
+  mate: {at: [3.1, 3.1], direction: front}
+  cable: {at: [3.1, 3.1], direction: front, 'on': stub}
+skins: [default]
