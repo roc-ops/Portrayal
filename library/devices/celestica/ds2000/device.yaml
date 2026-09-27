@@ -86,8 +86,11 @@ provenance:
       Front figure: a black pull tab at 390.6-413.0 x 38.7-42.5 mm interrupting the bottom vent
       row, which the Foleon render prints 'DS2000'; seated as celestica/lug-tag@1 (the card the
       DS3000/DS3001 modeller measured at 23.0 x 4.0) with that label. The rear has a second slot
-      under the management cluster, 217.1-241.4 x 40.3-44, printed 'L.T' at its left; the same
-      card is seated there with no label, because none is legible.
+      under the management cluster, 216.2-237.0 x 40.4-42.6 at 6x, printed 'L.T' at its left; the
+      same card is seated there, centred on it, with no label, because none is legible. Both
+      are seated unrotated, lip at the right as the part draws it: at 6x the front tab and the
+      rear slot are symmetric end to end, so no lip is resolved and the orientation is the
+      part's default, not a reading.
   vents:
     confidence: measured
     note: >-
@@ -131,8 +134,9 @@ provenance:
     confidence: photo-measured
     note: >-
       Black bezel and black fan faces in the Foleon renders and the datasheet picture; the
-      guide's CAD shades everything grey. As on the DS1000 the chassis colour is the bezel's,
-      and the rear is drawn as a full-face bright plate.
+      guide's CAD shades everything grey; lid, walls and rear are bright metal. As on the DS1000
+      and DS4000, chassis.color is the sheet metal (#c4c8cc) and the black front is a full-face
+      bezel plate at the bottom of the front decor - a black faceplate on a silver chassis.
   power:
     confidence: datasheet
     note: >-
@@ -201,7 +205,7 @@ attrs:
     emc: CN (GB9254-2008), EU (EN55022, EN55024), FCC, VCCI, CCC
     safety: IEC60950-1, GB4943, UL/CSA, CB, CCC
   lifecycle: {eol: none-announced}
-chassis: {width: 438, height: 44, depth: 520, ru: 1, weight-kg: 9.1, color: '#1b1d20', airflow: front-to-back, power: ac}
+chassis: {width: 438, height: 44, depth: 520, ru: 1, weight-kg: 9.1, color: '#c4c8cc', airflow: front-to-back, power: ac}
 gaps:
 - what: four-undrawn-faces
   scope: [top, bottom, left, right]
@@ -210,12 +214,6 @@ gaps:
     A drawing of the lid, underside and side walls. The guide's three-quarter chassis figure and
     the Foleon renders show the lid (two finger recesses, a label panel, a long pressed rib) and
     the right wall (rail screws) at an angle - visible, not measurable. Sized and left bare.
-- what: lid-colour
-  scope: [top, left, right]
-  reason: needs-drawing
-  wanted: >-
-    A per-face colour: the bezel is black and the lid and walls bright metal, and
-    `chassis.color` is one value. It carries the bezel's.
 - what: status-lamp-table
   scope: [rear]
   reason: sources-disagree
@@ -290,6 +288,7 @@ views:
     size: {w: 438, h: 44}
     panel:
       decor:
+      - {id: bezel, kind: bezel, at: [0, 0], size: [438, 44], fill: '#1b1e21'}
       - {id: vent-top-backing, kind: vent-backing, at: [8.6, 1.0], size: [417.4, 2.0], fill: '#2b2f33'}
       - {id: vent-top, at: [8.6, 1.0], size: [417.4, 2.0], pattern: grille, pattern-pitch: [4.97, 2.0], pattern-offset: [8.6, 1.0], vent: 10, confidence: estimated, source: 'extent and pitch measured on the guide front elevation (one row of slots 8.8-426 x 1.1-2.8 on 4.97 mm); cavity unmeasured'}
       - {id: vent-bottom-l-backing, kind: vent-backing, at: [5.6, 40.1], size: [284.2, 2.2], fill: '#2b2f33'}
@@ -622,7 +621,6 @@ views:
     size: {w: 438, h: 44}
     panel:
       decor:
-      - {id: rear-plate, kind: sheet-metal, at: [0, 0], size: [438, 44], fill: '#c3c7cc'}
       - {id: mgmt-shell, kind: port-shell, at: [205.5, 2.6], size: [17.3, 32.9], rx: 0.6, fill: '#d5d9dd', stroke: '#8d949b', stroke-width: 0.3}
       - {id: cpu-tray-lever, kind: lever, at: [240.2, 12.0], size: [6.6, 23.2], rx: 0.8, fill: '#b3b8be', stroke: '#8d949b', stroke-width: 0.3}
       - {id: guide-hole-1, kind: hole, at: [9.4, 34.9], size: [2.8, 2.8], rx: 1.4, fill: '#17191c'}
@@ -647,7 +645,7 @@ views:
       - {id: led-alm, at: [227.7, 24.0], size: [2, 2], shape: circle}
       - {id: led-stat, at: [227.7, 29.2], size: [2, 2], shape: circle}
       - {id: reset, at: [233.6, 30.4], size: [4, 4], shape: circle}
-      - {id: lug-tag-rear, at: [218.3, 39.9], size: [23, 4], shape: rect}
+      - {id: lug-tag-rear, at: [215.1, 39.5], size: [23, 4], shape: rect}
     silkscreen:
     - {text: MGMT, at: [225.5, 8.5], font-size: 1.8, anchor: middle, rotate: -90, fill: '#2b2f33', for: mgmt}
     - {text: CONSOLE, at: [225.5, 31.1], font-size: 1.8, anchor: middle, rotate: -90, fill: '#2b2f33', for: console}
@@ -656,7 +654,7 @@ views:
     - {text: ALM, at: [232.4, 25.0], font-size: 1.8, anchor: middle, rotate: -90, fill: '#2b2f33', for: led-alm}
     - {text: STAT, at: [232.4, 30.2], font-size: 1.8, anchor: middle, rotate: -90, fill: '#2b2f33', for: led-stat}
     - {text: RST, at: [239.4, 32.4], font-size: 1.8, anchor: middle, rotate: -90, fill: '#2b2f33', for: reset}
-    - {text: L.T, at: [206.2, 42.45], font-size: 1.7, fill: '#2b2f33', anchor: start, for: lug-tag-rear}
+    - {text: L.T, at: [206.2, 42.03], font-size: 1.7, fill: '#2b2f33', anchor: start, for: lug-tag-rear}
     components:
       bays:
       - {id: psu-1, at: [16.0, 2.0], size: {w: 73.5, h: 40.0}, group: psus, rel-pos: 1, accepts: [celestica/psu-r3059-f8001@1], default: celestica/psu-r3059-f8001@1}
@@ -675,7 +673,7 @@ views:
       - {ref: common/led-dot@1, id: led-alm, at: [227.7, 24.0], for: chassis, group: status-leds, rel-pos: 3}
       - {ref: common/led-dot@1, id: led-stat, at: [227.7, 29.2], for: chassis, group: status-leds, rel-pos: 4}
       - {ref: common/reset-button@1, id: reset, at: [233.6, 30.4], for: chassis, group: mgmt, rel-pos: 4}
-      - {ref: celestica/lug-tag@1, id: lug-tag-rear, at: [218.3, 39.9], group: furniture, rel-pos: 3}
+      - {ref: celestica/lug-tag@1, id: lug-tag-rear, at: [215.1, 39.5], group: furniture, rel-pos: 3}
       - {ref: common/screw-head@1, id: tray-screw, at: [241.7, 5.7], group: furniture, rel-pos: 4}
       - {ref: common/screw-head@1, id: screw-l1, at: [8.3, 10.5], group: furniture, rel-pos: 5}
     regions:

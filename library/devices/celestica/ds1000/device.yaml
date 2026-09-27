@@ -127,7 +127,9 @@ provenance:
       Guide Figure 1 callout LUG TAG: a black slot at 23.5-46.0 x 3.2-6.3 mm. Seated as
       celestica/lug-tag@1 (23.0 x 4.0, measured by the DS3000/DS3001 modeller on two other
       Celestica faces) centred on it. The three-quarter render prints DS1000 and LUG TAG there;
-      DS1000 is carried by the tag's label field, LUG TAG as panel silkscreen under it.
+      DS1000 is carried by the tag's label field, LUG TAG as panel silkscreen under it. Seated unrotated, lip at the right as the part draws it: at 10x the guide's slot is
+      symmetric end to end, so no lip is resolved at either end and the orientation is the
+      part's default, not a reading.
   wordmark:
     confidence: estimated
     note: >-
@@ -143,9 +145,11 @@ provenance:
     confidence: photo-measured
     note: >-
       The front bezel is black in the datasheet picture and both Foleon renders; the guide's
-      CAD draws everything grey. The chassis colour is the bezel's, so the lid and side walls -
-      bright metal in the renders - are drawn dark too; the rear is bright sheet metal and is
-      drawn as a full-face plate. See the lid-colour gap.
+      CAD draws everything grey. The lid, side walls and rear are bright sheet metal in the
+      renders, so chassis.color is that metal (#c4c8cc, the value the DS4000 uses) and the black
+      front is a full-face bezel plate drawn first in the front decor, since a view carries no
+      colour of its own - the family convention for every Celestica switch: a black faceplate
+      on an otherwise silver chassis.
   rear:
     confidence: measured
     note: >-
@@ -212,7 +216,7 @@ attrs:
     reach: (EC) No. 1907/2006
     psu-approvals: CE, CCC, KC, TUV, UL/cUL, BIS and BSMI
   lifecycle: {eol: none-announced}
-chassis: {width: 438.5, height: 43.6, depth: 370, ru: 1, color: '#1b1d20', airflow: front-to-back, power: ac}
+chassis: {width: 438.5, height: 43.6, depth: 370, ru: 1, color: '#c4c8cc', airflow: front-to-back, power: ac}
 gaps:
 - what: four-undrawn-faces
   scope: [top, bottom, left, right]
@@ -222,13 +226,6 @@ gaps:
     lid carries two pressed finger recesses and a rectangular label panel, and the right wall a
     row of rail screws and a vent - visible, not measurable at an angle. The guide draws only
     the front and rear. These four faces are sized and left bare rather than guessed.
-- what: lid-colour
-  scope: [top, left, right]
-  reason: needs-drawing
-  wanted: >-
-    A per-face colour. The DS1000's bezel is black and its lid and side walls are bright metal;
-    `chassis.color` is one value, and it carries the bezel's. The rear is drawn bright with a
-    full-face plate; the lid and sides render dark until a face can carry its own colour.
 - what: environment-disagree
   scope: [front]
   reason: sources-disagree
@@ -288,6 +285,7 @@ views:
     size: {w: 438.5, h: 43.6}
     panel:
       decor:
+      - {id: bezel, kind: bezel, at: [0, 0], size: [438.5, 43.6], fill: '#1b1e21'}
       - {id: rj45-shell-1, kind: port-shell, at: [7.69, 15.0], size: [118.3, 24.0], rx: 0.8, fill: '#c9ced3', stroke: '#8d949b', stroke-width: 0.3}
       - {id: rj45-shell-2, kind: port-shell, at: [129.78, 15.0], size: [118.3, 24.0], rx: 0.8, fill: '#c9ced3', stroke: '#8d949b', stroke-width: 0.3}
       - {id: rj45-shell-3, kind: port-shell, at: [251.87, 15.0], size: [118.3, 24.0], rx: 0.8, fill: '#c9ced3', stroke: '#8d949b', stroke-width: 0.3}
@@ -496,7 +494,6 @@ views:
     size: {w: 438.5, h: 43.6}
     panel:
       decor:
-      - {id: rear-plate, kind: sheet-metal, at: [0, 0], size: [438.5, 43.6], fill: '#c3c7cc'}
       - {id: lid-seam, kind: seam, at: [12.0, 12.3], size: [225.0, 0.4], fill: '#9aa0a6'}
       - {id: bay-divider, kind: seam, at: [236.8, 11.0], size: [0.5, 32.4], fill: '#6f757b'}
       - {id: fan-grille-1, at: [34.0, 3.8], size: [35.0, 35.0], rx: 17.5, pattern: holes, pattern-pitch: [3.9, 3.6], vent: 28, confidence: estimated, source: 'grille circle measured on the guide rear elevation (about 35 mm across, centred y 21.3); the 28 mm cavity is the datasheet fan thickness, 40 x 40 x 28'}
