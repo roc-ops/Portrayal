@@ -1,0 +1,38 @@
+format: 1
+kind: component
+name: service-tag
+version: 1.0.0
+class: tab
+behaviour: fills
+profile: networking
+description: Celestica pull-out service tag - a narrow vertical tab seated in a slot
+  at the right-hand end of the front panel, beside the management jacks, with a
+  curved finger lip at its top. The DS4001 render prints the model name along it;
+  the text is a field, empty unless the device sets it.
+size: {w: 3.0, h: 23.2}
+size-confidence: {w: measured, h: measured}
+attrs: {role: info-tab}
+provenance:
+  size: >-
+    measured - DS4000/DS4001 installation guide, Product Overview Figures 1-3 (front elevations,
+    orthographic CAD at 3.480 px/mm across and 3.527 px/mm down, see the device provenance):
+    the tab runs x 1500-1510.6 px and y 59.4-141.3 px, 3.0 x 23.2 mm. The DS4001 front render
+    shows the same tab, black, curved over at the top, printed 'DS4001' along its length.
+  colour: photo - black in the DS4001 Foleon render (ds4001_front); the CAD draws it in its
+    own light shading.
+elements:
+  tab: {at: [0.0, 0.0], size: [3.0, 23.2], class: tab}
+relief:
+  features:
+    - node: tab
+      out: 1.5
+      confidence: estimated
+      source: >-
+        celestica/service-tag@1 provenance.size - the DS4001 render shows the tab standing a
+        little proud of the panel with its lip curled forward; the standoff is not dimensioned.
+fields:
+  label:
+    label: Printed text
+    type: text
+    default: ''
+skins: [default]
