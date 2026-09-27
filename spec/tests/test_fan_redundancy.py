@@ -508,7 +508,16 @@ def test_the_comparison_layer_can_now_reach_them():
     Its guide calls each module "an assembly of dual rotor fan", so eight rotors turn
     behind the four faces. The digit counts the modules, not the rotors, and the
     bays agree.
+
+    EIGHTY AND EIGHTY-ONE ARE THE CELESTICA DS4100 AND DS4101, back to the DS4000's
+    6+1 over seven bays, from their own two datasheets ("6+1 redundant fans" on each) and
+    their own two rear elevations, which count seven trays between the two supplies. They
+    seat the same fan part as the DS4000 - the tray's lamp, pitch and face all check against
+    it on each rear - and what differs is only its finish: the DS4100's trays are orange, the
+    DS4101's black with the latch black too, set per configuration as fields. Two
+    installation guides, so unlike the DS4000/DS4001 pair these are two rears measured
+    twice, not one rear counted twice.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 79, n
+    assert n == 81, n
