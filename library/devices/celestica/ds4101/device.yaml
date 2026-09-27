@@ -99,7 +99,8 @@ provenance:
       std/sfp@1 centred on x 423.8, y 14.65 and 27.95, upper 0 and lower 180. BOTH LAMPS ARE ABOVE THE
       UPPER CAGE, green, at (420.86, 7.91) and (426.76, 7.91), 2.4 mm across; the render prints M1 under
       the left one and M2 under the right, so left is M1's and right M2's. Below the pair a two-row vent
-      patch and, at the foot, the LUG TAG.
+      patch and, at the foot, the LUG TAG - celestica/lug-tag-ridge-16@1, the top-ridge card, printed
+      DS4101; the render prints LUG TAG on the PANEL just above it, not on the card.
   vent-fields:
     confidence: measured
     note: >-
@@ -477,6 +478,8 @@ views:
     - {id: silk-sfp-m1, at: [421.9, 21.9], text: M1, font-size: 1.7, anchor: end, fill: '#e8eaec', for: mgmt-sfp-1}
     - {id: silk-sfp-arrows, at: [423.8, 21.8], text: ▲▼, font-size: 1.6, anchor: middle, fill: '#e8eaec',
       for: [mgmt-sfp-1, mgmt-sfp-2]}
+    - {id: silk-lug-tag, at: [424.85, 37.55], text: LUG TAG, font-size: 1.4, anchor: middle, fill: '#e8eaec',
+      for: lug-tag}
     - {id: silk-sfp-m2, at: [425.7, 21.9], text: M2, font-size: 1.7, anchor: start, fill: '#e8eaec', for: mgmt-sfp-2}
     - {id: silk-stat, at: [3.0, 12.19], text: STAT, font-size: 1.2, anchor: middle, rotate: -45, fill: '#e8eaec',
       for: led-stat}
@@ -518,8 +521,8 @@ views:
         states: ['off', 'on']}
       - {ref: common/led-indicator@1, id: led-alm, at: [5.7, 24.99], group: leds, rel-pos: 4, for: chassis,
         states: ['off', 'on']}
-      - {ref: celestica/lug-tag-16@1, id: lug-tag, at: [416.9, 38.0], group: furniture, rel-pos: 1, attrs: {
-          label: DS4101}}
+      - {ref: celestica/lug-tag-ridge-16@1, id: lug-tag, at: [416.9, 38.0], group: furniture, rel-pos: 1,
+        attrs: {label: DS4101}}
       - {ref: std/osfp@1, id: port-1, at: *id002, group: osfp, rel-pos: 1}
       - {ref: std/osfp@1, id: port-2, at: *id003, rotate: 180, group: osfp, rel-pos: 2}
       - {ref: std/osfp@1, id: port-3, at: *id004, group: osfp, rel-pos: 3}
@@ -744,10 +747,15 @@ configurations:
     default: true
     description: >-
       Two 2000 W AC supplies and seven fan modules, front-to-back - the only airflow the DS4101 is sold
-      in. Two builds share this face: R4030-F9001-A1 (COMe 4C/32 GB/128 GB) and R4030-F9003-A1 (COMe 4C/16
-      GB/64 GB).
+      in - with the COMe 4C / 32 GB DDR4 / 128 GB SSD control plane (R4030-F9001-A1).
     part-numbers:
       R4030-F9001-A1: {part: R4030-F9001-A1}
+  ac-f2b-16g:
+    kind: orderable
+    description: >-
+      The same chassis, supplies and fans with the COMe 4C / 16 GB DDR4 / 64 GB SSD control plane (R4030-F9003-A1).
+      The faces are identical; only the ordering code differs.
+    part-numbers:
       R4030-F9003-A1: {part: R4030-F9003-A1}
 references:
 - {title: Celestica DS4101 Installation Guide (documentation portal)}

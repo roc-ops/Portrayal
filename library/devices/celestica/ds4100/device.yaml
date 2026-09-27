@@ -143,6 +143,16 @@ provenance:
       The What's in the Box table lists R4035-F9001-A1 (F2B), R4035-F9005-A1 (B2F) and R4035-F9007-A1
       (DC PSU 2x1500W, F2B). Every figure shows the F2B build's orange fans; no document shows what the
       B2F build's trays or latches look like, so the B2F configuration is drawn identically and says so.
+  lug-tag:
+    confidence: measured
+    note: >-
+      celestica/lug-tag@1 (the shared Celestica card, 23.0 x 4.0, lip at the right of the landscape art),
+      seated flat - rotate 0 - because this tag lies horizontal under the LUG TAG legend. The Front Panel
+      figure reads its slot x 383.0-405.8 by y 38.3 to the bottom edge, centre (394.4, 40.7), so at =
+      centre - (11.5, 2.0) = (382.9, 38.7). THE RENDER MAY SAY OTHERWISE: ds4100-A.png draws this card
+      with a hatched grip along its TOP edge over its middle and rounded ends, no end block, which is
+      the top-ridge form of celestica/lug-tag-ridge-23@1 (the ES1000's card, 23.3 long). Seated as lug-tag@1
+      by the coordinator's direction; the question is open for the reviewer.
   colour:
     confidence: photo-measured
     note: >-
@@ -425,7 +435,7 @@ views:
       - {ref: common/led-indicator@1, id: led-alm, at: [322.15, 25.68], group: leds, rel-pos: 4, for: chassis,
         states: ['off', {name: no-alarm, color: '#22c55e'}, {name: critical, color: '#f59e0b'}, {name: major,
             behavior: blinking, color: '#f59e0b'}, {name: minor, behavior: blinking, color: '#f59e0b'}]}
-      - {ref: celestica/lug-tag-23@1, id: lug-tag, at: [383.0, 38.3], group: furniture, rel-pos: 1, attrs: {
+      - {ref: celestica/lug-tag@1, id: lug-tag, at: [382.9, 38.7], group: furniture, rel-pos: 1, attrs: {
           label: DS4100}}
       - {ref: std/osfp@1, id: port-1, at: *id002, group: osfp, rel-pos: 1}
       - {ref: std/osfp@1, id: port-2, at: *id003, rotate: 180, group: osfp, rel-pos: 2}
