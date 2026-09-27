@@ -57,7 +57,6 @@ def test_the_tokens_themselves_did_not_change():
     blob = _blob("0")
     # component refs, a group attr and a device attr - one of each source that
     # feeds the blob, so a regression in any of them fails here. NOT "arcos":
-    # nobody lists the S9510 yet, and asserting it would be asserting a fact
-    # about a different device.
+    # this snippet passes no listings, so a listing's words are not in it.
     for token in ("qsfp-cage", "sfp-ganged", "400g", "800"):
         assert token in blob.split(), f"{token!r} fell out of the haystack"
