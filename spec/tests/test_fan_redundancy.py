@@ -473,14 +473,23 @@ def test_the_comparison_layer_can_now_reach_them():
     twice, not because there are two rears. The two models' FRONTS differ; nothing about
     the cooling does.
 
-    SEVENTY-FOUR AND SEVENTY-FIVE ARE THE CELESTICA DS4100 AND DS4101, the same 6+1 over
-    seven bays from their own two datasheets ("6+1 redundant fans" on each) and their own two
-    rear elevations, which count seven trays between the two supplies. They seat the same
-    fan part as the DS4000 - the tray's lamp, pitch and face all check against it on each
-    rear - and what differs is only its finish: the DS4100's trays are orange, the DS4101's
-    black with the latch black too, set per configuration as fields. Two installation guides,
-    so unlike the pair above these are two rears measured twice, not one rear counted twice.
+    SEVENTY-FOUR IS THE CELESTICA DS5000, 2+1 over THREE bays - the hardware guide's own
+    words, "2+1 redundant fans", against a rear elevation that draws three fan modules
+    (FAN-1 to FAN-3, celestica/fan-2u-81@1), so the digit form and the bay count agree
+    without argument. Its datasheet says only "N+1 redundant fans", which is the same claim
+    with the number left out; the guide supplies the number and the metal confirms it. How
+    many rotors sit inside each module is not stated anywhere, so the figure is read at the
+    module level, which is the level the guide counts at.
+
+    SEVENTY-FIVE AND SEVENTY-SIX ARE THE CELESTICA DS4100 AND DS4101, back to the DS4000's
+    6+1 over seven bays, from their own two datasheets ("6+1 redundant fans" on each) and
+    their own two rear elevations, which count seven trays between the two supplies. They
+    seat the same fan part as the DS4000 - the tray's lamp, pitch and face all check against
+    it on each rear - and what differs is only its finish: the DS4100's trays are orange, the
+    DS4101's black with the latch black too, set per configuration as fields. Two
+    installation guides, so unlike the DS4000/DS4001 pair these are two rears measured
+    twice, not one rear counted twice.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 75, n
+    assert n == 76, n
