@@ -127,3 +127,15 @@ def test_the_seated_tab_wears_the_placements_colour():
                                      {"latch-color": "#1f5fbf"}, None, None)
     fills = {e.get("fill") for e in g.iter() if e.get("data-fill-from") == "latch-color"}
     assert fills == {"#1f5fbf"}
+
+
+def test_the_nose_stays_the_face_until_a_qsfp_dd_is_measured():
+    """generic/qsfp-lc@2 draws its nose 1.4 above and below the body from
+    photographs of a QSFP28 (roc-ops/Portrayal#646). No QSFP-DD module has been
+    photographed, and HW Rev 6.3 Figure 102's 13.5 REF is the envelope's sum
+    (8.5 + 3.4 + 1.6), not a module's nose, so this head stays the face. The
+    provenance says so; when a QSFP-DD is measured, this test is the one to move."""
+    d = yaml.safe_load(P.read_text())
+    assert d["head"]["at"] == [0.0, 0.0]
+    assert "NOSE IS NOT DRAWN TALLER" in d["provenance"]["head"]
+    assert "13.5 REF" in d["provenance"]["head"]

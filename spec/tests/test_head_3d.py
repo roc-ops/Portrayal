@@ -219,6 +219,21 @@ def test_the_tab_arms_span_20_to_58_6_and_the_grip_58_6_to_69_8(built):
     assert float(grip.get("data-z-out")) == pytest.approx(69.8, abs=1e-6)
 
 
+def test_the_risers_span_20_to_27_5_and_the_nose_is_11_3_tall(built):
+    """The riser posts stand on the nose front (lift 20.0, summed from the tab's
+    group) to 7.5 out of it, absolute 27.5 - a lift counted twice would build
+    them inside out. The nose is the body node, extruded 0 to 20 over its
+    11.3-tall outline, 1.4 past the 8.5 face at both edges (#646)."""
+    root, parents = built
+    for n in ("--tab--riser-l", "--tab--riser-r"):
+        r = by_suffix(root, f"cg0-occupant{n}")
+        assert lift_of(parents, r) == pytest.approx(20.0, abs=1e-6), n
+        assert float(r.get("data-z-out")) == pytest.approx(27.5, abs=1e-6), n
+    body = by_suffix(root, "cg0-occupant--body")
+    assert float(body.get("data-z-out")) - lift_of(parents, body) == pytest.approx(20.0, abs=1e-6)
+    assert float(body.get("y")) == pytest.approx(-1.3) and float(body.get("height")) == pytest.approx(11.1)
+
+
 # --- art outside the viewBox ---------------------------------------------------
 
 def _viewbox(svg_root):
@@ -236,7 +251,9 @@ def test_placed_overhangs_are_inside_the_device_viewbox(built):
     root, parents = built
     vb = _viewbox(root)
     for suffix in ("xg0-occupant--head", "cg0-occupant--tab--grip",
-                   "cg0-occupant--tab--arm-l", "cg0-occupant--tab--arm-r"):
+                   "cg0-occupant--tab--arm-l", "cg0-occupant--tab--arm-r",
+                   "cg0-occupant--tab--riser-l", "cg0-occupant--tab--riser-r",
+                   "cg0-occupant--body"):
         el = by_suffix(root, suffix)
         b = box(apply(device_matrix(parents, el), rect_corners(el)))
         assert _inside(b, vb), (suffix, b, vb)
@@ -248,7 +265,8 @@ def test_placed_overhangs_are_inside_the_device_viewbox(built):
 
 @pytest.mark.parametrize("stem, suffixes", [
     ("generic--sfp-rj45--v1--default", ("--head",)),
-    ("generic--qsfp-lc--v2--default", ("--tab--grip", "--tab--arm-l", "--tab--arm-r")),
+    ("generic--qsfp-lc--v2--default", ("--tab--grip", "--tab--arm-l", "--tab--arm-r",
+                                       "--tab--riser-l", "--tab--riser-r", "--body")),
 ])
 def test_standalone_preview_holds_its_overhangs(stem, suffixes):
     """The standalone component SVG is the Explorer's module preview. A part

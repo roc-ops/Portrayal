@@ -253,6 +253,16 @@ the *published build*, not about the hardware.
   (roc-ops/Portrayal#650).
 
 ### Changed
+- `generic/qsfp-lc@2` (2.1.0) draws its nose at the height the maintainer's
+  photographs of a QSFP SR4 module show: 1.4 above and 1.4 below the 8.5 body,
+  11.3 tall, so `head` is `at: [0, -1.4]`, `h: 11.3` in `components.json`, and
+  the `body` outline and its 20 mm solid grow to match. `common/qsfp-pull-tab@2`
+  (2.1.0) gains `riser-l` and `riser-r`, the posts at the arm roots (7.5 out
+  from the nose front, 7.8 tall from the strap top), and its size grows from
+  19 x 3.4 to 19 x 8.3. `generic/qsfp-dd-lc@2` (2.1.0) wears the risers through
+  the tab; its head is unchanged, since no QSFP-DD module has been measured.
+  Ids, connection points and placements are unchanged, and no device seats
+  these parts, so no lock moved (roc-ops/Portrayal#646).
 - In 3D, a solid painted from a field now takes its side colour from the
   field: the QSFP cable end's strap, ring and stub (so a wrapper's green or
   blue strap and the Siemon AOC's aqua jacket show on every face), every coax
