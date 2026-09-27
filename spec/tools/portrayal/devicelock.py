@@ -832,8 +832,11 @@ def stale_gap_scopes(doc):
 #
 #   `names`   hardware, nos, model, interfaces, entity-map, terms - what a
 #             consumer holds. Any change is major.
-#   `configs` per configuration override, recorded whole so an ADDED one can be
-#             told from a changed or removed one: added is minor, the rest major.
+#   `configs` per configuration override: its `names` (`model`, `part-numbers`)
+#             and its `rest`. Changing, removing or ADDING names is major - an
+#             override renames the exported type, so the old device type is gone
+#             from under anything that imported it. An override that adds only
+#             prose or aliases is minor; rewording one is a patch.
 #   `surface` everything else - source, portfolio, aliases, prose. A patch.
 
 LISTING_NAMES = ("hardware", "nos", "model", "interfaces", "entity-map", "terms")
@@ -841,7 +844,12 @@ LISTING_NAMES = ("hardware", "nos", "model", "interfaces", "entity-map", "terms"
 
 def listing_entry(doc):
     names = {k: doc.get(k) for k in LISTING_NAMES}
-    configs = {k: _digest(v) for k, v in (doc.get("configurations") or {}).items()}
+    configs = {}
+    for k, v in (doc.get("configurations") or {}).items():
+        v = v or {}
+        named = {n: v.get(n) for n in ("model", "part-numbers") if v.get(n)}
+        configs[k] = {"names": _digest(named) if named else None,
+                      "rest": _digest({n: x for n, x in v.items() if n not in named})}
     rest = {k: v for k, v in doc.items()
             if k not in LISTING_NAMES + ("configurations", "version")}
     return {"version": str(doc.get("version") or ""),
@@ -855,11 +863,20 @@ def listing_bump(old, new):
     if old.get("names") != new["names"]:
         return "major"
     was, now = old.get("configs") or {}, new["configs"]
-    if any(k not in now or now[k] != v for k, v in was.items()):
+    for k, v in was.items():
+        if k not in now:
+            return "major"
+        if not isinstance(v, dict):         # a lock from before names and rest were split
+            continue
+        if v.get("names") != now[k]["names"]:
+            return "major"
+    added = set(now) - set(was)
+    if any(now[k]["names"] for k in added):
         return "major"
-    if set(now) - set(was):
+    if added:
         return "minor"
-    if old.get("surface") != new["surface"]:
+    if old.get("surface") != new["surface"] or any(
+            isinstance(v, dict) and v.get("rest") != now[k]["rest"] for k, v in was.items()):
         return "patch"
     return None
 
@@ -882,8 +899,23 @@ def load_listing_locks(library: pathlib.Path):
     return out
 
 
+def orphan_listing_locks(library: pathlib.Path):
+    """listing.lock.json files whose listing is gone."""
+    return sorted(f for f in (library / "devices").glob(f"*/*/{LISTING_LOCK_NAME}")
+                  if not (f.parent / "listing.yaml").exists())
+
+
 def check_listings(library: pathlib.Path):
     findings = []
+    # A DELETED LISTING TAKES A DEVICE TYPE OUT OF EVERY DCIM THAT IMPORTED IT,
+    # and nothing said so: the walk below visits listings, and a removed one is
+    # not there to visit. Its lock is the only trace, so the lock is read.
+    for f in orphan_listing_locks(library):
+        key = f"{f.parent.parent.name}/{f.parent.name}"
+        findings.append((key, "removed",
+                         f"listing {key} is gone but its {LISTING_LOCK_NAME} is not. Removing a "
+                         "listing removes its device types from every DCIM that imported them; "
+                         "if that is intended, run devicelock.py --update to drop the lock"))
     known = load_listing_locks(library)
     for path in listing_files(library):
         key = libwalk.listing_key(path)
@@ -914,6 +946,9 @@ def check_listings(library: pathlib.Path):
 
 def update_listings(library: pathlib.Path):
     changed = []
+    for f in orphan_listing_locks(library):
+        f.unlink()
+        changed.append(f"listing {f.parent.parent.name}/{f.parent.name} (removed)")
     known = load_listing_locks(library)
     for path in listing_files(library):
         key = libwalk.listing_key(path)

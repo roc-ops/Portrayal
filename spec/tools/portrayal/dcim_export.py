@@ -1845,6 +1845,21 @@ def _listing_sku(pns):
     return (sorted(cordless) or sorted(pns))[0]
 
 
+def listing_config_model(over):
+    """What one listing configuration exports as: (model, sku), either None.
+
+    THE ONE ANSWER, asked by the exporter and by lint's L124 alike. The two
+    used to decide separately - lint took the alphabetically first SKU and
+    this the cordless one - so `{A-EU: cord EU, Y: none}` exported `Y` while
+    L124 checked `A-EU`, and a second listing calling its box `Y` collided
+    with nothing lint could see.
+    """
+    over = over or {}
+    pns = over.get("part-numbers") or {}
+    sku = _listing_sku(pns) if pns else None
+    return (over.get("model") or sku), sku
+
+
 def apply_listing(doc, listing, cfg_name, label=None):
     """File a hardware device type again, under the NOS vendor that lists it.
 
@@ -1865,11 +1880,9 @@ def apply_listing(doc, listing, cfg_name, label=None):
     over = ((listing.get("configurations") or {}).get(cfg_name) or {})
     hw_manufacturer, hw_model = doc["manufacturer"], doc["model"]
     pns = over.get("part-numbers") or {}
-    model = over.get("model")
-    if pns:
-        sku = _listing_sku(pns)
+    model, sku = listing_config_model(over)
+    if sku:
         part = pns[sku].get("part") if isinstance(pns[sku], dict) else None
-        model = model or sku
         if part:
             doc["part_number"] = part
     if model:
@@ -1900,9 +1913,18 @@ def apply_listing(doc, listing, cfg_name, label=None):
 # for identities, arriving by a different route. L124 catches it in the source;
 # this catches it in the output.
 WRITTEN = {}
+_FRESH = set()
 
 
-def write(doc, root, target, owner=None):
+def _listed_hardware(text):
+    """The first comment line of a listed type - "<vendor> lists <maker> <SKU>"."""
+    try:
+        return str((yaml.safe_load(text) or {}).get("comments") or "").split("\n", 1)[0]
+    except yaml.YAMLError:
+        return ""
+
+
+def write(doc, root, target, owner=None, listed=False):
     d = Path(root) / target / "device-types" / doc["manufacturer"]
     d.mkdir(parents=True, exist_ok=True)
     f = d / (doc["model"] + ".yaml")
@@ -1912,6 +1934,20 @@ def write(doc, root, target, owner=None):
             raise SystemExit(f"{f}: written for {prev} and again for {owner}. Two "
                              f"device types under {doc['manufacturer']} share the model "
                              f"{doc['model']!r}; give one a `model` or its own SKU")
+    # ACROSS PROCESSES TOO. publish.sh exports one device per process, so
+    # WRITTEN never sees the NCP-40C on the S9700-53DX and the NCP-40C on the
+    # COR550 - they are two devices. A listed type already on disk that some
+    # OTHER run wrote, and that lists different metal, is that collision.
+    # (The same metal re-exported over its own old file is not.) L124 is the
+    # gate; this is the backstop for a name lint could not see.
+    if listed and f.exists() and WRITTEN.get(f) == owner and f not in _FRESH:
+        mine = str(doc.get("comments") or "").split("\n", 1)[0]
+        theirs = _listed_hardware(f.read_text())
+        if theirs and theirs != mine:
+            raise SystemExit(f"{f}: already written as '{theirs}', and now '{mine}'. Two "
+                             f"listings under {doc['manufacturer']} export the model "
+                             f"{doc['model']!r}; give one a `model` or its own SKU")
+    _FRESH.add(f)
     f.write_text("---\n" + yaml.dump(doc, Dumper=Indented, sort_keys=False,
                                      width=100, default_flow_style=False))
     return f
@@ -2302,7 +2338,7 @@ def export_device(dist, device_name, out_root, images):
                 continue                       # nothing but a header: not worth a file
             owner = f"{lkey or dev.get('ns') + '/' + device_name}:{cfg_name}"
             for target in TARGETS:
-                f = write(doc, out_root, target, owner)
+                f = write(doc, out_root, target, owner, listed=lkey is not None)
                 for face in ("front", "rear"):
                     if doc.get(f"{face}_image") and RASTER:
                         render_image(images, out_root, target, doc,

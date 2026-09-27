@@ -140,6 +140,30 @@ def test_l124_lets_two_listings_share_a_display_name(tmp_path):
     assert not findings(lint.lint_library_listings, _two(tmp_path, a, b))
 
 
+def test_l124_asks_the_exporter_which_sku_a_configuration_exports(tmp_path):
+    """`{A-EU: cord EU, Y: none}` exports as Y - the cordless one. Lint used to
+    check A-EU, so a second listing calling its box Y collided unseen."""
+    a = {"configurations": {"ac": {"part-numbers": {"A-EU": {"power-cord": "EU"}, "Y": {}}}}}
+    b = {"configurations": {"ac": {"model": "Y"}}}
+    got = findings(lint.lint_library_listings, _two(tmp_path, a, b))
+    assert any(r == "L124" and "'y'" in m for r, m in got), got
+
+
+def test_l124_sees_an_override_that_takes_another_boxs_sku(tmp_path):
+    """Across hardware: one listing renames its box to a SKU another listing
+    of the same vendor inherits from its own hardware."""
+    lib = tmp_path
+    for ns, name, pn in (("ufispace", "hw-a", "SKU-A"), ("edgecore", "hw-b", "SKU-B")):
+        hd = lib / "devices" / ns / name
+        hd.mkdir(parents=True)
+        (hd / "device.yaml").write_text(json.dumps(
+            {"kind": "device", "configurations": {"ac": {"part-numbers": {pn: {}}}}}))
+    a = {"hardware": "ufispace/hw-a", "configurations": {"ac": {"model": "SKU-B"}}}
+    b = {"hardware": "edgecore/hw-b"}
+    got = findings(lint.lint_library_listings, _two(lib, a, b))
+    assert any(r == "L124" and "sku-b" in m for r, m in got), got
+
+
 def test_l124_holds_an_alias_to_one_listing_unless_shared(tmp_path):
     a = {"aliases": [{"name": "NCP-96X6C-S", "kind": "oem"}]}
     got = findings(lint.lint_library_listings, _two(tmp_path, a, copy.deepcopy(a)))
@@ -147,6 +171,31 @@ def test_l124_holds_an_alias_to_one_listing_unless_shared(tmp_path):
     s = {"aliases": [{"name": "NCP-96X6C-S", "kind": "oem", "shared": True}]}
     assert not findings(lint.lint_library_listings,
                         _two(tmp_path / "s", s, copy.deepcopy(s)))
+
+
+def test_l124_needs_every_claimant_to_mark_a_shared_alias(tmp_path):
+    s = {"aliases": [{"name": "NCP-96X6C-S", "kind": "oem", "shared": True}]}
+    u = {"aliases": [{"name": "NCP-96X6C-S", "kind": "oem"}]}
+    got = findings(lint.lint_library_listings, _two(tmp_path, s, u))
+    assert any(r == "L124" and "ncp-96x6c-s" in m for r, m in got), got
+
+
+def test_l124_checks_configuration_aliases_too(tmp_path):
+    a = {"configurations": {"ac": {"aliases": [{"name": "NCP-40C-AC", "kind": "oem"}]}}}
+    got = findings(lint.lint_library_listings, _two(tmp_path, a, copy.deepcopy(a)))
+    assert any(r == "L124" and "ncp-40c-ac" in m for r, m in got), got
+
+
+def test_l56_refuses_an_override_on_an_illustration():
+    hw = load_yaml(LIB / "devices/edgecore/as7726-32x/device.yaml")
+    examples = [k for k, v in (hw.get("configurations") or {}).items()
+                if (v or {}).get("kind") == "example"]
+    if not examples:
+        import pytest
+        pytest.skip("the AS7726-32X has no example configuration to override")
+    doc = dict(load_yaml(ARRCUS), configurations={examples[0]: {"model": "X"}})
+    got = findings(lint.lint_listing, ARRCUS, doc, [str(LIB)])
+    assert any(r == "L56" and "example" in m for r, m in got), got
 
 
 # ---- the lock ----------------------------------------------------------------
@@ -165,14 +214,37 @@ def test_a_renamed_port_is_a_major_change():
     assert devicelock.listing_bump(old, devicelock.listing_entry(new)) == "major"
 
 
-def test_an_added_configuration_override_is_minor_and_a_changed_one_major():
+def test_an_override_that_renames_an_export_is_major_even_when_added():
+    """An added `model` or `part-numbers` renames that configuration's exported
+    type - `Arrcus/7726-32X-O-AC-F` becomes `NCP-...` - which removes a device
+    type a DCIM keys on. That is major however it arrives."""
     doc = load_yaml(ARRCUS)
     old = devicelock.listing_entry(doc)
-    added = dict(doc, configurations={"ac-f2b": {"part-numbers": {"X": {"part": "X"}}}})
-    assert devicelock.listing_bump(old, devicelock.listing_entry(added)) == "minor"
+    renamed = dict(doc, configurations={"ac-f2b": {"part-numbers": {"X": {"part": "X"}}}})
+    assert devicelock.listing_bump(old, devicelock.listing_entry(renamed)) == "major"
     changed = dict(doc, configurations={"ac-f2b": {"part-numbers": {"Y": {"part": "Y"}}}})
-    assert devicelock.listing_bump(devicelock.listing_entry(added),
+    assert devicelock.listing_bump(devicelock.listing_entry(renamed),
                                    devicelock.listing_entry(changed)) == "major"
+
+
+def test_an_override_with_only_prose_is_minor_and_rewording_it_a_patch():
+    doc = load_yaml(ARRCUS)
+    old = devicelock.listing_entry(doc)
+    added = dict(doc, configurations={"ac-f2b": {"description": "the AC build"}})
+    assert devicelock.listing_bump(old, devicelock.listing_entry(added)) == "minor"
+    reworded = dict(doc, configurations={"ac-f2b": {"description": "the AC one"}})
+    assert devicelock.listing_bump(devicelock.listing_entry(added),
+                                   devicelock.listing_entry(reworded)) == "patch"
+
+
+def test_a_deleted_listing_leaves_a_finding_until_its_lock_goes(tmp_path):
+    d = tmp_path / "devices" / "arrcus" / "gone"
+    d.mkdir(parents=True)
+    (d / devicelock.LISTING_LOCK_NAME).write_text("{}")
+    got = devicelock.check_listings(tmp_path)
+    assert [k for k, kind, _ in got if kind == "removed"] == ["arrcus/gone"], got
+    devicelock.update_listings(tmp_path)
+    assert not (d / devicelock.LISTING_LOCK_NAME).exists()
 
 
 def test_a_reworded_source_is_a_patch():
