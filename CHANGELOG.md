@@ -15,6 +15,12 @@ the *published build*, not about the hardware.
 ## Unreleased
 
 ### Added
+- `npm_packages.py`: the build split into npm packages, one per device
+  (`@portrayal/<vendor>-<device>`), one for the component skins and one index
+  carrying `packages.json` (device → package and version, and a vendor →
+  family → device tree). Each package is versioned from what npm last
+  published, and only changed packages are published. Nothing in `dist/`
+  changes; see `library/README.md` (roc-ops/Portrayal#528).
 - Lint L123, library-wide: one module, one bay size. Every bay that accepts a
   module, in any device or carrier, reserves the same size for it to within a
   millimetre, compared in the module's own frame so a turned bay matches an
