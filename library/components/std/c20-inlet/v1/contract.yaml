@@ -1,21 +1,33 @@
 format: 1
 kind: component
 name: c20-inlet
-version: 1.3.0
+version: 1.3.1
 class: inlet
 profile: networking
 conforms: c20-inlet
 interface: iec-c20
 description: IEC C20 appliance inlet (mates C19 cords) - panel cutout with the
-  rounded-rectangle coupler recess behind it, earth pin up, line and neutral below
+  rounded-rectangle coupler recess behind it, earth pin up, line and neutral below, all
+  three blades lying along the long side
 size: {w: 32.4, h: 24.4, d: 15.0}
 attrs: {media: ac, input: ac}
 provenance:
   depth: estimated (typical receptacle depth; refine from spec)
   size: standard (IEC 60320-1) via a SCHURTER C20 dimension drawing - panel cutout
     32.4 +0.1/0 x 24.4 +0.1/0, corners max R4.5
-  recess: proportional from the same drawing, NOT dimensioned - C19/C20 is a plain
-    rounded rectangle with no keying chamfers, so polarity is by pin layout alone
+  recess: measured off the same drawing's front view at its own scale (26.9 flange
+    height = 190 px), NOT dimensioned - 29.0 x 21.0, R2.2. C19/C20 is a plain rounded
+    rectangle with no keying chamfers, so polarity is by pin layout alone. A PSU moulding
+    may chamfer its own surround (the Celestica DS5000 CAD does, on the earth side); that
+    belongs to the PSU, not to this part
+  pins: >-
+    orientation and centres are standard - IEC 60320 C19/C20 pins lie parallel to the long
+    axis of the coupler face, line and neutral 13 mm apart with earth 8 mm off their line
+    (the SCHURTER C20 front view draws exactly this, as do the Celestica DS5000 CAD rear
+    elevation and the Edgecore AIS800-64D rear photograph; roc-ops/Portrayal#398). The
+    cross-sections are measured off the SCHURTER and Celestica drawings, not dimensioned:
+    earth about 6.2 x 2.2, line and neutral about 5.3 x 2.2 - both drawings make the earth
+    blade the longer. Which of the lower pair is line and which neutral is not sourced
 elements:
   opening: {at: [0.0, 0.0], size: [32.4, 24.4], class: cutout}
 relief:
