@@ -161,13 +161,14 @@ provenance:
   the-rear:
     confidence: drawing
     note: >-
-      Read on Figure 2 at 5.512 x 5.540 px/mm. From the left: a 10.3 mm strip carrying two
+      Read on Figure 2 at 5.512 x 5.540 px/mm. From the left: a 10.4 mm strip carrying two
       bosses, the PSU-3 and PSU-4 legends, an earth symbol and the grounding bracket; PSU-3
-      over PSU-4 at x 10.3-66.7; a 14.55 mm strip with five bosses and a black screw; FAN-3,
+      over PSU-4 at x 10.4-66.6 (read 10.1-66.9 including the frame lines; seated at the
+      supply's 56.2 width, see celestica/psu-2000-ac@1); a 14.55 mm strip with five bosses and a black screw; FAN-3,
       FAN-2 and FAN-1 at x 81.25, 178.55 and 275.85 (97.3 pitch, 81.4 wide, the block centred
       on the chassis) with a 16 mm strip after each carrying its FAN-n legend and four bosses;
-      a 14.55 mm strip with five bosses and a black screw; PSU-1 over PSU-2 at x 371.8-428.2;
-      and a 10.3 mm strip with three bosses and the PSU-1 and PSU-2 legends. The two supply
+      a 14.55 mm strip with five bosses and a black screw; PSU-1 over PSU-2 at x 371.9-428.1;
+      and a 10.4 mm strip with three bosses and the PSU-1 and PSU-2 legends. The two supply
       pairs are one face drawn four times, not mirrored. Bosses are drawn as the dark rings
       the figure shows; whether they are standoffs, PEM nuts or plugged holes is not stated.
   the-grounding-point:
@@ -183,10 +184,14 @@ provenance:
   the-lug-tag:
     confidence: drawing
     note: >-
-      Figure 1's "Lug tag" callout is a black luggage-style label tag hanging over the left
-      lattice, about x 11.3-14.4, y 56.3-78.8, printed LUG TAG. It is a tag on a loop, not a
-      panel feature and not the sliding pull tab common/pull-tab@1 draws, so it is not
-      modelled; see the lug-tag gap.
+      Figure 1's "Lug tag" callout is celestica/lug-tag@1, Celestica's slide-out information
+      card, standing on end in a slot in the inner left lattice column. READ AT 14x (77.5 px/mm)
+      THE FIRST DESCRIPTION WAS WRONG: I had called it a tag hanging on a loop. The close-up
+      shows a black card x 11.8-14.5, y 56.4-78.8 (22.4 long) in a slot x 11.5-14.7, y
+      56.1-79.2 (3.2 x 23.1), the model name printed along it reading bottom to top, and the
+      panel printing LUG TAG beside it, x 15.4-17.4, y 61.9-74.1, also bottom to top - the
+      DS3001's arrangement. The part's 23.0 x 4.0 slot matches to 0.1 mm on the long axis. It
+      is seated rotate 270 (lip up) centred on the slot at (13.1, 67.65), label DS5000.
   power:
     confidence: datasheet
     note: >-
@@ -262,13 +267,6 @@ gaps:
     What the three small light squares between the STAT, ALM, PSU and FAN lamps are. A
     drawing or photograph of the cluster at 15 px/mm or better settles whether they are
     lenses and whether anything should be punched there.
-- what: lug-tag
-  scope: [front]
-  reason: needs-drawing
-  wanted: >-
-    The hanging "Lug tag" Figure 1 calls out on the left lattice. It is a luggage-style tag on
-    a loop, and the library's only tag part, common/pull-tab@1, is a sliding pull tab of a
-    different shape.
 - what: fru-part-numbers
   scope: [rear]
   reason: vendor-silent
@@ -334,6 +332,7 @@ groups:
         redundant fans"; three modules, numbered FAN-1 at the right to FAN-3 at the left.
   earth: {term: Ground, role: service, index-origin: 1}
   fasteners: {term: Screw, role: furniture, index-origin: 1}
+  furniture: {term: Item, role: furniture, index-origin: 1}
 views:
   front:
     size: {w: 438.5, h: 87.0}
@@ -597,6 +596,7 @@ views:
       - {id: led-psu, at: [419.6, 69.8], size: [1.6, 2.8], shape: rect}
       - {id: led-fan, at: [419.6, 77.25], size: [1.6, 2.8], shape: rect}
     silkscreen:
+    - {id: silk-lug-tag, at: [17.4, 68.0], text: LUG TAG, font-size: 2.8, anchor: middle, rotate: -90, fill: '#e6e8ea', for: lug-tag}
     - {id: silk-wordmark, at: [17.8, 10.3], text: Celestica, font-size: 4.1, anchor: start, fill: '#eceef0', for: chassis}
     - {id: silk-arrow-1, at: [20.7, 14.85], path: 'M -0.6 0.5334 L 0.6 0.5334 L 0 -0.5334 Z', filled: true, fill: '#e6e8ea', for: port-1}
     - {id: silk-num-1, at: [21.95, 15.32], text: '1', font-size: 1.3, anchor: start, fill: '#e6e8ea', for: port-1}
@@ -930,6 +930,7 @@ views:
       - {ref: common/led-dot@1, id: led-port-63-2, at: [385.62, 81.55], for: port-63, group: port-leds, rel-pos: 126}
       - {ref: common/led-dot@1, id: led-port-64-1, at: [389.42, 81.55], for: port-64, group: port-leds, rel-pos: 127}
       - {ref: common/led-dot@1, id: led-port-64-2, at: [393.52, 81.55], for: port-64, group: port-leds, rel-pos: 128}
+      - {ref: celestica/lug-tag@1, id: lug-tag, at: [1.6, 65.65], rotate: 270, group: furniture, rel-pos: 1, attrs: {label: DS5000}}
       - {ref: std/sfp@1, id: sfp28-65, at: [402.52, 51.43], group: sfp28, rel-pos: 1}
       - {ref: std/sfp@1, id: sfp28-66, at: [402.52, 66.43], rotate: 180, group: sfp28, rel-pos: 2}
       - {ref: common/led-arrow-sm@1, id: led-sfp28-65-1, at: [406.85, 62.9], skin: up, for: sfp28-65, group: port-leds, rel-pos: 129}
@@ -1018,13 +1019,13 @@ views:
     - {id: silk-fan-1, at: [364.5, 53.75], text: FAN-1, font-size: 3.2, anchor: middle, fill: '#2e3136', for: fan-1}
     components:
       bays:
-      - {id: psu-1, at: [371.8, 3.7], size: {w: 56.4, h: 40.0}, group: psus, rel-pos: 1,
+      - {id: psu-1, at: [371.9, 3.7], size: {w: 56.2, h: 40.0}, group: psus, rel-pos: 1,
          accepts: ['celestica/psu-2000-ac@1'], default: 'celestica/psu-2000-ac@1'}
-      - {id: psu-2, at: [371.8, 44.7], size: {w: 56.4, h: 40.0}, group: psus, rel-pos: 2,
+      - {id: psu-2, at: [371.9, 44.7], size: {w: 56.2, h: 40.0}, group: psus, rel-pos: 2,
          accepts: ['celestica/psu-2000-ac@1'], default: 'celestica/psu-2000-ac@1'}
-      - {id: psu-3, at: [10.3, 3.7], size: {w: 56.4, h: 40.0}, group: psus, rel-pos: 3,
+      - {id: psu-3, at: [10.4, 3.7], size: {w: 56.2, h: 40.0}, group: psus, rel-pos: 3,
          accepts: ['celestica/psu-2000-ac@1'], default: 'celestica/psu-2000-ac@1'}
-      - {id: psu-4, at: [10.3, 44.7], size: {w: 56.4, h: 40.0}, group: psus, rel-pos: 4,
+      - {id: psu-4, at: [10.4, 44.7], size: {w: 56.2, h: 40.0}, group: psus, rel-pos: 4,
          accepts: ['celestica/psu-2000-ac@1'], default: 'celestica/psu-2000-ac@1'}
       - {id: fan-1, at: [275.85, 4.4], size: {w: 81.4, h: 81.0}, group: fans, rel-pos: 1,
          accepts: ['celestica/fan-2u-81@1'], default: 'celestica/fan-2u-81@1'}
