@@ -272,6 +272,12 @@ the *published build*, not about the hardware.
   (roc-ops/Portrayal#650).
 
 ### Changed
+- `juniper/mic-3d-8ds3-e3` and `mic-3d-8ds3-e3-v` (1.1.2): their 16 jacks
+  state `impedance: 75`, and the description no longer calls 75-ohm
+  mini-SMB an unmodelled interface. Mini-SMB is the 75-ohm SMB series, the
+  SMB interface and intermateable with 50-ohm SMB, so the jacks were
+  correctly SMB (roc-ops/Portrayal#672). The MX80, MX240, MX480, MX960,
+  MX2008, MX2010 and MX2020 take a patch for the composed card.
 - `common/qsfp-pull-tab@2` (2.2.0) models the strap's S-bend: each arm is six
   relief boxes along the reach (`arm-l`, then `arm-l-2` to `arm-l-6`, and the
   same on the right) that follow the side-view curve, down 1.5 into a dip

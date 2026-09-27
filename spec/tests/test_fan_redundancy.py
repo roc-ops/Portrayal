@@ -472,7 +472,15 @@ def test_the_comparison_layer_can_now_reach_them():
     part, celestica/fan-40@1, serves both - counted twice because two datasheets state it
     twice, not because there are two rears. The two models' FRONTS differ; nothing about
     the cooling does.
+
+    SEVENTY-FOUR IS THE CELESTICA DS5000, 2+1 over THREE bays - the hardware guide's own
+    words, "2+1 redundant fans", against a rear elevation that draws three fan modules
+    (FAN-1 to FAN-3, celestica/fan-2u-81@1), so the digit form and the bay count agree
+    without argument. Its datasheet says only "N+1 redundant fans", which is the same claim
+    with the number left out; the guide supplies the number and the metal confirms it. How
+    many rotors sit inside each module is not stated anywhere, so the figure is read at the
+    module level, which is the level the guide counts at.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 73, n
+    assert n == 74, n
