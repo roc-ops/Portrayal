@@ -55,6 +55,9 @@ provenance:
       DIMENSIONS. 438 is the body between the rack-ear folds: the square-on renders show the
       ears (front: pale handle brackets with green thumbscrews; rear: grey brackets) standing
       outside a body whose own width is what scales to 438. Ears and handles are not drawn.
+      COLOUR follows the ruling for every Celestica switch - a black faceplate on an otherwise
+      silver chassis: chassis.color is the sheet metal (#c4c8cc, which the rear, lid and sides
+      show on every render) and the front's black is a full-face `bezel` decor (#16181b).
   the-osfp-wall:
     confidence: photo-measured
     note: >-
@@ -132,8 +135,10 @@ provenance:
     note: >-
       A pull-out luggage tag at the bottom right, "LUG TAG" printed above it at (393.5, 123.4)
       and the model name on the tab itself, 381.8-405.2 across at the bottom edge on ds6000-F.
-      common/pull-tab@1 is placed centred on it; its 16 mm is narrower than the 23.4 mm tab and
-      its green skin is not this tab's black, which the lug-tag-part gap records.
+      celestica/lug-tag@1 (23.0 x 4.0) is placed centred on it, LANDSCAPE (rotate 0) because
+      this tag lies along the bottom edge rather than standing on end as on the DS3000/DS4000.
+      The label is "DS6000", legible on ds6000-A and as a blur on ds6000-F. Which end carries the
+      pull lip does not resolve on either render; the part's own lip-right is kept.
   the-rear:
     confidence: photo-measured
     note: >-
@@ -256,13 +261,6 @@ gaps:
   note: >-
     The inlet is read as IEC C20 from the pin layout in ds6000-A-3; no document names it.
   wanted: 'The supply datasheet or the install guide power-cord table naming the inlet.'
-- what: lug-tag-part
-  scope: [lug-tag]
-  reason: needs-drawing
-  note: >-
-    common/pull-tab@1 (16 x 4.5, green) stands in for a black tab about 23.4 mm wide that
-    prints the model name; the library has no part of that size.
-  wanted: 'A photograph of the tab pulled out, to draw it as its own part.'
 - what: usb-c-oval
   scope: [front]
   reason: needs-photo
@@ -922,7 +920,7 @@ views:
         - {ref: common/led-dot@1, id: led-fan, at: [423.2, 14.0], group: leds, rel-pos: 2, for: [rear/fan-1, rear/fan-2, rear/fan-3, rear/fan-4, rear/fan-5]}
         - {ref: common/led-dot@1, id: led-sys, at: [416.2, 19.4], group: leds, rel-pos: 3, for: chassis}
         - {ref: common/led-dot@1, id: led-psu, at: [423.2, 19.4], group: leds, rel-pos: 4, for: [rear/psu-1, rear/psu-2, rear/psu-3, rear/psu-4]}
-        - {ref: common/pull-tab@1, id: lug-tag, at: [385.5, 125.3], group: furniture, rel-pos: 1}
+        - {ref: celestica/lug-tag@1, id: lug-tag, at: [382.0, 125.55], group: furniture, rel-pos: 1, attrs: {label: DS6000}}
     regions:
       - {id: osfp-field, at: [5.0, 35.0], size: {w: 428.0, h: 78.5}, label: '64 x 1.6TbE OSFP224, sixteen columns of two stacked pairs'}
       - {id: mgmt-cluster, at: [209.0, 3.0], size: {w: 225.0, h: 25.0}, label: 'Consoles, SFP56 management, MGMT, timing, USB, reset and system lamps'}

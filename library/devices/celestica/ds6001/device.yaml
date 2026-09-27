@@ -52,7 +52,10 @@ provenance:
       the ports symmetric about the face centre to 0.1 mm (bank midpoint 600.8 px against a
       face centre of 600.8). The tabs, rails and the two blue lifting handles folded along the
       top edge (with their "DO NOT LIFT BY HANDLE" labels on ds6001-A-3) are not drawn, as ears
-      are not.
+      are not. COLOUR follows the Celestica ruling - black faceplate, otherwise silver chassis -
+      and the DS6001 renders agree with it: chassis.color is the sheet metal (#c4c8cc; the rear,
+      lid and sides are silver on ds6001-B and ds6001-A-3) and the front's black is a
+      full-face `bezel` decor (#16181b).
   the-osfp-wall:
     confidence: estimated
     note: >-
@@ -85,8 +88,9 @@ provenance:
       holding BMC CONSOLE over TOD at x 40.0; each legend printed slanting beside its jack. The
       jacks' keyway side is not resolved at 1.9 px/mm and they are drawn unrotated. Centre gutter:
       PWR, ALM, STAT, FAN lamps at x 269.7, y 22.9-41.6 with legends to their left, the USB-C
-      console standing vertical at (265.0, 54.0) and RST at 67.5. Right: the LUG TAG and a
-      DS6001 plate at the top, and the two SFP56 cages stacked at x 509.9 (upper 0 / lower 180,
+      console standing vertical at (265.0, 54.0) and RST at 67.5. Right: the luggage tag lying landscape at
+      the top (celestica/lug-tag@1, rotate 0, label "DS6001" as ds6001-A-3 prints it) with "LUG TAG"
+      printed under it, and the two SFP56 cages stacked at x 509.9 (upper 0 / lower 180,
       per L108), printed "SFP56 65" above and "SFP56 66" below. Honeycomb vent fields fill the
       corners, drawn as estimated extents on backing rects.
   the-rear:
@@ -438,7 +442,7 @@ views:
       - {at: [267.2, 35.67], text: STAT, font-size: 1.2, anchor: end, for: led-stat}
       - {at: [267.2, 41.97], text: FAN, font-size: 1.2, anchor: end, for: led-fan}
       - {at: [266.9, 67.87], text: RST, font-size: 1.2, anchor: end, for: reset}
-      - {at: [512.6, 11.6], text: LUG TAG, font-size: 1.3, anchor: middle, for: lug-tag}
+      - {at: [512.4, 11.6], text: LUG TAG, font-size: 1.3, anchor: middle, for: lug-tag}
       - {at: [509.9, 48.4], text: SFP56 65, font-size: 1.3, anchor: middle, for: sfp56-65}
       - {at: [509.9, 77.6], text: SFP56 66, font-size: 1.3, anchor: middle, for: sfp56-66}
       - {at: [71.11, 25.9], text: '1-HP▲', font-size: 1.5, anchor: end, for: port-1}
@@ -650,7 +654,7 @@ views:
         - {ref: common/led-dot@1, id: led-alm, at: [268.7, 28.1], group: leds, rel-pos: 2, for: chassis}
         - {ref: common/led-dot@1, id: led-stat, at: [268.7, 34.3], group: leds, rel-pos: 3, for: chassis}
         - {ref: common/led-dot@1, id: led-fan, at: [268.7, 40.6], group: leds, rel-pos: 4, for: [rear/fan-1, rear/fan-2, rear/fan-3, rear/fan-4]}
-        - {ref: common/pull-tab@1, id: lug-tag, at: [504.6, 5.0], group: furniture, rel-pos: 1}
+        - {ref: celestica/lug-tag@1, id: lug-tag, at: [500.9, 5.3], group: furniture, rel-pos: 1, attrs: {label: DS6001}}
     regions:
       - {id: osfp-field, at: [58.0, 3.0], size: {w: 421.0, h: 86.0}, label: '64 x 1.6TbE OSFP224, two banks of eight columns, four rows'}
   rear:
