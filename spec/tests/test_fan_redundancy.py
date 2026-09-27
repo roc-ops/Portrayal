@@ -499,7 +499,16 @@ def test_the_comparison_layer_can_now_reach_them():
     no fan count at all, and the 3+1 over four bays is the STORDIS rear render's own
     callout, "3+1 FANS". It is counted because a stated figure is a stated figure, and its
     note says where it was read so the thinner source is visible.
+
+    SEVENTY-EIGHT AND SEVENTY-NINE ARE THE CELESTICA DS3000 AND DS3001, 3+1 over four bays
+    each, and unlike the DS4000 pair they are two different rears. The DS3000 is a 1RU
+    with four celestica/fan-40@1 trays in two pairs either side of a blank plate, and its
+    datasheet says "3+1 redundant fans". The DS3001 is a 2RU with four
+    celestica/fan-80@1 trays, and its datasheet says "3+1 Redundant/Hot-Swappable Fans".
+    Its guide calls each module "an assembly of dual rotor fan", so eight rotors turn
+    behind the four faces. The digit counts the modules, not the rotors, and the
+    bays agree.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 77, n
+    assert n == 79, n
