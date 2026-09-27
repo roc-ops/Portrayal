@@ -1,0 +1,84 @@
+format: 1
+kind: module
+name: fan-2u-81
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Celestica's 2RU rear fan module as the DS5000 seats it - a near-square 81.4 x 81.0 face
+  with a square-cell grille over a honeycomb mesh, one 80 mm-class rotor behind it, a round
+  tube handle running corner to corner, a status lamp at the bottom left, a thumbscrew at
+  the top left and bottom right, and a small silver release tab at the right edge ("Press
+  silver tab to the left to release the fan tray"). Three sit side by side between the two
+  pairs of supplies. No vendor part number is published, so it is named for its form and
+  face width.
+size: {w: 81.4, h: 81.0}
+size-confidence: {w: drawing, h: drawing}
+attrs:
+  airflow: front-to-back
+  power-absent: not-published
+provenance:
+  size: >-
+    drawing - Measured on the DS5000 hardware guide's Figure 2 "DS5000 Rear View" at 5.512 px/mm
+    across and 5.540 down (the body's 2417 x 482 px against the stated 438.5 x 87 mm, 0.5%
+    apart). FAN-3's frame runs x 81.0-162.4 and y 4.5-85.7; FAN-2's left frame is at 178.3
+    and FAN-1's right frame at 356.8, which is a 97.3 mm bay pitch for three modules and
+    a 16 mm chassis strip between each. The three are centred on the chassis to 0.3 mm.
+  depth: >-
+    estimated - 120 mm. The guide's Fan Removal figure (step 3, "Example of Fan module when removed")
+    is an isometric render showing a body about one and a half face-widths long behind the
+    face, with a connector cage at the back; it dimensions nothing.
+  face: >-
+    drawing - From the same Figure 2, in module coordinates: the grille cells x 3.0-78.0, y 4.0-78.4,
+    ten by ten on a 7.5 mm pitch with a hex mesh visible through each cell; the handle a
+    4.1 mm tube from (4.45, 76.1) at the bottom left to (76.65, 4.9) at the top right; the
+    lamp at (5.9, 69.0), about 2.8 across (FAN-3 reads 6.25, 69.2 and FAN-1 5.45, 68.9);
+    thumbscrews about 4.8 across at (4.5, 5.4) and (76.2, 76.5); the release tab x
+    76.65-79.85, y 64.4-72.1 (FAN-2's reads 75.75-79.65, 64.3-72.2).
+  handle-colour: >-
+    drawing - SILVER, AND THE ELEVATION DISAGREES. Figure 2 draws the three handles dark grey, but
+    the guide's own Fan Removal render of the pulled module, its rear three-quarter figure
+    ("DS5000 Rear Side View") and Celestica's product-page render all show a bright silver
+    tube. Three renders against one; silver is the default, held in the `handle-finish`
+    field.
+  power: >-
+    estimated - NOT PUBLISHED. Neither the datasheet nor the guide gives a per-module or total fan
+    figure; the only power figure is the chassis "<4000W".
+  redundancy: >-
+    datasheet - The guide's Hardware Overview says "2+1 redundant fans" and the datasheet "N+1
+    redundant fans"; three modules are drawn, and how many rotors each holds is not stated.
+states: [absent]
+elements:
+  grille: {at: [3.00, 4.00], size: [75.00, 74.40], class: rotor}
+  handle: {at: [2.40, 2.85], size: [76.30, 75.30], class: handle}
+  status: {at: [4.50, 67.60], size: [2.80, 2.80], class: led,
+           states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+  latch: {at: [76.65, 64.40], size: [3.20, 7.70], class: latch}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#b9bdc2'}
+relief:
+  wall: '#15181b'
+  features:
+    - node: grille
+      vent: 60
+      confidence: estimated
+      source: >-
+        celestica/fan-2u-81@1's own face key - the grille's extent is drawn; the depth of the
+        fan behind it is not stated anywhere.
+    - node: status
+      dome: 0.3
+      confidence: estimated
+      source: >-
+        common/led-dot@1 - the library's one panel-lamp figure; its own size is estimated
+        and the dome carries none.
+    - node: latch
+      out: 0.8
+      confidence: estimated
+      source: >-
+        celestica/fan-2u-81@1 itself - a small bent silver tab at the frame's right edge in
+        the elevation and the removal render; nothing dimensions how far it stands.
+skins: [default]
+body:
+  depth: 120
+  color: '#2b2f34'

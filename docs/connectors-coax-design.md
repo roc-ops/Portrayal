@@ -165,11 +165,10 @@ the connector ON THE FACEPLATE. An accessory cable's connector or a far end does
   table naming BNC describes the cable's far end, not the faceplate. Their 1.0/2.3 jacks
   become real placements instead of skin art, and so become slots.
 - **Stays on SMB:** the Juniper MIC-3D-8DS3-E3 (and -V). The MX2000 and MX104 datasheets
-  name its jack 75-ohm mini-SMB, not BNC, so it keeps its `common/smb-jack@1` placements; the
-  part's description is corrected to give that reason (mini-SMB) in place of the old "no BNC
-  standard exists in the registry yet". BNC appears only at the far end of the
-  CBL-DS3-E3-M-S accessory cable, which does not count. Mini-SMB as an interface is a
-  follow-up (section 7).
+  name its jack 75-ohm mini-SMB, not BNC. Mini-SMB is the 75-ohm SMB series (SMB interface,
+  intermateable with 50-ohm SMB; Cinch RF/microwave catalogue pp.121-122), so the jacks are
+  correctly SMB and state `impedance: 75` (#672). BNC appears only at the far end of the
+  CBL-DS3-E3-M-S accessory cable, which does not count.
 - **Stay as they are:** the MX80 CLK/SYNC jacks and the Nokia CPM5 1PPS jack, whose sources
   conflict (their gaps stay open), and the UfiSpace S9321, whose jack is SMB (BNC is on the
   accessory cable's far end).
@@ -211,9 +210,6 @@ section 5 said RJ45 connector slots are not in the explorer's swap menu. They ar
 
 ## Follow-ups
 
-- **Mini-SMB as an interface.** The Juniper DS3/E3 MIC's jack is 75-ohm mini-SMB, not SMB;
-  today it is still placed as `common/smb-jack@1` (section 6). A mini-SMB interface, and the
-  MIC's move to it, is later work.
 - **The DCIM export counts tx and rx as two interfaces per port.** This follows the existing
   library convention (the same MIC already does it); it is not fixed by this work and is
   carried as a follow-up issue.
@@ -226,6 +222,7 @@ section 5 said RJ45 connector slots are not in the explorer's swap menu. They ar
 - 2026-09-26: one interface per family, with impedance as an attr (decisions 1-2).
 - 2026-09-26: the interface is spelled `din-1-0-2-3`, not `din-1.0-2.3` — the schema's
   interface/mates pattern refuses a dot.
+- 2026-09-27: mini-SMB is the 75-ohm SMB series, not a separate interface; the MIC's SMB jacks state impedance 75 (#672).
 - 2026-09-26: the Juniper DS3/E3 MIC does not move; its jack is 75-ohm mini-SMB per the
   MX2000/MX104 datasheets, not "no BNC standard exists in the registry yet" as the part
   formerly said, and BNC on its accessory cable's far end does not count.
