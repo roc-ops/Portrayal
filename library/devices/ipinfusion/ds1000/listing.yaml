@@ -1,15 +1,15 @@
 format: 1
 kind: listing
-hardware: ufispace/s9600-64x
+hardware: celestica/ds1000
 version: 1.0.0
-portfolio: {line: OcNOS SP}
+portfolio: {line: OcNOS DC}
 description: >-
-  Supported by OcNOS SP 7.0.1, licensed per switching capacity as OcNOS-SP-IPBASE-4800, OcNOS-SP-MPLS-4800, OcNOS-SP-PLUS-4800.
+  Supported by OcNOS DC 7.0.1, licensed per switching capacity as OcNOS-DC-MGMT-120, OcNOS-DC-IPBASE-120.
   Those are software licences shared by every box of the same capacity, not part
   numbers for this one.
 source: >-
   OcNOS 7.0.1 MR Hardware Compatibility List (IP Infusion, July 2026), the row for
-  S9600-64X, current supported 'SP 7.0.1'.
+  DS1000, current supported 'DC 7.0.1'.
 gaps:
   - what: ocnos-port-names
     reason: vendor-silent
@@ -18,12 +18,12 @@ gaps:
       and 25G, ce 40G and 100G, cd 400G, eth0 for management - but it does not count the same
       way on every platform. IP Infusion's own S9510-30XC configuration counts once across the
       panel (ce0, ce1, xe2 to xe29); its AS7316-26XB example restarts at xe0 after ce0 and ce1.
-      Which way S9600-64X counts, and in what order its port groups fall, is in the 'S9600-64X Port
+      Which way DS1000 counts, and in what order its port groups fall, is in the 'DS1000 Port
       Mapping' chapter of IP Infusion's OcNOS installation guide, which is not in the public
       7.0 documentation library and is not held here.
     wanted: >-
-      The 'S9600-64X Port Mapping' chapter of the OcNOS installation guide, Release 7.0, or
-      `show interface brief` from a unit running OcNOS SP 7.0 - with it, `interfaces` can
+      The 'DS1000 Port Mapping' chapter of the OcNOS installation guide, Release 7.0, or
+      `show interface brief` from a unit running OcNOS DC 7.0 - with it, `interfaces` can
       name each port the way OcNOS does.
 nos: ocnos
 nos-versions: '>=7.0.1'

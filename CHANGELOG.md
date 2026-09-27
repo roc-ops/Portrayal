@@ -17,7 +17,7 @@ the *published build*, not about the hardware.
 ### Added
 - **OcNOS listings for the IP Infusion HCL** (roc-ops/Portrayal#674). Every box
   on the OcNOS 7.0.1 MR Hardware Compatibility List (July 2026) that the
-  library models - 41 of 44 - is listed under `ipinfusion/`, with the edition
+  library models - 42 of 44 - is listed under `ipinfusion/`, with the edition
   that supports it (OcNOS SP or OcNOS DC) as its portfolio line. 14 UfiSpace
   boxes carry OcNOS port names: speed-class prefix (`ge`, `xe`, `ce`, `cd`) and
   one 0-based count across the panel, as IP Infusion's own S9510-30XC

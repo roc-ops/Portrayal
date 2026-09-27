@@ -14,13 +14,14 @@ gaps:
   - what: ocnos-port-names
     reason: vendor-silent
     note: >-
-      OcNOS names a front-panel port by its speed class and number (xe, ce, cd and so on),
-      and the per-platform table is the 'S9321-64EO Port Mapping' chapter of IP Infusion's
-      OcNOS installation guide for the vendor, which the OcNOS SP 7.0 release notes cite.
-      That guide is not in the public 7.0 documentation library (documentation.ipinfusion.com,
-      checked 2026-09-27: the SP and DC 7.0 pages list release notes, key features and the
-      feature guides only), and no copy is held here. Until one is, this listing exports the
-      faceplate ids.
+      OcNOS names a front-panel port by its speed class and a 0-based number - ge 1G, xe 10G
+      and 25G, ce 40G and 100G, cd 400G, eth0 for management - but it does not count the same
+      way on every platform. IP Infusion's own S9510-30XC configuration counts once across the
+      panel (ce0, ce1, xe2 to xe29); its AS7316-26XB example restarts at xe0 after ce0 and ce1.
+      Which way S9321-64EO counts, and in what order its port groups fall, is in the 'S9321-64EO Port
+      Mapping' chapter of IP Infusion's OcNOS installation guide, which is not in the public
+      7.0 documentation library and is not held here.
+      No OcNOS document held here names an 800G port either.
     wanted: >-
       The 'S9321-64EO Port Mapping' chapter of the OcNOS installation guide, Release 7.0, or
       `show interface brief` from a unit running OcNOS DC 7.0 - with it, `interfaces` can
