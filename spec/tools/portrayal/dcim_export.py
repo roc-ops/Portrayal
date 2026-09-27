@@ -23,13 +23,15 @@ produced nothing at all, despite having console ports, module bays, a weight
 and a part number. Not every device takes a NOS; that is a fact about the
 device, not a reason to refuse to export it.
 
-A NOS is data. What ArcOS calls a port is stated once, in the device's overlay
-(`overlays/arcos.yaml`, `interfaces:`), and the exporter reads it from there -
-it does not know any NOS by name. Every device exports under its manufacturer
-with ports named by their faceplate id; a device whose overlay declares a NOS
-asked for with `--nos` exports a second type with that NOS's names, filed
-under the software vendor when the overlay carries an `identity:`. A `--nos`
-that no overlay in the build declares is refused.
+A NOS is data, and so is who sells it. A NOS vendor LISTS the hardware it
+supports - `devices/arrcus/as7726-32x/listing.yaml` points at
+`edgecore/as7726-32x` - and the listing states what ArcOS calls each port
+(`interfaces:`). The exporter reads it from there and knows no NOS by name.
+Every device exports under its manufacturer with ports named by their faceplate
+id; every listing of it exports the same type again under the NOS vendor, with
+that NOS's names and the vendor's own model and part numbers where it has them.
+That is how NetBox and Nautobot themselves file a disaggregated box: one device
+type per manufacturer that sells it.
 
 Nothing is dropped on the floor. What the target schema has no field for goes
 into `comments` rather than being lost: the datasheet, the maturity this model
@@ -38,7 +40,7 @@ claims, and the attrs that have no home - power envelope, ASIC, CPU. A bay's
 it as data (netbox-community/devicetype-library#4497,
 nautobot/devicetype-library#24).
 
-  python3 dcim_export.py DEVICE_YAML --out DIR [--nos arcos] [--dist DIR]
+  python3 dcim_export.py --dist DIR --out DIR [--device NAME]
 """
 import argparse
 import re
@@ -904,11 +906,11 @@ def slugify(s):
 def _index_expr(expr, n):
     """`{n}`, `{(n-1)*4}`: arithmetic over the port index, and nothing else.
 
-    The overlay schema's own example for a name pattern is SONiC's
-    `Ethernet{(n-1)*4}`, so the braces have to admit an expression - and an
-    expression read from a data file is not something to hand to eval() whole.
-    Only literals, `n` and the arithmetic operators pass; anything else is the
-    overlay's mistake and is refused by name.
+    A listing's name pattern can be SONiC's lane count, `Ethernet{(n-1)*4}`,
+    so the braces have to admit an expression - and an expression read from a
+    data file is not something to hand to eval() whole. Only literals, `n` and
+    the arithmetic operators pass; anything else is the listing's mistake and
+    is refused by name.
     """
     import ast
     tree = ast.parse(expr.strip(), mode="eval")
@@ -916,9 +918,9 @@ def _index_expr(expr, n):
           ast.Add, ast.Sub, ast.Mult, ast.Div, ast.FloorDiv, ast.Mod, ast.USub, ast.UAdd)
     for node in ast.walk(tree):
         if not isinstance(node, ok) or (isinstance(node, ast.Name) and node.id != "n"):
-            raise SystemExit(f"overlay interface name {{{expr}}}: only arithmetic over n "
+            raise SystemExit(f"listing interface name {{{expr}}}: only arithmetic over n "
                              f"is allowed in a name pattern")
-    return int(eval(compile(tree, "<overlay>", "eval"), {"__builtins__": {}}, {"n": n}))
+    return int(eval(compile(tree, "<listing>", "eval"), {"__builtins__": {}}, {"n": n}))
 
 
 def _expand(pattern, n):
@@ -930,23 +932,23 @@ def _expand(pattern, n):
                   pattern)
 
 
-def overlay_names(overlay):
+def listing_names(listing):
     """physical id -> (NOS interface name, breakout rule or None).
 
-    THE OVERLAY IS THE ONLY SOURCE OF A NOS NAME. This used to be a Python
+    THE LISTING IS THE ONLY SOURCE OF A NOS NAME. This used to be a Python
     function with `if profile == "arcos"` and `if profile == "sonic"` in it,
-    while the ArcOS overlay stated the same rule as data with breakout modes the
-    Python never read (#63, #56). Two statements of one fact drift, and the code
-    won silently. Now the exporter reads `interfaces:` - `physical` with `{n}`
-    over `range`, `name` with `{n}` or arithmetic on it - and a NOS with no
-    overlay has no names, rather than invented ones.
+    while the ArcOS data stated the same rule with breakout modes the Python
+    never read (#63, #56). Two statements of one fact drift, and the code won
+    silently. Now the exporter reads `interfaces:` - `physical` with `{n}` over
+    `range`, `name` with `{n}` or arithmetic on it - and a box no NOS vendor
+    lists has no NOS names, rather than invented ones.
     """
     out = {}
-    for rule in (overlay or {}).get("interfaces") or []:
+    for rule in (listing or {}).get("interfaces") or []:
         phys, name = rule["physical"], rule["name"]
         if "{n}" in phys:
             if not rule.get("range"):
-                raise SystemExit(f"overlay interface {phys!r} has {{n}} and no range")
+                raise SystemExit(f"listing interface {phys!r} has {{n}} and no range")
             lo, hi = (int(x) for x in str(rule["range"]).split("-", 1))
             for n in range(lo, hi + 1):
                 out[phys.replace("{n}", str(n))] = (_expand(name, n), rule.get("breakout"))
@@ -956,7 +958,7 @@ def overlay_names(overlay):
 
 
 def breakout_note(breakout, n):
-    """What the overlay says a port can be split into, as prose on the interface.
+    """What the listing says a port can be split into, as prose on the interface.
 
     A device type lists the ports the metal has. The 4x25G children a breakout
     makes are how a DEVICE is configured, not a fact about the type - so they go
@@ -1171,7 +1173,7 @@ def device_port_type(p, a, group_role, names=None):
     """What `build` exports a device placement as when it is a switch port:
     (type, label, None), or (None, None, why) when it is not one.
 
-    `names` is the overlay's (overlay_names) or None for the hardware's own
+    `names` is the listing's (listing_names) or None for the hardware's own
     document. L105 asks this with None, so a placement that declares
     `interfaces:` and would not export as a port is an error there instead of
     a declaration `build` drops without a word.
@@ -1330,7 +1332,7 @@ def bay_signature(dev, cfg_name):
     return tuple(sorted(ids))
 
 
-def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
+def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None):
     ch = dev.get("chassis", {})
     cfg = cfg or {}
 
@@ -1422,10 +1424,13 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
     def group_role(p):
         return (dev_groups.get(p.get("group")) or {}).get("role")
 
-    # WHAT THE NOS CALLS EACH PORT comes from the overlay's `interfaces:` rules
-    # and from nowhere else. None means no NOS: the document is the hardware's
-    # own, and names its ports by the id on the faceplate.
-    names = overlay_names(overlay) if overlay is not None else None
+    # WHAT THE NOS CALLS EACH PORT comes from the listing's `interfaces:` rules
+    # and from nowhere else. None means no names: the hardware's own document,
+    # or a listing that does not state them (ArcOS on a box nobody has run -
+    # its `gaps` say why). Both name every port by the id on the faceplate. An
+    # EMPTY map would mean "the NOS exposes nothing", and a listing with no
+    # `interfaces` exported a switch with no ports at all.
+    names = listing_names(listing) if (listing or {}).get("interfaces") else None
 
     console, mgmt_sfp, bays, powers, timing = [], [], [], {}, {}
     for view in views_for(dev, cfg_name):
@@ -1499,9 +1504,9 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
                     "Accepts: ", [a.split("/")[-1].split("@")[0] for a in acc])
             bays.append(bay)
 
-    # Switch and management interfaces. With an overlay, a placement is an
+    # Switch and management interfaces. With a listing, a placement is an
     # interface exactly when a rule names it - `mgmt-eth` becomes `ma1` because
-    # the overlay says so, not because a media attr happened to match. Without
+    # the listing says so, not because a media attr happened to match. Without
     # one, every port that is not a console is an interface under its faceplate
     # id: unspecific, but a fact about the metal rather than a convention borrowed
     # from a NOS the box may not run.
@@ -1832,68 +1837,117 @@ class Indented(yaml.SafeDumper):              # match the library's list indenta
         return super().increase_indent(flow, False)
 
 
-def overlay_identity(dist, ns, model, profile):
-    """What the device is SOLD AS when it runs this NOS, or None.
+def _listing_sku(pns):
+    """The SKU a listing's own `part-numbers` names the type after - the
+    cordless one first, as `build` chooses for the hardware."""
+    cordless = [m for m, v in pns.items()
+                if (v if isinstance(v, dict) else {}).get("power-cord") in (None, "", "none")]
+    return (sorted(cordless) or sorted(pns))[0]
 
-    A disaggregated box is two products from two companies: Edgecore made the
-    metal and the buyer's asset register may well say the software house, because
-    that is who invoiced them. Modelling that by duplicating the hardware means
-    keeping two full definitions in step forever, so the hardware is modelled once
-    and the overlay carries only what the software changes - here, who sells it.
 
-    Absence is meaningful and is the default: an overlay without `identity:` is a
-    naming and mapping layer, and its export stays under the manufacturer of
-    record exactly as before.
+def listing_config_model(over):
+    """What one listing configuration exports as: (model, sku), either None.
+
+    THE ONE ANSWER, asked by the exporter and by lint's L124 alike. The two
+    used to decide separately - lint took the alphabetically first SKU and
+    this the cordless one - so `{A-EU: cord EU, Y: none}` exported `Y` while
+    L124 checked `A-EU`, and a second listing calling its box `Y` collided
+    with nothing lint could see.
     """
-    if not profile:
-        return None
-    ov = dist.overlay(ns, model, profile)
-    return (ov or {}).get("identity") or None
+    over = over or {}
+    pns = over.get("part-numbers") or {}
+    sku = _listing_sku(pns) if pns else None
+    return (over.get("model") or sku), sku
 
 
-def apply_identity(doc, identity, vendors):
-    """Re-file a device type under the software vendor that sells it."""
-    if not identity:
+def apply_listing(doc, listing, cfg_name, label=None):
+    """File a hardware device type again, under the NOS vendor that lists it.
+
+    ONE COPY OF THE METAL, ONE TYPE PER MANUFACTURER THAT SELLS IT. That is how
+    NetBox and Nautobot file a disaggregated box, and it is what a listing says:
+    Arrcus lists the AS7726-32X, so `Arrcus/7726-32X-O-AC-F` sits beside
+    `Edgecore/7726-32X-O-AC-F` with the same geometry and ArcOS's port names.
+
+    THE MODEL is, in order: the listing's `model` for this configuration, where
+    the vendor names it (DriveNets' NCP-...); its own SKU for it; else the
+    hardware's SKU, because the metal is the same metal and its part number
+    still orders it. The hardware's part number carries over on the same
+    reasoning, and is replaced only where the vendor publishes its own.
+    """
+    if not listing:
         return doc
-    display = ((vendors.get(identity["vendor"]) or {}).get("display")
-               or identity["vendor"])
-    hw_model = doc["model"]
-    name = identity["model"]
-    if "{model}" in name:
-        name = name.replace("{model}", hw_model)
-    elif hw_model.lower() not in name.lower():
-        # THE HARDWARE'S SKUs DO NOT COLLAPSE. One device can be four orderable
-        # things - AC and 48 V, front-to-back and back-to-front - and they are
-        # four device types on the hardware side. A NOS identity that names none
-        # of them would write four documents to one filename, keeping whichever
-        # happened to be last. Appending the hardware model is not elegant; it is
-        # the option that loses nothing, and `{model}` exists so an author who
-        # cares about the phrasing never reaches this branch.
-        name = f"{name} ({hw_model})"
-    doc["manufacturer"] = display
-    doc["model"] = name
-    doc["slug"] = slugify(f"{display}-{name}")
-    if identity.get("part-number"):
-        doc["part_number"] = identity["part-number"]
+    display = listing.get("manufacturer") or listing.get("ns")
+    over = ((listing.get("configurations") or {}).get(cfg_name) or {})
+    hw_manufacturer, hw_model = doc["manufacturer"], doc["model"]
+    pns = over.get("part-numbers") or {}
+    model, sku = listing_config_model(over)
+    if sku:
+        part = pns[sku].get("part") if isinstance(pns[sku], dict) else None
+        if part:
+            doc["part_number"] = part
+    if model:
+        model = f"{model} {label}" if label else model
     else:
-        # The hardware's part number is the METAL's, and this document is no
-        # longer about the metal alone. Leaving it would attribute an Edgecore
-        # SKU to an Arrcus product.
-        doc.pop("part_number", None)
+        model = hw_model
+    doc["manufacturer"] = display
+    doc["model"] = model
+    doc["slug"] = slugify(f"{display}-{model}")
+    # SAY WHAT METAL THIS IS. The document is the NOS vendor's, and the one fact
+    # it cannot state in a field is whose hardware it lists.
+    names = [listing.get("model")] if listing.get("model") else []
+    names += [a["name"] for a in (listing.get("aliases") or []) + (over.get("aliases") or [])
+              if isinstance(a, dict) and a.get("name")]
+    head = [f"{display} lists {hw_manufacturer} {hw_model}"
+            + (f" (NOS: {listing['nos']})" if listing.get("nos") else "") + "."]
+    if names:
+        head.append(f"{display} also calls it: " + ", ".join(dict.fromkeys(names)) + ".")
+    if listing.get("source"):
+        head.append("Listed per: " + " ".join(str(listing["source"]).split()))
+    doc["comments"] = "\n".join(head) + ("\n\n" + doc["comments"] if doc.get("comments") else "")
     return doc
 
 
-def load_vendors(dist):
-    """The vendor registry, as published. `vendors.json` is the same content as
-    spec/schemas/vendors.yaml and is in the build."""
-    return dist.vendors
+# EVERY FILE THIS RUN HAS WRITTEN, and which device and configuration wrote it.
+# Two listings under one vendor that both call a box NCP-40C would otherwise
+# write one file twice and keep the second - the collision #47 guarded against
+# for identities, arriving by a different route. L124 catches it in the source;
+# this catches it in the output.
+WRITTEN = {}
+_FRESH = set()
 
 
-def write(doc, root, target, nos):
+def _listed_hardware(text):
+    """The first comment line of a listed type - "<vendor> lists <maker> <SKU>"."""
+    try:
+        return str((yaml.safe_load(text) or {}).get("comments") or "").split("\n", 1)[0]
+    except yaml.YAMLError:
+        return ""
+
+
+def write(doc, root, target, owner=None, listed=False):
     d = Path(root) / target / "device-types" / doc["manufacturer"]
     d.mkdir(parents=True, exist_ok=True)
-    name = doc["model"] + (f"-{nos}" if nos else "") + ".yaml"
-    f = d / name
+    f = d / (doc["model"] + ".yaml")
+    if owner is not None:
+        prev = WRITTEN.setdefault(f, owner)
+        if prev != owner:
+            raise SystemExit(f"{f}: written for {prev} and again for {owner}. Two "
+                             f"device types under {doc['manufacturer']} share the model "
+                             f"{doc['model']!r}; give one a `model` or its own SKU")
+    # ACROSS PROCESSES TOO. publish.sh exports one device per process, so
+    # WRITTEN never sees the NCP-40C on the S9700-53DX and the NCP-40C on the
+    # COR550 - they are two devices. A listed type already on disk that some
+    # OTHER run wrote, and that lists different metal, is that collision.
+    # (The same metal re-exported over its own old file is not.) L124 is the
+    # gate; this is the backstop for a name lint could not see.
+    if listed and f.exists() and WRITTEN.get(f) == owner and f not in _FRESH:
+        mine = str(doc.get("comments") or "").split("\n", 1)[0]
+        theirs = _listed_hardware(f.read_text())
+        if theirs and theirs != mine:
+            raise SystemExit(f"{f}: already written as '{theirs}', and now '{mine}'. Two "
+                             f"listings under {doc['manufacturer']} export the model "
+                             f"{doc['model']!r}; give one a `model` or its own SKU")
+    _FRESH.add(f)
     f.write_text("---\n" + yaml.dump(doc, Dumper=Indented, sort_keys=False,
                                      width=100, default_flow_style=False))
     return f
@@ -2133,14 +2187,12 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     # THE INPUT IS A PUBLISHED BUILD, NOT A CHECKOUT. Everything this reads is in
     # `dist/`: the compiled SVG carries the device manifest, components.json the
-    # contract fields, vendors.json and overlays.json the registries. That is
+    # contract fields, vendors.json and listings.json the registries. That is
     # what lets the export live outside the repository that produces them.
     ap.add_argument("--dist", required=True, help="a published build (library/dist)")
     ap.add_argument("--out", required=True, help="root of the exports tree")
     ap.add_argument("--device", help="one device by name; default is every device")
     ap.add_argument("--modules", action="store_true", help="export module types instead")
-    ap.add_argument("--nos", action="append", default=[],
-                    help="NOS profile to name interfaces for; repeatable")
     ap.add_argument("--no-raster", action="store_true",
                     help="write the image booleans but skip rendering the PNGs "
                          "behind them. What CI wants: the YAML is tracked, the "
@@ -2150,18 +2202,6 @@ def main():
     args = ap.parse_args()
 
     dist = Dist(args.dist)
-    # A NOS NOBODY DESCRIBES IS AN ERROR, NOT A DEFAULT. `--nos sonic` used to
-    # answer from a Python branch and wrote 144 device types for a NOS with no
-    # overlay anywhere; now the only source of a NOS name is an overlay, so a
-    # profile no overlay declares has nothing to say and the run stops here,
-    # before a file is written, naming where the overlay would go.
-    known = dist.profiles()
-    for p in args.nos:
-        if p not in known:
-            raise SystemExit(f"--nos {p}: no overlay in {args.dist} declares it. A NOS is "
-                             f"described by devices/<vendor>/<model>/overlays/{p}.yaml, "
-                             f"with `interfaces:` rules for its names"
-                             + (f"; known: {', '.join(sorted(known))}" if known else ""))
     global RASTER
     RASTER = not args.no_raster
     images = args.dist if args.images else None
@@ -2185,7 +2225,7 @@ def main():
 
     names = [args.device] if args.device else [d["name"] for d in dist.devices]
     for name in names:
-        export_device(dist, name, args.out, args.nos, images)
+        export_device(dist, name, args.out, images)
 
 
 def _config_rank(cfg):
@@ -2203,7 +2243,7 @@ def _config_rank(cfg):
     return 2
 
 
-def export_device(dist, device_name, out_root, nos, images):
+def export_device(dist, device_name, out_root, images):
     dev = dist.manifest(device_name)
     frus = module_models(dist)
 
@@ -2282,33 +2322,23 @@ def export_device(dist, device_name, out_root, nos, images):
               for key in by_sku}
 
     wrote = 0
-    vendors = load_vendors(dist)
     for key, (cfg_name, cfg) in by_sku.items():
         label = labels[key]
-        # THE HARDWARE'S OWN DOCUMENT, ALWAYS; A NOS DOCUMENT ONLY WHERE AN
-        # OVERLAY DECLARES THAT NOS FOR THIS DEVICE. Asking for `--nos arcos`
+        # THE HARDWARE'S OWN DOCUMENT, ALWAYS; ONE MORE FOR EACH NOS VENDOR THAT
+        # LISTS IT, and none for a NOS that does not. Asking for `--nos arcos`
         # used to write an ArcOS type for every switch in the library with names
-        # made up in Python, UfiSpace and Juniper included, and `--nos sonic` did
-        # the same for a NOS no overlay describes (#63, #56). A device with no
-        # overlay for a profile now gets nothing for it - the neutral type names
-        # its ports by the faceplate and says no more than it knows.
-        ns = dev.get("ns")
-        profiles = [None] + [p for p in nos if dist.overlay(ns, device_name, p)]
-
-        for profile in profiles:
-            overlay = dist.overlay(ns, device_name, profile) if profile else None
-            doc = build(dev, cfg_name, cfg, overlay, images, frus, label)
-            # DEVICE name, not the configuration's. `name` is rebound by the
-            # by-SKU loop above and means a configuration from there on, which
-            # silently looked up an overlay that does not exist and filed every
-            # ArcOS box under Edgecore instead of Arrcus.
-            ident = overlay_identity(dist, dev.get("ns"), device_name, profile)
-            doc = apply_identity(doc, ident, vendors)
+        # made up in Python, UfiSpace and Juniper included (#63, #56); then an
+        # overlay under the hardware had to opt in with `identity:`. Now the NOS
+        # vendor's own listing is the only thing that files a box under it.
+        for lkey, listing in [(None, None)] + dist.listings_for(dev.get("ns"), device_name):
+            doc = build(dev, cfg_name, cfg, listing, images, frus, label)
+            doc = apply_listing(doc, listing, cfg_name, label)
             if not any(k in doc for k in
                        ("console-ports", "interfaces", "module-bays")):
                 continue                       # nothing but a header: not worth a file
+            owner = f"{lkey or dev.get('ns') + '/' + device_name}:{cfg_name}"
             for target in TARGETS:
-                f = write(doc, out_root, target, None if ident else profile)
+                f = write(doc, out_root, target, owner, listed=lkey is not None)
                 for face in ("front", "rear"):
                     if doc.get(f"{face}_image") and RASTER:
                         render_image(images, out_root, target, doc,

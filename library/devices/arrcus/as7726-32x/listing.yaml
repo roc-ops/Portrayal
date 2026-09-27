@@ -1,18 +1,18 @@
 format: 1
-kind: overlay
+kind: listing
+hardware: edgecore/as7726-32x
+version: 1.0.0
+source: >-
+  a live device: ArcOS names the metal itself. `arcos-show-version.txt`, captured from a lab
+  AS7726-32X, reads 'Software: Arrcus ArcOS' over 'Firmware MU: EdgeCore MU 1.2.3' - the
+  software house and the hardware one on consecutive lines. The names below were read from a
+  running unit of this model (see `dumps`).
 nos: arcos
 nos-versions: '>=S8.5'
-device: edgecore/as7726-32x
-identity:
-  vendor: arrcus
-  model: ArcOS on {model}
-  source: >-
-    a live device: `arcos-show-version.txt` in this device's dumps reads 'Software: Arrcus
-    ArcOS' over 'Firmware MU: EdgeCore MU 1.2.3', with 'Platform: 7726-32X-O-AC-F' - ArcOS's
-    own name for the metal, which does not contain the Edgecore model. NO ARRCUS BUNDLE PART
-    NUMBER IS KNOWN, so `part-number` is omitted rather than invented; the model below is
-    this library's name for the pairing and says both halves on purpose, because a model
-    naming only the NOS could not be told from ArcOS on different metal.
+dumps:
+  - devices/edgecore/as7726-32x/dumps/arcos-interface-names.json
+  - devices/edgecore/as7726-32x/dumps/arcos-openconfig-components.json
+  - devices/edgecore/as7726-32x/dumps/arcos-show-version.txt
 terms:
   bay: Slot
 interfaces:

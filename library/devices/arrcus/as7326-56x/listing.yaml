@@ -1,18 +1,16 @@
 format: 1
-kind: overlay
+kind: listing
+hardware: edgecore/as7326-56x
+version: 1.0.0
+source: >-
+  a live device: ArcOS S8.5.1A running on a lab unit of this model (netlab-leaf1). The pairing
+  is the one the AS7726-32X's `arcos-show-version.txt` states for its sibling - 'Software:
+  Arrcus ArcOS' over 'Firmware MU: EdgeCore MU 1.2.3' - and the names below were read from this
+  model's own running unit (see `dumps` and the note under it).
 nos: arcos
 nos-versions: '>=S8.5'
-device: edgecore/as7326-56x
-identity:
-  vendor: arrcus
-  model: ArcOS on {model}
-  source: >-
-    a live device: `arcos-show-version.txt` in this device's dumps reads 'Software: Arrcus
-    ArcOS' over 'Firmware MU: EdgeCore MU 1.2.3', captured from a unit of this model in the
-    same lab. NO ARRCUS BUNDLE PART NUMBER IS KNOWN, so `part-number` is omitted rather than
-    invented; the model below is this library's name for the pairing and says both halves on
-    purpose, because a model naming only the NOS could not be told from ArcOS on different
-    metal.
+dumps:
+  - devices/edgecore/as7326-56x/dumps/arcos-openconfig-components.json
 # Read from the live unit - ArcOS S8.5.1A on netlab-leaf1, the same unit as the
 # intake photos - via 'show components | display json' and 'show interface
 # brief'. The component tree is committed at dumps/arcos-openconfig-components.json
@@ -20,7 +18,7 @@ identity:
 # rules below therefore come from the interface listing rather than from that
 # file, which is why they are the only ones here with nothing to diff against.
 #
-# This overlay replaces four attrs on the device manifest - `interface-naming`,
+# This naming replaces four attrs on the device manifest - `interface-naming`,
 # `entity-map`, `entity-transceivers` and `thermal-sensors` - which held the same
 # joins as English sentences ("chassis > lc0 (LINECARD) > psu0/psu1, fan1-fan6
 # chassis fans (plus fan0 inside PSU 2)"). Nothing could consume a sentence: a
