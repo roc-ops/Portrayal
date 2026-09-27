@@ -1,0 +1,71 @@
+format: 1
+kind: component
+name: bnc-jack
+version: 1.0.0
+class: port
+profile: networking
+description: Front-mount BNC bulkhead jack - the 12.7 flange and the two
+  bayonet lugs (bezel) around a std/bnc core, which presents the interface.
+unplaced: no held source puts a BNC on any modelled faceplate - the Cisco T3/E3 SPAs are 1.0/2.3 (Siemax) and the Juniper DS3/E3 MIC is mini-SMB, BNC being only the far end of their cables (docs/connectors-coax-design.md section 6); a device or card whose own document names a BNC panel jack would seat it
+size: {w: 12.7, h: 12.7}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  The 12.7 front flange of Radiall R141.557.000 (issue 0431 E, p.1, side
+  view), the widest thing in front of the panel. The lugs, 11.02 over their
+  tips, lie inside it.
+attrs: {media: coax-bnc}
+provenance:
+  size: >-
+    drawing - the front flange, dia 12.7, Radiall R141.557.000 data sheet
+    (bulkhead jack receptacle, front mounting, solder pot contact; issue 0431
+    E, p.1, side view). The size box is the flange envelope, so the overlap
+    rule and the hit box see what stands in front of the panel.
+  core: drawing (via std/bnc), placed so its collar centre is the flange centre
+  flange: >-
+    drawing - Radiall R141.557.000 side view: dia 12.7, 1.4 thick, on the
+    front of the panel. Drawn as an annulus whose hole is the core collar,
+    9.65, as common/sma-jack draws its nut, so the raised flange cannot paint
+    over the core.
+  lugs: >-
+    drawing - MIL-STD-348B with CHANGE 3, Figure 301-2: two lugs at 180
+    degrees (end view), stud diameter H 1.91-2.06 (drawn 1.985), 10.97-11.07
+    over the tips A (drawn 11.02, so each stands about 0.69 proud of the
+    collar), and F 5.18-5.28 from the front face to the far side of a lug. The
+    lug centre, 5.23 less half the stud, is 4.24 behind the front face, so
+    7.96 in front of the panel with the front at 12.2 (drawing, derived from F
+    and H). Face on a radial stud reads as a rectangle, stud-diameter tall,
+    drawn from 0.2 inside the collar so the solid meets it. The figure does
+    not fix the clocking: drawn at 3 and 9 o clock, a device that shows
+    another turns the part with rotate.
+elements: {}
+parts:
+  - {ref: std/bnc@1, id: jack, at: [1.5, 1.5]}
+relief:
+  features:
+    - node: flange
+      cyl: 1.4
+      color: '#c0c4c8'
+      confidence: drawing
+      source: >-
+        common/bnc-jack@1 flange key - Radiall R141.557.000 (issue 0431 E) side view, a
+        12.7 flange 1.4 thick sitting on the front of the panel.
+    - node: lug-l
+      lift: 6.97
+      out: 8.96
+      color: '#d7dade'
+      confidence: drawing
+      source: >-
+        common/bnc-jack@1 lugs key - MIL-STD-348B with CHANGE 3, Figure 301-2: stud H
+        1.985 centred 4.24 behind the front face (F 5.23 less half of H), so 7.96 in front
+        of the panel and 6.97 to 8.96 absolute. Derived from two drawn figures.
+    - node: lug-r
+      lift: 6.97
+      out: 8.96
+      color: '#d7dade'
+      confidence: drawing
+      source: >-
+        common/bnc-jack@1 lugs key - the same figures as lug-l; the second lug is 180
+        degrees round, per the end view of Figure 301-2.
+connection-points:
+  rf: {at: [6.35, 6.35], direction: front}
+skins: [default]

@@ -234,9 +234,9 @@ so a host that pins a colour on a composed part keeps doing so. Test:
 
 - Portrayal still ships devices bare (umbrella decision 2). A copper SFP appears in a cage's
   accept list because it `mates: sfp`; nothing seats it by default.
-- The explorer's swap menu offers `generic/sfp-rj45` automatically. It does NOT yet offer a
-  plug INTO the copper SFP's jack: RJ45 connector slots are not in the swap menu (B3 left
-  `rj45` out until its covers land). A configuration can seat one; that is tested.
+- The explorer's swap menu offers `generic/sfp-rj45` automatically, and now also offers a
+  plug INTO the copper SFP's jack: RJ45 connector slots are in the swap menu (#610, #611
+  and #570 delivered them; #648 is closed). A configuration can seat one; that is tested.
 - Head collisions between neighbouring cages (a copper SFP beside another in a tight 2xN)
   are real and vendors warn about them, but checking them needs seated occupants, which the
   library does not ship. Noted, not built.
@@ -247,8 +247,6 @@ Parked follow-ups, not built this piece of work:
   7.5 long) are not modelled; the head stays the 18.35 x 8.5 face (section 4.6).
 - The pull tab's S-bend and its riser are approximated as a two-step (arms low, grip high),
   not modelled as a curve.
-- RJ45 connector slots are not in the explorer's swap menu (section 5); a configuration can
-  still seat one directly.
 - A kit-vs-build coordinate check for the full copper-SFP-to-boot chain needs kit support
   the explorer does not have yet (the kit seats one occupant per cage); the copper chain's
   JS coverage stops one link short of that.

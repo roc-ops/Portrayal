@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: spa-2cht3-ce-atm
-version: 1.0.2
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -154,6 +154,21 @@ provenance:
     A-22 'Card and Fan Tray Power Consumption Specifications', which is staged and does not
     list SPAs. A SPA-specific datasheet, or the same appendix from a SIP-700-bearing
     platform's guide, is the thing to stage next.
+  jacks: >-
+    install guide - the interface connectors are 75-ohm coaxial DIN 1.0/2.3 types, the cables are
+    '1.0/2.3 RF to mini BNC', and Table 38 names the TX and RX DIN 1.0/2.3 connector (Cisco
+    ASR 9000 Series Aggregation Services Router SIP and SPA Hardware Installation Guide,
+    '2-Port Channelized T3/E3 ATM CEoP SPA Cables and Connectors'). BNC is the far end of
+    the cable.
+    Each jack is placed as common/din-1-0-2-3-jack@1, the rear-mount bulkhead jack with
+    its 7.01 spanner nut in front of the plate, centred where the skin drew the jack
+    before (a fraction of the drawn plate: see provenance.figure). Centres (x, y) mm:
+    p0-tx (8.64, 15.43), p0-rx (8.64, 27.92), p1-tx (8.64, 49.59), p1-rx (8.64, 61.34).
+    The nut, collar and barrel sizes are that part's drawing figures, not a reading of
+    this card. Ids are pN-tx and pN-rx, port N as the plate legend numbers it. The nut is
+    wider than the 4.6 disc the skin drew, so legends moved clear of it and nothing else
+    did: every TX and RX legend from x 11.84 to 12.2, and the port 1 numeral from x 5.04 to
+    3.4, since it sits level with the p1-tx jack.
   lifecycle: >-
     searched - no end-of-life notice for SPA-2CHT3-CE-ATM is in this intake. Table 10 gives
     this part a minimum IOS XR release of 4.3.0 and a minimum hardware revision of 1.0,
@@ -259,4 +274,9 @@ relief:
       source: >-
         common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
         estimated' and the dome carries none
+parts:
+  - {ref: common/din-1-0-2-3-jack@1, id: p0-tx, at: [5.135, 11.925], attrs: {impedance: 75, media: coax-din-1-0-2-3}}
+  - {ref: common/din-1-0-2-3-jack@1, id: p0-rx, at: [5.135, 24.415], attrs: {impedance: 75, media: coax-din-1-0-2-3}}
+  - {ref: common/din-1-0-2-3-jack@1, id: p1-tx, at: [5.135, 46.085], attrs: {impedance: 75, media: coax-din-1-0-2-3}}
+  - {ref: common/din-1-0-2-3-jack@1, id: p1-rx, at: [5.135, 57.835], attrs: {impedance: 75, media: coax-din-1-0-2-3}}
 skins: [default]

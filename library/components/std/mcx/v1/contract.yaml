@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: mcx
-version: 1.0.0
+version: 1.0.1
 class: port
 profile: networking
 conforms: mcx
@@ -51,6 +51,17 @@ provenance:
     the mating interface together stand about 2.0 mm proud of the panel front,
     which is why an MCX jack reads as a flush disc rather than a threaded stalk
     the way sma does
+  mate-plane: >-
+    drawing (derived) - THE MATE SITS `on: barrel`, SO THE JACK PRESENTS AT THE
+    BARREL FRONT, 2.0 proud, not at the panel. A mated MCX plug does not
+    overlap the jack: its slotted outer contact goes inside, and its body
+    shoulder stops 0.03-0.15 in front of the jack's front face (Radiall
+    catalogue "MMBX / MCX series R223 / R113 / R213", D1C004XEe, p.4-14,
+    INTERFACE, JACK and PLUG tables item 1). So the plane a seated plug's
+    coupling front sits on is this barrel's front face, and presenting there
+    seats the generic MCX plug on the barrel instead of over it. It follows the
+    barrel: if the recessed Casa variant is ever modelled with no barrel, its
+    mate sits on the face.
   flat: the flat is drawn at the BOTTOM of the aperture. Nothing in the Radiall
     sheet fixes its clocking - a D-hole is punched to whatever orientation the
     panel drawing calls for - so a card that shows a different clocking should
@@ -70,5 +81,5 @@ relief:
         this contract's variant-is-front-mount key warns - a rear-mount MCX does not read as
         a flush disc.
 connection-points:
-  mate: {at: [2.475, 2.475], direction: front}
+  mate: {at: [2.475, 2.475], direction: front, 'on': barrel}
 skins: [default]

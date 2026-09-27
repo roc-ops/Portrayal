@@ -1,0 +1,131 @@
+format: 1
+kind: component
+name: bnc-plug
+version: 1.0.0
+class: port
+mates: bnc
+conforms: bnc-plug
+profile: networking
+description: >-
+  A straight BNC crimp plug on a coax cable, seen from the face: the knurled
+  bayonet coupling sleeve, the crimp ferrule and a short straight stub of
+  cable whose diameter is the cable-od field. Seats in a `bnc` jack at its
+  own mate point; the cable leaves from the stub's far end.
+size: {w: 14.3, h: 14.3}
+size-confidence: {w: drawing, h: drawing}
+attrs: {media: coax-bnc, connector: bnc}
+fields:
+  cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 4.90}
+  jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    drawing - registry `bnc-plug`. Radiall technical data sheet "Straight
+    plug crimp type cable 5/50 S", R141.082.000, issue 0619 D, p.1: the
+    coupling sleeve's knurled ring is dimensioned 14,3 across ("diamond
+    knurl"), the widest thing on the plug.
+  no-depth: >-
+    NO `size.d`, DELIBERATELY, as on generic/sma-plug@1. The overall length
+    (27,28, dimensioned) is in the registry entry and in the relief below,
+    but a `size.d` on a component with no `behaviour` compiles to
+    `data-depth`, and the kit builds that as a pit behind the part's whole
+    box (render.py, the `size.d` block of the placement writer). This plug's
+    14.3 box is wider than the 9.70 x 8.85 jack hole it sits over, so the pit
+    would widen the hole in the panel around every seated plug. The depth is
+    carried by the three relief features instead.
+  frame: >-
+    THE PLUG'S RELIEF IS MEASURED FROM THE HOST'S PRESENTED LIFT, the frame
+    generic/sma-plug@1, generic/rj45-plug@1 and generic/lc-plug@2 use: each
+    seats at its jack's presented lift by `mate`, and its features run from
+    there toward the viewer. std/bnc@1 (and the bezel common/bnc-jack@1 that
+    composes it) presents at its mated plane, 3.7 in front of the panel
+    (provenance.engagement), with its flange and collar standing 12.2 proud.
+    So the sleeve's front face sits AT the presented lift (the coupling has
+    no lift), and the front 8.5 of the collar, with its lugs, lies inside
+    the sleeve.
+  engagement: >-
+    drawing (derived) - the mated sleeve runs about 8.5 (8.46 min) over the
+    jack's collar, measured from the jack's front face: MIL-STD-348B
+    w/CHANGE 3 Figure 301-2 dim G (jack front face 8.31-8.51 ahead of the
+    reference plane) plus Figure 301-1 dim F (plug sleeve front 0.15 min past
+    it); Figure 301-2 dim S (10.52 min clearance for the mating nut) bounds it
+    from above. On the Radiall R141.557.000 front-mount jack (collar front
+    12.2 in front of the panel) a real sleeve's front stands about 3.7 in
+    front of the panel. THE JACK PRESENTS AT THAT MATED PLANE: std/bnc@1's
+    mate carries `seat-out: 3.7` (12.2 - 8.5, its provenance.mated-plane),
+    and common/bnc-jack@1 forwards it, so the sleeve's front face, at the
+    presented lift, stands where a real seated sleeve's does. The plug itself
+    still does not know which jack it is in; the plane is the jack's
+    statement.
+  bayonet-slots: >-
+    NOT DRAWN, ON PURPOSE. The two bayonet slots (MIL-STD-348B Figure 301-1
+    dims K and U: 2.31-2.46 wide, at 180 degrees) are cut in the sleeve's
+    slotted section, 11.1-11.3 across and 2.45 to 7.7 from the front, which
+    lies IN FRONT OF the 14.3 knurled ring (7.7 to 14.3) on R141.082.000's
+    side view and isometric. A front elevation of a seated plug looks at the
+    cable end, where the knurl hides both the slots and the 13.8 front lip.
+    Drawing them would draw the plug's hidden face.
+  coupling: >-
+    drawing, scaled - R141.082.000 p.1 side view, a 200 ppi scan scaled at
+    47.4 px/mm on the dimensioned 27,28 overall and checked on the
+    dimensioned 14,3 knurl (reads 14.30-14.37): a front lip (13.8 across) 0 to
+    2.45, the slotted section (11.1-11.3) to 7.7, the knurled ring (14.3) to
+    14.3, then a step (9.5 across) 14.6 to 15.3 and the crimp ferrule from
+    15.4. The coupling feature is all of that as ONE cylinder at the knurl's
+    14.3, 0 to 15.4: the solid overstates the lip, the slotted section and
+    the step, which are narrower.
+  relief-boot: >-
+    drawing, scaled - the crimp ferrule on R141.082.000 p.1, 6.4 across and
+    11.88 long (15.4 to the dimensioned 27,28 end). The dimensioned 5,55 is
+    the cable-entry bore, not the ferrule's outline.
+  stub: >-
+    estimated - the stub rule, docs/connectors-coax-design.md section 5: a
+    straight run of cable 30 long starting where the strain relief ends
+    (27.28). The cable's bend is the installation's, not the plug's.
+  cable-od: >-
+    datasheet - RG-58, the cable R141.082.000 is made for (its 5/50 S
+    group). Belden 8240 technical data sheet, revision 0.541, 2026-02-20,
+    p.1, Overall Cable Diameter (Nominal) 0.193 in, 4.90 mm. A placement or a
+    wrapper sets the cable it actually carries.
+  jacket-colour: a FIELD; the neutral near-black default is no product in particular
+  impedance: >-
+    NOT STATED. 50 and 75 ohm BNC intermate, and a generic states no
+    impedance (docs/connectors-coax-design.md decision 2); a vendor wrapper
+    would.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on generic/rj45-plug@1 - every class port
+    contract states none (spec/tests/test_behaviour.py).
+  axis: >-
+    derived - `mate` and `cable` share one point, the centre of the sleeve
+    (7.15, 7.15): the cable runs straight through the plug, so its front and
+    its rear are one axis seen from two directions, as on
+    generic/sma-plug@1.
+elements: {}
+relief:
+  features:
+    - node: coupling
+      cyl: 15.4
+      color: '#c9ccd0'
+      confidence: drawing
+      source: >-
+        Radiall R141.082.000 issue 0619 D p.1 side view, scaled on the
+        dimensioned 27,28 overall and checked on the dimensioned 14,3 knurl:
+        the bayonet sleeve and the step behind it, front face to the crimp
+        ferrule at 15.4. The front sits at the host's presented lift
+        (provenance.frame, provenance.engagement).
+    - node: relief-boot
+      lift: 15.4
+      cyl: 11.88
+      color: '#b8bcc0'
+      confidence: drawing
+      source: Radiall R141.082.000 issue 0619 D p.1 side view, the crimp ferrule, 15.4 to the dimensioned 27,28 end and 6.4 across, scaled at 47.4 px/mm
+    - node: stub
+      lift: 27.28
+      cyl: 30
+      color: '#1c1c1c'
+      confidence: estimated
+      source: the stub rule, docs/connectors-coax-design.md section 5
+connection-points:
+  mate: {at: [7.15, 7.15], direction: front}
+  cable: {at: [7.15, 7.15], direction: front, 'on': stub}
+skins: [default]
