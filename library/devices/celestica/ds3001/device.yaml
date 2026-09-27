@@ -127,7 +127,10 @@ provenance:
     note: >-
       'Celestica' is printed top left as a text wordmark (set as sans-serif text; no logo mark is
       drawn). The LUG TAG legend sits to the right of the pull tab at the bottom right, which is
-      celestica/lug-tag@1 printed DS3001, x 3019-3143 px and y 1149-1171.
+      celestica/lug-tag@1 printed DS3001, x 3019-3143 px and y 1149-1171. It is seated unturned, so
+      the text reads left to right as printed and the part's grip end lands on the right. The render
+      cannot confirm the grip end: at 8x the card is a symmetric paddle, stepping out of its slot
+      equally at both ends, with no lip drawn at either end.
   rear:
     confidence: measured
     note: >-
@@ -1679,7 +1682,7 @@ views:
       - {ref: 'std/sfp@1', id: port-66, at: [391.08, 46.57], rotate: 180, group: sfp-plus, rel-pos: 2}
       - {ref: 'common/led-dot@1', id: led-port-66, at: [394.29, 58.57], for: port-66, group: port-leds, rel-pos: 258}
       - {ref: 'common/rj45-eth@1', id: mgmt, at: [416.9, 14.1], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45, speed: 1g, role: mgmt}}
-      - {ref: 'std/usb-a@1', id: usb, at: [419.1, 27.6], group: mgmt, rel-pos: 2, attrs: {role: storage, usb: '2.0'}}
+      - {ref: 'std/usb-a@1', id: usb, at: [419.1, 27.6], skin: usb2, group: mgmt, rel-pos: 2, attrs: {role: storage, usb: '2.0'}}
       - {ref: 'std/rj45@2', id: console, at: [416.9, 32.4], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
       - {ref: 'common/led-dot@1', id: led-fan, at: [409.92, 9.94], for: chassis, group: status-leds, rel-pos: 1, attrs: {label: FAN}, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
       - {ref: 'common/led-dot@1', id: led-psu, at: [409.92, 16.37], for: chassis, group: status-leds, rel-pos: 2, attrs: {label: PSU}, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}

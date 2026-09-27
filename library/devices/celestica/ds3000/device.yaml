@@ -146,7 +146,8 @@ provenance:
       'Celestica' is printed as a plain-text wordmark above the management stack and 'DS3000' on the
       pull tab (product render). The wordmark is set in sans-serif text, never traced (no logo mark
       is drawn). The pull tab is celestica/lug-tag@1 turned on end (rotate 270, so its text reads
-      upward, as rendered), in a slot at x 429.39, y 17.14-40.48 on the grey render.
+      upward, as rendered, which puts the part's grip end at the top), in a slot at x 429.39, y
+      17.14-40.48 on the grey render.
   rear:
     confidence: measured
     note: >-
@@ -160,6 +161,17 @@ provenance:
       handle, screw or latch; drawn as panel decor, see the rear-blank gap. The datasheet: '3+1
       redundant fans, front to back and back to front system cooling', '1+1 redundant, hot swap
       PSUs'.
+  fan-finish:
+    confidence: photo-measured
+    note: >-
+      ORANGE, SAMPLED OFF THE ORTHOGRAPHIC REAR. On each of the four fans the face surround reads a
+      median #9e440e-#a1460f (bottom strip, rows 205-212 px) and #8f3d0b-#953f0c in the shaded top
+      corner, and the handle band across the middle #cc550f-#ce5510 (rows 118-138) along its whole
+      length, the right-hand segments included. No latch of any other colour is drawn at the band's
+      left end (it reads #a3430c-#a9470d, the face in shadow). celestica/fan-40@1's fields are set
+      from those readings: face-finish #9f450f, handle-finish #ce5510, and latch-finish #ce5510 so
+      no blue shows. The product page's rear render shows black fans with blue handles instead; see
+      the airflow-finish gap.
   rear-numbering:
     confidence: estimated
     note: >-
@@ -269,9 +281,10 @@ gaps:
   scope: [rear]
   reason: vendor-silent
   wanted: >-
-    How the F2B and B2F builds differ on the outside. The docs-portal rear render draws orange-faced
-    fans; the product page's rear render draws black fans with blue handles. Neither says which
-    airflow it is, so both configurations are drawn with the fan part's own default finish.
+    How the F2B and B2F builds differ on the outside. The docs-portal rear render draws orange fans;
+    the product page's three-quarter rear render draws black fans with blue handles. Neither says
+    which airflow it is. Both configurations are drawn orange, from the orthographic figure (see the
+    fan-finish provenance); a documented B2F or F2B finish would change one of them.
 - what: side-faces
   scope: [top, bottom, left, right]
   reason: needs-drawing
@@ -906,12 +919,16 @@ configurations:
       (datasheet ordering information; the guide's What's in the Box repeats it). Listed first by
       both documents, so it is the default. Fan and supply finish for this airflow are not
       documented - see the airflow-finish gap.
+    component-attrs:
+      fan-40: {face-finish: '#9f450f', handle-finish: '#ce5510', latch-finish: '#ce5510'}
     part-numbers: {R4039-F9002-A0: {part: R4039-F9002-A0}}
   f2b:
     kind: orderable
     airflow: front-to-back
     description: >-
       R4039-F9005-A0: DS3000, 1U, 32x 100GbE, COMe 4C/16GB-DDR/64GB-SSD, front-to-back airflow.
+    component-attrs:
+      fan-40: {face-finish: '#9f450f', handle-finish: '#ce5510', latch-finish: '#ce5510'}
     part-numbers: {R4039-F9005-A0: {part: R4039-F9005-A0}}
 references:
 - title: >-

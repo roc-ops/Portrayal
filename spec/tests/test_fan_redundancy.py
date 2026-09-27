@@ -480,7 +480,16 @@ def test_the_comparison_layer_can_now_reach_them():
     with the number left out; the guide supplies the number and the metal confirms it. How
     many rotors sit inside each module is not stated anywhere, so the figure is read at the
     module level, which is the level the guide counts at.
+
+    SEVENTY-FIVE AND SEVENTY-SIX ARE THE CELESTICA DS3000 AND DS3001, 3+1 over four bays
+    each, and unlike the DS4000 pair they are two different rears. The DS3000 is a 1RU
+    with four celestica/fan-40@1 trays in two pairs either side of a blank plate, and its
+    datasheet says "3+1 redundant fans". The DS3001 is a 2RU with four
+    celestica/fan-80@1 trays, and its datasheet says "3+1 Redundant/Hot-Swappable Fans".
+    Its guide calls each module "an assembly of dual rotor fan", so eight rotors turn
+    behind the four faces. The digit counts the modules, not the rotors, and the
+    bays agree.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 74, n
+    assert n == 76, n
