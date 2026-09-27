@@ -1,5 +1,7 @@
 # Portrayal
 
+![A UfiSpace S9600-72XC faceplate drawn by Portrayal, fully cabled: every port, lamp, label and cable is an addressable element](docs/img/hero-switch.png)
+
 Declarative, Git-versioned hardware device definitions, compiled into SVG where
 every physical thing is individually addressable — ports, PSUs, fans, LEDs, bays,
 regions.
@@ -13,6 +15,14 @@ to a DCIM or a diagram tool.
 The core is domain-neutral. Networking is the first profile, not the only one.
 
 ![The Portrayal explorer showing a UfiSpace S9700-23D faceplate, with its service and fabric port groups, status lamps and regions listed in the part tree](docs/img/explorer.png)
+
+<p>
+  <a href="https://portrayal.dev/hero-3d.mp4">
+    <img src="docs/img/hero-3d-poster.jpg" alt="The same switch in Portrayal's 3D view, cabled, on a rack">
+  </a>
+  <br>
+  <a href="https://portrayal.dev/hero-3d.mp4">▶ Watch it in 3D</a> - the same drawing, extruded, with the cables routed.
+</p>
 
 <p>
   <a href="https://www.rocnetsupply.com/">
