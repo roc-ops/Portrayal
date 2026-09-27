@@ -18,6 +18,7 @@ description: >-
 profile: networking
 provenance:
   sources:
+    confidence: datasheet
     note: >-
       DS4001 datasheet (cls_datasheet_DS4001.pdf, 2 pp) for dimensions, interfaces, power, cooling,
       environment, approvals and ordering lines; the shared DS4000/DS4001 Installation Guide (docs
@@ -102,8 +103,8 @@ provenance:
       render - a silver plate holding, top to bottom, an RJ45 with its keyway UP (console, IOIOI),
       a USB-A, and an RJ45 with its keyway DOWN and two lamp windows in its lower corners
       (management, network symbol) - the DS4000's arrangement. Jack cells std/rj45-ganged@2 as
-      on the DS4000. std/usb-a@1 draws a blue (USB 3) tongue and has no field for it; this port
-      is USB 2.0 (datasheet) - an art compromise, not a claim.
+      on the DS4000. The USB is USB 2.0 (datasheet), so std/usb-a@1 is seated with its usb2
+      skin.
   vents:
     confidence: estimated
     note: >-
@@ -310,12 +311,14 @@ groups:
     index-origin: 1
     attrs:
       redundancy: '1+1'
+      redundancy-note: '1+1 - DS4001 datasheet, Power and Cooling: ''1+1 redundant, hot swap PSUs, 1500W each''; two bays at the rear ends'
   fans:
     term: Fan
     role: service
     index-origin: 1
     attrs:
       redundancy: '6+1'
+      redundancy-note: '6+1 - DS4001 datasheet, Power and Cooling: ''6+1 Redundant/Hot-Swappable fans, front to back and back to front airflow''; seven bays'
   grounding:
     term: Point
     role: furniture
@@ -630,7 +633,7 @@ views:
            states: ['off', {name: ok, color: '#22c55e'}, {name: critical, color: '#f59e0b'}, {name: minor, color: '#f59e0b', behavior: blinking}, {name: major, color: '#f59e0b', behavior: blinking}],
            description: 'guide Table 1, Alarm row - Green On (no alarm), Amber On (critical alarm), Amber 1Hz blinking (minor alarm), Amber 4Hz blinking (major alarm)'}
         - {ref: std/rj45-ganged@2, id: console, at: [405.77, 8.4], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
-        - {ref: std/usb-a@1, id: usb, at: [406.12, 20.35], group: mgmt, rel-pos: 2, attrs: {role: storage, usb: '2.0'}}
+        - {ref: std/usb-a@1, id: usb, at: [406.12, 20.35], skin: usb2, group: mgmt, rel-pos: 2, attrs: {role: storage, usb: '2.0'}}
         - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [405.77, 26.7], group: mgmt, rel-pos: 3, attrs: {role: mgmt, speed: 1g}, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {color: '#f59e0b', name: link-10-100m}], led-b: ['off', {behavior: blinking, color: '#22c55e', name: activity}]}, description: 'guide Table 3 Port Indicator Lights - Ethernet port active (left): Green on (link at 1000Mbps), Amber on (link in 10/100Mbps), Off (link down); Ethernet port active (right): Green blinking (link active with traffic), Off (no traffic)'}
         - {ref: celestica/lug-tag@1, id: lug-tag, at: [415.8, 25.7], rotate: 270, group: furniture, rel-pos: 1, attrs: {label: DS4001}}
     regions:

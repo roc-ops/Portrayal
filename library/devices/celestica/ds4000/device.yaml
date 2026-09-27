@@ -18,6 +18,7 @@ description: >-
 profile: networking
 provenance:
   sources:
+    confidence: datasheet
     note: >-
       DS4000 datasheet (cls_datasheet_DS4000.pdf, 2 pp) for dimensions, interfaces, power, cooling,
       environment, approvals and ordering lines; the DS4000/DS4001 Installation Guide, both as the
@@ -108,8 +109,7 @@ provenance:
       its keyway DOWN and two lamp windows in its lower corners (management; network symbol
       beside it). Jack openings 12.9 mm wide, matching std/rj45-ganged@2's 12.7 cell rather than
       the 15.8 mm single housing; the console is rotate 180 because the std part draws the keyway
-      down. std/usb-a@1 draws a blue (USB 3) tongue and carries no field to change it; this port
-      is USB 2.0, whose tongue is normally black or white - an art compromise, not a claim. To their right a vertical pull-out lug tag (celestica/lug-tag@1, turned on end) in a slot, x 430.5-433.5, y 16.1-39.3.
+      down. The USB is USB 2.0 (guide port table), so std/usb-a@1 is seated with its usb2 skin. To their right a vertical pull-out lug tag (celestica/lug-tag@1, turned on end) in a slot, x 430.5-433.5, y 16.1-39.3.
       The 'Celestica' wordmark over the plate is not in the CAD; it is printed there on the
       DS4000 datasheet render and the DS4001 render, set here as plain text, not a logo.
   vents:
@@ -324,12 +324,14 @@ groups:
     index-origin: 1
     attrs:
       redundancy: '1+1'
+      redundancy-note: '1+1 - What''s in the Box describes every DS4000 chassis SKU with ''2X1500W AC PSU'', and the DS4000 datasheet says ''1+1 redundant, hot swap PSUs''; two bays at the rear ends'
   fans:
     term: Fan
     role: service
     index-origin: 1
     attrs:
       redundancy: '6+1'
+      redundancy-note: '6+1 - DS4000 datasheet, Power and Cooling: ''6+1 redundant fans, front to back and back to front system cooling''; seven bays, and the SKU descriptions say ''7 FAN'''
   grounding:
     term: Point
     role: furniture
@@ -714,7 +716,7 @@ views:
            states: ['off', {name: ok, color: '#22c55e'}, {name: critical, color: '#f59e0b'}, {name: minor, color: '#f59e0b', behavior: blinking}, {name: major, color: '#f59e0b', behavior: blinking}],
            description: 'guide Table 1, Alarm row - Green On (no alarm), Amber On (critical alarm), Amber 1Hz blinking (minor alarm), Amber 4Hz blinking (major alarm)'}
         - {ref: std/rj45-ganged@2, id: console, at: [409, 8.4], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
-        - {ref: std/usb-a@1, id: usb, at: [409.35, 20.35], group: mgmt, rel-pos: 2, attrs: {role: storage, usb: '2.0'}}
+        - {ref: std/usb-a@1, id: usb, at: [409.35, 20.35], skin: usb2, group: mgmt, rel-pos: 2, attrs: {role: storage, usb: '2.0'}}
         - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [409, 26.7], group: mgmt, rel-pos: 3, attrs: {role: mgmt, speed: 1g}, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {color: '#f59e0b', name: link-10-100m}], led-b: ['off', {behavior: blinking, color: '#22c55e', name: activity}]}, description: 'guide Table 3 Port Indicator Lights - Ethernet port active (left): Green on (link at 1000Mbps), Amber on (link in 10/100Mbps), Off (link down); Ethernet port active (right): Green blinking (link active with traffic), Off (no traffic)'}
         - {ref: celestica/lug-tag@1, id: lug-tag, at: [420.5, 25.7], rotate: 270, group: furniture, rel-pos: 1}
     regions:
@@ -1179,7 +1181,7 @@ views:
            states: ['off', {name: ok, color: '#22c55e'}, {name: critical, color: '#f59e0b'}, {name: minor, color: '#f59e0b', behavior: blinking}, {name: major, color: '#f59e0b', behavior: blinking}],
            description: 'guide Table 1, Alarm row - Green On (no alarm), Amber On (critical alarm), Amber 1Hz blinking (minor alarm), Amber 4Hz blinking (major alarm)'}
         - {ref: std/rj45-ganged@2, id: console, at: [409, 8.4], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
-        - {ref: std/usb-a@1, id: usb, at: [409.35, 20.35], group: mgmt, rel-pos: 2, attrs: {role: storage, usb: '2.0'}}
+        - {ref: std/usb-a@1, id: usb, at: [409.35, 20.35], skin: usb2, group: mgmt, rel-pos: 2, attrs: {role: storage, usb: '2.0'}}
         - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [409, 26.7], group: mgmt, rel-pos: 3, attrs: {role: mgmt, speed: 1g}, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {color: '#f59e0b', name: link-10-100m}], led-b: ['off', {behavior: blinking, color: '#22c55e', name: activity}]}, description: 'guide Table 3 Port Indicator Lights - Ethernet port active (left): Green on (link at 1000Mbps), Amber on (link in 10/100Mbps), Off (link down); Ethernet port active (right): Green blinking (link active with traffic), Off (no traffic)'}
         - {ref: celestica/lug-tag@1, id: lug-tag, at: [420.5, 25.7], rotate: 270, group: furniture, rel-pos: 1}
     regions:
@@ -1557,7 +1559,7 @@ views:
            states: ['off', {name: ok, color: '#22c55e'}, {name: critical, color: '#f59e0b'}, {name: minor, color: '#f59e0b', behavior: blinking}, {name: major, color: '#f59e0b', behavior: blinking}],
            description: 'guide Table 1, Alarm row - Green On (no alarm), Amber On (critical alarm), Amber 1Hz blinking (minor alarm), Amber 4Hz blinking (major alarm)'}
         - {ref: std/rj45-ganged@2, id: console, at: [409, 8.4], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
-        - {ref: std/usb-a@1, id: usb, at: [409.35, 20.35], group: mgmt, rel-pos: 2, attrs: {role: storage, usb: '2.0'}}
+        - {ref: std/usb-a@1, id: usb, at: [409.35, 20.35], skin: usb2, group: mgmt, rel-pos: 2, attrs: {role: storage, usb: '2.0'}}
         - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [409, 26.7], group: mgmt, rel-pos: 3, attrs: {role: mgmt, speed: 1g}, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {color: '#f59e0b', name: link-10-100m}], led-b: ['off', {behavior: blinking, color: '#22c55e', name: activity}]}, description: 'guide Table 3 Port Indicator Lights - Ethernet port active (left): Green on (link at 1000Mbps), Amber on (link in 10/100Mbps), Off (link down); Ethernet port active (right): Green blinking (link active with traffic), Off (no traffic)'}
         - {ref: celestica/lug-tag@1, id: lug-tag, at: [420.5, 25.7], rotate: 270, group: furniture, rel-pos: 1}
     regions:
