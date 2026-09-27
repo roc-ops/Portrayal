@@ -15,6 +15,14 @@ the *published build*, not about the hardware.
 ## Unreleased
 
 ### Added
+- ReadyLinks GL-12xB-240D (`readylinks/gl-12xb-240d`), the first device to seat
+  a BNC jack: twelve ReadyLink ports on `common/bnc-jack@1` (impedance 75) on a new
+  GL-x 12-port BNC line card in slot 1, a slot blank in slot 2, and two BNC sync
+  jacks on the chassis, modelled from the vendor GLB. New components
+  `readylinks/gl-x-lc-12xb@1`, `readylinks/gl-x-lc-blank@1`,
+  `common/rocker-switch@1`, `common/dc-terminal-header-6@1` and
+  `common/ground-stud@1`. `std/bnc@1` and `common/bnc-jack@1` are no longer
+  `unplaced`.
 - Lint L123, library-wide: one module, one bay size. Every bay that accepts a
   module, in any device or carrier, reserves the same size for it to within a
   millimetre, compared in the module's own frame so a turned bay matches an

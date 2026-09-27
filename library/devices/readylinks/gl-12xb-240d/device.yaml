@@ -1,0 +1,543 @@
+format: 1
+kind: device
+name: gl-12xb-240d
+version: 0.1.0
+maturity: modelled
+manufacturer: ReadyLinks
+model: GL-12xB-240D
+description: >-
+  1RU coax edge switch - twelve ReadyLink ports on BNC jacks that carry gigabit Ethernet and
+  PoE over existing 75 ohm camera coax, two 10G SFP+ and two GbE RJ45 uplinks, a pair of BNC
+  sync jacks, and a console, USB-C and reset on the fixed left panel. The twelve BNC ports
+  are a line card in the upper of two line-card slots; the lower slot ships blanked. Two
+  internal 300 W supplies behind two switched C14 inlets give a 240 W PoE budget, and two
+  six-pole DC headers at the rear stack DC power between units.
+profile: networking
+provenance:
+  sources:
+    confidence: drawing
+    note: >-
+      vendor GLB 3D model (gl-12xb.glb from the product page's model viewer - a KeyShot CAD
+      export, 812 nodes, 2.19 million triangles, Draco-compressed, per-part meshes at
+      millimetre scale), read two ways: part boxes with spec/tools/intake/glb_parts.py, and
+      orthographic z-buffered renders of each face at 4 to 20 px/mm; the vendor datasheet
+      (ReadyLinks-GL-12xB-240D-Datasheet.pdf, three pages, whose page 3 panel figure is a
+      1600 px photograph of the front and rear with callouts and a three-quarter view); the
+      vendor product render (gl-12xb/front.png, 1920 x 1079, the same GLB with its textures);
+      and the vendor catalogue API entry. The GLB is the position source for every feature;
+      the datasheet names them; the render and photograph confirm colour and printing.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - the GLB body is 440.0 wide between the side walls (GL24X-1U-003B, x -220 to
+      220), 45.0 tall (bottom plate at y 0.5, top plate's top at 45.5) and 300.1 deep from the
+      front panel face (z 160.35) to the rear panel face (z -139.75). The datasheet reads
+      "12'(L) x 19'(W) x 1.75'(H) (305mm x 228.6mm x 44.45mm)": 19 in is the rack face with
+      the ears (the GLB ears, PRODUCT_1304, make it 482.6), 12 in is 305 against 300.1 and
+      1.75 in is 1RU against 45.0. The deltas are per-axis (42.6, 4.9, -0.55) and not a
+      scale factor, so they are ears and rounding, and the CAD body is modelled. The
+      sheet's 228.6 mm is 9 in, a slip for the 19 in it prints beside it. Ears are not
+      drawn.
+  front-layout:
+    confidence: drawing
+    note: >-
+      drawing - every position is measured off the GLB in face coordinates (x from the left
+      side wall, y down from the top plate). The fixed left panel (GL24X-1U-005B) runs x 0 to
+      132.4; the two line-card plates (GL24X-1U-NEWBNC and GL24X-DANGPAN) x 132.70 to 414.20
+      at y 2.35 to 21.90 and 23.05 to 42.60, flush with the panel at z 160.35, with a 1.15
+      rail of chassis metal between them; the right panel (GL24X-1U-007B) x 414.5 to 440.
+      Openings were found as depth-map regions behind the panel plane at 8 px/mm: GE2/GE1
+      12.75 x 10.88 at (107.88, 8.00) and 12.62 x 10.75 at (107.88, 24.38), in a shell whose
+      visible face runs y 7.32 to 35.6 (the GLB box reaches 38.65 with the light pipes below); SFP+2/SFP+1 14.1 x 10.9 centred (96.06, 15.69) and 14.25 x 10.75 centred (96.0,
+      29.5) in a 14.9 x 25.0 cage; console 12.25 x 11.0 in a 15.9 x 13.4 housing centred
+      (42.86, 28.5); USB-C 8.25 x 2.75 centred (57.25, 33.62); reset hole 3.38 across at
+      (67.19, 31.06). Lamp lenses 3.0 across: status at x 30.6, y 17.4 / 22.5 / 27.6 / 32.7;
+      the two SFP light pipes 1.5 x 1.35 at (91.35, 22.6) and (100.65, 22.6). The sync
+      jacks' collars (SYNC_1) are 9.30 across, centred at (79.60, 12.33) and (79.60, 28.33),
+      their fronts 11.9 in front of the panel.
+  sync-jacks:
+    confidence: drawing
+    note: >-
+      drawing - the datasheet's panel figure calls out "(2) BNC sync ports", and the faceplate
+      prints OUT over the upper and IN under the lower, joined by a SYNC bracket. They are
+      placed as common/bnc-jack@1, the library's BNC bezel. The GLB draws them as one
+      simplified block with plain barrels, no bayonet lugs, and each collar 0.5 mm off the
+      centre of the wider barrel behind it; the collar is what a plug mates, so the collar
+      centres are used. Which signal they carry, at what level and impedance, no held
+      document says (gap sync-signal).
+  line-cards:
+    confidence: datasheet
+    note: >-
+      datasheet - the panel figure labels the two openings "(2) Line card slots", and the PoE
+      row reads "Ports 11 and 12 of each line card are PoE++ ports", so the twelve BNC jacks
+      are a card in a slot and not part of the chassis. The GLB agrees: the card
+      (GL24XB_ASM, a 269.5 x 170.8 board behind its faceplate) and the blank (GL24X-DANGPAN)
+      are their own assemblies, each held by a captive thumbscrew at each end. The GL-12xB
+      ships the card in the upper slot and the blank in the lower (datasheet photograph,
+      product render and GLB all agree); the GL-24xB datasheet lists 24 ports on the same
+      chassis, which is the second card.
+  poe-polarity:
+    confidence: datasheet
+    note: >-
+      datasheet, and probably copied - the PoE row of this BNC model's sheet reads "(F center
+      pole: DC-, F shield: DC+)", the wording of the F-type GL-12xC sheet. On a BNC jack it
+      can only mean the centre contact is DC- and the shell DC+; recorded as printed rather
+      than corrected, since the polarity is a fact about the port and nothing held states it
+      in BNC terms.
+  silkscreen:
+    confidence: drawing
+    note: >-
+      drawing - the GLB carries the panel legends as flat meshes on the plate, so their
+      positions are measured off a 12 px/mm render: SYS/PWR/ALM/SYNC left-aligned at x 18.0,
+      each baseline 1.1 below its lamp's centre, cap height 2.8; CONSOLE and USB on baseline
+      41.0; SYNC with its two bracket arms (verticals at x 66.0, arms to 71.25 at y 12.1 and
+      28.2); OUT on 5.0 and IN on 37.9; SFP+2 on 6.9 and SFP+1 on 39.8; GE2 on 5.0 and GE1 on
+      39.8. Six of these sit off their part's centre and L61 says so, and the offsets are the
+      CAD's, not slips: CONSOLE 1.66 left of the console jack, USB 1.35 right of the USB-C,
+      SFP+2 and SFP+1 0.78 left of the cage, GE2 and GE1 1.02 left of the RJ45 openings (each
+      word is centred on its own print block, which is not the connector's centre on this
+      panel); they stay where the GLB and the product render put them. The ReadyLinks wordmark is not a mesh (it is a texture); it is placed from the
+      product render at 3.616 px/mm (x 14.4 to 48.7, baseline about 9.7, cap height
+      about 4.5) and drawn as plain text, not in the vendor's bold face. The wireless-arc mark above it is not drawn (no vendor logos); the logo-zone
+      region reserves it.
+  serial-label:
+    confidence: photo-measured
+    note: >-
+      photo-measured - a white QR and serial sticker on the right panel, 19.7 x 19.8 at
+      (415.6, 12.6), read off the product render at 3.616 px/mm (the GLB's right panel is
+      untextured). Drawn as a plain label plate with placeholder blocks where the code and
+      the serial string are; neither is transcribed.
+  port-leds:
+    confidence: drawing
+    note: >-
+      drawing - status lamps are 3.0 mm lenses in the GLB (LED_4_1), drawn with common/led-dot@1
+      (2.0), the library's round lamp and the one the GL-8xEP uses; the diameter delta is
+      recorded here. The SFP light pipes are triangles in the render, the left pointing down
+      and the right up, so the left serves SFP+1 below and the right SFP+2 above; drawn with
+      common/led-arrow-sm@1, down and up. The GbE lamps are the corner lamps of
+      common/rj45-ganged-eth@1, which is where the GLB puts them (in the shell corners on each
+      jack's keyway side).
+  stack-orientation:
+    confidence: drawing
+    note: >-
+      drawing - the GLB shows the upper RJ45 (GE2) keyway up and the lower (GE1) keyway down,
+      so GE2 turns 180; the SFP+ pair follows the library's belly-to-belly rule (upper at 0,
+      lower at 180), which the GLB's single stacked cage with its lamp band between the two
+      openings matches. The console jack's latch slot is at the bottom.
+  rear-layout:
+    confidence: drawing
+    note: >-
+      drawing - measured off the GLB rear (x from the left as seen from behind). Two C14
+      inlets on screw flanges (POWER_1, 50.0 x 22.5, screws 40 apart), the keyed shroud
+      centred at (34.92, 29.47) and (404.45, 30.17); a 21 x 15 rocker switch above each
+      (KAIGUAN_1) at (23.9, 2.4) and (394.7, 1.8); two six-pole headers (6P_FANFENGHUANG) at
+      x 182.1 and 225.5, y 26.8 to 35.4, with latch posts to 24.3; a 3.4 mm hole at (360.0,
+      32.5). The datasheet photograph names them "Primary power" (left), "Secondary power"
+      (right) and "DC power stacking ports", and shows what the GLB omits: ON and OFF either
+      side of each switch, -48V and -48VRTN under each header, an earth mark at about x 349.7
+      and a hex nut on a stud in the hole, read at about 3.0 px/mm. The cord-retention bails
+      over each inlet (SUS-DIANXIANKOU) are cable management and are not drawn.
+  side-layout:
+    confidence: drawing
+    note: >-
+      drawing - each side wall carries five round fan grilles, 40 holes about 3.9 across in
+      a 32.8 circle centred 22.3 down, with the fans' screws at two opposite corners, 16 mm
+      from the centre each way. Centres on the RIGHT view (x = 0 at the front) 53.75,
+      102.73, 152.73, 213.73, 259.73; on the LEFT view (x = 0 at the rear) 40.25, 86.25,
+      147.25, 197.25, 246.23, which is the right side mirrored (depth - x) to 0.1 mm. The
+      holes are drawn with the library's `holes` pattern at a 5.2 pitch clipped to the
+      circle, which gives the density and extent but not the rings of the real grille.
+  top-layout:
+    confidence: drawing
+    note: >-
+      drawing - the lid (GL24X-1U-001B) is one flat 427.5 x 293.8 sheet between the tops of
+      the side walls, from 6.2 to 433.8 across and 6.25 to 299.95 from the rear (y = 0 is the
+      REAR, the library's top-view convention); no opening, label or fastener shows on it in
+      an orthographic render of the GLB from above. No held photograph shows the top of this
+      model: the datasheet's three-quarter view is of a twisted-pair sibling (two RJ45
+      cards, G1 to G12 each), and its lid is plain as well.
+  bottom-layout:
+    confidence: drawing
+    note: >-
+      drawing - sixteen screw heads (about 5.5 across; common/screw-head@1 is 3.6) found as
+      bright discs in an orthographic render of the GLB underside at 6 px/mm. Axis
+      convention: y = 0 is the REAR as on the top view, and x is mirrored because the face
+      is seen from below (x = 0 is the chassis's right side as seen from the front).
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet - "Maxpower consumption 80W (Excluding PoE output)" is power-self-max-w; "Total
+      available PoE 240W (Using dual power) 90W (Using single power)" is the PoE budget; "Power
+      supply AC/DC, internal, (2) 300W"; "Power input 100-240V AC, 50/60 Hz 48-56VDC". The
+      sheet gives no figure for the box at full PoE load, so power-max-w is not stated; the
+      two figures are not added together here. The two supplies are inside (the GLB has two
+      RPS-300 boards behind the inlets) and are not field-replaceable, so they are not bays.
+  cooling:
+    confidence: drawing
+    note: >-
+      drawing - ten 40 x 20 mm fans (40X20_1), five behind each side-wall grille, so the air
+      moves side to side. Which side takes air in is stated nowhere held.
+  lifecycle:
+    confidence: datasheet
+    note: >-
+      the catalogue API lists the GL-12xB-240D as a current product (created 2026-04-09) and
+      the datasheet is dated 2026-07-27; no end-of-life notice was found on the vendor's site.
+attrs:
+  physical:
+    weight-max-kg: 4.5
+    weight-note: 'datasheet "<10lbs"'
+    enclosure: Metal
+    overall-dimensions: >-
+      12 x 19 x 1.75 in with the ears (datasheet; its mm column reads 305 x 228.6 x 44.45,
+      the 228.6 a slip for 482.6); body modelled from CAD 440 x 45.0 x 300.1
+  performance:
+    switching-capacity: 128 Gbps
+  power:
+    power-self-max-w: 80
+    power-self-scope: excluding PoE output
+    poe-budget-w: 240
+    poe-budget-scope: using dual power; 90 W using single power
+    poe-per-port: 'max per PSE: PoE 15.4 W, PoE+ 30 W, PoE++ 90 W; ports 11 and 12 of each line card are PoE++'
+    power-input: 100-240V AC, 50/60 Hz; 48-56VDC
+    power-supply: AC/DC, internal, (2) 300W
+  thermal:
+    cooling: ten 40 x 20 mm fans behind the side-wall grilles, five per side
+  environmental:
+    operating-temp-c: 0 to 40
+    operating-humidity: 10 to 90 percent noncondensing
+  features:
+    optics-sfp-plus: 'vendor optics line per the ReadyLinks Optics datasheet: SFP-1/10G-MM, SFP-1/10G-SM, SFP-1/10G-SM-SF-23 and -SF-32 (BiDi) 1/10G transceivers; no third-party support statement published'
+    layer-2: >-
+      IGMP snooping; STP/RSTP with priorities and port-level disable; port isolation; storm
+      control; voice VLAN; port mirroring; LACP; multicast/broadcast rate limiting; MAC
+      blocking; flow control; 802.1X; jumbo frames; proprietary loop protection; DHCP
+      snooping/guarding; egress rate limit; LLDP-MED; port restricted by MAC; device
+      isolation with ACLs
+    layer-3: DHCP server; IP routing; static routing between local networks; network isolation with ACLs
+  management:
+    interfaces: ReadyView, Ethernet/Fiber In-Band, Ethernet/Fiber Out-of-Band
+    button-functions: factory reset
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 440.0
+  height: 45.0
+  depth: 300.1
+  ru: 1
+  color: '#141619'
+  edge: '#0c0d0f'
+  silk: '#e9ecef'
+  airflow: side
+gaps:
+- what: sync-signal
+  scope: [sync-out, sync-in]
+  reason: vendor-silent
+  wanted: >-
+    What the SYNC OUT and IN BNC jacks carry (a 1PPS, a 10 MHz reference, a ReadyLinks
+    stacking clock) and at what impedance. The datasheet names them "(2) BNC sync ports" in
+    its panel figure and nowhere else; the catalogue API and the product page are silent.
+- what: usb-function
+  scope: [usb]
+  reason: vendor-silent
+  wanted: What the front USB-C port is for (console, storage, power); the datasheet's panel figure does not call it out and no other held text names it.
+- what: led-meanings
+  scope: [status-leds, sfp-leds]
+  reason: vendor-silent
+  wanted: >-
+    What SYS, PWR, ALM and SYNC and the port lamps show in each colour. No held document has
+    an LED table; the colours drawn are the GLB's and the render's.
+- what: line-card-part-numbers
+  scope: [slot-1, slot-2]
+  reason: vendor-silent
+  wanted: >-
+    Orderable part numbers for the 12-port BNC line card and the slot blank, and whether a
+    card is sold on its own. The datasheets, catalogue API and product pages name only whole
+    switches.
+- what: airflow-direction
+  scope: [right, left]
+  reason: vendor-silent
+  wanted: Which side wall takes air in and which exhausts; the fans sit behind both walls and no held document says.
+groups:
+  line-cards:
+    term: Slot
+    role: traffic
+    index-origin: 1
+    description: >-
+      the two line-card slots, upper then lower ("(2) Line card slots" in the datasheet's
+      panel figure). The GL-12xB fits the 12-port BNC card in slot 1 and a blank in slot 2.
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: the two 10G SFP+ uplinks, SFP+1 below SFP+2 in one stacked cage.
+  gbe:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: the two GbE RJ45 ports, GE1 below GE2 in one stacked shell.
+  sync:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: coax-bnc}
+    description: >-
+      the two BNC sync jacks, OUT above IN, under one SYNC bracket - timing between units
+      rather than traffic; what signal is not published (gap sync-signal).
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the local craft connectors on the fixed panel - the RJ45 CONSOLE and the USB-C beside
+      it - how the box is reached without the network.
+  buttons:
+    term: Button
+    role: management
+    index-origin: 1
+    description: the recessed factory-reset button (datasheet "Button - Factory reset").
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: SYS, PWR, ALM and SYNC, top to bottom at the left of the panel.
+  sfp-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the two triangle lamps in the band between the SFP+ openings.
+  power-in:
+    term: Power input
+    role: service
+    index-origin: 1
+    attrs: {inlet: c14}
+    description: the primary (left, from behind) and secondary (right) AC inlets, one per internal 300 W supply.
+  power-switches:
+    term: Switch
+    role: service
+    index-origin: 1
+    description: the rocker above each inlet that switches its supply.
+  dc-stack:
+    term: Power input
+    role: service
+    index-origin: 1
+    description: the two six-pole "DC power stacking ports" (-48V and -48VRTN), the 48-56 V DC input.
+  grounding:
+    term: Ground
+    role: furniture
+    index-origin: 1
+  furniture:
+    term: Screw
+    role: furniture
+    index-origin: 1
+    description: the two flange screws of each inlet.
+  fan-screws:
+    term: Screw
+    role: furniture
+    index-origin: 1
+    description: the fan-mounting screws at two corners of each side grille.
+  base-screws:
+    term: Screw
+    role: furniture
+    index-origin: 1
+views:
+  front:
+    size: {w: 440.0, h: 45.0}
+    panel:
+      decor:
+      - {id: sfp-cage, kind: port-shell, at: [88.55, 10.1], size: [14.9, 25.0], rx: 0.3, fill: '#b0b5bb'}
+      - {id: sfp-band, at: [88.95, 20.69], size: [14.1, 3.81], fill: '#8f959b'}
+      - {id: ge-shell, kind: port-shell, at: [104.95, 7.32], size: [18.55, 28.28], rx: 0.5, fill: '#c3c8cd'}
+      - {id: usb-shell, kind: port-shell, at: [52.8, 32.04], size: [8.95, 3.76], rx: 1.88, fill: '#b0b5bb'}
+      - {id: slot-rail, kind: rail, at: [132.7, 21.9], size: [281.5, 1.15], fill: '#5d6268'}
+      - {id: serial-label, kind: label-plate, at: [415.6, 12.6], size: [19.7, 19.8], rx: 0.4, fill: '#e4e6e8'}
+      - {id: serial-label-code, kind: label-plate, at: [418.9, 14.1], size: [13.1, 13.1], rx: 0.2, fill: '#8d9298'}
+      - {id: serial-label-text, kind: label-plate, at: [417.4, 28.9], size: [16.1, 1.9], rx: 0.2, fill: '#8d9298'}
+      cutouts:
+      - {id: led-sys, at: [29.6, 16.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-pwr, at: [29.6, 21.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-alm, at: [29.6, 26.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-sync, at: [29.6, 31.7], size: [2.0, 2.0], shape: circle}
+      - {id: console, at: [34.96, 21.9], size: [15.8, 13.2], shape: rect}
+      - {id: usb, at: [53.08, 32.34], size: [8.34, 2.56], shape: rect}
+      - {id: reset, at: [65.19, 29.06], size: [4.0, 4.0], shape: circle}
+      - {id: sync-out, at: [74.75, 7.48], size: [9.7, 8.85], shape: rect}
+      - {id: sync-in, at: [74.75, 23.48], size: [9.7, 8.85], shape: rect}
+      - {id: sfp2, at: [88.78, 10.69], size: [14.5, 10.0], shape: rect}
+      - {id: sfp1, at: [88.78, 24.5], size: [14.5, 10.0], shape: rect}
+      - {id: led-sfp1, at: [90.23, 21.6], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp2, at: [99.53, 21.6], size: [2.25, 2.0], shape: rect}
+      - {id: ge2, at: [107.87, 7.94], size: [12.7, 11.0], shape: rect}
+      - {id: ge1, at: [107.87, 24.25], size: [12.7, 11.0], shape: rect}
+    silkscreen:
+      - {at: [31.55, 9.7], text: ReadyLinks, font-size: 6.0, anchor: middle, for: chassis}
+      - {at: [18, 18.61], text: SYS, font-size: 3.9, anchor: start, for: led-sys}
+      - {at: [18, 23.71], text: PWR, font-size: 3.9, anchor: start, for: led-pwr}
+      - {at: [18, 28.81], text: ALM, font-size: 3.9, anchor: start, for: led-alm}
+      - {at: [18, 33.91], text: SYNC, font-size: 3.9, anchor: start, for: led-sync}
+      - {at: [41.2, 41.0], text: CONSOLE, font-size: 3.9, anchor: middle, for: console}
+      - {at: [58.6, 41.0], text: USB, font-size: 3.9, anchor: middle, for: usb}
+      - {at: [79.6, 5], text: OUT, font-size: 4.0, anchor: middle, for: sync-out}
+      - {at: [79.6, 37.9], text: IN, font-size: 4.0, anchor: middle, for: sync-in}
+      - {at: [66.25, 21.54], text: SYNC, font-size: 3.9, anchor: middle, for: [sync-out, sync-in]}
+      - {id: sync-bracket-out-bar, at: [66.0, 12.33], path: 'M 0 0 L 5.25 0', for: sync-out}
+      - {id: sync-bracket-out-drop, at: [66.0, 12.33], path: 'M 0 0 L 0 5.37', for: sync-out}
+      - {id: sync-bracket-in-bar, at: [66.0, 28.33], path: 'M 0 0 L 5.25 0', for: sync-in}
+      - {id: sync-bracket-in-drop, at: [66.0, 23.6], path: 'M 0 0 L 0 4.73', for: sync-in}
+      - {at: [95.25, 6.9], text: SFP+2, font-size: 4.0, anchor: middle, for: sfp2}
+      - {at: [95.25, 39.8], text: SFP+1, font-size: 4.0, anchor: middle, for: sfp1}
+      - {at: [113.2, 5.0], text: GE2, font-size: 4.0, anchor: middle, for: ge2}
+      - {at: [113.2, 39.8], text: GE1, font-size: 4.0, anchor: middle, for: ge1}
+    components:
+      bays:
+        - {id: slot-1, at: [132.7, 2.35], size: {w: 281.5, h: 19.55}, accepts: ['readylinks/gl-x-lc-12xb@1', 'readylinks/gl-x-lc-blank@1'], default: 'readylinks/gl-x-lc-12xb@1', group: line-cards, rel-pos: 1}
+        - {id: slot-2, at: [132.7, 23.05], size: {w: 281.5, h: 19.55}, accepts: ['readylinks/gl-x-lc-12xb@1', 'readylinks/gl-x-lc-blank@1'], default: 'readylinks/gl-x-lc-blank@1', group: line-cards, rel-pos: 2}
+      placements:
+        - {ref: common/led-dot@1, id: led-sys, at: [29.6, 16.4], for: chassis, group: status-leds, rel-pos: 1}
+        - {ref: common/led-dot@1, id: led-pwr, at: [29.6, 21.5], for: chassis, group: status-leds, rel-pos: 2}
+        - {ref: common/led-dot@1, id: led-alm, at: [29.6, 26.6], for: chassis, group: status-leds, rel-pos: 3}
+        - {ref: common/led-dot@1, id: led-sync, at: [29.6, 31.7], for: chassis, group: status-leds, rel-pos: 4}
+        - {ref: std/rj45@2, id: console, at: [34.96, 21.9], group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
+        - {ref: std/usb-c@1, id: usb, at: [53.08, 32.34], group: mgmt, rel-pos: 2}
+        - {ref: common/reset-button@1, id: reset, at: [65.19, 29.06], for: chassis, group: buttons, rel-pos: 1}
+        - {ref: common/bnc-jack@1, id: sync-out, at: [73.25, 5.98], group: sync, rel-pos: 1, attrs: {role: timing}}
+        - {ref: common/bnc-jack@1, id: sync-in, at: [73.25, 21.98], group: sync, rel-pos: 2, attrs: {role: timing}}
+        - {ref: std/sfp@1, id: sfp2, at: [88.78, 10.69], group: sfp-plus, rel-pos: 2}
+        - {ref: std/sfp@1, id: sfp1, at: [88.78, 24.5], rotate: 180, group: sfp-plus, rel-pos: 1}
+        - {ref: common/led-arrow-sm@1, id: led-sfp1, skin: down, at: [90.23, 21.6], for: sfp1, group: sfp-leds, rel-pos: 1}
+        - {ref: common/led-arrow-sm@1, id: led-sfp2, skin: up, at: [99.53, 21.6], for: sfp2, group: sfp-leds, rel-pos: 2}
+        - {ref: common/rj45-ganged-eth@1, id: ge2, at: [107.87, 7.94], rotate: 180, group: gbe, rel-pos: 2}
+        - {ref: common/rj45-ganged-eth@1, id: ge1, at: [107.87, 24.25], group: gbe, rel-pos: 1}
+    regions:
+      - {id: logo-zone, at: [34.5, 1.8], size: {w: 6.5, h: 3.4}, label: 'ReadyLinks wireless mark over the wordmark; not drawn'}
+  rear:
+    size: {w: 440.0, h: 45.0}
+    panel:
+      decor:
+      - {id: inlet-1-flange, kind: bezel, at: [10.21, 18.28], size: [50.0, 22.5], shape: octagon, fill: '#202327'}
+      - {id: inlet-2-flange, kind: bezel, at: [379.75, 18.98], size: [50.0, 22.5], shape: octagon, fill: '#202327'}
+      cutouts:
+      - {id: inlet-1, at: [20.92, 19.47], size: [28.0, 20.0], shape: rect}
+      - {id: inlet-2, at: [390.45, 20.17], size: [28.0, 20.0], shape: rect}
+      - {id: power-switch-1, at: [23.9, 2.4], size: [21.0, 15.0], shape: rect}
+      - {id: power-switch-2, at: [394.7, 1.8], size: [21.0, 15.0], shape: rect}
+      - {id: dc-1, at: [182.1, 24.3], size: [32.4, 11.1], shape: rect}
+      - {id: dc-2, at: [225.5, 24.3], size: [32.4, 11.1], shape: rect}
+      - {id: ground-stud, at: [355.95, 28.45], size: [8.1, 8.1], shape: circle}
+    silkscreen:
+      - {at: [18.5, 10.71], text: 'ON', font-size: 2.6, anchor: middle, for: power-switch-1}
+      - {at: [50.7, 10.71], text: 'OFF', font-size: 2.6, anchor: middle, for: power-switch-1}
+      - {at: [389.3, 10.11], text: 'ON', font-size: 2.6, anchor: middle, for: power-switch-2}
+      - {at: [421.5, 10.11], text: 'OFF', font-size: 2.6, anchor: middle, for: power-switch-2}
+      - {at: [190.68, 39.5], text: '-48V', font-size: 2.0, anchor: middle, for: dc-1}
+      - {at: [205.92, 39.5], text: '-48VRTN', font-size: 2.0, anchor: middle, for: dc-1}
+      - {at: [234.08, 39.5], text: '-48V', font-size: 2.0, anchor: middle, for: dc-2}
+      - {at: [249.32, 39.5], text: '-48VRTN', font-size: 2.0, anchor: middle, for: dc-2}
+    components:
+      placements:
+        - {ref: std/c14-inlet@1, id: inlet-1, at: [20.92, 19.47], group: power-in, rel-pos: 1, description: 'primary power (datasheet rear figure)'}
+        - {ref: common/screw-head@1, id: inlet-1-screw-1, at: [13.41, 27.85], group: furniture, rel-pos: 1}
+        - {ref: common/screw-head@1, id: inlet-1-screw-2, at: [53.41, 27.85], group: furniture, rel-pos: 2}
+        - {ref: std/c14-inlet@1, id: inlet-2, at: [390.45, 20.17], group: power-in, rel-pos: 2, description: 'secondary power (datasheet rear figure)'}
+        - {ref: common/screw-head@1, id: inlet-2-screw-1, at: [382.95, 28.55], group: furniture, rel-pos: 3}
+        - {ref: common/screw-head@1, id: inlet-2-screw-2, at: [422.95, 28.55], group: furniture, rel-pos: 4}
+        - {ref: common/rocker-switch@1, id: power-switch-1, at: [23.9, 2.4], for: chassis, group: power-switches, rel-pos: 1}
+        - {ref: common/rocker-switch@1, id: power-switch-2, at: [394.7, 1.8], for: chassis, group: power-switches, rel-pos: 2}
+        - {ref: common/dc-terminal-header-6@1, id: dc-1, at: [182.1, 24.3], group: dc-stack, rel-pos: 1}
+        - {ref: common/dc-terminal-header-6@1, id: dc-2, at: [225.5, 24.3], group: dc-stack, rel-pos: 2}
+        - {ref: common/ground-symbol@1, id: ground-mark, at: [346.7, 29.5], group: grounding, rel-pos: 1}
+        - {ref: common/ground-stud@1, id: ground-stud, at: [355.95, 28.45], group: grounding, rel-pos: 2}
+  right:
+    size: {w: 300.1, h: 45.0}
+    panel:
+      decor:
+      - {id: fan-grille-1, kind: grille, at: [37.35, 5.9], size: [32.8, 32.8], rx: 16.4, pattern: holes, pattern-pitch: [5.2, 5.2], pattern-offset: [37.25, 5.8]}
+      - {id: fan-grille-2, kind: grille, at: [86.33, 5.9], size: [32.8, 32.8], rx: 16.4, pattern: holes, pattern-pitch: [5.2, 5.2], pattern-offset: [86.23, 5.8]}
+      - {id: fan-grille-3, kind: grille, at: [136.33, 5.9], size: [32.8, 32.8], rx: 16.4, pattern: holes, pattern-pitch: [5.2, 5.2], pattern-offset: [136.23, 5.8]}
+      - {id: fan-grille-4, kind: grille, at: [197.33, 5.9], size: [32.8, 32.8], rx: 16.4, pattern: holes, pattern-pitch: [5.2, 5.2], pattern-offset: [197.23, 5.8]}
+      - {id: fan-grille-5, kind: grille, at: [243.33, 5.9], size: [32.8, 32.8], rx: 16.4, pattern: holes, pattern-pitch: [5.2, 5.2], pattern-offset: [243.23, 5.8]}
+    components:
+      placements:
+        - {ref: common/screw-head@1, id: fan-screw-1, at: [67.95, 4.5], group: fan-screws, rel-pos: 1}
+        - {ref: common/screw-head@1, id: fan-screw-2, at: [35.95, 36.5], group: fan-screws, rel-pos: 2}
+        - {ref: common/screw-head@1, id: fan-screw-3, at: [116.93, 4.5], group: fan-screws, rel-pos: 3}
+        - {ref: common/screw-head@1, id: fan-screw-4, at: [84.93, 36.5], group: fan-screws, rel-pos: 4}
+        - {ref: common/screw-head@1, id: fan-screw-5, at: [166.93, 4.5], group: fan-screws, rel-pos: 5}
+        - {ref: common/screw-head@1, id: fan-screw-6, at: [134.93, 36.5], group: fan-screws, rel-pos: 6}
+        - {ref: common/screw-head@1, id: fan-screw-7, at: [227.93, 4.5], group: fan-screws, rel-pos: 7}
+        - {ref: common/screw-head@1, id: fan-screw-8, at: [195.93, 36.5], group: fan-screws, rel-pos: 8}
+        - {ref: common/screw-head@1, id: fan-screw-9, at: [273.93, 4.5], group: fan-screws, rel-pos: 9}
+        - {ref: common/screw-head@1, id: fan-screw-10, at: [241.93, 36.5], group: fan-screws, rel-pos: 10}
+  left:
+    size: {w: 300.1, h: 45.0}
+    panel:
+      decor:
+      - {id: fan-grille-1, kind: grille, at: [23.85, 5.9], size: [32.8, 32.8], rx: 16.4, pattern: holes, pattern-pitch: [5.2, 5.2], pattern-offset: [23.75, 5.8]}
+      - {id: fan-grille-2, kind: grille, at: [69.85, 5.9], size: [32.8, 32.8], rx: 16.4, pattern: holes, pattern-pitch: [5.2, 5.2], pattern-offset: [69.75, 5.8]}
+      - {id: fan-grille-3, kind: grille, at: [130.85, 5.9], size: [32.8, 32.8], rx: 16.4, pattern: holes, pattern-pitch: [5.2, 5.2], pattern-offset: [130.75, 5.8]}
+      - {id: fan-grille-4, kind: grille, at: [180.85, 5.9], size: [32.8, 32.8], rx: 16.4, pattern: holes, pattern-pitch: [5.2, 5.2], pattern-offset: [180.75, 5.8]}
+      - {id: fan-grille-5, kind: grille, at: [229.83, 5.9], size: [32.8, 32.8], rx: 16.4, pattern: holes, pattern-pitch: [5.2, 5.2], pattern-offset: [229.73, 5.8]}
+    components:
+      placements:
+        - {ref: common/screw-head@1, id: fan-screw-1, at: [54.45, 4.5], group: fan-screws, rel-pos: 1}
+        - {ref: common/screw-head@1, id: fan-screw-2, at: [22.45, 36.5], group: fan-screws, rel-pos: 2}
+        - {ref: common/screw-head@1, id: fan-screw-3, at: [100.45, 4.5], group: fan-screws, rel-pos: 3}
+        - {ref: common/screw-head@1, id: fan-screw-4, at: [68.45, 36.5], group: fan-screws, rel-pos: 4}
+        - {ref: common/screw-head@1, id: fan-screw-5, at: [161.45, 4.5], group: fan-screws, rel-pos: 5}
+        - {ref: common/screw-head@1, id: fan-screw-6, at: [129.45, 36.5], group: fan-screws, rel-pos: 6}
+        - {ref: common/screw-head@1, id: fan-screw-7, at: [211.45, 4.5], group: fan-screws, rel-pos: 7}
+        - {ref: common/screw-head@1, id: fan-screw-8, at: [179.45, 36.5], group: fan-screws, rel-pos: 8}
+        - {ref: common/screw-head@1, id: fan-screw-9, at: [260.43, 4.5], group: fan-screws, rel-pos: 9}
+        - {ref: common/screw-head@1, id: fan-screw-10, at: [228.43, 36.5], group: fan-screws, rel-pos: 10}
+  top:
+    size: {w: 440.0, h: 300.1}
+    panel:
+      decor:
+      - {id: lid, kind: cover, at: [6.2, 6.25], size: [427.6, 293.7], rx: 0.3, fill: '#17191c'}
+  bottom:
+    size: {w: 440.0, h: 300.1}
+    components:
+      placements:
+        - {ref: common/screw-head@1, id: base-screw-1, at: [183.2, 22.7], group: base-screws, rel-pos: 1}
+        - {ref: common/screw-head@1, id: base-screw-2, at: [253.2, 22.7], group: base-screws, rel-pos: 2}
+        - {ref: common/screw-head@1, id: base-screw-3, at: [53.2, 28.7], group: base-screws, rel-pos: 3}
+        - {ref: common/screw-head@1, id: base-screw-4, at: [170.2, 28.7], group: base-screws, rel-pos: 4}
+        - {ref: common/screw-head@1, id: base-screw-5, at: [266.2, 28.7], group: base-screws, rel-pos: 5}
+        - {ref: common/screw-head@1, id: base-screw-6, at: [383.2, 28.7], group: base-screws, rel-pos: 6}
+        - {ref: common/screw-head@1, id: base-screw-7, at: [183.2, 81], group: base-screws, rel-pos: 7}
+        - {ref: common/screw-head@1, id: base-screw-8, at: [250.2, 91], group: base-screws, rel-pos: 8}
+        - {ref: common/screw-head@1, id: base-screw-9, at: [53.2, 94.9], group: base-screws, rel-pos: 9}
+        - {ref: common/screw-head@1, id: base-screw-10, at: [170.2, 94.9], group: base-screws, rel-pos: 10}
+        - {ref: common/screw-head@1, id: base-screw-11, at: [266.2, 94.9], group: base-screws, rel-pos: 11}
+        - {ref: common/screw-head@1, id: base-screw-12, at: [383.2, 94.9], group: base-screws, rel-pos: 12}
+        - {ref: common/screw-head@1, id: base-screw-13, at: [311.4, 139.7], group: base-screws, rel-pos: 13}
+        - {ref: common/screw-head@1, id: base-screw-14, at: [407.4, 139.7], group: base-screws, rel-pos: 14}
+        - {ref: common/screw-head@1, id: base-screw-15, at: [311.4, 274.7], group: base-screws, rel-pos: 15}
+        - {ref: common/screw-head@1, id: base-screw-16, at: [407.4, 274.7], group: base-screws, rel-pos: 16}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The GL-x chassis with both line-card slots blanked - the library's base, a chassis with
+      nothing decided about traffic cards.
+    bays:
+      slot-1: readylinks/gl-x-lc-blank@1
+      slot-2: readylinks/gl-x-lc-blank@1
+  as-sold:
+    kind: orderable
+    description: >-
+      The GL-12xB-240D as sold: the 12-port BNC line card in slot 1 and a blank in slot 2.
+    source: >-
+      sourced - the datasheet's panel figure, the product render and the vendor GLB all show
+      the card in the upper slot and a plain plate in the lower.
+    part-numbers:
+      GL-12xB-240D: {}
+    bays:
+      slot-1: readylinks/gl-x-lc-12xb@1
+      slot-2: readylinks/gl-x-lc-blank@1
+datasheet:
+  title: 'ReadyLinks GL-12xB-240D datasheet'
+  url: 'https://readylinks.io/assets/datasheets/ReadyLinks-GL-12xB-240D-Datasheet.pdf'
+  sha256: 120165418af74f0cbcf76e373968be1b6c875623538c3e218c791f51b025cb08

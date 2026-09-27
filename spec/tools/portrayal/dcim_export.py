@@ -521,6 +521,9 @@ PART_POWER = {
     # ECS4530-54CSFP-DC-I takes -48 V in a screw-clamp plug seated in a header, the
     # plug pulled out whole rather than lugs lifted off screws.
     "common/dc-terminal-plug-2": "dc-terminal",
+    # AND A SIX-POLE HEADER WITH NO PLUG SEATED: the ReadyLinks GL-x chassis lands its
+    # 48-56 V DC input (-48V and -48VRTN, the "DC power stacking ports") in two of them.
+    "common/dc-terminal-header-6": "dc-terminal",
     # AND A FOUR-POLE ONE CARRYING TWO FEEDS: the TM-7124S lands -48 V A and B
     # (-48VA RETA -48VB RETB) in one pluggable screw-clamp header on the chassis
     # face. It is still where a supply's wire is landed, so the same row.
