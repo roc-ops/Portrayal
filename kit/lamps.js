@@ -29,7 +29,8 @@
 // module takes its lamps with it.
 
 import * as THREE from 'three';
-import { nodeTools, rasterize, canvasTex, tiltOf, tiltTools, tiltGroupIn, unproject } from './relief.js';
+import { nodeTools, rasterize, canvasTex, tiltOf, tiltTools, tiltGroupIn, unproject,
+         withoutLampColors } from './relief.js';
 
 // SOMETHING UNDER THE LIVE ART. A blink is opacity 1 <-> 0 on the lamp, so a
 // frame sampled in the off half is transparent - and a transparent dome cap or
@@ -51,7 +52,9 @@ const artOf = text => {
 export function withBase(text) {
   const p = artOf(text);
   if (!p) return text;
-  const quiet = p.art.replace(/class="([^"]*)"/g,
+  // unlit is unlit whatever colour the host chose (#664): the host's inline
+  // --led-color goes with the state classes, or a blink's off half would show it
+  const quiet = withoutLampColors(p.art).replace(/class="([^"]*)"/g,
     (_, c) => `class="${c.split(/\s+/).filter(k => !k.startsWith('state-')).join(' ')}"`);
   return p.head + quiet + p.art + '</svg>';
 }
