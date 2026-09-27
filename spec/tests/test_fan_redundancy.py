@@ -472,7 +472,15 @@ def test_the_comparison_layer_can_now_reach_them():
     part, celestica/fan-40@1, serves both - counted twice because two datasheets state it
     twice, not because there are two rears. The two models' FRONTS differ; nothing about
     the cooling does.
+
+    SEVENTY-FOUR AND SEVENTY-FIVE ARE THE CELESTICA DS4100 AND DS4101, the same 6+1 over
+    seven bays from their own two datasheets ("6+1 redundant fans" on each) and their own two
+    rear elevations, which count seven trays between the two supplies. They seat the same
+    fan part as the DS4000 - the tray's lamp, pitch and face all check against it on each
+    rear - and what differs is only its finish: the DS4100's trays are orange, the DS4101's
+    black with the latch black too, set per configuration as fields. Two installation guides,
+    so unlike the pair above these are two rears measured twice, not one rear counted twice.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 73, n
+    assert n == 75, n
