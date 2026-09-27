@@ -128,8 +128,10 @@ provenance:
       gap being read as module at 3.9 px/mm and is recorded, not reconciled. THE FAN IS ORANGE HERE AND
       BLACK ON THE DS4000. Face and handle are sampled at #dd8817 on the figure and on the render; they
       are fan-40's face-finish and handle-finish fields, set by the configuration, not a second part.
-      The supplies' latch at the far right is drawn black on this figure where the DS4000 part defaults
-      to orange, so latch-finish is set #1f2124 too.
+      Sampled on the rear figure at the handle band's left end (fan 2): the latch reads #be7515, a shade
+      darker than the band's #d68415 - no blue anywhere, so latch-finish and handle-finish take those
+      two values and face-finish #dd8817. The supplies' latch at the far right is drawn black on this
+      figure where the DS4000 part defaults to orange, so latch-finish is set #1f2124 too.
   power:
     confidence: datasheet
     note: >-
@@ -146,13 +148,12 @@ provenance:
   lug-tag:
     confidence: measured
     note: >-
-      celestica/lug-tag@1 (the shared Celestica card, 23.0 x 4.0, lip at the right of the landscape art),
-      seated flat - rotate 0 - because this tag lies horizontal under the LUG TAG legend. The Front Panel
-      figure reads its slot x 383.0-405.8 by y 38.3 to the bottom edge, centre (394.4, 40.7), so at =
-      centre - (11.5, 2.0) = (382.9, 38.7). THE RENDER MAY SAY OTHERWISE: ds4100-A.png draws this card
-      with a hatched grip along its TOP edge over its middle and rounded ends, no end block, which is
-      the top-ridge form of celestica/lug-tag-ridge-23@1 (the ES1000's card, 23.3 long). Seated as lug-tag@1
-      by the coordinator's direction; the question is open for the reviewer.
+      celestica/lug-tag-ridge-23@1 - the top-ridge card, the same 23.3 mm part as the ES1000's - seated
+      flat (rotate 0). The Front Panel figure reads its slot x 383.0-405.8 from y 38.3 to the bottom edge,
+      centre x 394.4, so at = (394.4 - 11.65, 38.5). The vendor render ds4100-A.png draws the card with
+      a hatched grip along its TOP edge over its middle, rounded ends and no end block, and the guide
+      figure a raised centre - the ridge form, not celestica/lug-tag@1's end-lip card. The render prints
+      DS4100 on the card and LUG TAG on the panel above it.
   colour:
     confidence: photo-measured
     note: >-
@@ -435,8 +436,8 @@ views:
       - {ref: common/led-indicator@1, id: led-alm, at: [322.15, 25.68], group: leds, rel-pos: 4, for: chassis,
         states: ['off', {name: no-alarm, color: '#22c55e'}, {name: critical, color: '#f59e0b'}, {name: major,
             behavior: blinking, color: '#f59e0b'}, {name: minor, behavior: blinking, color: '#f59e0b'}]}
-      - {ref: celestica/lug-tag@1, id: lug-tag, at: [382.9, 38.7], group: furniture, rel-pos: 1, attrs: {
-          label: DS4100}}
+      - {ref: celestica/lug-tag-ridge-23@1, id: lug-tag, at: [382.75, 38.5], group: furniture, rel-pos: 1,
+        attrs: {label: DS4100}}
       - {ref: std/osfp@1, id: port-1, at: *id002, group: osfp, rel-pos: 1}
       - {ref: std/osfp@1, id: port-2, at: *id003, rotate: 180, group: osfp, rel-pos: 2}
       - {ref: std/osfp@1, id: port-3, at: *id004, group: osfp, rel-pos: 3}
@@ -519,7 +520,7 @@ configurations:
     description: >-
       Two 1500 W AC supplies, front-to-back airflow - the build every figure draws, with orange fan modules.
     component-attrs:
-      fan-40: {face-finish: '#dd8817', handle-finish: '#dd8817', latch-finish: '#dd8817'}
+      fan-40: {face-finish: '#dd8817', handle-finish: '#d68415', latch-finish: '#be7515'}
       psu-1500-ac: {latch-finish: '#1f2124'}
     part-numbers:
       R4035-F9001-A1: {part: R4035-F9001-A1}
@@ -531,7 +532,7 @@ configurations:
       the F2B one; see the b2f-finish gap.
     region-context: {exhaust: Intake}
     component-attrs:
-      fan-40: {face-finish: '#dd8817', handle-finish: '#dd8817', latch-finish: '#dd8817'}
+      fan-40: {face-finish: '#dd8817', handle-finish: '#d68415', latch-finish: '#be7515'}
       psu-1500-ac: {latch-finish: '#1f2124'}
     part-numbers:
       R4035-F9005-A1: {part: R4035-F9005-A1}
