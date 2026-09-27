@@ -236,3 +236,36 @@ def test_a_component_with_one_skin_does_not_need_it_named(tmp_path):
     assert r.returncode == 0, r.stderr[-400:]
     svg = (out / "as7726-32x.ac-f2b.front.svg").read_text()
     assert "port-1-occupant" in svg, "the optic did not seat"
+
+
+def test_a_forwarded_core_presents_at_its_interface_at_point_not_its_mate():
+    """#671. A core presents at the point `interface-at` names (default `mate`),
+    and a bezel forwarding it must present the same point and depth: the
+    position through the part's placement, and the seat out of THAT point.
+    Reading the core's `mate` instead put a part seated through the bezel at a
+    different point and depth from the same part seated in the bare core."""
+    core = {"interface": "bnc", "size": {"w": 10.0, "h": 10.0},
+            "interface-at": "front",
+            "connection-points": {"mate": {"at": [5.0, 5.0]},
+                                  "front": {"at": [4.0, 6.0], "seat-out": 3.0}},
+            "relief": {"features": []}}
+    part = {"id": "jack", "ref": "std/core@1", "at": [2.0, 3.0], "lift": 1.5}
+    bezel = {"size": {"w": 14.0, "h": 16.0}, "parts": [part]}
+    res = lambda ref: core if ref == "std/core@1" else None
+    # bare: the core itself presents at `front`, 3.0 out
+    assert presented_interface(core, res) == ("bnc", [4.0, 6.0], 3.0)
+    # through the bezel: the same point, carried by the part's `at`, and the
+    # same seat out plus the part's lift
+    assert presented_interface(bezel, res) == ("bnc", [6.0, 9.0], 4.5)
+
+
+def test_a_core_whose_presented_point_is_missing_is_not_forwarded():
+    """`interface-at` naming no point is L106's error; forwarding must not fall
+    back to `mate` and present somewhere the core never declared."""
+    from portrayal.manifest import forwarded_part
+    core = {"interface": "bnc", "size": {"w": 10.0, "h": 10.0},
+            "interface-at": "front",
+            "connection-points": {"mate": {"at": [5.0, 5.0]}}}
+    bezel = {"size": {"w": 14.0, "h": 16.0},
+             "parts": [{"id": "jack", "ref": "std/core@1", "at": [0, 0]}]}
+    assert forwarded_part(bezel, lambda ref: core) is None

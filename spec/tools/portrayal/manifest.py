@@ -195,6 +195,17 @@ def _seat_out(contract, point):
     return 0.0
 
 
+def presented_point(contract):
+    """The connection point `contract` presents its interface at: the one
+    `interface-at` names, default `mate` - or None when that point is not
+    declared (L106's error). THE ONE READING of which point is presented, for a
+    part that presents its own interface and for a core a wrapper forwards
+    (#671): a plug presents at its boot point, and a bezel composing a core
+    must present where the core does, not at the core's `mate`."""
+    cps = contract.get("connection-points") or {}
+    return cps.get(contract.get("interface-at") or "mate")
+
+
 def presented_interface(contract, resolve):
     """What a receptacle presents to a module, and where the module mates into it.
 
@@ -243,13 +254,16 @@ def presented_interface(contract, resolve):
     # feature's `lift` is where it starts, not where its rear face is. Without
     # either key this is exactly the old answer: `mate`, 0.0. A `cyl`
     # feature has no `out`; its rear is its far end, `lift + cyl`.
-    point = cps.get(contract.get("interface-at") or "mate")
+    point = presented_point(contract)
     if contract.get("interface") and point:
         return contract["interface"], list(point["at"]), _seat_out(contract, point)
     part = forwarded_part(contract, resolve)
     if part is not None:
         core = resolve(part["ref"])
-        cm = (core.get("connection-points") or {}).get("mate")
+        # THE CORE'S PRESENTED POINT, not its `mate` (#671): where the core
+        # presents placed bare - `interface-at`, default `mate` - is where it
+        # presents through the wrapper, position and seat out alike.
+        cm = presented_point(core)
         # THROUGH THE PART'S OWN PLACEMENT, rotation and all. `at + mate`
         # was right only for an unturned part: every generic transceiver
         # composes std/lc-bore@3 at `rotate: 180` (tongue up), and the plain
@@ -288,15 +302,17 @@ def forwarded_part(contract, resolve):
     question of THAT SPECIFIC part - here, whether it sits `on` a facet -
     without re-deriving which one presented_interface would pick.
     """
-    if contract.get("interface") and (contract.get("connection-points") or {}).get(
-            contract.get("interface-at") or "mate"):
+    if contract.get("interface") and presented_point(contract):
         return None
     hits = []
     for part in (contract.get("parts") or []):
         core = resolve(part.get("ref")) if part.get("ref") else None
         if not core or not core.get("interface"):
             continue
-        if not (core.get("connection-points") or {}).get("mate"):
+        # a core is forwarded by the point it presents at (#671); one whose
+        # `interface-at` names no point presents nowhere, and is not forwarded
+        # to its `mate` instead
+        if not presented_point(core):
             continue
         hits.append(part)
     return hits[0] if len(hits) == 1 else None
