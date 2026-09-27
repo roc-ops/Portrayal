@@ -100,7 +100,13 @@ def search_blob(d, listings=()):
         words += [str(ls.get("ns") or ""), str(ls.get("manufacturer") or ""),
                   str(ls.get("nos") or ""), str(ls.get("model") or "")]
         take([a.get("name") for a in (ls.get("aliases") or []) if isinstance(a, dict)])
-        take((ls.get("portfolio") or {}))
+        # VALUES ONLY: `take` on a dict adds its keys, and "line", "family" and
+        # "series" in every listed device's haystack would match them all.
+        take(list((ls.get("portfolio") or {}).values()))
+        for c in (ls.get("configurations") or {}).values():
+            c = c or {}
+            take([c.get("model")] + list((c.get("part-numbers") or {}).keys())
+                 + [a.get("name") for a in (c.get("aliases") or []) if isinstance(a, dict)])
     # sorted, because `refs` is a set and set iteration order varies between
     # processes. Everything else feeding `words` is already ordered; this was the
     # one leak, and it made devices.json differ between two builds of an

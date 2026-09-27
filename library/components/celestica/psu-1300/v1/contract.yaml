@@ -1,0 +1,82 @@
+format: 1
+kind: module
+name: psu-1300
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Celestica 1300 W AC hot-swap supply in the CRPS 1U envelope, drawn as it seats in a 2RU
+  chassis - turned on end, 39 wide by 73.5 tall. A status lamp top left, an IEC C14 inlet in a
+  black moulded block with its earth pin down, an open axial fan below behind two captive screws,
+  and a black U-bail handle down its right-hand edge. Two fill the left of the DS3001 rear.
+size: {w: 39.0, h: 73.5}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs: {power-output-w: 1300, input: ac, form-factor: crps-1u}
+provenance:
+  power: >-
+    guide - DS3001 Power Supply Unit page: 'Each PSU's maximum output power is 1300W with the
+    input voltage of 100VAC~240VAC and the output is 12V +/- 5%', two PSUs for redundancy, F2B
+    and B2F airflow options, 240 VDC input supported in China only. The datasheet agrees: '1+1
+    redundant, hot swap PSUs, 1300W each', AC 47-63 Hz, 100~127 V / 200~240 V nominal. The
+    output figure is unqualified by ambient or input line, so it is filed as the maximum. NO
+    MODEL NUMBER IS SET: neither document names the supply's own part number.
+  size: >-
+    photo-measured - DS3001 docs-portal rear panel (ds3001--rear-panel-1.jpg), an orthographic
+    render at 6.518 px/mm on both axes (chassis body 2858 x 567 px for the datasheet's 438.5 x
+    87 mm). PSU 1's face runs x 552-806 px between dark seams and y 901-1381, 39.0 x 73.5 mm;
+    PSU 2 repeats it 271 px (41.6 mm) to the right. 73.5 x 39 is the CRPS 1U face, here on end.
+  elements: >-
+    photo-measured on the same render, relative to the face's top-left: lamp centre (9.05,
+    3.68), about 2.8 mm across; black inlet block x 1.2-31.9, y 7.4-31.2; the C14 opening
+    centred at (16.6, 19.3); fan hub centre (18.9, 50.5) with blades to a 17.6 mm radius; screw
+    heads at (3.5, 35.1) and (3.5, 67.4); the bail x 27.3-39.0, y 31.2-71.1 with its bar down
+    the right edge.
+  inlet-orientation: >-
+    render - the inlet's single centre pin is BELOW its two side-by-side pins, and the black
+    block's chamfered corners are at the bottom, so std/c14-inlet@1 (earth pin up) is composed
+    turned 180.
+  status-lamp: >-
+    guide - DS3001 Status LEDs, Table 2 Rear Panel Status LEDs: P-1 / P-2, green 'All PSUs
+    operating normally', red 'PSU error(s) detected', off 'PSU off'. The render draws it green.
+  depth: >-
+    registry - the CRPS 1U module is 185 mm long; not measured on this unit.
+  cord-retainer: >-
+    render - a black cord-retention clip hangs off each inlet in the vendor renders. Cable
+    furniture is not drawn.
+states: [ok, fail, absent]
+elements:
+  status-led:
+    at: [7.65, 2.28]
+    size: [2.8, 2.8]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: fail, color: '#ef4444'}]
+  handle: {at: [27.3, 31.2], size: [11.7, 39.9], class: handle}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [2.6, 9.3], rotate: 180}
+relief:
+  features:
+    - node: inlet-frame
+      out: 1.6
+      confidence: estimated
+      source: >-
+        celestica/psu-1300@1 itself - unsourced. The rear render is face-on and states no
+        depth for the moulded block; 1.6 is celestica/psu-1600@1's figure for its own inlet
+        frame, the same kind of moulding on a Celestica CRPS face.
+    - node: handle
+      uhandle: 12
+      confidence: estimated
+      source: >-
+        celestica/psu-1300@1 itself - unsourced; the psu-removal figures show the bail swung
+        out but carry no scale for its reach.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        celestica/psu-1300@1 itself - unsourced; see inlet-frame.
+connection-points:
+  power: {at: [16.6, 19.3], direction: rear}
+body:
+  depth: 185
+  color: '#b9bec4'
+skins: [default]

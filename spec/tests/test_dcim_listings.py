@@ -156,6 +156,31 @@ def test_two_types_written_to_one_file_stop_the_run(tmp_path):
     dx.WRITTEN.clear()
 
 
+def test_a_listed_type_written_by_another_run_for_other_metal_stops_the_run(tmp_path):
+    """publish.sh exports each device in its own process. The NCP-40C on the
+    S9700-53DX and the NCP-40C on the COR550 are two devices, so the in-process
+    guard never sees both; the file on disk does."""
+    dx.WRITTEN.clear(); dx._FRESH.clear()
+    one = {"manufacturer": "DriveNets", "model": "NCP-40C",
+           "comments": "DriveNets lists UfiSpace S9700-53DX (NOS: dnos).\nmore"}
+    dx.write(dict(one), tmp_path, "netbox", "drivenets/s9700-53dx:ac", listed=True)
+    dx.WRITTEN.clear(); dx._FRESH.clear()                  # a second process
+    same = dict(one)
+    dx.write(same, tmp_path, "netbox", "drivenets/s9700-53dx:ac", listed=True)  # same metal: fine
+    dx.WRITTEN.clear(); dx._FRESH.clear()
+    other = dict(one, comments="DriveNets lists Edgecore COR550 (NOS: dnos).")
+    with pytest.raises(SystemExit):
+        dx.write(other, tmp_path, "netbox", "drivenets/cor550:ac", listed=True)
+    dx.WRITTEN.clear(); dx._FRESH.clear()
+
+
+def test_the_exporter_and_l124_agree_on_the_sku():
+    assert dx.listing_config_model(
+        {"part-numbers": {"A-EU": {"power-cord": "EU"}, "Y": {}}}) == ("Y", "Y")
+    assert dx.listing_config_model({"model": "M", "part-numbers": {"P": {}}}) == ("M", "P")
+    assert dx.listing_config_model({}) == (None, None)
+
+
 def test_a_neutral_document_names_ports_by_the_faceplate(tmp_path):
     """No NOS, no invented name: the id on the metal is the fact we have."""
     r = run(tmp_path, "--device", "as7726-32x")

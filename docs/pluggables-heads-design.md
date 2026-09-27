@@ -64,10 +64,13 @@ and end views; QSFP-DD HW Rev 6.3 Appendix B, Type 1, for the reach) is:
 - a reach of 49.8 measured from the NOSE FRONT (118 REF - 48.2 MIN - 20 nose, per Appendix
   B's Type 1 drawing), corroborated by the photographs (mean 49.9, within 8%). The ProLabs
   PAN-QSFP28-100GBASE-CWDM4-C drawing's 34.80 does not describe this tab;
-- a thin strap in side view: it leaves the nose near the top, dips about 1.8 mm mid-span,
-  and rises 0.5 mm at the grip;
+- a thin strap in side view, S-bent: it leaves the riser 0.47 above the body top, dips
+  1.53 below that at about 31 from the nose front, and rises through the grip pad to 0.76
+  above where it left (read on fitted body edges in 2.2.0; the median-edge draft said a 1.8
+  dip and a 0.5 rise);
 - seen end on, a grip pad that straddles the face's top edge rather than sitting wholly
-  above it: it is 1.07 above the body top, so the receptacle stays partly visible. This is
+  above it: it is 1.23 above the body top (1.07 on median edges), so the receptacle stays
+  partly visible. This is
   what SFF-8661's "3.4 MAX above, including bail travel" allows for.
 
 ## 3. Decisions
@@ -177,10 +180,21 @@ so a host that pins a colour on a composed part keeps doing so. Test:
 
 - Arms `arm-l`, `arm-r`: thin, at the module's side edges, from the nose front forward.
 - Grip `grip`: at the far end, spanning the 19.0 MAX width, positioned where it was
-  measured: it straddles the body's top edge (y -1.07 to 1.83 in the face), its top 1.07
+  measured: it straddles the body's top edge (y -1.23 to 1.67 in the face), its top 1.23
   above the body top, inside the 3.4 above allowance.
-- A two-step approximation of the S-bend: arms low, grip high. Relief builds boxes; no new
-  primitive. The round `uhandle` primitive is wrong for a flat strap and is not used.
+- A riser block at each arm root (`riser-l`, `riser-r`, since 2.1.0): a post the arm's
+  width, 7.5 out from the nose front and 7.8 tall from the strap top, photo-measured. It
+  is the strap's own moulding (beige, no seam) and rides with the tab, so it is the tab's
+  and not the module head's. Drawn below the arm's cross-section, so the two boxes share
+  no volume.
+- The S-bend as a staircase (since 2.2.0, roc-ops/Portrayal#647): each arm is six boxes
+  along the reach, `arm-l` (the root, flush with the riser) then `arm-l-2` to `arm-l-6`,
+  each the arm's 1.95 x 2.9 section with its top at the mean of the photographed curve
+  over its span. Each box's `lift` is where the one before it ends, so they meet with no
+  gap and no overlap, and the last one ends where the grip begins. Relief builds boxes; no
+  new primitive, and no kit or build change. The round `uhandle` primitive is wrong for a
+  flat strap and is not used. Face-on the strap is end-on and the dip lies inside the arm
+  root and riser outline, so the five lower boxes are drawn first, under that art.
 - Reach 49.8 from the nose front (QSFP-DD HW 6.3 Appendix B, Type 1; drawing), corroborated
   by the photographs; arm width, grip length and grip height are MEASURED off the top and
   side photographs against the known 18.35 module width, and say so.
@@ -199,10 +213,14 @@ so a host that pins a colour on a composed part keeps doing so. Test:
 - The bump is a major: `generic/qsfp-lc` and `generic/qsfp-dd-lc` go to `@2` (the CONTRIBUTING
   versioning rule — the tab geometry moved, not just the address). `@1` stays, marked
   `superseded-by: @2`, so the mechanism tests that use `@1` as a fixture keep working.
-- Parked finding, not built this piece of work: the maintainer's photographs also measure
-  the QSFP nose itself about 11.5 tall (1.6 above, 1.4 below the body top and bottom; within
-  SFF-8661's 3.4/1.6 allowance) and a riser block about 7.5 long at the arm roots. The head
-  stays the 18.35 x 8.5 face this PR; the nose and riser are not modelled. See section 5.
+- The nose (roc-ops/Portrayal#646): `generic/qsfp-lc@2` 2.1.0 draws its head as the nose
+  the maintainer's photographs of a QSFP SR4 module show, 1.4 above and 1.4 below the
+  body (11.3 tall; within SFF-8661's 3.4/1.6 allowance). An earlier reading of the same
+  photographs split it 1.6 above and 1.4 below; both side views are slightly rotated, and
+  once each body edge is fitted along the body and read at the nose, the two views agree
+  on an even split. `generic/qsfp-dd-lc@2` keeps the 18.35 x 8.5 face: no QSFP-DD module
+  has been photographed, and HW Rev 6.3 Figure 102's 13.5 REF is the envelope's sum, not a
+  module's nose. The riser arrives on both through the composed tab (section 4.5).
 
 ### 4.7 `generic/sfp-rj45@1`
 
@@ -243,10 +261,10 @@ so a host that pins a colour on a composed part keeps doing so. Test:
 
 Parked follow-ups, not built this piece of work:
 
-- The QSFP nose height (about 11.5 tall per the photographs) and its riser block (about
-  7.5 long) are not modelled; the head stays the 18.35 x 8.5 face (section 4.6).
-- The pull tab's S-bend and its riser are approximated as a two-step (arms low, grip high),
-  not modelled as a curve.
+- The pull tab's S-bend is a six-step staircase per arm, not a curve (roc-ops/Portrayal#647):
+  the steps stand up to 0.45 off the curve on the dip's flanks. The grip pad is still one
+  box at its top, so its first 4 mm, where the strap is still rising, are drawn up to 0.9
+  high. The riser's chamfered lower corners are not drawn.
 - A kit-vs-build coordinate check for the full copper-SFP-to-boot chain needs kit support
   the explorer does not have yet (the kit seats one occupant per cage); the copper chain's
   JS coverage stops one link short of that.
@@ -336,3 +354,17 @@ except the AEC head, which is known only as a QSFP-DD Type 2 extension.
   now reaches the composed `std/rj45@2` housing, matching what the kit already painted at
   runtime) is an intended fix, not a regression, and its changed front-view render is
   expected.
+- 2026-09-26: the QSFP riser block belongs to `common/qsfp-pull-tab@2`, not to the module's
+  head: the photographs show it beige and seamless with the strap, standing 0.1 to 0.3 off
+  the metal nose. The nose goes on `generic/qsfp-lc@2`'s head (1.4 above, 1.4 below), and
+  not on `generic/qsfp-dd-lc@2`'s until a QSFP-DD module is measured. Both corrections are
+  minor bumps: ids, connection points and placements are unchanged, and the nose and
+  riser were known to be missing (roc-ops/Portrayal#646).
+- 2026-09-27: the pull tab's vertical figures were read again on fitted body edges in the
+  side view that passes the orthography check (roc-ops/Portrayal#685): the grip top moved
+  beyond its uncertainty, 1.07 to 1.23, and the strap top within it, 0.57 to 0.47. The
+  second side view agrees on the shape once a 1.7 deg pitch of the tab is removed, so its
+  pose is taken from the view of record. The S-bend is modelled as a staircase of relief
+  boxes that follows the sampled curve, not as a new swept primitive (roc-ops/Portrayal#647).
+  All three QSFP parts take minor bumps to 2.2.0: ids and connection points are unchanged,
+  boxes were added, and the hosts move the tab 0.16 up to where it was measured.

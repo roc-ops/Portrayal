@@ -1,0 +1,39 @@
+format: 1
+kind: component
+name: orv3-busbar-connector
+version: 1.0.0
+class: inlet
+behaviour: mounts
+profile: networking
+description: >-
+  Open Rack v3 48 V bus-bar power connector on an IT tray's rear - a blind-mate clip body
+  with a vertical blade slot that engages the rack's vertical bus bar as the tray slides
+  home, on a light mounting plate with a guide stud either side. Drawn as a class of part:
+  no maker or model is stated for the one it was drawn from.
+size: {w: 60.7, h: 35.4}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  input: dc
+  nominal-v: '48'
+provenance:
+  size: >-
+    estimated - the mounting plate on the Celestica DS6001 rear render (ds6001-B), 240.9-301.6
+    mm across and 39.3-74.7 down after scaling each axis by its own datasheet dimension; the
+    render fails Gate 1 by 2.9%, so these are fractions, not measurements. The connector body
+    reads 25.8 x 30.1 inside it and the two studs sit 6.9 and 50.0 mm in, 17.0 down.
+  identity: >-
+    datasheet - Celestica DS6001 rev 120325, POWER AND COOLING: "48VDC Bus bar input";
+    STORDIS's legend on ds6001-B labels the part "BUS BAR" with an icon reading "BUS BAR
+    48VDC". That it is an ORv3 blind-mate clip follows from the datasheet's "2OU ORv3 form
+    factor"; its maker and part number are not stated anywhere held.
+elements:
+  blade-slot: {at: [26.2, 6.0], size: [7.0, 23.0], class: inlet}
+relief:
+  features:
+    - node: connector
+      out: 12.0
+      confidence: estimated
+      source: >-
+        common/orv3-busbar-connector@1's identity key - the three-quarter render ds6001-A-3
+        shows the clip body standing well proud of its plate; the depth is proportion by eye.
+skins: [default]

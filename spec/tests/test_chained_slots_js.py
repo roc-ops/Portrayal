@@ -203,7 +203,12 @@ def test_an_optic_the_kit_seats_in_a_tilted_cage_is_the_builds(world):
 @needs_node
 def test_a_plug_for_a_replacement_optic_lands_in_the_replacement(world):
     s = scenario(world, "replaceUnderPlugs")
-    assert s == {"applied": 2, "optic": ["generic/qsfp-lc-twin@1:2.0.0"], "tx": 1, "rx": 0, "ntb": 1}, s
+    # the twin is OPTIC under another name, so it carries OPTIC's version
+    # string, read from its contract rather than pinned to a release
+    name, major = OPTIC.split("@")
+    ver = yaml.safe_load((LIB / "components" / name / f"v{major}" / "contract.yaml")
+                         .read_text())["version"]
+    assert s == {"applied": 2, "optic": [f"generic/qsfp-lc-twin@1:{ver}"], "tx": 1, "rx": 0, "ntb": 1}, s
 
 
 @needs_node

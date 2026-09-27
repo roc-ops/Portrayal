@@ -86,6 +86,15 @@ IFACE_TYPE = {
     ("sfp", "10g"): "10gbase-x-sfpp",
     ("sfp", "1g"): "1000base-x-sfp",
     ("osfp", "800g"): "800gbase-x-osfp",    # s9321-64eo - the 'o' in the model
+    # A 1.6T OSFP IS `other`, BECAUSE THE TWO TARGETS SPELL IT DIFFERENTLY - the SFP112
+    # case again. NetBox has TYPE_1TE_OSFP1600 = '1.6tbase-x-osfp1600'
+    # (netbox-community/netbox netbox/dcim/choices.py at 9bcfd739) and Nautobot
+    # TYPE_1600GE_OSFP = '1600gbase-x-osfp' (nautobot/nautobot nautobot/dcim/choices.py
+    # at f9cdca3d); one document is written to both trees, so either slug fails the
+    # other's import. Without a row the Celestica DS6000/DS6001's 64 OSFP224 ports fell
+    # out of the exports entirely. `other` is valid in both, labelled OSFP by
+    # other_label(); when the two agree on a slug this becomes it.
+    ("osfp", "1.6t"): "other",
     ("qsfp", "800g"): "800gbase-x-qsfpdd",  # every 800G qsfp here is std/qsfp-dd
     ("qsfp", "400g"): "400gbase-x-qsfpdd",
     ("qsfp", "200g"): "200gbase-x-qsfp56",  # s9301-32db, s9601-104bc: media qsfp56
@@ -541,6 +550,12 @@ PART_POWER = {
     # Calling it `dc-terminal` would put a 12 V coaxial jack in a DCIM as a -48 V
     # lug pair, which is a wrong answer where this is merely an unnamed one.
     "common/dc-barrel": "other",
+    # AN ORv3 48 V BUS-BAR CLIP IS A POWER INPUT NEITHER LIBRARY NAMES. The Celestica
+    # DS6001 takes its whole feed from the rack's vertical bus bar; PowerPortTypeChoices
+    # has DC Terminal (`dc-terminal`) and no bus-bar or Open Rack entry in either
+    # netbox-community/netbox (netbox/dcim/choices.py at 9bcfd739) or nautobot/nautobot
+    # (at f9cdca3d). A clip is not a screw terminal, so it is `other`, as the barrel is.
+    "common/orv3-busbar-connector": "other",
 }
 
 # ...AND WHAT A SUPPLY SAYS WHEN IT DRAWS NO INLET.
@@ -1196,6 +1211,10 @@ def device_port_type(p, a, group_role, names=None):
         return t, link, None
     if t == "other" and a.get("media") in TDM_LABEL:
         return t, TDM_LABEL[a["media"]], None
+    # AN `other` CAGE SAYS WHICH CAGE, as other_label() does for a card's: the
+    # label is the only place the connector survives (the 1.6T OSFP row above).
+    if t == "other" and pluggable_cage(p["ref"]) and a.get("media"):
+        return t, OTHER_LABEL.get(a["media"], a["media"].upper()), None
     return t, None, None
 
 
@@ -1474,13 +1493,13 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None):
                     "name": p["id"] or "Inlet",
                     "type": PART_POWER[p["ref"].split("@")[0]]})
             if role == "console" and media == "rj45-serial":
-                console.append({"name": "Console", "type": "rj-45"})
+                console.append({"name": "Console", "type": "rj-45", "_id": p["id"]})
             elif role == "console" and p["ref"].startswith("std/usb-c"):
-                console.append({"name": "Console (USB-C)", "type": "usb-c"})
+                console.append({"name": "Console (USB-C)", "type": "usb-c", "_id": p["id"]})
             # A USB-A CONSOLE BESIDE THE RJ45 ONE: the XM-8424H prints CONSOLE over both, and the
             # data sheet lists a "USB console". `usb-a` is a console-port type in both targets.
             elif role == "console" and p["ref"].startswith("std/usb-a"):
-                console.append({"name": "Console (USB-A)", "type": "usb-a"})
+                console.append({"name": "Console (USB-A)", "type": "usb-a", "_id": p["id"]})
             elif (role == "mgmt" and a.get("speed") == "10g"
                   and not (names and p["id"] in names)):
                 mgmt_sfp.append({"name": p["id"].replace("port-", ""),
@@ -1577,7 +1596,18 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None):
               # RF jacks are real and belong here, and they belong at the end.
               + [timing[k] for k in sorted(timing)])
 
+    # TWO CONSOLES OF ONE KIND ARE TWO PORTS, and both libraries key a type's
+    # console ports by name, so two called "Console" is an import failure. The
+    # Celestica DS6000 prints CON0 and CON1 over its two RJ45 consoles and the
+    # DS6001 CPU CONSOLE and BMC CONSOLE; the name stays "Console" where there is
+    # one, and a repeated name takes its placement's id to tell them apart.
     if console:
+        seen = [c["name"] for c in console]
+        for c in console:
+            if seen.count(c["name"]) > 1:
+                c["name"] = f'{c["name"]} ({c["_id"]})'
+        for c in console:
+            c.pop("_id", None)
         out["console-ports"] = console
     if ifaces:
         out["interfaces"] = ifaces
@@ -1845,6 +1875,21 @@ def _listing_sku(pns):
     return (sorted(cordless) or sorted(pns))[0]
 
 
+def listing_config_model(over):
+    """What one listing configuration exports as: (model, sku), either None.
+
+    THE ONE ANSWER, asked by the exporter and by lint's L124 alike. The two
+    used to decide separately - lint took the alphabetically first SKU and
+    this the cordless one - so `{A-EU: cord EU, Y: none}` exported `Y` while
+    L124 checked `A-EU`, and a second listing calling its box `Y` collided
+    with nothing lint could see.
+    """
+    over = over or {}
+    pns = over.get("part-numbers") or {}
+    sku = _listing_sku(pns) if pns else None
+    return (over.get("model") or sku), sku
+
+
 def apply_listing(doc, listing, cfg_name, label=None):
     """File a hardware device type again, under the NOS vendor that lists it.
 
@@ -1865,11 +1910,9 @@ def apply_listing(doc, listing, cfg_name, label=None):
     over = ((listing.get("configurations") or {}).get(cfg_name) or {})
     hw_manufacturer, hw_model = doc["manufacturer"], doc["model"]
     pns = over.get("part-numbers") or {}
-    model = over.get("model")
-    if pns:
-        sku = _listing_sku(pns)
+    model, sku = listing_config_model(over)
+    if sku:
         part = pns[sku].get("part") if isinstance(pns[sku], dict) else None
-        model = model or sku
         if part:
             doc["part_number"] = part
     if model:
@@ -1900,9 +1943,18 @@ def apply_listing(doc, listing, cfg_name, label=None):
 # for identities, arriving by a different route. L124 catches it in the source;
 # this catches it in the output.
 WRITTEN = {}
+_FRESH = set()
 
 
-def write(doc, root, target, owner=None):
+def _listed_hardware(text):
+    """The first comment line of a listed type - "<vendor> lists <maker> <SKU>"."""
+    try:
+        return str((yaml.safe_load(text) or {}).get("comments") or "").split("\n", 1)[0]
+    except yaml.YAMLError:
+        return ""
+
+
+def write(doc, root, target, owner=None, listed=False):
     d = Path(root) / target / "device-types" / doc["manufacturer"]
     d.mkdir(parents=True, exist_ok=True)
     f = d / (doc["model"] + ".yaml")
@@ -1912,6 +1964,20 @@ def write(doc, root, target, owner=None):
             raise SystemExit(f"{f}: written for {prev} and again for {owner}. Two "
                              f"device types under {doc['manufacturer']} share the model "
                              f"{doc['model']!r}; give one a `model` or its own SKU")
+    # ACROSS PROCESSES TOO. publish.sh exports one device per process, so
+    # WRITTEN never sees the NCP-40C on the S9700-53DX and the NCP-40C on the
+    # COR550 - they are two devices. A listed type already on disk that some
+    # OTHER run wrote, and that lists different metal, is that collision.
+    # (The same metal re-exported over its own old file is not.) L124 is the
+    # gate; this is the backstop for a name lint could not see.
+    if listed and f.exists() and WRITTEN.get(f) == owner and f not in _FRESH:
+        mine = str(doc.get("comments") or "").split("\n", 1)[0]
+        theirs = _listed_hardware(f.read_text())
+        if theirs and theirs != mine:
+            raise SystemExit(f"{f}: already written as '{theirs}', and now '{mine}'. Two "
+                             f"listings under {doc['manufacturer']} export the model "
+                             f"{doc['model']!r}; give one a `model` or its own SKU")
+    _FRESH.add(f)
     f.write_text("---\n" + yaml.dump(doc, Dumper=Indented, sort_keys=False,
                                      width=100, default_flow_style=False))
     return f
@@ -2302,7 +2368,7 @@ def export_device(dist, device_name, out_root, images):
                 continue                       # nothing but a header: not worth a file
             owner = f"{lkey or dev.get('ns') + '/' + device_name}:{cfg_name}"
             for target in TARGETS:
-                f = write(doc, out_root, target, owner)
+                f = write(doc, out_root, target, owner, listed=lkey is not None)
                 for face in ("front", "rear"):
                     if doc.get(f"{face}_image") and RASTER:
                         render_image(images, out_root, target, doc,

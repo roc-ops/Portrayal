@@ -237,7 +237,7 @@ RULES = {
     "L70": ("device",     "a `fact:` gap names a real fact and does not contradict the device", "fix the gap's scope or remove it"),
     "L71": ("component",  "a body box reaches no further than the part says it is deep", "shrink the body box or raise `body.depth`"),
     "L72": ("device",     "a bay's `plan:` or `rear:` lands in a view that exists, inside the chassis", "fix the plan view name or the coordinates"),
-    "L73": ("component",  "a field prints somewhere, and what prints is a field", "add a `data-from` text node for each field, or remove the field"),
+    "L73": ("component",  "a field prints somewhere, and what prints is a field; a node a field paints states no relief `color`, so its 3D sides follow the field", "add a `data-from` text node for each field, or remove the field; drop a relief feature's `color` on a field-painted node"),
     "L74": ("component",  "a lamp that declares states is painted from the lamp-colour variable", "fill or stroke the lamp node with `var(--led-color, <off colour>)`, not a literal colour"),
     "L75": ("component",  "a slot's structured facts agree with its prose, and lanes fit the connector", "fix `lanes`/`connector` or the description"),
     "L76": ("device",     "the RJ45 census: every Ethernet jack says whether it has lamps", "use std/rj45@2 with the lamp parts, or say in provenance the jack is bare"),
@@ -1024,7 +1024,7 @@ def lint_component(path, validator):
     # each one a full lint to find the next. The return still happens, because
     # the checks below read a shape the schema has just said is wrong; it happens
     # after the whole file has been reported rather than after one line of it.
-    # `lint_overlay` a few thousand lines down has always done it this way.
+    # The listing walk in `main` has always done it this way.
     schema_errors = list(validator.iter_errors(data))
     for e in schema_errors:
         err(path, "L1", f"{'/'.join(str(p) for p in e.path)}: {e.message}")
@@ -3249,6 +3249,33 @@ def lint_component_fields(path, data, _lib_roots=None):
                 err(path, "L73", f"field {k} has no data-from, data-fill-from, "
                                  f"data-stroke-from, data-stroke-derive or data-r-from "
                                  f"node in skin {skin}")
+        # A FIELD-PAINTED NODE TAKES ITS 3D SIDES FROM ITS ART (#643). relief.js
+        # derives a solid's side colour from the node's painted art, and reads
+        # it again on every repaint, so a field change recolours the sides -
+        # but only when the feature states no `color`: a `data-z-color` is a
+        # statement and is never overridden (#481). A literal `color` on a node
+        # wired to a field left the Amphenol DAC's green strap and the Siemon
+        # AOC's aqua jacket with grey and black sides.
+        colored = {f.get("node"): f.get("color")
+                   for f in ((data.get("relief") or {}).get("features") or [])
+                   if isinstance(f, dict) and f.get("color")}
+        if colored:
+            try:
+                root_el = ET.fromstring(text)
+            except ET.ParseError:
+                root_el = None
+            for el in (root_el.iter() if root_el is not None else []):
+                node = el.get("id")
+                if node not in colored:
+                    continue
+                wired = sorted({e.get(a) for e in el.iter()
+                                for a in ("data-fill-from", "data-stroke-from")
+                                if e.get(a)})
+                if wired:
+                    err(path, "L73", f"relief feature {node!r} states color "
+                                     f"{colored[node]} but skin {skin} paints it "
+                                     f"from {', '.join(wired)} - drop the color, "
+                                     "so its 3D sides follow the field")
     undeclared = set().union(*seen.values()) - set(fields) if seen else set()
     if undeclared:
         warn(path, "L73", f"skin reads {', '.join(sorted(undeclared))} from attrs but the "
@@ -5631,6 +5658,10 @@ def lint_listing(path, data, roots):
             err(path, "L56", f"configuration {c!r} is not one of {hw}'s "
                 f"({', '.join(sorted(cfgs))}). A listing renames or renumbers the "
                 "hardware's own configurations; it cannot add one")
+        elif ((dev.get("configurations") or {}).get(c) or {}).get("kind") == "example":
+            err(path, "L56", f"configuration {c!r} is `kind: example` on {hw} - an "
+                "illustration, which exports no device type, so nothing here would ever "
+                "be named. Override an orderable configuration instead")
     ids = _listing_ids(dev)
     for pat, pid in _listing_targets(data.get("interfaces"), "physical"):
         if pid not in ids:
@@ -5655,42 +5686,64 @@ def lint_library_listings(roots):
     case that makes this real: it sells one name over more than one box (the
     NCP-40C is certified on a UfiSpace S9700-53DX and an Edgecore COR550). Two
     listings under `drivenets/` that both export NCP-40C would write one file
-    twice and keep the second. Only the vendor's OWN names are checked - a
-    listing that renames nothing exports the hardware's SKUs, which the
-    hardware already holds unique.
+    twice and keep the second - and publish.sh exports each device in its own
+    process, so no run of the exporter sees both. This is the gate.
+
+    WHAT EACH LISTING EXPORTS is asked of the exporter (`listing_config_model`),
+    not re-derived: the two used to pick different SKUs. A configuration with no
+    override exports the hardware's own SKU, and those are unique already -
+    they are the hardware's filenames - so a collision needs an override on at
+    least one side, and an override is checked against every other listing's
+    overrides AND against the hardware part numbers it would inherit.
+
+    NAMES - top-level and per-configuration aliases - are one listing's unless
+    EVERY claimant marks the name `shared`, the rule L111 holds devices to.
     """
+    from portrayal.dcim_export import listing_config_model
     by_ns = {}
     for f in libwalk.iter_listings([Path(r) for r in roots]):
         d = load_yaml(f) or {}
         by_ns.setdefault(f.parent.parent.name, []).append((f, d))
     for ns, items in by_ns.items():
-        models, names = {}, {}
+        overrides, inherited, names = {}, {}, {}
         for f, d in items:
-            for cname, c in (d.get("configurations") or {}).items():
-                c = c or {}
-                m = c.get("model") or (sorted(c.get("part-numbers") or {}) or [None])[0]
+            hw = str(d.get("hardware") or "")
+            man = next((Path(r) / "devices" / hw / "device.yaml" for r in roots
+                        if (Path(r) / "devices" / hw / "device.yaml").exists()), None)
+            dev = (load_yaml(man) or {}) if man else {}
+            over = d.get("configurations") or {}
+            for cname, c in over.items():
+                m, _ = listing_config_model(c)
                 if m:
-                    models.setdefault(str(m).lower(), []).append(f"{f.parent.name}:{cname}")
-            # ALIASES ONLY, and not a shared one. A listing's top-level `model`
-            # is a display name and may be one the vendor uses for two boxes -
-            # DriveNets' NCP-96X6C-S is both the S9600-102XC and its refresh;
-            # what must stay unique is what a DCIM keys on, checked above.
-            for n_ in dict.fromkeys(a.get("name") for a in (d.get("aliases") or [])
-                                    if isinstance(a, dict) and not a.get("shared")):
-                if n_:
-                    names.setdefault(str(n_).lower(), []).append((f, False))
-        for m, owners in sorted(models.items()):
-            if len(owners) > 1:
-                err(items[0][0].parent.parent, "L124", f"{ns}: {len(owners)} configurations "
-                    f"export the model {m!r} ({', '.join(owners)}). A DCIM keys a device type "
-                    "on manufacturer and model, so one would overwrite the other - give each "
-                    "its own `model` or SKU")
+                    overrides.setdefault(str(m).lower(), []).append(f"{f.parent.name}:{cname}")
+            for cname, c in (dev.get("configurations") or {}).items():
+                if listing_config_model(over.get(cname))[0]:
+                    continue                     # renamed: the hardware SKU is not exported
+                for sku in ((c or {}).get("part-numbers") or {}):
+                    inherited.setdefault(str(sku).lower(), set()).add(f"{f.parent.name}:{cname}")
+            claimed = list(d.get("aliases") or [])
+            for c in over.values():
+                claimed += list((c or {}).get("aliases") or [])
+            for a in claimed:
+                if isinstance(a, dict) and a.get("name"):
+                    names.setdefault(str(a["name"]).lower(), []).append((f, bool(a.get("shared"))))
+        where = items[0][0].parent.parent
+        for m, owners in sorted(overrides.items()):
+            clash = owners + sorted(inherited.get(m, set()) - set(owners))
+            if len(clash) > 1:
+                err(where, "L124", f"{ns}: {len(clash)} configurations export the model "
+                    f"{m!r} ({', '.join(clash)}). A DCIM keys a device type on manufacturer "
+                    "and model, so one would overwrite the other - give each its own `model` "
+                    "or SKU")
         for n_, owners in sorted(names.items()):
-            if len(owners) > 1:
-                err(owners[1][0], "L124", f"{ns}: the alias {n_!r} is claimed by "
-                    f"{len(owners)} listings ({', '.join(o[0].parent.name for o in owners)}). "
-                    "A search for it should find one box - if the vendor really uses one "
-                    "name for both, mark it `shared: true` in each and say why in its `note`")
+            files = {o[0] for o in owners}
+            if len(files) > 1 and not all(o[1] for o in owners):
+                unmarked = sorted({o[0].parent.name for o in owners if not o[1]})
+                err(owners[-1][0], "L124", f"{ns}: the alias {n_!r} is claimed by "
+                    f"{len(files)} listings ({', '.join(sorted(x.parent.name for x in files))}) "
+                    f"and {', '.join(unmarked)} do(es) not mark it shared. A search for it should "
+                    "find one box - if the vendor really uses one name for both, mark it "
+                    "`shared: true` in EVERY claimant and say why in its `note`")
 
 
 def lint_vendor_registry(root):
@@ -9064,7 +9117,7 @@ def lint_device(path, validator, lib_roots):
     # each one a full lint to find the next. The return still happens, because
     # the checks below read a shape the schema has just said is wrong; it happens
     # after the whole file has been reported rather than after one line of it.
-    # `lint_overlay` a few thousand lines down has always done it this way.
+    # The listing walk in `main` has always done it this way.
     schema_errors = list(validator.iter_errors(data))
     for e in schema_errors:
         err(path, "L1", f"{'/'.join(str(p) for p in e.path)}: {e.message}")

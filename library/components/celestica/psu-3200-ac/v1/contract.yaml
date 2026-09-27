@@ -1,0 +1,101 @@
+format: 1
+kind: module
+name: psu-3200-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  3200 W hot-swap AC supply of the Celestica DS6000 - a CRPS-width module with a round fan
+  grille on its inboard half, a red U-bail handle across the fan, an IEC C20 inlet turned
+  portrait on the outboard half and a red release latch at its right edge. Four fill the
+  DS6000's lower rear row (2+2). No Celestica document names the FRU or prints its ordering
+  code, so the part is named for its rating and feed rather than for a model number.
+size: {w: 73.5, h: 40.0}
+size-confidence: {w: borrowed, h: borrowed}
+attrs:
+  power-output-w: 3200
+  input: ac
+  input-range: '180-240 VAC auto-ranging, 47-63 Hz'
+provenance:
+  power: >-
+    datasheet - Celestica DS6000 datasheet rev 100725, POWER AND COOLING: "2+2 redundant, hot
+    swappable AC/DC 3200W PSUs" and "180-240VAC auto-ranging, 47-63Hz /40-72VDC input". The
+    figure is the supply's rating, filed as output because the datasheet names the PSU by it.
+    There is no low-line figure because the supply has no low-line input (180 V minimum), and
+    no efficiency class is given.
+  size: >-
+    borrowed - the crps-1u registry envelope, 73.5 x 40. The only square-on source is the
+    STORDIS-hosted DS6000 rear render (ds6000-B, 1200 px, 2.09 px/mm across the 438 mm body),
+    where the four supply faces read 74.35 x 41.4 mm including the dark bay frame line drawn
+    round each one, on a 77.49 mm pitch. That brackets the CRPS width to a pixel and a half,
+    and the render's vertical axis runs 1.8% long against the datasheet height (see the
+    device's gate-1 note), which accounts for most of the 1.4 mm in height. The datasheet
+    never says CRPS, so `conforms:` is not claimed; the envelope is borrowed, not asserted.
+  face: >-
+    photo-measured on ds6000-B at 2.09 px/mm, cross-read against the Foleon three-quarter
+    render ds6000-A-3 (3000 px) for what each feature IS: fan guard centred 21.2 mm in from
+    the inboard edge, the red bail across it at 17-22 mm with a black roller grip, the inlet
+    shroud 41.5-67.2 mm across and nearly full height, the red latch at 67.8-72.6 mm, 12.8-30.7
+    mm down. Every position is +/-0.5 mm at that resolution, and the callout discs STORDIS
+    printed over the supplies hide the centre of every face, so the fan hub is read from the
+    three-quarter render only.
+  inlet: >-
+    photo - the three-quarter render ds6000-A-3 shows a rounded-rectangle shroud with two
+    parallel flat pins and a third turned across them, which is the IEC 60320 C20 pin layout,
+    turned portrait with the earth blade INBOARD (toward the fan) and the line and neutral pair
+    outboard, as ds6000-B shows on all four supplies - rotate 270, not 90, which the first draft
+    had and the matched-scale overlay after std/c20-inlet 1.3.1 caught. No Celestica document
+    names the inlet; C20 is the
+    reading of the render, and 16 A at 180-240 V is what a 3200 W supply needs, but it is a
+    reading, not a statement.
+  status-led: >-
+    estimated - a green lens shows at the lower inboard corner of the supplies in ds6000-A-3;
+    on the square-on rear it is hidden under STORDIS's callout discs. Position read from the
+    three-quarter render, so it is placement by eye, not a measurement. No document gives the
+    lamp's states; the two lit states declared are the library's usual supply pair, not
+    Celestica's.
+  handle-colour: >-
+    photo - red on both renders of the front-to-back AC build (the only build photographed).
+    It is a field, so a back-to-front build can recolour it once its colour is known; the
+    DS6000 device records that colour as unseen.
+  depth: >-
+    NOT STATED. body.depth is the crps-1u registry depth, borrowed with the width; no document
+    gives the supply's length.
+states: [ok, fail, absent]
+elements:
+  status-led:
+    at: [2.2, 34.6]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: fail, color: '#f59e0b'}]
+  handle: {at: [1.0, 15.6], size: [29.0, 8.0], class: handle}
+  latch: {at: [67.8, 11.0], size: [4.8, 18.0], class: latch}
+parts:
+  - {ref: std/c20-inlet@1, id: inlet, at: [38.5, 7.8], rotate: 270}
+fields:
+  handle-finish:
+    label: Handle and latch colour
+    type: text
+    default: '#d32f2f'
+relief:
+  features:
+    - node: handle
+      uhandle: 18
+      confidence: estimated
+      source: >-
+        celestica/psu-3200-ac@1's own face key: the bail is seen swung down across the fan in
+        the three-quarter render ds6000-A-3 and its reach is not measurable from either image.
+        18 mm is the proportion it shows against the 40 mm face height, read by eye.
+    - node: latch
+      out: 2.0
+      confidence: estimated
+      source: >-
+        celestica/psu-3200-ac@1's own face key - the latch stands proud of the face in
+        ds6000-A-3; the render gives no scale in depth.
+connection-points:
+  power: {at: [54.7, 20.0], direction: front}
+body:
+  depth: 185.0
+  color: '#b9bec4'
+skins: [default]

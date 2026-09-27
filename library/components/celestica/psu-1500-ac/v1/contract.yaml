@@ -1,0 +1,120 @@
+format: 1
+kind: module
+name: psu-1500-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: Celestica 1500 W AC hot-swap power supply, 55.2 x 39.0 mm face - a
+  square-mesh grille on the left crossed by a vertical U-handle, an IEC C14 inlet
+  turned portrait (earth contact to the right) in a raised boss on the right, two
+  status lamps marked '!' and a check mark at lower left, and a release latch at
+  the lower right edge. Fitted two per DS4000 and DS4001, one at each end of the
+  rear. No vendor part number is printed in any held document, so the part is
+  named for its rating and feed.
+size: {w: 55.2, h: 39.0}
+size-confidence: {w: measured, h: measured}
+attrs: {power-output-w: 1500, input: ac}
+provenance:
+  power: >-
+    datasheet - DS4001 datasheet, Power and Cooling: '1+1 redundant, hot swap PSUs, 1500W each';
+    the installation guide's What's in the Box tables describe every DS4000 and DS4001 chassis
+    SKU as '2X1500W AC PSU'. Input: DS4001 datasheet 'AC 47~63Hz, 100 ~ 240 V nominal, 90~264V
+    max'; the DS4000 datasheet adds '180-300VDC auto input', i.e. the same supply takes a
+    high-voltage DC feed through its inlet. Output rating only; no held document gives a
+    low-line derating.
+  size: >-
+    measured - installation guide Product Overview Figure 4 (Rear Panel View), orthographic CAD,
+    3.8404 px/mm across (face width 438.5 mm) and 3.898 px/mm down (height 43.1 mm). PSU2's face
+    runs x 45-256.7 px and PSU1's x 1449-1663 px; the lavender face fill alone spans 46-254 and
+    1453-1661 on both, so the face is 54.4-55.1 mm wide depending on whether its outline is
+    counted, recorded as 55.2 with the outline. A second reading by the DS4100 modeller of that
+    guide's own rear callout gave 55.7-55.9 'between frame gaps'. Height rows 10-163 px, 39.0 mm.
+  face: >-
+    measured, same figure at 5x, all relative to the face's top-left: grille x 1.0-28.4 over
+    the full height except a solid lamp plate at lower left; the vertical U-handle x 19.5-25.8,
+    y 1.0-38.5; the C14 boss x 28.9-52.6, y 1.8-31.6 (drawn to 51.2 so it
+    does not run under the latch, which the CAD draws overlapping the boss's lower right
+    corner by 1.3 mm), its coupler cavity drawn portrait with the
+    earth contact on the RIGHT, so std/c14-inlet@1 is composed turned 90 degrees; lamps centred
+    at x 6.5, y 25.4 ('!') and y 32.1 (check mark), rings 5.7 mm across; the release latch x
+    51.3-55.2, y 24.6-38.7. The CAD also draws a safety label on the top of the supply
+    (Grounding figure), which is not on this face.
+  colour: >-
+    photo - DS4001 rear render (Foleon ds4001-side-by-side): silver mesh face, black U-handle,
+    ORANGE latch tab; the CAD's lavender and grey are its own shading and are not used.
+  lamps: >-
+    The guide's Rear Panel Status LEDs table names the PSU module lamps 'P-1 / P-2' with Green -
+    all PSUs operating normally, Red - PSU error(s) detected, Off - PSU off. The face carries
+    TWO lamps, beside printed '!' and check-mark symbols; the table describes one lamp per
+    supply with two colours. The states are split across the two windows by their symbols -
+    the check-mark window takes the green state and the '!' window the red - which is an
+    inference from the symbols, not a statement the guide makes.
+states: [absent]
+elements:
+  lamp-fault:
+    at: [5.0, 23.9]
+    size: [3.0, 3.0]
+    class: led
+    states: ['off', {name: fail, color: '#ef4444'}]
+    description: >-
+      the lamp beside the printed '!' - guide Rear Panel Status LEDs, PSU module row,
+      Red (PSU error(s) detected), Off (PSU off)
+  lamp-ok:
+    at: [5.0, 30.6]
+    size: [3.0, 3.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}]
+    description: >-
+      the lamp beside the printed check mark - guide Rear Panel Status LEDs, PSU
+      module row, Green (all PSUs operating normally), Off (PSU off)
+  handle: {at: [19.5, 1.0], size: [6.3, 37.5], class: handle}
+  latch: {at: [51.3, 24.6], size: [3.9, 14.1], class: latch}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [26.75, 6.7], rotate: 90}
+relief:
+  features:
+    - node: grille
+      vent: 20
+      confidence: estimated
+      source: >-
+        celestica/psu-1500-ac@1 provenance.face - the figure gives the grille outline; the
+        depth behind it is not stated in any held document.
+    - node: inlet-frame
+      out: 2.0
+      confidence: estimated
+      source: >-
+        celestica/psu-1500-ac@1 provenance.face - the Grounding figure shows the C14 boss
+        standing proud of the mesh; its standoff is not dimensioned.
+    - node: handle
+      uhandle: 22
+      confidence: estimated
+      source: >-
+        celestica/psu-1500-ac@1 provenance.face - the Grounding figure shows a round-section
+        U-handle standing well off the face; its reach is not dimensioned.
+    - node: latch
+      out: 3.0
+      confidence: estimated
+      source: >-
+        celestica/psu-1500-ac@1 provenance.colour - the DS4001 rear render shows the orange
+        tab standing proud of the face; not dimensioned.
+    - node: lamp-fault
+      dome: 0.4
+      confidence: estimated
+      source: celestica/psu-1500-ac@1 provenance.face - lamp rings measured, no depth held.
+    - node: lamp-ok
+      dome: 0.4
+      confidence: estimated
+      source: celestica/psu-1500-ac@1 provenance.face - lamp rings measured, no depth held.
+connection-points:
+  power: {at: [40.75, 16.7], direction: rear}
+fields:
+  latch-finish:
+    label: Latch colour
+    type: text
+    default: '#f39c1e'
+  handle-finish:
+    label: Handle colour
+    type: text
+    default: '#1c1f23'
+skins: [default]
