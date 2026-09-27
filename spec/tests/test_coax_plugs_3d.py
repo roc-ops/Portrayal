@@ -24,6 +24,7 @@ import pytest
 import yaml
 
 import warmrender
+from portrayal.artifacts import face_file
 from test_coax_plugs import EACH, LIB, NODES, PLUGS, ROOT, SEATS, SWAPS, doc, seated  # noqa: F401
 from test_head_3d import apply, box, lift_of
 from test_nested_occupants import (assert_same_turn, by_path, cage_mate, device_matrix,
@@ -154,7 +155,7 @@ def rotated(tmp_path_factory):
     r = warmrender.run([sys.executable, str(ROOT / "spec/tools/portrayal/render.py"), str(dev),
                         "--library", str(LIB), "--out", str(o)], capture_output=True, text=True)
     assert r.returncode == 0, r.stderr[-800:]
-    root = ET.parse(o / f"{name}.{config}.{view}.svg").getroot()
+    root = ET.parse(face_file(o, name, config, view)).getroot()
     return root, {c: p for p in root.iter() for c in p}
 
 

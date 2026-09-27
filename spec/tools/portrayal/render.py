@@ -2040,7 +2040,10 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     svg.set("viewBox", f"0 0 {w} {h}")
     svg.set("data-device", device["name"])
     svg.set("data-view", view_name)
-    svg.set("data-config", config_name)
+    # NO CONFIGURATION NAME ON THE FACE (#665). A drawing is written once and
+    # shared by every configuration that draws it the same - the R740xd's 42
+    # configurations draw 2 fronts - so a face cannot say which one it is.
+    # `<device>.configs.json` `configs[].files` says which file each draws.
     # AN OPEN-FRAME FACE SAYS SO ON ITS ROOT, because what it changes is the
     # chassis and not any one bay: the kit lines the inside of the box when a
     # face declares it, so an empty slot looks into the chassis's interior
@@ -3632,7 +3635,6 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         "device": f"{device['manufacturer']} {device['model']}",
         "device-version": device["version"],
         "view": view_name,
-        "config": config_name,
         "resolved-components": dict(sorted(resolved.items())),
         # THE SOURCE IS NAMED, NOT CARRIED (#665). Every face of a device held
         # the same manifest - 139 MB of a 249 MB build, and 107 KB in each of
@@ -3684,14 +3686,34 @@ def source_bytes(device):
     return (json.dumps(device, sort_keys=True, indent=1) + "\n").encode()
 
 
+def _face_files(device, outdir):
+    """The per-configuration face files the last build wrote for this device."""
+    return [p.name for p in Path(outdir).glob(f"{device['name']}.*.*.svg")
+            if len(p.name.split(".")) == 4]
+
+
 def _outputs(device, configs, default_cfg, outdir):
+    """What a fresh build of this device leaves behind.
+
+    Which configurations' names the faces carry depends on what they draw, so
+    it is not known before rendering. configs.json says, when there is one: its
+    `files` for every configuration it lists. When it lists a different set of
+    configurations than the manifest has, the build is stale anyway.
+    """
     names = {f"{device['name']}.configs.json", f"{device['name']}.source.json"}
+    for view_name in device.get("views") or {}:
+        names.add(f"{device['name']}.{view_name}.svg")
+    idx = Path(outdir) / f"{device['name']}.configs.json"
+    try:
+        listed = {c["name"]: c.get("files") for c in json.loads(idx.read_text())["configs"]}
+    except (OSError, ValueError, KeyError, TypeError):
+        listed = {}
     for cfg_name in configs:
-        for view_name in device.get("views") or {}:
-            names.add(f"{device['name']}.{cfg_name}.{view_name}.svg")
-            if cfg_name == default_cfg:
-                names.add(f"{device['name']}.{view_name}.svg")
-    return {outdir / n for n in names}
+        if not listed.get(cfg_name):
+            names.add(f"{device['name']}.{cfg_name}.__unbuilt__.svg")   # never exists: stale
+            continue
+        names.update(listed[cfg_name].values())
+    return {Path(outdir) / n for n in names}
 
 
 def is_stale(device, device_yaml, lib, configs, default_cfg, outdir):
@@ -4330,21 +4352,37 @@ def main():
         print(f"up to date {device['name']}")
         return
 
+    # EACH DISTINCT DRAWING IS WRITTEN ONCE (#665). Configurations that differ
+    # only in a part one face cannot see draw that face identically: the
+    # R740xd's 42 draw 2 fronts, 1 left and 10 tops, and wrote 252 files for
+    # them. The first configuration (in manifest order) to draw a face names
+    # its file; every later one that draws the same bytes points at it through
+    # `files` in configs.json. Configurations are rendered in the same order
+    # every build, so the names are deterministic.
+    old = set(_face_files(device, outdir))
+    written, files = {}, {}
     for cfg_name, cfg in configs.items():
         # THE FACE IS THE NAME, whichever panel this configuration binds to it.
         # A consumer asks for `front` and gets this configuration's front.
+        files[cfg_name] = {}
         for view_name, (_src, view) in resolve_views(device, cfg).items():
             svg = render_view(device, view_name, view or {}, lib, include=tuple(args.include),
                               silkscreen=("silkscreen" not in args.without),
                               config_name=cfg_name, config=cfg)
             ET.indent(svg, space="  ")
-            data = ET.tostring(svg, encoding="unicode", xml_declaration=False)
-            names = [f"{device['name']}.{cfg_name}.{view_name}.svg"]
+            data = ('<?xml version="1.0" encoding="UTF-8"?>\n'
+                    + ET.tostring(svg, encoding="unicode", xml_declaration=False) + "\n")
+            key = (view_name, hashlib.sha256(data.encode()).digest())
+            if key not in written:
+                written[key] = f"{device['name']}.{cfg_name}.{view_name}.svg"
+                (outdir / written[key]).write_text(data)
+            files[cfg_name][view_name] = written[key]
             if cfg_name == default_cfg:
-                names.append(f"{device['name']}.{view_name}.svg")
-            for nm in names:
-                (outdir / nm).write_text('<?xml version="1.0" encoding="UTF-8"?>\n' + data + "\n")
+                (outdir / f"{device['name']}.{view_name}.svg").write_text(data)
         print(f"wrote config {cfg_name}")
+    # a face the last build wrote and this one shares is stale, not a spare
+    for stale in old - {n for f in files.values() for n in f.values()}:
+        (outdir / stale).unlink(missing_ok=True)
     (outdir / f"{device['name']}.source.json").write_bytes(source_bytes(device))
     ch = device.get("chassis") or {}
     # What this model can and cannot do, and why. The viewer has to know before
@@ -4459,7 +4497,14 @@ def main():
                               # `views` at the top level stays the six faces, so
                               # a loader that fetches a face per name never asks
                               # for a variant's file, which does not exist.
-                              "views": c.get("views") or {}}
+                              "views": c.get("views") or {},
+                              # WHICH FILE DRAWS EACH FACE of this configuration
+                              # - `{front: "r740xd.sff24-rc0-noriser.front.svg"}`.
+                              # A drawing is written once and shared by every
+                              # configuration that draws it identically, so the
+                              # file is looked up here, never built from the
+                              # configuration's name (#665).
+                              "files": files.get(n, {})}
                              for n, c in sorted(configs.items())],
                  # what each bay will take, so a viewer can offer the swap rather
                  # than guessing from component class

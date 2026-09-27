@@ -14,6 +14,7 @@ import pytest
 import yaml
 
 import warmrender
+from portrayal.artifacts import face_file
 from test_nested_occupants import by_path, cage_mate, device_point, own_mate
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -174,7 +175,7 @@ def seated(tmp_path_factory):
         assert r.returncode == 0, r.stderr[-800:]
         configs = json.loads((o / f"{name}.configs.json").read_text())
         for ref, view, _bays, _host in seats:
-            root = ET.parse(o / f"{name}.{config}.{view}.svg").getroot()
+            root = ET.parse(face_file(o, name, config, view)).getroot()
             out[ref] = (root, {c: p for p in root.iter() for c in p}, configs)
     assert set(out) == set(SEATS)
     return out

@@ -42,6 +42,7 @@ from portrayal import libwalk
 from test_lifted_seat_js import (LIB, RENDER, SPEC, build_components, chain_matrix,
                                  descendants, is_occupant, mismatches, numbers, skin_file,
                                  spec_of)
+from portrayal.artifacts import face_file
 
 SCRIPT = SPEC / "tests/js/nested-slots.mjs"
 PLUG, SIMPLEX = "generic/lc-duplex-plug@2", "generic/lc-plug@2"
@@ -129,14 +130,14 @@ def world(tmp_path_factory):
                                                     ("s9510-30xc", "ufispace/s9510-30xc"))}
 
     def face(out, name, cfg):
-        return ET.parse(out / f"{name}.{cfg}.front.svg").getroot()
+        return ET.parse(face_file(out, name, cfg, "front")).getroot()
     faces = {f"fhd:{c}": face(fhd_out, fhd, c) for c in ["populated", *FHD_CONFIGS]}
     faces.update({f"dcp:{c}": face(dcp_out, dcp, c) for c in ["default", *DCP_CONFIGS]})
     faces["c40g:bdm-3plus1"] = face(wrap["c40g"], "c40g", "bdm-3plus1")
     faces["s9510-30xc:ac"] = face(wrap["s9510-30xc"], "s9510-30xc", "ac")
     # the rear face: every cassette's back, drawn as a projection in its hole
     for c in ("populated", "rear", "rearplug"):
-        faces[f"fhd-rear:{c}"] = ET.parse(fhd_out / f"{fhd}.{c}.rear.svg").getroot()
+        faces[f"fhd-rear:{c}"] = ET.parse(face_file(fhd_out, fhd, c, "rear")).getroot()
     meta = {n: json.loads((o / f"{n}.configs.json").read_text())
             for o, n in ((fhd_out, fhd), (dcp_out, dcp), *((o, n) for n, o in wrap.items()))}
     idx = json.loads((dist / "components.json").read_text())["components"]
