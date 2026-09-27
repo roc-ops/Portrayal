@@ -1,10 +1,11 @@
 ---
 manufacturer: Celestica
-model: DS4001
-slug: celestica-ds4001
+model: R3240-F9103-A0
+slug: celestica-r3240-f9103-a0
 u_height: 1.0
 is_full_depth: true
-airflow: front-to-rear
+part_number: R3240-F9103-A0
+airflow: rear-to-front
 description: Celestica DS4001 1U 32-port 400GbE data center switch - 32 QSFP-DD in two belly-to-belly
   rows of sixteen (ports 1, 2, 31 and 32 printed '-HP', the 20 W high-power positions), a stacked pair
   of 10G...
@@ -120,9 +121,10 @@ comments: "Celestica DS4001 1U 32-port 400GbE data center switch - 32 QSFP-DD in
   \ 10G SFP+ management ports (M1/M2) at the LEFT end, and at the right four status lamps and a vertical\
   \ console RJ45 / USB-A / management RJ45 stack; at the rear two 1500 W supplies (1+1) either side of\
   \ seven hot-swap fans (6+1). 12.8 Tbps, 70 MB buffer. The DS4000 shares its installation guide and rear\
-  \ but has a different faceplate.\n\nConfiguration `f2b`: Front-to-back airflow, two 1500 W AC supplies\
-  \ and seven fans - R3240-F9102-A0 (4C D1627, 1x16 GB DDR4, 64 GB SSD). The build the renders show.\n\
-  \nDatasheet: Celestica DS4001 1U 32-port 400GbE Data Center Switch datasheet\n  https://www.celestica.com/hps/ds4001\n\
+  \ but has a different faceplate.\n\nConfiguration `b2f`: Back-to-front airflow - R3240-F9103-A0 (same\
+  \ control plane). QSFP-DD power drops to 24 x 5 W + 8 x 12 W (ports 25-32). No held document shows whether\
+  \ the fans or supply latches change colour for this build, so the art is the f2b art (see the b2f-finish\
+  \ gap).\n\nDatasheet: Celestica DS4001 1U 32-port 400GbE Data Center Switch datasheet\n  https://www.celestica.com/hps/ds4001\n\
   \nFacts carried in the model that this schema has no field for:\n- compliance.emc: CN (GB/T9254-2008\
   \ Class A), EU (EN550032, EN55035, EN300386), FCC, VCCI, CCC\n- compliance.environment: RoHS\n- compliance.safety:\
   \ UL/CSA/IEC/EN60950-1/62368-1, UL, CB, CCC (GB4943.1-2011)\n- environmental.operating-humidity: 5 to\
@@ -141,6 +143,6 @@ comments: "Celestica DS4001 1U 32-port 400GbE data center switch - 32 QSFP-DD in
   \ per datasheet)\n- platform.storage: 64 GB M.2 SSD (both SKUs)\n- power.input-ac: 100-240 V nominal\
   \ (90-264 V max), 47-63 Hz\n- power.psu-redundancy: 1+1 hot-swappable, 1500 W each\n- thermal.fan-redundancy:\
   \ 6+1 hot-swappable\n- thermal.port-power-b2f: 24 x 5 W + 8 x 12 W (ports 25-32)\n- thermal.port-power-f2b:\
-  \ 28 x 15 W + 4 x 20 W (ports 1, 2, 31, 32)\n\nDrawing version 0.1.0. A major bump means a slot moved\
+  \ 28 x 15 W + 4 x 20 W (ports 1, 2, 31, 32)\n\nDrawing version 0.1.1. A major bump means a slot moved\
   \ or an id was renamed, so anything cached from an earlier export may no longer line up.\nModel maturity:\
   \ modelled. Every dimension in the source records where it came from."
