@@ -106,15 +106,20 @@ def test_node_is_installed_rather_than_inherited(workflow):
 
 
 def test_a_fork_never_reaches_the_self_hosted_pool(workflow):
-    """The runner is chosen by a repository variable so that going public is a
-    settings change - and a settings change is the kind that gets forgotten. A
-    self-hosted machine runs whatever a pull request's tree says and is not
-    thrown away afterwards, so the fork test has to come FIRST in every
-    `runs-on`, before the variable is consulted, and fall back to hosted."""
+    """The runner is chosen by a repository variable, and the cross-repository
+    test comes FIRST in every `runs-on`, before the variable is consulted, and
+    falls back to hosted. It compares repository names rather than reading
+    `head.repo.fork`, which is null for a pull request whose fork was deleted.
+
+    THIS IS NOT THE PROTECTION, AND THE WORKFLOW SAYS SO (#656). A pull request
+    runs its own copy of this file, so a fork can rewrite `runs-on`. What keeps
+    a stranger off a self-hosted machine is that none is registered while the
+    repository is public."""
     for name, job in workflow["jobs"].items():
         runs_on = str(job.get("runs-on", ""))
         assert runs_on.startswith(
-            "${{ (github.event.pull_request.head.repo.fork && 'ubuntu-latest')"
+            "${{ (github.event_name == 'pull_request' && "
+            "github.event.pull_request.head.repo.full_name != github.repository && 'ubuntu-latest')"
         ), f"{name}: {runs_on}"
         assert runs_on.rstrip(" }").endswith("'ubuntu-latest'"), f"{name}: {runs_on}"
 
