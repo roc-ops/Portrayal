@@ -96,6 +96,24 @@ def iter_devices(roots):
             for f in sorted(Path(r).glob("devices/*/*/device.yaml"))]
 
 
+def iter_listings(roots):
+    """Every listing.yaml under every root, sorted, as paths. A LIST.
+
+    A listing sits where a device would - `devices/<nos vendor>/<id>/` - and
+    is deliberately not a device.yaml, so every walk above that means "the
+    metal" keeps meaning it. A listing draws nothing and must not be rendered,
+    locked as a device, or counted in a device census.
+    """
+    return [f for r in _roots(roots)
+            for f in sorted(Path(r).glob("devices/*/*/listing.yaml"))]
+
+
+def listing_key(listing_file):
+    """`devices/arrcus/as7726-32x/listing.yaml` -> `arrcus/as7726-32x`."""
+    p = Path(listing_file)
+    return f"{p.parent.parent.name}/{p.parent.name}"
+
+
 def iter_components(roots):
     """Every contract.yaml under every root, sorted, as paths - all majors.
 

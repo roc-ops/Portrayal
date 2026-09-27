@@ -1,13 +1,28 @@
 # library
 
 Content library for Portrayal: component contracts + skins, device manifests, NOS
-overlays, and sanitized device dumps. Compiled SVGs are build artifacts
+listings, and sanitized device dumps. Compiled SVGs are build artifacts
 (`dist/`, gitignored) — render with `spec`.
 
 ```
 components/{std,common,<vendor>}/<name>/v<major>/{contract.yaml, skins/*.svg}
-devices/<vendor>/<model>/{device.yaml, overlays/<nos>.yaml, dumps/}
+devices/<vendor>/<model>/{device.yaml, device.lock.json, dumps/}
+devices/<nos vendor>/<model>/{listing.yaml, listing.lock.json}
 ```
+
+**Listings.** A white box is sold by the company that made it and again by
+every NOS vendor that lists it on its compatibility list - which is how NetBox
+and Nautobot file one: `UfiSpace/S9510-28DC`, `Arrcus/S9510-28DC`,
+`IP Infusion/S9510-28DC`. The hardware is modelled once, under its maker. Each
+NOS vendor's entry is a `listing.yaml` under that vendor's namespace, pointing at
+the device (`hardware: ufispace/s9510-28dc`) and carrying only what the vendor
+changes: what the NOS calls each port (`interfaces`, with breakout), how its
+component tree joins the drawing (`entity-map`), the vendor's own model name and
+catalogue family, and its own part numbers per configuration where it has them.
+It draws nothing. The NOS vendor's namespace is registered in
+`spec/schemas/vendors.yaml` with `role: software`, and every listing cites the
+published compatibility list that puts the box on it. How to write one:
+[`docs/listing-a-nos.md`](../docs/listing-a-nos.md).
 
 Reference device: **Edgecore AS7726-32X** (32× QSFP28 Trident 3 white-box switch),
 built from its datasheet facts (per-field provenance; no datasheet copies in-repo)
@@ -24,13 +39,13 @@ export it to a DCIM without a checkout of this repository.
 | `<device>.<config>.<view>.svg` | the drawing, with `--` DOM ids and `/` data-paths; its `<metadata>` names the source it was drawn from by `source-sha256`. **Written once per distinct drawing**: configurations that draw a face identically share one file, named after the first of them, so find a configuration's face through `configs[].files` in `<device>.configs.json`, never by building the name |
 | `<device>.source.json` | the whole source manifest, every view of it — once per device; the digest in each drawing is of these exact bytes |
 | `<device>.configs.json` | the device's configurations — each with its `kind` (base, orderable, example, model), its `airflow` (front-to-back, back-to-front, side, passive, or `null` where unstated), part numbers, bays, view bindings, and `files`: which drawing each face of it is |
-| `devices.json` | the portfolio index: identity (with `aliases`, the other names a box is sold or listed under), capability, gaps, search blob |
+| `devices.json` | the portfolio index: identity (with `aliases`, the other names a box is sold or listed under), capability, gaps, search blob, and `listings` - which NOS vendors list it |
 | `components.json` | the lean component index — identity, size, skins, attrs, parts (with each part's `group`), the component's own `groups` and `cages` |
 | `components-detail.json` | the same refs with `provenance` and `relief`, split out because they were 88% of the bytes and no viewer reads them |
 | `labs.json` | rack layouts |
 | `gaps.json` | what this library admits it does not know |
 | `vendors.json` | corporate lineage and NOS-vendor registry — what turns `arrcus` into "Arrcus" |
-| `overlays.json` | the NOS overlays, whole: `identity`, `terms`, `interfaces`, `entity-map` |
+| `listings.json` | every NOS vendor's listing, whole - `hardware`, names, part numbers, `terms`, `interfaces`, `entity-map` - with its `manufacturer` resolved |
 
 The last two exist because the DCIM exporter used to read them off the source
 tree, which made "export a NetBox document" a task that needed the development
@@ -49,7 +64,7 @@ in a bay carries the module's own group and role, from the component's
 
 Rules of the road (see spec/DESIGN.md for the full set):
 - Real millimeters everywhere; origin top-left, y-down, per view.
-- Physical IDs follow the silkscreen; NOS naming lives in overlays.
+- Physical IDs follow the silkscreen; NOS naming lives in the NOS vendor's listing.
 - No vendor logos in community skins (contracts may reserve a logo-zone).
 - No datasheet copies or conversions — transcribed facts with provenance only.
 - Dumps must be sanitized (serials, MACs, IPs, hostnames, communities).
