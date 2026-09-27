@@ -83,9 +83,9 @@ provenance:
       and 24.7 with a 3.8 mm lamp band between; management SFP cage 355.6 to 370.7 x 2.6 to 12.3
       (std/sfp@1 14.5 x 10 centred on it); its lamp centred (352.1, 9.5); USB-A shell 329.1 to 342.2 x
       5.5 to 11.4; the stacked management shell 407.0 to 423.6 x 5.4 to 35.4 holding the RJ45 (7.9 to
-      16.5 opening), USB-A (19.2 to 23.4) and console (26.3 to 35.2); status lamps on x 428.9 at y 17.7,
-      22.8, 27.9, 32.8, 3.7 across. The lamp component is common/led-indicator@1 (a 2 mm lens in a 4 mm
-      box), smaller than the drawn 3.7 lens; right pitch, compromise shape.
+      16.5 opening), USB-A (19.2 to 23.4) and console (26.3 to 35.2); status lamps centred on x 428.79 at y 17.68,
+      22.71, 27.83, 32.96 (bright-blob centres), 2.5 across; their legends centred on x 425.3. The lamp component is common/led-indicator@1 (a 2 mm lens in a 4 mm
+      box), smaller than the drawn 2.5 lens; right pitch, compromise shape.
   stack-orientation:
     confidence: estimated
     note: >-
@@ -95,14 +95,22 @@ provenance:
   vents:
     confidence: measured
     note: >-
-      the face is perforated with square holes, about 2.2 mm on a 3.15 mm lattice (close-up), drawn as
-      the grille pattern at that pitch over a backing plate. Fields: above RJ45 blocks 1 and 2 (x 47.5 to
-      186.5, beside the lug tag), above block 4 and around the USB/management SFP on the 48-port panel
-      (x 282.5), down the full height from x 323.5 on the 24-port panel, around the SFP28 bezel, and the
-      strip right of the stack. The 24-port panel is plain metal from x 187 to 323.5 where blocks 3 and 4
-      would be. Where legends print inside a field the metal is solid under them (print-island decor, the
-      es1010 vent-islands precedent). The renders show interior parts through the holes in places; those
-      are not drawn.
+      the face is perforated with square holes, and the perforation STOPS at flat metal around every
+      port, lamp and legend. Fields measured on contrast-stretched copies of the two close-ups (10.15
+      and 7.82 px/mm) and the full 48-port figure: two lattices, 3.2 x 3.2 mm left of the uplinks
+      (holes centred on x 323.9 + 3.2n, y 3.9 + 3.2n) and 4.0 x 3.2 around them (x 374.0 + 4.0n,
+      y 6.65 + 3.2n), drawn as the grille pattern with pattern-pitch and pattern-offset on those
+      lattices; the pattern's holes are about 85 percent of the pitch, larger than the real 2.2 to
+      2.5 mm. Fields: a top-edge row and the block above RJ45 blocks 1-2 (x 47.5 to 186.5, beside the
+      lug tag); above block 4 to x 325.3 and two rows over the USB on the 48-port panel; on the
+      24-port panel a left column at 322.2, the two rows over the USB and the full-height field below
+      y 15.3 to x 371.2; around the uplinks a top-edge row, one row between MGMT COMBO and the SFP28
+      bezel, a block over the status lamps, a column right of them and the bottom rows (under the SFP28
+      legends from y 37.9, under IOIOI from 40.6). Flat: the USB 1 plate (325.3 to the management SFP,
+      y 4.4 to 15.3), the lamp and management SFP, the MGMT COMBO band, the SFP28 bezel and its
+      legends, the stacked management shell and the lamp column. The 24-port panel is plain metal from
+      x 187 to 322.2 where blocks 3 and 4 would be. The renders show interior parts through the holes
+      in places; those are not drawn.
   legends:
     confidence: measured
     note: >-
@@ -327,22 +335,28 @@ views:
     panel:
       decor:
         - {id: faceplate, at: [0, 0], size: [438.2, 43.4], fill: '#24272b', kind: faceplate}
-        - {id: vent-top-left-backing, at: [47.5, 0.9], size: [139, 14], fill: '#24272b', kind: vent-backing}
-        - {id: vent-top-left, at: [47.5, 0.9], size: [139, 14], pattern: grille, pattern-pitch: [3.15, 3.15], vent: 3}
-        - {id: vent-right-backing, at: [282.5, 0.9], size: [92, 14.9], fill: '#24272b', kind: vent-backing}
-        - {id: vent-right, at: [282.5, 0.9], size: [92, 14.9], pattern: grille, pattern-pitch: [3.15, 3.15], vent: 3}
-        - {id: vent-uplink-backing, at: [371, 0.9], size: [35.5, 42.2], fill: '#24272b', kind: vent-backing}
-        - {id: vent-uplink, at: [371, 0.9], size: [35.5, 42.2], pattern: grille, pattern-pitch: [3.15, 3.15], vent: 3}
-        - {id: vent-edge-backing, at: [424.2, 0.9], size: [13.1, 42.2], fill: '#24272b', kind: vent-backing}
-        - {id: vent-edge, at: [424.2, 0.9], size: [13.1, 42.2], pattern: grille, pattern-pitch: [3.15, 3.15], vent: 3}
-        - {id: print-island-1, at: [383.6, 2.9], size: [19.4, 2.8], fill: '#24272b', kind: print-island}
-        - {id: print-island-2, at: [371, 35.9], size: [35.5, 2.9], fill: '#24272b', kind: print-island}
-        - {id: print-island-3, at: [403.2, 17.9], size: [4, 10.5], fill: '#24272b', kind: print-island}
-        - {id: print-island-4, at: [424.2, 15], size: [7, 20.4], fill: '#24272b', kind: print-island}
-        - {id: print-island-5, at: [328.4, 11], size: [11.8, 4.7], fill: '#24272b', kind: print-island}
-        - {id: print-island-6, at: [349.7, 5.1], size: [21.1, 7.8], fill: '#24272b', kind: print-island}
-        - {id: print-island-7, at: [409, 37.9], size: [12.6, 2.9], fill: '#24272b', kind: print-island}
-        - {id: print-island-8, at: [426.4, 15.2], size: [5, 19.8], fill: '#24272b', kind: print-island}
+        - {id: vent-top-edge-backing, at: [3, 0.4], size: [44.5, 1.6], fill: '#24272b', kind: vent-backing}
+        - {id: vent-top-edge, at: [3, 0.4], size: [44.5, 1.6], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
+        - {id: vent-top-left-backing, at: [47.5, 0.4], size: [139, 14.4], fill: '#24272b', kind: vent-backing}
+        - {id: vent-top-left, at: [47.5, 0.4], size: [139, 14.4], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
+        - {id: vent-block4-top-backing, at: [283, 0.4], size: [42.3, 14.4], fill: '#24272b', kind: vent-backing}
+        - {id: vent-block4-top, at: [283, 0.4], size: [42.3, 14.4], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
+        - {id: vent-usb-top-backing, at: [325.3, 0.4], size: [29.9, 4], fill: '#24272b', kind: vent-backing}
+        - {id: vent-usb-top, at: [325.3, 0.4], size: [29.9, 4], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
+        - {id: vent-top-edge-r-backing, at: [371.5, 0.4], size: [53.3, 1], fill: '#24272b', kind: vent-backing}
+        - {id: vent-top-edge-r, at: [371.5, 0.4], size: [53.3, 1], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-over-sfp28-backing, at: [371.2, 5.4], size: [32.6, 2.7], fill: '#24272b', kind: vent-backing}
+        - {id: vent-over-sfp28, at: [371.2, 5.4], size: [32.6, 2.7], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-over-lamps-backing, at: [424.8, 1.4], size: [7.2, 13.2], fill: '#24272b', kind: vent-backing}
+        - {id: vent-over-lamps, at: [424.8, 1.4], size: [7.2, 13.2], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-right-col-backing, at: [432, 1.4], size: [4.4, 35.4], fill: '#24272b', kind: vent-backing}
+        - {id: vent-right-col, at: [432, 1.4], size: [4.4, 35.4], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-bottom-left-backing, at: [371.2, 37.9], size: [34.4, 5.1], fill: '#24272b', kind: vent-backing}
+        - {id: vent-bottom-left, at: [371.2, 37.9], size: [34.4, 5.1], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-under-stack-backing, at: [405.6, 40.6], size: [19.4, 2.4], fill: '#24272b', kind: vent-backing}
+        - {id: vent-under-stack, at: [405.6, 40.6], size: [19.4, 2.4], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-bottom-right-backing, at: [425, 36.8], size: [12.5, 6.2], fill: '#24272b', kind: vent-backing}
+        - {id: vent-bottom-right, at: [425, 36.8], size: [12.5, 6.2], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
         - {id: rj45-shell-1, at: [7.36, 16.1], size: [86.8, 23.4], rx: 0.4, fill: '#b0b5bb', kind: port-shell}
         - {id: rj45-shell-2, at: [99.36, 16.1], size: [86.8, 23.4], rx: 0.4, fill: '#b0b5bb', kind: port-shell}
         - {id: rj45-shell-3, at: [191.36, 16.1], size: [86.8, 23.4], rx: 0.4, fill: '#b0b5bb', kind: port-shell}
@@ -379,18 +393,18 @@ views:
       - {text: '43 ▲▼ 44', at: [333.74, 41.7], font-size: 1.6, anchor: middle, for: [port-43, port-44]}
       - {text: '45 ▲▼ 46', at: [347.7, 41.7], font-size: 1.6, anchor: middle, for: [port-45, port-46]}
       - {text: '47 ▲▼ 48', at: [361.66, 41.7], font-size: 1.6, anchor: middle, for: [port-47, port-48]}
-      - {text: '49 ▲▼ 50', at: [382.12, 37.9], font-size: 1.7, anchor: middle, for: [port-49, port-50]}
-      - {text: '51 ▲▼ 52', at: [396.38, 37.9], font-size: 1.7, anchor: middle, for: [port-51, port-52]}
+      - {text: '49 ▲▼ 50', at: [382.12, 37.5], font-size: 1.7, anchor: middle, for: [port-49, port-50]}
+      - {text: '51 ▲▼ 52', at: [396.38, 37.5], font-size: 1.7, anchor: middle, for: [port-51, port-52]}
       - {text: MGMT COMBO, at: [393.3, 4.85], font-size: 1.8, anchor: middle, for: [mgmt-sfp, mgmt]}
       - {id: combo-bar-sfp, at: [371.1, 4.2], path: 'M 0 0 L 13.2 0', stroke-width: 0.25, for: [mgmt-sfp, mgmt]}
       - {id: combo-bar-rj45, at: [402.3, 4.2], path: 'M 0 0 L 13.0 0', stroke-width: 0.25, for: [mgmt-sfp, mgmt]}
       - {id: combo-drop-rj45, at: [415.3, 4.2], path: 'M 0 0 L 0 1.2', stroke-width: 0.25, for: mgmt}
       - {id: arrow-mgmt-sfp-led, at: [352.1, 6.3], path: 'M -0.7 -0.8 L 0.8 0 L -0.7 0.8 Z', filled: true, for: led-mgmt-sfp}
       - {text: IOIOI, at: [415.3, 40.3], font-size: 1.7, anchor: middle, for: console}
-      - {text: STAT, at: [425.2, 18.2], font-size: 1.4, anchor: middle, rotate: -60, for: led-stat}
-      - {text: FAN, at: [425.2, 23.3], font-size: 1.4, anchor: middle, rotate: -60, for: led-fan}
-      - {text: PWR, at: [425.2, 28.4], font-size: 1.4, anchor: middle, rotate: -60, for: led-pwr}
-      - {text: ALM, at: [425.2, 33.3], font-size: 1.4, anchor: middle, rotate: -60, for: led-alm}
+      - {text: STAT, at: [425.7, 18.11], font-size: 1.4, anchor: middle, rotate: -60, for: led-stat}
+      - {text: FAN, at: [425.7, 23.14], font-size: 1.4, anchor: middle, rotate: -60, for: led-fan}
+      - {text: PWR, at: [425.7, 28.26], font-size: 1.4, anchor: middle, rotate: -60, for: led-pwr}
+      - {text: ALM, at: [425.7, 33.39], font-size: 1.4, anchor: middle, rotate: -60, for: led-alm}
       - {text: SS, at: [331.9, 14.0], font-size: 1.5, anchor: end, for: usb-1}
       - {text: SS, at: [405.9, 26.0], font-size: 1.4, anchor: middle, rotate: -90, for: usb-2}
     components:
@@ -459,10 +473,10 @@ views:
         - {ref: std/usb-a@1, id: usb-2, at: [409.3, 19.05], group: mgmt, rel-pos: 4, attrs: {role: storage, usb: '3.0'}}
         - {ref: common/usb-symbol@1, id: mark-usb-2, at: [402.3, 19.3], rotate: 270, for: usb-2, group: marks, rel-pos: 2}
         - {ref: std/rj45-ganged@2, id: console, at: [408.95, 24.75], group: mgmt, rel-pos: 5, attrs: {media: rj45-serial, role: console}}
-        - {ref: common/led-indicator@1, id: led-stat, at: [426.9, 15.7], for: chassis, group: status-leds, rel-pos: 1, states: ['off', {name: normal, color: '#22c55e', behavior: {mode: alternating, color: '#f59e0b'}}]}
-        - {ref: common/led-indicator@1, id: led-fan, at: [426.9, 20.8], for: chassis, group: status-leds, rel-pos: 2, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
-        - {ref: common/led-indicator@1, id: led-pwr, at: [426.9, 25.9], for: chassis, group: status-leds, rel-pos: 3, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
-        - {ref: common/led-indicator@1, id: led-alm, at: [426.9, 30.8], for: chassis, group: status-leds, rel-pos: 4, states: ['off', {name: no-alarm, color: '#22c55e'}, {name: critical, color: '#f59e0b'}, {name: major, color: '#f59e0b', behavior: {mode: blinking, rate: 4}}, {name: minor, color: '#f59e0b', behavior: {mode: blinking, rate: 1}}]}
+        - {ref: common/led-indicator@1, id: led-stat, at: [426.79, 15.68], for: chassis, group: status-leds, rel-pos: 1, states: ['off', {name: normal, color: '#22c55e', behavior: {mode: alternating, color: '#f59e0b'}}]}
+        - {ref: common/led-indicator@1, id: led-fan, at: [426.79, 20.71], for: chassis, group: status-leds, rel-pos: 2, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+        - {ref: common/led-indicator@1, id: led-pwr, at: [426.79, 25.83], for: chassis, group: status-leds, rel-pos: 3, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+        - {ref: common/led-indicator@1, id: led-alm, at: [426.79, 30.96], for: chassis, group: status-leds, rel-pos: 4, states: ['off', {name: no-alarm, color: '#22c55e'}, {name: critical, color: '#f59e0b'}, {name: major, color: '#f59e0b', behavior: {mode: blinking, rate: 4}}, {name: minor, color: '#f59e0b', behavior: {mode: blinking, rate: 1}}]}
     regions:
       - {id: mgmt-block, at: [324, 0], size: {w: 114.2, h: 43.4}, label: Uplinks and management}
   front-24:
@@ -471,22 +485,30 @@ views:
     panel:
       decor:
         - {id: faceplate, at: [0, 0], size: [438.2, 43.4], fill: '#24272b', kind: faceplate}
-        - {id: vent-top-left-backing, at: [47.5, 0.9], size: [139, 14], fill: '#24272b', kind: vent-backing}
-        - {id: vent-top-left, at: [47.5, 0.9], size: [139, 14], pattern: grille, pattern-pitch: [3.15, 3.15], vent: 3}
-        - {id: vent-right-backing, at: [323.5, 0.9], size: [51, 42.2], fill: '#24272b', kind: vent-backing}
-        - {id: vent-right, at: [323.5, 0.9], size: [51, 42.2], pattern: grille, pattern-pitch: [3.15, 3.15], vent: 3}
-        - {id: vent-uplink-backing, at: [371, 0.9], size: [35.5, 42.2], fill: '#24272b', kind: vent-backing}
-        - {id: vent-uplink, at: [371, 0.9], size: [35.5, 42.2], pattern: grille, pattern-pitch: [3.15, 3.15], vent: 3}
-        - {id: vent-edge-backing, at: [424.2, 0.9], size: [13.1, 42.2], fill: '#24272b', kind: vent-backing}
-        - {id: vent-edge, at: [424.2, 0.9], size: [13.1, 42.2], pattern: grille, pattern-pitch: [3.15, 3.15], vent: 3}
-        - {id: print-island-1, at: [383.6, 2.9], size: [19.4, 2.8], fill: '#24272b', kind: print-island}
-        - {id: print-island-2, at: [371, 35.9], size: [35.5, 2.9], fill: '#24272b', kind: print-island}
-        - {id: print-island-3, at: [403.2, 17.9], size: [4, 10.5], fill: '#24272b', kind: print-island}
-        - {id: print-island-4, at: [424.2, 15], size: [7, 20.4], fill: '#24272b', kind: print-island}
-        - {id: print-island-5, at: [328.4, 11], size: [11.8, 4.7], fill: '#24272b', kind: print-island}
-        - {id: print-island-6, at: [349.7, 5.1], size: [21.1, 7.8], fill: '#24272b', kind: print-island}
-        - {id: print-island-7, at: [409, 37.9], size: [12.6, 2.9], fill: '#24272b', kind: print-island}
-        - {id: print-island-8, at: [426.4, 15.2], size: [5, 19.8], fill: '#24272b', kind: print-island}
+        - {id: vent-top-edge-backing, at: [3, 0.4], size: [44.5, 1.6], fill: '#24272b', kind: vent-backing}
+        - {id: vent-top-edge, at: [3, 0.4], size: [44.5, 1.6], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
+        - {id: vent-top-left-backing, at: [47.5, 0.4], size: [139, 14.4], fill: '#24272b', kind: vent-backing}
+        - {id: vent-top-left, at: [47.5, 0.4], size: [139, 14.4], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
+        - {id: vent-left-col-backing, at: [322.2, 0.4], size: [3.1, 14.9], fill: '#24272b', kind: vent-backing}
+        - {id: vent-left-col, at: [322.2, 0.4], size: [3.1, 14.9], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
+        - {id: vent-usb-top-backing, at: [325.3, 0.4], size: [29.9, 4], fill: '#24272b', kind: vent-backing}
+        - {id: vent-usb-top, at: [325.3, 0.4], size: [29.9, 4], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
+        - {id: vent-lower-backing, at: [322.2, 15.3], size: [49, 27.7], fill: '#24272b', kind: vent-backing}
+        - {id: vent-lower, at: [322.2, 15.3], size: [49, 27.7], pattern: grille, pattern-pitch: [3.2, 3.2], pattern-offset: [322.3, 2.3], vent: 3}
+        - {id: vent-top-edge-r-backing, at: [371.5, 0.4], size: [53.3, 1], fill: '#24272b', kind: vent-backing}
+        - {id: vent-top-edge-r, at: [371.5, 0.4], size: [53.3, 1], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-over-sfp28-backing, at: [371.2, 5.4], size: [32.6, 2.7], fill: '#24272b', kind: vent-backing}
+        - {id: vent-over-sfp28, at: [371.2, 5.4], size: [32.6, 2.7], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-over-lamps-backing, at: [424.8, 1.4], size: [7.2, 13.2], fill: '#24272b', kind: vent-backing}
+        - {id: vent-over-lamps, at: [424.8, 1.4], size: [7.2, 13.2], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-right-col-backing, at: [432, 1.4], size: [4.4, 35.4], fill: '#24272b', kind: vent-backing}
+        - {id: vent-right-col, at: [432, 1.4], size: [4.4, 35.4], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-bottom-left-backing, at: [371.2, 37.9], size: [34.4, 5.1], fill: '#24272b', kind: vent-backing}
+        - {id: vent-bottom-left, at: [371.2, 37.9], size: [34.4, 5.1], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-under-stack-backing, at: [405.6, 40.6], size: [19.4, 2.4], fill: '#24272b', kind: vent-backing}
+        - {id: vent-under-stack, at: [405.6, 40.6], size: [19.4, 2.4], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
+        - {id: vent-bottom-right-backing, at: [425, 36.8], size: [12.5, 6.2], fill: '#24272b', kind: vent-backing}
+        - {id: vent-bottom-right, at: [425, 36.8], size: [12.5, 6.2], pattern: grille, pattern-pitch: [4.0, 3.2], pattern-offset: [372.0, 5.05], vent: 3}
         - {id: rj45-shell-1, at: [7.36, 16.1], size: [86.8, 23.4], rx: 0.4, fill: '#b0b5bb', kind: port-shell}
         - {id: rj45-shell-2, at: [99.36, 16.1], size: [86.8, 23.4], rx: 0.4, fill: '#b0b5bb', kind: port-shell}
         - {id: sfp28-bezel, at: [375.0, 10.5], size: [28.5, 24.6], rx: 0.3, fill: '#a9aeb4', kind: cage-bezel}
@@ -509,18 +531,18 @@ views:
       - {text: '19 ▲▼ 20', at: [149.74, 41.7], font-size: 1.6, anchor: middle, for: [port-19, port-20]}
       - {text: '21 ▲▼ 22', at: [163.7, 41.7], font-size: 1.6, anchor: middle, for: [port-21, port-22]}
       - {text: '23 ▲▼ 24', at: [177.66, 41.7], font-size: 1.6, anchor: middle, for: [port-23, port-24]}
-      - {text: '25 ▲▼ 26', at: [382.12, 37.9], font-size: 1.7, anchor: middle, for: [port-25, port-26]}
-      - {text: '27 ▲▼ 28', at: [396.38, 37.9], font-size: 1.7, anchor: middle, for: [port-27, port-28]}
+      - {text: '25 ▲▼ 26', at: [382.12, 37.5], font-size: 1.7, anchor: middle, for: [port-25, port-26]}
+      - {text: '27 ▲▼ 28', at: [396.38, 37.5], font-size: 1.7, anchor: middle, for: [port-27, port-28]}
       - {text: MGMT COMBO, at: [393.3, 4.85], font-size: 1.8, anchor: middle, for: [mgmt-sfp, mgmt]}
       - {id: combo-bar-sfp, at: [371.1, 4.2], path: 'M 0 0 L 13.2 0', stroke-width: 0.25, for: [mgmt-sfp, mgmt]}
       - {id: combo-bar-rj45, at: [402.3, 4.2], path: 'M 0 0 L 13.0 0', stroke-width: 0.25, for: [mgmt-sfp, mgmt]}
       - {id: combo-drop-rj45, at: [415.3, 4.2], path: 'M 0 0 L 0 1.2', stroke-width: 0.25, for: mgmt}
       - {id: arrow-mgmt-sfp-led, at: [352.1, 6.3], path: 'M -0.7 -0.8 L 0.8 0 L -0.7 0.8 Z', filled: true, for: led-mgmt-sfp}
       - {text: IOIOI, at: [415.3, 40.3], font-size: 1.7, anchor: middle, for: console}
-      - {text: STAT, at: [425.2, 18.2], font-size: 1.4, anchor: middle, rotate: -60, for: led-stat}
-      - {text: FAN, at: [425.2, 23.3], font-size: 1.4, anchor: middle, rotate: -60, for: led-fan}
-      - {text: PWR, at: [425.2, 28.4], font-size: 1.4, anchor: middle, rotate: -60, for: led-pwr}
-      - {text: ALM, at: [425.2, 33.3], font-size: 1.4, anchor: middle, rotate: -60, for: led-alm}
+      - {text: STAT, at: [425.7, 18.11], font-size: 1.4, anchor: middle, rotate: -60, for: led-stat}
+      - {text: FAN, at: [425.7, 23.14], font-size: 1.4, anchor: middle, rotate: -60, for: led-fan}
+      - {text: PWR, at: [425.7, 28.26], font-size: 1.4, anchor: middle, rotate: -60, for: led-pwr}
+      - {text: ALM, at: [425.7, 33.39], font-size: 1.4, anchor: middle, rotate: -60, for: led-alm}
     components:
       placements:
         - {ref: common/rj45-ganged-eth@1, id: port-1, at: [9.51, 16.25], rotate: 180, group: rj45-1g, rel-pos: 1, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
@@ -563,10 +585,10 @@ views:
         - {ref: std/usb-a@1, id: usb-2, at: [409.3, 19.05], group: mgmt, rel-pos: 4, attrs: {role: storage, usb: '2.0'}}
         - {ref: common/usb-symbol@1, id: mark-usb-2, at: [402.3, 19.3], rotate: 270, for: usb-2, group: marks, rel-pos: 2}
         - {ref: std/rj45-ganged@2, id: console, at: [408.95, 24.75], group: mgmt, rel-pos: 5, attrs: {media: rj45-serial, role: console}}
-        - {ref: common/led-indicator@1, id: led-stat, at: [426.9, 15.7], for: chassis, group: status-leds, rel-pos: 1, states: ['off', {name: normal, color: '#22c55e', behavior: {mode: alternating, color: '#f59e0b'}}]}
-        - {ref: common/led-indicator@1, id: led-fan, at: [426.9, 20.8], for: chassis, group: status-leds, rel-pos: 2, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
-        - {ref: common/led-indicator@1, id: led-pwr, at: [426.9, 25.9], for: chassis, group: status-leds, rel-pos: 3, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
-        - {ref: common/led-indicator@1, id: led-alm, at: [426.9, 30.8], for: chassis, group: status-leds, rel-pos: 4, states: ['off', {name: no-alarm, color: '#22c55e'}, {name: critical, color: '#f59e0b'}, {name: major, color: '#f59e0b', behavior: {mode: blinking, rate: 4}}, {name: minor, color: '#f59e0b', behavior: {mode: blinking, rate: 1}}]}
+        - {ref: common/led-indicator@1, id: led-stat, at: [426.79, 15.68], for: chassis, group: status-leds, rel-pos: 1, states: ['off', {name: normal, color: '#22c55e', behavior: {mode: alternating, color: '#f59e0b'}}]}
+        - {ref: common/led-indicator@1, id: led-fan, at: [426.79, 20.71], for: chassis, group: status-leds, rel-pos: 2, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+        - {ref: common/led-indicator@1, id: led-pwr, at: [426.79, 25.83], for: chassis, group: status-leds, rel-pos: 3, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+        - {ref: common/led-indicator@1, id: led-alm, at: [426.79, 30.96], for: chassis, group: status-leds, rel-pos: 4, states: ['off', {name: no-alarm, color: '#22c55e'}, {name: critical, color: '#f59e0b'}, {name: major, color: '#f59e0b', behavior: {mode: blinking, rate: 4}}, {name: minor, color: '#f59e0b', behavior: {mode: blinking, rate: 1}}]}
     regions:
       - {id: mgmt-block, at: [324, 0], size: {w: 114.2, h: 43.4}, label: Uplinks and management}
   rear:
