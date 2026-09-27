@@ -253,6 +253,9 @@ the *published build*, not about the hardware.
   (roc-ops/Portrayal#650).
 
 ### Changed
+- `siemon/qsfp28-aoc` (1.1.1) draws its pull tabs black (`latch-color:
+  #090502`), read off the product photograph the aqua jacket came from, in
+  place of the generic's neutral grey (roc-ops/Portrayal#645).
 - **`contract: 2`. A drawing no longer embeds the device's source manifest.**
   Every face carried the same whole manifest in its `<metadata>`: 139 MB of a
   249 MB build, 107 KB in each of the R740xd's 252 faces. It is now published
