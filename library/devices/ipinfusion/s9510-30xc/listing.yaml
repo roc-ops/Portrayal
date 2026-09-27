@@ -1,0 +1,22 @@
+format: 1
+kind: listing
+hardware: ufispace/s9510-30xc
+version: 1.0.0
+portfolio: {line: OcNOS SP}
+description: >-
+  Supported by OcNOS SP 7.0.1, licensed per switching capacity as OcNOS-SP-IPBASE-300, OcNOS-SP-MPLS-300, OcNOS-SP-PLUS-300.
+  Those are software licences shared by every box of the same capacity, not part
+  numbers for this one.
+source: >-
+  OcNOS 7.0.1 MR Hardware Compatibility List (IP Infusion, July 2026), the row for
+  S9510-30XC, current supported 'SP 7.0.1'.
+  The names are the ones IP Infusion's own S9510-30XC running configuration uses in the
+  OcNOS SP 7.0 Segment Routing Guide (edge-node snapshot, software version
+  UFI_S9510-30XC-OcNOS-SP-PLUS-6.6.0): ce0 and ce1, then xe2 to xe29, and eth0 for
+  management - which is this faceplate's own numbering, port for port.
+interfaces:
+  - {physical: 'port-{n}', name: 'ce{n}', range: '0-1'}
+  - {physical: 'port-{n}', name: 'xe{n}', range: '2-29'}
+  - {physical: mgmt, name: eth0}
+nos: ocnos
+nos-versions: '>=7.0.1'

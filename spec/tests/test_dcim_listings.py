@@ -200,11 +200,15 @@ def test_nos_is_no_longer_a_flag(tmp_path):
 
 
 def test_a_device_nobody_lists_gets_only_its_own_document(tmp_path):
-    """No NOS vendor lists the S9501-18SMT in this library. Its export must be
-    UfiSpace's alone - no NOS document invented for it."""
+    """A UfiSpace box no NOS vendor lists exports UfiSpace's document alone - no
+    NOS document invented for it. Chosen from the build, because every NOS
+    roll-out lists more boxes and a named one would stop being unlisted."""
     listed = {v["hardware"] for v in json.loads((DIST / "listings.json").read_text())["listings"].values()}
-    assert "ufispace/s9501-18smt" not in listed, "pick a device nobody lists"
-    r = run(tmp_path, "--device", "s9501-18smt")
+    devices = json.loads((DIST / "devices.json").read_text())["devices"]
+    free = sorted(d["name"] for d in devices
+                  if d["ns"] == "ufispace" and f"ufispace/{d['name']}" not in listed)
+    assert free, "every UfiSpace box is listed; pick another vendor"
+    r = run(tmp_path, "--device", free[0])
     assert r.returncode == 0, r.stderr[-800:]
     made = list(docs(tmp_path))
     assert made

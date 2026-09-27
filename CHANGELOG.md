@@ -15,6 +15,16 @@ the *published build*, not about the hardware.
 ## Unreleased
 
 ### Added
+- **OcNOS listings for the IP Infusion HCL** (roc-ops/Portrayal#674). Every box
+  on the OcNOS 7.0.1 MR Hardware Compatibility List (July 2026) that the
+  library models - 41 of 44 - is listed under `ipinfusion/`, with the edition
+  that supports it (OcNOS SP or OcNOS DC) as its portfolio line. 14 UfiSpace
+  boxes carry OcNOS port names: speed-class prefix (`ge`, `xe`, `ce`, `cd`) and
+  one 0-based count across the panel, as IP Infusion's own S9510-30XC
+  configuration shows and as the UfiSpace silkscreen already numbers them, with
+  `eth0` for management. The rest carry an `ocnos-port-names` gap: Edgecore
+  boxes do not all count the same way (the AS7316-26XB restarts per speed
+  class), and no 800G prefix is documented.
 - **ArcOS listings for the Arrcus HCL** (roc-ops/Portrayal#674). Every box on
   the Arrcus Hardware Compatibility List (June 2026, ArcOS 8.5) that the library
   models - 29 of the 30 from UfiSpace and Edgecore - is listed under

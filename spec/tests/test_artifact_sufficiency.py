@@ -85,7 +85,8 @@ def test_the_index_says_who_lists_a_device():
     """devices.json carries the reverse join, so a picker can offer the NOS
     vendors for a box without opening listings.json."""
     dev = next(d for d in load("devices.json")["devices"] if d["name"] == "as7726-32x")
-    assert dev["listings"] == ["arrcus/as7726-32x"]
+    assert "arrcus/as7726-32x" in dev["listings"], dev["listings"]
+    assert dev["listings"] == sorted(dev["listings"])
     assert "arrcus" in dev["search"].split() and "arcos" in dev["search"].split()
 
 

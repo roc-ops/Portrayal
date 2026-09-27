@@ -1,0 +1,29 @@
+format: 1
+kind: listing
+hardware: edgecore/csr310
+version: 1.0.0
+portfolio: {line: OcNOS SP}
+description: >-
+  Supported by OcNOS SP 7.0.1, licensed per switching capacity as OcNOS-SP-IPBASE-300, OcNOS-SP-MPLS-300, OcNOS-CSR-300.
+  Those are software licences shared by every box of the same capacity, not part
+  numbers for this one.
+source: >-
+  OcNOS 7.0.1 MR Hardware Compatibility List (IP Infusion, July 2026), the row for
+  AS7315-27X, current supported 'SP 7.0.1'.
+gaps:
+  - what: ocnos-port-names
+    reason: vendor-silent
+    note: >-
+      OcNOS names a front-panel port by its speed class and number (xe, ce, cd and so on),
+      and the per-platform table is the 'AS7315-27X Port Mapping' chapter of IP Infusion's
+      OcNOS installation guide for the vendor, which the OcNOS SP 7.0 release notes cite.
+      That guide is not in the public 7.0 documentation library (documentation.ipinfusion.com,
+      checked 2026-09-27: the SP and DC 7.0 pages list release notes, key features and the
+      feature guides only), and no copy is held here. Until one is, this listing exports the
+      faceplate ids.
+    wanted: >-
+      The 'AS7315-27X Port Mapping' chapter of the OcNOS installation guide, Release 7.0, or
+      `show interface brief` from a unit running OcNOS SP 7.0 - with it, `interfaces` can
+      name each port the way OcNOS does.
+nos: ocnos
+nos-versions: '>=7.0.1'
