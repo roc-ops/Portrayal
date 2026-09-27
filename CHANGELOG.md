@@ -253,6 +253,14 @@ the *published build*, not about the hardware.
   (roc-ops/Portrayal#650).
 
 ### Changed
+- In 3D, a solid painted from a field now takes its side colour from the
+  field: the QSFP cable end's strap, ring and stub (so a wrapper's green or
+  blue strap and the Siemon AOC's aqua jacket show on every face), every coax
+  plug's cable stub, and the DCS201 and DCS240 fan handles. Their relief
+  features stated a literal `color`, which the kit never overrides; the parts
+  take a patch, and the DCS201, DCS202, DCS240 and DCS511 a patch for the
+  fans. Lint L73 now refuses a relief `color` on a node a field paints
+  (roc-ops/Portrayal#643).
 - `siemon/qsfp28-aoc` (1.1.1) draws its pull tabs black (`latch-color:
   #090502`), read off the product photograph the aqua jacket came from, in
   place of the generic's neutral grey (roc-ops/Portrayal#645).

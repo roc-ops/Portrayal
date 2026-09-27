@@ -79,7 +79,7 @@ a test fails when this page and the linter disagree. A finding prints as
 | L70 | device | a `fact:` gap names a real fact and does not contradict the device | fix the gap's scope or remove it |
 | L71 | component | a body box reaches no further than the part says it is deep | shrink the body box or raise `body.depth` |
 | L72 | device | a bay's `plan:` or `rear:` lands in a view that exists, inside the chassis | fix the plan view name or the coordinates |
-| L73 | component | a field prints somewhere, and what prints is a field | add a `data-from` text node for each field, or remove the field |
+| L73 | component | a field prints somewhere, and what prints is a field; a node a field paints states no relief `color`, so its 3D sides follow the field | add a `data-from` text node for each field, or remove the field; drop a relief feature's `color` on a field-painted node |
 | L74 | component | a lamp that declares states is painted from the lamp-colour variable | fill or stroke the lamp node with `var(--led-color, <off colour>)`, not a literal colour |
 | L75 | component | a slot's structured facts agree with its prose, and lanes fit the connector | fix `lanes`/`connector` or the description |
 | L76 | device | the RJ45 census: every Ethernet jack says whether it has lamps | use std/rj45@2 with the lamp parts, or say in provenance the jack is bare |
