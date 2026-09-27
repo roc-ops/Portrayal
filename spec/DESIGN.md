@@ -116,8 +116,14 @@ Three layers:
    level would move 587 directories and change resolution in sixteen tools to
    retire a mechanism the week before it acquires its first users.
 
-   **What pays for keeping it: a dead major goes.** An old major is deleted once
-   nothing references it, and L89 fails on one that lingers — it will not accept
+   **What pays for keeping it: a dead major goes, and says where it went.**
+   While the package is at 0.x, a superseded major may be removed, and every
+   removal is listed in `CHANGELOG.md` with the ref that replaces it, so a
+   manifest outside this repository that pins the old major is told what to pin
+   instead. From 1.0 a retired major is deprecated for at least one release
+   before it is removed: that release is the coexistence above, spent on the
+   consumers it exists for. Inside the repository, L89 still fails on a
+   superseded major that nothing references — it will not accept
    an `unplaced:` sentence from a major that a newer live major supersedes.
    There is one exception, and it is the reason the check asks whether anything
    NAMES a major rather than only whether something seats it: a retired major
