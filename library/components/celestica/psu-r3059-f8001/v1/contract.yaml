@@ -1,0 +1,117 @@
+format: 1
+kind: module
+name: psu-r3059-f8001
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Celestica 550 W AC CRPS supply of the DS1000 and DS2000 (and, by the DS3000 modeller's
+  matched reading, the DS3000) - a hex-guarded 40 mm fan at the left with two screws above it,
+  a fold-down U handle along the bottom, an IEC C14 inlet turned portrait in a black block at
+  the right with the black release tab under it, and one green status lamp in the lower right
+  corner. Named for the DS1000 datasheet's FRU part number R3059-F8001-01 (F2B); the B2F twin
+  is R3059-F8002-01 and draws the same face.
+size: {w: 73.5, h: 40.0, d: 185.0}
+size-confidence: {w: registry, h: registry, d: registry}
+conforms: crps-1u
+attrs: {power-output-w: 550, input: ac, form-factor: crps-1u, inlet: c14}
+provenance:
+  identity: >-
+    datasheet - DS1000 datasheet (cls_branded_datasheet_DS1000_090924) ORDER INFORMATION, FRU
+    lines 'R3059-F8001-01: AC PSU FRU, DS1000 F2B' and 'R3059-F8002-01: AC PSU FRU, DS1000
+    B2F'. The DS2000 guide and datasheet print no supply part number; this part is seated there
+    because the two rear elevations draw the same face (see face) and the two guides print the
+    same rating sentence, not because a document names it. The ES1000's 550 W supply is a
+    DIFFERENT face (X-guard fan, two lamps, tab beside the inlet) and is celestica/psu-crps-550-ac.
+  power: >-
+    datasheet - DS1000 guide, Power Supply Unit (PSU): 'Each PSU's maximum output power is 550W
+    with an output voltage of 12VDC +/- 5%'; DS2000 guide, Power Supply Unit (PSU): 'Each PSU's
+    maximum output power is 550W with an input voltage of 90VAC~264VAC and an output voltage of
+    12 VDC +/- 5%'. A maximum output rating; no ambient or low-line derating is stated.
+  input: >-
+    datasheet - DS1000 datasheet '90-264VAC 47Hz/63Hz AC/DC PSU'; DS2000 guide '90VAC~264VAC'.
+    The DS2000 datasheet also offers '180-300VDC auto input' on the system; nothing says whether
+    that is this supply or another, so no DC figure is recorded here.
+  size: >-
+    registry - the CRPS 1U module envelope, 73.5 x 40, 185 deep. It is also measured: the DS2000
+    guide Rear Panel View (3600 x 444 px, 8.037 px/mm across on the stated 438 mm, 8.045 down on
+    44 mm - an orthographic CAD render) puts both supplies' faces at 16.0-89.5 and 352.4-425.9 mm,
+    73.5 each; the DS1000 guide Rear Panel View (1615 x 257 px, 3.574 px/mm) puts its bay edges
+    at 254.8-328.9 and 344.4-418.7 mm, 74.1 and 74.3 including the bay's dark edge line.
+  depth: registry - CRPS 1U nominal 185; no Celestica document states the supply depth.
+  face: >-
+    measured - every element is read off the DS2000 Rear Panel View at 8.04 px/mm, left supply,
+    module origin at (16.0, 2.0) mm on the rear: fan guard 3.9-41.0 x 2.0-34.5, screws at
+    (6.5, 3.5) and (38.5, 3.5), handle 2.5-42.0 x 28.5-39.5, black inlet block 42.6-66.6 x
+    1.3-35.8, the C14 face centred at (54.45, 20.0) and 19.5 x 26.8 (the registry part turned a
+    quarter, 20 x 28), lamp centred at (68.1, 36.7), release tab 52.3-57.8 below the block. The
+    DS1000 Rear Panel View at 3.57 px/mm draws the same face: block 42.5-66, lamp (66.5, 35.2),
+    all within its 0.3 mm pixel and the lamp 1.6 mm off - read at a third of the resolution.
+    The DS3000 modeller read the same module off the DS3000 guide independently at 4.46 px/mm:
+    C14 centre (54.2, 18.9), block 41.9-65.4 x 2.6-33.3, lamp (67.1, 36.9), screws at y 4.1 -
+    agreement inside 1.2 mm everywhere, which is what one part read three times looks like.
+  inlet-orientation: >-
+    measured - the three C14 pins read in the DS2000 rear at 12.8 px/mm: two at x 69.5 (y 20.3
+    and 27.2) and one outboard at x 72.5, which is the registry drawing's earth pin turned to
+    the right, i.e. `rotate: 90`.
+  handle: >-
+    measured position, estimated reach - the fold-down U bail along the bottom of the face in
+    both rear elevations; how far it swings out is not drawn anywhere held.
+  colour: >-
+    photo - the Foleon three-quarter renders of both switches (cls.celestica.com hardware-platforms
+    ds1000 and ds2000, side-by-side images) show a bright metal face, black inlet block, black
+    handle and tab, green lamp.
+  leds: >-
+    datasheet - DS2000 guide Table 4 Rear Panel Status LEDs, 'PSU module, P-1 / P-2': Green (all
+    PSUs operating normally), Red (PSU error(s) detected), Off (PSU is off). The one lamp on the
+    face is the only candidate; the table names no position. The DS1000 guide has no LED table.
+states: [ok, fail, absent]
+elements:
+  handle: {at: [2.5, 28.5], size: [39.5, 11.0], class: handle}
+  latch: {at: [52.3, 35.8], size: [5.5, 4.0], class: latch}
+  status-led:
+    at: [66.7, 35.3]
+    size: [2.8, 2.8]
+    class: led
+    states:
+      - 'off'
+      - {name: ok, color: '#22c55e'}
+      - {name: fail, color: '#ef4444'}
+    description: >-
+      DS2000 guide Table 4, PSU module row - Green all PSUs operating normally, Red PSU
+      error(s) detected, Off PSU is off
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [40.45, 10.0], rotate: 90}
+relief:
+  wall: '#3a3e43'
+  # THE FACE GETS NO RELIEF: a full-face `out` is a slab that buries the inlet's recess.
+  features:
+    - node: fan-guard
+      vent: 20
+      confidence: estimated
+      source: >-
+        celestica/psu-r3059-f8001@1 provenance.face - the guard's outline is measured; the depth
+        of the cavity behind it is not stated anywhere held.
+    - node: handle
+      uhandle: 12.0
+      confidence: estimated
+      source: >-
+        celestica/psu-r3059-f8001@1 provenance.handle - the Foleon three-quarter renders show
+        the bail folded down against the face; how far it swings out is not dimensioned.
+    - node: latch
+      out: 2.4
+      confidence: estimated
+      source: >-
+        celestica/psu-r3059-f8001@1 provenance.face - the tab hangs below the inlet block in
+        the Foleon renders; its projection is not dimensioned.
+    - node: status-led
+      dome: 0.3
+      confidence: estimated
+      source: common/led-dot@1 - the lamp dome the library carries for small panel lamps; unmeasured here.
+connection-points:
+  power: {at: [54.45, 20.0], direction: rear}
+body:
+  depth: 185.0
+  color: '#c3c7cc'
+skins: [default]

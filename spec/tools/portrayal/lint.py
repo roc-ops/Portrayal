@@ -63,7 +63,8 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L53 device: content changed without the version bump the change requires
   L54 device: a declared gap scopes something the device does not have
   L55 library: every vendor namespace is in the vendor registry
-  L56 overlay: a NOS identity names a software vendor the registry knows
+  L56 listing: a listing lives under a NOS vendor and lists hardware that exists -
+      its configurations, ports and components are the hardware's
   L57 device: configurations say what kind of thing they are, and the base is the default
   L58 component: a wrapper's own connection point sits where its aperture mates
   L59 device: top-level part-numbers are not read by anything
@@ -100,6 +101,8 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
       `pocket` element at least `-lift` deep
   L123 library: one module, one bay size - every bay that accepts a module
       reserves the same size for it, across every device and carrier
+  L124 library: under one NOS vendor, no two listings export the same model or
+      claim the same name
 """
 import argparse
 import types
@@ -158,7 +161,7 @@ WARNINGS = []
 # still raised somewhere, and the committed page matches this text.
 #
 # Scope is what the rule reads: a component contract, a device manifest, an
-# overlay, any YAML file, or the library as a whole. L53 is listed because a
+# listing, any YAML file, or the library as a whole. L53 is listed because a
 # reader meets the code; it is enforced by devicelock.py rather than here.
 RULES = {
     "L0":  ("any yaml",   "the file parses as YAML", "fix the syntax the message points at; a `#` after a space inside an unquoted string starts a comment"),
@@ -217,7 +220,7 @@ RULES = {
     "L53": ("device",     "content changed without the version bump the change requires (see devicelock)", "bump `version`: patch for wording, minor for additions, major for geometry or ids"),
     "L54": ("device",     "a gap's scope names a group, view, configuration, id or attribute the device has", "fix the `scope`, or drop it"),
     "L55": ("library",    "every vendor namespace is in spec/schemas/vendors.yaml", "add the vendor to the registry with display, role and source"),
-    "L56": ("overlay",    "an overlay's identity names a software vendor the registry knows", "add the NOS vendor to vendors.yaml"),
+    "L56": ("listing",    "a listing sits under a software vendor in spec/schemas/vendors.yaml and lists a device that exists - every configuration it overrides, port it names and component it maps is the hardware's", "register the NOS vendor with role software, point `hardware` at a device's <namespace>/<directory>, and name only configurations and ids that device declares"),
     "L57": ("device",     "exactly one configuration is `kind: base`, and each says whether it is orderable", "set `kind` on every configuration"),
     "L58": ("component",  "a cage's own connection point agrees with the aperture inside it", "move the connection point to the composed aperture's"),
     "L59": ("device",     "SKUs live on configurations, not at the top level", "move `part-numbers` into the configuration they belong to"),
@@ -284,6 +287,7 @@ RULES = {
     "L120": ("device",     "a configuration's `power` agrees with the supplies it seats - `dc` over an `-ac` supply is a contradiction - warning at `modelled`, error at `verified`", "correct `power`, or seat the supply the build actually ships with"),
     "L121": ("component",  "a pluggable that conforms to a module envelope declares its `head:` - the box it occupies outside the cage - and the head fits the MSA's outside envelope, or lists each dimension it exceeds with a source; no relief feature of its own that starts inside the head stands past it (one lifted to the head's rear or beyond is the cable's, not the head's), and the head's node draws it", "add `head:` from the part's drawing, list a real overhang under `head.exceeds` with the document that shows it, drop a waiver that no longer applies, or shorten the feature that stands past the head"),
     "L122": ("component, device", "a `cable-od` value is a diameter in millimetres from 2 to 15 - on a field's default, a composing part's attrs, and a device placement's attrs - written as plain ASCII digits and a point, the only number the build and the kit draw", "give the cable's outside diameter in mm as a number, from the product's own document"),
+    "L124": ("library",    "under one NOS vendor, no two listings export the same DCIM model, and no alias is claimed by two listings unless each marks it `shared`", "give one listing a configuration `model` or its own SKU; drop the duplicate alias, or mark it `shared: true` in every claimant with a `note`"),
     "L123": ("library",    "one module, one bay size - every bay that accepts a module, in any device or carrier, reserves the same size for it, to within a millimetre", "reserve one figure everywhere - the module's own `insert` or `size`; a difference that is real stays in the baseline, with the reason in the provenance of the chassis that reserves more (the warning is filed on the module, so a chassis `lint.waive` cannot clear it)"),
 }
 
@@ -1020,7 +1024,7 @@ def lint_component(path, validator):
     # each one a full lint to find the next. The return still happens, because
     # the checks below read a shape the schema has just said is wrong; it happens
     # after the whole file has been reported rather than after one line of it.
-    # `lint_overlay` a few thousand lines down has always done it this way.
+    # The listing walk in `main` has always done it this way.
     schema_errors = list(validator.iter_errors(data))
     for e in schema_errors:
         err(path, "L1", f"{'/'.join(str(p) for p in e.path)}: {e.message}")
@@ -5590,49 +5594,156 @@ def lint_device_configuration_kind(path, data):
             "and without it the default has to be a variant or an illustration")
 
 
-def lint_overlay_identity(path, data):
-    """L56: an overlay's `identity:` names a vendor who could sell it.
+def _listing_ids(dev):
+    """Every id a device places or bays, in any view - what a listing may name."""
+    ids = set()
+    for view in (dev.get("views") or {}).values():
+        vp = view_parts(view or {})
+        for q in vp["placements"] + vp["bays"]:
+            if q.get("id"):
+                ids.add(str(q["id"]))
+    return ids
 
-    An overlay with `identity:` says the device running this NOS is a distinct
-    orderable thing whose vendor is the SOFTWARE house - the buyer's asset
-    register says IP Infusion even though Edgecore made the metal. That only
-    works if the named vendor exists and is a software vendor: filing a device
-    type under a company that makes no software would put the disaggregated SKU
-    back under a hardware brand, which is the thing the field exists to avoid.
 
-    AN ERROR AND NOT A WARNING, unlike L55 next door. L55 is soft because the
-    entry that matters states a lineage, and a lineage guessed to clear a gate
-    is worse than an absent one. Here nothing is being guessed: the overlay has
-    already made the claim, and the only question is whether the registry agrees
-    the claimed vendor exists and writes software. That needs no document.
+def _listing_targets(rules, field):
+    """Expand `{n}` rules into the ids they name. Yields (pattern, id)."""
+    for rule in rules or []:
+        pat = str(rule.get(field) or "")
+        if "{" not in pat:
+            yield pat, pat
+            continue
+        rng = str(rule.get("range") or "")
+        if "-" not in rng:
+            continue                    # the schema and the exporter report this
+        lo, hi = (int(x) for x in rng.split("-", 1))
+        for n in range(lo, hi + 1):
+            yield pat, dcim_export._expand(pat, n)
+
+
+def lint_listing(path, data, roots):
+    """L56: a listing lives under a NOS vendor and lists hardware that exists.
+
+    A listing is a NOS vendor's entry for a box on its compatibility list:
+    devices/arrcus/as7726-32x/listing.yaml points at edgecore/as7726-32x and
+    carries what ArcOS calls the ports. Every claim in it is about the
+    hardware, so every one is checkable against the hardware - and a listing
+    that names a port the metal has not got would export an interface nothing
+    can plug into.
+
+    AN ERROR, for the reason the rule gave when it checked an overlay's
+    identity: nothing here is being guessed. The listing has already made the
+    claim and the only question is whether the registry and the hardware agree.
     """
-    ident = data.get("identity")
-    if not ident:
-        return                      # opt-in: an overlay without one is a naming layer
-    vendor = ident.get("vendor")
-    entry = VENDORS.get(vendor)
-    if entry is None:
-        err(path, "L56", f"identity.vendor {vendor!r} is in no vendor registry. Add it "
-            "to spec/schemas/vendors.yaml with role: software and a source saying how "
-            "the pairing is known - a NOS vendor is named here and nowhere else, because "
-            "the device's own `manufacturer:` is the metal and does not move when the "
-            "software changes")
+    path = Path(path)
+    ns = path.parent.parent.name
+    entry = VENDORS.get(ns)
+    if entry is None or entry.get("role") not in ("software", "both"):
+        err(path, "L56", f"a listing lives under a NOS vendor, and {ns!r} is "
+            + ("in no vendor registry" if entry is None else f"registered with role {entry.get('role')!r}")
+            + ". Add it to spec/schemas/vendors.yaml with role: software, or move the "
+            "listing under the vendor that sells this NOS - the hardware's own maker "
+            "files it under its `manufacturer:` and needs no listing")
+    hw = str(data.get("hardware") or "")
+    man = next((Path(r) / "devices" / hw / "device.yaml" for r in roots
+                if (Path(r) / "devices" / hw / "device.yaml").exists()), None)
+    dev = load_yaml(man) if man else None
+    if not isinstance(dev, dict) or dev.get("kind") != "device":
+        err(path, "L56", f"hardware {hw!r} is not a device in the library. A listing "
+            "points at the device it lists as <namespace>/<directory>, e.g. "
+            "`ufispace/s9510-28dc` - model the hardware first; a listing draws nothing")
         return
-    if entry.get("role") not in ("software", "both"):
-        err(path, "L56", f"identity.vendor {vendor!r} has role {entry.get('role')!r}. "
-            "An identity names the company that sells this NOS on this hardware, so it "
-            "has to be a software vendor. If this company does write a NOS, correct its "
-            "role in the registry; if the intent was to say who MADE the metal, that is "
-            "the device's `manufacturer:` and it belongs there")
-    dev = data.get("device")
-    if dev and ident.get("model") and dev.split("/")[-1].lower() in \
-            ident["model"].lower().replace(" ", "-"):
-        return
-    if ident.get("model") and data.get("nos") and \
-            ident["model"].strip().lower() == str(data["nos"]).strip().lower():
-        warn(path, "L56", f"identity.model {ident['model']!r} names only the NOS. The "
-             "same NOS runs on other metal, so a model that does not say which hardware "
-             "it is paired with cannot be told from its siblings in a DCIM")
+    cfgs = set((dev.get("configurations") or {}).keys())
+    for c in (data.get("configurations") or {}):
+        if c not in cfgs:
+            err(path, "L56", f"configuration {c!r} is not one of {hw}'s "
+                f"({', '.join(sorted(cfgs))}). A listing renames or renumbers the "
+                "hardware's own configurations; it cannot add one")
+        elif ((dev.get("configurations") or {}).get(c) or {}).get("kind") == "example":
+            err(path, "L56", f"configuration {c!r} is `kind: example` on {hw} - an "
+                "illustration, which exports no device type, so nothing here would ever "
+                "be named. Override an orderable configuration instead")
+    ids = _listing_ids(dev)
+    for pat, pid in _listing_targets(data.get("interfaces"), "physical"):
+        if pid not in ids:
+            err(path, "L56", f"interfaces: {pat!r} names {pid!r}, which {hw} does not "
+                "place. A NOS name for a port the metal has not got exports an interface "
+                "nothing can plug into - fix the range or the id")
+            break
+    for pat, pid in _listing_targets(data.get("entity-map"), "to"):
+        if pid == "chassis" or pid.startswith("region:"):
+            continue
+        if pid not in ids:
+            err(path, "L56", f"entity-map: {pat!r} maps to {pid!r}, which {hw} does not "
+                "place. A component the NOS reports has to land on something drawn - map "
+                "it to `chassis`, a `region:`, or the id the hardware uses")
+            break
+
+
+def lint_library_listings(roots):
+    """L124: under one NOS vendor, every exported model and every name is one box's.
+
+    A DCIM keys a device type on manufacturer and model, and DriveNets is the
+    case that makes this real: it sells one name over more than one box (the
+    NCP-40C is certified on a UfiSpace S9700-53DX and an Edgecore COR550). Two
+    listings under `drivenets/` that both export NCP-40C would write one file
+    twice and keep the second - and publish.sh exports each device in its own
+    process, so no run of the exporter sees both. This is the gate.
+
+    WHAT EACH LISTING EXPORTS is asked of the exporter (`listing_config_model`),
+    not re-derived: the two used to pick different SKUs. A configuration with no
+    override exports the hardware's own SKU, and those are unique already -
+    they are the hardware's filenames - so a collision needs an override on at
+    least one side, and an override is checked against every other listing's
+    overrides AND against the hardware part numbers it would inherit.
+
+    NAMES - top-level and per-configuration aliases - are one listing's unless
+    EVERY claimant marks the name `shared`, the rule L111 holds devices to.
+    """
+    from portrayal.dcim_export import listing_config_model
+    by_ns = {}
+    for f in libwalk.iter_listings([Path(r) for r in roots]):
+        d = load_yaml(f) or {}
+        by_ns.setdefault(f.parent.parent.name, []).append((f, d))
+    for ns, items in by_ns.items():
+        overrides, inherited, names = {}, {}, {}
+        for f, d in items:
+            hw = str(d.get("hardware") or "")
+            man = next((Path(r) / "devices" / hw / "device.yaml" for r in roots
+                        if (Path(r) / "devices" / hw / "device.yaml").exists()), None)
+            dev = (load_yaml(man) or {}) if man else {}
+            over = d.get("configurations") or {}
+            for cname, c in over.items():
+                m, _ = listing_config_model(c)
+                if m:
+                    overrides.setdefault(str(m).lower(), []).append(f"{f.parent.name}:{cname}")
+            for cname, c in (dev.get("configurations") or {}).items():
+                if listing_config_model(over.get(cname))[0]:
+                    continue                     # renamed: the hardware SKU is not exported
+                for sku in ((c or {}).get("part-numbers") or {}):
+                    inherited.setdefault(str(sku).lower(), set()).add(f"{f.parent.name}:{cname}")
+            claimed = list(d.get("aliases") or [])
+            for c in over.values():
+                claimed += list((c or {}).get("aliases") or [])
+            for a in claimed:
+                if isinstance(a, dict) and a.get("name"):
+                    names.setdefault(str(a["name"]).lower(), []).append((f, bool(a.get("shared"))))
+        where = items[0][0].parent.parent
+        for m, owners in sorted(overrides.items()):
+            clash = owners + sorted(inherited.get(m, set()) - set(owners))
+            if len(clash) > 1:
+                err(where, "L124", f"{ns}: {len(clash)} configurations export the model "
+                    f"{m!r} ({', '.join(clash)}). A DCIM keys a device type on manufacturer "
+                    "and model, so one would overwrite the other - give each its own `model` "
+                    "or SKU")
+        for n_, owners in sorted(names.items()):
+            files = {o[0] for o in owners}
+            if len(files) > 1 and not all(o[1] for o in owners):
+                unmarked = sorted({o[0].parent.name for o in owners if not o[1]})
+                err(owners[-1][0], "L124", f"{ns}: the alias {n_!r} is claimed by "
+                    f"{len(files)} listings ({', '.join(sorted(x.parent.name for x in files))}) "
+                    f"and {', '.join(unmarked)} do(es) not mark it shared. A search for it should "
+                    "find one box - if the vendor really uses one name for both, mark it "
+                    "`shared: true` in EVERY claimant and say why in its `note`")
 
 
 def lint_vendor_registry(root):
@@ -6933,7 +7044,7 @@ def lint_device_placement_interfaces(path, data, lib_roots):
     group with no port role: `build` splits only what it exports as a switch
     port and dropped the rest's declaration without a word. Which is which is
     dcim_export.device_port_type's answer, asked for the hardware's own
-    document (no overlay), not a second copy of its rules.
+    document (no listing), not a second copy of its rules.
     """
     dev_groups = data.get("groups") or {}
     for vname, view in (data.get("views") or {}).items():
@@ -9006,7 +9117,7 @@ def lint_device(path, validator, lib_roots):
     # each one a full lint to find the next. The return still happens, because
     # the checks below read a shape the schema has just said is wrong; it happens
     # after the whole file has been reported rather than after one line of it.
-    # `lint_overlay` a few thousand lines down has always done it this way.
+    # The listing walk in `main` has always done it this way.
     schema_errors = list(validator.iter_errors(data))
     for e in schema_errors:
         err(path, "L1", f"{'/'.join(str(p) for p in e.path)}: {e.message}")
@@ -10217,7 +10328,7 @@ def main():
         lint_duplicate_keys(f)
     comp_v = load_schema(schemas, "component.schema.json")
     dev_v = load_schema(schemas, "device.schema.json")
-    ovl_v = load_schema(schemas, "overlay.schema.json")
+    lst_v = load_schema(schemas, "listing.schema.json")
 
     n = 0
     matrix = []
@@ -10340,13 +10451,14 @@ def main():
                 matrix.append((f, d))
         if args.device:
             continue
-        for f in sorted(root.glob("devices/**/overlays/*.yaml")):
+        for f in libwalk.iter_listings([root]):
             lint_duplicate_keys(f)
             data = load_yaml(f)
-            for e in ovl_v.iter_errors(data):
+            for e in lst_v.iter_errors(data):
                 err(f, "L1", f"{'/'.join(str(p) for p in e.path)}: {e.message}")
             if isinstance(data, dict):
-                lint_overlay_identity(f, data)
+                lint_listing(f, data, args.library)
+                lint_quoted_prose(f, data)
             n += 1
 
     # The matrix is a PORTFOLIO view - it ranks devices against each other - so
@@ -10358,6 +10470,7 @@ def main():
     if not args.device:
         lint_library_comparable_facts([Path(r) for r in args.library], matrix)
         lint_library_aliases(matrix)
+        lint_library_listings(args.library)
         lint_library_bay_size_per_module(matrix + comp_matrix, args.library)
         for root in [Path(r) for r in args.library]:
             lint_vendor_registry(root)
