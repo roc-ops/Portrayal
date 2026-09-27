@@ -247,7 +247,7 @@ aperture when it is a bare opening - never both at one position. The README's
 |---|---|---|---|---|---|---|---|
 | `celestica/fan-2u-81@1` | module | fan | 81.4 × 81 |  | 1 | 0 | Celestica's 2RU rear fan module as the DS5000 seats it - a near-square 81.4 x 81.0 face with a square-cell gr… |
 | `celestica/fan-40@1` | module | fan | 39.3 × 39 |  | 2 | 0 | Celestica 1U hot-swap fan module with a 39.3 x 39.0 mm face - an octagonal hexagon-mesh grille split top and … |
-| `celestica/lug-tag@1` | component | tab | 23 × 4 |  | 3 | 0 | Celestica pull-out luggage tag - the flat black asset / information card that slides out of a slot in the fac… |
+| `celestica/lug-tag@1` | component | tab | 23 × 4 |  | 4 | 0 | Celestica pull-out luggage tag - the flat black asset / information card that slides out of a slot in the fac… |
 | `celestica/psu-1500-ac@1` | module | psu | 55.2 × 39 |  | 2 | 0 | Celestica 1500 W AC hot-swap power supply, 55.2 x 39.0 mm face - a square-mesh grille on the left crossed by … |
 | `celestica/psu-1600@1` | module | psu | 73.5 × 40 |  | 1 | 1 | Gospower G1482-1600WRA 1600W AC PSU (Celestica ES1010 FRU) - 54.5V output for PoE++, CRPS form factor, C14 in… |
 | `celestica/psu-2000-ac@1` | module | psu | 56.2 × 40 |  | 1 | 0 | Celestica's 2000 W hot-swap supply - a 56.2 x 40 mm face in a bright housing with a perforated plate at its l… |
