@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: qsfp28-aoc
-version: 1.1.0
+version: 1.1.1
 class: transceiver
 behaviour: occupies
 mates: qsfp
@@ -22,7 +22,7 @@ attrs:
   power-draw-max-w: 1.78
 parts:
   - {ref: generic/qsfp-cable@1, id: body, at: [0, 0],
-     attrs: {cable-od: 3.0, jacket-color: '#49eaf8'}}
+     attrs: {cable-od: 3.0, jacket-color: '#49eaf8', latch-color: '#090502'}}
 provenance:
   size: >-
     borrowed - generic/qsfp-cable@1, the generic this wraps, whose own figures
@@ -70,8 +70,14 @@ provenance:
     the OM3 and OM4 fibre the sheet specifies. A studio photograph lit bright,
     so a real jacket may read darker.
   latch-color: >-
-    NOT STATED - page 1 describes "a high-strength pull tab latching system"
-    and gives no colour, so the generic's neutral #6f6f6f default stands.
+    photo-measured - the page 1 product photograph (the embedded 1535 x 738
+    image at 300 ppi), which shows both pull tabs black: #090502 is the
+    per-channel median of the 32,091 pixels of value under 0.45 in the two tab
+    regions (the metal heads and the white ground are brighter); the middle
+    half by value gives the same colour. The text describes a high-strength
+    pull tab latching system and states no colour. The photograph is lit for
+    contrast and its blacks are crushed, so a real tab may read a little
+    lighter.
   power: >-
     datasheet - page 2 Electrical Specifications, Maximum Power Consumption Per
     End 1.78W, at the 0 to 70 C case operating range the same table gives. One
