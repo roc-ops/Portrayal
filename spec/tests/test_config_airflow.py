@@ -60,7 +60,11 @@ def render(device_yaml, tmp_path):
 def svg_airflows(outdir, device, cfg):
     """{data-airflow or None} across every face drawn for one configuration."""
     got = set()
-    for f in outdir.glob(f"{device}.{cfg}.*.svg"):
+    # through configs.json: a drawing shared with another configuration
+    # carries that configuration's name, not this one's (#665)
+    files = next(c["files"] for c in json.loads(
+        (outdir / f"{device}.configs.json").read_text())["configs"] if c["name"] == cfg)
+    for f in (outdir / n for n in files.values()):
         root = SVG_ROOT.search(f.read_text()).group(0)
         m = AIRFLOW_ATTR.search(root)
         got.add(m.group(1) if m else None)

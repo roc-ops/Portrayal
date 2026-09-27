@@ -15,7 +15,9 @@ Everything in `library/dist/`, documented as a contract in
 
 - `<device>.<config>.<view>.svg` — the drawing. Addressable: `--` DOM ids, `/`
   data-paths. Its `<metadata>` names the source it was drawn from by
-  `source-sha256`.
+  `source-sha256`. Configurations that draw a face identically share one file,
+  so the kit finds a configuration's face through `configs[].files` in
+  `<device>.configs.json` (`faceFile` in `dist.js`), never by its name.
 - `<device>.source.json` — the **whole source manifest**, every view of it: the
   device's configurations, groups, attrs and chassis. One per device.
 - `devices.json`, `components.json` (+ `components-detail.json`), `labs.json`,

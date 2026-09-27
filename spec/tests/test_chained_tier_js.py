@@ -30,6 +30,7 @@ import yaml
 import warmrender
 from test_lifted_seat_js import LIB, RENDER, SPEC, build_components, mismatches, skin_file, spec_of
 from test_nested_slots_js import built_occupant
+from portrayal.artifacts import face_file
 
 SCRIPT = SPEC / "tests/js/chained-tier.mjs"
 SIMPLEX, LCPLUG, LCBOOT = "generic/sfp-lc-simplex@2", "generic/lc-plug@2", "common/lc-boot@1"
@@ -119,7 +120,7 @@ def render(tmp, key, spec):
     r = warmrender.run([sys.executable, str(RENDER), str(dev), "--library", str(LIB),
                         "--out", str(out)], capture_output=True, text=True)
     assert r.returncode == 0, r.stderr[-800:]
-    faces = {c: ET.parse(out / f"{name}.{c}.front.svg").getroot() for c in configs}
+    faces = {c: ET.parse(face_file(out, name, c, "front")).getroot() for c in configs}
     meta = json.loads((out / f"{name}.configs.json").read_text())
     return faces, meta["cages"]["front"]
 

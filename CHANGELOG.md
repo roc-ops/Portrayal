@@ -240,6 +240,17 @@ the *published build*, not about the hardware.
   metadata is replaced by `source-sha256`, the digest of that file's exact
   bytes. A reader that took the manifest from any drawing reads the one file
   instead. What is published is unchanged; only where (roc-ops/Portrayal#665).
+- **Each distinct drawing is written once.** Configurations that differ only in
+  a part a face cannot see draw that face identically, and each wrote its own
+  copy: the R740xd's 42 configurations wrote 252 faces holding 35 distinct
+  drawings. A drawing is now written once, named after the first configuration
+  (in manifest order) that draws it, and `configs[].files` in
+  `<device>.configs.json` maps each configuration's faces to their files. **Find
+  a face through `files`**; `<device>.<config>.<view>.svg` exists only for the
+  configuration that names it. A face no longer carries its configuration's
+  name: `data-config` on the root and `config` in `<metadata>` are gone, since
+  a shared drawing belongs to several. The default configuration's
+  `<device>.<view>.svg` copies are unchanged (roc-ops/Portrayal#665).
 - **BREAKING for DCIM data already imported.** A module type names its ports per
   bay. Every interface, console, power, front and rear port name on a card
   starts with `{module}/`, which NetBox and Nautobot both fill with the position

@@ -47,7 +47,7 @@ from pathlib import Path
 
 import yaml
 
-from portrayal.artifacts import Dist
+from portrayal.artifacts import Dist, face_file
 
 from portrayal.manifest import view_parts, alias_names, config_airflow
 from portrayal import optical_ports
@@ -1403,7 +1403,8 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
     # booleans; the file itself is matched by slug from elevation-images/.
     if dist:
         for face in ("front", "rear"):
-            if (Path(dist) / f"{dev['name']}.{cfg_name}.{face}.svg").exists():
+            f = face_file(dist, dev["name"], cfg_name, face)
+            if f and f.exists():
                 out[f"{face}_image"] = True
 
     dev_groups = dev.get("groups") or {}
@@ -1929,7 +1930,7 @@ def render_image(dist, root, target, doc, dev_name, cfg_name, face):
     # libraries' own elevation images sit in - theirs run 37 KB to 350 KB. At 4
     # px/mm the 13 RU C100G alone came to 1.9 MB, and a contribution that ships
     # 29 MB of PNG is not one anybody wants to merge.
-    return rasterize(Path(dist) / f"{dev_name}.{cfg_name}.{face}.svg",
+    return rasterize(face_file(dist, dev_name, cfg_name, face),
                      Path(root) / target / "elevation-images" / doc["manufacturer"]
                      / f"{doc['slug']}.{face}.png", 2)
 
