@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ds4000
-version: 0.1.0
+version: 0.2.0
 maturity: modelled
 manufacturer: Celestica
 model: DS4000
@@ -110,7 +110,12 @@ provenance:
       beside it). Jack openings 12.9 mm wide, matching std/rj45-ganged@2's 12.7 cell rather than
       the 15.8 mm single housing; the console is rotate 180 because the std part draws the keyway
       down. The USB is USB 2.0 (guide port table), so std/usb-a@1 is seated with its usb2 skin. To their right a vertical pull-out lug tag (celestica/lug-tag@1, turned on end) in a slot, x 430.5-433.5, y 16.1-39.3.
-      The 'Celestica' wordmark over the plate is not in the CAD; it is printed there on the
+      THE LUG TAG IS SEATED WITH NO LABEL, on purpose. The DS4001 render prints its model on the
+      tag and the ES1000 figure its; for the DS4000 the held images were read for it at 8x - the
+      datasheet render (1005 x 477) shows a faint mark on the tag a few pixels high that does not
+      resolve into characters, the Foleon ds4000-A-white render is untextured and prints nothing, and
+      the guide CAD draws the tag blank. Writing 'DS4000' there would be a guess that looks like a
+      reading. The 'Celestica' wordmark over the plate is not in the CAD; it is printed there on the
       DS4000 datasheet render and the DS4001 render, set here as plain text, not a logo.
   vents:
     confidence: measured
@@ -184,6 +189,17 @@ provenance:
       the same for back to front, 'Operating Relative Humidity 40 - 60 %', 'Storage Relative
       Humidity 5 - 95 %'. The operating-temp attr takes the datasheet's; the guide's narrower
       figures are in operating-temp-guide and operating-humidity-guide.
+  part-numbers:
+    confidence: datasheet
+    note: >-
+      Six chassis SKUs, from the guide's What's in the Box Table 1 (PDF rev 1.4.0): R4023-F9102/F9103/
+      F9104-A0 front-to-back and R4023-F9003/F9004/F9005-A0 back-to-front, differing within an airflow
+      only in CPU (4C D1627 or 8C D1649N), memory (1 or 2 x 16 GB) and SSD (64, 128 or 256 GB). Each is
+      its own orderable configuration with its own part-numbers entry, because the DCIM exporter makes
+      one device type per configuration SKU and a configuration listing three would export one. The
+      control-plane figures live in the descriptions: a configuration carries no attrs of its own (see
+      the config-scoped-device-attrs gap on cisco/asr-9001) and a part-numbers entry holds only part and
+      power-cord. The datasheet's ordering lines name only F9102 and F9003.
   lifecycle:
     note: >-
       searched 2026-09-26 for a DS4000/DS4001 end-of-life or end-of-sale announcement; none found.
@@ -248,8 +264,11 @@ gaps:
   note: >-
     The guide draws three fronts (2x 10GKR, 1x SFP+ plus 1x 10GKR, 2x SFP+) and lists six
     chassis SKUs whose descriptions differ only in CPU, memory, SSD and airflow. Nothing held ties
-    a front to a SKU. The base follows the datasheet render (one SFP+); the other two are
-    `example` configurations.
+    a front to a SKU. Re-read when the six SKUs became six orderable configurations: all six are
+    drawn with the datasheet render's one-SFP+ front, which is the same unsourced choice made six
+    times rather than a finding, and the other two fronts stay `example` configurations. If a SKU
+    turns out to ship another front, its configuration takes `views: {front: ...}` and nothing else
+    moves.
   wanted: a Celestica ordering guide or SKU description naming the SFP+ build
 - what: b2f-finish
   scope: [fans, psus, b2f]
@@ -1569,21 +1588,60 @@ configurations:
     kind: base
     default: true
     description: >-
-      Front-to-back airflow, two 1500 W AC supplies and seven fans, with the one-SFP+ front
-      (M1 fitted, the M2 lanes routed as 10GBASE-KR - guide Figure 2), which is the build the
-      DS4000 datasheet render shows. Ordered as R4023-F9102-A0 (4C D1627, 1x16 GB, 64 GB SSD),
-      -F9103-A0 (2x16 GB, 128 GB) or -F9104-A0 (8C D1649N, 2x16 GB, 256 GB); which front build
-      each SKU ships with is not stated (see the front-build-sku gap).
+      R4023-F9102-A0 - front-to-back airflow, 4-core Xeon D-1627, 1 x 16 GB DDR4, 64 GB SSD, two 1500 W
+      AC supplies and seven fans (guide What's in the Box, 'ASSY,TLA,DS4000,32X400GbE,4C D1627,1X16GB
+      DDR4,64GB SSD,2X1500W AC PSU,7 FAN,F2B'). Drawn with the one-SFP+ front (M1 fitted, the M2 lanes
+      routed as 10GBASE-KR - guide Figure 2), the build the DS4000 datasheet render shows; which front
+      build each SKU ships with is not stated (see the front-build-sku gap).
+    part-numbers:
+      R4023-F9102-A0: {part: R4023-F9102-A0}
+  f2b-2x16g-128g:
+    kind: orderable
+    description: >-
+      R4023-F9103-A0 - front-to-back, 4-core Xeon D-1627, 2 x 16 GB DDR4, 128 GB SSD, two 1500 W AC
+      supplies, seven fans. The control plane is the only difference from f2b, and nothing on the faces
+      shows it.
+    part-numbers:
+      R4023-F9103-A0: {part: R4023-F9103-A0}
+  f2b-8c-256g:
+    kind: orderable
+    description: >-
+      R4023-F9104-A0 - front-to-back, 8-core Xeon D-1649N, 2 x 16 GB DDR4, 256 GB SSD, two 1500 W AC
+      supplies, seven fans.
+    part-numbers:
+      R4023-F9104-A0: {part: R4023-F9104-A0}
   b2f:
     kind: orderable
     airflow: back-to-front
     description: >-
-      Back-to-front airflow - R4023-F9003-A0, -F9004-A0 or -F9005-A0 (the same three control-plane
-      options). QSFP-DD power drops to 24 x 5 W + 8 x 12 W (ports 25-32). No held document shows
-      whether the fans or supply latches change colour for this build, so the art is the f2b art
-      (see the b2f-finish gap).
+      R4023-F9003-A0 - back-to-front airflow, 4-core Xeon D-1627, 1 x 16 GB DDR4, 64 GB SSD, two 1500 W
+      AC supplies, seven fans. QSFP-DD power drops to 24 x 5 W + 8 x 12 W (ports 25-32). No held
+      document shows whether the fans or supply latches change colour for this build, so the art is the
+      f2b art (see the b2f-finish gap).
     region-context:
       exhaust: Intake
+    part-numbers:
+      R4023-F9003-A0: {part: R4023-F9003-A0}
+  b2f-2x16g-128g:
+    kind: orderable
+    airflow: back-to-front
+    description: >-
+      R4023-F9004-A0 - back-to-front, 4-core Xeon D-1627, 2 x 16 GB DDR4, 128 GB SSD, two 1500 W AC
+      supplies, seven fans.
+    region-context:
+      exhaust: Intake
+    part-numbers:
+      R4023-F9004-A0: {part: R4023-F9004-A0}
+  b2f-8c-256g:
+    kind: orderable
+    airflow: back-to-front
+    description: >-
+      R4023-F9005-A0 - back-to-front, 8-core Xeon D-1649N, 2 x 16 GB DDR4, 256 GB SSD, two 1500 W AC
+      supplies, seven fans.
+    region-context:
+      exhaust: Intake
+    part-numbers:
+      R4023-F9005-A0: {part: R4023-F9005-A0}
   f2b-2sfp:
     kind: example
     description: >-
