@@ -253,6 +253,17 @@ the *published build*, not about the hardware.
   (roc-ops/Portrayal#650).
 
 ### Changed
+- `common/qsfp-pull-tab@2` (2.2.0) models the strap's S-bend: each arm is six
+  relief boxes along the reach (`arm-l`, then `arm-l-2` to `arm-l-6`, and the
+  same on the right) that follow the side-view curve, down 1.5 into a dip
+  about 31 from the nose front and back up to the grip, meeting end to end.
+  The tab's vertical figures were read again on fitted body edges: the grip
+  top is 1.23 above the module top (was 1.07) and the strap top 0.47 (was
+  0.57), so the size is 19 x 8.56 and the risers end 7.33 below the module top,
+  where they were measured. `generic/qsfp-lc@2` and `generic/qsfp-dd-lc@2`
+  (2.2.0) compose the tab at `at: [-0.325, -1.23]`. The face-on drawing is
+  unchanged apart from that 0.16 shift. No device seats these parts, so no
+  lock moved (roc-ops/Portrayal#647, roc-ops/Portrayal#685).
 - `std/c20-inlet` (1.3.1) lays all three blades along the long side of the
   recess, as IEC 60320 C19/C20 has them and the SCHURTER C20 front view it
   cites draws them: line and neutral 13.0 apart, earth 8.0 off their line, in a
