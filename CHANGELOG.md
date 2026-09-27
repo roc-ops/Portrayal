@@ -244,9 +244,11 @@ the *published build*, not about the hardware.
   stub sized by a `cable-od` field. A `seat-out` connection-point key: a
   number of mm a part seated at that point stands off, absolute from the
   part's own face, where no drawn feature's rear already sits at that plane;
-  mutually exclusive with `on:` and read only where `on:` would be
-  (`manifest._seat_out`). Lint L106 refuses a point that carries both, or a
-  `seat-out` that is not a number at or above 0. See
+  mutually exclusive with `on:` and read only on the presented point
+  (`interface-at`, default `mate`; `manifest._seat_out`). Lint L106 refuses a
+  point that carries both, a `seat-out` that is not a number at or above 0,
+  and a `seat-out` on any other point. The kit now labels the coax media
+  (BNC, 1.0/2.3, F, MCX) in its port rows. See
   [connectors-coax-design.md](docs/connectors-coax-design.md)
   (roc-ops/Portrayal#650).
 
@@ -517,12 +519,12 @@ the *published build*, not about the hardware.
   the library's other bezels) present as deep as their core stands bare.
   `std/mcx@1`'s mate moves `on: barrel` (2.0), so a seated MCX plug now stands
   proud of the panel by the barrel's height rather than at the panel plane;
-  the MCX cages on `casa/c100g` and `casa/c40g` published lift 104 before this
-  and 2.0 after, and both took a patch bump. `std/bnc@1`, `std/din-1-0-2-3@1`
+  the MCX cages on `casa/c100g` and `casa/c40g` (104 placements) published
+  lift 0 before this and 2.0 after, and both took a patch bump. `std/bnc@1`, `std/din-1-0-2-3@1`
   and `std/f-type@1` each carry a `seat-out` (3.7, 3.85 and 7.8 respectively),
   so a seated plug on those jacks now presents at the mated plane instead of
   the panel face.
-- The Cisco channelized T3 SPAs `spa-2xt3e3`, `spa-4xt3e3`, `spa-2cht3-ce-atm`
+- The Cisco T3/E3 SPAs `spa-2xt3e3`, `spa-4xt3e3`, `spa-2cht3-ce-atm`
   and `spa-4xct3-ds0` (1.1.0) draw their 1.0/2.3 jacks as real
   `common/din-1-0-2-3-jack@1` placements instead of skin art, so they now
   publish `kind: connector` slots; `cisco/asr-9010`, the only device that

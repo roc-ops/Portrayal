@@ -79,9 +79,9 @@ panel-hole box, and the bezel composes it and adds the flange or nut that sits i
 the panel. A device or card places the bezel, never the bare core, and a guard test refuses
 any device or card that places a `std/bnc@1` or `std/din-1-0-2-3@1` core directly.
 
-- **`std/bnc@1`** (core) + **`common/bnc-jack@1`** (bezel): the bayonet collar with its two
-  lugs and the insulator ring around the centre contact, inside the panel hole; the bezel's
-  flange (12.7) is what sits in front of the panel. The panel hole and collar come from IEC
+- **`std/bnc@1`** (core) + **`common/bnc-jack@1`** (bezel): the bayonet collar, bore and
+  the insulator ring around the centre contact, inside the panel hole; the bezel draws the
+  flange (12.7) that sits in front of the panel and the collar's two bayonet lugs. The panel hole and collar come from IEC
   61169-8 where the figure is held, otherwise from a vendor panel-jack drawing, and each
   figure is labelled to its source. `common/bnc-jack@1` ships `unplaced:` — no held source
   puts a BNC jack on a modelled faceplate yet (section 6).
@@ -90,9 +90,10 @@ any device or card that places a `std/bnc@1` or `std/din-1-0-2-3@1` core directl
   vendor drawing; the bezel's nut (7.01) sits in front of the panel.
 - **The existing jacks are unchanged in art.** Each already presents its interface and a
   `mate` point, which is all a slot needs. `common/sma-jack@1` and `common/smb-jack@1`
-  present the interface through their core, as the RJ45 wrappers do. MCX keeps its recorded
-  caveat: at least one vendor (Casa) uses a variant recessed into the faceplate, so the
-  seated plug's depth follows the placement's presented lift, not the `std/mcx` barrel.
+  present the interface through their core, as the RJ45 wrappers do. `std/mcx@1` presents
+  at its barrel front (2.0), where a seated plug stops. At least one vendor (Casa) uses a
+  variant recessed into the faceplate; that variant is recorded in the part's provenance but
+  not modelled.
 
 ## 5. The plugs
 
@@ -103,7 +104,7 @@ behaviour and seating idiom of `generic/lc-plug@2` and `generic/rj45-plug@1`.
 
 Each is drawn end on from the face, nearest the viewer last:
 
-1. **The coupling part:** a hex nut (SMA, F), a knurled bayonet sleeve with its slots (BNC),
+1. **The coupling part:** a hex nut (SMA, F), a knurled bayonet sleeve (BNC; its slots are hidden from the face),
    a plain snap-on sleeve (SMB, MCX), or a push-pull sleeve (1.0/2.3). It overlaps the jack's
    collar, barrel or thread by the mated engagement length the standard gives, so in 3D the
    coupling part sits over that feature, not in front of it — except MCX, where the plug's
@@ -135,8 +136,8 @@ standard's reference plane less the plug's overlap past it — not at its own fr
 
 | jack | presents at (mm) | how |
 |---|---|---|
-| SMA | 0 | drawn feature at the plane (`on:`) |
-| SMB | 0 | drawn feature at the plane (`on:`) |
+| SMA | 0 | the jack's own face (no key) |
+| SMB | 0 | the jack's own face (no key) |
 | MCX | 2.0 | `on: barrel` — the barrel front, since the plug engages inside the jack |
 | BNC | 3.7 | `seat-out: 3.7` |
 | 1.0/2.3 | 3.85 | `seat-out: 3.85` |
@@ -144,9 +145,9 @@ standard's reference plane less the plug's overlap past it — not at its own fr
 
 The last three use the new `seat-out` connection-point key: a number of mm a seated part
 stands off, absolute from the part's own face, where no drawn feature's rear sits at that
-plane already. It is read only where `on:` would be (`manifest._seat_out`) and is mutually
-exclusive with it; lint L106 refuses a point that carries both, or a value that is not a
-number at or above 0. A bezel forwards its core's seat out: composing a core no longer drops
+plane already. It is read only on the presented point (`manifest._seat_out`) and is
+mutually exclusive with `on:`; lint L106 refuses a point that carries both, a value that is
+not a number at or above 0, or a `seat-out` on any point other than the presented one. A bezel forwards its core's seat out: composing a core no longer drops
 the core's own presented depth, so `common/bnc-jack@1` and `common/din-1-0-2-3-jack@1`
 present at their core's plane, not at the bezel's own placement lift alone.
 
@@ -158,7 +159,7 @@ A sweep lists every device and card that notes a stand-in or an unsettled coax j
 moves to `common/bnc-jack@1` or `common/din-1-0-2-3-jack@1` only when a held document names
 the connector ON THE FACEPLATE. An accessory cable's connector or a far end does not count.
 
-- **Moved, to `common/din-1-0-2-3-jack@1`:** the four Cisco channelized T3 SPAs —
+- **Moved, to `common/din-1-0-2-3-jack@1`:** the four Cisco T3/E3 SPAs —
   `spa-2xt3e3`, `spa-4xt3e3`, `spa-2cht3-ce-atm` and `spa-4xct3-ds0`. Each guide names its
   jacks 75-ohm coaxial Siemax (the 1.0/2.3 family) with "1.0/2.3 RF to BNC" cables, so a
   table naming BNC describes the cable's far end, not the faceplate. Their 1.0/2.3 jacks
@@ -189,7 +190,7 @@ Each moved part, and each device that seats it, takes the version bump deviceloc
 
 1. The registry holds the six interfaces, each citing its standard.
 2. Slots: a known port of each family publishes a `kind: connector` slot that accepts its
-   plug. Examples are the MX304 SMB clock port, a CommScope F-type port, and a moved 1.0/2.3
+   plug. Examples are the MX304 SMB clock port, a card F-type port (Casa), and a moved 1.0/2.3
    port on a Cisco T3/E3 SPA.
 3. Seating: each plug seats at its jack's `mate` point in a built device.
 4. 3D: each plug's solids build right side out, and the stub's cylinder diameter equals
