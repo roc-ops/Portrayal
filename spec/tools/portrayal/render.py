@@ -2,7 +2,8 @@
 """Portrayal renderer v0: compile a device manifest + component skins into flat SVG.
 
 One SVG per view. Deterministic output: no timestamps; tool version stamped in
-<metadata> along with resolved component versions and the embedded source manifest.
+<metadata> along with resolved component versions and the digest of the device's
+published <device>.source.json.
 """
 import argparse
 import copy
