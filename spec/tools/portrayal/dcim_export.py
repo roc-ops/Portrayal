@@ -1425,9 +1425,12 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None):
         return (dev_groups.get(p.get("group")) or {}).get("role")
 
     # WHAT THE NOS CALLS EACH PORT comes from the listing's `interfaces:` rules
-    # and from nowhere else. None means no NOS: the document is the hardware's
-    # own, and names its ports by the id on the faceplate.
-    names = listing_names(listing) if listing is not None else None
+    # and from nowhere else. None means no names: the hardware's own document,
+    # or a listing that does not state them (ArcOS on a box nobody has run -
+    # its `gaps` say why). Both name every port by the id on the faceplate. An
+    # EMPTY map would mean "the NOS exposes nothing", and a listing with no
+    # `interfaces` exported a switch with no ports at all.
+    names = listing_names(listing) if (listing or {}).get("interfaces") else None
 
     console, mgmt_sfp, bays, powers, timing = [], [], [], {}, {}
     for view in views_for(dev, cfg_name):
