@@ -109,7 +109,7 @@ provenance:
       beside it). Jack openings 12.9 mm wide, matching std/rj45-ganged@2's 12.7 cell rather than
       the 15.8 mm single housing; the console is rotate 180 because the std part draws the keyway
       down. std/usb-a@1 draws a blue (USB 3) tongue and carries no field to change it; this port
-      is USB 2.0, whose tongue is normally black or white - an art compromise, not a claim. To their right a vertical pull-out service tag in a slot, x 430.5-433.5, y 16.1-39.3.
+      is USB 2.0, whose tongue is normally black or white - an art compromise, not a claim. To their right a vertical pull-out lug tag (celestica/lug-tag@1, turned on end) in a slot, x 430.5-433.5, y 16.1-39.3.
       The 'Celestica' wordmark over the plate is not in the CAD; it is printed there on the
       DS4000 datasheet render and the DS4001 render, set here as plain text, not a logo.
   vents:
@@ -716,7 +716,7 @@ views:
         - {ref: std/rj45-ganged@2, id: console, at: [409, 8.4], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
         - {ref: std/usb-a@1, id: usb, at: [409.35, 20.35], group: mgmt, rel-pos: 2, attrs: {role: storage, usb: '2.0'}}
         - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [409, 26.7], group: mgmt, rel-pos: 3, attrs: {role: mgmt, speed: 1g}, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {color: '#f59e0b', name: link-10-100m}], led-b: ['off', {behavior: blinking, color: '#22c55e', name: activity}]}, description: 'guide Table 3 Port Indicator Lights - Ethernet port active (left): Green on (link at 1000Mbps), Amber on (link in 10/100Mbps), Off (link down); Ethernet port active (right): Green blinking (link active with traffic), Off (no traffic)'}
-        - {ref: celestica/service-tag@1, id: service-tag, at: [430.5, 16.1], group: furniture, rel-pos: 1}
+        - {ref: celestica/lug-tag@1, id: lug-tag, at: [420.5, 25.7], rotate: 90, group: furniture, rel-pos: 1}
     regions:
       - {id: mgmt-block, at: [406.4, 1], size: {w: 17.9, h: 40.5}, label: Management, members: [console, usb, mgmt]}
   rear:
@@ -1181,7 +1181,7 @@ views:
         - {ref: std/rj45-ganged@2, id: console, at: [409, 8.4], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
         - {ref: std/usb-a@1, id: usb, at: [409.35, 20.35], group: mgmt, rel-pos: 2, attrs: {role: storage, usb: '2.0'}}
         - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [409, 26.7], group: mgmt, rel-pos: 3, attrs: {role: mgmt, speed: 1g}, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {color: '#f59e0b', name: link-10-100m}], led-b: ['off', {behavior: blinking, color: '#22c55e', name: activity}]}, description: 'guide Table 3 Port Indicator Lights - Ethernet port active (left): Green on (link at 1000Mbps), Amber on (link in 10/100Mbps), Off (link down); Ethernet port active (right): Green blinking (link active with traffic), Off (no traffic)'}
-        - {ref: celestica/service-tag@1, id: service-tag, at: [430.5, 16.1], group: furniture, rel-pos: 1}
+        - {ref: celestica/lug-tag@1, id: lug-tag, at: [420.5, 25.7], rotate: 90, group: furniture, rel-pos: 1}
     regions:
       - {id: mgmt-block, at: [406.4, 1], size: {w: 17.9, h: 40.5}, label: Management, members: [console, usb, mgmt]}
   front-kr:
@@ -1559,7 +1559,7 @@ views:
         - {ref: std/rj45-ganged@2, id: console, at: [409, 8.4], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
         - {ref: std/usb-a@1, id: usb, at: [409.35, 20.35], group: mgmt, rel-pos: 2, attrs: {role: storage, usb: '2.0'}}
         - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [409, 26.7], group: mgmt, rel-pos: 3, attrs: {role: mgmt, speed: 1g}, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {color: '#f59e0b', name: link-10-100m}], led-b: ['off', {behavior: blinking, color: '#22c55e', name: activity}]}, description: 'guide Table 3 Port Indicator Lights - Ethernet port active (left): Green on (link at 1000Mbps), Amber on (link in 10/100Mbps), Off (link down); Ethernet port active (right): Green blinking (link active with traffic), Off (no traffic)'}
-        - {ref: celestica/service-tag@1, id: service-tag, at: [430.5, 16.1], group: furniture, rel-pos: 1}
+        - {ref: celestica/lug-tag@1, id: lug-tag, at: [420.5, 25.7], rotate: 90, group: furniture, rel-pos: 1}
     regions:
       - {id: mgmt-block, at: [406.4, 1], size: {w: 17.9, h: 40.5}, label: Management, members: [console, usb, mgmt]}
 configurations:

@@ -34,7 +34,7 @@ provenance:
       ds4001_front render and the Foleon side-by-side - shows a different faceplate: the SFP+
       pair at the LEFT end with a green lamp above and below it, legends 'M1 up-down M2',
       '1-HP up-down 2-HP' and '31-HP up-down 32-HP', a hexagon-perforated black face, and the
-      service tag printed 'DS4001'. So this front is modelled from the renders and carries no
+      lug tag printed 'DS4001'. So this front is modelled from the renders and carries no
       guide front figure at all.
   front-geometry:
     confidence: photo-measured
@@ -54,7 +54,7 @@ provenance:
       so the whole QSFP-DD block sits 14.86 mm further right, making room for the SFP+ pair);
       SFP+ lamp 16.93, so SFP+ centre 20.06 using the DS4000's lamp-to-cage offset (3.13 mm; the
       protruding cage's own blob centroid gives 20.1-21.1, biased right by its visible side
-      wall); status lamps 400.4; management plate 403.6-420.65; service tag centred 427.3. Image
+      wall); status lamps 400.4; management plate 403.6-420.65; lug tag centred 427.3. Image
       x was corrected for the face's vertical lean (0.0625 px per px, from the left edge at two
       heights) before mapping features measured off the dot line. Vertical positions are NOT
       measured on the render; they are carried from the DS4000's orthographic elevation (same
@@ -93,7 +93,7 @@ provenance:
       '31-HP up-down 32-HP' between the rows, solid triangles; 'M1 up-down M2' between the SFP+
       cages; 'STAT', 'FAN', 'PWR', 'ALM' set diagonally left of the four lamps; 'IOIOI', a USB
       trident and a network symbol to the right of the jacks; 'Celestica' set in plain type
-      above the jacks (a wordmark in text, not a logo); 'DS4001' along the service tag. The -HP
+      above the jacks (a wordmark in text, not a logo); 'DS4001' along the lug tag. The -HP
       ports are the guide's high-power positions (QSFP-DD Port Power Outputs: F2B 20 W on ports
       1, 2, 31 and 32).
   mgmt:
@@ -632,7 +632,7 @@ views:
         - {ref: std/rj45-ganged@2, id: console, at: [405.77, 8.4], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
         - {ref: std/usb-a@1, id: usb, at: [406.12, 20.35], group: mgmt, rel-pos: 2, attrs: {role: storage, usb: '2.0'}}
         - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [405.77, 26.7], group: mgmt, rel-pos: 3, attrs: {role: mgmt, speed: 1g}, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {color: '#f59e0b', name: link-10-100m}], led-b: ['off', {behavior: blinking, color: '#22c55e', name: activity}]}, description: 'guide Table 3 Port Indicator Lights - Ethernet port active (left): Green on (link at 1000Mbps), Amber on (link in 10/100Mbps), Off (link down); Ethernet port active (right): Green blinking (link active with traffic), Off (no traffic)'}
-        - {ref: celestica/service-tag@1, id: service-tag, at: [425.8, 16.1], group: furniture, rel-pos: 1, attrs: {label: DS4001}}
+        - {ref: celestica/lug-tag@1, id: lug-tag, at: [415.8, 25.7], rotate: 90, group: furniture, rel-pos: 1, attrs: {label: DS4001}}
     regions:
       - {id: mgmt-block, at: [403.1, 1], size: {w: 18.05, h: 40.5}, label: Management, members: [console, usb, mgmt]}
   rear:
