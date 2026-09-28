@@ -110,6 +110,7 @@ PRIVATE_NAMES = {
     "e0fcd351b53ffafa": _SPONSOR_FILES,    # the employer, as the sponsor credit names it
     "619e045974e6cf5d": _SPONSOR_FILES,    # the employer, as its domain reads
     "5b090874c87b019a": frozenset(),       # the maintainer's own domain
+    "21a0462aef66d8ba": frozenset(),       # a lab hostname prefix, found after #452
     "06b9a6eacd7a77b9": _AUTHOR_FILES,     # the maintainer, given name
     "6f12ebf934ac8261": _AUTHOR_FILES,     # the maintainer, family name
 }
