@@ -63,7 +63,7 @@ jsDelivr with `?dist=cdn` (and `&index=<version>`).
 | `gif.js` | GIF capture |
 | `swap.js` | swapping a component into a bay |
 | `fields.js` | writing a field on a part at runtime - its text and its colour, the build's rule, for 2D and 3D alike |
-| `devsel.js` | device selection and filtering |
+| `devsel.js` | device selection and filtering - hardware by its maker, and each NOS vendor's listings under that vendor (`listings.json`, #709) |
 | `dist.js` | artifact fetching, and where each file is: a build directory or the npm packages |
 
 Plain ES modules. No bundler, no build step.
