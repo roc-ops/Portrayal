@@ -309,6 +309,16 @@ the *published build*, not about the hardware.
   (roc-ops/Portrayal#650).
 
 ### Changed
+- **The DriveNets names leave the UfiSpace hardware** (roc-ops/Portrayal#674).
+  Twelve UfiSpace boxes carried their NCP name as an `oem` alias (#518) - the
+  S9700-53DX's `NCP-40C` and so on. DriveNets' own listing now carries it
+  (`drivenets/<box>/listing.yaml`, `model:`), filed under DriveNets and found
+  by search and the picker, so the alias is removed and each box takes a patch
+  bump. `aliases` in `devices.json` and `<device>.configs.json` drops those
+  names, and the UfiSpace DCIM types lose "Also sold or listed as: NCP-...".
+  The S9600-102XC loses `NCP-96X6C-S` too: the DNOS CLI reference accepts only
+  the S9601-102XC for that model. The fabric boxes (S9705-48D `NCF-48CD`,
+  S9725-64E `NCF-64E`) keep theirs until they are listed.
 - `juniper/mic-3d-8ds3-e3` and `mic-3d-8ds3-e3-v` (1.1.2): their 16 jacks
   state `impedance: 75`, and the description no longer calls 75-ohm
   mini-SMB an unmodelled interface. Mini-SMB is the 75-ohm SMB series, the
