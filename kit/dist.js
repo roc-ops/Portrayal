@@ -68,8 +68,18 @@ export function flatDist(base) {
 /** `opts.dist` as a path -> URL function: a function is used as it is, a
  *  string (or nothing, then `fallback`) is a build directory's base. */
 export function distResolver(dist, fallback) {
-  return typeof dist === 'function' ? dist : flatDist(dist ?? fallback);
+  // `||`, not `??`: an empty string meant "the default" before this function
+  // existed (callers wrote `opts.dist || '../dist'`), and '' as a base would
+  // put every file at the site root
+  return typeof dist === 'function' ? dist : flatDist(dist || fallback);
 }
+
+/** An exact version (semver, prerelease and build allowed), a package this
+ *  library publishes, and what `?index=` may name: `latest`, a dist-tag, or an
+ *  exact version. None of them can hold a `/`. */
+const SEMVER = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/;
+const PACKAGE = /^@portrayal\/[a-z0-9][a-z0-9-]*$/;
+export const safeIndex = v => typeof v === 'string' && (/^[a-z][a-z0-9-]{0,63}$/.test(v) || SEMVER.test(v));
 
 /** Where jsDelivr serves version `version` of npm package `name`. */
 export const JSDELIVR = (name, version) => `https://cdn.jsdelivr.net/npm/${name}@${version}/`;
@@ -88,14 +98,25 @@ export const JSDELIVR = (name, version) => `https://cdn.jsdelivr.net/npm/${name}
  */
 export async function packageDist({at = JSDELIVR, index = 'latest'} = {}) {
   const INDEX = '@portrayal/index';
+  // A NAME OR VERSION IS CHECKED BEFORE IT IS PART OF A URL. `index` comes from
+  // the page's query string, and every other name and version from a file the
+  // first request returned; unchecked, a crafted `?index=` with path segments
+  // walks off the package onto other content the CDN serves, and the faces it
+  // then names are parsed as markup.
+  if (!safeIndex(index)) throw new Error(`not an index version or dist-tag: ${JSON.stringify(index)}`);
   const get = async url => {
     const r = await fetch(url);
     if (!r.ok) throw new Error(`${url}: HTTP ${r.status}`);
     return r.json();
   };
   const version = (await get(`${at(INDEX, index)}package.json`)).version;
+  if (!SEMVER.test(String(version))) throw new Error(`${INDEX}: not a version: ${JSON.stringify(version)}`);
   const base = at(INDEX, version);
   const pk = await jdist(`${base}packages.json`);
+  for (const [what, ref] of [['components', pk.components], ...Object.entries(pk.devices || {})]) {
+    if (!ref || !PACKAGE.test(String(ref.package)) || !SEMVER.test(String(ref.version)))
+      throw new Error(`packages.json: ${what} names ${JSON.stringify(ref)}, not @portrayal/<name> at a version`);
+  }
   const comp = at(pk.components.package, pk.components.version);
   const distAt = path => {
     if (path.startsWith('components/')) return comp + path.slice('components/'.length);

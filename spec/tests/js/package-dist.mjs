@@ -28,7 +28,7 @@ globalThis.fetch = async url => {
   return { ok: true, json: async () => JSON.parse(body), text: async () => body };
 };
 
-const { packageDist, flatDist, distResolver } = await import('../../../kit/dist.js');
+const { packageDist, flatDist, distResolver, safeIndex } = await import('../../../kit/dist.js');
 const at = (name, version) => `${PREFIX}${name}@${version}/`;
 const distAt = await packageDist({ at });
 
@@ -60,5 +60,14 @@ console.log(JSON.stringify({
   flat: [flatDist('../dist')('a.svg'), flatDist('../dist/')('a.svg')],
   resolverKeepsAFunction: distResolver(distAt, 'x') === distAt,
   resolverFromString: distResolver(undefined, '../dist')('devices.json'),
+  resolverFromEmpty: distResolver('', '../dist')('devices.json'),
+  // a crafted `?index=` is refused before any request is made
+  crafted: await (async () => {
+    const before = asked.length;
+    const e = await packageDist({ at, index: '0/../../../gh/someone/else@main' }).then(() => 'loaded', e => String(e.message));
+    return { error: e, requests: asked.length - before };
+  })(),
+  indexForms: ['latest', 'next', '1.2.3', '0.1.0-rc.1', '0/../x', '1.2.3/x', '', 'Latest?']
+    .map(v => [v, safeIndex(v)]),
   pinnedMissing: await packageDist({ at, index: '0.0.0-nope' }).then(() => 'loaded', e => String(e.message)),
 }));

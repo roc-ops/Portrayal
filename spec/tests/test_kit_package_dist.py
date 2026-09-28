@@ -57,3 +57,19 @@ def test_a_build_directory_still_works_as_it_did(result):
 
 def test_an_index_version_npm_does_not_have_says_so(result):
     assert "HTTP 404" in result["pinnedMissing"]
+
+
+def test_an_empty_dist_is_the_default_as_it_was(result):
+    """`opts.dist || default` before #691: an empty string is not a base."""
+    assert result["resolverFromEmpty"] == "../dist/devices.json"
+
+
+def test_a_crafted_index_is_refused_before_any_request(result):
+    """`?index=` goes into a URL, so it is held to a version or a dist-tag:
+    with path segments it would walk off @portrayal/index onto other content
+    the CDN serves, whose faces are then parsed as markup."""
+    assert "not an index version" in result["crafted"]["error"]
+    assert result["crafted"]["requests"] == 0
+    assert dict(result["indexForms"]) == {
+        "latest": True, "next": True, "1.2.3": True, "0.1.0-rc.1": True,
+        "0/../x": False, "1.2.3/x": False, "": False, "Latest?": False}
