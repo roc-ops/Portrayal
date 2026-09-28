@@ -8,8 +8,8 @@ Depends on A for parts to offer. Written now so it survives; refined when A land
 In the explorer and the annotate tab - one inspector serves both - a pluggable cage
 is swappable the way a bay is: pick from a list, the drawing and the 3D scene update.
 The list is not written by anyone. It is everything in the library that mates the
-cage's interface and fits the ladder, so a generic and a partner's optic sit in the
-same list the moment the partner's part lints. Portrayal ships no populated device;
+cage's interface and fits the ladder, so a generic and a third party's optic sit in
+the same list the moment the third party's part lints. Portrayal ships no populated device;
 this is the mechanism a downstream tool uses to populate one.
 
 ## What exists and is kept

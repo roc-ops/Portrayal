@@ -1,9 +1,12 @@
 format: 1
 kind: listing
 hardware: edgecore/as7326-56x
-version: 1.0.0
+version: 1.0.2
+portfolio: {line: 'Switching (XGS)'}
 source: >-
-  a live device: ArcOS S8.5.1A running on a lab unit of this model (netlab-leaf1). The pairing
+  Arrcus Hardware Compatibility List (External), June 2026, for ArcOS 8.5 - page 1,
+  under Switching (XGS), the row 'DCS203 / AS7326-56X'. The names below come from
+  a live device: ArcOS S8.5.1A running on a lab unit of this model. The pairing
   is the one the AS7726-32X's `arcos-show-version.txt` states for its sibling - 'Software:
   Arrcus ArcOS' over 'Firmware MU: EdgeCore MU 1.2.3' - and the names below were read from this
   model's own running unit (see `dumps` and the note under it).
@@ -11,7 +14,7 @@ nos: arcos
 nos-versions: '>=S8.5'
 dumps:
   - devices/edgecore/as7326-56x/dumps/arcos-openconfig-components.json
-# Read from the live unit - ArcOS S8.5.1A on netlab-leaf1, the same unit as the
+# Read from the live unit - ArcOS S8.5.1A on the lab unit, the same unit as the
 # intake photos - via 'show components | display json' and 'show interface
 # brief'. The component tree is committed at dumps/arcos-openconfig-components.json
 # with chassis serial, MAC and the whole transceiver subtree redacted; the sfp

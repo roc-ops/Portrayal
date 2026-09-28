@@ -101,14 +101,16 @@ _LICENCE_FILES = frozenset({"LICENSE", "NOTICE",
 _AUTHOR_FILES = _LICENCE_FILES | {"pyproject.toml"}
 # THE SPONSOR CREDIT IS THE ONE PLACE THE EMPLOYER IS NAMED ON PURPOSE (#446):
 # the permission to publish came with one request, a visible "sponsored by"
-# credit with the logo and a link. The README carries it; the logo files carry
-# nothing but paths. Anywhere else the name is still a finding.
-_SPONSOR_FILES = frozenset({"README.md"})
+# credit with the logo and a link. The README carries it, NOTICE carves the
+# logos out of the Apache grant (#657), and the logo files carry nothing but
+# paths. Anywhere else the name is still a finding.
+_SPONSOR_FILES = frozenset({"README.md", "NOTICE", "library/exports/NOTICE"})
 PRIVATE_NAMES = {
     "a2848e0afd90d6e7": frozenset(),       # a customer
     "e0fcd351b53ffafa": _SPONSOR_FILES,    # the employer, as the sponsor credit names it
     "619e045974e6cf5d": _SPONSOR_FILES,    # the employer, as its domain reads
     "5b090874c87b019a": frozenset(),       # the maintainer's own domain
+    "21a0462aef66d8ba": frozenset(),       # a lab hostname prefix, found after #452
     "06b9a6eacd7a77b9": _AUTHOR_FILES,     # the maintainer, given name
     "6f12ebf934ac8261": _AUTHOR_FILES,     # the maintainer, family name
 }
