@@ -61,6 +61,15 @@ written against that branch's numbers names a different rule. From 0.1.0 a
 code is never moved; the lint catalogue test pins every code issued.
 
 #### Added
+- **ArcOS listings for the Arrcus HCL** (roc-ops/Portrayal#674). Every box on
+  the Arrcus Hardware Compatibility List (June 2026, ArcOS 8.5) that the library
+  models - 29 of the 30 from UfiSpace and Edgecore - is listed under
+  `arrcus/`, with the HCL row as its source and Arrcus's own grouping
+  (Switching (XGS), Routing (DNX), VDR line and fabric cards) as its portfolio.
+  The AS7726-32X and AS7326-56X carry ArcOS port names from live units; the
+  other 27 carry an `arcos-port-names` gap instead, because ArcOS's own
+  documentation disagrees on whether a platform's first port is `swp0` or
+  `swp1`. Listings may now carry `gaps`.
 - **Listings** (roc-ops/Portrayal#674). A NOS vendor lists the hardware it
   supports: `library/devices/<nos vendor>/<id>/listing.yaml` points at one device
   and carries only what the NOS vendor changes - interface names, its own model

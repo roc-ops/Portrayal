@@ -142,4 +142,6 @@ the right to submit it under this licence. There is no CLA.
 
 Vendor and product names are trademarks of their owners and are used only to
 identify the hardware each drawing describes. Portrayal is independent and is
-not affiliated with or endorsed by any vendor it models; see `NOTICE`.
+not affiliated with or endorsed by any vendor it models; see `NOTICE`. The
+sponsor logos in `docs/sponsor/` are RocNet Supply's marks, included for the
+sponsor credit only and not covered by the Apache-2.0 licence.
