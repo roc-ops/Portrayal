@@ -114,9 +114,12 @@ source documents stay out of the repository. See `PRIOR-ART.md`.
 
 ## Status
 
-Early. The schemas are at `v0` and will change. The library covers white-box
-switches and routers, Cisco ASR 9000, Juniper MX, Casa CCAP and Dell server
-hardware at varying maturity; `library/dist/devices.json` is the current list.
+Early. Manifests are `format: 1` (schema v1) and the package is 0.x, so the
+format can still change: every change is in `CHANGELOG.md` with how to move
+across, and [docs/format-stability.md](docs/format-stability.md) says what is
+promised. The library covers white-box switches and routers, Cisco ASR 9000,
+Juniper MX, Casa CCAP and Dell server hardware at varying maturity;
+`library/dist/devices.json` is the current list.
 
 ## Licence
 
