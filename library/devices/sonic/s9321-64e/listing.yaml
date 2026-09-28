@@ -1,0 +1,16 @@
+format: 1
+kind: listing
+hardware: ufispace/s9321-64e
+version: 1.0.0
+description: >-
+  SONiC's hardware SKU for this box is UFISPACE-S9321-64E, on platform x86_64-ufispace_s9321_64e-r0.
+source: >-
+  SONiC Supported Devices and Platforms (sonic-net.github.io/SONiC), the row for S9321-64E.
+  Port names from the platform's own table in sonic-net/sonic-buildimage at d5c2e3b32ffa,
+  device/ufispace/x86_64-ufispace_s9321_64e-r0/platform.json: each SONiC name with the front-panel port its alias names and the breakout modes it allows.
+  eth0 is SONiC's management port (the SONiC command reference, Management VRF).
+interfaces:
+  - {physical: 'port-{n}', name: 'Ethernet{8*n}', range: '0-63', breakout: {modes: [1x400g, 1x800g, 2x400g, 4x200g]}}
+  - {physical: mgmt, name: eth0}
+nos: sonic
+nos-versions: master

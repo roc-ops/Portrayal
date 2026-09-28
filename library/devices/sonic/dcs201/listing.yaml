@@ -1,0 +1,24 @@
+format: 1
+kind: listing
+hardware: edgecore/dcs201
+version: 1.0.0
+description: >-
+  SONiC's hardware SKU for this box is Accton-AS5835-54X, on platform x86_64-accton_as5835_54x-r0.
+source: >-
+  SONiC Supported Devices and Platforms (sonic-net.github.io/SONiC), the row for AS5835-54X.
+  Port names from the platform's own table in sonic-net/sonic-buildimage at d5c2e3b32ffa,
+  device/accton/x86_64-accton_as5835_54x-r0/Accton-AS5835-54X/port_config.ini: each SONiC name with the front-panel port its alias names.
+  eth0 is SONiC's management port (the SONiC command reference, Management VRF).
+gaps:
+  - what: sonic-management-name
+    reason: vendor-silent
+    note: >-
+      This box has two management jacks (mgmt-1, mgmt-2) and SONiC has one eth0; the platform
+      files do not say which jack it is, so neither is named and the SONiC type does not list them.
+    wanted: >-
+      `show interfaces status` or `ip link` from this box running SONiC, with one jack cabled.
+interfaces:
+  - {physical: 'port-{n}', name: 'Ethernet{n-1}', range: '1-49'}
+  - {physical: 'port-{n}', name: 'Ethernet{4*n-148}', range: '50-54'}
+nos: sonic
+nos-versions: master
