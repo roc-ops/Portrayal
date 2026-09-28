@@ -186,6 +186,20 @@ def test_a_type_name_keeps_one_vendor_name_distinct_per_box():
     assert a["slug"] != b["slug"]
 
 
+def test_sonic_names_come_from_the_platform_alias_not_its_index():
+    """SONiC's port_config.ini `index` is not the faceplate number on every
+    platform - the AS5835-54T's 100G ports sit at index 49, 53, ... 69 - but
+    the alias is: hundredGigE50 is port 50. Pinned from sonic-buildimage."""
+    import yaml as _y
+    root = ROOT / "library/devices/sonic"
+    t = dx.listing_names(_y.safe_load((root / "dcs202/listing.yaml").read_text()))
+    assert (t["port-49"][0], t["port-50"][0], t["port-54"][0]) == ("Ethernet48", "Ethernet52", "Ethernet68")
+    t = dx.listing_names(_y.safe_load((root / "dcs510/listing.yaml").read_text()))
+    assert (t["port-1"][0], t["port-2"][0]) == ("Ethernet0", "Ethernet8")
+    t = dx.listing_names(_y.safe_load((root / "as7726-32x/listing.yaml").read_text()))
+    assert (t["port-7"][0], t["mgmt-eth"][0]) == ("Ethernet24", "eth0")
+
+
 def test_the_exporter_and_l124_agree_on_the_sku():
     assert dx.listing_config_model(
         {"part-numbers": {"A-EU": {"power-cord": "EU"}, "Y": {}}}) == ("Y", "Y")

@@ -15,6 +15,14 @@ the *published build*, not about the hardware.
 ## Unreleased
 
 ### Added
+- **SONiC listings** (roc-ops/Portrayal#674). The 17 boxes on SONiC's Supported
+  Devices and Platforms page that the library models are listed under
+  `sonic/`, every one with SONiC port names: each platform's own table in
+  sonic-buildimage (`port_config.ini`, or `platform.json` with its breakout
+  modes), pinned to one commit and joined to the faceplate by the port's alias
+  - which names the front-panel port where `index` does not. `eth0` is the
+  management port. Celestica's rows use codenames (DX010, Silverstone,
+  Seastone_2) no document here ties to a DS model, so they wait.
 - **DNOS listings** (roc-ops/Portrayal#674). The 13 modelled boxes the DNOS CLI
   Reference Guide 26.2 accepts as NCP hardware (`system ncp model`) are listed
   under `drivenets/`, each named as DriveNets sells it - `model: NCP-40C` - and

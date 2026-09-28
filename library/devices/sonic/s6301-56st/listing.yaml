@@ -1,0 +1,17 @@
+format: 1
+kind: listing
+hardware: ufispace/s6301-56st
+version: 1.0.0
+description: >-
+  SONiC's hardware SKU for this box is UFISPACE-S6301-56ST, on platform x86_64-ufispace_s6301_56st-r0.
+source: >-
+  SONiC Supported Devices and Platforms (sonic-net.github.io/SONiC), the row for S6301-56ST.
+  Port names from the platform's own table in sonic-net/sonic-buildimage at d5c2e3b32ffa,
+  device/ufispace/x86_64-ufispace_s6301_56st-r0/platform.json: each SONiC name with the front-panel port its alias names and the breakout modes it allows.
+  eth0 is SONiC's management port (the SONiC command reference, Management VRF).
+interfaces:
+  - {physical: 'port-{n}', name: 'Ethernet{n}', range: '0-47'}
+  - {physical: 'port-{n}', name: 'Ethernet{n}', range: '48-55'}
+  - {physical: mgmt, name: eth0}
+nos: sonic
+nos-versions: master
