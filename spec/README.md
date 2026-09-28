@@ -8,7 +8,7 @@ DCIM, and diagram-tool exports. Domain-neutral core; networking is profile #1.
 - `DESIGN.md` — the architecture and the ten resolved design decisions
 - `../PRIOR-ART.md` — the research this project rests on (and the gap it fills)
 - `DEPTH-AND-3D.md` — how depth, relief and module bodies turn the 2D drawing into 3D
-- `schemas/` — JSON Schemas for component contracts, device manifests, NOS overlays
+- `schemas/` — JSON Schemas for component contracts, device manifests, NOS listings
 - `tools/portrayal/render.py` — compiles manifest + component skins → flat, addressable SVG
 - `tools/portrayal/lint.py` — schema validation + contract↔skin consistency + ID grammar;
   `--list-rules` prints every rule code, and [docs/lint-rules.md](../docs/lint-rules.md) is that table as a page

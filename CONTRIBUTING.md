@@ -195,8 +195,8 @@ It reads `library/dist/`, so `./build.sh --device <model>` above is what puts
 your change in it. This sentence goes in the pull request: which figure you compared
 against, at what scale, what agreed, what did not, and what you did about it.
 "Looks right" is not the sentence; "front over the datasheet elevation at
-2.2 px/mm, port pitch and PSU cut-out agree, the status lamp sits 0.6 mm low
-and is recorded as estimated" is.
+2.2 px/mm, port pitch and PSU cut-out agree, the status lamp sits 0.6 mm low,
+recorded as estimated" is.
 
 ### 5. Run the gates
 

@@ -1,0 +1,74 @@
+format: 1
+kind: component
+name: lug-tag-ridge-16
+version: 1.0.0
+class: tab
+behaviour: fills
+profile: networking
+description: >-
+  Celestica pull-out luggage tag, the TOP-RIDGE form in its short 15.9 mm length - a flat black
+  card in a slot in the faceplate whose grip is a raised ridge running along its top edge over
+  the middle two-thirds of its length, with the model name printed on the card below it. Drawn
+  landscape, text reading left to right; fitted flat (rotate 0) under the SFP+ pair of the
+  DS4101. Not celestica/lug-tag@1, whose grip is a block at one END: the two cards differ in
+  shape, and this one's 23.3 mm sibling is celestica/lug-tag-ridge-23@1.
+size: {w: 15.9, h: 4.0}
+size-confidence: {w: measured, h: measured}
+attrs: {role: info-tab}
+provenance:
+  size: >-
+    measured on the DS4101 installation guide's Product Overview Figure 1 (DS4101 Front View), an
+    orthographic CAD render whose face box reads 6836 x 673 px against the stated 438.5 x 43.1 mm
+    (aspect 0.16% out, 15.6 px/mm; the JPEG is an upscale, edges soft by about 0.2 mm). The slot
+    and card read x 416.9 to 432.8 by y 38.0 to 42.0.
+  ridge: >-
+    measured on the same figure: the raised grip runs x 420.0 to 430.0 along the card's top edge,
+    so 3.1 to 13.1 in the part's frame - 63% of the length, set nearly centrally. The product-page
+    three-quarter render (cls.celestica.com DS4101, ds4101-A.png) shows the same ridge standing
+    along the top of the card with the model name below it. Its height on the face (0.9 mm) is
+    read off the render against the card's own height and is estimated.
+  one-contract-or-two: >-
+    TWO, because the lengths differ and size is a contract's geometry. The ES1000's card has the
+    same top-ridge form at 23.3 x 3.8 mm; a skin cannot carry a different size (its viewBox is the
+    contract's size, L4), and the components README's rule is that a different shape is a
+    different component and a size change is a major. So the long card is
+    celestica/lug-tag-ridge-23@1 and this is the short one, drawn to the same recipe.
+  label: >-
+    render - ds4101-A.png prints the model name on the card and LUG TAG on the panel above it, not
+    on the card; the label is a field so the same part carries whatever the host prints.
+  relief: >-
+    estimated, following celestica/lug-tag@1 and common/pull-tab@1: the card stands a little proud
+    of its slot and the ridge stands further, so the tag reads in 3D as something a finger can take
+    hold of. No held document dimensions either standoff.
+  body: >-
+    estimated - no document dimensions the card's length behind the faceplate or its travel.
+    celestica/lug-tag@1 carries 70 deep and 55 of travel for a 23 mm card; this card is given the
+    same depth-to-length proportion.
+elements:
+  tab: {at: [0.3, 0.3], size: [15.3, 3.4], class: tab}
+fields:
+  label:
+    label: Printed model name
+    type: text
+    default: ''
+relief:
+  features:
+    - node: tab
+      out: 1.2
+      color: '#26292d'
+      confidence: estimated
+      source: >-
+        celestica/lug-tag@1 - the card's standoff from its slot; not dimensioned for this card
+        either.
+    - node: tab-ridge
+      out: 2.4
+      color: '#34383d'
+      confidence: estimated
+      source: >-
+        celestica/lug-tag@1's grip figure, applied to this card's top-edge ridge; the ridge's height
+        is seen on ds4101-A.png and not dimensioned.
+skins: [default]
+body:
+  depth: 48
+  travel: 38
+  color: '#26292d'

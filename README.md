@@ -1,5 +1,7 @@
 # Portrayal
 
+![A UfiSpace S9600-72XC faceplate drawn by Portrayal, fully cabled: every port, lamp, label and cable is an addressable element](docs/img/hero-switch.png)
+
 Declarative, Git-versioned hardware device definitions, compiled into SVG where
 every physical thing is individually addressable — ports, PSUs, fans, LEDs, bays,
 regions.
@@ -15,6 +17,14 @@ The core is domain-neutral. Networking is the first profile, not the only one.
 ![The Portrayal explorer showing a UfiSpace S9700-23D faceplate, with its service and fabric port groups, status lamps and regions listed in the part tree](docs/img/explorer.png)
 
 <p>
+  <a href="https://portrayal.dev/hero-3d.mp4">
+    <img src="docs/img/hero-3d-poster.jpg" alt="The same switch in Portrayal's 3D view, cabled, on a rack">
+  </a>
+  <br>
+  <a href="https://portrayal.dev/hero-3d.mp4">▶ Watch it in 3D</a> - the same drawing, extruded, with the cables routed.
+</p>
+
+<p>
   <a href="https://www.rocnetsupply.com/">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="docs/sponsor/RocNet-Primary-Logo-white.svg">
@@ -27,8 +37,8 @@ The core is domain-neutral. Networking is the first profile, not the only one.
 
 ```
 spec/          schemas, compiler, linter, tests
-library/       component contracts + skins, device manifests, NOS overlays
-kit/           portrayal-kit: the JS consumer — draw, inspect, export
+library/       component contracts + skins, device manifests, NOS listings
+kit/           @portrayal/kit: the JS consumer — draw, inspect, export
 docs/          how the model works
 ```
 
@@ -94,9 +104,9 @@ populated. Chassis silkscreen paints *under* the components that cover it, becau
 that is what happens to the real panel. `--without silkscreen` gives you the bare
 panel-and-components drawing to hand to whoever does the artwork.
 
-**Physical ids follow the silkscreen.** What the NOS calls an interface is an
-overlay, because two operating systems on the same hardware disagree and the
-hardware does not care.
+**Physical ids follow the silkscreen.** What the NOS calls an interface belongs
+to the NOS vendor's listing of the box, because two operating systems on the
+same hardware disagree and the hardware does not care.
 
 **No vendor material is redistributed.** Facts are transcribed and cited; the
 source documents stay out of the repository. See `PRIOR-ART.md`.
@@ -157,4 +167,6 @@ the right to submit it under this licence. There is no CLA.
 
 Vendor and product names are trademarks of their owners and are used only to
 identify the hardware each drawing describes. Portrayal is independent and is
-not affiliated with or endorsed by any vendor it models; see `NOTICE`.
+not affiliated with or endorsed by any vendor it models; see `NOTICE`. The
+sponsor logos in `docs/sponsor/` are RocNet Supply's marks, included for the
+sponsor credit only and not covered by the Apache-2.0 licence.

@@ -1,0 +1,331 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://portrayal.dev/schemas/v1/listing.schema.json",
+  "title": "Portrayal listing (v1) - a NOS vendor's entry for hardware it supports",
+  "description": "A LISTING IS HOW A DISAGGREGATED BOX IS SOLD. NetBox and Nautobot model a switch that runs another company's NOS by listing the same device type under that company: UfiSpace's S9510-28DC, and Arrcus's S9510-28DC, and IP Infusion's. A listing is that entry. It lives at devices/<nos vendor>/<id>/listing.yaml, it points at ONE hardware device and draws nothing of its own, and it carries only what the NOS vendor changes: what the ports are called, what the vendor calls the box and where it files it, and its own part numbers where it has them. The hardware is modelled once, whoever lists it.",
+  "type": "object",
+  "required": [
+    "format",
+    "kind",
+    "hardware",
+    "version",
+    "nos",
+    "source"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "format": {
+      "const": 1
+    },
+    "kind": {
+      "const": "listing"
+    },
+    "hardware": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*/[a-z0-9][a-z0-9._-]*$",
+      "description": "the device this listing is for, as <namespace>/<directory> - `ufispace/s9510-28dc`. It must be a `kind: device` (L56). The listing's own namespace is the NOS vendor, and its directory is by convention the hardware's name"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "semver, held to devicelock like a device's: a changed interface name, model or part number is what a DCIM import keys on, so it is major; a new configuration override is minor; wording is a patch"
+    },
+    "model": {
+      "type": "string",
+      "description": "what the NOS vendor calls this box, when it is not the hardware's name - DriveNets sells a UfiSpace S9700-53DX as the NCP-40C. Omitted means the hardware's `model`. A display and search name: the DCIM model of each exported type is a configuration's `model` or SKU (see `configurations`)"
+    },
+    "portfolio": {
+      "type": "object",
+      "description": "where the NOS VENDOR files this box in its own catalogue, in its own words - which need not match the ODM's. OcNOS files boxes by edition (SP, DC), DriveNets by role (aggregation router, fabric); the hardware's portfolio stays the ODM's.",
+      "additionalProperties": false,
+      "properties": {
+        "line": {
+          "type": "string",
+          "description": "the vendor's business line, e.g. 'Service Provider'"
+        },
+        "family": {
+          "type": "string",
+          "description": "the vendor's word for the category, e.g. 'Aggregation Router'"
+        },
+        "series": {
+          "type": "string",
+          "description": "marketing series, e.g. 'AGR400'; the model is the SKU root"
+        },
+        "also-listed-in": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "other catalogue categories the vendor ALSO files this device under, in the vendor's own words. `line` is the category of the vendor's own canonical product URL; this is everywhere else it appears. A consumer filtering by category should union the two, so a box the vendor lists twice shows up in both lists."
+        }
+      }
+    },
+    "aliases": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "the other names THIS VENDOR uses for this box - an HCL row's spelling, a retired name, a catalogue name that is not its model. Same shape as a device's `aliases`. Held unique within the vendor's namespace (L124); a name the ODM already carries as an alias on the hardware is not repeated here.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "kind"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^\\S(.*\\S)?$"
+          },
+          "kind": {
+            "enum": [
+              "vendor",
+              "marketing",
+              "oem",
+              "superseded",
+              "variant"
+            ]
+          },
+          "note": {
+            "type": "string",
+            "description": "the caveat that keeps the alias honest - where the mapping comes from, or how a variant differs"
+          },
+          "shared": {
+            "const": true,
+            "description": "this name is knowingly claimed by more than one device - an OEM name mapped to either of a pair. L111 accepts a duplicate only when EVERY claimant says so"
+          }
+        }
+      }
+    },
+    "description": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string",
+      "description": "WHERE THE VENDOR LISTS IT: the compatibility list, its version, and the row. Required, because a listing is a claim about what somebody sells, it changes release to release, and it has to be a document anyone can read - a pairing known only from material that cannot be published does not go in"
+    },
+    "gaps": {
+      "type": "array",
+      "description": "what this listing does not know and a reader cannot tell from looking at it - most often the NOS's own port names where no document or live unit states them. A listing without `interfaces` exports its hardware's faceplate ids under the NOS vendor, which is honest but not what the NOS answers to; the gap says so and says what would close it.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "what",
+          "reason",
+          "wanted"
+        ],
+        "properties": {
+          "what": {
+            "description": "the missing knowledge, as a token: port-led-semantics, fan-direction",
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "reason": {
+            "description": "why it is missing, because that decides who can close it. `sources-disagree` is the one that is NOT an absence: two documents we hold state different values for one fact, and picking the bigger number and saying nothing loses a real finding. It is the normal case rather than the exceptional one - the AGR400's datasheet says 527 W max where its own QSG says 638 W at 25 C, and the C100G guide gives the fan assemblies 100 W each in prose and 330 W for the three of them in Table A-2. The `note` carries both figures with their sources",
+            "enum": [
+              "vendor-silent",
+              "sources-disagree",
+              "nos-dependent",
+              "needs-hardware",
+              "needs-photo",
+              "needs-drawing"
+            ]
+          },
+          "note": {
+            "type": "string",
+            "description": "what was looked at and what it did not say. Cite the section, so the next reader does not repeat the search"
+          },
+          "wanted": {
+            "type": "string",
+            "description": "required, and the most valuable field: the difference between 'we don't know' and a request someone can act on"
+          },
+          "blocks": {
+            "type": "array",
+            "description": "capability flags or levels this gap stands in the way of, so a consumer can join a flag to its explanation structurally rather than by reading the prose in `wanted`. Optional, and an empty list is a fine answer - do not invent a blocker to fill the field. Absent or empty means 'blocks nothing we can name', not 'unknown'.",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+            }
+          }
+        }
+      }
+    },
+    "nos": {
+      "type": "string",
+      "description": "e.g. arcos, sonic, cumulus"
+    },
+    "nos-versions": {
+      "type": "string",
+      "description": "optional applicability note, e.g. '>=S8.5'"
+    },
+    "configurations": {
+      "type": "object",
+      "description": "per hardware configuration, what the NOS vendor calls or numbers it. KEYS ARE THE HARDWARE'S configuration names (L56). Omitted, every configuration the hardware exports is listed under the hardware's own SKUs - the metal is the same metal, and its part number still orders it. A configuration named here with `model` or `part-numbers` exports under those instead",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "model": {
+            "type": "string",
+            "description": "the DCIM model for this configuration, where the vendor names it rather than numbering it"
+          },
+          "part-numbers": {
+            "type": "object",
+            "description": "orderable SKUs for this configuration: model -> {part, power-cord}",
+            "additionalProperties": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "part": {
+                  "type": "string"
+                },
+                "power-cord": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "aliases": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "description": "the other names THIS VENDOR uses for this box - an HCL row's spelling, a retired name, a catalogue name that is not its model. Same shape as a device's `aliases`. Held unique within the vendor's namespace (L124); a name the ODM already carries as an alias on the hardware is not repeated here.",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "name",
+                "kind"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "pattern": "^\\S(.*\\S)?$"
+                },
+                "kind": {
+                  "enum": [
+                    "vendor",
+                    "marketing",
+                    "oem",
+                    "superseded",
+                    "variant"
+                  ]
+                },
+                "note": {
+                  "type": "string",
+                  "description": "the caveat that keeps the alias honest - where the mapping comes from, or how a variant differs"
+                },
+                "shared": {
+                  "const": true,
+                  "description": "this name is knowingly claimed by more than one device - an OEM name mapped to either of a pair. L111 accepts a duplicate only when EVERY claimant says so"
+                }
+              }
+            }
+          },
+          "description": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "terms": {
+      "type": "object",
+      "description": "display vocabulary overrides, e.g. {bay: 'Slot'}",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "interfaces": {
+      "type": "array",
+      "description": "logical interface naming rules; {n} expands over a group's rel-pos",
+      "items": {
+        "type": "object",
+        "required": [
+          "physical",
+          "name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "physical": {
+            "type": "string",
+            "description": "physical id or pattern, e.g. 'port-{n}'"
+          },
+          "name": {
+            "type": "string",
+            "description": "NOS interface name pattern, e.g. 'swp{n}' or 'Ethernet{(n-1)*4}'"
+          },
+          "range": {
+            "type": "string",
+            "description": "e.g. '1-32'; omit for single"
+          },
+          "breakout": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "modes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "child-name": {
+                "type": "string",
+                "description": "pattern for breakout children"
+              }
+            }
+          }
+        }
+      }
+    },
+    "entity-map": {
+      "type": "array",
+      "description": "rules joining NOS component names (ENTITY-MIB / ietf-hardware / OpenConfig) to physical ids or regions; NOS trees are joined, never drawn; unmapped NOS nodes are legal",
+      "items": {
+        "type": "object",
+        "required": [
+          "match",
+          "to"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "source": {
+            "enum": [
+              "openconfig",
+              "entity-mib",
+              "ietf-hardware",
+              "redfish"
+            ],
+            "description": "which tree these names come from; omit = any"
+          },
+          "match": {
+            "type": "string",
+            "description": "NOS component name pattern, e.g. 'sfp{n}' or 'PSU-{n}'"
+          },
+          "range": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string",
+            "description": "physical id pattern ('port-{n}'), or 'region:<id>'"
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "dumps": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "live captures this listing's naming was read from, as paths relative to the library root - a NOS's `show` output is evidence about the NOS, but it was taken on the hardware and stays filed beside it"
+    }
+  }
+}

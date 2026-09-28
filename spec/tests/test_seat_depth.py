@@ -181,6 +181,76 @@ def test_an_unquoted_on_is_an_error(tmp_path):
     assert len(errs) == 1 and "boolean" in errs[0], errs
 
 
+def _seat_out_jack(**cp):
+    """A synthetic coax jack: a 10.8 collar from 1.4, and a mate point."""
+    return {
+        "interface": "bnc",
+        "connection-points": {"mate": {"at": [4.85, 4.85], "direction": "front", **cp}},
+        "relief": {"features": [{"node": "collar", "lift": 1.4, "cyl": 10.8}]},
+    }
+
+
+def test_a_seat_out_presents_its_own_plane():
+    """A numeric `seat-out` is the plane itself, absolute from the face - for
+    a jack whose mated plane lies partway along a plain collar."""
+    assert presented_interface(_seat_out_jack(**{"seat-out": 3.7}), _res({}))[2] == 3.7
+
+
+def test_the_schema_accepts_a_seat_out_and_refuses_a_negative_one():
+    assert _validate(_seat_out_jack(**{"seat-out": 3.7})) == []
+    errs = _validate(_seat_out_jack(**{"seat-out": -1}))
+    assert errs and any("minimum" in e or "-1" in e for e in errs), errs
+
+
+def test_a_seat_out_lints_clean(tmp_path):
+    errs, warns = _l105(tmp_path, _seat_out_jack(**{"seat-out": 3.7}))
+    assert errs == [] and warns == []
+    errs, _ = _l105(tmp_path, _seat_out_jack(**{"seat-out": 0}))
+    assert errs == []
+
+
+@pytest.mark.parametrize("bad", [-0.5, "3.7", True])
+def test_a_seat_out_that_is_no_depth_is_an_error(tmp_path, bad):
+    errs, _ = _l105(tmp_path, _seat_out_jack(**{"seat-out": bad}))
+    assert len(errs) == 1 and "seat-out" in errs[0], errs
+
+
+def test_a_seat_out_beside_on_is_an_error(tmp_path):
+    errs, _ = _l105(tmp_path, _seat_out_jack(**{"seat-out": 3.7, "on": "collar"}))
+    assert len(errs) == 1 and "both seat-out and on" in errs[0], errs
+
+
+def test_a_seat_out_off_the_presented_point_is_an_error(tmp_path):
+    """Only the presented point is read for `seat-out` (manifest._seat_out); on
+    a `cable` point, which reads `on:` but never `seat-out`, it would do
+    nothing and say nothing (final review M1)."""
+    d = _seat_out_jack()
+    d["connection-points"]["cable"] = {"at": [4.85, 4.85], "direction": "rear",
+                                       "seat-out": 3.7}
+    errs, _ = _l105(tmp_path, d)
+    assert len(errs) == 1 and "'cable' has seat-out" in errs[0] \
+        and "presented point ('mate'" in errs[0], errs
+
+
+def test_a_seat_out_on_mate_is_refused_when_interface_at_names_another(tmp_path):
+    d = _seat_out_jack(**{"seat-out": 3.7})
+    d["connection-points"]["rear"] = {"at": [4.85, 4.85], "direction": "rear"}
+    d["interface-at"] = "rear"
+    errs, _ = _l105(tmp_path, d)
+    assert len(errs) == 1 and "'mate' has seat-out" in errs[0] \
+        and "presented point ('rear'" in errs[0], errs
+
+
+def test_a_seat_out_on_the_point_interface_at_names_lints_clean(tmp_path):
+    d = _seat_out_jack()
+    d["connection-points"]["rear"] = {"at": [4.85, 4.85], "direction": "rear",
+                                      "seat-out": 3.7}
+    d["interface-at"] = "rear"
+    assert presented_interface(d, _res({}))[2] == 3.7
+    errs, warns = _l105(tmp_path, d)
+    assert errs == [] and warns == [], (errs, warns)
+
+
 def test_an_integer_key_is_not_an_unquoted_on(tmp_path):
     """`True in cp` is also true for a key of 1 or 1.0 (True == 1 in Python), so
     the check names the key's type exactly (final review M2)."""

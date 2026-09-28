@@ -1,6 +1,6 @@
 {
  "$schema": "https://json-schema.org/draft/2020-12/schema",
- "$id": "https://roc-ops.github.io/Portrayal/schemas/v1/device.schema.json",
+ "$id": "https://portrayal.dev/schemas/v1/device.schema.json",
  "title": "Portrayal device manifest (v1)",
  "type": "object",
  "required": [
@@ -29,7 +29,7 @@
   "version": {
    "type": "string",
    "pattern": "^\\d+\\.\\d+\\.\\d+$",
-   "description": "Semver, and the bump rules are tied to `library/devices.lock.json` rather than left to judgement: the lock records a fingerprint per device split into `shape`, `names`, `surface` and `gaps`, and `devicelock` reads the change and says which bump it needs. Surface alone is a patch; ids added with nothing moved or removed is a minor; anything else about shape or names is a major, because a moved slot invalidates a cached coordinate exactly as a renamed id invalidates a held reference. spec/DESIGN.md section 9 carries the argument and CONTRIBUTING step 5 the order to run it in - the check must see the lock BEFORE you regenerate it, or the bump it would have asked for is lost. L53 is what fails when content moved and the version did not."
+   "description": "Semver, and the bump rules are tied to the device's own lock, `device.lock.json` beside its manifest, rather than left to judgement: the lock records a fingerprint per device split into `shape`, `names`, `surface` and `gaps`, and `devicelock` reads the change and says which bump it needs. Surface alone is a patch; ids added with nothing moved or removed is a minor; anything else about shape or names is a major, because a moved slot invalidates a cached coordinate exactly as a renamed id invalidates a held reference. spec/DESIGN.md section 9 carries the argument and CONTRIBUTING step 5 the order to run it in - the check must see the lock BEFORE you regenerate it, or the bump it would have asked for is lost. L53 is what fails when content moved and the version did not."
   },
   "maturity": {
    "enum": [

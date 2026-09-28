@@ -1,0 +1,103 @@
+format: 1
+kind: module
+name: fan-40
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: Celestica 1U hot-swap fan module with a 39.3 x 39.0 mm face - an
+  octagonal hexagon-mesh grille split top and bottom by a full-width horizontal
+  pull handle, a release latch at the left end of the handle and a round status
+  lamp in the upper-left corner. Seven sit on a 43.96 mm pitch across the rear of
+  the DS4000/DS4001. No vendor part number is printed in any held document, so the
+  part is named for its 40 mm form.
+size: {w: 39.3, h: 39.0}
+size-confidence: {w: measured, h: measured}
+attrs: {power-absent: not-published}
+provenance:
+  size: >-
+    measured - DS4000/DS4001 installation guide, Product Overview Figure 4 (Rear Panel View),
+    an orthographic CAD elevation 1686 x 172 px. The rear face spans x 2-1685 px against the
+    guide's stated 438.5 mm width, 3.8404 px/mm, and y 2-170 px against 43.1 mm, 3.898 px/mm;
+    the two axes disagree by 1.5 percent, the same direction and size as the front elevation,
+    so x is taken at 3.8404 and y as a fraction of the stated height. Each fan's black face
+    measures x 271.7-422.5 px (39.27 mm) and y 10.8-162.5 px (38.9 mm), and the seven faces
+    repeat on 168.83 px = 43.96 mm, measured on the black handle bands at rows 85-95. A second,
+    independent reading by the DS4100 modeller on that guide's own rear callout (3.9 px/mm)
+    gave the same pitch, 44.02 mm, and the same PSU edges to 0.4 mm.
+  grille: >-
+    measured, same figure at 6x - the mesh is an octagon spanning 2.2-37.1 mm across and
+    2.1-37.3 mm down, its corners chamfered about 6.5 mm, interrupted by the handle band at
+    16.2-22.9 mm. The mesh is drawn as the library's hexagon cell at a size chosen to read, not
+    counted cell for cell.
+  handle: >-
+    measured, same figure - a black band across the full width at y 16.2-22.9 mm. The vendor's
+    rear render of the DS4001 (Foleon ds4001-side-by-side) shows it black, with a BLUE latch
+    tab at its left end on every fan; the CAD draws a blue sliver at the same place (x 438 px,
+    rows 80-95 on fan 6, i.e. the left edge of that fan).
+  status-lamp: >-
+    measured - a round window at (3.7, 3.6) mm from the face's top-left, 2.4 mm across, drawn
+    white in the CAD. The guide's Rear Panel Status LEDs table gives one lamp per fan module
+    (FAN1 to FAN7): Green - all fans operating normally; Amber - fan(s) operating abnormally;
+    Off - fan absent. The table names no position, so assigning that lamp to this window is
+    the only candidate on the face, not a statement the guide makes.
+  colour: >-
+    photo - black face and handle with a blue latch, read off the DS4001 rear render. The
+    face, handle and latch colours are fields so a sibling that ships the same shape in
+    another finish (the DS4100's orange trays) sets them per configuration rather than
+    drawing a second part.
+  power: >-
+    NOT PUBLISHED. The DS4000 and DS4001 datasheets give only the system figure (DS4000 1100 W
+    peak with 12 W optics) and the installation guide tables the fan lamp without a wattage.
+elements:
+  status-led:
+    at: [2.5, 2.4]
+    size: [2.4, 2.4]
+    class: led
+    states: ['off',
+             {name: ok, color: '#22c55e'},
+             {name: fault, color: '#f59e0b'}]
+    description: >-
+      DS4000/DS4001 installation guide, Rear Panel Status LEDs, Fan module row -
+      Green (all fans operating normally), Amber (fan(s) operating abnormally), Off
+      (fan absent)
+  handle: {at: [0.4, 16.2], size: [38.5, 6.7], class: handle}
+  latch: {at: [0.3, 16.9], size: [1.7, 5.3], class: latch}
+relief:
+  features:
+    - node: grille-mesh
+      vent: 20
+      confidence: estimated
+      source: >-
+        celestica/fan-40@1 provenance.grille - the face drawing gives the mesh outline only;
+        the depth to the rotor is not stated anywhere held.
+    - node: handle
+      out: 5.0
+      confidence: estimated
+      source: >-
+        celestica/fan-40@1 provenance.handle - the rear renders show the band standing clear
+        of the grille; its standoff is not dimensioned in any held document.
+    - node: latch
+      out: 5.4
+      confidence: estimated
+      source: >-
+        celestica/fan-40@1 provenance.handle - the latch sits at the end of the handle band
+        in the DS4001 rear render and stands at least as far out; not dimensioned.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: celestica/fan-40@1 provenance.status-lamp - a light-pipe window; no depth held.
+fields:
+  face-finish:
+    label: Face colour
+    type: text
+    default: '#17191c'
+  handle-finish:
+    label: Handle colour
+    type: text
+    default: '#0e1012'
+  latch-finish:
+    label: Latch colour
+    type: text
+    default: '#2f7fc1'
+skins: [default]

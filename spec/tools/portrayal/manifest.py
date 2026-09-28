@@ -174,7 +174,14 @@ def _seat_out(contract, point):
     nothing, or a feature with neither `out` nor `cyl`, also answers 0.0 here -
     lint L106 refuses both, and a renderer that guessed a depth would hide the
     error L106 exists to report.
+
+    A point may instead carry a numeric `seat-out`: the plane itself, absolute
+    from the part's face, where no drawn feature has its rear there (a coax
+    jack's mated plane lies partway along a plain barrel). L106 refuses a
+    point with both it and `on:`.
     """
+    if point.get("seat-out") is not None:
+        return float(point["seat-out"])
     node = point.get("on")
     if not node:
         return 0.0
@@ -186,6 +193,17 @@ def _seat_out(contract, point):
         if f.get("cyl") is not None:
             return float(f.get("lift") or 0.0) + float(f["cyl"])
     return 0.0
+
+
+def presented_point(contract):
+    """The connection point `contract` presents its interface at: the one
+    `interface-at` names, default `mate` - or None when that point is not
+    declared (L106's error). THE ONE READING of which point is presented, for a
+    part that presents its own interface and for a core a wrapper forwards
+    (#671): a plug presents at its boot point, and a bezel composing a core
+    must present where the core does, not at the core's `mate`."""
+    cps = contract.get("connection-points") or {}
+    return cps.get(contract.get("interface-at") or "mate")
 
 
 def presented_interface(contract, resolve):
@@ -236,13 +254,16 @@ def presented_interface(contract, resolve):
     # feature's `lift` is where it starts, not where its rear face is. Without
     # either key this is exactly the old answer: `mate`, 0.0. A `cyl`
     # feature has no `out`; its rear is its far end, `lift + cyl`.
-    point = cps.get(contract.get("interface-at") or "mate")
+    point = presented_point(contract)
     if contract.get("interface") and point:
         return contract["interface"], list(point["at"]), _seat_out(contract, point)
     part = forwarded_part(contract, resolve)
     if part is not None:
         core = resolve(part["ref"])
-        cm = (core.get("connection-points") or {}).get("mate")
+        # THE CORE'S PRESENTED POINT, not its `mate` (#671): where the core
+        # presents placed bare - `interface-at`, default `mate` - is where it
+        # presents through the wrapper, position and seat out alike.
+        cm = presented_point(core)
         # THROUGH THE PART'S OWN PLACEMENT, rotation and all. `at + mate`
         # was right only for an unturned part: every generic transceiver
         # composes std/lc-bore@3 at `rotate: 180` (tongue up), and the plain
@@ -250,10 +271,19 @@ def presented_interface(contract, resolve):
         # y - (x, 4.10) where the bore, and the part's own `optical` point,
         # is at (x, 5.70). The part is drawn translate(at) rotate(deg w/2
         # h/2) with its own contract's size, so its mate lands by seat_point.
+        #
+        # AND THROUGH THE CORE'S OWN SEAT OUT. The part's `lift` is how far the
+        # core stands off the wrapper's face; the core's mate may itself sit
+        # `on:` a feature whose rear stands further out still. A coax jack's
+        # mate sits on the face a mated plug's coupling front reaches, and a
+        # bezel that composes the jack must present it there too, or a plug
+        # seated through the bezel stands nearer the panel than the same plug
+        # seated in the bare jack. The same sum presented_turn makes for the
+        # part's `rotate`.
         at = part.get("at") or [0, 0]
         return (core["interface"],
                 seat_point(at, core["size"], part.get("rotate"), cm["at"]),
-                float(part.get("lift") or 0))
+                float(part.get("lift") or 0) + _seat_out(core, cm))
     return contract.get("interface"), (list(mate["at"]) if mate else None), 0.0
 
 
@@ -272,15 +302,17 @@ def forwarded_part(contract, resolve):
     question of THAT SPECIFIC part - here, whether it sits `on` a facet -
     without re-deriving which one presented_interface would pick.
     """
-    if contract.get("interface") and (contract.get("connection-points") or {}).get(
-            contract.get("interface-at") or "mate"):
+    if contract.get("interface") and presented_point(contract):
         return None
     hits = []
     for part in (contract.get("parts") or []):
         core = resolve(part.get("ref")) if part.get("ref") else None
         if not core or not core.get("interface"):
             continue
-        if not (core.get("connection-points") or {}).get("mate"):
+        # a core is forwarded by the point it presents at (#671); one whose
+        # `interface-at` names no point presents nowhere, and is not forwarded
+        # to its `mate` instead
+        if not presented_point(core):
             continue
         hits.append(part)
     return hits[0] if len(hits) == 1 else None

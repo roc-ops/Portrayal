@@ -1,5 +1,5 @@
 {
-  "name": "portrayal-kit",
+  "name": "@portrayal/kit",
   "version": "0.1.0",
   "description": "Read, draw, inspect and export Portrayal device artifacts. Consumes compiled SVG + JSON; never reads YAML.",
   "license": "Apache-2.0",
@@ -9,8 +9,13 @@
     "url": "git+https://github.com/roc-ops/Portrayal.git",
     "directory": "kit"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "sideEffects": false,
   "scripts": {
+    "prepack": "cp ../LICENSE ../NOTICE .",
+    "postpack": "rm -f LICENSE NOTICE",
     "test": "node --check shell.js && node --check viewer3d.js && node --check relief.js && node --check lamps.js && node --check marks.js && node --check fields.js && node --check states.js && node --check dist.js && node --check swap.js && node --check share.js && node --check devsel.js && node --check gif.js && node --check optical.js"
   },
   "exports": {
@@ -38,6 +43,8 @@
   "files": [
     "*.js",
     "portrayal.png",
-    "README.md"
+    "README.md",
+    "LICENSE",
+    "NOTICE"
   ]
 }
