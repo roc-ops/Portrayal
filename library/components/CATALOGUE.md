@@ -254,9 +254,9 @@ aperture when it is a bare opening - never both at one position. The README's
 | `celestica/fan-80@1` | module | fan | 80 × 80.8 |  | 1 | 0 | Celestica 2RU hot-swap fan tray with an 80 mm face - a silver plate punched with a square mesh over a dual-ro… |
 | `celestica/fan-module-62@1` | module | fan | 61.6 × 66.2 |  | 1 | 0 | Rear fan module of the Celestica DS6001 (2OU ORv3) - a 61.6 x 66.2 mm face with a field of hexagonal perforat… |
 | `celestica/fan-module-82@1` | module | fan | 81.8 × 83.4 |  | 1 | 0 | Rear fan module of the Celestica DS6000 - a near-square 81.8 x 83.4 mm face of square perforations, a red pul… |
-| `celestica/lug-tag@1` | component | tab | 23 × 4 |  | 10 | 2 | Celestica pull-out luggage tag - the flat black asset / information card that slides out of a slot in the fac… |
+| `celestica/lug-tag@1` | component | tab | 23 × 4 |  | 9 | 2 | Celestica pull-out luggage tag - the flat black asset / information card that slides out of a slot in the fac… |
 | `celestica/lug-tag-ridge-16@1` | component | tab | 15.9 × 4 |  | 1 | 1 | Celestica pull-out luggage tag, the TOP-RIDGE form in its short 15.9 mm length - a flat black card in a slot … |
-| `celestica/lug-tag-ridge-23@1` | component | tab | 23.3 × 3.8 |  | 1 | 1 | Celestica pull-out luggage tag, the TOP-RIDGE form in its long 23.3 mm length - a flat black card in a slot i… |
+| `celestica/lug-tag-ridge-23@1` | component | tab | 23.3 × 3.8 |  | 2 | 1 | Celestica pull-out luggage tag, the TOP-RIDGE form in its long 23.3 mm length - a flat black card in a slot i… |
 | `celestica/psu-1300@1` | module | psu | 39 × 73.5 |  | 1 | 0 | Celestica 1300 W AC hot-swap supply in the CRPS 1U envelope, drawn as it seats in a 2RU chassis - turned on e… |
 | `celestica/psu-1500-ac@1` | module | psu | 55.2 × 39 |  | 3 | 0 | Celestica 1500 W AC hot-swap power supply, 55.2 x 39.0 mm face - a square-mesh grille on the left crossed by … |
 | `celestica/psu-1600@1` | module | psu | 73.5 × 40 |  | 1 | 2 | Gospower G1482-1600WRA 1600W AC PSU (Celestica ES1010 FRU) - 54.5V output for PoE++, CRPS form factor, C14 in… |

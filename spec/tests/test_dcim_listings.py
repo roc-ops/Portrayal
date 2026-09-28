@@ -200,10 +200,27 @@ def test_nos_is_no_longer_a_flag(tmp_path):
 
 
 def test_a_device_nobody_lists_gets_only_its_own_document(tmp_path):
-    """No NOS vendor lists the S9510-28DC in this library yet. Its export must
-    be UfiSpace's alone - no NOS document invented for it."""
-    r = run(tmp_path, "--device", "s9510-28dc")
+    """No NOS vendor lists the S9501-18SMT in this library. Its export must be
+    UfiSpace's alone - no NOS document invented for it."""
+    listed = {v["hardware"] for v in json.loads((DIST / "listings.json").read_text())["listings"].values()}
+    assert "ufispace/s9501-18smt" not in listed, "pick a device nobody lists"
+    r = run(tmp_path, "--device", "s9501-18smt")
     assert r.returncode == 0, r.stderr[-800:]
     made = list(docs(tmp_path))
     assert made
     assert all(n.startswith("UfiSpace/") for n in made), made
+
+
+def test_a_listing_with_no_port_names_exports_the_faceplate_ids(tmp_path):
+    """Arrcus lists the S9510-28DC, and no document we hold says whether ArcOS
+    numbers its ports from swp0 or swp1 - the listing records that as a gap.
+    Its type is filed under Arrcus with the metal's own ids, not a guess."""
+    r = run(tmp_path, "--device", "s9510-28dc")
+    assert r.returncode == 0, r.stderr[-800:]
+    made = docs(tmp_path)
+    ar = {n.split("/", 1)[1]: d for n, d in made.items() if n.startswith("Arrcus/")}
+    hw = {n.split("/", 1)[1]: d for n, d in made.items() if n.startswith("UfiSpace/")}
+    assert ar and set(ar) == set(hw), (sorted(ar), sorted(hw))
+    for name, doc in ar.items():
+        assert [i["name"] for i in doc["interfaces"]] == [i["name"] for i in hw[name]["interfaces"]]
+        assert not any(i["name"].startswith("swp") for i in doc["interfaces"])
