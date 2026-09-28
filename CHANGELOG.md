@@ -22,6 +22,16 @@ manifest) and per component (`version:` in each contract), and those versions
 are not repeated here, except where a component major is removed: every removal
 names the ref that replaces it.
 
+## Unreleased
+
+### Added
+- `npm_packages.py`: the build split into npm packages, one per device
+  (`@portrayal/<vendor>-<device>`), one for the component skins and one index
+  carrying `packages.json` (device → package and version, and a vendor →
+  family → device tree). Each package is versioned from what npm last
+  published, and only changed packages are published. Nothing in `dist/`
+  changes; see `library/README.md` (roc-ops/Portrayal#528).
+
 ## 0.1.0 (unreleased) - the first public release
 
 What 0.1.0 promises, as [docs/format-stability.md](docs/format-stability.md)
