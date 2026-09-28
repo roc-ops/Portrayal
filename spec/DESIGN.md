@@ -1,4 +1,4 @@
-# Portrayal Design Decisions (v0)
+# Portrayal Design Decisions (format 1)
 
 "Portrayal" is the name; the repository is `roc-ops/Portrayal`.
 
@@ -51,7 +51,9 @@ Three layers:
    core vocabulary (profiles extend); compiled SVG ships `.state-*` CSS rules;
    consumers toggle classes; skins expose CSS custom-property color hooks.
 5. **Labels as data**: contracts define anchors; text comes from manifests and
-   NOS listings. One open project font; optional outline-to-paths build flag.
+   NOS listings. Skins set their text in a system sans-serif (Arial or
+   Helvetica, falling back to `sans-serif`). *Planned, not built:* one open
+   project font, and a build flag that converts text to outlines.
 6. **Regions**: addressable areas (sensor context via Redfish PhysicalContext
    vocabulary, grouping, doc callouts); may declare member components; NOS
    entity-map rules may target regions (e.g. a per-NOS "port bank" container).
@@ -66,8 +68,11 @@ Three layers:
    registered by title/URL/SHA-256/archive link. Device dumps stored sanitized
    (serials, MACs, IPs, hostnames, communities stripped/hashed).
 8. **Builds**: byte-deterministic (no timestamps; toolchain version in
-   `<metadata>`); source-only repos, compiled SVGs as release artifacts/gallery;
-   CI = schema validation + contract↔skin linter + pixel-diff regression.
+   `<metadata>`); source-only repos. CI = schema validation, the
+   contract↔skin linter and the test suite, including a check that the
+   committed DCIM exports match a fresh build. *Planned, not built:* compiled
+   SVGs published as release artifacts (#64), and a pixel-diff regression step
+   in CI.
    **A configuration says what OCCUPIES a bay AND what is TRUE of a part, and
    still not what is true of the DEVICE.** That sentence is the decision #193
    asked for, and the shape it names came from two vendors at once
@@ -116,8 +121,14 @@ Three layers:
    level would move 587 directories and change resolution in sixteen tools to
    retire a mechanism the week before it acquires its first users.
 
-   **What pays for keeping it: a dead major goes.** An old major is deleted once
-   nothing references it, and L89 fails on one that lingers — it will not accept
+   **What pays for keeping it: a dead major goes, and says where it went.**
+   While the package is at 0.x, a superseded major may be removed, and every
+   removal is listed in `CHANGELOG.md` with the ref that replaces it, so a
+   manifest outside this repository that pins the old major is told what to pin
+   instead. From 1.0 a retired major is deprecated for at least one release
+   before it is removed: that release is the coexistence above, spent on the
+   consumers it exists for. Inside the repository, L89 still fails on a
+   superseded major that nothing references — it will not accept
    an `unplaced:` sentence from a major that a newer live major supersedes.
    There is one exception, and it is the reason the check asks whether anything
    NAMES a major rather than only whether something seats it: a retired major

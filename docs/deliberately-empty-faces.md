@@ -110,8 +110,8 @@ Sketch, not a proposal for syntax:
 
     bottom:
       size: {w: 447.0, h: 668.0}
-      empty: 'no bottom view exists in any of the 78 documents held; searched every
-              figure caption in 65 PDFs. The face sits on rack rails and is never serviced.'
+      empty: 'no bottom view in the 78 documents held (every figure caption in 65
+              PDFs searched); the face sits on rack rails, never serviced.'
 
 with `_has_content` unchanged for level 1 - a declared-empty face is still not a DRAWING - and
 level 3 accepting `content OR declared-empty`.

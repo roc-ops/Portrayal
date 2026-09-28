@@ -31,6 +31,21 @@ body:
       options: ["I am modelling it, this issue claims it", "Requesting only"]
     validations:
       required: true
+  - type: checkboxes
+    id: paid
+    attributes:
+      label: Covering the cost
+      description: >-
+        Optional. Devices are modelled with AI, and inference costs money, so a
+        request the maintainers build themselves moves up the list when it has
+        support (a thumbs-up on this issue from others who need it) or when its
+        cost is covered. Tick this if you would pay to have it built, and the
+        maintainer will follow up with an estimate - on this issue, or by email
+        from maintainer@portrayal.dev if you'd rather keep cost private; nothing is agreed
+        until you accept it. Without either, the request stays open at a lower
+        priority, and anyone can pick it up.
+      options:
+        - label: I'm open to paying to have this built
   - type: textarea
     id: notes
     attributes:
