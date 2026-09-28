@@ -1,5 +1,7 @@
 # Portrayal
 
+![A UfiSpace S9600-72XC faceplate drawn by Portrayal, fully cabled: every port, lamp, label and cable is an addressable element](docs/img/hero-switch.png)
+
 Declarative, Git-versioned hardware device definitions, compiled into SVG where
 every physical thing is individually addressable — ports, PSUs, fans, LEDs, bays,
 regions.
@@ -11,6 +13,16 @@ telemetry, highlight a failed PSU, link a region to a ticket, export the whole t
 to a DCIM or a diagram tool.
 
 The core is domain-neutral. Networking is the first profile, not the only one.
+
+![The Portrayal explorer showing a UfiSpace S9700-23D faceplate, with its service and fabric port groups, status lamps and regions listed in the part tree](docs/img/explorer.png)
+
+<p>
+  <a href="https://portrayal.dev/hero-3d.mp4">
+    <img src="docs/img/hero-3d-poster.jpg" alt="The same switch in Portrayal's 3D view, cabled, on a rack">
+  </a>
+  <br>
+  <a href="https://portrayal.dev/hero-3d.mp4">▶ Watch it in 3D</a> - the same drawing, extruded, with the cables routed.
+</p>
 
 <p>
   <a href="https://www.rocnetsupply.com/">
@@ -117,9 +129,22 @@ source documents stay out of the repository. See `PRIOR-ART.md`.
 Early. Manifests are `format: 1` (schema v1) and the package is 0.x, so the
 format can still change: every change is in `CHANGELOG.md` with how to move
 across, and [docs/format-stability.md](docs/format-stability.md) says what is
-promised. The library covers white-box switches and routers, Cisco ASR 9000,
-Juniper MX, Casa CCAP and Dell server hardware at varying maturity;
-`library/dist/devices.json` is the current list.
+promised.
+
+The library holds 158 devices from 16 vendors: white-box switches and routers
+(UfiSpace, Edgecore, Celestica), carrier routers and access platforms (Juniper
+MX, Cisco ASR 9000, Nokia 7750 SR and 7360 FX), Ethernet access switches (Telco
+Systems, ReadyLinks), edge appliances (MaiaEdge), cable access (Casa,
+CommScope), optical transport (Smartoptics), timing (Oscilloquartz), passive
+fibre (FS FHD enclosures), a Halny XGS-PON ONT and a Dell PowerEdge server.
+
+**What you can rely on.** Every device except one declares `maturity: modelled`,
+so every face is sourced from vendor documents, with each figure's provenance
+recorded beside it. Where a source was silent or two sources disagreed, the
+manifest says so in `gaps:` instead of guessing. None is `verified`, the level
+that also needs every estimated figure replaced. The list is the directories
+under `library/devices/<vendor>/<model>/`, and after `./build.sh`,
+`library/dist/devices.json` indexes them.
 
 ## Licence
 
