@@ -71,11 +71,11 @@ def test_a_face_does_not_say_which_configuration_it_is():
 
 
 def test_the_r740xd_shares_its_faces():
-    """The device that prompted this: 42 configurations, 6 faces each."""
+    """The device that prompted this: 43 configurations, 6 faces each."""
     idx = json.loads((DIST / "r740xd.configs.json").read_text())
     drawn = sum(len(c["files"]) for c in idx["configs"])
     files = {n for c in idx["configs"] for n in c["files"].values()}
-    assert drawn == 252, drawn
-    assert len(files) < 60, f"{len(files)} files for 252 faces - nothing was shared"
+    assert drawn == 258, drawn
+    assert len(files) < 60, f"{len(files)} files for 258 faces - nothing was shared"
     fronts = {c["files"]["front"] for c in idx["configs"]}
     assert len(fronts) == 2, f"the R740xd draws two fronts (SFF and LFF), not {len(fronts)}"
