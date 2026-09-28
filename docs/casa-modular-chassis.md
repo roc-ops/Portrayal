@@ -319,11 +319,10 @@ round — the figure's own aspect is 3.43 against the module's 2.26, the same sc
 distortion the isolated card figures have, so everything is taken as a percentage of the
 figure's faceplate and stretched.
 
-Top row is **four rocker circuit breakers**, not terminals. The guide is explicit:
-*"Each PEM provides power terminals for four 30A power branches. Each power branch
-consists of a -48VDC cable and a corresponding return cable protected by a 30A circuit
-breaker … These breakers are for protection only and are not intended to be used as power
-switches."* Measured centres 18.04 / 37.99 / 61.36 / 81.33 %, each 15.07 % wide and
+Top row is **four rocker circuit breakers**, not terminals. The guide says so plainly:
+each PEM has terminals for four 30 A branches, each branch a -48 VDC cable and its return
+behind a 30 A breaker, and the breakers protect the circuit rather than serve as power
+switches. Measured centres 18.04 / 37.99 / 61.36 / 81.33 %, each 15.07 % wide and
 24.2 % tall.
 
 The **terminals** are the two dark recessed blocks below, at 6.99 % and 71.1 %, each

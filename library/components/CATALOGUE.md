@@ -254,9 +254,9 @@ aperture when it is a bare opening - never both at one position. The README's
 | `celestica/fan-80@1` | module | fan | 80 × 80.8 |  | 1 | 0 | Celestica 2RU hot-swap fan tray with an 80 mm face - a silver plate punched with a square mesh over a dual-ro… |
 | `celestica/fan-module-62@1` | module | fan | 61.6 × 66.2 |  | 1 | 0 | Rear fan module of the Celestica DS6001 (2OU ORv3) - a 61.6 x 66.2 mm face with a field of hexagonal perforat… |
 | `celestica/fan-module-82@1` | module | fan | 81.8 × 83.4 |  | 1 | 0 | Rear fan module of the Celestica DS6000 - a near-square 81.8 x 83.4 mm face of square perforations, a red pul… |
-| `celestica/lug-tag@1` | component | tab | 23 × 4 |  | 10 | 2 | Celestica pull-out luggage tag - the flat black asset / information card that slides out of a slot in the fac… |
+| `celestica/lug-tag@1` | component | tab | 23 × 4 |  | 9 | 2 | Celestica pull-out luggage tag - the flat black asset / information card that slides out of a slot in the fac… |
 | `celestica/lug-tag-ridge-16@1` | component | tab | 15.9 × 4 |  | 1 | 1 | Celestica pull-out luggage tag, the TOP-RIDGE form in its short 15.9 mm length - a flat black card in a slot … |
-| `celestica/lug-tag-ridge-23@1` | component | tab | 23.3 × 3.8 |  | 1 | 1 | Celestica pull-out luggage tag, the TOP-RIDGE form in its long 23.3 mm length - a flat black card in a slot i… |
+| `celestica/lug-tag-ridge-23@1` | component | tab | 23.3 × 3.8 |  | 2 | 1 | Celestica pull-out luggage tag, the TOP-RIDGE form in its long 23.3 mm length - a flat black card in a slot i… |
 | `celestica/psu-1300@1` | module | psu | 39 × 73.5 |  | 1 | 0 | Celestica 1300 W AC hot-swap supply in the CRPS 1U envelope, drawn as it seats in a 2RU chassis - turned on e… |
 | `celestica/psu-1500-ac@1` | module | psu | 55.2 × 39 |  | 3 | 0 | Celestica 1500 W AC hot-swap power supply, 55.2 x 39.0 mm face - a square-mesh grille on the left crossed by … |
 | `celestica/psu-1600@1` | module | psu | 73.5 × 40 |  | 1 | 2 | Gospower G1482-1600WRA 1600W AC PSU (Celestica ES1010 FRU) - 54.5V output for PoE++, CRPS form factor, C14 in… |
@@ -1025,8 +1025,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `nvidia/mcx623102a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142 |  | 1 | 7 | NVIDIA ConnectX-6 Dx MCX623102A dual-port 25/50GbE SFP56 adapter, PCIe Gen4 x16, on its short (low-profile) b… |
 | `nvidia/mcx623105-fh@1` | module | expansion-card | 120.02 × 21.59 × 142 |  | 0 | 10 | NVIDIA ConnectX-6 Dx MCX623105A single-port 100/200GbE QSFP56 adapter, PCIe Gen4 x16, on its tall (full-heigh… |
 | `nvidia/mcx623105-lp@1` | module | expansion-card | 79.2 × 18.42 × 142 |  | 0 | 7 | NVIDIA ConnectX-6 Dx MCX623105A single-port 100/200GbE QSFP56 adapter, PCIe Gen4 x16, on its short (low-profi… |
-| `nvidia/mcx623106-fh@1` | module | expansion-card | 120.02 × 21.59 × 142 |  | 0 | 10 | NVIDIA ConnectX-6 Dx MCX623106A dual-port 100GbE QSFP56 adapter, PCIe Gen4 x16, on its tall (full-height) bra… |
-| `nvidia/mcx623106-lp@1` | module | expansion-card | 79.2 × 18.42 × 142 |  | 0 | 7 | NVIDIA ConnectX-6 Dx MCX623106A dual-port 100GbE QSFP56 adapter, PCIe Gen4 x16, on its short (low-profile) br… |
+| `nvidia/mcx623106-fh@1` | module | expansion-card | 120.02 × 21.59 × 142 |  | 1 | 10 | NVIDIA ConnectX-6 Dx MCX623106A dual-port 100GbE QSFP56 adapter, PCIe Gen4 x16, on its tall (full-height) bra… |
+| `nvidia/mcx623106-lp@1` | module | expansion-card | 79.2 × 18.42 × 142 |  | 1 | 7 | NVIDIA ConnectX-6 Dx MCX623106A dual-port 100GbE QSFP56 adapter, PCIe Gen4 x16, on its short (low-profile) br… |
 | `nvidia/mcx713104-fh@1` | module | expansion-card | 120.02 × 21.59 × 143.5 |  | 0 | 9 | NVIDIA ConnectX-7 MCX713104A quad-port 25/50GbE SFP56 adapter (one ganged 1x4 cage), PCIe Gen4 x16, on its ta… |
 | `nvidia/mcx713106-fh@1` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 10 | NVIDIA ConnectX-7 MCX713106A dual-port 100/200GbE QSFP112 adapter, PCIe Gen5 x16, on its tall (full-height) b… |
 | `nvidia/mcx713106-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 7 | NVIDIA ConnectX-7 MCX713106A dual-port 100/200GbE QSFP112 adapter, PCIe Gen5 x16, on its short (low-profile) … |
