@@ -6,6 +6,7 @@ the metal it runs on, loading the hardware's drawing, and findable by the
 vendor's words. Run under node; skipped where node is not installed.
 """
 import json
+import pathlib
 import shutil
 import subprocess
 from pathlib import Path
@@ -59,3 +60,19 @@ def test_every_listing_in_the_build_is_an_entry(out):
     d = out["dist"]
     assert d["listings"] and d["entries"] == d["listings"]
     assert d["unique"]
+
+
+def test_another_vendors_entry_for_the_box_on_screen_does_not_reload_it():
+    """A listing says whose box it is, not what is drawn. Picking Arrcus's entry
+    for the AS7726-32X already open must keep the reader's configuration, view
+    and swaps: the shell's picker `onchange` handles the same device before it
+    ever calls loadDevice (#711 review)."""
+    import re
+    src = (pathlib.Path(__file__).resolve().parents[2] / "kit/shell.js").read_text()
+    m = re.search(r"onchange: \(name, \{listing\} = \{\}\) => \{(.*?)\n\s*\}\}\);", src, re.S)
+    assert m, "the picker's onchange moved; point this test at it"
+    body = m.group(1)
+    same = body.find("name === state.device")
+    assert same != -1, "no same-device branch"
+    assert same < body.find("loadDevice("), "the same-device branch must come before the reload"
+    assert "return;" in body[same:body.find("loadDevice(")]

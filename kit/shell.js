@@ -1818,6 +1818,15 @@ export function createShell(opts = {}) {
                                    listings: LISTINGS, listing: state.listing,
                                    onchange: (name, {listing} = {}) => {
                                      state.listing = listing || null;
+                                     // ANOTHER VENDOR'S ENTRY FOR THE BOX ON SCREEN
+                                     // changes whose box it is, not what is drawn:
+                                     // reloading would reset the configuration, the
+                                     // view and every swap (#711 review)
+                                     if (name === state.device) {
+                                       if (state.sel === 'chassis') select('chassis', false);
+                                       emit('change');
+                                       return;
+                                     }
                                      loadDevice(name, {listing: state.listing});
                                    }});
     } else {
