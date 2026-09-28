@@ -34,6 +34,11 @@
       "type": "string",
       "description": "what the NOS vendor calls this box, when it is not the hardware's name - DriveNets sells a UfiSpace S9700-53DX as the NCP-40C. Omitted means the hardware's `model`. A display and search name: the DCIM model of each exported type is a configuration's `model` or SKU (see `configurations`)"
     },
+    "type-name": {
+      "type": "string",
+      "pattern": "\\{sku\\}",
+      "description": "HOW EACH EXPORTED DEVICE TYPE IS NAMED, when the vendor's name for the box is not unique on its own. `{model}` is this listing's `model`; `{sku}` is the name the type would otherwise have - the configuration's own override, else the hardware's SKU - so it keeps every type distinct. DriveNets sells one NCP-40C on a UfiSpace, an Edgecore and a Delta box, and `'{model} ({sku})'` files them as `NCP-40C (S9700-53DX-...)` and so on. Must contain `{sku}`."
+    },
     "portfolio": {
       "type": "object",
       "description": "where the NOS VENDOR files this box in its own catalogue, in its own words - which need not match the ODM's. OcNOS files boxes by edition (SP, DC), DriveNets by role (aggregation router, fabric); the hardware's portfolio stays the ODM's.",

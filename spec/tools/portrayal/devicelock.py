@@ -830,7 +830,7 @@ def stale_gap_scopes(doc):
 # exported names with nothing recording it (#56). Its buckets are simpler than a
 # device's because it draws nothing:
 #
-#   `names`   hardware, nos, model, interfaces, entity-map, terms - what a
+#   `names`   hardware, nos, model, type-name, interfaces, entity-map, terms - what a
 #             consumer holds. Any change is major.
 #   `configs` per configuration override: its `names` (`model`, `part-numbers`)
 #             and its `rest`. Changing, removing or ADDING names is major - an
@@ -840,10 +840,15 @@ def stale_gap_scopes(doc):
 #   `surface` everything else - source, portfolio, aliases, prose. A patch.
 
 LISTING_NAMES = ("hardware", "nos", "model", "interfaces", "entity-map", "terms")
+# Keys that joined the `names` bucket after listings were first locked. Hashed
+# only when present, so a listing that does not use one keeps the fingerprint
+# it had - otherwise every existing lock moves for a field it never set.
+LISTING_NAMES_LATER = ("type-name",)
 
 
 def listing_entry(doc):
     names = {k: doc.get(k) for k in LISTING_NAMES}
+    names.update({k: doc[k] for k in LISTING_NAMES_LATER if k in doc})
     configs = {}
     for k, v in (doc.get("configurations") or {}).items():
         v = v or {}
@@ -851,7 +856,7 @@ def listing_entry(doc):
         configs[k] = {"names": _digest(named) if named else None,
                       "rest": _digest({n: x for n, x in v.items() if n not in named})}
     rest = {k: v for k, v in doc.items()
-            if k not in LISTING_NAMES + ("configurations", "version")}
+            if k not in LISTING_NAMES + LISTING_NAMES_LATER + ("configurations", "version")}
     return {"version": str(doc.get("version") or ""),
             "names": _digest(names), "configs": configs, "surface": _digest(rest)}
 

@@ -31,6 +31,16 @@ names the ref that replaces it.
   family → device tree). Each package is versioned from what npm last
   published, and only changed packages are published. Nothing in `dist/`
   changes; see `library/README.md` (roc-ops/Portrayal#528).
+- **DNOS listings** (roc-ops/Portrayal#674). The 13 modelled boxes the DNOS CLI
+  Reference Guide 26.2 accepts as NCP hardware (`system ncp model`) are listed
+  under `drivenets/`, each named as DriveNets sells it - `model: NCP-40C` - and
+  exported as `DriveNets/NCP-40C (<SKU>)`, because one NCP name covers boxes
+  from several ODMs. A listing may now set `type-name`, a pattern with `{model}`
+  and `{sku}`, for exactly that. Six single-speed boxes carry DNOS port names
+  (`ge100-0/0/<n>`, `fab-ncp400-0/0/<n>`) for a standalone NCP 0; the
+  mixed-speed boxes carry a `dnos-port-names` gap, and management jacks a
+  `dnos-management-names` gap. The fabric boxes (NCF-48CD, NCF-64E) wait for a
+  document that names their hardware.
 - **OcNOS listings for the IP Infusion HCL** (roc-ops/Portrayal#674). Every box
   on the OcNOS 7.0.1 MR Hardware Compatibility List (July 2026) that the
   library models - 42 of 44 - is listed under `ipinfusion/`, with the edition
