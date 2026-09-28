@@ -1,0 +1,18 @@
+format: 1
+kind: listing
+hardware: ufispace/s7801-54xs
+version: 1.0.0
+description: >-
+  SONiC's hardware SKU for this box is UFISPACE-S7801-54XS, on platform x86_64-ufispace_s7801_54xs-r0.
+source: >-
+  SONiC Supported Devices and Platforms (sonic-net.github.io/SONiC), the row for S7801-54XS.
+  Port names from the platform's own table in sonic-net/sonic-buildimage at d5c2e3b32ffa,
+  device/ufispace/x86_64-ufispace_s7801_54xs-r0/platform.json: each SONiC name with the front-panel port its alias names and the breakout modes it allows.
+  eth0 is SONiC's management port (the SONiC command reference, Management VRF).
+interfaces:
+  - {physical: 'port-{n}', name: 'Ethernet{n}', range: '0-47'}
+  - {physical: 'port-{n}', name: 'Ethernet{4*n-144}', range: '48-51'}
+  - {physical: 'port-{n}', name: 'Ethernet{4*n-144}', range: '52-53', breakout: {modes: [1x100g, 2x50g, 4x10g, 4x25g]}}
+  - {physical: mgmt-oob, name: eth0}
+nos: sonic
+nos-versions: master

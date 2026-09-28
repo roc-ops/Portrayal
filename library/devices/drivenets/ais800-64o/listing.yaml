@@ -1,0 +1,32 @@
+format: 1
+kind: listing
+hardware: edgecore/ais800-64o
+version: 1.0.0
+portfolio: {line: Network Cloud, family: Network Cloud Packet Forwarder (NCP)}
+description: >-
+  DNOS accepts this box as NCP hardware, but the reference lists three 64 x 800G NCP
+  models (NCP-64E-X, NCP-64E-XS, NCP-64E-XD) and does not say which this is, so no
+  DriveNets name is given.
+source: >-
+  DNOS CLI Reference Guide 26.2, `system ncp model`: AIS800-64O-AF and AS9817-64O is among the hardware
+  models DNOS accepts for an NCP.
+gaps:
+  - what: dnos-port-names
+    reason: vendor-silent
+    note: >-
+      This box has service ports of more than one speed. The DNOS CLI reference numbers each
+      NCP's ports from 0 (its breakout section: '100GE ports 0..19 of each NCP-40C', '400GE
+      ports 0..35 of each NCP-36cd') but never for a mixed box, so whether the count runs
+      across the speed groups, and in what order, is not stated anywhere held here.
+    wanted: >-
+      `show interfaces` from this box running DNOS, standalone - it settles the count.
+  - what: dnos-management-names
+    reason: vendor-silent
+    note: >-
+      DNOS names management ports mgmt-ncp-<ncp>/<n> and IPMI ports ipmi-ncp-<ncp>/<n> (show
+      interfaces management), but not which jack on this box is which n, so the management
+      jacks are left out of `interfaces` and the DriveNets type does not list them.
+    wanted: >-
+      `show interfaces management` from this box running DNOS.
+nos: dnos
+nos-versions: '>=26.2'

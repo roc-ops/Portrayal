@@ -1,0 +1,29 @@
+format: 1
+kind: listing
+hardware: edgecore/agr110
+version: 1.0.0
+portfolio: {line: OcNOS SP}
+description: >-
+  Supported by OcNOS SP 7.0.1, licensed per switching capacity as OcNOS-SP-IPBASE-800, OcNOS-SP-MPLS-800, OcNOS-CSR-800.
+  Those are software licences shared by every box of the same capacity, not part
+  numbers for this one.
+source: >-
+  OcNOS 7.0.1 MR Hardware Compatibility List (IP Infusion, July 2026), the row for
+  AS5916-54XL, current supported 'SP 7.0.1'.
+gaps:
+  - what: ocnos-port-names
+    reason: vendor-silent
+    note: >-
+      OcNOS names a front-panel port by its speed class and a 0-based number - ge 1G, xe 10G
+      and 25G, ce 40G and 100G, cd 400G, eth0 for management - but it does not count the same
+      way on every platform. IP Infusion's own S9510-30XC configuration counts once across the
+      panel (ce0, ce1, xe2 to xe29); its AS7316-26XB example restarts at xe0 after ce0 and ce1.
+      Which way AS5916-54XL counts, and in what order its port groups fall, is in the 'AS5916-54XL Port
+      Mapping' chapter of IP Infusion's OcNOS installation guide, which is not in the public
+      7.0 documentation library and is not held here.
+    wanted: >-
+      The 'AS5916-54XL Port Mapping' chapter of the OcNOS installation guide, Release 7.0, or
+      `show interface brief` from a unit running OcNOS SP 7.0 - with it, `interfaces` can
+      name each port the way OcNOS does.
+nos: ocnos
+nos-versions: '>=7.0.1'

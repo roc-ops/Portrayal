@@ -1,0 +1,32 @@
+format: 1
+kind: listing
+hardware: ufispace/s9600-72xc
+version: 1.0.0
+model: NCP-64X8C-S
+type-name: '{model} ({sku})'
+portfolio: {line: Network Cloud, family: Network Cloud Packet Forwarder (NCP)}
+description: >-
+  Sold by DriveNets as the NCP-64X8C-S: the NCP-64X8C-S name spells the layout - 64 x 10/25G and 8 x 100G - which this box has.
+source: >-
+  DNOS CLI Reference Guide 26.2, `system ncp model`: S9600-72XC is among the hardware
+  models DNOS accepts for an NCP.
+gaps:
+  - what: dnos-port-names
+    reason: vendor-silent
+    note: >-
+      This box has service ports of more than one speed. The DNOS CLI reference numbers each
+      NCP's ports from 0 (its breakout section: '100GE ports 0..19 of each NCP-40C', '400GE
+      ports 0..35 of each NCP-36cd') but never for a mixed box, so whether the count runs
+      across the speed groups, and in what order, is not stated anywhere held here.
+    wanted: >-
+      `show interfaces` from this box running DNOS, standalone - it settles the count.
+  - what: dnos-management-names
+    reason: vendor-silent
+    note: >-
+      DNOS names management ports mgmt-ncp-<ncp>/<n> and IPMI ports ipmi-ncp-<ncp>/<n> (show
+      interfaces management), but not which jack on this box is which n, so the management
+      jacks are left out of `interfaces` and the DriveNets type does not list them.
+    wanted: >-
+      `show interfaces management` from this box running DNOS.
+nos: dnos
+nos-versions: '>=26.2'

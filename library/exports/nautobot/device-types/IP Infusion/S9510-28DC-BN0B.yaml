@@ -1,0 +1,142 @@
+---
+manufacturer: IP Infusion
+model: S9510-28DC-BN0B
+slug: ip-infusion-s9510-28dc-bn0b
+u_height: 1.0
+is_full_depth: true
+part_number: S9510-28DC-BN0B
+weight: 4.9
+weight_unit: kg
+airflow: front-to-rear
+description: UfiSpace S9510-28DC Disaggregated Cell Site Gateway Router - 1RU, 2x QSFP-DD 400G + 2x QSFP28
+  100G + 24x SFP28 25G, full timing (GNSS/1PPS/ 10MHz/ToD/BITS), temperature hardened, front-service
+front_image: true
+rear_image: true
+console-ports:
+  - name: Console
+    type: rj-45
+interfaces:
+  - name: eth0
+    type: 1000base-t
+    mgmt_only: true
+  - name: cd0
+    type: 400gbase-x-qsfpdd
+  - name: cd1
+    type: 400gbase-x-qsfpdd
+  - name: ce2
+    type: 100gbase-x-qsfp28
+  - name: ce3
+    type: 100gbase-x-qsfp28
+  - name: xe4
+    type: 25gbase-x-sfp28
+  - name: xe5
+    type: 25gbase-x-sfp28
+  - name: xe6
+    type: 25gbase-x-sfp28
+  - name: xe7
+    type: 25gbase-x-sfp28
+  - name: xe8
+    type: 25gbase-x-sfp28
+  - name: xe9
+    type: 25gbase-x-sfp28
+  - name: xe10
+    type: 25gbase-x-sfp28
+  - name: xe11
+    type: 25gbase-x-sfp28
+  - name: xe12
+    type: 25gbase-x-sfp28
+  - name: xe13
+    type: 25gbase-x-sfp28
+  - name: xe14
+    type: 25gbase-x-sfp28
+  - name: xe15
+    type: 25gbase-x-sfp28
+  - name: xe16
+    type: 25gbase-x-sfp28
+  - name: xe17
+    type: 25gbase-x-sfp28
+  - name: xe18
+    type: 25gbase-x-sfp28
+  - name: xe19
+    type: 25gbase-x-sfp28
+  - name: xe20
+    type: 25gbase-x-sfp28
+  - name: xe21
+    type: 25gbase-x-sfp28
+  - name: xe22
+    type: 25gbase-x-sfp28
+  - name: xe23
+    type: 25gbase-x-sfp28
+  - name: xe24
+    type: 25gbase-x-sfp28
+  - name: xe25
+    type: 25gbase-x-sfp28
+  - name: xe26
+    type: 25gbase-x-sfp28
+  - name: xe27
+    type: 25gbase-x-sfp28
+  - name: bits
+    type: other
+    label: BITS
+  - name: clk-10mhz
+    type: other
+    label: SMB
+  - name: clk-1pps
+    type: other
+    label: SMB
+  - name: gnss-ant
+    type: other
+    label: SMA
+  - name: tod
+    type: other
+    label: TOD
+module-bays:
+  - name: Fan 1
+    position: fan-1
+    description: 'Accepts: fan-402825'
+  - name: Fan 2
+    position: fan-2
+    description: 'Accepts: fan-402825'
+  - name: Fan 3
+    position: fan-3
+    description: 'Accepts: fan-402825'
+  - name: Fan 4
+    position: fan-4
+    description: 'Accepts: fan-402825'
+  - name: Fan 5
+    position: fan-5
+    description: 'Accepts: fan-402825'
+  - name: PSU 0
+    position: psu-0
+    description: 'Accepts: psu-401-dc, psu-401-ac'
+  - name: PSU 1
+    position: psu-1
+    description: 'Accepts: psu-401-dc, psu-401-ac'
+comments: "IP Infusion lists UfiSpace S9510-28DC-BN0B (NOS: ocnos).\nListed per: OcNOS 7.0.1 MR Hardware\
+  \ Compatibility List (IP Infusion, July 2026), the row for S9510-28DC, current supported 'SP 7.0.1'.\
+  \ The names follow OcNOS's pattern rather than a table for this box: the port's speed class as prefix\
+  \ (ge 1G, xe 10G and 25G, ce 40G and 100G, cd 400G) and one 0-based count across the whole front panel,\
+  \ with eth0 for management. That is how the S9510-30XC's own configuration in the OcNOS SP 7.0 Segment\
+  \ Routing Guide names its ports - ce0, ce1, xe2 to xe29 - and it is exactly the UfiSpace silkscreen\
+  \ numbering, which this box shares. Not every platform counts this way: the AS7316-26XB example in the\
+  \ Layer 3 Guide restarts at xe0 after ce0 and ce1, so the rule is applied to UfiSpace boxes whose ports\
+  \ are numbered in one run from 0, and nowhere else.\n\nUfiSpace S9510-28DC Disaggregated Cell Site Gateway\
+  \ Router - 1RU, 2x QSFP-DD 400G + 2x QSFP28 100G + 24x SFP28 25G, full timing (GNSS/1PPS/ 10MHz/ToD/BITS),\
+  \ temperature hardened, front-service\n\nConfiguration `dc`: Dual 400W DC PSUs (PSU-401-DISB-1), front-to-back\
+  \ airflow\n\nDatasheet: UfiSpace S9510-28DC Datasheet (202500822V06)\n  https://www.ufispace.com/products/telco/access/s9510-28dc\n\
+  \nFacts carried in the model that this schema has no field for:\n- environmental.operating-temp: -40\
+  \ to 65 C (temperature hardened)\n- features.flexe: OIF FlexE 1.1 and 2.0, 400G total bandwidth\n- features.gnss:\
+  \ internal receiver for master clock\n- features.optics-qsfp-dd: 400G SR4/LR4/FR4/ZR4/OpenZR+\n- features.optics-qsfp28:\
+  \ 100G SR4/LR4/ER4\n- features.optics-sfp28: 25G SR/LR/ER, 10G SFP+ SR/LR/ER/ZR\n- features.timing:\
+  \ Stratum 3E OCXO, SyncE, IEEE 1588v2 (T-GM, T-BC/OC, T-TC), Class C, TSN\n- features.timing-interfaces:\
+  \ GNSS SMA in, 10MHz SMB in/out, 1PPS SMB in/out, ToD RJ45 in, BITS RJ48 in/out\n- performance.packet-buffer:\
+  \ 2 GB\n- performance.port-modes-qsfp-dd: 100/400G, OpenZR+ and 400ZR\n- performance.port-modes-qsfp28:\
+  \ 40/100G\n- performance.port-modes-sfp28: 1/10/25G\n- performance.switching-capacity: 800 Gbps\n- platform.asic:\
+  \ Broadcom Qumran2a BCM88483\n- platform.bmc: ASPEED AST2620\n- platform.cpu: Intel Denverton-NS 4-core\
+  \ @ 1.6 GHz (premium SKU 8-core @ 1.7 GHz)\n- platform.memory: 8 GB DDR4 (premium 16 GB)\n- platform.software:\
+  \ ONIE (NOS required for timing/GNSS features)\n- platform.storage: 32 GB SSD (premium 128 GB)\n- power.power-max-ac-w:\
+  \ 301.2\n- power.power-max-dc-w: 306\n- power.power-typical-w: 137\n- power.psus: 2x 400 W 1+1 redundant,\
+  \ hot-swappable (intake)\n- thermal.fans: 4+1 redundant, hot-swappable (exhaust)\n\nDrawing version\
+  \ 5.0.4. A major bump means a slot moved or an id was renamed, so anything cached from an earlier export\
+  \ may no longer line up.\nModel maturity: modelled. Every dimension in the source records where it came\
+  \ from."

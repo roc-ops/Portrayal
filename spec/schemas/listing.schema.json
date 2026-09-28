@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://roc-ops.github.io/Portrayal/schemas/v0/listing.schema.json",
-  "title": "Portrayal listing (v0) - a NOS vendor's entry for hardware it supports",
+  "$id": "https://portrayal.dev/schemas/v1/listing.schema.json",
+  "title": "Portrayal listing (v1) - a NOS vendor's entry for hardware it supports",
   "description": "A LISTING IS HOW A DISAGGREGATED BOX IS SOLD. NetBox and Nautobot model a switch that runs another company's NOS by listing the same device type under that company: UfiSpace's S9510-28DC, and Arrcus's S9510-28DC, and IP Infusion's. A listing is that entry. It lives at devices/<nos vendor>/<id>/listing.yaml, it points at ONE hardware device and draws nothing of its own, and it carries only what the NOS vendor changes: what the ports are called, what the vendor calls the box and where it files it, and its own part numbers where it has them. The hardware is modelled once, whoever lists it.",
   "type": "object",
   "required": [
@@ -33,6 +33,11 @@
     "model": {
       "type": "string",
       "description": "what the NOS vendor calls this box, when it is not the hardware's name - DriveNets sells a UfiSpace S9700-53DX as the NCP-40C. Omitted means the hardware's `model`. A display and search name: the DCIM model of each exported type is a configuration's `model` or SKU (see `configurations`)"
+    },
+    "type-name": {
+      "type": "string",
+      "pattern": "\\{sku\\}",
+      "description": "HOW EACH EXPORTED DEVICE TYPE IS NAMED, when the vendor's name for the box is not unique on its own. `{model}` is this listing's `model`; `{sku}` is the name the type would otherwise have - the configuration's own override, else the hardware's SKU - so it keeps every type distinct. DriveNets sells one NCP-40C on a UfiSpace, an Edgecore and a Delta box, and `'{model} ({sku})'` files them as `NCP-40C (S9700-53DX-...)` and so on. Must contain `{sku}`."
     },
     "portfolio": {
       "type": "object",

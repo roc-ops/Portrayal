@@ -1919,6 +1919,12 @@ def apply_listing(doc, listing, cfg_name, label=None):
         model = f"{model} {label}" if label else model
     else:
         model = hw_model
+    if listing.get("type-name"):
+        # THE VENDOR'S NAME, KEPT DISTINCT BY THE SKU. `{sku}` is the name the
+        # type would have had, so two boxes sharing one vendor name still file
+        # as two types - NCP-40C (S9700-53DX-...) beside NCP-40C (7926-...).
+        model = (listing["type-name"].replace("{model}", str(listing.get("model") or hw_model))
+                 .replace("{sku}", model))
     doc["manufacturer"] = display
     doc["model"] = model
     doc["slug"] = slugify(f"{display}-{model}")

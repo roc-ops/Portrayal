@@ -49,11 +49,15 @@ concurrency:
 # jobs are back on `ubuntu-latest` with no edit here - which is the step for
 # going public, and the fallback if the machine is down.
 #
-# A PULL REQUEST FROM A FORK NEVER GETS THE VARIABLE'S ANSWER. A self-hosted
-# runner executes whatever the pull request's tree says, on a machine that is
-# not thrown away afterwards; that is acceptable for branches in this repository
-# and never for a stranger's. The fork test comes first so that forgetting to
-# unset the variable when the repository opens is not the thing that exposes it.
+# THE TEST BELOW IS NOT WHAT KEEPS A STRANGER OFF THE POOL (#656). A pull
+# request runs the workflow file from ITS OWN tree, so a fork can delete this
+# expression and write `runs-on: portrayal-ci` directly. The only protection is
+# that no self-hosted runner is registered while the repository is public:
+# deregister every runner AND delete GATES_RUNNER before the visibility flip,
+# not after it (#457, step 0). What the test does is keep an honest pull request
+# from another repository - including one whose fork was deleted, where
+# `head.repo` is null and the old `head.repo.fork` test fell through - off the
+# pool if a runner is ever registered again.
 #
 # WHAT A HOSTED RUNNER GAVE FOR FREE, THIS FILE NOW ASKS FOR: the self-hosted
 # user has no sudo, so apt installs only what is missing; and several runners
@@ -72,7 +76,7 @@ jobs:
   # merge-if-green refuses a head with any check-run that did not succeed, and
   # lint is one of them.
   lint:
-    runs-on: ${{ (github.event.pull_request.head.repo.fork && 'ubuntu-latest') || vars.GATES_RUNNER || 'ubuntu-latest' }}
+    runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository && 'ubuntu-latest') || vars.GATES_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
@@ -101,7 +105,7 @@ jobs:
     # of three runners through every burst of merges. Lint still runs on the push
     # (a minute), and `workflow_dispatch` runs everything on request.
     if: github.event_name != 'push'
-    runs-on: ${{ (github.event.pull_request.head.repo.fork && 'ubuntu-latest') || vars.GATES_RUNNER || 'ubuntu-latest' }}
+    runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository && 'ubuntu-latest') || vars.GATES_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0

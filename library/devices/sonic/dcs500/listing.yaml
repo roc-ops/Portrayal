@@ -1,0 +1,50 @@
+format: 1
+kind: listing
+hardware: edgecore/dcs500
+version: 1.0.0
+description: >-
+  SONiC's hardware SKU for this box is Accton-AS7816-64X, on platform x86_64-accton_as7816_64x-r0.
+source: >-
+  SONiC Supported Devices and Platforms (sonic-net.github.io/SONiC), the row for AS7816-64X.
+  Port names from the platform's own table in sonic-net/sonic-buildimage at d5c2e3b32ffa,
+  device/accton/x86_64-accton_as7816_64x-r0/platform.json: each SONiC name with the front-panel port its alias names and the breakout modes it allows.
+  eth0 is SONiC's management port (the SONiC command reference, Management VRF).
+  SONiC's aliases count this faceplate from 1 and this model's ids from
+  0; the two run over the same cages in the same order, so each is mapped
+  to its counterpart by position.
+interfaces:
+  - {physical: 'port-0', name: 'Ethernet0', breakout: {modes: [1x100g, 2x50g, 4x10g, 4x25g]}}
+  - {physical: 'port-1', name: 'Ethernet4'}
+  - {physical: 'port-2', name: 'Ethernet8', breakout: {modes: [1x100g, 2x50g, 4x10g, 4x25g]}}
+  - {physical: 'port-3', name: 'Ethernet12'}
+  - {physical: 'port-4', name: 'Ethernet16', breakout: {modes: [1x100g, 2x50g, 4x10g, 4x25g]}}
+  - {physical: 'port-5', name: 'Ethernet20'}
+  - {physical: 'port-6', name: 'Ethernet24', breakout: {modes: [1x100g, 2x50g, 4x10g, 4x25g]}}
+  - {physical: 'port-7', name: 'Ethernet28'}
+  - {physical: 'port-8', name: 'Ethernet32', breakout: {modes: [1x100g, 2x50g, 4x10g, 4x25g]}}
+  - {physical: 'port-9', name: 'Ethernet36'}
+  - {physical: 'port-10', name: 'Ethernet40', breakout: {modes: [1x100g, 2x50g, 4x10g, 4x25g]}}
+  - {physical: 'port-11', name: 'Ethernet44'}
+  - {physical: 'port-12', name: 'Ethernet48', breakout: {modes: [1x100g, 2x50g, 4x10g, 4x25g]}}
+  - {physical: 'port-13', name: 'Ethernet52'}
+  - {physical: 'port-14', name: 'Ethernet56', breakout: {modes: [1x100g, 2x50g, 4x10g, 4x25g]}}
+  - {physical: 'port-15', name: 'Ethernet60'}
+  - {physical: 'port-16', name: 'Ethernet64', breakout: {modes: [1x100g, 2x50g, 4x10g, 4x25g]}}
+  - {physical: 'port-17', name: 'Ethernet68'}
+  - {physical: 'port-18', name: 'Ethernet72', breakout: {modes: [1x100g, 2x50g, 4x10g, 4x25g]}}
+  - {physical: 'port-19', name: 'Ethernet76'}
+  - {physical: 'port-20', name: 'Ethernet80', breakout: {modes: [1x100g, 2x50g, 4x10g, 4x25g]}}
+  - {physical: 'port-21', name: 'Ethernet84'}
+  - {physical: 'port-22', name: 'Ethernet88', breakout: {modes: [1x100g, 2x50g, 4x10g, 4x25g]}}
+  - {physical: 'port-23', name: 'Ethernet92'}
+  - {physical: 'port-24', name: 'Ethernet96', breakout: {modes: [1x100g, 2x50g, 4x10g, 4x25g]}}
+  - {physical: 'port-25', name: 'Ethernet100'}
+  - {physical: 'port-26', name: 'Ethernet104', breakout: {modes: [1x100g, 2x50g, 4x10g, 4x25g]}}
+  - {physical: 'port-27', name: 'Ethernet108'}
+  - {physical: 'port-28', name: 'Ethernet112', breakout: {modes: [1x100g, 2x50g, 4x10g, 4x25g]}}
+  - {physical: 'port-29', name: 'Ethernet116'}
+  - {physical: 'port-30', name: 'Ethernet120', breakout: {modes: [1x100g, 2x50g, 4x10g, 4x25g]}}
+  - {physical: 'port-{n}', name: 'Ethernet{4*n}', range: '31-63'}
+  - {physical: mgmt-eth, name: eth0}
+nos: sonic
+nos-versions: master
