@@ -17,11 +17,11 @@ The core is domain-neutral. Networking is the first profile, not the only one.
 ![The Portrayal explorer showing a UfiSpace S9700-23D faceplate, with its service and fabric port groups, status lamps and regions listed in the part tree](docs/img/explorer.png)
 
 <p>
-  <a href="https://portrayal.dev/hero-3d.mp4">
+  <a href="https://portrayal.dev/media/hero-3d.mp4">
     <img src="docs/img/hero-3d-poster.jpg" alt="The same switch in Portrayal's 3D view, cabled, on a rack">
   </a>
   <br>
-  <a href="https://portrayal.dev/hero-3d.mp4">▶ Watch it in 3D</a> - the same drawing, extruded, with the cables routed.
+  <a href="https://portrayal.dev/media/hero-3d.mp4">▶ Watch it in 3D</a> - the same drawing, extruded, with the cables routed.
 </p>
 
 <p>
