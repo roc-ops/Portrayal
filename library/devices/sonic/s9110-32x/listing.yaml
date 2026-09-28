@@ -1,0 +1,17 @@
+format: 1
+kind: listing
+hardware: ufispace/s9110-32x
+version: 1.0.0
+description: >-
+  SONiC's hardware SKU for this box is UFISPACE-S9110-32X, on platform x86_64-ufispace_s9110_32x-r0.
+source: >-
+  SONiC Supported Devices and Platforms (sonic-net.github.io/SONiC), the row for S9110-32X.
+  Port names from the platform's own table in sonic-net/sonic-buildimage at d5c2e3b32ffa,
+  device/ufispace/x86_64-ufispace_s9110_32x-r0/platform.json: each SONiC name with the front-panel port its alias names and the breakout modes it allows.
+  eth0 is SONiC's management port (the SONiC command reference, Management VRF).
+interfaces:
+  - {physical: 'port-{n}', name: 'Ethernet{4*n}', range: '0-31', breakout: {modes: [1x100g, 2x50g, 4x10g, 4x25g]}}
+  - {physical: 'mgmt-sfp', name: 'Ethernet128'}
+  - {physical: oob, name: eth0}
+nos: sonic
+nos-versions: master

@@ -1,0 +1,18 @@
+format: 1
+kind: listing
+hardware: ufispace/s9301-32d
+version: 1.0.0
+description: >-
+  SONiC's hardware SKU for this box is UFISPACE-S9301-32D, on platform x86_64-ufispace_s9301_32d-r0.
+source: >-
+  SONiC Supported Devices and Platforms (sonic-net.github.io/SONiC), the row for S9301-32D.
+  Port names from the platform's own table in sonic-net/sonic-buildimage at d5c2e3b32ffa,
+  device/ufispace/x86_64-ufispace_s9301_32d-r0/platform.json: each SONiC name with the front-panel port its alias names and the breakout modes it allows.
+  eth0 is SONiC's management port (the SONiC command reference, Management VRF).
+interfaces:
+  - {physical: 'port-{n}', name: 'Ethernet{8*n}', range: '0-31', breakout: {modes: [1x400g, 2x200g, 4x100g, 8x50g]}}
+  - {physical: 'port-sfp-0', name: 'Ethernet256'}
+  - {physical: 'port-sfp-1', name: 'Ethernet257'}
+  - {physical: oob, name: eth0}
+nos: sonic
+nos-versions: master

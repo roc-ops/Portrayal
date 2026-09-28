@@ -1,16 +1,26 @@
 # Changelog
 
-What changed in the **dist contract** — the files under `library/dist/` that a
-consumer outside this repository reads. `devices.json` carries a `contract`
-number; this file says what each one meant.
+What a consumer outside this repository can depend on, and every change to it.
+That is four things:
 
-The contract number goes up when a field a reader depends on is **removed,
-renamed, or changes meaning**. Adding a field does not move it: a consumer that
-ignores a new key is unaffected, and one that wants it can look.
+- the **manifest format** (`format:` in every file, named by schema **v1**);
+- the **published build** under `library/dist/`, whose `devices.json` carries a
+  `contract` number;
+- the **DCIM exports** under `library/exports/`, which carry no number of their
+  own, so a change that re-files data already imported is marked **BREAKING
+  for DCIM data already imported**;
+- the **addresses** a manifest outside this tree holds: a component major it
+  pins (`name@2`), and a lint code it waives.
 
-The library itself is versioned per device (`device.lock.json` beside each
-manifest) and per component (`version:` in each contract). This file is about
-the *published build*, not about the hardware.
+A number goes up when something a reader depends on is **removed, renamed, or
+changes meaning**. Adding a field does not move it: a consumer that ignores a
+new key is unaffected, and one that wants it can look.
+[docs/format-stability.md](docs/format-stability.md) states the rules in full.
+
+The hardware itself is versioned per device (`device.lock.json` beside each
+manifest) and per component (`version:` in each contract), and those versions
+are not repeated here, except where a component major is removed: every removal
+names the ref that replaces it.
 
 ## Unreleased
 
@@ -21,6 +31,86 @@ the *published build*, not about the hardware.
   family → device tree). Each package is versioned from what npm last
   published, and only changed packages are published. Nothing in `dist/`
   changes; see `library/README.md` (roc-ops/Portrayal#528).
+- **SONiC listings** (roc-ops/Portrayal#674). The 17 boxes on SONiC's Supported
+  Devices and Platforms page that the library models are listed under
+  `sonic/`, every one with SONiC port names: each platform's own table in
+  sonic-buildimage (`port_config.ini`, or `platform.json` with its breakout
+  modes), pinned to one commit and joined to the faceplate by the port's alias
+  - which names the front-panel port where `index` does not. `eth0` is the
+  management port. Celestica's rows use codenames (DX010, Silverstone,
+  Seastone_2) no document here ties to a DS model, so they wait.
+- **DNOS listings** (roc-ops/Portrayal#674). The 13 modelled boxes the DNOS CLI
+  Reference Guide 26.2 accepts as NCP hardware (`system ncp model`) are listed
+  under `drivenets/`, each named as DriveNets sells it - `model: NCP-40C` - and
+  exported as `DriveNets/NCP-40C (<SKU>)`, because one NCP name covers boxes
+  from several ODMs. A listing may now set `type-name`, a pattern with `{model}`
+  and `{sku}`, for exactly that. Six single-speed boxes carry DNOS port names
+  (`ge100-0/0/<n>`, `fab-ncp400-0/0/<n>`) for a standalone NCP 0; the
+  mixed-speed boxes carry a `dnos-port-names` gap, and management jacks a
+  `dnos-management-names` gap. The fabric boxes (NCF-48CD, NCF-64E) wait for a
+  document that names their hardware.
+- **OcNOS listings for the IP Infusion HCL** (roc-ops/Portrayal#674). Every box
+  on the OcNOS 7.0.1 MR Hardware Compatibility List (July 2026) that the
+  library models - 42 of 44 - is listed under `ipinfusion/`, with the edition
+  that supports it (OcNOS SP or OcNOS DC) as its portfolio line. 14 UfiSpace
+  boxes carry OcNOS port names: speed-class prefix (`ge`, `xe`, `ce`, `cd`) and
+  one 0-based count across the panel, as IP Infusion's own S9510-30XC
+  configuration shows and as the UfiSpace silkscreen already numbers them, with
+  `eth0` for management. The rest carry an `ocnos-port-names` gap: Edgecore
+  boxes do not all count the same way (the AS7316-26XB restarts per speed
+  class), and no 800G prefix is documented.
+
+### Changed
+- **The DriveNets names leave the UfiSpace hardware** (roc-ops/Portrayal#674).
+  Twelve UfiSpace boxes carried their NCP name as an `oem` alias (#518) - the
+  S9700-53DX's `NCP-40C` and so on. DriveNets' own listing now carries it
+  (`drivenets/<box>/listing.yaml`, `model:`), filed under DriveNets and found
+  by search and the picker, so the alias is removed and each box takes a patch
+  bump. `aliases` in `devices.json` and `<device>.configs.json` drops those
+  names, and the UfiSpace DCIM types lose "Also sold or listed as: NCP-...".
+  The S9600-102XC loses `NCP-96X6C-S` too: the DNOS CLI reference accepts only
+  the S9601-102XC for that model. The fabric boxes (S9705-48D `NCF-48CD`,
+  S9725-64E `NCF-64E`) keep theirs until they are listed.
+
+## 0.1.0 (unreleased) - the first public release
+
+What 0.1.0 promises, as [docs/format-stability.md](docs/format-stability.md)
+states it in full:
+
+- Manifests are **`format: 1`**, which schema **v1** names. The schemas were
+  labelled `v0` until this release, which was the same format under a second
+  name. Each schema's `$id` is `https://portrayal.dev/schemas/v1/<name>.schema.json`
+  (`device`, `component`, `listing`), and the schemas are published there.
+- The published build is **`contract: 2`**. The history below says what `1`
+  and `2` each changed.
+- At 0.x the tools read the current format only. Every change that raises
+  `format` or `contract`, or re-files DCIM data already imported, is listed
+  here, with what to change to move across, and it raises the package's minor
+  version.
+- At 0.x a superseded component major may be removed. Every removal is listed
+  here with the ref that replaces it. From 1.0 a retired major is deprecated
+  for at least one release before it is removed.
+- Lint codes are never renumbered or reused, because a manifest waives a rule
+  by its code. A deleted rule's code is retired, not reissued.
+- From 1.0, a change that raises `format` or `contract` is a major version, and
+  the previous format stays readable for one release.
+
+### Pre-release history
+
+Everything below changed before the first release, while every consumer was
+inside this repository. It is kept because the build already carried `contract`
+numbers through it, and because it is the record of what each major and each
+breaking export change replaced.
+
+One of these changes is one the promise above now rules out: during
+pre-release the power rules were renumbered from L117-L119 to L118-L120
+(commit 5f6417b7, roc-ops/Portrayal#513), because another branch had taken
+L117 first. The move was made on the power rules' own branch, before they
+merged, so no code on `main` ever named a power rule at L117-L119, but anything
+written against that branch's numbers names a different rule. From 0.1.0 a
+code is never moved; the lint catalogue test pins every code issued.
+
+#### Added
 - **ArcOS listings for the Arrcus HCL** (roc-ops/Portrayal#674). Every box on
   the Arrcus Hardware Compatibility List (June 2026, ArcOS 8.5) that the library
   models - 29 of the 30 from UfiSpace and Edgecore - is listed under
@@ -286,7 +376,7 @@ the *published build*, not about the hardware.
   [connectors-coax-design.md](docs/connectors-coax-design.md)
   (roc-ops/Portrayal#650).
 
-### Changed
+#### Changed
 - `juniper/mic-3d-8ds3-e3` and `mic-3d-8ds3-e3-v` (1.1.2): their 16 jacks
   state `impedance: 75`, and the description no longer calls 75-ohm
   mini-SMB an unmodelled interface. Mini-SMB is the 75-ohm SMB series, the
@@ -659,7 +749,7 @@ above: the six interfaces, the new jacks, plugs and `seat-out` key are all
 additions, and the moved SPA jacks and the corrected MIC description change
 no field a reader already depends on.
 
-### Fixed
+#### Fixed
 - A seated part turns with the aperture it is in when its host FORWARDS that
   aperture from a composed part (roc-ops/Portrayal#548). The composed part's
   own `rotate` was left out, so a plug seated in generic/sfp-lc-simplex@2 or

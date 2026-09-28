@@ -1,0 +1,157 @@
+---
+manufacturer: IP Infusion
+model: AS9726-32DB
+slug: ip-infusion-as9726-32db
+u_height: 1.0
+is_full_depth: true
+weight: 11.85
+weight_unit: kg
+airflow: front-to-rear
+description: 32x 400G QSFP56-DD and 2x 10G SFP+ data-centre leaf switch, sold as the DCS240, with an ASPEED
+  BMC on the -DB variant
+front_image: true
+rear_image: true
+console-ports:
+  - name: Console
+    type: rj-45
+interfaces:
+  - name: mgmt-eth
+    type: 1000base-t
+    mgmt_only: true
+  - name: tengig-1
+    type: 10gbase-x-sfpp
+  - name: port-1
+    type: 400gbase-x-qsfpdd
+  - name: tengig-2
+    type: 10gbase-x-sfpp
+  - name: port-2
+    type: 400gbase-x-qsfpdd
+  - name: port-3
+    type: 400gbase-x-qsfpdd
+  - name: port-4
+    type: 400gbase-x-qsfpdd
+  - name: port-5
+    type: 400gbase-x-qsfpdd
+  - name: port-6
+    type: 400gbase-x-qsfpdd
+  - name: port-7
+    type: 400gbase-x-qsfpdd
+  - name: port-8
+    type: 400gbase-x-qsfpdd
+  - name: port-9
+    type: 400gbase-x-qsfpdd
+  - name: port-10
+    type: 400gbase-x-qsfpdd
+  - name: port-11
+    type: 400gbase-x-qsfpdd
+  - name: port-12
+    type: 400gbase-x-qsfpdd
+  - name: port-13
+    type: 400gbase-x-qsfpdd
+  - name: port-14
+    type: 400gbase-x-qsfpdd
+  - name: port-15
+    type: 400gbase-x-qsfpdd
+  - name: port-16
+    type: 400gbase-x-qsfpdd
+  - name: port-17
+    type: 400gbase-x-qsfpdd
+  - name: port-18
+    type: 400gbase-x-qsfpdd
+  - name: port-19
+    type: 400gbase-x-qsfpdd
+  - name: port-20
+    type: 400gbase-x-qsfpdd
+  - name: port-21
+    type: 400gbase-x-qsfpdd
+  - name: port-22
+    type: 400gbase-x-qsfpdd
+  - name: port-23
+    type: 400gbase-x-qsfpdd
+  - name: port-24
+    type: 400gbase-x-qsfpdd
+  - name: port-25
+    type: 400gbase-x-qsfpdd
+  - name: port-26
+    type: 400gbase-x-qsfpdd
+  - name: port-27
+    type: 400gbase-x-qsfpdd
+  - name: port-28
+    type: 400gbase-x-qsfpdd
+  - name: port-29
+    type: 400gbase-x-qsfpdd
+  - name: port-30
+    type: 400gbase-x-qsfpdd
+  - name: port-31
+    type: 400gbase-x-qsfpdd
+  - name: port-32
+    type: 400gbase-x-qsfpdd
+  - name: pps-in
+    type: other
+    label: SMB
+module-bays:
+  - name: Fan 1
+    position: fan-1
+    description: 'Accepts: dcs240-fan'
+  - name: Fan 2
+    position: fan-2
+    description: 'Accepts: dcs240-fan'
+  - name: Fan 3
+    position: fan-3
+    description: 'Accepts: dcs240-fan'
+  - name: Fan 4
+    position: fan-4
+    description: 'Accepts: dcs240-fan'
+  - name: Fan 5
+    position: fan-5
+    description: 'Accepts: dcs240-fan'
+  - name: Fan 6
+    position: fan-6
+    description: 'Accepts: dcs240-fan'
+  - name: PSU 1
+    position: psu-1
+    description: 'Accepts: dcs240-psu-ac, dcs240-psu-dc'
+  - name: PSU 2
+    position: psu-2
+    description: 'Accepts: dcs240-psu-ac, dcs240-psu-dc'
+comments: 'IP Infusion lists Edgecore AS9726-32DB (NOS: ocnos).
+
+  Listed per: OcNOS 7.0.1 MR Hardware Compatibility List (IP Infusion, July 2026), the row for AS9726-32DB,
+  current supported ''DC 7.0.1''.
+
+
+  32x 400G QSFP56-DD and 2x 10G SFP+ data-centre leaf switch, sold as the DCS240, with an ASPEED BMC on
+  the -DB variant. Every port, the management jack, both consoles, the USB and a 1PPS timing input are
+  on the FRONT; two supplies and SIX fan trays are on the rear. The QSFP ports number 1-32 down each column;
+  THE TWO SFP+ HAVE THEIR OWN NUMBER SPACE and are printed 1 and 2.
+
+
+  Configuration `ac-f2b`: Dual AC PSUs, front-to-back airflow - red handles and red release latches
+
+
+  Also sold or listed as: DCS240, AS9726-32DBS
+
+
+  Facts carried in the model that this schema has no field for:
+
+  - environmental.operating-temp: 0 to 45 C
+
+  - environmental.storage-temp: -40 to 70 C
+
+  - features.optics-qsfp-dd: datasheet: each port takes 1 x 400 GbE or breaks out to 2 x 200G / 4 x 100G,
+  and also accepts 100 GbE QSFP28 and 40 GbE QSFP+. THE UPPER SIXTEEN PORTS SUPPORT UP TO 24 W PER TRANSCEIVER
+  AND THE LOWER SIXTEEN DO NOT, which is a per-row fact this model has no vocabulary for and is recorded
+  as a gap.
+
+  - features.optics-sfp-plus: quick start, Port LEDs: 10G and 1G modes are both indicated, so the pair
+  takes 10GbE and 1GbE optics.
+
+  - lifecycle.eol: none-announced
+
+  - physical.weight-note: 11.85 kg (26.12 lb), with 2 PSUs and 6 fans installed
+
+
+  Drawing version 1.1.6. A major bump means a slot moved or an id was renamed, so anything cached from
+  an earlier export may no longer line up.
+
+  Model maturity: modelled. Every dimension in the source records where it came from.'

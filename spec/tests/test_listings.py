@@ -254,6 +254,23 @@ def test_a_deleted_listing_leaves_a_finding_until_its_lock_goes(tmp_path):
     assert not (d / devicelock.LISTING_LOCK_NAME).exists()
 
 
+def test_a_listing_without_type_name_keeps_its_fingerprint():
+    """`type-name` joined the names bucket later; a listing that does not set
+    it must hash as it always did, or every existing lock moves at once."""
+    doc = load_yaml(ARRCUS)
+    assert "type-name" not in doc
+    assert devicelock.listing_entry(doc)["names"] == \
+        devicelock._digest({k: doc.get(k) for k in devicelock.LISTING_NAMES})
+    renamed = dict(doc, **{"type-name": "{model} ({sku})"})
+    assert devicelock.listing_bump(devicelock.listing_entry(doc),
+                                   devicelock.listing_entry(renamed)) == "major"
+
+
+def test_a_type_name_must_keep_the_sku():
+    doc = dict(load_yaml(ARRCUS), **{"type-name": "NCP-40C"})
+    assert list(Draft202012Validator(SCHEMA).iter_errors(doc))
+
+
 def test_a_reworded_source_is_a_patch():
     doc = load_yaml(ARRCUS)
     old = devicelock.listing_entry(doc)

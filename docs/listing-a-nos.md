@@ -52,6 +52,12 @@ vendor calls the box.
 not the hardware's (DriveNets sells a UfiSpace S9700-53DX as the NCP-40C), and
 `aliases` holds its other spellings. Both are for search and display.
 
+**When one vendor name covers several boxes.** DriveNets sells one NCP-40C on
+a UfiSpace S9700-53DX, an Edgecore COR550 and a Delta AGCXD40S. Set `model: NCP-40C`
+and `type-name: '{model} ({sku})'`: each exported type is then named after the
+vendor's model and kept distinct by the SKU it would otherwise have had -
+`DriveNets/NCP-40C (S9700-53DX)`. `type-name` must contain `{sku}`.
+
 **What a DCIM keys on.** One device type is exported per hardware configuration,
 under the NOS vendor. Its model is, in order: `configurations.<cfg>.model`; the
 first SKU in `configurations.<cfg>.part-numbers`; else the hardware's own SKU.
