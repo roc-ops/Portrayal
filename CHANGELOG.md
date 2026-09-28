@@ -25,6 +25,12 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- `npm_packages.py`: the build split into npm packages, one per device
+  (`@portrayal/<vendor>-<device>`), one for the component skins and one index
+  carrying `packages.json` (device → package and version, and a vendor →
+  family → device tree). Each package is versioned from what npm last
+  published, and only changed packages are published. Nothing in `dist/`
+  changes; see `library/README.md` (roc-ops/Portrayal#528).
 - **OcNOS listings for the IP Infusion HCL** (roc-ops/Portrayal#674). Every box
   on the OcNOS 7.0.1 MR Hardware Compatibility List (July 2026) that the
   library models - 42 of 44 - is listed under `ipinfusion/`, with the edition
