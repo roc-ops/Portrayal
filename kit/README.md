@@ -23,6 +23,33 @@ Everything in `library/dist/`, documented as a contract in
 - `devices.json`, `components.json` (+ `components-detail.json`), `labs.json`,
   `gaps.json`, `vendors.json`, `listings.json`.
 
+## Where it reads from
+
+`createShell` and `createViewer` take `dist`: either the base URL of a build
+directory, or a function from a path in the build to its URL. `dist.js` makes
+both:
+
+```js
+import { flatDist, packageDist } from '@portrayal/kit/dist';
+
+// a build directory: library/dist, or a copy of it on your own server
+createShell({ dist: flatDist('/portrayal/dist') });
+
+// the npm packages, from jsDelivr: one package per device, fetched only
+// when that device is opened
+const dist = await packageDist();                   // @portrayal/index@latest
+const pinned = await packageDist({ index: '0.3.1' });  // one release, exactly
+createShell({ dist });
+createViewer(el, { dist });
+```
+
+`packageDist` resolves `latest` to an exact version first, and then reads
+every file at the exact version the index's `packages.json` names for it, so a
+page never mixes two releases. `at(name, version)` changes where packages are
+served from: another CDN, or `library/packages/` after `./publish.sh` to try
+the packages locally. The explorer does that with `?dist=packages`, and reads
+jsDelivr with `?dist=cdn` (and `&index=<version>`).
+
 ## Modules
 
 | module | what it does |
@@ -37,7 +64,7 @@ Everything in `library/dist/`, documented as a contract in
 | `swap.js` | swapping a component into a bay |
 | `fields.js` | writing a field on a part at runtime - its text and its colour, the build's rule, for 2D and 3D alike |
 | `devsel.js` | device selection and filtering |
-| `dist.js` | artifact fetching and URL construction |
+| `dist.js` | artifact fetching, and where each file is: a build directory or the npm packages |
 
 Plain ES modules. No bundler, no build step.
 

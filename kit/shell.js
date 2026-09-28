@@ -22,7 +22,7 @@ import { nestedBays, applyOverrides, applyOccupantOverrides, applyRearOverrides,
          builtOccupants, builtBays, faceCages, cageAt, pruneCarrier,
          freshBaysUnder, seatFace, faceQueue, swapOverrides, faceEntries, ownerPath,
          slotOptions, slotResolver } from './swap.js';
-import { jdist, faceFile } from './dist.js';
+import { jdist, faceFile, distResolver } from './dist.js';
 import { paintFields, unpaintFields } from './fields.js';
 import { fibreOf, farPath, fibreLabel, connectorLabel, moduleOf } from './optical.js';
 
@@ -167,10 +167,11 @@ let DEVICES = [], COMPONENTS = [];
 
 export function createShell(opts = {}) {
   let picker = null;
-  const DIST = opts.dist || '../dist';
+  // a build directory's base, or a path -> URL function (dist.js)
+  const distAt = distResolver(opts.dist, '../dist');
   const body = opts.mount || document.body;
   // shared with the 3D viewer mounted in the same page - see dist.js
-  const j = p => jdist(`${DIST}/${p}`);
+  const j = p => jdist(distAt(p));
 
   document.head.appendChild(Object.assign(document.createElement('style'),
                                           {textContent: SHELL_CSS}));
@@ -1238,7 +1239,7 @@ export function createShell(opts = {}) {
     try { c = compByRef(ref); } catch (e) { return null; }   // not ns/name@major
     if (!c) return null;
     const skin = c.skins?.includes('default') ? 'default' : c.skins?.[0];
-    const r = await fetch(`${DIST}/components/${c.ns}--${c.name}--${c.major}--${skin}.svg`);
+    const r = await fetch(distAt(`components/${c.ns}--${c.name}--${c.major}--${skin}.svg`));
     return r.ok ? {comp: c, text: await r.text()} : null;
   }
 
@@ -1595,7 +1596,7 @@ export function createShell(opts = {}) {
       live: () => state.facesFor === key && !state.module,
       has: view => !!state.faces[view],
       fetch: async view => {
-        const r = await fetch(`${DIST}/${faceFile(state.meta, state.cfg, view)}`);
+        const r = await fetch(distAt(faceFile(state.meta, state.cfg, view)));
         if (!r.ok) return null;
         const doc = new DOMParser().parseFromString(await r.text(), 'image/svg+xml');
         return document.importNode(doc.documentElement, true);
@@ -1667,9 +1668,9 @@ export function createShell(opts = {}) {
     if (state.module) {
       const c = compByRef(state.module);
       const skin = c.skins.includes('default') ? 'default' : c.skins[0];
-      file = `${DIST}/components/${c.ns}--${c.name}--${c.major}--${skin}.svg`;
+      file = distAt(`components/${c.ns}--${c.name}--${c.major}--${skin}.svg`);
     } else {
-      file = `${DIST}/${faceFile(state.meta, state.cfg, state.view)}`;
+      file = distAt(faceFile(state.meta, state.cfg, state.view));
     }
     const txt = await (await fetch(file)).text();
     const doc = new DOMParser().parseFromString(txt, 'image/svg+xml');
