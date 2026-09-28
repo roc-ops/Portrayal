@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: es1000
-version: 0.1.0
+version: 0.2.0
 maturity: modelled
 manufacturer: Celestica
 model: ES1000
@@ -120,7 +120,21 @@ provenance:
       ALM set at about 60 degrees beside the lamps; a USB trident under USB 1 and one turned vertical
       beside USB 2. The 48-port close-up prints the SuperSpeed 'SS' with both tridents, the 24-port
       close-up does not. The Celestica wordmark is plain text, no logo art. The lug tag is the dark
-      pull-out tab printed ES1000 with LUG TAG under it.
+      pull-out tab printed ES1000 with LUG TAG under it; since the #682 follow-up it is the seated
+      celestica/lug-tag@1 (landscape, rotate 0, label ES1000) rather than a decor rect - see lug-tag.
+  lug-tag:
+    confidence: measured
+    note: >-
+      Front Panels figure 1 (3.438 px/mm): the tag's slot runs x 22.9-45.4 and y 2.9-6.7, horizontal
+      above LUG TAG, which is where the old 23.3 x 2.6 decor rect sat (x 23.1-46.4, y 3.6-6.2); the
+      shared celestica/lug-tag@1 (23.0 x 4.0 with its slot) is centred on that rect at rotate 0, and
+      ES1000 reads left to right on it as the figure and the Foleon es1000-A render both print it. THE
+      LIP DOES NOT MATCH, and this is a reading, not a guess: on the render at 8x and the figure at 14x
+      the ES1000's card carries its thicker grip as a ridge along its TOP EDGE, over roughly the left
+      two-thirds, tapering out toward the right end - not as a block at one end, which is how the
+      shared part draws the lip of the DS3000/DS4001 card. No rotation of the shared part gives a
+      top-edge ridge with left-to-right text, so the text is honoured and the lip shape is recorded in
+      the lug-tag-lip gap. The DS4101 modeller reports the same top-edge grip on its 15.9 mm tag.
   usb:
     confidence: datasheet
     note: >-
@@ -233,6 +247,15 @@ chassis:
   color: '#c9ccd0'
   power: ac
 gaps:
+- what: lug-tag-lip
+  scope: [lug-tag]
+  reason: needs-hardware
+  wanted: >-
+    THE SHAPE OF THE ES1000 LUG TAG'S GRIP. The shared celestica/lug-tag@1 draws the DS3000/DS4001 card, whose
+    thicker lip is a block at one end; the ES1000 render and Front Panels figure 1 show this card's grip as a
+    ridge along its top edge over about two-thirds of its length. Seated as the shared part because the size and
+    the printed text agree; a caliper or a close photograph of the ES1000 card would say whether it wants its own
+    contract (a different shape), as the DS4101's 15.9 mm tag with a top-edge grip may too.
 - what: usb-generation
   scope: [usb-1, usb-2]
   reason: sources-disagree
@@ -365,10 +388,8 @@ views:
         - {id: sfp28-bezel, at: [375.0, 10.5], size: [28.5, 24.6], rx: 0.3, fill: '#a9aeb4', kind: cage-bezel}
         - {id: mgmt-stack-shell, at: [407.0, 5.4], size: [16.6, 30.2], rx: 0.4, fill: '#b0b5bb', kind: port-shell}
         - {id: usb-1-shell, at: [329.1, 5.5], size: [13.1, 5.9], rx: 0.6, fill: '#b0b5bb', kind: port-shell}
-        - {id: lug-tag, at: [23.1, 3.6], size: [23.3, 2.6], rx: 0.6, fill: '#3a3e43', kind: lug-tag}
     silkscreen:
       - {text: Celestica, at: [3.4, 14.2], font-size: 5.2, anchor: start, for: chassis}
-      - {text: ES1000, at: [34.75, 5.45], font-size: 1.5, anchor: middle, for: chassis}
       - {text: LUG TAG, at: [34.4, 10.6], font-size: 1.8, anchor: middle, for: chassis}
       - {text: '1 ▲▼ 2', at: [15.86, 41.7], font-size: 1.6, anchor: middle, for: [port-1, port-2]}
       - {text: '3 ▲▼ 4', at: [29.82, 41.7], font-size: 1.6, anchor: middle, for: [port-3, port-4]}
@@ -410,6 +431,7 @@ views:
       - {text: SS, at: [405.9, 26.0], font-size: 1.4, anchor: middle, rotate: -90, for: usb-2}
     components:
       placements:
+        - {ref: celestica/lug-tag@1, id: lug-tag, at: [23.25, 2.9], group: furniture, rel-pos: 29, attrs: {label: ES1000}}
         - {ref: common/rj45-ganged-eth@1, id: port-1, at: [9.51, 16.25], rotate: 180, group: rj45-1g, rel-pos: 1, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
         - {ref: common/rj45-ganged-eth@1, id: port-2, at: [9.51, 28.25], group: rj45-1g, rel-pos: 2, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
         - {ref: common/rj45-ganged-eth@1, id: port-3, at: [23.47, 16.25], rotate: 180, group: rj45-1g, rel-pos: 3, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
@@ -515,10 +537,8 @@ views:
         - {id: sfp28-bezel, at: [375.0, 10.5], size: [28.5, 24.6], rx: 0.3, fill: '#a9aeb4', kind: cage-bezel}
         - {id: mgmt-stack-shell, at: [407.0, 5.4], size: [16.6, 30.2], rx: 0.4, fill: '#b0b5bb', kind: port-shell}
         - {id: usb-1-shell, at: [329.1, 5.5], size: [13.1, 5.9], rx: 0.6, fill: '#b0b5bb', kind: port-shell}
-        - {id: lug-tag, at: [23.1, 3.6], size: [23.3, 2.6], rx: 0.6, fill: '#3a3e43', kind: lug-tag}
     silkscreen:
       - {text: Celestica, at: [3.4, 14.2], font-size: 5.2, anchor: start, for: chassis}
-      - {text: ES1000, at: [34.75, 5.45], font-size: 1.5, anchor: middle, for: chassis}
       - {text: LUG TAG, at: [34.4, 10.6], font-size: 1.8, anchor: middle, for: chassis}
       - {text: '1 ▲▼ 2', at: [15.86, 41.7], font-size: 1.6, anchor: middle, for: [port-1, port-2]}
       - {text: '3 ▲▼ 4', at: [29.82, 41.7], font-size: 1.6, anchor: middle, for: [port-3, port-4]}
@@ -546,6 +566,7 @@ views:
       - {text: ALM, at: [425.7, 33.39], font-size: 1.4, anchor: middle, rotate: -60, for: led-alm}
     components:
       placements:
+        - {ref: celestica/lug-tag@1, id: lug-tag, at: [23.25, 2.9], group: furniture, rel-pos: 29, attrs: {label: ES1000}}
         - {ref: common/rj45-ganged-eth@1, id: port-1, at: [9.51, 16.25], rotate: 180, group: rj45-1g, rel-pos: 1, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
         - {ref: common/rj45-ganged-eth@1, id: port-2, at: [9.51, 28.25], group: rj45-1g, rel-pos: 2, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}
         - {ref: common/rj45-ganged-eth@1, id: port-3, at: [23.47, 16.25], rotate: 180, group: rj45-1g, rel-pos: 3, states: {led-a: ['off', {name: link-1g, color: '#22c55e'}, {name: link-100m, color: '#f59e0b'}], led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}, {name: poe-disabled, color: '#22c55e'}, {name: poe-enabled, color: '#f59e0b'}, {name: poe-denied, color: '#f59e0b', behavior: {mode: alternating, color: '#22c55e'}}]}}

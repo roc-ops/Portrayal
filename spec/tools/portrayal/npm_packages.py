@@ -21,19 +21,25 @@ by itself. So:
 EACH PACKAGE HAS ITS OWN VERSION, NOT THE DEVICE'S. devicelock deliberately does
 not hash rendered output, so a toolchain change moves every face of every
 device without moving a device version - and npm will not take new bytes under
-a version it already holds. A package is versioned from what it last published
-(`--published`, the `state.json` a previous run wrote): an unchanged digest
+a version it already holds. A package is versioned from what npm holds for it
+now (`--from-registry`, read off each package's latest package.json - the only
+record of what is out; nothing local is trusted to know): an unchanged digest
 keeps the version and is not published again; a changed one bumps it by the
 largest thing that changed:
 
 - the dist `contract` - breaking;
 - the device's own version - the same level as the device moved;
-- anything else (a re-render, a new component, a regenerated index) - patch
-  below 1.0, minor from 1.0.
+- anything else (a re-render, a new component, a regenerated index) - a fix,
+  which is always a patch.
 
-A breaking change is a minor below 1.0 and a major from it, as
-`docs/format-stability.md` promises for the format. A package's first version
-is its device's version; the components and the index start at 0.1.0.
+A breaking change is a minor below 1.0 and a major from it, as #449 promises
+for the format. A package's first version is its device's version; the
+components and the index start at 0.1.0.
+
+Without `--from-registry` every package is versioned as if it had never been
+published. That is what publish.sh runs, to lay the packages out and fail on
+one over the size limit; it publishes nothing, and `--publish` refuses to run
+without the registry's state.
 
 Every package carries `LICENSE` and `NOTICE`: Apache-2.0 asks a redistribution
 to carry the NOTICE, which is why build.sh copies both into dist.
@@ -191,10 +197,11 @@ def _write(out, name, version, description, files, meta, readme):
 
 
 def build(dist, out, root, published=None, limit_mb=LIMIT_MB):
-    """Write every package under `out` and return the new state.
+    """Write every package under `out`; return ({name: state}, {name: bytes}).
 
-    The state is what a publisher records once the changed packages are up,
-    and what the next run takes as `published`.
+    `published` is what npm holds now (`registry_state`), or nothing. Nothing
+    is written back: npm is the record of what is out, and a state file written
+    here would claim versions that a dry run or a failed publish never sent.
     """
     dist, out, root = Path(dist), Path(out), Path(root)
     published = published or {}
@@ -207,7 +214,9 @@ def build(dist, out, root, published=None, limit_mb=LIMIT_MB):
     def add(name, version_of, description, files, meta, readme):
         files = {**files, **licence}
         meta = {**meta, "contract": contract}
-        dg = digest(files, meta)
+        # the generated README and description are in the tarball too, so a
+        # change to either is a change to the package
+        dg = digest(files, {**meta, "description": description, "readme": readme})
         version, changed = version_of(published.get(name), dg)
         meta = {**meta, "digest": dg}
         d, size = _write(out, name, version, description, files, meta, readme)
@@ -277,7 +286,6 @@ def build(dist, out, root, published=None, limit_mb=LIMIT_MB):
         if s > WARN_MB * 1e6:
             print(f"warning: {n} is {s / 1e6:.1f} MB, over half the {limit_mb} MB limit",
                   file=sys.stderr)
-    (out / "state.json").write_text(json.dumps(state, indent=1, sort_keys=True) + "\n")
     return state, sizes
 
 
@@ -299,7 +307,11 @@ def registry_state(names, run=subprocess.run, workers=8):
     against a state we could not read would re-version everything.
     """
     def one(name):
-        r = run(["npm", "view", f"{name}@latest", "--json"], capture_output=True, text=True)
+        try:
+            r = run(["npm", "view", f"{name}@latest", "--json"], capture_output=True,
+                    text=True, timeout=120)
+        except subprocess.TimeoutExpired:
+            raise SystemExit(f"npm view {name}: no answer in 120 s")
         if r.returncode:
             if "E404" in (r.stdout + r.stderr):
                 return name, None
@@ -326,7 +338,11 @@ def publish(out, state, run=subprocess.run, dry_run=False):
         [n for n in changed if n == f"{SCOPE}/index"]
     for name in order:
         cmd = ["npm", "publish"] + (["--dry-run"] if dry_run else [])
-        r = run(cmd, cwd=Path(out) / name.split("/", 1)[1], capture_output=True, text=True)
+        try:
+            r = run(cmd, cwd=Path(out) / name.split("/", 1)[1], capture_output=True,
+                    text=True, timeout=900)
+        except subprocess.TimeoutExpired:
+            raise SystemExit(f"npm publish {name}: no answer in 900 s")
         if r.returncode:
             raise SystemExit(f"npm publish {name}: {(r.stderr or r.stdout).strip()[-400:]}")
         print(f"{'would publish' if dry_run else 'published'} {name}@{state[name]['version']}")
@@ -338,20 +354,17 @@ def main(argv=None):
     ap.add_argument("--dist", default="library/dist")
     ap.add_argument("--out", default="library/packages")
     ap.add_argument("--root", default=".", help="where LICENSE and NOTICE are")
-    src = ap.add_mutually_exclusive_group()
-    src.add_argument("--published", help="the state.json of the last publish")
-    src.add_argument("--from-registry", action="store_true",
-                     help="read the last publish off npm itself")
+    ap.add_argument("--from-registry", action="store_true",
+                    help="version against what npm holds now (required with --publish)")
     ap.add_argument("--publish", action="store_true", help="npm publish what changed")
     ap.add_argument("--dry-run", action="store_true", help="with --publish: npm publish --dry-run")
     ap.add_argument("--limit-mb", type=float, default=LIMIT_MB)
     args = ap.parse_args(argv)
-    if args.from_registry:
-        published = registry_state(package_names(args.dist))
-    elif args.published:
-        published = json.loads(Path(args.published).read_text())
-    else:
-        published = {}
+    if args.publish and not args.from_registry:
+        # with no baseline every package is priced as brand new; a dry run
+        # passes, and the first real publish after the first collides
+        ap.error("--publish needs --from-registry: npm is the only record of what is out")
+    published = registry_state(package_names(args.dist)) if args.from_registry else {}
     state, sizes = build(args.dist, args.out, args.root, published, args.limit_mb)
     changed = sorted(n for n, s in state.items() if s["changed"])
     big = max(sizes, key=sizes.get)

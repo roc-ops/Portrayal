@@ -21,7 +21,7 @@ Everything in `library/dist/`, documented as a contract in
 - `<device>.source.json` — the **whole source manifest**, every view of it: the
   device's configurations, groups, attrs and chassis. One per device.
 - `devices.json`, `components.json` (+ `components-detail.json`), `labs.json`,
-  `gaps.json`, `vendors.json`, `overlays.json`.
+  `gaps.json`, `vendors.json`, `listings.json`.
 
 ## Where it reads from
 
@@ -55,7 +55,7 @@ jsDelivr with `?dist=cdn` (and `&index=<version>`).
 | module | what it does |
 |---|---|
 | `shell.js` | the explorer shell — device picker, view switching, tree |
-| `viewer3d.js` | 2D→3D: rasterises each face onto a chassis-sized box, adds relief meshes |
+| `viewer3d.js` | 2D→3D: rasterises each face onto a chassis-sized box, adds relief meshes; a host can hold coloured marks on many parts (`setMarks`) and paint a lamp its own colour (`setLampColors`) |
 | `relief.js` | turns `data-depth` / `data-z-*` annotations into geometry |
 | `marks.js` | annotation and callouts |
 | `states.js` | state toggling (LEDs, link states) and what a display can read |

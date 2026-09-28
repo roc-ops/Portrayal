@@ -69,7 +69,7 @@ device_list \
       --library library --out "$OUT" ${STALE+"${STALE[@]}"} >/dev/null
 # The six index passes each walk the whole library and each writes its own
 # file - devices.json, components.json, labs.json, gaps.json, comparable-facts.json, and
-# vendors.json + overlays.json - and none reads another's output, so they were serial
+# vendors.json + listings.json - and none reads another's output, so they were serial
 # only by habit. Together they were 8.5s of a 17.8s build, the largest single
 # block once lint was fixed.
 #

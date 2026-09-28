@@ -1,0 +1,101 @@
+format: 1
+kind: module
+name: fan-40-right-latch
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Celestica 1U hot-swap fan module of the DS2000 - a 39.1 x 39.0 face with an octagonal
+  hexagon-mesh grille split by a full-width horizontal pull handle, a coloured release latch
+  set into the RIGHT-hand end of that handle, and a round window in the upper-left corner.
+  The same outline, grille, handle band and corner window as celestica/fan-40@1 (DS4000),
+  whose latch sits at the LEFT end of the handle; the latch is geometry, not colour, so this is
+  a second part until someone shows the two are one module turned or revised. No vendor part
+  number is printed in any held document.
+size: {w: 39.1, h: 39.0}
+size-confidence: {w: measured, h: measured}
+attrs: {power-absent: not-published}
+provenance:
+  size: >-
+    measured - DS2000 guide Product Overview Figure 2, Rear Panel View (3600 x 444 px, an
+    orthographic CAD render: 438 mm across 3521 px and 44 mm down 355 px agree to 0.4 percent,
+    8.037 and 8.045 px/mm). The rightmost fan's grey face reads x 297.0-336.05 mm and y
+    2.95-41.9 mm at 4x, 39.05 x 38.95; the bay's dark border around it reads 296.1-337.1 x
+    2.0-42.7. The four red latch blocks repeat at 134.32, 181.97, 277.40 and 325.18 mm,
+    a 47.65 / 47.78 mm pitch inside each pair.
+  grille: >-
+    measured, same figure at 4x - an octagon of hexagon mesh spanning 1.9-37.3 across and
+    1.7-37.2 down, broken by the handle band. Drawn as the library's hexagon cell at a size that
+    reads, not counted cell for cell.
+  handle: >-
+    measured, same figure - a band across the full width at 16.05-22.85 mm from the face's top
+    edge, the same band celestica/fan-40@1 measures at 16.2-22.9 on the DS4000 guide.
+  latch: >-
+    measured - the red block is 28.2-33.8 across and 15.9-22.8 down, on the handle band at its
+    right end, on all four fans. The Foleon three-quarter rear render of the DS2000
+    (ds2000-side-by-side-b) shows the same block BLUE; which build each colour marks is not
+    stated in any held document, so the colour is a field defaulting to the guide's red.
+  status-window: >-
+    measured - a round window 3.9 mm across centred (3.5, 3.15) from the face's top-left. The
+    DS2000 guide Table 4 gives one rear lamp per fan module (FAN1-FAN4: green all fans operating
+    normally, amber fan(s) operating abnormally, off fan absent) and names no position; this
+    window is the only candidate on the face and the only one on the rear near each fan, which
+    is the same inference celestica/fan-40@1 makes.
+  colour: >-
+    photo - black face and handle in the DS2000 Foleon rear render; the CAD figure shades them
+    grey.
+  power: >-
+    NOT PUBLISHED. The DS2000 guide and datasheet give only the system figure (<500 W maximum,
+    <350 W typical at 25 C) and a 3+1 fan redundancy; no per-module wattage.
+states: [ok, fault, absent]
+elements:
+  status-led:
+    at: [1.55, 1.2]
+    size: [3.9, 3.9]
+    class: led
+    states: ['off',
+             {name: ok, color: '#22c55e'},
+             {name: fault, color: '#f59e0b'}]
+    description: >-
+      DS2000 guide Table 4, Fan module row - Green (all fans operating normally), Amber (fan(s)
+      operating abnormally), Off (fan absent)
+  handle: {at: [0.4, 16.05], size: [38.3, 6.8], class: handle}
+  latch: {at: [28.2, 15.9], size: [5.6, 6.9], class: latch}
+relief:
+  features:
+    - node: grille-mesh
+      vent: 20
+      confidence: estimated
+      source: >-
+        celestica/fan-40-right-latch@1 provenance.grille - the mesh outline is measured; the
+        depth to the rotor is not stated anywhere held.
+    - node: handle
+      out: 5.0
+      confidence: estimated
+      source: >-
+        celestica/fan-40@1 - the same band on the DS4000 module, whose standoff is also
+        unmeasured; borrowed so the two read alike.
+    - node: latch
+      out: 5.4
+      confidence: estimated
+      source: >-
+        celestica/fan-40@1 - its latch stands at least as far out as the handle; not dimensioned.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: celestica/fan-40-right-latch@1 provenance.status-window - a window; no depth held.
+fields:
+  face-finish:
+    label: Face colour
+    type: text
+    default: '#1b1d20'
+  handle-finish:
+    label: Handle colour
+    type: text
+    default: '#0e1012'
+  latch-finish:
+    label: Latch colour
+    type: text
+    default: '#d8292f'
+skins: [default]

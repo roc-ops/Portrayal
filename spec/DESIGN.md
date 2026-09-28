@@ -19,9 +19,12 @@ Three layers:
      states, semantic attributes, skins list.
    - *Device manifest*: chassis, views, placements of component instances, bays,
      regions, label text.
-   - *NOS overlay*: per-NOS naming (`terms`), logical interfaces (incl. breakout),
-     and `entity-map` pattern rules joining that NOS's ENTITY-MIB / ietf-hardware /
-     OpenConfig component names onto physical IDs or regions. NOS trees are never
+   - *Listing*: a NOS vendor's entry for hardware on its compatibility list,
+     under that vendor's namespace and pointing at one device. It carries the
+     vendor's own names and part numbers, per-NOS naming (`terms`), logical
+     interfaces (incl. breakout), and `entity-map` pattern rules joining that
+     NOS's ENTITY-MIB / ietf-hardware / OpenConfig component names onto physical
+     IDs or regions. NOS trees are never
      drawn — only joined. Unmapped NOS nodes are legal (linter warns on unmapped
      port/psu/fan classes only).
 3. **Compiled SVG** — build artifact. Flat (components inline-expanded), stable
@@ -35,7 +38,7 @@ Three layers:
    in `data-path="port-1/led-link"`; element `id` = path joined with `--`
    (`port-1--led-link`, CSS-safe). Physical IDs are position-based, NOS-neutral,
    and follow the silkscreen (zero-based device → `port-0`). `index-origin`
-   declared per component group. Logical names live in overlays.
+   declared per component group. Logical names live in listings.
 2. **Views**: free-form IDs, conventional names (`front`, `rear`, `top`,
    `interior`, `lid-open`); per-view mm frame, origin top-left, **y-down**;
    a component identity may appear in multiple views; only `front` required.
@@ -48,7 +51,7 @@ Three layers:
    core vocabulary (profiles extend); compiled SVG ships `.state-*` CSS rules;
    consumers toggle classes; skins expose CSS custom-property color hooks.
 5. **Labels as data**: contracts define anchors; text comes from manifests and
-   NOS overlays. One open project font; optional outline-to-paths build flag.
+   NOS listings. One open project font; optional outline-to-paths build flag.
 6. **Regions**: addressable areas (sensor context via Redfish PhysicalContext
    vocabulary, grouping, doc callouts); may declare member components; NOS
    entity-map rules may target regions (e.g. a per-NOS "port bank" container).
@@ -185,7 +188,7 @@ Three layers:
     `working/` staging tree and are cited, not copied); dumps are committed
     sanitised. Vendor slugs reused from netbox devicetype-library. Refs =
     `namespace/name@major`. Toolchain takes a library search path; reserved
-    `local/` namespace for private overlays.
+    `local/` namespace for private listings and devices.
 
 ## First device (historical)
 
