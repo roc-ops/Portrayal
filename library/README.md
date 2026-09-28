@@ -67,14 +67,16 @@ A package has its own version. The device's version is recorded in its
 `package.json` under `portrayal`, but it cannot be the package's version:
 rendered output is not in the device lock, so a re-render changes a device's
 files without changing its version, and npm refuses new bytes under an old
-version. Each run compares a digest of every package with what npm holds
-(`--from-registry`). An unchanged package is skipped. A changed one is bumped
+version. With `--from-registry`, a run compares a digest of every package
+with what npm holds now. An unchanged package is skipped. A changed one is bumped
 by the largest thing that moved: a dist `contract` change is breaking, a
 device's own version bump carries its level, and anything else is a fix.
 Below 1.0 a breaking change is a minor bump and everything else a patch. A
 package's first version is its device's; the components and index start at
-0.1.0. `--publish` publishes what changed, the index last, so it never names a
-version npm does not have yet.
+0.1.0. `--publish` (which requires `--from-registry`) publishes what changed,
+the index last, so it never names a version npm does not have yet. A plain
+run, as `publish.sh` makes, compares against nothing: it lays the packages out
+and fails on one over the size limit, and publishes nothing.
 
 **Ports in the drawing.** Every port is a `<g data-class="port">`, and the
 facts about it (`data-media`, `data-speed`, `data-group`, `data-group-role`)

@@ -210,3 +210,30 @@ def test_publish_sends_only_what_changed_and_the_index_last(tmp_path):
     npm = _Npm({})
     assert P.publish(tmp_path / "out", again, run=npm) == \
         ["@portrayal/acme-box-1", "@portrayal/index"]
+
+
+# ---- what the merge-queue review of #688 found ----------------------------------
+
+def test_a_run_writes_no_state_that_could_claim_an_unpublished_version(tmp_path):
+    """A dry run, or a publish that failed partway, must not leave behind a
+    record the next run would read as "already out". npm is the record."""
+    _build(tmp_path, _dist(tmp_path))
+    assert not list((tmp_path / "out").glob("*.json")), \
+        "the packager wrote a state file beside the packages"
+
+
+def test_publish_refuses_to_run_without_the_registrys_state(tmp_path, capsys):
+    """With no baseline every package is priced as new: a dry run passes and
+    the second real release collides with the first on its first name."""
+    dist = _dist(tmp_path)
+    with pytest.raises(SystemExit):
+        P.main(["--dist", str(dist), "--out", str(tmp_path / "out"),
+                "--root", str(tmp_path), "--publish", "--dry-run"])
+    assert "--from-registry" in capsys.readouterr().err
+
+
+def test_a_changed_readme_is_a_changed_package(tmp_path, monkeypatch):
+    first, _ = _build(tmp_path, _dist(tmp_path))
+    monkeypatch.setattr(P, "_readme", lambda title, body: f"# {title}\n\nreworded\n")
+    again, _ = _build(tmp_path, _dist(tmp_path), first)
+    assert again["@portrayal/acme-box-1"]["changed"]
