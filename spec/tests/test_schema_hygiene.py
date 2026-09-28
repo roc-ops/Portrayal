@@ -61,6 +61,23 @@ def test_the_schemas_are_valid_schemas(path):
     jsonschema.Draft202012Validator.check_schema(json.loads(path.read_text()))
 
 
+@pytest.mark.parametrize("path", _schema_files(), ids=lambda p: p.name)
+def test_every_schema_id_names_its_published_home(path):
+    """roc-ops/Portrayal#450. A `$id` is the URL validators and editors
+    dereference, and once an outside file copies it the host is frozen. The
+    schemas are published at portrayal.dev under the format's label, and the
+    title carries the same label, so `v1` means format 1 in all three places."""
+    doc = json.loads(path.read_text())
+    assert doc["$id"] == f"https://portrayal.dev/schemas/v1/{path.name}", doc["$id"]
+    assert "(v1)" in doc["title"], doc["title"]
+    assert doc["properties"]["format"] == {"const": 1}, "schema v1 is format 1"
+
+
+def test_the_id_sweep_is_not_vacuous():
+    assert {p.name for p in _schema_files()} >= {
+        "device.schema.json", "component.schema.json", "listing.schema.json"}
+
+
 @pytest.mark.parametrize("key", ["width", "height", "depth"])
 def test_a_chassis_dimension_says_what_unit_it_is_in(key):
     """Every length in this library is millimetres, and a schema is where
