@@ -77,6 +77,16 @@ are per platform: each platform's port configuration in sonic-buildimage states
 them, and the listing cites that file. Never derive one NOS's names from
 another's.
 
+**When nothing states them, leave `interfaces` out and record a gap.** ArcOS is
+the worked case. Its CLI reference says the first port is `swp1`, and the two
+boxes we hold live dumps for agree, but its DNX examples start at `swp0`, and
+none of them names a platform. So a listing for a box nobody has run is
+published without `interfaces`, with a `gaps` entry (`what: arcos-port-names`,
+`reason: sources-disagree`) that quotes the disagreement and asks for
+`show interface brief` from a unit. The export files the type under the NOS
+vendor with the faceplate ids, which is true, rather than `swp` names that are
+off by one on half the boxes.
+
 ## The gates
 
 - **L56** - the listing sits under a software vendor, `hardware` is a device,
