@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: qsfp-dd-lc
-version: 2.1.0
+version: 2.2.0
 class: transceiver
 behaviour: occupies
 mates: qsfp-dd
@@ -134,21 +134,23 @@ provenance:
     until a QSFP-DD module is measured.
   tab: >-
     composed - common/qsfp-pull-tab@2; see that part's provenance for the reach
-    and the measurements (the U-loop as photographed, arms out 38.6 and grip out
-    49.8 on its own plane). This host's `lift: 20.0` stands it on the nose front,
+    and the measurements (the U-loop as photographed, arms stepping along
+    the S-bend of the strap to 38.6 and grip out 49.8 on its own plane).
+    This host's `lift: 20.0` stands it on the nose front,
     so the tab runs from 20 to 69.8 forward of the cage face. The ProLabs 34.80
     MAX that @1 carried is a different, shorter tab and does not apply. The tab is
     composed again rather than painted in this skin because a composed part now
     takes its host's fields at build time (docs/pluggables-heads-design.md,
     decision 4), so the tab still wears this generic's `latch-color`. At
-    `at: [-0.325, -1.07]` the grip's top sits 1.07 above the module top, as
-    measured, and the grip straddles the face's top edge (y -1.07 to 1.83).
+    `at: [-0.325, -1.23]` the grip's top sits 1.23 above the module top, as
+    measured (common/qsfp-pull-tab@2 2.2.0 read it again on fitted body edges;
+    it was 1.07), and the grip straddles the face's top edge (y -1.23 to 1.67).
     The tab's riser blocks (common/qsfp-pull-tab@2 2.1.0 and later) arrive
     with it: they are the tab's own moulding, and this generic already wears
     the tab's photo-measured QSFP28 geometry for its arms and grip. On this
-    8.5 face they stand at the side edges from y 2.33 to 7.23, clear of the
+    8.5 face they stand at the side edges from y 2.43 to 7.33, clear of the
     receptacle housing. THE LAYERING IS DELIBERATE (lint L46): the tab's
-    size box is now 19 x 8.3 and holds both bores, but the tab is a loop open
+    size box is now 19 x 8.56 and holds both bores, but the tab is a loop open
     in the middle and draws nothing over them. QSFP-DD HW Rev 6.3 Figure
     102's informative handle also stands a block against the nose front at
     the handle's root, the height of the latch, so a riser there is not a QSFP28 peculiarity; but its
@@ -178,11 +180,11 @@ parts:
   - {ref: std/lc-bore@3, id: rx, at: [9.95, 0.95], rotate: 180, lift: 20.0}
   # THE TAB IS COMPOSED AGAIN. It was painted here only because a composed part
   # could not take latch-color at build time; since pluggables-heads decision 4 it
-  # can. lift 20.0 stands it on the nose front. At y -1.07 the grip's top sits
-  # 1.07 above the module top, as measured: the grip straddles the face's top edge
-  # (y -1.07 to 1.83) and in the front view hides about 0.9 of the bores' tops,
+  # can. lift 20.0 stands it on the nose front. At y -1.23 the grip's top sits
+  # 1.23 above the module top, as measured: the grip straddles the face's top edge
+  # (y -1.23 to 1.67) and in the front view hides about 0.7 of the bores' tops,
   # which is what the real part does.
-  - {ref: common/qsfp-pull-tab@2, id: tab, at: [-0.325, -1.07], lift: 20.0}
+  - {ref: common/qsfp-pull-tab@2, id: tab, at: [-0.325, -1.23], lift: 20.0}
 relief:
   features:
     - node: body

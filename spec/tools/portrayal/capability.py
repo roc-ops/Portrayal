@@ -414,7 +414,7 @@ def _templated(data):
 
     ASKED OF THE EXPORTER, not re-derived: `dcim_export.device_port_type` is
     the question `build` asks of every device placement, the same one lint's
-    L105 asks of a raw manifest (no overlay - the hardware's own document).
+    L105 asks of a raw manifest (no listing - the hardware's own document).
     This used to import `nautobot_export`, which stopped existing when the
     NetBox and Nautobot exporters merged into `dcim_export` (#129); the import
     always failed, so the flag was false for every device and the gap register

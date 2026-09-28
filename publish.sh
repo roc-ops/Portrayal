@@ -64,7 +64,7 @@ python3 spec/tools/portrayal/dcim_export.py --dist "$OUT" --modules \
 modules_pid=$!
 python3 -c "import json,sys; print('\n'.join(d['name'] for d in json.load(open(sys.argv[1]))['devices']))" "$OUT/devices.json" \
   | xargs -P "$JOBS" -I{} python3 spec/tools/portrayal/dcim_export.py --dist "$OUT" \
-      --out library/exports --device {} --nos arcos ${IMAGES+"${IMAGES[@]}"} >/dev/null
+      --out library/exports --device {} ${IMAGES+"${IMAGES[@]}"} >/dev/null
 wait "$modules_pid"
 
 # The exports leave with a DCIM the same way dist leaves with a page; the

@@ -1,0 +1,55 @@
+format: 1
+kind: module
+name: fan-module-62
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Rear fan module of the Celestica DS6001 (2OU ORv3) - a 61.6 x 66.2 mm face with a field of
+  hexagonal perforations above and below a grey handle band across its middle, a black pull
+  grip at the band's right. Four fill the DS6001's rear, in two pairs either side of the bus
+  bar (3+1). No Celestica document names the FRU, so the part is named for its face width.
+size: {w: 61.6, h: 66.2}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  power-absent: not-published
+  airflow: front-to-back
+provenance:
+  size: >-
+    estimated - read on the STORDIS-hosted DS6001 rear render (ds6001-B, 1200 px), whose body
+    spans 1003.3 px for the datasheet's 537 mm and 170.7 px for its 94 mm; the two axes
+    disagree by 2.9%, which fails Gate 1, so each axis is taken as a fraction of its own
+    datasheet dimension and nothing on this face is better than estimated. Module frames
+    read 88.1-150.1, 157.9-219.3, 320.4-381.8 and 390.1-451.4 mm across and 27.4-93.6 down.
+  face: >-
+    estimated on ds6001-B at the scales above: two fields of hexagonal holes (about 3.6 mm
+    across on a 4.8 mm pitch) above and below a handle band at 26.4-38.7 mm. On the render the
+    band runs continuously across both modules of a pair; the Foleon three-quarter render
+    ds6001-A-3 shows each module with its own black pull grip on the band, which is drawn at
+    the band's right. No lamp is visible on either render.
+  count: >-
+    photo - STORDIS's callout on ds6001-B reads "3+1 FANS" over the two pairs; the datasheet
+    (rev 120325) gives no fan count.
+  power: >-
+    NOT PUBLISHED. The datasheet states no system or per-fan power; no install guide exists.
+  depth: >-
+    NOT STATED. body.depth is a placeholder by proportion, not a reading.
+  states: >-
+    NO LAMP, so only `absent`: neither rear render shows a lens on these modules. If the
+    install guide ever shows one, add it with the states it names.
+states: [absent]
+elements:
+  handle: {at: [1.2, 26.4], size: [59.2, 12.3], class: handle}
+relief:
+  features:
+    - node: grille
+      vent: 20
+      confidence: estimated
+      source: >-
+        celestica/fan-module-62@1's own face key - how far the rotor sits behind the
+        perforations is not visible in either render.
+body:
+  depth: 60
+  color: '#9aa0a8'
+skins: [default]

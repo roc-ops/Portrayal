@@ -1,0 +1,45 @@
+format: 1
+kind: listing
+hardware: edgecore/as7726-32x
+version: 1.0.1
+portfolio: {line: 'Switching (XGS)'}
+source: >-
+  Arrcus Hardware Compatibility List (External), June 2026, for ArcOS 8.5 - page 1,
+  under Switching (XGS), the row 'DCS204 / AS7726-32X'. The names below were read from a
+  running unit of this model (see `dumps`), whose `arcos-show-version.txt` reads 'Software:
+  Arrcus ArcOS' over 'Firmware MU: EdgeCore MU 1.2.3' - the software house and the hardware
+  one on consecutive lines.
+nos: arcos
+nos-versions: '>=S8.5'
+dumps:
+  - devices/edgecore/as7726-32x/dumps/arcos-interface-names.json
+  - devices/edgecore/as7726-32x/dumps/arcos-openconfig-components.json
+  - devices/edgecore/as7726-32x/dumps/arcos-show-version.txt
+terms:
+  bay: Slot
+interfaces:
+  - {physical: 'port-{n}', name: 'swp{n}', range: '1-32',
+     breakout: {modes: [4x25g, 4x10g, 2x50g, 1x40g], child-name: 'swp{n}s{i}'}}
+  - {physical: mgmt-eth, name: ma1}
+  # The 2x SFP+ mgmt uplinks are not exposed as ArcOS interfaces (documented
+  # front-panel-only; see RocContLab nautobot-physical-fabric notes).
+entity-map:
+  - {source: openconfig, match: chassis, to: chassis}
+  - {source: openconfig, match: lc0, to: chassis, note: 'fixed-config linecard == the chassis board'}
+  # Source: live `show components | display json` from a lab AS7726-32X (ArcOS S8.5.1A).
+  # ArcOS names are zero-based for psu/fan/led, one-based for sfp; physical IDs
+  # follow the silkscreen (one-based). Tree shape (all flat under lc0) is joined,
+  # never drawn. Unmapped nodes (process*, eeprom0, system0) are intentionally absent.
+  - {source: openconfig, match: 'sfp{n}', range: '1-32', to: 'port-{n}'}
+  - {source: openconfig, match: sfp33, to: mgmt-sfp-1, note: 'assumed cage order; verify with inserted optic'}
+  - {source: openconfig, match: sfp34, to: mgmt-sfp-2, note: 'assumed cage order; verify with inserted optic'}
+  - {source: openconfig, match: 'psu{n}', range: '0-1', to: 'psu-{n+1}', note: "names psu0/psu1; own labels say PSU-1/PSU-2"}
+  - {source: openconfig, match: 'fan{n}', range: '1-6', to: 'fan-{n}', note: "desc 'Chassis Fan - n'"}
+  - {source: openconfig, match: fan0, to: psu-2, note: "desc 'PSU 2 - Fan 1' — rolls up to PSU-2"}
+  - {source: openconfig, match: led0, to: led-diag}
+  - {source: openconfig, match: led1, to: led-loc}
+  - {source: openconfig, match: led2, to: led-fan}
+  - {source: openconfig, match: led3, to: led-psu1}
+  - {source: openconfig, match: led4, to: led-psu2, note: "vendor desc bug: led3 and led4 both say 'LED 4'"}
+  - {source: openconfig, match: 'thermal{n}', range: '0-5', to: 'region:internal', note: 'CPU core + LM75 board sensors; no faceplate component'}
+  - {source: openconfig, match: thermal6, to: psu-2, note: 'PSU-2 thermal sensor'}

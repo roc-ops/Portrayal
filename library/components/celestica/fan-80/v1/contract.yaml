@@ -1,0 +1,89 @@
+format: 1
+kind: module
+name: fan-80
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Celestica 2RU hot-swap fan tray with an 80 mm face - a silver plate punched with a square mesh
+  over a dual-rotor fan, a vertical silver bar handle down its centre, an orange release latch at
+  the left edge, a status lamp lower left and three captive-screw heads in the corners. Four of
+  them fill the rear of the DS3001.
+size: {w: 80.0, h: 80.8}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs: {airflow: front-to-back}
+provenance:
+  size: >-
+    photo-measured - DS3001 docs-portal rear panel (ds3001--rear-panel-1.jpg), an orthographic
+    render: the chassis body reads 2858 x 567 px against the datasheet's 438.5 x 87 mm, 6.518
+    px/mm on both axes (aspect 5.0406 against 5.0402). Fan 1's face runs from x 1109 to 1630 px
+    between dark seams at 1107 and 1632, 79.9 mm, and from y 859 to 1387 between seams at 857 and
+    1389, 80.8 mm. The four trays sit on an 84.85 mm pitch with a 4.3 mm chassis divider between
+    faces, so 80.0 is the face and not the pitch.
+  construction: >-
+    guide - DS3001 Fan Module page: 'FAN module is an assembly of dual rotor fan, LED light
+    pipe, fan connector and fan bracket', four modules in the standard configuration, hot
+    swappable, F2B and B2F airflow options. The fan-removal figures (ds3001--fan-module--fan-
+    removal-1..3.jpg) show the tray drawn out by its bar handle after the orange latch is
+    pressed, and the two rotors behind the mesh.
+  elements: >-
+    photo-measured on the same rear render, relative to the face's top-left corner: screw heads
+    at (5.1, 4.4), (75.7, 4.4) and (75.7, 74.8), about 6 mm across - the lower-left corner
+    carries the lamp instead, at (6.0, 74.4); the orange latch at x 2.3-5.2, y 32.4-47.0; the bar
+    handle x 37.0-43.1, y 4.8-74.6; the mesh field x 2.5-77.6, y 2.5-77.6 on a 4.0 mm pitch with
+    2.9 mm square holes.
+  status-lamp: >-
+    guide - DS3001 Status LEDs, Table 2 Rear Panel Status LEDs: FAN1 / FAN2 / FAN3 / FAN4, green
+    'All fans operating normally', amber 'Fan(s) operating abnormally', off 'Fan absent'. The
+    rear render draws each lamp green.
+  airflow: >-
+    guide - both F2B and B2F builds exist and must not be mixed. No document held says how the
+    two trays differ on the outside: the rear render is one build and draws the orange latch;
+    the vendor's three-quarter rear render (cls.celestica.com Foleon page, ds3001-side-by-side)
+    also shows orange latches. The latch colour is a field so a configuration can change it once
+    the B2F finish is known.
+  depth: >-
+    estimated - body.depth 120 is not read from any figure. The fan-removal renders show a
+    tray roughly one and a half times as deep as it is wide, and nothing held dimensions it;
+    it only gives the tray a body to draw when pulled in the 3D view.
+  power: >-
+    NOT STATED. The DS3001 guide and datasheet give no per-fan figure and no chassis fan budget;
+    L27 stands as the record that it is missing.
+states: [ok, fail, absent]
+elements:
+  status-led:
+    at: [4.6, 73.0]
+    size: [2.8, 2.8]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]
+  latch: {at: [2.3, 32.4], size: [2.9, 14.6], class: latch}
+  handle: {at: [37.0, 4.8], size: [6.1, 69.8], class: handle}
+  mesh: {at: [2.5, 2.5], size: [75.1, 75.1], class: grille}
+fields:
+  latch-finish:
+    label: Latch colour
+    type: text
+    default: '#f0a030'
+relief:
+  features:
+    - node: handle
+      uhandle: 14
+      confidence: estimated
+      source: >-
+        celestica/fan-80@1 itself - unsourced. The rear render is face-on; the fan-removal
+        figures show the bar standing off the face on two short legs but carry no scale for it.
+    - node: latch
+      out: 1.5
+      confidence: estimated
+      source: >-
+        celestica/fan-80@1 itself - unsourced; see handle.
+    - node: status-led
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        celestica/fan-80@1 itself - unsourced; see handle.
+skins: [default]
+body:
+  depth: 120
+  color: '#c9cdd1'

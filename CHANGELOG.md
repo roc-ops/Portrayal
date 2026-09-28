@@ -21,6 +21,34 @@ the *published build*, not about the hardware.
   family → device tree). Each package is versioned from what npm last
   published, and only changed packages are published. Nothing in `dist/`
   changes; see `library/README.md` (roc-ops/Portrayal#528).
+- **ArcOS listings for the Arrcus HCL** (roc-ops/Portrayal#674). Every box on
+  the Arrcus Hardware Compatibility List (June 2026, ArcOS 8.5) that the library
+  models - 29 of the 30 from UfiSpace and Edgecore - is listed under
+  `arrcus/`, with the HCL row as its source and Arrcus's own grouping
+  (Switching (XGS), Routing (DNX), VDR line and fabric cards) as its portfolio.
+  The AS7726-32X and AS7326-56X carry ArcOS port names from live units; the
+  other 27 carry an `arcos-port-names` gap instead, because ArcOS's own
+  documentation disagrees on whether a platform's first port is `swp0` or
+  `swp1`. Listings may now carry `gaps`.
+- **Listings** (roc-ops/Portrayal#674). A NOS vendor lists the hardware it
+  supports: `library/devices/<nos vendor>/<id>/listing.yaml` points at one device
+  and carries only what the NOS vendor changes - interface names, its own model
+  name and catalogue family, and its own part numbers where it has them. This is
+  how NetBox and Nautobot file a disaggregated box: one device type per
+  manufacturer that sells it, with one copy of the metal behind them all.
+  - `listings.json`: every listing, whole, keyed `<ns>/<id>`, with `ns` and the
+    resolved `manufacturer` added.
+  - `devices.json`: each device carries `listings`, the keys of the listings
+    that list it, and its `search` blob gains each listing's vendor, NOS and
+    names, so "arrcus" or "ocnos" finds the hardware.
+  - `devices.lock.json`: a `listings` map beside `devices`. A listing is
+    versioned (`listing.lock.json` beside it): a changed port name, model or
+    part number is major, an added configuration override minor, wording a
+    patch.
+  - `vendors.json`: IP Infusion (OcNOS), DriveNets (DNOS) and SONiC join Arrcus
+    as software vendors.
+  - Lint L124: under one NOS vendor, no two listings export the same DCIM model,
+    and an alias names one listing unless each claimant marks it `shared`.
 - Lint L123, library-wide: one module, one bay size. Every bay that accepts a
   module, in any device or carrier, reserves the same size for it to within a
   millimetre, compared in the module's own frame so a turned bay matches an
@@ -259,6 +287,28 @@ the *published build*, not about the hardware.
   (roc-ops/Portrayal#650).
 
 ### Changed
+- `juniper/mic-3d-8ds3-e3` and `mic-3d-8ds3-e3-v` (1.1.2): their 16 jacks
+  state `impedance: 75`, and the description no longer calls 75-ohm
+  mini-SMB an unmodelled interface. Mini-SMB is the 75-ohm SMB series, the
+  SMB interface and intermateable with 50-ohm SMB, so the jacks were
+  correctly SMB (roc-ops/Portrayal#672). The MX80, MX240, MX480, MX960,
+  MX2008, MX2010 and MX2020 take a patch for the composed card.
+- `common/qsfp-pull-tab@2` (2.2.0) models the strap's S-bend: each arm is six
+  relief boxes along the reach (`arm-l`, then `arm-l-2` to `arm-l-6`, and the
+  same on the right) that follow the side-view curve, down 1.5 into a dip
+  about 31 from the nose front and back up to the grip, meeting end to end.
+  The tab's vertical figures were read again on fitted body edges: the grip
+  top is 1.23 above the module top (was 1.07) and the strap top 0.47 (was
+  0.57), so the size is 19 x 8.56 and the risers end 7.33 below the module top,
+  where they were measured. `generic/qsfp-lc@2` and `generic/qsfp-dd-lc@2`
+  (2.2.0) compose the tab at `at: [-0.325, -1.23]`. The face-on drawing is
+  unchanged apart from that 0.16 shift. No device seats these parts, so no
+  lock moved (roc-ops/Portrayal#647, roc-ops/Portrayal#685).
+- `std/c20-inlet` (1.3.1) lays all three blades along the long side of the
+  recess, as IEC 60320 C19/C20 has them and the SCHURTER C20 front view it
+  cites draws them: line and neutral 13.0 apart, earth 8.0 off their line, in a
+  29.0 x 21.0 recess. It had drawn them across the long side. Ids, size and
+  connection point are unchanged; the 27 devices that seat it take a patch.
 - `generic/qsfp-lc@2` (2.1.0) draws its nose at the height the maintainer's
   photographs of a QSFP SR4 module show: 1.4 above and 1.4 below the 8.5 body,
   11.3 tall, so `head` is `at: [0, -1.4]`, `h: 11.3` in `components.json`, and
@@ -301,6 +351,20 @@ the *published build*, not about the hardware.
   name: `data-config` on the root and `config` in `<metadata>` are gone, since
   a shared drawing belongs to several. The default configuration's
   `<device>.<view>.svg` copies are unchanged (roc-ops/Portrayal#665).
+- **Also in `contract: 2`: `overlays.json` is gone;** `listings.json` replaces
+  it (roc-ops/Portrayal#674). The NOS naming an overlay carried under the
+  hardware (`devices/edgecore/as7726-32x/overlays/arcos.yaml`) now lives in the
+  NOS vendor's listing (`devices/arrcus/as7726-32x/listing.yaml`), and the
+  overlay's `identity:` block is retired - the listing's namespace is the
+  vendor. Lint L56 now checks a listing: it lives under a software vendor and
+  names only configurations, ports and components its hardware has.
+- **BREAKING for DCIM data already imported.** The Arrcus device types are
+  renamed from `Arrcus/ArcOS on <SKU>` to `Arrcus/<SKU>` - the hardware's SKU,
+  under the NOS vendor, as NetBox's and Nautobot's own libraries file a
+  disaggregated box - and they now carry the hardware's part number, which the
+  identity export dropped. The metal is the same metal and its part number
+  still orders it; a listing that publishes its own replaces it per
+  configuration. `dcim_export.py --nos` is removed: every listing exports.
 - **BREAKING for DCIM data already imported.** A module type names its ports per
   bay. Every interface, console, power, front and rear port name on a card
   starts with `{module}/`, which NetBox and Nautobot both fill with the position

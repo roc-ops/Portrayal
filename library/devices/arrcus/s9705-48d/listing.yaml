@@ -1,0 +1,26 @@
+format: 1
+kind: listing
+hardware: ufispace/s9705-48d
+version: 1.0.0
+portfolio: {line: 'Routing (DNX)', family: VDR fabric card}
+source: >-
+  Arrcus Hardware Compatibility List (External), June 2026, for ArcOS 8.5 - page 4,
+  under Routing (DNX), the row 'S9705-48D (VDR FC)'.
+gaps:
+  - what: arcos-port-names
+    reason: sources-disagree
+    note: >-
+      The ArcOS S8.5.1A CLI Reference names front-panel ports swp<port number> and the
+      management port ma1, and its Physical Interface section says the first port is swp1 -
+      which the AS7726-32X and AS7326-56X confirm from live units. Its DNX sections disagree:
+      'Mapping of front panel ports to core' lists swp0 to swp71 on a 72-port system, and
+      'Breakout modes' puts breakout on the odd ports swp1 to swp39 of a 40-port Jericho 2
+      box while the same mapping page shows breakout on swp8, swp14 and swp20. None of the
+      examples names its platform, so whether this box's first port is swp0 or swp1 is not
+      stated anywhere we hold. Until it is, this listing exports the faceplate ids.
+    wanted: >-
+      `show interface brief` (or `show interface swp* | select unit`) from a unit of this
+      model running ArcOS 8.5, to fix the origin of the swp numbering and name the management
+      port; with it, `interfaces` can map port-{n} to swp{n} or swp{n+1}.
+nos: arcos
+nos-versions: '>=8.5'

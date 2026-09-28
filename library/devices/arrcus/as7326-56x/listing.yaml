@@ -1,0 +1,65 @@
+format: 1
+kind: listing
+hardware: edgecore/as7326-56x
+version: 1.0.1
+portfolio: {line: 'Switching (XGS)'}
+source: >-
+  Arrcus Hardware Compatibility List (External), June 2026, for ArcOS 8.5 - page 1,
+  under Switching (XGS), the row 'DCS203 / AS7326-56X'. The names below come from
+  a live device: ArcOS S8.5.1A running on a lab unit of this model (netlab-leaf1). The pairing
+  is the one the AS7726-32X's `arcos-show-version.txt` states for its sibling - 'Software:
+  Arrcus ArcOS' over 'Firmware MU: EdgeCore MU 1.2.3' - and the names below were read from this
+  model's own running unit (see `dumps` and the note under it).
+nos: arcos
+nos-versions: '>=S8.5'
+dumps:
+  - devices/edgecore/as7326-56x/dumps/arcos-openconfig-components.json
+# Read from the live unit - ArcOS S8.5.1A on netlab-leaf1, the same unit as the
+# intake photos - via 'show components | display json' and 'show interface
+# brief'. The component tree is committed at dumps/arcos-openconfig-components.json
+# with chassis serial, MAC and the whole transceiver subtree redacted; the sfp
+# rules below therefore come from the interface listing rather than from that
+# file, which is why they are the only ones here with nothing to diff against.
+#
+# This naming replaces four attrs on the device manifest - `interface-naming`,
+# `entity-map`, `entity-transceivers` and `thermal-sensors` - which held the same
+# joins as English sentences ("chassis > lc0 (LINECARD) > psu0/psu1, fan1-fan6
+# chassis fans (plus fan0 inside PSU 2)"). Nothing could consume a sentence: a
+# viewer cannot light up the bay an ENTITY-MIB row describes from prose. The
+# mechanism to hold them already existed and the AS7726-32X already used it.
+terms:
+  bay: Slot
+interfaces:
+  # ArcOS presents swp1-swp56 only. The faceplate labels the two 10G management
+  # ports 57 and 58 and this model places them as port-57/port-58, but they are
+  # not ASIC switch ports and no swp57/58 exists - so they are deliberately
+  # absent here rather than mapped to a name the box would not answer to.
+  - {physical: 'port-{n}', name: 'swp{n}', range: '1-56'}
+  - {physical: mgmt-eth, name: ma1}
+entity-map:
+  - {source: openconfig, match: chassis, to: chassis}
+  - {source: openconfig, match: lc0, to: chassis, note: 'fixed-config linecard == the chassis board'}
+  # ArcOS names are zero-based for psu and fan, one-based for sfp; physical IDs
+  # follow the silkscreen (one-based). The tree shape - everything flat under
+  # lc0 - is joined, never drawn.
+  - {source: openconfig, match: 'sfp{n}', range: '1-56', to: 'port-{n}',
+     note: 'each carries SwPort/Status/Vendor/Model/Type/Module-Type/Media-Type/Module-Capability'}
+  - {source: openconfig, match: 'psu{n}', range: '0-1', to: 'psu-{n+1}', note: "names psu0/psu1; own labels say PSU-1/PSU-2"}
+  - {source: openconfig, match: 'fan{n}', range: '1-6', to: 'fan-{n}', note: "desc 'Chassis Fan - n'"}
+  - {source: openconfig, match: fan0, to: psu-2, note: "desc 'PSU 2 - Fan 1' - rolls up to PSU-2"}
+  - {source: openconfig, match: led0, to: led-diag}
+  - {source: openconfig, match: led1, to: led-loc}
+  - {source: openconfig, match: led2, to: led-fan}
+  - {source: openconfig, match: led3, to: led-psu1}
+  - {source: openconfig, match: led4, to: led-psu2, note: "vendor desc bug: led3 and led4 both say 'Chassis LED 4'"}
+  # Board sensors with no faceplate component. The AS7726-32X sends these to
+  # `region:internal`; this manifest declares no such region, so they land on the
+  # chassis and the note carries the vendor's own name for each.
+  - {source: openconfig, match: thermal0, to: chassis, note: 'CPU Core'}
+  - {source: openconfig, match: thermal1, to: chassis, note: 'LM75-1-48'}
+  - {source: openconfig, match: thermal2, to: chassis, note: 'LM75-2-49'}
+  - {source: openconfig, match: thermal3, to: chassis, note: 'LM75-3-4A'}
+  - {source: openconfig, match: thermal4, to: chassis, note: 'LM75-4-4B'}
+  - {source: openconfig, match: thermal5, to: psu-2, note: 'PSU-2 Thermal Sensor 1'}
+  # Unmapped nodes are legal and these are intentionally absent: eeprom0, cpu0,
+  # system0 and process0-process23 describe the running host, not the box.
