@@ -57,9 +57,9 @@ to start a device: [modelling-a-device.md](modelling-a-device.md) is the method.
   argument.
 - **A derived extent stated to two decimal places implies a precision the
   source cannot support.** Write the number the subtraction gives, then write
-  what the figure actually resolves to: "stated to the hundredth because that is
-  what the subtraction gives, not because the figure resolves to it; the whole
-  disagreement is six pixels at 2.982 px/mm."
+  what the figure actually resolves to: "stated to the hundredth because the
+  subtraction gives it, not the figure; the whole disagreement is six pixels at
+  2.982 px/mm."
 - **An inert claim is the hardest kind to catch, because nothing depends on
   it.** Six modular carriers stated as fact that the adapters seated in them
   are inside their own power figure. The vendor says no such thing. The claim

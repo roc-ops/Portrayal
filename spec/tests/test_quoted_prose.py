@@ -8,6 +8,7 @@ pairing finds what it should and nothing else - because a sweep that passes by
 finding nothing also passes when its pattern has stopped matching.
 """
 import pathlib
+import re
 
 import pytest
 import yaml
@@ -77,3 +78,65 @@ def test_the_key_path_names_where_the_quote_is():
             "gaps": [{"note": "fine"}]}
     [(key, n, _)] = list(lint.long_quotes(data))
     assert (key, n) == ("provenance.lamp.note", 30)
+
+
+# THE REST OF THE TREE (#661). L107 reads contracts and manifests, and its
+# pairing stops at a line break - so a wrapped Markdown quotation was invisible,
+# and one 46-word guide passage sat in docs/casa-modular-chassis.md for a month.
+# This sweep reads every other place prose is written, with line breaks joined,
+# and holds it to the same 25 words. No exemption list: the library's own
+# example sentences keep under the cap too, which costs a few words each.
+_DOCS = ("README.md", "CONTRIBUTING.md", "PRIOR-ART.md", "SECURITY.md",
+         "CODE_OF_CONDUCT.md", "CHANGELOG.md", "AGENTS.md")
+
+
+def _joined(text):
+    return re.sub(r"\s*\n\s*", " ", text)
+
+
+def _strings(o):
+    if isinstance(o, str):
+        yield o
+    elif isinstance(o, dict):
+        for v in o.values():
+            yield from _strings(v)
+    elif isinstance(o, list):
+        for v in o:
+            yield from _strings(v)
+
+
+def _prose_files():
+    md = [ROOT / p for p in _DOCS if (ROOT / p).exists()]
+    md += sorted(ROOT.glob("docs/**/*.md")) + sorted(ROOT.glob("spec/*.md"))
+    ym = []
+    for pattern in ("library/devices/**/layout.yaml", "library/labs/**/*.yaml",
+                    "library/devices/**/listings/*.yaml",
+                    "library/devices/**/overlays/*.yaml", "spec/schemas/*.yaml"):
+        ym += sorted(ROOT.glob(pattern))
+    return md, ym
+
+
+def _long_runs_in(path):
+    if path.suffix == ".md":
+        texts = [_joined(path.read_text(encoding="utf-8"))]
+    else:
+        texts = [_joined(s) for s in _strings(yaml.safe_load(path.read_text(encoding="utf-8")))]
+    return [(n, q) for t in texts for _, n, q in lint.long_quotes(t)]
+
+
+def test_no_doc_or_other_yaml_quotes_a_long_passage():
+    md, ym = _prose_files()
+    assert len(md) > 20 and len(ym) > 20, "the prose walk found almost nothing - it is broken"
+    hits = [(str(p.relative_to(ROOT)), n, q[:80]) for p in md + ym for n, q in _long_runs_in(p)]
+    assert not hits, (
+        f"{len(hits)} quoted run(s) over {lint.QUOTE_MAX_WORDS} words outside the manifests. "
+        "Paraphrase vendor text; trim the library's own example sentences.\n  " +
+        "\n  ".join(f"{p} ({n} words): {q}" for p, n, q in hits[:10]))
+
+
+def test_a_quotation_wrapped_across_lines_is_still_seen(tmp_path):
+    """The line-break blind spot, planted: 30 words split over three lines."""
+    words = " ".join(["word"] * 10)
+    planted = tmp_path / "planted.md"
+    planted.write_text(f'The guide says "{words}\n{words}\n{words}" and so on.\n')
+    assert [n for n, _ in _long_runs_in(planted)] == [30]
