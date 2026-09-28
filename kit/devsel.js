@@ -8,8 +8,10 @@
 // So the picker is a component, and the page that owns the state mounts it.
 //
 //   const pick = createDevicePicker({mount: el, devices: DEVICES, value: name,
-//                                    onchange: name => ...});
+//                                    listings: LISTINGS,       // optional
+//                                    onchange: (name, {listing}) => ...});
 //   pick.value = 'as7946-30xb';        // set without firing onchange
+//   pick.listing                        // 'arrcus/as7726-32x', or null
 //
 // Two stages: vendor, then device. Vendor first because it is the one axis
 // everybody knows before they start - you come looking for "the Edgecore box",
@@ -30,7 +32,40 @@
 // backfilled as a migration.
 const groupLabel = p => [p?.line, p?.family].filter(Boolean).join(' · ');
 export const deviceLabel = d =>
-  d.portfolio?.series ? `${d.portfolio.series} — ${d.model}` : d.model;
+  d._label ? d._label
+  : d.portfolio?.series ? `${d.portfolio.series} — ${d.model}` : d.model;
+
+// A NOS VENDOR SELLS SOMEBODY ELSE'S METAL. `listings.json` (#674) says Arrcus
+// lists the AS7726-32X and IP Infusion the S9510-28DC, and a buyer of either
+// looks for it under the vendor they bought it from - so each listing is an
+// entry of its own, under its own manufacturer and filed by its own portfolio
+// words, which need not be the ODM's. It draws nothing: `name` is the
+// hardware's, so choosing it loads the hardware's drawing, and `_listing` is
+// what remembers which vendor's entry was chosen.
+//
+// Every entry carries a `_key` - the value its <option> holds. A device's key
+// is its bare name, as before; a listing's is its `<ns>/<id>`, which no device
+// name can collide with because names carry no slash.
+export function pickerEntries(devices, listings = {}) {
+  const byHw = new Map(devices.map(d => [`${d.ns}/${d.name}`, d]));
+  const out = devices.map(d => ({...d, _key: d.name, _listing: null}));
+  for (const [key, ls] of Object.entries(listings || {})) {
+    const hw = byHw.get(ls.hardware);
+    if (!hw) continue;                       // a listing of a box this build lacks
+    const own = ls.model && ls.model !== hw.model ? ls.model : null;
+    const names = (ls.aliases || []).map(a => a?.name).filter(Boolean);
+    out.push({
+      ...hw, _key: key, _listing: key,
+      manufacturer: ls.manufacturer || ls.ns || key.split('/')[0],
+      model: own || hw.model,
+      portfolio: ls.portfolio || {},
+      _label: `${own ? `${own} — ` : ''}${hw.manufacturer} ${hw.model}`,
+      search: [hw.search, hw.manufacturer, hw.model, ls.ns, ls.nos, ls.model, ...names,
+               ...Object.values(ls.portfolio || {})].filter(Boolean).join(' '),
+    });
+  }
+  return out;
+}
 
 // Everything a person might type. Past about fifty devices a three-deep grouped
 // select is worse than a flat one - more depth to navigate, no less to read - so
@@ -72,14 +107,14 @@ const CSS = `
 
 let cssDone = false;
 
-export function createDevicePicker({mount, devices, value, onchange}) {
+export function createDevicePicker({mount, devices, value, onchange, listings, listing}) {
   if (!cssDone) {
     document.head.appendChild(Object.assign(document.createElement('style'),
                                             {textContent: CSS}));
     cssDone = true;
   }
 
-  const all = [...devices].sort((a, b) => cmp(a.manufacturer, b.manufacturer)
+  const all = pickerEntries(devices, listings).sort((a, b) => cmp(a.manufacturer, b.manufacturer)
                                        || cmp(groupLabel(a.portfolio), groupLabel(b.portfolio))
                                        || cmp(deviceLabel(a), deviceLabel(b)));
   for (const d of all) d._hay = haystack(d);
@@ -97,13 +132,15 @@ export function createDevicePicker({mount, devices, value, onchange}) {
   const dev = root.querySelector('.dev');
   mount.appendChild(root);
 
-  let current = value || all[0]?.name;
-  const byName = n => all.find(d => d.name === n);
+  // `current` is an entry KEY: a device name, or a listing's `<ns>/<id>`.
+  const byKey = k => all.find(d => d._key === k);
+  let current = (listing && byKey(listing)?.name === (value || byKey(listing)?.name)
+                 ? listing : null) || value || all[0]?._key;
   // The chosen vendor is state in its own right, not a projection of the chosen
   // device: someone who picks "Smartoptics" wants to see the Smartoptics list
   // before committing to one of them, and recomputing it from the device would
   // snap the menu back under them.
-  let vendor = byName(current)?.manufacturer;
+  let vendor = byKey(current)?.manufacturer;
 
   const matches = () => {
     const toks = q.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
@@ -114,7 +151,7 @@ export function createDevicePicker({mount, devices, value, onchange}) {
   function paint() {
     const hits = matches();
     const hit = new Set(hits);
-    const cur = byName(current);
+    const cur = byKey(current);
     // The selected device stays reachable whatever the filter says, because a
     // menu that disagrees with the drawing on screen is worse than one extra
     // row - but it is labelled as the selection rather than left looking like a
@@ -142,7 +179,7 @@ export function createDevicePicker({mount, devices, value, onchange}) {
       groups.get(g).push(d);
     }
     const opt = d =>
-      `<option value="${d.name}">${deviceLabel(d).replace(/</g, '&lt;')}</option>`;
+      `<option value="${d._key}">${deviceLabel(d).replace(/</g, '&lt;')}</option>`;
     // ungrouped first, so the groups read as a block rather than being split by
     // whichever devices happen to have no portfolio words yet
     let html = (groups.get('') || []).map(opt).join('');
@@ -159,8 +196,8 @@ export function createDevicePicker({mount, devices, value, onchange}) {
                    + ` \u2014 pick one</option>` + html;
     dev.innerHTML = html;
     dev.value = away ? ''
-              : ([...list, ...(kept ? [cur] : [])].some(d => d.name === current)
-                 ? current : (list[0]?.name || ''));
+              : ([...list, ...(kept ? [cur] : [])].some(d => d._key === current)
+                 ? current : (list[0]?._key || ''));
     dev.disabled = !list.length && !kept;
 
     root.querySelector('.none')?.remove();
@@ -168,12 +205,17 @@ export function createDevicePicker({mount, devices, value, onchange}) {
       `<span class="none">no device matches \u201c${q.value.replace(/</g, '&lt;')}\u201d</span>`);
   }
 
-  const pick = name => {
-    if (!name || name === current) return;
-    current = name;
-    vendor = byName(name)?.manufacturer || vendor;
+  const pick = key => {
+    if (!key || key === current) return;
+    current = key;
+    const e = byKey(key);
+    vendor = e?.manufacturer || vendor;
     paint();
-    onchange?.(name);
+    // THE DEVICE NAME FIRST, as before, so a caller written for devices alone
+    // keeps working; which vendor's entry it was comes second. Choosing another
+    // vendor's entry for the box already on the stage is still a change - the
+    // caller may name its ports differently - so it is reported too.
+    if (e) onchange?.(e.name, {listing: e._listing});
   };
 
   q.oninput = paint;
@@ -183,7 +225,7 @@ export function createDevicePicker({mount, devices, value, onchange}) {
     if (e.key !== 'Enter') return;
     e.preventDefault();
     const first = matches().filter(d => d.manufacturer === vendor)[0] || matches()[0];
-    if (first) pick(first.name);
+    if (first) pick(first._key);
   };
   // Asking for a vendor by hand is a request to look at that vendor, so it lands
   // on its first device rather than leaving the two selects describing different
@@ -194,7 +236,7 @@ export function createDevicePicker({mount, devices, value, onchange}) {
     vendor = ven.value;
     const first = firstIn(vendor);
     paint();
-    if (first) pick(first.name);
+    if (first) pick(first._key);
   };
   dev.onchange = () => pick(dev.value);
 
@@ -202,13 +244,20 @@ export function createDevicePicker({mount, devices, value, onchange}) {
 
   return {
     el: root,
-    get value() { return current; },
+    // THE DEVICE NAME, whichever entry is chosen - what a caller loads.
+    get value() { return byKey(current)?.name ?? current; },
     set value(name) {
-      if (!name || !byName(name)) return;
+      // Setting the device a listing entry already shows keeps that entry: the
+      // stage reloading the same box must not throw the reader back under its
+      // ODM. A listing key may be set directly too.
+      if (!name || !byKey(name)) return;
+      if (byKey(current)?.name === name && byKey(current)?._listing && !name.includes('/')) return;
       current = name;
-      vendor = byName(name).manufacturer;
+      vendor = byKey(name).manufacturer;
       paint();
     },
+    // THE LISTING KEY when a NOS vendor's entry is chosen, else null.
+    get listing() { return byKey(current)?._listing ?? null; },
     focusFilter: () => q.focus(),
   };
 }

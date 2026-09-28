@@ -327,6 +327,12 @@ function about(box) {
 
   let h = `<h2>About</h2>`;
   h += row('manufacturer', d.manufacturer || '');
+  // WHOSE ENTRY THIS IS, when the reader came to the box through a NOS vendor
+  // (#709). The drawing is the metal's, so the manufacturer above stays true;
+  // this says who sells it as what.
+  const ls = shell.listing?.();
+  if (ls) h += row('listed by', `${ls.manufacturer || ls.ns}${ls.model ? ` as ${ls.model}` : ''}`
+                                + (ls.nos ? ` (NOS: ${ls.nos})` : ''));
   h += row('model', meta.model || d.model || '');
   const pf = d.portfolio || {};
   if (pf.series) h += row('series', pf.series);
@@ -534,7 +540,7 @@ const swapKey = () => Object.entries(swapOverrides())
 // swapping does not fill the back button) on every swap, configuration change
 // and view change; shell.js reads them back on load in that order.
 //
-//   ?device=<name>&config=<c>&view=<v>&swap=<k>~<ref>,<k>~
+//   ?device=<name>&listing=<ns>/<id>&config=<c>&view=<v>&swap=<k>~<ref>,<k>~
 //
 // The swap string carries its own escaping (encodeSwaps in swap.js), so it is
 // written raw, and parameters this page does not own - `tex` - are kept.
@@ -550,7 +556,8 @@ function writeLocation() {
   const swaps = encodeSwaps(swapOverrides());
   const e = encodeURIComponent;
   const search = searchWith(location.search, {
-    device: e(state.device), config: e(state.cfg || ''), view: e(state.view || ''), swap: swaps,
+    device: e(state.device), listing: e(state.listing || ''),
+    config: e(state.cfg || ''), view: e(state.view || ''), swap: swaps,
   });
   if (search !== location.search) {
     try { history.replaceState(history.state, '', `${location.pathname}${search}${location.hash}`); }
