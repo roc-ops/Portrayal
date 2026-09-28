@@ -12,7 +12,10 @@
       python3 tools/serve.py 8931      # from the repository root
       open http://localhost:8931/kit/index.html?device=<name>
 
-  Everything it draws comes from ../library/dist. The shell and the viewer are
+  Everything it draws comes from ../library/dist. `?dist=packages` reads the
+  npm packages instead, as `npm_packages.py` (or `./publish.sh`) left them in
+  ../library/packages; `?dist=cdn` reads them from jsDelivr, at `&index=` a
+  version of @portrayal/index (latest if not given). The shell and the viewer are
   the kit modules the README lists; what this page adds is the wiring BETWEEN
   them, because three of the things Gate 5 asks you to check live in that gap:
 
@@ -122,8 +125,16 @@
 import { createShell, esc } from './shell.js';
 import { statesOfEl, messagesOfEl, charactersOfEl } from './states.js';
 import { encodeSwaps, searchWith } from './swap.js';
+import { flatDist, packageDist } from './dist.js';
 
-const DIST = '../library/dist';
+// WHERE THE FILES COME FROM. The build directory by default; the npm packages
+// (#528) on `?dist=packages` (a local npm_packages.py run) or `?dist=cdn`.
+const page = new URLSearchParams(location.search);
+const DIST = page.get('dist') === 'packages'
+  ? await packageDist({at: name => `../library/packages/${name.split('/')[1]}/`})
+  : page.get('dist') === 'cdn'
+    ? await packageDist({index: page.get('index') || 'latest'})
+    : flatDist('../library/dist');
 const shell = createShell({ title: 'Portrayal explorer', dist: DIST });
 const state = shell.state;
 
@@ -327,6 +338,12 @@ function about(box) {
 
   let h = `<h2>About</h2>`;
   h += row('manufacturer', d.manufacturer || '');
+  // WHOSE ENTRY THIS IS, when the reader came to the box through a NOS vendor
+  // (#709). The drawing is the metal's, so the manufacturer above stays true;
+  // this says who sells it as what.
+  const ls = shell.listing?.();
+  if (ls) h += row('listed by', `${ls.manufacturer || ls.ns}${ls.model ? ` as ${ls.model}` : ''}`
+                                + (ls.nos ? ` (NOS: ${ls.nos})` : ''));
   h += row('model', meta.model || d.model || '');
   const pf = d.portfolio || {};
   if (pf.series) h += row('series', pf.series);
@@ -534,7 +551,7 @@ const swapKey = () => Object.entries(swapOverrides())
 // swapping does not fill the back button) on every swap, configuration change
 // and view change; shell.js reads them back on load in that order.
 //
-//   ?device=<name>&config=<c>&view=<v>&swap=<k>~<ref>,<k>~
+//   ?device=<name>&listing=<ns>/<id>&config=<c>&view=<v>&swap=<k>~<ref>,<k>~
 //
 // The swap string carries its own escaping (encodeSwaps in swap.js), so it is
 // written raw, and parameters this page does not own - `tex` - are kept.
@@ -550,7 +567,8 @@ function writeLocation() {
   const swaps = encodeSwaps(swapOverrides());
   const e = encodeURIComponent;
   const search = searchWith(location.search, {
-    device: e(state.device), config: e(state.cfg || ''), view: e(state.view || ''), swap: swaps,
+    device: e(state.device), listing: e(state.listing || ''),
+    config: e(state.cfg || ''), view: e(state.view || ''), swap: swaps,
   });
   if (search !== location.search) {
     try { history.replaceState(history.state, '', `${location.pathname}${search}${location.hash}`); }
@@ -580,7 +598,7 @@ async function ensureViewer() {
   if (viewer) return viewer;
   if (!loading) loading = (async () => {
     const { createViewer } = await import('./viewer3d.js');
-    const v = createViewer(host3d, { dist: DIST + '/', background: shell.stage() });
+    const v = createViewer(host3d, { dist: DIST, background: shell.stage() });
     shell.on('stage', c => v.setBackground(c));
     v.on('select', p => {
       if (!p) return;

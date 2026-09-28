@@ -3151,7 +3151,8 @@ export async function buildFaceRelief(F, ctx) {
         const backSrc = meta.body.sides && meta.body.sides.rear;
         if (backSrc && ctx.dist && !f.lift && !ctx.back) {
           const key = `back:${f.path}`;
-          const shipped = ctx.dist + backSrc;
+          // ctx.dist is a path -> URL function (dist.js); a bare base still works
+          const shipped = typeof ctx.dist === 'function' ? ctx.dist(backSrc) : ctx.dist + backSrc;
           const src = ctx.backSource ? await ctx.backSource(f.path, f.ref, shipped) : shipped;
           const back = {view: key, fw: () => fp.size[0], fh: () => fp.size[1],
                         deep: () => d, pos: () => [0, 0, 0], rot: [0, Math.PI, 0]};

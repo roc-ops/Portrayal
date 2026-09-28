@@ -22,7 +22,7 @@ import { nestedBays, applyOverrides, applyOccupantOverrides, applyRearOverrides,
          builtOccupants, builtBays, faceCages, cageAt, pruneCarrier,
          freshBaysUnder, seatFace, faceQueue, swapOverrides, faceEntries, ownerPath,
          slotOptions, slotResolver } from './swap.js';
-import { jdist, faceFile } from './dist.js';
+import { jdist, faceFile, distResolver } from './dist.js';
 import { paintFields, unpaintFields } from './fields.js';
 import { fibreOf, farPath, fibreLabel, connectorLabel, moduleOf } from './optical.js';
 
@@ -163,14 +163,15 @@ const SHELL_HTML = `
 
 // The two indexes are the same for every shell on the page, and there is only
 // ever one, but caching them keeps a re-mount cheap.
-let DEVICES = [], COMPONENTS = [];
+let DEVICES = [], COMPONENTS = [], LISTINGS = {};
 
 export function createShell(opts = {}) {
   let picker = null;
-  const DIST = opts.dist || '../dist';
+  // a build directory's base, or a path -> URL function (dist.js)
+  const distAt = distResolver(opts.dist, '../dist');
   const body = opts.mount || document.body;
   // shared with the 3D viewer mounted in the same page - see dist.js
-  const j = p => jdist(`${DIST}/${p}`);
+  const j = p => jdist(distAt(p));
 
   document.head.appendChild(Object.assign(document.createElement('style'),
                                           {textContent: SHELL_CSS}));
@@ -192,7 +193,10 @@ export function createShell(opts = {}) {
   // `state.svg` has not moved yet either. `svg === state.svg` alone cannot see
   // that window; `cfgGen` can, because it changes at the exact moment the
   // objects a stale write would land in are swapped out from under it.
-  const state = {device: null, cfg: null, view: null, module: null, sel: null,
+  // `listing` is the NOS vendor's entry the reader chose, `<ns>/<id>` from
+  // listings.json, or null for the hardware's own (#709). It never changes
+  // what is drawn - a listing draws nothing - only whose box this is.
+  const state = {device: null, listing: null, cfg: null, view: null, module: null, sel: null,
                  svg: null, meta: null, cfgBays: {}, cfgOccupants: {}, cfgFields: {},
                  touched: new Set(), refused: {}, failed: {}, cfgGen: 0};
 
@@ -1238,7 +1242,7 @@ export function createShell(opts = {}) {
     try { c = compByRef(ref); } catch (e) { return null; }   // not ns/name@major
     if (!c) return null;
     const skin = c.skins?.includes('default') ? 'default' : c.skins?.[0];
-    const r = await fetch(`${DIST}/components/${c.ns}--${c.name}--${c.major}--${skin}.svg`);
+    const r = await fetch(distAt(`components/${c.ns}--${c.name}--${c.major}--${skin}.svg`));
     return r.ok ? {comp: c, text: await r.text()} : null;
   }
 
@@ -1595,7 +1599,7 @@ export function createShell(opts = {}) {
       live: () => state.facesFor === key && !state.module,
       has: view => !!state.faces[view],
       fetch: async view => {
-        const r = await fetch(`${DIST}/${faceFile(state.meta, state.cfg, view)}`);
+        const r = await fetch(distAt(faceFile(state.meta, state.cfg, view)));
         if (!r.ok) return null;
         const doc = new DOMParser().parseFromString(await r.text(), 'image/svg+xml');
         return document.importNode(doc.documentElement, true);
@@ -1667,9 +1671,9 @@ export function createShell(opts = {}) {
     if (state.module) {
       const c = compByRef(state.module);
       const skin = c.skins.includes('default') ? 'default' : c.skins[0];
-      file = `${DIST}/components/${c.ns}--${c.name}--${c.major}--${skin}.svg`;
+      file = distAt(`components/${c.ns}--${c.name}--${c.major}--${skin}.svg`);
     } else {
-      file = `${DIST}/${faceFile(state.meta, state.cfg, state.view)}`;
+      file = distAt(faceFile(state.meta, state.cfg, state.view));
     }
     const txt = await (await fetch(file)).text();
     const doc = new DOMParser().parseFromString(txt, 'image/svg+xml');
@@ -1733,6 +1737,14 @@ export function createShell(opts = {}) {
   // URL - and is honoured only where this device has it; anything else falls
   // back to the device's default configuration and first view.
   async function loadDevice(name, want = {}) {
+    // WHOSE BOX THIS IS goes with the box. A caller that names a listing sets
+    // it; any other load keeps the current one only if it still lists this
+    // device - the tab shell switching boxes must not leave "Arrcus" behind.
+    if ('listing' in want) state.listing = want.listing || null;
+    else if (state.listing) {
+      const d = DEVICES.find(x => x.name === name);
+      if (!d || LISTINGS[state.listing]?.hardware !== `${d.ns}/${d.name}`) state.listing = null;
+    }
     state.device = name;
     state.module = null;
     state.meta = await j(`${name}.configs.json`);
@@ -1778,6 +1790,9 @@ export function createShell(opts = {}) {
   const ready = (async () => {
     DEVICES = DEVICES.length ? DEVICES : (await j('devices.json')).devices;
     COMPONENTS = COMPONENTS.length ? COMPONENTS : (await j('components.json')).components;
+    // OPTIONAL, for a build from before listings (#677): without the file the
+    // picker offers the hardware alone, which is what it always did.
+    try { LISTINGS = (await j('listings.json')).listings || {}; } catch { LISTINGS = {}; }
     // the tab shell picks the device and hands it over in the query string, so
     // switching tabs keeps you on the same box. The explorer writes its own
     // configuration, view and swaps there too (index.html), so a reload lands
@@ -1794,9 +1809,27 @@ export function createShell(opts = {}) {
     // straight from the filesystem, or one of the harness pages - there is no
     // outer shell, so the page has to carry the picker itself. Same component
     // either way; only whether it is mounted differs.
+    // A LISTING SURVIVES A RELOAD when it lists the device the URL names; one
+    // that lists anything else is a stale link and is dropped, not honoured.
+    const wantListing = opts.listing || q.get('listing');
+    state.listing = start.name === want && LISTINGS[wantListing]?.hardware === `${start.ns}/${start.name}`
+      ? wantListing : null;
     if (parent === window) {
       picker = createDevicePicker({mount: el.dev, devices: DEVICES, value: start.name,
-                                   onchange: name => loadDevice(name)});
+                                   listings: LISTINGS, listing: state.listing,
+                                   onchange: (name, {listing} = {}) => {
+                                     state.listing = listing || null;
+                                     // ANOTHER VENDOR'S ENTRY FOR THE BOX ON SCREEN
+                                     // changes whose box it is, not what is drawn:
+                                     // reloading would reset the configuration, the
+                                     // view and every swap (#711 review)
+                                     if (name === state.device) {
+                                       if (state.sel === 'chassis') select('chassis', false);
+                                       emit('change');
+                                       return;
+                                     }
+                                     loadDevice(name, {listing: state.listing});
+                                   }});
     } else {
       el.dev.hidden = true;
     }
@@ -1862,6 +1895,9 @@ export function createShell(opts = {}) {
     over, setPulled, pulledPaths,
     compByRef, devices: () => DEVICES, components: () => COMPONENTS,
     device: () => DEVICES.find(d => d.name === state.device),
+    // the chosen NOS vendor's listing, whole, or null (#709)
+    listing: () => (state.listing && LISTINGS[state.listing]) || null,
+    listings: () => LISTINGS,
     hl: () => hlColor,
     stage: () => stageColor,
   };
