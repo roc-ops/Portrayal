@@ -52,6 +52,32 @@ tree, which made "export a NetBox document" a task that needed the development
 environment rather than the artifacts. `spec/tests/test_artifact_sufficiency.py`
 is what keeps them published and whole.
 
+**On npm.** `spec/tools/portrayal/npm_packages.py` splits a build into the
+packages it ships as, under `library/packages/`. There is one package per
+device, because the CDN serves at most 50 MB per package and a vendor or a
+family has no upper bound:
+
+| package | holds |
+|---|---|
+| `@portrayal/<vendor>-<device>` | `<device>.configs.json`, `<device>.source.json` and every file `configs[].files` names. The default configuration's `<device>.<view>.svg` copies are left out |
+| `@portrayal/components` | every file under `components/` |
+| `@portrayal/index` | the library-wide JSON above, and `packages.json`: which package and version holds each device, and a vendor → family → device tree |
+
+A package has its own version. The device's version is recorded in its
+`package.json` under `portrayal`, but it cannot be the package's version:
+rendered output is not in the device lock, so a re-render changes a device's
+files without changing its version, and npm refuses new bytes under an old
+version. With `--from-registry`, a run compares a digest of every package
+with what npm holds now. An unchanged package is skipped. A changed one is bumped
+by the largest thing that moved: a dist `contract` change is breaking, a
+device's own version bump carries its level, and anything else is a fix.
+Below 1.0 a breaking change is a minor bump and everything else a patch. A
+package's first version is its device's; the components and index start at
+0.1.0. `--publish` (which requires `--from-registry`) publishes what changed,
+the index last, so it never names a version npm does not have yet. A plain
+run, as `publish.sh` makes, compares against nothing: it lays the packages out
+and fails on one over the size limit, and publishes nothing.
+
 **Ports in the drawing.** Every port is a `<g data-class="port">`, and the
 facts about it (`data-media`, `data-speed`, `data-group`, `data-group-role`)
 sit on that element. A composed port, such as `common/rj45-eth@1` around a

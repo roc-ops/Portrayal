@@ -18,11 +18,9 @@ repository publishes.
 
 ## Reporting
 
-While this repository is private, open an issue: only its collaborators can
-read it, so the report is private by construction, and the maintainer is
-notified. Once the repository is public, use GitHub's private vulnerability
-reporting ("Report a vulnerability" under the Security tab) so the report is
-not public until a fix is; if that form is unavailable to you, email
+Use GitHub's private vulnerability reporting ("Report a vulnerability" under
+the Security tab), so the report stays private until a fix is public. **Do not
+open an issue:** issues are public. If that form is unavailable to you, email
 security@portrayal.dev instead.
 
 This file covers security reports only. Conduct reports go to the address in
