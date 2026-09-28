@@ -31,6 +31,16 @@ names the ref that replaces it.
   family → device tree). Each package is versioned from what npm last
   published, and only changed packages are published. Nothing in `dist/`
   changes; see `library/README.md` (roc-ops/Portrayal#528).
+- **OcNOS listings for the IP Infusion HCL** (roc-ops/Portrayal#674). Every box
+  on the OcNOS 7.0.1 MR Hardware Compatibility List (July 2026) that the
+  library models - 42 of 44 - is listed under `ipinfusion/`, with the edition
+  that supports it (OcNOS SP or OcNOS DC) as its portfolio line. 14 UfiSpace
+  boxes carry OcNOS port names: speed-class prefix (`ge`, `xe`, `ce`, `cd`) and
+  one 0-based count across the panel, as IP Infusion's own S9510-30XC
+  configuration shows and as the UfiSpace silkscreen already numbers them, with
+  `eth0` for management. The rest carry an `ocnos-port-names` gap: Edgecore
+  boxes do not all count the same way (the AS7316-26XB restarts per speed
+  class), and no 800G prefix is documented.
 
 ## 0.1.0 (unreleased) - the first public release
 
