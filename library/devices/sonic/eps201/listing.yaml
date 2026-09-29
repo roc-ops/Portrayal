@@ -1,0 +1,18 @@
+format: 1
+kind: listing
+hardware: edgecore/eps201
+version: 1.0.0
+description: >-
+  SONiC's hardware SKU for this box is Accton-AS4630-54TE, on platform x86_64-accton_as4630_54te-r0.
+source: >-
+  sonic-net/sonic-buildimage at d5c2e3b32ffa builds SONiC for this box: device/accton/x86_64-accton_as4630_54te-r0.
+  It is not on SONiC's Supported Devices and Platforms page, which predates it; the build
+  tree is taken as SONiC's list. Port names from the platform's own
+  table, device/accton/x86_64-accton_as4630_54te-r0/Accton-AS4630-54TE/port_config.ini: each SONiC name with the front-panel port its alias names.
+  eth0 is SONiC's management port (the SONiC command reference, Management VRF).
+interfaces:
+  - {physical: 'port-{n}', name: 'Ethernet{n-1}', range: '1-53'}
+  - {physical: 'port-54', name: 'Ethernet56'}
+  - {physical: mgmt, name: eth0}
+nos: sonic
+nos-versions: master

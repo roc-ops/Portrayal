@@ -25,6 +25,11 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- **Four more SONiC listings** (roc-ops/Portrayal#674): the Celestica DS1000,
+  DS2000 and DS3000 and the Edgecore AS4630-54TE (EPS201). SONiC builds for all
+  four in sonic-buildimage but its Supported Devices page predates them; the
+  build tree is taken as SONiC's list. Port names come from each platform's
+  table at the same pinned commit, joined by alias (`Eth33/1` is port 33).
 - `npm_packages.py`: the build split into npm packages, one per device
   (`@portrayal/<vendor>-<device>`), one for the component skins and one index
   carrying `packages.json` (device → package and version, and a vendor →
