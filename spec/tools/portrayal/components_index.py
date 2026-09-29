@@ -332,7 +332,13 @@ def main():
                                "size": dict(zip(("w", "h"), b.get("size") or []))
                                if isinstance(b.get("size"), list) else b.get("size"),
                                "accepts": b.get("accepts") or [],
-                               **({"default": b["default"]} if "default" in b else {})}
+                               **({"default": b["default"]} if "default" in b else {}),
+                               # A TURNED SLOT - riser 3a's two carry `rotate: 180`,
+                               # the card upside down in them - is placed turned by the
+                               # renderer; without it here a consumer placing a card by
+                               # this index lands its ports off the face's by up to
+                               # 90 mm (Adjacency #487).
+                               **({"rotate": b["rotate"]} if b.get("rotate") is not None else {})}
                          for bid, b in sorted((data.get("bays") or {}).items())
                          if isinstance(b, dict)},
                 # REF AND ID, not the ref alone. A consumer that has to say

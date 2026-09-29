@@ -85,3 +85,23 @@ def test_components_json_publishes_what_a_nested_bay_accepts():
         f"published unnormalised: {ppm['size']}")
     assert "smartoptics/ppm-ad1-1510@2" in ppm["accepts"]
     assert ppm["default"] == "smartoptics/ppm-dummy@1"
+
+
+def test_components_json_publishes_a_turned_slot():
+    """A slot its carrier turns is published turned.
+
+    Riser 3a's two slots carry `rotate: 180` in its contract - the card sits
+    upside down in them - and the renderer places them turned. The index left
+    the rotation out, so a consumer placing a card by the index landed an
+    N3100-4C's ports in the R740xd's riser 3 up to 90 mm from the face's
+    (Adjacency #487). A slot that is not turned says nothing, as before.
+    """
+    f = DIST / "components.json"
+    if not f.exists():
+        pytest.skip("components.json not built")
+    comps = {f"{c['ns']}/{c['name']}": c for c in json.loads(f.read_text())["components"]}
+    riser3 = comps.get("dell/riser-3a-14g")
+    if riser3 is None:
+        pytest.skip("dell/riser-3a-14g not built")
+    assert {s: riser3["bays"][s].get("rotate") for s in ("slot-7", "slot-8")} == {"slot-7": 180, "slot-8": 180}
+    assert "rotate" not in comps["dell/riser-2a-14g"]["bays"]["slot-4"], "an unturned slot says nothing"
