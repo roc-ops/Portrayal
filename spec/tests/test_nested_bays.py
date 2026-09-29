@@ -93,8 +93,8 @@ def test_components_json_publishes_a_turned_slot():
     Riser 3a's two slots carry `rotate: 180` in its contract - the card sits
     upside down in them - and the renderer places them turned. The index left
     the rotation out, so a consumer placing a card by the index landed an
-    N3100-4C's ports in the R740xd's riser 3 up to 90 mm from the face's
-    (Adjacency #487). A slot that is not turned says nothing, as before.
+    N3100-4C's ports in the R740xd's riser 3 up to 90 mm from the face's.
+    A slot that is not turned says nothing, as before.
     """
     f = DIST / "components.json"
     if not f.exists():

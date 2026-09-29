@@ -337,7 +337,7 @@ def main():
                                # the card upside down in them - is placed turned by the
                                # renderer; without it here a consumer placing a card by
                                # this index lands its ports off the face's by up to
-                               # 90 mm (Adjacency #487).
+                               # 90 mm.
                                **({"rotate": b["rotate"]} if b.get("rotate") is not None else {})}
                          for bid, b in sorted((data.get("bays") or {}).items())
                          if isinstance(b, dict)},
