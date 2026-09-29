@@ -928,7 +928,13 @@ def _index_expr(expr, n):
     is refused by name.
     """
     import ast
-    tree = ast.parse(expr.strip(), mode="eval")
+    try:
+        tree = ast.parse(expr.strip(), mode="eval")
+    except SyntaxError:
+        # `{n;1}` is not arithmetic either, and deserves the same refusal by
+        # name rather than a parser traceback (the kit's port says the same)
+        raise SystemExit(f"listing interface name {{{expr}}}: only arithmetic over n "
+                         f"is allowed in a name pattern")
     ok = (ast.Expression, ast.BinOp, ast.UnaryOp, ast.Constant, ast.Name, ast.Load,
           ast.Add, ast.Sub, ast.Mult, ast.Div, ast.FloorDiv, ast.Mod, ast.USub, ast.UAdd)
     for node in ast.walk(tree):

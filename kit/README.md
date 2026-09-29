@@ -64,6 +64,7 @@ jsDelivr with `?dist=cdn` (and `&index=<version>`).
 | `swap.js` | swapping a component into a bay |
 | `fields.js` | writing a field on a part at runtime - its text and its colour, the build's rule, for 2D and 3D alike |
 | `devsel.js` | device selection and filtering - hardware by its maker, and each NOS vendor's listings under that vendor (`listings.json`, #709) |
+| `nosnames.js` | what the chosen listing's NOS calls each port (`swp7`, `Ethernet24`, `ge100-0/0/7`), expanded by the same grammar as the DCIM export (#712) |
 | `dist.js` | artifact fetching, and where each file is: a build directory or the npm packages |
 
 Plain ES modules. No bundler, no build step.

@@ -16,6 +16,7 @@
 // it, and the comment says which.
 
 import { createDevicePicker } from './devsel.js';
+import { nosNameFor } from './nosnames.js';
 import { nestedBays, applyOverrides, applyOccupantOverrides, applyRearOverrides, acceptSwaps, decodeSwaps,
          occupantsOf,
          rawParam, liesOver, seatClaims, occupantRef, refusalReason,
@@ -1096,6 +1097,19 @@ export function createShell(opts = {}) {
     const bay = bayFor(path);
 
     let html = `<h2>${cls || 'node'}</h2><div class="row"><span>path</span><code>${path}</code></div>`;
+    // WHAT THE CHOSEN NOS CALLS IT (#712). A listing names the device's own
+    // ports, so only a port at the top of the drawing is looked up - a port on
+    // a seated module has a path of its own and no listing rule reaches it.
+    // Where the listing does not name the port, say so and why, never guess.
+    const nos = cls === 'port' && !path.includes('/')
+      ? nosNameFor(state.listing && LISTINGS[state.listing], path) : null;
+    if (nos?.name) {
+      html += `<div class="row"><span>${esc(nos.vendor)} name</span><code>${esc(nos.name)}</code></div>`;
+      if (nos.note) html += `<div class="row"><span>breakout</span>${esc(nos.note.replace(/^Breakout: /, ''))}</div>`;
+    } else if (nos) {
+      html += `<div class="row" style="color:var(--dim, #8d939a)">${esc(nos.vendor)} name not stated`
+            + (nos.gap ? ` &mdash; see the listing's <code>${esc(nos.gap)}</code> gap` : '') + `</div>`;
+    }
     for (const to of state.far || [])
       html += `<div class="row"><span>fibre to</span><a href="#" data-go="${esc(to)}"><code>${esc(to)}</code></a></div>`;
     if (ref) html += `<div class="row"><span>component</span><code>${ref.split(':')[0]}</code></div>`;
