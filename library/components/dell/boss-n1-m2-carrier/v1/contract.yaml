@@ -1,0 +1,98 @@
+format: 1
+kind: module
+name: boss-n1-m2-carrier
+version: 1.0.0
+class: drive
+behaviour: fills
+profile: server
+description: >-
+  Hot-swap M.2 NVMe card carrier for Dell's BOSS-N1 boot module - an orange
+  release tab, a status lamp and an activity lamp each beside its icon, and a
+  grip. Drawn lying flat with the tab at the left; a 1U module stands it upright.
+unplaced: seated by dell/boss-n1-module-1u@1, which the R660 device (in progress on this branch) will seat; remove this line when that lands
+attrs:
+  media: m2-nvme
+provenance:
+  sources: >-
+    Four. (1) Dell's R660 service model, r660.glb: two `XE9680_BOSS-N1 card
+    carrier_149` bodies, each 10.0 x 26.0 on the face, standing upright - the
+    size. (2) The VisioCafe master `17G BOSS-N1`, which draws the same carrier
+    lying flat: the tab, the label plate, the icons, the lamps and the grip,
+    calibrated on the CAD's 26.0. Facts read, art not traced. (3) The R660 ISM
+    figure 25, the BOSS-N1 service label, which prints carriers 0 and 1 with
+    their two icons and lamps - the orientation and which lamp is which. (4)
+    Dell's BOSS-N1 User's Guide, "Identify M.2 drives by using LEDs for BOSS-N1
+    Monolithic controllers" (dell.com/support/manuals/en-us/boss-s-1/boss-n1_ug,
+    guid-f4ac3d25-7c03-4a08-8cf6-2ff6681874b1), table 1 - the lamp states.
+  size: >-
+    measured - r660.glb, 10.0 x 26.0 upright, so 26.0 x 10.0 as drawn here. The
+    master's carrier is 534 x 203 px, aspect 2.63 against the CAD's 2.60 (1.2%),
+    so it is orthographic enough to take positions from at 26.0/534 = 0.04869 mm
+    per px, with y stretched by 1.012 to the CAD's 10.0. Depth 108.9 is the CAD
+    carrier body (cad z 683.3..792.2).
+  the-master-is-17g-and-the-carrier-is-shared: >-
+    The only drawing of this carrier's face is the 17th-generation master, where
+    the module lies flat. The R660's carrier is the same part standing up: the
+    CAD names it the BOSS-N1 card carrier, the outline agrees with the master to
+    1.2%, and the R660's own label prints the same tab, icons and lamps on it.
+  orientation-and-lamps: >-
+    THE LABEL SETTLES BOTH. ISM figure 25 prints carrier 0 with its orange tab at
+    the BOTTOM and the activity icon above the drive icon, and carrier 1 with its
+    tab at the TOP and the drive icon above the activity icon. That is one part
+    turned two ways: lying flat with the tab at the left and, reading away from
+    the tab, the drive icon and its lamp then the activity icon and its lamp -
+    exactly the master's order. Turned 270 it is carrier 0, turned 90 carrier 1.
+    THE LABEL DRAWS EACH ICON BESIDE ITS LAMP, ACROSS THE CARRIER; the master and
+    ISM figure 9's render both put icon and lamp one after the other ALONG it,
+    four small marks in a column on an upright carrier. The label is a service
+    schematic with leader lines; the render and the master are the face, so
+    their arrangement is drawn and the label is used only for order and turn.
+  lamp-states: >-
+    Dell's BOSS-N1 User's Guide, table 1, status lamp: green - drive is online;
+    blink amber - drive is failed or has become SMART trip; blink green - drive
+    is located or identified (from iDRAC or OMSA); off - drive is not present.
+    The activity lamp "is triggered when an activity is initiated in M.2
+    drives" and blinks green during rebuild and I/O. No blink rate is published;
+    1 Hz is a reading.
+  power: >-
+    NOT STATED. No document held gives a figure for the carrier or its M.2
+    drive; the BOSS-N1 module's draw is not published in the R660 guides either.
+size: {w: 26.0, h: 10.0, d: 108.9}
+size-confidence: {w: measured, h: measured, d: measured}
+body:
+  depth: 108.9
+  color: '#5f6366'
+relief:
+  wall: '#2a2d30'
+  features:
+  - node: tab
+    out: 1.0
+    color: '#e8781e'
+    confidence: estimated
+    source: >-
+      none measured - the tab is a lever flush with the carrier front; the 1 mm
+      lip is drawn so it reads as a part and not as paint
+elements:
+  tab:
+    at: [0.0, 1.97]
+    size: [4.33, 6.07]
+    class: latch
+    description: the orange release tab, pulled to swing the carrier out
+  led-status:
+    at: [9.95, 4.36]
+    size: [1.3, 1.3]
+    class: led
+    states: ['off',
+             {name: online, color: '#22c55e'},
+             {name: failed, color: '#eab308', behavior: {mode: blinking, rate: 1}},
+             {name: identify, color: '#22c55e', behavior: {mode: blinking, rate: 1}}]
+    description: >-
+      the drive's status lamp, beside the drive icon. BOSS-N1 User's Guide
+      table 1 - see provenance/lamp-states.
+  led-activity:
+    at: [14.80, 4.36]
+    size: [1.3, 1.3]
+    class: led
+    states: ['off', {name: activity, color: '#22c55e', behavior: {mode: blinking, rate: 1}}]
+    description: the activity lamp, beside the activity icon; blinks green on I/O and rebuild
+skins: [default]
