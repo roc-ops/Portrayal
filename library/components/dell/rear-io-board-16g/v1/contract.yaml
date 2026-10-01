@@ -1,0 +1,61 @@
+format: 1
+kind: module
+name: rear-io-board-16g
+version: 1.0.0
+class: expansion-card
+behaviour: fills
+profile: server
+description: >-
+  The rear I/O board of a 16th-generation 1U PowerEdge (R660) - the system ID
+  button, the dedicated iDRAC port, two USB ports and the VGA connector
+attrs:
+  power-absent: not-published
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: service access at the back of the rack - the ID button, iDRAC, USB and VGA
+    description: the system ID button, the dedicated iDRAC port, two USB and the VGA
+provenance:
+  identity: >-
+    datasheet - R660 ISM "LOM card, MIC card, and rear I/O board": a board that
+    plugs into the system board and is screwed to it, removed and installed on
+    its own. The ISM notes a different rear I/O board for systems with the
+    liquid-cooling (DLC) module; see the device's gaps.
+  sources: >-
+    Two. (1) The VisioCafe master `R660 3xPCI LP Rear` (r660-3xpci-lp-rear-1),
+    read on the 434 body at 22.24 px/mm with y scaled 0.9926 (see
+    dell/psu-1400w-ac-60mm@1, provenance/stencil-scale): the visible window, the
+    connector openings and the iDRAC legend. Facts read, art not traced. (2)
+    Dell's R660 service model, r660.glb, `PEr760_RearIOBoard_Assembly` (shared
+    with the R760): the depth.
+  size: >-
+    drawing - 85.37 x 15.93, THE WINDOW THE REAR SHOWS, x 250.50..335.87 and y
+    24.71..40.64 on the master, found as tone edges. The service model's
+    bracket `3DGeom~16225` runs 90.00 from x 246.39 and ends at 336.39, half a
+    millimetre from the master; its first 4.1 is behind the chassis.
+  depth: >-
+    measured - the board's plan in the service model is 121.5 deep (see
+    dell/rear-io-board-plan-16g@1).
+  connectors: >-
+    drawing - positions carried unchanged from the device, where they were
+    read off the master: the system ID button at 252.6, the iDRAC opening
+    12.28 x 9.51 at 268.26, the USB stack at 287.46 (USB 2.0 over 3.0), the VGA
+    shell at 310.12. The legend iDRAC under its port is printed on this board.
+  power: >-
+    NOT PUBLISHED - the R660 ISM, technical guide and spec sheet give no
+    wattage for the rear I/O board.
+size: {w: 85.37, h: 15.93, d: 121.5}
+size-confidence: {w: drawing, h: drawing, d: measured}
+plan: {ref: dell/rear-io-board-plan-16g@1}
+body:
+  depth: 121.5
+  color: '#b8bdc2'
+parts:
+  - {ref: dell/system-id-button-14g@1, id: system-id, group: mgmt, at: [2.10, 3.19]}
+  - {ref: common/rj45-ganged-eth@1, id: idrac, group: mgmt, at: [17.55, 2.36], rotate: 180, attrs: {media: rj45, speed: 1g}}
+  - {ref: std/usb-a@1, id: usb-1, group: mgmt, at: [37.19, 2.29], skin: usb2, attrs: {usb: '2.0'}}
+  - {ref: std/usb-a@1, id: usb-2, group: mgmt, at: [37.19, 10.69], attrs: {usb: '3.0'}}
+  - {ref: common/vga-receptacle@1, id: video, group: mgmt, at: [53.50, 0.64]}
+skins: [default]
