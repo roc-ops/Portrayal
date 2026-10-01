@@ -1,3 +1,17 @@
+# SOURCES:
+# Dell's R660 Installation and Service Manual and Technical Guide (converted
+# under working/intake/dell/converted), Dell's R660 service model r660.glb,
+# the VisioCafe Dell rack server stencil (working/visio-dell; facts read, art
+# not traced), Dell's R660/R660xs gallery renders and StorageReview's
+# photographs of a real R660 (working/intake/dell/poweredge/photos/r660).
+# STATE:
+# DONE: the 10-bay front and the riser-configuration-1 rear. NOT YET: the top,
+# the other fronts (8-bay Smart Flow, 0-drive, 14/16 x E3.S), the other riser
+# configurations (2 x FH, 2 x LP, 2 x LP Gen5, 2 rear drives + 1 LP, 2 x E3.S
+# rear, no riser), seated cards, the LOM card and rear I/O board as field-
+# replaceable modules (drawn as placements here), the small printed glyphs
+# beside the rear ports and the right front panel, the information tag, and
+# the bezel.
 format: 1
 kind: device
 name: r660
@@ -20,13 +34,6 @@ lint:
       master draws exactly that - plate edges at 122.66..192.76, 195.6..264.35 and
       272.76..348.61 with the latch between the second and third.
 provenance:
-  sources:
-    note: >-
-      Dell's R660 Installation and Service Manual and Technical Guide (converted
-      under working/intake/dell/converted), Dell's R660 service model r660.glb,
-      the VisioCafe Dell rack server stencil (working/visio-dell; facts read, art
-      not traced), Dell's R660/R660xs gallery renders and StorageReview's
-      photographs of a real R660 (working/intake/dell/poweredge/photos/r660).
   chassis:
     confidence: datasheet
     note: >-
@@ -71,6 +78,7 @@ provenance:
       4/5, 6/7, 8/9. ISM figure 22's service label numbers the 8-bay build the
       same way, and the photograph shows 2/3 and 4/5 on its dividers.
   drive-default:
+    confidence: datasheet
     note: >-
       EVERY BAY DEFAULTS TO A BLANK, as on the R740xd: Dell publishes no default
       drive count, and the ISM requires blanks in every empty slot for cooling. A
@@ -128,15 +136,6 @@ provenance:
       mixed-mode unit (700-1400 W, C14). The -48 V DC, 277 V and 1800 W C16
       supplies are not modelled (no orthographic image of their faces is held),
       and when they are, power moves onto per-build configurations.
-  not-yet-modelled:
-    note: >-
-      DONE: the 10-bay front and the riser-configuration-1 rear. NOT YET: the
-      top, the other fronts (8-bay Smart Flow, 0-drive, 14/16 x E3.S), the other
-      riser configurations (2 x FH, 2 x LP, 2 x LP Gen5, 2 rear drives + 1 LP,
-      2 x E3.S rear, no riser), seated cards, the LOM card and rear I/O board as
-      field-replaceable modules (drawn as placements here), the small printed
-      glyphs beside the rear ports and the right front panel, the information
-      tag, and the bezel.
 attrs:
   physical:
     ru: 1
