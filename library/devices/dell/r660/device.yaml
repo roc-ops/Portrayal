@@ -5,11 +5,10 @@
 # not traced), Dell's R660/R660xs gallery renders and StorageReview's
 # photographs of a real R660 (working/intake/dell/poweredge/photos/r660).
 # STATE:
-# DONE: the 10-bay front; the rear for riser configurations 1-8 (RC1, 2, 4 and
-# 5 share one face; RC3 two full-height; RC6 the Gen5 R2Q pair; RC7 two rear
-# 2.5 inch bays and slot 3; RC8 one usable slot). NOT YET: riser
-# configurations 0 and 9 (no face held - see gaps), seated cards (see gaps),
-# the top, the other fronts (8-bay Smart Flow, 0-drive, 14/16 x E3.S), riser
+# DONE: five fronts (10 x 2.5, 8 x 2.5 Smart Flow, no backplane, 16 and 14 x
+# EDSFF E3.S) and the rear for riser configurations 1-8, combined into 36
+# orderable configurations. NOT YET: riser configurations 0 and 9 and seated
+# cards (see gaps), the E3.S single-slot blank (see gaps), the top, riser
 # cages and their printed slot numbers, the LOM card and rear I/O board as
 # field-replaceable modules, the small printed glyphs beside the rear ports
 # and the right front panel, the information tag, and the bezel.
@@ -92,6 +91,34 @@ provenance:
       seated there (dell/power-button-14g@1) are the library's existing ones,
       centred on the master's positions; the master draws the 16G button 7.3
       square against that part's 8.34 x 8.31.
+  fronts:
+    confidence: drawing
+    note: >-
+      FIVE FRONTS, EACH ITS OWN VIEW bound by `configurations.<name>.views`, as
+      the R740xd's 12-drive front is. All share the ears, both control panels,
+      the VGA module and the right panel. 8 x 2.5 Smart Flow (front-sff8sf): the
+      VisioCafe master `R660 8D 2.5 SF Front` - the same bays as the 10-drive
+      front less the middle column, which is a fixed vent plate 78.25 x 33.26
+      with eight 15.5 x 13.12 openings, and the dividers number 0-3 then 4-7.
+      No backplane (front-nobp): master `R660 0D Front` - fixed grilles, three
+      on the left and three on the right, vent grids read off it; the lower
+      right grids' columns are spread evenly across the plates rather than
+      matched hole by hole. That chassis is 50.8 shorter (ISM table 12, 700.7
+      ear to rear wall) and this device has one depth.
+  e3s-fronts:
+    confidence: photo-measured
+    note: >-
+      photo-measured - no R660 master draws an E3.S front, so ISM figure 4's
+      embedded images (1664 x 372, 3.27 px/mm across the 482.6 face) place
+      them: each carrier is found by its orange chevrons (9.67 into the
+      carrier, dell/e3s-carrier@1), giving columns at 36.3, 117.3, 280.3 and
+      361.3, and the centre vent at 197.5..276.5 - the R670 16D master's own
+      vent plate to 0.3 mm, so the cage is the R670's. The figure's vertical
+      scale is not trusted (it reads 38.9 for 42.8), so the rows are the R670
+      master's 9.63 pitch, 3.17 to 31.80. The last column reaches 438.95,
+      2.0 over the VGA plate's edge, which the figure's resolution cannot
+      resolve either way. The top vent strip is left off: neither figure nor
+      the R670 master shows one over E3.S carriers.
   rear:
     confidence: drawing
     note: >-
@@ -185,6 +212,28 @@ gaps:
     wanted: >-
       a straight-on rear photograph of an R660 with low-profile cards in slots 1
       and 2, showing both bracket ends
+  - what: e3s-single-slot-blank-not-modelled
+    scope: [front]
+    reason: needs-photo
+    note: >-
+      the ISM requires an EDSFF E3.S drive blank in every empty E3.S slot
+      ("Removing an EDSFF E3.S drive blank", figures 77/78, isometric) and no
+      straight-on image of one is held, so the E3.S bays name no default and draw
+      as open frames until a configuration seats a carrier. Whether an empty
+      COLUMN takes four of these or one dell/e3s-filler-1u@1 is also unsettled.
+    wanted: >-
+      a straight-on photograph of a single-slot E3.S blank, or of an R660 E3.S
+      front with empty slots
+  - what: e3s-front-left-panel-and-numbering
+    scope: [front]
+    reason: needs-photo
+    note: >-
+      ISM figure 4 draws the 16 x E3.S build's left ear as a plain strip without
+      the status glyphs the 14-drive figure shows, and neither figure prints bay
+      numbers; the E3.S fronts here seat the same left panel as every other
+      front and number down each column like the 2.5 inch bays.
+    wanted: >-
+      a straight-on photograph of a 16 x E3.S R660 front
 groups:
   drives:
     term: Drive
@@ -242,6 +291,19 @@ groups:
     description: >-
       slot 3, on riser 3 - its own group because it is its own riser, past riser
       2's latch, and not on riser 2's pitch
+  drives-e3s:
+    term: Drive
+    role: service
+    index-origin: 0
+    description: >-
+      the EDSFF E3.S front bays, numbered down each column as the 2.5 inch bays
+      are - the E3.S fronts print no numbers in any figure held
+    attrs: {media: e3s}
+  fillers:
+    term: Filler
+    role: service
+    index-origin: 1
+    description: the E3.S centre vent and the 14-drive build's two-slot filler
   riser-blanks:
     term: Blank
     role: service
@@ -430,6 +492,684 @@ views:
             R660 ISM table 131: solid green for two seconds when a laptop is
             connected, flashing green (two on, two off) when recognised, off
             when unplugged - the R740xd's table 8 word for word.
+  front-sff8sf:
+    face: front
+    size: {w: 482.6, h: 42.8}
+    panel:
+      decor:
+        - {at: [0, 0], size: [14.2, 42.8], fill: '#22262a'}
+        - {at: [468.88, 0], size: [13.72, 42.8], fill: '#22262a'}
+        - {at: [24.3, 0], size: [433.35, 2.09], fill: '#9aa0a6'}
+        - {at: [24.3, 40.71], size: [433.35, 2.09], fill: '#9aa0a6'}
+        - {at: [24.3, 2.09], size: [412.65, 4.32], fill: '#3a3f44'}
+        - {at: [50.48, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [55.92, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [61.4, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [72.33, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [77.8, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [83.25, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [88.72, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [94.2, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [99.65, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [117.15, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [122.62, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [128.07, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [133.53, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [139.0, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [144.47, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [155.4, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [160.85, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [166.32, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [171.8, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [177.25, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [182.72, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [200.2, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [205.68, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [211.15, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [216.6, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [222.05, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [227.53, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [238.45, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [243.93, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [249.38, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [254.85, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [260.32, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [265.77, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [288.75, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [294.2, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [299.65, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [305.12, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [310.6, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [321.52, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [326.98, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [332.45, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [337.93, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [343.38, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [348.85, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [370.93, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [376.4, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [381.85, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [387.32, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [392.77, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [403.73, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [409.18, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [414.65, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [420.1, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        # the VGA module's plate
+        - {at: [436.95, 2.09], size: [20.2, 38.62], fill: '#3d4348'}
+        # the right control panel strip in the ear
+        - {at: [457.65, 2.09], size: [11.2, 38.62], fill: '#2a2e32'}
+        # the rack latches in both ears
+        - {at: [1.5, 14.07], size: [12.15, 24.41], fill: '#4a5056'}
+        - {at: [469.4, 14.07], size: [12.15, 24.41], fill: '#4a5056'}
+        # the Smart Flow vent in place of the middle column
+        - {at: [195.6, 6.96], size: [78.25, 33.26], fill: '#5f656b'}
+        - {at: [201.7, 9.69], size: [15.5, 13.12], fill: '#141719'}
+        - {at: [201.7, 24.36], size: [15.5, 13.12], fill: '#141719'}
+        - {at: [218.55, 9.69], size: [15.5, 13.12], fill: '#141719'}
+        - {at: [218.55, 24.36], size: [15.5, 13.12], fill: '#141719'}
+        - {at: [235.4, 9.69], size: [15.5, 13.12], fill: '#141719'}
+        - {at: [235.4, 24.36], size: [15.5, 13.12], fill: '#141719'}
+        - {at: [252.25, 9.69], size: [15.5, 13.12], fill: '#141719'}
+        - {at: [252.25, 24.36], size: [15.5, 13.12], fill: '#141719'}
+      cutouts:
+        - {id: power-btn, at: [459.13, 2.36], size: [8.34, 8.31], shape: rect}
+        - {id: usb-1, at: [460.31, 12.57], size: [4.5, 12.0], shape: rect}
+        - {id: idrac-direct, at: [462.97, 28.83], size: [2.75, 7.5], shape: rect}
+        - {id: idrac-direct-led, at: [459.45, 35.76], size: [2.0, 2.0], shape: circle}
+        - {id: vga, at: [441.755, 12.875], size: [11.40, 20.47], shape: d-sub, rotate: 270}
+    silkscreen:
+      - {at: [28.13, 13.87], text: '0', for: drive-0}
+      - {at: [28.13, 16.20], text: '▶', for: drive-0}
+      - {at: [28.13, 30.36], text: '1', for: drive-1}
+      - {at: [28.13, 32.81], text: '▶', for: drive-1}
+      - {at: [110.43, 13.87], text: '2', for: drive-2}
+      - {at: [110.43, 16.20], text: '▶', for: drive-2}
+      - {at: [110.43, 30.36], text: '3', for: drive-3}
+      - {at: [110.43, 32.81], text: '▶', for: drive-3}
+      - {at: [276.2, 13.87], text: '4', for: drive-4}
+      - {at: [276.2, 16.20], text: '▶', for: drive-4}
+      - {at: [276.2, 30.36], text: '5', for: drive-5}
+      - {at: [276.2, 32.81], text: '▶', for: drive-5}
+      - {at: [359.0, 13.87], text: '6', for: drive-6}
+      - {at: [359.0, 16.20], text: '▶', for: drive-6}
+      - {at: [359.0, 30.36], text: '7', for: drive-7}
+      - {at: [359.0, 32.81], text: '▶', for: drive-7}
+    components:
+      bays:
+        - {id: panel-left, at: [14.2, 2.34], size: {w: 10.1, h: 38.13},
+           accepts: [dell/control-panel-left-16g@1], default: dell/control-panel-left-16g@1,
+           group: panels, rel-pos: 1}
+        - {id: drive-0, at: [32.5, 7.71], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 0}
+        - {id: drive-1, at: [32.5, 24.21], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 1}
+        - {id: drive-2, at: [115.35, 7.71], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 2}
+        - {id: drive-3, at: [115.35, 24.21], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 3}
+        - {id: drive-4, at: [281.1, 7.71], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 4}
+        - {id: drive-5, at: [281.1, 24.21], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 5}
+        - {id: drive-6, at: [363.95, 7.71], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 6}
+        - {id: drive-7, at: [363.95, 24.21], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 7}
+      placements:
+        - {ref: dell/power-button-14g@1, id: power-btn, at: [459.13, 2.36], for: chassis,
+           group: mgmt, rel-pos: 1}
+        - {ref: std/usb-a@1, id: usb-1, at: [456.56, 16.32], rotate: 90, skin: usb2,
+           attrs: {usb: '2.0'}, group: ports, rel-pos: 1}
+        - {ref: std/micro-usb@1, id: idrac-direct, at: [460.59, 31.20], rotate: 90,
+           group: ports, rel-pos: 2}
+        - {ref: std/vga@1, id: vga, at: [437.22, 17.41], rotate: 270, group: ports, rel-pos: 3}
+        - {ref: common/vga-symbol@1, id: mark-vga, at: [444.45, 9.56], for: vga, group: marks, rel-pos: 1}
+        - ref: common/led-dot@1
+          id: idrac-direct-led
+          at: [459.45, 35.76]
+          for: idrac-direct
+          group: leds
+          rel-pos: 1
+          states: ['off',
+                   {name: connected, color: '#22c55e'},
+                   {name: recognised, color: '#22c55e',
+                    behavior: {mode: blinking, rate: 0.25}}]
+          description: >-
+            R660 ISM table 131: solid green for two seconds when a laptop is
+            connected, flashing green (two on, two off) when recognised, off
+            when unplugged - the R740xd's table 8 word for word.
+  front-nobp:
+    face: front
+    size: {w: 482.6, h: 42.8}
+    panel:
+      decor:
+        - {at: [0, 0], size: [14.2, 42.8], fill: '#22262a'}
+        - {at: [468.88, 0], size: [13.72, 42.8], fill: '#22262a'}
+        - {at: [24.3, 0], size: [433.35, 2.09], fill: '#9aa0a6'}
+        - {at: [24.3, 40.71], size: [433.35, 2.09], fill: '#9aa0a6'}
+        - {at: [24.3, 2.09], size: [412.65, 4.32], fill: '#3a3f44'}
+        - {at: [50.48, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [55.92, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [61.4, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [72.33, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [77.8, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [83.25, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [88.72, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [94.2, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [99.65, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [117.15, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [122.62, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [128.07, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [133.53, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [139.0, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [144.47, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [155.4, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [160.85, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [166.32, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [171.8, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [177.25, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [182.72, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [200.2, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [205.68, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [211.15, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [216.6, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [222.05, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [227.53, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [238.45, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [243.93, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [249.38, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [254.85, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [260.32, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [265.77, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [288.75, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [294.2, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [299.65, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [305.12, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [310.6, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [321.52, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [326.98, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [332.45, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [337.93, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [343.38, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [348.85, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [370.93, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [376.4, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [381.85, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [387.32, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [392.77, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [403.73, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [409.18, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [414.65, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [420.1, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        # the VGA module's plate
+        - {at: [436.95, 2.09], size: [20.2, 38.62], fill: '#3d4348'}
+        # the right control panel strip in the ear
+        - {at: [457.65, 2.09], size: [11.2, 38.62], fill: '#2a2e32'}
+        # the rack latches in both ears
+        - {at: [1.5, 14.07], size: [12.15, 24.41], fill: '#4a5056'}
+        - {at: [469.4, 14.07], size: [12.15, 24.41], fill: '#4a5056'}
+        # the no-backplane front: fixed grilles where the drives would be
+        - {at: [33.8, 6.96], size: [65.55, 33.26], fill: '#5f656b'}
+        - {at: [121.5, 6.96], size: [60.7, 33.26], fill: '#5f656b'}
+        - {at: [204.35, 6.96], size: [65.05, 33.26], fill: '#5f656b'}
+        - {at: [278.6, 2.09], size: [157.85, 20.63], fill: '#5f656b'}
+        - {at: [282.95, 23.21], size: [65.85, 16.95], fill: '#5f656b'}
+        - {at: [369.2, 23.21], size: [65.65, 16.95], fill: '#5f656b'}
+        - {at: [39.55, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [39.55, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [39.55, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [39.55, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [39.55, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [45.02, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [45.02, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [45.02, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [45.02, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [45.02, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [50.49, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [50.49, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [50.49, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [50.49, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [50.49, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [55.96, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [55.96, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [55.96, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [55.96, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [55.96, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [61.43, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [61.43, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [61.43, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [61.43, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [61.43, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [66.90, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [66.90, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [66.90, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [66.90, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [66.90, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [72.37, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [72.37, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [72.37, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [72.37, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [72.37, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [77.84, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [77.84, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [77.84, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [77.84, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [77.84, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [83.31, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [83.31, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [83.31, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [83.31, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [83.31, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [88.78, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [88.78, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [88.78, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [88.78, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [88.78, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [122.60, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [122.60, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [122.60, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [122.60, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [122.60, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [128.07, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [128.07, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [128.07, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [128.07, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [128.07, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [133.54, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [133.54, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [133.54, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [133.54, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [133.54, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [139.01, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [139.01, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [139.01, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [139.01, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [139.01, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [144.48, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [144.48, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [144.48, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [144.48, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [144.48, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [149.95, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [149.95, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [149.95, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [149.95, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [149.95, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [155.42, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [155.42, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [155.42, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [155.42, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [155.42, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [160.89, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [160.89, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [160.89, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [160.89, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [160.89, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [166.36, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [166.36, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [166.36, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [166.36, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [166.36, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [171.83, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [171.83, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [171.83, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [171.83, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [171.83, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [205.65, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [205.65, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [205.65, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [205.65, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [205.65, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [211.12, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [211.12, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [211.12, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [211.12, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [211.12, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [216.59, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [216.59, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [216.59, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [216.59, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [216.59, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [222.06, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [222.06, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [222.06, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [222.06, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [222.06, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [227.53, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [227.53, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [227.53, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [227.53, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [227.53, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [233.00, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [233.00, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [233.00, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [233.00, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [233.00, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [238.47, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [238.47, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [238.47, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [238.47, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [238.47, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [243.94, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [243.94, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [243.94, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [243.94, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [243.94, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [249.41, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [249.41, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [249.41, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [249.41, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [249.41, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [254.88, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [254.88, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [254.88, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [254.88, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [254.88, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [260.35, 10.69], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [260.35, 16.11], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [260.35, 21.57], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [260.35, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [260.35, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [288.90, 10.34], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [288.90, 15.81], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [294.59, 10.34], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [294.59, 15.81], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [300.28, 10.34], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [300.28, 15.81], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [305.97, 10.34], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [305.97, 15.81], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [311.66, 10.34], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [311.66, 15.81], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [317.35, 10.34], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [317.35, 15.81], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [323.04, 10.34], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [323.04, 15.81], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [328.73, 10.34], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [328.73, 15.81], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [334.42, 10.34], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [334.42, 15.81], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [340.11, 10.34], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [340.11, 15.81], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [345.80, 10.34], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [345.80, 15.81], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [351.49, 10.34], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [351.49, 15.81], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [357.18, 10.34], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [357.18, 15.81], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [362.87, 10.34], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [362.87, 15.81], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [368.56, 10.34], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [368.56, 15.81], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [374.25, 10.34], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [374.25, 15.81], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [379.94, 10.34], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [379.94, 15.81], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [385.63, 10.34], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [385.63, 15.81], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [391.32, 10.34], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [391.32, 15.81], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [397.01, 10.34], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [397.01, 15.81], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [402.70, 10.34], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [402.70, 15.81], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [408.39, 10.34], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [408.39, 15.81], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [414.08, 10.34], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [414.08, 15.81], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [419.77, 10.34], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [419.77, 15.81], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [425.46, 10.34], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [425.46, 15.81], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [288.90, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [288.90, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [294.59, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [294.59, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [300.28, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [300.28, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [305.97, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [305.97, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [311.66, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [311.66, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [317.35, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [317.35, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [323.04, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [323.04, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [328.73, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [328.73, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [334.42, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [334.42, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [340.11, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [340.11, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [374.20, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [374.20, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [379.89, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [379.89, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [385.58, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [385.58, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [391.27, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [391.27, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [396.96, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [396.96, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [402.65, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [402.65, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [408.34, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [408.34, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [414.03, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [414.03, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [419.72, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [419.72, 32.41], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [425.41, 26.99], size: [4.05, 4.03], fill: '#141719'}
+        - {at: [425.41, 32.41], size: [4.05, 4.03], fill: '#141719'}
+      cutouts:
+        - {id: power-btn, at: [459.13, 2.36], size: [8.34, 8.31], shape: rect}
+        - {id: usb-1, at: [460.31, 12.57], size: [4.5, 12.0], shape: rect}
+        - {id: idrac-direct, at: [462.97, 28.83], size: [2.75, 7.5], shape: rect}
+        - {id: idrac-direct-led, at: [459.45, 35.76], size: [2.0, 2.0], shape: circle}
+        - {id: vga, at: [441.755, 12.875], size: [11.40, 20.47], shape: d-sub, rotate: 270}
+    components:
+      bays:
+        - {id: panel-left, at: [14.2, 2.34], size: {w: 10.1, h: 38.13},
+           accepts: [dell/control-panel-left-16g@1], default: dell/control-panel-left-16g@1,
+           group: panels, rel-pos: 1}
+      placements:
+        - {ref: dell/power-button-14g@1, id: power-btn, at: [459.13, 2.36], for: chassis,
+           group: mgmt, rel-pos: 1}
+        - {ref: std/usb-a@1, id: usb-1, at: [456.56, 16.32], rotate: 90, skin: usb2,
+           attrs: {usb: '2.0'}, group: ports, rel-pos: 1}
+        - {ref: std/micro-usb@1, id: idrac-direct, at: [460.59, 31.20], rotate: 90,
+           group: ports, rel-pos: 2}
+        - {ref: std/vga@1, id: vga, at: [437.22, 17.41], rotate: 270, group: ports, rel-pos: 3}
+        - {ref: common/vga-symbol@1, id: mark-vga, at: [444.45, 9.56], for: vga, group: marks, rel-pos: 1}
+        - ref: common/led-dot@1
+          id: idrac-direct-led
+          at: [459.45, 35.76]
+          for: idrac-direct
+          group: leds
+          rel-pos: 1
+          states: ['off',
+                   {name: connected, color: '#22c55e'},
+                   {name: recognised, color: '#22c55e',
+                    behavior: {mode: blinking, rate: 0.25}}]
+          description: >-
+            R660 ISM table 131: solid green for two seconds when a laptop is
+            connected, flashing green (two on, two off) when recognised, off
+            when unplugged - the R740xd's table 8 word for word.
+  front-e3s16:
+    face: front
+    size: {w: 482.6, h: 42.8}
+    panel:
+      decor:
+        - {at: [0, 0], size: [14.2, 42.8], fill: '#22262a'}
+        - {at: [468.88, 0], size: [13.72, 42.8], fill: '#22262a'}
+        - {at: [24.3, 0], size: [433.35, 2.09], fill: '#9aa0a6'}
+        - {at: [24.3, 40.71], size: [433.35, 2.09], fill: '#9aa0a6'}
+        # the VGA module's plate
+        - {at: [436.95, 2.09], size: [20.2, 38.62], fill: '#3d4348'}
+        # the right control panel strip in the ear
+        - {at: [457.65, 2.09], size: [11.2, 38.62], fill: '#2a2e32'}
+        # the rack latches in both ears
+        - {at: [1.5, 14.07], size: [12.15, 24.41], fill: '#4a5056'}
+        - {at: [469.4, 14.07], size: [12.15, 24.41], fill: '#4a5056'}
+      cutouts:
+        - {id: power-btn, at: [459.13, 2.36], size: [8.34, 8.31], shape: rect}
+        - {id: usb-1, at: [460.31, 12.57], size: [4.5, 12.0], shape: rect}
+        - {id: idrac-direct, at: [462.97, 28.83], size: [2.75, 7.5], shape: rect}
+        - {id: idrac-direct-led, at: [459.45, 35.76], size: [2.0, 2.0], shape: circle}
+        - {id: vga, at: [441.755, 12.875], size: [11.40, 20.47], shape: d-sub, rotate: 270}
+    components:
+      bays:
+        - {id: panel-left, at: [14.2, 2.34], size: {w: 10.1, h: 38.13},
+           accepts: [dell/control-panel-left-16g@1], default: dell/control-panel-left-16g@1,
+           group: panels, rel-pos: 1}
+        - {id: e3s-0, at: [36.3, 3.17], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 0}
+        - {id: e3s-1, at: [36.3, 12.68], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 1}
+        - {id: e3s-2, at: [36.3, 22.29], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 2}
+        - {id: e3s-3, at: [36.3, 31.8], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 3}
+        - {id: e3s-4, at: [117.3, 3.17], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 4}
+        - {id: e3s-5, at: [117.3, 12.68], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 5}
+        - {id: e3s-6, at: [117.3, 22.29], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 6}
+        - {id: e3s-7, at: [117.3, 31.8], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 7}
+        - {id: e3s-8, at: [280.3, 3.17], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 8}
+        - {id: e3s-9, at: [280.3, 12.68], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 9}
+        - {id: e3s-10, at: [280.3, 22.29], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 10}
+        - {id: e3s-11, at: [280.3, 31.8], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 11}
+        - {id: e3s-12, at: [361.3, 3.17], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 12}
+        - {id: e3s-13, at: [361.3, 12.68], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 13}
+        - {id: e3s-14, at: [361.3, 22.29], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 14}
+        - {id: e3s-15, at: [361.3, 31.8], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 15}
+      placements:
+        - {ref: dell/power-button-14g@1, id: power-btn, at: [459.13, 2.36], for: chassis,
+           group: mgmt, rel-pos: 1}
+        - {ref: std/usb-a@1, id: usb-1, at: [456.56, 16.32], rotate: 90, skin: usb2,
+           attrs: {usb: '2.0'}, group: ports, rel-pos: 1}
+        - {ref: std/micro-usb@1, id: idrac-direct, at: [460.59, 31.20], rotate: 90,
+           group: ports, rel-pos: 2}
+        - {ref: std/vga@1, id: vga, at: [437.22, 17.41], rotate: 270, group: ports, rel-pos: 3}
+        - {ref: common/vga-symbol@1, id: mark-vga, at: [444.45, 9.56], for: vga, group: marks, rel-pos: 1}
+        - ref: common/led-dot@1
+          id: idrac-direct-led
+          at: [459.45, 35.76]
+          for: idrac-direct
+          group: leds
+          rel-pos: 1
+          states: ['off',
+                   {name: connected, color: '#22c55e'},
+                   {name: recognised, color: '#22c55e',
+                    behavior: {mode: blinking, rate: 0.25}}]
+          description: >-
+            R660 ISM table 131: solid green for two seconds when a laptop is
+            connected, flashing green (two on, two off) when recognised, off
+            when unplugged - the R740xd's table 8 word for word.
+        - {ref: dell/e3s-filler-1u@1, id: centre-vent, at: [197.5, 2.6], for: chassis,
+           group: fillers, rel-pos: 1}
+  front-e3s14:
+    face: front
+    size: {w: 482.6, h: 42.8}
+    panel:
+      decor:
+        - {at: [0, 0], size: [14.2, 42.8], fill: '#22262a'}
+        - {at: [468.88, 0], size: [13.72, 42.8], fill: '#22262a'}
+        - {at: [24.3, 0], size: [433.35, 2.09], fill: '#9aa0a6'}
+        - {at: [24.3, 40.71], size: [433.35, 2.09], fill: '#9aa0a6'}
+        # the VGA module's plate
+        - {at: [436.95, 2.09], size: [20.2, 38.62], fill: '#3d4348'}
+        # the right control panel strip in the ear
+        - {at: [457.65, 2.09], size: [11.2, 38.62], fill: '#2a2e32'}
+        # the rack latches in both ears
+        - {at: [1.5, 14.07], size: [12.15, 24.41], fill: '#4a5056'}
+        - {at: [469.4, 14.07], size: [12.15, 24.41], fill: '#4a5056'}
+      cutouts:
+        - {id: power-btn, at: [459.13, 2.36], size: [8.34, 8.31], shape: rect}
+        - {id: usb-1, at: [460.31, 12.57], size: [4.5, 12.0], shape: rect}
+        - {id: idrac-direct, at: [462.97, 28.83], size: [2.75, 7.5], shape: rect}
+        - {id: idrac-direct-led, at: [459.45, 35.76], size: [2.0, 2.0], shape: circle}
+        - {id: vga, at: [441.755, 12.875], size: [11.40, 20.47], shape: d-sub, rotate: 270}
+    components:
+      bays:
+        - {id: panel-left, at: [14.2, 2.34], size: {w: 10.1, h: 38.13},
+           accepts: [dell/control-panel-left-16g@1], default: dell/control-panel-left-16g@1,
+           group: panels, rel-pos: 1}
+        - {id: e3s-0, at: [36.3, 3.17], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 0}
+        - {id: e3s-1, at: [36.3, 12.68], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 1}
+        - {id: e3s-2, at: [36.3, 22.29], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 2}
+        - {id: e3s-3, at: [36.3, 31.8], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 3}
+        - {id: e3s-4, at: [117.3, 3.17], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 4}
+        - {id: e3s-5, at: [117.3, 12.68], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 5}
+        - {id: e3s-6, at: [117.3, 22.29], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 6}
+        - {id: e3s-7, at: [117.3, 31.8], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 7}
+        - {id: e3s-8, at: [280.3, 3.17], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 8}
+        - {id: e3s-9, at: [280.3, 12.68], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 9}
+        - {id: e3s-10, at: [280.3, 22.29], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 10}
+        - {id: e3s-11, at: [280.3, 31.8], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 11}
+        - {id: e3s-12, at: [361.3, 3.17], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 12}
+        - {id: e3s-13, at: [361.3, 12.68], size: {w: 77.65, h: 7.75},
+           accepts: [dell/e3s-carrier@1, std/drive-e3s@1], group: drives-e3s, rel-pos: 13}
+        - {id: e3s-filler-14, at: [361.3, 22.29], size: {w: 77.65, h: 17.38},
+           accepts: [dell/e3s-filler-2slot-1u@1], default: dell/e3s-filler-2slot-1u@1,
+           group: fillers, rel-pos: 2}
+      placements:
+        - {ref: dell/power-button-14g@1, id: power-btn, at: [459.13, 2.36], for: chassis,
+           group: mgmt, rel-pos: 1}
+        - {ref: std/usb-a@1, id: usb-1, at: [456.56, 16.32], rotate: 90, skin: usb2,
+           attrs: {usb: '2.0'}, group: ports, rel-pos: 1}
+        - {ref: std/micro-usb@1, id: idrac-direct, at: [460.59, 31.20], rotate: 90,
+           group: ports, rel-pos: 2}
+        - {ref: std/vga@1, id: vga, at: [437.22, 17.41], rotate: 270, group: ports, rel-pos: 3}
+        - {ref: common/vga-symbol@1, id: mark-vga, at: [444.45, 9.56], for: vga, group: marks, rel-pos: 1}
+        - ref: common/led-dot@1
+          id: idrac-direct-led
+          at: [459.45, 35.76]
+          for: idrac-direct
+          group: leds
+          rel-pos: 1
+          states: ['off',
+                   {name: connected, color: '#22c55e'},
+                   {name: recognised, color: '#22c55e',
+                    behavior: {mode: blinking, rate: 0.25}}]
+          description: >-
+            R660 ISM table 131: solid green for two seconds when a laptop is
+            connected, flashing green (two on, two off) when recognised, off
+            when unplugged - the R740xd's table 8 word for word.
+        - {ref: dell/e3s-filler-1u@1, id: centre-vent, at: [197.5, 2.6], for: chassis,
+           group: fillers, rel-pos: 1}
   rear:
     size: {w: 434.0, h: 42.8}
     panel:
@@ -472,27 +1212,27 @@ views:
            accepts: [dell/psu-1400w-ac-60mm@1, dell/psu-1100w-ac-60mm@1, dell/psu-800w-ac-60mm@1, dell/psu-700w-ac-60mm@1], default: dell/psu-1400w-ac-60mm@1, group: psus, rel-pos: 2}
         - {id: slot-1, at: [122.63, 4.12], size: {w: 70.0, h: 18.42},
            accepts: [dell/pcie-filler-lp-16g@1], default: dell/pcie-filler-lp-16g@1, group: slots, rel-pos: 1,
-           only-in: [sff10-rc1-2a3a, sff10-rc2-2p3p, sff10-rc4-2r3r, sff10-rc5-2a3q, sff10-rc8-2a]}
+           only-in: [sff10-rc1-2a3a, sff8sf-rc1-2a3a, nobp-rc1-2a3a, e3s16-rc1-2a3a, e3s14-rc1-2a3a, sff10-rc2-2p3p, sff8sf-rc2-2p3p, nobp-rc2-2p3p, e3s16-rc2-2p3p, e3s14-rc2-2p3p, sff10-rc4-2r3r, sff8sf-rc4-2r3r, nobp-rc4-2r3r, e3s16-rc4-2r3r, e3s14-rc4-2r3r, sff10-rc5-2a3q, sff8sf-rc5-2a3q, nobp-rc5-2a3q, e3s16-rc5-2a3q, e3s14-rc5-2a3q, sff10-rc8-2a, sff8sf-rc8-2a, nobp-rc8-2a, e3s16-rc8-2a, e3s14-rc8-2a]}
         - {id: slot-2, at: [194.41, 4.12], size: {w: 70.0, h: 18.42},
            accepts: [dell/pcie-filler-lp-16g@1], default: dell/pcie-filler-lp-16g@1, group: slots, rel-pos: 2,
-           only-in: [sff10-rc1-2a3a, sff10-rc2-2p3p, sff10-rc4-2r3r, sff10-rc5-2a3q, sff10-rc8-2a]}
+           only-in: [sff10-rc1-2a3a, sff8sf-rc1-2a3a, nobp-rc1-2a3a, e3s16-rc1-2a3a, e3s14-rc1-2a3a, sff10-rc2-2p3p, sff8sf-rc2-2p3p, nobp-rc2-2p3p, e3s16-rc2-2p3p, e3s14-rc2-2p3p, sff10-rc4-2r3r, sff8sf-rc4-2r3r, nobp-rc4-2r3r, e3s16-rc4-2r3r, e3s14-rc4-2r3r, sff10-rc5-2a3q, sff8sf-rc5-2a3q, nobp-rc5-2a3q, e3s16-rc5-2a3q, e3s14-rc5-2a3q, sff10-rc8-2a, sff8sf-rc8-2a, nobp-rc8-2a, e3s16-rc8-2a, e3s14-rc8-2a]}
         - {id: slot-3, at: [278.70, 4.12], size: {w: 70.0, h: 18.42},
            accepts: [dell/pcie-filler-lp-16g@1], default: dell/pcie-filler-lp-16g@1, group: slots-r3, rel-pos: 3,
-           only-in: [sff10-rc1-2a3a, sff10-rc2-2p3p, sff10-rc4-2r3r, sff10-rc5-2a3q, sff10-rc7-3p-rear2]}
+           only-in: [sff10-rc1-2a3a, sff8sf-rc1-2a3a, nobp-rc1-2a3a, e3s16-rc1-2a3a, e3s14-rc1-2a3a, sff10-rc2-2p3p, sff8sf-rc2-2p3p, nobp-rc2-2p3p, e3s16-rc2-2p3p, e3s14-rc2-2p3p, sff10-rc4-2r3r, sff8sf-rc4-2r3r, nobp-rc4-2r3r, e3s16-rc4-2r3r, e3s14-rc4-2r3r, sff10-rc5-2a3q, sff8sf-rc5-2a3q, nobp-rc5-2a3q, e3s16-rc5-2a3q, e3s14-rc5-2a3q, sff10-rc7-3p-rear2]}
         - {id: slot-1-r2q, at: [131.80, 4.12], size: {w: 70.0, h: 18.42},
-           accepts: [dell/pcie-filler-lp-16g@1], default: dell/pcie-filler-lp-16g@1, group: slots, rel-pos: 1, only-in: [sff10-rc6-2q]}
+           accepts: [dell/pcie-filler-lp-16g@1], default: dell/pcie-filler-lp-16g@1, group: slots, rel-pos: 1, only-in: [sff10-rc6-2q, sff8sf-rc6-2q, nobp-rc6-2q, e3s16-rc6-2q, e3s14-rc6-2q]}
         - {id: slot-2-r2q, at: [213.68, 4.12], size: {w: 70.0, h: 18.42},
-           accepts: [dell/pcie-filler-lp-16g@1], default: dell/pcie-filler-lp-16g@1, group: slots, rel-pos: 2, only-in: [sff10-rc6-2q]}
+           accepts: [dell/pcie-filler-lp-16g@1], default: dell/pcie-filler-lp-16g@1, group: slots, rel-pos: 2, only-in: [sff10-rc6-2q, sff8sf-rc6-2q, nobp-rc6-2q, e3s16-rc6-2q, e3s14-rc6-2q]}
         - {id: riser-3-blank-r2q, at: [293.7, 2.2], size: {w: 68.9, h: 19.8},
            accepts: [dell/riser-3-blank-gen5-16g@1], default: dell/riser-3-blank-gen5-16g@1,
-           group: riser-blanks, rel-pos: 1, only-in: [sff10-rc6-2q]}
+           group: riser-blanks, rel-pos: 1, only-in: [sff10-rc6-2q, sff8sf-rc6-2q, nobp-rc6-2q, e3s16-rc6-2q, e3s14-rc6-2q]}
         - {id: riser-3-blank, at: [272.8, 2.2], size: {w: 89.8, h: 19.8},
            accepts: [dell/riser-3-blank-16g@1], default: dell/riser-3-blank-16g@1,
-           group: riser-blanks, rel-pos: 1, only-in: [sff10-rc8-2a]}
+           group: riser-blanks, rel-pos: 1, only-in: [sff10-rc8-2a, sff8sf-rc8-2a, nobp-rc8-2a, e3s16-rc8-2a, e3s14-rc8-2a]}
         - {id: slot-1-fh, at: [107.0, 4.29], size: {w: 120.02, h: 18.42},
-           accepts: [dell/pcie-filler-fh-16g@1], default: dell/pcie-filler-fh-16g@1, group: slots, rel-pos: 1, only-in: [sff10-rc3-1p4p]}
+           accepts: [dell/pcie-filler-fh-16g@1], default: dell/pcie-filler-fh-16g@1, group: slots, rel-pos: 1, only-in: [sff10-rc3-1p4p, sff8sf-rc3-1p4p, nobp-rc3-1p4p, e3s16-rc3-1p4p, e3s14-rc3-1p4p]}
         - {id: slot-2-fh, at: [233.72, 4.29], size: {w: 120.02, h: 18.42},
-           accepts: [dell/pcie-filler-fh-16g@1], default: dell/pcie-filler-fh-16g@1, group: slots, rel-pos: 2, only-in: [sff10-rc3-1p4p]}
+           accepts: [dell/pcie-filler-fh-16g@1], default: dell/pcie-filler-fh-16g@1, group: slots, rel-pos: 2, only-in: [sff10-rc3-1p4p, sff8sf-rc3-1p4p, nobp-rc3-1p4p, e3s16-rc3-1p4p, e3s14-rc3-1p4p]}
         - {id: rear-drive-0, at: [111.12, 2.1], size: {w: 79.25, h: 18.0}, rotate: 270,
            accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2, group: drives-rear, rel-pos: 0, only-in: [sff10-rc7-3p-rear2]}
         - {id: rear-drive-1, at: [190.83, 2.1], size: {w: 79.25, h: 18.0}, rotate: 270,
@@ -522,6 +1262,10 @@ views:
   right:
     size: {w: 773.5, h: 42.8}
 configurations:
+  # GENERATED from one table with the only-in lists on the rear bays: five
+  # fronts by eight riser configurations, less the pairings the technical
+  # guide does not offer - rear 2.5 inch storage (riser configuration 7) is
+  # listed only with the 10 x 2.5 inch front. 36 builds.
   sff10-rc1-2a3a:
     kind: orderable
     default: true
@@ -555,9 +1299,150 @@ configurations:
     kind: orderable
     description: >-
       10 x 2.5 inch front; riser configuration 8, R2A, single processor: one usable low-profile Gen4 x16 slot (slot 1; slot 2's lanes belong to processor 2), and a vented blank where riser 3 would be. ISM table 111.
+  sff8sf-rc1-2a3a:
+    kind: orderable
+    views: {front: front-sff8sf}
+    description: >-
+      8 x 2.5 inch front with the Smart Flow centre vent; riser configuration 1, R2A + R3A: three low-profile PCIe Gen4 x16 slots - slots 1 and 2 on riser 2 (processors 1 and 2), slot 3 on riser 3 (processor 2). ISM table 111.
+  sff8sf-rc2-2p3p:
+    kind: orderable
+    views: {front: front-sff8sf}
+    description: >-
+      8 x 2.5 inch front with the Smart Flow centre vent; riser configuration 2, R2P + R3P: three low-profile slots - slot 1 Gen5 x16 (processor 1), slot 2 Gen4 x16 (processor 2), slot 3 Gen5 x16 (processor 2). The same face as configuration 1. ISM table 111.
+  sff8sf-rc3-1p4p:
+    kind: orderable
+    views: {front: front-sff8sf}
+    description: >-
+      8 x 2.5 inch front with the Smart Flow centre vent; riser configuration 3, R1P + R4P: two full-height Gen5 x16 slots - slot 1 on riser 1 (processor 1), slot 2 on riser 4 (processor 2); the configuration DPUs and the management interface card need. ISM table 111.
+  sff8sf-rc4-2r3r:
+    kind: orderable
+    views: {front: front-sff8sf}
+    description: >-
+      8 x 2.5 inch front with the Smart Flow centre vent; riser configuration 4, R2R + R3R, single processor: three low-profile slots - slot 1 Gen5 x8, slot 2 Gen4 x16, slot 3 Gen5 x8, all on processor 1. The same face as configuration 1. ISM table 111.
+  sff8sf-rc5-2a3q:
+    kind: orderable
+    views: {front: front-sff8sf}
+    description: >-
+      8 x 2.5 inch front with the Smart Flow centre vent; riser configuration 5, R2A + R3Q: three low-profile slots - slots 1 and 2 Gen4 x16, slot 3 Gen5 x16 SNAPI on both processors. The same face as configuration 1. ISM table 111.
+  sff8sf-rc6-2q:
+    kind: orderable
+    views: {front: front-sff8sf}
+    description: >-
+      8 x 2.5 inch front with the Smart Flow centre vent; riser configuration 6, R2Q: two low-profile Gen5 x16 slots on riser 2 (processors 1 and 2), wider apart than R2A's, and a vented blank where riser 3 would be. TG table 14 splits it 6-1 / 6-2 by GPU support, not by face. ISM table 111.
+  sff8sf-rc8-2a:
+    kind: orderable
+    views: {front: front-sff8sf}
+    description: >-
+      8 x 2.5 inch front with the Smart Flow centre vent; riser configuration 8, R2A, single processor: one usable low-profile Gen4 x16 slot (slot 1; slot 2's lanes belong to processor 2), and a vented blank where riser 3 would be. ISM table 111.
+  nobp-rc1-2a3a:
+    kind: orderable
+    views: {front: front-nobp}
+    description: >-
+      no front drives (no backplane) - a chassis 50.8 shorter, which this model's single depth does not show; riser configuration 1, R2A + R3A: three low-profile PCIe Gen4 x16 slots - slots 1 and 2 on riser 2 (processors 1 and 2), slot 3 on riser 3 (processor 2). ISM table 111.
+  nobp-rc2-2p3p:
+    kind: orderable
+    views: {front: front-nobp}
+    description: >-
+      no front drives (no backplane) - a chassis 50.8 shorter, which this model's single depth does not show; riser configuration 2, R2P + R3P: three low-profile slots - slot 1 Gen5 x16 (processor 1), slot 2 Gen4 x16 (processor 2), slot 3 Gen5 x16 (processor 2). The same face as configuration 1. ISM table 111.
+  nobp-rc3-1p4p:
+    kind: orderable
+    views: {front: front-nobp}
+    description: >-
+      no front drives (no backplane) - a chassis 50.8 shorter, which this model's single depth does not show; riser configuration 3, R1P + R4P: two full-height Gen5 x16 slots - slot 1 on riser 1 (processor 1), slot 2 on riser 4 (processor 2); the configuration DPUs and the management interface card need. ISM table 111.
+  nobp-rc4-2r3r:
+    kind: orderable
+    views: {front: front-nobp}
+    description: >-
+      no front drives (no backplane) - a chassis 50.8 shorter, which this model's single depth does not show; riser configuration 4, R2R + R3R, single processor: three low-profile slots - slot 1 Gen5 x8, slot 2 Gen4 x16, slot 3 Gen5 x8, all on processor 1. The same face as configuration 1. ISM table 111.
+  nobp-rc5-2a3q:
+    kind: orderable
+    views: {front: front-nobp}
+    description: >-
+      no front drives (no backplane) - a chassis 50.8 shorter, which this model's single depth does not show; riser configuration 5, R2A + R3Q: three low-profile slots - slots 1 and 2 Gen4 x16, slot 3 Gen5 x16 SNAPI on both processors. The same face as configuration 1. ISM table 111.
+  nobp-rc6-2q:
+    kind: orderable
+    views: {front: front-nobp}
+    description: >-
+      no front drives (no backplane) - a chassis 50.8 shorter, which this model's single depth does not show; riser configuration 6, R2Q: two low-profile Gen5 x16 slots on riser 2 (processors 1 and 2), wider apart than R2A's, and a vented blank where riser 3 would be. TG table 14 splits it 6-1 / 6-2 by GPU support, not by face. ISM table 111.
+  nobp-rc8-2a:
+    kind: orderable
+    views: {front: front-nobp}
+    description: >-
+      no front drives (no backplane) - a chassis 50.8 shorter, which this model's single depth does not show; riser configuration 8, R2A, single processor: one usable low-profile Gen4 x16 slot (slot 1; slot 2's lanes belong to processor 2), and a vented blank where riser 3 would be. ISM table 111.
+  e3s16-rc1-2a3a:
+    kind: orderable
+    views: {front: front-e3s16}
+    description: >-
+      16 x EDSFF E3.S front (dual RAID); riser configuration 1, R2A + R3A: three low-profile PCIe Gen4 x16 slots - slots 1 and 2 on riser 2 (processors 1 and 2), slot 3 on riser 3 (processor 2). ISM table 111.
+  e3s16-rc2-2p3p:
+    kind: orderable
+    views: {front: front-e3s16}
+    description: >-
+      16 x EDSFF E3.S front (dual RAID); riser configuration 2, R2P + R3P: three low-profile slots - slot 1 Gen5 x16 (processor 1), slot 2 Gen4 x16 (processor 2), slot 3 Gen5 x16 (processor 2). The same face as configuration 1. ISM table 111.
+  e3s16-rc3-1p4p:
+    kind: orderable
+    views: {front: front-e3s16}
+    description: >-
+      16 x EDSFF E3.S front (dual RAID); riser configuration 3, R1P + R4P: two full-height Gen5 x16 slots - slot 1 on riser 1 (processor 1), slot 2 on riser 4 (processor 2); the configuration DPUs and the management interface card need. ISM table 111.
+  e3s16-rc4-2r3r:
+    kind: orderable
+    views: {front: front-e3s16}
+    description: >-
+      16 x EDSFF E3.S front (dual RAID); riser configuration 4, R2R + R3R, single processor: three low-profile slots - slot 1 Gen5 x8, slot 2 Gen4 x16, slot 3 Gen5 x8, all on processor 1. The same face as configuration 1. ISM table 111.
+  e3s16-rc5-2a3q:
+    kind: orderable
+    views: {front: front-e3s16}
+    description: >-
+      16 x EDSFF E3.S front (dual RAID); riser configuration 5, R2A + R3Q: three low-profile slots - slots 1 and 2 Gen4 x16, slot 3 Gen5 x16 SNAPI on both processors. The same face as configuration 1. ISM table 111.
+  e3s16-rc6-2q:
+    kind: orderable
+    views: {front: front-e3s16}
+    description: >-
+      16 x EDSFF E3.S front (dual RAID); riser configuration 6, R2Q: two low-profile Gen5 x16 slots on riser 2 (processors 1 and 2), wider apart than R2A's, and a vented blank where riser 3 would be. TG table 14 splits it 6-1 / 6-2 by GPU support, not by face. ISM table 111.
+  e3s16-rc8-2a:
+    kind: orderable
+    views: {front: front-e3s16}
+    description: >-
+      16 x EDSFF E3.S front (dual RAID); riser configuration 8, R2A, single processor: one usable low-profile Gen4 x16 slot (slot 1; slot 2's lanes belong to processor 2), and a vented blank where riser 3 would be. ISM table 111.
+  e3s14-rc1-2a3a:
+    kind: orderable
+    views: {front: front-e3s14}
+    description: >-
+      14 x EDSFF E3.S front; riser configuration 1, R2A + R3A: three low-profile PCIe Gen4 x16 slots - slots 1 and 2 on riser 2 (processors 1 and 2), slot 3 on riser 3 (processor 2). ISM table 111.
+  e3s14-rc2-2p3p:
+    kind: orderable
+    views: {front: front-e3s14}
+    description: >-
+      14 x EDSFF E3.S front; riser configuration 2, R2P + R3P: three low-profile slots - slot 1 Gen5 x16 (processor 1), slot 2 Gen4 x16 (processor 2), slot 3 Gen5 x16 (processor 2). The same face as configuration 1. ISM table 111.
+  e3s14-rc3-1p4p:
+    kind: orderable
+    views: {front: front-e3s14}
+    description: >-
+      14 x EDSFF E3.S front; riser configuration 3, R1P + R4P: two full-height Gen5 x16 slots - slot 1 on riser 1 (processor 1), slot 2 on riser 4 (processor 2); the configuration DPUs and the management interface card need. ISM table 111.
+  e3s14-rc4-2r3r:
+    kind: orderable
+    views: {front: front-e3s14}
+    description: >-
+      14 x EDSFF E3.S front; riser configuration 4, R2R + R3R, single processor: three low-profile slots - slot 1 Gen5 x8, slot 2 Gen4 x16, slot 3 Gen5 x8, all on processor 1. The same face as configuration 1. ISM table 111.
+  e3s14-rc5-2a3q:
+    kind: orderable
+    views: {front: front-e3s14}
+    description: >-
+      14 x EDSFF E3.S front; riser configuration 5, R2A + R3Q: three low-profile slots - slots 1 and 2 Gen4 x16, slot 3 Gen5 x16 SNAPI on both processors. The same face as configuration 1. ISM table 111.
+  e3s14-rc6-2q:
+    kind: orderable
+    views: {front: front-e3s14}
+    description: >-
+      14 x EDSFF E3.S front; riser configuration 6, R2Q: two low-profile Gen5 x16 slots on riser 2 (processors 1 and 2), wider apart than R2A's, and a vented blank where riser 3 would be. TG table 14 splits it 6-1 / 6-2 by GPU support, not by face. ISM table 111.
+  e3s14-rc8-2a:
+    kind: orderable
+    views: {front: front-e3s14}
+    description: >-
+      14 x EDSFF E3.S front; riser configuration 8, R2A, single processor: one usable low-profile Gen4 x16 slot (slot 1; slot 2's lanes belong to processor 2), and a vented blank where riser 3 would be. ISM table 111.
   # Riser configurations 0 (no riser) and 9 (R2S + R3S, two rear E3.S drives)
   # are orderable and NOT drawn: no master, figure or photograph held shows
   # either rear face - see the gaps.
+
 datasheet:
   title: 'Dell PowerEdge R660 Spec Sheet'
   sha256: f6fdf46e0488ee0e17c9375ceb3fd24cedb7d728e545c6f64b229bb200c3f771
