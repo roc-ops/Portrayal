@@ -8,11 +8,12 @@
 # DONE: five fronts and the rear for riser configurations 1-8 (36 builds, plus
 # a populated example); the top view - system board, heatsinks, 32 DIMM slots,
 # air shroud, fans and bracket, system and backplane covers, and plan
-# projections of the PSUs, BOSS-N1, OCP card, LOM, rear I/O board and upper
-# front drives; estimated bottom and sides. NOT YET: riser configurations 0
-# and 9, seated cards and the E3.S single-slot blank (see gaps); the risers in
-# the top view; riser cages and their printed slot numbers; the LOM card and
-# rear I/O board as field-replaceable modules; the small printed glyphs beside
+# projections of the PSUs, BOSS-N1, OCP card, LOM, rear I/O board, risers 2
+# and 3 and upper front drives; the risers as modules carrying their slots and
+# printed slot numbers; estimated bottom and sides. NOT YET: riser
+# configurations 0 and 9, seated cards and the E3.S single-slot blank (see
+# gaps); risers 2Q, 1P and 4P from above; the LOM card and rear I/O board as
+# field-replaceable modules; the small printed glyphs beside
 # the rear ports and the right front panel; the information tag and the bezel.
 format: 1
 kind: device
@@ -134,13 +135,14 @@ provenance:
       cover. The lid is seated by inference - the model has it slid 29.9 back
       for removal. SEATED MODULES PROJECT INTO THIS VIEW through their rear or
       front bay's `plan:` - the PSUs (dell/psu-60mm-plan@1), the BOSS-N1 module,
-      the OCP card and the upper row of front drives (std/drive-25-plan@1, from
-      the carrier) - at the service model's positions mirrored from their rear
+      the OCP card, risers 2 and 3 (dell/riser-2-lp-plan-16g@1,
+      dell/riser-3-plan-16g@1) and the upper row of front drives
+      (std/drive-25-plan@1, from the carrier) - at the service model's positions mirrored from their rear
       bays; the LOM card and rear I/O board are top-view placements, as they are
       rear placements. A blank seats no plan, so the default build shows the two
-      supplies only; the `sff10-rc1-2a3a-populated` example seats the rest. NOT
-      YET IN THIS VIEW: the risers and their cards, the drive backplane, and the
-      cabling.
+      supplies and the two risers; the `sff10-rc1-2a3a-populated` example seats
+      the rest. NOT YET IN THIS VIEW: risers 2Q, 1P and 4P (the model carries
+      only 2A and 3A), the cards, the drive backplane, and the cabling.
   sides-and-bottom:
     confidence: estimated
     note: >-
@@ -168,24 +170,28 @@ provenance:
       seated centred in the module's bay it draws about 3 mm left of where the
       master puts it. Both outlines are sourced; the bay follows the part that
       fills it fully.
-  rear-slots:
+  rear-risers:
     confidence: drawing
     note: >-
-      drawing - three 70.0 x 18.42 windows centred on the master's vent fields
-      (157.63, 229.41, 313.70) at y 4.12; see dell/pcie-filler-lp-16g@1 for why
-      the window is narrower than a 79.20 low-profile bracket. ONLY THE FILLER IS
-      ACCEPTED YET: a card's bracket is 79.20, and how its ends hide under the
-      riser hardware on this machine is not settled, so a seated card would
-      overdraw its neighbour.
+      drawing - the riser bays are each riser's extent on the masters: riser 2
+      107.0..270.6 (the vent block to its latch) and riser 3 272.8..362.6 on the
+      3 x LP master, riser 2Q 107.0..293.5 on the Gen5 master, risers 1 and 4
+      107.0..227.6 and 227.6..362.6 on the 2 x FH master, all at y 2.2, 19.8
+      tall like dell/riser-3-blank-16g@1. The slots are the risers' own bays, on
+      their cage's windows - the low-profile windows 70.0 x 18.42 centred on the
+      master's vent fields (157.63, 229.41, 313.70) at y 4.12, as before. The
+      riser-3 latch moved off the chassis onto riser 3's cage: the masters draw
+      it only where riser 3 is fitted, and vents there on the configuration 6
+      and 8 masters, so as chassis decor it was wrong for three configurations.
   rear-slot-numerals:
     confidence: drawing
     note: >-
-      NOT PRINTED ON THE CHASSIS, so not drawn here. The masters print the slot
-      numbers - a triangle and 1, 2, 3 - on the riser cages, and the cages
-      differ by configuration: the 2 x FH master puts its numerals at 1 and 2
-      past each slot's end, the Gen5 R2Q master moves slot 2's, and the
-      rear-storage master has none for slots 1 and 2. They belong to riser
-      cages, which this model does not draw as parts yet.
+      drawing - the slot numbers are printed on the riser cages, not the
+      chassis, so they are drawn by the cages (dell/riser-2-lp-cage-16g@1 and
+      its siblings) and move with the configuration: the Gen5 riser 2Q prints
+      its 1 and 2 12 mm right of riser 2A's, the full-height risers print theirs
+      beside the window, and the rear-storage build, with no riser 2, prints no
+      1 or 2.
   rear-drives:
     confidence: drawing
     note: >-
@@ -234,12 +240,27 @@ gaps:
     note: >-
       a low-profile bracket is 79.20 long and the slot windows show about 70 of
       it, on a pitch the full bracket cannot fit end to end; how the bracket ends
-      sit under the riser hardware is not shown by the masters, and the service
-      model's risers are posed for removal. Until it is, the slots accept fillers
-      only.
+      sit under the riser cage is not shown by the masters, and the service
+      model's low-profile card stand-ins are posed 8 to 12 mm proud of the rear
+      wall. The cage is drawn over each slot (`behind: true`), so a bracket's
+      ends would hide under it, but its pitch still overlaps two brackets by 7.4.
+      Until a photograph settles it, the risers' slots accept fillers only.
     wanted: >-
       a straight-on rear photograph of an R660 with low-profile cards in slots 1
       and 2, showing both bracket ends
+  - what: risers-2q-1p-4p-unseen-from-above
+    scope: [top]
+    reason: needs-drawing
+    note: >-
+      Dell's service model carries risers 2A and 3A and no other, so the top
+      view draws risers 2 and 3 for every variant sharing their cages and
+      leaves riser 2Q (configuration 6) and the full-height risers 1P and 4P
+      (configuration 3) out, rather than borrow an outline. The model also
+      begins both risers 20 mm behind the rear wall; the plans are clipped at
+      the wall.
+    wanted: >-
+      a service model, figure or top photograph with riser 2Q or the
+      full-height risers fitted
   - what: e3s-single-slot-blank-not-modelled
     scope: [front]
     reason: needs-photo
@@ -305,20 +326,15 @@ groups:
     role: service
     index-origin: 1
     description: the BOSS-N1 boot module bay at the far left of the rear
-  slots:
-    term: Slot
-    role: traffic
+  risers:
+    term: Riser
+    role: service
     index-origin: 1
     description: >-
-      the PCIe slots on riser 2 (and riser 1 / riser 4 in the full-height
-      layout), numbered as printed
-  slots-r3:
-    term: Slot
-    role: traffic
-    index-origin: 1
-    description: >-
-      slot 3, on riser 3 - its own group because it is its own riser, past riser
-      2's latch, and not on riser 2's pitch
+      the expansion card riser positions, numbered as Dell numbers the risers
+      (1 and 4 only in the full-height layout). `service` and not `traffic`, as
+      on the R740xd: the group holds the riser, and the cards live in the
+      riser's own slot bays, numbered as the riser prints them.
   drives-e3s:
     term: Drive
     role: service
@@ -1248,10 +1264,9 @@ views:
       decor:
         # the rear wall behind everything that seats in it
         - {at: [0, 0], size: [434.0, 42.8], fill: '#c3c8cd'}
-        # the LOM card's bracket, the rear I/O board's plate and the riser-3 latch
+        # the LOM card's bracket and the rear I/O board's plate
         - {at: [107.0, 23.8], size: [52.5, 16.4], fill: '#d2d6da'}
         - {at: [247.0, 23.8], size: [85.5, 16.4], fill: '#d2d6da'}
-        - {at: [350.41, 2.79], size: [8.54, 19.49], fill: '#5a6066'}
         # the small vent block left of PSU 2 and the slots beside the LOM bracket
         - {at: [346.59, 26.42], size: [3.78, 3.75], fill: '#16191c'}
         - {at: [346.59, 31.91], size: [3.78, 3.75], fill: '#16191c'}
@@ -1285,36 +1300,42 @@ views:
         - {id: psu-2, at: [367.91, 1.75], size: {w: 59.8, h: 40.1},
            accepts: [dell/psu-1400w-ac-60mm@1, dell/psu-1100w-ac-60mm@1, dell/psu-800w-ac-60mm@1, dell/psu-700w-ac-60mm@1], default: dell/psu-1400w-ac-60mm@1, group: psus, rel-pos: 2,
            plan: {view: top, at: [6.29, 0.0], in: system-board, under: [system-cover]}}
-        - {id: slot-1, at: [122.63, 4.12], size: {w: 70.0, h: 18.42},
-           accepts: [dell/pcie-filler-lp-16g@1], default: dell/pcie-filler-lp-16g@1, group: slots, rel-pos: 1,
+        # the OCP card before the risers: seen from above, riser 2's cage is over it
+        - {id: ocp, at: [164.95, 24.7], size: {w: 71.8, h: 15.1},
+           accepts: [dell/ocp3-blank-16g@1, dell/ocp3-4x1g-rj45@1, dell/ocp3-2x10g-rj45@1, dell/ocp3-4x10g-rj45@1, dell/ocp3-2x25g-sfp28@1, dell/ocp3-4x25g-sfp28@1, dell/ocp3-2x100g-qsfp56@1], default: dell/ocp3-blank-16g@1, group: ocp, rel-pos: 1,
+           plan: {view: top, at: [195.15, 0.6], in: system-board, under: [system-cover]}}
+        # THE SLOTS ARE THE RISERS'. Each riser brings its slot bays and the cage
+        # that prints their numbers; the configuration chooses the riser, and
+        # the riser variants that share a cage share its face.
+        - {id: riser-2, at: [107.0, 2.2], size: {w: 163.6, h: 19.8},
+           accepts: [dell/riser-2a-16g@1, dell/riser-2p-16g@1, dell/riser-2r-16g@1], default: dell/riser-2a-16g@1,
+           group: risers, rel-pos: 2,
+           plan: {view: top, at: [163.4, 0.0], in: system-board, under: [system-cover]},
            only-in: [sff10-rc1-2a3a, sff8sf-rc1-2a3a, nobp-rc1-2a3a, e3s16-rc1-2a3a, e3s14-rc1-2a3a, sff10-rc2-2p3p, sff8sf-rc2-2p3p, nobp-rc2-2p3p, e3s16-rc2-2p3p, e3s14-rc2-2p3p, sff10-rc4-2r3r, sff8sf-rc4-2r3r, nobp-rc4-2r3r, e3s16-rc4-2r3r, e3s14-rc4-2r3r, sff10-rc5-2a3q, sff8sf-rc5-2a3q, nobp-rc5-2a3q, e3s16-rc5-2a3q, e3s14-rc5-2a3q, sff10-rc8-2a, sff8sf-rc8-2a, nobp-rc8-2a, e3s16-rc8-2a, e3s14-rc8-2a, sff10-rc1-2a3a-populated]}
-        - {id: slot-2, at: [194.41, 4.12], size: {w: 70.0, h: 18.42},
-           accepts: [dell/pcie-filler-lp-16g@1], default: dell/pcie-filler-lp-16g@1, group: slots, rel-pos: 2,
-           only-in: [sff10-rc1-2a3a, sff8sf-rc1-2a3a, nobp-rc1-2a3a, e3s16-rc1-2a3a, e3s14-rc1-2a3a, sff10-rc2-2p3p, sff8sf-rc2-2p3p, nobp-rc2-2p3p, e3s16-rc2-2p3p, e3s14-rc2-2p3p, sff10-rc4-2r3r, sff8sf-rc4-2r3r, nobp-rc4-2r3r, e3s16-rc4-2r3r, e3s14-rc4-2r3r, sff10-rc5-2a3q, sff8sf-rc5-2a3q, nobp-rc5-2a3q, e3s16-rc5-2a3q, e3s14-rc5-2a3q, sff10-rc8-2a, sff8sf-rc8-2a, nobp-rc8-2a, e3s16-rc8-2a, e3s14-rc8-2a, sff10-rc1-2a3a-populated]}
-        - {id: slot-3, at: [278.70, 4.12], size: {w: 70.0, h: 18.42},
-           accepts: [dell/pcie-filler-lp-16g@1], default: dell/pcie-filler-lp-16g@1, group: slots-r3, rel-pos: 3,
+        - {id: riser-3, at: [272.8, 2.2], size: {w: 89.8, h: 19.8},
+           accepts: [dell/riser-3a-16g@1, dell/riser-3p-16g@1, dell/riser-3q-16g@1, dell/riser-3r-16g@1], default: dell/riser-3a-16g@1,
+           group: risers, rel-pos: 3,
+           plan: {view: top, at: [71.4, 0.0], in: system-board, under: [system-cover]},
            only-in: [sff10-rc1-2a3a, sff8sf-rc1-2a3a, nobp-rc1-2a3a, e3s16-rc1-2a3a, e3s14-rc1-2a3a, sff10-rc2-2p3p, sff8sf-rc2-2p3p, nobp-rc2-2p3p, e3s16-rc2-2p3p, e3s14-rc2-2p3p, sff10-rc4-2r3r, sff8sf-rc4-2r3r, nobp-rc4-2r3r, e3s16-rc4-2r3r, e3s14-rc4-2r3r, sff10-rc5-2a3q, sff8sf-rc5-2a3q, nobp-rc5-2a3q, e3s16-rc5-2a3q, e3s14-rc5-2a3q, sff10-rc7-3p-rear2, sff10-rc1-2a3a-populated]}
-        - {id: slot-1-r2q, at: [131.80, 4.12], size: {w: 70.0, h: 18.42},
-           accepts: [dell/pcie-filler-lp-16g@1], default: dell/pcie-filler-lp-16g@1, group: slots, rel-pos: 1, only-in: [sff10-rc6-2q, sff8sf-rc6-2q, nobp-rc6-2q, e3s16-rc6-2q, e3s14-rc6-2q]}
-        - {id: slot-2-r2q, at: [213.68, 4.12], size: {w: 70.0, h: 18.42},
-           accepts: [dell/pcie-filler-lp-16g@1], default: dell/pcie-filler-lp-16g@1, group: slots, rel-pos: 2, only-in: [sff10-rc6-2q, sff8sf-rc6-2q, nobp-rc6-2q, e3s16-rc6-2q, e3s14-rc6-2q]}
+        - {id: riser-2q, at: [107.0, 2.2], size: {w: 186.5, h: 19.8},
+           accepts: [dell/riser-2q-16g@1], default: dell/riser-2q-16g@1, group: risers, rel-pos: 2,
+           only-in: [sff10-rc6-2q, sff8sf-rc6-2q, nobp-rc6-2q, e3s16-rc6-2q, e3s14-rc6-2q]}
+        - {id: riser-1, at: [107.0, 2.2], size: {w: 120.6, h: 19.8},
+           accepts: [dell/riser-1p-16g@1], default: dell/riser-1p-16g@1, group: risers, rel-pos: 1,
+           only-in: [sff10-rc3-1p4p, sff8sf-rc3-1p4p, nobp-rc3-1p4p, e3s16-rc3-1p4p, e3s14-rc3-1p4p]}
+        - {id: riser-4, at: [227.6, 2.2], size: {w: 135.0, h: 19.8},
+           accepts: [dell/riser-4p-16g@1], default: dell/riser-4p-16g@1, group: risers, rel-pos: 4,
+           only-in: [sff10-rc3-1p4p, sff8sf-rc3-1p4p, nobp-rc3-1p4p, e3s16-rc3-1p4p, e3s14-rc3-1p4p]}
         - {id: riser-3-blank-r2q, at: [293.7, 2.2], size: {w: 68.9, h: 19.8},
            accepts: [dell/riser-3-blank-gen5-16g@1], default: dell/riser-3-blank-gen5-16g@1,
            group: riser-blanks, rel-pos: 1, only-in: [sff10-rc6-2q, sff8sf-rc6-2q, nobp-rc6-2q, e3s16-rc6-2q, e3s14-rc6-2q]}
         - {id: riser-3-blank, at: [272.8, 2.2], size: {w: 89.8, h: 19.8},
            accepts: [dell/riser-3-blank-16g@1], default: dell/riser-3-blank-16g@1,
            group: riser-blanks, rel-pos: 1, only-in: [sff10-rc8-2a, sff8sf-rc8-2a, nobp-rc8-2a, e3s16-rc8-2a, e3s14-rc8-2a]}
-        - {id: slot-1-fh, at: [107.0, 4.29], size: {w: 120.02, h: 18.42},
-           accepts: [dell/pcie-filler-fh-16g@1], default: dell/pcie-filler-fh-16g@1, group: slots, rel-pos: 1, only-in: [sff10-rc3-1p4p, sff8sf-rc3-1p4p, nobp-rc3-1p4p, e3s16-rc3-1p4p, e3s14-rc3-1p4p]}
-        - {id: slot-2-fh, at: [233.72, 4.29], size: {w: 120.02, h: 18.42},
-           accepts: [dell/pcie-filler-fh-16g@1], default: dell/pcie-filler-fh-16g@1, group: slots, rel-pos: 2, only-in: [sff10-rc3-1p4p, sff8sf-rc3-1p4p, nobp-rc3-1p4p, e3s16-rc3-1p4p, e3s14-rc3-1p4p]}
         - {id: rear-drive-0, at: [111.12, 2.1], size: {w: 79.25, h: 18.0}, rotate: 270,
            accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2, group: drives-rear, rel-pos: 0, only-in: [sff10-rc7-3p-rear2]}
         - {id: rear-drive-1, at: [190.83, 2.1], size: {w: 79.25, h: 18.0}, rotate: 270,
            accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2, group: drives-rear, rel-pos: 1, only-in: [sff10-rc7-3p-rear2]}
-        - {id: ocp, at: [164.95, 24.7], size: {w: 71.8, h: 15.1},
-           accepts: [dell/ocp3-blank-16g@1, dell/ocp3-4x1g-rj45@1, dell/ocp3-2x10g-rj45@1, dell/ocp3-4x10g-rj45@1, dell/ocp3-2x25g-sfp28@1, dell/ocp3-4x25g-sfp28@1, dell/ocp3-2x100g-qsfp56@1], default: dell/ocp3-blank-16g@1, group: ocp, rel-pos: 1,
-           plan: {view: top, at: [195.15, 0.6], in: system-board, under: [system-cover]}}
       placements:
         - {ref: common/rj45-ganged-eth@1, id: lom-1, at: [114.5, 27.07], rotate: 180,
            attrs: {media: rj45, speed: 1g}, group: lom, rel-pos: 1}
@@ -1505,6 +1526,9 @@ configurations:
     kind: orderable
     description: >-
       10 x 2.5 inch front; riser configuration 2, R2P + R3P: three low-profile slots - slot 1 Gen5 x16 (processor 1), slot 2 Gen4 x16 (processor 2), slot 3 Gen5 x16 (processor 2). The same face as configuration 1. ISM table 111.
+    bays:
+      riser-2: dell/riser-2p-16g@1
+      riser-3: dell/riser-3p-16g@1
   sff10-rc3-1p4p:
     kind: orderable
     description: >-
@@ -1513,10 +1537,15 @@ configurations:
     kind: orderable
     description: >-
       10 x 2.5 inch front; riser configuration 4, R2R + R3R, single processor: three low-profile slots - slot 1 Gen5 x8, slot 2 Gen4 x16, slot 3 Gen5 x8, all on processor 1. The same face as configuration 1. ISM table 111.
+    bays:
+      riser-2: dell/riser-2r-16g@1
+      riser-3: dell/riser-3r-16g@1
   sff10-rc5-2a3q:
     kind: orderable
     description: >-
       10 x 2.5 inch front; riser configuration 5, R2A + R3Q: three low-profile slots - slots 1 and 2 Gen4 x16, slot 3 Gen5 x16 SNAPI on both processors. The same face as configuration 1. ISM table 111.
+    bays:
+      riser-3: dell/riser-3q-16g@1
   sff10-rc6-2q:
     kind: orderable
     description: >-
@@ -1525,6 +1554,8 @@ configurations:
     kind: orderable
     description: >-
       10 x 2.5 inch front; riser configuration 7, R3P with rear storage: slot 3 low-profile Gen5 x16 (processor 2), and two rear 2.5 inch drive bays where riser 2 would be. TG table 14: rear storage possible. ISM table 111.
+    bays:
+      riser-3: dell/riser-3p-16g@1
   sff10-rc8-2a:
     kind: orderable
     description: >-
@@ -1539,6 +1570,9 @@ configurations:
     views: {front: front-sff8sf}
     description: >-
       8 x 2.5 inch front with the Smart Flow centre vent; riser configuration 2, R2P + R3P: three low-profile slots - slot 1 Gen5 x16 (processor 1), slot 2 Gen4 x16 (processor 2), slot 3 Gen5 x16 (processor 2). The same face as configuration 1. ISM table 111.
+    bays:
+      riser-2: dell/riser-2p-16g@1
+      riser-3: dell/riser-3p-16g@1
   sff8sf-rc3-1p4p:
     kind: orderable
     views: {front: front-sff8sf}
@@ -1549,11 +1583,16 @@ configurations:
     views: {front: front-sff8sf}
     description: >-
       8 x 2.5 inch front with the Smart Flow centre vent; riser configuration 4, R2R + R3R, single processor: three low-profile slots - slot 1 Gen5 x8, slot 2 Gen4 x16, slot 3 Gen5 x8, all on processor 1. The same face as configuration 1. ISM table 111.
+    bays:
+      riser-2: dell/riser-2r-16g@1
+      riser-3: dell/riser-3r-16g@1
   sff8sf-rc5-2a3q:
     kind: orderable
     views: {front: front-sff8sf}
     description: >-
       8 x 2.5 inch front with the Smart Flow centre vent; riser configuration 5, R2A + R3Q: three low-profile slots - slots 1 and 2 Gen4 x16, slot 3 Gen5 x16 SNAPI on both processors. The same face as configuration 1. ISM table 111.
+    bays:
+      riser-3: dell/riser-3q-16g@1
   sff8sf-rc6-2q:
     kind: orderable
     views: {front: front-sff8sf}
@@ -1574,6 +1613,9 @@ configurations:
     views: {front: front-nobp}
     description: >-
       no front drives (no backplane) - a chassis 50.8 shorter, which this model's single depth does not show; riser configuration 2, R2P + R3P: three low-profile slots - slot 1 Gen5 x16 (processor 1), slot 2 Gen4 x16 (processor 2), slot 3 Gen5 x16 (processor 2). The same face as configuration 1. ISM table 111.
+    bays:
+      riser-2: dell/riser-2p-16g@1
+      riser-3: dell/riser-3p-16g@1
   nobp-rc3-1p4p:
     kind: orderable
     views: {front: front-nobp}
@@ -1584,11 +1626,16 @@ configurations:
     views: {front: front-nobp}
     description: >-
       no front drives (no backplane) - a chassis 50.8 shorter, which this model's single depth does not show; riser configuration 4, R2R + R3R, single processor: three low-profile slots - slot 1 Gen5 x8, slot 2 Gen4 x16, slot 3 Gen5 x8, all on processor 1. The same face as configuration 1. ISM table 111.
+    bays:
+      riser-2: dell/riser-2r-16g@1
+      riser-3: dell/riser-3r-16g@1
   nobp-rc5-2a3q:
     kind: orderable
     views: {front: front-nobp}
     description: >-
       no front drives (no backplane) - a chassis 50.8 shorter, which this model's single depth does not show; riser configuration 5, R2A + R3Q: three low-profile slots - slots 1 and 2 Gen4 x16, slot 3 Gen5 x16 SNAPI on both processors. The same face as configuration 1. ISM table 111.
+    bays:
+      riser-3: dell/riser-3q-16g@1
   nobp-rc6-2q:
     kind: orderable
     views: {front: front-nobp}
@@ -1609,6 +1656,9 @@ configurations:
     views: {front: front-e3s16}
     description: >-
       16 x EDSFF E3.S front (dual RAID); riser configuration 2, R2P + R3P: three low-profile slots - slot 1 Gen5 x16 (processor 1), slot 2 Gen4 x16 (processor 2), slot 3 Gen5 x16 (processor 2). The same face as configuration 1. ISM table 111.
+    bays:
+      riser-2: dell/riser-2p-16g@1
+      riser-3: dell/riser-3p-16g@1
   e3s16-rc3-1p4p:
     kind: orderable
     views: {front: front-e3s16}
@@ -1619,11 +1669,16 @@ configurations:
     views: {front: front-e3s16}
     description: >-
       16 x EDSFF E3.S front (dual RAID); riser configuration 4, R2R + R3R, single processor: three low-profile slots - slot 1 Gen5 x8, slot 2 Gen4 x16, slot 3 Gen5 x8, all on processor 1. The same face as configuration 1. ISM table 111.
+    bays:
+      riser-2: dell/riser-2r-16g@1
+      riser-3: dell/riser-3r-16g@1
   e3s16-rc5-2a3q:
     kind: orderable
     views: {front: front-e3s16}
     description: >-
       16 x EDSFF E3.S front (dual RAID); riser configuration 5, R2A + R3Q: three low-profile slots - slots 1 and 2 Gen4 x16, slot 3 Gen5 x16 SNAPI on both processors. The same face as configuration 1. ISM table 111.
+    bays:
+      riser-3: dell/riser-3q-16g@1
   e3s16-rc6-2q:
     kind: orderable
     views: {front: front-e3s16}
@@ -1644,6 +1699,9 @@ configurations:
     views: {front: front-e3s14}
     description: >-
       14 x EDSFF E3.S front; riser configuration 2, R2P + R3P: three low-profile slots - slot 1 Gen5 x16 (processor 1), slot 2 Gen4 x16 (processor 2), slot 3 Gen5 x16 (processor 2). The same face as configuration 1. ISM table 111.
+    bays:
+      riser-2: dell/riser-2p-16g@1
+      riser-3: dell/riser-3p-16g@1
   e3s14-rc3-1p4p:
     kind: orderable
     views: {front: front-e3s14}
@@ -1654,11 +1712,16 @@ configurations:
     views: {front: front-e3s14}
     description: >-
       14 x EDSFF E3.S front; riser configuration 4, R2R + R3R, single processor: three low-profile slots - slot 1 Gen5 x8, slot 2 Gen4 x16, slot 3 Gen5 x8, all on processor 1. The same face as configuration 1. ISM table 111.
+    bays:
+      riser-2: dell/riser-2r-16g@1
+      riser-3: dell/riser-3r-16g@1
   e3s14-rc5-2a3q:
     kind: orderable
     views: {front: front-e3s14}
     description: >-
       14 x EDSFF E3.S front; riser configuration 5, R2A + R3Q: three low-profile slots - slots 1 and 2 Gen4 x16, slot 3 Gen5 x16 SNAPI on both processors. The same face as configuration 1. ISM table 111.
+    bays:
+      riser-3: dell/riser-3q-16g@1
   e3s14-rc6-2q:
     kind: orderable
     views: {front: front-e3s14}

@@ -1,0 +1,63 @@
+format: 1
+kind: module
+name: riser-2q-16g
+version: 1.0.0
+class: riser
+behaviour: fills
+profile: server
+description: >-
+  Dell riser 2Q of the PowerEdge R660 - slot 1 and slot 2 on dell/riser-2q-cage-16g@1, fitted in riser configuration 6
+attrs:
+  riser: '2Q'
+  appears-in: 'riser configuration 6'
+  power-absent: not-published
+  slot-1: 'x16, low profile, half length, processor 1, PCIe Gen5'
+  slot-2: 'x16, low profile, half length, processor 2, PCIe Gen5'
+provenance:
+  power: >-
+    NOT PUBLISHED - the riser is a passive board with connectors. The R660 ISM,
+    technical guide and spec sheet were searched for 'riser' beside a wattage
+    and none gives one.
+  identity: >-
+    A REMOVABLE ASSEMBLY THAT BRINGS ITS OWN SLOTS, which is why it is a module
+    with `bays` and the slots are not openings on the chassis: the numbers are
+    printed on the riser and move with it (see dell/riser-2q-cage-16g@1).
+  slots: >-
+    datasheet - R660 ISM table 111, which gives each slot's form factor,
+    controlling processor, PCIe generation and electrical width, every one on an
+    x16 connector; the technical guide's slot table and the spec sheet agree.
+    Length: the same two documents give every low-profile slot as half length.
+  face: >-
+    drawing - composed from dell/riser-2q-cage-16g@1, the metal every riser sharing this
+    cage presents. The slot bays sit on that cage's windows.
+  size: >-
+    drawing - the cage's extent, 186.50 x 19.80.
+  seating: >-
+    ONLY THE FILLER IS ACCEPTED. A low-profile bracket is 79.20 long and the
+    window 70.0; how a card's bracket ends lie under this riser's metal is not
+    shown by any source held, so the device's slot-cards-not-seatable gap
+    stands.
+  plan: >-
+    NONE. Dell's service model carries riser 2A and riser 3A and no other; no
+    model, figure or photograph held shows this riser from above, so the top
+    view leaves its place empty rather than borrow another riser's outline.
+size: {w: 186.50, h: 19.80}
+size-confidence: {w: drawing, h: drawing}
+parts:
+  - {ref: dell/riser-2q-cage-16g@1, id: plate, at: [0, 0]}
+bays:
+  slot-1:
+    slot: {connector: x16, lanes: 16, height: low, length: half, processor: 1, generation: 5}
+    behind: true
+    at: [24.80, 1.92]
+    size: [70.00, 18.42]
+    accepts: [dell/pcie-filler-lp-16g@1]
+    default: dell/pcie-filler-lp-16g@1
+  slot-2:
+    slot: {connector: x16, lanes: 16, height: low, length: half, processor: 2, generation: 5}
+    behind: true
+    at: [106.68, 1.92]
+    size: [70.00, 18.42]
+    accepts: [dell/pcie-filler-lp-16g@1]
+    default: dell/pcie-filler-lp-16g@1
+skins: [default]

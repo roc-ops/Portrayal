@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1062 component majors in 23 namespaces.
+1079 component majors in 23 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -494,7 +494,7 @@ aperture when it is a bare opening - never both at one position. The README's
 |---|---|---|---|---|---|---|---|
 | `credo/hiwire-shift-qsfp-dd@1` | module | transceiver | 18.35 × 8.5 × 58.26 | qsfp-dd | 0 | 0 | Credo HiWire SHIFT active electrical cable, the 400G QSFP-DD end of a 400G to four 100G QSFP28 breakout - a Q… |
 
-## dell/ (90)
+## dell/ (107)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -532,9 +532,9 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/ocp3-blank-16g@1` | module | blank | 71.8 × 15.1 |  | 1 | 0 | The vented blank a 16th-generation PowerEdge (R660) fits in an empty OCP NIC 3.0 slot - a twelve-by-two grid … |
 | `dell/ocp3-sff-plan@1` | component | mechanical | 76 × 115 |  | 0 | 6 | An OCP NIC 3.0 small-form-factor card seen from above - the 76 x 115 board behind its bracket |
 | `dell/pcie-filler-fh-14g@2` | component | bracket | 120.02 × 21.59 |  | 0 | 14 | full-height PCIe slot blanking plate for a 14th-generation PowerEdge - the standard bracket with a 14 x 2 ven… |
-| `dell/pcie-filler-fh-16g@1` | module | blank | 120.02 × 18.42 |  | 1 | 0 | Vented full-height slot filler of a 16th-generation 1U PowerEdge (R660), lying flat on riser 1 or riser 4 - a… |
+| `dell/pcie-filler-fh-16g@1` | module | blank | 120.02 × 18.42 |  | 0 | 2 | Vented full-height slot filler of a 16th-generation 1U PowerEdge (R660), lying flat on riser 1 or riser 4 - a… |
 | `dell/pcie-filler-lp-14g@1` | component | bracket | 79.2 × 18.42 |  | 0 | 7 | low-profile PCIe slot blanking plate for a 14th-generation PowerEdge - the standard bracket with a 8 x 2 vent… |
-| `dell/pcie-filler-lp-16g@1` | module | blank | 70 × 18.42 |  | 1 | 0 | Vented low-profile slot filler of a 16th-generation 1U PowerEdge (R660), lying flat in its riser - the part o… |
+| `dell/pcie-filler-lp-16g@1` | module | blank | 70 × 18.42 |  | 0 | 8 | Vented low-profile slot filler of a 16th-generation 1U PowerEdge (R660), lying flat in its riser - the part o… |
 | `dell/pcie-retention-clip-14g@1` | component | latch | 7.5 × 16.5 × 3 |  | 0 | 2 | The chassis-side retention clip for a PCIe card bracket on a 14G PowerEdge - a pair of tabs the bracket's own… |
 | `dell/pcie-slot-strip-14g@1` | component | mechanical | 10.75 × 62 × 2 |  | 1 | 1 | The strip of chassis metal between the PCIe card retention clips and the riser plate on a 14G PowerEdge, carr… |
 | `dell/pcie-slot-strip-r3-14g@1` | component | mechanical | 10.75 × 41.68 × 2 |  | 1 | 0 | The strip of chassis metal between the PCIe card retention clips and riser 3's plate on a 14G PowerEdge, carr… |
@@ -542,7 +542,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/psu-1100w-ac-14g@1` | module | psu | 86.3 × 39.1 × 195.5 |  | 1 | 2 | 1100 W AC hot-plug power supply for a 14th-generation PowerEdge - C14 inlet, a fan, and a translucent handle … |
 | `dell/psu-1100w-ac-60mm@1` | module | psu | 59.8 × 40.1 × 222 |  | 1 | 0 | 1100 W mixed-mode hot-plug power supply in Dell's 60 mm form factor, as fitted to the 16th-generation 1U Powe… |
 | `dell/psu-1100w-dc-14g@1` | module | psu | 86.3 × 39.1 × 195.5 |  | 1 | 0 | 1100 W -48 V DC hot-plug power supply for a 14th-generation PowerEdge - a terminal-block input, a fan under a… |
-| `dell/psu-1400w-ac-60mm@1` | module | psu | 59.8 × 40.1 × 222 |  | 1 | 7 | 1400 W mixed-mode hot-plug power supply in Dell's 60 mm form factor, as fitted to the 16th-generation 1U Powe… |
+| `dell/psu-1400w-ac-60mm@1` | module | psu | 59.8 × 40.1 × 222 |  | 1 | 12 | 1400 W mixed-mode hot-plug power supply in Dell's 60 mm form factor, as fitted to the 16th-generation 1U Powe… |
 | `dell/psu-2400w-ac-14g@1` | module | psu | 86.3 × 39.1 × 195.5 |  | 1 | 0 | 2400 W AC hot-plug power supply for a 14th-generation PowerEdge - C20 inlet, a fan, and a translucent handle … |
 | `dell/psu-60mm-plan@1` | component | mechanical | 59.8 × 222 |  | 0 | 4 | Dell's 60 mm power supply seen from above - the can that runs 222 mm into a 16th-generation 1U PowerEdge from… |
 | `dell/psu-700w-ac-60mm@1` | module | psu | 59.8 × 40.1 × 222 |  | 1 | 0 | 700 W mixed-mode hot-plug power supply in Dell's 60 mm form factor, as fitted to the 16th-generation 1U Power… |
@@ -555,6 +555,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/rear-drive-plate-14g@1` | component | mechanical | 12.95 × 31.75 |  | 1 | 0 | The numbered plate at the inboard end of one rear drive bay on a 14G PowerEdge - two slot numbers, each with … |
 | `dell/rear-handle-14g@1` | component | mechanical | 111.69 × 41.85 × 49.59 |  | 1 | 0 | The moulded rear grab handle of a 14G PowerEdge - a block on the left, a rail running right and a leg falling… |
 | `dell/rear-io-board-plan-16g@1` | component | mechanical | 90 × 121.5 |  | 1 | 0 | The 16G rear I/O board seen from above - the board behind the iDRAC port, the USB stack, the VGA and the syst… |
+| `dell/riser-1-fh-cage-16g@1` | component | riser | 120.6 × 19.8 |  | 0 | 1 | the riser 1 cage of a 16th-generation 1U PowerEdge (R660) - one full-height window, its clip at the left and … |
 | `dell/riser-1-none-14g@2` | module | riser | 107.59 × 62 |  | 1 | 0 | Dell riser none - no card; the three openings take fillers only |
 | `dell/riser-1-plate-14g@1` | component | riser | 107.59 × 62 |  | 0 | 4 | the riser 1 plate on a 14th-generation PowerEdge - one pressing with three windows, shared by every riser 1 a… |
 | `dell/riser-1-shroud-14g@1` | component | mechanical | 25.62 × 64.43 × 17.76 |  | 1 | 3 | The sheet metal right of riser 1 on a 14G PowerEdge - the outer skin over the PCIe retention bracket, and the… |
@@ -562,20 +563,36 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/riser-1a-14g@2` | module | riser | 107.59 × 62 × 184.8 |  | 1 | 0 | Dell riser 1A - two x16 full-height slots on the three-window riser 1 plate; the middle opening has no connec… |
 | `dell/riser-1b-14g@2` | module | riser | 107.59 × 62 × 184.8 |  | 1 | 8 | Dell riser 1B - 3 wired slots on the shared riser 1 plate |
 | `dell/riser-1d-14g@2` | module | riser | 107.59 × 62 × 184.8 |  | 1 | 0 | Dell riser 1D - 3 wired slots on the shared riser 1 plate |
+| `dell/riser-1p-16g@1` | module | riser | 120.6 × 19.8 |  | 1 | 0 | Dell riser 1P of the PowerEdge R660 - slot 1 on dell/riser-1-fh-cage-16g@1, fitted in riser configuration 3 |
 | `dell/riser-2-3-blank-14g@1` | module | blank | 233 × 62 |  | 1 | 0 | Sheet-metal blank closing riser 2 AND riser 3 on a 14th-generation PowerEdge when no riser is fitted there |
-| `dell/riser-2-fh-plate-14g@1` | component | riser | 111.715 × 42.2 |  | 0 | 4 | the riser 2 plate on a 14th-generation PowerEdge - two full-height windows and one low-profile, shared by ris… |
+| `dell/riser-2-fh-plate-14g@1` | component | riser | 111.715 × 42.2 |  | 0 | 9 | the riser 2 plate on a 14th-generation PowerEdge - two full-height windows and one low-profile, shared by ris… |
+| `dell/riser-2-lp-cage-16g@1` | component | riser | 163.6 × 19.8 |  | 0 | 3 | the riser 2 cage of a 16th-generation 1U PowerEdge (R660) - two low-profile windows, the riser's vent block a… |
+| `dell/riser-2-lp-plan-16g@1` | component | mechanical | 172.7 × 253.2 |  | 0 | 3 | riser 2 of the PowerEdge R660 (2A, 2P, 2R) seen from above - the cage roof over its two low-profile cards and… |
 | `dell/riser-2-none-14g@1` | module | riser | 79.2 × 18.42 |  | 1 | 0 | the riser 2 position with no riser in it - the low-profile window is still there and takes a filler only |
 | `dell/riser-2a-14g@2` | module | riser | 111.715 × 42.2 × 184.8 |  | 1 | 0 | Dell riser 2A - 3 wired slots on the shared riser 2 plate |
+| `dell/riser-2a-16g@1` | module | riser | 163.6 × 19.8 |  | 1 | 0 | Dell riser 2A of the PowerEdge R660 - slot 1 and slot 2 on dell/riser-2-lp-cage-16g@1, fitted in riser config… |
 | `dell/riser-2b-14g@1` | module | riser | 79.2 × 18.42 × 221 |  | 1 | 0 | Dell riser 2B - 1 wired slot on the shared riser 2 plate |
 | `dell/riser-2c-14g@1` | module | riser | 79.2 × 18.42 × 221 |  | 1 | 1 | Dell riser 2C - 1 wired slot on the shared riser 2 plate |
 | `dell/riser-2d-14g@2` | module | riser | 111.715 × 42.2 × 184.8 |  | 1 | 0 | Dell riser 2D - 3 wired slots on the shared riser 2 plate |
 | `dell/riser-2e-14g@2` | module | riser | 111.715 × 42.2 × 184.8 |  | 1 | 0 | Dell riser 2E - 3 wired slots on the shared riser 2 plate |
 | `dell/riser-2f-14g@2` | module | riser | 111.715 × 42.2 × 184.8 |  | 1 | 0 | Dell riser 2F - 3 wired slots on the shared riser 2 plate |
-| `dell/riser-3-blank-16g@1` | module | blank | 89.8 × 19.8 |  | 1 | 0 | The vented plate a 16th-generation 1U PowerEdge (R660) fits where riser 3 is absent beside a riser 2 with two… |
+| `dell/riser-2p-16g@1` | module | riser | 163.6 × 19.8 |  | 1 | 0 | Dell riser 2P of the PowerEdge R660 - slot 1 and slot 2 on dell/riser-2-lp-cage-16g@1, fitted in riser config… |
+| `dell/riser-2q-16g@1` | module | riser | 186.5 × 19.8 |  | 1 | 0 | Dell riser 2Q of the PowerEdge R660 - slot 1 and slot 2 on dell/riser-2q-cage-16g@1, fitted in riser configur… |
+| `dell/riser-2q-cage-16g@1` | component | riser | 186.5 × 19.8 |  | 0 | 1 | the riser 2Q cage of a 16th-generation 1U PowerEdge (R660) - two low-profile Gen5 windows set wider apart tha… |
+| `dell/riser-2r-16g@1` | module | riser | 163.6 × 19.8 |  | 1 | 0 | Dell riser 2R of the PowerEdge R660 - slot 1 and slot 2 on dell/riser-2-lp-cage-16g@1, fitted in riser config… |
+| `dell/riser-3-blank-16g@1` | module | blank | 89.8 × 19.8 |  | 1 | 5 | The vented plate a 16th-generation 1U PowerEdge (R660) fits where riser 3 is absent beside a riser 2 with two… |
 | `dell/riser-3-blank-gen5-16g@1` | module | blank | 68.9 × 19.8 |  | 1 | 0 | The vented plate a 16th-generation 1U PowerEdge (R660) fits where riser 3 is absent beside the Gen5 R2Q riser… |
+| `dell/riser-3-lp-cage-16g@1` | component | riser | 89.8 × 19.8 |  | 0 | 4 | the riser 3 cage of a 16th-generation 1U PowerEdge (R660) - one low-profile window, slot number 3 printed abo… |
+| `dell/riser-3-plan-16g@1` | component | mechanical | 92.6 × 252.8 |  | 0 | 4 | riser 3 of the PowerEdge R660 (3A, 3P, 3Q, 3R) seen from above - the cage roof over its low-profile card and … |
 | `dell/riser-3-plate-14g@1` | component | riser | 107.59 × 41.68 |  | 0 | 2 | the riser 3 plate on a 14th-generation PowerEdge - two full-height windows, shared by risers 3A and 3B |
 | `dell/riser-3a-14g@2` | module | riser | 107.59 × 41.68 × 184.8 |  | 1 | 0 | Dell riser 3A - 2 wired slots on the shared riser 3 plate |
+| `dell/riser-3a-16g@1` | module | riser | 89.8 × 19.8 |  | 1 | 0 | Dell riser 3A of the PowerEdge R660 - slot 3 on dell/riser-3-lp-cage-16g@1, fitted in riser configuration 1 |
 | `dell/riser-3b-14g@2` | module | riser | 107.59 × 41.68 × 184.8 |  | 1 | 0 | Dell riser 3B - 2 wired slots on the shared riser 3 plate |
+| `dell/riser-3p-16g@1` | module | riser | 89.8 × 19.8 |  | 1 | 0 | Dell riser 3P of the PowerEdge R660 - slot 3 on dell/riser-3-lp-cage-16g@1, fitted in riser configurations 2 … |
+| `dell/riser-3q-16g@1` | module | riser | 89.8 × 19.8 |  | 1 | 0 | Dell riser 3Q of the PowerEdge R660 - slot 3 on dell/riser-3-lp-cage-16g@1, fitted in riser configuration 5 |
+| `dell/riser-3r-16g@1` | module | riser | 89.8 × 19.8 |  | 1 | 0 | Dell riser 3R of the PowerEdge R660 - slot 3 on dell/riser-3-lp-cage-16g@1, fitted in riser configuration 4 |
+| `dell/riser-4-fh-cage-16g@1` | component | riser | 135 × 19.8 |  | 0 | 1 | the riser 4 cage of a 16th-generation 1U PowerEdge (R660) - one full-height window between two latches, slot … |
+| `dell/riser-4p-16g@1` | module | riser | 135 × 19.8 |  | 1 | 0 | Dell riser 4P of the PowerEdge R660 - slot 2 on dell/riser-4-fh-cage-16g@1, fitted in riser configuration 3 |
 | `dell/riser-cage-mount-14g@1` | component | mechanical | 6.14 × 14.54 |  | 1 | 0 | The pair of rings a riser cage mounts to on a 14G PowerEdge rear bay, seen when the bay carries drives instea… |
 | `dell/riser-card-14g@1` | component | riser | 12.8 × 170.9 |  | 0 | 10 | The full-height riser card of a 2U 14G PowerEdge seen from above - the vertical PCB standing at the chassis w… |
 | `dell/riser-card-clip-14g@1` | component | mechanical | 8.4 × 16.4 |  | 0 | 3 | The blue card-retention clip at the end of a riser's slots on a 14G PowerEdge, where the L of a PCIe bracket … |
