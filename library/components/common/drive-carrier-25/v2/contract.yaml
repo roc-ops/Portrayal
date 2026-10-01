@@ -1,0 +1,303 @@
+format: 1
+kind: module
+name: drive-carrier-25
+version: 2.1.0
+class: drive
+behaviour: fills
+profile: server
+description: >-
+  Hot-plug carrier for a 2.5 inch SFF drive, stood on edge as a rack server's
+  front bays present them - two illuminated glyphs at the head, a release with
+  its orange ring, and three windows onto the tray's honeycomb
+size: {w: 15.3, h: 73.0, d: 123.7}
+plan: {ref: std/drive-25-plan@1}
+size-confidence: {w: drawing, h: drawing, d: measured}
+body: {depth: 123.7, color: '#3c4247'}
+attrs:
+  media: sff-2.5
+  form-factor: '2.5-inch SFF'
+  capacity: '1.2'
+  capacity-unit: TB
+  interface: SAS
+  link: 12Gb
+  rpm: 10K
+# THE LABEL IS FIELDS. The carrier is one part for every capacity; what the
+# label prints is set per drive - a placement's attrs, a configuration's
+# bay-attrs, or a form. Defaults are the attrs above.
+fields:
+  capacity: {label: Capacity, type: text, default: '1.2'}
+  capacity-unit: {label: Unit, type: choice, default: TB, options: [GB, TB]}
+  interface: {label: Interface, type: choice, default: SAS, options: [SAS, SATA, NVMe]}
+  link: {label: Link rate, type: text, default: 12Gb}
+  rpm: {label: Spindle, type: text, default: 10K, description: empty for an SSD - the glyph beside it goes too}
+provenance:
+  plan: >-
+    seen from above, a seated carrier shows the drive it holds, std/drive-25-plan@1; the carrier frame round it is not drawn in plan.
+  size: >-
+    drawing - 15.3 x 73.0, the CARRIER'S OWN FACE, standing on edge. @1 was
+    17.868 x 79.4, and neither of those was the carrier: 17.868 is the R740xd's
+    bay PITCH and 79.4 the vertical extent of its bay SEAMS on a face-on render
+    (both still measured there, and the R740xd's bays keep them - see that
+    device's bay-pitch and bay-vertical provenance). @1's own body-inset key
+    already said the body inside that pitch was 14.86.
+    WHAT FIXES 15.3 x 73.0 IS FOUR DELL DRAWINGS OF THE SAME PART. The 16G R760
+    24-bay front master (true scale, drawn ear to ear) has its carriers 15.3 wide
+    on a 17.8 pitch with 2.5 mm of chassis between them, and 72.45..73.9 long;
+    the 16G R660 10-bay front master lays the same carrier flat, 73.0 x 15.3, on
+    an 82.85 column pitch; Dell's isolated carrier master (14g-2-5-sas-ssd-h)
+    is stamped 72.5 long with an aspect of 4.74, which is 72.5 x 15.3; and a
+    photograph of a real R660 gives an aspect of about 4.8. The R740xd's own ISM
+    figure put the body at 14.86 between its rails - 3% under, inside what a
+    figure at that resolution resolves.
+    ONE PART ACROSS 14G, 15G AND 16G. Dell sells one 2.5 inch carrier, DXD9H, for
+    14th- through 16th-generation PowerEdge including the R740xd and the R660
+    (reseller listings, secondary), and Dell's own service models put the same
+    carrier asset in both machines (r740xd.glb `DD9900_ Drives_` and r660.glb
+    `Poweredge_R760_Drive_Carrier_Assembly`, identical children). The CAD's
+    78.3 x 18.48 is that asset's bounding box, which takes in what stands off the
+    face, and is not the face - it would overlap its neighbour by 2.7 mm on the
+    R660's 15.8 row pitch.
+    ONE DRAWING DISAGREES: the 15G r750-24d-2-5-front master draws its carriers
+    79.01 long, the figure @1 leaned on for corroboration. Against the R760's
+    16G master, the isolated carrier master and the R660, it is the outlier, and
+    it measures the bay outline rather than the carrier.
+  size-was-a-bay: >-
+    THE ART IS @1's, RESCALED, NOT REDRAWN. @1 drew its features as percentages
+    of the length (from the isolated 14g master) inside a 14.86 body; @2 maps
+    that body onto the 15.3 face (x 1.5..16.36 to 0..15.3, scale 1.0296) and the
+    79.4 length onto 73.0 (scale 0.9194), so every feature keeps its fraction of
+    the part. The gap @1 drew either side of the body is the bay's, and is gone.
+  depth-from-dell-cad: >-
+    measured - Dell's R740XD 3D guide CAD, node `DD9900_ Drives_-1.001`, which
+    spans z 19.77..143.47. The bare drive inside it (`DD9900_ HDD 2.5_`, 15.00
+    x 69.85 x 100.20 - matching std/drive-25's recorded 15.0 x 69.85 x 100.45)
+    sits at z 42.28..142.48, so the carrier is the drive plus 22.5 mm of bezel
+    and latch in front and 1.0 mm of shell behind. THE HANDLE IS CLOSED IN
+    THIS SCENE, checked because the R740xd PSU's CAD depth is a pose: the
+    release handle spans 19.77..31.77 against a carrier face at 20.27, so it
+    stands 0.5 mm proud rather than swung out. THE FACE IS NOT TAKEN FROM THIS
+    CAD and 17.868 x 79.4 stands. The same node reads 18.50 wide while its own
+    front row pitches at 17.8174 - a carrier wider than its pitch is
+    impossible - and neighbour gaps in that row run 16.9 to 18.8, so the scene
+    is approximately assembled in x. The library's 17.868 comes from two
+    Gate-1 figures with 24 repeats each.
+  body: >-
+    the 3D body. `body.depth` is what viewer3d.js uses for a component
+    (`body.depth ?? size.d`), and it matches `size.d` here because the whole
+    part is one box behind one face. `travel` is DELIBERATELY OMITTED: the
+    schema reserves it for captive modules that pull out and stay in the
+    chassis, and a drive carrier comes all the way out.
+  the-label-is-attrs-now-not-a-skin-per-capacity: >-
+    THE FOUR CAPACITY SKINS ARE GONE AND NOTHING REFERENCED THEM. d2tb-sas,
+    d1200gb-sas, d960gb-ssd and d1920gb-ssd differed from `default` in one <g
+    id="drive-label"> block and in nothing else, and no device named any of
+    them. Table 9 of the R740/R740xd Technical Guide lists eight rows of
+    supported drives for one chassis and a reseller lists 84 distinct specs,
+    so a file per capacity is a file per catalogue row forever. The label now
+    reads from attrs via `data-from`, which is the bargain skins already make
+    for colour: the value in the file is a DEFAULT and the render overrides
+    it. An attr that is ABSENT leaves the default standing; an attr that is
+    EMPTY removes the node and any ancestor marked `data-hide-when-empty`,
+    which is how one drawing serves an SSD with no rotational speed and no
+    spindle glyph beside it.
+  the-defaults-are-real-rows-of-table-9: >-
+    datasheet - Dell R740/R740xd Technical Guide, table 9 "Supported drives",
+    row 2.5-inch / SAS / 12Gb / 10K - "300GB, 600GB, 768 GB, 1.2TB, 1.8TB,
+    2.4TB". The values in the skin are DEFAULTS rather than a fixed drawing,
+    so a bay that names no attrs still renders a drive Dell actually sells.
+    THE DEFAULT USED TO READ 10 TB SATA 7.2K, WHICH IS NOT A DRIVE THAT
+    EXISTS. Table 9's 2.5-inch SATA 7.2K row is "1TB, 2TB", and 10TB appears
+    only in the 3.5-inch rows - it was copied from the 3.5-inch family. A
+    capacity baked into a file nobody re-reads is how that survived unnoticed,
+    which is most of the argument for attrs.
+  the-label-is-text-and-a-skin: >-
+    IT LOOKED LIKE A QR CODE AND IT IS FOUR LINES OF TYPE. At the resolution the
+    first reading was done, a dense block of small white glyphs on a dark square
+    is indistinguishable from a matrix barcode, and it was drawn as one - a grid
+    of squares carrying no information whatever. At 24x the figure resolves it:
+    capacity with the unit small beside it, interface, link rate, and a spindle
+    glyph with the rotational speed.
+    THAT MAKES IT THE SAME KIND OF THING AS THE SUPPLY'S WATTAGE. A carrier is
+    one moulding whatever is in it, and this label is the only thing on the face
+    saying whether the bay holds a 10 TB 7.2K SATA drive or a 1.92 TB SSD. So it
+    is a skin: the geometry is the part, the text is the variant, and a device
+    names a skin rather than seating a different carrier.
+    THE GLYPHS ARE NOT READ FROM THE FIGURE - the LAYOUT is. Four lines, this
+    order, this emphasis. The values in each skin are the ones that figure shows
+    plus common orderable sizes, and a drive this library holds no document for
+    should get a skin when it gets a document rather than a guess.
+  face: >-
+    transcribed from Dell's rack server Visio master `14g-2-5-sas-v-1`, which is
+    a line drawing and can therefore be measured where a photograph cannot.
+    Read off it as percentages of the length and applied to 79.4: release ring
+    centred across the face with its centre at 16.1%, rails from 23.1% to 98.3%
+    down BOTH long edges, three windows at 34.4-48.1, 49.9-63.7 and 65.6-77.1%
+    spanning 8.8% to 90.9% across. Transcribed and not copied - the master stays
+    in working/ and what crosses here is the geometry, not the artwork.
+  windows: >-
+    The honeycomb belongs to the TRAY BEHIND the ejector, not to this face. The
+    ejector carries three rectangular openings and what a viewer sees is mesh
+    through them, which is why the mesh is laid out across the whole face and
+    clipped by each window rather than fitted to it. Cell size is counted off
+    the master at a little over 4 mm and is NOT dimensioned by anything.
+  label: >-
+    A WHITE SQUARE WITH A QR CODE IN IT. This took three passes and each one was
+    a different reading of the same corner: a plate with a Phillips head (from a
+    photograph), then a wide dark strip with bars standing in for printing, and
+    now what the operator reports from the machine with the compiled drawing
+    zoomed beside it - a light, roughly square label carrying a QR and nothing
+    else worth drawing. A screw says the part is bolted and a label says it is
+    identified, so the first of those was not a detail apart.
+    THE CODE DOES NOT RESOLVE, DELIBERATELY. It is a plausible module grid with
+    the three finder patterns that make a QR read AS a QR, generated from a fixed
+    rule so it is stable across builds. Encoding a real payload would put a
+    scannable string on every drive bay in the library, which is a claim about a
+    machine rather than a picture of one.
+  depth: >-
+    estimated - SFF-8201 gives the drive 100.45 mm long; the carrier is a little
+    longer and no document held here says how much. 105 is a placeholder.
+  lamps: >-
+    THE GLYPHS ARE THE LAMPS. They are not labels beside an indicator - the
+    pulse and the drive cylinder light up themselves, which is why the master
+    draws two glyphs and no third dot, and why an earlier draft's separate LED
+    between them was a misreading of a photograph.
+    WHICH IS WHICH IS SOURCED: Dell KB 000413096 states 'the drive manages the
+    light on the left and indicates activity on the drive', so the pulse is the
+    left-hand activity lamp and the cylinder the right-hand status lamp, the
+    latter driven by the backplane or storage controller.
+  led-states: >-
+    Dell KB 000413096, 'PowerEdge: What is the meaning of LEDs on physical
+    drives', transcribed in full for the status lamp: blinks green twice a
+    second - identifying the drive or preparing for removal; blinks green, amber
+    and off - predicted drive failure; blinks amber four times a second - drive
+    failure; blinks green slowly - drive rebuilding; steady green - drive
+    online; blinks green three seconds, amber three seconds, off six seconds -
+    rebuild aborted; off - ready for insertion, removal, or not detected.
+    ONE LIMIT THE ARTICLE STATES ITSELF and which is carried rather than smoothed
+    over: the table applies to RAID configurations only.
+  led-states-corroborated: >-
+    A SECOND DOCUMENT, ABOUT THIS EXACT MACHINE, AND IT AGREES ON ALL SEVEN. The
+    PowerFlex / ScaleIO Ready Node R740xd Owner's Guide, 'Drive indicator codes',
+    gives: flashes green twice per second - identifying or preparing for removal;
+    off - ready for removal; flashes green, amber, then off - predicted failure;
+    flashes amber four times per second - failed; flashes green slowly -
+    rebuilding; solid green - online; flashes green 3 sec, amber 3 sec, off after
+    6 sec - rebuild stopped. Same seven codes and the same timings as the generic
+    KB article, now from a guide for the R740xd itself rather than for PowerEdge
+    at large.
+    AND IT ADDS TWO THINGS THE KB DID NOT SAY. The activity lamp has a published
+    behaviour after all - "The activity LED flashes whenever the drive is
+    accessed" - so `active` is BLINKING here and not solid, which an earlier
+    draft got wrong by concluding from one document's silence that nothing was
+    published. No rate is given, so none is stated.
+    And `off` has a condition beyond an empty or unseated bay: "The drive status
+    indicator remains off until all drives are initialized after the system is
+    turned on." A dark status lamp on a running machine can mean the array is
+    still coming up.
+  the-label-rows-are-right-aligned: >-
+    photo-measured - every row inside the label block ends on the same right
+    edge, and the block runs 2.83..15.03 with the ink stopping about 13% of its
+    width in, at 13.43. The rows were LEFT-aligned at 3.73 or centred at 8.93,
+    which is not what the printed label does.
+    THE RPM CIRCLE STAYS LEFT. It sits at cx 4.73 while the "7.2K" beside it is
+    right-aligned, so that row is ragged in the middle rather than set as a
+    unit. Moving the circle across with the text was the tidy assumption and the
+    figure does not support it.
+    THE 13% IS READ OFF A BLURRED FIGURE and is the soft number here. A scan for
+    the block edge and the ink extents returned nonsense - it found a 16.75-wide
+    block where the component says 12.20, because the carrier's own dark body
+    reads the same as the label plate at 4 px/mm - so the margin was taken by
+    eye off a 8x crop instead. The ALIGNMENT is certain; the margin is not.
+  the-per-skin-magic-x-is-gone: >-
+    The capacity unit used to carry a hand-computed x measured off the number
+    beside it - 9.93 for "1920", 8.38 for "960", 5.28 for "2" - one per skin,
+    re-derived by hand whenever a capacity changed, checked by nothing.
+    Anchoring to the block's right edge removed all five: text-anchor="end"
+    makes the renderer measure the glyphs. Right-aligning was asked for and
+    dropping five unverifiable constants came free with it.
+elements:
+  lamp-activity:
+    at: [1.65, 1.56]
+    size: [3.5, 2.76]
+    class: led
+    states: ['off',
+             {name: active, color: '#22c55e', behavior: blinking}]
+    description: >-
+      The pulse glyph, which is itself the lamp. Dell KB 000413096 puts the
+      activity indicator on the left; the R740xd Owner's Guide says what it does
+      - "The activity LED flashes whenever the drive is accessed" - so it BLINKS
+      rather than sitting solid. NO RATE IS PUBLISHED and none is stated: access
+      is not periodic, so a frequency here would be a decoration pretending to be
+      a measurement.
+  lamp-status:
+    at: [10.19, 1.56]
+    size: [3.5, 2.76]
+    class: led
+    states: ['off',
+             {name: online, color: '#22c55e'},
+             {name: identify, color: '#22c55e',
+              behavior: {mode: blinking, rate: 2}},
+             {name: failure, color: '#eab308',
+              behavior: {mode: blinking, rate: 4}},
+             {name: rebuilding, color: '#22c55e',
+              behavior: {mode: blinking, rate: 0.5}},
+             {name: predicted-failure,
+              behavior: {mode: sequence,
+                         phases: [{color: '#22c55e'}, {color: '#eab308'}, {}]}},
+             {name: rebuild-aborted,
+              behavior: {mode: sequence,
+                         phases: [{color: '#22c55e', seconds: 3},
+                                  {color: '#eab308', seconds: 3},
+                                  {seconds: 6}]}}]
+    description: >-
+      The drive-cylinder glyph, which is itself the lamp. Every state from Dell
+      KB 000413096, at the rate and in the sequence that article gives, and RAID
+      configurations only as it says. `identify` blinks twice a second and
+      `failure` four times: same amber-or-green question, different condition,
+      and they are only distinguishable because the rate is carried.
+      `predicted-failure` is green, amber, off with no timing published, so its
+      phases divide evenly; `rebuild-aborted` has Dell's three, three and six
+      seconds. `rebuilding` is 'blinks green slowly', and 0.5 Hz is this
+      library's reading of slowly rather than a figure Dell states.
+      `off` IS NOT ONLY AN EMPTY BAY: the Owner's Guide adds that the status
+      indicator "remains off until all drives are initialized after the system is
+      turned on", so a dark lamp on a running machine can also mean the array is
+      still coming up.
+  release: {at: [3.12, 8.64], size: [9.06, 6.16], class: control}
+  window-1: {at: [1.37, 25.1], size: [12.56, 10.02], class: vent}
+  window-2: {at: [1.37, 36.41], size: [12.56, 10.11], class: vent}
+  window-3: {at: [1.37, 47.9], size: [12.56, 8.37], class: vent}
+relief:
+  wall: '#1b1e21'
+  features:
+  # THE THREE WINDOWS ARE HOLES, NOT PAINT. `2.5 HDD.003` is a flat surface
+  # 10.07 x 39.71 sitting 7.63 behind the carrier face, and the windows are the
+  # only openings in that face - so it is what you see down them. The honeycomb
+  # already drawn behind each window becomes the floor of the pocket rather than
+  # a pattern printed on the lid.
+  - node: window-1
+    pocket: 7.6
+    confidence: measured
+    source: >-
+      measured - Dell's service model r740xd.glb, node `Poweredge_R740XD_Drives_Assembly-1.001`, descended past the named assembly to its mesh children. The carrier body `Body_3_4.004` is 18.48 x 78.30 x 123.89 and its FACE is the small-z end at 19.58, because on this face the chassis runs from the drive bays forward - a feature standing proud has a smaller z0 and one that is recessed a larger one, and reading that backwards would have built every window as a lump. NOTHING ON THIS CARRIER STANDS PROUD. Every child begins at or behind the face plane, which is why the depth here is all pockets and no protrusions.
+  - node: window-2
+    pocket: 7.6
+    confidence: measured
+    source: >-
+      measured - Dell's service model r740xd.glb, node `Poweredge_R740XD_Drives_Assembly-1.001`, descended past the named assembly to its mesh children. The carrier body `Body_3_4.004` is 18.48 x 78.30 x 123.89 and its FACE is the small-z end at 19.58, because on this face the chassis runs from the drive bays forward - a feature standing proud has a smaller z0 and one that is recessed a larger one, and reading that backwards would have built every window as a lump. NOTHING ON THIS CARRIER STANDS PROUD. Every child begins at or behind the face plane, which is why the depth here is all pockets and no protrusions.
+  - node: window-3
+    pocket: 7.6
+    confidence: measured
+    source: >-
+      measured - Dell's service model r740xd.glb, node `Poweredge_R740XD_Drives_Assembly-1.001`, descended past the named assembly to its mesh children. The carrier body `Body_3_4.004` is 18.48 x 78.30 x 123.89 and its FACE is the small-z end at 19.58, because on this face the chassis runs from the drive bays forward - a feature standing proud has a smaller z0 and one that is recessed a larger one, and reading that backwards would have built every window as a lump. NOTHING ON THIS CARRIER STANDS PROUD. Every child begins at or behind the face plane, which is why the depth here is all pockets and no protrusions.
+  # THE RELEASE IS PRESSED IN. `Body_4_4.004` is 11.46 x 10.56 x 4.20 and starts
+  # 0.19 behind the face - the only face-adjacent child of that size, and the
+  # release is the only feature of that size on the drawing. The mapping is by
+  # size and position rather than by name, because the model's mesh names are
+  # `Body_N` and carry none.
+  - node: release
+    pocket: 4.2
+    confidence: measured
+    source: >-
+      measured - Dell's service model r740xd.glb, node `Poweredge_R740XD_Drives_Assembly-1.001`, descended past the named assembly to its mesh children. The carrier body `Body_3_4.004` is 18.48 x 78.30 x 123.89 and its FACE is the small-z end at 19.58, because on this face the chassis runs from the drive bays forward - a feature standing proud has a smaller z0 and one that is recessed a larger one, and reading that backwards would have built every window as a lump. NOTHING ON THIS CARRIER STANDS PROUD. Every child begins at or behind the face plane, which is why the depth here is all pockets and no protrusions.
+skins: [default]

@@ -1,0 +1,43 @@
+format: 1
+kind: module
+name: e3s-carrier-blank
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: server
+description: >-
+  Filler for an EDSFF E3.S bay on a 16th-generation PowerEdge - Dell's E3.S
+  carrier moulding without the drive: the same release handle with its orange
+  chevrons and the same frame, and no lamps, legend or capacity label, because
+  a blank has nothing to report. Drawn lying flat, as a 1U bay stacks it four
+  high.
+attrs:
+  media: e3s
+  power-absent: not-applicable
+provenance:
+  face: >-
+    estimated - THE CARRIER WITHOUT ITS DRIVE, by analogy with
+    common/drive-blank-25@2, which is Dell's 2.5 inch carrier moulding with the
+    lamps and legend left off. The ISM requires a blank in every empty E3.S
+    slot ("Removing an EDSFF E3.S drive blank", figures 77 and 78) and draws
+    it only in isometric; no straight-on image of one is held, so this face is
+    dell/e3s-carrier@1's minus what belongs to a drive, and the device's gap
+    e3s-single-slot-blank-not-modelled stays open until one is.
+  size: >-
+    drawing - dell/e3s-carrier@1's face, 77.65 x 7.75, since a blank fills the
+    same slot.
+  depth: >-
+    estimated - 25.0, common/drive-blank-25@2's measured depth; no E3.S blank
+    has been measured.
+  power: >-
+    NOT APPLICABLE - a moulding with no electronics.
+size: {w: 77.65, h: 7.75, d: 25.0}
+size-confidence: {w: drawing, h: drawing, d: estimated}
+body: {depth: 25.0, color: '#3c4247'}
+elements:
+  release:
+    at: [1.5, 0.3]
+    size: [20.9, 7.15]
+    class: control
+    description: the release handle; lift the release button and swing it out
+skins: [default]

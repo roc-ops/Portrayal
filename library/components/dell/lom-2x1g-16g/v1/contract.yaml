@@ -1,0 +1,67 @@
+format: 1
+kind: module
+name: lom-2x1g-16g
+version: 1.0.0
+class: nic
+behaviour: fills
+profile: server
+description: >-
+  The LAN on Motherboard (LOM) card of a 16th-generation 1U PowerEdge (R660) -
+  two 1 GbE RJ45 ports in the rear window beside the OCP slot
+attrs:
+  ports: 2
+  media: rj45
+  power-absent: not-published
+groups:
+  ports:
+    term: Port
+    role: traffic
+    index-origin: 1
+    description: the two 1 GbE ports, numbered 1 and 2 on the chassis beside them
+    attrs: {media: rj45, speed: 1g}
+provenance:
+  identity: >-
+    datasheet - R660 ISM "LOM card, MIC card, and rear I/O board": a card that
+    plugs into the system board and is screwed to it, removed and installed on
+    its own, and OPTIONAL ("LOM card (optional) - 1 GbE x 2", NIC
+    specifications). The same section says the system takes either this card or
+    a Management Interface Card (MIC) in its place, the MIC only with Dell DPU
+    cards; see the device's gaps.
+  sources: >-
+    Two. (1) The VisioCafe master `R660 3xPCI LP Rear` (r660-3xpci-lp-rear-1),
+    read on the 434 body at 22.24 px/mm with y scaled 0.9926 (see
+    dell/psu-1400w-ac-60mm@1, provenance/stencil-scale): the visible window and
+    the jacks. Facts read, art not traced. (2) Dell's R660 service model,
+    r660.glb, `PE_R660_LOM card_Assemby`: the depth and the card behind the
+    window.
+  size: >-
+    drawing - 42.58 x 15.93, THE WINDOW THE REAR SHOWS, x 110.59..153.17 and y
+    24.71..40.64 on the master, found as the tone edges between the chassis and
+    the card's frame. The service model's bracket, `3DGeom~9767`, is wider -
+    58.83 from x 98.08 - and the extra runs behind the chassis either side,
+    where the master draws the chassis's own vent slots and the PSU and network
+    marks; those are the chassis's and stay on it.
+  depth: >-
+    measured - the card's plan in the service model is 117.2 deep (see
+    dell/lom-2x1g-plan-16g@1).
+  jacks: >-
+    drawing - two openings 12.28 x 9.51 at x 114.71 and 136.74 on the master,
+    seated as common/rj45-ganged-eth@1 keyway up (rotate 180) as on the OCP
+    cards; the service model's two `Ethernet Port` bodies sit at 112.01 and
+    133.92, 16.21 wide - the same 21.9 pitch.
+  numbering: >-
+    drawing - the master prints a network glyph and 1 left of the window and 2
+    right of it, on the chassis, so the device draws them.
+  power: >-
+    NOT PUBLISHED - the R660 ISM, technical guide and spec sheet give the
+    card's port count and speed and no wattage.
+size: {w: 42.58, h: 15.93, d: 117.2}
+size-confidence: {w: drawing, h: drawing, d: measured}
+plan: {ref: dell/lom-2x1g-plan-16g@1}
+body:
+  depth: 117.2
+  color: '#b8bdc2'
+parts:
+  - {ref: common/rj45-ganged-eth@1, id: port-1, group: ports, at: [3.91, 2.36], rotate: 180, attrs: {media: rj45, speed: 1g}}
+  - {ref: common/rj45-ganged-eth@1, id: port-2, group: ports, at: [25.94, 2.36], rotate: 180, attrs: {media: rj45, speed: 1g}}
+skins: [default]

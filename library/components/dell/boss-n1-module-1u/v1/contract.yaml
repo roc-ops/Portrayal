@@ -1,0 +1,72 @@
+format: 1
+kind: module
+name: boss-n1-module-1u
+version: 1.1.0
+class: expansion-card
+behaviour: fills
+profile: server
+description: >-
+  Dell BOSS-N1 boot module in its 1U rear-accessible form - two hot-swap M.2
+  NVMe carriers standing side by side, a row of vents above and below them
+attrs:
+  form-factor: 1u-rear
+  raid: hardware RAID 1 across two M.2 NVMe
+provenance:
+  plan: >-
+    seen from above, the module is dell/boss-n1-plan@1.
+  sources: >-
+    (1) Dell's R660 service model, r660.glb, `XE9680_Optional BOSS-N1
+    module_145.001` and its two card carriers: the size and the carrier
+    positions. (2) R660 ISM figure 9 (the rear view, fig-0008 in the
+    conversion), whose callout 1 is this module: the vent rows and a check on
+    the carrier positions. (3) R660 ISM figure 25, the service label: which
+    carrier is 0 and which is 1, and which way each faces.
+  size: >-
+    measured - r660.glb, module body 29.9 x 38.9 on the face, 185.1 deep (cad z
+    605.6..790.7). It sits at the far left of the rear, its left edge 0.85 from
+    the body edge on the rear face.
+  carriers: >-
+    measured - r660.glb, two carrier bodies 10.0 x 26.0 at module-local x 4.4
+    and 17.5, y 7.3..33.3 from the module's top edge. ISM figure 9 at about 2.6
+    px/mm puts them at 4.3..14.0 and 7.1..32.4 - agreeing to the figure's
+    resolution.
+  numbering-and-turn: >-
+    ISM figure 25 prints carrier 0 on the LEFT with its orange tab at the bottom
+    and carrier 1 on the RIGHT with its tab at the top. dell/boss-n1-m2-carrier@1
+    is drawn lying flat with its tab at the left, so bay 0 turns it 270 and bay
+    1 turns it 90. The label's lamp order then falls out of the turn, which is
+    the check that the turn is right - see the carrier's provenance.
+  vents: >-
+    estimated - a row of four square vents above the carriers and four below,
+    read off ISM figure 9 at about 2.6 px/mm: squares about 2.6 wide at x 6.2,
+    10.5, 17.9 and 22.4, rows at y 2.2 and 34.9. No vector master draws this
+    module (the stencil's R660 rears all show the blank), so these are the
+    figure's to the figure's resolution.
+  default-carriers: >-
+    EACH BAY SEATS A CARRIER, because a BOSS-N1 is ordered with its M.2 drives.
+    The ISM also has a "card carrier blank" for an empty slot; no image held
+    shows one at a resolution that could draw it, so it is not modelled and the
+    bays accept only the carrier.
+  power: >-
+    NOT STATED in the R660 technical guide or ISM, or in the BOSS-N1 User's
+    Guide pages read.
+size: {w: 29.9, h: 38.9, d: 185.1}
+plan: {ref: dell/boss-n1-plan@1}
+size-confidence: {w: measured, h: measured, d: measured}
+body:
+  depth: 185.1
+  color: '#c3c8cd'
+bays:
+  carrier-0:
+    at: [4.4, 7.3]
+    size: [10.0, 26.0]
+    rotate: 270
+    accepts: [dell/boss-n1-m2-carrier@1]
+    default: dell/boss-n1-m2-carrier@1
+  carrier-1:
+    at: [17.5, 7.3]
+    size: [10.0, 26.0]
+    rotate: 90
+    accepts: [dell/boss-n1-m2-carrier@1]
+    default: dell/boss-n1-m2-carrier@1
+skins: [default]

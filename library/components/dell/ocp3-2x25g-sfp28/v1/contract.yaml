@@ -1,0 +1,63 @@
+format: 1
+kind: module
+name: ocp3-2x25g-sfp28
+version: 1.1.0
+class: nic
+behaviour: fills
+profile: server
+description: >-
+  Dual-port 25 GbE SFP28 OCP NIC 3.0 card, small form factor, as Dell fits it to the 16th-generation PowerEdge - two separate SFP28 cages among vent fields
+attrs:
+  ports: 2
+  media: sfp28
+  form-factor: ocp3-sff
+  sfp28: 2
+provenance:
+  plan: >-
+    seen from above, the card is dell/ocp3-sff-plan@1 - its 76 x 115 board.
+  sources: >-
+    The bracket and depth from Dell's R660 service model via
+    dell/ocp3-4x1g-rj45@1; the face from the VisioCafe master `2xSFP OCP3` (facts read, art not traced); the card's existence from
+    the R660 technical guide Table 12 and the ISM's networking table.
+  ports: >-
+    stencil-measured - two single cages, outer 15.84 wide (common/sfp-plus-
+    cage@2 is 16.0), centred at x 22.09 and 49.67 with their openings centred
+    at y 8.37. The 4 x SFP28 master puts its openings on the same 8.37 once its
+    vents are set on the shared grid - two masters agreeing to the hundredth.
+    TG Table 12 lists Intel, Broadcom and Mellanox 2 x 25 GbE SFP28 cards.
+  stencil-scale: >-
+    The four rack-server OCP masters share one EMF width, so they share one
+    scale: 0.04303 mm/px at 1600 px, set on dell/ocp3-4x1g-rj45@1 by the CAD's
+    14.3 jack pitch. Cross-checks on this family: the 2 x SFP master's cage
+    opening reads 14.37 against the SFP standard's 14.5 (0.9%), and the 4 x SFP
+    block 59.6 against SFF-8433's 1x4 cutout of 58.2 (2.4%). The art is centred
+    on the bracket, and its vent grid - the same four rows on every rack master
+    - is set at the rows the 4 x 1G card measured, y 3.48 on a 2.88 pitch.
+  size: >-
+    measured - the same Dell SFF bracket as dell/ocp3-4x1g-rj45@1, whose
+    provenance gives the CAD reading: 71.8 x 15.1, a 76 x 115 board behind it.
+    One bracket across the family is the R660 CAD's one card plus the
+    VisioCafe masters, which all punch the same vent grid; no image held shows
+    THIS card's bracket edge on its own.
+  latch: >-
+    NOT DRAWN, for the reason dell/ocp3-4x1g-rj45@1 gives: the R660 ISM opens
+    the card's blue latch from inside the chassis, after the riser is out.
+  power: >-
+    NOT STATED for this card. TG Table 11 gives the OCP slot's range, 15-35 W,
+    for every card it takes; no document held gives this card's own figure.
+  lamps-and-numbering: >-
+    NOT DRAWN beyond what the composed ports carry. The master draws no lamps or
+    numerals on this card; the one real OCP card photographed in an R660 (a
+    4 x SFP28 from another vendor, StorageReview -01.jpg) has a lamp column and
+    printed numbers, which shows that vendors differ here and that this card's
+    own printing is not in hand.
+size: {w: 71.8, h: 15.1, d: 115.0}
+plan: {ref: dell/ocp3-sff-plan@1}
+size-confidence: {w: measured, h: measured, d: measured}
+body:
+  depth: 115.0
+  color: '#b8bdc2'
+parts:
+  - {ref: common/sfp-plus-cage@2, id: port-1, at: [14.09, 3.37], attrs: {media: sfp28, speed: 25g}}
+  - {ref: common/sfp-plus-cage@2, id: port-2, at: [41.67, 3.37], attrs: {media: sfp28, speed: 25g}}
+skins: [default]

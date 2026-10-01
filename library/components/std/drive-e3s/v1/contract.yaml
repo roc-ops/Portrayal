@@ -1,0 +1,27 @@
+format: 1
+kind: component
+name: drive-e3s
+version: 1.0.0
+class: drive
+profile: server
+conforms: drive-e3s
+description: >-
+  EDSFF E3.S drive per SFF-TA-1008 - the device itself, not a carrier: 76 wide
+  by 7.5 thick, drawn lying flat, presenting its plain front edge at the bay
+size: {w: 76.0, h: 7.5, d: 112.75}
+size-confidence: {w: registry, h: registry, d: registry}
+attrs:
+  form-factor: e3s
+provenance:
+  size: >-
+    standard - SFF-TA-1008 Rev 3.0a, Table 5-1: E3.S width 76 mm, length
+    112.75 mm, thickness 7.5 mm (+0.2/-0.5 per the revision history). DRAWN
+    LYING FLAT - 76.0 across by 7.5 tall - because that is how a 1U bay stacks
+    E3.S devices four high. The 2T variant (16.8 thick) is a different part.
+  the-face-is-blank-on-purpose: >-
+    As with std/drive-25: the device enters connector first, and its latch,
+    lamps and label belong to the vendor's carrier, not to the device.
+  what-this-is-not: >-
+    NOT A BAY AND NOT A CARRIER - the same three-way split std/drive-25 states.
+    Dell's carrier is dell/e3s-carrier@1.
+skins: [default]

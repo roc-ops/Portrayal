@@ -1,0 +1,75 @@
+format: 1
+kind: module
+name: riser-2r-16g
+version: 1.0.0
+class: riser
+behaviour: fills
+profile: server
+description: >-
+  Dell riser 2R of the PowerEdge R660 - slot 1 and slot 2 on dell/riser-2-lp-cage-16g@1, fitted in riser configuration 4
+attrs:
+  riser: '2R'
+  appears-in: 'riser configuration 4'
+  power-absent: not-published
+  slot-1: 'x8, low profile, half length, processor 1, PCIe Gen5'
+  slot-2: 'x16, low profile, half length, processor 1, PCIe Gen4'
+provenance:
+  power: >-
+    NOT PUBLISHED - the riser is a passive board with connectors. The R660 ISM,
+    technical guide and spec sheet were searched for 'riser' beside a wattage
+    and none gives one.
+  identity: >-
+    A REMOVABLE ASSEMBLY THAT BRINGS ITS OWN SLOTS, which is why it is a module
+    with `bays` and the slots are not openings on the chassis: the numbers are
+    printed on the riser and move with it (see dell/riser-2-lp-cage-16g@1).
+  slots: >-
+    datasheet - R660 ISM table 111, which gives each slot's form factor,
+    controlling processor, PCIe generation and electrical width, every one on an
+    x16 connector; the technical guide's slot table and the spec sheet agree.
+    Length: the same two documents give every low-profile slot as half length.
+  face: >-
+    drawing - composed from dell/riser-2-lp-cage-16g@1, the metal every riser sharing this
+    cage presents. The slot bays sit on that cage's windows.
+  size: >-
+    drawing - the cage's extent, 163.60 x 19.80.
+  seating: >-
+    measured - THE SLOTS TAKE CARDS, the brackets and cards the R740xd's risers
+    take at the same heights. Each bay is the whole bracket (79.20 low-profile,
+    120.02 x 21.59 full-height), `behind` the cage, which covers its ends as
+    the hardware does. Dell's service model (r660.glb) seats riser 2A's two
+    low-profile brackets at rear x 120.9..200.9 and 187.0..267.0: they overlap
+    14 mm in x at depths a millimetre apart, the ends interleaving - which is
+    why two brackets fit a 71.8 pitch - and they face each other: slot 1
+    tip-left, slot 2 turned over (rotate 180), its card board at the top of
+    the bracket where slot 1's is at the bottom. Slot 3 (268.5..348.4) is
+    turned over too, and so are the full-height slots, whose keyed flange the
+    master puts at the left.
+    StorageReview's rear photograph of a real R660 (riser 2Q) shows a two-port
+    QSFP card in slot 1 the same way, its bracket ends under the cage.
+  plan: >-
+    seen from above, the riser is dell/riser-2-lp-plan-16g@1 - its cage as Dell's service
+    model places it.
+size: {w: 163.60, h: 19.80}
+size-confidence: {w: drawing, h: drawing}
+plan: {ref: dell/riser-2-lp-plan-16g@1}
+parts:
+  - {ref: dell/riser-2-lp-cage-16g@1, id: plate, at: [0, 0]}
+bays:
+  slot-1:
+    slot: {connector: x16, lanes: 8, height: low, length: half, processor: 1, generation: 5}
+    plan: {at: [70.47, 0.00]}
+    behind: true
+    at: [13.93, 1.92]
+    size: [79.20, 18.42]
+    accepts: [dell/pcie-filler-lp-16g@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1, nvidia/mcx4111a-lp@1, nvidia/mcx4121a-lp@1, nvidia/mcx4131a-lp@1, nvidia/mcx512a-lp@1, nvidia/mcx512f-lp@1, nvidia/mcx515a-lp@1, nvidia/mcx516a-lp@1, nvidia/mcx621102-lp@1, nvidia/mcx621202-lp@1, nvidia/mcx623102a-lp@1, nvidia/mcx623105-lp@1, nvidia/mcx623106-lp@1, nvidia/mcx713106-lp@1, nvidia/mcx715105-lp@1, nvidia/mcx75310-lp@1, nvidia/mcx75510-lp@1, nvidia/mcx755106-lp@1]
+    default: dell/pcie-filler-lp-16g@1
+  slot-2:
+    slot: {connector: x16, lanes: 16, height: low, length: half, processor: 1, generation: 4}
+    rotate: 180
+    plan: {at: [3.60, 0.00]}
+    behind: true
+    at: [80.80, 1.92]
+    size: [79.20, 18.42]
+    accepts: [dell/pcie-filler-lp-16g@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1, nvidia/mcx4111a-lp@1, nvidia/mcx4121a-lp@1, nvidia/mcx4131a-lp@1, nvidia/mcx512a-lp@1, nvidia/mcx512f-lp@1, nvidia/mcx515a-lp@1, nvidia/mcx516a-lp@1, nvidia/mcx621102-lp@1, nvidia/mcx621202-lp@1, nvidia/mcx623102a-lp@1, nvidia/mcx623105-lp@1, nvidia/mcx623106-lp@1, nvidia/mcx713106-lp@1, nvidia/mcx715105-lp@1, nvidia/mcx75310-lp@1, nvidia/mcx75510-lp@1, nvidia/mcx755106-lp@1]
+    default: dell/pcie-filler-lp-16g@1
+skins: [default]

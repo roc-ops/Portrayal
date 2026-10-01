@@ -105,7 +105,12 @@ def test_the_accessor_answers_for_every_part_that_names_a_plan():
     """Fourteen parts name a plan drawing; the accessor must find all of them.
     The fourteenth is ufispace/n3100-4c@1, the first real PCIe card, whose
     plan is ufispace/n3100-4c-plan@1. Fifty since the 36 NVIDIA ConnectX card
-    modules, each naming the generic card plan of its bracket height.
+    modules, each naming the generic card plan of its bracket height. Sixty-two
+    since the R660's top view: its four 60 mm supplies, the BOSS-N1 module, the
+    six OCP NIC 3.0 cards and the shared 2.5 inch carrier now name their plans.
+    Sixty-nine since the R660's risers: 2A, 2P, 2R and 3A, 3P, 3Q, 3R, the
+    variants Dell's service model shows from above (2Q, 1P and 4P name none).
+    Seventy-one since its LOM card and rear I/O board became modules.
 
     Reads the real library rather than a fixture. Spelling-agnostic on purpose -
     it passes before Task 5's migration and after it, because what it watches is
@@ -114,8 +119,8 @@ def test_the_accessor_answers_for_every_part_that_names_a_plan():
     lib = ROOT / "library/components"
     named = [p for p in lib.glob("*/*/v*/contract.yaml")
              if F.face_ref(yaml.safe_load(p.read_text()) or {}, "plan")]
-    assert len(named) == 50, \
-        f"expected 50 parts naming a plan drawing, found {len(named)}"
+    assert len(named) == 71, \
+        f"expected 71 parts naming a plan drawing, found {len(named)}"
 
 
 def run83(doc, path="t/contract.yaml", name="t/thing@1", lib=LIB):
@@ -228,9 +233,13 @@ def test_the_index_carries_a_parts_other_faces():
     # ufispace/n3100-4c-plan@1 - the card seen from above in a riser slot.
     # 85, not 49: the 36 nvidia/ ConnectX card modules each declare the generic
     # card plan of their bracket height, common/pcie-card-plan@1 or -lp@1.
+    # 97 since the R660's top view added twelve: four supplies, the BOSS-N1
+    # module, six OCP cards and the shared 2.5 inch carrier.
+    # 104 since its seven risers seen from above (2A, 2P, 2R, 3A, 3P, 3Q, 3R);
+    # 106 since its LOM card and rear I/O board.
     with_faces = [e for e in entries if e.get("faces")]
-    assert len(with_faces) == 85, \
-        f"expected exactly 85 of {len(entries)} entries to carry a faces " \
+    assert len(with_faces) == 106, \
+        f"expected exactly 106 of {len(entries)} entries to carry a faces " \
         f"key, found {len(with_faces)}"
 
 

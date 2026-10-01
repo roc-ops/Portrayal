@@ -517,7 +517,13 @@ def test_the_comparison_layer_can_now_reach_them():
     DS4101's black with the latch black too, set per configuration as fields. Two
     installation guides, so unlike the DS4000/DS4001 pair these are two rears measured
     twice, not one rear counted twice.
+
+    EIGHTY-TWO IS THE DELL R660, n+1 over four dual-rotor modules, from its
+    technical guide's thermal features ("The R660 allows N+1 fan redundancy,
+    allowing continuous operation with one fan failure in the system"). The four
+    bays are in the top view, where the fans are: a 1U server's fans are inside
+    the chassis, not on a face.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 81, n
+    assert n == 82, n

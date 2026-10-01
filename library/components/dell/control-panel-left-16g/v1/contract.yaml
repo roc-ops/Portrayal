@@ -1,0 +1,137 @@
+format: 1
+kind: module
+name: control-panel-left-16g
+version: 1.0.0
+class: control-panel
+behaviour: fills
+profile: server
+description: >-
+  Left control panel of a 16th-generation 1U PowerEdge (R660) - five status
+  glyphs that are themselves the lamps, the system health and ID bar under its
+  italic i, and the optional iDRAC Quick Sync 2 bar with its wireless mark
+provenance:
+  sources: >-
+    (1) The VisioCafe master `R660 10D 2.5 Front` (true scale, 43.05 tall against
+    42.8, so y is scaled by 0.9942): the panel outline and where every mark sits.
+    Facts read, art not traced. (2) R660 ISM tables 128-130 and figures 6/7
+    (fig-0006/fig-0005): what each mark is and its states. (3)
+    dell/control-panel-left-14g@1: the glyph art and the lamp states, which
+    the R660 tables repeat word for word.
+  size: >-
+    drawing - 10.1 x 38.13, the master's panel strip at face x 14.2..24.3, y
+    2.34..40.47. It sits in the left rack ear, outboard of the 434 body, as the
+    R740xd's does.
+  depth: >-
+    BORROWED from dell/control-panel-left-14g@1's measured 22.80. Dell's R660
+    service model carries a right-hand control panel (`PE_R660_Control
+    panel_Right_Long`) and no left one, so this panel's depth is not measured
+    here; the 14G panel stops inside its ear for the same reason this one must.
+  marks: >-
+    drawing, panel-local mm: the five status glyphs centred at x 3.35 and y
+    8.25, 13.62, 18.84, 24.06 and 29.28 (drive, temperature, electrical,
+    memory, PCIe - ISM table 128's order); the italic i at 7.0..9.0, 4.7..7.7;
+    the health bar 2.05 wide at x 7.0 from y 10.48, blue in the master, and the
+    Quick Sync bar below it to 27.58; the wireless arcs at 6.5..9.5, 30.7..32.8.
+  states: >-
+    ISM table 128: each status glyph turns solid amber on its error and is
+    otherwise dark - darkness is the healthy state. Table 129: health solid
+    blue, ID blinking blue, fail-safe solid amber, blinking amber. Table 130:
+    Quick Sync off, solid white, rapid and slow white, five rapid blinks then
+    off, solid and blinking amber. All identical to the 14G tables, so the
+    states and their rate readings are dell/control-panel-left-14g@1's.
+  quick-sync-is-optional: >-
+    the ISM calls the Quick Sync 2 indicator optional; the master draws it, and
+    so does every R660 render held, so it is drawn. A build without it shows a
+    plain bar there - not modelled as a variant.
+size: {w: 10.1, h: 38.13, d: 22.8}
+size-confidence: {w: drawing, h: drawing, d: borrowed}
+body: {depth: 22.8, color: '#15181b'}
+elements:
+  lamp-drive:
+    at: [2.05, 6.95]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', {name: fault, color: '#eab308'}]
+    description: >-
+      the drive glyph, lit. ISM table 4 - solid amber if there is a drive error.
+  lamp-temperature:
+    at: [2.05, 12.32]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', {name: fault, color: '#eab308'}]
+    description: >-
+      the thermometer glyph. Solid amber on a thermal error - ambient out of
+      range, or a fan failure.
+  lamp-electrical:
+    at: [2.05, 17.54]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', {name: fault, color: '#eab308'}]
+    description: >-
+      the lightning glyph. Solid amber on voltage out of range, a failed PSU or
+      a failed voltage regulator.
+  lamp-memory:
+    at: [2.05, 22.76]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', {name: fault, color: '#eab308'}]
+    description: the memory glyph. Solid amber on a memory error.
+  lamp-pcie:
+    at: [2.05, 27.98]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', {name: fault, color: '#eab308'}]
+    description: the PCIe glyph. Solid amber when a PCIe card errors.
+  lamp-health:
+    at: [7.0, 10.48]
+    size: [2.05, 8.52]
+    class: led
+    states: ['off',
+             {name: healthy, color: '#2563eb'},
+             {name: identify, color: '#2563eb',
+              behavior: {mode: blinking, rate: 1}},
+             {name: fail-safe, color: '#eab308'},
+             {name: fault, color: '#eab308',
+              behavior: {mode: blinking, rate: 1}}]
+    description: >-
+      the system health and system ID bar, and the button that switches between
+      the two modes. ISM table 5 in full: solid blue - on, healthy, ID mode not
+      active; blinking blue - ID mode active; solid amber - fail-safe mode;
+      blinking amber - a fault, check the event log. NO RATE IS PUBLISHED for
+      either blink, so 1 Hz is this library's reading and is not a figure Dell
+      states - unlike the drive lamp, where the article gives twice and four
+      times a second and the model carries them.
+  lamp-quicksync:
+    at: [7.0, 19.0]
+    size: [2.05, 8.58]
+    class: led
+    states: ['off',
+             {name: ready, color: '#f8fafc'},
+             {name: transfer, color: '#f8fafc',
+              behavior: {mode: blinking, rate: 4}},
+             {name: updating, color: '#f8fafc',
+              behavior: {mode: blinking, rate: 0.5}},
+             {name: disabled,
+              behavior: {mode: sequence,
+                         phases: [{color: '#f8fafc', seconds: 0.12},
+                                  {seconds: 0.12},
+                                  {color: '#f8fafc', seconds: 0.12},
+                                  {seconds: 0.12},
+                                  {color: '#f8fafc', seconds: 0.12},
+                                  {seconds: 0.12},
+                                  {color: '#f8fafc', seconds: 0.12},
+                                  {seconds: 0.12},
+                                  {color: '#f8fafc', seconds: 0.12},
+                                  {seconds: 2.5}]}},
+             {name: fail-safe, color: '#eab308'},
+             {name: unresponsive, color: '#eab308',
+              behavior: {mode: blinking, rate: 1}}]
+    description: >-
+      the iDRAC Quick Sync 2 bar, and the button that turns the feature on and
+      off. Every code in ISM table 6, at the shape that table gives.
+      `disabled` IS WHY THE SEQUENCE MECHANISM EXISTS: Dell's wording is 'blinks
+      white five times rapidly and then turns off', which is five on-phases, five
+      off-phases and a long dark tail - a pattern no colour and rate can say. The
+      2.5 second tail is this library's reading of 'and then turns off'; the five
+      blinks are Dell's own count.
+skins: [default]

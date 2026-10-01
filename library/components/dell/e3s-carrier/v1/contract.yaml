@@ -1,0 +1,108 @@
+format: 1
+kind: module
+name: e3s-carrier
+version: 1.0.0
+class: drive
+behaviour: fills
+profile: server
+description: >-
+  Dell's hot-swap EDSFF E3.S drive carrier for 16th- and 17th-generation
+  PowerEdge - an orange-chevroned release handle, an SSD legend, a locate/fault
+  lamp and a power/activity lamp either side of an activity icon, and a printed
+  capacity label. Drawn lying flat, as a 1U bay stacks it four high.
+attrs:
+  media: e3s
+fields:
+  capacity:
+    label: Capacity
+    type: text
+    default: '7.68TB'
+    pattern: '^[0-9.]+(GB|TB)$'
+    description: what the capacity label prints
+provenance:
+  sources: >-
+    (1) The VisioCafe master `R670 16D E3.S Front` (r670-16d-e3-s-front-1),
+    rendered at 40 px/mm: the face. Front masters are drawn ear to ear at their
+    stamped 482.7 - at that width the art is 43.1 tall against a 1U's 42.8 -
+    so they are read at their own scale. Facts read, art not traced. (2) R660
+    ISM figure 239 (fig-0288), a close-up of the R660's own E3.S carrier, and
+    Dell's R660 16 x E3.S gallery render (photos/r660/dell-gallery/
+    r660-gallery-4.png): that the R660's carrier is this one. (3) R660 ISM
+    tables 138 and 139: the lamps. (4) SFF-TA-1008 Rev 3.0a: the device inside.
+  one-carrier-for-16g-and-17g: >-
+    The only vector drawing of this carrier is on a 17th-generation master
+    (R670). ISM figure 239 shows the R660's carrier with the same features in the
+    same order - three orange chevrons on the handle, SSD, a lamp, the activity
+    icon, a lamp, a capacity label with a lock glyph - and the R660 gallery
+    render agrees, so the 17G drawing is taken as this carrier. No R660 master
+    draws an E3.S front.
+  size: >-
+    drawing - 77.65 x 7.75 on the face, the R670 master's carriers, 16 of them
+    agreeing to 0.1. That is 1.65 wider and 0.25 taller than the SFF-TA-1008
+    E3.S device (76 x 7.5), which is the carrier's frame round it. The bays are
+    on a 9.63 row pitch and an 81.8 column pitch. `d` is the device's 112.75 -
+    BORROWED: how far the carrier itself runs past the device is not drawn
+    anywhere held.
+  face-features: >-
+    drawing, carrier-local mm: the release handle spans x 1.5..22.4 with a grip
+    recess at 3.9..6.9 and three chevrons 2.7 wide at 9.67, 11.73 and 13.77
+    (y 1.05..6.63); a seam at 22.4; the SSD legend from x 25.9, cap height
+    2.0; lamps 1.6 square at x 41.1 and 49.1, y 3.02, with the activity icon
+    between them at 44.3..47.6; the capacity label panel 15.88 x 4.75 at
+    53.38, 1.45; a grip at the far end, 72.2..75.3.
+  lamps-by-colour: >-
+    ISM table 138/139 and the text above them: an E3.S carrier has a GREEN
+    lamp - power and activity - and a BLUE/AMBER lamp - locate and fault.
+    Figure 239 draws the LEFT lamp dark amber and the RIGHT one lit green, so
+    left is locate/fault and right is power/activity. ITS CALLOUTS SAY
+    OTHERWISE - "1 Drive activity LED indicator, 2 Drive status LED indicator",
+    1 on the left - but that list is word for word the 2.5 inch carrier's in
+    figure 238, which has an activity lamp and a status lamp in that order; the
+    E3.S tables have no "status" lamp at all. The colours are the figure's own
+    evidence and the tables agree with them, so the colours win and the
+    callout text is recorded as a copy.
+  lamp-states: >-
+    ISM table 138, the blue/amber lamp: locate - blue, 1 s on, 1 s off; fault -
+    amber, 2 s on, 1 s off; locate overrides fault; neither - off. Table 139,
+    the green lamp: powered and idle - on; host I/O - 4 Hz nominal blink;
+    unpowered - off.
+  capacity-label: >-
+    figure 239 and the gallery render print "7.68TB" and a lock glyph, white on
+    the dark panel. The figure is the default because it is the one printed;
+    the field carries any other.
+  power: >-
+    NOT STATED for the carrier or a device in it in the R660 documents held.
+    SFF-TA-1008 Table 6-2 gives recommended sustained maxima for air-cooled E3
+    devices by thickness, which describe the device class, not this carrier.
+size: {w: 77.65, h: 7.75, d: 112.75}
+size-confidence: {w: drawing, h: drawing, d: borrowed}
+body:
+  depth: 112.75
+  color: '#3c4247'
+elements:
+  release:
+    at: [1.5, 0.3]
+    size: [20.9, 7.15]
+    class: control
+    description: the release handle; lift the release button and swing it out
+  lamp-locate-fault:
+    at: [41.1, 3.02]
+    size: [1.6, 1.6]
+    class: led
+    states: ['off',
+             {name: locate, behavior: {mode: sequence, phases: [{color: '#3b82f6', seconds: 1}, {seconds: 1}]}},
+             {name: fault, behavior: {mode: sequence, phases: [{color: '#f59e0b', seconds: 2}, {seconds: 1}]}}]
+    description: the blue/amber lamp - ISM table 138; locate overrides fault
+  lamp-activity:
+    at: [49.1, 3.02]
+    size: [1.6, 1.6]
+    class: led
+    states: ['off', {name: power, color: '#22c55e'},
+             {name: activity, color: '#22c55e', behavior: {mode: blinking, rate: 4}}]
+    description: the green lamp - ISM table 139; on when powered, 4 Hz on host I/O
+  label:
+    at: [53.38, 1.45]
+    size: [15.88, 4.75]
+    class: label
+    description: the capacity label
+skins: [default]
