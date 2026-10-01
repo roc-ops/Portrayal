@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1050 component majors in 23 namespaces.
+1057 component majors in 23 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -77,7 +77,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/dc-terminal-27@1` | component | inlet | 27.5 × 15.9 × 10.4 |  | 1 | 3 | Three-pole DC barrier terminal block with a hinged clear cover - the screw-down -48 V input fitted to 1RU acc… |
 | `common/dc-terminal-plug-2@1` | component | inlet | 32.1 × 17.6 × 15 |  | 2 | 1 | Two-pole PLUGGABLE DC terminal block - a green header on the faceplate with a matching two-way screw-clamp pl… |
 | `common/device-label@1` | component | sticker | 80 × 40 |  | 5 | 0 | Bottom identity label in oval recess (placeholder art - never reproduce serials/MACs/credentials) |
-| `common/dimm-plan@1` | module | memory | 3.8 × 133.4 × 31.3 |  | 1 | 1 | A DIMM seen from above, standing in its socket - the thin edge of the module with its latches at either end, … |
+| `common/dimm-plan@1` | module | memory | 3.8 × 133.4 × 31.3 |  | 2 | 1 | A DIMM seen from above, standing in its socket - the thin edge of the module with its latches at either end, … |
 | `common/din-1-0-2-3-jack@1` | component | port | 7.01 × 7.01 |  | 0 | 5 | Rear-mount 1.0/2.3 bulkhead jack - the round spanner nut in front of the panel (bezel) around a std/din-1-0-2… |
 | `common/drive-blank-25@2` | module | blank | 15.3 × 73 × 25 |  | 2 | 0 | Filler for a 2.5 inch SFF drive bay - the carrier moulding without the drive: same release with its orange ri… |
 | `common/drive-blank-35@1` | module | blank | 105.5 × 26.9 × 25 |  | 1 | 0 | Filler for a 3.5 inch LFF drive bay - the carrier moulding without the drive: same release with its orange ri… |
@@ -494,11 +494,13 @@ aperture when it is a bare opening - never both at one position. The README's
 |---|---|---|---|---|---|---|---|
 | `credo/hiwire-shift-qsfp-dd@1` | module | transceiver | 18.35 × 8.5 × 58.26 | qsfp-dd | 0 | 0 | Credo HiWire SHIFT active electrical cable, the 400G QSFP-DD end of a 400G to four 100G QSFP28 breakout - a Q… |
 
-## dell/ (78)
+## dell/ (85)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
 | `dell/air-shroud-14g@1` | component | mechanical | 431.49 × 210.42 |  | 1 | 0 | The air shroud of a 14G PowerEdge - the moulding over the processors and memory that ducts the fans' air acro… |
+| `dell/air-shroud-1u-16g@1` | component | mechanical | 429 × 92.9 |  | 1 | 0 | The processor air shroud of a 16th-generation 1U PowerEdge (R660) seen from above - the black band between th… |
+| `dell/backplane-cover-1u-16g@1` | component | mechanical | 433.4 × 164 |  | 1 | 0 | The drive backplane cover of a 16th-generation 1U PowerEdge (R660) - the fixed panel over the front drive cag… |
 | `dell/bezel-2u-14g@1` | module | bezel | 434 × 82.35 × 23.3 |  | 1 | 0 | The optional metal front bezel for a 2U 14th-generation PowerEdge - a honeycomb of large hexagonal openings b… |
 | `dell/boss-n1-blank-1u@1` | module | blank | 24.85 × 38.44 |  | 1 | 0 | The vented blank Dell fits where a 1U PowerEdge has no BOSS-N1 module - a plate with a four-by-six grid of sq… |
 | `dell/boss-n1-m2-carrier@1` | module | drive | 26 × 10 × 108.9 |  | 0 | 1 | Hot-swap M.2 NVMe card carrier for Dell's BOSS-N1 boot module - an orange release tab, a status lamp and an a… |
@@ -511,8 +513,11 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/e3s-filler-1u@1` | module | blank | 79.25 × 37.85 |  | 1 | 0 | Dell's 1U E3.S column filler - one vented plate standing in for a whole column of four E3.S bays, a thirteen-… |
 | `dell/e3s-filler-2slot-1u@1` | module | blank | 77.65 × 17.38 |  | 1 | 0 | The vented filler a 16th-generation 1U PowerEdge (R660) fits across the two lower E3.S slots of its last colu… |
 | `dell/fan-14g@1` | module | fan | 63.6 × 46.2 × 74.6 |  | 1 | 1 | A hot-swap cooling fan of a 2U 14G PowerEdge seen from above - the block that lifts straight out of the fan c… |
+| `dell/fan-1u-16g@1` | module | fan | 82 × 56 × 40 |  | 1 | 0 | Dual-rotor hot-plug fan module of a 16th-generation 1U PowerEdge (R660) seen from above - two 40 mm fans in o… |
+| `dell/fan-bracket-1u-16g@1` | component | mechanical | 428.3 × 70.6 × 40 |  | 1 | 0 | The fan bracket of a 16th-generation 1U PowerEdge (R660) seen from above - the frame across the chassis that … |
 | `dell/fan-cage-14g@1` | component | mechanical | 408.9 × 71.5 × 78.08 |  | 1 | 1 | The cooling fan cage of a 14G PowerEdge seen from above - the frame across the full width of the chassis, bet… |
 | `dell/heatsink-1u-14g@1` | component | mechanical | 82.2 × 128.1 |  | 1 | 1 | The 1U processor heatsink of a 14G PowerEdge seen from above - a finned block the width of the socket, one pe… |
+| `dell/heatsink-1u-16g@1` | component | mechanical | 82.1 × 119.1 |  | 1 | 0 | The 1U processor heatsink of a 16th-generation PowerEdge (R660) seen from above - a finned block over each so… |
 | `dell/idrac-direct-symbol@1` | component | silkscreen | 3.8 × 3.8 |  | 1 | 0 | The wrench Dell prints beside an iDRAC Direct micro USB port - the mark that says this socket reaches the ser… |
 | `dell/mid-drive-tray-14g@1` | component | mechanical | 431.4 × 181.24 × 31.31 |  | 1 | 1 | The mid-drive tray of a 14G PowerEdge - four drives lying flat between the front cage and the risers, reached… |
 | `dell/ndc-4x-rj45-14g@1` | module | nic | 90.3 × 14.5 × 60 |  | 1 | 1 | Network daughter card for a 14th-generation PowerEdge - four RJ45 ports, each with its own link and activity … |
@@ -573,7 +578,9 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/riser-divider-plate-14g@1` | component | mechanical | 11.32 × 40.61 |  | 1 | 0 | The sheet metal either side of the rear-bay divider on a 14G PowerEdge - the plate right of riser 2 and the p… |
 | `dell/rj45-port-14g@1` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 0 | 3 | A 14G PowerEdge network port - common/rj45-eth@1 carrying the link and activity states ISM table 11 gives it |
 | `dell/system-board-14g@1` | component | mechanical | 422.8 × 456.5 × 79.9 |  | 1 | 2 | The system board of a 14G PowerEdge seen from above - the floor of the chassis, visible between the fan cage,… |
+| `dell/system-board-r660@1` | component | mechanical | 425 × 471.8 × 38.3 |  | 1 | 1 | The R660 system board seen from above - the PCB the processors, memory, risers and fan connectors stand on, a… |
 | `dell/system-cover-14g@1` | component | mechanical | 434 × 540.6 |  | 1 | 0 | The system cover of a 14G PowerEdge - the lid over the mid-drive tray, the risers and the processor tray, rel… |
+| `dell/system-cover-1u-16g@1` | component | mechanical | 433.4 × 615 |  | 1 | 0 | The system cover of a 16th-generation 1U PowerEdge (R660) - the lid over everything behind the drive backplan… |
 | `dell/system-id-button-14g@1` | component | button | 7 × 7 |  | 2 | 0 | The system identification button on the rear of a 14th-generation PowerEdge - pressed to make the machine ann… |
 | `dell/thumbscrew-blue-14g@1` | component | screw | 11.5 × 11.5 × 16 |  | 1 | 2 | Dell's blue captive thumbscrew - the ringed hand-turned fastener that retains a rear drive cage on a 14G Powe… |
 

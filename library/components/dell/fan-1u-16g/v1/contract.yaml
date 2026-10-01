@@ -1,0 +1,30 @@
+format: 1
+kind: module
+name: fan-1u-16g
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: server
+description: >-
+  Dual-rotor hot-plug fan module of a 16th-generation 1U PowerEdge (R660) seen from above - two 40 mm fans in one housing with its orange handle
+provenance:
+  sources: >-
+    Dell's R660 service model, working/intake/dell/3d-models/r660.glb, read with glb-parts.py and mapped to plan coordinates (rear at y=0: plan y = 789.4 - cad z1, the rear wall at cad z 789.4; plan x = 217.65 - cad x - w, the body seen from above). Only the poses inside the chassis' 0..43 height are seated; the scene also holds exploded copies above it.
+  size: >-
+    measured - eight 40.0 x 56.0 x 40.0 rotor bodies (`Body_27_7.003` and
+    `Body_28_7.003`, alternating) at plan x 28.5, 70.5, 115.4, 157.5, 239.4,
+    281.4, 326.0 and 368.0, y 484.7; each 27/28 pair is one module, 82.0 wide.
+    ISM "Cooling fan specifications": four dual-fan modules, eight rotors, on
+    FAN_1U1..FAN_1U4.
+  depth: >-
+    measured - 40.0 tall, standing on the chassis floor at cad 1.2.
+  handle: >-
+    ISM table 19's photographs show an orange handle on both the standard and the
+    high-performance Gold module; its plan position is drawn, not measured.
+  power: >-
+    NOT STATED in the R660 documents held.
+size: {w: 82.0, h: 56.0, d: 40.0}
+size-confidence: {w: measured, h: measured, d: measured}
+elements:
+  body: {at: [0.0, 0.0], size: [82.0, 56.0], class: bezel}
+skins: [default]

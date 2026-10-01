@@ -126,8 +126,5 @@ def test_the_r740xd_is_solid_and_nothing_else_regressed():
     # no device in the library is blocked by a dimension disagreement any more
     assert dim_blocked == [], dim_blocked
     # and the three that are incomplete are incomplete for their own reasons
-    # dell/r660 is a draft built in stages: front and rear are drawn, top,
-    # bottom and sides carry sizes only until the interior stage lands.
     assert sorted(s for s, lv in levels.items() if lv < 4) == [
-        "dell/r660",
         "ufispace/s9502-12sm", "ufispace/s9620-32e", "ufispace/s9620-40dg"]

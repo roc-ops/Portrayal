@@ -1,0 +1,35 @@
+format: 1
+kind: component
+name: air-shroud-1u-16g
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+profile: server
+description: >-
+  The processor air shroud of a 16th-generation 1U PowerEdge (R660) seen from
+  above - the black band between the fans and the processors and memory
+provenance:
+  sources: >-
+    Dell's R660 service model, working/intake/dell/3d-models/r660.glb, mapped to
+    plan coordinates as dell/system-board-r660@1 records; R660 ISM figure 15,
+    whose callout 2 is this part.
+  size: >-
+    measured - `Body_1_18.011` (`3DGeom~16329`), 429.0 x 92.9 at plan x 3.1,
+    y 390.7, 23.0 tall at cad 17.9..40.9. It is the one part of that size between
+    the processors and the fan bracket, and ISM figure 15 draws the shroud there.
+    It overlaps the front 8.6 of the DIMM slots, which run under it.
+  required: >-
+    TG thermal notes: the CPU air shroud is required in every air-cooled build.
+size: {w: 429.0, h: 92.9}
+size-confidence: {w: measured, h: measured}
+relief:
+  wall: '#15181b'
+  features:
+  - node: shroud
+    out: 0.5
+    color: '#1b1e21'
+    confidence: estimated
+    source: a moulded cover; drawn as a surface over what it covers
+elements:
+  shroud: {at: [0.0, 0.0], size: [429.0, 92.9], class: bezel}
+skins: [default]

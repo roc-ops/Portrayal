@@ -5,13 +5,15 @@
 # not traced), Dell's R660/R660xs gallery renders and StorageReview's
 # photographs of a real R660 (working/intake/dell/poweredge/photos/r660).
 # STATE:
-# DONE: five fronts (10 x 2.5, 8 x 2.5 Smart Flow, no backplane, 16 and 14 x
-# EDSFF E3.S) and the rear for riser configurations 1-8, combined into 36
-# orderable configurations. NOT YET: riser configurations 0 and 9 and seated
-# cards (see gaps), the E3.S single-slot blank (see gaps), the top, riser
-# cages and their printed slot numbers, the LOM card and rear I/O board as
-# field-replaceable modules, the small printed glyphs beside the rear ports
-# and the right front panel, the information tag, and the bezel.
+# DONE: five fronts and the rear for riser configurations 1-8 (36 builds); the
+# top view - system board, heatsinks, 32 DIMM slots, air shroud, fan modules
+# and bracket, system cover and backplane cover; estimated bottom and sides.
+# NOT YET: riser configurations 0 and 9, seated cards and the E3.S single-slot
+# blank (see gaps); in the top view, the PSUs, risers, OCP, LOM, rear I/O and
+# BOSS-N1 as plan projections and the drives under the backplane cover; riser
+# cages and their printed slot numbers; the LOM card and rear I/O board as
+# field-replaceable modules; the small printed glyphs beside the rear ports
+# and the right front panel; the information tag and the bezel.
 format: 1
 kind: device
 name: r660
@@ -119,6 +121,26 @@ provenance:
       2.0 over the VGA plate's edge, which the figure's resolution cannot
       resolve either way. The top vent strip is left off: neither figure nor
       the R670 master shows one over E3.S carriers.
+  top:
+    confidence: measured
+    note: >-
+      measured - Dell's R660 service model mapped from above (plan y = 789.4 -
+      cad z1, plan x = 217.65 - cad x - w), seated poses only, checked against
+      ISM figure 15's top view: the system board (the XE8640-named assembly,
+      425.0 x 471.8), the two heatsinks on their 82.1 x 119.1 retention plates
+      with CPU 2 left and CPU 1 right, all 32 DIMM slots at 3.8 x 133.4 named from
+      the memory label (ISM figure 18), the air shroud (figure 15 callout 2), the
+      four dual fan modules and their bracket, the system cover and the backplane
+      cover. The lid is seated by inference - the model has it slid 29.9 back
+      for removal. NOT YET IN THIS VIEW: the PSUs, risers, OCP, LOM, rear I/O and
+      BOSS-N1 as plan projections, the drive backplane and drives under the
+      backplane cover, and the cabling.
+  sides-and-bottom:
+    confidence: estimated
+    note: >-
+      estimated - no figure or photograph held shows the bottom or either side;
+      their folded edges and the rail land are plausible shapes at plausible
+      sizes, drawn so the faces are not blank, and marked estimated where drawn.
   rear:
     confidence: drawing
     note: >-
@@ -304,6 +326,41 @@ groups:
     role: service
     index-origin: 1
     description: the E3.S centre vent and the 14-drive build's two-slot filler
+  memory:
+    term: DIMM
+    role: service
+    index-origin: 1
+    description: >-
+      the 32 DDR5 slots, named as Dell's memory label prints them (ISM figure 18),
+      sixteen per processor - CPU 2's B slots on the left, CPU 1's A slots on the
+      right, seen from above with the rear at the top
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    description: the four dual-rotor fan modules, FAN_1U1..FAN_1U4
+    attrs:
+      redundancy: 'n+1'
+      redundancy-note: >-
+        R660 technical guide, thermal features: "The R660 allows N+1 fan
+        redundancy, allowing continuous operation with one fan failure in the
+        system." The ISM adds that all fan modules are required with a single
+        processor.
+  processors:
+    term: CPU
+    role: service
+    index-origin: 1
+    description: the two processor heatsinks - CPU 1 on the right as the front faces you
+  interior:
+    term: Part
+    role: furniture
+    index-origin: 1
+    description: the system board, the air shroud and the fan bracket
+  covers:
+    term: Cover
+    role: furniture
+    index-origin: 1
+    description: the system cover and the backplane cover
   riser-blanks:
     term: Blank
     role: service
@@ -1254,13 +1311,163 @@ views:
            attrs: {usb: '3.0'}, group: mgmt-rear, rel-pos: 4}
         - {ref: common/vga-receptacle@1, id: video-rear, at: [304.0, 25.35], group: mgmt-rear, rel-pos: 5}
   top:
+    # REAR AT y=0, FRONT AT y=773.5 - the library's plan convention. Every
+    # position is Dell's R660 service model mapped from above: plan y = 789.4 -
+    # cad z1 (the rear wall), plan x = 217.65 - cad x - w.
     size: {w: 434.0, h: 773.5}
+    panel:
+      decor:
+        # the front drive cage's top, ahead of the backplane cover
+        - {at: [0.0, 749.3], size: [434.0, 24.2], fill: '#2f3439'}
+    components:
+      bays:
+        - {id: dimm-b8, at: [17.15, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 1, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-b16, at: [24.65, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 2, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-b2, at: [32.05, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 3, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-b10, at: [39.55, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 4, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-b6, at: [47.35, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 5, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-b14, at: [54.85, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 6, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-b4, at: [62.25, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 7, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-b12, at: [69.75, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 8, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-b9, at: [159.25, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 9, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-b1, at: [166.75, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 10, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-b15, at: [174.15, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 11, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-b7, at: [181.65, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 12, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-b11, at: [189.45, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 13, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-b3, at: [196.95, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 14, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-b13, at: [204.35, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 15, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-b5, at: [211.85, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 16, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-a8, at: [219.25, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 17, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-a16, at: [226.75, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 18, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-a2, at: [234.15, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 19, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-a10, at: [241.65, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 20, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-a6, at: [249.45, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 21, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-a14, at: [256.95, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 22, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-a4, at: [264.35, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 23, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-a12, at: [271.85, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 24, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-a9, at: [362.55, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 25, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-a1, at: [370.05, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 26, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-a15, at: [377.45, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 27, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-a7, at: [384.95, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 28, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-a11, at: [392.75, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 29, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-a3, at: [400.25, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 30, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-a13, at: [407.65, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 31, in: system-board, under: [system-cover, air-shroud]}
+        - {id: dimm-a5, at: [415.15, 265.9], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 32, in: system-board, under: [system-cover, air-shroud]}
+        - {id: fan-1, at: [28.5, 484.7], size: {w: 82.0, h: 56.0},
+           accepts: [dell/fan-1u-16g@1], default: dell/fan-1u-16g@1,
+           group: fans, rel-pos: 1, under: [system-cover]}
+        - {id: fan-2, at: [115.4, 484.7], size: {w: 82.0, h: 56.0},
+           accepts: [dell/fan-1u-16g@1], default: dell/fan-1u-16g@1,
+           group: fans, rel-pos: 2, under: [system-cover]}
+        - {id: fan-3, at: [239.4, 484.7], size: {w: 82.0, h: 56.0},
+           accepts: [dell/fan-1u-16g@1], default: dell/fan-1u-16g@1,
+           group: fans, rel-pos: 3, under: [system-cover]}
+        - {id: fan-4, at: [326.0, 484.7], size: {w: 82.0, h: 56.0},
+           accepts: [dell/fan-1u-16g@1], default: dell/fan-1u-16g@1,
+           group: fans, rel-pos: 4, under: [system-cover]}
+      placements:
+        - {ref: dell/system-board-r660@1, id: system-board, at: [5.1, 1.4],
+           group: interior, rel-pos: 1,
+           under: [heatsink-1, heatsink-2, air-shroud, fan-bracket, system-cover, backplane-cover, fan-1, fan-2, fan-3, fan-4, dimm-b8, dimm-b16, dimm-b2, dimm-b10, dimm-b6, dimm-b14, dimm-b4, dimm-b12, dimm-b9, dimm-b1, dimm-b15, dimm-b7, dimm-b11, dimm-b3, dimm-b13, dimm-b5, dimm-a8, dimm-a16, dimm-a2, dimm-a10, dimm-a6, dimm-a14, dimm-a4, dimm-a12, dimm-a9, dimm-a1, dimm-a15, dimm-a7, dimm-a11, dimm-a3, dimm-a13, dimm-a5]}
+        - {ref: dell/heatsink-1u-16g@1, id: heatsink-1, at: [278.0, 266.7],
+           group: processors, rel-pos: 1, in: system-board, under: [system-cover]}
+        - {ref: dell/heatsink-1u-16g@1, id: heatsink-2, at: [75.2, 266.7],
+           group: processors, rel-pos: 2, in: system-board, under: [system-cover]}
+        - {ref: dell/air-shroud-1u-16g@1, id: air-shroud, at: [3.1, 390.7],
+           group: interior, rel-pos: 3, in: system-board, under: [system-cover]}
+        - {ref: dell/fan-bracket-1u-16g@1, id: fan-bracket, at: [3.45, 488.2],
+           group: interior, rel-pos: 2, under: [system-cover],
+           frames: [fan-1, fan-2, fan-3, fan-4]}
+        - {ref: dell/system-cover-1u-16g@1, id: system-cover, at: [0.3, 0.0],
+           group: covers, rel-pos: 1, under: [backplane-cover]}
+        - {ref: dell/backplane-cover-1u-16g@1, id: backplane-cover, at: [0.3, 585.3],
+           group: covers, rel-pos: 2}
   bottom:
     size: {w: 434.0, h: 773.5}
+    panel:
+      decor:
+        - {id: edge-left, at: [0.0, 0.0], size: [4.0, 773.5], fill: '#1a1d21', confidence: estimated, source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the figure is not measured"}
+        - {id: edge-right, at: [430.0, 0.0], size: [4.0, 773.5], fill: '#1a1d21', confidence: estimated, source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the figure is not measured"}
+        - {id: edge-front, at: [0.0, 769.5], size: [434.0, 4.0], fill: '#1a1d21', confidence: estimated, source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the figure is not measured"}
+        - {id: edge-rear, at: [0.0, 0.0], size: [434.0, 4.0], fill: '#1a1d21', confidence: estimated, source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the figure is not measured"}
   left:
     size: {w: 773.5, h: 42.8}
+    panel:
+      decor:
+        - {id: rail-land, at: [0.0, 14.4], size: [773.5, 14.0], fill: '#3a4045', confidence: estimated, source: "the sliding-rail land along this side. ESTIMATED: no figure held shows this face, so the band is a plausible rail land in a 1U side and not a reading"}
+        - {id: edge-top, at: [0.0, 0.0], size: [773.5, 3.0], fill: '#1a1d21', confidence: estimated, source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the figure is not measured"}
+        - {id: edge-bottom, at: [0.0, 39.8], size: [773.5, 3.0], fill: '#1a1d21', confidence: estimated, source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the figure is not measured"}
   right:
     size: {w: 773.5, h: 42.8}
+    panel:
+      decor:
+        - {id: rail-land, at: [0.0, 14.4], size: [773.5, 14.0], fill: '#3a4045', confidence: estimated, source: "the sliding-rail land along this side. ESTIMATED: no figure held shows this face, so the band is a plausible rail land in a 1U side and not a reading"}
+        - {id: edge-top, at: [0.0, 0.0], size: [773.5, 3.0], fill: '#1a1d21', confidence: estimated, source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the figure is not measured"}
+        - {id: edge-bottom, at: [0.0, 39.8], size: [773.5, 3.0], fill: '#1a1d21', confidence: estimated, source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the figure is not measured"}
 configurations:
   # GENERATED from one table with the only-in lists on the rear bays: five
   # fronts by eight riser configurations, less the pairings the technical

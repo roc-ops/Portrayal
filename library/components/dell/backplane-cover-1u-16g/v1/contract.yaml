@@ -1,0 +1,23 @@
+format: 1
+kind: component
+name: backplane-cover-1u-16g
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+profile: server
+description: >-
+  The drive backplane cover of a 16th-generation 1U PowerEdge (R660) - the fixed panel over the front drive cage, ahead of the system cover
+provenance:
+  sources: >-
+    Dell's R660 service model, working/intake/dell/3d-models/r660.glb, read with glb-parts.py and mapped to plan coordinates (rear at y=0: plan y = 789.4 - cad z1, the rear wall at cad z 789.4; plan x = 217.65 - cad x - w, the body seen from above). Only the poses inside the chassis' 0..43 height are seated; the scene also holds exploded copies above it.
+  removable: >-
+    `mounts`: the ISM has its own removal procedure ("Removing the drive backplane
+    cover"), and the system cover's front edge tucks under it.
+  size: >-
+    measured - `PE_R660_Drive backplane cover_Assembly-1.001`, 433.4 x 164.0 at
+    plan x 1.0, y 585.3, over the 10 x 2.5 inch backplane.
+size: {w: 433.4, h: 164.0}
+size-confidence: {w: measured, h: measured}
+elements:
+  plate: {at: [0.0, 0.0], size: [433.4, 164.0], class: bezel}
+skins: [default]

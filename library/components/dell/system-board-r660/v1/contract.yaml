@@ -1,0 +1,30 @@
+format: 1
+kind: component
+name: system-board-r660
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The R660 system board seen from above - the PCB the processors, memory, risers and fan connectors stand on, and the floor of the interior
+provenance:
+  sources: >-
+    Dell's R660 service model, working/intake/dell/3d-models/r660.glb, read with glb-parts.py and mapped to plan coordinates (rear at y=0: plan y = 789.4 - cad z1, the rear wall at cad z 789.4; plan x = 217.65 - cad x - w, the body seen from above). Only the poses inside the chassis' 0..43 height are seated; the scene also holds exploded copies above it.
+  size: >-
+    measured - `PE_XE8640_Systemboard_Assembly-1.002` (Dell's model names the
+    board after the XE8640 it shares), seated pose: 425.0 x 471.8 at plan x 5.1,
+    y 1.4. The PCB alone (`3DGeom~20309`) is 423.1 x 342.0 from y 116.4, and the
+    assembly's rear 115 mm is the riser, OCP, LOM and rear I/O connector area.
+  depth: >-
+    measured - the PCB's top is at cad height 4.5 against the 42.8 lid line, so
+    the interior is a 38.3 well and the parts on the board stand from its floor.
+  board-variants: >-
+    ISM table 126 notes two boards, MS (processors under 250 W) and MAX (250 W
+    and over); their outlines are not distinguished here.
+size: {w: 425.0, h: 471.8, d: 38.3}
+size-confidence: {w: measured, h: measured, d: measured}
+relief:
+  wall: '#1e2226'
+  walls: inside
+elements:
+  board: {at: [0.0, 0.0], size: [425.0, 471.8], class: bezel}
+skins: [default]
