@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: drive-carrier-25
-version: 1.5.1
+version: 2.0.0
 class: drive
 behaviour: fills
 profile: server
@@ -9,7 +9,8 @@ description: >-
   Hot-plug carrier for a 2.5 inch SFF drive, stood on edge as a rack server's
   front bays present them - two illuminated glyphs at the head, a release with
   its orange ring, and three windows onto the tray's honeycomb
-size: {w: 17.868, h: 79.4, d: 123.7}
+size: {w: 15.3, h: 73.0, d: 123.7}
+size-confidence: {w: drawing, h: drawing, d: measured}
 body: {depth: 123.7, color: '#3c4247'}
 attrs:
   media: sff-2.5
@@ -29,6 +30,40 @@ fields:
   link: {label: Link rate, type: text, default: 12Gb}
   rpm: {label: Spindle, type: text, default: 10K, description: empty for an SSD - the glyph beside it goes too}
 provenance:
+  size: >-
+    drawing - 15.3 x 73.0, the CARRIER'S OWN FACE, standing on edge. @1 was
+    17.868 x 79.4, and neither of those was the carrier: 17.868 is the R740xd's
+    bay PITCH and 79.4 the vertical extent of its bay SEAMS on a face-on render
+    (both still measured there, and the R740xd's bays keep them - see that
+    device's bay-pitch and bay-vertical provenance). @1's own body-inset key
+    already said the body inside that pitch was 14.86.
+    WHAT FIXES 15.3 x 73.0 IS FOUR DELL DRAWINGS OF THE SAME PART. The 16G R760
+    24-bay front master (true scale, drawn ear to ear) has its carriers 15.3 wide
+    on a 17.8 pitch with 2.5 mm of chassis between them, and 72.45..73.9 long;
+    the 16G R660 10-bay front master lays the same carrier flat, 73.0 x 15.3, on
+    an 82.85 column pitch; Dell's isolated carrier master (14g-2-5-sas-ssd-h)
+    is stamped 72.5 long with an aspect of 4.74, which is 72.5 x 15.3; and a
+    photograph of a real R660 gives an aspect of about 4.8. The R740xd's own ISM
+    figure put the body at 14.86 between its rails - 3% under, inside what a
+    figure at that resolution resolves.
+    ONE PART ACROSS 14G, 15G AND 16G. Dell sells one 2.5 inch carrier, DXD9H, for
+    14th- through 16th-generation PowerEdge including the R740xd and the R660
+    (reseller listings, secondary), and Dell's own service models put the same
+    carrier asset in both machines (r740xd.glb `DD9900_ Drives_` and r660.glb
+    `Poweredge_R760_Drive_Carrier_Assembly`, identical children). The CAD's
+    78.3 x 18.48 is that asset's bounding box, which takes in what stands off the
+    face, and is not the face - it would overlap its neighbour by 2.7 mm on the
+    R660's 15.8 row pitch.
+    ONE DRAWING DISAGREES: the 15G r750-24d-2-5-front master draws its carriers
+    79.01 long, the figure @1 leaned on for corroboration. Against the R760's
+    16G master, the isolated carrier master and the R660, it is the outlier, and
+    it measures the bay outline rather than the carrier.
+  size-was-a-bay: >-
+    THE ART IS @1's, RESCALED, NOT REDRAWN. @1 drew its features as percentages
+    of the length (from the isolated 14g master) inside a 14.86 body; @2 maps
+    that body onto the 15.3 face (x 1.5..16.36 to 0..15.3, scale 1.0296) and the
+    79.4 length onto 73.0 (scale 0.9194), so every feature keeps its fraction of
+    the part. The gap @1 drew either side of the body is the bay's, and is gone.
   depth-from-dell-cad: >-
     measured - Dell's R740XD 3D guide CAD, node `DD9900_ Drives_-1.001`, which
     spans z 19.77..143.47. The bare drive inside it (`DD9900_ HDD 2.5_`, 15.00
@@ -88,31 +123,6 @@ provenance:
     order, this emphasis. The values in each skin are the ones that figure shows
     plus common orderable sizes, and a drive this library holds no document for
     should get a skin when it gets a document rather than a guess.
-  size: >-
-    photo-measured, anchored to a standard. WIDTH is the bay pitch, and the
-    pitch is arithmetic rather than a reading: the R740xd's face-on render
-    passes Gate 1 at 2.10% against its datasheet 482.6 x 86.8, which fixes
-    1.5997 px/mm, and 25 carrier seams span 686 px from first to last over 24
-    gaps - 17.868 mm. Measuring the run and dividing by a known count puts the
-    endpoint error over 24 rather than multiplying it by 24.
-    HEIGHT 79.4 is the vertical extent of those seams, CORROBORATED BY THE
-    DRIVE IT HOLDS: SFF-8201 Rev 3.4 gives a 2.5 inch drive 70.10 mm wide at
-    most, and stood on edge that width is the carrier's height, so 79.4 leaves
-    9.3 mm of rail - the right order, and it would not be if the reading were
-    wrong.
-  body-inset: >-
-    THE CARRIER DOES NOT FILL ITS BAY, and the gap is 3.0 mm rather than the 1.08
-    an earlier draft drew. `size` is the full 17.868 pitch so that twenty-four
-    tile exactly; the body inside it is 14.86, MEASURED BETWEEN THE RAILS on two
-    whole-face drawings that agree - the R740xd's own ISM figure at 600 dpi puts
-    the bright rails 13.71 mm apart within a carrier and 3.96 to the next, and
-    the r750-24d-2-5-front master's exact vectors say 13.16. A 1.15 rail on each
-    edge makes the body 14.86.
-    THE FIGURE IT REPLACES CAME FROM AN ASPECT. 16.79 was read off the ISOLATED
-    14g-2-5-sas-v-1 master, 4.730 against a 79.4 length, and an aspect taken from
-    a single part has now lost to two drawings with twenty-four repeats in them -
-    which is the rule about measuring against something that repeats, arriving
-    late. A row of 24 read visibly too tight and that is what exposed it.
   face: >-
     transcribed from Dell's rack server Visio master `14g-2-5-sas-v-1`, which is
     a line drawing and can therefore be measured where a photograph cannot.
@@ -204,8 +214,8 @@ provenance:
     dropping five unverifiable constants came free with it.
 elements:
   lamp-activity:
-    at: [3.1, 1.7]
-    size: [3.4, 3.0]
+    at: [1.65, 1.56]
+    size: [3.5, 2.76]
     class: led
     states: ['off',
              {name: active, color: '#22c55e', behavior: blinking}]
@@ -217,8 +227,8 @@ elements:
       is not periodic, so a frequency here would be a decoration pretending to be
       a measurement.
   lamp-status:
-    at: [11.4, 1.7]
-    size: [3.4, 3.0]
+    at: [10.19, 1.56]
+    size: [3.5, 2.76]
     class: led
     states: ['off',
              {name: online, color: '#22c55e'},
@@ -250,10 +260,10 @@ elements:
       indicator "remains off until all drives are initialized after the system is
       turned on", so a dark lamp on a running machine can also mean the array is
       still coming up.
-  release: {at: [4.53, 9.4], size: [8.8, 6.7], class: control}
-  window-1: {at: [2.83, 27.3], size: [12.2, 10.9], class: vent}
-  window-2: {at: [2.83, 39.6], size: [12.2, 11.0], class: vent}
-  window-3: {at: [2.83, 52.1], size: [12.2, 9.1], class: vent}
+  release: {at: [3.12, 8.64], size: [9.06, 6.16], class: control}
+  window-1: {at: [1.37, 25.1], size: [12.56, 10.02], class: vent}
+  window-2: {at: [1.37, 36.41], size: [12.56, 10.11], class: vent}
+  window-3: {at: [1.37, 47.9], size: [12.56, 8.37], class: vent}
 relief:
   wall: '#1b1e21'
   features:

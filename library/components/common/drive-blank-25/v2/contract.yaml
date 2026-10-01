@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: drive-blank-25
-version: 1.2.0
+version: 2.0.0
 class: blank
 behaviour: fills
 profile: server
@@ -15,25 +15,39 @@ attrs:
   form-factor: '2.5-inch SFF'
 provenance:
   size: >-
-    WIDTH AND HEIGHT ARE THE CARRIER'S, and deliberately so: a blank fills the
-    same bay on the same pitch, so its face is the same 17.868 x 79.4 and the
-    same 14.86 body inside it. See common/drive-carrier-25, which carries the
-    measurement - photo-measured against Dell's face-on render at 1.5997 px/mm
-    and corroborated to 0.13% by the pitch read off the 15G r750-24d-2-5-front
-    Visio master, a line drawing that passes Gate 1 at 0.67%.
-  body-inset: >-
-    THE CARRIER DOES NOT FILL ITS BAY, and the gap is 3.0 mm rather than the 1.08
-    an earlier draft drew. `size` is the full 17.868 pitch so that twenty-four
-    tile exactly; the body inside it is 14.86, MEASURED BETWEEN THE RAILS on two
-    whole-face drawings that agree - the R740xd's own ISM figure at 600 dpi puts
-    the bright rails 13.71 mm apart within a carrier and 3.96 to the next, and
-    the r750-24d-2-5-front master's exact vectors say 13.16. A 1.15 rail on each
-    edge makes the body 14.86.
-    THE FIGURE IT REPLACES CAME FROM AN ASPECT. 16.79 was read off the ISOLATED
-    14g-2-5-sas-v-1 master, 4.730 against a 79.4 length, and an aspect taken from
-    a single part has now lost to two drawings with twenty-four repeats in them -
-    which is the rule about measuring against something that repeats, arriving
-    late. A row of 24 read visibly too tight and that is what exposed it.
+    drawing - 15.3 x 73.0, the face of the carrier whose bay it fills - common/drive-carrier-25@2's, which carries the measurement and is summarised here, standing on edge. @1 was
+    17.868 x 79.4, and neither of those was the carrier: 17.868 is the R740xd's
+    bay PITCH and 79.4 the vertical extent of its bay SEAMS on a face-on render
+    (both still measured there, and the R740xd's bays keep them - see that
+    device's bay-pitch and bay-vertical provenance). @1's own body-inset key
+    already said the body inside that pitch was 14.86.
+    WHAT FIXES 15.3 x 73.0 IS FOUR DELL DRAWINGS OF THE SAME PART. The 16G R760
+    24-bay front master (true scale, drawn ear to ear) has its carriers 15.3 wide
+    on a 17.8 pitch with 2.5 mm of chassis between them, and 72.45..73.9 long;
+    the 16G R660 10-bay front master lays the same carrier flat, 73.0 x 15.3, on
+    an 82.85 column pitch; Dell's isolated carrier master (14g-2-5-sas-ssd-h)
+    is stamped 72.5 long with an aspect of 4.74, which is 72.5 x 15.3; and a
+    photograph of a real R660 gives an aspect of about 4.8. The R740xd's own ISM
+    figure put the body at 14.86 between its rails - 3% under, inside what a
+    figure at that resolution resolves.
+    ONE PART ACROSS 14G, 15G AND 16G. Dell sells one 2.5 inch carrier, DXD9H, for
+    14th- through 16th-generation PowerEdge including the R740xd and the R660
+    (reseller listings, secondary), and Dell's own service models put the same
+    carrier asset in both machines (r740xd.glb `DD9900_ Drives_` and r660.glb
+    `Poweredge_R760_Drive_Carrier_Assembly`, identical children). The CAD's
+    78.3 x 18.48 is that asset's bounding box, which takes in what stands off the
+    face, and is not the face - it would overlap its neighbour by 2.7 mm on the
+    R660's 15.8 row pitch.
+    ONE DRAWING DISAGREES: the 15G r750-24d-2-5-front master draws its carriers
+    79.01 long, the figure @1 leaned on for corroboration. Against the R760's
+    16G master, the isolated carrier master and the R660, it is the outlier, and
+    it measures the bay outline rather than the carrier.
+  size-was-a-bay: >-
+    THE ART IS @1's, RESCALED, NOT REDRAWN. @1 drew its features as percentages
+    of the length (from the isolated 14g master) inside a 14.86 body; @2 maps
+    that body onto the 15.3 face (x 1.5..16.36 to 0..15.3, scale 1.0296) and the
+    79.4 length onto 73.0 (scale 0.9194), so every feature keeps its fraction of
+    the part. The gap @1 drew either side of the body is the bay's, and is gone.
   face: >-
     THE SAME GENERATOR DRAWS BOTH FACES. A blank and a populated carrier are one
     moulding differing in one thing, and two files drawing "the same part except"
@@ -73,7 +87,8 @@ provenance:
     a blank draws nothing. It is not that the figure is unknown - there is no
     figure, which is why no power-draw attribute is stated rather than a zero
     that would read as a measurement.
-size: {w: 17.868, h: 79.4, d: 25.0}
+size: {w: 15.3, h: 73.0, d: 25.0}
+size-confidence: {w: drawing, h: drawing, d: measured}
 # A BLANK IS A SOLID AND HAD NO WAY TO SAY SO. relief.js builds a module's
 # body only `if (meta.body)`, so without this key ejecting one gave a face plane
 # hanging in the air - not a shallow filler but a texture with nothing behind it.
@@ -81,10 +96,10 @@ size: {w: 17.868, h: 79.4, d: 25.0}
 # it was drawn and this one never did.
 body: {depth: 25.0, color: '#3c4247'}
 elements:
-  release: {at: [4.53, 9.4], size: [8.8, 6.7], class: control}
-  window-1: {at: [2.83, 27.3], size: [12.2, 10.9], class: vent}
-  window-2: {at: [2.83, 39.6], size: [12.2, 11.0], class: vent}
-  window-3: {at: [2.83, 52.1], size: [12.2, 9.1], class: vent}
+  release: {at: [3.12, 8.64], size: [9.06, 6.16], class: control}
+  window-1: {at: [1.37, 25.1], size: [12.56, 10.02], class: vent}
+  window-2: {at: [1.37, 36.41], size: [12.56, 10.11], class: vent}
+  window-3: {at: [1.37, 47.9], size: [12.56, 8.37], class: vent}
 relief:
   wall: '#1b1e21'
   features:
@@ -92,7 +107,7 @@ relief:
     pocket: 7.6
     confidence: borrowed
     source: >-
-      common/drive-carrier-25@1 - the depth of its own `window-1`, measured
+      common/drive-carrier-25@2 - the depth of its own `window-1`, measured
       off Dell's service model r740xd.glb. NO BLANK APPEARS IN THAT SCENE: it
       is posed fully populated, with carriers in every bay and nothing named
       blank, filler or dummy anywhere in it, so this number is the carrier's
@@ -105,7 +120,7 @@ relief:
     pocket: 7.6
     confidence: borrowed
     source: >-
-      common/drive-carrier-25@1 - the depth of its own `window-1`, measured
+      common/drive-carrier-25@2 - the depth of its own `window-1`, measured
       off Dell's service model r740xd.glb. NO BLANK APPEARS IN THAT SCENE: it
       is posed fully populated, with carriers in every bay and nothing named
       blank, filler or dummy anywhere in it, so this number is the carrier's
@@ -118,7 +133,7 @@ relief:
     pocket: 7.6
     confidence: borrowed
     source: >-
-      common/drive-carrier-25@1 - the depth of its own `window-1`, measured
+      common/drive-carrier-25@2 - the depth of its own `window-1`, measured
       off Dell's service model r740xd.glb. NO BLANK APPEARS IN THAT SCENE: it
       is posed fully populated, with carriers in every bay and nothing named
       blank, filler or dummy anywhere in it, so this number is the carrier's
@@ -131,7 +146,7 @@ relief:
     pocket: 4.2
     confidence: borrowed
     source: >-
-      common/drive-carrier-25@1 - the depth of its own `release`, measured
+      common/drive-carrier-25@2 - the depth of its own `release`, measured
       off Dell's service model r740xd.glb. NO BLANK APPEARS IN THAT SCENE: it
       is posed fully populated, with carriers in every bay and nothing named
       blank, filler or dummy anywhere in it, so this number is the carrier's
