@@ -1,0 +1,62 @@
+format: 1
+kind: module
+name: ocp3-2x100g-qsfp56
+version: 1.0.0
+class: nic
+behaviour: fills
+profile: server
+description: >-
+  Dual-port 100 GbE QSFP56 OCP NIC 3.0 card, small form factor, as Dell fits it to the 16th-generation PowerEdge - two QSFP56 cages among vent fields
+unplaced: the R660 device (dell/r660, in progress on this branch) seats it in its OCP bay; remove this line when that lands
+attrs:
+  ports: 2
+  media: qsfp56
+  form-factor: ocp3-sff
+  qsfp56: 2
+provenance:
+  sources: >-
+    The bracket and depth from Dell's R660 service model via
+    dell/ocp3-4x1g-rj45@1; the face from the VisioCafe master `C66xx 2x25Gb QSFP28 OCP3` (facts read, art not traced); the card's existence from
+    the R660 technical guide Table 12 and the ISM's networking table.
+  ports: >-
+    stencil-measured, from a sibling master. No rack-server master draws a QSFP
+    OCP card; the C6600 master `C66xx 2x25Gb QSFP28 OCP3` does, on a bracket
+    with an external pull tab. The PORTS are the card's and not the bracket's,
+    so they are read from it: calibrated on that set's own 4 x SFP28 block
+    against SFF-8433's 58.2 (0.04353 mm/px), its cages read 20.15 wide against
+    the QSFP standard's 20.0 (0.75%), on a 28.12 pitch, centred on the bracket
+    at x 21.84 and 49.96. QSFP56 and QSFP28 share the SFF-8663 opening, so the
+    port is std/qsfp56@1. The leftmost vent column is notched for the C6600's
+    pull tab; this card has no pull tab and the column is drawn whole.
+  x16-needs-a-cable: >-
+    R660 TG Table 11: 100 GbE needs the OCP cable from SL11_CPU1_PB7 to
+    SL13_CPU1_PB7, which only the MAX system board has; the MS board runs the
+    slot at x8. A configuration fact, not a face one - recorded here because it
+    is why this card appears in some R660 builds and not others.
+  size: >-
+    measured - the same Dell SFF bracket as dell/ocp3-4x1g-rj45@1, whose
+    provenance gives the CAD reading: 71.8 x 15.1, a 76 x 115 board behind it.
+    One bracket across the family is the R660 CAD's one card plus the
+    VisioCafe masters, which all punch the same vent grid; no image held shows
+    THIS card's bracket edge on its own.
+  latch: >-
+    NOT DRAWN, for the reason dell/ocp3-4x1g-rj45@1 gives: the R660 ISM opens
+    the card's blue latch from inside the chassis, after the riser is out.
+  power: >-
+    NOT STATED for this card. TG Table 11 gives the OCP slot's range, 15-35 W,
+    for every card it takes; no document held gives this card's own figure.
+  lamps-and-numbering: >-
+    NOT DRAWN beyond what the composed ports carry. The master draws no lamps or
+    numerals on this card; the one real OCP card photographed in an R660 (a
+    4 x SFP28 from another vendor, StorageReview -01.jpg) has a lamp column and
+    printed numbers, which shows that vendors differ here and that this card's
+    own printing is not in hand.
+size: {w: 71.8, h: 15.1, d: 115.0}
+size-confidence: {w: measured, h: measured, d: measured}
+body:
+  depth: 115.0
+  color: '#b8bdc2'
+parts:
+  - {ref: std/qsfp56@1, id: port-1, at: [11.84, 3.18], attrs: {media: qsfp56, speed: 100g}}
+  - {ref: std/qsfp56@1, id: port-2, at: [39.96, 3.18], attrs: {media: qsfp56, speed: 100g}}
+skins: [default]
