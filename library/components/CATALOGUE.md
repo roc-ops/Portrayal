@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1083 component majors in 23 namespaces.
+1084 component majors in 23 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -494,13 +494,14 @@ aperture when it is a bare opening - never both at one position. The README's
 |---|---|---|---|---|---|---|---|
 | `credo/hiwire-shift-qsfp-dd@1` | module | transceiver | 18.35 × 8.5 × 58.26 | qsfp-dd | 0 | 0 | Credo HiWire SHIFT active electrical cable, the 400G QSFP-DD end of a 400G to four 100G QSFP28 breakout - a Q… |
 
-## dell/ (111)
+## dell/ (112)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
 | `dell/air-shroud-14g@1` | component | mechanical | 431.49 × 210.42 |  | 1 | 0 | The air shroud of a 14G PowerEdge - the moulding over the processors and memory that ducts the fans' air acro… |
 | `dell/air-shroud-1u-16g@1` | component | mechanical | 429 × 92.9 |  | 1 | 0 | The processor air shroud of a 16th-generation 1U PowerEdge (R660) seen from above - the black band between th… |
 | `dell/backplane-cover-1u-16g@1` | component | mechanical | 433.4 × 164 |  | 1 | 0 | The drive backplane cover of a 16th-generation 1U PowerEdge (R660) - the fixed panel over the front drive cag… |
+| `dell/bezel-1u-16g@1` | module | bezel | 433.35 × 42.8 × 13.84 |  | 1 | 0 | The optional security bezel for a 16th-generation 1U PowerEdge (R660) - five metal wings between two rails ac… |
 | `dell/bezel-2u-14g@1` | module | bezel | 434 × 82.35 × 23.3 |  | 1 | 0 | The optional metal front bezel for a 2U 14th-generation PowerEdge - a honeycomb of large hexagonal openings b… |
 | `dell/boss-n1-blank-1u@1` | module | blank | 24.85 × 38.44 |  | 1 | 0 | The vented blank Dell fits where a 1U PowerEdge has no BOSS-N1 module - a plate with a four-by-six grid of sq… |
 | `dell/boss-n1-m2-carrier@1` | module | drive | 26 × 10 × 108.9 |  | 0 | 1 | Hot-swap M.2 NVMe card carrier for Dell's BOSS-N1 boot module - an orange release tab, a status lamp and an a… |

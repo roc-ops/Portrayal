@@ -1,0 +1,112 @@
+format: 1
+kind: module
+name: bezel-1u-16g
+version: 1.0.0
+class: bezel
+behaviour: mounts
+profile: server
+description: >-
+  The optional security bezel for a 16th-generation 1U PowerEdge (R660) - five
+  metal wings between two rails across the drive bays, a keylock on the first
+  wing, a plain end plate at the left and a dark section over the VGA module at
+  the right. Open between the wings, so the drives show through. Unbranded
+attrs:
+  power-absent: not-applicable
+provenance:
+  power: >-
+    NOT APPLICABLE - a metal cover with no electronics; the LCD bezel, which
+    has some, is not this part. The ISM and technical guide give no figure for
+    either.
+  sources: >-
+    Three, and two of them disagree. (1) The VisioCafe master `1U 16G Bezel`
+    (1u-16g-bezel): the wing shape, the rails, the keylock and the badge zone.
+    Facts read, art not traced. (2) Dell's R660 gallery render
+    (photos/r660/dell-gallery/r660-gallery-2.png), a straight front with the
+    bezel fitted, laid over this model's front - its ears and controls land on
+    ours within a millimetre, so its scale is the face's: where the wings,
+    the end plate and the dark end section sit. (3) The R660 ISM and technical
+    guide: what the bezel is, how it comes off, and its depth.
+  size: >-
+    drawing - 433.35 x 42.80, the body between the ear folds as this model's
+    front draws it (x 24.30..457.65), which the bezel covers: in the render it
+    starts at the left ear and ends at the right control panel. The master's
+    frame, 19236.5 x 1907.2 units, is 431.7 wide at 42.8 tall - 0.4% from this.
+  the-render-and-the-master-disagree: >-
+    A DISAGREEMENT, RESOLVED FOR THE RENDER ACROSS AND THE MASTER UP AND DOWN.
+    The master spreads five wings 59.3 wide on an 88.0 pitch from 11.4 to 422.8,
+    nearly end to end. The render, measured as the wings' top arms in its first
+    rows, puts them 51.3 wide on a 77.5 pitch from 35.4 (front x 59.7, 136.7,
+    214.0, 291.7, 369.7), with a plain light plate at the left end (1.0..19.1,
+    y 11.5..31.4) and a dark section over the VGA module at the right (from
+    408.7). A render of the product is closer to the product than a stencil, and
+    stencils are simplifications here more than once; but the same render
+    numbers the drive bays 1-10 where the machine prints 0-9, so it is not
+    beyond error either. The wing outline is the master's, scaled 0.8645 across
+    to the render's width; heights are the master's - rails at y 4.02..7.18 and
+    35.62..38.79, wings 1.15..41.66 - and the render agrees: a dark band at
+    5.3..8.6 runs across behind its wings.
+  depth: >-
+    datasheet - R660 ISM and technical guide chassis dimensions: 35.84 mm ear to
+    front with the bezel and 22 mm without, and an overall depth of 822.88 with
+    against 809.04 without - 13.84 both ways. No model or drawing gives its
+    section, so it stands off the face as one depth.
+  lock: >-
+    drawing - the master's keylock sits on the first wing's left; the render puts
+    it at x 45.7, y 21.4, 12.6 across, which is used. ISM "Removing the front
+    bezel": unlock it, press the release button, disengage the left end, unhook
+    the right. The release button is NOT DRAWN: neither image shows it, so
+    where on the left end it sits is not known.
+  no-branding: >-
+    DELIBERATELY UNBRANDED. Both images carry a Dell wordmark across the third
+    wing; it is not drawn, and `logo-zone` reserves its place (the master's
+    badge, 52.0 x 18.9 at 191.0, 12.0) with nothing in it.
+  lcd-variant: >-
+    NOT MODELLED. The ISM and technical guide offer an LCD bezel as well as this
+    security bezel, and the master `1U 16G Bezel w/LCD` draws its panel - three
+    buttons and a display over the fourth and fifth wings. A bezel with a
+    screen is a different part with a display element and states.
+  colour: >-
+    photo - the render's wings are a warm grey, lit lighter on the upper wing
+    than the lower; the values are this drawing's, not counted.
+size: {w: 433.35, h: 42.8, d: 13.84}
+size-confidence: {w: drawing, h: drawing, d: datasheet}
+relief:
+  features:
+  - node: plate
+    out: 13.84
+    shape: true
+    color: '#8f8b85'
+    confidence: datasheet
+    source: 35.84 ear-to-front with the bezel against 22 without, ISM and technical guide
+elements:
+  plate:
+    at: [0.0, 0.0]
+    size: [433.35, 42.8]
+    class: bezel
+    description: the bezel - rails, wings and end sections - over an open ground
+  wings-lit:
+    at: [35.4, 1.15]
+    size: [361.35, 20.26]
+    class: bezel
+    description: the five wings' upper halves, lit lighter
+  end-l:
+    at: [1.0, 11.5]
+    size: [18.1, 19.9]
+    class: bezel
+    description: the lighter square on the plain left end
+  end-r:
+    at: [408.7, 1.15]
+    size: [24.65, 40.51]
+    class: bezel
+    description: the dark right end, over the VGA module
+  lock:
+    at: [39.4, 15.1]
+    size: [12.6, 12.6]
+    class: control
+    description: the keylock - unlocked with the bezel key before the bezel comes off
+  logo-zone:
+    at: [191.0, 12.0]
+    size: [52.0, 18.9]
+    class: bezel
+    description: where Dell's wordmark sits; reserved and left empty
+skins: [default]

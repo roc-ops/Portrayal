@@ -144,6 +144,18 @@ provenance:
       supplies and the two risers; the `sff10-rc1-2a3a-populated` example seats
       the rest. NOT YET IN THIS VIEW: risers 2Q, 1P and 4P (the model carries
       only 2A and 3A), the cards, the drive backplane, and the cabling.
+  bezel:
+    confidence: drawing
+    note: >-
+      DRAWN FITTED, as on the R740xd, and taken off in the viewer: the optional
+      security bezel (dell/bezel-1u-16g@1) covers the body between the ears,
+      and `for:` names the bays and parts behind it. Its openings are holes, so
+      the drives show through and a legend lying in one is not read as covered.
+      THE EIGHT L21 WARNINGS IT RAISES ARE TRUE: bays 0 and 1's numbers and
+      arrows, at x 28.13 on the two 2.5 inch fronts, sit under the bezel's plain
+      left end, as Dell's gallery render shows them hidden. They are in the
+      baseline rather than waived, so a mark buried by anything else still
+      warns. The LCD bezel is not modelled.
   sides-and-bottom:
     confidence: estimated
     note: >-
@@ -402,7 +414,11 @@ groups:
     term: Cover
     role: furniture
     index-origin: 1
-    description: the system cover and the backplane cover
+    description: >-
+      the system cover and the backplane cover on top, and the optional
+      security bezel on the front. The bezel is DRAWN FITTED, as on the
+      R740xd: it is `mounts`, so the viewer takes it off to show the drives,
+      and `for:` names what it covers.
   riser-blanks:
     term: Blank
     role: service
@@ -591,6 +607,9 @@ views:
         - {ref: std/vga@1, id: vga, at: [437.22, 17.41], rotate: 270, group: ports, rel-pos: 3}
         - {ref: common/vga-symbol@1, id: mark-vga, at: [444.45, 9.56], for: vga, group: marks, rel-pos: 1}
         - {ref: dell/information-tag-1u-16g@1, id: info-tag, at: [393.6, 40.75], group: tags, rel-pos: 1}
+        - {ref: dell/bezel-1u-16g@1, id: bezel, at: [24.3, 0.0],
+           for: [drive-0, drive-1, drive-2, drive-3, drive-4, drive-5, drive-6, drive-7, drive-8, drive-9, vga, mark-vga],
+           group: covers, rel-pos: 3}
         - ref: common/led-dot@1
           id: idrac-direct-led
           at: [459.45, 35.76]
@@ -757,6 +776,9 @@ views:
         - {ref: std/vga@1, id: vga, at: [437.22, 17.41], rotate: 270, group: ports, rel-pos: 3}
         - {ref: common/vga-symbol@1, id: mark-vga, at: [444.45, 9.56], for: vga, group: marks, rel-pos: 1}
         - {ref: dell/information-tag-1u-16g@1, id: info-tag, at: [393.6, 40.75], group: tags, rel-pos: 1}
+        - {ref: dell/bezel-1u-16g@1, id: bezel, at: [24.3, 0.0],
+           for: [drive-0, drive-1, drive-2, drive-3, drive-4, drive-5, drive-6, drive-7, vga, mark-vga],
+           group: covers, rel-pos: 3}
         - ref: common/led-dot@1
           id: idrac-direct-led
           at: [459.45, 35.76]
@@ -1121,6 +1143,9 @@ views:
         - {ref: std/vga@1, id: vga, at: [437.22, 17.41], rotate: 270, group: ports, rel-pos: 3}
         - {ref: common/vga-symbol@1, id: mark-vga, at: [444.45, 9.56], for: vga, group: marks, rel-pos: 1}
         - {ref: dell/information-tag-1u-16g@1, id: info-tag, at: [393.6, 40.75], group: tags, rel-pos: 1}
+        - {ref: dell/bezel-1u-16g@1, id: bezel, at: [24.3, 0.0],
+           for: [vga, mark-vga],
+           group: covers, rel-pos: 3}
         - ref: common/led-dot@1
           id: idrac-direct-led
           at: [459.45, 35.76]
@@ -1211,6 +1236,9 @@ views:
         - {ref: std/vga@1, id: vga, at: [437.22, 17.41], rotate: 270, group: ports, rel-pos: 3}
         - {ref: common/vga-symbol@1, id: mark-vga, at: [444.45, 9.56], for: vga, group: marks, rel-pos: 1}
         - {ref: dell/information-tag-1u-16g@1, id: info-tag, at: [393.6, 40.75], group: tags, rel-pos: 1}
+        - {ref: dell/bezel-1u-16g@1, id: bezel, at: [24.3, 0.0],
+           for: [e3s-0, e3s-1, e3s-2, e3s-3, e3s-4, e3s-5, e3s-6, e3s-7, e3s-8, e3s-9, e3s-10, e3s-11, e3s-12, e3s-13, e3s-14, e3s-15, vga, mark-vga, centre-vent],
+           group: covers, rel-pos: 3}
         - ref: common/led-dot@1
           id: idrac-direct-led
           at: [459.45, 35.76]
@@ -1302,6 +1330,9 @@ views:
         - {ref: std/vga@1, id: vga, at: [437.22, 17.41], rotate: 270, group: ports, rel-pos: 3}
         - {ref: common/vga-symbol@1, id: mark-vga, at: [444.45, 9.56], for: vga, group: marks, rel-pos: 1}
         - {ref: dell/information-tag-1u-16g@1, id: info-tag, at: [393.6, 40.75], group: tags, rel-pos: 1}
+        - {ref: dell/bezel-1u-16g@1, id: bezel, at: [24.3, 0.0],
+           for: [e3s-0, e3s-1, e3s-2, e3s-3, e3s-4, e3s-5, e3s-6, e3s-7, e3s-8, e3s-9, e3s-10, e3s-11, e3s-12, e3s-13, e3s-filler-14, vga, mark-vga, centre-vent],
+           group: covers, rel-pos: 3}
         - ref: common/led-dot@1
           id: idrac-direct-led
           at: [459.45, 35.76]
