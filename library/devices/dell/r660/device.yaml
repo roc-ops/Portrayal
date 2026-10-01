@@ -11,6 +11,14 @@ description: >-
   power supplies at opposite ends of the rear, up to three PCIe slots, an OCP
   NIC 3.0 slot and a rear BOSS-N1 boot module
 profile: server
+lint:
+  waive:
+    L49: >-
+      the three slot windows are NOT one evenly spaced row and should not be: slots 1
+      and 2 are both on riser 2 (R2A) and sit 1.8 apart, slot 3 is on riser 3 (R3A)
+      past riser 2's blue latch and sits 14.3 further on. The VisioCafe R660 rear
+      master draws exactly that - plate edges at 122.66..192.76, 195.6..264.35 and
+      272.76..348.61 with the latch between the second and third.
 provenance:
   sources:
     note: >-
@@ -83,15 +91,52 @@ provenance:
       seated there (dell/power-button-14g@1) are the library's existing ones,
       centred on the master's positions; the master draws the 16G button 7.3
       square against that part's 8.34 x 8.31.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the VisioCafe master `R660 3xPCI LP Rear` (r660-3xpci-lp-rear-1),
+      riser configuration 1 (R2A + R3A, three low-profile slots). THE REAR
+      MASTERS DRAW THE 434 BODY, NOT THE RACK FACE: stamped 482.6, they are
+      43.12 tall at 434 against 42.8 (0.75%), so they are read at 22.24 px/mm
+      with y scaled 0.9926. Positions: PSU 1 and PSU 2 placed by their orange
+      latches (x 82.06 and 416.91, 49.0 into each supply), PSU 1 within 0.3 of
+      the service model; the OCP bay on the service model's bracket (164.95,
+      against the master's vent field centred 1.0 further right); the LOM and
+      iDRAC RJ45 openings 12.28 x 9.51 at 114.71, 136.74 and 268.26; the USB
+      stack 287.46; the VGA shell 310.12; the system ID button 252.43.
+  rear-boss-bay:
+    confidence: measured
+    note: >-
+      measured - the bay is the service model's BOSS-N1 module, 29.9 x 38.9 at
+      x 0.85. The blank the master draws is narrower (24.85, at 6.41..31.25), and
+      seated centred in the module's bay it draws about 3 mm left of where the
+      master puts it. Both outlines are sourced; the bay follows the part that
+      fills it fully.
+  rear-slots:
+    confidence: drawing
+    note: >-
+      drawing - three 70.0 x 18.42 windows centred on the master's vent fields
+      (157.63, 229.41, 313.70) at y 4.12; see dell/pcie-filler-lp-16g@1 for why
+      the window is narrower than a 79.20 low-profile bracket. ONLY THE FILLER IS
+      ACCEPTED YET: a card's bracket is 79.20, and how its ends hide under the
+      riser hardware on this machine is not settled, so a seated card would
+      overdraw its neighbour.
+  rear-power:
+    confidence: datasheet
+    note: >-
+      chassis.power is `ac`: every supply this device accepts is an AC
+      mixed-mode unit (700-1400 W, C14). The -48 V DC, 277 V and 1800 W C16
+      supplies are not modelled (no orthographic image of their faces is held),
+      and when they are, power moves onto per-build configurations.
   not-yet-modelled:
     note: >-
-      THIS IS THE FRONT OF THE 10-BAY BUILD AND NOTHING ELSE YET. The rear, the
-      top, the 8-bay Smart Flow, 0-drive and E3.S fronts, the riser
-      configurations and the bezel are the next stages; their views below carry
-      sizes only. Also not yet drawn on this face: the small USB, iDRAC and power
-      marks on the right panel (about 1.3 x 2.9 in the master, smaller than the
-      library's mark parts) and the pull-out information tag (ISM table 1 item 4),
-      which the R740xd does not draw either.
+      DONE: the 10-bay front and the riser-configuration-1 rear. NOT YET: the
+      top, the other fronts (8-bay Smart Flow, 0-drive, 14/16 x E3.S), the other
+      riser configurations (2 x FH, 2 x LP, 2 x LP Gen5, 2 rear drives + 1 LP,
+      2 x E3.S rear, no riser), seated cards, the LOM card and rear I/O board as
+      field-replaceable modules (drawn as placements here), the small printed
+      glyphs beside the rear ports and the right front panel, the information
+      tag, and the bezel.
 attrs:
   physical:
     ru: 1
@@ -102,6 +147,7 @@ chassis:
   height: 42.8
   depth: 773.5
   ru: 1
+  power: ac
   color: '#2f3439'
   edge: '#1d2125'
   silk: '#c9ced3'
@@ -133,6 +179,43 @@ groups:
     role: furniture
     index-origin: 1
     description: printed marks seated as parts - the VGA symbol
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    description: the two 60 mm supplies, PSU 1 at the left as the rear faces you
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: >-
+        R660 technical guide: two hot-swap supplies, 1+1 redundant, with a hot-spare
+        mode (ISM "Hot spare feature"); one supply runs the system.
+  boss:
+    term: Bay
+    role: service
+    index-origin: 1
+    description: the BOSS-N1 boot module bay at the far left of the rear
+  slots:
+    term: Slot
+    role: traffic
+    index-origin: 1
+    description: the PCIe slots of riser configuration 1 (R2A + R3A), numbered as printed
+  ocp:
+    term: Slot
+    role: traffic
+    index-origin: 1
+    description: the OCP NIC 3.0 slot
+  lom:
+    term: Port
+    role: traffic
+    index-origin: 1
+    description: the two 1 GbE ports of the LOM card
+    attrs: {media: rj45, speed: 1g}
+  mgmt-rear:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: the rear I/O board - service access at the back of the rack
+    description: the system ID button, the dedicated iDRAC port, two USB and the VGA
   leds:
     term: LED
     role: indicator
@@ -295,6 +378,69 @@ views:
             when unplugged - the R740xd's table 8 word for word.
   rear:
     size: {w: 434.0, h: 42.8}
+    panel:
+      decor:
+        # the rear wall behind everything that seats in it
+        - {at: [0, 0], size: [434.0, 42.8], fill: '#c3c8cd'}
+        # the LOM card's bracket, the rear I/O board's plate and the riser-3 latch
+        - {at: [107.0, 23.8], size: [52.5, 16.4], fill: '#d2d6da'}
+        - {at: [247.0, 23.8], size: [85.5, 16.4], fill: '#d2d6da'}
+        - {at: [350.41, 2.79], size: [8.54, 19.49], fill: '#5a6066'}
+        # the small vent block left of PSU 2 and the slots beside the LOM bracket
+        - {at: [346.59, 26.42], size: [3.78, 3.75], fill: '#16191c'}
+        - {at: [346.59, 31.91], size: [3.78, 3.75], fill: '#16191c'}
+        - {at: [346.59, 37.40], size: [3.78, 3.75], fill: '#16191c'}
+        - {at: [352.12, 31.91], size: [3.78, 3.75], fill: '#16191c'}
+        - {at: [352.12, 37.40], size: [3.78, 3.75], fill: '#16191c'}
+        - {at: [357.65, 31.91], size: [3.78, 3.75], fill: '#16191c'}
+        - {at: [99.01, 26.42], size: [1.62, 3.75], fill: '#16191c'}
+        - {at: [99.01, 31.91], size: [1.62, 3.75], fill: '#16191c'}
+        - {at: [102.38, 26.42], size: [1.62, 3.75], fill: '#16191c'}
+        - {at: [102.38, 31.91], size: [1.62, 3.75], fill: '#16191c'}
+        - {at: [157.78, 26.42], size: [3.78, 3.75], fill: '#16191c'}
+        - {at: [157.78, 31.91], size: [3.78, 3.75], fill: '#16191c'}
+        - {at: [242.09, 26.42], size: [3.78, 3.75], fill: '#16191c'}
+        - {at: [242.09, 31.91], size: [3.78, 3.75], fill: '#16191c'}
+    silkscreen:
+      - {at: [193.4, 12.3], text: '1', fill: '#2b2f33', for: slot-1}
+      - {at: [203.4, 4.0], text: '2', fill: '#2b2f33', for: slot-2}
+      - {at: [284.9, 4.0], text: '3', fill: '#2b2f33', for: slot-3}
+      - {at: [101.5, 38.3], text: '1', fill: '#2b2f33', for: psu-1}
+      - {at: [104.8, 38.3], text: '1', fill: '#2b2f33', for: lom-1}
+      - {at: [155.2, 38.3], text: '2', fill: '#2b2f33', for: lom-2}
+      - {at: [258.5, 38.7], text: 'iDRAC', fill: '#2b2f33', for: idrac}
+      - {at: [356.0, 38.3], text: '2', fill: '#2b2f33', for: psu-2}
+    components:
+      bays:
+        - {id: boss, at: [0.85, 2.2], size: {w: 29.9, h: 38.9},
+           accepts: [dell/boss-n1-blank-1u@1, dell/boss-n1-module-1u@1], default: dell/boss-n1-blank-1u@1,
+           group: boss, rel-pos: 1}
+        - {id: psu-1, at: [33.06, 1.75], size: {w: 59.8, h: 40.1},
+           accepts: [dell/psu-1400w-ac-60mm@1, dell/psu-1100w-ac-60mm@1, dell/psu-800w-ac-60mm@1, dell/psu-700w-ac-60mm@1], default: dell/psu-1400w-ac-60mm@1, group: psus, rel-pos: 1}
+        - {id: psu-2, at: [367.91, 1.75], size: {w: 59.8, h: 40.1},
+           accepts: [dell/psu-1400w-ac-60mm@1, dell/psu-1100w-ac-60mm@1, dell/psu-800w-ac-60mm@1, dell/psu-700w-ac-60mm@1], default: dell/psu-1400w-ac-60mm@1, group: psus, rel-pos: 2}
+        - {id: slot-1, at: [122.63, 4.12], size: {w: 70.0, h: 18.42},
+           accepts: [dell/pcie-filler-lp-16g@1], default: dell/pcie-filler-lp-16g@1, group: slots, rel-pos: 1}
+        - {id: slot-2, at: [194.41, 4.12], size: {w: 70.0, h: 18.42},
+           accepts: [dell/pcie-filler-lp-16g@1], default: dell/pcie-filler-lp-16g@1, group: slots, rel-pos: 2}
+        - {id: slot-3, at: [278.70, 4.12], size: {w: 70.0, h: 18.42},
+           accepts: [dell/pcie-filler-lp-16g@1], default: dell/pcie-filler-lp-16g@1, group: slots, rel-pos: 3}
+        - {id: ocp, at: [164.95, 24.7], size: {w: 71.8, h: 15.1},
+           accepts: [dell/ocp3-blank-16g@1, dell/ocp3-4x1g-rj45@1, dell/ocp3-2x10g-rj45@1, dell/ocp3-4x10g-rj45@1, dell/ocp3-2x25g-sfp28@1, dell/ocp3-4x25g-sfp28@1, dell/ocp3-2x100g-qsfp56@1], default: dell/ocp3-blank-16g@1, group: ocp, rel-pos: 1}
+      placements:
+        - {ref: common/rj45-ganged-eth@1, id: lom-1, at: [114.5, 27.07], rotate: 180,
+           attrs: {media: rj45, speed: 1g}, group: lom, rel-pos: 1}
+        - {ref: common/rj45-ganged-eth@1, id: lom-2, at: [136.53, 27.07], rotate: 180,
+           attrs: {media: rj45, speed: 1g}, group: lom, rel-pos: 2}
+        - {ref: dell/system-id-button-14g@1, id: system-id, at: [252.6, 27.9], for: chassis,
+           group: mgmt-rear, rel-pos: 1}
+        - {ref: common/rj45-ganged-eth@1, id: idrac, at: [268.05, 27.07], rotate: 180,
+           attrs: {media: rj45, speed: 1g}, group: mgmt-rear, rel-pos: 2}
+        - {ref: std/usb-a@1, id: usb-rear-1, at: [287.69, 27.0], skin: usb2,
+           attrs: {usb: '2.0'}, group: mgmt-rear, rel-pos: 3}
+        - {ref: std/usb-a@1, id: usb-rear-2, at: [287.69, 35.4],
+           attrs: {usb: '3.0'}, group: mgmt-rear, rel-pos: 4}
+        - {ref: common/vga-receptacle@1, id: video-rear, at: [304.0, 25.35], group: mgmt-rear, rel-pos: 5}
   top:
     size: {w: 434.0, h: 773.5}
   bottom:
