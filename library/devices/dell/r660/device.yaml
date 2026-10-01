@@ -5,15 +5,15 @@
 # not traced), Dell's R660/R660xs gallery renders and StorageReview's
 # photographs of a real R660 (working/intake/dell/poweredge/photos/r660).
 # STATE:
-# DONE: five fronts and the rear for riser configurations 1-8 (36 builds); the
-# top view - system board, heatsinks, 32 DIMM slots, air shroud, fan modules
-# and bracket, system cover and backplane cover; estimated bottom and sides.
-# NOT YET: riser configurations 0 and 9, seated cards and the E3.S single-slot
-# blank (see gaps); in the top view, the PSUs, risers, OCP, LOM, rear I/O and
-# BOSS-N1 as plan projections and the drives under the backplane cover; riser
-# cages and their printed slot numbers; the LOM card and rear I/O board as
-# field-replaceable modules; the small printed glyphs beside the rear ports
-# and the right front panel; the information tag and the bezel.
+# DONE: five fronts and the rear for riser configurations 1-8 (36 builds, plus
+# a populated example); the top view - system board, heatsinks, 32 DIMM slots,
+# air shroud, fans and bracket, system and backplane covers, and plan
+# projections of the PSUs, BOSS-N1, OCP card, LOM, rear I/O board and upper
+# front drives; estimated bottom and sides. NOT YET: riser configurations 0
+# and 9, seated cards and the E3.S single-slot blank (see gaps); the risers in
+# the top view; riser cages and their printed slot numbers; the LOM card and
+# rear I/O board as field-replaceable modules; the small printed glyphs beside
+# the rear ports and the right front panel; the information tag and the bezel.
 format: 1
 kind: device
 name: r660
@@ -132,9 +132,15 @@ provenance:
       the memory label (ISM figure 18), the air shroud (figure 15 callout 2), the
       four dual fan modules and their bracket, the system cover and the backplane
       cover. The lid is seated by inference - the model has it slid 29.9 back
-      for removal. NOT YET IN THIS VIEW: the PSUs, risers, OCP, LOM, rear I/O and
-      BOSS-N1 as plan projections, the drive backplane and drives under the
-      backplane cover, and the cabling.
+      for removal. SEATED MODULES PROJECT INTO THIS VIEW through their rear or
+      front bay's `plan:` - the PSUs (dell/psu-60mm-plan@1), the BOSS-N1 module,
+      the OCP card and the upper row of front drives (std/drive-25-plan@1, from
+      the carrier) - at the service model's positions mirrored from their rear
+      bays; the LOM card and rear I/O board are top-view placements, as they are
+      rear placements. A blank seats no plan, so the default build shows the two
+      supplies only; the `sff10-rc1-2a3a-populated` example seats the rest. NOT
+      YET IN THIS VIEW: the risers and their cards, the drive backplane, and the
+      cabling.
   sides-and-bottom:
     confidence: estimated
     note: >-
@@ -498,31 +504,36 @@ views:
            group: panels, rel-pos: 1}
         - {id: drive-0, at: [32.5, 7.71], size: {w: 73.0, h: 15.3}, rotate: 270,
            accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
-           group: drives, rel-pos: 0}
+           group: drives, rel-pos: 0,
+           plan: {view: top, at: [10.2, 643.1], under: [backplane-cover]}}
         - {id: drive-1, at: [32.5, 24.21], size: {w: 73.0, h: 15.3}, rotate: 270,
            accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
            group: drives, rel-pos: 1}
         - {id: drive-2, at: [115.35, 7.71], size: {w: 73.0, h: 15.3}, rotate: 270,
            accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
-           group: drives, rel-pos: 2}
+           group: drives, rel-pos: 2,
+           plan: {view: top, at: [93.7, 643.1], under: [backplane-cover]}}
         - {id: drive-3, at: [115.35, 24.21], size: {w: 73.0, h: 15.3}, rotate: 270,
            accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
            group: drives, rel-pos: 3}
         - {id: drive-4, at: [198.2, 7.71], size: {w: 73.0, h: 15.3}, rotate: 270,
            accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
-           group: drives, rel-pos: 4}
+           group: drives, rel-pos: 4,
+           plan: {view: top, at: [176.2, 643.1], under: [backplane-cover]}}
         - {id: drive-5, at: [198.2, 24.21], size: {w: 73.0, h: 15.3}, rotate: 270,
            accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
            group: drives, rel-pos: 5}
         - {id: drive-6, at: [281.1, 7.71], size: {w: 73.0, h: 15.3}, rotate: 270,
            accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
-           group: drives, rel-pos: 6}
+           group: drives, rel-pos: 6,
+           plan: {view: top, at: [259.5, 643.1], under: [backplane-cover]}}
         - {id: drive-7, at: [281.1, 24.21], size: {w: 73.0, h: 15.3}, rotate: 270,
            accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
            group: drives, rel-pos: 7}
         - {id: drive-8, at: [363.95, 7.71], size: {w: 73.0, h: 15.3}, rotate: 270,
            accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
-           group: drives, rel-pos: 8}
+           group: drives, rel-pos: 8,
+           plan: {view: top, at: [342.5, 643.1], under: [backplane-cover]}}
         - {id: drive-9, at: [363.95, 24.21], size: {w: 73.0, h: 15.3}, rotate: 270,
            accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
            group: drives, rel-pos: 9}
@@ -659,25 +670,29 @@ views:
            group: panels, rel-pos: 1}
         - {id: drive-0, at: [32.5, 7.71], size: {w: 73.0, h: 15.3}, rotate: 270,
            accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
-           group: drives, rel-pos: 0}
+           group: drives, rel-pos: 0,
+           plan: {view: top, at: [10.2, 643.1], under: [backplane-cover]}}
         - {id: drive-1, at: [32.5, 24.21], size: {w: 73.0, h: 15.3}, rotate: 270,
            accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
            group: drives, rel-pos: 1}
         - {id: drive-2, at: [115.35, 7.71], size: {w: 73.0, h: 15.3}, rotate: 270,
            accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
-           group: drives, rel-pos: 2}
+           group: drives, rel-pos: 2,
+           plan: {view: top, at: [93.7, 643.1], under: [backplane-cover]}}
         - {id: drive-3, at: [115.35, 24.21], size: {w: 73.0, h: 15.3}, rotate: 270,
            accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
            group: drives, rel-pos: 3}
         - {id: drive-4, at: [281.1, 7.71], size: {w: 73.0, h: 15.3}, rotate: 270,
            accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
-           group: drives, rel-pos: 4}
+           group: drives, rel-pos: 4,
+           plan: {view: top, at: [259.5, 643.1], under: [backplane-cover]}}
         - {id: drive-5, at: [281.1, 24.21], size: {w: 73.0, h: 15.3}, rotate: 270,
            accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
            group: drives, rel-pos: 5}
         - {id: drive-6, at: [363.95, 7.71], size: {w: 73.0, h: 15.3}, rotate: 270,
            accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
-           group: drives, rel-pos: 6}
+           group: drives, rel-pos: 6,
+           plan: {view: top, at: [342.5, 643.1], under: [backplane-cover]}}
         - {id: drive-7, at: [363.95, 24.21], size: {w: 73.0, h: 15.3}, rotate: 270,
            accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
            group: drives, rel-pos: 7}
@@ -1262,20 +1277,23 @@ views:
       bays:
         - {id: boss, at: [0.85, 2.2], size: {w: 29.9, h: 38.9},
            accepts: [dell/boss-n1-blank-1u@1, dell/boss-n1-module-1u@1], default: dell/boss-n1-blank-1u@1,
-           group: boss, rel-pos: 1}
+           group: boss, rel-pos: 1,
+           plan: {view: top, at: [403.25, 0.0], in: system-board, under: [system-cover]}}
         - {id: psu-1, at: [33.06, 1.75], size: {w: 59.8, h: 40.1},
-           accepts: [dell/psu-1400w-ac-60mm@1, dell/psu-1100w-ac-60mm@1, dell/psu-800w-ac-60mm@1, dell/psu-700w-ac-60mm@1], default: dell/psu-1400w-ac-60mm@1, group: psus, rel-pos: 1}
+           accepts: [dell/psu-1400w-ac-60mm@1, dell/psu-1100w-ac-60mm@1, dell/psu-800w-ac-60mm@1, dell/psu-700w-ac-60mm@1], default: dell/psu-1400w-ac-60mm@1, group: psus, rel-pos: 1,
+           plan: {view: top, at: [341.14, 0.0], in: system-board, under: [system-cover]}}
         - {id: psu-2, at: [367.91, 1.75], size: {w: 59.8, h: 40.1},
-           accepts: [dell/psu-1400w-ac-60mm@1, dell/psu-1100w-ac-60mm@1, dell/psu-800w-ac-60mm@1, dell/psu-700w-ac-60mm@1], default: dell/psu-1400w-ac-60mm@1, group: psus, rel-pos: 2}
+           accepts: [dell/psu-1400w-ac-60mm@1, dell/psu-1100w-ac-60mm@1, dell/psu-800w-ac-60mm@1, dell/psu-700w-ac-60mm@1], default: dell/psu-1400w-ac-60mm@1, group: psus, rel-pos: 2,
+           plan: {view: top, at: [6.29, 0.0], in: system-board, under: [system-cover]}}
         - {id: slot-1, at: [122.63, 4.12], size: {w: 70.0, h: 18.42},
            accepts: [dell/pcie-filler-lp-16g@1], default: dell/pcie-filler-lp-16g@1, group: slots, rel-pos: 1,
-           only-in: [sff10-rc1-2a3a, sff8sf-rc1-2a3a, nobp-rc1-2a3a, e3s16-rc1-2a3a, e3s14-rc1-2a3a, sff10-rc2-2p3p, sff8sf-rc2-2p3p, nobp-rc2-2p3p, e3s16-rc2-2p3p, e3s14-rc2-2p3p, sff10-rc4-2r3r, sff8sf-rc4-2r3r, nobp-rc4-2r3r, e3s16-rc4-2r3r, e3s14-rc4-2r3r, sff10-rc5-2a3q, sff8sf-rc5-2a3q, nobp-rc5-2a3q, e3s16-rc5-2a3q, e3s14-rc5-2a3q, sff10-rc8-2a, sff8sf-rc8-2a, nobp-rc8-2a, e3s16-rc8-2a, e3s14-rc8-2a]}
+           only-in: [sff10-rc1-2a3a, sff8sf-rc1-2a3a, nobp-rc1-2a3a, e3s16-rc1-2a3a, e3s14-rc1-2a3a, sff10-rc2-2p3p, sff8sf-rc2-2p3p, nobp-rc2-2p3p, e3s16-rc2-2p3p, e3s14-rc2-2p3p, sff10-rc4-2r3r, sff8sf-rc4-2r3r, nobp-rc4-2r3r, e3s16-rc4-2r3r, e3s14-rc4-2r3r, sff10-rc5-2a3q, sff8sf-rc5-2a3q, nobp-rc5-2a3q, e3s16-rc5-2a3q, e3s14-rc5-2a3q, sff10-rc8-2a, sff8sf-rc8-2a, nobp-rc8-2a, e3s16-rc8-2a, e3s14-rc8-2a, sff10-rc1-2a3a-populated]}
         - {id: slot-2, at: [194.41, 4.12], size: {w: 70.0, h: 18.42},
            accepts: [dell/pcie-filler-lp-16g@1], default: dell/pcie-filler-lp-16g@1, group: slots, rel-pos: 2,
-           only-in: [sff10-rc1-2a3a, sff8sf-rc1-2a3a, nobp-rc1-2a3a, e3s16-rc1-2a3a, e3s14-rc1-2a3a, sff10-rc2-2p3p, sff8sf-rc2-2p3p, nobp-rc2-2p3p, e3s16-rc2-2p3p, e3s14-rc2-2p3p, sff10-rc4-2r3r, sff8sf-rc4-2r3r, nobp-rc4-2r3r, e3s16-rc4-2r3r, e3s14-rc4-2r3r, sff10-rc5-2a3q, sff8sf-rc5-2a3q, nobp-rc5-2a3q, e3s16-rc5-2a3q, e3s14-rc5-2a3q, sff10-rc8-2a, sff8sf-rc8-2a, nobp-rc8-2a, e3s16-rc8-2a, e3s14-rc8-2a]}
+           only-in: [sff10-rc1-2a3a, sff8sf-rc1-2a3a, nobp-rc1-2a3a, e3s16-rc1-2a3a, e3s14-rc1-2a3a, sff10-rc2-2p3p, sff8sf-rc2-2p3p, nobp-rc2-2p3p, e3s16-rc2-2p3p, e3s14-rc2-2p3p, sff10-rc4-2r3r, sff8sf-rc4-2r3r, nobp-rc4-2r3r, e3s16-rc4-2r3r, e3s14-rc4-2r3r, sff10-rc5-2a3q, sff8sf-rc5-2a3q, nobp-rc5-2a3q, e3s16-rc5-2a3q, e3s14-rc5-2a3q, sff10-rc8-2a, sff8sf-rc8-2a, nobp-rc8-2a, e3s16-rc8-2a, e3s14-rc8-2a, sff10-rc1-2a3a-populated]}
         - {id: slot-3, at: [278.70, 4.12], size: {w: 70.0, h: 18.42},
            accepts: [dell/pcie-filler-lp-16g@1], default: dell/pcie-filler-lp-16g@1, group: slots-r3, rel-pos: 3,
-           only-in: [sff10-rc1-2a3a, sff8sf-rc1-2a3a, nobp-rc1-2a3a, e3s16-rc1-2a3a, e3s14-rc1-2a3a, sff10-rc2-2p3p, sff8sf-rc2-2p3p, nobp-rc2-2p3p, e3s16-rc2-2p3p, e3s14-rc2-2p3p, sff10-rc4-2r3r, sff8sf-rc4-2r3r, nobp-rc4-2r3r, e3s16-rc4-2r3r, e3s14-rc4-2r3r, sff10-rc5-2a3q, sff8sf-rc5-2a3q, nobp-rc5-2a3q, e3s16-rc5-2a3q, e3s14-rc5-2a3q, sff10-rc7-3p-rear2]}
+           only-in: [sff10-rc1-2a3a, sff8sf-rc1-2a3a, nobp-rc1-2a3a, e3s16-rc1-2a3a, e3s14-rc1-2a3a, sff10-rc2-2p3p, sff8sf-rc2-2p3p, nobp-rc2-2p3p, e3s16-rc2-2p3p, e3s14-rc2-2p3p, sff10-rc4-2r3r, sff8sf-rc4-2r3r, nobp-rc4-2r3r, e3s16-rc4-2r3r, e3s14-rc4-2r3r, sff10-rc5-2a3q, sff8sf-rc5-2a3q, nobp-rc5-2a3q, e3s16-rc5-2a3q, e3s14-rc5-2a3q, sff10-rc7-3p-rear2, sff10-rc1-2a3a-populated]}
         - {id: slot-1-r2q, at: [131.80, 4.12], size: {w: 70.0, h: 18.42},
            accepts: [dell/pcie-filler-lp-16g@1], default: dell/pcie-filler-lp-16g@1, group: slots, rel-pos: 1, only-in: [sff10-rc6-2q, sff8sf-rc6-2q, nobp-rc6-2q, e3s16-rc6-2q, e3s14-rc6-2q]}
         - {id: slot-2-r2q, at: [213.68, 4.12], size: {w: 70.0, h: 18.42},
@@ -1295,7 +1313,8 @@ views:
         - {id: rear-drive-1, at: [190.83, 2.1], size: {w: 79.25, h: 18.0}, rotate: 270,
            accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2, group: drives-rear, rel-pos: 1, only-in: [sff10-rc7-3p-rear2]}
         - {id: ocp, at: [164.95, 24.7], size: {w: 71.8, h: 15.1},
-           accepts: [dell/ocp3-blank-16g@1, dell/ocp3-4x1g-rj45@1, dell/ocp3-2x10g-rj45@1, dell/ocp3-4x10g-rj45@1, dell/ocp3-2x25g-sfp28@1, dell/ocp3-4x25g-sfp28@1, dell/ocp3-2x100g-qsfp56@1], default: dell/ocp3-blank-16g@1, group: ocp, rel-pos: 1}
+           accepts: [dell/ocp3-blank-16g@1, dell/ocp3-4x1g-rj45@1, dell/ocp3-2x10g-rj45@1, dell/ocp3-4x10g-rj45@1, dell/ocp3-2x25g-sfp28@1, dell/ocp3-4x25g-sfp28@1, dell/ocp3-2x100g-qsfp56@1], default: dell/ocp3-blank-16g@1, group: ocp, rel-pos: 1,
+           plan: {view: top, at: [195.15, 0.6], in: system-board, under: [system-cover]}}
       placements:
         - {ref: common/rj45-ganged-eth@1, id: lom-1, at: [114.5, 27.07], rotate: 180,
            attrs: {media: rj45, speed: 1g}, group: lom, rel-pos: 1}
@@ -1432,7 +1451,7 @@ views:
       placements:
         - {ref: dell/system-board-r660@1, id: system-board, at: [5.1, 1.4],
            group: interior, rel-pos: 1,
-           under: [heatsink-1, heatsink-2, air-shroud, fan-bracket, system-cover, backplane-cover, fan-1, fan-2, fan-3, fan-4, dimm-b8, dimm-b16, dimm-b2, dimm-b10, dimm-b6, dimm-b14, dimm-b4, dimm-b12, dimm-b9, dimm-b1, dimm-b15, dimm-b7, dimm-b11, dimm-b3, dimm-b13, dimm-b5, dimm-a8, dimm-a16, dimm-a2, dimm-a10, dimm-a6, dimm-a14, dimm-a4, dimm-a12, dimm-a9, dimm-a1, dimm-a15, dimm-a7, dimm-a11, dimm-a3, dimm-a13, dimm-a5]}
+           under: [heatsink-1, heatsink-2, air-shroud, lom-card, rear-io-board, fan-bracket, system-cover, backplane-cover, fan-1, fan-2, fan-3, fan-4, dimm-b8, dimm-b16, dimm-b2, dimm-b10, dimm-b6, dimm-b14, dimm-b4, dimm-b12, dimm-b9, dimm-b1, dimm-b15, dimm-b7, dimm-b11, dimm-b3, dimm-b13, dimm-b5, dimm-a8, dimm-a16, dimm-a2, dimm-a10, dimm-a6, dimm-a14, dimm-a4, dimm-a12, dimm-a9, dimm-a1, dimm-a15, dimm-a7, dimm-a11, dimm-a3, dimm-a13, dimm-a5]}
         - {ref: dell/heatsink-1u-16g@1, id: heatsink-1, at: [278.0, 266.7],
            group: processors, rel-pos: 1, in: system-board, under: [system-cover]}
         - {ref: dell/heatsink-1u-16g@1, id: heatsink-2, at: [75.2, 266.7],
@@ -1442,6 +1461,10 @@ views:
         - {ref: dell/fan-bracket-1u-16g@1, id: fan-bracket, at: [3.45, 488.2],
            group: interior, rel-pos: 2, under: [system-cover],
            frames: [fan-1, fan-2, fan-3, fan-4]}
+        - {ref: dell/lom-2x1g-plan-16g@1, id: lom-card, at: [277.0, 1.6],
+           group: interior, rel-pos: 4, in: system-board, under: [system-cover]}
+        - {ref: dell/rear-io-board-plan-16g@1, id: rear-io-board, at: [97.7, 0.0],
+           group: interior, rel-pos: 5, in: system-board, under: [system-cover]}
         - {ref: dell/system-cover-1u-16g@1, id: system-cover, at: [0.3, 0.0],
            group: covers, rel-pos: 1, under: [backplane-cover]}
         - {ref: dell/backplane-cover-1u-16g@1, id: backplane-cover, at: [0.3, 585.3],
@@ -1646,6 +1669,26 @@ configurations:
     views: {front: front-e3s14}
     description: >-
       14 x EDSFF E3.S front; riser configuration 8, R2A, single processor: one usable low-profile Gen4 x16 slot (slot 1; slot 2's lanes belong to processor 2), and a vented blank where riser 3 would be. ISM table 111.
+  sff10-rc1-2a3a-populated:
+    kind: example
+    description: >-
+      The default build (10 x 2.5 inch front, riser configuration 1) with what
+      the bays can hold seated rather than their blanks - ten 2.5 inch carriers,
+      a BOSS-N1 module and a quad 25 GbE SFP28 OCP card - so the top view shows
+      the drives, the boot module and the OCP card from above.
+    bays:
+      drive-0: common/drive-carrier-25@2
+      drive-1: common/drive-carrier-25@2
+      drive-2: common/drive-carrier-25@2
+      drive-3: common/drive-carrier-25@2
+      drive-4: common/drive-carrier-25@2
+      drive-5: common/drive-carrier-25@2
+      drive-6: common/drive-carrier-25@2
+      drive-7: common/drive-carrier-25@2
+      drive-8: common/drive-carrier-25@2
+      drive-9: common/drive-carrier-25@2
+      boss: dell/boss-n1-module-1u@1
+      ocp: dell/ocp3-4x25g-sfp28@1
   # Riser configurations 0 (no riser) and 9 (R2S + R3S, two rear E3.S drives)
   # are orderable and NOT drawn: no master, figure or photograph held shows
   # either rear face - see the gaps.

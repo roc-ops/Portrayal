@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: psu-800w-ac-60mm
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: server
@@ -28,6 +28,8 @@ fields:
     pattern: '^\\d+W$'
     description: what the handle label prints; the sum reads power-output-w, not this
 provenance:
+  plan: >-
+    seen from above, the supply is dell/psu-60mm-plan@1 - the can it runs into the chassis.
   sources: >-
     Four, each answering its own question. (1) Dell's R660 service model,
     working/intake/dell/3d-models/r660.glb, read with glb-parts.py: size, depth,
@@ -120,6 +122,7 @@ provenance:
     handle ("Remove the cable from the strap on the PSU handle", ISM removal
     steps). It is cable management and not a panel fact.
 size: {w: 59.8, h: 40.1, d: 222.0}
+plan: {ref: dell/psu-60mm-plan@1}
 size-confidence: {w: measured, h: measured, d: measured}
 body:
   depth: 222.0
