@@ -1,0 +1,305 @@
+format: 1
+kind: device
+name: r660
+version: 0.1.0
+maturity: draft
+manufacturer: Dell
+model: PowerEdge R660
+description: >-
+  1U two-socket rack server, 16th generation - up to ten 2.5 inch front drive
+  bays (or eight with a Smart Flow vent, sixteen EDSFF E3.S, or none), two 60 mm
+  power supplies at opposite ends of the rear, up to three PCIe slots, an OCP
+  NIC 3.0 slot and a rear BOSS-N1 boot module
+profile: server
+provenance:
+  sources:
+    note: >-
+      Dell's R660 Installation and Service Manual and Technical Guide (converted
+      under working/intake/dell/converted), Dell's R660 service model r660.glb,
+      the VisioCafe Dell rack server stencil (working/visio-dell; facts read, art
+      not traced), Dell's R660/R660xs gallery renders and StorageReview's
+      photographs of a real R660 (working/intake/dell/poweredge/photos/r660).
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - ISM table 12: width 434.0 between the ears (482.0 across them),
+      height 42.8. DEPTH 773.5 is the front face to the rear wall: the same table
+      gives the ears 22 behind the front face without the bezel and the rear wall
+      751.47 behind the ears, 773.47 in all, and the service model agrees - its
+      front face sits at cad z 15.8 and the rear wall, where the PSU faces are, at
+      789.4, 773.6 apart. The PSU handles stand a further 35.6 proud (787.04 ear to
+      handle). The 0-drive build is 50.8 shorter (700.7 ear to rear wall) and is not
+      this depth; see the front-variants gap.
+  front-face:
+    confidence: drawing
+    note: >-
+      THE EARS CARRY THE CONTROL PANELS, SO THEY ARE DRAWN - the R740xd's
+      reasoning, and the R660 master draws them the same way: the left panel in
+      the left ear outboard of the drives, the right panel (power, USB, iDRAC
+      Direct) in the right. The front face is therefore 482.6 wide.
+  gate-1:
+    confidence: drawing
+    note: >-
+      the VisioCafe master `R660 10D 2.5 Front` (r660-10d-2-5-front-1) is stamped
+      482.7 wide and draws 43.05 tall at that width, against 42.8 - 0.6%, so it is
+      drawn ear to ear at true scale. Every front position here is read off it at
+      20 and 40 px/mm, with y scaled by 0.9942 to the 42.8 height. (The same set's
+      REAR masters are stamped 482.6 and draw the 434 body - see the rear view.)
+  drive-bays:
+    confidence: drawing
+    note: >-
+      drawing - five columns 73.0 wide at x 32.5, 115.35, 198.2, 281.1 and 363.95
+      (an 82.85 pitch) and two rows 15.3 tall at y 7.70 and 24.21. The carrier is
+      common/drive-carrier-25@2, the same part the R740xd seats standing up -
+      Dell's one 2.5 inch carrier - laid flat here with rotate 270, which puts
+      its activity glyph above its status glyph as StorageReview's photograph of a
+      real R660 shows. The service model's carriers (a reused R760 asset, 78.3 x
+      18.5) put the column centres within 0.35 mm of these.
+  drive-numbering:
+    confidence: drawing
+    note: >-
+      drawing - the master prints the bay number and a right-pointing triangle on
+      the divider left of each column, upper bay even and lower bay odd: 0/1, 2/3,
+      4/5, 6/7, 8/9. ISM figure 22's service label numbers the 8-bay build the
+      same way, and the photograph shows 2/3 and 4/5 on its dividers.
+  drive-default:
+    note: >-
+      EVERY BAY DEFAULTS TO A BLANK, as on the R740xd: Dell publishes no default
+      drive count, and the ISM requires blanks in every empty slot for cooling. A
+      populated machine is a configuration.
+  vent-strip:
+    confidence: drawing
+    note: >-
+      drawing - a row of 4.05 x 2.33 slots on a 5.46 pitch along the top edge,
+      y 3.08, read off the master; the master draws a few positions in the row
+      lighter (closed) and those are left out.
+  right-side:
+    confidence: drawing
+    note: >-
+      drawing - the VGA module, a separate FRU in the ISM, is the plate at x
+      436.95..457.15 carrying a vertical DB-15 and its IOI mark; the right
+      control panel in the ear carries the power button at the top, a vertical
+      USB-A, and the iDRAC Direct micro-AB USB with its lamp below. The 14G parts
+      seated there (dell/power-button-14g@1) are the library's existing ones,
+      centred on the master's positions; the master draws the 16G button 7.3
+      square against that part's 8.34 x 8.31.
+  not-yet-modelled:
+    note: >-
+      THIS IS THE FRONT OF THE 10-BAY BUILD AND NOTHING ELSE YET. The rear, the
+      top, the 8-bay Smart Flow, 0-drive and E3.S fronts, the riser
+      configurations and the bezel are the next stages; their views below carry
+      sizes only. Also not yet drawn on this face: the small USB, iDRAC and power
+      marks on the right panel (about 1.3 x 2.9 in the master, smaller than the
+      library's mark parts) and the pull-out information tag (ISM table 1 item 4),
+      which the R740xd does not draw either.
+attrs:
+  physical:
+    ru: 1
+    weight-max-kg: 22.51
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 434.0
+  height: 42.8
+  depth: 773.5
+  ru: 1
+  color: '#2f3439'
+  edge: '#1d2125'
+  silk: '#c9ced3'
+groups:
+  drives:
+    term: Drive
+    role: service
+    index-origin: 0
+    description: the ten 2.5 inch front bays, numbered as the dividers print them
+    attrs: {media: sff-2.5}
+  panels:
+    term: Panel
+    role: indicator
+    index-origin: 1
+    description: the left control panel, a field-replaceable module in the left ear
+  ports:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: local console and service access
+    description: the front VGA, the USB-A and the iDRAC Direct micro-AB USB
+  mgmt:
+    term: Button
+    role: management
+    index-origin: 1
+    description: the power button
+  marks:
+    term: Mark
+    role: furniture
+    index-origin: 1
+    description: printed marks seated as parts - the VGA symbol
+  leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the iDRAC Direct lamp
+views:
+  front:
+    size: {w: 482.6, h: 42.8}
+    panel:
+      decor:
+        - {at: [0, 0], size: [14.2, 42.8], fill: '#22262a'}
+        - {at: [468.88, 0], size: [13.72, 42.8], fill: '#22262a'}
+        - {at: [24.3, 0], size: [433.35, 2.09], fill: '#9aa0a6'}
+        - {at: [24.3, 40.71], size: [433.35, 2.09], fill: '#9aa0a6'}
+        - {at: [24.3, 2.09], size: [412.65, 4.32], fill: '#3a3f44'}
+        - {at: [50.48, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [55.92, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [61.4, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [72.33, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [77.8, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [83.25, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [88.72, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [94.2, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [99.65, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [117.15, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [122.62, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [128.07, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [133.53, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [139.0, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [144.47, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [155.4, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [160.85, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [166.32, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [171.8, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [177.25, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [182.72, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [200.2, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [205.68, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [211.15, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [216.6, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [222.05, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [227.53, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [238.45, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [243.93, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [249.38, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [254.85, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [260.32, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [265.77, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [288.75, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [294.2, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [299.65, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [305.12, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [310.6, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [321.52, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [326.98, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [332.45, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [337.93, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [343.38, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [348.85, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [370.93, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [376.4, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [381.85, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [387.32, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [392.77, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [403.73, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [409.18, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [414.65, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        - {at: [420.1, 3.08], size: [4.05, 2.33], fill: '#141719'}
+        # the VGA module's plate
+        - {at: [436.95, 2.09], size: [20.2, 38.62], fill: '#3d4348'}
+        # the right control panel strip in the ear
+        - {at: [457.65, 2.09], size: [11.2, 38.62], fill: '#2a2e32'}
+        # the rack latches in both ears
+        - {at: [1.5, 14.07], size: [12.15, 24.41], fill: '#4a5056'}
+        - {at: [469.4, 14.07], size: [12.15, 24.41], fill: '#4a5056'}
+      cutouts:
+        - {id: power-btn, at: [459.13, 2.36], size: [8.34, 8.31], shape: rect}
+        - {id: usb-1, at: [460.31, 12.57], size: [4.5, 12.0], shape: rect}
+        - {id: idrac-direct, at: [462.97, 28.83], size: [2.75, 7.5], shape: rect}
+        - {id: idrac-direct-led, at: [459.45, 35.76], size: [2.0, 2.0], shape: circle}
+        - {id: vga, at: [441.755, 12.875], size: [11.40, 20.47], shape: d-sub, rotate: 270}
+    silkscreen:
+      - {at: [28.13, 13.87], text: '0', for: drive-0}
+      - {at: [28.13, 16.20], text: '▶', for: drive-0}
+      - {at: [28.13, 30.36], text: '1', for: drive-1}
+      - {at: [28.13, 32.81], text: '▶', for: drive-1}
+      - {at: [110.43, 13.87], text: '2', for: drive-2}
+      - {at: [110.43, 16.20], text: '▶', for: drive-2}
+      - {at: [110.43, 30.36], text: '3', for: drive-3}
+      - {at: [110.43, 32.81], text: '▶', for: drive-3}
+      - {at: [193.3, 13.87], text: '4', for: drive-4}
+      - {at: [193.30, 16.20], text: '▶', for: drive-4}
+      - {at: [193.3, 30.36], text: '5', for: drive-5}
+      - {at: [193.30, 32.81], text: '▶', for: drive-5}
+      - {at: [276.2, 13.87], text: '6', for: drive-6}
+      - {at: [276.20, 16.20], text: '▶', for: drive-6}
+      - {at: [276.2, 30.36], text: '7', for: drive-7}
+      - {at: [276.20, 32.81], text: '▶', for: drive-7}
+      - {at: [359.0, 13.87], text: '8', for: drive-8}
+      - {at: [359.00, 16.20], text: '▶', for: drive-8}
+      - {at: [359.0, 30.36], text: '9', for: drive-9}
+      - {at: [359.00, 32.81], text: '▶', for: drive-9}
+    components:
+      bays:
+        - {id: panel-left, at: [14.2, 2.34], size: {w: 10.1, h: 38.13},
+           accepts: [dell/control-panel-left-16g@1], default: dell/control-panel-left-16g@1,
+           group: panels, rel-pos: 1}
+        - {id: drive-0, at: [32.5, 7.71], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 0}
+        - {id: drive-1, at: [32.5, 24.21], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 1}
+        - {id: drive-2, at: [115.35, 7.71], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 2}
+        - {id: drive-3, at: [115.35, 24.21], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 3}
+        - {id: drive-4, at: [198.2, 7.71], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 4}
+        - {id: drive-5, at: [198.2, 24.21], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 5}
+        - {id: drive-6, at: [281.1, 7.71], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 6}
+        - {id: drive-7, at: [281.1, 24.21], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 7}
+        - {id: drive-8, at: [363.95, 7.71], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 8}
+        - {id: drive-9, at: [363.95, 24.21], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 9}
+      placements:
+        - {ref: dell/power-button-14g@1, id: power-btn, at: [459.13, 2.36], for: chassis,
+           group: mgmt, rel-pos: 1}
+        - {ref: std/usb-a@1, id: usb-1, at: [456.56, 16.32], rotate: 90, skin: usb2,
+           attrs: {usb: '2.0'}, group: ports, rel-pos: 1}
+        - {ref: std/micro-usb@1, id: idrac-direct, at: [460.59, 31.20], rotate: 90,
+           group: ports, rel-pos: 2}
+        - {ref: std/vga@1, id: vga, at: [437.22, 17.41], rotate: 270, group: ports, rel-pos: 3}
+        - {ref: common/vga-symbol@1, id: mark-vga, at: [444.45, 9.56], for: vga, group: marks, rel-pos: 1}
+        - ref: common/led-dot@1
+          id: idrac-direct-led
+          at: [459.45, 35.76]
+          for: idrac-direct
+          group: leds
+          rel-pos: 1
+          states: ['off',
+                   {name: connected, color: '#22c55e'},
+                   {name: recognised, color: '#22c55e',
+                    behavior: {mode: blinking, rate: 0.25}}]
+          description: >-
+            R660 ISM table 131: solid green for two seconds when a laptop is
+            connected, flashing green (two on, two off) when recognised, off
+            when unplugged - the R740xd's table 8 word for word.
+  rear:
+    size: {w: 434.0, h: 42.8}
+  top:
+    size: {w: 434.0, h: 773.5}
+  bottom:
+    size: {w: 434.0, h: 773.5}
+  left:
+    size: {w: 773.5, h: 42.8}
+  right:
+    size: {w: 773.5, h: 42.8}
