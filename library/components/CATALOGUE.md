@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1082 component majors in 23 namespaces.
+1083 component majors in 23 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -160,9 +160,9 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/st-simplex-adapter@1` | component | port | 10 × 10 | st-adapter | 0 | 1 | Panel-mount ST (BFOC) simplex adapter, one bayonet-coupled opening, as fitted to an FS FHD ST panel |
 | `common/usb-a@2` | component | port | 17 × 7 × 13.7 |  | 3 | 0 | USB Type-A receptacle with trident silkscreen - a shell bezel wrapping a std/usb-a opening core |
 | `common/usb-a-bezel@1` | component | port | 17 × 9.3 × 13.7 |  | 5 | 0 | USB Type-A port in a silver panel bezel - the plate spans the component so it can abut neighboring port bezel… |
-| `common/usb-symbol@1` | component | silkscreen | 6.4 × 4 |  | 28 | 0 | USB trident silkscreen symbol, no hardware - the marking printed beside a USB receptacle |
+| `common/usb-symbol@1` | component | silkscreen | 6.4 × 4 |  | 28 | 1 | USB trident silkscreen symbol, no hardware - the marking printed beside a USB receptacle |
 | `common/vga-receptacle@1` | component | port | 30.8 × 12.5 × 6.73 |  | 1 | 1 | VGA receptacle as a faceplate sees it - the female HD-15 shell with a jackscrew standoff either side, which i… |
-| `common/vga-symbol@1` | component | silkscreen | 6 × 3.4 |  | 2 | 0 | The monitor mark printed beside a VGA port - a display outline flanked by two short bars, which is the form v… |
+| `common/vga-symbol@1` | component | silkscreen | 6 × 3.4 |  | 2 | 1 | The monitor mark printed beside a VGA port - a display outline flanked by two short bars, which is the form v… |
 | `common/vhdci-receptacle@1` | component | port | 40.4 × 5.2 |  | 0 | 3 | VHDCI (very-high-density cable interconnect) receptacle as a faceplate sees it - the flattened 0.8 mm-pitch s… |
 | `common/warning-triangle@1` | component | marking | 5.4 × 4.8 |  | 5 | 3 | General warning triangle - a black exclamation mark in a yellow triangle, ISO 7010 W001 |
 
@@ -494,7 +494,7 @@ aperture when it is a bare opening - never both at one position. The README's
 |---|---|---|---|---|---|---|---|
 | `credo/hiwire-shift-qsfp-dd@1` | module | transceiver | 18.35 × 8.5 × 58.26 | qsfp-dd | 0 | 0 | Credo HiWire SHIFT active electrical cable, the 400G QSFP-DD end of a 400G to four 100G QSFP28 breakout - a Q… |
 
-## dell/ (110)
+## dell/ (111)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -521,6 +521,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/heatsink-1u-14g@1` | component | mechanical | 82.2 × 128.1 |  | 1 | 1 | The 1U processor heatsink of a 14G PowerEdge seen from above - a finned block the width of the socket, one pe… |
 | `dell/heatsink-1u-16g@1` | component | mechanical | 82.1 × 119.1 |  | 1 | 0 | The 1U processor heatsink of a 16th-generation PowerEdge (R660) seen from above - a finned block over each so… |
 | `dell/idrac-direct-symbol@1` | component | silkscreen | 3.8 × 3.8 |  | 1 | 0 | The wrench Dell prints beside an iDRAC Direct micro USB port - the mark that says this socket reaches the ser… |
+| `dell/information-tag-1u-16g@1` | component | tab | 63.55 × 2.03 |  | 1 | 0 | The information tag of a 16th-generation 1U PowerEdge (R660) - Dell's slide-out label panel, of which the fro… |
 | `dell/lom-2x1g-16g@1` | module | nic | 42.58 × 15.93 × 117.2 |  | 1 | 0 | The LAN on Motherboard (LOM) card of a 16th-generation 1U PowerEdge (R660) - two 1 GbE RJ45 ports in the rear… |
 | `dell/lom-2x1g-plan-16g@1` | component | mechanical | 60.6 × 117.2 |  | 0 | 1 | The 16G LOM card (two 1 GbE ports) seen from above, behind the rear's two LOM jacks |
 | `dell/mid-drive-tray-14g@1` | component | mechanical | 431.4 × 181.24 × 31.31 |  | 1 | 1 | The mid-drive tray of a 14G PowerEdge - four drives lying flat between the front cage and the risers, reached… |
