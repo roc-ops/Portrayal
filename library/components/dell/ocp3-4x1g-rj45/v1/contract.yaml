@@ -1,0 +1,88 @@
+format: 1
+kind: module
+name: ocp3-4x1g-rj45
+version: 1.0.0
+class: nic
+behaviour: fills
+profile: server
+description: >-
+  Quad-port 1 GbE BASE-T OCP NIC 3.0 card, small form factor, as Dell fits it to
+  the 16th-generation PowerEdge - four RJ45 jacks in one housing, a vent column
+  either side
+unplaced: the R660 device (dell/r660, in progress on this branch) seats it in its OCP bay; remove this line when that lands
+attrs:
+  ports: 4
+  media: rj45
+  form-factor: ocp3-sff
+provenance:
+  sources: >-
+    Three. (1) Dell's R660 service model, r660.glb, whose OCP card
+    (`XE9680_OCP Card-1.005`) is this one - four `Ethernet Port` bodies: the
+    faceplate, the depth and the jack positions. (2) The VisioCafe stencil master
+    `4x1Gb BT OCP3`, for what the CAD does not name - the housing, the lamps and
+    the vent columns. Facts read, art not traced. (3) The R660 technical guide,
+    Table 12, which lists Broadcom and Intel 1 GbE x4 BT cards, and the ISM's
+    networking table, which lists 1GbE x 4 among the OCP options.
+  size: >-
+    measured - r660.glb `Body_3_3.015`, the bracket: 71.8 wide, 15.1 tall. The
+    card behind it is `3DGeom~7797.003`, 76.0 wide and 115.0 deep, which is the
+    OCP NIC 3.0 small form factor's published 76 x 115 board; `d` is the board's
+    depth. The OCP NIC 3.0 specification itself was NOT read - opencompute.org
+    refused this host (403 on the document and on the wiki) - so the envelope is
+    corroborated by the CAD and by secondary summaries of the spec, not by the
+    spec.
+  jacks: >-
+    measured - r660.glb puts four `Ethernet Port` bodies, each 14.4 wide, at
+    cad x -44.2, -29.9, -15.6 and -1.3: a 14.3 pitch, centred on the bracket to
+    0.05 mm, spanning y 1.9..12.9 down from the bracket's top edge. That 11.0
+    height is exactly std/rj45-ganged@2's cell, which is why the ports are the
+    library's ganged Ethernet cell and not a single jack - a 15.8 single housing
+    does not fit a 14.3 pitch. Each cell is centred on its CAD body.
+  jacks-keyway-up: >-
+    drawing - the stencil draws all four openings with the stepped latch slot at
+    the TOP and a lamp in each top corner. common/rj45-ganged-eth@1 is drawn
+    keyway down with its lamps on that side, so `rotate: 180` gives the
+    stencil's arrangement, the lamps still on the keyway side as TE and
+    Amphenol place them.
+  stencil-scale: >-
+    THE MASTER'S STAMPED WIDTH IS NOT ITS SCALE. Visio records it as 76.2 wide;
+    calibrated on the CAD's 14.3 jack pitch it is 68.85 wide at 0.04303 mm/px,
+    and at that scale the openings are 12.56 wide against the standard cell's
+    12.7 - 1.1%, an independent check on the calibration. The art carries no
+    plate edges; it was centred on the bracket by its jacks.
+  housing-and-vents: >-
+    stencil-measured at the scale above - one light housing round all four
+    jacks, 58.35 wide from x 6.71; a column of four 2.11 mm vent squares at
+    x 1.50 and at x 68.20, rows from y 3.48 on a 2.88 pitch.
+  finish: >-
+    photo - StorageReview's rear photograph of a real R660 (photos/r660/
+    storagereview, -01.jpg) shows its OCP bracket as bare silver sheet metal.
+    That card is a 4 x SFP28 from another vendor, so the colour is the bracket's
+    and not evidence about this card's housing.
+  numbering: >-
+    photo - the same photograph prints 1, 2, 3, 4 left to right beneath the four
+    cages of its OCP card. The 1 GbE card's own numbering is not seen in any
+    image held; left to right is carried over from that card and is not printed
+    here, since no image shows ink on this one.
+  latch: >-
+    NOT DRAWN, deliberately. The CAD has `XE9680_OCP Card_latch-1.005` 2.5 x 7.5
+    at the bracket's left, standing 14.8 past it, but the ISM removes this card
+    by "Open the blue latch to unlock the OCP card" only AFTER "Remove the
+    expansion card riser" - the latch is reached from inside the chassis. No
+    image held shows a latch on the rear face, and the part comes from a model
+    named for a different server (XE9680), so drawing it would assert something
+    the R660 sources do not.
+  power: >-
+    NOT STATED for this card. TG Table 11 gives the OCP slot's range, 15-35 W,
+    for every card it takes; no document held gives this card's own figure.
+size: {w: 71.8, h: 15.1, d: 115.0}
+size-confidence: {w: measured, h: measured, d: measured}
+body:
+  depth: 115.0
+  color: '#b8bdc2'
+parts:
+  - {ref: common/rj45-ganged-eth@1, id: port-1, at: [8.05, 1.9], rotate: 180, attrs: {media: rj45, speed: 1g}}
+  - {ref: common/rj45-ganged-eth@1, id: port-2, at: [22.35, 1.9], rotate: 180, attrs: {media: rj45, speed: 1g}}
+  - {ref: common/rj45-ganged-eth@1, id: port-3, at: [36.65, 1.9], rotate: 180, attrs: {media: rj45, speed: 1g}}
+  - {ref: common/rj45-ganged-eth@1, id: port-4, at: [50.95, 1.9], rotate: 180, attrs: {media: rj45, speed: 1g}}
+skins: [default]
