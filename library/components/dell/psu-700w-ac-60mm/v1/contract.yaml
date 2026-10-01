@@ -1,0 +1,190 @@
+format: 1
+kind: module
+name: psu-700w-ac-60mm
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: server
+description: >-
+  700 W mixed-mode hot-plug power supply in Dell's 60 mm form factor, as fitted
+  to the 16th-generation 1U PowerEdge (R660) - a vent field, a translucent handle
+  that is itself the status lamp and carries the wattage label, a C14 inlet, and
+  an orange release latch
+unplaced: the R660 device (dell/r660, in progress on this branch) seats it in both PSU bays; remove this line when that lands
+attrs:
+  power-output-w: 700
+  form-factor: 60mm
+  inlet: c14
+  input: mixed-mode
+# THE WATTAGE LABEL IS A FIELD AND THE OUTPUT IS NOT. Dell builds 700, 800, 1100
+# and 1400 W supplies on this one C14 face; the label printed on the handle is
+# what tells them apart at the back of a rack. A field cannot set attrs, so the
+# figure the power model sums is this part's own, and a different wattage is a
+# sibling part with the same art, not a skin of this one.
+fields:
+  watts:
+    label: Wattage
+    type: text
+    default: '700W'
+    pattern: '^\\d+W$'
+    description: what the handle label prints; the sum reads power-output-w, not this
+provenance:
+  sources: >-
+    Four, each answering its own question. (1) Dell's R660 service model,
+    working/intake/dell/3d-models/r660.glb, read with glb-parts.py: size, depth,
+    and the handle, inlet bezel and latch outlines. (2) The VisioCafe Dell rack
+    server stencil, master `R660 3xPCI LP Rear` (r660-3xpci-lp-rear-1), rasterised
+    at 22.24 px/mm: positions of the features the CAD does not name - the vent
+    slots, the label, the latch slots. Facts read off it; no art traced, per the
+    stencil's licence. (3) R660 ISM (converted): the handle as lamp, table 136's
+    codes, and the chassis dimension table that gives the handle's stand-off.
+    (4) StorageReview's rear photograph of a real R660 (photos/r660/storagereview,
+    -01.jpg): confirms the layout, the orientation, and that the dark panel on the
+    handle is a black wattage label, printed "1400W" on the unit photographed.
+  sibling-of-the-1400: >-
+    THIS IS dell/psu-1400w-ac-60mm@1's FACE WITH ITS OWN OUTPUT. Dell's stencil
+    draws its 700, 800, 1100 and 1400 W C14 supplies as byte-identical masters
+    (the 86 mm form; md5 868f06c0) with a separate wattage label each, and the
+    R660 technical guide Table 17 puts all four in the redundant 60 mm form on a
+    C13 cord. So the casting is shared and every geometric fact below was read
+    for the 1400 W unit. The photographs show a 1400 W label; that this unit's
+    label prints "700W" in the same place is the shared casting's
+    consequence, not something an image of this unit shows.
+  stencil-scale: >-
+    THE REAR MASTER IS STAMPED 482.6 WIDE AND DRAWS A 434 BODY. At 482.6 its
+    height would be 47.95 mm; at 434 it is 43.12 against the ISM's 42.8, 0.75%.
+    So the drawing is a 434 mm rear face with no ears, and every stencil number
+    here is at 434/9652 px. Positions read off it were then fitted to the CAD
+    faceplate by per-axis fraction: the stencil frame is 60.39 x 38.71, the CAD
+    faceplate 59.8 x 40.1, so x is scaled by 0.990 and y by 1.036. The two
+    disagree in opposite directions per axis, which is frame-line width and
+    drawing style, not a scale error; the CAD is the body.
+  size: >-
+    measured - r660.glb, the PSU faceplate `Body_9_2.010` (child of
+    `PE_R660_Power supply unit-1.001`): 59.8 x 40.1, its outer face at cad z
+    789.3. The deep can `Body_7.013` is 59.2 x 39.5 from z 567.3 to 788.3, so
+    the supply reaches 222.0 into the chassis from its own face. The named
+    assembly boxes 63.3 x 40.3 x 267.7 because it includes the handle; the
+    faceplate is the child whose outline is the face, which is why it and not
+    the assembly is `size`.
+  position-in-chassis: >-
+    measured - both supplies sit with their faceplates at z 789.3, which is the
+    rear wall: the ISM puts the handle 787.04 from the ear and the rear wall
+    751.47, a 35.57 difference, and the CAD handle ends at z 825.0, 35.7 past the
+    faceplate. The face is flush with the wall, not recessed.
+  handle-is-the-lamp: >-
+    ISM "Power supply unit indicator codes": "AC and DC power supply units (PSUs)
+    have an illuminated translucent handle that serves as an indicator", and
+    table 136 gives green, blinking amber, not powered, blinking green, and the
+    mismatch code - "blinks green five times at a rate of 4 Hz and powers off".
+    4 Hz fixes the phase length at 0.125 s; the 2 s dark tail is this library's
+    reading of "powers off", as on dell/psu-1100w-ac-14g. No rate is published
+    for the amber fault or the firmware blink; 1 Hz is a reading.
+  handle-outline: >-
+    x from the stencil, y from the CAD. The CAD handle `Body_5_24.006` is 15.5 x
+    34.0 at local x 3.1..18.6, y 3.9..37.9 - but that box takes in the label
+    carrier to its left as well as the grip. The stencil draws the grip as its
+    own shape at local 10.0..17.4, and the photograph shows the same split: the
+    black label sits on the handle's left, the bare translucent grip right of
+    it. So `grip` is x 10.0 w 7.4 from the stencil and y 3.9 h 34.0 from the CAD.
+  label: >-
+    photo-measured position, stencil-measured size - the stencil's dark panel at
+    local 3.69..9.49, 5.26..21.48 (scaled). The text is read off two images of
+    two machines: the StorageReview R660 and Dell's R660xs gallery rear (photos/
+    r660/dell-gallery/r660xs-gallery-2.png) both print "1400W", white on black,
+    reading top to bottom. The label's font is not identified.
+  inlet: >-
+    COMPOSED, std/c14-inlet@1, at rotate 270. The library's C14 is drawn earth
+    pin up with its chamfers on top; on this supply the stencil and the
+    photograph both put the chamfered side and the earth pin on the LEFT, with
+    line and neutral stacked to the right - a quarter turn anticlockwise. The
+    placement centres the connector on the stencil's inlet body, local centre
+    (40.1, 21.2). The BEZEL around it is the CAD's `Body_3_25.006`, 24.0 x 31.0
+    at local 28.6, 5.8.
+  latch: >-
+    measured - r660.glb `3DGeom~21228.001`, 10.8 x 14.8 at local x 49.0, y 13.2,
+    standing to cad z 804.0, 14.7 proud of the faceplate. Only its outer 5.1 is
+    orange and visible from behind; the stencil's orange is 5.08 wide at 49.19,
+    which is what `latch` draws. It overlaps the inlet bezel by 1.1 mm, which is
+    the hardware: it is pushed across the cord to release the supply.
+  vents: >-
+    stencil-measured - three groups, positions scaled from the stencil as above:
+    a narrow slot column at the far left with two further columns below the
+    label; a two-column field between the grip and the inlet bezel; and one
+    column right of the latch, broken where the latch runs. Counts and rows are
+    the stencil's and match the photograph's.
+  power: >-
+    power-output-w 700 is the rating; the R660 technical guide Table 16 gives the 700 W mixed-mode HLAC unit at 700 W on 200-240 V AC and on 240 V DC, Titanium, with no 100-120 V rating - it is a high-line-only supply. A RATING, not a draw, and not
+    qualified by an ambient. Efficiency class: Titanium; 200-240 V AC only (HLAC).
+  cable-strap: >-
+    NOT DRAWN. The photographed unit carries a hook-and-loop cord strap round the
+    handle ("Remove the cable from the strap on the PSU handle", ISM removal
+    steps). It is cable management and not a panel fact.
+size: {w: 59.8, h: 40.1, d: 222.0}
+size-confidence: {w: measured, h: measured, d: measured}
+body:
+  depth: 222.0
+  color: '#b9bec4'
+relief:
+  wall: '#3a4045'
+  features:
+  - node: grip
+    uhandle: 35.7
+    color: '#e9ecef'
+    confidence: measured
+    source: >-
+      r660.glb `Body_5_24.006` runs from the faceplate at z 789.3 to 825.0; the
+      ISM's own chassis table gives 35.57 between the rear wall and the handle,
+      so the vendor model and the vendor document agree to 0.13 mm.
+  - node: latch
+    out: 14.7
+    color: '#d9661a'
+    confidence: measured
+    source: r660.glb `3DGeom~21228.001`, faceplate z 789.3 to 804.0
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [26.1, 11.2], rotate: 270, behind: true}
+elements:
+  grip:
+    at: [10.0, 3.9]
+    size: [7.4, 34.0]
+    class: led
+    states: ['off',
+             {name: 'ok', color: '#22c55e'},
+             {name: fault, color: '#eab308', behavior: {mode: blinking, rate: 1}},
+             {name: updating, color: '#22c55e',
+              behavior: {mode: blinking, rate: 1}},
+             {name: mismatch,
+              behavior: {mode: sequence,
+                         phases: [{color: '#22c55e', seconds: 0.125},
+                                  {seconds: 0.125},
+                                  {color: '#22c55e', seconds: 0.125},
+                                  {seconds: 0.125},
+                                  {color: '#22c55e', seconds: 0.125},
+                                  {seconds: 0.125},
+                                  {color: '#22c55e', seconds: 0.125},
+                                  {seconds: 0.125},
+                                  {color: '#22c55e', seconds: 0.125},
+                                  {seconds: 2.0}]}}]
+    description: >-
+      The translucent handle, lit from within. ISM table 136: green - a valid
+      source is connected and the supply is operational; blinking amber - a
+      problem with the supply; not illuminated - no power connected; blinking
+      green - firmware is being updated; five green blinks at 4 Hz then off - a
+      mismatch with the other supply.
+  label:
+    at: [3.69, 5.26]
+    size: [5.8, 16.2]
+    class: label
+    description: the wattage label on the handle's left, printed downwards
+  inlet-bezel:
+    at: [28.6, 5.8]
+    size: [24.0, 31.0]
+    class: inlet
+    description: >-
+      the recess the C14 sits in. The connector is std/c14-inlet@1, composed.
+  latch:
+    at: [49.0, 13.2]
+    size: [5.1, 14.8]
+    class: latch
+    description: the orange release latch, pressed to withdraw the supply
+skins: [default]
