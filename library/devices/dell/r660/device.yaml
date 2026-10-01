@@ -25,14 +25,6 @@ description: >-
   power supplies at opposite ends of the rear, up to three PCIe slots, an OCP
   NIC 3.0 slot and a rear BOSS-N1 boot module
 profile: server
-lint:
-  waive:
-    L49: >-
-      the three slot windows are NOT one evenly spaced row and should not be: slots 1
-      and 2 are both on riser 2 (R2A) and sit 1.8 apart, slot 3 is on riser 3 (R3A)
-      past riser 2's blue latch and sits 14.3 further on. The VisioCafe R660 rear
-      master draws exactly that - plate edges at 122.66..192.76, 195.6..264.35 and
-      272.76..348.61 with the latch between the second and third.
 provenance:
   chassis:
     confidence: datasheet
@@ -197,7 +189,16 @@ groups:
     term: Slot
     role: traffic
     index-origin: 1
-    description: the PCIe slots of riser configuration 1 (R2A + R3A), numbered as printed
+    description: >-
+      the PCIe slots on riser 2 (and riser 1 / riser 4 in the full-height
+      layout), numbered as printed
+  slots-r3:
+    term: Slot
+    role: traffic
+    index-origin: 1
+    description: >-
+      slot 3, on riser 3 - its own group because it is its own riser, past riser
+      2's latch, and not on riser 2's pitch
   ocp:
     term: Slot
     role: traffic
@@ -423,7 +424,7 @@ views:
         - {id: slot-2, at: [194.41, 4.12], size: {w: 70.0, h: 18.42},
            accepts: [dell/pcie-filler-lp-16g@1], default: dell/pcie-filler-lp-16g@1, group: slots, rel-pos: 2}
         - {id: slot-3, at: [278.70, 4.12], size: {w: 70.0, h: 18.42},
-           accepts: [dell/pcie-filler-lp-16g@1], default: dell/pcie-filler-lp-16g@1, group: slots, rel-pos: 3}
+           accepts: [dell/pcie-filler-lp-16g@1], default: dell/pcie-filler-lp-16g@1, group: slots-r3, rel-pos: 3}
         - {id: ocp, at: [164.95, 24.7], size: {w: 71.8, h: 15.1},
            accepts: [dell/ocp3-blank-16g@1, dell/ocp3-4x1g-rj45@1, dell/ocp3-2x10g-rj45@1, dell/ocp3-4x10g-rj45@1, dell/ocp3-2x25g-sfp28@1, dell/ocp3-4x25g-sfp28@1, dell/ocp3-2x100g-qsfp56@1], default: dell/ocp3-blank-16g@1, group: ocp, rel-pos: 1}
       placements:
@@ -448,3 +449,9 @@ views:
     size: {w: 773.5, h: 42.8}
   right:
     size: {w: 773.5, h: 42.8}
+datasheet:
+  title: 'Dell PowerEdge R660 Spec Sheet'
+  sha256: f6fdf46e0488ee0e17c9375ceb3fd24cedb7d728e545c6f64b229bb200c3f771
+references:
+  - {title: 'Dell PowerEdge R660 Installation and Service Manual', sha256: 218ffd8c9b046db469b4d2f40645afa3347dfe05cea27986e5ba603ce7e73ecb}
+  - {title: 'Dell PowerEdge R660 Technical Guide', sha256: 445dafb964b1bccad52d31c0226279a2b5391bc20648bc28aa014f4e70ec7e19}
