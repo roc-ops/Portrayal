@@ -1,11 +1,13 @@
 ---
 manufacturer: Dell
-model: PowerEdge R660
-slug: dell-poweredge-r660
+model: PowerEdge R660 sff10-rc6-2q
+slug: dell-poweredge-r660-sff10-rc6-2q
 u_height: 1.0
 is_full_depth: true
 description: 1U two-socket rack server, 16th generation - up to ten 2.5 inch front drive bays (or eight
   with a Smart Flow vent, sixteen EDSFF E3.S, or none), two 60 mm power supplies at opposite ends of the...
+front_image: true
+rear_image: true
 interfaces:
   - name: idrac
     type: 1000base-t
@@ -61,18 +63,23 @@ module-bays:
   - name: panel-left
     position: panel-left
     description: 'Accepts: control-panel-left-16g'
-  - name: slot-1
-    position: slot-1
+  - name: riser-3-blank-r2q
+    position: riser-3-blank-r2q
+    description: 'Accepts: riser-3-blank-gen5-16g'
+  - name: slot-1-r2q
+    position: slot-1-r2q
     description: 'Accepts: pcie-filler-lp-16g'
-  - name: slot-2
-    position: slot-2
-    description: 'Accepts: pcie-filler-lp-16g'
-  - name: slot-3
-    position: slot-3
+  - name: slot-2-r2q
+    position: slot-2-r2q
     description: 'Accepts: pcie-filler-lp-16g'
 comments: '1U two-socket rack server, 16th generation - up to ten 2.5 inch front drive bays (or eight
   with a Smart Flow vent, sixteen EDSFF E3.S, or none), two 60 mm power supplies at opposite ends of the
   rear, up to three PCIe slots, an OCP NIC 3.0 slot and a rear BOSS-N1 boot module
+
+
+  Configuration `sff10-rc6-2q`: 10 x 2.5 inch front; riser configuration 6, R2Q: two low-profile Gen5
+  x16 slots on riser 2 (processors 1 and 2), wider apart than R2A''s, and a vented blank where riser 3
+  would be. TG table 14 splits it 6-1 / 6-2 by GPU support, not by face. ISM table 111.
 
 
   Facts carried in the model that this schema has no field for:
