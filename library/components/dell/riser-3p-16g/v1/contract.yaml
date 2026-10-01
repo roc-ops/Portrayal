@@ -32,10 +32,19 @@ provenance:
   size: >-
     drawing - the cage's extent, 89.80 x 19.80.
   seating: >-
-    ONLY THE FILLER IS ACCEPTED. A low-profile bracket is 79.20 long and the
-    window 70.0; how a card's bracket ends lie under this riser's metal is not
-    shown by any source held, so the device's slot-cards-not-seatable gap
-    stands.
+    measured - THE SLOTS TAKE CARDS, the brackets and cards the R740xd's risers
+    take at the same heights. Each bay is the whole bracket (79.20 low-profile,
+    120.02 x 21.59 full-height), `behind` the cage, which covers its ends as
+    the hardware does. Dell's service model (r660.glb) seats riser 2A's two
+    low-profile brackets at rear x 120.9..200.9 and 187.0..267.0: they overlap
+    14 mm in x at depths a millimetre apart, the ends interleaving - which is
+    why two brackets fit a 71.8 pitch - and they face each other: slot 1
+    tip-left, slot 2 turned over (rotate 180), its card board at the top of
+    the bracket where slot 1's is at the bottom. Slot 3 (268.5..348.4) is
+    turned over too, and so are the full-height slots, whose keyed flange the
+    master puts at the left.
+    StorageReview's rear photograph of a real R660 (riser 2Q) shows a two-port
+    QSFP card in slot 1 the same way, its bracket ends under the cage.
   plan: >-
     seen from above, the riser is dell/riser-3-plan-16g@1 - its cage as Dell's service
     model places it.
@@ -47,9 +56,11 @@ parts:
 bays:
   slot-3:
     slot: {connector: x16, lanes: 16, height: low, length: half, processor: 2, generation: 5}
+    rotate: 180
+    plan: {at: [14.20, 0.00]}
     behind: true
-    at: [5.90, 1.92]
-    size: [70.00, 18.42]
-    accepts: [dell/pcie-filler-lp-16g@1]
+    at: [-3.60, 1.92]
+    size: [79.20, 18.42]
+    accepts: [dell/pcie-filler-lp-16g@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1, nvidia/mcx4111a-lp@1, nvidia/mcx4121a-lp@1, nvidia/mcx4131a-lp@1, nvidia/mcx512a-lp@1, nvidia/mcx512f-lp@1, nvidia/mcx515a-lp@1, nvidia/mcx516a-lp@1, nvidia/mcx621102-lp@1, nvidia/mcx621202-lp@1, nvidia/mcx623102a-lp@1, nvidia/mcx623105-lp@1, nvidia/mcx623106-lp@1, nvidia/mcx713106-lp@1, nvidia/mcx715105-lp@1, nvidia/mcx75310-lp@1, nvidia/mcx75510-lp@1, nvidia/mcx755106-lp@1]
     default: dell/pcie-filler-lp-16g@1
 skins: [default]

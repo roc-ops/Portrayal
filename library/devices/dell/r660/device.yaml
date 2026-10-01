@@ -13,7 +13,7 @@
 # the risers as modules carrying their slots and
 # printed slot numbers; the printed marks front and rear and the information
 # tag; estimated bottom and sides. NOT YET: riser
-# configurations 0 and 9, seated cards, a seen E3.S blank (the default is
+# configurations 0 and 9, a seen E3.S blank (the default is
 # the carrier without its drive; see gaps); risers 2Q, 1P and 4P from above;
 # the no-LOM, MIC and liquid-cooling rear faces; the bezel.
 format: 1
@@ -244,20 +244,6 @@ gaps:
       measured; the VisioCafe set draws neither.
     wanted: >-
       a straight-on rear photograph or a vector master of either configuration
-  - what: slot-cards-not-seatable
-    scope: [rear]
-    reason: needs-photo
-    note: >-
-      a low-profile bracket is 79.20 long and the slot windows show about 70 of
-      it, on a pitch the full bracket cannot fit end to end; how the bracket ends
-      sit under the riser cage is not shown by the masters, and the service
-      model's low-profile card stand-ins are posed 8 to 12 mm proud of the rear
-      wall. The cage is drawn over each slot (`behind: true`), so a bracket's
-      ends would hide under it, but its pitch still overlaps two brackets by 7.4.
-      Until a photograph settles it, the risers' slots accept fillers only.
-    wanted: >-
-      a straight-on rear photograph of an R660 with low-profile cards in slots 1
-      and 2, showing both bracket ends
   - what: risers-2q-1p-4p-unseen-from-above
     scope: [top]
     reason: needs-drawing
@@ -1810,8 +1796,9 @@ configurations:
     description: >-
       The default build (10 x 2.5 inch front, riser configuration 1) with what
       the bays can hold seated rather than their blanks - ten 2.5 inch carriers,
-      a BOSS-N1 module and a quad 25 GbE SFP28 OCP card - so the top view shows
-      the drives, the boot module and the OCP card from above.
+      a BOSS-N1 module, a quad 25 GbE SFP28 OCP card and three low-profile
+      NVIDIA ConnectX cards in the riser slots - so the rear shows seated cards
+      and the top view the drives, the boot module and the OCP card from above.
     bays:
       drive-0: common/drive-carrier-25@2
       drive-1: common/drive-carrier-25@2
@@ -1825,6 +1812,9 @@ configurations:
       drive-9: common/drive-carrier-25@2
       boss: dell/boss-n1-module-1u@1
       ocp: dell/ocp3-4x25g-sfp28@1
+      riser-2/slot-1: nvidia/mcx623106-lp@1
+      riser-2/slot-2: nvidia/mcx4121a-lp@1
+      riser-3/slot-3: nvidia/mcx713106-lp@1
   # Riser configurations 0 (no riser) and 9 (R2S + R3S, two rear E3.S drives)
   # are orderable and NOT drawn: no master, figure or photograph held shows
   # either rear face - see the gaps.
