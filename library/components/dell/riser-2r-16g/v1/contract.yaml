@@ -45,7 +45,8 @@ provenance:
     the cage and its body filling the window, which puts riser 2's at
     121.17..200.37 and 186.67..265.87 against the model's 120.9..200.9 and
     187.0..267.0; the two overlap at depths a millimetre apart, the ends
-    interleaving, which is why two brackets fit a 71.8 pitch. A first version
+    interleaving, which is why two brackets fit a 71.8 pitch. Neither tip
+    shows: slot 1's window stops where slot 2's tip begins. A first version
     had the handedness backwards and showed each tip in the window. The
     full-height slots are tip-left where the master draws their plates, the
     tip under the clip. StorageReview's rear photograph of a real R660 (riser
@@ -77,22 +78,20 @@ plan: {ref: dell/riser-2-lp-plan-16g@1}
 parts:
   - {ref: dell/riser-2-lp-cage-16g@1, id: plate, at: [0, 0]}
 bays:
-  # SLOT 2 IS LISTED FIRST SO SLOT 1 PAINTS OVER IT: the service model has
-  # slot 1's bracket a millimetre in front, and the two brackets' ends overlap.
-  slot-2:
-    slot: {connector: x16, lanes: 16, height: low, length: half, processor: 1, generation: 4}
-    plan: {at: [4.73, 0.00]}
-    behind: true
-    at: [79.67, 1.92]
-    size: [79.20, 18.42]
-    accepts: [dell/pcie-filler-lp-16g@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1, nvidia/mcx4111a-lp@1, nvidia/mcx4121a-lp@1, nvidia/mcx4131a-lp@1, nvidia/mcx512a-lp@1, nvidia/mcx512f-lp@1, nvidia/mcx515a-lp@1, nvidia/mcx516a-lp@1, nvidia/mcx621102-lp@1, nvidia/mcx621202-lp@1, nvidia/mcx623102a-lp@1, nvidia/mcx623105-lp@1, nvidia/mcx623106-lp@1, nvidia/mcx713106-lp@1, nvidia/mcx715105-lp@1, nvidia/mcx75310-lp@1, nvidia/mcx75510-lp@1, nvidia/mcx755106-lp@1]
-    default: dell/pcie-filler-lp-16g@1
   slot-1:
     slot: {connector: x16, lanes: 8, height: low, length: half, processor: 1, generation: 5}
     rotate: 180
     plan: {at: [70.23, 0.00]}
     behind: true
     at: [14.17, 1.92]
+    size: [79.20, 18.42]
+    accepts: [dell/pcie-filler-lp-16g@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1, nvidia/mcx4111a-lp@1, nvidia/mcx4121a-lp@1, nvidia/mcx4131a-lp@1, nvidia/mcx512a-lp@1, nvidia/mcx512f-lp@1, nvidia/mcx515a-lp@1, nvidia/mcx516a-lp@1, nvidia/mcx621102-lp@1, nvidia/mcx621202-lp@1, nvidia/mcx623102a-lp@1, nvidia/mcx623105-lp@1, nvidia/mcx623106-lp@1, nvidia/mcx713106-lp@1, nvidia/mcx715105-lp@1, nvidia/mcx75310-lp@1, nvidia/mcx75510-lp@1, nvidia/mcx755106-lp@1]
+    default: dell/pcie-filler-lp-16g@1
+  slot-2:
+    slot: {connector: x16, lanes: 16, height: low, length: half, processor: 1, generation: 4}
+    plan: {at: [4.73, 0.00]}
+    behind: true
+    at: [79.67, 1.92]
     size: [79.20, 18.42]
     accepts: [dell/pcie-filler-lp-16g@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1, nvidia/mcx4111a-lp@1, nvidia/mcx4121a-lp@1, nvidia/mcx4131a-lp@1, nvidia/mcx512a-lp@1, nvidia/mcx512f-lp@1, nvidia/mcx515a-lp@1, nvidia/mcx516a-lp@1, nvidia/mcx621102-lp@1, nvidia/mcx621202-lp@1, nvidia/mcx623102a-lp@1, nvidia/mcx623105-lp@1, nvidia/mcx623106-lp@1, nvidia/mcx713106-lp@1, nvidia/mcx715105-lp@1, nvidia/mcx75310-lp@1, nvidia/mcx75510-lp@1, nvidia/mcx755106-lp@1]
     default: dell/pcie-filler-lp-16g@1
