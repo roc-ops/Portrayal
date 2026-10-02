@@ -78,6 +78,78 @@ out.rack = {
          devices: [...opts.matchAll(/<mxCell id="([a-z0-9-]+-g\dr\d-[a-z]+)" value="Same"/g)].map(m => m[1])},
 };
 
+// ---------------------------------------------------------------- cables
+// A rack builder's plan: one page per face, two racks on the front page, a
+// switch with a card seated in slot-2, a server whose NIC is on its rear, a
+// device with no front drawing, and a patch panel in the next rack.
+const sw = {svg, vb, ports: portsOf([
+  {id: 'p0', cls: 'port', path: 'p0', x: 0, y: 0, w: 2, h: 2},
+  {id: 'slot-2', cls: 'bay', path: 'slot-2', x: 8, y: 0, w: 8, h: 8},
+  {id: 'slot-2--module--p0', cls: 'port', path: 'slot-2/module/p0', x: 10, y: 2, w: 2, h: 2},
+], {bays: true})};
+const srvFront = {svg, vb, ports: [{id: 'p0', cls: 'port', path: 'p0', x: 4, y: 4, w: 2, h: 2}]};
+const srvRear = {svg, vb, ports: [{id: 'nic-1--p0', cls: 'port', path: 'nic-1/p0', x: 4, y: 4, w: 2, h: 2}]};
+const swM = {name: 'sw', id: 'sw-1', u: 1, ru: 1, faces: {front: sw, rear: face}};
+const srvM = {name: 'r740', id: 'srv-1', u: 3, ru: 2, faces: {front: srvFront, rear: srvRear}};
+const plan = [
+  {label: 'Front', faces: ['front'], racks: [
+    {label: 'rack-2', mounted: [swM, srvM,
+      {name: 'blank', id: 'blank-1', u: 6, ru: 1, faces: {rear: face}}]},
+    {label: 'rack-3', mounted: [{name: 'pp', id: 'pp-1', u: 1, ru: 1, faces: {front: srvFront}}]}]},
+  {label: 'Rear', faces: ['rear'], racks: [{label: 'rack-2', mounted: [swM, srvM]}]},
+];
+const end = (item, path, view) => ({item, path, view});
+const cables = [
+  {id: 'c1', a: end('sw-1', 'slot-2/module/p0', 'front'), b: end('srv-1', 'p0', 'front'),
+   media: 'dac', purpose: 'uplink', label: 'up-1', length: {value: 2, unit: 'm', source: 'entered'}},
+  {id: 'c2', a: end('sw-1', 'p0', 'front'), b: end('srv-1', 'nic-1/p0', 'rear'), media: 'os2'},
+  {id: 'c3', a: end('sw-1', 'p0', 'front'), b: end('srv-1', 'p99', 'front')},
+  {id: 'c4', a: end('ghost', 'p0', 'front'), b: end('sw-1', 'p0', 'front')},
+  {id: 'c5', a: end('blank-1', 'p0', 'front'), b: end('sw-1', 'p0', 'front')},
+  {id: 'c 6', a: end('sw-1', 'p0'), b: end('pp-1', 'p0', 'front'), media: 'sm', label: 'a <b>'},
+  {id: 'c-6', a: end('srv-1', 'p0', 'front'), b: end('pp-1', 'p0', 'front'), media: 'mystery'},
+];
+const wiredXml = drawio.rackDiagram(plan, {cables, notes: ['caller note']});
+const pageXml = wiredXml.split('<diagram ').slice(1);
+const edgeRe = /<object label="([^"]*)"([^>]*) id="([^"]+)"><mxCell style="([^"]*)" edge="1" parent="1" source="([^"]+)" target="([^"]+)"/g;
+const edgesOf = x => [...x.matchAll(edgeRe)].map(m => ({
+  id: m[3], label: m[1], source: m[5], target: m[6],
+  attrs: Object.fromEntries([...m[2].matchAll(/ ([a-z-]+)="([^"]*)"/g)].map(a => [a[1], a[2]])),
+  stroke: /strokeColor=([^;]+);/.exec(m[4])?.[1] ?? null,
+}));
+const cellIds = x => new Set([...x.matchAll(/ id="([^"]+)"/g)].map(m => m[1]));
+const valueOf = (x, id) => new RegExp(`<mxCell id="${id}" value="([^"]*)"`).exec(x)?.[1] ?? null;
+const commentOf = x => /<!--\n([\s\S]*?)\n-->/.exec(x)?.[1] ?? null;
+out.cables = {
+  pages: pageXml.map(x => ({
+    edges: edgesOf(x),
+    // every source and target is a cell on the page the edge is on
+    dangling: edgesOf(x).flatMap(e => [e.source, e.target]).filter(c => !cellIds(x).has(c)),
+  })),
+  far: {front: valueOf(pageXml[0], 'cable-c2-a-far'), rear: valueOf(pageXml[1], 'cable-c2-b-far')},
+  farGeom: geom(pageXml[0])['cable-c2-a-far'],
+  comment: commentOf(wiredXml),
+  commentInside: wiredXml.startsWith('<mxfile host="portrayal"><!--'),
+  notes: drawio.rackCables(plan, cables).notes,
+  stable: drawio.rackDiagram(plan, {cables, notes: ['caller note']}) === wiredXml,
+  none: drawio.rackDiagram(plan, {cables: []}) === drawio.rackDiagram(plan),
+  styleFn: edgesOf(drawio.rackDiagram(plan, {cables: cables.slice(0, 1),
+    cableStyle: c => `endArrow=none;strokeColor=#${c.purpose === 'uplink' ? 'ABCDEF' : '000000'};`}))
+    .map(e => e.stroke),
+  styleMap: edgesOf(drawio.rackDiagram(plan, {cables, cableStyle: {sm: '#123456'}}))
+    .map(e => [e.id, e.stroke]),
+};
+
+// One device, as toDrawio writes it: an end names the drawing by leaving
+// `item` out or by its name.
+const one = [
+  {id: 'k1', a: {path: 'p0'}, b: {item: 'S', path: 'slot-2/module/p0'}, media: 'cu'},
+  {id: 'k2', a: {path: 'p0'}, b: {item: 'other', path: 'p0'}},
+  {id: 'k3', a: {path: 'p0', view: 'rear'}, b: {path: 'slot-2/module/p0'}},
+];
+const oneXml = drawio.diagram('S', svg, vb, sw.ports, {cables: one, view: 'front'});
+out.oneDevice = {edges: edgesOf(oneXml), comment: commentOf(oneXml)};
+
 // ---------------------------------------------------------------- OmniGraffle
 out.crc = og.crc32(new TextEncoder().encode('123456789')).toString(16);
 

@@ -25,6 +25,14 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- **Cables in the draw.io exports** (roc-ops/Portrayal#728): `rackDiagram`,
+  `toDrawio` and `diagram` take `cables` (a rack plan's
+  `{id, a: {item, path, view}, b, media, purpose, label, length}`) and write
+  each as an edge between two port cells. A cable whose ends are on different
+  pages becomes a labelled stub on each; one with an end not drawn is listed in
+  a notes comment with the reason. `cableStyle` sets the colours, and
+  `rackCables` returns the notes as a list. Without `cables` the output is
+  unchanged.
 - **Diagram exports in the kit**: `@portrayal/kit/drawio`,
   `@portrayal/kit/omnigraffle` and `@portrayal/kit/zones`, which were written
   for portrayal.dev and are now the kit's own. Each export is the face as a

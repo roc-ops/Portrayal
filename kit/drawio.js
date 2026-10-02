@@ -254,6 +254,199 @@ export function library(entries, provenance = null) {
   return `${head}<mxlibrary>${payload}</mxlibrary>`;
 }
 
+// Room for the U gutter between cabinets, and more between racks than between
+// the two sides of one rack - so a front/rear pair reads as a pair.
+const FACE_GAP = 90, RACK_GAP = 190;
+const pairWidthOf = fs => fs.length * RACK.outer + (fs.length - 1) * FACE_GAP;
+
+// CONTENT STARTS AT THE ORIGIN. Whatever draw.io decides to scroll to when it
+// opens a file - and it is not the page's top-left, which was tried - the one
+// place it will not be looking is off past the end of an empty canvas. So the
+// first rack is at x=0 and the page is drawn tight around what is on it,
+// leaving only the headroom the cabinet's own label needs above it.
+const TOP = 30;
+
+// ── cables ───────────────────────────────────────────────────────────────
+// WHAT THE PORT CELLS WERE FOR. A cable is an edge whose source and target are
+// two port cells, so in draw.io its connectors stay glued to their ports when a
+// device is dragged to another U. The shape is a rack plan's:
+//   {id, a: {item, path, view}, b: {item, path, view}, media, purpose, label, length}
+// where `item` names a mounted device (its `id`, else its `name`), `path` is a
+// port's data-path - `slot-2/module/p0` for a port on a seated card - and
+// `view` the face it is on.
+
+/** Jacket colours by `media`. A default, not a rule: `cableStyle` takes a map
+ *  of the embedder's own (merged over this one) or a function. */
+export const CABLE_COLOURS = {
+  dac: '#4D4D4D', aoc: '#2F80C0', cu: '#7A5C99', mm: '#16A5A5', sm: '#D4A017',
+  om1: '#E07B39', om2: '#E07B39', om3: '#16A5A5', om4: '#16A5A5', om5: '#7DB343',
+  os1: '#D4A017', os2: '#D4A017', cat5e: '#7A5C99', cat6: '#7A5C99', cat6a: '#7A5C99',
+  default: '#808080',
+};
+
+// ORTHOGONAL, AND NO ARROWS. A patch lead has no direction, and draw.io's
+// default edge ends in an arrowhead that says it does. NOT html=1, here or on
+// a stub's label: an html label renders its text as markup, and a cable label
+// or a port path is text a plan typed, not markup.
+const CABLE_EDGE = 'edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=none;' +
+  'startArrow=none;strokeWidth=2;fontSize=8;labelBackgroundColor=#FFFFFF;';
+
+function cableStyleOf(cable, opt) {
+  if (typeof opt === 'function') return String(opt(cable));
+  const map = opt ? {...CABLE_COLOURS, ...opt} : CABLE_COLOURS;
+  const colour = map[String(cable.media || '').toLowerCase()] || map.default;
+  return `${CABLE_EDGE}strokeColor=${colour};`;
+}
+
+// A plan writes `length` as {value, unit, source}; a number or a string is
+// taken as it is written.
+const lengthText = l => (l == null || l === '') ? ''
+  : typeof l === 'object' ? [l.value, l.unit].filter(v => v != null && v !== '').join(' ')
+  : String(l);
+
+/** Notes as one XML comment. draw.io reads the <diagram>s inside <mxfile> and
+ *  ignores the rest, so the file carries what it could not draw for a person
+ *  who opens it in an editor. `--` would close the comment. */
+const notesComment = notes => notes.length
+  ? `<!--\nNotes:\n${notes.map(n => `- ${n}`).join('\n').replace(/-{2,}/g, '-')}\n-->`
+  : '';
+
+// EVERY EDGE ID FROM THE CABLE'S OWN ID, so the same plan writes the same file
+// and a cable is findable by its name after a round trip. Slugged like a
+// device's cell id, and a slug two ids share ("a b", "a-b") is numbered in plan
+// order rather than written twice - draw.io keeps the first cell of an id and
+// silently drops the second.
+function cableIds(cables) {
+  const seen = new Map();
+  return cables.map((c, i) => {
+    const base = `cable-${slug(c.id ?? '') || i + 1}`;
+    const n = (seen.get(base) || 0) + 1;
+    seen.set(base, n);
+    return n === 1 ? base : `${base}-${n}`;
+  });
+}
+
+const endText = e => `${e.item != null ? `${e.item} ` : ''}${e.view ? `${e.view}/` : ''}${e.path ?? '?'}`;
+
+/**
+ * The cells a cable list adds to each page, and the cables it could not draw.
+ *
+ * `locate(end)` answers {at: [{page, cell, y, stubX, far}]} in page order, or
+ * {reason}. A cable whose two ends share a page is one edge there. One whose
+ * ends are only on different pages - a front-to-rear run, when each face is a
+ * page - is a STUB on each: an edge from the port to a small label naming the
+ * far end, because a draw.io edge cannot leave its page. A cable with an end
+ * that is not drawn at all is NOT half drawn: it goes in the notes with why.
+ */
+function cableCells(cables, locate, {cableStyle} = {}) {
+  const pages = new Map(), notes = [];
+  const put = (page, xml) => (pages.get(page) || pages.set(page, []).get(page)).push(xml);
+  // Stub labels stack down the gutter beside their cabinet rather than over
+  // each other when two ports sit at one height.
+  const taken = new Map();
+  const slot = (page, x, y) => {
+    const key = `${page}:${x}`;
+    const ys = taken.get(key) || taken.set(key, []).get(key);
+    while (ys.some(t => Math.abs(t - y) < 10)) y += 10;
+    ys.push(y);
+    return y;
+  };
+  const ids = cableIds(cables);
+  cables.forEach((c, i) => {
+    const a = locate(c.a || {}), b = locate(c.b || {});
+    if (a.reason || b.reason) {
+      const why = [a.reason && `a (${endText(c.a || {})}) ${a.reason}`,
+                   b.reason && `b (${endText(c.b || {})}) ${b.reason}`].filter(Boolean);
+      notes.push(`Cable ${c.id ?? i + 1} is not drawn: ${why.join('; ')}.`);
+      return;
+    }
+    const id = ids[i];
+    const style = esc(cableStyleOf(c, cableStyle));
+    const value = [c.label, lengthText(c.length)].filter(Boolean).join(' · ');
+    // THE CABLE STAYS A CABLE after a round trip: draw.io keeps an <object>'s
+    // attributes through an edit and a save, as it keeps a port's path.
+    const attrs = [['portrayal-cable', c.id], ['portrayal-media', c.media],
+                   ['portrayal-purpose', c.purpose], ['portrayal-length', lengthText(c.length)]]
+      .filter(([, v]) => v != null && v !== '')
+      .map(([k, v]) => ` ${k}="${esc(v)}"`).join('');
+    const edge = (eid, extra, src, dst) =>
+      `<object label="${esc(value)}"${attrs}${extra} id="${esc(eid)}"><mxCell ` +
+      `style="${style}" edge="1" parent="1" source="${esc(src)}" target="${esc(dst)}">` +
+      `<mxGeometry relative="1" as="geometry"/></mxCell></object>`;
+    const pa = a.at.find(p => b.at.some(q => q.page === p.page));
+    if (pa) {
+      const pb = b.at.find(q => q.page === pa.page);
+      put(pa.page, edge(id, '', pa.cell, pb.cell));
+      return;
+    }
+    for (const [end, here, there] of [['a', a.at[0], b.at[0]], ['b', b.at[0], a.at[0]]]) {
+      const far = `${id}-${end}-far`;
+      const y = slot(here.page, here.stubX, here.y - 5);
+      put(here.page, cell(far, `→ ${there.far}`,
+        'text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;' +
+        'fontSize=8;fontColor=#333333;spacingLeft=2;',
+        here.stubX, y, 84, 10));
+      put(here.page, edge(`${id}-${end}`, ` portrayal-end="${end}"`, here.cell, far));
+    }
+  });
+  return {pages, notes};
+}
+
+// THE PORTS A RACK DIAGRAM DRAWS, where it draws them: the same walk, ids and
+// arithmetic as rackDiagram's own, so an edge names cells that exist. Keyed by
+// item and path; a device drawn on several pages has a place on each.
+function rackPorts(groups, faces) {
+  const at = new Map(), drawn = new Map(), known = new Set();
+  groups.forEach((group, gi) => {
+    const gFaces = group.faces || faces;
+    let x = 0;
+    group.racks.forEach((rack, r) => {
+      gFaces.forEach((face, i) => {
+        const fx = x + i * (RACK.outer + FACE_GAP);
+        for (const m of rack.mounted) {
+          const item = m.id ?? m.name;
+          known.add(item);
+          const f = m.faces[face];
+          if (!f) continue;
+          (drawn.get(item) || drawn.set(item, new Set()).get(item)).add(face);
+          const id = `${slug(item)}-g${gi}r${r}-${face}`;
+          const top = TOP + RACK.marginTop + (m.u - 1) * RACK.unit;
+          const sy = RACK.unit * (m.ru || 1) / f.vb[3];
+          for (const p of f.ports) {
+            if (p.cls !== 'port') continue;
+            const path = p.path || p.id;
+            const key = `${item}\n${path}`;
+            (at.get(key) || at.set(key, []).get(key)).push({
+              page: gi, face, cell: `${id}-${p.id}`,
+              y: top + (p.y + p.h / 2 - f.vb[1]) * sy,
+              stubX: fx + RACK.outer + 4,
+              far: [rack.label, m.name, `${face}/${path}`].filter(Boolean).join(' · '),
+            });
+          }
+        }
+      });
+      x += pairWidthOf(gFaces) + RACK_GAP;
+    });
+  });
+  return end => {
+    if (!known.has(end.item)) return {reason: 'names no mounted device'};
+    const faceOk = p => !end.view || p.face === end.view;
+    const found = (at.get(`${end.item}\n${end.path}`) || []).filter(faceOk);
+    if (found.length) return {at: found};
+    const sides = drawn.get(end.item);
+    if (end.view && !(sides && sides.has(end.view)))
+      return {reason: 'is on a face no page draws'};
+    return {reason: "is not a port in its device's drawing"};
+  };
+}
+
+/** What a cable list adds to a rack diagram: the cells for each page (by its
+ *  index in `groups`) and the notes for the cables it cannot draw. rackDiagram
+ *  calls this itself; a caller that wants the notes as a list calls it too. */
+export function rackCables(groups, cables = [], {faces = ['front'], cableStyle} = {}) {
+  return cableCells(cables, rackPorts(groups, faces), {cableStyle});
+}
+
 /**
  * A rack diagram: draw.io's own cabinet, with devices mounted in it.
  *
@@ -274,8 +467,17 @@ export function library(entries, provenance = null) {
  * name, which two devices can share), and a rack its own `numDisp` (`descend`
  * prints 1 at the bottom). Without them, the output is exactly what it always
  * was.
+ *
+ * `cables` adds the patching (see rackCables): an edge between two port cells
+ * where both ends are on one page, a labelled stub on each page where they are
+ * not, and a note for a cable with an end not drawn. `cableStyle` is a map of
+ * media to colour or a function from a cable to an edge style. `notes` are the
+ * caller's own, written in the same comment as the cables' - one block, inside
+ * <mxfile>, so it survives being handed around as a file.
  */
-export function rackDiagram(groups, {faces = ['front'], labels = true} = {}) {
+export function rackDiagram(groups, {faces = ['front'], labels = true,
+                                     cables = [], cableStyle, notes = []} = {}) {
+  const wired = rackCables(groups, cables, {faces, cableStyle});
   // Each rack carries its own height, because each is grown to its contents.
   const heightOf = units => RACK.marginTop + RACK.marginBottom + units * RACK.unit;
   const style =
@@ -288,17 +490,6 @@ export function rackDiagram(groups, {faces = ['front'], labels = true} = {}) {
     // either side of it.
     `textColor=#666666;numDisp=ascend;html=1;` +
     `verticalLabelPosition=top;verticalAlign=bottom;fontSize=11;fontStyle=1;`;
-  // Room for the U gutter between cabinets, and more between racks than between
-  // the two sides of one rack - so a front/rear pair reads as a pair.
-  const FACE_GAP = 90, RACK_GAP = 190;
-  const pairWidthOf = fs => fs.length * RACK.outer + (fs.length - 1) * FACE_GAP;
-
-  // CONTENT STARTS AT THE ORIGIN. Whatever draw.io decides to scroll to when it
-  // opens a file - and it is not the page's top-left, which was tried - the one
-  // place it will not be looking is off past the end of an empty canvas. So the
-  // first rack is at x=0 and the page is drawn tight around what is on it,
-  // leaving only the headroom the cabinet's own label needs above it.
-  const TOP = 30;
   const pages = groups.map((group, gi) => {
     const gFaces = group.faces || faces;
     const pairWidth = pairWidthOf(gFaces);
@@ -404,13 +595,14 @@ export function rackDiagram(groups, {faces = ['front'], labels = true} = {}) {
       `pageWidth="${Math.ceil(x - RACK_GAP + 20)}" ` +
       `pageHeight="${Math.ceil(tallest + TOP + 20)}"><root>` +
       `<mxCell id="0"/><mxCell id="1" parent="0"/>${cells.join('')}` +
-      `</root></mxGraphModel></diagram>`;
+      `${(wired.pages.get(gi) || []).join('')}</root></mxGraphModel></diagram>`;
   });
   // Front and rear are NOT mirrored. Walking round a rack does reverse
   // left-to-right, but every DCIM elevation - NetBox's and Nautobot's included -
   // shows both sides in the same order, because the point of the pair is to
   // read one device across two views. Mirroring makes that a puzzle.
-  return `<mxfile host="portrayal">${pages.join('')}</mxfile>`;
+  return `<mxfile host="portrayal">${notesComment([...notes, ...wired.notes])}` +
+    `${pages.join('')}</mxfile>`;
 }
 
 
@@ -422,12 +614,38 @@ export function rackDiagram(groups, {faces = ['front'], labels = true} = {}) {
  * device up the way a project needs it - optics seated, lamps lit, one region
  * cropped - wants to draw on that device now, and a library makes them import a
  * file, find the shape and drag it out first.
+ *
+ * `cables` are drawn between this device's own ports: an end names it by
+ * leaving `item` out or giving `opts.item` (the name, by default), and a `view`
+ * other than `opts.view`, where that is given, is a face this file does not
+ * draw. An end that is not here is a note, as in a rack.
  */
 export function diagram(name, svgText, vb, ports, opts = {}) {
+  return diagramOf(name, svgText, vb, ports, opts).text;
+}
+
+function diagramOf(name, svgText, vb, ports, opts = {}) {
+  const {cables = [], cableStyle, notes = [], item = name, view = null} = opts;
   const e = entry(name, svgText, vb, ports, opts);
-  return `<mxfile host="portrayal"><diagram name="${esc(name)}" id="page0">` +
-    e.xml.replace('<mxGraphModel>', '<mxGraphModel grid="0" page="0">') +
+  // entry() names the device's cells by this slug, and these are its ports.
+  const id = slug(name), here = new Map();
+  for (const p of ports) {
+    if (p.cls === 'port') here.set(String(p.path || p.id), `${id}-${p.id}`);
+  }
+  const wired = cableCells(cables, end => {
+    if (end.item != null && end.item !== item) return {reason: 'names a device this file does not draw'};
+    if (end.view && view && end.view !== view) return {reason: 'is on a face this file does not draw'};
+    const c = here.get(String(end.path));
+    return c ? {at: [{page: 0, cell: c}]}
+      : {reason: "is not a port in this drawing (cropped away, or an unknown path)"};
+  }, {cableStyle});
+  const all = [...notes, ...wired.notes];
+  const text = `<mxfile host="portrayal">${notesComment(all)}` +
+    `<diagram name="${esc(name)}" id="page0">` +
+    e.xml.replace('<mxGraphModel>', '<mxGraphModel grid="0" page="0">')
+      .replace('</root>', `${(wired.pages.get(0) || []).join('')}</root>`) +
     `</diagram></mxfile>`;
+  return {text, notes: all};
 }
 
 /**
@@ -440,16 +658,28 @@ export function diagram(name, svgText, vb, ports, opts = {}) {
  * page has applied - and goes into the picture exactly as marks.toSvg would
  * write it. Ports outside a crop are left out rather than left floating.
  *
- * @returns {{text, name, ports}}  the file's text, a name for it, and how many
- *                                 connection points it carries
+ * `cables` (with `cableStyle`) draws a cable list between this drawing's ports,
+ * as `diagram` does; a cable with an end outside the drawing is in `notes`.
+ *
+ * @returns {{text, name, ports, notes}}  the file's text, a name for it, how
+ *                                        many connection points it carries, and
+ *                                        what it could not draw
  */
-export function toDrawio(svgRoot, doc = {}, {form = 'diagram', name, visible = false} = {}) {
+export function toDrawio(svgRoot, doc = {}, {form = 'diagram', name, visible = false,
+                                             cables = [], cableStyle, item} = {}) {
   const d = normalise(doc);
   const {text, vb, ports} = readDrawing(svgRoot, d);
   const title = name || [d.device, d.config, d.view].filter(Boolean).join(' ') || 'drawing';
-  const out = form === 'library'
-    ? library([entry(title, text, vb, ports, {visible})],
-        `Portrayal ${title} - ${d.marks.length} mark(s)${d.crop ? ', cropped' : ''}`)
-    : diagram(title, text, vb, ports, {visible});
-  return {text: out, name: title, ports: ports.length};
+  if (form === 'library') {
+    // A LIBRARY HOLDS SHAPES, NOT A DRAWING: there is nowhere in one for an
+    // edge to live, so cables handed to it are said to be left out.
+    const notes = cables.length
+      ? [`${cables.length} cable(s) not written: a library holds shapes, not edges.`] : [];
+    return {text: library([entry(title, text, vb, ports, {visible})],
+              `Portrayal ${title} - ${d.marks.length} mark(s)${d.crop ? ', cropped' : ''}`),
+            name: title, ports: ports.length, notes};
+  }
+  const out = diagramOf(title, text, vb, ports,
+    {visible, cables, cableStyle, item: item ?? title, view: d.view || null});
+  return {text: out.text, name: title, ports: ports.length, notes: out.notes};
 }
