@@ -28,6 +28,14 @@ names the ref that replaces it.
 - `chassis.mount` in the device manifest: `rack` (the default), `din-rail`,
   `wall` or `desktop`. Lint L125 warns on a rack device with no `ru` and
   refuses `ru` on a box that is not racked (roc-ops/Portrayal#734).
+- `chassis.bevel` in the device manifest: edges named by the two faces that
+  meet at them, cut back by `size` mm - one number at 45 degrees, or a pair
+  `[a, b]` taking a different amount off each face. A bevelled face's
+  `chassis-faceplate` is a `<path>` of the solid's outline, its bevel strips
+  are drawn in `chassis-bevels`, and `<device>.configs.json` carries the
+  solid's polygons as `chassis.solid` for the 3D viewer (`@portrayal/kit`
+  exports `./bevel`). Lint L126 checks the bevel and keeps parts on the flat
+  face (roc-ops/Portrayal#735).
 - **Cables in the draw.io exports** (roc-ops/Portrayal#728): `rackDiagram`,
   `toDrawio` and `diagram` take `cables` (a rack plan's
   `{id, a: {item, path, view}, b, media, purpose, label, length}`) and write
