@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: riser-2q-16g
-version: 1.1.0
+version: 1.2.0
 class: riser
 behaviour: fills
 profile: server
@@ -66,15 +66,18 @@ body:
   depth: 246.9
   color: '#4a5057'
   boxes:
-  - {id: pcb, at: [99.50, -0.30], size: [2.40, 33.20],
+  - {id: pcb-1, at: [94.47, -0.30], size: [2.40, 33.20],
      from: 27.6, depth: 219.3, color: '#1f5138',
-     confidence: estimated, source: "estimated by analogy with riser 2A's board, centred in riser 2Q's wider gap between its slots"}
-  - {id: slot-1-connector, at: [89.50, 12.70], size: [10.00, 8.70],
+     confidence: estimated, source: "estimated by analogy with riser 2A - the board 0.6 right of slot 1's connector; riser 2Q's slots are 13.8 further apart than one board between two connectors allows, so each connector is drawn on a board of its own"}
+  - {id: slot-1-connector, at: [83.87, 12.70], size: [10.00, 8.70],
      from: 48.3, depth: 89.0, color: '#15171b',
-     confidence: estimated, source: "estimated by analogy with riser 2A - low, left of the board"}
-  - {id: slot-2-connector, at: [101.90, 0.40], size: [10.00, 8.70],
+     confidence: estimated, source: "estimated by analogy with riser 2A - low, left of its board, placed so a low-profile card's edge pads (13.71..16.71 from the tip) sit where they sit in riser 2A's slot 1"}
+  - {id: pcb-2, at: [104.67, -0.30], size: [2.40, 33.20],
+     from: 27.6, depth: 219.3, color: '#1f5138',
+     confidence: estimated, source: "estimated by analogy with riser 2A - the board 0.6 left of slot 2's connector"}
+  - {id: slot-2-connector, at: [107.67, 0.40], size: [10.00, 8.70],
      from: 47.2, depth: 89.0, color: '#15171b',
-     confidence: estimated, source: "estimated by analogy with riser 2A - high, right of the board"}
+     confidence: estimated, source: "estimated by analogy with riser 2A - high, right of its board, placed so the card's edge pads sit where they sit in riser 2A's slot 2"}
 parts:
   - {ref: dell/riser-2q-cage-16g@1, id: plate, at: [0, 0]}
 bays:
