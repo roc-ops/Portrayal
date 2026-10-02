@@ -25,6 +25,14 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- **Cables in the draw.io exports** (roc-ops/Portrayal#728): `rackDiagram`,
+  `toDrawio` and `diagram` take `cables` (a rack plan's
+  `{id, a: {item, path, view}, b, media, purpose, label, length}`) and write
+  each as an edge between two port cells. A cable whose ends are on different
+  pages becomes a labelled stub on each; one with an end not drawn is listed in
+  a notes comment with the reason. `cableStyle` sets the colours, and
+  `rackCables` returns the notes as a list. Without `cables` the output is
+  unchanged.
 - **Diagram exports in the kit**: `@portrayal/kit/drawio`,
   `@portrayal/kit/omnigraffle` and `@portrayal/kit/zones`, which were written
   for portrayal.dev and are now the kit's own. Each export is the face as a
@@ -76,6 +84,12 @@ names the ref that replaces it.
   class), and no 800G prefix is documented.
 
 ### Changed
+- **`toDrawio()`'s `ports` is what a line can be drawn to** (roc-ops/Portrayal#730):
+  every port and every empty bay. A bay holding a card is a container that
+  takes no line, and counting it overstated a modular chassis by its seated
+  cards. `connectable(ports)` in `drawio.js` gives the same count. `toGraffle()`
+  is unchanged - every port and bay there is a magnetised shape - and its
+  `ports` now says so.
 - **BREAKING for DCIM data already imported.** The Edgecore DCS510's AC builds
   export as `9716-32D-O-AC-F-EU` and `9716-32D-O-AC-B-EU`, not
   `9716-32D-O-A C-F-UK` and `9716-32D-O-A C-B-UK`, under Edgecore and its
