@@ -4425,6 +4425,9 @@ def main():
                  # a particular build breathes.
                  "chassis": {"w": ch.get("width"), "h": ch.get("height"), "d": ch.get("depth"),
                              "ru": ch.get("ru"), "airflow": ch.get("airflow"),
+                             # how the box is installed; `rack` where the
+                             # device states nothing (#734)
+                             "mount": ch.get("mount", "rack"),
                              # the chassis's own feed, where one feed is the
                              # whole story; `configs[].power` is each build's
                              # resolved answer, as for airflow
