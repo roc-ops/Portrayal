@@ -76,6 +76,12 @@ names the ref that replaces it.
   class), and no 800G prefix is documented.
 
 ### Changed
+- **`toDrawio()`'s `ports` is what a line can be drawn to** (roc-ops/Portrayal#730):
+  every port and every empty bay. A bay holding a card is a container that
+  takes no line, and counting it overstated a modular chassis by its seated
+  cards. `connectable(ports)` in `drawio.js` gives the same count. `toGraffle()`
+  is unchanged - every port and bay there is a magnetised shape - and its
+  `ports` now says so.
 - **BREAKING for DCIM data already imported.** The Edgecore DCS510's AC builds
   export as `9716-32D-O-AC-F-EU` and `9716-32D-O-AC-B-EU`, not
   `9716-32D-O-A C-F-UK` and `9716-32D-O-A C-B-UK`, under Edgecore and its
