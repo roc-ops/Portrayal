@@ -25,6 +25,16 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- **Diagram exports in the kit**: `@portrayal/kit/drawio`,
+  `@portrayal/kit/omnigraffle` and `@portrayal/kit/zones`, which were written
+  for portrayal.dev and are now the kit's own. Each export is the face as a
+  picture with one named, connectable shape per port and bay; draw.io gets a
+  shape library, a rack elevation or a one-device `.drawio`, and OmniGraffle a
+  `.gstencil`. `toDrawio(svgRoot, doc)` and `toGraffle(svgRoot, doc)` export a
+  LIVE drawing - optics seated, lamps lit, marks and a crop applied - and leave
+  out the ports a crop cuts away. A face whose viewBox does not start at 0,0
+  (an optic's, or a crop) now has its draw.io ports where its picture is; they
+  were offset by the viewBox origin.
 - **Four more SONiC listings** (roc-ops/Portrayal#674): the Celestica DS1000,
   DS2000 and DS3000 and the Edgecore AS4630-54TE (EPS201). SONiC builds for all
   four in sonic-buildimage but its Supported Devices page predates them; the

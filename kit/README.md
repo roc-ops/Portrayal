@@ -66,8 +66,33 @@ jsDelivr with `?dist=cdn` (and `&index=<version>`).
 | `devsel.js` | device selection and filtering - hardware by its maker, and each NOS vendor's listings under that vendor (`listings.json`, #709) |
 | `nosnames.js` | what the chosen listing's NOS calls each port (`swp7`, `Ethernet24`, `ge100-0/0/7`), expanded by the same grammar as the DCIM export (#712) |
 | `dist.js` | artifact fetching, and where each file is: a build directory or the npm packages |
+| `zones.js` | the ports and bays of a compiled face, each with its box in millimetres - what the diagram exports put a connectable shape over |
+| `drawio.js` | draw.io: a shape library, a rack elevation, or one live drawing as a `.drawio` (`toDrawio`), with a named connection point per port |
+| `omnigraffle.js` | OmniGraffle: a `.gstencil` with a named, magnetised shape per port, or one live drawing as a stencil (`toGraffle`) |
 
 Plain ES modules. No bundler, no build step.
+
+## Exporting to draw.io and OmniGraffle
+
+Both are the face as a picture, with one invisible shape over every port and
+bay, named by its path: a line drawn to a port attaches to `port-12`, not to a
+point on a picture. Hand either function the live drawing and a marks document,
+and what is seated, lit, highlighted or cropped is what is exported:
+
+```js
+import { toDrawio } from '@portrayal/kit/drawio';
+import { toGraffle } from '@portrayal/kit/omnigraffle';
+
+const {text} = toDrawio(shell.state.svg, doc);                 // a .drawio to open
+const lib = toDrawio(shell.state.svg, doc, {form: 'library'});  // or a library
+const {bytes} = await toGraffle(shell.state.svg, doc);          // a .gstencil
+```
+
+`readSvg` and `portsOf` in `zones.js`, and `entry`, `library` and
+`rackDiagram` in `drawio.js`, build the same files from published faces, many
+at once. Reading a face needs a browser - it is parsed and laid out by the DOM
+- and so does OmniGraffle's picture, which is drawn on a canvas; writing the
+files from zones already read does not.
 
 ## three.js
 
