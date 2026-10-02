@@ -168,6 +168,21 @@ def test_edge_ids_come_from_cable_ids_and_never_repeat(out):
     assert list(_edges(out, 0)) == ["cable-c1", "cable-c2-a", "cable-c-6", "cable-c-6-2"]
 
 
+def test_numbered_and_stub_ids_never_collide_with_another_cable(out):
+    c = out["clash"]
+    # every cell a cable writes has an id no other cell has
+    assert len(c["ids"]) == len(set(c["ids"])), c["ids"]
+    # and every cable is in the file
+    assert sorted(c["cables"]) == sorted(["c 6", "c-6", "c-6-2", "x", "x-a", "y-b", "y"])
+    assert c["notes"] == []
+    ids = set(c["ids"])
+    # where nothing clashes the plain names stand; where something does, the
+    # later cable is numbered on, and a stub pair keeps one suffix
+    assert {"cable-c-6", "cable-c-6-2", "cable-c-6-2-2"} <= ids
+    assert {"cable-x-a", "cable-x-a-far", "cable-x-b", "cable-x-b-far", "cable-x-a-2"} <= ids
+    assert {"cable-y-b", "cable-y-2-a", "cable-y-2-a-far", "cable-y-2-b", "cable-y-2-b-far"} <= ids
+
+
 def test_cable_style_is_the_callers(out):
     c = out["cables"]
     assert c["styleFn"] == ["#ABCDEF"]

@@ -313,17 +313,25 @@ const notesComment = notes => notes.length
 
 // EVERY EDGE ID FROM THE CABLE'S OWN ID, so the same plan writes the same file
 // and a cable is findable by its name after a round trip. Slugged like a
-// device's cell id, and a slug two ids share ("a b", "a-b") is numbered in plan
-// order rather than written twice - draw.io keeps the first cell of an id and
-// silently drops the second.
-function cableIds(cables) {
-  const seen = new Map();
-  return cables.map((c, i) => {
-    const base = `cable-${slug(c.id ?? '') || i + 1}`;
-    const n = (seen.get(base) || 0) + 1;
-    seen.set(base, n);
-    return n === 1 ? base : `${base}-${n}`;
-  });
+// device's cell id - and draw.io keeps the first cell of an id and silently
+// drops the second, so every id a cable writes comes from ONE set of ids
+// already taken. Checking the base slug alone was not enough: "c 6" and "c-6"
+// share one, the second is numbered `cable-c-6-2`, and a third cable called
+// `c-6-2` then lands on it; a stub's `-a` suffix meets a cable called `x-a` the
+// same way. A candidate that is taken is numbered on until it is free, and a
+// stub pair's four ids are taken together so they keep one suffix.
+function idAllocator() {
+  const used = new Set();
+  return (base, suffixes) => {
+    for (let n = 1; ; n++) {
+      const stem = n === 1 ? base : `${base}-${n}`;
+      const ids = suffixes.map(s => stem + s);
+      if (ids.every(id => !used.has(id))) {
+        ids.forEach(id => used.add(id));
+        return stem;
+      }
+    }
+  };
 }
 
 const endText = e => `${e.item != null ? `${e.item} ` : ''}${e.view ? `${e.view}/` : ''}${e.path ?? '?'}`;
@@ -351,7 +359,7 @@ function cableCells(cables, locate, {cableStyle} = {}) {
     ys.push(y);
     return y;
   };
-  const ids = cableIds(cables);
+  const take = idAllocator();
   cables.forEach((c, i) => {
     const a = locate(c.a || {}), b = locate(c.b || {});
     if (a.reason || b.reason) {
@@ -360,7 +368,7 @@ function cableCells(cables, locate, {cableStyle} = {}) {
       notes.push(`Cable ${c.id ?? i + 1} is not drawn: ${why.join('; ')}.`);
       return;
     }
-    const id = ids[i];
+    const base = `cable-${slug(c.id ?? '') || i + 1}`;
     const style = esc(cableStyleOf(c, cableStyle));
     const value = [c.label, lengthText(c.length)].filter(Boolean).join(' · ');
     // THE CABLE STAYS A CABLE after a round trip: draw.io keeps an <object>'s
@@ -376,9 +384,10 @@ function cableCells(cables, locate, {cableStyle} = {}) {
     const pa = a.at.find(p => b.at.some(q => q.page === p.page));
     if (pa) {
       const pb = b.at.find(q => q.page === pa.page);
-      put(pa.page, edge(id, '', pa.cell, pb.cell));
+      put(pa.page, edge(take(base, ['']), '', pa.cell, pb.cell));
       return;
     }
+    const id = take(base, ['-a', '-a-far', '-b', '-b-far']);
     for (const [end, here, there] of [['a', a.at[0], b.at[0]], ['b', b.at[0], a.at[0]]]) {
       const far = `${id}-${end}-far`;
       const y = slot(here.page, here.stubX, here.y - 5);

@@ -140,6 +140,26 @@ out.cables = {
     .map(e => [e.id, e.stroke]),
 };
 
+// Ids that collide only after numbering or a stub suffix: a third cable named
+// what the second was numbered to, and a same-page cable named what another
+// cable's stub is called - in both orders.
+const clash = [
+  {id: 'c 6', a: end('sw-1', 'p0', 'front'), b: end('pp-1', 'p0', 'front')},
+  {id: 'c-6', a: end('srv-1', 'p0', 'front'), b: end('pp-1', 'p0', 'front')},
+  {id: 'c-6-2', a: end('sw-1', 'p0', 'front'), b: end('srv-1', 'p0', 'front')},
+  {id: 'x', a: end('sw-1', 'p0', 'front'), b: end('srv-1', 'nic-1/p0', 'rear')},
+  {id: 'x-a', a: end('sw-1', 'p0', 'front'), b: end('srv-1', 'p0', 'front')},
+  {id: 'y-b', a: end('sw-1', 'p0', 'front'), b: end('srv-1', 'p0', 'front')},
+  {id: 'y', a: end('sw-1', 'p0', 'front'), b: end('srv-1', 'nic-1/p0', 'rear')},
+];
+const clashXml = drawio.rackDiagram(plan, {cables: clash});
+const clashIds = [...clashXml.matchAll(/ id="(cable-[^"]+)"/g)].map(m => m[1]);
+out.clash = {
+  ids: clashIds,
+  cables: [...new Set([...clashXml.matchAll(/portrayal-cable="([^"]+)"/g)].map(m => m[1]))],
+  notes: drawio.rackCables(plan, clash).notes,
+};
+
 // One device, as toDrawio writes it: an end names the drawing by leaving
 // `item` out or by its name.
 const one = [
