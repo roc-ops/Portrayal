@@ -406,6 +406,23 @@
     "weight-kg": {
      "type": "number"
     },
+    "bevel": {
+     "type": "array",
+     "description": "EDGES CUT BACK AT 45 DEGREES, for a housing that is not a plain box (#735). Each entry names edges by the two faces that meet at them - `front-left`, `top-right`, `rear-bottom`; order does not matter - and the millimetres the bevel takes off each of those two faces. The front of an AurCore AIS switch is narrower than its body because the edges where it meets the finned sides are bevelled: `{edges: [front-left, front-right], size: 11}`. The face drawings keep their full size and their coordinates: a bevel along a view's line of sight cuts a corner off its outline, and a bevel on one of its own edges is drawn as a strip beside the flat face, which is where parts go. spec/tools/portrayal/bevel.py builds the solid; L126 checks it.",
+     "items": {
+      "type": "object",
+      "required": ["edges", "size"],
+      "additionalProperties": false,
+      "properties": {
+       "edges": {
+        "type": "array",
+        "minItems": 1,
+        "items": {"type": "string", "pattern": "^(front|rear|top|bottom|left|right)-(front|rear|top|bottom|left|right)$"}
+       },
+       "size": {"type": "number", "exclusiveMinimum": 0, "description": "millimetres taken off each of the two faces"}
+      }
+     }
+    },
     "airflow": {
      "description": "WHERE AIRFLOW LIVES. The chassis is the home; a configuration states `airflow` only when it DIFFERS from this, which render.py has always assumed - it reads the configuration first and falls back here. Airflow genuinely varies by build in 7 of the 48 devices that state it; in the rest it is one fact about the box, and repeating it per configuration gave one fact two homes. The enums differ on purpose: `side` and `passive` are chassis answers a configuration cannot give, because a fanless enclosure and a side-breathing modular chassis offer no airflow option to choose between. L91 checks the division.",
      "enum": [

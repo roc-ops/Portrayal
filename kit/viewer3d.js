@@ -31,6 +31,7 @@ import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, sv
          buildFaceRelief, bodyBoxes, fruFor,
          nodeTools, tiltOf, tiltTools, tiltGroupIn, unproject, openFrameFaces } from './relief.js';
 import { seatViews, seatBack, refusalReason } from './swap.js';
+import { bevelledArrays } from './bevel.js';
 import { jdist, faceFile, distResolver } from './dist.js';
 import { createLamps } from './lamps.js';
 
@@ -747,6 +748,21 @@ export function createViewer(container, opts = {}) {
       scene.add(box);
       box.userData.bodyBox = bodyBox;
       scene.add(bodyBox);
+    } else if (devIndex && devIndex.chassis && devIndex.chassis.solid) {
+      // A BEVELLED BODY (#735): the polygons render.py published, each face
+      // mapped the way BoxGeometry maps it so the face textures land exactly
+      // where they would on a box, and the bevels in lit housing colour.
+      // Material 6 is the bevels; picking reads 0-5 and ignores it.
+      const a = bevelledArrays(devIndex.chassis.solid.polygons, W, H, D);
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.Float32BufferAttribute(a.positions, 3));
+      geo.setAttribute('normal', new THREE.Float32BufferAttribute(a.normals, 3));
+      geo.setAttribute('uv', new THREE.Float32BufferAttribute(a.uvs, 2));
+      for (const g of a.groups) geo.addGroup(g.start, g.count, g.materialIndex);
+      const metal = new THREE.MeshLambertMaterial(
+        {color: devIndex.chassis.solid.color || '#3a3f44'});
+      box = new THREE.Mesh(geo, [...mats, metal]);
+      scene.add(box);
     } else {
       box = new THREE.Mesh(new THREE.BoxGeometry(W, H, D), mats);
       scene.add(box);

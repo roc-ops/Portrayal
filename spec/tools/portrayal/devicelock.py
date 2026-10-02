@@ -473,7 +473,9 @@ def _composed(doc, versions):
 # and they have to say which side it falls on rather than have it default into
 # `shape` and quietly demand a major from every device that adopts it. Same
 # guard, and the same reason, as PORT_ROLES/NON_PORT_ROLES in dcim_export.
-CHASSIS_SHAPE = {"width", "height", "depth", "ru"}
+# `bevel` IS GEOMETRY: it changes the outline of a face and what a part may be
+# placed on, so adding or resizing one is a major (#735).
+CHASSIS_SHAPE = {"width", "height", "depth", "ru", "bevel"}
 CHASSIS_SURFACE = {"color", "edge", "silk", "weight-kg", "airflow", "power"}
 
 
