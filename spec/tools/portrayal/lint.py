@@ -290,6 +290,7 @@ RULES = {
     "L122": ("component, device", "a `cable-od` value is a diameter in millimetres from 2 to 15 - on a field's default, a composing part's attrs, and a device placement's attrs - written as plain ASCII digits and a point, the only number the build and the kit draw", "give the cable's outside diameter in mm as a number, from the product's own document"),
     "L124": ("library",    "under one NOS vendor, no two listings export the same DCIM model, and no alias is claimed by two listings unless each marks it `shared`", "give one listing a configuration `model` or its own SKU; drop the duplicate alias, or mark it `shared: true` in every claimant with a `note`"),
     "L123": ("library",    "one module, one bay size - every bay that accepts a module, in any device or carrier, reserves the same size for it, to within a millimetre", "reserve one figure everywhere - the module's own `insert` or `size`; a difference that is real stays in the baseline, with the reason in the provenance of the chassis that reserves more (the warning is filed on the module, so a chassis `lint.waive` cannot clear it)"),
+    "L125": ("device",     "a device says how it is installed - a rack device (the default `mount`) states `ru` (warning), and a device whose `chassis.mount` is `din-rail`, `wall` or `desktop` states none (error)", "give a rack device its `ru` from the datasheet; for a box that is not racked, state `chassis.mount` and drop `ru`, so its DCIM export says `u_height: 0` rather than an invented rack unit"),
     "L126": ("device",     "a bevelled chassis is a solid the box can have - every edge named by two faces that meet, none bevelled twice, no face cut away and no bevel swallowed by its neighbours - its face drawings are the chassis's own size, and every part, bay and cutout on a face lies on the flat face rather than on a bevel", "name edges as two adjacent faces (`front-left`), shrink a bevel that cuts too much, drop a view `size` that differs from the chassis on a bevelled face, or move the part onto the flat face - spec/tools/portrayal/bevel.py says where it is"),
 }
 
@@ -298,10 +299,7 @@ RULES = {
 # gap is named here rather than read as a deleted rule. The catalogue test
 # counts these as present, and fails once a reserved code is also in RULES -
 # whichever branch lands second deletes its line.
-RESERVED = {
-    # roc-ops/Portrayal#741 (#734): a device says how it is installed
-    "L125": "chassis.mount and `ru` agree",
-}
+RESERVED = {}
 
 # A CODE THAT NAMED A RULE WHICH IS GONE. A device manifest waives a rule by its
 # code (`lint.waive`), and so does the baseline, so a code is an address: once
@@ -6163,6 +6161,29 @@ def lint_device_power_home(path, data):
                           "the chassis and let a configuration override it where it differs")
 
 
+def lint_device_mount(path, data):
+    """L125: a device says how it is installed (#734).
+
+    `ru` was the only mounting fact the schema had, so a box that is not racked
+    simply left it out - and the DCIM export, reading `ch.get("ru", 1)`, called
+    every one of them a 1U full-depth rack device. The ReadyLinks GL-8xEP is a
+    wall-mount unit and exported as one; the R740xd is a 2U server and exported
+    as 1U. An omission and a non-rack box looked identical. `mount` makes the
+    difference a statement: absent means `rack`, and a rack device without `ru`
+    is the omission it always was.
+    """
+    ch = data.get("chassis") or {}
+    mount = ch.get("mount", "rack")
+    # A MISSING `ru` WARNS; a contradiction refuses. The one rack device left
+    # without rack units is an Open Rack v3 tray, sized in a unit `ru` cannot
+    # hold, and a waiver - which only a warning can take - is where it says so.
+    if mount == "rack" and "ru" not in ch:
+        warn(path, "L125", "a rack device states `ru`. If this box is not racked, "
+                          "say how it is installed with `chassis.mount` "
+                          "(`din-rail`, `wall`, `desktop`)")
+    elif mount != "rack" and "ru" in ch:
+        err(path, "L125", f"`chassis.mount` is {mount!r}, so `ru` {ch['ru']!r} "
+                          "describes a rack this box is not in - drop it")
 def _inside(pt, poly, tol=0.05):
     """A point inside a convex polygon, to within `tol` mm of its edges."""
     sign = 0
@@ -10536,6 +10557,7 @@ def main():
                 lint_device_key_order(f, d)
                 lint_device_airflow_home(f, d)
                 lint_device_power_home(f, d)
+                lint_device_mount(f, d)
                 lint_device_power_stated(f, d)
                 lint_device_provenance_confidence(f, d)
                 lint_quoted_prose(f, d)

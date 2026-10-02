@@ -355,7 +355,9 @@ function about(box) {
   h += capability(meta.capability || d.capability, meta.gaps || d.gaps);
 
   h += `<h3>Dimensions</h3>`;
-  h += row('rack units', ch.ru != null ? `${ch.ru} RU` : '—');
+  // A box that is not racked says how it is installed instead (#734).
+  if (ch.mount && ch.mount !== 'rack') h += row('mount', ch.mount);
+  else h += row('rack units', ch.ru != null ? `${ch.ru} RU` : '—');
   h += row('W × H × D', `${dim(ch.w)} × ${dim(ch.h)} × ${dim(ch.d)}`);
   h += cite('chassis', 'dimensions', 'width', 'height', 'depth', 'ru');
 

@@ -25,6 +25,16 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- `chassis.mount` in the device manifest: `rack` (the default), `din-rail`,
+  `wall` or `desktop`. Lint L125 warns on a rack device with no `ru` and
+  refuses `ru` on a box that is not racked (roc-ops/Portrayal#734).
+- `chassis.bevel` in the device manifest: edges named by the two faces that
+  meet at them, cut back at 45 degrees by `size` mm. A bevelled face's
+  `chassis-faceplate` is a `<path>` of the solid's outline, its bevel strips
+  are drawn in `chassis-bevels`, and `<device>.configs.json` carries the
+  solid's polygons as `chassis.solid` for the 3D viewer (`@portrayal/kit`
+  exports `./bevel`). Lint L126 checks the bevel and keeps parts on the flat
+  face (roc-ops/Portrayal#735).
 - **Cables in the draw.io exports** (roc-ops/Portrayal#728): `rackDiagram`,
   `toDrawio` and `diagram` take `cables` (a rack plan's
   `{id, a: {item, path, view}, b, media, purpose, label, length}`) and write
@@ -84,6 +94,11 @@ names the ref that replaces it.
   class), and no 800G prefix is documented.
 
 ### Changed
+- The DCIM exports no longer call every device without `ru` a 1U full-depth
+  rack device. A box that is not racked exports `u_height: 0`, not full depth,
+  with its mounting in the comments (ReadyLinks GL-8XEP, Halny HLX-TGV), and
+  the Dell R740xd exports at its real 2U. A DCIM that imported these types
+  holds the old height until they are re-imported (roc-ops/Portrayal#734).
 - **`toDrawio()`'s `ports` is what a line can be drawn to** (roc-ops/Portrayal#730):
   every port and every empty bay. A bay holding a card is a container that
   takes no line, and counting it overstated a modular chassis by its seated

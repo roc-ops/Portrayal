@@ -180,10 +180,16 @@ def test_waivers_have_not_become_the_answer():
     waiver records that disproof. What would let this go back to six is a coverage
     test that sums the windows a multi-window lamp declares - a change to L39, not to
     the device. Its L61 offsets, by contrast, went to the baseline like every other
-    device's, because L61 is deliberately never waived (see the module docstring)."""
+    device's, because L61 is deliberately never waived (see the module docstring).
+
+    EIGHT IS THE DS6001's L125 (#734), and its fix is wrong for the same reason.
+    L125 asks a rack device for `ru`, and the DS6001 is an Open Rack v3 tray: 2OU
+    of 48 mm, a unit `ru` cannot hold - 96 mm is 2.16 U and the tray does not fit
+    an EIA rack at all - so the only `ru` that would silence it is invented. What
+    would let this go back to seven is an Open Rack value for `chassis.mount`."""
     waived = [p for p in libwalk.iter_devices([LIB])
               if ((yaml.safe_load(p.read_text()) or {}).get("lint") or {}).get("waive")]
-    assert len(waived) <= 7, f"{len(waived)} devices waive a rule: {[p.parent.name for p in waived]}"
+    assert len(waived) <= 8, f"{len(waived)} devices waive a rule: {[p.parent.name for p in waived]}"
 
 
 # --- render's half ------------------------------------------------------------

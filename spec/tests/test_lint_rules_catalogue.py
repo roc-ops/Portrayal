@@ -224,7 +224,7 @@ ISSUED = {
     "L122": "component, device",
     "L123": "library",
     "L124": "library",
-    "L125": "device",   # reserved here; lands with roc-ops/Portrayal#741
+    "L125": "device",
     "L126": "device",
 }
 
