@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: heatsink-1u-16g
-version: 1.0.0
+version: 1.1.0
 class: mechanical
 behaviour: mounts
 profile: server
@@ -23,6 +23,19 @@ provenance:
     drawn and not measured.
 size: {w: 82.1, h: 119.1}
 size-confidence: {w: measured, h: measured}
+relief:
+  wall: '#6d737a'
+  features:
+  - node: block
+    out: 33.1
+    color: '#8a9096'
+    confidence: estimated
+    source: >-
+      borrowed from dell/heatsink-1u-14g@1, the 14th-generation 1U heatsink,
+      whose 33.1 Dell's R740xd service model measures (cad y 7.7 to 40.8). The
+      R660 model carries no finned block (see provenance/height), and both are
+      1U heatsinks under a lid at the same height. Without it the block built
+      nothing in 3D and the sockets showed bare board.
 elements:
   block: {at: [0.0, 0.0], size: [82.1, 119.1], class: bezel}
 skins: [default]

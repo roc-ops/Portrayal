@@ -47,7 +47,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/mrj21@1` | component | port | 28.92 × 13.45 | mrj21 | 0 | 2 | MRJ21 ("mini-RJ21") 48-position shielded receptacle - two stepped blades with twelve contacts on each face, c… |
 | `std/osfp@1` | component | port | 23.1 × 13.5 × 47 | osfp | 9 | 4 | OSFP cage cutout (800G, one port per opening; the belly-to-belly rows of a 2RU face are two of these, not one… |
 | `std/pcie-bracket-fh@2` | component | bracket | 120.02 × 21.59 | pcie-bracket-fh | 0 | 34 | Standard (full height) PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the ch… |
-| `std/pcie-bracket-lp@1` | component | bracket | 79.2 × 18.42 | pcie-bracket-lp | 0 | 35 | Low profile PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the chassis wall,… |
+| `std/pcie-bracket-lp@1` | component | bracket | 79.2 × 18.42 | pcie-bracket-lp | 0 | 38 | Low profile PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the chassis wall,… |
 | `std/qsfp-dd@1` | component | port | 19 × 10 × 37 | qsfp-dd | 32 | 19 | QSFP-DD cage cutout (400G, backward-compatible faceplate) |
 | `std/qsfp-ganged@1` | component | port | 18.5 × 9.58 × 37 | qsfp-ganged | 50 | 25 | QSFP family per-port opening inside a ganged cage block - the cage aperture, with the SFF-8661 module envelop… |
 | `std/qsfp28@1` | component | port | 20 × 10.15 × 37 | qsfp28 | 2 | 48 | QSFP28 cage cutout (100G, 4 lanes) |
@@ -519,7 +519,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/fan-1u-16g@1` | module | fan | 82 × 56 × 40 |  | 1 | 0 | Dual-rotor hot-plug fan module of a 16th-generation 1U PowerEdge (R660) seen from above - two 40 mm fans in o… |
 | `dell/fan-bracket-1u-16g@1` | component | mechanical | 428.3 × 70.6 × 40 |  | 1 | 0 | The fan bracket of a 16th-generation 1U PowerEdge (R660) seen from above - the frame across the chassis that … |
 | `dell/fan-cage-14g@1` | component | mechanical | 408.9 × 71.5 × 78.08 |  | 1 | 1 | The cooling fan cage of a 14G PowerEdge seen from above - the frame across the full width of the chassis, bet… |
-| `dell/heatsink-1u-14g@1` | component | mechanical | 82.2 × 128.1 |  | 1 | 1 | The 1U processor heatsink of a 14G PowerEdge seen from above - a finned block the width of the socket, one pe… |
+| `dell/heatsink-1u-14g@1` | component | mechanical | 82.2 × 128.1 |  | 1 | 2 | The 1U processor heatsink of a 14G PowerEdge seen from above - a finned block the width of the socket, one pe… |
 | `dell/heatsink-1u-16g@1` | component | mechanical | 82.1 × 119.1 |  | 1 | 0 | The 1U processor heatsink of a 16th-generation PowerEdge (R660) seen from above - a finned block over each so… |
 | `dell/idrac-direct-symbol@1` | component | silkscreen | 3.8 × 3.8 |  | 1 | 0 | The wrench Dell prints beside an iDRAC Direct micro USB port - the mark that says this socket reaches the ser… |
 | `dell/information-tag-1u-16g@1` | component | tab | 63.55 × 2.03 |  | 1 | 0 | The information tag of a 16th-generation 1U PowerEdge (R660) - Dell's slide-out label panel, of which the fro… |
