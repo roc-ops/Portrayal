@@ -1417,7 +1417,8 @@ export function restyleText(text, scope) {
 // de-stroke the faceplate before it becomes a texture; the geometry draws the
 // edge.
 export function squareFaceplate(text) {
-  return text.replace(/<rect\b[^>]*\bid="chassis-faceplate"[^>]*>/,
+  // a <path> on a bevelled chassis, whose outline has its corners cut (#735)
+  return text.replace(/<(?:rect|path)\b[^>]*\bid="chassis-faceplate"[^>]*>/,
     m => m.replace(/\s(?:rx|ry|stroke|stroke-width)="[^"]*"/g, ''));
 }
 

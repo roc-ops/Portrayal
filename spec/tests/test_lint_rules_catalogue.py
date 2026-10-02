@@ -224,11 +224,16 @@ ISSUED = {
     "L122": "component, device",
     "L123": "library",
     "L124": "library",
+    "L125": "device",
+    "L126": "device",
 }
 
 
 def test_every_issued_code_is_live_or_retired():
-    gone = sorted(set(ISSUED) - set(lint.RULES) - set(lint.RETIRED), key=lambda c: int(c[1:]))
+    # a RESERVED code is issued to a rule landing on another branch, and is
+    # counted as present until it does (lint.RESERVED)
+    gone = sorted(set(ISSUED) - set(lint.RULES) - set(lint.RETIRED) - set(lint.RESERVED),
+                  key=lambda c: int(c[1:]))
     assert not gone, (f"issued codes in neither RULES nor RETIRED: {gone}. A deleted rule's "
                       "code moves to lint.RETIRED with a sentence; it is never dropped or reused")
 

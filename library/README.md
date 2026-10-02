@@ -37,6 +37,7 @@ export it to a DCIM without a checkout of this repository.
 | file | what a consumer gets from it |
 |---|---|
 | `<device>.<config>.<view>.svg` | the drawing, with `--` DOM ids and `/` data-paths; its `<metadata>` names the source it was drawn from by `source-sha256`. **Written once per distinct drawing**: configurations that draw a face identically share one file, named after the first of them, so find a configuration's face through `configs[].files` in `<device>.configs.json`, never by building the name |
+| `<device>.<config>.<view>.elements.json` | beside every drawing, under the same name: each element it draws as one row (address, class, ref, media, speed, group, lamp states, owners, inner), with its box and connection points in the face's millimetres and its `parent` in the Explorer's tree, so a server can read the tree without a DOM. The shape is in `docs/format-stability.md` |
 | `<device>.source.json` | the whole source manifest, every view of it — once per device; the digest in each drawing is of these exact bytes |
 | `<device>.configs.json` | the device's configurations — each with its `kind` (base, orderable, example, model), its `airflow` (front-to-back, back-to-front, side, passive, or `null` where unstated), part numbers, bays, view bindings, and `files`: which drawing each face of it is |
 | `devices.json` | the portfolio index: identity (with `aliases`, the other names a box is sold or listed under), capability, gaps, search blob, and `listings` - which NOS vendors list it |
@@ -59,7 +60,7 @@ family has no upper bound:
 
 | package | holds |
 |---|---|
-| `@portrayal/<vendor>-<device>` | `<device>.configs.json`, `<device>.source.json` and every file `configs[].files` names. The default configuration's `<device>.<view>.svg` copies are left out |
+| `@portrayal/<vendor>-<device>` | `<device>.configs.json`, `<device>.source.json` and every file `configs[].files` names, each with its `.elements.json`. The default configuration's `<device>.<view>.svg` copies, and their elements files, are left out |
 | `@portrayal/components` | every file under `components/` |
 | `@portrayal/index` | the library-wide JSON above, and `packages.json`: which package and version holds each device, and a vendor → family → device tree |
 

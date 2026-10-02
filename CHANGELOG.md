@@ -25,6 +25,39 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- `chassis.mount` in the device manifest: `rack` (the default), `din-rail`,
+  `wall` or `desktop`. Lint L125 warns on a rack device with no `ru` and
+  refuses `ru` on a box that is not racked (roc-ops/Portrayal#734).
+- `chassis.bevel` in the device manifest: edges named by the two faces that
+  meet at them, cut back by `size` mm - one number at 45 degrees, or a pair
+  `[a, b]` taking a different amount off each face. A bevelled face's
+  `chassis-faceplate` is a `<path>` of the solid's outline, its bevel strips
+  are drawn in `chassis-bevels`, and `<device>.configs.json` carries the
+  solid's polygons as `chassis.solid` for the 3D viewer (`@portrayal/kit`
+  exports `./bevel`). Lint L126 checks the bevel and keeps parts on the flat
+  face (roc-ops/Portrayal#735).
+- **Cables in the draw.io exports** (roc-ops/Portrayal#728): `rackDiagram`,
+  `toDrawio` and `diagram` take `cables` (a rack plan's
+  `{id, a: {item, path, view}, b, media, purpose, label, length}`) and write
+  each as an edge between two port cells. A cable whose ends are on different
+  pages becomes a labelled stub on each; one with an end not drawn is listed in
+  a notes comment with the reason. `cableStyle` sets the colours, and
+  `rackCables` returns the notes as a list. Without `cables` the output is
+  unchanged.
+- **An elements file beside every compiled face**:
+  `<device>[.<config>].<view>.elements.json` lists each element the face
+  draws, by its `path` (or `of` for a projection), with its `id`, `class`,
+  `ref`, `media`, `speed`, `group`, `group-role`, `rel-pos`, `states`, `for`
+  and `inner`, its box and connection points in the face's millimetres, the bay or cage it
+  is seated in, and its `parent` in the Explorer's tree, under a header naming
+  the device, configurations, view, viewBox, `source-sha256` and component
+  versions. A server can read a face's tree without a DOM or a layout pass.
+  The nesting rule moved out of `kit/shell.js` into `faceTree` in
+  `@portrayal/kit/swap`, which the Explorer and the build both follow; the
+  Explorer's tree is unchanged. Each device's npm package carries its faces'
+  elements files. The file is new, so the dist `contract` number is unchanged
+  at 2; [docs/format-stability.md](docs/format-stability.md) gives its shape
+  (roc-ops/Portrayal#727).
 - **Diagram exports in the kit**: `@portrayal/kit/drawio`,
   `@portrayal/kit/omnigraffle` and `@portrayal/kit/zones`, which were written
   for portrayal.dev and are now the kit's own. Each export is the face as a
@@ -76,6 +109,17 @@ names the ref that replaces it.
   class), and no 800G prefix is documented.
 
 ### Changed
+- The DCIM exports no longer call every device without `ru` a 1U full-depth
+  rack device. A box that is not racked exports `u_height: 0`, not full depth,
+  with its mounting in the comments (ReadyLinks GL-8XEP, Halny HLX-TGV), and
+  the Dell R740xd exports at its real 2U. A DCIM that imported these types
+  holds the old height until they are re-imported (roc-ops/Portrayal#734).
+- **`toDrawio()`'s `ports` is what a line can be drawn to** (roc-ops/Portrayal#730):
+  every port and every empty bay. A bay holding a card is a container that
+  takes no line, and counting it overstated a modular chassis by its seated
+  cards. `connectable(ports)` in `drawio.js` gives the same count. `toGraffle()`
+  is unchanged - every port and bay there is a magnetised shape - and its
+  `ports` now says so.
 - **BREAKING for DCIM data already imported.** The Edgecore DCS510's AC builds
   export as `9716-32D-O-AC-F-EU` and `9716-32D-O-AC-B-EU`, not
   `9716-32D-O-A C-F-UK` and `9716-32D-O-A C-B-UK`, under Edgecore and its

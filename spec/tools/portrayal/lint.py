@@ -121,6 +121,7 @@ from pathlib import Path
 import yaml
 
 from portrayal import attrsections as attrs_mod
+from portrayal import bevel as bevel_mod
 from portrayal import facets
 from portrayal import libwalk
 from portrayal import capability
@@ -289,6 +290,8 @@ RULES = {
     "L122": ("component, device", "a `cable-od` value is a diameter in millimetres from 2 to 15 - on a field's default, a composing part's attrs, and a device placement's attrs - written as plain ASCII digits and a point, the only number the build and the kit draw", "give the cable's outside diameter in mm as a number, from the product's own document"),
     "L124": ("library",    "under one NOS vendor, no two listings export the same DCIM model, and no alias is claimed by two listings unless each marks it `shared`", "give one listing a configuration `model` or its own SKU; drop the duplicate alias, or mark it `shared: true` in every claimant with a `note`"),
     "L123": ("library",    "one module, one bay size - every bay that accepts a module, in any device or carrier, reserves the same size for it, to within a millimetre", "reserve one figure everywhere - the module's own `insert` or `size`; a difference that is real stays in the baseline, with the reason in the provenance of the chassis that reserves more (the warning is filed on the module, so a chassis `lint.waive` cannot clear it)"),
+    "L125": ("device",     "a device says how it is installed - a rack device (the default `mount`) states `ru` (warning), and a device whose `chassis.mount` is `din-rail`, `wall` or `desktop` states none (error)", "give a rack device its `ru` from the datasheet; for a box that is not racked, state `chassis.mount` and drop `ru`, so its DCIM export says `u_height: 0` rather than an invented rack unit"),
+    "L126": ("device",     "a bevelled chassis is a solid the box can have - every edge named by two faces that meet, none bevelled twice, no face cut away and no bevel swallowed by its neighbours - its face drawings are the chassis's own size, and every part, bay and cutout on a face lies on the flat face rather than on a bevel", "name edges as two adjacent faces (`front-left`), shrink a bevel that cuts too much, drop a view `size` that differs from the chassis on a bevelled face, or move the part onto the flat face - spec/tools/portrayal/bevel.py says where it is"),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -6158,6 +6161,105 @@ def lint_device_power_home(path, data):
                           "the chassis and let a configuration override it where it differs")
 
 
+def lint_device_mount(path, data):
+    """L125: a device says how it is installed (#734).
+
+    `ru` was the only mounting fact the schema had, so a box that is not racked
+    simply left it out - and the DCIM export, reading `ch.get("ru", 1)`, called
+    every one of them a 1U full-depth rack device. The ReadyLinks GL-8xEP is a
+    wall-mount unit and exported as one; the R740xd is a 2U server and exported
+    as 1U. An omission and a non-rack box looked identical. `mount` makes the
+    difference a statement: absent means `rack`, and a rack device without `ru`
+    is the omission it always was.
+    """
+    ch = data.get("chassis") or {}
+    mount = ch.get("mount", "rack")
+    # A MISSING `ru` WARNS; a contradiction refuses. The one rack device left
+    # without rack units is an Open Rack v3 tray, sized in a unit `ru` cannot
+    # hold, and a waiver - which only a warning can take - is where it says so.
+    if mount == "rack" and "ru" not in ch:
+        warn(path, "L125", "a rack device states `ru`. If this box is not racked, "
+                          "say how it is installed with `chassis.mount` "
+                          "(`din-rail`, `wall`, `desktop`)")
+    elif mount != "rack" and "ru" in ch:
+        err(path, "L125", f"`chassis.mount` is {mount!r}, so `ru` {ch['ru']!r} "
+                          "describes a rack this box is not in - drop it")
+def _inside(pt, poly, tol=0.05):
+    """A point inside a convex polygon, to within `tol` mm of its edges."""
+    sign = 0
+    for i, a in enumerate(poly):
+        b = poly[(i + 1) % len(poly)]
+        ex, ey = b[0] - a[0], b[1] - a[1]
+        n = math.hypot(ex, ey) or 1
+        side = (ex * (pt[1] - a[1]) - ey * (pt[0] - a[0])) / n
+        if abs(side) <= tol:
+            continue
+        s = 1 if side > 0 else -1
+        if sign and s != sign:
+            return False
+        sign = s
+    return True
+
+
+def lint_device_bevel(path, data, lib_roots):
+    """L126: a bevelled chassis is a solid the box can have, and parts sit on
+    the flat (#735).
+
+    `chassis.bevel` cuts the box by one plane per edge (bevel.py). What can go
+    wrong is the bevel itself - an edge that is not one, or bevels that eat a
+    face - and what is placed on the face: the drawing keeps the chassis's full
+    size and its coordinates, so a port placed where it always could be may now
+    sit on a 45-degree strip of metal no port is mounted on. Bays and cutouts
+    are held to the flat for the same reason.
+    """
+    ch = data.get("chassis") or {}
+    if not ch.get("bevel"):
+        return
+    try:
+        bevels = bevel_mod.parse(ch)
+        bevel_mod.solid(ch["width"], ch["height"], ch["depth"], bevels)
+    except bevel_mod.BevelError as e:
+        err(path, "L126", f"chassis.bevel: {e}")
+        return
+    w, h, d = ch["width"], ch["height"], ch["depth"]
+    for vname, view in (data.get("views") or {}).items():
+        view = view or {}
+        face = view.get("face") or vname
+        if face not in bevel_mod.FACES:
+            continue
+        el = bevel_mod.elevation(face, w, h, d, bevels)
+        if not el["strips"] and bevel_mod.is_rectangle(el["outline"], *bevel_mod.draw_size(face, w, h, d)):
+            continue
+        dw, dh = bevel_mod.draw_size(face, w, h, d)
+        size = view.get("size")
+        if size and (abs(size["w"] - dw) > 0.01 or abs(size["h"] - dh) > 0.01):
+            err(path, "L126", f"{vname}: the view is {size['w']:g} x {size['h']:g} but the "
+                              f"bevelled chassis draws this face {dw:g} x {dh:g}. A bevelled "
+                              "face is drawn at the chassis's own size")
+            continue
+        flat = el["flat"]
+        vp = view_parts(view)
+        boxes = []
+        for q in vp["placements"]:
+            if not q.get("at") or q.get("behind"):
+                continue
+            sz = _instance_size(q.get("ref"), lib_roots)
+            if sz:
+                boxes.append((q.get("id", "?"), facets.projected_box(q["at"], *sz, q.get("rotate"), None)))
+        for kind in ("bays", "cutouts"):
+            for q in vp[kind]:
+                at, sz = q.get("at"), q.get("size")
+                if at and isinstance(sz, dict) and "w" in sz:
+                    boxes.append((q.get("id", kind[:-1]), (at[0], at[1], at[0] + sz["w"], at[1] + sz["h"])))
+        for pid, (x0, y0, x1, y1) in boxes:
+            off = [c for c in ((x0, y0), (x1, y0), (x1, y1), (x0, y1)) if not _inside(c, flat)]
+            if off:
+                err(path, "L126", f"{vname}/{pid}: ({x0:.2f},{y0:.2f})-({x1:.2f},{y1:.2f}) runs onto "
+                                  "a bevel - parts are placed on the flat face, "
+                                  "x " + "..".join(f"{v:.2f}" for v in (min(p[0] for p in flat), max(p[0] for p in flat)))
+                                  + ", y " + "..".join(f"{v:.2f}" for v in (min(p[1] for p in flat), max(p[1] for p in flat))))
+
+
 # A SUPPLY'S FEED, READ OFF ITS COMPONENT NAME. The library names supplies
 # `psu-ac-650`, `psu-132-dc`, `agr560-psu-ac`, `amx-3200-48v-psu` - the feed is a
 # token of the name wherever the part is feed-specific, and a part whose name
@@ -10455,11 +10557,13 @@ def main():
                 lint_device_key_order(f, d)
                 lint_device_airflow_home(f, d)
                 lint_device_power_home(f, d)
+                lint_device_mount(f, d)
                 lint_device_power_stated(f, d)
                 lint_device_provenance_confidence(f, d)
                 lint_quoted_prose(f, d)
                 lint_device_component_attrs_resolve(f, d)
                 lint_device_spanned_exclusion(f, d, args.library)
+                lint_device_bevel(f, d, args.library)
                 try:
                     dev_maturity[str(f.parent.relative_to(root / "devices"))] = \
                         d.get("maturity", "draft")
