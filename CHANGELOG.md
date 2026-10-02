@@ -76,6 +76,14 @@ names the ref that replaces it.
   class), and no 800G prefix is documented.
 
 ### Changed
+- **BREAKING for DCIM data already imported.** The Edgecore DCS510's AC builds
+  export as `9716-32D-O-AC-F-EU` and `9716-32D-O-AC-B-EU`, not
+  `9716-32D-O-A C-F-UK` and `9716-32D-O-A C-B-UK`, under Edgecore and its
+  Arrcus, IP Infusion and SONiC listings. Two UK part numbers carried a stray
+  space, which sorted them first; with it removed the EU part number names
+  the type, as for a build whose every part number has a cord. A DCIM that
+  imported the old types keeps them under the old model; re-import under the
+  new one (roc-ops/Portrayal#720).
 - **The DriveNets names leave the UfiSpace hardware** (roc-ops/Portrayal#674).
   Twelve UfiSpace boxes carried their NCP name as an `oem` alias (#518) - the
   S9700-53DX's `NCP-40C` and so on. DriveNets' own listing now carries it
