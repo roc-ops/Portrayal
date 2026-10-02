@@ -9,9 +9,10 @@ renamed under its consumers the day it outgrew the limit. A device is bounded
 by itself. So:
 
 - `@portrayal/<vendor>-<device>` - one device: its `configs.json`, its
-  `source.json` and each distinct face (#665). The default-configuration copies
-  (`<device>.<view>.svg`) are left out; `configs.json` names the default and
-  `files` finds its faces.
+  `source.json` and each distinct face (#665) with its `.elements.json` (#727).
+  The default-configuration copies (`<device>.<view>.svg` and its elements
+  file) are left out; `configs.json` names the default and `files` finds its
+  faces.
 - `@portrayal/components` - the component skins every device shares.
 - `@portrayal/index` - the portfolio: the library-wide JSON (`devices.json`,
   `components.json` and the rest) and `packages.json`, which says which package
@@ -148,6 +149,10 @@ def device_files(dist, name):
     for c in idx["configs"]:
         for f in c.get("files", {}).values():
             out[f] = dist / f
+            # each face's elements file travels with it (#727); a default
+            # copy's is left out, as the default copy of the SVG is
+            ej = f[:-len(".svg")] + ".elements.json"
+            out[ej] = dist / ej
     missing = [k for k, v in out.items() if not v.exists()]
     if missing:
         raise SystemExit(f"{name}: configs.json names files dist does not have: {missing[:5]}")
@@ -241,7 +246,8 @@ def build(dist, out, root, published=None, limit_mb=LIMIT_MB):
             {"device": name, "vendor": ns, "device-version": dev["version"]},
             _readme(f"{who} - Portrayal drawings",
                     f"`{name}.configs.json` lists the configurations; `configs[].files` "
-                    f"names the SVG that draws each face. `{name}.source.json` is the "
+                    f"names the SVG that draws each face, and the `.elements.json` "
+                    f"beside it lists that face's elements. `{name}.source.json` is the "
                     f"source manifest."))
         entries[name] = {"package": pkg, "version": version, "vendor": ns,
                          "manufacturer": dev["manufacturer"], "model": dev["model"],

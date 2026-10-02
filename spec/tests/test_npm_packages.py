@@ -81,6 +81,9 @@ def _dist(tmp, device_version="1.2.0", contract=2, rear=b"<svg>rear</svg>"):
         (dist / f"{name}.front.svg").write_text("<svg>front</svg>")   # the default's copy
         # config b shares a's front and draws its own rear
         (dist / f"{name}.b.rear.svg").write_text("<svg>rear b</svg>")
+        # every face has its elements file beside it (#727), the copy included
+        for face in ("a.front", "a.rear", "front", "b.rear"):
+            (dist / f"{name}.{face}.elements.json").write_text('{"elements": []}')
         (dist / f"{name}.configs.json").write_text(json.dumps({"device": name, "configs": [
             {"name": "a", "files": {"front": f"{name}.a.front.svg", "rear": f"{name}.a.rear.svg"}},
             {"name": "b", "files": {"front": f"{name}.a.front.svg", "rear": f"{name}.b.rear.svg"}},
@@ -99,8 +102,11 @@ def test_one_package_per_device_holding_what_its_configurations_draw(tmp_path):
     assert set(state) == {"@portrayal/acme-box-1", "@portrayal/acme-box-2",
                           "@portrayal/components", "@portrayal/index"}
     got = sorted(p.name for p in (tmp_path / "out" / "acme-box-1").iterdir())
-    assert got == ["LICENSE", "NOTICE", "README.md", "box-1.a.front.svg", "box-1.a.rear.svg",
-                   "box-1.b.rear.svg", "box-1.configs.json", "box-1.source.json",
+    assert got == ["LICENSE", "NOTICE", "README.md",
+                   "box-1.a.front.elements.json", "box-1.a.front.svg",
+                   "box-1.a.rear.elements.json", "box-1.a.rear.svg",
+                   "box-1.b.rear.elements.json", "box-1.b.rear.svg",
+                   "box-1.configs.json", "box-1.source.json",
                    "package.json"], "the default's copy is left out; everything drawn is in"
     pkg = json.loads((tmp_path / "out" / "acme-box-1" / "package.json").read_text())
     assert pkg["name"] == "@portrayal/acme-box-1" and pkg["version"] == "1.2.0"

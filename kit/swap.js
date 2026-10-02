@@ -2264,3 +2264,96 @@ export function ownerPath(el) {
   }
   return null;
 }
+
+// THE FACE'S TREE: each row of faceEntries under the row it lists beneath, the
+// nesting the Explorer shows (shell.js buildTree) and the `parent` render.py
+// writes into every `<face>.elements.json` (#727). One rule, so it lives here
+// where a node test can call it without a page, and the build's Python copy is
+// held to it row for row by spec/tests/test_face_elements_parity.py - a change
+// here that is not made there fails that test, which is the point.
+//
+// Returns the roots; each node is {path, el, kids, projected}, one per path,
+// first element wins. `entries` defaults to faceEntries(root).
+export function faceTree(root, entries = faceEntries(root)) {
+  const byPath = new Map();
+  for (const {path, el: e, projected} of entries) {
+    if (!byPath.has(path)) byPath.set(path, {path, el: e, kids: [], projected});
+  }
+  const roots = [];
+  for (const n of byPath.values()) {
+    const cut = n.path.lastIndexOf('/');
+    let parent = cut < 0 ? null : byPath.get(n.path.slice(0, cut));
+    // A PROJECTION LISTS UNDER WHAT IT IS SEEN THROUGH. `bay-1/module` on the
+    // rear face has no `bay-1` there to nest in; it is drawn inside the panel
+    // cutout the bay names, and that cutout is where the reader looks for it.
+    if (!parent && n.projected) {
+      const home = byPath.get(ownerPath(n.el.parentNode));
+      if (home && home !== n) parent = home;
+    }
+    // `for:` in the manifest - an LED belongs to its port, a button to its module.
+    // Nest under the first target, so an indicator lists under the thing it
+    // indicates rather than in a pile of 52 LEDs somewhere else in the tree.
+    // A cross-view target is written device-absolute, `/rear/psu-0`, and is not
+    // a path in this drawing - a front-view tree cannot nest a rear-view bay,
+    // because the rear-view bay is not here. Nest under the first LOCAL target,
+    // and leave the row where it naturally falls when there is none. The
+    // binding is not dropped: shell.js xrefOf() puts the qualified target on the
+    // row as text, so a front-panel PSU lamp reads "led-ps0 → rear/psu-0"
+    // rather than sitting silently unexplained among the unbound lamps.
+    // A HOLE THAT SOMETHING FILLS IS THAT THING'S APERTURE, NOT A PEER OF IT.
+    // Panel cutouts get a namespaced path, `cutout:<id>`, which has no parent
+    // component in it, so every one of them landed at the root. On the AGR420
+    // that was 74 rows - `cutout:port-0` to `cutout:port-73` - each naming a
+    // hole the port listed three rows above already accounts for.
+    //
+    // The manifest says which is which without being asked: a cutout is
+    // declared, then a component is placed in it under THE SAME id. So a
+    // cutout whose id is also a path is that node's aperture and nests under
+    // it, exactly as a component's own `port-1/aperture/opening` already does.
+    // A cutout nothing names is a feature in its own right and stays - which
+    // is every cutout on every Cisco chassis, where `shelf-0`, `ft-0` and
+    // `esd` are real openings with no module modelled behind them and this row
+    // is the only place the tree admits they exist.
+    if (!parent && n.path.startsWith('cutout:')) {
+      const filled = byPath.get(n.path.slice(7));
+      if (filled && filled !== n) parent = filled;
+    }
+    if (!parent && n.el.getAttribute('data-for')) {
+      const local = n.el.getAttribute('data-for').split(' ').filter(t => t[0] !== '/');
+      // A PART THAT NAMES SEVERAL OWNERS IS NOT A CHILD OF THE FIRST ONE.
+      // The C40G's snap-on filter cover is `for` all four PSU bays, and taking
+      // the first target buried a removable full-width panel inside PSU 1 -
+      // so the owner looking for it in the list could not find it, and the
+      // three other bays it covers said nothing about it.
+      //
+      // Only for PLACED COMPONENTS, which is what data-ref marks. A shared
+      // legend is the opposite case and stays as it was: "0/1" printed between
+      // two ports is a mark, it names both, and nesting it under the first of
+      // an adjacent pair reads correctly. Lifting those out would have put 74
+      // rows back at the top of the AGR420, which is the tree this already fixed.
+      const single = local.length === 1 || !n.el.getAttribute('data-ref');
+      const here = single ? local[0] : null;
+      const owner = here && byPath.get(here);
+      if (owner && owner !== n) parent = owner;
+      // AN INDICATOR WITH ONLY CROSS-VIEW TARGETS STILL BELONGS TO SOMETHING.
+      // Leaving it at the root made it a SIBLING of the chassis row, while the
+      // lamps beside it on the same faceplate - the ones naming a local target
+      // - nested INSIDE that row. One declared group then rendered as two
+      // headings in two places, which is what "why are there two LED sections"
+      // was seeing: DIAG and Location inside the chassis, Fan and the two PSU
+      // lamps outside it, split by nothing more than where the thing each one
+      // watches happens to live.
+      //
+      // The panel is the answer. A lamp pointing at `/rear/psu-1` is screwed to
+      // THIS faceplate and reports on something behind it; the target being
+      // elsewhere says what it watches, never where it is. So fall back to the
+      // chassis - not to the root, which is not a place on the device.
+      if (!parent) {
+        const body = byPath.get('chassis');
+        if (body && body !== n) parent = body;
+      }
+    }
+    (parent ? parent.kids : roots).push(n);
+  }
+  return roots;
+}
