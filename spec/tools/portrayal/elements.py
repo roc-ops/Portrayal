@@ -6,7 +6,7 @@ it - its address, class, ref, media, lamp states, owners - with its box in the
 face's millimetre frame and the tree parent the Explorer gives it.
 
 READ FROM THE DRAWING, NOT FROM THE MANIFEST. Every embedder used to rebuild
-this from the SVG - the Explorer's tree, kit/zones.js, an adjacency importer -
+this from the SVG - the Explorer's tree, kit/zones.js, a cabling importer -
 and each did it a little differently, so the one way to be sure the file and
 the drawing agree is to take the file from the drawing. render.py hands this
 module the element tree it has just serialised; nothing here re-derives a

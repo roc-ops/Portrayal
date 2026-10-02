@@ -1252,6 +1252,12 @@ def comments_for(dev, cfg_name, cfg):
     # have one `model`, so the rest go where a reader of the record sees them.
     if alias_names(dev):
         lines += ["Also sold or listed as: " + ", ".join(alias_names(dev)), ""]
+    # HOW THE BOX IS INSTALLED, where it is not a rack: neither NetBox nor
+    # Nautobot has a device-type field for it, and `u_height: 0` alone does not
+    # tell a DIN-rail switch from a desktop ONT (#734).
+    mount = (dev.get("chassis") or {}).get("mount", "rack")
+    if mount in MOUNT_PROSE:
+        lines += [MOUNT_PROSE[mount], ""]
 
     ds = dev.get("datasheet") or {}
     if ds.get("url"):
@@ -1357,6 +1363,44 @@ def bay_signature(dev, cfg_name):
     return tuple(sorted(ids))
 
 
+def u_height(ch):
+    """Rack units for a racked box, and 0 for one that is not (#734).
+
+    This read `ch.get("ru", 1)`, so every device without `ru` - a wall-mount
+    ReadyLinks unit, a desktop ONT, a 2U server whose `ru` had been left out -
+    exported as a 1U rack device. L125 now makes a rack device state `ru`, and
+    a box mounted any other way states `chassis.mount` instead.
+
+    Both schemas take `u_height` as a number, minimum 0, multiple of 0.5, and
+    neither has a field for how a box is mounted (schema/devicetype.json at
+    netbox-community/devicetype-library 52d359bd and nautobot/devicetype-library
+    c86556e9). Upstream device types that are not racked are written exactly
+    this way - Aoni B08 and CNB VP1A, for two, say `u_height: 0` and
+    `is_full_depth: false`.
+    """
+    if ch.get("mount", "rack") != "rack":
+        return 0.0
+    return float(ch.get("ru", 1))
+
+
+def is_full_depth(ch):
+    """True for a racked box, as before; false for one that is not (#734).
+
+    `is_full_depth` says whether a device occupies both faces of the rack, which
+    is a question with no meaning for a box on a DIN rail or a wall. Rack devices
+    keep the `True` this always wrote - whether a short rack box is full depth is
+    a separate question, and not this change's.
+    """
+    return ch.get("mount", "rack") == "rack"
+
+
+MOUNT_PROSE = {
+    "din-rail": "Mounts on a DIN rail (IEC 60715); not rack-mounted.",
+    "wall": "Wall-mounted; not rack-mounted.",
+    "desktop": "Desktop unit; not rack-mounted.",
+}
+
+
 def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None):
     ch = dev.get("chassis", {})
     cfg = cfg or {}
@@ -1403,8 +1447,8 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None):
         "manufacturer": dev["manufacturer"],
         "model": model,
         "slug": slugify(f"{dev['manufacturer']}-{model}"),
-        "u_height": float(ch.get("ru", 1)),
-        "is_full_depth": True,
+        "u_height": u_height(ch),
+        "is_full_depth": is_full_depth(ch),
     }
     if part:
         out["part_number"] = part
