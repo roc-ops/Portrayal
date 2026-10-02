@@ -37,6 +37,7 @@ from portrayal.manifest import (presented_point, back_hosts, back_parts, key_on_
                       config_power, device_options)
 from portrayal import capability
 from portrayal import bevel as _bevel
+from portrayal import elements as elements_mod
 from portrayal import facets as _facets
 TOOL_VERSION = "0.1.0"
 # profiles.yaml lives with the schemas, and every tool that needs it can find it
@@ -3700,8 +3701,11 @@ def _inputs(device, device_yaml, lib):
     it costs a second, and skipping something that did leaves a stale drawing
     that looks fresh and is believed. When in doubt, rebuild.
     """
+    # elements.py writes the file beside each face, so a change to it changes
+    # an output as surely as a change to this file does
     files = {Path(device_yaml), Path(__file__),
-             Path(__file__).with_name("manifest.py")}
+             Path(__file__).with_name("manifest.py"),
+             Path(__file__).with_name("elements.py")}
     seen, queue = set(), list(component_refs(device))
     while queue:
         ref = queue.pop()
@@ -3753,6 +3757,10 @@ def _outputs(device, configs, default_cfg, outdir):
             names.add(f"{device['name']}.{cfg_name}.__unbuilt__.svg")   # never exists: stale
             continue
         names.update(listed[cfg_name].values())
+    # EVERY FACE HAS ITS ELEMENTS FILE (#727), so a dist built before there
+    # were any - or one an elements file is missing from - is stale, and
+    # `--if-stale` writes them rather than trusting the SVGs beside them.
+    names.update(elements_mod.elements_name(n) for n in list(names) if n.endswith(".svg"))
     return {Path(outdir) / n for n in names}
 
 
@@ -4400,7 +4408,9 @@ def main():
     # `files` in configs.json. Configurations are rendered in the same order
     # every build, so the names are deterministic.
     old = set(_face_files(device, outdir))
-    written, files = {}, {}
+    # `faces` is each distinct drawing's elements document, by its SVG's name;
+    # `copies` maps each default-configuration copy to the face it copies
+    written, files, faces, copies = {}, {}, {}, {}
     for cfg_name, cfg in configs.items():
         # THE FACE IS THE NAME, whichever panel this configuration binds to it.
         # A consumer asks for `front` and gets this configuration's front.
@@ -4416,13 +4426,27 @@ def main():
             if key not in written:
                 written[key] = f"{device['name']}.{cfg_name}.{view_name}.svg"
                 (outdir / written[key]).write_text(data)
+                # READ FROM THE TREE JUST SERIALISED, so the file and the
+                # drawing cannot disagree (elements.py says why)
+                faces[written[key]] = elements_mod.face_elements(svg, cfg_name, view_name)
             files[cfg_name][view_name] = written[key]
             if cfg_name == default_cfg:
                 (outdir / f"{device['name']}.{view_name}.svg").write_text(data)
+                copies[f"{device['name']}.{view_name}.svg"] = written[key]
         print(f"wrote config {cfg_name}")
     # a face the last build wrote and this one shares is stale, not a spare
     for stale in old - {n for f in files.values() for n in f.values()}:
         (outdir / stale).unlink(missing_ok=True)
+        (outdir / elements_mod.elements_name(stale)).unlink(missing_ok=True)
+    # THE ELEMENTS FILES, written once every configuration has said which faces
+    # it draws, so a shared face lists all of them in `configs`. A default
+    # copy is the same bytes as the file it copies, exactly as its SVG is.
+    for name, doc in faces.items():
+        doc["configs"] = sorted(c for c, f in files.items() if f.get(doc["view"]) == name)
+        text = elements_mod.dumps(doc)
+        (outdir / elements_mod.elements_name(name)).write_text(text)
+        for copy_name in sorted(c for c, of in copies.items() if of == name):
+            (outdir / elements_mod.elements_name(copy_name)).write_text(text)
     (outdir / f"{device['name']}.source.json").write_bytes(source_bytes(device))
     ch = device.get("chassis") or {}
     # What this model can and cannot do, and why. The viewer has to know before
