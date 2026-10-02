@@ -19,7 +19,7 @@
 format: 1
 kind: device
 name: r660
-version: 0.1.2
+version: 1.0.0
 maturity: draft
 manufacturer: Dell
 model: PowerEdge R660
@@ -196,12 +196,14 @@ provenance:
     confidence: drawing
     note: >-
       drawing - the riser bays are each riser's extent on the masters: riser 2
-      107.0..270.6 (the vent block to its latch) and riser 3 272.8..362.6 on the
-      3 x LP master, riser 2Q 107.0..293.5 on the Gen5 master, risers 1 and 4
+      107.0..270.6 (the vent block to its latch) and riser 3 270.6..362.6 on the
+      3 x LP master - riser 3 starts where riser 2 ends rather than at the
+      master's 272.8, and is listed before riser 2 so riser 2's cage covers the
+      end of slot 3's bracket tip, which Dell's service model puts at 268.5 - riser 2Q 107.0..293.5 on the Gen5 master, risers 1 and 4
       107.0..227.6 and 227.6..362.6 on the 2 x FH master, all at y 2.2, 19.8
       tall like dell/riser-3-blank-16g@1. The slots are the risers' own bays, on
-      their cage's windows - the low-profile windows 70.0 x 18.42 centred on the
-      master's vent fields (157.63, 229.41, 313.70) at y 4.12, as before. The
+      their cage's windows, each cut to a seated bracket's full-height body (see
+      dell/riser-2-lp-cage-16g@1, provenance/windows). The
       riser-3 latch moved off the chassis onto riser 3's cage: the masters draw
       it only where riser 3 is fitted, and vents there on the configuration 6
       and 8 masters, so as chassis decor it was wrong for three configurations.
@@ -265,7 +267,9 @@ gaps:
       leaves riser 2Q (configuration 6) and the full-height risers 1P and 4P
       (configuration 3) out, rather than borrow an outline. The model also
       begins both risers 20 mm behind the rear wall; the plans are clipped at
-      the wall.
+      the wall. Re-read at 1.0.0, when riser 3's bay was widened to 270.6 and
+      its slot returned to the model's 268.5: still true, and no gap opened or
+      closed by that change - the other four do not concern riser 3.
     wanted: >-
       a service model, figure or top photograph with riser 2Q or the
       full-height risers fitted
@@ -1415,16 +1419,18 @@ views:
         # THE SLOTS ARE THE RISERS'. Each riser brings its slot bays and the cage
         # that prints their numbers; the configuration chooses the riser, and
         # the riser variants that share a cage share its face.
+        # RISER 3 BEFORE RISER 2: riser 2's cage paints over the end of slot 3's
+        # bracket tip, which reaches 2.1 under it, as the hardware hides it.
+        - {id: riser-3, at: [270.6, 2.2], size: {w: 92.0, h: 19.8},
+           accepts: [dell/riser-3a-16g@1, dell/riser-3p-16g@1, dell/riser-3q-16g@1, dell/riser-3r-16g@1], default: dell/riser-3a-16g@1,
+           group: risers, rel-pos: 3,
+           plan: {view: top, at: [71.4, 0.0], in: system-board, under: [system-cover]},
+           only-in: [sff10-rc1-2a3a, sff8sf-rc1-2a3a, nobp-rc1-2a3a, e3s16-rc1-2a3a, e3s14-rc1-2a3a, sff10-rc2-2p3p, sff8sf-rc2-2p3p, nobp-rc2-2p3p, e3s16-rc2-2p3p, e3s14-rc2-2p3p, sff10-rc4-2r3r, sff8sf-rc4-2r3r, nobp-rc4-2r3r, e3s16-rc4-2r3r, e3s14-rc4-2r3r, sff10-rc5-2a3q, sff8sf-rc5-2a3q, nobp-rc5-2a3q, e3s16-rc5-2a3q, e3s14-rc5-2a3q, sff10-rc7-3p-rear2, sff10-rc1-2a3a-populated]}
         - {id: riser-2, at: [107.0, 2.2], size: {w: 163.6, h: 19.8},
            accepts: [dell/riser-2a-16g@1, dell/riser-2p-16g@1, dell/riser-2r-16g@1], default: dell/riser-2a-16g@1,
            group: risers, rel-pos: 2,
            plan: {view: top, at: [163.4, 0.0], in: system-board, under: [system-cover]},
            only-in: [sff10-rc1-2a3a, sff8sf-rc1-2a3a, nobp-rc1-2a3a, e3s16-rc1-2a3a, e3s14-rc1-2a3a, sff10-rc2-2p3p, sff8sf-rc2-2p3p, nobp-rc2-2p3p, e3s16-rc2-2p3p, e3s14-rc2-2p3p, sff10-rc4-2r3r, sff8sf-rc4-2r3r, nobp-rc4-2r3r, e3s16-rc4-2r3r, e3s14-rc4-2r3r, sff10-rc5-2a3q, sff8sf-rc5-2a3q, nobp-rc5-2a3q, e3s16-rc5-2a3q, e3s14-rc5-2a3q, sff10-rc8-2a, sff8sf-rc8-2a, nobp-rc8-2a, e3s16-rc8-2a, e3s14-rc8-2a, sff10-rc1-2a3a-populated]}
-        - {id: riser-3, at: [272.8, 2.2], size: {w: 89.8, h: 19.8},
-           accepts: [dell/riser-3a-16g@1, dell/riser-3p-16g@1, dell/riser-3q-16g@1, dell/riser-3r-16g@1], default: dell/riser-3a-16g@1,
-           group: risers, rel-pos: 3,
-           plan: {view: top, at: [71.4, 0.0], in: system-board, under: [system-cover]},
-           only-in: [sff10-rc1-2a3a, sff8sf-rc1-2a3a, nobp-rc1-2a3a, e3s16-rc1-2a3a, e3s14-rc1-2a3a, sff10-rc2-2p3p, sff8sf-rc2-2p3p, nobp-rc2-2p3p, e3s16-rc2-2p3p, e3s14-rc2-2p3p, sff10-rc4-2r3r, sff8sf-rc4-2r3r, nobp-rc4-2r3r, e3s16-rc4-2r3r, e3s14-rc4-2r3r, sff10-rc5-2a3q, sff8sf-rc5-2a3q, nobp-rc5-2a3q, e3s16-rc5-2a3q, e3s14-rc5-2a3q, sff10-rc7-3p-rear2, sff10-rc1-2a3a-populated]}
         - {id: riser-2q, at: [107.0, 2.2], size: {w: 186.5, h: 19.8},
            accepts: [dell/riser-2q-16g@1], default: dell/riser-2q-16g@1, group: risers, rel-pos: 2,
            only-in: [sff10-rc6-2q, sff8sf-rc6-2q, nobp-rc6-2q, e3s16-rc6-2q, e3s14-rc6-2q]}

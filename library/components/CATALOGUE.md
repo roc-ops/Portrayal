@@ -593,15 +593,15 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/riser-2r-16g@1` | module | riser | 163.6 × 19.8 × 246.9 |  | 1 | 0 | Dell riser 2R of the PowerEdge R660 - slot 1 and slot 2 on dell/riser-2-lp-cage-16g@1, fitted in riser config… |
 | `dell/riser-3-blank-16g@1` | module | blank | 89.8 × 19.8 |  | 1 | 5 | The vented plate a 16th-generation 1U PowerEdge (R660) fits where riser 3 is absent beside a riser 2 with two… |
 | `dell/riser-3-blank-gen5-16g@1` | module | blank | 68.9 × 19.8 |  | 1 | 0 | The vented plate a 16th-generation 1U PowerEdge (R660) fits where riser 3 is absent beside the Gen5 R2Q riser… |
-| `dell/riser-3-lp-cage-16g@1` | component | riser | 89.8 × 19.8 |  | 0 | 4 | the riser 3 cage of a 16th-generation 1U PowerEdge (R660) - one low-profile window, slot number 3 printed abo… |
+| `dell/riser-3-lp-cage-16g@1` | component | riser | 92 × 19.8 |  | 0 | 4 | the riser 3 cage of a 16th-generation 1U PowerEdge (R660) - one low-profile window, slot number 3 printed abo… |
 | `dell/riser-3-plan-16g@1` | component | mechanical | 92.6 × 252.8 |  | 0 | 4 | riser 3 of the PowerEdge R660 (3A, 3P, 3Q, 3R) seen from above - the cage roof over its low-profile card and … |
 | `dell/riser-3-plate-14g@1` | component | riser | 107.59 × 41.68 |  | 0 | 2 | the riser 3 plate on a 14th-generation PowerEdge - two full-height windows, shared by risers 3A and 3B |
 | `dell/riser-3a-14g@2` | module | riser | 107.59 × 41.68 × 184.8 |  | 1 | 0 | Dell riser 3A - 2 wired slots on the shared riser 3 plate |
-| `dell/riser-3a-16g@1` | module | riser | 89.8 × 19.8 × 219.8 |  | 1 | 0 | Dell riser 3A of the PowerEdge R660 - slot 3 on dell/riser-3-lp-cage-16g@1, fitted in riser configuration 1 |
+| `dell/riser-3a-16g@1` | module | riser | 92 × 19.8 × 219.8 |  | 1 | 0 | Dell riser 3A of the PowerEdge R660 - slot 3 on dell/riser-3-lp-cage-16g@1, fitted in riser configuration 1 |
 | `dell/riser-3b-14g@2` | module | riser | 107.59 × 41.68 × 184.8 |  | 1 | 0 | Dell riser 3B - 2 wired slots on the shared riser 3 plate |
-| `dell/riser-3p-16g@1` | module | riser | 89.8 × 19.8 × 219.8 |  | 1 | 0 | Dell riser 3P of the PowerEdge R660 - slot 3 on dell/riser-3-lp-cage-16g@1, fitted in riser configurations 2 … |
-| `dell/riser-3q-16g@1` | module | riser | 89.8 × 19.8 × 219.8 |  | 1 | 0 | Dell riser 3Q of the PowerEdge R660 - slot 3 on dell/riser-3-lp-cage-16g@1, fitted in riser configuration 5 |
-| `dell/riser-3r-16g@1` | module | riser | 89.8 × 19.8 × 219.8 |  | 1 | 0 | Dell riser 3R of the PowerEdge R660 - slot 3 on dell/riser-3-lp-cage-16g@1, fitted in riser configuration 4 |
+| `dell/riser-3p-16g@1` | module | riser | 92 × 19.8 × 219.8 |  | 1 | 0 | Dell riser 3P of the PowerEdge R660 - slot 3 on dell/riser-3-lp-cage-16g@1, fitted in riser configurations 2 … |
+| `dell/riser-3q-16g@1` | module | riser | 92 × 19.8 × 219.8 |  | 1 | 0 | Dell riser 3Q of the PowerEdge R660 - slot 3 on dell/riser-3-lp-cage-16g@1, fitted in riser configuration 5 |
+| `dell/riser-3r-16g@1` | module | riser | 92 × 19.8 × 219.8 |  | 1 | 0 | Dell riser 3R of the PowerEdge R660 - slot 3 on dell/riser-3-lp-cage-16g@1, fitted in riser configuration 4 |
 | `dell/riser-4-fh-cage-16g@1` | component | riser | 135 × 19.8 |  | 0 | 1 | the riser 4 cage of a 16th-generation 1U PowerEdge (R660) - one full-height window between two latches, slot … |
 | `dell/riser-4p-16g@1` | module | riser | 135 × 19.8 × 246.9 |  | 1 | 0 | Dell riser 4P of the PowerEdge R660 - slot 2 on dell/riser-4-fh-cage-16g@1, fitted in riser configuration 3 |
 | `dell/riser-cage-mount-14g@1` | component | mechanical | 6.14 × 14.54 |  | 1 | 0 | The pair of rings a riser cage mounts to on a 14G PowerEdge rear bay, seen when the bay carries drives instea… |
