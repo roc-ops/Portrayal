@@ -57,6 +57,27 @@ out.diagram = {
   tail: dia.slice(-26),
 };
 
+// ---------------------------------------------------------------- rack
+// The defaults, and each option a rack builder can set: a group's own faces, a
+// mounted device's own id, a rack's own numbering.
+const face = {svg, vb, ports: []};
+const mounted = (name, id) => ({name, id, u: 1, ru: 1, faces: {front: face, rear: face}});
+const pagesOf = x => [...x.matchAll(/<diagram name="([^"]+)"/g)].map(m => m[1]);
+const racksOf = x => [...x.matchAll(/<mxCell id="(g\d+r\d+-[a-z]+)"[^>]*style="([^"]*)"/g)]
+  .map(m => [m[1], /numDisp=(\w+)/.exec(m[2])[1]]);
+const plain = drawio.rackDiagram([{label: 'P', racks: [{label: 'R', mounted: [mounted('A')]}]}]);
+const opts = drawio.rackDiagram([
+  {label: 'Front', faces: ['front'], racks: [{label: 'R', numDisp: 'descend',
+    mounted: [mounted('Same', 'dev-1'), mounted('Same', 'dev-2')]}]},
+  {label: 'Rear', faces: ['rear'], racks: [{label: 'R', mounted: [mounted('Same', 'dev-1')]}]},
+], {faces: ['front', 'rear']});
+out.rack = {
+  plain: {pages: pagesOf(plain), racks: racksOf(plain),
+          device: /id="(A-g0r0-front)"/.exec(plain)?.[1] ?? null},
+  opts: {pages: pagesOf(opts), racks: racksOf(opts),
+         devices: [...opts.matchAll(/<mxCell id="([a-z0-9-]+-g\dr\d-[a-z]+)" value="Same"/g)].map(m => m[1])},
+};
+
 // ---------------------------------------------------------------- OmniGraffle
 out.crc = og.crc32(new TextEncoder().encode('123456789')).toString(16);
 
