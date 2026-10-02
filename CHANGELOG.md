@@ -29,7 +29,8 @@ names the ref that replaces it.
   `wall` or `desktop`. Lint L125 warns on a rack device with no `ru` and
   refuses `ru` on a box that is not racked (roc-ops/Portrayal#734).
 - `chassis.bevel` in the device manifest: edges named by the two faces that
-  meet at them, cut back at 45 degrees by `size` mm. A bevelled face's
+  meet at them, cut back by `size` mm - one number at 45 degrees, or a pair
+  `[a, b]` taking a different amount off each face. A bevelled face's
   `chassis-faceplate` is a `<path>` of the solid's outline, its bevel strips
   are drawn in `chassis-bevels`, and `<device>.configs.json` carries the
   solid's polygons as `chassis.solid` for the 3D viewer (`@portrayal/kit`

@@ -257,3 +257,27 @@ def test_the_kit_mesh_has_the_solid_s_areas_and_box_uvs(tmp_path):
     caps = sum(bv._area(p["points"], p["normal"]) for p in bv.solid(W, H, D, bv.parse(AIS))
                if p["face"] == "bevel")
     assert got["area"]["6"] == pytest.approx(caps, rel=1e-4)
+
+
+# ---- an asymmetric bevel ----------------------------------------------------
+
+def test_a_pair_takes_its_first_size_off_the_first_face_named():
+    """`top-left: [11, 16]` takes 11 off the top and 16 off the left. The
+    canonical spelling is `left-top`, so parse turns the pair round with it."""
+    assert bv.parse({"bevel": [{"edges": ["top-left"], "size": [11, 16]}]}) == {"left-top": (16.0, 11.0)}
+    assert bv.parse({"bevel": [{"edges": ["left-top"], "size": [16, 11]}]}) == {"left-top": (16.0, 11.0)}
+
+
+def test_an_asymmetric_cut_lands_where_the_pair_says():
+    """Seen from the front, the top-left corner loses 11 mm across the top and
+    16 mm down the side - the AIS housing's octagonal section."""
+    bevels = bv.parse({"bevel": [{"edges": ["top-left"], "size": [11, 16]}]})
+    el = bv.elevation("front", W, H, D, bevels)
+    pts = {(round(x, 6), round(y, 6)) for x, y in el["outline"]}
+    assert (11.0, 0.0) in pts and (0.0, 16.0) in pts
+
+
+@pytest.mark.parametrize("size", [[0, 3], [3], [1, 2, 3], "3"])
+def test_a_bad_size_is_refused(size):
+    with pytest.raises(bv.BevelError):
+        bv.parse({"bevel": [{"edges": ["front-left"], "size": size}]})

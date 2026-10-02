@@ -429,7 +429,13 @@
         "minItems": 1,
         "items": {"type": "string", "pattern": "^(front|rear|top|bottom|left|right)-(front|rear|top|bottom|left|right)$"}
        },
-       "size": {"type": "number", "exclusiveMinimum": 0, "description": "millimetres taken off each of the two faces"}
+       "size": {
+        "description": "millimetres taken off each of the two faces - one number for a 45-degree bevel, or a pair [a, b] taking a off the first face named and b off the second (`top-left: [11, 16]` takes 11 off the top and 16 off the left)",
+        "oneOf": [
+         {"type": "number", "exclusiveMinimum": 0},
+         {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number", "exclusiveMinimum": 0}}
+        ]
+       }
       }
      }
     },

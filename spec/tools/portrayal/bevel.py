@@ -81,18 +81,31 @@ def edge_key(name):
     return "-".join(sorted((a, b)))
 
 
+def _size(size):
+    """(a, b) from a bevel's `size`: one number for a 45-degree bevel, or a pair
+    for one that takes a different amount off each face."""
+    pair = size if isinstance(size, (list, tuple)) else [size, size]
+    if len(pair) != 2 or not all(isinstance(v, (int, float)) and v > 0 for v in pair):
+        raise BevelError(f"a bevel size is a positive number of mm, or a pair of "
+                         f"them, not {size!r}")
+    return float(pair[0]), float(pair[1])
+
+
 def parse(chassis):
-    """{edge: size} from `chassis.bevel`, or BevelError. {} when there is none."""
+    """{edge: (a, b)} from `chassis.bevel`, or BevelError; {} when there is none.
+
+    `a` is what the bevel takes off the FIRST face of the canonical edge name
+    and `b` off the second. An author writes the pair in the order they named
+    the edge - `top-left: [11, 16]` takes 11 off the top and 16 off the left -
+    and this swaps it when the canonical spelling turns the name round."""
     out = {}
     for entry in (chassis or {}).get("bevel") or []:
-        size = entry.get("size")
-        if not isinstance(size, (int, float)) or size <= 0:
-            raise BevelError(f"a bevel size is a positive number of mm, not {size!r}")
+        a, b = _size(entry.get("size"))
         for name in entry.get("edges") or []:
             k = edge_key(name)
             if k in out:
                 raise BevelError(f"edge {k} is bevelled twice")
-            out[k] = float(size)
+            out[k] = (a, b) if str(name).split("-")[0] == k.split("-")[0] else (b, a)
     return out
 
 
@@ -166,13 +179,20 @@ def _ordered(points, normal):
 
 def plane(edge, size, w, h, d):
     """The cutting plane of one bevelled edge: (unit normal, offset), keeping
-    n.p <= offset. A symmetric bevel takes `size` off each of the two faces."""
-    a, b = edge.split("-")
+    n.p <= offset. `size` is one number, taken off both faces at 45 degrees, or
+    (a, b): `a` off the first face of the edge's name, `b` off the second.
+
+    In the section across the edge, with u along the first face's normal and v
+    along the second's, the corner is (hu, hv) and the cut joins (hu, hv - a)
+    on the first face to (hu - b, hv) on the second: the line a.u + b.v =
+    a.hu + b.hv - a.b."""
+    fa, fb = edge.split("-")
     half = {"right": w / 2, "left": w / 2, "top": h / 2, "bottom": h / 2,
             "front": d / 2, "rear": d / 2}
-    na, nb = FACES[a], FACES[b]
-    n = _unit(_add(na, nb))
-    return n, (half[a] + half[b] - size) / math.sqrt(2)
+    a, b = (size, size) if isinstance(size, (int, float)) else size
+    n = _add(_mul(FACES[fa], a), _mul(FACES[fb], b))
+    norm = math.hypot(a, b)
+    return _mul(n, 1 / norm), (a * half[fa] + b * half[fb] - a * b) / norm
 
 
 def solid(w, h, d, bevels):
