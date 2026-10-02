@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: riser-2p-16g
-version: 1.0.0
+version: 1.1.0
 class: riser
 behaviour: fills
 profile: server
@@ -36,39 +36,63 @@ provenance:
     measured - THE SLOTS TAKE CARDS, the brackets and cards the R740xd's risers
     take at the same heights. Each bay is the whole bracket (79.20 low-profile,
     120.02 x 21.59 full-height), `behind` the cage, which covers its ends as
-    the hardware does. Dell's service model (r660.glb) seats riser 2A's two
-    low-profile brackets at rear x 120.9..200.9 and 187.0..267.0: they overlap
-    14 mm in x at depths a millimetre apart, the ends interleaving - which is
-    why two brackets fit a 71.8 pitch - and they face each other: slot 1
-    tip-left, slot 2 turned over (rotate 180), its card board at the top of
-    the bracket where slot 1's is at the bottom. Slot 3 (268.5..348.4) is
-    turned over too, and so are the full-height slots, whose keyed flange the
-    master puts at the left.
-    StorageReview's rear photograph of a real R660 (riser 2Q) shows a two-port
-    QSFP card in slot 1 the same way, its bracket ends under the cage.
+    the hardware does. A BRACKET'S RETENTION TIP IS AT THE CARD'S EDGE
+    CONNECTOR, so it points at the riser board. Dell's service model stands
+    riser 2's board at rear x 192.4, between its two slots, and riser 3's at
+    274.6, left of slot 3: slot 1 is turned over (rotate 180, tip right) and
+    slots 2 and 3 are tip-left, and the model's card boards agree - slot 1's
+    low, slots 2 and 3 high. Each bracket sits with its 7.74 tip just under
+    the cage and its body filling the window, which puts riser 2's at
+    121.17..200.37 and 186.67..265.87 against the model's 120.9..200.9 and
+    187.0..267.0; the two overlap at depths a millimetre apart, the ends
+    interleaving, which is why two brackets fit a 71.8 pitch. A first version
+    had the handedness backwards and showed each tip in the window. The
+    full-height slots are tip-left where the master draws their plates, the
+    tip under the clip. StorageReview's rear photograph of a real R660 (riser
+    2Q) shows a two-port QSFP card in slot 1 with its bracket ends under the
+    cage.
+  body: >-
+    THE RISER IS ITS BOARD AND CONNECTORS in 3D, as on the R740xd's risers:
+    each a box in `body.boxes`, so ejecting the riser takes them and the
+    interior stays visible. Each box says where it comes from.
   plan: >-
     seen from above, the riser is dell/riser-2-lp-plan-16g@1 - its cage as Dell's service
     model places it.
-size: {w: 163.60, h: 19.80}
-size-confidence: {w: drawing, h: drawing}
+size: {w: 163.60, h: 19.80, d: 246.9}
+size-confidence: {w: drawing, h: drawing, d: measured}
+body:
+  depth: 246.9
+  color: '#4a5057'
+  boxes:
+  - {id: pcb, at: [85.40, -0.30], size: [2.40, 33.20],
+     from: 27.6, depth: 219.3, color: '#1f5138',
+     confidence: measured, source: "measured - Dell's service model r660.glb, PE_R660_L_Riser_2A_Assembly Body_2_57, 2.4 x 33.2 x 219.3 at rear x 192.4, plan y 27.6..246.8"}
+  - {id: slot-1-connector, at: [74.70, 12.70], size: [10.00, 8.70],
+     from: 48.3, depth: 89.0, color: '#15171b',
+     confidence: measured, source: "measured - Dell's service model r660.glb, Body_6_31, 10.0 x 8.7 x 89.0 at rear x 181.7 - low, on the board's left face"}
+  - {id: slot-2-connector, at: [88.40, 0.40], size: [10.00, 8.70],
+     from: 47.2, depth: 89.0, color: '#15171b',
+     confidence: measured, source: "measured - Dell's service model r660.glb, Body_7_24, 10.0 x 8.7 x 89.0 at rear x 195.4 - high, on the board's right face"}
 plan: {ref: dell/riser-2-lp-plan-16g@1}
 parts:
   - {ref: dell/riser-2-lp-cage-16g@1, id: plate, at: [0, 0]}
 bays:
-  slot-1:
-    slot: {connector: x16, lanes: 16, height: low, length: half, processor: 1, generation: 5}
-    plan: {at: [70.47, 0.00]}
+  # SLOT 2 IS LISTED FIRST SO SLOT 1 PAINTS OVER IT: the service model has
+  # slot 1's bracket a millimetre in front, and the two brackets' ends overlap.
+  slot-2:
+    slot: {connector: x16, lanes: 16, height: low, length: half, processor: 2, generation: 4}
+    plan: {at: [4.73, 0.00]}
     behind: true
-    at: [13.93, 1.92]
+    at: [79.67, 1.92]
     size: [79.20, 18.42]
     accepts: [dell/pcie-filler-lp-16g@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1, nvidia/mcx4111a-lp@1, nvidia/mcx4121a-lp@1, nvidia/mcx4131a-lp@1, nvidia/mcx512a-lp@1, nvidia/mcx512f-lp@1, nvidia/mcx515a-lp@1, nvidia/mcx516a-lp@1, nvidia/mcx621102-lp@1, nvidia/mcx621202-lp@1, nvidia/mcx623102a-lp@1, nvidia/mcx623105-lp@1, nvidia/mcx623106-lp@1, nvidia/mcx713106-lp@1, nvidia/mcx715105-lp@1, nvidia/mcx75310-lp@1, nvidia/mcx75510-lp@1, nvidia/mcx755106-lp@1]
     default: dell/pcie-filler-lp-16g@1
-  slot-2:
-    slot: {connector: x16, lanes: 16, height: low, length: half, processor: 2, generation: 4}
+  slot-1:
+    slot: {connector: x16, lanes: 16, height: low, length: half, processor: 1, generation: 5}
     rotate: 180
-    plan: {at: [3.60, 0.00]}
+    plan: {at: [70.23, 0.00]}
     behind: true
-    at: [80.80, 1.92]
+    at: [14.17, 1.92]
     size: [79.20, 18.42]
     accepts: [dell/pcie-filler-lp-16g@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1, nvidia/mcx4111a-lp@1, nvidia/mcx4121a-lp@1, nvidia/mcx4131a-lp@1, nvidia/mcx512a-lp@1, nvidia/mcx512f-lp@1, nvidia/mcx515a-lp@1, nvidia/mcx516a-lp@1, nvidia/mcx621102-lp@1, nvidia/mcx621202-lp@1, nvidia/mcx623102a-lp@1, nvidia/mcx623105-lp@1, nvidia/mcx623106-lp@1, nvidia/mcx713106-lp@1, nvidia/mcx715105-lp@1, nvidia/mcx75310-lp@1, nvidia/mcx75510-lp@1, nvidia/mcx755106-lp@1]
     default: dell/pcie-filler-lp-16g@1
