@@ -268,6 +268,12 @@ export function library(entries, provenance = null) {
  * becomes a wall you navigate rather than a diagram you read, and an .mxfile
  * takes as many <diagram> elements as you give it - each is a tab along the
  * bottom of the editor.
+ *
+ * A group may carry its own `faces` (a rack builder draws one page per face),
+ * a mounted device its own `id` (cell ids are slugged from it instead of the
+ * name, which two devices can share), and a rack its own `numDisp` (`descend`
+ * prints 1 at the bottom). Without them, the output is exactly what it always
+ * was.
  */
 export function rackDiagram(groups, {faces = ['front'], labels = true} = {}) {
   // Each rack carries its own height, because each is grown to its contents.
@@ -285,7 +291,7 @@ export function rackDiagram(groups, {faces = ['front'], labels = true} = {}) {
   // Room for the U gutter between cabinets, and more between racks than between
   // the two sides of one rack - so a front/rear pair reads as a pair.
   const FACE_GAP = 90, RACK_GAP = 190;
-  const pairWidth = faces.length * RACK.outer + (faces.length - 1) * FACE_GAP;
+  const pairWidthOf = fs => fs.length * RACK.outer + (fs.length - 1) * FACE_GAP;
 
   // CONTENT STARTS AT THE ORIGIN. Whatever draw.io decides to scroll to when it
   // opens a file - and it is not the page's top-left, which was tried - the one
@@ -294,22 +300,25 @@ export function rackDiagram(groups, {faces = ['front'], labels = true} = {}) {
   // leaving only the headroom the cabinet's own label needs above it.
   const TOP = 30;
   const pages = groups.map((group, gi) => {
+    const gFaces = group.faces || faces;
+    const pairWidth = pairWidthOf(gFaces);
     const cells = [];
     let x = 0;
     group.racks.forEach((rack, r) => {
       const units = rack.units || 12;
       const h = heightOf(units);
-      faces.forEach((face, i) => {
+      gFaces.forEach((face, i) => {
         const rackId = `g${gi}r${r}-${face}`;
         const fx = x + i * (RACK.outer + FACE_GAP);
         // The PAGE is named for the vendor and family, so the cabinet only
         // has to say which rack and which side.
         cells.push(cell(rackId, rack.label ? `${rack.label} · ${face}` : face,
-                        style, fx, TOP, RACK.outer, h));
+                        rack.numDisp ? style.replace('numDisp=ascend;', `numDisp=${rack.numDisp};`) : style,
+                        fx, TOP, RACK.outer, h));
         for (const m of rack.mounted) {
           const f = m.faces[face];
           const ru = m.ru || 1;
-          const id = `${slug(m.name)}-g${gi}r${r}-${face}`;
+          const id = `${slug(m.id ?? m.name)}-g${gi}r${r}-${face}`;
           // A device with nothing drawn on this side does NOT borrow the other
           // side's picture. An optical shelf that is only a front is a real
           // thing, and putting a faceplate on the back of a rack would be a

@@ -90,3 +90,19 @@ def test_a_stencil_is_a_stored_zip_of_its_plist_and_image(out):
     assert g["crcOk"] is True
     assert g["png"] == [0x89, 0x50, 0x4E, 0x47]
     assert g["device"] is True
+
+
+def test_a_rack_diagram_keeps_its_defaults(out):
+    r = out["rack"]["plain"]
+    assert r["pages"] == ["P"]
+    assert r["racks"] == [["g0r0-front", "ascend"]]
+    assert r["device"] == "A-g0r0-front"
+
+
+def test_a_rack_builder_sets_faces_ids_and_numbering_per_rack(out):
+    r = out["rack"]["opts"]
+    assert r["pages"] == ["Front", "Rear"]
+    # each page draws only its own face, not the call's front-and-rear default
+    assert r["racks"] == [["g0r0-front", "descend"], ["g1r0-rear", "ascend"]]
+    # two devices with one name get two cells, named by their ids
+    assert r["devices"] == ["dev-1-g0r0-front", "dev-2-g0r0-front", "dev-1-g1r0-rear"]
