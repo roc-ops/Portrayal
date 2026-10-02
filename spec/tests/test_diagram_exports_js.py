@@ -108,6 +108,15 @@ def test_a_rack_builder_sets_faces_ids_and_numbering_per_rack(out):
     assert r["devices"] == ["dev-1-g0r0-front", "dev-2-g0r0-front", "dev-1-g1r0-rear"]
 
 
+def test_connectable_counts_what_a_line_can_be_drawn_to(out):
+    # port-1, slot-1/module/p0 and the empty slot-2; not slot-1, which holds p0
+    c = out["connectable"]
+    assert c["counted"] == 3
+    assert c["cells"] == c["counted"]
+    assert c["containers"] == 1
+    assert c["zones"] == 4   # what toDrawio used to report
+
+
 # ---------------------------------------------------------------- cables
 # A cable plan written as draw.io edges between the port cells (#728).
 

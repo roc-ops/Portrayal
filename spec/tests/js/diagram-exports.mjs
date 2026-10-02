@@ -38,6 +38,16 @@ out.parents = Object.fromEntries([...cells.matchAll(/id="(d-[^"]+)"><mxCell[^>]*
   .map(m => [m[1], m[2]]));
 out.order = portsOf(zones, {bays: true}).map(z => z.id);
 
+// What toDrawio reports as connectable, against what deviceCells wrote: slot-1
+// holds slot-1/module/p0, so it is a container and takes no line; slot-2 is
+// empty and does. connectable() and the cells must agree.
+out.connectable = {
+  counted: drawio.connectable(portsOf(zones, {bays: true})),
+  cells: (cells.match(/connectable=1;/g) || []).length,
+  containers: (cells.match(/connectable=0;/g) || []).length,
+  zones: portsOf(zones, {bays: true}).length,
+};
+
 // A crop over the middle: port-1 is outside it, slot-1 is cut through.
 out.within = within(zones, [3, 0, 10, 6]).map(z => [z.id, z.x, z.y, z.w, z.h]);
 

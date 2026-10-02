@@ -131,6 +131,23 @@ export function splitCovers(svgText) {
   return {base: ser(baseRoot), covers};
 }
 
+// A port is ON a bay's card when its path runs through the bay: slot-2/module/p0
+// is slot-2's. deviceCells nests such a port in its bay and makes the bay a
+// container that takes no line; connectable() counts by the same rule.
+const onBay = (p, b) => p.cls === 'port' && String(p.path || p.id).startsWith(`${b.id}/`);
+
+/**
+ * How many cells deviceCells writes that a line can be drawn to: every port,
+ * and every bay that holds no port of its own (an empty slot). A bay with a
+ * card's ports in it is a container, `connectable=0`, so it is not one - and
+ * counting it overstated a modular chassis by its seated cards.
+ */
+export function connectable(ports) {
+  const bays = ports.filter(p => p.cls === 'bay');
+  return ports.filter(p => p.cls === 'port').length
+    + bays.filter(b => !ports.some(p => onBay(p, b))).length;
+}
+
 /**
  * One device: the compiled face as an image, with a connectable cell per port.
  *
@@ -179,8 +196,7 @@ export function deviceCells(id, svgText, vb, ports, x, y, w, h, {visible = false
   const bays = ports.filter(p => p.cls === 'bay');
   const owned = new Set();
   for (const b of bays) {
-    const mine = ports.filter(p => p.cls === 'port'
-      && String(p.path || p.id).startsWith(`${b.id}/`));
+    const mine = ports.filter(p => onBay(p, b));
     if (!mine.length) continue;
     mine.forEach(p => owned.add(p));
     const bx = X(b.x), by = Y(b.y);
@@ -207,8 +223,7 @@ export function deviceCells(id, svgText, vb, ports, x, y, w, h, {visible = false
   // A bay with no ports of its own is still worth being a cell - it is an empty
   // slot - so it keeps the behaviour it had before this change.
   for (const b of bays) {
-    if (ports.some(p => p.cls === 'port'
-        && String(p.path || p.id).startsWith(`${b.id}/`))) continue;
+    if (ports.some(p => onBay(p, b))) continue;
     out.push(cell(`${id}-${b.id}`, '', `${tint('bay')}html=1;connectable=1;${PORT_POINT}`,
       X(b.x), Y(b.y), Math.max(b.w * sx, 1.5), Math.max(b.h * sy, 1.5), id));
   }
@@ -671,8 +686,9 @@ function diagramOf(name, svgText, vb, ports, opts = {}) {
  * as `diagram` does; a cable with an end outside the drawing is in `notes`.
  *
  * @returns {{text, name, ports, notes}}  the file's text, a name for it, how
- *                                        many connection points it carries, and
- *                                        what it could not draw
+ *   many cells a line can be drawn to - every port, and every empty bay, not a
+ *   bay holding a card, which is a container of its card's ports
+ *   (connectable()) - and what it could not draw
  */
 export function toDrawio(svgRoot, doc = {}, {form = 'diagram', name, visible = false,
                                              cables = [], cableStyle, item} = {}) {
@@ -686,9 +702,9 @@ export function toDrawio(svgRoot, doc = {}, {form = 'diagram', name, visible = f
       ? [`${cables.length} cable(s) not written: a library holds shapes, not edges.`] : [];
     return {text: library([entry(title, text, vb, ports, {visible})],
               `Portrayal ${title} - ${d.marks.length} mark(s)${d.crop ? ', cropped' : ''}`),
-            name: title, ports: ports.length, notes};
+            name: title, ports: connectable(ports), notes};
   }
   const out = diagramOf(title, text, vb, ports,
     {visible, cables, cableStyle, item: item ?? title, view: d.view || null});
-  return {text: out.text, name: title, ports: ports.length, notes: out.notes};
+  return {text: out.text, name: title, ports: connectable(ports), notes: out.notes};
 }
