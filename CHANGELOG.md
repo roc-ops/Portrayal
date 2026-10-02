@@ -25,6 +25,20 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- **An elements file beside every compiled face**:
+  `<device>[.<config>].<view>.elements.json` lists each element the face
+  draws, by its `path` (or `of` for a projection), with its `id`, `class`,
+  `ref`, `media`, `speed`, `group`, `group-role`, `rel-pos`, `states`, `for`
+  and `inner`, its box and connection points in the face's millimetres, the bay or cage it
+  is seated in, and its `parent` in the Explorer's tree, under a header naming
+  the device, configurations, view, viewBox, `source-sha256` and component
+  versions. A server can read a face's tree without a DOM or a layout pass.
+  The nesting rule moved out of `kit/shell.js` into `faceTree` in
+  `@portrayal/kit/swap`, which the Explorer and the build both follow; the
+  Explorer's tree is unchanged. Each device's npm package carries its faces'
+  elements files. The file is new, so the dist `contract` number is unchanged
+  at 2; [docs/format-stability.md](docs/format-stability.md) gives its shape
+  (roc-ops/Portrayal#727).
 - **Diagram exports in the kit**: `@portrayal/kit/drawio`,
   `@portrayal/kit/omnigraffle` and `@portrayal/kit/zones`, which were written
   for portrayal.dev and are now the kit's own. Each export is the face as a
