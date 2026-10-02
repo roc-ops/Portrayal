@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: riser-3q-16g
-version: 1.2.0
+version: 1.3.0
 class: riser
 behaviour: fills
 profile: server
@@ -30,7 +30,7 @@ provenance:
     drawing - composed from dell/riser-3-lp-cage-16g@1, the metal every riser sharing this
     cage presents. The slot bays sit on that cage's windows.
   size: >-
-    drawing - the cage's extent, 89.80 x 19.80.
+    drawing - the cage's extent, 92.00 x 19.80.
   seating: >-
     measured - THE SLOTS TAKE CARDS, the brackets and cards the R740xd's risers
     take at the same heights. Each bay is the whole bracket (79.20 low-profile,
@@ -61,27 +61,27 @@ provenance:
   plan: >-
     seen from above, the riser is dell/riser-3-plan-16g@1 - its cage as Dell's service
     model places it.
-size: {w: 89.80, h: 19.80, d: 219.8}
+size: {w: 92.00, h: 19.80, d: 219.8}
 size-confidence: {w: drawing, h: drawing, d: measured}
 body:
   depth: 219.8
   color: '#4a5057'
   boxes:
-  - {id: pcb, at: [6.93, -0.30], size: [1.60, 33.20],
+  - {id: pcb, at: [4.00, -0.30], size: [1.60, 33.20],
      from: 21.6, depth: 198.2, color: '#1f5138',
-     confidence: measured, source: "measured - Dell's service model r660.glb, PE_R660_L_Riser_3A Assembly Body_2_58, 1.6 x 33.2 x 198.2, plan y 21.6..219.8; at rear x 279.73, 5.13 right of the model's 274.6, to keep the model's 0.6 gap to its connector, which is moved with it"}
-  - {id: slot-3-connector, at: [9.13, 0.40], size: [10.00, 8.70],
+     confidence: measured, source: "measured - Dell's service model r660.glb, PE_R660_L_Riser_3A Assembly Body_2_58, 1.6 x 33.2 x 198.2 at rear x 274.6, plan y 21.6..219.8"}
+  - {id: slot-3-connector, at: [6.20, 0.40], size: [10.00, 8.70],
      from: 44.2, depth: 89.0, color: '#15171b',
-     confidence: measured, source: "measured - Dell's service model r660.glb, Body_1_76, 10.0 x 8.7 x 89.0, high on the board's right face; at rear x 281.93, 5.13 right of the model's 276.8, so the card's edge tab sits 2.38 inside it as riser 2's does - slot 3 is placed by the master's window, 5.25 right of the model's stand-in card, and the connector follows the card it holds"}
+     confidence: measured, source: "measured - Dell's service model r660.glb, Body_1_76, 10.0 x 8.7 x 89.0 at rear x 276.8 - high, on the board's right face; a card in slot 3 at 268.50 has its edge pads at 282.21..285.21, inside it"}
 plan: {ref: dell/riser-3-plan-16g@1}
 parts:
   - {ref: dell/riser-3-lp-cage-16g@1, id: plate, at: [0, 0]}
 bays:
   slot-3:
     slot: {connector: x16, lanes: 16, height: low, length: half, generation: 5}
-    plan: {at: [10.20, 0.00]}
+    plan: {at: [14.90, 0.00]}
     behind: true
-    at: [0.40, 1.92]
+    at: [-2.10, 1.92]
     size: [79.20, 18.42]
     accepts: [dell/pcie-filler-lp-16g@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1, nvidia/mcx4111a-lp@1, nvidia/mcx4121a-lp@1, nvidia/mcx4131a-lp@1, nvidia/mcx512a-lp@1, nvidia/mcx512f-lp@1, nvidia/mcx515a-lp@1, nvidia/mcx516a-lp@1, nvidia/mcx621102-lp@1, nvidia/mcx621202-lp@1, nvidia/mcx623102a-lp@1, nvidia/mcx623105-lp@1, nvidia/mcx623106-lp@1, nvidia/mcx713106-lp@1, nvidia/mcx715105-lp@1, nvidia/mcx75310-lp@1, nvidia/mcx75510-lp@1, nvidia/mcx755106-lp@1]
     default: dell/pcie-filler-lp-16g@1
