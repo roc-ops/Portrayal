@@ -541,6 +541,10 @@ PART_POWER = {
     "telco-systems/xm8424-dc-plug": "dc-terminal",
     # AND THE XM-3352's DC SUPPLY: a three-pole screw-clamp plug, the same row.
     "telco-systems/xm3352-dc-plug": "dc-terminal",
+    # AND THE AURCORE AIS SWITCHES' FIVE-WAY HEADER, `+ - earth + -`: two DC feeds
+    # landed in one pluggable screw-clamp plug on the top face, the TM-7124S case
+    # again. Still where a supply's wire is landed, so the same row (#737).
+    "common/terminal-header-508-5f": "dc-terminal",
     # THE XM-3352's AC SUPPLY TAKES A C5 CORD IN A CLOVERLEAF C6 INLET. `iec-60320-c6` is a
     # PowerPortTypeChoices value in both targets, as `iec-60320-c14` is.
     "telco-systems/xm3352-ac-inlet": "iec-60320-c6",
@@ -793,6 +797,9 @@ NOT_A_DCIM_PORT = {
     "std/db25": "the 7750 SR-12 DC PEM-3 AC Supply Status port - an AC rectifier shelf's status "
                 "signalling on a female DB-25, not RS-232. `db-25` upstream is a CONSOLE type and "
                 "this is not a console; neither library has an alarm or status port",
+    "common/terminal-header-508-2": "the AurCore AIS switches' RELAY output - a dry-contact alarm "
+                                    "relay on a two-way pluggable terminal, not a network port or a "
+                                    "console. Neither library has an alarm port (#737)",
     "std/vga": "VGA; neither library has a video port type",
     "common/vhdci-receptacle": "a VHDCI fan-out carrying sixteen timing outputs to a patch panel "
                                "over one cable; neither library has a type for it, and one row "

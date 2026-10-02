@@ -1,0 +1,39 @@
+format: 1
+kind: component
+name: ground-screw-washer
+version: 1.0.0
+class: ground
+profile: networking
+description: >-
+  Chassis grounding screw - a Phillips pan head seated on a captive washer, screwed into
+  the housing where the earth wire is landed under the washer. The earth symbol is printed
+  beside it on the housing, so it is not part of this.
+size: {w: 11.0, h: 11.0}
+size-confidence: {w: photo-measured, h: photo-measured}
+provenance:
+  size: >-
+    PHOTO-MEASURED on the AurCore AIS4001P top face in the vendor video (1:02, 1920 px),
+    against the five-way 5.08 mm header on the same face (78 px per contact): the washer
+    is 185 px across, about 12 mm, and the head 130 px, about 8.5 mm. The earth symbol
+    beside it reads 6.3 mm against the library's 6.0 mm symbol, so the same frame reads
+    about 5 percent large there; 11.0 and 8.0 are the corrected figures. Good to half a
+    millimetre at best.
+elements:
+  washer: {at: [0.1, 0.1], size: [10.8, 10.8], class: ground}
+  screw: {at: [1.5, 1.5], size: [8.0, 8.0], class: ground}
+relief:
+  features:
+    - node: washer
+      cyl: 0.8
+      color: '#b9c0c6'
+      confidence: estimated
+      source: >-
+        the vendor video (1:00-1:02) shows a domed pan head on a flat washer standing off the top face; no figure gives a height. common/ground-screw-washer@1's own 3D-form key.
+    - node: screw
+      cyl: 2.6
+      lift: 0.8
+      color: '#d7dde2'
+      confidence: estimated
+      source: >-
+        common/ground-screw-washer@1's own 3D-form key - see `washer`. The pan head, on the washer.
+skins: [default]

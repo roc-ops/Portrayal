@@ -1,0 +1,420 @@
+format: 1
+kind: device
+name: ais4001p
+version: 0.1.0
+maturity: modelled
+manufacturer: AurCore
+model: AIS4001P
+description: >-
+  AurCore AIS4001P industrial Layer 3 PoE+ switch - 8x GbE PoE+ RJ45 and 4x 10G SFP+ in a
+  fanless finned aluminium housing that clips onto a 35 mm DIN rail or screws to a wall,
+  -40 to 75 C. The port face hangs vertically on the rail: console, two status lamps, a
+  reset and a two-way DIP switch at the top, the RJ45 block in two columns, the SFP+ cages
+  turned on their side below it. Dual 48-57 V DC feeds, the relay contact and the ground
+  screw are on the top face; the DIN clip and two wall plates on the back.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      vendor datasheet (AIS4001P Data Sheet 1.0, 3 pages: spec table, and an annotated
+      front and back figure that is the same artwork as the product images); the product
+      page's three images (straight-on front, three-quarter front-top-right, and a back
+      render raised to show the top face), 1000 px; and the vendor's AIS4000 Series video
+      (YouTube MfK6WpjLsA8, 1080p), whose footage at 0:28-1:02 is a real AIS4001P. No
+      hardware guide or drawing is published (the Download Center holds the CLI, ACC and
+      ACN manuals only).
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - 'Dimension (L*W*H) 5.71 x 4.33 x 3.30 in'. The letters are not width,
+      height and depth: the straight-on front reads 0.587 wide-to-tall against 3.30/5.71 =
+      0.578, so L (145.0 mm) is the face's height as the unit hangs on the rail, H (83.8)
+      its width and W (110.0) the depth from the port face to the DIN face.
+  bevel:
+    confidence: photo-measured
+    note: >-
+      photo-measured - the housing is an octagon in section: the four edges that run from
+      the port face to the back are cut off, which is what the user and the photographs
+      call its wedge. The front's silhouette (front image, 4.407 px/mm) narrows 10.9 mm at
+      its top and bottom rows and reaches full width 16.3 mm in, at every corner; the four
+      product images give identical silhouettes, quantised to 1.8 mm by the image's mask,
+      so 11 and 16 are good to about two millimetres. The video (0:31-0:41) shows these
+      cuts running the whole depth and the flat front being the full octagon - the grey
+      margins beside the legend plate are flat casting, not further bevels.
+  front-layout:
+    confidence: photo-measured
+    note: >-
+      photo-measured on the straight-on front image at 4.407 px/mm (Gate 1: the face's own
+      width agrees with the datasheet to 1.5 percent; the vendor's datasheet front is the
+      same artwork). Jack lamps located by colour: columns at x 23.85 and 45.2, rows on a
+      15.57 mm pitch from y 43.2; SFP+ block x 22.2-47.8, rows from y 106.8 and 122.1.
+      Drawn with common/rj45-ganged-eth@1 turned 90/270 so the keyways face out, as the
+      lamps show: its lamps are 8.3 mm apart and the AIS's 11.5, the closest library cell
+      that fits the 11 mm column; the 1.6 mm difference is recorded here. The console is
+      the bare ganged cell, turned the same way. The SFP+ cages are std/sfp@1 on their side,
+      left column 270 and right 90 (L108). Each SFP lamp is a small dash beside its number
+      on the gold strip, drawn with common/led-rect-sm@1 turned 90 (2.8 x 1.6 against
+      about 1.6 x 0.7).
+  sfp-numbering:
+    confidence: photo-measured
+    note: >-
+      photo-measured - the gold strip reads, top to bottom, an up-pointing triangle and 9,
+      a lamp, a down-pointing triangle and 10, a lamp, up 11, a lamp, down 12, a lamp, in
+      text turned to read down the face. Up in that text points away from the strip, so 9
+      and 11 are the right-hand column and 10 and 12 the left, top row first.
+  silkscreen:
+    confidence: photo-measured
+    note: >-
+      photo-measured - legends transcribed from the front image (Reset, SYS, PWR; Fast
+      Ring and SCP with leaders to switches 1 and 2; CONSOLE; 2/4/6/8 left of the jacks
+      and 1/3/5/7 right; PoE and LINK/ACT under their colour keys; the port summary line).
+      The AURCORE wordmark is printed as text: its A is drawn as a chevron mark, which is
+      not reproduced (no logo marks).
+  top-layout:
+    confidence: estimated
+    note: >-
+      estimated - no straight-on top view exists. Positions are fractions of the top face
+      in the back render (image 3, raised about 35 degrees), corrected with the parts' own
+      sizes: the five-way power header (Phoenix MSTB-GF family, 35.56 mm) runs front to
+      back with its pole legend '1 + - earth + - 2' on one side and POWER:48-57V DC on the
+      other, pole 1 at the rear; the RELAY header and the ground screw with its earth
+      symbol are near the front edge. The video (1:00-1:02) confirms every part and legend
+      close up but not their places on the face. Good to a few millimetres.
+  rear-layout:
+    confidence: estimated
+    note: >-
+      estimated - the back render is foreshortened top to bottom; widths are taken as
+      fractions of the face on the same image row, heights as fractions of 145 mm. Two
+      wall plates (upper with its screws above the keyholes, lower with them below) and the
+      DIN clip between them, centred. The DIN rail's centre line lies about 79 mm from the
+      top of this face.
+  side-layout:
+    confidence: estimated
+    note: >-
+      estimated - from the video (0:37-0:41, 0:55) and the three-quarter image: both sides
+      are fins running front to back, with a recessed channel and a raised badge plate
+      carrying the wordmark on the right side. The left side is not photographed square on
+      and is drawn as fins only.
+  bottom-layout:
+    confidence: estimated
+    note: >-
+      estimated - the underside is not photographed. Drawn as plain casting, the bevels
+      strips at its sides; registered as a gap.
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet - 'Power Supply DC 48-57 V'; 'Idling: 48V 7.12W / 57V 7.52W'; 'Full load:
+      48V 243.36W / 57V 245.67W'; 'Power Budget 240W'. power-max-w takes the highest figure
+      (245.67 W at 57 V); no ambient is stated with any of them. The supply is not
+      included ('the power supply is excluded from the package').
+attrs:
+  physical:
+    dimensions-in: 5.71 x 4.33 x 3.30 (L x W x H, datasheet)
+    enclosure: fanless all-aluminium, finned
+    mounting: DIN rail (TS35) or wall
+    accessories: two pluggable terminal plugs (power and relay), console cable
+  performance:
+    switching-capacity: 96 Gbps
+    forwarding-rate: 71.42 Mpps
+    mac-table: 16K
+  power:
+    power-max-w: 245.67
+    power-envelope: fully-configured
+    power-idle-w: 7.52
+    poe-budget-w: 240
+    poe-standard: IEEE 802.3af/at
+    power-input: DC 48-57 V, dual feed
+  thermal:
+    cooling: fanless (finned housing)
+  environmental:
+    operating-temp-c: -40 to 75
+    storage-temp-c: -40 to 80
+    surge-protection: differential mode 2 kV, common mode 4 kV
+    esd: contact 6 kV, air 8 kV
+  platform:
+    flash-mb: 64
+    memory: 1 GB
+  features:
+    optics-sfp-plus: >-
+      vendor optics listed under AurCore Accessories - AOM10M-S300 (10G, multimode, 300 m)
+      and AOM10S-K10 (10G, single-mode, 10 km), with AOM01M-S550 and AOM01S-K10 at 1G; the
+      datasheet states no compatibility list or third-party policy
+    layer: L3 (static routing, ERPS ring recovery 20 ms or less)
+  management:
+    interfaces: console, Telnet, SSH, SNMP v1/v2c/v3, web, ACC/ACN cloud
+    interface-naming: Ethernet1/0/N (Command Manual - 4000 Series)
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 83.8
+  height: 145.0
+  depth: 110.0
+  mount: din-rail
+  bevel:
+  - {edges: [top-left, top-right, bottom-left, bottom-right], size: [11, 16]}
+  color: '#63696f'
+  edge: '#3f4449'
+  silk: '#e3e6ea'
+  airflow: passive
+  power: dc
+gaps:
+- what: no-drawing
+  scope: [front, rear, top]
+  reason: needs-drawing
+  wanted: >-
+    A dimensioned drawing or the in-box quick installation guide. Nothing published gives
+    the bevel, the DIN clip's position or the top-face layout; they are photo-measured or
+    estimated (see provenance). AurCore support or a reseller holds the guide.
+- what: weight
+  scope: [base]
+  reason: vendor-silent
+  wanted: The unit's weight; the datasheet gives none.
+- what: sfp-port-numbering
+  scope: [port-9, port-10, port-11, port-12]
+  reason: needs-hardware
+  wanted: >-
+    Confirmation that 9 and 11 are the right-hand column, read from the strip's arrows;
+    a unit, or the switch's own port table against a seated optic, settles it.
+- what: jack-lamp-spacing
+  scope: [gbe-poe]
+  reason: needs-hardware
+  wanted: >-
+    A lamped RJ45 cell with 11.5 mm between its lamps on an 11 mm column; the library's
+    nearest puts them 8.3 mm apart. Which lamp is link and which PoE is also not stated.
+- what: underside
+  scope: [bottom]
+  reason: needs-photo
+  wanted: A photograph of the underside.
+groups:
+  gbe-poe:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g, poe: 802.3af/at}
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+  power-input:
+    term: Power
+    role: service
+    index-origin: 1
+  relay:
+    term: Relay
+    role: management
+    index-origin: 1
+  controls:
+    term: Switch
+    role: management
+    index-origin: 1
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+  sfp-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+  grounding:
+    term: Ground
+    role: furniture
+    index-origin: 1
+  mounting:
+    term: Mount
+    role: furniture
+    index-origin: 1
+views:
+  front:
+    size: {w: 83.8, h: 145.0}
+    panel:
+      decor:
+      - {at: [12.6, 0.4], size: [58.4, 144.2], fill: '#3a3f4b'}
+      - {at: [14.5, 4.5], size: [54.0, 137.0], fill: none, stroke: '#1c4772', stroke-width: 0.5, rx: 2.0}
+      - {at: [19.8, 40.3], size: [32.0, 64.7], fill: '#033a74'}
+      - {at: [22.4, 40.6], size: [24.2, 63.9], fill: '#d9dbdd', rx: 0.4}
+      - {at: [22.0, 22.5], size: [12.6, 16.5], fill: '#d9dbdd', rx: 0.4}
+      - {at: [19.1, 22.6], size: [1.9, 16.1], fill: '#636e73'}
+      - {at: [22.2, 106.4], size: [25.6, 30.5], fill: '#d9dbdd', rx: 0.4}
+      - {at: [19.2, 105.5], size: [2.8, 32.0], fill: '#b3945e'}
+      cutouts:
+      - {id: port-2, at: [23.03, 42.6], size: [11.0, 12.7], shape: rect}
+      - {id: port-1, at: [35.02, 42.6], size: [11.0, 12.7], shape: rect}
+      - {id: port-4, at: [23.03, 58.17], size: [11.0, 12.7], shape: rect}
+      - {id: port-3, at: [35.02, 58.17], size: [11.0, 12.7], shape: rect}
+      - {id: port-6, at: [23.03, 73.74], size: [11.0, 12.7], shape: rect}
+      - {id: port-5, at: [35.02, 73.74], size: [11.0, 12.7], shape: rect}
+      - {id: port-8, at: [23.03, 89.31], size: [11.0, 12.7], shape: rect}
+      - {id: port-7, at: [35.02, 89.31], size: [11.0, 12.7], shape: rect}
+      - {id: port-9, at: [37.9, 106.8], size: [10.0, 14.5], shape: rect}
+      - {id: port-10, at: [22.7, 106.8], size: [10.0, 14.5], shape: rect}
+      - {id: port-11, at: [37.9, 122.1], size: [10.0, 14.5], shape: rect}
+      - {id: port-12, at: [22.7, 122.1], size: [10.0, 14.5], shape: rect}
+      - {id: led-sfp-9, at: [19.8, 112.65], size: [1.6, 2.8], shape: rect}
+      - {id: led-sfp-10, at: [19.8, 118.4], size: [1.6, 2.8], shape: rect}
+      - {id: led-sfp-11, at: [19.8, 123.6], size: [1.6, 2.8], shape: rect}
+      - {id: led-sfp-12, at: [19.8, 129.0], size: [1.6, 2.8], shape: rect}
+      - {id: console, at: [22.8, 24.4], size: [11.0, 12.7], shape: rect}
+      - {id: led-sys, at: [24.2, 10.8], size: [2.0, 2.0], shape: circle}
+      - {id: led-pwr, at: [28.9, 10.8], size: [2.0, 2.0], shape: circle}
+      - {id: reset, at: [18.2, 9.8], size: [4.0, 4.0], shape: circle}
+      - {id: dip, at: [22.6, 14.6], size: [10.0, 7.0], shape: rect}
+    silkscreen:
+    - {at: [62.5, 19.0], text: AURCORE, font-size: 4.2, rotate: 90, fill: '#f2f4f6', for: chassis}
+    - {at: [19.67, 7.2], text: Reset, font-size: 1.7, rotate: 90, for: reset}
+    - {at: [24.67, 6.9], text: SYS, font-size: 1.7, rotate: 90, for: led-sys}
+    - {at: [29.37, 7.0], text: PWR, font-size: 1.7, rotate: 90, for: led-pwr}
+    - {at: [17.2, 16.3], text: Fast Ring, font-size: 1.5, rotate: 90, for: chassis}
+    - {at: [19.9, 18.8], text: SCP, font-size: 1.5, rotate: 90, for: chassis}
+    - {id: fast-ring-leader, at: [18.4, 16.4], path: 'M 0 0 H 4.1', for: dip}
+    - {id: scp-leader, at: [21.0, 19.4], path: 'M 0 0 H 1.5', for: dip}
+    - {at: [20.05, 30.75], text: CONSOLE, font-size: 1.7, rotate: 90, for: console}
+    - {id: poe-key, at: [53.3, 11.3], path: 'M 0 0 a 0.9 0.9 0 1 1 0 1.8 a 0.9 0.9 0 1 1 0 -1.8 Z', filled: true, fill: '#c0472c', for: chassis}
+    - {id: link-key, at: [49.4, 11.5], path: 'M 0 0 a 0.9 0.9 0 1 1 0 1.8 a 0.9 0.9 0 1 1 0 -1.8 Z', filled: true, fill: '#2f8a4c', for: chassis}
+    - {at: [53.6, 15.0], text: PoE, font-size: 1.7, rotate: 90, for: chassis}
+    - {at: [49.7, 18.3], text: LINK/ACT, font-size: 1.7, rotate: 90, for: chassis}
+    - {at: [63.2, 112.0], text: '8 X GE | 4 X 10 GE SFP+ | L3 PoE+', font-size: 2.4, rotate: 90, for: chassis}
+    - {at: [20.7, 48.95], text: '2', font-size: 2.2, rotate: 90, for: port-2}
+    - {at: [50.6, 48.95], text: '1', font-size: 2.2, rotate: 90, for: port-1}
+    - {at: [20.7, 64.52], text: '4', font-size: 2.2, rotate: 90, for: port-4}
+    - {at: [50.6, 64.52], text: '3', font-size: 2.2, rotate: 90, for: port-3}
+    - {at: [20.7, 80.09], text: '6', font-size: 2.2, rotate: 90, for: port-6}
+    - {at: [50.6, 80.09], text: '5', font-size: 2.2, rotate: 90, for: port-5}
+    - {at: [20.7, 95.66], text: '8', font-size: 2.2, rotate: 90, for: port-8}
+    - {at: [50.6, 95.66], text: '7', font-size: 2.2, rotate: 90, for: port-7}
+    - {at: [20.6, 111.6], text: '9', font-size: 1.6, rotate: 90, fill: '#f2ead8', for: port-9}
+    - {at: [20.6, 117.0], text: '10', font-size: 1.6, rotate: 90, fill: '#f2ead8', for: port-10}
+    - {at: [20.6, 122.3], text: '11', font-size: 1.6, rotate: 90, fill: '#f2ead8', for: port-11}
+    - {at: [20.6, 127.6], text: '12', font-size: 1.6, rotate: 90, fill: '#f2ead8', for: port-12}
+    components:
+      placements:
+      - {ref: std/rj45-ganged@2, id: console, at: [21.95, 25.25], rotate: 90, group: mgmt, attrs: {role: console, media: rj45-serial}, rel-pos: 1}
+      - {ref: common/rj45-ganged-eth@1, id: port-2, at: [22.18, 43.45], rotate: 90, group: gbe-poe, rel-pos: 2}
+      - {ref: common/rj45-ganged-eth@1, id: port-1, at: [34.17, 43.45], rotate: 270, group: gbe-poe, rel-pos: 1}
+      - {ref: common/rj45-ganged-eth@1, id: port-4, at: [22.18, 59.02], rotate: 90, group: gbe-poe, rel-pos: 4}
+      - {ref: common/rj45-ganged-eth@1, id: port-3, at: [34.17, 59.02], rotate: 270, group: gbe-poe, rel-pos: 3}
+      - {ref: common/rj45-ganged-eth@1, id: port-6, at: [22.18, 74.59], rotate: 90, group: gbe-poe, rel-pos: 6}
+      - {ref: common/rj45-ganged-eth@1, id: port-5, at: [34.17, 74.59], rotate: 270, group: gbe-poe, rel-pos: 5}
+      - {ref: common/rj45-ganged-eth@1, id: port-8, at: [22.18, 90.16], rotate: 90, group: gbe-poe, rel-pos: 8}
+      - {ref: common/rj45-ganged-eth@1, id: port-7, at: [34.17, 90.16], rotate: 270, group: gbe-poe, rel-pos: 7}
+      - {ref: std/sfp@1, id: port-9, at: [35.65, 109.05], rotate: 90, group: sfp-plus, rel-pos: 9}
+      - {ref: std/sfp@1, id: port-10, at: [20.45, 109.05], rotate: 270, group: sfp-plus, rel-pos: 10}
+      - {ref: std/sfp@1, id: port-11, at: [35.65, 124.35], rotate: 90, group: sfp-plus, rel-pos: 11}
+      - {ref: std/sfp@1, id: port-12, at: [20.45, 124.35], rotate: 270, group: sfp-plus, rel-pos: 12}
+      - {ref: common/led-rect-sm@1, id: led-sfp-9, at: [19.2, 113.25], rotate: 90, for: port-9, group: sfp-leds, rel-pos: 9}
+      - {ref: common/led-rect-sm@1, id: led-sfp-10, at: [19.2, 119.0], rotate: 90, for: port-10, group: sfp-leds, rel-pos: 10}
+      - {ref: common/led-rect-sm@1, id: led-sfp-11, at: [19.2, 124.2], rotate: 90, for: port-11, group: sfp-leds, rel-pos: 11}
+      - {ref: common/led-rect-sm@1, id: led-sfp-12, at: [19.2, 129.6], rotate: 90, for: port-12, group: sfp-leds, rel-pos: 12}
+      - {ref: common/reset-button@1, id: reset, at: [18.2, 9.8], for: chassis, group: controls, rel-pos: 1}
+      - {ref: common/dip-switch-2@1, id: dip, at: [24.1, 13.1], rotate: 90, for: chassis, group: controls, rel-pos: 2}
+      - {ref: common/led-dot@1, id: led-sys, at: [24.2, 10.8], for: chassis, group: status-leds, rel-pos: 1}
+      - {ref: common/led-dot@1, id: led-pwr, at: [28.9, 10.8], for: chassis, group: status-leds, rel-pos: 2}
+  rear:
+    size: {w: 83.8, h: 145.0}
+    components:
+      placements:
+      - {ref: common/wall-plate-keyhole-2@1, id: wall-plate-upper, at: [13.9, 3.75], for: chassis, group: mounting, rel-pos: 1}
+      - {ref: common/din-clip-ts35@1, id: rail-clip, at: [19.9, 49.3], for: chassis, group: mounting, rel-pos: 2}
+      - {ref: common/wall-plate-keyhole-2@1, id: wall-plate-lower, at: [13.9, 111.25], skin: screws-below, for: chassis, group: mounting, rel-pos: 3}
+  left:
+    size: {w: 110.0, h: 145.0}
+    panel:
+      decor:
+      - {at: [2.0, 19.0], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 23.4], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 27.8], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 32.2], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 36.6], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 41.0], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 45.4], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 49.8], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 54.2], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 58.6], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 63.0], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 67.4], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 71.8], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 76.2], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 80.6], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 85.0], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 89.4], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 93.8], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 98.2], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 102.6], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 107.0], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 111.4], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 115.8], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 120.2], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 124.6], size: [106.0, 1.6], fill: '#3a3f44'}
+  right:
+    size: {w: 110.0, h: 145.0}
+    panel:
+      decor:
+      - {at: [2.0, 19.0], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 23.4], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 27.8], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 32.2], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 36.6], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 41.0], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 45.4], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 49.8], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 54.2], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 58.6], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 63.0], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 67.4], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 71.8], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 76.2], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 80.6], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 85.0], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 89.4], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 93.8], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 98.2], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 102.6], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 107.0], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 111.4], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 115.8], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 120.2], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [2.0, 124.6], size: [106.0, 1.6], fill: '#3a3f44'}
+      - {at: [40.0, 30.0], size: [12.0, 85.0], fill: '#2f3338'}
+      - {at: [58.0, 45.0], size: [24.0, 55.0], fill: '#5c6268', rx: 1.0}
+    silkscreen:
+    - {at: [70.0, 72.5], text: AURCORE, font-size: 4.0, rotate: 90, fill: '#f2f4f6', for: chassis}
+  top:
+    size: {w: 83.8, h: 110.0}
+    silkscreen:
+    - {at: [37.0, 41.6], text: 'POWER:48-57V DC', font-size: 2.2, rotate: 90, for: power}
+    - {at: [18.4, 26.0], text: '1', font-size: 2.2, for: power}
+    - {at: [18.4, 32.2], text: '+', font-size: 2.6, for: power}
+    - {at: [18.4, 37.3], text: '-', font-size: 2.6, for: power}
+    - {id: power-earth, at: [17.1, 41.6], path: 'M 0 0 a 1.3 1.3 0 1 0 2.6 0 a 1.3 1.3 0 1 0 -2.6 0 M 1.3 -1.1 V 0 M 0.6 0 H 2.0 M 0.8 0.5 H 1.8', filled: false, stroke-width: 0.25, for: power}
+    - {at: [18.4, 47.4], text: '+', font-size: 2.6, for: power}
+    - {at: [18.4, 52.5], text: '-', font-size: 2.6, for: power}
+    - {at: [18.4, 58.0], text: '2', font-size: 2.2, for: power}
+    - {at: [33.6, 91.7], text: RELAY, font-size: 2.2, rotate: 90, for: relay}
+    components:
+      placements:
+      - {ref: common/terminal-header-508-5f@1, id: power, at: [9.32, 35.55], rotate: 90, group: power-input, rel-pos: 1}
+      - {ref: common/terminal-header-508-2@1, id: relay, at: [20.42, 85.65], group: relay, rel-pos: 1}
+      - {ref: common/ground-screw-washer@1, id: ground-screw, at: [49.7, 89.8], for: chassis, group: grounding, rel-pos: 1}
+      - {ref: common/ground-symbol@1, id: ground-mark, at: [42.8, 92.3], for: ground-screw, group: grounding, rel-pos: 2}
+  bottom:
+    size: {w: 83.8, h: 110.0}
+    empty: >-
+      Not photographed: the product images show the front, the back and the front-top-right
+      three-quarter, and the vendor video never turns the unit over. Drawn bare; a gap asks
+      for the underside.
+configurations:
+  base:
+    kind: base
+    description: AIS4001P industrial L3 PoE+ switch, 8x GbE PoE+ and 4x 10G SFP+, dual 48-57 V DC
+    default: true
+    part-numbers:
+      AIS4001P: {}
+datasheet:
+  title: 'AurCore AIS4001P Data Sheet 1.0'
+  url: https://cdn-aurcore.aurcorenetworks.net/api/upload/file/69bc7e246333aaefd7b48aed909c9e00.pdf
+  sha256: 4e6173cc852b78ae55a846e8a99b8a8ab0cf4969e660733ba09f13d00f1c753a

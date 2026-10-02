@@ -1,0 +1,58 @@
+format: 1
+kind: component
+name: terminal-header-508-2
+version: 1.0.0
+class: port
+profile: networking
+description: >-
+  Two-position pluggable terminal HEADER on a 5.08 mm pitch, no flange - the green
+  receptacle a two-way screw-clamp plug seats in. The dry-contact RELAY (alarm) output
+  of the AurCore AIS industrial switches. Drawn empty, as the vendor photographs it.
+size: {w: 10.16, h: 12.1}
+size-confidence: {w: photo-measured, h: datasheet}
+attrs: {media: terminal-block, positions: 2, pitch-mm: 5.08}
+provenance:
+  size: >-
+    WIDTH PHOTO-MEASURED against the five-way power header beside it on the same face
+    (AurCore AIS4001P, vendor video 1:02, 1920 px): 155 px against that header's 78 px
+    contact pitch is 10.1 mm, two cells of the same 5.08 mm family (10.16). HEIGHT is that family's, from the Phoenix Contact MSTB 2,5/..-5,08 datasheet held for
+    the five-way part (h 12.1); no depth is given, because a port without a behaviour would read one as a pit cut
+    into the face, and the header stands proud of it - its relief says how far - the same series without a flange; no datasheet for
+    this exact two-way part is held.
+elements:
+  body: {at: [0.0, 0.0], size: [10.16, 12.1], class: connector}
+relief:
+  wall: '#245c21'
+  features:
+    - node: body
+      out: 2.5
+      shape: true
+      color: '#4fb548'
+      confidence: estimated
+      source: >-
+        ESTIMATED - the vendor video (1:00-1:02) shows the housing standing a few millimetres proud of the top face with its cells open and a contact in each; no figure gives the height. common/terminal-header-508-2@1's own 3D-form key.
+    - node: cell-1
+      out: 0.8
+      color: '#2f6e2a'
+      confidence: estimated
+      source: >-
+        common/terminal-header-508-2@1's own 3D-form key - see `body`. The well floor, below the housing top.
+    - node: pin-1
+      out: 1.6
+      color: '#c9cdd2'
+      confidence: estimated
+      source: >-
+        common/terminal-header-508-2@1's own 3D-form key - see `body`. The contact standing in the well.
+    - node: cell-2
+      out: 0.8
+      color: '#2f6e2a'
+      confidence: estimated
+      source: >-
+        common/terminal-header-508-2@1's own 3D-form key - see `body`. The well floor, below the housing top.
+    - node: pin-2
+      out: 1.6
+      color: '#c9cdd2'
+      confidence: estimated
+      source: >-
+        common/terminal-header-508-2@1's own 3D-form key - see `body`. The contact standing in the well.
+skins: [default]
