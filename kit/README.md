@@ -94,6 +94,52 @@ at once. Reading a face needs a browser - it is parsed and laid out by the DOM
 - and so does OmniGraffle's picture, which is drawn on a canvas; writing the
 files from zones already read does not.
 
+### Cables in a draw.io file
+
+`rackDiagram` and `toDrawio` (and `diagram`) take a cable list and write each
+cable as a draw.io edge whose source and target are two port cells, so its
+connectors stay on their ports when a device is moved:
+
+```js
+const cables = [{
+  id: 'c1',
+  a: { item: 'sw-1',  path: 'slot-2/module/p0', view: 'front' },
+  b: { item: 'srv-1', path: 'nic-1/p0',         view: 'rear' },
+  media: 'os2', purpose: 'uplink', label: 'up-1',
+  length: { value: 2, unit: 'm' },              // or a number or a string
+}];
+
+const xml = rackDiagram(groups, { cables, cableStyle: { os2: '#C9A400' }, notes: [] });
+const { notes } = rackCables(groups, cables);   // the same notes, as a list
+const { text, notes: n } = toDrawio(shell.state.svg, doc, { cables });
+```
+
+- **Ends.** `item` is a mounted device's `id`, else its `name`; `path` is the
+  port's `data-path`, so a port on a seated card is `slot-2/module/p0`. `view`
+  is the face, and may be left out. For `toDrawio` and `diagram`, `item` is
+  left out or is the drawing's name. An edge ends at the port cell's centre
+  connection point.
+- **Pages.** Both ends on one page (two racks on one page included) make one
+  edge. Ends only on different pages, such as a front-to-rear run when each
+  face is a page, make a stub on each page: a short edge from the port to a
+  label naming the far end (`→ rack-2 · r740 · rear/nic-1/p0`, from the rack's
+  label, the device's name, and the face and path). A draw.io edge cannot
+  leave its page.
+- **Ends that are not drawn.** An unknown item, a face no page draws, or a
+  path with no port cell (cropped away, or not in the drawing) draws nothing
+  for that cable: it is listed in the file's notes, an XML comment inside
+  `<mxfile>`, with the reason. `notes` adds the caller's own lines to the same
+  comment. `toDrawio` also returns them as `notes`.
+- **Style.** `cableStyle` is a map from `media` to a stroke colour, merged over
+  `CABLE_COLOURS` (dac, aoc, cu, mm, sm, the OM and OS grades, and a grey
+  `default`), or a function from a cable to a whole draw.io edge style.
+- **Identity.** Edge ids are `cable-<id>`, slugged like the other cell ids (a
+  stub is `cable-<id>-a` or `-b`, and its label `cable-<id>-a-far`). The edge's
+  label is `label` and `length`. `id`, `media`, `purpose` and `length` are kept
+  as `portrayal-cable`, `portrayal-media`, `portrayal-purpose` and
+  `portrayal-length` attributes, so a cable can still be identified after the
+  file is edited and saved in draw.io. The same input writes the same bytes.
+
 ## three.js
 
 `viewer3d.js` and `share.js` import `three` and `three/addons/` as bare

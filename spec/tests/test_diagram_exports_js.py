@@ -115,3 +115,102 @@ def test_connectable_counts_what_a_line_can_be_drawn_to(out):
     assert c["cells"] == c["counted"]
     assert c["containers"] == 1
     assert c["zones"] == 4   # what toDrawio used to report
+
+
+# ---------------------------------------------------------------- cables
+# A cable plan written as draw.io edges between the port cells (#728).
+
+def _edges(out, page):
+    return {e["id"]: e for e in out["cables"]["pages"][page]["edges"]}
+
+
+def test_a_cable_on_one_page_is_an_edge_between_its_port_cells(out):
+    e = _edges(out, 0)["cable-c1"]
+    # a port on a card seated in slot-2 resolves by its data-path
+    assert e["source"] == "sw-1-g0r0-front-slot-2--module--p0"
+    assert e["target"] == "srv-1-g0r0-front-p0"
+    assert e["label"] == "up-1 · 2 m"
+    assert e["attrs"] == {"portrayal-cable": "c1", "portrayal-media": "dac",
+                          "portrayal-purpose": "uplink", "portrayal-length": "2 m"}
+
+
+def test_two_racks_on_one_page_are_one_edge(out):
+    e = _edges(out, 0)["cable-c-6"]
+    assert (e["source"], e["target"]) == ("sw-1-g0r0-front-p0", "pp-1-g0r1-front-p0")
+    # a plan's text is escaped, and the edge is not an html label
+    assert e["label"] == "a &lt;b&gt;"
+
+
+def test_every_edge_ends_on_a_cell_of_its_own_page(out):
+    assert [p["dangling"] for p in out["cables"]["pages"]] == [[], []]
+
+
+def test_a_front_to_rear_cable_is_a_stub_on_each_page(out):
+    front, rear = _edges(out, 0), _edges(out, 1)
+    assert "cable-c2" not in front and "cable-c2" not in rear
+    a, b = front["cable-c2-a"], rear["cable-c2-b"]
+    assert (a["source"], a["target"]) == ("sw-1-g0r0-front-p0", "cable-c2-a-far")
+    assert (b["source"], b["target"]) == ("srv-1-g1r0-rear-nic-1--p0", "cable-c2-b-far")
+    assert a["attrs"]["portrayal-end"] == "a" and b["attrs"]["portrayal-end"] == "b"
+    assert out["cables"]["far"] == {"front": "→ rack-2 · r740 · rear/nic-1/p0",
+                                    "rear": "→ rack-2 · sw · front/p0"}
+    # in the gutter right of the cabinet (180 + 4), level with its port
+    assert out["cables"]["farGeom"] == [184, 51.81, 84, 10]
+
+
+def test_an_end_with_no_cell_is_a_note_not_a_half_edge(out):
+    c = out["cables"]
+    ids = {e["id"] for p in c["pages"] for e in p["edges"]}
+    assert not any(i.startswith(("cable-c3", "cable-c4", "cable-c5")) for i in ids)
+    assert c["notes"] == [
+        "Cable c3 is not drawn: b (srv-1 front/p99) is not a port in its device's drawing.",
+        "Cable c4 is not drawn: a (ghost front/p0) names no mounted device.",
+        "Cable c5 is not drawn: a (blank-1 front/p0) is on a face no page draws.",
+    ]
+    # one comment inside <mxfile>, the caller's notes first
+    assert c["commentInside"] is True
+    assert c["comment"] == "Notes:\n- caller note\n" + "\n".join(f"- {n}" for n in c["notes"])
+
+
+def test_edge_ids_come_from_cable_ids_and_never_repeat(out):
+    # "c 6" and "c-6" slug alike; the second is numbered, not dropped
+    assert list(_edges(out, 0)) == ["cable-c1", "cable-c2-a", "cable-c-6", "cable-c-6-2"]
+
+
+def test_numbered_and_stub_ids_never_collide_with_another_cable(out):
+    c = out["clash"]
+    # every cell a cable writes has an id no other cell has
+    assert len(c["ids"]) == len(set(c["ids"])), c["ids"]
+    # and every cable is in the file
+    assert sorted(c["cables"]) == sorted(["c 6", "c-6", "c-6-2", "x", "x-a", "y-b", "y"])
+    assert c["notes"] == []
+    ids = set(c["ids"])
+    # where nothing clashes the plain names stand; where something does, the
+    # later cable is numbered on, and a stub pair keeps one suffix
+    assert {"cable-c-6", "cable-c-6-2", "cable-c-6-2-2"} <= ids
+    assert {"cable-x-a", "cable-x-a-far", "cable-x-b", "cable-x-b-far", "cable-x-a-2"} <= ids
+    assert {"cable-y-b", "cable-y-2-a", "cable-y-2-a-far", "cable-y-2-b", "cable-y-2-b-far"} <= ids
+
+
+def test_cable_style_is_the_callers(out):
+    c = out["cables"]
+    assert c["styleFn"] == ["#ABCDEF"]
+    # a map merges over the default palette; an unknown media is the default grey
+    assert dict(c["styleMap"]) == {"cable-c1": "#4D4D4D", "cable-c2-a": "#D4A017",
+                                   "cable-c-6": "#123456", "cable-c-6-2": "#808080",
+                                   "cable-c2-b": "#D4A017"}
+
+
+def test_cables_are_byte_stable_and_absent_cables_change_nothing(out):
+    assert out["cables"]["stable"] is True
+    assert out["cables"]["none"] is True
+
+
+def test_one_device_diagram_takes_cables_between_its_own_ports(out):
+    o = out["oneDevice"]
+    assert [(e["id"], e["source"], e["target"]) for e in o["edges"]] == [
+        ("cable-k1", "S-p0", "S-slot-2--module--p0")]
+    assert o["comment"] == (
+        "Notes:\n"
+        "- Cable k2 is not drawn: b (other p0) names a device this file does not draw.\n"
+        "- Cable k3 is not drawn: a (rear/p0) is on a face this file does not draw.")
