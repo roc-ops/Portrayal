@@ -276,8 +276,11 @@ export function buildStencil(sheets, {tinted = false, generated = new Date()} = 
  * marks.toSvg freezes every lamp at.
  *
  * @returns {Promise<{bytes, name, ports, density}>}  the .gstencil's bytes, a
- *   name for it, how many ports it carries, and the px/mm the face was drawn at
- *   (less than asked when the face would not fit a canvas at that density)
+ *   name for it, how many magnetised shapes it carries, and the px/mm the face
+ *   was drawn at (less than asked when the face would not fit a canvas at that
+ *   density). Every port and every bay is a shape with a magnet - a bay holding
+ *   a card included, unlike draw.io's container - so `ports` counts them all,
+ *   and differs from toDrawio's on a chassis with cards seated.
  */
 export async function toGraffle(svgRoot, doc = {}, {pxmm = 8, name, tinted = false,
                                                     generated = new Date()} = {}) {
