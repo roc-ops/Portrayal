@@ -224,6 +224,7 @@ ISSUED = {
     "L122": "component, device",
     "L123": "library",
     "L124": "library",
+    "L125": "device",
 }
 
 

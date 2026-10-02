@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ds6001
-version: 0.1.0
+version: 0.1.1
 maturity: draft
 manufacturer: Celestica
 model: DS6001
@@ -17,6 +17,13 @@ description: >-
   connector in the middle. No installation guide exists; this is a DRAFT from the datasheet
   and vendor renders whose only square-on images fail the aspect gate.
 profile: networking
+lint:
+  waive:
+    L125: >-
+      An Open Rack v3 tray, sized in OPEN RACK units (2OU, 48 mm each), not EIA rack units. A 19-inch
+      `ru` would be a conversion the hardware never makes - 96 mm is 2.16 U and the tray does not fit
+      an EIA rack at all - and `mount` has no Open Rack value yet. Until one exists this device states
+      neither, and its DCIM export keeps the 1U it has always written (#734).
 provenance:
   sources:
     confidence: datasheet

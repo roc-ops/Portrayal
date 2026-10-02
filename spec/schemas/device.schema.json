@@ -401,7 +401,17 @@
      "description": "millimetres, front face to rear face"
     },
     "ru": {
-     "type": "number"
+     "type": "number",
+     "description": "rack units, for a device whose `mount` is `rack` (the default). L125: a rack device states it, and a device mounted any other way does not."
+    },
+    "mount": {
+     "description": "HOW THE BOX IS INSTALLED, which a DCIM device type has to know and the dimensions do not say. `rack` is the default and needs no statement; a device mounted any other way says so here and states no `ru`, and the DCIM export then writes `u_height: 0` and `is_full_depth: false` rather than inventing a rack unit (#734). `din-rail` is a box that clips onto a rail (IEC 60715), `wall` one that screws to a surface, `desktop` one that stands on its feet. A box that does more than one names the way it is drawn and exported, and its provenance says the rest. L125 checks it against `ru`.",
+     "enum": [
+      "rack",
+      "din-rail",
+      "wall",
+      "desktop"
+     ]
     },
     "weight-kg": {
      "type": "number"
