@@ -1283,7 +1283,9 @@ export function createViewer(container, opts = {}) {
         if (selected) select(selected, {frame: false});
         if (MARKS.length) drawMarks();
       } catch (e) { error = e; console.warn('[portrayal] viewer3d rebuild after context loss', e); }
-      if (disposed) return;
+      // a second loss during the rebuild: its own restore will rebuild again,
+      // and announcing this one would clear the host's message over a dead canvas
+      if (disposed || renderer.getContext().isContextLost()) return;
       contextLost = false;
       if (!raf) loop();
       emit('contextrestored', error);

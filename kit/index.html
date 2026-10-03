@@ -688,7 +688,8 @@ async function setMode(m) {
   try {
     await sync3d();
     (await ensureViewer()).resize();
-    shell.el.status.textContent = '';
+    // a context lost while the drawing showed is still lost: keep saying so
+    shell.el.status.textContent = gpuLost ? LOST_MSG : '';
   } catch (err) {
     console.warn('[portrayal] 3D unavailable', err);
     shell.el.status.textContent = why3d(err);
