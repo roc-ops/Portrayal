@@ -1298,10 +1298,16 @@ export function createViewer(container, opts = {}) {
     return 'portrayal-' + (DEV || COMP || 'scene').replace(/[^a-z0-9.-]+/gi, '-');
   }
   async function exportData(fmt) {
-    const wasVisible = hl && hl.visible;
-    if (hl) hl.visible = false;          // a selection marker is not part of the model
+    // AN EXPORT IS THE MODEL, NOT THE ANNOTATION. The selection halo was hidden
+    // here from the start - "a selection marker is not part of the model" - and
+    // a mark is the same kind of thing: a plate drawn over a part to point at it,
+    // with no depth test, which in a GLB is a flat coloured square floating over
+    // the chassis in every viewer that opens it. Hidden for the export alone and
+    // restored after, so the reader still sees them.
+    const hidden = [hl, ...markObjs].filter(o => o && o.visible);
+    for (const o of hidden) o.visible = false;
     try { return fmt === 'glb' ? await toGLB(scene) : await toUSDZ(scene); }
-    finally { if (hl) hl.visible = wasVisible; }
+    finally { for (const o of hidden) o.visible = true; }
   }
   async function download(fmt) {
     const data = await exportData(fmt);
