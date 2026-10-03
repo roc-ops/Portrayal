@@ -81,3 +81,7 @@ packages = ["portrayal", "portrayal_intake", "portrayal_dev", "portrayal_bench",
 
 [tool.pytest.ini_options]
 testpaths = ["spec/tests"]
+# TESTS THAT WAIT ON ONE SHARED RUN GO TO ONE WORKER (spec/tests/onebuild.py).
+# `loadgroup` is `load` for every test without an `xdist_group` mark, and does
+# nothing at all without `-n`.
+addopts = "--dist loadgroup"
