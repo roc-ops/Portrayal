@@ -44,6 +44,7 @@ from pathlib import Path
 import pytest
 import yaml
 
+import onebuild
 import warmrender
 from portrayal.render import _inset_feature
 
@@ -108,11 +109,7 @@ def descendants(el):
 
 
 def build_components(out):
-    r = warmrender.run([sys.executable, "-m", "portrayal.components_index",
-                        "--library", str(LIB), "--out", str(out)],
-                       capture_output=True, text=True,
-                       env={**os.environ, "PYTHONPATH": str(SPEC / "tools")})
-    assert r.returncode == 0, r.stderr[-600:]
+    onebuild.components_index_into(out)   # built once per session, copied here
     idx = json.loads((out / "components.json").read_text())["components"]
     return {f"{c['ns']}/{c['name']}@{c['major'].lstrip('v')}": c for c in idx}
 

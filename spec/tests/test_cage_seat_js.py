@@ -30,6 +30,7 @@ from pathlib import Path
 import pytest
 import yaml
 
+import onebuild
 import warmrender
 
 SPEC = Path(__file__).resolve().parents[1]
@@ -62,13 +63,10 @@ def pick(cages, ref):
 def build_components(out):
     """components.json and the compiled skins, BUILT HERE rather than read
     from library/dist - a stale dist is a stale answer, and nothing about this
-    test would say so (the "gates measure the installed tree" hazard)."""
-    r = warmrender.run([sys.executable, "-m", "portrayal.components_index",
-                        "--library", str(LIB), "--out", str(out)],
-                       capture_output=True, text=True,
-                       env={**os.environ, "PYTHONPATH": str(SPEC / "tools")})
-    assert r.returncode == 0, r.stderr[-600:]
-    return out
+    test would say so (the "gates measure the installed tree" hazard).
+
+    Built once per session by onebuild, by the same command, and copied here."""
+    return onebuild.components_index_into(out)
 
 
 def components(dist):

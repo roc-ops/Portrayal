@@ -40,6 +40,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
 LINT = ROOT / "spec/tools/portrayal/lint.py"
 BASELINE = LIB / "lint-baseline.json"
+import onebuild
 from portrayal import lint as L
 from portrayal import libwalk
 
@@ -60,10 +61,15 @@ def test_the_baseline_exists_and_is_counts_not_sentences():
             assert code.startswith("L") and isinstance(n, int) and n > 0, (f, code, n)
 
 
+@pytest.mark.xdist_group("full-lint")
 def test_a_clean_tree_reports_no_change():
     """THE POINT OF THE WHOLE THING. The tail has to say the backlog is the
-    backlog, or the 1392 above it reads as an accusation."""
-    r = run()
+    backlog, or the 1392 above it reads as an accusation.
+
+    ONE LINT ANSWERS THREE TESTS. This, the baseline's drift and the waiver's
+    printing each ran the same command for a different line of the same output,
+    at about 45 seconds a run. `onebuild.full_lint` is that run, made once."""
+    r = onebuild.full_lint()
     assert r.returncode == 0, r.stdout[-2000:]
     assert "no change against the baseline" in r.stdout, r.stdout[-800:]
 
@@ -97,11 +103,12 @@ def test_a_fixed_warning_is_reported_as_fixed():
     assert not new and gone == {"a.yaml": {"L61": 2}}
 
 
+@pytest.mark.xdist_group("full-lint")
 def test_the_baseline_matches_the_library_today():
     """A committed baseline that has drifted from the tree is worse than none -
     it reports phantom fixes and hides real additions. This is the guard that
     `expand.py --check` did not have, and #168 is what happens without it."""
-    r = run()
+    r = onebuild.full_lint()
     assert "NEW since the baseline" not in r.stdout, r.stdout[-1200:]
 
 
@@ -114,8 +121,9 @@ def test_the_c40g_states_its_l44_decision():
     assert "3D" in reason, "the reason should say why the field is kept"
 
 
+@pytest.mark.xdist_group("full-lint")
 def test_a_waived_warning_is_separated_and_its_reason_printed():
-    r = run()
+    r = onebuild.full_lint()
     assert "waived by the device that raised them" in r.stdout
     assert "[L44] " in r.stdout
     assert "100% buried in 2D" in r.stdout, "the argument belongs in the output"

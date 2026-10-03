@@ -6,6 +6,8 @@ import sys
 import pytest
 from pathlib import Path
 
+import onebuild
+
 SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"
 DEVICE = LIB / "devices/edgecore/as7726-32x/device.yaml"
@@ -17,6 +19,7 @@ def run(*args):
     return subprocess.run([sys.executable, *args], capture_output=True, text=True)
 
 
+@pytest.mark.xdist_group("full-lint")
 @pytest.mark.skipif(os.environ.get("PORTRAYAL_LINT_ALREADY_RAN") == "1",
                     reason="lint runs as its own CI job, and a merge needs it green")
 def test_lint_green():
@@ -29,7 +32,7 @@ def test_lint_green():
     it is redundant, because the `lint` job runs beside the job this runs in and
     merge-if-green refuses a head unless every check passed (#183).
     """
-    r = run(SPEC / "tools/portrayal/lint.py", "--schemas", SPEC / "schemas", "--library", LIB)
+    r = onebuild.full_lint()    # the same command, run once for every test that reads it
     assert r.returncode == 0, r.stdout + r.stderr
 
 

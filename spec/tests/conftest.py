@@ -58,6 +58,25 @@ def _portrayal_cache_dir(tmp_path_factory):
         os.environ["PORTRAYAL_CACHE_DIR"] = old
 
 
+# ONE DIRECTORY EVERY WORKER SHARES, for the runs onebuild.py makes once per
+# session - the whole-library lint, the component index. Named in the
+# environment rather than handed out as a fixture because the helpers that need
+# it are plain functions several test files import from each other.
+@pytest.fixture(scope="session", autouse=True)
+def _shared_builds(tmp_path_factory):
+    import os
+    base = tmp_path_factory.getbasetemp()
+    if os.environ.get("PYTEST_XDIST_WORKER"):
+        base = base.parent
+    old = os.environ.get("PORTRAYAL_TEST_SHARED")
+    os.environ["PORTRAYAL_TEST_SHARED"] = str(base / "shared-builds")
+    yield
+    if old is None:
+        os.environ.pop("PORTRAYAL_TEST_SHARED", None)
+    else:
+        os.environ["PORTRAYAL_TEST_SHARED"] = old
+
+
 @pytest.fixture(scope="session")
 def library():
     return libdata.library()
