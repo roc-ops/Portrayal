@@ -1,0 +1,38 @@
+format: 1
+kind: module
+name: psu-blank-flex-slot
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: server
+description: >-
+  HPE Flex Slot power supply blank, as the Gen10 ProLiant DL160 ships in its
+  second supply bay - a bright metal plate with two large round openings and
+  an embossed TOP and triangle along its upper edge
+provenance:
+  sources: >-
+    The straight-on rear photograph in newserverlife's DL160 Gen10 review
+    (newserverlife.com/upload/iblock/386/8_opt.jpeg, staged as photos/ nsl-
+    dl160g10-rear-ORTHO-1280x145.jpg under working/intake/hpe/proliant/
+    dl160-gen10), which shows this blank in bay 2 beside a 500 W supply in bay
+    1. See hpe/psu-865408-b21@1 for the panel gate on that image.
+  size: >-
+    photo-measured - The blank's face is the supply's 68.2 x 40.6: it fills the
+    same bay, and on the photograph it runs x 841..1038 px (67.9 mm) against the
+    supply's 1060..1258.
+  face: >-
+    photo-measured - Blank-local at 2.90 x 2.87 px/mm: two round openings 20
+    across, centred at (19.7, 19.9) and (47.9, 19.9); "TOP" embossed at
+    11.0..28.9 x 2.4..6.3 with a triangle beside it at 32..38. The embossing is
+    drawn as a light outline because it is raised metal, not ink.
+  why-a-blank: >-
+    User Guide "Rear panel components": item 4 is "Flexible Slot power supply 2
+    (hot-plug, optional)"; a second supply also needs the redundant power supply
+    enablement kit 866442-B21 (QuickSpecs). A chassis without it carries this
+    blank, which is what the photographed unit shows.
+size: {w: 68.2, h: 40.6}
+size-confidence: {w: photo-measured, h: photo-measured}
+elements:
+  opening-1: {at: [9.7, 9.9], size: [20.0, 20.0], class: vent}
+  opening-2: {at: [37.9, 9.9], size: [20.0, 20.0], class: vent}
+skins: [default]

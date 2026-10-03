@@ -1,0 +1,100 @@
+format: 1
+kind: module
+name: sff-sc-carrier
+version: 1.0.0
+class: drive
+behaviour: fills
+profile: server
+description: >-
+  HPE SmartCarrier (SC) for a 2.5 inch SFF drive, lying flat as the Gen10
+  ProLiant DL160's 8 SFF front presents it - the release handle at the left
+  with the locate slot along its top, the activity ring with the drive-status
+  lamp at its centre, and the do-not-remove button at the right
+attrs:
+  form-factor: 2.5in
+provenance:
+  sources: >-
+    Two documents, no photograph. (1) DL160 Gen10 User Guide a00066666en_us,
+    "Smart Carrier (SC) drive LED definitions" figure (native figure GUID-
+    DC2DFCB8, 675 px) and its table. (2) The same guide's "Eight-bay SFF drive
+    model with two-bay SFF drive option" elevation (native figure
+    GUID-7FDCEC9A), which gives the carrier's size in the bay. No straight-on
+    photograph of an SFF DL160 face was found in a two-round web search
+    (working/intake/hpe/proliant/dl160-gen10/COVERAGE.md, gap 1, accepted).
+  size: >-
+    drawing - 79.9 x 15.2. The 8 SFF elevation is 675 px wide; between its ear
+    folds the body is 592 px for the 434.6 mm the QuickSpecs gives (1.362
+    px/mm), and five drive columns divide it on dividers at 152.5, 263.3, 374,
+    485 and 596 px - an 81.4 mm pitch, 79.9 of carrier and 1.5 of divider. The
+    same drawing is 6% taller than true (62 px for 42.9 mm), so heights are
+    taken as fractions of the body: each drive row is 15.2 of the 42.9.
+  face: >-
+    drawing - Proportions of the LED figure's carrier (x 100..556, y 365..453
+    px, an aspect 1.5% from this part's), scaled to 79.9 x 15.2: locate slot
+    16.6..40.3 along the top edge; activity ring centred at (49.1, 7.4), 9.8
+    across, the drive-status lamp at its centre; do-not-remove button 63.1..75.4
+    x 0.5..13.3; the release handle across the left 14 mm. The ribbed edges the
+    figure draws above and below the carrier are its rails in the bay and are
+    not part of the face.
+  lamps: >-
+    User Guide table: 1 Locate - solid blue identified by a host application,
+    flashing blue carrier firmware updating or needing an update; 2 Activity
+    ring - rotating green activity, off none; 3 Do not remove - solid white,
+    removing the drive fails one or more logical drives; 4 Drive status - solid
+    green member of a logical drive, flashing green rebuilding or migrating,
+    flashing amber/green member and predictive failure, flashing amber
+    predictive failure, solid amber failed, off not configured.
+  depth: >-
+    estimated - NOT IN THE INTAKE. 125 is a 100.45 mm SFF-8201 drive plus a
+    carrier frame, of the size common/drive-carrier-25@2 measures (123.7); no
+    HPE document held gives the SmartCarrier's depth.
+size: {w: 79.9, h: 15.2, d: 125.0}
+size-confidence: {w: drawing, h: drawing, d: estimated}
+body: {depth: 125.0, color: '#2f3337'}
+elements:
+  release: {at: [0.8, 1.6], size: [13.2, 12.0], class: control}
+  lamp-locate:
+    at: [16.6, 0.9]
+    size: [23.7, 1.7]
+    class: led
+    states:
+      - 'off'
+      - {name: locate, color: '#3b82f6'}
+      - {name: firmware, color: '#3b82f6', behavior: {mode: blinking, rate: 1}}
+    description: Locate. Solid blue - identified by a host application; flashing blue - carrier firmware updating or needing an update.
+  lamp-activity:
+    at: [44.2, 2.5]
+    size: [9.8, 9.8]
+    class: led
+    states:
+      - 'off'
+      - {name: active, color: '#22c55e', behavior: {mode: blinking, rate: 4}}
+    description: Activity ring. Rotating green - drive activity; off - none. The rotation is drawn as a blink.
+  lamp-status:
+    at: [47.35, 5.65]
+    size: [3.5, 3.5]
+    class: led
+    states:
+      - 'off'
+      - {name: online, color: '#22c55e'}
+      - {name: rebuild, color: '#22c55e', behavior: {mode: blinking, rate: 1}}
+      - {name: predictive-failure, color: '#f59e0b', behavior: {mode: blinking, rate: 1}}
+      - {name: fault, color: '#f59e0b'}
+    description: Drive status. Solid green - member of a logical drive; flashing green - rebuilding or migrating; flashing amber - predictive failure; solid amber - failed.
+  lamp-do-not-remove:
+    at: [63.1, 0.5]
+    size: [12.3, 12.8]
+    class: led
+    states:
+      - 'off'
+      - {name: do-not-remove, color: '#f8fafc'}
+    description: The do-not-remove button, lit solid white when removing the drive would fail a logical drive.
+relief:
+  wall: '#1b1e21'
+  features:
+  - node: release
+    out: 1.0
+    color: '#3a3f44'
+    confidence: estimated
+    source: the handle stands proud of the carrier in the LED figure's shading; not measured
+skins: [default]
