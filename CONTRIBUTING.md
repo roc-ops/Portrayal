@@ -251,8 +251,48 @@ consumer outside the checkout; it is derived, so it cannot drift.
 
 One device per pull request. The
 [template](.github/PULL_REQUEST_TEMPLATE.md) asks for the sources, the
-maturity you claim, the matched-scale comparison sentence, and the gates you
-ran. A reviewer reads that before the diff.
+maturity you claim, the matched-scale comparison sentence, the gates you ran,
+and the merge danger. A reviewer reads that before the diff.
+
+#### Merge danger
+
+Most changes here are **two-way doors**: if one turns out wrong, a revert puts
+things back and nobody outside the repository has to do anything. A new device
+in its own directory is the usual case. Those merge on green gates.
+
+A few are **one-way doors**. Something outside the repository has already
+acted on the change by the time anyone notices it was wrong, so a revert does
+not undo it. The pull request says which it is, and a one-way door waits for
+the maintainer to read it. It is one-way if any of these is true:
+
+- **The lock asks for a major bump** on any device or component. A major means
+  an address somebody may hold has gone: a placement id, a bay, a ref.
+- **A component is renamed or removed,** or a bay stops accepting a ref. A
+  rename with no change to the drawing still costs a major on every device
+  that seats the part.
+- **A committed export is renamed or removed,** or a port name or interface
+  type in one changes. A DCIM that has already imported the old document keeps
+  the old data; [`CHANGELOG.md`](CHANGELOG.md) marks these as breaking for
+  data already imported.
+- **The manifest format, a schema key or a lint code is removed, renamed or
+  changes meaning.** [`docs/format-stability.md`](docs/format-stability.md)
+  has the rules.
+- **The change publishes something:** a kit release, a tag. A published
+  version cannot be withdrawn from whoever installed it.
+- **It changes how changes are checked or merged:** a workflow, the merge
+  script, a repository setting.
+
+Beside the door, say the **blast radius**: who notices if it is wrong. One
+device, every device that seats a part, DCIM data already imported, kit
+consumers, CI only.
+
+#### Review
+
+A change is reviewed against
+[`docs/review-standards.md`](docs/review-standards.md) before it merges. The
+standards are the judgements no gate can make, and they are read at review,
+not while building. The reviewer fixes what it finds and commits the fix; a
+comment is for a question only the author or the maintainer can answer.
 
 The maintainer merges once the `gates` check is green. Anything under
 `library/exports/` or `library/dist/` is generated; a review comment on one of
