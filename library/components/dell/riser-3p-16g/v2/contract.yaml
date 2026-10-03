@@ -1,18 +1,20 @@
 format: 1
 kind: module
-name: riser-3q-16g
-version: 1.4.0
+name: riser-3p-16g
+version: 2.0.0
 class: riser
 behaviour: fills
 profile: server
 description: >-
-  Dell riser 3Q of the PowerEdge R660 - slot 3 on dell/riser-3-lp-gen5-cage-16g@1, fitted in riser configuration 5
+  Dell riser 3P of the PowerEdge R660 - slot 3 on dell/riser-3-lp-gen5-cage-16g@1, fitted in riser configurations 2 and 7
 attrs:
-  riser: '3Q'
-  appears-in: 'riser configuration 5'
+  riser: '3P'
+  appears-in: 'riser configurations 2 and 7'
   power-absent: not-published
-  slot-3: 'x16, low profile, half length, processors 1 and 2 (SNAPI), PCIe Gen5'
+  slot-3: 'x16, low profile, half length, processor 2, PCIe Gen5'
 provenance:
+  version-2: >-
+    @2 because the face changed: the riser now composes the Gen5 cage, whose windows and print differ from the Gen4 cage @1 composed.
   power: >-
     NOT PUBLISHED - the riser is a passive board with connectors. The R660 ISM,
     technical guide and spec sheet were searched for 'riser' beside a wattage
@@ -54,10 +56,6 @@ provenance:
     THE RISER IS ITS BOARD AND CONNECTORS in 3D, as on the R740xd's risers:
     each a box in `body.boxes`, so ejecting the riser takes them and the
     interior stays visible. Each box says where it comes from.
-  snapi: >-
-    datasheet - ISM table 111 gives slot 3 on riser 3Q as "Processor 1 &
-    Processor 2", a SNAPI slot taking lanes from both, so `slot.processor`,
-    which names one CPU, is left out and the prose attr says both.
   plan: >-
     seen from above, the riser is dell/riser-3-plan-16g@1 - its cage as Dell's service
     model places it.
@@ -78,7 +76,7 @@ parts:
   - {ref: dell/riser-3-lp-gen5-cage-16g@1, id: plate, at: [0, 0]}
 bays:
   slot-3:
-    slot: {connector: x16, lanes: 16, height: low, length: half, generation: 5}
+    slot: {connector: x16, lanes: 16, height: low, length: half, processor: 2, generation: 5}
     plan: {at: [14.90, 0.00]}
     behind: true
     at: [-2.10, 1.92]

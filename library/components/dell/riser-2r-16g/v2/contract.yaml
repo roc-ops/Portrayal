@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: riser-2r-16g
-version: 1.4.0
+version: 2.0.0
 class: riser
 behaviour: fills
 profile: server
@@ -14,6 +14,8 @@ attrs:
   slot-1: 'x8, low profile, half length, processor 1, PCIe Gen5'
   slot-2: 'x16, low profile, half length, processor 1, PCIe Gen4'
 provenance:
+  version-2: >-
+    @2 because the face changed: the riser now composes the Gen5 cage, whose windows and print differ from the Gen4 cage @1 composed.
   power: >-
     NOT PUBLISHED - the riser is a passive board with connectors. The R660 ISM,
     technical guide and spec sheet were searched for 'riser' beside a wattage
@@ -57,10 +59,10 @@ provenance:
     each a box in `body.boxes`, so ejecting the riser takes them and the
     interior stays visible. Each box says where it comes from.
   slot-count: >-
-    UNRESOLVED - ISM table 111 gives riser 2R two slots (slot 1 Gen5 x8 and
-    slot 2 Gen4 x16, both on processor 1) and the riser carries both; Dell's
-    technical-guide figure of riser 2R (in the revision expresscomputersystems
-    reproduces) draws one slot. The table is followed here.
+    datasheet and drawing - TWO SLOTS: ISM table 111 gives riser 2R slot 1
+    (Gen5 x8) and slot 2 (Gen4 x16), both on processor 1, and ISM figure 158
+    (Riser 2R) labels both. The technical guide's figure of riser 2R labels
+    only slot 1; it is the one source that seems to say otherwise.
   plan: >-
     seen from above, the riser is dell/riser-2-lp-plan-16g@1 - its cage as Dell's service
     model places it.

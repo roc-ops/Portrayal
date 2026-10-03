@@ -32,7 +32,9 @@ provenance:
     storage; ISM table 111 gives R2S slot 1 as Gen5 x16 on processor 1; the Dell
     slide (photos/r660/storagereview-e3s, -10.jpg) has the two rear E3.S drives
     'direct to CPU1, 1 x8 cable'. The drive bays are numbered 0 and 1 top to
-    bottom here; no image held prints their numbers.
+    bottom here; no image held prints their numbers. Their places are drawing
+    measurements off ISM figure 13 (see dell/riser-2s-cage-16g@1): centres at
+    4.40 and 14.80 on the riser, 10.4 apart, good to about 0.5 mm.
   face: >-
     drawing - composed from dell/riser-2s-cage-16g@1, the metal every riser sharing this
     cage presents. The slot bays sit on that cage's windows.
@@ -71,12 +73,12 @@ body:
   depth: 246.9
   color: '#4a5057'
   boxes:
-  - {id: pcb, at: [85.40, -0.30], size: [2.40, 33.20],
+  - {id: pcb, at: [73.30, -0.30], size: [2.40, 33.20],
      from: 27.6, depth: 219.3, color: '#1f5138',
-     confidence: estimated, source: "estimated by analogy with riser 2A, whose PE_R660_L_Riser_2A_Assembly Body_2_57, 2.4 x 33.2 x 219.3 at rear x 192.4, plan y 27.6..246.8"}
-  - {id: slot-1-connector, at: [74.70, 12.70], size: [10.00, 8.70],
+     confidence: estimated, source: "estimated by analogy with riser 2A, shifted 12.1 left with slot 1 (ISM figure 13); riser 2A's is PE_R660_L_Riser_2A_Assembly Body_2_57, 2.4 x 33.2 x 219.3 at rear x 192.4, plan y 27.6..246.8"}
+  - {id: slot-1-connector, at: [62.60, 12.70], size: [10.00, 8.70],
      from: 48.3, depth: 89.0, color: '#15171b',
-     confidence: estimated, source: "estimated by analogy with riser 2A, whose Body_6_31, 10.0 x 8.7 x 89.0 at rear x 181.7 - low, on the board's left face"}
+     confidence: estimated, source: "estimated by analogy with riser 2A, shifted 12.1 left with slot 1 (ISM figure 13); riser 2A's is Body_6_31, 10.0 x 8.7 x 89.0 at rear x 181.7 - low, on the board's left face"}
 parts:
   - {ref: dell/riser-2s-cage-16g@1, id: plate, at: [0, 0]}
 bays:
@@ -84,18 +86,18 @@ bays:
     slot: {connector: x16, lanes: 16, height: low, length: half, processor: 1, generation: 5}
     rotate: 180
     behind: true
-    at: [14.17, 1.92]
+    at: [2.07, 1.92]
     size: [79.20, 18.42]
     accepts: [dell/pcie-filler-lp-16g@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1, nvidia/mcx4111a-lp@1, nvidia/mcx4121a-lp@1, nvidia/mcx4131a-lp@1, nvidia/mcx512a-lp@1, nvidia/mcx512f-lp@1, nvidia/mcx515a-lp@1, nvidia/mcx516a-lp@1, nvidia/mcx621102-lp@1, nvidia/mcx621202-lp@1, nvidia/mcx623102a-lp@1, nvidia/mcx623105-lp@1, nvidia/mcx623106-lp@1, nvidia/mcx713106-lp@1, nvidia/mcx715105-lp@1, nvidia/mcx75310-lp@1, nvidia/mcx75510-lp@1, nvidia/mcx755106-lp@1]
     default: dell/pcie-filler-lp-16g@1
   e3s-0:
-    at: [82.50, 2.15]
+    at: [82.52, 0.53]
     size: [77.65, 7.75]
-    accepts: [dell/e3s-carrier-blank@1, dell/e3s-carrier@1, std/drive-e3s@1]
-    default: dell/e3s-carrier-blank@1
+    accepts: [dell/e3s-carrier-blank@2, dell/e3s-carrier@1, std/drive-e3s@1]
+    default: dell/e3s-carrier-blank@2
   e3s-1:
-    at: [82.50, 10.20]
+    at: [82.52, 10.93]
     size: [77.65, 7.75]
-    accepts: [dell/e3s-carrier-blank@1, dell/e3s-carrier@1, std/drive-e3s@1]
-    default: dell/e3s-carrier-blank@1
+    accepts: [dell/e3s-carrier-blank@2, dell/e3s-carrier@1, std/drive-e3s@1]
+    default: dell/e3s-carrier-blank@2
 skins: [default]
