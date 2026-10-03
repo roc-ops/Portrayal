@@ -29,7 +29,8 @@ on:
 
 # READ-ONLY, AND PINNED BY SHA (#456). Neither job writes anything back - no
 # comment, no status beyond its own, no push - so the token gets `contents: read`
-# and nothing else, whatever the repository default happens to be. Once this
+# and nothing else, whatever the repository default happens to be. (`build` adds
+# two more READS for itself, to find the run it compares its test times with.) Once this
 # repository is public, a pull request from a fork runs this file; a tag like
 # `@v4` is a pointer its owner can move, a commit SHA is not. The comment beside
 # each pin says which release it is, so a bump is a deliberate edit.
@@ -107,6 +108,13 @@ jobs:
     if: github.event_name != 'push'
     runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository && 'ubuntu-latest') || vars.GATES_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 30
+    # STILL NOTHING WRITTEN. The two extra reads are what `test time` needs to
+    # find an earlier run: which pull requests merged, and the artifact the
+    # newest of them published.
+    permissions:
+      contents: read
+      actions: read
+      pull-requests: read
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
 
@@ -206,6 +214,7 @@ jobs:
           export TMPDIR="$RUNNER_TEMP/tmp"
           mkdir -p "$TMPDIR"
           python3 -m pytest spec/tests -q -rs -n auto \
+            --junitxml "$RUNNER_TEMP/junit.xml" \
             --basetemp "$RUNNER_TEMP/pytest" | tee "$RUNNER_TEMP/pytest.txt"
 
       # The guard for the failure above, and it checks WHICH test stopped running
@@ -233,6 +242,40 @@ jobs:
             exit 1
           fi
           python3 spec/tools/portrayal/check_skips.py "$RUNNER_TEMP/pytest.txt" spec/allowed-skips.txt
+
+      # WHAT THE SUITE COST, AND WHAT THIS CHANGE ADDED TO IT. The suite grew one
+      # reasonable test at a time and nothing reported it. This writes where the
+      # time went to the job summary and, against the newest merged pull request's
+      # run, names a new test over five seconds, a file that slowed and a total
+      # that grew - with the runner's load divided out, since the same tree
+      # measures up to twice as slow on a busy machine.
+      #
+      # IT FLAGS AND CANNOT FAIL THE RUN. A timing is a question for a reviewer,
+      # not a reason to refuse a merge, and finding the earlier run talks to an
+      # API that can be rate-limited - hence `continue-on-error`. When the suite
+      # wrote no record there is nothing to say; the step above already failed.
+      - name: test time
+        if: always()
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          [ -f "$RUNNER_TEMP/junit.xml" ] || exit 0
+          python3 spec/tools/portrayal/suite_times.py "$RUNNER_TEMP/junit.xml" \
+            --out "$RUNNER_TEMP/test-times.json" \
+            --fetch-base "$GITHUB_REPOSITORY" --summary "$GITHUB_STEP_SUMMARY"
+
+      # The record a LATER run compares against. Only a merged head's is ever
+      # read, but the run cannot know yet whether it will merge.
+      - name: publish test times
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        with:
+          name: test-times
+          path: ${{ runner.temp }}/test-times.json
+          if-no-files-found: ignore
+          retention-days: 30
 
       # The exports are committed and a DCIM reads them, so a stale one is a
       # real defect rather than untidiness. publish.sh above has already
