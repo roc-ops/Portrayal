@@ -313,6 +313,18 @@ bump it would have asked for is lost, and publish comes *after* the bumps
 because a version change alters the exports. Both orders end in the same
 state, and CI verifies that they did.
 
+After the suite, CI reports **what the tests cost**. The job summary lists the
+slowest test files, and against the newest merged pull request's run it flags a
+new test that takes five seconds or more, a file that slowed, and a suite that
+grew by three per cent. A flag does not fail the run. It is a question for the
+review: whether the test is worth its time, and whether a lint rule or a cheaper
+fixture would answer the same thing. To see the same figures locally:
+
+```sh
+python3 -m pytest spec/tests -q -n auto --junitxml /tmp/junit.xml
+python3 spec/tools/portrayal/suite_times.py /tmp/junit.xml
+```
+
 ## Commits
 
 One sentence that says what is true after the change, optionally prefixed with
