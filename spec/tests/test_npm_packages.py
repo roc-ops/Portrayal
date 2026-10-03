@@ -243,3 +243,49 @@ def test_a_changed_readme_is_a_changed_package(tmp_path, monkeypatch):
     monkeypatch.setattr(P, "_readme", lambda title, body: f"# {title}\n\nreworded\n")
     again, _ = _build(tmp_path, _dist(tmp_path), first)
     assert again["@portrayal/acme-box-1"]["changed"]
+
+
+# ---- a first publish is not like the others (#526) -------------------------------
+
+def test_a_package_npm_has_never_held_is_marked_as_a_first_publish(tmp_path):
+    """npm's trusted publishing is set up per package and only on a package
+    that exists, so a first publish needs a token and every later one does
+    not. The run has to say which are which."""
+    first, _ = _build(tmp_path, _dist(tmp_path))
+    assert all(s["first"] for s in first.values())
+    held = {k: v for k, v in first.items() if k != "@portrayal/acme-box-2"}
+    again, _ = _build(tmp_path, _dist(tmp_path), held)
+    assert P.first_publishes(again) == ["@portrayal/acme-box-2"]
+
+
+def test_a_registry_run_names_its_first_publishes(tmp_path, capsys, monkeypatch):
+    dist = _dist(tmp_path)
+    first, _ = _build(tmp_path, dist)
+    held = {k: v for k, v in first.items() if k != "@portrayal/acme-box-2"}
+    monkeypatch.setattr(P, "registry_state", lambda names: held)
+    P.main(["--dist", str(dist), "--out", str(tmp_path / "out"),
+            "--root", str(tmp_path), "--from-registry"])
+    out = capsys.readouterr().out
+    assert "first publish: @portrayal/acme-box-2" in out
+    assert "first publish: @portrayal/acme-box-1" not in out
+
+
+def test_a_run_without_the_registry_claims_no_first_publish(tmp_path, capsys):
+    """publish.sh runs with no baseline, where every package looks new. Saying
+    so there would be 180 lines of noise on every build."""
+    dist = _dist(tmp_path)
+    P.main(["--dist", str(dist), "--out", str(tmp_path / "out"), "--root", str(tmp_path)])
+    assert "first publish" not in capsys.readouterr().out
+
+
+def test_a_first_publish_is_named_on_the_line_that_sent_it(tmp_path, capsys):
+    """A run that fails partway has sent some new packages. The next run finds
+    them on npm and calls none of them first, so the line that published one
+    is the only place that says it still needs trusting."""
+    first, _ = _build(tmp_path, _dist(tmp_path))
+    held = {k: v for k, v in first.items() if k != "@portrayal/acme-box-2"}
+    again, _ = _build(tmp_path, _dist(tmp_path, device_version="1.3.0"), held)
+    P.publish(tmp_path / "out", again, run=_Npm({}))
+    out = capsys.readouterr().out.splitlines()
+    assert "published @portrayal/acme-box-2@0.1.0 (first publish)" in out
+    assert "published @portrayal/acme-box-1@1.3.0" in out
