@@ -143,6 +143,14 @@ names the ref that replaces it.
   the S9601-102XC for that model. The fabric boxes (S9705-48D `NCF-48CD`,
   S9725-64E `NCF-64E`) keep theirs until they are listed.
 
+### Removed
+- Six Dell R660 component majors are superseded and removed, each replaced by
+  its `@2`: `dell/e3s-carrier-blank@1` (redrawn as Dell's real E3.S blank),
+  and the Gen5 risers `dell/riser-2p-16g@1`, `dell/riser-2r-16g@1`,
+  `dell/riser-3p-16g@1`, `dell/riser-3q-16g@1` and `dell/riser-3r-16g@1` (now
+  on the Gen5-printed cages). A manifest that pins an `@1` moves to the `@2`
+  of the same name (roc-ops/Portrayal#749).
+
 ## 0.1.0 (unreleased) - the first public release
 
 What 0.1.0 promises, as [docs/format-stability.md](docs/format-stability.md)
