@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1092 component majors in 23 namespaces.
+1097 component majors in 23 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -36,7 +36,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/drive-25-plan@1` | module | drive | 69.85 × 100.45 × 15 | drive-25 | 1 | 2 | A 2.5 inch drive lying flat, seen from above - the same body std/drive-25@1 draws standing on edge, in the pr… |
 | `std/drive-35@1` | component | drive | 101.6 × 26.1 × 147 | drive-35 | 1 | 2 | 3.5 inch form factor drive per SFF-8301 - the drive itself, not a carrier: 101.60 wide by 26.10 high, present… |
 | `std/drive-35-plan@1` | module | drive | 101.6 × 147 × 26.1 | drive-35 | 1 | 2 | A 3.5 inch drive seen from above - the same body std/drive-35@1 draws from the front, in the projection a mid… |
-| `std/drive-e3s@1` | component | drive | 76 × 7.5 × 112.75 | drive-e3s | 1 | 0 | EDSFF E3.S drive per SFF-TA-1008 - the device itself, not a carrier: 76 wide by 7.5 thick, drawn lying flat, … |
+| `std/drive-e3s@1` | component | drive | 76 × 7.5 × 112.75 | drive-e3s | 1 | 1 | EDSFF E3.S drive per SFF-TA-1008 - the device itself, not a carrier: 76 wide by 7.5 thick, drawn lying flat, … |
 | `std/f-type@1` | component | port | 9.7 × 7.9 | f-type | 0 | 11 | F-type 75-ohm coaxial panel jack (3/8-32 UNEF-2A) - the CATV drop connector |
 | `std/lc-bore@3` | component | port | 4.7 × 6.3 × 4.5 | lc-duplex-receptacle | 0 | 17 | One LC receptacle bore - the KEYED opening an LC plug enters, not a square hole |
 | `std/lc-bulkhead-bore@1` | component | port | 4.7 × 8.06 × 4.5 | lc | 0 | 9 | One LC bore of a BULKHEAD (panel-mount) adapter - the keyed opening an LC plug enters, with the full-length k… |
@@ -47,7 +47,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/mrj21@1` | component | port | 28.92 × 13.45 | mrj21 | 0 | 2 | MRJ21 ("mini-RJ21") 48-position shielded receptacle - two stepped blades with twelve contacts on each face, c… |
 | `std/osfp@1` | component | port | 23.1 × 13.5 × 47 | osfp | 9 | 4 | OSFP cage cutout (800G, one port per opening; the belly-to-belly rows of a 2RU face are two of these, not one… |
 | `std/pcie-bracket-fh@2` | component | bracket | 120.02 × 21.59 | pcie-bracket-fh | 0 | 34 | Standard (full height) PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the ch… |
-| `std/pcie-bracket-lp@1` | component | bracket | 79.2 × 18.42 | pcie-bracket-lp | 0 | 38 | Low profile PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the chassis wall,… |
+| `std/pcie-bracket-lp@1` | component | bracket | 79.2 × 18.42 | pcie-bracket-lp | 0 | 42 | Low profile PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the chassis wall,… |
 | `std/qsfp-dd@1` | component | port | 19 × 10 × 37 | qsfp-dd | 32 | 19 | QSFP-DD cage cutout (400G, backward-compatible faceplate) |
 | `std/qsfp-ganged@1` | component | port | 18.5 × 9.58 × 37 | qsfp-ganged | 50 | 25 | QSFP family per-port opening inside a ganged cage block - the cage aperture, with the SFF-8661 module envelop… |
 | `std/qsfp28@1` | component | port | 20 × 10.15 × 37 | qsfp28 | 2 | 48 | QSFP28 cage cutout (100G, 4 lanes) |
@@ -124,7 +124,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/nic-symbol@1` | component | silkscreen | 5.4 × 4.6 |  | 1 | 0 | The network mark printed beside an Ethernet port - a node above three nodes on a bus, which is the figure ven… |
 | `common/orv3-busbar-connector@1` | component | inlet | 60.7 × 35.4 |  | 1 | 0 | Open Rack v3 48 V bus-bar power connector on an IT tray's rear - a blind-mate clip body with a vertical blade… |
 | `common/pcie-card-fh@2` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 12 | A generic full-height PCI Express add-in card, half-length - the standard bracket at the chassis wall and a P… |
-| `common/pcie-card-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 14 | A generic low-profile PCI Express add-in card, half-length - the standard bracket at the chassis wall and a P… |
+| `common/pcie-card-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 16 | A generic low-profile PCI Express add-in card, half-length - the standard bracket at the chassis wall and a P… |
 | `common/pcie-card-plan@1` | module | expansion-card | 120.9 × 173.8 × 21.6 |  | 0 | 21 | A full-height PCIe expansion card seen from above, lying in a riser slot - its bracket at the rear, its lengt… |
 | `common/pcie-card-plan-lp@1` | module | expansion-card | 79.2 × 173.8 × 21.6 |  | 0 | 18 | A low-profile PCIe expansion card seen from above, lying in a riser slot - its bracket at the rear, its lengt… |
 | `common/power-button@1` | component | button | 12 × 12 |  | 3 | 0 | Round ON/OFF push button |
@@ -502,7 +502,7 @@ aperture when it is a bare opening - never both at one position. The README's
 |---|---|---|---|---|---|---|---|
 | `credo/hiwire-shift-qsfp-dd@1` | module | transceiver | 18.35 × 8.5 × 58.26 | qsfp-dd | 0 | 0 | Credo HiWire SHIFT active electrical cable, the 400G QSFP-DD end of a 400G to four 100G QSFP28 breakout - a Q… |
 
-## dell/ (112)
+## dell/ (117)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -519,8 +519,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/control-panel-left-14g@1` | module | control-panel | 11.59 × 30 × 22.8 |  | 1 | 1 | Left control panel of a 14th-generation PowerEdge - five status glyphs that are themselves lamps, the system … |
 | `dell/control-panel-left-16g@1` | module | control-panel | 10.1 × 38.13 × 22.8 |  | 1 | 0 | Left control panel of a 16th-generation 1U PowerEdge (R660) - five status glyphs that are themselves the lamp… |
 | `dell/dc-terminal-6ryj9@1` | component | inlet | 31 × 27.5 × 12 |  | 0 | 1 | The -48 V DC input receptacle on a 14th-generation PowerEdge power supply - two bladed openings taking Dell p… |
-| `dell/e3s-carrier@1` | module | drive | 77.65 × 7.75 × 112.75 |  | 1 | 4 | Dell's hot-swap EDSFF E3.S drive carrier for 16th- and 17th-generation PowerEdge - an orange-chevroned releas… |
-| `dell/e3s-carrier-blank@1` | module | blank | 77.65 × 7.75 × 25 |  | 1 | 0 | Filler for an EDSFF E3.S bay on a 16th-generation PowerEdge - Dell's E3.S carrier moulding without the drive:… |
+| `dell/e3s-carrier@1` | module | drive | 77.65 × 7.75 × 112.75 |  | 1 | 5 | Dell's hot-swap EDSFF E3.S drive carrier for 16th- and 17th-generation PowerEdge - an orange-chevroned releas… |
+| `dell/e3s-carrier-blank@2` | module | blank | 77.65 × 7.75 × 25 |  | 1 | 1 | Filler for an EDSFF E3.S bay on a 16th-generation PowerEdge - Dell's 1-bay E3.S blank (59T4C), a black moulde… |
 | `dell/e3s-filler-1u@1` | module | blank | 79.25 × 37.85 |  | 1 | 0 | Dell's 1U E3.S column filler - one vented plate standing in for a whole column of four E3.S bays, a thirteen-… |
 | `dell/e3s-filler-2slot-1u@1` | module | blank | 77.65 × 17.38 |  | 1 | 0 | The vented filler a 16th-generation 1U PowerEdge (R660) fits across the two lower E3.S slots of its last colu… |
 | `dell/fan-14g@1` | module | fan | 63.6 × 46.2 × 74.6 |  | 1 | 1 | A hot-swap cooling fan of a 2U 14G PowerEdge seen from above - the block that lifts straight out of the fan c… |
@@ -546,7 +546,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/pcie-filler-fh-14g@2` | component | bracket | 120.02 × 21.59 |  | 0 | 14 | full-height PCIe slot blanking plate for a 14th-generation PowerEdge - the standard bracket with a 14 x 2 ven… |
 | `dell/pcie-filler-fh-16g@1` | module | blank | 120.02 × 21.59 |  | 0 | 2 | Vented full-height slot filler of a 16th-generation 1U PowerEdge (R660), lying flat on riser 1 or riser 4 - a… |
 | `dell/pcie-filler-lp-14g@1` | component | bracket | 79.2 × 18.42 |  | 0 | 7 | low-profile PCIe slot blanking plate for a 14th-generation PowerEdge - the standard bracket with a 8 x 2 vent… |
-| `dell/pcie-filler-lp-16g@1` | module | blank | 79.2 × 18.42 |  | 0 | 8 | Vented low-profile slot filler of a 16th-generation 1U PowerEdge (R660), lying flat in its riser - the part o… |
+| `dell/pcie-filler-lp-16g@1` | module | blank | 79.2 × 18.42 |  | 0 | 10 | Vented low-profile slot filler of a 16th-generation 1U PowerEdge (R660), lying flat in its riser - the part o… |
 | `dell/pcie-retention-clip-14g@1` | component | latch | 7.5 × 16.5 × 3 |  | 0 | 2 | The chassis-side retention clip for a PCIe card bracket on a 14G PowerEdge - a pair of tabs the bracket's own… |
 | `dell/pcie-slot-strip-14g@1` | component | mechanical | 10.75 × 62 × 2 |  | 1 | 1 | The strip of chassis metal between the PCIe card retention clips and the riser plate on a 14G PowerEdge, carr… |
 | `dell/pcie-slot-strip-r3-14g@1` | component | mechanical | 10.75 × 41.68 × 2 |  | 1 | 0 | The strip of chassis metal between the PCIe card retention clips and riser 3's plate on a 14G PowerEdge, carr… |
@@ -554,7 +554,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/psu-1100w-ac-14g@1` | module | psu | 86.3 × 39.1 × 195.5 |  | 1 | 2 | 1100 W AC hot-plug power supply for a 14th-generation PowerEdge - C14 inlet, a fan, and a translucent handle … |
 | `dell/psu-1100w-ac-60mm@1` | module | psu | 59.8 × 40.1 × 222 |  | 1 | 0 | 1100 W mixed-mode hot-plug power supply in Dell's 60 mm form factor, as fitted to the 16th-generation 1U Powe… |
 | `dell/psu-1100w-dc-14g@1` | module | psu | 86.3 × 39.1 × 195.5 |  | 1 | 0 | 1100 W -48 V DC hot-plug power supply for a 14th-generation PowerEdge - a terminal-block input, a fan under a… |
-| `dell/psu-1400w-ac-60mm@1` | module | psu | 59.8 × 40.1 × 222 |  | 1 | 14 | 1400 W mixed-mode hot-plug power supply in Dell's 60 mm form factor, as fitted to the 16th-generation 1U Powe… |
+| `dell/psu-1400w-ac-60mm@1` | module | psu | 59.8 × 40.1 × 222 |  | 1 | 16 | 1400 W mixed-mode hot-plug power supply in Dell's 60 mm form factor, as fitted to the 16th-generation 1U Powe… |
 | `dell/psu-2400w-ac-14g@1` | module | psu | 86.3 × 39.1 × 195.5 |  | 1 | 0 | 2400 W AC hot-plug power supply for a 14th-generation PowerEdge - C20 inlet, a fan, and a translucent handle … |
 | `dell/psu-60mm-plan@1` | component | mechanical | 59.8 × 222 |  | 0 | 4 | Dell's 60 mm power supply seen from above - the can that runs 222 mm into a 16th-generation 1U PowerEdge from… |
 | `dell/psu-700w-ac-60mm@1` | module | psu | 59.8 × 40.1 × 222 |  | 1 | 0 | 700 W mixed-mode hot-plug power supply in Dell's 60 mm form factor, as fitted to the 16th-generation 1U Power… |
@@ -578,8 +578,9 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/riser-1d-14g@2` | module | riser | 107.59 × 62 × 184.8 |  | 1 | 0 | Dell riser 1D - 3 wired slots on the shared riser 1 plate |
 | `dell/riser-1p-16g@1` | module | riser | 120.6 × 19.8 × 246.9 |  | 1 | 0 | Dell riser 1P of the PowerEdge R660 - slot 1 on dell/riser-1-fh-cage-16g@1, fitted in riser configuration 3 |
 | `dell/riser-2-3-blank-14g@1` | module | blank | 233 × 62 |  | 1 | 0 | Sheet-metal blank closing riser 2 AND riser 3 on a 14th-generation PowerEdge when no riser is fitted there |
-| `dell/riser-2-fh-plate-14g@1` | component | riser | 111.715 × 42.2 |  | 0 | 9 | the riser 2 plate on a 14th-generation PowerEdge - two full-height windows and one low-profile, shared by ris… |
-| `dell/riser-2-lp-cage-16g@1` | component | riser | 163.6 × 19.8 |  | 0 | 3 | the riser 2 cage of a 16th-generation 1U PowerEdge (R660) - two low-profile windows, the riser's vent block a… |
+| `dell/riser-2-fh-plate-14g@1` | component | riser | 111.715 × 42.2 |  | 0 | 11 | the riser 2 plate on a 14th-generation PowerEdge - two full-height windows and one low-profile, shared by ris… |
+| `dell/riser-2-lp-cage-16g@1` | component | riser | 163.6 × 19.8 |  | 0 | 2 | the riser 2 cage of a 16th-generation 1U PowerEdge (R660) - two low-profile windows, the riser's vent block a… |
+| `dell/riser-2-lp-gen5-cage-16g@1` | component | riser | 163.6 × 19.8 |  | 0 | 3 | the Gen5 riser 2 cage of a 16th-generation 1U PowerEdge (R660) - riser 2A's metal, with the printing Dell's G… |
 | `dell/riser-2-lp-plan-16g@1` | component | mechanical | 172.7 × 253.2 |  | 0 | 3 | riser 2 of the PowerEdge R660 (2A, 2P, 2R) seen from above - the cage roof over its two low-profile cards and… |
 | `dell/riser-2-none-14g@1` | module | riser | 79.2 × 18.42 |  | 1 | 0 | the riser 2 position with no riser in it - the low-profile window is still there and takes a filler only |
 | `dell/riser-2a-14g@2` | module | riser | 111.715 × 42.2 × 184.8 |  | 1 | 0 | Dell riser 2A - 3 wired slots on the shared riser 2 plate |
@@ -589,21 +590,25 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/riser-2d-14g@2` | module | riser | 111.715 × 42.2 × 184.8 |  | 1 | 0 | Dell riser 2D - 3 wired slots on the shared riser 2 plate |
 | `dell/riser-2e-14g@2` | module | riser | 111.715 × 42.2 × 184.8 |  | 1 | 0 | Dell riser 2E - 3 wired slots on the shared riser 2 plate |
 | `dell/riser-2f-14g@2` | module | riser | 111.715 × 42.2 × 184.8 |  | 1 | 0 | Dell riser 2F - 3 wired slots on the shared riser 2 plate |
-| `dell/riser-2p-16g@1` | module | riser | 163.6 × 19.8 × 246.9 |  | 1 | 0 | Dell riser 2P of the PowerEdge R660 - slot 1 and slot 2 on dell/riser-2-lp-cage-16g@1, fitted in riser config… |
+| `dell/riser-2p-16g@2` | module | riser | 163.6 × 19.8 × 246.9 |  | 1 | 0 | Dell riser 2P of the PowerEdge R660 - slot 1 and slot 2 on dell/riser-2-lp-gen5-cage-16g@1, fitted in riser c… |
 | `dell/riser-2q-16g@1` | module | riser | 186.5 × 19.8 × 246.9 |  | 1 | 0 | Dell riser 2Q of the PowerEdge R660 - slot 1 and slot 2 on dell/riser-2q-cage-16g@1, fitted in riser configur… |
 | `dell/riser-2q-cage-16g@1` | component | riser | 186.5 × 19.8 |  | 0 | 1 | the riser 2Q cage of a 16th-generation 1U PowerEdge (R660) - two low-profile Gen5 windows set wider apart tha… |
-| `dell/riser-2r-16g@1` | module | riser | 163.6 × 19.8 × 246.9 |  | 1 | 0 | Dell riser 2R of the PowerEdge R660 - slot 1 and slot 2 on dell/riser-2-lp-cage-16g@1, fitted in riser config… |
-| `dell/riser-3-blank-16g@1` | module | blank | 89.8 × 19.8 |  | 1 | 5 | The vented plate a 16th-generation 1U PowerEdge (R660) fits where riser 3 is absent beside a riser 2 with two… |
+| `dell/riser-2r-16g@2` | module | riser | 163.6 × 19.8 × 246.9 |  | 1 | 0 | Dell riser 2R of the PowerEdge R660 - slot 1 and slot 2 on dell/riser-2-lp-gen5-cage-16g@1, fitted in riser c… |
+| `dell/riser-2s-16g@1` | module | riser | 163.6 × 19.8 × 246.9 |  | 1 | 1 | Dell riser 2S of the PowerEdge R660 - slot 1 and the two-drive rear EDSFF E3.S module on dell/riser-2s-cage-1… |
+| `dell/riser-2s-cage-16g@1` | component | riser | 163.6 × 19.8 |  | 0 | 1 | the riser 2S cage of a 16th-generation 1U PowerEdge (R660) - one low-profile Gen5 window for slot 1 and, wher… |
+| `dell/riser-3-blank-16g@1` | module | blank | 89.8 × 19.8 |  | 1 | 7 | The vented plate a 16th-generation 1U PowerEdge (R660) fits where riser 3 is absent beside a riser 2 with two… |
 | `dell/riser-3-blank-gen5-16g@1` | module | blank | 68.9 × 19.8 |  | 1 | 0 | The vented plate a 16th-generation 1U PowerEdge (R660) fits where riser 3 is absent beside the Gen5 R2Q riser… |
-| `dell/riser-3-lp-cage-16g@1` | component | riser | 92 × 19.8 |  | 0 | 4 | the riser 3 cage of a 16th-generation 1U PowerEdge (R660) - one low-profile window, slot number 3 printed abo… |
-| `dell/riser-3-plan-16g@1` | component | mechanical | 92.6 × 252.8 |  | 0 | 4 | riser 3 of the PowerEdge R660 (3A, 3P, 3Q, 3R) seen from above - the cage roof over its low-profile card and … |
+| `dell/riser-3-lp-cage-16g@1` | component | riser | 92 × 19.8 |  | 0 | 2 | the riser 3 cage of a 16th-generation 1U PowerEdge (R660) - one low-profile window, slot number 3 printed abo… |
+| `dell/riser-3-lp-gen5-cage-16g@1` | component | riser | 92 × 19.8 |  | 0 | 4 | the Gen5 riser 3 cage of a 16th-generation 1U PowerEdge (R660) - riser 3A's metal, with a dark strip over the… |
+| `dell/riser-3-plan-16g@1` | component | mechanical | 92.6 × 252.8 |  | 0 | 5 | riser 3 of the PowerEdge R660 (3A, 3P, 3Q, 3R) seen from above - the cage roof over its low-profile card and … |
 | `dell/riser-3-plate-14g@1` | component | riser | 107.59 × 41.68 |  | 0 | 2 | the riser 3 plate on a 14th-generation PowerEdge - two full-height windows, shared by risers 3A and 3B |
 | `dell/riser-3a-14g@2` | module | riser | 107.59 × 41.68 × 184.8 |  | 1 | 0 | Dell riser 3A - 2 wired slots on the shared riser 3 plate |
 | `dell/riser-3a-16g@1` | module | riser | 92 × 19.8 × 219.8 |  | 1 | 0 | Dell riser 3A of the PowerEdge R660 - slot 3 on dell/riser-3-lp-cage-16g@1, fitted in riser configuration 1 |
 | `dell/riser-3b-14g@2` | module | riser | 107.59 × 41.68 × 184.8 |  | 1 | 0 | Dell riser 3B - 2 wired slots on the shared riser 3 plate |
-| `dell/riser-3p-16g@1` | module | riser | 92 × 19.8 × 219.8 |  | 1 | 0 | Dell riser 3P of the PowerEdge R660 - slot 3 on dell/riser-3-lp-cage-16g@1, fitted in riser configurations 2 … |
-| `dell/riser-3q-16g@1` | module | riser | 92 × 19.8 × 219.8 |  | 1 | 0 | Dell riser 3Q of the PowerEdge R660 - slot 3 on dell/riser-3-lp-cage-16g@1, fitted in riser configuration 5 |
-| `dell/riser-3r-16g@1` | module | riser | 92 × 19.8 × 219.8 |  | 1 | 0 | Dell riser 3R of the PowerEdge R660 - slot 3 on dell/riser-3-lp-cage-16g@1, fitted in riser configuration 4 |
+| `dell/riser-3p-16g@2` | module | riser | 92 × 19.8 × 219.8 |  | 1 | 0 | Dell riser 3P of the PowerEdge R660 - slot 3 on dell/riser-3-lp-gen5-cage-16g@1, fitted in riser configuratio… |
+| `dell/riser-3q-16g@2` | module | riser | 92 × 19.8 × 219.8 |  | 1 | 0 | Dell riser 3Q of the PowerEdge R660 - slot 3 on dell/riser-3-lp-gen5-cage-16g@1, fitted in riser configuratio… |
+| `dell/riser-3r-16g@2` | module | riser | 92 × 19.8 × 219.8 |  | 1 | 0 | Dell riser 3R of the PowerEdge R660 - slot 3 on dell/riser-3-lp-gen5-cage-16g@1, fitted in riser configuratio… |
+| `dell/riser-3s-16g@1` | module | riser | 92 × 19.8 × 219.8 |  | 1 | 0 | Dell riser 3S of the PowerEdge R660 - slot 3 on dell/riser-3-lp-gen5-cage-16g@1, fitted in riser configuratio… |
 | `dell/riser-4-fh-cage-16g@1` | component | riser | 135 × 19.8 |  | 0 | 1 | the riser 4 cage of a 16th-generation 1U PowerEdge (R660) - one full-height window between two latches, slot … |
 | `dell/riser-4p-16g@1` | module | riser | 135 × 19.8 × 246.9 |  | 1 | 0 | Dell riser 4P of the PowerEdge R660 - slot 2 on dell/riser-4-fh-cage-16g@1, fitted in riser configuration 3 |
 | `dell/riser-cage-mount-14g@1` | component | mechanical | 6.14 × 14.54 |  | 1 | 0 | The pair of rings a riser cage mounts to on a 14G PowerEdge rear bay, seen when the bay carries drives instea… |
@@ -1069,41 +1074,41 @@ aperture when it is a bare opening - never both at one position. The README's
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
 | `nvidia/mcx4111a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 12 | NVIDIA ConnectX-4 Lx MCX4111A single-port 10/25GbE SFP28 adapter, PCIe Gen3 x8, on its tall (full-height) bra… |
-| `nvidia/mcx4111a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 15 | NVIDIA ConnectX-4 Lx MCX4111A single-port 10/25GbE SFP28 adapter, PCIe Gen3 x8, on its short (low-profile) br… |
+| `nvidia/mcx4111a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 17 | NVIDIA ConnectX-4 Lx MCX4111A single-port 10/25GbE SFP28 adapter, PCIe Gen3 x8, on its short (low-profile) br… |
 | `nvidia/mcx4121a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 12 | NVIDIA ConnectX-4 Lx MCX4121A dual-port 10/25GbE SFP28 adapter, PCIe Gen3 x8, on its tall (full-height) brack… |
-| `nvidia/mcx4121a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 1 | 15 | NVIDIA ConnectX-4 Lx MCX4121A dual-port 10/25GbE SFP28 adapter, PCIe Gen3 x8, on its short (low-profile) brac… |
+| `nvidia/mcx4121a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 1 | 17 | NVIDIA ConnectX-4 Lx MCX4121A dual-port 10/25GbE SFP28 adapter, PCIe Gen3 x8, on its short (low-profile) brac… |
 | `nvidia/mcx4131a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 12 | NVIDIA ConnectX-4 Lx MCX4131A single-port 40/50GbE QSFP28 adapter, PCIe Gen3 x8, on its tall (full-height) br… |
-| `nvidia/mcx4131a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 15 | NVIDIA ConnectX-4 Lx MCX4131A single-port 40/50GbE QSFP28 adapter, PCIe Gen3 x8, on its short (low-profile) b… |
+| `nvidia/mcx4131a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 17 | NVIDIA ConnectX-4 Lx MCX4131A single-port 40/50GbE QSFP28 adapter, PCIe Gen3 x8, on its short (low-profile) b… |
 | `nvidia/mcx512a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 12 | NVIDIA ConnectX-5 MCX512A dual-port 10/25GbE SFP28 adapter, PCIe x8, on its tall (full-height) bracket |
-| `nvidia/mcx512a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 15 | NVIDIA ConnectX-5 MCX512A dual-port 10/25GbE SFP28 adapter, PCIe x8, on its short (low-profile) bracket |
+| `nvidia/mcx512a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 17 | NVIDIA ConnectX-5 MCX512A dual-port 10/25GbE SFP28 adapter, PCIe x8, on its short (low-profile) bracket |
 | `nvidia/mcx512f-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 12 | NVIDIA ConnectX-5 MCX512F dual-port 10/25GbE SFP28 adapter, PCIe Gen3 x16, on its tall (full-height) bracket |
-| `nvidia/mcx512f-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 15 | NVIDIA ConnectX-5 MCX512F dual-port 10/25GbE SFP28 adapter, PCIe Gen3 x16, on its short (low-profile) bracket |
+| `nvidia/mcx512f-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 17 | NVIDIA ConnectX-5 MCX512F dual-port 10/25GbE SFP28 adapter, PCIe Gen3 x16, on its short (low-profile) bracket |
 | `nvidia/mcx515a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 12 | NVIDIA ConnectX-5 MCX515A single-port 50/100GbE QSFP28 adapter, PCIe Gen3 x16, on its tall (full-height) brac… |
-| `nvidia/mcx515a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 15 | NVIDIA ConnectX-5 MCX515A single-port 50/100GbE QSFP28 adapter, PCIe Gen3 x16, on its short (low-profile) bra… |
+| `nvidia/mcx515a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 17 | NVIDIA ConnectX-5 MCX515A single-port 50/100GbE QSFP28 adapter, PCIe Gen3 x16, on its short (low-profile) bra… |
 | `nvidia/mcx516a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 12 | NVIDIA ConnectX-5 MCX516A dual-port 40/50/100GbE QSFP28 adapter, PCIe x16, on its tall (full-height) bracket |
-| `nvidia/mcx516a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 15 | NVIDIA ConnectX-5 MCX516A dual-port 40/50/100GbE QSFP28 adapter, PCIe x16, on its short (low-profile) bracket |
+| `nvidia/mcx516a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 17 | NVIDIA ConnectX-5 MCX516A dual-port 40/50/100GbE QSFP28 adapter, PCIe x16, on its short (low-profile) bracket |
 | `nvidia/mcx621102-fh@1` | module | expansion-card | 120.02 × 21.59 × 124.22 |  | 0 | 12 | NVIDIA ConnectX-6 Dx MCX621102A dual-port 10/25GbE SFP28 adapter, PCIe Gen4 x8, on its tall (full-height) bra… |
-| `nvidia/mcx621102-lp@1` | module | expansion-card | 79.2 × 18.42 × 124.22 |  | 0 | 15 | NVIDIA ConnectX-6 Dx MCX621102A dual-port 10/25GbE SFP28 adapter, PCIe Gen4 x8, on its short (low-profile) br… |
+| `nvidia/mcx621102-lp@1` | module | expansion-card | 79.2 × 18.42 × 124.22 |  | 0 | 17 | NVIDIA ConnectX-6 Dx MCX621102A dual-port 10/25GbE SFP28 adapter, PCIe Gen4 x8, on its short (low-profile) br… |
 | `nvidia/mcx621202-fh@1` | module | expansion-card | 120.02 × 21.59 × 152.86 |  | 0 | 12 | NVIDIA ConnectX-6 Dx MCX621202A dual-port 10/25GbE SFP28 adapter with active cooling (onboard fan), PCIe Gen4… |
-| `nvidia/mcx621202-lp@1` | module | expansion-card | 79.2 × 18.42 × 152.86 |  | 0 | 15 | NVIDIA ConnectX-6 Dx MCX621202A dual-port 10/25GbE SFP28 adapter with active cooling (onboard fan), PCIe Gen4… |
+| `nvidia/mcx621202-lp@1` | module | expansion-card | 79.2 × 18.42 × 152.86 |  | 0 | 17 | NVIDIA ConnectX-6 Dx MCX621202A dual-port 10/25GbE SFP28 adapter with active cooling (onboard fan), PCIe Gen4… |
 | `nvidia/mcx623102a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142 |  | 1 | 12 | NVIDIA ConnectX-6 Dx MCX623102A dual-port 25/50GbE SFP56 adapter, PCIe Gen4 x16, on its tall (full-height) br… |
-| `nvidia/mcx623102a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142 |  | 1 | 15 | NVIDIA ConnectX-6 Dx MCX623102A dual-port 25/50GbE SFP56 adapter, PCIe Gen4 x16, on its short (low-profile) b… |
+| `nvidia/mcx623102a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142 |  | 1 | 17 | NVIDIA ConnectX-6 Dx MCX623102A dual-port 25/50GbE SFP56 adapter, PCIe Gen4 x16, on its short (low-profile) b… |
 | `nvidia/mcx623105-fh@1` | module | expansion-card | 120.02 × 21.59 × 142 |  | 0 | 12 | NVIDIA ConnectX-6 Dx MCX623105A single-port 100/200GbE QSFP56 adapter, PCIe Gen4 x16, on its tall (full-heigh… |
-| `nvidia/mcx623105-lp@1` | module | expansion-card | 79.2 × 18.42 × 142 |  | 0 | 15 | NVIDIA ConnectX-6 Dx MCX623105A single-port 100/200GbE QSFP56 adapter, PCIe Gen4 x16, on its short (low-profi… |
+| `nvidia/mcx623105-lp@1` | module | expansion-card | 79.2 × 18.42 × 142 |  | 0 | 17 | NVIDIA ConnectX-6 Dx MCX623105A single-port 100/200GbE QSFP56 adapter, PCIe Gen4 x16, on its short (low-profi… |
 | `nvidia/mcx623106-fh@1` | module | expansion-card | 120.02 × 21.59 × 142 |  | 1 | 12 | NVIDIA ConnectX-6 Dx MCX623106A dual-port 100GbE QSFP56 adapter, PCIe Gen4 x16, on its tall (full-height) bra… |
-| `nvidia/mcx623106-lp@1` | module | expansion-card | 79.2 × 18.42 × 142 |  | 2 | 15 | NVIDIA ConnectX-6 Dx MCX623106A dual-port 100GbE QSFP56 adapter, PCIe Gen4 x16, on its short (low-profile) br… |
+| `nvidia/mcx623106-lp@1` | module | expansion-card | 79.2 × 18.42 × 142 |  | 2 | 17 | NVIDIA ConnectX-6 Dx MCX623106A dual-port 100GbE QSFP56 adapter, PCIe Gen4 x16, on its short (low-profile) br… |
 | `nvidia/mcx713104-fh@1` | module | expansion-card | 120.02 × 21.59 × 143.5 |  | 0 | 11 | NVIDIA ConnectX-7 MCX713104A quad-port 25/50GbE SFP56 adapter (one ganged 1x4 cage), PCIe Gen4 x16, on its ta… |
 | `nvidia/mcx713106-fh@1` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 12 | NVIDIA ConnectX-7 MCX713106A dual-port 100/200GbE QSFP112 adapter, PCIe Gen5 x16, on its tall (full-height) b… |
-| `nvidia/mcx713106-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 1 | 15 | NVIDIA ConnectX-7 MCX713106A dual-port 100/200GbE QSFP112 adapter, PCIe Gen5 x16, on its short (low-profile) … |
+| `nvidia/mcx713106-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 1 | 17 | NVIDIA ConnectX-7 MCX713106A dual-port 100/200GbE QSFP112 adapter, PCIe Gen5 x16, on its short (low-profile) … |
 | `nvidia/mcx713114-fh@1` | module | expansion-card | 120.02 × 21.59 × 167.15 |  | 0 | 11 | NVIDIA ConnectX-7 MCX713114T quad-port 25/50GbE SFP56 adapter with PPS in/out SMA jacks (one ganged 1x4 cage)… |
 | `nvidia/mcx715105-fh@1` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 12 | NVIDIA ConnectX-7 MCX715105A single-port NDR 400Gb/s InfiniBand / 400GbE QSFP112 adapter, Socket Direct ready… |
-| `nvidia/mcx715105-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 15 | NVIDIA ConnectX-7 MCX715105A single-port NDR 400Gb/s InfiniBand / 400GbE QSFP112 adapter, Socket Direct ready… |
+| `nvidia/mcx715105-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 17 | NVIDIA ConnectX-7 MCX715105A single-port NDR 400Gb/s InfiniBand / 400GbE QSFP112 adapter, Socket Direct ready… |
 | `nvidia/mcx75310-fh@1` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 12 | NVIDIA ConnectX-7 MCX75310A single-port NDR 400Gb/s InfiniBand / 400GbE OSFP adapter, PCIe Gen5 x16, on its t… |
-| `nvidia/mcx75310-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 15 | NVIDIA ConnectX-7 MCX75310A single-port NDR 400Gb/s InfiniBand / 400GbE OSFP adapter, PCIe Gen5 x16, on its s… |
+| `nvidia/mcx75310-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 17 | NVIDIA ConnectX-7 MCX75310A single-port NDR 400Gb/s InfiniBand / 400GbE OSFP adapter, PCIe Gen5 x16, on its s… |
 | `nvidia/mcx75510-fh@1` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 12 | NVIDIA ConnectX-7 MCX75510A single-port NDR 400Gb/s InfiniBand OSFP adapter, Socket Direct ready, PCIe Gen5 x… |
-| `nvidia/mcx75510-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 15 | NVIDIA ConnectX-7 MCX75510A single-port NDR 400Gb/s InfiniBand OSFP adapter, Socket Direct ready, PCIe Gen5 x… |
+| `nvidia/mcx75510-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 17 | NVIDIA ConnectX-7 MCX75510A single-port NDR 400Gb/s InfiniBand OSFP adapter, Socket Direct ready, PCIe Gen5 x… |
 | `nvidia/mcx755106-fh@1` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 12 | NVIDIA ConnectX-7 MCX755106A dual-port NDR200 / 200GbE QSFP112 adapter, Socket Direct ready, PCIe Gen5 x16, o… |
-| `nvidia/mcx755106-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 15 | NVIDIA ConnectX-7 MCX755106A dual-port NDR200 / 200GbE QSFP112 adapter, Socket Direct ready, PCIe Gen5 x16, o… |
+| `nvidia/mcx755106-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 17 | NVIDIA ConnectX-7 MCX755106A dual-port NDR200 / 200GbE QSFP112 adapter, Socket Direct ready, PCIe Gen5 x16, o… |
 
 ## oscilloquartz/ (10)
 

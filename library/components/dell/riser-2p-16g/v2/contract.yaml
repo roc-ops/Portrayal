@@ -1,19 +1,21 @@
 format: 1
 kind: module
-name: riser-2r-16g
-version: 1.2.0
+name: riser-2p-16g
+version: 2.0.0
 class: riser
 behaviour: fills
 profile: server
 description: >-
-  Dell riser 2R of the PowerEdge R660 - slot 1 and slot 2 on dell/riser-2-lp-cage-16g@1, fitted in riser configuration 4
+  Dell riser 2P of the PowerEdge R660 - slot 1 and slot 2 on dell/riser-2-lp-gen5-cage-16g@1, fitted in riser configuration 2
 attrs:
-  riser: '2R'
-  appears-in: 'riser configuration 4'
+  riser: '2P'
+  appears-in: 'riser configuration 2'
   power-absent: not-published
-  slot-1: 'x8, low profile, half length, processor 1, PCIe Gen5'
-  slot-2: 'x16, low profile, half length, processor 1, PCIe Gen4'
+  slot-1: 'x16, low profile, half length, processor 1, PCIe Gen5'
+  slot-2: 'x16, low profile, half length, processor 2, PCIe Gen4'
 provenance:
+  version-2: >-
+    @2 because the face changed: the riser now composes the Gen5 cage, whose windows and print differ from the Gen4 cage @1 composed.
   power: >-
     NOT PUBLISHED - the riser is a passive board with connectors. The R660 ISM,
     technical guide and spec sheet were searched for 'riser' beside a wattage
@@ -21,14 +23,14 @@ provenance:
   identity: >-
     A REMOVABLE ASSEMBLY THAT BRINGS ITS OWN SLOTS, which is why it is a module
     with `bays` and the slots are not openings on the chassis: the numbers are
-    printed on the riser and move with it (see dell/riser-2-lp-cage-16g@1).
+    printed on the riser and move with it (see dell/riser-2-lp-gen5-cage-16g@1).
   slots: >-
     datasheet - R660 ISM table 111, which gives each slot's form factor,
     controlling processor, PCIe generation and electrical width, every one on an
     x16 connector; the technical guide's slot table and the spec sheet agree.
     Length: the same two documents give every low-profile slot as half length.
   face: >-
-    drawing - composed from dell/riser-2-lp-cage-16g@1, the metal every riser sharing this
+    drawing - composed from dell/riser-2-lp-gen5-cage-16g@1, the metal every riser sharing this
     cage presents. The slot bays sit on that cage's windows.
   size: >-
     drawing - the cage's extent, 163.60 x 19.80.
@@ -76,10 +78,10 @@ body:
      confidence: measured, source: "measured - Dell's service model r660.glb, Body_7_24, 10.0 x 8.7 x 89.0 at rear x 195.4 - high, on the board's right face"}
 plan: {ref: dell/riser-2-lp-plan-16g@1}
 parts:
-  - {ref: dell/riser-2-lp-cage-16g@1, id: plate, at: [0, 0]}
+  - {ref: dell/riser-2-lp-gen5-cage-16g@1, id: plate, at: [0, 0]}
 bays:
   slot-1:
-    slot: {connector: x16, lanes: 8, height: low, length: half, processor: 1, generation: 5}
+    slot: {connector: x16, lanes: 16, height: low, length: half, processor: 1, generation: 5}
     rotate: 180
     plan: {at: [70.23, 0.00]}
     behind: true
@@ -88,7 +90,7 @@ bays:
     accepts: [dell/pcie-filler-lp-16g@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1, nvidia/mcx4111a-lp@1, nvidia/mcx4121a-lp@1, nvidia/mcx4131a-lp@1, nvidia/mcx512a-lp@1, nvidia/mcx512f-lp@1, nvidia/mcx515a-lp@1, nvidia/mcx516a-lp@1, nvidia/mcx621102-lp@1, nvidia/mcx621202-lp@1, nvidia/mcx623102a-lp@1, nvidia/mcx623105-lp@1, nvidia/mcx623106-lp@1, nvidia/mcx713106-lp@1, nvidia/mcx715105-lp@1, nvidia/mcx75310-lp@1, nvidia/mcx75510-lp@1, nvidia/mcx755106-lp@1]
     default: dell/pcie-filler-lp-16g@1
   slot-2:
-    slot: {connector: x16, lanes: 16, height: low, length: half, processor: 1, generation: 4}
+    slot: {connector: x16, lanes: 16, height: low, length: half, processor: 2, generation: 4}
     plan: {at: [4.73, 0.00]}
     behind: true
     at: [79.67, 1.92]
