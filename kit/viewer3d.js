@@ -178,7 +178,7 @@ export function createViewer(container, opts = {}) {
   ro.observe(container);
 
   // --- events -----------------------------------------------------------------
-  const listeners = {select: [], hover: [], lod: []};
+  const listeners = {select: [], hover: [], lod: [], contextlost: [], contextrestored: []};
   function on(event, fn) {
     (listeners[event] || (listeners[event] = [])).push(fn);
     return () => { const a = listeners[event]; const i = a.indexOf(fn); if (i >= 0) a.splice(i, 1); };
@@ -1231,14 +1231,68 @@ export function createViewer(container, opts = {}) {
 
   // --- loop -------------------------------------------------------------------
   let raf = 0;
-  (function loop(now) {
+  function loop(now) {
     raf = requestAnimationFrame(loop);
     stepTweens(now || 0);
     LAMPS.step(now || 0);
     controls.update();
     renderer.render(scene, camera);
     lodTick();
-  })();
+  }
+  loop();
+
+  // --- a lost context ---------------------------------------------------------
+  // A GPU process reset or memory pressure takes the context away, and with it
+  // every texture and buffer the scene uploaded. Without this the canvas simply
+  // went blank: no message, no recovery, and a host that could not tell a dead
+  // scene from a slow one. preventDefault is what lets the browser hand the
+  // context back at all (three.js asks too; saying so here does not lean on it).
+  // The loop stops while there is nothing to draw into, and the host hears
+  // 'contextlost' so it can say why the scene is empty.
+  //
+  // ON RESTORE THE SCENE IS REBUILT, NOT RE-UPLOADED. three.js resets its own GL
+  // state on restore and would re-upload what it still holds, but the relief and
+  // LOD rasters are made against the renderer during the build, and re-running
+  // the build for what is loaded - same device, config, swaps, states and pulled
+  // parts, all of which live here - is the one path already known to produce a
+  // whole scene. The camera is left where the reader put it. 'contextrestored'
+  // carries the rebuild's error, or null, once the scene is back on screen.
+  let contextLost = false;
+  function onContextLost(ev) {
+    if (disposed) return;              // dispose() forces this loss on purpose
+    ev.preventDefault();
+    contextLost = true;
+    cancelAnimationFrame(raf);
+    raf = 0;
+    // RELEASE THE DEAD RESOURCES NOW, WHILE GL CALLS ARE SILENT NO-OPS. three.js
+    // keeps each upload's handle and frees it when the object is disposed; left
+    // for the rebuild, those deletes reach the RESTORED context with handles from
+    // the old one, and a C100G restore logged 259 "object does not belong to this
+    // context" warnings. The objects stay in the graph for the rebuild to replace.
+    disposeTree(scene);
+    emit('contextlost');
+  }
+  function onContextRestored() {
+    if (disposed) return;
+    serialise(async () => {
+      if (disposed) return;
+      let error = null;
+      try {
+        if (COMP) await build(CFG);
+        else if (DEV) { await build(CFG); await buildHitIndex(CFG); }
+        if (selected) select(selected, {frame: false});
+        if (MARKS.length) drawMarks();
+      } catch (e) { error = e; console.warn('[portrayal] viewer3d rebuild after context loss', e); }
+      // a second loss during the rebuild: its own restore will rebuild again,
+      // and announcing this one would clear the host's message over a dead canvas
+      if (disposed || renderer.getContext().isContextLost()) return;
+      contextLost = false;
+      if (!raf) loop();
+      emit('contextrestored', error);
+    });
+  }
+  renderer.domElement.addEventListener('webglcontextlost', onContextLost);
+  renderer.domElement.addEventListener('webglcontextrestored', onContextRestored);
 
   function exportName() {
     return 'portrayal-' + (DEV || COMP || 'scene').replace(/[^a-z0-9.-]+/gi, '-');
@@ -1272,6 +1326,8 @@ export function createViewer(container, opts = {}) {
     disposeTree(scene);
     scene.clear();
     LOD.length = 0;
+    renderer.domElement.removeEventListener('webglcontextlost', onContextLost);
+    renderer.domElement.removeEventListener('webglcontextrestored', onContextRestored);
     renderer.dispose();
     // a GL context is not released when the last reference drops - the browser
     // keeps ~16 alive and silently kills the oldest, so say so explicitly
@@ -1510,6 +1566,8 @@ export function createViewer(container, opts = {}) {
     paths: () => ALL_VIEWS.flatMap(view =>
       pathIndex[view].map(c => ({view, path: c.path, cls: c.cls, model: c.model}))),
     capabilities: () => caps,
+    // true between 'contextlost' and 'contextrestored': the scene is not drawn
+    get contextLost() { return contextLost; },
     lod: () => lodSummary,
     // `info` and `selection` are properties, not calls: they are a snapshot of
     // what the viewer currently holds, and a getter cannot go stale in a host's
