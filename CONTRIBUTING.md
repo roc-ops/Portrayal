@@ -266,7 +266,8 @@ not undo it. The pull request says which it is, and a one-way door waits for
 the maintainer to read it. It is one-way if any of these is true:
 
 - **The lock asks for a major bump** on any device or component. A major means
-  an address somebody may hold has gone: a placement id, a bay, a ref.
+  something a consumer may already hold has changed under it: an id, a bay or
+  a ref has gone, or a slot has moved with its id unchanged.
 - **A component is renamed or removed,** or a bay stops accepting a ref. A
   rename with no change to the drawing still costs a major on every device
   that seats the part.

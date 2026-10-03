@@ -47,8 +47,11 @@ Fill these as the template asks. The comparison is the sentence Gate 5 of
 what you put beside the reference, at what scale, and what it showed, for every
 face that has a reference. Name any face that has none.
 
-For a change that is not a device, replace the comparison with **evidence**:
-the test that failed before and passes now, or the output before and after.
+For a change that is not a device, keep the template's headings and answer
+them for what you changed. Under the comparison heading give the **evidence**
+in place of a render: the test that failed before and passes now, or the
+output before and after. Under sources and maturity, say what the change rests
+on, or that the heading does not apply.
 
 ## Gates run locally
 
