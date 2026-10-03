@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: riser-2q-16g
-version: 1.2.0
+version: 1.4.0
 class: riser
 behaviour: fills
 profile: server
@@ -56,10 +56,17 @@ provenance:
     THE RISER IS ITS BOARD AND CONNECTORS in 3D, as on the R740xd's risers:
     each a box in `body.boxes`, so ejecting the riser takes them and the
     interior stays visible. Each box says where it comes from.
+  boards: >-
+    drawing - TWO BOARDS. ISM figure 157 (Riser 2Q) shows two green riser
+    boards standing parallel and offset, slot 1's connector on the near one
+    and slot 2's on the far one, joined by a cable; the slots are 75.6 apart,
+    too far for one board to meet both cards' edge pads. The technical
+    guide's smaller figure of the riser reads at first as a single board and
+    is not one.
   plan: >-
-    NONE. Dell's service model carries riser 2A and riser 3A and no other; no
-    model, figure or photograph held shows this riser from above, so the top
-    view leaves its place empty rather than borrow another riser's outline.
+    estimated - seen from above, the riser is dell/riser-2q-plan-16g@1, an outline by eye
+    from ISM figure 157's isometric: nothing held shows this riser top-down
+    (see that part). It replaces an empty place in the top view.
 size: {w: 186.50, h: 19.80, d: 246.9}
 size-confidence: {w: drawing, h: drawing, d: estimated}
 body:
@@ -78,12 +85,14 @@ body:
   - {id: slot-2-connector, at: [107.67, 0.40], size: [10.00, 8.70],
      from: 47.2, depth: 89.0, color: '#15171b',
      confidence: estimated, source: "estimated by analogy with riser 2A - high, right of its board, placed so the card's edge pads sit where they sit in riser 2A's slot 2"}
+plan: {ref: dell/riser-2q-plan-16g@1}
 parts:
   - {ref: dell/riser-2q-cage-16g@1, id: plate, at: [0, 0]}
 bays:
   slot-1:
     slot: {connector: x16, lanes: 16, height: low, length: half, processor: 1, generation: 5}
     rotate: 180
+    plan: {at: [83.96, 0.00]}
     behind: true
     at: [23.34, 1.92]
     size: [79.20, 18.42]
@@ -91,6 +100,7 @@ bays:
     default: dell/pcie-filler-lp-16g@1
   slot-2:
     slot: {connector: x16, lanes: 16, height: low, length: half, processor: 2, generation: 5}
+    plan: {at: [8.36, 0.00]}
     behind: true
     at: [98.94, 1.92]
     size: [79.20, 18.42]

@@ -10,14 +10,13 @@ import pathlib
 import subprocess
 import sys
 
+import onebuild
+
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _index(tmp_path):
-    env = {**os.environ, "PYTHONPATH": "spec/tools"}
-    subprocess.run([sys.executable, "spec/tools/portrayal/components_index.py",
-                    "--library", "library", "--out", str(tmp_path)],
-                   cwd=ROOT, check=True, env=env)
+    tmp_path = onebuild.components_index()   # built once per session
     return {f"{e['ns']}/{e['name']}": e for e in json.loads((tmp_path / "components.json").read_text())["components"]}
 
 

@@ -21,6 +21,7 @@ from pathlib import Path
 import pytest
 import yaml
 
+import onebuild
 import warmrender
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -41,11 +42,8 @@ CARD_JACKS = [
 
 @pytest.fixture(scope="module")
 def comps(tmp_path_factory):
-    out = tmp_path_factory.mktemp("components")
-    r = warmrender.run([sys.executable, str(INDEXER), "--library", str(LIB),
-                        "--out", str(out)], capture_output=True, text=True)
-    assert r.returncode == 0, r.stdout + r.stderr
-    doc = json.loads((out / "components.json").read_text())
+    # the indexer the build runs, over this tree, once per session (onebuild)
+    doc = json.loads((onebuild.components_index() / "components.json").read_text())
     got = {f"{e['ns']}/{e['name']}@{e['major'][1:]}": e for e in doc["components"]}
     assert got, "the indexer published no component at all"
     return got

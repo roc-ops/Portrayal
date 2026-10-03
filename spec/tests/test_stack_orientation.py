@@ -234,6 +234,12 @@ THREE_HIGH = {
     "edgecore/as7326-56x": {f"port-{n}" for n in range(3, 49, 3)},  # "top two SFP rows are 2x4 ganged"
     "edgecore/dcs201": {"port-51", "port-54"},          # "third row is a separate block below"
     "edgecore/dcs202": {"port-51", "port-54"},          # the DCS201's face
+    # NOT A THIRD COLUMN: the AIS2004s' right-hand SFP column (13-20, its own gold
+    # strip and numbering) runs down beside the 2x2 block (9-12) with 2 mm between
+    # them, so its lowest two cages read as a neighbour of the block's right-hand
+    # pair. The 2x2 block is the stack; the column is single (#738).
+    "aurcore/ais2004": {"port-19", "port-20"},
+    "aurcore/ais2004p": {"port-19", "port-20"},
 }
 
 

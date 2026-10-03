@@ -52,6 +52,7 @@ import re
 import shutil
 import subprocess
 import sys
+import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -226,8 +227,9 @@ def build(dist, out, root, published=None, limit_mb=LIMIT_MB):
         meta = {**meta, "digest": dg}
         d, size = _write(out, name, version, description, files, meta, readme)
         state[name] = {"version": version, "digest": dg, "contract": contract,
-                       "changed": changed, **({"device-version": meta["device-version"]}
-                                              if "device-version" in meta else {})}
+                       "changed": changed, "first": name not in published,
+                       **({"device-version": meta["device-version"]}
+                          if "device-version" in meta else {})}
         sizes[name] = size
         return version
 
@@ -335,23 +337,61 @@ def registry_state(names, run=subprocess.run, workers=8):
         return {n: e for n, e in pool.map(one, names) if e}
 
 
-def publish(out, state, run=subprocess.run, dry_run=False):
+def first_publishes(state):
+    """The packages npm has never held. Trusted publishing is configured on a
+    package that exists, so these are the ones a release needs a token for, and
+    the ones to run `npm trust` on afterwards (docs/maintainers.md)."""
+    return sorted(n for n, s in state.items() if s["first"])
+
+
+# How long to wait, in seconds, each time npm answers the publish of a package
+# it ALREADY HOLDS with E429: that is a rate, and a rate passes.
+#
+# A FIRST publish refused with E429 is not waited on, because that one is a
+# quota. npm lets an account create about 25 new packages and then refuses the
+# next for hours: the first release sent 25 in a minute and was refused the
+# 26th, and a second run 110 minutes later was refused on its first request
+# and on five more over the next 38 minutes. npm documents neither the number
+# nor the window. Waiting inside a run cannot outlast it.
+RATE_LIMIT_WAITS = (60, 120, 300)
+
+
+def publish(out, state, run=subprocess.run, dry_run=False, sleep=time.sleep):
     """`npm publish` every changed package: devices and components first, the
     index LAST, so the index never names a version npm does not have yet.
-    Returns the names published, in order."""
+    Returns the names published, in order.
+
+    E429 on a package npm already holds is waited on and tried again. E429 on
+    a first publish is npm's quota of new packages and stops the run at once,
+    as any other failure does."""
     changed = [n for n, s in sorted(state.items()) if s["changed"]]
     order = [n for n in changed if n != f"{SCOPE}/index"] + \
         [n for n in changed if n == f"{SCOPE}/index"]
     for name in order:
         cmd = ["npm", "publish"] + (["--dry-run"] if dry_run else [])
-        try:
-            r = run(cmd, cwd=Path(out) / name.split("/", 1)[1], capture_output=True,
-                    text=True, timeout=900)
-        except subprocess.TimeoutExpired:
-            raise SystemExit(f"npm publish {name}: no answer in 900 s")
+        for wait in RATE_LIMIT_WAITS + (None,):
+            try:
+                r = run(cmd, cwd=Path(out) / name.split("/", 1)[1], capture_output=True,
+                        text=True, timeout=900)
+            except subprocess.TimeoutExpired:
+                raise SystemExit(f"npm publish {name}: no answer in 900 s")
+            if not r.returncode or wait is None or "E429" not in (r.stdout + r.stderr):
+                break
+            if state[name].get("first") and not dry_run:
+                left = len(order) - order.index(name)
+                raise SystemExit(
+                    f"npm publish {name}: E429 on a first publish. npm limits how many new "
+                    f"packages an account creates (about 25, then none for hours). {left} "
+                    f"packages are left; run the release again tomorrow, it skips what is out.")
+            print(f"rate limited at {name}; waiting {wait} s", flush=True)
+            sleep(wait)
         if r.returncode:
             raise SystemExit(f"npm publish {name}: {(r.stderr or r.stdout).strip()[-400:]}")
-        print(f"{'would publish' if dry_run else 'published'} {name}@{state[name]['version']}")
+        # said on the line itself, so the list to `npm trust` survives a run
+        # that fails later: the next run finds these on npm and no longer
+        # calls them first
+        print(f"{'would publish' if dry_run else 'published'} {name}@{state[name]['version']}"
+              f"{' (first publish)' if state[name].get('first') else ''}", flush=True)
     return order
 
 
@@ -376,6 +416,10 @@ def main(argv=None):
     big = max(sizes, key=sizes.get)
     print(f"wrote {len(state)} packages -> {args.out} ({len(changed)} changed); "
           f"largest {big} {sizes[big] / 1e6:.1f} MB")
+    if args.from_registry:
+        # only against the registry: with no baseline every package looks new
+        for n in first_publishes(state):
+            print(f"first publish: {n}")
     if args.publish:
         publish(args.out, state, dry_run=args.dry_run)
     return 0
