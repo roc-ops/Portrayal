@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: riser-2s-16g
-version: 1.0.0
+version: 1.1.0
 class: riser
 behaviour: fills
 profile: server
@@ -65,8 +65,9 @@ provenance:
     each a box in `body.boxes`, so ejecting the riser takes them and the
     interior stays visible. Each box says where it comes from.
   plan: >-
-    NONE. Dell's service model carries riser 2A and riser 3A and no other; no
-    model, figure or photograph held shows riser 2S from above.
+    seen from above, the riser is dell/riser-2s-plan-16g@1, read off Dell's top
+    views of the R6615 and R6625 with this assembly, whose footprint is riser
+    2's here.
 size: {w: 163.60, h: 19.80, d: 246.9}
 size-confidence: {w: drawing, h: drawing, d: estimated}
 body:
@@ -79,12 +80,14 @@ body:
   - {id: slot-1-connector, at: [62.60, 12.70], size: [10.00, 8.70],
      from: 48.3, depth: 89.0, color: '#15171b',
      confidence: estimated, source: "estimated by analogy with riser 2A, shifted 12.1 left with slot 1 (ISM figure 13); riser 2A's is Body_6_31, 10.0 x 8.7 x 89.0 at rear x 181.7 - low, on the board's left face"}
+plan: {ref: dell/riser-2s-plan-16g@1}
 parts:
   - {ref: dell/riser-2s-cage-16g@1, id: plate, at: [0, 0]}
 bays:
   slot-1:
     slot: {connector: x16, lanes: 16, height: low, length: half, processor: 1, generation: 5}
     rotate: 180
+    plan: {at: [82.33, 0.00]}
     behind: true
     at: [2.07, 1.92]
     size: [79.20, 18.42]

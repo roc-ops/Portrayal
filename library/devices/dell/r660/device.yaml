@@ -18,12 +18,13 @@
 # riser configuration 0 (no riser), the LOM blank, the MIC and the
 # liquid-cooling rear I/O board, the last three as examples - configuration 0
 # and the liquid-cooling rear from sibling manuals' figures, the MIC's face an
-# estimate. NOT YET: risers 2Q, 1P, 4P and 2S from above; the liquid-cooling
-# module and the PCH shroud in the top view.
+# estimate; in the top view, riser 2S, the liquid-cooling module and the PCH
+# shroud, from sibling manuals' top views and the ISM's isometrics. NOT YET:
+# risers 2Q, 1P and 4P from above - nothing held shows them top-down.
 format: 1
 kind: device
 name: r660
-version: 3.0.0
+version: 4.0.0
 maturity: draft
 manufacturer: Dell
 model: PowerEdge R660
@@ -158,8 +159,12 @@ provenance:
       bays; the LOM card and rear I/O board project the same way from their
       rear bays. A blank seats no plan, so the default build shows the two
       supplies and the two risers; the `sff10-rc1-2a3a-populated` example seats
-      the rest. NOT YET IN THIS VIEW: risers 2Q, 1P and 4P (the model carries
-      only 2A and 3A), the cards, the drive backplane, and the cabling.
+      the rest. Riser 2S, the liquid-cooling module and the PCH shroud are not
+      in the model; they are drawn from Dell's top views of sibling chassis
+      and the ISM's isometrics, each part saying which. NOT YET IN THIS VIEW:
+      risers 2Q, 1P and 4P (the model carries only 2A and 3A, and no figure
+      held shows the others from above), the cards, the drive backplane, and
+      the cabling.
   bezel:
     confidence: drawing
     note: >-
@@ -275,8 +280,9 @@ gaps:
       one plate across the riser band with a row of forty-three vents
       (dell/riser-blank-full-16g@1). No R660 document draws it, so the plate's
       width here is the R660's riser band and not a measurement. The PCH shroud
-      the ISM fits on the system board in the risers' place (figures 67, 68) is
-      not drawn in the top view.
+      the ISM fits on the system board in the risers' place is in the top view
+      (dell/pch-shroud-1u-16g@1) at the chipset heatsink, its outline an
+      estimate from the ISM's isometric figures 67 and 68.
     wanted: >-
       a straight-on rear photograph of an R660 with no risers
   - what: riser-configuration-9-rear-print-unread
@@ -299,7 +305,11 @@ gaps:
       Dell's service model carries risers 2A and 3A and no other, so the top
       view draws risers 2 and 3 for every variant sharing their cages and
       leaves riser 2Q (configuration 6) and the full-height risers 1P and 4P
-      (configuration 3) out, rather than borrow an outline. The model also
+      (configuration 3) out, rather than borrow an outline. Riser 2S is drawn
+      (dell/riser-2s-plan-16g@1): Dell's top views of the R6615 and R6625 show
+      it, at riser 2's footprint. The same manuals were searched for the other
+      three and show only low-profile risers 2 and 3 from above; the R660 ISM's
+      figures 154, 157 and 165 draw 1P, 2Q and 4P in isometric only. The model also
       begins both risers 20 mm behind the rear wall; the plans are clipped at
       the wall. Re-read at 1.0.0, when riser 3's bay was widened to 270.6 and
       its slot returned to the model's 268.5: still true, and no gap opened or
@@ -326,8 +336,9 @@ gaps:
       from the R6625 ISM's 'rear view with coolant tubes', a sibling drawn in
       the R660 ISM's own frame, and Dell's R660 video confirms the tubes leave
       through round grommets beside PSU 2. No R660 document draws that rear,
-      the board's USB marks cannot be read, and the cold plates and tubes that
-      replace the heatsinks are not drawn in the top view.
+      and the board's USB marks cannot be read. The module itself is in the top
+      view (dell/dlc-module-1u-16g@1): cold plates on the R660's own sockets,
+      the tube route the R6625's fitted to them, the plates' height a guess.
     wanted: >-
       a straight-on rear photograph of an R660 with the Direct Liquid Cooling
       module, and a view of it from above
@@ -446,7 +457,7 @@ groups:
     term: Part
     role: furniture
     index-origin: 1
-    description: the system board, the air shroud and the fan bracket
+    description: the system board, the air shroud, the fan bracket and, with no riser, the PCH shroud
   covers:
     term: Cover
     role: furniture
@@ -1648,11 +1659,21 @@ views:
       placements:
         - {ref: dell/system-board-r660@1, id: system-board, at: [5.1, 1.4],
            group: interior, rel-pos: 1,
-           under: [heatsink-1, heatsink-2, air-shroud, fan-bracket, system-cover, backplane-cover, fan-1, fan-2, fan-3, fan-4, dimm-b8, dimm-b16, dimm-b2, dimm-b10, dimm-b6, dimm-b14, dimm-b4, dimm-b12, dimm-b9, dimm-b1, dimm-b15, dimm-b7, dimm-b11, dimm-b3, dimm-b13, dimm-b5, dimm-a8, dimm-a16, dimm-a2, dimm-a10, dimm-a6, dimm-a14, dimm-a4, dimm-a12, dimm-a9, dimm-a1, dimm-a15, dimm-a7, dimm-a11, dimm-a3, dimm-a13, dimm-a5]}
+           under: [heatsink-1, heatsink-2, dlc-module, pch-shroud, air-shroud, fan-bracket, system-cover, backplane-cover, fan-1, fan-2, fan-3, fan-4, dimm-b8, dimm-b16, dimm-b2, dimm-b10, dimm-b6, dimm-b14, dimm-b4, dimm-b12, dimm-b9, dimm-b1, dimm-b15, dimm-b7, dimm-b11, dimm-b3, dimm-b13, dimm-b5, dimm-a8, dimm-a16, dimm-a2, dimm-a10, dimm-a6, dimm-a14, dimm-a4, dimm-a12, dimm-a9, dimm-a1, dimm-a15, dimm-a7, dimm-a11, dimm-a3, dimm-a13, dimm-a5]}
+        # the heatsinks in every build but the liquid-cooled one, whose module
+        # takes their place on the sockets (GENERATED with the configurations)
         - {ref: dell/heatsink-1u-16g@1, id: heatsink-1, at: [278.0, 266.7],
-           group: processors, rel-pos: 1, in: system-board, under: [system-cover]}
+           group: processors, rel-pos: 1, in: system-board, under: [system-cover],
+           only-in: [sff10-rc1-2a3a, sff10-rc2-2p3p, sff10-rc3-1p4p, sff10-rc4-2r3r, sff10-rc5-2a3q, sff10-rc6-2q, sff10-rc7-3p-rear2, sff10-rc8-2a, sff8sf-rc1-2a3a, sff8sf-rc2-2p3p, sff8sf-rc3-1p4p, sff8sf-rc4-2r3r, sff8sf-rc5-2a3q, sff8sf-rc6-2q, sff8sf-rc8-2a, nobp-rc1-2a3a, nobp-rc2-2p3p, nobp-rc3-1p4p, nobp-rc4-2r3r, nobp-rc5-2a3q, nobp-rc6-2q, nobp-rc8-2a, e3s16-rc1-2a3a, e3s16-rc2-2p3p, e3s16-rc3-1p4p, e3s16-rc4-2r3r, e3s16-rc5-2a3q, e3s16-rc6-2q, e3s16-rc8-2a, e3s14-rc1-2a3a, e3s14-rc2-2p3p, e3s14-rc3-1p4p, e3s14-rc4-2r3r, e3s14-rc5-2a3q, e3s14-rc6-2q, e3s14-rc8-2a, e3s14-rc9-2s3s, sff10-rc0-none, sff8sf-rc0-none, nobp-rc0-none, e3s16-rc0-none, e3s14-rc0-none, sff10-rc1-2a3a-populated, sff10-rc1-2a3a-no-lom, sff10-rc3-1p4p-mic]}
         - {ref: dell/heatsink-1u-16g@1, id: heatsink-2, at: [75.2, 266.7],
-           group: processors, rel-pos: 2, in: system-board, under: [system-cover]}
+           group: processors, rel-pos: 2, in: system-board, under: [system-cover],
+           only-in: [sff10-rc1-2a3a, sff10-rc2-2p3p, sff10-rc3-1p4p, sff10-rc4-2r3r, sff10-rc5-2a3q, sff10-rc6-2q, sff10-rc7-3p-rear2, sff10-rc8-2a, sff8sf-rc1-2a3a, sff8sf-rc2-2p3p, sff8sf-rc3-1p4p, sff8sf-rc4-2r3r, sff8sf-rc5-2a3q, sff8sf-rc6-2q, sff8sf-rc8-2a, nobp-rc1-2a3a, nobp-rc2-2p3p, nobp-rc3-1p4p, nobp-rc4-2r3r, nobp-rc5-2a3q, nobp-rc6-2q, nobp-rc8-2a, e3s16-rc1-2a3a, e3s16-rc2-2p3p, e3s16-rc3-1p4p, e3s16-rc4-2r3r, e3s16-rc5-2a3q, e3s16-rc6-2q, e3s16-rc8-2a, e3s14-rc1-2a3a, e3s14-rc2-2p3p, e3s14-rc3-1p4p, e3s14-rc4-2r3r, e3s14-rc5-2a3q, e3s14-rc6-2q, e3s14-rc8-2a, e3s14-rc9-2s3s, sff10-rc0-none, sff8sf-rc0-none, nobp-rc0-none, e3s16-rc0-none, e3s14-rc0-none, sff10-rc1-2a3a-populated, sff10-rc1-2a3a-no-lom, sff10-rc3-1p4p-mic]}
+        - {ref: dell/dlc-module-1u-16g@1, id: dlc-module, at: [75.2, 0.0],
+           group: processors, rel-pos: 3, in: system-board, under: [system-cover, air-shroud],
+           only-in: [sff10-rc1-2a3a-dlc]}
+        - {ref: dell/pch-shroud-1u-16g@1, id: pch-shroud, at: [94.0, 110.8],
+           group: interior, rel-pos: 5, in: system-board, under: [system-cover],
+           only-in: [sff10-rc0-none, sff8sf-rc0-none, nobp-rc0-none, e3s16-rc0-none, e3s14-rc0-none]}
         - {ref: dell/air-shroud-1u-16g@1, id: air-shroud, at: [3.1, 390.7],
            group: interior, rel-pos: 3, in: system-board, under: [system-cover]}
         - {ref: dell/fan-bracket-1u-16g@1, id: fan-bracket, at: [3.45, 488.2],
