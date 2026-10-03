@@ -594,7 +594,20 @@ host3d.id = 'stage-3d';
 host3d.hidden = true;
 shell.el.stage.appendChild(host3d);
 
-let mode = '2d', viewer = null, loading = null, loadedKey = '';
+let mode = '2d', viewer = null, loading = null, loadedKey = '', gpuLost = false;
+
+// WHY 3D IS NOT SHOWING, in words a reader can act on. A browser keeps only
+// about sixteen WebGL contexts alive and, after repeated GPU resets, refuses
+// new ones until it restarts; three.js reports either as "Error creating WebGL
+// context", which on its own tells nobody what to do next.
+function why3d(err) {
+  const msg = String(err?.message || err);
+  if (/WebGL context/i.test(msg))
+    return '3D unavailable: the browser would not create a graphics context — ' +
+           'reload the page, or close other tabs with 3D open (browsers allow only about 16)';
+  return `3D unavailable: ${msg}`;
+}
+const LOST_MSG = '3D paused — the graphics context was lost; it will resume, or reload the page';
 
 async function ensureViewer() {
   if (viewer) return viewer;
@@ -607,7 +620,14 @@ async function ensureViewer() {
       if (state.svg?.querySelector(`[data-path="${CSS.escape(p)}"]`)) return shell.select(p, false);
       shell.el.status.textContent = `${p} — not in the ${state.view} view`;
     });
-    v.on('hover', p => { shell.el.status.textContent = p || ''; });
+    // while the context is gone the pick still works on the CPU, and a hover
+    // clearing the status would take the only explanation of the blank scene
+    v.on('hover', p => { if (!gpuLost) shell.el.status.textContent = p || ''; });
+    v.on('contextlost', () => { gpuLost = true; shell.el.status.textContent = LOST_MSG; });
+    v.on('contextrestored', err => {
+      gpuLost = false;
+      shell.el.status.textContent = err ? why3d(err) : '';
+    });
     return v;
   })();
   try { viewer = await loading; }
@@ -668,10 +688,11 @@ async function setMode(m) {
   try {
     await sync3d();
     (await ensureViewer()).resize();
-    shell.el.status.textContent = '';
+    // a context lost while the drawing showed is still lost: keep saying so
+    shell.el.status.textContent = gpuLost ? LOST_MSG : '';
   } catch (err) {
     console.warn('[portrayal] 3D unavailable', err);
-    shell.el.status.textContent = `3D unavailable: ${err.message || err}`;
+    shell.el.status.textContent = why3d(err);
     setMode('2d');
   }
 }
@@ -708,11 +729,11 @@ shell.on('select', path => { if (mode === '3d' && viewer) viewer.select(path); }
 // rejection is a silent one.
 shell.on('change', () => { sync3d().catch(err => {
   console.warn('[portrayal] 3D swap sync failed', err);
-  shell.el.status.textContent = `3D unavailable: ${err.message || err}`;
+  shell.el.status.textContent = why3d(err);
 }); });
 shell.on('load', () => { sync3d().catch(err => {
   console.warn('[portrayal] 3D reload failed', err);
-  shell.el.status.textContent = `3D unavailable: ${err.message || err}`;
+  shell.el.status.textContent = why3d(err);
 }); });
 
 addEventListener('resize', () => { if (mode === '3d' && viewer) viewer.resize(); });
