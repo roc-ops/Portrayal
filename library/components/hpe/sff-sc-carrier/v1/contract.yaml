@@ -28,8 +28,7 @@ provenance:
     (1) HPE's straight-on product image of the DL160 Gen10 8 SFF front, as
     hosted by Express Computer Systems (expresscomputersystems.com/cdn/shop/
     files/dl160-gen10-drive-8sff_1835d8c9-1c70-466f-aed1-349e0d74a3b8.jpg,
-    1080 x 1080, staged as photos/ecs-dl160g10-8sff-front-ORTHO-1080sq.jpg
-    under working/intake/hpe/proliant/dl160-gen10), which carries eight of
+    1080 x 1080), which carries eight of
     these carriers. (2) DL160 Gen10 User Guide a00066666en_us, "Smart Carrier
     (SC) drive LED definitions" figure (native figure GUID-DC2DFCB8) and its
     table.
@@ -96,8 +95,9 @@ elements:
       - {name: online, color: '#22c55e'}
       - {name: rebuild, color: '#22c55e', behavior: {mode: blinking, rate: 1}}
       - {name: predictive-failure, color: '#f59e0b', behavior: {mode: blinking, rate: 1}}
+      - {name: predictive-failure-member, behavior: {mode: sequence, phases: [{color: '#f59e0b', seconds: 0.5}, {color: '#22c55e', seconds: 0.5}]}}
       - {name: fault, color: '#f59e0b'}
-    description: Drive status. Solid green - member of a logical drive; flashing green - rebuilding or migrating; flashing amber - predictive failure; solid amber - failed.
+    description: Drive status. Solid green - member of a logical drive; flashing green - rebuilding or migrating; flashing amber - predictive failure, not a member of a logical drive; flashing amber/green - a member of one or more logical drives and predicted to fail; solid amber - failed.
   release:
     at: [62.0, 1.8]
     size: [7.4, 10.7]
