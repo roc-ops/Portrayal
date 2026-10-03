@@ -344,11 +344,16 @@ def first_publishes(state):
     return sorted(n for n, s in state.items() if s["first"])
 
 
-# How long to wait, in seconds, each time npm answers a publish with E429. The
-# first release sent 25 new packages in a minute and was refused the 26th; npm
-# does not say what the limit is or when it lifts, so the waits lengthen, and
-# a package is given up on after the last (about half an hour in all).
-RATE_LIMIT_WAITS = (60, 120, 300, 600, 900)
+# How long to wait, in seconds, each time npm answers the publish of a package
+# it ALREADY HOLDS with E429: that is a rate, and a rate passes.
+#
+# A FIRST publish refused with E429 is not waited on, because that one is a
+# quota. npm lets an account create about 25 new packages and then refuses the
+# next for hours: the first release sent 25 in a minute and was refused the
+# 26th, and a second run 110 minutes later was refused on its first request
+# and on five more over the next 38 minutes. npm documents neither the number
+# nor the window. Waiting inside a run cannot outlast it.
+RATE_LIMIT_WAITS = (60, 120, 300)
 
 
 def publish(out, state, run=subprocess.run, dry_run=False, sleep=time.sleep):
@@ -356,8 +361,9 @@ def publish(out, state, run=subprocess.run, dry_run=False, sleep=time.sleep):
     index LAST, so the index never names a version npm does not have yet.
     Returns the names published, in order.
 
-    A publish npm refuses as rate limited (E429) is waited on and tried again;
-    any other failure stops the run."""
+    E429 on a package npm already holds is waited on and tried again. E429 on
+    a first publish is npm's quota of new packages and stops the run at once,
+    as any other failure does."""
     changed = [n for n, s in sorted(state.items()) if s["changed"]]
     order = [n for n in changed if n != f"{SCOPE}/index"] + \
         [n for n in changed if n == f"{SCOPE}/index"]
@@ -371,6 +377,12 @@ def publish(out, state, run=subprocess.run, dry_run=False, sleep=time.sleep):
                 raise SystemExit(f"npm publish {name}: no answer in 900 s")
             if not r.returncode or wait is None or "E429" not in (r.stdout + r.stderr):
                 break
+            if state[name].get("first") and not dry_run:
+                left = len(order) - order.index(name)
+                raise SystemExit(
+                    f"npm publish {name}: E429 on a first publish. npm limits how many new "
+                    f"packages an account creates (about 25, then none for hours). {left} "
+                    f"packages are left; run the release again tomorrow, it skips what is out.")
             print(f"rate limited at {name}; waiting {wait} s", flush=True)
             sleep(wait)
         if r.returncode:
