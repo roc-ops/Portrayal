@@ -35,9 +35,9 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 import pytest
+import yaml
 
 import onebuild
-import yaml
 
 SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"

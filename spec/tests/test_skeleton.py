@@ -4,9 +4,9 @@ import subprocess
 import sys
 
 import pytest
+from pathlib import Path
 
 import onebuild
-from pathlib import Path
 
 SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"

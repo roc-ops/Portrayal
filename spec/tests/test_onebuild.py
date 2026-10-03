@@ -80,6 +80,23 @@ def test_processes_asking_at_once_build_it_once(shared, tmp_path):
     assert log.read_text() == "built\n"
 
 
+def test_a_process_with_no_shared_directory_cleans_up_after_itself(tmp_path):
+    """Run outside pytest's session, or without flock, each process builds for
+    itself in the system temp directory - which nothing else empties."""
+    script = textwrap.dedent("""
+        import onebuild
+        print(onebuild.once("thing", lambda d: (d / "x").write_text("1")).parent)
+    """)
+    env = {k: v for k, v in os.environ.items() if k != "PORTRAYAL_TEST_SHARED"}
+    env["PYTHONPATH"] = os.pathsep.join([str(ROOT / "spec/tools"), str(ROOT / "spec/tests")])
+    env["TMPDIR"] = str(tmp_path)
+    r = subprocess.run([sys.executable, "-c", script], env=env, capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr
+    used = pathlib.Path(r.stdout.strip())
+    assert used.parent.resolve() == tmp_path.resolve(), used
+    assert not used.exists(), "the process left its build directory behind"
+
+
 def test_the_index_is_this_trees_and_not_library_dist():
     """THE GUARANTEE THE FIXTURES IT REPLACED EACH GAVE. A stale dist is a stale
     answer, so what a test reads is built in this session by the indexer."""

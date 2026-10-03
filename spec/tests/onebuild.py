@@ -34,6 +34,7 @@ same message.
 READ-ONLY, like libdata: `components_index()` is shared, so a test that wants
 to write beside the index takes its own copy with `components_index_into`.
 """
+import atexit
 import contextlib
 import json
 import os
@@ -68,7 +69,11 @@ def _shared():
         d.mkdir(parents=True, exist_ok=True)
         return d
     if _OWN is None:
+        # NOT UNDER PYTEST'S BASETEMP, so nothing else will remove it: a copy
+        # of the index is tens of megabytes, and one left per process per run
+        # is how a shared temp directory fills.
         _OWN = pathlib.Path(tempfile.mkdtemp(prefix="portrayal-onebuild-"))
+        atexit.register(shutil.rmtree, _OWN, ignore_errors=True)
     return _OWN
 
 
