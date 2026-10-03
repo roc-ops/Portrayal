@@ -1,0 +1,72 @@
+format: 1
+kind: module
+name: flom-817721-b21
+version: 1.0.0
+class: nic
+behaviour: fills
+profile: server
+description: >-
+  HPE Ethernet 10Gb 2-port 535FLR-T FlexibleLOM adapter (535FLR-T; option
+  817721-B21, spare 854177-001) - the adapter the Gen10 ProLiant DL160's
+  FlexibleLOM riser carries in place of slot 1
+attrs:
+  ports: 2
+  media: rj45
+  part-numbers: 817721-B21 854177-001
+  spare-part: 854177-001
+  hpe-model: 535FLR-T
+  controller: Broadcom BCM57416
+groups:
+  ports:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 10g}
+provenance:
+  sources: >-
+    QuickSpecs a00021860enw, FlexibleLOM adapters: 817721-B21 ('FlexibleLOM
+    Riser Kit (875748-B21) is required to install these adapters'; 'Only one
+    FlexibleLOM can be added to the server'). HPE PartSurfer names its spare
+    854177-001 (partsurfer.hpe.com/Search.aspx?SearchText=817721-B21). A
+    reseller's photograph of a 535FLR-T from the port end (cdn11.bigcommerce.com
+    /s-b18w/images/stencil/1280x1280/products/59909/110875/854177-
+    001_Front__82447.1746626872.jpg), slightly from the left, and PartSurfer's
+    of the spare.
+  size: >-
+    photo-measured - 74.0 x 14.6, the FlexibleLOM faceplate, from three sellers'
+    photographs of three adapters taken near face-on, each scaled on a part of
+    known size it carries: the 640FLR-SFP28's 1x2 SFP cage (29.8 across by
+    SFF-8433) puts its plate at 73.5; the 331FLR's four ganged jacks span 0.755
+    of its plate, which at 74.0 is 55.9 - four of the 13.97 a ganged modular
+    jack is pitched at - and that agreement is what fixes the length; the
+    562FLR-T's plate is 12.4 tall with its jacks standing 1.3 below it. 14.6 is
+    the plate, its top fold and that overhang together. None of the three is a
+    ruler on the part, and none is perfectly square to the camera.
+  face: >-
+    photo-measured - the same faceplate as hpe/flom-817745-b21@1: screw hole,
+    three-by-three vents, two shielded jacks notch down, P2 and P1. The
+    photograph is taken from a little to the left, so its positions are read as
+    that part's and not re-measured here.
+  lamps: >-
+    known-wrong - THE LAMPS ARE AT THE WRONG CORNERS. The photographs show a
+    lamp window at each UPPER corner of each jack with the latch notch at the
+    bottom; the library's lamped jack (common/rj45-eth@1) carries its lamps
+    beside the notch, so drawn notch-down they sit at the lower corners. The
+    jack's way up is the photograph's; the lamps are 9 mm from where they are.
+  way-up: >-
+    The adapter lies component side up, its screw end at the left as the User
+    Guide's figure fits it into the cage; the photographs are taken the same way
+    up.
+  power: >-
+    NOT STATED for the adapter in any document held; lint's L27 stands as the
+    record.
+  depth: >-
+    estimated - 110. No dimension of the adapter is in any document held; it is
+    the board's reach behind the faceplate by proportion on the photographs.
+size: {w: 74.0, h: 14.6, d: 110.0}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+body: {depth: 110.0, color: '#2f6b3a'}
+parts:
+  - {ref: common/rj45-eth@1, id: port-2, group: ports, at: [21.4, 1.1], attrs: {media: rj45, speed: 10g}}
+  - {ref: common/rj45-eth@1, id: port-1, group: ports, at: [42.8, 1.1], attrs: {media: rj45, speed: 10g}}
+skins: [default]

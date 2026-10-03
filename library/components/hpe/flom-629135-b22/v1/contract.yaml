@@ -1,0 +1,70 @@
+format: 1
+kind: module
+name: flom-629135-b22
+version: 1.0.0
+class: nic
+behaviour: fills
+profile: server
+description: >-
+  HPE Ethernet 1Gb 4-port 331FLR FlexibleLOM adapter (331FLR; option
+  629135-B22, spare 789897-001) - the adapter the Gen10 ProLiant DL160's
+  FlexibleLOM riser carries in place of slot 1
+attrs:
+  ports: 4
+  media: rj45
+  part-numbers: 629135-B22 789897-001
+  spare-part: 789897-001
+  hpe-model: 331FLR
+  controller: Broadcom BCM5719
+groups:
+  ports:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+provenance:
+  sources: >-
+    QuickSpecs a00021860enw, FlexibleLOM adapters: 629135-B22 ('FlexibleLOM
+    Riser Kit (875748-B21) is required to install these adapters'; 'Only one
+    FlexibleLOM can be added to the server'). HPE PartSurfer names its spare
+    789897-001 (partsurfer.hpe.com/Search.aspx?SearchText=629135-B22). A
+    reseller's photograph of a 331FLR from the port end, nearly face-on (img.gen
+    uinemodules.com/cache/catalog/products/629135-B22/629135-B22-3-800x800.jpg),
+    and PartSurfer's of the spare from above.
+  size: >-
+    photo-measured - 74.0 x 14.6, the FlexibleLOM faceplate, from three sellers'
+    photographs of three adapters taken near face-on, each scaled on a part of
+    known size it carries: the 640FLR-SFP28's 1x2 SFP cage (29.8 across by
+    SFF-8433) puts its plate at 73.5; the 331FLR's four ganged jacks span 0.755
+    of its plate, which at 74.0 is 55.9 - four of the 13.97 a ganged modular
+    jack is pitched at - and that agreement is what fixes the length; the
+    562FLR-T's plate is 12.4 tall with its jacks standing 1.3 below it. 14.6 is
+    the plate, its top fold and that overhang together. None of the three is a
+    ruler on the part, and none is perfectly square to the camera.
+  face: >-
+    photo-measured - one four-port ganged jack in a shield, 9.05..64.95 along
+    the plate (0.755 of it), a lamp at each upper corner of every jack and the
+    contacts along the bottom, so the jacks are the library's lamped ganged jack
+    turned over; the screw hole at the left end. PORT ORDER IS NOT READ: the
+    faceplate prints no numbers that the photograph resolves, and 4 to 1 left to
+    right follows HPE's two-port FlexibleLOMs, which print P2 at the left and P1
+    at the right.
+  way-up: >-
+    The adapter lies component side up, its screw end at the left as the User
+    Guide's figure fits it into the cage; the photographs are taken the same way
+    up.
+  power: >-
+    NOT STATED for the adapter in any document held; lint's L27 stands as the
+    record.
+  depth: >-
+    estimated - 110. No dimension of the adapter is in any document held; it is
+    the board's reach behind the faceplate by proportion on the photographs.
+size: {w: 74.0, h: 14.6, d: 110.0}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+body: {depth: 110.0, color: '#2f6b3a'}
+parts:
+  - {ref: common/rj45-ganged-eth@1, id: port-4, group: ports, at: [9.69, 2.9], rotate: 180, attrs: {media: rj45, speed: 1g}}
+  - {ref: common/rj45-ganged-eth@1, id: port-3, group: ports, at: [23.66, 2.9], rotate: 180, attrs: {media: rj45, speed: 1g}}
+  - {ref: common/rj45-ganged-eth@1, id: port-2, group: ports, at: [37.62, 2.9], rotate: 180, attrs: {media: rj45, speed: 1g}}
+  - {ref: common/rj45-ganged-eth@1, id: port-1, group: ports, at: [51.6, 2.9], rotate: 180, attrs: {media: rj45, speed: 1g}}
+skins: [default]

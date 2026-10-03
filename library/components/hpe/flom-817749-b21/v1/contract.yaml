@@ -1,0 +1,82 @@
+format: 1
+kind: module
+name: flom-817749-b21
+version: 1.0.0
+class: nic
+behaviour: fills
+profile: server
+description: >-
+  HPE Ethernet 10/25Gb 2-port 640FLR-SFP28 FlexibleLOM adapter (640FLR-SFP28;
+  option 817749-B21, spare 840139-001) - the adapter the Gen10 ProLiant
+  DL160's FlexibleLOM riser carries in place of slot 1
+attrs:
+  ports: 2
+  media: sfp28
+  part-numbers: 817749-B21 840139-001
+  spare-part: 840139-001
+  hpe-model: 640FLR-SFP28
+  controller: Mellanox MCX4121A-ACFT
+  sfp28: 2
+groups:
+  ports:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp28, speed: 25g}
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+provenance:
+  sources: >-
+    QuickSpecs a00021860enw, FlexibleLOM adapters: 817749-B21 ('FlexibleLOM
+    Riser Kit (875748-B21) is required to install these adapters'; 'Only one
+    FlexibleLOM can be added to the server'). HPE PartSurfer names its spare
+    840139-001 (partsurfer.hpe.com/Search.aspx?SearchText=817749-B21). A
+    seller's photograph of a 640FLR-SFP28 from the port end, face-on and close
+    (i.ebayimg.com/images/g/7bEAAOSw7wxiERnD/s-l1600.jpg), and the User Guide
+    figure, which draws an SFP adapter going into the cage.
+  size: >-
+    photo-measured - 74.0 x 14.6, the FlexibleLOM faceplate, from three sellers'
+    photographs of three adapters taken near face-on, each scaled on a part of
+    known size it carries: the 640FLR-SFP28's 1x2 SFP cage (29.8 across by
+    SFF-8433) puts its plate at 73.5; the 331FLR's four ganged jacks span 0.755
+    of its plate, which at 74.0 is 55.9 - four of the 13.97 a ganged modular
+    jack is pitched at - and that agreement is what fixes the length; the
+    562FLR-T's plate is 12.4 tall with its jacks standing 1.3 below it. 14.6 is
+    the plate, its top fold and that overhang together. None of the three is a
+    ruler on the part, and none is perfectly square to the camera.
+  face: >-
+    photo-measured - at 24.5 px/mm on the cage's 29.8: the screw hole 5.3 from
+    the left end; a three-by-two field of vents at 10.0..25.5; one 1x2 ganged
+    SFP28 cage at 26.1..55.9, its latch slots along the bottom; a two-by-two
+    field at 56.3..66.1; PORT 2 printed under the left cage and PORT 1 under the
+    right; and four round lamps in a row under the vents, ACT and LNK at the
+    left for port 2 and LNK and ACT at the right for port 1.
+  lamps: >-
+    photo-measured - four round lamps about 1 mm across, drawn with the
+    library's 2 mm dot; their legends ACT and LNK are read off the photograph.
+    WHAT THEIR COLOURS AND FLASHES MEAN is in no document held: the QuickSpecs
+    and the User Guide do not carry the adapter's LED table. Green for link and
+    flashing green for activity is the convention, not a reading.
+  way-up: >-
+    The adapter lies component side up, its screw end at the left as the User
+    Guide's figure fits it into the cage; the photographs are taken the same way
+    up.
+  power: >-
+    NOT STATED for the adapter in any document held; lint's L27 stands as the
+    record.
+  depth: >-
+    estimated - 110. No dimension of the adapter is in any document held; it is
+    the board's reach behind the faceplate by proportion on the photographs.
+size: {w: 74.0, h: 14.6, d: 110.0}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+body: {depth: 110.0, color: '#2f6b3a'}
+parts:
+  - {ref: std/sfp-ganged@1, id: port-2, group: ports, at: [26.6, 2.5], attrs: {media: sfp28, speed: 25g}}
+  - {ref: std/sfp-ganged@1, id: port-1, group: ports, at: [40.85, 2.5], attrs: {media: sfp28, speed: 25g}}
+  - {ref: common/led-dot@1, id: led-2-act, group: port-leds, at: [16.5, 9.4], states: {lamp: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-2-lnk, group: port-leds, at: [21, 9.4], states: {lamp: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-1-lnk, group: port-leds, at: [58.8, 9.4], states: {lamp: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-1-act, group: port-leds, at: [62.5, 9.4], states: {lamp: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]}}
+skins: [default]
