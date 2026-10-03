@@ -1,0 +1,35 @@
+format: 1
+kind: component
+name: access-panel-dl160
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+profile: server
+description: >-
+  The access panel of the Gen10 ProLiant DL160 - the lid over the whole
+  chassis, with its hood latch near the front
+provenance:
+  sources: >-
+    The QuickSpecs front views, whose callout 1 on both fronts is the 'Quick
+    removal access panel' (a00021860enw pages 1-2, angled from above), and the
+    User Guide's 'Remove the access panel' procedure. The Internal View shows
+    the chassis with the panel off and nothing left over the drive cage, so the
+    panel is drawn as one lid over the whole top.
+  size: >-
+    datasheet - the chassis' own 434.6 x 614.9 (QuickSpecs page 31): the lid is
+    the top of the box.
+  latch: >-
+    estimated - the hood latch and the label beside it are placed from the
+    angled front views, about a third of the width in from the left and 60 mm
+    behind the front edge. No straight-on view of the closed lid is held.
+size: {w: 434.6, h: 614.9}
+size-confidence: {w: datasheet, h: datasheet}
+relief:
+  wall: '#1a1d21'
+  features:
+  - {node: cover, out: 1.0, color: '#c3c8cd', confidence: estimated, source: 'sheet metal lid; thickness not measured'}
+  - {node: latch, out: 2.0, color: '#2b6cb0', confidence: estimated, source: 'the latch stands proud of the lid in the angled views; not measured'}
+elements:
+  cover: {at: [0.0, 0.0], size: [434.6, 614.9], class: bezel}
+  latch: {at: [130.0, 520.0], size: [22.0, 40.0], class: latch}
+skins: [default]

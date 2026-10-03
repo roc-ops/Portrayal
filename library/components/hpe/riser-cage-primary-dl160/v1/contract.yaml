@@ -1,0 +1,39 @@
+format: 1
+kind: component
+name: riser-cage-primary-dl160
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+profile: server
+description: >-
+  The primary PCI riser cage of the Gen10 ProLiant DL160 seen from above - the
+  vented sheet-metal roof over PCIe slots 1 and 2 at the rear right, with the
+  riser board along its inner edge
+provenance:
+  sources: >-
+    The Internal View in HPE's QuickSpecs for the DL160 Gen10 (a00021860enw,
+    page 3; the version 6 edition embeds it at 1171 x 728) - a photograph of the
+    8 SFF server from above with its lid off, twenty-two callouts. Turned to the
+    plan's orientation (rear at the top), the chassis is 576.5 px across for
+    434.6 mm (1.3265 px/mm) and 845 px down for 614.9 (1.374 px/mm): 3.6% apart,
+    so the photograph FAILS the panel gate - it is a camera above a box, not a
+    drawing - and positions are taken as fractions on each axis separately. The
+    User Guide's Removing / Installing the primary PCI riser cage procedures;
+    the riser's own label in the photograph reads Slot 2 PCIe x8 and Slot 1 PCIe
+    x16.
+  size: >-
+    estimated - 123.5 x 145.6: x 468..632 px and y 200..400 px on the
+    photograph. THE CROSS-CHECK: the rear photograph, a different image, puts
+    slot 1's window at 309.4..418.7 seen from above, and this cage starts at
+    308.0.
+  relief: >-
+    estimated - 30 above the board; the cage reaches the lid.
+size: {w: 123.5, h: 145.6}
+size-confidence: {w: estimated, h: estimated}
+relief:
+  wall: '#8d949b'
+  features:
+  - {node: roof, out: 30.0, color: '#c3c8cd', confidence: estimated, source: 'the cage reaches the lid; not measured'}
+elements:
+  roof: {at: [0.0, 0.0], size: [123.5, 145.6], class: bezel}
+skins: [default]

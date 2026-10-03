@@ -1,0 +1,130 @@
+format: 1
+kind: module
+name: psu-865414-b21
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: server
+description: >-
+  HPE 800 W Flex Slot Platinum Hot Plug Low Halogen power supply (865414-B21),
+  the 500 W supply's casting with its own output - a 40 mm fan behind a grille
+  held by four screws, the status lamp and the terracotta release latch at the
+  top right, and a C14 inlet standing portrait below them
+attrs:
+  power-output-w: 800
+  form-factor: flex-slot
+  inlet: c14
+  input: 100-240 VAC
+  efficiency: platinum
+# THE HUB LABEL IS A FIELD AND THE OUTPUT IS NOT, as on dell/psu-700w-ac-60mm@1:
+# a field cannot set attrs, so a different wattage is a sibling part.
+fields:
+  watts:
+    label: Wattage
+    type: text
+    default: '800W'
+    pattern: '^\\d+W$'
+    description: what the fan hub prints; the sum reads power-output-w, not this
+provenance:
+  plan: >-
+    seen from above, the supply is hpe/psu-flex-slot-plan@1 - the can it runs into the chassis.
+  sources: >-
+    (1) hpe/psu-865408-b21@1, whose face this is - see sibling-of-the-500. (2)
+    A reseller's photograph of an 865414-B21 from its inlet end
+    (comptechdirect.com/cdn/shop/products/800Watt.jpg, 1200 x 790, angled;
+    staged as photos/comptech-psu-800w-865414-angled-1200x790.jpg under
+    working/intake/hpe/proliant/dl160-gen10). (3) HPE's QuickSpecs HPE Flexible
+    Slot Power Supplies, c04346217 version 18, and HPE's data sheet for this
+    supply, PSN1009449980CAEN. (4) DL160 Gen10 User Guide a00066666en_us, "HPE
+    800 W Flex Slot Platinum Hot-plug Low Halogen Power Supply".
+  sibling-of-the-500: >-
+    borrowed - THIS IS hpe/psu-865408-b21@1's FACE WITH ITS OWN OUTPUT. The
+    Flex Slot QuickSpecs says the family shares "a common electrical and
+    physical design" and gives one set of mechanical dimensions for the AC
+    models, this one and the 500 W among them. The reseller's photograph
+    shows the same arrangement on an 800 W unit - fan and four screws, lamp,
+    terracotta latch, portrait C14 - with "800W" on the fan hub, but it is
+    angled and nothing was measured off it: every position below was read for
+    the 500 W unit.
+  size: >-
+    datasheet - 68.0 x 40.4 x 225.3. HPE's "QuickSpecs HPE Flexible Slot Power
+    Supplies" (c04346217, version 18, December 2023; read from a distributor's
+    copy, staged under docs/) gives the AC supplies' mechanical dimensions as
+    2.68 x 1.59 x 8.87 in (6.80 x 4.04 x 22.53 cm), W x H x D, "length
+    includes from handle to card-edge", for a list of models that names
+    865408-B21. HPE's data sheet for the 800 W supply (PSN1009449980CAEN) prints
+    the same 6.80 x 4.04 x 22.53 cm. The rear photograph had measured the face
+    at 68.2 x 40.6 (x 1060..1258 px and y 15..131 px at 2.90 x 2.87 px/mm)
+    before either document was found - 0.2 mm from the datasheet on both axes,
+    which is the check on that photograph's scale.
+  face: >-
+    photo-measured - supply-local: grille 1.0..38.9 across, drawn as a 36 mm
+    round grille centred at (20.0, 20.4); screws at (5.5, 5.2), (37.2, 5.2),
+    (4.8, 36.9) and (37.2, 36.9); status lamp at (48.3, 5.6); release latch
+    53.1..62.1 x 4.5..11.1, burgundy; inlet recess 43.1..68.0 x 11.1..40.4.
+    THE BLACK BAR ACROSS THE FAN IS THE PULL HANDLE, from the left edge to the
+    inlet at mid height - a first drawing left it off as a cord strap, which is
+    what the hook-and-loop wrap round it on the photographed unit is.
+  hub: >-
+    photo-measured - THE HUB STICKER IS WHAT TELLS ONE FLEX SLOT SUPPLY FROM
+    ANOTHER at the back of a rack: the casting is shared. Here it is a mauve sticker printed "800W", as the reseller's photograph of an 865414-B21 shows it.
+    About 17 mm across on both. The first drawing printed the rating in
+    2.4 mm type on a 10 mm hub and the two supplies could not be told apart.
+  inlet: >-
+    photo-measured - COMPOSED, std/c14-inlet@1 at rotate 90. The library's C14
+    is drawn earth pin up; on this supply the photograph puts the earth pin on
+    the RIGHT with line and neutral stacked on the left, a quarter turn
+    clockwise. It is centred on the recess at (55.6, 25.8).
+  lamp: >-
+    User Guide "Rear panel LEDs" item 4, Power supply: solid green - normal; off
+    - power unavailable, power supply failure, power supply in standby, or power
+    supply error.
+  power: >-
+    datasheet - power-output-w 800 is the rating: User Guide specification
+    table, rated steady-state power 800 W at 100-127 VAC, at 100-240 VAC and at
+    240 VDC (China only); maximum peak power the same. Rated input current 9.1
+    A at 100 VAC, 4.4 A at 200 VAC; maximum rated input power 899 W at 100 VAC,
+    867 W at 200 VAC. A rating, not a draw.
+  depth: >-
+    datasheet - 225.3, the Flex Slot QuickSpecs' 8.87 in, which by its own note
+    runs from the handle to the card edge: it includes the handle and is not
+    the depth of the can behind the face.
+size: {w: 68.0, h: 40.4, d: 225.3}
+plan: {ref: hpe/psu-flex-slot-plan@1}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+body: {depth: 225.3, color: '#b9bec4'}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [41.6, 15.8], rotate: 90, behind: true}
+elements:
+  grille: {at: [2.0, 2.4], size: [36.0, 36.0], class: vent}
+  lamp:
+    at: [47.2, 4.5]
+    size: [2.2, 2.2]
+    class: led
+    states:
+      - 'off'
+      - {name: ok, color: '#22c55e'}
+    description: Power supply. Solid green - normal; off - power unavailable, failure, standby, or error.
+  latch: {at: [53.1, 4.5], size: [9.0, 6.6], class: latch}
+  handle: {at: [0.6, 18.0], size: [44.0, 4.8], class: latch}
+  hub: {at: [11.4, 11.8], size: [17.2, 17.2], class: sticker}
+  inlet-bezel: {at: [43.1, 11.1], size: [24.9, 29.3], class: inlet}
+relief:
+  wall: '#3a4045'
+  features:
+  - node: latch
+    out: 3.0
+    color: '#8f2b4d'
+    confidence: estimated
+    source: the latch stands proud of the face in the photograph; not measured
+  - node: handle
+    uhandle: 14.0
+    color: '#17191c'
+    confidence: estimated
+    source: >-
+      the pull handle is a black bail standing off the fan grille, not a bar
+      painted on it. HPE PartSurfer's photographs of the 500 W and 800 W spares
+      (866729-001, 866730-001) show it from the side with a cable strap wrapped
+      round it, about a third of the supply's 40 mm height proud. 14 is read
+      off that side view by proportion; it is not measured.
+skins: [default]

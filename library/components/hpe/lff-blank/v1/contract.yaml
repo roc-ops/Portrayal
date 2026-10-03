@@ -1,0 +1,51 @@
+format: 1
+kind: module
+name: lff-blank
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: server
+description: >-
+  HPE LFF drive blank for the Gen10 ProLiant DL160's 3.5 inch front bays - a
+  black moulding with a vented window at each end and two chevron slots top
+  and bottom in the middle, and no lamps
+attrs:
+  form-factor: 3.5in
+provenance:
+  sources: >-
+    The straight-on photograph of a DL160 Gen10 4 LFF front in newserverlife's
+    review (newserverlife.com/upload/iblock/562/7_opt.jpeg, staged as
+    photos/nsl-dl160g10-4lff-front-ORTHO-1280x131.jpg under
+    working/intake/hpe/proliant/dl160-gen10), which carries this blank in bays 3
+    and 4. See hpe/lff-lp-carrier@1 for the panel gate on that image.
+  size: >-
+    photo-measured - The blank's face is the same 104.8 x 27.5 as hpe/lff-lp-
+    carrier@1: it fills the same opening, and on the photograph its outline in
+    bays 3 and 4 runs the same extent as the carriers' in bays 1 and 2.
+  face: >-
+    photo-measured - Bay 3's blank, blank-local at 2.605 x 2.615 px/mm: left
+    window 6.9..28.0 x 3.2..22.9 with four pill slots in two rows; chevron slots
+    38.9..67.1 at y 3.0..6.0 and 19.1..22.9; right window 76.0..99.7 with a
+    column of pill slots on its left edge and four more in two rows. Bay 4's
+    blank is the same moulding.
+  depth: >-
+    estimated - NOT IN THE INTAKE; 25.0 is drawn as a filler, as common/drive-
+    blank-35@1 does. No HPE document held gives the blank's depth.
+size: {w: 104.8, h: 27.5, d: 25.0}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+body: {depth: 25.0, color: '#1e2124'}
+elements:
+  window-left: {at: [6.9, 3.2], size: [21.1, 19.7], class: vent}
+  window-right: {at: [76.0, 3.2], size: [23.7, 19.7], class: vent}
+relief:
+  wall: '#121416'
+  features:
+  - node: window-left
+    pocket: 2.0
+    confidence: estimated
+    source: the windows are recessed panels in the moulding; 2.0 is drawn, not measured
+  - node: window-right
+    pocket: 2.0
+    confidence: estimated
+    source: as `window-left`
+skins: [default]

@@ -1,0 +1,39 @@
+format: 1
+kind: component
+name: heatsink-std-1u
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+profile: server
+description: >-
+  The standard processor heatsink of the Gen10 ProLiant DL160 seen from above
+  - a black shrouded block over the socket with HPE's install and remove
+  labels on its top
+provenance:
+  sources: >-
+    The Internal View in HPE's QuickSpecs for the DL160 Gen10 (a00021860enw,
+    page 3; the version 6 edition embeds it at 1171 x 728) - a photograph of the
+    8 SFF server from above with its lid off, twenty-two callouts. Turned to the
+    plan's orientation (rear at the top), the chassis is 576.5 px across for
+    434.6 mm (1.3265 px/mm) and 845 px down for 614.9 (1.374 px/mm): 3.6% apart,
+    so the photograph FAILS the panel gate - it is a camera above a box, not a
+    drawing - and positions are taken as fractions on each axis separately. The
+    QuickSpecs captions callout 3 'Up to 2 processors (shown with standard heat
+    sinks)'.
+  size: >-
+    estimated - 80 x 107. On the photograph the two blocks run 122.9..203.5 and
+    288.7..367.1 across (80.6 and 78.4 wide) and 234..342 down. A first drawing
+    made them 88 wide, the gap between the DIMM banks less clearance, and the
+    lid-off render beside the photograph showed them too wide. Fractions of a
+    photograph that fails the gate; not a measurement.
+  relief: >-
+    estimated - 25 above the board, a 1U heatsink under a 42.9 chassis.
+size: {w: 80.0, h: 107.0}
+size-confidence: {w: estimated, h: estimated}
+relief:
+  wall: '#2a2e32'
+  features:
+  - {node: block, out: 25.0, color: '#33383d', confidence: estimated, source: 'a 1U heatsink under the lid; not measured'}
+elements:
+  block: {at: [0.0, 0.0], size: [80.0, 107.0], class: bezel}
+skins: [default]

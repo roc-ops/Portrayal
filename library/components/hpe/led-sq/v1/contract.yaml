@@ -1,0 +1,40 @@
+format: 1
+kind: component
+name: led-sq
+version: 1.0.0
+class: led
+profile: server
+description: >-
+  A small square status lamp of an HPE Gen10 ProLiant - the front NIC status
+  and Health lamps, and the rear UID lamp, of the DL160 Gen10
+provenance:
+  sources: >-
+    DL160 Gen10 User Guide a00066666en_us, "Front panel LEDs and buttons" and
+    "Rear panel LEDs"; the straight-on 4 LFF front and rear photographs in
+    newserverlife's review (photos/ under working/intake/hpe/proliant/
+    dl160-gen10).
+  size: >-
+    photo-measured - 3.0 square. The front NIC and Health lamps are 7..8 px at
+    2.605 px/mm (2.7..3.1) and the rear UID lamp 8 px at 2.90 (2.8). One part at
+    3.0; a pixel is 0.35..0.4 mm at these scales.
+  states: >-
+    The union of the three. NIC status: solid green linked; flashing green
+    active; off no activity. Health: solid green normal; flashing green iLO
+    rebooting; flashing amber degraded; flashing red critical. Rear UID: solid
+    blue activated; flashing blue remote management or iLO reboot.
+size: {w: 3.0, h: 3.0}
+size-confidence: {w: photo-measured, h: photo-measured}
+elements:
+  lamp:
+    at: [0.3, 0.3]
+    size: [2.4, 2.4]
+    class: led
+    states:
+      - 'off'
+      - {name: green, color: '#22c55e'}
+      - {name: green-flashing, color: '#22c55e', behavior: {mode: blinking, rate: 1}}
+      - {name: amber-flashing, color: '#f59e0b', behavior: {mode: blinking, rate: 1}}
+      - {name: red-flashing, color: '#ef4444', behavior: {mode: blinking, rate: 1}}
+      - {name: blue, color: '#3b82f6'}
+      - {name: blue-flashing, color: '#3b82f6', behavior: {mode: blinking, rate: 1}}
+skins: [default]

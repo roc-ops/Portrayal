@@ -1,0 +1,70 @@
+format: 1
+kind: module
+name: media-module-872161
+version: 1.0.0
+class: nic
+behaviour: fills
+profile: server
+description: >-
+  HPE Ethernet 1Gb 2-port 368FLR-T Media Module adapter (option 866464-B21;
+  spare 872161-001) for the Gen10 ProLiant DL160 - two ports in the rear media
+  module opening, the server's NIC ports 3 and 4
+attrs:
+  ports: 2
+  media: rj45
+  part-numbers: 866464-B21 872161-001
+  spare-part: 872161-001
+groups:
+  ports:
+    term: Port
+    role: traffic
+    index-origin: 1
+    description: the two ports the chassis prints as NIC 3 and 4 under the opening - ports 1 and 2 are the embedded ones
+    attrs: {media: rj45, speed: 1g}
+provenance:
+  sources: >-
+    DL160 Gen10 User Guide a00066666en_us, 'Installing the Media Module adapter'
+    and 'Rear panel components' item 11, 'Media Module adapter (optional NIC
+    ports 3-4)'. Maintenance and Service Guide a00066664en_us, Media Module
+    adapter spare parts: 1GbE BT C620 872161-001, 10GbE SFP+ C620 872162-001,
+    10GbE BT C620 872163-001. QuickSpecs a00021860enw option list: 368FLR-T
+    866464-B21, 568FLR-SFP+ 866467-B21, 568FLR-T 866470-B21. HPE PartSurfer
+    spare-part photographs (partsurfer.hpe.com/media/photos/<spare>.jpg; staged
+    at working/intake/hpe/proliant/dl160-gen10/photos/partsurfer/): each shows
+    the adapter from above on a bench and its port end face-on in an inset. The
+    straight-on rear photograph in newserverlife's DL160 Gen10 review
+    (newserverlife.com/upload/iblock/386/8_opt.jpeg, staged as photos/nsl-
+    dl160g10-rear-ORTHO-1280x145.jpg under
+    working/intake/hpe/proliant/dl160-gen10), 2.90 x 2.87 px/mm; see
+    hpe/psu-865408-b21@1 for the panel gate on that image.
+  size: >-
+    photo-measured - the opening's 45.0 x 13.4 (hpe/media-module-blank@1).
+  ports: >-
+    photo-measured - PartSurfer 872161-001: one two-port RJ45 housing, the jacks
+    side by side under a common shield with a thin wall between them. Their
+    pitch is 1.03 jack widths on the face-on inset (jacks 270 and 280 px, 280 px
+    centre to centre), 16.3 for the 15.8 jack this library draws; the pair is
+    CENTRED in the opening, which nothing held measures - the chassis prints 3
+    and 4 at 10.9 and 34.3 on this face, whose midpoint is 22.6 against the
+    opening's 22.5. The first drawing put a jack over each printed number, 23.4
+    apart; the photograph shows them adjacent. The inset is too coarse to show
+    whether the housing carries lamps, and they are drawn as on the embedded
+    ports.
+  way-up: >-
+    The adapter's mezzanine connector is on the SAME side of the board as its
+    port housings (PartSurfer, from above), and that connector mates with the
+    system board below, so the adapter is fitted that side down and its ports
+    hang under the board: turned over (rotate 180) on this face.
+  power: >-
+    NOT STATED for the adapter in any document held; lint's L27 stands as the
+    record.
+  depth: >-
+    estimated - 110, the adapter board's reach on the User Guide's isometric
+    figures; not measured.
+size: {w: 45.0, h: 13.4, d: 110.0}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+body: {depth: 110.0, color: '#2f6b3a'}
+parts:
+  - {ref: common/rj45-eth@1, id: port-3, group: ports, at: [6.45, 0.1], rotate: 180, attrs: {media: rj45, speed: 1g}}
+  - {ref: common/rj45-eth@1, id: port-4, group: ports, at: [22.75, 0.1], rotate: 180, attrs: {media: rj45, speed: 1g}}
+skins: [default]

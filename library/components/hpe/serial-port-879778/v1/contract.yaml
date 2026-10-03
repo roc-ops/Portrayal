@@ -1,0 +1,49 @@
+format: 1
+kind: module
+name: serial-port-879778
+version: 1.0.0
+class: expansion-card
+behaviour: fills
+profile: server
+description: >-
+  The optional serial port of the Gen10 ProLiant DL160 (serial port cable,
+  spare 879778-001) - a DE-9 on a cable from the system board's serial port
+  connector, fitted in the rear opening under the IOIOI legend
+attrs:
+  media: db9
+  spare-part: 879778-001
+groups:
+  ports:
+    term: Port
+    role: management
+    index-origin: 1
+    description: the serial port
+    attrs: {media: db9}
+provenance:
+  sources: >-
+    DL160 Gen10 User Guide a00066666en_us, 'Rear panel components' item 6,
+    'Serial port (optional)', 'Installing the serial port', and System board
+    components item 7, the serial port connector. Maintenance and Service Guide
+    a00066664en_us: serial port cable spare 879778-001. QuickSpecs a00021860enw:
+    '1 Serial Port (optional)'. The straight-on rear photograph in
+    newserverlife's DL160 Gen10 review
+    (newserverlife.com/upload/iblock/386/8_opt.jpeg, staged as photos/nsl-
+    dl160g10-rear-ORTHO-1280x145.jpg under
+    working/intake/hpe/proliant/dl160-gen10), 2.90 x 2.87 px/mm; see
+    hpe/psu-865408-b21@1 for the panel gate on that image.
+  size: >-
+    photo-measured - the opening's 32.8 x 12.5 (hpe/serial-port-blank@1).
+  port: >-
+    COMPOSED, common/db9-receptacle@1 - a DE-9 with a jackscrew either side -
+    centred in the opening. The blank's two screw holes are 24.8 apart, a DE-9's
+    jackscrew spacing, which is what the opening is cut for. No image held shows
+    the port fitted, and the connector's gender is not stated: the receptacle is
+    the library's DE-9 and is drawn for the shell, not as a claim about pins or
+    sockets.
+  depth: >-
+    estimated - NOT KNOWN; a connector on a cable.
+size: {w: 32.8, h: 12.5}
+size-confidence: {w: photo-measured, h: photo-measured}
+parts:
+  - {ref: common/db9-receptacle@1, id: serial, group: ports, at: [1.0, 0.0], attrs: {media: db9}}
+skins: [default]

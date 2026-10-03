@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1107 component majors in 23 namespaces.
+1136 component majors in 24 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -22,7 +22,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
 | `std/bnc@1` | component | port | 9.7 × 8.85 | bnc | 0 | 2 | BNC bayonet coaxial panel jack core (IEC 61169-8) - the D-hole and the collar with its bore, insulator and ce… |
-| `std/c14-inlet@1` | component | inlet | 28 × 20 × 13 | c14-inlet | 3 | 55 | IEC C14 appliance inlet (mates C13 cords) - panel cutout with the keyed coupler shroud recessed behind it, ea… |
+| `std/c14-inlet@1` | component | inlet | 28 × 20 × 13 | c14-inlet | 3 | 57 | IEC C14 appliance inlet (mates C13 cords) - panel cutout with the keyed coupler shroud recessed behind it, ea… |
 | `std/c20-inlet@1` | component | inlet | 32.4 × 24.4 × 15 | c20-inlet | 1 | 12 | IEC C20 appliance inlet (mates C19 cords) - panel cutout with the rounded-rectangle coupler recess behind it,… |
 | `std/cfp@1` | component | port | 82 × 13.6 × 144.8 | cfp | 0 | 5 | CFP cage cutout - the module envelope of the CFP MSA, the aperture the module seats through |
 | `std/cfp2@1` | component | port | 41.5 × 12.4 × 107.5 | cfp2 | 0 | 9 | CFP2 cage cutout - the module envelope of the CFP2 MSA, the aperture the module seats through |
@@ -46,8 +46,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/mpo16@1` | component | port | 12.9 × 8 × 9 | mpo-adapter | 0 | 2 | One MTP-16 adapter opening - the mouth an MTP-16 plug enters |
 | `std/mrj21@1` | component | port | 28.92 × 13.45 | mrj21 | 0 | 2 | MRJ21 ("mini-RJ21") 48-position shielded receptacle - two stepped blades with twelve contacts on each face, c… |
 | `std/osfp@1` | component | port | 23.1 × 13.5 × 47 | osfp | 9 | 4 | OSFP cage cutout (800G, one port per opening; the belly-to-belly rows of a 2RU face are two of these, not one… |
-| `std/pcie-bracket-fh@2` | component | bracket | 120.02 × 21.59 | pcie-bracket-fh | 0 | 34 | Standard (full height) PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the ch… |
-| `std/pcie-bracket-lp@1` | component | bracket | 79.2 × 18.42 | pcie-bracket-lp | 0 | 42 | Low profile PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the chassis wall,… |
+| `std/pcie-bracket-fh@2` | component | bracket | 120.02 × 21.59 | pcie-bracket-fh | 0 | 36 | Standard (full height) PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the ch… |
+| `std/pcie-bracket-lp@1` | component | bracket | 79.2 × 18.42 | pcie-bracket-lp | 0 | 45 | Low profile PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the chassis wall,… |
 | `std/qsfp-dd@1` | component | port | 19 × 10 × 37 | qsfp-dd | 32 | 19 | QSFP-DD cage cutout (400G, backward-compatible faceplate) |
 | `std/qsfp-ganged@1` | component | port | 18.5 × 9.58 × 37 | qsfp-ganged | 50 | 25 | QSFP family per-port opening inside a ganged cage block - the cage aperture, with the SFF-8661 module envelop… |
 | `std/qsfp28@1` | component | port | 20 × 10.15 × 37 | qsfp28 | 2 | 48 | QSFP28 cage cutout (100G, 4 lanes) |
@@ -57,10 +57,10 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/saf-d-grid@1` | component | inlet | 26.8 × 19.9 × 17 | saf-d-grid | 0 | 3 | Anderson Saf-D-Grid appliance inlet - the panel cutout with the keyed coupler recessed behind it, a first-mat… |
 | `std/sc-bore@1` | component | port | 8.39 × 9 × 6 | sc-simplex-receptacle | 0 | 30 | One SC opening - the rectangular hole an SC plug's housing enters, with the key slot cut into one long wall a… |
 | `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 43 | 75 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
-| `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 89 | 88 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
+| `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 89 | 89 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
 | `std/sma@1` | component | port | 6.35 × 6.35 | sma | 19 | 8 | SMA coaxial panel jack (1/4-36UNS-2B) - threaded barrel protrudes; GNSS/RF antenna input |
 | `std/smb@1` | component | port | 4.83 × 4.83 | smb | 24 | 20 | SMB coaxial panel jack (10-32UNF-2A) - snap-on timing coax (1PPS/10MHz) |
-| `std/usb-a@1` | component | port | 12 × 4.5 × 13.7 | usb-a | 97 | 29 | USB Type-A receptacle opening - sharp corners |
+| `std/usb-a@1` | component | port | 12 × 4.5 × 13.7 | usb-a | 98 | 29 | USB Type-A receptacle opening - sharp corners |
 | `std/usb-c@1` | component | port | 8.34 × 2.56 × 6.5 | usb-c | 7 | 0 | USB Type-C receptacle opening - fully rounded ends |
 | `std/vga@1` | component | port | 20.47 × 11.4 × 6.73 | hd15 | 2 | 6 | VGA video receptacle - a female high-density DE-15, fifteen contacts in three rows inside the D-subminiature … |
 | `std/xfp@1` | component | port | 19.5 × 9.7 × 61.7 | xfp | 1 | 40 | XFP cage cutout (10G pluggable) - the recommended bezel opening of the XFP MSA, the aperture an XFP cage prot… |
@@ -71,20 +71,20 @@ aperture when it is a bare opening - never both at one position. The README's
 |---|---|---|---|---|---|---|---|
 | `common/bnc-jack@1` | component | port | 12.7 × 12.7 |  | 0 | 1 | Front-mount BNC bulkhead jack - the 12.7 flange and the two bayonet lugs (bezel) around a std/bnc core, which… |
 | `common/compliance-sticker@1` | component | sticker | 219 × 206 |  | 47 | 0 | Bottom-cover compliance/spec label (placeholder art until a real bottom photo is available) |
-| `common/db9-receptacle@1` | component | port | 30.8 × 12.5 × 6.73 |  | 4 | 22 | DE-9 receptacle as a faceplate sees it - the shell with a jackscrew standoff either side of it, which is what… |
+| `common/db9-receptacle@1` | component | port | 30.8 × 12.5 × 6.73 |  | 4 | 24 | DE-9 receptacle as a faceplate sees it - the shell with a jackscrew standoff either side of it, which is what… |
 | `common/dc-barrel@1` | component | inlet | 12 × 13 |  | 2 | 0 | DC barrel power inlet |
 | `common/dc-terminal-24@1` | component | inlet | 24.6 × 14.4 × 9.1 |  | 1 | 4 | Three-pole DC barrier terminal block with a hinged clear cover - the screw-down -48 V input fitted to 1RU acc… |
 | `common/dc-terminal-27@1` | component | inlet | 27.5 × 15.9 × 10.4 |  | 1 | 3 | Three-pole DC barrier terminal block with a hinged clear cover - the screw-down -48 V input fitted to 1RU acc… |
 | `common/dc-terminal-plug-2@1` | component | inlet | 32.1 × 17.6 × 15 |  | 2 | 1 | Two-pole PLUGGABLE DC terminal block - a green header on the faceplate with a matching two-way screw-clamp pl… |
 | `common/device-label@1` | component | sticker | 80 × 40 |  | 5 | 0 | Bottom identity label in oval recess (placeholder art - never reproduce serials/MACs/credentials) |
-| `common/dimm-plan@1` | module | memory | 3.8 × 133.4 × 31.3 |  | 2 | 1 | A DIMM seen from above, standing in its socket - the thin edge of the module with its latches at either end, … |
+| `common/dimm-plan@1` | module | memory | 3.8 × 133.4 × 31.3 |  | 3 | 1 | A DIMM seen from above, standing in its socket - the thin edge of the module with its latches at either end, … |
 | `common/din-1-0-2-3-jack@1` | component | port | 7.01 × 7.01 |  | 0 | 5 | Rear-mount 1.0/2.3 bulkhead jack - the round spanner nut in front of the panel (bezel) around a std/din-1-0-2… |
 | `common/din-clip-ts35@1` | component | mount | 44 × 58 |  | 10 | 1 | DIN-rail mounting clip for a 35 mm top-hat rail (IEC 60715 TS35, 7.5 and 15 mm deep) - the plate screwed to a… |
 | `common/dip-switch-2@1` | component | button | 7 × 10 |  | 10 | 0 | Two-position DIP switch - a red body with two slide actuators side by side and ON at the top, unrotated |
 | `common/drive-blank-25@2` | module | blank | 15.3 × 73 × 25 |  | 2 | 1 | Filler for a 2.5 inch SFF drive bay - the carrier moulding without the drive: same release with its orange ri… |
 | `common/drive-blank-35@1` | module | blank | 105.5 × 26.9 × 25 |  | 1 | 0 | Filler for a 3.5 inch LFF drive bay - the carrier moulding without the drive: same release with its orange ri… |
-| `common/drive-carrier-25@2` | module | drive | 15.3 × 73 × 123.7 |  | 2 | 1 | Hot-plug carrier for a 2.5 inch SFF drive, stood on edge as a rack server's front bays present them - two ill… |
-| `common/drive-carrier-35@1` | module | drive | 105.5 × 26.9 × 165.6 |  | 1 | 1 | A 3.5 inch hot-swap drive in its carrier, drawn wide - the orientation both the rear bays and a 12 x 3.5 inch… |
+| `common/drive-carrier-25@2` | module | drive | 15.3 × 73 × 123.7 |  | 2 | 2 | Hot-plug carrier for a 2.5 inch SFF drive, stood on edge as a rack server's front bays present them - two ill… |
+| `common/drive-carrier-35@1` | module | drive | 105.5 × 26.9 × 165.6 |  | 1 | 2 | A 3.5 inch hot-swap drive in its carrier, drawn wide - the orientation both the rear bays and a 12 x 3.5 inch… |
 | `common/esd-jack@1` | component | ground | 6 × 6 |  | 19 | 0 | ESD wrist-strap grounding jack - the socket you clip an antistatic strap into before handling cards |
 | `common/esd-warning@1` | component | marking | 7.7 × 8.5 |  | 4 | 0 | Electrostatic-sensitive-device warning sticker - the IEC 61340-5-1 hand-in-triangle symbol, a black triangle … |
 | `common/fan-module@1` | module | fan | 48.6 × 40 |  | 4 | 9 | Hot-swappable 1U fan module — 44.6mm square unioned with a 4mm left mounting tab (captive screw), honeycomb g… |
@@ -123,8 +123,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/multi-cord-hazard-label@1` | component | marking | 29.8 × 10.9 |  | 1 | 0 | Yellow rectangular hazard sticker with two symbols side by side - an electric-shock triangle (ISO 7010 W012) … |
 | `common/nic-symbol@1` | component | silkscreen | 5.4 × 4.6 |  | 1 | 0 | The network mark printed beside an Ethernet port - a node above three nodes on a bus, which is the figure ven… |
 | `common/orv3-busbar-connector@1` | component | inlet | 60.7 × 35.4 |  | 1 | 0 | Open Rack v3 48 V bus-bar power connector on an IT tray's rear - a blind-mate clip body with a vertical blade… |
-| `common/pcie-card-fh@2` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 12 | A generic full-height PCI Express add-in card, half-length - the standard bracket at the chassis wall and a P… |
-| `common/pcie-card-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 16 | A generic low-profile PCI Express add-in card, half-length - the standard bracket at the chassis wall and a P… |
+| `common/pcie-card-fh@2` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 13 | A generic full-height PCI Express add-in card, half-length - the standard bracket at the chassis wall and a P… |
+| `common/pcie-card-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 18 | A generic low-profile PCI Express add-in card, half-length - the standard bracket at the chassis wall and a P… |
 | `common/pcie-card-plan@1` | module | expansion-card | 120.9 × 173.8 × 21.6 |  | 0 | 21 | A full-height PCIe expansion card seen from above, lying in a riser slot - its bracket at the rear, its lengt… |
 | `common/pcie-card-plan-lp@1` | module | expansion-card | 79.2 × 173.8 × 21.6 |  | 0 | 18 | A low-profile PCIe expansion card seen from above, lying in a riser slot - its bracket at the rear, its lengt… |
 | `common/power-button@1` | component | button | 12 × 12 |  | 3 | 0 | Round ON/OFF push button |
@@ -147,7 +147,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/rivet@1` | component | mechanical | 3 × 3 |  | 7 | 0 | Sheet-metal rivet head |
 | `common/rj11-jack@1` | component | port | 14 × 13.5 |  | 1 | 0 | RJ11 telephone jack (FXS) |
 | `common/rj45-boot@1` | component | boot | 14.5 × 10 | rj45-plug | 0 | 1 | A strain-relief boot for an RJ45 (8P8C) copper plug - PVC, moulded around the plug it wraps |
-| `common/rj45-eth@1` | component | port | 15.8 × 13.2 × 18.6 |  | 57 | 35 | An Ethernet RJ45 - the std/rj45@2 housing with the two link and activity lamps nearly every Ethernet jack car… |
+| `common/rj45-eth@1` | component | port | 15.8 × 13.2 × 18.6 |  | 58 | 37 | An Ethernet RJ45 - the std/rj45@2 housing with the two link and activity lamps nearly every Ethernet jack car… |
 | `common/rj45-ganged-eth@1` | component | port | 12.7 × 11 × 18.6 |  | 74 | 32 | An Ethernet RJ45 in a ganged 2xN block - the std/rj45-ganged@2 cell with the two lamps in its keyway-side cor… |
 | `common/rj45-ganged-link@1` | component | port | 12.7 × 11 × 18.6 |  | 5 | 0 | An Ethernet RJ45 in a ganged 2xN block with ONE lamp - the std/rj45-ganged@2 cell with a single link/activity… |
 | `common/sc-apc@1` | component | port | 24 × 26 |  | 1 | 0 | SC/APC fiber adapter in a molded bay (PON WAN) |
@@ -167,7 +167,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/usb-a@2` | component | port | 17 × 7 × 13.7 |  | 3 | 0 | USB Type-A receptacle with trident silkscreen - a shell bezel wrapping a std/usb-a opening core |
 | `common/usb-a-bezel@1` | component | port | 17 × 9.3 × 13.7 |  | 5 | 0 | USB Type-A port in a silver panel bezel - the plate spans the component so it can abut neighboring port bezel… |
 | `common/usb-symbol@1` | component | silkscreen | 6.4 × 4 |  | 28 | 1 | USB trident silkscreen symbol, no hardware - the marking printed beside a USB receptacle |
-| `common/vga-receptacle@1` | component | port | 30.8 × 12.5 × 6.73 |  | 1 | 1 | VGA receptacle as a faceplate sees it - the female HD-15 shell with a jackscrew standoff either side, which i… |
+| `common/vga-receptacle@1` | component | port | 30.8 × 12.5 × 6.73 |  | 2 | 1 | VGA receptacle as a faceplate sees it - the female HD-15 shell with a jackscrew standoff either side, which i… |
 | `common/vga-symbol@1` | component | silkscreen | 6 × 3.4 |  | 2 | 1 | The monitor mark printed beside a VGA port - a display outline flanked by two short bars, which is the form v… |
 | `common/vhdci-receptacle@1` | component | port | 40.4 × 5.2 |  | 0 | 3 | VHDCI (very-high-density cable interconnect) receptacle as a faceplate sees it - the flattened 0.8 mm-pitch s… |
 | `common/wall-plate-keyhole-2@1` | component | mount | 56 × 30 |  | 6 | 1 | Wall-mounting plate with two keyhole slots - a flat plate screwed across a device's back so the device hangs … |
@@ -561,7 +561,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/psu-1400w-ac-60mm@1` | module | psu | 59.8 × 40.1 × 222 |  | 1 | 16 | 1400 W mixed-mode hot-plug power supply in Dell's 60 mm form factor, as fitted to the 16th-generation 1U Powe… |
 | `dell/psu-2400w-ac-14g@1` | module | psu | 86.3 × 39.1 × 195.5 |  | 1 | 0 | 2400 W AC hot-plug power supply for a 14th-generation PowerEdge - C20 inlet, a fan, and a translucent handle … |
 | `dell/psu-60mm-plan@1` | component | mechanical | 59.8 × 222 |  | 0 | 4 | Dell's 60 mm power supply seen from above - the can that runs 222 mm into a 16th-generation 1U PowerEdge from… |
-| `dell/psu-700w-ac-60mm@1` | module | psu | 59.8 × 40.1 × 222 |  | 1 | 0 | 700 W mixed-mode hot-plug power supply in Dell's 60 mm form factor, as fitted to the 16th-generation 1U Power… |
+| `dell/psu-700w-ac-60mm@1` | module | psu | 59.8 × 40.1 × 222 |  | 1 | 2 | 700 W mixed-mode hot-plug power supply in Dell's 60 mm form factor, as fitted to the 16th-generation 1U Power… |
 | `dell/psu-800w-ac-60mm@1` | module | psu | 59.8 × 40.1 × 222 |  | 1 | 0 | 800 W mixed-mode hot-plug power supply in Dell's 60 mm form factor, as fitted to the 16th-generation 1U Power… |
 | `dell/rack-latch-14g@1` | component | latch | 12.16 × 37.99 |  | 1 | 0 | The rack release rocker built into a 14th-generation PowerEdge ear - pressed to free the chassis from the rac… |
 | `dell/rear-bay-blank-14g@2` | module | mechanical | 135.19 × 39.5 × 12 |  | 1 | 0 | The perforated blank over one empty rear storage bay on a 14th-generation PowerEdge - fitted where a riser co… |
@@ -762,6 +762,40 @@ aperture when it is a bare opening - never both at one position. The README's
 | `fs/fhd-splice-12-lc@3` | module | cassette | 108.97 × 35.05 × 117.86 |  | 7 | 0 | FS FHD Fiber Splice Cassette, LC UPC, OS2, 12 Fibers |
 | `fs/fhd-splice-12-lc-rear@2` | component | cassette | 99 × 31 |  | 0 | 1 | The back of FS FHD's LC UPC OS2 12-fibre splice cassette (SKU 382907): the cassette body seen from behind, ca… |
 | `fs/qsfp28-aoc@1` | module | transceiver | 18.35 × 8.5 × 52.4 | qsfp | 0 | 0 | FS 100G QSFP28 active optical cable, one end - four 25G lanes over multimode ribbon fibre, up to 100 m over O… |
+
+## hpe/ (29)
+
+| ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
+|---|---|---|---|---|---|---|---|
+| `hpe/access-panel-dl160@1` | component | mechanical | 434.6 × 614.9 |  | 1 | 0 | The access panel of the Gen10 ProLiant DL160 - the lid over the whole chassis, with its hood latch near the f… |
+| `hpe/button-led-sq@1` | component | button | 4 × 4 |  | 1 | 0 | The square lit push button of an HPE Gen10 ProLiant front panel - the Power On/Standby button and the UID but… |
+| `hpe/expansion-slot-blank-fh@1` | module | blank | 120.02 × 21.59 |  | 0 | 1 | HPE full-height expansion slot blank of the Gen10 ProLiant DL160's primary riser, lying flat - the part of it… |
+| `hpe/expansion-slot-blank-lp@1` | module | blank | 79.2 × 18.42 |  | 0 | 2 | HPE low-profile expansion slot blank of the Gen10 ProLiant DL160's risers, lying flat - the part of it the wi… |
+| `hpe/fan-dl160@1` | module | fan | 40 × 32 × 40 |  | 1 | 0 | A single-rotor hot-plug fan of the Gen10 ProLiant DL160 seen from above - the block that lifts out of its bay… |
+| `hpe/heatsink-std-1u@1` | component | mechanical | 80 × 107 |  | 1 | 0 | The standard processor heatsink of the Gen10 ProLiant DL160 seen from above - a black shrouded block over the… |
+| `hpe/info-pull-tab@1` | component | tab | 37.2 × 11.1 |  | 1 | 1 | The serial number / iLO information pull tab of an HPE Gen10 ProLiant front - a black tab that slides out of … |
+| `hpe/info-pull-tab-slim@1` | component | tab | 33.5 × 5.4 |  | 1 | 0 | The serial number / iLO information pull tab of the Gen10 ProLiant DL160 8 SFF front - a slim black tab lying… |
+| `hpe/led-sq@1` | component | led | 3 × 3 |  | 1 | 0 | A small square status lamp of an HPE Gen10 ProLiant - the front NIC status and Health lamps, and the rear UID… |
+| `hpe/lff-blank@1` | module | blank | 104.8 × 27.5 × 25 |  | 1 | 0 | HPE LFF drive blank for the Gen10 ProLiant DL160's 3.5 inch front bays - a black moulding with a vented windo… |
+| `hpe/lff-lp-carrier@1` | module | drive | 104.8 × 27.5 × 170 |  | 1 | 3 | HPE low-profile (LP) hot-plug carrier for a 3.5 inch LFF drive, as the Gen10 ProLiant DL160's four front bays… |
+| `hpe/media-bay-blank-1u@1` | module | blank | 163.1 × 22.1 |  | 1 | 0 | HPE media bay blank for the Gen10 ProLiant DL160 8 SFF front - the vented cover over the bay the optical driv… |
+| `hpe/media-module-872161@1` | module | nic | 45 × 13.4 × 110 |  | 1 | 0 | HPE Ethernet 1Gb 2-port 368FLR-T Media Module adapter (option 866464-B21; spare 872161-001) for the Gen10 Pro… |
+| `hpe/media-module-872162@1` | module | nic | 45 × 13.4 × 110 |  | 1 | 0 | HPE Ethernet 10Gb 2-port 568FLR-SFP+ Media Module adapter (option 866467-B21; spare 872162-001) for the Gen10… |
+| `hpe/media-module-872163@1` | module | nic | 45 × 13.4 × 110 |  | 1 | 0 | HPE Ethernet 10Gb 2-port 568FLR-T Media Module adapter (option 866470-B21; spare 872163-001) for the Gen10 Pr… |
+| `hpe/media-module-blank@1` | module | blank | 45 × 13.4 |  | 1 | 3 | HPE Media Module adapter blank for the Gen10 ProLiant DL160's rear media module opening - a bright plate notc… |
+| `hpe/optical-blank-lff@1` | module | blank | 146 × 9.4 |  | 1 | 0 | HPE optical drive blank over the Gen10 ProLiant DL160 4 LFF front's optical bay - the vented plate across the… |
+| `hpe/psu-865408-b21@1` | module | psu | 68 × 40.4 × 225.3 |  | 1 | 12 | HPE 500 W Flex Slot Platinum Hot Plug Low Halogen power supply (865408-B21), as fitted to the Gen10 ProLiant … |
+| `hpe/psu-865414-b21@1` | module | psu | 68 × 40.4 × 225.3 |  | 1 | 0 | HPE 800 W Flex Slot Platinum Hot Plug Low Halogen power supply (865414-B21), the 500 W supply's casting with … |
+| `hpe/psu-blank-flex-slot@1` | module | blank | 68 × 40.4 |  | 1 | 0 | HPE Flex Slot power supply blank, as the Gen10 ProLiant DL160 ships in its second supply bay - a bright metal… |
+| `hpe/psu-flex-slot-plan@1` | component | mechanical | 68 × 190 |  | 0 | 2 | An HPE Flex Slot power supply seen from above - the can that runs into the chassis behind its rear face |
+| `hpe/riser-cage-primary-dl160@1` | component | mechanical | 123.5 × 145.6 |  | 1 | 0 | The primary PCI riser cage of the Gen10 ProLiant DL160 seen from above - the vented sheet-metal roof over PCI… |
+| `hpe/riser-primary-dl160@1` | module | riser | 203 × 24.2 × 150 |  | 1 | 1 | The primary PCI riser cage of the Gen10 ProLiant DL160 as the rear presents it, with the standard x16/x8 rise… |
+| `hpe/riser-secondary-dl160@1` | module | riser | 82.5 × 21 × 150 |  | 1 | 0 | The secondary PCI riser cage of the Gen10 ProLiant DL160 as the rear presents it, with the x16 riser board (8… |
+| `hpe/serial-port-879778@1` | module | expansion-card | 32.8 × 12.5 |  | 1 | 0 | The optional serial port of the Gen10 ProLiant DL160 (serial port cable, spare 879778-001) - a DE-9 on a cabl… |
+| `hpe/serial-port-blank@1` | module | blank | 32.8 × 12.5 |  | 1 | 1 | HPE serial port blank on the Gen10 ProLiant DL160's rear, covering the opening the optional serial port fills… |
+| `hpe/sff-blank@1` | module | blank | 76.2 × 15 × 25 |  | 1 | 0 | HPE SFF drive blank for the Gen10 ProLiant DL160's 2.5 inch front bays, lying flat - a black moulding with a … |
+| `hpe/sff-sc-carrier@1` | module | drive | 76.2 × 15 × 125 |  | 1 | 3 | HPE SmartCarrier (SC) for a 2.5 inch SFF drive, lying flat as the Gen10 ProLiant DL160's 8 SFF front presents… |
+| `hpe/system-board-dl160@1` | component | mechanical | 426 × 393 × 36 |  | 1 | 0 | The Gen10 ProLiant DL160 system board seen from above - the PCB the processors, memory, risers and supply con… |
 
 ## juniper/ (170)
 
@@ -1083,42 +1117,42 @@ aperture when it is a bare opening - never both at one position. The README's
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
-| `nvidia/mcx4111a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 12 | NVIDIA ConnectX-4 Lx MCX4111A single-port 10/25GbE SFP28 adapter, PCIe Gen3 x8, on its tall (full-height) bra… |
-| `nvidia/mcx4111a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 17 | NVIDIA ConnectX-4 Lx MCX4111A single-port 10/25GbE SFP28 adapter, PCIe Gen3 x8, on its short (low-profile) br… |
-| `nvidia/mcx4121a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 12 | NVIDIA ConnectX-4 Lx MCX4121A dual-port 10/25GbE SFP28 adapter, PCIe Gen3 x8, on its tall (full-height) brack… |
-| `nvidia/mcx4121a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 1 | 17 | NVIDIA ConnectX-4 Lx MCX4121A dual-port 10/25GbE SFP28 adapter, PCIe Gen3 x8, on its short (low-profile) brac… |
-| `nvidia/mcx4131a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 12 | NVIDIA ConnectX-4 Lx MCX4131A single-port 40/50GbE QSFP28 adapter, PCIe Gen3 x8, on its tall (full-height) br… |
-| `nvidia/mcx4131a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 17 | NVIDIA ConnectX-4 Lx MCX4131A single-port 40/50GbE QSFP28 adapter, PCIe Gen3 x8, on its short (low-profile) b… |
-| `nvidia/mcx512a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 12 | NVIDIA ConnectX-5 MCX512A dual-port 10/25GbE SFP28 adapter, PCIe x8, on its tall (full-height) bracket |
-| `nvidia/mcx512a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 17 | NVIDIA ConnectX-5 MCX512A dual-port 10/25GbE SFP28 adapter, PCIe x8, on its short (low-profile) bracket |
-| `nvidia/mcx512f-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 12 | NVIDIA ConnectX-5 MCX512F dual-port 10/25GbE SFP28 adapter, PCIe Gen3 x16, on its tall (full-height) bracket |
-| `nvidia/mcx512f-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 17 | NVIDIA ConnectX-5 MCX512F dual-port 10/25GbE SFP28 adapter, PCIe Gen3 x16, on its short (low-profile) bracket |
-| `nvidia/mcx515a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 12 | NVIDIA ConnectX-5 MCX515A single-port 50/100GbE QSFP28 adapter, PCIe Gen3 x16, on its tall (full-height) brac… |
-| `nvidia/mcx515a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 17 | NVIDIA ConnectX-5 MCX515A single-port 50/100GbE QSFP28 adapter, PCIe Gen3 x16, on its short (low-profile) bra… |
-| `nvidia/mcx516a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 12 | NVIDIA ConnectX-5 MCX516A dual-port 40/50/100GbE QSFP28 adapter, PCIe x16, on its tall (full-height) bracket |
-| `nvidia/mcx516a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 17 | NVIDIA ConnectX-5 MCX516A dual-port 40/50/100GbE QSFP28 adapter, PCIe x16, on its short (low-profile) bracket |
-| `nvidia/mcx621102-fh@1` | module | expansion-card | 120.02 × 21.59 × 124.22 |  | 0 | 12 | NVIDIA ConnectX-6 Dx MCX621102A dual-port 10/25GbE SFP28 adapter, PCIe Gen4 x8, on its tall (full-height) bra… |
-| `nvidia/mcx621102-lp@1` | module | expansion-card | 79.2 × 18.42 × 124.22 |  | 0 | 17 | NVIDIA ConnectX-6 Dx MCX621102A dual-port 10/25GbE SFP28 adapter, PCIe Gen4 x8, on its short (low-profile) br… |
-| `nvidia/mcx621202-fh@1` | module | expansion-card | 120.02 × 21.59 × 152.86 |  | 0 | 12 | NVIDIA ConnectX-6 Dx MCX621202A dual-port 10/25GbE SFP28 adapter with active cooling (onboard fan), PCIe Gen4… |
-| `nvidia/mcx621202-lp@1` | module | expansion-card | 79.2 × 18.42 × 152.86 |  | 0 | 17 | NVIDIA ConnectX-6 Dx MCX621202A dual-port 10/25GbE SFP28 adapter with active cooling (onboard fan), PCIe Gen4… |
-| `nvidia/mcx623102a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142 |  | 1 | 12 | NVIDIA ConnectX-6 Dx MCX623102A dual-port 25/50GbE SFP56 adapter, PCIe Gen4 x16, on its tall (full-height) br… |
-| `nvidia/mcx623102a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142 |  | 1 | 17 | NVIDIA ConnectX-6 Dx MCX623102A dual-port 25/50GbE SFP56 adapter, PCIe Gen4 x16, on its short (low-profile) b… |
-| `nvidia/mcx623105-fh@1` | module | expansion-card | 120.02 × 21.59 × 142 |  | 0 | 12 | NVIDIA ConnectX-6 Dx MCX623105A single-port 100/200GbE QSFP56 adapter, PCIe Gen4 x16, on its tall (full-heigh… |
-| `nvidia/mcx623105-lp@1` | module | expansion-card | 79.2 × 18.42 × 142 |  | 0 | 17 | NVIDIA ConnectX-6 Dx MCX623105A single-port 100/200GbE QSFP56 adapter, PCIe Gen4 x16, on its short (low-profi… |
-| `nvidia/mcx623106-fh@1` | module | expansion-card | 120.02 × 21.59 × 142 |  | 1 | 12 | NVIDIA ConnectX-6 Dx MCX623106A dual-port 100GbE QSFP56 adapter, PCIe Gen4 x16, on its tall (full-height) bra… |
-| `nvidia/mcx623106-lp@1` | module | expansion-card | 79.2 × 18.42 × 142 |  | 2 | 17 | NVIDIA ConnectX-6 Dx MCX623106A dual-port 100GbE QSFP56 adapter, PCIe Gen4 x16, on its short (low-profile) br… |
-| `nvidia/mcx713104-fh@1` | module | expansion-card | 120.02 × 21.59 × 143.5 |  | 0 | 11 | NVIDIA ConnectX-7 MCX713104A quad-port 25/50GbE SFP56 adapter (one ganged 1x4 cage), PCIe Gen4 x16, on its ta… |
-| `nvidia/mcx713106-fh@1` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 12 | NVIDIA ConnectX-7 MCX713106A dual-port 100/200GbE QSFP112 adapter, PCIe Gen5 x16, on its tall (full-height) b… |
-| `nvidia/mcx713106-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 1 | 17 | NVIDIA ConnectX-7 MCX713106A dual-port 100/200GbE QSFP112 adapter, PCIe Gen5 x16, on its short (low-profile) … |
-| `nvidia/mcx713114-fh@1` | module | expansion-card | 120.02 × 21.59 × 167.15 |  | 0 | 11 | NVIDIA ConnectX-7 MCX713114T quad-port 25/50GbE SFP56 adapter with PPS in/out SMA jacks (one ganged 1x4 cage)… |
-| `nvidia/mcx715105-fh@1` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 12 | NVIDIA ConnectX-7 MCX715105A single-port NDR 400Gb/s InfiniBand / 400GbE QSFP112 adapter, Socket Direct ready… |
-| `nvidia/mcx715105-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 17 | NVIDIA ConnectX-7 MCX715105A single-port NDR 400Gb/s InfiniBand / 400GbE QSFP112 adapter, Socket Direct ready… |
-| `nvidia/mcx75310-fh@1` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 12 | NVIDIA ConnectX-7 MCX75310A single-port NDR 400Gb/s InfiniBand / 400GbE OSFP adapter, PCIe Gen5 x16, on its t… |
-| `nvidia/mcx75310-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 17 | NVIDIA ConnectX-7 MCX75310A single-port NDR 400Gb/s InfiniBand / 400GbE OSFP adapter, PCIe Gen5 x16, on its s… |
-| `nvidia/mcx75510-fh@1` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 12 | NVIDIA ConnectX-7 MCX75510A single-port NDR 400Gb/s InfiniBand OSFP adapter, Socket Direct ready, PCIe Gen5 x… |
-| `nvidia/mcx75510-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 17 | NVIDIA ConnectX-7 MCX75510A single-port NDR 400Gb/s InfiniBand OSFP adapter, Socket Direct ready, PCIe Gen5 x… |
-| `nvidia/mcx755106-fh@1` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 12 | NVIDIA ConnectX-7 MCX755106A dual-port NDR200 / 200GbE QSFP112 adapter, Socket Direct ready, PCIe Gen5 x16, o… |
-| `nvidia/mcx755106-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 17 | NVIDIA ConnectX-7 MCX755106A dual-port NDR200 / 200GbE QSFP112 adapter, Socket Direct ready, PCIe Gen5 x16, o… |
+| `nvidia/mcx4111a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 13 | NVIDIA ConnectX-4 Lx MCX4111A single-port 10/25GbE SFP28 adapter, PCIe Gen3 x8, on its tall (full-height) bra… |
+| `nvidia/mcx4111a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 19 | NVIDIA ConnectX-4 Lx MCX4111A single-port 10/25GbE SFP28 adapter, PCIe Gen3 x8, on its short (low-profile) br… |
+| `nvidia/mcx4121a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 13 | NVIDIA ConnectX-4 Lx MCX4121A dual-port 10/25GbE SFP28 adapter, PCIe Gen3 x8, on its tall (full-height) brack… |
+| `nvidia/mcx4121a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 2 | 19 | NVIDIA ConnectX-4 Lx MCX4121A dual-port 10/25GbE SFP28 adapter, PCIe Gen3 x8, on its short (low-profile) brac… |
+| `nvidia/mcx4131a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 13 | NVIDIA ConnectX-4 Lx MCX4131A single-port 40/50GbE QSFP28 adapter, PCIe Gen3 x8, on its tall (full-height) br… |
+| `nvidia/mcx4131a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 19 | NVIDIA ConnectX-4 Lx MCX4131A single-port 40/50GbE QSFP28 adapter, PCIe Gen3 x8, on its short (low-profile) b… |
+| `nvidia/mcx512a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 13 | NVIDIA ConnectX-5 MCX512A dual-port 10/25GbE SFP28 adapter, PCIe x8, on its tall (full-height) bracket |
+| `nvidia/mcx512a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 19 | NVIDIA ConnectX-5 MCX512A dual-port 10/25GbE SFP28 adapter, PCIe x8, on its short (low-profile) bracket |
+| `nvidia/mcx512f-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 13 | NVIDIA ConnectX-5 MCX512F dual-port 10/25GbE SFP28 adapter, PCIe Gen3 x16, on its tall (full-height) bracket |
+| `nvidia/mcx512f-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 19 | NVIDIA ConnectX-5 MCX512F dual-port 10/25GbE SFP28 adapter, PCIe Gen3 x16, on its short (low-profile) bracket |
+| `nvidia/mcx515a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 1 | 13 | NVIDIA ConnectX-5 MCX515A single-port 50/100GbE QSFP28 adapter, PCIe Gen3 x16, on its tall (full-height) brac… |
+| `nvidia/mcx515a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 19 | NVIDIA ConnectX-5 MCX515A single-port 50/100GbE QSFP28 adapter, PCIe Gen3 x16, on its short (low-profile) bra… |
+| `nvidia/mcx516a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 13 | NVIDIA ConnectX-5 MCX516A dual-port 40/50/100GbE QSFP28 adapter, PCIe x16, on its tall (full-height) bracket |
+| `nvidia/mcx516a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 1 | 19 | NVIDIA ConnectX-5 MCX516A dual-port 40/50/100GbE QSFP28 adapter, PCIe x16, on its short (low-profile) bracket |
+| `nvidia/mcx621102-fh@1` | module | expansion-card | 120.02 × 21.59 × 124.22 |  | 0 | 13 | NVIDIA ConnectX-6 Dx MCX621102A dual-port 10/25GbE SFP28 adapter, PCIe Gen4 x8, on its tall (full-height) bra… |
+| `nvidia/mcx621102-lp@1` | module | expansion-card | 79.2 × 18.42 × 124.22 |  | 0 | 19 | NVIDIA ConnectX-6 Dx MCX621102A dual-port 10/25GbE SFP28 adapter, PCIe Gen4 x8, on its short (low-profile) br… |
+| `nvidia/mcx621202-fh@1` | module | expansion-card | 120.02 × 21.59 × 152.86 |  | 0 | 13 | NVIDIA ConnectX-6 Dx MCX621202A dual-port 10/25GbE SFP28 adapter with active cooling (onboard fan), PCIe Gen4… |
+| `nvidia/mcx621202-lp@1` | module | expansion-card | 79.2 × 18.42 × 152.86 |  | 0 | 19 | NVIDIA ConnectX-6 Dx MCX621202A dual-port 10/25GbE SFP28 adapter with active cooling (onboard fan), PCIe Gen4… |
+| `nvidia/mcx623102a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142 |  | 1 | 13 | NVIDIA ConnectX-6 Dx MCX623102A dual-port 25/50GbE SFP56 adapter, PCIe Gen4 x16, on its tall (full-height) br… |
+| `nvidia/mcx623102a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142 |  | 1 | 19 | NVIDIA ConnectX-6 Dx MCX623102A dual-port 25/50GbE SFP56 adapter, PCIe Gen4 x16, on its short (low-profile) b… |
+| `nvidia/mcx623105-fh@1` | module | expansion-card | 120.02 × 21.59 × 142 |  | 0 | 13 | NVIDIA ConnectX-6 Dx MCX623105A single-port 100/200GbE QSFP56 adapter, PCIe Gen4 x16, on its tall (full-heigh… |
+| `nvidia/mcx623105-lp@1` | module | expansion-card | 79.2 × 18.42 × 142 |  | 0 | 19 | NVIDIA ConnectX-6 Dx MCX623105A single-port 100/200GbE QSFP56 adapter, PCIe Gen4 x16, on its short (low-profi… |
+| `nvidia/mcx623106-fh@1` | module | expansion-card | 120.02 × 21.59 × 142 |  | 1 | 13 | NVIDIA ConnectX-6 Dx MCX623106A dual-port 100GbE QSFP56 adapter, PCIe Gen4 x16, on its tall (full-height) bra… |
+| `nvidia/mcx623106-lp@1` | module | expansion-card | 79.2 × 18.42 × 142 |  | 2 | 19 | NVIDIA ConnectX-6 Dx MCX623106A dual-port 100GbE QSFP56 adapter, PCIe Gen4 x16, on its short (low-profile) br… |
+| `nvidia/mcx713104-fh@1` | module | expansion-card | 120.02 × 21.59 × 143.5 |  | 0 | 12 | NVIDIA ConnectX-7 MCX713104A quad-port 25/50GbE SFP56 adapter (one ganged 1x4 cage), PCIe Gen4 x16, on its ta… |
+| `nvidia/mcx713106-fh@1` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 13 | NVIDIA ConnectX-7 MCX713106A dual-port 100/200GbE QSFP112 adapter, PCIe Gen5 x16, on its tall (full-height) b… |
+| `nvidia/mcx713106-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 1 | 19 | NVIDIA ConnectX-7 MCX713106A dual-port 100/200GbE QSFP112 adapter, PCIe Gen5 x16, on its short (low-profile) … |
+| `nvidia/mcx713114-fh@1` | module | expansion-card | 120.02 × 21.59 × 167.15 |  | 0 | 12 | NVIDIA ConnectX-7 MCX713114T quad-port 25/50GbE SFP56 adapter with PPS in/out SMA jacks (one ganged 1x4 cage)… |
+| `nvidia/mcx715105-fh@1` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 13 | NVIDIA ConnectX-7 MCX715105A single-port NDR 400Gb/s InfiniBand / 400GbE QSFP112 adapter, Socket Direct ready… |
+| `nvidia/mcx715105-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 19 | NVIDIA ConnectX-7 MCX715105A single-port NDR 400Gb/s InfiniBand / 400GbE QSFP112 adapter, Socket Direct ready… |
+| `nvidia/mcx75310-fh@1` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 13 | NVIDIA ConnectX-7 MCX75310A single-port NDR 400Gb/s InfiniBand / 400GbE OSFP adapter, PCIe Gen5 x16, on its t… |
+| `nvidia/mcx75310-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 19 | NVIDIA ConnectX-7 MCX75310A single-port NDR 400Gb/s InfiniBand / 400GbE OSFP adapter, PCIe Gen5 x16, on its s… |
+| `nvidia/mcx75510-fh@1` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 13 | NVIDIA ConnectX-7 MCX75510A single-port NDR 400Gb/s InfiniBand OSFP adapter, Socket Direct ready, PCIe Gen5 x… |
+| `nvidia/mcx75510-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 19 | NVIDIA ConnectX-7 MCX75510A single-port NDR 400Gb/s InfiniBand OSFP adapter, Socket Direct ready, PCIe Gen5 x… |
+| `nvidia/mcx755106-fh@1` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 13 | NVIDIA ConnectX-7 MCX755106A dual-port NDR200 / 200GbE QSFP112 adapter, Socket Direct ready, PCIe Gen5 x16, o… |
+| `nvidia/mcx755106-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 19 | NVIDIA ConnectX-7 MCX755106A dual-port NDR200 / 200GbE QSFP112 adapter, Socket Direct ready, PCIe Gen5 x16, o… |
 
 ## oscilloquartz/ (10)
 
@@ -1198,7 +1232,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `ufispace/fan-805616@1` | module | fan | 83.7 × 80 |  | 2 | 0 | UfiSpace FAN-805616 hot-swap fan module (S9311-64D) - a hex rotor grille with a long vertical tube handle, a … |
 | `ufispace/fan-808012@1` | module | fan | 81 × 81.5 |  | 11 | 2 | UfiSpace FAN-808012-HCE hot-swap fan module (S9321-64E/EO 800G family) - red loop handle, red release tab on … |
 | `ufispace/lane-led-quad@1` | component | led | 14.4 × 2.6 |  | 11 | 1 | Four round port lamps in a row on a 3.94 mm pitch - the per-QSFP28 indicator cluster the S9110-32X prints abo… |
-| `ufispace/n3100-4c@1` | module | expansion-card | 120.02 × 21.59 × 181.07 |  | 1 | 12 | UfiSpace N3100-4C 5G timing adapter - a full-height PCIe Gen4 x16 add-in card that offloads the PTP stack and… |
+| `ufispace/n3100-4c@1` | module | expansion-card | 120.02 × 21.59 × 181.07 |  | 1 | 13 | UfiSpace N3100-4C 5G timing adapter - a full-height PCIe Gen4 x16 add-in card that offloads the PTP stack and… |
 | `ufispace/n3100-4c-plan@1` | component | expansion-card | 120.9 × 173.8 |  | 0 | 1 | The UfiSpace N3100-4C seen from above, lying in a riser slot - its bracket at the rear, its grey cover runnin… |
 | `ufispace/psu-102-ac@1` | module | psu | 52.9 × 39.7 |  | 1 | 1 | UfiSpace PSU-102-AISB-1 1000W AC PSU - hexagonal vent field on the left, a black tube handle standing beside … |
 | `ufispace/psu-102-dc@1` | module | psu | 52.9 × 39.7 |  | 1 | 0 | UfiSpace PSU-102-DISB-1 1000W DC PSU - the AC unit's shell with a three-post terminal block where the C14 inl… |
