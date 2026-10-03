@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dl160-gen10
-version: 0.1.0
+version: 1.0.0
 maturity: modelled
 manufacturer: HPE
 model: ProLiant DL160 Gen10
@@ -526,10 +526,10 @@ views:
         - {id: info-tab, ref: hpe/info-pull-tab@1, at: [289.7, 1.2], group: tags, rel-pos: 1}
         - {id: ilo-service, ref: std/usb-a@1, at: [343.6, 5.65], group: usb, rel-pos: 1, attrs: {role: ilo-service}}
         - {id: usb-front, ref: std/usb-a@1, at: [363.6, 5.15], group: usb, rel-pos: 2, attrs: {usb: '3.0'}}
-        - {id: btn-uid, ref: hpe/button-led-sq@1, at: [399.0, 4.6], group: controls, rel-pos: 2, for: chassis}
-        - {id: led-nic, ref: hpe/led-sq@1, at: [407.9, 5.3], group: leds, rel-pos: 1, for: chassis}
-        - {id: led-health, ref: hpe/led-sq@1, at: [415.6, 5.3], group: leds, rel-pos: 2, for: chassis}
-        - {id: btn-power, ref: hpe/button-led-sq@1, at: [423.6, 4.6], group: controls, rel-pos: 1, for: chassis}
+        - {id: btn-uid, ref: common/button-led-sq@1, at: [399.0, 4.6], group: controls, rel-pos: 2, for: chassis}
+        - {id: led-nic, ref: common/led-sq@1, at: [407.9, 5.3], group: leds, rel-pos: 1, for: chassis}
+        - {id: led-health, ref: common/led-sq@1, at: [415.6, 5.3], group: leds, rel-pos: 2, for: chassis}
+        - {id: btn-power, ref: common/button-led-sq@1, at: [423.6, 4.6], group: controls, rel-pos: 1, for: chassis}
   front-sff8:
     face: front
     size: {w: 434.6, h: 42.9}
@@ -592,10 +592,10 @@ views:
         - {id: media-bay, at: [245.5, 0.7], size: {w: 163.1, h: 22.1}, accepts: [hpe/media-bay-blank-1u@1], default: hpe/media-bay-blank-1u@1, group: media-bays, rel-pos: 1}
       placements:
         - {id: info-tab, ref: hpe/info-pull-tab-slim@1, at: [188.1, 0.3], group: tags, rel-pos: 1}
-        - {id: btn-power, ref: hpe/button-led-sq@1, at: [414.4, 7.0], group: controls, rel-pos: 1, for: chassis}
-        - {id: led-health, ref: hpe/led-sq@1, at: [414.9, 15.8], group: leds, rel-pos: 2, for: chassis}
-        - {id: led-nic, ref: hpe/led-sq@1, at: [414.9, 23.9], group: leds, rel-pos: 1, for: chassis}
-        - {id: btn-uid, ref: hpe/button-led-sq@1, at: [414.4, 31.4], group: controls, rel-pos: 2, for: chassis}
+        - {id: btn-power, ref: common/button-led-sq@1, at: [414.4, 7.0], group: controls, rel-pos: 1, for: chassis}
+        - {id: led-health, ref: common/led-sq@1, at: [414.9, 15.8], group: leds, rel-pos: 2, for: chassis}
+        - {id: led-nic, ref: common/led-sq@1, at: [414.9, 23.9], group: leds, rel-pos: 1, for: chassis}
+        - {id: btn-uid, ref: common/button-led-sq@1, at: [414.4, 31.4], group: controls, rel-pos: 2, for: chassis}
         - {id: usb-front, ref: std/usb-a@1, at: [420.0, 9.75], rotate: 90, group: usb, rel-pos: 2, attrs: {usb: '3.0'}}
         - {id: ilo-service, ref: std/usb-a@1, at: [420.3, 28.65], rotate: 90, group: usb, rel-pos: 1, attrs: {role: ilo-service}}
   rear:
@@ -696,7 +696,7 @@ views:
       bays:
         - {id: riser-primary, at: [0.0, 0.4], size: {w: 203.0, h: 24.2}, accepts: [hpe/riser-primary-dl160@1], default: hpe/riser-primary-dl160@1, group: risers, rel-pos: 1}
         - {id: riser-secondary, at: [203.0, 0.4], size: {w: 82.5, h: 21.0}, accepts: [hpe/riser-secondary-dl160@1], default: hpe/riser-secondary-dl160@1, group: risers, rel-pos: 2}
-        - {id: media-module, at: [13.6, 26.3], size: {w: 45.0, h: 13.4}, accepts: [hpe/media-module-blank@1, hpe/media-module-872161@1, hpe/media-module-872162@1, hpe/media-module-872163@1], default: hpe/media-module-blank@1, group: media-module, rel-pos: 1}
+        - {id: media-module, at: [13.6, 26.3], size: {w: 45.0, h: 13.4}, accepts: [hpe/media-module-blank@1, hpe/media-module-866464-b21@1, hpe/media-module-866467-b21@1, hpe/media-module-866470-b21@1], default: hpe/media-module-blank@1, group: media-module, rel-pos: 1}
         - {id: serial, at: [219.3, 26.0], size: {w: 32.8, h: 12.5}, accepts: [hpe/serial-port-blank@1, hpe/serial-port-879778@1], default: hpe/serial-port-blank@1, group: serial, rel-pos: 1}
         - {id: psu-2, at: [287.0, 0.8], size: {w: 68.0, h: 40.4}, accepts: [hpe/psu-865408-b21@1, hpe/psu-865414-b21@1, hpe/psu-blank-flex-slot@1], default: hpe/psu-blank-flex-slot@1, group: psus, rel-pos: 2, plan: {view: top, at: [79.6, 0.0], in: system-board, under: [access-panel]}}
         - {id: psu-1, at: [362.5, 0.8], size: {w: 68.0, h: 40.4}, accepts: [hpe/psu-865408-b21@1, hpe/psu-865414-b21@1, hpe/psu-blank-flex-slot@1], default: hpe/psu-865408-b21@1, group: psus, rel-pos: 1, plan: {view: top, at: [4.1, 0.0], in: system-board, under: [access-panel]}}
@@ -707,7 +707,7 @@ views:
         - {id: vga, ref: common/vga-receptacle@1, at: [104.9, 27.85], group: video, rel-pos: 1}
         - {id: nic-1, ref: common/rj45-eth@1, at: [139.9, 26.5], rotate: 180, group: nics, rel-pos: 1}
         - {id: nic-2, ref: common/rj45-eth@1, at: [157.1, 26.5], rotate: 180, group: nics, rel-pos: 2}
-        - {id: uid-rear, ref: hpe/led-sq@1, at: [194.4, 34.0], group: leds, rel-pos: 3, for: chassis}
+        - {id: uid-rear, ref: common/led-sq@1, at: [194.4, 34.0], group: leds, rel-pos: 3, for: chassis}
   top:
     size: {w: 434.6, h: 614.9}
     panel:
@@ -804,7 +804,7 @@ configurations:
       riser-primary/slot-1: nvidia/mcx515a-fh@1
       riser-primary/slot-2: nvidia/mcx516a-lp@1
       riser-secondary/slot-3: nvidia/mcx4121a-lp@1
-      media-module: hpe/media-module-872161@1
+      media-module: hpe/media-module-866464-b21@1
       serial: hpe/serial-port-879778@1
       psu-2: hpe/psu-865408-b21@1
   sff8:

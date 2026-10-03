@@ -65,11 +65,12 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/vga@1` | component | port | 20.47 × 11.4 × 6.73 | hd15 | 2 | 6 | VGA video receptacle - a female high-density DE-15, fifteen contacts in three rows inside the D-subminiature … |
 | `std/xfp@1` | component | port | 19.5 × 9.7 × 61.7 | xfp | 1 | 40 | XFP cage cutout (10G pluggable) - the recommended bezel opening of the XFP MSA, the aperture an XFP cage prot… |
 
-## common/ (104)
+## common/ (106)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
 | `common/bnc-jack@1` | component | port | 12.7 × 12.7 |  | 0 | 1 | Front-mount BNC bulkhead jack - the 12.7 flange and the two bayonet lugs (bezel) around a std/bnc core, which… |
+| `common/button-led-sq@1` | component | button | 4 × 4 |  | 1 | 0 | A square lit push button, the lamp being the whole button face |
 | `common/compliance-sticker@1` | component | sticker | 219 × 206 |  | 47 | 0 | Bottom-cover compliance/spec label (placeholder art until a real bottom photo is available) |
 | `common/db9-receptacle@1` | component | port | 30.8 × 12.5 × 6.73 |  | 4 | 24 | DE-9 receptacle as a faceplate sees it - the shell with a jackscrew standoff either side of it, which is what… |
 | `common/dc-barrel@1` | component | inlet | 12 × 13 |  | 2 | 0 | DC barrel power inlet |
@@ -111,6 +112,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/led-rect@1` | component | led | 4.6 × 2.6 |  | 30 | 3 | Rectangular system LED (cell-site style green bar) |
 | `common/led-rect-sm@1` | component | led | 2.8 × 1.6 |  | 30 | 22 | Small rectangular per-port LED - the rounded bar a dense port row carries one of beside each cage, at roughly… |
 | `common/led-slot-pair@1` | component | led | 3.7 × 1.2 |  | 0 | 4 | Two lamps behind one light-pipe slot - the rounded 3.7 x 1.2 window a bracket punches for a port's pair of in… |
+| `common/led-sq@1` | component | led | 3 × 3 |  | 1 | 0 | A small square status lamp, 3 mm, flush in a panel |
 | `common/liquid-qd-coupler@1` | component | coupler | 38.4 × 38.4 |  | 1 | 0 | Liquid-cooling quick-disconnect (QD) coupler on an equipment rear - a hex-bodied fitting with a flush valve f… |
 | `common/lsh-simplex-adapter@1` | component | port | 7 × 8 | lsh-adapter | 0 | 0 | Panel-mount LSH/E2000 simplex adapter, one spring-shutter opening, as fitted to an FS FHD LSH panel |
 | `common/mdc-adapter@1` | component | port | 6.6 × 8 | mdc-adapter | 0 | 0 | Panel-mount MDC adapter, one small-form-factor body carrying FOUR fibre positions across its two ports (a "2-… |
@@ -763,25 +765,23 @@ aperture when it is a bare opening - never both at one position. The README's
 | `fs/fhd-splice-12-lc-rear@2` | component | cassette | 99 × 31 |  | 0 | 1 | The back of FS FHD's LC UPC OS2 12-fibre splice cassette (SKU 382907): the cassette body seen from behind, ca… |
 | `fs/qsfp28-aoc@1` | module | transceiver | 18.35 × 8.5 × 52.4 | qsfp | 0 | 0 | FS 100G QSFP28 active optical cable, one end - four 25G lanes over multimode ribbon fibre, up to 100 m over O… |
 
-## hpe/ (29)
+## hpe/ (27)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
 | `hpe/access-panel-dl160@1` | component | mechanical | 434.6 × 614.9 |  | 1 | 0 | The access panel of the Gen10 ProLiant DL160 - the lid over the whole chassis, with its hood latch near the f… |
-| `hpe/button-led-sq@1` | component | button | 4 × 4 |  | 1 | 0 | The square lit push button of an HPE Gen10 ProLiant front panel - the Power On/Standby button and the UID but… |
 | `hpe/expansion-slot-blank-fh@1` | module | blank | 120.02 × 21.59 |  | 0 | 1 | HPE full-height expansion slot blank of the Gen10 ProLiant DL160's primary riser, lying flat - the part of it… |
 | `hpe/expansion-slot-blank-lp@1` | module | blank | 79.2 × 18.42 |  | 0 | 2 | HPE low-profile expansion slot blank of the Gen10 ProLiant DL160's risers, lying flat - the part of it the wi… |
 | `hpe/fan-dl160@1` | module | fan | 40 × 32 × 40 |  | 1 | 0 | A single-rotor hot-plug fan of the Gen10 ProLiant DL160 seen from above - the block that lifts out of its bay… |
 | `hpe/heatsink-std-1u@1` | component | mechanical | 80 × 107 |  | 1 | 0 | The standard processor heatsink of the Gen10 ProLiant DL160 seen from above - a black shrouded block over the… |
 | `hpe/info-pull-tab@1` | component | tab | 37.2 × 11.1 |  | 1 | 1 | The serial number / iLO information pull tab of an HPE Gen10 ProLiant front - a black tab that slides out of … |
 | `hpe/info-pull-tab-slim@1` | component | tab | 33.5 × 5.4 |  | 1 | 0 | The serial number / iLO information pull tab of the Gen10 ProLiant DL160 8 SFF front - a slim black tab lying… |
-| `hpe/led-sq@1` | component | led | 3 × 3 |  | 1 | 0 | A small square status lamp of an HPE Gen10 ProLiant - the front NIC status and Health lamps, and the rear UID… |
 | `hpe/lff-blank@1` | module | blank | 104.8 × 27.5 × 25 |  | 1 | 0 | HPE LFF drive blank for the Gen10 ProLiant DL160's 3.5 inch front bays - a black moulding with a vented windo… |
 | `hpe/lff-lp-carrier@1` | module | drive | 104.8 × 27.5 × 170 |  | 1 | 3 | HPE low-profile (LP) hot-plug carrier for a 3.5 inch LFF drive, as the Gen10 ProLiant DL160's four front bays… |
 | `hpe/media-bay-blank-1u@1` | module | blank | 163.1 × 22.1 |  | 1 | 0 | HPE media bay blank for the Gen10 ProLiant DL160 8 SFF front - the vented cover over the bay the optical driv… |
-| `hpe/media-module-872161@1` | module | nic | 45 × 13.4 × 110 |  | 1 | 0 | HPE Ethernet 1Gb 2-port 368FLR-T Media Module adapter (option 866464-B21; spare 872161-001) for the Gen10 Pro… |
-| `hpe/media-module-872162@1` | module | nic | 45 × 13.4 × 110 |  | 1 | 0 | HPE Ethernet 10Gb 2-port 568FLR-SFP+ Media Module adapter (option 866467-B21; spare 872162-001) for the Gen10… |
-| `hpe/media-module-872163@1` | module | nic | 45 × 13.4 × 110 |  | 1 | 0 | HPE Ethernet 10Gb 2-port 568FLR-T Media Module adapter (option 866470-B21; spare 872163-001) for the Gen10 Pr… |
+| `hpe/media-module-866464-b21@1` | module | nic | 45 × 13.4 × 110 |  | 1 | 0 | HPE Ethernet 1Gb 2-port 368FLR-T Media Module adapter (option 866464-B21; spare 872161-001) for the Gen10 Pro… |
+| `hpe/media-module-866467-b21@1` | module | nic | 45 × 13.4 × 110 |  | 1 | 0 | HPE Ethernet 10Gb 2-port 568FLR-SFP+ Media Module adapter (option 866467-B21; spare 872162-001) for the Gen10… |
+| `hpe/media-module-866470-b21@1` | module | nic | 45 × 13.4 × 110 |  | 1 | 0 | HPE Ethernet 10Gb 2-port 568FLR-T Media Module adapter (option 866470-B21; spare 872163-001) for the Gen10 Pr… |
 | `hpe/media-module-blank@1` | module | blank | 45 × 13.4 |  | 1 | 3 | HPE Media Module adapter blank for the Gen10 ProLiant DL160's rear media module opening - a bright plate notc… |
 | `hpe/optical-blank-lff@1` | module | blank | 146 × 9.4 |  | 1 | 0 | HPE optical drive blank over the Gen10 ProLiant DL160 4 LFF front's optical bay - the vented plate across the… |
 | `hpe/psu-865408-b21@1` | module | psu | 68 × 40.4 × 225.3 |  | 1 | 12 | HPE 500 W Flex Slot Platinum Hot Plug Low Halogen power supply (865408-B21), as fitted to the Gen10 ProLiant … |

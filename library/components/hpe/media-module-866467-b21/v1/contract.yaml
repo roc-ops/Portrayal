@@ -1,26 +1,26 @@
 format: 1
 kind: module
-name: media-module-872163
+name: media-module-866467-b21
 version: 1.0.0
 class: nic
 behaviour: fills
 profile: server
 description: >-
-  HPE Ethernet 10Gb 2-port 568FLR-T Media Module adapter (option 866470-B21;
-  spare 872163-001) for the Gen10 ProLiant DL160 - two ports in the rear media
-  module opening, the server's NIC ports 3 and 4
+  HPE Ethernet 10Gb 2-port 568FLR-SFP+ Media Module adapter (option
+  866467-B21; spare 872162-001) for the Gen10 ProLiant DL160 - two ports in
+  the rear media module opening, the server's NIC ports 3 and 4
 attrs:
   ports: 2
-  media: rj45
-  part-numbers: 866470-B21 872163-001
-  spare-part: 872163-001
+  media: sfp-plus
+  part-numbers: 866467-B21 872162-001
+  spare-part: 872162-001
 groups:
   ports:
     term: Port
     role: traffic
     index-origin: 1
     description: the two ports the chassis prints as NIC 3 and 4 under the opening - ports 1 and 2 are the embedded ones
-    attrs: {media: rj45, speed: 10g}
+    attrs: {media: sfp-plus, speed: 10g}
 provenance:
   sources: >-
     DL160 Gen10 User Guide a00066666en_us, 'Installing the Media Module adapter'
@@ -39,13 +39,11 @@ provenance:
   size: >-
     photo-measured - the opening's 45.0 x 13.4 (hpe/media-module-blank@1).
   ports: >-
-    estimated - PartSurfer 872163-001: two SEPARATE shielded RJ45 jacks side by
-    side with a gap between their shells (the 1GbE adapter has one common
-    housing), and a finned heatsink behind them. On the face-on inset the shells
-    are 235 and 240 px wide and 270 px centre to centre, a pitch of 1.14 jack
-    widths: 18.0 for the 15.8 jack this library draws. The pair is CENTRED in
-    the opening, which nothing held measures. Lamps are drawn as on the embedded
-    ports; the inset does not resolve them.
+    estimated - PartSurfer 872162-001: one 1x2 ganged SFP+ cage in a bright
+    bracket with two screw bosses at each end. The cage is the registry's
+    (std/sfp-ganged@1, 14.25 pitch), CENTRED in the opening - the photograph is
+    oblique and gives no offset. No lamp is visible on the face in the inset,
+    and none is drawn; lint's L76 stands as the record.
   way-up: >-
     The adapter's mezzanine connector is on the SAME side of the board as its
     port housings (PartSurfer, from above), and that connector mates with the
@@ -61,6 +59,6 @@ size: {w: 45.0, h: 13.4, d: 110.0}
 size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
 body: {depth: 110.0, color: '#2f6b3a'}
 parts:
-  - {ref: common/rj45-eth@1, id: port-3, group: ports, at: [5.6, 0.1], rotate: 180, attrs: {media: rj45, speed: 10g}}
-  - {ref: common/rj45-eth@1, id: port-4, group: ports, at: [23.6, 0.1], rotate: 180, attrs: {media: rj45, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: port-3, group: ports, at: [8.25, 1.5], rotate: 180, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: port-4, group: ports, at: [22.5, 1.5], rotate: 180, attrs: {media: sfp-plus, speed: 10g}}
 skins: [default]
