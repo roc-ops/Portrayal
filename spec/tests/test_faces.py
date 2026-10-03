@@ -111,6 +111,8 @@ def test_the_accessor_answers_for_every_part_that_names_a_plan():
     Sixty-nine since the R660's risers: 2A, 2P, 2R and 3A, 3P, 3Q, 3R, the
     variants Dell's service model shows from above (2Q, 1P and 4P name none).
     Seventy-one since its LOM card and rear I/O board became modules.
+    Seventy-three since the HPE DL160 Gen10's two Flex Slot supplies
+    (psu-865408-b21, psu-865414-b21) named hpe/psu-flex-slot-plan@1.
 
     Reads the real library rather than a fixture. Spelling-agnostic on purpose -
     it passes before Task 5's migration and after it, because what it watches is
@@ -119,8 +121,8 @@ def test_the_accessor_answers_for_every_part_that_names_a_plan():
     lib = ROOT / "library/components"
     named = [p for p in lib.glob("*/*/v*/contract.yaml")
              if F.face_ref(yaml.safe_load(p.read_text()) or {}, "plan")]
-    assert len(named) == 71, \
-        f"expected 71 parts naming a plan drawing, found {len(named)}"
+    assert len(named) == 73, \
+        f"expected 73 parts naming a plan drawing, found {len(named)}"
 
 
 def run83(doc, path="t/contract.yaml", name="t/thing@1", lib=LIB):
@@ -236,10 +238,11 @@ def test_the_index_carries_a_parts_other_faces():
     # 97 since the R660's top view added twelve: four supplies, the BOSS-N1
     # module, six OCP cards and the shared 2.5 inch carrier.
     # 104 since its seven risers seen from above (2A, 2P, 2R, 3A, 3P, 3Q, 3R);
-    # 106 since its LOM card and rear I/O board.
+    # 106 since its LOM card and rear I/O board;
+    # 108 since the HPE DL160 Gen10's two Flex Slot supplies.
     with_faces = [e for e in entries if e.get("faces")]
-    assert len(with_faces) == 106, \
-        f"expected exactly 106 of {len(entries)} entries to carry a faces " \
+    assert len(with_faces) == 108, \
+        f"expected exactly 108 of {len(entries)} entries to carry a faces " \
         f"key, found {len(with_faces)}"
 
 

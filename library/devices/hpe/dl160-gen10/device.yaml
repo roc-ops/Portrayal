@@ -221,13 +221,57 @@ provenance:
   faces:
     confidence: datasheet
     note: >-
-      Top, bottom, left and right are sized and declared empty. No document held shows
-      the base or the sides straight on. THE TOP HAS A SOURCE AND IS NOT YET DRAWN:
-      the QuickSpecs' "Internal View" (page 3; embedded image 1107 x 723) is a
-      photograph of the 8 SFF server from directly above with its lid off and twenty-
-      two callouts - fans, processors, DIMM slots, risers, the supply, the system
-      board connectors - which an earlier reading of this model called isometric and
-      was wrong about.
+      Bottom, left and right are sized from the QuickSpecs dimensions and declared
+      empty: no document held shows the base or the sides straight on.
+  interior:
+    confidence: estimated
+    note: >-
+      THE TOP VIEW IS DRAWN FROM ONE PHOTOGRAPH THAT FAILS THE PANEL GATE. The
+      QuickSpecs' Internal View (a00021860enw page 3; the version 6 edition embeds it
+      at 1171 x 728) photographs the 8 SFF server from above with its lid off. Turned
+      so the rear is at the top - the plan's orientation, x as the front view has it -
+      the chassis is 576.5 px across for 434.6 mm (1.3265 px/mm) and 845 px down for
+      614.9 (1.374), 3.6% apart: a camera above a box, with perspective. Every
+      position is therefore a fraction on its own axis and is estimated; what the
+      photograph gives well is arrangement and count. Two checks on it: a DIMM socket
+      with its latches measures 197 px, 143 mm at the down scale, for a 133.35 mm
+      module; and the primary riser cage starts at 308 mm where the rear photograph, a
+      different image, puts slot 1's window at 309.4.
+  interior-layout:
+    confidence: estimated
+    note: >-
+      From the photograph and HPE's two figures. The User Guide's System board
+      components figure (native figure GUID-944C6994, rear at the top) puts processor
+      2 on the left and processor 1 on the right, eight DIMM slots to each - four
+      either side of its socket - and fan connectors 1 to 7 along the front edge from
+      the left; its Fan locations figure (GUID-4CD08C59) numbers the fan bays 1 to 7
+      from the supply's side. On the photograph: sixteen DIMM slots on a 9.45 pitch in
+      banks of four, eight and four starting at 85.2, 213.9 and 379.4 (centres;
+      latches found by a pixel profile along both ends of the sockets), 236.4 from the
+      rear; the two heatsinks between the banks; seven fans, 404 from the rear, DRAWN
+      ON ONE PITCH WITH ONE BREAK: fans 1 to 4 and fans 5 to 7 on 47.8, and 52.8
+      between fans 4 and 5, where the photograph shows a bracket in the fan row. That
+      is a fit, and this is what it was fitted to: the fans' labels sit at 105.5,
+      151.9, 198.3, 247.3, 300.0, 347.2 and 397.3 on the photograph (steps 46.4, 46.4,
+      49.0, 52.7, 47.2, 50.1), and the Fan locations figure, an independent drawing,
+      steps its seven boxes 45.6, 45.6, 47.8, 53.4, 45.6 and 51.1. Both are widest
+      between 4 and 5; the other steps differ by 2 to 5 mm in images where a pixel is
+      0.75 and 1.1 mm and a label sits within two pixels of its fan's middle. The
+      fitted centres - 104.0, 151.8, 199.6, 247.4, 300.2, 348.0, 395.8 - are within
+      1.5 mm of every measured one, which is inside what either image can resolve, so
+      the scatter is recorded here and not drawn; the primary riser cage at the rear
+      right. The supplies are placed from the rear view's bays, not from the
+      photograph, which shows the non-hot-plug supply.
+  interior-population:
+    confidence: datasheet
+    note: >-
+      DRAWN AS THE QUICKSPECS PHOTOGRAPHS IT: two processors, sixteen DIMMs, seven
+      fans ("2 CPUs - 6 standard fans (1 redundant fan shown)", "Fully populated 16
+      DIMMs shown"). The User Guide's Fan population guidelines give the other builds
+      - one processor non-redundant: fans in bays 5, 6 and 7 and blanks in 1 to 4; one
+      processor redundant: bay 3 as well; two processors non-redundant: bays 2 to 7.
+      The fan blank and the empty processor socket are not drawn, so the
+      configurations here do not vary the interior; see the gap.
 attrs:
   physical:
     ru: 1
@@ -320,17 +364,41 @@ gaps:
     wanted: >-
       straight-on rear images with a FlexibleLOM, a media module adapter and the
       serial port fitted
-  - what: interior
+  - what: interior-estimated
     scope: [top]
     reason: needs-drawing
     note: >-
-      the top view is declared empty and has a source: the QuickSpecs Internal View
-      (page 3) is a top-down photograph with twenty-two callouts. Drawing it needs
-      plan-view parts this library does not have for HPE - fans, heatsinks, DIMMs,
-      risers, the supply cage - and a figure with a scale: the photograph gives
-      arrangement, and its lens is not known to be orthographic.
+      the top view is drawn from the QuickSpecs Internal View, a photograph that fails
+      the panel gate at 3.6%, so every interior position is a fraction and is
+      estimated; and it is the only top-down image held. Not drawn because no image
+      shows them from above: the redundant power supply cage and its power
+      distribution board (the photograph has the non-hot-plug supply), the secondary
+      riser cage for slot 3 (not fitted in the photograph), the drive cage and
+      backplane under the lid, the energy pack, and the 4 LFF chassis' interior.
     wanted: >-
       a dimensioned plan of the DL160 Gen10 interior, or HPE's service model
+  - what: dimm-slot-numbering
+    scope: [top]
+    reason: vendor-silent
+    note: >-
+      the sixteen DIMM slots are numbered here 1 to 16 left to right as the plan shows
+      them. HPE's own slot numbers - 1 to 8 per processor, silkscreened on the board -
+      are not legible on the photograph and are stated in no document held: the User
+      Guide defers DIMM population to the QuickSpecs, and the QuickSpecs to HPE's
+      memory population guidelines.
+    wanted: >-
+      HPE's DIMM slot numbering for the DL160 Gen10 (the Server Memory Population
+      Rules document, or the label inside the access panel)
+  - what: interior-population
+    scope: [top]
+    reason: needs-photo
+    note: >-
+      the interior is drawn fully populated, as the QuickSpecs photographs it. A one-
+      processor server carries fan blanks in bays 1 to 4 (User Guide, Fan population
+      guidelines) and a cover on processor socket 2; neither part is drawn, so every
+      configuration shows two heatsinks and seven fans.
+    wanted: >-
+      images of the fan blank and of the empty processor 2 socket
 groups:
   drives: {term: Bay, role: service, index-origin: 1}
   media-bays: {term: Bay, role: service, index-origin: 1}
@@ -345,6 +413,11 @@ groups:
   controls: {term: Button, role: management, index-origin: 1}
   leds: {term: LED, role: indicator, index-origin: 1}
   tags: {term: Tag, role: furniture, index-origin: 1}
+  memory: {term: DIMM, role: service, index-origin: 1, description: 'the sixteen DDR4 slots, eight per processor, numbered here left to right as seen from above with the rear at the top - HPE numbers them per processor, see the gap'}
+  fans: {term: Fan, role: service, index-origin: 1, description: 'the seven single-rotor fan bays, numbered from the power supply side as the User Guide numbers them', attrs: {redundancy: 'n+1', redundancy-note: 'User Guide, Fan mode behavior and Fan population guidelines: the redundant fan kit adds one fan, and in redundant fan mode one fan rotor failure switches the system to non-redundant mode and it continues to operate; a second failure or a missing fan causes an orderly shutdown'}}
+  processors: {term: CPU, role: service, index-origin: 1, description: 'the two processor heatsinks - processor 1 on the right as the front faces you'}
+  interior: {term: Part, role: furniture, index-origin: 1, description: 'the system board and the primary riser cage'}
+  covers: {term: Cover, role: furniture, index-origin: 1, description: 'the access panel'}
 views:
   front:
     size: {w: 434.6, h: 42.9}
@@ -614,8 +687,8 @@ views:
         - {id: slot-3, at: [214.8, 2.0], size: {w: 60.3, h: 18.2}, accepts: [hpe/expansion-slot-blank-lp@1], default: hpe/expansion-slot-blank-lp@1, group: slots, rel-pos: 3}
         - {id: media-module, at: [14.1, 27.9], size: {w: 44.1, h: 11.8}, accepts: [hpe/media-module-blank@1], default: hpe/media-module-blank@1, group: media-module, rel-pos: 1}
         - {id: serial, at: [219.3, 26.8], size: {w: 32.8, h: 11.2}, accepts: [hpe/serial-port-blank@1], default: hpe/serial-port-blank@1, group: serial, rel-pos: 1}
-        - {id: psu-2, at: [287.0, 0.8], size: {w: 68.0, h: 40.4}, accepts: [hpe/psu-865408-b21@1, hpe/psu-865414-b21@1, hpe/psu-blank-flex-slot@1], default: hpe/psu-blank-flex-slot@1, group: psus, rel-pos: 2}
-        - {id: psu-1, at: [362.5, 0.8], size: {w: 68.0, h: 40.4}, accepts: [hpe/psu-865408-b21@1, hpe/psu-865414-b21@1, hpe/psu-blank-flex-slot@1], default: hpe/psu-865408-b21@1, group: psus, rel-pos: 1}
+        - {id: psu-2, at: [287.0, 0.8], size: {w: 68.0, h: 40.4}, accepts: [hpe/psu-865408-b21@1, hpe/psu-865414-b21@1, hpe/psu-blank-flex-slot@1], default: hpe/psu-blank-flex-slot@1, group: psus, rel-pos: 2, plan: {view: top, at: [79.6, 0.0], in: system-board, under: [access-panel]}}
+        - {id: psu-1, at: [362.5, 0.8], size: {w: 68.0, h: 40.4}, accepts: [hpe/psu-865408-b21@1, hpe/psu-865414-b21@1, hpe/psu-blank-flex-slot@1], default: hpe/psu-865408-b21@1, group: psus, rel-pos: 1, plan: {view: top, at: [4.1, 0.0], in: system-board, under: [access-panel]}}
       placements:
         - {id: usb-rear-1, ref: std/usb-a@1, at: [65.0, 28.95], group: usb, rel-pos: 3, attrs: {usb: '3.0'}}
         - {id: usb-rear-2, ref: std/usb-a@1, at: [65.0, 35.75], group: usb, rel-pos: 4, attrs: {usb: '3.0'}}
@@ -626,11 +699,41 @@ views:
         - {id: uid-rear, ref: hpe/led-sq@1, at: [194.4, 34.0], group: leds, rel-pos: 3, for: chassis}
   top:
     size: {w: 434.6, h: 614.9}
-    empty: >-
-      not yet drawn. The QuickSpecs Internal View (page 3) photographs the 8 SFF
-      server from above with its lid off and twenty-two callouts; drawing it needs
-      plan-view HPE parts this library does not have and a scale the photograph does
-      not give - see the interior gap. Sized from the QuickSpecs dimensions.
+    panel:
+      decor:
+        - {at: [0, 0], size: [434.6, 614.9], fill: '#c9cdd1'}
+        - {at: [0, 455.0], size: [434.6, 159.9], fill: '#b9bec4'}
+    components:
+      bays:
+        - {id: dimm-1, at: [83.3, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 1, in: system-board, under: [access-panel]}
+        - {id: dimm-2, at: [92.75, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 2, in: system-board, under: [access-panel]}
+        - {id: dimm-3, at: [102.2, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 3, in: system-board, under: [access-panel]}
+        - {id: dimm-4, at: [111.65, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 4, in: system-board, under: [access-panel]}
+        - {id: dimm-5, at: [212, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 5, in: system-board, under: [access-panel]}
+        - {id: dimm-6, at: [221.45, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 6, in: system-board, under: [access-panel]}
+        - {id: dimm-7, at: [230.9, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 7, in: system-board, under: [access-panel]}
+        - {id: dimm-8, at: [240.35, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 8, in: system-board, under: [access-panel]}
+        - {id: dimm-9, at: [249.8, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 9, in: system-board, under: [access-panel]}
+        - {id: dimm-10, at: [259.25, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 10, in: system-board, under: [access-panel]}
+        - {id: dimm-11, at: [268.7, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 11, in: system-board, under: [access-panel]}
+        - {id: dimm-12, at: [278.15, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 12, in: system-board, under: [access-panel]}
+        - {id: dimm-13, at: [377.5, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 13, in: system-board, under: [access-panel]}
+        - {id: dimm-14, at: [386.95, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 14, in: system-board, under: [access-panel]}
+        - {id: dimm-15, at: [396.4, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 15, in: system-board, under: [access-panel]}
+        - {id: dimm-16, at: [405.85, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 16, in: system-board, under: [access-panel]}
+        - {id: fan-1, at: [84, 404], size: {w: 40.0, h: 32.0}, accepts: [hpe/fan-dl160@1], default: hpe/fan-dl160@1, group: fans, rel-pos: 1, under: [access-panel]}
+        - {id: fan-2, at: [131.8, 404], size: {w: 40.0, h: 32.0}, accepts: [hpe/fan-dl160@1], default: hpe/fan-dl160@1, group: fans, rel-pos: 2, under: [access-panel]}
+        - {id: fan-3, at: [179.6, 404], size: {w: 40.0, h: 32.0}, accepts: [hpe/fan-dl160@1], default: hpe/fan-dl160@1, group: fans, rel-pos: 3, under: [access-panel]}
+        - {id: fan-4, at: [227.4, 404], size: {w: 40.0, h: 32.0}, accepts: [hpe/fan-dl160@1], default: hpe/fan-dl160@1, group: fans, rel-pos: 4, under: [access-panel]}
+        - {id: fan-5, at: [280.2, 404], size: {w: 40.0, h: 32.0}, accepts: [hpe/fan-dl160@1], default: hpe/fan-dl160@1, group: fans, rel-pos: 5, under: [access-panel]}
+        - {id: fan-6, at: [328, 404], size: {w: 40.0, h: 32.0}, accepts: [hpe/fan-dl160@1], default: hpe/fan-dl160@1, group: fans, rel-pos: 6, under: [access-panel]}
+        - {id: fan-7, at: [375.8, 404], size: {w: 40.0, h: 32.0}, accepts: [hpe/fan-dl160@1], default: hpe/fan-dl160@1, group: fans, rel-pos: 7, under: [access-panel]}
+      placements:
+        - {id: system-board, ref: hpe/system-board-dl160@1, at: [4.0, 3.0], group: interior, rel-pos: 1, under: [heatsink-1, heatsink-2, riser-primary, access-panel, dimm-1, dimm-2, dimm-3, dimm-4, dimm-5, dimm-6, dimm-7, dimm-8, dimm-9, dimm-10, dimm-11, dimm-12, dimm-13, dimm-14, dimm-15, dimm-16]}
+        - {id: heatsink-1, ref: hpe/heatsink-std-1u@1, at: [288.0, 235.0], group: processors, rel-pos: 1, in: system-board, under: [access-panel]}
+        - {id: heatsink-2, ref: hpe/heatsink-std-1u@1, at: [123.2, 235.0], group: processors, rel-pos: 2, in: system-board, under: [access-panel]}
+        - {id: riser-primary, ref: hpe/riser-cage-primary-dl160@1, at: [306.4, 6.9], group: interior, rel-pos: 2, in: system-board, under: [access-panel]}
+        - {id: access-panel, ref: hpe/access-panel-dl160@1, at: [0.0, 0.0], group: covers, rel-pos: 1}
   bottom:
     size: {w: 434.6, h: 614.9}
     empty: >-

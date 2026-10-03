@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1107 component majors in 24 namespaces.
+1113 component majors in 24 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -77,7 +77,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/dc-terminal-27@1` | component | inlet | 27.5 × 15.9 × 10.4 |  | 1 | 3 | Three-pole DC barrier terminal block with a hinged clear cover - the screw-down -48 V input fitted to 1RU acc… |
 | `common/dc-terminal-plug-2@1` | component | inlet | 32.1 × 17.6 × 15 |  | 2 | 1 | Two-pole PLUGGABLE DC terminal block - a green header on the faceplate with a matching two-way screw-clamp pl… |
 | `common/device-label@1` | component | sticker | 80 × 40 |  | 5 | 0 | Bottom identity label in oval recess (placeholder art - never reproduce serials/MACs/credentials) |
-| `common/dimm-plan@1` | module | memory | 3.8 × 133.4 × 31.3 |  | 2 | 1 | A DIMM seen from above, standing in its socket - the thin edge of the module with its latches at either end, … |
+| `common/dimm-plan@1` | module | memory | 3.8 × 133.4 × 31.3 |  | 3 | 1 | A DIMM seen from above, standing in its socket - the thin edge of the module with its latches at either end, … |
 | `common/din-1-0-2-3-jack@1` | component | port | 7.01 × 7.01 |  | 0 | 5 | Rear-mount 1.0/2.3 bulkhead jack - the round spanner nut in front of the panel (bezel) around a std/din-1-0-2… |
 | `common/din-clip-ts35@1` | component | mount | 44 × 58 |  | 1 | 1 | DIN-rail mounting clip for a 35 mm top-hat rail (IEC 60715 TS35, 7.5 and 15 mm deep) - the plate screwed to a… |
 | `common/dip-switch-2@1` | component | button | 7 × 10 |  | 1 | 0 | Two-position DIP switch - a red body with two slide actuators side by side and ON at the top, unrotated |
@@ -746,13 +746,16 @@ aperture when it is a bare opening - never both at one position. The README's
 | `fs/fhd-splice-12-lc-rear@2` | component | cassette | 99 × 31 |  | 0 | 1 | The back of FS FHD's LC UPC OS2 12-fibre splice cassette (SKU 382907): the cassette body seen from behind, ca… |
 | `fs/qsfp28-aoc@1` | module | transceiver | 18.35 × 8.5 × 52.4 | qsfp | 0 | 0 | FS 100G QSFP28 active optical cable, one end - four 25G lanes over multimode ribbon fibre, up to 100 m over O… |
 
-## hpe/ (17)
+## hpe/ (23)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
+| `hpe/access-panel-dl160@1` | component | mechanical | 434.6 × 614.9 |  | 1 | 0 | The access panel of the Gen10 ProLiant DL160 - the lid over the whole chassis, with its hood latch near the f… |
 | `hpe/button-led-sq@1` | component | button | 4 × 4 |  | 1 | 0 | The square lit push button of an HPE Gen10 ProLiant front panel - the Power On/Standby button and the UID but… |
 | `hpe/expansion-slot-blank-fh@1` | module | blank | 109.3 × 23.3 |  | 1 | 0 | HPE full-height expansion slot blank in the Gen10 ProLiant DL160's primary riser, lying flat at the rear as s… |
 | `hpe/expansion-slot-blank-lp@1` | module | blank | 60.3 × 18.2 |  | 1 | 0 | HPE low-profile expansion slot blank in the Gen10 ProLiant DL160's riser cages, lying flat at the rear as slo… |
+| `hpe/fan-dl160@1` | module | fan | 40 × 32 × 40 |  | 1 | 0 | A single-rotor hot-plug fan of the Gen10 ProLiant DL160 seen from above - the block that lifts out of its bay… |
+| `hpe/heatsink-std-1u@1` | component | mechanical | 80 × 107 |  | 1 | 0 | The standard processor heatsink of the Gen10 ProLiant DL160 seen from above - a black shrouded block over the… |
 | `hpe/info-pull-tab@1` | component | tab | 37.2 × 11.1 |  | 1 | 1 | The serial number / iLO information pull tab of an HPE Gen10 ProLiant front - a black tab that slides out of … |
 | `hpe/info-pull-tab-slim@1` | component | tab | 33.5 × 5.4 |  | 1 | 0 | The serial number / iLO information pull tab of the Gen10 ProLiant DL160 8 SFF front - a slim black tab lying… |
 | `hpe/led-sq@1` | component | led | 3 × 3 |  | 1 | 0 | A small square status lamp of an HPE Gen10 ProLiant - the front NIC status and Health lamps, and the rear UID… |
@@ -764,9 +767,12 @@ aperture when it is a bare opening - never both at one position. The README's
 | `hpe/psu-865408-b21@1` | module | psu | 68 × 40.4 × 225.3 |  | 1 | 6 | HPE 500 W Flex Slot Platinum Hot Plug Low Halogen power supply (865408-B21), as fitted to the Gen10 ProLiant … |
 | `hpe/psu-865414-b21@1` | module | psu | 68 × 40.4 × 225.3 |  | 1 | 0 | HPE 800 W Flex Slot Platinum Hot Plug Low Halogen power supply (865414-B21), the 500 W supply's casting with … |
 | `hpe/psu-blank-flex-slot@1` | module | blank | 68 × 40.4 |  | 1 | 0 | HPE Flex Slot power supply blank, as the Gen10 ProLiant DL160 ships in its second supply bay - a bright metal… |
+| `hpe/psu-flex-slot-plan@1` | component | mechanical | 68 × 190 |  | 0 | 2 | An HPE Flex Slot power supply seen from above - the can that runs into the chassis behind its rear face |
+| `hpe/riser-cage-primary-dl160@1` | component | mechanical | 123.5 × 145.6 |  | 1 | 0 | The primary PCI riser cage of the Gen10 ProLiant DL160 seen from above - the vented sheet-metal roof over PCI… |
 | `hpe/serial-port-blank@1` | module | blank | 32.8 × 11.2 |  | 1 | 0 | HPE serial port blank on the Gen10 ProLiant DL160's rear, covering the opening the optional serial port cable… |
 | `hpe/sff-blank@1` | module | blank | 76.2 × 15 × 25 |  | 1 | 0 | HPE SFF drive blank for the Gen10 ProLiant DL160's 2.5 inch front bays, lying flat - a black moulding with a … |
 | `hpe/sff-sc-carrier@1` | module | drive | 76.2 × 15 × 125 |  | 1 | 3 | HPE SmartCarrier (SC) for a 2.5 inch SFF drive, lying flat as the Gen10 ProLiant DL160's 8 SFF front presents… |
+| `hpe/system-board-dl160@1` | component | mechanical | 426 × 393 × 36 |  | 1 | 0 | The Gen10 ProLiant DL160 system board seen from above - the PCB the processors, memory, risers and supply con… |
 
 ## juniper/ (170)
 

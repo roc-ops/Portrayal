@@ -523,7 +523,12 @@ def test_the_comparison_layer_can_now_reach_them():
     allowing continuous operation with one fan failure in the system"). The four
     bays are in the top view, where the fans are: a 1U server's fans are inside
     the chassis, not on a face.
+
+    EIGHTY-THREE IS THE HPE DL160 GEN10, n+1 over seven single-rotor bays, from
+    its User Guide's fan mode behaviour (the redundant fan kit adds one fan, and
+    in redundant mode one rotor failure leaves the system running). Its bays are
+    in the top view too.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 82, n
+    assert n == 83, n
