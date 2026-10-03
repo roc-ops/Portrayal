@@ -134,12 +134,12 @@ provenance:
   rear:
     confidence: photo-measured
     note: >-
-      From the rear photograph, left to right along the top: the primary riser's end
-      bracket (0..14.1), slot 1's full-height window (15.9..125.2), slot 2's low-
-      profile window (127.9..188.2), the riser cage's middle bracket (187.2..203.8),
-      slot 3's low-profile window on the secondary riser (214.8..275.1, its vents
-      level with slot 2's). Along the bottom: two screw holes, the media module blank
-      (14.1..58.2), the stacked USB 3.0 ports in a dark bezel (59.0..79.0), the iLO
+      From the rear photograph, left to right along the top: the primary riser cage
+      (0..201.5; its latch bracket ends at 203.0) with slot 1's full-height window
+      (15.9..125.2) and slot 2's low-profile window (127.9..188.2), then the secondary
+      riser cage (to 285.5) with slot 3's window (214.8..275.1, its vents level with
+      slot 2's). Along the bottom: two screw holes, the media module opening
+      (13.6..58.6), the stacked USB 3.0 ports in a dark bezel (59.0..79.0), the iLO
       RJ45 with its legend turned on its side, VGA in a blue field (103.8..136.9), NIC
       1 and 2 in a pale bezel (138.6..173.8), a vent block, the UID lamp (195.9,
       35.5), a small round hole, and under slot 3 the IOIOI legend and the serial port
@@ -161,9 +161,14 @@ provenance:
       User Guide "PCIe expansion slot definitions": slot 1 PCIe 3.0 x16, full-height
       half-length or low-profile, or a FlexibleLOM (x8); slot 2 PCIe 3.0 x8 low-
       profile; slot 3 PCIe 3.0 x16 low-profile, on the secondary riser with processor
-      2. The photographed unit has blanks in all three. Slot 3's window is drawn on
-      slot 2's measured height (18.2), centred where the photograph puts its plate;
-      its own edges are softer on the image.
+      2. THE SLOTS ARE BAYS OF THE RISERS, each a standard bracket behind a window in
+      its cage (hpe/riser-primary-dl160@1, hpe/riser-secondary-dl160@1), so the
+      library's generic cards and its card families seat in them. They were first
+      drawn as chassis bays the size of the windows the photograph shows - 109.3 x
+      23.3 and 60.3 x 18.2 - and nothing but HPE's blanks fitted; the same was true of
+      the media module and serial openings, which are now the openings' own sizes and
+      accept the Media Module adapter and the serial port. The photographed unit has
+      blanks in all five.
   psus:
     confidence: datasheet
     note: >-
@@ -352,18 +357,24 @@ gaps:
       6 to 32 is listed with a hot-plug supply - so that rear is not drawn.
     wanted: >-
       the non-hot-plug supply's part number and rating, and which models carried it
-  - what: expansion-cards
+  - what: expansion-options-unseen
     scope: [rear]
     reason: needs-photo
     note: >-
-      the three PCIe slots, the FlexibleLOM option in slot 1 (riser kit 875748-B21),
-      the Media Module adapter (NIC ports 3 and 4) and the serial port cable kit are
-      drawn as their blanks only. A reseller's photograph of the FlexibleLOM riser is
-      staged (photos/aeonfly-flexiblelom-riser-875748-angled-1500x1400.jpg) and is
-      angled.
+      no image held shows a card in any of the three PCIe slots; which way up each
+      bracket lies follows from where the riser connectors are, which HPE's PartSurfer
+      photograph shows for the primary riser and only the User Guide's board figure
+      for the secondary (see the riser parts). Not drawn: the FlexibleLOM riser
+      (primary riser board x8/FlexibleLOM, 878539-001, kit 875748-B21) and the
+      FlexibleLOM adapters it carries - PartSurfer photographs the cage at an angle,
+      labelled 'Slot 2 PCIe x8 / Slot 1 ALOM x8', which shows what it is and not the
+      size of its rear opening - and the primary riser BLANK (878532-001) a server
+      ordered with no riser carries, which PartSurfer photographs straight on. The
+      three Media Module adapters are drawn from PartSurfer's photographs, each
+      centred in the opening because no image shows one fitted.
     wanted: >-
-      straight-on rear images with a FlexibleLOM, a media module adapter and the
-      serial port fitted
+      a straight-on rear image of a server with the FlexibleLOM riser and an adapter
+      fitted, and of one with a card in each slot and a Media Module adapter fitted
   - what: interior-estimated
     scope: [top]
     reason: needs-drawing
@@ -402,7 +413,7 @@ gaps:
 groups:
   drives: {term: Bay, role: service, index-origin: 1}
   media-bays: {term: Bay, role: service, index-origin: 1}
-  slots: {term: Slot, role: service, index-origin: 1}
+  risers: {term: Riser, role: service, index-origin: 1, description: 'the primary riser cage (PCIe slots 1 and 2) and the secondary (slot 3, with processor 2); the slots are bays of the risers'}
   media-module: {term: Slot, role: service, index-origin: 1}
   psus: {term: PSU, role: service, index-origin: 1, attrs: {redundancy: '1+1', redundancy-note: 'QuickSpecs: one 500 W Flex Slot supply standard and RPS ready; a second supply needs the DL160/180 Gen10 Redundant Power Supply Enablement Kit 866442-B21, and the User Guide calls the second supply the redundant one - the same capacity twice, not twice the capacity'}}
   nics: {term: Port, role: traffic, index-origin: 1, attrs: {media: rj45, speed: 1g}}
@@ -581,16 +592,6 @@ views:
     panel:
       decor:
         - {at: [0, 0], size: [434.6, 42.9], fill: '#c3c8cd'}
-        - {at: [0.4, 0.4], size: [13.7, 23.6], fill: '#b3b9bf'}
-        - {at: [3.4, 4.5], size: [2.6, 2.0], fill: '#1d2023'}
-        - {at: [7.6, 4.5], size: [2.6, 2.0], fill: '#1d2023'}
-        - {at: [3.4, 18.4], size: [2.6, 2.0], fill: '#1d2023'}
-        - {at: [7.6, 18.4], size: [2.6, 2.0], fill: '#1d2023'}
-        - {at: [187.2, 0.7], size: [16.6, 26.1], fill: '#b3b9bf'}
-        - {at: [192.0, 4.2], size: [2.6, 2.0], fill: '#1d2023'}
-        - {at: [196.4, 4.2], size: [2.6, 2.0], fill: '#1d2023'}
-        - {at: [192.0, 20.2], size: [2.6, 2.0], fill: '#1d2023'}
-        - {at: [196.4, 20.2], size: [2.6, 2.0], fill: '#1d2023'}
         - {at: [7.4, 30.2], size: [2.4, 2.4], fill: '#1d2023', shape: circle}
         - {at: [7.4, 36.4], size: [2.4, 2.4], fill: '#1d2023', shape: circle}
         - {at: [59.0, 26.1], size: [20.0, 16.5], fill: '#1d2023'}
@@ -673,7 +674,7 @@ views:
       - {at: [83.9, 34.5], text: iLO, font-size: 1.8, fill: '#2b2f33', anchor: middle, rotate: -90, for: ilo}
       - {at: [133.3, 25.7], path: 'M 0 0 H 2.6 V 1.1 H 0 Z M 0.8 1.1 V 1.4 M 1.8 1.1 V 1.4 M 0.5 1.4 H 2.1', stroke-width: 0.25, fill: '#f1f3f5', for: vga}
       - {at: [195.9, 40.0], text: UID, font-size: 1.6, fill: '#2b2f33', anchor: middle, for: uid-rear}
-      - {at: [235.5, 24.0], text: IOIOI, font-size: 2.6, fill: '#2b2f33', anchor: middle, for: serial}
+      - {at: [235.5, 24.9], text: IOIOI, font-size: 2.4, fill: '#2b2f33', anchor: middle, for: serial}
       - {at: [358.7, 6.6], text: PS, font-size: 1.6, fill: '#2b2f33', anchor: middle, for: psu-1}
       - {at: [358.7, 9.0], text: '1', font-size: 1.6, fill: '#2b2f33', anchor: middle, for: psu-1}
       - {at: [358.0, 10.4], path: 'M 0 0 L 1.4 0.8 L 0 1.6 Z', filled: true, fill: '#2b2f33', for: psu-1}
@@ -682,11 +683,10 @@ views:
       - {at: [358.0, 32.0], path: 'M 1.4 0 L 0 0.8 L 1.4 1.6 Z', filled: true, fill: '#2b2f33', for: psu-2}
     components:
       bays:
-        - {id: slot-1, at: [15.9, 0.7], size: {w: 109.3, h: 23.3}, accepts: [hpe/expansion-slot-blank-fh@1], default: hpe/expansion-slot-blank-fh@1, group: slots, rel-pos: 1}
-        - {id: slot-2, at: [127.9, 2.4], size: {w: 60.3, h: 18.2}, accepts: [hpe/expansion-slot-blank-lp@1], default: hpe/expansion-slot-blank-lp@1, group: slots, rel-pos: 2}
-        - {id: slot-3, at: [214.8, 2.0], size: {w: 60.3, h: 18.2}, accepts: [hpe/expansion-slot-blank-lp@1], default: hpe/expansion-slot-blank-lp@1, group: slots, rel-pos: 3}
-        - {id: media-module, at: [14.1, 27.9], size: {w: 44.1, h: 11.8}, accepts: [hpe/media-module-blank@1], default: hpe/media-module-blank@1, group: media-module, rel-pos: 1}
-        - {id: serial, at: [219.3, 26.8], size: {w: 32.8, h: 11.2}, accepts: [hpe/serial-port-blank@1], default: hpe/serial-port-blank@1, group: serial, rel-pos: 1}
+        - {id: riser-primary, at: [0.0, 0.4], size: {w: 201.5, h: 24.2}, accepts: [hpe/riser-primary-dl160@1], default: hpe/riser-primary-dl160@1, group: risers, rel-pos: 1}
+        - {id: riser-secondary, at: [201.5, 0.4], size: {w: 84.0, h: 21.0}, accepts: [hpe/riser-secondary-dl160@1], default: hpe/riser-secondary-dl160@1, group: risers, rel-pos: 2}
+        - {id: media-module, at: [13.6, 26.3], size: {w: 45.0, h: 13.4}, accepts: [hpe/media-module-blank@1, hpe/media-module-872161@1, hpe/media-module-872162@1, hpe/media-module-872163@1], default: hpe/media-module-blank@1, group: media-module, rel-pos: 1}
+        - {id: serial, at: [219.3, 26.0], size: {w: 32.8, h: 12.5}, accepts: [hpe/serial-port-blank@1, hpe/serial-port-879778@1], default: hpe/serial-port-blank@1, group: serial, rel-pos: 1}
         - {id: psu-2, at: [287.0, 0.8], size: {w: 68.0, h: 40.4}, accepts: [hpe/psu-865408-b21@1, hpe/psu-865414-b21@1, hpe/psu-blank-flex-slot@1], default: hpe/psu-blank-flex-slot@1, group: psus, rel-pos: 2, plan: {view: top, at: [79.6, 0.0], in: system-board, under: [access-panel]}}
         - {id: psu-1, at: [362.5, 0.8], size: {w: 68.0, h: 40.4}, accepts: [hpe/psu-865408-b21@1, hpe/psu-865414-b21@1, hpe/psu-blank-flex-slot@1], default: hpe/psu-865408-b21@1, group: psus, rel-pos: 1, plan: {view: top, at: [4.1, 0.0], in: system-board, under: [access-panel]}}
       placements:
@@ -775,6 +775,20 @@ configurations:
     bays:
       drive-1: hpe/lff-lp-carrier@1
       drive-2: hpe/lff-lp-carrier@1
+  lff4-options:
+    kind: example
+    description: >-
+      The 4 LFF server with its rear options fitted, to show what the openings
+      take: a generic full-height card in slot 1 and a low-profile one in slot
+      2, the 1GbE Media Module adapter (NIC ports 3 and 4), the serial port,
+      and a second 500 W supply in PS 2 (which needs the redundant power supply
+      enablement kit; HPE does not support mixing two different supplies).
+    bays:
+      riser-primary/slot-1: common/pcie-card-fh@2
+      riser-primary/slot-2: common/pcie-card-lp@1
+      media-module: hpe/media-module-872161@1
+      serial: hpe/serial-port-879778@1
+      psu-2: hpe/psu-865408-b21@1
   sff8:
     kind: orderable
     part-numbers:

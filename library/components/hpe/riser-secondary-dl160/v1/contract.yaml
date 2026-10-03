@@ -1,0 +1,62 @@
+format: 1
+kind: module
+name: riser-secondary-dl160
+version: 1.0.0
+class: riser
+behaviour: fills
+profile: server
+description: >-
+  The secondary PCI riser cage of the Gen10 ProLiant DL160 as the rear
+  presents it, with the x16 riser board (878540-001) - PCIe 3.0 slot 3, low
+  profile, wired to processor 2, a window in the cage over a standard bracket
+attrs:
+  riser-board: 878540-001
+provenance:
+  sources: >-
+    The straight-on rear photograph in newserverlife's DL160 Gen10 review
+    (newserverlife.com/upload/iblock/386/8_opt.jpeg, staged as photos/nsl-
+    dl160g10-rear-ORTHO-1280x145.jpg under
+    working/intake/hpe/proliant/dl160-gen10), 2.90 x 2.87 px/mm; see
+    hpe/psu-865408-b21@1 for the panel gate on that image. DL160 Gen10 User
+    Guide a00066666en_us, 'Rear panel components' item 3 (PCIe slot 3, secondary
+    riser for processor 2, optional) and 'PCIe expansion slot definitions';
+    Maintenance and Service Guide a00066664en_us, secondary riser board x16,
+    878540-001.
+  size: >-
+    photo-measured - 84.0 x 21.0: from where slot 2's bracket ends (201.5 on the
+    rear; see hpe/riser-primary-dl160@1, `packing`) to the plate's right end
+    beside the supply bays (x ..837 px), and down to just under slot 3's plate.
+  windows: >-
+    photo-measured - slot 3's window is 13.3..73.6 by 1.6..19.8 on this face,
+    the same 60.3 x 18.2 as slot 2's (its own edges are softer on the image).
+    The bay behind it is a low-profile bracket's 79.20 x 18.42, its tip 5.9 past
+    the window's right edge as slot 2's is past its left.
+  handedness: >-
+    drawing - turned over (rotate 180, tip right). The User Guide's 'Installing
+    an expansion board' figure for slot 3 looks from the front of the server
+    toward the rear and pushes the card to the LEFT of the picture into the
+    riser, which is the right of this face - the supply side - and its System
+    board components figure puts the secondary riser connector there. The
+    bracket's tip is the end at the edge connector.
+  slots: >-
+    datasheet - User Guide: slot 3 PCIe 3.0, x16 connector, negotiable 16/8/4/1,
+    low-profile half-length, and 'a second processor must be installed' to use
+    it.
+  depth: >-
+    estimated - 150, as hpe/riser-primary-dl160@1; this cage is not in the
+    QuickSpecs Internal View.
+size: {w: 84.0, h: 21.0, d: 150.0}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+body: {depth: 150.0, color: '#b9bec4'}
+elements:
+  plate: {at: [0.0, 0.0], size: [84.0, 21.0], class: bezel}
+bays:
+  slot-3:
+    slot: {connector: x16, lanes: 16, height: low, length: half, processor: 2, generation: 3}
+    rotate: 180
+    behind: true
+    at: [0.3, 1.5]
+    size: [79.20, 18.42]
+    accepts: [hpe/expansion-slot-blank-lp@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1, nvidia/mcx4111a-lp@1, nvidia/mcx4121a-lp@1, nvidia/mcx4131a-lp@1, nvidia/mcx512a-lp@1, nvidia/mcx512f-lp@1, nvidia/mcx515a-lp@1, nvidia/mcx516a-lp@1, nvidia/mcx621102-lp@1, nvidia/mcx621202-lp@1, nvidia/mcx623102a-lp@1, nvidia/mcx623105-lp@1, nvidia/mcx623106-lp@1, nvidia/mcx713106-lp@1, nvidia/mcx715105-lp@1, nvidia/mcx75310-lp@1, nvidia/mcx75510-lp@1, nvidia/mcx755106-lp@1]
+    default: hpe/expansion-slot-blank-lp@1
+skins: [default]

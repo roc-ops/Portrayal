@@ -1,0 +1,112 @@
+format: 1
+kind: module
+name: riser-primary-dl160
+version: 1.0.0
+class: riser
+behaviour: fills
+profile: server
+description: >-
+  The primary PCI riser cage of the Gen10 ProLiant DL160 as the rear presents
+  it, with the standard x16/x8 riser board (878538-001) - PCIe 3.0 slot 1,
+  full height, and slot 2, low profile, lying flat either side of the riser,
+  each a window in the cage over a standard bracket
+attrs:
+  riser-board: 878538-001
+provenance:
+  sources: >-
+    The straight-on rear photograph in newserverlife's DL160 Gen10 review
+    (newserverlife.com/upload/iblock/386/8_opt.jpeg, staged as photos/nsl-
+    dl160g10-rear-ORTHO-1280x145.jpg under
+    working/intake/hpe/proliant/dl160-gen10), 2.90 x 2.87 px/mm; see
+    hpe/psu-865408-b21@1 for the panel gate on that image. DL160 Gen10 User
+    Guide a00066666en_us, 'Rear panel components' and 'PCIe expansion slot
+    definitions'; Maintenance and Service Guide a00066664en_us, riser board
+    spare parts (primary riser board x16 x8, 878538-001; primary riser board
+    x8/FlexibleLOM, 878539-001). The QuickSpecs Internal View shows the riser
+    board from above between the two slots, its label reading Slot 2 PCIe x8
+    over Slot 1 PCIe x16.
+  size: >-
+    photo-measured - 201.5 x 24.2: the cage's face from the chassis' left edge
+    to where slot 2's bracket ends and slot 3's begins. The photograph shows the
+    latch bracket right of slot 2 ending at 203.0 (x 9..597 px); the seam is
+    drawn 1.5 short of that because the brackets fix it - see `packing` -
+  packing: >-
+    The three brackets are standard lengths and the blanks in slots 2 and 3 are
+    one part, so their windows sit the same distance from their tips: slot 2's
+    window starts at 127.9 and slot 3's ends at 275.1 on the rear, and two 79.20
+    brackets back to back between them leave each window 5.6 from its tip at the
+    least. Drawn at 5.9: slot 2 122.0..201.2, slot 3 201.8..281.0, and slot 1's
+    tip the riser board's 1.6 short of slot 2's, 0.4..120.4. THE FIRST DRAWING
+    CENTRED EACH BRACKET IN ITS WINDOW, which laid the tips of slots 1 and 2
+    over each other by 16.7 mm. Slot 1's photographed window therefore runs 4.8
+    past its bracket's tip, over the riser board; the skin's opening stops at
+    the tip (120.6), and the plate is drawn across the rest, where the
+    photograph shows the blank's plain margin. These are positions reasoned from
+    standard parts and a photograph of blanks, and they are soft by a few
+    millimetres: a frame of StorageReview's hardware review video (youtube
+    j957HK8E4VI, 4:31) puts the join between the two slots nearer the
+    photographed post at 125..128 than the 121 drawn here, which standard
+    brackets can only do if their tips pass each other in front of the riser
+    board. No image held shows a card in place.
+  height: >-
+    photo-measured - and from 0.4 below the top edge to the bottom of slot 1's
+    window (y 14..83 px).
+  windows: >-
+    photo-measured - slot 1's window is 15.9..125.2 by 0.3..23.6 on this face
+    and slot 2's 127.9..188.2 by 2.0..20.2. THEY ARE WINDOWS OVER STANDARD
+    BRACKETS, which is what was missed when these slots were first drawn as bays
+    the size of the windows - no card fitted them. A photograph gives the
+    opening, not the bracket (std/pcie-bracket-fh@2 says the same of Dell's
+    rear): the full-height bay is the bracket's 120.02 x 21.59 and the low-
+    profile bay its 79.20 x 18.42, each placed as `packing` says.
+  handedness: >-
+    Slot 1 is turned over (rotate 180, tip right) and slot 2 is not (tip left),
+    and a card can seat no other way. HPE's PartSurfer photograph of this cage
+    (878538-001, partsurfer.hpe.com/media/photos/878538-001.jpg) shows the riser
+    board standing BETWEEN the two slots with a connector on each face, and its
+    label reads 'Slot 2 PCIe x8' with an arrow one way and 'Slot 1 PCIe x16'
+    with an arrow the other; the QuickSpecs Internal View puts the board at
+    102..126 on this face. The User Guide's 'Installing an expansion board'
+    figures draw it: in slot 1 and in slot 2 the card is pushed toward the riser
+    board in the middle of the cage and a latch at the cage's OUTER end closes
+    over the bracket's flange. StorageReview's video shows the same cage in the
+    server with the lid off (4:48): the board runs front to back between the two
+    slots, slot 2's x8 connector faces the middle of the server, slot 1 lies
+    under the cage toward the chassis wall, and a blue latch sits at each OUTER
+    end of the cage's rear edge. A card's edge connector plugs into the board,
+    the bracket's tip is the end at the edge connector (std/pcie-bracket-fh@2),
+    so each tip is at the riser and each flange at the far end, and the two
+    cards lie opposite ways up - a half turn on this face. No image held shows a
+    card fitted, so the bracket is not READ in place; what is read is where the
+    connectors are.
+  slots: >-
+    datasheet - User Guide 'PCIe expansion slot definitions': slot 1 PCIe 3.0,
+    x16 connector, negotiable 16/8/4/1, full-height half-length or low-profile;
+    slot 2 PCIe 3.0, x8, 8/4/1, low-profile half-length; both on processor 1
+    (the secondary riser is the one that needs processor 2).
+  depth: >-
+    estimated - 150, the cage's reach into the chassis on the QuickSpecs
+    Internal View (145.6 by that photograph's scale, which fails the panel
+    gate).
+size: {w: 201.5, h: 24.2, d: 150.0}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+body: {depth: 150.0, color: '#b9bec4'}
+elements:
+  plate: {at: [0.0, 0.0], size: [201.5, 24.2], class: bezel}
+bays:
+  slot-1:
+    slot: {connector: x16, lanes: 16, height: full, length: half, processor: 1, generation: 3}
+    rotate: 180
+    behind: true
+    at: [0.4, 1.15]
+    size: [120.02, 21.59]
+    accepts: [hpe/expansion-slot-blank-fh@1, std/pcie-bracket-fh@2, common/pcie-card-fh@2, ufispace/n3100-4c@1, nvidia/mcx4111a-fh@1, nvidia/mcx4121a-fh@1, nvidia/mcx4131a-fh@1, nvidia/mcx512a-fh@1, nvidia/mcx512f-fh@1, nvidia/mcx515a-fh@1, nvidia/mcx516a-fh@1, nvidia/mcx621102-fh@1, nvidia/mcx621202-fh@1, nvidia/mcx623102a-fh@1, nvidia/mcx623105-fh@1, nvidia/mcx623106-fh@1, nvidia/mcx713104-fh@1, nvidia/mcx713106-fh@1, nvidia/mcx713114-fh@1, nvidia/mcx715105-fh@1, nvidia/mcx75310-fh@1, nvidia/mcx75510-fh@1, nvidia/mcx755106-fh@1]
+    default: hpe/expansion-slot-blank-fh@1
+  slot-2:
+    slot: {connector: x8, lanes: 8, height: low, length: half, processor: 1, generation: 3}
+    behind: true
+    at: [122.0, 1.9]
+    size: [79.20, 18.42]
+    accepts: [hpe/expansion-slot-blank-lp@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1, nvidia/mcx4111a-lp@1, nvidia/mcx4121a-lp@1, nvidia/mcx4131a-lp@1, nvidia/mcx512a-lp@1, nvidia/mcx512f-lp@1, nvidia/mcx515a-lp@1, nvidia/mcx516a-lp@1, nvidia/mcx621102-lp@1, nvidia/mcx621202-lp@1, nvidia/mcx623102a-lp@1, nvidia/mcx623105-lp@1, nvidia/mcx623106-lp@1, nvidia/mcx713106-lp@1, nvidia/mcx715105-lp@1, nvidia/mcx75310-lp@1, nvidia/mcx75510-lp@1, nvidia/mcx755106-lp@1]
+    default: hpe/expansion-slot-blank-lp@1
+skins: [default]

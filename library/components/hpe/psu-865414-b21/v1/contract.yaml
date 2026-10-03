@@ -58,12 +58,18 @@ provenance:
     before either document was found - 0.2 mm from the datasheet on both axes,
     which is the check on that photograph's scale.
   face: >-
-    photo-measured - Supply-local: grille 1.0..38.9 across, drawn as a 36 mm
-    round grille centred at (20.0, 20.6); screws at (5.5, 5.2), (37.2, 5.2),
+    photo-measured - supply-local: grille 1.0..38.9 across, drawn as a 36 mm
+    round grille centred at (20.0, 20.4); screws at (5.5, 5.2), (37.2, 5.2),
     (4.8, 36.9) and (37.2, 36.9); status lamp at (48.3, 5.6); release latch
-    53.1..62.1 x 4.5..11.1; inlet recess 43.1..68.0 x 11.1..40.4; the fan hub prints the rating ("800W" on the photographed 800 W unit). The cord strap
-    the photographed unit carries across its handle is cable management and is
-    not drawn.
+    53.1..62.1 x 4.5..11.1, burgundy; inlet recess 43.1..68.0 x 11.1..40.4.
+    THE BLACK BAR ACROSS THE FAN IS THE PULL HANDLE, from the left edge to the
+    inlet at mid height - a first drawing left it off as a cord strap, which is
+    what the hook-and-loop wrap round it on the photographed unit is.
+  hub: >-
+    photo-measured - THE HUB STICKER IS WHAT TELLS ONE FLEX SLOT SUPPLY FROM
+    ANOTHER at the back of a rack: the casting is shared. Here it is a mauve sticker printed "800W", as the reseller's photograph of an 865414-B21 shows it.
+    About 17 mm across on both. The first drawing printed the rating in
+    2.4 mm type on a 10 mm hub and the two supplies could not be told apart.
   inlet: >-
     photo-measured - COMPOSED, std/c14-inlet@1 at rotate 90. The library's C14
     is drawn earth pin up; on this supply the photograph puts the earth pin on
@@ -100,13 +106,15 @@ elements:
       - {name: ok, color: '#22c55e'}
     description: Power supply. Solid green - normal; off - power unavailable, failure, standby, or error.
   latch: {at: [53.1, 4.5], size: [9.0, 6.6], class: latch}
+  handle: {at: [0.6, 18.0], size: [44.0, 4.8], class: latch}
+  hub: {at: [11.4, 11.8], size: [17.2, 17.2], class: sticker}
   inlet-bezel: {at: [43.1, 11.1], size: [24.9, 29.3], class: inlet}
 relief:
   wall: '#3a4045'
   features:
   - node: latch
     out: 3.0
-    color: '#c0473d'
+    color: '#8f2b4d'
     confidence: estimated
     source: the latch stands proud of the face in the photograph; not measured
 skins: [default]
