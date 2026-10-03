@@ -50,11 +50,14 @@ last. A run with nothing new publishes nothing, and a run that failed partway
 is finished by running it again. Run the dry run first: its summary lists what
 a release would send.
 
-npm limits how fast packages arrive: the first release was refused with `E429`
-after 25 new packages in a minute. The packager waits and tries the same
-package again, a minute at first and longer each time, and gives up on it after
-about half an hour. A release that stops there has hit a limit that waiting did
-not clear; run it again later.
+npm limits how many new packages an account creates: about 25, then none for
+hours. It documents neither the number nor the window. The first release was
+refused with `E429` on its 26th package, and a run two hours later on its
+first. A release stops at once on a first publish refused this way and says how
+many packages are left; run it again the next day. The index goes last, so
+nothing reads the packages from the CDN until every device is out. `E429` on a
+package npm already holds is an ordinary rate limit, and the packager waits and
+tries that package again.
 
 **A package's first publish needs a token; every later one does not.** npm's
 trusted publishing lets the workflow publish with no stored secret, but a

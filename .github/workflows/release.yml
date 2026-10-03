@@ -40,10 +40,7 @@ jobs:
     # HOSTED, AND NOT A VARIABLE. npm's trusted publishing refuses a self-hosted
     # runner, and none may be registered on this repository again (#656).
     runs-on: ubuntu-latest
-    # LONG, BECAUSE npm RATE-LIMITS NEW PACKAGES. The first release was refused
-    # after 25 in a minute; the packager waits and tries again, up to half an
-    # hour on one package, and a release of every package is mostly waiting.
-    timeout-minutes: 240
+    timeout-minutes: 90
     # THE ENVIRONMENT IS WHERE THE TOKEN LIVES AND WHO MAY USE IT. NPM_TOKEN is
     # an environment secret, not a repository one, so no other workflow and no
     # other job can read it; the environment admits only `main` and can ask for

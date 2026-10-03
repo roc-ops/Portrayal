@@ -310,22 +310,37 @@ class _Limited(_Npm):
         return super().__call__(cmd, cwd=cwd, **kw)
 
 
-def test_a_rate_limited_publish_waits_and_is_tried_again(tmp_path):
-    """The first release sent 25 packages in a minute and npm refused the 26th
-    with E429. That is the registry asking for time, not a failure."""
+def _held(state):
+    """`state` as a later run sees it: npm holds every package, each has moved."""
+    return {n: {**s, "first": False, "changed": True} for n, s in state.items()}
+
+
+def test_a_rate_limited_update_waits_and_is_tried_again(tmp_path):
+    """E429 on a package npm already holds is a rate, and a rate passes."""
     first, _ = _build(tmp_path, _dist(tmp_path))
     npm, slept = _Limited(2), []
-    order = P.publish(tmp_path / "out", first, run=npm, sleep=slept.append)
+    order = P.publish(tmp_path / "out", _held(first), run=npm, sleep=slept.append)
     assert npm.published == order and len(order) == 4
     assert slept == list(P.RATE_LIMIT_WAITS[:2]), "two refusals, two waits, each longer"
 
 
-def test_a_registry_that_never_relents_stops_the_run(tmp_path):
+def test_an_update_npm_never_relents_on_stops_the_run(tmp_path):
     first, _ = _build(tmp_path, _dist(tmp_path))
     npm, slept = _Limited(10 ** 6), []
     with pytest.raises(SystemExit, match="E429"):
-        P.publish(tmp_path / "out", first, run=npm, sleep=slept.append)
+        P.publish(tmp_path / "out", _held(first), run=npm, sleep=slept.append)
     assert slept == list(P.RATE_LIMIT_WAITS) and not npm.published
+
+
+def test_a_refused_first_publish_is_a_quota_and_is_not_waited_on(tmp_path):
+    """npm lets an account create about 25 packages, then none for hours. The
+    second release waited 33 minutes on one package and was refused six times;
+    no wait inside a run outlasts it, so the run says so and stops."""
+    first, _ = _build(tmp_path, _dist(tmp_path))
+    npm, slept = _Limited(10 ** 6), []
+    with pytest.raises(SystemExit, match=r"first publish.*4 packages are left.*tomorrow"):
+        P.publish(tmp_path / "out", first, run=npm, sleep=slept.append)
+    assert not slept and not npm.published
 
 
 def test_any_other_publish_failure_is_not_waited_on(tmp_path):
