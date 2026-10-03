@@ -1,15 +1,14 @@
 {
  "bay-accepts": {},
- "composed": "62088d5a7fc1c534",
+ "composed": "e4bca7e72d1c3153",
  "composed-refs": {
   "common/din-clip-ts35@1": "1.0.0+0fa6f1e73cc1993b",
   "common/dip-switch-2@1": "1.0.0+a57d35591ef443b8",
   "common/ground-screw-washer@1": "1.0.0+0555256f898c020c",
   "common/ground-symbol@1": "1.0.0+938c617ba0a96a89",
   "common/led-dot@1": "1.1.0+f09babec64cd84f9",
-  "common/led-rect-sm@1": "1.0.0+9ebac9d739e4dcb6",
   "common/reset-button@1": "1.1.0+cda1cbe1d930fdbc",
-  "common/rj45-ganged-eth@1": "1.2.0+2a9b24f6f8d2aaa7",
+  "common/rj45-ganged-link@1": "1.0.0+140722cdeb2bf95e",
   "common/terminal-header-508-2@1": "1.0.0+471159fe257f696a",
   "common/terminal-header-508-5f@1": "1.0.0+ef3bab0038f6b9b3",
   "common/wall-plate-keyhole-2@1": "1.0.0+352db6ff1e828746",
@@ -20,27 +19,27 @@
   "base"
  ],
  "format": 1,
- "gaps": "1c1322d6f14fa02f",
+ "gaps": "6a4333a560fb58ec",
  "groups": [
   "controls",
-  "gbe-poe",
+  "gbe",
   "grounding",
   "mgmt",
   "mounting",
   "power-input",
   "relay",
-  "sfp-leds",
-  "sfp-plus",
+  "rj45-combo",
+  "sfp-combo",
   "status-leds"
  ],
  "ids": [
   "front/cutout/console",
+  "front/cutout/copper-10",
+  "front/cutout/copper-11",
+  "front/cutout/copper-12",
+  "front/cutout/copper-9",
   "front/cutout/dip",
   "front/cutout/led-pwr",
-  "front/cutout/led-sfp-10",
-  "front/cutout/led-sfp-11",
-  "front/cutout/led-sfp-12",
-  "front/cutout/led-sfp-9",
   "front/cutout/led-sys",
   "front/cutout/port-1",
   "front/cutout/port-10",
@@ -56,12 +55,12 @@
   "front/cutout/port-9",
   "front/cutout/reset",
   "front/placements/console",
+  "front/placements/copper-10",
+  "front/placements/copper-11",
+  "front/placements/copper-12",
+  "front/placements/copper-9",
   "front/placements/dip",
   "front/placements/led-pwr",
-  "front/placements/led-sfp-10",
-  "front/placements/led-sfp-11",
-  "front/placements/led-sfp-12",
-  "front/placements/led-sfp-9",
   "front/placements/led-sys",
   "front/placements/port-1",
   "front/placements/port-10",
@@ -84,7 +83,7 @@
   "top/placements/power",
   "top/placements/relay"
  ],
- "names": "faa66ba95c6615a1",
+ "names": "686bb45f1461bf07",
  "placement-addressing": {
   "for": {
    "front/placements/dip": [
@@ -92,18 +91,6 @@
    ],
    "front/placements/led-pwr": [
     "chassis"
-   ],
-   "front/placements/led-sfp-10": [
-    "port-10"
-   ],
-   "front/placements/led-sfp-11": [
-    "port-11"
-   ],
-   "front/placements/led-sfp-12": [
-    "port-12"
-   ],
-   "front/placements/led-sfp-9": [
-    "port-9"
    ],
    "front/placements/led-sys": [
     "chassis"
@@ -129,12 +116,12 @@
   },
   "rel-pos": {
    "front/placements/console": 1,
+   "front/placements/copper-10": 10,
+   "front/placements/copper-11": 11,
+   "front/placements/copper-12": 12,
+   "front/placements/copper-9": 9,
    "front/placements/dip": 2,
    "front/placements/led-pwr": 2,
-   "front/placements/led-sfp-10": 10,
-   "front/placements/led-sfp-11": 11,
-   "front/placements/led-sfp-12": 12,
-   "front/placements/led-sfp-9": 9,
    "front/placements/led-sys": 1,
    "front/placements/port-1": 1,
    "front/placements/port-10": 10,
@@ -162,25 +149,25 @@
  "placement-geometry": "44136fa355b3678a",
  "placement-groups": {
   "front/placements/console": "mgmt",
+  "front/placements/copper-10": "rj45-combo",
+  "front/placements/copper-11": "rj45-combo",
+  "front/placements/copper-12": "rj45-combo",
+  "front/placements/copper-9": "rj45-combo",
   "front/placements/dip": "controls",
   "front/placements/led-pwr": "status-leds",
-  "front/placements/led-sfp-10": "sfp-leds",
-  "front/placements/led-sfp-11": "sfp-leds",
-  "front/placements/led-sfp-12": "sfp-leds",
-  "front/placements/led-sfp-9": "sfp-leds",
   "front/placements/led-sys": "status-leds",
-  "front/placements/port-1": "gbe-poe",
-  "front/placements/port-10": "sfp-plus",
-  "front/placements/port-11": "sfp-plus",
-  "front/placements/port-12": "sfp-plus",
-  "front/placements/port-2": "gbe-poe",
-  "front/placements/port-3": "gbe-poe",
-  "front/placements/port-4": "gbe-poe",
-  "front/placements/port-5": "gbe-poe",
-  "front/placements/port-6": "gbe-poe",
-  "front/placements/port-7": "gbe-poe",
-  "front/placements/port-8": "gbe-poe",
-  "front/placements/port-9": "sfp-plus",
+  "front/placements/port-1": "gbe",
+  "front/placements/port-10": "sfp-combo",
+  "front/placements/port-11": "sfp-combo",
+  "front/placements/port-12": "sfp-combo",
+  "front/placements/port-2": "gbe",
+  "front/placements/port-3": "gbe",
+  "front/placements/port-4": "gbe",
+  "front/placements/port-5": "gbe",
+  "front/placements/port-6": "gbe",
+  "front/placements/port-7": "gbe",
+  "front/placements/port-8": "gbe",
+  "front/placements/port-9": "sfp-combo",
   "front/placements/reset": "controls",
   "rear/placements/rail-clip": "mounting",
   "rear/placements/wall-plate-lower": "mounting",
@@ -190,8 +177,8 @@
   "top/placements/power": "power-input",
   "top/placements/relay": "relay"
  },
- "placement-surface": "eb6e691989eaebd1",
- "shape": "9c159f0b70e41ce8",
- "surface": "673dd97736c8d688",
- "version": "0.1.1"
+ "placement-surface": "0739fc6e844bd7ea",
+ "shape": "4a87fc89aa29001c",
+ "surface": "9ad650503aa6e1c2",
+ "version": "0.1.0"
 }
