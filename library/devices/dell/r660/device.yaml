@@ -19,8 +19,9 @@
 # liquid-cooling rear I/O board, the last three as examples - configuration 0
 # and the liquid-cooling rear from sibling manuals' figures, the MIC's face an
 # estimate; in the top view, riser 2S, the liquid-cooling module and the PCH
-# shroud, from sibling manuals' top views and the ISM's isometrics. NOT YET:
-# risers 2Q, 1P and 4P from above - nothing held shows them top-down.
+# shroud, from sibling manuals' top views and the ISM's isometrics; risers
+# 2Q, 1P and 4P from above as ESTIMATES off the ISM's isometric figures -
+# nothing held shows them top-down.
 format: 1
 kind: device
 name: r660
@@ -161,10 +162,10 @@ provenance:
       supplies and the two risers; the `sff10-rc1-2a3a-populated` example seats
       the rest. Riser 2S, the liquid-cooling module and the PCH shroud are not
       in the model; they are drawn from Dell's top views of sibling chassis
-      and the ISM's isometrics, each part saying which. NOT YET IN THIS VIEW:
-      risers 2Q, 1P and 4P (the model carries only 2A and 3A, and no figure
-      held shows the others from above), the cards, the drive backplane, and
-      the cabling.
+      and the ISM's isometrics, each part saying which. Risers 2Q, 1P
+      and 4P are outlines by eye from the ISM's isometric figures - no figure
+      held shows them from above. NOT YET IN THIS VIEW: the cards, the
+      drive backplane, and the cabling.
   bezel:
     confidence: drawing
     note: >-
@@ -298,22 +299,19 @@ gaps:
       figure 13 agrees with but cannot prove.
     wanted: >-
       a straight-on rear photograph of an R660 in riser configuration 9
-  - what: risers-2q-1p-4p-unseen-from-above
+  - what: risers-2q-1p-4p-from-above-estimated
     scope: [top]
     reason: needs-drawing
     note: >-
-      Dell's service model carries risers 2A and 3A and no other, so the top
-      view draws risers 2 and 3 for every variant sharing their cages and
-      leaves riser 2Q (configuration 6) and the full-height risers 1P and 4P
-      (configuration 3) out, rather than borrow an outline. Riser 2S is drawn
-      (dell/riser-2s-plan-16g@1): Dell's top views of the R6615 and R6625 show
-      it, at riser 2's footprint. The same manuals were searched for the other
-      three and show only low-profile risers 2 and 3 from above; the R660 ISM's
-      figures 154, 157 and 165 draw 1P, 2Q and 4P in isometric only. The model also
-      begins both risers 20 mm behind the rear wall; the plans are clipped at
-      the wall. Re-read at 1.0.0, when riser 3's bay was widened to 270.6 and
-      its slot returned to the model's 268.5: still true, and no gap opened or
-      closed by that change - the other four do not concern riser 3.
+      Dell's service model carries risers 2A and 3A and no other. Riser 2S is
+      drawn from Dell's top views of the R6615 and R6625, at riser 2's
+      footprint. RISERS 2Q, 1P AND 4P ARE ESTIMATES: nothing held shows them
+      from above - those manuals' top views show only low-profile risers 2 and
+      3 - so each is an outline by eye from the R660 ISM's isometric figure
+      (157, 154, 165), at its own rear extent and riser 2's depth
+      (dell/riser-2q-plan-16g@1, dell/riser-1-fh-plan-16g@1,
+      dell/riser-4-fh-plan-16g@1). The model also begins both measured risers
+      20 mm behind the rear wall; every plan is clipped at the wall.
     wanted: >-
       a service model, figure or top photograph with riser 2Q or the
       full-height risers fitted
@@ -1517,12 +1515,15 @@ views:
            only-in: [sff10-rc1-2a3a, sff8sf-rc1-2a3a, nobp-rc1-2a3a, e3s16-rc1-2a3a, e3s14-rc1-2a3a, sff10-rc2-2p3p, sff8sf-rc2-2p3p, nobp-rc2-2p3p, e3s16-rc2-2p3p, e3s14-rc2-2p3p, sff10-rc4-2r3r, sff8sf-rc4-2r3r, nobp-rc4-2r3r, e3s16-rc4-2r3r, e3s14-rc4-2r3r, sff10-rc5-2a3q, sff8sf-rc5-2a3q, nobp-rc5-2a3q, e3s16-rc5-2a3q, e3s14-rc5-2a3q, sff10-rc8-2a, sff8sf-rc8-2a, nobp-rc8-2a, e3s16-rc8-2a, e3s14-rc8-2a, e3s14-rc9-2s3s, sff10-rc1-2a3a-populated, sff10-rc1-2a3a-dlc, sff10-rc1-2a3a-no-lom]}
         - {id: riser-2q, at: [107.0, 2.2], size: {w: 186.5, h: 19.8},
            accepts: [dell/riser-2q-16g@1], default: dell/riser-2q-16g@1, group: risers, rel-pos: 2,
+           plan: {view: top, at: [140.5, 0.0], in: system-board, under: [system-cover]},
            only-in: [sff10-rc6-2q, sff8sf-rc6-2q, nobp-rc6-2q, e3s16-rc6-2q, e3s14-rc6-2q]}
         - {id: riser-1, at: [107.0, 2.2], size: {w: 120.6, h: 19.8},
            accepts: [dell/riser-1p-16g@1], default: dell/riser-1p-16g@1, group: risers, rel-pos: 1,
+           plan: {view: top, at: [206.4, 0.0], in: system-board, under: [system-cover]},
            only-in: [sff10-rc3-1p4p, sff8sf-rc3-1p4p, nobp-rc3-1p4p, e3s16-rc3-1p4p, e3s14-rc3-1p4p, sff10-rc3-1p4p-mic]}
         - {id: riser-4, at: [227.6, 2.2], size: {w: 135.0, h: 19.8},
            accepts: [dell/riser-4p-16g@1], default: dell/riser-4p-16g@1, group: risers, rel-pos: 4,
+           plan: {view: top, at: [71.4, 0.0], in: system-board, under: [system-cover]},
            only-in: [sff10-rc3-1p4p, sff8sf-rc3-1p4p, nobp-rc3-1p4p, e3s16-rc3-1p4p, e3s14-rc3-1p4p, sff10-rc3-1p4p-mic]}
         - {id: riser-blank-none, at: [107.0, 2.2], size: {w: 255.6, h: 19.8},
            accepts: [dell/riser-blank-full-16g@1], default: dell/riser-blank-full-16g@1,
