@@ -245,7 +245,9 @@
    "dell/boss-n1-module-1u@1"
   ],
   "rear/bays/lom": [
-   "dell/lom-2x1g-16g@1"
+   "dell/lom-2x1g-16g@1",
+   "dell/lom-blank-16g@1",
+   "dell/mic-card-16g@1"
   ],
   "rear/bays/ocp": [
    "dell/ocp3-2x100g-qsfp56@1",
@@ -277,7 +279,8 @@
    "common/drive-carrier-25@2"
   ],
   "rear/bays/rio": [
-   "dell/rear-io-board-16g@1"
+   "dell/rear-io-board-16g@1",
+   "dell/rear-io-board-dlc-16g@1"
   ],
   "rear/bays/riser-1": [
    "dell/riser-1p-16g@1"
@@ -306,6 +309,9 @@
   ],
   "rear/bays/riser-4": [
    "dell/riser-4p-16g@1"
+  ],
+  "rear/bays/riser-blank-none": [
+   "dell/riser-blank-full-16g@1"
   ],
   "top/bays/dimm-a1": [
    "common/dimm-plan@1"
@@ -416,7 +422,7 @@
    "dell/fan-1u-16g@1"
   ]
  },
- "composed": "66baec45079f38bb",
+ "composed": "2050ee6f02c4d34e",
  "composed-refs": {
   "common/dimm-plan@1": "1.2.0+e9ae6e3f8f5062ce",
   "common/drive-blank-25@2": "2.0.0+af7efd33cf1a467a",
@@ -453,6 +459,8 @@
   "dell/information-tag-1u-16g@1": "1.0.0+4308fdc26cd541b7",
   "dell/lom-2x1g-16g@1": "1.0.0+bd7f7e89512d1c71",
   "dell/lom-2x1g-plan-16g@1": "1.0.0+65096f0a4d812b13",
+  "dell/lom-blank-16g@1": "1.0.0+f44f8869e0429723",
+  "dell/mic-card-16g@1": "1.0.0+34aa1baf222aa56c",
   "dell/ocp3-2x100g-qsfp56@1": "1.1.0+fbf024d68417b502",
   "dell/ocp3-2x10g-rj45@1": "1.1.0+ba6cae728b5719a5",
   "dell/ocp3-2x25g-sfp28@1": "1.1.0+faf215c119cbabae",
@@ -470,6 +478,7 @@
   "dell/psu-700w-ac-60mm@1": "1.1.0+a856b1721f7bce6e",
   "dell/psu-800w-ac-60mm@1": "1.1.0+715a72241a42ddf5",
   "dell/rear-io-board-16g@1": "1.0.0+ee4cb0c7a5e9706a",
+  "dell/rear-io-board-dlc-16g@1": "1.0.0+06282d50693facba",
   "dell/rear-io-board-plan-16g@1": "1.0.0+e81e34e38c222092",
   "dell/riser-1-fh-cage-16g@1": "1.1.0+36fd261144d14735",
   "dell/riser-1p-16g@1": "1.2.0+7a3c825c5ad0a93c",
@@ -495,6 +504,7 @@
   "dell/riser-3s-16g@1": "1.0.0+f12cfa0190b4d2bf",
   "dell/riser-4-fh-cage-16g@1": "1.1.0+482769f9b6c3ca44",
   "dell/riser-4p-16g@1": "1.2.0+ecc1c674190b694b",
+  "dell/riser-blank-full-16g@1": "1.0.0+093a6656d1ffdca8",
   "dell/system-board-r660@1": "1.0.0+d99fae3edb3d4915",
   "dell/system-cover-1u-16g@1": "1.0.0+8c1b231f197dd065",
   "dell/system-id-button-14g@1": "1.0.1+a453cf90c341d8d0",
@@ -554,6 +564,7 @@
   "ufispace/n3100-4c@1": "1.0.0+cdd01a9412829b9b"
  },
  "configs": [
+  "e3s14-rc0-none",
   "e3s14-rc1-2a3a",
   "e3s14-rc2-2p3p",
   "e3s14-rc3-1p4p",
@@ -562,6 +573,7 @@
   "e3s14-rc6-2q",
   "e3s14-rc8-2a",
   "e3s14-rc9-2s3s",
+  "e3s16-rc0-none",
   "e3s16-rc1-2a3a",
   "e3s16-rc2-2p3p",
   "e3s16-rc3-1p4p",
@@ -569,6 +581,7 @@
   "e3s16-rc5-2a3q",
   "e3s16-rc6-2q",
   "e3s16-rc8-2a",
+  "nobp-rc0-none",
   "nobp-rc1-2a3a",
   "nobp-rc2-2p3p",
   "nobp-rc3-1p4p",
@@ -576,15 +589,20 @@
   "nobp-rc5-2a3q",
   "nobp-rc6-2q",
   "nobp-rc8-2a",
+  "sff10-rc0-none",
   "sff10-rc1-2a3a",
+  "sff10-rc1-2a3a-dlc",
+  "sff10-rc1-2a3a-no-lom",
   "sff10-rc1-2a3a-populated",
   "sff10-rc2-2p3p",
   "sff10-rc3-1p4p",
+  "sff10-rc3-1p4p-mic",
   "sff10-rc4-2r3r",
   "sff10-rc5-2a3q",
   "sff10-rc6-2q",
   "sff10-rc7-3p-rear2",
   "sff10-rc8-2a",
+  "sff8sf-rc0-none",
   "sff8sf-rc1-2a3a",
   "sff8sf-rc2-2p3p",
   "sff8sf-rc3-1p4p",
@@ -594,7 +612,7 @@
   "sff8sf-rc8-2a"
  ],
  "format": 1,
- "gaps": "318bcaef495a7cc8",
+ "gaps": "7432400c54bcaaf7",
  "groups": [
   "boss",
   "covers",
@@ -756,6 +774,7 @@
   "rear/bays/riser-3-blank",
   "rear/bays/riser-3-blank-r2q",
   "rear/bays/riser-4",
+  "rear/bays/riser-blank-none",
   "top/bays/dimm-a1",
   "top/bays/dimm-a10",
   "top/bays/dimm-a11",
@@ -800,7 +819,7 @@
   "top/placements/system-board",
   "top/placements/system-cover"
  ],
- "names": "a8ceb1a75d1ee53d",
+ "names": "57cac42c5959861c",
  "placement-addressing": {
   "for": {
    "front-e3s14/placements/bezel": [
@@ -1038,6 +1057,7 @@
    "rear/bays/riser-3-blank": 1,
    "rear/bays/riser-3-blank-r2q": 1,
    "rear/bays/riser-4": 4,
+   "rear/bays/riser-blank-none": 1,
    "top/bays/dimm-a1": 26,
    "top/bays/dimm-a10": 20,
    "top/bays/dimm-a11": 29,
@@ -1084,7 +1104,7 @@
   }
  },
  "placement-attrs": "1a4adddc38893e9b",
- "placement-geometry": "340f6af0134d5143",
+ "placement-geometry": "3df0ee4c155a75f5",
  "placement-groups": {
   "front-e3s14/bays/e3s-0": "drives-e3s",
   "front-e3s14/bays/e3s-1": "drives-e3s",
@@ -1197,6 +1217,7 @@
   "rear/bays/riser-3-blank": "riser-blanks",
   "rear/bays/riser-3-blank-r2q": "riser-blanks",
   "rear/bays/riser-4": "risers",
+  "rear/bays/riser-blank-none": "riser-blanks",
   "top/bays/dimm-a1": "memory",
   "top/bays/dimm-a10": "memory",
   "top/bays/dimm-a11": "memory",
@@ -1242,7 +1263,7 @@
   "top/placements/system-cover": "covers"
  },
  "placement-surface": "7c9dbf2f6e7571f7",
- "shape": "f58c28e2e94b21dd",
- "surface": "40deccf72300e638",
- "version": "2.0.0"
+ "shape": "5a3e7dfff8c3899a",
+ "surface": "c32029893f4c6313",
+ "version": "3.0.0"
 }

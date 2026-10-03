@@ -5,7 +5,7 @@
 # not traced), Dell's R660/R660xs gallery renders and StorageReview's
 # photographs of a real R660 (working/intake/dell/poweredge/photos/r660).
 # STATE:
-# DONE: five fronts and the rear for riser configurations 1-9 (37 builds, plus
+# DONE: five fronts and the rear for riser configurations 0-9 (42 builds, plus
 # a populated example); the top view - system board, heatsinks, 32 DIMM slots,
 # air shroud, fans and bracket, system and backplane covers, and plan
 # projections of the PSUs, BOSS-N1, OCP card, LOM, rear I/O board, risers 2
@@ -15,12 +15,15 @@
 # tag; the bezel; riser configuration 9 (R2S + R3S, two rear E3.S drives)
 # from Dell's slide; the Gen5 risers' printed strips; the E3.S blank and the
 # E3.S fronts' lip numbering from photographs; estimated bottom and sides.
-# NOT YET: riser configuration 0; risers 2Q, 1P, 4P and 2S from above; the
-# no-LOM, MIC and liquid-cooling rear faces.
+# riser configuration 0 (no riser), the LOM blank, the MIC and the
+# liquid-cooling rear I/O board, the last three as examples - configuration 0
+# and the liquid-cooling rear from sibling manuals' figures, the MIC's face an
+# estimate. NOT YET: risers 2Q, 1P, 4P and 2S from above; the liquid-cooling
+# module and the PCH shroud in the top view.
 format: 1
 kind: device
 name: r660
-version: 2.0.0
+version: 3.0.0
 maturity: draft
 manufacturer: Dell
 model: PowerEdge R660
@@ -263,14 +266,19 @@ chassis:
   edge: '#1d2125'
   silk: '#c9ced3'
 gaps:
-  - what: riser-configuration-0-rear-unseen
-    scope: [rear]
-    reason: needs-drawing
+  - what: riser-configuration-0-rear-by-sibling-figure
+    scope: [rear, top]
+    reason: needs-photo
     note: >-
-      TG table 14 lists riser configuration 0 (no riser); no master, figure or
-      photograph held shows its rear, so it is not drawn.
+      configuration 0 (no riser) is drawn from the R6615 technical guide's
+      'rear view with no risers', a sibling 1U chassis with this rear layout:
+      one plate across the riser band with a row of forty-three vents
+      (dell/riser-blank-full-16g@1). No R660 document draws it, so the plate's
+      width here is the R660's riser band and not a measurement. The PCH shroud
+      the ISM fits on the system board in the risers' place (figures 67, 68) is
+      not drawn in the top view.
     wanted: >-
-      a straight-on rear photograph or a vector master of configuration 0
+      a straight-on rear photograph of an R660 with no risers
   - what: riser-configuration-9-rear-print-unread
     scope: [rear]
     reason: needs-photo
@@ -299,20 +307,30 @@ gaps:
     wanted: >-
       a service model, figure or top photograph with riser 2Q or the
       full-height risers fitted
-  - what: lom-alternatives-and-dlc-rear-io-unseen
+  - what: mic-rear-face-estimated
     scope: [rear]
-    reason: needs-drawing
+    reason: needs-photo
     note: >-
-      the ISM makes the LOM card optional and offers a Management Interface Card
-      (MIC, with Dell DPU cards only) in its place, and a different rear I/O
-      board with the liquid-cooling (DLC) module. Every rear master held draws
-      the LOM card and the standard board, and figures 220-222 show the others
-      only in isometric, so the lom bay accepts only the LOM card and the rio
-      bay only the standard board; what fills the LOM window when neither card
-      is fitted is not known.
+      the Management Interface Card (with Dell DPU cards only) takes the LOM
+      card's place and has no rear ports - ISM figure 222 and the same figure
+      in three sibling manuals show a bracket without jacks - but nothing held
+      shows that bracket straight-on. dell/mic-card-16g@1 draws it as the LOM
+      blank's face, the one LOM-window plate photographed.
     wanted: >-
-      a straight-on rear image of an R660 without a LOM card, with a MIC, or
-      with the liquid-cooling rear I/O board
+      a straight-on rear photograph of a 16th-generation PowerEdge with a MIC
+  - what: dlc-rear-by-sibling-figure
+    scope: [rear, top]
+    reason: needs-photo
+    note: >-
+      the liquid-cooling rear I/O board (dell/rear-io-board-dlc-16g@1) is drawn
+      from the R6625 ISM's 'rear view with coolant tubes', a sibling drawn in
+      the R660 ISM's own frame, and Dell's R660 video confirms the tubes leave
+      through round grommets beside PSU 2. No R660 document draws that rear,
+      the board's USB marks cannot be read, and the cold plates and tubes that
+      replace the heatsinks are not drawn in the top view.
+    wanted: >-
+      a straight-on rear photograph of an R660 with the Direct Liquid Cooling
+      module, and a view of it from above
   - what: e3s-blank-face-estimated
     scope: [front]
     reason: needs-photo
@@ -442,7 +460,7 @@ groups:
     term: Blank
     role: service
     index-origin: 1
-    description: the vented plate where riser 3 is absent
+    description: the vented plate where riser 3 is absent, or across the whole riser band where no riser is fitted
   drives-rear:
     term: Drive
     role: service
@@ -1462,10 +1480,10 @@ views:
         # the system board and is screwed to it (ISM). Listed before the risers so
         # that, seen from above, the riser cages paint over them.
         - {id: lom, at: [110.59, 24.71], size: {w: 42.58, h: 15.93},
-           accepts: [dell/lom-2x1g-16g@1], default: dell/lom-2x1g-16g@1, group: lom-card, rel-pos: 1,
+           accepts: [dell/lom-2x1g-16g@1, dell/lom-blank-16g@1, dell/mic-card-16g@1], default: dell/lom-2x1g-16g@1, group: lom-card, rel-pos: 1,
            plan: {view: top, at: [277.0, 1.6], in: system-board, under: [system-cover]}}
         - {id: rio, at: [250.5, 24.71], size: {w: 85.37, h: 15.93},
-           accepts: [dell/rear-io-board-16g@1], default: dell/rear-io-board-16g@1, group: rear-io, rel-pos: 1,
+           accepts: [dell/rear-io-board-16g@1, dell/rear-io-board-dlc-16g@1], default: dell/rear-io-board-16g@1, group: rear-io, rel-pos: 1,
            plan: {view: top, at: [97.7, 0.0], in: system-board, under: [system-cover]}}
         # the OCP card before the risers: seen from above, riser 2's cage is over it
         - {id: ocp, at: [164.95, 24.7], size: {w: 71.8, h: 15.1},
@@ -1480,21 +1498,24 @@ views:
            accepts: [dell/riser-3a-16g@1, dell/riser-3p-16g@2, dell/riser-3q-16g@2, dell/riser-3r-16g@2, dell/riser-3s-16g@1], default: dell/riser-3a-16g@1,
            group: risers, rel-pos: 3,
            plan: {view: top, at: [71.4, 0.0], in: system-board, under: [system-cover]},
-           only-in: [sff10-rc1-2a3a, sff8sf-rc1-2a3a, nobp-rc1-2a3a, e3s16-rc1-2a3a, e3s14-rc1-2a3a, sff10-rc2-2p3p, sff8sf-rc2-2p3p, nobp-rc2-2p3p, e3s16-rc2-2p3p, e3s14-rc2-2p3p, sff10-rc4-2r3r, sff8sf-rc4-2r3r, nobp-rc4-2r3r, e3s16-rc4-2r3r, e3s14-rc4-2r3r, sff10-rc5-2a3q, sff8sf-rc5-2a3q, nobp-rc5-2a3q, e3s16-rc5-2a3q, e3s14-rc5-2a3q, sff10-rc7-3p-rear2, e3s14-rc9-2s3s, sff10-rc1-2a3a-populated]}
+           only-in: [sff10-rc1-2a3a, sff8sf-rc1-2a3a, nobp-rc1-2a3a, e3s16-rc1-2a3a, e3s14-rc1-2a3a, sff10-rc2-2p3p, sff8sf-rc2-2p3p, nobp-rc2-2p3p, e3s16-rc2-2p3p, e3s14-rc2-2p3p, sff10-rc4-2r3r, sff8sf-rc4-2r3r, nobp-rc4-2r3r, e3s16-rc4-2r3r, e3s14-rc4-2r3r, sff10-rc5-2a3q, sff8sf-rc5-2a3q, nobp-rc5-2a3q, e3s16-rc5-2a3q, e3s14-rc5-2a3q, sff10-rc7-3p-rear2, e3s14-rc9-2s3s, sff10-rc1-2a3a-populated, sff10-rc1-2a3a-dlc, sff10-rc1-2a3a-no-lom]}
         - {id: riser-2, at: [107.0, 2.2], size: {w: 163.6, h: 19.8},
            accepts: [dell/riser-2a-16g@1, dell/riser-2p-16g@2, dell/riser-2r-16g@2, dell/riser-2s-16g@1], default: dell/riser-2a-16g@1,
            group: risers, rel-pos: 2,
            plan: {view: top, at: [163.4, 0.0], in: system-board, under: [system-cover]},
-           only-in: [sff10-rc1-2a3a, sff8sf-rc1-2a3a, nobp-rc1-2a3a, e3s16-rc1-2a3a, e3s14-rc1-2a3a, sff10-rc2-2p3p, sff8sf-rc2-2p3p, nobp-rc2-2p3p, e3s16-rc2-2p3p, e3s14-rc2-2p3p, sff10-rc4-2r3r, sff8sf-rc4-2r3r, nobp-rc4-2r3r, e3s16-rc4-2r3r, e3s14-rc4-2r3r, sff10-rc5-2a3q, sff8sf-rc5-2a3q, nobp-rc5-2a3q, e3s16-rc5-2a3q, e3s14-rc5-2a3q, sff10-rc8-2a, sff8sf-rc8-2a, nobp-rc8-2a, e3s16-rc8-2a, e3s14-rc8-2a, e3s14-rc9-2s3s, sff10-rc1-2a3a-populated]}
+           only-in: [sff10-rc1-2a3a, sff8sf-rc1-2a3a, nobp-rc1-2a3a, e3s16-rc1-2a3a, e3s14-rc1-2a3a, sff10-rc2-2p3p, sff8sf-rc2-2p3p, nobp-rc2-2p3p, e3s16-rc2-2p3p, e3s14-rc2-2p3p, sff10-rc4-2r3r, sff8sf-rc4-2r3r, nobp-rc4-2r3r, e3s16-rc4-2r3r, e3s14-rc4-2r3r, sff10-rc5-2a3q, sff8sf-rc5-2a3q, nobp-rc5-2a3q, e3s16-rc5-2a3q, e3s14-rc5-2a3q, sff10-rc8-2a, sff8sf-rc8-2a, nobp-rc8-2a, e3s16-rc8-2a, e3s14-rc8-2a, e3s14-rc9-2s3s, sff10-rc1-2a3a-populated, sff10-rc1-2a3a-dlc, sff10-rc1-2a3a-no-lom]}
         - {id: riser-2q, at: [107.0, 2.2], size: {w: 186.5, h: 19.8},
            accepts: [dell/riser-2q-16g@1], default: dell/riser-2q-16g@1, group: risers, rel-pos: 2,
            only-in: [sff10-rc6-2q, sff8sf-rc6-2q, nobp-rc6-2q, e3s16-rc6-2q, e3s14-rc6-2q]}
         - {id: riser-1, at: [107.0, 2.2], size: {w: 120.6, h: 19.8},
            accepts: [dell/riser-1p-16g@1], default: dell/riser-1p-16g@1, group: risers, rel-pos: 1,
-           only-in: [sff10-rc3-1p4p, sff8sf-rc3-1p4p, nobp-rc3-1p4p, e3s16-rc3-1p4p, e3s14-rc3-1p4p]}
+           only-in: [sff10-rc3-1p4p, sff8sf-rc3-1p4p, nobp-rc3-1p4p, e3s16-rc3-1p4p, e3s14-rc3-1p4p, sff10-rc3-1p4p-mic]}
         - {id: riser-4, at: [227.6, 2.2], size: {w: 135.0, h: 19.8},
            accepts: [dell/riser-4p-16g@1], default: dell/riser-4p-16g@1, group: risers, rel-pos: 4,
-           only-in: [sff10-rc3-1p4p, sff8sf-rc3-1p4p, nobp-rc3-1p4p, e3s16-rc3-1p4p, e3s14-rc3-1p4p]}
+           only-in: [sff10-rc3-1p4p, sff8sf-rc3-1p4p, nobp-rc3-1p4p, e3s16-rc3-1p4p, e3s14-rc3-1p4p, sff10-rc3-1p4p-mic]}
+        - {id: riser-blank-none, at: [107.0, 2.2], size: {w: 255.6, h: 19.8},
+           accepts: [dell/riser-blank-full-16g@1], default: dell/riser-blank-full-16g@1,
+           group: riser-blanks, rel-pos: 1, only-in: [sff10-rc0-none, sff8sf-rc0-none, nobp-rc0-none, e3s16-rc0-none, e3s14-rc0-none]}
         - {id: riser-3-blank-r2q, at: [293.7, 2.2], size: {w: 68.9, h: 19.8},
            accepts: [dell/riser-3-blank-gen5-16g@1], default: dell/riser-3-blank-gen5-16g@1,
            group: riser-blanks, rel-pos: 1, only-in: [sff10-rc6-2q, sff8sf-rc6-2q, nobp-rc6-2q, e3s16-rc6-2q, e3s14-rc6-2q]}
@@ -1669,7 +1690,8 @@ configurations:
   # guide does not offer - rear 2.5 inch storage (riser configuration 7) is
   # listed only with the 10 x 2.5 inch front, and rear E3.S storage
   # (configuration 9) only with the 14 x E3.S front, as Dell's slide pairs
-  # them. 37 builds.
+  # them. Riser configuration 0 (no riser) with every front. 42 builds, and
+  # four examples.
   sff10-rc1-2a3a:
     kind: orderable
     default: true
@@ -1893,8 +1915,30 @@ configurations:
     bays:
       riser-2: dell/riser-2s-16g@1
       riser-3: dell/riser-3s-16g@1
-  # Riser configuration 0 (no riser) is orderable and NOT drawn: no master,
-  # figure or photograph held shows its rear face - see the gaps.
+  sff10-rc0-none:
+    kind: orderable
+    description: >-
+      10 x 2.5 inch front; riser configuration 0, no riser: no PCIe slots - one vented plate across the riser band, the LOM, OCP and rear I/O below it as in every build, and front PERC only. Drawn from the R6615's figure of the same plate. TG table 14, ISM table 112.
+  sff8sf-rc0-none:
+    kind: orderable
+    views: {front: front-sff8sf}
+    description: >-
+      8 x 2.5 inch front with the Smart Flow centre vent; riser configuration 0, no riser: no PCIe slots - one vented plate across the riser band, the LOM, OCP and rear I/O below it as in every build, and front PERC only. Drawn from the R6615's figure of the same plate. TG table 14, ISM table 112.
+  nobp-rc0-none:
+    kind: orderable
+    views: {front: front-nobp}
+    description: >-
+      no front drives (no backplane) - a chassis 50.8 shorter, which this model's single depth does not show; riser configuration 0, no riser: no PCIe slots - one vented plate across the riser band, the LOM, OCP and rear I/O below it as in every build, and front PERC only. Drawn from the R6615's figure of the same plate. TG table 14, ISM table 112.
+  e3s16-rc0-none:
+    kind: orderable
+    views: {front: front-e3s16}
+    description: >-
+      16 x EDSFF E3.S front (dual RAID); riser configuration 0, no riser: no PCIe slots - one vented plate across the riser band, the LOM, OCP and rear I/O below it as in every build, and front PERC only. Drawn from the R6615's figure of the same plate. TG table 14, ISM table 112.
+  e3s14-rc0-none:
+    kind: orderable
+    views: {front: front-e3s14}
+    description: >-
+      14 x EDSFF E3.S front; riser configuration 0, no riser: no PCIe slots - one vented plate across the riser band, the LOM, OCP and rear I/O below it as in every build, and front PERC only. Drawn from the R6615's figure of the same plate. TG table 14, ISM table 112.
   sff10-rc1-2a3a-populated:
     kind: example
     description: >-
@@ -1919,6 +1963,31 @@ configurations:
       riser-2/slot-1: nvidia/mcx623106-lp@1
       riser-2/slot-2: nvidia/mcx4121a-lp@1
       riser-3/slot-3: nvidia/mcx713106-lp@1
+  sff10-rc1-2a3a-dlc:
+    kind: example
+    description: >-
+      The default build with the Direct Liquid Cooling module's rear: the
+      liquid-cooling rear I/O board, which has no VGA and passes the two
+      coolant tubes through the rear wall beside PSU 2. The cold plates and
+      tubes inside are not drawn in the top view (see the gaps). DLC is a
+      cooling option, not a riser configuration, so this is one example of it.
+    bays:
+      rio: dell/rear-io-board-dlc-16g@1
+  sff10-rc1-2a3a-no-lom:
+    kind: example
+    description: >-
+      The default build without the optional LOM card: Dell's LOM blank
+      (YM3P9) in its window.
+    bays:
+      lom: dell/lom-blank-16g@1
+  sff10-rc3-1p4p-mic:
+    kind: example
+    description: >-
+      Riser configuration 3 (two full-height slots, the build Dell DPU cards
+      need) with the Management Interface Card in the LOM card's place. The
+      MIC has no rear ports; its face is an estimate (see the gaps).
+    bays:
+      lom: dell/mic-card-16g@1
 
 datasheet:
   title: 'Dell PowerEdge R660 Spec Sheet'
