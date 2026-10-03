@@ -27,3 +27,63 @@ behind its base.
 
 Use it rather than `gh pr merge` until branch protection is on. Before then,
 nothing enforces it, and that is exactly how it gets skipped.
+
+## Releasing the compiled library to npm
+
+```sh
+gh workflow run release.yml --ref main                  # a dry run
+gh workflow run release.yml --ref main -f publish=true  # the release
+```
+
+`release.yml` builds the library and runs
+`npm_packages.py --from-registry --publish`. The packager reads what npm holds
+for every package and publishes only the ones whose bytes changed, the index
+last. A run with nothing new publishes nothing, and a run that failed partway
+is finished by running it again. Run the dry run first: its summary lists what
+a release would send.
+
+**A package's first publish needs a token; every later one does not.** npm's
+trusted publishing lets the workflow publish with no stored secret, but a
+trusted publisher is configured on a package, and a package that has never been
+published is not there to configure. A run against the registry prints a
+`first publish:` line for each such package: all of them on the first release,
+and afterwards one for each device added since the last.
+
+Devices are added most weeks, so the token is kept and not made for each
+release. What limits it is where it is stored and how long it lives:
+
+- **It is a secret of the `npm` environment, not of the repository.** Only a
+  job that names the environment can read it, the environment admits only
+  `main`, and it can require the maintainer's approval before the job starts.
+- **npm expires it.** A token that can publish lasts 90 days at most. When it
+  has lapsed, a release still publishes every package that is trusted and fails
+  on the first new one; replace the token and run the release again.
+
+Setting it up, once:
+
+1. Create the environment: repository Settings, Environments, `npm`. Restrict
+   its deployment branches to `main` and add the maintainer as a required
+   reviewer.
+2. On npmjs.com, under Access Tokens, generate a granular access token: read
+   and write on the `@portrayal` scope, "bypass two-factor authentication"
+   ticked, 90 days. Store it with `gh secret set NPM_TOKEN --env npm`.
+
+After a release that published new packages, trust the workflow on each. It
+takes npm 11.10 or later and an interactive `npm login`, since npm refuses a
+token for this:
+
+```sh
+for p in <the names from the first publish lines>; do
+  npx -y npm@11 trust github "$p" --repository roc-ops/Portrayal \
+    --file release.yml --environment npm --yes
+  sleep 2
+done
+```
+
+npm asks for the second factor once and then skips it for five minutes, which
+at this pace is about 80 packages; run the loop again for the rest. A package
+left untrusted keeps publishing through the token, so this can be done in
+batches. What trusting buys is that an expired or revoked token stops only new
+devices, and that each trusted publish carries a provenance attestation.
+
+`@portrayal/kit` is not part of this. It is published by hand from `kit/`.
