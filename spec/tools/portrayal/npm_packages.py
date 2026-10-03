@@ -359,7 +359,11 @@ def publish(out, state, run=subprocess.run, dry_run=False):
             raise SystemExit(f"npm publish {name}: no answer in 900 s")
         if r.returncode:
             raise SystemExit(f"npm publish {name}: {(r.stderr or r.stdout).strip()[-400:]}")
-        print(f"{'would publish' if dry_run else 'published'} {name}@{state[name]['version']}")
+        # said on the line itself, so the list to `npm trust` survives a run
+        # that fails later: the next run finds these on npm and no longer
+        # calls them first
+        print(f"{'would publish' if dry_run else 'published'} {name}@{state[name]['version']}"
+              f"{' (first publish)' if state[name].get('first') else ''}", flush=True)
     return order
 
 

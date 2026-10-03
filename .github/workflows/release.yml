@@ -96,6 +96,13 @@ jobs:
           set -o pipefail
           python3 spec/tools/portrayal/npm_packages.py --from-registry --publish $DRY_RUN \
             | tee "$RUNNER_TEMP/packages.txt"
+
+      # ON A FAILED RUN TOO, AND THAT IS WHEN IT MATTERS MOST. A package sent
+      # before the failure is on npm, so the next run does not call it a first
+      # publish; this run's summary is the only list that says to trust it.
+      - name: summary
+        if: always()
+        run: |
           {
             echo '```'
             grep -E '^(wrote|first publish|published|would publish)' "$RUNNER_TEMP/packages.txt" || true

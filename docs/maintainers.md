@@ -56,8 +56,9 @@ release. What limits it is where it is stored and how long it lives:
   job that names the environment can read it, the environment admits only
   `main`, and it can require the maintainer's approval before the job starts.
 - **npm expires it.** A token that can publish lasts 90 days at most. When it
-  has lapsed, a release still publishes every package that is trusted and fails
-  on the first new one; replace the token and run the release again.
+  has lapsed, a release stops at the first new package, in name order: the
+  trusted packages before it are published, and nothing after it is, the index
+  included. Replace the token and run the release again.
 
 Setting it up, once:
 
@@ -73,12 +74,17 @@ takes npm 11.10 or later and an interactive `npm login`, since npm refuses a
 token for this:
 
 ```sh
-for p in <the names from the first publish lines>; do
+for p in <the names published as a first publish>; do
   npx -y npm@11 trust github "$p" --repository roc-ops/Portrayal \
     --file release.yml --environment npm --yes
   sleep 2
 done
 ```
+
+The names are the `published ... (first publish)` lines of the run summary.
+Take them from every run of a release that failed and was run again: a package
+sent before the failure is on npm by the next run, which no longer calls it a
+first publish.
 
 npm asks for the second factor once and then skips it for five minutes, which
 at this pace is about 80 packages; run the loop again for the rest. A package

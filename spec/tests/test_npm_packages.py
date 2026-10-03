@@ -276,3 +276,16 @@ def test_a_run_without_the_registry_claims_no_first_publish(tmp_path, capsys):
     dist = _dist(tmp_path)
     P.main(["--dist", str(dist), "--out", str(tmp_path / "out"), "--root", str(tmp_path)])
     assert "first publish" not in capsys.readouterr().out
+
+
+def test_a_first_publish_is_named_on_the_line_that_sent_it(tmp_path, capsys):
+    """A run that fails partway has sent some new packages. The next run finds
+    them on npm and calls none of them first, so the line that published one
+    is the only place that says it still needs trusting."""
+    first, _ = _build(tmp_path, _dist(tmp_path))
+    held = {k: v for k, v in first.items() if k != "@portrayal/acme-box-2"}
+    again, _ = _build(tmp_path, _dist(tmp_path, device_version="1.3.0"), held)
+    P.publish(tmp_path / "out", again, run=_Npm({}))
+    out = capsys.readouterr().out.splitlines()
+    assert "published @portrayal/acme-box-2@0.1.0 (first publish)" in out
+    assert "published @portrayal/acme-box-1@1.3.0" in out

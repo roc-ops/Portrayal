@@ -124,6 +124,14 @@ def test_a_failed_publish_fails_the_step(job):
     assert run.index("set -o pipefail") < run.index("npm_packages.py")
 
 
+def test_the_summary_is_written_when_the_publish_failed(job):
+    """A package sent before a failure is on npm, so the next run does not call
+    it a first publish. The failed run's summary is the only list of them."""
+    step = _run(job, "summary")
+    assert step["if"] == "always()"
+    assert "GITHUB_STEP_SUMMARY" in step["run"] and "published" in step["run"]
+
+
 def test_the_maintainer_notes_say_how_a_first_publish_is_done():
     t = (ROOT / "docs/maintainers.md").read_text()
     assert "release.yml" in t and "trust github" in t and "first publish" in t
