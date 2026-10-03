@@ -32,6 +32,19 @@
 - [ ] `python3 -m pytest spec/tests -q` passes (build first; it skips without `dist/`)
 - [ ] No vendor material committed: no PDF, CAD, stencil, or photograph; dumps sanitised
 
+<!-- What the tests cost: quote what CI's "Test time" summary flagged, or say
+     nothing was flagged. A new test of five seconds or more says why a lint
+     rule or a cheaper fixture could not answer the same question. -->
+
+## Merge danger
+
+<!-- CONTRIBUTING.md, "Merge danger", lists what makes a one-way door. -->
+
+**Door:** <!-- two-way, or one-way and why -->
+
+**Blast radius:** <!-- who notices if this is wrong: one device, every device
+     seating a part, DCIM data already imported, kit consumers, CI only -->
+
 ## Anything a reviewer should look at first
 
 <!-- A judgement you made, a figure you are unsure of, a rule you waived. -->

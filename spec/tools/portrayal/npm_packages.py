@@ -226,8 +226,9 @@ def build(dist, out, root, published=None, limit_mb=LIMIT_MB):
         meta = {**meta, "digest": dg}
         d, size = _write(out, name, version, description, files, meta, readme)
         state[name] = {"version": version, "digest": dg, "contract": contract,
-                       "changed": changed, **({"device-version": meta["device-version"]}
-                                              if "device-version" in meta else {})}
+                       "changed": changed, "first": name not in published,
+                       **({"device-version": meta["device-version"]}
+                          if "device-version" in meta else {})}
         sizes[name] = size
         return version
 
@@ -335,6 +336,13 @@ def registry_state(names, run=subprocess.run, workers=8):
         return {n: e for n, e in pool.map(one, names) if e}
 
 
+def first_publishes(state):
+    """The packages npm has never held. Trusted publishing is configured on a
+    package that exists, so these are the ones a release needs a token for, and
+    the ones to run `npm trust` on afterwards (docs/maintainers.md)."""
+    return sorted(n for n, s in state.items() if s["first"])
+
+
 def publish(out, state, run=subprocess.run, dry_run=False):
     """`npm publish` every changed package: devices and components first, the
     index LAST, so the index never names a version npm does not have yet.
@@ -351,7 +359,11 @@ def publish(out, state, run=subprocess.run, dry_run=False):
             raise SystemExit(f"npm publish {name}: no answer in 900 s")
         if r.returncode:
             raise SystemExit(f"npm publish {name}: {(r.stderr or r.stdout).strip()[-400:]}")
-        print(f"{'would publish' if dry_run else 'published'} {name}@{state[name]['version']}")
+        # said on the line itself, so the list to `npm trust` survives a run
+        # that fails later: the next run finds these on npm and no longer
+        # calls them first
+        print(f"{'would publish' if dry_run else 'published'} {name}@{state[name]['version']}"
+              f"{' (first publish)' if state[name].get('first') else ''}", flush=True)
     return order
 
 
@@ -376,6 +388,10 @@ def main(argv=None):
     big = max(sizes, key=sizes.get)
     print(f"wrote {len(state)} packages -> {args.out} ({len(changed)} changed); "
           f"largest {big} {sizes[big] / 1e6:.1f} MB")
+    if args.from_registry:
+        # only against the registry: with no baseline every package looks new
+        for n in first_publishes(state):
+            print(f"first publish: {n}")
     if args.publish:
         publish(args.out, state, dry_run=args.dry_run)
     return 0
