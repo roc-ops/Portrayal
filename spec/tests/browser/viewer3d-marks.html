@@ -119,6 +119,21 @@ window.harness = {
     await V3.load({device: DEVICE});
     r.lastHeard = heard[heard.length - 1];
     V3.dispose();
+    // 5. an export is the model, not the annotation: a GLB taken while marks
+    //    are held has exactly as many meshes as one taken with none, and the
+    //    marks are still on screen afterwards
+    const glbMeshes = async () => {
+      const buf = await V.exportData('glb');
+      const dv = new DataView(buf);
+      const len = dv.getUint32(12, true);                 // chunk 0 is the JSON
+      const json = JSON.parse(new TextDecoder().decode(new Uint8Array(buf, 20, len)));
+      return (json.meshes || []).length;
+    };
+    V.setMarks([]);
+    r.meshesUnmarked = await glbMeshes();
+    V.setMarks([{path: A, color: '#e0574f'}, {path: B, color: '#2bb3c8'}]);
+    r.meshesMarked = await glbMeshes();
+    r.afterExport = halos().filter(h => h.visible).length;
     // 4. clearing
     V.setMarks([]);
     r.afterClear = halos();

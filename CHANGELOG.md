@@ -109,6 +109,10 @@ names the ref that replaces it.
   class), and no 800G prefix is documented.
 
 ### Changed
+- **A 3D export leaves the marks out** (roc-ops/portrayal-site#46): `exportData()` and
+  `download()` hide every mark halo for the export, as they always hid the
+  selection halo, and restore them after. A GLB or USDZ is the model; the marks
+  stay on screen.
 - The DCIM exports no longer call every device without `ru` a 1U full-depth
   rack device. A box that is not racked exports `u_height: 0`, not full depth,
   with its mounting in the comments (ReadyLinks GL-8XEP, Halny HLX-TGV), and

@@ -1,0 +1,65 @@
+format: 1
+kind: component
+name: wall-plate-keyhole-2-42
+version: 1.0.0
+class: mount
+profile: networking
+description: >-
+  The smaller wall-mounting plate with two keyhole slots - the 42 mm plate on the back of the
+  AurCore AIS small housing (AIS2001, AIS2002), where common/wall-plate-keyhole-2@1's 56 mm
+  plate would overrun the 44.5 mm flat between the bevels. Narrow end of each keyhole up; the
+  two screws holding it to the device are part of it, above the keyholes in the default skin
+  and below them in `screws-below`.
+size: {w: 42.0, h: 22.0}
+size-confidence: {w: estimated, h: estimated}
+provenance:
+  size: >-
+    ESTIMATED from the AurCore AIS2002P back render (vendor product image 3), which is not
+    square-on: widths as fractions of the back face's 72.1 mm on the same image row (the upper
+    plate about 0.61, the lower 0.56 where the face is seen smaller), heights as fractions of
+    its 110 mm, foreshortened, so taken to fit the face beside the DIN clip.
+  layout: >-
+    ESTIMATED at the same scale: two keyholes on 26 mm centres and two cross-head screws on
+    20 mm centres, the screws above the keyholes on the upper plate and below them on the lower.
+elements:
+  plate: {at: [0.0, 0.0], size: [42.0, 22.0], class: mechanical}
+  keyhole-1: {at: [5.2, 7.5], size: [5.6, 11.6], class: mechanical}
+  keyhole-2: {at: [31.2, 7.5], size: [5.6, 11.6], class: mechanical}
+  screw-1: {at: [9.3, 1.9], size: [3.4, 3.4], class: mechanical}
+  screw-2: {at: [29.3, 1.9], size: [3.4, 3.4], class: mechanical}
+relief:
+  features:
+    - node: plate
+      out: 1.5
+      shape: true
+      color: '#3d4247'
+      confidence: estimated
+      source: >-
+        the vendor video shows the large housing's plates standing off its back with keyholes through them; the small housing's are the same construction in the back render. No figure gives the thickness. common/wall-plate-keyhole-2-42@1's own 3D-form key
+    - node: keyhole-1
+      out: 0.2
+      color: '#15181b'
+      confidence: estimated
+      source: >-
+        common/wall-plate-keyhole-2-42@1's own 3D-form key - see `plate`. The floor of the keyhole, seen through the plate.
+    - node: keyhole-2
+      out: 0.2
+      color: '#15181b'
+      confidence: estimated
+      source: >-
+        common/wall-plate-keyhole-2-42@1's own 3D-form key - see `plate`. The floor of the keyhole, seen through the plate.
+    - node: screw-1
+      cyl: 0.8
+      lift: 1.5
+      color: '#1f2226'
+      confidence: estimated
+      source: >-
+        common/wall-plate-keyhole-2-42@1's own 3D-form key - see `plate`. A cross-head screw on the plate.
+    - node: screw-2
+      cyl: 0.8
+      lift: 1.5
+      color: '#1f2226'
+      confidence: estimated
+      source: >-
+        common/wall-plate-keyhole-2-42@1's own 3D-form key - see `plate`. A cross-head screw on the plate.
+skins: [default, screws-below]
