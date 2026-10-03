@@ -1,0 +1,49 @@
+format: 1
+kind: module
+name: e3s-carrier-blank
+version: 2.0.0
+class: blank
+behaviour: fills
+profile: server
+description: >-
+  Filler for an EDSFF E3.S bay on a 16th-generation PowerEdge - Dell's 1-bay
+  E3.S blank (59T4C), a black moulded tray whose front edge is a plain black bar
+  with a row of seven silver round studs. Drawn lying flat, as a 1U bay stacks
+  it four high.
+attrs:
+  media: e3s
+  power-absent: not-applicable
+provenance:
+  version-2: >-
+    @2 because the face is redrawn as the real 59T4C blank and its release element moved and resized, so a device that placed the @1 element may be wrong.
+  face: >-
+    photo - an angled studio photograph of the real part (IT Creations' listing
+    for Dell 59T4C, photos/e3s-blank/59T4C-itcreations-large.jpg, 3630 x 2723):
+    seven silver domed studs about 4 across sit in a row just behind the
+    front edge, their centres from about a quarter to two thirds of the way
+    along it, between a notch at each end where the tray latches. They are set
+    into the top surface rather than the edge, so a head-on view shows them
+    over a black bar; the face draws them so. Positions are proportions read
+    off a foreshortened edge, so the studs' spacing and size are estimates.
+    THIS REPLACES A STAND-IN. The first version drew dell/e3s-carrier@1's face
+    without its lamps and label, by analogy with the 2.5 inch blank, because no
+    image of the blank was held; the photograph shows it is not a carrier at
+    all.
+  size: >-
+    drawing - dell/e3s-carrier@1's face, 77.65 x 7.75, since a blank fills the
+    same slot.
+  depth: >-
+    estimated - 25.0, common/drive-blank-25@2's measured depth; no E3.S blank
+    has been measured.
+  power: >-
+    NOT APPLICABLE - a moulding with no electronics.
+size: {w: 77.65, h: 7.75, d: 25.0}
+size-confidence: {w: drawing, h: drawing, d: estimated}
+body: {depth: 25.0, color: '#1d2023'}
+elements:
+  release:
+    at: [16.6, 1.0]
+    size: [38.6, 5.75]
+    class: control
+    description: the studded grip along the front edge, by which the blank is pulled
+skins: [default]

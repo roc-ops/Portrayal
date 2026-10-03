@@ -109,6 +109,10 @@ names the ref that replaces it.
   class), and no 800G prefix is documented.
 
 ### Changed
+- **A 3D export leaves the marks out** (roc-ops/portrayal-site#46): `exportData()` and
+  `download()` hide every mark halo for the export, as they always hid the
+  selection halo, and restore them after. A GLB or USDZ is the model; the marks
+  stay on screen.
 - The DCIM exports no longer call every device without `ru` a 1U full-depth
   rack device. A box that is not racked exports `u_height: 0`, not full depth,
   with its mounting in the comments (ReadyLinks GL-8XEP, Halny HLX-TGV), and
@@ -138,6 +142,14 @@ names the ref that replaces it.
   The S9600-102XC loses `NCP-96X6C-S` too: the DNOS CLI reference accepts only
   the S9601-102XC for that model. The fabric boxes (S9705-48D `NCF-48CD`,
   S9725-64E `NCF-64E`) keep theirs until they are listed.
+
+### Removed
+- Six Dell R660 component majors are superseded and removed, each replaced by
+  its `@2`: `dell/e3s-carrier-blank@1` (redrawn as Dell's real E3.S blank),
+  and the Gen5 risers `dell/riser-2p-16g@1`, `dell/riser-2r-16g@1`,
+  `dell/riser-3p-16g@1`, `dell/riser-3q-16g@1` and `dell/riser-3r-16g@1` (now
+  on the Gen5-printed cages). A manifest that pins an `@1` moves to the `@2`
+  of the same name (roc-ops/Portrayal#749).
 
 ## 0.1.0 (unreleased) - the first public release
 

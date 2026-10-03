@@ -243,3 +243,114 @@ def test_a_changed_readme_is_a_changed_package(tmp_path, monkeypatch):
     monkeypatch.setattr(P, "_readme", lambda title, body: f"# {title}\n\nreworded\n")
     again, _ = _build(tmp_path, _dist(tmp_path), first)
     assert again["@portrayal/acme-box-1"]["changed"]
+
+
+# ---- a first publish is not like the others (#526) -------------------------------
+
+def test_a_package_npm_has_never_held_is_marked_as_a_first_publish(tmp_path):
+    """npm's trusted publishing is set up per package and only on a package
+    that exists, so a first publish needs a token and every later one does
+    not. The run has to say which are which."""
+    first, _ = _build(tmp_path, _dist(tmp_path))
+    assert all(s["first"] for s in first.values())
+    held = {k: v for k, v in first.items() if k != "@portrayal/acme-box-2"}
+    again, _ = _build(tmp_path, _dist(tmp_path), held)
+    assert P.first_publishes(again) == ["@portrayal/acme-box-2"]
+
+
+def test_a_registry_run_names_its_first_publishes(tmp_path, capsys, monkeypatch):
+    dist = _dist(tmp_path)
+    first, _ = _build(tmp_path, dist)
+    held = {k: v for k, v in first.items() if k != "@portrayal/acme-box-2"}
+    monkeypatch.setattr(P, "registry_state", lambda names: held)
+    P.main(["--dist", str(dist), "--out", str(tmp_path / "out"),
+            "--root", str(tmp_path), "--from-registry"])
+    out = capsys.readouterr().out
+    assert "first publish: @portrayal/acme-box-2" in out
+    assert "first publish: @portrayal/acme-box-1" not in out
+
+
+def test_a_run_without_the_registry_claims_no_first_publish(tmp_path, capsys):
+    """publish.sh runs with no baseline, where every package looks new. Saying
+    so there would be 180 lines of noise on every build."""
+    dist = _dist(tmp_path)
+    P.main(["--dist", str(dist), "--out", str(tmp_path / "out"), "--root", str(tmp_path)])
+    assert "first publish" not in capsys.readouterr().out
+
+
+def test_a_first_publish_is_named_on_the_line_that_sent_it(tmp_path, capsys):
+    """A run that fails partway has sent some new packages. The next run finds
+    them on npm and calls none of them first, so the line that published one
+    is the only place that says it still needs trusting."""
+    first, _ = _build(tmp_path, _dist(tmp_path))
+    held = {k: v for k, v in first.items() if k != "@portrayal/acme-box-2"}
+    again, _ = _build(tmp_path, _dist(tmp_path, device_version="1.3.0"), held)
+    P.publish(tmp_path / "out", again, run=_Npm({}))
+    out = capsys.readouterr().out.splitlines()
+    assert "published @portrayal/acme-box-2@0.1.0 (first publish)" in out
+    assert "published @portrayal/acme-box-1@1.3.0" in out
+
+
+# ---- the registry limits how fast packages arrive (#526) --------------------------
+
+class _Limited(_Npm):
+    """An npm that answers the first `refuse` publishes with E429."""
+    def __init__(self, refuse):
+        super().__init__({})
+        self.refuse = refuse
+
+    def __call__(self, cmd, cwd=None, **kw):
+        if cmd[1] == "publish" and self.refuse:
+            self.refuse -= 1
+
+            class R:
+                returncode, stdout = 1, ""
+                stderr = "npm error code E429\nnpm error 429 Too Many Requests - PUT ..."
+            return R()
+        return super().__call__(cmd, cwd=cwd, **kw)
+
+
+def _held(state):
+    """`state` as a later run sees it: npm holds every package, each has moved."""
+    return {n: {**s, "first": False, "changed": True} for n, s in state.items()}
+
+
+def test_a_rate_limited_update_waits_and_is_tried_again(tmp_path):
+    """E429 on a package npm already holds is a rate, and a rate passes."""
+    first, _ = _build(tmp_path, _dist(tmp_path))
+    npm, slept = _Limited(2), []
+    order = P.publish(tmp_path / "out", _held(first), run=npm, sleep=slept.append)
+    assert npm.published == order and len(order) == 4
+    assert slept == list(P.RATE_LIMIT_WAITS[:2]), "two refusals, two waits, each longer"
+
+
+def test_an_update_npm_never_relents_on_stops_the_run(tmp_path):
+    first, _ = _build(tmp_path, _dist(tmp_path))
+    npm, slept = _Limited(10 ** 6), []
+    with pytest.raises(SystemExit, match="E429"):
+        P.publish(tmp_path / "out", _held(first), run=npm, sleep=slept.append)
+    assert slept == list(P.RATE_LIMIT_WAITS) and not npm.published
+
+
+def test_a_refused_first_publish_is_a_quota_and_is_not_waited_on(tmp_path):
+    """npm lets an account create about 25 packages, then none for hours. The
+    second release waited 33 minutes on one package and was refused six times;
+    no wait inside a run outlasts it, so the run says so and stops."""
+    first, _ = _build(tmp_path, _dist(tmp_path))
+    npm, slept = _Limited(10 ** 6), []
+    with pytest.raises(SystemExit, match=r"first publish.*4 packages are left.*tomorrow"):
+        P.publish(tmp_path / "out", first, run=npm, sleep=slept.append)
+    assert not slept and not npm.published
+
+
+def test_any_other_publish_failure_is_not_waited_on(tmp_path):
+    first, _ = _build(tmp_path, _dist(tmp_path))
+
+    def forbidden(cmd, **_):
+        class R:
+            returncode, stdout, stderr = 1, "", "npm error code E403"
+        return R()
+    slept = []
+    with pytest.raises(SystemExit, match="E403"):
+        P.publish(tmp_path / "out", first, run=forbidden, sleep=slept.append)
+    assert not slept

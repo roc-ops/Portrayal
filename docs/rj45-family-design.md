@@ -68,6 +68,7 @@ Four components replace nine.
 | `std/rj45-ganged@2` | one cell of a shared-wall 2xN block, ~12.7 x 11, same cavity | none | the same roles inside a ganged block |
 | `common/rj45-eth@1` | `std/rj45@2` plus two lamps in the housing corners | `led-a`, `led-b` | every single Ethernet jack: data, mgmt, OOB, service |
 | `common/rj45-ganged-eth@1` | `std/rj45-ganged@2` plus two lamps in the outer corners | `led-a`, `led-b` | every Ethernet jack in a ganged block |
+| `common/rj45-ganged-link@1` | `std/rj45-ganged@2` plus ONE lamp, at `led-a`'s corner | `led-a` | a ganged Ethernet jack whose housing has a single LINK/ACT window - added for the AurCore AIS non-PoE builds, whose PoE siblings carry the second (PoE) lamp (#738) |
 
 `dell/rj45-port-14g@1` stays. It draws nothing and exists to attach ISM table 11's
 meanings once; it composes `common/rj45-eth@1` instead of `rj45-port@4`.

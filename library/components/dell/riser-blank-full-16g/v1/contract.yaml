@@ -1,0 +1,46 @@
+format: 1
+kind: module
+name: riser-blank-full-16g
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: server
+description: >-
+  The plate a 16th-generation 1U PowerEdge fits across the whole riser band
+  when no riser is installed (riser configuration 0) - one plain plate from
+  riser 2's place to riser 3's, with a single row of forty-three vents low on it
+attrs:
+  power-absent: not-applicable
+provenance:
+  identity: >-
+    datasheet - R660 technical guide table 14: configuration 0, 'No RSR', two
+    processors, front PERC only, no rear storage; "the PowerEdge R660 have a
+    no riser option". ISM table 112 lists the cards it takes, all in the
+    integrated slots, and a PCH shroud is fitted on the system board in the
+    risers' place. Neither R660 document draws its rear.
+  sources: >-
+    drawing, BY A SIBLING'S FIGURE - the PowerEdge R6615 technical guide's
+    figure 6, 'Rear view of the system with no risers' (1537 px wide, about
+    3.2 px/mm): the R6615 is the 16th generation's one-socket AMD 1U server,
+    with the R660's rear layout - boot module, supply, LOM, OCP, rear I/O,
+    supply. One plate covers the band the risers take, with one row of square
+    holes along its lower part and no other feature.
+  size: >-
+    estimated - 255.6 x 19.8, THE R660'S RISER BAND, rear-face x 107.0..362.6
+    (riser 2's extent and riser 3's, see dell/riser-2-lp-cage-16g@1). The
+    R6615 figure's plate measures 252 to 259 wide by the two scales the figure
+    offers (its vents' pitch, and its overall width), which brackets that; the
+    R660 has not been seen with one.
+  vents: >-
+    drawing, by the sibling's figure - FORTY-THREE in one row, found as dark
+    runs along the row: 12.4 px wide on a 17.83 px pitch, which is the 4.05 on
+    5.49 of this generation's other rear vents (dell/riser-3-blank-16g@1,
+    thirteen of them) and is drawn as that. The first starts 4.6 from the
+    plate's left edge and the row's top is 12.6 down.
+  depth: >-
+    NOT KNOWN; drawn as a plate.
+  power: >-
+    NOT APPLICABLE - sheet metal.
+size: {w: 255.6, h: 19.8}
+size-confidence: {w: estimated, h: drawing}
+skins: [default]

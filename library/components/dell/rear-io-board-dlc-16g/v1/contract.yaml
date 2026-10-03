@@ -1,0 +1,94 @@
+format: 1
+kind: module
+name: rear-io-board-dlc-16g
+version: 1.0.0
+class: expansion-card
+behaviour: fills
+profile: server
+description: >-
+  The rear I/O board a 16th-generation 1U PowerEdge (R660) takes with the
+  Direct Liquid Cooling module - the system ID button, the dedicated iDRAC port
+  and two USB ports, and no VGA: the two coolant tubes leave the chassis
+  through round grommets where the VGA connector is on the air-cooled board
+attrs:
+  power-absent: not-published
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: service access at the back of the rack - the ID button, iDRAC and USB
+    description: the system ID button, the dedicated iDRAC port and two USB
+provenance:
+  identity: >-
+    datasheet - R660 ISM "LOM card, MIC card, and rear I/O board" and the
+    Direct Liquid Cooling module's installation notes: "the rear I/O (RIO)
+    board is different for the system with DLC module", and the tubes and the
+    leak-detection cable run between PSU 2 and the board's clip. The technical
+    guide's port table gives the rear VGA as "optional for liquid cooling
+    configuration".
+  sources: >-
+    drawing, BY A SIBLING'S FIGURE - no R660 document held draws this rear.
+    The PowerEdge R6625 ISM's figure 8 ('Rear view of the system R6625 with
+    Coolant tubes') does, and it is drawn in the frame of the R660 ISM's rear
+    figures: the R6625 is the R660's two-socket AMD sibling, and its figure 6
+    lays the same rear out at the same places. Scaled on the 434.0 body (1011
+    px, 2.33 px/mm), the figure puts the ID button at 256.1, the iDRAC jack at
+    264.4..279.8 and the USB stack at 286.1..298.7 - this board's standard
+    sibling's positions (dell/rear-io-board-16g@1) to a millimetre - and the
+    VGA connector is not there. The R6615 technical guide's figure 8 shows
+    the same rear. Dell's video 'How to Replace Liquid Cooling Module for
+    PowerEdge R660' shows the tubes from inside at about 1:15.
+  size: >-
+    drawing - 85.37 x 15.93, the standard board's rear window
+    (dell/rear-io-board-16g@1), which this board fills.
+  depth: >-
+    estimated - 121.5, the standard board's; ISM figure 221 draws the two
+    boards alike from above.
+  connectors: >-
+    drawing - the ID button, iDRAC port and USB stack at the standard board's
+    positions, which the R6625 figure agrees with (see sources).
+  tubes: >-
+    drawing, by the sibling's figure - two round openings centred 58.9 and
+    77.0 along the board (rear-face 309.4 and 327.5), at mid-height, about
+    14.6 across in the figure, with a tube about 12 across in each. Drawn 13.6
+    and 11.4 so the grommets clear the window's edges. THEY ARE ROUND: the
+    video shows each tube seated in a round rubber grommet in the rear wall
+    beside PSU 2. The tubes run on outside the chassis to the rack manifold;
+    only their ends in the wall are drawn. Which is supply and which return
+    is not stated in anything held.
+  plan: >-
+    estimated - seen from above it is drawn as the standard board
+    (dell/rear-io-board-plan-16g@1): ISM figure 221 draws the two alike apart
+    from the tube clip, and Dell's service model carries only the standard one.
+  marks: >-
+    drawing - the system ID's icon and the iDRAC legend, as the standard board
+    prints them. The standard board's USB and VGA marks stand where the first
+    tube is on this one; where this board prints its USB marks cannot be read
+    off the figure, so none are drawn.
+  power: >-
+    NOT PUBLISHED - the R660 ISM, technical guide and spec sheet give no
+    wattage for the rear I/O board.
+size: {w: 85.37, h: 15.93, d: 121.5}
+size-confidence: {w: drawing, h: drawing, d: estimated}
+plan: {ref: dell/rear-io-board-plan-16g@1}
+body:
+  depth: 121.5
+  color: '#b8bdc2'
+parts:
+  - {ref: dell/system-id-button-14g@1, id: system-id, group: mgmt, at: [2.10, 3.19]}
+  - {ref: common/rj45-ganged-eth@1, id: idrac, group: mgmt, at: [17.55, 2.36], rotate: 180, attrs: {media: rj45, speed: 1g}}
+  - {ref: std/usb-a@1, id: usb-1, group: mgmt, at: [37.19, 2.29], skin: usb2, attrs: {usb: '2.0'}}
+  - {ref: std/usb-a@1, id: usb-2, group: mgmt, at: [37.19, 10.69], attrs: {usb: '3.0'}}
+elements:
+  tube-1:
+    at: [52.10, 1.17]
+    size: [13.60, 13.60]
+    class: mechanical
+    description: a coolant tube of the Direct Liquid Cooling module, in its grommet in the rear wall
+  tube-2:
+    at: [70.20, 1.17]
+    size: [13.60, 13.60]
+    class: mechanical
+    description: the second coolant tube, in its grommet in the rear wall
+skins: [default]

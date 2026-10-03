@@ -1,0 +1,53 @@
+format: 1
+kind: component
+name: rj45-ganged-link
+version: 1.0.0
+class: port
+profile: networking
+description: An Ethernet RJ45 in a ganged 2xN block with ONE lamp - the std/rj45-ganged@2
+  cell with a single link/activity window in its keyway-side corner, where
+  common/rj45-ganged-eth@1 has two.
+size: {w: 12.7, h: 11.0, d: 18.6}
+size-confidence: {w: borrowed, h: borrowed, d: borrowed}
+attrs: {media: rj45}
+provenance:
+  size: via std/rj45-ganged@2 - the housing, TE 1734264 rev A2.
+  depth: via std/rj45-ganged@2.
+  lamp: >-
+    via common/rj45-ganged-eth@1 - the same window, at that part's led-a position (2.0
+    wide, 1.2 from the side, 0.27 from the keyway edge). The second window is simply not
+    there: the AurCore AIS4001, AIS2003 and AIS2004 product images show one green lamp per
+    jack where their PoE siblings show a green and an amber one, and their faceplate keys
+    only LINK/ACT.
+  lamp-right: >-
+    the same window at the other keyway corner (led-b's place on common/rj45-ganged-eth@1),
+    for the right-hand column of an AIS block: its jacks turn 270 to face their keyways
+    outward and still show the lamp at the top. A skin rather than `mirror`, because a
+    mirrored slot cannot seat a plug.
+  states: >-
+    convention - one lamp carrying link and activity together, as a LINK/ACT legend says;
+    a device whose guide tables it overrides with `states:` on the placement.
+fields:
+  finish:
+    label: Shell finish
+    type: text
+    default: '#b0b5bb'
+elements:
+  led-a:
+    at: [1.2, 9.63]
+    size: [2.0, 1.1]
+    class: led
+    states: ['off', link, activity]
+parts:
+  - {ref: std/rj45-ganged@2, id: jack, at: [0.0, 0.0], behind: true}
+relief:
+  features:
+    - node: led-a
+      out: 0.3
+      color: '#0d0f11'
+      confidence: estimated
+      source: >-
+        common/rj45-ganged-eth@1 - the same lamp-lens stand-off, itself unsourced.
+connection-points:
+  net: {at: [6.35, 5.1], direction: front}
+skins: [default, lamp-right]

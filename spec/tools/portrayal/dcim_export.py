@@ -444,6 +444,9 @@ FAMILY_PART = {
     "std/rj45-ganged@2": ("console", "rj-45"),
     "common/rj45-eth@1": ("iface", "1000base-t"),
     "common/rj45-ganged-eth@1": ("iface", "1000base-t"),
+    # the ganged cell with ONE lamp (a LINK/ACT jack, the AurCore AIS non-PoE
+    # builds): the same Ethernet jack, so the same row (#738)
+    "common/rj45-ganged-link@1": ("iface", "1000base-t"),
 }
 
 # ...AND FAMILY_PART IS A FALLBACK, NOT A DECISION. #125 gave std/rj45@2 seven
