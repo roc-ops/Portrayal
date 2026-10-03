@@ -1,28 +1,29 @@
 format: 1
 kind: device
-name: ais4001p
-version: 0.1.1
+name: ais4001
+version: 0.1.0
 maturity: modelled
 manufacturer: AurCore
-model: AIS4001P
+model: AIS4001
 description: >-
-  AurCore AIS4001P industrial Layer 3 PoE+ switch - 8x GbE PoE+ and 4x 10G SFP+, L3 in a fanless
-  finned aluminium housing that clips onto a 35 mm DIN rail or screws to a wall, -40 to 75 C.
-  The port face hangs vertically on the rail: console, two status lamps, a reset and a two-way
-  DIP switch at the top, the RJ45 block in two columns, the SFP+ cages turned on their side
-  below it. Dual 48-57 V DC feeds, the relay contact and the ground screw are on the top face;
-  the DIN clip and two wall plates on the back.
+  AurCore AIS4001 industrial Layer 3 switch - 8x GbE and 4x 10G SFP+, L3 in a fanless finned
+  aluminium housing that clips onto a 35 mm DIN rail or screws to a wall, -40 to 75 C. The port
+  face hangs vertically on the rail: console, two status lamps, a reset and a two-way DIP switch
+  at the top, the RJ45 block in two columns, the SFP+ cages turned on their side below it. Dual
+  12-55 V DC feeds, the relay contact and the ground screw are on the top face; the DIN clip and
+  two wall plates on the back.
 profile: networking
 provenance:
   sources:
     confidence: datasheet
     note: >-
-      vendor datasheet (AIS4001P Data Sheet 1.0, 3 pages: spec table, and an annotated front and
+      vendor datasheet (AIS4001 Data Sheet 1.0, 3 pages: spec table, and an annotated front and
       back figure that is the same artwork as the product images); the product page's three
       images (straight-on front, three-quarter front-top-right, and a back render raised to show
       the top face), 1000 px; and the vendor's AIS4000 Series video (YouTube MfK6WpjLsA8,
-      1080p), whose footage at 0:28-1:02 is a real AIS4001P. No hardware guide or drawing is
-      published (the Download Center holds the CLI, ACC and ACN manuals only).
+      1080p), whose footage at 0:28-1:02 is a real AIS4001P, the same housing - the top, back
+      and sides here are that unit's, with the AIS4001's own power legend. No hardware guide or
+      drawing is published (the Download Center holds the CLI, ACC and ACN manuals only).
   chassis:
     confidence: datasheet
     note: >-
@@ -51,7 +52,7 @@ provenance:
   front-layout:
     confidence: photo-measured
     note: >-
-      photo-measured on the straight-on AIS4001P front image at 4.407 px/mm (Gate 1: the face's
+      photo-measured on the straight-on AIS4001 front image at 4.407 px/mm (Gate 1: the face's
       own width agrees with the datasheet to 1.5 percent; the datasheet's front is the same
       artwork). Jack lamps located by colour; columns at x 23.85 and 45.2, rows on a 15.57 mm
       pitch from y 43.2; SFP+ block x 22.2-47.8, rows from y 106.8 and 122.1. Jacks are drawn
@@ -69,25 +70,25 @@ provenance:
   lamps:
     confidence: photo-measured
     note: >-
-      photo-measured - each jack has two lamps, green at its top and amber at its bottom, and
-      the faceplate's colour key pairs green with LINK/ACT and red-orange with PoE; so the green
-      lamp is link/activity and the amber one PoE, set per placement because the two columns are
-      turned opposite ways and swap led-a and led-b.
+      photo-measured - each jack has ONE lamp, green, at its top (the PoE builds add an amber
+      one below it), and the colour key names only LINK/ACT; drawn with
+      common/rj45-ganged-link@1, the right-hand column drawn with its lamp-right skin so its
+      lamp also lands at the top.
   silkscreen:
     confidence: photo-measured
     note: >-
-      photo-measured - legends transcribed from the AIS4001P front image: Reset, SYS, PWR; Fast
+      photo-measured - legends transcribed from the AIS4001 front image: Reset, SYS, PWR; Fast
       Ring and SCP with leaders to switches 1 and 2; CONSOLE; the port numbers as printed;
-      LINK/ACT and PoE under their colour keys; the summary line '8 X GE | 4 X 10 GE SFP+ | L3
-      PoE+'. The AURCORE wordmark is printed as text: its A is drawn as a chevron mark, which is
-      not reproduced (no logo marks).
+      LINK/ACT under its colour key (no PoE key on this build); the summary line '8 x GE | 4 x
+      10GE SFP+ | L3'. The AURCORE wordmark is printed as text: its A is drawn as a chevron
+      mark, which is not reproduced (no logo marks).
   top-layout:
     confidence: estimated
     note: >-
       estimated - no straight-on top view exists. Positions are fractions of the top face in the
       back render (image 3, raised about 35 degrees), corrected with the parts' own sizes: the
       five-way power header (Phoenix MSTB-GF family, 35.56 mm) runs front to back with its pole
-      legend '1 + - earth + - 2' on one side and POWER:48-57V DC on the other (read off this
+      legend '1 + - earth + - 2' on one side and POWER:12-55V DC on the other (read off this
       build's back render), pole 1 at the rear; the RELAY header and the ground screw with its
       earth symbol are near the front edge. The video (1:00-1:02) confirms every part and legend
       close up but not their places on the face. Good to a few millimetres.
@@ -113,10 +114,10 @@ provenance:
   power:
     confidence: datasheet
     note: >-
-      datasheet - 'Power Supply DC 48-57 V'; 'Idling: 48V 7.12W / 57V 7.52W'; 'Full load: 48V
-      243.36W / 57V 245.67W'; 'Power Budget 240W'. power-max-w takes the highest figure (245.67
-      W); no ambient is stated with any of them. The supply is not included ('the power supply
-      is excluded from the package').
+      datasheet - 'Power Supply DC 12-55 V'; 'Idling: 12V 5.40W / 55V 6.05W'; 'Full load: 12V
+      12.25W / 55V 12.10W'. power-max-w takes the highest figure (12.25 W); no ambient is stated
+      with any of them. The supply is not included ('the power supply is excluded from the
+      package').
 attrs:
   physical:
     dimensions-in: 5.71 x 4.33 x 3.30 (L x W x H, datasheet)
@@ -128,12 +129,10 @@ attrs:
     forwarding-rate: 71.42 Mpps
     mac-table: 16K
   power:
-    power-max-w: 245.67
+    power-max-w: 12.25
     power-envelope: fully-configured
-    power-idle-w: 7.52
-    poe-budget-w: 240
-    poe-standard: IEEE 802.3af/at
-    power-input: DC 48-57 V, dual feed
+    power-idle-w: 6.05
+    power-input: DC 12-55 V, dual feed
   thermal:
     cooling: fanless (finned housing)
   environmental:
@@ -187,7 +186,7 @@ gaps:
     Confirmation of the port numbering read from the faceplate's arrows (see provenance
     sfp-numbering); a unit, or the switch's own port table against a seated optic, settles it.
 - what: jack-lamp-spacing
-  scope: [gbe-poe]
+  scope: [gbe]
   reason: needs-hardware
   wanted: >-
     A lamped RJ45 cell with 11.5 mm between its lamps on an 11 mm column; the library's nearest
@@ -197,11 +196,11 @@ gaps:
   reason: needs-photo
   wanted: A photograph of the underside.
 groups:
-  gbe-poe:
+  gbe:
     term: Port
     role: traffic
     index-origin: 1
-    attrs: {media: rj45, speed: 1g, poe: 802.3af/at}
+    attrs: {media: rj45, speed: 1g}
   sfp-plus:
     term: Port
     role: traffic
@@ -285,8 +284,6 @@ views:
     - {at: [20.05, 30.75], text: CONSOLE, font-size: 1.7, rotate: 90, for: console}
     - {id: link-key, at: [49.4, 11.5], path: 'M 0 0 a 0.9 0.9 0 1 1 0 1.8 a 0.9 0.9 0 1 1 0 -1.8 Z', filled: true, fill: '#2f8a4c', for: chassis}
     - {at: [49.7, 18.3], text: LINK/ACT, font-size: 1.7, rotate: 90, for: chassis}
-    - {id: poe-key, at: [53.3, 11.3], path: 'M 0 0 a 0.9 0.9 0 1 1 0 1.8 a 0.9 0.9 0 1 1 0 -1.8 Z', filled: true, fill: '#c0472c', for: chassis}
-    - {at: [53.6, 15.0], text: PoE, font-size: 1.7, rotate: 90, for: chassis}
     - {at: [20.7, 48.95], text: '2', font-size: 2.2, rotate: 90, for: port-2}
     - {at: [50.6, 48.95], text: '1', font-size: 2.2, rotate: 90, for: port-1}
     - {at: [20.7, 64.52], text: '4', font-size: 2.2, rotate: 90, for: port-4}
@@ -300,7 +297,7 @@ views:
     - {at: [20.6, 122.3], text: '11', font-size: 1.6, rotate: 90, fill: '#f2ead8', for: port-11}
     - {at: [20.6, 127.6], text: '12', font-size: 1.6, rotate: 90, fill: '#f2ead8', for: port-12}
     - {at: [62.5, 19.0], text: AURCORE, font-size: 4.2, rotate: 90, fill: '#f2f4f6', for: chassis}
-    - {at: [63.2, 112.0], text: '8 X GE | 4 X 10 GE SFP+ | L3 PoE+', font-size: 2.4, rotate: 90, for: chassis}
+    - {at: [63.2, 112.0], text: '8 x GE | 4 x 10GE SFP+ | L3', font-size: 2.4, rotate: 90, for: chassis}
     components:
       placements:
       - {ref: std/rj45-ganged@2, id: console, at: [21.95, 25.25], rotate: 90, group: mgmt, attrs: {role: console, media: rj45-serial}, rel-pos: 1}
@@ -308,14 +305,14 @@ views:
       - {ref: common/dip-switch-2@1, id: dip, at: [24.1, 13.1], rotate: 90, for: chassis, group: controls, rel-pos: 2}
       - {ref: common/led-dot@1, id: led-sys, at: [24.2, 10.8], for: chassis, group: status-leds, rel-pos: 1}
       - {ref: common/led-dot@1, id: led-pwr, at: [28.9, 10.8], for: chassis, group: status-leds, rel-pos: 2}
-      - {ref: common/rj45-ganged-eth@1, id: port-2, at: [22.18, 43.45], rotate: 90, group: gbe-poe, rel-pos: 2, states: {led-a: ['off', {name: link-activity, color: '#22c55e'}], led-b: ['off', {name: poe, color: '#f59e0b'}]}}
-      - {ref: common/rj45-ganged-eth@1, id: port-1, at: [34.17, 43.45], rotate: 270, group: gbe-poe, rel-pos: 1, states: {led-a: ['off', {name: poe, color: '#f59e0b'}], led-b: ['off', {name: link-activity, color: '#22c55e'}]}}
-      - {ref: common/rj45-ganged-eth@1, id: port-4, at: [22.18, 59.02], rotate: 90, group: gbe-poe, rel-pos: 4, states: {led-a: ['off', {name: link-activity, color: '#22c55e'}], led-b: ['off', {name: poe, color: '#f59e0b'}]}}
-      - {ref: common/rj45-ganged-eth@1, id: port-3, at: [34.17, 59.02], rotate: 270, group: gbe-poe, rel-pos: 3, states: {led-a: ['off', {name: poe, color: '#f59e0b'}], led-b: ['off', {name: link-activity, color: '#22c55e'}]}}
-      - {ref: common/rj45-ganged-eth@1, id: port-6, at: [22.18, 74.59], rotate: 90, group: gbe-poe, rel-pos: 6, states: {led-a: ['off', {name: link-activity, color: '#22c55e'}], led-b: ['off', {name: poe, color: '#f59e0b'}]}}
-      - {ref: common/rj45-ganged-eth@1, id: port-5, at: [34.17, 74.59], rotate: 270, group: gbe-poe, rel-pos: 5, states: {led-a: ['off', {name: poe, color: '#f59e0b'}], led-b: ['off', {name: link-activity, color: '#22c55e'}]}}
-      - {ref: common/rj45-ganged-eth@1, id: port-8, at: [22.18, 90.16], rotate: 90, group: gbe-poe, rel-pos: 8, states: {led-a: ['off', {name: link-activity, color: '#22c55e'}], led-b: ['off', {name: poe, color: '#f59e0b'}]}}
-      - {ref: common/rj45-ganged-eth@1, id: port-7, at: [34.17, 90.16], rotate: 270, group: gbe-poe, rel-pos: 7, states: {led-a: ['off', {name: poe, color: '#f59e0b'}], led-b: ['off', {name: link-activity, color: '#22c55e'}]}}
+      - {ref: common/rj45-ganged-link@1, id: port-2, at: [22.18, 43.45], rotate: 90, group: gbe, rel-pos: 2, states: {led-a: ['off', {name: link-activity, color: '#22c55e'}]}}
+      - {ref: common/rj45-ganged-link@1, id: port-1, at: [34.17, 43.45], rotate: 270, skin: lamp-right, group: gbe, rel-pos: 1, states: {led-a: ['off', {name: link-activity, color: '#22c55e'}]}}
+      - {ref: common/rj45-ganged-link@1, id: port-4, at: [22.18, 59.02], rotate: 90, group: gbe, rel-pos: 4, states: {led-a: ['off', {name: link-activity, color: '#22c55e'}]}}
+      - {ref: common/rj45-ganged-link@1, id: port-3, at: [34.17, 59.02], rotate: 270, skin: lamp-right, group: gbe, rel-pos: 3, states: {led-a: ['off', {name: link-activity, color: '#22c55e'}]}}
+      - {ref: common/rj45-ganged-link@1, id: port-6, at: [22.18, 74.59], rotate: 90, group: gbe, rel-pos: 6, states: {led-a: ['off', {name: link-activity, color: '#22c55e'}]}}
+      - {ref: common/rj45-ganged-link@1, id: port-5, at: [34.17, 74.59], rotate: 270, skin: lamp-right, group: gbe, rel-pos: 5, states: {led-a: ['off', {name: link-activity, color: '#22c55e'}]}}
+      - {ref: common/rj45-ganged-link@1, id: port-8, at: [22.18, 90.16], rotate: 90, group: gbe, rel-pos: 8, states: {led-a: ['off', {name: link-activity, color: '#22c55e'}]}}
+      - {ref: common/rj45-ganged-link@1, id: port-7, at: [34.17, 90.16], rotate: 270, skin: lamp-right, group: gbe, rel-pos: 7, states: {led-a: ['off', {name: link-activity, color: '#22c55e'}]}}
       - {ref: std/sfp@1, id: port-9, at: [35.65, 109.05], rotate: 90, group: sfp-plus, rel-pos: 9}
       - {ref: std/sfp@1, id: port-10, at: [20.45, 109.05], rotate: 270, group: sfp-plus, rel-pos: 10}
       - {ref: std/sfp@1, id: port-11, at: [35.65, 124.35], rotate: 90, group: sfp-plus, rel-pos: 11}
@@ -396,7 +393,7 @@ views:
   top:
     size: {w: 83.8, h: 110.0}
     silkscreen:
-    - {at: [37.0, 41.6], text: 'POWER:48-57V DC', font-size: 2.2, rotate: 90, for: power}
+    - {at: [37.0, 41.6], text: 'POWER:12-55V DC', font-size: 2.2, rotate: 90, for: power}
     - {at: [18.4, 26.0], text: '1', font-size: 2.2, for: power}
     - {at: [18.4, 32.2], text: '+', font-size: 2.6, for: power}
     - {at: [18.4, 37.3], text: '-', font-size: 2.6, for: power}
@@ -420,11 +417,11 @@ views:
 configurations:
   base:
     kind: base
-    description: AIS4001P industrial switch, 8x GbE PoE+ and 4x 10G SFP+, L3, dual 48-57 V DC
+    description: AIS4001 industrial switch, 8x GbE and 4x 10G SFP+, L3, dual 12-55 V DC
     default: true
     part-numbers:
-      AIS4001P: {}
+      AIS4001: {}
 datasheet:
-  title: 'AurCore AIS4001P Data Sheet 1.0'
-  url: https://cdn-aurcore.aurcorenetworks.net/api/upload/file/69bc7e246333aaefd7b48aed909c9e00.pdf
-  sha256: 4e6173cc852b78ae55a846e8a99b8a8ab0cf4969e660733ba09f13d00f1c753a
+  title: 'AurCore AIS4001 Data Sheet 1.0'
+  url: https://cdn-aurcore.aurcorenetworks.net/api/upload/file/1c64c9c4474437d1bed976f99905dfad.pdf
+  sha256: 8021eb230d4d0ad40ab755d508f173e4202e5320202e48d1bb7ab11bfd98aef4
