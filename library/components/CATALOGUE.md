@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1097 component majors in 23 namespaces.
+1101 component majors in 23 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -60,7 +60,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 89 | 88 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
 | `std/sma@1` | component | port | 6.35 × 6.35 | sma | 19 | 8 | SMA coaxial panel jack (1/4-36UNS-2B) - threaded barrel protrudes; GNSS/RF antenna input |
 | `std/smb@1` | component | port | 4.83 × 4.83 | smb | 24 | 20 | SMB coaxial panel jack (10-32UNF-2A) - snap-on timing coax (1PPS/10MHz) |
-| `std/usb-a@1` | component | port | 12 × 4.5 × 13.7 | usb-a | 97 | 28 | USB Type-A receptacle opening - sharp corners |
+| `std/usb-a@1` | component | port | 12 × 4.5 × 13.7 | usb-a | 97 | 29 | USB Type-A receptacle opening - sharp corners |
 | `std/usb-c@1` | component | port | 8.34 × 2.56 × 6.5 | usb-c | 7 | 0 | USB Type-C receptacle opening - fully rounded ends |
 | `std/vga@1` | component | port | 20.47 × 11.4 × 6.73 | hd15 | 2 | 6 | VGA video receptacle - a female high-density DE-15, fifteen contacts in three rows inside the D-subminiature … |
 | `std/xfp@1` | component | port | 19.5 × 9.7 × 61.7 | xfp | 1 | 40 | XFP cage cutout (10G pluggable) - the recommended bezel opening of the XFP MSA, the aperture an XFP cage prot… |
@@ -148,7 +148,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/rj11-jack@1` | component | port | 14 × 13.5 |  | 1 | 0 | RJ11 telephone jack (FXS) |
 | `common/rj45-boot@1` | component | boot | 14.5 × 10 | rj45-plug | 0 | 1 | A strain-relief boot for an RJ45 (8P8C) copper plug - PVC, moulded around the plug it wraps |
 | `common/rj45-eth@1` | component | port | 15.8 × 13.2 × 18.6 |  | 57 | 35 | An Ethernet RJ45 - the std/rj45@2 housing with the two link and activity lamps nearly every Ethernet jack car… |
-| `common/rj45-ganged-eth@1` | component | port | 12.7 × 11 × 18.6 |  | 74 | 31 | An Ethernet RJ45 in a ganged 2xN block - the std/rj45-ganged@2 cell with the two lamps in its keyway-side cor… |
+| `common/rj45-ganged-eth@1` | component | port | 12.7 × 11 × 18.6 |  | 74 | 32 | An Ethernet RJ45 in a ganged 2xN block - the std/rj45-ganged@2 cell with the two lamps in its keyway-side cor… |
 | `common/rj45-ganged-link@1` | component | port | 12.7 × 11 × 18.6 |  | 5 | 0 | An Ethernet RJ45 in a ganged 2xN block with ONE lamp - the std/rj45-ganged@2 cell with a single link/activity… |
 | `common/sc-apc@1` | component | port | 24 × 26 |  | 1 | 0 | SC/APC fiber adapter in a molded bay (PON WAN) |
 | `common/sc-duplex-adapter@5` | component | port | 9.4 × 25.4 | sc-duplex-adapter | 0 | 9 | Panel-mount SC duplex adapter, as fitted to an FS FHD SC panel - one body carrying two SC ports STACKED verti… |
@@ -502,7 +502,7 @@ aperture when it is a bare opening - never both at one position. The README's
 |---|---|---|---|---|---|---|---|
 | `credo/hiwire-shift-qsfp-dd@1` | module | transceiver | 18.35 × 8.5 × 58.26 | qsfp-dd | 0 | 0 | Credo HiWire SHIFT active electrical cable, the 400G QSFP-DD end of a 400G to four 100G QSFP28 breakout - a Q… |
 
-## dell/ (117)
+## dell/ (121)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -531,8 +531,10 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/heatsink-1u-16g@1` | component | mechanical | 82.1 × 119.1 |  | 1 | 0 | The 1U processor heatsink of a 16th-generation PowerEdge (R660) seen from above - a finned block over each so… |
 | `dell/idrac-direct-symbol@1` | component | silkscreen | 3.8 × 3.8 |  | 1 | 0 | The wrench Dell prints beside an iDRAC Direct micro USB port - the mark that says this socket reaches the ser… |
 | `dell/information-tag-1u-16g@1` | component | tab | 63.55 × 2.03 |  | 1 | 0 | The information tag of a 16th-generation 1U PowerEdge (R660) - Dell's slide-out label panel, of which the fro… |
-| `dell/lom-2x1g-16g@1` | module | nic | 42.58 × 15.93 × 117.2 |  | 1 | 0 | The LAN on Motherboard (LOM) card of a 16th-generation 1U PowerEdge (R660) - two 1 GbE RJ45 ports in the rear… |
+| `dell/lom-2x1g-16g@1` | module | nic | 42.58 × 15.93 × 117.2 |  | 1 | 2 | The LAN on Motherboard (LOM) card of a 16th-generation 1U PowerEdge (R660) - two 1 GbE RJ45 ports in the rear… |
 | `dell/lom-2x1g-plan-16g@1` | component | mechanical | 60.6 × 117.2 |  | 0 | 1 | The 16G LOM card (two 1 GbE ports) seen from above, behind the rear's two LOM jacks |
+| `dell/lom-blank-16g@1` | module | blank | 42.58 × 15.93 |  | 1 | 1 | The blank a 16th-generation PowerEdge (R660, R760, R7625) fits in the LOM card's rear window when no LOM card… |
+| `dell/mic-card-16g@1` | module | expansion-card | 42.58 × 15.93 × 117.2 |  | 1 | 0 | The Management Interface Card (MIC) of a 16th-generation 1U PowerEdge (R660) - fitted in the LOM card's place… |
 | `dell/mid-drive-tray-14g@1` | component | mechanical | 431.4 × 181.24 × 31.31 |  | 1 | 1 | The mid-drive tray of a 14G PowerEdge - four drives lying flat between the front cage and the risers, reached… |
 | `dell/ndc-4x-rj45-14g@1` | module | nic | 90.3 × 14.5 × 60 |  | 1 | 1 | Network daughter card for a 14th-generation PowerEdge - four RJ45 ports, each with its own link and activity … |
 | `dell/ocp3-2x100g-qsfp56@1` | module | nic | 71.8 × 15.1 × 115 |  | 1 | 0 | Dual-port 100 GbE QSFP56 OCP NIC 3.0 card, small form factor, as Dell fits it to the 16th-generation PowerEdg… |
@@ -566,8 +568,9 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/rear-drive-label-lff-14g@1` | component | mechanical | 11 × 12 |  | 1 | 0 | The two slot numbers for a 2 x 3.5 inch rear on a 14G PowerEdge, printed on the divider between the bays rath… |
 | `dell/rear-drive-plate-14g@1` | component | mechanical | 12.95 × 31.75 |  | 1 | 0 | The numbered plate at the inboard end of one rear drive bay on a 14G PowerEdge - two slot numbers, each with … |
 | `dell/rear-handle-14g@1` | component | mechanical | 111.69 × 41.85 × 49.59 |  | 1 | 0 | The moulded rear grab handle of a 14G PowerEdge - a block on the left, a rail running right and a leg falling… |
-| `dell/rear-io-board-16g@1` | module | expansion-card | 85.37 × 15.93 × 121.5 |  | 1 | 0 | The rear I/O board of a 16th-generation 1U PowerEdge (R660) - the system ID button, the dedicated iDRAC port,… |
-| `dell/rear-io-board-plan-16g@1` | component | mechanical | 90 × 121.5 |  | 0 | 1 | The 16G rear I/O board seen from above - the board behind the iDRAC port, the USB stack, the VGA and the syst… |
+| `dell/rear-io-board-16g@1` | module | expansion-card | 85.37 × 15.93 × 121.5 |  | 1 | 1 | The rear I/O board of a 16th-generation 1U PowerEdge (R660) - the system ID button, the dedicated iDRAC port,… |
+| `dell/rear-io-board-dlc-16g@1` | module | expansion-card | 85.37 × 15.93 × 121.5 |  | 1 | 0 | The rear I/O board a 16th-generation 1U PowerEdge (R660) takes with the Direct Liquid Cooling module - the sy… |
+| `dell/rear-io-board-plan-16g@1` | component | mechanical | 90 × 121.5 |  | 0 | 2 | The 16G rear I/O board seen from above - the board behind the iDRAC port, the USB stack, the VGA and the syst… |
 | `dell/riser-1-fh-cage-16g@1` | component | riser | 120.6 × 19.8 |  | 0 | 1 | the riser 1 cage of a 16th-generation 1U PowerEdge (R660) - one full-height window, its clip at the left and … |
 | `dell/riser-1-none-14g@2` | module | riser | 107.59 × 62 |  | 1 | 0 | Dell riser none - no card; the three openings take fillers only |
 | `dell/riser-1-plate-14g@1` | component | riser | 107.59 × 62 |  | 0 | 4 | the riser 1 plate on a 14th-generation PowerEdge - one pressing with three windows, shared by every riser 1 a… |
@@ -579,7 +582,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/riser-1p-16g@1` | module | riser | 120.6 × 19.8 × 246.9 |  | 1 | 0 | Dell riser 1P of the PowerEdge R660 - slot 1 on dell/riser-1-fh-cage-16g@1, fitted in riser configuration 3 |
 | `dell/riser-2-3-blank-14g@1` | module | blank | 233 × 62 |  | 1 | 0 | Sheet-metal blank closing riser 2 AND riser 3 on a 14th-generation PowerEdge when no riser is fitted there |
 | `dell/riser-2-fh-plate-14g@1` | component | riser | 111.715 × 42.2 |  | 0 | 11 | the riser 2 plate on a 14th-generation PowerEdge - two full-height windows and one low-profile, shared by ris… |
-| `dell/riser-2-lp-cage-16g@1` | component | riser | 163.6 × 19.8 |  | 0 | 2 | the riser 2 cage of a 16th-generation 1U PowerEdge (R660) - two low-profile windows, the riser's vent block a… |
+| `dell/riser-2-lp-cage-16g@1` | component | riser | 163.6 × 19.8 |  | 0 | 3 | the riser 2 cage of a 16th-generation 1U PowerEdge (R660) - two low-profile windows, the riser's vent block a… |
 | `dell/riser-2-lp-gen5-cage-16g@1` | component | riser | 163.6 × 19.8 |  | 0 | 3 | the Gen5 riser 2 cage of a 16th-generation 1U PowerEdge (R660) - riser 2A's metal, with the printing Dell's G… |
 | `dell/riser-2-lp-plan-16g@1` | component | mechanical | 172.7 × 253.2 |  | 0 | 3 | riser 2 of the PowerEdge R660 (2A, 2P, 2R) seen from above - the cage roof over its two low-profile cards and… |
 | `dell/riser-2-none-14g@1` | module | riser | 79.2 × 18.42 |  | 1 | 0 | the riser 2 position with no riser in it - the low-profile window is still there and takes a filler only |
@@ -596,7 +599,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/riser-2r-16g@2` | module | riser | 163.6 × 19.8 × 246.9 |  | 1 | 0 | Dell riser 2R of the PowerEdge R660 - slot 1 and slot 2 on dell/riser-2-lp-gen5-cage-16g@1, fitted in riser c… |
 | `dell/riser-2s-16g@1` | module | riser | 163.6 × 19.8 × 246.9 |  | 1 | 1 | Dell riser 2S of the PowerEdge R660 - slot 1 and the two-drive rear EDSFF E3.S module on dell/riser-2s-cage-1… |
 | `dell/riser-2s-cage-16g@1` | component | riser | 163.6 × 19.8 |  | 0 | 1 | the riser 2S cage of a 16th-generation 1U PowerEdge (R660) - one low-profile Gen5 window for slot 1 and, wher… |
-| `dell/riser-3-blank-16g@1` | module | blank | 89.8 × 19.8 |  | 1 | 7 | The vented plate a 16th-generation 1U PowerEdge (R660) fits where riser 3 is absent beside a riser 2 with two… |
+| `dell/riser-3-blank-16g@1` | module | blank | 89.8 × 19.8 |  | 1 | 9 | The vented plate a 16th-generation 1U PowerEdge (R660) fits where riser 3 is absent beside a riser 2 with two… |
 | `dell/riser-3-blank-gen5-16g@1` | module | blank | 68.9 × 19.8 |  | 1 | 0 | The vented plate a 16th-generation 1U PowerEdge (R660) fits where riser 3 is absent beside the Gen5 R2Q riser… |
 | `dell/riser-3-lp-cage-16g@1` | component | riser | 92 × 19.8 |  | 0 | 2 | the riser 3 cage of a 16th-generation 1U PowerEdge (R660) - one low-profile window, slot number 3 printed abo… |
 | `dell/riser-3-lp-gen5-cage-16g@1` | component | riser | 92 × 19.8 |  | 0 | 4 | the Gen5 riser 3 cage of a 16th-generation 1U PowerEdge (R660) - riser 3A's metal, with a dark strip over the… |
@@ -611,6 +614,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/riser-3s-16g@1` | module | riser | 92 × 19.8 × 219.8 |  | 1 | 0 | Dell riser 3S of the PowerEdge R660 - slot 3 on dell/riser-3-lp-gen5-cage-16g@1, fitted in riser configuratio… |
 | `dell/riser-4-fh-cage-16g@1` | component | riser | 135 × 19.8 |  | 0 | 1 | the riser 4 cage of a 16th-generation 1U PowerEdge (R660) - one full-height window between two latches, slot … |
 | `dell/riser-4p-16g@1` | module | riser | 135 × 19.8 × 246.9 |  | 1 | 0 | Dell riser 4P of the PowerEdge R660 - slot 2 on dell/riser-4-fh-cage-16g@1, fitted in riser configuration 3 |
+| `dell/riser-blank-full-16g@1` | module | blank | 255.6 × 19.8 |  | 1 | 0 | The plate a 16th-generation 1U PowerEdge fits across the whole riser band when no riser is installed (riser c… |
 | `dell/riser-cage-mount-14g@1` | component | mechanical | 6.14 × 14.54 |  | 1 | 0 | The pair of rings a riser cage mounts to on a 14G PowerEdge rear bay, seen when the bay carries drives instea… |
 | `dell/riser-card-14g@1` | component | riser | 12.8 × 170.9 |  | 0 | 10 | The full-height riser card of a 2U 14G PowerEdge seen from above - the vertical PCB standing at the chassis w… |
 | `dell/riser-card-clip-14g@1` | component | mechanical | 8.4 × 16.4 |  | 0 | 3 | The blue card-retention clip at the end of a riser's slots on a 14G PowerEdge, where the L of a PCIe bracket … |
@@ -621,7 +625,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/system-board-r660@1` | component | mechanical | 425 × 471.8 × 38.3 |  | 1 | 6 | The R660 system board seen from above - the PCB the processors, memory, risers and fan connectors stand on, a… |
 | `dell/system-cover-14g@1` | component | mechanical | 434 × 540.6 |  | 1 | 0 | The system cover of a 14G PowerEdge - the lid over the mid-drive tray, the risers and the processor tray, rel… |
 | `dell/system-cover-1u-16g@1` | component | mechanical | 433.4 × 615 |  | 1 | 0 | The system cover of a 16th-generation 1U PowerEdge (R660) - the lid over everything behind the drive backplan… |
-| `dell/system-id-button-14g@1` | component | button | 7 × 7 |  | 1 | 1 | The system identification button on the rear of a 14th-generation PowerEdge - pressed to make the machine ann… |
+| `dell/system-id-button-14g@1` | component | button | 7 × 7 |  | 1 | 2 | The system identification button on the rear of a 14th-generation PowerEdge - pressed to make the machine ann… |
 | `dell/thumbscrew-blue-14g@1` | component | screw | 11.5 × 11.5 × 16 |  | 1 | 2 | Dell's blue captive thumbscrew - the ringed hand-turned fastener that retains a rear drive cage on a 14G Powe… |
 
 ## edgecore/ (57)

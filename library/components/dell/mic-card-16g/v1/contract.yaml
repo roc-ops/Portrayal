@@ -1,0 +1,49 @@
+format: 1
+kind: module
+name: mic-card-16g
+version: 1.0.0
+class: expansion-card
+behaviour: fills
+profile: server
+description: >-
+  The Management Interface Card (MIC) of a 16th-generation 1U PowerEdge (R660) -
+  fitted in the LOM card's place on systems with a Dell DPU card, which it
+  joins to the iDRAC by cable inside the chassis; it has no rear ports
+attrs:
+  power-absent: not-published
+provenance:
+  identity: >-
+    datasheet - R660 ISM "LOM card, MIC card, and rear I/O board": "the system
+    allows either LOM card or MIC card to be installed", and the MIC "is only
+    available in the system that supports Dell DPU cards". ISM table 103 cables
+    it inside the chassis: its UART connector to the rear I/O board's, and its
+    connector 1 to the DPU card in riser 1. The technical guide gives the DPU
+    the full-height risers, so the MIC goes with riser configuration 3.
+  no-ports: >-
+    drawing - ISM figure 222 (Removing the MIC card) shows the card where the
+    LOM card sits, with a bracket at the rear wall and NO jacks on it; the same
+    figure in the R6615, R6625 and R760 manuals shows the same. StorageReview's
+    photographs of a MIC in an R750 show it from inside only.
+  face: >-
+    estimated - THE REAR FACE IS NOT SHOWN STRAIGHT-ON IN ANYTHING HELD. Figure
+    222 shows a sliver of the bracket from above, which reads as plain metal
+    with small square holes. It is drawn as dell/lom-blank-16g@1's face - a
+    plain plate with that part's vent field - because that is the one LOM-window
+    plate of this generation that has been photographed. See the device's gap.
+  size: >-
+    drawing - 42.58 x 15.93, the LOM card's rear window (dell/lom-2x1g-16g@1),
+    which it fills.
+  depth: >-
+    estimated - 117.2, the LOM card's, whose place and screw positions it
+    takes; figure 222 draws a board of about that depth.
+  plan: >-
+    NONE. Dell's service model carries the LOM card and not the MIC.
+  power: >-
+    NOT PUBLISHED - the R660 ISM, technical guide and spec sheet were searched
+    for 'MIC' and 'Management Interface' beside a wattage and give none.
+size: {w: 42.58, h: 15.93, d: 117.2}
+size-confidence: {w: drawing, h: drawing, d: estimated}
+body:
+  depth: 117.2
+  color: '#b8bdc2'
+skins: [default]
