@@ -1,0 +1,69 @@
+format: 1
+kind: component
+name: dlc-module-1u-16g
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+profile: server
+description: >-
+  The Direct Liquid Cooling module of a 16th-generation 1U PowerEdge (R660)
+  seen from above - a cold plate on each processor in the heatsink's place,
+  joined by a tube, and two tubes running back past PSU 2 and out through the
+  rear wall
+provenance:
+  identity: >-
+    datasheet - R660 ISM "Direct Liquid Cooling module": one assembly of two
+    cold plates and their tubes, fitted in the heatsinks' place, with a leak
+    sensor cable to the liquid-cooling rear I/O board
+    (dell/rear-io-board-dlc-16g@1); the tubes are clipped between PSU 2 and
+    that board. DLC is a rack solution: the tubes go on to a manifold and a
+    coolant distribution unit.
+  sources: >-
+    drawing, BY A SIBLING'S FIGURE - the R660 ISM draws the module only in
+    isometric (figures 144, 151, 152). The PowerEdge R6625 technical guide's
+    figure 10 ('Inside the system with Liquid Cooling', 1.40 px/mm on the
+    434.0 body) is a true top view of the two-socket sibling's: the tubes
+    cross the rear wall at plan x 108.3 and 126.2 - rear-face 325.7 and 307.8,
+    where dell/rear-io-board-dlc-16g@1 has its grommets at 327.5 and 309.4 -
+    run forward beside PSU 2 to the nearer cold plate, and one tube joins the
+    two plates across their front.
+  plates: >-
+    estimated - THE R660'S OWN SOCKETS, NOT THE SIBLING'S. The R6625's cold
+    plates measure 97.6 x 117.6 on AMD sockets; the R660's are drawn on its
+    socket retention plates, 82.1 x 119.1 at plan x 75.2 and 278.0, y 266.7
+    (dell/heatsink-1u-16g@1, measured on Dell's service model), since that is
+    what a cold plate bolts to. The hexagonal window is the figure's.
+  tubes: >-
+    estimated - the route is the sibling's fitted to the R660's sockets: out
+    of the rear wall at the measured places, across to the edge beside PSU 2
+    within the first 150, forward to the nearer plate, and a link 36 in front
+    of the plates. About 10 across in the figure.
+  size: >-
+    estimated - 284.9 x 432.0, the box round what is drawn: the two plates on
+    the R660's sockets (plan x 75.2 to 360.1) and the tubes from the rear wall
+    to the link in front of the plates.
+  height: >-
+    NOT MEASURED; the plates are stood 20 by eye from the ISM's isometrics.
+size: {w: 284.9, h: 432.0}
+size-confidence: {w: estimated, h: estimated}
+relief:
+  wall: '#3a3e42'
+  features:
+  - node: plate-1
+    out: 20.0
+    color: '#2b2f33'
+    confidence: estimated
+    source: >-
+      estimated by eye from R660 ISM figures 151 and 152; no cold plate has
+      been measured.
+  - node: plate-2
+    out: 20.0
+    color: '#2b2f33'
+    confidence: estimated
+    source: >-
+      estimated by eye from R660 ISM figures 151 and 152; no cold plate has
+      been measured.
+elements:
+  plate-1: {at: [202.8, 266.7], size: [82.1, 119.1], class: mechanical, description: the cold plate on processor 1}
+  plate-2: {at: [0.0, 266.7], size: [82.1, 119.1], class: mechanical, description: the cold plate on processor 2}
+skins: [default]
