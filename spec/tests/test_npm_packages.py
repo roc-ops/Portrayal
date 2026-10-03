@@ -289,3 +289,53 @@ def test_a_first_publish_is_named_on_the_line_that_sent_it(tmp_path, capsys):
     out = capsys.readouterr().out.splitlines()
     assert "published @portrayal/acme-box-2@0.1.0 (first publish)" in out
     assert "published @portrayal/acme-box-1@1.3.0" in out
+
+
+# ---- the registry limits how fast packages arrive (#526) --------------------------
+
+class _Limited(_Npm):
+    """An npm that answers the first `refuse` publishes with E429."""
+    def __init__(self, refuse):
+        super().__init__({})
+        self.refuse = refuse
+
+    def __call__(self, cmd, cwd=None, **kw):
+        if cmd[1] == "publish" and self.refuse:
+            self.refuse -= 1
+
+            class R:
+                returncode, stdout = 1, ""
+                stderr = "npm error code E429\nnpm error 429 Too Many Requests - PUT ..."
+            return R()
+        return super().__call__(cmd, cwd=cwd, **kw)
+
+
+def test_a_rate_limited_publish_waits_and_is_tried_again(tmp_path):
+    """The first release sent 25 packages in a minute and npm refused the 26th
+    with E429. That is the registry asking for time, not a failure."""
+    first, _ = _build(tmp_path, _dist(tmp_path))
+    npm, slept = _Limited(2), []
+    order = P.publish(tmp_path / "out", first, run=npm, sleep=slept.append)
+    assert npm.published == order and len(order) == 4
+    assert slept == list(P.RATE_LIMIT_WAITS[:2]), "two refusals, two waits, each longer"
+
+
+def test_a_registry_that_never_relents_stops_the_run(tmp_path):
+    first, _ = _build(tmp_path, _dist(tmp_path))
+    npm, slept = _Limited(10 ** 6), []
+    with pytest.raises(SystemExit, match="E429"):
+        P.publish(tmp_path / "out", first, run=npm, sleep=slept.append)
+    assert slept == list(P.RATE_LIMIT_WAITS) and not npm.published
+
+
+def test_any_other_publish_failure_is_not_waited_on(tmp_path):
+    first, _ = _build(tmp_path, _dist(tmp_path))
+
+    def forbidden(cmd, **_):
+        class R:
+            returncode, stdout, stderr = 1, "", "npm error code E403"
+        return R()
+    slept = []
+    with pytest.raises(SystemExit, match="E403"):
+        P.publish(tmp_path / "out", first, run=forbidden, sleep=slept.append)
+    assert not slept

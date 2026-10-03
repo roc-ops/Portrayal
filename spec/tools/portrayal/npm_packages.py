@@ -52,6 +52,7 @@ import re
 import shutil
 import subprocess
 import sys
+import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -343,20 +344,35 @@ def first_publishes(state):
     return sorted(n for n, s in state.items() if s["first"])
 
 
-def publish(out, state, run=subprocess.run, dry_run=False):
+# How long to wait, in seconds, each time npm answers a publish with E429. The
+# first release sent 25 new packages in a minute and was refused the 26th; npm
+# does not say what the limit is or when it lifts, so the waits lengthen, and
+# a package is given up on after the last (about half an hour in all).
+RATE_LIMIT_WAITS = (60, 120, 300, 600, 900)
+
+
+def publish(out, state, run=subprocess.run, dry_run=False, sleep=time.sleep):
     """`npm publish` every changed package: devices and components first, the
     index LAST, so the index never names a version npm does not have yet.
-    Returns the names published, in order."""
+    Returns the names published, in order.
+
+    A publish npm refuses as rate limited (E429) is waited on and tried again;
+    any other failure stops the run."""
     changed = [n for n, s in sorted(state.items()) if s["changed"]]
     order = [n for n in changed if n != f"{SCOPE}/index"] + \
         [n for n in changed if n == f"{SCOPE}/index"]
     for name in order:
         cmd = ["npm", "publish"] + (["--dry-run"] if dry_run else [])
-        try:
-            r = run(cmd, cwd=Path(out) / name.split("/", 1)[1], capture_output=True,
-                    text=True, timeout=900)
-        except subprocess.TimeoutExpired:
-            raise SystemExit(f"npm publish {name}: no answer in 900 s")
+        for wait in RATE_LIMIT_WAITS + (None,):
+            try:
+                r = run(cmd, cwd=Path(out) / name.split("/", 1)[1], capture_output=True,
+                        text=True, timeout=900)
+            except subprocess.TimeoutExpired:
+                raise SystemExit(f"npm publish {name}: no answer in 900 s")
+            if not r.returncode or wait is None or "E429" not in (r.stdout + r.stderr):
+                break
+            print(f"rate limited at {name}; waiting {wait} s", flush=True)
+            sleep(wait)
         if r.returncode:
             raise SystemExit(f"npm publish {name}: {(r.stderr or r.stdout).strip()[-400:]}")
         # said on the line itself, so the list to `npm trust` survives a run
