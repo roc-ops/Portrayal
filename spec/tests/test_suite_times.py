@@ -80,19 +80,29 @@ def test_a_record_with_no_test_in_it_is_an_error_not_a_clean_report(tmp_path):
 # --- comparing two runs -------------------------------------------------------
 
 def test_a_busy_runner_is_not_reported_as_a_slower_suite():
-    """Every file took exactly twice as long. That is the machine."""
+    """Every file took a quarter longer. That is the machine."""
     base = spread()
-    cmp = T.compare({k: v * 2 for k, v in base.items()}, base)
-    assert cmp["load"] == 2.0
+    cmp = T.compare({k: v * 1.25 for k, v in base.items()}, base)
+    assert cmp["load"] == 1.25
     assert T.flags(cmp) == []
     assert cmp["total"] == 48.0 and cmp["base_total"] == 48.0
 
 
+def test_everything_slowing_at_once_is_named_as_the_runner_or_the_change():
+    """WHAT DIVIDING THE LOAD OUT CANNOT SEE. A fixture every file pays for
+    looks exactly like a busy runner, so a suite that doubled would normalise
+    back to its base figures and report nothing. The load itself is the flag."""
+    base = spread()
+    found = T.flags(T.compare({k: v * 2 for k, v in base.items()}, base))
+    assert len(found) == 1, found
+    assert found[0].startswith("every shared file took 2.00x as long as in the base run")
+
+
 def test_a_new_slow_test_is_named_with_the_load_divided_out():
     base = spread()
-    now = {k: v * 2 for k, v in base.items()}
-    now["test_f00::test_added"] = 14.0      # 7s on the base run's machine
-    now["test_f00::test_added_small"] = 1.0
+    now = {k: v * 1.25 for k, v in base.items()}
+    now["test_f00::test_added"] = 8.75      # 7s on the base run's machine
+    now["test_f00::test_added_small"] = 0.625
     cmp = T.compare(now, base)
     assert cmp["slow_new"] == {"test_f00::test_added": 7.0}
     assert cmp["new_seconds"] == 7.5
@@ -162,6 +172,45 @@ def test_the_base_is_the_newest_merged_heads_run():
     assert chosen["workflow_run"]["head_sha"] == "new" and number == 742
 
 
+def test_the_token_does_not_follow_a_redirect_to_another_host():
+    """An artifact download redirects to a signed storage address. The token
+    is not that host's to see, and sending it there gets the download refused."""
+    import http.server
+    import threading
+    seen = {}
+
+    class Storage(http.server.BaseHTTPRequestHandler):
+        def do_GET(self):
+            seen["storage"] = self.headers.get("Authorization")
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(b"the artifact")
+
+        def log_message(self, *a):
+            pass
+
+    storage = http.server.HTTPServer(("127.0.0.1", 0), Storage)
+
+    class Api(Storage):
+        def do_GET(self):
+            seen["api"] = self.headers.get("Authorization")
+            self.send_response(302)
+            self.send_header("Location", f"http://127.0.0.1:{storage.server_port}/blob")
+            self.end_headers()
+
+    api = http.server.HTTPServer(("127.0.0.1", 0), Api)
+    for s in (storage, api):
+        threading.Thread(target=s.serve_forever, daemon=True).start()
+    try:
+        body = T._api(f"http://127.0.0.1:{api.server_port}/zip", "s3cret")
+    finally:
+        for s in (storage, api):
+            s.shutdown()
+            s.server_close()
+    assert body == b"the artifact"
+    assert seen == {"api": "Bearer s3cret", "storage": None}
+
+
 def test_an_expired_or_differently_named_artifact_is_not_a_base():
     arts = [art("a", "2026-10-02T09:00:00Z", expired=True),
             art("b", "2026-10-02T08:00:00Z", name="coverage")]
@@ -194,6 +243,8 @@ def test_the_report_cannot_turn_a_green_run_red(build):
 def test_the_times_are_published_for_the_next_run_to_compare_against(build):
     s = step(build, "publish test times")
     assert s["with"]["name"] == T.ARTIFACT
+    # a re-run finds the first attempt's artifact; neither may fail the job
+    assert s["with"]["overwrite"] is True and s.get("continue-on-error") is True
     uses = s["uses"]
     assert uses.startswith("actions/upload-artifact@") and len(uses.split("@")[1]) == 40, uses
 

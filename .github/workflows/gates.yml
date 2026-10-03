@@ -268,13 +268,19 @@ jobs:
 
       # The record a LATER run compares against. Only a merged head's is ever
       # read, but the run cannot know yet whether it will merge.
+      #
+      # `overwrite`, AND IT CANNOT FAIL THE RUN EITHER: a re-run of this job
+      # finds the first attempt's artifact under the same name, and without
+      # both lines the upload would refuse it and turn a passing suite red.
       - name: publish test times
         if: always()
+        continue-on-error: true
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
         with:
           name: test-times
           path: ${{ runner.temp }}/test-times.json
           if-no-files-found: ignore
+          overwrite: true
           retention-days: 30
 
       # The exports are committed and a DCIM reads them, so a stale one is a

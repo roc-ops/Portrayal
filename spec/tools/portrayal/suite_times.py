@@ -25,6 +25,12 @@ both runs share, of how much longer each took - and divides it out. A file that
 slowed by the same factor as everything else did not change; one that slowed by
 more did.
 
+WHAT THAT CANNOT SEE, AND SAYS INSTEAD. A change that slows EVERY file - a
+fixture in conftest, the YAML loader - looks exactly like a busy runner, and
+dividing it out would report a suite that tripled as unchanged. So a load of
+1.5 or more is itself flagged, as the one or the other: a re-run tells them
+apart, and the reader is told to ask.
+
 A REGRESSION IS REPORTED PER FILE AND A NEW TEST PER TEST. A module-scoped
 fixture is charged to whichever test happens to run first in a worker, so one
 test's time moves between runs while its file's does not.
@@ -36,6 +42,7 @@ import os
 import pathlib
 import statistics
 import sys
+import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 import zipfile
@@ -45,6 +52,7 @@ FILE_GREW = 5.0     # a file is named when its shared tests grew by this much ..
 FILE_RATIO = 1.25   # ... and by this factor, with the load divided out
 TOTAL_GREW = 0.03   # the suite is named when it grew by this fraction
 MIN_SHARED = 20     # fewer shared files than this and the load is not estimated
+LOAD_SUSPECT = 1.5  # a load this high is named: a busy runner, or everything slowed
 ARTIFACT = "test-times"
 
 
@@ -104,6 +112,10 @@ def compare(tests, base):
 def flags(cmp):
     """One sentence per thing a reviewer should look at."""
     out = []
+    if cmp["load"] >= LOAD_SUSPECT:
+        out.append(f"every shared file took {cmp['load']:.2f}x as long as in the base run: "
+                   "a busy runner, or a change that slowed everything (a shared fixture, "
+                   "the loader) - re-run to tell which")
     for k, s in sorted(cmp["slow_new"].items(), key=lambda kv: -kv[1]):
         out.append(f"new test {k} takes {s:.1f}s")
     for f, (was, now) in sorted(cmp["grew"].items(), key=lambda kv: kv[1][0] - kv[1][1]):
@@ -154,11 +166,27 @@ def choose_base(artifacts, merged):
     return None, None
 
 
+class _TokenStaysHome(urllib.request.HTTPRedirectHandler):
+    """An artifact's download URL redirects to a signed address on a storage
+    host. urllib carries every header across a redirect, and the token must not
+    follow: it is not that host's to see, and a request bearing both a signature
+    and a bearer token is refused - which would read here as "no base", for
+    ever."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        new = super().redirect_request(req, fp, code, msg, headers, newurl)
+        if new is not None and (urllib.parse.urlsplit(newurl).netloc
+                                != urllib.parse.urlsplit(req.full_url).netloc):
+            for held in (new.headers, new.unredirected_hdrs):
+                held.pop("Authorization", None)
+        return new
+
+
 def _api(url, token):
     req = urllib.request.Request(url, headers={
         "Accept": "application/vnd.github+json",
         **({"Authorization": f"Bearer {token}"} if token else {})})
-    with urllib.request.urlopen(req, timeout=30) as r:
+    with urllib.request.build_opener(_TokenStaysHome).open(req, timeout=30) as r:
         return r.read()
 
 
