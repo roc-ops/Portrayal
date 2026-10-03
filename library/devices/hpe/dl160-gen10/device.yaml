@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dl160-gen10
-version: 0.1.0
+version: 1.0.0
 maturity: modelled
 manufacturer: HPE
 model: ProLiant DL160 Gen10
@@ -18,22 +18,21 @@ provenance:
   sources:
     confidence: datasheet
     note: >-
-      THE INTAKE IS working/intake/hpe/proliant/dl160-gen10 (SOURCES.md and
-      COVERAGE.md there). Read for this model: QuickSpecs a00021860enw (retired
-      edition, Aug 2025), HPE's datasheet for the model, for dimensions, weights,
-      chassis builds, options and environmentals; User Guide a00066666en_us ed. 7, the
-      server's hardware guide, for component identification, LEDs, drive and slot
-      numbering and specifications, both as its PDF export and as the HTML zip whose
-      native figures (GUID-*-high.png, 675 px) are the line drawings cited below;
-      Maintenance and Service Guide a00066664en_us, the service manual; two straight-
-      on photographs from newserverlife's hands-on review - the 4 LFF front
+      Read for this model: QuickSpecs a00021860enw (retired edition, Aug 2025), HPE's
+      datasheet for the model, for dimensions, weights, chassis builds, options and
+      environmentals; User Guide a00066666en_us ed. 7, the server's hardware guide,
+      for component identification, LEDs, drive and slot numbering and specifications,
+      both as its PDF export and as the HTML zip whose native figures
+      (GUID-*-high.png, 675 px) are the line drawings cited below; Maintenance and
+      Service Guide a00066664en_us, the service manual; two straight-on photographs
+      from newserverlife's hands-on review - the 4 LFF front
       (newserverlife.com/upload/iblock/562/7_opt.jpeg, 1280 x 131) and the rear
       (.../386/8_opt.jpeg, 1280 x 145). No vendor 3D model exists for this server on
       any page searched, and NetBox's devicetype-library has no DL160 Gen10.
   chassis:
     confidence: datasheet
     note: >-
-      QuickSpecs page 31 and the User Guide's mechanical specifications agree: 4.29 x
+      QuickSpecs page 32 and the User Guide's mechanical specifications agree: 4.29 x
       43.46 x 61.49 cm (the User Guide prints the depth 61.50), 1U. 434.6 is the body
       between the ear folds, which is how both front and rear photographs measure
       (below), so the 43.46 cm is the body, not the rack face. Neither document says
@@ -70,17 +69,16 @@ provenance:
     note: >-
       The 8 SFF front is measured off HPE's straight-on product image of that face, as
       hosted by Express Computer Systems (expresscomputersystems.com/cdn/shop/files/dl
-      160-gen10-drive-8sff_1835d8c9-1c70-466f-aed1-349e0d74a3b8.jpg, 1080 x 1080;
-      staged as photos/ecs-dl160g10-8sff-front-ORTHO-1080sq.jpg), found in a third web
-      search after the first two had found none. It passes the panel gate: the body
-      between the ear folds is 946 px for 434.6 mm (2.177 px/mm) and 93 px for 42.9
-      (2.168), 0.4% apart, and ear to ear it is 484.9 mm, the 4 LFF photograph's
-      figure. THIS VIEW WAS FIRST DRAWN FROM THE USER GUIDE'S LINE ELEVATIONS (native
-      figures GUID-7FDCEC9A, GUID-55DF0433), which fail the gate at 6% vertical
-      stretch; against the image they had the column pitch right (81.4 against 81.75)
-      and three things wrong - the carrier 3.7 mm too wide, the media bay blank one
-      drive row tall where it runs to the top of the face, and the SmartCarrier's
-      handle on the wrong side of its ring.
+      160-gen10-drive-8sff_1835d8c9-1c70-466f-aed1-349e0d74a3b8.jpg, 1080 x 1080),
+      found in a third web search after the first two had found none. It passes the
+      panel gate: the body between the ear folds is 946 px for 434.6 mm (2.177 px/mm)
+      and 93 px for 42.9 (2.168), 0.4% apart, and ear to ear it is 484.9 mm, the 4 LFF
+      photograph's figure. THIS VIEW WAS FIRST DRAWN FROM THE USER GUIDE'S LINE
+      ELEVATIONS (native figures GUID-7FDCEC9A, GUID-55DF0433), which fail the gate at
+      6% vertical stretch; against the image they had the column pitch right (81.4
+      against 81.75) and three things wrong - the carrier 3.7 mm too wide, the media
+      bay blank one drive row tall where it runs to the top of the face, and the
+      SmartCarrier's handle on the wrong side of its ring.
   front-lff:
     confidence: photo-measured
     note: >-
@@ -144,7 +142,7 @@ provenance:
       (138.6..173.8), a vent block, the UID lamp (195.9, 35.5), a small round hole,
       and under slot 3 the IOIOI legend and the serial port blank. The two supply bays
       fill the right end, PS 2 at 286.9 and PS 1 at 362.4, with the PS 1 / PS 2 legend
-      printed on the strip between them, rotated.
+      printed upright on the strip between them, PS over the digit over an arrow.
   rear-numbering:
     confidence: datasheet
     note: >-
@@ -172,9 +170,13 @@ provenance:
   psus:
     confidence: datasheet
     note: >-
-      QuickSpecs: one 500 W Flex Slot supply standard ("RPS ready"); a second supply
-      needs the DL160/180 Gen10 Redundant Power Supply Enablement Kit 866442-B21.
-      Supplies offered: 865408-B21 500 W Platinum, 865414-B21 800 W Platinum,
+      QuickSpecs: the pre-configured models carry "1x 500W Hot Plug; RPS ready"; on
+      the configure-to-order chassis (878972-B21, 878973-B21) the supply is a choice
+      of one or two, and the DL160/180 Gen10 Redundant Power Supply Enablement Kit
+      866442-B21 is "required with selection of power supply". Whether that means any
+      Flex Slot supply or only a second one the QuickSpecs does not say; the User
+      Guide fits the kit by first removing the non-hot-plug supply, which reads as
+      any. Supplies offered: 865408-B21 500 W Platinum, 865414-B21 800 W Platinum,
       865438-B21 800 W Titanium, 865428-B21 800 W Universal (HVAC/HVDC), 865434-B21
       800 W -48 VDC. The 500 W and the 800 W Platinum are drawn (hpe/psu-865408-b21@1,
       hpe/psu-865414-b21@1); the other three are a gap. The bays are the supply's 68.0
@@ -185,7 +187,7 @@ provenance:
   weight:
     confidence: datasheet
     note: >-
-      QuickSpecs page 31 by configuration: SFF minimum 10.97 kg (1 drive, 1 DIMM, 3
+      QuickSpecs page 32 by configuration: SFF minimum 10.97 kg (1 drive, 1 DIMM, 3
       fans, 1 processor, 1 supply), SFF maximum 13.92, LFF minimum 11.65, LFF maximum
       15.74. The User Guide's mechanical table rounds to 10.00 minimum and 16.00
       maximum "approximate values"; the QuickSpecs figures are the configured ones and
@@ -209,10 +211,10 @@ provenance:
     note: >-
       QuickSpecs pages 32-33 and the User Guide's environmental table: operating 10 to
       35 C at sea level, derated 1 C per 305 m to 3050 m; extended 5..10 and 35..40 C,
-      and 40..45 C, for approved configurations only (document a00026969en_us,
-      staged); non-operating -30 to 60 C; operating humidity 8 to 90% non-condensing,
-      28 C maximum wet bulb; altitude 3050 m operating, 9144 m non-operating;
-      acoustics LWAd 4.5 B idle and 5.1 B operating for both builds.
+      and 40..45 C, for approved configurations only (document a00026969en_us); non-
+      operating -30 to 60 C; operating humidity 8 to 90% non-condensing, 28 C maximum
+      wet bulb; altitude 3050 m operating, 9144 m non-operating; acoustics LWAd 4.5 B
+      idle and 5.1 B operating for both builds.
   lifecycle:
     confidence: datasheet
     note: >-
@@ -267,6 +269,18 @@ provenance:
       the scatter is recorded here and not drawn; the primary riser cage at the rear
       right. The supplies are placed from the rear view's bays, not from the
       photograph, which shows the non-hot-plug supply.
+  dimm-numbering:
+    confidence: datasheet
+    note: >-
+      QuickSpecs page 31, 'Memory Population guidelines': a figure captioned 'HPE
+      DL160/DL180 Gen 10 Servers Front Server (2+1+1 slots per channel)' draws the P2
+      CPU on the left and the P1 CPU on the right, each with slots numbered 1 2 3 4
+      one side of its socket and 5 6 7 8 the other, left to right, and the table under
+      it gives the population order. The plan's dimm-1..8 are therefore processor 2
+      slots 1..8 and dimm-9..16 processor 1 slots 1..8; the User Guide's System board
+      components figure agrees on which processor is which. A FIRST VERSION RECORDED
+      THIS AS A GAP, 'stated in no document held': the figure is a picture, the text
+      conversion dropped it, and a search of the converted text found only the table.
   interior-population:
     confidence: datasheet
     note: >-
@@ -327,8 +341,7 @@ gaps:
       (866458-B21), and the 4 LFF optical bay the 9.5 mm drive; only the blanks are
       drawn. The User Guide elevations GUID-696364B2 and GUID-7FDCEC9A show both
       options at 1.36 px/mm; the only photograph of either is a reseller's 10 SFF unit
-      from above (photos/nsl-dl160g10-8sff-10sff-angled-800x320.jpg), and of the
-      optical kit only its bare bracket and cables.
+      from above, and of the optical kit only its bare bracket and cables.
     wanted: >-
       straight-on images of the optical drive bezel and the two-bay SFF cage in a
       DL160 Gen10
@@ -350,11 +363,11 @@ gaps:
       bays: the User Guide's enablement procedure begins "Remove the non-hot-plug
       power supply" before fitting the redundant power supply cage, the system board
       has a non-hot-plug power supply connector, the Parts Support Guide heads a
-      section with it, and HPE's own rear product image (photos/pcsp-dl160g10-rear-
-      ORTHO-1280sq.jpg, straight on) shows one wide plate with a fan marked 92% and a
-      single inlet where the bays are. No document held names its part number or
-      rating or says which models shipped with it - every model in QuickSpecs versions
-      6 to 32 is listed with a hot-plug supply - so that rear is not drawn.
+      section with it, and HPE's own rear product image (straight on) shows one wide
+      plate with a fan marked 92% and a single inlet where the bays are. No document
+      held names its part number or rating or says which models shipped with it -
+      every model in QuickSpecs versions 6 to 32 is listed with a hot-plug supply - so
+      that rear is not drawn.
     wanted: >-
       the non-hot-plug supply's part number and rating, and which models carried it
   - what: expansion-options-unseen
@@ -388,18 +401,16 @@ gaps:
       backplane under the lid, the energy pack, and the 4 LFF chassis' interior.
     wanted: >-
       a dimensioned plan of the DL160 Gen10 interior, or HPE's service model
-  - what: dimm-slot-numbering
-    scope: [top]
-    reason: vendor-silent
+  - what: front-bezel
+    scope: [front]
+    reason: needs-photo
     note: >-
-      the sixteen DIMM slots are numbered here 1 to 16 left to right as the plan shows
-      them. HPE's own slot numbers - 1 to 8 per processor, silkscreened on the board -
-      are not legible on the photograph and are stated in no document held: the User
-      Guide defers DIMM population to the QuickSpecs, and the QuickSpecs to HPE's
-      memory population guidelines.
+      the front bezel option is not drawn: the QuickSpecs lists the HPE 1U Gen10 Bezel
+      Kit 867998-B21, which needs the quick-release ear kit, and the User Guide has
+      'Installing the front bezel option'. The only image held of it is a reseller's
+      angled photograph.
     wanted: >-
-      HPE's DIMM slot numbering for the DL160 Gen10 (the Server Memory Population
-      Rules document, or the label inside the access panel)
+      a straight-on image of the 1U Gen10 bezel on a DL160 Gen10
   - what: interior-population
     scope: [top]
     reason: needs-photo
@@ -415,7 +426,7 @@ groups:
   media-bays: {term: Bay, role: service, index-origin: 1}
   risers: {term: Riser, role: service, index-origin: 1, description: 'the primary riser cage (PCIe slots 1 and 2) and the secondary (slot 3, with processor 2); the slots are bays of the risers'}
   media-module: {term: Slot, role: service, index-origin: 1}
-  psus: {term: PSU, role: service, index-origin: 1, attrs: {redundancy: '1+1', redundancy-note: 'QuickSpecs: one 500 W Flex Slot supply standard and RPS ready; a second supply needs the DL160/180 Gen10 Redundant Power Supply Enablement Kit 866442-B21, and the User Guide calls the second supply the redundant one - the same capacity twice, not twice the capacity'}}
+  psus: {term: PSU, role: service, index-origin: 1, attrs: {redundancy: '1+1', redundancy-note: 'QuickSpecs: the pre-configured models carry one 500 W Flex Slot supply and are RPS ready; the Redundant Power Supply Enablement Kit 866442-B21 is required with a Flex Slot supply on a configure-to-order chassis, and the User Guide calls the second supply the redundant one - the same capacity twice, not twice the capacity'}}
   nics: {term: Port, role: traffic, index-origin: 1, attrs: {media: rj45, speed: 1g}}
   mgmt: {term: Port, role: management, index-origin: 1, attrs: {media: rj45, speed: 1g, role: mgmt}}
   usb: {term: Port, role: management, index-origin: 1, attrs: {media: usb-a}, description: 'the USB Type-A ports front and rear, the front iLO service port among them'}
@@ -424,7 +435,7 @@ groups:
   controls: {term: Button, role: management, index-origin: 1}
   leds: {term: LED, role: indicator, index-origin: 1}
   tags: {term: Tag, role: furniture, index-origin: 1}
-  memory: {term: DIMM, role: service, index-origin: 1, description: 'the sixteen DDR4 slots, eight per processor, numbered here left to right as seen from above with the rear at the top - HPE numbers them per processor, see the gap'}
+  memory: {term: DIMM, role: service, index-origin: 1, description: 'the sixteen DDR4 slots, eight per processor, numbered here 1 to 16 left to right as seen from above with the rear at the top: 1 to 8 are processor 2 slots 1 to 8 and 9 to 16 are processor 1 slots 1 to 8, which is how the QuickSpecs memory population figure numbers them'}
   fans: {term: Fan, role: service, index-origin: 1, description: 'the seven single-rotor fan bays, numbered from the power supply side as the User Guide numbers them', attrs: {redundancy: 'n+1', redundancy-note: 'User Guide, Fan mode behavior and Fan population guidelines: the redundant fan kit adds one fan, and in redundant fan mode one fan rotor failure switches the system to non-redundant mode and it continues to operate; a second failure or a missing fan causes an orderly shutdown'}}
   processors: {term: CPU, role: service, index-origin: 1, description: 'the two processor heatsinks - processor 1 on the right as the front faces you'}
   interior: {term: Part, role: furniture, index-origin: 1, description: 'the system board and the primary riser cage'}
@@ -486,14 +497,14 @@ views:
         - {at: [381.6, 6.7], size: [5, 3], fill: '#0d0f11'}
         - {at: [387.97, 6.7], size: [5, 3], fill: '#0d0f11'}
     silkscreen:
-      - {at: [10.1, 11.6], text: '1', font-size: 1.9, fill: '#e7ebee', anchor: middle, for: drive-1}
-      - {at: [11.2, 10.45], path: 'M 0 0 H 1.6 L 0.8 1.1 Z', filled: true, fill: '#e7ebee', for: drive-1}
-      - {at: [142.9, 11.2], text: '2', font-size: 1.9, fill: '#e7ebee', anchor: middle, for: drive-2}
-      - {at: [144, 10.05], path: 'M 0 0 H 1.6 L 0.8 1.1 Z', filled: true, fill: '#e7ebee', for: drive-2}
-      - {at: [280.7, 10.6], text: '3', font-size: 1.9, fill: '#e7ebee', anchor: middle, for: drive-3}
-      - {at: [281.8, 9.45], path: 'M 0 0 H 1.6 L 0.8 1.1 Z', filled: true, fill: '#e7ebee', for: drive-3}
-      - {at: [387.1, 11], text: '4', font-size: 1.9, fill: '#e7ebee', anchor: middle, for: drive-4}
-      - {at: [388.2, 9.85], path: 'M 0 0 H 1.6 L 0.8 1.1 Z', filled: true, fill: '#e7ebee', for: drive-4}
+      - {at: [10.1, 11.1], text: '1', font-size: 1.9, fill: '#e7ebee', anchor: middle, for: drive-1}
+      - {at: [11.2, 9.95], path: 'M 0 0 H 1.6 L 0.8 1.1 Z', filled: true, fill: '#e7ebee', for: drive-1}
+      - {at: [142.9, 11.1], text: '2', font-size: 1.9, fill: '#e7ebee', anchor: middle, for: drive-2}
+      - {at: [144, 9.95], path: 'M 0 0 H 1.6 L 0.8 1.1 Z', filled: true, fill: '#e7ebee', for: drive-2}
+      - {at: [280.7, 11.1], text: '3', font-size: 1.9, fill: '#e7ebee', anchor: middle, for: drive-3}
+      - {at: [281.8, 9.95], path: 'M 0 0 H 1.6 L 0.8 1.1 Z', filled: true, fill: '#e7ebee', for: drive-3}
+      - {at: [387.1, 11.1], text: '4', font-size: 1.9, fill: '#e7ebee', anchor: middle, for: drive-4}
+      - {at: [388.2, 9.95], path: 'M 0 0 H 1.6 L 0.8 1.1 Z', filled: true, fill: '#e7ebee', for: drive-4}
       - {at: [349.6, 2.9], text: iLO, font-size: 2.0, fill: '#f1f3f5', anchor: middle, for: ilo-service}
       - {id: ilo-box-top, at: [341.9, 2.1], path: 'M 0 0 H 0.9 M 1.6 0 H 2.5 M 3.2 0 H 4.1 M 11.2 0 H 12.1 M 12.8 0 H 13.7 M 14.4 0 H 15.3', stroke-width: 0.35, fill: '#f1f3f5', for: ilo-service}
       - {id: ilo-box-bottom, at: [341.9, 11.2], path: 'M 0 0 H 0.9 M 1.6 0 H 2.5 M 3.2 0 H 4.1 M 4.8 0 H 5.7 M 6.4 0 H 7.3 M 8 0 H 8.9 M 9.6 0 H 10.5 M 11.2 0 H 12.1 M 12.8 0 H 13.7 M 14.4 0 H 15.3', stroke-width: 0.35, fill: '#f1f3f5', for: ilo-service}
@@ -515,10 +526,10 @@ views:
         - {id: info-tab, ref: hpe/info-pull-tab@1, at: [289.7, 1.2], group: tags, rel-pos: 1}
         - {id: ilo-service, ref: std/usb-a@1, at: [343.6, 5.65], group: usb, rel-pos: 1, attrs: {role: ilo-service}}
         - {id: usb-front, ref: std/usb-a@1, at: [363.6, 5.15], group: usb, rel-pos: 2, attrs: {usb: '3.0'}}
-        - {id: btn-uid, ref: hpe/button-led-sq@1, at: [399.0, 4.6], group: controls, rel-pos: 2, for: chassis}
-        - {id: led-nic, ref: hpe/led-sq@1, at: [407.9, 5.3], group: leds, rel-pos: 1, for: chassis}
-        - {id: led-health, ref: hpe/led-sq@1, at: [415.6, 5.3], group: leds, rel-pos: 2, for: chassis}
-        - {id: btn-power, ref: hpe/button-led-sq@1, at: [423.6, 4.6], group: controls, rel-pos: 1, for: chassis}
+        - {id: btn-uid, ref: common/button-led-sq@1, at: [399.0, 4.6], group: controls, rel-pos: 2, for: chassis}
+        - {id: led-nic, ref: common/led-sq@1, at: [407.9, 5.3], group: leds, rel-pos: 1, for: chassis}
+        - {id: led-health, ref: common/led-sq@1, at: [415.6, 5.3], group: leds, rel-pos: 2, for: chassis}
+        - {id: btn-power, ref: common/button-led-sq@1, at: [423.6, 4.6], group: controls, rel-pos: 1, for: chassis}
   front-sff8:
     face: front
     size: {w: 434.6, h: 42.9}
@@ -581,10 +592,10 @@ views:
         - {id: media-bay, at: [245.5, 0.7], size: {w: 163.1, h: 22.1}, accepts: [hpe/media-bay-blank-1u@1], default: hpe/media-bay-blank-1u@1, group: media-bays, rel-pos: 1}
       placements:
         - {id: info-tab, ref: hpe/info-pull-tab-slim@1, at: [188.1, 0.3], group: tags, rel-pos: 1}
-        - {id: btn-power, ref: hpe/button-led-sq@1, at: [414.4, 7.0], group: controls, rel-pos: 1, for: chassis}
-        - {id: led-health, ref: hpe/led-sq@1, at: [414.9, 15.8], group: leds, rel-pos: 2, for: chassis}
-        - {id: led-nic, ref: hpe/led-sq@1, at: [414.9, 23.9], group: leds, rel-pos: 1, for: chassis}
-        - {id: btn-uid, ref: hpe/button-led-sq@1, at: [414.4, 31.4], group: controls, rel-pos: 2, for: chassis}
+        - {id: btn-power, ref: common/button-led-sq@1, at: [414.4, 7.0], group: controls, rel-pos: 1, for: chassis}
+        - {id: led-health, ref: common/led-sq@1, at: [414.9, 15.8], group: leds, rel-pos: 2, for: chassis}
+        - {id: led-nic, ref: common/led-sq@1, at: [414.9, 23.9], group: leds, rel-pos: 1, for: chassis}
+        - {id: btn-uid, ref: common/button-led-sq@1, at: [414.4, 31.4], group: controls, rel-pos: 2, for: chassis}
         - {id: usb-front, ref: std/usb-a@1, at: [420.0, 9.75], rotate: 90, group: usb, rel-pos: 2, attrs: {usb: '3.0'}}
         - {id: ilo-service, ref: std/usb-a@1, at: [420.3, 28.65], rotate: 90, group: usb, rel-pos: 1, attrs: {role: ilo-service}}
   rear:
@@ -685,7 +696,7 @@ views:
       bays:
         - {id: riser-primary, at: [0.0, 0.4], size: {w: 203.0, h: 24.2}, accepts: [hpe/riser-primary-dl160@1], default: hpe/riser-primary-dl160@1, group: risers, rel-pos: 1}
         - {id: riser-secondary, at: [203.0, 0.4], size: {w: 82.5, h: 21.0}, accepts: [hpe/riser-secondary-dl160@1], default: hpe/riser-secondary-dl160@1, group: risers, rel-pos: 2}
-        - {id: media-module, at: [13.6, 26.3], size: {w: 45.0, h: 13.4}, accepts: [hpe/media-module-blank@1, hpe/media-module-872161@1, hpe/media-module-872162@1, hpe/media-module-872163@1], default: hpe/media-module-blank@1, group: media-module, rel-pos: 1}
+        - {id: media-module, at: [13.6, 26.3], size: {w: 45.0, h: 13.4}, accepts: [hpe/media-module-blank@1, hpe/media-module-866464-b21@1, hpe/media-module-866467-b21@1, hpe/media-module-866470-b21@1], default: hpe/media-module-blank@1, group: media-module, rel-pos: 1}
         - {id: serial, at: [219.3, 26.0], size: {w: 32.8, h: 12.5}, accepts: [hpe/serial-port-blank@1, hpe/serial-port-879778@1], default: hpe/serial-port-blank@1, group: serial, rel-pos: 1}
         - {id: psu-2, at: [287.0, 0.8], size: {w: 68.0, h: 40.4}, accepts: [hpe/psu-865408-b21@1, hpe/psu-865414-b21@1, hpe/psu-blank-flex-slot@1], default: hpe/psu-blank-flex-slot@1, group: psus, rel-pos: 2, plan: {view: top, at: [79.6, 0.0], in: system-board, under: [access-panel]}}
         - {id: psu-1, at: [362.5, 0.8], size: {w: 68.0, h: 40.4}, accepts: [hpe/psu-865408-b21@1, hpe/psu-865414-b21@1, hpe/psu-blank-flex-slot@1], default: hpe/psu-865408-b21@1, group: psus, rel-pos: 1, plan: {view: top, at: [4.1, 0.0], in: system-board, under: [access-panel]}}
@@ -696,7 +707,7 @@ views:
         - {id: vga, ref: common/vga-receptacle@1, at: [104.9, 27.85], group: video, rel-pos: 1}
         - {id: nic-1, ref: common/rj45-eth@1, at: [139.9, 26.5], rotate: 180, group: nics, rel-pos: 1}
         - {id: nic-2, ref: common/rj45-eth@1, at: [157.1, 26.5], rotate: 180, group: nics, rel-pos: 2}
-        - {id: uid-rear, ref: hpe/led-sq@1, at: [194.4, 34.0], group: leds, rel-pos: 3, for: chassis}
+        - {id: uid-rear, ref: common/led-sq@1, at: [194.4, 34.0], group: leds, rel-pos: 3, for: chassis}
   top:
     size: {w: 434.6, h: 614.9}
     panel:
@@ -762,10 +773,14 @@ configurations:
     part-numbers:
       878972-B21: {part: 878972-B21}
     description: >-
-      4 LFF CTO server, 878972-B21, as it powers on with nothing chosen: every
-      drive bay and the optical bay blanked, one 500 W Flex Slot supply in PS 1
-      and the blank in PS 2, all three PCIe slots, the media module and the
-      serial port blanked.
+      The 4 LFF chassis, 878972-B21, with every drive bay and the optical bay
+      blanked, both riser cages with their slots blanked, the media module and
+      serial port blanked, one 500 W Flex Slot supply in PS 1 and the blank in
+      PS 2. THIS IS THE BUILD THE PHOTOGRAPHS SHOW, NOT WHAT THE PART NUMBER
+      SHIPS WITH: the QuickSpecs gives the configure-to-order chassis no riser
+      as standard (a primary riser blank, which is not drawn) and makes the
+      supply a choice; one 500 W supply is what the pre-configured models
+      carry, and the secondary riser is an option that needs processor 2.
   lff4:
     kind: example
     description: >-
@@ -789,7 +804,7 @@ configurations:
       riser-primary/slot-1: nvidia/mcx515a-fh@1
       riser-primary/slot-2: nvidia/mcx516a-lp@1
       riser-secondary/slot-3: nvidia/mcx4121a-lp@1
-      media-module: hpe/media-module-872161@1
+      media-module: hpe/media-module-866464-b21@1
       serial: hpe/serial-port-879778@1
       psu-2: hpe/psu-865408-b21@1
   sff8:
@@ -798,8 +813,10 @@ configurations:
       878973-B21: {part: 878973-B21}
     views: {front: front-sff8}
     description: >-
-      8 SFF CTO server, 878973-B21, with the media bay blank and every bay
-      blanked; one 500 W Flex Slot supply in PS 1.
+      The 8 SFF chassis, 878973-B21, with the media bay blank and every bay
+      blanked; one 500 W Flex Slot supply in PS 1 and both riser cages, as the
+      base configuration and with the same caveat - the configure-to-order
+      chassis ships with no riser and a chosen supply.
   sff8-drives:
     kind: example
     views: {front: front-sff8}
@@ -822,4 +839,4 @@ datasheet:
 references:
   - {title: 'HPE ProLiant DL160 Gen10 Server User Guide', url: 'https://support.hpe.com/hpesc/public/docDisplay?docId=a00066666en_us', sha256: 7d832e524ec07f9074708c82050987dba342e023c8d1ddf76034d62c3bd41e69}
   - {title: 'HPE ProLiant DL160 Gen10 Server Maintenance and Service Guide', url: 'https://support.hpe.com/hpesc/public/docDisplay?docId=a00066664en_us', sha256: f65d3ad36acc0daed9ff277a862d50da536c92c93eef23d8469c13d3a4abab01}
-  - {title: 'QuickSpecs HPE Flexible Slot Power Supplies', sha256: 7ba1e44a22d04315ba501251f923c9e1ba120c3ebe5366ed06f9e690de58b6ab}
+  - {title: 'QuickSpecs HPE Flexible Slot Power Supplies', url: 'https://pimcontent1.ingrammicro.com/pe/assets/media/brochure/000000000005567580_5567580.pdf', sha256: 7ba1e44a22d04315ba501251f923c9e1ba120c3ebe5366ed06f9e690de58b6ab}

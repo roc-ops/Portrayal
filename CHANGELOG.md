@@ -144,6 +144,15 @@ names the ref that replaces it.
   S9725-64E `NCF-64E`) keep theirs until they are listed.
 
 ### Removed
+- **BREAKING for DCIM data already imported.** Five HPE parts are renamed, and
+  the old refs are gone. The DL160 Gen10's Media Module adapters take their
+  option numbers, as its supplies do: `hpe/media-module-872161@1` is now
+  `hpe/media-module-866464-b21@1`, `hpe/media-module-872162@1` is
+  `hpe/media-module-866467-b21@1` and `hpe/media-module-872163@1` is
+  `hpe/media-module-866470-b21@1`; their NetBox and Nautobot module types are
+  renamed with them. Two lamps that are shapes and not HPE products move to
+  `common/`: `hpe/led-sq@1` is `common/led-sq@1` and `hpe/button-led-sq@1` is
+  `common/button-led-sq@1` (roc-ops/Portrayal#760).
 - Six Dell R660 component majors are superseded and removed, each replaced by
   its `@2`: `dell/e3s-carrier-blank@1` (redrawn as Dell's real E3.S blank),
   and the Gen5 risers `dell/riser-2p-16g@1`, `dell/riser-2r-16g@1`,

@@ -98,7 +98,7 @@ module-bays:
     description: 'Accepts: media-bay-blank-1u'
   - name: media-module
     position: media-module
-    description: 'Accepts: media-module-blank, media-module-872161, media-module-872162, media-module-872163'
+    description: 'Accepts: media-module-blank, media-module-866464-b21, media-module-866467-b21, media-module-866470-b21'
   - name: riser-primary
     position: riser-primary
     description: 'Accepts: riser-primary-dl160'
@@ -137,11 +137,13 @@ comments: "HPE's 1U two-socket Intel Xeon Scalable rack server of the Gen10 gene
   \ - over one rear: three PCIe 3.0 slots on two risers, two Flex Slot power supply bays, two embedded\
   \ 1GbE ports, the iLO 5 port, VGA, two USB 3.0 ports, and blanks for the media module and the optional\
   \ serial port. Retired by HPE; the QuickSpecs carries HPE's RETIRED notice.\n\nConfiguration `sff8`:\
-  \ 8 SFF CTO server, 878973-B21, with the media bay blank and every bay blanked; one 500 W Flex Slot\
-  \ supply in PS 1.\n\nDatasheet: QuickSpecs HPE ProLiant DL160 Gen10 Server\n  https://support.hpe.com/hpesc/public/docDisplay?docId=a00021860enw\n\
-  \nFacts carried in the model that this schema has no field for:\n- environmental.acoustic-lwad: 4.5\
-  \ B idle, 5.1 B operating\n- environmental.altitude-operating-m: 3050\n- environmental.operating-humidity:\
-  \ 8 to 90% non-condensing, 28 C maximum wet bulb\n- environmental.operating-temp-c: 10 to 35\n- environmental.operating-temp-extended-c:\
+  \ The 8 SFF chassis, 878973-B21, with the media bay blank and every bay blanked; one 500 W Flex Slot\
+  \ supply in PS 1 and both riser cages, as the base configuration and with the same caveat - the configure-to-order\
+  \ chassis ships with no riser and a chosen supply.\n\nDatasheet: QuickSpecs HPE ProLiant DL160 Gen10\
+  \ Server\n  https://support.hpe.com/hpesc/public/docDisplay?docId=a00021860enw\n\nFacts carried in the\
+  \ model that this schema has no field for:\n- environmental.acoustic-lwad: 4.5 B idle, 5.1 B operating\n\
+  - environmental.altitude-operating-m: 3050\n- environmental.operating-humidity: 8 to 90% non-condensing,\
+  \ 28 C maximum wet bulb\n- environmental.operating-temp-c: 10 to 35\n- environmental.operating-temp-extended-c:\
   \ 5 to 10 and 35 to 45, approved configurations only\n- environmental.storage-temp-c: -30 to 60\n- lifecycle.eol:\
   \ announced\n- lifecycle.eol-announcement: https://support.hpe.com/hpesc/public/docDisplay?docId=a00021860enw\n\
   - physical.ru: 1\n- physical.weight-max-kg: 15.74\n- physical.weight-min-kg: 10.97\n- platform.bmc:\
@@ -151,6 +153,6 @@ comments: "HPE's 1U two-socket Intel Xeon Scalable rack server of the Gen10 gene
   \ and PCIe controllers optional\n- power.power-input: 100-240 VAC per Flex Slot supply (the 865434-B21\
   \ supply -48 VDC, the 865428-B21 HVAC/HVDC)\n- power.psu-redundancy: 1+1 with the redundant power supply\
   \ enablement kit 866442-B21\n- thermal.fans: three single-rotor hot-plug fans with one processor, six\
-  \ with two; one more with the redundant fan kit 866438-B21\n\nDrawing version 0.1.0. A major bump means\
+  \ with two; one more with the redundant fan kit 866438-B21\n\nDrawing version 1.0.0. A major bump means\
   \ a slot moved or an id was renamed, so anything cached from an earlier export may no longer line up.\n\
   Model maturity: modelled. Every dimension in the source records where it came from."
