@@ -1,12 +1,12 @@
 format: 1
 kind: module
 name: riser-2r-16g
-version: 1.2.0
+version: 1.4.0
 class: riser
 behaviour: fills
 profile: server
 description: >-
-  Dell riser 2R of the PowerEdge R660 - slot 1 and slot 2 on dell/riser-2-lp-cage-16g@1, fitted in riser configuration 4
+  Dell riser 2R of the PowerEdge R660 - slot 1 and slot 2 on dell/riser-2-lp-gen5-cage-16g@1, fitted in riser configuration 4
 attrs:
   riser: '2R'
   appears-in: 'riser configuration 4'
@@ -21,14 +21,14 @@ provenance:
   identity: >-
     A REMOVABLE ASSEMBLY THAT BRINGS ITS OWN SLOTS, which is why it is a module
     with `bays` and the slots are not openings on the chassis: the numbers are
-    printed on the riser and move with it (see dell/riser-2-lp-cage-16g@1).
+    printed on the riser and move with it (see dell/riser-2-lp-gen5-cage-16g@1).
   slots: >-
     datasheet - R660 ISM table 111, which gives each slot's form factor,
     controlling processor, PCIe generation and electrical width, every one on an
     x16 connector; the technical guide's slot table and the spec sheet agree.
     Length: the same two documents give every low-profile slot as half length.
   face: >-
-    drawing - composed from dell/riser-2-lp-cage-16g@1, the metal every riser sharing this
+    drawing - composed from dell/riser-2-lp-gen5-cage-16g@1, the metal every riser sharing this
     cage presents. The slot bays sit on that cage's windows.
   size: >-
     drawing - the cage's extent, 163.60 x 19.80.
@@ -56,6 +56,11 @@ provenance:
     THE RISER IS ITS BOARD AND CONNECTORS in 3D, as on the R740xd's risers:
     each a box in `body.boxes`, so ejecting the riser takes them and the
     interior stays visible. Each box says where it comes from.
+  slot-count: >-
+    UNRESOLVED - ISM table 111 gives riser 2R two slots (slot 1 Gen5 x8 and
+    slot 2 Gen4 x16, both on processor 1) and the riser carries both; Dell's
+    technical-guide figure of riser 2R (in the revision expresscomputersystems
+    reproduces) draws one slot. The table is followed here.
   plan: >-
     seen from above, the riser is dell/riser-2-lp-plan-16g@1 - its cage as Dell's service
     model places it.
@@ -76,7 +81,7 @@ body:
      confidence: measured, source: "measured - Dell's service model r660.glb, Body_7_24, 10.0 x 8.7 x 89.0 at rear x 195.4 - high, on the board's right face"}
 plan: {ref: dell/riser-2-lp-plan-16g@1}
 parts:
-  - {ref: dell/riser-2-lp-cage-16g@1, id: plate, at: [0, 0]}
+  - {ref: dell/riser-2-lp-gen5-cage-16g@1, id: plate, at: [0, 0]}
 bays:
   slot-1:
     slot: {connector: x16, lanes: 8, height: low, length: half, processor: 1, generation: 5}

@@ -1,12 +1,12 @@
 format: 1
 kind: module
 name: riser-3p-16g
-version: 1.3.0
+version: 1.4.0
 class: riser
 behaviour: fills
 profile: server
 description: >-
-  Dell riser 3P of the PowerEdge R660 - slot 3 on dell/riser-3-lp-cage-16g@1, fitted in riser configurations 2 and 7
+  Dell riser 3P of the PowerEdge R660 - slot 3 on dell/riser-3-lp-gen5-cage-16g@1, fitted in riser configurations 2 and 7
 attrs:
   riser: '3P'
   appears-in: 'riser configurations 2 and 7'
@@ -20,14 +20,14 @@ provenance:
   identity: >-
     A REMOVABLE ASSEMBLY THAT BRINGS ITS OWN SLOTS, which is why it is a module
     with `bays` and the slots are not openings on the chassis: the numbers are
-    printed on the riser and move with it (see dell/riser-3-lp-cage-16g@1).
+    printed on the riser and move with it (see dell/riser-3-lp-gen5-cage-16g@1).
   slots: >-
     datasheet - R660 ISM table 111, which gives each slot's form factor,
     controlling processor, PCIe generation and electrical width, every one on an
     x16 connector; the technical guide's slot table and the spec sheet agree.
     Length: the same two documents give every low-profile slot as half length.
   face: >-
-    drawing - composed from dell/riser-3-lp-cage-16g@1, the metal every riser sharing this
+    drawing - composed from dell/riser-3-lp-gen5-cage-16g@1, the metal every riser sharing this
     cage presents. The slot bays sit on that cage's windows.
   size: >-
     drawing - the cage's extent, 92.00 x 19.80.
@@ -71,7 +71,7 @@ body:
      confidence: measured, source: "measured - Dell's service model r660.glb, Body_1_76, 10.0 x 8.7 x 89.0 at rear x 276.8 - high, on the board's right face; a card in slot 3 at 268.50 has its edge pads at 282.21..285.21, inside it"}
 plan: {ref: dell/riser-3-plan-16g@1}
 parts:
-  - {ref: dell/riser-3-lp-cage-16g@1, id: plate, at: [0, 0]}
+  - {ref: dell/riser-3-lp-gen5-cage-16g@1, id: plate, at: [0, 0]}
 bays:
   slot-3:
     slot: {connector: x16, lanes: 16, height: low, length: half, processor: 2, generation: 5}

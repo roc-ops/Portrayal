@@ -5,21 +5,22 @@
 # not traced), Dell's R660/R660xs gallery renders and StorageReview's
 # photographs of a real R660 (working/intake/dell/poweredge/photos/r660).
 # STATE:
-# DONE: five fronts and the rear for riser configurations 1-8 (36 builds, plus
+# DONE: five fronts and the rear for riser configurations 1-9 (37 builds, plus
 # a populated example); the top view - system board, heatsinks, 32 DIMM slots,
 # air shroud, fans and bracket, system and backplane covers, and plan
 # projections of the PSUs, BOSS-N1, OCP card, LOM, rear I/O board, risers 2
 # and 3 and upper front drives; the LOM card and rear I/O board as modules;
 # the risers as modules carrying their slots and
 # printed slot numbers; the printed marks front and rear and the information
-# tag; estimated bottom and sides. NOT YET: riser
-# configurations 0 and 9, a seen E3.S blank (the default is
-# the carrier without its drive; see gaps); risers 2Q, 1P and 4P from above;
-# the no-LOM, MIC and liquid-cooling rear faces; the bezel.
+# tag; the bezel; riser configuration 9 (R2S + R3S, two rear E3.S drives)
+# from Dell's slide; the Gen5 risers' printed strips; the E3.S blank and the
+# E3.S fronts' lip numbering from photographs; estimated bottom and sides.
+# NOT YET: riser configuration 0; risers 2Q, 1P, 4P and 2S from above; the
+# no-LOM, MIC and liquid-cooling rear faces.
 format: 1
 kind: device
 name: r660
-version: 1.0.0
+version: 2.0.0
 maturity: draft
 manufacturer: Dell
 model: PowerEdge R660
@@ -123,6 +124,18 @@ provenance:
       2.0 over the VGA plate's edge, which the figure's resolution cannot
       resolve either way. The top vent strip is left off: neither figure nor
       the R670 master shows one over E3.S carriers.
+  e3s-numbering:
+    confidence: photo-measured
+    note: >-
+      photo - StorageReview's photograph of a real 14 x E3.S R660 front
+      (photos/r660/storagereview-e3s, -E3S-7.jpg): the lower lip under the
+      first column prints an NVMe badge, a drive icon and 0 1 2 3 left to right
+      for that column's bays top to bottom, so the ids number down each column.
+      The other columns' lip is out of frame and is printed by the same rule,
+      4-7, 8-11, 12-15 (12 and 13 on the 14-drive front, whose last two slots
+      are a filler); the drive icon is not drawn and the glyph spacing is read
+      by eye at about 4.5 px/mm. The same photograph shows the left ear is the
+      standard 16th-generation left control panel, as every front here seats.
   top:
     confidence: measured
     note: >-
@@ -215,7 +228,9 @@ provenance:
       its siblings) and move with the configuration: the Gen5 riser 2Q prints
       its 1 and 2 12 mm right of riser 2A's, the full-height risers print theirs
       beside the window, and the rear-storage build, with no riser 2, prints no
-      1 or 2.
+      1 or 2. The Gen5 low-profile risers (2P, 2R, 3P, 3Q, 3R, 2S, 3S) print a
+      dark strip with the number and GEN 5 over each Gen5 slot instead
+      (dell/riser-2-lp-gen5-cage-16g@1, from a photograph of a real machine).
   rear-drives:
     confidence: drawing
     note: >-
@@ -248,16 +263,26 @@ chassis:
   edge: '#1d2125'
   silk: '#c9ced3'
 gaps:
-  - what: riser-configuration-0-and-9-rear-unseen
+  - what: riser-configuration-0-rear-unseen
     scope: [rear]
     reason: needs-drawing
     note: >-
-      TG table 14 lists riser configuration 0 (no riser) and 9 (R2S + R3S, two rear
-      EDSFF E3.S drives with low-profile slots 1 and 3), and ISM figure 13 shows
-      configuration 9's rear at a resolution that confirms the layout but cannot be
-      measured; the VisioCafe set draws neither.
+      TG table 14 lists riser configuration 0 (no riser); no master, figure or
+      photograph held shows its rear, so it is not drawn.
     wanted: >-
-      a straight-on rear photograph or a vector master of either configuration
+      a straight-on rear photograph or a vector master of configuration 0
+  - what: riser-configuration-9-rear-estimated
+    scope: [rear]
+    reason: needs-drawing
+    note: >-
+      configuration 9 (R2S + R3S) is drawn from Dell's slide reproduced by
+      StorageReview and ISM figure 13, both too coarse to measure: the two rear
+      E3.S drives stand where riser 2's slot 2 would, slot 1 to their left and
+      slot 3 to their right. The drive opening's size and place and the 2S
+      cage's printing are estimates (dell/riser-2s-cage-16g@1), as is riser 3S,
+      drawn as riser 3P's face.
+    wanted: >-
+      a straight-on rear photograph of an R660 in riser configuration 9
   - what: risers-2q-1p-4p-unseen-from-above
     scope: [top]
     reason: needs-drawing
@@ -291,26 +316,15 @@ gaps:
     scope: [front]
     reason: needs-photo
     note: >-
-      the ISM requires an EDSFF E3.S drive blank in every empty E3.S slot
-      ("Removing an EDSFF E3.S drive blank", figures 77/78, isometric) and no
-      straight-on image of one is held. The E3.S bays default to
-      dell/e3s-carrier-blank@1, the carrier's own face without its lamps,
-      legend and label - the way Dell's 2.5 inch blank is its carrier - so the
-      fronts do not draw empty; that face is an estimate. Whether an empty
-      COLUMN takes four blanks or one dell/e3s-filler-1u@1 is also unsettled.
+      the E3.S bays default to dell/e3s-carrier-blank@1, Dell's 1-bay blank
+      (59T4C) drawn from an angled photograph of the real part - a black bar
+      with seven silver studs - so its studs' spacing and size are proportions
+      off a foreshortened edge. Whether an empty COLUMN takes four blanks or one
+      dell/e3s-filler-1u@1 is unsettled.
     wanted: >-
       a straight-on photograph of a single-slot E3.S blank, or of an R660 E3.S
       front with empty slots
-  - what: e3s-front-left-panel-and-numbering
-    scope: [front]
-    reason: needs-photo
-    note: >-
-      ISM figure 4 draws the 16 x E3.S build's left ear as a plain strip without
-      the status glyphs the 14-drive figure shows, and neither figure prints bay
-      numbers; the E3.S fronts here seat the same left panel as every other
-      front and number down each column like the 2.5 inch bays.
-    wanted: >-
-      a straight-on photograph of a 16 x E3.S R660 front
+
 groups:
   drives:
     term: Drive
@@ -376,8 +390,8 @@ groups:
     role: service
     index-origin: 0
     description: >-
-      the EDSFF E3.S front bays, numbered down each column as the 2.5 inch bays
-      are - the E3.S fronts print no numbers in any figure held
+      the EDSFF E3.S front bays, numbered down each column - the lower lip
+      prints 0-3 under the first column (see e3s-numbering)
     attrs: {media: e3s}
   fillers:
     term: Filler
@@ -1193,6 +1207,27 @@ views:
       - {at: [466.65, 16.83], path: M 0.85 0.35 V 2.5 M 0.85 1.9 L 0.3 1.45 V 1.1 M 0.85 2.2 L 1.42 1.75 V 1.3 M 0.12 1.02 H 0.48 M 0.3 0.84 V 1.2, stroke-width: 0.16, fill: '#e6e8ea', for: usb-1}
       - {at: [466.65, 16.83], path: M 0.6 0.42 L 0.85 0 L 1.1 0.42 Z M 0.63 2.42 H 1.07 V 2.83 H 0.63 Z M 1.26 1.0 H 1.58 V 1.32 H 1.26 Z, filled: true, fill: '#e6e8ea', for: usb-1}
       - {at: [466.65, 31.85], path: M -0.06 0.38 L 0.32 0.58 L 0.26 0.16 M 0.32 0.58 L 0.95 1.22 M 1.42 1.36 L 0.95 1.22 L 1.06 1.66, stroke-width: 0.22, fill: '#e6e8ea', for: idrac-direct}
+      # the bay numbers on the lower lip under each column, 0-3 left to right
+      # for the column's bays top to bottom, and an NVMe badge under column 1;
+      # one legend per column, so each glyph names the column it labels
+      # (StorageReview's photograph of a real 14 x E3.S front, see e3s-numbering)
+      - {at: [42.3, 42.35], text: 'NVMe', font-size: 1.1, anchor: middle, fill: '#e6e8ea', for: [e3s-0, e3s-1, e3s-2, e3s-3]}
+      - {at: [60.3, 42.35], text: '0', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-0, e3s-1, e3s-2, e3s-3]}
+      - {at: [67.3, 42.35], text: '1', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-0, e3s-1, e3s-2, e3s-3]}
+      - {at: [75.3, 42.35], text: '2', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-0, e3s-1, e3s-2, e3s-3]}
+      - {at: [83.3, 42.35], text: '3', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-0, e3s-1, e3s-2, e3s-3]}
+      - {at: [141.3, 42.35], text: '4', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-4, e3s-5, e3s-6, e3s-7]}
+      - {at: [148.3, 42.35], text: '5', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-4, e3s-5, e3s-6, e3s-7]}
+      - {at: [156.3, 42.35], text: '6', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-4, e3s-5, e3s-6, e3s-7]}
+      - {at: [164.3, 42.35], text: '7', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-4, e3s-5, e3s-6, e3s-7]}
+      - {at: [304.3, 42.35], text: '8', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-8, e3s-9, e3s-10, e3s-11]}
+      - {at: [311.3, 42.35], text: '9', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-8, e3s-9, e3s-10, e3s-11]}
+      - {at: [319.3, 42.35], text: '10', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-8, e3s-9, e3s-10, e3s-11]}
+      - {at: [327.3, 42.35], text: '11', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-8, e3s-9, e3s-10, e3s-11]}
+      - {at: [385.3, 42.35], text: '12', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-12, e3s-13, e3s-14, e3s-15]}
+      - {at: [392.3, 42.35], text: '13', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-12, e3s-13, e3s-14, e3s-15]}
+      - {at: [400.3, 42.35], text: '14', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-12, e3s-13, e3s-14, e3s-15]}
+      - {at: [408.3, 42.35], text: '15', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-12, e3s-13, e3s-14, e3s-15]}
     components:
       bays:
         - {id: panel-left, at: [14.2, 2.34], size: {w: 10.1, h: 38.13},
@@ -1288,6 +1323,25 @@ views:
       - {at: [466.65, 16.83], path: M 0.85 0.35 V 2.5 M 0.85 1.9 L 0.3 1.45 V 1.1 M 0.85 2.2 L 1.42 1.75 V 1.3 M 0.12 1.02 H 0.48 M 0.3 0.84 V 1.2, stroke-width: 0.16, fill: '#e6e8ea', for: usb-1}
       - {at: [466.65, 16.83], path: M 0.6 0.42 L 0.85 0 L 1.1 0.42 Z M 0.63 2.42 H 1.07 V 2.83 H 0.63 Z M 1.26 1.0 H 1.58 V 1.32 H 1.26 Z, filled: true, fill: '#e6e8ea', for: usb-1}
       - {at: [466.65, 31.85], path: M -0.06 0.38 L 0.32 0.58 L 0.26 0.16 M 0.32 0.58 L 0.95 1.22 M 1.42 1.36 L 0.95 1.22 L 1.06 1.66, stroke-width: 0.22, fill: '#e6e8ea', for: idrac-direct}
+      # the bay numbers on the lower lip under each column, 0-3 left to right
+      # for the column's bays top to bottom, and an NVMe badge under column 1;
+      # one legend per column, so each glyph names the column it labels
+      # (StorageReview's photograph of a real 14 x E3.S front, see e3s-numbering)
+      - {at: [42.3, 42.35], text: 'NVMe', font-size: 1.1, anchor: middle, fill: '#e6e8ea', for: [e3s-0, e3s-1, e3s-2, e3s-3]}
+      - {at: [60.3, 42.35], text: '0', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-0, e3s-1, e3s-2, e3s-3]}
+      - {at: [67.3, 42.35], text: '1', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-0, e3s-1, e3s-2, e3s-3]}
+      - {at: [75.3, 42.35], text: '2', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-0, e3s-1, e3s-2, e3s-3]}
+      - {at: [83.3, 42.35], text: '3', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-0, e3s-1, e3s-2, e3s-3]}
+      - {at: [141.3, 42.35], text: '4', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-4, e3s-5, e3s-6, e3s-7]}
+      - {at: [148.3, 42.35], text: '5', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-4, e3s-5, e3s-6, e3s-7]}
+      - {at: [156.3, 42.35], text: '6', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-4, e3s-5, e3s-6, e3s-7]}
+      - {at: [164.3, 42.35], text: '7', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-4, e3s-5, e3s-6, e3s-7]}
+      - {at: [304.3, 42.35], text: '8', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-8, e3s-9, e3s-10, e3s-11]}
+      - {at: [311.3, 42.35], text: '9', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-8, e3s-9, e3s-10, e3s-11]}
+      - {at: [319.3, 42.35], text: '10', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-8, e3s-9, e3s-10, e3s-11]}
+      - {at: [327.3, 42.35], text: '11', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-8, e3s-9, e3s-10, e3s-11]}
+      - {at: [385.3, 42.35], text: '12', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-12, e3s-13]}
+      - {at: [392.3, 42.35], text: '13', font-size: 1.4, anchor: middle, fill: '#e6e8ea', for: [e3s-12, e3s-13]}
     components:
       bays:
         - {id: panel-left, at: [14.2, 2.34], size: {w: 10.1, h: 38.13},
@@ -1422,15 +1476,15 @@ views:
         # RISER 3 BEFORE RISER 2: riser 2's cage paints over the end of slot 3's
         # bracket tip, which reaches 2.1 under it, as the hardware hides it.
         - {id: riser-3, at: [270.6, 2.2], size: {w: 92.0, h: 19.8},
-           accepts: [dell/riser-3a-16g@1, dell/riser-3p-16g@1, dell/riser-3q-16g@1, dell/riser-3r-16g@1], default: dell/riser-3a-16g@1,
+           accepts: [dell/riser-3a-16g@1, dell/riser-3p-16g@1, dell/riser-3q-16g@1, dell/riser-3r-16g@1, dell/riser-3s-16g@1], default: dell/riser-3a-16g@1,
            group: risers, rel-pos: 3,
            plan: {view: top, at: [71.4, 0.0], in: system-board, under: [system-cover]},
-           only-in: [sff10-rc1-2a3a, sff8sf-rc1-2a3a, nobp-rc1-2a3a, e3s16-rc1-2a3a, e3s14-rc1-2a3a, sff10-rc2-2p3p, sff8sf-rc2-2p3p, nobp-rc2-2p3p, e3s16-rc2-2p3p, e3s14-rc2-2p3p, sff10-rc4-2r3r, sff8sf-rc4-2r3r, nobp-rc4-2r3r, e3s16-rc4-2r3r, e3s14-rc4-2r3r, sff10-rc5-2a3q, sff8sf-rc5-2a3q, nobp-rc5-2a3q, e3s16-rc5-2a3q, e3s14-rc5-2a3q, sff10-rc7-3p-rear2, sff10-rc1-2a3a-populated]}
+           only-in: [sff10-rc1-2a3a, sff8sf-rc1-2a3a, nobp-rc1-2a3a, e3s16-rc1-2a3a, e3s14-rc1-2a3a, sff10-rc2-2p3p, sff8sf-rc2-2p3p, nobp-rc2-2p3p, e3s16-rc2-2p3p, e3s14-rc2-2p3p, sff10-rc4-2r3r, sff8sf-rc4-2r3r, nobp-rc4-2r3r, e3s16-rc4-2r3r, e3s14-rc4-2r3r, sff10-rc5-2a3q, sff8sf-rc5-2a3q, nobp-rc5-2a3q, e3s16-rc5-2a3q, e3s14-rc5-2a3q, sff10-rc7-3p-rear2, e3s14-rc9-2s3s, sff10-rc1-2a3a-populated]}
         - {id: riser-2, at: [107.0, 2.2], size: {w: 163.6, h: 19.8},
-           accepts: [dell/riser-2a-16g@1, dell/riser-2p-16g@1, dell/riser-2r-16g@1], default: dell/riser-2a-16g@1,
+           accepts: [dell/riser-2a-16g@1, dell/riser-2p-16g@1, dell/riser-2r-16g@1, dell/riser-2s-16g@1], default: dell/riser-2a-16g@1,
            group: risers, rel-pos: 2,
            plan: {view: top, at: [163.4, 0.0], in: system-board, under: [system-cover]},
-           only-in: [sff10-rc1-2a3a, sff8sf-rc1-2a3a, nobp-rc1-2a3a, e3s16-rc1-2a3a, e3s14-rc1-2a3a, sff10-rc2-2p3p, sff8sf-rc2-2p3p, nobp-rc2-2p3p, e3s16-rc2-2p3p, e3s14-rc2-2p3p, sff10-rc4-2r3r, sff8sf-rc4-2r3r, nobp-rc4-2r3r, e3s16-rc4-2r3r, e3s14-rc4-2r3r, sff10-rc5-2a3q, sff8sf-rc5-2a3q, nobp-rc5-2a3q, e3s16-rc5-2a3q, e3s14-rc5-2a3q, sff10-rc8-2a, sff8sf-rc8-2a, nobp-rc8-2a, e3s16-rc8-2a, e3s14-rc8-2a, sff10-rc1-2a3a-populated]}
+           only-in: [sff10-rc1-2a3a, sff8sf-rc1-2a3a, nobp-rc1-2a3a, e3s16-rc1-2a3a, e3s14-rc1-2a3a, sff10-rc2-2p3p, sff8sf-rc2-2p3p, nobp-rc2-2p3p, e3s16-rc2-2p3p, e3s14-rc2-2p3p, sff10-rc4-2r3r, sff8sf-rc4-2r3r, nobp-rc4-2r3r, e3s16-rc4-2r3r, e3s14-rc4-2r3r, sff10-rc5-2a3q, sff8sf-rc5-2a3q, nobp-rc5-2a3q, e3s16-rc5-2a3q, e3s14-rc5-2a3q, sff10-rc8-2a, sff8sf-rc8-2a, nobp-rc8-2a, e3s16-rc8-2a, e3s14-rc8-2a, e3s14-rc9-2s3s, sff10-rc1-2a3a-populated]}
         - {id: riser-2q, at: [107.0, 2.2], size: {w: 186.5, h: 19.8},
            accepts: [dell/riser-2q-16g@1], default: dell/riser-2q-16g@1, group: risers, rel-pos: 2,
            only-in: [sff10-rc6-2q, sff8sf-rc6-2q, nobp-rc6-2q, e3s16-rc6-2q, e3s14-rc6-2q]}
@@ -1612,7 +1666,9 @@ configurations:
   # GENERATED from one table with the only-in lists on the rear bays: five
   # fronts by eight riser configurations, less the pairings the technical
   # guide does not offer - rear 2.5 inch storage (riser configuration 7) is
-  # listed only with the 10 x 2.5 inch front. 36 builds.
+  # listed only with the 10 x 2.5 inch front, and rear E3.S storage
+  # (configuration 9) only with the 14 x E3.S front, as Dell's slide pairs
+  # them. 37 builds.
   sff10-rc1-2a3a:
     kind: orderable
     default: true
@@ -1828,6 +1884,16 @@ configurations:
     views: {front: front-e3s14}
     description: >-
       14 x EDSFF E3.S front; riser configuration 8, R2A, single processor: one usable low-profile Gen4 x16 slot (slot 1; slot 2's lanes belong to processor 2), and a vented blank where riser 3 would be. ISM table 111.
+  e3s14-rc9-2s3s:
+    kind: orderable
+    views: {front: front-e3s14}
+    description: >-
+      14 x EDSFF E3.S front; riser configuration 9, R2S + R3S with rear storage: slot 1 low-profile Gen5 x16 (processor 1), two rear EDSFF E3.S drives where riser 2's slot 2 would be, and slot 3 low-profile Gen5 x16 (processor 2). Dell's slide pairs it with the 14-drive E3.S front ('14x E3.S NVMe + 2x E3.S rear'). TG table 14, ISM table 111.
+    bays:
+      riser-2: dell/riser-2s-16g@1
+      riser-3: dell/riser-3s-16g@1
+  # Riser configuration 0 (no riser) is orderable and NOT drawn: no master,
+  # figure or photograph held shows its rear face - see the gaps.
   sff10-rc1-2a3a-populated:
     kind: example
     description: >-
@@ -1852,9 +1918,6 @@ configurations:
       riser-2/slot-1: nvidia/mcx623106-lp@1
       riser-2/slot-2: nvidia/mcx4121a-lp@1
       riser-3/slot-3: nvidia/mcx713106-lp@1
-  # Riser configurations 0 (no riser) and 9 (R2S + R3S, two rear E3.S drives)
-  # are orderable and NOT drawn: no master, figure or photograph held shows
-  # either rear face - see the gaps.
 
 datasheet:
   title: 'Dell PowerEdge R660 Spec Sheet'
