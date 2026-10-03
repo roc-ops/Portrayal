@@ -23,14 +23,17 @@ provenance:
     Maintenance and Service Guide a00066664en_us, secondary riser board x16,
     878540-001.
   size: >-
-    photo-measured - 84.0 x 21.0: from where slot 2's bracket ends (201.5 on the
-    rear; see hpe/riser-primary-dl160@1, `packing`) to the plate's right end
-    beside the supply bays (x ..837 px), and down to just under slot 3's plate.
+    photo-measured - 82.5 x 21.0: from the bracket right of slot 2 to the
+    plate's right end beside the supply bays (x 598..837 px), and down to just
+    under slot 3's plate.
   windows: >-
-    photo-measured - slot 3's window is 13.3..73.6 by 1.6..19.8 on this face,
-    the same 60.3 x 18.2 as slot 2's (its own edges are softer on the image).
-    The bay behind it is a low-profile bracket's 79.20 x 18.42, its tip 5.9 past
-    the window's right edge as slot 2's is past its left.
+    photo-measured - slot 3's blank shows from 3.4 on this face to about 70, its
+    right end softer on the image. The skin's opening is 8.5..73.5 by 1.6..19.8,
+    the same 65.0 x 18.2 as slot 2's and the same distance from its bracket's
+    tip, so one blank serves both. The bay behind it is a low-profile bracket's
+    79.20 x 18.42, its tip at the cage's right end, 9.0 past the opening, so the
+    window shows the bracket's connector opening (see hpe/riser-primary-dl160@1,
+    `placing`).
   handedness: >-
     drawing - turned over (rotate 180, tip right). The User Guide's 'Installing
     an expansion board' figure for slot 3 looks from the front of the server
@@ -45,18 +48,34 @@ provenance:
   depth: >-
     estimated - 150, as hpe/riser-primary-dl160@1; this cage is not in the
     QuickSpecs Internal View.
-size: {w: 84.0, h: 21.0, d: 150.0}
+size: {w: 82.5, h: 21.0, d: 150.0}
 size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
 body: {depth: 150.0, color: '#b9bec4'}
 elements:
-  plate: {at: [0.0, 0.0], size: [84.0, 21.0], class: bezel}
+  plate: {at: [0.0, 0.0], size: [82.5, 21.0], class: bezel}
 bays:
   slot-3:
     slot: {connector: x16, lanes: 16, height: low, length: half, processor: 2, generation: 3}
     rotate: 180
     behind: true
-    at: [0.3, 1.5]
+    at: [3.3, 1.5]
     size: [79.20, 18.42]
     accepts: [hpe/expansion-slot-blank-lp@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1, nvidia/mcx4111a-lp@1, nvidia/mcx4121a-lp@1, nvidia/mcx4131a-lp@1, nvidia/mcx512a-lp@1, nvidia/mcx512f-lp@1, nvidia/mcx515a-lp@1, nvidia/mcx516a-lp@1, nvidia/mcx621102-lp@1, nvidia/mcx621202-lp@1, nvidia/mcx623102a-lp@1, nvidia/mcx623105-lp@1, nvidia/mcx623106-lp@1, nvidia/mcx713106-lp@1, nvidia/mcx715105-lp@1, nvidia/mcx75310-lp@1, nvidia/mcx75510-lp@1, nvidia/mcx755106-lp@1]
     default: hpe/expansion-slot-blank-lp@1
+relief:
+  features:
+  - node: latch
+    out: 12.0
+    color: '#b3b9bf'
+    confidence: estimated
+    source: >-
+      the latch housing a bracket's flange lands in. The User Guide's
+      'Installing an expansion board' figures close a latch over the flange at
+      the cage's outer end, PartSurfer's photograph of the cage (878538-001)
+      shows a blue latch at each end of its rear edge, and a reseller's close-up
+      of the rear (2beshop, staged) shows the housing standing proud of the rear
+      wall beside slot 2. HOW FAR is not measured: 12 is drawn because a
+      bracket's folded flange is 9.40 proud (PCIe CEM 5.0 figure 11-9) and is
+      inside the housing, not sticking out of the rear wall as it did before
+      this feature existed
 skins: [default]

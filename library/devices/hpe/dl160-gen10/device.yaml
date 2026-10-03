@@ -135,16 +135,16 @@ provenance:
     confidence: photo-measured
     note: >-
       From the rear photograph, left to right along the top: the primary riser cage
-      (0..201.5; its latch bracket ends at 203.0) with slot 1's full-height window
-      (15.9..125.2) and slot 2's low-profile window (127.9..188.2), then the secondary
-      riser cage (to 285.5) with slot 3's window (214.8..275.1, its vents level with
-      slot 2's). Along the bottom: two screw holes, the media module opening
-      (13.6..58.6), the stacked USB 3.0 ports in a dark bezel (59.0..79.0), the iLO
-      RJ45 with its legend turned on its side, VGA in a blue field (103.8..136.9), NIC
-      1 and 2 in a pale bezel (138.6..173.8), a vent block, the UID lamp (195.9,
-      35.5), a small round hole, and under slot 3 the IOIOI legend and the serial port
-      blank. The two supply bays fill the right end, PS 2 at 286.9 and PS 1 at 362.4,
-      with the PS 1 / PS 2 legend printed on the strip between them, rotated.
+      (0..203.0) with slot 1's full-height window (15.9..125.2) and slot 2's low-
+      profile window (127.9..188.2), then the secondary riser cage (203.0..285.5) with
+      slot 3's window (214.8..275.1, its vents level with slot 2's). Along the bottom:
+      two screw holes, the media module opening (13.6..58.6), the stacked USB 3.0
+      ports in a dark bezel (59.0..79.0), the iLO RJ45 with its legend turned on its
+      side, VGA in a blue field (103.8..136.9), NIC 1 and 2 in a pale bezel
+      (138.6..173.8), a vent block, the UID lamp (195.9, 35.5), a small round hole,
+      and under slot 3 the IOIOI legend and the serial port blank. The two supply bays
+      fill the right end, PS 2 at 286.9 and PS 1 at 362.4, with the PS 1 / PS 2 legend
+      printed on the strip between them, rotated.
   rear-numbering:
     confidence: datasheet
     note: >-
@@ -683,8 +683,8 @@ views:
       - {at: [358.0, 32.0], path: 'M 1.4 0 L 0 0.8 L 1.4 1.6 Z', filled: true, fill: '#2b2f33', for: psu-2}
     components:
       bays:
-        - {id: riser-primary, at: [0.0, 0.4], size: {w: 201.5, h: 24.2}, accepts: [hpe/riser-primary-dl160@1], default: hpe/riser-primary-dl160@1, group: risers, rel-pos: 1}
-        - {id: riser-secondary, at: [201.5, 0.4], size: {w: 84.0, h: 21.0}, accepts: [hpe/riser-secondary-dl160@1], default: hpe/riser-secondary-dl160@1, group: risers, rel-pos: 2}
+        - {id: riser-primary, at: [0.0, 0.4], size: {w: 203.0, h: 24.2}, accepts: [hpe/riser-primary-dl160@1], default: hpe/riser-primary-dl160@1, group: risers, rel-pos: 1}
+        - {id: riser-secondary, at: [203.0, 0.4], size: {w: 82.5, h: 21.0}, accepts: [hpe/riser-secondary-dl160@1], default: hpe/riser-secondary-dl160@1, group: risers, rel-pos: 2}
         - {id: media-module, at: [13.6, 26.3], size: {w: 45.0, h: 13.4}, accepts: [hpe/media-module-blank@1, hpe/media-module-872161@1, hpe/media-module-872162@1, hpe/media-module-872163@1], default: hpe/media-module-blank@1, group: media-module, rel-pos: 1}
         - {id: serial, at: [219.3, 26.0], size: {w: 32.8, h: 12.5}, accepts: [hpe/serial-port-blank@1, hpe/serial-port-879778@1], default: hpe/serial-port-blank@1, group: serial, rel-pos: 1}
         - {id: psu-2, at: [287.0, 0.8], size: {w: 68.0, h: 40.4}, accepts: [hpe/psu-865408-b21@1, hpe/psu-865414-b21@1, hpe/psu-blank-flex-slot@1], default: hpe/psu-blank-flex-slot@1, group: psus, rel-pos: 2, plan: {view: top, at: [79.6, 0.0], in: system-board, under: [access-panel]}}
@@ -779,13 +779,16 @@ configurations:
     kind: example
     description: >-
       The 4 LFF server with its rear options fitted, to show what the openings
-      take: a generic full-height card in slot 1 and a low-profile one in slot
-      2, the 1GbE Media Module adapter (NIC ports 3 and 4), the serial port,
+      take: a full-height card in slot 1 and low-profile cards in slots 2 and 3
+      (three of the library's ConnectX cards, chosen because their ports show
+      whether a window is in the right place - not an HPE-qualified build),
+      the 1GbE Media Module adapter (NIC ports 3 and 4), the serial port,
       and a second 500 W supply in PS 2 (which needs the redundant power supply
       enablement kit; HPE does not support mixing two different supplies).
     bays:
-      riser-primary/slot-1: common/pcie-card-fh@2
-      riser-primary/slot-2: common/pcie-card-lp@1
+      riser-primary/slot-1: nvidia/mcx515a-fh@1
+      riser-primary/slot-2: nvidia/mcx516a-lp@1
+      riser-secondary/slot-3: nvidia/mcx4121a-lp@1
       media-module: hpe/media-module-872161@1
       serial: hpe/serial-port-879778@1
       psu-2: hpe/psu-865408-b21@1
