@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1105 component majors in 24 namespaces.
+1107 component majors in 24 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -22,7 +22,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
 | `std/bnc@1` | component | port | 9.7 × 8.85 | bnc | 0 | 2 | BNC bayonet coaxial panel jack core (IEC 61169-8) - the D-hole and the collar with its bore, insulator and ce… |
-| `std/c14-inlet@1` | component | inlet | 28 × 20 × 13 | c14-inlet | 3 | 56 | IEC C14 appliance inlet (mates C13 cords) - panel cutout with the keyed coupler shroud recessed behind it, ea… |
+| `std/c14-inlet@1` | component | inlet | 28 × 20 × 13 | c14-inlet | 3 | 57 | IEC C14 appliance inlet (mates C13 cords) - panel cutout with the keyed coupler shroud recessed behind it, ea… |
 | `std/c20-inlet@1` | component | inlet | 32.4 × 24.4 × 15 | c20-inlet | 1 | 12 | IEC C20 appliance inlet (mates C19 cords) - panel cutout with the rounded-rectangle coupler recess behind it,… |
 | `std/cfp@1` | component | port | 82 × 13.6 × 144.8 | cfp | 0 | 5 | CFP cage cutout - the module envelope of the CFP MSA, the aperture the module seats through |
 | `std/cfp2@1` | component | port | 41.5 × 12.4 × 107.5 | cfp2 | 0 | 9 | CFP2 cage cutout - the module envelope of the CFP2 MSA, the aperture the module seats through |
@@ -555,7 +555,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/psu-1400w-ac-60mm@1` | module | psu | 59.8 × 40.1 × 222 |  | 1 | 14 | 1400 W mixed-mode hot-plug power supply in Dell's 60 mm form factor, as fitted to the 16th-generation 1U Powe… |
 | `dell/psu-2400w-ac-14g@1` | module | psu | 86.3 × 39.1 × 195.5 |  | 1 | 0 | 2400 W AC hot-plug power supply for a 14th-generation PowerEdge - C20 inlet, a fan, and a translucent handle … |
 | `dell/psu-60mm-plan@1` | component | mechanical | 59.8 × 222 |  | 0 | 4 | Dell's 60 mm power supply seen from above - the can that runs 222 mm into a 16th-generation 1U PowerEdge from… |
-| `dell/psu-700w-ac-60mm@1` | module | psu | 59.8 × 40.1 × 222 |  | 1 | 0 | 700 W mixed-mode hot-plug power supply in Dell's 60 mm form factor, as fitted to the 16th-generation 1U Power… |
+| `dell/psu-700w-ac-60mm@1` | module | psu | 59.8 × 40.1 × 222 |  | 1 | 2 | 700 W mixed-mode hot-plug power supply in Dell's 60 mm form factor, as fitted to the 16th-generation 1U Power… |
 | `dell/psu-800w-ac-60mm@1` | module | psu | 59.8 × 40.1 × 222 |  | 1 | 0 | 800 W mixed-mode hot-plug power supply in Dell's 60 mm form factor, as fitted to the 16th-generation 1U Power… |
 | `dell/rack-latch-14g@1` | component | latch | 12.16 × 37.99 |  | 1 | 0 | The rack release rocker built into a 14th-generation PowerEdge ear - pressed to free the chassis from the rac… |
 | `dell/rear-bay-blank-14g@2` | module | mechanical | 135.19 × 39.5 × 12 |  | 1 | 0 | The perforated blank over one empty rear storage bay on a 14th-generation PowerEdge - fitted where a riser co… |
@@ -746,25 +746,27 @@ aperture when it is a bare opening - never both at one position. The README's
 | `fs/fhd-splice-12-lc-rear@2` | component | cassette | 99 × 31 |  | 0 | 1 | The back of FS FHD's LC UPC OS2 12-fibre splice cassette (SKU 382907): the cassette body seen from behind, ca… |
 | `fs/qsfp28-aoc@1` | module | transceiver | 18.35 × 8.5 × 52.4 | qsfp | 0 | 0 | FS 100G QSFP28 active optical cable, one end - four 25G lanes over multimode ribbon fibre, up to 100 m over O… |
 
-## hpe/ (15)
+## hpe/ (17)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
 | `hpe/button-led-sq@1` | component | button | 4 × 4 |  | 1 | 0 | The square lit push button of an HPE Gen10 ProLiant front panel - the Power On/Standby button and the UID but… |
 | `hpe/expansion-slot-blank-fh@1` | module | blank | 109.3 × 23.3 |  | 1 | 0 | HPE full-height expansion slot blank in the Gen10 ProLiant DL160's primary riser, lying flat at the rear as s… |
 | `hpe/expansion-slot-blank-lp@1` | module | blank | 60.3 × 18.2 |  | 1 | 0 | HPE low-profile expansion slot blank in the Gen10 ProLiant DL160's riser cages, lying flat at the rear as slo… |
-| `hpe/info-pull-tab@1` | component | tab | 37.2 × 11.1 |  | 1 | 0 | The serial number / iLO information pull tab of an HPE Gen10 ProLiant front - a black tab that slides out of … |
+| `hpe/info-pull-tab@1` | component | tab | 37.2 × 11.1 |  | 1 | 1 | The serial number / iLO information pull tab of an HPE Gen10 ProLiant front - a black tab that slides out of … |
+| `hpe/info-pull-tab-slim@1` | component | tab | 33.5 × 5.4 |  | 1 | 0 | The serial number / iLO information pull tab of the Gen10 ProLiant DL160 8 SFF front - a slim black tab lying… |
 | `hpe/led-sq@1` | component | led | 3 × 3 |  | 1 | 0 | A small square status lamp of an HPE Gen10 ProLiant - the front NIC status and Health lamps, and the rear UID… |
 | `hpe/lff-blank@1` | module | blank | 104.8 × 27.5 × 25 |  | 1 | 0 | HPE LFF drive blank for the Gen10 ProLiant DL160's 3.5 inch front bays - a black moulding with a vented windo… |
-| `hpe/lff-lp-carrier@1` | module | drive | 104.8 × 27.5 × 170 |  | 1 | 2 | HPE low-profile (LP) hot-plug carrier for a 3.5 inch LFF drive, as the Gen10 ProLiant DL160's four front bays… |
-| `hpe/media-bay-blank-1u@1` | module | blank | 161.3 × 15.2 |  | 1 | 0 | HPE media bay blank for the Gen10 ProLiant DL160 8 SFF front - the vented cover over the bay the optical driv… |
+| `hpe/lff-lp-carrier@1` | module | drive | 104.8 × 27.5 × 170 |  | 1 | 3 | HPE low-profile (LP) hot-plug carrier for a 3.5 inch LFF drive, as the Gen10 ProLiant DL160's four front bays… |
+| `hpe/media-bay-blank-1u@1` | module | blank | 163.1 × 22.1 |  | 1 | 0 | HPE media bay blank for the Gen10 ProLiant DL160 8 SFF front - the vented cover over the bay the optical driv… |
 | `hpe/media-module-blank@1` | module | blank | 44.1 × 11.8 |  | 1 | 0 | HPE Media Module blank for the Gen10 ProLiant DL160's rear media module slot, which an optional adapter fills… |
 | `hpe/optical-blank-lff@1` | module | blank | 146 × 9.4 |  | 1 | 0 | HPE optical drive blank over the Gen10 ProLiant DL160 4 LFF front's optical bay - the vented plate across the… |
-| `hpe/psu-865408-b21@1` | module | psu | 68.2 × 40.6 |  | 1 | 5 | HPE 500 W Flex Slot Platinum Hot Plug Low Halogen power supply (865408-B21), as fitted to the Gen10 ProLiant … |
-| `hpe/psu-blank-flex-slot@1` | module | blank | 68.2 × 40.6 |  | 1 | 0 | HPE Flex Slot power supply blank, as the Gen10 ProLiant DL160 ships in its second supply bay - a bright metal… |
+| `hpe/psu-865408-b21@1` | module | psu | 68 × 40.4 × 225.3 |  | 1 | 6 | HPE 500 W Flex Slot Platinum Hot Plug Low Halogen power supply (865408-B21), as fitted to the Gen10 ProLiant … |
+| `hpe/psu-865414-b21@1` | module | psu | 68 × 40.4 × 225.3 |  | 1 | 0 | HPE 800 W Flex Slot Platinum Hot Plug Low Halogen power supply (865414-B21), the 500 W supply's casting with … |
+| `hpe/psu-blank-flex-slot@1` | module | blank | 68 × 40.4 |  | 1 | 0 | HPE Flex Slot power supply blank, as the Gen10 ProLiant DL160 ships in its second supply bay - a bright metal… |
 | `hpe/serial-port-blank@1` | module | blank | 32.8 × 11.2 |  | 1 | 0 | HPE serial port blank on the Gen10 ProLiant DL160's rear, covering the opening the optional serial port cable… |
-| `hpe/sff-blank@1` | module | blank | 79.9 × 15.2 × 25 |  | 1 | 0 | HPE SFF drive blank for the Gen10 ProLiant DL160's 2.5 inch front bays, lying flat - a black moulding with a … |
-| `hpe/sff-sc-carrier@1` | module | drive | 79.9 × 15.2 × 125 |  | 1 | 2 | HPE SmartCarrier (SC) for a 2.5 inch SFF drive, lying flat as the Gen10 ProLiant DL160's 8 SFF front presents… |
+| `hpe/sff-blank@1` | module | blank | 76.2 × 15 × 25 |  | 1 | 0 | HPE SFF drive blank for the Gen10 ProLiant DL160's 2.5 inch front bays, lying flat - a black moulding with a … |
+| `hpe/sff-sc-carrier@1` | module | drive | 76.2 × 15 × 125 |  | 1 | 3 | HPE SmartCarrier (SC) for a 2.5 inch SFF drive, lying flat as the Gen10 ProLiant DL160's 8 SFF front presents… |
 
 ## juniper/ (170)
 

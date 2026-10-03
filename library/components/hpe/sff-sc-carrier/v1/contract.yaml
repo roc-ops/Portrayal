@@ -7,55 +7,72 @@ behaviour: fills
 profile: server
 description: >-
   HPE SmartCarrier (SC) for a 2.5 inch SFF drive, lying flat as the Gen10
-  ProLiant DL160's 8 SFF front presents it - the release handle at the left
-  with the locate slot along its top, the activity ring with the drive-status
-  lamp at its centre, and the do-not-remove button at the right
+  ProLiant DL160's 8 SFF front presents it - the drive label at the left, the
+  handle with the locate slot along its top, the activity ring with the
+  drive-status lamp at its centre, and the terracotta release button, which
+  is also the do-not-remove lamp, at the right
 attrs:
   form-factor: 2.5in
+  capacity: '300'
+  capacity-unit: GB
+  interface: SAS
+  rpm: 10K
+# THE LABEL IS FIELDS, as on hpe/lff-lp-carrier@1.
+fields:
+  capacity: {label: Capacity, type: text, default: '300'}
+  capacity-unit: {label: Unit, type: choice, default: GB, options: [GB, TB]}
+  interface: {label: Interface, type: choice, default: SAS, options: [SAS, SATA]}
+  rpm: {label: Spindle, type: text, default: 10K}
 provenance:
   sources: >-
-    Two documents, no photograph. (1) DL160 Gen10 User Guide a00066666en_us,
-    "Smart Carrier (SC) drive LED definitions" figure (native figure GUID-
-    DC2DFCB8, 675 px) and its table. (2) The same guide's "Eight-bay SFF drive
-    model with two-bay SFF drive option" elevation (native figure
-    GUID-7FDCEC9A), which gives the carrier's size in the bay. No straight-on
-    photograph of an SFF DL160 face was found in a two-round web search
-    (working/intake/hpe/proliant/dl160-gen10/COVERAGE.md, gap 1, accepted).
+    (1) HPE's straight-on product image of the DL160 Gen10 8 SFF front, as
+    hosted by Express Computer Systems (expresscomputersystems.com/cdn/shop/
+    files/dl160-gen10-drive-8sff_1835d8c9-1c70-466f-aed1-349e0d74a3b8.jpg,
+    1080 x 1080, staged as photos/ecs-dl160g10-8sff-front-ORTHO-1080sq.jpg
+    under working/intake/hpe/proliant/dl160-gen10), which carries eight of
+    these carriers. (2) DL160 Gen10 User Guide a00066666en_us, "Smart Carrier
+    (SC) drive LED definitions" figure (native figure GUID-DC2DFCB8) and its
+    table.
   size: >-
-    drawing - 79.9 x 15.2. The 8 SFF elevation is 675 px wide; between its ear
-    folds the body is 592 px for the 434.6 mm the QuickSpecs gives (1.362
-    px/mm), and five drive columns divide it on dividers at 152.5, 263.3, 374,
-    485 and 596 px - an 81.4 mm pitch, 79.9 of carrier and 1.5 of divider. The
-    same drawing is 6% taller than true (62 px for 42.9 mm), so heights are
-    taken as fractions of the body: each drive row is 15.2 of the 42.9.
+    photo-measured - 76.2 x 15.0. The image passes the panel gate: the body
+    between the ear folds is 946 px for 434.6 mm (2.177 px/mm) and 93 px for
+    42.9 (2.168), 0.4% apart. Bay 1's carrier runs x 77..243 px and y 33..66
+    px. The first reading of this part, 79.9 wide off the User Guide's line
+    elevation at 1.36 px/mm, took in the rail either side; the columns sit on
+    an 81.75 pitch, so the rails and divider are 5.5 a column.
   face: >-
-    drawing - Proportions of the LED figure's carrier (x 100..556, y 365..453
-    px, an aspect 1.5% from this part's), scaled to 79.9 x 15.2: locate slot
-    16.6..40.3 along the top edge; activity ring centred at (49.1, 7.4), 9.8
-    across, the drive-status lamp at its centre; do-not-remove button 63.1..75.4
-    x 0.5..13.3; the release handle across the left 14 mm. The ribbed edges the
-    figure draws above and below the carrier are its rails in the bay and are
-    not part of the face.
+    photo-measured - carrier-local at 2.177 x 2.168 px/mm: label 2.3..9.6 x
+    2.3..12.5; handle 10.6..40.4 x 2.3..13.4; activity ring centred at
+    (46.4, 7.4), 10.6 across; release button housing 58.8..74.9, its
+    terracotta face 62.0..69.4 x 1.8..12.5. The first drawing of this part
+    had the handle grey at the LEFT and no terracotta: it was read off the LED
+    figure alone, which is a line drawing and carries no colour, and the
+    photograph corrected it.
   lamps: >-
-    User Guide table: 1 Locate - solid blue identified by a host application,
-    flashing blue carrier firmware updating or needing an update; 2 Activity
-    ring - rotating green activity, off none; 3 Do not remove - solid white,
-    removing the drive fails one or more logical drives; 4 Drive status - solid
-    green member of a logical drive, flashing green rebuilding or migrating,
-    flashing amber/green member and predictive failure, flashing amber
-    predictive failure, solid amber failed, off not configured.
+    drawing - User Guide table and figure: 1 Locate, on the handle - solid
+    blue identified by a host application, flashing blue carrier firmware
+    updating or needing an update; 2 Activity ring - rotating green activity,
+    off none; 3 Do not remove, the release button - solid white, removing the
+    drive fails one or more logical drives; 4 Drive status, the ring's centre
+    - solid green member of a logical drive, flashing green rebuilding or
+    migrating, flashing amber predictive failure, solid amber failed, off not
+    configured. The locate slot's position along the handle is the figure's;
+    the photograph does not resolve it.
+  label: >-
+    The defaults are what the photographed carriers print - 10K, SAS, 300 GB
+    - and are an illustration.
   depth: >-
     estimated - NOT IN THE INTAKE. 125 is a 100.45 mm SFF-8201 drive plus a
     carrier frame, of the size common/drive-carrier-25@2 measures (123.7); no
     HPE document held gives the SmartCarrier's depth.
-size: {w: 79.9, h: 15.2, d: 125.0}
-size-confidence: {w: drawing, h: drawing, d: estimated}
+size: {w: 76.2, h: 15.0, d: 125.0}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
 body: {depth: 125.0, color: '#2f3337'}
 elements:
-  release: {at: [0.8, 1.6], size: [13.2, 12.0], class: control}
+  label: {at: [2.3, 2.3], size: [7.3, 10.2], class: label}
   lamp-locate:
-    at: [16.6, 0.9]
-    size: [23.7, 1.7]
+    at: [14.0, 1.0]
+    size: [24.0, 1.3]
     class: led
     states:
       - 'off'
@@ -63,16 +80,16 @@ elements:
       - {name: firmware, color: '#3b82f6', behavior: {mode: blinking, rate: 1}}
     description: Locate. Solid blue - identified by a host application; flashing blue - carrier firmware updating or needing an update.
   lamp-activity:
-    at: [44.2, 2.5]
-    size: [9.8, 9.8]
+    at: [41.1, 2.1]
+    size: [10.6, 10.6]
     class: led
     states:
       - 'off'
       - {name: active, color: '#22c55e', behavior: {mode: blinking, rate: 4}}
     description: Activity ring. Rotating green - drive activity; off - none. The rotation is drawn as a blink.
   lamp-status:
-    at: [47.35, 5.65]
-    size: [3.5, 3.5]
+    at: [44.55, 5.55]
+    size: [3.7, 3.7]
     class: led
     states:
       - 'off'
@@ -81,20 +98,20 @@ elements:
       - {name: predictive-failure, color: '#f59e0b', behavior: {mode: blinking, rate: 1}}
       - {name: fault, color: '#f59e0b'}
     description: Drive status. Solid green - member of a logical drive; flashing green - rebuilding or migrating; flashing amber - predictive failure; solid amber - failed.
-  lamp-do-not-remove:
-    at: [63.1, 0.5]
-    size: [12.3, 12.8]
+  release:
+    at: [62.0, 1.8]
+    size: [7.4, 10.7]
     class: led
     states:
       - 'off'
       - {name: do-not-remove, color: '#f8fafc'}
-    description: The do-not-remove button, lit solid white when removing the drive would fail a logical drive.
+    description: The release button, which is the do-not-remove lamp - solid white when removing the drive would fail a logical drive.
 relief:
   wall: '#1b1e21'
   features:
   - node: release
     out: 1.0
-    color: '#3a3f44'
+    color: '#b8463b'
     confidence: estimated
-    source: the handle stands proud of the carrier in the LED figure's shading; not measured
+    source: the release button stands proud of its housing in the photograph; not measured
 skins: [default]
