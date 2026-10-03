@@ -28,6 +28,14 @@ behind its base.
 Use it rather than `gh pr merge` until branch protection is on. Before then,
 nothing enforces it, and that is exactly how it gets skipped.
 
+**Green is enough for a two-way door, and not for a one-way one.** Every pull
+request states its merge danger; `CONTRIBUTING.md` lists what makes a change a
+one-way door. A two-way door that is green and up to date is merged without
+being read again. A one-way door is read first, by the maintainer, because a
+revert will not undo it. A pull request that declares two-way while the diff
+renames a component, removes an export or touches a workflow is treated as
+one-way, and the declaration is corrected.
+
 ## Releasing the compiled library to npm
 
 ```sh
