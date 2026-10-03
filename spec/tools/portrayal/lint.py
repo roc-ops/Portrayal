@@ -8400,7 +8400,7 @@ RJ45_BARE = re.compile(
     r"console|aux|serial|ioioi|telemetry|timing"
     r"|(^|[\s-])(con|tod|clk|bits|pps|sync|ptp|1588|ics"
     r"|t1|e1|ds1|rj48|che1)([\s-]|$)", re.I)
-RJ45_LAMPED_REFS = {"common/rj45-eth@1", "common/rj45-ganged-eth@1"}
+RJ45_LAMPED_REFS = {"common/rj45-eth@1", "common/rj45-ganged-eth@1", "common/rj45-ganged-link@1"}
 RJ45_BARE_REFS = {"std/rj45@2", "std/rj45-ganged@2"}
 # A carrier that draws nothing and exists to attach one vendor's meanings
 # (dell/rj45-port-14g) is the family member it composes, for census purposes;
@@ -8408,6 +8408,7 @@ RJ45_BARE_REFS = {"std/rj45@2", "std/rj45-ganged@2"}
 # that IS one of them is not making a jack choice and is not censused.
 RJ45_FAMILY_DIRS = {("std", "rj45"), ("std", "rj45-ganged"),
                     ("common", "rj45-eth"), ("common", "rj45-ganged-eth"),
+                    ("common", "rj45-ganged-link"),
                     ("dell", "rj45-port-14g")}
 
 
@@ -8497,7 +8498,8 @@ def _rj45_census(placements, groups, lib_roots, name=None):
     return unlamped_eth, lamped_bare, retired
 
 
-RJ45_CENSUS_MSG = ("An Ethernet jack is common/rj45-eth@1 or common/rj45-ganged-eth@1; "
+RJ45_CENSUS_MSG = ("An Ethernet jack is common/rj45-eth@1 or common/rj45-ganged-eth@1 "
+                   "(common/rj45-ganged-link@1 where it has one lamp); "
                    "a console or timing jack is std/rj45@2 or std/rj45-ganged@2 "
                    "(docs/rj45-family-design.md; spec/tools/sweeps/sweep_rj45.py)")
 
