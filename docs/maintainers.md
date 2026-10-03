@@ -50,6 +50,12 @@ last. A run with nothing new publishes nothing, and a run that failed partway
 is finished by running it again. Run the dry run first: its summary lists what
 a release would send.
 
+npm limits how fast packages arrive: the first release was refused with `E429`
+after 25 new packages in a minute. The packager waits and tries the same
+package again, a minute at first and longer each time, and gives up on it after
+about half an hour. A release that stops there has hit a limit that waiting did
+not clear; run it again later.
+
 **A package's first publish needs a token; every later one does not.** npm's
 trusted publishing lets the workflow publish with no stored secret, but a
 trusted publisher is configured on a package, and a package that has never been
