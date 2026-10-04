@@ -610,3 +610,107 @@ def test_two_identical_cards_install_as_the_drawing_names_them():
     for n in names:
         bay, port = n.split("/", 1)
         assert f'data-path="{bay}/module/{port}"' in face, n
+
+
+# --- a module's own bays -------------------------------------------------------
+
+def _contract(ref):
+    ns, rest = ref.split("/", 1)
+    name, major = rest.split("@")
+    p = LIB / "components" / ns / name / f"v{major}" / "contract.yaml"
+    return load_yaml(p) if p.exists() else None
+
+
+def _nested_bays(ref, seen=()):
+    """Every bay id a module offers, through whatever it seats in turn."""
+    c = _contract(ref)
+    bays = (c or {}).get("bays") or {}
+    if not isinstance(bays, dict) or ref in seen:
+        return
+    for bid, b in bays.items():
+        yield bid
+        for sub in (b or {}).get("accepts") or []:
+            yield from _nested_bays(sub, seen + (ref,))
+
+
+def test_a_module_exports_the_bays_it_declares():
+    """A riser's slots are bays of the riser. 65 contracts declared `bays:` and
+    none exported a module bay, so a DCIM had nowhere to seat a card."""
+    bad, seen = [], 0
+    for p in sorted((LIB / "components").glob("*/*/v*/contract.yaml")):
+        c = load_yaml(p)
+        bays = c.get("bays")
+        if c.get("kind") != "module" or not isinstance(bays, dict) or not bays:
+            continue
+        seen += 1
+        doc = dx.build_module(c, "X")
+        got = sorted(b["position"] for b in doc.get("module-bays") or [])
+        if got != sorted(bays):
+            bad.append(f"{p.parent.parent.name}: declares {sorted(bays)}, exports {got}")
+    assert seen, "no module with bays was read"
+    assert not bad, "\n".join(bad)
+
+
+def _nested_paths(ref, prefix, seen=()):
+    """Every nested bay under a module seated at `prefix`, as NetBox resolves it."""
+    c = _contract(ref)
+    bays = (c or {}).get("bays") or {}
+    if not isinstance(bays, dict) or ref in seen:
+        return
+    for bid, b in bays.items():
+        pos = f"{prefix}/{bid}"
+        yield pos
+        for sub in (b or {}).get("accepts") or []:
+            yield from _nested_paths(sub, pos, seen + (ref,))
+
+
+def test_a_nested_bay_is_written_for_netbox_and_not_for_nautobot():
+    """`for_target`: NetBox templates a bay's position and Nautobot does not, so
+    one gets `{module}/mic0` and the other no nested bay at all."""
+    doc = {"model": "X", "module-bays": [{"name": "mic0", "position": "mic0"}],
+           "interfaces": [{"name": "{module}/port-1"}]}
+    nb = dx.for_target(doc, "netbox")
+    assert nb["module-bays"] == [{"name": "{module}/mic0", "position": "{module}/mic0"}]
+    assert "module-bays" not in dx.for_target(doc, "nautobot")
+    assert doc["module-bays"][0]["position"] == "mic0", "the built document was changed"
+    plain = {"model": "Y", "interfaces": []}
+    assert dx.for_target(plain, "nautobot") is plain
+
+
+def test_the_written_module_types_carry_nested_bays_only_for_netbox():
+    seen = 0
+    for p in sorted((LIB / "exports/netbox/module-types").glob("*/*.yaml")):
+        bays = (yaml.safe_load(p.read_text()) or {}).get("module-bays") or []
+        if not bays:
+            continue
+        seen += 1
+        assert all(b["position"].startswith("{module}/") and b["name"].startswith("{module}/")
+                   for b in bays), p
+        twin = LIB / "exports/nautobot/module-types" / p.parent.name / p.name
+        assert "module-bays" not in (yaml.safe_load(twin.read_text()) or {}), twin
+    if not (LIB / "exports/netbox/module-types").exists():
+        pytest.skip("not published - run ./publish.sh --no-images")
+    assert seen, "no module type with a nested bay was read - run ./publish.sh --no-images"
+
+
+def test_no_two_nested_bays_on_a_device_resolve_to_one_position():
+    """The position a nested bay takes once NetBox has resolved `{module}` is its
+    path from the chassis: `fpc3/mic0`. No two may land on one path, and each
+    has to fit the 30 characters NetBox gives a bay's position."""
+    bad, seen = [], 0
+    for p in sorted((LIB / "devices").glob("*/*/device.yaml")):
+        dev = load_yaml(p)
+        owner = {}
+        for vname, view in (dev.get("views") or {}).items():
+            for b in view_parts(view)["bays"]:
+                for ref in b.get("accepts") or []:
+                    for pos in set(_nested_paths(ref, b["id"])):
+                        seen += 1
+                        if len(pos) > 30:
+                            bad.append(f"{p.parent.name}: `{pos}` is {len(pos)} characters")
+                        owner.setdefault(pos, set()).add((vname, b["id"]))
+        for pos, under in sorted(owner.items()):
+            if len({bid for _v, bid in under}) > 1:
+                bad.append(f"{p.parent.name}: `{pos}` is reached from {sorted(under)}")
+    assert seen, "no nested bay was read"
+    assert not bad, "\n".join(sorted(set(bad))[:30])
