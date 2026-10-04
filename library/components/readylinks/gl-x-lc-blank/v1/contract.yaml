@@ -1,0 +1,50 @@
+format: 1
+kind: module
+name: gl-x-lc-blank
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  The blank plate that closes an empty GL-x chassis line-card slot - a plain black plate
+  held by a captive thumbscrew at each end. The GL-12xB ships with one in its second slot.
+size: {w: 281.5, h: 19.55}
+size-confidence: {w: drawing, h: drawing}
+attrs:
+  model: GL-x line-card slot blank
+provenance:
+  size: >-
+    drawing - the blank's node in the vendor GLB (gl-12xb.glb, GL24X-DANGPAN) spans x 132.71
+    to 414.19 and y 23.05 to 42.60 on the chassis face, so 281.5 x 19.55, the same plate as
+    the card above it (readylinks/gl-x-lc-12xb@1).
+  identity: >-
+    drawing - the GLB names it DANGPAN (a blanking plate) and the datasheet's panel figure
+    shows the lower of the "(2) Line card slots" closed by a plain plate on the GL-12xB. No
+    part number is published.
+  elements: >-
+    drawing - thumbscrews centred at x 3.99 and 277.49, y 9.64 in plate coordinates, about
+    7.8 across, measured off the GLB; two small flush plate screws at x 11.8 and 269.7,
+    y about 9.7, read off the product render and drawn as art only; nothing else is on the plate.
+  power: 'a blank draws nothing, so it states no power figure at all'
+states: [absent]
+elements:
+  thumbscrew-left: {at: [0.09, 5.74], size: [7.8, 7.8], class: fastener}
+  thumbscrew-right: {at: [273.59, 5.74], size: [7.8, 7.8], class: fastener}
+relief:
+  features:
+    - node: thumbscrew-left
+      cyl: 13.7
+      color: '#b9bec3'
+      confidence: drawing
+      source: >-
+        readylinks/gl-x-lc-blank@1 elements key - the GLB plate mesh reaches z 174.04 where
+        the plate front is at 160.35, and only the thumbscrew heads stand there.
+    - node: thumbscrew-right
+      cyl: 13.7
+      color: '#b9bec3'
+      confidence: drawing
+      source: >-
+        readylinks/gl-x-lc-blank@1 elements key - the same GLB reading as the left screw.
+connection-points:
+  mate: {at: [140.75, 9.775], direction: rear}
+skins: [default]

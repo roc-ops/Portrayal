@@ -266,6 +266,7 @@ def test_every_pluggable_media_the_library_uses_is_a_pluggable_cage():
         "rj45",         # a fixed copper jack takes no module
         "fiber",        # bare glass in an adapter, not a cage
         "coax-smb",     # a timing connector
+        "coax-bnc",     # a coax jack a cable plug seats in, not a module cage (the GL-12xB sync jacks)
         "usb-c",        # power in, on the GL-8xEP
         "db9",          # a D-sub alarm or serial connector (the 7750 SR-1 alarm port) takes no module
         "usb-a",        # a USB Type-A receptacle takes a USB device, not a transceiver (the DL160 Gen10's front and rear USB group)

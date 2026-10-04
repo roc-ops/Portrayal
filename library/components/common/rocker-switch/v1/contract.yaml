@@ -1,0 +1,44 @@
+format: 1
+kind: component
+name: rocker-switch
+version: 1.0.0
+class: button
+profile: networking
+description: >-
+  Snap-in panel rocker power switch, 21 x 15 bezel, rocker across the width - the I (on)
+  side at the left and O (off) at the right as drawn. The mains switch a chassis carries
+  beside its appliance inlet where the supply is internal. A panel that shows the rocker the
+  other way round places the part with rotate.
+size: {w: 21.0, h: 15.0}
+size-confidence: {w: drawing, h: drawing}
+provenance:
+  size: >-
+    drawing - the switch node of the ReadyLinks GL-12xB vendor GLB (gl-12xb.glb, KAIGUAN_1)
+    is 21.0 x 15.0 on the rear face, the common 21 x 15 snap-in rocker bezel.
+  rocker: >-
+    drawing - the rocker inside the bezel reads about 17.5 x 11.5 in an orthographic render
+    of the same GLB at 12 px/mm; drawn at that. The I and O marks are the ReadyLinks
+    datasheet photograph's (a bar at the left, a ring at the right).
+  depth: >-
+    drawing - the GLB switch reaches 4.9 mm behind the rear-panel plane, which is the
+    rocker's raised end; the bezel lip is not separated in the mesh and its 1.5 is
+    estimated.
+elements:
+  rocker: {at: [1.75, 1.75], size: [17.5, 11.5], class: button}
+relief:
+  features:
+    - node: bezel
+      out: 1.5
+      color: '#1d2023'
+      confidence: estimated
+      source: >-
+        common/rocker-switch@1 depth key - the bezel lip is not a separate mesh in the
+        GLB; 1.5 is a typical snap-in bezel lip.
+    - node: rocker
+      out: 4.9
+      color: '#26292d'
+      confidence: drawing
+      source: >-
+        common/rocker-switch@1 depth key - the GL-12xB GLB switch reaches 4.9 behind the
+        rear panel plane.
+skins: [default]
