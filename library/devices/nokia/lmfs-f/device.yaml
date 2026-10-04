@@ -1,0 +1,578 @@
+format: 1
+kind: device
+name: lmfs-f
+version: 0.1.0
+maturity: modelled
+manufacturer: Nokia
+model: Lightspan MF-8
+aliases:
+- {name: LMFS-F, kind: vendor, note: 'the mnemonic of the empty shelf, 3FE 79748 AA, in the Unit Data Sheet guide and the installation manual'}
+description: >-
+  The Nokia Lightspan MF-8 (LMFS-F), an 8RU fibre access node (OLT) shelf of the Lightspan MF
+  family, drawn as it mounts horizontally in a 19-inch rack. Eight line-termination (LT) boards
+  and two network-termination (NT) boards lie horizontally in the slot area, LT 8 at the top down
+  to LT 1, then NT B, NT A, the alarm module and, at the bottom, two half-width power modules
+  side by side. The fan module stands in an unlabelled slot at the left and exhausts the air
+  drawn across the boards from the open right side. The front face is drawn with its two
+  mounting flanges, because the left flange carries the dual-stud grounding point, the hook for
+  the front cover and the ESD point. The shelf is cabled entirely from the front.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Written first, before any number. UDS = Lightspan Access Node MF-8 Unit Data Sheet Guide
+      26.9, 3HH-92646-AAAA-TQZZA Issue 09: chapters 2 to 4 (p13-32) the shelf and its two kits,
+      Figures 1, 3, 4, 5 and 6; chapter 11 the fan module; chapters 15 and 16 the bottom and the
+      vertical front dust filter assemblies. USIM = Lightspan Access Node MF-8 User, Safety and
+      Installation Manual 26.9, 3HH-92647-AAAA-RJZZA Issue 09: s2.2 and s2.3 (Table 5, the
+      orderable items), s2.3.7 the horizontal mounting and front cover kits, s2.4.5 Table 21 power
+      per unit, s4.1.3.4 airflow, s4.4.6 the dummy boards. DS = Nokia Lightspan MF-8 data sheet
+      CID214273 (April 2025), with a front render of a fully populated shelf. Every figure in the
+      two guides is an embedded raster of 1 to 3 px/mm, and every image of the shelf is a vendor
+      render: no photograph of a unit is held.
+  chassis:
+    confidence: datasheet
+    note: >-
+      UDS s2.5.1 (p19), repeated for the kits in s3.5.1 and s4.5.1: height 355 mm (8 RU), width
+      "overall over flanges: 481 mm" and "no flanges: 448 mm", depth "front plate to rear: 246
+      mm" and "including grounding stud: 262 mm"; with a power module 274 mm and with the front
+      dust filter assembly 290 mm. s2.5.2: 11.5 kg empty; s3.5.2: 16.75 kg as a kit. The DS prints
+      a mounting centre distance of 465 mm and an overall depth of 287.3 mm, which matches none of
+      the UDS depths and is carried as the DS's own figure. The chassis width is the 448 body;
+      the front view alone is 481 wide, see flanges.
+  flanges:
+    confidence: datasheet
+    note: >-
+      The front view is drawn 481.0 wide WITH the two mounting flanges, 16.5 mm each ((481 - 448)
+      / 2; the DS render measures 16.5), against the library's rule that ears are not drawn. The
+      reason is that this shelf's left flange is not bare: UDS s2.4 (p16) lists on it, from bottom
+      to top, a dual-stud chassis grounding point, a hook for the cover of the front dust filter
+      assembly and an ESD protection point. Those parts are placements here and they need the
+      flange to stand on. The rear,
+      top and bottom views are the 448 body.
+  panel-scale:
+    confidence: photo-measured
+    note: >-
+      Gate 1. The DS front render is 1053 x 777 px. The shelf's outer flange edges are 872 px
+      apart, which against the stated 481.0 is 1.8129 px/mm; at that scale the shelf measures
+      355.2 tall against the stated 355, and the two power modules 43.5 tall against the stated
+      42.8, so the render is orthographic and carries geometry at about 0.55 mm a pixel. It is a
+      vendor render and not a photograph. UDS Figure 5 (p19) is a line drawing of the same face
+      at 1.02 px/mm, used only to confirm the arrangement.
+  rows:
+    confidence: photo-measured
+    note: >-
+      Row boundaries read on the DS render as the bright lower edge of each board's faceplate, at
+      y 27.6, 52.4, 76.7, 101.2, 125.8, 150.3, 174.9, 199.7, 234.7, 269.7 and 292.9, then set to
+      the vendor's stated pitches: LT and alarm 24.5 mm, NT 35 mm (UDS board chapters; USIM
+      s4.4.6 for the dummy boards). LT 8 starts at 3.0 under the top rail, the LT block ends at
+      199.0, NT B 199.0-234.0, NT A 234.0-269.0... the alarm row is seated at 269.5-294.0, half
+      a millimetre lower than the stack gives, where the render has it. A dark rail 4.4 mm tall
+      separates the alarm row from the power bays, whose white frame ticks are at y 297.9 and
+      341.7: the bays are the stated 196.15 x 42.8 (UDS chapter 13) at y 298.4. Below them the
+      shelf's bottom rail runs to 355.
+  columns:
+    confidence: photo-measured
+    note: >-
+      Across, on the DS render: flanges 0-16.5 and 464.5-481.0; the fan cover between shadow
+      lines at 17.7 and 55.2, in which the stated 38.1 x 348.5 fan module (UDS s11.6.1) is
+      centred at x 17.4, y 3.2; a legend strip 55.7-58.5; board faceplates from 59.0 to 459.5
+      (400.5, the boards being 388 long with their ejector ends); a second legend strip
+      460.0-462.2. Power bay frame verticals at 63.2, 259.25 and 455.6, so the two bays are at
+      x 63.1 and 259.25.
+  slot-order:
+    confidence: drawing
+    note: >-
+      UDS Figure 3 "Board and module positions in LMFS-F" (p16) and USIM Figure 6: from the top
+      LT 8 to LT 3, NTIO 2 / LT 2, NTIO 1 / LT 1, NT B, NT A, ALM, then PWR 1 at the left and PWR
+      2 at the right, with the fan area at the left. UDS s2.4.1 (p16-17) says the same in words,
+      from the bottom up.
+  slot-legends:
+    confidence: drawing
+    note: >-
+      The legends are printed in the two narrow strips left and right of the boards, reading
+      bottom to top, about 2.2 mm high: LT 8 to LT 3, NT B, NT A, ALM, and PWR 1 (left strip only)
+      and PWR 2 (right strip only). Positions measured on the DS render: each LT and ALM legend
+      about 3.9 below its row's top, each NT legend 9.4 below, the PWR legends at mid-height.
+      For the two hybrid rows UDS Figure 1 (p14) prints the longer "NTIO 2 / LT 2" and "NTIO 1 /
+      LT 1", as s2.4.1 says the slots are labelled, while the DS render prints "LT 2" and "LT 1".
+      The UDS wording is used, as the unit's own document; see the gap. Legends smaller than this
+      on the render (none found on the frame) would not resolve at 0.55 mm a pixel.
+  flange-holes:
+    confidence: photo-measured
+    note: >-
+      DS render, hole centres: left flange a round hole 6.1 across at (8.0, 14.6) and at (8.0,
+      340.1), and four oblong slots 9.4 x 6.1 at y 37.8, 139.3, 215.7 and 317.4; right flange the
+      same four slots at x 473.0. The centres are 465 apart, the DS's mounting centre distance.
+      UDS Figures 1 and 6 draw the right flange's four slots open to the outer edge, as notches;
+      the DS render draws them closed. Drawn closed, as measured; see the gap.
+  left-flange:
+    confidence: photo-measured
+    note: >-
+      DS render, centres from the shelf's top-left: a ringed round label 12 across at (7.9, 92.9),
+      read as the earth bonding point label of USIM Figure 81; the ESD point, a white round 14.3
+      across, at (7.7, 115.3) (UDS Figure 3 points "ESD point" at this one); the two grounding
+      studs, 12.1 across in their caps, at (7.7, 239.4) and (7.7, 255.7), 16.3 apart; the earth
+      symbol, 8.3 across, at (7.9, 285.6). The library's common parts are placed on those centres
+      and are smaller than the capped rounds the render draws (stud 8.1, jack 6.0, symbol 6.0).
+      The cover hook is NOT in the DS render; it is taken from UDS Figure 1 (p14), scaled by the
+      flange slots it shares with the render (2.232 px/mm): a bracket about x 2.5-13.5, y
+      149-208, with a dark receptacle at y 162.4-196.0 and a screw at each end, at y 154.2 and
+      202.5. Good to about a millimetre.
+  rear:
+    confidence: drawing
+    note: >-
+      No document held draws the rear of the shelf. UDS s2.4.3 (p18) puts the "six BATRET (battery
+      return) / FG (Frame Ground) fast-on combinations in the bottom right side of its backpanel",
+      but Figure 4 shows them from the FRONT, through the empty slot area, on the inner face of
+      the backpanel behind the alarm row: they are reached with the boards out and are not a
+      rear-panel feature. The rear view is therefore sized from the top view and left empty.
+  top:
+    confidence: drawing
+    note: >-
+      UDS Figure 5 (p19; the same art is Figures 10 and 15), the plan drawn above the front view,
+      an embedded raster at 1.019 px/mm, so positions are good to about a millimetre. It is drawn
+      with the FRONT edge uppermost and the shelf's left at the left (the grounding stud projects
+      from the upper left corner, in line with the left flange of the front view below it), and
+      its AIRFLOW legend is upside down in the figure. USIM Figure 83 (p153) shows that legend on
+      the shelf's top cover, near the front edge behind the fan partition, reading "<- AIRFLOW"
+      from the front. The 38 screw heads and the legend are transcribed with the rear at y 0. A
+      small rectangle the drawing has near the front left corner (x 14-27, 3-10 mm from the
+      front) is not identified and is not drawn.
+  airflow:
+    confidence: datasheet
+    note: >-
+      USIM s4.1.3.4 (p153): the forced air "comes in via the open side and goes out via the fan",
+      which is right to left in a horizontal mounting and bottom to top in a vertical one;
+      s2.3.8.1 says the same, "Air intake at the right and air exhaust at the left (via the
+      fan)". The top-cover legend "<- AIRFLOW" points the same way.
+      UDS s11.3 (p80) gives only the vertical case. Air baffles can turn the flow front-to-rear
+      or front-to-top (USIM s2.3.6, s2.3.8); the bare shelf is side to side.
+  power:
+    confidence: datasheet
+    note: >-
+      DS: "DC-powered: 48/60 V DC nominal; Fully redundant power feeding (branch A and B)". UDS
+      s2.6 (p19): everything in the shelf is fed over the backpanel "from the active power
+      module"; s2.4.1 Note: "The two power modules provide power redundancy to the shelf". USIM
+      s2.2.1.3 C: "When two power modules are equipped ... power redundancy is supported". USIM
+      s3.2.5.4 limits the feed to 80 A with two LPWR-F AA and 100 A with two LPWR-F AB. No
+      document held states a power figure for the whole shelf: searched the DS, UDS chapters 2
+      to 4 and the USIM for "power consumption", "dissipation" and "W"; USIM Table 21 (p123)
+      gives a figure per unit only, and each is carried on that unit's own contract.
+  nt-redundancy:
+    confidence: datasheet
+    note: >-
+      UDS s2.4.1 Note 1: "The two NT boards provide NT redundancy to the shelf"; minimum one NT,
+      maximum two. USIM s2.2.1.3 A: active/active on the data plane and active/standby on the
+      control and management plane.
+  occupants:
+    confidence: datasheet
+    note: >-
+      USIM Table 5: LT boards LGLT-D, LWLT-C, LLLT-A and LLLT-B, NT board LBNT-A (AA and AB), fan
+      LFAN-F, power LPWR-F (AA 80 A, AB 100 A), alarm LALM-F, and the dummy boards LMDB-B EA
+      (LT) and LMDB-E BA (NT); note 6, "no dummy panels exist for any of the modules". Only
+      LWLT-C is modelled of the LT boards. UDS s2.4.1 Note 4: "In this release no NTIO boards are
+      supported yet", so the two hybrid slots accept LT boards only. The slots are keyed: an NT
+      dummy does not fit an LT slot (USIM Procedure 35 Note 2).
+  defaults:
+    confidence: datasheet
+    note: >-
+      The base is the shelf kit as UDS chapter 3 and Table 4 (p24) deliver it - the fan module,
+      the alarm module and two power modules fitted, "without boards" - with a dummy board in
+      every LT and NT slot, because USIM s4.4 forbids operating the shelf with an empty slot.
+      It has no NT board and so cannot be logged into; it is the orderable starting point and
+      not a working node. The populated example is the DS render's population.
+  front-cover:
+    confidence: datasheet
+    note: >-
+      Two front covers exist and they are different parts. The VERTICAL front dust filter assembly
+      (3TJ 00003 AA, UDS chapter 16: 355 W x 542 H x 42.13 D) fits only a vertically mounted
+      shelf, where it also spans the bottom dust filter assembly. The HORIZONTAL front dust
+      filter assembly (USIM s2.3.7.1, p72-74: 355 H x 507.6 W x 36 D) is the one for the
+      horizontal mounting drawn here and is nokia/mf8-horizontal-front-cover@1, placed only in
+      the front-cover configuration. USIM s2.3.7.1 puts its right edge 55 mm beyond the right
+      mounting holes, so on this face it runs from x 20.4 to 528: it overhangs the right flange
+      by 47 mm, onto the cable tray of the same kit, which is not part of the shelf and is not
+      drawn. Its small light window lands on the fan module's location lamp, which checks the
+      position.
+  bottom-dust-filter:
+    confidence: datasheet
+    note: >-
+      The bottom dust filter assembly (3FE 79983 AA, UDS chapter 15: 358 W x 89 H x 284.85 D) is
+      "a mandatory element when installing a Lightspan MF-8 vertically" and "can only be used in
+      case of a vertical mounting configuration" (s15.3, s15.6). In that mounting it sits under
+      the shelf's right-hand end, the air intake, across the 355 dimension; it is not part of a
+      horizontally mounted shelf and is not drawn on any face here. The DS's "Height (w/o bottom
+      dust filter assembly): 355 mm" is the same statement.
+  sides:
+    confidence: estimated
+    note: >-
+      No document held draws either side face. Vendor renders of a vertically mounted shelf show
+      its upper face - the shelf's LEFT side, behind the fan module - perforated over most of its
+      area, which is the fan exhaust; the field is placed by eye from those perspective views.
+      The right side is "the open side" the air enters by (USIM s4.1.3.4) and no image held
+      shows it.
+  colour:
+    confidence: photo-measured
+    note: >-
+      DS render, averaged over plain areas: flange 95,102,111 (#5f666f), fan cover and frame
+      86,95,106 (#565f6a), right legend strip 67,74,82. A vendor render, so this is the vendor's
+      presentation of a blue-grey slate finish; no photograph of a unit is held.
+attrs:
+  physical:
+    part-number: 3FE 79748 AA
+    weight-kg: 11.5
+    weight-kit-kg: 16.75
+    width-over-flanges-mm: 481
+    mounting-centre-mm: 465
+    depth-with-ground-stud-mm: 262
+    depth-with-power-module-mm: 274
+    depth-with-front-cover-mm: 290
+    depth-overall-datasheet-mm: 287.3
+    mounting: '19 in., 21 in. and 23 in. racks with extra mounting equipment, vertical or horizontal'
+  power:
+    power-input-dc: '48/60 V DC nominal; fully redundant power feeding (branch A and B)'
+    power-feed-limit: '80 A with two LPWR-F AA, 100 A with two LPWR-F AB'
+    power-wiring: 'three-wire as delivered; two-wire by bridging the six BATRET/FG fast-on pairs on the backpanel'
+  environmental:
+    operating-temp: '-40 C to +65 C at the air inlet of the shelf'
+    operating-temp-central-office: '-5 C to 55 C (ETSI EN 300 019 Class 3.1E, GR-63-CORE)'
+    humidity: '5% to 93% (non-condensing)'
+  platform:
+    family: Lightspan MF
+    chipset: Nokia Quillion
+  compliance:
+    safety: 'IEC 62 368-1 / EN 62 368-1; AS/NZS 62368-1; UL62368-1; CAN/CSA-C22.2 No. 62368-1-14'
+    emc: 'ETS EN 300 386; ETS ES 201 468; GR-1089-CORE; ICES-003 issue 7 (2020); VCCI-CISPR32: 2016'
+    environmental-class: 'ETS EN 300 019-1-3 Class 3.1E and Class 3.3; GR-3108-CORE Class 1 and Class 2; GR-63-CORE for Temperature and Humidity'
+    rohs: 'EU Directive 2011/65/EU as amended including by Directive 2015/863/EU'
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 448.0
+  height: 355.0
+  depth: 246.0
+  ru: 8
+  weight-kg: 11.5
+  airflow: side
+  power: dc
+  color: '#565f6a'
+  silk: '#e6e8ea'
+gaps:
+- what: rear-face
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    No rear view exists in the UDS, the USIM or the data sheet. UDS Figure 4 shows the six
+    BATRET/FG fast-on pairs from the front, on the inner face of the backpanel; nothing shows the
+    outside of the back.
+  wanted: a photograph or drawing of the shelf's rear face
+- what: side-faces
+  scope: [left, right, bottom]
+  reason: needs-drawing
+  note: >-
+    The left side's perforated field is placed by eye from perspective renders; the right side
+    (the air intake) and the underside appear in no image held. UDS chapter 15 says the bottom
+    dust filter assembly is fixed to "four screw holes in the bottom of the shelf" by four
+    captive screws and three magnets, but their positions are not drawn.
+  wanted: side and underside elevations or photographs
+- what: hybrid-slot-legend
+  scope: [lt-1, lt-2]
+  reason: sources-disagree
+  note: >-
+    UDS Figure 1 and s2.4.1 label the two hybrid slots "NTIO 1 / LT 1" and "NTIO 2 / LT 2"; the
+    data sheet render prints "LT 1" and "LT 2". The UDS wording is printed here.
+  wanted: a photograph of the legend strip of a delivered shelf
+- what: right-flange-slots
+  scope: [front]
+  reason: sources-disagree
+  note: >-
+    UDS Figures 1 and 6 draw the right flange's four mounting slots open to the outer edge; the
+    data sheet render draws them as closed oblong slots like the left flange's. Drawn closed.
+  wanted: a photograph of the right flange
+- what: cover-hook
+  scope: [front]
+  reason: needs-photo
+  note: >-
+    The cover hook is absent from the data sheet render and is taken from UDS Figure 1 at about
+    2.2 px/mm; its shape is a bracket with a dark receptacle and two screws, no more than that.
+  wanted: a close photograph of the left flange
+- what: shelf-power
+  scope: [power-slots]
+  reason: vendor-silent
+  note: >-
+    No document held gives a power envelope for the whole shelf; USIM Table 21 gives figures per
+    unit, and the LPWR-F rating is a current (80 A or 100 A), not a wattage.
+  wanted: a shelf-level maximum power or heat dissipation figure
+- what: line-cards
+  scope: [lt-slots]
+  reason: needs-drawing
+  note: >-
+    USIM Table 5 lists LGLT-D, LLLT-A and LLLT-B as LT boards for this shelf beside LWLT-C; they
+    are not modelled and not accepted yet.
+  wanted: the three boards modelled from UDS chapters 7, 9 and 10
+groups:
+  lt-slots:
+    term: Slot
+    role: traffic
+    index-origin: 1
+    description: >-
+      the eight LT (line termination) slots, 24.5 mm pitch, LT 1 at the bottom of the block to LT
+      8 at the top (UDS Figure 3). LT 1 and LT 2 are the hybrid NTIO / LT slots; no NTIO board
+      exists in this release (UDS s2.4.1 Note 4)
+  nt-slots:
+    term: Slot
+    role: service
+    index-origin: 1
+    description: NT A (rel-pos 1) and NT B (rel-pos 2), the two network-termination slots, 35 mm pitch
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: 'UDS s2.4.1 Note 1: the two NT boards provide NT redundancy to the shelf; one NT is the minimum. USIM s2.2.1.3 A: active/active data plane, active/standby control plane'
+  alarm-slot:
+    term: Slot
+    role: service
+    index-origin: 1
+    description: the alarm module slot (ALM) under NT A, 24.5 mm pitch
+  power-slots:
+    term: Slot
+    role: service
+    index-origin: 1
+    description: the two half-width power module slots along the bottom, PWR 1 at the left
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: 'UDS s2.4.1: two (redundant) power modules, "The two power modules provide power redundancy to the shelf"; s2.6: the shelf is fed from the active one'
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    description: the single, unlabelled fan module slot at the left; six blowers in one module
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 1
+    description: the dual-stud chassis grounding point and the ESD point on the left flange
+  covers:
+    term: Cover
+    role: furniture
+    index-origin: 1
+    description: the front cover of the horizontal mounting and front cover kits
+views:
+  front:
+    size: {w: 481.0, h: 355.0}
+    panel:
+      decor:
+        - {id: flange-left, at: [0.0, 0.0], size: [16.5, 355.0], fill: '#5f666f'}
+        - {id: flange-right, at: [464.5, 0.0], size: [16.5, 355.0], fill: '#5f666f'}
+        - {id: fan-shadow-left, at: [16.5, 0.0], size: [1.2, 355.0], fill: '#2f343a'}
+        - {id: frame-line-left, at: [55.2, 3.3], size: [0.5, 348.6], fill: '#b9bdc2'}
+        - {id: strip-right, at: [459.5, 2.2], size: [3.0, 350.3], fill: '#434a52'}
+        - {id: pwr-rail, at: [59.0, 294.0], size: [400.5, 4.4], fill: '#2a2e33'}
+        - {id: bottom-rail, at: [59.0, 341.2], size: [400.5, 13.8], fill: '#4a525c'}
+        - {id: hole-left-top, at: [4.95, 11.55], size: [6.1, 6.1], rx: 3.05, fill: '#0b0c0d'}
+        - {id: slot-left-1, at: [3.3, 34.75], size: [9.4, 6.1], rx: 3.05, fill: '#0b0c0d'}
+        - {id: slot-left-2, at: [3.3, 136.25], size: [9.4, 6.1], rx: 3.05, fill: '#0b0c0d'}
+        - {id: slot-left-3, at: [3.3, 212.65], size: [9.4, 6.1], rx: 3.05, fill: '#0b0c0d'}
+        - {id: slot-left-4, at: [3.3, 314.35], size: [9.4, 6.1], rx: 3.05, fill: '#0b0c0d'}
+        - {id: hole-left-bottom, at: [4.95, 337.05], size: [6.1, 6.1], rx: 3.05, fill: '#0b0c0d'}
+        - {id: slot-right-1, at: [468.3, 34.75], size: [9.4, 6.1], rx: 3.05, fill: '#0b0c0d'}
+        - {id: slot-right-2, at: [468.3, 136.25], size: [9.4, 6.1], rx: 3.05, fill: '#0b0c0d'}
+        - {id: slot-right-3, at: [468.3, 212.65], size: [9.4, 6.1], rx: 3.05, fill: '#0b0c0d'}
+        - {id: slot-right-4, at: [468.3, 314.35], size: [9.4, 6.1], rx: 3.05, fill: '#0b0c0d'}
+        - {id: cover-hook, kind: bracket, at: [2.5, 149.0], size: [11.0, 59.0], rx: 1.0, fill: '#4a525c', out: 4.0, confidence: estimated, source: 'UDS Figure 1 (p14) at 2.2 px/mm; the hook stands off the flange, by how much is not dimensioned'}
+        - {id: cover-hook-receptacle, at: [4.0, 162.4], size: [8.0, 33.6], rx: 1.0, fill: '#1b1d20'}
+        - {id: cover-hook-screw-top, at: [5.7, 151.9], size: [4.6, 4.6], rx: 2.3, fill: '#c9ccd0'}
+        - {id: cover-hook-screw-bottom, at: [5.7, 200.2], size: [4.6, 4.6], rx: 2.3, fill: '#c9ccd0'}
+    silkscreen:
+      - {id: bonding-label, at: [1.9, 86.9], path: 'M 0 6 a 6 6 0 1 0 12 0 a 6 6 0 1 0 -12 0 Z M 2.5 6 a 3.5 3.5 0 1 0 7 0 a 3.5 3.5 0 1 0 -7 0 Z M 4.5 6 a 1.5 1.5 0 1 0 3 0 a 1.5 1.5 0 1 0 -3 0 Z', stroke-width: 0.5, for: esd-point}
+      - {at: [57.95, 6.9], text: 'LT 8', font-size: 2.2, anchor: middle, rotate: -90, for: lt-8}
+      - {at: [57.95, 31.4], text: 'LT 7', font-size: 2.2, anchor: middle, rotate: -90, for: lt-7}
+      - {at: [57.95, 55.9], text: 'LT 6', font-size: 2.2, anchor: middle, rotate: -90, for: lt-6}
+      - {at: [57.95, 80.4], text: 'LT 5', font-size: 2.2, anchor: middle, rotate: -90, for: lt-5}
+      - {at: [57.95, 104.9], text: 'LT 4', font-size: 2.2, anchor: middle, rotate: -90, for: lt-4}
+      - {at: [57.95, 129.4], text: 'LT 3', font-size: 2.2, anchor: middle, rotate: -90, for: lt-3}
+      - {at: [57.95, 162.25], text: 'NTIO 2 / LT 2', font-size: 2.2, anchor: middle, rotate: -90, for: lt-2}
+      - {at: [57.95, 186.75], text: 'NTIO 1 / LT 1', font-size: 2.2, anchor: middle, rotate: -90, for: lt-1}
+      - {at: [57.95, 208.4], text: 'NT B', font-size: 2.2, anchor: middle, rotate: -90, for: nt-b}
+      - {at: [57.95, 243.4], text: 'NT A', font-size: 2.2, anchor: middle, rotate: -90, for: nt-a}
+      - {at: [57.95, 273.4], text: 'ALM', font-size: 2.2, anchor: middle, rotate: -90, for: alm}
+      - {at: [57.95, 319.8], text: 'PWR 1', font-size: 2.2, anchor: middle, rotate: -90, for: pwr-1}
+      - {at: [461.75, 6.9], text: 'LT 8', font-size: 2.2, anchor: middle, rotate: -90, for: lt-8}
+      - {at: [461.75, 31.4], text: 'LT 7', font-size: 2.2, anchor: middle, rotate: -90, for: lt-7}
+      - {at: [461.75, 55.9], text: 'LT 6', font-size: 2.2, anchor: middle, rotate: -90, for: lt-6}
+      - {at: [461.75, 80.4], text: 'LT 5', font-size: 2.2, anchor: middle, rotate: -90, for: lt-5}
+      - {at: [461.75, 104.9], text: 'LT 4', font-size: 2.2, anchor: middle, rotate: -90, for: lt-4}
+      - {at: [461.75, 129.4], text: 'LT 3', font-size: 2.2, anchor: middle, rotate: -90, for: lt-3}
+      - {at: [461.75, 162.25], text: 'NTIO 2 / LT 2', font-size: 2.2, anchor: middle, rotate: -90, for: lt-2}
+      - {at: [461.75, 186.75], text: 'NTIO 1 / LT 1', font-size: 2.2, anchor: middle, rotate: -90, for: lt-1}
+      - {at: [461.75, 208.4], text: 'NT B', font-size: 2.2, anchor: middle, rotate: -90, for: nt-b}
+      - {at: [461.75, 243.4], text: 'NT A', font-size: 2.2, anchor: middle, rotate: -90, for: nt-a}
+      - {at: [461.75, 273.4], text: 'ALM', font-size: 2.2, anchor: middle, rotate: -90, for: alm}
+      - {at: [461.75, 319.8], text: 'PWR 2', font-size: 2.2, anchor: middle, rotate: -90, for: pwr-2}
+    components:
+      bays:
+        - {id: lt-8, at: [59.0, 3.0], size: {w: 400.5, h: 24.5}, accepts: [nokia/lwlt-c@1, nokia/lmdb-b-ea@1], default: nokia/lmdb-b-ea@1, group: lt-slots, rel-pos: 8}
+        - {id: lt-7, at: [59.0, 27.5], size: {w: 400.5, h: 24.5}, accepts: [nokia/lwlt-c@1, nokia/lmdb-b-ea@1], default: nokia/lmdb-b-ea@1, group: lt-slots, rel-pos: 7}
+        - {id: lt-6, at: [59.0, 52.0], size: {w: 400.5, h: 24.5}, accepts: [nokia/lwlt-c@1, nokia/lmdb-b-ea@1], default: nokia/lmdb-b-ea@1, group: lt-slots, rel-pos: 6}
+        - {id: lt-5, at: [59.0, 76.5], size: {w: 400.5, h: 24.5}, accepts: [nokia/lwlt-c@1, nokia/lmdb-b-ea@1], default: nokia/lmdb-b-ea@1, group: lt-slots, rel-pos: 5}
+        - {id: lt-4, at: [59.0, 101.0], size: {w: 400.5, h: 24.5}, accepts: [nokia/lwlt-c@1, nokia/lmdb-b-ea@1], default: nokia/lmdb-b-ea@1, group: lt-slots, rel-pos: 4}
+        - {id: lt-3, at: [59.0, 125.5], size: {w: 400.5, h: 24.5}, accepts: [nokia/lwlt-c@1, nokia/lmdb-b-ea@1], default: nokia/lmdb-b-ea@1, group: lt-slots, rel-pos: 3}
+        - {id: lt-2, at: [59.0, 150.0], size: {w: 400.5, h: 24.5}, accepts: [nokia/lwlt-c@1, nokia/lmdb-b-ea@1], default: nokia/lmdb-b-ea@1, group: lt-slots, rel-pos: 2}
+        - {id: lt-1, at: [59.0, 174.5], size: {w: 400.5, h: 24.5}, accepts: [nokia/lwlt-c@1, nokia/lmdb-b-ea@1], default: nokia/lmdb-b-ea@1, group: lt-slots, rel-pos: 1}
+        - {id: nt-b, at: [59.0, 199.0], size: {w: 400.5, h: 35.0}, accepts: [nokia/lbnt-a@1, nokia/lmdb-e-ba@1], default: nokia/lmdb-e-ba@1, group: nt-slots, rel-pos: 2}
+        - {id: nt-a, at: [59.0, 234.0], size: {w: 400.5, h: 35.0}, accepts: [nokia/lbnt-a@1, nokia/lmdb-e-ba@1], default: nokia/lmdb-e-ba@1, group: nt-slots, rel-pos: 1}
+        - {id: alm, at: [59.0, 269.5], size: {w: 400.5, h: 24.5}, accepts: [nokia/lalm-f@1], default: nokia/lalm-f@1, group: alarm-slot, rel-pos: 1}
+        - {id: pwr-1, at: [63.1, 298.4], size: {w: 196.15, h: 42.8}, accepts: [nokia/lpwr-f@1], default: nokia/lpwr-f@1, group: power-slots, rel-pos: 1}
+        - {id: pwr-2, at: [259.25, 298.4], size: {w: 196.15, h: 42.8}, accepts: [nokia/lpwr-f@1], default: nokia/lpwr-f@1, group: power-slots, rel-pos: 2}
+        - {id: fan, at: [17.4, 3.2], size: {w: 38.1, h: 348.5}, accepts: [nokia/lfan-f@1], default: nokia/lfan-f@1, group: fans, rel-pos: 1}
+      placements:
+        - {ref: common/esd-jack@1, id: esd-point, at: [4.7, 112.3], group: grounding, rel-pos: 1}
+        - {ref: common/ground-stud@1, id: ground-stud-1, at: [3.65, 235.35], group: grounding, rel-pos: 2}
+        - {ref: common/ground-stud@1, id: ground-stud-2, at: [3.65, 251.65], group: grounding, rel-pos: 3}
+        - {ref: common/ground-symbol@1, id: ground-symbol, at: [4.7, 282.6], for: [ground-stud-1, ground-stud-2], group: grounding, rel-pos: 4}
+        - {ref: nokia/mf8-horizontal-front-cover@1, id: front-cover, at: [20.4, 0.0], only-in: [front-cover], group: covers, rel-pos: 1}
+  rear:
+    size: {w: 448.0, h: 355.0}
+    empty: >-
+      No document held draws the rear of the shelf: searched every figure caption of the Unit Data
+      Sheet guide chapters 2 to 4 and of the installation manual for rear, back and backpanel
+      views. UDS Figure 4 shows the six BATRET/FG fast-on pairs on the INNER face of the
+      backpanel, seen from the front through the empty slots; the shelf is cabled from the front.
+  left:
+    size: {w: 246.0, h: 355.0}
+    panel:
+      decor:
+        - {id: exhaust-backing, at: [30.0, 20.0], size: [200.0, 315.0], fill: '#4a525c'}
+        - {id: exhaust-vent, at: [30.0, 20.0], size: [200.0, 315.0], pattern: holes, vent: 30, confidence: estimated, source: 'vendor renders of a vertically mounted shelf show this side, behind the fan module, perforated over most of its area; extent by eye from perspective views, hole size and pitch not documented'}
+  right:
+    size: {w: 246.0, h: 355.0}
+    empty: >-
+      No document held draws the right side. The installation manual s4.1.3.4 calls it "the open
+      side" the air enters by, and no figure or render held shows the face itself.
+  top:
+    size: {w: 448.0, h: 246.0}
+    panel:
+      decor:
+        - {id: top-screw-1, at: [5.4, 224.4], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-2, at: [5.4, 194.0], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-3, at: [5.4, 163.5], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-4, at: [5.4, 133.1], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-5, at: [5.4, 102.7], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-6, at: [5.4, 72.3], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-7, at: [5.4, 42.3], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-8, at: [5.4, 11.4], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-9, at: [41.2, 235.2], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-10, at: [41.2, 221.9], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-11, at: [51.0, 212.6], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-12, at: [51.0, 172.4], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-13, at: [51.0, 131.2], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-14, at: [51.0, 90.9], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-15, at: [51.0, 50.7], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-16, at: [61.8, 237.6], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-17, at: [76.5, 47.7], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-18, at: [121.7, 237.6], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-19, at: [131.5, 47.7], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-20, at: [181.5, 237.6], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-21, at: [186.4, 47.7], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-22, at: [241.4, 237.6], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-23, at: [241.4, 47.7], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-24, at: [296.3, 47.7], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-25, at: [301.2, 237.6], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-26, at: [351.3, 47.7], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-27, at: [361.1, 237.6], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-28, at: [406.3, 47.7], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-29, at: [421.0, 237.6], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-30, at: [440.6, 194.0], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-31, at: [440.6, 163.5], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-32, at: [440.6, 133.1], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-33, at: [440.6, 102.7], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-34, at: [440.6, 72.8], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-35, at: [440.6, 42.3], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-36, at: [440.6, 11.4], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-37, at: [441.6, 235.2], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+        - {id: top-screw-38, at: [441.6, 221.9], size: [3.0, 3.0], rx: 1.5, fill: '#3b424b'}
+    silkscreen:
+      - {at: [96.2, 231.6], text: 'AIRFLOW', font-size: 5.0, anchor: middle, for: chassis}
+      - {id: airflow-arrow, at: [72.5, 228.4], path: 'M 7 1.6 H 0 M 2 0 L 0 1.6 L 2 3.2', stroke-width: 0.5, for: chassis}
+  bottom:
+    size: {w: 448.0, h: 246.0}
+    empty: >-
+      No document held draws the underside. The Unit Data Sheet guide chapter 15 says the bottom
+      dust filter assembly screws into four holes in the bottom of the shelf, without drawing
+      them; that assembly belongs to a vertically mounted shelf only.
+configurations:
+  base:
+    kind: base
+    default: true
+    source: >-
+      SOURCED: the shelf kit of UDS chapter 3, Table 4 (p24) - one LMFS-F, one LFAN-F, two LPWR-F
+      and one LALM-F - with the dummy boards the installation manual requires in every unused
+      slot. The kit ships without boards, so this base has no NT.
+    description: >-
+      The Lightspan MF-8 shelf kit as shipped: the fan module, the alarm module and two power
+      modules fitted, and a dummy/filler board in each of the eight LT and two NT slots. The AA
+      kit carries two 80 A power modules and the AB kit two 100 A.
+    part-numbers:
+      LMFS-F AA kit: {part: 3FE 79747 AA}
+      LMFS-F AB kit: {part: 3FE 79747 AB}
+    bays:
+      lt-8: nokia/lmdb-b-ea@1
+      lt-7: nokia/lmdb-b-ea@1
+      lt-6: nokia/lmdb-b-ea@1
+      lt-5: nokia/lmdb-b-ea@1
+      lt-4: nokia/lmdb-b-ea@1
+      lt-3: nokia/lmdb-b-ea@1
+      lt-2: nokia/lmdb-b-ea@1
+      lt-1: nokia/lmdb-b-ea@1
+      nt-b: nokia/lmdb-e-ba@1
+      nt-a: nokia/lmdb-e-ba@1
+  empty-shelf:
+    kind: orderable
+    description: >-
+      The empty shelf LMFS-F, 3FE 79748 AA, as delivered: "without any module or board" (UDS
+      s2.4), every slot open onto the backpanel.
+    part-numbers:
+      LMFS-F: {part: 3FE 79748 AA}
+    bays:
+      lt-8: ''
+      lt-7: ''
+      lt-6: ''
+      lt-5: ''
+      lt-4: ''
+      lt-3: ''
+      lt-2: ''
+      lt-1: ''
+      nt-b: ''
+      nt-a: ''
+      alm: ''
+      pwr-1: ''
+      pwr-2: ''
+      fan: ''
+  populated:
+    kind: example
+    description: >-
+      The fully populated shelf of the data sheet's front render: eight LWLT-C multi-PON line
+      boards and two LBNT-A NT boards, with the kit's fan, alarm and power modules.
+    bays:
+      lt-8: nokia/lwlt-c@1
+      lt-7: nokia/lwlt-c@1
+      lt-6: nokia/lwlt-c@1
+      lt-5: nokia/lwlt-c@1
+      lt-4: nokia/lwlt-c@1
+      lt-3: nokia/lwlt-c@1
+      lt-2: nokia/lwlt-c@1
+      lt-1: nokia/lwlt-c@1
+      nt-b: nokia/lbnt-a@1
+      nt-a: nokia/lbnt-a@1
+  front-cover:
+    kind: example
+    description: >-
+      The shelf kit with the horizontal front dust filter assembly hung on the cover hook, as the
+      installation manual's Figure 35 shows a horizontally mounted shelf with its cover closed.
+      The cover is mandatory for EMC and comes in the horizontal mounting and front cover kits.
+datasheet:
+  title: 'Nokia Lightspan Access Node MF-8 Unit Data Sheet Guide 26.9, 3HH-92646-AAAA-TQZZA Issue 09'
+  sha256: 1f4ee1aea32a6488ec2364068991dec201c7b35e0f65648d373ab8352d894db4
+references:
+  - {title: 'Nokia Lightspan Access Node MF-8 User, Safety and Installation Manual 26.9, 3HH-92647-AAAA-RJZZA Issue 09', sha256: 254418981c9045307bb1bd74a915b17990a0c64b7d1d1af44d28f92554727965}
+  - {title: 'Nokia Lightspan MF-8 Data Sheet, CID214273 (April 2025)', sha256: e0439220d532aa6a51a6a500194013fd0252ede34ae78301b9f0c098fa4cf3ee}
