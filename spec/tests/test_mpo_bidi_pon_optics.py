@@ -1,7 +1,10 @@
 """Four generic optics and the MPO-16 plug (docs/pluggables-mpo-bidi-pon-design.md).
 
-    generic/qsfp-mpo@1         a QSFP with one MPO receptacle (std/mpo@2)
-    generic/qsfp-dd-mpo16@1    a QSFP-DD with one MPO-16 receptacle (std/mpo16@1)
+    generic/qsfp-mpo@1         a QSFP with one MPO receptacle
+    generic/qsfp-dd-mpo16@1    a QSFP-DD with one MPO-16 receptacle
+    std/mpo-module-receptacle@1, std/mpo16-module-receptacle@1
+                               the MPO mouth as a module carries it: a dark
+                               cavity, pinned ferrule, key notch, fibre row
     generic/qsfp-lc-simplex@1  a QSFP with one LC bore in a duplex-shaped shell
     generic/sfp-sc@1           an SFP with one SC opening, long axis horizontal
     generic/sfp-sc-key-up@1    the same module with the SC key slot up
@@ -43,14 +46,16 @@ SFP_SC = "generic/sfp-sc@1"
 SFP_SC_UP = "generic/sfp-sc-key-up@1"
 SC_BOTH = (SFP_SC, SFP_SC_UP)
 TAB2 = "common/qsfp-dd-pull-tab-type2@1"
+REC12 = "std/mpo-module-receptacle@1"
+REC16 = "std/mpo16-module-receptacle@1"
 MPO16 = "generic/mpo16-plug@1"
 
 # optic -> (mates, conforms, receptacle part id, receptacle ref, its rotate,
 #           interface presented, what its slot offers)
 OPTICS = {
-    QSFP_MPO: ("qsfp", "qsfp-module", "mpo", "std/mpo@2", 0, "mpo",
+    QSFP_MPO: ("qsfp", "qsfp-module", "mpo", REC12, 0, "mpo",
                {"generic/mpo12-plug@1", "generic/mpo24-plug@1", "common/mpo-dust-cap@2"}),
-    QDD_MPO16: ("qsfp-dd", "qsfp-dd-module", "mpo16", "std/mpo16@1", 0, "mpo16",
+    QDD_MPO16: ("qsfp-dd", "qsfp-dd-module", "mpo16", REC16, 0, "mpo16",
                 {MPO16, "common/mpo16-dust-cap@1"}),
     QSFP_BIDI: ("qsfp", "qsfp-module", "bore", "std/lc-bore@3", 180, "lc",
                 {"generic/lc-plug@2", "common/lc-dust-cap@1"}),
@@ -211,9 +216,9 @@ def test_the_receptacle_stands_on_the_front_of_the_head(ref):
 
 
 def test_the_mpo_receptacles_are_key_up():
-    """Neither MPO aperture draws its keyway, so key-up is the placement: the
-    aperture unrotated, with the plugs' key ribs drawn on top unrotated (a
-    seat turns an occupant by its host's turn and nothing else)."""
+    """Key-up is the placement: the receptacle unrotated, its key notch in the
+    top wall, with the plugs' key ribs drawn on top unrotated (a seat turns
+    an occupant by its host's turn and nothing else)."""
     for ref, pid in ((QSFP_MPO, "mpo"), (QDD_MPO16, "mpo16")):
         assert not part(ref, pid).get("rotate")
     for plug in ("generic/mpo12-plug@1", MPO16):
@@ -594,3 +599,165 @@ def test_the_seated_sr8_stands_69_out_and_is_built_right_side_out(seated):
     mouth = by_path(root, f"{SEATS[QDD_MPO16][0]}-occupant/mpo16")
     assert float(mouth.get("data-z-lift")) == pytest.approx(31.9)
     assert float(mouth.get("data-depth")) > 0
+
+
+# --- the module-side MPO receptacles -----------------------------------------
+
+# receptacle -> (interface, fibres, key offset from the centreline, pin pitch,
+#                ferrule window, the panel opening it shares a mouth with,
+#                the plug whose key and fibres it takes)
+RECEPTACLES = {
+    REC12: ("mpo", 12, 0.0, 4.6, (6.10, 2.50), "std/mpo@2", "generic/mpo12-plug@1"),
+    REC16: ("mpo16", 16, 1.12, 5.3, (6.36, 2.46), "std/mpo16@1", MPO16),
+}
+EACH_REC = pytest.mark.parametrize("ref", sorted(RECEPTACLES))
+CENTRE = (6.45, 4.0)
+
+
+def _num(el, *keys):
+    return [float(el.get(k)) for k in keys]
+
+
+@EACH_REC
+def test_a_module_receptacle_is_its_panel_openings_mouth_and_interface(ref):
+    iface, _, _, _, _, twin, _ = RECEPTACLES[ref]
+    d, t = doc(ref), doc(twin)
+    assert (d["class"], d["interface"], d["conforms"]) == ("port", iface, "mpo-adapter")
+    assert d["interface"] == t["interface"]
+    assert d["size"] == t["size"]                       # the optics' layout does not move
+    assert d["connection-points"] == t["connection-points"]
+    assert d["connection-points"]["mate"]["at"] == list(CENTRE)
+    assert "behaviour" not in d and "mates" not in d
+
+
+@EACH_REC
+def test_the_key_notch_is_at_the_top_centred_or_offset(ref):
+    """Centred on the MPO-12 receptacle; 1.12 right of the centreline on the
+    MPO-16 one, looking in - the same side the seated plug's key is drawn on,
+    and wide enough to take that key with the opening's 0.2 a side."""
+    _, _, offset, _, _, _, plug = RECEPTACLES[ref]
+    x, y, w, h = _num(node(ref, "keyway"), "x", "y", "width", "height")
+    assert x + w / 2 - CENTRE[0] == pytest.approx(offset)
+    assert y + h < CENTRE[1] / 2                           # in the top wall
+    kx, ky, kw, kh = _num(node(plug, "key"), "x", "y", "width", "height")
+    # the plug seats centre on centre: its frame is 0.2 inside this one
+    assert kx + 0.2 >= x and kx + kw + 0.2 <= x + w + 1e-9
+    assert ky + 0.2 >= y and ky + kh + 0.2 <= y + h + 1e-9
+    assert w == pytest.approx(kw + 0.4)
+
+
+@EACH_REC
+def test_the_fibres_are_inked_dots_at_true_pitch_numbered_as_the_seated_plug(ref):
+    """One row of dots 0.125 across at 0.25 pitch, centred on the ferrule.
+    Looking into the receptacle, position 1 is at the right: the mirror of a
+    plug's own end face, and the side the library draws a seated plug's fibre
+    1 on, so position n is under the seated plug's fibre n."""
+    _, n, _, _, _, _, plug = RECEPTACLES[ref]
+    d = doc(ref)
+    assert d["optical"] == {"positions": n}
+    fibres = {k: v for k, v in d["elements"].items() if v["class"] == "fibre"}
+    assert sorted(fibres, key=int) == [str(i) for i in range(1, n + 1)]
+    xs = []
+    for i in range(1, n + 1):
+        el = node(ref, str(i))
+        cx, cy, r = _num(el, "cx", "cy", "r")
+        assert el.tag.endswith("circle") and r == 0.0625 and cy == CENTRE[1]
+        assert el.get("fill") not in (None, "none")                 # real ink
+        assert fibres[str(i)]["at"] == pytest.approx([cx - r, cy - r])
+        assert fibres[str(i)]["size"] == [0.125, 0.125]
+        xs.append(cx)
+    assert all(a - b == pytest.approx(0.25) for a, b in zip(xs, xs[1:]))
+    assert (xs[0] + xs[-1]) / 2 == pytest.approx(CENTRE[0]) and xs[0] > xs[-1]
+    pe = doc(plug)["elements"]
+    for i in range(1, n + 1):
+        px = pe[str(i)]["at"][0] + pe[str(i)]["size"][0] / 2 + 0.2
+        assert px == pytest.approx(xs[i - 1]), i
+    # no lane assignment: a generic states none
+    assert not {"tx", "rx", "lanes", "unused"} & set(d["optical"])
+
+
+@EACH_REC
+def test_the_ferrule_and_its_two_pins_are_drawn(ref):
+    _, n, _, pitch, (fw, fh), _, _ = RECEPTACLES[ref]
+    x, y, w, h = _num(node(ref, "ferrule"), "x", "y", "width", "height")
+    assert (w, h) == (fw, fh)
+    assert (x + w / 2, y + h / 2) == pytest.approx(CENTRE)
+    left, right = node(ref, "pin-l"), node(ref, "pin-r")
+    lx, rx = float(left.get("cx")), float(right.get("cx"))
+    assert rx - lx == pytest.approx(pitch) and (lx + rx) / 2 == pytest.approx(CENTRE[0])
+    for pin in (left, right):
+        assert pin.tag.endswith("circle") and float(pin.get("cy")) == CENTRE[1]
+        assert x < float(pin.get("cx")) - float(pin.get("r"))
+        assert float(pin.get("cx")) + float(pin.get("r")) < x + w
+    # the pins flank the fibre row
+    assert lx < CENTRE[0] - (n - 1) * 0.125 and rx > CENTRE[0] + (n - 1) * 0.125
+
+
+@EACH_REC
+def test_the_cavity_is_a_recess_with_the_ferrule_standing_in_it(ref):
+    """A cavity, not a slab: `relief.cavity` on the opening, no `out` anywhere,
+    the ferrule a `top` standing up from the floor short of the mouth and the
+    pins proud of the ferrule by the printed figure, still inside the mouth."""
+    d = doc(ref)
+    rel = d["relief"]
+    assert rel["cavity"] == "opening" and d["elements"]["opening"]["class"] == "cutout"
+    feats = {f["node"]: f for f in rel["features"]}
+    assert set(feats) == {"ferrule", "pin-l", "pin-r"}
+    assert not [f for f in feats.values() if set(f) & {"out", "lift", "cyl", "bar"}]
+    depth = d["size"]["d"]
+    assert 0 < feats["ferrule"]["top"] < feats["pin-l"]["top"] == feats["pin-r"]["top"] < depth
+    proud = {REC12: 1.9, REC16: 1.8}[ref]
+    assert feats["pin-l"]["top"] - feats["ferrule"]["top"] == pytest.approx(proud)
+    # the opening is the skin's first child, so nothing it draws is under it
+    first = [c for c in skin(ref) if c.get("id")][0]
+    assert first.get("id") == "opening"
+
+
+def test_the_panel_adapters_keep_the_open_sleeve():
+    assert [q["ref"] for q in doc("common/mpo-adapter@2")["parts"]] == ["std/mpo@2"]
+    assert [q["ref"] for q in doc("common/mpo16-adapter@1")["parts"]] == ["std/mpo16@1"]
+    for ref in (REC12, REC16):
+        assert "sleeve" not in (path(ref) / "skins/default.svg").read_text().split("-->", 1)[1]
+
+
+def test_the_module_receptacles_offer_what_the_panel_openings_offer(comps):
+    """The slots did not change: the optic's accept list is the panel
+    adapter's for the same interface."""
+    for optic, adapter in ((QSFP_MPO, "common/mpo-adapter@2"), (QDD_MPO16, "common/mpo16-adapter@1")):
+        iface, offers = _adapter_offers(adapter)
+        slot = comps[optic]["presents"]
+        assert slot["interface"] == iface
+        assert set(slot["accepts"]) == offers == OPTICS[optic][6]
+
+
+@pytest.mark.parametrize("ref", [QSFP_MPO, QDD_MPO16])
+def test_a_seated_optics_fibres_are_addressable_and_its_cavity_is_right_side_out(seated, ref):
+    """Fibre n of the receptacle is at `<cage>-occupant/<part>/n`. The cavity
+    is cut from the nose front (its lift is the head's length), the ferrule
+    and pins stand up from its floor without reaching the mouth, and nothing
+    in the receptacle stands out over it. A seated plug's fibre n lies on
+    receptacle position n."""
+    root, parents = seated
+    cage, _ = SEATS[ref]
+    pid, n = OPTICS[ref][2], doc(OPTICS[ref][3])["optical"]["positions"]
+    mouth = by_path(root, f"{cage}-occupant/{pid}")
+    depth = float(mouth.get("data-depth"))
+    assert mouth.get("data-cavity") == "opening" and depth == 9.0
+    assert float(mouth.get("data-z-lift")) == doc(ref)["head"]["size"]["d"]
+    inside = list(mouth.iter())
+    assert not [e.get("id") for e in inside if e.get("data-z-out")]
+    tops = {e.get("id").rsplit("--", 1)[1]: float(e.get("data-z-top"))
+            for e in inside if e.get("data-z-top")}
+    assert set(tops) == {"ferrule", "pin-l", "pin-r"}
+    assert 0 < tops["ferrule"] < tops["pin-l"] < depth
+    plug = by_path(root, f"{cage}-occupant-occupant")
+    pe = doc(SEATS[ref][1])["elements"]
+    for i in range(1, n + 1):
+        f = by_path(root, f"{cage}-occupant/{pid}/{i}")
+        assert f.get("data-class") == "fibre"
+        here = device_point(parents, f, _num(f, "cx", "cy"))
+        if str(i) in pe:
+            a = pe[str(i)]
+            there = device_point(parents, plug, [a["at"][0] + a["size"][0] / 2,
+                                                 a["at"][1] + a["size"][1] / 2])
+            assert here == pytest.approx(there, abs=1e-6), i

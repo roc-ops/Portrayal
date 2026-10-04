@@ -61,26 +61,25 @@ provenance:
     Figure 5-1 Note 1, at drawing confidence as on generic/qsfp-lc@2; FS p10
     gives 72.24 overall, which less 52.4 is 19.84.
   receptacle: >-
-    std/mpo@2, the MPO adapter opening, composed as `mpo`. SFF-8436 Rev 4.9
-    section 5.1 says the optical interface meets IEC 61754-7 interface 7-3,
-    the MPO adapter interface, so the module mouth is the adapter opening the
-    library already draws. Its 12.9 x 8.0 is the estimate std/mpo@2 records
-    (registry there; the opening itself is estimated), and no keyway is drawn
-    because that part draws none.
+    std/mpo-module-receptacle@1, composed as `mpo`: the MPO adapter opening as
+    a module carries it, a dark cavity with the pinned ferrule and its twelve
+    fibre positions at the back. SFF-8436 Rev 4.9 section 5.1 says the optical
+    interface meets IEC 61754-7 interface 7-3, the MPO adapter interface, so
+    the mouth is the 12.9 x 8.0 std/mpo@2 records (estimated there) and the
+    slot offers what that opening offers. The fibres are addressable as
+    `mpo/1` to `mpo/12`; which carry which lane is the wrapper's fact.
   key: >-
     datasheet - KEY UP, toward the module top and the pull tab. SFF-8679 Rev
     1.9 section 7.3.1 puts the keying feature of the MPO receptacle on the top
-    (Figure 7-2). std/mpo@2 is composed unrotated: the MPO plugs draw their key
-    rib on top unrotated, and a seat turns an occupant by its host turn, so a
-    seated plug shows key up. Section 7.3: with the key up the four left fibre
-    positions transmit and the four right receive.
+    (Figure 7-2). The receptacle is composed unrotated, its key notch at the
+    top and centred; the MPO plugs draw their key rib on top unrotated, and a
+    seat turns an occupant by its host turn, so a seated plug shows key up.
   gender: >-
     datasheet - PINNED. SFF-8679 Rev 1.9 section 7.3 describes a male MPO
     connector with two alignment pins present in the receptacle; the pins are
-    visible in the end-on photograph. STATED IN PROSE ONLY, as
-    generic/mpo12-plug@1 states that it is unpinned: the schema has no key for
-    gender yet. The pins are not drawn, because the composed aperture paints
-    over this skin and draws no ferrule.
+    visible in the end-on photograph, and the composed receptacle draws them.
+    The schema has no key for gender yet, so the claim is this sentence and
+    the drawing.
   position: >-
     photo-measured, +/-0.4 - the maintainer's end-on photograph of a QSFP28
     SR4 module, scaled on the 18.35 nose width and read by eye, not
@@ -118,7 +117,7 @@ provenance:
     its wavelength calls for. The outline follows the fill
     (`data-stroke-derive` on the composed tab).
 parts:
-  - {ref: std/mpo@2, id: mpo, at: [2.725, 0.5], lift: 20.0}
+  - {ref: std/mpo-module-receptacle@1, id: mpo, at: [2.725, 0.5], lift: 20.0}
   - {ref: common/qsfp-pull-tab@2, id: tab, at: [-0.325, -1.23], lift: 20.0}
 relief:
   features:

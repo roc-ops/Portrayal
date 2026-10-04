@@ -68,22 +68,23 @@ provenance:
     generic/qsfp-dd-lc@2 keeps a Type 1 head; one drawing of one face is not
     the class, and this part says only what the MPO-16 drawings show.
   receptacle: >-
-    std/mpo16@1, the MTP-16 opening, composed as `mpo16`. QSFP-DD HW Rev 6.3
-    section 6.2.1 places the MPO-16 plug and receptacle under TIA-604-18 and
-    IEC 61754-7-3 (Figure 29). The 12.9 x 8.0 is the estimate std/mpo16@1
-    records, and no keyway is drawn because that part draws none.
+    std/mpo16-module-receptacle@1, composed as `mpo16`: the MTP-16 opening as
+    a module carries it, a dark cavity with the pinned ferrule and its sixteen
+    fibre positions at the back. QSFP-DD HW Rev 6.3 section 6.2.1 places the
+    MPO-16 plug and receptacle under TIA-604-18 and IEC 61754-7-3 (Figure 29).
+    The mouth is the 12.9 x 8.0 std/mpo16@1 records (estimated there), and the
+    slot offers what that opening offers. The fibres are addressable as
+    `mpo16/1` to `mpo16/16`; which carry which lane is the wrapper's fact.
   key: >-
-    datasheet - KEY UP, toward the module top and the pull tab: QSFP-DD HW
+    datasheet - KEY UP, toward the module top and the pull handle: QSFP-DD HW
     Rev 6.3 section 6.2.1; the FluxLight p13 end view draws the notch on the
     pull-tab side; the JPC p10 lane figure draws the key up and offset to the
-    right of centre looking into the receptacle, with TX 1-8 on the left and
-    RX 8-1 on the right. std/mpo16@1 is composed unrotated, and
-    generic/mpo16-plug@1 draws its key on top, offset right, so a seated plug
-    agrees with that figure.
+    right of centre looking into the receptacle. The receptacle is composed
+    unrotated and draws its notch there, and generic/mpo16-plug@1 draws its
+    key on top, offset right, so a seated plug agrees with that figure.
   gender: >-
     datasheet - PINNED. QSFP-DD HW Rev 6.3 section 6.2.1 notes two alignment
-    pins present in each receptacle. Stated in prose only, as on
-    generic/qsfp-mpo@1; the pins are not drawn.
+    pins present in each receptacle, and the composed receptacle draws them.
   position: >-
     ESTIMATED - centred on the face in x and at the mid-height of the body
     (9.175, 4.25). NO DOCUMENT DIMENSIONS IT and no QSFP-DD module has been
@@ -118,7 +119,7 @@ provenance:
     names the colour and not a value: #d9cba3 is a representative beige,
     estimated. A vendor wrapper sets `latch-color` where its module differs.
 parts:
-  - {ref: std/mpo16@1, id: mpo16, at: [2.725, 0.25], lift: 31.9}
+  - {ref: std/mpo16-module-receptacle@1, id: mpo16, at: [2.725, 0.25], lift: 31.9}
   - {ref: common/qsfp-dd-pull-tab-type2@1, id: tab, at: [0.0, -3.13], lift: 31.9}
 relief:
   features:
