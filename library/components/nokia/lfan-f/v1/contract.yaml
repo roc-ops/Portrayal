@@ -1,0 +1,125 @@
+format: 1
+kind: module
+name: lfan-f
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Nokia LFAN-F (3FE 79719 AA), the fan module of the Lightspan MF-8 shelf: an intelligent fan
+  tray with six variable-speed blowers that slides into the unlabelled fan slot at the left of
+  a horizontally mounted shelf and exhausts the air drawn across the cards. Drawn is its front
+  cover as it stands in the shelf, 38.1 x 348.5: the name "Nokia Lightspan MF-8" reading up the
+  cover, a long pull handle, the location lamp window, the PWR status lamp and, at the foot,
+  the square black unlock button with the rotating-fan caution label beside it. It has no
+  front-panel interfaces.
+size: {w: 38.1, h: 348.5, d: 233.3}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+attrs:
+  model: LFAN-F
+  part-number: 3FE 79719 AA
+  weight-kg: 2.08
+  fans: '6'
+  power-draw-typical-w: 18
+  power-draw-max-w: 275
+  hot-swap: 'yes'
+provenance:
+  sources: >-
+    UDS = Lightspan Access Node MF-8 Unit Data Sheet Guide 26.9, 3HH-92646-AAAA-TQZZA Issue 09,
+    chapter 11 (p79-85). USIM = Lightspan Access Node MF-8 User, Safety and Installation Manual
+    26.9, 3HH-92647-AAAA-RJZZA Issue 09. DS = Nokia Lightspan MF-8 data sheet CID214273 (April
+    2025), whose front render of a populated shelf shows this module seated and is orthographic.
+  size: >-
+    datasheet - UDS s11.6.1 (p83): "Width: 348.5 mm", "Depth: 233.3 mm", "Height: 38.1 mm",
+    stated with the module lying flat as Figure 58 draws it. The face is authored as the module
+    stands in a horizontally mounted shelf, so w is the stated height 38.1 and h the stated width
+    348.5. The same page prints 348.5 mm as "40.7 in.", which is wrong (13.7 in.); the millimetre
+    figure agrees with the DS render, where the cover measures 37.0 x 345.3 between the shadow
+    lines at 1.8129 px/mm.
+  depth: 'datasheet - 233.3 mm, UDS s11.6.1 (p83)'
+  weight: 'datasheet - 2,08 kg (4.59 lbs), UDS s11.6.2 (p83)'
+  power: >-
+    datasheet - USIM Table 21 "Power consumption per unit" (p123): LFAN-F 18 W "Full Load
+    Typical" and 275 W "Full Load Maximum". Note 1 defines typical as 48 Vdc, 25 C and averaged
+    component specs; note 2 defines maximum as worst-case voltage, temperature and tolerances.
+    The UDS chapter states no wattage (s11.8 says only that the module is fed from the back
+    panel). Read the spread before using the low figure: the maximum is fifteen times the typical.
+  fans: 'datasheet - UDS s11.3 (p80): "Contains six variable-speed fan blowers"'
+  hot-swap: 'datasheet - UDS s11.3 (p80): "Is field-replaceable without service interruption of the shelf"'
+  layout: >-
+    photo-measured - the DS front render (1053 x 777 px, shelf 481.0 mm across 872 px, 1.8129
+    px/mm; the shelf height and the power bays confirm the scale), which is a vendor render and
+    not a photograph of a unit. Positions in mm from the cover's top-left, good to about 0.5 mm:
+    name text centred x 19.5 and running y 14.5 to 85.6; handle 16.2-21.8 x 122.6-224.6; location
+    window 16.6-22.6 x 271.6-291.1; PWR lamp centre (19.1, 306.4) with the PWR legend below it at
+    y 309-314; unlock button 11.8-26.7 x 325.0-339.9 with the white lock mark at (19.3, 330.8).
+    UDS Figure 58 "LFAN-F front panel view" (p82, a 150 ppi raster, the cover lying flat) names
+    the parts and puts them in the same order at the same fractions of the length (button 9-26
+    mm from the end, lamp 43, window 57-78, handle 125-230); its width is 4 percent out against
+    its length, so only the render was measured.
+  orientation: >-
+    The module is drawn in Figure 58 lying flat with the unlock button at the left; in a
+    horizontally mounted shelf it stands with that end DOWN and the name reading bottom to top,
+    as the DS render and UDS Figure 6 both show.
+  leds: >-
+    datasheet - UDS s11.7 Table 27 (p84-85). Fan power status LED (label PWR), tri-colour: green
+    on = normal operation; green blinking = start-up, or communication with the NT lost; red on
+    = alarm, for example one or more fans failing; orange on = controller in reset, not
+    programmed, or firmware upgrade ongoing; off = no power. Location LED (no label): white on =
+    shelf location indication, off = normal operation; note 2 says that in this release it lights
+    for an hour after system initialisation. Figure 58 points "Location LED" at the pale
+    rounded window and "Fan power LED" at the dot beside the PWR legend.
+  caution-label: >-
+    drawing - UDS Figure 58 (p82) draws an ESD mark, a yellow warning triangle and the words
+    CAUTION ROTATING FAN in a strip beside the unlock button, about 2 to 48 mm from the button
+    end and 0.71 to 0.84 of the way across the cover. The DS render shows no label there, so its
+    position is taken from Figure 58 as fractions and is the least certain item on the face.
+  unlock-button: >-
+    datasheet - UDS s11.6.3 (p84): "a square, black, unlock button (marked with a white lock
+    label)", shifted sideways to unlock. Size 14.9 x 14.9 measured on the DS render.
+  colour: >-
+    photo-measured - the DS render: cover 86,95,106 (#565f6a) averaged over the plain cover
+    between the handle and the name, handle 134-144 grey-white, button near black. A vendor
+    render, so the colour is the vendor's presentation of the part and not a photographed unit.
+  airflow: >-
+    datasheet - USIM s4.1.3.4 (p153): "the forced airflow comes in via the open side and goes out
+    via the fan", right to left in a horizontal shelf and bottom to top in a vertical one. The
+    module is the exhaust.
+  relief: 'estimated - the handle and button stand off the cover in UDS Figure 59 (3D); nothing dimensions either'
+  logo-zone: >-
+    no mark is drawn: "Nokia Lightspan MF-8" is printed as text, in the same face as the rest of
+    the legend, and is set as silkscreen text.
+  lifecycle: >-
+    searched only the staged documents - both 26.9 guides list the module as current (USIM Table
+    5); no end-of-life notice was searched for on the web.
+elements:
+  handle: {at: [16.2, 122.6], size: [5.6, 102.0], class: handle}
+  location-led: {at: [16.6, 271.6], size: [6.0, 19.5], class: led, states: ['off', {name: 'on', color: '#f4f6f8'}]}
+  unlock-button: {at: [11.8, 325.0], size: [14.9, 14.9], class: button}
+  caution-label: {at: [27.0, 300.5], size: [5.0, 46.0], class: label}
+groups:
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the PWR fan status lamp; the location lamp is the window above it
+parts:
+  - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [18.1, 305.4],
+     states: {lamp: ['off', {name: 'on', color: '#39b54a'},
+                     {name: starting, color: '#39b54a', behavior: blinking},
+                     {name: fail, color: '#d0021b'},
+                     {name: reset, color: '#f5a623'}]}}
+relief:
+  wall: '#565f6a'
+  features:
+    - node: handle
+      out: 18.0
+      confidence: estimated
+      source: the handle stands off the cover in UDS Figure 59 (3D); no document gives a figure
+    - node: unlock-button
+      out: 2.0
+      confidence: estimated
+      source: the button stands proud in UDS Figure 61; no document gives a figure
+connection-points:
+  mate: {at: [19.05, 174.25], direction: rear}
+skins: [default]
