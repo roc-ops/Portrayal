@@ -50,3 +50,32 @@ def test_the_parts_own_attrs_still_win(tmp_path):
 
 def test_unset_leaves_the_drawn_default(tmp_path):
     assert grip_fill(_lib(tmp_path, FIELD), None) == "#6f6f6f"
+
+
+BEIGE = {"latch-color": {"label": "Latch colour", "type": "text", "default": "#d9cba3"}}
+
+
+def _host_default(lib, default):
+    host = lib.cache["local/host@1"][0]
+    host["fields"] = {"latch-color": {**FIELD["latch-color"], "default": default}}
+    return lib
+
+
+def test_a_hosts_own_default_reaches_the_part_when_it_differs(tmp_path):
+    """generic/qsfp-mpo@1 defaults its tab to beige; the composed tab's own
+    default is grey. Unset, the tab wears the host default."""
+    lib = _host_default(_lib(tmp_path, FIELD), "#d9cba3")
+    assert grip_fill(lib, None) == "#d9cba3"
+
+
+def test_a_value_still_beats_the_hosts_default(tmp_path):
+    lib = _host_default(_lib(tmp_path, FIELD), "#d9cba3")
+    assert grip_fill(lib, {"latch-color": "#1f5fbf"}) == "#1f5fbf"
+
+
+def test_a_default_equal_to_the_parts_own_is_not_handed_down(tmp_path):
+    """So no drawing that agreed before gains an attribute."""
+    lib = _lib(tmp_path, FIELD)
+    g, _ = render_mod.instance_group(lib, "local/host@1", "h", [0, 0], None, None, None, None)
+    tab = next(e for e in g.iter() if e.get("id") == "h--tab")
+    assert tab.get("data-latch-color") is None

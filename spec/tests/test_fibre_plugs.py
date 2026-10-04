@@ -120,7 +120,7 @@ def test_a_plugs_envelope_is_held_to_a_registry_entry_or_says_why_not(ref):
         assert "NO `conforms:`" in contract(LC)["provenance"]["standard"]
 
 
-def test_the_librarys_fibre_plugs_are_these_five_and_there_are_five():
+def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
     """A census, and it asserts it measured something.
 
     KEYED ON THE STRUCTURE, not on a namespace or a name: a part that MATES a
@@ -149,8 +149,12 @@ def test_the_librarys_fibre_plugs_are_these_five_and_there_are_five():
         if c.get("mates") in connectors and c.get("class") != "cap":
             ns = f.parents[2].name
             found[f"{ns}/{c['name']}@{c['version'].split('.')[0]}"] = c
-    assert len(found) == 5, sorted(found)
-    assert set(found) == set(MATES) | {LC}, sorted(found)
+    # THE SIXTH, WITH ITS PARAGRAPH. generic/mpo16-plug@1 mates `mpo16`: the
+    # MPO-12 housing with its key offset, so it is its own interface and its
+    # own part (umbrella decision 10). Its tests are
+    # spec/tests/test_mpo_bidi_pon_optics.py.
+    assert len(found) == 6, sorted(found)
+    assert set(found) == set(MATES) | {LC, "generic/mpo16-plug@1"}, sorted(found)
 
 
 # --- the two new registry entries --------------------------------------------------

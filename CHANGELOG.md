@@ -25,6 +25,15 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- Four generic optics and a plug: `generic/qsfp-mpo@1` (a QSFP with one MPO
+  receptacle), `generic/qsfp-dd-mpo16@1` (a QSFP-DD with one MPO-16 receptacle
+  in a Type 2 nose), `generic/qsfp-lc-simplex@1` (a QSFP with a single LC
+  bore), `generic/sfp-sc@1` (an SFP with an SC receptacle and a bail) and
+  `generic/mpo16-plug@1` (the sixteen-fibre MPO plug, key offset, mating
+  `mpo16`). Each optic's receptacle is a connector slot offering its plug and
+  dust cap. A new registry entry, `mpo16-plug`. A host's own field default now
+  reaches a part it composes when the two defaults differ. See
+  [docs/pluggables-mpo-bidi-pon-design.md](docs/pluggables-mpo-bidi-pon-design.md).
 - ReadyLinks GL-12xB-240D (`readylinks/gl-12xb-240d`), the first device to seat
   a BNC jack: twelve ReadyLink ports on `common/bnc-jack@1` (impedance 75) on a new
   GL-x 12-port BNC line card in slot 1, a slot blank in slot 2, and two BNC sync

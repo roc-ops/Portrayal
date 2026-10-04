@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: qsfp-lc
-version: 2.2.0
+version: 2.2.1
 class: transceiver
 behaviour: occupies
 mates: qsfp
@@ -91,7 +91,7 @@ provenance:
     bore centres. THE HEIGHT IS NOT SOURCED and never was - it was 5.30 and is now 6.90,
     grown to contain the keyed opening it frames rather than measured off anything
   face-mpo: >-
-    the MPO faces are their own parts - generic/qsfp-mpo12 - because a face is in the
+    the MPO face is its own part - generic/qsfp-mpo@1 - because a face is in the
     name (docs/pluggables-design.md decision 4).
   head: >-
     registry - qsfp-module's `head` (19 MAX wide, 3.4 MAX above, 1.6 MAX below,
@@ -149,19 +149,24 @@ provenance:
     16.725.
   tab-colour: >-
     A FIELD, not a fact, and the default is a NEUTRAL GREY (#6f6f6f) because
-    every chromatic default is a claim. SFF-8661 Rev 2.5, this module's own
-    MSA, gives no colour code at all; the one pull-tab code the corpus holds
-    is QSFP-DD HW Rev 6.3 section 6.3, the sibling form factor's, which
-    recommends colour-coding the tab by wavelength - beige for 850 nm, blue
-    for 1310 nm, white for 1550 nm - with "should", and the list is not
+    every chromatic default is a claim. THE QSFP DOCUMENTS DO CARRY A COLOUR
+    CODE (corrected in 2.2.1, which said they carried none): SFF-8661 Rev 2.5,
+    the mechanical MSA, gives no colour code, but SFF-8679 Rev 1.9 section 7.2
+    requires an exposed feature of the module to be colour coded - beige for
+    850 nm, blue for 1310 nm, white for 1550 nm, unless an industry
+    specification applies - and SFF-8436 Rev 4.9 section 5.5 says the same.
+    QSFP-DD HW Rev 6.3 section 6.3, the sibling form factor, recommends the
+    same three with "should". None lists aqua, and the list is not
     exhaustive. The near-white this default used to carry (the ProLabs
     drawing's PULL LATCH COLOR WHITE, a fact about that one part) therefore
     read as 1550 nm under that code on every generic drawn with it, a
     per-SKU fact a generic must not carry (L99). The grey is in no code
     table: not beige, not blue, not white. A vendor wrapper, which
     knows which module it is, sets `latch-color` to the colour its wavelength
-    calls for. Decided 2026-09-21. Both documents are held locally in the
-    maintainer's gitignored corpus. THE OUTLINE FOLLOWS THE FILL. The composed tab's nodes carry
+    calls for. Decided 2026-09-21. An LC duplex face is used at all three
+    wavelengths, so the code picks no default here; generic/qsfp-mpo@1, whose
+    face is the 850 nm one, defaults to beige. The documents are held locally
+    in the maintainer's gitignored corpus. THE OUTLINE FOLLOWS THE FILL. The composed tab's nodes carry
     `data-stroke-derive: latch-color`, so their stroke is a fixed darker shade of
     whatever colour the field is given - each channel x 61/100, rounded half
     up (render.py `stroke_shade`) - and #444444 for this default, the shade

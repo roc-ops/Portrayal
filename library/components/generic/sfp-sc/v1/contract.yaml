@@ -1,0 +1,145 @@
+format: 1
+kind: component
+name: sfp-sc
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: sfp
+conforms: sfp-module
+profile: networking
+description: >-
+  A generic SFP with one SC receptacle - the shape of the PON line-terminal
+  SFP and SFP+ optic, standing for all of them. An SFP body behind a head
+  that is wider, taller and longer than a duplex LC one, because an SC
+  opening does not fit the 8.55 body: one SC opening with its long axis
+  horizontal, and a bail whose bar lies along the bottom of the head. Which
+  module it is - rate, reach, wavelength, watts - is a fact about a vendor
+  product and lives on the wrapper that composes this
+  (docs/pluggables-design.md, decision 5), never here. Copies
+  generic/sfp-lc-simplex@2 and changes the face and the head.
+size: {w: 13.55, h: 8.55, d: 47.50}
+size-confidence: {w: registry, h: registry, d: registry}
+head:
+  at: [-0.225, -2.1]
+  size: {w: 14.0, h: 12.05, d: 20.0}
+  size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+  node: body
+  exceeds:
+    - dimension: length
+      source: >-
+        Superxon SFP+ XGS-PON MPM OLT Transceiver, DS00001553 V1.1, p10 Figure
+        8: 67.5 REF overall less 47.5 +/-0.20 is 20.0 outside the cage; 6COM
+        6C-XGSPON-E1-OLT-SFP+ Rev 3.1 p8: 68 REF less 47.5 +/-0.2 is 20.5.
+        SFF-8432 Rev 5.2a designator A is a recommended 10.00 and calls other
+        lengths application specific
+attrs: {power-absent: not-applicable, form-factor: sfp, face: sc, media: fiber}
+fields:
+  latch-color:
+    label: Latch colour
+    type: text
+    default: '#6f6f6f'
+  label:
+    label: Module label
+    type: text
+    default: ''
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    registry - sfp-module, which is SFF-8432 Rev 5.2a Table 4-3 (designator E
+    13.55 width, S 8.55 height, T 47.50 from the positive stop to the rear).
+    Two vendor drawings of this face print the same body: Superxon DS00001553
+    V1.1 p10 Figure 8 (13.55 +/-0.25, 8.55 +/-0.15, 47.5 +/-0.20) and 6COM
+    6C-XGSPON-E1-OLT-SFP+ Rev 3.1 p8 (8.5 +0.2/-0.1, 47.5 +/-0.2).
+  power: >-
+    NOT APPLICABLE, because this contract is a GENERIC and not a part. It
+    stands in for every module of its kind, so there is no one figure to
+    state, and any wattage here would be a fiction. The figure belongs on the
+    wrapper, which knows which module it is. L27 exempts by `power-absent` and
+    this sentence is why.
+  head: >-
+    datasheet - Superxon SFP+ XGS-PON MPM OLT Transceiver, DS00001553 V1.1
+    (2023-02-23), p10 Figure 8, Package Outline, toleranced callouts: 14 MAX
+    wide (top view), 2.1 MAX above the body and 1.4 +/-0.50 below it (side
+    view), so 12.05 tall on the 8.55 body. The same vendor sheet DS00001552
+    V1.1 p7 Figure 5 prints the same outline, and a SECOND VENDOR AGREES: 6COM
+    6C-XGSPON-E1-OLT-SFP+ Rev 3.1 p8, Package Dimensions, prints 14 MAX, 2.1
+    MAX and 1.4 +/-0.5. Width, above and below are each AT the sfp-module head
+    maximum (14.00, 2.10, 1.40; SFF-8432 Rev 5.2a Table 4-3 D, L, AK), so none
+    of the three is listed in `exceeds`. The 14.0 is centred on the 13.55
+    body, 0.225 over each side. THE LENGTH IS 20.0, DERIVED (Superxon 67.5 REF
+    less 47.5; 6COM gives 20.5), and is over the 10.00 RECOMMENDED maximum, so
+    it is listed. WHICH WAY UP: the 6COM sheet draws the view under its side
+    view with the cage-latch triangle, the module bottom, so the top of its
+    side view is the module top; the 2.1 is above and the 1.4, with the bail
+    bar, below. The Superxon side view agrees (its latch is on the lower
+    edge).
+  receptacle: >-
+    std/sc-bore@1, the SC opening (7.5 x 9.0 with a 0.89 x 2.1 key slot),
+    composed as `sc` and turned a quarter (`rotate: 270`) so its LONG AXIS IS
+    HORIZONTAL. Both vendor end views draw it so: scaled on the 14 MAX width
+    of Superxon Figure 8 (a 226 ppi raster, 7.71 px/mm), the opening reads 9.1
+    wide by 7.5 tall, +/-0.15, and the 6COM end view shows the latch clips left
+    and right of the ferrule. Datasheet, scaled off undimensioned art.
+  position: >-
+    ESTIMATED, scaled off undimensioned art - the opening centre is drawn at
+    (6.775, 3.7). Centred in x: the Superxon end view centres it to the pixel
+    (7.0 of 14). In y the same view puts the centre 5.84 below the top of the
+    head outline, which less the 2.1 above is 3.74 below the body top; the
+    body centre is 4.275. Neither sheet dimensions the opening on the face.
+  key: >-
+    ESTIMATED, AND THE TWO VENDORS DO NOT AGREE. The key slot is drawn at the
+    BOTTOM of the opening, toward the module bottom and the bail bar, as the
+    6COM p8 end view draws it: a small slot at the bottom centre of the
+    opening, above the wide bail bar (read off a raster of about 150 ppi,
+    undimensioned). The Superxon Figure 8 end view draws a 2.1 notch, the
+    width SENKO DS-SC-000011 prints for the SC key slot, in the wall ABOVE the
+    opening, with its wide bail tab below - the opposite side. Both sheets
+    put the bail bar at the bottom, so one of the two notches is not the key
+    slot or the two products are keyed differently; nothing held settles it.
+    If the Superxon reading is the right one the placement is `rotate: 90`
+    and nothing else changes. A photograph of one module end-on would settle
+    it.
+  latch: >-
+    datasheet for the shape, ESTIMATED for every figure - A BAIL, not a pull
+    tab. Both vendor side views draw a wire bail across the front of the
+    head, hooked over the top (the 2.1 above) and ending in a bar below the
+    body (the 1.4 below). ONLY THE BAR IS DRAWN, as generic/sfp-lc-simplex@2
+    draws only its crossbar: 8.4 wide, the width the Superxon end view shows
+    (scaled on its 14 MAX), centred, along the bottom of the head. Its 1.3
+    height is not sourced. No bail dimension is called out on either sheet.
+    New art: no bail part exists in the library to compose.
+  bail-colour: >-
+    A FIELD, and the default is the NEUTRAL GREY (#6f6f6f) the SFP generics
+    use. Neither Superxon sheet states a colour. SFF-8432 Rev 5.2a Note 13
+    codes an exposed feature by fibre mode (blue for single mode), and a
+    vendor wrapper sets `latch-color` accordingly. The outline follows the
+    fill (`data-stroke-derive`).
+  unread: >-
+    Superxon Figure 8 carries two callouts on its side view, read as 12-2MAX
+    and 12-1MAX, whose meaning is not legible at 226 ppi. Nothing here uses
+    them.
+parts:
+  - {ref: std/sc-bore@1, id: sc, at: [2.58, -0.355], rotate: 270, lift: 20.0}
+relief:
+  features:
+    - node: body
+      out: 20.0
+      color: '#9aa0a8'
+      confidence: datasheet
+      source: >-
+        Superxon DS00001553 V1.1 p10 Figure 8: 67.5 REF overall less 47.5
+        +/-0.20, the head length outside the cage; 6COM Rev 3.1 p8 gives 20.5
+        - see provenance.head
+    - node: bail
+      lift: 20.0
+      bar: 1.3
+      confidence: estimated
+      source: >-
+        A ROUND BAR along the bottom of the head, resting on the head front at
+        lift 20.0, as generic/sfp-lc-simplex@2 builds its bail. The 6COM side
+        view ends the bail in a round loop below the body. The diameter is the
+        drawn height of the bar, which is not sourced - see provenance.latch
+connection-points:
+  mate: {at: [6.775, 4.275], direction: front}
+  optical: {at: [6.775, 3.7], direction: front}
+skins: [default]

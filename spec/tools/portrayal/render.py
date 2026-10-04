@@ -1344,6 +1344,34 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
         pending.update(chained)
 
 
+def _inherited_fields(lib, contract, merged, part):
+    """The field values `contract` hands the part it composes: every value it
+    holds for a field it declares, AND ITS OWN DEFAULT where that differs from
+    the default the composed part declares for the same field.
+
+    The second half is what lets a host choose a default colour for a part it
+    composes without pinning it. generic/qsfp-mpo@1 defaults `latch-color` to
+    beige and composes common/qsfp-pull-tab@2, whose own default is grey: with
+    no value set the tab has to wear the host default, and a `parts:` entry
+    `attrs` would do that only by overriding every wrapper. A default equal to
+    the composed part's is not handed down, so nothing that agreed before
+    carries a new attribute."""
+    out = {}
+    try:
+        child = lib.resolve(part["ref"])[0]
+    except Exception:
+        child = None
+    theirs = (child or {}).get("fields") or {}
+    for k, f in (contract.get("fields") or {}).items():
+        if k in merged:
+            out[k] = merged[k]
+            continue
+        default = (f or {}).get("default")
+        if k in theirs and default not in (None, "") and default != (theirs[k] or {}).get("default"):
+            out[k] = default
+    return out
+
+
 def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None, z_inset=0.0, z_group_lift=0.0, seated=None, bay_attrs=None, occupants=None, occ_used=None, in_port=False, tilt=None, inherited_fields=None):
     contract, skins = lib.resolve(ref)
     comp_name = ref.split("/")[-1].split("@")[0]
@@ -1627,8 +1655,7 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                                part["at"], None,
                                group_merged_attrs(pgrp, part.get("attrs")), None, None,
                                skin_name=part.get("skin", "default"),
-                               inherited_fields={k: merged[k] for k in (contract.get("fields") or {})
-                                                 if k in merged},
+                               inherited_fields=_inherited_fields(lib, contract, merged, part),
                                rotate=part.get("rotate"), mirror=bool(part.get("mirror")),
                                # A LIFTED PART'S FEATURES ARE STILL MEASURED
                                # FROM THE PANEL. `lift` raises where a composed

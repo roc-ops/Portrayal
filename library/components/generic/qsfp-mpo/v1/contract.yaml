@@ -1,0 +1,136 @@
+format: 1
+kind: component
+name: qsfp-mpo
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: qsfp
+conforms: qsfp-module
+profile: networking
+description: >-
+  A generic QSFP with one MPO face - the shape every QSFP+, QSFP28 and QSFP56
+  parallel-fibre optic has, standing for all of them. One MPO receptacle, key
+  up and pinned, in a black insert in the metal nose, and a pull tab standing
+  proud of the body because the module is seated. Which module it is - rate,
+  reach, wavelength, watts - is a fact about a vendor product and lives on the
+  wrapper that composes this (docs/pluggables-design.md, decision 5), never
+  here. Copies generic/qsfp-lc@2 and changes the face.
+size: {w: 18.35, h: 8.5, d: 52.4}
+size-confidence: {w: registry, h: registry, d: registry}
+head:
+  at: [0.0, -1.4]
+  size: {w: 18.35, h: 11.3, d: 20.0}
+  size-confidence: {w: registry, h: photo-measured, d: drawing}
+  node: body
+attrs: {power-absent: not-applicable, form-factor: qsfp, face: mpo, media: fiber}
+fields:
+  latch-color:
+    label: Latch colour
+    type: text
+    default: '#d9cba3'
+  label:
+    label: Module label
+    type: text
+    default: ''
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    registry - qsfp-module, which is SFF-8661 Rev 2.5 Figure 5-1 Basic Views
+    (18.35 +/-0.10 wide, 8.50 +/-0.10 high, 52.4 REF deep, the inserted length
+    behind the nose). Unchanged from generic/qsfp-lc@2, which this contract is
+    copied from; see that contract for the full reading of the depth. FS
+    QSFP28-SR4 datasheet p10 (18.35) and Gigalight GQS-MPO101-SR4C Rev V2
+    Figure 9 (18.35 +/-0.10, 8.50) print the same body.
+  power: >-
+    NOT APPLICABLE, because this contract is a GENERIC and not a part. It
+    stands in for every module of its kind, so there is no one figure to
+    state, and any wattage here would be a fiction. The figure belongs on the
+    wrapper, which knows which module it is. L27 exempts by `power-absent` and
+    this sentence is why.
+  head: >-
+    registry - the `head` of qsfp-module (19 MAX wide, 3.4 MAX above, 1.6 MAX
+    below, 20 MAX long; SFF-8661 Rev 2.5 Figure 5-1 Notes 1 and 6), which L121
+    checks this key against. THE NOSE IS 1.4 ABOVE AND 1.4 BELOW THE BODY, 11.3
+    tall: photo-measured off the maintainer's photographs of a QSFP28 SR4
+    module, the reading generic/qsfp-lc@2 carries - and that module is this
+    face, an MPO one. The end-on photograph agrees: scaled on the 18.35 nose
+    width, the nose reads 11.3 tall. VENDORS DIFFER, all inside the envelope:
+    FS QSFP28-SR4 datasheet p10 prints 1.85 above and 1.20 below; Gigalight
+    GQS-MPO101-SR4C Rev V2 Figure 9 prints a 12.80 +/-0.10 nose on an 8.50
+    body. The width stays the registry 18.35. The length is the 20 MAX of
+    Figure 5-1 Note 1, at drawing confidence as on generic/qsfp-lc@2; FS p10
+    gives 72.24 overall, which less 52.4 is 19.84.
+  receptacle: >-
+    std/mpo@2, the MPO adapter opening, composed as `mpo`. SFF-8436 Rev 4.9
+    section 5.1 says the optical interface meets IEC 61754-7 interface 7-3,
+    the MPO adapter interface, so the module mouth is the adapter opening the
+    library already draws. Its 12.9 x 8.0 is the estimate std/mpo@2 records
+    (registry there; the opening itself is estimated), and no keyway is drawn
+    because that part draws none.
+  key: >-
+    datasheet - KEY UP, toward the module top and the pull tab. SFF-8679 Rev
+    1.9 section 7.3.1 puts the keying feature of the MPO receptacle on the top
+    (Figure 7-2). std/mpo@2 is composed unrotated: the MPO plugs draw their key
+    rib on top unrotated, and a seat turns an occupant by its host turn, so a
+    seated plug shows key up. Section 7.3: with the key up the four left fibre
+    positions transmit and the four right receive.
+  gender: >-
+    datasheet - PINNED. SFF-8679 Rev 1.9 section 7.3 describes a male MPO
+    connector with two alignment pins present in the receptacle; the pins are
+    visible in the end-on photograph. STATED IN PROSE ONLY, as
+    generic/mpo12-plug@1 states that it is unpinned: the schema has no key for
+    gender yet. The pins are not drawn, because the composed aperture paints
+    over this skin and draws no ferrule.
+  position: >-
+    photo-measured, +/-0.4 - the maintainer's end-on photograph of a QSFP28
+    SR4 module, scaled on the 18.35 nose width and read by eye, not
+    edge-fitted. The black insert shows margins of 2.7 left and 2.5 right, so
+    its centre is at x 9.2 against the module centre 9.175; the receptacle is
+    drawn ON the module centre, which the reading does not distinguish from.
+    Vertically the insert is 1.25 below the nose top and 0.7 above the nose
+    bottom, which puts its centre 4.55 below the body top, and the recessed
+    ferrule reads 4.36; 4.5 is drawn, between the two, against a body centre
+    of 4.25. No document dimensions where the receptacle sits on the nose
+    face: not SFF-8679 Figure 7-2 and not the vendor drawings read.
+  insert: >-
+    photo-measured - the black plastic receptacle body seen in the metal nose,
+    13.1 x 9.4 on the same photograph, larger than the mouth. Drawn at x 2.7
+    to 15.8 and y -0.15 to 9.25, the margins as read. Painted, not relief.
+  tab: >-
+    composed - common/qsfp-pull-tab@2, placed exactly as generic/qsfp-lc@2
+    places it (`at: [-0.325, -1.23]`, `lift: 20.0` on the nose front); see that
+    part for the reach and the measurements, which were taken off this same
+    SR4 module. FS p10 prints 118.22 overall (45.98 forward of its 72.24) and
+    an 18.29 tab width; Gigalight Figure 9 prints 120.80 +/-0.30 overall. THE
+    LAYERING IS DELIBERATE (lint L46): the size box of the tab holds the
+    receptacle, but the tab is a loop open in the middle and draws nothing
+    over it except the grip, which straddles the top edge of the face (y -1.23
+    to 1.67) as the real part does.
+  tab-colour: >-
+    A FIELD, and the default is BEIGE because the code says so for this face.
+    SFF-8679 Rev 1.9 section 7.2 requires an exposed feature of the module to
+    be colour coded, and unless an industry specification applies: beige for
+    850 nm, blue for 1310 nm, white for 1550 nm. SFF-8436 Rev 4.9 section 5.5
+    says the same. An MPO face on a QSFP is the multimode parallel face, and
+    the photographed SR4 has a beige tab. The standard names the colour and
+    not a value: #d9cba3 is a representative beige, estimated. A vendor
+    wrapper for a parallel single-mode module sets `latch-color` to the colour
+    its wavelength calls for. The outline follows the fill
+    (`data-stroke-derive` on the composed tab).
+parts:
+  - {ref: std/mpo@2, id: mpo, at: [2.725, 0.5], lift: 20.0}
+  - {ref: common/qsfp-pull-tab@2, id: tab, at: [-0.325, -1.23], lift: 20.0}
+relief:
+  features:
+    - node: body
+      out: 20.0
+      color: '#8d949c'
+      confidence: drawing
+      source: >-
+        SFF-8661 Rev 2.5 Figure 5-1, Note 1, the 20 MAX nose that extends
+        outside the cage - see provenance.head. The node is the front outline
+        of the nose, 11.3 tall (photo-measured)
+connection-points:
+  mate: {at: [9.175, 4.25], direction: front}
+  optical: {at: [9.175, 4.5], direction: front}
+skins: [default]

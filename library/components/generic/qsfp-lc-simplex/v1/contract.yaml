@@ -1,0 +1,124 @@
+format: 1
+kind: component
+name: qsfp-lc-simplex
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: qsfp
+conforms: qsfp-module
+profile: networking
+description: >-
+  A generic QSFP with one LC bore - the shape of the single-fibre
+  bidirectional (BiDi) QSFP optic, standing for all of them. A duplex-shaped
+  receptacle shell with the one keyed bore in its LEFT bay, where the duplex
+  face has its transmit bore, and the right bay empty; keyway up, under a
+  pull tab. Which module it is - rate, reach, wavelength, watts - is a fact
+  about a vendor product and lives on the wrapper that composes this
+  (docs/pluggables-design.md, decision 5), never here. Copies
+  generic/qsfp-lc@2 for the body and generic/sfp-lc-simplex@2 for the single
+  bore.
+size: {w: 18.35, h: 8.5, d: 52.4}
+size-confidence: {w: registry, h: registry, d: registry}
+head:
+  at: [0.0, -2.2]
+  size: {w: 18.35, h: 12.2, d: 19.2}
+  size-confidence: {w: registry, h: datasheet, d: datasheet}
+  node: body
+attrs: {power-absent: not-applicable, form-factor: qsfp, face: lc-simplex, media: fiber}
+fields:
+  latch-color:
+    label: Latch colour
+    type: text
+    default: '#6f6f6f'
+  label:
+    label: Module label
+    type: text
+    default: ''
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    registry - qsfp-module, which is SFF-8661 Rev 2.5 Figure 5-1 Basic Views
+    (18.35 +/-0.10 wide, 8.50 +/-0.10 high, 52.4 REF deep, the inserted length
+    behind the nose). Unchanged from generic/qsfp-lc@2. Three vendor drawings
+    of this face print the same body: ROBOfiber QSFP-10010-WA/WB datasheet Rev
+    1.1 p8 Figure 3 (18.35 +/-0.10, 8.50), GBC Photonics QSFP28 BiDi 100GbE
+    datasheet p4 (18.35 +/-0.1, 8.5 +/-0.1) and Ascent Optics datasheet-381 p5
+    (18.35 +/-0.10, 8.5 +/-0.10).
+  power: >-
+    NOT APPLICABLE, because this contract is a GENERIC and not a part. It
+    stands in for every module of its kind, so there is no one figure to
+    state, and any wattage here would be a fiction. The figure belongs on the
+    wrapper, which knows which module it is. L27 exempts by `power-absent` and
+    this sentence is why.
+  head: >-
+    datasheet - ROBOfiber QSFP-10010-WA/WB datasheet Rev 1.1 (Mar 2023), p8
+    Figure 3, side view: the nose stands 2.20 +/-0.20 above and 1.50
+    +0.10/-0.30 below the 8.50 body, 12.2 tall. Both are inside the registry
+    envelope (3.4 MAX above, 1.6 MAX below, SFF-8661 Rev 2.5 Figure 5-1), so
+    nothing is listed in `exceeds`. The GBC Photonics p4 outline prints only
+    those two maxima, 3.4 MAX and 1.6 MAX, and so bounds the nose without
+    measuring it. The width is the registry 18.35, which Figure 3 prints. THE
+    LENGTH IS 19.2, DERIVED: Figure 3 prints 72.00 +/-0.20 for the module and
+    52.80 +/-0.20 behind the nose. GBC prints 72 REF.
+  bore: >-
+    std/lc-bore@3, the keyed opening the other LC optics compose, IN THE PLACE
+    OF THE TRANSMIT BORE of generic/qsfp-lc@2: `at: [3.70, 0.95]`, centre
+    (6.05, 4.9). TWO VENDORS AGREE ON THE SIDE. On the ROBOfiber Figure 3 end
+    view (a 188 ppi raster, scaled on the 18.35 width, good to about 0.2) the
+    ferrule centre is 6.07 from the left edge with the module top up, which is
+    the duplex transmit position (6.05) and not the receive one (12.30) or the
+    centre; the sheet does not state its projection, and left rests on reading
+    it as third-angle. The GBC Photonics p4 end view draws a duplex-shaped
+    shell with two bays, the ferrule in the LEFT bay only and the right bay
+    empty. X IS DATASHEET, SCALED OFF UNDIMENSIONED ART; THE HEIGHT IS
+    ESTIMATED: neither sheet dimensions it, the ferrule sits at the mid-height
+    of its bay, and the 4.9 is the optical axis of generic/qsfp-lc@2, which is
+    itself derived and not a callout.
+  keyway: >-
+    datasheet, scaled off undimensioned art - UP, toward the pull tab. The
+    ROBOfiber end view draws the narrow keyway of the bore on the tab side,
+    and the GBC end view hangs the bay divider from the top. That is the
+    `rotate: 180` both QSFP LC generics use (std/lc-bore@3 is drawn tongue
+    down).
+  shell: >-
+    the receptacle housing is that of generic/qsfp-lc@2 unchanged (11.55 wide
+    from x 3.40, 6.90 tall; its height is not sourced there either). THE RIGHT
+    BAY IS DRAWN EMPTY, as the GBC end view shows it: the keyed outline of a
+    bore in the receive position with no sleeve and no ferrule. PAINTED, NOT A
+    CAVITY - the empty bay has no depth in 3D. The ROBOfiber sheet draws a
+    different shell, one bore with T/R lettered beside it; the lettering is
+    kept, under the bore.
+  tab: >-
+    composed - common/qsfp-pull-tab@2, placed as generic/qsfp-lc@2 places it
+    (`at: [-0.325, -1.23]`), at `lift: 19.2` on the nose front. Both sheets
+    name a pull tab. The reach is the composed part's 49.8, photo-measured on
+    another QSFP28; ROBOfiber prints (127.30) overall, 55.3 forward of the
+    nose front, and GBC 118 REF, 46 forward, so the drawn tab sits between
+    the two. THE LAYERING IS DELIBERATE (lint L46): the size box of the tab
+    holds the bore, but the tab is a loop open in the middle and draws nothing
+    over it except the grip across the top edge of the face.
+  tab-colour: >-
+    A FIELD, and the default is the NEUTRAL GREY (#6f6f6f) the LC generics
+    use. SFF-8679 Rev 1.9 section 7.2 codes an exposed feature by wavelength -
+    beige for 850 nm, blue for 1310 nm, white for 1550 nm - and a
+    single-fibre module transmits on one wavelength and receives on another,
+    so the two ends of one link differ; one vendor render of this face shows a
+    violet tab, and neither datasheet states a colour. A vendor wrapper sets
+    `latch-color`.
+parts:
+  - {ref: std/lc-bore@3, id: bore, at: [3.70, 0.95], rotate: 180, lift: 19.2}
+  - {ref: common/qsfp-pull-tab@2, id: tab, at: [-0.325, -1.23], lift: 19.2}
+relief:
+  features:
+    - node: body
+      out: 19.2
+      color: '#8d949c'
+      confidence: datasheet
+      source: >-
+        ROBOfiber QSFP-10010-WA/WB datasheet Rev 1.1 p8 Figure 3: 72.00
+        +/-0.20 less 52.80 +/-0.20, the nose length outside the cage - see
+        provenance.head
+connection-points:
+  mate: {at: [9.175, 4.25], direction: front}
+  optical: {at: [6.05, 4.9], direction: front}
+skins: [default]
