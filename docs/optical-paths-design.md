@@ -215,6 +215,18 @@ current `front-port` schema is `{name, type, positions}` with
 `additionalProperties: false` and no `rear_port` key, consistent with #20564
 having removed the FK. The mapping is now per-INSTANCE M2M.
 
+**Nautobot is the exception, and it was found by importing.** Its
+FrontPortTemplate still has a non-null rear port and rear-port position, and its
+library's front-port schema is `{name, type, rear_port, rear_port_position}`
+with no `positions`. A NetBox-shaped front port fails the Nautobot import, so
+the Nautobot document is written with the binding, read from the same rows as
+the fibre map. One front port reaches one rear position there, which holds
+every breakout, conversion, mesh and splice cassette as it stands. It does not
+hold an MPO front connector against an MPO rear one; that pair is written as a
+single position, and the fibres stay in the map. A tap - several front ports on
+one rear position - has no Nautobot spelling at all, and the export stops on one
+rather than writing a file that cannot load.
+
 So it ships beside `exports/netbox/` and `exports/nautobot/` as a fibre map,
 carrying the rows the M2M wants:
 

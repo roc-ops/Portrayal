@@ -129,6 +129,19 @@ names the ref that replaces it.
   class), and no 800G prefix is documented.
 
 ### Changed
+- The Nautobot exports are no longer a copy of the NetBox ones in two places,
+  because Nautobot could not import 37 of them. Front ports under
+  `library/exports/nautobot/` now carry `rear_port` and `rear_port_position`
+  (read from the fibre map) in place of `positions`, which is the shape
+  Nautobot's FrontPortTemplate requires; and a device that occupies a half
+  rack unit states the next whole number, with the true height in `comments`,
+  because Nautobot stores `u_height` as an integer. That is the 35 FS FHD
+  cassettes and panels, the Juniper MX104 (3.5U, written as 4) and the Telco
+  Systems TM-7124S (1.5U, written as 2). The four MPO-to-MPO adapter panels
+  state each front and rear connector as one position there, since Nautobot
+  binds a front port to a single rear position; the fibre map keeps every
+  fibre. None of the 37 could be imported into Nautobot before, so no imported
+  data changes. The NetBox exports and the fibre maps are unchanged.
 - **A 3D export leaves the marks out** (roc-ops/portrayal-site#46): `exportData()` and
   `download()` hide every mark halo for the export, as they always hid the
   selection halo, and restore them after. A GLB or USDZ is the model; the marks
