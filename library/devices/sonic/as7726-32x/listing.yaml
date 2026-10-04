@@ -1,0 +1,16 @@
+format: 1
+kind: listing
+hardware: edgecore/as7726-32x
+version: 1.0.0
+description: >-
+  SONiC's hardware SKU for this box is Accton-AS7726-32X, on platform x86_64-accton_as7726_32x-r0.
+source: >-
+  SONiC Supported Devices and Platforms (sonic-net.github.io/SONiC), the row for AS7726-32X.
+  Port names from the platform's own table in sonic-net/sonic-buildimage at d5c2e3b32ffa,
+  device/accton/x86_64-accton_as7726_32x-r0/Accton-AS7726-32X/port_config.ini: each SONiC name with the front-panel port its alias names.
+  eth0 is SONiC's management port (the SONiC command reference, Management VRF).
+interfaces:
+  - {physical: 'port-{n}', name: 'Ethernet{4*n-4}', range: '1-32'}
+  - {physical: mgmt-eth, name: eth0}
+nos: sonic
+nos-versions: master

@@ -1,0 +1,129 @@
+format: 1
+kind: module
+name: lff-lp-carrier
+version: 1.0.0
+class: drive
+behaviour: fills
+profile: server
+description: >-
+  HPE low-profile (LP) hot-plug carrier for a 3.5 inch LFF drive, as the Gen10
+  ProLiant DL160's four front bays present it - a label at the left, a
+  honeycomb window, the terracotta release lever, a second small honeycomb
+  window, and two lamps stacked at the right end
+attrs:
+  form-factor: 3.5in
+  capacity: '1'
+  capacity-unit: TB
+  interface: SATA
+  link: 6G
+  rpm: 7.2K
+# THE LABEL IS FIELDS, as on common/drive-carrier-35@1: one carrier for every
+# capacity, and what the label prints is set per drive.
+fields:
+  capacity: {label: Capacity, type: text, default: '1'}
+  capacity-unit: {label: Unit, type: choice, default: TB, options: [GB, TB]}
+  interface: {label: Interface, type: choice, default: SATA, options: [SAS, SATA]}
+  link: {label: Link rate, type: text, default: 6G}
+  rpm: {label: Spindle, type: text, default: 7.2K}
+provenance:
+  sources: >-
+    Three. (1) The straight-on photograph of a DL160 Gen10 4 LFF front in
+    newserverlife's hands-on review (newserverlife.com/upload/iblock/562/
+    7_opt.jpeg, 1280 x 131), which
+    carries two of these carriers in bays 1 and 2. (2) The DL160 Gen10 User
+    Guide a00066666en_us, "LFF low-profile drive LED definitions" figure and
+    table (native figure GUID-307656A7). (3) The QuickSpecs a00021860enw option
+    list, which sells the LFF drives in the "LP" carrier.
+  size: >-
+    photo-measured - 104.8 x 27.5. The photograph passes the panel gate: the
+    body between the ear folds is 1132 px for the 434.6 mm the QuickSpecs gives,
+    2.605 px/mm across, and 112.2 px for the 42.9 height, 2.615 px/mm down -
+    0.4% apart, so the face is near-orthographic and can be measured. Bay 1's
+    carrier runs x 77..350 px and y 45..117 px: 104.8 x 27.5 mm. The bay pitch
+    is 108.65 (the body width over four bays; the dividers measure 73, 354, 637,
+    920 px), so the carrier leaves 3.85 mm of divider and rail per bay. A bare
+    3.5 inch drive is 101.6 wide (SFF-8301), which the carrier clears by 1.6 a
+    side.
+  face: >-
+    photo-measured - Positions from the same photograph, carrier-local, at 2.605
+    x 2.615 px/mm: label 2.8..10.2 x 7.0..18.5; honeycomb window 15.1..53.0 x
+    7.0..20.4; release lever 70.0..88.2 x 3.8..22.9, terracotta with a darker
+    latch edge on its left; small honeycomb window 88.4..98.4 x 5.7..22.9; the
+    lamp column at the right end, 99.7..102.9. Read on the photograph's bay 1
+    carrier resampled to this part's own size beside the rendered skin, which is
+    how a first reading that had dropped its crop offset (and put the lever 7 mm
+    left) was caught. The honeycomb cell is drawn, not measured: at 2.6 px/mm a
+    cell is four pixels.
+  lamps: >-
+    drawing - User Guide "LFF low-profile drive LED definitions": item 1
+    Fault/Locate (solid amber failed; solid blue identified; flashing amber/blue
+    1 Hz failed and identified; flashing amber 1 Hz predictive failure), item 2
+    Online/Activity (solid green online; flashing green 4 Hz activity; flashing
+    green 1 Hz rebuilding or migrating). The figure stacks them at the carrier's
+    right end, item 1 above item 2, at about 0.96 of the width; the photograph
+    shows the same column as a light strip at 101..104 mm. Their sizes are drawn
+    from the figure's proportions, not measured.
+  label: >-
+    The defaults are what the photographed carriers print - 7.2K, SATA 6G, 1 TB,
+    part number 862130 (HPE's 1 TB SATA LFF LP drive) - and are an illustration,
+    not a claim about any configuration.
+  depth: >-
+    estimated - NOT IN THE INTAKE. 170 is a 147 mm SFF-8301 drive plus a carrier
+    frame of the size common/drive-carrier-35@1 measures on Dell's CAD (165.6);
+    no HPE document held gives the LP carrier's depth. Searched: QuickSpecs,
+    User Guide, Maintenance and Service Guide, Parts Support Guide for
+    "carrier", "dimension" and "mm".
+size: {w: 104.8, h: 27.5, d: 170.0}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+body: {depth: 170.0, color: '#2f3337'}
+elements:
+  label: {at: [2.8, 7.0], size: [7.4, 11.5], class: label}
+  window: {at: [15.1, 7.0], size: [37.9, 13.4], class: vent}
+  release: {at: [70.0, 3.8], size: [18.2, 19.1], class: control}
+  window-2: {at: [88.4, 5.7], size: [10.0, 17.2], class: vent}
+  lamp-fault:
+    at: [100.2, 6.6]
+    size: [2.4, 3.6]
+    class: led
+    states:
+      - 'off'
+      - {name: fault, color: '#f59e0b'}
+      - {name: locate, color: '#3b82f6'}
+      - {name: fault-locate, behavior: {mode: sequence, phases: [{color: '#f59e0b', seconds: 0.5}, {color: '#3b82f6', seconds: 0.5}]}}
+      - {name: predictive-failure, color: '#f59e0b', behavior: {mode: blinking, rate: 1}}
+    description: >-
+      Fault/Locate. User Guide: solid amber - failed, unsupported or invalid;
+      solid blue - normal and being identified; flashing amber/blue one flash
+      per second - failed or predictive failure and identified; flashing amber
+      one flash per second - predictive failure alert.
+  lamp-activity:
+    at: [100.2, 15.6]
+    size: [2.4, 3.6]
+    class: led
+    states:
+      - 'off'
+      - {name: online, color: '#22c55e'}
+      - {name: active, color: '#22c55e', behavior: {mode: blinking, rate: 4}}
+      - {name: rebuild, color: '#22c55e', behavior: {mode: blinking, rate: 1}}
+    description: >-
+      Online/Activity. User Guide: solid green - online, no activity; flashing
+      green four per second - activity; flashing green one per second -
+      rebuilding, RAID migration, strip size migration, capacity expansion,
+      logical drive extension, or erasing.
+relief:
+  wall: '#1b1e21'
+  features:
+  - node: window
+    pocket: 6.0
+    confidence: estimated
+    source: the honeycomb sits behind the carrier face; 6.0 is a drawn depth, not measured
+  - node: window-2
+    pocket: 6.0
+    confidence: estimated
+    source: as `window`
+  - node: release
+    out: 1.5
+    color: '#b8463b'
+    confidence: estimated
+    source: the lever stands slightly proud of the carrier face in the photograph; not measured
+skins: [default]

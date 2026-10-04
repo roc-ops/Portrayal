@@ -20,9 +20,9 @@
 #   `role: software` marks a NOS vendor, which is the DISAGGREGATION case. The
 #   same switch running ArcOS and running another NOS is two things you can buy,
 #   from two different companies, and only one of them made the metal. That is
-#   not lineage and it does not belong in `successor`; it is expressed by an
-#   overlay declaring an `identity:`, and this file is only what lets that
-#   overlay name its vendor.
+#   not lineage and it does not belong in `successor`; it is expressed by a
+#   LISTING - devices/<nos vendor>/<id>/listing.yaml, pointing at the hardware -
+#   and this entry is what names the namespace that listing lives in.
 #
 # EVERY ENTRY CARRIES ITS SOURCE, for the reason every figure in this library
 # does: a corporate lineage claim is a fact about the world, it decays, and the
@@ -49,6 +49,13 @@ vendors:
 
   # ---- hardware manufacturers, in the library today ----
 
+  aurcore:
+    display: AurCore
+    role: hardware
+    source: >-
+      AurCore Technology Inc., www.aurcore.net - the name on the AIS datasheets and
+      product pages; the wordmark is styled rCore, and an earlier URL scheme on the same
+      site named the AIS boxes AE-IS200-*. No corporate lineage is known or claimed.
   casa:
     display: Casa Systems
     role: hardware
@@ -115,6 +122,17 @@ vendors:
     display: Halny
     role: hardware
     source: 'the name on the metal'
+
+  hpe:
+    display: Hewlett Packard Enterprise
+    aka: [HPE, HP Enterprise]
+    role: hardware
+    source: >-
+      the name on the metal: the ProLiant DL160 Gen10 front ear carries the HPE
+      element and every DL160 Gen10 document (QuickSpecs a00021860enw, User
+      Guide a00066666en_us) is published by Hewlett Packard Enterprise. ProLiant
+      Gen8 and earlier shipped as HP before the 2015 split; those are not in
+      this library.
 
   juniper:
     display: Juniper Networks
@@ -302,8 +320,9 @@ vendors:
     source: 'per the maintainer and roc-ops/Portrayal#47 - the CMTS brand under Vistance from Jan 2026'
 
   # ---- software vendors ----
-  # A NOS vendor is named by an overlay's `identity:`, never by a device. The
-  # device is the metal and the metal did not change when the software did.
+  # A NOS vendor's namespace holds listings, never devices. The device is the
+  # metal and the metal did not change when the software did; the listing under
+  # devices/<vendor>/ points at it and carries only what the NOS changes.
 
   arrcus:
     display: Arrcus
@@ -314,3 +333,35 @@ vendors:
       AS7726-32X, reads "Software: Arrcus ArcOS" with "Firmware MU: EdgeCore MU
       1.2.3" beneath it - one line naming both the software house and the
       hardware one.
+
+  ipinfusion:
+    display: IP Infusion
+    role: software
+    products: [ocnos]
+    source: >-
+      IP Infusion's own OcNOS documentation (docs.ipinfusion.com), which sells OcNOS
+      in editions by market - SP and DC among them - each certified on its own list of
+      ODM hardware. The editions target different silicon, so one namespace holds them
+      all and a listing's `portfolio` says which edition lists the box.
+
+  drivenets:
+    display: DriveNets
+    role: software
+    products: [dnos]
+    source: >-
+      DriveNets' own DNOS documentation and product pages (drivenets.com): DNOS runs as
+      Network Cloud on certified white boxes from UfiSpace and Edgecore, and DriveNets
+      sells those boxes under its own NCP/NCF names, which do not name the hardware -
+      so the pairing is carried by the listing, not derived. `software` until a
+      DriveNets-made box is modelled; then `both`.
+
+  sonic:
+    display: SONiC
+    role: software
+    products: [sonic]
+    source: >-
+      the sonic-net project (github.com/sonic-net), an open-source NOS governed by the
+      SONiC Foundation. No single company sells it, and it is entered as a vendor
+      anyway because that is how a DCIM files a device type by NOS: one manufacturer
+      per NOS, each listing the hardware it runs on. Its interface names are per
+      platform, from each platform's port configuration in sonic-buildimage.

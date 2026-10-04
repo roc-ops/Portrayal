@@ -1241,6 +1241,85 @@ export function applyNodeFields(root, scope) {
 }
 export function nodeStates(scope) { return new Map(_sc(scope).states); }
 
+// A LAMP COLOUR THE HOST CHOOSES (#664). In 2D a mark's `lamp` is any hex,
+// written on the lamp as an inline `--led-color` - how a reader paints a lamp
+// whose vendor never published a colour table. In 3D a lamp is part of a
+// face texture, so the colour has to be in the TEXT a texture is painted
+// from: the route a state takes, repaint and never re-shape. Inline, so it
+// wins over the drawing's `#id.state-*` rules as it does in 2D.
+//
+// HEX ONLY, and validated here, because it lands in a CSS value slot: the
+// rule is marks.js's HEX_RE, repeated (and held equal by a test) so relief
+// does not import the 2D marks module.
+//
+// OFF STAYS OFF, as in 2D (`mark.state !== 'off'`): a lamp whose registered
+// state is `state-off` keeps its drawing, so a custom colour never lights a
+// lamp that is out.
+export const LAMP_HEX = /^#(?:[0-9a-f]{3}|[0-9a-f]{4}|[0-9a-f]{6}|[0-9a-f]{8})$/i;
+
+// A MARK'S COLOUR FOR A MATERIAL (#667). A 3D mark takes the same hex a lamp
+// does, but it lands in a three.js material, and Color.setStyle reads only
+// #rgb and #rrggbb: it warns on #rgba or #rrggbbaa and leaves the material
+// white, so a mark would draw white while nothing reported it. The alpha is
+// dropped - the halo's own opacity is its style's - and anything that is not a
+// LAMP_HEX is null, which setMarks reports as `invalid`.
+export function markHex(colour) {
+  const c = String(colour ?? '');
+  if (!LAMP_HEX.test(c)) return null;
+  const h = c.slice(1).toLowerCase();
+  if (h.length === 4) return '#' + h.slice(0, 3);
+  if (h.length === 8) return '#' + h.slice(0, 6);
+  return '#' + h;
+}
+// The declaration is written between two CSS comments so an unlit copy of the
+// art (lamps.js withBase) can take exactly it out again and nothing else.
+export const LAMP_MARK = '/*portrayal-lamp*/';
+const LAMP_END = '/*portrayal-lamp-end*/';
+const LAMP_DECL = new RegExp(`${LAMP_MARK.replace(/[*/]/g, '\\$&')}[^/]*${LAMP_END.replace(/[*/]/g, '\\$&')}`, 'g');
+/** Strip the host's lamp colours from a fragment of text (an unlit copy). */
+export function withoutLampColors(text) { return String(text).replace(LAMP_DECL, ''); }
+
+/** Replace the host's lamp colours, keyed by data-path. Returns the rejected paths. */
+export function setNodeLampColors(map, scope) {
+  const st = _sc(scope).lampColors || (_sc(scope).lampColors = new Map());
+  st.clear();
+  const rejected = [];
+  for (const [path, colour] of map instanceof Map ? map : Object.entries(map || {})) {
+    if (!colour) continue;
+    if (LAMP_HEX.test(String(colour))) st.set(String(path), String(colour).toLowerCase());
+    else rejected.push(String(path));
+  }
+  return rejected;
+}
+export function nodeLampColors(scope) { return new Map(_sc(scope).lampColors || []); }
+
+/** Paint the registered lamp colours onto a parsed document, clearing first. */
+export function applyNodeLampColors(root, scope) {
+  if (!root) return root;
+  // put back what this painted, over the whole document: a colour taken out
+  // of the registry arrives as a path that is no longer there
+  for (const el of root.querySelectorAll('[data-portrayal-lamp]')) {
+    const was = el.getAttribute('data-portrayal-lamp-style');
+    if (was) el.setAttribute('style', was); else el.removeAttribute('style');
+    el.removeAttribute('data-portrayal-lamp');
+    el.removeAttribute('data-portrayal-lamp-style');
+  }
+  const st = _sc(scope).lampColors;
+  if (!st || !st.size) return root;
+  const states = _sc(scope).states;
+  for (const [path, colour] of st) {
+    if (/(^|\s)state-off(\s|$)/.test(states.get(path) || '')) continue;
+    for (const el of root.querySelectorAll(`[data-path="${CSS.escape(path)}"]`)) {
+      const was = el.getAttribute('style') || '';
+      el.setAttribute('data-portrayal-lamp', colour);
+      if (was) el.setAttribute('data-portrayal-lamp-style', was);
+      el.setAttribute('style', `${was}${was && !/;\s*$/.test(was) ? ';' : ''}`
+                               + `${LAMP_MARK}--led-color:${colour}${LAMP_END}`);
+    }
+  }
+  return root;
+}
+
 // WHAT A VIEWER HAS TAKEN OFF. A cover hides what is behind it, which is the
 // whole reason it is on the device and the whole reason someone wants it off. In
 // 2D that is a CSS rule; in 3D the face is a rasterised canvas, so the part is
@@ -1322,6 +1401,7 @@ export function restyleText(text, scope) {
   div.innerHTML = text;
   applyNodeStates(div, scope);
   applyNodeFields(div, scope);
+  applyNodeLampColors(div, scope);
   applyPulled(div, scope);
   return div.innerHTML;
 }
@@ -1337,7 +1417,8 @@ export function restyleText(text, scope) {
 // de-stroke the faceplate before it becomes a texture; the geometry draws the
 // edge.
 export function squareFaceplate(text) {
-  return text.replace(/<rect\b[^>]*\bid="chassis-faceplate"[^>]*>/,
+  // a <path> on a bevelled chassis, whose outline has its corners cut (#735)
+  return text.replace(/<(?:rect|path)\b[^>]*\bid="chassis-faceplate"[^>]*>/,
     m => m.replace(/\s(?:rx|ry|stroke|stroke-width)="[^"]*"/g, ''));
 }
 
@@ -1651,11 +1732,19 @@ export function nodeTools(svg, {back = false} = {}) {
       // colour - same defect as the id case, one attribute over.
       const id = p.getAttribute('id'), cls = p.getAttribute('class'),
             path = p.getAttribute('data-path'), ref = p.getAttribute('data-ref'),
-            dc = p.getAttribute('data-class');
-      if (!id && !cls && !ref && !dc) continue;      // a pure layout group changes no selector
+            dc = p.getAttribute('data-class'), lamp = p.getAttribute('data-portrayal-lamp');
+      if (!id && !cls && !ref && !dc && !lamp) continue;   // a pure layout group changes no selector
+      // THE HOST'S LAMP COLOUR RIDES TOO (#664), and only it: it is an inline
+      // custom property on the lamp's group, and a dome or a lens cut out
+      // below the group took the group's class (so its state rule applied)
+      // and not the colour - the face showed the host's magenta around a
+      // dome in the stylesheet's own colour. Marked as applyNodeLampColors
+      // marks it, so an unlit copy strips it and a repaint replaces it.
+      const lampStyle = lamp && LAMP_HEX.test(lamp)
+        ? ` data-portrayal-lamp="${lamp}" style="${LAMP_MARK}--led-color:${lamp}${LAMP_END}"` : '';
       inner = `<g${id ? ` id="${id}"` : ''}${cls ? ` class="${cls}"` : ''}` +
               `${ref ? ` data-ref="${ref}"` : ''}${dc ? ` data-class="${dc}"` : ''}` +
-              `${path ? ` data-path="${path}"` : ''}>${inner}</g>`;
+              `${path ? ` data-path="${path}"` : ''}${lampStyle}>${inner}</g>`;
     }
     return inner;
   };
@@ -1708,6 +1797,9 @@ export async function extractRelief(url, scope, {back = false} = {}) {
   // while the registry still said the value was set, and a repeated setFields
   // would see nothing changed and never put it back
   applyNodeFields(svg, scope);
+  // and the host's lamp colours (#664), so a rebuild paints a custom-coloured
+  // lamp the colour the registry says rather than its stylesheet default
+  applyNodeLampColors(svg, scope);
   // A part the viewer has taken off is REMOVED here rather than hidden, and only
   // here: this document is built to be measured and then discarded, so nothing
   // has to put it back. Left as display:none it would measure 0x0 and extrude a
@@ -3060,7 +3152,8 @@ export async function buildFaceRelief(F, ctx) {
         const backSrc = meta.body.sides && meta.body.sides.rear;
         if (backSrc && ctx.dist && !f.lift && !ctx.back) {
           const key = `back:${f.path}`;
-          const shipped = ctx.dist + backSrc;
+          // ctx.dist is a path -> URL function (dist.js); a bare base still works
+          const shipped = typeof ctx.dist === 'function' ? ctx.dist(backSrc) : ctx.dist + backSrc;
           const src = ctx.backSource ? await ctx.backSource(f.path, f.ref, shipped) : shipped;
           const back = {view: key, fw: () => fp.size[0], fh: () => fp.size[1],
                         deep: () => d, pos: () => [0, 0, 0], rot: [0, Math.PI, 0]};

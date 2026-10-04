@@ -23,6 +23,7 @@ from pathlib import Path
 import pytest
 import yaml
 
+import onebuild
 import warmrender
 from portrayal import render as render_mod
 
@@ -51,11 +52,8 @@ def test_each_existing_jack_presents_its_interface():
 
 @pytest.fixture(scope="module")
 def comps(tmp_path_factory):
-    out = tmp_path_factory.mktemp("components")
-    r = warmrender.run([sys.executable, str(INDEXER), "--library", str(LIB),
-                        "--out", str(out)], capture_output=True, text=True)
-    assert r.returncode == 0, r.stdout + r.stderr
-    doc = json.loads((out / "components.json").read_text())
+    # the indexer the build runs, over this tree, once per session (onebuild)
+    doc = json.loads((onebuild.components_index() / "components.json").read_text())
     got = {f"{e['ns']}/{e['name']}@{e['major'][1:]}": e for e in doc["components"]}
     assert got, "the indexer published no component at all"
     return got
@@ -421,7 +419,7 @@ def test_the_bnc_lugs_sit_where_mil_std_348_puts_them():
 # The Cisco clear channel T3/E3 SPAs drew their 1.0/2.3 jacks as skin art; they
 # now place common/din-1-0-2-3-jack@1 (the bezel, never the bare core) at the
 # centres the skin drew. The Juniper DS3/E3 MIC does not move: its faceplate
-# jack is 75-ohm mini-SMB, which no modelled interface fits.
+# jack is 75-ohm mini-SMB, the 75-ohm SMB series, so it is SMB (#672).
 SPA_JACKS = {
     "cisco/spa-4xt3e3@1": {
         "p0-tx": 10.29, "p0-rx": 22.77, "p1-tx": 53.26, "p1-rx": 65.38,
@@ -521,3 +519,18 @@ def test_no_device_or_card_places_a_bare_bnc_or_din_core():
     # and it reaches every moved card, each through the bezel
     assert set(SPA_JACKS) <= din_placers, set(SPA_JACKS) - din_placers
     assert not bad, bad
+
+
+# --- #672: mini-SMB is the 75-ohm SMB series ---------------------------------
+
+@pytest.mark.parametrize("ref", ["juniper/mic-3d-8ds3-e3@1", "juniper/mic-3d-8ds3-e3-v@1"])
+def test_the_ds3_mic_jacks_are_smb_stating_75_ohm(ref):
+    """The MX datasheets name the MIC's jack 75-ohm mini-SMB, and mini-SMB is
+    the 75-ohm SMB series (intermateable with 50-ohm SMB), so each of the 16
+    jacks is std/smb@1 stating impedance 75 - impedance is an attr, never the
+    interface (docs/connectors-coax-design.md decision 2)."""
+    doc = _contract(ref)
+    jacks = [p for p in doc["parts"] if p.get("ref") == "std/smb@1"]
+    assert len(jacks) == 16
+    assert all((p.get("attrs") or {}).get("impedance") == 75 for p in jacks)
+    assert "does not model" not in doc["description"]

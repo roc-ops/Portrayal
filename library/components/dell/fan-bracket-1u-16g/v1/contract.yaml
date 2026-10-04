@@ -1,0 +1,24 @@
+format: 1
+kind: component
+name: fan-bracket-1u-16g
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The fan bracket of a 16th-generation 1U PowerEdge (R660) seen from above - the frame across the chassis that holds the four fan modules
+provenance:
+  sources: >-
+    Dell's R660 service model, working/intake/dell/3d-models/r660.glb, read with glb-parts.py and mapped to plan coordinates (rear at y=0: plan y = 789.4 - cad z1, the rear wall at cad z 789.4; plan x = 217.65 - cad x - w, the body seen from above). Only the poses inside the chassis' 0..43 height are seated; the scene also holds exploded copies above it.
+  size: >-
+    measured - `PE_R660_L_Chassis_Fan bracket-1.001`, 428.3 x 70.6, plan x 3.45,
+    y 488.2. The fan modules start 3.5 behind it, so it frames them rather than
+    containing them.
+  depth: >-
+    the fans' own 40.0 - the bracket stands from the same floor.
+size: {w: 428.3, h: 70.6, d: 40.0}
+size-confidence: {w: measured, h: measured, d: borrowed}
+relief:
+  wall: '#2b3035'
+elements:
+  frame: {at: [0.0, 0.0], size: [428.3, 70.6], class: bezel}
+skins: [default]

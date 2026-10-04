@@ -270,7 +270,7 @@ def test_examples_never_become_device_types():
     # so an example leaks only when it is the whole stem or the whole tail after
     # a space. Matching mid-word condemns by accident.
     # NOT an exact "<model> <config>": sixteen stems in the tree are part-number
-    # style (`5912-54X-O-48V-B-arcos`) with no model prefix, and building the
+    # style (`5912-54X-O-48V-B`) with no model prefix, and building the
     # expected name from the model would stop checking those at all.
     leaked = sorted({n for n in names
                      for e in examples

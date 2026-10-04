@@ -1,0 +1,100 @@
+format: 1
+kind: component
+name: din-clip-ts35
+version: 1.0.0
+class: mount
+profile: networking
+description: >-
+  DIN-rail mounting clip for a 35 mm top-hat rail (IEC 60715 TS35, 7.5 and 15 mm deep) -
+  the plate screwed to a device's back with a fixed hook along its top and a spring latch
+  along its bottom, the rail seated in the channel between. Hooked over the rail's upper
+  lip and snapped down onto the lower one; the pin hole in the latch is where a screwdriver
+  levers it to release. Unrotated, the hook is at the top.
+size: {w: 44.0, h: 58.0}
+size-confidence: {w: estimated, h: estimated}
+attrs: {din-profiles: ts35x7.5 ts35x15, rail-centre-y: 29.5}
+provenance:
+  size: >-
+    ESTIMATED from the AurCore AIS4001P back render (vendor product image 3, 1000 px),
+    which is NOT square-on: the camera is raised so the top face shows, the back face is
+    foreshortened top to bottom and wider near its top edge than its bottom. Widths are
+    taken as fractions of the back face's own width on the same image row (the clip spans
+    about 0.53 of 83.8 mm, 44 mm); heights are fractions of the face's 145 mm, a rougher
+    figure (about 0.40, 58 mm). Good to a few millimetres, not better.
+  the-face: >-
+    The same render and the vendor video (0:31-0:33, the back three-quarter on): a dark
+    plate; a hook bar across the top; the rail channel below it; three cross-head screws
+    holding the plate, one centred above two; a lighter latch bar across the bottom with a
+    small release pin hole at its upper edge.
+  rail-centre-y: >-
+    ESTIMATED - midway between the two lips, which stand 33 mm apart so that a 35 mm
+    rail's edges sit 1 mm under each. A device placing this clip states the rail centre on
+    its face from it.
+elements:
+  plate: {at: [0.0, 0.0], size: [44.0, 58.0], class: mechanical}
+  hook: {at: [0.0, 1.5], size: [44.0, 8.5], class: mechanical}
+  hook-lip: {at: [0.0, 10.0], size: [44.0, 3.0], class: mechanical}
+  latch-lip: {at: [0.0, 46.0], size: [44.0, 4.0], class: mechanical}
+  latch: {at: [0.0, 50.0], size: [44.0, 7.0], class: mechanical}
+  screw-1: {at: [19.9, 26.3], size: [4.2, 4.2], class: mechanical}
+  screw-2: {at: [13.4, 37.1], size: [4.2, 4.2], class: mechanical}
+  screw-3: {at: [26.4, 37.1], size: [4.2, 4.2], class: mechanical}
+relief:
+  features:
+    - node: plate
+      out: 2.0
+      shape: true
+      color: '#474c52'
+      confidence: estimated
+      source: >-
+        the vendor video (0:31-0:33) shows a plate on the back with a hook along the top and a spring latch along the bottom, the rail seated between them, and three screw heads on the plate; no figure gives a height. common/din-clip-ts35@1's own 3D-form key.
+    - node: hook
+      out: 5.0
+      lift: 2.0
+      color: '#2c3035'
+      confidence: estimated
+      source: >-
+        common/din-clip-ts35@1's own 3D-form key - see `plate`. The hook's block, standing ON the plate (lift 2.0) rather than through it, so its side walls do not share a plane with the plate's and z-fight.
+    - node: hook-lip
+      out: 5.0
+      lift: 3.4
+      color: '#3a3f44'
+      confidence: estimated
+      source: >-
+        common/din-clip-ts35@1's own 3D-form key - see `plate`. The lip overhanging the rail seat: it floats 1.4 mm above the plate, the gap the rail's 1 mm flange slides into.
+    - node: latch
+      out: 5.0
+      lift: 2.0
+      color: '#5e646a'
+      confidence: estimated
+      source: >-
+        common/din-clip-ts35@1's own 3D-form key - see `plate`. The latch's block, on the plate as the hook's is.
+    - node: latch-lip
+      out: 5.0
+      lift: 3.4
+      color: '#6a7076'
+      confidence: estimated
+      source: >-
+        common/din-clip-ts35@1's own 3D-form key - see `plate`. The latch's lip over the rail's lower edge, with the same 1.4 mm gap below it.
+    - node: screw-1
+      cyl: 0.8
+      lift: 2.0
+      color: '#1f2226'
+      confidence: estimated
+      source: >-
+        common/din-clip-ts35@1's own 3D-form key - see `plate`. A cross-head screw on the plate.
+    - node: screw-2
+      cyl: 0.8
+      lift: 2.0
+      color: '#1f2226'
+      confidence: estimated
+      source: >-
+        common/din-clip-ts35@1's own 3D-form key - see `plate`. A cross-head screw on the plate.
+    - node: screw-3
+      cyl: 0.8
+      lift: 2.0
+      color: '#1f2226'
+      confidence: estimated
+      source: >-
+        common/din-clip-ts35@1's own 3D-form key - see `plate`. A cross-head screw on the plate.
+skins: [default]

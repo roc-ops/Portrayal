@@ -1,0 +1,146 @@
+---
+manufacturer: IP Infusion
+model: S9300-32D
+slug: ip-infusion-s9300-32d
+u_height: 1.0
+is_full_depth: true
+weight: 11.34
+weight_unit: kg
+airflow: front-to-rear
+description: UfiSpace S9300-32D 400G data center spine switch - 1RU white box, 32x QSFP-DD 400G in two
+  rows plus 2x SFP+ 1/10G and a 2x SFP+ 10G / RJ45 out-of-band management block, Broadcom Trident4-X11
+  at...
+front_image: true
+rear_image: true
+console-ports:
+  - name: Console
+    type: rj-45
+interfaces:
+  - name: eth0
+    type: 1000base-t
+    mgmt_only: true
+  - name: cd0
+    type: 400gbase-x-qsfpdd
+  - name: cd1
+    type: 400gbase-x-qsfpdd
+  - name: cd2
+    type: 400gbase-x-qsfpdd
+  - name: cd3
+    type: 400gbase-x-qsfpdd
+  - name: cd4
+    type: 400gbase-x-qsfpdd
+  - name: cd5
+    type: 400gbase-x-qsfpdd
+  - name: cd6
+    type: 400gbase-x-qsfpdd
+  - name: cd7
+    type: 400gbase-x-qsfpdd
+  - name: cd8
+    type: 400gbase-x-qsfpdd
+  - name: cd9
+    type: 400gbase-x-qsfpdd
+  - name: cd10
+    type: 400gbase-x-qsfpdd
+  - name: cd11
+    type: 400gbase-x-qsfpdd
+  - name: cd12
+    type: 400gbase-x-qsfpdd
+  - name: cd13
+    type: 400gbase-x-qsfpdd
+  - name: cd14
+    type: 400gbase-x-qsfpdd
+  - name: cd15
+    type: 400gbase-x-qsfpdd
+  - name: cd16
+    type: 400gbase-x-qsfpdd
+  - name: cd17
+    type: 400gbase-x-qsfpdd
+  - name: cd18
+    type: 400gbase-x-qsfpdd
+  - name: cd19
+    type: 400gbase-x-qsfpdd
+  - name: cd20
+    type: 400gbase-x-qsfpdd
+  - name: cd21
+    type: 400gbase-x-qsfpdd
+  - name: cd22
+    type: 400gbase-x-qsfpdd
+  - name: cd23
+    type: 400gbase-x-qsfpdd
+  - name: cd24
+    type: 400gbase-x-qsfpdd
+  - name: cd25
+    type: 400gbase-x-qsfpdd
+  - name: cd26
+    type: 400gbase-x-qsfpdd
+  - name: cd27
+    type: 400gbase-x-qsfpdd
+  - name: cd28
+    type: 400gbase-x-qsfpdd
+  - name: cd29
+    type: 400gbase-x-qsfpdd
+  - name: cd30
+    type: 400gbase-x-qsfpdd
+  - name: cd31
+    type: 400gbase-x-qsfpdd
+module-bays:
+  - name: Fan 0
+    position: fan-0
+    description: 'Accepts: fan-405637'
+  - name: Fan 1
+    position: fan-1
+    description: 'Accepts: fan-405637'
+  - name: Fan 2
+    position: fan-2
+    description: 'Accepts: fan-405637'
+  - name: Fan 3
+    position: fan-3
+    description: 'Accepts: fan-405637'
+  - name: Fan 4
+    position: fan-4
+    description: 'Accepts: fan-405637'
+  - name: Fan 5
+    position: fan-5
+    description: 'Accepts: fan-405637'
+  - name: PSU 0
+    position: psu-0
+    description: 'Accepts: psu-132-ac, psu-132-dc'
+  - name: PSU 1
+    position: psu-1
+    description: 'Accepts: psu-132-ac, psu-132-dc'
+comments: "IP Infusion lists UfiSpace S9300-32D (NOS: ocnos).\nListed per: OcNOS 7.0.1 MR Hardware Compatibility\
+  \ List (IP Infusion, July 2026), the row for S9300-32D, current supported 'DC 7.0.1'. The names follow\
+  \ OcNOS's pattern rather than a table for this box: the port's speed class as prefix (ge 1G, xe 10G\
+  \ and 25G, ce 40G and 100G, cd 400G) and one 0-based count across the whole front panel, with eth0 for\
+  \ management. That is how the S9510-30XC's own configuration in the OcNOS SP 7.0 Segment Routing Guide\
+  \ names its ports - ce0, ce1, xe2 to xe29 - and it is exactly the UfiSpace silkscreen numbering, which\
+  \ this box shares. Not every platform counts this way: the AS7316-26XB example in the Layer 3 Guide\
+  \ restarts at xe0 after ce0 and ce1, so the rule is applied to UfiSpace boxes whose ports are numbered\
+  \ in one run from 0, and nowhere else.\n\nUfiSpace S9300-32D 400G data center spine switch - 1RU white\
+  \ box, 32x QSFP-DD 400G in two rows plus 2x SFP+ 1/10G and a 2x SFP+ 10G / RJ45 out-of-band management\
+  \ block, Broadcom Trident4-X11 at 12.8 Tbps; six hot-swap fans (5+1) and dual 1300W PSUs (1+1) at the\
+  \ rear, orderable in AC or DC and in front-to-back or back-to-front airflow\n\nConfiguration `ac`: Dual\
+  \ 1300W AC PSUs (PSU-132-AESR-3N, exhaust, red latch) with front-to-back airflow fans (FAN-405637-HD,\
+  \ red handles) - the build the vendor renders show. The back-to-front build is ac-b2f; no chassis SKU\
+  \ appears in any held document (see the chassis-sku gap)\n\nDatasheet: UfiSpace S9300-32D 400GE Data\
+  \ Center Switch Datasheet\n  https://www.ufispace.com/products/datacenter/400g/s9300-32d-400g-data-center-spine-switch\n\
+  \nFacts carried in the model that this schema has no field for:\n- compliance.emc: FCC Part 15, Subpart\
+  \ B, Class A; ICES-003, Class A; EN 55032, Class A; EN 300 386; EN 55024; EN 55035; BSMI; VCCI CISPR\
+  \ 32, Class A; AS/NZS CISPR 32, Class A; MTCTE\n- compliance.environment: RoHS; WEEE\n- compliance.safety:\
+  \ UL 62368-1; IEC 60950-1; IEC 62368-1; BSMI; MTCTE\n- environmental.operating-humidity: 5 to 95% RH\
+  \ non-condensing\n- environmental.operating-temp: 0 to 40 C\n- environmental.storage-humidity: 5 to\
+  \ 95% RH non-condensing\n- environmental.storage-temp: -40 to 70 C\n- features.optics-qsfp-dd: 400GE\
+  \ ZR/ER4/LR4/SR8/FR4/DR4/DR4+/PLR4 and 400G ZR/ZR+ support; 200GE QSFP56 SR4/FR4; 100GE QSFP28 ZR4/ER4/LR4/SR4\
+  \ (datasheet compatible transceiver list)\n- features.optics-sfp-plus: 1/10G on the data pair, 10G on\
+  \ the OOB pair (datasheet port list)\n- features.programmability: NPL (open source) runtime programmability\n\
+  - features.zr-capacity: up to 8x 400G ZR in ZR-only use, or up to 6 total if any OpenZR+ is mixed in;\
+  \ ZR/OpenZR+ modules must not sit in adjacent ports (HIG port overview)\n- lifecycle.eol: none-announced\n\
+  - management.console: RJ45 RS-232, 115200 8N1 (labelled IOIOI)\n- management.oob: 1x RJ45 100/1000M\
+  \ plus 2x SFP+ 10G, both reaching the x86 (HIG)\n- performance.packet-buffer: 132 MB\n- performance.switching-capacity:\
+  \ 12.8 Tbps\n- platform.asic: Broadcom Trident4-X11 BCM56880\n- platform.bmc: Aspeed AST2400\n- platform.cpu:\
+  \ Intel Skylake-D 8-core @ 1.9 GHz\n- platform.memory: 32 GB DDR4\n- platform.storage: 1x 128 GB SSD\n\
+  - power.input-ac: 200 to 240 V, 7.5 A per feed\n- power.input-dc: -40 to -75 V, 40 A per feed\n- power.power-envelope:\
+  \ bare\n- power.power-max-w: 1246\n- power.power-typical-w: 403\n- power.psu-redundancy: 1+1 hot-swappable\n\
+  - thermal.fan-redundancy: 5+1 hot-swappable\n\nDrawing version 3.1.0. A major bump means a slot moved\
+  \ or an id was renamed, so anything cached from an earlier export may no longer line up.\nModel maturity:\
+  \ modelled. Every dimension in the source records where it came from."

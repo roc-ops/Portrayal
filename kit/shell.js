@@ -16,13 +16,14 @@
 // it, and the comment says which.
 
 import { createDevicePicker } from './devsel.js';
+import { nosNameFor } from './nosnames.js';
 import { nestedBays, applyOverrides, applyOccupantOverrides, applyRearOverrides, acceptSwaps, decodeSwaps,
          occupantsOf,
          rawParam, liesOver, seatClaims, occupantRef, refusalReason,
          builtOccupants, builtBays, faceCages, cageAt, pruneCarrier,
-         freshBaysUnder, seatFace, faceQueue, swapOverrides, faceEntries, ownerPath,
+         freshBaysUnder, seatFace, faceQueue, swapOverrides, faceEntries, faceTree, ownerPath,
          slotOptions, slotResolver } from './swap.js';
-import { jdist, faceFile } from './dist.js';
+import { jdist, faceFile, distResolver } from './dist.js';
 import { paintFields, unpaintFields } from './fields.js';
 import { fibreOf, farPath, fibreLabel, connectorLabel, moduleOf } from './optical.js';
 
@@ -163,14 +164,15 @@ const SHELL_HTML = `
 
 // The two indexes are the same for every shell on the page, and there is only
 // ever one, but caching them keeps a re-mount cheap.
-let DEVICES = [], COMPONENTS = [];
+let DEVICES = [], COMPONENTS = [], LISTINGS = {};
 
 export function createShell(opts = {}) {
   let picker = null;
-  const DIST = opts.dist || '../dist';
+  // a build directory's base, or a path -> URL function (dist.js)
+  const distAt = distResolver(opts.dist, '../dist');
   const body = opts.mount || document.body;
   // shared with the 3D viewer mounted in the same page - see dist.js
-  const j = p => jdist(`${DIST}/${p}`);
+  const j = p => jdist(distAt(p));
 
   document.head.appendChild(Object.assign(document.createElement('style'),
                                           {textContent: SHELL_CSS}));
@@ -192,7 +194,10 @@ export function createShell(opts = {}) {
   // `state.svg` has not moved yet either. `svg === state.svg` alone cannot see
   // that window; `cfgGen` can, because it changes at the exact moment the
   // objects a stale write would land in are swapped out from under it.
-  const state = {device: null, cfg: null, view: null, module: null, sel: null,
+  // `listing` is the NOS vendor's entry the reader chose, `<ns>/<id>` from
+  // listings.json, or null for the hardware's own (#709). It never changes
+  // what is drawn - a listing draws nothing - only whose box this is.
+  const state = {device: null, listing: null, cfg: null, view: null, module: null, sel: null,
                  svg: null, meta: null, cfgBays: {}, cfgOccupants: {}, cfgFields: {},
                  touched: new Set(), refused: {}, failed: {}, cfgGen: 0};
 
@@ -330,94 +335,15 @@ export function createShell(opts = {}) {
   // data-path, '/' separated. Build the tree from that rather than from the
   // contracts, so what you see listed is exactly what is drawn - including
   // what only a projection draws, a cassette's rear MTPs (swap.js faceEntries).
+  // The nesting itself is swap.js's `faceTree`, which render.py's elements
+  // file follows too (#727), so the published tree and this one are one rule.
   function buildTree(root) {
     const entries = faceEntries(root);
-    const nodes = entries.map(x => x.el);
-    const byPath = new Map();
     // document order = manifest order, and the manifest is now written in the order
     // the part is made. That is a better group ordering than the alphabet: it put
     // qsfp28 (ports 4-21) ahead of qsfpdd-400g (ports 0-3) purely on spelling.
-    nodes.forEach((e, i) => { if (e.__docIdx === undefined) e.__docIdx = i; });
-    for (const {path, el: e, projected} of entries) {
-      if (!byPath.has(path)) byPath.set(path, {path, el: e, kids: [], projected});
-    }
-    const roots = [];
-    for (const n of byPath.values()) {
-      const cut = n.path.lastIndexOf('/');
-      let parent = cut < 0 ? null : byPath.get(n.path.slice(0, cut));
-      // A PROJECTION LISTS UNDER WHAT IT IS SEEN THROUGH. `bay-1/module` on the
-      // rear face has no `bay-1` there to nest in; it is drawn inside the panel
-      // cutout the bay names, and that cutout is where the reader looks for it.
-      if (!parent && n.projected) {
-        const home = byPath.get(ownerPath(n.el.parentNode));
-        if (home && home !== n) parent = home;
-      }
-      // `for:` in the manifest - an LED belongs to its port, a button to its module.
-      // Nest under the first target, so an indicator lists under the thing it
-      // indicates rather than in a pile of 52 LEDs somewhere else in the tree.
-      // A cross-view target is written device-absolute, `/rear/psu-0`, and is not
-      // a path in this drawing - a front-view tree cannot nest a rear-view bay,
-      // because the rear-view bay is not here. Nest under the first LOCAL target,
-      // and leave the row where it naturally falls when there is none. The
-      // binding is not dropped: xrefOf() below puts the qualified target on the
-      // row as text, so a front-panel PSU lamp reads "led-ps0 → rear/psu-0"
-      // rather than sitting silently unexplained among the unbound lamps.
-      // A HOLE THAT SOMETHING FILLS IS THAT THING'S APERTURE, NOT A PEER OF IT.
-      // Panel cutouts get a namespaced path, `cutout:<id>`, which has no parent
-      // component in it, so every one of them landed at the root. On the AGR420
-      // that was 74 rows - `cutout:port-0` to `cutout:port-73` - each naming a
-      // hole the port listed three rows above already accounts for.
-      //
-      // The manifest says which is which without being asked: a cutout is
-      // declared, then a component is placed in it under THE SAME id. So a
-      // cutout whose id is also a path is that node's aperture and nests under
-      // it, exactly as a component's own `port-1/aperture/opening` already does.
-      // A cutout nothing names is a feature in its own right and stays - which
-      // is every cutout on every Cisco chassis, where `shelf-0`, `ft-0` and
-      // `esd` are real openings with no module modelled behind them and this row
-      // is the only place the tree admits they exist.
-      if (!parent && n.path.startsWith('cutout:')) {
-        const filled = byPath.get(n.path.slice(7));
-        if (filled && filled !== n) parent = filled;
-      }
-      if (!parent && n.el.dataset.for) {
-        const local = n.el.dataset.for.split(' ').filter(t => t[0] !== '/');
-        // A PART THAT NAMES SEVERAL OWNERS IS NOT A CHILD OF THE FIRST ONE.
-        // The C40G's snap-on filter cover is `for` all four PSU bays, and taking
-        // the first target buried a removable full-width panel inside PSU 1 -
-        // so the owner looking for it in the list could not find it, and the
-        // three other bays it covers said nothing about it.
-        //
-        // Only for PLACED COMPONENTS, which is what data-ref marks. A shared
-        // legend is the opposite case and stays as it was: "0/1" printed between
-        // two ports is a mark, it names both, and nesting it under the first of
-        // an adjacent pair reads correctly. Lifting those out would have put 74
-        // rows back at the top of the AGR420, which is the tree this already fixed.
-        const single = local.length === 1 || !n.el.dataset.ref;
-        const here = single ? local[0] : null;
-        const owner = here && byPath.get(here);
-        if (owner && owner !== n) parent = owner;
-        // AN INDICATOR WITH ONLY CROSS-VIEW TARGETS STILL BELONGS TO SOMETHING.
-        // Leaving it at the root made it a SIBLING of the chassis row, while the
-        // lamps beside it on the same faceplate - the ones naming a local target
-        // - nested INSIDE that row. One declared group then rendered as two
-        // headings in two places, which is what "why are there two LED sections"
-        // was seeing: DIAG and Location inside the chassis, Fan and the two PSU
-        // lamps outside it, split by nothing more than where the thing each one
-        // watches happens to live.
-        //
-        // The panel is the answer. A lamp pointing at `/rear/psu-1` is screwed to
-        // THIS faceplate and reports on something behind it; the target being
-        // elsewhere says what it watches, never where it is. So fall back to the
-        // chassis - not to the root, which is not a place on the device.
-        if (!parent) {
-          const body = byPath.get('chassis');
-          if (body && body !== n) parent = body;
-        }
-      }
-      (parent ? parent.kids : roots).push(n);
-    }
-    return roots;
+    entries.forEach(({el: e}, i) => { if (e.__docIdx === undefined) e.__docIdx = i; });
+    return faceTree(root, entries);
   }
 
   // A row that just says "front-0--module" makes you look at the drawing to find
@@ -1092,6 +1018,19 @@ export function createShell(opts = {}) {
     const bay = bayFor(path);
 
     let html = `<h2>${cls || 'node'}</h2><div class="row"><span>path</span><code>${path}</code></div>`;
+    // WHAT THE CHOSEN NOS CALLS IT (#712). A listing names the device's own
+    // ports, so only a port at the top of the drawing is looked up - a port on
+    // a seated module has a path of its own and no listing rule reaches it.
+    // Where the listing does not name the port, say so and why, never guess.
+    const nos = cls === 'port' && !path.includes('/')
+      ? nosNameFor(state.listing && LISTINGS[state.listing], path) : null;
+    if (nos?.name) {
+      html += `<div class="row"><span>${esc(nos.vendor)} name</span><code>${esc(nos.name)}</code></div>`;
+      if (nos.note) html += `<div class="row"><span>breakout</span>${esc(nos.note.replace(/^Breakout: /, ''))}</div>`;
+    } else if (nos) {
+      html += `<div class="row" style="color:var(--dim, #8d939a)">${esc(nos.vendor)} name not stated`
+            + (nos.gap ? ` &mdash; see the listing's <code>${esc(nos.gap)}</code> gap` : '') + `</div>`;
+    }
     for (const to of state.far || [])
       html += `<div class="row"><span>fibre to</span><a href="#" data-go="${esc(to)}"><code>${esc(to)}</code></a></div>`;
     if (ref) html += `<div class="row"><span>component</span><code>${ref.split(':')[0]}</code></div>`;
@@ -1238,7 +1177,7 @@ export function createShell(opts = {}) {
     try { c = compByRef(ref); } catch (e) { return null; }   // not ns/name@major
     if (!c) return null;
     const skin = c.skins?.includes('default') ? 'default' : c.skins?.[0];
-    const r = await fetch(`${DIST}/components/${c.ns}--${c.name}--${c.major}--${skin}.svg`);
+    const r = await fetch(distAt(`components/${c.ns}--${c.name}--${c.major}--${skin}.svg`));
     return r.ok ? {comp: c, text: await r.text()} : null;
   }
 
@@ -1595,7 +1534,7 @@ export function createShell(opts = {}) {
       live: () => state.facesFor === key && !state.module,
       has: view => !!state.faces[view],
       fetch: async view => {
-        const r = await fetch(`${DIST}/${faceFile(state.meta, state.cfg, view)}`);
+        const r = await fetch(distAt(faceFile(state.meta, state.cfg, view)));
         if (!r.ok) return null;
         const doc = new DOMParser().parseFromString(await r.text(), 'image/svg+xml');
         return document.importNode(doc.documentElement, true);
@@ -1667,9 +1606,9 @@ export function createShell(opts = {}) {
     if (state.module) {
       const c = compByRef(state.module);
       const skin = c.skins.includes('default') ? 'default' : c.skins[0];
-      file = `${DIST}/components/${c.ns}--${c.name}--${c.major}--${skin}.svg`;
+      file = distAt(`components/${c.ns}--${c.name}--${c.major}--${skin}.svg`);
     } else {
-      file = `${DIST}/${faceFile(state.meta, state.cfg, state.view)}`;
+      file = distAt(faceFile(state.meta, state.cfg, state.view));
     }
     const txt = await (await fetch(file)).text();
     const doc = new DOMParser().parseFromString(txt, 'image/svg+xml');
@@ -1733,6 +1672,14 @@ export function createShell(opts = {}) {
   // URL - and is honoured only where this device has it; anything else falls
   // back to the device's default configuration and first view.
   async function loadDevice(name, want = {}) {
+    // WHOSE BOX THIS IS goes with the box. A caller that names a listing sets
+    // it; any other load keeps the current one only if it still lists this
+    // device - the tab shell switching boxes must not leave "Arrcus" behind.
+    if ('listing' in want) state.listing = want.listing || null;
+    else if (state.listing) {
+      const d = DEVICES.find(x => x.name === name);
+      if (!d || LISTINGS[state.listing]?.hardware !== `${d.ns}/${d.name}`) state.listing = null;
+    }
     state.device = name;
     state.module = null;
     state.meta = await j(`${name}.configs.json`);
@@ -1778,6 +1725,9 @@ export function createShell(opts = {}) {
   const ready = (async () => {
     DEVICES = DEVICES.length ? DEVICES : (await j('devices.json')).devices;
     COMPONENTS = COMPONENTS.length ? COMPONENTS : (await j('components.json')).components;
+    // OPTIONAL, for a build from before listings (#677): without the file the
+    // picker offers the hardware alone, which is what it always did.
+    try { LISTINGS = (await j('listings.json')).listings || {}; } catch { LISTINGS = {}; }
     // the tab shell picks the device and hands it over in the query string, so
     // switching tabs keeps you on the same box. The explorer writes its own
     // configuration, view and swaps there too (index.html), so a reload lands
@@ -1794,9 +1744,27 @@ export function createShell(opts = {}) {
     // straight from the filesystem, or one of the harness pages - there is no
     // outer shell, so the page has to carry the picker itself. Same component
     // either way; only whether it is mounted differs.
+    // A LISTING SURVIVES A RELOAD when it lists the device the URL names; one
+    // that lists anything else is a stale link and is dropped, not honoured.
+    const wantListing = opts.listing || q.get('listing');
+    state.listing = start.name === want && LISTINGS[wantListing]?.hardware === `${start.ns}/${start.name}`
+      ? wantListing : null;
     if (parent === window) {
       picker = createDevicePicker({mount: el.dev, devices: DEVICES, value: start.name,
-                                   onchange: name => loadDevice(name)});
+                                   listings: LISTINGS, listing: state.listing,
+                                   onchange: (name, {listing} = {}) => {
+                                     state.listing = listing || null;
+                                     // ANOTHER VENDOR'S ENTRY FOR THE BOX ON SCREEN
+                                     // changes whose box it is, not what is drawn:
+                                     // reloading would reset the configuration, the
+                                     // view and every swap (#711 review)
+                                     if (name === state.device) {
+                                       if (state.sel === 'chassis') select('chassis', false);
+                                       emit('change');
+                                       return;
+                                     }
+                                     loadDevice(name, {listing: state.listing});
+                                   }});
     } else {
       el.dev.hidden = true;
     }
@@ -1862,6 +1830,9 @@ export function createShell(opts = {}) {
     over, setPulled, pulledPaths,
     compByRef, devices: () => DEVICES, components: () => COMPONENTS,
     device: () => DEVICES.find(d => d.name === state.device),
+    // the chosen NOS vendor's listing, whole, or null (#709)
+    listing: () => (state.listing && LISTINGS[state.listing]) || null,
+    listings: () => LISTINGS,
     hl: () => hlColor,
     stage: () => stageColor,
   };

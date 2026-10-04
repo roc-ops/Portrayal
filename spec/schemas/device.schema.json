@@ -1,7 +1,7 @@
 {
  "$schema": "https://json-schema.org/draft/2020-12/schema",
- "$id": "https://roc-ops.github.io/Portrayal/schemas/v0/device.schema.json",
- "title": "Portrayal device manifest (v0)",
+ "$id": "https://portrayal.dev/schemas/v1/device.schema.json",
+ "title": "Portrayal device manifest (v1)",
  "type": "object",
  "required": [
   "format",
@@ -29,7 +29,7 @@
   "version": {
    "type": "string",
    "pattern": "^\\d+\\.\\d+\\.\\d+$",
-   "description": "Semver, and the bump rules are tied to `library/devices.lock.json` rather than left to judgement: the lock records a fingerprint per device split into `shape`, `names`, `surface` and `gaps`, and `devicelock` reads the change and says which bump it needs. Surface alone is a patch; ids added with nothing moved or removed is a minor; anything else about shape or names is a major, because a moved slot invalidates a cached coordinate exactly as a renamed id invalidates a held reference. spec/DESIGN.md section 9 carries the argument and CONTRIBUTING step 5 the order to run it in - the check must see the lock BEFORE you regenerate it, or the bump it would have asked for is lost. L53 is what fails when content moved and the version did not."
+   "description": "Semver, and the bump rules are tied to the device's own lock, `device.lock.json` beside its manifest, rather than left to judgement: the lock records a fingerprint per device split into `shape`, `names`, `surface` and `gaps`, and `devicelock` reads the change and says which bump it needs. Surface alone is a patch; ids added with nothing moved or removed is a minor; anything else about shape or names is a major, because a moved slot invalidates a cached coordinate exactly as a renamed id invalidates a held reference. spec/DESIGN.md section 9 carries the argument and CONTRIBUTING step 5 the order to run it in - the check must see the lock BEFORE you regenerate it, or the bump it would have asked for is lost. L53 is what fails when content moved and the version did not."
   },
   "maturity": {
    "enum": [
@@ -401,10 +401,43 @@
      "description": "millimetres, front face to rear face"
     },
     "ru": {
-     "type": "number"
+     "type": "number",
+     "description": "rack units, for a device whose `mount` is `rack` (the default). L125: a rack device states it, and a device mounted any other way does not."
+    },
+    "mount": {
+     "description": "HOW THE BOX IS INSTALLED, which a DCIM device type has to know and the dimensions do not say. `rack` is the default and needs no statement; a device mounted any other way says so here and states no `ru`, and the DCIM export then writes `u_height: 0` and `is_full_depth: false` rather than inventing a rack unit (#734). `din-rail` is a box that clips onto a rail (IEC 60715), `wall` one that screws to a surface, `desktop` one that stands on its feet. A box that does more than one names the way it is drawn and exported, and its provenance says the rest. L125 checks it against `ru`.",
+     "enum": [
+      "rack",
+      "din-rail",
+      "wall",
+      "desktop"
+     ]
     },
     "weight-kg": {
      "type": "number"
+    },
+    "bevel": {
+     "type": "array",
+     "description": "EDGES CUT BACK AT 45 DEGREES, for a housing that is not a plain box (#735). Each entry names edges by the two faces that meet at them - `front-left`, `top-right`, `rear-bottom`; order does not matter - and the millimetres the bevel takes off each of those two faces. The front of an AurCore AIS switch is narrower than its body because the edges where it meets the finned sides are bevelled: `{edges: [front-left, front-right], size: 11}`. The face drawings keep their full size and their coordinates: a bevel along a view's line of sight cuts a corner off its outline, and a bevel on one of its own edges is drawn as a strip beside the flat face, which is where parts go. spec/tools/portrayal/bevel.py builds the solid; L126 checks it.",
+     "items": {
+      "type": "object",
+      "required": ["edges", "size"],
+      "additionalProperties": false,
+      "properties": {
+       "edges": {
+        "type": "array",
+        "minItems": 1,
+        "items": {"type": "string", "pattern": "^(front|rear|top|bottom|left|right)-(front|rear|top|bottom|left|right)$"}
+       },
+       "size": {
+        "description": "millimetres taken off each of the two faces - one number for a 45-degree bevel, or a pair [a, b] taking a off the first face named and b off the second (`top-left: [11, 16]` takes 11 off the top and 16 off the left)",
+        "oneOf": [
+         {"type": "number", "exclusiveMinimum": 0},
+         {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number", "exclusiveMinimum": 0}}
+        ]
+       }
+      }
+     }
     },
     "airflow": {
      "description": "WHERE AIRFLOW LIVES. The chassis is the home; a configuration states `airflow` only when it DIFFERS from this, which render.py has always assumed - it reads the configuration first and falls back here. Airflow genuinely varies by build in 7 of the 48 devices that state it; in the rest it is one fact about the box, and repeating it per configuration gave one fact two homes. The enums differ on purpose: `side` and `passive` are chassis answers a configuration cannot give, because a fanless enclosure and a side-breathing modular chassis offer no airflow option to choose between. L91 checks the division.",

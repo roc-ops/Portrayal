@@ -1,7 +1,7 @@
 """A consumer holding only `dist/` can export DCIM YAML.
 
 THE POINT. Exporting a NetBox document used to require a checkout: the exporter
-read `spec/schemas/vendors.yaml` and `devices/*/*/overlays/*.yaml` off the source
+read `spec/schemas/vendors.yaml` and the NOS naming off the source
 tree. Everything else it needed already shipped - the compiled SVG embeds the
 whole device manifest in its <metadata>, and components.json carries every
 contract field the exporter takes off a component - so those two files were the
@@ -46,42 +46,48 @@ def test_the_namespaces_ship_too():
     assert load("vendors.json")["namespaces"], "namespaces were dropped"
 
 
-def test_every_overlay_on_disk_is_published():
-    on_disk = {f"{f.parents[2].name}/{f.parents[1].name}:{f.stem}"
-               for f in ROOT.glob("library/devices/*/*/overlays/*.yaml")}
-    shipped = {f"{dev}:{prof}"
-               for dev, profs in load("overlays.json")["overlays"].items()
-               for prof in profs}
-    assert on_disk == shipped
+def test_every_listing_on_disk_is_published():
+    on_disk = {f"{f.parents[1].name}/{f.parent.name}"
+               for f in ROOT.glob("library/devices/*/*/listing.yaml")}
+    assert on_disk, "no listing in the library; this test proved nothing"
+    assert on_disk == set(load("listings.json")["listings"])
 
 
-def test_an_overlay_ships_whole_not_just_its_identity():
-    """The exporter reads `identity:` today. `terms`, `interfaces` and
+def test_a_listing_ships_whole():
+    """The exporter reads names and part numbers. `terms`, `interfaces` and
     `entity-map` are the NOS mapping - what says the port silkscreened 1 is
     called swp1 and answers to sfp1 over OpenConfig - and a consumer joining a
     drawing to a live device wants precisely that. Publishing half of a document
     only buys a second pass later to publish the other half."""
-    ov = load("overlays.json")["overlays"]["edgecore/as7726-32x"]["arcos"]
+    ls = load("listings.json")["listings"]["arrcus/as7726-32x"]
     src = yaml.safe_load(
-        (ROOT / "library/devices/edgecore/as7726-32x/overlays/arcos.yaml").read_text())
-    assert ov == src, "the published overlay is not the overlay"
+        (ROOT / "library/devices/arrcus/as7726-32x/listing.yaml").read_text())
+    assert {k: v for k, v in ls.items() if k not in ("ns", "manufacturer")} == src, \
+        "the published listing is not the listing"
 
 
-def test_an_identitys_vendor_resolves_in_the_published_registry():
-    """The join the exporter actually performs: an overlay names a vendor key,
-    the registry turns it into a display name. If a key resolved only in the
-    source tree, a consumer would export the raw key - 'arrcus', not 'Arrcus'."""
+def test_a_listings_manufacturer_is_resolved_in_the_published_file():
+    """The join the exporter performs: a listing's namespace names a vendor key,
+    the registry turns it into a display name. Resolved at build, so a consumer
+    exports 'Arrcus', not 'arrcus', without joining vendors.json itself."""
     vendors = load("vendors.json")["vendors"]
     seen = 0
-    for _, profs in load("overlays.json")["overlays"].items():
-        for doc in profs.values():
-            ident = doc.get("identity")
-            if not ident:
-                continue
-            seen += 1
-            assert ident["vendor"] in vendors, \
-                f"overlay names vendor {ident['vendor']!r}, absent from the registry"
-    assert seen, "no overlay declares an identity; this test proved nothing"
+    for key, ls in load("listings.json")["listings"].items():
+        seen += 1
+        ns = key.split("/")[0]
+        assert ls["ns"] == ns
+        assert ls["manufacturer"] == vendors[ns]["display"], key
+        assert vendors[ns]["role"] in ("software", "both"), key
+    assert seen, "no listing shipped; this test proved nothing"
+
+
+def test_the_index_says_who_lists_a_device():
+    """devices.json carries the reverse join, so a picker can offer the NOS
+    vendors for a box without opening listings.json."""
+    dev = next(d for d in load("devices.json")["devices"] if d["name"] == "as7726-32x")
+    assert "arrcus/as7726-32x" in dev["listings"], dev["listings"]
+    assert dev["listings"] == sorted(dev["listings"])
+    assert "arrcus" in dev["search"].split() and "arcos" in dev["search"].split()
 
 
 # ---- what already shipped, asserted so it keeps shipping ---------------------
@@ -157,20 +163,20 @@ def test_every_drawing_names_its_source_and_carries_none_of_it():
             f"{svg.name} names a source that is not {device}.source.json"
 
 
-def test_the_overlays_declared_interface_names_are_what_the_exporter_reads():
+def test_the_listings_declared_interface_names_are_what_the_exporter_reads():
     """THE JOIN, NOW A READ RATHER THAN A PIN.
 
-    `nos_name()` used to hardcode arcos as swp{n}/ma1 in Python while the arcos
-    overlay declared exactly that as data, and this test held the two together
-    by asserting they agreed. The exporter now reads the published overlay -
-    `overlay_names()` over overlays.json - so there is one statement of the
+    `nos_name()` used to hardcode arcos as swp{n}/ma1 in Python while the ArcOS
+    data declared exactly that, and this test held the two together by
+    asserting they agreed. The exporter now reads the published listing -
+    `listing_names()` over listings.json - so there is one statement of the
     fact and this checks it is the published one being read: a JS consumer and
     the exporter answer "what does ArcOS call port 7" from the same bytes.
-    `spec/tests/test_dcim_nos_overlay.py` runs the export itself.
+    `spec/tests/test_dcim_listings.py` runs the export itself.
     """
-    from portrayal.dcim_export import overlay_names
-    doc = load("overlays.json")["overlays"]["edgecore/as7726-32x"]["arcos"]
-    names = overlay_names(doc)
+    from portrayal.dcim_export import listing_names
+    doc = load("listings.json")["listings"]["arrcus/as7726-32x"]
+    names = listing_names(doc)
     assert names["port-7"][0] == "swp7"
     assert names["mgmt-eth"][0] == "ma1"
     assert names["port-7"][1]["modes"], "the breakout modes the Python never read"
@@ -211,7 +217,7 @@ def test_the_dcim_export_needs_no_source_tree():
         # dist/ is the ONLY input. Copied by name so that anything not on the
         # published contract is genuinely absent rather than merely unused.
         (sand / "dist").mkdir()
-        for name in ("devices.json", "components.json", "vendors.json", "overlays.json",
+        for name in ("devices.json", "components.json", "vendors.json", "listings.json",
                      "as7726-32x.source.json"):
             shutil.copy(DIST / name, sand / "dist" / name)
         for svg in DIST.glob("as7726-32x.*.svg"):
@@ -220,16 +226,17 @@ def test_the_dcim_export_needs_no_source_tree():
         r = subprocess.run(
             [sys.executable, str(sand / "tools" / "dcim_export.py"),
              "--dist", str(sand / "dist"), "--out", str(sand / "out"),
-             "--device", "as7726-32x", "--nos", "arcos"],
+             "--device", "as7726-32x"],
             capture_output=True, text=True, cwd=tmp)
         assert r.returncode == 0, f"export failed away from the tree:\n{r.stderr[-800:]}"
 
         made = sorted(p.name for p in (sand / "out").rglob("*.yaml"))
         assert made, "no device type written"
-        # the overlay identity has to survive the journey too: this device is
-        # sold as ArcOS on Edgecore metal, and that fact lives in overlays.json
-        assert any(n.startswith("ArcOS on ") for n in made), made[:4]
-        doc = yaml.safe_load((sand / "out").rglob("ArcOS on *.yaml").__next__().read_text())
+        # the listing has to survive the journey too: Arrcus lists this box,
+        # and that fact lives in listings.json
+        arrcus = sorted((sand / "out").rglob("Arrcus/*.yaml"))
+        assert arrcus, made[:4]
+        doc = yaml.safe_load(arrcus[0].read_text())
         assert doc["manufacturer"] == "Arrcus", doc["manufacturer"]
         assert doc.get("interfaces"), "no interfaces named for the NOS"
 

@@ -1,0 +1,26 @@
+format: 1
+kind: listing
+hardware: ufispace/s6301-56st
+version: 1.0.0
+portfolio: {line: OcNOS DC}
+description: >-
+  Supported by OcNOS DC 7.0.1, licensed per switching capacity as OcNOS-DC-MGMT-120, OcNOS-DC-IPBASE-120.
+  Those are software licences shared by every box of the same capacity, not part
+  numbers for this one.
+source: >-
+  OcNOS 7.0.1 MR Hardware Compatibility List (IP Infusion, July 2026), the row for
+  S6301-56ST, current supported 'DC 7.0.1'.
+  The names follow OcNOS's pattern rather than a table for this box: the port's speed class
+  as prefix (ge 1G, xe 10G and 25G, ce 40G and 100G, cd 400G) and one 0-based count across
+  the whole front panel, with eth0 for management. That is how the S9510-30XC's own
+  configuration in the OcNOS SP 7.0 Segment Routing Guide names its ports - ce0, ce1, xe2 to
+  xe29 - and it is exactly the UfiSpace silkscreen numbering, which this box shares. Not every
+  platform counts this way: the AS7316-26XB example in the Layer 3 Guide restarts at xe0
+  after ce0 and ce1, so the rule is applied to UfiSpace boxes whose ports are numbered in
+  one run from 0, and nowhere else.
+interfaces:
+  - {physical: 'port-{n}', name: 'ge{n}', range: '0-47'}
+  - {physical: 'port-{n}', name: 'xe{n}', range: '48-55'}
+  - {physical: mgmt, name: eth0}
+nos: ocnos
+nos-versions: '>=7.0.1'

@@ -1,0 +1,42 @@
+format: 1
+kind: component
+name: system-cover-1u-16g
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+profile: server
+description: >-
+  The system cover of a 16th-generation 1U PowerEdge (R660) - the lid over everything behind the drive backplane, released by its latch
+provenance:
+  sources: >-
+    Dell's R660 service model, working/intake/dell/3d-models/r660.glb, read with glb-parts.py and mapped to plan coordinates (rear at y=0: plan y = 789.4 - cad z1, the rear wall at cad z 789.4; plan x = 217.65 - cad x - w, the body seen from above). Only the poses inside the chassis' 0..43 height are seated; the scene also holds exploded copies above it.
+  size: >-
+    measured - `PE_R660_System cover-1.001`, 433.4 x 615.0.
+  pose: >-
+    THE MODEL HAS IT SLID BACK. It spans cad z 204.3..819.3, ending 29.9 behind
+    the rear wall at 789.4 - the removal pose, where the lid slides rearward off
+    its hooks. Seated, its rear edge is taken at the rear wall (plan y 0), so its
+    front 29.7 lies under the backplane cover (plan y 585.3). The seated position
+    is inferred from that; the size is not.
+  latch: >-
+    measured - `PE_R660_System cover_Latch-1.001`, 25.0 x 63.6, at lid-local x
+    204.2, y 493.5 once the pose is undone.
+size: {w: 433.4, h: 615.0}
+size-confidence: {w: measured, h: measured}
+relief:
+  wall: '#1a1d21'
+  features:
+  - node: cover
+    out: 1.0
+    color: '#c3c8cd'
+    confidence: estimated
+    source: sheet steel of about a millimetre, so the lid reads as a surface
+  - node: latch
+    out: 2.0
+    color: '#2b6cb0'
+    confidence: estimated
+    source: the latch stands proud of the lid; not measured
+elements:
+  cover: {at: [0.0, 0.0], size: [433.4, 615.0], class: bezel}
+  latch: {at: [204.2, 493.5], size: [25.0, 63.6], class: latch}
+skins: [default]

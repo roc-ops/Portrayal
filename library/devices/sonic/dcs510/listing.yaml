@@ -1,0 +1,16 @@
+format: 1
+kind: listing
+hardware: edgecore/dcs510
+version: 1.0.0
+description: >-
+  SONiC's hardware SKU for this box is Accton-AS9716-32D, on platform x86_64-accton_as9716_32d-r0.
+source: >-
+  SONiC Supported Devices and Platforms (sonic-net.github.io/SONiC), the row for AS9716-32D.
+  Port names from the platform's own table in sonic-net/sonic-buildimage at d5c2e3b32ffa,
+  device/accton/x86_64-accton_as9716_32d-r0/Accton-AS9716-32D/port_config.ini: each SONiC name with the front-panel port its alias names.
+  eth0 is SONiC's management port (the SONiC command reference, Management VRF).
+interfaces:
+  - {physical: 'port-{n}', name: 'Ethernet{8*n-8}', range: '1-32'}
+  - {physical: mgmt-eth, name: eth0}
+nos: sonic
+nos-versions: master

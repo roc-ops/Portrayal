@@ -50,7 +50,7 @@ def test_every_internal_ref_resolves(path):
 def test_some_schema_actually_uses_internal_refs():
     """NON-VACUITY for the sweep above: it passes when a schema has no refs at
     all, which is also what it does if the pattern stops matching. Two of the
-    three schemas here use them heavily; overlay.schema.json uses none."""
+    three schemas here use them heavily; listing.schema.json uses none."""
     total = sum(len(set(re.findall(r'"#/\$defs/([^"]+)"', f.read_text())))
                 for f in _schema_files())
     assert total >= 10, f"only {total} internal refs across all schemas"
@@ -59,6 +59,23 @@ def test_some_schema_actually_uses_internal_refs():
 @pytest.mark.parametrize("path", _schema_files(), ids=lambda p: p.name)
 def test_the_schemas_are_valid_schemas(path):
     jsonschema.Draft202012Validator.check_schema(json.loads(path.read_text()))
+
+
+@pytest.mark.parametrize("path", _schema_files(), ids=lambda p: p.name)
+def test_every_schema_id_names_its_published_home(path):
+    """roc-ops/Portrayal#450. A `$id` is the URL validators and editors
+    dereference, and once an outside file copies it the host is frozen. The
+    schemas are published at portrayal.dev under the format's label, and the
+    title carries the same label, so `v1` means format 1 in all three places."""
+    doc = json.loads(path.read_text())
+    assert doc["$id"] == f"https://portrayal.dev/schemas/v1/{path.name}", doc["$id"]
+    assert "(v1)" in doc["title"], doc["title"]
+    assert doc["properties"]["format"] == {"const": 1}, "schema v1 is format 1"
+
+
+def test_the_id_sweep_is_not_vacuous():
+    assert {p.name for p in _schema_files()} >= {
+        "device.schema.json", "component.schema.json", "listing.schema.json"}
 
 
 @pytest.mark.parametrize("key", ["width", "height", "depth"])

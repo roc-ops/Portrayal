@@ -1,0 +1,140 @@
+format: 1
+kind: module
+name: riser-primary-dl160
+version: 1.0.0
+class: riser
+behaviour: fills
+profile: server
+description: >-
+  The primary PCI riser cage of the Gen10 ProLiant DL160 as the rear presents
+  it, with the standard x16/x8 riser board (878538-001) - PCIe 3.0 slot 1,
+  full height, and slot 2, low profile, lying flat either side of the riser,
+  each a window in the cage over a standard bracket
+attrs:
+  riser-board: 878538-001
+provenance:
+  sources: >-
+    The straight-on rear photograph in newserverlife's DL160 Gen10 review
+    (newserverlife.com/upload/iblock/386/8_opt.jpeg), 2.90 x 2.87 px/mm; see
+    hpe/psu-865408-b21@1 for the panel gate on that image. DL160 Gen10 User
+    Guide a00066666en_us, 'Rear panel components' and 'PCIe expansion slot
+    definitions'; Maintenance and Service Guide a00066664en_us, riser board
+    spare parts (primary riser board x16 x8, 878538-001; primary riser board
+    x8/FlexibleLOM, 878539-001). The QuickSpecs Internal View shows the riser
+    board from above between the two slots, its label reading Slot 2 PCIe x8
+    over Slot 1 PCIe x16.
+  size: >-
+    photo-measured - 203.0 x 24.2: the cage's face from the chassis' left edge
+    to the end of the bracket right of slot 2 (x 9..597 px), and from 0.4 below
+    the top edge to the bottom of slot 1's window (y 14..83 px).
+  placing: >-
+    WHAT A WINDOW SHOWS IS THE BRACKET'S CONNECTOR OPENING, and that is what
+    places each bay. The standard puts the opening 19.96..109.86 from the tip of
+    a full-height bracket and 15.63..70.16 from the tip of a low-profile one
+    (std/pcie-bracket-fh@2, std/pcie-bracket-lp@1). Drawn: slot 1's bracket
+    6.48..126.5 with its tip at the right, its flange under the cage's left end
+    block; slot 2's 117.5..196.7 with its tip at the left, its flange under the
+    right end block. THE TWO TIPS PASS EACH OTHER by 9.0 mm, behind the plate
+    between the windows. That is the standard's doing - a bracket's retention
+    tab reaches some 15 mm below its card's edge fingers, so it passes the riser
+    board the card plugs into - and the photograph shows the two blanks at
+    different depths where they meet. It was first read as a fault and the
+    brackets packed end to end, which cut the ports of every low-profile card
+    off at its window. Soft by a few millimetres; no image held shows a card in
+    place.
+  windows: >-
+    photo-measured - the blanks show through 15.0..121.9 (slot 1) and
+    123.6..191.7 (slot 2) on this face: each blank's whole visible plate, re-
+    read at twice the photograph's size after a first reading had taken the
+    frame round slot 2's vents (127.9..188.2, shorter than the 65.34 the
+    standard gives as a low-profile chassis opening's least) for its window.
+    THEY ARE WINDOWS OVER STANDARD BRACKETS, which is what was missed when these
+    slots were first drawn as bays the size of the windows - no card fitted
+    them. The skin's openings are 14.3..117.5 and 126.5..191.5: slot 1's stops
+    where slot 2's bracket begins, slot 2's starts where its bracket's tip has
+    widened to the body (9.0 from the tip) and stops at the end block, so
+    neither bracket's tip nor flange shows, and the plate is drawn across what
+    is left of each photographed window, where the photograph shows a blank's
+    plain margin. Up and down, slot 1's opening is the bracket body's 18.42 and
+    a little, centred where the blank's vents are centred (11.9).
+  handedness: >-
+    Slot 1 is turned over (rotate 180, tip right) and slot 2 is not (tip left),
+    and a card can seat no other way. HPE's PartSurfer photograph of this cage
+    (878538-001, partsurfer.hpe.com/media/photos/878538-001.jpg) shows the riser
+    board standing BETWEEN the two slots with a connector on each face, and its
+    label reads 'Slot 2 PCIe x8' with an arrow one way and 'Slot 1 PCIe x16'
+    with an arrow the other; the QuickSpecs Internal View puts the board at
+    102..126 on this face. The User Guide's 'Installing an expansion board'
+    figures draw it: in slot 1 and in slot 2 the card is pushed toward the riser
+    board in the middle of the cage and a latch at the cage's OUTER end closes
+    over the bracket's flange. StorageReview's video shows the same cage in the
+    server with the lid off (4:48): the board runs front to back between the two
+    slots, slot 2's x8 connector faces the middle of the server, slot 1 lies
+    under the cage toward the chassis wall, and a blue latch sits at each OUTER
+    end of the cage's rear edge. A card's edge connector plugs into the board,
+    the bracket's tip is the end at the edge connector (std/pcie-bracket-fh@2),
+    so each tip is at the riser and each flange at the far end, and the two
+    cards lie opposite ways up - a half turn on this face. No image held shows a
+    card fitted, so the bracket is not READ in place; what is read is where the
+    connectors are.
+  slots: >-
+    datasheet - User Guide 'PCIe expansion slot definitions': slot 1 PCIe 3.0,
+    x16 connector, negotiable 16/8/4/1, full-height half-length or low-profile;
+    slot 2 PCIe 3.0, x8, 8/4/1, low-profile half-length; both on processor 1
+    (the secondary riser is the one that needs processor 2).
+  depth: >-
+    estimated - 150, the cage's reach into the chassis on the QuickSpecs
+    Internal View (145.6 by that photograph's scale, which fails the panel
+    gate).
+size: {w: 203.0, h: 24.2, d: 150.0}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+body: {depth: 150.0, color: '#b9bec4'}
+elements:
+  plate: {at: [0.0, 0.0], size: [203.0, 24.2], class: bezel}
+bays:
+  slot-1:
+    slot: {connector: x16, lanes: 16, height: full, length: half, processor: 1, generation: 3}
+    rotate: 180
+    behind: true
+    at: [6.48, 2.7]
+    size: [120.02, 21.59]
+    accepts: [hpe/expansion-slot-blank-fh@1, std/pcie-bracket-fh@2, common/pcie-card-fh@2, ufispace/n3100-4c@1, nvidia/mcx4111a-fh@1, nvidia/mcx4121a-fh@1, nvidia/mcx4131a-fh@1, nvidia/mcx512a-fh@1, nvidia/mcx512f-fh@1, nvidia/mcx515a-fh@1, nvidia/mcx516a-fh@1, nvidia/mcx621102-fh@1, nvidia/mcx621202-fh@1, nvidia/mcx623102a-fh@1, nvidia/mcx623105-fh@1, nvidia/mcx623106-fh@1, nvidia/mcx713104-fh@1, nvidia/mcx713106-fh@1, nvidia/mcx713114-fh@1, nvidia/mcx715105-fh@1, nvidia/mcx75310-fh@1, nvidia/mcx75510-fh@1, nvidia/mcx755106-fh@1]
+    default: hpe/expansion-slot-blank-fh@1
+  slot-2:
+    slot: {connector: x8, lanes: 8, height: low, length: half, processor: 1, generation: 3}
+    behind: true
+    at: [117.5, 1.9]
+    size: [79.20, 18.42]
+    accepts: [hpe/expansion-slot-blank-lp@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1, nvidia/mcx4111a-lp@1, nvidia/mcx4121a-lp@1, nvidia/mcx4131a-lp@1, nvidia/mcx512a-lp@1, nvidia/mcx512f-lp@1, nvidia/mcx515a-lp@1, nvidia/mcx516a-lp@1, nvidia/mcx621102-lp@1, nvidia/mcx621202-lp@1, nvidia/mcx623102a-lp@1, nvidia/mcx623105-lp@1, nvidia/mcx623106-lp@1, nvidia/mcx713106-lp@1, nvidia/mcx715105-lp@1, nvidia/mcx75310-lp@1, nvidia/mcx75510-lp@1, nvidia/mcx755106-lp@1]
+    default: hpe/expansion-slot-blank-lp@1
+relief:
+  features:
+  - node: latch-left
+    out: 12.0
+    color: '#b3b9bf'
+    confidence: estimated
+    source: >-
+      the latch housing a bracket's flange lands in. The User Guide's
+      'Installing an expansion board' figures close a latch over the flange at
+      the cage's outer end, PartSurfer's photograph of the cage (878538-001)
+      shows a blue latch at each end of its rear edge, and a reseller's close-up
+      of the rear (2beshop.com/images/products/HPE-ProLiant-DL160-Gen10/10.jpg)
+      shows the housing standing proud of the rear wall beside slot 2. HOW FAR
+      is not measured: 12 is drawn because a bracket's folded flange is 9.40
+      proud (PCIe CEM 5.0 figure 11-9) and is inside the housing, not sticking
+      out of the rear wall as it did before this feature existed
+  - node: latch-right
+    out: 12.0
+    color: '#b3b9bf'
+    confidence: estimated
+    source: >-
+      the latch housing a bracket's flange lands in. The User Guide's
+      'Installing an expansion board' figures close a latch over the flange at
+      the cage's outer end, PartSurfer's photograph of the cage (878538-001)
+      shows a blue latch at each end of its rear edge, and a reseller's close-up
+      of the rear (2beshop.com/images/products/HPE-ProLiant-DL160-Gen10/10.jpg)
+      shows the housing standing proud of the rear wall beside slot 2. HOW FAR
+      is not measured: 12 is drawn because a bracket's folded flange is 9.40
+      proud (PCIe CEM 5.0 figure 11-9) and is inside the housing, not sticking
+      out of the rear wall as it did before this feature existed
+skins: [default]

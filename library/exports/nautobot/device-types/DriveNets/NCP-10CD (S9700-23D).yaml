@@ -1,0 +1,139 @@
+---
+manufacturer: DriveNets
+model: NCP-10CD (S9700-23D)
+slug: drivenets-ncp-10cd-s9700-23d
+u_height: 2.0
+is_full_depth: true
+weight: 18.77
+weight_unit: kg
+airflow: front-to-rear
+description: UfiSpace S9700-23D 400G open disaggregated core and edge router - 2RU white box on Broadcom
+  Jericho2 BCM88690 with an external OP2 BCM16K TCAM, 4.8 Tbps and an 8 GB deep buffer, carrying 10x...
+front_image: true
+rear_image: true
+console-ports:
+  - name: Console
+    type: rj-45
+interfaces:
+  - name: ge400-0/0/0
+    type: 400gbase-x-qsfpdd
+  - name: fab-ncp400-0/0/0
+    type: 400gbase-x-qsfpdd
+  - name: ge400-0/0/1
+    type: 400gbase-x-qsfpdd
+  - name: fab-ncp400-0/0/1
+    type: 400gbase-x-qsfpdd
+  - name: ge400-0/0/2
+    type: 400gbase-x-qsfpdd
+  - name: fab-ncp400-0/0/2
+    type: 400gbase-x-qsfpdd
+  - name: ge400-0/0/3
+    type: 400gbase-x-qsfpdd
+  - name: fab-ncp400-0/0/3
+    type: 400gbase-x-qsfpdd
+  - name: ge400-0/0/4
+    type: 400gbase-x-qsfpdd
+  - name: fab-ncp400-0/0/4
+    type: 400gbase-x-qsfpdd
+  - name: ge400-0/0/5
+    type: 400gbase-x-qsfpdd
+  - name: fab-ncp400-0/0/5
+    type: 400gbase-x-qsfpdd
+  - name: ge400-0/0/6
+    type: 400gbase-x-qsfpdd
+  - name: fab-ncp400-0/0/6
+    type: 400gbase-x-qsfpdd
+  - name: ge400-0/0/7
+    type: 400gbase-x-qsfpdd
+  - name: fab-ncp400-0/0/7
+    type: 400gbase-x-qsfpdd
+  - name: ge400-0/0/8
+    type: 400gbase-x-qsfpdd
+  - name: fab-ncp400-0/0/8
+    type: 400gbase-x-qsfpdd
+  - name: ge400-0/0/9
+    type: 400gbase-x-qsfpdd
+  - name: fab-ncp400-0/0/9
+    type: 400gbase-x-qsfpdd
+  - name: fab-ncp400-0/0/10
+    type: 400gbase-x-qsfpdd
+  - name: fab-ncp400-0/0/11
+    type: 400gbase-x-qsfpdd
+  - name: fab-ncp400-0/0/12
+    type: 400gbase-x-qsfpdd
+module-bays:
+  - name: Fan 0
+    position: fan-0
+    description: 'Accepts: fan-803816-hc'
+  - name: Fan 1
+    position: fan-1
+    description: 'Accepts: fan-803816-hc'
+  - name: Fan 2
+    position: fan-2
+    description: 'Accepts: fan-803816-hc'
+  - name: Fan 3
+    position: fan-3
+    description: 'Accepts: fan-803816-hc'
+  - name: PSU 0
+    position: psu-0
+    description: 'Accepts: psu-202-ac, psu-202-dc'
+  - name: PSU 1
+    position: psu-1
+    description: 'Accepts: psu-202-ac, psu-202-dc'
+comments: "DriveNets lists UfiSpace S9700-23D (NOS: dnos).\nDriveNets also calls it: NCP-10CD.\nListed\
+  \ per: DNOS CLI Reference Guide 26.2, `system ncp model`: S9700-23D is among the hardware models DNOS\
+  \ accepts for an NCP. Port names from the same reference: a service port is ge<speed>-<ncp>/<slot>/<port>\
+  \ and a fabric port fab-ncp400-<ncp>/0/<port>, the port being the id printed on the box ('as shown at\
+  \ the WB') and counted from 0 on each NCP. Named here for a standalone box, NCP 0 and slot 0; in a cluster\
+  \ DNOS renames every port with the NCP id the deployment gives this box.\n\nUfiSpace S9700-23D 400G\
+  \ open disaggregated core and edge router - 2RU white box on Broadcom Jericho2 BCM88690 with an external\
+  \ OP2 BCM16K TCAM, 4.8 Tbps and an 8 GB deep buffer, carrying 10x QSFP-DD 100/400G SERVICE ports (four\
+  \ of them 400ZR/OpenZR+ capable, all breakable to 4x100G) and 13x QSFP-DD 400G FABRIC ports that connect\
+  \ only to a UfiSpace S9705-48D or S9725-64E fabric switch, which is what makes it half of a distributed\
+  \ disaggregated chassis rather than a standalone box; a management cluster of 2x SFP+ 10G, an RJ45 and\
+  \ a micro-USB console, an out-of-band RJ45 and a USB 2.0 Type-A; four hot-swap fans (3+1) and dual 2000\
+  \ W PSUs (1+1) at the rear, orderable AC or DC, exhaust airflow. Sold by DriveNets as the NCP-10CD packet-forwarder\
+  \ of its Network Cloud DDC.\n\nConfiguration `ac`: The chassis as HIG Figure 7's rear elevation and\
+  \ the vendor's rear product photograph both show it - four FAN-803816-HC exhaust fans and two PSU-202-AESR\
+  \ 2000 W AC supplies with portrait appliance inlets and red latches, front-to-back airflow, and the\
+  \ twenty-five traffic and management ports empty. The HIG rates the feed at 200-240 V and notes that\
+  \ on a single 110 VAC source each supply delivers 1000 W and cannot then be swapped while the router\
+  \ is running. No orderable chassis part number appears in any held document; see the chassis-sku gap.\n\
+  \nDatasheet: UfiSpace S9700-23D 400G Disaggregated Core and Edge Router Datasheet\n  https://www.ufispace.com/products/telco/core-edge/s9700-23d-400g-disaggregated-core-router\n\
+  \nFacts carried in the model that this schema has no field for:\n- compliance.emc: FCC Part 15, Subpart\
+  \ B, Class A; ICES-003, Class A; EN 55032, Class A; EN 55024; EN 55035; EN 62479; EN 50663; EN 300 386;\
+  \ EN 301 489; EN 303 413; BSMI; VCCI CISPR 32, Class A; AS/NZS CISPR 32, Class A; Anatel; NEBS GR-1089\n\
+  - compliance.environment: NEBS GR-63; WEEE; RoHS\n- compliance.nebs: NEBS Level 3 (datasheet Key Benefits,\
+  \ 'Ideal for Core, Edge, and Central Office deployments (NEBS Level 3)')\n- compliance.safety: UL 62368-1;\
+  \ IEC 60950-1; IEC 62368-1; BSMI; NOM\n- environmental.operating-humidity: 5 to 85% RH non-condensing\n\
+  - environmental.operating-temp: 0 to 45 C\n- environmental.storage-humidity: 5 to 93% RH non-condensing\n\
+  - environmental.storage-temp: -40 to 70 C\n- features.breakout: service ports support 4x100G break-out\n\
+  - features.deployment: standalone core or edge router, or a packet-forwarding building block of a distributed\
+  \ disaggregated chassis (DDC) when its fabric ports are cabled to a UfiSpace S9705-48D or S9725-64E\
+  \ fabric switch. (Keyed `deployment` rather than `role`: `role` is reserved for the structural one each\
+  \ GROUP carries, and two different meanings under one key is what that rule exists to stop)\n- features.fabric-ports:\
+  \ the 13 QSFP-DD ports of the fabric block are 400GE only and connect ONLY to the fabric ports of an\
+  \ S9705-48D or S9725-64E - the HIG's Port Overview says so explicitly - so they carry no customer traffic\
+  \ and take no optics from the service list\n- features.optics-qsfp-dd: SERVICE ports, up to 600 km:\
+  \ 400GE QSFP-DD OpenZR+, ZR, SR8, ER4, LR4, DR4 and 100GE QSFP28 ZR4, ER4, LR4, SR4, with 400ZR and\
+  \ OpenZR+ on ports 0, 1, 4, 5, 8 and 9 only. FABRIC ports, up to 100 m: 400GE QSFP-DD DAC, AEC and AOC\
+  \ cable only - no optical transceiver is listed for them and they connect only to an S9705-48D or S9725-64E.\
+  \ One key covers both blocks because both are qsfp-dd media; which list applies is decided by the group,\
+  \ not by the cage\n- features.optics-sfp-plus: the two SFP+ management ports are 10G; the datasheet's\
+  \ Compatible Transceiver Types block names QSFP-DD and QSFP28 parts only and lists no SFP+ optic, so\
+  \ what is qualified in these two cages is not stated by the vendor\n- features.routing: full Segment\
+  \ Routing over IPv6 (SRv6)\n- features.zr-ports: 400ZR and OpenZR+ run on six of the ten service ports\
+  \ - 0, 1, 4, 5, 8 and 9, the left column of each ganged shell (datasheet prose, and HIG Figure 8's highlight\
+  \ read against the printed numbering)\n- lifecycle.eol: none-announced\n- management.console: RJ45 RS-232\
+  \ plus a micro-USB serial console, both labelled IOIO\n- management.inband: 2x SFP+ 10G management ports\n\
+  - management.oob: 1x RJ45 100/1000M\n- management.usb: 1x USB 2.0 Type-A\n- performance.cluster-capacity:\
+  \ 4 Tbps standalone, scaling to 192 Tbps in a DDC cluster\n- performance.packet-buffer: 8 GB\n- performance.packet-throughput:\
+  \ 2000 Mpps\n- performance.switching-capacity: 4.8 Tbps\n- platform.asic: Broadcom Jericho2 BCM88690\n\
+  - platform.bmc: Aspeed AST2400\n- platform.cpu: Intel Broadwell-DE 8-core @ 2.0 GHz\n- platform.memory:\
+  \ 64 GB DDR4\n- platform.storage: 128 GB SSD\n- platform.tcam: Broadcom OP2 BCM16K external TCAM, up\
+  \ to 16 parallel searches\n- power.input-ac: 200 to 240 V, 12.5 A\n- power.input-dc: -40 to -72 V, 60\
+  \ A\n- power.power-envelope: bare\n- power.power-max-w: 993\n- power.power-typical-w: 410\n- power.psu-redundancy:\
+  \ 1+1 hot-swappable\n- thermal.airflow: front-to-back (exhaust fans and exhaust PSUs)\n- thermal.fan-redundancy:\
+  \ 3+1 hot-swappable\n\nDrawing version 4.0.2. A major bump means a slot moved or an id was renamed,\
+  \ so anything cached from an earlier export may no longer line up.\nModel maturity: modelled. Every\
+  \ dimension in the source records where it came from."

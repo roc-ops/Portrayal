@@ -95,5 +95,8 @@ def test_only_a_rack_face_is_wider_than_its_plane():
     # fhd-1ufmt-n: FS's fixed 1U FHD enclosure is one flat 482.6 front plate
     # with the rack holes at its ends, and its four FHD modules mount on it
     # across 440 - wider than the 430 body - so its front is the whole plate.
-    assert set(wide) <= {"r740xd:front", "r740xd:front-lff-12", "fhd-1ufmt-n:front"}, \
+    # r660: the R740xd's case in 1U - both control panels sit in the ears.
+    assert set(wide) <= {"r740xd:front", "r740xd:front-lff-12", "fhd-1ufmt-n:front",
+                         "r660:front", "r660:front-sff8sf", "r660:front-nobp",
+                         "r660:front-e3s16", "r660:front-e3s14"}, \
         f"a face is wider than its plane and is not a known rack face: {wide}"

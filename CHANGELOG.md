@@ -1,16 +1,26 @@
 # Changelog
 
-What changed in the **dist contract** — the files under `library/dist/` that a
-consumer outside this repository reads. `devices.json` carries a `contract`
-number; this file says what each one meant.
+What a consumer outside this repository can depend on, and every change to it.
+That is four things:
 
-The contract number goes up when a field a reader depends on is **removed,
-renamed, or changes meaning**. Adding a field does not move it: a consumer that
-ignores a new key is unaffected, and one that wants it can look.
+- the **manifest format** (`format:` in every file, named by schema **v1**);
+- the **published build** under `library/dist/`, whose `devices.json` carries a
+  `contract` number;
+- the **DCIM exports** under `library/exports/`, which carry no number of their
+  own, so a change that re-files data already imported is marked **BREAKING
+  for DCIM data already imported**;
+- the **addresses** a manifest outside this tree holds: a component major it
+  pins (`name@2`), and a lint code it waives.
 
-The library itself is versioned per device (`device.lock.json` beside each
-manifest) and per component (`version:` in each contract). This file is about
-the *published build*, not about the hardware.
+A number goes up when something a reader depends on is **removed, renamed, or
+changes meaning**. Adding a field does not move it: a consumer that ignores a
+new key is unaffected, and one that wants it can look.
+[docs/format-stability.md](docs/format-stability.md) states the rules in full.
+
+The hardware itself is versioned per device (`device.lock.json` beside each
+manifest) and per component (`version:` in each contract), and those versions
+are not repeated here, except where a component major is removed: every removal
+names the ref that replaces it.
 
 ## Unreleased
 
@@ -23,6 +33,208 @@ the *published build*, not about the hardware.
   `common/rocker-switch@1`, `common/dc-terminal-header-6@1` and
   `common/ground-stud@1`. `std/bnc@1` and `common/bnc-jack@1` are no longer
   `unplaced`.
+- `chassis.mount` in the device manifest: `rack` (the default), `din-rail`,
+  `wall` or `desktop`. Lint L125 warns on a rack device with no `ru` and
+  refuses `ru` on a box that is not racked (roc-ops/Portrayal#734).
+- `chassis.bevel` in the device manifest: edges named by the two faces that
+  meet at them, cut back by `size` mm - one number at 45 degrees, or a pair
+  `[a, b]` taking a different amount off each face. A bevelled face's
+  `chassis-faceplate` is a `<path>` of the solid's outline, its bevel strips
+  are drawn in `chassis-bevels`, and `<device>.configs.json` carries the
+  solid's polygons as `chassis.solid` for the 3D viewer (`@portrayal/kit`
+  exports `./bevel`). Lint L126 checks the bevel and keeps parts on the flat
+  face (roc-ops/Portrayal#735).
+- **Cables in the draw.io exports** (roc-ops/Portrayal#728): `rackDiagram`,
+  `toDrawio` and `diagram` take `cables` (a rack plan's
+  `{id, a: {item, path, view}, b, media, purpose, label, length}`) and write
+  each as an edge between two port cells. A cable whose ends are on different
+  pages becomes a labelled stub on each; one with an end not drawn is listed in
+  a notes comment with the reason. `cableStyle` sets the colours, and
+  `rackCables` returns the notes as a list. Without `cables` the output is
+  unchanged.
+- **An elements file beside every compiled face**:
+  `<device>[.<config>].<view>.elements.json` lists each element the face
+  draws, by its `path` (or `of` for a projection), with its `id`, `class`,
+  `ref`, `media`, `speed`, `group`, `group-role`, `rel-pos`, `states`, `for`
+  and `inner`, its box and connection points in the face's millimetres, the bay or cage it
+  is seated in, and its `parent` in the Explorer's tree, under a header naming
+  the device, configurations, view, viewBox, `source-sha256` and component
+  versions. A server can read a face's tree without a DOM or a layout pass.
+  The nesting rule moved out of `kit/shell.js` into `faceTree` in
+  `@portrayal/kit/swap`, which the Explorer and the build both follow; the
+  Explorer's tree is unchanged. Each device's npm package carries its faces'
+  elements files. The file is new, so the dist `contract` number is unchanged
+  at 2; [docs/format-stability.md](docs/format-stability.md) gives its shape
+  (roc-ops/Portrayal#727).
+- **Diagram exports in the kit**: `@portrayal/kit/drawio`,
+  `@portrayal/kit/omnigraffle` and `@portrayal/kit/zones`, which were written
+  for portrayal.dev and are now the kit's own. Each export is the face as a
+  picture with one named, connectable shape per port and bay; draw.io gets a
+  shape library, a rack elevation or a one-device `.drawio`, and OmniGraffle a
+  `.gstencil`. `toDrawio(svgRoot, doc)` and `toGraffle(svgRoot, doc)` export a
+  LIVE drawing - optics seated, lamps lit, marks and a crop applied - and leave
+  out the ports a crop cuts away. A face whose viewBox does not start at 0,0
+  (an optic's, or a crop) now has its draw.io ports where its picture is; they
+  were offset by the viewBox origin.
+- **Four more SONiC listings** (roc-ops/Portrayal#674): the Celestica DS1000,
+  DS2000 and DS3000 and the Edgecore AS4630-54TE (EPS201). SONiC builds for all
+  four in sonic-buildimage but its Supported Devices page predates them; the
+  build tree is taken as SONiC's list. Port names come from each platform's
+  table at the same pinned commit, joined by alias (`Eth33/1` is port 33).
+- `npm_packages.py`: the build split into npm packages, one per device
+  (`@portrayal/<vendor>-<device>`), one for the component skins and one index
+  carrying `packages.json` (device → package and version, and a vendor →
+  family → device tree). Each package is versioned from what npm last
+  published, and only changed packages are published. Nothing in `dist/`
+  changes; see `library/README.md` (roc-ops/Portrayal#528).
+- **SONiC listings** (roc-ops/Portrayal#674). The 17 boxes on SONiC's Supported
+  Devices and Platforms page that the library models are listed under
+  `sonic/`, every one with SONiC port names: each platform's own table in
+  sonic-buildimage (`port_config.ini`, or `platform.json` with its breakout
+  modes), pinned to one commit and joined to the faceplate by the port's alias
+  - which names the front-panel port where `index` does not. `eth0` is the
+  management port. Celestica's rows use codenames (DX010, Silverstone,
+  Seastone_2) no document here ties to a DS model, so they wait.
+- **DNOS listings** (roc-ops/Portrayal#674). The 13 modelled boxes the DNOS CLI
+  Reference Guide 26.2 accepts as NCP hardware (`system ncp model`) are listed
+  under `drivenets/`, each named as DriveNets sells it - `model: NCP-40C` - and
+  exported as `DriveNets/NCP-40C (<SKU>)`, because one NCP name covers boxes
+  from several ODMs. A listing may now set `type-name`, a pattern with `{model}`
+  and `{sku}`, for exactly that. Six single-speed boxes carry DNOS port names
+  (`ge100-0/0/<n>`, `fab-ncp400-0/0/<n>`) for a standalone NCP 0; the
+  mixed-speed boxes carry a `dnos-port-names` gap, and management jacks a
+  `dnos-management-names` gap. The fabric boxes (NCF-48CD, NCF-64E) wait for a
+  document that names their hardware.
+- **OcNOS listings for the IP Infusion HCL** (roc-ops/Portrayal#674). Every box
+  on the OcNOS 7.0.1 MR Hardware Compatibility List (July 2026) that the
+  library models - 42 of 44 - is listed under `ipinfusion/`, with the edition
+  that supports it (OcNOS SP or OcNOS DC) as its portfolio line. 14 UfiSpace
+  boxes carry OcNOS port names: speed-class prefix (`ge`, `xe`, `ce`, `cd`) and
+  one 0-based count across the panel, as IP Infusion's own S9510-30XC
+  configuration shows and as the UfiSpace silkscreen already numbers them, with
+  `eth0` for management. The rest carry an `ocnos-port-names` gap: Edgecore
+  boxes do not all count the same way (the AS7316-26XB restarts per speed
+  class), and no 800G prefix is documented.
+
+### Changed
+- **A 3D export leaves the marks out** (roc-ops/portrayal-site#46): `exportData()` and
+  `download()` hide every mark halo for the export, as they always hid the
+  selection halo, and restore them after. A GLB or USDZ is the model; the marks
+  stay on screen.
+- The DCIM exports no longer call every device without `ru` a 1U full-depth
+  rack device. A box that is not racked exports `u_height: 0`, not full depth,
+  with its mounting in the comments (ReadyLinks GL-8XEP, Halny HLX-TGV), and
+  the Dell R740xd exports at its real 2U. A DCIM that imported these types
+  holds the old height until they are re-imported (roc-ops/Portrayal#734).
+- **`toDrawio()`'s `ports` is what a line can be drawn to** (roc-ops/Portrayal#730):
+  every port and every empty bay. A bay holding a card is a container that
+  takes no line, and counting it overstated a modular chassis by its seated
+  cards. `connectable(ports)` in `drawio.js` gives the same count. `toGraffle()`
+  is unchanged - every port and bay there is a magnetised shape - and its
+  `ports` now says so.
+- **BREAKING for DCIM data already imported.** The Edgecore DCS510's AC builds
+  export as `9716-32D-O-AC-F-EU` and `9716-32D-O-AC-B-EU`, not
+  `9716-32D-O-A C-F-UK` and `9716-32D-O-A C-B-UK`, under Edgecore and its
+  Arrcus, IP Infusion and SONiC listings. Two UK part numbers carried a stray
+  space, which sorted them first; with it removed the EU part number names
+  the type, as for a build whose every part number has a cord. A DCIM that
+  imported the old types keeps them under the old model; re-import under the
+  new one (roc-ops/Portrayal#720).
+- **The DriveNets names leave the UfiSpace hardware** (roc-ops/Portrayal#674).
+  Twelve UfiSpace boxes carried their NCP name as an `oem` alias (#518) - the
+  S9700-53DX's `NCP-40C` and so on. DriveNets' own listing now carries it
+  (`drivenets/<box>/listing.yaml`, `model:`), filed under DriveNets and found
+  by search and the picker, so the alias is removed and each box takes a patch
+  bump. `aliases` in `devices.json` and `<device>.configs.json` drops those
+  names, and the UfiSpace DCIM types lose "Also sold or listed as: NCP-...".
+  The S9600-102XC loses `NCP-96X6C-S` too: the DNOS CLI reference accepts only
+  the S9601-102XC for that model. The fabric boxes (S9705-48D `NCF-48CD`,
+  S9725-64E `NCF-64E`) keep theirs until they are listed.
+
+### Removed
+- **BREAKING for DCIM data already imported.** Five HPE parts are renamed, and
+  the old refs are gone. The DL160 Gen10's Media Module adapters take their
+  option numbers, as its supplies do: `hpe/media-module-872161@1` is now
+  `hpe/media-module-866464-b21@1`, `hpe/media-module-872162@1` is
+  `hpe/media-module-866467-b21@1` and `hpe/media-module-872163@1` is
+  `hpe/media-module-866470-b21@1`; their NetBox and Nautobot module types are
+  renamed with them. Two lamps that are shapes and not HPE products move to
+  `common/`: `hpe/led-sq@1` is `common/led-sq@1` and `hpe/button-led-sq@1` is
+  `common/button-led-sq@1` (roc-ops/Portrayal#760).
+- Six Dell R660 component majors are superseded and removed, each replaced by
+  its `@2`: `dell/e3s-carrier-blank@1` (redrawn as Dell's real E3.S blank),
+  and the Gen5 risers `dell/riser-2p-16g@1`, `dell/riser-2r-16g@1`,
+  `dell/riser-3p-16g@1`, `dell/riser-3q-16g@1` and `dell/riser-3r-16g@1` (now
+  on the Gen5-printed cages). A manifest that pins an `@1` moves to the `@2`
+  of the same name (roc-ops/Portrayal#749).
+
+## 0.1.0 (unreleased) - the first public release
+
+What 0.1.0 promises, as [docs/format-stability.md](docs/format-stability.md)
+states it in full:
+
+- Manifests are **`format: 1`**, which schema **v1** names. The schemas were
+  labelled `v0` until this release, which was the same format under a second
+  name. Each schema's `$id` is `https://portrayal.dev/schemas/v1/<name>.schema.json`
+  (`device`, `component`, `listing`), and the schemas are published there.
+- The published build is **`contract: 2`**. The history below says what `1`
+  and `2` each changed.
+- At 0.x the tools read the current format only. Every change that raises
+  `format` or `contract`, or re-files DCIM data already imported, is listed
+  here, with what to change to move across, and it raises the package's minor
+  version.
+- At 0.x a superseded component major may be removed. Every removal is listed
+  here with the ref that replaces it. From 1.0 a retired major is deprecated
+  for at least one release before it is removed.
+- Lint codes are never renumbered or reused, because a manifest waives a rule
+  by its code. A deleted rule's code is retired, not reissued.
+- From 1.0, a change that raises `format` or `contract` is a major version, and
+  the previous format stays readable for one release.
+
+### Pre-release history
+
+Everything below changed before the first release, while every consumer was
+inside this repository. It is kept because the build already carried `contract`
+numbers through it, and because it is the record of what each major and each
+breaking export change replaced.
+
+One of these changes is one the promise above now rules out: during
+pre-release the power rules were renumbered from L117-L119 to L118-L120
+(commit 5f6417b7, roc-ops/Portrayal#513), because another branch had taken
+L117 first. The move was made on the power rules' own branch, before they
+merged, so no code on `main` ever named a power rule at L117-L119, but anything
+written against that branch's numbers names a different rule. From 0.1.0 a
+code is never moved; the lint catalogue test pins every code issued.
+
+#### Added
+- **ArcOS listings for the Arrcus HCL** (roc-ops/Portrayal#674). Every box on
+  the Arrcus Hardware Compatibility List (June 2026, ArcOS 8.5) that the library
+  models - 29 of the 30 from UfiSpace and Edgecore - is listed under
+  `arrcus/`, with the HCL row as its source and Arrcus's own grouping
+  (Switching (XGS), Routing (DNX), VDR line and fabric cards) as its portfolio.
+  The AS7726-32X and AS7326-56X carry ArcOS port names from live units; the
+  other 27 carry an `arcos-port-names` gap instead, because ArcOS's own
+  documentation disagrees on whether a platform's first port is `swp0` or
+  `swp1`. Listings may now carry `gaps`.
+- **Listings** (roc-ops/Portrayal#674). A NOS vendor lists the hardware it
+  supports: `library/devices/<nos vendor>/<id>/listing.yaml` points at one device
+  and carries only what the NOS vendor changes - interface names, its own model
+  name and catalogue family, and its own part numbers where it has them. This is
+  how NetBox and Nautobot file a disaggregated box: one device type per
+  manufacturer that sells it, with one copy of the metal behind them all.
+  - `listings.json`: every listing, whole, keyed `<ns>/<id>`, with `ns` and the
+    resolved `manufacturer` added.
+  - `devices.json`: each device carries `listings`, the keys of the listings
+    that list it, and its `search` blob gains each listing's vendor, NOS and
+    names, so "arrcus" or "ocnos" finds the hardware.
+  - `devices.lock.json`: a `listings` map beside `devices`. A listing is
+    versioned (`listing.lock.json` beside it): a changed port name, model or
+    part number is major, an added configuration override minor, wording a
+    patch.
+  - `vendors.json`: IP Infusion (OcNOS), DriveNets (DNOS) and SONiC join Arrcus
+    as software vendors.
+  - Lint L124: under one NOS vendor, no two listings export the same DCIM model,
+    and an alias names one listing unless each claimant marks it `shared`.
 - Lint L123, library-wide: one module, one bay size. Every bay that accepts a
   module, in any device or carrier, reserves the same size for it to within a
   millimetre, compared in the module's own frame so a turned bay matches an
@@ -260,7 +472,13 @@ the *published build*, not about the hardware.
   [connectors-coax-design.md](docs/connectors-coax-design.md)
   (roc-ops/Portrayal#650).
 
-### Changed
+#### Changed
+- `juniper/mic-3d-8ds3-e3` and `mic-3d-8ds3-e3-v` (1.1.2): their 16 jacks
+  state `impedance: 75`, and the description no longer calls 75-ohm
+  mini-SMB an unmodelled interface. Mini-SMB is the 75-ohm SMB series, the
+  SMB interface and intermateable with 50-ohm SMB, so the jacks were
+  correctly SMB (roc-ops/Portrayal#672). The MX80, MX240, MX480, MX960,
+  MX2008, MX2010 and MX2020 take a patch for the composed card.
 - `common/qsfp-pull-tab@2` (2.2.0) models the strap's S-bend: each arm is six
   relief boxes along the reach (`arm-l`, then `arm-l-2` to `arm-l-6`, and the
   same on the right) that follow the side-view curve, down 1.5 into a dip
@@ -319,6 +537,20 @@ the *published build*, not about the hardware.
   name: `data-config` on the root and `config` in `<metadata>` are gone, since
   a shared drawing belongs to several. The default configuration's
   `<device>.<view>.svg` copies are unchanged (roc-ops/Portrayal#665).
+- **Also in `contract: 2`: `overlays.json` is gone;** `listings.json` replaces
+  it (roc-ops/Portrayal#674). The NOS naming an overlay carried under the
+  hardware (`devices/edgecore/as7726-32x/overlays/arcos.yaml`) now lives in the
+  NOS vendor's listing (`devices/arrcus/as7726-32x/listing.yaml`), and the
+  overlay's `identity:` block is retired - the listing's namespace is the
+  vendor. Lint L56 now checks a listing: it lives under a software vendor and
+  names only configurations, ports and components its hardware has.
+- **BREAKING for DCIM data already imported.** The Arrcus device types are
+  renamed from `Arrcus/ArcOS on <SKU>` to `Arrcus/<SKU>` - the hardware's SKU,
+  under the NOS vendor, as NetBox's and Nautobot's own libraries file a
+  disaggregated box - and they now carry the hardware's part number, which the
+  identity export dropped. The metal is the same metal and its part number
+  still orders it; a listing that publishes its own replaces it per
+  configuration. `dcim_export.py --nos` is removed: every listing exports.
 - **BREAKING for DCIM data already imported.** A module type names its ports per
   bay. Every interface, console, power, front and rear port name on a card
   starts with `{module}/`, which NetBox and Nautobot both fill with the position
@@ -613,7 +845,7 @@ above: the six interfaces, the new jacks, plugs and `seat-out` key are all
 additions, and the moved SPA jacks and the corrected MIC description change
 no field a reader already depends on.
 
-### Fixed
+#### Fixed
 - A seated part turns with the aperture it is in when its host FORWARDS that
   aperture from a composed part (roc-ops/Portrayal#548). The composed part's
   own `rotate` was left out, so a plug seated in generic/sfp-lc-simplex@2 or

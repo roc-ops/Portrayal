@@ -1,0 +1,62 @@
+format: 1
+kind: component
+name: dip-switch-2
+version: 1.0.0
+class: button
+profile: networking
+description: >-
+  Two-position DIP switch - a red body with two slide actuators side by side and ON at
+  the top, unrotated. Sets two boot-time options; on the AurCore AIS switches switch 1 is
+  Fast Ring and switch 2 is SCP, and the bank is turned 90 degrees so ON reads to the
+  right. Drawn with both actuators OFF, as the vendor photographs it.
+size: {w: 7.0, h: 10.0}
+size-confidence: {w: photo-measured, h: photo-measured}
+provenance:
+  size: >-
+    PHOTO-MEASURED on the AurCore AIS4001P straight-on front photograph (vendor product
+    image, 1000 px, 4.407 px/mm from the datasheet's 145 mm face height; the face's own
+    width agrees to 1.5 percent): the red body runs x 22.6-32.6 and y 14.6-21.6 on the
+    face, 10.0 x 7.0 turned, so 7.0 x 10.0 here.
+  actuators: >-
+    PHOTO-MEASURED at the same scale: two white slots, each about 2.6 x 3.2 unrotated with
+    the slider at the OFF end; the printed 1, 2 and ON are on the body.
+elements:
+  switch-1: {at: [0.9, 2.6], size: [2.4, 6.4], class: button}
+  switch-2: {at: [3.7, 2.6], size: [2.4, 6.4], class: button}
+  slider-1: {at: [1.1, 6.0], size: [2.0, 2.8], class: button}
+  slider-2: {at: [3.9, 6.0], size: [2.0, 2.8], class: button}
+relief:
+  wall: '#6e2a2c'
+  features:
+    - node: body
+      out: 1.6
+      shape: true
+      color: '#a84749'
+      confidence: estimated
+      source: >-
+        the vendor photographs show a red body standing off the face with two slots and white sliders; no figure gives a height. common/dip-switch-2@1's own 3D-form key.
+    - node: switch-1
+      out: 0.8
+      color: '#e9e6e2'
+      confidence: estimated
+      source: >-
+        common/dip-switch-2@1's own 3D-form key - see `body`. The slot floor, below the body top.
+    - node: switch-2
+      out: 0.8
+      color: '#e9e6e2'
+      confidence: estimated
+      source: >-
+        common/dip-switch-2@1's own 3D-form key - see `body`.
+    - node: slider-1
+      out: 2.0
+      color: '#bdb8b2'
+      confidence: estimated
+      source: >-
+        common/dip-switch-2@1's own 3D-form key - see `body`. The actuator, proud of the body.
+    - node: slider-2
+      out: 2.0
+      color: '#bdb8b2'
+      confidence: estimated
+      source: >-
+        common/dip-switch-2@1's own 3D-form key - see `body`.
+skins: [default]

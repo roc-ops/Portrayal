@@ -1,4 +1,4 @@
-# Portrayal Design Decisions (v0)
+# Portrayal Design Decisions (format 1)
 
 "Portrayal" is the name; the repository is `roc-ops/Portrayal`.
 
@@ -19,9 +19,12 @@ Three layers:
      states, semantic attributes, skins list.
    - *Device manifest*: chassis, views, placements of component instances, bays,
      regions, label text.
-   - *NOS overlay*: per-NOS naming (`terms`), logical interfaces (incl. breakout),
-     and `entity-map` pattern rules joining that NOS's ENTITY-MIB / ietf-hardware /
-     OpenConfig component names onto physical IDs or regions. NOS trees are never
+   - *Listing*: a NOS vendor's entry for hardware on its compatibility list,
+     under that vendor's namespace and pointing at one device. It carries the
+     vendor's own names and part numbers, per-NOS naming (`terms`), logical
+     interfaces (incl. breakout), and `entity-map` pattern rules joining that
+     NOS's ENTITY-MIB / ietf-hardware / OpenConfig component names onto physical
+     IDs or regions. NOS trees are never
      drawn — only joined. Unmapped NOS nodes are legal (linter warns on unmapped
      port/psu/fan classes only).
 3. **Compiled SVG** — build artifact. Flat (components inline-expanded), stable
@@ -35,7 +38,7 @@ Three layers:
    in `data-path="port-1/led-link"`; element `id` = path joined with `--`
    (`port-1--led-link`, CSS-safe). Physical IDs are position-based, NOS-neutral,
    and follow the silkscreen (zero-based device → `port-0`). `index-origin`
-   declared per component group. Logical names live in overlays.
+   declared per component group. Logical names live in listings.
 2. **Views**: free-form IDs, conventional names (`front`, `rear`, `top`,
    `interior`, `lid-open`); per-view mm frame, origin top-left, **y-down**;
    a component identity may appear in multiple views; only `front` required.
@@ -48,7 +51,9 @@ Three layers:
    core vocabulary (profiles extend); compiled SVG ships `.state-*` CSS rules;
    consumers toggle classes; skins expose CSS custom-property color hooks.
 5. **Labels as data**: contracts define anchors; text comes from manifests and
-   NOS overlays. One open project font; optional outline-to-paths build flag.
+   NOS listings. Skins set their text in a system sans-serif (Arial or
+   Helvetica, falling back to `sans-serif`). *Planned, not built:* one open
+   project font, and a build flag that converts text to outlines.
 6. **Regions**: addressable areas (sensor context via Redfish PhysicalContext
    vocabulary, grouping, doc callouts); may declare member components; NOS
    entity-map rules may target regions (e.g. a per-NOS "port bank" container).
@@ -63,8 +68,11 @@ Three layers:
    registered by title/URL/SHA-256/archive link. Device dumps stored sanitized
    (serials, MACs, IPs, hostnames, communities stripped/hashed).
 8. **Builds**: byte-deterministic (no timestamps; toolchain version in
-   `<metadata>`); source-only repos, compiled SVGs as release artifacts/gallery;
-   CI = schema validation + contract↔skin linter + pixel-diff regression.
+   `<metadata>`); source-only repos. CI = schema validation, the
+   contract↔skin linter and the test suite, including a check that the
+   committed DCIM exports match a fresh build. *Planned, not built:* compiled
+   SVGs published as release artifacts (#64), and a pixel-diff regression step
+   in CI.
    **A configuration says what OCCUPIES a bay AND what is TRUE of a part, and
    still not what is true of the DEVICE.** That sentence is the decision #193
    asked for, and the shape it names came from two vendors at once
@@ -113,8 +121,14 @@ Three layers:
    level would move 587 directories and change resolution in sixteen tools to
    retire a mechanism the week before it acquires its first users.
 
-   **What pays for keeping it: a dead major goes.** An old major is deleted once
-   nothing references it, and L89 fails on one that lingers — it will not accept
+   **What pays for keeping it: a dead major goes, and says where it went.**
+   While the package is at 0.x, a superseded major may be removed, and every
+   removal is listed in `CHANGELOG.md` with the ref that replaces it, so a
+   manifest outside this repository that pins the old major is told what to pin
+   instead. From 1.0 a retired major is deprecated for at least one release
+   before it is removed: that release is the coexistence above, spent on the
+   consumers it exists for. Inside the repository, L89 still fails on a
+   superseded major that nothing references — it will not accept
    an `unplaced:` sentence from a major that a newer live major supersedes.
    There is one exception, and it is the reason the check asks whether anything
    NAMES a major rather than only whether something seats it: a retired major
@@ -185,7 +199,7 @@ Three layers:
     `working/` staging tree and are cited, not copied); dumps are committed
     sanitised. Vendor slugs reused from netbox devicetype-library. Refs =
     `namespace/name@major`. Toolchain takes a library search path; reserved
-    `local/` namespace for private overlays.
+    `local/` namespace for private listings and devices.
 
 ## First device (historical)
 

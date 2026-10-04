@@ -40,6 +40,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
 LINT = ROOT / "spec/tools/portrayal/lint.py"
 BASELINE = LIB / "lint-baseline.json"
+import onebuild
 from portrayal import lint as L
 from portrayal import libwalk
 
@@ -60,10 +61,15 @@ def test_the_baseline_exists_and_is_counts_not_sentences():
             assert code.startswith("L") and isinstance(n, int) and n > 0, (f, code, n)
 
 
+@pytest.mark.xdist_group("full-lint")
 def test_a_clean_tree_reports_no_change():
     """THE POINT OF THE WHOLE THING. The tail has to say the backlog is the
-    backlog, or the 1392 above it reads as an accusation."""
-    r = run()
+    backlog, or the 1392 above it reads as an accusation.
+
+    ONE LINT ANSWERS THREE TESTS. This, the baseline's drift and the waiver's
+    printing each ran the same command for a different line of the same output,
+    at about 45 seconds a run. `onebuild.full_lint` is that run, made once."""
+    r = onebuild.full_lint()
     assert r.returncode == 0, r.stdout[-2000:]
     assert "no change against the baseline" in r.stdout, r.stdout[-800:]
 
@@ -97,11 +103,12 @@ def test_a_fixed_warning_is_reported_as_fixed():
     assert not new and gone == {"a.yaml": {"L61": 2}}
 
 
+@pytest.mark.xdist_group("full-lint")
 def test_the_baseline_matches_the_library_today():
     """A committed baseline that has drifted from the tree is worse than none -
     it reports phantom fixes and hides real additions. This is the guard that
     `expand.py --check` did not have, and #168 is what happens without it."""
-    r = run()
+    r = onebuild.full_lint()
     assert "NEW since the baseline" not in r.stdout, r.stdout[-1200:]
 
 
@@ -114,8 +121,9 @@ def test_the_c40g_states_its_l44_decision():
     assert "3D" in reason, "the reason should say why the field is kept"
 
 
+@pytest.mark.xdist_group("full-lint")
 def test_a_waived_warning_is_separated_and_its_reason_printed():
-    r = run()
+    r = onebuild.full_lint()
     assert "waived by the device that raised them" in r.stdout
     assert "[L44] " in r.stdout
     assert "100% buried in 2D" in r.stdout, "the argument belongs in the output"
@@ -180,10 +188,16 @@ def test_waivers_have_not_become_the_answer():
     waiver records that disproof. What would let this go back to six is a coverage
     test that sums the windows a multi-window lamp declares - a change to L39, not to
     the device. Its L61 offsets, by contrast, went to the baseline like every other
-    device's, because L61 is deliberately never waived (see the module docstring)."""
+    device's, because L61 is deliberately never waived (see the module docstring).
+
+    EIGHT IS THE DS6001's L125 (#734), and its fix is wrong for the same reason.
+    L125 asks a rack device for `ru`, and the DS6001 is an Open Rack v3 tray: 2OU
+    of 48 mm, a unit `ru` cannot hold - 96 mm is 2.16 U and the tray does not fit
+    an EIA rack at all - so the only `ru` that would silence it is invented. What
+    would let this go back to seven is an Open Rack value for `chassis.mount`."""
     waived = [p for p in libwalk.iter_devices([LIB])
               if ((yaml.safe_load(p.read_text()) or {}).get("lint") or {}).get("waive")]
-    assert len(waived) <= 7, f"{len(waived)} devices waive a rule: {[p.parent.name for p in waived]}"
+    assert len(waived) <= 8, f"{len(waived)} devices waive a rule: {[p.parent.name for p in waived]}"
 
 
 # --- render's half ------------------------------------------------------------

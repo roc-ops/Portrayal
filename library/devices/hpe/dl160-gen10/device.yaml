@@ -1,0 +1,856 @@
+format: 1
+kind: device
+name: dl160-gen10
+version: 1.1.0
+maturity: modelled
+manufacturer: HPE
+model: ProLiant DL160 Gen10
+description: >-
+  HPE's 1U two-socket Intel Xeon Scalable rack server of the Gen10 generation,
+  in its two front builds - four 3.5 inch LFF bays (878972-B21) or eight 2.5
+  inch SFF bays with a media bay (878973-B21) - over one rear: three PCIe 3.0
+  slots on two risers, two Flex Slot power supply bays, two embedded 1GbE
+  ports, the iLO 5 port, VGA, two USB 3.0 ports, and blanks for the media
+  module and the optional serial port. Retired by HPE; the QuickSpecs carries
+  HPE's RETIRED notice.
+profile: server
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Read for this model: QuickSpecs a00021860enw (retired edition, Aug 2025), HPE's
+      datasheet for the model, for dimensions, weights, chassis builds, options and
+      environmentals; User Guide a00066666en_us ed. 7, the server's hardware guide,
+      for component identification, LEDs, drive and slot numbering and specifications,
+      both as its PDF export and as the HTML zip whose native figures
+      (GUID-*-high.png, 675 px) are the line drawings cited below; Maintenance and
+      Service Guide a00066664en_us, the service manual; two straight-on photographs
+      from newserverlife's hands-on review - the 4 LFF front
+      (newserverlife.com/upload/iblock/562/7_opt.jpeg, 1280 x 131) and the rear
+      (.../386/8_opt.jpeg, 1280 x 145). No vendor 3D model exists for this server on
+      any page searched, and NetBox's devicetype-library has no DL160 Gen10.
+  chassis:
+    confidence: datasheet
+    note: >-
+      QuickSpecs page 32 and the User Guide's mechanical specifications agree: 4.29 x
+      43.46 x 61.49 cm (the User Guide prints the depth 61.50), 1U. 434.6 is the body
+      between the ear folds, which is how both front and rear photographs measure
+      (below), so the 43.46 cm is the body, not the rack face. Neither document says
+      what the depth runs between - whether it takes in the ears or the PSU handles.
+  ears:
+    confidence: photo-measured
+    note: >-
+      THE EARS ARE NOT DRAWN. On the front photograph the ears run 8..71 and
+      1206..1270 px with the body between the fold gaps at 72.5 and 1204.5 px: 1263 px
+      ear to ear is 484.9 mm at the body's scale, 25 mm an ear. The left ear carries
+      only a thumbscrew; the right ear the HPE element, a thumbscrew and a "ProLiant
+      DL160 Gen10" model label. The control cluster sits on the body, not the ears,
+      which is what decides it (the Dell R660 draws its ears because its control
+      panels are on them). The HPE element is a logo and would not be drawn anyway.
+  gate-1-front:
+    confidence: photo-measured
+    note: >-
+      The 4 LFF front photograph passes the panel gate. The body between the ear folds
+      is 1132 px for the 434.6 mm width, 2.6047 px/mm across, and 112.2 px top to
+      bottom for the 42.9 mm height, 2.615 px/mm down - 0.4% apart, so the face is
+      near-orthographic. Every front 4 LFF position is read off it at those scales.
+      The bay pitch is a check: the four bays divide the body at 73, 354, 637 and 920
+      px, an even 282.3 px against the 282.75 that 434.6 / 4 gives.
+  gate-1-rear:
+    confidence: photo-measured
+    note: >-
+      The rear photograph passes the panel gate, less comfortably: the body is 1261 px
+      across for 434.6 (2.90 px/mm) and 123 px down for 42.9 (2.87), 1.2% apart. Every
+      rear position is read off it at those scales, to about a millimetre. The
+      photograph is cropped tight at both sides; the body's edges are at 9 and 1270
+      px.
+  gate-1-sff:
+    confidence: photo-measured
+    note: >-
+      The 8 SFF front is measured off HPE's straight-on product image of that face, as
+      hosted by Express Computer Systems (expresscomputersystems.com/cdn/shop/files/dl
+      160-gen10-drive-8sff_1835d8c9-1c70-466f-aed1-349e0d74a3b8.jpg, 1080 x 1080),
+      found in a third web search after the first two had found none. It passes the
+      panel gate: the body between the ear folds is 946 px for 434.6 mm (2.177 px/mm)
+      and 93 px for 42.9 (2.168), 0.4% apart, and ear to ear it is 484.9 mm, the 4 LFF
+      photograph's figure. THIS VIEW WAS FIRST DRAWN FROM THE USER GUIDE'S LINE
+      ELEVATIONS (native figures GUID-7FDCEC9A, GUID-55DF0433), which fail the gate at
+      6% vertical stretch; against the image they had the column pitch right (81.4
+      against 81.75) and three things wrong - the carrier 3.7 mm too wide, the media
+      bay blank one drive row tall where it runs to the top of the face, and the
+      SmartCarrier's handle on the wrong side of its ring.
+  front-lff:
+    confidence: photo-measured
+    note: >-
+      Four LFF bays, 108.65 apart, each seating a 104.8 x 27.5 carrier at 1.73 into
+      its bay and 13.8 down. Above them the top strip, 0..12.7: the optical drive
+      blank across bays 1 and 2 (a separate plate - its seam is at 455 px), chassis
+      vents from 149.0 to 277.5 in two rows of 5.0 slots on a 6.37 pitch, the
+      information pull tab at 289.7..326.9, two more vent columns at 327.6, the iLO
+      service port in a printed dashed box centred at (349.6, 7.9), the USB 3.0 port
+      at (369.6, 7.4), two vent columns at 381.6, then the UID button (401.0, 6.6),
+      NIC status lamp (409.4, 6.8), Health lamp (417.1, 6.8) and Power button (425.6,
+      6.6), each with its legend above it. A bright lip runs along the bottom,
+      41.2..42.9.
+  front-sff:
+    confidence: photo-measured
+    note: >-
+      Eight SFF bays as the User Guide numbers them - columns of two, 1 over 2, 3 over
+      4, 5 over 6 - with the media bay over columns 4 and 5 and bays 7 and 8 beneath
+      it. Columns start at 5.3 on an 81.75 pitch (the rails at 73, 248, 427, 606 and
+      786 px); rows at 6.8 and 24.5; each carrier 76.2 x 15.0. The media bay blank
+      runs 245.5..408.6 from 0.7 down to 22.8. The top strip, 0..5.8, carries a row of
+      slots and, over column 3, the slim information pull tab at 188.1..221.6. The
+      control column, 409..434.6, stacks the Power button at (416.4, 9.0), the Health
+      lamp (416.4, 17.3), the NIC lamp (416.4, 25.4) and the UID button (416.4, 33.4),
+      each under its printed mark, beside the USB 3.0 port (426.0, 12.0) and the iLO
+      service port (426.3, 30.9) in its printed dashed box, both USB Type-A turned
+      upright. The order top to bottom agrees with the User Guide close-up (native
+      figure GUID-812F8899, callouts 4, 3, 2, 1).
+  drive-numbering:
+    confidence: datasheet
+    note: >-
+      User Guide "Drive bay numbering": 4 LFF numbered 1..4 left to right; 8 SFF 1..6
+      in columns of two, top to bottom, then 7 and 8 under the media bay. The 4 LFF
+      front prints each number with a down-pointing triangle on the strip above its
+      bay - at 11.0, 143.8, 281.6 and 388.0, which is where the photograph puts them,
+      not over each bay's centre. The 8 SFF image prints no bay numerals on the strip
+      or the carriers at 2.18 px/mm - and the same image resolves the 1.5 mm legends
+      of the control column, so that is a reading and not a limit of the picture - so
+      none are printed here.
+  controls:
+    confidence: datasheet
+    note: >-
+      User Guide "Front panel LEDs and buttons": UID button/LED (solid blue activated;
+      flashing blue remote management, firmware upgrade or iLO reboot), NIC status LED
+      (solid green linked; flashing green active; off none), Health LED (solid green
+      normal; flashing green iLO rebooting; flashing amber degraded; flashing red
+      critical), Power On/Standby button and system power LED (solid green on;
+      flashing green power-on sequence; solid amber standby; off no power). The same
+      four on both fronts. Rear: NIC link and status on each RJ45, UID, and each
+      supply's lamp ("Rear panel LEDs").
+  rear:
+    confidence: photo-measured
+    note: >-
+      From the rear photograph, left to right along the top: the primary riser cage
+      (0..203.0) with slot 1's full-height window (15.9..125.2) and slot 2's low-
+      profile window (127.9..188.2), then the secondary riser cage (203.0..285.5) with
+      slot 3's window (214.8..275.1, its vents level with slot 2's). Along the bottom:
+      two screw holes, the media module opening (13.6..58.6), the stacked USB 3.0
+      ports in a dark bezel (59.0..79.0), the iLO RJ45 with its legend turned on its
+      side, VGA in a blue field (103.8..136.9), NIC 1 and 2 in a pale bezel
+      (138.6..173.8), a vent block, the UID lamp (195.9, 35.5), a small round hole,
+      and under slot 3 the IOIOI legend and the serial port blank. The two supply bays
+      fill the right end, PS 2 at 286.9 and PS 1 at 362.4, with the PS 1 / PS 2 legend
+      printed upright on the strip between them, PS over the digit over an arrow.
+  rear-numbering:
+    confidence: datasheet
+    note: >-
+      User Guide "Rear panel components": 1 PCIe slot 1 or FlexibleLOM adapter
+      (optional), 2 PCIe slot 2, 3 PCIe slot 3 (secondary riser for processor 2,
+      optional), 4 Flexible Slot power supply 2 (hot-plug, optional), 5 Flexible Slot
+      power supply 1 (hot-plug), 6 Serial port (optional), 7 NIC ports 1-2 (1Gb), 8
+      VGA port, 9 iLO Management Port, 10 USB 3.0 ports, 11 Media Module adapter
+      (optional NIC ports 3-4). The photograph's printed legends agree: PS 1 points
+      right and PS 2 left, and the media module window is printed 3 and 4.
+  slots:
+    confidence: datasheet
+    note: >-
+      User Guide "PCIe expansion slot definitions": slot 1 PCIe 3.0 x16, full-height
+      half-length or low-profile, or a FlexibleLOM (x8); slot 2 PCIe 3.0 x8 low-
+      profile; slot 3 PCIe 3.0 x16 low-profile, on the secondary riser with processor
+      2. THE SLOTS ARE BAYS OF THE RISERS, each a standard bracket behind a window in
+      its cage (hpe/riser-primary-dl160@1, hpe/riser-secondary-dl160@1), so the
+      library's generic cards and its card families seat in them. They were first
+      drawn as chassis bays the size of the windows the photograph shows - 109.3 x
+      23.3 and 60.3 x 18.2 - and nothing but HPE's blanks fitted; the same was true of
+      the media module and serial openings, which are now the openings' own sizes and
+      accept the Media Module adapter and the serial port. The photographed unit has
+      blanks in all five.
+  psus:
+    confidence: datasheet
+    note: >-
+      QuickSpecs: the pre-configured models carry "1x 500W Hot Plug; RPS ready"; on
+      the configure-to-order chassis (878972-B21, 878973-B21) the supply is a choice
+      of one or two, and the DL160/180 Gen10 Redundant Power Supply Enablement Kit
+      866442-B21 is "required with selection of power supply". Whether that means any
+      Flex Slot supply or only a second one the QuickSpecs does not say; the User
+      Guide fits the kit by first removing the non-hot-plug supply, which reads as
+      any. Supplies offered: 865408-B21 500 W Platinum, 865414-B21 800 W Platinum,
+      865438-B21 800 W Titanium, 865428-B21 800 W Universal (HVAC/HVDC), 865434-B21
+      800 W -48 VDC. The 500 W and the 800 W Platinum are drawn (hpe/psu-865408-b21@1,
+      hpe/psu-865414-b21@1); the other three are a gap. The bays are the supply's 68.0
+      x 40.4, from HPE's QuickSpecs HPE Flexible Slot Power Supplies (c04346217),
+      which the rear photograph had measured at 68.2 x 40.6. The default seats the 500
+      W in PS 1 and the blank in PS 2, as photographed. A NON-HOT-PLUG SUPPLY ALSO
+      EXISTS and is not drawn - see the gap.
+  weight:
+    confidence: datasheet
+    note: >-
+      QuickSpecs page 32 by configuration: SFF minimum 10.97 kg (1 drive, 1 DIMM, 3
+      fans, 1 processor, 1 supply), SFF maximum 13.92, LFF minimum 11.65, LFF maximum
+      15.74. The User Guide's mechanical table rounds to 10.00 minimum and 16.00
+      maximum "approximate values"; the QuickSpecs figures are the configured ones and
+      are carried.
+  power:
+    confidence: datasheet
+    note: >-
+      NO SYSTEM POWER FIGURE IS STATED in the QuickSpecs (current edition and versions
+      6, 10 and 14), the User Guide or the Maintenance and Service Guide: each gives
+      per-supply ratings and the 500 W supply's maximum input (557 W at 100 VAC) and
+      points at HPE's Power Advisor for configured draw. Searched outside them too:
+      ENERGY STAR's certified enterprise servers list (data.energystar.gov dataset
+      qifb-fcj2) returns 70 ProLiant entries, DL360 and DL380 Gen10 among them, and no
+      DL160 Gen10; the one SPECpower result a search attributes to this server
+      (power_ssj2008-20190312-00916) is a DL360 Gen10; and the "55 W idle, 380 W
+      maximum" that search summaries repeat traces to a hobbyist calculator, not to
+      HPE. A supply's input rating is not the server's draw, so no power-max is
+      written and the gap stays open.
+  environmental:
+    confidence: datasheet
+    note: >-
+      QuickSpecs pages 32-33 and the User Guide's environmental table: operating 10 to
+      35 C at sea level, derated 1 C per 305 m to 3050 m; extended 5..10 and 35..40 C,
+      and 40..45 C, for approved configurations only (document a00026969en_us); non-
+      operating -30 to 60 C; operating humidity 8 to 90% non-condensing, 28 C maximum
+      wet bulb; altitude 3050 m operating, 9144 m non-operating; acoustics LWAd 4.5 B
+      idle and 5.1 B operating for both builds.
+  lifecycle:
+    confidence: datasheet
+    note: >-
+      HPE's own QuickSpecs a00021860enw opens with "RETIRED: This document has been
+      officially retired, and the base products listed herein are now considered
+      obsolete and are no longer available for sale", and buy.hpe.com no longer lists
+      the product. That retired QuickSpecs is the vendor document cited. Third-party
+      EOL trackers (Park Place, eosl.date, Techbuyer) give 31 October 2024 as the last
+      order date for Gen10 and October 2029 for end of support; no HPE notice stating
+      those dates was found, so they are not written as dates.
+  faces:
+    confidence: datasheet
+    note: >-
+      Bottom, left and right are sized from the QuickSpecs dimensions and declared
+      empty: no document held shows the base or the sides straight on.
+  interior:
+    confidence: estimated
+    note: >-
+      THE TOP VIEW IS DRAWN FROM ONE PHOTOGRAPH THAT FAILS THE PANEL GATE. The
+      QuickSpecs' Internal View (a00021860enw page 3; the version 6 edition embeds it
+      at 1171 x 728) photographs the 8 SFF server from above with its lid off. Turned
+      so the rear is at the top - the plan's orientation, x as the front view has it -
+      the chassis is 576.5 px across for 434.6 mm (1.3265 px/mm) and 845 px down for
+      614.9 (1.374), 3.6% apart: a camera above a box, with perspective. Every
+      position is therefore a fraction on its own axis and is estimated; what the
+      photograph gives well is arrangement and count. Two checks on it: a DIMM socket
+      with its latches measures 197 px, 143 mm at the down scale, for a 133.35 mm
+      module; and the primary riser cage starts at 308 mm where the rear photograph, a
+      different image, puts slot 1's window at 309.4.
+  interior-layout:
+    confidence: estimated
+    note: >-
+      From the photograph and HPE's two figures. The User Guide's System board
+      components figure (native figure GUID-944C6994, rear at the top) puts processor
+      2 on the left and processor 1 on the right, eight DIMM slots to each - four
+      either side of its socket - and fan connectors 1 to 7 along the front edge from
+      the left; its Fan locations figure (GUID-4CD08C59) numbers the fan bays 1 to 7
+      from the supply's side. On the photograph: sixteen DIMM slots on a 9.45 pitch in
+      banks of four, eight and four starting at 85.2, 213.9 and 379.4 (centres;
+      latches found by a pixel profile along both ends of the sockets), 236.4 from the
+      rear; the two heatsinks between the banks; seven fans, 404 from the rear, DRAWN
+      ON ONE PITCH WITH ONE BREAK: fans 1 to 4 and fans 5 to 7 on 47.8, and 52.8
+      between fans 4 and 5, where the photograph shows a bracket in the fan row. That
+      is a fit, and this is what it was fitted to: the fans' labels sit at 105.5,
+      151.9, 198.3, 247.3, 300.0, 347.2 and 397.3 on the photograph (steps 46.4, 46.4,
+      49.0, 52.7, 47.2, 50.1), and the Fan locations figure, an independent drawing,
+      steps its seven boxes 45.6, 45.6, 47.8, 53.4, 45.6 and 51.1. Both are widest
+      between 4 and 5; the other steps differ by 2 to 5 mm in images where a pixel is
+      0.75 and 1.1 mm and a label sits within two pixels of its fan's middle. The
+      fitted centres - 104.0, 151.8, 199.6, 247.4, 300.2, 348.0, 395.8 - are within
+      1.5 mm of every measured one, which is inside what either image can resolve, so
+      the scatter is recorded here and not drawn; the primary riser cage at the rear
+      right. The supplies are placed from the rear view's bays, not from the
+      photograph, which shows the non-hot-plug supply.
+  dimm-numbering:
+    confidence: datasheet
+    note: >-
+      QuickSpecs page 31, 'Memory Population guidelines': a figure captioned 'HPE
+      DL160/DL180 Gen 10 Servers Front Server (2+1+1 slots per channel)' draws the P2
+      CPU on the left and the P1 CPU on the right, each with slots numbered 1 2 3 4
+      one side of its socket and 5 6 7 8 the other, left to right, and the table under
+      it gives the population order. The plan's dimm-1..8 are therefore processor 2
+      slots 1..8 and dimm-9..16 processor 1 slots 1..8; the User Guide's System board
+      components figure agrees on which processor is which. A FIRST VERSION RECORDED
+      THIS AS A GAP, 'stated in no document held': the figure is a picture, the text
+      conversion dropped it, and a search of the converted text found only the table.
+  interior-population:
+    confidence: datasheet
+    note: >-
+      DRAWN AS THE QUICKSPECS PHOTOGRAPHS IT: two processors, sixteen DIMMs, seven
+      fans ("2 CPUs - 6 standard fans (1 redundant fan shown)", "Fully populated 16
+      DIMMs shown"). The User Guide's Fan population guidelines give the other builds
+      - one processor non-redundant: fans in bays 5, 6 and 7 and blanks in 1 to 4; one
+      processor redundant: bay 3 as well; two processors non-redundant: bays 2 to 7.
+      The fan blank and the empty processor socket are not drawn, so the
+      configurations here do not vary the interior; see the gap.
+attrs:
+  physical:
+    ru: 1
+    weight-min-kg: 10.97
+    weight-max-kg: 15.74
+  power:
+    power-input: 100-240 VAC per Flex Slot supply (the 865434-B21 supply -48 VDC, the 865428-B21 HVAC/HVDC)
+    psu-redundancy: 1+1 with the redundant power supply enablement kit 866442-B21
+  thermal:
+    fans: three single-rotor hot-plug fans with one processor, six with two; one more with the redundant fan kit 866438-B21
+  environmental:
+    operating-temp-c: 10 to 35
+    operating-temp-extended-c: 5 to 10 and 35 to 45, approved configurations only
+    storage-temp-c: -30 to 60
+    operating-humidity: 8 to 90% non-condensing, 28 C maximum wet bulb
+    altitude-operating-m: 3050
+    acoustic-lwad: 4.5 B idle, 5.1 B operating
+  platform:
+    cpu: up to two Intel Xeon Scalable processors, first or second generation
+    memory: 16 DDR4 DIMM slots, up to 1.0 TB with 64 GB DIMMs
+    storage-controller: HPE Smart Array S100i embedded (SATA only); Smart Array modular and PCIe controllers optional
+    network: embedded 2-port 1GbE
+    bmc: HPE iLO 5
+  lifecycle:
+    eol: announced
+    eol-announcement: https://support.hpe.com/hpesc/public/docDisplay?docId=a00021860enw
+chassis: {width: 434.6, height: 42.9, depth: 614.9, ru: 1, color: '#26292d', power: ac}
+gaps:
+  - what: power-max
+    scope: [front, rear]
+    reason: vendor-silent
+    note: >-
+      no system power figure in the QuickSpecs (four editions), User Guide or
+      Maintenance and Service Guide; each gives per-supply ratings and defers to HPE
+      Power Advisor, a web tool, for configured draw. ENERGY STAR's certified server
+      list has no DL160 Gen10 entry and the SPECpower result a search attributes to it
+      is a DL360 Gen10. The server profile's power requirement is unmet for that
+      reason.
+    wanted: >-
+      a configured power figure from HPE (Power Advisor output or a DL160 Gen10 power
+      specification)
+  - what: media-bay-options
+    scope: [front]
+    reason: needs-photo
+    note: >-
+      the 8 SFF media bay accepts the optical drive cage (873961-B21 enablement kit,
+      9.5 mm drives 726536-B21 / 726537-B21) or the two-bay SFF drive cage
+      (866458-B21), and the 4 LFF optical bay the 9.5 mm drive; only the blanks are
+      drawn. The User Guide elevations GUID-696364B2 and GUID-7FDCEC9A show both
+      options at 1.36 px/mm; the only photograph of either is a reseller's 10 SFF unit
+      from above, and of the optical kit only its bare bracket and cables.
+    wanted: >-
+      straight-on images of the optical drive bezel and the two-bay SFF cage in a
+      DL160 Gen10
+  - what: psu-800w-others
+    scope: [rear]
+    reason: needs-photo
+    note: >-
+      three Flex Slot supplies the QuickSpecs lists are not drawn: 865438-B21 (800 W
+      Titanium), 865428-B21 (800 W Universal, HVAC/HVDC) and 865434-B21 (800 W -48
+      VDC). The Flex Slot QuickSpecs gives the DC supplies a different length (18.29
+      cm) and no image of any of the three faces is held.
+    wanted: >-
+      a photograph of each supply's face
+  - what: non-hot-plug-supply
+    scope: [rear]
+    reason: vendor-silent
+    note: >-
+      the server also exists with a non-hot-plug supply in place of the two Flex Slot
+      bays: the User Guide's enablement procedure begins "Remove the non-hot-plug
+      power supply" before fitting the redundant power supply cage, the system board
+      has a non-hot-plug power supply connector, the Parts Support Guide heads a
+      section with it, and HPE's own rear product image (straight on) shows one wide
+      plate with a fan marked 92% and a single inlet where the bays are. No document
+      held names its part number or rating or says which models shipped with it -
+      every model in QuickSpecs versions 6 to 32 is listed with a hot-plug supply - so
+      that rear is not drawn.
+    wanted: >-
+      the non-hot-plug supply's part number and rating, and which models carried it
+  - what: expansion-options-unseen
+    scope: [rear]
+    reason: needs-photo
+    note: >-
+      no image held shows a card in any of the three PCIe slots; which way up each
+      bracket lies follows from where the riser connectors are, which HPE's PartSurfer
+      photograph shows for the primary riser and only the User Guide's board figure
+      for the secondary (see the riser parts). The FlexibleLOM riser (hpe/riser-flom-
+      dl160@1) and five of the six FlexibleLOM adapters the QuickSpecs lists are
+      drawn, the adapters from sellers' photographs and the cage's opening for them
+      from two isometric User Guide figures - no image held shows that cage's rear
+      straight on, with or without an adapter, so where the adapter sits on the rear
+      is estimated. Not drawn: the sixth adapter, 817709-B21 (631FLR-SFP28), of which
+      only a photograph from above is held, and the primary riser BLANK (878532-001) a
+      server ordered with no riser carries, which PartSurfer photographs straight on.
+      The three Media Module adapters are drawn from PartSurfer's photographs, each
+      centred in the opening because no image shows one fitted.
+    wanted: >-
+      a straight-on rear image of a server with the FlexibleLOM riser and an adapter
+      fitted, of the 631FLR-SFP28's faceplate, and of a server with a card in each
+      slot and a Media Module adapter fitted
+  - what: interior-estimated
+    scope: [top]
+    reason: needs-drawing
+    note: >-
+      the top view is drawn from the QuickSpecs Internal View, a photograph that fails
+      the panel gate at 3.6%, so every interior position is a fraction and is
+      estimated; and it is the only top-down image held. Not drawn because no image
+      shows them from above: the redundant power supply cage and its power
+      distribution board (the photograph has the non-hot-plug supply), the secondary
+      riser cage for slot 3 (not fitted in the photograph), the drive cage and
+      backplane under the lid, the energy pack, and the 4 LFF chassis' interior.
+    wanted: >-
+      a dimensioned plan of the DL160 Gen10 interior, or HPE's service model
+  - what: front-bezel
+    scope: [front]
+    reason: needs-photo
+    note: >-
+      the front bezel option is not drawn: the QuickSpecs lists the HPE 1U Gen10 Bezel
+      Kit 867998-B21, which needs the quick-release ear kit, and the User Guide has
+      'Installing the front bezel option'. The only image held of it is a reseller's
+      angled photograph.
+    wanted: >-
+      a straight-on image of the 1U Gen10 bezel on a DL160 Gen10
+  - what: interior-population
+    scope: [top]
+    reason: needs-photo
+    note: >-
+      the interior is drawn fully populated, as the QuickSpecs photographs it. A one-
+      processor server carries fan blanks in bays 1 to 4 (User Guide, Fan population
+      guidelines) and a cover on processor socket 2; neither part is drawn, so every
+      configuration shows two heatsinks and seven fans.
+    wanted: >-
+      images of the fan blank and of the empty processor 2 socket
+groups:
+  drives: {term: Bay, role: service, index-origin: 1}
+  media-bays: {term: Bay, role: service, index-origin: 1}
+  risers: {term: Riser, role: service, index-origin: 1, description: 'the primary riser cage (PCIe slots 1 and 2) and the secondary (slot 3, with processor 2); the slots are bays of the risers'}
+  media-module: {term: Slot, role: service, index-origin: 1}
+  psus: {term: PSU, role: service, index-origin: 1, attrs: {redundancy: '1+1', redundancy-note: 'QuickSpecs: the pre-configured models carry one 500 W Flex Slot supply and are RPS ready; the Redundant Power Supply Enablement Kit 866442-B21 is required with a Flex Slot supply on a configure-to-order chassis, and the User Guide calls the second supply the redundant one - the same capacity twice, not twice the capacity'}}
+  nics: {term: Port, role: traffic, index-origin: 1, attrs: {media: rj45, speed: 1g}}
+  mgmt: {term: Port, role: management, index-origin: 1, attrs: {media: rj45, speed: 1g, role: mgmt}}
+  usb: {term: Port, role: management, index-origin: 1, attrs: {media: usb-a}, description: 'the USB Type-A ports front and rear, the front iLO service port among them'}
+  video: {term: Port, role: management, index-origin: 1}
+  serial: {term: Port, role: management, index-origin: 1}
+  controls: {term: Button, role: management, index-origin: 1}
+  leds: {term: LED, role: indicator, index-origin: 1}
+  tags: {term: Tag, role: furniture, index-origin: 1}
+  memory: {term: DIMM, role: service, index-origin: 1, description: 'the sixteen DDR4 slots, eight per processor, numbered here 1 to 16 left to right as seen from above with the rear at the top: 1 to 8 are processor 2 slots 1 to 8 and 9 to 16 are processor 1 slots 1 to 8, which is how the QuickSpecs memory population figure numbers them'}
+  fans: {term: Fan, role: service, index-origin: 1, description: 'the seven single-rotor fan bays, numbered from the power supply side as the User Guide numbers them', attrs: {redundancy: 'n+1', redundancy-note: 'User Guide, Fan mode behavior and Fan population guidelines: the redundant fan kit adds one fan, and in redundant fan mode one fan rotor failure switches the system to non-redundant mode and it continues to operate; a second failure or a missing fan causes an orderly shutdown'}}
+  processors: {term: CPU, role: service, index-origin: 1, description: 'the two processor heatsinks - processor 1 on the right as the front faces you'}
+  interior: {term: Part, role: furniture, index-origin: 1, description: 'the system board and the primary riser cage'}
+  covers: {term: Cover, role: furniture, index-origin: 1, description: 'the access panel'}
+views:
+  front:
+    size: {w: 434.6, h: 42.9}
+    panel:
+      decor:
+        - {at: [0, 0], size: [434.6, 42.9], fill: '#26292d'}
+        - {at: [0, 12.7], size: [434.6, 0.5], fill: '#121416'}
+        - {at: [0, 41.2], size: [434.6, 1.7], fill: '#c3c8cd'}
+        - {at: [149, 2], size: [5, 3.4], fill: '#0d0f11'}
+        - {at: [155.37, 2], size: [5, 3.4], fill: '#0d0f11'}
+        - {at: [161.74, 2], size: [5, 3.4], fill: '#0d0f11'}
+        - {at: [168.11, 2], size: [5, 3.4], fill: '#0d0f11'}
+        - {at: [174.48, 2], size: [5, 3.4], fill: '#0d0f11'}
+        - {at: [180.85, 2], size: [5, 3.4], fill: '#0d0f11'}
+        - {at: [187.22, 2], size: [5, 3.4], fill: '#0d0f11'}
+        - {at: [193.59, 2], size: [5, 3.4], fill: '#0d0f11'}
+        - {at: [199.96, 2], size: [5, 3.4], fill: '#0d0f11'}
+        - {at: [206.33, 2], size: [5, 3.4], fill: '#0d0f11'}
+        - {at: [212.7, 2], size: [5, 3.4], fill: '#0d0f11'}
+        - {at: [219.07, 2], size: [5, 3.4], fill: '#0d0f11'}
+        - {at: [225.44, 2], size: [5, 3.4], fill: '#0d0f11'}
+        - {at: [231.81, 2], size: [5, 3.4], fill: '#0d0f11'}
+        - {at: [238.18, 2], size: [5, 3.4], fill: '#0d0f11'}
+        - {at: [244.55, 2], size: [5, 3.4], fill: '#0d0f11'}
+        - {at: [250.92, 2], size: [5, 3.4], fill: '#0d0f11'}
+        - {at: [257.29, 2], size: [5, 3.4], fill: '#0d0f11'}
+        - {at: [263.66, 2], size: [5, 3.4], fill: '#0d0f11'}
+        - {at: [270.03, 2], size: [5, 3.4], fill: '#0d0f11'}
+        - {at: [327.6, 2], size: [5, 3.4], fill: '#0d0f11'}
+        - {at: [333.97, 2], size: [5, 3.4], fill: '#0d0f11'}
+        - {at: [149, 6.2], size: [5, 3.1], fill: '#0d0f11'}
+        - {at: [155.37, 6.2], size: [5, 3.1], fill: '#0d0f11'}
+        - {at: [161.74, 6.2], size: [5, 3.1], fill: '#0d0f11'}
+        - {at: [168.11, 6.2], size: [5, 3.1], fill: '#0d0f11'}
+        - {at: [174.48, 6.2], size: [5, 3.1], fill: '#0d0f11'}
+        - {at: [180.85, 6.2], size: [5, 3.1], fill: '#0d0f11'}
+        - {at: [187.22, 6.2], size: [5, 3.1], fill: '#0d0f11'}
+        - {at: [193.59, 6.2], size: [5, 3.1], fill: '#0d0f11'}
+        - {at: [199.96, 6.2], size: [5, 3.1], fill: '#0d0f11'}
+        - {at: [206.33, 6.2], size: [5, 3.1], fill: '#0d0f11'}
+        - {at: [212.7, 6.2], size: [5, 3.1], fill: '#0d0f11'}
+        - {at: [219.07, 6.2], size: [5, 3.1], fill: '#0d0f11'}
+        - {at: [225.44, 6.2], size: [5, 3.1], fill: '#0d0f11'}
+        - {at: [231.81, 6.2], size: [5, 3.1], fill: '#0d0f11'}
+        - {at: [238.18, 6.2], size: [5, 3.1], fill: '#0d0f11'}
+        - {at: [244.55, 6.2], size: [5, 3.1], fill: '#0d0f11'}
+        - {at: [250.92, 6.2], size: [5, 3.1], fill: '#0d0f11'}
+        - {at: [257.29, 6.2], size: [5, 3.1], fill: '#0d0f11'}
+        - {at: [263.66, 6.2], size: [5, 3.1], fill: '#0d0f11'}
+        - {at: [270.03, 6.2], size: [5, 3.1], fill: '#0d0f11'}
+        - {at: [327.6, 6.2], size: [5, 3.1], fill: '#0d0f11'}
+        - {at: [333.97, 6.2], size: [5, 3.1], fill: '#0d0f11'}
+        - {at: [381.6, 3.1], size: [5, 3], fill: '#0d0f11'}
+        - {at: [387.97, 3.1], size: [5, 3], fill: '#0d0f11'}
+        - {at: [381.6, 6.7], size: [5, 3], fill: '#0d0f11'}
+        - {at: [387.97, 6.7], size: [5, 3], fill: '#0d0f11'}
+    silkscreen:
+      - {at: [10.1, 11.1], text: '1', font-size: 1.9, fill: '#e7ebee', anchor: middle, for: drive-1}
+      - {at: [11.2, 9.95], path: 'M 0 0 H 1.6 L 0.8 1.1 Z', filled: true, fill: '#e7ebee', for: drive-1}
+      - {at: [142.9, 11.1], text: '2', font-size: 1.9, fill: '#e7ebee', anchor: middle, for: drive-2}
+      - {at: [144, 9.95], path: 'M 0 0 H 1.6 L 0.8 1.1 Z', filled: true, fill: '#e7ebee', for: drive-2}
+      - {at: [280.7, 11.1], text: '3', font-size: 1.9, fill: '#e7ebee', anchor: middle, for: drive-3}
+      - {at: [281.8, 9.95], path: 'M 0 0 H 1.6 L 0.8 1.1 Z', filled: true, fill: '#e7ebee', for: drive-3}
+      - {at: [387.1, 11.1], text: '4', font-size: 1.9, fill: '#e7ebee', anchor: middle, for: drive-4}
+      - {at: [388.2, 9.95], path: 'M 0 0 H 1.6 L 0.8 1.1 Z', filled: true, fill: '#e7ebee', for: drive-4}
+      - {at: [349.6, 2.9], text: iLO, font-size: 2.0, fill: '#f1f3f5', anchor: middle, for: ilo-service}
+      - {id: ilo-box-top, at: [341.9, 2.1], path: 'M 0 0 H 0.9 M 1.6 0 H 2.5 M 3.2 0 H 4.1 M 11.2 0 H 12.1 M 12.8 0 H 13.7 M 14.4 0 H 15.3', stroke-width: 0.35, fill: '#f1f3f5', for: ilo-service}
+      - {id: ilo-box-bottom, at: [341.9, 11.2], path: 'M 0 0 H 0.9 M 1.6 0 H 2.5 M 3.2 0 H 4.1 M 4.8 0 H 5.7 M 6.4 0 H 7.3 M 8 0 H 8.9 M 9.6 0 H 10.5 M 11.2 0 H 12.1 M 12.8 0 H 13.7 M 14.4 0 H 15.3', stroke-width: 0.35, fill: '#f1f3f5', for: ilo-service}
+      - {id: ilo-box-left, at: [341.9, 2.1], path: 'M 0 0 V 0.9 M 0 1.6 V 2.5 M 0 3.2 V 4.1 M 0 4.8 V 5.7 M 0 6.4 V 7.3 M 0 8 V 8.9', stroke-width: 0.35, fill: '#f1f3f5', for: ilo-service}
+      - {id: ilo-box-right, at: [357.6, 2.1], path: 'M 0 0 V 0.9 M 0 1.6 V 2.5 M 0 3.2 V 4.1 M 0 4.8 V 5.7 M 0 6.4 V 7.3 M 0 8 V 8.9', stroke-width: 0.35, fill: '#f1f3f5', for: ilo-service}
+      - {at: [369.6, 3.0], text: SS, font-size: 1.7, fill: '#d98cb3', anchor: middle, for: usb-front}
+      - {at: [401.0, 3.2], text: UID, font-size: 1.7, fill: '#e7ebee', anchor: middle, for: btn-uid}
+      - {at: [407.9, 1.2], path: 'M 1.1 0 H 1.9 V 0.6 H 1.1 Z M 1.5 0.6 V 1.0 M 0.4 1.0 H 2.6 M 0.4 1.0 V 1.4 M 2.6 1.0 V 1.4 M 0 1.4 H 0.8 V 2.0 H 0 Z M 2.2 1.4 H 3.0 V 2.0 H 2.2 Z', stroke-width: 0.22, fill: '#e7ebee', for: led-nic}
+      - {at: [415.6, 1.3], path: 'M 0 1.0 H 0.9 L 1.3 0 L 1.7 2.0 L 2.1 1.0 H 3.0', stroke-width: 0.25, fill: '#e7ebee', for: led-health}
+      - {at: [424.4, 1.2], path: 'M 0.55 0.55 A 0.95 0.95 0 1 0 1.85 0.55 M 1.2 0 V 1.0', stroke-width: 0.25, fill: '#e7ebee', for: btn-power}
+    components:
+      bays:
+        - {id: optical, at: [0.2, 0.4], size: {w: 146.0, h: 9.4}, accepts: [hpe/optical-blank-lff@1], default: hpe/optical-blank-lff@1, group: media-bays, rel-pos: 1}
+        - {id: drive-1, at: [1.73, 13.8], size: {w: 104.8, h: 27.5}, accepts: [hpe/lff-lp-carrier@1, hpe/lff-blank@1], default: hpe/lff-blank@1, group: drives, rel-pos: 1}
+        - {id: drive-2, at: [110.38, 13.8], size: {w: 104.8, h: 27.5}, accepts: [hpe/lff-lp-carrier@1, hpe/lff-blank@1], default: hpe/lff-blank@1, group: drives, rel-pos: 2}
+        - {id: drive-3, at: [219.03, 13.8], size: {w: 104.8, h: 27.5}, accepts: [hpe/lff-lp-carrier@1, hpe/lff-blank@1], default: hpe/lff-blank@1, group: drives, rel-pos: 3}
+        - {id: drive-4, at: [327.68, 13.8], size: {w: 104.8, h: 27.5}, accepts: [hpe/lff-lp-carrier@1, hpe/lff-blank@1], default: hpe/lff-blank@1, group: drives, rel-pos: 4}
+      placements:
+        - {id: info-tab, ref: hpe/info-pull-tab@1, at: [289.7, 1.2], group: tags, rel-pos: 1}
+        - {id: ilo-service, ref: std/usb-a@1, at: [343.6, 5.65], group: usb, rel-pos: 1, attrs: {role: ilo-service}}
+        - {id: usb-front, ref: std/usb-a@1, at: [363.6, 5.15], group: usb, rel-pos: 2, attrs: {usb: '3.0'}}
+        - {id: btn-uid, ref: common/button-led-sq@1, at: [399.0, 4.6], group: controls, rel-pos: 2, for: chassis}
+        - {id: led-nic, ref: common/led-sq@1, at: [407.9, 5.3], group: leds, rel-pos: 1, for: chassis}
+        - {id: led-health, ref: common/led-sq@1, at: [415.6, 5.3], group: leds, rel-pos: 2, for: chassis}
+        - {id: btn-power, ref: common/button-led-sq@1, at: [423.6, 4.6], group: controls, rel-pos: 1, for: chassis}
+  front-sff8:
+    face: front
+    size: {w: 434.6, h: 42.9}
+    panel:
+      decor:
+        - {at: [0, 0], size: [434.6, 42.9], fill: '#26292d'}
+        - {at: [0, 41.2], size: [434.6, 1.7], fill: '#c3c8cd'}
+        - {at: [409.0, 0.6], size: [25.2, 40.4], fill: '#202326'}
+        - {at: [6, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+        - {at: [12.7, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+        - {at: [19.4, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+        - {at: [26.1, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+        - {at: [32.8, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+        - {at: [39.5, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+        - {at: [46.2, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+        - {at: [52.9, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+        - {at: [59.6, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+        - {at: [66.3, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+        - {at: [73, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+        - {at: [79.7, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+        - {at: [86.4, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+        - {at: [93.1, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+        - {at: [99.8, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+        - {at: [106.5, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+        - {at: [113.2, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+        - {at: [119.9, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+        - {at: [126.6, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+        - {at: [133.3, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+        - {at: [140, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+        - {at: [146.7, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+        - {at: [153.4, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+        - {at: [160.1, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+        - {at: [166.8, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+        - {at: [173.5, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+        - {at: [180.2, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+        - {at: [224, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+        - {at: [230.7, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+        - {at: [237.4, 2.8], size: [4.6, 1.6], fill: '#0d0f11'}
+    silkscreen:
+      - {at: [415.2, 2.6], path: 'M 0.55 0.55 A 0.95 0.95 0 1 0 1.85 0.55 M 1.2 0 V 1.0', stroke-width: 0.25, fill: '#e7ebee', for: btn-power}
+      - {at: [414.9, 12.6], path: 'M 0 1.0 H 0.9 L 1.3 0 L 1.7 2.0 L 2.1 1.0 H 3.0', stroke-width: 0.25, fill: '#e7ebee', for: led-health}
+      - {at: [414.9, 20.9], path: 'M 1.1 0 H 1.9 V 0.6 H 1.1 Z M 1.5 0.6 V 1.0 M 0.4 1.0 H 2.6 M 0.4 1.0 V 1.4 M 2.6 1.0 V 1.4 M 0 1.4 H 0.8 V 2.0 H 0 Z M 2.2 1.4 H 3.0 V 2.0 H 2.2 Z', stroke-width: 0.22, fill: '#e7ebee', for: led-nic}
+      - {at: [416.4, 30.6], text: UID, font-size: 1.5, fill: '#e7ebee', anchor: middle, for: btn-uid}
+      - {at: [426.0, 4.6], text: SS, font-size: 1.4, fill: '#d98cb3', anchor: middle, for: usb-front}
+      - {at: [426.3, 22.4], text: iLO, font-size: 1.5, fill: '#f1f3f5', anchor: middle, for: ilo-service}
+      - {id: ilo-box-top, at: [421.9, 22.8], path: 'M 0 0 H 0.9 M 1.6 0 H 2.5 M 6.4 0 H 7.3 M 8 0 H 8.9', stroke-width: 0.3, fill: '#f1f3f5', for: ilo-service}
+      - {id: ilo-box-bottom, at: [421.9, 39], path: 'M 0 0 H 0.9 M 1.6 0 H 2.5 M 3.2 0 H 4.1 M 4.8 0 H 5.7 M 6.4 0 H 7.3 M 8 0 H 8.9', stroke-width: 0.3, fill: '#f1f3f5', for: ilo-service}
+      - {id: ilo-box-left, at: [421.9, 22.8], path: 'M 0 0 V 0.9 M 0 1.6 V 2.5 M 0 3.2 V 4.1 M 0 4.8 V 5.7 M 0 6.4 V 7.3 M 0 8 V 8.9 M 0 9.6 V 10.5 M 0 11.2 V 12.1 M 0 12.8 V 13.7 M 0 14.4 V 15.3 M 0 16 V 16.2', stroke-width: 0.3, fill: '#f1f3f5', for: ilo-service}
+      - {id: ilo-box-right, at: [431.1, 22.8], path: 'M 0 0 V 0.9 M 0 1.6 V 2.5 M 0 3.2 V 4.1 M 0 4.8 V 5.7 M 0 6.4 V 7.3 M 0 8 V 8.9 M 0 9.6 V 10.5 M 0 11.2 V 12.1 M 0 12.8 V 13.7 M 0 14.4 V 15.3 M 0 16 V 16.2', stroke-width: 0.3, fill: '#f1f3f5', for: ilo-service}
+    components:
+      bays:
+        - {id: sff-1, at: [5.3, 6.8], size: {w: 76.2, h: 15.0}, accepts: [hpe/sff-sc-carrier@1, hpe/sff-blank@1], default: hpe/sff-blank@1, group: drives, rel-pos: 1}
+        - {id: sff-2, at: [5.3, 24.5], size: {w: 76.2, h: 15.0}, accepts: [hpe/sff-sc-carrier@1, hpe/sff-blank@1], default: hpe/sff-blank@1, group: drives, rel-pos: 2}
+        - {id: sff-3, at: [87.05, 6.8], size: {w: 76.2, h: 15.0}, accepts: [hpe/sff-sc-carrier@1, hpe/sff-blank@1], default: hpe/sff-blank@1, group: drives, rel-pos: 3}
+        - {id: sff-4, at: [87.05, 24.5], size: {w: 76.2, h: 15.0}, accepts: [hpe/sff-sc-carrier@1, hpe/sff-blank@1], default: hpe/sff-blank@1, group: drives, rel-pos: 4}
+        - {id: sff-5, at: [168.8, 6.8], size: {w: 76.2, h: 15.0}, accepts: [hpe/sff-sc-carrier@1, hpe/sff-blank@1], default: hpe/sff-blank@1, group: drives, rel-pos: 5}
+        - {id: sff-6, at: [168.8, 24.5], size: {w: 76.2, h: 15.0}, accepts: [hpe/sff-sc-carrier@1, hpe/sff-blank@1], default: hpe/sff-blank@1, group: drives, rel-pos: 6}
+        - {id: sff-7, at: [250.55, 24.5], size: {w: 76.2, h: 15.0}, accepts: [hpe/sff-sc-carrier@1, hpe/sff-blank@1], default: hpe/sff-blank@1, group: drives, rel-pos: 7}
+        - {id: sff-8, at: [332.3, 24.5], size: {w: 76.2, h: 15.0}, accepts: [hpe/sff-sc-carrier@1, hpe/sff-blank@1], default: hpe/sff-blank@1, group: drives, rel-pos: 8}
+        - {id: media-bay, at: [245.5, 0.7], size: {w: 163.1, h: 22.1}, accepts: [hpe/media-bay-blank-1u@1], default: hpe/media-bay-blank-1u@1, group: media-bays, rel-pos: 1}
+      placements:
+        - {id: info-tab, ref: hpe/info-pull-tab-slim@1, at: [188.1, 0.3], group: tags, rel-pos: 1}
+        - {id: btn-power, ref: common/button-led-sq@1, at: [414.4, 7.0], group: controls, rel-pos: 1, for: chassis}
+        - {id: led-health, ref: common/led-sq@1, at: [414.9, 15.8], group: leds, rel-pos: 2, for: chassis}
+        - {id: led-nic, ref: common/led-sq@1, at: [414.9, 23.9], group: leds, rel-pos: 1, for: chassis}
+        - {id: btn-uid, ref: common/button-led-sq@1, at: [414.4, 31.4], group: controls, rel-pos: 2, for: chassis}
+        - {id: usb-front, ref: std/usb-a@1, at: [420.0, 9.75], rotate: 90, group: usb, rel-pos: 2, attrs: {usb: '3.0'}}
+        - {id: ilo-service, ref: std/usb-a@1, at: [420.3, 28.65], rotate: 90, group: usb, rel-pos: 1, attrs: {role: ilo-service}}
+  rear:
+    size: {w: 434.6, h: 42.9}
+    panel:
+      decor:
+        - {at: [0, 0], size: [434.6, 42.9], fill: '#c3c8cd'}
+        - {at: [7.4, 30.2], size: [2.4, 2.4], fill: '#1d2023', shape: circle}
+        - {at: [7.4, 36.4], size: [2.4, 2.4], fill: '#1d2023', shape: circle}
+        - {at: [59.0, 26.1], size: [20.0, 16.5], fill: '#1d2023'}
+        - {at: [80, 27.8], size: [2.2, 2.4], fill: '#1d2023'}
+        - {at: [80, 31.3], size: [2.2, 2.4], fill: '#1d2023'}
+        - {at: [80, 34.8], size: [2.2, 2.4], fill: '#1d2023'}
+        - {at: [80, 38.3], size: [2.2, 2.4], fill: '#1d2023'}
+        - {at: [103.8, 26.1], size: [33.1, 15.7], fill: '#1f63c9'}
+        - {at: [138.6, 27.2], size: [35.2, 11.8], fill: '#ded6c3'}
+        - {at: [176.8, 28.1], size: [2.4, 2.1], fill: '#1d2023'}
+        - {at: [176.8, 31.15], size: [2.4, 2.1], fill: '#1d2023'}
+        - {at: [176.8, 34.2], size: [2.4, 2.1], fill: '#1d2023'}
+        - {at: [176.8, 37.25], size: [2.4, 2.1], fill: '#1d2023'}
+        - {at: [180.1, 28.1], size: [2.4, 2.1], fill: '#1d2023'}
+        - {at: [180.1, 31.15], size: [2.4, 2.1], fill: '#1d2023'}
+        - {at: [180.1, 34.2], size: [2.4, 2.1], fill: '#1d2023'}
+        - {at: [180.1, 37.25], size: [2.4, 2.1], fill: '#1d2023'}
+        - {at: [183.4, 28.1], size: [2.4, 2.1], fill: '#1d2023'}
+        - {at: [183.4, 31.15], size: [2.4, 2.1], fill: '#1d2023'}
+        - {at: [183.4, 34.2], size: [2.4, 2.1], fill: '#1d2023'}
+        - {at: [183.4, 37.25], size: [2.4, 2.1], fill: '#1d2023'}
+        - {at: [186.7, 28.1], size: [2.4, 2.1], fill: '#1d2023'}
+        - {at: [186.7, 31.15], size: [2.4, 2.1], fill: '#1d2023'}
+        - {at: [186.7, 34.2], size: [2.4, 2.1], fill: '#1d2023'}
+        - {at: [186.7, 37.25], size: [2.4, 2.1], fill: '#1d2023'}
+        - {at: [202.7, 33.0], size: [2.2, 2.2], fill: '#1d2023', shape: circle}
+        - {at: [208, 28], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [208, 31.4], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [208, 34.8], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [208, 38.2], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [211.6, 28], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [211.6, 31.4], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [211.6, 34.8], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [211.6, 38.2], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [254, 26.4], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [254, 29.6], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [254, 32.8], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [254, 36], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [257.4, 26.4], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [257.4, 29.6], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [257.4, 32.8], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [257.4, 36], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [260.8, 26.4], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [260.8, 29.6], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [260.8, 32.8], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [260.8, 36], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [264.2, 26.4], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [264.2, 29.6], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [264.2, 32.8], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [264.2, 36], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [267.6, 26.4], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [267.6, 29.6], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [267.6, 32.8], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [267.6, 36], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [271, 26.4], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [271, 29.6], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [271, 32.8], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [271, 36], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [274.4, 26.4], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [274.4, 29.6], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [274.4, 32.8], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [274.4, 36], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [277.8, 26.4], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [277.8, 29.6], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [277.8, 32.8], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [277.8, 36], size: [2.4, 2.2], fill: '#1d2023'}
+        - {at: [355.3, 0.4], size: [6.8, 42.1], fill: '#d6dade'}
+        - {at: [431.6, 0.4], size: [2.6, 42.1], fill: '#b3b9bf'}
+    silkscreen:
+      - {at: [20.9, 39.8], path: 'M 1.1 0 H 1.9 V 0.6 H 1.1 Z M 1.5 0.6 V 1.0 M 0.4 1.0 H 2.6 M 0.4 1.0 V 1.4 M 2.6 1.0 V 1.4 M 0 1.4 H 0.8 V 2.0 H 0 Z M 2.2 1.4 H 3.0 V 2.0 H 2.2 Z', stroke-width: 0.22, fill: '#2b2f33', for: media-module}
+      - {at: [25.1, 42.1], text: '3', font-size: 2.0, fill: '#2b2f33', anchor: middle, for: media-module}
+      - {at: [44.3, 39.8], path: 'M 1.1 0 H 1.9 V 0.6 H 1.1 Z M 1.5 0.6 V 1.0 M 0.4 1.0 H 2.6 M 0.4 1.0 V 1.4 M 2.6 1.0 V 1.4 M 0 1.4 H 0.8 V 2.0 H 0 Z M 2.2 1.4 H 3.0 V 2.0 H 2.2 Z', stroke-width: 0.22, fill: '#2b2f33', for: media-module}
+      - {at: [48.5, 42.1], text: '4', font-size: 2.0, fill: '#2b2f33', anchor: middle, for: media-module}
+      - {at: [144, 39.8], path: 'M 1.1 0 H 1.9 V 0.6 H 1.1 Z M 1.5 0.6 V 1.0 M 0.4 1.0 H 2.6 M 0.4 1.0 V 1.4 M 2.6 1.0 V 1.4 M 0 1.4 H 0.8 V 2.0 H 0 Z M 2.2 1.4 H 3.0 V 2.0 H 2.2 Z', stroke-width: 0.22, fill: '#2b2f33', for: nic-1}
+      - {at: [147.8, 42.1], text: '1', font-size: 2.0, fill: '#2b2f33', anchor: middle, for: nic-1}
+      - {at: [160.9, 39.8], path: 'M 1.1 0 H 1.9 V 0.6 H 1.1 Z M 1.5 0.6 V 1.0 M 0.4 1.0 H 2.6 M 0.4 1.0 V 1.4 M 2.6 1.0 V 1.4 M 0 1.4 H 0.8 V 2.0 H 0 Z M 2.2 1.4 H 3.0 V 2.0 H 2.2 Z', stroke-width: 0.22, fill: '#2b2f33', for: nic-2}
+      - {at: [165, 42.1], text: '2', font-size: 2.0, fill: '#2b2f33', anchor: middle, for: nic-2}
+      - {at: [61.4, 31.63], text: SS, font-size: 1.4, fill: '#e7ebee', anchor: middle, for: usb-rear-1}
+      - {at: [61.4, 38.43], text: SS, font-size: 1.4, fill: '#e7ebee', anchor: middle, for: usb-rear-2}
+      - {at: [83.9, 34.5], text: iLO, font-size: 1.8, fill: '#2b2f33', anchor: middle, rotate: -90, for: ilo}
+      - {at: [133.3, 25.7], path: 'M 0 0 H 2.6 V 1.1 H 0 Z M 0.8 1.1 V 1.4 M 1.8 1.1 V 1.4 M 0.5 1.4 H 2.1', stroke-width: 0.25, fill: '#f1f3f5', for: vga}
+      - {at: [195.9, 40.0], text: UID, font-size: 1.6, fill: '#2b2f33', anchor: middle, for: uid-rear}
+      - {at: [235.5, 24.9], text: IOIOI, font-size: 2.4, fill: '#2b2f33', anchor: middle, for: serial}
+      - {at: [358.7, 6.6], text: PS, font-size: 1.6, fill: '#2b2f33', anchor: middle, for: psu-1}
+      - {at: [358.7, 9.0], text: '1', font-size: 1.6, fill: '#2b2f33', anchor: middle, for: psu-1}
+      - {at: [358.0, 10.4], path: 'M 0 0 L 1.4 0.8 L 0 1.6 Z', filled: true, fill: '#2b2f33', for: psu-1}
+      - {at: [358.7, 28.2], text: PS, font-size: 1.6, fill: '#2b2f33', anchor: middle, for: psu-2}
+      - {at: [358.7, 30.6], text: '2', font-size: 1.6, fill: '#2b2f33', anchor: middle, for: psu-2}
+      - {at: [358.0, 32.0], path: 'M 1.4 0 L 0 0.8 L 1.4 1.6 Z', filled: true, fill: '#2b2f33', for: psu-2}
+    components:
+      bays:
+        - {id: riser-primary, at: [0.0, 0.4], size: {w: 203.0, h: 24.2}, accepts: [hpe/riser-primary-dl160@1, hpe/riser-flom-dl160@1], default: hpe/riser-primary-dl160@1, group: risers, rel-pos: 1}
+        - {id: riser-secondary, at: [203.0, 0.4], size: {w: 82.5, h: 21.0}, accepts: [hpe/riser-secondary-dl160@1], default: hpe/riser-secondary-dl160@1, group: risers, rel-pos: 2}
+        - {id: media-module, at: [13.6, 26.3], size: {w: 45.0, h: 13.4}, accepts: [hpe/media-module-blank@1, hpe/media-module-866464-b21@1, hpe/media-module-866467-b21@1, hpe/media-module-866470-b21@1], default: hpe/media-module-blank@1, group: media-module, rel-pos: 1}
+        - {id: serial, at: [219.3, 26.0], size: {w: 32.8, h: 12.5}, accepts: [hpe/serial-port-blank@1, hpe/serial-port-879778@1], default: hpe/serial-port-blank@1, group: serial, rel-pos: 1}
+        - {id: psu-2, at: [287.0, 0.8], size: {w: 68.0, h: 40.4}, accepts: [hpe/psu-865408-b21@1, hpe/psu-865414-b21@1, hpe/psu-blank-flex-slot@1], default: hpe/psu-blank-flex-slot@1, group: psus, rel-pos: 2, plan: {view: top, at: [79.6, 0.0], in: system-board, under: [access-panel]}}
+        - {id: psu-1, at: [362.5, 0.8], size: {w: 68.0, h: 40.4}, accepts: [hpe/psu-865408-b21@1, hpe/psu-865414-b21@1, hpe/psu-blank-flex-slot@1], default: hpe/psu-865408-b21@1, group: psus, rel-pos: 1, plan: {view: top, at: [4.1, 0.0], in: system-board, under: [access-panel]}}
+      placements:
+        - {id: usb-rear-1, ref: std/usb-a@1, at: [65.0, 28.95], group: usb, rel-pos: 3, attrs: {usb: '3.0'}}
+        - {id: usb-rear-2, ref: std/usb-a@1, at: [65.0, 35.75], group: usb, rel-pos: 4, attrs: {usb: '3.0'}}
+        - {id: ilo, ref: common/rj45-eth@1, at: [85.9, 27.9], rotate: 180, group: mgmt, rel-pos: 1}
+        - {id: vga, ref: common/vga-receptacle@1, at: [104.9, 27.85], group: video, rel-pos: 1}
+        - {id: nic-1, ref: common/rj45-eth@1, at: [139.9, 26.5], rotate: 180, group: nics, rel-pos: 1}
+        - {id: nic-2, ref: common/rj45-eth@1, at: [157.1, 26.5], rotate: 180, group: nics, rel-pos: 2}
+        - {id: uid-rear, ref: common/led-sq@1, at: [194.4, 34.0], group: leds, rel-pos: 3, for: chassis}
+  top:
+    size: {w: 434.6, h: 614.9}
+    panel:
+      decor:
+        - {at: [0, 0], size: [434.6, 614.9], fill: '#c9cdd1'}
+        - {at: [0, 455.0], size: [434.6, 159.9], fill: '#b9bec4'}
+    components:
+      bays:
+        - {id: dimm-1, at: [83.3, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 1, in: system-board, under: [access-panel]}
+        - {id: dimm-2, at: [92.75, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 2, in: system-board, under: [access-panel]}
+        - {id: dimm-3, at: [102.2, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 3, in: system-board, under: [access-panel]}
+        - {id: dimm-4, at: [111.65, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 4, in: system-board, under: [access-panel]}
+        - {id: dimm-5, at: [212, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 5, in: system-board, under: [access-panel]}
+        - {id: dimm-6, at: [221.45, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 6, in: system-board, under: [access-panel]}
+        - {id: dimm-7, at: [230.9, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 7, in: system-board, under: [access-panel]}
+        - {id: dimm-8, at: [240.35, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 8, in: system-board, under: [access-panel]}
+        - {id: dimm-9, at: [249.8, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 9, in: system-board, under: [access-panel]}
+        - {id: dimm-10, at: [259.25, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 10, in: system-board, under: [access-panel]}
+        - {id: dimm-11, at: [268.7, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 11, in: system-board, under: [access-panel]}
+        - {id: dimm-12, at: [278.15, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 12, in: system-board, under: [access-panel]}
+        - {id: dimm-13, at: [377.5, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 13, in: system-board, under: [access-panel]}
+        - {id: dimm-14, at: [386.95, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 14, in: system-board, under: [access-panel]}
+        - {id: dimm-15, at: [396.4, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 15, in: system-board, under: [access-panel]}
+        - {id: dimm-16, at: [405.85, 236.4], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 16, in: system-board, under: [access-panel]}
+        - {id: fan-1, at: [84, 404], size: {w: 40.0, h: 32.0}, accepts: [hpe/fan-dl160@1], default: hpe/fan-dl160@1, group: fans, rel-pos: 1, under: [access-panel]}
+        - {id: fan-2, at: [131.8, 404], size: {w: 40.0, h: 32.0}, accepts: [hpe/fan-dl160@1], default: hpe/fan-dl160@1, group: fans, rel-pos: 2, under: [access-panel]}
+        - {id: fan-3, at: [179.6, 404], size: {w: 40.0, h: 32.0}, accepts: [hpe/fan-dl160@1], default: hpe/fan-dl160@1, group: fans, rel-pos: 3, under: [access-panel]}
+        - {id: fan-4, at: [227.4, 404], size: {w: 40.0, h: 32.0}, accepts: [hpe/fan-dl160@1], default: hpe/fan-dl160@1, group: fans, rel-pos: 4, under: [access-panel]}
+        - {id: fan-5, at: [280.2, 404], size: {w: 40.0, h: 32.0}, accepts: [hpe/fan-dl160@1], default: hpe/fan-dl160@1, group: fans, rel-pos: 5, under: [access-panel]}
+        - {id: fan-6, at: [328, 404], size: {w: 40.0, h: 32.0}, accepts: [hpe/fan-dl160@1], default: hpe/fan-dl160@1, group: fans, rel-pos: 6, under: [access-panel]}
+        - {id: fan-7, at: [375.8, 404], size: {w: 40.0, h: 32.0}, accepts: [hpe/fan-dl160@1], default: hpe/fan-dl160@1, group: fans, rel-pos: 7, under: [access-panel]}
+      placements:
+        - {id: system-board, ref: hpe/system-board-dl160@1, at: [4.0, 3.0], group: interior, rel-pos: 1, under: [heatsink-1, heatsink-2, riser-primary, access-panel, dimm-1, dimm-2, dimm-3, dimm-4, dimm-5, dimm-6, dimm-7, dimm-8, dimm-9, dimm-10, dimm-11, dimm-12, dimm-13, dimm-14, dimm-15, dimm-16]}
+        - {id: heatsink-1, ref: hpe/heatsink-std-1u@1, at: [288.0, 235.0], group: processors, rel-pos: 1, in: system-board, under: [access-panel]}
+        - {id: heatsink-2, ref: hpe/heatsink-std-1u@1, at: [123.2, 235.0], group: processors, rel-pos: 2, in: system-board, under: [access-panel]}
+        - {id: riser-primary, ref: hpe/riser-cage-primary-dl160@1, at: [306.4, 6.9], group: interior, rel-pos: 2, in: system-board, under: [access-panel]}
+        - {id: access-panel, ref: hpe/access-panel-dl160@1, at: [0.0, 0.0], group: covers, rel-pos: 1}
+  bottom:
+    size: {w: 434.6, h: 614.9}
+    empty: >-
+      no straight-on view of the bottom face in any document held (QuickSpecs, User
+      Guide, Maintenance and Service Guide, Product Information Reference, Parts
+      Support Guide - every figure checked) and no photograph shows it. Sized from the
+      QuickSpecs dimensions.
+  left:
+    size: {w: 614.9, h: 42.9}
+    empty: >-
+      no straight-on view of the left face in any document held (QuickSpecs, User
+      Guide, Maintenance and Service Guide, Product Information Reference, Parts
+      Support Guide - every figure checked) and no photograph shows it. Sized from the
+      QuickSpecs dimensions.
+  right:
+    size: {w: 614.9, h: 42.9}
+    empty: >-
+      no straight-on view of the right face in any document held (QuickSpecs, User
+      Guide, Maintenance and Service Guide, Product Information Reference, Parts
+      Support Guide - every figure checked) and no photograph shows it. Sized from the
+      QuickSpecs dimensions.
+configurations:
+  base:
+    kind: base
+    default: true
+    part-numbers:
+      878972-B21: {part: 878972-B21}
+    description: >-
+      The 4 LFF chassis, 878972-B21, with every drive bay and the optical bay
+      blanked, both riser cages with their slots blanked, the media module and
+      serial port blanked, one 500 W Flex Slot supply in PS 1 and the blank in
+      PS 2. THIS IS THE BUILD THE PHOTOGRAPHS SHOW, NOT WHAT THE PART NUMBER
+      SHIPS WITH: the QuickSpecs gives the configure-to-order chassis no riser
+      as standard (a primary riser blank, which is not drawn) and makes the
+      supply a choice; one 500 W supply is what the pre-configured models
+      carry, and the secondary riser is an option that needs processor 2.
+  lff4:
+    kind: example
+    description: >-
+      The 4 LFF CTO server, 878972-B21, as photographed: LFF low-profile drives in
+      bays 1 and 2, blanks in 3 and 4, the optical blank, one 500 W Flex Slot
+      supply in PS 1 and the blank in PS 2, all three PCIe slots blanked.
+    bays:
+      drive-1: hpe/lff-lp-carrier@1
+      drive-2: hpe/lff-lp-carrier@1
+  lff4-options:
+    kind: example
+    description: >-
+      The 4 LFF server with its rear options fitted, to show what the openings
+      take: a full-height card in slot 1 and low-profile cards in slots 2 and 3
+      (three of the library's ConnectX cards, chosen because their ports show
+      whether a window is in the right place - not an HPE-qualified build),
+      the 1GbE Media Module adapter (NIC ports 3 and 4), the serial port,
+      and a second 500 W supply in PS 2 (which needs the redundant power supply
+      enablement kit; HPE does not support mixing two different supplies).
+    bays:
+      riser-primary/slot-1: nvidia/mcx515a-fh@1
+      riser-primary/slot-2: nvidia/mcx516a-lp@1
+      riser-secondary/slot-3: nvidia/mcx4121a-lp@1
+      media-module: hpe/media-module-866464-b21@1
+      serial: hpe/serial-port-879778@1
+      psu-2: hpe/psu-865408-b21@1
+  lff4-flom:
+    kind: example
+    description: >-
+      The 4 LFF server with the FlexibleLOM riser in place of the standard
+      primary riser: the 10/25Gb 640FLR-SFP28 adapter where slot 1 was and a
+      low-profile card in slot 2 (one of the library's ConnectX cards, to show
+      the window - not an HPE-qualified build).
+    bays:
+      riser-primary: hpe/riser-flom-dl160@1
+      riser-primary/flom: hpe/flom-817749-b21@1
+      riser-primary/slot-2: nvidia/mcx4121a-lp@1
+  sff8:
+    kind: orderable
+    part-numbers:
+      878973-B21: {part: 878973-B21}
+    views: {front: front-sff8}
+    description: >-
+      The 8 SFF chassis, 878973-B21, with the media bay blank and every bay
+      blanked; one 500 W Flex Slot supply in PS 1 and both riser cages, as the
+      base configuration and with the same caveat - the configure-to-order
+      chassis ships with no riser and a chosen supply.
+  sff8-drives:
+    kind: example
+    views: {front: front-sff8}
+    description: >-
+      The 8 SFF CTO server, 878973-B21, as HPE's product image shows it: a
+      SmartCarrier drive in each of the eight bays and the media bay blank.
+    bays:
+      sff-1: hpe/sff-sc-carrier@1
+      sff-2: hpe/sff-sc-carrier@1
+      sff-3: hpe/sff-sc-carrier@1
+      sff-4: hpe/sff-sc-carrier@1
+      sff-5: hpe/sff-sc-carrier@1
+      sff-6: hpe/sff-sc-carrier@1
+      sff-7: hpe/sff-sc-carrier@1
+      sff-8: hpe/sff-sc-carrier@1
+datasheet:
+  title: 'QuickSpecs HPE ProLiant DL160 Gen10 Server'
+  url: https://support.hpe.com/hpesc/public/docDisplay?docId=a00021860enw
+  sha256: a9852739fa1ff6c3fcfb25aed7d08a3857bbb25e297845a3fef14132502d96ac
+references:
+  - {title: 'HPE ProLiant DL160 Gen10 Server User Guide', url: 'https://support.hpe.com/hpesc/public/docDisplay?docId=a00066666en_us', sha256: 7d832e524ec07f9074708c82050987dba342e023c8d1ddf76034d62c3bd41e69}
+  - {title: 'HPE ProLiant DL160 Gen10 Server Maintenance and Service Guide', url: 'https://support.hpe.com/hpesc/public/docDisplay?docId=a00066664en_us', sha256: f65d3ad36acc0daed9ff277a862d50da536c92c93eef23d8469c13d3a4abab01}
+  - {title: 'QuickSpecs HPE Flexible Slot Power Supplies', url: 'https://pimcontent1.ingrammicro.com/pe/assets/media/brochure/000000000005567580_5567580.pdf', sha256: 7ba1e44a22d04315ba501251f923c9e1ba120c3ebe5366ed06f9e690de58b6ab}

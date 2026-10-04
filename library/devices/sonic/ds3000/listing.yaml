@@ -1,0 +1,18 @@
+format: 1
+kind: listing
+hardware: celestica/ds3000
+version: 1.0.0
+description: >-
+  SONiC's hardware SKU for this box is DS3000, on platform x86_64-cel_ds3000-r0.
+source: >-
+  sonic-net/sonic-buildimage at d5c2e3b32ffa builds SONiC for this box: device/celestica/x86_64-cel_ds3000-r0.
+  It is not on SONiC's Supported Devices and Platforms page, which predates it; the build
+  tree is taken as SONiC's list. Port names from the platform's own
+  table, device/celestica/x86_64-cel_ds3000-r0/platform.json: each SONiC name with the front-panel port its alias names and the breakout modes it allows.
+  eth0 is SONiC's management port (the SONiC command reference, Management VRF).
+interfaces:
+  - {physical: 'port-{n}', name: 'Ethernet{4*n-4}', range: '1-32', breakout: {modes: [1x100g, 1x40g]}}
+  - {physical: 'm1', name: 'Ethernet128'}
+  - {physical: mgmt, name: eth0}
+nos: sonic
+nos-versions: master

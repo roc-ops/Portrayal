@@ -26,11 +26,13 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { toGLB, toUSDZ } from './share.js';
 import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, svgSource, setSvgOverride, clearSvgOverrides,
          setNodeStates, nodeStates, setNodeFields, restyleText,
+         setNodeLampColors, nodeLampColors, markHex,
          setPulled as setReliefPulled, pulledPaths,
          buildFaceRelief, bodyBoxes, fruFor,
          nodeTools, tiltOf, tiltTools, tiltGroupIn, unproject, openFrameFaces } from './relief.js';
 import { seatViews, seatBack, refusalReason } from './swap.js';
-import { jdist, faceFile } from './dist.js';
+import { bevelledArrays } from './bevel.js';
+import { jdist, faceFile, distResolver } from './dist.js';
 import { createLamps } from './lamps.js';
 
 const CLS_LABEL = {fan: 'Fan module', psu: 'Power supply', tab: 'Info tab'};
@@ -70,15 +72,21 @@ const save = (data, filename, type) => {
 /**
  * Mount a viewer into `container`.
  *
- * @param opts.dist       where the compiled SVGs and indexes live ('../dist/')
+ * @param opts.dist       where the compiled SVGs and indexes live: a build
+ *                        directory's base ('../dist/'), or a path -> URL
+ *                        function such as dist.js `packageDist` returns
  * @param opts.pxmm       base face raster density (4)
  * @param opts.background scene background
  * @param opts.highlight  selection colour
  */
 export function createViewer(container, opts = {}) {
-  const DIST = opts.dist || '../dist/';
+  // a build directory's base, or a path -> URL function (dist.js)
+  const distAt = distResolver(opts.dist, '../dist/');
   const PXMM = opts.pxmm || 4;
   const HL_COLOR = opts.highlight || '#f59e0b';
+  // how a mark is drawn when it does not say (#664): 'plate', the selection's
+  // translucent plate and outline, or 'ring', 2D marks.js's pair of rings
+  const MARK_STYLE = opts.markStyle === 'ring' ? 'ring' : 'plate';
 
   let DEV = null, CFG = null, disposed = false;
   // Runtime bay swaps, bay id -> ref (or null for an emptied bay). The 3D scene
@@ -170,7 +178,7 @@ export function createViewer(container, opts = {}) {
   ro.observe(container);
 
   // --- events -----------------------------------------------------------------
-  const listeners = {select: [], hover: [], lod: []};
+  const listeners = {select: [], hover: [], lod: [], contextlost: [], contextrestored: []};
   function on(event, fn) {
     (listeners[event] || (listeners[event] = [])).push(fn);
     return () => { const a = listeners[event]; const i = a.indexOf(fn); if (i >= 0) a.splice(i, 1); };
@@ -381,7 +389,7 @@ export function createViewer(container, opts = {}) {
     const plain = () => new THREE.MeshLambertMaterial({color: body.color || '#3a3f44'});
     const sideMat = async (name, wmm, hmm, flipX, flipY) => {
       if (!body.sides || !body.sides[name]) return plain();
-      const c = await svgCanvas(DIST + body.sides[name], wmm, hmm, flipX, flipY, SCOPE);
+      const c = await svgCanvas(distAt(body.sides[name]), wmm, hmm, flipX, flipY, SCOPE);
       return new THREE.MeshBasicMaterial({map: canvasTex(c)});
     };
     const fp = body.footprint || {at: [0, 0], size: [faceW, faceH]};
@@ -417,7 +425,7 @@ export function createViewer(container, opts = {}) {
     const c = byRef(ref);
     if (!c) return null;
     const skin = c.skins?.includes('default') ? 'default' : c.skins?.[0];
-    const url = `${DIST}components/${c.ns}--${c.name}--${c.major}--${skin}.svg`;
+    const url = distAt(`components/${c.ns}--${c.name}--${c.major}--${skin}.svg`);
     return {comp: c, text: await svgSource(url, SCOPE)};
   };
   async function applyBayOverrides(cfg) {
@@ -433,7 +441,7 @@ export function createViewer(container, opts = {}) {
     // rear pass here re-seated swapped bays only (B3 Task 10c).
     const roots = {};
     for (const view of ALL_VIEWS) {
-      const url = `${DIST}${faceFile(devIndex, cfg, view)}`;
+      const url = distAt(faceFile(devIndex, cfg, view));
       let text;
       try { text = await svgSource(url, SCOPE); } catch { continue; }
       if (!text) continue;
@@ -474,7 +482,7 @@ export function createViewer(container, opts = {}) {
       // Keyed by the file, which other configurations may share. The
       // overrides are cleared at the top of every pass and a pass is one
       // configuration, so no other configuration reads this one's.
-      setSvgOverride(`${DIST}${faceFile(devIndex, cfg, view)}`,
+      setSvgOverride(distAt(faceFile(devIndex, cfg, view)),
                      new XMLSerializer().serializeToString(roots[view].ownerDocument), SCOPE);
       total += viewApplied;
     }
@@ -524,7 +532,7 @@ export function createViewer(container, opts = {}) {
     setReliefPulled(PULLED, SCOPE);
     RESTYLE = [];
     gen++;
-    const f = v => `${DIST}${faceFile(devIndex, cfg, v)}`;
+    const f = v => distAt(faceFile(devIndex, cfg, v));
     const meshes = [];
     FRU_PATHS.clear();
     for (const k of Object.keys(FRU_GROUPS)) delete FRU_GROUPS[k];
@@ -568,7 +576,7 @@ export function createViewer(container, opts = {}) {
     // is not clamped; a part that declares a depth is, as before.
     const compDeep = () => (COMP_ENTRY.body || COMP_ENTRY.size?.d) ? D : Infinity;
     const FACES = COMP ? [
-      {view: 'comp', url: DIST + COMP_ENTRY.files[cfg], sizeBox: true,
+      {view: 'comp', url: distAt(COMP_ENTRY.files[cfg]), sizeBox: true,
        fw: () => W, fh: () => H, deep: compDeep, pos: () => [0, 0, D / 2], rot: [0, 0, 0]},
     ] : [
       {view: 'front', fw: () => W, fh: () => H, deep: () => D, pos: () => [0, 0, D / 2], rot: [0, 0, 0]},
@@ -588,7 +596,7 @@ export function createViewer(container, opts = {}) {
       await buildFaceRelief(F, {src: F.url || f(F.view), faceCv, faceSvg, facePunch,
                                 faceMM,
                                 meshes, FRU_GROUPS, FRU_META, BODY_META, D, deep: F.deep(),
-                                bodyBoxMesh, dist: DIST, backSource,
+                                bodyBoxMesh, dist: distAt, backSource,
                                 restyle: RESTYLE, scope: SCOPE});
       // a face with no drawing falls back to flat colour and contributes no group
       if (meshes.length > before) built[F.view] = meshes[meshes.length - 1];
@@ -600,7 +608,7 @@ export function createViewer(container, opts = {}) {
       const plain = new THREE.MeshLambertMaterial({color: body.color || '#3a3f44'});
       const sideMat = async (name, wmm, hmm, flipX, flipY) => {
         if (!body.sides || !body.sides[name]) return plain;
-        const c = await svgCanvas(DIST + body.sides[name], wmm, hmm, flipX, flipY, SCOPE);
+        const c = await svgCanvas(distAt(body.sides[name]), wmm, hmm, flipX, flipY, SCOPE);
         return new THREE.MeshBasicMaterial({map: canvasTex(c)});
       };
       mats = [
@@ -740,6 +748,21 @@ export function createViewer(container, opts = {}) {
       scene.add(box);
       box.userData.bodyBox = bodyBox;
       scene.add(bodyBox);
+    } else if (devIndex && devIndex.chassis && devIndex.chassis.solid) {
+      // A BEVELLED BODY (#735): the polygons render.py published, each face
+      // mapped the way BoxGeometry maps it so the face textures land exactly
+      // where they would on a box, and the bevels in lit housing colour.
+      // Material 6 is the bevels; picking reads 0-5 and ignores it.
+      const a = bevelledArrays(devIndex.chassis.solid.polygons, W, H, D);
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.Float32BufferAttribute(a.positions, 3));
+      geo.setAttribute('normal', new THREE.Float32BufferAttribute(a.normals, 3));
+      geo.setAttribute('uv', new THREE.Float32BufferAttribute(a.uvs, 2));
+      for (const g of a.groups) geo.addGroup(g.start, g.count, g.materialIndex);
+      const metal = new THREE.MeshLambertMaterial(
+        {color: devIndex.chassis.solid.color || '#3a3f44'});
+      box = new THREE.Mesh(geo, [...mats, metal]);
+      scene.add(box);
     } else {
       box = new THREE.Mesh(new THREE.BoxGeometry(W, H, D), mats);
       scene.add(box);
@@ -805,7 +828,7 @@ export function createViewer(container, opts = {}) {
   async function buildHitIndex(cfg) {
     for (const view of ALL_VIEWS) {
       hitIndex[view] = []; pathIndex[view] = [];
-      const text = await svgSource(`${DIST}${faceFile(devIndex, cfg, view)}`, SCOPE);
+      const text = await svgSource(distAt(faceFile(devIndex, cfg, view)), SCOPE);
       if (!text) continue;                 // a face the device does not draw
       const div = document.createElement('div');
       div.style.cssText = 'position:absolute;left:-10000px;top:0;width:1000px;visibility:hidden';
@@ -939,15 +962,56 @@ export function createViewer(container, opts = {}) {
     return null;
   }
 
-  function select(path, o = {}) {
-    clearHighlight();
-    selected = path || null;
-    if (!path) return false;
+  // ONE HALO, TWO USERS (#664): the selection and every mark. A halo stands on
+  // the part's face or facet, with its tilt and its flip, inside the FRU group
+  // that owns it so it rides a pulled module out, drawn last with the depth test
+  // off - only its colour differs. Built here once so the two cannot drift.
+  // Returns {obj, grp, lx, ly, w, h, exact} with `obj` already in the scene, or
+  // null for a path no face draws.
+  // THE RING STYLE, 2D marks.js's halo() in 3D: a soft wide ring under a
+  // crisp narrow one, each a rounded rectangle band around the part at the
+  // same outsets, widths and opacities in the same millimetres (ring(): pad,
+  // stroke width, stroke opacity, corner radius min(0.9, pad)). A band is the
+  // stroke drawn as a surface: the rounded rectangle at pad + width/2 with the
+  // one at pad - width/2 cut out of it, so it is exactly the 2D stroke.
+  const RINGS = [{pad: 1.35, width: 1.8, opacity: 0.28, order: 999},
+                 {pad: 0.45, width: 0.7, opacity: 1, order: 1000}];
+  function roundedRect(target, w, h, r) {
+    const x = -w / 2, y = -h / 2, rr = Math.max(0, Math.min(r, w / 2, h / 2));
+    target.moveTo(x + rr, y);
+    target.lineTo(x + w - rr, y);
+    target.absarc(x + w - rr, y + rr, rr, -Math.PI / 2, 0, false);
+    target.lineTo(x + w, y + h - rr);
+    target.absarc(x + w - rr, y + h - rr, rr, 0, Math.PI / 2, false);
+    target.lineTo(x + rr, y + h);
+    target.absarc(x + rr, y + h - rr, rr, Math.PI / 2, Math.PI, false);
+    target.lineTo(x, y + rr);
+    target.absarc(x + rr, y + rr, rr, Math.PI, Math.PI * 1.5, false);
+    return target;
+  }
+  function ringBand(w, h, {pad, width, opacity, order}, colour) {
+    const corner = Math.min(0.9, pad);
+    const outer = pad + width / 2, inner = Math.max(pad - width / 2, 0);
+    const shape = roundedRect(new THREE.Shape(), w + 2 * outer, h + 2 * outer, corner + width / 2);
+    shape.holes.push(roundedRect(new THREE.Path(), w + 2 * inner, h + 2 * inner,
+                                 Math.max(corner - width / 2, 0)));
+    const mesh = new THREE.Mesh(new THREE.ShapeGeometry(shape, 6),
+      // transparent at any opacity: three.js draws every opaque mesh before
+      // every transparent one whatever its renderOrder, so an opaque crisp ring
+      // was drawn first and the soft ring painted over its edge. One pass, and
+      // renderOrder puts the crisp band on top.
+      new THREE.MeshBasicMaterial({color: colour, transparent: true, opacity,
+                                   depthTest: false, depthWrite: false, side: THREE.DoubleSide}));
+    mesh.renderOrder = order;
+    return mesh;
+  }
+
+  function halo(path, colour, style = 'plate') {
     const found = locate(path);
-    if (!found) return false;
-    const {view, c} = found;
+    if (!found) return null;
+    const {view, c, exact} = found;
     const grp = faceGroups[view];
-    if (!grp) return false;
+    if (!grp) return null;
     const w = Math.max(c.x1 - c.x0, 0.4), h = Math.max(c.y1 - c.y0, 0.4);
     // Local x=0 is the centre of the face the relief was built on, which for a
     // rack face is the 482.6 mm plate. Centring on the 434 mm body put the
@@ -969,25 +1033,87 @@ export function createViewer(container, opts = {}) {
       hy = (flipY ? -1 : 1) * (fh / 2 - (u.y + u.h / 2));
       into = tiltGroupIn(into, c.tilt, {fw, fh, flipLX: flipX, flipLY: flipY});
     }
-    hl = new THREE.Group();
-    const geo = new THREE.PlaneGeometry(hw, hh);
+    const obj = new THREE.Group();
+    // what this is, for a host or a harness counting halos without guessing
+    // from a material
+    obj.userData.portrayalHalo = {path, colour, style};
     // depthTest off, drawn last: the same argument hl.js makes in 2D - a halo that
     // neighbours can paint over is not a halo. Here the neighbour is a handle or a
     // cage standing proud of the face.
-    const fillMat = new THREE.MeshBasicMaterial({color: HL_COLOR, transparent: true,
-      opacity: 0.18, depthTest: false, depthWrite: false});
-    const lineMat = new THREE.LineBasicMaterial({color: HL_COLOR, depthTest: false,
-      transparent: true});
-    hl.add(new THREE.Mesh(geo, fillMat));
-    hl.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo), lineMat));
-    hl.traverse(o2 => { o2.renderOrder = 999; });
-    hl.position.set(hx, hy, 0.8);
+    if (style === 'ring') {
+      for (const r of RINGS) obj.add(ringBand(hw, hh, r, colour));
+    } else {
+      const geo = new THREE.PlaneGeometry(hw, hh);
+      const fillMat = new THREE.MeshBasicMaterial({color: colour, transparent: true,
+        opacity: 0.18, depthTest: false, depthWrite: false});
+      const lineMat = new THREE.LineBasicMaterial({color: colour, depthTest: false,
+        transparent: true});
+      obj.add(new THREE.Mesh(geo, fillMat));
+      obj.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo), lineMat));
+      obj.traverse(o2 => { o2.renderOrder = 999; });
+    }
+    obj.position.set(hx, hy, 0.8);
     // ride with the module if it is a FRU, so ejecting it does not leave the
     // marker behind on the chassis
     // (the longest prefix that is one - a card's optic is a FRU inside its card)
-    into.add(hl);
-    if (o.frame !== false) frameOn(grp, lx, ly, w, h);
+    into.add(obj);
+    return {obj, grp, lx, ly, w, h, exact};
+  }
+
+  function select(path, o = {}) {
+    clearHighlight();
+    selected = path || null;
+    if (!path) return false;
+    const got = halo(path, HL_COLOR);
+    if (!got) return false;
+    hl = got.obj;
+    if (o.frame !== false) frameOn(got.grp, got.lx, got.ly, got.w, got.h);
     return true;
+  }
+
+  // MARKS (#664): many halos at once, each in its own colour, independent of
+  // the selection - a reader selects one part while five others stay marked.
+  // `list` is the whole truth, [{path, color, style?}], and [] clears. `style`
+  // is 'plate' (the selection's look) or 'ring' (2D's pair of rings); a mark
+  // that does not say takes the viewer's `markStyle`, 'plate' by default. Paths, never
+  // selectors (the host resolves those against its 2D drawing). A mark never
+  // moves the camera and never touches `selected`. It is held here and drawn
+  // again after every rebuild, as STATES and PULLED are, and a pulled module's
+  // marks ride out in its FRU group like the selection halo.
+  // Returns what could not be drawn so the host can say "not in 3D":
+  //   missing  - no face draws the path, or any ancestor of it
+  //   nearest  - drawn on the nearest ancestor that is (the rule select() uses)
+  //   invalid  - the colour is not a hex (it lands in a material, never a string)
+  let MARKS = [], markObjs = [], markReport = {missing: [], nearest: [], invalid: []};
+  function clearMarkObjs() {
+    for (const o of markObjs) { o.parent && o.parent.remove(o); disposeTree(o); }
+    markObjs = [];
+  }
+  function drawMarks() {
+    clearMarkObjs();
+    const r = {missing: [], nearest: [], invalid: []};
+    for (const m of MARKS) {
+      const colour = markHex(m.color);   // #rgb/#rrggbb, alpha dropped (#667)
+      if (!colour) { r.invalid.push(m.path); continue; }
+      const got = box ? halo(m.path, colour, m.style) : null;
+      if (!got) { r.missing.push(m.path); continue; }
+      if (!got.exact) r.nearest.push(m.path);
+      markObjs.push(got.obj);
+    }
+    markReport = r;
+    // ON EVERY DRAW, a clean report included: a host that marked before the
+    // first load finished was told every path was missing, and when the load
+    // then drew them all, an event sent only on trouble never said so - its
+    // "not in 3D" note stayed up over parts that were shown
+    emit('marks', r);
+    return r;
+  }
+  function setMarks(list) {
+    MARKS = (Array.isArray(list) ? list : [])
+      .filter(m => m && m.path)
+      .map(m => ({path: String(m.path), color: String(m.color || ''),
+                  style: m.style === 'ring' || m.style === 'plate' ? m.style : MARK_STYLE}));
+    return drawMarks();
   }
 
   function frameOn(grp, lx, ly, w, h) {
@@ -1030,7 +1156,7 @@ export function createViewer(container, opts = {}) {
   // bytes arrive once per page even with the shell asking for them too.
   async function ensureComponents() {
     if (COMP_INDEX) return;
-    const cidx = await jdist(`${DIST}components.json`);
+    const cidx = await jdist(distAt('components.json'));
     COMP_INDEX = cidx.components;
     BODY_META = Object.fromEntries(cidx.components.filter(c => c.body)
       .map(c => [`${c.ns}/${c.name}@${c.major.slice(1)}`, c.body]));
@@ -1042,7 +1168,7 @@ export function createViewer(container, opts = {}) {
     COMP = COMP_ENTRY = null;
     await ensureComponents();
     if (first || !devIndex) {
-      devIndex = await jdist(`${DIST}${DEV}.configs.json`);
+      devIndex = await jdist(distAt(`${DEV}.configs.json`));
       if (devIndex.chassis && devIndex.chassis.w) {
         W = devIndex.chassis.w; H = devIndex.chassis.h; D = devIndex.chassis.d;
       }
@@ -1098,28 +1224,90 @@ export function createViewer(container, opts = {}) {
       else await loadDevice(spec.device || DEV, spec.config);
       // a config switch keeps the host's selection; the boxes were rebuilt
       if (selected) select(selected, {frame: false});
+      // and its marks (#664): the halos went with the old scene
+      if (MARKS.length) drawMarks();
     });
   }
 
   // --- loop -------------------------------------------------------------------
   let raf = 0;
-  (function loop(now) {
+  function loop(now) {
     raf = requestAnimationFrame(loop);
     stepTweens(now || 0);
     LAMPS.step(now || 0);
     controls.update();
     renderer.render(scene, camera);
     lodTick();
-  })();
+  }
+  loop();
+
+  // --- a lost context ---------------------------------------------------------
+  // A GPU process reset or memory pressure takes the context away, and with it
+  // every texture and buffer the scene uploaded. Without this the canvas simply
+  // went blank: no message, no recovery, and a host that could not tell a dead
+  // scene from a slow one. preventDefault is what lets the browser hand the
+  // context back at all (three.js asks too; saying so here does not lean on it).
+  // The loop stops while there is nothing to draw into, and the host hears
+  // 'contextlost' so it can say why the scene is empty.
+  //
+  // ON RESTORE THE SCENE IS REBUILT, NOT RE-UPLOADED. three.js resets its own GL
+  // state on restore and would re-upload what it still holds, but the relief and
+  // LOD rasters are made against the renderer during the build, and re-running
+  // the build for what is loaded - same device, config, swaps, states and pulled
+  // parts, all of which live here - is the one path already known to produce a
+  // whole scene. The camera is left where the reader put it. 'contextrestored'
+  // carries the rebuild's error, or null, once the scene is back on screen.
+  let contextLost = false;
+  function onContextLost(ev) {
+    if (disposed) return;              // dispose() forces this loss on purpose
+    ev.preventDefault();
+    contextLost = true;
+    cancelAnimationFrame(raf);
+    raf = 0;
+    // RELEASE THE DEAD RESOURCES NOW, WHILE GL CALLS ARE SILENT NO-OPS. three.js
+    // keeps each upload's handle and frees it when the object is disposed; left
+    // for the rebuild, those deletes reach the RESTORED context with handles from
+    // the old one, and a C100G restore logged 259 "object does not belong to this
+    // context" warnings. The objects stay in the graph for the rebuild to replace.
+    disposeTree(scene);
+    emit('contextlost');
+  }
+  function onContextRestored() {
+    if (disposed) return;
+    serialise(async () => {
+      if (disposed) return;
+      let error = null;
+      try {
+        if (COMP) await build(CFG);
+        else if (DEV) { await build(CFG); await buildHitIndex(CFG); }
+        if (selected) select(selected, {frame: false});
+        if (MARKS.length) drawMarks();
+      } catch (e) { error = e; console.warn('[portrayal] viewer3d rebuild after context loss', e); }
+      // a second loss during the rebuild: its own restore will rebuild again,
+      // and announcing this one would clear the host's message over a dead canvas
+      if (disposed || renderer.getContext().isContextLost()) return;
+      contextLost = false;
+      if (!raf) loop();
+      emit('contextrestored', error);
+    });
+  }
+  renderer.domElement.addEventListener('webglcontextlost', onContextLost);
+  renderer.domElement.addEventListener('webglcontextrestored', onContextRestored);
 
   function exportName() {
     return 'portrayal-' + (DEV || COMP || 'scene').replace(/[^a-z0-9.-]+/gi, '-');
   }
   async function exportData(fmt) {
-    const wasVisible = hl && hl.visible;
-    if (hl) hl.visible = false;          // a selection marker is not part of the model
+    // AN EXPORT IS THE MODEL, NOT THE ANNOTATION. The selection halo was hidden
+    // here from the start - "a selection marker is not part of the model" - and
+    // a mark is the same kind of thing: a plate drawn over a part to point at it,
+    // with no depth test, which in a GLB is a flat coloured square floating over
+    // the chassis in every viewer that opens it. Hidden for the export alone and
+    // restored after, so the reader still sees them.
+    const hidden = [hl, ...markObjs].filter(o => o && o.visible);
+    for (const o of hidden) o.visible = false;
     try { return fmt === 'glb' ? await toGLB(scene) : await toUSDZ(scene); }
-    finally { if (hl) hl.visible = wasVisible; }
+    finally { for (const o of hidden) o.visible = true; }
   }
   async function download(fmt) {
     const data = await exportData(fmt);
@@ -1139,10 +1327,13 @@ export function createViewer(container, opts = {}) {
     el.removeEventListener('pointerup', onPointerUp);
     controls.dispose();
     clearHighlight();
+    clearMarkObjs();
     LAMPS.clear();
     disposeTree(scene);
     scene.clear();
     LOD.length = 0;
+    renderer.domElement.removeEventListener('webglcontextlost', onContextLost);
+    renderer.domElement.removeEventListener('webglcontextrestored', onContextRestored);
     renderer.dispose();
     // a GL context is not released when the last reference drops - the browser
     // keeps ~16 alive and silently kills the oldest, so say so explicitly
@@ -1252,6 +1443,40 @@ export function createViewer(container, opts = {}) {
   const setPulled = paths => coalesce('pulled', paths, applyPulledNow);
   const setStates = map => coalesce('states', map, applyStatesNow);
   const setFields = map => coalesce('fields', map, applyFieldsNow);   // same queue: latest wins
+  const setLampColors = map => coalesce('lamps', map, applyLampColorsNow);
+
+  // A LAMP IN THE HOST'S COLOUR (#664): `{path: '#ff00ff'}`, the whole map each
+  // time, {} clears. The colour goes into the text every texture is painted
+  // from (relief.js applyNodeLampColors), so it repaints and never re-shapes,
+  // survives a rebuild from the scope's registry, and an animated lamp's frames
+  // (lamps.js) are rasterised from the same text. A lamp registered `state-off`
+  // stays unlit, as in 2D. Returns the paths whose colour was not a hex.
+  let lampRejected = [];
+  async function applyLampColorsNow(map) {
+    const before = nodeLampColors(SCOPE);
+    lampRejected = setNodeLampColors(map, SCOPE);
+    const after = nodeLampColors(SCOPE);
+    const changed = new Set();
+    for (const k of new Set([...before.keys(), ...after.keys()]))
+      if (before.get(k) !== after.get(k)) changed.add(k);
+    if (!changed.size || !box) return {repainted: 0, rejected: lampRejected};
+    const touches = text => [...changed].some(p => text.includes(`data-path="${p}"`));
+    let n = 0;
+    for (const e of RESTYLE) {
+      if (!touches(e.svgText)) continue;
+      try { await e.run(restyleText(e.svgText, SCOPE)); n++; }
+      catch (err) { console.warn('[portrayal] restyle failed', err); }
+    }
+    for (const rec of LOD) {
+      if (!touches(rec.svgText)) continue;
+      rec.svgText = restyleText(rec.svgText, SCOPE);
+      rec.rev++;
+      await refineFace(rec, rec.level);
+      n++;
+    }
+    await syncLamps(changed);
+    return {repainted: n, rejected: lampRejected};
+  }
 
   async function syncLamps(changed) {
     if (!box) return;
@@ -1332,6 +1557,9 @@ export function createViewer(container, opts = {}) {
 
   return {
     load, select, on, resize, dispose, setStates, setFields, fields: () => JSON.parse(JSON.stringify(FIELDS)),
+    // #664: persistent coloured marks, and a host's lamp colours
+    setMarks, marks: () => MARKS.map(m => ({...m})), get markReport() { return {...markReport}; },
+    setLampColors, lampColors: () => Object.fromEntries(nodeLampColors(SCOPE)),
     // the backdrop, for a host that lets its reader choose one - the loop
     // redraws every frame, so setting it is all there is to do
     setBackground: c => { scene.background = new THREE.Color(c); },
@@ -1344,6 +1572,8 @@ export function createViewer(container, opts = {}) {
     paths: () => ALL_VIEWS.flatMap(view =>
       pathIndex[view].map(c => ({view, path: c.path, cls: c.cls, model: c.model}))),
     capabilities: () => caps,
+    // true between 'contextlost' and 'contextrestored': the scene is not drawn
+    get contextLost() { return contextLost; },
     lod: () => lodSummary,
     // `info` and `selection` are properties, not calls: they are a snapshot of
     // what the viewer currently holds, and a getter cannot go stale in a host's

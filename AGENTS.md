@@ -15,6 +15,13 @@ documentation that a person follows the same way.
   including the lock check that has to run before `--update`.
 - [`library/components/README.md`](library/components/README.md): namespaces,
   naming, and what a component contract and its skin must contain.
+- [`docs/listing-a-nos.md`](docs/listing-a-nos.md): listing a box under a NOS
+  vendor (ArcOS, OcNOS, DNOS, SONiC) without copying the hardware.
+
+Read this one when you review, not while you build:
+
+- [`docs/review-standards.md`](docs/review-standards.md): the judgements no
+  gate can make, for the second pass over a finished change.
 
 ## The skills are documents
 
@@ -24,6 +31,11 @@ Markdown instructions and you can follow them by hand.
 `portrayal-vendor-intake` stages a vendor's datasheets and guides and converts
 the PDFs with docling. It assumes the conversion runs on a separate machine
 with a GPU; running docling locally works too, only more slowly.
+`portrayal-review` reviews a change against its sources and the review
+standards, and fixes what it finds. `portrayal-pr` writes the pull request
+body, including its merge danger. `portrayal-retro` reads what recent work got
+wrong and proposes checks, standards and test redesigns; it changes nothing
+itself.
 
 ## The gates
 

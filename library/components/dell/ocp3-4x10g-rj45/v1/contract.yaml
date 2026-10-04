@@ -1,0 +1,58 @@
+format: 1
+kind: module
+name: ocp3-4x10g-rj45
+version: 1.1.0
+class: nic
+behaviour: fills
+profile: server
+description: >-
+  Quad-port 10 GbE BASE-T OCP NIC 3.0 card, small form factor, as Dell fits it to the 16th-generation PowerEdge - drawn on the quad 1 GbE card's face
+attrs:
+  ports: 4
+  media: rj45
+  form-factor: ocp3-sff
+provenance:
+  plan: >-
+    seen from above, the card is dell/ocp3-sff-plan@1 - its 76 x 115 board.
+  sources: >-
+    The bracket and depth from Dell's R660 service model via
+    dell/ocp3-4x1g-rj45@1; the face from the no drawing of this card - see face-is-borrowed; the card's existence from
+    the R660 technical guide Table 12 and the ISM's networking table.
+  face-is-borrowed: >-
+    BORROWED, AND THE ONLY CARD IN THIS FAMILY THAT IS. The R660 ISM lists
+    "10 GbE x 4" among the OCP options and TG Table 12 names Broadcom and Intel
+    4 x 10 GbE BT cards, but no master, figure or photograph held shows one.
+    Four RJ45 jacks on an SFF bracket have one place to go, so the face is
+    dell/ocp3-4x1g-rj45@1's - jack pitch, housing and vents - with the speed
+    changed. What is not known is whether the 10G card's housing, lamps or
+    vents differ; when an image turns up, measure it against this.
+  size: >-
+    measured - the same Dell SFF bracket as dell/ocp3-4x1g-rj45@1, whose
+    provenance gives the CAD reading: 71.8 x 15.1, a 76 x 115 board behind it.
+    One bracket across the family is the R660 CAD's one card plus the
+    VisioCafe masters, which all punch the same vent grid; no image held shows
+    THIS card's bracket edge on its own.
+  latch: >-
+    NOT DRAWN, for the reason dell/ocp3-4x1g-rj45@1 gives: the R660 ISM opens
+    the card's blue latch from inside the chassis, after the riser is out.
+  power: >-
+    NOT STATED for this card. TG Table 11 gives the OCP slot's range, 15-35 W,
+    for every card it takes; no document held gives this card's own figure.
+  lamps-and-numbering: >-
+    NOT DRAWN beyond what the composed ports carry. The master draws no lamps or
+    numerals on this card; the one real OCP card photographed in an R660 (a
+    4 x SFP28 from another vendor, StorageReview -01.jpg) has a lamp column and
+    printed numbers, which shows that vendors differ here and that this card's
+    own printing is not in hand.
+size: {w: 71.8, h: 15.1, d: 115.0}
+plan: {ref: dell/ocp3-sff-plan@1}
+size-confidence: {w: measured, h: measured, d: measured}
+body:
+  depth: 115.0
+  color: '#b8bdc2'
+parts:
+  - {ref: common/rj45-ganged-eth@1, id: port-1, at: [8.05, 1.9], rotate: 180, attrs: {media: rj45, speed: 10g}}
+  - {ref: common/rj45-ganged-eth@1, id: port-2, at: [22.35, 1.9], rotate: 180, attrs: {media: rj45, speed: 10g}}
+  - {ref: common/rj45-ganged-eth@1, id: port-3, at: [36.65, 1.9], rotate: 180, attrs: {media: rj45, speed: 10g}}
+  - {ref: common/rj45-ganged-eth@1, id: port-4, at: [50.95, 1.9], rotate: 180, attrs: {media: rj45, speed: 10g}}
+skins: [default]

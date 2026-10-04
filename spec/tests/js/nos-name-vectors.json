@@ -1,0 +1,16 @@
+{
+  "rules": {
+    "plain": {"physical": "port-{n}", "name": "swp{n}", "range": "1-3"},
+    "lanes": {"physical": "port-{n}", "name": "Ethernet{4*n-4}", "range": "1-3"},
+    "sonic-doc": {"physical": "port-{n}", "name": "Ethernet{(n-1)*4}", "range": "1-3"},
+    "negative-offset": {"physical": "port-{n}", "name": "Ethernet{4*n-148}", "range": "49-51"},
+    "true-division": {"physical": "port-{n}", "name": "e{n/2}", "range": "0-5"},
+    "floor-division": {"physical": "port-{n}", "name": "e{(n-7)//2}", "range": "0-5"},
+    "modulo": {"physical": "port-{n}", "name": "e{(n-4)%3}", "range": "0-5"},
+    "unary": {"physical": "port-{n}", "name": "e{-n+10}", "range": "0-2"},
+    "child-kept": {"physical": "port-{n}", "name": "ge100-0/0/{n}", "range": "0-1"},
+    "single": {"physical": "mgmt-eth", "name": "ma1"},
+    "no-range": {"physical": "port-{n}", "name": "swp{n}"}
+  },
+  "refused": ["x{__import__('os')}", "x{n**2}", "x{m}", "x{n;1}", "x{1/0}"]
+}

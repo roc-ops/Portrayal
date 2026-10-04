@@ -40,8 +40,7 @@ Issues = "https://github.com/roc-ops/Portrayal/issues"
 
 [project.optional-dependencies]
 # DERIVED BY WALKING EVERY TEST MODULE'S TOP-LEVEL IMPORTS one hop through the
-# local modules, rather than by guessing - the note spec/requirements-ci.txt
-# carries, kept with the list. A module-scope import in a collected test file is
+# local modules, rather than by guessing. A module-scope import in a collected test file is
 # a COLLECTION ERROR, so a missing one takes the suite down rather than skipping
 # a file.
 test = ["pytest", "pytest-xdist", "pillow", "numpy"]
@@ -82,3 +81,7 @@ packages = ["portrayal", "portrayal_intake", "portrayal_dev", "portrayal_bench",
 
 [tool.pytest.ini_options]
 testpaths = ["spec/tests"]
+# TESTS THAT WAIT ON ONE SHARED RUN GO TO ONE WORKER (spec/tests/onebuild.py).
+# `loadgroup` is `load` for every test without an `xdist_group` mark, and does
+# nothing at all without `-n`.
+addopts = "--dist loadgroup"

@@ -1,0 +1,41 @@
+format: 1
+kind: component
+name: button-led-sq
+version: 1.0.0
+class: button
+profile: server
+description: >-
+  A square lit push button, the lamp being the whole button face. Drawn first
+  for the HPE Gen10 ProLiant DL160 front panel, whose Power On/Standby and UID
+  buttons are this part, and kept here because it is a shape, not a product
+provenance:
+  sources: >-
+    DL160 Gen10 User Guide a00066666en_us, "Front panel LEDs and buttons"
+    (native figures GUID-06BF9681 and GUID-812F8899, both fronts) and its table;
+    the straight-on 4 LFF photograph in newserverlife's review.
+  size: >-
+    photo-measured - 4.0 square. On the photograph the UID button is 10 px and
+    the power button 11 px across at 2.605 px/mm - 3.8 and 4.2 - and the User
+    Guide close-ups draw them the same size, so one part at their mean. At this
+    resolution a pixel is 0.4 mm.
+  states: >-
+    The union of what the two buttons show. Power On/Standby: solid green system
+    on; flashing green power-on sequence; solid amber standby; off no power.
+    UID: solid blue activated; flashing blue remote management, firmware upgrade
+    or iLO reboot. A placement picks the colours it uses; the part carries all
+    of them because it is the same button.
+size: {w: 4.0, h: 4.0}
+size-confidence: {w: photo-measured, h: photo-measured}
+elements:
+  lamp:
+    at: [0.5, 0.5]
+    size: [3.0, 3.0]
+    class: led
+    states:
+      - 'off'
+      - {name: green, color: '#22c55e'}
+      - {name: green-flashing, color: '#22c55e', behavior: {mode: blinking, rate: 1}}
+      - {name: amber, color: '#f59e0b'}
+      - {name: blue, color: '#3b82f6'}
+      - {name: blue-flashing, color: '#3b82f6', behavior: {mode: blinking, rate: 1}}
+skins: [default]

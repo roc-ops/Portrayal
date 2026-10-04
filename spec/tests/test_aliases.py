@@ -141,10 +141,19 @@ def test_the_hcl_names_the_issue_asked_about_resolve():
     # is when this line changes.
     for name, want in [("AS9817-64O", "ais800-64o"), ("DCS560", "ais800-64o"),
                        ("AS9716-32D", "dcs510"), ("CSR440", "csr440"),
-                       ("DCS203", "as7326-56x"), ("NCP-40C", "s9700-53dx")]:
+                       ("DCS203", "as7326-56x")]:
         assert by.get(name.casefold()) == [want], name
-    # the DriveNets name that maps to either of a pair names both
-    assert sorted(by["ncp-96x6c-s"]) == ["s9600-102xc", "s9601-102xc"]
+    # A DRIVENETS NAME IS DRIVENETS' LISTING NOW, not an alias on the metal
+    # (#674): drivenets/<box>/listing.yaml carries `model: NCP-40C`, which
+    # search and the picker read, and the UfiSpace manifest no longer claims it.
+    assert "ncp-40c" not in by and "ncp-96x6c-s" not in by
+    listed = {}
+    for f in LIB.glob("devices/drivenets/*/listing.yaml"):
+        ls = load_yaml(f)
+        if ls.get("model"):
+            listed.setdefault(ls["model"].casefold(), []).append(ls["hardware"])
+    assert sorted(listed["ncp-40c"]) == ["edgecore/cor550", "ufispace/s9700-53dx"]
+    assert listed["ncp-96x6c-s"] == ["ufispace/s9601-102xc"]
 
 
 # ---------------------------------------------------------------- outputs ---

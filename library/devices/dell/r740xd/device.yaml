@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 24.0.1
+version: 27.0.0
 maturity: draft
 manufacturer: Dell
 model: PowerEdge R740xd
@@ -49,9 +49,12 @@ provenance:
       drawing - the r750 master draws 22 of its 24 carriers with an identical outline at y
       4.01..83.02, height 79.01 mm (bays 1 and 24 catch chassis paths and are excluded).
       Correcting the 0.7% by which that master draws the face 87.39 mm tall instead of 86.8 gives
-      78.48. common/drive-carrier-25 carries 79.4 from an independent source, and 0.5% agreement
-      between a render and a line drawing is why that figure stands rather than being re-derived
-      here.
+      78.48, and the face-on render's seams give 79.4: 0.5% agreement between a render and a line
+      drawing is why the BAY stands at 79.4. THE BAY IS NOT THE CARRIER. common/drive-carrier-25@2
+      is the carrier's own 15.3 x 73.0 face, from the 16G R760 and R660 masters and Dell's isolated
+      carrier master, and sits centred in this 17.868 x 79.4 bay with the chassis showing round
+      it - 2.6 mm between carriers, which is the 13.71 + 3.96 rail spacing this device's ISM figure
+      measured. @1 drew the bay's outline as the carrier's; see that part's provenance/size.
   right-control-panel:
     note: >-
       THE R740xd AND R750 SHARE THIS PANEL, which is what licenses reading exact vector geometry
@@ -168,6 +171,7 @@ chassis:
   width: 434.0
   height: 86.8
   depth: 737.5
+  ru: 2
   color: '#2f3439'
   edge: '#1d2125'
   silk: '#c9ced3'
@@ -421,6 +425,9 @@ gaps:
       AND TABLE 28 HAS A MID DRIVE TRAY in three of its ten rows. This device
       models no mid bay at all, which is a whole third drive location missing
       rather than a detail.
+      RE-READ WHEN `ru: 2` WAS STATED (#734), and all nine gaps still open. The
+      chassis had no rack units at all, so its DCIM exports called a 2U server
+      1U; stating them moves nothing on any face and settles none of these.
     wanted: >-
       NOW DEMONSTRABLE RATHER THAN HYPOTHETICAL. `rear-2-lff` draws a correct
       2 x 3.5 inch rear on a 24 x 2.5 inch front, and ISM table 28 lists no such
@@ -681,76 +688,76 @@ views:
            accepts: [dell/control-panel-left-14g@1], default: dell/control-panel-left-14g@1,
            group: panels, rel-pos: 1}
         - {id: drive-0, at: [26.884, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
            group: drives, rel-pos: 0}
         - {id: drive-1, at: [44.752, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
            group: drives, rel-pos: 1}
         - {id: drive-2, at: [62.620, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
            group: drives, rel-pos: 2}
         - {id: drive-3, at: [80.488, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
            group: drives, rel-pos: 3}
         - {id: drive-4, at: [98.356, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
            group: drives, rel-pos: 4}
         - {id: drive-5, at: [116.224, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
            group: drives, rel-pos: 5}
         - {id: drive-6, at: [134.092, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
            group: drives, rel-pos: 6}
         - {id: drive-7, at: [151.960, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
            group: drives, rel-pos: 7}
         - {id: drive-8, at: [169.828, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
            group: drives, rel-pos: 8}
         - {id: drive-9, at: [187.696, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
            group: drives, rel-pos: 9}
         - {id: drive-10, at: [205.564, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
            group: drives, rel-pos: 10}
         - {id: drive-11, at: [223.432, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
            group: drives, rel-pos: 11}
         - {id: drive-12, at: [241.300, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
            group: drives, rel-pos: 12}
         - {id: drive-13, at: [259.168, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
            group: drives, rel-pos: 13}
         - {id: drive-14, at: [277.036, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
            group: drives, rel-pos: 14}
         - {id: drive-15, at: [294.904, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
            group: drives, rel-pos: 15}
         - {id: drive-16, at: [312.772, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
            group: drives, rel-pos: 16}
         - {id: drive-17, at: [330.640, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
            group: drives, rel-pos: 17}
         - {id: drive-18, at: [348.508, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
            group: drives, rel-pos: 18}
         - {id: drive-19, at: [366.376, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
            group: drives, rel-pos: 19}
         - {id: drive-20, at: [384.244, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
            group: drives, rel-pos: 20}
         - {id: drive-21, at: [402.112, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
            group: drives, rel-pos: 21}
         - {id: drive-22, at: [419.980, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
            group: drives, rel-pos: 22}
         - {id: drive-23, at: [437.848, 4.0], size: {w: 17.868, h: 79.4},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1], default: common/drive-blank-25@1,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
            group: drives, rel-pos: 23}
       placements:
         - {ref: dell/power-button-14g@1, id: power-btn, at: [458.80, 3.17], for: chassis,
@@ -1147,7 +1154,7 @@ views:
         # drive-12 and drive-13, which are ALREADY THE NAMES OF TWO FRONT BAYS:
         # this chassis draws a 24-bay front numbered 0-23.
         # Named that way, lint reported `config full-24: bay drive-12 ref
-        # common/drive-carrier-25@1 not in accepts` - the full-24 configuration
+        # common/drive-carrier-25@2 not in accepts` - the full-24 configuration
         # fits a 2.5 inch carrier into every drive-N it can name, and it had
         # just been handed two more that take a 3.5 inch one. A silent version
         # of that would have put the wrong drive in the wrong bay.
@@ -1222,7 +1229,7 @@ views:
            default: dell/riser-2a-14g@2,
            group: risers, rel-pos: 2, only-in: [lff12-rc3-1a2a, lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a, lff12-rc9-1a2d3a,
                      lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b, sff24-rc3-1a2a,
-                     sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-connectx, sff24-rc4-1a2a3a-n3100-4c, sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a,
+                     sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-connectx, sff24-rc4-1a2a3a-connectx-100g, sff24-rc4-1a2a3a-n3100-4c, sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a,
                      sff24-rc15-1a2e3b, sff24-rc16-1d2e3b, sff24-rc17-1a2f3b]}
         # A 12 mm DISAGREEMENT WAS REPORTED AGAINST THE CAD HERE AND IT WAS
         # NOT REAL. It came from the rear handle's upper 'window', read off a
@@ -1263,7 +1270,7 @@ views:
            accepts: [dell/riser-3a-14g@2, dell/riser-3b-14g@2],
            default: dell/riser-3a-14g@2,
            group: risers, rel-pos: 3, only-in: [lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a, lff12-rc9-1a2d3a,
-                     lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b, sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-connectx, sff24-rc4-1a2a3a-n3100-4c,
+                     lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b, sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-connectx, sff24-rc4-1a2a3a-connectx-100g, sff24-rc4-1a2a3a-n3100-4c,
                      sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a, sff24-rc15-1a2e3b,
                      sff24-rc16-1d2e3b, sff24-rc17-1a2f3b]}
         - {id: ndc, at: [139.6, 66.4], size: {w: 90.3, h: 14.5},
@@ -1285,47 +1292,47 @@ views:
         # rear, which Dell also numbers 12. The form factor is what tells the two
         # rears apart.
         - {id: rear-sff-12, at: [173.0, 4.9], size: {w: 79.4, h: 17.868},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
-           default: common/drive-blank-25@1, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1],
+           default: common/drive-blank-25@2, rotate: 270,
            only-in: [lff12-rsff4-rc0-noriser, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
                      lff12-mlff4-rsff4-rc0-noriser, lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c],
            group: drives-rear, rel-pos: 1}
         - {id: rear-sff-13, at: [173.0, 22.8], size: {w: 79.4, h: 17.868},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
-           default: common/drive-blank-25@1, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1],
+           default: common/drive-blank-25@2, rotate: 270,
            only-in: [lff12-rsff4-rc0-noriser, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
                      lff12-mlff4-rsff4-rc0-noriser, lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c],
            group: drives-rear, rel-pos: 2}
         - {id: rear-sff-14, at: [331.0, 4.9], size: {w: 79.4, h: 17.868},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
-           default: common/drive-blank-25@1, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1],
+           default: common/drive-blank-25@2, rotate: 270,
            only-in: [lff12-rsff4-rc0-noriser, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
                      lff12-mlff4-rsff4-rc0-noriser, lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c],
            group: drives-rear, rel-pos: 3}
         - {id: rear-sff-15, at: [331.0, 22.8], size: {w: 79.4, h: 17.868},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
-           default: common/drive-blank-25@1, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1],
+           default: common/drive-blank-25@2, rotate: 270,
            only-in: [lff12-rsff4-rc0-noriser, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
                      lff12-mlff4-rsff4-rc0-noriser, lff12-mlff4-rsff4-rc1-1b2b, lff12-mlff4-rsff4-rc2-1b2c],
            group: drives-rear, rel-pos: 4}
         - {id: drive-24, at: [173.0, 4.9], size: {w: 79.4, h: 17.868},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
-           default: common/drive-blank-25@1, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1],
+           default: common/drive-blank-25@2, rotate: 270,
            only-in: [sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c,
                      sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b, sff24-msff4-rsff4-rc2-1b2c], group: drives-rear, rel-pos: 12}
         - {id: drive-25, at: [173.0, 22.8], size: {w: 79.4, h: 17.868},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
-           default: common/drive-blank-25@1, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1],
+           default: common/drive-blank-25@2, rotate: 270,
            only-in: [sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c,
                      sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b, sff24-msff4-rsff4-rc2-1b2c], group: drives-rear, rel-pos: 13}
         - {id: drive-26, at: [331.0, 4.9], size: {w: 79.4, h: 17.868},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
-           default: common/drive-blank-25@1, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1],
+           default: common/drive-blank-25@2, rotate: 270,
            only-in: [sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c,
                      sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b, sff24-msff4-rsff4-rc2-1b2c], group: drives-rear, rel-pos: 14}
         - {id: drive-27, at: [331.0, 22.8], size: {w: 79.4, h: 17.868},
-           accepts: [common/drive-carrier-25@1, common/drive-blank-25@1, std/drive-25@1],
-           default: common/drive-blank-25@1, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1],
+           default: common/drive-blank-25@2, rotate: 270,
            only-in: [sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c,
                      sff24-msff4-rsff4-rc0-noriser, sff24-msff4-rsff4-rc1-1b2b, sff24-msff4-rsff4-rc2-1b2c], group: drives-rear, rel-pos: 15}
       placements:
@@ -1445,7 +1452,7 @@ views:
         - {ref: dell/pcie-slot-strip-r3-14g@1, id: slot-strip-r3,
            at: [416.375, 4.0], group: furniture, rel-pos: 23,
            only-in: [lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a, lff12-rc9-1a2d3a,
-                     lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b, sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-connectx, sff24-rc4-1a2a3a-n3100-4c,
+                     lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b, sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-connectx, sff24-rc4-1a2a3a-connectx-100g, sff24-rc4-1a2a3a-n3100-4c,
                      sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a, sff24-rc15-1a2e3b,
                      sff24-rc16-1d2e3b, sff24-rc17-1a2f3b]}
         # THE TAB THE LEFT THUMBSCREW IS BOLTED TO, drawn after the bays
@@ -1509,14 +1516,14 @@ views:
            at: [267.32, 1.81], group: furniture, rel-pos: 24,
            only-in: [lff12-rc3-1a2a, lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a,
                      lff12-rc9-1a2d3a, lff12-rc15-1a2e3b, lff12-rc16-1d2e3b,
-                     lff12-rc17-1a2f3b, sff24-rc3-1a2a, sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-connectx, sff24-rc4-1a2a3a-n3100-4c, sff24-rc5-1b2a3a,
+                     lff12-rc17-1a2f3b, sff24-rc3-1a2a, sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-connectx, sff24-rc4-1a2a3a-connectx-100g, sff24-rc4-1a2a3a-n3100-4c, sff24-rc5-1b2a3a,
                      sff24-rc6-1d2a3a, sff24-rc9-1a2d3a, sff24-rc15-1a2e3b, sff24-rc16-1d2e3b,
                      sff24-rc17-1a2f3b]}
         - {ref: dell/riser-divider-plate-14g@1, id: riser-3-divider-plate,
            at: [297.10, 1.81], group: furniture, rel-pos: 25,
            only-in: [lff12-rc4-1a2a3a, lff12-rc5-1b2a3a, lff12-rc6-1d2a3a, lff12-rc9-1a2d3a,
                      lff12-rc15-1a2e3b, lff12-rc16-1d2e3b, lff12-rc17-1a2f3b,
-                     sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-connectx, sff24-rc4-1a2a3a-n3100-4c, sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a,
+                     sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-connectx, sff24-rc4-1a2a3a-connectx-100g, sff24-rc4-1a2a3a-n3100-4c, sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a,
                      sff24-rc15-1a2e3b, sff24-rc16-1d2e3b, sff24-rc17-1a2f3b]}
         - {ref: dell/rear-bay-screw-tab-14g@1, id: rear-bay-screw-tab,
            at: [144.26, 3.09], group: furniture, rel-pos: 20}
@@ -1933,7 +1940,7 @@ views:
                      lff12-rsff4-rc0-noriser, lff12-rsff4-rc1-1b2b, lff12-rsff4-rc2-1b2c,
                      sff24-rc0-noriser, sff24-rc1-1b2b, sff24-rc15-1a2e3b,
                      sff24-rc16-1d2e3b, sff24-rc17-1a2f3b, sff24-rc2-1b2c, sff24-rc3-1a2a,
-                     sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-connectx, sff24-rc4-1a2a3a-n3100-4c, sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a,
+                     sff24-rc4-1a2a3a, sff24-rc4-1a2a3a-connectx, sff24-rc4-1a2a3a-connectx-100g, sff24-rc4-1a2a3a-n3100-4c, sff24-rc5-1b2a3a, sff24-rc6-1d2a3a, sff24-rc9-1a2d3a,
                      sff24-rsff4-rc0-noriser, sff24-rsff4-rc1-1b2b, sff24-rsff4-rc2-1b2c]}
         # THE MID-DRIVE TRAY, on the nine configurations that have one. It is
         # UNDER THE LID, so it is placed before the cover and the cover draws
@@ -2337,6 +2344,20 @@ configurations:
       riser-3: dell/riser-3a-14g@2
       riser-2/slot-4: nvidia/mcx623102a-fh@1
       riser-2/slot-6: nvidia/mcx623102a-lp@1
+  sff24-rc4-1a2a3a-connectx-100g:
+    kind: example
+    skins: {db9: teal}
+    description: >-
+      Riser configuration 4 with NVIDIA ConnectX-6 Dx MCX623106A dual-port
+      100GbE QSFP56 adapters seated in riser 2: the full-height build in slot 4
+      and the low-profile build in slot 6 - the same board on its two
+      brackets. The 100G sibling of the MCX623102A build above.
+    bays:
+      riser-1: dell/riser-1a-14g@2
+      riser-2: dell/riser-2a-14g@2
+      riser-3: dell/riser-3a-14g@2
+      riser-2/slot-4: nvidia/mcx623106-fh@1
+      riser-2/slot-6: nvidia/mcx623106-lp@1
   sff24-rc5-1b2a3a:
     kind: orderable
     default: true

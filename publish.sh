@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Everything build.sh makes, plus the consumer artifacts: the DCIM exports.
+# Everything build.sh makes, plus the consumer artifacts: the DCIM exports and
+# the npm packages.
 #
 # WHY THIS IS A SEPARATE SCRIPT. The export was half of `build.sh` - 39 seconds
 # against 41 for the lint, the render and the indexes together - and its output
@@ -63,10 +64,16 @@ python3 spec/tools/portrayal/dcim_export.py --dist "$OUT" --modules \
 modules_pid=$!
 python3 -c "import json,sys; print('\n'.join(d['name'] for d in json.load(open(sys.argv[1]))['devices']))" "$OUT/devices.json" \
   | xargs -P "$JOBS" -I{} python3 spec/tools/portrayal/dcim_export.py --dist "$OUT" \
-      --out library/exports --device {} --nos arcos ${IMAGES+"${IMAGES[@]}"} >/dev/null
+      --out library/exports --device {} ${IMAGES+"${IMAGES[@]}"} >/dev/null
 wait "$modules_pid"
 
 # The exports leave with a DCIM the same way dist leaves with a page; the
 # licence and NOTICE go with them for the same reason build.sh copies them.
 cp LICENSE NOTICE library/exports/
 echo "exported $(find library/exports -name '*.yaml' | wc -l | tr -d ' ') documents -> library/exports"
+
+# The same build as the npm packages it ships as, one per device (#528). It
+# publishes nothing - that is `--from-registry --publish`, run at release - but
+# it fails here when a package outgrows what the CDN will serve, rather than on
+# the day of the release.
+python3 spec/tools/portrayal/npm_packages.py --dist "$OUT" --out library/packages

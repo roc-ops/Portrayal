@@ -1,0 +1,63 @@
+format: 1
+kind: component
+name: riser-2q-cage-16g
+version: 1.1.0
+class: riser
+profile: server
+description: >-
+  the riser 2Q cage of a 16th-generation 1U PowerEdge (R660) - two low-profile Gen5 windows set wider apart than riser 2A's, the vent block at the left and the latch at the right, slot numbers 1 and 2 printed on the cage
+attrs:
+  power-absent: not-applicable
+provenance:
+  power: >-
+    NOT APPLICABLE - sheet metal and print; the riser that composes it carries
+    the power record.
+  why-this-is-its-own-part: >-
+    THE METAL IS SHARED AND THE WIRING IS NOT. Dell's riser variants on this
+    cage (riser 2Q) differ in which processor and PCIe generation each slot
+    carries (ISM table 111), and not in anything the rear face shows - so the
+    face is drawn once, here, and each variant composes it, as
+    dell/riser-2-fh-plate-14g@1 does for the 14th generation.
+  sources: >-
+    drawing - the VisioCafe master `R660 2xPCI LP Gen5 Rear` (r660-2xpci-lp-gen5-rear-1), read on the 434 body
+    at 22.24 px/mm with y scaled 0.9926 (see dell/psu-1400w-ac-60mm@1,
+    provenance/stencil-scale). Facts read, art not traced.
+  size: >-
+    drawing - 186.50 x 19.80 from rear-face x 107.00, y 2.20: the riser's
+    extent between its neighbours on the master, at the height of
+    dell/riser-3-blank-16g@1, the plate riser 3's place takes without it.
+  features: >-
+    drawing - windows 139.01..197.69 and 217.79..276.47 (see windows; the master's filler plates run 131.80..201.80 and 213.68..283.68), the vent block 109.71..127.88, the latch 284.6..292.1. THE PRINT IS FROM THE PHOTOGRAPH, NOT THE MASTER: the StorageReview rear photograph of a real R660 with riser 2Q (photos/r660/storagereview, -01.jpg) prints a dark strip along the top of each slot with a down-pointing triangle and the slot number centred over it and GEN 5 at its right end, where the master prints 1 with a left-pointing triangle at 203.56 and 2 at 217.22. A perspective photograph, so the strip is placed on the windows and its glyphs by fraction, not measured, all in rear-face millimetres.
+  windows: >-
+    THE WINDOW IS THE BRACKET'S FULL-HEIGHT BODY, 56.18 of a low-profile
+    bracket's 79.20 (std/pcie-bracket-lp@1: chamfers from the tip to 11.85,
+    the keyed step from 68.03), placed where the slot seats it. The masters
+    draw Dell's fillers as plain plates 70 wide and the first windows were
+    that wide, which showed a card's chamfers and keyed step at both ends and
+    stacked two of them at the junction between slots. Every master vent field
+    falls inside the narrower window, so a filler reads as before; the margins
+    are cage metal of nearly its grey. The R740xd's riser windows are cut the
+    same way. ON THE FLANGE END THE WINDOW RUNS 2.50 PAST THE BODY: the
+    connector opening ends 2.13 beyond it (CEM: 70.16 from the tip against
+    the body's 68.03), and stopping at the body clipped a card's outer port.
+  numerals: >-
+    drawing - THE SLOT NUMBERS ARE PRINTED ON THE RISER, NOT THE CHASSIS: the
+    masters move them with the cage (the full-height risers print theirs beside
+    the window with a right-pointing triangle; riser 2Q prints its numbers and
+    GEN 5 on a strip over each slot, per the photograph), and the rear-storage master, which has no riser
+    2, prints no 1 or 2. Glyph heights 2.5 on the masters; the font is not
+    identified.
+size: {w: 186.50, h: 19.80}
+size-confidence: {w: drawing, h: drawing}
+relief:
+  features:
+  - node: plate
+    out: 20.0
+    shape: true
+    color: '#cfd3d7'
+    confidence: estimated
+    source: >-
+      estimated by analogy with riser 2A's cage, 20 mm proud in Dell's service model; riser 2Q is not in the model. Its windows are cut through it, so a card's face is seen down
+      them and the bracket's folded flange, 9.4 proud at the end the window
+      does not show, is inside the cage, as on the R740xd's riser shrouds.
+skins: [default]

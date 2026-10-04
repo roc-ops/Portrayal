@@ -1,0 +1,79 @@
+format: 1
+kind: module
+name: riser-secondary-dl160
+version: 1.0.0
+class: riser
+behaviour: fills
+profile: server
+description: >-
+  The secondary PCI riser cage of the Gen10 ProLiant DL160 as the rear
+  presents it, with the x16 riser board (878540-001) - PCIe 3.0 slot 3, low
+  profile, wired to processor 2, a window in the cage over a standard bracket
+attrs:
+  riser-board: 878540-001
+provenance:
+  sources: >-
+    The straight-on rear photograph in newserverlife's DL160 Gen10 review
+    (newserverlife.com/upload/iblock/386/8_opt.jpeg), 2.90 x 2.87 px/mm; see
+    hpe/psu-865408-b21@1 for the panel gate on that image. DL160 Gen10 User
+    Guide a00066666en_us, 'Rear panel components' item 3 (PCIe slot 3, secondary
+    riser for processor 2, optional) and 'PCIe expansion slot definitions';
+    Maintenance and Service Guide a00066664en_us, secondary riser board x16,
+    878540-001.
+  size: >-
+    photo-measured - 82.5 x 21.0: from the bracket right of slot 2 to the
+    plate's right end beside the supply bays (x 598..837 px), and down to just
+    under slot 3's plate.
+  windows: >-
+    photo-measured - slot 3's blank shows from 3.4 on this face to about 70, its
+    right end softer on the image. The skin's opening is 8.5..73.5 by 1.6..19.8,
+    the same 65.0 x 18.2 as slot 2's and the same distance from its bracket's
+    tip, so one blank serves both. The bay behind it is a low-profile bracket's
+    79.20 x 18.42, its tip at the cage's right end, 9.0 past the opening, so the
+    window shows the bracket's connector opening (see hpe/riser-primary-dl160@1,
+    `placing`).
+  handedness: >-
+    drawing - turned over (rotate 180, tip right). The User Guide's 'Installing
+    an expansion board' figure for slot 3 looks from the front of the server
+    toward the rear and pushes the card to the LEFT of the picture into the
+    riser, which is the right of this face - the supply side - and its System
+    board components figure puts the secondary riser connector there. The
+    bracket's tip is the end at the edge connector.
+  slots: >-
+    datasheet - User Guide: slot 3 PCIe 3.0, x16 connector, negotiable 16/8/4/1,
+    low-profile half-length, and 'a second processor must be installed' to use
+    it.
+  depth: >-
+    estimated - 150, as hpe/riser-primary-dl160@1; this cage is not in the
+    QuickSpecs Internal View.
+size: {w: 82.5, h: 21.0, d: 150.0}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+body: {depth: 150.0, color: '#b9bec4'}
+elements:
+  plate: {at: [0.0, 0.0], size: [82.5, 21.0], class: bezel}
+bays:
+  slot-3:
+    slot: {connector: x16, lanes: 16, height: low, length: half, processor: 2, generation: 3}
+    rotate: 180
+    behind: true
+    at: [3.3, 1.5]
+    size: [79.20, 18.42]
+    accepts: [hpe/expansion-slot-blank-lp@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1, nvidia/mcx4111a-lp@1, nvidia/mcx4121a-lp@1, nvidia/mcx4131a-lp@1, nvidia/mcx512a-lp@1, nvidia/mcx512f-lp@1, nvidia/mcx515a-lp@1, nvidia/mcx516a-lp@1, nvidia/mcx621102-lp@1, nvidia/mcx621202-lp@1, nvidia/mcx623102a-lp@1, nvidia/mcx623105-lp@1, nvidia/mcx623106-lp@1, nvidia/mcx713106-lp@1, nvidia/mcx715105-lp@1, nvidia/mcx75310-lp@1, nvidia/mcx75510-lp@1, nvidia/mcx755106-lp@1]
+    default: hpe/expansion-slot-blank-lp@1
+relief:
+  features:
+  - node: latch
+    out: 12.0
+    color: '#b3b9bf'
+    confidence: estimated
+    source: >-
+      the latch housing a bracket's flange lands in. The User Guide's
+      'Installing an expansion board' figures close a latch over the flange at
+      the cage's outer end, PartSurfer's photograph of the cage (878538-001)
+      shows a blue latch at each end of its rear edge, and a reseller's close-up
+      of the rear (2beshop.com/images/products/HPE-ProLiant-DL160-Gen10/10.jpg)
+      shows the housing standing proud of the rear wall beside slot 2. HOW FAR
+      is not measured: 12 is drawn because a bracket's folded flange is 9.40
+      proud (PCIe CEM 5.0 figure 11-9) and is inside the housing, not sticking
+      out of the rear wall as it did before this feature existed
+skins: [default]

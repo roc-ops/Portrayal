@@ -472,7 +472,63 @@ def test_the_comparison_layer_can_now_reach_them():
     part, celestica/fan-40@1, serves both - counted twice because two datasheets state it
     twice, not because there are two rears. The two models' FRONTS differ; nothing about
     the cooling does.
+
+    SEVENTY-FOUR IS THE CELESTICA DS5000, 2+1 over THREE bays - the hardware guide's own
+    words, "2+1 redundant fans", against a rear elevation that draws three fan modules
+    (FAN-1 to FAN-3, celestica/fan-2u-81@1), so the digit form and the bay count agree
+    without argument. Its datasheet says only "N+1 redundant fans", which is the same claim
+    with the number left out; the guide supplies the number and the metal confirms it. How
+    many rotors sit inside each module is not stated anywhere, so the figure is read at the
+    module level, which is the level the guide counts at.
+
+    SEVENTY-FIVE IS THE CELESTICA DS2000, 3+1 over four bays: its datasheet says "3+1
+    redundant fans" and its installation guide "four fan modules in the standard
+    configuration", and the guide's rear elevation draws four modules, two either side of
+    the rear management cluster. Its fan is not the DS4000's: the outline, grille and
+    handle band agree to 0.3 mm but the latch sits at the other end of the handle, so it
+    is celestica/fan-40-right-latch@1. Its sibling the DS1000 is not counted, and should
+    not be: its datasheet's "2+1 Fixed 40 mm x 40 mm x 28 mm fans" are fixed fans behind
+    round grilles, not bays, so there is no group for the comparison layer to reach.
+
+    SEVENTY-SIX AND SEVENTY-SEVEN ARE THE CELESTICA DS6000 AND DS6001, and unlike the
+    DS4000 pair they are two different rears. The DS6000 states 4+1 over FIVE module bays
+    ("4+1 field replaceable fans (dual-rotor, 9+1 redundancy)") - the form counts modules,
+    and the 9+1 in the same sentence counts the ten rotors behind them, two per module, so
+    the bay count and the form agree and the rotor figure is carried in the note. The
+    DS6001 is the first entry whose form comes from NO VENDOR DOCUMENT: its datasheet gives
+    no fan count at all, and the 3+1 over four bays is the STORDIS rear render's own
+    callout, "3+1 FANS". It is counted because a stated figure is a stated figure, and its
+    note says where it was read so the thinner source is visible.
+
+    SEVENTY-EIGHT AND SEVENTY-NINE ARE THE CELESTICA DS3000 AND DS3001, 3+1 over four bays
+    each, and unlike the DS4000 pair they are two different rears. The DS3000 is a 1RU
+    with four celestica/fan-40@1 trays in two pairs either side of a blank plate, and its
+    datasheet says "3+1 redundant fans". The DS3001 is a 2RU with four
+    celestica/fan-80@1 trays, and its datasheet says "3+1 Redundant/Hot-Swappable Fans".
+    Its guide calls each module "an assembly of dual rotor fan", so eight rotors turn
+    behind the four faces. The digit counts the modules, not the rotors, and the
+    bays agree.
+
+    EIGHTY AND EIGHTY-ONE ARE THE CELESTICA DS4100 AND DS4101, back to the DS4000's
+    6+1 over seven bays, from their own two datasheets ("6+1 redundant fans" on each) and
+    their own two rear elevations, which count seven trays between the two supplies. They
+    seat the same fan part as the DS4000 - the tray's lamp, pitch and face all check against
+    it on each rear - and what differs is only its finish: the DS4100's trays are orange, the
+    DS4101's black with the latch black too, set per configuration as fields. Two
+    installation guides, so unlike the DS4000/DS4001 pair these are two rears measured
+    twice, not one rear counted twice.
+
+    EIGHTY-TWO IS THE DELL R660, n+1 over four dual-rotor modules, from its
+    technical guide's thermal features ("The R660 allows N+1 fan redundancy,
+    allowing continuous operation with one fan failure in the system"). The four
+    bays are in the top view, where the fans are: a 1U server's fans are inside
+    the chassis, not on a face.
+
+    EIGHTY-THREE IS THE HPE DL160 GEN10, n+1 over seven single-rotor bays, from
+    its User Guide's fan mode behaviour (the redundant fan kit adds one fan, and
+    in redundant mode one rotor failure leaves the system running). Its bays are
+    in the top view too.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 73, n
+    assert n == 83, n
