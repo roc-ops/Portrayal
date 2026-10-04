@@ -79,3 +79,12 @@ def test_a_default_equal_to_the_parts_own_is_not_handed_down(tmp_path):
     g, _ = render_mod.instance_group(lib, "local/host@1", "h", [0, 0], None, None, None, None)
     tab = next(e for e in g.iter() if e.get("id") == "h--tab")
     assert tab.get("data-latch-color") is None
+
+
+def test_an_empty_value_is_as_drawn_and_takes_the_hosts_default(tmp_path):
+    """An empty string is the build's "leave it as drawn", the same as no
+    value. With the key absent the tab wears the host's default; cleared to
+    empty it must wear the same, not fall back to the tab's own grey."""
+    lib = _host_default(_lib(tmp_path, FIELD), "#d9cba3")
+    assert grip_fill(lib, {"latch-color": ""}) == "#d9cba3"
+    assert grip_fill(lib, {"latch-color": ""}) == grip_fill(lib, None)

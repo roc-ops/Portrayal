@@ -1363,7 +1363,11 @@ def _inherited_fields(lib, contract, merged, part):
         child = None
     theirs = (child or {}).get("fields") or {}
     for k, f in (contract.get("fields") or {}).items():
-        if k in merged:
+        # AN EMPTY VALUE IS "AS DRAWN", THE SAME AS NO VALUE: it falls through
+        # to the default, or a cleared colour would leave the composed part in
+        # its own default while the same host with the key absent hands down
+        # the host's.
+        if merged.get(k) not in (None, ""):
             out[k] = merged[k]
             continue
         default = (f or {}).get("default")
