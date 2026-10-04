@@ -11,10 +11,10 @@ description: >-
   (MPM, GPON + XGS-PON) on every port and 25GS-PON on the even ports, in sixteen SFP-DD
   cages marked 01 to 16. Authored lying flat, as the MF-8 seats it when the shelf is
   mounted horizontally: a slate plate with an ejector lever at each lower corner, the board
-  name, the PWR and ALM lamps and a label at the left, one row of sixteen cages on a 19.9 mm
-  pitch with four vent openings above each, and a strip under the row carrying each port's
-  numeral between its two PON lamps. The two part numbers share one face, so they are one
-  component.
+  name, the PWR and ALM lamps and a label at the left, and one row of sixteen cages on a
+  19.9 mm pitch, each on its own sawtooth step turned to face right, with four vent
+  openings above it and, on the strip under the row, its numeral between two rectangular
+  PON light pipes. The two part numbers share one face, so they are one component.
 unplaced: >-
   the lt-1 to lt-8 bays of nokia/lmfs-f (the Lightspan MF-8 shelf); wired when the shelf
   lands. Delete this key then.
@@ -50,8 +50,9 @@ provenance:
     / 25g even, `pon:` flavour per port, card-level `xgs-pon: 16`), the two-lamps-per-port
     states and their colours, and the ALM / PWR states - the two guides give the same LED
     tables. NOT taken from it: every position and size. This card lies flat at 400.5 x 24.5
-    on a 19.9 mm pitch (the FX card stands upright at 25 x 405 on 20.62), its cages are not
-    turned, its lamps flank the numeral under each cage rather than standing beside it,
+    on a 19.9 mm pitch (the FX card stands upright at 25 x 405 on 20.62), its cages stand
+    on a sawtooth whose angle this card's figures resolve (the FX contract leaves its own
+    unresolved), its lamps are rectangular light pipes flanking the numeral under each cage,
     its ejectors are levers folded along the lower edge with no thumbscrews drawn, the
     board lamps sit at the left end beside the board name, and the power figures are this
     board's own.
@@ -94,11 +95,38 @@ provenance:
     18.1 / 18.2 wide, left lever tip 70.9 / 70.6, right 328.3 / 329.9. Cage pitch 44.0 px
     = 19.87 mm on the figure and 19.94 on the render (fourteen intervals each); 19.9
     carried. Positions are good to about +-0.5 mm at this resolution. Cage row y 7.4 to
-    17.4; vent openings 2.2 mm square at y 2.5, four per port on 3.67, the first hidden by
-    the plate edge; numeral strip y 18.8 to 23.4 with each numeral 3.85 mm right of its
+    17.4; vent openings 2.2 mm square at y 2.5, four per port on 3.67, starting at the
+    tooth crest; numeral strip y 18.8 to 23.4 with each numeral 3.85 mm right of its
     cage centre and a lamp 4.85 mm either side of the numeral; board name at x 26.7; PWR
     lamp at (31.5, 10.0) and ALM at (31.5, 15.1); ejector blocks 18.1 wide from y 9.9 to
     23.3 with lever arms y 19.4 to 23.3.
+  angled-panel: >-
+    estimated - the sixteen cages stand on a sawtooth, one tooth per port on the 19.9 mm
+    pitch. WHICH WAY: every cage faces RIGHT, toward the higher port numbers. Figure 39
+    draws each cage with its left flank showing (a doubled edge 1.6 mm wide on the left of
+    cages 02 to 16, none on the right); Figure 42 (p61), a straight-on photograph of ports
+    11 to 13 with the card upright, shows the EMI fingers of each cage's lower-numbered
+    flank and a plain grey face running from the cage's other side to the next step; the
+    3D view (Figure 40) and the data sheet photograph show the same stagger. So each tooth
+    is a short return on its left, facing left, and a long face on its right, facing
+    right, with the cage at the crest end of the face. THE ANGLE is not dimensioned. Method:
+    Figure 39 draws each cage outline 12.8-12.9 mm wide where an SFP cage is 13.7-14.0,
+    which is 20 to 24 degrees of foreshortening; 22 is carried. The return then has to
+    close the same crest: a 18.58 mm face at 22 degrees rises 7.5 mm, and Figure 39 and
+    Figure 42 show about 1.3 mm of return, so it is 80 degrees over 1.32 mm. DEPTH: the
+    teeth stand in a window between the top rail and the numeral strip; the photograph
+    shows the strip and rail in front of the cages with the light pipes running forward
+    to the strip, so the window is a pocket 10.51 mm deep with the crests 3 mm below the
+    plate. That 3 mm is read by eye and is the softest number here. The std/sfp@1 opening
+    draws 13.4 mm wide on the face.
+  first-cage: >-
+    drawing - the left end plate's edge at x 48.2 stands in front of the start of the
+    first tooth: Figure 39 draws cage 01 from that edge (10.9 mm showing against 12.9 for
+    the others, and three vent openings against four) and the photograph shows the AAPA
+    label ending just short of it. The tooth is whole underneath; port-1 is composed
+    `behind: true` and shows through an opening in the plate art from x 48.2, so the
+    plate covers its left 2.4 mm as it does on the card. In 3D the plate edge is painted
+    on the tooth rather than built in front of it.
   ports: >-
     datasheet - Unit Data Sheet Guide section 8.5 (p59): 16 cages "marked 01 until 16";
     the manual's Table 4 (p38) gives cage label 01 until 16, cage type SFP-DD, ports 1 to
@@ -107,7 +135,7 @@ provenance:
     prints 01 to 16 the same way, so numbering runs left to right with the board name at
     the left. The library has no std/ SFP-DD cage, so each port composes std/sfp@1, the
     SFP opening an SFP-DD cage presents, and says media sfp-dd; the cages stand apart on
-    19.9 mm with a wall between each, so they are single cages, not a ganged block. Speed
+    19.9 mm, each on its own tooth, so they are single cages, not a ganged block. Speed
     is 25g on the even ports and 10g on the odd.
   lamps: >-
     datasheet - Unit Data Sheet Guide section 8.6.2, Figures 41-42 and Tables 18-19
@@ -118,7 +146,15 @@ provenance:
     yellow (provisioned, no ONU ranged) / green (active) / red (transmitter failed or no
     communication with the module). The guide calls them top and bottom for the card
     standing upright and left and right for it lying flat, which is how they are named
-    here. The yellow is drawn #f2c200; Nokia gives no shade.
+    here. The yellow is drawn #f2c200; Nokia gives no shade. SHAPE: they are rectangular
+    light-pipe windows set in notches in the upper edge of the numeral strip, one each
+    side of the numeral. Figure 39 draws each 2.3 x 1.1 mm; Figure 42 (4.6 px/mm, the
+    19.9 mm port pitch as its ruler) shows windows about 3.0 mm along the card by 1.8,
+    4.6 mm either side of the numeral. common/led-rect-sm@1 (2.8 x 1.6, window 2.3 x 1.1)
+    is that shape. The four dark squares above each cage are vent openings, not lamps.
+    Figure 42 puts the numeral nearer the end of its cage than Figure 39 does; it is a
+    photograph of a strip standing in front of recessed cages, so the orthographic
+    figure and the render are followed.
   ejectors: >-
     drawing - Figure 39 and the render both draw the closed levers lying over the lower
     strip, the left one to x 70.8 and the right one from x 329. In a front view they
@@ -127,6 +163,8 @@ provenance:
     PWR; the data sheet photograph, taken from above, shows all sixteen numerals, their
     lamps and ALM. The skin is the front view, so it prints 02 to 14 and PWR and leaves
     the four covered legends out; the numbering rule does not stop at 14, the lever does.
+    Re-read after the sawtooth was modelled: the strip is flat and none of it moved, so
+    the same legends and lamps are covered.
     The six covered lamps are composed `behind: true` so the plate covers them. The
     photograph shows bright metal levers; the render draws them white, which is what the
     skin follows.
@@ -151,14 +189,46 @@ provenance:
   gaps: >-
     (1) no std/sfp-dd cage exists, so the opening is the SFP one, and the export has no
     25GS-PON type, so the even ports export as XGS-PON; (2) the labels are placeholders;
-    (3) the 14.5 mm SFP opening is wider than the 12.9 mm cage outline Figure 39 draws, so
-    the first opening runs 2.4 mm over the plate edge at x 48.2 where the figure shows
-    the plate covering the cage's left side; (4) the small hinge blocks and end lugs of
+    (3) the facet angles and the pocket depth are estimated from front views and one
+    photograph, with no side elevation to fit; (4) the small hinge blocks and end lugs of
     the ejectors are drawn schematically; (5) ejector proudness is not stated anywhere.
 elements:
   part-label: {at: [35.5, 4.0], size: [10.0, 13.5], class: label}
   label-right-1: {at: [368.4, 1.5], size: [5.5, 8.2], class: label}
   label-right-2: {at: [378.4, 1.5], size: [5.4, 8.2], class: label}
+  well: {at: [43.3, 1.3], size: [322.2, 17.5], class: mechanical}
+  return-1: {at: [43.3, 1.3], size: [1.323, 17.5], class: mechanical}
+  face-1: {at: [44.623, 1.3], size: [18.577, 17.5], class: mechanical}
+  return-2: {at: [63.2, 1.3], size: [1.323, 17.5], class: mechanical}
+  face-2: {at: [64.523, 1.3], size: [18.577, 17.5], class: mechanical}
+  return-3: {at: [83.1, 1.3], size: [1.323, 17.5], class: mechanical}
+  face-3: {at: [84.423, 1.3], size: [18.577, 17.5], class: mechanical}
+  return-4: {at: [103.0, 1.3], size: [1.323, 17.5], class: mechanical}
+  face-4: {at: [104.323, 1.3], size: [18.577, 17.5], class: mechanical}
+  return-5: {at: [122.9, 1.3], size: [1.323, 17.5], class: mechanical}
+  face-5: {at: [124.223, 1.3], size: [18.577, 17.5], class: mechanical}
+  return-6: {at: [142.8, 1.3], size: [1.323, 17.5], class: mechanical}
+  face-6: {at: [144.123, 1.3], size: [18.577, 17.5], class: mechanical}
+  return-7: {at: [162.7, 1.3], size: [1.323, 17.5], class: mechanical}
+  face-7: {at: [164.023, 1.3], size: [18.577, 17.5], class: mechanical}
+  return-8: {at: [182.6, 1.3], size: [1.323, 17.5], class: mechanical}
+  face-8: {at: [183.923, 1.3], size: [18.577, 17.5], class: mechanical}
+  return-9: {at: [202.5, 1.3], size: [1.323, 17.5], class: mechanical}
+  face-9: {at: [203.823, 1.3], size: [18.577, 17.5], class: mechanical}
+  return-10: {at: [222.4, 1.3], size: [1.323, 17.5], class: mechanical}
+  face-10: {at: [223.723, 1.3], size: [18.577, 17.5], class: mechanical}
+  return-11: {at: [242.3, 1.3], size: [1.323, 17.5], class: mechanical}
+  face-11: {at: [243.623, 1.3], size: [18.577, 17.5], class: mechanical}
+  return-12: {at: [262.2, 1.3], size: [1.323, 17.5], class: mechanical}
+  face-12: {at: [263.523, 1.3], size: [18.577, 17.5], class: mechanical}
+  return-13: {at: [282.1, 1.3], size: [1.323, 17.5], class: mechanical}
+  face-13: {at: [283.423, 1.3], size: [18.577, 17.5], class: mechanical}
+  return-14: {at: [302.0, 1.3], size: [1.323, 17.5], class: mechanical}
+  face-14: {at: [303.323, 1.3], size: [18.577, 17.5], class: mechanical}
+  return-15: {at: [321.9, 1.3], size: [1.323, 17.5], class: mechanical}
+  face-15: {at: [323.223, 1.3], size: [18.577, 17.5], class: mechanical}
+  return-16: {at: [341.8, 1.3], size: [1.323, 17.5], class: mechanical}
+  face-16: {at: [343.123, 1.3], size: [18.577, 17.5], class: mechanical}
 relief:
   wall: '#8d9298'
   features:
@@ -172,6 +242,178 @@ relief:
       out: 4.2
       confidence: estimated
       source: as ejector-left
+    - node: well
+      pocket: 10.51
+      confidence: estimated
+      source: >-
+        the tooth height the two facet angles give (7.51 mm) plus 3 mm, the tooth
+        crests read as standing a little behind the strip and the top rail on the LWLT-C
+        data sheet photograph; nothing dimensions it
+    - node: return-1
+      facet: {deg: 80, facing: left}
+      lift: -10.51
+      confidence: estimated
+      source: >-
+        Unit Data Sheet Guide Figure 39, front view (2.2147 px/mm): each cage outline is
+        12.8-12.9 mm wide against a 13.7-14.0 mm SFP cage, 20-24 degrees of foreshortening,
+        22 carried for the face; the return shows about 1.3 mm of front view and must
+        close the same crest over the 19.9 mm tooth, which makes it 80 degrees. See
+        provenance.angled-panel
+    - node: face-1
+      facet: {deg: 22, facing: right}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: return-2
+      facet: {deg: 80, facing: left}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: face-2
+      facet: {deg: 22, facing: right}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: return-3
+      facet: {deg: 80, facing: left}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: face-3
+      facet: {deg: 22, facing: right}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: return-4
+      facet: {deg: 80, facing: left}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: face-4
+      facet: {deg: 22, facing: right}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: return-5
+      facet: {deg: 80, facing: left}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: face-5
+      facet: {deg: 22, facing: right}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: return-6
+      facet: {deg: 80, facing: left}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: face-6
+      facet: {deg: 22, facing: right}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: return-7
+      facet: {deg: 80, facing: left}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: face-7
+      facet: {deg: 22, facing: right}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: return-8
+      facet: {deg: 80, facing: left}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: face-8
+      facet: {deg: 22, facing: right}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: return-9
+      facet: {deg: 80, facing: left}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: face-9
+      facet: {deg: 22, facing: right}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: return-10
+      facet: {deg: 80, facing: left}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: face-10
+      facet: {deg: 22, facing: right}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: return-11
+      facet: {deg: 80, facing: left}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: face-11
+      facet: {deg: 22, facing: right}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: return-12
+      facet: {deg: 80, facing: left}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: face-12
+      facet: {deg: 22, facing: right}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: return-13
+      facet: {deg: 80, facing: left}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: face-13
+      facet: {deg: 22, facing: right}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: return-14
+      facet: {deg: 80, facing: left}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: face-14
+      facet: {deg: 22, facing: right}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: return-15
+      facet: {deg: 80, facing: left}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: face-15
+      facet: {deg: 22, facing: right}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: return-16
+      facet: {deg: 80, facing: left}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
+    - node: face-16
+      facet: {deg: 22, facing: right}
+      lift: -10.51
+      confidence: estimated
+      source: as return-1
 groups:
   sfp-dd:
     term: Port
@@ -190,7 +432,7 @@ groups:
     role: indicator
     index-origin: 1
     description: >-
-      two PON lamps per port in the strip under its cage, led-N-left and led-N-right
+      two rectangular PON light pipes per port in the strip under its cage, led-N-left and led-N-right
       either side of the numeral; left = the optic's channel (the GPON channel of an MPM),
       right = the XGS-PON channel of an MPM
   status-leds:
@@ -201,54 +443,54 @@ groups:
 parts:
   - {ref: common/led-indicator@1, id: led-pwr, group: status-leds, at: [29.5, 8.0], states: {lamp: ['off', {name: init, color: '#39b54a', behavior: blinking}, {name: 'on', color: '#39b54a'}]}}
   - {ref: common/led-indicator@1, id: led-alm, group: status-leds, at: [29.5, 13.1], states: {lamp: ['off', {name: alarm, color: '#d0021b'}]}}
-  - {ref: std/sfp@1, id: port-1, group: sfp-dd, at: [45.5, 7.4], attrs: {media: sfp-dd, speed: 10g, pon: xgs-pon}}
-  - {ref: std/sfp@1, id: port-2, group: sfp-dd, at: [65.4, 7.4], attrs: {media: sfp-dd, speed: 25g, pon: 25gs-pon}}
-  - {ref: std/sfp@1, id: port-3, group: sfp-dd, at: [85.3, 7.4], attrs: {media: sfp-dd, speed: 10g, pon: xgs-pon}}
-  - {ref: std/sfp@1, id: port-4, group: sfp-dd, at: [105.2, 7.4], attrs: {media: sfp-dd, speed: 25g, pon: 25gs-pon}}
-  - {ref: std/sfp@1, id: port-5, group: sfp-dd, at: [125.1, 7.4], attrs: {media: sfp-dd, speed: 10g, pon: xgs-pon}}
-  - {ref: std/sfp@1, id: port-6, group: sfp-dd, at: [145.0, 7.4], attrs: {media: sfp-dd, speed: 25g, pon: 25gs-pon}}
-  - {ref: std/sfp@1, id: port-7, group: sfp-dd, at: [164.9, 7.4], attrs: {media: sfp-dd, speed: 10g, pon: xgs-pon}}
-  - {ref: std/sfp@1, id: port-8, group: sfp-dd, at: [184.8, 7.4], attrs: {media: sfp-dd, speed: 25g, pon: 25gs-pon}}
-  - {ref: std/sfp@1, id: port-9, group: sfp-dd, at: [204.7, 7.4], attrs: {media: sfp-dd, speed: 10g, pon: xgs-pon}}
-  - {ref: std/sfp@1, id: port-10, group: sfp-dd, at: [224.6, 7.4], attrs: {media: sfp-dd, speed: 25g, pon: 25gs-pon}}
-  - {ref: std/sfp@1, id: port-11, group: sfp-dd, at: [244.5, 7.4], attrs: {media: sfp-dd, speed: 10g, pon: xgs-pon}}
-  - {ref: std/sfp@1, id: port-12, group: sfp-dd, at: [264.4, 7.4], attrs: {media: sfp-dd, speed: 25g, pon: 25gs-pon}}
-  - {ref: std/sfp@1, id: port-13, group: sfp-dd, at: [284.3, 7.4], attrs: {media: sfp-dd, speed: 10g, pon: xgs-pon}}
-  - {ref: std/sfp@1, id: port-14, group: sfp-dd, at: [304.2, 7.4], attrs: {media: sfp-dd, speed: 25g, pon: 25gs-pon}}
-  - {ref: std/sfp@1, id: port-15, group: sfp-dd, at: [324.1, 7.4], attrs: {media: sfp-dd, speed: 10g, pon: xgs-pon}}
-  - {ref: std/sfp@1, id: port-16, group: sfp-dd, at: [344.0, 7.4], attrs: {media: sfp-dd, speed: 25g, pon: 25gs-pon}}
-  - {ref: common/led-dot@1, id: led-1-left, group: pon-leds, at: [50.75, 19.7], behind: true, states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-1-right, group: pon-leds, at: [60.45, 19.7], behind: true, states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-2-left, group: pon-leds, at: [70.65, 19.7], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-2-right, group: pon-leds, at: [80.35, 19.7], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-3-left, group: pon-leds, at: [90.55, 19.7], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-3-right, group: pon-leds, at: [100.25, 19.7], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-4-left, group: pon-leds, at: [110.45, 19.7], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-4-right, group: pon-leds, at: [120.15, 19.7], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-5-left, group: pon-leds, at: [130.35, 19.7], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-5-right, group: pon-leds, at: [140.05, 19.7], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-6-left, group: pon-leds, at: [150.25, 19.7], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-6-right, group: pon-leds, at: [159.95, 19.7], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-7-left, group: pon-leds, at: [170.15, 19.7], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-7-right, group: pon-leds, at: [179.85, 19.7], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-8-left, group: pon-leds, at: [190.05, 19.7], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-8-right, group: pon-leds, at: [199.75, 19.7], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-9-left, group: pon-leds, at: [209.95, 19.7], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-9-right, group: pon-leds, at: [219.65, 19.7], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-10-left, group: pon-leds, at: [229.85, 19.7], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-10-right, group: pon-leds, at: [239.55, 19.7], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-11-left, group: pon-leds, at: [249.75, 19.7], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-11-right, group: pon-leds, at: [259.45, 19.7], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-12-left, group: pon-leds, at: [269.65, 19.7], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-12-right, group: pon-leds, at: [279.35, 19.7], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-13-left, group: pon-leds, at: [289.55, 19.7], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-13-right, group: pon-leds, at: [299.25, 19.7], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-14-left, group: pon-leds, at: [309.45, 19.7], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-14-right, group: pon-leds, at: [319.15, 19.7], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-15-left, group: pon-leds, at: [329.35, 19.7], behind: true, states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-15-right, group: pon-leds, at: [339.05, 19.7], behind: true, states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-16-left, group: pon-leds, at: [349.25, 19.7], behind: true, states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-16-right, group: pon-leds, at: [358.95, 19.7], behind: true, states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: std/sfp@1, id: port-1, group: sfp-dd, at: [45.8, 7.4], 'on': face-1, behind: true, attrs: {media: sfp-dd, speed: 10g, pon: xgs-pon}}
+  - {ref: std/sfp@1, id: port-2, group: sfp-dd, at: [65.7, 7.4], 'on': face-2, attrs: {media: sfp-dd, speed: 25g, pon: 25gs-pon}}
+  - {ref: std/sfp@1, id: port-3, group: sfp-dd, at: [85.6, 7.4], 'on': face-3, attrs: {media: sfp-dd, speed: 10g, pon: xgs-pon}}
+  - {ref: std/sfp@1, id: port-4, group: sfp-dd, at: [105.5, 7.4], 'on': face-4, attrs: {media: sfp-dd, speed: 25g, pon: 25gs-pon}}
+  - {ref: std/sfp@1, id: port-5, group: sfp-dd, at: [125.4, 7.4], 'on': face-5, attrs: {media: sfp-dd, speed: 10g, pon: xgs-pon}}
+  - {ref: std/sfp@1, id: port-6, group: sfp-dd, at: [145.3, 7.4], 'on': face-6, attrs: {media: sfp-dd, speed: 25g, pon: 25gs-pon}}
+  - {ref: std/sfp@1, id: port-7, group: sfp-dd, at: [165.2, 7.4], 'on': face-7, attrs: {media: sfp-dd, speed: 10g, pon: xgs-pon}}
+  - {ref: std/sfp@1, id: port-8, group: sfp-dd, at: [185.1, 7.4], 'on': face-8, attrs: {media: sfp-dd, speed: 25g, pon: 25gs-pon}}
+  - {ref: std/sfp@1, id: port-9, group: sfp-dd, at: [205.0, 7.4], 'on': face-9, attrs: {media: sfp-dd, speed: 10g, pon: xgs-pon}}
+  - {ref: std/sfp@1, id: port-10, group: sfp-dd, at: [224.9, 7.4], 'on': face-10, attrs: {media: sfp-dd, speed: 25g, pon: 25gs-pon}}
+  - {ref: std/sfp@1, id: port-11, group: sfp-dd, at: [244.8, 7.4], 'on': face-11, attrs: {media: sfp-dd, speed: 10g, pon: xgs-pon}}
+  - {ref: std/sfp@1, id: port-12, group: sfp-dd, at: [264.7, 7.4], 'on': face-12, attrs: {media: sfp-dd, speed: 25g, pon: 25gs-pon}}
+  - {ref: std/sfp@1, id: port-13, group: sfp-dd, at: [284.6, 7.4], 'on': face-13, attrs: {media: sfp-dd, speed: 10g, pon: xgs-pon}}
+  - {ref: std/sfp@1, id: port-14, group: sfp-dd, at: [304.5, 7.4], 'on': face-14, attrs: {media: sfp-dd, speed: 25g, pon: 25gs-pon}}
+  - {ref: std/sfp@1, id: port-15, group: sfp-dd, at: [324.4, 7.4], 'on': face-15, attrs: {media: sfp-dd, speed: 10g, pon: xgs-pon}}
+  - {ref: std/sfp@1, id: port-16, group: sfp-dd, at: [344.3, 7.4], 'on': face-16, attrs: {media: sfp-dd, speed: 25g, pon: 25gs-pon}}
+  - {ref: common/led-rect-sm@1, id: led-1-left, group: pon-leds, at: [50.35, 19.0], behind: true, states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-1-right, group: pon-leds, at: [60.05, 19.0], behind: true, states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-2-left, group: pon-leds, at: [70.25, 19.0], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-2-right, group: pon-leds, at: [79.95, 19.0], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-3-left, group: pon-leds, at: [90.15, 19.0], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-3-right, group: pon-leds, at: [99.85, 19.0], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-4-left, group: pon-leds, at: [110.05, 19.0], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-4-right, group: pon-leds, at: [119.75, 19.0], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-5-left, group: pon-leds, at: [129.95, 19.0], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-5-right, group: pon-leds, at: [139.65, 19.0], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-6-left, group: pon-leds, at: [149.85, 19.0], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-6-right, group: pon-leds, at: [159.55, 19.0], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-7-left, group: pon-leds, at: [169.75, 19.0], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-7-right, group: pon-leds, at: [179.45, 19.0], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-8-left, group: pon-leds, at: [189.65, 19.0], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-8-right, group: pon-leds, at: [199.35, 19.0], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-9-left, group: pon-leds, at: [209.55, 19.0], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-9-right, group: pon-leds, at: [219.25, 19.0], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-10-left, group: pon-leds, at: [229.45, 19.0], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-10-right, group: pon-leds, at: [239.15, 19.0], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-11-left, group: pon-leds, at: [249.35, 19.0], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-11-right, group: pon-leds, at: [259.05, 19.0], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-12-left, group: pon-leds, at: [269.25, 19.0], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-12-right, group: pon-leds, at: [278.95, 19.0], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-13-left, group: pon-leds, at: [289.15, 19.0], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-13-right, group: pon-leds, at: [298.85, 19.0], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-14-left, group: pon-leds, at: [309.05, 19.0], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-14-right, group: pon-leds, at: [318.75, 19.0], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-15-left, group: pon-leds, at: [328.95, 19.0], behind: true, states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-15-right, group: pon-leds, at: [338.65, 19.0], behind: true, states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-16-left, group: pon-leds, at: [348.85, 19.0], behind: true, states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-16-right, group: pon-leds, at: [358.55, 19.0], behind: true, states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
 connection-points:
   mate: {at: [200.25, 12.25], direction: rear}
 skins: [default]
