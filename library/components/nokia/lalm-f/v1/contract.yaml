@@ -1,0 +1,202 @@
+format: 1
+kind: module
+name: lalm-f
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Nokia LALM-F (3FE 79628 AA), the alarm and clock module of the Lightspan MF-8 shelf, in
+  its dedicated ALM slot between the NT slots and the power modules. Left to right: the
+  ejector, the LALM-F legend and six lamps (PWR, ACO, ALM over MIN, MAJ, CRI), the ACO push
+  button, the 1PPS and 10MHz SMA jacks, the CRAFT serial port on a female DE-9, the ALM UP
+  and ALM DOWN external-alarm ports on female DA-15s, a block of four RJ-45s for the clock
+  (1PPS/ToD IN, 1PPS/ToD OUT, BITS 1, BITS 2) and a block of four for the alarms (LAMP,
+  DOOR, SYS UP, SYS DOWN), the ESD mark and the second ejector. Authored horizontal, as the
+  shelf seats it when mounted horizontally.
+size: {w: 400.5, h: 24.5, d: 217}
+size-confidence: {w: drawing, h: datasheet, d: datasheet}
+size-notes: >-
+  w is the ALM slot opening, 400.5 between the shelf frame lines on the data sheet render;
+  the faceplate itself measures 393.0 and sits centred in it with the ejector ends reaching
+  the opening (provenance.size). h is the stated 24.5 pitch. d is the stated depth without
+  handles.
+attrs:
+  model: LALM-F
+  part-number: 3FE 79628 AA
+  weight-kg: 0.77
+  power-draw-max-w: 5
+  power-draw-typical-w: 4
+provenance:
+  sources: >-
+    datasheet - Lightspan Access Node MF-8 Unit Data Sheet Guide 26.9, 3HH-92646-AAAA-TQZZA
+    Issue 09 (UDS), chapter 12, p87-92; Lightspan Access Node MF-8 User, Safety and
+    Installation Manual 26.9, 3HH-92647-AAAA-RJZZA Issue 09 (USIM), p123, p141, p239-240,
+    p266-267, p340-345; Nokia Lightspan MF-8 data sheet CID214273 (April 2025), the front
+    render of a populated shelf (the render).
+  size: >-
+    drawing for the width, datasheet for the pitch and depth. UDS p91 section 12.6: "height:
+    388 mm", "depth: with handles 256 mm, without handles 217 mm", "width or board to board
+    pitch: 24.5 mm". The 388 is the board; no document states the faceplate length. The
+    render, calibrated on the 481.0 shelf width at 1.8129 px/mm, puts the ALM slot opening
+    at 400.5 between frame lines, which is the size here. USIM Figure 202 (p266, embedded
+    1011 x 321) draws the plate 975 x 61 px, and three rulers in that figure agree on 2.481
+    px/mm: the CRAFT screwlock centres 62 px against the DE-9 standard 24.99, the ALM UP
+    screwlock centres 83 px against the DA-15 standard 33.32, and the plate height 61 px
+    against the 24.5 pitch. At that scale the plate is 393.0 long. Fitting the figure to the
+    render on the SMA pair, CRAFT, ALM UP and the two RJ-45 blocks gives x in the opening =
+    3.75 + 0.9813 x the figure fraction, residuals under 0.7, so the plate ends fall 3.75
+    inside each end of the opening. The render cannot show the plate ends: its levers lie
+    across them. Positions are good to about 0.5.
+  layout: >-
+    drawing - every x is in opening coordinates, read on the render and on USIM Figure 202
+    through the fit in provenance.size (UDS Figure 63, p90, is the same art at 742 px).
+    Render / figure: SMA centres 64.3 and 78.3 / 64.0 and 77.9; ACO button 52.1 / 51.9;
+    CRAFT centre 107.0 / 106.3; ALM UP centre 145.9 / 145.5; ALM DOWN centre 190.1 / 189.6;
+    the RJ-45 blocks 213.5-279.1 and 284.1-349.2 / 213.4-278.6 and 283.9-348.8. The
+    connectors share one centreline, 10.6 down. Lamps on columns 30.5 / 36.0 / 41.2 and rows
+    8.8 / 14.3 (figure only: the render hides them behind the lever). The lighter
+    strip along the foot of the plate is drawn in both.
+  interfaces: >-
+    datasheet - UDS p90 Table 29, every type and function taken from the table: ALM DOWN and
+    ALM UP "External alarm I/O connector", DB15, note 3 "Female 15 pin D-sub connector";
+    SYS DOWN and SYS UP "System alarm I/O connector", RJ-45, RS-485 cascade, "Not in use in
+    this release yet"; DOOR "Rack door detection alarm interface", RJ-45; LAMP "Rack lamp
+    alarm interface (I/O)", RJ-45; ACO "Alarm CutOff push button"; BITS 1 and BITS 2 "1x
+    BITS IN & 1x BITS OUT", RJ-45; 1PPS/ToD IN and 1PPS/ToD OUT, RJ-45; 1PPS "1PPS IN or
+    1PPS OUT", SMA, note 4 configurable; 10MHz "10MHz IN", SMA; CRAFT "Remote serial
+    management interface", DB9, note 2 "Female 9 pin D-sub connector". USIM p267 Table 39
+    agrees; USIM p141 names the CRAFT port a "Serial RS232 CRAFT terminal", and p340-345
+    give the pinning of each (Tables 49-57).
+  parts: >-
+    registry - CRAFT is common/db9-receptacle@1 and states role console, because it is the
+    RS-232 management terminal. ALM UP and ALM DOWN are std/da15@1, the shell alone, with
+    their screwlocks drawn in the skin on the 33.32 centres (the render reads 33.1). The two
+    SMA jacks are common/sma-jack@1 over a bright washer; the render and the figures show a
+    bright nut where the part draws a gold one. The eight RJ-45s are bare std/rj45@2
+    housings turned 180, latch up as every view draws them: no view shows a lamp window in
+    any of them, and the jack pitch measures 16.0 in the render (29 px) and in the figure
+    alike, which is the single housing (15.8) and not the 13.97 ganged cell. Each block sits
+    on a dark body 65.4 x 14.6.
+  export: >-
+    registry - the timing jacks say their function in their ids (pps, bits) so they read as
+    timing inputs; LAMP, DOOR, SYS UP and SYS DOWN state media rj45-telemetry, the only
+    medium the library has for an RJ-45 that is neither Ethernet, a console nor a timing
+    port, so that they do not read as consoles.
+  lamps: >-
+    datasheet - UDS p92 Table 30: PWR "ON (green)" power present; ACO "ON (green)" alarm
+    has been cut off; ALM "ON (red)" alarm present on shelf; MIN "ON (orange)" minor alarm;
+    MAJ "ON (red)" major alarm; CRI "ON (red)" critical alarm; each otherwise OFF. The
+    table gives no RGB values; green #39b54a, amber #f5a623 for the orange, red #d0021b, the
+    library values. UDS Figure 65 (p91) gives the arrangement: PWR, ACO, ALM over MIN, MAJ,
+    CRI, legends printed vertically.
+  lamp-order: >-
+    drawing - SOURCES DIFFER on the upper row. UDS Figure 63 (p90), UDS Figure 65 (p91, a
+    line drawing of the lamp block) and USIM Figure 202 (p266) print PWR, ACO, ALM left to
+    right over MIN, MAJ, CRI. The data sheet render prints ALM, ACO, PWR over the same
+    three columns; its lower row is hidden behind the lever. The unit documents are
+    drawn, three figures against one. A photograph would settle it.
+  legends: >-
+    drawing - spelled as USIM Figure 202 and the render print them: LALM-F (vertical), PWR
+    ACO ALM MIN MAJ CRI (vertical), ACO, 1PPS, 10MHz, CRAFT, ALM UP, ALM DOWN, 1PPS/ToD IN,
+    1PPS/ToD OUT, BITS 1, BITS 2, LAMP, DOOR, SYS UP, SYS DOWN. Type size from the legend
+    lengths in the figure, about 2.1. The render hides ACO, 1PPS and SYS DOWN behind its
+    levers, and MIN, MAJ and CRI in part; those six are not printed here
+    (provenance.ejectors) and the rest are where the render prints them.
+  block-outline: >-
+    drawing - the figures (UDS Figure 63, USIM Figures 176 and 202) draw a dashed white
+    outline round each RJ-45 block. The render does not show one, although it resolves the
+    legends beside it. Drawn as the unit documents draw it; a photograph would settle it.
+  ejectors: >-
+    drawing - a long lever folded along the lower edge at each end, as the data sheet render
+    and the vendor's cabled-shelf render both show it and as the LT and NT boards beside it
+    carry theirs: a grip 18.1 wide at the end and an arm reaching 70.75 in from the left and
+    to 329 from the right. UDS Figure 63 and USIM Figure 202 draw a short clip in its place
+    with every legend clear; two renders against one drawing, and the cabled-shelf render,
+    taken from above, shows the lever standing proud below the legends it covers square-on.
+    Square-on the arm covers the MIN, MAJ and CRI, ACO, 1PPS and SYS DOWN legends, which
+    are therefore not printed here; the unit documents give them and the description
+    names them.
+  colour: >-
+    drawing - sampled on the render, a vendor render and not a photograph: the plate is a
+    blue-grey slate, modal bins (60-68, 68-76, 76-84) over 26,200 px of the ALM row, taken
+    as #444c54; ejector levers (224, 224, 224); legends white.
+  power: >-
+    datasheet - USIM p123, the power consumption table: LALM-F 4 W typical, 5 W maximum.
+    The typical column assumes 48 Vdc and 25 C, the maximum column worst-case corners (the
+    table notes 1 and 2).
+  weight: 'datasheet - UDS p91 section 12.6: "The weight of a LALM-F is 770g (1.7lbs)"'
+  relief: >-
+    datasheet - the handles stand 39 mm proud (UDS 12.6 p91: 256 mm with handles, 217 without);
+    which part of a lever reaches that is not stated, and the whole lever is built to it. The
+    connectors carry their own depth.
+  logo-zone: 'none reserved - no view prints a vendor mark on this plate; the ESD mark at the right is drawn'
+  lifecycle: 'searched only the staged corpus - listed in the 26.9 guides (2025-2026); no end-of-life notice searched'
+elements:
+  ejector-left-grip: {at: [0.0, 9.9], size: [24.8, 13.4], class: latch}
+  ejector-left-arm: {at: [18.1, 19.4], size: [52.65, 3.9], class: latch}
+  ejector-right-arm: {at: [329.0, 19.4], size: [53.4, 3.9], class: latch}
+  ejector-right-grip: {at: [375.7, 9.9], size: [24.8, 13.4], class: latch}
+  aco: {at: [50.65, 12.35], size: [2.5, 2.5], class: button}
+  clock-block: {at: [213.4, 3.0], size: [65.4, 14.6], class: label}
+  alarm-block: {at: [283.8, 3.0], size: [65.4, 14.6], class: label}
+  esd-mark: {at: [359.4, 2.5], size: [5.0, 4.8], class: marking}
+relief:
+  features:
+    - {node: ejector-left-grip, out: 39, color: '#dcdddd', confidence: datasheet, source: 'UDS 12.6 (p91): depth 256 mm with handles, 217 mm without'}
+    - {node: ejector-left-arm, out: 39, color: '#dcdddd', confidence: datasheet, source: 'UDS 12.6 (p91): depth 256 mm with handles, 217 mm without'}
+    - {node: ejector-right-arm, out: 39, color: '#dcdddd', confidence: datasheet, source: 'UDS 12.6 (p91): depth 256 mm with handles, 217 mm without'}
+    - {node: ejector-right-grip, out: 39, color: '#dcdddd', confidence: datasheet, source: 'UDS 12.6 (p91): depth 256 mm with handles, 217 mm without'}
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    description: the CRAFT port, an RS-232 serial management terminal on a female DE-9
+  timing:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the clock interfaces of the shelf - 1PPS (in or out) and 10 MHz in on SMA, and 1PPS/ToD
+      in, 1PPS/ToD out, BITS 1 and BITS 2 on RJ-45
+  alarms:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the alarm interfaces of the shelf - external alarm I/O up and down on DA-15, and the
+      rack lamp, rack door and RS-485 system alarm cascade (up and down) on RJ-45
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: PWR and ACO
+  alarm-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: ALM, MIN, MAJ and CRI
+parts:
+  - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [29.5, 7.8], states: {lamp: ['off', {name: 'on', color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: led-aco, group: status-leds, at: [35, 7.8], states: {lamp: ['off', {name: cut-off, color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: led-alm, group: alarm-leds, at: [40.2, 7.8], states: {lamp: ['off', {name: alarm, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-min, group: alarm-leds, at: [29.5, 13.3], states: {lamp: ['off', {name: minor, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: led-maj, group: alarm-leds, at: [35, 13.3], states: {lamp: ['off', {name: major, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-cri, group: alarm-leds, at: [40.2, 13.3], states: {lamp: ['off', {name: critical, color: '#d0021b'}]}}
+  - {ref: common/sma-jack@1, id: pps, group: timing, at: [59.45, 5.85], attrs: {function: 1PPS input or output (configurable)}}
+  - {ref: common/sma-jack@1, id: ref-10mhz, group: timing, at: [73.45, 5.85], attrs: {function: 10 MHz input}}
+  - {ref: common/db9-receptacle@1, id: craft, group: mgmt, at: [91.3, 4.35], attrs: {role: console, function: RS-232 serial management (CRAFT)}}
+  - {ref: std/da15@1, id: alm-up, group: alarms, at: [131.4, 4.9], attrs: {function: 'external alarm I/O, cascade up'}}
+  - {ref: std/da15@1, id: alm-down, group: alarms, at: [175.5, 4.9], attrs: {function: 'external alarm I/O, cascade down'}}
+  - {ref: std/rj45@2, id: pps-tod-in, group: timing, at: [214.2, 3.7], rotate: 180, attrs: {finish: '#2a2d31', function: 1PPS + ToD input}}
+  - {ref: std/rj45@2, id: pps-tod-out, group: timing, at: [230.2, 3.7], rotate: 180, attrs: {finish: '#2a2d31', function: 1PPS + ToD output}}
+  - {ref: std/rj45@2, id: bits-1, group: timing, at: [246.2, 3.7], rotate: 180, attrs: {finish: '#2a2d31', function: BITS in and out}}
+  - {ref: std/rj45@2, id: bits-2, group: timing, at: [262.2, 3.7], rotate: 180, attrs: {finish: '#2a2d31', function: BITS in and out}}
+  - {ref: std/rj45@2, id: lamp, group: alarms, at: [284.6, 3.7], rotate: 180, attrs: {finish: '#2a2d31', media: rj45-telemetry, function: rack alarm lamp I/O}}
+  - {ref: std/rj45@2, id: door, group: alarms, at: [300.6, 3.7], rotate: 180, attrs: {finish: '#2a2d31', media: rj45-telemetry, function: rack door detection alarm input}}
+  - {ref: std/rj45@2, id: sys-up, group: alarms, at: [316.6, 3.7], rotate: 180, attrs: {finish: '#2a2d31', media: rj45-telemetry, function: 'system alarm I/O (RS-485 cascade) up; not in use in release 26.9'}}
+  - {ref: std/rj45@2, id: sys-down, group: alarms, at: [332.6, 3.7], rotate: 180, attrs: {finish: '#2a2d31', media: rj45-telemetry, function: 'system alarm I/O (RS-485 cascade) down; not in use in release 26.9'}}
+connection-points:
+  mate: {at: [200.25, 12.25], direction: rear}
+skins: [default]

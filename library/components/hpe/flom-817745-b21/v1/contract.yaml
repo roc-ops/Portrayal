@@ -15,7 +15,7 @@ attrs:
   part-numbers: 817745-B21 840138-001
   spare-part: 840138-001
   hpe-model: 562FLR-T
-  controller: Intel X550-AT2
+  controller: X550-AT2
 groups:
   ports:
     term: Port
@@ -26,29 +26,29 @@ provenance:
   sources: >-
     QuickSpecs a00021860enw, FlexibleLOM adapters: 817745-B21 ('FlexibleLOM
     Riser Kit (875748-B21) is required to install these adapters'; 'Only one
-    FlexibleLOM can be added to the server'). HPE PartSurfer names its spare
-    840138-001 (partsurfer.hpe.com/Search.aspx?SearchText=817745-B21). A
-    reseller's photograph of a 562FLR-T from the port end, face-on
+    FlexibleLOM can be added to the server'). The QuickSpecs names the adapter
+    by its controller; the name 562FLR-T is the Product Information Reference's
+    (a00077132en_us) and HPE PartSurfer's, which also gives the spare 840138-001
+    (partsurfer.hpe.com/Search.aspx?SearchText=817745-B21). A reseller's
+    photograph of a 562FLR-T from the port end, face-on
     (serversupply.com/images/mproductimages/316774_2.jpg, 800 x 496), and
     PartSurfer's of the spare.
   size: >-
-    photo-measured - 74.0 x 14.6, the FlexibleLOM faceplate, from three sellers'
-    photographs of three adapters taken near face-on, each scaled on a part of
-    known size it carries: the 640FLR-SFP28's 1x2 SFP cage (29.8 across by
-    SFF-8433) puts its plate at 73.5; the 331FLR's four ganged jacks span 0.755
-    of its plate, which at 74.0 is 55.9 - four of the 13.97 a ganged modular
-    jack is pitched at - and that agreement is what fixes the length; the
-    562FLR-T's plate is 12.4 tall with its jacks standing 1.3 below it. 14.6 is
-    the plate, its top fold and that overhang together. None of the three is a
-    ruler on the part, and none is perfectly square to the camera.
+    borrowed - 74.0 x 14.6, hpe/flom-629135-b22@1, the adapter whose photograph
+    the faceplate's length is read from; this part's own image does not measure
+    it.
   face: >-
-    photo-measured - on the face-on photograph the plate is 388 px for the 74.0:
-    the screw hole 3.4 from the left end, a three-by-three field of square vents
-    at 8.2..14.9, two separate shielded jacks centred 29.3 and 50.7 with their
-    latch notches down, P2 printed left of the left jack and P1 right of the
-    right one, and a narrow two-by-three vent field at 60.6..64.5.
+    photo-measured - on the face-on photograph the plate is 157..588, 432 px for
+    the 74.0 (5.84 px/mm): the screw 4.5 from the left end; a three-by-three
+    field of vents at 8.9..18.2, each 2.4 x 1.5 on a 3.4 x 2.6 pitch, COUNTED
+    three columns and three rows; two separate shielded jacks centred 29.2 and
+    50.8, their shields 19.0 wide and their latch notches down; P2 printed under
+    the vents, left of the left jack; ONE column of three vents at 62.2..64.6,
+    right of the right jack, with P1 under it. A first version wrote the plate
+    as 388 px, drew the left field 2 mm short and the right field as two
+    columns; all three were wrong against this photograph.
   lamps: >-
-    known-wrong - THE LAMPS ARE AT THE WRONG CORNERS. The photographs show a
+    known-wrong - THE LAMPS ARE AT THE WRONG CORNERS. The photograph shows a
     lamp window at each UPPER corner of each jack with the latch notch at the
     bottom; the library's lamped jack (common/rj45-eth@1) carries its lamps
     beside the notch, so drawn notch-down they sit at the lower corners. The
@@ -64,9 +64,9 @@ provenance:
     estimated - 110. No dimension of the adapter is in any document held; it is
     the board's reach behind the faceplate by proportion on the photographs.
 size: {w: 74.0, h: 14.6, d: 110.0}
-size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+size-confidence: {w: borrowed, h: borrowed, d: estimated}
 body: {depth: 110.0, color: '#2f6b3a'}
 parts:
-  - {ref: common/rj45-eth@1, id: port-2, group: ports, at: [21.4, 1.1], attrs: {media: rj45, speed: 10g}}
-  - {ref: common/rj45-eth@1, id: port-1, group: ports, at: [42.8, 1.1], attrs: {media: rj45, speed: 10g}}
+  - {ref: common/rj45-eth@1, id: port-2, group: ports, at: [21.3, 1.0], attrs: {media: rj45, speed: 10g}}
+  - {ref: common/rj45-eth@1, id: port-1, group: ports, at: [42.9, 1.0], attrs: {media: rj45, speed: 10g}}
 skins: [default]

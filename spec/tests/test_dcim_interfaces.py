@@ -221,9 +221,9 @@ def test_every_plain_speed_the_library_uses_has_a_row():
     the cage.
 
     A port whose part NOT_A_DCIM_PORT registers is not a missing row: the register
-    already says why it does not type. The HLX-TGV's SC/APC PON port is the one
-    case - it states `speed: 10g` beside `pon: xgs-pon`, and the ferrule is not
-    an Ethernet cage family.
+    already says why it does not type. An ONT's SC/APC PON port is the one
+    case - the HLX-TGV's states `speed: 10g` beside `pon: xgs-pon`, the ferrule
+    is not an Ethernet cage family, and it types from `pon` instead.
     """
     import re
     plain = re.compile(r"^\d+(\.\d+)?[gmt]$")

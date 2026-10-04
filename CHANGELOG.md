@@ -38,6 +38,18 @@ names the ref that replaces it.
   dust cap. A new registry entry, `mpo16-plug`. A host's own field default now
   reaches a part it composes when the two defaults differ. See
   [docs/pluggables-mpo-bidi-pon-design.md](docs/pluggables-mpo-bidi-pon-design.md).
+- Nokia Lightspan MF-8 (`nokia/lmfs-f`) with its NT board (`nokia/lbnt-a`), 16-port
+  Multi-PON LT board (`nokia/lwlt-c`), alarm module (`nokia/lalm-f`), power module
+  (`nokia/lpwr-f`), fan module (`nokia/lfan-f`), the LT and NT dummy boards and the
+  horizontal front cover; the Nokia XS-010X-R and XS-010XR-P XGS-PON ONTs; and the
+  outdoor ONT enclosure 3FE54221AH.
+- A device's built-in PON port now exports. A placement that states `pon` with a
+  flavour both NetBox and Nautobot define leaves as that interface type; before, an
+  ONT's SC/APC uplink exported nothing. This adds a `pon` interface (`xgs-pon`) to
+  the four Halny HLX-TGV device types - an addition, so nothing already imported is
+  re-filed.
+- Lint L76 counts a lamp bound to a jack from another face (`for: rear/lan`), as it
+  already counted one drawn beside the jack.
 - ReadyLinks GL-12xB-240D (`readylinks/gl-12xb-240d`), the first device to seat
   a BNC jack: twelve ReadyLink ports on `common/bnc-jack@1` (impedance 75) on a new
   GL-x 12-port BNC line card in slot 1, a slot blank in slot 2, and two BNC sync
@@ -130,6 +142,19 @@ names the ref that replaces it.
   class), and no 800G prefix is documented.
 
 ### Changed
+- The Nautobot exports are no longer a copy of the NetBox ones in two places,
+  because Nautobot could not import 37 of them. Front ports under
+  `library/exports/nautobot/` now carry `rear_port` and `rear_port_position`
+  (read from the fibre map) in place of `positions`, which is the shape
+  Nautobot's FrontPortTemplate requires; and a device that occupies a half
+  rack unit states the next whole number, with the true height in `comments`,
+  because Nautobot stores `u_height` as an integer. That is the 35 FS FHD
+  cassettes and panels, the Juniper MX104 (3.5U, written as 4) and the Telco
+  Systems TM-7124S (1.5U, written as 2). The four MPO-to-MPO adapter panels
+  state each front and rear connector as one position there, since Nautobot
+  binds a front port to a single rear position; the fibre map keeps every
+  fibre. None of the 37 could be imported into Nautobot before, so no imported
+  data changes. The NetBox exports and the fibre maps are unchanged.
 - **A 3D export leaves the marks out** (roc-ops/portrayal-site#46): `exportData()` and
   `download()` hide every mark halo for the export, as they always hid the
   selection halo, and restore them after. A GLB or USDZ is the model; the marks
