@@ -1,6 +1,6 @@
 """The npm packages a build ships as, and how each is versioned (#528).
 
-One package per device, one for the component skins, one index. A package
+One package per device, one per namespace of component skins, one index. A package
 carries its own version, bumped from what it last published: devicelock does
 not hash rendered output, so a re-render moves a device's bytes without moving
 its version, and npm will not take new bytes under a version it already holds.
