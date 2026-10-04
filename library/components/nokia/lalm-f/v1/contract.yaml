@@ -126,21 +126,26 @@ provenance:
     table notes 1 and 2).
   weight: 'datasheet - UDS p91 section 12.6: "The weight of a LALM-F is 770g (1.7lbs)"'
   relief: >-
-    estimated - the ejector levers stand off the plate; nothing dimensions them. The
+    datasheet - the handles stand 39 mm proud (UDS 12.6 p91: 256 mm with handles, 217 without);
+    which part of a lever reaches that is not stated, and the whole lever is built to it. The
     connectors carry their own depth.
   logo-zone: 'none reserved - no view prints a vendor mark on this plate; the ESD mark at the right is drawn'
   lifecycle: 'searched only the staged corpus - listed in the 26.9 guides (2025-2026); no end-of-life notice searched'
 elements:
-  ejector-left: {at: [0.0, 9.9], size: [70.75, 13.4], class: latch}
-  ejector-right: {at: [329.0, 9.9], size: [71.5, 13.4], class: latch}
+  ejector-left-grip: {at: [0.0, 9.9], size: [24.8, 13.4], class: latch}
+  ejector-left-arm: {at: [18.1, 19.4], size: [52.65, 3.9], class: latch}
+  ejector-right-arm: {at: [329.0, 19.4], size: [53.4, 3.9], class: latch}
+  ejector-right-grip: {at: [375.7, 9.9], size: [24.8, 13.4], class: latch}
   aco: {at: [50.65, 12.35], size: [2.5, 2.5], class: button}
   clock-block: {at: [213.4, 3.0], size: [65.4, 14.6], class: label}
   alarm-block: {at: [283.8, 3.0], size: [65.4, 14.6], class: label}
   esd-mark: {at: [359.4, 2.5], size: [5.0, 4.8], class: marking}
 relief:
   features:
-    - {node: ejector-left, out: 4.2, color: '#dcdddd', confidence: estimated, source: 'an ejector lever standing off the plate, as nokia/fwlt-c@1; not dimensioned'}
-    - {node: ejector-right, out: 4.2, color: '#dcdddd', confidence: estimated, source: as ejector-left}
+    - {node: ejector-left-grip, out: 39, color: '#dcdddd', confidence: datasheet, source: 'UDS 12.6 (p91): depth 256 mm with handles, 217 mm without'}
+    - {node: ejector-left-arm, out: 39, color: '#dcdddd', confidence: datasheet, source: 'UDS 12.6 (p91): depth 256 mm with handles, 217 mm without'}
+    - {node: ejector-right-arm, out: 39, color: '#dcdddd', confidence: datasheet, source: 'UDS 12.6 (p91): depth 256 mm with handles, 217 mm without'}
+    - {node: ejector-right-grip, out: 39, color: '#dcdddd', confidence: datasheet, source: 'UDS 12.6 (p91): depth 256 mm with handles, 217 mm without'}
 groups:
   mgmt:
     term: Port

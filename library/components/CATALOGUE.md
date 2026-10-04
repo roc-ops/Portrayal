@@ -652,7 +652,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `edgecore/agr-label-spec@1` | component | sticker | 74 × 88 |  | 2 | 24 | Regulatory and specification label on the top cover on the Edgecore AGR400 / AGR420 |
 | `edgecore/agr-panel-screw@1` | component | screw | 8.4 × 8.4 × 3 |  | 1 | 124 | Captive slotted thumb screw at each corner of the Edgecore AGR400 / AGR420 front panel, holding the rack flan… |
 | `edgecore/agr-psu-ac@1` | module | psu | 60.1 × 37.6 × 360.7 |  | 2 | 1 | AC-DC hot-swappable PSU for the Edgecore AGR400 (AS7946-30XB) and AGR420 (AS7946-74XKSB) |
-| `edgecore/agr-psu-dc@1` | module | psu | 60.1 × 37.6 × 360.7 |  | 2 | 132 | DC-DC hot-swappable PSU for the Edgecore AGR400 (AS7946-30XB) and AGR420 (AS7946-74XKSB) |
+| `edgecore/agr-psu-dc@1` | module | psu | 60.1 × 37.6 × 360.7 |  | 2 | 131 | DC-DC hot-swappable PSU for the Edgecore AGR400 (AS7946-30XB) and AGR420 (AS7946-74XKSB) |
 | `edgecore/agr420-filter-bottom@1` | module | filter | 399.5 × 9 × 12 |  | 1 | 0 | Removable BOTTOM air filter for the Edgecore AGR420 (AS7946-74XKSB) - the full-width band of it |
 | `edgecore/agr420-filter-step@1` | module | filter | 25.5 × 16.5 × 12 |  | 1 | 0 | The deep section of an Edgecore AGR420 air filter, beside the QSFP-DD column at the left of the front panel, … |
 | `edgecore/agr420-filter-top@1` | module | filter | 417 × 8.6 × 12 |  | 1 | 1 | Removable TOP air filter for the Edgecore AGR420 (AS7946-74XKSB) - the full-width band of it |
@@ -1046,7 +1046,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `nokia/fwlt-a@1` | module | line-card | 25 × 405 × 225 |  | 3 | 0 | Nokia FWLT-A (3FE 56399 AB), the 4-port U-NGPON line termination card of the 7360 ISAM FX: NG-PON2 TWDM or XG… |
 | `nokia/fwlt-b-aa@1` | module | line-card | 25 × 405 × 225 |  | 3 | 0 | Nokia FWLT-B AA (3FE 72955 AA), the 8-port XGS-PON line termination card of the 7360 ISAM FX and Lightspan FX… |
 | `nokia/fwlt-b-ab@1` | module | line-card | 25 × 405 × 225 |  | 3 | 1 | Nokia FWLT-B AB (3FE 72955 AB), the 8-port U-NGPON line termination card of the 7360 ISAM FX (NG-PON2 TWDM or… |
-| `nokia/fwlt-c@1` | module | line-card | 25 × 405 × 225 |  | 3 | 2 | Nokia FWLT-C (3FE 74981 AA, AD, BD and CD), the 16-port Multi-PON line termination card of the 7360 ISAM FX a… |
+| `nokia/fwlt-c@1` | module | line-card | 25 × 405 × 225 |  | 3 | 1 | Nokia FWLT-C (3FE 74981 AA, AD, BD and CD), the 16-port Multi-PON line termination card of the 7360 ISAM FX a… |
 | `nokia/imm-2pac-fp3-p6-10g-sfp@1` | module | line-card | 425.4 × 35.4 × 431.8 |  | 2 | 0 | Nokia 12-port 10GE SFP+ Multi-Core IMM (3HE07158AA L3HQ, -BA L3BQ, -CA L2HQ - one face, three licences), the … |
 | `nokia/iom-e@1` | module | line-card | 259.1 × 70.8 × 292.1 |  | 3 | 5 | Nokia 7750 SR-e IOM-e (3HE10311AA L3HQ, 3HE10311BA L2HQ, 3HE10311CA L3BQ - one face, three licences), the two… |
 | `nokia/iom3-xp@1` | module | line-card | 425.4 × 35.4 × 431.8 |  | 2 | 3 | Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS IOM3-XP, IOM3-XP-B and IOM3-XP-C (3HE03619AA, 3HE06318AA, 3HE08426A… |

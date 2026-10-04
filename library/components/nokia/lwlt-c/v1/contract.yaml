@@ -188,7 +188,7 @@ provenance:
     25GS-PON type, so the even ports export as XGS-PON; (2) the labels are placeholders;
     (3) the facet angles and the pocket depth are estimated from front views and one
     photograph, with no side elevation to fit; (4) the small hinge blocks and end lugs of
-    the ejectors are drawn schematically; (5) ejector proudness is not stated anywhere.
+    the ejectors are drawn schematically; (5) the handles stand 39 mm proud (UDS 8.6.1, 256 mm with handles against 217 without); which part of a lever reaches that is not stated, and the whole lever is built to it.
 elements:
   part-label: {at: [35.5, 4.0], size: [10.0, 13.5], class: label}
   label-right-1: {at: [368.4, 1.5], size: [5.5, 8.2], class: label}
@@ -230,15 +230,13 @@ relief:
   wall: '#8d9298'
   features:
     - node: ejector-left
-      out: 4.2
-      confidence: estimated
-      source: >-
-        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, as
-        nokia/fwlt-c@1 uses; itself sourced for arrangement and not proudness
+      out: 39
+      confidence: datasheet
+      source: 'UDS 8.6.1 (p60): depth 256 mm with handles, 217 mm without'
     - node: ejector-right
-      out: 4.2
-      confidence: estimated
-      source: as ejector-left
+      out: 39
+      confidence: datasheet
+      source: 'UDS 8.6.1 (p60): depth 256 mm with handles, 217 mm without'
     - node: well
       pocket: 10.51
       confidence: estimated
