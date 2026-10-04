@@ -1,0 +1,143 @@
+format: 1
+kind: component
+name: qsfp-dd-pull-tab-type2
+version: 1.0.0
+class: latch
+profile: networking
+description: >-
+  The pull handle of a Type 2 QSFP-DD module - the long-nosed module, whose
+  handle is shorter than a Type 1 handle because the case extends further out
+  of the cage. A closed loop as wide as the module: two arms along the side
+  edges, a grip plate across the far end, and a tall post at each arm root
+  against the nose front, with the arm stepping up from the post to a flat
+  strap level with the top of the nose. Open in the middle, so the fibre
+  connector passes through. No speed lettering: the generic that composes it
+  carries no rate.
+size: {w: 18.35, h: 10.0}
+size-confidence: {w: datasheet, h: estimated}
+attrs: {role: pull-latch}
+fields:
+  latch-color: {label: Latch colour, type: text, default: '#6f6f6f'}
+provenance:
+  source: >-
+    the JPC 400G QSFP-DD SR8 Transceiver datasheet (an MPO-16 module), p2
+    outline drawing: top, side and bottom views of the module with its handle.
+    The callouts on the handle are toleranced; its shape is not dimensioned
+    and is SCALED off the embedded raster (1336 x 886 at 200 ppi), on the
+    ruler the printed 117.6 fixes (4.87 px/mm, checked on the printed 13.13
+    height, 4.84), good to about 0.25. The second vendor is the FluxLight
+    QSFP-DD-400GBase-SR8 datasheet, revision 21.04, p13, used for the reach
+    only: its drawing is a 130 ppi raster and its handle was not scaled.
+  size: >-
+    w 18.35 is printed: JPC p2 dimensions the handle 18.35 +/-0.2 across, the
+    width of the module, so the arms run on the module side edges and the part
+    is composed at x 0. h 10.0 is the post at the arm root, scaled: its top is
+    level with the handle top and its lower edge 10.0 below that.
+  reach: >-
+    datasheet, derived - 37.1 from the nose front. JPC p2 prints 117.6 +/-0.4
+    from the handle end to the hard stop and 80.5 +/-0.2 from the nose front
+    to the same stop. Scaled on the same view the handle measures 37.3. THE
+    TWO VENDORS DIFFER: FluxLight p13 prints 128.06 +/-0.5 overall and 93.00
+    +/-0.20 for the module, 35.06 forward of the nose front, 2.0 shorter, on a
+    nose that derives 2.8 longer (34.74 against 31.89). JPC is drawn because
+    its two spans share one datum. Both are far short of the 49.8 of a Type 1
+    handle (common/qsfp-pull-tab@2): QSFP-DD HW Rev 6.3 Appendix B says a Type
+    2 handle is shortened by the case extension.
+  height: >-
+    datasheet for the top, scaled for the rest. The handle top is level with
+    the top of the nose: the 13.13 (ref) height on JPC p2 is dimensioned from
+    the handle top line to the nose bottom, and the nose is 3.13 +/-0.25 above
+    the body. A host composes this part at `at: [0, -3.13]` on the nose front.
+    The strap is 3.2 thick in the side view, so its underside is at the body
+    top.
+  arms: >-
+    estimated, scaled off the JPC p2 top view - each arm is 2.25 wide, at the
+    module side edge. In the side view the arm is three things along its
+    reach: a post from the nose front to 6.8 out, as tall as 10.0; a dogleg
+    from 6.8 to 12.5 whose lower edge rises from 10.0 to 3.2; and a flat strap
+    from 12.5 to the grip. The dogleg is drawn as two boxes at the mean of the
+    edge over each half, the staircase common/qsfp-pull-tab@2 uses for its
+    S-bend; relief builds boxes. Every box starts at the handle top, and each
+    one starts where the one before it ends, so no two share a volume.
+  grip: >-
+    estimated, scaled off the JPC p2 top view - the far end is a plate across
+    the full width with a raised thumb pad on it. Its inner edge is an arc,
+    8.7 from the handle end on the centreline and about 13.6 at the arms; the
+    plate is drawn 8.7 long, as a box, 3.2 thick like the strap. The thumb pad
+    (about 5.3 x 10.6) and the rounded outer corners are not drawn.
+  neck: >-
+    the JPC side view starts the handle 1.2 forward of the nose front, joined
+    to it by a short ribbed neck. Not drawn: the post is drawn touching the
+    nose, as common/qsfp-pull-tab@2 draws its riser.
+  colour: >-
+    the neutral grey #6f6f6f of common/qsfp-pull-tab@2, not a wavelength code;
+    a host or a vendor wrapper sets latch-color. The outline follows the fill
+    (`data-stroke-derive`).
+elements:
+  grip: {at: [0.0, 0.0], size: [18.35, 3.2], class: latch}
+  riser-l: {at: [0, 0.0], size: [2.25, 10.0], class: latch}
+  arm-l-2: {at: [0, 0.0], size: [2.25, 8.3], class: latch}
+  arm-l-3: {at: [0, 0.0], size: [2.25, 4.9], class: latch}
+  arm-l: {at: [0, 0.0], size: [2.25, 3.2], class: latch}
+  riser-r: {at: [16.1, 0.0], size: [2.25, 10.0], class: latch}
+  arm-r-2: {at: [16.1, 0.0], size: [2.25, 8.3], class: latch}
+  arm-r-3: {at: [16.1, 0.0], size: [2.25, 4.9], class: latch}
+  arm-r: {at: [16.1, 0.0], size: [2.25, 3.2], class: latch}
+relief:
+  features:
+    - node: riser-l
+      out: 6.8
+      confidence: estimated
+      source: >-
+        the post at the arm root, scaled off the JPC p2 side view: full height from the handle top to 10.0 below it, from the nose front to 6.8 out (the drawing starts it 1.2 off the nose, behind a ribbed neck; drawn as touching)
+    - node: arm-l-2
+      out: 9.65
+      lift: 6.8
+      confidence: estimated
+      source: >-
+        the first half of the dogleg, 6.8 to 9.65 out: the lower edge rises from 10.0 to 3.2 below the handle top between 6.8 and 12.5 (scaled, JPC p2 side view), and this box is its mean over the span, 8.3. Its lift is where the post ends
+    - node: arm-l-3
+      out: 12.5
+      lift: 9.65
+      confidence: estimated
+      source: >-
+        the second half of the dogleg, 9.65 to 12.5 out, the mean of the same edge over the span, 4.9. Its lift is where the box before it ends
+    - node: arm-l
+      out: 28.4
+      lift: 12.5
+      confidence: estimated
+      source: >-
+        the flat strap, 3.2 thick with its top level with the handle top, from the end of the dogleg at 12.5 to where the grip plate begins at 28.4 (both scaled, JPC p2 side and top views)
+    - node: riser-r
+      out: 6.8
+      confidence: estimated
+      source: >-
+        the same reading as riser-l - one drawing covering both arms of one handle
+    - node: arm-r-2
+      out: 9.65
+      lift: 6.8
+      confidence: estimated
+      source: >-
+        the same reading as arm-l-2 - one drawing covering both arms of one handle
+    - node: arm-r-3
+      out: 12.5
+      lift: 9.65
+      confidence: estimated
+      source: >-
+        the same reading as arm-l-3 - one drawing covering both arms of one handle
+    - node: arm-r
+      out: 28.4
+      lift: 12.5
+      confidence: estimated
+      source: >-
+        the same reading as arm-l - one drawing covering both arms of one handle
+    - node: grip
+      out: 37.1
+      lift: 28.4
+      confidence: datasheet
+      source: >-
+        the far end of the handle: JPC p2 prints 117.6 +/-0.4 from the handle
+        end to the hard stop and 80.5 +/-0.2 from the nose front to the same
+        stop, so the handle ends 37.1 forward of the nose front. The 28.4 lift
+        is that less the 8.7 plate length, which is scaled (provenance.grip)
+skins: [default]

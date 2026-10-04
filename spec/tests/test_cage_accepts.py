@@ -83,7 +83,8 @@ def test_an_sfp28_cage_accepts_exactly_the_sfp_generics(tmp_path):
     # wrong-but-nonempty list (the failure mode an unordered `set()` compare
     # would hide) fails loudly here.
     assert cage["accepts"] == ["generic/sfp-cable@1", "generic/sfp-lc-simplex@2", "generic/sfp-lc@1",
-                               "generic/sfp-rj45@1", "molex/sfp-plus-passive-dac@1"]
+                               "generic/sfp-rj45@1", "generic/sfp-sc-key-up@1",
+                               "generic/sfp-sc@1", "molex/sfp-plus-passive-dac@1"]
 
 
 CSR180 = LIB / "devices/edgecore/csr180/device.yaml"
@@ -99,7 +100,8 @@ def test_the_rate_ceiling_keeps_a_10g_dac_out_of_a_1g_sfp_cage(tmp_path):
     assert cage["interface"] == "sfp"
     assert cage["media"] == "sfp"
     assert cage["accepts"] == ["generic/sfp-cable@1", "generic/sfp-lc-simplex@2", "generic/sfp-lc@1",
-                               "generic/sfp-rj45@1"]
+                               "generic/sfp-rj45@1", "generic/sfp-sc-key-up@1",
+                               "generic/sfp-sc@1"]
 
 
 def test_the_rate_ceiling_offers_a_10g_dac_in_a_10g_sfp_cage(tmp_path):
@@ -126,7 +128,8 @@ def test_a_qsfp_dd_cage_accepts_its_own_family_and_the_also_accepted_qsfp_parts(
     assert cage["media"] == "qsfp-dd"
     assert cage["group"] == "qsfpdd-400g"
     assert cage["accepts"] == ["generic/qsfp-cable@1", "generic/qsfp-dd-cable-type2@1",
-                               "generic/qsfp-dd-cable@1", "generic/qsfp-dd-lc@2", "generic/qsfp-lc@2",
+                               "generic/qsfp-dd-cable@1", "generic/qsfp-dd-lc@2", "generic/qsfp-dd-mpo16@1",
+                               "generic/qsfp-lc-simplex@1", "generic/qsfp-lc@2", "generic/qsfp-mpo@1",
                                "amphenol/qsfp28-passive-dac@1", "amphenol/qsfp56-linear-active@1",
                                "credo/hiwire-shift-qsfp-dd@1", "fs/qsfp28-aoc@1",
                                "siemon/qsfp28-aoc@1", "volex/qsfp-dd-passive-dac@1"]
@@ -189,7 +192,8 @@ def test_a_group_with_no_media_has_no_ceiling(tmp_path):
     assert cage["group"] == "sfp28"
     assert cage["media"] is None
     assert cage["accepts"] == ["generic/sfp-cable@1", "generic/sfp-lc-simplex@2", "generic/sfp-lc@1",
-                               "generic/sfp-rj45@1", "molex/sfp-plus-passive-dac@1"]
+                               "generic/sfp-rj45@1", "generic/sfp-sc-key-up@1",
+                               "generic/sfp-sc@1", "molex/sfp-plus-passive-dac@1"]
 
 
 # --- the configured occupant, read from the manifest, not hardcoded ------
@@ -362,7 +366,8 @@ def test_a_qsfp_shaped_cage_with_qsfp_dd_media_offers_the_qsfp_dd_optic(tmp_path
     # this same media would offer (test_a_qsfp_dd_cage_accepts_its_own_generic_
     # and_the_also_accepted_qsfp_one, above, on edgecore/dcs510).
     assert cage["accepts"] == ["generic/qsfp-cable@1", "generic/qsfp-dd-cable-type2@1",
-                               "generic/qsfp-dd-cable@1", "generic/qsfp-dd-lc@2", "generic/qsfp-lc@2",
+                               "generic/qsfp-dd-cable@1", "generic/qsfp-dd-lc@2", "generic/qsfp-dd-mpo16@1",
+                               "generic/qsfp-lc-simplex@1", "generic/qsfp-lc@2", "generic/qsfp-mpo@1",
                                "amphenol/qsfp28-passive-dac@1", "amphenol/qsfp56-linear-active@1",
                                "credo/hiwire-shift-qsfp-dd@1", "fs/qsfp28-aoc@1",
                                "siemon/qsfp28-aoc@1", "volex/qsfp-dd-passive-dac@1"]
@@ -404,7 +409,8 @@ def test_a_placement_declared_media_governs_when_the_group_declares_none(tmp_pat
     # published - is the defect this pins.
     assert cage["media"] == "qsfp-dd"
     assert cage["accepts"] == ["generic/qsfp-cable@1", "generic/qsfp-dd-cable-type2@1",
-                               "generic/qsfp-dd-cable@1", "generic/qsfp-dd-lc@2", "generic/qsfp-lc@2",
+                               "generic/qsfp-dd-cable@1", "generic/qsfp-dd-lc@2", "generic/qsfp-dd-mpo16@1",
+                               "generic/qsfp-lc-simplex@1", "generic/qsfp-lc@2", "generic/qsfp-mpo@1",
                                "amphenol/qsfp28-passive-dac@1", "amphenol/qsfp56-linear-active@1",
                                "credo/hiwire-shift-qsfp-dd@1", "fs/qsfp28-aoc@1",
                                "siemon/qsfp28-aoc@1", "volex/qsfp-dd-passive-dac@1"]
@@ -433,7 +439,8 @@ def test_a_qsfp_shaped_cage_with_agreeing_media_is_unaffected(tmp_path):
     assert cage["media"] == "qsfp28"
     # no amphenol/qsfp56-linear-active@1: its `rate: qsfp56` is above this
     # cage's qsfp28 rung (test_the_rate_ceiling_* below)
-    assert cage["accepts"] == ["generic/qsfp-cable@1", "generic/qsfp-lc@2",
+    assert cage["accepts"] == ["generic/qsfp-cable@1", "generic/qsfp-lc-simplex@1", "generic/qsfp-lc@2",
+                               "generic/qsfp-mpo@1",
                                "amphenol/qsfp28-passive-dac@1",
                                "fs/qsfp28-aoc@1", "siemon/qsfp28-aoc@1"]
 

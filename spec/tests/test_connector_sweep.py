@@ -42,6 +42,9 @@ FIBRE_CONNECTORS = [
     "generic/sc-plug/v1",
     "generic/mpo12-plug/v1",
     "generic/mpo24-plug/v1",
+    # the sixteen-fibre plug: the MPO-12 housing with an offset key, mating
+    # `mpo16` (docs/pluggables-mpo-bidi-pon-design.md)
+    "generic/mpo16-plug/v1",
 ]
 
 

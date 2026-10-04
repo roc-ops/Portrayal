@@ -25,6 +25,19 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- Five generic optics, a plug and a pull handle: `generic/qsfp-mpo@1` (a QSFP
+  with one MPO receptacle), `generic/qsfp-dd-mpo16@1` (a QSFP-DD with one
+  MPO-16 receptacle in a Type 2 nose), `generic/qsfp-lc-simplex@1` (a QSFP
+  with a single LC bore), `generic/sfp-sc@1` and `generic/sfp-sc-key-up@1` (an
+  SFP with an SC receptacle and a bail, key slot down and key slot up),
+  `generic/mpo16-plug@1` (the sixteen-fibre MPO plug, key offset, mating
+  `mpo16`) and `common/qsfp-dd-pull-tab-type2@1` (the shorter handle of a
+  Type 2 QSFP-DD module). `std/mpo-module-receptacle@1` and
+  `std/mpo16-module-receptacle@1` draw the MPO mouth as a module carries it,
+  with the pinned ferrule, the key notch and one addressable node per fibre. Each optic's receptacle is a connector slot offering its plug and
+  dust cap. A new registry entry, `mpo16-plug`. A host's own field default now
+  reaches a part it composes when the two defaults differ. See
+  [docs/pluggables-mpo-bidi-pon-design.md](docs/pluggables-mpo-bidi-pon-design.md).
 - Nokia Lightspan MF-8 (`nokia/lmfs-f`) with its NT board (`nokia/lbnt-a`), 16-port
   Multi-PON LT board (`nokia/lwlt-c`), alarm module (`nokia/lalm-f`), power module
   (`nokia/lpwr-f`), fan module (`nokia/lfan-f`), the LT and NT dummy boards and the
