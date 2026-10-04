@@ -124,35 +124,38 @@ def test_a_known_port_offers_its_plug(iface, plug, comps, tmp_path):
     assert plug in slot["accepts"], slot
 
 
-# THE BNC PLUG (#650 Task 5). No device or card places a BNC jack, and the
-# bezel's own components.json entry carries neither `cages` (it is not a card)
-# nor `presents` (it mates nothing), so the accept list is read where the
-# build publishes it: the configs.json slot of a device copy whose coax
-# placement is REPLACED by the bezel a device places. The 1.0/2.3 plug is read
-# off a real SPA port instead (KNOWN_CARD, PLUG_FOR).
-SWAPPED = {
-    "bnc": ("cisco/asr-9901", "front", "gps-1pps", "common/bnc-jack@1",
+# THE BNC PLUG (#650 Task 5; a real device since #673). The bezel's own
+# components.json entry carries neither `cages` (it is not a card) nor
+# `presents` (it mates nothing), so the accept list is read where the build
+# publishes it. Two real placements of common/bnc-jack@1 carry it: the
+# ReadyLinks GL-12xB-240D's SYNC IN jack, a device placement read from the
+# device's configs.json, and RL1 on the GL-x 12-port BNC line card that device
+# seats, read from the indexer's card entry. The 1.0/2.3 plug is read off a
+# real SPA port instead (KNOWN_CARD, PLUG_FOR).
+BNC_DEVICE = {
+    "bnc": ("readylinks/gl-12xb-240d", "front", "sync-in", "common/bnc-jack@1",
             "generic/bnc-plug@1"),
 }
+BNC_CARD = {"bnc": ("readylinks/gl-x-lc-12xb@1", "rl1", "generic/bnc-plug@1")}
 
 
-@pytest.mark.parametrize("iface", sorted(SWAPPED))
+@pytest.mark.parametrize("iface", sorted(BNC_DEVICE))
 def test_a_bezel_placement_offers_its_plug(iface, tmp_path):
-    import shutil
-    device, view, pid, bezel, plug = SWAPPED[iface]
-    dev = tmp_path / device.split("/")[1] / "device.yaml"
-    shutil.copytree(LIB / "devices" / device, dev.parent)
-    d = yaml.safe_load(dev.read_text())
+    device, view, pid, bezel, plug = BNC_DEVICE[iface]
+    d = yaml.safe_load((LIB / "devices" / device / "device.yaml").read_text())
     hits = [p for p in d["views"][view]["components"]["placements"] if p.get("id") == pid]
-    assert len(hits) == 1
-    hits[0]["ref"] = bezel
-    dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
-    out = tmp_path / "o"
-    r = warmrender.run([sys.executable, str(RENDER), str(dev), "--library", str(LIB),
-                        "--out", str(out)], capture_output=True, text=True)
-    assert r.returncode == 0, r.stderr[-800:]
-    cfg = json.loads((out / f"{dev.parent.name}.configs.json").read_text())
-    slot = next(c for c in cfg["cages"][view] if c["id"] == pid)
+    assert len(hits) == 1 and hits[0]["ref"] == bezel, hits
+    slot = _device_slot(device, view, pid, tmp_path)
+    assert slot["kind"] == "connector" and slot["interface"] == iface, slot
+    assert plug in slot["accepts"], slot
+
+
+@pytest.mark.parametrize("iface", sorted(BNC_CARD))
+def test_a_card_bezel_port_offers_its_plug(iface, comps):
+    ref, cage_id, plug = BNC_CARD[iface]
+    part = next(p for p in _contract(ref)["parts"] if p["id"] == cage_id)
+    assert part["ref"] == "common/bnc-jack@1", part
+    slot = _card_slot(comps, ref, cage_id)
     assert slot["kind"] == "connector" and slot["interface"] == iface, slot
     assert plug in slot["accepts"], slot
 

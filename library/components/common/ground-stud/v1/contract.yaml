@@ -1,0 +1,41 @@
+format: 1
+kind: component
+name: ground-stud
+version: 1.0.0
+class: ground
+behaviour: mounts
+profile: networking
+description: >-
+  Chassis grounding stud with its hex nut - a threaded stud pressed into the panel and the
+  nut that clamps a ring lug to it, seen end on. No symbol: where the panel prints an earth
+  mark beside it, that is common/ground-symbol@1 placed separately.
+size: {w: 8.1, h: 8.1}
+size-confidence: {w: photo-measured, h: photo-measured}
+provenance:
+  size: >-
+    photo-measured - the nut beside the earth mark on the rear of the ReadyLinks GL-12xB
+    datasheet photograph reads about 7.3 across corners at about 3.0 px/mm; drawn as an M4
+    nut, 7.0 across the flats and 8.1 across the corners, which is the size the photograph
+    resolves to.
+  depth: >-
+    estimated - the stud and nut stand about 6 mm off the panel in the photograph's
+    perspective; not measured.
+elements:
+  nut: {at: [0.0, 0.5], size: [8.1, 7.0], class: stud}
+relief:
+  features:
+    - node: nut
+      out: 3.2
+      color: '#b3b8bd'
+      confidence: estimated
+      source: >-
+        common/ground-stud@1 depth key - an M4 nut is 3.2 thick; the stud behind it is not
+        drawn.
+    - node: stud
+      cyl: 6.0
+      color: '#9aa0a6'
+      confidence: estimated
+      source: >-
+        common/ground-stud@1 depth key - read by eye off the datasheet photograph's
+        perspective; not measured.
+skins: [default]
