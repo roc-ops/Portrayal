@@ -1,0 +1,91 @@
+format: 1
+kind: module
+name: riser-flom-dl160
+version: 1.0.0
+class: riser
+behaviour: fills
+profile: server
+description: >-
+  The FlexibleLOM riser cage of the Gen10 ProLiant DL160 as the rear presents
+  it (riser kit 875748-B21, riser board 878539-001), which replaces the
+  standard primary riser - a FlexibleLOM adapter lying flat low in the cage
+  where slot 1 was, and PCIe 3.0 slot 2, low profile, beside it
+attrs:
+  riser-board: 878539-001
+  part-numbers: 875748-B21 878539-001
+provenance:
+  sources: >-
+    DL160 Gen10 User Guide a00066666en_us, 'Installing the FlexibleLOM adapter'
+    (native figures GUID-181C89BB and GUID-7CC9C16D: the blank coming out of the
+    FlexibleLOM riser cage and an adapter going in, both from the rear at an
+    angle). QuickSpecs a00021860enw, 'FlexibleLOM Riser Slots': slot 1 PCIe 3.0
+    x8, Flexible LOM, CPU1; slot 2 PCIe 3.0 x8, low profile, CPU1; 'This riser
+    is mandatory for installing FlexibleLOMs' and 'FlexibleLOM riser will
+    replace standard CPU1 X16/X8 riser'. Maintenance and Service Guide
+    a00066664en_us: primary riser board x8/FlexibleLOM, 878539-001. HPE
+    PartSurfer's photograph of the cage
+    (partsurfer.hpe.com/media/photos/878539-001.jpg), from above and behind at
+    an angle, its label reading 'Slot 2 PCIe x8 / Slot 1 ALOM x8'.
+  size: >-
+    borrowed - 203.0 x 24.2, hpe/riser-primary-dl160@1: this cage goes in the
+    same place in the chassis and PartSurfer's two photographs show the same
+    outline. Slot 2, its window and both end housings are that part's.
+  flom-opening: >-
+    estimated - NO IMAGE HELD SHOWS THIS CAGE'S REAR STRAIGHT ON. What the two
+    User Guide figures show, and all that is drawn from them: the adapter sits
+    low in the cage, its right end at the divider beside slot 2, one screw
+    through the cage into the adapter's left end, and a row of vents above it.
+    The opening is the adapter's faceplate less the screw end (hpe/flom-blank@1
+    for the faceplate's 74.0 x 14.6), 64.5 x 14.0 at 52.0..116.5 by 9.4..23.4;
+    it stops at 116.5, 1.0 short of where slot 2's bracket begins behind the
+    plate. The figures are isometric and give no scale: every one of these
+    positions is a placement by eye inside a cage whose outline is borrowed.
+  vents: >-
+    estimated - a row of slots above the adapter and a block of them left of the
+    screw, as the figures draw the cage; their count and size are not read.
+  slots: >-
+    datasheet - QuickSpecs: slot 1 PCIe 3.0, x8, FlexibleLOM; slot 2 PCIe 3.0,
+    x8 connector, low profile; both on processor 1. Only one FlexibleLOM can be
+    added to the server.
+  depth: >-
+    borrowed - 150, hpe/riser-primary-dl160@1.
+size: {w: 203.0, h: 24.2, d: 150.0}
+size-confidence: {w: borrowed, h: borrowed, d: borrowed}
+body: {depth: 150.0, color: '#b9bec4'}
+elements:
+  plate: {at: [0.0, 0.0], size: [203.0, 24.2], class: bezel}
+bays:
+  flom:
+    behind: true
+    at: [43.5, 9.0]
+    size: [74.0, 14.6]
+    accepts: [hpe/flom-blank@1, hpe/flom-629135-b22@1, hpe/flom-665240-b21@1, hpe/flom-817745-b21@1, hpe/flom-817721-b21@1, hpe/flom-817749-b21@1]
+    default: hpe/flom-blank@1
+  slot-2:
+    slot: {connector: x8, lanes: 8, height: low, length: half, processor: 1, generation: 3}
+    behind: true
+    at: [117.5, 1.9]
+    size: [79.20, 18.42]
+    accepts: [hpe/expansion-slot-blank-lp@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1, nvidia/mcx4111a-lp@1, nvidia/mcx4121a-lp@1, nvidia/mcx4131a-lp@1, nvidia/mcx512a-lp@1, nvidia/mcx512f-lp@1, nvidia/mcx515a-lp@1, nvidia/mcx516a-lp@1, nvidia/mcx621102-lp@1, nvidia/mcx621202-lp@1, nvidia/mcx623102a-lp@1, nvidia/mcx623105-lp@1, nvidia/mcx623106-lp@1, nvidia/mcx713106-lp@1, nvidia/mcx715105-lp@1, nvidia/mcx75310-lp@1, nvidia/mcx75510-lp@1, nvidia/mcx755106-lp@1]
+    default: hpe/expansion-slot-blank-lp@1
+relief:
+  features:
+  - node: latch-left
+    out: 12.0
+    color: '#b3b9bf'
+    confidence: estimated
+    source: >-
+      the latch housing a bracket's flange lands in, as on hpe/riser-primary-
+      dl160@1: the two cages are the same sheet metal at their ends (HPE
+      PartSurfer photographs 878538-001 and 878539-001). 12 proud is that part's
+      estimate, not a measurement
+  - node: latch-right
+    out: 12.0
+    color: '#b3b9bf'
+    confidence: estimated
+    source: >-
+      the latch housing a bracket's flange lands in, as on hpe/riser-primary-
+      dl160@1: the two cages are the same sheet metal at their ends (HPE
+      PartSurfer photographs 878538-001 and 878539-001). 12 proud is that part's
+      estimate, not a measurement
+skins: [default]
