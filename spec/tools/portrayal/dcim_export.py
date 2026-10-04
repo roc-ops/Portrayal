@@ -780,7 +780,9 @@ NOT_A_DCIM_PORT = {
                    "os32m2b); no trunk to terminate on, the same case as "
                    "common/lc-duplex-adapter",
     "common/sc-apc": "PON; the connector is the same ferrule for xg-pon (10G/2.5G) and "
-                     "xgs-pon (10G/10G), which upstream separates, so the ref cannot pick one",
+                     "xgs-pon (10G/10G), which upstream separates, so the ref cannot pick "
+                     "one - a device placement that states `pon` does, and exports "
+                     "(device_port_type)",
 
     # --- USB: real ports, no device-type field to put them in ----------------
     # A DCIM device type has console ports, power ports and interfaces. A USB
@@ -1223,6 +1225,13 @@ def device_port_type(p, a, group_role, names=None):
     # A CAGE THAT CARRIES A PROPRIETARY LINK says what runs in it, as a
     # card's does in `placed_type`, and no speed row can be true of it.
     link = proprietary_link(a) if pluggable_cage(p["ref"]) else None
+    # A PON PORT'S FLAVOUR IS `pon`, ON A DEVICE AS ON A CARD (placed_type).
+    # An ONT's uplink is a built-in SC/APC ferrule, not a cage, so iface_type
+    # has no family to read and the port never typed: the box exported with
+    # its LAN jack and without the port it exists for. The flavour is the
+    # device's own word, and only the ones both targets define count.
+    if not link and a.get("pon") in PON_TYPES:
+        return a["pon"], None, None
     t = "other" if link else iface_type(p, a, group_role)
     if t is None:                      # unknown combination: skip, do not guess
         return None, None, "a port the exporter cannot type"

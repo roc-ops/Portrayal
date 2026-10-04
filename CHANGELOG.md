@@ -25,6 +25,18 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- Nokia Lightspan MF-8 (`nokia/lmfs-f`) with its NT board (`nokia/lbnt-a`), 16-port
+  Multi-PON LT board (`nokia/lwlt-c`), alarm module (`nokia/lalm-f`), power module
+  (`nokia/lpwr-f`), fan module (`nokia/lfan-f`), the LT and NT dummy boards and the
+  horizontal front cover; the Nokia XS-010X-R and XS-010XR-P XGS-PON ONTs; and the
+  outdoor ONT enclosure 3FE54221AH.
+- A device's built-in PON port now exports. A placement that states `pon` with a
+  flavour both NetBox and Nautobot define leaves as that interface type; before, an
+  ONT's SC/APC uplink exported nothing. This adds a `pon` interface (`xgs-pon`) to
+  the four Halny HLX-TGV device types - an addition, so nothing already imported is
+  re-filed.
+- Lint L76 counts a lamp bound to a jack from another face (`for: rear/lan`), as it
+  already counted one drawn beside the jack.
 - ReadyLinks GL-12xB-240D (`readylinks/gl-12xb-240d`), the first device to seat
   a BNC jack: twelve ReadyLink ports on `common/bnc-jack@1` (impedance 75) on a new
   GL-x 12-port BNC line card in slot 1, a slot blank in slot 2, and two BNC sync
