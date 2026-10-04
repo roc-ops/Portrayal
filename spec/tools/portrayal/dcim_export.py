@@ -1997,7 +1997,9 @@ def for_target(doc, target, fibre_map=None):
                 f"{who}: front port {port['name']} reaches {on or 'no rear port'}. "
                 f"Nautobot binds a front port to exactly one rear port of its own type")
         bound[port["name"]] = (on[0], legs)
-        if len(legs) > 1:
+        # BY THE PORT'S OWN WIDTH AS WELL AS ITS ROWS: a twelve-fibre connector
+        # with one path stated is still a connector, not a fibre.
+        if len(legs) > 1 or (port.get("positions") or 1) > 1:
             whole_connector.add(on[0])
 
     for rear in sorted(whole_connector):

@@ -82,6 +82,14 @@ def test_an_mpo_pass_through_is_one_position_and_says_where_the_fibres_are():
     assert doc["rear-ports"][0]["positions"] == 12
 
 
+def test_a_wide_front_port_with_one_stated_path_is_still_a_whole_connector():
+    doc, fmap = panel()
+    fmap["rows"] = fmap["rows"][:1]
+    out = dx.for_target(doc, "nautobot", fmap)
+    assert out["front-ports"][0]["rear_port_position"] == 1
+    assert out["rear-ports"][0]["positions"] == 1
+
+
 def test_a_front_port_with_no_row_stops_the_export():
     doc, fmap = breakout()
     fmap["rows"] = fmap["rows"][:-1]
@@ -150,7 +158,14 @@ def test_the_half_u_boxes_differ_between_the_trees_only_in_height(vendor, model,
 
 
 def test_the_trees_differ_nowhere_else():
-    """Everything `for_target` does not rewrite is still one document in both."""
-    differ = [str(f.relative_to(EXPORTS / "netbox")) for f, d in _docs("netbox")
-              if d != yaml.safe_load((EXPORTS / "nautobot" / f.relative_to(EXPORTS / "netbox")).read_text())]
-    assert len(differ) == len([1 for _f, d in _docs("netbox") if d.get("front-ports")]) + 2, differ
+    """Everything `for_target` does not rewrite is still one document in both:
+    the files that differ are the ones with front ports or a part-unit height."""
+    differ, rewritten = set(), set()
+    for f, d in _docs("netbox"):
+        rel = str(f.relative_to(EXPORTS / "netbox"))
+        if d != yaml.safe_load((EXPORTS / "nautobot" / rel).read_text()):
+            differ.add(rel)
+        if d.get("front-ports") or not float(d.get("u_height") or 0).is_integer():
+            rewritten.add(rel)
+    assert len(rewritten) > 30
+    assert differ == rewritten, sorted(differ ^ rewritten)
