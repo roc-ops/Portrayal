@@ -142,6 +142,16 @@ names the ref that replaces it.
   class), and no 800G prefix is documented.
 
 ### Changed
+- **The npm packages: the component skins ship one package per namespace**,
+  `@portrayal/components-<namespace>`, and `packages.json` in `@portrayal/index`
+  maps each namespace to its package and version under `components`. One
+  package for every skin was the largest in the scope, grew with every
+  component and moved whole with any one skin. `packageDist` in
+  `@portrayal/kit/dist` reads the new map, and `@portrayal/kit` is 0.2.0 for it:
+  0.1.0 reads the old single entry and cannot load an index published from
+  here on.
+  `@portrayal/components` 0.1.0, published before the split, is not updated
+  again (roc-ops/Portrayal#526).
 - The Nautobot exports are no longer a copy of the NetBox ones in two places,
   because Nautobot could not import 37 of them. Front ports under
   `library/exports/nautobot/` now carry `rear_port` and `rear_port_position`

@@ -55,8 +55,8 @@ export function faceFile(index, config, view) {
 // Every file the kit reads is named by its path in a build: `devices.json`,
 // `<device>.configs.json`, a face `configs[].files` names, `components/<skin>`.
 // A build directory serves them all from one base. The npm packages (#528) do
-// not: each device is its own package, the skins are another and the
-// library-wide JSON a third. So the kit asks a function for a path's URL and
+// not: each device is its own package, each namespace's skins are another and
+// the library-wide JSON a third. So the kit asks a function for a path's URL and
 // never joins a base itself: `distAt(path)`.
 
 /** path -> URL for one build directory (library/dist, or a copy of it). */
@@ -113,16 +113,25 @@ export async function packageDist({at = JSDELIVR, index = 'latest'} = {}) {
   if (!SEMVER.test(String(version))) throw new Error(`${INDEX}: not a version: ${JSON.stringify(version)}`);
   const base = at(INDEX, version);
   const pk = await jdist(`${base}packages.json`);
-  for (const [what, ref] of [['components', pk.components], ...Object.entries(pk.devices || {})]) {
+  for (const [what, ref] of [
+    ...Object.entries(pk.components || {}).map(([ns, r]) => [`components/${ns}`, r]),
+    ...Object.entries(pk.devices || {})]) {
     if (!ref || !PACKAGE.test(String(ref.package)) || !SEMVER.test(String(ref.version)))
       throw new Error(`packages.json: ${what} names ${JSON.stringify(ref)}, not @portrayal/<name> at a version`);
   }
-  const comp = at(pk.components.package, pk.components.version);
+  // own keys only: a path is the page's to choose, and `constructor` or
+  // `__proto__` would otherwise find something on every object
+  const held = (map, key) => (map && Object.hasOwn(map, key) ? map[key] : undefined);
   const distAt = path => {
-    if (path.startsWith('components/')) return comp + path.slice('components/'.length);
+    // a skin is `components/<ns>--<name>--<major>--<skin>.svg`, and each
+    // namespace's skins are a package of their own
+    const skin = path.startsWith('components/') ? path.slice('components/'.length) : null;
     // a device's files all start `<device>.` and device names hold no dot
-    const dev = pk.devices[path.split('.')[0]];
-    return dev ? at(dev.package, dev.version) + path : base + path;
+    const ref = skin !== null ? held(pk.components, skin.split('--')[0])
+      : held(pk.devices, path.split('.')[0]);
+    // a name no package holds falls to the index, where it misses as it
+    // would in a build directory
+    return ref ? at(ref.package, ref.version) + (skin ?? path) : base + path;
   };
   distAt.packages = pk;
   return distAt;

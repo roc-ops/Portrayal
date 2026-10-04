@@ -100,7 +100,7 @@ def _build(tmp, dist, published=None, **kw):
 def test_one_package_per_device_holding_what_its_configurations_draw(tmp_path):
     state, _ = _build(tmp_path, _dist(tmp_path))
     assert set(state) == {"@portrayal/acme-box-1", "@portrayal/acme-box-2",
-                          "@portrayal/components", "@portrayal/index"}
+                          "@portrayal/components-acme", "@portrayal/index"}
     got = sorted(p.name for p in (tmp_path / "out" / "acme-box-1").iterdir())
     assert got == ["LICENSE", "NOTICE", "README.md",
                    "box-1.a.front.elements.json", "box-1.a.front.svg",
@@ -123,7 +123,8 @@ def test_the_index_says_where_each_device_is_and_groups_them(tmp_path):
     assert pk["devices"]["box-1"]["package"] == "@portrayal/acme-box-1"
     assert pk["devices"]["box-1"]["version"] == "1.2.0"
     assert pk["tree"] == {"acme": {"": ["box-2"], "Boxes": ["box-1"]}}
-    assert pk["components"]["package"] == "@portrayal/components"
+    assert pk["components"] == {"acme": {"package": "@portrayal/components-acme",
+                                         "version": "0.1.0"}}
 
 
 def test_every_package_carries_the_licence_and_the_notice(tmp_path):
@@ -148,7 +149,8 @@ def test_one_redrawn_face_bumps_its_device_and_the_index_only(tmp_path):
     # both devices share the fixture's rear bytes, so both redraw
     assert changed == ["@portrayal/acme-box-1", "@portrayal/acme-box-2", "@portrayal/index"]
     assert again["@portrayal/acme-box-1"]["version"] == "1.2.1"
-    assert again["@portrayal/components"]["version"] == first["@portrayal/components"]["version"]
+    assert again["@portrayal/components-acme"]["version"] == \
+        first["@portrayal/components-acme"]["version"]
 
 
 def test_a_package_over_the_limit_fails_the_run(tmp_path):
@@ -163,7 +165,9 @@ def test_every_device_in_the_library_fits_in_a_package(tmp_path):
         pytest.skip("library/dist not built - run ./build.sh")
     state, sizes = P.build(DIST, tmp_path / "out", ROOT)
     devices = json.loads((DIST / "devices.json").read_text())["devices"]
-    assert len(state) == len(devices) + 2
+    namespaces = {p.name.split("--")[0] for p in (DIST / "components").iterdir()}
+    assert len(namespaces) > 10, "measured almost no skins; the build is not the library"
+    assert len(state) == len(devices) + len(namespaces) + 1
     assert max(sizes.values()) < P.LIMIT_MB * 1e6
 
 
@@ -354,3 +358,68 @@ def test_any_other_publish_failure_is_not_waited_on(tmp_path):
     with pytest.raises(SystemExit, match="E403"):
         P.publish(tmp_path / "out", first, run=forbidden, sleep=slept.append)
     assert not slept
+
+
+# ---- the skins, one package per namespace (#526) ---------------------------------
+
+def _two_namespaces(tmp, knob="<svg>knob</svg>"):
+    dist = _dist(tmp)
+    (dist / "components" / "acme--knob--v1--default.svg").write_text(knob)
+    (dist / "components" / "generic--led--v1--default.svg").write_text("<svg>led</svg>")
+    (dist / "components" / "generic--led--v1--body-top.svg").write_text("<svg>top</svg>")
+    return dist
+
+
+def test_the_skins_ship_one_package_per_namespace(tmp_path):
+    """One package for every skin had no ceiling: it was the largest package
+    and grew with every component anyone added. A namespace is bounded by its
+    vendor, and a skin's file name already starts with it."""
+    state, _ = _build(tmp_path, _two_namespaces(tmp_path))
+    assert "@portrayal/components" not in state
+    out = tmp_path / "out"
+    assert sorted(p.name for p in (out / "components-generic").glob("*.svg")) == \
+        ["generic--led--v1--body-top.svg", "generic--led--v1--default.svg"]
+    assert [p.name for p in (out / "components-acme").glob("*.svg")] == \
+        ["acme--knob--v1--default.svg"]
+    pk = json.loads((out / "index" / "packages.json").read_text())
+    assert pk["components"] == {
+        "acme": {"package": "@portrayal/components-acme", "version": "0.1.0"},
+        "generic": {"package": "@portrayal/components-generic", "version": "0.1.0"}}
+    meta = json.loads((out / "components-generic" / "package.json").read_text())["portrayal"]
+    assert meta["namespace"] == "generic"
+
+
+def test_a_new_skin_moves_its_own_namespace_and_the_index_only(tmp_path):
+    first, _ = _build(tmp_path, _two_namespaces(tmp_path))
+    again, _ = _build(tmp_path, _two_namespaces(tmp_path, knob="<svg>knob, redrawn</svg>"), first)
+    assert sorted(n for n, s in again.items() if s["changed"]) == \
+        ["@portrayal/components-acme", "@portrayal/index"]
+
+
+def test_the_registry_is_asked_about_every_namespaces_package(tmp_path):
+    names = P.package_names(_two_namespaces(tmp_path))
+    assert names[-3:] == ["@portrayal/components-acme", "@portrayal/components-generic",
+                          "@portrayal/index"]
+
+
+def test_a_skin_with_no_namespace_in_its_name_fails_the_run(tmp_path):
+    dist = _dist(tmp_path)
+    (dist / "components" / "stray.svg").write_text("<svg/>")
+    with pytest.raises(SystemExit, match="stray.svg"):
+        _build(tmp_path, dist)
+
+
+def test_a_vendor_cannot_take_the_names_the_skins_use(tmp_path):
+    """A device package is `<vendor>-<device>` and a skin package is
+    `components-<namespace>`: a vendor called `components` could publish a
+    device over a namespace's skins."""
+    dist = _dist(tmp_path)
+    d = json.loads((dist / "devices.json").read_text())
+    d["devices"][1].update(ns="components", name="acme")
+    (dist / "devices.json").write_text(json.dumps(d))
+    for f in list(dist.glob("box-2.*")):
+        f.rename(dist / f.name.replace("box-2", "acme", 1))
+    cfg = dist / "acme.configs.json"
+    cfg.write_text(cfg.read_text().replace("box-2", "acme"))
+    with pytest.raises(SystemExit, match="two packages are named @portrayal/components-acme"):
+        _build(tmp_path, dist)

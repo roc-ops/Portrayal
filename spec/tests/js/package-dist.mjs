@@ -52,7 +52,16 @@ for (const path of new Set(wanted)) {
   if (!m || m[2] === 'latest' || !existsSync(join(PKGS, m[1], m[3]))) unresolved.push([path, url]);
 }
 
+// a skin lands in ITS namespace's package, and a name on every object's
+// prototype is nobody's package
+const aSkin = comps.flatMap(c => Object.values(c.files || {})).find(f => f.startsWith('components/'));
+const skinNs = aSkin.slice('components/'.length).split('--')[0];
+
 console.log(JSON.stringify({
+  skin: [distAt(aSkin), `${at(pk.components[skinNs].package, pk.components[skinNs].version)}${aSkin.slice('components/'.length)}`],
+  skinPackages: new Set(Object.values(pk.components).map(r => r.package)).size,
+  inherited: [distAt('components/constructor--x--v1--default.svg'), distAt('constructor.configs.json'),
+              distAt('components/__proto__--x--v1--default.svg')],
   firstAsked: asked.slice(0, 2),
   indexVersion: JSON.parse(readFileSync(join(PKGS, 'index', 'package.json'), 'utf8')).version,
   checked: new Set(wanted).size,
