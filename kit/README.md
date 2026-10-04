@@ -35,8 +35,8 @@ import { flatDist, packageDist } from '@portrayal/kit/dist';
 // a build directory: library/dist, or a copy of it on your own server
 createShell({ dist: flatDist('/portrayal/dist') });
 
-// the npm packages, from jsDelivr: one package per device, fetched only
-// when that device is opened
+// the npm packages, from jsDelivr: one package per device and one per
+// component namespace, each fetched only when something in it is opened
 const dist = await packageDist();                   // @portrayal/index@latest
 const pinned = await packageDist({ index: '0.3.1' });  // one release, exactly
 createShell({ dist });

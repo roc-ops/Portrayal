@@ -109,4 +109,12 @@ left untrusted keeps publishing through the token, so this can be done in
 batches. What trusting buys is that an expired or revoked token stops only new
 devices, and that each trusted publish carries a provenance attestation.
 
+`@portrayal/components` 0.1.0 was published before the skins were split by
+namespace into `@portrayal/components-<namespace>`. Nothing publishes it now
+and no index names it. Mark it, once, from an interactive login:
+
+```sh
+npm deprecate @portrayal/components "split by namespace: see @portrayal/components-<namespace>"
+```
+
 `@portrayal/kit` is not part of this. It is published by hand from `kit/`.
