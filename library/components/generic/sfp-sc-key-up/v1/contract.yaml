@@ -1,6 +1,6 @@
 format: 1
 kind: component
-name: sfp-sc
+name: sfp-sc-key-up
 version: 1.0.0
 class: transceiver
 behaviour: occupies
@@ -12,9 +12,8 @@ description: >-
   SFP and SFP+ optic, standing for all of them. An SFP body behind a head
   that is wider, taller and longer than a duplex LC one, because an SC
   opening does not fit the 8.55 body: one SC opening with its long axis
-  horizontal and its key slot down, and a bail whose bar lies along the
-  bottom of the head. generic/sfp-sc-key-up@1 is the same module keyed the
-  other way. Which
+  horizontal and its key slot up, and a bail whose bar lies along the bottom
+  of the head. generic/sfp-sc@1 is the same module keyed the other way. Which
   module it is - rate, reach, wavelength, watts - is a fact about a vendor
   product and lives on the wrapper that composes this
   (docs/pluggables-design.md, decision 5), never here. Copies
@@ -77,7 +76,7 @@ provenance:
     edge).
   receptacle: >-
     std/sc-bore@1, the SC opening (7.5 x 9.0 with a 0.89 x 2.1 key slot),
-    composed as `sc` and turned a quarter (`rotate: 270`) so its LONG AXIS IS
+    composed as `sc` and turned a quarter (`rotate: 90`) so its LONG AXIS IS
     HORIZONTAL. Both vendor end views draw it so: scaled on the 14 MAX width
     of Superxon Figure 8 (a 226 ppi raster, 7.71 px/mm), the opening reads 9.1
     wide by 7.5 tall, +/-0.15, and the 6COM end view shows the latch clips left
@@ -89,17 +88,18 @@ provenance:
     head outline, which less the 2.1 above is 3.74 below the body top; the
     body centre is 4.275. Neither sheet dimensions the opening on the face.
   key: >-
-    THE KEY DIRECTION FOLLOWS THE 6COM END VIEW, and
-    generic/sfp-sc-key-up@1 is the Superxon reading: two vendors draw the key
-    on opposite sides, so both parts exist. Here the key slot is at the
-    BOTTOM of the opening, toward the module bottom and the bail bar, as 6COM
-    6C-XGSPON-E1-OLT-SFP+ Rev 3.1 p8 draws it: a small slot at the bottom
-    centre of the opening, above the wide bail bar (read off a raster of
-    about 150 ppi, undimensioned), hence `rotate: 270`. The Superxon
-    DS00001553 V1.1 Figure 8 end view draws a 2.1 notch, the width SENKO
-    DS-SC-000011 prints for the SC key slot, in the wall ABOVE the opening.
-    Both sheets put the bail bar at the bottom. Which a given product has is
-    for its wrapper to choose; the two generics differ in nothing else.
+    THE KEY DIRECTION FOLLOWS THE SUPERXON END VIEW, and generic/sfp-sc@1 is
+    the 6COM reading: two vendors draw the key on opposite sides, so both
+    parts exist. Here the key slot is at the TOP of the opening, toward the
+    module top, as Superxon DS00001553 V1.1 p10 Figure 8 and DS00001552 V1.1
+    p7 Figure 5 draw it: a 2.1 notch, the width SENKO DS-SC-000011 prints for
+    the SC key slot, in the wall above the opening, with the wide bail tab
+    below (scaled on the 14 MAX width of a 226 ppi raster, undimensioned),
+    hence `rotate: 90`. The Superxon end view is upright: its bail tab is at
+    the bottom, where its own side view puts the bail bar and the cage latch.
+    The 6COM Rev 3.1 p8 end view draws a small slot at the BOTTOM of the
+    opening instead. Which a given product has is for its wrapper to choose;
+    the two generics differ in nothing else.
   latch: >-
     datasheet for the shape, ESTIMATED for every figure - A BAIL, not a pull
     tab. Both vendor side views draw a wire bail across the front of the
@@ -120,7 +120,7 @@ provenance:
     and 12-1MAX, whose meaning is not legible at 226 ppi. Nothing here uses
     them.
 parts:
-  - {ref: std/sc-bore@1, id: sc, at: [2.58, -0.355], rotate: 270, lift: 20.0}
+  - {ref: std/sc-bore@1, id: sc, at: [2.58, -1.245], rotate: 90, lift: 20.0}
 relief:
   features:
     - node: body

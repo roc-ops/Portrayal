@@ -83,7 +83,8 @@ def test_an_sfp28_cage_accepts_exactly_the_sfp_generics(tmp_path):
     # wrong-but-nonempty list (the failure mode an unordered `set()` compare
     # would hide) fails loudly here.
     assert cage["accepts"] == ["generic/sfp-cable@1", "generic/sfp-lc-simplex@2", "generic/sfp-lc@1",
-                               "generic/sfp-rj45@1", "generic/sfp-sc@1", "molex/sfp-plus-passive-dac@1"]
+                               "generic/sfp-rj45@1", "generic/sfp-sc-key-up@1",
+                               "generic/sfp-sc@1", "molex/sfp-plus-passive-dac@1"]
 
 
 CSR180 = LIB / "devices/edgecore/csr180/device.yaml"
@@ -99,7 +100,8 @@ def test_the_rate_ceiling_keeps_a_10g_dac_out_of_a_1g_sfp_cage(tmp_path):
     assert cage["interface"] == "sfp"
     assert cage["media"] == "sfp"
     assert cage["accepts"] == ["generic/sfp-cable@1", "generic/sfp-lc-simplex@2", "generic/sfp-lc@1",
-                               "generic/sfp-rj45@1", "generic/sfp-sc@1"]
+                               "generic/sfp-rj45@1", "generic/sfp-sc-key-up@1",
+                               "generic/sfp-sc@1"]
 
 
 def test_the_rate_ceiling_offers_a_10g_dac_in_a_10g_sfp_cage(tmp_path):
@@ -190,7 +192,8 @@ def test_a_group_with_no_media_has_no_ceiling(tmp_path):
     assert cage["group"] == "sfp28"
     assert cage["media"] is None
     assert cage["accepts"] == ["generic/sfp-cable@1", "generic/sfp-lc-simplex@2", "generic/sfp-lc@1",
-                               "generic/sfp-rj45@1", "generic/sfp-sc@1", "molex/sfp-plus-passive-dac@1"]
+                               "generic/sfp-rj45@1", "generic/sfp-sc-key-up@1",
+                               "generic/sfp-sc@1", "molex/sfp-plus-passive-dac@1"]
 
 
 # --- the configured occupant, read from the manifest, not hardcoded ------

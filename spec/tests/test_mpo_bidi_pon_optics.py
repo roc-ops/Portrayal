@@ -4,6 +4,8 @@
     generic/qsfp-dd-mpo16@1    a QSFP-DD with one MPO-16 receptacle (std/mpo16@1)
     generic/qsfp-lc-simplex@1  a QSFP with one LC bore in a duplex-shaped shell
     generic/sfp-sc@1           an SFP with one SC opening, long axis horizontal
+    generic/sfp-sc-key-up@1    the same module with the SC key slot up
+    common/qsfp-dd-pull-tab-type2@1   the handle of a Type 2 QSFP-DD module
     generic/mpo16-plug@1       the sixteen-fibre plug, key offset
 
 What each is, that its head fits the MSA envelope (L121), that its receptacle
@@ -38,6 +40,9 @@ QSFP_MPO = "generic/qsfp-mpo@1"
 QDD_MPO16 = "generic/qsfp-dd-mpo16@1"
 QSFP_BIDI = "generic/qsfp-lc-simplex@1"
 SFP_SC = "generic/sfp-sc@1"
+SFP_SC_UP = "generic/sfp-sc-key-up@1"
+SC_BOTH = (SFP_SC, SFP_SC_UP)
+TAB2 = "common/qsfp-dd-pull-tab-type2@1"
 MPO16 = "generic/mpo16-plug@1"
 
 # optic -> (mates, conforms, receptacle part id, receptacle ref, its rotate,
@@ -51,6 +56,8 @@ OPTICS = {
                 {"generic/lc-plug@2", "common/lc-dust-cap@1"}),
     SFP_SC: ("sfp", "sfp-module", "sc", "std/sc-bore@1", 270, "sc",
              {"generic/sc-plug@1", "common/sc-dust-cap@1"}),
+    SFP_SC_UP: ("sfp", "sfp-module", "sc", "std/sc-bore@1", 90, "sc",
+                {"generic/sc-plug@1", "common/sc-dust-cap@1"}),
 }
 EACH = pytest.mark.parametrize("ref", sorted(OPTICS))
 
@@ -60,6 +67,7 @@ HEADS = {
     QDD_MPO16: (3.13, 1.5, 31.9, 18.35),
     QSFP_BIDI: (2.2, 1.5, 19.2, 18.35),
     SFP_SC: (2.1, 1.4, 20.0, 14.0),
+    SFP_SC_UP: (2.1, 1.4, 20.0, 14.0),
 }
 BEIGE = "#d9cba3"
 GREY = "#6f6f6f"
@@ -72,6 +80,7 @@ SEATS = {
     QDD_MPO16: ("qsfpdd-1", MPO16),
     QSFP_BIDI: ("qsfp28-3", "generic/lc-plug@2"),
     SFP_SC: ("port-0", "generic/sc-plug@1"),
+    SFP_SC_UP: ("port-2", "generic/sc-plug@1"),
 }
 TURNED = {"qsfpdd-1", "qsfp28-3"}
 DEVICE = "edgecore/agr560"
@@ -147,10 +156,11 @@ def test_only_the_sc_head_exceeds_and_only_in_length():
     20.0 length is over the recommended 10.0 and is listed with its source.
     The three QSFP heads list nothing, and the QSFP-DD one is a Type 2."""
     env = standards()["sfp-module"]["head"]
-    head = doc(SFP_SC)["head"]
-    assert (head["size"]["w"], -head["at"][1]) == (env["w-max"], env["above-max"])
-    assert [e["dimension"] for e in head["exceeds"]] == ["length"]
-    assert head["exceeds"][0]["source"]
+    for ref in SC_BOTH:
+        head = doc(ref)["head"]
+        assert (head["size"]["w"], -head["at"][1]) == (env["w-max"], env["above-max"])
+        assert [e["dimension"] for e in head["exceeds"]] == ["length"]
+        assert head["exceeds"][0]["source"]
     for ref in (QSFP_MPO, QDD_MPO16, QSFP_BIDI):
         assert not doc(ref)["head"].get("exceeds"), ref
     assert doc(QDD_MPO16)["head"]["type"] == 2
@@ -229,28 +239,67 @@ def test_the_single_lc_bore_is_in_the_left_bay_keyway_up():
     assert empty.get("d").split()[1] == "10.98"      # the RX position, x 9.95 + 1.03
 
 
-def test_the_sc_opening_lies_across_with_its_key_slot_down():
+@pytest.mark.parametrize("ref,down", [(SFP_SC, True), (SFP_SC_UP, False)])
+def test_the_sc_opening_lies_across_with_its_key_slot_on_its_side(ref, down):
+    """Key slot at the bottom on generic/sfp-sc@1 (the 6COM end view) and at
+    the top on generic/sfp-sc-key-up@1 (the Superxon end view); the opening
+    itself is in the same place on both."""
     core = doc("std/sc-bore@1")
-    p = part(SFP_SC, "sc")
+    p = part(ref, "sc")
     size = core["size"]
     mate = seat_point(p["at"], size, p["rotate"], core["connection-points"]["mate"]["at"])
-    assert mate == pytest.approx(doc(SFP_SC)["connection-points"]["optical"]["at"])
-    assert mate[0] == pytest.approx(doc(SFP_SC)["size"]["w"] / 2)
+    assert mate == pytest.approx(doc(ref)["connection-points"]["optical"]["at"])
+    assert mate == pytest.approx([6.775, 3.7])
     # the 9.0 axis of the opening runs in x once turned
     a = seat_point(p["at"], size, p["rotate"], [4.64, 0.0])
     b = seat_point(p["at"], size, p["rotate"], [4.64, 9.0])
     assert abs(a[0] - b[0]) == pytest.approx(9.0) and a[1] == pytest.approx(b[1])
-    # the key slot (the part's left wall unrotated) is at the bottom
+    # the key slot is the part's left wall unrotated
     slot = seat_point(p["at"], size, p["rotate"], [0.0, 4.5])
-    assert slot[0] == pytest.approx(mate[0]) and slot[1] > mate[1]
-    # and the whole turned part is inside the head
-    head = doc(SFP_SC)["head"]
-    assert head["at"][1] <= min(a[1], slot[1] - 8.39) and slot[1] <= head["at"][1] + head["size"]["h"]
+    assert slot[0] == pytest.approx(mate[0])
+    assert (slot[1] > mate[1]) == down
+    assert abs(slot[1] - mate[1]) == pytest.approx(4.64)
+    # and the slot is inside the head
+    head = doc(ref)["head"]
+    assert head["at"][1] <= slot[1] <= head["at"][1] + head["size"]["h"]
 
 
-def test_the_sc_bail_is_a_field_painted_bar_at_the_bottom():
-    d = doc(SFP_SC)
-    bail = node(SFP_SC, "bail")
+def _strip(d):
+    return {k: v for k, v in d.items() if k not in ("name", "description", "provenance")}
+
+
+def test_the_two_sc_parts_differ_only_in_the_receptacles_rotation():
+    """Two vendors draw the SC key on opposite sides, so there are two parts,
+    and the key direction is the whole of the difference: the same head, the
+    same bail, the same fields, the same opening centre. A quarter turn about
+    the part's own centre moves its mate, so `at` follows the `rotate` - by
+    exactly what keeps the opening where it was."""
+    down, up = _strip(doc(SFP_SC)), _strip(doc(SFP_SC_UP))
+    pd, pu = down.pop("parts"), up.pop("parts")
+    assert down == up
+    assert len(pd) == len(pu) == 1
+    assert (pd[0]["rotate"], pu[0]["rotate"]) == (270, 90)
+    rest = lambda q: {k: v for k, v in q.items() if k not in ("rotate", "at")}
+    assert rest(pd[0]) == rest(pu[0])
+    size = doc("std/sc-bore@1")["size"]
+    centre = lambda q: seat_point(q["at"], size, q["rotate"], [4.64, 4.5])
+    assert centre(pd[0]) == pytest.approx(centre(pu[0]))
+    # each names the other, and the vendor its own key direction follows
+    kd, ku = doc(SFP_SC)["provenance"]["key"], doc(SFP_SC_UP)["provenance"]["key"]
+    assert "6COM END VIEW" in kd and SFP_SC_UP in kd
+    assert "SUPERXON END VIEW" in ku and SFP_SC in ku
+    # the skins differ only in where the label is printed: clear of the slot
+    art = lambda ref: {e.get("id"): dict(e.attrib) for e in skin(ref).iter() if e.get("id")}
+    ad, au = art(SFP_SC), art(SFP_SC_UP)
+    assert set(ad) == set(au)
+    assert [k for k in ad if ad[k] != au[k]] == ["label"]
+    assert {k for k in ad["label"] if ad["label"][k] != au["label"][k]} == {"y"}
+
+
+@pytest.mark.parametrize("ref", SC_BOTH)
+def test_the_sc_bail_is_a_field_painted_bar_at_the_bottom(ref):
+    d = doc(ref)
+    bail = node(ref, "bail")
     assert bail.get("data-fill-from") == "latch-color"
     y, h = float(bail.get("y")), float(bail.get("height"))
     assert y > d["size"]["h"] and y + h <= d["head"]["at"][1] + d["head"]["size"]["h"]
@@ -264,6 +313,8 @@ def test_the_mpo_faces_default_to_beige_and_the_others_to_grey():
     assert doc(QDD_MPO16)["fields"]["latch-color"]["default"] == BEIGE
     assert doc(QSFP_BIDI)["fields"]["latch-color"]["default"] == GREY
     assert doc(SFP_SC)["fields"]["latch-color"]["default"] == GREY
+    assert doc(SFP_SC_UP)["fields"]["latch-color"]["default"] == GREY
+    assert doc(TAB2)["fields"]["latch-color"]["default"] == GREY
 
 
 # --- the slots, from a components.json built here ----------------------------
@@ -436,10 +487,11 @@ def test_a_seated_plug_keeps_its_key_on_the_receptacles_key_side(seated):
     the pull-tab side, offset toward the same side in the module's own frame
     whichever way up the cage is drawn."""
     root, parents = seated
-    sc = by_path(root, f"{SEATS[SFP_SC][0]}-occupant-occupant")
-    ferrule = device_point(parents, sc, own_mate(sc))
-    key = device_point(parents, sc, [0.45, 4.5])
-    assert key[1] > ferrule[1] and abs(key[0] - ferrule[0]) < 1e-6
+    for ref, down in ((SFP_SC, True), (SFP_SC_UP, False)):
+        sc = by_path(root, f"{SEATS[ref][0]}-occupant-occupant")
+        ferrule = device_point(parents, sc, own_mate(sc))
+        key = device_point(parents, sc, [0.45, 4.5])
+        assert (key[1] > ferrule[1]) == down and abs(key[0] - ferrule[0]) < 1e-6
     cage = SEATS[QDD_MPO16][0]
     optic = by_path(root, f"{cage}-occupant")
     plug = by_path(root, f"{cage}-occupant-occupant")
@@ -448,3 +500,97 @@ def test_a_seated_plug_keeps_its_key_on_the_receptacles_key_side(seated):
     bottom = device_point(parents, optic, [9.175 + 1.12, 8.5])
     assert abs(k[0] - top[0]) < 1e-6
     assert abs(k[1] - top[1]) < abs(k[1] - bottom[1])
+
+
+# --- the Type 2 QSFP-DD pull tab ---------------------------------------------
+
+def test_the_type2_tab_is_a_latch_with_the_drawn_figures():
+    """Reach 37.1 from the nose front (JPC p2: 117.6 less 80.5), 18.35 wide
+    (printed), arms 2.25 wide at the side edges, a post 10.0 tall at each arm
+    root, a 3.2 strap and an 8.7 grip plate (scaled)."""
+    d = doc(TAB2)
+    assert d["class"] == "latch" and "behaviour" not in d and "mates" not in d
+    assert d["size"] == {"w": 18.35, "h": 10.0}
+    assert d["size-confidence"] == {"w": "datasheet", "h": "estimated"}
+    e = d["elements"]
+    assert set(e) == {"grip"} | {f"{n}-{s}{k}" for s in "lr" for n, k in
+                                 (("riser", ""), ("arm", ""), ("arm", "-2"), ("arm", "-3"))}
+    assert e["grip"] == {"at": [0.0, 0.0], "size": [18.35, 3.2], "class": "latch"}
+    for side, x in (("l", 0.0), ("r", 16.1)):
+        for nid, h in ((f"riser-{side}", 10.0), (f"arm-{side}-2", 8.3),
+                       (f"arm-{side}-3", 4.9), (f"arm-{side}", 3.2)):
+            assert e[nid]["at"] == [x, 0.0] and e[nid]["size"] == [2.25, h], nid
+    feats = {f["node"]: f for f in d["relief"]["features"]}
+    assert set(feats) == set(e)
+    assert feats["grip"]["out"] == 37.1 and feats["grip"]["lift"] == pytest.approx(37.1 - 8.7)
+    assert feats["grip"]["confidence"] == "datasheet"
+    assert max(f["out"] for f in feats.values()) == 37.1
+    long_tab = doc("common/qsfp-pull-tab@2")
+    assert max(f["out"] for f in long_tab["relief"]["features"]) == 49.8
+
+
+def test_the_type2_tab_is_boxes_end_to_end_with_no_shared_volume():
+    """Along each arm every box starts where the one before it ends (`lift`
+    is where it starts, `out` where it ends), from the nose front to the tip:
+    no gap, no overlap, nothing built inside out."""
+    feats = {f["node"]: f for f in doc(TAB2)["relief"]["features"]}
+    for side in "lr":
+        chain = [f"riser-{side}", f"arm-{side}-2", f"arm-{side}-3", f"arm-{side}", "grip"]
+        at = 0.0
+        for nid in chain:
+            f = feats[nid]
+            assert (f.get("lift") or 0.0) == pytest.approx(at), nid
+            assert f["out"] > at, nid
+            at = f["out"]
+        assert at == 37.1
+
+
+def test_the_type2_tab_is_painted_by_its_field_and_states_no_relief_colour():
+    d = doc(TAB2)
+    for nid in d["elements"]:
+        el = node(TAB2, nid)
+        assert el.get("data-fill-from") == "latch-color", nid
+        assert el.get("data-stroke-derive") == "latch-color", nid
+    assert not [f["node"] for f in d["relief"]["features"] if "color" in f]     # L73
+    # farthest from the viewer first, the grip last
+    order = [c.get("id") for c in skin(TAB2) if c.get("id")]
+    assert order[0].startswith("riser") and order[-1] == "grip"
+
+
+def test_the_sr8_optic_composes_the_type2_tab_on_its_nose():
+    tab = part(QDD_MPO16, "tab")
+    assert tab == {"ref": TAB2, "id": "tab", "at": [0.0, -3.13], "lift": 31.9}
+    d = doc(QDD_MPO16)
+    assert tab["at"][1] == d["head"]["at"][1]                   # top level with the nose top
+    assert doc(TAB2)["size"]["w"] == d["size"]["w"]             # arms on the side edges
+    assert "known-wrong" not in json.dumps(d["provenance"]).lower()
+    # the LC QSFP-DD keeps the Type 1 handle on its Type 1 head
+    lc = doc("generic/qsfp-dd-lc@2")
+    assert [p["ref"] for p in lc["parts"] if p["id"] == "tab"] == ["common/qsfp-pull-tab@2"]
+
+
+def test_the_seated_sr8_stands_69_out_and_is_built_right_side_out(seated):
+    """The 3D extents, read off the compiled relief: the nose front 31.9 from
+    the cage face, the handle tip 69.0 (JPC p2: 117.6 to the hard stop less
+    48.61), every box of the handle in front of the nose, each one's start
+    behind its own end, and the receptacle cavity cut from the nose front."""
+    root, parents = seated
+    optic = by_path(root, f"{SEATS[QDD_MPO16][0]}-occupant")
+    oid = optic.get("id")
+    raised = {e.get("id")[len(oid) + 2:]: e for e in optic.iter()
+              if e.get("data-z-out") and (e.get("id") or "").startswith(oid + "--")}
+    assert float(raised["body"].get("data-z-out")) == pytest.approx(31.9)
+    tab = {k: v for k, v in raised.items() if k.startswith("tab--")}
+    assert len(tab) == 9
+    assert max(float(e.get("data-z-out")) for e in raised.values()) == pytest.approx(69.0)
+    assert float(tab["tab--grip"].get("data-z-out")) == pytest.approx(117.6 - 48.61, abs=0.05)
+    group = by_path(root, f"{SEATS[QDD_MPO16][0]}-occupant/tab")
+    assert float(group.get("data-z-lift")) == pytest.approx(31.9)
+    for name, e in tab.items():
+        start = 31.9 + float(e.get("data-z-lift") or 0)
+        end = float(e.get("data-z-out"))
+        assert 31.9 <= start < end <= 69.0 + 1e-6, (name, start, end)
+        assert e.get("data-z-color") is None, name
+    mouth = by_path(root, f"{SEATS[QDD_MPO16][0]}-occupant/mpo16")
+    assert float(mouth.get("data-z-lift")) == pytest.approx(31.9)
+    assert float(mouth.get("data-depth")) > 0

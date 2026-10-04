@@ -10,7 +10,8 @@ profile: networking
 description: >-
   A generic QSFP-DD with one MPO-16 face - the shape of the QSFP-DD
   parallel-fibre optic with a single-row sixteen-fibre receptacle. One MPO-16
-  receptacle, key up and pinned, in a long Type 2 nose, and a pull tab.
+  receptacle, key up and pinned, in a long Type 2 nose, and the shorter pull
+  handle a Type 2 module carries.
   Which module it is - rate, reach, wavelength, watts - is a fact about a
   vendor product and lives on the wrapper that composes this
   (docs/pluggables-design.md, decision 5), never here. Copies
@@ -97,19 +98,18 @@ provenance:
     photo-measured there on a QSFP28 module, drawn centred on this receptacle.
     Estimated here: nothing shows the insert of a QSFP-DD MPO-16 module.
   tab: >-
-    composed - common/qsfp-pull-tab@2 at `lift: 31.9`, on the nose front, as
-    generic/qsfp-dd-lc@2 composes it. PLACED WITH ITS TOP LEVEL WITH THE NOSE
-    TOP (`at: [-0.325, -3.13]`), estimated: the JPC p2 side view draws the
-    handle top on the line its 13.13 (ref) height is measured to. THE REACH IS
-    KNOWN-WRONG FOR THIS NOSE: the composed tab is the Type 1 handle,
-    photo-measured on a QSFP28, reaching 49.8 from the nose front, and
-    QSFP-DD HW Rev 6.3 Appendix B says a Type 2 handle is shortened by the
-    case extension. JPC p2 prints 117.6 +/-0.4 from the tab end to the hard
-    stop, 37.1 forward of the nose front; FluxLight p13 prints 128.06 +/-0.5
-    overall, 35.06 forward. A shorter tab is its own part and is not drawn.
-    THE LAYERING IS DELIBERATE (lint L46): the size box of the tab overlaps
-    the receptacle, but the tab is a loop open in the middle and draws nothing
-    over it.
+    composed - common/qsfp-dd-pull-tab-type2@1, the handle of a Type 2 module,
+    read off the same JPC p2 outline this head is. At `lift: 31.9` it stands on
+    the nose front and reaches 37.1 further, so the module ends 69.0 outside
+    the cage: the 117.6 +/-0.4 JPC prints to the hard stop, less its 48.61
+    +/-0.2. At `at: [0, -3.13]` the handle top is level with the top of the
+    nose, where JPC's 13.13 (ref) is dimensioned from, and its arms run on the
+    module side edges (18.35 across). See that part for its figures and for
+    where FluxLight differs. generic/qsfp-dd-lc@2 keeps the Type 1 handle on
+    its Type 1 head. THE LAYERING IS DELIBERATE (lint L46): the size box of
+    the handle overlaps the receptacle, but the handle is a loop open in the
+    middle; its posts stand at x 0 to 2.25 and 16.1 to 18.35, clear of the
+    insert (2.625 to 15.725), and its grip lies above the body top.
   tab-colour: >-
     A FIELD, and the default is BEIGE because the code says so for this face.
     QSFP-DD HW Rev 6.3 section 6.3 recommends colour coding the pull tab by
@@ -119,7 +119,7 @@ provenance:
     estimated. A vendor wrapper sets `latch-color` where its module differs.
 parts:
   - {ref: std/mpo16@1, id: mpo16, at: [2.725, 0.25], lift: 31.9}
-  - {ref: common/qsfp-pull-tab@2, id: tab, at: [-0.325, -3.13], lift: 31.9}
+  - {ref: common/qsfp-dd-pull-tab-type2@1, id: tab, at: [0.0, -3.13], lift: 31.9}
 relief:
   features:
     - node: body
