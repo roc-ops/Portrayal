@@ -567,7 +567,14 @@ def test_the_lift_census():
     states. A pluggables cage growing a lift still moves this - and the day
     it does, the kit's data-z-lift path stops being dead code, which is the
     point of pinning it. The kit refuses a lifted slot today (spec B3 tasks
-    8/10 own that), so these slots are not swappable there yet."""
+    8/10 own that), so these slots are not swappable there yet.
+
+    A COAX JACK PLACED ON A DEVICE DOES TOO, since #673 put the first one there
+    (the ReadyLinks GL-12xB-240D's BNC sync jacks): a BNC, 1.0/2.3 or F jack
+    presents at its mated plane through `seat-out`, forwarded by its bezel, so
+    its slot's lift is that seat-out and nothing else - the figure
+    `manifest.presented_interface` derives from the contract chain."""
+    from portrayal import manifest
     lib = render_mod.Library([str(LIB)])
     families = render_mod._pluggable_families()
     candidates = render_mod._pluggable_candidates([LIB])
@@ -581,6 +588,12 @@ def test_the_lift_census():
                 if c["lift"]:
                     nonzero += 1
                     lifted_cages += c["kind"] == "cage"
+                    if c["interface"] in ("bnc", "din-1-0-2-3", "f-type"):
+                        doc = lib.resolve(_ref(d, v, c["id"]))[0]
+                        want = manifest.presented_interface(
+                            doc, lambda r: lib.resolve(r)[0])[2]
+                        assert c["lift"] == pytest.approx(want), (c["id"], c["lift"], want)
+                        continue
                     assert c["interface"] == "lc-duplex", (c["id"], c["lift"])
                     bezel = {f["node"]: f.get("out") for f in
                              (lib.resolve(_ref(d, v, c["id"]))[0].get("relief")

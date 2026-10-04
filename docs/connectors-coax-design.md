@@ -175,6 +175,8 @@ the connector ON THE FACEPLATE. An accessory cable's connector or a far end does
 - **`common/bnc-jack@1` ships unplaced.** No held source puts a BNC jack on a modelled
   faceplate; the ReadyLinks GL-12xB/24xB BNC switches (staged, not yet modelled) are its
   first natural user.
+  Since #673 the ReadyLinks GL-12xB-240D seats it (its SYNC jacks and the twelve ports of
+  its BNC line card), so neither part is `unplaced` any more.
 
 Each moved part, and each device that seats it, takes the version bump devicelock asks for.
 

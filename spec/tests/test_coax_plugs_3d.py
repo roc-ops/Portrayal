@@ -25,7 +25,7 @@ import yaml
 
 import warmrender
 from portrayal.artifacts import face_file
-from test_coax_plugs import EACH, LIB, NODES, PLUGS, ROOT, SEATS, SWAPS, doc, seated  # noqa: F401
+from test_coax_plugs import BEZELS, EACH, LIB, NODES, PLUGS, ROOT, SEATS, doc, seated  # noqa: F401
 from test_head_3d import apply, box, lift_of
 from test_nested_occupants import (assert_same_turn, by_path, cage_mate, device_matrix,
                                    device_point, own_mate)
@@ -214,9 +214,9 @@ def test_the_stub_is_the_default_cable_od(seated, ref):
 
 
 # A placement's attrs set the field (an occupant carries only a ref): a BNC plug
-# placed directly, `mate-to` the jack, on the ASR 9901's GPS 1PPS port with that
-# port swapped to a BNC bezel as in test_coax_plugs' SWAPS.
-OVERRIDE = ("generic/bnc-plug@1", "cisco/asr-9901", "front", "gps-1pps", 6.1)
+# placed directly, `mate-to` the jack, on the ReadyLinks GL-12xB-240D's SYNC IN
+# port, a real common/bnc-jack@1 placement (#673).
+OVERRIDE = ("generic/bnc-plug@1", "readylinks/gl-12xb-240d", "front", "sync-in", 6.1)
 
 
 @pytest.fixture(scope="module")
@@ -230,7 +230,7 @@ def overridden(tmp_path_factory):
     places = d["views"][view]["components"]["placements"]
     hits = [p for p in places if p.get("id") == host]
     assert len(hits) == 1, (device, view, host)
-    hits[0]["ref"] = SWAPS[ref]
+    assert hits[0]["ref"] == BEZELS[ref], hits
     places.append({"ref": ref, "id": "coax-plug", "mate-to": host, "attrs": {"cable-od": od}})
     dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
     o = tmp / "o"

@@ -38,9 +38,9 @@ EACH = pytest.mark.parametrize("ref", sorted(PLUGS))
 # has no device-level port in the library, so it seats in a card port through
 # the card's nested occupant key; so does F (casa/rfd@1). 1.0/2.3 seats in a
 # real Cisco T3/E3 SPA port (a common/din-1-0-2-3-jack@1 placement), two bays
-# deep: an A9K-SIP-700 in slot-0 and the SPA in its bay-2. No device or card
-# places a BNC jack, so BNC seats in a device copy whose placement at the host
-# path is REPLACED by the bezel named in SWAPS.
+# deep: an A9K-SIP-700 in slot-0 and the SPA in its bay-2. BNC seats in RL1 of
+# the ReadyLinks GL-x 12-port BNC card (a common/bnc-jack@1 placement), seated
+# in the GL-12xB-240D's slot-1 as its as-sold configuration does (#673).
 SEATS = {
     "generic/sma-plug@1": ("ufispace/s9500-30xs", "base", "front", {}, "pps-in"),
     "generic/smb-plug@1": ("juniper/mx304", "base", "rear", {}, "clk-1pps-in"),
@@ -48,7 +48,8 @@ SEATS = {
                            "rear-0/module/p0"),
     "generic/f-type-plug@1": ("casa/c100g", "base", "rear", {"rear-1": "casa/rfd@1"},
                               "rear-1/module/p0"),
-    "generic/bnc-plug@1": ("cisco/asr-9901", "base", "front", {}, "gps-1pps"),
+    "generic/bnc-plug@1": ("readylinks/gl-12xb-240d", "base", "front",
+                           {"slot-1": "readylinks/gl-x-lc-12xb@1"}, "slot-1/module/rl1"),
     "generic/din-1-0-2-3-plug@1": ("cisco/asr-9010", "base", "front",
                                    {"slot-0": "cisco/a9k-sip-700@2",
                                     "slot-0/bay-2": "cisco/spa-4xt3e3@1"},
@@ -60,8 +61,9 @@ BEZELS = {
     "generic/din-1-0-2-3-plug@1": "common/din-1-0-2-3-jack@1",
 }
 # plug -> the bezel that REPLACES the placement at its host path in a tmp
-# device copy, because nothing in the library places that jack (see SEATS).
-SWAPS = {"generic/bnc-plug@1": BEZELS["generic/bnc-plug@1"]}
+# device copy, for a jack nothing in the library places. Empty since #673: the
+# BNC bezel has a real host (see SEATS).
+SWAPS = {}
 NODES = ("coupling", "relief-boot", "stub")
 
 
@@ -243,7 +245,7 @@ def _z_base(parents, el):
 
 def _jack_group(host, ref):
     """The group drawing the jack PLUGS names: the host itself, or the core
-    the SWAPS bezel composes."""
+    the bezel composes (a SWAPS bezel, or a real one such as the BNC card port)."""
     core = PLUGS[ref][2]
     if host.get("data-ref", "").startswith(core):
         return host
