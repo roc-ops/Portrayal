@@ -2022,10 +2022,17 @@ def for_target(doc, target, fibre_map=None):
         port["rear_port"], port["rear_port_position"] = rear, position
 
     if whole_connector:
-        _note(doc, "Each front connector passes straight through to the rear connector "
-                   "behind it. Nautobot binds a front port to one rear position, so each "
-                   "pair is stated here as one position; the fibre-by-fibre rows are in "
-                   "this module's fibre map.")
+        # STRAIGHT ONLY IF EVERY FIBRE KEEPS ITS POSITION: a Type B adapter lands
+        # front fibre 12 on rear fibre 1, and a note calling that straight through
+        # would contradict the module's own fibre map.
+        straight = all(leg["front_position"] == leg["rear_position"]
+                       for rear, legs in bound.values() if rear in whole_connector
+                       for leg in legs)
+        how = ("passes straight through to the rear connector behind it" if straight else
+               "reaches the one rear connector behind it, its fibres in a different order")
+        _note(doc, f"Each front connector {how}. Nautobot binds a front port to one rear "
+                   "position, so each pair is stated here as one position; the "
+                   "fibre-by-fibre rows are in this module's fibre map.")
     return doc
 
 

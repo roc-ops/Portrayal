@@ -82,6 +82,19 @@ def test_an_mpo_pass_through_is_one_position_and_says_where_the_fibres_are():
     assert doc["rear-ports"][0]["positions"] == 12
 
 
+def test_a_reversing_adapter_is_not_called_straight_through():
+    """A Type B adapter turns the fibres over (front 12 on rear 1). The binding
+    is the same one position; the note must not say the opposite of the map."""
+    doc, fmap = panel()
+    assert "straight through" in dx.for_target(doc, "nautobot", fmap)["comments"]
+    for row in fmap["rows"]:
+        row["front_position"] = 13 - row["rear_position"]
+    out = dx.for_target(doc, "nautobot", fmap)
+    assert out["front-ports"][0]["rear_port_position"] == 1
+    assert "straight through" not in out["comments"]
+    assert "different order" in out["comments"] and "fibre map" in out["comments"]
+
+
 def test_a_wide_front_port_with_one_stated_path_is_still_a_whole_connector():
     doc, fmap = panel()
     fmap["rows"] = fmap["rows"][:1]
