@@ -8454,7 +8454,7 @@ def rj45_wants_lamps(q, groups, name=None):
     return not RJ45_BARE.search(text)
 
 
-def _rj45_census(placements, groups, lib_roots, name=None):
+def _rj45_census(placements, groups, lib_roots, name=None, elsewhere=(), view=None):
     """Count the RJ45 placements in one list that disagree with the family's rule.
 
     Shared by the device path (a view's `components.placements`) and the component
@@ -8470,8 +8470,14 @@ def _rj45_census(placements, groups, lib_roots, name=None):
     # deliberately left alone. The same exemption covers a BARE timing jack
     # whose vendor draws lamps for it (juniper/mx204's bits): the family has
     # no bare-with-lamps member, so the lamps stay separate placements.
+    #
+    # THE LAMP MAY BE ON ANOTHER FACE. A desktop ONT puts its jack on the back
+    # edge and the jack's one lamp on the top (nokia/xs-010x-r: DATA, `for: lan`),
+    # so the device path passes the other views' placements as `elsewhere` and a
+    # lamp there that names the jack as `<view>/<id>` counts as one beside it.
     lamped_for = set()
-    for q in placements:
+    here = len(placements)
+    for n, q in enumerate([*placements, *elsewhere]):
         ref = str(q.get("ref") or "")
         if not ref:
             continue
@@ -8481,7 +8487,12 @@ def _rj45_census(placements, groups, lib_roots, name=None):
             continue
         if cp and (load_yaml(cp) or {}).get("class") == "led":
             f = q.get("for")
-            lamped_for.update(str(x) for x in (f if isinstance(f, list) else [f]) if x is not None)
+            fs = [str(x) for x in (f if isinstance(f, list) else [f]) if x is not None]
+            if n < here:
+                lamped_for.update(fs)
+            else:
+                lamped_for.update(x.split("/", 1)[1] for x in fs
+                                  if view and x.startswith(f"{view}/"))
     for q in placements:
         ref = str(q.get("ref") or "")
         if "rj45" not in ref:
@@ -8511,9 +8522,11 @@ def lint_device_rj45_lamps(path, data, lib_roots):
     sixth way arriving quietly."""
     groups = data.get("groups") or {}
     unlamped_eth = lamped_bare = retired = 0
-    for view in (data.get("views") or {}).values():
-        placements = (((view or {}).get("components") or {}).get("placements") or [])
-        a, b, c = _rj45_census(placements, groups, lib_roots)
+    per_view = {vn: (((view or {}).get("components") or {}).get("placements") or [])
+                for vn, view in (data.get("views") or {}).items()}
+    for vn, placements in per_view.items():
+        elsewhere = [q for on, other in per_view.items() if on != vn for q in other]
+        a, b, c = _rj45_census(placements, groups, lib_roots, elsewhere=elsewhere, view=vn)
         unlamped_eth += a; lamped_bare += b; retired += c
     if unlamped_eth or lamped_bare or retired:
         warn(path, "L76", f"RJ45 family: {unlamped_eth} Ethernet jack(s) on a part with no "

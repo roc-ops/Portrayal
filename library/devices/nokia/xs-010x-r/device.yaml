@@ -11,15 +11,6 @@ description: >-
   a green adapter, one 100M/1G/2.5G/5G/10GBASE-T RJ-45, a pinhole reset, the 12 V DC jack and
   a round on/off button. Four lamps on the top face read POWER, PON, ALARM and DATA.
 profile: networking
-lint:
-  waive:
-    L76: >-
-      The LAN jack is an Ethernet jack on a part with no lamps because the housing shows none:
-      the Product Guide back elevation (Figure 2-2) draws a plain opening in a moulded bezel,
-      the data sheet lists only the four top-face lamps, and the port lamp is DATA on the top
-      face, which is placed there and bound to this jack from the other view. Putting the jack
-      on common/rj45-eth@1 would draw two windows the figure does not have. Delete this waiver
-      if a square-on photograph of a unit shows lamp windows in the jack (gap rj45-lamp-windows).
 provenance:
   sources:
     confidence: datasheet
@@ -157,7 +148,6 @@ attrs:
     pon-launch-power: +4.5 dBm minimum, +9 dBm maximum
     pon-receive-power: -28.5 to -9 dBm
   management:
-    local-web-gui: 192.168.100.1
     remote: OMCI (ITU-T G.988), Nokia 5520 AMS
   compliance:
     regulatory: CE, UKCA
