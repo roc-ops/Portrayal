@@ -1724,6 +1724,7 @@ def bay_row(bay_id, accepts=None):
 
 
 def bay_order(b):
+    """Bays by kind, then by number. Asked of a BUILT row, before any token."""
     return (b["name"].split()[0], _num(b["position"].rsplit("-", 1)[-1]))
 
 
@@ -1956,8 +1957,21 @@ def for_target(doc, target):
     which is what it had before this existed: a module type with nowhere to
     seat a sub-module is a gap, and two ports with one name is a wrong answer.
 
-    Both schemas take `module-bays` on a module type (schema/moduletype.json at
-    netbox-community/devicetype-library 52d359bd).
+    IT NEEDS NETBOX 4.5.7. Position templating on a bay arrived in 4.5.6
+    (release note #20467) and the single token's leaf rule in 4.5.7 (#20474).
+    Before that the install FORMS refuse a card whose token count is not the
+    depth of the bay tree, so the UI and bulk import fail loudly; the REST API
+    does not check, fills the one token with the ROOT bay's position, and a
+    MIC in fpc3's mic0 names its port `fpc3/port-1`. These bays did not exist
+    to be installed into before, so that is an exposure this adds.
+
+    Both DCIMs take `module-bays` on a module type: NetBox by schema
+    (schema/moduletype.json at netbox-community/devicetype-library 52d359bd),
+    Nautobot by its import view (nautobot/dcim/views.py at 92b367ef lists it
+    among a module type's related forms). The NAME is templated with the
+    position so the bay reads `fpc3/mic0` in a device's bay list; NetBox would
+    take a plain `mic0` on two modules, its constraint being device, module
+    and name together.
     """
     bays = doc.get("module-bays")
     if not bays:
@@ -1966,8 +1980,10 @@ def for_target(doc, target):
     if target == "netbox":
         out["module-bays"] = [{**b, "name": module_scoped(b["name"]),
                                "position": module_scoped(b["position"])} for b in bays]
-    else:
+    elif target == "nautobot":
         del out["module-bays"]
+    else:
+        raise ValueError(f"no rule for a nested bay on target {target!r}")
     return out
 
 
@@ -2179,7 +2195,8 @@ def render_module_image(dist, root, target, doc, ns, name, ver):
 
 
 def dcim_significant(doc):
-    """What a DCIM READS, which is everything but the comments.
+    """What a DCIM reads ABOUT THE HARDWARE: everything but the comments, and
+    but the `Accepts:` sentence on a bay a module carries (below).
 
     Two authors of one card carry their own version numbers and their own
     sentence about which way it was drawn, and neither is a difference in the
@@ -2197,7 +2214,12 @@ def dcim_significant(doc):
     # MICs (`mic-3d-20ge-sfp` against `mic-3d-20ge-sfp-v`), which are one
     # module type each; the bay a DCIM gets - its name and position - is the
     # same. Compared with the description in, three twins read as different
-    # hardware the day their bays were first exported.
+    # hardware the day their bays were first exported. IT CAN HIDE A REAL
+    # DIFFERENCE IN WHAT A BAY ACCEPTS - `scb-mx` takes two routing engines and
+    # `scb-mx960-v` one - and that is accepted: neither DCIM holds what a bay
+    # accepts as data, only as this sentence.
+    # What is WRITTEN for such twins is the first one's sentence, so it names
+    # one orientation's MICs; the bay is right for all of them.
     if out.get("module-bays"):
         out["module-bays"] = [{k: v for k, v in b.items() if k != "description"}
                               for b in out["module-bays"]]

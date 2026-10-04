@@ -634,8 +634,8 @@ def _nested_bays(ref, seen=()):
 
 
 def test_a_module_exports_the_bays_it_declares():
-    """A riser's slots are bays of the riser. 65 contracts declared `bays:` and
-    none exported a module bay, so a DCIM had nowhere to seat a card."""
+    """A riser's slots are bays of the riser. No contract that declared `bays:`
+    exported a module bay, so a DCIM had nowhere to seat a card."""
     bad, seen = [], 0
     for p in sorted((LIB / "components").glob("*/*/v*/contract.yaml")):
         c = load_yaml(p)
@@ -678,19 +678,83 @@ def test_a_nested_bay_is_written_for_netbox_and_not_for_nautobot():
 
 
 def test_the_written_module_types_carry_nested_bays_only_for_netbox():
+    """The files, not the function: every NetBox module type carries exactly the
+    bays its contract declares, templated, and its Nautobot twin carries none."""
+    nb = LIB / "exports/netbox/module-types"
+    if not nb.exists():
+        pytest.skip("not published - run ./publish.sh --no-images")
+    declared = {}
+    for p in sorted((LIB / "components").glob("*/*/v*/contract.yaml")):
+        c = load_yaml(p)
+        if c.get("kind") == "module" and isinstance(c.get("bays"), dict) and c["bays"]:
+            model = str((c.get("attrs") or {}).get("model") or c["name"]).replace("/", "-")
+            declared.setdefault(model, set()).add(frozenset(c["bays"]))
     seen = 0
-    for p in sorted((LIB / "exports/netbox/module-types").glob("*/*.yaml")):
+    for p in sorted(nb.glob("*/*.yaml")):
         bays = (yaml.safe_load(p.read_text()) or {}).get("module-bays") or []
         if not bays:
+            assert p.stem not in declared, f"{p}: its contract declares bays and it exports none"
             continue
         seen += 1
-        assert all(b["position"].startswith("{module}/") and b["name"].startswith("{module}/")
-                   for b in bays), p
+        for b in bays:
+            assert b["name"] == b["position"] and b["position"].startswith("{module}/"), (p, b)
+        got = frozenset(b["position"].split("/", 1)[1] for b in bays)
+        assert got in declared.get(p.stem, ()), f"{p}: exports {sorted(got)}"
         twin = LIB / "exports/nautobot/module-types" / p.parent.name / p.name
+        assert twin.exists(), twin
         assert "module-bays" not in (yaml.safe_load(twin.read_text()) or {}), twin
-    if not (LIB / "exports/netbox/module-types").exists():
-        pytest.skip("not published - run ./publish.sh --no-images")
     assert seen, "no module type with a nested bay was read - run ./publish.sh --no-images"
+
+
+def _resolve_bay(template, parent_position):
+    """NetBox's resolve_position on a nested bay: one `{module}`, the parent's."""
+    return template.replace(dx.MODULE_TOKEN, parent_position)
+
+
+def test_a_card_in_a_riser_slot_installs_as_the_drawing_names_it():
+    """The nested sibling of the DCP-2 test, on the DL160 Gen10 as drawn with a
+    card in each slot of its primary riser. Installed as NetBox installs them -
+    the riser into the chassis' bay, each card into the bay the riser brought -
+    every port is the drawing's path to it with each `/module/` taken out."""
+    ex = LIB / "exports/netbox"
+    dev_p = ex / "device-types/HPE/878972-B21.yaml"
+    riser_p = ex / "module-types/HPE/riser-primary-dl160.yaml"
+    cards = {"slot-1": ex / "module-types/NVIDIA/MCX515A tall bracket.yaml",
+             "slot-2": ex / "module-types/NVIDIA/MCX516A short bracket.yaml"}
+    face_p = LIB / "dist/dl160-gen10.lff4-options.rear.svg"
+    missing = [p.name for p in (dev_p, riser_p, face_p, *cards.values()) if not p.exists()]
+    if missing:
+        pytest.skip(f"not built: {', '.join(missing)} - run ./publish.sh --no-images")
+    dev = yaml.safe_load(dev_p.read_text())
+    riser = yaml.safe_load(riser_p.read_text())
+    face = face_p.read_text()
+    outer = {b["name"]: b["position"] for b in dev["module-bays"]}["riser-primary"]
+    inner = {_resolve_bay(b["name"], outer): _resolve_bay(b["position"], outer)
+             for b in riser["module-bays"]}
+    assert sorted(inner) == ["riser-primary/slot-1", "riser-primary/slot-2"]
+    names = []
+    for slot, card_p in cards.items():
+        card = yaml.safe_load(card_p.read_text())
+        assert card["interfaces"], card_p
+        names += [_resolve(i["name"], inner[f"riser-primary/{slot}"]) for i in card["interfaces"]]
+    assert len(names) == len(set(names)) == 3, names
+    for n in names:
+        bay, slot, port = n.split("/", 2)
+        assert f'data-path="{bay}/module/{slot}/module/{port}"' in face, n
+
+
+def test_two_line_cards_each_bring_their_own_nested_bays():
+    """What the first design got wrong. With a nested bay positioned by its own
+    id, the MIC bays of the MPCs in two FPC slots were one position, and the
+    MICs in them named their ports alike."""
+    p = LIB / "exports/netbox/module-types/Juniper/MX-MPC2E-3D.yaml"
+    if not p.exists():
+        pytest.skip("not published - run ./publish.sh --no-images")
+    mpc = yaml.safe_load(p.read_text())
+    assert mpc.get("module-bays"), p
+    resolved = [_resolve_bay(b["position"], fpc) for fpc in ("fpc0", "fpc1") for b in mpc["module-bays"]]
+    assert len(resolved) == len(set(resolved)) == 2 * len(mpc["module-bays"])
+    assert "fpc0/mic0" in resolved and "fpc1/mic0" in resolved
 
 
 def test_no_two_nested_bays_on_a_device_resolve_to_one_position():
