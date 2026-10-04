@@ -402,9 +402,25 @@ def test_a_placement_that_names_its_pon_flavour_takes_it():
     # A flavour one target lacks falls through to the media, as before.
     part["attrs"]["pon"] = "25gs-pon"
     assert dx.placed_type(part) == "10gbase-x-sfpp"
-    # And a `pon` with no media is not a placement statement at all - the
-    # HLX-TGV's SC/APC ferrule stays in NOT_A_DCIM_PORT.
+    # And a `pon` with no media is not a CARD placement statement at all: on a
+    # card the SC/APC ferrule stays in NOT_A_DCIM_PORT.
     assert dx.placed_type({"ref": "common/sc-apc@1", "attrs": {"pon": "xgs-pon"}}) is None
+
+
+def test_a_device_pon_port_takes_its_flavour():
+    """An ONT's uplink is a built-in SC/APC ferrule, not a cage, so iface_type
+    has no family to read. The Halny HLX-TGV and both Nokia XS-010X ONTs
+    exported their LAN jack and not the PON port they exist for."""
+    sc = {"ref": "common/sc-apc@1", "id": "pon"}
+    assert dx.device_port_type(sc, {"speed": "10g", "pon": "xgs-pon"}, "traffic") == (
+        "xgs-pon", None, None)
+    bore = {"ref": "std/sc-bore@1", "id": "pon"}
+    assert dx.device_port_type(bore, {"media": "fiber", "pon": "gpon"}, "traffic")[0] == "gpon"
+    # A flavour one target lacks is not a type, and the ferrule has no cage to
+    # fall back on, so the port stays out rather than leaving as a guess.
+    assert dx.device_port_type(sc, {"speed": "10g", "pon": "25gs-pon"}, "traffic")[0] is None
+    # A ferrule in a group that is not a port role is still not a port.
+    assert dx.device_port_type(sc, {"pon": "xgs-pon"}, "furniture")[0] is None
 
 
 def test_a_multi_pon_card_exports_every_port_as_pon():

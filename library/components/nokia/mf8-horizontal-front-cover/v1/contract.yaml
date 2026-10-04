@@ -1,0 +1,84 @@
+format: 1
+kind: component
+name: mf8-horizontal-front-cover
+version: 1.0.0
+class: bezel
+behaviour: mounts
+profile: networking
+description: >-
+  The horizontal front dust filter assembly of the Nokia Lightspan MF-8: the perforated front
+  cover that hangs on the cover hook of the shelf's left flange and locks, by two quarter-turn
+  D-ring screws, onto the cable tray fixed to the shelf's right side. It carries the full-size
+  front dust filter (3FE 77351 CA) clamped behind it. It is not orderable on its own: it comes
+  in the horizontal mounting and front cover kits (3TJ 00014 AA for a 19 in. rack, 3TJ 00007 AA
+  for 21 in., 3TJ 00116 AA for 23 in.). It is 507.6 mm wide, wider than the shelf's 481 mm rack
+  face, and overhangs the right flange to cover the cable tray. A different part from the
+  vertical front dust filter assembly 3TJ 00003 AA (355 x 542), which fits only a vertically
+  mounted shelf.
+size: {w: 507.6, h: 355.0, d: 36.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+attrs:
+  model: Lightspan MF-8 horizontal front dust filter assembly
+  weight-kg: 1.86
+  dust-filter: 3FE 77351 CA
+  role: front-cover
+provenance:
+  sources: >-
+    USIM = Lightspan Access Node MF-8 User, Safety and Installation Manual 26.9,
+    3HH-92647-AAAA-RJZZA Issue 09: s2.3.7 and s2.3.7.1 (p71-74), Table 8, Figure 34 (3D render),
+    Figure 35 (front renders in three rack widths), Figure 36 "Cover extension in 19 in. rack
+    type" (orthographic line drawing, a 732 x 311 px raster), s2.3.4.2 (the dust filter). The
+    Unit Data Sheet Guide has no chapter for this assembly; its chapter 16 is the vertical one.
+  size: >-
+    datasheet - USIM s2.3.7.1 (p74): "height: 355 mm", "depth: 36 mm", "width: 507.6 mm",
+    "weight: 1.86 kg ... excluding dust filter and cover". Figure 36 draws the cover 1.436 wide
+    for its height against a stated 1.430, so the figure is orthographic to 0.4 percent.
+  part-number: >-
+    NOT GIVEN for the assembly: USIM s2.3.7.1 (p72) "cannot be ordered separately, it is always
+    part of one of the three horizontal mounting and front cover kits". Table 8 gives the kit
+    codes, which are named in the description and not carried as this part's number.
+  layout: >-
+    drawing - USIM Figure 36 (p74), left view, at 0.81 px/mm, so positions are good to about
+    1.5 mm. From the cover's top-left: perforated field 105.2-414.3 x 17.0-314.1; a column of
+    13 short vertical slots centred x 71.3, y 22.7 to 308.3 on a 23.8 pitch; one small slot at
+    (18.1, 284.8), which lands on the fan module's location lamp window when the cover is hung
+    (shelf x 38.5 against the window's 37.0) and is read as its light window; the two D-ring
+    quarter-turn screws centred (457.4, 50.1) and (457.4, 304.4); the maker's mark at 105-149 x
+    330-340 and the words "Lightspan MF-8" ending at x 414 on the same line. Figure 34 (3D
+    render) draws 14 slots in the column where Figure 36 draws 13; the orthographic count is
+    taken.
+  perforation: >-
+    estimated - round holes on a square grid. The pitch, 5.92 mm, is measured on a 3840 px
+    vendor render of the VERTICAL cover (16.2 px at 2.741 px/mm, by autocorrelation in both
+    axes) and assumed to be the same sheet pattern here; Figure 36 hatches the field and
+    resolves no holes. Hole diameter 3.5 is by eye from that render. 52 x 50 holes fill the
+    measured field.
+  position: >-
+    USIM s2.3.7.1 (p73): "the front cover/cable tray extends 55 mm (2.16 in.) to the right
+    starting from the rack mounting holes"; Figure 36 dimensions the hole centres 465 apart. On
+    the shelf's 481 face the holes are at x 8 and 473, so the cover's right edge is at 528 and
+    its left edge at 20.4, just inside the left flange, whose ground studs, hook and ESD point
+    stay visible beside it in Figures 35 and 36.
+  colour: >-
+    drawing - Figures 34 and 35 render the cover in the shelf's slate; drawn #565f6a as the shelf
+    is. A vendor render, not a photograph.
+  logo-zone: >-
+    the maker's mark at the lower left of the cover is reserved as a logo-zone and not drawn;
+    "Lightspan MF-8" at the lower right is text and is set as text.
+  relief: 'estimated - the dust filter sits directly behind the sheet; the gap is not dimensioned'
+  lifecycle: >-
+    searched only the staged documents - the 26.9 USIM lists the three kits as orderable; no
+    end-of-life notice was searched for on the web.
+elements:
+  vent: {at: [105.2, 17.0], size: [309.1, 297.1], class: vent}
+  slot-row: {at: [68.8, 17.7], size: [5.0, 295.6], class: vent}
+  lamp-window: {at: [16.6, 279.8], size: [3.0, 10.0], class: window}
+  d-ring-1: {at: [446.4, 39.1], size: [22.0, 22.0], class: screw}
+  d-ring-2: {at: [446.4, 293.4], size: [22.0, 22.0], class: screw}
+  logo-zone: {at: [105.2, 330.2], size: [43.9, 9.7], class: logo-zone}
+relief:
+  features:
+    - {node: vent-holes, vent: 5.0, confidence: estimated, source: 'the dust filter is clamped directly behind the sheet (USIM s2.3.4.2); the gap is not dimensioned'}
+    - {node: d-ring-1, out: 6.0, confidence: estimated, source: 'the D-rings stand off the cover in USIM Figure 34 (3D); nothing dimensions them'}
+    - {node: d-ring-2, out: 6.0, confidence: estimated, source: as d-ring-1}
+skins: [default]

@@ -1,0 +1,355 @@
+format: 1
+kind: device
+name: xs-010xr-p
+version: 0.1.0
+maturity: modelled
+manufacturer: Nokia
+model: XS-010XR-P
+description: >-
+  Temperature-hardened, reverse-powered XGS-PON single-family-unit ONT in a 208 x 142 x 34.3 mm
+  white moulded housing, for a desk, a wall, or outdoors inside the Nokia outdoor ONT
+  enclosure. The back edge carries a ground point, one 100M/1G/2.5G/5G/10GBASE-T RJ-45 that is
+  also the PoE powered-device input, a pinhole reset, a round on/off button, the 12 V DC jack
+  and the SC/APC PON port in a green adapter with a fibre-lock boss beside it. Three lamps on
+  the top face read POWER, PON and DATA.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Nokia ONT XS-010XR-P Product Guide, 3TN-00113-AAAA-TCZZA Issue 4 (BBD Release 25.01):
+      Table 4-1 p33 the kits, Table 4-3 p34 the accessories, Table 4-8 p39 size and weight,
+      Table 4-9 p39 power, Table 4-10 p39 the environment, Figure 4-1 p36 the back elevation,
+      Figure 4-2 p38 the top plan, Figure 5-8 p53 the underside, Table 4-7 p38 the lamps.
+      Nokia ONT XS-010XR-P data sheet CID212870 (the vendor datasheet) and Quick Reference
+      Guide 3TN-00113-AAAA-TCZZB CID213181 for summary figures and the one product render. The
+      guide figures are vector line art, read at 600 dpi.
+  chassis:
+    confidence: datasheet
+    note: >-
+      Product Guide Table 4-8 p39, without the fibre storage tray: length 208 mm, width 142 mm,
+      height 34.3 mm, 0.53 kg within 0.23 kg; with the tray 208 x 232 x 48 mm and 0.85 kg. The
+      data sheet and the Quick Reference Guide print the same 208 x 142 x 34.3 and 0.53 kg.
+      The ports are on a 208 mm edge (Figure 4-1 measures 2963 px across, and its RJ-45 then
+      comes out 16.0 mm wide), so 208 is the width here and 142 the depth. Mount `desktop`:
+      the guide stands it on a desk or shelf, hangs it horizontally on a wall by the keyholes
+      in its underside or vertically on bracket 3FE49972AA, and outdoors seats it in outdoor
+      enclosure 3FE54221AH; the feet-down way is the one drawn. THE HOUSING IS NOT A PLAIN BOX:
+      its plan corners are rounded at about 19 mm (Figure 4-2) and its lower shell curves
+      under below two seam lines; the views are the 208 x 142 x 34.3 envelope and the rounded
+      outline is drawn on the top and bottom faces as a line.
+  rear-layout:
+    confidence: drawing
+    note: >-
+      Product Guide Figure 4-1 p36, an elevation of the back edge. x at 14.245 px/mm from the
+      208 width. GATE 1 IS ONLY HALF PASSED: the figure draws the top edge as a shallow arc
+      and the shell 514 px from crest to underside, 36.1 mm at that scale against the stated
+      34.3, so heights are five percent out and are taken as fractions of 34.3; x is good to
+      about 0.5 mm, y to about 1 mm. Centres left to right as seen from behind: ground point
+      21.3, 10GE 97.2, RESET 115.9, ON/OFF 132.6, POWER 148.3, PON 169.7, fibre-lock boss
+      180.3, laser mark 187.2. The RJ-45 is drawn 16.0 x 12.3 with its latch down and one lamp
+      window in its lower left corner; the SC opening has its key slot up. Standard parts keep
+      their registry sizes. The earth symbol is drawn 8.7 mm above the ground point; the
+      library part that pairs the two holds them 6.5 mm apart, so the symbol sits about 2 mm
+      low here.
+  top-layout:
+    confidence: drawing
+    note: >-
+      Product Guide Figure 4-2 p38, a plan of the front part of the top face at 15.13 px/mm
+      from the 208 width; only the front edge is in the figure, so there is no second axis to
+      check it against. Three lamps 1.8 mm across, 12.8 mm in from the front edge at 86.0,
+      103.9 and 121.9 mm - a row centred on the face at 17.95 mm pitch, drawn at 86, 104 and
+      122. Each legend runs away from its lamp towards the back, reading from the right. The
+      data sheet render shows the same three and Figure 5-13 the same order.
+  wordmark:
+    confidence: estimated
+    note: >-
+      The data sheet render shows the vendor wordmark on the top face along the short edge at
+      the right as seen from the front, reading along that edge. No line drawing shows it, so
+      the reserved zone is placed by eye from a three-quarter render. Not drawn - a reserved
+      logo zone.
+  bottom-layout:
+    confidence: drawing
+    note: >-
+      Product Guide Figure 5-8 p53, a plan of the underside. GATE 1: outline 2142 x 1467 px,
+      1.460 against 208 / 142 = 1.465, orthographic to 0.3 percent, 10.30 px/mm. Four feet
+      11.65 mm across; two label recesses 60.4 x 40.7 and 60.4 x 20.8 mm; a raised plate about
+      169 x 101 mm; the two wall-mounting keyholes whose screw positions the figure marks,
+      115.9 mm apart. NOT DRAWN: four slanted slots at the plate corners and a third
+      wall-mounting hole the figure also shows, and two pegs near the front edge that no
+      document names. The figure has the back edge at the bottom; this view has it at the top.
+  side-layout:
+    confidence: estimated
+    note: >-
+      The two seam lines are carried round from the back elevation (26.3 and 28.3 mm down).
+      The guide speaks of side vents (5.5 step 1: 50 mm clearance from the side vents) and the
+      render shows a perforated field on one short side, but no square-on figure of a side
+      exists, so the vents are a gap and not drawn.
+  colours:
+    confidence: estimated
+    note: >-
+      From the data sheet render, 975 x 481 px, by counting pixels: the housing reads #f7f7f7
+      on the back edge (3,600 px, median); 2,231 px of the PON adapter are green, median
+      #68a80d; the legends are dark, #2f2f2f to #333333 at their darkest; the fibre-lock boss
+      beside the PON port is brass-yellow, median #d1b830 over 232 px. A render, not a
+      photograph of a unit.
+  power:
+    confidence: datasheet
+    note: >-
+      Product Guide Table 4-9 p39: maximum power (not to exceed) 10.6 W, minimum 4.54 W, one
+      10GBASE-T Ethernet, other interfaces not provisioned. The Quick Reference Guide prints
+      standby 4.6 W and typical 7.75 W; the data sheet prints below 10 W, recorded as a gap.
+      Two feeds: the 12 V DC jack (12 V DC 1 A, Table 4-2) or PoE on the 10GE jack, which the
+      guide calls a PoE 802.3af PD function and also POE+; the optional injector 1AF32488DA is
+      56 V 0.62 A.
+  power-jack:
+    confidence: drawing
+    note: >-
+      Drawn as the coaxial DC jack Figure 4-1 shows - a round socket with a centre pin - and
+      the US kit ships the same adapter, 1AF32126AAAA, as the XS-010X-R, whose jack is drawn
+      the same way. Table 4-6 calls the power connection a cable with a Molex connector;
+      recorded as a gap.
+  lamps:
+    confidence: datasheet
+    note: >-
+      Product Guide Table 4-7 p38. POWER green, blinking while firmware loads. PON green when
+      up, green blinking while ranging, red when down (O7 or rogue), red blinking when out of
+      range. DATA green at 100M/1G, yellow at 2.5G or above. The data sheet also lists two
+      RJ-45 lamps, Mode/Status and Link/Carrier, with no colours or states. The lamp colours
+      drawn are conventional hues for those words, not sampled.
+attrs:
+  physical:
+    mounting: desktop, wall (horizontal by keyholes, vertical on bracket 3FE49972AA), or outdoor enclosure 3FE54221AH
+    size-with-fibre-tray: 208 x 232 x 48 mm, 0.85 kg
+  performance:
+    pon-line-rate: 10 Gb/s downstream and upstream (ITU-T G.9807.1 XGS-PON)
+    max-frame-bytes: 9216
+    vlans: 4094
+    multicast-groups: 1024
+  power:
+    power-max-w: 10.6
+    power-min-w: 4.54
+    power-typical-w: 7.75
+    power-standby-w: 4.6
+    power-input: 12 V DC 1 A adapter, or PoE on the 10GE port (802.3af PD)
+  environmental:
+    operating-temp: -40 to 65 C
+    operating-temp-in-enclosure: -40 to 58 C outside the outdoor enclosure
+    humidity: 5% to 95% non-condensing
+  platform:
+    memory: 256 MB DDR3
+    flash: 128 MB
+  features:
+    wan: xgs-pon
+    pon-wavelengths: 1260-1280 nm upstream, 1575-1580 nm downstream
+  management:
+    remote: OMCI, Nokia AMS or Altiplano
+  compliance:
+    regulatory: FCC compliant, UL 62368
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 208.0
+  height: 34.3
+  depth: 142.0
+  mount: desktop
+  weight-kg: 0.53
+  color: '#f7f7f7'
+  edge: '#c9ccd0'
+  silk: '#333333'
+  power: dc
+gaps:
+  - what: power-max
+    scope: [power-max-w]
+    reason: sources-disagree
+    note: >-
+      Product Guide Table 4-9 prints maximum power (not to exceed) 10.6 W. The data sheet
+      CID212870 prints power consumption below 10 W. The manifest carries the guide's figure,
+      the larger and the one that states its condition.
+    wanted: a Nokia statement of which figure is current
+  - what: power-connector
+    scope: [dc-in]
+    reason: sources-disagree
+    note: >-
+      Figure 4-1 draws a round coaxial jack with a centre pin and the US kit's adapter is the
+      XS-010X-R's 1AF32126AAAA; Table 4-6 says the power connection is a cable with a Molex
+      connector, and Table 4-3 sells a Molex to Phoenix adapter with the outdoor enclosure.
+      The manifest draws the figure.
+    wanted: a photograph of the POWER socket of a real unit
+  - what: poe-class
+    scope: [rj45-10g]
+    reason: sources-disagree
+    note: >-
+      The guide's section 4.4 names a PoE 802.3af PD function; its section 4.3, the data sheet
+      and the Quick Reference Guide say PoE+, and the data sheet writes PoE+ compliant
+      powering (802.3af) in one line. The stated 10.6 W maximum is inside the 802.3af budget.
+    wanted: the PD class the port negotiates
+  - what: rj45-lamp-meanings
+    scope: [port-10ge]
+    reason: vendor-silent
+    note: >-
+      The data sheet lists RJ-45 LEDs Mode/Status and Link/Carrier. No table gives their
+      colours, which window is which, or their states; the Product Guide LED table covers only
+      the three top-face lamps.
+    wanted: an LED table for the two jack lamps
+  - what: cpu
+    reason: vendor-silent
+    note: >-
+      The guide names an ONT SoC (Figure 4-4) without a part or a clock. Memory and flash are
+      stated.
+    wanted: the SoC named in a Nokia document
+  - what: side-vents
+    scope: [left, right]
+    reason: needs-drawing
+    note: >-
+      Side vents are named in the mounting requirements and visible on one short side in the
+      render; no elevation of a side is in the guide.
+    wanted: a side elevation or a square-on photograph of each short side
+  - what: front-face
+    scope: [front]
+    reason: needs-photo
+    note: no figure or render held shows the long edge opposite the ports
+    wanted: a photograph or drawing of the front edge
+  - what: underside-holes
+    scope: [bottom]
+    reason: needs-drawing
+    note: >-
+      Figure 5-8 shows four slanted slots, a third wall-mounting hole and two pegs that are
+      not drawn here: the slots are at an angle a decor rectangle cannot take, and no document
+      says what the pegs are.
+    wanted: a dimensioned underside drawing
+groups:
+  pon:
+    term: Port
+    role: traffic
+    index-origin: 1
+    description: the XGS-PON uplink, an SC/APC receptacle in a green adapter
+    attrs: {media: fiber, connector: sc, speed: 10g, pon: xgs-pon}
+  rj45-10g:
+    term: Port
+    role: traffic
+    index-origin: 1
+    description: the one subscriber port, 100M/1G/2.5G/5G/10GBASE-T, and the PoE powered-device input
+    attrs: {media: rj45, speed: 10g, poe: 802.3af PD}
+  inlets:
+    term: Inlet
+    role: service
+    index-origin: 1
+    description: the 12 V DC jack
+  controls:
+    term: Control
+    role: management
+    index-origin: 1
+    description: >-
+      the on/off button and the reset pinhole; this box has no management port, so the group
+      is what you press
+  leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the three lamps on the top face
+  grounding:
+    term: Ground
+    role: furniture
+    index-origin: 1
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 1
+views:
+  front:
+    size: {w: 208.0, h: 34.3}
+    empty: >-
+      no figure in the Product Guide (Issue 4) and no render in the data sheet or the Quick
+      Reference Guide shows the long edge opposite the ports; Figures 4-1, 5-3 and 5-14 and
+      the data sheet render all look at the back
+  rear:
+    size: {w: 208.0, h: 34.3}
+    panel:
+      decor:
+        - {id: seam-upper, at: [0.0, 26.3], size: [208.0, 0.2], fill: '#d3d6d9'}
+        - {id: seam-lower, at: [0.0, 28.3], size: [208.0, 0.2], fill: '#d3d6d9'}
+        - {id: pon-adapter, kind: bezel, at: [162.7, 15.2], size: [14.0, 9.75], fill: '#68a80d', rx: 0.5}
+        - {id: fibre-lock, at: [178.15, 17.95], size: [4.3, 4.3], rx: 2.15, fill: '#d1b830'}
+    silkscreen:
+      - {at: [97.2, 10.0], text: 10GE, font-size: 2.0, anchor: middle, for: port-10ge}
+      - {at: [115.9, 10.0], text: RESET, font-size: 2.0, anchor: middle, for: reset}
+      - {at: [132.6, 10.0], text: ON/OFF, font-size: 2.0, anchor: middle, for: power-btn}
+      - {at: [148.3, 10.0], text: POWER, font-size: 2.0, anchor: middle, for: dc-in}
+      - {at: [169.7, 10.0], text: PON, font-size: 2.0, anchor: middle, for: pon}
+    components:
+      placements:
+        - {ref: common/ground-lug@1, id: ground-point, at: [17.8, 8.9], group: grounding, rel-pos: 1}
+        - {ref: common/rj45-eth@1, id: port-10ge, at: [89.3, 11.65], group: rj45-10g, rel-pos: 1}
+        - {ref: common/reset-button@1, id: reset, at: [113.9, 19.9], for: chassis, group: controls, rel-pos: 2}
+        - {ref: common/power-button@1, id: power-btn, at: [126.6, 13.5], for: chassis, group: controls, rel-pos: 1}
+        - {ref: common/dc-barrel@1, id: dc-in, at: [142.3, 13.5], group: inlets, rel-pos: 1}
+        - {ref: std/sc-bore@1, id: pon, at: [165.505, 15.6], rotate: 90, group: pon, rel-pos: 1}
+        - {ref: common/laser-warning@1, id: laser-mark, at: [184.5, 17.7], for: pon, group: furniture, rel-pos: 1}
+  top:
+    size: {w: 208.0, h: 142.0}
+    panel:
+      decor:
+        - {id: outline, at: [0.4, 0.4], size: [207.2, 141.2], rx: 19.0, stroke: '#c9ccd0', stroke-width: 0.5}
+    silkscreen:
+      - {at: [86.68, 126.9], text: POWER, font-size: 2.2, anchor: start, rotate: -90, for: led-power}
+      - {at: [104.68, 126.9], text: PON, font-size: 2.2, anchor: start, rotate: -90, for: led-pon}
+      - {at: [122.68, 126.9], text: DATA, font-size: 2.2, anchor: start, rotate: -90, for: led-data}
+    components:
+      placements:
+        - {ref: common/led-dot@1, id: led-power, at: [85.0, 128.2], for: chassis, group: leds, rel-pos: 1,
+           states: ['off', {name: 'on', color: '#22c55e'}, {name: firmware-load, color: '#22c55e', behavior: blinking}]}
+        - {ref: common/led-dot@1, id: led-pon, at: [103.0, 128.2], for: rear/pon, group: leds, rel-pos: 2,
+           states: ['off', {name: up, color: '#22c55e'}, {name: ranging, color: '#22c55e', behavior: blinking},
+                    {name: down, color: '#e02020'}, {name: out-of-range, color: '#e02020', behavior: blinking}]}
+        - {ref: common/led-dot@1, id: led-data, at: [121.0, 128.2], for: rear/port-10ge, group: leds, rel-pos: 3,
+           states: ['off', {name: link-1g, color: '#22c55e'}, {name: link-2g5-or-above, color: '#f5d90a'}]}
+    regions:
+      - {id: logo-zone, at: [192.0, 52.0], size: {w: 8.0, h: 38.0}, label: Branding area}
+  bottom:
+    size: {w: 208.0, h: 142.0}
+    panel:
+      decor:
+        - {id: outline, at: [0.4, 0.4], size: [207.2, 141.2], rx: 19.0, stroke: '#c9ccd0', stroke-width: 0.5}
+        - {id: plate, at: [20.0, 20.3], size: [167.5, 100.7], rx: 3.0, stroke: '#c9ccd0', stroke-width: 0.3}
+        - {id: label-recess-1, kind: label-plate, at: [73.8, 60.7], size: [60.4, 40.7], stroke: '#c9ccd0', stroke-width: 0.3}
+        - {id: label-recess-2, kind: label-plate, at: [73.8, 35.3], size: [60.4, 20.8], stroke: '#c9ccd0', stroke-width: 0.3}
+        - {id: foot-1, at: [26.7, 22.3], size: [11.65, 11.65], rx: 5.825, fill: '#e3e5e8'}
+        - {id: foot-2, at: [169.8, 22.3], size: [11.65, 11.65], rx: 5.825, fill: '#e3e5e8'}
+        - {id: foot-3, at: [26.7, 107.8], size: [11.65, 11.65], rx: 5.825, fill: '#e3e5e8'}
+        - {id: foot-4, at: [169.8, 107.8], size: [11.65, 11.65], rx: 5.825, fill: '#e3e5e8'}
+    components:
+      placements:
+        - {ref: common/keyhole-mount@1, id: keyhole-1, at: [43.0, 88.6], group: furniture, rel-pos: 2}
+        - {ref: common/keyhole-mount@1, id: keyhole-2, at: [158.9, 88.6], group: furniture, rel-pos: 3}
+        - {ref: common/screw-head@1, id: case-screw, at: [21.9, 7.1], group: furniture, rel-pos: 4}
+  left:
+    size: {w: 142.0, h: 34.3}
+    panel:
+      decor:
+        - {id: seam-upper, at: [0.0, 26.3], size: [142.0, 0.2], fill: '#d3d6d9'}
+        - {id: seam-lower, at: [0.0, 28.3], size: [142.0, 0.2], fill: '#d3d6d9'}
+  right:
+    size: {w: 142.0, h: 34.3}
+    panel:
+      decor:
+        - {id: seam-upper, at: [0.0, 26.3], size: [142.0, 0.2], fill: '#d3d6d9'}
+        - {id: seam-lower, at: [0.0, 28.3], size: [142.0, 0.2], fill: '#d3d6d9'}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: Kit 3TN00113AA - the ONT only, for PoE powering or a separately supplied adapter
+    part-numbers:
+      XS-010XR-P: {part: 3TN00113AA}
+  us:
+    kind: orderable
+    description: Kit 3TN00112AA - the ONT with a 2-pin US plug 12 V AC/DC switching power adapter
+    part-numbers:
+      3TN00112AA: {part: 3TN00113AA, power-cord: 2-pin US plug adapter}
+datasheet:
+  title: Nokia ONT XS-010XR-P XGS-PON reverse powered ONT data sheet, CID212870
+  sha256: bff5cbba55cd56cd16e04dc542dec84f85b2785f1b70d59ed7e95611f7781e17
+references:
+  - {title: 'Nokia ONT XS-010XR-P Product Guide, 3TN-00113-AAAA-TCZZA Issue 4 (BBD Release 25.01)', sha256: 9124cdb431767ea0c5b6637185ca579a3973813c79d413d69e1e6739a085077b}
+  - {title: 'Nokia ONT XS-010XR-P Quick Reference Guide, 3TN-00113-AAAA-TCZZB Issue 1, CID213181', sha256: 5c310a28b0f2b1f0d5068136a9ec6b9203d78e150c820307be7854bebb4248c7}

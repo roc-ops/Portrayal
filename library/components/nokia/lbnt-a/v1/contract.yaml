@@ -1,0 +1,312 @@
+format: 1
+kind: module
+name: lbnt-a
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Nokia LBNT-A, the 2 Tbps Network Termination (NT) board of the Lightspan MF-8 and MF-14,
+  in its two functional variants: LBNT-A AA (3FE 79417 AA) and LBNT-A AB (3FE 79417 AB, the
+  same board with secure boot and a 10 Gb/s PTP port). One face serves both. Authored
+  horizontal, as the Unit Data Sheet guide draws it and as the MF-8 seats it. Left to right:
+  a white ejector lever, the model name and the PWR, ALM, A/S and PTP lamps (their legends
+  read upright when the card stands in an MF-14), the ESD, hot-surface and laser marks, the
+  PTP SFP+ cage in a recessed well, the two QSFP28 uplink cages PORT 1 and PORT 2 in a
+  second well with four lane lamps 1 2 3 4 above each, the DEBUG and USB Type-C sockets,
+  the OOB, LEMI and CRAFT RJ-45s, an arrow label, and the second lever. The three optical
+  cages stand at 45 degrees to the plate, looking toward the right-hand end.
+size: {w: 400.5, h: 35.0, d: 217.0}
+size-confidence: {w: photo-measured, h: datasheet, d: datasheet}
+size-notes: >-
+  w is the span of the two ejector ends, which fill the MF-8 slot opening; the plate between
+  them measures 390.3 and the guide states the board at 388. h is the board-to-board pitch.
+  d is the stated depth without handles. See provenance.size.
+attrs:
+  model: LBNT-A
+  part-number: 3FE 79417 AA
+  part-number-variants: 3FE 79417 AA, 3FE 79417 AB
+  variants: 'LBNT-A AA (3FE 79417 AA); LBNT-A AB (3FE 79417 AB): secure boot, PTP port at 1 or 10 Gb/s'
+  switch-capacity: '2 Tbps'
+  qsfp28: 2
+  sfp-plus: 1
+  breakout: 'PORT 1 and PORT 2: 1x 100GE, 1x 40GE, 4x 25GE or 4x 10GE; 1x 25GE or 1x 10GE through a QSFP28 to SFP28/SFP+ adapter'
+  weight-kg: 2.5
+  power-draw-max-w: 140
+  power-draw-typical-w: 130
+  power-scope: 'full load, including two 100GE QSFP28 modules'
+provenance:
+  sources: >-
+    Lightspan Access Node MF-8 Unit Data Sheet Guide 26.9, 3HH-92646-AAAA-TQZZA Issue 09
+    (UDS), chapters 5 (LBNT-A AA, pp33-39) and 6 (LBNT-A AB, pp41-47); Lightspan Access Node
+    MF-8 User, Safety and Installation Manual 26.9, 3HH-92647-AAAA-RJZZA Issue 09 (USIM);
+    Nokia Lightspan MF-8 data sheet CID214273 (April 2025), whose front render of a populated
+    shelf shows two of these cards in colour; a Nokia product render of a vertically mounted
+    shelf with the fan module drawn out, which shows the lamp end close up.
+  variants: >-
+    drawing + datasheet - ONE component for both variants because the face is one face. UDS
+    Figure 18 (p37, AA) and Figure 25 (p45, AB) are vector art; rendered at 600 dpi the two
+    figure areas differ in 0 pixels, and so do the 3D views, Figures 19 and 26. Tables 8
+    (p36) and 12 (p44) list the same ten interfaces with the same connector types and labels;
+    their one difference is note (4): the PTP SFP+ port runs at 1 Gb/s only on the AA and at 1
+    or 10 Gb/s on the AB. Tables 7 (p33) and 11 (p41) add secure boot to the AB. USIM p42 and
+    its note (20) (p46) say the same and allow the two to be combined in a redundant pair.
+    `part-number` carries the AA; `part-number-variants` both.
+  size: >-
+    photo-measured for w, datasheet for h and d. UDS 5.6.1 (p37) and 6.6.1 (p45): height 388
+    mm, depth 256 mm with handles and 217 mm without, board-to-board pitch 35 mm. Figure 18
+    draws the card with its levers closed, 3334 x 300 px at 600 dpi from the tip of one
+    ejector to the tip of the other. Laid on the data sheet render at the render's 1.8129
+    px/mm with those tips at the two ends of the 400.5 mm slot opening, the figure and the
+    render coincide along the whole card: the PTP well 77.5-105.0 in the figure against
+    76.4-104.3 in the render, the uplink well 111.0-169.1 against 110.3-168.9, the DEBUG
+    bezel 202.5-216.6 against 202.5-216.9, the USB bezel 219.4-233.4 against 219.6-233.9, the
+    OOB housing 239.2-256.5 against 239.4-255.8, LEMI 263.0-280.3 against 263.5-280.1, CRAFT
+    286.8-304.2 against 287.6-304.0, the lever ends 96.6 and 303.7 against 95.5 and 304.7.
+    The render resolves 0.55 mm per pixel, so that is agreement to about two of its pixels
+    with no trend along the card, and the figure is taken at 8.325 px/mm in both axes. At that
+    scale the plate is 390.3 mm (5.13 to 395.46), 0.6 percent over the stated 388, and 34.4
+    high inside the 35 pitch; the strip drawn under it (34.8 to 36.0) is cut at 35.0.
+  depth: 'datasheet - UDS 5.6.1 (p37): 217 mm without handles, 256 mm with; 217 carried'
+  weight: 'datasheet - UDS 5.6.1 (p37) and 6.6.1 (p45): 2,5 kg (5.5 lbs)'
+  power: >-
+    datasheet - USIM 2.4.5 Table 21 (p123): LBNT-A, "Including two 100GE QSFP28 modules",
+    130 W full load typical (48 Vdc, 25 C, averaged component specs) and 140 W full load
+    maximum (worst-case voltage, temperature and tolerances). The UDS states no figure
+    (5.6.3 says only that the board is fed over the backplane).
+  capacity: 'datasheet - UDS Tables 7 and 11 (pp33, 41): 2 Tbps Network Termination board'
+  layout: >-
+    drawing - UDS Figure 18 (p37), vector, read from its paths and mapped at 8.325 px/mm with
+    the left ejector tip at x 0 and the plate's top edge at y 0 (provenance.size). Plate
+    5.13-395.46 x 0-34.4. Lamps 2.98 across at (32.44, 19.60) PWR, (32.44, 24.65) ALM,
+    (37.49, 19.60) A/S and (37.49, 24.65) PTP. Model name 26.5-29.0 x 11.4-23.2, set
+    vertical. Marks 43.8-48.6 across: ESD 6.7-12.0, hot surface 14.6-20.0, laser 22.5-27.9.
+    PTP well 77.48-104.95 x 8.35-30.40, opening 78.46-104.40 x 9.54-29.41, the sloped face
+    ending at 94.57. Uplink well 110.95-169.06 x 8.50-30.55, opening 111.92-168.35 x
+    9.54-29.56, a bar 137.43-138.51 between the two cages, the sloped faces ending at 130.46
+    and 157.27. Lane lamps at x 116.71, 120.15, 123.59, 127.03 (PORT 1) and 26.82 further on
+    (PORT 2), y 14.47. USB Type-C bezels 14.04 x 7.71 centred (209.53, 25.26) and (226.41,
+    25.26). RJ-45 housings 17.29 x 14.90 centred (247.84, 20.02) OOB and (271.68, 20.02)
+    LEMI, and 17.34 x 14.30 centred (295.51, 20.42) CRAFT. Arrow label 365.16-380.07 x
+    1.89-12.82. Left lever: grip 0.6-19.6 x 19.5-32.9, arm to 96.62 x 28.46-32.44; right
+    lever: arm from 303.69, grip 380.8-400.0. About 0.5 mm, the two-pixel agreement with the
+    render.
+  angled-cages: >-
+    datasheet for the angle, estimated for the depth. UDS Table 8 note (2) (p36): "To respect
+    the fiber bending radius the cage is placed under a 45 degree angle." Figure 18 draws
+    each cage in a recessed well, its mouth toward the left of the well and its dust plug
+    reaching out to the right over a narrower back wall, and Figure 19 and both renders show
+    the same, so the cages look toward the card's right-hand end (downward when the card
+    stands in an MF-14). Modelled as one 45 degree facet per cage, facing right, sunk in a
+    pocket: the face starts flush with the plate at its left edge and falls to the pocket
+    floor at its right, where a steeper return facet climbs back to the plate. The depths
+    (16.11 PTP, 18.54 PORT 1, 18.76 PORT 2) are the faces' front-view runs times tan 45, and
+    the return angles (59, 69, 59 degrees) follow from the drawn return widths; no side
+    elevation of this card exists to check either, and whether the face starts exactly flush
+    is not resolved (gap). The cages run back square to their faces, under the plate to the
+    left, so none comes out through a wall.
+  ports: >-
+    datasheet - UDS Table 8 (p36) and Table 12 (p44), External interfaces on front panel.
+    OOB: out of band management interface, RJ-45, 10 Mbps, 100 Mbps or 1 Gbps. LEMI: local
+    Ethernet management interface, RJ-45, 10 Mbps, 100 Mbps or 1 Gbps. CRAFT: local craft
+    management interface, RJ-45. PTP: PTP interface, SFP+, 1 Gbps (AA) or 1 or 10 Gbps (AB).
+    PORT1 (1 2 3 4) and PORT2 (1 2 3 4): uplink 1 and 2, QSFP28/QSFP+, "Can be equipped with
+    a 100G, 40G or 4x 10G QSFP28/QSFP+ module". DEBUG: troubleshooting interface, USB-C,
+    restricted to Nokia personnel. USB: USB 2.0 interface, native USB-C, unrestricted (mass
+    storage for logging, or a boot image). Part ids are the printed labels in lower case.
+  rate: >-
+    datasheet - `qsfp28: 2` for the two uplink cages (100GE; the Nokia data sheet gives the
+    NT 200 Gb/s of uplink capacity, which is these two) and `sfp-plus: 1` for the PTP cage,
+    which both tables call an SFP+. On the AA that cage runs only at 1 Gb/s (note 4), which
+    one card-level rate cannot say; the group description carries it.
+  breakout: >-
+    datasheet - USIM Table 3 (p37), NT port naming: with channelised optics each uplink cage
+    presents four links, 1/1/c1/1 to 1/1/c1/4 and 1/1/c2/1 to 1/1/c2/4 on NT A, each at 10GE
+    or 25GE; with non-channelised optics it is one 40GE or 100GE port, 1/1/c1/1. That is a
+    mode a port is configured into, not four ports that always exist, so each cage is one
+    interface and declares no `interfaces:`; the lane numerals 1 2 3 4 are the legends of its
+    four lamps. The PTP port is 1/1/3 and OOB 1/2/1 on NT A (1/3/... and 1/4/1 on NT B).
+  craft: >-
+    datasheet, with a conflict. UDS Tables 8 and 12 give CRAFT no rate, where OOB and LEMI
+    both get one; Table 10 (p39) gives lamps to OOB and LEMI only, and Figure 18 draws CRAFT
+    as a different, lampless jack. USIM p141 (interface classification) lists "RJ-45 Out Of
+    Band (OOB) management interface" and "RJ-45 Local Ethernet Management Interface (LEMI)"
+    as the Ethernet ports and a separate "Serial RS232 CRAFT terminal". So CRAFT is typed as
+    the serial craft port. AGAINST that, USIM Table 41 (p287) describes the CRAFT row in the
+    OOB row's words (VLANs and IP interfaces can be associated with the port), which reads
+    as Ethernet; taken as a repeated row. A gap until a pin-out is found.
+  jacks: >-
+    drawing - OOB and LEMI are the lamped common/rj45-eth@1 turned 180, lamp windows and
+    latch at the top as Figure 18 and Figure 22 draw them; CRAFT is the bare std/rj45@2
+    turned 180, latch up as drawn. The library jacks are 15.8 x 13.2 against housings drawn
+    17.3 x 14.9, so the housing is skin art behind each jack and the jack is centred in it.
+    Turned 180, led-b is the left window and led-a the right.
+  lamps: >-
+    datasheet - UDS Table 9 (p38) and Table 13 (p46). PWR, green: flashing 0.5 s on / 0.5 s
+    off while the software initialises, 3.5 s on / 0.5 s off once the board is operational,
+    off without power. ALM, red: on with a board alarm. A/S, green: on active, off standby.
+    PTP, green: on with link, blinking with activity. The four lamps beside each uplink cage,
+    "PORT 1 (1 up to 4)": off no link, green link up, blinking green traffic; with
+    non-channelised optics only one or two of the four work (note 2). Table 10 (p39) and
+    Table 14 (p47): on OOB and LEMI the left LED1 is green, on for a Gb link; the right LED0
+    is orange, on when the port is active and blinking with activity. The guide gives no RGB
+    values; the library's lamp colours are used.
+  legends: >-
+    drawing - Figure 18 for position, Figure 19 (p37) for the three it hides. The model name
+    and the lamp legends are set vertical, reading bottom to top on the horizontal card:
+    PWR and A/S above their lamps, ALM and PTP below theirs. PTP under the SFP+ well, PORT 1
+    and PORT 2 with 1 2 3 4 under the uplink well, DEBUG, USB, OOB, LEMI and CRAFT under
+    their sockets read horizontally. With the levers closed, as Figure 18 and the data sheet
+    render draw them, the left lever lies over the ALM and PTP lamp legends and over the PTP
+    cage legend; they are drawn, under the lever. The arrow label near the right end is
+    drawn in outline as Figure 18 draws it; the render shows nothing there at its 0.55 mm
+    per pixel, so whether it is a printed mark or a sticker is not resolved (gap).
+  colour: >-
+    photo - sampled on the data sheet render, which is a Nokia render and not a photograph.
+    Plate: median #505863 mid-card (2300 px), #49505a right (3772 px), #464d56 left (1763
+    px), a lighting gradient; #4c545e used. Lever arms #cccccc (550 px each), left grip
+    #e0e0e0, right grip #acacac in shade; one #d4d5d6 used. Well faces #b4b4b4 (160 px).
+    USB bezels #c8cacc. Legends white.
+  marks: >-
+    drawing - Figure 18 draws three triangles right of the lamps: ESD, hot surface and
+    laser, drawn here in white outline as the legends are. No vendor mark is printed on this
+    face in the figure or in either render, so no logo-zone is reserved.
+  relief: >-
+    datasheet for the envelope, estimated for its distribution - the levers are the card's
+    handles and UDS 5.6.1 states the depth as 256 mm with them and 217 mm without, so they
+    stand 39 mm proud; which part of a lever reaches that is not stated, and the whole lever
+    is given it.
+  lifecycle: >-
+    searched only the staged corpus - current in the MF-8 26.9 guides (Issue 09); no
+    end-of-life notice was searched for on the web.
+elements:
+  lever-left-grip: {at: [0.6, 19.5], size: [19.0, 13.4], class: latch}
+  lever-left-arm: {at: [19.6, 28.46], size: [77.02, 3.98], class: latch}
+  lever-right-arm: {at: [303.69, 28.41], size: [77.1, 3.98], class: latch}
+  lever-right-grip: {at: [380.79, 19.47], size: [19.22, 13.41], class: latch}
+  well-ptp: {at: [78.46, 9.54], size: [25.94, 19.87], class: mechanical}
+  face-ptp: {at: [78.46, 9.54], size: [16.11, 19.87], class: mechanical}
+  return-ptp: {at: [94.57, 9.54], size: [9.83, 19.87], class: mechanical}
+  well-uplink: {at: [111.92, 9.54], size: [56.43, 20.02], class: mechanical}
+  face-port-1: {at: [111.92, 9.54], size: [18.54, 20.02], class: mechanical}
+  return-port-1: {at: [130.46, 9.54], size: [6.97, 20.02], class: mechanical}
+  face-port-2: {at: [138.51, 9.54], size: [18.76, 20.02], class: mechanical}
+  return-port-2: {at: [157.27, 9.54], size: [11.08, 20.02], class: mechanical}
+  arrow-label: {at: [365.16, 1.89], size: [14.91, 10.93], class: label}
+relief:
+  wall: '#8d9298'
+  features:
+    - node: lever-left-grip
+      out: 39
+      confidence: datasheet
+      source: 'UDS 5.6.1 (p37): depth 256 mm with handles, 217 mm without'
+    - node: lever-left-arm
+      out: 39
+      confidence: datasheet
+      source: 'UDS 5.6.1 (p37): depth 256 mm with handles, 217 mm without'
+    - node: lever-right-arm
+      out: 39
+      confidence: datasheet
+      source: 'UDS 5.6.1 (p37): depth 256 mm with handles, 217 mm without'
+    - node: lever-right-grip
+      out: 39
+      confidence: datasheet
+      source: 'UDS 5.6.1 (p37): depth 256 mm with handles, 217 mm without'
+    - node: well-ptp
+      pocket: 16.11
+      confidence: estimated
+      source: 'UDS Figure 18 (p37): the sloped face runs 16.11 mm of front view at the 45 degrees of Table 8 note (2)'
+    - node: face-ptp
+      facet: {deg: 45, facing: right}
+      lift: -16.11
+      confidence: estimated
+      source: 'UDS Table 8 note (2) (p36), cage placed under a 45 degree angle; direction from Figures 18 and 19'
+    - node: return-ptp
+      facet: {deg: 59, facing: left}
+      lift: -16.11
+      confidence: estimated
+      source: 'UDS Figure 18 (p37): return drawn 9.83 mm wide, climbing the 16.11 mm back to the plate'
+    - node: well-uplink
+      pocket: 18.76
+      confidence: estimated
+      source: 'UDS Figure 18 (p37): the PORT 2 face runs 18.76 mm of front view at the 45 degrees of Table 8 note (2)'
+    - node: face-port-1
+      facet: {deg: 45, facing: right}
+      lift: -18.54
+      confidence: estimated
+      source: 'UDS Table 8 note (2) (p36), cage placed under a 45 degree angle; direction from Figures 18 and 19'
+    - node: return-port-1
+      facet: {deg: 69, facing: left}
+      lift: -18.54
+      confidence: estimated
+      source: 'UDS Figure 18 (p37): return drawn 6.97 mm wide, climbing the 18.54 mm back to the plate'
+    - node: face-port-2
+      facet: {deg: 45, facing: right}
+      lift: -18.76
+      confidence: estimated
+      source: 'UDS Table 8 note (2) (p36), cage placed under a 45 degree angle; direction from Figures 18 and 19'
+    - node: return-port-2
+      facet: {deg: 59, facing: left}
+      lift: -18.76
+      confidence: estimated
+      source: 'UDS Figure 18 (p37): return drawn 11.08 mm wide, climbing the 18.76 mm back to the plate'
+groups:
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp28, speed: 100g}
+    description: >-
+      the two uplinks PORT 1 and PORT 2, QSFP28/QSFP+ cages: 1x 100GE, 1x 40GE, 4x 25GE or
+      4x 10GE each, data or management uplink
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: >-
+      the PTP interface, an SFP+ cage toward the PTP master: 1 Gb/s on the LBNT-A AA, 1 or
+      10 Gb/s on the LBNT-A AB
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      reaching the board - the OOB and LEMI Ethernet management RJ-45s, the CRAFT serial
+      RJ-45, the DEBUG USB Type-C (Nokia personnel) and the USB 2.0 Type-C
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the board lamps PWR, ALM and A/S and the PTP port lamp
+  lane-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: >-
+      four lamps above each uplink cage, legends 1 2 3 4: one per lane with channelised
+      optics (led-port-N-L serves lane L of port-N)
+parts:
+  - {ref: common/led-indicator@1, id: led-pwr, group: status-leds, at: [30.44, 17.6], states: {lamp: ['off', {name: initialising, color: '#39b54a', behavior: blinking}, {name: operational, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-indicator@1, id: led-alm, group: status-leds, at: [30.44, 22.65], states: {lamp: ['off', {name: alarm, color: '#d0021b'}]}}
+  - {ref: common/led-indicator@1, id: led-as, group: status-leds, at: [35.49, 17.6], states: {lamp: ['off', {name: active, color: '#39b54a'}]}}
+  - {ref: common/led-indicator@1, id: led-ptp, group: status-leds, at: [35.49, 22.65], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: std/sfp@1, id: ptp, group: sfp-plus, at: [80.6, 17.24], 'on': face-ptp, attrs: {function: 'PTP interface (1 Gb/s on the AA, 1 or 10 Gb/s on the AB)', legend: PTP}}
+  - {ref: std/qsfp28@1, id: port-1, group: qsfp28, at: [115.0, 17.26], 'on': face-port-1, attrs: {function: 'Uplink 1', legend: 'PORT 1'}}
+  - {ref: std/qsfp28@1, id: port-2, group: qsfp28, at: [141.8, 17.26], 'on': face-port-2, attrs: {function: 'Uplink 2', legend: 'PORT 2'}}
+  - {ref: common/led-dot@1, id: led-port-1-1, group: lane-leds, at: [116.0, 13.47], 'on': face-port-1, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-port-1-2, group: lane-leds, at: [119.44, 13.47], 'on': face-port-1, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-port-1-3, group: lane-leds, at: [122.88, 13.47], 'on': face-port-1, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-port-1-4, group: lane-leds, at: [126.32, 13.47], 'on': face-port-1, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-port-2-1, group: lane-leds, at: [142.82, 13.47], 'on': face-port-2, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-port-2-2, group: lane-leds, at: [146.26, 13.47], 'on': face-port-2, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-port-2-3, group: lane-leds, at: [149.7, 13.47], 'on': face-port-2, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-port-2-4, group: lane-leds, at: [153.14, 13.47], 'on': face-port-2, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: std/usb-c@1, id: debug, group: mgmt, at: [205.36, 23.98], attrs: {function: 'troubleshooting interface (debug USB-C), restricted to Nokia personnel', legend: DEBUG}}
+  - {ref: std/usb-c@1, id: usb, group: mgmt, at: [222.24, 23.98], attrs: {function: 'USB 2.0 interface (native USB-C): mass storage or boot image', legend: USB}}
+  - {ref: common/rj45-eth@1, id: oob, group: mgmt, at: [239.94, 13.42], rotate: 180, attrs: {media: rj45, speed: 1g, function: 'out of band management interface, 10/100/1000', legend: OOB}, states: {led-b: ['off', {name: gb-link, color: '#39b54a'}], led-a: ['off', {name: active, color: '#f5a623'}, {name: activity, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/rj45-eth@1, id: lemi, group: mgmt, at: [263.78, 13.42], rotate: 180, attrs: {media: rj45, speed: 1g, function: 'local Ethernet management interface, 10/100/1000', legend: LEMI}, states: {led-b: ['off', {name: gb-link, color: '#39b54a'}], led-a: ['off', {name: active, color: '#f5a623'}, {name: activity, color: '#f5a623', behavior: blinking}]}}
+  - {ref: std/rj45@2, id: craft, group: mgmt, at: [287.61, 13.82], rotate: 180, attrs: {media: rj45-serial, function: 'local craft management interface', legend: CRAFT}}
+connection-points:
+  mate: {at: [200.25, 17.5], direction: rear}
+skins: [default]

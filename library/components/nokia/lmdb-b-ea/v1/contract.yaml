@@ -1,0 +1,83 @@
+format: 1
+kind: module
+name: lmdb-b-ea
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Nokia LMDB-B EA (3FE 77035 EA), the LT dummy/filler board of the Lightspan MF-8: a full-size
+  air-guiding dummy front with filler plates that must close every unused LT slot, for airflow,
+  EMC and touch safety. A plain slate front plate, 24.5 mm pitch, with a small plastic latch
+  handle at each end in place of the metal ejectors of a real board. Authored horizontal, as the
+  shelf seats it when mounted horizontally.
+size: {w: 400.5, h: 24.5, d: 253.8}
+size-confidence: {w: borrowed, h: datasheet, d: datasheet}
+size-notes: >-
+  h is the stated 24.5 mm board-to-board pitch and w the 400.5 mm card bay of nokia/lmfs-f; the
+  plate itself is stated 400 x 23.5 and is drawn at that size, centred in the pitch
+attrs:
+  model: LMDB-B EA
+  part-number: 3FE 77035 EA
+  weight-kg: 0.39
+  role: slot-blank
+provenance:
+  sources: >-
+    USIM = Lightspan Access Node MF-8 User, Safety and Installation Manual 26.9,
+    3HH-92647-AAAA-RJZZA Issue 09: Table 5 (ordering code and mnemonic), s4.4.6 and s4.4.6.2
+    (p255-256), Figure 189 "3D view of LT dummy/filler board". The Unit Data Sheet Guide
+    3HH-92646-AAAA-TQZZA Issue 09 s2.4.1 says no unit data sheet exists for the dummy boards and
+    points here.
+  size: >-
+    datasheet - USIM s4.4.6.2 (p255): "height: 400 mm", "depth: 253.8 mm", "width 23.5 mm ... or
+    board to board pitch: 24.5 mm", weight 0.39 kg, all "including handles" and stated with the
+    board standing upright. The face modelled is the slot it fills, 400.5 x 24.5 (borrowed from
+    nokia/lmfs-f@1, whose bays are measured on the data sheet render), with the 400 x 23.5 plate
+    centred in it.
+  depth: 'datasheet - 253.8 mm, USIM s4.4.6.2 (p255)'
+  weight: 'datasheet - 0.39 kg (0.86 lbs), USIM s4.4.6.2 (p255)'
+  layout: >-
+    drawing (fractions only) - the upper, face-on view of USIM Figure 189 (p255, a raster about
+    1.64 px/mm along the plate and 1.70 across, so 4 percent out in aspect): a plain plate with
+    one white latch handle at each end, each about 27 mm long and occupying roughly y 10 to 22.3
+    of the 23.5 mm plate, the lower half as the figure is drawn. Good to about a millimetre.
+  handles: >-
+    datasheet - USIM s4.4.6 (p252): in place of the metal handles of a real board the dummy has
+    "much smaller full plastic handles" that bend when pushed at their pushing point, so that the
+    lip at the end hooks into the connection point and locks the board.
+  orientation: >-
+    USIM s4.4.6 Caution: the board goes in "with the arrow (see Figure 189) on the silkscreen of
+    the front cover pointing down (and the handles at the left side of the cover)". Figure 189 is
+    too coarse to show the arrow, so it is not drawn; see arrow-gap. The handles are drawn in the
+    lower half of the plate, as the figure's face-on view has them and as the data sheet render
+    has the ejectors of the real boards.
+  arrow-gap: >-
+    the silkscreen arrow the Caution names cannot be resolved in Figure 189 or Figure 190 (both
+    under 2 px/mm); its position and size are not known and nothing is printed in its place.
+  colour: >-
+    drawing - Figure 189 renders the plate 97,106,113 (#616a71), the family's slate; a vendor
+    render, not a photograph.
+  purpose: >-
+    datasheet - USIM s4.4.6 and s4.4 (p227): "Never operate the Lightspan MF-8 shelf with any empty
+    slots. All slots must contain either an active unit or an appropriate filler plate". Slot
+    types are keyed, so this board fits LT slots only (Procedure 36 Note 2).
+  lifecycle: >-
+    searched only the staged documents - USIM Table 5 lists the board as orderable; no end-of-life
+    notice was searched for on the web.
+elements:
+  handle-left: {at: [0.25, 10.5], size: [27.0, 12.3], class: handle}
+  handle-right: {at: [373.25, 10.5], size: [27.0, 12.3], class: handle}
+relief:
+  wall: '#616a71'
+  features:
+    - node: handle-left
+      out: 8.0
+      confidence: estimated
+      source: the latch handles stand off the plate in USIM Figure 189 (3D); nothing dimensions them
+    - node: handle-right
+      out: 8.0
+      confidence: estimated
+      source: as handle-left
+connection-points:
+  mate: {at: [200.25, 12.25], direction: rear}
+skins: [default]
