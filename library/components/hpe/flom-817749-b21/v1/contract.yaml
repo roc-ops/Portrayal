@@ -15,7 +15,7 @@ attrs:
   part-numbers: 817749-B21 840139-001
   spare-part: 840139-001
   hpe-model: 640FLR-SFP28
-  controller: Mellanox MCX4121A-ACFT
+  controller: MCX4121A-ACFT
   sfp28: 2
 groups:
   ports:
@@ -31,28 +31,33 @@ provenance:
   sources: >-
     QuickSpecs a00021860enw, FlexibleLOM adapters: 817749-B21 ('FlexibleLOM
     Riser Kit (875748-B21) is required to install these adapters'; 'Only one
-    FlexibleLOM can be added to the server'). HPE PartSurfer names its spare
-    840139-001 (partsurfer.hpe.com/Search.aspx?SearchText=817749-B21). A
-    seller's photograph of a 640FLR-SFP28 from the port end, face-on and close
-    (i.ebayimg.com/images/g/7bEAAOSw7wxiERnD/s-l1600.jpg), and the User Guide
-    figure, which draws an SFP adapter going into the cage.
+    FlexibleLOM can be added to the server'). The QuickSpecs names the adapter
+    by its controller; the name 640FLR-SFP28 is the Product Information
+    Reference's (a00077132en_us) and HPE PartSurfer's, which also gives the
+    spare 840139-001 (partsurfer.hpe.com/Search.aspx?SearchText=817749-B21). A
+    seller's photograph of a 640FLR-SFP28 from the port end, close and from a
+    little above (i.ebayimg.com/images/g/7bEAAOSw7wxiERnD/s-l1600.jpg; read at
+    1000 px), and the User Guide figure, which draws an SFP adapter going into
+    the cage. THAT FIGURE PRINTS PORT 1 AT THE LEFT AND PORT 2 AT THE RIGHT, the
+    opposite of this adapter's photograph; it draws a different or a generic SFP
+    FlexibleLOM, and the photograph of the real part is what is followed.
   size: >-
-    photo-measured - 74.0 x 14.6, the FlexibleLOM faceplate, from three sellers'
-    photographs of three adapters taken near face-on, each scaled on a part of
-    known size it carries: the 640FLR-SFP28's 1x2 SFP cage (29.8 across by
-    SFF-8433) puts its plate at 73.5; the 331FLR's four ganged jacks span 0.755
-    of its plate, which at 74.0 is 55.9 - four of the 13.97 a ganged modular
-    jack is pitched at - and that agreement is what fixes the length; the
-    562FLR-T's plate is 12.4 tall with its jacks standing 1.3 below it. 14.6 is
-    the plate, its top fold and that overhang together. None of the three is a
-    ruler on the part, and none is perfectly square to the camera.
+    borrowed - 74.0 x 14.6, hpe/flom-629135-b22@1, the adapter whose photograph
+    the faceplate's length is read from; this part's own image does not measure
+    it.
   face: >-
-    photo-measured - at 24.5 px/mm on the cage's 29.8: the screw hole 5.3 from
-    the left end; a three-by-two field of vents at 10.0..25.5; one 1x2 ganged
-    SFP28 cage at 26.1..55.9, its latch slots along the bottom; a two-by-two
-    field at 56.3..66.1; PORT 2 printed under the left cage and PORT 1 under the
-    right; and four round lamps in a row under the vents, ACT and LNK at the
-    left for port 2 and LNK and ACT at the right for port 1.
+    photo-measured - the plate runs off both edges of the photograph, so
+    positions are read FROM THE CAGE and the cage is placed on the plate by an
+    assumption: the 1x2 SFP28 cage is 413 px, 13.9 px/mm on the 29.8 that two
+    ganged 14.25 ports and their walls make, the frame is 72 mm wide, and the 2
+    mm of a 74.0 plate the frame does not show is split evenly between its ends.
+    On that footing: the screw 6.3 from the left end; a three-by-two field of
+    vents at 11.0..26.5, COUNTED; the cage at 27.1..56.9, its latch slots along
+    the bottom; a two-by-two field at 57.3..67.1, counted; PORT 2 printed under
+    the left cage and PORT 1 under the right; and four round lamps in a row
+    under the vents, ACT and LNK at the left for port 2 and LNK and ACT at the
+    right for port 1. Everything is good to a millimetre along the plate and no
+    better.
   lamps: >-
     photo-measured - four round lamps about 1 mm across, drawn with the
     library's 2 mm dot; their legends ACT and LNK are read off the photograph.
@@ -70,13 +75,13 @@ provenance:
     estimated - 110. No dimension of the adapter is in any document held; it is
     the board's reach behind the faceplate by proportion on the photographs.
 size: {w: 74.0, h: 14.6, d: 110.0}
-size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+size-confidence: {w: borrowed, h: borrowed, d: estimated}
 body: {depth: 110.0, color: '#2f6b3a'}
 parts:
-  - {ref: std/sfp-ganged@1, id: port-2, group: ports, at: [26.6, 2.5], attrs: {media: sfp28, speed: 25g}}
-  - {ref: std/sfp-ganged@1, id: port-1, group: ports, at: [40.85, 2.5], attrs: {media: sfp28, speed: 25g}}
-  - {ref: common/led-dot@1, id: led-2-act, group: port-leds, at: [16.5, 9.4], states: {lamp: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]}}
-  - {ref: common/led-dot@1, id: led-2-lnk, group: port-leds, at: [21, 9.4], states: {lamp: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]}}
-  - {ref: common/led-dot@1, id: led-1-lnk, group: port-leds, at: [58.8, 9.4], states: {lamp: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]}}
-  - {ref: common/led-dot@1, id: led-1-act, group: port-leds, at: [62.5, 9.4], states: {lamp: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]}}
+  - {ref: std/sfp-ganged@1, id: port-2, group: ports, at: [27.6, 2.5], attrs: {media: sfp28, speed: 25g}}
+  - {ref: std/sfp-ganged@1, id: port-1, group: ports, at: [41.85, 2.5], attrs: {media: sfp28, speed: 25g}}
+  - {ref: common/led-dot@1, id: led-2-act, group: port-leds, at: [17.5, 9.4], states: {lamp: ['off', {name: activity, color: '#22c55e', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-2-lnk, group: port-leds, at: [22, 9.4], states: {lamp: ['off', {name: link, color: '#22c55e'}]}}
+  - {ref: common/led-dot@1, id: led-1-lnk, group: port-leds, at: [59.8, 9.4], states: {lamp: ['off', {name: link, color: '#22c55e'}]}}
+  - {ref: common/led-dot@1, id: led-1-act, group: port-leds, at: [63.5, 9.4], states: {lamp: ['off', {name: activity, color: '#22c55e', behavior: blinking}]}}
 skins: [default]
