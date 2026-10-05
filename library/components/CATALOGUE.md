@@ -1245,7 +1245,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `supermicro/psu-pws-601s-1r-plan@1` | component | mechanical | 54.5 × 220 |  | 0 | 1 | A Supermicro PWS-601S-1R power supply seen from above - the can that runs into the chassis behind its face |
 | `supermicro/psu-pws-804p-1r@1` | module | psu | 54.5 × 40.25 × 220 |  | 1 | 1 | Supermicro PWS-804P-1R, the 800 W Platinum redundant power supply module of the SuperServer SYS-111E-FWTR - a… |
 | `supermicro/psu-pws-804p-1r-plan@1` | component | mechanical | 54.5 × 220 |  | 0 | 2 | A Supermicro PWS-804P-1R power supply seen from above - the can that runs into the chassis behind its face |
-| `supermicro/psu-pws-861a-1r@1` | module | psu | 54.5 × 40.25 × 322 |  | 1 | 0 | Supermicro PWS-861A-1R, the 860 W Titanium redundant power supply module of the SuperServer SYS-111E-WR - a v… |
+| `supermicro/psu-pws-861a-1r@2` | module | psu | 54.5 × 40.25 × 322 |  | 1 | 0 | Supermicro PWS-861A-1R, the 860 W Titanium redundant power supply module of the SuperServer SYS-111E-WR - a v… |
 | `supermicro/psu-pws-861a-1r-plan@1` | component | mechanical | 54.5 × 322 |  | 0 | 1 | A Supermicro PWS-861A-1R power supply seen from above - the can that runs into the chassis behind its face |
 | `supermicro/psu-pws-862s-1r@1` | module | psu | 54.5 × 40.25 × 220 |  | 1 | 1 | Supermicro PWS-862S-1R, the 860 W Titanium redundant power supply module of the SuperServer SYS-111E-FWTR-EU … |
 | `supermicro/psu-pws-862s-1r-plan@1` | component | mechanical | 54.5 × 220 |  | 0 | 1 | A Supermicro PWS-862S-1R power supply seen from above - the can that runs into the chassis behind its face |
