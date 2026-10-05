@@ -37,8 +37,20 @@ names the ref that replaces it.
   Series SKU SYS-511E-WR-01-G2 is its `gold` configuration.
 - `supermicro/riser-wio-rhs-x13sew@2` replaces `@1`: slot 3's bracket bay moved
   2.6 mm so the riser plate no longer covers the edge of a card's first cage.
-  Both X13SEW risers gain a housing over the bracket flanges in 3D, and the
-  board well is deep enough that DIMMs stay under the cover.
+  Both X13SEW risers gain a housing over the bracket flanges in 3D.
+- `supermicro/system-board-x13sew@2` replaces `@1`: the board is flat art on
+  the floor of one interior well per chassis (`supermicro/interior-sc116b@1`,
+  `-sc815b@1`, `-sc515b@1`), so supplies, risers, fans and DIMMs stand in the
+  chassis as bodies under the cover and leave it empty when ejected. The fan
+  (`supermicro/fan-0163l4@1`) is drawn as the top of its housing, not as
+  rotors, and the SYS-111E-WR's five fans are at their photographed positions.
+  The two WIO servers gain an air shroud and a supply cage cover under the lid,
+  and the X13SEW risers declare their bodies in pieces, so the cards show.
+- 3D kit (`relief.js` `ejectTravel`): a pulled part's travel limit is never less
+  than its own depth plus the margin. From above a 1U chassis the limit was the
+  chassis height less 10, 33 mm, and a 40 mm fan or a 31 mm DIMM never came
+  clear of the lid. Parts pulled from the front or rear are unaffected unless
+  they are within 20 mm of the chassis depth.
 - `plan: {rotate: 180}` on a device bay: the plan of a module seated in a
   FRONT bay is turned half a turn in the top view, and the occupants of its own
   bays are offset from the opposite corner. A plan is drawn face-at-the-top, as

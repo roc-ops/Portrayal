@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: riser-wio-lhs-x13sew
-version: 1.2.0
+version: 1.3.0
 class: riser
 behaviour: fills
 profile: server
@@ -52,7 +52,17 @@ provenance:
 size: {w: 123.0, h: 43.0, d: 180.0}
 plan: {ref: supermicro/riser-wio-lhs-plan-x13sew@1}
 size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
-body: {depth: 180.0, color: '#c8ccd0'}
+body:
+  depth: 180.0
+  color: '#c8ccd0'
+  # NOT ONE BOX. A box the size of this face hid both cards and the floor
+  # under them; the bracket is an arm beside the board and a riser card
+  # standing on its edge, and the cards are bodies of their own.
+  boxes:
+  - {id: arm, at: [16.5, 0.5], size: [1.5, 42.0], from: 0.0, depth: 180.0, color: '#d2d5d8',
+     confidence: estimated, source: 'the sheet-metal arm of the bracket, running in beside the board; drawn as long as the body, not measured'}
+  - {id: riser-card, at: [19.5, 4.0], size: [1.6, 36.0], from: 12.0, depth: 150.0, color: '#1f5a3a',
+     confidence: estimated, source: 'the riser card the two slots are on, standing on its edge at the tip end of the brackets; not measured'}
 elements:
   plate: {at: [0.0, 0.0], size: [123.0, 43.0], class: bezel}
 bays:

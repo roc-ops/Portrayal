@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1191 component majors in 26 namespaces.
+1200 component majors in 26 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -81,7 +81,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/dc-terminal-header-6@1` | component | inlet | 32.4 × 11.1 |  | 1 | 0 | Six-pole pluggable terminal-block HEADER on a 5.08 mm pitch - the green board-mounted receptacle with six wir… |
 | `common/dc-terminal-plug-2@1` | component | inlet | 32.1 × 17.6 × 15 |  | 2 | 1 | Two-pole PLUGGABLE DC terminal block - a green header on the faceplate with a matching two-way screw-clamp pl… |
 | `common/device-label@1` | component | sticker | 80 × 40 |  | 5 | 0 | Bottom identity label in oval recess (placeholder art - never reproduce serials/MACs/credentials) |
-| `common/dimm-plan@1` | module | memory | 3.8 × 133.4 × 31.3 |  | 7 | 2 | A DIMM seen from above, standing in its socket - the thin edge of the module with its latches at either end, … |
+| `common/dimm-plan@1` | module | memory | 3.8 × 133.4 × 31.3 |  | 7 | 1 | A DIMM seen from above, standing in its socket - the thin edge of the module with its latches at either end, … |
 | `common/din-1-0-2-3-jack@1` | component | port | 7.01 × 7.01 |  | 0 | 5 | Rear-mount 1.0/2.3 bulkhead jack - the round spanner nut in front of the panel (bezel) around a std/din-1-0-2… |
 | `common/din-clip-ts35@1` | component | mount | 44 × 58 |  | 10 | 1 | DIN-rail mounting clip for a 35 mm top-hat rail (IEC 60715 TS35, 7.5 and 15 mm deep) - the plate screwed to a… |
 | `common/dip-switch-2@1` | component | button | 7 × 10 |  | 10 | 0 | Two-position DIP switch - a red body with two slide actuators side by side and ON at the top, unrotated |
@@ -538,8 +538,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/e3s-carrier-blank@2` | module | blank | 77.65 × 7.75 × 25 |  | 1 | 1 | Filler for an EDSFF E3.S bay on a 16th-generation PowerEdge - Dell's 1-bay E3.S blank (59T4C), a black moulde… |
 | `dell/e3s-filler-1u@1` | module | blank | 79.25 × 37.85 |  | 1 | 0 | Dell's 1U E3.S column filler - one vented plate standing in for a whole column of four E3.S bays, a thirteen-… |
 | `dell/e3s-filler-2slot-1u@1` | module | blank | 77.65 × 17.38 |  | 1 | 0 | The vented filler a 16th-generation 1U PowerEdge (R660) fits across the two lower E3.S slots of its last colu… |
-| `dell/fan-14g@1` | module | fan | 63.6 × 46.2 × 74.6 |  | 1 | 1 | A hot-swap cooling fan of a 2U 14G PowerEdge seen from above - the block that lifts straight out of the fan c… |
-| `dell/fan-1u-16g@1` | module | fan | 82 × 56 × 40 |  | 1 | 0 | Dual-rotor hot-plug fan module of a 16th-generation 1U PowerEdge (R660) seen from above - two 40 mm fans in o… |
+| `dell/fan-14g@1` | module | fan | 63.6 × 46.2 × 74.6 |  | 1 | 2 | A hot-swap cooling fan of a 2U 14G PowerEdge seen from above - the block that lifts straight out of the fan c… |
+| `dell/fan-1u-16g@1` | module | fan | 82 × 56 × 40 |  | 1 | 3 | Dual-rotor hot-plug fan module of a 16th-generation 1U PowerEdge (R660) seen from above - two 40 mm fans in o… |
 | `dell/fan-bracket-1u-16g@1` | component | mechanical | 428.3 × 70.6 × 40 |  | 1 | 0 | The fan bracket of a 16th-generation 1U PowerEdge (R660) seen from above - the frame across the chassis that … |
 | `dell/fan-cage-14g@1` | component | mechanical | 408.9 × 71.5 × 78.08 |  | 1 | 1 | The cooling fan cage of a 14G PowerEdge seen from above - the frame across the full width of the chassis, bet… |
 | `dell/heatsink-1u-14g@1` | component | mechanical | 82.2 × 128.1 |  | 1 | 2 | The 1U processor heatsink of a 14G PowerEdge seen from above - a finned block the width of the socket, one pe… |
@@ -642,7 +642,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/riser-divider-plate-14g@1` | component | mechanical | 11.32 × 40.61 |  | 1 | 0 | The sheet metal either side of the rear-bay divider on a 14G PowerEdge - the plate right of riser 2 and the p… |
 | `dell/rj45-port-14g@1` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 0 | 3 | A 14G PowerEdge network port - common/rj45-eth@1 carrying the link and activity states ISM table 11 gives it |
 | `dell/system-board-14g@1` | component | mechanical | 422.8 × 456.5 × 79.9 |  | 1 | 2 | The system board of a 14G PowerEdge seen from above - the floor of the chassis, visible between the fan cage,… |
-| `dell/system-board-r660@1` | component | mechanical | 425 × 471.8 × 38.3 |  | 1 | 6 | The R660 system board seen from above - the PCB the processors, memory, risers and fan connectors stand on, a… |
+| `dell/system-board-r660@1` | component | mechanical | 425 × 471.8 × 38.3 |  | 1 | 7 | The R660 system board seen from above - the PCB the processors, memory, risers and fan connectors stand on, a… |
 | `dell/system-cover-14g@1` | component | mechanical | 434 × 540.6 |  | 1 | 0 | The system cover of a 14G PowerEdge - the lid over the mid-drive tray, the risers and the processor tray, rel… |
 | `dell/system-cover-1u-16g@1` | component | mechanical | 433.4 × 615 |  | 1 | 0 | The system cover of a 16th-generation 1U PowerEdge (R660) - the lid over everything behind the drive backplan… |
 | `dell/system-id-button-14g@1` | component | button | 7 × 7 |  | 1 | 2 | The system identification button on the rear of a 14th-generation PowerEdge - pressed to make the machine ann… |
@@ -814,7 +814,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `hpe/serial-port-blank@1` | module | blank | 32.8 × 12.5 |  | 1 | 1 | HPE serial port blank on the Gen10 ProLiant DL160's rear, covering the opening the optional serial port fills… |
 | `hpe/sff-blank@1` | module | blank | 76.2 × 15 × 25 |  | 1 | 0 | HPE SFF drive blank for the Gen10 ProLiant DL160's 2.5 inch front bays, lying flat - a black moulding with a … |
 | `hpe/sff-sc-carrier@1` | module | drive | 76.2 × 15 × 125 |  | 1 | 3 | HPE SmartCarrier (SC) for a 2.5 inch SFF drive, lying flat as the Gen10 ProLiant DL160's 8 SFF front presents… |
-| `hpe/system-board-dl160@1` | component | mechanical | 426 × 393 × 36 |  | 1 | 1 | The Gen10 ProLiant DL160 system board seen from above - the PCB the processors, memory, risers and supply con… |
+| `hpe/system-board-dl160@1` | component | mechanical | 426 × 393 × 36 |  | 1 | 0 | The Gen10 ProLiant DL160 system board seen from above - the PCB the processors, memory, risers and supply con… |
 
 ## juniper/ (170)
 
@@ -1230,19 +1230,28 @@ aperture when it is a bare opening - never both at one position. The README's
 | `smartoptics/ppm-ocu-50-50@2` | module | coupler | 55.4 × 19.5 |  | 0 | 1 | Smartoptics PPM-OCU-50-50 - a passive plug-in module holding a C-band optical coupler that splits the signal … |
 | `smartoptics/ppm-ocu-97-3@2` | module | coupler | 55.4 × 19.5 |  | 0 | 1 | Smartoptics PPM-OCU-97-3 - a passive plug-in module holding a C-band optical coupler that taps 3% of the sign… |
 
-## supermicro/ (26)
+## supermicro/ (35)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
+| `supermicro/air-shroud-x13sew-wio@1` | component | mechanical | 164 × 181 |  | 2 | 0 | The processor air shroud of the Supermicro X13SEW WIO servers seen from above - a black moulded duct that is … |
 | `supermicro/control-panel-sc116b@1` | component | control-panel | 22 × 20 |  | 1 | 0 | The front control panel of the Supermicro SC116B 1U chassis, as on the SuperServer SYS-111E-WR - a row of fiv… |
 | `supermicro/control-panel-sc815b@1` | component | control-panel | 64.5 × 13.1 |  | 1 | 0 | The front control panel of the Supermicro SC815B 1U chassis, as on the SuperServer SYS-511E-WR - a black stri… |
+| `supermicro/drive-cage-sc515b@1` | component | mechanical | 107.1 × 84 |  | 2 | 0 | The internal drive cage of the SC515B chassis seen from above - the bracket at the rear left that holds two f… |
 | `supermicro/drive-tray-25@1` | module | drive | 76 × 14 × 125 |  | 1 | 0 | Supermicro tool-less hot-swap tray for a 2.5 inch drive, lying flat as the SuperServer SYS-111E-WR front pres… |
 | `supermicro/drive-tray-35@1` | module | drive | 104 × 24.2 × 170 |  | 1 | 0 | Supermicro hot-swap tray for a 3.5 inch drive, lying flat as the SuperServer SYS-511E-WR front presents it - … |
-| `supermicro/fan-0163l4@1` | module | fan | 40 × 56 × 40 |  | 4 | 0 | Supermicro FAN-0163L4 seen from above - the 40 x 40 x 56 mm counter-rotating PWM fan of the SuperServer SYS-1… |
+| `supermicro/fan-0163l4@1` | module | fan | 40 × 56 × 40 |  | 4 | 0 | Supermicro FAN-0163L4 seen from above - the 40 x 40 x 56 mm counter-rotating PWM fan of the X13SEW 1U servers… |
+| `supermicro/fan-tray-sc116b@1` | component | mechanical | 263 × 66 |  | 1 | 0 | The fan tray of the SuperServer SYS-111E-WR seen from above - the black frame across the chassis floor that h… |
+| `supermicro/fan-tray-sc815b@1` | component | mechanical | 273 × 62 |  | 1 | 0 | The fan tray of the SuperServer SYS-511E-WR seen from above - the black frame across the chassis floor that h… |
+| `supermicro/fan-wall-sc515b@1` | component | mechanical | 278 × 60 |  | 2 | 0 | The rear fan positions of the SC515B chassis (SuperServer SYS-111E-FDWTR and FWTR) seen from above - the stri… |
 | `supermicro/heatsink-1u-lga4677@1` | component | mechanical | 76 × 120 |  | 4 | 0 | The passive 1U processor heatsink of the SuperServer SYS-111E-WR seen from above - a finned copper-coloured b… |
+| `supermicro/interior-sc116b@1` | component | mechanical | 435 × 365.5 × 41.5 |  | 1 | 1 | The interior of the SuperServer SYS-111E-WR seen from above with the cover off - the chassis floor between th… |
+| `supermicro/interior-sc515b@1` | component | mechanical | 435 × 330.5 × 41.5 |  | 2 | 0 | The interior of the SuperServer SYS-111E-FDWTR and SYS-111E-FWTR seen from above with the cover off - the cha… |
+| `supermicro/interior-sc815b@1` | component | mechanical | 435 × 368.5 × 41.5 |  | 1 | 0 | The interior of the SuperServer SYS-511E-WR seen from above with the cover off - the chassis floor between th… |
 | `supermicro/pcie-blank-fh@1` | module | blank | 120.02 × 21.59 |  | 0 | 1 | Supermicro full-height expansion slot blank of the 1U WIO chassis, lying flat - the part of it a slot window … |
 | `supermicro/pcie-blank-lp@1` | module | blank | 79.2 × 18.42 |  | 0 | 1 | Supermicro low-profile expansion slot blank of the 1U WIO chassis, lying flat - the part of it a slot window … |
 | `supermicro/power-button-sc515b@1` | component | button | 16 × 16 |  | 2 | 0 | The front power button of the Supermicro SC515B chassis, as on the SuperServer SYS-111E-FDWTR - a round black… |
+| `supermicro/psu-cage-cover-x13sew-wio@1` | component | mechanical | 113 × 216 |  | 2 | 0 | The power supply cage of the Supermicro X13SEW WIO servers seen from above - the sheet-metal cover over the i… |
 | `supermicro/psu-pws-601s-1r@1` | module | psu | 54.5 × 40 × 220 |  | 1 | 0 | Supermicro PWS-601S-1R, the 600 W -48 V DC redundant power supply module of the SuperServer SYS-111E-FDWTR - … |
 | `supermicro/psu-pws-601s-1r-plan@1` | component | mechanical | 54.5 × 220 |  | 0 | 1 | A Supermicro PWS-601S-1R power supply seen from above - the can that runs into the chassis behind its face |
 | `supermicro/psu-pws-804p-1r@1` | module | psu | 54.5 × 40.25 × 220 |  | 1 | 1 | Supermicro PWS-804P-1R, the 800 W Platinum redundant power supply module of the SuperServer SYS-111E-FWTR - a… |
@@ -1256,7 +1265,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `supermicro/riser-wio-lhs-x13sew@1` | module | riser | 123 × 43 × 180 |  | 4 | 2 | The left-hand-side WIO riser bracket of the SuperServer SYS-111E-WR as the rear presents it - PCIe 5.0 x16 sl… |
 | `supermicro/riser-wio-rhs-plan-x13sew@1` | component | mechanical | 79.5 × 176 |  | 0 | 1 | The slot 3 riser of the SuperServer SYS-111E servers seen from above, slot wall at the top - the bar at the s… |
 | `supermicro/riser-wio-rhs-x13sew@2` | module | riser | 79.5 × 23.8 × 180 |  | 4 | 1 | The right-hand-side WIO riser of the SuperServer SYS-111E-WR as the rear presents it - slot 3, PCIe 5.0 x8 in… |
-| `supermicro/system-board-x13sew@1` | component | mechanical | 203 × 330 × 36 |  | 4 | 0 | The Supermicro X13SEW-F / X13SEW-TF motherboard seen from above, I/O edge at the top - the proprietary WIO bo… |
+| `supermicro/system-board-x13sew@2` | component | mechanical | 203 × 330 |  | 4 | 0 | The Supermicro X13SEW-F / X13SEW-TF motherboard seen from above, I/O edge at the top - the proprietary WIO bo… |
 | `supermicro/system-cover-sc116b@1` | component | mechanical | 437 × 469.5 |  | 1 | 0 | The top cover of the SuperServer SYS-111E-WR - the lid over everything behind the drive cage |
 | `supermicro/system-cover-sc515b@1` | component | mechanical | 437 × 429 |  | 2 | 0 | The top cover of the SuperServer SYS-111E-FDWTR - the lid over the whole chassis, with a row of vent slots ne… |
 | `supermicro/system-cover-sc815b@1` | component | mechanical | 437 × 491.7 |  | 1 | 0 | The top cover of the SuperServer SYS-511E-WR - the lid over everything behind the drive cage |

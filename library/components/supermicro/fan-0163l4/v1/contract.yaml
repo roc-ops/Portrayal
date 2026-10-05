@@ -1,32 +1,44 @@
 format: 1
 kind: module
 name: fan-0163l4
-version: 1.0.0
+version: 1.0.1
 class: fan
 behaviour: fills
 profile: server
 description: >-
   Supermicro FAN-0163L4 seen from above - the 40 x 40 x 56 mm counter-rotating
-  PWM fan of the SuperServer SYS-111E servers, two rotors one behind the other
-  in one black housing
+  PWM fan of the X13SEW 1U servers: the top of its black housing, two fans
+  joined back to back, with the maker's label on one half
 attrs:
   model: FAN-0163L4
 provenance:
   sources: >-
-    Supermicro product pages for the SYS-111E-WR and SYS-111E-FDWTR, parts lists:
-    "FAN-0163L4 - 40x40x56 mm, 23.3K-20.3K RPM, Counter-rotating Fan". the top-down
-    photograph of the open SYS-111E-FDWTR embedded in its manual MNL-2570 on page 13
-    (1419 x 1381 at 300 ppi), on which the chassis is 1254 px across for 437 mm (2.870
-    px/mm) and 1236 px front to rear for 429 (2.881), 0.4% apart; six of them stand in a
-    row at the rear.
+    Supermicro product pages for the SYS-111E-WR, SYS-111E-FDWTR and SYS-511E-WR, parts
+    lists: "FAN-0163L4 - 40x40x56 mm, 23.3K-20.3K RPM, Counter-rotating Fan". The
+    SYS-511E-WR manual MNL-2491, section 3.8: "Each fan unit is actually made up of two
+    fans joined back-to-back, which rotate in opposite directions." The top-down
+    photographs of the three open chassis, in which the fans stand in their trays.
   size: >-
-    datasheet - 40 x 56 seen from above (40 x 40 x 56 mm, the parts list); 40 deep into
-    the page. On the FDWTR photograph a fan measures about 41.7 across.
+    datasheet - 40 x 56 seen from above (40 x 40 x 56 mm, the parts list); 40 tall,
+    which is how far it comes up when it is lifted out. On the FDWTR photograph a fan
+    measures about 41.7 across.
+  what-a-fan-looks-like-from-above: >-
+    photo - NOT A ROTOR. The blades face front and rear, the way the air goes, and what
+    shows with the lid off is the top of the housing: a black block with a seam across
+    the middle where the two fans meet, the raised ribs of the frame, and a white label
+    on one half (the SYS-511E-WR photograph shows the labels best). A first drawing put
+    two rotor rings on it, which is a fan blowing up through the lid; dell/fan-14g@1
+    records the same mistake and the same correction. The ribs and the label are drawn
+    from the photographs and are not measured. NO AIRFLOW ARROW IS DRAWN: none can be
+    read on the housing in any photograph held, and no document held states the
+    direction.
   power: >-
-    NOT STATED. The parts lists give size and speed and no wattage, and neither manual
-    gives a per-fan figure.
+    NOT STATED. The parts lists give size and speed and no wattage, and no manual gives
+    a per-fan figure.
 size: {w: 40.0, h: 56.0, d: 40.0}
 size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+body: {depth: 40.0, color: '#1c1e20'}
 elements:
   body: {at: [0.0, 0.0], size: [40.0, 56.0], class: bezel}
+  label: {at: [14.0, 33.5], size: [12.0, 9.0], class: label}
 skins: [default]

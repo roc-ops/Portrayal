@@ -234,11 +234,13 @@ gaps:
     reason: needs-drawing
     note: >-
       the interior under the top cover is drawn from one top-down photograph. Drawn:
-      the cover (it lifts off), the board, eight DIMMs, the heatsink, five fans, and
-      seen through from the rear bays the two supplies, both risers and any cards.
-      Not drawn: the four drives and their cage (a plain fixed cover, as
-      photographed), the backplane (a line), the empty sixth fan housing, the air
-      shroud, the supplies' distribution board and cabling. The riser outlines are
+      the cover (it lifts off), the board, eight DIMMs, the heatsink, the air shroud
+      and the supply cage cover (both lift off), five fans in their tray, the power
+      distribution box beside them, and standing in from the rear bays the two
+      supplies, both risers and any cards. Not drawn: the four drives and their
+      cage (a plain fixed cover, as photographed), the backplane (a line), the
+      empty sixth fan housing and cabling. THE AIR SHROUD IS THE SYS-111E-WR'S,
+      placed over the same heatsink; this server is photographed with it out. The riser outlines are
       the SYS-111E-WR's.
     wanted: >-
       a dimensioned plan of the CSE-815BTS interior
@@ -257,7 +259,7 @@ groups:
   fans: {term: Fan, role: service, index-origin: 1, description: 'the 40 x 40 x 56 mm counter-rotating fans, numbered here left to right as seen from above; the vendor fan numbering is not mapped'}
   processors: {term: CPU, role: service, index-origin: 1}
   interior: {term: Part, role: furniture, index-origin: 1}
-  covers: {term: Cover, role: furniture, index-origin: 1, description: 'the top cover; it lifts off in the viewer'}
+  covers: {term: Cover, role: furniture, index-origin: 1, description: 'the top cover, and under it the air shroud and the supply cage cover where the chassis has them; each lifts off in the viewer'}
 views:
   front:
     size: {w: 437.0, h: 43.0}
@@ -382,10 +384,10 @@ views:
         - {at: [432, 34.2], size: [3, 3.6], fill: '#16181a'}
     components:
       bays:
-        - {id: psu-1, at: [4.4, 1.9], size: {w: 54.5, h: 40.25}, accepts: [supermicro/psu-pws-861a-1r@2], default: supermicro/psu-pws-861a-1r@2, group: psus, rel-pos: 1, plan: {view: top, at: [378.1, 0.0], under: [system-cover]}}
-        - {id: psu-2, at: [61.0, 1.9], size: {w: 54.5, h: 40.25}, accepts: [supermicro/psu-pws-861a-1r@2], default: supermicro/psu-pws-861a-1r@2, group: psus, rel-pos: 2, plan: {view: top, at: [321.5, 0.0], under: [system-cover]}}
-        - {id: riser-rhs, at: [218.5, 0.0], size: {w: 79.5, h: 23.8}, accepts: [supermicro/riser-wio-rhs-x13sew@2], default: supermicro/riser-wio-rhs-x13sew@2, group: risers, rel-pos: 2, plan: {view: top, at: [139.0, 0.0], in: system-board, under: [system-cover]}}
-        - {id: riser-lhs, at: [298.0, 0.0], size: {w: 123.0, h: 43.0}, accepts: [supermicro/riser-wio-lhs-x13sew@1], default: supermicro/riser-wio-lhs-x13sew@1, group: risers, rel-pos: 1, plan: {view: top, at: [16.0, 0.0], under: [system-cover]}}
+        - {id: psu-1, at: [4.4, 1.9], size: {w: 54.5, h: 40.25}, accepts: [supermicro/psu-pws-861a-1r@2], default: supermicro/psu-pws-861a-1r@2, group: psus, rel-pos: 1, plan: {view: top, at: [378.1, 0.0], in: interior, under: [system-cover, psu-cage]}}
+        - {id: psu-2, at: [61.0, 1.9], size: {w: 54.5, h: 40.25}, accepts: [supermicro/psu-pws-861a-1r@2], default: supermicro/psu-pws-861a-1r@2, group: psus, rel-pos: 2, plan: {view: top, at: [321.5, 0.0], in: interior, under: [system-cover, psu-cage]}}
+        - {id: riser-rhs, at: [218.5, 0.0], size: {w: 79.5, h: 23.8}, accepts: [supermicro/riser-wio-rhs-x13sew@2], default: supermicro/riser-wio-rhs-x13sew@2, group: risers, rel-pos: 2, plan: {view: top, at: [139.0, 0.0], in: interior, under: [system-cover]}}
+        - {id: riser-lhs, at: [298.0, 0.0], size: {w: 123.0, h: 43.0}, accepts: [supermicro/riser-wio-lhs-x13sew@1], default: supermicro/riser-wio-lhs-x13sew@1, group: risers, rel-pos: 1, plan: {view: top, at: [16.0, 0.0], in: interior, under: [system-cover]}}
       placements:
         - {id: serial, ref: common/db9-receptacle@1, at: [132.8, 25.95], group: serial, rel-pos: 1}
         - {id: bmc, ref: common/rj45-eth@1, at: [165.7, 5.7], rotate: 180, group: mgmt, rel-pos: 1}
@@ -404,24 +406,30 @@ views:
         - {at: [0, 0], size: [437.0, 650.0], fill: '#c9cdd1'}
         - {at: [0, 467.0], size: [437.0, 4.0], fill: '#2c5a3c'}
         - {at: [0, 491.7], size: [437.0, 158.3], fill: '#b9bec4'}
+        - {at: [320.0, 369.5], size: [88.0, 80.5], fill: '#bfc4c9'}
+        - {at: [342.0, 400.0], size: [16.0, 7.0], fill: '#e6c229'}
     components:
       bays:
-        - {id: dimm-1, at: [144.1, 189.9], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 1, in: system-board, under: [system-cover]}
-        - {id: dimm-2, at: [151.7, 189.9], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 2, in: system-board, under: [system-cover]}
-        - {id: dimm-3, at: [159.3, 189.9], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 3, in: system-board, under: [system-cover]}
-        - {id: dimm-4, at: [166.9, 189.9], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 4, in: system-board, under: [system-cover]}
-        - {id: dimm-5, at: [258.7, 189.9], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 5, in: system-board, under: [system-cover]}
-        - {id: dimm-6, at: [266.3, 189.9], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 6, in: system-board, under: [system-cover]}
-        - {id: dimm-7, at: [273.9, 189.9], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 7, in: system-board, under: [system-cover]}
-        - {id: dimm-8, at: [281.5, 189.9], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 8, in: system-board, under: [system-cover]}
+        - {id: dimm-1, at: [144.1, 189.9], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 1, in: interior, under: [system-cover]}
+        - {id: dimm-2, at: [151.7, 189.9], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 2, in: interior, under: [system-cover]}
+        - {id: dimm-3, at: [159.3, 189.9], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 3, in: interior, under: [system-cover]}
+        - {id: dimm-4, at: [166.9, 189.9], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 4, in: interior, under: [system-cover]}
+        - {id: dimm-5, at: [258.7, 189.9], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 5, in: interior, under: [system-cover]}
+        - {id: dimm-6, at: [266.3, 189.9], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 6, in: interior, under: [system-cover]}
+        - {id: dimm-7, at: [273.9, 189.9], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 7, in: interior, under: [system-cover]}
+        - {id: dimm-8, at: [281.5, 189.9], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 8, in: interior, under: [system-cover]}
         - {id: fan-1, at: [39.8, 373], size: {w: 40.0, h: 56.0}, accepts: [supermicro/fan-0163l4@1], default: supermicro/fan-0163l4@1, group: fans, rel-pos: 1, under: [system-cover]}
         - {id: fan-2, at: [130.9, 373], size: {w: 40.0, h: 56.0}, accepts: [supermicro/fan-0163l4@1], default: supermicro/fan-0163l4@1, group: fans, rel-pos: 2, under: [system-cover]}
         - {id: fan-3, at: [174.3, 373], size: {w: 40.0, h: 56.0}, accepts: [supermicro/fan-0163l4@1], default: supermicro/fan-0163l4@1, group: fans, rel-pos: 3, under: [system-cover]}
         - {id: fan-4, at: [217.7, 373], size: {w: 40.0, h: 56.0}, accepts: [supermicro/fan-0163l4@1], default: supermicro/fan-0163l4@1, group: fans, rel-pos: 4, under: [system-cover]}
         - {id: fan-5, at: [261.1, 373], size: {w: 40.0, h: 56.0}, accepts: [supermicro/fan-0163l4@1], default: supermicro/fan-0163l4@1, group: fans, rel-pos: 5, under: [system-cover]}
       placements:
-        - {id: system-board, ref: supermicro/system-board-x13sew@1, at: [115, 13.5], group: interior, rel-pos: 1, under: [heatsink, system-cover, dimm-1, dimm-2, dimm-3, dimm-4, dimm-5, dimm-6, dimm-7, dimm-8]}
-        - {id: heatsink, ref: supermicro/heatsink-1u-lga4677@1, at: [177.3, 190.1], group: processors, rel-pos: 1, in: system-board, under: [system-cover]}
+        - {id: interior, ref: supermicro/interior-sc815b@1, at: [1, 0.5], group: interior, rel-pos: 1, under: [system-cover, system-board, heatsink, air-shroud, psu-cage, dimm-1, dimm-2, dimm-3, dimm-4, dimm-5, dimm-6, dimm-7, dimm-8]}
+        - {id: system-board, ref: supermicro/system-board-x13sew@2, at: [115, 13.5], group: interior, rel-pos: 2, in: interior, under: [system-cover, air-shroud, heatsink], frames: [dimm-1, dimm-2, dimm-3, dimm-4, dimm-5, dimm-6, dimm-7, dimm-8]}
+        - {id: heatsink, ref: supermicro/heatsink-1u-lga4677@1, at: [177.3, 190.1], group: processors, rel-pos: 1, in: interior, under: [system-cover, air-shroud]}
+        - {id: fan-tray, ref: supermicro/fan-tray-sc815b@1, at: [34, 370], group: interior, rel-pos: 3, under: [system-cover], frames: [fan-1, fan-2, fan-3, fan-4, fan-5]}
+        - {id: air-shroud, ref: supermicro/air-shroud-x13sew-wio@1, at: [141, 185], group: covers, rel-pos: 2, in: interior, under: [system-cover]}
+        - {id: psu-cage, ref: supermicro/psu-cage-cover-x13sew-wio@1, at: [320.9, 101], group: covers, rel-pos: 3, in: interior, under: [system-cover]}
         - {id: system-cover, ref: supermicro/system-cover-sc815b@1, at: [0.0, 0.0], group: covers, rel-pos: 1}
   bottom:
     size: {w: 437.0, h: 650.0}

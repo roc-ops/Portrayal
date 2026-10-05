@@ -762,7 +762,26 @@ def _old_travel(c):
     data-body-depth, else 60, and a bay box that deep left behind."""
     d = c["body"]["depth"] if c["body"] else (c["bodyDepth"] or 60)
     captive = c["body"] and c["body"].get("travel")
-    return {"pull": min(captive or d * 1.5 + 25, c["into"] - 10), "leavesBay": True, "bayDepth": d}
+    return {"pull": min(captive or d * 1.5 + 25, max(c["into"] - 10, d + 10)), "leavesBay": True, "bayDepth": d}
+
+
+@needs_node
+def test_a_part_lifted_out_of_a_shallow_box_clears_it():
+    """From above a 1U chassis the face looks 43 mm into the box, and `into - 10`
+    held a 40 mm fan to 33 mm of travel: it never came out of the lid. The limit
+    is never less than the part's own depth plus the margin. From the front of a
+    deep chassis nothing changes."""
+    out = node("eject", {"cases": [
+        {"name": "fan from above", "body": {"depth": 40}, "bodyDepth": None, "depth": None,
+         "occupies": False, "feats": [], "base": 0, "into": 43},
+        {"name": "dimm from above", "body": None, "bodyDepth": 31.3, "depth": None,
+         "occupies": False, "feats": [], "base": 0, "into": 43},
+        {"name": "psu from the rear", "body": {"depth": 322}, "bodyDepth": None, "depth": None,
+         "occupies": False, "feats": [], "base": 0, "into": 597},
+    ]})
+    assert out["fan from above"]["travel"]["pull"] == 50
+    assert out["dimm from above"]["travel"]["pull"] == pytest.approx(41.3)
+    assert out["psu from the rear"]["travel"]["pull"] == 508
 
 
 @needs_node

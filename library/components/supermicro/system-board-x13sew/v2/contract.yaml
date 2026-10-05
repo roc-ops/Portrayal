@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: system-board-x13sew
-version: 1.0.1
+version: 2.0.0
 class: mechanical
 profile: server
 description: >-
@@ -32,14 +32,15 @@ provenance:
     a different image of the sibling board at 1.5 px/mm, puts the DIMM centres within
     1.5 mm across and the DIMM and heatsink centres within 4 mm down. The I/O connector
     strip and the fan headers are drawn as marks, not measured.
-  depth: >-
-    estimated - 36, the well the board and its parts stand in under the lid, as
-    hpe/system-board-dl160@1; not measured. IT WAS 30, WHICH IS LESS THAN A DIMM STANDS
-    (common/dimm-plan@1 is 31.3 tall), and in 3D the eight modules came up through the
-    cover.
-size: {w: 203.0, h: 330.0, d: 36.0}
-size-confidence: {w: datasheet, h: datasheet, d: estimated}
-relief: {wall: '#1e2226', walls: inside}
+  not-a-well: >-
+    THE BOARD IS DRAWN FLAT, ON THE FLOOR OF THE CHASSIS INTERIOR, and that is what @2
+    changes. @1 was a well of its own, 30 and then 36 deep, standing in a solid chassis
+    top; the supplies, risers and fans beside it then had nothing to stand in and were
+    built down from the lid or painted on it. The interior is now one well per chassis
+    (supermicro/interior-sc116b@1 and its siblings), as dell/system-board-r660@1 is for
+    that server, and this part is the board lying in it.
+size: {w: 203.0, h: 330.0}
+size-confidence: {w: datasheet, h: datasheet}
 elements:
   board: {at: [0.0, 0.0], size: [203.0, 330.0], class: bezel}
 skins: [default]
