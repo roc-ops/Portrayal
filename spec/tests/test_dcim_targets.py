@@ -171,14 +171,17 @@ def test_the_half_u_boxes_differ_between_the_trees_only_in_height(vendor, model,
 
 
 def test_the_trees_differ_nowhere_else():
-    """Everything `for_target` does not rewrite is still one document in both:
-    the files that differ are the ones with front ports or a part-unit height."""
+    """Everything `for_target` and `nested_bays_for` do not rewrite is still one
+    document in both: the files that differ are the ones with front ports or a
+    part-unit height, and the module types that carry bays of their own, which
+    only NetBox is given."""
     differ, rewritten = set(), set()
     for f, d in _docs("netbox"):
         rel = str(f.relative_to(EXPORTS / "netbox"))
         if d != yaml.safe_load((EXPORTS / "nautobot" / rel).read_text()):
             differ.add(rel)
-        if d.get("front-ports") or not float(d.get("u_height") or 0).is_integer():
+        nested = rel.startswith("module-types/") and d.get("module-bays")
+        if d.get("front-ports") or nested or not float(d.get("u_height") or 0).is_integer():
             rewritten.add(rel)
     assert len(rewritten) > 30
     assert differ == rewritten, sorted(differ ^ rewritten)
