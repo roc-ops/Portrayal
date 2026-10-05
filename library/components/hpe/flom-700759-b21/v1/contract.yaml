@@ -1,0 +1,77 @@
+format: 1
+kind: module
+name: flom-700759-b21
+version: 1.0.0
+class: nic
+behaviour: fills
+profile: server
+description: >-
+  HPE FlexFabric 10Gb 2-port 533FLR-T FlexibleLOM adapter (533FLR-T; option
+  700759-B21, spare 701534-001) - the adapter the Gen10 ProLiant DL160's
+  FlexibleLOM riser carries in place of slot 1
+attrs:
+  ports: 2
+  media: rj45
+  part-numbers: 700759-B21 701534-001
+  spare-part: 701534-001
+  hpe-model: 533FLR-T
+  controller: 57810S
+groups:
+  ports:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 10g}
+provenance:
+  sources: >-
+    Product Information Reference a00077132en_us, FlexibleLOM adapters:
+    700759-B21, 533FLR-T. THE QUICKSPECS DOES NOT LIST THIS ADAPTER for the
+    DL160 Gen10; the reference does. QuickSpecs a00021860enw on any FlexibleLOM
+    ('FlexibleLOM Riser Kit (875748-B21) is required to install these adapters';
+    'Only one FlexibleLOM can be added to the server'). The QuickSpecs names the
+    adapter by its controller; the name 533FLR-T is the Product Information
+    Reference's (a00077132en_us) and HPE PartSurfer's, which also gives the
+    spare 701534-001 (partsurfer.hpe.com/Search.aspx?SearchText=700759-B21). A
+    reseller's photograph of a 533FLR-T from the port end, from a little below
+    and to the left, the whole plate in frame
+    (itcreations.com/images/products/large/701534-001.jpg, 3630 x 2723), and
+    PartSurfer's of the spare from above.
+  size: >-
+    borrowed - 74.0 x 14.6, hpe/flom-629135-b22@1, the adapter whose photograph
+    the faceplate's length is read from; this part's own image does not measure
+    it.
+  face: >-
+    photo-measured - the plate is 1785 px on the reduced photograph: the screw
+    4.4 from the left end; a three-by-three field of vents at 9.1..20.9,
+    COUNTED; two shielded jacks at 21.4..39.4 and 42.9..61.8, latch notches
+    down, the left one against the vents; P2 printed BETWEEN the jacks and P1
+    right of the right one; no vent field at the right. It is
+    hpe/flom-817721-b21@1's arrangement, read here on its own photograph. The
+    photograph is taken from the left, so the right jack reads a millimetre wide
+    and these are good to about that. Positions are read as fractions of the
+    plate, whose whole length the photograph shows, at the 74.0 this family
+    draws; by the cage or jacks it carries this photograph would put the plate
+    between 74 and 76, which is the family's open question and not this part's.
+  lamps: >-
+    known-wrong - THE LAMPS ARE AT THE WRONG CORNERS. The photograph shows a
+    lamp window at each UPPER corner of each jack with the latch notch at the
+    bottom; the library's lamped jack (common/rj45-eth@1) carries its lamps
+    beside the notch, so drawn notch-down they sit at the lower corners. The
+    jack's way up is the photograph's; the lamps are 9 mm from where they are.
+  way-up: >-
+    The adapter lies component side up, its screw end at the left as the User
+    Guide's figure fits it into the cage; the photographs are taken the same way
+    up.
+  power: >-
+    NOT STATED for the adapter in any document held; lint's L27 stands as the
+    record.
+  depth: >-
+    estimated - 110. No dimension of the adapter is in any document held; it is
+    the board's reach behind the faceplate by proportion on the photographs.
+size: {w: 74.0, h: 14.6, d: 110.0}
+size-confidence: {w: borrowed, h: borrowed, d: estimated}
+body: {depth: 110.0, color: '#2f6b3a'}
+parts:
+  - {ref: common/rj45-eth@1, id: port-2, group: ports, at: [22.5, 1.0], attrs: {media: rj45, speed: 10g}}
+  - {ref: common/rj45-eth@1, id: port-1, group: ports, at: [44.45, 1.0], attrs: {media: rj45, speed: 10g}}
+skins: [default]

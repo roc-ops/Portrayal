@@ -1,0 +1,74 @@
+format: 1
+kind: module
+name: flom-764302-b21
+version: 1.0.0
+class: nic
+behaviour: fills
+profile: server
+description: >-
+  HPE FlexFabric 10Gb 4-port 536FLR-T FlexibleLOM adapter (536FLR-T; option
+  764302-B21, spare 768082-001) - the adapter the Gen10 ProLiant DL160's
+  FlexibleLOM riser carries in place of slot 1
+attrs:
+  ports: 4
+  media: rj45
+  part-numbers: 764302-B21 768082-001
+  spare-part: 768082-001
+  hpe-model: 536FLR-T
+  controller: 57840S
+groups:
+  ports:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 10g}
+provenance:
+  sources: >-
+    Product Information Reference a00077132en_us, FlexibleLOM adapters:
+    764302-B21, 536FLR-T. THE QUICKSPECS DOES NOT LIST THIS ADAPTER for the
+    DL160 Gen10; the reference does. QuickSpecs a00021860enw on any FlexibleLOM
+    ('FlexibleLOM Riser Kit (875748-B21) is required to install these adapters';
+    'Only one FlexibleLOM can be added to the server'). The QuickSpecs names the
+    adapter by its controller; the name 536FLR-T is the Product Information
+    Reference's (a00077132en_us) and HPE PartSurfer's, which also gives the
+    spare 768082-001 (partsurfer.hpe.com/Search.aspx?SearchText=764302-B21). A
+    reseller's photograph of a 536FLR-T from the port end, face-on, the whole
+    plate in frame (serverorbit.com/images/detailed/272/HPE-764302-B21-4Port-
+    PCIE-Flexfabric536flr-Adapter.jpg, 800 x 800), and PartSurfer's of the spare
+    from above.
+  size: >-
+    borrowed - 74.0 x 14.6, hpe/flom-629135-b22@1, the adapter whose photograph
+    the faceplate's length is read from; this part's own image does not measure
+    it.
+  face: >-
+    photo-measured - the plate is 1810 px on the enlarged photograph: the screw
+    4.7 from the left end and one four-port ganged jack in a shield at
+    8.4..65.4, a lamp at each upper corner of every jack and the contacts along
+    the bottom, so the jacks are the library's lamped ganged jack turned over.
+    The four openings are pitched 13.56 at 74.0. It is hpe/flom-629135-b22@1's
+    layout read again on a different adapter, 0.6 mm apart at the shield's ends.
+    PORT ORDER IS NOT READ: the plate prints no numbers the photograph shows,
+    and 4 to 1 left to right follows HPE's two-port FlexibleLOMs. Positions are
+    read as fractions of the plate, whose whole length the photograph shows, at
+    the 74.0 this family draws; by the cage or jacks it carries this photograph
+    would put the plate between 74 and 76, which is the family's open question
+    and not this part's.
+  way-up: >-
+    The adapter lies component side up, its screw end at the left as the User
+    Guide's figure fits it into the cage; the photographs are taken the same way
+    up.
+  power: >-
+    NOT STATED for the adapter in any document held; lint's L27 stands as the
+    record.
+  depth: >-
+    estimated - 110. No dimension of the adapter is in any document held; it is
+    the board's reach behind the faceplate by proportion on the photographs.
+size: {w: 74.0, h: 14.6, d: 110.0}
+size-confidence: {w: borrowed, h: borrowed, d: estimated}
+body: {depth: 110.0, color: '#2f6b3a'}
+parts:
+  - {ref: common/rj45-ganged-eth@1, id: port-4, group: ports, at: [9.69, 2.9], rotate: 180, attrs: {media: rj45, speed: 10g}}
+  - {ref: common/rj45-ganged-eth@1, id: port-3, group: ports, at: [23.66, 2.9], rotate: 180, attrs: {media: rj45, speed: 10g}}
+  - {ref: common/rj45-ganged-eth@1, id: port-2, group: ports, at: [37.62, 2.9], rotate: 180, attrs: {media: rj45, speed: 10g}}
+  - {ref: common/rj45-ganged-eth@1, id: port-1, group: ports, at: [51.6, 2.9], rotate: 180, attrs: {media: rj45, speed: 10g}}
+skins: [default]

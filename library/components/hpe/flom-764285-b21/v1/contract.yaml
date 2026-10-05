@@ -1,0 +1,93 @@
+format: 1
+kind: module
+name: flom-764285-b21
+version: 1.0.0
+class: nic
+behaviour: fills
+profile: server
+description: >-
+  HPE InfiniBand FDR/Ethernet 10Gb/40Gb 2-port 544+FLR-QSFP FlexibleLOM
+  adapter (544+FLR-QSFP; option 764285-B21, spare 764737-001) - the adapter
+  the Gen10 ProLiant DL160's FlexibleLOM riser carries in place of slot 1
+attrs:
+  ports: 2
+  media: qsfp-plus
+  part-numbers: 764285-B21 764737-001
+  spare-part: 764737-001
+  hpe-model: 544+FLR-QSFP
+  controller: ConnectX-3 Pro
+  qsfp: 2
+  qsfp-plus: 2
+groups:
+  ports:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp-plus, speed: 40g}
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+provenance:
+  sources: >-
+    Product Information Reference a00077132en_us, FlexibleLOM adapters:
+    764285-B21, 544+FLR-QSFP. THE QUICKSPECS DOES NOT LIST THIS ADAPTER for the
+    DL160 Gen10; the reference does. QuickSpecs a00021860enw on any FlexibleLOM
+    ('FlexibleLOM Riser Kit (875748-B21) is required to install these adapters';
+    'Only one FlexibleLOM can be added to the server'). The QuickSpecs names the
+    adapter by its controller; the name 544+FLR-QSFP is the Product Information
+    Reference's (a00077132en_us) and HPE PartSurfer's, which also gives the
+    spare 764737-001 (partsurfer.hpe.com/Search.aspx?SearchText=764285-B21). A
+    reseller's photograph of a 544+FLR-QSFP from the port end, from a little
+    above and to the left, the whole plate in frame (hp-
+    pro.net/netcat_files/254/539/764285_B21.jpg, 800 x 753), and PartSurfer's of
+    the spare from above.
+  size: >-
+    borrowed - 74.0 x 14.6, hpe/flom-629135-b22@1, the adapter whose photograph
+    the faceplate's length is read from; this part's own image does not measure
+    it.
+  face: >-
+    photo-measured - the plate is 1670 px on the enlarged photograph: the screw
+    4.2 from the left end; a three-by-two field of vents at 8.1..22.3, COUNTED;
+    FOUR lamps in one row under it at 11.7, 14.6, 17.3 and 20.2, lettered P2
+    over LNK ACT and P1 over LNK ACT - both ports' lamps are at the left; two
+    SEPARATE QSFP cages at 23.0..41.4 and 42.5..62.3; two small square holes one
+    above the other at 63.8; PORT 2 under the left cage and PORT 1 under the
+    right. The left cage reads 18.4 wide at 74.0 against the 18.35 a QSFP cage
+    is, which is the one check a part of known size gives on this family's plate
+    length and it agrees. The photograph is taken from the left and above: the
+    right cage reads 1.3 mm wide, and positions right of the middle are good to
+    about 1.5 mm.
+  lamps: >-
+    photo-measured - round lamps about 1 mm across, drawn with the library's 2
+    mm dot; which is link and which activity is read off the legends the
+    photograph shows. WHAT THEIR COLOURS AND FLASHES MEAN is in no document
+    held. Green for link and flashing green for activity is the convention, not
+    a reading.
+  pitch-note: >-
+    The two cages are SEPARATE single cages with a strip of plate between them,
+    not one ganged 1x2: the photograph shows each with its own bezel and puts
+    their centres 20.2 apart, against the 19.0 a ganged pair is pitched at. The
+    library's ganged cage is drawn twice because it is the cage's own 18.5
+    width; the pitch is the photograph's.
+  way-up: >-
+    The adapter lies component side up, its screw end at the left as the User
+    Guide's figure fits it into the cage; the photographs are taken the same way
+    up.
+  power: >-
+    NOT STATED for the adapter in any document held; lint's L27 stands as the
+    record.
+  depth: >-
+    estimated - 110. No dimension of the adapter is in any document held; it is
+    the board's reach behind the faceplate by proportion on the photographs.
+size: {w: 74.0, h: 14.6, d: 110.0}
+size-confidence: {w: borrowed, h: borrowed, d: estimated}
+body: {depth: 110.0, color: '#2f6b3a'}
+parts:
+  - {ref: std/qsfp-ganged@1, id: port-2, group: ports, at: [22.95, 3.0], attrs: {media: qsfp-plus, speed: 40g}}
+  - {ref: std/qsfp-ganged@1, id: port-1, group: ports, at: [43.15, 3.0], attrs: {media: qsfp-plus, speed: 40g}}
+  - {ref: common/led-dot@1, id: led-2-lnk, group: port-leds, at: [10.7, 9], states: {lamp: ['off', {name: link, color: '#22c55e'}]}}
+  - {ref: common/led-dot@1, id: led-2-act, group: port-leds, at: [13.6, 9], states: {lamp: ['off', {name: activity, color: '#22c55e', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-1-lnk, group: port-leds, at: [16.5, 9], states: {lamp: ['off', {name: link, color: '#22c55e'}]}}
+  - {ref: common/led-dot@1, id: led-1-act, group: port-leds, at: [19.4, 9], states: {lamp: ['off', {name: activity, color: '#22c55e', behavior: blinking}]}}
+skins: [default]
