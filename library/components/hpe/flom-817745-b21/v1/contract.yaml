@@ -48,11 +48,13 @@ provenance:
     as 388 px, drew the left field 2 mm short and the right field as two
     columns; all three were wrong against this photograph.
   lamps: >-
-    known-wrong - THE LAMPS ARE AT THE WRONG CORNERS. The photograph shows a
-    lamp window at each UPPER corner of each jack with the latch notch at the
-    bottom; the library's lamped jack (common/rj45-eth@1) carries its lamps
-    beside the notch, so drawn notch-down they sit at the lower corners. The
-    jack's way up is the photograph's; the lamps are 9 mm from where they are.
+    photo-measured - a lamp window at each corner of each jack on the PIN side,
+    away from the latch notch: counted, two per jack, on this adapter's
+    photograph. The jack is common/rj45-eth-pinside@1, which carries its lamps
+    there. A first version used common/rj45-eth@1, whose lamps are beside the
+    notch, and drew them 9 mm low. WHICH LAMP IS LINK AND WHICH ACTIVITY IS NOT
+    READ: the faceplate letters neither, and left link, right activity is the
+    jack's convention. What the colours and flashes mean is in no document held.
   way-up: >-
     The adapter lies component side up, its screw end at the left as the User
     Guide's figure fits it into the cage; the photographs are taken the same way
@@ -67,6 +69,6 @@ size: {w: 74.0, h: 14.6, d: 110.0}
 size-confidence: {w: borrowed, h: borrowed, d: estimated}
 body: {depth: 110.0, color: '#2f6b3a'}
 parts:
-  - {ref: common/rj45-eth@1, id: port-2, group: ports, at: [21.3, 1.0], attrs: {media: rj45, speed: 10g}}
-  - {ref: common/rj45-eth@1, id: port-1, group: ports, at: [42.9, 1.0], attrs: {media: rj45, speed: 10g}}
+  - {ref: common/rj45-eth-pinside@1, id: port-2, group: ports, at: [21.3, 1.0], attrs: {media: rj45, speed: 10g}}
+  - {ref: common/rj45-eth-pinside@1, id: port-1, group: ports, at: [42.9, 1.0], attrs: {media: rj45, speed: 10g}}
 skins: [default]

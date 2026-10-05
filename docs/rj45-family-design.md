@@ -253,3 +253,18 @@ flagged: the latch slot height (2.6, conventional) and the housing top wall
 
 **The version rule the sweep answered two ways:** a composed-part swap that
 removes no id is a minor bump.
+
+## Addendum: a third lamped member, lamps on the pin side
+
+`common/rj45-eth@1` carries its two lamps in the corners beside the latch
+keyway, which is where the drawings this note rests on put them. Some jacks carry
+them at the other end, in the corners on the pin side: the 10GBASE-T jacks on
+three HPE FlexibleLOM adapters show a lamp window in both corners away from the
+notch, on photographs of each. No rotation of the first part draws that, because
+turning it moves the keyway with the lamps.
+
+`common/rj45-eth-pinside@1` is the same housing with the two windows mirrored to
+the pin edge. It is a lamped member of the family for the census (L76) and for
+the exporter, and nothing else about the family changes. It is named for the pin
+side and not for top or bottom, because which way up a jack sits is its
+placement's to say.

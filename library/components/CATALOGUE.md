@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1183 component majors in 26 namespaces.
+1184 component majors in 26 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -54,7 +54,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/qsfp-ganged@1` | component | port | 18.5 × 9.58 × 37 | qsfp-ganged | 50 | 26 | QSFP family per-port opening inside a ganged cage block - the cage aperture, with the SFF-8661 module envelop… |
 | `std/qsfp28@1` | component | port | 20 × 10.15 × 37 | qsfp28 | 2 | 49 | QSFP28 cage cutout (100G, 4 lanes) |
 | `std/qsfp56@1` | component | port | 20 × 10.15 × 37 | qsfp56 | 0 | 16 | QSFP56 cage cutout (200G, shares SFF-8661 profile) |
-| `std/rj45@2` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 72 | 56 | RJ45 modular jack HOUSING - the 15.8 x 13.2 plastic face a plug enters, with the 8P8C interface recessed into… |
+| `std/rj45@2` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 72 | 57 | RJ45 modular jack HOUSING - the 15.8 x 13.2 plastic face a plug enters, with the 8P8C interface recessed into… |
 | `std/rj45-ganged@2` | component | port | 12.7 × 11 × 18.6 | rj45-ganged | 75 | 27 | One cell of a shared-wall 2xN RJ45 block - the 12.7 x 11.0 face between neighbouring ports on a 13.97 pitch, … |
 | `std/saf-d-grid@1` | component | inlet | 26.8 × 19.9 × 17 | saf-d-grid | 0 | 3 | Anderson Saf-D-Grid appliance inlet - the panel cutout with the keyed coupler recessed behind it, a first-mat… |
 | `std/sc-bore@1` | component | port | 8.39 × 9 × 6 | sc-simplex-receptacle | 2 | 34 | One SC opening - the rectangular hole an SC plug's housing enters, with the key slot cut into one long wall a… |
@@ -67,7 +67,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/vga@1` | component | port | 20.47 × 11.4 × 6.73 | hd15 | 2 | 6 | VGA video receptacle - a female high-density DE-15, fifteen contacts in three rows inside the D-subminiature … |
 | `std/xfp@1` | component | port | 19.5 × 9.7 × 61.7 | xfp | 1 | 40 | XFP cage cutout (10G pluggable) - the recommended bezel opening of the XFP MSA, the aperture an XFP cage prot… |
 
-## common/ (110)
+## common/ (111)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -154,7 +154,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/rivet@1` | component | mechanical | 3 × 3 |  | 7 | 0 | Sheet-metal rivet head |
 | `common/rj11-jack@1` | component | port | 14 × 13.5 |  | 1 | 0 | RJ11 telephone jack (FXS) |
 | `common/rj45-boot@1` | component | boot | 14.5 × 10 | rj45-plug | 0 | 1 | A strain-relief boot for an RJ45 (8P8C) copper plug - PVC, moulded around the plug it wraps |
-| `common/rj45-eth@1` | component | port | 15.8 × 13.2 × 18.6 |  | 61 | 41 | An Ethernet RJ45 - the std/rj45@2 housing with the two link and activity lamps nearly every Ethernet jack car… |
+| `common/rj45-eth@1` | component | port | 15.8 × 13.2 × 18.6 |  | 61 | 42 | An Ethernet RJ45 - the std/rj45@2 housing with the two link and activity lamps nearly every Ethernet jack car… |
+| `common/rj45-eth-pinside@1` | component | port | 15.8 × 13.2 × 18.6 |  | 0 | 3 | An Ethernet RJ45 whose two link and activity lamps are in the corners on the PIN side of the housing, opposit… |
 | `common/rj45-ganged-eth@1` | component | port | 12.7 × 11 × 18.6 |  | 75 | 35 | An Ethernet RJ45 in a ganged 2xN block - the std/rj45-ganged@2 cell with the two lamps in its keyway-side cor… |
 | `common/rj45-ganged-link@1` | component | port | 12.7 × 11 × 18.6 |  | 5 | 0 | An Ethernet RJ45 in a ganged 2xN block with ONE lamp - the std/rj45-ganged@2 cell with a single link/activity… |
 | `common/rocker-switch@1` | component | button | 21 × 15 |  | 1 | 0 | Snap-in panel rocker power switch, 21 x 15 bezel, rocker across the width - the I (on) side at the left and O… |
@@ -640,7 +641,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/riser-card-clip-14g@1` | component | mechanical | 8.4 × 16.4 |  | 0 | 3 | The blue card-retention clip at the end of a riser's slots on a 14G PowerEdge, where the L of a PCIe bracket … |
 | `dell/riser-card-lp-14g@1` | component | riser | 27.4 × 211.4 |  | 0 | 2 | The low-profile riser card of a 2U 14G PowerEdge seen from above - the short card that carries riser 2's sing… |
 | `dell/riser-divider-plate-14g@1` | component | mechanical | 11.32 × 40.61 |  | 1 | 0 | The sheet metal either side of the rear-bay divider on a 14G PowerEdge - the plate right of riser 2 and the p… |
-| `dell/rj45-port-14g@1` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 0 | 3 | A 14G PowerEdge network port - common/rj45-eth@1 carrying the link and activity states ISM table 11 gives it |
+| `dell/rj45-port-14g@1` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 0 | 4 | A 14G PowerEdge network port - common/rj45-eth@1 carrying the link and activity states ISM table 11 gives it |
 | `dell/system-board-14g@1` | component | mechanical | 422.8 × 456.5 × 79.9 |  | 1 | 2 | The system board of a 14G PowerEdge seen from above - the floor of the chassis, visible between the fan cage,… |
 | `dell/system-board-r660@1` | component | mechanical | 425 × 471.8 × 38.3 |  | 1 | 6 | The R660 system board seen from above - the PCB the processors, memory, risers and fan connectors stand on, a… |
 | `dell/system-cover-14g@1` | component | mechanical | 434 × 540.6 |  | 1 | 0 | The system cover of a 14G PowerEdge - the lid over the mid-drive tray, the risers and the processor tray, rel… |
@@ -788,13 +789,13 @@ aperture when it is a bare opening - never both at one position. The README's
 | `hpe/flom-629135-b22@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 13 | HPE Ethernet 1Gb 4-port 331FLR FlexibleLOM adapter (331FLR; option 629135-B22, spare 789897-001) - the adapte… |
 | `hpe/flom-665240-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 1 | HPE Ethernet 1Gb 4-port 366FLR FlexibleLOM adapter (366FLR; option 665240-B21, spare 669280-001) - the adapte… |
 | `hpe/flom-700751-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 1 | HPE FlexFabric 10Gb 2-port 534FLR-SFP+ FlexibleLOM adapter (534FLR-SFP+; option 700751-B21, spare 701531-001)… |
-| `hpe/flom-700759-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 1 | HPE FlexFabric 10Gb 2-port 533FLR-T FlexibleLOM adapter (533FLR-T; option 700759-B21, spare 701534-001) - the… |
+| `hpe/flom-700759-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 2 | HPE FlexFabric 10Gb 2-port 533FLR-T FlexibleLOM adapter (533FLR-T; option 700759-B21, spare 701534-001) - the… |
 | `hpe/flom-727054-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 1 | HPE Ethernet 10Gb 2-port 562FLR-SFP+ FlexibleLOM adapter (562FLR-SFP+; option 727054-B21, spare 790317-001) -… |
 | `hpe/flom-764285-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 1 | HPE InfiniBand FDR/Ethernet 10Gb/40Gb 2-port 544+FLR-QSFP FlexibleLOM adapter (544+FLR-QSFP; option 764285-B2… |
 | `hpe/flom-764302-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 1 | HPE FlexFabric 10Gb 4-port 536FLR-T FlexibleLOM adapter (536FLR-T; option 764302-B21, spare 768082-001) - the… |
 | `hpe/flom-817709-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 1 | HPE Ethernet 10/25Gb 2-port 631FLR-SFP28 FlexibleLOM adapter (631FLR-SFP28; option 817709-B21, spare 840133-0… |
-| `hpe/flom-817721-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 2 | HPE Ethernet 10Gb 2-port 535FLR-T FlexibleLOM adapter (535FLR-T; option 817721-B21, spare 854177-001) - the a… |
-| `hpe/flom-817745-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 1 | HPE Ethernet 10Gb 2-port 562FLR-T FlexibleLOM adapter (562FLR-T; option 817745-B21, spare 840138-001) - the a… |
+| `hpe/flom-817721-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 3 | HPE Ethernet 10Gb 2-port 535FLR-T FlexibleLOM adapter (535FLR-T; option 817721-B21, spare 854177-001) - the a… |
+| `hpe/flom-817745-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 2 | HPE Ethernet 10Gb 2-port 562FLR-T FlexibleLOM adapter (562FLR-T; option 817745-B21, spare 840138-001) - the a… |
 | `hpe/flom-817749-b21@1` | module | nic | 74 × 14.6 × 110 |  | 1 | 1 | HPE Ethernet 10/25Gb 2-port 640FLR-SFP28 FlexibleLOM adapter (640FLR-SFP28; option 817749-B21, spare 840139-0… |
 | `hpe/flom-867334-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 1 | HPE Ethernet 10/25Gb 2-port 622FLR-SFP28 converged network FlexibleLOM adapter (622FLR-SFP28; option 867334-B… |
 | `hpe/flom-blank@1` | module | blank | 74 × 14.6 |  | 0 | 1 | FlexibleLOM adapter blank of the Gen10 ProLiant DL160's FlexibleLOM riser cage - a perforated plate where an … |

@@ -181,6 +181,24 @@ def test_common_rj45_eth_composes_the_housing_and_adds_two_lamps():
     assert "conforms" not in c, "the wrapper composes the standard; it does not restate it"
 
 
+def test_common_rj45_eth_pinside_is_the_same_jack_with_its_lamps_at_the_other_end():
+    """The lamps mirror to the pin edge and nothing else moves: same housing,
+    same windows, same vocabulary, and the family counts it as lamped."""
+    c, base = contract("common/rj45-eth-pinside@1"), contract("common/rj45-eth@1")
+    assert c["size"] == base["size"] and c["parts"] == base["parts"]
+    for el in ("led-a", "led-b"):
+        x, y = base["elements"][el]["at"]
+        w, h = base["elements"][el]["size"]
+        assert c["elements"][el]["at"] == [x, round(base["size"]["h"] - y - h, 2)], el
+        assert c["elements"][el]["size"] == [w, h]
+        assert c["elements"][el]["states"] == base["elements"][el]["states"]
+    assert c["elements"]["led-a"]["at"][1] < 1.0, "the lamps are on the pin side, away from the keyway"
+    s = skin("common/rj45-eth-pinside@1")
+    assert s.count('y="0.27"') == 2 and 'y="11.83"' not in s
+    assert lint.rj45_class("common/rj45-eth-pinside@1", [LIB]) == "lamped"
+    assert dx.FAMILY_PART["common/rj45-eth-pinside@1"] == dx.FAMILY_PART["common/rj45-eth@1"]
+
+
 def test_common_rj45_eth_skin_punches_the_opening_through_its_own_face():
     s = skin("common/rj45-eth@1")
     assert 'id="led-a"' in s and 'id="led-b"' in s

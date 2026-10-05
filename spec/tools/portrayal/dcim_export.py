@@ -445,6 +445,7 @@ FAMILY_PART = {
     "std/rj45@2": ("console", "rj-45"),
     "std/rj45-ganged@2": ("console", "rj-45"),
     "common/rj45-eth@1": ("iface", "1000base-t"),
+    "common/rj45-eth-pinside@1": ("iface", "1000base-t"),
     "common/rj45-ganged-eth@1": ("iface", "1000base-t"),
     # the ganged cell with ONE lamp (a LINK/ACT jack, the AurCore AIS non-PoE
     # builds): the same Ethernet jack, so the same row (#738)
