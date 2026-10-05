@@ -119,6 +119,10 @@ def test_the_accessor_answers_for_every_part_that_names_a_plan():
     eye from the ISM's isometric figures.
     Seventy-nine since the HPE DL160 Gen10's two Flex Slot supplies
     (psu-865408-b21, psu-865414-b21) named hpe/psu-flex-slot-plan@1.
+    Eighty-five since the Supermicro SYS-111E servers: their four supplies
+    (psu-pws-861a-1r, psu-pws-601s-1r, psu-pws-804p-1r, psu-pws-862s-1r) each
+    named the can they run into the chassis as, and the two WIO risers they
+    share each named its bracket seen from above.
 
     Reads the real library rather than a fixture. Spelling-agnostic on purpose -
     it passes before Task 5's migration and after it, because what it watches is
@@ -127,8 +131,8 @@ def test_the_accessor_answers_for_every_part_that_names_a_plan():
     lib = ROOT / "library/components"
     named = [p for p in lib.glob("*/*/v*/contract.yaml")
              if F.face_ref(yaml.safe_load(p.read_text()) or {}, "plan")]
-    assert len(named) == 79, \
-        f"expected 79 parts naming a plan drawing, found {len(named)}"
+    assert len(named) == 85, \
+        f"expected 85 parts naming a plan drawing, found {len(named)}"
 
 
 def run83(doc, path="t/contract.yaml", name="t/thing@1", lib=LIB):
@@ -247,10 +251,11 @@ def test_the_index_carries_a_parts_other_faces():
     # 106 since its LOM card and rear I/O board; 107 since riser 3S; 108 since
     # the liquid-cooling rear I/O board.
     # 109 since riser 2S; 112 since risers 2Q, 1P and 4P;
-    # 114 since the HPE DL160 Gen10's two Flex Slot supplies.
+    # 114 since the HPE DL160 Gen10's two Flex Slot supplies;
+    # 120 since the four Supermicro SYS-111E supplies and their two risers.
     with_faces = [e for e in entries if e.get("faces")]
-    assert len(with_faces) == 114, \
-        f"expected exactly 114 of {len(entries)} entries to carry a faces " \
+    assert len(with_faces) == 120, \
+        f"expected exactly 120 of {len(entries)} entries to carry a faces " \
         f"key, found {len(with_faces)}"
 
 

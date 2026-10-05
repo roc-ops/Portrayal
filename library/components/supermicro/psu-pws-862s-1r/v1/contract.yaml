@@ -1,0 +1,107 @@
+format: 1
+kind: module
+name: psu-pws-862s-1r
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: server
+description: >-
+  Supermicro PWS-862S-1R, the 860 W Titanium redundant power supply module of
+  the SuperServer SYS-111E-FWTR-EU - a vent grid at the left, a pull bail, a C14 inlet
+  standing portrait in a dark bezel, the status lamp in a ring and a red
+  release tab along the bottom
+attrs:
+  model: PWS-862S-1R
+  power-output-w: 860
+  inlet: c14
+  input: 100-240 VAC
+  efficiency: titanium
+provenance:
+  plan: >-
+    seen from above, the supply is supermicro/psu-pws-862s-1r-plan@1 - the can it runs
+    into the chassis.
+  sources: >-
+    (1) The near straight-on rear photograph in StorageReview's review of the
+    SYS-111E-WR
+    (storagereview.com/wp-content/uploads/2023/03/StorageReview-Supermicro-Sys-111E-WR-6.jpg,
+    1200 x 677), on which the body between its side walls is 889 px for the 437 mm
+    width, 2.034 px/mm, which carries two PWS-861A-1R. (2) the front photograph of the
+    AC SYS-111E-FWTR embedded on page 10 of that manual (1890 x 513 at 300 ppi), a view
+    from slightly above on which each supply face is about 194 px across, 3.58 px/mm,
+    which carries two of the 220 mm AC supplies. (3) SuperServer SYS-111E-FWTR / FWTR-EU
+    / FDWTR User's Manual, MNL-2570 revision 1.0d, figure 3-7, "AC Power Supply Rear
+    View", a line drawing of the supply face with an arrow labelled LED. (4) SuperServer
+    SYS-111E-WR User's Manual, MNL-2490 revision 1.0d and SuperServer SYS-111E-FWTR /
+    FWTR-EU / FDWTR User's Manual, MNL-2570 revision 1.0d, Appendix B and the power
+    supply sections. (5) Supermicro product pages for the SYS-111E-WR and SYS-111E-FWTR,
+    Power Supply.
+  size: >-
+    borrowed - 54.5 x 40.25 x 220 mm from supermicro/psu-pws-804p-1r@1, the other supply
+    of the same chassis (CSE-515B-R801W), whose bays seat either. Supermicro has no
+    product page for the SYS-111E-FWTR-EU and prints no dimensions for this module in
+    the manual.
+  face: >-
+    photo-measured - ONE FACE, THREE SUPPLIES. Supermicro builds its 54.5 mm redundant
+    AC modules on one front casting, and the 322 mm PWS-861A-1R photographed on the
+    SYS-111E-WR and the 220 mm supply photographed on the SYS-111E-FWTR show the same
+    face: a three by four grid of square vents from 2.9 to 26.5 across; the pull bail
+    standing off the face at 15.4..26; the inlet bezel 27.3..51.3 x 2.6..32.6; a ringed
+    lens at (28.5, 36.0), a plain round hole at (35.3, 36.0) and the red release tab
+    38.4..50.0 along the bottom edge. Positions are read off the WR rear photograph at
+    2.03 px/mm; the FWTR image, at 3.58 px/mm but from above, agrees on the order and
+    proportions of all of them.
+  inlet: >-
+    photo-measured - COMPOSED, std/c14-inlet@1 at rotate 270: both photographs put the
+    earth pin on the LEFT with line and neutral stacked on the right, as figure 3-7
+    draws it. Centred on the bezel at (39.3, 17.6).
+  lamp: >-
+    drawing - THE LAMP IS THE RINGED LENS, the left of the two round features: figure
+    3-7 of the SYS-111E-FWTR manual draws this face and points its LED arrow at it. A
+    first reading of the WR photograph took the plain dark hole beside it for the lamp.
+    SuperServer SYS-111E-FWTR / FWTR-EU / FDWTR User's Manual, MNL-2570 revision 1.0d
+    section 3.7, Power Supply LED States: off - no power input; amber - power supply is
+    off or failed; green - on and operating.
+  power: >-
+    datasheet - power-output-w 860: Appendix B of the manual, model PWS-862S-1R, AC
+    input 100-127 Vac 9.4-7.4 A (800 W) and 200-240 Vac 4.8-4 A (860 W); the product
+    page names it as the Titanium Level supply of the European version. A rating, not a
+    draw.
+  depth: >-
+    datasheet - 220, the product page length. The page does not say whether it runs to
+    the bail or to the gold fingers.
+size: {w: 54.5, h: 40.25, d: 220.0}
+plan: {ref: supermicro/psu-pws-862s-1r-plan@1}
+size-confidence: {w: borrowed, h: borrowed, d: borrowed}
+body: {depth: 220.0, color: '#c8ccd0'}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [25.3, 7.6], rotate: 270, behind: true}
+elements:
+  vents: {at: [2.9, 3.6], size: [23.6, 33.5], class: vent}
+  lamp:
+    at: [27.0, 34.5]
+    size: [3.0, 3.0]
+    class: led
+    states:
+      - 'off'
+      - {name: ok, color: '#22c55e'}
+      - {name: fault, color: '#f59e0b'}
+    description: >-
+      Power supply status. Off - no power input; amber - power supply is off or failed;
+      green - on and operating.
+  release: {at: [38.4, 35.6], size: [11.6, 4.4], class: latch}
+  handle: {at: [15.4, 4.2], size: [10.6, 32.8], class: handle}
+  inlet-bezel: {at: [27.3, 2.6], size: [24.0, 30.0], class: inlet}
+relief:
+  wall: '#3a4045'
+  features:
+  - node: release
+    out: 4.0
+    color: '#b0434d'
+    confidence: estimated
+    source: the release tab stands proud of the face and below it in both photographs; not measured
+  - node: handle
+    uhandle: 14.0
+    color: '#6c7278'
+    confidence: estimated
+    source: the pull bail stands off the face in both photographs; how far is not measured
+skins: [default]
