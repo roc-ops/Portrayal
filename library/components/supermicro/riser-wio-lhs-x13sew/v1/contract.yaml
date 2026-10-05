@@ -1,0 +1,68 @@
+format: 1
+kind: module
+name: riser-wio-lhs-x13sew
+version: 1.0.0
+class: riser
+behaviour: fills
+profile: server
+description: >-
+  The left-hand-side WIO riser bracket of the SuperServer SYS-111E-WR as the
+  rear presents it - PCIe 5.0 x16 slots 1 and 2, full height, one above the
+  other, each a window over a standard bracket, with the lift-out thumbscrew
+  post at its inner end
+provenance:
+  sources: >-
+    The near straight-on rear photograph in StorageReview's review of the SYS-111E-WR
+    (storagereview.com/wp-content/uploads/2023/03/StorageReview-Supermicro-Sys-111E-WR-6.jpg,
+    1200 x 677), on which the body between its side walls is 889 px for the 437 mm
+    width, 2.034 px/mm. SuperServer SYS-111E-WR User's Manual, MNL-2490 revision 1.0d
+    section 3.9, Expansion Slots and Riser Cards: "1U LHS WIO riser card with two PCIe
+    5.0 x16 slots" for slots 1 and 2, and the rear view table: slots 1 and 2 PCIe 5.0
+    x16 full-height full-length. THE RISER CARD PART NUMBER IS NOT PRINTED in the
+    manual, the quick reference or the product page; the name here is this library's,
+    after the X13SEW board both servers that seat it are built on. THE SAME BRACKET IS
+    SEATED IN THE SYS-111E-FDWTR, on the strength of one check: that server's front
+    image (its manual MNL-2570, page 10, 3.35 px/mm) puts the two windows at
+    315.9..412.3 across its face and the thumbscrew at 310.3, against 318.1..405.6 and
+    309.2 here.
+  size: >-
+    photo-measured - 123.0 x 43.0: from where the two slot rows meet slot 3's bracket
+    (298.0 on the rear) to the edge of the chassis end vents (421.0), the full height of
+    the face.
+  placing: >-
+    photo-measured - WHAT A WINDOW SHOWS IS THE BRACKET CONNECTOR OPENING. The
+    photographed windows run 20.1..107.6 on this face; the standard puts the opening
+    19.96..109.86 from a full-height bracket's tip (std/pcie-bracket-fh@2), so both
+    brackets sit tip-left at 0, flange under the rail at the right. Down: the two plates
+    centre at 12.8 and 32.7 on the photograph, 19.9 apart for the standard's 20.32 slot
+    pitch; drawn on 20.32 at 0.3 and 20.62.
+  handedness: >-
+    photo-measured - not turned (keyed edge up). The card photographed in slot 1 has its
+    two cages in the upper part of its bracket, and a card's connectors stand on its
+    board, at the keyed edge.
+  slots: >-
+    datasheet - product page and manual: two PCIe 5.0 x16 full-height full-length slots.
+    Which processor lanes serve them is not a question on a one-socket board.
+  depth: >-
+    estimated - 180; no plan view of the bracket is dimensioned in any document held.
+size: {w: 123.0, h: 43.0, d: 180.0}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+body: {depth: 180.0, color: '#c8ccd0'}
+elements:
+  plate: {at: [0.0, 0.0], size: [123.0, 43.0], class: bezel}
+bays:
+  slot-1:
+    slot: {connector: x16, lanes: 16, height: full, length: full, processor: 1, generation: 5}
+    behind: true
+    at: [0.0, 0.3]
+    size: [120.02, 21.59]
+    accepts: [supermicro/pcie-blank-fh@1, std/pcie-bracket-fh@2, common/pcie-card-fh@2, ufispace/n3100-4c@1, nvidia/mcx4111a-fh@1, nvidia/mcx4121a-fh@1, nvidia/mcx4131a-fh@1, nvidia/mcx512a-fh@1, nvidia/mcx512f-fh@1, nvidia/mcx515a-fh@1, nvidia/mcx516a-fh@1, nvidia/mcx621102-fh@1, nvidia/mcx621202-fh@1, nvidia/mcx623102a-fh@1, nvidia/mcx623105-fh@1, nvidia/mcx623106-fh@1, nvidia/mcx713104-fh@1, nvidia/mcx713106-fh@1, nvidia/mcx713114-fh@1, nvidia/mcx715105-fh@1, nvidia/mcx75310-fh@1, nvidia/mcx75510-fh@1, nvidia/mcx755106-fh@1]
+    default: supermicro/pcie-blank-fh@1
+  slot-2:
+    slot: {connector: x16, lanes: 16, height: full, length: full, processor: 1, generation: 5}
+    behind: true
+    at: [0.0, 20.62]
+    size: [120.02, 21.59]
+    accepts: [supermicro/pcie-blank-fh@1, std/pcie-bracket-fh@2, common/pcie-card-fh@2, ufispace/n3100-4c@1, nvidia/mcx4111a-fh@1, nvidia/mcx4121a-fh@1, nvidia/mcx4131a-fh@1, nvidia/mcx512a-fh@1, nvidia/mcx512f-fh@1, nvidia/mcx515a-fh@1, nvidia/mcx516a-fh@1, nvidia/mcx621102-fh@1, nvidia/mcx621202-fh@1, nvidia/mcx623102a-fh@1, nvidia/mcx623105-fh@1, nvidia/mcx623106-fh@1, nvidia/mcx713104-fh@1, nvidia/mcx713106-fh@1, nvidia/mcx713114-fh@1, nvidia/mcx715105-fh@1, nvidia/mcx75310-fh@1, nvidia/mcx75510-fh@1, nvidia/mcx755106-fh@1]
+    default: supermicro/pcie-blank-fh@1
+skins: [default]

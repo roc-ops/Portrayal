@@ -1,0 +1,92 @@
+format: 1
+kind: module
+name: psu-pws-601s-1r
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: server
+description: >-
+  Supermicro PWS-601S-1R, the 600 W -48 V DC redundant power supply module of
+  the SuperServer SYS-111E-FDWTR - a white pull bail at the left, a two-pole
+  terminal block lettered RTN and -48V, the safety ground screw beside it and
+  a maroon release tab along the bottom
+attrs:
+  model: PWS-601S-1R
+  power-output-w: 600
+  inlet: dc-terminal
+  input: -44 to -65 VDC
+provenance:
+  sources: >-
+    (1) the front photograph of the SYS-111E-FDWTR embedded on page 10 of its manual
+    (1767 x 444 at 300 ppi), a view from slightly above on which the body is 1465 px
+    across for 437 mm, 3.352 px/mm, and 134.5 px down for 43 mm, 3.128 px/mm; the server
+    carries two of this supply. (2) SuperServer SYS-111E-FWTR / FWTR-EU / FDWTR User's
+    Manual, MNL-2570 revision 1.0d: Appendix B, Power Supply; section 3.7; section 2.8
+    with figure 2-7, DC Input Power Cable Connector. (3) Supermicro product page for the
+    SYS-111E-FDWTR, Power Supply.
+  size: >-
+    datasheet - 54.5 x 40 x 220 mm, W x H x L, printed on the SYS-111E-FDWTR product
+    page under Power Supply, Dimension. The front image measures the two faces at 54.1
+    and 54.0 across.
+  depth: >-
+    datasheet - 220, the product page length. The page does not say whether it runs to
+    the bail or to the gold fingers.
+  face: >-
+    photo-measured ACROSS, estimated DOWN - the image is taken from above and its down
+    scale is 7% short of its across scale, so across positions are good to half a
+    millimetre and down positions are fractions of the 40 mm height. Supply-local: the
+    white pull bail 1.9..8.1; a round lens at (12.4, 6.0); two small vents 17.4..26.0 at
+    the top; two round blue-grey features at (32.9, 7.3) and (39.2, 7.3); the terminal
+    block 15.8..34.2 x 14.7..38.0, its two poles lettered RTN and -48V on their sides;
+    the ground screw on its square washer centred at (44.4, 14.5); a vent grid under it;
+    the maroon release tab 39.8..51.0 at the bottom edge.
+  lamp: >-
+    estimated position - SuperServer SYS-111E-FWTR / FWTR-EU / FDWTR User's Manual,
+    MNL-2570 revision 1.0d gives the Power Supply LED States (off - no power input;
+    amber - off or failed; green - on and operating) and does not say where on the DC
+    supply the lamp is. It is drawn at the round lens beside the bail; the two blue-grey
+    round features right of the vents are the other candidates.
+  terminals: >-
+    SuperServer SYS-111E-FWTR / FWTR-EU / FDWTR User's Manual, MNL-2570 revision 1.0d
+    section 2.8: three conductors - -48 Vdc negative terminal (battery), +Return
+    positive terminal (battery return), and a safety ground marked with the earth
+    symbol, "optional because Chassis GND stud is connected"; Positronic CBD connector
+    on the supplied cable, 12 AWG. The ground is the screw on its washer, COMPOSED as
+    common/ground-screw-washer@1.
+  power: >-
+    datasheet - power-output-w 600: Appendix B, model PWS-601S-1R, input -44 to -65 Vdc
+    18-10 A, output +12 Vdc 50 A and +5 Vsb 3 A (600 W). A rating, not a draw.
+size: {w: 54.5, h: 40.0, d: 220.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+body: {depth: 220.0, color: '#c8ccd0'}
+parts:
+  - {ref: common/ground-screw-washer@1, id: ground, at: [38.9, 9.0]}
+elements:
+  vents: {at: [36.0, 21.0], size: [15.8, 17.6], class: vent}
+  lamp:
+    at: [10.8, 4.4]
+    size: [3.2, 3.2]
+    class: led
+    states:
+      - 'off'
+      - {name: ok, color: '#22c55e'}
+      - {name: fault, color: '#f59e0b'}
+    description: Power supply status. Off - no power input; amber - power supply is off or failed; green - on and operating.
+  terminal-rtn: {at: [17.6, 31.0], size: [5.6, 4.6], class: inlet, description: '+Return, the positive terminal (battery return)'}
+  terminal-48v: {at: [26.8, 31.0], size: [5.6, 4.6], class: inlet, description: '-48 Vdc, the negative terminal (battery)'}
+  release: {at: [39.8, 36.4], size: [11.2, 3.6], class: latch}
+  handle: {at: [1.9, 1.1], size: [6.2, 38.7], class: handle}
+relief:
+  wall: '#3a4045'
+  features:
+  - node: release
+    out: 4.0
+    color: '#7d2f33'
+    confidence: estimated
+    source: the release tab stands proud of the face and below it in the image; not measured
+  - node: handle
+    uhandle: 14.0
+    color: '#e4e6e8'
+    confidence: estimated
+    source: the pull bail stands off the face in the image; how far is not measured
+skins: [default]

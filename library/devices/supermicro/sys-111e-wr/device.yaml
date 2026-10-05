@@ -1,0 +1,477 @@
+format: 1
+kind: device
+name: sys-111e-wr
+version: 0.1.0
+maturity: modelled
+manufacturer: Supermicro
+model: SuperServer SYS-111E-WR
+description: >-
+  Supermicro's 1U single-socket WIO rack server for 4th and 5th generation
+  Intel Xeon Scalable processors: ten front hot-swap 2.5 inch bays, the
+  control panel and two USB ports beside them, and at the rear two 860 W
+  redundant supplies, the X13SEW-F board's serial, BMC, USB, two 1GbE and VGA
+  ports, and three PCIe 5.0 slots on two risers - two full-height full-length
+  and one low-profile.
+profile: server
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Read for this model: Supermicro's product page for the SYS-111E-WR
+      (supermicro.com/en/products/system/wio/1u/sys-111e-wr) and its two-page datasheet,
+      for dimensions, weight, ports, slots, power supply and environmentals; the User's
+      Manual MNL-2490 revision 1.0d, for the front, control panel and rear figures, LED
+      tables, slot and riser descriptions and Appendix B; the quick reference guide
+      QRG-2490; the Lot 9 addendum to the manual; the X13SEW motherboard manual
+      MNL-2413; and two near straight-on photographs from StorageReview's review of the
+      server - the front
+      (storagereview.com/wp-content/uploads/2023/03/StorageReview-Supermicro-Sys-111E-WR-7.jpg,
+      1200 x 698) and the rear
+      (storagereview.com/wp-content/uploads/2023/03/StorageReview-Supermicro-Sys-111E-WR-6.jpg,
+      1200 x 677). EVERY SUPERMICRO IMAGE OF THIS SERVER IS A PERSPECTIVE VIEW WITH
+      CALLOUTS (product page, datasheet, manual figures 1-1 and 1-3, 960 x 720 at most);
+      they are read for what is on each face and in what order, never for position. No
+      vendor 3D model is on the product page, and NetBox's devicetype-library has no
+      entry for this model or its chassis.
+  chassis:
+    confidence: datasheet
+    note: >-
+      Product page, datasheet and manual Appendix B agree: 1.7 x 17.2 x 23.5 in, 43 x
+      437 x 597 mm, 1U, chassis CSE-116BTS-R000WNP. 437 is the body between the ear
+      folds, which is how both photographs measure, so it is the body and not the rack
+      face. No document says what the depth runs between.
+  ears:
+    confidence: photo-measured
+    note: >-
+      THE EARS ARE NOT DRAWN. On the front photograph each ear with its handle runs
+      about 38 px outside the fold, 18.5 mm, 474 mm ear to ear at the body's scale. The
+      control panel and both front USB ports sit on the body, not the ears.
+  gate-1-front:
+    confidence: photo-measured
+    note: >-
+      The front photograph passes the panel gate only loosely. The body between the ear
+      folds is 894 px for 437 mm, 2.046 px/mm across; top to bottom it is about 88 px
+      for 43 mm, 2.05 px/mm, but the camera is slightly above the server and the top
+      edge of the face is soft against the lid, so the height is good to two pixels, 2%.
+      Positions across are read at 2.046 px/mm; positions down are read at the same
+      scale from the top edge at 338 px and are the softer figures. The five drive
+      columns are a check on the across scale: they start at 150.75, 314.5, 479.5, 644.5
+      and 810.75 px, steps of 163.75, 165, 165 and 166.25 - an even 165 px, 80.65 mm.
+  gate-1-rear:
+    confidence: photo-measured
+    note: >-
+      The rear photograph is the same kind of image: the body is 889 px across for 437
+      mm, 2.034 px/mm, and about 87 px down from 348 px. Two known sizes check it: each
+      power supply measures 53.5 x 39.3 mm for the product page's 54.5 x 40.25, and the
+      two full-height slot plates centre 19.9 mm apart for the standard's 20.32.
+      Positions are good to about a millimetre across and a little worse down.
+  front:
+    confidence: photo-measured
+    note: >-
+      Ten hot-swap bays in five columns of two, columns starting at 1.3 on an 80.65
+      pitch, rows at 10.3 and 27.3, each seating a 76.0 x 14.0 tray. Above them a strip
+      of vent slots, 1.4..5.8 down, seven to a column, with the pull-out tag in place of
+      the first five over column 1. Right of the drives, from 401.5, the control panel
+      (lamps 8.1 down, buttons 18.4 down) and under it two USB 3.2 ports one above the
+      other, centred at (418.6, 28.5) and (418.6, 36.6). The vent slot widths are read
+      at 2 px/mm and are approximate.
+  drive-numbering:
+    confidence: datasheet
+    note: >-
+      Product page and datasheet front view, and the quick reference guide: bays 0 to 9,
+      the lower bay of each column even and the upper odd, left to right - 1 over 0, 3
+      over 2, up to 9 over 8. The group is numbered from 0 as Supermicro numbers it.
+      Nothing is printed on the metal beside the bays that the photograph resolves, and
+      the photograph does resolve the 1.3 mm digits under the control panel's network
+      marks, so no bay numerals are drawn.
+  controls:
+    confidence: datasheet
+    note: >-
+      Manual figure 1-2 and its tables; see supermicro/control-panel-sc116b@1. The front
+      USB ports are USB 3.2 Gen1 (product page, front view).
+  rear:
+    confidence: photo-measured
+    note: >-
+      From the rear photograph, left to right: the two power supplies, PWS1 at 5.2 and
+      PWS2 at 62.0; from 118.1 the I/O plate - a four-row vent field, the serial port
+      (centre 148.2, 32.2), the BMC LAN port (173.6, 12.3) over two USB 2.0 ports
+      (173.7; 23.5 and 32.2), two more vent rows over two blue USB 3.2 ports (192.2),
+      LAN1 (210.1, 30.8) and LAN2 (228.8, 30.8), VGA (256.2, 32.4) and a small vent
+      block; above LAN2 and VGA the slot 3 window; from 298 the slot 1 and 2 bracket
+      with its thumbscrew post; and a column of vents at the right end. Names and order
+      are the manual's figure 1-3 and rear view table.
+  rear-uid:
+    confidence: estimated
+    note: >-
+      The manual's rear figure labels a Unit ID LED right of the VGA port. The
+      photograph shows a small oblong lens at (287.4, 34.9), right of the vent block
+      beside VGA, and that is where the lamp is drawn; the figure's arrow is the only
+      thing that says this lens is it.
+  rear-legends:
+    confidence: estimated
+    note: >-
+      NO REAR LEGEND IS DRAWN. Faint marks show under the ports on the photograph at 2
+      px/mm and none can be read, and nothing else printed on that face resolves at that
+      scale either, so this is a limit of the image and not a reading that the plate is
+      blank. See the gap.
+  slots:
+    confidence: datasheet
+    note: >-
+      Product page: 2 PCIe 5.0 x16 FHFL slots and 1 PCIe 5.0 x8 (in x16) LP slot. Manual
+      section 3.9: slots 1 and 2 on the "1U LHS WIO riser card", slot 3 on the "1U RHS
+      WIO riser card". The slots are bays of the two riser parts
+      (supermicro/riser-wio-lhs-x13sew@1, supermicro/riser-wio-rhs-x13sew@1), each a
+      standard bracket behind a window, so the library's cards seat in them.
+  psus:
+    confidence: datasheet
+    note: >-
+      Product page and manual Appendix B: two PWS-861A-1R, 860 W, redundant 1+1,
+      Titanium; rear view table: PWS1 on the left, PWS2 on the right. Both are seated by
+      default - the server ships with both.
+  weight:
+    confidence: datasheet
+    note: >-
+      Product page: net weight 21 lbs (9.53 kg), gross 33.5 lbs (15.2 kg). The page does
+      not say what is installed at the net figure; the system is sold as a barebone,
+      without processor, memory or drives.
+  power:
+    confidence: datasheet
+    note: >-
+      NO MAXIMUM SYSTEM POWER IS STATED on the product page, the datasheet, the manual
+      or the quick reference guide; each gives the supply rating only. The Lot 9
+      addendum states the idle state power at the higher boundary temperature of the
+      operating class, 260.43 W, for its tested configuration - an idle figure under one
+      regulation's test, not a maximum - and it is not written as power-max. A supply
+      rating is not the server's draw.
+  environmental:
+    confidence: datasheet
+    note: >-
+      Product page and manual Appendix B: operating 10 to 35 C, non-operating -30 to 60
+      C, operating relative humidity 8 to 80% non-condensing, non-operating 8 to 90%.
+  lifecycle:
+    confidence: datasheet
+    note: >-
+      Searched 2026-10-04 for an end-of-life notice (Supermicro's product page, which
+      still offers the system, and the web for "SYS-111E-WR end of life"); none found.
+  faces:
+    confidence: datasheet
+    note: >-
+      Top, bottom, left and right are sized from the stated dimensions and declared
+      empty. Supermicro's top view is a perspective photograph of the open chassis with
+      callouts, and no document held shows any of the four straight on.
+attrs:
+  physical:
+    ru: 1
+    weight-kg: 9.53
+    weight-gross-kg: 15.2
+  power:
+    power-input: 100-240 VAC, 50-60 Hz, per supply (860 W at 200-240 VAC and 240 VDC, 800 W at 100-127 VAC)
+    psu-redundancy: 1+1
+  thermal:
+    fans: five 40 x 40 x 56 mm counter-rotating PWM fans, with space for a sixth
+  environmental:
+    operating-temp-c: 10 to 35
+    storage-temp-c: -30 to 60
+    operating-humidity: 8 to 80% non-condensing
+    storage-humidity: 8 to 90% non-condensing
+  platform:
+    cpu: one 4th or 5th generation Intel Xeon Scalable processor, socket E (LGA-4677), up to 300 W TDP
+    memory: 8 DDR5 DIMM slots, up to 2 TB of 5600 MT/s ECC RDIMM
+    chipset: Intel C741
+    motherboard: X13SEW-F
+    storage-controller: onboard SATA, 6 Gbps; NVMe and SAS need the optional cables or controller card
+    network: two 1GbE RJ45 (Intel i210)
+    bmc: dedicated 1GbE BMC LAN port
+  compliance:
+    regulatory: FCC, ICES, CE, UKCA, VCCI, RCM, NRTL, CB
+  lifecycle:
+    eol: none-announced
+chassis: {width: 437.0, height: 43.0, depth: 597.0, ru: 1, color: '#c8ccd0', power: ac}
+gaps:
+  - what: power-max
+    scope: [front, rear]
+    reason: vendor-silent
+    note: >-
+      no maximum system power on the product page, datasheet, manual or quick
+      reference guide; the Lot 9 addendum gives only an idle figure, 260.43 W, for
+      its tested configuration. The server profile's power requirement is unmet for
+      that reason.
+    wanted: >-
+      a configured maximum power figure from Supermicro for the SYS-111E-WR
+  - what: rear-legends
+    scope: [rear]
+    reason: needs-photo
+    note: >-
+      the legends printed under the rear ports are not drawn: the only straight-on
+      rear image held is 2 px/mm and resolves no printing at all, so what the plate
+      says is unread. The power supplies' own labels are unread for the same reason.
+    wanted: >-
+      a straight-on rear photograph of a SYS-111E-WR at 6 px/mm or better
+  - what: riser-part-numbers
+    scope: [rear]
+    reason: vendor-silent
+    note: >-
+      the manual names the two risers only as the 1U LHS and RHS WIO riser cards and
+      the product page lists neither; their RSC part numbers are not in any document
+      held, so the riser parts are named for the chassis.
+    wanted: >-
+      the riser card part numbers from the system's parts list
+  - what: front-estimated-heights
+    scope: [front, rear]
+    reason: needs-photo
+    note: >-
+      both faces are measured off photographs taken from slightly above the server
+      at about 2 px/mm; positions across are good to a millimetre and positions
+      down, and every part's height, somewhat worse. Vent slot and hole sizes are
+      approximate.
+    wanted: >-
+      square-on photographs of the front and rear, or a dimensioned drawing of the
+      CSE-116BTS chassis
+  - what: front-bezel
+    scope: [front]
+    reason: needs-photo
+    note: >-
+      the optional black front bezel MCP-210-11601-0B (product page parts list) is
+      not drawn; no image of it is held.
+    wanted: >-
+      a straight-on image of the bezel on this chassis
+  - what: interior
+    scope: [top]
+    reason: needs-drawing
+    note: >-
+      the interior is not drawn. The product page's top view and the manual's figure
+      1-5 are perspective photographs of the open chassis; the motherboard manual's
+      layout drawing would place the board's own parts but not the fans, backplane
+      or supplies around it.
+    wanted: >-
+      a plan of the chassis interior, or a top-down photograph
+groups:
+  drives: {term: Bay, role: service, index-origin: 0, description: 'the ten hot-swap 2.5 inch bays, numbered 0 to 9 as Supermicro numbers them: the lower bay of each column even, the upper odd'}
+  risers: {term: Riser, role: service, index-origin: 1, description: 'the left-hand-side riser bracket (PCIe slots 1 and 2) and the right-hand-side riser (slot 3); the slots are bays of the risers'}
+  psus: {term: PSU, role: service, index-origin: 1, attrs: {redundancy: '1+1', redundancy-note: 'product page: 2x 860W Redundant (1 + 1); manual section 3.8: the system will continue to operate if one module fails'}}
+  nics: {term: Port, role: traffic, index-origin: 1, attrs: {media: rj45, speed: 1g}}
+  mgmt: {term: Port, role: management, index-origin: 1, attrs: {media: rj45, speed: 1g, role: mgmt}}
+  usb: {term: Port, role: management, index-origin: 1, attrs: {media: usb-a}, description: 'the six USB Type-A ports: two USB 3.2 Gen1 at the front, two USB 2.0 and two USB 3.2 Gen1 at the rear'}
+  video: {term: Port, role: management, index-origin: 1}
+  serial: {term: Port, role: management, index-origin: 1}
+  controls: {term: Panel, role: management, index-origin: 1}
+  leds: {term: LED, role: indicator, index-origin: 1}
+  tags: {term: Tag, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 437.0, h: 43.0}
+    panel:
+      decor:
+        - {at: [0, 0], size: [437.0, 43.0], fill: '#1b1d1f'}
+        - {at: [401.3, 0.6], size: [35.4, 41.8], fill: '#202326'}
+        - {at: [57, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+        - {at: [67.9, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+        - {at: [83.15, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+        - {at: [94.05, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+        - {at: [104.95, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+        - {at: [115.85, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+        - {at: [126.75, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+        - {at: [137.65, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+        - {at: [148.55, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+        - {at: [163.8, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+        - {at: [174.7, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+        - {at: [185.6, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+        - {at: [196.5, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+        - {at: [207.4, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+        - {at: [218.3, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+        - {at: [229.2, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+        - {at: [244.45, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+        - {at: [255.35, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+        - {at: [266.25, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+        - {at: [277.15, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+        - {at: [288.05, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+        - {at: [298.95, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+        - {at: [309.85, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+        - {at: [325.1, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+        - {at: [336, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+        - {at: [346.9, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+        - {at: [357.8, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+        - {at: [368.7, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+        - {at: [379.6, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+        - {at: [390.5, 1.4], size: [9.2, 4.4], fill: '#08090a'}
+    components:
+      bays:
+        - {id: drive-0, at: [1.3, 27.3], size: {w: 76.0, h: 14.0}, accepts: [supermicro/drive-tray-25@1], default: supermicro/drive-tray-25@1, group: drives, rel-pos: 0}
+        - {id: drive-1, at: [1.3, 10.3], size: {w: 76.0, h: 14.0}, accepts: [supermicro/drive-tray-25@1], default: supermicro/drive-tray-25@1, group: drives, rel-pos: 1}
+        - {id: drive-2, at: [81.95, 27.3], size: {w: 76.0, h: 14.0}, accepts: [supermicro/drive-tray-25@1], default: supermicro/drive-tray-25@1, group: drives, rel-pos: 2}
+        - {id: drive-3, at: [81.95, 10.3], size: {w: 76.0, h: 14.0}, accepts: [supermicro/drive-tray-25@1], default: supermicro/drive-tray-25@1, group: drives, rel-pos: 3}
+        - {id: drive-4, at: [162.6, 27.3], size: {w: 76.0, h: 14.0}, accepts: [supermicro/drive-tray-25@1], default: supermicro/drive-tray-25@1, group: drives, rel-pos: 4}
+        - {id: drive-5, at: [162.6, 10.3], size: {w: 76.0, h: 14.0}, accepts: [supermicro/drive-tray-25@1], default: supermicro/drive-tray-25@1, group: drives, rel-pos: 5}
+        - {id: drive-6, at: [243.25, 27.3], size: {w: 76.0, h: 14.0}, accepts: [supermicro/drive-tray-25@1], default: supermicro/drive-tray-25@1, group: drives, rel-pos: 6}
+        - {id: drive-7, at: [243.25, 10.3], size: {w: 76.0, h: 14.0}, accepts: [supermicro/drive-tray-25@1], default: supermicro/drive-tray-25@1, group: drives, rel-pos: 7}
+        - {id: drive-8, at: [323.9, 27.3], size: {w: 76.0, h: 14.0}, accepts: [supermicro/drive-tray-25@1], default: supermicro/drive-tray-25@1, group: drives, rel-pos: 8}
+        - {id: drive-9, at: [323.9, 10.3], size: {w: 76.0, h: 14.0}, accepts: [supermicro/drive-tray-25@1], default: supermicro/drive-tray-25@1, group: drives, rel-pos: 9}
+      placements:
+        - {id: pull-out-tag, ref: supermicro/pull-out-tag-sc116b@1, at: [1.5, 1.2], group: tags, rel-pos: 1}
+        - {id: control-panel, ref: supermicro/control-panel-sc116b@1, at: [407.5, 5.0], group: controls, rel-pos: 1, for: chassis}
+        - {id: usb-front-1, ref: std/usb-a@1, at: [412.6, 26.25], group: usb, rel-pos: 1, attrs: {usb: '3.2 Gen1'}}
+        - {id: usb-front-2, ref: std/usb-a@1, at: [412.6, 34.35], group: usb, rel-pos: 2, attrs: {usb: '3.2 Gen1'}}
+  rear:
+    size: {w: 437.0, h: 43.0}
+    panel:
+      decor:
+        - {at: [0, 0], size: [437.0, 43.0], fill: '#c8ccd0'}
+        - {at: [59.7, 0.6], size: [2.3, 41.8], fill: '#b4b9be'}
+        - {at: [123.4, 6.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [128.5, 6.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [133.6, 6.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [138.7, 6.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [143.8, 6.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [148.9, 6.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [154, 6.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [159.1, 6.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [123.4, 11.55], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [128.5, 11.55], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [133.6, 11.55], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [138.7, 11.55], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [143.8, 11.55], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [148.9, 11.55], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [154, 11.55], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [159.1, 11.55], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [123.4, 16.5], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [128.5, 16.5], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [133.6, 16.5], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [138.7, 16.5], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [143.8, 16.5], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [148.9, 16.5], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [154, 16.5], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [159.1, 16.5], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [123.4, 21.45], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [128.5, 21.45], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [133.6, 21.45], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [138.7, 21.45], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [143.8, 21.45], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [148.9, 21.45], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [154, 21.45], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [159.1, 21.45], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [120.6, 27.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [125.7, 27.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [120.6, 32.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [125.7, 32.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [185.1, 6.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [190.2, 6.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [195.3, 6.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [200.4, 6.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [205.5, 6.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [210.6, 6.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [185.1, 11.55], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [190.2, 11.55], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [195.3, 11.55], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [200.4, 11.55], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [205.5, 11.55], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [210.6, 11.55], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [185.1, 16.6], size: [3.3, 1.2], fill: '#16181a'}
+        - {at: [190.2, 16.6], size: [3.3, 1.2], fill: '#16181a'}
+        - {at: [195.3, 16.6], size: [3.3, 1.2], fill: '#16181a'}
+        - {at: [200.4, 16.6], size: [3.3, 1.2], fill: '#16181a'}
+        - {at: [205.5, 16.6], size: [3.3, 1.2], fill: '#16181a'}
+        - {at: [210.6, 16.6], size: [3.3, 1.2], fill: '#16181a'}
+        - {at: [271, 27.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [276.1, 27.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [281.2, 27.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [271, 32.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [276.1, 32.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [281.2, 32.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [423.2, 6.2], size: [3, 3.6], fill: '#16181a'}
+        - {at: [427.6, 6.2], size: [3, 3.6], fill: '#16181a'}
+        - {at: [432, 6.2], size: [3, 3.6], fill: '#16181a'}
+        - {at: [423.2, 11.8], size: [3, 3.6], fill: '#16181a'}
+        - {at: [427.6, 11.8], size: [3, 3.6], fill: '#16181a'}
+        - {at: [432, 11.8], size: [3, 3.6], fill: '#16181a'}
+        - {at: [423.2, 17.4], size: [3, 3.6], fill: '#16181a'}
+        - {at: [427.6, 17.4], size: [3, 3.6], fill: '#16181a'}
+        - {at: [432, 17.4], size: [3, 3.6], fill: '#16181a'}
+        - {at: [423.2, 23], size: [3, 3.6], fill: '#16181a'}
+        - {at: [427.6, 23], size: [3, 3.6], fill: '#16181a'}
+        - {at: [432, 23], size: [3, 3.6], fill: '#16181a'}
+        - {at: [423.2, 28.6], size: [3, 3.6], fill: '#16181a'}
+        - {at: [427.6, 28.6], size: [3, 3.6], fill: '#16181a'}
+        - {at: [432, 28.6], size: [3, 3.6], fill: '#16181a'}
+        - {at: [423.2, 34.2], size: [3, 3.6], fill: '#16181a'}
+        - {at: [427.6, 34.2], size: [3, 3.6], fill: '#16181a'}
+        - {at: [432, 34.2], size: [3, 3.6], fill: '#16181a'}
+    components:
+      bays:
+        - {id: psu-1, at: [5.2, 1.9], size: {w: 54.5, h: 40.25}, accepts: [supermicro/psu-pws-861a-1r@1], default: supermicro/psu-pws-861a-1r@1, group: psus, rel-pos: 1}
+        - {id: psu-2, at: [62.0, 1.9], size: {w: 54.5, h: 40.25}, accepts: [supermicro/psu-pws-861a-1r@1], default: supermicro/psu-pws-861a-1r@1, group: psus, rel-pos: 2}
+        - {id: riser-rhs, at: [218.5, 0.0], size: {w: 79.5, h: 23.8}, accepts: [supermicro/riser-wio-rhs-x13sew@1], default: supermicro/riser-wio-rhs-x13sew@1, group: risers, rel-pos: 2}
+        - {id: riser-lhs, at: [298.0, 0.0], size: {w: 123.0, h: 43.0}, accepts: [supermicro/riser-wio-lhs-x13sew@1], default: supermicro/riser-wio-lhs-x13sew@1, group: risers, rel-pos: 1}
+      placements:
+        - {id: serial, ref: common/db9-receptacle@1, at: [132.8, 25.95], group: serial, rel-pos: 1}
+        - {id: bmc, ref: common/rj45-eth@1, at: [165.7, 5.7], rotate: 180, group: mgmt, rel-pos: 1}
+        - {id: usb-rear-1, ref: std/usb-a@1, at: [167.7, 21.25], skin: usb2, group: usb, rel-pos: 3, attrs: {usb: '2.0'}}
+        - {id: usb-rear-2, ref: std/usb-a@1, at: [167.7, 29.95], skin: usb2, group: usb, rel-pos: 4, attrs: {usb: '2.0'}}
+        - {id: usb-rear-3, ref: std/usb-a@1, at: [186.2, 21.25], group: usb, rel-pos: 5, attrs: {usb: '3.2 Gen1'}}
+        - {id: usb-rear-4, ref: std/usb-a@1, at: [186.2, 29.95], group: usb, rel-pos: 6, attrs: {usb: '3.2 Gen1'}}
+        - {id: lan-1, ref: common/rj45-eth@1, at: [202.2, 24.2], rotate: 180, group: nics, rel-pos: 1}
+        - {id: lan-2, ref: common/rj45-eth@1, at: [220.9, 24.2], rotate: 180, group: nics, rel-pos: 2}
+        - {id: vga, ref: common/vga-receptacle@1, at: [240.8, 26.15], group: video, rel-pos: 1}
+        - {id: uid-rear, ref: common/led-dot@1, at: [286.4, 33.9], group: leds, rel-pos: 1, for: chassis}
+  top:
+    size: {w: 437.0, h: 597.0}
+    empty: >-
+      no straight-on view of the top or of the interior in any document held: the
+      product page top view and manual figure 1-5 are perspective photographs with
+      callouts. Sized from the stated dimensions.
+  bottom:
+    size: {w: 437.0, h: 597.0}
+    empty: >-
+      no view of the bottom face in any document held (product page, datasheet,
+      manual, quick reference guide, motherboard manual). Sized from the stated
+      dimensions.
+  left:
+    size: {w: 597.0, h: 43.0}
+    empty: >-
+      no straight-on view of the left face in any document held (product page,
+      datasheet, manual, quick reference guide, motherboard manual). Sized from the
+      stated dimensions.
+  right:
+    size: {w: 597.0, h: 43.0}
+    empty: >-
+      no straight-on view of the right face in any document held (product page,
+      datasheet, manual, quick reference guide, motherboard manual). Sized from the
+      stated dimensions.
+configurations:
+  base:
+    kind: base
+    default: true
+    part-numbers:
+      SYS-111E-WR: {part: SYS-111E-WR}
+    description: >-
+      The barebone as Supermicro sells it: ten drive trays, both 860 W
+      supplies, both risers with all three slots blanked.
+  nvme:
+    kind: example
+    description: >-
+      Bays 0 to 3 fitted with the orange-tab NVMe tray (MCP-220-00167-0B)
+      in place of the standard tray; the rest as the base.
+    bay-attrs:
+      drive-0: {release-color: '#e8891c'}
+      drive-1: {release-color: '#e8891c'}
+      drive-2: {release-color: '#e8891c'}
+      drive-3: {release-color: '#e8891c'}
+  cards:
+    kind: example
+    description: >-
+      A card in each slot, to show what the windows take: two-port
+      full-height cards in slots 1 and 2 and a low-profile card in slot 3
+      (three of the library's ConnectX cards - not a Supermicro-qualified
+      build). The photographed server carries a two-port card in slot 1.
+    bays:
+      riser-lhs/slot-1: nvidia/mcx516a-fh@1
+      riser-lhs/slot-2: nvidia/mcx516a-fh@1
+      riser-rhs/slot-3: nvidia/mcx4121a-lp@1
+datasheet:
+  title: 'Supermicro SYS-111E-WR datasheet'
+  url: https://www.supermicro.com/en/products/system/datasheet/SYS-111E-WR
+  sha256: 641ad3d01b32b182d014cef3082ed61d768b44bde415e36082c4c6f45f9afbe0
+references:
+  - {title: "SuperServer SYS-111E-WR User's Manual (MNL-2490)", url: 'https://www.supermicro.com/manuals/superserver/1U/MNL-2490.pdf', sha256: 0afc37eac3f20620647438056a897fcb4a585ddc9ca1e9592b6605ac12422a59}
+  - {title: 'SYS-111E-WR Quick Reference Guide (QRG-2490)', url: 'https://www.supermicro.com/QuickRefs/superserver/1U/QRG-2490.pdf', sha256: 6047737b7d00bd3ccd6789bd69ebf1352901429d6858f86243fc3c12f627b639}
+  - {title: "Lot 9 Addendum to the SYS-111E-WR User's Manual", url: 'https://www.supermicro.com/manuals/superserver/1U/Lot9_SYS-111E-WR.pdf', sha256: e1cf7b791f3231450abbbefd5b855f34f0b6763fae7df13606495700e17317b5}
+  - {title: "X13SEW-F / X13SEW-TF User's Manual (MNL-2413)", url: 'https://www.supermicro.com/manuals/motherboard/X13/MNL-2413.pdf', sha256: 4ebc4132339614b0e125861b4db15e8082025a08ff64385130ab99212287045e}

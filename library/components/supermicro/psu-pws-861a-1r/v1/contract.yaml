@@ -1,0 +1,92 @@
+format: 1
+kind: module
+name: psu-pws-861a-1r
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: server
+description: >-
+  Supermicro PWS-861A-1R, the 860 W Titanium redundant power supply module of
+  the SuperServer SYS-111E-WR - a vent grid at the left, a grey pull bail, a
+  C14 inlet standing portrait in a dark bezel, the status lamp and a pink
+  release tab along the bottom
+attrs:
+  model: PWS-861A-1R
+  power-output-w: 860
+  inlet: c14
+  input: 100-240 VAC
+  efficiency: titanium
+provenance:
+  sources: >-
+    (1) The near straight-on rear photograph in StorageReview's review of the
+    SYS-111E-WR
+    (storagereview.com/wp-content/uploads/2023/03/StorageReview-Supermicro-Sys-111E-WR-6.jpg,
+    1200 x 677), on which the body between its side walls is 889 px for the 437 mm
+    width, 2.034 px/mm; the server carries two of this supply. (2) SuperServer
+    SYS-111E-WR User's Manual, MNL-2490 revision 1.0d: Appendix B, Power Supply, and
+    section 3.8. (3) Supermicro product page for the SYS-111E-WR, Power Supply.
+  size: >-
+    datasheet - 54.5 x 40.25 x 322 mm, W x H x L, printed on the SYS-111E-WR product
+    page under Power Supply, Dimension. The rear photograph measures the face at 53.5 x
+    39.3 (108.75 x 80 px), 1 mm under on both axes, which is the check on that
+    photograph.
+  depth: >-
+    datasheet - 322, the product page length. The page does not say whether it runs to
+    the bail or to the gold fingers.
+  face: >-
+    photo-measured - supply-local, to about half a millimetre: a three by four grid of
+    square vents from 2.9 to 26.5 across; the grey pull bail standing off the face at
+    15.4..26 (it crosses the vent grid, as photographed); the inlet bezel 27.3..51.3 x
+    2.6..32.6; a screw at (28.5, 36.0), the lamp at (35.3, 36.0) and the pink release
+    tab 38.4..50.0 along the bottom edge. WHICH OF THE TWO ROUND FEATURES IS THE LAMP is
+    read from their tone - the left one is a bright ring with a cross, the right one a
+    dark lens - and not from a document.
+  inlet: >-
+    photo-measured - COMPOSED, std/c14-inlet@1 at rotate 270: the photograph puts the
+    earth pin on the LEFT with line and neutral stacked on the right. Centred on the
+    bezel at (39.3, 17.6).
+  lamp: >-
+    SuperServer SYS-111E-WR User's Manual, MNL-2490 revision 1.0d section 3.8, Power
+    Supply LEDs: solid green - on; blinking green - plugged in and turned off by the
+    system; blinking amber - a warning condition, still operating; solid amber - plugged
+    in and in an abnormal state. The table in chapter 1 adds that the amber blink is 1
+    Hz.
+  power: >-
+    datasheet - power-output-w 860 is the rating at 200-240 VAC and 240 VDC; at 100-127
+    VAC the same module is rated 800 W (product page and Appendix B: +12 V 66.67 A at
+    100-127 VAC, 71.67 A at 200-240 VAC; 5 V standby 4 A). A rating, not a draw.
+size: {w: 54.5, h: 40.25, d: 322.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+body: {depth: 322.0, color: '#c8ccd0'}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [25.3, 7.6], rotate: 270, behind: true}
+elements:
+  vents: {at: [2.9, 3.6], size: [23.6, 33.5], class: vent}
+  lamp:
+    at: [33.8, 34.5]
+    size: [3.0, 3.0]
+    class: led
+    states:
+      - 'off'
+      - {name: ok, color: '#22c55e'}
+      - {name: standby, color: '#22c55e', behavior: {mode: blinking, rate: 1}}
+      - {name: warning, color: '#f59e0b', behavior: {mode: blinking, rate: 1}}
+      - {name: fault, color: '#f59e0b'}
+    description: Power supply status. Solid green - on; blinking green - plugged in, turned off by the system; blinking amber at 1 Hz - warning, still operating; solid amber - abnormal state. The green blink rate is not stated and is drawn at 1 Hz.
+  release: {at: [38.4, 35.6], size: [11.6, 4.4], class: latch}
+  handle: {at: [15.4, 4.2], size: [10.6, 32.8], class: handle}
+  inlet-bezel: {at: [27.3, 2.6], size: [24.0, 30.0], class: inlet}
+relief:
+  wall: '#3a4045'
+  features:
+  - node: release
+    out: 4.0
+    color: '#d98a94'
+    confidence: estimated
+    source: the release tab stands proud of the face and below it in the photograph; not measured
+  - node: handle
+    uhandle: 14.0
+    color: '#6c7278'
+    confidence: estimated
+    source: the pull bail stands off the face in the photograph and in Supermicro's angled product images; how far is not measured
+skins: [default]
