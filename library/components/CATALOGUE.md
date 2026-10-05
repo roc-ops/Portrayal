@@ -58,8 +58,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/rj45-ganged@2` | component | port | 12.7 × 11 × 18.6 | rj45-ganged | 75 | 27 | One cell of a shared-wall 2xN RJ45 block - the 12.7 x 11.0 face between neighbouring ports on a 13.97 pitch, … |
 | `std/saf-d-grid@1` | component | inlet | 26.8 × 19.9 × 17 | saf-d-grid | 0 | 3 | Anderson Saf-D-Grid appliance inlet - the panel cutout with the keyed coupler recessed behind it, a first-mat… |
 | `std/sc-bore@1` | component | port | 8.39 × 9 × 6 | sc-simplex-receptacle | 2 | 34 | One SC opening - the rectangular hole an SC plug's housing enters, with the key slot cut into one long wall a… |
-| `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 44 | 77 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
-| `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 89 | 94 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
+| `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 44 | 78 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
+| `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 89 | 93 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
 | `std/sma@1` | component | port | 6.35 × 6.35 | sma | 19 | 8 | SMA coaxial panel jack (1/4-36UNS-2B) - threaded barrel protrudes; GNSS/RF antenna input |
 | `std/smb@1` | component | port | 4.83 × 4.83 | smb | 24 | 20 | SMB coaxial panel jack (10-32UNF-2A) - snap-on timing coax (1PPS/10MHz) |
 | `std/usb-a@1` | component | port | 12 × 4.5 × 13.7 | usb-a | 100 | 29 | USB Type-A receptacle opening - sharp corners |
@@ -787,7 +787,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `hpe/fan-dl160@1` | module | fan | 40 × 32 × 40 |  | 1 | 0 | A single-rotor hot-plug fan of the Gen10 ProLiant DL160 seen from above - the block that lifts out of its bay… |
 | `hpe/flom-629135-b22@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 13 | HPE Ethernet 1Gb 4-port 331FLR FlexibleLOM adapter (331FLR; option 629135-B22, spare 789897-001) - the adapte… |
 | `hpe/flom-665240-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 1 | HPE Ethernet 1Gb 4-port 366FLR FlexibleLOM adapter (366FLR; option 665240-B21, spare 669280-001) - the adapte… |
-| `hpe/flom-700751-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 2 | HPE FlexFabric 10Gb 2-port 534FLR-SFP+ FlexibleLOM adapter (534FLR-SFP+; option 700751-B21, spare 701531-001)… |
+| `hpe/flom-700751-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 1 | HPE FlexFabric 10Gb 2-port 534FLR-SFP+ FlexibleLOM adapter (534FLR-SFP+; option 700751-B21, spare 701531-001)… |
 | `hpe/flom-700759-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 1 | HPE FlexFabric 10Gb 2-port 533FLR-T FlexibleLOM adapter (533FLR-T; option 700759-B21, spare 701534-001) - the… |
 | `hpe/flom-727054-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 1 | HPE Ethernet 10Gb 2-port 562FLR-SFP+ FlexibleLOM adapter (562FLR-SFP+; option 727054-B21, spare 790317-001) -… |
 | `hpe/flom-764285-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 1 | HPE InfiniBand FDR/Ethernet 10Gb/40Gb 2-port 544+FLR-QSFP FlexibleLOM adapter (544+FLR-QSFP; option 764285-B2… |

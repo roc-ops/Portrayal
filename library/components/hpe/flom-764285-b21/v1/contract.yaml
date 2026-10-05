@@ -30,12 +30,12 @@ groups:
     index-origin: 1
 provenance:
   sources: >-
-    Product Information Reference a00077132en_us, FlexibleLOM adapters:
-    764285-B21, 544+FLR-QSFP. THE QUICKSPECS DOES NOT LIST THIS ADAPTER for the
-    DL160 Gen10; the reference does. QuickSpecs a00021860enw on any FlexibleLOM
-    ('FlexibleLOM Riser Kit (875748-B21) is required to install these adapters';
-    'Only one FlexibleLOM can be added to the server'). The QuickSpecs names the
-    adapter by its controller; the name 544+FLR-QSFP is the Product Information
+    Product Information Reference a00077132en_us, HPE InfiniBand: 764285-B21,
+    544+FLR-QSFP. THE QUICKSPECS DOES NOT LIST THIS ADAPTER for the DL160 Gen10;
+    the reference does. QuickSpecs a00021860enw on any FlexibleLOM ('FlexibleLOM
+    Riser Kit (875748-B21) is required to install these adapters'; 'Only one
+    FlexibleLOM can be added to the server'). The controller is PartSurfer's
+    title for the option. The name 544+FLR-QSFP is the Product Information
     Reference's (a00077132en_us) and HPE PartSurfer's, which also gives the
     spare 764737-001 (partsurfer.hpe.com/Search.aspx?SearchText=764285-B21). A
     reseller's photograph of a 544+FLR-QSFP from the port end, from a little
@@ -53,11 +53,13 @@ provenance:
     over LNK ACT and P1 over LNK ACT - both ports' lamps are at the left; two
     SEPARATE QSFP cages at 23.0..41.4 and 42.5..62.3; two small square holes one
     above the other at 63.8; PORT 2 under the left cage and PORT 1 under the
-    right. The left cage reads 18.4 wide at 74.0 against the 18.35 a QSFP cage
-    is, which is the one check a part of known size gives on this family's plate
-    length and it agrees. The photograph is taken from the left and above: the
-    right cage reads 1.3 mm wide, and positions right of the middle are good to
-    about 1.5 mm.
+    right. The two cage bezels read 18.4 and 19.8 wide at 74.0; a QSFP module is
+    18.35 and its cage's bezel somewhat more, so the photograph is not
+    inconsistent with the family's plate length and does not measure it. It is
+    taken from above with the right end nearer the camera, and positions right
+    of the middle are good to about 1.5 mm. IT IS A VPI ADAPTER: each port runs
+    InfiniBand FDR or 10/40Gb Ethernet, and the export types both as 40GbE; the
+    InfiniBand mode has no type here.
   lamps: >-
     photo-measured - round lamps about 1 mm across, drawn with the library's 2
     mm dot; which is link and which activity is read off the legends the
@@ -88,6 +90,6 @@ parts:
   - {ref: std/qsfp-ganged@1, id: port-1, group: ports, at: [43.15, 3.0], attrs: {media: qsfp-plus, speed: 40g}}
   - {ref: common/led-dot@1, id: led-2-lnk, group: port-leds, at: [10.7, 9], states: {lamp: ['off', {name: link, color: '#22c55e'}]}}
   - {ref: common/led-dot@1, id: led-2-act, group: port-leds, at: [13.6, 9], states: {lamp: ['off', {name: activity, color: '#22c55e', behavior: blinking}]}}
-  - {ref: common/led-dot@1, id: led-1-lnk, group: port-leds, at: [16.5, 9], states: {lamp: ['off', {name: link, color: '#22c55e'}]}}
-  - {ref: common/led-dot@1, id: led-1-act, group: port-leds, at: [19.4, 9], states: {lamp: ['off', {name: activity, color: '#22c55e', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-1-lnk, group: port-leds, at: [16.3, 9], states: {lamp: ['off', {name: link, color: '#22c55e'}]}}
+  - {ref: common/led-dot@1, id: led-1-act, group: port-leds, at: [19.2, 9], states: {lamp: ['off', {name: activity, color: '#22c55e', behavior: blinking}]}}
 skins: [default]
