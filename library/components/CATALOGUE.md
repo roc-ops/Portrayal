@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1216 component majors in 26 namespaces.
+1219 component majors in 26 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -41,7 +41,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/lc-bore@3` | component | port | 4.7 × 6.3 × 4.5 | lc-duplex-receptacle | 0 | 20 | One LC receptacle bore - the KEYED opening an LC plug enters, not a square hole |
 | `std/lc-bulkhead-bore@1` | component | port | 4.7 × 8.06 × 4.5 | lc | 0 | 9 | One LC bore of a BULKHEAD (panel-mount) adapter - the keyed opening an LC plug enters, with the full-length k… |
 | `std/mcx@1` | component | port | 4.95 × 4.5 | mcx | 0 | 7 | MCX coaxial panel jack (IEC 61169-36) - snap-on micro coax, the 75-ohm RF drop connector on cable headend I/O… |
-| `std/micro-usb@1` | component | port | 7.5 × 2.75 × 5.9 | micro-usb-b | 35 | 18 | Micro-USB Type-B receptacle, as used for a console port |
+| `std/micro-usb@1` | component | port | 7.5 × 2.75 × 5.9 | micro-usb-b | 35 | 19 | Micro-USB Type-B receptacle, as used for a console port |
 | `std/mpo@2` | component | port | 12.9 × 8 × 9 | mpo-adapter | 0 | 11 | One MPO/MTP adapter opening - the mouth an MPO plug enters, not the adapter around it |
 | `std/mpo-module-receptacle@1` | component | port | 12.9 × 8 × 9 | mpo-adapter | 0 | 1 | One MPO receptacle as a module carries it - the mouth an MPO-12 or MPO-24 plug enters on a transceiver, looke… |
 | `std/mpo16@1` | component | port | 12.9 × 8 × 9 | mpo-adapter | 0 | 5 | One MTP-16 adapter opening - the mouth an MTP-16 plug enters |
@@ -62,8 +62,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 89 | 93 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
 | `std/sma@1` | component | port | 6.35 × 6.35 | sma | 19 | 8 | SMA coaxial panel jack (1/4-36UNS-2B) - threaded barrel protrudes; GNSS/RF antenna input |
 | `std/smb@1` | component | port | 4.83 × 4.83 | smb | 24 | 20 | SMB coaxial panel jack (10-32UNF-2A) - snap-on timing coax (1PPS/10MHz) |
-| `std/usb-a@1` | component | port | 12 × 4.5 × 13.7 | usb-a | 102 | 29 | USB Type-A receptacle opening - sharp corners |
-| `std/usb-c@1` | component | port | 8.34 × 2.56 × 6.5 | usb-c | 8 | 1 | USB Type-C receptacle opening - fully rounded ends |
+| `std/usb-a@1` | component | port | 12 × 4.5 × 13.7 | usb-a | 102 | 30 | USB Type-A receptacle opening - sharp corners |
+| `std/usb-c@1` | component | port | 8.34 × 2.56 × 6.5 | usb-c | 8 | 2 | USB Type-C receptacle opening - fully rounded ends |
 | `std/vga@1` | component | port | 20.47 × 11.4 × 6.73 | hd15 | 2 | 6 | VGA video receptacle - a female high-density DE-15, fifteen contacts in three rows inside the D-subminiature … |
 | `std/xfp@1` | component | port | 19.5 × 9.7 × 61.7 | xfp | 1 | 40 | XFP cage cutout (10G pluggable) - the recommended bezel opening of the XFP MSA, the aperture an XFP cage prot… |
 
@@ -183,18 +183,19 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/wall-plate-keyhole-2-42@1` | component | mount | 42 × 22 |  | 4 | 0 | The smaller wall-mounting plate with two keyhole slots - the 42 mm plate on the back of the AurCore AIS small… |
 | `common/warning-triangle@1` | component | marking | 5.4 × 4.8 |  | 5 | 3 | General warning triangle - a black exclamation mark in a yellow triangle, ISO 7010 W001 |
 
-## generic/ (32)
+## generic/ (35)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
-| `generic/bnc-plug@1` | component | port | 14.3 × 14.3 | bnc-plug | 0 | 3 | A straight BNC crimp plug on a coax cable, seen from the face: the knurled bayonet coupling sleeve, the crimp… |
-| `generic/c13-plug@1` | component | port | 26 × 16 | c13-plug | 0 | 0 | A moulded straight IEC C13 cord connector on its cord, seen from the cable end as a front elevation sees it s… |
+| `generic/bnc-plug@1` | component | port | 14.3 × 14.3 | bnc-plug | 0 | 6 | A straight BNC crimp plug on a coax cable, seen from the face: the knurled bayonet coupling sleeve, the crimp… |
+| `generic/c13-plug@1` | component | port | 26 × 16 | c13-plug | 0 | 3 | A moulded straight IEC C13 cord connector on its cord, seen from the cable end as a front elevation sees it s… |
 | `generic/c19-plug@1` | component | port | 37 × 24 | c19-plug | 0 | 0 | A moulded straight IEC C19 cord connector on its cord, seen from the cable end as a front elevation sees it s… |
 | `generic/din-1-0-2-3-plug@1` | component | port | 7.7 × 7.7 | din-1-0-2-3-plug | 0 | 0 | A straight 1.0/2.3 crimp plug on a coax cable, seen from the face: the push-pull latch sleeve, the crimp ferr… |
 | `generic/f-type-plug@1` | component | port | 12.83 × 11.11 | f-type-plug | 0 | 0 | A straight F crimp plug on a 75 ohm coax cable, seen from the face: the 7/16 hex coupling nut, the ribbed cri… |
 | `generic/lc-duplex-plug@2` | component | port | 11.83 × 8.535 | lc-duplex | 0 | 0 | An LC duplex plug as it is SEATED - the cable end that fills BOTH ports of a duplex LC adapter at once |
-| `generic/lc-plug@2` | component | port | 5.58 × 8.535 | lc-plug | 0 | 18 | An LC fibre plug as it is SEATED, front view - the four-tier keyed silhouette of the free plug (provenance.fr… |
+| `generic/lc-plug@2` | component | port | 5.58 × 8.535 | lc-plug | 0 | 21 | An LC fibre plug as it is SEATED, front view - the four-tier keyed silhouette of the free plug (provenance.fr… |
 | `generic/mcx-plug@1` | component | port | 5 × 5 | mcx-plug | 0 | 0 | A straight MCX crimp plug on a coax cable, seen from the face: the ribbed snap-on grip, the crimp ferrule and… |
+| `generic/micro-usb-b-plug@1` | component | port | 10.6 × 8.5 | micro-usb-b-plug | 0 | 0 | A moulded straight USB 2.0 Micro-B cable plug on its cable, seen from the cable end as a front elevation sees… |
 | `generic/mpo12-plug@1` | component | port | 12.5 × 7.6 | mpo-plug | 0 | 8 | A 12-fibre MPO/MTP plug, front view - the 12.5 x 7.6 barrel-ended housing with the MT ferrule standing in its… |
 | `generic/mpo16-plug@1` | component | port | 12.5 × 7.6 | mpo16-plug | 0 | 2 | A 16-fibre MPO/MTP-16 plug, front view - the 12.5 x 7.6 housing of the MPO-12 plug with a key rib that is nar… |
 | `generic/mpo24-plug@1` | component | port | 12.5 × 7.6 | mpo-plug | 0 | 3 | A 24-fibre MPO/MTP plug, front view - the SAME 12.5 x 7.6 barrel-ended housing generic/mpo12-plug@1 draws, wi… |
@@ -219,6 +220,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `generic/sfp-sc-key-up@1` | component | transceiver | 13.55 × 8.55 × 47.5 | sfp-module | 0 | 1 | A generic SFP with one SC receptacle - the shape of the PON line-terminal SFP and SFP+ optic, standing for al… |
 | `generic/sma-plug@1` | component | port | 9.17 × 7.94 | sma-plug | 0 | 3 | A straight SMA crimp plug on a coax cable, seen from the face: the hex coupling nut, the crimp ferrule and a … |
 | `generic/smb-plug@1` | component | port | 6.2 × 6.2 | smb-plug | 0 | 0 | A straight SMB crimp plug on a coax cable, seen from the face: the plain snap-on body, the crimp ferrule and … |
+| `generic/usb-a-plug@1` | component | port | 16 × 8 | usb-a-plug | 0 | 0 | A moulded straight USB Standard-A cable plug on its cable, seen from the cable end as a front elevation sees … |
+| `generic/usb-c-plug@1` | component | port | 12.85 × 7 | usb-c-plug | 0 | 0 | A moulded straight USB Type-C cable plug on its cable, seen from the cable end as a front elevation sees it s… |
 
 ## amphenol/ (2)
 

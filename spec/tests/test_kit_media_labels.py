@@ -1,4 +1,4 @@
-"""Every coax medium, and every AC cord end's, has a label in the kit.
+"""Every coax medium, AC cord end and USB plug medium has a label in the kit.
 
 kit/shell.js labels a port row from its data-media through the `MEDIA` table
 and falls back to upper-casing the key. For coax that fallback reads
@@ -74,3 +74,25 @@ def test_each_ac_cord_end_medium_has_its_label():
         assert table.get(key) == label, (
             f"kit MEDIA[{key!r}] is {table.get(key)!r}, expected {label!r}")
     assert table.get("ac") == "AC"
+
+
+# USB cable plugs (#786). A plug states the key its receptacle states
+# (`usb-a`, `micro-usb-b`, `usb-c`), and the kit labelled all three before
+# there was a plug. The fallback would read MICRO-USB-B on a row that should
+# say micro-USB B.
+USB_PLUGS = {
+    "generic/usb-a-plug": ("std/usb-a", "usb-a", "USB-A"),
+    "generic/micro-usb-b-plug": ("std/micro-usb", "micro-usb-b", "micro-USB B"),
+    "generic/usb-c-plug": ("std/usb-c", "usb-c", "USB-C"),
+}
+
+
+def test_each_usb_plug_medium_is_its_receptacles_and_has_its_label():
+    table = media_table()
+    for part, (jack, key, label) in USB_PLUGS.items():
+        for ref in (part, jack):
+            text = (LIBRARY / "components" / ref / "v1" / "contract.yaml").read_text()
+            stated = re.search(r"^attrs:.*\bmedia:\s*([a-z0-9-]+)", text, re.M)
+            assert stated and stated.group(1) == key, (ref, stated and stated.group(1))
+        assert table.get(key) == label, (
+            f"kit MEDIA[{key!r}] is {table.get(key)!r}, expected {label!r}")
