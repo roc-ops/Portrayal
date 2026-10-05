@@ -316,7 +316,7 @@ groups:
   controls: {term: Button, role: management, index-origin: 1}
   grounding: {term: Stud, role: furniture, index-origin: 1}
   drives: {term: Bay, role: service, index-origin: 1, description: 'the two internal fixed 2.5 inch SATA bays, one above the other in a cage at the rear left; seen from above they are one footprint, so one is drawn'}
-  memory: {term: DIMM, role: service, index-origin: 1, description: 'the eight DDR5 slots, numbered here 1 to 8 left to right as seen from above with the rear at the top; the board prints its own slot names (DIMMA1 and so on), which are not mapped to these positions'}
+  memory: {term: DIMM, role: service, index-origin: 1, description: 'the eight DDR5 slots, each bay named as the board prints it (dimm-a1 is DIMMA1): seen with the I/O edge away from you, DIMMH1, G1, F1 and E1 left of the processor and DIMMA1, B1, C1 and D1 right of it, from the Motherboard Layout figure of the X13SEW manual MNL-2413. Positions run 1 to 8 left to right as this view is drawn, which on a server that carries the board I/O-forward is the reverse order'}
   fans: {term: Fan, role: service, index-origin: 1, description: 'the 40 x 40 x 56 mm counter-rotating fans, numbered here left to right as seen from above; the vendor fan numbering is not mapped'}
   processors: {term: CPU, role: service, index-origin: 1}
   interior: {term: Part, role: furniture, index-origin: 1}
@@ -782,14 +782,14 @@ views:
         - {at: [2.9, 96.0], size: [107.1, 113.0], fill: '#bcc1c6'}
     components:
       bays:
-        - {id: dimm-1, at: [153.3, 107], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 1, in: interior, under: [system-cover, air-shroud]}
-        - {id: dimm-2, at: [160.9, 107], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 2, in: interior, under: [system-cover, air-shroud]}
-        - {id: dimm-3, at: [168.5, 107], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 3, in: interior, under: [system-cover, air-shroud]}
-        - {id: dimm-4, at: [176.1, 107], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 4, in: interior, under: [system-cover, air-shroud]}
-        - {id: dimm-5, at: [267.9, 107], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 5, in: interior, under: [system-cover, air-shroud]}
-        - {id: dimm-6, at: [275.5, 107], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 6, in: interior, under: [system-cover, air-shroud]}
-        - {id: dimm-7, at: [283.1, 107], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 7, in: interior, under: [system-cover, air-shroud]}
-        - {id: dimm-8, at: [290.7, 107], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 8, in: interior, under: [system-cover, air-shroud]}
+        - {id: dimm-d1, at: [153.3, 107], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 1, in: interior, under: [system-cover, air-shroud]}
+        - {id: dimm-c1, at: [160.9, 107], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 2, in: interior, under: [system-cover, air-shroud]}
+        - {id: dimm-b1, at: [168.5, 107], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 3, in: interior, under: [system-cover, air-shroud]}
+        - {id: dimm-a1, at: [176.1, 107], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 4, in: interior, under: [system-cover, air-shroud]}
+        - {id: dimm-e1, at: [267.9, 107], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 5, in: interior, under: [system-cover, air-shroud]}
+        - {id: dimm-f1, at: [275.5, 107], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 6, in: interior, under: [system-cover, air-shroud]}
+        - {id: dimm-g1, at: [283.1, 107], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 7, in: interior, under: [system-cover, air-shroud]}
+        - {id: dimm-h1, at: [290.7, 107], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 8, in: interior, under: [system-cover, air-shroud]}
         - {id: fan-1, at: [149, 14], size: {w: 40.0, h: 56.0}, accepts: [supermicro/fan-0163l4@1], default: supermicro/fan-0163l4@1, group: fans, rel-pos: 1, under: [system-cover]}
         - {id: fan-2, at: [192.1, 14], size: {w: 40.0, h: 56.0}, accepts: [supermicro/fan-0163l4@1], default: supermicro/fan-0163l4@1, group: fans, rel-pos: 2, under: [system-cover]}
         - {id: fan-3, at: [235.2, 14], size: {w: 40.0, h: 56.0}, accepts: [supermicro/fan-0163l4@1], default: supermicro/fan-0163l4@1, group: fans, rel-pos: 3, under: [system-cover]}
@@ -798,8 +798,8 @@ views:
         - {id: fan-6, at: [378.5, 14], size: {w: 40.0, h: 56.0}, accepts: [supermicro/fan-0163l4@1], default: supermicro/fan-0163l4@1, group: fans, rel-pos: 6, under: [system-cover]}
         - {id: drive-1, at: [6.3, 19.4], size: {w: 100.45, h: 69.85}, rotate: 90, accepts: [std/drive-25-plan@1], default: std/drive-25-plan@1, group: drives, rel-pos: 1, under: [system-cover]}
       placements:
-        - {id: interior, ref: supermicro/interior-sc515b@1, at: [1, 98], group: interior, rel-pos: 1, under: [system-cover, system-board, heatsink, air-shroud, psu-cage, dimm-1, dimm-2, dimm-3, dimm-4, dimm-5, dimm-6, dimm-7, dimm-8]}
-        - {id: system-board, ref: supermicro/system-board-x13sew@2, at: [120.6, 86.8], rotate: 180, group: interior, rel-pos: 2, in: interior, under: [system-cover, air-shroud, heatsink], frames: [dimm-1, dimm-2, dimm-3, dimm-4, dimm-5, dimm-6, dimm-7, dimm-8]}
+        - {id: interior, ref: supermicro/interior-sc515b@1, at: [1, 98], group: interior, rel-pos: 1, under: [system-cover, system-board, heatsink, air-shroud, psu-cage, dimm-d1, dimm-c1, dimm-b1, dimm-a1, dimm-e1, dimm-f1, dimm-g1, dimm-h1]}
+        - {id: system-board, ref: supermicro/system-board-x13sew@2, at: [120.6, 86.8], rotate: 180, group: interior, rel-pos: 2, in: interior, under: [system-cover, air-shroud, heatsink], frames: [dimm-d1, dimm-c1, dimm-b1, dimm-a1, dimm-e1, dimm-f1, dimm-g1, dimm-h1]}
         - {id: heatsink, ref: supermicro/heatsink-1u-lga4677@1, at: [185.3, 120.2], group: processors, rel-pos: 1, in: interior, under: [system-cover, air-shroud]}
         - {id: fan-tray, ref: supermicro/fan-wall-sc515b@1, at: [145, 12], group: interior, rel-pos: 3, under: [system-cover], frames: [fan-1, fan-2, fan-3, fan-4, fan-5, fan-6]}
         - {id: internal-bays, ref: supermicro/drive-cage-sc515b@1, at: [2.9, 12], group: interior, rel-pos: 4, under: [system-cover], frames: [drive-1]}
