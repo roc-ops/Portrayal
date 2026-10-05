@@ -1,0 +1,44 @@
+format: 1
+kind: component
+name: power-button-sc515b
+version: 1.0.0
+class: button
+profile: server
+description: >-
+  The front power button of the Supermicro SC515B chassis, as on the
+  SuperServer SYS-111E-FDWTR - a round black push button in a black housing,
+  its power symbol the status lamp
+provenance:
+  sources: >-
+    the front photograph of the SYS-111E-FDWTR embedded on page 10 of its manual (1767 x
+    444 at 300 ppi), a view from slightly above on which the body is 1465 px across for
+    437 mm, 3.352 px/mm, and 134.5 px down for 43 mm, 3.128 px/mm. SuperServer
+    SYS-111E-FWTR / FWTR-EU / FDWTR User's Manual, MNL-2570 revision 1.0d, System
+    Features: Front, Power Button with Status LED.
+  size: >-
+    photo-measured - 16.0 x 16.0, the round housing, 54 px across on the image; the
+    button inside it about 11.
+  lamp: >-
+    SuperServer SYS-111E-FWTR / FWTR-EU / FDWTR User's Manual, MNL-2570 revision 1.0d:
+    "This LED is illuminated when the system is operating normally. Indicates hard disk
+    drive activity when flashing." THAT THE LAMP IS THE POWER SYMBOL is read from the
+    image, where the symbol is the only mark on the button; the manual does not say
+    where on the button the light is, nor its colour, which is drawn green.
+size: {w: 16.0, h: 16.0}
+size-confidence: {w: photo-measured, h: photo-measured}
+elements:
+  button:
+    at: [2.6, 2.6]
+    size: [10.8, 10.8]
+    class: button
+    description: Power button. Applies or removes primary power from the power supply to the server; standby power is maintained.
+  lamp:
+    at: [5.0, 4.3]
+    size: [6.0, 7.0]
+    class: led
+    states:
+      - 'off'
+      - {name: 'on', color: '#22c55e'}
+      - {name: activity, color: '#22c55e', behavior: {mode: blinking, rate: 4}}
+    description: Status LED. Illuminated - the system is operating normally; flashing - hard disk drive activity. Colour and rate are not stated; drawn green at 4 Hz.
+skins: [default]

@@ -1,0 +1,89 @@
+format: 1
+kind: module
+name: drive-tray-25
+version: 1.0.0
+class: drive
+behaviour: fills
+profile: server
+description: >-
+  Supermicro tool-less hot-swap tray for a 2.5 inch drive, lying flat as the
+  SuperServer SYS-111E-WR front presents it - two rounded windows at the left,
+  a vented centre, the release button (maroon on the standard tray, orange on
+  the NVMe tray) and the two lamps at the right end
+attrs:
+  form-factor: 2.5in
+fields:
+  release-color:
+    label: Release button colour
+    type: text
+    default: '#8e3b3d'
+    description: maroon on the standard tray; the NVMe tray (MCP-220-00167-0B, "Orange tab") is '#e8891c'
+provenance:
+  sources: >-
+    (1) The near straight-on front photograph in StorageReview's review of the
+    SYS-111E-WR
+    (storagereview.com/wp-content/uploads/2023/03/StorageReview-Supermicro-Sys-111E-WR-7.jpg,
+    1200 x 698), on which the body between the ear folds is 894 px for the 437 mm width,
+    2.046 px/mm; ten trays in five columns of two. (2) SuperServer SYS-111E-WR User's
+    Manual, MNL-2490 revision 1.0d, Drive Carrier Indicators and section 3.6. (3) The
+    SYS-111E-WR product page parts list: MCP-220-00167-0B, "Tool-less Hot-swap Gen-3
+    NVMe drive tray, Orange tab, Black".
+  size: >-
+    photo-measured - 76.0 x 14.0. The trays measure 155 px across (75.8 mm) on a 165 px
+    column pitch (80.65 mm), and 27.5 to 28.5 px down (13.4 to 13.9 mm) on a 34.75 px
+    row pitch (17.0 mm). The photograph is taken from slightly above, so the height is
+    the softer figure.
+  depth: >-
+    estimated - 125, room for a 100.45 mm drive (SFF-8201) and the tray front; no
+    document held states the tray length.
+  face: >-
+    photo-measured - tray-local: two rounded windows 2.4..15.8, a two by three field of
+    rounded vents 18.6..54.0, the release button 57.2..69.6 x 1.5..11.6, and a dark end
+    strip from 70.6 that carries two small lamps one above the other. WHICH LAMP IS
+    WHICH is not stated in the manual; the upper is drawn as activity and the lower as
+    status.
+  release-color: >-
+    photo-measured - maroon on nine of the ten photographed trays; the tenth, lettered
+    NVMe, has an orange button with a lock. The parts list names the NVMe tray as the
+    orange-tab one. The colour is a field, not a second drawing.
+  lamps: >-
+    SuperServer SYS-111E-WR User's Manual, MNL-2490 revision 1.0d, Drive Carrier LED
+    Indicators: activity blue - solid for an idle SAS drive, blinking for I/O, off for
+    an idle SATA drive or none; status red - solid for a failed drive, 1 Hz rebuild, 4
+    Hz identify, two blinks and a stop at 1 Hz hot spare, five seconds on at power-on
+    (all "with VROC support"); green solid - safe to remove an NVMe device; amber 1 Hz -
+    do not remove an NVMe device.
+size: {w: 76.0, h: 14.0, d: 125.0}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+body: {depth: 125.0, color: '#2a2d30'}
+elements:
+  release: {at: [57.2, 1.5], size: [12.4, 10.1], class: latch}
+  lamp-activity:
+    at: [72.15, 1.85]
+    size: [1.5, 1.5]
+    class: led
+    states:
+      - 'off'
+      - {name: idle-sas, color: '#3b82f6'}
+      - {name: activity, color: '#3b82f6', behavior: {mode: blinking, rate: 4}}
+    description: Activity. Solid blue - idle SAS drive installed; blinking blue - I/O activity; off - idle SATA drive or no drive. The blink rate is not stated and is drawn at 4 Hz.
+  lamp-status:
+    at: [72.15, 4.65]
+    size: [1.5, 1.5]
+    class: led
+    states:
+      - 'off'
+      - {name: fault, color: '#ef4444'}
+      - {name: rebuild, color: '#ef4444', behavior: {mode: blinking, rate: 1}}
+      - {name: identify, color: '#ef4444', behavior: {mode: blinking, rate: 4}}
+      - {name: safe-to-remove, color: '#22c55e'}
+      - {name: do-not-remove, color: '#f59e0b', behavior: {mode: blinking, rate: 1}}
+    description: Status. Solid red - drive failure; red 1 Hz - rebuild; red 4 Hz - identify (each with VROC support); solid green - safe to remove an NVMe device; amber 1 Hz - do not remove an NVMe device. The hot-spare and power-on patterns are not drawn.
+relief:
+  wall: '#141618'
+  features:
+  - node: release
+    out: 1.5
+    confidence: estimated
+    source: the release button stands proud of the tray face in the photograph; not measured
+skins: [default]
