@@ -766,6 +766,46 @@ def _old_travel(c):
 
 
 @needs_node
+def test_a_part_lifted_out_of_a_shallow_box_clears_it():
+    """From above a 1U chassis the face looks 43 mm into the box, and `into - 10`
+    held a 40 mm fan to 33 mm of travel: it never came out of the lid. The limit
+    is never less than the part's own depth plus the margin.
+
+    THE OLD RULE STAYS WRITTEN DOWN, in `_old_travel`, and the test under this one
+    still holds every part in the library to it. A first version of this change
+    edited `_old_travel` to the new formula, which left that test comparing the
+    kit with itself. What the new limit changes is stated here instead, as
+    literals: a part deeper than `into - 20` now travels its depth plus 10, on
+    any face. From above a 1U box that is every fan and DIMM, which is the
+    point. From the front or rear it is only a part nearly as deep as its
+    chassis, which the old rule stopped 10 short of the far wall and so never
+    brought clear of the face; it is pinned below so the change is a decision
+    and not an accident."""
+    out = node("eject", {"cases": [
+        {"name": "fan from above", "body": {"depth": 40}, "bodyDepth": None, "depth": None,
+         "occupies": False, "feats": [], "base": 0, "into": 43},
+        {"name": "dimm from above", "body": None, "bodyDepth": 31.3, "depth": None,
+         "occupies": False, "feats": [], "base": 0, "into": 43},
+        {"name": "psu from the rear", "body": {"depth": 322}, "bodyDepth": None, "depth": None,
+         "occupies": False, "feats": [], "base": 0, "into": 597},
+        {"name": "full-depth card from the front", "body": {"depth": 590}, "bodyDepth": None, "depth": None,
+         "occupies": False, "feats": [], "base": 0, "into": 597},
+        {"name": "captive tray from above", "body": {"depth": 40, "travel": 12}, "bodyDepth": None, "depth": None,
+         "occupies": False, "feats": [], "base": 0, "into": 43},
+    ]})
+    assert out["fan from above"]["travel"]["pull"] == 50
+    assert out["dimm from above"]["travel"]["pull"] == pytest.approx(41.3)
+    # unchanged: the old limit, 587, is nowhere near a 322 mm supply's 508
+    assert out["psu from the rear"]["travel"]["pull"] == 508
+    # changed, on purpose: 587 under the old rule, depth + 10 under the new
+    assert out["full-depth card from the front"]["travel"]["pull"] == 600
+    # unchanged: a captive part still travels what it declares
+    assert out["captive tray from above"]["travel"]["pull"] == 12
+    for name in out:
+        assert out[name]["travel"]["leavesBay"] is True
+
+
+@needs_node
 def test_a_part_that_declares_a_depth_is_pulled_as_before(ejected):
     """Optics, cards, modules and supplies that declare a body or a depth keep
     today's travel and today's bay box EXACTLY."""

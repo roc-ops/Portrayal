@@ -31,6 +31,27 @@ names the ref that replaces it.
   supplies) and its AC sibling the SYS-111E-FWTR (`supermicro/sys-111e-fwtr`,
   with the SYS-111E-FWTR-EU as its `eu` configuration), each with front, rear
   and a top view under a removable cover, and 23 `supermicro/` parts.
+- Supermicro SuperServer SYS-511E-WR (`supermicro/sys-511e-wr`): the 1U WIO
+  server with four hot-swap 3.5 inch bays, front, rear and a top view under a
+  removable cover, with its tray, control panel and cover parts; the Gold
+  Series SKU SYS-511E-WR-01-G2 is its `gold` configuration.
+- `supermicro/riser-wio-rhs-x13sew@2` replaces `@1`: slot 3's bracket bay moved
+  2.6 mm so the riser plate no longer covers the edge of a card's first cage.
+  Both X13SEW risers gain a housing over the bracket flanges in 3D.
+- `supermicro/system-board-x13sew@2` replaces `@1`: the board is flat art on
+  the floor of one interior well per chassis (`supermicro/interior-sc116b@1`,
+  `-sc815b@1`, `-sc515b@1`), so supplies, risers, fans and DIMMs stand in the
+  chassis as bodies under the cover and leave it empty when ejected. The fan
+  (`supermicro/fan-0163l4@1`) is drawn as the top of its housing, not as
+  rotors, and the SYS-111E-WR's five fans are at their photographed positions.
+  All four servers gain an air shroud and a supply cage cover under the lid,
+  and the X13SEW risers declare their bodies in pieces - bracket arm, riser
+  card and a connector for each slot - so seated cards show, plugged in.
+- 3D kit (`relief.js` `ejectTravel`): a pulled part's travel limit is never less
+  than its own depth plus the margin. From above a 1U chassis the limit was the
+  chassis height less 10, 33 mm, and a 40 mm fan or a 31 mm DIMM never came
+  clear of the lid. Parts pulled from the front or rear are unaffected unless
+  they are within 20 mm of the chassis depth.
 - `plan: {rotate: 180}` on a device bay: the plan of a module seated in a
   FRONT bay is turned half a turn in the top view, and the occupants of its own
   bays are offset from the opposite corner. A plan is drawn face-at-the-top, as
@@ -238,6 +259,14 @@ names the ref that replaces it.
   `dell/riser-3p-16g@1`, `dell/riser-3q-16g@1` and `dell/riser-3r-16g@1` (now
   on the Gen5-printed cages). A manifest that pins an `@1` moves to the `@2`
   of the same name (roc-ops/Portrayal#749).
+- Two Supermicro component majors are superseded and removed, each replaced by
+  its `@2`: `supermicro/riser-wio-rhs-x13sew@1` (slot 3's bracket bay moved) and
+  `supermicro/system-board-x13sew@1` (the board is now flat art on the floor of
+  an interior well). A manifest that pins an `@1` moves to the `@2` of the same
+  name. The DIMM bays of the SYS-111E-WR, SYS-111E-FDWTR and SYS-111E-FWTR are
+  renamed as the board names them, `dimm-1`..`dimm-8` to `dimm-a1`..`dimm-h1`,
+  in the drawings and in their NetBox and Nautobot device types. None of this
+  was in a release (roc-ops/Portrayal#782).
 
 ## 0.1.0 (unreleased) - the first public release
 
