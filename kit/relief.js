@@ -1544,8 +1544,9 @@ export function reliefExtent(feats = [], base = 0) {
 // A part that says how deep it is - a `body:` block, a `data-body-depth`, or
 // an optic's own `data-depth` - travels as it always did: a captive part its
 // declared travel, anything else 1.5 x its depth + 25 (60 when a drawing
-// predates depths entirely), never further than the face looks less 10, and
-// it leaves a dark bay box that deep behind it.
+// predates depths entirely), never further than the face looks less 10 - or,
+// where the box is shallower than the part, the part's own depth plus
+// EJECT_MARGIN - and it leaves a dark bay box that deep behind it.
 // An OCCUPANT THAT DECLARES NO DEPTH - a dust cap, a plug - has no body
 // behind the face to clear: it is the relief it draws. It travels its own
 // extent (reliefExtent) plus EJECT_MARGIN and leaves no box, so the port it
@@ -1559,7 +1560,14 @@ export function ejectTravel({body = null, bodyDepth = null, depth = null, occupi
     return {pull: Math.min((+extent || 0) + EJECT_MARGIN, into - 10), leavesBay: false, bayDepth: 0};
   const d = body ? body.depth : (bodyDepth || 60);
   const captive = body && body.travel;
-  return {pull: Math.min(captive || d * 1.5 + 25, into - 10), leavesBay: true, bayDepth: d};
+  // THE LIMIT IS NEVER LESS THAN THE PART IS DEEP. `into - 10` stops a part
+  // travelling further than the box is deep, which is right from the front or
+  // rear of a 700 mm chassis and wrong from above a 43 mm one: a 40 mm fan
+  // lifted out of a 1U server was held to 33 and never cleared the lid. A part
+  // has to travel its own depth to come out at all, so the limit is that plus
+  // EJECT_MARGIN wherever the box is shallower.
+  const limit = Math.max(into - 10, d + EJECT_MARGIN);
+  return {pull: Math.min(captive || d * 1.5 + 25, limit), leavesBay: true, bayDepth: d};
 }
 
 // WHAT A REMOVABLE PART'S BODY IS BUILT AS, from its path and behaviour - the

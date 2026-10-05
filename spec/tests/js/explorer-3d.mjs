@@ -49,7 +49,7 @@ if (mode === 'roles' || mode === 'eject') {
   const reliefExtent = R.reliefExtent || (() => 0);
   const ejectTravel = R.ejectTravel || (({body, bodyDepth, into}) => {
     const d = body ? body.depth : (bodyDepth || 60);
-    return {pull: Math.min((body && body.travel) || d * 1.5 + 25, into - 10), leavesBay: true, bayDepth: d};
+    return {pull: Math.min((body && body.travel) || d * 1.5 + 25, Math.max(into - 10, d + 10)), leavesBay: true, bayDepth: d};
   });
   if (mode === 'roles') {
     for (const [name, {back, nodes}] of Object.entries(input.sets)) {

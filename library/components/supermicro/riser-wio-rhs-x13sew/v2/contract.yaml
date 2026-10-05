@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: riser-wio-rhs-x13sew
-version: 1.1.0
+version: 2.0.0
 class: riser
 behaviour: fills
 profile: server
@@ -25,12 +25,15 @@ provenance:
     rear) to where it meets the slot 1 and 2 brackets (298.0), and down to the ledge
     over the LAN ports.
   placing: >-
-    photo-measured - the window runs 12.1..71.0 x 6.3..22.5 on this face, wider than a
-    low-profile bracket's 54.5 opening, and its blank shows vents across all of it. The
-    bracket is 79.2 long (std/pcie-bracket-lp@1) with its flange under the three-hole
-    tab at the left and its tip at the right end, where slot 1 and 2's tips begin: on
-    the photograph the two tips come within 3 mm of each other at the same height, which
-    is inside what the image resolves, so they are drawn meeting at 298.0.
+    photo-measured - WHAT THE WINDOW SHOWS IS THE BRACKET CONNECTOR OPENING, and that
+    places the bay. The window runs 12.1..71.0 x 6.3..22.5 on this face. A low-profile
+    bracket's opening is 15.63..70.16 from its tip (std/pcie-bracket-lp@1); turned over,
+    with the bay at 2.9, it lies 11.9..66.5 here and the whole opening shows. @1 HAD THE
+    BAY AT 0.3, to make this bracket's tip meet the tips of slots 1 and 2 at 298.0, and
+    the plate then covered the first 2.5 mm of the opening - the edge of a card's first
+    cage. The tip now runs 2.6 past this part's end, behind the post of the slot 1 and 2
+    bracket, as the tips of two opposed slots do (hpe/riser-primary-dl160@1 has the same
+    overlap).
   handedness: >-
     estimated - turned over (rotate 180, tip right). The flange end is read from the tab
     the photograph shows at the left of the window; no image held shows a card in slot
@@ -46,7 +49,14 @@ provenance:
 size: {w: 79.5, h: 23.8, d: 180.0}
 plan: {ref: supermicro/riser-wio-rhs-plan-x13sew@1}
 size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
-body: {depth: 180.0, color: '#c8ccd0'}
+body:
+  depth: 180.0
+  color: '#c8ccd0'
+  boxes:
+  - {id: riser-card, at: [74.4, 3.0], size: [1.6, 19.0], from: 30.0, depth: 120.0, color: '#1f5a3a',
+     confidence: estimated, source: 'the riser card slot 3 is on, standing on its edge against the tip side of the connector; neither top-down photograph shows this riser fitted, so it is a mark'}
+  - {id: slot-3-connector, at: [63.8, 16.45], size: [10.0, 8.7], from: 44.2, depth: 89.0, color: '#15171b',
+     confidence: registry, source: 'PLACED ON THE CARD, from PCIe CEM 5.0 as common/pcie-card-lp@1 builds it, through the half turn of this bay: a low-profile card has its edge tab 11.11..19.51 from the bracket tip and its board 1.27 below the keyed edge, which turned over in a bay at 2.9, 5.2 puts the tab at 62.6..71.0 across and the board at 20.8..22.4 down. The connector stands to it as the one on dell/riser-3a-16g@1 stands to its card'}
 elements:
   plate: {at: [0.0, 0.0], size: [79.5, 23.8], class: bezel}
 bays:
@@ -55,8 +65,18 @@ bays:
     rotate: 180
     plan: {at: [0.0, 0.0]}
     behind: true
-    at: [0.3, 5.2]
+    at: [2.9, 5.2]
     size: [79.20, 18.42]
     accepts: [supermicro/pcie-blank-lp@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1, nvidia/mcx4111a-lp@1, nvidia/mcx4121a-lp@1, nvidia/mcx4131a-lp@1, nvidia/mcx512a-lp@1, nvidia/mcx512f-lp@1, nvidia/mcx515a-lp@1, nvidia/mcx516a-lp@1, nvidia/mcx621102-lp@1, nvidia/mcx621202-lp@1, nvidia/mcx623102a-lp@1, nvidia/mcx623105-lp@1, nvidia/mcx623106-lp@1, nvidia/mcx713106-lp@1, nvidia/mcx715105-lp@1, nvidia/mcx75310-lp@1, nvidia/mcx75510-lp@1, nvidia/mcx755106-lp@1]
     default: supermicro/pcie-blank-lp@1
+relief:
+  features:
+  - node: tab
+    out: 12.0
+    color: '#d6d9dc'
+    confidence: estimated
+    source: >-
+      the tab a bracket's flange lands behind, at the flange end of the window.
+      A bracket's folded flange stands 9.40 proud of its plate (PCIe CEM 5.0
+      figure 11-9); how far the tab stands is not measured, and 12 covers the fold
 skins: [default]
