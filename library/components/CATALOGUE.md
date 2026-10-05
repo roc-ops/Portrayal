@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1182 component majors in 26 namespaces.
+1183 component majors in 26 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -777,7 +777,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `fs/fhd-splice-12-lc-rear@2` | component | cassette | 99 × 31 |  | 0 | 1 | The back of FS FHD's LC UPC OS2 12-fibre splice cassette (SKU 382907): the cassette body seen from behind, ca… |
 | `fs/qsfp28-aoc@1` | module | transceiver | 18.35 × 8.5 × 52.4 | qsfp | 0 | 0 | FS 100G QSFP28 active optical cable, one end - four 25G lanes over multimode ribbon fibre, up to 100 m over O… |
 
-## hpe/ (41)
+## hpe/ (42)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -813,9 +813,10 @@ aperture when it is a bare opening - never both at one position. The README's
 | `hpe/psu-865414-b21@1` | module | psu | 68 × 40.4 × 225.3 |  | 1 | 0 | HPE 800 W Flex Slot Platinum Hot Plug Low Halogen power supply (865414-B21), the 500 W supply's casting with … |
 | `hpe/psu-blank-flex-slot@1` | module | blank | 68 × 40.4 |  | 1 | 0 | HPE Flex Slot power supply blank, as the Gen10 ProLiant DL160 ships in its second supply bay - a bright metal… |
 | `hpe/psu-flex-slot-plan@1` | component | mechanical | 68 × 190 |  | 0 | 2 | An HPE Flex Slot power supply seen from above - the can that runs into the chassis behind its rear face |
+| `hpe/riser-blank-primary-dl160@1` | module | blank | 203 × 24.2 |  | 1 | 0 | The primary PCI riser blank of the Gen10 ProLiant DL160 (spare 878532-001) - one perforated plate across the … |
 | `hpe/riser-cage-primary-dl160@1` | component | mechanical | 123.5 × 145.6 |  | 1 | 0 | The primary PCI riser cage of the Gen10 ProLiant DL160 seen from above - the vented sheet-metal roof over PCI… |
 | `hpe/riser-flom-dl160@1` | module | riser | 203 × 24.2 × 150 |  | 1 | 0 | The FlexibleLOM riser cage of the Gen10 ProLiant DL160 as the rear presents it (FlexibleLOM/NVMe riser kit 87… |
-| `hpe/riser-primary-dl160@1` | module | riser | 203 × 24.2 × 150 |  | 1 | 2 | The primary PCI riser cage of the Gen10 ProLiant DL160 as the rear presents it, with the standard x16/x8 rise… |
+| `hpe/riser-primary-dl160@1` | module | riser | 203 × 24.2 × 150 |  | 1 | 3 | The primary PCI riser cage of the Gen10 ProLiant DL160 as the rear presents it, with the standard x16/x8 rise… |
 | `hpe/riser-secondary-dl160@1` | module | riser | 82.5 × 21 × 150 |  | 1 | 0 | The secondary PCI riser cage of the Gen10 ProLiant DL160 as the rear presents it, with the x16 riser board (8… |
 | `hpe/serial-port-879778@1` | module | expansion-card | 32.8 × 12.5 |  | 1 | 0 | The optional serial port of the Gen10 ProLiant DL160 (serial port cable, spare 879778-001) - a DE-9 on a cabl… |
 | `hpe/serial-port-blank@1` | module | blank | 32.8 × 12.5 |  | 1 | 1 | HPE serial port blank on the Gen10 ProLiant DL160's rear, covering the opening the optional serial port fills… |

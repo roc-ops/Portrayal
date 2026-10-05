@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dl160-gen10
-version: 1.1.2
+version: 1.2.0
 maturity: modelled
 manufacturer: HPE
 model: ProLiant DL160 Gen10
@@ -383,11 +383,11 @@ gaps:
       Reference lists - each from a seller's photograph of its own faceplate, and the
       cage's opening for them from two isometric User Guide figures: no image held
       shows that cage's rear straight on, with or without an adapter, so where an
-      adapter sits on the rear is estimated. Not drawn: the primary riser BLANK
-      (878532-001) a server ordered with no riser carries, which PartSurfer
-      photographs straight on. The three Media Module adapters are drawn from
-      PartSurfer's photographs, each centred in the opening because no image shows one
-      fitted.
+      adapter sits on the rear is estimated. The primary riser BLANK (hpe/riser-blank-
+      primary-dl160@1, 878532-001), which a server ordered with no riser carries, is
+      drawn from PartSurfer's photograph and seated in the `lff4-no-riser`
+      configuration; what stands in the SECONDARY riser's place on such a server is in
+      no image or document held, so that configuration keeps the secondary cage.
     wanted: >-
       a straight-on rear image of a server with the FlexibleLOM riser and an adapter
       fitted, and of a server with a card in each slot and a Media Module adapter
@@ -698,7 +698,7 @@ views:
       - {at: [358.0, 32.0], path: 'M 1.4 0 L 0 0.8 L 1.4 1.6 Z', filled: true, fill: '#2b2f33', for: psu-2}
     components:
       bays:
-        - {id: riser-primary, at: [0.0, 0.4], size: {w: 203.0, h: 24.2}, accepts: [hpe/riser-primary-dl160@1, hpe/riser-flom-dl160@1], default: hpe/riser-primary-dl160@1, group: risers, rel-pos: 1}
+        - {id: riser-primary, at: [0.0, 0.4], size: {w: 203.0, h: 24.2}, accepts: [hpe/riser-primary-dl160@1, hpe/riser-flom-dl160@1, hpe/riser-blank-primary-dl160@1], default: hpe/riser-primary-dl160@1, group: risers, rel-pos: 1}
         - {id: riser-secondary, at: [203.0, 0.4], size: {w: 82.5, h: 21.0}, accepts: [hpe/riser-secondary-dl160@1], default: hpe/riser-secondary-dl160@1, group: risers, rel-pos: 2}
         - {id: media-module, at: [13.6, 26.3], size: {w: 45.0, h: 13.4}, accepts: [hpe/media-module-blank@1, hpe/media-module-866464-b21@1, hpe/media-module-866467-b21@1, hpe/media-module-866470-b21@1], default: hpe/media-module-blank@1, group: media-module, rel-pos: 1}
         - {id: serial, at: [219.3, 26.0], size: {w: 32.8, h: 12.5}, accepts: [hpe/serial-port-blank@1, hpe/serial-port-879778@1], default: hpe/serial-port-blank@1, group: serial, rel-pos: 1}
@@ -782,7 +782,7 @@ configurations:
       serial port blanked, one 500 W Flex Slot supply in PS 1 and the blank in
       PS 2. THIS IS THE BUILD THE PHOTOGRAPHS SHOW, NOT WHAT THE PART NUMBER
       SHIPS WITH: the QuickSpecs gives the configure-to-order chassis no riser
-      as standard (a primary riser blank, which is not drawn) and makes the
+      as standard (it carries the primary riser blank; see the `lff4-no-riser` configuration) and makes the
       supply a choice; one 500 W supply is what the pre-configured models
       carry, and the secondary riser is an option that needs processor 2.
   lff4:
@@ -811,6 +811,15 @@ configurations:
       media-module: hpe/media-module-866464-b21@1
       serial: hpe/serial-port-879778@1
       psu-2: hpe/psu-865408-b21@1
+  lff4-no-riser:
+    kind: example
+    description: >-
+      The 4 LFF chassis with the primary riser blank where the primary riser
+      cage goes - what the QuickSpecs gives the configure-to-order chassis,
+      'PCIe: None standard. Risers need to be added'. The secondary cage is
+      still drawn: nothing held shows what a server without it carries there.
+    bays:
+      riser-primary: hpe/riser-blank-primary-dl160@1
   lff4-flom:
     kind: example
     description: >-
