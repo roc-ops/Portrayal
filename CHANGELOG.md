@@ -259,6 +259,14 @@ names the ref that replaces it.
   `dell/riser-3p-16g@1`, `dell/riser-3q-16g@1` and `dell/riser-3r-16g@1` (now
   on the Gen5-printed cages). A manifest that pins an `@1` moves to the `@2`
   of the same name (roc-ops/Portrayal#749).
+- Two Supermicro component majors are superseded and removed, each replaced by
+  its `@2`: `supermicro/riser-wio-rhs-x13sew@1` (slot 3's bracket bay moved) and
+  `supermicro/system-board-x13sew@1` (the board is now flat art on the floor of
+  an interior well). A manifest that pins an `@1` moves to the `@2` of the same
+  name. The DIMM bays of the SYS-111E-WR, SYS-111E-FDWTR and SYS-111E-FWTR are
+  renamed as the board names them, `dimm-1`..`dimm-8` to `dimm-a1`..`dimm-h1`,
+  in the drawings and in their NetBox and Nautobot device types. None of this
+  was in a release (roc-ops/Portrayal#782).
 
 ## 0.1.0 (unreleased) - the first public release
 
