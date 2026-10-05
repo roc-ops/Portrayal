@@ -1,0 +1,125 @@
+format: 1
+kind: component
+name: control-panel-sc815b
+version: 1.0.0
+class: control-panel
+profile: server
+description: >-
+  The front control panel of the Supermicro SC815B 1U chassis, as on the
+  SuperServer SYS-511E-WR - a black strip at the right of the top row: the
+  UID button, five lamps under their printed marks (information, LAN2, LAN1,
+  drive, power), the reset button and the power button
+provenance:
+  sources: >-
+    (1) the front photograph of the SYS-511E-WR embedded on page 10 of its manual (1959
+    x 593 at 300 ppi), on which the body between the ear folds is 1745 px for 437 mm,
+    3.993 px/mm, and the face 171.5 px for 43 mm, 3.988 px/mm, which shows the panel
+    lit. (2) SuperServer SYS-511E-WR User's Manual, MNL-2491 figure 1-2, Control Panel,
+    with the Control Panel Features and Information LED tables.
+  size: >-
+    photo-measured - 64.5 x 13.1, the black strip 368.8..433.3 across the front and
+    2.9..16.0 down.
+  face: >-
+    photo-measured - panel-local: the UID button at (4.6, 10.4) under its printed
+    legend; five lamps 10.9 down at 11.2, 16.6, 22.8, 28.8 and 34.8 with their marks
+    above; the reset button at (43.4, 6.4) over the word RESET; the power button at
+    (51.9, 6.9).
+  order: >-
+    drawing - figure 1-2 names them left to right: Unit LED Button, Information LED,
+    LAN2 LED, LAN1 LED, Drive LED, Power LED, Reset, Power; the photograph prints 2 and
+    1 beside the two network marks.
+  lamps: >-
+    SuperServer SYS-511E-WR User's Manual, MNL-2491, Control Panel Features and
+    Information LED tables. The tables give patterns and, for the information LED,
+    colours; the LAN, drive and power lamp colours are as the photograph shows them lit
+    - green, green, yellow, green.
+  power: >-
+    NOT STATED. No document held gives the panel a power figure.
+size: {w: 64.5, h: 13.1}
+size-confidence: {w: photo-measured, h: photo-measured}
+elements:
+  lamp-info:
+    at: [9.9, 9.6]
+    size: [2.6, 2.6]
+    class: led
+    states:
+      - 'off'
+      - {name: overheat, color: '#ef4444'}
+      - {name: fan-fail, color: '#ef4444', behavior: {mode: blinking, rate: 1}}
+      - {name: power-fail, color: '#ef4444', behavior: {mode: blinking, rate: 0.25}}
+      - {name: uid-local, color: '#3b82f6'}
+      - {name: uid-remote, color: '#3b82f6', behavior: {mode: blinking, rate: 1}}
+      - {name: bmc-reset, color: '#3b82f6', behavior: {mode: blinking, rate: 2}}
+    description: >-
+      Information LED. Solid red - overheat; red 1 Hz - fan failure; red 0.25 Hz - power
+      failure; solid blue - UID activated locally; blue 1 Hz - UID activated from the
+      BMC; blue 2 Hz - BMC resetting. Also red solid with the power LED blinking green -
+      fault; blue and red at 10 Hz - recovery mode; blue 4 Hz - BMC setting factory
+      defaults; blue 10 Hz with the power LED blinking green - BMC or BIOS firmware
+      updating.
+  lamp-lan2:
+    at: [15.3, 9.6]
+    size: [2.6, 2.6]
+    class: led
+    states:
+      - 'off'
+      - {name: activity, color: '#22c55e', behavior: {mode: blinking, rate: 4}}
+    description: >-
+      LAN2 LED. Flashing - network activity on LAN port 2. The rate is not stated; drawn
+      at 4 Hz, green as photographed.
+  lamp-lan1:
+    at: [21.5, 9.6]
+    size: [2.6, 2.6]
+    class: led
+    states:
+      - 'off'
+      - {name: activity, color: '#22c55e', behavior: {mode: blinking, rate: 4}}
+    description: >-
+      LAN1 LED. Flashing - network activity on LAN port 1. The rate is not stated; drawn
+      at 4 Hz, green as photographed.
+  lamp-drive:
+    at: [27.5, 9.6]
+    size: [2.6, 2.6]
+    class: led
+    states:
+      - 'off'
+      - {name: activity, color: '#eab308', behavior: {mode: blinking, rate: 4}}
+    description: >-
+      Drive LED. Flashing - activity on the storage drives. The rate is not stated;
+      drawn at 4 Hz, yellow as photographed.
+  lamp-power:
+    at: [33.5, 9.6]
+    size: [2.6, 2.6]
+    class: led
+    states:
+      - 'off'
+      - {name: 'on', color: '#22c55e'}
+      - {name: checking, color: '#22c55e', behavior: {mode: blinking, rate: 4}}
+    description: >-
+      Power LED. Steady on - power on; blinking at 4 Hz - checking BIOS/BMC integrity.
+      Also 4 Hz with the information LED blue - BIOS firmware updating; two blinks and a
+      pause - BMC firmware updating; 1 Hz with the information LED red - fault detected.
+  btn-uid:
+    at: [2.9, 8.7]
+    size: [3.4, 3.4]
+    class: button
+    description: UID LED button. Turns the blue UID indicators on at the front and the rear; also resets the BMC (manual section 7.8).
+  lamp-uid:
+    at: [3.8, 9.6]
+    size: [1.6, 1.6]
+    class: led
+    states:
+      - 'off'
+      - {name: identify, color: '#3b82f6'}
+    description: the UID lamp in the button. Blue when the unit identifier is activated.
+  btn-reset:
+    at: [40.9, 3.9]
+    size: [5.0, 5.0]
+    class: button
+    description: Reset button. Reboots the system.
+  btn-power:
+    at: [48.7, 3.7]
+    size: [6.4, 6.4]
+    class: button
+    description: Power button. Applies or removes primary power, standby power stays; hold four seconds to force a shutdown.
+skins: [default]

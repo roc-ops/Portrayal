@@ -31,6 +31,10 @@ names the ref that replaces it.
   supplies) and its AC sibling the SYS-111E-FWTR (`supermicro/sys-111e-fwtr`,
   with the SYS-111E-FWTR-EU as its `eu` configuration), each with front, rear
   and a top view under a removable cover, and 23 `supermicro/` parts.
+- Supermicro SuperServer SYS-511E-WR (`supermicro/sys-511e-wr`): the 1U WIO
+  server with four hot-swap 3.5 inch bays, front, rear and a top view under a
+  removable cover, with its tray, control panel and cover parts; the Gold
+  Series SKU SYS-511E-WR-01-G2 is its `gold` configuration.
 - `plan: {rotate: 180}` on a device bay: the plan of a module seated in a
   FRONT bay is turned half a turn in the top view, and the occupants of its own
   bays are offset from the opposite corner. A plan is drawn face-at-the-top, as
