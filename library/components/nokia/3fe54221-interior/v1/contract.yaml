@@ -1,0 +1,52 @@
+format: 1
+kind: component
+name: 3fe54221-interior
+version: 1.0.0
+class: mechanical
+profile: optical
+description: >-
+  The inside of the Nokia outdoor ONT enclosure 3FE54221 behind its door: the back wall of
+  the frame with two fibre slack spools, an SC connector holder under the top mounting tab,
+  a four-position line protector block at the right, the grommets over the two cable entries
+  at the bottom, and the two turn retainers that hold an ONT upright at the left. The ONT's
+  place is a dashed outline; no ONT is drawn.
+size: {w: 260.1, h: 312.0, d: 60.0}
+size-confidence: {w: drawing, h: drawing, d: estimated}
+attrs:
+  model: 3FE54221 enclosure interior
+provenance:
+  sources: >-
+    Nokia ONT XS-010XR-P Product Guide, 3TN-00113-AAAA-TCZZA Issue 4, Figures 5-11 p55 (open
+    and empty) and 5-13 p57 (with the ONT seated), vector line art at 8.17 px/mm.
+  size: >-
+    drawing for w and h, estimated for d - w and h are the opening inside the gasket on
+    Figure 5-11. d is the depth of the cavity from the frame's front edge to its back wall:
+    no side view exists, the housing's own 109 mm depth comes from one table that does not
+    name it, and the door takes the rest. It has to exceed the 34.3 mm ONT and its retainers.
+  layout: >-
+    drawing - the ONT stands upright, 142 across by 208 tall, its top face outwards, between
+    a retainer above and one below; two slack spools about 60 mm across, the left one behind
+    the ONT; the SC connector holder under the top mounting tab; a four-position line
+    protector block at the right; grommets over the two cable entries at the bottom. The
+    guide's text says to place the ONT on the right and both figures draw it on the left;
+    the figures are followed. Fibre guides and the protector's detail are not drawn.
+  ont-seat: >-
+    drawing - the ONT is a device of its own (nokia/xs-010xr-p) and a bay accepts components,
+    not devices, so it is not seated here and no body is drawn for it. Its place is a dashed
+    outline 142.8 x 206.6 on the back wall, where Figure 5-13 draws the XS-010XR-P.
+  relief: >-
+    none beyond the cavity - the retainers and the protector block stand off the back wall
+    in the hardware and are flat art here: a feature of this part is measured from the
+    front plane, not from the wall, and nothing dimensions them.
+  colour: 'estimated - the wall a shade darker than the housing so the cavity reads as one'
+  logo-zone: 'none reserved - no vendor mark is drawn inside the housing'
+relief:
+  wall: '#6c6e70'
+  walls: inside
+elements:
+  wall: {at: [0.0, 0.0], size: [260.1, 312.0], class: bezel}
+  ont-seat: {at: [10.0, 44.4], size: [142.8, 206.6], class: mechanical}
+  retainer-top: {at: [62.1, 26.0], size: [20.5, 48.0], class: latch}
+  retainer-bottom: {at: [73.6, 223.0], size: [20.5, 60.0], class: latch}
+  line-protector: {at: [200.1, 149.6], size: [33.0, 72.0], class: mechanical}
+skins: [default]

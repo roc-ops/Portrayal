@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: 3fe54221ah
-version: 0.1.0
+version: 1.0.0
 maturity: modelled
 manufacturer: Nokia
 model: Outdoor ONT enclosure 3FE54221AH
@@ -68,13 +68,15 @@ provenance:
       two cable entries at the bottom, and a mounting tab top and bottom on the centre line.
       The figure and the text disagree about the side: step 4 says to place the ONT on the
       right side of the enclosure and both figures draw it on the left; the figures are
-      followed. The door, which swings out to the left, is not drawn.
+      followed. The interior is a part of its own (nokia/3fe54221-interior@1) set back in the
+      frame, and the door (nokia/3fe54221-door@1) lies over it; with the door open the door
+      itself, which swings out to the left, is not drawn.
   ont-seat:
     confidence: drawing
     note: >-
       The ONT is a device of its own (nokia/xs-010xr-p) and a bay accepts components, not
-      devices, so it is not seated here: the place it occupies is drawn as an outline and
-      declared as a region. The guide calls the housing a universal outdoor ONT enclosure;
+      devices, so it is not seated here: the place it occupies is a dashed outline
+      on the interior's back wall, and no ONT is drawn. The guide calls the housing a universal outdoor ONT enclosure;
       which other ONTs it takes is not stated in anything held.
   bottom-layout:
     confidence: estimated
@@ -147,6 +149,14 @@ gaps:
     reason: needs-drawing
     note: the two entries are sized and placed front to back by eye from angled photographs
     wanted: a bottom view with dimensions
+  - what: cavity-depth
+    scope: [front]
+    reason: needs-drawing
+    note: >-
+      The interior is set 60 mm back from the frame's front edge and the door stands 6 mm off
+      it. Both are estimates: no side view or section exists, and the housing's own depth is
+      from one table that does not name it.
+    wanted: a side view or section of the housing, or a rule down the inside of a unit
   - what: compatible-onts
     reason: vendor-silent
     note: >-
@@ -154,6 +164,16 @@ gaps:
       no compatibility list is held.
     wanted: the list of ONTs Nokia qualifies in 3FE54221AH
 groups:
+  interior:
+    term: Item
+    role: furniture
+    index-origin: 1
+    description: what the door hides - the back wall with its spools, retainers and protector block
+  covers:
+    term: Cover
+    role: service
+    index-origin: 1
+    description: the door, which swings away to reach the inside
   security:
     term: Fastener
     role: furniture
@@ -164,14 +184,11 @@ views:
     size: {w: 304.0, h: 336.0}
     panel:
       decor:
-        - {id: frame, at: [10.9, 1.0], size: [274.1, 333.0], rx: 12.0, stroke: '#6c6e70', stroke-width: 0.8}
-        - {id: door, at: [16.9, 4.0], size: [264.1, 330.0], rx: 10.0, stroke: '#7b7d7f', stroke-width: 0.4}
-        - {id: crease, at: [66.2, 97.5], size: [212.7, 0.3], fill: '#7b7d7f'}
-        - {id: label-panel, kind: recess, at: [158.0, 198.8], size: [107.0, 125.6], rx: 8.0, stroke: '#7b7d7f', stroke-width: 0.4}
+        - {id: frame, at: [10.9, 1.0], size: [274.1, 322.0], rx: 12.0, stroke: '#6c6e70', stroke-width: 0.8}
+        - {id: mount-tab-bottom, at: [125.5, 308.5], size: [44.7, 26.2], fill: '#858787', rx: 1.5}
+        - {id: mount-slot, at: [140.5, 318.0], size: [14.0, 6.0], rx: 3.0, fill: '#2a2c2e'}
         - {id: hinge-upper, at: [0.0, 55.0], size: [10.9, 52.0], fill: '#858787', rx: 1.0}
         - {id: hinge-lower, at: [0.0, 245.7], size: [10.9, 49.0], fill: '#858787', rx: 1.0}
-        - {id: catch-upper, at: [282.5, 67.7], size: [9.7, 29.0], rx: 1.5, stroke: '#6c6e70', stroke-width: 0.5}
-        - {id: catch-lower, at: [282.5, 244.0], size: [9.7, 31.5], rx: 1.5, stroke: '#6c6e70', stroke-width: 0.5}
         - {id: latch-tab, at: [285.0, 123.0], size: [19.0, 94.5], fill: '#858787', rx: 3.0}
         - {id: security-boss, at: [285.1, 144.5], size: [16.4, 16.4], rx: 8.2, stroke: '#5a5c5e', stroke-width: 0.6}
         - {id: latch-boss, at: [288.2, 178.6], size: [10.2, 10.2], rx: 5.1, stroke: '#5a5c5e', stroke-width: 0.6}
@@ -180,46 +197,13 @@ views:
       - {at: [293.3, 136.0], text: TELCO, font-size: 3.0, anchor: middle, for: security-screw}
     components:
       placements:
+        # THE INSIDE IS A WELL, 60 back from the frame's front edge, and the door lies over
+        # it. The door is `mounts`, which already puts it over anything; it is placed in the
+        # closed configuration only, so `door-open` shows the well.
+        - {ref: nokia/3fe54221-interior@1, id: interior, at: [18.9, 6.0], group: interior, rel-pos: 1}
+        - {ref: nokia/3fe54221-door@1, id: door, at: [16.9, 4.0], only-in: [closed], group: covers, rel-pos: 1}
         - {ref: common/screw-head@1, id: security-screw, at: [291.5, 150.9], group: security, rel-pos: 1}
         - {ref: common/screw-head@1, id: latch-screw, at: [291.5, 181.9], group: security, rel-pos: 2}
-  front-open:
-    face: front
-    size: {w: 304.0, h: 336.0}
-    panel:
-      decor:
-        - {id: frame, at: [10.9, 1.0], size: [274.1, 322.0], rx: 12.0, stroke: '#6c6e70', stroke-width: 0.8}
-        - {id: gasket, at: [14.0, 4.0], size: [267.9, 316.0], rx: 10.0, stroke: '#4a4c4e', stroke-width: 0.6}
-        - {id: mount-tab-top, at: [125.5, 5.0], size: [44.7, 23.0], rx: 1.5, stroke: '#6c6e70', stroke-width: 0.5}
-        - {id: mount-tab-bottom, at: [125.5, 308.5], size: [44.7, 26.2], fill: '#858787', rx: 1.5}
-        - {id: mount-slot, at: [140.5, 318.0], size: [14.0, 6.0], rx: 3.0, fill: '#2a2c2e'}
-        - {id: spool-1, at: [52.6, 78.9], size: [59.6, 59.6], rx: 29.8, stroke: '#6c6e70', stroke-width: 0.6}
-        - {id: spool-2, at: [133.6, 78.9], size: [59.6, 59.6], rx: 29.8, stroke: '#6c6e70', stroke-width: 0.6}
-        - {id: ont-body, at: [28.9, 50.4], size: [142.8, 206.6], rx: 19.0, fill: '#f7f7f7'}
-        - {id: ont-outline, at: [28.9, 50.4], size: [142.8, 206.6], rx: 19.0, stroke: '#c9ccd0', stroke-width: 0.6}
-        - {id: retainer-top, at: [81.0, 32.0], size: [20.5, 48.0], rx: 4.0, fill: '#a9abad'}
-        - {id: retainer-top-edge, at: [81.0, 32.0], size: [20.5, 48.0], rx: 4.0, stroke: '#6c6e70', stroke-width: 0.4}
-        - {id: retainer-bottom, at: [92.5, 229.0], size: [20.5, 60.0], rx: 4.0, fill: '#a9abad'}
-        - {id: retainer-bottom-edge, at: [92.5, 229.0], size: [20.5, 60.0], rx: 4.0, stroke: '#6c6e70', stroke-width: 0.4}
-        - {id: line-protector, at: [219.0, 155.6], size: [33.0, 72.0], rx: 2.0, stroke: '#6c6e70', stroke-width: 0.6}
-        - {id: grommet-left, at: [30.0, 296.3], size: [65.0, 10.0], fill: '#2a2c2e', rx: 1.0}
-        - {id: grommet-right, at: [214.2, 296.3], size: [65.5, 10.0], fill: '#2a2c2e', rx: 1.0}
-        - {id: hinge-upper, at: [0.0, 55.0], size: [10.9, 52.0], fill: '#858787', rx: 1.0}
-        - {id: hinge-lower, at: [0.0, 245.7], size: [10.9, 49.0], fill: '#858787', rx: 1.0}
-        - {id: latch-tab, at: [285.0, 123.0], size: [19.0, 94.5], fill: '#858787', rx: 3.0}
-        - {id: security-boss, at: [285.1, 144.5], size: [16.4, 16.4], rx: 8.2, stroke: '#5a5c5e', stroke-width: 0.6}
-        - {id: latch-boss, at: [288.2, 178.6], size: [10.2, 10.2], rx: 5.1, stroke: '#5a5c5e', stroke-width: 0.6}
-        - {id: padlock-hole, at: [287.4, 195.0], size: [13.0, 13.0], rx: 6.5, fill: '#2a2c2e'}
-    silkscreen:
-      - {at: [165.2, 38.2], text: SC CONNECTOR HOLDER, font-size: 2.2, anchor: middle, for: chassis}
-      - {at: [293.3, 136.0], text: TELCO, font-size: 3.0, anchor: middle, for: security-screw-open}
-    components:
-      placements:
-        - {ref: common/screw-head@1, id: security-screw-open, at: [291.5, 150.9], group: security, rel-pos: 3}
-        - {ref: common/screw-head@1, id: latch-screw-open, at: [291.5, 181.9], group: security, rel-pos: 4}
-    regions:
-      - {id: ont-seat, at: [28.9, 50.4], size: {w: 142.8, h: 206.6}, label: 'ONT position (XS-010XR-P, upright, lamps at left)'}
-      - {id: fibre-slack, at: [52.6, 78.9], size: {w: 140.6, h: 59.6}, label: Fibre slack spools}
-      - {id: line-protectors, at: [219.0, 155.6], size: {w: 33.0, h: 72.0}, label: Four-line protector block}
   rear:
     size: {w: 304.0, h: 336.0}
     empty: >-
@@ -257,7 +241,6 @@ configurations:
     kind: example
     description: >-
       Door open, showing the frame interior and the place the ONT occupies, as the Product
-      Guide Figures 5-11 and 5-13 draw it
-    views: {front: front-open}
+      Guide Figures 5-11 and 5-13 draw it. The door itself is not drawn swung out.
 references:
   - {title: 'Nokia ONT XS-010XR-P Product Guide, 3TN-00113-AAAA-TCZZA Issue 4 (BBD Release 25.01)', sha256: 9124cdb431767ea0c5b6637185ca579a3973813c79d413d69e1e6739a085077b}

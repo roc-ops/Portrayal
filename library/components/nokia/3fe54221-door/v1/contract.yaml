@@ -1,0 +1,49 @@
+format: 1
+kind: component
+name: 3fe54221-door
+version: 1.0.0
+class: bezel
+# It is the door. It lies over everything inside the housing and swings away to reveal it,
+# which is what `mounts` declares.
+behaviour: mounts
+profile: optical
+description: >-
+  The gasketed door of the Nokia outdoor ONT enclosure 3FE54221: a grey moulded panel hinged
+  on the left of the frame, with a crease across it, a recessed label panel in its lower
+  right and two catches on its right edge that close onto the frame beside the latch tab. It
+  is part of the housing and is not ordered alone.
+size: {w: 274.5, h: 330.0}
+size-confidence: {w: drawing, h: drawing}
+attrs:
+  model: 3FE54221 enclosure door
+  role: door
+provenance:
+  sources: >-
+    Nokia ONT XS-010XR-P Product Guide, 3TN-00113-AAAA-TCZZA Issue 4, Figure 5-10 p54, the
+    housing closed, vector line art. Photographs of the sibling 3FE54221AC for colour only.
+  size: >-
+    drawing - measured on Figure 5-10 at the scale the housing is drawn to: the door panel is
+    264.1 across and 330.0 tall. The two catches are drawn 9.7 wide in the figure and are
+    built 8.9, so that this part's box stops short of the latch tab's screws, which stand in
+    the same column lower down; the 0.8 is inside the figure's reading error. No document
+    dimensions the door, and the housing's own size is an estimate.
+  layout: >-
+    drawing - the door fills the frame; a crease runs across it about 98 mm down the housing;
+    a recessed label panel 107 x 126 mm sits in its lower right; two catches on the right
+    edge. Its arched top and bowed bottom are drawn as a rounded rectangle. The hinges and
+    the latch tab stay with the frame, as Figure 5-11 draws them with the door open.
+  relief: >-
+    estimated - the door is a moulded shell and how far it stands off the frame is not
+    stated or measurable from a front elevation; 6 mm is carried so that it reads as a
+    panel over the opening.
+  colour: 'estimated - #8e8f8f, the housing colour, from two photographs of 3FE54221AC'
+  logo-zone: 'none reserved - Figure 5-10 draws no vendor mark on the door'
+relief:
+  wall: '#6c6e70'
+  features:
+    - {node: door, out: 6.0, color: '#8e8f8f', confidence: estimated, source: 'a moulded door standing off the frame; not dimensioned'}
+elements:
+  door: {at: [0.0, 0.0], size: [264.1, 330.0], class: bezel}
+  catch-upper: {at: [265.6, 63.7], size: [8.9, 29.0], class: latch}
+  catch-lower: {at: [265.6, 240.0], size: [8.9, 31.5], class: latch}
+skins: [default]

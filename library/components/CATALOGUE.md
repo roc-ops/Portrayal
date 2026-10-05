@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1214 component majors in 26 namespaces.
+1216 component majors in 26 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -1024,10 +1024,12 @@ aperture when it is a bare opening - never both at one position. The README's
 |---|---|---|---|---|---|---|---|
 | `molex/sfp-plus-passive-dac@1` | module | transceiver | 13.55 × 8.55 × 47.5 | sfp | 0 | 0 | Molex 74752 SFP+ to SFP+ 10G passive direct-attach copper cable, one end - a plunger-latch cable end with a b… |
 
-## nokia/ (123)
+## nokia/ (125)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
+| `nokia/3fe54221-door@1` | component | bezel | 274.5 × 330 |  | 1 | 0 | The gasketed door of the Nokia outdoor ONT enclosure 3FE54221: a grey moulded panel hinged on the left of the… |
+| `nokia/3fe54221-interior@1` | component | mechanical | 260.1 × 312 × 60 |  | 1 | 0 | The inside of the Nokia outdoor ONT enclosure 3FE54221 behind its door: the back wall of the frame with two f… |
 | `nokia/bfan-e@1` | module | fan | 32.9 × 345 × 216.7 |  | 1 | 1 | Nokia BFAN-E (3FE 66545 AA), the intelligent fan unit of the 7360 ISAM FX-8 (NFXS-E), also sold as the Lights… |
 | `nokia/bfan-h@1` | module | fan | 493.4 × 59.25 × 274.85 |  | 1 | 0 | Nokia BFAN-H (3FE 66546 AA), the intelligent fan tray of the 7360 ISAM FX-16 (NFXS-D), also sold as the Light… |
 | `nokia/bfan-x@1` | module | fan | 33.1 × 213.5 × 225.36 |  | 1 | 1 | Nokia BFAN-X (3FE 66544 AA), the intelligent fan unit of the 7360 ISAM FX-4 (NFXS-F), also sold as the Lights… |
