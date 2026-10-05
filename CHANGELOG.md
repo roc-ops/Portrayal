@@ -31,6 +31,19 @@ names the ref that replaces it.
   supplies), with ten `supermicro/` parts: both supplies, the drive tray, the
   two WIO risers and their slot blanks, the SC116B control panel and pull-out
   tag, and the SC515B power button.
+- NetBox module types carry a module's own bays. A module that seats others -
+  a riser with PCIe slots, an MPC with MIC bays - exports them as
+  `module-bays`, each named and positioned `{module}/<bay id>`, which NetBox
+  fills with the position of the bay the module itself sits in: a card in
+  slot 2 of a riser in `riser-primary` names its port
+  `riser-primary/slot-2/port-1`. Nothing already imported is renamed. **It
+  needs NetBox 4.5.7 or later**: before that the install forms refuse a card
+  in a nested bay, and the REST API names its ports after the outer bay alone.
+  **The
+  Nautobot module types are not given these bays**, so from here the two
+  trees under `library/exports/*/module-types` are no longer the same text:
+  Nautobot writes a bay's position as given and cannot fill `{module}` in it
+  (roc-ops/Portrayal#765).
 - Five generic optics, a plug and a pull handle: `generic/qsfp-mpo@1` (a QSFP
   with one MPO receptacle), `generic/qsfp-dd-mpo16@1` (a QSFP-DD with one
   MPO-16 receptacle in a Type 2 nose), `generic/qsfp-lc-simplex@1` (a QSFP

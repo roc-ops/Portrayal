@@ -1584,21 +1584,7 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None):
                                  "description": "10G management port (faceplate label; "
                                                 "not presented as a switch interface)"})
         for b in scoped(parts["bays"], cfg_name):
-            name = (b["id"].replace("psu-", "PSU ").replace("fan-", "Fan ")
-                    .replace("front-", "Front ").replace("rear-", "Rear "))
-            # THE POSITION IS THE BAY'S WHOLE ID, because it is what a card's
-            # `{module}` token becomes (MODULE_TOKEN). The trailing number alone
-            # was one per KIND - Fan 1, PSU 1 and slot-1 all at `1` on 167 of
-            # 205 bayed devices - so two cards resolved to one port name.
-            bay = {"name": name, "position": b["id"]}
-            # Neither library can express what a bay accepts as data yet, so it
-            # goes where a person will still see it. Truncated to the 200 the
-            # NetBox schema allows on a bay description.
-            acc = b.get("accepts") or []
-            if acc:
-                bay["description"] = fit_items(
-                    "Accepts: ", [a.split("/")[-1].split("@")[0] for a in acc])
-            bays.append(bay)
+            bays.append(bay_row(b["id"], b.get("accepts")))
 
     # Switch and management interfaces. With a listing, a placement is an
     # interface exactly when a rule names it - `mgmt-eth` becomes `ma1` because
@@ -1709,9 +1695,7 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None):
     if powers:
         out["power-ports"] = [powers[k] for k in sorted(powers)]
     if bays:
-        out["module-bays"] = sorted(
-            bays, key=lambda b: (b["name"].split()[0],
-                                 _num(b["position"].rsplit("-", 1)[-1])))
+        out["module-bays"] = sorted(bays, key=bay_order)
 
     body = comments_for(dev, cfg_name, cfg)
     if body:
@@ -1733,6 +1717,29 @@ def contract_view(entry):
     return {"parts": entry.get("parts") or [],
             "faces": faces,
             "optical": entry.get("optical") or {}}
+
+
+def bay_row(bay_id, accepts=None):
+    """One `module-bays` row, for a bay on a device or a bay on a module."""
+    name = (bay_id.replace("psu-", "PSU ").replace("fan-", "Fan ")
+            .replace("front-", "Front ").replace("rear-", "Rear "))
+    # THE POSITION IS THE BAY'S WHOLE ID, because it is what a card's
+    # `{module}` token becomes (MODULE_TOKEN). The trailing number alone
+    # was one per KIND - Fan 1, PSU 1 and slot-1 all at `1` on 167 of
+    # 205 bayed devices - so two cards resolved to one port name.
+    bay = {"name": name, "position": bay_id}
+    # Neither library can express what a bay accepts as data yet, so it
+    # goes where a person will still see it. Truncated to the 200 the
+    # NetBox schema allows on a bay description.
+    if accepts:
+        bay["description"] = fit_items(
+            "Accepts: ", [a.split("/")[-1].split("@")[0] for a in accepts])
+    return bay
+
+
+def bay_order(b):
+    """Bays by kind, then by number. Asked of a BUILT row, before any token."""
+    return (b["name"].split()[0], _num(b["position"].rsplit("-", 1)[-1]))
 
 
 def build_module(contract, manufacturer, load_ref=None, dropped=None,
@@ -1833,6 +1840,19 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None,
     if powers:
         out["power-ports"] = powers
 
+    # A MODULE'S OWN BAYS - a riser's slots, a carrier's sub-slots. Without
+    # them the module type imported with nowhere to seat what the drawing seats
+    # in it: 65 contracts declare `bays:` and none exported one, so a riser's
+    # PCIe slots did not exist in either DCIM.
+    #
+    # Built here with the bay's own id as its position, like every other name
+    # in a built document; `for_target` says what each DCIM is given.
+    nested = contract.get("bays") or {}
+    if isinstance(nested, dict) and nested:
+        out["module-bays"] = sorted(
+            (bay_row(bid, (b or {}).get("accepts")) for bid, b in nested.items()),
+            key=bay_order)
+
     # THE GLASS, IF THIS MODULE CARRIES ANY. A fibre cassette has no interfaces
     # in the DCIM sense - nothing terminates electrically - so these are its
     # entire port list, and a module with no `optical` adds nothing here.
@@ -1922,6 +1942,65 @@ def tokenize_module(doc):
         for row in doc.get(key) or []:
             row["name"] = module_scoped(row["name"])
     return doc
+
+
+def nested_bays_for(doc, target):
+    """A written MODULE document's own bays as ONE DCIM takes them. Asked of
+    module types only: a device type's `module-bays` are the chassis' own, are
+    positioned by their id in both DCIMs, and never pass through here.
+    `for_target` does the rest of what the two DCIMs differ in.
+
+    A NESTED BAY NEEDS ITS PARENT IN ITS POSITION. A card's single `{module}` is
+    the position of the bay it sits in, not of the chain above it, in both DCIMs
+    - NetBox's resolve_module_placeholder ("a single {module} token resolves to
+    the leaf (immediate parent) bay's position", netbox/dcim/utils.py at
+    5a9a9d2a) and Nautobot's render_name_template (nautobot/dcim/models/
+    device_components.py at 92b367ef). Every MX FPC offers a `mic0`, every 7750
+    slot an `mda-1`: with the bay's own id as its position, the MICs in two
+    slots would name their ports alike.
+
+    NetBox resolves placeholders in a bay template's NAME and POSITION when it
+    instantiates one (ModuleBayTemplate.instantiate calls resolve_name and
+    resolve_position, netbox/dcim/models/device_component_templates.py at
+    5a9a9d2a), so `{module}/mic0` in an MPC seated in `fpc3` becomes
+    `fpc3/mic0`, and a MIC there names its port `fpc3/mic0/port-1` - the
+    drawing's path with `/module/` taken out, as for a card one level down.
+
+    Nautobot instantiates a bay template's position verbatim
+    (ModuleBayTemplate.instantiate, `position=self.position`, nautobot/dcim/
+    models/device_component_templates.py at 92b367ef), so there the same row
+    would put every FPC's MICs at one position. It is given no nested bays,
+    which is what it had before this existed: a module type with nowhere to
+    seat a sub-module is a gap, and two ports with one name is a wrong answer.
+
+    IT NEEDS NETBOX 4.5.7. Position templating on a bay arrived in 4.5.6
+    (release note #20467) and the single token's leaf rule in 4.5.7 (#20474).
+    Before that the install FORMS refuse a card whose token count is not the
+    depth of the bay tree, so the UI and bulk import fail loudly; the REST API
+    does not check, fills the one token with the ROOT bay's position, and a
+    MIC in fpc3's mic0 names its port `fpc3/port-1`. These bays did not exist
+    to be installed into before, so that is an exposure this adds.
+
+    Both DCIMs take `module-bays` on a module type: NetBox by schema
+    (schema/moduletype.json at netbox-community/devicetype-library 52d359bd),
+    Nautobot by its import view (nautobot/dcim/views.py at 92b367ef lists it
+    among a module type's related forms). The NAME is templated with the
+    position so the bay reads `fpc3/mic0` in a device's bay list; NetBox would
+    take a plain `mic0` on two modules, its constraint being device, module
+    and name together.
+    """
+    bays = doc.get("module-bays")
+    if not bays:
+        return doc
+    out = dict(doc)
+    if target == "netbox":
+        out["module-bays"] = [{**b, "name": module_scoped(b["name"]),
+                               "position": module_scoped(b["position"])} for b in bays]
+    elif target == "nautobot":
+        del out["module-bays"]
+    else:
+        raise ValueError(f"no rule for a nested bay on target {target!r}")
+    return out
 
 
 def tokenize_fibre_map(m):
@@ -2245,7 +2324,8 @@ def render_module_image(dist, root, target, doc, ns, name, ver):
 
 
 def dcim_significant(doc):
-    """What a DCIM READS, which is everything but the comments.
+    """What a DCIM reads ABOUT THE HARDWARE: everything but the comments, and
+    but the `Accepts:` sentence on a bay a module carries (below).
 
     Two authors of one card carry their own version numbers and their own
     sentence about which way it was drawn, and neither is a difference in the
@@ -2257,7 +2337,22 @@ def dcim_significant(doc):
     copy of it would drift, and this file's own history is that a mirror of a
     tool is wrong about it within a commit or two.
     """
-    return {k: v for k, v in doc.items() if k not in ("comments", "_stamp")}
+    out = {k: v for k, v in doc.items() if k not in ("comments", "_stamp")}
+    # A NESTED BAY'S `Accepts:` LINE IS A SENTENCE ABOUT THE DRAWING. The MPCs
+    # are drawn once per chassis orientation and each seats that orientation's
+    # MICs (`mic-3d-20ge-sfp` against `mic-3d-20ge-sfp-v`), which are one
+    # module type each; the bay a DCIM gets - its name and position - is the
+    # same. Compared with the description in, three twins read as different
+    # hardware the day their bays were first exported. IT CAN HIDE A REAL
+    # DIFFERENCE IN WHAT A BAY ACCEPTS - `scb-mx` takes two routing engines and
+    # `scb-mx960-v` one - and that is accepted: neither DCIM holds what a bay
+    # accepts as data, only as this sentence.
+    # What is WRITTEN for such twins is the first one's sentence, so it names
+    # one orientation's MICs; the bay is right for all of them.
+    if out.get("module-bays"):
+        out["module-bays"] = [{k: v for k, v in b.items() if k != "description"}
+                              for b in out["module-bays"]]
+    return out
 
 
 def export_modules(dist, root, images=None):
@@ -2357,8 +2452,9 @@ def export_modules(dist, root, images=None):
             # Cisco ships part numbers with slashes in them - A9K-16T/8-B - and
             # a slash is a path separator, not a character. The model keeps the
             # real name; only the filename is sanitised.
+            written = for_target(nested_bays_for(doc, target), target, fibre_map)
             (d / (model.replace("/", "-") + ".yaml")).write_text(
-                "---\n" + yaml.dump(for_target(doc, target, fibre_map), Dumper=Indented,
+                "---\n" + yaml.dump(written, Dumper=Indented,
                                     sort_keys=False, width=100, default_flow_style=False))
             if images and RASTER:
                 if render_module_image(images, root, target, doc, ns, name, ver):
