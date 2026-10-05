@@ -253,6 +253,12 @@ names the ref that replaces it.
   S9725-64E `NCF-64E`) keep theirs until they are listed.
 
 ### Removed
+- `nokia/3fe54221ah` 1.0.0: the `front-open` view is gone, with its two placements
+  `front-open/placements/security-screw-open` and `front-open/placements/latch-screw-open`.
+  The inside of the housing is now on the `front` view, as `nokia/3fe54221-interior@1`
+  behind the removable door `nokia/3fe54221-door@1`; the screws are
+  `front/placements/security-screw` and `front/placements/latch-screw`. The device has
+  no DCIM export.
 - **BREAKING for DCIM data already imported.** Five HPE parts are renamed, and
   the old refs are gone. The DL160 Gen10's Media Module adapters take their
   option numbers, as its supplies do: `hpe/media-module-872161@1` is now
