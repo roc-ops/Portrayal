@@ -1,0 +1,88 @@
+format: 1
+kind: module
+name: flom-700751-b21
+version: 1.0.0
+class: nic
+behaviour: fills
+profile: server
+description: >-
+  HPE FlexFabric 10Gb 2-port 534FLR-SFP+ FlexibleLOM adapter (534FLR-SFP+;
+  option 700751-B21, spare 701531-001) - the adapter the Gen10 ProLiant
+  DL160's FlexibleLOM riser carries in place of slot 1
+attrs:
+  ports: 2
+  media: sfp-plus
+  part-numbers: 700751-B21 701531-001
+  spare-part: 701531-001
+  hpe-model: 534FLR-SFP+
+  controller: 57810S
+  sfp-plus: 2
+groups:
+  ports:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+provenance:
+  sources: >-
+    Product Information Reference a00077132en_us, FlexibleLOM adapters:
+    700751-B21, 534FLR-SFP+. THE QUICKSPECS DOES NOT LIST THIS ADAPTER for the
+    DL160 Gen10; the reference does. QuickSpecs a00021860enw on any FlexibleLOM
+    ('FlexibleLOM Riser Kit (875748-B21) is required to install these adapters';
+    'Only one FlexibleLOM can be added to the server'). The controller is
+    PartSurfer's title for the option. The name 534FLR-SFP+ is the Product
+    Information Reference's (a00077132en_us) and HPE PartSurfer's, which also
+    gives the spare 701531-001
+    (partsurfer.hpe.com/Search.aspx?SearchText=700751-B21). A reseller's
+    photograph of a 534FLR-SFP+ from the port end, face-on, the whole plate in
+    frame (creoserver.com/storage/images/comp_600/HP_534FLR_10Gbps_SFP+_Dual_Por
+    t_P_N:_701531-001_2.webp, 600 x 533), and PartSurfer's of the spare.
+  size: >-
+    borrowed - 74.0 x 14.6, hpe/flom-629135-b22@1, the adapter whose photograph
+    the faceplate's length is read from; this part's own image does not measure
+    it.
+  face: >-
+    photo-measured - the plate is 1738 px on the enlarged photograph: the screw
+    4.9 from the left end; a THREE-by-two field of vents at 8.9..22.0, COUNTED;
+    lamps at 11.6 and 18.6 lettered ACT and LINK; one 1x2 SFP+ cage at
+    22.7..52.0, latch slots along the bottom; a FOUR-by-two field at 52.9..71.7
+    with lamps at 55.3 and 61.7 lettered LINK and ACT; P2 under the left cage
+    and P1 under the right. Drawn within 0.2 of those readings (vents
+    8.8..21.8 and 52.8..71.6, lamps 11.5, 18.4, 55.4, 61.7): the figures of a
+    second reading of the same layout on HPE's 570FLR-SFP+, a card not offered
+    for this server, which a seller had filed under another adapter's number.
+    Positions are read as fractions of the plate, whose whole length the
+    photograph shows, at the 74.0 this family draws; by the cage or jacks it
+    carries this photograph would put the plate between 74 and 76, which is the
+    family's open question and not this part's.
+  lamps: >-
+    photo-measured - round lamps about 1 mm across, drawn with the library's 2
+    mm dot; which is link and which activity is read off the legends the
+    photograph shows. WHAT THEIR COLOURS AND FLASHES MEAN is in no document
+    held. Green for link and flashing green for activity is the convention, not
+    a reading.
+  way-up: >-
+    The adapter lies component side up, its screw end at the left as the User
+    Guide's figure fits it into the cage; the photographs are taken the same way
+    up.
+  power: >-
+    NOT STATED for the adapter in any document held; lint's L27 stands as the
+    record.
+  depth: >-
+    estimated - 110. No dimension of the adapter is in any document held; it is
+    the board's reach behind the faceplate by proportion on the photographs.
+size: {w: 74.0, h: 14.6, d: 110.0}
+size-confidence: {w: borrowed, h: borrowed, d: estimated}
+body: {depth: 110.0, color: '#2f6b3a'}
+parts:
+  - {ref: std/sfp-ganged@1, id: port-2, group: ports, at: [23.05, 2.5], attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: port-1, group: ports, at: [37.3, 2.5], attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: common/led-dot@1, id: led-2-act, group: port-leds, at: [10.5, 8.4], states: {lamp: ['off', {name: activity, color: '#22c55e', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-2-lnk, group: port-leds, at: [17.4, 8.4], states: {lamp: ['off', {name: link, color: '#22c55e'}]}}
+  - {ref: common/led-dot@1, id: led-1-lnk, group: port-leds, at: [54.4, 8.4], states: {lamp: ['off', {name: link, color: '#22c55e'}]}}
+  - {ref: common/led-dot@1, id: led-1-act, group: port-leds, at: [60.7, 8.4], states: {lamp: ['off', {name: activity, color: '#22c55e', behavior: blinking}]}}
+skins: [default]
