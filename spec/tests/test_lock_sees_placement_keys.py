@@ -220,6 +220,7 @@ BAY_GEOMETRY = [
     ({}, {"plan": PLAN}),
     ({"plan": PLAN}, {"plan": {**PLAN, "at": [11, 20]}}),
     ({"plan": PLAN}, {"plan": {**PLAN, "mirror": True}}),
+    ({"plan": PLAN}, {"plan": {**PLAN, "rotate": 180}}),
     ({}, {"rear": REAR}),
     ({"rear": REAR}, {"rear": {**REAR, "cutout": "window-2"}}),
     ({"rear": REAR}, {}),
