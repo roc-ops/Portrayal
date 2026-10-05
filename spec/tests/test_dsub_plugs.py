@@ -410,10 +410,40 @@ def test_its_box_is_the_widest_section_drawn(ref):
 @EACH
 def test_its_fields_are_the_cable(ref):
     f = _contract(ref)["fields"]
-    assert set(f) == {"cable-od", "jacket-color"}
+    # the moulded VGA hood also chooses its colour; a metal backshell does not
+    assert set(f) == {"cable-od", "jacket-color"} | ({"hood-color"} if ref == HD15 else set())
     assert f["cable-od"]["default"] == pytest.approx(FIGURES[ref][4])
     assert f["jacket-color"]["default"] == "#1c1c1c"
     assert "jacket-colour" in _contract(ref)["provenance"]
+
+
+HOOD_BLUE = "#1f4f9e"
+HOOD_NODES = ["hood", "relief-boot", "screw-l", "screw-r"]
+
+
+def test_the_vga_hood_colour_is_a_field_and_defaults_to_the_ports_blue():
+    """A VGA cable end is usually the blue of the port and sometimes black, so
+    the colour is a field (never a second skin) on the one moulding: hood,
+    strain relief and both knobs."""
+    d = _contract(HD15)
+    assert d["fields"]["hood-color"]["default"] == HOOD_BLUE
+    assert d["skins"] == ["default"]
+    assert "hood-colour" in d["provenance"]
+    # the default is the blue std/vga@1 draws its insert in
+    vga = (LIB / "components" / "std" / "vga" / "v1" / "skins" / "default.svg").read_text()
+    assert f'fill="{HOOD_BLUE}"' in vga
+    s = _skin_path(HD15).read_text()
+    for node in HOOD_NODES:
+        tag = s[s.index(f'id="{node}"'):].split("/>", 1)[0]
+        assert 'data-fill-from="hood-color"' in tag, node
+        assert 'data-stroke-derive="hood-color"' in tag, node
+        # the skin stays a valid drawing alone: the literal fill is the
+        # default and the literal stroke is its shade (61/100, half up)
+        assert f'fill="{HOOD_BLUE}"' in tag and 'stroke="#133060"' in tag, node
+        # L73: a node a field paints states no relief colour
+        assert "color" not in feats(HD15)[node], node
+    for ref in (DB9, DA15, DB25):
+        assert "hood-color" not in _contract(ref)["fields"]
 
 
 @EACH
@@ -460,7 +490,8 @@ def test_the_stub_circle_is_bound_to_the_fields(ref):
     stub = s[s.index('id="stub"'):].split("/>", 1)[0]
     assert 'data-r-from="cable-od"' in stub
     assert 'data-fill-from="jacket-color"' in stub
-    assert s.count("data-fill-from") == 1 and s.count("data-r-from") == 1
+    assert s.count('data-fill-from="jacket-color"') == 1 and s.count("data-r-from") == 1
+    assert s.count("data-fill-from") == (5 if ref == HD15 else 1)
     r = float(stub.split('r="', 1)[1].split('"', 1)[0])
     assert r == pytest.approx(FIGURES[ref][4] / 2, abs=0.005)
     # L73: the node a field paints states no relief colour

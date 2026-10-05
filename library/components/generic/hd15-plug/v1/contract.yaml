@@ -20,6 +20,7 @@ attrs: {media: vga, connector: hd15, gender: male}
 fields:
   cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 9}
   jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
+  hood-color: {label: Hood colour, type: text, default: '#1f4f9e'}
 unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
 provenance:
   size: >-
@@ -149,8 +150,18 @@ provenance:
     PVC hood and black thumbscrews, and CableWholesale drawing 10H1-202xx Rev
     B (10-2006), SVGA (HD15) Male to SVGA Female with Ferrite Core lists the
     same three in black. The Legrand cord the dimensions come from is
-    photographed in grey. THE HOOD IS NOT A FIELD: it is drawn black, as two
-    of the three held sources have it.
+    photographed in grey.
+  hood-colour: >-
+    a FIELD, `hood-color`, and it paints the one moulding: the hood, the
+    strain relief and the two thumbscrew knobs, each outlined in the shade of
+    its fill. BLUE IS THE DEFAULT, the blue std/vga@1 draws its insert in
+    (#1f4f9e): the PC 99 System Design Guide colour-codes the analogue VGA
+    connector blue, and a moulded VGA cable end commonly matches the port it
+    plugs into. That is a convention and not a figure from a held drawing.
+    BLACK IS THE OTHER COMMON FINISH and is what two of the three held
+    sources show (Hatteland HA-VGA-2M-32 and CableWholesale 10H1-202xx);
+    a placement or a wrapper states `hood-color: '#26282b'` for it. A colour
+    is a field and not a second skin (library/components/README.md).
   no-mark: >-
     NOTHING IS PRINTED OR EMBOSSED ON THE HOOD. No logo, no part number and no
     screw slots are drawn: the skin is the outlines its relief builds from.
@@ -183,7 +194,6 @@ relief:
       lift: 6.73
       out: 39.23
       shape: true
-      color: '#26282b'
       confidence: estimated
       source: >-
         Legrand technical data sheet S000091720EN-01, HD15 Male/Male cord
@@ -194,7 +204,6 @@ relief:
       lift: 39.23
       out: 48.29
       shape: true
-      color: '#202225'
       confidence: estimated
       source: >-
         CableWholesale drawing 10H1-202xx Rev B (10-2006), SVGA (HD15) Male to
@@ -204,7 +213,6 @@ relief:
     - node: screw-l
       lift: 39.23
       cyl: 10.7
-      color: '#2c2e32'
       confidence: estimated
       source: >-
         CableWholesale drawing 10H1-202xx Rev B (10-2006), SVGA (HD15) Male to
@@ -214,7 +222,6 @@ relief:
     - node: screw-r
       lift: 39.23
       cyl: 10.7
-      color: '#2c2e32'
       confidence: estimated
       source: >-
         CableWholesale drawing 10H1-202xx Rev B (10-2006), SVGA (HD15) Male to

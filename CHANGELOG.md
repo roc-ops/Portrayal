@@ -35,7 +35,8 @@ names the ref that replaces it.
   device changed. `generic/db9-plug@1` (female), `generic/hd15-plug@1`,
   `generic/da15-plug@1` and `generic/db25-plug@1` (male) are the cable plugs
   that mate them, drawn from the cable end with their two thumbscrews and a
-  30 mm stub of cable sized by `cable-od` and coloured by `jacket-color`. Each
+  30 mm stub of cable sized by `cable-od` and coloured by `jacket-color`. The
+  moulded VGA hood takes `hood-color`, blue by default as the port is. Each
   seats with its flange the mating dimension in front of the panel connector;
   see `docs/connectors-dsub-design.md` (#787).
 - USB receptacles are connector slots, and three cable plugs seat in them.

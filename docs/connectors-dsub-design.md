@@ -42,8 +42,14 @@ published a slot. There was no cable plug.
    cable has, with a strain relief and two thumbscrew knobs behind it.
 7. **A 30 mm stub of cable** from where the plug ends, sized by `cable-od` and coloured by
    `jacket-color`, with the `cable` point on it. The far end of the cable is not a part.
-8. **A hood is not a field.** `jacket-color` paints the cable. The backshell is drawn in
-   the nickel of the hood its dimensions come from and the moulded hood in black.
+8. **The moulded VGA hood's colour is a field; a metal backshell's is not.**
+   `jacket-color` paints the cable on all four plugs. `generic/hd15-plug@1` also has
+   `hood-color`, which paints its hood, strain relief and thumbscrew knobs as one
+   moulding. Its default is the blue of the VGA port (`#1f4f9e`, as `std/vga@1` draws
+   its insert), the PC 99 colour code a VGA cable end commonly matches; black
+   (`#26282b`) is the other common finish and is one word on the placement. A colour
+   is a field and not a second skin. The three backshells are drawn in the nickel of
+   the die-cast hood their dimensions come from.
 9. **The kit labels the four media keys** (`DB9`, `VGA`, `DA15`, `DB25`), which is what
    its fallback already read.
 
