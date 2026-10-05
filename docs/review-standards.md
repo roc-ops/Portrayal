@@ -73,6 +73,9 @@ list of things to do.
 - **A rotated or stacked placement was rendered seated.** Stacked cages sit
   belly to belly and a turned bay is easy to get upside down; only a seated
   configuration shows it.
+- **A vent is declared, not coloured.** Decor that is a hole in the sheet says
+  `vent:` or `pattern: vent`; on a device with an interior well, the walls
+  were looked at from inside with the cover off.
 - **A relief change was looked at in 3D, in every configuration.** A slab that
   buries the detail behind it lints clean.
 - **A rename is priced as a major** on every device that seats the part, and

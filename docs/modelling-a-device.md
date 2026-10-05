@@ -250,6 +250,14 @@ Establish `chassis.width/height/depth` and each view's `size`.
   person could put a part number to (a cover, a door, a filler, a blank), it is
   a component in a bay, not paint. The MX80's rear cover was a bare white decor
   rectangle nobody could identify because it appeared in no component list.
+- A vent says it is one: `pattern: vent`, or `vent: <mm>` on a plain rect
+  (the sheet's thickness, 1 if nothing states it). A dark rectangle with
+  neither is a plate, whatever its colour. The declaration is what the lint
+  rules about parts and legends sitting on air read (L44, L64), and it is
+  what puts the opening on the INSIDE of the chassis in 3D: where an interior
+  well (`relief: {walls: inside}`) has a side within 3 mm of a face, that side
+  shows the face's declared vents, so with the cover off you can see where the
+  air leaves. Undeclared, the wall is blank from inside.
 
 **Gate 1: prove a figure can be measured before you measure it.** Render the
 guide page at 400 to 600 dpi (`pdftocairo -png -r 600`), find the panel in it,

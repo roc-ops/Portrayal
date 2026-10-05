@@ -44,6 +44,7 @@ from pathlib import Path
 import pytest
 import yaml
 
+import libdata
 import warmrender
 from portrayal import render as R
 from test_lifted_seat_js import LIB, RENDER, SPEC, build_components, numbers, skin_file, spec_of
@@ -805,3 +806,220 @@ def test_a_cap_or_a_plug_is_pulled_by_its_own_relief_and_leaves_its_port(ejected
         assert len(ext) == 1, (ref, ext)
         if want is not None:
             assert ext == {want}, (ref, ext)
+
+
+# ------------------------------------------------- a face's vents, seen from inside
+#
+# A vent is paint on its face, and a face is drawn from outside. The interior
+# under a lifted cover is a well whose sides are plain colour, so from inside
+# the chassis the wall the air leaves through was blank. relief.js now paints a
+# face's DECLARED apertures (`data-aperture="air"`: decor that says `vent:` or
+# `pattern: vent`) on the inner side of a well wall lying against that face.
+# Which wall, against which face, covering which part of its drawing, is
+# arithmetic these tests hold to the viewer's own face table (the harness cuts
+# `FACES` out of viewer3d.js) and to what the library already states twice: a
+# rear bay's `at` and the `plan.at` that draws the same bay from above.
+
+VIEWER = SPEC.parent / "kit/viewer3d.js"
+BOX = {"W": 437.0, "H": 43.0, "D": 597.0}
+# BoxGeometry's order for a well's sides, in its face's local frame
+PX_, NX_, PY_, NY_ = 0, 1, 2, 3
+
+
+def walls(cases, relief=None):
+    return node("walls", {"viewer": VIEWER.read_text(), "cases": cases}, relief=relief)
+
+
+def _hit(g, face):
+    hits = [h for h in g["hits"] if h["face"] == face]
+    assert len(hits) <= 1, g["hits"]
+    return hits[0] if hits else None
+
+
+def _rect(h):
+    r = h["rect"]
+    return tuple(round(r[k], 6) for k in "xywh")
+
+
+def wall_cases():
+    interior = {"x": 1.0, "y": 0.5, "w": 435.0, "h": 365.5, "d": 41.0, "lift": 0}
+    return [
+        # the chassis between its side walls, from the I/O wall forward
+        {"name": "interior", **BOX, "view": "top", "well": interior,
+         "points": [{"face": "rear", "x": 123.4, "y": 6.6}, {"face": "left", "x": 100.0, "y": 20.0},
+                    {"face": "right", "x": 500.0, "y": 20.0}]},
+        # a board 12.5 mm inside the I/O wall and 115 from a flank: against nothing
+        {"name": "board", **BOX, "view": "top",
+         "well": {"x": 115.0, "y": 13.5, "w": 203.0, "h": 330.0, "d": 30.0, "lift": 0}},
+        # the reach is the sheet, and no more
+        {"name": "at the reach", **BOX, "view": "top", "well": {**interior, "y": 3.0}},
+        {"name": "past the reach", **BOX, "view": "top", "well": {**interior, "y": 3.2}},
+        # the underside is authored mirrored in both axes
+        {"name": "underside", **BOX, "view": "bottom", "well": interior,
+         "points": [{"face": "rear", "x": 123.4, "y": 30.0}]},
+        # a well that runs the whole depth reaches the front too
+        {"name": "full depth", **BOX, "view": "top",
+         "well": {"x": 1.0, "y": 0.5, "w": 435.0, "h": 596.0, "d": 41.0, "lift": 0}},
+    ]
+
+
+@pytest.fixture(scope="module")
+def walled():
+    cases = wall_cases()
+    return cases, walls(cases)
+
+
+@needs_node
+def test_the_face_table_is_the_viewers_own(walled):
+    _, out = walled
+    assert got(out, "interior")["views"] == ["front", "rear", "right", "left", "top", "bottom"]
+
+
+@needs_node
+def test_a_well_side_against_a_face_covers_that_part_of_its_drawing(walled):
+    """The interior well of a 437 x 43 x 597 box, cut in the top a millimetre
+    in from each flank and half a millimetre from the rear. Its rear side is
+    the box's +y (a top view has the rear at y 0) and covers the rear drawing
+    from 1 to 436 - the rear is seen from behind, so the top's x is turned
+    over - and from the lid down as far as the well was built. Its flanks
+    cover 0.5..366 of the left drawing, whose x runs rear to front, and the
+    same stretch of the right, whose x runs front to rear."""
+    _, out = walled
+    g = got(out, "interior")
+    assert {h["face"] for h in g["hits"]} == {"rear", "left", "right"}, g["hits"]
+    rear, left, right = (_hit(g, f) for f in ("rear", "left", "right"))
+    assert (rear["wall"], _rect(rear)) == (PY_, (1.0, 0.0, 435.0, 41.0))
+    assert (left["wall"], _rect(left)) == (NX_, (0.5, 0.0, 365.5, 41.0))
+    assert (right["wall"], _rect(right)) == (PX_, (597.0 - 366.0, 0.0, 365.5, 41.0))
+
+
+@needs_node
+def test_a_side_that_is_not_against_a_face_shows_nothing_of_it(walled):
+    _, out = walled
+    assert got(out, "board")["hits"] == []
+    assert _hit(got(out, "at the reach"), "rear") is not None
+    assert _hit(got(out, "past the reach"), "rear") is None
+    # the flanks do not move with the rear
+    assert {h["face"] for h in got(out, "past the reach")["hits"]} == {"left", "right"}
+    assert {h["face"] for h in got(out, "full depth")["hits"]} == {"rear", "front", "left", "right"}
+
+
+@needs_node
+def test_a_hole_is_in_the_same_place_from_both_sides_of_the_sheet(walled):
+    """A point of the far face's drawing, taken half a millimetre inside the
+    sheet as a vertex of the well's side, lands on the side's texture at that
+    point's place in the part of the drawing the side covers - v up."""
+    cases, out = walled
+    for name in ("interior", "underside"):
+        c, g = next(c for c in cases if c["name"] == name), got(out, name)
+        assert len(g["uvs"]) == len(c["points"]) > 0
+        for p, uv in zip(c["points"], g["uvs"]):
+            r = _hit(g, p["face"])["rect"]
+            assert uv["wall"] == _hit(g, p["face"])["wall"]
+            assert uv["uv"] == pytest.approx([(p["x"] - r["x"]) / r["w"], 1 - (p["y"] - r["y"]) / r["h"]])
+    # the underside's rear side is its -y, and it covers the BOTTOM of the rear
+    under = _hit(got(out, "underside"), "rear")
+    assert (under["wall"], _rect(under)) == (NY_, (1.0, 2.0, 435.0, 41.0))
+
+
+def plan_cases():
+    """Every rear bay the library also draws from above at the rear wall: its
+    `at` on the rear and its `plan.at` on the top are one opening stated
+    twice, by a person, from the drawing of each face. A well with the plan's
+    mouth must find the rear at the bay's own x."""
+    # A CARD'S BOARD IS NOT ITS BRACKET. These three are drawn from above as
+    # the board behind the bracket, which is wider than it or set to one side
+    # (3.8, 0.4 and 2.1 mm), so their two figures are not one opening.
+    boards = {"dell/r660 lom", "dell/r660 rio", "dell/r660 ocp"}
+    cases = []
+    # read-only: libdata's documents are shared by the whole session
+    for slug, data in libdata.devices():
+        views = data.get("views") or {}
+        rear, top = views.get("rear") or {}, views.get("top") or {}
+        if not (rear.get("size") and top.get("size")):
+            continue
+        for b in ((rear.get("components") or {}).get("bays") or []):
+            plan = b.get("plan") or {}
+            if plan.get("view") != "top" or plan.get("rotate") or plan.get("mirror") or b.get("rotate"):
+                continue
+            if not (isinstance(b.get("size"), dict) and plan.get("at") and plan["at"][1] <= 3):
+                continue
+            name = f"{slug} {b['id']}"
+            if name in boards:
+                continue
+            cases.append({"name": name,
+                          "W": rear["size"]["w"], "H": rear["size"]["h"], "D": top["size"]["h"],
+                          "sizes": {"top": [top["size"]["w"], top["size"]["h"]]},
+                          "view": "top", "bay": [b["at"][0], b["size"]["w"]],
+                          "well": {"x": plan["at"][0], "y": plan["at"][1], "w": b["size"]["w"],
+                                   "h": 20.0, "d": 10.0, "lift": 0}})
+    return cases
+
+
+@pytest.fixture(scope="module")
+def planned():
+    cases = plan_cases()
+    return cases, walls(cases)
+
+
+def _plans_ok(cases, out):
+    bad = []
+    for c in cases:
+        h = _hit(got(out, c["name"]), "rear")
+        if not h or abs(h["rect"]["x"] - c["bay"][0]) > 0.05 or abs(h["rect"]["w"] - c["bay"][1]) > 1e-6:
+            bad.append((c["name"], c["bay"], h and h["rect"]))
+    return bad
+
+
+@needs_node
+def test_a_rear_bay_drawn_from_above_is_behind_itself(planned):
+    cases, out = planned
+    vendors = {c["name"].split("/")[0] for c in cases}
+    assert len(cases) >= 8 and {"dell", "supermicro"} <= vendors, [c["name"] for c in cases]
+    assert _plans_ok(cases, out) == []
+
+
+WALL_MUTATIONS = [
+    ("the rear is not turned over", "return {x: sx * l[0] + fw / 2,", "return {x: fw / 2 - sx * l[0],", "plans"),
+    ("any distance behind a face is against it", "q.behind <= reach", "q.behind <= 1e9", "reach"),
+    ("a top view has the front at y 0", "sy * (fh / 2 - y), z]", "sy * (y - fh / 2), z]", "sides"),
+]
+
+
+@needs_node
+@pytest.mark.parametrize("label,old,new,breaks", WALL_MUTATIONS, ids=[m[0] for m in WALL_MUTATIONS])
+def test_a_mutated_wall_reading_is_caught(walled, planned, tmp_path, label, old, new, breaks):
+    src = RELIEF.read_text()
+    assert src.count(old) == 1, f"{label}: the anchor is not in relief.js exactly once"
+    mutant = tmp_path / "relief.js"
+    mutant.write_text(src.replace(old, new))
+    shutil.copy(RELIEF.parent / "fields.js", tmp_path / "fields.js")
+    if breaks == "plans":
+        cases, _ = planned
+        assert _plans_ok(cases, walls(cases, relief=mutant)) != []
+    elif breaks == "reach":
+        cases, _ = walled
+        assert got(walls(cases, relief=mutant), "board")["hits"] != []
+    else:
+        cases, _ = walled
+        rear = _hit(got(walls(cases, relief=mutant), "interior"), "rear")
+        assert rear is None or rear["wall"] != PY_
+
+
+def test_only_declared_decor_is_an_air_aperture():
+    """Which paint is a hole is DECLARED: `vent:` or `pattern: vent` on the
+    decor, which render.py stamps `data-aperture="air"` - the only thing the
+    kit collects. A dark rect that says neither is a plate, whatever its
+    colour, and a pattern that is not a vent is a texture."""
+    dev = yaml.safe_load((LIB / "devices/supermicro/sys-111e-wr/device.yaml").read_text())
+    dev["views"] = {"front": {"size": {"w": 100, "h": 40}, "panel": {"decor": [
+        {"at": [0, 0], "size": [100, 40], "fill": "#c8ccd0"},
+        {"id": "dark-plate", "at": [5, 5], "size": [10, 10], "fill": "#16181a"},
+        {"id": "hole", "at": [20, 5], "size": [10, 10], "fill": "#16181a", "vent": 1},
+        {"id": "field", "at": [35, 5], "size": [30, 10], "pattern": "vent"},
+        {"id": "ribs", "at": [70, 5], "size": [20, 10], "pattern": "ribs"}]}}}
+    svg = R.render_view(dev, "front", dev["views"]["front"], _lib)
+    root = svg if isinstance(svg, ET.Element) else ET.fromstring(
+        svg if isinstance(svg, (str, bytes)) else ET.tostring(svg.getroot()))
+    air = {e.get("id") for e in root.iter() if e.get("data-aperture") == "air"}
+    assert air == {"hole", "field"}

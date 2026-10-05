@@ -29,7 +29,8 @@ import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, sv
          setNodeLampColors, nodeLampColors, markHex,
          setPulled as setReliefPulled, pulledPaths,
          buildFaceRelief, bodyBoxes, fruFor,
-         nodeTools, tiltOf, tiltTools, tiltGroupIn, unproject, openFrameFaces } from './relief.js';
+         nodeTools, tiltOf, tiltTools, tiltGroupIn, unproject, openFrameFaces,
+         faceFrame, ventWellWalls } from './relief.js';
 import { seatViews, seatBack, refusalReason } from './swap.js';
 import { bevelledArrays } from './bevel.js';
 import { jdist, faceFile, distResolver } from './dist.js';
@@ -591,10 +592,13 @@ export function createViewer(container, opts = {}) {
        rot: [Math.PI / 2, 0, 0], flipLX: true, flipLY: true},
     ];
     const built = {};
+    // the wells cut in each face and the air openings declared on each, for
+    // the pass below that shows a face's vents on the well wall behind it
+    const wells = [], apertures = {};
     for (const F of FACES) {
       const before = meshes.length;
       await buildFaceRelief(F, {src: F.url || f(F.view), faceCv, faceSvg, facePunch,
-                                faceMM,
+                                faceMM, wells, apertures,
                                 meshes, FRU_GROUPS, FRU_META, BODY_META, D, deep: F.deep(),
                                 bodyBoxMesh, dist: distAt, backSource,
                                 restyle: RESTYLE, scope: SCOPE});
@@ -602,6 +606,13 @@ export function createViewer(container, opts = {}) {
       if (meshes.length > before) built[F.view] = meshes[meshes.length - 1];
       FACE_FLIP[F.view] = [!!F.flipLX, !!F.flipLY];
     }
+    // A VENT READS FROM INSIDE (relief.js ventWellWalls). After the loop, since
+    // a well in the top looks at the rear's vents and either may be built first.
+    if (!COMP)
+      await ventWellWalls({wells, apertures, scope: SCOPE,
+        frames: Object.fromEntries(FACES.map(F => [F.view, faceFrame(
+          {pos: F.pos(), rot: F.rot, flipLX: F.flipLX, flipLY: F.flipLY},
+          ...(faceMM[F.view] || [F.fw(), F.fh()]))]))});
     let mats;
     if (COMP) {
       const body = COMP_ENTRY.body || {};
