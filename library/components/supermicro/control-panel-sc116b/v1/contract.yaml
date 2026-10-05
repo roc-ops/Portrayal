@@ -1,0 +1,133 @@
+format: 1
+kind: component
+name: control-panel-sc116b
+version: 1.0.0
+class: control-panel
+profile: server
+description: >-
+  The front control panel of the Supermicro SC116B 1U chassis, as on the
+  SuperServer SYS-111E-WR - a row of five lamps (information, NIC2, NIC1,
+  HDD, power) over their printed marks, and under them the UID button with
+  its lamp and the red power button
+provenance:
+  sources: >-
+    (1) The near straight-on front photograph in StorageReview's review of the
+    SYS-111E-WR
+    (storagereview.com/wp-content/uploads/2023/03/StorageReview-Supermicro-Sys-111E-WR-7.jpg,
+    1200 x 698), on which the body between the ear folds is 894 px for the 437 mm width,
+    2.046 px/mm. (2) SuperServer SYS-111E-WR User's Manual, MNL-2490 revision 1.0d
+    figure 1-2, Control Panel, with the Control Panel Features and Information LED
+    tables. (3) The quick reference guide for the server, QRG-2490, front control panel
+    callouts.
+  size: >-
+    photo-measured - 22.0 x 20.0, the area the lamps, buttons and their marks occupy on
+    the right end of the front (407.5..429.5 x 5.0..25.0); the panel has no drawn
+    outline on the metal and this box is the extent of its printing.
+  face: >-
+    photo-measured - five lamps in a row 8.1 down the face at 411.9, 415.3, 418.6, 422.0
+    and 425.6 across, their marks under them; the UID button centred at (413.2, 18.4)
+    and the red power button at (424.5, 18.4), with UID and the power symbol printed
+    below. A USB trident is printed between the two legends, over the two USB ports
+    beneath the panel.
+  order: >-
+    drawing - figure 1-2 names the lamps left to right Information LED, NIC LEDs, HDD
+    LED, Power LED, and the quick reference guide prints 2 under the first network mark
+    and 1 under the second, so the order is information, NIC2, NIC1, HDD, power.
+  lamps: >-
+    SuperServer SYS-111E-WR User's Manual, MNL-2490 revision 1.0d, Control Panel
+    Features and Information LED tables. The tables give patterns and, for the
+    information LED, colours; they do not give the colour of the NIC, HDD or power
+    lamps.
+  power: >-
+    NOT STATED. No document held gives the panel a power figure.
+size: {w: 22.0, h: 20.0}
+size-confidence: {w: photo-measured, h: photo-measured}
+elements:
+  lamp-info:
+    at: [3.5, 2.2]
+    size: [1.8, 1.8]
+    class: led
+    states:
+      - 'off'
+      - {name: overheat, color: '#ef4444'}
+      - {name: fan-fail, color: '#ef4444', behavior: {mode: blinking, rate: 1}}
+      - {name: power-fail, color: '#ef4444', behavior: {mode: blinking, rate: 0.25}}
+      - {name: uid-local, color: '#3b82f6'}
+      - {name: uid-remote, color: '#3b82f6', behavior: {mode: blinking, rate: 1}}
+      - {name: bmc-reset, color: '#3b82f6', behavior: {mode: blinking, rate: 2}}
+    description: >-
+      Information LED. Solid red - overheat; red 1 Hz - fan failure; red 0.25 Hz - power
+      failure; solid blue - UID activated locally; blue 1 Hz - UID activated from the
+      BMC; blue 2 Hz - BMC resetting. Also: red solid with the power LED blinking green
+      - fault; blue and red at 10 Hz - recovery mode; blue 4 Hz - BMC setting factory
+      defaults; blue 10 Hz with the power LED blinking green - BMC or BIOS firmware
+      updating.
+  lamp-nic2:
+    at: [6.9, 2.2]
+    size: [1.8, 1.8]
+    class: led
+    states:
+      - 'off'
+      - {name: activity, color: '#22c55e', behavior: {mode: blinking, rate: 4}}
+    description: >-
+      NIC2 LED. Flashing - network activity on LAN2. Colour and rate are not stated;
+      drawn green at 4 Hz.
+  lamp-nic1:
+    at: [10.2, 2.2]
+    size: [1.8, 1.8]
+    class: led
+    states:
+      - 'off'
+      - {name: activity, color: '#22c55e', behavior: {mode: blinking, rate: 4}}
+    description: >-
+      NIC1 LED. Flashing - network activity on LAN1. Colour and rate are not stated;
+      drawn green at 4 Hz.
+  lamp-hdd:
+    at: [13.6, 2.2]
+    size: [1.8, 1.8]
+    class: led
+    states:
+      - 'off'
+      - {name: activity, color: '#f59e0b', behavior: {mode: blinking, rate: 4}}
+    description: >-
+      HDD LED. Flashing - activity on the storage drives. Colour and rate are not
+      stated; drawn amber at 4 Hz.
+  lamp-power:
+    at: [17.2, 2.2]
+    size: [1.8, 1.8]
+    class: led
+    states:
+      - 'off'
+      - {name: 'on', color: '#22c55e'}
+      - {name: checking, color: '#22c55e', behavior: {mode: blinking, rate: 4}}
+    description: >-
+      Power LED. Steady on - power on; blinking at 4 Hz - checking BIOS/BMC integrity.
+      Also 4 Hz with the information LED blue - BIOS firmware updating; two blinks and a
+      pause - BMC firmware updating; 1 Hz with the information LED red - fault detected.
+      The colour is not stated in the table; drawn green.
+  btn-uid:
+    at: [3.1, 10.8]
+    size: [5.2, 5.2]
+    class: button
+    description: UID button. Turns the blue UID indicators on at the front and the rear; also resets the BMC (manual section 7.8).
+  lamp-uid:
+    at: [5.0, 12.7]
+    size: [1.4, 1.4]
+    class: led
+    states:
+      - 'off'
+      - {name: identify, color: '#3b82f6'}
+    description: the UID lamp in the button. Blue when the unit identifier is activated.
+  btn-power:
+    at: [14.3, 10.7]
+    size: [5.4, 5.4]
+    class: button
+    description: Power button. Applies or removes primary power, standby power stays; hold four seconds to force a shutdown.
+relief:
+  features:
+  - node: btn-power
+    out: 1.0
+    color: '#8f3a3f'
+    confidence: estimated
+    source: the power button stands proud of the panel in the photograph; not measured
+skins: [default]

@@ -1,0 +1,771 @@
+format: 1
+kind: device
+name: sys-111e-fdwtr
+version: 0.1.0
+maturity: modelled
+manufacturer: Supermicro
+model: SuperServer SYS-111E-FDWTR
+description: >-
+  Supermicro's 1U short-depth front-I/O edge server for 4th and 5th generation
+  Intel Xeon Scalable processors, the -48 V DC build: everything is at the
+  front - two 600 W DC supplies, the power button, the X13SEW-TF board's
+  serial, BMC, USB, two 10GbE and VGA ports, and three PCIe 5.0 x16 slots on
+  two risers - and the rear is a vent field over six fans. NEBS Level 3.
+profile: server
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Read for this model: Supermicro's product page for the SYS-111E-FDWTR
+      (supermicro.com/en/products/system/iot/1u/sys-111e-fdwtr) and its two-page
+      datasheet, for dimensions, weight, ports, slots, power supply, environmentals and
+      the NEBS statement; the User's Manual MNL-2570 revision 1.0d, which covers this
+      server and its two AC siblings (SYS-111E-FWTR, SYS-111E-FWTR-EU), for the front
+      and rear views, feature tables, the grounding section and Appendix B; the quick
+      reference guide QRG-2570; the SC515B chassis manual; and the X13SEW motherboard
+      manual MNL-2413. The two images measured are both embedded in the manual at 300
+      ppi: the front on page 10 (1767 x 444) and the rear on page 12 (1946 x 205). No
+      vendor 3D model is on the product page, NetBox's devicetype-library has no entry,
+      and a web search for a square-on photograph of the front found none.
+  chassis:
+    confidence: datasheet
+    note: >-
+      Product page, datasheet and manual agree: 1.7 x 17.2 x 16.9 in, 43 x 437 x 429 mm,
+      1U, chassis CSE-515B-R601W. 437 is the body between the ear folds on the front
+      image. No document says what the depth runs between.
+  ears:
+    confidence: photo-measured
+    note: >-
+      THE EARS ARE NOT DRAWN. On the front image each ear with its handle runs about 70
+      px outside the body, 21 mm. Everything on this face is on the body.
+  gate-1-front:
+    confidence: photo-measured
+    note: >-
+      THE FRONT IMAGE FAILS THE PANEL GATE AND IS READ AS FRACTIONS ON EACH AXIS. It is
+      a photograph from slightly above: 1465 px across for 437 mm (3.352 px/mm) and
+      134.5 px down for 43 mm (3.128), 7% apart. Across positions are read at 3.352
+      px/mm; down positions are fractions of the 43 mm height. The check on it is
+      another server: the SYS-111E-WR carries the sibling board (X13SEW-F) behind an I/O
+      plate measured off a different photograph, and the two agree on where everything
+      on that plate is to 1.5 mm - serial port 149.4 here against 148.2 there, BMC port
+      174.5 / 173.6, USB 2.0 175.1 / 173.7, USB 3.2 192.6 / 192.2, LAN1 211.5 / 210.1,
+      LAN2 230.2 / 228.8, VGA 257.6 / 256.2, slot 3 window 230.2..293.6 / 230.6..292.5,
+      thumbscrew 310.3 / 309.2. THE I/O PLATE IS DRAWN AT THE WR FIGURES, which come
+      from the better-scaled image; what is this server's own is read off its own image.
+  gate-1-rear:
+    confidence: photo-measured
+    note: >-
+      The rear image is straight on and nearly passes: 1928 px across for 437 mm (4.412
+      px/mm) and 179 px down for 43 mm (4.163), 5.6% apart, which is more than the gate
+      allows, so it too is read per axis. The vent columns give an even pitch right
+      across it, 27.3 px, 6.19 mm.
+  front:
+    confidence: photo-measured
+    note: >-
+      Left to right: the two DC supplies, PWS2 at 5.6 and PWS1 at 62.8; from 118.3 the
+      I/O plate - a vent field around the power button (centre 141.3, 12.6), the serial
+      port, the BMC LAN port over two USB 2.0 ports, a second vent field over two USB
+      3.2 ports, LAN1 and LAN2 (10GbE), VGA and a small vent block, with a row of slots
+      along the bottom edge under all of it; above LAN2 and VGA the slot 3 window; from
+      298 the slot 1 and 2 bracket; and the end bracket from 418 with a round hole.
+      Names and order are the manual's figure 1-1 and System Features: Front table.
+  power-button:
+    confidence: photo-measured
+    note: >-
+      The manual calls it the Power Button with Status LED: the main power switch, with
+      a lamp that is lit when the system is operating normally and flashes on drive
+      activity. It is supermicro/power-button-sc515b@1, centred where the image puts it.
+  ground-stud:
+    confidence: estimated
+    note: >-
+      The manual's section 2.8 says both the AC and DC servers carry a chassis ground
+      terminal marked with the protective earth symbol, and its figure 2-8 circles a
+      stud in the front vent field, above the gap between the USB 3.2 ports and LAN1.
+      THE FIGURE IS A CROPPED LINE DRAWING WITH NO SCALE OF ITS OWN: taking its USB port
+      as 13.1 mm wide puts the stud 11.4 right of the USB 3.2 centre and 11.8 above the
+      upper port, at (203.6, 11.7). The front photograph does not show a stud there -
+      that field is plain vents on it - so the position rests on the drawing alone. The
+      heading says studs; the figure shows one.
+  rear:
+    confidence: photo-measured
+    note: >-
+      A field of square vents, 4.8 on a 6.19 pitch across and 6.2 down, starting 7.1
+      from the left and 4.05 from the top: six rows over the first 46 columns, where the
+      six fans stand behind it, and the lower three rows only over the next 22, under a
+      plain plate. The manual's rear figure labels the fans and a service tag. THE
+      SERVICE TAG IS NOT DRAWN: only its edge shows, under the bottom of the face at
+      about 365..395; see the gap.
+  slots:
+    confidence: datasheet
+    note: >-
+      Product page: 1 PCIe 5.0 x16 LP slot and 2 PCIe 5.0 x16 FHFL slots; manual
+      Expansion Slot Locations table: 1 and 2 full-height full-length, 3 low-profile.
+      The slots are bays of the two riser parts this server shares with the SYS-111E-WR
+      (see those parts for the check). ONE DIFFERENCE IS NOT CARRIED: slot 3 here is a
+      full x16, where the WR's is x8 in an x16 connector, and the shared riser part
+      states x8 lanes. See the gap.
+  psus:
+    confidence: datasheet
+    note: >-
+      Product page and manual Appendix B: two PWS-601S-1R, 600 W, -44 to -65 Vdc,
+      redundant; front table: PWS1 on the right, PWS2 on the left. Both are seated by
+      default.
+  weight:
+    confidence: datasheet
+    note: >-
+      Product page: net weight 10.01 lbs (4.54 kg), gross 14.99 lbs (6.8 kg), for the
+      barebone.
+  power:
+    confidence: datasheet
+    note: >-
+      NO SYSTEM POWER FIGURE IS STATED on the product page, the datasheet, the manual or
+      the quick reference guide; each gives the supply rating only, and no Lot 9
+      addendum is published for this model. A supply rating is not the server's draw.
+  environmental:
+    confidence: datasheet
+    note: >-
+      Product page and manual Appendix C: operating 0 to 40 C, non-operating -40 to 70 C
+      on the product page and -40 to 60 C in the manual; operating relative humidity 8
+      to 90% non-condensing, non-operating 5 to 95%. THE TWO DOCUMENTS DISAGREE on the
+      upper non-operating temperature; the manual's lower figure is carried and the
+      disagreement is a gap.
+  compliance:
+    confidence: datasheet
+    note: >-
+      Product page: "NEBS Level 3 Certified" as a key feature. Manual section 2.8: the
+      SYS-111E-FDWTR is DC-I and can be grounded in both CBN and IBN networks.
+  lifecycle:
+    confidence: datasheet
+    note: >-
+      Searched 2026-10-04 for an end-of-life notice (Supermicro's product page, which
+      still offers the system, and the web for "SYS-111E-FDWTR end of life"); none
+      found.
+  faces:
+    confidence: datasheet
+    note: >-
+      Top, bottom, left and right are sized from the stated dimensions and declared
+      empty. Supermicro's top view is a perspective photograph of the open chassis, and
+      no document held shows any of the four straight on.
+attrs:
+  physical:
+    ru: 1
+    weight-kg: 4.54
+    weight-gross-kg: 6.8
+  power:
+    power-input: -44 to -65 VDC, 18-10 A, per supply
+    psu-redundancy: 1+1
+  thermal:
+    fans: six 40 x 40 x 56 mm counter-rotating fans
+    airflow: front to rear
+  environmental:
+    operating-temp-c: 0 to 40
+    storage-temp-c: -40 to 60
+    operating-humidity: 8 to 90% non-condensing
+    storage-humidity: 5 to 95% non-condensing
+  platform:
+    cpu: one 4th or 5th generation Intel Xeon Scalable processor, socket E (LGA-4677), 85 to 350 W TDP (over 205 W only under specific conditions)
+    memory: 8 DDR5 DIMM slots, up to 2 TB of 5600 MT/s ECC RDIMM
+    chipset: Intel C741
+    motherboard: X13SEW-TF
+    storage: two internal fixed 2.5 inch SATA bays; one M.2 PCIe 3.0 x2 NVMe slot
+    network: two 10GbE RJ45 (Intel X550-AT2)
+    bmc: dedicated 1GbE BMC LAN port
+  compliance:
+    nebs: NEBS Level 3 Certified
+    regulatory: FCC, ICES, CE, UKCA, VCCI, RCM, NRTL, CB
+  lifecycle:
+    eol: none-announced
+chassis: {width: 437.0, height: 43.0, depth: 429.0, ru: 1, color: '#c8ccd0', power: dc}
+gaps:
+  - what: power-max
+    scope: [front, rear]
+    reason: vendor-silent
+    note: >-
+      no system power figure on the product page, datasheet, manual or quick
+      reference guide, and no Lot 9 addendum for this model. The server profile's
+      power requirement is unmet for that reason.
+    wanted: >-
+      a configured maximum power figure from Supermicro for the SYS-111E-FDWTR
+  - what: front-not-orthographic
+    scope: [front]
+    reason: needs-photo
+    note: >-
+      no square-on image of the front exists in any document held or on any page
+      searched; the face is read per axis off a photograph taken from above, 7% out
+      between its two scales, and its I/O plate is drawn at the figures of the
+      sibling SYS-111E-WR. Positions down, the vent fields and the end bracket are
+      approximate.
+    wanted: >-
+      a square-on photograph of a SYS-111E-FDWTR front, or a dimensioned drawing of
+      the CSE-515B chassis
+  - what: ground-stud-position
+    scope: [front]
+    reason: needs-photo
+    note: >-
+      the chassis ground stud is placed from the manual's figure 2-8, an unscaled
+      line drawing; the front photograph shows no stud there. Whether there is a
+      second stud, as the section heading's plural suggests, is not shown.
+    wanted: >-
+      a photograph of the ground stud on a real unit
+  - what: front-legends
+    scope: [front]
+    reason: needs-photo
+    note: >-
+      no legend printed on the front plate is drawn. The image resolves the supplies'
+      RTN and -48V lettering, which is 3 mm type, and shows no printing that size on
+      the I/O plate; smaller marks beside the ports and the protective earth symbol
+      the manual says identifies the ground terminal are below what it resolves.
+    wanted: >-
+      a close photograph of the front I/O plate
+  - what: slot-3-lanes
+    scope: [front]
+    reason: needs-drawing
+    note: >-
+      slot 3 is a full PCIe 5.0 x16 on this server (product page and manual) and x8
+      in an x16 connector on the SYS-111E-WR; the riser part the two share states
+      x8. The riser cards are different parts on the two boards and their part
+      numbers are in no document held.
+    wanted: >-
+      the riser card part numbers for the X13SEW-TF and X13SEW-F systems
+  - what: non-operating-temperature
+    scope: [front]
+    reason: sources-disagree
+    note: >-
+      the product page gives the non-operating temperature as -40 to 70 C and the
+      manual's Appendix C as -40 to 60 C; the same measure and scope. The manual's
+      figure is carried.
+    wanted: >-
+      Supermicro's confirmation of which figure is right
+  - what: service-tag
+    scope: [rear]
+    reason: needs-photo
+    note: >-
+      the service tag the manual's rear figure labels (it carries the BMC password
+      details) is not drawn; the rear image shows only its edge under the face.
+    wanted: >-
+      an image of the service tag pulled out
+  - what: interior
+    scope: [top]
+    reason: needs-drawing
+    note: >-
+      the interior is not drawn - the two fixed 2.5 inch drive bays, the six fans,
+      the board and the supplies. The product page top view is a perspective
+      photograph of the open chassis.
+    wanted: >-
+      a plan of the chassis interior, or a top-down photograph
+groups:
+  risers: {term: Riser, role: service, index-origin: 1, description: 'the left-hand-side riser bracket (PCIe slots 1 and 2) and the right-hand-side riser (slot 3); the slots are bays of the risers'}
+  psus: {term: PSU, role: service, index-origin: 1, attrs: {redundancy: '1+1', redundancy-note: 'product page: 2x 600W Redundant (1 + 1); manual section 3.7: hot-swappable redundant power supplies'}}
+  nics: {term: Port, role: traffic, index-origin: 1, attrs: {media: rj45, speed: 10g}}
+  mgmt: {term: Port, role: management, index-origin: 1, attrs: {media: rj45, speed: 1g, role: mgmt}}
+  usb: {term: Port, role: management, index-origin: 1, attrs: {media: usb-a}, description: 'two USB 2.0 and two USB 3.2 Gen1 Type-A ports'}
+  video: {term: Port, role: management, index-origin: 1}
+  serial: {term: Port, role: management, index-origin: 1}
+  controls: {term: Button, role: management, index-origin: 1}
+  grounding: {term: Stud, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 437.0, h: 43.0}
+    panel:
+      decor:
+        - {at: [0, 0], size: [437.0, 43.0], fill: '#c8ccd0'}
+        - {at: [60.2, 0.6], size: [2.5, 41.8], fill: '#b4b9be'}
+        - {at: [123.4, 6.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [128.5, 6.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [154, 6.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [159.1, 6.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [128.5, 11.55], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [148.9, 11.55], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [154, 11.55], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [159.1, 11.55], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [123.4, 16.5], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [128.5, 16.5], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [148.9, 16.5], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [154, 16.5], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [159.1, 16.5], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [123.4, 21.45], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [128.5, 21.45], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [133.6, 21.45], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [138.7, 21.45], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [143.8, 21.45], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [148.9, 21.45], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [154, 21.45], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [159.1, 21.45], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [120.6, 27.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [125.7, 27.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [120.6, 32.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [125.7, 32.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [185.1, 6.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [190.2, 6.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [195.3, 6.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [210.6, 6.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [185.1, 11.55], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [190.2, 11.55], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [195.3, 11.55], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [210.6, 11.55], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [274.4, 27.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [279.5, 27.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [284.6, 27.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [289.7, 27.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [274.4, 32.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [279.5, 32.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [284.6, 32.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [289.7, 32.6], size: [3.3, 3.3], fill: '#16181a'}
+        - {at: [121.5, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [126.1, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [130.7, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [135.3, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [139.9, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [144.5, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [149.1, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [153.7, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [158.3, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [162.9, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [167.5, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [172.1, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [176.7, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [181.3, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [185.9, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [190.5, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [195.1, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [199.7, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [204.3, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [208.9, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [213.5, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [218.1, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [222.7, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [227.3, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [231.9, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [236.5, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [241.1, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [245.7, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [250.3, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [254.9, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [259.5, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [264.1, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [268.7, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [273.3, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [277.9, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [282.5, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [287.1, 38.4], size: [3.4, 2], fill: '#16181a'}
+        - {at: [422.3, 6.8], size: [3.6, 3.6], fill: '#16181a', shape: circle}
+        - {at: [422.0, 21.0], size: [3.6, 4.6], fill: '#16181a'}
+        - {at: [422.0, 28.0], size: [3.6, 4.6], fill: '#16181a'}
+    components:
+      bays:
+        - {id: psu-2, at: [5.6, 1.5], size: {w: 54.5, h: 40.0}, accepts: [supermicro/psu-pws-601s-1r@1], default: supermicro/psu-pws-601s-1r@1, group: psus, rel-pos: 2}
+        - {id: psu-1, at: [62.8, 1.5], size: {w: 54.5, h: 40.0}, accepts: [supermicro/psu-pws-601s-1r@1], default: supermicro/psu-pws-601s-1r@1, group: psus, rel-pos: 1}
+        - {id: riser-rhs, at: [218.5, 0.0], size: {w: 79.5, h: 23.8}, accepts: [supermicro/riser-wio-rhs-x13sew@1], default: supermicro/riser-wio-rhs-x13sew@1, group: risers, rel-pos: 2}
+        - {id: riser-lhs, at: [298.0, 0.0], size: {w: 123.0, h: 43.0}, accepts: [supermicro/riser-wio-lhs-x13sew@1], default: supermicro/riser-wio-lhs-x13sew@1, group: risers, rel-pos: 1}
+      placements:
+        - {id: power, ref: supermicro/power-button-sc515b@1, at: [133.3, 4.6], group: controls, rel-pos: 1, for: chassis}
+        - {id: serial, ref: common/db9-receptacle@1, at: [132.8, 25.95], group: serial, rel-pos: 1}
+        - {id: bmc, ref: common/rj45-eth@1, at: [165.7, 5.7], rotate: 180, group: mgmt, rel-pos: 1}
+        - {id: usb-1, ref: std/usb-a@1, at: [167.7, 21.25], skin: usb2, group: usb, rel-pos: 1, attrs: {usb: '2.0'}}
+        - {id: usb-2, ref: std/usb-a@1, at: [167.7, 29.95], skin: usb2, group: usb, rel-pos: 2, attrs: {usb: '2.0'}}
+        - {id: usb-3, ref: std/usb-a@1, at: [186.2, 21.25], group: usb, rel-pos: 3, attrs: {usb: '3.2 Gen1'}}
+        - {id: usb-4, ref: std/usb-a@1, at: [186.2, 29.95], group: usb, rel-pos: 4, attrs: {usb: '3.2 Gen1'}}
+        - {id: ground-stud, ref: common/ground-stud@1, at: [199.55, 7.65], group: grounding, rel-pos: 1}
+        - {id: lan-1, ref: common/rj45-eth@1, at: [202.2, 24.2], rotate: 180, group: nics, rel-pos: 1}
+        - {id: lan-2, ref: common/rj45-eth@1, at: [220.9, 24.2], rotate: 180, group: nics, rel-pos: 2}
+        - {id: vga, ref: common/vga-receptacle@1, at: [240.8, 26.15], group: video, rel-pos: 1}
+  rear:
+    size: {w: 437.0, h: 43.0}
+    panel:
+      decor:
+        - {at: [0, 0], size: [437.0, 43.0], fill: '#c8ccd0'}
+        - {at: [7.1, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [13.29, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [19.48, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [25.67, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [31.86, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [38.05, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [44.24, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [50.43, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [56.62, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [62.81, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [69, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [75.19, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [81.38, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [87.57, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [93.76, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [99.95, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [106.14, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [112.33, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [118.52, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [124.71, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [130.9, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [137.09, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [143.28, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [149.47, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [155.66, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [161.85, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [168.04, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [174.23, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [180.42, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [186.61, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [192.8, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [198.99, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [205.18, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [211.37, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [217.56, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [223.75, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [229.94, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [236.13, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [242.32, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [248.51, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [254.7, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [260.89, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [267.08, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [273.27, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [279.46, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [285.65, 4.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [7.1, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [13.29, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [19.48, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [25.67, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [31.86, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [38.05, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [44.24, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [50.43, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [56.62, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [62.81, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [69, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [75.19, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [81.38, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [87.57, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [93.76, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [99.95, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [106.14, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [112.33, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [118.52, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [124.71, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [130.9, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [137.09, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [143.28, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [149.47, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [155.66, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [161.85, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [168.04, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [174.23, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [180.42, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [186.61, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [192.8, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [198.99, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [205.18, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [211.37, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [217.56, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [223.75, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [229.94, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [236.13, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [242.32, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [248.51, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [254.7, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [260.89, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [267.08, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [273.27, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [279.46, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [285.65, 10.25], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [7.1, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [13.29, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [19.48, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [25.67, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [31.86, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [38.05, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [44.24, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [50.43, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [56.62, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [62.81, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [69, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [75.19, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [81.38, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [87.57, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [93.76, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [99.95, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [106.14, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [112.33, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [118.52, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [124.71, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [130.9, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [137.09, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [143.28, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [149.47, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [155.66, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [161.85, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [168.04, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [174.23, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [180.42, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [186.61, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [192.8, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [198.99, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [205.18, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [211.37, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [217.56, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [223.75, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [229.94, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [236.13, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [242.32, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [248.51, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [254.7, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [260.89, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [267.08, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [273.27, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [279.46, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [285.65, 16.45], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [7.1, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [13.29, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [19.48, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [25.67, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [31.86, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [38.05, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [44.24, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [50.43, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [56.62, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [62.81, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [69, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [75.19, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [81.38, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [87.57, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [93.76, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [99.95, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [106.14, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [112.33, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [118.52, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [124.71, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [130.9, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [137.09, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [143.28, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [149.47, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [155.66, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [161.85, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [168.04, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [174.23, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [180.42, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [186.61, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [192.8, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [198.99, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [205.18, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [211.37, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [217.56, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [223.75, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [229.94, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [236.13, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [242.32, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [248.51, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [254.7, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [260.89, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [267.08, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [273.27, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [279.46, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [285.65, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [7.1, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [13.29, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [19.48, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [25.67, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [31.86, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [38.05, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [44.24, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [50.43, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [56.62, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [62.81, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [69, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [75.19, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [81.38, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [87.57, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [93.76, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [99.95, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [106.14, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [112.33, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [118.52, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [124.71, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [130.9, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [137.09, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [143.28, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [149.47, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [155.66, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [161.85, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [168.04, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [174.23, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [180.42, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [186.61, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [192.8, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [198.99, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [205.18, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [211.37, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [217.56, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [223.75, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [229.94, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [236.13, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [242.32, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [248.51, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [254.7, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [260.89, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [267.08, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [273.27, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [279.46, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [285.65, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [7.1, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [13.29, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [19.48, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [25.67, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [31.86, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [38.05, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [44.24, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [50.43, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [56.62, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [62.81, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [69, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [75.19, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [81.38, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [87.57, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [93.76, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [99.95, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [106.14, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [112.33, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [118.52, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [124.71, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [130.9, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [137.09, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [143.28, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [149.47, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [155.66, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [161.85, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [168.04, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [174.23, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [180.42, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [186.61, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [192.8, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [198.99, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [205.18, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [211.37, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [217.56, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [223.75, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [229.94, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [236.13, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [242.32, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [248.51, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [254.7, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [260.89, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [267.08, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [273.27, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [279.46, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [285.65, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [291.84, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [298.03, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [304.22, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [310.41, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [316.6, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [322.79, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [328.98, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [335.17, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [341.36, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [347.55, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [353.74, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [359.93, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [366.12, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [372.31, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [378.5, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [384.69, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [390.88, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [397.07, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [403.26, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [409.45, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [415.64, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [421.83, 22.65], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [291.84, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [298.03, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [304.22, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [310.41, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [316.6, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [322.79, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [328.98, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [335.17, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [341.36, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [347.55, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [353.74, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [359.93, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [366.12, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [372.31, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [378.5, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [384.69, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [390.88, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [397.07, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [403.26, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [409.45, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [415.64, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [421.83, 28.85], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [291.84, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [298.03, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [304.22, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [310.41, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [316.6, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [322.79, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [328.98, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [335.17, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [341.36, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [347.55, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [353.74, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [359.93, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [366.12, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [372.31, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [378.5, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [384.69, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [390.88, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [397.07, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [403.26, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [409.45, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [415.64, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+        - {at: [421.83, 35.05], size: [4.8, 4.8], fill: '#16181a'}
+  top:
+    size: {w: 437.0, h: 429.0}
+    empty: >-
+      no straight-on view of the top or of the interior in any document held: the
+      product page top view is a perspective photograph with callouts. Sized from
+      the stated dimensions.
+  bottom:
+    size: {w: 437.0, h: 429.0}
+    empty: >-
+      no view of the bottom face in any document held (product page, datasheet,
+      manual, quick reference guide, chassis manual, motherboard manual). Sized from
+      the stated dimensions.
+  left:
+    size: {w: 429.0, h: 43.0}
+    empty: >-
+      no straight-on view of the left face in any document held (product page,
+      datasheet, manual, quick reference guide, chassis manual, motherboard manual).
+      Sized from the stated dimensions.
+  right:
+    size: {w: 429.0, h: 43.0}
+    empty: >-
+      no straight-on view of the right face in any document held (product page,
+      datasheet, manual, quick reference guide, chassis manual, motherboard manual).
+      Sized from the stated dimensions.
+configurations:
+  base:
+    kind: base
+    default: true
+    part-numbers:
+      SYS-111E-FDWTR: {part: SYS-111E-FDWTR}
+    description: >-
+      The barebone as Supermicro sells it: both 600 W DC supplies and both
+      risers with all three slots blanked.
+  cards:
+    kind: example
+    description: >-
+      A card in each slot, to show what the windows take: two-port
+      full-height cards in slots 1 and 2 and a low-profile card in slot 3
+      (three of the library's ConnectX cards - not a Supermicro-qualified
+      build).
+    bays:
+      riser-lhs/slot-1: nvidia/mcx516a-fh@1
+      riser-lhs/slot-2: nvidia/mcx516a-fh@1
+      riser-rhs/slot-3: nvidia/mcx4121a-lp@1
+datasheet:
+  title: 'Supermicro SYS-111E-FDWTR datasheet'
+  url: https://www.supermicro.com/en/products/system/datasheet/SYS-111E-FDWTR
+  sha256: 24b0bea38f969dda15784384a3dd32e2c857171eec364343a5108cc955e20ec1
+references:
+  - {title: "SuperServer SYS-111E-FWTR / FWTR-EU / FDWTR User's Manual (MNL-2570)", url: 'https://www.supermicro.com/manuals/superserver/1U/MNL-2570.pdf', sha256: 67af0da8ec416854a8b222df2897c72b77622d0b11d973249d42edb17b38b09c}
+  - {title: 'SYS-111E-FDWTR Quick Reference Guide (QRG-2570)', url: 'https://www.supermicro.com/QuickRefs/superserver/1U/QRG-2570.pdf', sha256: ab67fea32ed7f15aba6bde72da17602edbd1748da0aea45e77fe3f98bc8fc632}
+  - {title: 'SC515B Chassis Series User Manual', url: 'https://www.supermicro.com/manuals/chassis/1U/SC515B.pdf', sha256: 1d4985e89a6f304308d1c43e68295bc805e7e38f0b8da08c0bf61c5d68b7defd}
+  - {title: "X13SEW-F / X13SEW-TF User's Manual (MNL-2413)", url: 'https://www.supermicro.com/manuals/motherboard/X13/MNL-2413.pdf', sha256: 4ebc4132339614b0e125861b4db15e8082025a08ff64385130ab99212287045e}

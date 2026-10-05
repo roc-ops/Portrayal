@@ -25,6 +25,12 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- Supermicro, a new vendor: the SuperServer SYS-111E-WR (`supermicro/sys-111e-wr`,
+  1U, ten hot-swap 2.5 inch bays, two 860 W supplies) and SYS-111E-FDWTR
+  (`supermicro/sys-111e-fdwtr`, 1U short-depth front I/O, two 600 W -48 V DC
+  supplies), with nine `supermicro/` parts: both supplies, the drive tray, the
+  two WIO risers and their slot blanks, the SC116B control panel and pull-out
+  tag, and the SC515B power button.
 - Five generic optics, a plug and a pull handle: `generic/qsfp-mpo@1` (a QSFP
   with one MPO receptacle), `generic/qsfp-dd-mpo16@1` (a QSFP-DD with one
   MPO-16 receptacle in a Type 2 nose), `generic/qsfp-lc-simplex@1` (a QSFP
