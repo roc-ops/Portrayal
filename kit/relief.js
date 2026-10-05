@@ -135,6 +135,105 @@ export function openFrameFaces(texts) {
     .map(([face]) => face);
 }
 
+// A VENT IS SEEN FROM BOTH SIDES OF THE SHEET. A face's vents are paint on its
+// plate, and the plate is drawn from outside only; the interior under a lifted
+// cover is a well (`relief.walls: inside`) whose sides are plain colour. So
+// from inside the chassis the wall the air leaves through was blank. What
+// follows puts a face's declared apertures on the inner side of any well wall
+// that lies against that face (ventWellWalls is the builder).
+//
+// WHICH PAINT IS A HOLE IS DECLARED, NEVER READ OFF ITS COLOUR. A dark decor
+// rect is as often a label plate, a recess or a port shell. render.py stamps
+// `data-aperture="air"` on decor that says `vent:` or `pattern: vent`, and
+// that attribute is the only thing collected (extractRelief's `apertures`).
+//
+// PAINTED, NOT PUNCHED, for the reason the face's own vents are (see "Air
+// vents stay as painted art" in buildFaceRelief): a lattice of alphaTest
+// cutouts speckles at a grazing angle, and the inside of a 1U wall is only
+// ever seen at one.
+//
+// A face's frame, in plain arithmetic so it runs under node: `pos` and `rot`
+// (an XYZ Euler, as three.js composes it) are the face group's, `fw` x `fh`
+// the size its DRAWING declares, which is not always its plane's. `art` takes
+// a scene point to that drawing's mm - and to how far behind the face it is.
+export function faceFrame({pos, rot, flipLX = false, flipLY = false}, fw, fh) {
+  const [a, b, c] = rot;
+  const [ca, sa, cb, sb, cc, sc] = [Math.cos(a), Math.sin(a), Math.cos(b), Math.sin(b),
+                                    Math.cos(c), Math.sin(c)];
+  // Rx . Ry . Rz, rows
+  const m = [[cb * cc, -cb * sc, sb],
+             [sa * sb * cc + ca * sc, -sa * sb * sc + ca * cc, -sa * cb],
+             [-ca * sb * cc + sa * sc, ca * sb * sc + sa * cc, ca * cb]];
+  const sx = flipLX ? -1 : 1, sy = flipLY ? -1 : 1;
+  return {
+    flip: [flipLX, flipLY],
+    // face mm (and z out of the face) -> scene; LX/LY of buildFaceRelief
+    world(x, y, z = 0) {
+      return this.local([sx * (x - fw / 2), sy * (fh / 2 - y), z]);
+    },
+    // the face group's own coordinates (x right, y up, z out) -> scene
+    local(l) {
+      return [0, 1, 2].map(i => m[i][0] * l[0] + m[i][1] * l[1] + m[i][2] * l[2] + pos[i]);
+    },
+    art(p) {
+      const d = [p[0] - pos[0], p[1] - pos[1], p[2] - pos[2]];
+      const l = [0, 1, 2].map(j => m[0][j] * d[0] + m[1][j] * d[1] + m[2][j] * d[2]);
+      return {x: sx * l[0] + fw / 2, y: fh / 2 - sy * l[1], behind: -l[2]};
+    },
+  };
+}
+
+// how far behind a face a well wall may stand and still be that face's own
+// sheet: a chassis wall is 1-2 mm of steel, and a well is drawn to its inner
+// surface. A board 12.5 mm inside the I/O wall is not against it.
+export const WALL_REACH = 3;
+
+// THE FOUR SIDES OF A BOX WELL, in the order BoxGeometry numbers them (+x, -x,
+// +y, -y in the face's local frame, y up), each as four scene points. `well`
+// is the cavity in its face's drawing mm, `d` the depth it was built to.
+export function wellWallCorners(well, frame, d = well.d) {
+  const {x, y, w, h, lift = 0} = well;
+  const at = (px, py) => [frame.world(px, py, lift), frame.world(px, py, lift - d)];
+  const side = (p, q) => [...at(...p), ...at(...q)];
+  const right = side([x + w, y], [x + w, y + h]), left = side([x, y], [x, y + h]),
+        top = side([x, y], [x + w, y]), bottom = side([x, y + h], [x + w, y + h]);
+  // a flipped face's local +x is its drawing's left, and its +y the bottom
+  const [fx, fy] = frame.flip;
+  return [fx ? left : right, fx ? right : left, fy ? bottom : top, fy ? top : bottom];
+}
+
+// WHICH FACE EACH SIDE LIES AGAINST, and the part of that face's drawing it
+// covers. A side is against a face when all four of its corners stand within
+// `reach` behind that face's plane - parallel to it and just inside it.
+// `frames` is {view: faceFrame}; `own` names the face the well was cut in,
+// which its sides are never against. One entry per side that found a face:
+// {wall, face, rect}, `rect` in that face's drawing mm.
+export function wallsAgainstFaces(sides, frames, own, reach = WALL_REACH, eps = 0.01) {
+  const hits = [];
+  sides.forEach((corners, wall) => {
+    for (const [face, fr] of Object.entries(frames)) {
+      if (face === own) continue;
+      const a = corners.map(p => fr.art(p));
+      if (!a.every(q => q.behind >= -eps && q.behind <= reach + eps)) continue;
+      const xs = a.map(q => q.x), ys = a.map(q => q.y);
+      const x0 = Math.min(...xs), y0 = Math.min(...ys);
+      const rect = {x: x0, y: y0, w: Math.max(...xs) - x0, h: Math.max(...ys) - y0};
+      if (rect.w > eps && rect.h > eps) hits.push({wall, face, rect});
+      break;
+    }
+  });
+  return hits;
+}
+
+// WHERE A POINT OF A SIDE FALLS ON THE TEXTURE CUT FOR IT: `l` in the well's
+// own face-local frame, carried to the face the side lies against (`fr`) and
+// read against the part of that drawing the side covers (`rect`). v runs up,
+// as a canvas texture's does.
+export function wallUV(l, own, fr, rect) {
+  const a = fr.art(own.local(l));
+  return [(a.x - rect.x) / rect.w, 1 - (a.y - rect.y) / rect.h];
+}
+
 export function cavitySeatsOn(c, o, eps = 0.01) {
   return !!c.lift && Math.abs(c.lift - o.out) < eps
     && c.x >= o.x - eps && c.y >= o.y - eps
@@ -2064,6 +2163,12 @@ export async function extractRelief(url, scope, {back = false} = {}) {
     return {...rect, owner: ownerOf(el), depth: +(el.dataset.vent || el.dataset.zVent),
             svgText: nodeSvg(el, rect)};
   });
+  // the sheet's declared air openings (render.py `data-aperture`), for the
+  // inner side of a well wall that lies against this face (ventWellWalls)
+  const apertures = [...q('[data-aperture="air"]')].filter(el => !ownerOf(el)).map(el => {
+    const rect = mmRect(el);
+    return {...rect, svgText: nodeSvg(el, rect)};
+  });
   // component instances only (data-ref) - contract elements can share a class
   // name (pull-tab has an element called "tab"), which would shadow the module
   const frus = [];
@@ -2198,7 +2303,7 @@ export async function extractRelief(url, scope, {back = false} = {}) {
     el.style.display = 'none';
   const cleanText = svg.outerHTML;
   div.remove();
-  return {cavities, outs, domes, vents, frus, subBodies, flatLifted, cleanText};
+  return {cavities, outs, domes, vents, apertures, frus, subBodies, flatLifted, cleanText};
 }
 
 // The commonest opaque colour in a raster, which is what a part is MADE of - as
@@ -2255,6 +2360,54 @@ export async function rasterize(svgText, wmm, hmm, pxmm = PXMM, flipX = false, f
 
 // six-sided FRU body: same art the component tab shows, reused inside the device
 
+// THE VENTS OF A FACE, ON THE WELL WALL BEHIND IT. Run once every face has
+// been built: `wells` and `apertures` are what buildFaceRelief recorded into
+// its ctx, `frames` a faceFrame per view. A side of a well that lies against
+// a face with apertures has its plain material replaced by the wall colour
+// with those apertures painted on it. THE TEXTURE IS PINNED BY POSITION, NOT
+// BY ORIENTATION: each vertex of the side is carried to the face's drawing
+// and takes its uv from where it lands, so a hole is in the same place from
+// both sides of the sheet whichever way the face, the well or a flip runs -
+// "mirrored" falls out of that rather than being decided per face. Returns
+// what it painted, [{view, wall, face, rect, apertures}].
+export async function ventWellWalls({wells = [], apertures = {}, frames = {}, scope} = {}) {
+  const PX = _px(scope);
+  const done = [];
+  for (const {view, mesh, well, d} of wells) {
+    const own = frames[view];
+    if (!own || !Array.isArray(mesh.material)) continue;
+    for (const hit of wallsAgainstFaces(wellWallCorners(well, own, d), frames, view)) {
+      const r = hit.rect;
+      const aps = (apertures[hit.face] || []).filter(a =>
+        a.x < r.x + r.w && a.x + a.w > r.x && a.y < r.y + r.h && a.y + a.h > r.y);
+      if (!aps.length) continue;
+      const cv = document.createElement('canvas');
+      cv.width = Math.max(1, Math.round(r.w * PX)); cv.height = Math.max(1, Math.round(r.h * PX));
+      const x = cv.getContext('2d');
+      x.fillStyle = well.wall; x.fillRect(0, 0, cv.width, cv.height);
+      for (const a of aps)
+        x.drawImage(await rasterize(a.svgText, a.w, a.h, PX),
+                    Math.round((a.x - r.x) * PX), Math.round((a.y - r.y) * PX));
+      const geo = mesh.geometry, pos = geo.attributes.position, uv = geo.attributes.uv;
+      const g = geo.groups.find(q => q.materialIndex === hit.wall);
+      if (!g) continue;
+      const fr = frames[hit.face];
+      for (let k = g.start; k < g.start + g.count; k++) {
+        const i = geo.index ? geo.index.getX(k) : k;
+        // the box is unturned in its face group, so a vertex is face-local
+        const l = [pos.getX(i) + mesh.position.x, pos.getY(i) + mesh.position.y,
+                   pos.getZ(i) + mesh.position.z];
+        uv.setXY(i, ...wallUV(l, own, fr, r));
+      }
+      uv.needsUpdate = true;
+      mesh.material = mesh.material.slice();
+      mesh.material[hit.wall] = new THREE.MeshLambertMaterial({map: canvasTex(cv), side: THREE.BackSide});
+      done.push({view, wall: hit.wall, face: hit.face, rect: r, apertures: aps.length});
+    }
+  }
+  return done;
+}
+
 // Build the relief geometry for one face: the recesses, raised parts, domes,
 // vents and FRU sub-groups a compiled face describes. Returns nothing - it
 // fills the collections the caller owns, because a device viewer wants these
@@ -2306,8 +2459,9 @@ export async function buildFaceRelief(F, ctx) {
       faceCv[F.view] = cv0;
       return;
     }
-    const {cavities, outs, domes, vents, frus, subBodies = [], flatLifted = [],
+    const {cavities, outs, domes, vents, apertures = [], frus, subBodies = [], flatLifted = [],
            cleanText} = await extractRelief(src, ctx.scope, {back: !!ctx.back});
+    if (ctx.apertures) ctx.apertures[F.view] = apertures;
     // A MODULE PREVIEW IS THE PART'S SIZE BOX HERE. A part that declares
     // `head:` publishes a preview whose viewBox also holds the head and its
     // composed parts (components_index.preview_box), so the 2D module view
@@ -2500,6 +2654,10 @@ export async function buildFaceRelief(F, ctx) {
       // an outline's walls are built in the face frame already
       if (!c.rings) walls.position.set(LX(c.x, c.w), LY(c.y, c.h), zc);
       addTo(walls);
+      // a box well whose sides are the chassis: a side against another face
+      // shows that face's vents (ventWellWalls, once every face is read)
+      if (ctx.wells && c.wallsInside && !c.rings && !c.round && !c.tilt)
+        ctx.wells.push({view: F.view, mesh: walls, well: c, d});
       if (!shell.floor) continue;
       // textured floor: the aperture art, pushed to the back of the recess
       const floor = new THREE.Mesh(new THREE.PlaneGeometry(c.w, c.h),

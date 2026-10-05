@@ -31,6 +31,15 @@ names the ref that replaces it.
   supplies) and its AC sibling the SYS-111E-FWTR (`supermicro/sys-111e-fwtr`,
   with the SYS-111E-FWTR-EU as its `eu` configuration), each with front, rear
   and a top view under a removable cover, and 23 `supermicro/` parts.
+- A face's vents show from inside the chassis in 3D. Where an interior well
+  (`relief: {walls: inside}`) has a side within 3 mm of a face, that side is
+  painted with the face's declared air openings - decor that says `vent:` or
+  `pattern: vent`, which the compiled drawing carries as
+  `data-aperture="air"` - each in the place it has on the outside. Nothing is
+  read off a colour: a dark rect that declares neither stays a plate.
+  `dell/r660` and `supermicro/sys-111e-wr` declare their rear vents (a patch
+  each). `relief.js` exports `faceFrame`, `wellWallCorners`,
+  `wallsAgainstFaces`, `wallUV`, `ventWellWalls` and `WALL_REACH`.
 - Supermicro SuperServer SYS-511E-WR (`supermicro/sys-511e-wr`): the 1U WIO
   server with four hot-swap 3.5 inch bays, front, rear and a top view under a
   removable cover, with its tray, control panel and cover parts; the Gold

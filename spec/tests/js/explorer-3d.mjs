@@ -18,6 +18,12 @@
 //   backs  - stdin JSON {components, skins, cases: [{name, back, bay,
 //            moduleRef, map}]}; seatBack into a module's own back drawing,
 //            as viewer3d hands relief.js the back it builds in 3D.
+//   walls  - stdin JSON {viewer, cases: [{name, W, H, D, sizes, view, well,
+//            points}]}; the face table is cut out of the viewer's own source
+//            (`viewer`, the text of viewer3d.js), and relief.js says which
+//            face each side of a well lies against, what of that face's
+//            drawing it covers, and where given points of that drawing fall
+//            on the side's texture.
 // SWAP_MODULE / RELIEF_MODULE name the swap.js / relief.js to load; by
 // default the kit's own. A
 // scenario that throws records {error} and the rest still run.
@@ -35,7 +41,38 @@ const run = async (name, fn) => {
   catch (e) { out[name] = {error: String(e && e.stack || e)}; }
 };
 
-if (mode === 'roles' || mode === 'eject') {
+if (mode === 'walls') {
+  const R = await import(process.env.RELIEF_MODULE
+    ? pathToFileURL(process.env.RELIEF_MODULE).href : '../../../kit/relief.js');
+  // THE VIEWER'S OWN FACES, not a copy of them: the device rows of `FACES`,
+  // evaluated for this box. A table restated here would agree with itself.
+  const rows = /const FACES = COMP \? \[[\s\S]*?\] : (\[[\s\S]*?\n {4}\]);/.exec(input.viewer);
+  if (!rows) throw new Error('viewer3d.js: the FACES table was not found');
+  const table = (W, H, D) => new Function('W', 'H', 'D', `return ${rows[1]}`)(W, H, D);
+  for (const c of input.cases) {
+    await run(c.name, async () => {
+      const faces = table(c.W, c.H, c.D);
+      const size = F => (c.sizes || {})[F.view] || [F.fw(), F.fh()];
+      const frames = Object.fromEntries(faces.map(F => [F.view, R.faceFrame(
+        {pos: F.pos(), rot: F.rot, flipLX: F.flipLX, flipLY: F.flipLY}, ...size(F))]));
+      const own = frames[c.view];
+      const [fw, fh] = size(faces.find(F => F.view === c.view));
+      const hits = R.wallsAgainstFaces(R.wellWallCorners(c.well, own), frames, c.view);
+      // a point of the far face's drawing, half a millimetre inside the sheet,
+      // in the well's own face-local frame (x right, y up, z out) - which is
+      // what a vertex of the side is - and where it falls on the side's texture
+      const uvs = (c.points || []).map(({face, x, y}) => {
+        const hit = hits.find(h => h.face === face);
+        if (!hit) return null;
+        const a = own.art(frames[face].world(x, y, -0.5));
+        const l = [(own.flip[0] ? -1 : 1) * (a.x - fw / 2), (own.flip[1] ? -1 : 1) * (fh / 2 - a.y),
+                   -a.behind];
+        return {wall: hit.wall, uv: R.wallUV(l, own, frames[face], hit.rect)};
+      });
+      return {views: Object.keys(frames), hits, uvs};
+    });
+  }
+} else if (mode === 'roles' || mode === 'eject') {
   const R = await import(process.env.RELIEF_MODULE
     ? pathToFileURL(process.env.RELIEF_MODULE).href : '../../../kit/relief.js');
   // THE KIT BEFORE THE FIX, kept only as the stand-in when relief.js has
