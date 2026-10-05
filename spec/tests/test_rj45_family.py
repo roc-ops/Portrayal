@@ -196,6 +196,11 @@ def test_common_rj45_eth_pinside_carries_its_lamps_in_the_side_walls_at_the_pin_
     assert c["elements"]["led-a"]["states"] == ["off", "link"]
     assert c["elements"]["led-b"]["states"] == ["off", "activity"]
     assert "conforms" not in c
+    # the skin draws each window where the contract says it is, or the two drift
+    s = skin("common/rj45-eth-pinside@1")
+    for el in ("led-a", "led-b"):
+        (x, y), (w, h) = c["elements"][el]["at"], c["elements"][el]["size"]
+        assert re.search(rf'<rect id="{el}" x="{x:g}" y="{y:g}" width="{w:g}" height="{h:g}"', s), el
 
 
 def test_l76_takes_the_pinside_jack_as_lamped():

@@ -26,11 +26,15 @@ names the ref that replaces it.
 
 ### Added
 - Supermicro, a new vendor: the SuperServer SYS-111E-WR (`supermicro/sys-111e-wr`,
-  1U, ten hot-swap 2.5 inch bays, two 860 W supplies) and SYS-111E-FDWTR
+  1U, ten hot-swap 2.5 inch bays, two 860 W supplies), the SYS-111E-FDWTR
   (`supermicro/sys-111e-fdwtr`, 1U short-depth front I/O, two 600 W -48 V DC
-  supplies), with ten `supermicro/` parts: both supplies, the drive tray, the
-  two WIO risers and their slot blanks, the SC116B control panel and pull-out
-  tag, and the SC515B power button.
+  supplies) and its AC sibling the SYS-111E-FWTR (`supermicro/sys-111e-fwtr`,
+  with the SYS-111E-FWTR-EU as its `eu` configuration), each with front, rear
+  and a top view under a removable cover, and 23 `supermicro/` parts.
+- `plan: {rotate: 180}` on a device bay: the plan of a module seated in a
+  FRONT bay is turned half a turn in the top view, and the occupants of its own
+  bays are offset from the opposite corner. A plan is drawn face-at-the-top, as
+  a rear-seated module lies; the first front-I/O server needed the other way.
 - NetBox module types carry a module's own bays. A module that seats others -
   a riser with PCIe slots, an MPC with MIC bays - exports them as
   `module-bays`, each named and positioned `{module}/<bay id>`, which NetBox

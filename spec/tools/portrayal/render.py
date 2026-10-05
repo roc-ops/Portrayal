@@ -2359,7 +2359,9 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     # this face draws no part at that path - swap.js faceEntries) and the kit
     # builds nothing from it. The occupants of the occupant's own bays come
     # along at the offsets those bays declare, lowest slot first so the top
-    # card paints last. A mirrored plan mirrors the offsets about the plan's own width.
+    # card paints last. A mirrored plan mirrors the offsets about the plan's own width,
+    # and one turned half a turn (`rotate: 180`, a module seated in the front)
+    # measures them from the opposite corner.
     #
     # `rear:` IS THE SAME PROJECTION FROM THE OTHER END. A drawer whose back is
     # open shows the backs of the cassettes it holds; the occupant's contract
@@ -2410,9 +2412,20 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                 continue
             pc, _ = lib.resolve(pref)
             pw = float((pc.get("size") or {}).get("w") or 0)
+            ph = float((pc.get("size") or {}).get("h") or 0)
             mirror = bool(pl.get("mirror"))
+            # `rotate: 180` IS FOR A MODULE SEATED IN THE FRONT. A plan is drawn
+            # with its own face - the slot wall, the bracket - at the top, which
+            # is where the rear is in every top view. Seated in a front bay the
+            # same part faces the other way, so its plan is turned half a turn
+            # in place and its slots' offsets are measured from the opposite
+            # corner. Half a turn only: a quarter would swap the footprint's
+            # sides, and no bay seats a module sideways into a wall.
+            turn = pl.get("rotate") == 180
             X, Y = pl["at"]
             common = {k: pl[k] for k in ("in", "under") if pl.get(k)}
+            if turn:
+                common["rotate"] = 180
             parts["placements"].append({
                 "ref": pref, "id": f"{b['id']}-plan", "at": [X, Y], "mirror": mirror,
                 "projection-of": f"{b['id']}/module", **common})
@@ -2429,12 +2442,17 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                     continue
                 scc, _ = lib.resolve(sref)
                 sw = float((scc.get("size") or {}).get("w") or 0)
+                sh = float((scc.get("size") or {}).get("h") or 0)
                 dx, dy = sp["at"]
-                x = X + (pw - dx - sw) if mirror else X + dx
+                # a mirror flips the offset across, a half turn flips it both
+                # ways, and the two together leave it as written across
+                x = X + (pw - dx - sw) if mirror != turn else X + dx
+                y = Y + (ph - dy - sh) if turn else Y + dy
                 parts["placements"].append({
-                    "ref": sref, "id": f"{b['id']}-{slot}-plan", "at": [round(x, 4), round(Y + dy, 4)],
+                    "ref": sref, "id": f"{b['id']}-{slot}-plan", "at": [round(x, 4), round(y, 4)],
                     "mirror": mirror, "projection-of": f"{b['id']}/module/{slot}/module",
                     "under": [f"{b['id']}-plan"] + list(common.get("under") or []),
+                    **({"rotate": 180} if turn else {}),
                     **({"in": common["in"]} if common.get("in") else {})})
 
     used_patterns = {d.get("pattern") for d in parts["decor"] if d.get("pattern")}
