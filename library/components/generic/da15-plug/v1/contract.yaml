@@ -1,0 +1,238 @@
+format: 1
+kind: component
+name: da15-plug
+version: 1.0.0
+class: port
+mates: da15
+conforms: da15-plug
+profile: networking
+description: >-
+  A DA-15 alarm cable plug: the MALE fifteen-position two-row D-subminiature
+  connector in its backshell hood on its cable, seen from the cable end as a
+  front elevation sees it seated: the hood, the two thumbscrews either side of
+  it and a short straight stub of cable whose diameter is the cable-od field.
+  Seats on a `da15` panel connector at its own mate point; the cable leaves
+  from the far end of the stub.
+size: {w: 39.9, h: 15.3}
+size-confidence: {w: drawing, h: drawing}
+size-notes: both figures are the die-cast hood NorComp drawing 979-015-030R121 dimensions, 39.9 across the ears and 15.3 thick at the front; a plastic or moulded hood of the same shell size is a little different
+attrs: {media: da15, connector: da15, gender: male}
+fields:
+  cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 7.21}
+  jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    drawing - registry `da15-plug`. NorComp drawing 979-015-030R121 Rev 8, 979
+    Series D-Sub Backshell - Die Cast, sheet 1, for D-sub shell size 2: the
+    hood is dimensioned 39.9 across the two ears that hold its screws and 15.3
+    thick at its front, all tolerances +/-0.3. THE BOX IS THE WIDEST SECTION
+    DRAWN, the ears, and the thumbscrews sit inside it.
+  no-depth: >-
+    NO `size.d`, DELIBERATELY, as on generic/usb-a-plug@1 and
+    generic/c13-plug@1. The overall length (51.84, the 5.94 front shell and
+    the 45.9 of hood behind the flange) is in the registry entry and in the
+    relief below, but a `size.d` on a component with no `behaviour` compiles
+    to `data-depth`, and the kit builds that as a pit behind the whole box of
+    the part. The depth is carried by the relief features instead.
+  gender: >-
+    male - THE CORE IS FEMALE: std/da15@1 records in provenance.gender that
+    the alarm connector it models has sockets, so the cable plug that mates it
+    carries pins. The gender is stated in `attrs` because the interface `da15`
+    names the panel connector with the gender the library draws, and a plug of
+    the other gender does not mate it. Pins are on the mating face, inside the
+    panel connector, and are not drawn.
+  orientation: >-
+    DRAWN IN THE UNROTATED CONVENTION OF THE CORE: std/da15@1 draws the long
+    side of its D UP, so the front shell of this plug has its long side UP
+    too, and the turn a seat applies carries that round with a rotated core.
+    THE KEY IS NOT VISIBLE FROM THE CABLE END: the D is the front shell, which
+    is wholly behind the hood from here, and the hood, its two screws and the
+    cable are the same either way up. A plug seated the other way up would
+    look identical, so which way is up is recorded here and tested on the
+    shell outline alone.
+  seated-depth: >-
+    RULING - THE PLUG SEATS BY THE MATING DIMENSION THE DRAWING GIVES,
+    MEASURED FROM THE FACE THE CORE PRESENTS. Tyco Electronics catalogue
+    82068, AMPLIMITE Subminiature D Connectors (revised 1-08), p.126,
+    Plug/Receptacle Mating, dimensions the two mated flanges 6.73 +/-0.38
+    apart for shell sizes 1 and 2 and says the dimension is required to assure
+    full mating of the connector halves. std/da15@1 presents at its own face
+    (its `mate` carries no `on:` and no `seat-out`), the panel plane its
+    flange lies on, so the flange of this plug stands 6.73 in front of that
+    plane. Its front shell is 5.82 to 6.05 long (Amphenol M2000 Series D-Sub
+    Connectors catalogue (D-Sub-01 Rev. 10/10), p.22, Solder Type Standard
+    D-Sub Connector), built at 5.94, so it reaches back to 6.73 - 5.94 = 0.79
+    from the panel plane, and the two shells engage along what the panel
+    connector stands in front of that. THE CORE AS MODELLED AGREES ON THE
+    SEAT: std/da15@1 states its depth as 6.73, the same mating dimension, so
+    the lip of its modelled shell and the flange of this plug meet in one
+    plane and nothing here is derived from a figure the drawing does not give.
+    WHAT THE CORE DOES NOT AGREE WITH IS ITS OWN SHELL: the same Amphenol
+    table gives the front shell of a panel connector as 6.05 to 6.30 long, so
+    the modelled 6.73 is about 0.55 taller than a real shell, as the
+    provenance of the core already says of its depth. THAT IS THE FIGURE TO
+    REVISIT, and no figure of this plug moves when it is.
+  frame: >-
+    THE RELIEF IS MEASURED FROM THE LIFT THE HOST PRESENTS, the frame
+    generic/usb-a-plug@1 and generic/c13-plug@1 use: 0 here is the panel plane
+    the core stands on. The front shell is built where it is, from 0.79 to
+    6.73, inside the height the shell of the core occupies: the two nest in
+    the real connector and they overlap here, hidden by the hood from the
+    front and by the shell of the core from the side.
+  shell: >-
+    drawing - Amphenol M2000 Series D-Sub Connectors catalogue (D-Sub-01 Rev.
+    10/10), p.22, Solder Type Standard D-Sub Connector: the front shell of a
+    pin connector of shell size 2 is 25.12 to 25.37 by 8.23 to 8.48 and 5.82
+    to 6.05 long from its lip to the front of its flange. Drawn at 25.25 by
+    8.36, the middle of each range, with 10 degrees of taper a side as the
+    panel cutout has. THE CORNER RADIUS, 2.0, IS ESTIMATED: the table
+    dimensions none. Seen from the cable end the shell is wholly behind the
+    hood; it is drawn so the part of the connector in front of the hood has a
+    node to build from.
+  hood: >-
+    drawing and scaled - NorComp drawing 979-015-030R121 Rev 8, 979 Series
+    D-Sub Backshell - Die Cast, sheet 1. Dimensioned: 27.4 wide and 15.3 thick
+    at the front, 14 wide and 13.21 thick at the cable end, 48.3 long overall,
+    39.9 across the ears, a lip of 2.4 in front of the slot that holds the
+    connector flange, and 10.4 from the front to the top of the saddle washer
+    under each screw. The flange of the connector therefore sits 2.4 behind
+    the very front of the casting, and the hood runs 48.3 - 2.4 = 45.9 behind
+    the flange face. THE LIP IS NOT BUILT: it is two tabs about a quarter of
+    the hood wide, above and below the shell. The ears are built 10.4 - 2.4 =
+    8 long. WHERE THE TAPER STARTS IS SCALED: 27.2 behind the flange, read on
+    a 600 dpi render of the vector drawing calibrated on its own printed
+    width, good to about 0.5. The drawing is marked not to scale, so that one
+    figure is an estimate. THE EARS ARE DRAWN THE FULL THICKNESS OF THE HOOD,
+    which no view dimensions. A second drawing agrees on the envelope: NorComp
+    977-015-0Y0RYY1 Rev 4, the plastic hood of the same shell size, gives 39.6
+    +/-0.5 across, 33.3 +/-0.5 between its screws, 17.6 +/-0.5 thick and 36.9
+    +/-0.5 long.
+  taper: >-
+    scaled - built as TWO steps, not a taper, as on generic/usb-a-plug@1:
+    `hood` at the full 27.4 by 15.3 section as far as the taper starts, and
+    `hood-rear` for the rest at 20.7 by 14.26, midway between the front
+    section and the cable end. The rear step overstates the casting near the
+    cable and understates it near the body.
+  thumbscrews: >-
+    drawing and estimated - NorComp drawing 160-000-050R031 Rev 3, 4-40
+    Thumbscrew, the thumbscrew NorComp lists for the 977, 978, 979 and 983
+    hoods: 44.45 long, a 4-40 thread 5.31 long, a diameter 3.1 collar, a
+    diameter 2.36 neck that ends 13.21 from the tip, and a diameter 4.01 body
+    from there to the end, its last 15.88 knurled. THE HOOD DRAWING ITSELF
+    SHOWS A SLOTTED MATING SCREW with a 4.20 head (979-015-030R121 sheet 2);
+    the thumbscrew is the alternative the same maker lists for the same hood,
+    and it is what is drawn. Each is built from the rear of the ears for 44.45
+    - 13.21 = 31.24, which ASSUMES the screw is tightened with the shoulder of
+    its body on the saddle washer; that puts its thread in the standoff of the
+    panel connector. THE CENTRES ARE 33.32, the mounting-hole spacing registry
+    `da15` holds for shell size 2 (TE catalogue 82068 p.126 prints 33.33; the
+    hood drawing prints 33.3 +/-0.3), which is where a screwlock on the panel
+    connector is; no part in the library draws standoffs for this shell size.
+  stub: >-
+    estimated - the stub rule, docs/connectors-coax-design.md section 5: a
+    straight run of cable 30 long starting where the hood ends (52.63 in front
+    of the panel plane). THERE IS NO SEPARATE STRAIN RELIEF TO DRAW: this hood
+    clamps the cable inside and the cable leaves through a grommet in its rear
+    face (979-015-030R121 sheet 2), so the stub starts at the hood. The bend
+    is the installation.
+  cable-od: >-
+    datasheet - Belden 9541 data sheet (revision 0.511, 09-07-2025), a fifteen
+    conductor 24 AWG foil-shielded EIA RS-232 cable: overall nominal diameter
+    7.21 mm. The hood takes any cable up to 10.5 (979-015-030R121 sheet 1,
+    maximum cable diameter). A placement or a wrapper sets the cable it
+    actually carries.
+  jacket-colour: >-
+    a FIELD, and it paints the cable only. Black is the default the plugs of
+    this library share. THE HELD SOURCES DO NOT AGREE ON A COLOUR: the Belden
+    data sheet lists its jacket as chrome, a grey, and the one held serial
+    cable assembly (Hatteland Technology appliance cables data sheet, revision
+    19, p.5) is beige, hood and cable alike. THE HOOD IS NOT A FIELD: it is
+    drawn in the nickel of the die-cast hood the dimensions come from
+    (NorComp, zinc alloy, nickel plated), and the thumbscrews are
+    nickel-plated steel.
+  no-mark: >-
+    NOTHING IS PRINTED OR EMBOSSED ON THE HOOD. No logo, no part number and no
+    screw slots are drawn: the skin is the outlines its relief builds from.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on generic/bnc-plug@1 - every class port contract
+    states none (spec/tests/test_behaviour.py).
+  axis: >-
+    derived - `mate` and `cable` share one point, the centre of the hood
+    (19.95, 7.65), which is also the centre of the front shell: the cable runs
+    straight through the connector, so its front and its rear are one axis
+    seen from two directions. The two thumbscrews are 16.66 either side of it.
+elements: {}
+relief:
+  features:
+    - node: shell
+      lift: 0.79
+      out: 6.73
+      shape: true
+      color: '#c9cdd1'
+      confidence: drawing
+      source: >-
+        Amphenol M2000 Series D-Sub Connectors catalogue (D-Sub-01 Rev.
+        10/10), p.22, Solder Type Standard D-Sub Connector: the 5.82 to 6.05
+        front shell, built at 5.94, ending at the flange face the ruling in
+        provenance.seated-depth puts 6.73 in front of the panel plane (Tyco
+        Electronics catalogue 82068, AMPLIMITE Subminiature D Connectors
+        (revised 1-08), p.126, Plug/Receptacle Mating).
+    - node: hood-front
+      lift: 6.73
+      out: 14.73
+      shape: true
+      color: '#b4b8bd'
+      confidence: estimated
+      source: >-
+        NorComp drawing 979-015-030R121 Rev 8, 979 Series D-Sub Backshell -
+        Die Cast, sheet 1: the ears, 39.9 across, from the flange face to the
+        top of the saddle washers (10.4 less the 2.4 lip). Their thickness is
+        not dimensioned and is drawn as that of the hood.
+    - node: hood
+      lift: 14.73
+      out: 33.93
+      shape: true
+      color: '#b9bdc2'
+      confidence: estimated
+      source: >-
+        NorComp drawing 979-015-030R121 Rev 8, 979 Series D-Sub Backshell -
+        Die Cast, sheet 1: the hood at its full 27.4 by 15.3 section. The
+        section is dimensioned; where it gives way to the taper is scaled
+        (provenance.hood).
+    - node: hood-rear
+      lift: 33.93
+      out: 52.63
+      shape: true
+      color: '#aeb2b7'
+      confidence: estimated
+      source: >-
+        NorComp drawing 979-015-030R121 Rev 8, 979 Series D-Sub Backshell -
+        Die Cast, sheet 1: the tapering rear of the hood, built as one step
+        20.7 by 14.26 (provenance.taper), ending 45.9 behind the flange face.
+    - node: screw-l
+      lift: 14.73
+      cyl: 31.24
+      color: '#cfd3d7'
+      confidence: estimated
+      source: >-
+        NorComp drawing 160-000-050R031 Rev 3, 4-40 Thumbscrew: the diameter
+        4.01 body, 31.24 long behind its shoulder (provenance.thumbscrews).
+    - node: screw-r
+      lift: 14.73
+      cyl: 31.24
+      color: '#cfd3d7'
+      confidence: estimated
+      source: >-
+        NorComp drawing 160-000-050R031 Rev 3, 4-40 Thumbscrew: the diameter
+        4.01 body, 31.24 long behind its shoulder (provenance.thumbscrews).
+    - node: stub
+      lift: 52.63
+      cyl: 30
+      confidence: estimated
+      source: >-
+        the stub rule, docs/connectors-coax-design.md section 5
+connection-points:
+  mate: {at: [19.95, 7.65], direction: front}
+  cable: {at: [19.95, 7.65], direction: front, 'on': stub}
+skins: [default]

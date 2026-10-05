@@ -379,6 +379,10 @@ export function createShell(opts = {}) {
     // AC cord ends (#785). `c13` and `c19` read right upper-cased; the
     // Saf-D-Grid plug's key would read SAF-D-GRID.
     'c13': 'C13', 'c19': 'C19', 'saf-d-grid': 'Saf-D-Grid',
+    // D-sub and VGA cable plugs (#787) state the key their connector states.
+    // Each reads right upper-cased; they are written out so the row a plug
+    // adds is labelled by the table and not by the fallback.
+    'db9': 'DB9', 'vga': 'VGA', 'da15': 'DA15', 'db25': 'DB25',
   };
   // A speed is one of spec/schemas/speeds.yaml's closed set (lint L110), and
   // every one of those reads right upper-cased - 1G, 2.5G, 1.6T - so there is

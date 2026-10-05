@@ -1,4 +1,4 @@
-"""Every coax medium, AC cord end and USB plug medium has a label in the kit.
+"""Every coax medium, AC cord end, USB plug and D-sub plug medium has a label in the kit.
 
 kit/shell.js labels a port row from its data-media through the `MEDIA` table
 and falls back to upper-casing the key. For coax that fallback reads
@@ -95,4 +95,27 @@ def test_each_usb_plug_medium_is_its_receptacles_and_has_its_label():
             stated = re.search(r"^attrs:.*\bmedia:\s*([a-z0-9-]+)", text, re.M)
             assert stated and stated.group(1) == key, (ref, stated and stated.group(1))
         assert table.get(key) == label, (
+            f"kit MEDIA[{key!r}] is {table.get(key)!r}, expected {label!r}")
+
+
+# D-sub and VGA cable plugs (#787). A plug states the key its core states
+# (`db9`, `vga`, `da15`, `db25`); none of the four was in the table, and each
+# is given the label the upper-casing fallback already read, so the row a
+# plug adds reads as the connector row beside it always has.
+DSUB_PLUGS = {
+    "generic/db9-plug": ("std/db9", "db9", "DB9"),
+    "generic/hd15-plug": ("std/vga", "vga", "VGA"),
+    "generic/da15-plug": ("std/da15", "da15", "DA15"),
+    "generic/db25-plug": ("std/db25", "db25", "DB25"),
+}
+
+
+def test_each_dsub_plug_medium_is_its_cores_and_has_its_label():
+    table = media_table()
+    for part, (core, key, label) in DSUB_PLUGS.items():
+        for ref in (part, core):
+            text = (LIBRARY / "components" / ref / "v1" / "contract.yaml").read_text()
+            stated = re.search(r"^attrs:.*\bmedia:\s*([a-z0-9-]+)", text, re.M)
+            assert stated and stated.group(1) == key, (ref, stated and stated.group(1))
+        assert table.get(key) == label == key.upper(), (
             f"kit MEDIA[{key!r}] is {table.get(key)!r}, expected {label!r}")

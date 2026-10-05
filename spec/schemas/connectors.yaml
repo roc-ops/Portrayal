@@ -39,3 +39,13 @@ interfaces:
   usb-a: {standard: usb-a, note: 'USB Standard-A receptacle (USB 2.0 specification, figure 6-7); generic/usb-a-plug@1 mates it. A USB 3.x Standard-A plug mates the same opening'}
   micro-usb-b: {standard: micro-usb-b, note: 'USB 2.0 Micro-B receptacle (Micro-USB Cables and Connectors Specification 1.01, figure 4-10); generic/micro-usb-b-plug@1 mates it. Micro-AB and the wider USB 3.x Micro-B are different interfaces'}
   usb-c: {standard: usb-c, note: 'USB Type-C receptacle (USB Type-C Cable and Connector Specification, figure 3-1); generic/usb-c-plug@1 mates it, either way up'}
+  # D-subminiature and VGA connectors (#787, docs/connectors-dsub-design.md).
+  # The hooded cable plug that mates each is a generic plug; the far end of
+  # the cable is not a part. GENDER IS PART OF THE INTERFACE: each key names
+  # the connector with the gender the library's panel part has, and a panel
+  # connector of the other gender would be a different interface with its own
+  # key, because the plug that mates it is the other plug.
+  db9: {standard: db9, note: 'D-subminiature 9 position, shell size E (DE-9), MALE on the panel: pins, as std/db9@1 draws it; generic/db9-plug@1, a female cable plug, mates it. A female DE-9 on a panel would be a different interface'}
+  hd15: {standard: hd15, note: 'High-density D-subminiature 15 position in shell size E (VGA), FEMALE on the panel: sockets, as std/vga@1 draws it; generic/hd15-plug@1, a male cable plug, mates it. The shell is the db9 shell and neither plug mates the other connector. A male HD-15 on a panel would be a different interface'}
+  da15: {standard: da15, note: 'D-subminiature 15 position in two rows, shell size A (DA-15), FEMALE on the panel: sockets, as std/da15@1 draws it; generic/da15-plug@1, a male cable plug, mates it. A male DA-15 on a panel would be a different interface'}
+  db25: {standard: db25, note: 'D-subminiature 25 position, shell size B (DB-25), FEMALE on the panel: sockets, as std/db25@1 draws it; generic/db25-plug@1, a male cable plug, mates it. A male DB-25 on a panel would be a different interface'}

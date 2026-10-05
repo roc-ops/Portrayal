@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1219 component majors in 26 namespaces.
+1223 component majors in 26 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -28,9 +28,9 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/cfp2@1` | component | port | 41.5 × 12.4 × 107.5 | cfp2 | 0 | 9 | CFP2 cage cutout - the module envelope of the CFP2 MSA, the aperture the module seats through |
 | `std/cfp4@1` | component | port | 21.5 × 9.5 × 92 | cfp4 | 0 | 3 | CFP4 cage cutout - the module envelope of the CFP4 MSA, the aperture the module seats through |
 | `std/cxp@1` | component | port | 27 × 10 × 92 | cxp | 0 | 3 | CXP cage cutout - the module envelope of the CXP MSA, the aperture the module seats through |
-| `std/da15@1` | component | port | 28.8 × 11.4 × 6.73 | da15 | 1 | 3 | D-subminiature DA-15 receptacle - fifteen contacts in two rows, eight over seven, in the size A shell; the al… |
-| `std/db25@1` | component | port | 42.52 × 11.4 × 6.5 | db25 | 0 | 1 | D-subminiature DB-25 receptacle - twenty-five contacts in two rows, thirteen over twelve, in the size B shell… |
-| `std/db9@1` | component | port | 20.47 × 11.4 × 6.73 | db9 | 0 | 18 | D-subminiature DE-9 receptacle - the nine-pin shell used for RS-232 serial ports and for the dry-contact ALAR… |
+| `std/da15@1` | component | port | 28.8 × 11.4 × 6.73 | da15 | 1 | 4 | D-subminiature DA-15 receptacle - fifteen contacts in two rows, eight over seven, in the size A shell; the al… |
+| `std/db25@1` | component | port | 42.52 × 11.4 × 6.5 | db25 | 0 | 2 | D-subminiature DB-25 receptacle - twenty-five contacts in two rows, thirteen over twelve, in the size B shell… |
+| `std/db9@1` | component | port | 20.47 × 11.4 × 6.73 | db9 | 0 | 19 | D-subminiature DE-9 receptacle - the nine-pin shell used for RS-232 serial ports and for the dry-contact ALAR… |
 | `std/din-1-0-2-3@1` | component | port | 5.59 × 5.59 | din-1-0-2-3 | 0 | 2 | 1.0/2.3 push-pull coaxial panel jack core (DIN 41626/2) - the round hole and the plain barrel with its collar… |
 | `std/drive-25@1` | component | drive | 15 × 69.85 × 100.45 | drive-25 | 1 | 2 | 2.5 inch form factor drive per SFF-8201 - the drive itself, not a carrier: 69.85 wide by 15.00 thick, drawn s… |
 | `std/drive-25-plan@1` | module | drive | 69.85 × 100.45 × 15 | drive-25 | 3 | 2 | A 2.5 inch drive lying flat, seen from above - the same body std/drive-25@1 draws standing on edge, in the pr… |
@@ -64,7 +64,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/smb@1` | component | port | 4.83 × 4.83 | smb | 24 | 20 | SMB coaxial panel jack (10-32UNF-2A) - snap-on timing coax (1PPS/10MHz) |
 | `std/usb-a@1` | component | port | 12 × 4.5 × 13.7 | usb-a | 102 | 30 | USB Type-A receptacle opening - sharp corners |
 | `std/usb-c@1` | component | port | 8.34 × 2.56 × 6.5 | usb-c | 8 | 2 | USB Type-C receptacle opening - fully rounded ends |
-| `std/vga@1` | component | port | 20.47 × 11.4 × 6.73 | hd15 | 2 | 6 | VGA video receptacle - a female high-density DE-15, fifteen contacts in three rows inside the D-subminiature … |
+| `std/vga@1` | component | port | 20.47 × 11.4 × 6.73 | hd15 | 2 | 7 | VGA video receptacle - a female high-density DE-15, fifteen contacts in three rows inside the D-subminiature … |
 | `std/xfp@1` | component | port | 19.5 × 9.7 × 61.7 | xfp | 1 | 40 | XFP cage cutout (10G pluggable) - the recommended bezel opening of the XFP MSA, the aperture an XFP cage prot… |
 
 ## common/ (111)
@@ -74,7 +74,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/bnc-jack@1` | component | port | 12.7 × 12.7 |  | 1 | 2 | Front-mount BNC bulkhead jack - the 12.7 flange and the two bayonet lugs (bezel) around a std/bnc core, which… |
 | `common/button-led-sq@1` | component | button | 4 × 4 |  | 1 | 0 | A square lit push button, the lamp being the whole button face |
 | `common/compliance-sticker@1` | component | sticker | 219 × 206 |  | 47 | 0 | Bottom-cover compliance/spec label (placeholder art until a real bottom photo is available) |
-| `common/db9-receptacle@1` | component | port | 30.8 × 12.5 × 6.73 |  | 8 | 25 | DE-9 receptacle as a faceplate sees it - the shell with a jackscrew standoff either side of it, which is what… |
+| `common/db9-receptacle@1` | component | port | 30.8 × 12.5 × 6.73 |  | 8 | 26 | DE-9 receptacle as a faceplate sees it - the shell with a jackscrew standoff either side of it, which is what… |
 | `common/dc-barrel@1` | component | inlet | 12 × 13 |  | 4 | 0 | DC barrel power inlet |
 | `common/dc-terminal-24@1` | component | inlet | 24.6 × 14.4 × 9.1 |  | 1 | 4 | Three-pole DC barrier terminal block with a hinged clear cover - the screw-down -48 V input fitted to 1RU acc… |
 | `common/dc-terminal-27@1` | component | inlet | 27.5 × 15.9 × 10.4 |  | 1 | 3 | Three-pole DC barrier terminal block with a hinged clear cover - the screw-down -48 V input fitted to 1RU acc… |
@@ -176,22 +176,26 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/usb-a@2` | component | port | 17 × 7 × 13.7 |  | 3 | 0 | USB Type-A receptacle with trident silkscreen - a shell bezel wrapping a std/usb-a opening core |
 | `common/usb-a-bezel@1` | component | port | 17 × 9.3 × 13.7 |  | 5 | 0 | USB Type-A port in a silver panel bezel - the plate spans the component so it can abut neighboring port bezel… |
 | `common/usb-symbol@1` | component | silkscreen | 6.4 × 4 |  | 28 | 1 | USB trident silkscreen symbol, no hardware - the marking printed beside a USB receptacle |
-| `common/vga-receptacle@1` | component | port | 30.8 × 12.5 × 6.73 |  | 6 | 1 | VGA receptacle as a faceplate sees it - the female HD-15 shell with a jackscrew standoff either side, which i… |
+| `common/vga-receptacle@1` | component | port | 30.8 × 12.5 × 6.73 |  | 6 | 2 | VGA receptacle as a faceplate sees it - the female HD-15 shell with a jackscrew standoff either side, which i… |
 | `common/vga-symbol@1` | component | silkscreen | 6 × 3.4 |  | 2 | 1 | The monitor mark printed beside a VGA port - a display outline flanked by two short bars, which is the form v… |
 | `common/vhdci-receptacle@1` | component | port | 40.4 × 5.2 |  | 0 | 3 | VHDCI (very-high-density cable interconnect) receptacle as a faceplate sees it - the flattened 0.8 mm-pitch s… |
 | `common/wall-plate-keyhole-2@1` | component | mount | 56 × 30 |  | 6 | 1 | Wall-mounting plate with two keyhole slots - a flat plate screwed across a device's back so the device hangs … |
 | `common/wall-plate-keyhole-2-42@1` | component | mount | 42 × 22 |  | 4 | 0 | The smaller wall-mounting plate with two keyhole slots - the 42 mm plate on the back of the AurCore AIS small… |
 | `common/warning-triangle@1` | component | marking | 5.4 × 4.8 |  | 5 | 3 | General warning triangle - a black exclamation mark in a yellow triangle, ISO 7010 W001 |
 
-## generic/ (35)
+## generic/ (39)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
-| `generic/bnc-plug@1` | component | port | 14.3 × 14.3 | bnc-plug | 0 | 6 | A straight BNC crimp plug on a coax cable, seen from the face: the knurled bayonet coupling sleeve, the crimp… |
-| `generic/c13-plug@1` | component | port | 26 × 16 | c13-plug | 0 | 3 | A moulded straight IEC C13 cord connector on its cord, seen from the cable end as a front elevation sees it s… |
+| `generic/bnc-plug@1` | component | port | 14.3 × 14.3 | bnc-plug | 0 | 10 | A straight BNC crimp plug on a coax cable, seen from the face: the knurled bayonet coupling sleeve, the crimp… |
+| `generic/c13-plug@1` | component | port | 26 × 16 | c13-plug | 0 | 7 | A moulded straight IEC C13 cord connector on its cord, seen from the cable end as a front elevation sees it s… |
 | `generic/c19-plug@1` | component | port | 37 × 24 | c19-plug | 0 | 0 | A moulded straight IEC C19 cord connector on its cord, seen from the cable end as a front elevation sees it s… |
+| `generic/da15-plug@1` | component | port | 39.9 × 15.3 | da15-plug | 0 | 0 | A DA-15 alarm cable plug: the MALE fifteen-position two-row D-subminiature connector in its backshell hood on… |
+| `generic/db25-plug@1` | component | port | 53.5 × 15.7 | db25-plug | 0 | 0 | A DB-25 status cable plug: the MALE twenty-five-position D-subminiature connector in its backshell hood on it… |
+| `generic/db9-plug@1` | component | port | 31 × 15.6 | db9-plug | 0 | 1 | A DE-9 serial or alarm cable plug: the FEMALE nine-position D-subminiature connector in its backshell hood on… |
 | `generic/din-1-0-2-3-plug@1` | component | port | 7.7 × 7.7 | din-1-0-2-3-plug | 0 | 0 | A straight 1.0/2.3 crimp plug on a coax cable, seen from the face: the push-pull latch sleeve, the crimp ferr… |
 | `generic/f-type-plug@1` | component | port | 12.83 × 11.11 | f-type-plug | 0 | 0 | A straight F crimp plug on a 75 ohm coax cable, seen from the face: the 7/16 hex coupling nut, the ribbed cri… |
+| `generic/hd15-plug@1` | component | port | 34 × 15.5 | hd15-plug | 0 | 0 | A moulded VGA cable plug: the MALE high-density fifteen-position D-subminiature connector in its moulded hood… |
 | `generic/lc-duplex-plug@2` | component | port | 11.83 × 8.535 | lc-duplex | 0 | 0 | An LC duplex plug as it is SEATED - the cable end that fills BOTH ports of a duplex LC adapter at once |
 | `generic/lc-plug@2` | component | port | 5.58 × 8.535 | lc-plug | 0 | 21 | An LC fibre plug as it is SEATED, front view - the four-tier keyed silhouette of the free plug (provenance.fr… |
 | `generic/mcx-plug@1` | component | port | 5 × 5 | mcx-plug | 0 | 0 | A straight MCX crimp plug on a coax cable, seen from the face: the ribbed snap-on grip, the crimp ferrule and… |
@@ -220,7 +224,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `generic/sfp-sc-key-up@1` | component | transceiver | 13.55 × 8.55 × 47.5 | sfp-module | 0 | 1 | A generic SFP with one SC receptacle - the shape of the PON line-terminal SFP and SFP+ optic, standing for al… |
 | `generic/sma-plug@1` | component | port | 9.17 × 7.94 | sma-plug | 0 | 3 | A straight SMA crimp plug on a coax cable, seen from the face: the hex coupling nut, the crimp ferrule and a … |
 | `generic/smb-plug@1` | component | port | 6.2 × 6.2 | smb-plug | 0 | 0 | A straight SMB crimp plug on a coax cable, seen from the face: the plain snap-on body, the crimp ferrule and … |
-| `generic/usb-a-plug@1` | component | port | 16 × 8 | usb-a-plug | 0 | 0 | A moulded straight USB Standard-A cable plug on its cable, seen from the cable end as a front elevation sees … |
+| `generic/usb-a-plug@1` | component | port | 16 × 8 | usb-a-plug | 0 | 4 | A moulded straight USB Standard-A cable plug on its cable, seen from the cable end as a front elevation sees … |
 | `generic/usb-c-plug@1` | component | port | 12.85 × 7 | usb-c-plug | 0 | 0 | A moulded straight USB Type-C cable plug on its cable, seen from the cable end as a front elevation sees it s… |
 
 ## amphenol/ (2)

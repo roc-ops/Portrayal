@@ -1,0 +1,240 @@
+format: 1
+kind: component
+name: hd15-plug
+version: 1.0.0
+class: port
+mates: hd15
+conforms: hd15-plug
+profile: networking
+description: >-
+  A moulded VGA cable plug: the MALE high-density fifteen-position
+  D-subminiature connector in its moulded hood on its cable, seen from the
+  cable end as a front elevation sees it seated: the hood, the two thumbscrew
+  knobs either side of the strain relief and a short straight stub of cable
+  whose diameter is the cable-od field. Seats on an `hd15` panel connector at
+  its own mate point; the cable leaves from the far end of the stub.
+size: {w: 34, h: 15.5}
+size-confidence: {w: datasheet, h: datasheet}
+size-notes: both figures are printed in a table on one cable data sheet (Legrand S000091720EN-01, p.2), not dimensioned on a drawing; a second moulded plug scales a little smaller
+attrs: {media: vga, connector: hd15, gender: male}
+fields:
+  cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 9}
+  jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
+  hood-color: {label: Hood colour, type: text, default: '#1f4f9e'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    datasheet - registry `hd15-plug`. Legrand technical data sheet
+    S000091720EN-01, HD15 Male/Male cord (updated 18/10/2017), p.2: the
+    straight connector is 15,5 x 34,0 x 47,5 mm, height by width by depth.
+    Those are three printed figures in a table, not a dimensioned drawing, and
+    the sheet does not say what the 47,5 runs between.
+  no-depth: >-
+    NO `size.d`, DELIBERATELY, as on generic/usb-a-plug@1 and
+    generic/c13-plug@1. The overall length (47.5) is in the registry entry and
+    in the relief below, but a `size.d` on a component with no `behaviour`
+    compiles to `data-depth`, and the kit builds that as a pit behind the
+    whole box of the part. The depth is carried by the relief features
+    instead.
+  gender: >-
+    male - THE CORE IS FEMALE: std/vga@1 records in provenance.gender that VGA
+    on equipment is a receptacle with sockets, so the cable plug that mates it
+    carries pins. The gender is stated in `attrs` because the interface `hd15`
+    names the panel connector with the gender the library draws, and a plug of
+    the other gender does not mate it. The pins are on the mating face, inside
+    the panel connector, and are not drawn.
+  not-db9: >-
+    THE SHELL IS THE DE-9 SHELL AND THE PLUG IS NOT A DE-9 PLUG. High density
+    puts fifteen contacts in three rows in shell size E, so this plug and
+    generic/db9-plug@1 have front shells of one size; they mate different
+    interfaces (`hd15` and `db9`), and neither is offered by a slot of the
+    other.
+  orientation: >-
+    DRAWN IN THE UNROTATED CONVENTION OF THE CORE: std/vga@1 draws the long
+    side of its D UP, so the front shell of this plug has its long side UP
+    too, and the turn a seat applies carries that round with a rotated core.
+    THE KEY IS NOT VISIBLE FROM THE CABLE END: the D is the front shell, which
+    is wholly behind the hood from here, and the hood, its two thumbscrews and
+    the cable are the same either way up. A plug seated the other way up would
+    look identical, so which way is up is recorded here and tested on the
+    shell outline alone.
+  seated-depth: >-
+    RULING - THE PLUG SEATS BY THE MATING DIMENSION THE DRAWING GIVES,
+    MEASURED FROM THE FACE THE CORE PRESENTS. Tyco Electronics catalogue
+    82068, AMPLIMITE Subminiature D Connectors (revised 1-08), p.126,
+    Plug/Receptacle Mating, dimensions the two mated flanges 6.73 +/-0.38
+    apart for shell sizes 1 and 2 and says the dimension is required to assure
+    full mating of the connector halves. std/vga@1 presents at its own face
+    (its `mate` carries no `on:` and no `seat-out`), the panel plane its
+    flange lies on, so the flange of this plug, which is the front of its
+    moulded hood, stands 6.73 in front of that plane. Its front shell is 5.82
+    to 6.05 long (Amphenol M2000 Series D-Sub Connectors catalogue (D-Sub-01
+    Rev. 10/10), p.22, Solder Type Standard D-Sub Connector, the pin connector
+    of shell size 1), built at 5.94, so it reaches back to 6.73 - 5.94 = 0.79
+    from the panel plane. THE CORE AS MODELLED AGREES ON THE SEAT: std/vga@1
+    states its depth as 6.73, the same mating dimension, so the lip of its
+    modelled shell and the front of this hood meet in one plane and nothing
+    here is derived from a figure the drawing does not give. WHAT THE CORE
+    DOES NOT AGREE WITH IS ITS OWN SHELL: the same Amphenol table gives the
+    front shell of a socket connector as 6.05 to 6.30 long, so the modelled
+    6.73 is about 0.55 taller than a real shell, as the provenance of the core
+    already says of its depth. THAT IS THE FIGURE TO REVISIT, and no figure of
+    this plug moves when it is.
+  frame: >-
+    THE RELIEF IS MEASURED FROM THE LIFT THE HOST PRESENTS, the frame
+    generic/usb-a-plug@1 and generic/c13-plug@1 use: 0 here is the panel plane
+    the core stands on. The front shell is built where it is, from 0.79 to
+    6.73, inside the height the shell of the core occupies: the two nest in
+    the real connector and they overlap here, hidden by the hood from the
+    front and by the shell of the core from the side.
+  shell: >-
+    drawing - Amphenol M2000 Series D-Sub Connectors catalogue (D-Sub-01 Rev.
+    10/10), p.22, Solder Type Standard D-Sub Connector: the front shell of a
+    pin connector of shell size 1 is 16.79 to 17.04 by 8.23 to 8.48 and 5.82
+    to 6.05 long from its lip to the front of its flange; a high-density
+    fifteen-position connector is in that shell (registry `hd15`). Drawn at
+    16.92 by 8.36 with 10 degrees of taper a side as the panel cutout has. THE
+    CORNER RADIUS, 2.0, IS ESTIMATED: the table dimensions none. Seen from the
+    cable end the shell is wholly behind the hood; it is drawn so the part of
+    the connector in front of the hood has a node to build from.
+  hood: >-
+    datasheet and scaled. The 34.0 by 15.5 section and the 47.5 overall length
+    are the Legrand figures (provenance.size). HOW THE 47.5 DIVIDES IS SCALED
+    on a second moulded VGA plug, CableWholesale drawing 10H1-202xx Rev B
+    (10-2006), SVGA (HD15) Male to SVGA Female with Ferrite Core, a vector
+    drawing with no dimensions, rendered at 600 dpi: hood 288 px and strain
+    relief 80 px. TAKING THE 47.5 TO RUN FROM THE LIP OF THE SHELL TO THE END
+    OF THE STRAIN RELIEF, an assumption, the 5.94 shell leaves 41.56, which
+    those two lengths divide into a hood of 32.5 and a strain relief of 9.06.
+    THE SAME DRAWING DOES NOT GIVE ONE RULER: its shell (16.92) reads 8.63
+    px/mm and its thumbscrew centres (24.99) read 8.20, 5 per cent apart, so
+    anything scaled from it is good to about that; on their mean it draws a
+    hood 32.4 wide, 13.8 thick and 49.2 from shell lip to the end of the
+    strain relief, against the 34.0, 15.5 and 47.5 Legrand prints. The corner
+    radius, 2.0, is estimated. The ribs and finger grips moulded into the hood
+    are not drawn.
+  relief-boot: >-
+    scaled and estimated - CableWholesale drawing 10H1-202xx Rev B (10-2006),
+    SVGA (HD15) Male to SVGA Female with Ferrite Core: the strain relief is a
+    flat block about 14.5 across the wide axis of the plug (122 px on the 8.4
+    px/mm mean ruler) and 9.06 long (provenance.hood). ITS THICKNESS, 11.0, IS
+    ESTIMATED: no held view shows that axis. Built as a block, not a cylinder.
+  thumbscrews: >-
+    scaled - CableWholesale drawing 10H1-202xx Rev B (10-2006), SVGA (HD15)
+    Male to SVGA Female with Ferrite Core lists a slotted 4/40 moulded
+    thumbscrew and draws each as a knurled knob standing behind the hood
+    beside the strain relief: about 7.7 across and 9.3 long, starting 1.4
+    clear of the hood (65, 78 and 12 px on the 8.4 px/mm mean ruler). Built
+    from the rear face of the hood for 10.7 so that nothing floats. THE
+    CENTRES ARE 24.99, the mounting-hole spacing of shell size 1 (TE catalogue
+    82068 p.126), which is where common/vga-receptacle@1 draws its two
+    standoffs; the drawing itself reads 23.8 on the shell ruler. Hatteland
+    Technology data sheet, Appliance cables and connectors, revision 19 (18
+    Sep 2024), p.2, HA-VGA-2M-32, lists black 4/40 thumbscrews on a black
+    moulded PVC hood.
+  stub: >-
+    estimated - the stub rule, docs/connectors-coax-design.md section 5: a
+    straight run of cable 30 long starting where the strain relief ends (48.29
+    in front of the panel plane). The bend is the installation.
+  cable-od: >-
+    datasheet - Legrand technical data sheet S000091720EN-01, HD15 Male/Male
+    cord (updated 18/10/2017), p.1: overall jacket diameter 9,00 +/-0,20 mm,
+    the cable the hood figures above belong to. VGA cables vary widely:
+    Hatteland Technology data sheet, Appliance cables and connectors, revision
+    19 (18 Sep 2024), p.2, HA-VGA-2M-32, lists 5.0 for a mini-coaxial cable. A
+    placement or a wrapper sets the cable it actually carries.
+  jacket-colour: >-
+    a FIELD, and it paints the cable only. Black is the default: Hatteland
+    Technology data sheet, Appliance cables and connectors, revision 19 (18
+    Sep 2024), p.2, HA-VGA-2M-32, lists a black PVC jacket, a black moulded
+    PVC hood and black thumbscrews, and CableWholesale drawing 10H1-202xx Rev
+    B (10-2006), SVGA (HD15) Male to SVGA Female with Ferrite Core lists the
+    same three in black. The Legrand cord the dimensions come from is
+    photographed in grey.
+  hood-colour: >-
+    a FIELD, `hood-color`, and it paints the one moulding: the hood, the
+    strain relief and the two thumbscrew knobs, each outlined in the shade of
+    its fill. BLUE IS THE DEFAULT, the blue std/vga@1 draws its insert in
+    (#1f4f9e): the PC 99 System Design Guide colour-codes the analogue VGA
+    connector blue, and a moulded VGA cable end commonly matches the port it
+    plugs into. That is a convention and not a figure from a held drawing.
+    BLACK IS THE OTHER COMMON FINISH and is what two of the three held
+    sources show (Hatteland HA-VGA-2M-32 and CableWholesale 10H1-202xx);
+    a placement or a wrapper states `hood-color: '#26282b'` for it. A colour
+    is a field and not a second skin (library/components/README.md).
+  no-mark: >-
+    NOTHING IS PRINTED OR EMBOSSED ON THE HOOD. No logo, no part number and no
+    screw slots are drawn: the skin is the outlines its relief builds from.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on generic/bnc-plug@1 - every class port contract
+    states none (spec/tests/test_behaviour.py).
+  axis: >-
+    derived - `mate` and `cable` share one point, the centre of the hood (17,
+    7.75), which is also the centre of the front shell: the cable runs
+    straight through the connector, so its front and its rear are one axis
+    seen from two directions. The two thumbscrews are 12.495 either side of
+    it.
+elements: {}
+relief:
+  features:
+    - node: shell
+      lift: 0.79
+      out: 6.73
+      shape: true
+      color: '#c9cdd1'
+      confidence: drawing
+      source: >-
+        Amphenol M2000 Series D-Sub Connectors catalogue (D-Sub-01 Rev.
+        10/10), p.22, Solder Type Standard D-Sub Connector: the 5.82 to 6.05
+        front shell, built at 5.94, ending at the flange face the ruling in
+        provenance.seated-depth puts 6.73 in front of the panel plane (Tyco
+        Electronics catalogue 82068, AMPLIMITE Subminiature D Connectors
+        (revised 1-08), p.126, Plug/Receptacle Mating).
+    - node: hood
+      lift: 6.73
+      out: 39.23
+      shape: true
+      confidence: estimated
+      source: >-
+        Legrand technical data sheet S000091720EN-01, HD15 Male/Male cord
+        (updated 18/10/2017), p.2: 34.0 by 15.5 in section. Its 32.5 length is
+        the printed 47.5 less the shell, divided on a second drawing
+        (provenance.hood).
+    - node: relief-boot
+      lift: 39.23
+      out: 48.29
+      shape: true
+      confidence: estimated
+      source: >-
+        CableWholesale drawing 10H1-202xx Rev B (10-2006), SVGA (HD15) Male to
+        SVGA Female with Ferrite Core: the strain relief, scaled at 14.5
+        across and 9.06 long; 11.0 thick is estimated
+        (provenance.relief-boot).
+    - node: screw-l
+      lift: 39.23
+      cyl: 10.7
+      confidence: estimated
+      source: >-
+        CableWholesale drawing 10H1-202xx Rev B (10-2006), SVGA (HD15) Male to
+        SVGA Female with Ferrite Core: the moulded thumbscrew knob, scaled at
+        7.7 across, built 10.7 long from the rear of the hood
+        (provenance.thumbscrews).
+    - node: screw-r
+      lift: 39.23
+      cyl: 10.7
+      confidence: estimated
+      source: >-
+        CableWholesale drawing 10H1-202xx Rev B (10-2006), SVGA (HD15) Male to
+        SVGA Female with Ferrite Core: the moulded thumbscrew knob, scaled at
+        7.7 across, built 10.7 long from the rear of the hood
+        (provenance.thumbscrews).
+    - node: stub
+      lift: 48.29
+      cyl: 30
+      confidence: estimated
+      source: >-
+        the stub rule, docs/connectors-coax-design.md section 5
+connection-points:
+  mate: {at: [17, 7.75], direction: front}
+  cable: {at: [17, 7.75], direction: front, 'on': stub}
+skins: [default]
