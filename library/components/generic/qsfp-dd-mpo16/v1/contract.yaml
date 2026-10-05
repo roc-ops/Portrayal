@@ -1,0 +1,136 @@
+format: 1
+kind: component
+name: qsfp-dd-mpo16
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: qsfp-dd
+conforms: qsfp-dd-module
+profile: networking
+description: >-
+  A generic QSFP-DD with one MPO-16 face - the shape of the QSFP-DD
+  parallel-fibre optic with a single-row sixteen-fibre receptacle. One MPO-16
+  receptacle, key up and pinned, in a long Type 2 nose, and the shorter pull
+  handle a Type 2 module carries.
+  Which module it is - rate, reach, wavelength, watts - is a fact about a
+  vendor product and lives on the wrapper that composes this
+  (docs/pluggables-design.md, decision 5), never here. Copies
+  generic/qsfp-dd-lc@2 and changes the face and the nose.
+size: {w: 18.35, h: 8.5, d: 58.26}
+size-confidence: {w: registry, h: registry, d: registry}
+head:
+  at: [0.0, -3.13]
+  size: {w: 18.35, h: 13.13, d: 31.9}
+  size-confidence: {w: registry, h: datasheet, d: datasheet}
+  node: body
+  type: 2
+attrs: {power-absent: not-applicable, form-factor: qsfp-dd, face: mpo16, media: fiber}
+fields:
+  latch-color:
+    label: Latch colour
+    type: text
+    default: '#d9cba3'
+  label:
+    label: Module label
+    type: text
+    default: ''
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    registry - qsfp-dd-module, QSFP-DD/QSFP-DD800/QSFP112 Hardware
+    Specification Rev 6.3 section 7.3, Figures 52 and 53: 18.35 +/-0.1 wide,
+    8.5 +/-0.1 high, 58.26 REF inserted length behind the nose. Unchanged from
+    generic/qsfp-dd-lc@2; see that contract for the full reading. The JPC 400G
+    QSFP-DD SR8 datasheet p2 outline prints the same body (18.35 +/-0.1, 8.5
+    +/-0.1, and 10.06 +/-0.15 from the hard stop to the rear end).
+  power: >-
+    NOT APPLICABLE, because this contract is a GENERIC and not a part. It
+    stands in for every module of its kind, so there is no one figure to
+    state, and any wattage here would be a fiction. The figure belongs on the
+    wrapper, which knows which module it is. L27 exempts by `power-absent` and
+    this sentence is why.
+  head: >-
+    datasheet - the JPC 400G QSFP-DD SR8 Transceiver datasheet (an MPO-16
+    module), p2 outline drawing, toleranced: the nose stands 3.13 +/-0.25
+    above and 1.5 +/-0.1 below the 8.5 +/-0.1 body, 13.13 (ref) tall. Both are
+    inside the registry envelope (3.4 MAX above, 1.6 MAX below; QSFP-DD HW Rev
+    6.3 Figure 52 Note 4), so nothing is listed in `exceeds`. The width is the
+    registry 18.35, which the same sheet prints. THE LENGTH IS 31.9, DERIVED:
+    the sheet dimensions 80.5 +/-0.2 from the nose front to the hard stop and
+    48.61 +/-0.2 from the back of the nose to the same stop, and the
+    difference is 31.89. That is a TYPE 2 nose (35 MAX; Type 1 is 20 MAX),
+    hence `type: 2`. A SECOND VENDOR AGREES IN KIND: the FluxLight
+    QSFP-DD-400GBase-SR8 datasheet, revision 21.04, p13 prints 93.00 +/-0.20
+    module length, MAX 3.4 above and 1.40 +/-0.10 below; less the registry
+    58.26 that is 34.74 outside the cage, a derivation that assumes its 93.00
+    runs to the rear end. The two differ by 2.8 and both are Type 2. The FS
+    QDD-SR4-400G datasheet p9, an MPO-12 QSFP-DD, also draws a long nose.
+    generic/qsfp-dd-lc@2 keeps a Type 1 head; one drawing of one face is not
+    the class, and this part says only what the MPO-16 drawings show.
+  receptacle: >-
+    std/mpo16-module-receptacle@1, composed as `mpo16`: the MTP-16 opening as
+    a module carries it, a dark cavity with the pinned ferrule and its sixteen
+    fibre positions at the back. QSFP-DD HW Rev 6.3 section 6.2.1 places the
+    MPO-16 plug and receptacle under TIA-604-18 and IEC 61754-7-3 (Figure 29).
+    The mouth is the 12.9 x 8.0 std/mpo16@1 records (estimated there), and the
+    slot offers what that opening offers. The fibres are addressable as
+    `mpo16/1` to `mpo16/16`; which carry which lane is the wrapper's fact.
+  key: >-
+    datasheet - KEY UP, toward the module top and the pull handle: QSFP-DD HW
+    Rev 6.3 section 6.2.1; the FluxLight p13 end view draws the notch on the
+    pull-tab side; the JPC p10 lane figure draws the key up and offset to the
+    right of centre looking into the receptacle. The receptacle is composed
+    unrotated and draws its notch there, and generic/mpo16-plug@1 draws its
+    key on top, offset right, so a seated plug agrees with that figure.
+  gender: >-
+    datasheet - PINNED. QSFP-DD HW Rev 6.3 section 6.2.1 notes two alignment
+    pins present in each receptacle, and the composed receptacle draws them.
+  position: >-
+    ESTIMATED - centred on the face in x and at the mid-height of the body
+    (9.175, 4.25). NO DOCUMENT DIMENSIONS IT and no QSFP-DD module has been
+    photographed. FluxLight p13 and QSFP-DD HW Figure 29 draw the receptacle
+    centred in x with no callout. The height is scaled off a SIBLING: the
+    Gigalight GQD-MPO401-SR8CB Rev V2 Figure 6 end view (the two-row variant
+    of the same module, a raster), scaled on its 18.35 width, puts the ferrule
+    centre on the x centreline and 4.2 below the body top. An MPO-16 module is
+    taken to share that nose.
+  insert: >-
+    borrowed - the 13.1 x 9.4 black insert of generic/qsfp-mpo@1,
+    photo-measured there on a QSFP28 module, drawn centred on this receptacle.
+    Estimated here: nothing shows the insert of a QSFP-DD MPO-16 module.
+  tab: >-
+    composed - common/qsfp-dd-pull-tab-type2@1, the handle of a Type 2 module,
+    read off the same JPC p2 outline this head is. At `lift: 31.9` it stands on
+    the nose front and reaches 37.1 further, so the module ends 69.0 outside
+    the cage: the 117.6 +/-0.4 JPC prints to the hard stop, less its 48.61
+    +/-0.2. At `at: [0, -3.13]` the handle top is level with the top of the
+    nose, where JPC's 13.13 (ref) is dimensioned from, and its arms run on the
+    module side edges (18.35 across). See that part for its figures and for
+    where FluxLight differs. generic/qsfp-dd-lc@2 keeps the Type 1 handle on
+    its Type 1 head. THE LAYERING IS DELIBERATE (lint L46): the size box of
+    the handle overlaps the receptacle, but the handle is a loop open in the
+    middle; its posts stand at x 0 to 2.25 and 16.1 to 18.35, clear of the
+    insert (2.625 to 15.725), and its grip lies above the body top.
+  tab-colour: >-
+    A FIELD, and the default is BEIGE because the code says so for this face.
+    QSFP-DD HW Rev 6.3 section 6.3 recommends colour coding the pull tab by
+    wavelength - beige for 850 nm, blue for 1310 nm, white for 1550 nm - and
+    a single-row MPO-16 face is the multimode parallel face. The document
+    names the colour and not a value: #d9cba3 is a representative beige,
+    estimated. A vendor wrapper sets `latch-color` where its module differs.
+parts:
+  - {ref: std/mpo16-module-receptacle@1, id: mpo16, at: [2.725, 0.25], lift: 31.9}
+  - {ref: common/qsfp-dd-pull-tab-type2@1, id: tab, at: [0.0, -3.13], lift: 31.9}
+relief:
+  features:
+    - node: body
+      out: 31.9
+      color: '#8d949c'
+      confidence: datasheet
+      source: >-
+        JPC 400G QSFP-DD SR8 datasheet p2: 80.5 +/-0.2 less 48.61 +/-0.2, the
+        nose length outside the cage, a Type 2 nose - see provenance.head
+connection-points:
+  mate: {at: [9.175, 4.25], direction: front}
+  optical: {at: [9.175, 4.25], direction: front}
+skins: [default]

@@ -221,9 +221,9 @@ def test_every_plain_speed_the_library_uses_has_a_row():
     the cage.
 
     A port whose part NOT_A_DCIM_PORT registers is not a missing row: the register
-    already says why it does not type. The HLX-TGV's SC/APC PON port is the one
-    case - it states `speed: 10g` beside `pon: xgs-pon`, and the ferrule is not
-    an Ethernet cage family.
+    already says why it does not type. An ONT's SC/APC PON port is the one
+    case - the HLX-TGV's states `speed: 10g` beside `pon: xgs-pon`, the ferrule
+    is not an Ethernet cage family, and it types from `pon` instead.
     """
     import re
     plain = re.compile(r"^\d+(\.\d+)?[gmt]$")
@@ -665,16 +665,16 @@ def _nested_paths(ref, prefix, seen=()):
 
 
 def test_a_nested_bay_is_written_for_netbox_and_not_for_nautobot():
-    """`for_target`: NetBox templates a bay's position and Nautobot does not, so
-    one gets `{module}/mic0` and the other no nested bay at all."""
+    """`nested_bays_for`: NetBox templates a bay's position and Nautobot does not,
+    so one gets `{module}/mic0` and the other no nested bay at all."""
     doc = {"model": "X", "module-bays": [{"name": "mic0", "position": "mic0"}],
            "interfaces": [{"name": "{module}/port-1"}]}
-    nb = dx.for_target(doc, "netbox")
+    nb = dx.nested_bays_for(doc, "netbox")
     assert nb["module-bays"] == [{"name": "{module}/mic0", "position": "{module}/mic0"}]
-    assert "module-bays" not in dx.for_target(doc, "nautobot")
+    assert "module-bays" not in dx.nested_bays_for(doc, "nautobot")
     assert doc["module-bays"][0]["position"] == "mic0", "the built document was changed"
     plain = {"model": "Y", "interfaces": []}
-    assert dx.for_target(plain, "nautobot") is plain
+    assert dx.nested_bays_for(plain, "nautobot") is plain
 
 
 def test_the_written_module_types_carry_nested_bays_only_for_netbox():

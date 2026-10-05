@@ -38,6 +38,31 @@ names the ref that replaces it.
   trees under `library/exports/*/module-types` are no longer the same text:
   Nautobot writes a bay's position as given and cannot fill `{module}` in it
   (roc-ops/Portrayal#765).
+- Five generic optics, a plug and a pull handle: `generic/qsfp-mpo@1` (a QSFP
+  with one MPO receptacle), `generic/qsfp-dd-mpo16@1` (a QSFP-DD with one
+  MPO-16 receptacle in a Type 2 nose), `generic/qsfp-lc-simplex@1` (a QSFP
+  with a single LC bore), `generic/sfp-sc@1` and `generic/sfp-sc-key-up@1` (an
+  SFP with an SC receptacle and a bail, key slot down and key slot up),
+  `generic/mpo16-plug@1` (the sixteen-fibre MPO plug, key offset, mating
+  `mpo16`) and `common/qsfp-dd-pull-tab-type2@1` (the shorter handle of a
+  Type 2 QSFP-DD module). `std/mpo-module-receptacle@1` and
+  `std/mpo16-module-receptacle@1` draw the MPO mouth as a module carries it,
+  with the pinned ferrule, the key notch and one addressable node per fibre. Each optic's receptacle is a connector slot offering its plug and
+  dust cap. A new registry entry, `mpo16-plug`. A host's own field default now
+  reaches a part it composes when the two defaults differ. See
+  [docs/pluggables-mpo-bidi-pon-design.md](docs/pluggables-mpo-bidi-pon-design.md).
+- Nokia Lightspan MF-8 (`nokia/lmfs-f`) with its NT board (`nokia/lbnt-a`), 16-port
+  Multi-PON LT board (`nokia/lwlt-c`), alarm module (`nokia/lalm-f`), power module
+  (`nokia/lpwr-f`), fan module (`nokia/lfan-f`), the LT and NT dummy boards and the
+  horizontal front cover; the Nokia XS-010X-R and XS-010XR-P XGS-PON ONTs; and the
+  outdoor ONT enclosure 3FE54221AH.
+- A device's built-in PON port now exports. A placement that states `pon` with a
+  flavour both NetBox and Nautobot define leaves as that interface type; before, an
+  ONT's SC/APC uplink exported nothing. This adds a `pon` interface (`xgs-pon`) to
+  the four Halny HLX-TGV device types - an addition, so nothing already imported is
+  re-filed.
+- Lint L76 counts a lamp bound to a jack from another face (`for: rear/lan`), as it
+  already counted one drawn beside the jack.
 - ReadyLinks GL-12xB-240D (`readylinks/gl-12xb-240d`), the first device to seat
   a BNC jack: twelve ReadyLink ports on `common/bnc-jack@1` (impedance 75) on a new
   GL-x 12-port BNC line card in slot 1, a slot blank in slot 2, and two BNC sync
@@ -130,6 +155,29 @@ names the ref that replaces it.
   class), and no 800G prefix is documented.
 
 ### Changed
+- **The npm packages: the component skins ship one package per namespace**,
+  `@portrayal/components-<namespace>`, and `packages.json` in `@portrayal/index`
+  maps each namespace to its package and version under `components`. One
+  package for every skin was the largest in the scope, grew with every
+  component and moved whole with any one skin. `packageDist` in
+  `@portrayal/kit/dist` reads the new map, and `@portrayal/kit` is 0.2.0 for it:
+  0.1.0 reads the old single entry and cannot load an index published from
+  here on.
+  `@portrayal/components` 0.1.0, published before the split, is not updated
+  again (roc-ops/Portrayal#526).
+- The Nautobot exports are no longer a copy of the NetBox ones in two places,
+  because Nautobot could not import 37 of them. Front ports under
+  `library/exports/nautobot/` now carry `rear_port` and `rear_port_position`
+  (read from the fibre map) in place of `positions`, which is the shape
+  Nautobot's FrontPortTemplate requires; and a device that occupies a half
+  rack unit states the next whole number, with the true height in `comments`,
+  because Nautobot stores `u_height` as an integer. That is the 35 FS FHD
+  cassettes and panels, the Juniper MX104 (3.5U, written as 4) and the Telco
+  Systems TM-7124S (1.5U, written as 2). The four MPO-to-MPO adapter panels
+  state each front and rear connector as one position there, since Nautobot
+  binds a front port to a single rear position; the fibre map keeps every
+  fibre. None of the 37 could be imported into Nautobot before, so no imported
+  data changes. The NetBox exports and the fibre maps are unchanged.
 - **A 3D export leaves the marks out** (roc-ops/portrayal-site#46): `exportData()` and
   `download()` hide every mark halo for the export, as they always hid the
   selection halo, and restore them after. A GLB or USDZ is the model; the marks

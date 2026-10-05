@@ -1,0 +1,145 @@
+format: 1
+kind: component
+name: mpo16-plug
+version: 1.0.0
+class: port
+mates: mpo16
+interface: mpo16-plug
+interface-at: boot
+conforms: mpo16-plug
+optical: {positions: 16}
+profile: networking
+description: >-
+  A 16-fibre MPO/MTP-16 plug, front view - the 12.5 x 7.6 housing of the
+  MPO-12 plug with a key rib that is narrower and OFFSET from the centreline,
+  and a one-row sixteen-fibre MT ferrule between guide-pin bores 5.3 apart.
+  UNPINNED: the pins live on the module receptacle this lands in - stated in
+  `provenance.gender`, because the schema carries no key for it yet. Occupies
+  an `mpo16` aperture (std/mpo16@1 and anything composing it) at its own
+  `mate` point, and presents `mpo16-plug` at its rear so a boot or a bare
+  cable can seat there, with nothing built yet to take it up. It does not
+  mate `mpo`: the offset key is what keeps a sixteen-fibre plug out of
+  MPO-8/12/24 hardware (docs/pluggables-design.md, decision 10).
+size: {w: 12.5, h: 7.6}
+size-confidence: {w: drawing, h: drawing}
+attrs: {media: fiber, connector: mpo16}
+unplaced: >-
+  seated by a configuration in an `mpo16`-presenting aperture; no device
+  ships one. The slots exist: common/mpo16-adapter@1 on the FS MTP-16 adapter
+  panel, and the receptacle of generic/qsfp-dd-mpo16@1.
+  spec/tests/test_mpo_bidi_pon_optics.py seats it as a configured occupant in
+  that optic in a real QSFP-DD cage.
+provenance:
+  behaviour: >-
+    DELIBERATELY OMITTED, for the reason generic/lc-plug@2 states in its own
+    `provenance.behaviour`: every `class: port` contract carries no behaviour,
+    and nothing in the mate-to resolution reads the field.
+  source: >-
+    US Conec customer drawings C17864 rev H (KIT, MTP-16 CONNECTOR, RIBBON),
+    C18012 rev F (5.3 - 5.7mm ROUND CABLE) and C21364 rev C (3.4 - 3.8mm round,
+    flex boot), sheet 2 of each: front (end-on) view, plan view and SECTION
+    A-A. Sheet 2 is vector and marked N.T.S., DIMENSIONS FOR REFERENCE ONLY,
+    as the MPO-12 sheets are, so the printed callouts govern and every
+    measurement is a check on them. Measurements were taken from the vector
+    paths with curves evaluated, on the ruler the printed 7.6 fixes (11.345
+    pt/mm on C17864, 8.503 on C18012). SENKO DS-MPO-000001 Rev B p4 (712
+    series, sixteen and thirty-two fibre, vector) is the second manufacturer,
+    and the US Conec MTP-16 handout SM-0022-0823 p1 prints the pin and fibre
+    pitches.
+  size: >-
+    drawing, both axes, PRINTED CALLOUTS: 12.5 on the plan view and 7.6 on the
+    front view of all three US Conec sheets. The front-view outline measures
+    12.52 and 12.53 on the 7.6 ruler. THE SAME ENVELOPE AS THE MPO-12 PLUG
+    (generic/mpo12-plug@1, C20044 / C20851), which is what the handout means
+    by the same external footprint. NO DEPTH, the reading standards.yaml takes
+    for every plug: the sheets print 43.2 overall on a ribbon boot (C17864)
+    and 60.3 and 60.7 on round-cable boots (C18012, C21364), so what is behind
+    the housing is the cable assembly and not the interface. SENKO gives
+    (37.1) to (43.6) for its own boots.
+  key: >-
+    drawing, measured on two US Conec sheets - THE KEY IS OFFSET. On the front
+    view a rectangular moulding 3.65 wide (3.65, 3.66) and 0.68 tall (0.68,
+    0.66) sits on the long face, its outer edge 0.40 inside the housing flat,
+    its CENTRE 1.12 FROM THE HOUSING CENTRELINE (1.118, 1.133). The MPO-12 key
+    is 4.39 wide and centred to 0.02. SENKO DS-MPO-000001 Rev B p4 agrees from
+    a second manufacturer: its key spans -0.48 to +2.77 about the centreline,
+    centre 1.13.
+    WHICH LONG FACE, AND WHICH WAY THE OFFSET RUNS, IS A CONVENTION ARGUMENT
+    AND NOT A READING, as generic/mpo12-plug@1 records for its own key. Both
+    long faces draw a 3.65 moulding, offset to opposite sides (the outline is
+    point-symmetric), and no callout names either. The top is drawn, as on
+    the MPO-12 plug. On the END FACE the upper moulding is offset to the
+    LEFT of the viewer; this view is the seated plug seen from its boot end,
+    where that mirrors to the RIGHT, so the key is drawn 1.12 right of centre.
+    The JPC 400G QSFP-DD SR8 datasheet p10 lane figure draws the same thing
+    from the module side: key up and offset to the right of centre looking
+    into the receptacle.
+  ferrule: >-
+    drawing, measured, undimensioned. The window the MT ferrule stands in
+    measures 6.36 x 2.46 (6.35 x 2.46 on the second sheet), centred, inside an
+    8.16 x 3.97 outer step (C17864) that is not drawn. The MPO-12 window is
+    6.10 x 2.50.
+  guide-pins: >-
+    datasheet, confirmed by drawing - the two guide-pin bores are 5.3 apart:
+    the US Conec MTP-16 handout SM-0022-0823 p1 prints 5.3mm against 4.6mm for
+    the traditional MT, and the bores measure 5.30 apart on C17864 and 5.31 on
+    the SENKO 712 front view. Each bore measures 0.56 to 0.63 across on
+    C17864 and is drawn at 0.6. Bores, not pins: the plug is unpinned.
+  gender: >-
+    UNPINNED, as every MPO plug in this library is: the module receptacle
+    carries the pins (QSFP-DD HW Rev 6.3 section 6.2.1 notes two alignment
+    pins in each receptacle). The sheets print the guide pins 1.8 proud of
+    the ferrule for the pinned build of the same housing. Stated in prose
+    only, for the reason generic/mpo12-plug@1 gives.
+  standoff: >-
+    ESTIMATED, borrowed - the 15.2 of generic/mpo12-plug@1, whose own
+    `provenance.standoff` brackets it from the printed 25.6 MPO-12 connector
+    body and a 20.7 adapter. The MTP-16 sheets print only overall lengths
+    with a boot (43.2, 60.3, 60.7) and the ferrule 1.2 or 1.1 proud of the
+    housing; none dimensions the connector body alone, so the same housing is
+    given the same standoff.
+  fibre-positions: >-
+    ELEMENTS 1 TO 16 ARE ADDRESSES, NOT A PICTURE: L112 asks every connector
+    for a node per optical position, so fibre n of a seated plug is at
+    `<part>/n`. One row through the centre of the ferrule window (6.25, 3.8)
+    at the 0.25 pitch the handout prints (0.2496 measured on C17864), 3.75 end
+    to end. NUMBERED AS A SEATED PLUG SHOWS THEM, fibre 1 at the RIGHT, the
+    way generic/mpo12-plug@1 and common/mpo16-adapter@1 number theirs, so
+    fibre n lands on the adapter fibre n. Each fibre bore measures 0.11 across
+    and is not drawn.
+  colour: >-
+    not a standard figure. SENKO offers yellow, green, violet, aqua, beige,
+    black and lime housings, and US Conec kits list lime and magenta. The
+    grey of generic/mpo12-plug@1 is drawn.
+elements:
+  body: {at: [0.0, 0.0], size: [12.5, 7.6], class: port}
+  '1': {at: [8.05, 3.725], size: [0.15, 0.15], class: fibre}
+  '2': {at: [7.8, 3.725], size: [0.15, 0.15], class: fibre}
+  '3': {at: [7.55, 3.725], size: [0.15, 0.15], class: fibre}
+  '4': {at: [7.3, 3.725], size: [0.15, 0.15], class: fibre}
+  '5': {at: [7.05, 3.725], size: [0.15, 0.15], class: fibre}
+  '6': {at: [6.8, 3.725], size: [0.15, 0.15], class: fibre}
+  '7': {at: [6.55, 3.725], size: [0.15, 0.15], class: fibre}
+  '8': {at: [6.3, 3.725], size: [0.15, 0.15], class: fibre}
+  '9': {at: [6.05, 3.725], size: [0.15, 0.15], class: fibre}
+  '10': {at: [5.8, 3.725], size: [0.15, 0.15], class: fibre}
+  '11': {at: [5.55, 3.725], size: [0.15, 0.15], class: fibre}
+  '12': {at: [5.3, 3.725], size: [0.15, 0.15], class: fibre}
+  '13': {at: [5.05, 3.725], size: [0.15, 0.15], class: fibre}
+  '14': {at: [4.8, 3.725], size: [0.15, 0.15], class: fibre}
+  '15': {at: [4.55, 3.725], size: [0.15, 0.15], class: fibre}
+  '16': {at: [4.3, 3.725], size: [0.15, 0.15], class: fibre}
+connection-points:
+  mate: {at: [6.25, 3.8], direction: front}
+  boot: {at: [6.25, 3.8], direction: rear, 'on': body}
+  cable: {at: [6.25, 3.8], direction: rear, 'on': body}
+relief:
+  features:
+    - node: body
+      out: 15.2
+      confidence: estimated
+      source: >-
+        borrowed from generic/mpo12-plug@1, the same housing - see
+        provenance.standoff. ABSOLUTE from this part's own face: std/mpo16@1
+        puts its `mate` on nothing and presents a lift of 0.0
+skins: [default]

@@ -43,6 +43,8 @@ nautobot/devicetype-library#24).
   python3 dcim_export.py --dist DIR --out DIR [--device NAME]
 """
 import argparse
+import copy
+import math
 import re
 import pathlib
 from pathlib import Path
@@ -780,7 +782,9 @@ NOT_A_DCIM_PORT = {
                    "os32m2b); no trunk to terminate on, the same case as "
                    "common/lc-duplex-adapter",
     "common/sc-apc": "PON; the connector is the same ferrule for xg-pon (10G/2.5G) and "
-                     "xgs-pon (10G/10G), which upstream separates, so the ref cannot pick one",
+                     "xgs-pon (10G/10G), which upstream separates, so the ref cannot pick "
+                     "one - a device placement that states `pon` does, and exports "
+                     "(device_port_type)",
 
     # --- USB: real ports, no device-type field to put them in ----------------
     # A DCIM device type has console ports, power ports and interfaces. A USB
@@ -836,11 +840,13 @@ NOT_A_DCIM_PORT = {
     # of parts that export nothing is wrong about one that does.
 }
 
-# Both libraries take the same device-type document. They differ only in what
+# Both libraries take ALMOST the same device-type document. They differ in what
 # they REQUIRE - NetBox also demands u_height and is_full_depth, which we always
-# write - and in the airflow enum, where NetBox allows three values we never
-# emit. So one document is written to both trees, and each is validated against
-# its own schema so a divergence is caught rather than assumed away.
+# write - in the airflow enum, where NetBox allows three values we never emit,
+# and in the two places `for_target` below rewrites for Nautobot: a height that
+# is not a whole number of rack units, and a front port, which Nautobot still
+# binds to its rear port inside the type. Everything else is one document
+# written to both trees.
 TARGETS = ("netbox", "nautobot")
 
 
@@ -1223,6 +1229,13 @@ def device_port_type(p, a, group_role, names=None):
     # A CAGE THAT CARRIES A PROPRIETARY LINK says what runs in it, as a
     # card's does in `placed_type`, and no speed row can be true of it.
     link = proprietary_link(a) if pluggable_cage(p["ref"]) else None
+    # A PON PORT'S FLAVOUR IS `pon`, ON A DEVICE AS ON A CARD (placed_type).
+    # An ONT's uplink is a built-in SC/APC ferrule, not a cage, so iface_type
+    # has no family to read and the port never typed: the box exported with
+    # its LAN jack and without the port it exists for. The flavour is the
+    # device's own word, and only the ones both targets define count.
+    if not link and a.get("pon") in PON_TYPES:
+        return a["pon"], None, None
     t = "other" if link else iface_type(p, a, group_role)
     if t is None:                      # unknown combination: skip, do not guess
         return None, None, "a port the exporter cannot type"
@@ -1384,8 +1397,9 @@ def u_height(ch):
     exported as a 1U rack device. L125 now makes a rack device state `ru`, and
     a box mounted any other way states `chassis.mount` instead.
 
-    Both schemas take `u_height` as a number, minimum 0, multiple of 0.5, and
-    neither has a field for how a box is mounted (schema/devicetype.json at
+    Both schemas take `u_height` as a number, minimum 0, multiple of 0.5 -
+    though Nautobot itself stores a whole number, which `for_target` answers -
+    and neither has a field for how a box is mounted (schema/devicetype.json at
     netbox-community/devicetype-library 52d359bd and nautobot/devicetype-library
     c86556e9). Upstream device types that are not racked are written exactly
     this way - Aoni B08 and CNB VP1A, for two, say `u_height: 0` and
@@ -1930,9 +1944,11 @@ def tokenize_module(doc):
     return doc
 
 
-def for_target(doc, target):
-    """A written module document as ONE DCIM takes it. They differ in one thing:
-    the bays a module carries itself.
+def nested_bays_for(doc, target):
+    """A written MODULE document's own bays as ONE DCIM takes them. Asked of
+    module types only: a device type's `module-bays` are the chassis' own, are
+    positioned by their id in both DCIMs, and never pass through here.
+    `for_target` does the rest of what the two DCIMs differ in.
 
     A NESTED BAY NEEDS ITS PARENT IN ITS POSITION. A card's single `{module}` is
     the position of the bay it sits in, not of the chain above it, in both DCIMs
@@ -1993,6 +2009,119 @@ def tokenize_fibre_map(m):
             if row.get(key) is not None:
                 row[key] = module_scoped(row[key])
     return m
+
+
+# WHERE THE TWO TARGETS PART. Both trees were one document until every export
+# was imported into a running NetBox 4.7 and a running Nautobot 3.2: NetBox took
+# all of them, Nautobot refused 37. Its model is the older one in two places,
+# and its own library schema does not say so in the first.
+#
+# HEIGHT. nautobot/devicetype-library's schema takes `u_height` as a multiple
+# of 0.5, but Nautobot stores it in a PositiveSmallIntegerField and the import
+# form answers "Enter a whole number" to 3.5. So a half-U box rounds UP there -
+# a rack reservation half a unit too tall is the error that does not put two
+# devices in one space - and the comment keeps the height the vendor states.
+#
+# FRONT PORTS. NetBox 4.5 moved the front-to-rear binding out of the type
+# (netbox#20564), which is why the fibre map exists. Nautobot did not: its
+# FrontPortTemplate has a non-null `rear_port_template` and
+# `rear_port_position`, its library schema spells them `rear_port` and
+# `rear_port_position`, and neither has `positions` on a front port. A front
+# port without them fails the import - reported as "object-level permissions
+# violation", which is the handler that happens to catch the missing relation.
+# The rows are already in the fibre map, so they are read from there.
+#
+# AN MPO FRONT IS THE CASE NAUTOBOT CANNOT SAY. One front port there reaches one
+# rear position, so a twelve-fibre front connector against a twelve-position
+# rear connector has no spelling. It exports as what Nautobot can hold - one
+# pass-through, one position - and the comment says the fibres are in the map.
+# That is a coarser statement, not a wrong one: the panel does pass the
+# connector straight through.
+class NotExpressible(SystemExit):
+    """A document one target has no way to hold. It stops the export, because
+    the alternative is a file that is committed, looks right and fails on import."""
+
+
+def _note(doc, text):
+    body = str(doc.get("comments") or "").rstrip()
+    doc["comments"] = (body + "\n\n" + text).strip()
+
+
+def for_target(doc, target, fibre_map=None):
+    """`doc` as `target` can import it. NetBox takes it as written; Nautobot
+    takes a copy with a whole-unit height and rear-bound front ports.
+
+    `fibre_map` is the module's own map, tokenised the same way `doc` is, and
+    is what a document with front ports is bound from.
+    """
+    if target != "nautobot":
+        return doc
+    whole = float(doc.get("u_height") or 0).is_integer()
+    if whole and not doc.get("front-ports"):
+        return doc
+    doc = copy.deepcopy(doc)
+    who = f"{doc.get('manufacturer')} {doc.get('model')}"
+
+    if not whole:
+        stated = doc["u_height"]
+        doc["u_height"] = float(math.ceil(stated))
+        _note(doc, f"Occupies {stated:g}U. Nautobot stores whole rack units, so this "
+                   f"type states {doc['u_height']:g}.")
+
+    fronts = doc.get("front-ports") or []
+    if not fronts:
+        return doc
+    rows = {}
+    for row in (fibre_map or {}).get("rows") or []:
+        rows.setdefault(row["front"], []).append(row)
+    rears = {r["name"]: r for r in doc.get("rear-ports") or []}
+
+    bound, whole_connector = {}, set()
+    for port in fronts:
+        legs = rows.get(port["name"]) or []
+        on = sorted({leg["rear"] for leg in legs})
+        if len(on) != 1 or on[0] not in rears:
+            raise NotExpressible(
+                f"{who}: front port {port['name']} reaches {on or 'no rear port'}. "
+                f"Nautobot binds a front port to exactly one rear port of its own type")
+        bound[port["name"]] = (on[0], legs)
+        # BY THE PORT'S OWN WIDTH AS WELL AS ITS ROWS: a twelve-fibre connector
+        # with one path stated is still a connector, not a fibre.
+        if len(legs) > 1 or (port.get("positions") or 1) > 1:
+            whole_connector.add(on[0])
+
+    for rear in sorted(whole_connector):
+        sharing = [n for n, (r, _legs) in bound.items() if r == rear]
+        if len(sharing) != 1:
+            raise NotExpressible(
+                f"{who}: rear port {rear} carries {len(sharing)} front ports, one of them "
+                f"on several positions. Nautobot has no spelling for that")
+        rears[rear]["positions"] = 1
+
+    taken = {}
+    for port in fronts:
+        rear, legs = bound[port["name"]]
+        position = 1 if rear in whole_connector else legs[0]["rear_position"]
+        if taken.setdefault((rear, position), port["name"]) != port["name"]:
+            raise NotExpressible(
+                f"{who}: front ports {taken[(rear, position)]} and {port['name']} both reach "
+                f"{rear} position {position}. Nautobot allows one front port per rear position")
+        port.pop("positions", None)
+        port["rear_port"], port["rear_port_position"] = rear, position
+
+    if whole_connector:
+        # STRAIGHT ONLY IF EVERY FIBRE KEEPS ITS POSITION: a Type B adapter lands
+        # front fibre 12 on rear fibre 1, and a note calling that straight through
+        # would contradict the module's own fibre map.
+        straight = all(leg["front_position"] == leg["rear_position"]
+                       for rear, legs in bound.values() if rear in whole_connector
+                       for leg in legs)
+        how = ("passes straight through to the rear connector behind it" if straight else
+               "reaches the one rear connector behind it, its fibres in a different order")
+        _note(doc, f"Each front connector {how}. Nautobot binds a front port to one rear "
+                   "position, so each pair is stated here as one position; the "
+                   "fibre-by-fibre rows are in this module's fibre map.")
+    return doc
 
 
 def _num(s):
@@ -2298,10 +2427,18 @@ def export_modules(dist, root, images=None):
         doc.pop("_stamp", None)
 
         tokenize_module(doc)
-        body_text = {t: "---\n" + yaml.dump(for_target(doc, t), Dumper=Indented,
-                                             sort_keys=False, width=100,
-                                             default_flow_style=False)
-                     for t in TARGETS}
+        # THE FIBRE MAP IS BUILT BEFORE THE TYPE IS WRITTEN, because the
+        # Nautobot type is bound from it (`for_target`). It is gated the same
+        # way build_module gates rear-ports: on a declared rear face, not merely
+        # on having paths. A single-faced module (a PPM coupler) has paths that
+        # run front-to-front, so `_row` answers None for every leg and a map for
+        # it would be all rows and no ports - the same shape netbox#21830
+        # rejected for the port lists themselves.
+        view = contract_view(contract)
+        fibre_map = None
+        if face_ref(view, "rear") and (contract.get("optical") or {}).get("paths"):
+            fibre_map = tokenize_fibre_map(
+                optical_ports.fibre_map(view, dist.component_by_ref, model))
         # `major` ARRIVES PREFIXED. It is the version directory's own name, so
         # components.json carries `v1` and not `1` - every other reader strips
         # with `major[1:]` rather than adding. Prefixing again asked for
@@ -2315,29 +2452,24 @@ def export_modules(dist, root, images=None):
             # Cisco ships part numbers with slashes in them - A9K-16T/8-B - and
             # a slash is a path separator, not a character. The model keeps the
             # real name; only the filename is sanitised.
-            (d / (model.replace("/", "-") + ".yaml")).write_text(body_text[target])
+            written = for_target(nested_bays_for(doc, target), target, fibre_map)
+            (d / (model.replace("/", "-") + ".yaml")).write_text(
+                "---\n" + yaml.dump(written, Dumper=Indented,
+                                    sort_keys=False, width=100, default_flow_style=False))
             if images and RASTER:
                 if render_module_image(images, root, target, doc, ns, name, ver):
                     imaged.add(model)
 
-        # THE FIBRE MAP, gated the same way build_module gates rear-ports: on a
-        # declared rear face, not merely on having paths. A single-faced module
-        # (a PPM coupler) has paths that run front-to-front, so `_row` answers
-        # None for every leg and a map for it would be all rows and no ports -
-        # the same shape netbox#21830 rejected for the port lists themselves.
-        # It sits beside `netbox/` and `nautobot/` rather than inside either,
-        # because it is not a document of either schema - it is the artefact
-        # this project defines, and both targets consume the same rows. Written
-        # once per MODEL for the same reason the type is: its filename is the
-        # model too, so it collided in exactly the same silence.
-        view = contract_view(contract)
-        if face_ref(view, "rear") and (contract.get("optical") or {}).get("paths"):
-            m = tokenize_fibre_map(
-                optical_ports.fibre_map(view, dist.component_by_ref, model))
+        # THE FIBRE MAP sits beside `netbox/` and `nautobot/` rather than inside
+        # either, because it is not a document of either schema - it is the
+        # artefact this project defines, and both targets consume the same rows.
+        # Written once per MODEL for the same reason the type is: its filename
+        # is the model too, so it collided in exactly the same silence.
+        if fibre_map is not None:
             d = Path(root) / "fibre-maps" / man
             d.mkdir(parents=True, exist_ok=True)
             (d / (model.replace("/", "-") + ".yaml")).write_text(
-                "---\n" + yaml.dump(m, Dumper=Indented, sort_keys=False,
+                "---\n" + yaml.dump(fibre_map, Dumper=Indented, sort_keys=False,
                                     width=100, default_flow_style=False))
 
         wrote += 1
@@ -2532,7 +2664,8 @@ def export_device(dist, device_name, out_root, images):
                 continue                       # nothing but a header: not worth a file
             owner = f"{lkey or dev.get('ns') + '/' + device_name}:{cfg_name}"
             for target in TARGETS:
-                f = write(doc, out_root, target, owner, listed=lkey is not None)
+                f = write(for_target(doc, target), out_root, target, owner,
+                          listed=lkey is not None)
                 for face in ("front", "rear"):
                     if doc.get(f"{face}_image") and RASTER:
                         render_image(images, out_root, target, doc,

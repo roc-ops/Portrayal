@@ -13,7 +13,10 @@ by itself. So:
   The default-configuration copies (`<device>.<view>.svg` and its elements
   file) are left out; `configs.json` names the default and `files` finds its
   faces.
-- `@portrayal/components` - the component skins every device shares.
+- `@portrayal/components-<namespace>` - the component skins of one namespace,
+  which every device shares. One package for all of them had no ceiling: it
+  was the largest package and grew with every component added, and it moved,
+  whole, with any one skin. A namespace is bounded by its vendor.
 - `@portrayal/index` - the portfolio: the library-wide JSON (`devices.json`,
   `components.json` and the rest) and `packages.json`, which says which package
   and version holds each device, and a vendor -> family -> device tree to browse
@@ -161,7 +164,21 @@ def device_files(dist, name):
 
 
 def components_files(dist):
-    return {p.name: p for p in sorted((dist / "components").glob("*")) if p.is_file()}
+    """{namespace: {published path: source}} for the skin packages. A skin is
+    `<ns>--<name>--<major>--<skin>.svg`, so its name says whose it is."""
+    out = {}
+    for p in sorted((Path(dist) / "components").glob("*")):
+        if not p.is_file():
+            continue
+        ns, sep, _ = p.name.partition("--")
+        if not sep or not ns:
+            raise SystemExit(f"components/{p.name}: no namespace in the file name")
+        out.setdefault(ns, {})[p.name] = p
+    return out
+
+
+def components_package(ns):
+    return package_name("components", ns)
 
 
 def index_files(dist, device_names):
@@ -218,6 +235,9 @@ def build(dist, out, root, published=None, limit_mb=LIMIT_MB):
     state, sizes, tree, entries = {}, {}, {}, {}
 
     def add(name, version_of, description, files, meta, readme):
+        if name in state:
+            # `<vendor>-<device>` and `components-<namespace>` share one scope
+            raise SystemExit(f"two packages are named {name}")
         files = {**files, **licence}
         meta = {**meta, "contract": contract}
         # the generated README and description are in the tarball too, so a
@@ -256,20 +276,26 @@ def build(dist, out, root, published=None, limit_mb=LIMIT_MB):
                          "family": family, "device-version": dev["version"]}
         tree.setdefault(ns, {}).setdefault(family or "", []).append(name)
 
-    comp_version = add(
-        f"{SCOPE}/components",
-        lambda prev, dg: next_version(prev, dg, contract),
-        "Portrayal component skins: the SVG every device drawing's parts are made of.",
-        components_files(dist), {},
-        _readme("Portrayal components",
-                "One SVG per component skin, `<ns>--<name>--<major>--<skin>.svg`; "
-                "`components.json` in `@portrayal/index` describes each."))
+    components = {}
+    for ns, files in components_files(dist).items():
+        pkg = components_package(ns)
+        version = add(
+            pkg,
+            lambda prev, dg: next_version(prev, dg, contract),
+            f"Portrayal component skins of the `{ns}` namespace: the SVG device "
+            f"drawings' parts are made of.",
+            files, {"namespace": ns},
+            _readme(f"Portrayal components: {ns}",
+                    "One SVG per component skin, `<ns>--<name>--<major>--<skin>.svg`; "
+                    "`components.json` in `@portrayal/index` describes each."))
+        components[ns] = {"package": pkg, "version": version}
 
     staging = out / ".index"
     staging.mkdir(exist_ok=True)
     (staging / "packages.json").write_text(json.dumps({
         "contract": contract,
-        "components": {"package": f"{SCOPE}/components", "version": comp_version},
+        # namespace -> the package and version holding its skins
+        "components": components,
         "devices": entries,
         # vendor -> family -> devices; "" is a device whose manifest names none
         "tree": {v: {f: sorted(ds) for f, ds in sorted(fams.items())}
@@ -303,7 +329,7 @@ def package_names(dist):
     """Every package a build of `dist` would write, without writing any."""
     devices = json.loads((Path(dist) / "devices.json").read_text())["devices"]
     return [package_name(d["ns"], d["name"]) for d in devices] + \
-        [f"{SCOPE}/components", f"{SCOPE}/index"]
+        [components_package(ns) for ns in components_files(dist)] + [f"{SCOPE}/index"]
 
 
 def registry_state(names, run=subprocess.run, workers=8):

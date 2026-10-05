@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1148 component majors in 25 namespaces.
+1165 component majors in 25 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -17,7 +17,7 @@ composes it. Place the wrapper when the panel carries that furniture and the
 aperture when it is a bare opening - never both at one position. The README's
 [Namespaces](README.md#namespaces) section has the pairs and the rule.
 
-## std/ (43)
+## std/ (45)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -28,7 +28,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/cfp2@1` | component | port | 41.5 × 12.4 × 107.5 | cfp2 | 0 | 9 | CFP2 cage cutout - the module envelope of the CFP2 MSA, the aperture the module seats through |
 | `std/cfp4@1` | component | port | 21.5 × 9.5 × 92 | cfp4 | 0 | 3 | CFP4 cage cutout - the module envelope of the CFP4 MSA, the aperture the module seats through |
 | `std/cxp@1` | component | port | 27 × 10 × 92 | cxp | 0 | 3 | CXP cage cutout - the module envelope of the CXP MSA, the aperture the module seats through |
-| `std/da15@1` | component | port | 28.8 × 11.4 × 6.73 | da15 | 1 | 2 | D-subminiature DA-15 receptacle - fifteen contacts in two rows, eight over seven, in the size A shell; the al… |
+| `std/da15@1` | component | port | 28.8 × 11.4 × 6.73 | da15 | 1 | 3 | D-subminiature DA-15 receptacle - fifteen contacts in two rows, eight over seven, in the size A shell; the al… |
 | `std/db25@1` | component | port | 42.52 × 11.4 × 6.5 | db25 | 0 | 1 | D-subminiature DB-25 receptacle - twenty-five contacts in two rows, thirteen over twelve, in the size B shell… |
 | `std/db9@1` | component | port | 20.47 × 11.4 × 6.73 | db9 | 0 | 18 | D-subminiature DE-9 receptacle - the nine-pin shell used for RS-232 serial ports and for the dry-contact ALAR… |
 | `std/din-1-0-2-3@1` | component | port | 5.59 × 5.59 | din-1-0-2-3 | 0 | 2 | 1.0/2.3 push-pull coaxial panel jack core (DIN 41626/2) - the round hole and the plain barrel with its collar… |
@@ -38,42 +38,44 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/drive-35-plan@1` | module | drive | 101.6 × 147 × 26.1 | drive-35 | 1 | 2 | A 3.5 inch drive seen from above - the same body std/drive-35@1 draws from the front, in the projection a mid… |
 | `std/drive-e3s@1` | component | drive | 76 × 7.5 × 112.75 | drive-e3s | 1 | 1 | EDSFF E3.S drive per SFF-TA-1008 - the device itself, not a carrier: 76 wide by 7.5 thick, drawn lying flat, … |
 | `std/f-type@1` | component | port | 9.7 × 7.9 | f-type | 0 | 11 | F-type 75-ohm coaxial panel jack (3/8-32 UNEF-2A) - the CATV drop connector |
-| `std/lc-bore@3` | component | port | 4.7 × 6.3 × 4.5 | lc-duplex-receptacle | 0 | 17 | One LC receptacle bore - the KEYED opening an LC plug enters, not a square hole |
+| `std/lc-bore@3` | component | port | 4.7 × 6.3 × 4.5 | lc-duplex-receptacle | 0 | 20 | One LC receptacle bore - the KEYED opening an LC plug enters, not a square hole |
 | `std/lc-bulkhead-bore@1` | component | port | 4.7 × 8.06 × 4.5 | lc | 0 | 9 | One LC bore of a BULKHEAD (panel-mount) adapter - the keyed opening an LC plug enters, with the full-length k… |
 | `std/mcx@1` | component | port | 4.95 × 4.5 | mcx | 0 | 7 | MCX coaxial panel jack (IEC 61169-36) - snap-on micro coax, the 75-ohm RF drop connector on cable headend I/O… |
 | `std/micro-usb@1` | component | port | 7.5 × 2.75 × 5.9 | micro-usb-b | 35 | 18 | Micro-USB Type-B receptacle, as used for a console port |
-| `std/mpo@2` | component | port | 12.9 × 8 × 9 | mpo-adapter | 0 | 9 | One MPO/MTP adapter opening - the mouth an MPO plug enters, not the adapter around it |
-| `std/mpo16@1` | component | port | 12.9 × 8 × 9 | mpo-adapter | 0 | 2 | One MTP-16 adapter opening - the mouth an MTP-16 plug enters |
+| `std/mpo@2` | component | port | 12.9 × 8 × 9 | mpo-adapter | 0 | 11 | One MPO/MTP adapter opening - the mouth an MPO plug enters, not the adapter around it |
+| `std/mpo-module-receptacle@1` | component | port | 12.9 × 8 × 9 | mpo-adapter | 0 | 1 | One MPO receptacle as a module carries it - the mouth an MPO-12 or MPO-24 plug enters on a transceiver, looke… |
+| `std/mpo16@1` | component | port | 12.9 × 8 × 9 | mpo-adapter | 0 | 5 | One MTP-16 adapter opening - the mouth an MTP-16 plug enters |
+| `std/mpo16-module-receptacle@1` | component | port | 12.9 × 8 × 9 | mpo-adapter | 0 | 1 | One MPO-16 receptacle as a module carries it - the mouth an MTP-16 plug enters on a transceiver, looked into:… |
 | `std/mrj21@1` | component | port | 28.92 × 13.45 | mrj21 | 0 | 2 | MRJ21 ("mini-RJ21") 48-position shielded receptacle - two stepped blades with twelve contacts on each face, c… |
 | `std/osfp@1` | component | port | 23.1 × 13.5 × 47 | osfp | 9 | 4 | OSFP cage cutout (800G, one port per opening; the belly-to-belly rows of a 2RU face are two of these, not one… |
 | `std/pcie-bracket-fh@2` | component | bracket | 120.02 × 21.59 | pcie-bracket-fh | 0 | 36 | Standard (full height) PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the ch… |
 | `std/pcie-bracket-lp@1` | component | bracket | 79.2 × 18.42 | pcie-bracket-lp | 0 | 46 | Low profile PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the chassis wall,… |
 | `std/qsfp-dd@1` | component | port | 19 × 10 × 37 | qsfp-dd | 32 | 19 | QSFP-DD cage cutout (400G, backward-compatible faceplate) |
 | `std/qsfp-ganged@1` | component | port | 18.5 × 9.58 × 37 | qsfp-ganged | 50 | 25 | QSFP family per-port opening inside a ganged cage block - the cage aperture, with the SFF-8661 module envelop… |
-| `std/qsfp28@1` | component | port | 20 × 10.15 × 37 | qsfp28 | 2 | 48 | QSFP28 cage cutout (100G, 4 lanes) |
+| `std/qsfp28@1` | component | port | 20 × 10.15 × 37 | qsfp28 | 2 | 49 | QSFP28 cage cutout (100G, 4 lanes) |
 | `std/qsfp56@1` | component | port | 20 × 10.15 × 37 | qsfp56 | 0 | 16 | QSFP56 cage cutout (200G, shares SFF-8661 profile) |
-| `std/rj45@2` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 71 | 54 | RJ45 modular jack HOUSING - the 15.8 x 13.2 plastic face a plug enters, with the 8P8C interface recessed into… |
+| `std/rj45@2` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 72 | 56 | RJ45 modular jack HOUSING - the 15.8 x 13.2 plastic face a plug enters, with the 8P8C interface recessed into… |
 | `std/rj45-ganged@2` | component | port | 12.7 × 11 × 18.6 | rj45-ganged | 75 | 27 | One cell of a shared-wall 2xN RJ45 block - the 12.7 x 11.0 face between neighbouring ports on a 13.97 pitch, … |
 | `std/saf-d-grid@1` | component | inlet | 26.8 × 19.9 × 17 | saf-d-grid | 0 | 3 | Anderson Saf-D-Grid appliance inlet - the panel cutout with the keyed coupler recessed behind it, a first-mat… |
-| `std/sc-bore@1` | component | port | 8.39 × 9 × 6 | sc-simplex-receptacle | 0 | 30 | One SC opening - the rectangular hole an SC plug's housing enters, with the key slot cut into one long wall a… |
-| `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 44 | 75 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
+| `std/sc-bore@1` | component | port | 8.39 × 9 × 6 | sc-simplex-receptacle | 2 | 34 | One SC opening - the rectangular hole an SC plug's housing enters, with the key slot cut into one long wall a… |
+| `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 44 | 77 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
 | `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 89 | 90 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
 | `std/sma@1` | component | port | 6.35 × 6.35 | sma | 19 | 8 | SMA coaxial panel jack (1/4-36UNS-2B) - threaded barrel protrudes; GNSS/RF antenna input |
 | `std/smb@1` | component | port | 4.83 × 4.83 | smb | 24 | 20 | SMB coaxial panel jack (10-32UNF-2A) - snap-on timing coax (1PPS/10MHz) |
 | `std/usb-a@1` | component | port | 12 × 4.5 × 13.7 | usb-a | 98 | 29 | USB Type-A receptacle opening - sharp corners |
-| `std/usb-c@1` | component | port | 8.34 × 2.56 × 6.5 | usb-c | 8 | 0 | USB Type-C receptacle opening - fully rounded ends |
+| `std/usb-c@1` | component | port | 8.34 × 2.56 × 6.5 | usb-c | 8 | 1 | USB Type-C receptacle opening - fully rounded ends |
 | `std/vga@1` | component | port | 20.47 × 11.4 × 6.73 | hd15 | 2 | 6 | VGA video receptacle - a female high-density DE-15, fifteen contacts in three rows inside the D-subminiature … |
 | `std/xfp@1` | component | port | 19.5 × 9.7 × 61.7 | xfp | 1 | 40 | XFP cage cutout (10G pluggable) - the recommended bezel opening of the XFP MSA, the aperture an XFP cage prot… |
 
-## common/ (109)
+## common/ (110)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
 | `common/bnc-jack@1` | component | port | 12.7 × 12.7 |  | 1 | 2 | Front-mount BNC bulkhead jack - the 12.7 flange and the two bayonet lugs (bezel) around a std/bnc core, which… |
 | `common/button-led-sq@1` | component | button | 4 × 4 |  | 1 | 0 | A square lit push button, the lamp being the whole button face |
 | `common/compliance-sticker@1` | component | sticker | 219 × 206 |  | 47 | 0 | Bottom-cover compliance/spec label (placeholder art until a real bottom photo is available) |
-| `common/db9-receptacle@1` | component | port | 30.8 × 12.5 × 6.73 |  | 4 | 24 | DE-9 receptacle as a faceplate sees it - the shell with a jackscrew standoff either side of it, which is what… |
-| `common/dc-barrel@1` | component | inlet | 12 × 13 |  | 2 | 0 | DC barrel power inlet |
+| `common/db9-receptacle@1` | component | port | 30.8 × 12.5 × 6.73 |  | 4 | 25 | DE-9 receptacle as a faceplate sees it - the shell with a jackscrew standoff either side of it, which is what… |
+| `common/dc-barrel@1` | component | inlet | 12 × 13 |  | 4 | 0 | DC barrel power inlet |
 | `common/dc-terminal-24@1` | component | inlet | 24.6 × 14.4 × 9.1 |  | 1 | 4 | Three-pole DC barrier terminal block with a hinged clear cover - the screw-down -48 V input fitted to 1RU acc… |
 | `common/dc-terminal-27@1` | component | inlet | 27.5 × 15.9 × 10.4 |  | 1 | 3 | Three-pole DC barrier terminal block with a hinged clear cover - the screw-down -48 V input fitted to 1RU acc… |
 | `common/dc-terminal-header-6@1` | component | inlet | 32.4 × 11.1 |  | 1 | 0 | Six-pole pluggable terminal-block HEADER on a 5.08 mm pitch - the green board-mounted receptacle with six wir… |
@@ -87,20 +89,20 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/drive-blank-35@1` | module | blank | 105.5 × 26.9 × 25 |  | 1 | 0 | Filler for a 3.5 inch LFF drive bay - the carrier moulding without the drive: same release with its orange ri… |
 | `common/drive-carrier-25@2` | module | drive | 15.3 × 73 × 123.7 |  | 2 | 2 | Hot-plug carrier for a 2.5 inch SFF drive, stood on edge as a rack server's front bays present them - two ill… |
 | `common/drive-carrier-35@1` | module | drive | 105.5 × 26.9 × 165.6 |  | 1 | 2 | A 3.5 inch hot-swap drive in its carrier, drawn wide - the orientation both the rear bays and a 12 x 3.5 inch… |
-| `common/esd-jack@1` | component | ground | 6 × 6 |  | 19 | 0 | ESD wrist-strap grounding jack - the socket you clip an antistatic strap into before handling cards |
+| `common/esd-jack@1` | component | ground | 6 × 6 |  | 20 | 0 | ESD wrist-strap grounding jack - the socket you clip an antistatic strap into before handling cards |
 | `common/esd-warning@1` | component | marking | 7.7 × 8.5 |  | 4 | 0 | Electrostatic-sensitive-device warning sticker - the IEC 61340-5-1 hand-in-triangle symbol, a black triangle … |
 | `common/fan-module@1` | module | fan | 48.6 × 40 |  | 4 | 9 | Hot-swappable 1U fan module — 44.6mm square unioned with a 4mm left mounting tab (captive screw), honeycomb g… |
 | `common/fan-module-41@1` | module | fan | 40.9 × 40 |  | 1 | 0 | Hot-swappable 1U fan tray, 40.9mm opening on a 48.8mm pitch - honeycomb grille over one rotor, crossed by a f… |
 | `common/fan-module-46@1` | module | fan | 46.6 × 40 |  | 3 | 1 | Hot-swappable 1U fan module, 46.6mm pitch - 44.6mm square unioned with a 2mm left mounting tab (captive screw… |
 | `common/fc-simplex-adapter@1` | component | port | 10 × 10 | fc-adapter | 0 | 0 | Panel-mount FC simplex adapter, one threaded bayonet-coupled opening, as fitted to an FS FHD FC panel |
 | `common/fibre-splice@1` | component | port | 60 × 20 |  | 0 | 1 | A fusion-splice tray holder, as fitted behind a splice cassette's rear panel - twelve trunk pigtails fusion-s… |
-| `common/ground-lug@1` | component | ground | 7 × 14 |  | 39 | 1 | Chassis grounding point with earth symbol above the stud |
+| `common/ground-lug@1` | component | ground | 7 × 14 |  | 40 | 1 | Chassis grounding point with earth symbol above the stud |
 | `common/ground-screw-washer@1` | component | ground | 11 × 11 |  | 10 | 0 | Chassis grounding screw - a Phillips pan head seated on a captive washer, screwed into the housing where the … |
-| `common/ground-stud@1` | component | ground | 8.1 × 8.1 |  | 1 | 0 | Chassis grounding stud with its hex nut - a threaded stud pressed into the panel and the nut that clamps a ri… |
-| `common/ground-symbol@1` | component | ground | 6 × 6 |  | 60 | 1 | Grounding silkscreen symbol (earth in a circle), no hardware |
-| `common/keyhole-mount@1` | component | mount | 8 × 12 |  | 1 | 0 | Wall-mount keyhole slot |
+| `common/ground-stud@1` | component | ground | 8.1 × 8.1 |  | 2 | 0 | Chassis grounding stud with its hex nut - a threaded stud pressed into the panel and the nut that clamps a ri… |
+| `common/ground-symbol@1` | component | ground | 6 × 6 |  | 61 | 1 | Grounding silkscreen symbol (earth in a circle), no hardware |
+| `common/keyhole-mount@1` | component | mount | 8 × 12 |  | 3 | 0 | Wall-mount keyhole slot |
 | `common/keystone-clip@2` | component | mechanical | 16.5 × 14.9 | keystone-opening | 0 | 1 | The white plastic clip FS ships with its FHD multimedia modular panel (FHD-FAPM6, SKU 143239), seated in one … |
-| `common/laser-warning@1` | component | marking | 5.4 × 4.8 |  | 4 | 13 | IEC 60825 laser hazard triangle - yellow field, black border and burst symbol |
+| `common/laser-warning@1` | component | marking | 5.4 × 4.8 |  | 6 | 13 | IEC 60825 laser hazard triangle - yellow field, black border and burst symbol |
 | `common/lc-boot@1` | component | boot | 6.2 × 6.2 | lc-plug | 0 | 7 | A strain-relief boot for an LC plug: a 6.2 square cross-section that goes AROUND the 5.58 x 5.65 plug body, w… |
 | `common/lc-duplex-adapter@6` | component | port | 13.2 × 11 | lc-duplex | 3 | 16 | Panel-mount LC duplex adapter - a bezel carrying two LC bores side by side, as used for Tx/Rx pairs on optica… |
 | `common/lc-duplex-dust-cap@2` | component | cap | 12.25 × 5.85 | lc-duplex | 0 | 1 | The ONE white cap FS ships over both ports of an FHD LC duplex adapter - 5.85 x 12.25 as read off that adapte… |
@@ -109,10 +111,10 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/lc-dust-cap@1` | component | cap | 4.7 × 4.7 | lc | 0 | 3 | The white dust cap an idle LC port ships with - a 4.7 square lump plugging the bore square, with a rounded-sq… |
 | `common/led-arrow@1` | component | led | 3.6 × 3.2 |  | 15 | 1 | Single triangle port LED - up skin for top-row ports, down for bottom |
 | `common/led-arrow-sm@1` | component | led | 2.25 × 2 |  | 33 | 0 | Compact triangle port LED for tight inter-port gaps - up skin for top-row ports, down for bottom |
-| `common/led-dot@1` | component | led | 2 × 2 |  | 112 | 264 | Tiny round port LED (2mm) |
-| `common/led-indicator@1` | component | led | 4 × 4 |  | 26 | 46 | Single chassis status LED |
+| `common/led-dot@1` | component | led | 2 × 2 |  | 114 | 268 | Tiny round port LED (2mm) |
+| `common/led-indicator@1` | component | led | 4 × 4 |  | 26 | 48 | Single chassis status LED |
 | `common/led-rect@1` | component | led | 4.6 × 2.6 |  | 30 | 3 | Rectangular system LED (cell-site style green bar) |
-| `common/led-rect-sm@1` | component | led | 2.8 × 1.6 |  | 30 | 22 | Small rectangular per-port LED - the rounded bar a dense port row carries one of beside each cage, at roughly… |
+| `common/led-rect-sm@1` | component | led | 2.8 × 1.6 |  | 30 | 23 | Small rectangular per-port LED - the rounded bar a dense port row carries one of beside each cage, at roughly… |
 | `common/led-slot-pair@1` | component | led | 3.7 × 1.2 |  | 0 | 4 | Two lamps behind one light-pipe slot - the rounded 3.7 x 1.2 window a bracket punches for a port's pair of in… |
 | `common/led-sq@1` | component | led | 3 × 3 |  | 1 | 0 | A small square status lamp, 3 mm, flush in a panel |
 | `common/liquid-qd-coupler@1` | component | coupler | 38.4 × 38.4 |  | 1 | 0 | Liquid-cooling quick-disconnect (QD) coupler on an equipment rear - a hex-bodied fitting with a flush valve f… |
@@ -121,7 +123,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/mpo-adapter@2` | component | port | 13.8 × 9.4 |  | 0 | 15 | Panel-mount MPO/MTP adapter - one opening in a bezel, as fitted to an FS FHD adapter panel |
 | `common/mpo-dust-cap@2` | component | cap | 12.8 × 8.1 | mpo | 0 | 9 | The grey dust cap FS ships in an MTP/MPO port - a 12.8 x 8.1 moulding that fills the port's mouth, with a thi… |
 | `common/mpo-flange-adapter@2` | component | port | 30 × 11 | mpo | 0 | 9 | Flanged MPO/MTP bulkhead adapter carrying 12 fibres - a black flange held by two screws, a raised housing, an… |
-| `common/mpo16-adapter@1` | component | port | 13.8 × 9.4 |  | 0 | 4 | Panel-mount MTP-16 adapter - one opening in a bezel, as fitted to FS's FHD 12x MTP-16 adapter panel (SKU 3828… |
+| `common/mpo16-adapter@1` | component | port | 13.8 × 9.4 |  | 0 | 5 | Panel-mount MTP-16 adapter - one opening in a bezel, as fitted to FS's FHD 12x MTP-16 adapter panel (SKU 3828… |
 | `common/mpo16-dust-cap@1` | component | cap | 12.8 × 8.1 | mpo16 | 0 | 1 | The grey dust cap FS ships in each opening of its FHD 12x MTP-16 adapter panel (SKU 382885) - common/mpo-dust… |
 | `common/mpo24-flange-adapter@2` | component | port | 30 × 11 | mpo | 0 | 4 | Flanged MPO/MTP bulkhead adapter carrying 24 fibres - a black flange held by two screws, a raised housing, an… |
 | `common/multi-cord-hazard-label@1` | component | marking | 29.8 × 10.9 |  | 1 | 0 | Yellow rectangular hazard sticker with two symbols side by side - an electric-shock triangle (ISO 7010 W012) … |
@@ -131,7 +133,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/pcie-card-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 19 | A generic low-profile PCI Express add-in card, half-length - the standard bracket at the chassis wall and a P… |
 | `common/pcie-card-plan@1` | module | expansion-card | 120.9 × 173.8 × 21.6 |  | 0 | 21 | A full-height PCIe expansion card seen from above, lying in a riser slot - its bracket at the rear, its lengt… |
 | `common/pcie-card-plan-lp@1` | module | expansion-card | 79.2 × 173.8 × 21.6 |  | 0 | 18 | A low-profile PCIe expansion card seen from above, lying in a riser slot - its bracket at the rear, its lengt… |
-| `common/power-button@1` | component | button | 12 × 12 |  | 3 | 0 | Round ON/OFF push button |
+| `common/power-button@1` | component | button | 12 × 12 |  | 5 | 0 | Round ON/OFF push button |
 | `common/power-switch-slide@1` | component | button | 30.74 × 13.53 |  | 2 | 0 | Panel slide power switch under a hazard tag - the recessed two-position slider a chassis carries where a rock… |
 | `common/psu-550w@2` | module | psu | 73.5 × 40 × 185 | crps-1u | 3 | 6 | 550W CRPS hot-swap PSU module - axial fan, pull handle, latch and a panel-mounted C14 inlet turned portrait |
 | `common/psu-ac-1300@1` | module | psu | 57 × 40 |  | 2 | 0 | 1300W AC PSU module, CRPS form factor (composed - bezel art wraps a std/c14-inlet core) |
@@ -139,32 +141,33 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/psu-dc-650@2` | module | psu | 54 × 40 |  | 5 | 3 | 650W -48V DC PSU module - blue fold-out handle, terminal cover (v2 = photo-measured 54mm) |
 | `common/pull-tab@1` | component | tab | 16 × 4.5 |  | 8 | 3 | Captive pull-out information tab (default credentials / serial card) |
 | `common/qsfp-cage@3` | component | port | 19.5 × 10.18 × 37 |  | 7 | 1 | Plain QSFP cage (no lane LEDs) - bezel around a std/qsfp-ganged aperture (v2 = the cage only - the coloured b… |
+| `common/qsfp-dd-pull-tab-type2@1` | component | latch | 18.35 × 10 |  | 0 | 1 | The pull handle of a Type 2 QSFP-DD module - the long-nosed module, whose handle is shorter than a Type 1 han… |
 | `common/qsfp-drawing@1` | component | reference | 118 × 19 |  | 0 | 0 | QSFP orthographic views transcribed from a vendor mechanical drawing - top, side and bottom at true scale |
 | `common/qsfp-lane-leds@1` | component | led | 19.5 × 3.4 |  | 2 | 3 | QSFP port lane LED strip - four triangles, one per lane (no separate link/activity LEDs on this platform) |
 | `common/qsfp-lane-leds-column@1` | component | led | 1.8 × 11.4 |  | 4 | 0 | QSFP port lane LED column - four round lamps stacked VERTICALLY, one per 100G lane, for faceplates that stand… |
 | `common/qsfp-pull-tab@1` | component | latch | 19 × 3.4 |  | 0 | 4 | QSFP / QSFP-DD pull tab - the flat paddle bail that wraps the module and extends forward, with an elongated o… |
-| `common/qsfp-pull-tab@2` | component | latch | 19 × 8.56 |  | 0 | 2 | QSFP / QSFP-DD pull tab, as the part is: a flat U-loop whose two thin arms run forward along the module's sid… |
+| `common/qsfp-pull-tab@2` | component | latch | 19 × 8.56 |  | 0 | 5 | QSFP / QSFP-DD pull tab, as the part is: a flat U-loop whose two thin arms run forward along the module's sid… |
 | `common/qsfp-transceiver@1` | module | transceiver | 18.35 × 8.5 × 83.2 | qsfp | 0 | 2 | QSFP transceiver with a white pull-latch bail, drawn from a vendor mechanical drawing |
 | `common/qsfp28-cage@3` | component | port | 19 × 14.5 × 37 |  | 1 | 0 | QSFP28 cage at the measured 19.0mm ganged pitch, four round per-lane LEDs (v3 = composed - cage bezel wraps a… |
 | `common/rack-ear@1` | component | ear | 14 × 43.5 |  | 36 | 1 | Generic 1U rack mounting ear (decorative; place outside the chassis with optional tag 'ears'; skins left/righ… |
-| `common/reset-button@1` | component | button | 4 × 4 × 2.5 |  | 111 | 7 | Recessed pinhole reset button |
+| `common/reset-button@1` | component | button | 4 × 4 × 2.5 |  | 113 | 7 | Recessed pinhole reset button |
 | `common/rivet@1` | component | mechanical | 3 × 3 |  | 7 | 0 | Sheet-metal rivet head |
 | `common/rj11-jack@1` | component | port | 14 × 13.5 |  | 1 | 0 | RJ11 telephone jack (FXS) |
 | `common/rj45-boot@1` | component | boot | 14.5 × 10 | rj45-plug | 0 | 1 | A strain-relief boot for an RJ45 (8P8C) copper plug - PVC, moulded around the plug it wraps |
-| `common/rj45-eth@1` | component | port | 15.8 × 13.2 × 18.6 |  | 58 | 39 | An Ethernet RJ45 - the std/rj45@2 housing with the two link and activity lamps nearly every Ethernet jack car… |
+| `common/rj45-eth@1` | component | port | 15.8 × 13.2 × 18.6 |  | 59 | 40 | An Ethernet RJ45 - the std/rj45@2 housing with the two link and activity lamps nearly every Ethernet jack car… |
 | `common/rj45-ganged-eth@1` | component | port | 12.7 × 11 × 18.6 |  | 75 | 34 | An Ethernet RJ45 in a ganged 2xN block - the std/rj45-ganged@2 cell with the two lamps in its keyway-side cor… |
 | `common/rj45-ganged-link@1` | component | port | 12.7 × 11 × 18.6 |  | 5 | 0 | An Ethernet RJ45 in a ganged 2xN block with ONE lamp - the std/rj45-ganged@2 cell with a single link/activity… |
 | `common/rocker-switch@1` | component | button | 21 × 15 |  | 1 | 0 | Snap-in panel rocker power switch, 21 x 15 bezel, rocker across the width - the I (on) side at the left and O… |
 | `common/sc-apc@1` | component | port | 24 × 26 |  | 1 | 0 | SC/APC fiber adapter in a molded bay (PON WAN) |
 | `common/sc-duplex-adapter@5` | component | port | 9.4 × 25.4 | sc-duplex-adapter | 0 | 9 | Panel-mount SC duplex adapter, as fitted to an FS FHD SC panel - one body carrying two SC ports STACKED verti… |
 | `common/sc-dust-cap@1` | component | cap | 8.8 × 11.45 | sc | 0 | 1 | The black dust cap FS ships in an FHD SC port - 8.8 x 11.45, with a lighter raised grip across its middle for… |
-| `common/screw-head@1` | component | screw | 3.6 × 3.6 × 0.7 |  | 77 | 9 | Generic countersunk screw head (decorative fastener) |
+| `common/screw-head@1` | component | screw | 3.6 × 3.6 × 0.7 |  | 80 | 9 | Generic countersunk screw head (decorative fastener) |
 | `common/serial-symbol@1` | component | silkscreen | 7.2 × 2.6 |  | 1 | 0 | The IOIOI mark printed beside a serial port - alternating bars and rings, which is how a vendor says "this on… |
 | `common/seven-segment-dual@1` | component | display | 17.4 × 12.1 |  | 2 | 0 | Two-digit seven-segment status display behind one window - the code readout an Accton/Edgecore faceplate prin… |
 | `common/sfp-lc-duplex@1` | component | transceiver | 13.5 × 8.5 | sfp | 0 | 1 | SFP transceiver with an LC duplex face - two recessed bores with the fiber ferrules standing in them, and a b… |
 | `common/sfp-led-pair@1` | component | led | 12 × 4 |  | 4 | 0 | Stacked-SFP indicator pair — left lamp = upper port, right lamp = lower port, up/down triangles between |
 | `common/sfp-plus-cage@2` | component | port | 16 × 10 × 41 |  | 7 | 3 | SFP+ cage (v2 = composed - bezel wraps a std/sfp cutout core) |
-| `common/sma-jack@1` | component | port | 9.5 × 9.5 |  | 18 | 12 | Panel-mount SMA jack with gold jam nut (bezel) around a std/sma core |
+| `common/sma-jack@1` | component | port | 9.5 × 9.5 |  | 18 | 13 | Panel-mount SMA jack with gold jam nut (bezel) around a std/sma core |
 | `common/smb-jack@1` | component | port | 7 × 7 |  | 27 | 4 | Panel-mount SMB jack with gold nut (bezel) around a std/smb core |
 | `common/st-simplex-adapter@1` | component | port | 10 × 10 | st-adapter | 0 | 1 | Panel-mount ST (BFOC) simplex adapter, one bayonet-coupled opening, as fitted to an FS FHD ST panel |
 | `common/terminal-header-508-2@1` | component | port | 10.16 × 12.1 |  | 10 | 0 | Two-position pluggable terminal HEADER on a 5.08 mm pitch, no flange - the green receptacle a two-way screw-c… |
@@ -179,7 +182,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/wall-plate-keyhole-2-42@1` | component | mount | 42 × 22 |  | 4 | 0 | The smaller wall-mounting plate with two keyhole slots - the 42 mm plate on the back of the AurCore AIS small… |
 | `common/warning-triangle@1` | component | marking | 5.4 × 4.8 |  | 5 | 3 | General warning triangle - a black exclamation mark in a yellow triangle, ISO 7010 W001 |
 
-## generic/ (23)
+## generic/ (29)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -187,23 +190,29 @@ aperture when it is a bare opening - never both at one position. The README's
 | `generic/din-1-0-2-3-plug@1` | component | port | 7.7 × 7.7 | din-1-0-2-3-plug | 0 | 0 | A straight 1.0/2.3 crimp plug on a coax cable, seen from the face: the push-pull latch sleeve, the crimp ferr… |
 | `generic/f-type-plug@1` | component | port | 12.83 × 11.11 | f-type-plug | 0 | 0 | A straight F crimp plug on a 75 ohm coax cable, seen from the face: the 7/16 hex coupling nut, the ribbed cri… |
 | `generic/lc-duplex-plug@2` | component | port | 11.83 × 8.535 | lc-duplex | 0 | 0 | An LC duplex plug as it is SEATED - the cable end that fills BOTH ports of a duplex LC adapter at once |
-| `generic/lc-plug@2` | component | port | 5.58 × 8.535 | lc-plug | 0 | 14 | An LC fibre plug as it is SEATED, front view - the four-tier keyed silhouette of the free plug (provenance.fr… |
+| `generic/lc-plug@2` | component | port | 5.58 × 8.535 | lc-plug | 0 | 15 | An LC fibre plug as it is SEATED, front view - the four-tier keyed silhouette of the free plug (provenance.fr… |
 | `generic/mcx-plug@1` | component | port | 5 × 5 | mcx-plug | 0 | 0 | A straight MCX crimp plug on a coax cable, seen from the face: the ribbed snap-on grip, the crimp ferrule and… |
-| `generic/mpo12-plug@1` | component | port | 12.5 × 7.6 | mpo-plug | 0 | 5 | A 12-fibre MPO/MTP plug, front view - the 12.5 x 7.6 barrel-ended housing with the MT ferrule standing in its… |
+| `generic/mpo12-plug@1` | component | port | 12.5 × 7.6 | mpo-plug | 0 | 8 | A 12-fibre MPO/MTP plug, front view - the 12.5 x 7.6 barrel-ended housing with the MT ferrule standing in its… |
+| `generic/mpo16-plug@1` | component | port | 12.5 × 7.6 | mpo16-plug | 0 | 2 | A 16-fibre MPO/MTP-16 plug, front view - the 12.5 x 7.6 housing of the MPO-12 plug with a key rib that is nar… |
 | `generic/mpo24-plug@1` | component | port | 12.5 × 7.6 | mpo-plug | 0 | 3 | A 24-fibre MPO/MTP plug, front view - the SAME 12.5 x 7.6 barrel-ended housing generic/mpo12-plug@1 draws, wi… |
 | `generic/qsfp-cable@1` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 6 | A generic QSFP cable end - the shape every QSFP+, QSFP28 and QSFP56 direct attach, active copper and active o… |
 | `generic/qsfp-dd-cable@1` | component | transceiver | 18.35 × 8.5 × 58.26 | qsfp-dd-module | 0 | 0 | A generic QSFP-DD cable end with the Type 1 head - the shape a direct-attach, active copper, active electrica… |
 | `generic/qsfp-dd-cable-type2@1` | component | transceiver | 18.35 × 8.5 × 58.26 | qsfp-dd-module | 0 | 2 | A generic QSFP-DD cable end with the longer Type 2 head - the shape a direct-attach, active copper, active el… |
 | `generic/qsfp-dd-lc@1` | component | transceiver | 18.35 × 8.5 × 58.26 | qsfp-dd-module | 0 | 0 | A generic QSFP-DD with an LC duplex face - the shape every QSFP-DD, QSFP-DD800 and QSFP112 optic with two LC … |
-| `generic/qsfp-dd-lc@2` | component | transceiver | 18.35 × 8.5 × 58.26 | qsfp-dd-module | 0 | 0 | A generic QSFP-DD with an LC duplex face - the shape every QSFP-DD, QSFP-DD800 and QSFP112 optic with two LC … |
+| `generic/qsfp-dd-lc@2` | component | transceiver | 18.35 × 8.5 × 58.26 | qsfp-dd-module | 0 | 1 | A generic QSFP-DD with an LC duplex face - the shape every QSFP-DD, QSFP-DD800 and QSFP112 optic with two LC … |
+| `generic/qsfp-dd-mpo16@1` | component | transceiver | 18.35 × 8.5 × 58.26 | qsfp-dd-module | 0 | 0 | A generic QSFP-DD with one MPO-16 face - the shape of the QSFP-DD parallel-fibre optic with a single-row sixt… |
 | `generic/qsfp-lc@1` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 2 | A generic QSFP with an LC duplex face - the shape every QSFP+, QSFP28 and QSFP56 optic with two LC bores has,… |
-| `generic/qsfp-lc@2` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 3 | A generic QSFP with an LC duplex face - the shape every QSFP+, QSFP28 and QSFP56 optic with two LC bores has,… |
+| `generic/qsfp-lc@2` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 5 | A generic QSFP with an LC duplex face - the shape every QSFP+, QSFP28 and QSFP56 optic with two LC bores has,… |
+| `generic/qsfp-lc-simplex@1` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 0 | A generic QSFP with one LC bore - the shape of the single-fibre bidirectional (BiDi) QSFP optic, standing for… |
+| `generic/qsfp-mpo@1` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 2 | A generic QSFP with one MPO face - the shape every QSFP+, QSFP28 and QSFP56 parallel-fibre optic has, standin… |
 | `generic/rj45-plug@1` | component | port | 11.68 × 7.93 × 22.48 | rj45-plug | 0 | 9 | An RJ45 (8P8C) copper plug, the UNSHIELDED variant - a rectangular body with a spring latch on its underside … |
 | `generic/sc-plug@1` | component | port | 8.3 × 9 | sc-plug | 0 | 0 | An SC fibre plug, front view - the square keyed silhouette an SC connector presents end-on: a 7.4 x 9.0 housi… |
 | `generic/sfp-cable@1` | component | transceiver | 13.55 × 8.55 × 47.5 | sfp-module | 0 | 1 | A generic SFP+ cable end - the shape every direct-attach, active copper, active electrical and active optical… |
 | `generic/sfp-lc@1` | component | transceiver | 13.55 × 8.55 × 47.5 | sfp-module | 0 | 5 | A generic SFP with an LC duplex face - the shape every SFP, SFP+ and SFP28 optic with two LC bores has, stand… |
-| `generic/sfp-lc-simplex@2` | component | transceiver | 13.55 × 8.55 × 47.5 | sfp-module | 0 | 0 | A generic SFP with one LC bore on its optical axis - the shape every bidirectional (BiDi) SFP, SFP+ and SFP28… |
+| `generic/sfp-lc-simplex@2` | component | transceiver | 13.55 × 8.55 × 47.5 | sfp-module | 0 | 3 | A generic SFP with one LC bore on its optical axis - the shape every bidirectional (BiDi) SFP, SFP+ and SFP28… |
 | `generic/sfp-rj45@1` | component | transceiver | 13.55 × 8.55 × 47.5 | sfp-module | 0 | 0 | A generic copper SFP - the shape every 1000BASE-T, 10GBASE-T and NBASE-T SFP with an RJ45 jack has, standing … |
+| `generic/sfp-sc@1` | component | transceiver | 13.55 × 8.55 × 47.5 | sfp-module | 0 | 1 | A generic SFP with one SC receptacle - the shape of the PON line-terminal SFP and SFP+ optic, standing for al… |
+| `generic/sfp-sc-key-up@1` | component | transceiver | 13.55 × 8.55 × 47.5 | sfp-module | 0 | 1 | A generic SFP with one SC receptacle - the shape of the PON line-terminal SFP and SFP+ optic, standing for al… |
 | `generic/sma-plug@1` | component | port | 9.17 × 7.94 | sma-plug | 0 | 3 | A straight SMA crimp plug on a coax cable, seen from the face: the hex coupling nut, the crimp ferrule and a … |
 | `generic/smb-plug@1` | component | port | 6.2 × 6.2 | smb-plug | 0 | 0 | A straight SMB crimp plug on a coax cable, seen from the face: the plain snap-on body, the crimp ferrule and … |
 
@@ -776,10 +785,10 @@ aperture when it is a bare opening - never both at one position. The README's
 | `hpe/expansion-slot-blank-fh@1` | module | blank | 120.02 × 21.59 |  | 0 | 1 | HPE full-height expansion slot blank of the Gen10 ProLiant DL160's primary riser, lying flat - the part of it… |
 | `hpe/expansion-slot-blank-lp@1` | module | blank | 79.2 × 18.42 |  | 0 | 3 | HPE low-profile expansion slot blank of the Gen10 ProLiant DL160's risers, lying flat - the part of it the wi… |
 | `hpe/fan-dl160@1` | module | fan | 40 × 32 × 40 |  | 1 | 0 | A single-rotor hot-plug fan of the Gen10 ProLiant DL160 seen from above - the block that lifts out of its bay… |
-| `hpe/flom-629135-b22@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 2 | HPE Ethernet 1Gb 4-port 331FLR FlexibleLOM adapter (331FLR; option 629135-B22, spare 789897-001) - the adapte… |
+| `hpe/flom-629135-b22@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 6 | HPE Ethernet 1Gb 4-port 331FLR FlexibleLOM adapter (331FLR; option 629135-B22, spare 789897-001) - the adapte… |
 | `hpe/flom-665240-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 1 | HPE Ethernet 1Gb 4-port 366FLR FlexibleLOM adapter (366FLR; option 665240-B21, spare 669280-001) - the adapte… |
 | `hpe/flom-817721-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 1 | HPE Ethernet 10Gb 2-port 535FLR-T FlexibleLOM adapter (535FLR-T; option 817721-B21, spare 854177-001) - the a… |
-| `hpe/flom-817745-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 2 | HPE Ethernet 10Gb 2-port 562FLR-T FlexibleLOM adapter (562FLR-T; option 817745-B21, spare 840138-001) - the a… |
+| `hpe/flom-817745-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 1 | HPE Ethernet 10Gb 2-port 562FLR-T FlexibleLOM adapter (562FLR-T; option 817745-B21, spare 840138-001) - the a… |
 | `hpe/flom-817749-b21@1` | module | nic | 74 × 14.6 × 110 |  | 1 | 1 | HPE Ethernet 10/25Gb 2-port 640FLR-SFP28 FlexibleLOM adapter (640FLR-SFP28; option 817749-B21, spare 840139-0… |
 | `hpe/flom-blank@1` | module | blank | 74 × 14.6 |  | 0 | 1 | FlexibleLOM adapter blank of the Gen10 ProLiant DL160's FlexibleLOM riser cage - a perforated plate where an … |
 | `hpe/heatsink-std-1u@1` | component | mechanical | 80 × 107 |  | 1 | 0 | The standard processor heatsink of the Gen10 ProLiant DL160 seen from above - a black shrouded block over the… |
@@ -798,7 +807,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `hpe/psu-blank-flex-slot@1` | module | blank | 68 × 40.4 |  | 1 | 0 | HPE Flex Slot power supply blank, as the Gen10 ProLiant DL160 ships in its second supply bay - a bright metal… |
 | `hpe/psu-flex-slot-plan@1` | component | mechanical | 68 × 190 |  | 0 | 2 | An HPE Flex Slot power supply seen from above - the can that runs into the chassis behind its rear face |
 | `hpe/riser-cage-primary-dl160@1` | component | mechanical | 123.5 × 145.6 |  | 1 | 0 | The primary PCI riser cage of the Gen10 ProLiant DL160 seen from above - the vented sheet-metal roof over PCI… |
-| `hpe/riser-flom-dl160@1` | module | riser | 203 × 24.2 × 150 |  | 1 | 0 | The FlexibleLOM riser cage of the Gen10 ProLiant DL160 as the rear presents it (riser kit 875748-B21, riser b… |
+| `hpe/riser-flom-dl160@1` | module | riser | 203 × 24.2 × 150 |  | 1 | 0 | The FlexibleLOM riser cage of the Gen10 ProLiant DL160 as the rear presents it (FlexibleLOM/NVMe riser kit 87… |
 | `hpe/riser-primary-dl160@1` | module | riser | 203 × 24.2 × 150 |  | 1 | 2 | The primary PCI riser cage of the Gen10 ProLiant DL160 as the rear presents it, with the standard x16/x8 rise… |
 | `hpe/riser-secondary-dl160@1` | module | riser | 82.5 × 21 × 150 |  | 1 | 0 | The secondary PCI riser cage of the Gen10 ProLiant DL160 as the rear presents it, with the x16 riser board (8… |
 | `hpe/serial-port-879778@1` | module | expansion-card | 32.8 × 12.5 |  | 1 | 0 | The optional serial port of the Gen10 ProLiant DL160 (serial port cable, spare 879778-001) - a DE-9 on a cabl… |
@@ -1003,7 +1012,7 @@ aperture when it is a bare opening - never both at one position. The README's
 |---|---|---|---|---|---|---|---|
 | `molex/sfp-plus-passive-dac@1` | module | transceiver | 13.55 × 8.55 × 47.5 | sfp | 0 | 0 | Molex 74752 SFP+ to SFP+ 10G passive direct-attach copper cable, one end - a plunger-latch cable end with a b… |
 
-## nokia/ (115)
+## nokia/ (123)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -1046,13 +1055,20 @@ aperture when it is a bare opening - never both at one position. The README's
 | `nokia/fwlt-a@1` | module | line-card | 25 × 405 × 225 |  | 3 | 0 | Nokia FWLT-A (3FE 56399 AB), the 4-port U-NGPON line termination card of the 7360 ISAM FX: NG-PON2 TWDM or XG… |
 | `nokia/fwlt-b-aa@1` | module | line-card | 25 × 405 × 225 |  | 3 | 0 | Nokia FWLT-B AA (3FE 72955 AA), the 8-port XGS-PON line termination card of the 7360 ISAM FX and Lightspan FX… |
 | `nokia/fwlt-b-ab@1` | module | line-card | 25 × 405 × 225 |  | 3 | 1 | Nokia FWLT-B AB (3FE 72955 AB), the 8-port U-NGPON line termination card of the 7360 ISAM FX (NG-PON2 TWDM or… |
-| `nokia/fwlt-c@1` | module | line-card | 25 × 405 × 225 |  | 3 | 0 | Nokia FWLT-C (3FE 74981 AA, AD, BD and CD), the 16-port Multi-PON line termination card of the 7360 ISAM FX a… |
+| `nokia/fwlt-c@1` | module | line-card | 25 × 405 × 225 |  | 3 | 1 | Nokia FWLT-C (3FE 74981 AA, AD, BD and CD), the 16-port Multi-PON line termination card of the 7360 ISAM FX a… |
 | `nokia/imm-2pac-fp3-p6-10g-sfp@1` | module | line-card | 425.4 × 35.4 × 431.8 |  | 2 | 0 | Nokia 12-port 10GE SFP+ Multi-Core IMM (3HE07158AA L3HQ, -BA L3BQ, -CA L2HQ - one face, three licences), the … |
 | `nokia/iom-e@1` | module | line-card | 259.1 × 70.8 × 292.1 |  | 3 | 5 | Nokia 7750 SR-e IOM-e (3HE10311AA L3HQ, 3HE10311BA L2HQ, 3HE10311CA L3BQ - one face, three licences), the two… |
 | `nokia/iom3-xp@1` | module | line-card | 425.4 × 35.4 × 431.8 |  | 2 | 3 | Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS IOM3-XP, IOM3-XP-B and IOM3-XP-C (3HE03619AA, 3HE06318AA, 3HE08426A… |
 | `nokia/iom4-e@1` | module | line-card | 425.4 × 35.4 × 431.8 |  | 2 | 3 | Nokia 7750 SR / 7450 ESS IOM4-e and IOM4-e-B (3HE09648AA/BA/CA, 3HE10717AA/BA/CA - one face, two models, thre… |
 | `nokia/iom4-e-hs@1` | module | line-card | 425.4 × 35.4 × 431.8 |  | 2 | 0 | Nokia 7750 SR / 7450 ESS IOM4-e-HS (3HE11351AA L3HQ, 3HE11351CA L2HQ), the high-scale-QoS FP3 200 Gb/s input/… |
 | `nokia/iom5-e@1` | module | line-card | 425.4 × 35.4 × 431.8 |  | 2 | 0 | Nokia 7750 SR IOM5-e (3HE12332AA/BA/CA, 3HE13727AA/BA/CA 400G, 3HE15182AA/BA/CA 800G - nine licence and rate … |
+| `nokia/lalm-f@1` | module | supervisor | 400.5 × 24.5 × 217 |  | 1 | 0 | Nokia LALM-F (3FE 79628 AA), the alarm and clock module of the Lightspan MF-8 shelf, in its dedicated ALM slo… |
+| `nokia/lbnt-a@1` | module | supervisor | 400.5 × 35 × 217 |  | 1 | 0 | Nokia LBNT-A, the 2 Tbps Network Termination (NT) board of the Lightspan MF-8 and MF-14, in its two functiona… |
+| `nokia/lfan-f@1` | module | fan | 38.1 × 348.5 × 233.3 |  | 1 | 0 | Nokia LFAN-F (3FE 79719 AA), the fan module of the Lightspan MF-8 shelf: an intelligent fan tray with six var… |
+| `nokia/lmdb-b-ea@1` | module | blank | 400.5 × 24.5 × 253.8 |  | 1 | 0 | Nokia LMDB-B EA (3FE 77035 EA), the LT dummy/filler board of the Lightspan MF-8: a full-size air-guiding dumm… |
+| `nokia/lmdb-e-ba@1` | module | blank | 400.5 × 35 × 241.8 |  | 1 | 0 | Nokia LMDB-E BA (3FE 77556 BA), the NT dummy/filler board of the Lightspan MF-8: a full-size air-guiding dumm… |
+| `nokia/lpwr-f@1` | module | power | 196.15 × 42.8 × 202.6 |  | 1 | 0 | Nokia LPWR-F, the DC power module of the Lightspan MF-8 shelf, in its two builds: LPWR-F AA (3FE 79723 AA, ma… |
+| `nokia/lwlt-c@1` | module | line-card | 400.5 × 24.5 × 217 |  | 1 | 0 | Nokia LWLT-C (3FE 76353 AA, and 3FE 76353 BA, the US-made BEAD build), the 16-port Multi-PON line termination… |
 | `nokia/m1-10gb-hs-xfp@1` | module | line-card | 190.5 × 35.4 × 177.8 |  | 0 | 1 | Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 1-port 10GB HS XFP MDA, M1-10GB-HS-XFP, the first-generation High S… |
 | `nokia/m1-10gb-hs-xfp-b@1` | module | line-card | 190.5 × 35.4 × 177.8 |  | 0 | 1 | Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 1-port 10GE XFP HS-MDA2, M1-10GB-HS-XFP-B (3HE06433AA), the second-… |
 | `nokia/m1-10gb-xp-xfp@1` | module | line-card | 190.5 × 35.4 × 177.8 |  | 0 | 3 | Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 1-port 10GBASE XFP MDA-XP, M1-10GB-XP-XFP (3HE04274AA; ESS 3HE04273… |
@@ -1086,6 +1102,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `nokia/me6-100gb-qsfp28@1` | module | line-card | 193 × 35.4 × 193 |  | 2 | 1 | Nokia 6-port Universal QSFP28 MDA-e-XP (3HE12333AA), CLI type me6-100gb-qsfp28, for the 7750 SR-1 (FP4) and t… |
 | `nokia/me6-10gb-sfp-plus@1` | module | line-card | 193 × 35.4 × 195.6 |  | 3 | 2 | Nokia ME6-10GB-SFP+ (3HE10429AA), the 6-port 10GE SFP+ MDA-e of the 7750 SR-e and the IOM4-e family |
 | `nokia/me6-400gb-qsfp-dd@1` | module | line-card | 193 × 35.4 × 193 |  | 2 | 0 | Nokia 6-port Universal QSFP-DD MDA-e-XP (3HE15152AA), CLI type me6-400gb-qsfp-dd, for the 7750 SR-1 (FP4) and… |
+| `nokia/mf8-horizontal-front-cover@1` | component | bezel | 507.6 × 355 × 36 |  | 1 | 0 | The horizontal front dust filter assembly of the Nokia Lightspan MF-8: the perforated front cover that hangs … |
 | `nokia/ms-isa2@1` | module | line-card | 193 × 35.4 × 195.6 |  | 3 | 2 | Nokia MS-ISA2 (3HE10427AA) and MS-ISA2-E (3HE10428AA), the multiservice integrated service adapter in the MDA… |
 | `nokia/nelt-b@1` | module | line-card | 25 × 405 × 205 |  | 3 | 17 | Nokia NELT-B (3FE 62543 AA and AB), the FE/GE Ethernet LT of the 7360 ISAM FX (and 7302, 7330 FTTN and 7356 F… |
 | `nokia/ngfc-g@1` | module | power | 405 × 28.8 × 203 |  | 1 | 0 | Nokia NGFC-G (3FE 65676 AA), the general facilities card of the ANSI 7360 ISAM FX-4 shelf (NFXS-F BB) |

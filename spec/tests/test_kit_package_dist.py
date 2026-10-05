@@ -1,8 +1,8 @@
 """The kit reading a device from its npm package (#526, #528).
 
 dist.js `packageDist` maps every path the kit fetches onto the package that
-holds it: a device's files onto `@portrayal/<vendor>-<device>`, the skins onto
-`@portrayal/components`, everything else onto `@portrayal/index`, each at the
+holds it: a device's files onto `@portrayal/<vendor>-<device>`, a skin onto its
+namespace's `@portrayal/components-<ns>`, everything else onto `@portrayal/index`, each at the
 exact version the index's `packages.json` names. Checked here against the real
 build, packaged into a temporary directory the way npm_packages.py ships it,
 with fetch answered from those files: every file the kit can ask for has to
@@ -73,3 +73,19 @@ def test_a_crafted_index_is_refused_before_any_request(result):
     assert dict(result["indexForms"]) == {
         "latest": True, "next": True, "1.2.3": True, "0.1.0-rc.1": True,
         "0/../x": False, "1.2.3/x": False, "": False, "Latest?": False}
+
+
+def test_a_skin_is_read_from_its_own_namespaces_package(result):
+    got, want = result["skin"]
+    assert got == want and "/@portrayal/components-" in got
+    assert result["skinPackages"] > 10, "the skins are not split by namespace"
+
+
+def test_a_name_every_object_inherits_is_nobodys_package(result):
+    """`pk.devices["constructor"]` is a function, and truthy: without the
+    own-key test the URL was built from its `package` and `version`, both
+    undefined."""
+    index = f"https://cdn.test/npm/@portrayal/index@{result['indexVersion']}/"
+    assert result["inherited"] == [index + "components/constructor--x--v1--default.svg",
+                                   index + "constructor.configs.json",
+                                   index + "components/__proto__--x--v1--default.svg"]

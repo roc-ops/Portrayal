@@ -1,0 +1,189 @@
+format: 1
+kind: module
+name: lpwr-f
+version: 1.0.0
+class: power
+behaviour: fills
+profile: networking
+description: >-
+  Nokia LPWR-F, the DC power module of the Lightspan MF-8 shelf, in its two builds: LPWR-F
+  AA (3FE 79723 AA, maximum 80 A, a 2 x 40 A breaker) and LPWR-F AB (3FE 79723 AB, maximum
+  100 A, a 2 x 50 A breaker). Two sit side by side in the PWR 1 and PWR 2 slots at the foot
+  of the slot area and give the shelf power redundancy. Left to right: a module locking
+  screw, the elevated connector block under its semi-transparent door (the two-stud BAT
+  terminal showing through the left half, the energy hazard label covering the right half
+  over the two-stud RET terminal, the door lock and the PWR lamp at its lower left), the
+  circuit breaker with its ON/OFF rocker and the current marker beneath it, the handle, the
+  second locking screw and the ESD mark. The two builds have one face and differ only in
+  the printed marker, which is the `rating` field: "2 X 40A" on the AA, "2X 50A" on the AB.
+size: {w: 196.15, h: 42.8, d: 202.6}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: >-
+  UDS p99 section 13.6 and p109 section 14.6, identical for both builds. d is the stated
+  depth "without elevated connector block and BP connector"; the block adds 27.95 at the
+  front and the backpanel connector 33.21 at the rear.
+attrs:
+  model: LPWR-F
+  part-number: 3FE 79723 AA
+  part-number-variants: 3FE 79723 AA, 3FE 79723 AB
+  role: dc-power-entry
+  feeds: 1
+  input: dc
+  inlet: dc-terminal
+  input-voltage: '-40.5 to -72 VDC'
+  nominal-voltage: '-48 / -60 VDC'
+  current-max-a: 80
+  current-max-a-variants: 'AA 80 A (2 x 40 A); AB 100 A (2 x 50 A)'
+  breaker: 2 x 40 A DPST
+  power-output-w: 3840
+  power-output-scope: pass-through-ceiling
+  weight-kg: 1.2
+provenance:
+  sources: >-
+    datasheet - Lightspan Access Node MF-8 Unit Data Sheet Guide 26.9, 3HH-92646-AAAA-TQZZA
+    Issue 09 (UDS), chapter 13 (LPWR-F AA, p93-102) and chapter 14 (LPWR-F AB, p103-112);
+    Lightspan Access Node MF-8 User, Safety and Installation Manual 26.9,
+    3HH-92647-AAAA-RJZZA Issue 09 (USIM), p123, p145, p243-247, p265, p291-296; Nokia
+    Lightspan MF-8 data sheet CID214273 (April 2025), the front render of a populated shelf
+    (the render).
+  size: >-
+    datasheet - UDS p99 section 13.6 (AA) and p109 section 14.6 (AB): "Height: 42.8 mm
+    (1.68 in.)", "Width: 196.15 mm (7.72 in.)", "Depth: 202.6 mm (7.98 in.) without elevated
+    connector block and BP connector", "elevated connector block depth: 27,95 mm", "BP
+    connector: 33,21 mm". UDS Figure 72 (p99) dimensions the face 42.80 x 196.15. The render
+    agrees: the PWR bay frame lines stand 196.1 apart twice over.
+  variants: >-
+    datasheet - ONE COMPONENT FOR BOTH BUILDS, because the faces are the same drawing. UDS
+    Figure 67 (p95, AA) and Figure 74 (p105, AB) are the same render with one difference,
+    the marker under the breaker: "2 X 40A" on the AA, "2X 50A" on the AB; USIM p244 says the
+    marker "allows to distinguish this version of the module on sight". Chapters 13 and 14
+    are word for word the same but for the current rating and the breaker (p94 / p104, p98
+    / p108); dimensions, weight, lamp table and interface table are identical. The marker is
+    the `rating` field; a seat that holds the AB sets rating to "2X 50A". The attrs state the
+    AA, the first-sorted part number, and name both. USIM p244: the two builds must not be
+    mixed in one shelf, and the AA "will not support the use of line cards that consume
+    300W".
+  rating: >-
+    datasheet - UDS p94: "Offers a maximum power current rating of 80A (2x 40A)"; p104:
+    "100A (2x 50A)". UDS p98 section 13.4.3: "a 2x40A DPST (Double Pole Single Throw)
+    Circuit Breaker (CB) with an ON/OFF switch"; p108 section 14.4.3: "2x50A DPST". USIM
+    p145: DC power to a shelf with two 80 A modules "must be current limited to 80A", with
+    two 100 A modules to 100 A.
+  feeds: >-
+    datasheet - one feed per module. UDS p96 section 13.4.2: "two (2-stud) power terminals
+    (1x BAT and 1x RET)", BAT at the left and RET at the right, each cabled with a dual-hole
+    lug cable; p95: "It is mandatory to cable both power terminals". UDS p98 Table 32 lists
+    them as "RET/ BAT - Two power inputs; 1x RET and 1x BAT - 2-stud power terminal". The
+    "2 X 40A" marker is the two poles of the breaker, not two feeds. The second feed of a
+    shelf is the second module.
+  voltage: >-
+    datasheet - UDS p94 and p104: "a supported voltage range between -40.5Vdc and -72Vdc",
+    "a nominal operating voltage of -48Vdc/-60 Vdc".
+  power: >-
+    datasheet inputs, derived figure - NOTHING SEATS IN THIS MODULE and it neither converts
+    nor regulates: it lands the -48 V feed, breaks it and passes it to the backpanel. No
+    held document gives it a wattage, only its current rating, so the figure is a
+    pass-through ceiling and the arithmetic is the whole of it: 80 A (UDS p94, "maximum
+    power current rating of 80A") x 48 V (the stated nominal, UDS p94) = 3840 W for the AA.
+    The AB is 100 A x 48 V = 4800 W (UDS p104). It bounds what the module may pass; it is
+    not a promise of what a plant delivers. What the module itself dissipates is a separate
+    figure and is not an attr on a supply class: USIM p123, the power consumption table,
+    LPWR-F "in case of a full configuration (2x LBNT-A + 8x LT)" 4 W typical, 6.5 W
+    maximum.
+  layout: >-
+    drawing - UDS Figure 67 (p95, embedded 664 x 317), the front view of the closed AA: the
+    plate 590 x 133 px, 3.008 px/mm across and 3.107 down against the stated size (aspect
+    4.44 against 4.58, 3 percent out), so every position is a per-axis fraction of the
+    stated face, good to about 0.5. Module locking screws centred (4.7, 26.2) and (191.3,
+    26.2); the connector block door 9.3-110.4 x 3.6-35.4, its lock (13.5, 30.3); the hazard
+    label 70.6-106.9 x 7.4-30.7 with its triangle 75.8-84.4 x 14.5-23.8; the breaker body
+    120.8-165.4 x 2.8-20.8, its screw (125.3, 11.6), the rocker 132.0-161.2 x 3.9-19.3; the
+    marker centred 146.4 with its baseline at 24.6; the handle 179.3-184.0 x 3.3-28.8; the
+    ESD mark 189-194 x 35.5-40.3. UDS Figure 72 (p99), the dimensioned CAD face view at 1.6
+    px/mm, agrees across the plate on the door, the label, the breaker and the handle. The
+    render, at 1.8129 px/mm, agrees on the screws (4.7-5.2 and 190.9-191.1, 26.2), the
+    rocker (131.6-161.6 x 3.3-20.4) and the handle (178.4-183.1 x 3.3-27.0).
+  render-differences: >-
+    drawing - the data sheet render draws a different connector block from the unit
+    documents, in three ways, on both modules alike. Its door sits about 14.5-115.8 across,
+    5 to the right of the 9.3-110.4 that UDS Figures 67 and 72 give, while its screws,
+    breaker and handle sit where the figures have them. It carries no hazard label, so both
+    terminals show through the door. And it prints the PWR lamp and legend on the plate
+    below the door at about (18.5, 39), where the UDS has the lamp "under the
+    semi-transparent connector block door" (p100) and draws it there (Figures 67 and 69).
+    The unit documents are drawn. A photograph of a delivered module would settle which is
+    the shipping build.
+  connector-block: >-
+    datasheet - UDS p96-97 section 13.4.2: the block "is elevated (2.8 cm/1.1 in.)", has
+    two two-stud terminals under a transparent door with a hinge at the top, "an energy
+    hazard label on the right half of the door (that blocks the transparancy)", a locking
+    mechanism at the left bottom and two cable guiding openings in its bottom side. Drawn
+    closed, as UDS Figure 67: the BAT studs show dimly through the left half and the label
+    hides the RET studs. BAT stud centres (25.6, 15.7) and (39.5, 21.6) on Figure 67, 15.1
+    apart at about 0.5 a reading, against the 16 hole spacing of the dual-hole M6 lug (USIM
+    p265). The terminal plate outline is schematic.
+  hazard-label: >-
+    drawing - UDS Figure 67 and Figure 72: a grey label with a yellow warning triangle and
+    "ENERGY HAZARD" over "Disconnect before service", printed to read up the label. The
+    triangle from Figure 67; yellow (226-255, 180-200, 0-60) counted
+    over 384 px of Figure 67.
+  breaker: >-
+    datasheet - UDS p98 Table 32: "ON/OFF - ON/OFF switch for the CB - switch - Linked to
+    the PWR LED". It switches the complete shelf and protects it against over-current
+    (section 13.4.3). Drawn as the black rocker in its black bezel; which end is ON is not
+    stated and no legend is drawn on it.
+  lamps: >-
+    datasheet - UDS p100 Table 33 and p110 Table 36, identical: PWR, "CB load terminal state
+    LED", dual-colour. CB OFF with input voltage present: red. CB OFF or ON with no power:
+    off. CB ON, input within normal range: green. CB ON, input not within normal range
+    (below the low power alarm threshold, or a missing BAT connection): red. No RGB values
+    given; green #39b54a and red #d0021b, the library values. Position from UDS Figure 69
+    (p97, the door open) and Figure 67: 7 to the right of the door lock, the PWR legend beside it.
+  legends: >-
+    drawing - the marker as UDS Figure 67 prints it, "2 X 40A" (Figure 74: "2X 50A"); PWR
+    beside the lamp and BAT beside the left terminal as UDS Figure 69 prints them, dim
+    because they are read through the door. RET is under the hazard label and not drawn.
+  colour: >-
+    drawing - sampled on the render, a vendor render and not a photograph: the plate modal
+    bins (68-76, 76-84, 84-92) over 9,880 px, taken as the family slate #444c54; the door,
+    breaker and rocker near black (32, 32, 32); screws and handle bright metal.
+  weight: 'datasheet - UDS p99: "The weight of the LPWR-F AA is 1.20 kg (2.65 lbs)"; p109 the same for the AB'
+  relief: >-
+    datasheet for the block, estimated for the rest - the connector block stands 27.95 off
+    the plate (UDS p99); the screw heads, the breaker bezel and the handle are not
+    dimensioned.
+  logo-zone: 'none reserved - no view prints a vendor mark on this plate; the ESD mark at the lower right is drawn'
+  lifecycle: 'searched only the staged corpus - listed in the 26.9 guides (2025-2026); no end-of-life notice searched'
+elements:
+  screw-left: {at: [1.7, 23.2], size: [6.0, 6.0], class: screw}
+  screw-right: {at: [188.3, 23.2], size: [6.0, 6.0], class: screw}
+  connector-block: {at: [9.6, 3.2], size: [101.0, 32.0], class: terminal}
+  breaker: {at: [121.0, 2.6], size: [44.2, 18.0], class: switch}
+  handle: {at: [178.9, 2.8], size: [5.4, 26.2], class: handle}
+  esd-mark: {at: [189.4, 35.4], size: [5.0, 4.8], class: marking}
+fields:
+  rating:
+    label: Breaker marker
+    type: choice
+    default: 2 X 40A
+    options: [2 X 40A, 2X 50A]
+    description: the current marker printed under the breaker - "2 X 40A" on the LPWR-F AA, "2X 50A" on the LPWR-F AB
+relief:
+  features:
+    - {node: connector-block, out: 27.95, color: '#232527', confidence: datasheet, source: 'UDS p99 section 13.6: elevated connector block depth 27,95 mm'}
+    - {node: screw-left, cyl: 2.0, confidence: estimated, source: 'a module locking screw head; not dimensioned'}
+    - {node: screw-right, cyl: 2.0, confidence: estimated, source: as screw-left}
+    - {node: breaker, out: 8.0, color: '#1b1c1e', confidence: estimated, source: 'the breaker bezel and rocker standing off the plate (UDS Figure 66); not dimensioned'}
+    - {node: handle, uhandle: 20.0, dia: 3.2, confidence: estimated, source: 'the pull handle loop (UDS Figure 66, p94); not dimensioned'}
+groups:
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the one PWR lamp, under the connector block door
+parts:
+  - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [19.6, 29.3], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+connection-points:
+  mate: {at: [98.075, 21.4], direction: rear}
+  power: {at: [60.1, 35.2], direction: down}
+skins: [default]
