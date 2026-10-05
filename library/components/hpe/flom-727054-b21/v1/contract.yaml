@@ -1,0 +1,94 @@
+format: 1
+kind: module
+name: flom-727054-b21
+version: 1.0.0
+class: nic
+behaviour: fills
+profile: server
+description: >-
+  HPE Ethernet 10Gb 2-port 562FLR-SFP+ FlexibleLOM adapter (562FLR-SFP+;
+  option 727054-B21, spare 790317-001) - the adapter the Gen10 ProLiant
+  DL160's FlexibleLOM riser carries in place of slot 1
+attrs:
+  ports: 2
+  media: sfp-plus
+  part-numbers: 727054-B21 790317-001
+  spare-part: 790317-001
+  hpe-model: 562FLR-SFP+
+  controller: X710-DA2
+  sfp-plus: 2
+groups:
+  ports:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+provenance:
+  sources: >-
+    Product Information Reference a00077132en_us, FlexibleLOM adapters:
+    727054-B21, 562FLR-SFP+. THE QUICKSPECS DOES NOT LIST THIS ADAPTER for the
+    DL160 Gen10; the reference does. QuickSpecs a00021860enw on any FlexibleLOM
+    ('FlexibleLOM Riser Kit (875748-B21) is required to install these adapters';
+    'Only one FlexibleLOM can be added to the server'). The controller is
+    PartSurfer's title for the option. The name 562FLR-SFP+ is the Product
+    Information Reference's (a00077132en_us) and HPE PartSurfer's, which also
+    gives the spare 790317-001
+    (partsurfer.hpe.com/Search.aspx?SearchText=727054-B21). A reseller's
+    photograph of a 562FLR-SFP+ from the port end, from a little to the right,
+    the whole plate in frame (servermind.de/media/image/17/5f/cd/727054-B21.jpg,
+    1024 x 768), and HPE PartSurfer's of the spare from above
+    (partsurfer.hpe.com/media/photos/790317-001.jpg), which shows the same two
+    separate cages under a black heatsink. A FIRST VERSION MEASURED THE WRONG
+    CARD: a photograph a seller files under 727054-B21 whose own label reads
+    570FLR-SFP+, product 717491-B21 - one ganged cage and a silver heatsink -
+    and the part was drawn as that.
+  size: >-
+    borrowed - 74.0 x 14.6, hpe/flom-629135-b22@1, the adapter whose photograph
+    the faceplate's length is read from; this part's own image does not measure
+    it.
+  face: >-
+    photo-measured - the plate is 1712 px on the enlarged photograph: a large
+    round screw hole 4.1 from the left end; a three-by-two field of vents at
+    8.0..18.4, COUNTED; two lamps under it at 14.7 and 17.9 over the legend
+    LNK/ACT; a single SFP+ cage at 19.2..34.7 lettered Port 2; one column of two
+    vents at 37.1..39.9 with two lamps under it at 36.5 and 39.8 over a second
+    LNK/ACT; a second single cage at 41.7..57.5 lettered Port 1; one column of
+    two vents at 58.8..61.7; plain plate from there to the end. TWO SEPARATE
+    CAGES, each a single, 22.65 between centres, not one ganged pair. The
+    photograph is taken from the right, so these are good to about 1.5 mm.
+    Positions are read as fractions of the plate, whose whole length the
+    photograph shows, at the 74.0 this family draws; by the cage or jacks it
+    carries this photograph would put the plate between 74 and 76, which is the
+    family's open question and not this part's.
+  lamps: >-
+    photo-measured - two round lamps per port, about 1.5 mm across, drawn with
+    the library's 2 mm dot. Each pair sits over ONE legend, LNK/ACT, so the left
+    lamp of a pair is drawn as link and the right as activity: that is the
+    legend's word order, not a lamp lettered on its own. Each pair is left of
+    the cage it serves, by position. What the colours and flashes mean is in no
+    document held; green is the convention.
+  way-up: >-
+    The adapter lies component side up, its screw end at the left as the User
+    Guide's figure fits it into the cage; the photographs are taken the same way
+    up.
+  power: >-
+    NOT STATED for the adapter in any document held; lint's L27 stands as the
+    record.
+  depth: >-
+    estimated - 110. No dimension of the adapter is in any document held; it is
+    the board's reach behind the faceplate by proportion on the photographs.
+size: {w: 74.0, h: 14.6, d: 110.0}
+size-confidence: {w: borrowed, h: borrowed, d: estimated}
+body: {depth: 110.0, color: '#2f6b3a'}
+parts:
+  - {ref: std/sfp@1, id: port-2, group: ports, at: [19.7, 2.6], attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp@1, id: port-1, group: ports, at: [42.35, 2.6], attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: common/led-dot@1, id: led-2-lnk, group: port-leds, at: [13.7, 9.4], states: {lamp: ['off', {name: link, color: '#22c55e'}]}}
+  - {ref: common/led-dot@1, id: led-2-act, group: port-leds, at: [16.9, 9.4], states: {lamp: ['off', {name: activity, color: '#22c55e', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-1-lnk, group: port-leds, at: [35.5, 9.4], states: {lamp: ['off', {name: link, color: '#22c55e'}]}}
+  - {ref: common/led-dot@1, id: led-1-act, group: port-leds, at: [38.8, 9.4], states: {lamp: ['off', {name: activity, color: '#22c55e', behavior: blinking}]}}
+skins: [default]

@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1202 component majors in 26 namespaces.
+1211 component majors in 26 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -51,15 +51,15 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/pcie-bracket-fh@2` | component | bracket | 120.02 × 21.59 | pcie-bracket-fh | 0 | 38 | Standard (full height) PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the ch… |
 | `std/pcie-bracket-lp@1` | component | bracket | 79.2 × 18.42 | pcie-bracket-lp | 0 | 48 | Low profile PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the chassis wall,… |
 | `std/qsfp-dd@1` | component | port | 19 × 10 × 37 | qsfp-dd | 32 | 19 | QSFP-DD cage cutout (400G, backward-compatible faceplate) |
-| `std/qsfp-ganged@1` | component | port | 18.5 × 9.58 × 37 | qsfp-ganged | 50 | 25 | QSFP family per-port opening inside a ganged cage block - the cage aperture, with the SFF-8661 module envelop… |
+| `std/qsfp-ganged@1` | component | port | 18.5 × 9.58 × 37 | qsfp-ganged | 50 | 26 | QSFP family per-port opening inside a ganged cage block - the cage aperture, with the SFF-8661 module envelop… |
 | `std/qsfp28@1` | component | port | 20 × 10.15 × 37 | qsfp28 | 2 | 49 | QSFP28 cage cutout (100G, 4 lanes) |
 | `std/qsfp56@1` | component | port | 20 × 10.15 × 37 | qsfp56 | 0 | 16 | QSFP56 cage cutout (200G, shares SFF-8661 profile) |
-| `std/rj45@2` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 72 | 56 | RJ45 modular jack HOUSING - the 15.8 x 13.2 plastic face a plug enters, with the 8P8C interface recessed into… |
+| `std/rj45@2` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 72 | 57 | RJ45 modular jack HOUSING - the 15.8 x 13.2 plastic face a plug enters, with the 8P8C interface recessed into… |
 | `std/rj45-ganged@2` | component | port | 12.7 × 11 × 18.6 | rj45-ganged | 75 | 27 | One cell of a shared-wall 2xN RJ45 block - the 12.7 x 11.0 face between neighbouring ports on a 13.97 pitch, … |
 | `std/saf-d-grid@1` | component | inlet | 26.8 × 19.9 × 17 | saf-d-grid | 0 | 3 | Anderson Saf-D-Grid appliance inlet - the panel cutout with the keyed coupler recessed behind it, a first-mat… |
 | `std/sc-bore@1` | component | port | 8.39 × 9 × 6 | sc-simplex-receptacle | 2 | 34 | One SC opening - the rectangular hole an SC plug's housing enters, with the key slot cut into one long wall a… |
-| `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 44 | 77 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
-| `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 89 | 90 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
+| `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 44 | 78 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
+| `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 89 | 93 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
 | `std/sma@1` | component | port | 6.35 × 6.35 | sma | 19 | 8 | SMA coaxial panel jack (1/4-36UNS-2B) - threaded barrel protrudes; GNSS/RF antenna input |
 | `std/smb@1` | component | port | 4.83 × 4.83 | smb | 24 | 20 | SMB coaxial panel jack (10-32UNF-2A) - snap-on timing coax (1PPS/10MHz) |
 | `std/usb-a@1` | component | port | 12 × 4.5 × 13.7 | usb-a | 102 | 29 | USB Type-A receptacle opening - sharp corners |
@@ -67,7 +67,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/vga@1` | component | port | 20.47 × 11.4 × 6.73 | hd15 | 2 | 6 | VGA video receptacle - a female high-density DE-15, fifteen contacts in three rows inside the D-subminiature … |
 | `std/xfp@1` | component | port | 19.5 × 9.7 × 61.7 | xfp | 1 | 40 | XFP cage cutout (10G pluggable) - the recommended bezel opening of the XFP MSA, the aperture an XFP cage prot… |
 
-## common/ (110)
+## common/ (111)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -111,7 +111,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/lc-dust-cap@1` | component | cap | 4.7 × 4.7 | lc | 0 | 3 | The white dust cap an idle LC port ships with - a 4.7 square lump plugging the bore square, with a rounded-sq… |
 | `common/led-arrow@1` | component | led | 3.6 × 3.2 |  | 15 | 1 | Single triangle port LED - up skin for top-row ports, down for bottom |
 | `common/led-arrow-sm@1` | component | led | 2.25 × 2 |  | 33 | 0 | Compact triangle port LED for tight inter-port gaps - up skin for top-row ports, down for bottom |
-| `common/led-dot@1` | component | led | 2 × 2 |  | 116 | 268 | Tiny round port LED (2mm) |
+| `common/led-dot@1` | component | led | 2 × 2 |  | 116 | 273 | Tiny round port LED (2mm) |
 | `common/led-indicator@1` | component | led | 4 × 4 |  | 26 | 48 | Single chassis status LED |
 | `common/led-rect@1` | component | led | 4.6 × 2.6 |  | 30 | 3 | Rectangular system LED (cell-site style green bar) |
 | `common/led-rect-sm@1` | component | led | 2.8 × 1.6 |  | 30 | 23 | Small rectangular per-port LED - the rounded bar a dense port row carries one of beside each cage, at roughly… |
@@ -154,8 +154,9 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/rivet@1` | component | mechanical | 3 × 3 |  | 7 | 0 | Sheet-metal rivet head |
 | `common/rj11-jack@1` | component | port | 14 × 13.5 |  | 1 | 0 | RJ11 telephone jack (FXS) |
 | `common/rj45-boot@1` | component | boot | 14.5 × 10 | rj45-plug | 0 | 1 | A strain-relief boot for an RJ45 (8P8C) copper plug - PVC, moulded around the plug it wraps |
-| `common/rj45-eth@1` | component | port | 15.8 × 13.2 × 18.6 |  | 63 | 40 | An Ethernet RJ45 - the std/rj45@2 housing with the two link and activity lamps nearly every Ethernet jack car… |
-| `common/rj45-ganged-eth@1` | component | port | 12.7 × 11 × 18.6 |  | 75 | 34 | An Ethernet RJ45 in a ganged 2xN block - the std/rj45-ganged@2 cell with the two lamps in its keyway-side cor… |
+| `common/rj45-eth@1` | component | port | 15.8 × 13.2 × 18.6 |  | 63 | 42 | An Ethernet RJ45 - the std/rj45@2 housing with the two link and activity lamps nearly every Ethernet jack car… |
+| `common/rj45-eth-pinside@1` | component | port | 15.8 × 13.2 × 18.6 |  | 0 | 3 | An Ethernet RJ45 whose two link and activity lamps are in the side walls of the housing at its PIN end, besid… |
+| `common/rj45-ganged-eth@1` | component | port | 12.7 × 11 × 18.6 |  | 75 | 35 | An Ethernet RJ45 in a ganged 2xN block - the std/rj45-ganged@2 cell with the two lamps in its keyway-side cor… |
 | `common/rj45-ganged-link@1` | component | port | 12.7 × 11 × 18.6 |  | 5 | 0 | An Ethernet RJ45 in a ganged 2xN block with ONE lamp - the std/rj45-ganged@2 cell with a single link/activity… |
 | `common/rocker-switch@1` | component | button | 21 × 15 |  | 1 | 0 | Snap-in panel rocker power switch, 21 x 15 bezel, rocker across the width - the I (on) side at the left and O… |
 | `common/sc-apc@1` | component | port | 24 × 26 |  | 1 | 0 | SC/APC fiber adapter in a molded bay (PON WAN) |
@@ -640,7 +641,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/riser-card-clip-14g@1` | component | mechanical | 8.4 × 16.4 |  | 0 | 3 | The blue card-retention clip at the end of a riser's slots on a 14G PowerEdge, where the L of a PCIe bracket … |
 | `dell/riser-card-lp-14g@1` | component | riser | 27.4 × 211.4 |  | 0 | 2 | The low-profile riser card of a 2U 14G PowerEdge seen from above - the short card that carries riser 2's sing… |
 | `dell/riser-divider-plate-14g@1` | component | mechanical | 11.32 × 40.61 |  | 1 | 0 | The sheet metal either side of the rear-bay divider on a 14G PowerEdge - the plate right of riser 2 and the p… |
-| `dell/rj45-port-14g@1` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 0 | 3 | A 14G PowerEdge network port - common/rj45-eth@1 carrying the link and activity states ISM table 11 gives it |
+| `dell/rj45-port-14g@1` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 0 | 4 | A 14G PowerEdge network port - common/rj45-eth@1 carrying the link and activity states ISM table 11 gives it |
 | `dell/system-board-14g@1` | component | mechanical | 422.8 × 456.5 × 79.9 |  | 1 | 2 | The system board of a 14G PowerEdge seen from above - the floor of the chassis, visible between the fan cage,… |
 | `dell/system-board-r660@1` | component | mechanical | 425 × 471.8 × 38.3 |  | 1 | 7 | The R660 system board seen from above - the PCB the processors, memory, risers and fan connectors stand on, a… |
 | `dell/system-cover-14g@1` | component | mechanical | 434 × 540.6 |  | 1 | 0 | The system cover of a 14G PowerEdge - the lid over the mid-drive tray, the risers and the processor tray, rel… |
@@ -777,7 +778,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `fs/fhd-splice-12-lc-rear@2` | component | cassette | 99 × 31 |  | 0 | 1 | The back of FS FHD's LC UPC OS2 12-fibre splice cassette (SKU 382907): the cassette body seen from behind, ca… |
 | `fs/qsfp28-aoc@1` | module | transceiver | 18.35 × 8.5 × 52.4 | qsfp | 0 | 0 | FS 100G QSFP28 active optical cable, one end - four 25G lanes over multimode ribbon fibre, up to 100 m over O… |
 
-## hpe/ (34)
+## hpe/ (42)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -785,11 +786,18 @@ aperture when it is a bare opening - never both at one position. The README's
 | `hpe/expansion-slot-blank-fh@1` | module | blank | 120.02 × 21.59 |  | 0 | 1 | HPE full-height expansion slot blank of the Gen10 ProLiant DL160's primary riser, lying flat - the part of it… |
 | `hpe/expansion-slot-blank-lp@1` | module | blank | 79.2 × 18.42 |  | 0 | 3 | HPE low-profile expansion slot blank of the Gen10 ProLiant DL160's risers, lying flat - the part of it the wi… |
 | `hpe/fan-dl160@1` | module | fan | 40 × 32 × 40 |  | 1 | 0 | A single-rotor hot-plug fan of the Gen10 ProLiant DL160 seen from above - the block that lifts out of its bay… |
-| `hpe/flom-629135-b22@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 6 | HPE Ethernet 1Gb 4-port 331FLR FlexibleLOM adapter (331FLR; option 629135-B22, spare 789897-001) - the adapte… |
+| `hpe/flom-629135-b22@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 13 | HPE Ethernet 1Gb 4-port 331FLR FlexibleLOM adapter (331FLR; option 629135-B22, spare 789897-001) - the adapte… |
 | `hpe/flom-665240-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 1 | HPE Ethernet 1Gb 4-port 366FLR FlexibleLOM adapter (366FLR; option 665240-B21, spare 669280-001) - the adapte… |
-| `hpe/flom-817721-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 1 | HPE Ethernet 10Gb 2-port 535FLR-T FlexibleLOM adapter (535FLR-T; option 817721-B21, spare 854177-001) - the a… |
-| `hpe/flom-817745-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 1 | HPE Ethernet 10Gb 2-port 562FLR-T FlexibleLOM adapter (562FLR-T; option 817745-B21, spare 840138-001) - the a… |
+| `hpe/flom-700751-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 1 | HPE FlexFabric 10Gb 2-port 534FLR-SFP+ FlexibleLOM adapter (534FLR-SFP+; option 700751-B21, spare 701531-001)… |
+| `hpe/flom-700759-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 2 | HPE FlexFabric 10Gb 2-port 533FLR-T FlexibleLOM adapter (533FLR-T; option 700759-B21, spare 701534-001) - the… |
+| `hpe/flom-727054-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 1 | HPE Ethernet 10Gb 2-port 562FLR-SFP+ FlexibleLOM adapter (562FLR-SFP+; option 727054-B21, spare 790317-001) -… |
+| `hpe/flom-764285-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 1 | HPE InfiniBand FDR/Ethernet 10Gb/40Gb 2-port 544+FLR-QSFP FlexibleLOM adapter (544+FLR-QSFP; option 764285-B2… |
+| `hpe/flom-764302-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 1 | HPE FlexFabric 10Gb 4-port 536FLR-T FlexibleLOM adapter (536FLR-T; option 764302-B21, spare 768082-001) - the… |
+| `hpe/flom-817709-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 1 | HPE Ethernet 10/25Gb 2-port 631FLR-SFP28 FlexibleLOM adapter (631FLR-SFP28; option 817709-B21, spare 840133-0… |
+| `hpe/flom-817721-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 3 | HPE Ethernet 10Gb 2-port 535FLR-T FlexibleLOM adapter (535FLR-T; option 817721-B21, spare 854177-001) - the a… |
+| `hpe/flom-817745-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 2 | HPE Ethernet 10Gb 2-port 562FLR-T FlexibleLOM adapter (562FLR-T; option 817745-B21, spare 840138-001) - the a… |
 | `hpe/flom-817749-b21@1` | module | nic | 74 × 14.6 × 110 |  | 1 | 1 | HPE Ethernet 10/25Gb 2-port 640FLR-SFP28 FlexibleLOM adapter (640FLR-SFP28; option 817749-B21, spare 840139-0… |
+| `hpe/flom-867334-b21@1` | module | nic | 74 × 14.6 × 110 |  | 0 | 1 | HPE Ethernet 10/25Gb 2-port 622FLR-SFP28 converged network FlexibleLOM adapter (622FLR-SFP28; option 867334-B… |
 | `hpe/flom-blank@1` | module | blank | 74 × 14.6 |  | 0 | 1 | FlexibleLOM adapter blank of the Gen10 ProLiant DL160's FlexibleLOM riser cage - a perforated plate where an … |
 | `hpe/heatsink-std-1u@1` | component | mechanical | 80 × 107 |  | 1 | 0 | The standard processor heatsink of the Gen10 ProLiant DL160 seen from above - a black shrouded block over the… |
 | `hpe/info-pull-tab@1` | component | tab | 37.2 × 11.1 |  | 1 | 1 | The serial number / iLO information pull tab of an HPE Gen10 ProLiant front - a black tab that slides out of … |
@@ -806,9 +814,10 @@ aperture when it is a bare opening - never both at one position. The README's
 | `hpe/psu-865414-b21@1` | module | psu | 68 × 40.4 × 225.3 |  | 1 | 0 | HPE 800 W Flex Slot Platinum Hot Plug Low Halogen power supply (865414-B21), the 500 W supply's casting with … |
 | `hpe/psu-blank-flex-slot@1` | module | blank | 68 × 40.4 |  | 1 | 0 | HPE Flex Slot power supply blank, as the Gen10 ProLiant DL160 ships in its second supply bay - a bright metal… |
 | `hpe/psu-flex-slot-plan@1` | component | mechanical | 68 × 190 |  | 0 | 2 | An HPE Flex Slot power supply seen from above - the can that runs into the chassis behind its rear face |
+| `hpe/riser-blank-primary-dl160@1` | module | blank | 203 × 24.2 |  | 1 | 0 | The primary PCI riser blank of the Gen10 ProLiant DL160 (spare 878532-001) - one perforated plate across the … |
 | `hpe/riser-cage-primary-dl160@1` | component | mechanical | 123.5 × 145.6 |  | 1 | 0 | The primary PCI riser cage of the Gen10 ProLiant DL160 seen from above - the vented sheet-metal roof over PCI… |
 | `hpe/riser-flom-dl160@1` | module | riser | 203 × 24.2 × 150 |  | 1 | 0 | The FlexibleLOM riser cage of the Gen10 ProLiant DL160 as the rear presents it (FlexibleLOM/NVMe riser kit 87… |
-| `hpe/riser-primary-dl160@1` | module | riser | 203 × 24.2 × 150 |  | 1 | 4 | The primary PCI riser cage of the Gen10 ProLiant DL160 as the rear presents it, with the standard x16/x8 rise… |
+| `hpe/riser-primary-dl160@1` | module | riser | 203 × 24.2 × 150 |  | 1 | 5 | The primary PCI riser cage of the Gen10 ProLiant DL160 as the rear presents it, with the standard x16/x8 rise… |
 | `hpe/riser-secondary-dl160@1` | module | riser | 82.5 × 21 × 150 |  | 1 | 0 | The secondary PCI riser cage of the Gen10 ProLiant DL160 as the rear presents it, with the x16 riser board (8… |
 | `hpe/serial-port-879778@1` | module | expansion-card | 32.8 × 12.5 |  | 1 | 0 | The optional serial port of the Gen10 ProLiant DL160 (serial port cable, spare 879778-001) - a DE-9 on a cabl… |
 | `hpe/serial-port-blank@1` | module | blank | 32.8 × 12.5 |  | 1 | 1 | HPE serial port blank on the Gen10 ProLiant DL160's rear, covering the opening the optional serial port fills… |

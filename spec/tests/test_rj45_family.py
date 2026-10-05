@@ -181,6 +181,46 @@ def test_common_rj45_eth_composes_the_housing_and_adds_two_lamps():
     assert "conforms" not in c, "the wrapper composes the standard; it does not restate it"
 
 
+def test_common_rj45_eth_pinside_carries_its_lamps_in_the_side_walls_at_the_pin_end():
+    c = contract("common/rj45-eth-pinside@1")
+    assert c["size"] == {"w": 15.8, "h": 13.2, "d": 18.6}
+    assert c["parts"] == [{"ref": "std/rj45@2", "id": "jack", "at": [0.0, 0.0], "behind": True}]
+    assert c["elements"]["led-a"]["at"] == [0.1, 1.6] and c["elements"]["led-b"]["at"] == [13.95, 1.6]
+    for el in ("led-a", "led-b"):
+        w, h = c["elements"][el]["size"]
+        assert c["elements"][el]["class"] == "led" and h > w, "the window is taller than wide"
+        x, y = c["elements"][el]["at"]
+        # in a side wall (the opening spans x 1.945..13.855) and in the pin half
+        assert x + w <= 1.945 or x >= 13.855, el
+        assert y + h < c["size"]["h"] / 2, el
+    assert c["elements"]["led-a"]["states"] == ["off", "link"]
+    assert c["elements"]["led-b"]["states"] == ["off", "activity"]
+    assert "conforms" not in c
+    # the skin draws each window where the contract says it is, or the two drift
+    s = skin("common/rj45-eth-pinside@1")
+    for el in ("led-a", "led-b"):
+        (x, y), (w, h) = c["elements"][el]["at"], c["elements"][el]["size"]
+        assert re.search(rf'<rect id="{el}" x="{x:g}" y="{y:g}" width="{w:g}" height="{h:g}"', s), el
+
+
+def test_l76_takes_the_pinside_jack_as_lamped():
+    """Without its entry in the lamped set the census follows `parts` to
+    std/rj45@2 and calls an Ethernet port on it bare."""
+    assert lint.rj45_class("common/rj45-eth-pinside@1", [str(LIB)]) == "lamped"
+    eth = {"id": "port-1", "ref": "common/rj45-eth-pinside@1", "at": [0, 0], "attrs": {"role": "port"}}
+    assert l76c("flom-x", [eth]) == []
+    ws = l76c("flom-x", [{**eth, "id": "console", "attrs": {"role": "console"}}])
+    assert len(ws) == 1 and "1 console/timing jack(s) on a lamped part" in ws[0]
+
+
+def test_the_pinside_jack_exports_as_ethernet_at_the_cards_speed():
+    assert dx.iface_type({"ref": "common/rj45-eth-pinside@1", "id": "port-1"}, {}, "traffic") == "1000base-t"
+    card = contract("hpe/flom-817745-b21@1")
+    assert [p["ref"] for p in card["parts"]] == ["common/rj45-eth-pinside@1"] * 2
+    doc = dx.build_module(card, "HPE")
+    assert [(i["name"], i["type"]) for i in doc["interfaces"]] == [("port-1", "10gbase-t"), ("port-2", "10gbase-t")]
+
+
 def test_common_rj45_eth_skin_punches_the_opening_through_its_own_face():
     s = skin("common/rj45-eth@1")
     assert 'id="led-a"' in s and 'id="led-b"' in s

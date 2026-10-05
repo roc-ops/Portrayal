@@ -69,6 +69,7 @@ Four components replace nine.
 | `common/rj45-eth@1` | `std/rj45@2` plus two lamps in the housing corners | `led-a`, `led-b` | every single Ethernet jack: data, mgmt, OOB, service |
 | `common/rj45-ganged-eth@1` | `std/rj45-ganged@2` plus two lamps in the outer corners | `led-a`, `led-b` | every Ethernet jack in a ganged block |
 | `common/rj45-ganged-link@1` | `std/rj45-ganged@2` plus ONE lamp, at `led-a`'s corner | `led-a` | a ganged Ethernet jack whose housing has a single LINK/ACT window - added for the AurCore AIS non-PoE builds, whose PoE siblings carry the second (PoE) lamp (#738) |
+| `common/rj45-eth-pinside@1` | `std/rj45@2` plus two lamps in the side walls at the PIN end, away from the keyway | `led-a`, `led-b` | a single Ethernet jack whose lamps are opposite the latch - added for three HPE 10GBASE-T FlexibleLOM adapters (#777); see the addendum |
 
 `dell/rj45-port-14g@1` stays. It draws nothing and exists to attach ISM table 11's
 meanings once; it composes `common/rj45-eth@1` instead of `rj45-port@4`.
@@ -253,3 +254,21 @@ flagged: the latch slot height (2.6, conventional) and the housing top wall
 
 **The version rule the sweep answered two ways:** a composed-part swap that
 removes no id is a minor bump.
+
+## Addendum: a third lamped member, lamps on the pin side
+
+`common/rj45-eth@1` carries its two lamps in the corners beside the latch
+keyway, which is where the drawings this note rests on put them. Some jacks carry
+them at the other end, in the corners on the pin side: the 10GBASE-T jacks on
+three HPE FlexibleLOM adapters show a lamp window in both corners away from the
+notch, on photographs of each. No rotation of the first part draws that, because
+turning it moves the keyway with the lamps.
+
+`common/rj45-eth-pinside@1` is the same housing with a window in each side wall
+beside the opening's corner at the pin end, sized off the photographs. The
+family's own drawings (TE 6368011, itself an integrated-magnetics jack) put the
+lamps latch-side, so this is what three products show and not a rule for
+10GBASE-T jacks. It is a lamped member of the family for the census (L76) and for
+the exporter, and nothing else about the family changes. It is named for the pin
+side and not for top or bottom, because which way up a jack sits is its
+placement's to say.
