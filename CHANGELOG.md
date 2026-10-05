@@ -25,6 +25,19 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- USB receptacles are connector slots, and three cable plugs seat in them.
+  `usb-a`, `micro-usb-b` and `usb-c` join `spec/schemas/connectors.yaml`, so
+  every `std/usb-a@1`, `std/micro-usb@1` and `std/usb-c@1` publishes a
+  `kind: connector` slot: on a chassis, on a card seated in a bay, and through
+  the `common/usb-a@2` and `common/usb-a-bezel@1` bezels. `std/micro-usb@1`
+  (1.0.1) gains its interface and a `mate` point; its drawing is unchanged, and
+  the 39 devices that draw it take a patch. `generic/usb-a-plug@1`,
+  `generic/micro-usb-b-plug@1` and `generic/usb-c-plug@1` are the moulded cable
+  plugs that mate them, drawn from the cable end at the largest overmould the
+  USB specifications allow, with a 30 mm stub of cable sized by `cable-od` and
+  coloured by `jacket-color`. Each seats to the insertion its USB drawing
+  gives; see `docs/connectors-usb-design.md`. No receptacle's geometry changed
+  (#786).
 - AC power inlets are connector slots, and three cord ends seat in them.
   `iec-c14`, `iec-c20` and `saf-d-grid` join `spec/schemas/connectors.yaml`, so
   every `std/c14-inlet@1`, `std/c20-inlet@1` and `std/saf-d-grid@1` publishes a

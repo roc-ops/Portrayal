@@ -1,0 +1,168 @@
+format: 1
+kind: component
+name: micro-usb-b-plug
+version: 1.0.0
+class: port
+mates: micro-usb-b
+conforms: micro-usb-b-plug
+profile: networking
+description: >-
+  A moulded straight USB 2.0 Micro-B cable plug on its cable, seen from the
+  cable end as a front elevation sees it seated: the overmould at the largest
+  section the Micro-USB specification allows, keyed by the two chamfered
+  corners on its latch side, the round strain relief and a short straight
+  stub of cable whose diameter is the cable-od field. Seats in a
+  `micro-usb-b` receptacle at its own mate point; the cable leaves from the
+  far end of the stub.
+size: {w: 10.6, h: 8.5}
+size-confidence: {w: drawing, h: drawing}
+size-notes: both figures are the overmould MAXIMUM the Micro-USB specification dimensions on figure 4-5, not a measured plug; one held cable assembly drawing is 11 by 6.9
+attrs: {media: micro-usb-b, connector: micro-usb-b}
+fields:
+  cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 4.06}
+  jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    drawing - registry `micro-usb-b-plug`. Micro-USB Cables and Connectors
+    Specification Revision 1.01 (April 4, 2007), figure 4-5, Micro-B Plug
+    Overmold, Straight, p.18: the overmould is dimensioned 10.6 MAX wide and
+    8.5 MAX high, and note 3 makes the maximum dimensions mandatory and the
+    outer shape reference. THE PART IS DRAWN AT THAT MAXIMUM. A real plug is
+    usually thinner and may be wider: the Same Sky CBL-UA-MUB-1 cable assembly
+    data sheet (09/12/2024, p.2) dimensions its Micro-B overmould 11 +/-0.3
+    by 6.9 +/-0.2.
+  no-depth: >-
+    NO `size.d`, DELIBERATELY, as on generic/bnc-plug@1 and
+    generic/c13-plug@1. The overall length (32.5, of which only the 5.4 shell
+    is printed) is in the registry entry and in the relief below, but a
+    `size.d` on a component with no `behaviour` compiles to `data-depth`, and
+    the kit builds that as a pit behind the whole box of the part.
+  orientation: >-
+    DRAWN LATCH SIDE UP: the wide flat of the shell, the side its two latch
+    hooks stand on, is at the top, and the two chamfered corners of the shell
+    are at the bottom. That is the way figure 4-10 (p.23) draws the Micro-B
+    receptacle, wide side up with its board below, and it is taken as the
+    unrotated convention of std/micro-usb@1, WHICH DRAWS A SYMMETRIC OPENING
+    AND SO STATES NO UP OF ITS OWN. The overmould is keyed the other way
+    round: figure 4-5 chamfers its two corners on the LATCH side, so the cut
+    corners drawn here are at the top. The turn a seat applies carries the
+    plug round with its receptacle. A device whose jack is mounted board side
+    up turns the jack, and the plug follows.
+  seated-depth: >-
+    RULING - THE PLUG SEATS TO THE DEPTH THE USB DRAWING GIVES, MEASURED FROM
+    THE FACE THE RECEPTACLE PRESENTS. Micro-USB 1.01 figure 4-10 (p.23)
+    dimensions the Micro-B receptacle 3.5 +/-0.1 from the mouth of its shell
+    to the wall the plug meets, and figure 4-8 (p.21) dimensions the plug
+    shell 5.4 MIN from its front to the overmould, so a seated plug leaves
+    5.4 - 3.5 = 1.9 of shell in front of the receptacle face. The latch
+    figures agree: the hook is 1.05 MIN to 2.8 MAX behind the front of the
+    plug and the window it drops into ends 1.05 from that wall. THE
+    RECEPTACLE AS MODELLED DISAGREES: std/micro-usb@1 states its depth as
+    5.9, which is 2.4 deeper than the 3.5 the drawing gives and longer than
+    the whole plug shell. A plug seated on that modelled floor would have its
+    overmould 0.5 behind the panel, so the modelled depth is not what seats
+    this plug; THE 5.9 IS THE FIGURE TO REVISIT, and nothing here changes
+    when it is, because no figure below is derived from it.
+  frame: >-
+    THE RELIEF IS MEASURED FROM THE LIFT THE HOST PRESENTS, the frame
+    generic/bnc-plug@1, generic/lc-plug@2 and generic/c13-plug@1 use.
+    std/micro-usb@1 presents at its own face (its `mate` carries no `on:` and
+    no `seat-out`), so 0 here is the panel plane the opening is in. The 3.5
+    of shell inside the receptacle is not built.
+  shell: >-
+    drawing - Micro-USB 1.01 figure 4-7, Micro-B Plug Interface, p.20: the
+    shell is 6.85 +0.02/-0.06 wide and 1.8 +0.02/-0.08 high, its two lower
+    corners cut so the flat between their intersections is 5.3, the cut
+    starting 1.03 below the top; figure 4-8, p.21: 5.4 MIN long. It is
+    centred in the overmould: on the end view of figure 4-5 the shell centre
+    scales to the overmould centre within 0.05. Seen from the cable end it is
+    wholly behind the overmould; it is drawn so the 1.9 of it in front of the
+    receptacle has a node to build from. The latch hooks are not drawn.
+  body: >-
+    drawing and scaled. The 10.6 by 8.5 section is the dimensioned maximum
+    (provenance.size). EVERYTHING ELSE IS SCALED on figure 4-5, p.18, a 150
+    ppi raster embedded in the specification and read at that resolution,
+    calibrated on its own printed 10.6 and 8.5 (8.7 px/mm, good to about
+    0.15); the printed 5.4 shell reads 5.44 on that ruler. The overmould is
+    18.5 long and holds its section for all of it. The two chamfers on the
+    latch side are about 1.75 on each leg; the other two corners are drawn
+    with a 0.5 radius.
+  relief-boot: >-
+    scaled - figure 4-5, p.18: a ribbed strain relief 8.6 long that tapers
+    from about 9.2 by 7.3 at the overmould to about 5.7 by 6.1 at the cable.
+    Built as one round section 6.5 across, near its small end; the ribs and
+    the taper are not built. The Same Sky CBL-UA-MUB-1 data sheet
+    (09/12/2024, p.2) dimensions overmould and strain relief together 26
+    +/-0.5, against the 27.1 scaled here.
+  stub: >-
+    estimated - the stub rule, docs/connectors-coax-design.md section 5: a
+    straight run of cable 30 long starting where the strain relief ends
+    (29.0 in front of the receptacle face). The bend is the installation.
+  cable-od: >-
+    datasheet - a Micro-B cable is a USB 2.0 cable (Micro-USB 1.01 section
+    4.5.1), so the figure is USB 2.0 table 6-5, Nominal Cable Diameter,
+    p.105: 4.06 mm (0.160 in) for the 28/28 shielded cable. Figure 4-5 draws
+    its cable about 3.9 across on the scaled ruler. A thinner cable is
+    common: the Same Sky CBL-UA-MUB-1 data sheet (09/12/2024, p.2) lists 3.5
+    +/-0.2. A placement or a wrapper sets the cable it actually carries.
+  jacket-colour: >-
+    a FIELD. Black is the default because the one held cable assembly
+    drawing that states a colour states black for both the cable and the
+    overmould (Same Sky CBL-UA-MUB-1, p.2). Figure 4-5 makes the insulator
+    of a Micro-B plug black and leaves the overmould colour as reference.
+  icon: >-
+    NOT DRAWN, ON PURPOSE. Figure 4-5 puts the USB mark and the letter B on
+    the flat of the overmould; the mark is a logo, and both are on a face a
+    front elevation does not see.
+  contacts: >-
+    NOT DRAWN, ON PURPOSE. The five contacts are on the mating face of the
+    plug, which is in the receptacle; a front elevation of a seated plug looks
+    at the cable end.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on generic/bnc-plug@1 - every class port
+    contract states none (spec/tests/test_behaviour.py).
+  axis: >-
+    derived - `mate` and `cable` share one point, the centre of the overmould
+    (5.3, 4.25), which is also the centre of the shell: the cable runs
+    straight through the connector, so its front and its rear are one axis
+    seen from two directions.
+elements: {}
+relief:
+  features:
+    - node: shell
+      out: 1.9
+      shape: true
+      color: '#c9cdd1'
+      confidence: drawing
+      source: >-
+        Micro-USB 1.01 figure 4-8, p.21, the 5.4 MIN plug shell, less the 3.5
+        of figure 4-10, p.23, from the receptacle mouth to the wall the plug
+        meets. The 1.9 is what the ruling in provenance.seated-depth leaves
+        in front of the receptacle face.
+    - node: body
+      lift: 1.9
+      out: 20.4
+      shape: true
+      color: '#26282b'
+      confidence: estimated
+      source: >-
+        Micro-USB 1.01 figure 4-5, p.18: the overmould, 18.5 long, scaled on
+        the printed 10.6 and 8.5 of the same figure (provenance.body).
+    - node: relief-boot
+      lift: 20.4
+      cyl: 8.6
+      color: '#202225'
+      confidence: estimated
+      source: >-
+        Micro-USB 1.01 figure 4-5, p.18: the ribbed strain relief, 8.6 long
+        (scaled), built as one round section 6.5 across.
+    - node: stub
+      lift: 29.0
+      cyl: 30
+      confidence: estimated
+      source: the stub rule, docs/connectors-coax-design.md section 5
+connection-points:
+  mate: {at: [5.3, 4.25], direction: front}
+  cable: {at: [5.3, 4.25], direction: front, 'on': stub}
+skins: [default]

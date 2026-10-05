@@ -1,0 +1,187 @@
+format: 1
+kind: component
+name: usb-a-plug
+version: 1.0.0
+class: port
+mates: usb-a
+conforms: usb-a-plug
+profile: networking
+description: >-
+  A moulded straight USB Standard-A cable plug on its cable, seen from the
+  cable end as a front elevation sees it seated: the overmould at the largest
+  section the USB specification allows, the round strain relief and a short
+  straight stub of cable whose diameter is the cable-od field. Seats in a
+  `usb-a` receptacle at its own mate point; the cable leaves from the far end
+  of the stub. It states no speed and no USB generation.
+size: {w: 16.0, h: 8.0}
+size-confidence: {w: drawing, h: drawing}
+size-notes: both figures are the overmould MAXIMUM the USB 2.0 specification dimensions on figure 6-9, not a measured plug; the same specification draws a typical overmould 15.7 by 7.5 on figure 6-2
+attrs: {media: usb-a, connector: usb-a}
+fields:
+  cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 4.06}
+  jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    drawing - registry `usb-a-plug`. Universal Serial Bus Specification
+    Revision 2.0 (April 27, 2000), figure 6-9, USB Series A Plug Interface
+    Drawing, p.99: the overmould boot is dimensioned 16.0 MAX across and 8.0
+    MAX high (8.0 MAX and 4.0 MAX each side of the centre lines). THE PART IS
+    DRAWN AT THAT MAXIMUM, the envelope every compliant plug fits in. Figure
+    6-2 on p.87 draws a typical overmould 15.7 by 7.5 and labels its
+    dimensions typical and for general reference only.
+  no-depth: >-
+    NO `size.d`, DELIBERATELY, as on generic/bnc-plug@1 and
+    generic/c13-plug@1. The overall length (47.75, three printed figures
+    summed) is in the registry entry and in the relief below, but a `size.d`
+    on a component with no `behaviour` compiles to `data-depth`, and the kit
+    builds that as a pit behind the whole box of the part. The depth is
+    carried by the relief features instead.
+  orientation: >-
+    DRAWN IN THE UNROTATED CONVENTION OF THE RECEPTACLE, as
+    generic/lc-plug@2 is drawn in that of its bore: std/usb-a@1 draws its
+    tongue in the upper half of the opening, so this plug has its insulator
+    DOWN and its open side, the side that carries the USB icon, UP (USB 2.0
+    section 6.5.1 puts the icon on the top side of the plug, and figure 6-9
+    puts the plug insulator under the contacts). The turn a seat applies
+    carries that onto the receptacle on every host. THE KEY IS NOT VISIBLE
+    FROM THE CABLE END: the insulator is on the mating face, inside the
+    receptacle, and the icon that marks the top is not drawn, so the overmould
+    as drawn is the same either way up. A plug seated in a receptacle that is
+    drawn tongue down is still correct, turned with it.
+  seated-depth: >-
+    RULING - THE PLUG SEATS TO THE DEPTH THE USB DRAWING GIVES, MEASURED FROM
+    THE FACE THE RECEPTACLE PRESENTS. USB 2.0 figure 6-7 (p.95) dimensions
+    the Series A receptacle 8.88 +/-0.20 from its face, datum A, to the
+    stop the plug shell meets, and figure 6-9 (p.99) dimensions the plug shell
+    11.75 MIN from its front to the overmould, so a seated plug leaves 11.75 -
+    8.88 = 2.87 of shell in front of the receptacle face. Figure 6-7 asks for
+    2.67 MIN there, so the two figures agree. THE RECEPTACLE AS MODELLED
+    DISAGREES: std/usb-a@1 states its depth as 13.7, an estimate by its own
+    provenance, which is 4.82 deeper than the 8.88 the drawing gives and
+    longer than the whole plug shell. A plug seated on that modelled floor
+    would have its overmould 1.95 behind the panel, so the modelled depth is
+    not what seats this plug; THE 13.7 IS THE FIGURE TO REVISIT, and nothing
+    here changes when it is, because no figure below is derived from it.
+  frame: >-
+    THE RELIEF IS MEASURED FROM THE LIFT THE HOST PRESENTS, the frame
+    generic/bnc-plug@1, generic/lc-plug@2 and generic/c13-plug@1 use.
+    std/usb-a@1 presents at its own face (its `mate` carries no `on:` and no
+    `seat-out`), so 0 here is the panel plane the opening is in. The 8.88 of
+    shell inside the receptacle is not built: it is behind the face, where
+    the cavity of the receptacle is.
+  shell: >-
+    drawing - USB 2.0 figure 6-9, p.99: the plug shell is 12.00 +/-0.10 by
+    4.50 +/-0.10 and 11.75 MIN long. Seen from the cable end it is wholly
+    behind the overmould; it is drawn so the 2.87 of it in front of the
+    receptacle has a node to build from.
+  body: >-
+    drawing and scaled. The 16.0 by 8.0 section is the dimensioned maximum
+    (provenance.size). The length is from USB 2.0 figure 6-2, p.87, which
+    dimensions the overmould 27.0 from the shell to the strain relief,
+    typical. THE SPLIT OF THAT 27.0 IS SCALED on a 600 dpi render of the
+    vector figure, calibrated on its own printed 27.0 (19.6 px/mm): the
+    overmould holds its full width for about 21 and tapers over the last 6.
+    The corner radius, 1.0, is estimated; the figures draw rounded corners
+    and dimension none.
+  taper: >-
+    scaled - built as TWO steps, not a taper, as on generic/c13-plug@1:
+    `body` at the full section for the front 21.0 and `body-rear` for the
+    remaining 6.0 at 11.5 wide, about midway between the full width and the
+    6.9 strain relief. The rear step overstates the moulding near the strain
+    relief and understates it near the body; its height is held at the 8.0
+    of the body because no view dimensions how the short axis tapers.
+  relief-boot: >-
+    drawing and scaled - USB 2.0 figure 6-2, p.87, dimensions the optional
+    moulded strain relief 9.0 long, typical. Its section is not dimensioned:
+    6.9 across is SCALED on the same render (147 px at about 21.2 px/mm
+    across the plug, the mean of the rulers the printed 12.0 shell and 15.7
+    overmould give). Drawn round; no view shows its other axis. A second
+    drawing agrees on the length: the Same Sky CBL-UA-MUB-1 cable assembly
+    data sheet (09/12/2024, p.2) dimensions the strain relief of its
+    Standard-A end 9.85 +/-0.3.
+  stub: >-
+    estimated - the stub rule, docs/connectors-coax-design.md section 5: a
+    straight run of cable 30 long starting where the strain relief ends
+    (38.87 in front of the receptacle face). The bend is the installation.
+  cable-od: >-
+    datasheet - USB 2.0 table 6-5, Nominal Cable Diameter, p.105: 4.06 mm
+    (0.160 in) for the 28/28 shielded cable, 28 AWG being the minimum gauge
+    the specification allows for both pairs; the table runs to 5.21 for
+    28/20. A thinner cable is common: the Same Sky CBL-UA-MUB-1 data sheet
+    (09/12/2024, p.2) lists 3.5 +/-0.2. A placement or a wrapper sets the
+    cable it actually carries.
+  jacket-colour: >-
+    a FIELD. Black is the default because the one held cable assembly
+    drawing that states a colour states black for both the cable and the
+    overmould (Same Sky CBL-UA-MUB-1, p.2); the USB specification states no
+    convention.
+  icon: >-
+    NOT DRAWN, ON PURPOSE. USB 2.0 section 6.5.1 embosses the USB icon on the
+    top of the overmould; it is a logo mark, and it is on a face a front
+    elevation does not see.
+  contacts: >-
+    NOT DRAWN, ON PURPOSE. The four contacts and the insulator are on the
+    mating face of the plug, which is in the receptacle; a front elevation of
+    a seated plug looks at the cable end.
+  generation: >-
+    NONE STATED. The interface is the connector, not the bus: a USB 3.x
+    Standard-A plug has the same shell and mates the same opening, and a
+    generic plug claims neither.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on generic/bnc-plug@1 - every class port
+    contract states none (spec/tests/test_behaviour.py).
+  axis: >-
+    derived - `mate` and `cable` share one point, the centre of the overmould
+    (8.0, 4.0), which is also the centre of the shell: the cable runs
+    straight through the connector, so its front and its rear are one axis
+    seen from two directions.
+elements: {}
+relief:
+  features:
+    - node: shell
+      out: 2.87
+      shape: true
+      color: '#c9cdd1'
+      confidence: drawing
+      source: >-
+        USB 2.0 figure 6-9, p.99, the 11.75 MIN plug shell, less the 8.88 of
+        figure 6-7, p.95, from the receptacle face to the stop. The 2.87 is
+        what the ruling in provenance.seated-depth leaves in front of the
+        receptacle face.
+    - node: body
+      lift: 2.87
+      out: 23.87
+      shape: true
+      color: '#26282b'
+      confidence: estimated
+      source: >-
+        USB 2.0 figure 6-2, p.87: the front 21.0 of the 27.0 typical
+        overmould, at its full section. The 27.0 is dimensioned; where the
+        taper starts is scaled on the figure (provenance.body).
+    - node: body-rear
+      lift: 23.87
+      out: 29.87
+      shape: true
+      color: '#2c2e32'
+      confidence: estimated
+      source: >-
+        USB 2.0 figure 6-2, p.87: the tapering rear 6.0 of the 27.0
+        overmould, built as one step 11.5 wide (provenance.taper).
+    - node: relief-boot
+      lift: 29.87
+      cyl: 9.0
+      color: '#202225'
+      confidence: estimated
+      source: >-
+        USB 2.0 figure 6-2, p.87: the optional moulded strain relief, 9.0
+        long (dimensioned, typical) and about 6.9 across (scaled).
+    - node: stub
+      lift: 38.87
+      cyl: 30
+      confidence: estimated
+      source: the stub rule, docs/connectors-coax-design.md section 5
+connection-points:
+  mate: {at: [8.0, 4.0], direction: front}
+  cable: {at: [8.0, 4.0], direction: front, 'on': stub}
+skins: [default]

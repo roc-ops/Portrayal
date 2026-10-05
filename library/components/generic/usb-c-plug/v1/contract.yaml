@@ -1,0 +1,162 @@
+format: 1
+kind: component
+name: usb-c-plug
+version: 1.0.0
+class: port
+mates: usb-c
+conforms: usb-c-plug
+profile: networking
+description: >-
+  A moulded straight USB Type-C cable plug on its cable, seen from the cable
+  end as a front elevation sees it seated: the overmould at the largest
+  section the USB Type-C specification allows, the round strain relief and a
+  short straight stub of cable whose diameter is the cable-od field. Seats in
+  a `usb-c` receptacle at its own mate point, either way up; the cable leaves
+  from the far end of the stub. It states no speed and no USB generation.
+size: {w: 12.85, h: 7.0}
+size-confidence: {w: drawing, h: drawing}
+size-notes: both figures are the overmould MAXIMUM the USB Type-C specification dimensions on figure 3-3, not a measured plug; one held cable assembly drawing is 12.2 by 6.4
+attrs: {media: usb-c, connector: usb-c}
+fields:
+  cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 5.2}
+  jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    drawing - registry `usb-c-plug`. USB Type-C Cable and Connector
+    Specification Release 2.5 (March 2026), figure 3-3, USB Full-Featured
+    Type-C Plug Interface Dimensions, p.54: section A-A dimensions the
+    overmould 12.85 MAX wide and section C-C dimensions it 7.0 MAX high. THE
+    PART IS DRAWN AT THAT MAXIMUM. Appendix D section D.3.1.2 (three-port
+    spacing) uses the same two figures as the closest centre spacings. The
+    Same Sky CBL-UC-UC-1 cable assembly data sheet (09/12/2024, p.2)
+    dimensions a real overmould 12.2 +/-0.2 by 6.4 +/-0.2.
+  no-depth: >-
+    NO `size.d`, DELIBERATELY, as on generic/bnc-plug@1 and
+    generic/c13-plug@1. The overall length (50.85, of which the 9.2 strain
+    relief is scaled) is in the registry entry and in the relief below, but a
+    `size.d` on a component with no `behaviour` compiles to `data-depth`, and
+    the kit builds that as a pit behind the whole box of the part.
+  orientation: >-
+    SYMMETRIC. A Type-C plug mates either way up, and the overmould, the
+    strain relief and the cable are the same turned half a turn, so there is
+    no up to state. The plug is drawn with its long axis along that of the
+    opening of std/usb-c@1, and the turn a seat applies carries it round with
+    a receptacle mounted on end.
+  seated-depth: >-
+    RULING - THE PLUG SEATS TO THE DEPTH THE USB DRAWING GIVES, MEASURED FROM
+    THE FACE THE RECEPTACLE PRESENTS. USB Type-C Release 2.5 figure 3-3
+    (p.54, section C-C) dimensions the plug shell 6.65 +/-0.10 from its
+    front to the overmould, and note 7 to figure 3-1 (p.47) gives the
+    receptacle shell a reference length of 6.20, to be 6.20 +/-0.20 as
+    mounted, so a seated plug leaves 6.65 - 6.20 = 0.45 of shell in front of
+    the receptacle mouth. Figure 3-82 (p.147) asks for 0.05 MIN between the
+    overmould and the outside of the product there, so the figures agree. THE
+    RECEPTACLE AS MODELLED DISAGREES, slightly: std/usb-c@1 states its depth
+    as 6.5, an estimate by its own provenance, which is 0.30 deeper than the
+    6.20 the specification gives. A plug seated on that modelled floor would
+    stand 0.15 in front of the face in place of 0.45; the modelled depth is
+    not what seats this plug. THE 6.5 IS THE FIGURE TO REVISIT, and nothing
+    here changes when it is, because no figure below is derived from it.
+  frame: >-
+    THE RELIEF IS MEASURED FROM THE LIFT THE HOST PRESENTS, the frame
+    generic/bnc-plug@1, generic/lc-plug@2 and generic/c13-plug@1 use.
+    std/usb-c@1 presents at its own face (its `mate` carries no `on:` and no
+    `seat-out`), so 0 here is the panel plane the opening is in. The 6.20 of
+    shell inside the receptacle is not built.
+  shell: >-
+    drawing - USB Type-C Release 2.5 figure 3-3, p.54: the plug shell is 8.25
+    +/-0.03 wide (section A-A) and 2.40 +/-0.03 high and 6.65 +/-0.10 long
+    (section C-C); p.53 gives 6.51 MIN of it exposed. Its ends are drawn
+    fully rounded, as the face view on p.53 draws them. Seen from the cable
+    end it is wholly behind the overmould; it is drawn so the 0.45 of it in
+    front of the receptacle has a node to build from.
+  body: >-
+    drawing. The 12.85 by 7.0 section is the dimensioned maximum
+    (provenance.size), drawn with fully rounded ends as the face views on
+    p.53 and p.147 draw it. The length is the (35) figure 3-3 prints on its
+    top view, p.53, A REFERENCE DIMENSION AND NOT A LIMIT: the same view is
+    drawn 16.9 long on the ruler its own 8.25 shell gives (23.2 px/mm, a 138
+    ppi raster), and appendix D names 35 mm as the overmould length of its
+    thermal study. A passive cable is usually shorter: the Same Sky
+    CBL-UC-UC-1 data sheet (09/12/2024, p.2) dimensions overmould and strain
+    relief together 31 +/-0.5. The 35 is kept because it is the figure the
+    governing drawing prints; it is the first thing to shorten if a vendor
+    plug is modelled.
+  relief-boot: >-
+    scaled - figure 3-3, p.53, top view: a slotted strain relief 9.2 long and
+    about 6.1 across on the ruler the printed 8.25 shell gives (23.2 px/mm).
+    Not dimensioned by the specification. Drawn round; the slots are not
+    built.
+  stub: >-
+    estimated - the stub rule, docs/connectors-coax-design.md section 5: a
+    straight run of cable 30 long starting where the strain relief ends
+    (44.65 in front of the receptacle face). The bend is the installation.
+  cable-od: >-
+    datasheet - Same Sky CBL-UC-UC-1 cable assembly data sheet (09/12/2024,
+    p.2): a Type-C to Type-C cable, outside diameter 5.2 +/-0.15. USB Type-C
+    Release 2.5 section 3.3.3 (p.80, informative) puts a typical
+    full-featured cable at 4 to 6 mm and a typical USB 2.0 Type-C cable at 2
+    to 4 mm, so 5.2 is a full-featured cable and a charging cable is
+    thinner. A placement or a wrapper sets the cable it actually carries.
+  jacket-colour: >-
+    a FIELD. Black is the default because the one held cable assembly
+    drawing states black for both the cable and the overmould (Same Sky
+    CBL-UC-UC-1, p.2); the USB specification states no convention.
+  contacts: >-
+    NOT DRAWN, ON PURPOSE. The contacts are on the mating face of the plug,
+    which is in the receptacle; a front elevation of a seated plug looks at
+    the cable end.
+  generation: >-
+    NONE STATED. The interface is the connector, not the bus: the USB 2.0
+    Type-C plug of figure 3-12 and the full-featured plug of figure 3-3 mate
+    the same receptacle, and a generic plug claims neither.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on generic/bnc-plug@1 - every class port
+    contract states none (spec/tests/test_behaviour.py).
+  axis: >-
+    derived - `mate` and `cable` share one point, the centre of the overmould
+    (6.425, 3.5), which is also the centre of the shell: the cable runs
+    straight through the connector, so its front and its rear are one axis
+    seen from two directions.
+elements: {}
+relief:
+  features:
+    - node: shell
+      out: 0.45
+      shape: true
+      color: '#c9cdd1'
+      confidence: drawing
+      source: >-
+        USB Type-C Release 2.5 figure 3-3, p.54, the 6.65 plug shell, less
+        the 6.20 reference length of the receptacle shell (note 7 to figure
+        3-1, p.47). The 0.45 is what the ruling in provenance.seated-depth
+        leaves in front of the receptacle face.
+    - node: body
+      lift: 0.45
+      out: 35.45
+      shape: true
+      color: '#26282b'
+      confidence: estimated
+      source: >-
+        USB Type-C Release 2.5 figure 3-3, p.53: the overmould, the (35)
+        reference length the top view prints. Estimated because a reference
+        dimension is not a limit and real overmoulds are shorter
+        (provenance.body).
+    - node: relief-boot
+      lift: 35.45
+      cyl: 9.2
+      color: '#202225'
+      confidence: estimated
+      source: >-
+        USB Type-C Release 2.5 figure 3-3, p.53, top view, scaled: the
+        strain relief, 9.2 long and about 6.1 across.
+    - node: stub
+      lift: 44.65
+      cyl: 30
+      confidence: estimated
+      source: the stub rule, docs/connectors-coax-design.md section 5
+connection-points:
+  mate: {at: [6.425, 3.5], direction: front}
+  cable: {at: [6.425, 3.5], direction: front, 'on': stub}
+skins: [default]

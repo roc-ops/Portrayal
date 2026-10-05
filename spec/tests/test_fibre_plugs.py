@@ -136,6 +136,23 @@ def test_the_ac_inlet_interfaces_were_read():
     assert {"iec-c14", "iec-c20", "saf-d-grid"} <= _ac_inlet_interfaces()
 
 
+def _usb_receptacle_interfaces():
+    """Every interface a part presents while stating a USB connector as its
+    medium, read off the library."""
+    got = set()
+    for f in (LIB / "components").rglob("v*/contract.yaml"):
+        c = load_yaml(f) or {}
+        if c.get("interface") and "usb" in str((c.get("attrs") or {}).get("media") or ""):
+            got.add(c["interface"])
+    return got
+
+
+def test_the_usb_receptacle_interfaces_were_read():
+    """The census's exclusion is keyed on these; an empty set would exclude
+    nothing and say nothing."""
+    assert _usb_receptacle_interfaces() == {"usb-a", "micro-usb-b", "usb-c"}
+
+
 def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
     """A census, and it asserts it measured something.
 
@@ -153,6 +170,8 @@ def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
     found = {}
     ac_inlets = _ac_inlet_interfaces()
     assert ac_inlets
+    usb_receptacles = _usb_receptacle_interfaces()
+    assert usb_receptacles
     for f in (LIB / "components").rglob("v*/contract.yaml"):
         c = load_yaml(f) or {}
         if (c.get("attrs") or {}).get("media") == "rj45":
@@ -171,6 +190,14 @@ def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
         # fibre runs through an appliance inlet - and their census is
         # spec/tests/test_ac_cord_ends.py.
         if c.get("mates") in ac_inlets:
+            continue
+        # NOR ARE THE USB CABLE PLUGS (#786). generic/usb-a-plug@1,
+        # micro-usb-b-plug@1 and usb-c-plug@1 mate `usb-a`, `micro-usb-b` and
+        # `usb-c`, which the registry holds so a USB receptacle is a slot.
+        # Left out by what each IS - it mates an interface presented by a
+        # part whose medium is a USB connector, and no fibre runs through
+        # one - and their census is spec/tests/test_usb_plugs.py.
+        if c.get("mates") in usb_receptacles:
             continue
         if c.get("mates") in connectors and c.get("class") != "cap":
             ns = f.parents[2].name
