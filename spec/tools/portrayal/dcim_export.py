@@ -427,7 +427,7 @@ def cage_type(ref, attrs):
 PART_CONSOLE = {"std/rj45-ganged": "rj-45", "common/rj45-shielded": "rj-45",
                 "std/usb-a": "usb-a"}
 
-# The four-part RJ45 family (sweep_rj45.py / docs/rj45-family-design.md), keyed
+# The RJ45 family (sweep_rj45.py / docs/rj45-family-design.md), keyed
 # by the FULL ref including @major because a version bump inside this family
 # changes what the jack IS, not just its shape: std/rj45@2 and
 # std/rj45-ganged@2 are the swept bare jack (console/aux/timing, no lamps);

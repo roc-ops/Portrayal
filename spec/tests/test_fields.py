@@ -128,7 +128,8 @@ def test_lint_holds_a_slot_to_its_prose_and_its_connector():
 # device measured dark, because a silent regression here repaints 758 jacks.
 
 RJ45_FAMILY = ["std/rj45@2", "std/rj45-ganged@2",
-               "common/rj45-eth@1", "common/rj45-ganged-eth@1"]
+               "common/rj45-eth@1", "common/rj45-ganged-eth@1",
+               "common/rj45-eth-pinside@1"]
 
 
 def _skin_of(ref):
