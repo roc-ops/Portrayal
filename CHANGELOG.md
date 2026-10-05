@@ -25,6 +25,15 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- AC power inlets are connector slots, and three cord ends seat in them.
+  `iec-c14`, `iec-c20` and `saf-d-grid` join `spec/schemas/connectors.yaml`, so
+  every `std/c14-inlet@1`, `std/c20-inlet@1` and `std/saf-d-grid@1` publishes a
+  `kind: connector` slot, on a chassis and on a supply seated in a bay alike.
+  `generic/c13-plug@1`, `generic/c19-plug@1` and `generic/saf-d-grid-plug@1` are
+  the moulded cord connectors that mate them, drawn from the cable end with a
+  30 mm stub of cord sized by `cable-od` and coloured by `jacket-color`. Each
+  seats with its nose on the inlet's modelled cavity floor; see
+  `docs/connectors-power-design.md`. No inlet's geometry changed (#785).
 - Supermicro, a new vendor: the SuperServer SYS-111E-WR (`supermicro/sys-111e-wr`,
   1U, ten hot-swap 2.5 inch bays, two 860 W supplies), the SYS-111E-FDWTR
   (`supermicro/sys-111e-fdwtr`, 1U short-depth front I/O, two 600 W -48 V DC

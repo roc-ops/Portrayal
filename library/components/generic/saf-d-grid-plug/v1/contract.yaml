@@ -1,0 +1,166 @@
+format: 1
+kind: component
+name: saf-d-grid-plug
+version: 1.0.0
+class: port
+mates: saf-d-grid
+conforms: saf-d-grid-plug
+profile: networking
+description: >-
+  A moulded Anderson Saf-D-Grid cord plug on its cord, seen from the cable
+  end as a front elevation sees it seated: the moulded body, the ribbed
+  strain relief, which is taller than it is wide, and a short straight stub
+  of cord whose diameter is the cable-od field. Seats in a `saf-d-grid`
+  inlet at its own mate point; the cord leaves from the stub's far end.
+size: {w: 26.0, h: 18.9}
+size-confidence: {w: drawing, h: drawing}
+attrs: {media: saf-d-grid, connector: saf-d-grid}
+fields:
+  cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 9.65}
+  jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    drawing - registry `saf-d-grid-plug`. Anderson Power Products Saf-D-Grid
+    data sheet DS-SDG REV 19, p.16, "SDG TO IEC 320 CABLE CONFIGURATIONS":
+    the moulded plug is dimensioned 26.0 [1.03 in] wide on the top view and
+    18.9 [0.74 in] high on the face view. This is the 18-14 AWG plug; the
+    12 AWG wide-latch plug (31 x 23.9) and the 300 V keyed 2300 series plug
+    (31.0 x 24.0, p.17) are larger bodies and are not this part.
+  only-three-figures-are-printed: >-
+    26.0, 18.9 AND THE 80.5 OVERALL LENGTH ARE THE ONLY DIMENSIONS ANY HELD
+    DOCUMENT PRINTS FOR THIS PLUG. Drawing 115171S1 rev 12 is the receptacle
+    alone. Every other figure below - the split into nose, collar, body and
+    strain relief - is SCALED from the vector drawing on p.16 of the data
+    sheet, read at 600 dpi and calibrated on the printed 80.5 (side view)
+    and 26.0 (top view); the two views are drawn at slightly different
+    scales, so each was calibrated on its own printed dimension.
+  no-depth: >-
+    NO `size.d`, DELIBERATELY, as on generic/bnc-plug@1. The overall length
+    (80.5, dimensioned) is in the registry entry and in the relief below, but
+    a `size.d` on a component with no `behaviour` compiles to `data-depth`,
+    and the kit builds that as a pit behind the part's whole box. The depth
+    is carried by the relief features instead.
+  orientation: >-
+    DRAWN IN THE INLET'S UNROTATED CONVENTION: std/saf-d-grid@1 draws its
+    ground at the top and its cavity's two long chamfers above the straight
+    sides, so this plug's nose has its chamfers at the top and the turn a
+    seat applies carries them onto the inlet's on every host.
+  seated-depth: >-
+    RULING - THE NOSE SITS ON THE INLET'S MODELLED CAVITY FLOOR, the way
+    generic/lc-plug@2 seats in its bore, and the same rule the two IEC cord
+    connectors take. std/saf-d-grid@1 models its cavity 17.0 deep, so this
+    plug stands 80.5 - 17.0 = 63.5 in front of the inlet's face: 8.5 of
+    nose, 43.7 of collar and body and 11.3 of strain relief. THE NOSE, ABOUT
+    25.5 (SCALED), IS LONGER THAN THE MODELLED CAVITY. Here the cavity is
+    the measured figure and the nose the scaled one, the reverse of the IEC
+    pair: 115171S1 dimensions the receptacle 17.0 behind the panel and 5.8
+    proud of it, 22.8 in all, and std/saf-d-grid@1 models the cutout and the
+    17.0 behind it, not the 5.8 of housing in front. A nose seated to its
+    collar on that proud housing would leave about 60.8 standing in front of
+    the panel, not 63.5. WHAT TO REVISIT is the inlet's missing front
+    housing, and the nose length, which wants a dimensioned plug drawing.
+  frame: >-
+    THE PLUG'S RELIEF IS MEASURED FROM THE HOST'S PRESENTED LIFT, the frame
+    generic/bnc-plug@1 and generic/lc-plug@2 use. std/saf-d-grid@1 presents
+    at its own face (its `mate` carries no `on:` and no `seat-out`), so 0
+    here is the panel plane the cutout is in. The 17.0 of nose inside the
+    cavity is not built.
+  nose: >-
+    scaled and estimated. About 22.8 wide (top view) by 16.7 high (side
+    view) and about 25.5 long to the latch collar (24.5 on the top view).
+    THE OUTLINE IS ESTIMATED: p.16's face view is too small to trace, so the
+    nose is drawn as the mate of the six-sided cavity std/saf-d-grid@1
+    holds - flat top, two long chamfers, straight sides, flat bottom - at
+    the scaled 22.8 x 16.7, which sits inside that part's 24.10 x 17.29
+    cavity. Seen from the cable end the nose is wholly behind the body; it
+    is drawn so the 8.5 of it in front of the inlet has a node to build from.
+  body: >-
+    drawing and scaled. 26.0 x 18.9 is dimensioned. Its length is SCALED:
+    a latch collar about 6.3 long directly behind the nose, then about 37.5
+    of overmould to the strain relief, which starts about 69.2 behind the
+    face. Collar and overmould are ONE block here at the dimensioned
+    section. The overmould tapers to the strain relief over its rear third,
+    and that taper is not built, so the block overstates the rear. The
+    corner radius, 2.0, is estimated.
+  latch: >-
+    NOT DRAWN. The latch button stands about 2.5 (scaled) above the body
+    behind the collar. It is outside the dimensioned 18.9, and no held
+    document dimensions it; drawing it would take the part's box past the
+    two figures the data sheet prints.
+  relief-boot: >-
+    scaled - the strain relief is about 11.3 long (side view; 10.9 on the
+    top view) and NOT ROUND: about 13.2 wide by 16.6 high, ribbed. So it is
+    a box, not a `cyl`. Its ribs are not drawn and its corner radius, 2.0,
+    is estimated.
+  stub: >-
+    estimated - the stub rule, docs/connectors-coax-design.md section 5: a
+    straight run of cord 30 long starting where the strain relief ends (63.5
+    in front of the inlet face). The cord's bend is the installation's.
+  cable-od: >-
+    datasheet - SJT 3 x 14 AWG. DS-SDG REV 19 pp.13-14 list 14 AWG SJT (1.5
+    mm2 H05VV-F) on the Saf-D-Grid to IEC jumpers, and p.16's dimensioned
+    plug is the 18-14 AWG one. The diameter is the cable maker's: Belden
+    19354 technical data sheet, revision 0.525, 09-07-2025, p.1, Overall
+    Cable Diameter (Nominal) 0.380 in, 9.65 mm. Anderson's own sheet prints
+    no cord diameter. A placement or a wrapper sets the cord it actually
+    carries; the 12 AWG cords on p.15 use the larger plug.
+  jacket-colour: >-
+    a FIELD. Black is the default: every cord part number in DS-SDG REV 19
+    ends -BK. P.13 also lists red and blue variants of the Saf-D-Grid to C14
+    jumper, offered as an option and not explained as a convention.
+  contacts: >-
+    NOT DRAWN, ON PURPOSE. The contacts are on the plug's front face, which
+    is in the inlet. P.16 labels them (ground top centre, the pair below)
+    and dimensions none.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on generic/bnc-plug@1 - every class port
+    contract states none (spec/tests/test_behaviour.py).
+  axis: >-
+    derived - `mate` and `cable` share one point, the centre of the body
+    (13.0, 9.45): the cord runs straight through the plug, so its front and
+    its rear are one axis seen from two directions.
+elements: {}
+relief:
+  features:
+    - node: nose
+      out: 8.5
+      shape: true
+      color: '#1c1c1c'
+      confidence: estimated
+      source: >-
+        Anderson Power Products DS-SDG REV 19 p.16 side view, scaled on the
+        printed 80.5: the insertion nose, about 25.5 to the latch collar,
+        less the 17.0 std/saf-d-grid@1 models its cavity deep. The 8.5 is
+        what the ruling in provenance.seated-depth leaves in front of the
+        inlet face.
+    - node: body
+      lift: 8.5
+      out: 52.2
+      shape: true
+      color: '#26282b'
+      confidence: estimated
+      source: >-
+        Anderson Power Products DS-SDG REV 19 p.16 side view, scaled on the
+        printed 80.5: the latch collar (about 6.3) and the overmould (about
+        37.5) as one block, to where the strain relief starts about 69.2
+        behind the face.
+    - node: relief-boot
+      lift: 52.2
+      out: 63.5
+      shape: true
+      color: '#202225'
+      confidence: estimated
+      source: >-
+        Anderson Power Products DS-SDG REV 19 p.16, scaled: the ribbed strain
+        relief, about 11.3 long to the dimensioned 80.5 end, about 13.2 wide
+        by 16.6 high.
+    - node: stub
+      lift: 63.5
+      cyl: 30
+      confidence: estimated
+      source: the stub rule, docs/connectors-coax-design.md section 5
+connection-points:
+  mate: {at: [13.0, 9.45], direction: front}
+  cable: {at: [13.0, 9.45], direction: front, 'on': stub}
+skins: [default]

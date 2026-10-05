@@ -47,8 +47,10 @@ def test_the_connector_registry_is_not_vacuous():
     # rj45: the copper jack, so generic/rj45-plug@1 has somewhere to go (#610)
     # f-type/sma/smb/mcx: the existing coax jacks, made slots (#650)
     # bnc/din-1-0-2-3: the two new coax jacks, std/bnc@1 and std/din-1-0-2-3@1 (#650)
+    # iec-c14/iec-c20/saf-d-grid: the AC inlets, made slots for their cord ends (#785)
     assert set(reg) == {"lc", "lc-duplex", "sc", "mpo", "mpo16", "rj45",
-                         "f-type", "sma", "smb", "mcx", "bnc", "din-1-0-2-3"}
+                         "f-type", "sma", "smb", "mcx", "bnc", "din-1-0-2-3",
+                         "iec-c14", "iec-c20", "saf-d-grid"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
     fam_ifaces = {f.get("interface") for f in render_mod._pluggable_families().values()}
@@ -59,7 +61,8 @@ def test_every_connector_presenting_part_is_a_connector_slot(comps):
     entries = [c for c in _entries(comps) if c.get("kind") == "connector"]
     assert len(entries) > 0, "measured no connector slot at all"
     assert all(c["interface"] in {"lc", "lc-duplex", "sc", "mpo", "mpo16", "rj45",
-                                   "f-type", "sma", "smb", "mcx", "bnc", "din-1-0-2-3"}
+                                   "f-type", "sma", "smb", "mcx", "bnc", "din-1-0-2-3",
+                                   "iec-c14", "iec-c20", "saf-d-grid"}
                for c in entries)
     # a slot has no rate ladder, so no media ceiling
     assert all(c["media"] is None for c in entries)

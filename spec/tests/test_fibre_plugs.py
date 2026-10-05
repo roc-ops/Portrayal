@@ -120,6 +120,22 @@ def test_a_plugs_envelope_is_held_to_a_registry_entry_or_says_why_not(ref):
         assert "NO `conforms:`" in contract(LC)["provenance"]["standard"]
 
 
+def _ac_inlet_interfaces():
+    """Every interface a `class: inlet` part presents, read off the library."""
+    got = set()
+    for f in (LIB / "components").rglob("v*/contract.yaml"):
+        c = load_yaml(f) or {}
+        if c.get("class") == "inlet" and c.get("interface"):
+            got.add(c["interface"])
+    return got
+
+
+def test_the_ac_inlet_interfaces_were_read():
+    """The census's exclusion is keyed on these; an empty set would exclude
+    nothing and say nothing."""
+    assert {"iec-c14", "iec-c20", "saf-d-grid"} <= _ac_inlet_interfaces()
+
+
 def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
     """A census, and it asserts it measured something.
 
@@ -135,6 +151,8 @@ def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
     # it IS - its own `attrs.media` is `rj45` - not by name, and its census is
     # spec/tests/test_rj45_slots.py.
     found = {}
+    ac_inlets = _ac_inlet_interfaces()
+    assert ac_inlets
     for f in (LIB / "components").rglob("v*/contract.yaml"):
         c = load_yaml(f) or {}
         if (c.get("attrs") or {}).get("media") == "rj45":
@@ -145,6 +163,14 @@ def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
         # `attrs.media` is `coax-<family>` - and their census is
         # spec/tests/test_coax_plugs.py.
         if str((c.get("attrs") or {}).get("media") or "").startswith("coax-"):
+            continue
+        # NOR ARE THE AC CORD ENDS (#785). generic/c13-plug@1, c19-plug@1 and
+        # saf-d-grid-plug@1 mate `iec-c14`, `iec-c20` and `saf-d-grid`, which
+        # the registry holds so an AC inlet is a slot. Left out by what each
+        # IS - it mates an interface a `class: inlet` part presents, and no
+        # fibre runs through an appliance inlet - and their census is
+        # spec/tests/test_ac_cord_ends.py.
+        if c.get("mates") in ac_inlets:
             continue
         if c.get("mates") in connectors and c.get("class") != "cap":
             ns = f.parents[2].name
