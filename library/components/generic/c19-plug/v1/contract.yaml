@@ -1,0 +1,165 @@
+format: 1
+kind: component
+name: c19-plug
+version: 1.0.0
+class: port
+mates: iec-c20
+conforms: c19-plug
+profile: networking
+description: >-
+  A moulded straight IEC C19 cord connector on its cord, seen from the cable
+  end as a front elevation sees it seated: the overmould with a grip lug on
+  each short side, the round strain relief and a short straight stub of cord
+  whose diameter is the cable-od field. Seats in an `iec-c20` inlet at its
+  own mate point; the cord leaves from the stub's far end.
+size: {w: 37.0, h: 24.0}
+size-confidence: {w: drawing, h: drawing}
+attrs: {media: c19, connector: c19}
+fields:
+  cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 9.65}
+  jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    drawing - registry `c19-plug`. Volex Power Products catalogue, Aug-2025,
+    cat. no. VAC19 "3-pole Straight Connector", p.262, face view: 37 +0.39/-0
+    across the two grip lugs (balloon 7) and the body 24 thick. The tolerance
+    on the 24 is garbled in the catalogue raster (read as +/-1); the top view
+    scales to 23.8. The catalogue gives no drawing number or revision.
+  no-depth: >-
+    NO `size.d`, DELIBERATELY, as on generic/bnc-plug@1. The overall length
+    (76 +/-1, dimensioned) is in the registry entry and in the relief below,
+    but a `size.d` on a component with no `behaviour` compiles to
+    `data-depth`, and the kit builds that as a pit behind the part's whole
+    box - here a box 37 wide over a 32.4 cutout. The depth is carried by the
+    relief features instead.
+  orientation: >-
+    DRAWN IN THE INLET'S UNROTATED CONVENTION: std/c20-inlet@1 has its long
+    axis across, so this plug's 29 and its lugs run across too. The Volex
+    face view is drawn with the long axis vertical; it is turned a quarter
+    here. A C19 is not keyed by shape, and from the cable end it is the same
+    either way up.
+  seated-depth: >-
+    RULING - THE NOSE SITS ON THE INLET'S MODELLED CAVITY FLOOR, the way
+    generic/lc-plug@2 seats in its bore. std/c20-inlet@1 models its cavity
+    15.0 deep, so this plug stands 76 - 15.0 = 61.0 in front of the inlet's
+    face: 5.0 of nose, 26.0 of overmould and 30.0 of strain relief. THE NOSE
+    IS LONGER THAN THE MODELLED CAVITY. Volex prints it 20 (MIN), and a nose
+    that went fully home would leave 76 - 20 = 56 at most standing out. THE
+    INLET'S 15.0 IS THE ESTIMATE TO REVISIT: its own provenance.depth says
+    estimated (a typical receptacle depth). When that depth is measured,
+    every `lift` and `out` below moves by the difference and nothing else
+    changes.
+  frame: >-
+    THE PLUG'S RELIEF IS MEASURED FROM THE HOST'S PRESENTED LIFT, the frame
+    generic/bnc-plug@1 and generic/lc-plug@2 use. std/c20-inlet@1 presents
+    at its own face (its `mate` carries no `on:` and no `seat-out`), so 0
+    here is the panel plane the cutout is in. The 15.0 of nose inside the
+    cavity is not built.
+  nose: >-
+    drawing - Volex catalogue Aug-2025 p.262: 28 +0/-0.9 on the long side
+    (balloon 6), 20 +0/-0.7 on the short (balloon 9), 20 (MIN) long (balloon
+    1), a plain rounded rectangle, R3.5 (MIN) at all four corners, no
+    chamfers. It fits the 29.0 x 21.0 recess std/c20-inlet@1 draws. Seen
+    from the cable end the nose is wholly behind the overmould; it is drawn
+    so the 5.0 of it in front of the inlet has a node to build from.
+  body: >-
+    drawing - Volex catalogue Aug-2025 p.262: the overmould is 29 +0/-0.5 on
+    the long axis and 24 thick on the face view, and 26.00 long on the side
+    view. ESTIMATED: its corner radius, drawn 3.5 as the nose's is; and that
+    the nose is centred in it, which the face view shows and does not
+    dimension. The overmould's own taper toward the strain relief is not
+    built.
+  lugs: >-
+    drawing - Volex catalogue Aug-2025 p.262: 37 +0.39/-0 across the two
+    grip lugs (balloon 7), each 8 +0.5/-0 wide (balloon 8); on the side view
+    each is 14 +0/-0.39 long with a 2.00 lead, its rear 12.00 ahead of the
+    body's rear and 34 +0.39/-0 behind the connector's face. So a lug runs
+    from 20 to 34 behind the face, which is from the nose shoulder. Built as
+    plain blocks: the 2.00 lead is not cut. ESTIMATED: that each lug is
+    centred on the body's thickness.
+  relief-boot: >-
+    drawing and scaled - the strain relief is dimensioned 30.0 +/-0.5 long.
+    Its section, about 16 across, is SCALED on the printed 76 (16.1 on the
+    side view, 15.9 on the top view; the printed 30.0, 26.00 and 20 read
+    30.1, 26.1 and 19.9 on the same ruler). Its flex slots (2.00 five times
+    and 2.50 four times) are not drawn.
+  stub: >-
+    estimated - the stub rule, docs/connectors-coax-design.md section 5: a
+    straight run of cord 30 long starting where the strain relief ends (61.0
+    in front of the inlet face). The cord's bend is the installation's.
+  cable-od: >-
+    datasheet - SJT 3 x 14 AWG, the heaviest cord Volex lists against VAC19
+    (catalogue p.262, which has no 12 AWG row). Belden 19354 technical data
+    sheet, revision 0.525, 09-07-2025, p.1, Overall Cable Diameter (Nominal)
+    0.380 in, 9.65 mm. A placement or a wrapper sets the cord it actually
+    carries.
+  jacket-colour: >-
+    a FIELD. Black is the default because every held source that states a
+    colour states black (Belden 19354 lists one put-up, black; the SCHURTER
+    6051.2197 C19 cord set sheet says housing PVC, black); none states a
+    convention.
+  contacts: >-
+    NOT DRAWN, ON PURPOSE. The three contact slots (line and neutral 13
+    +/-0.2 apart, earth 8 +/-0.2 off their row) are on the plug's front
+    face, which is in the inlet. The Volex face view labels them NEUTRAL,
+    LIVE and EARTH; std/c20-inlet@1 records which of its lower pair is line
+    as not sourced, and this part does not settle it for the inlet.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on generic/bnc-plug@1 - every class port
+    contract states none (spec/tests/test_behaviour.py).
+  axis: >-
+    derived - `mate` and `cable` share one point, the centre of the
+    overmould (18.5, 12.0): the cord runs straight through the connector, so
+    its front and its rear are one axis seen from two directions.
+elements: {}
+relief:
+  features:
+    - node: nose
+      out: 5.0
+      shape: true
+      color: '#1c1c1c'
+      confidence: estimated
+      source: >-
+        Volex catalogue Aug-2025 p.262, the 20 (MIN) insertion nose, less the
+        15.0 std/c20-inlet@1 models its cavity deep - an estimate in that
+        part. The 5.0 is what the ruling in provenance.seated-depth leaves in
+        front of the inlet face.
+    - node: lugs
+      lift: 5.0
+      out: 19.0
+      color: '#2c2e32'
+      confidence: estimated
+      source: >-
+        Volex catalogue Aug-2025 p.262 side view: the grip lugs, 14 +0/-0.39
+        long from the nose shoulder (20 to 34 behind the face), 37 across.
+        Dimensioned; estimated only because their start follows the inlet's
+        estimated depth.
+    - node: body
+      lift: 5.0
+      out: 31.0
+      shape: true
+      color: '#26282b'
+      confidence: estimated
+      source: >-
+        Volex catalogue Aug-2025 p.262 side view: the overmould, dimensioned
+        26.00 long from the nose shoulder. Estimated only because its start
+        follows the inlet's estimated depth.
+    - node: relief-boot
+      lift: 31.0
+      cyl: 30.0
+      color: '#202225'
+      confidence: estimated
+      source: >-
+        Volex catalogue Aug-2025 p.262: the strain relief, dimensioned 30.0
+        +/-0.5 long to the 76 end, about 16 across (scaled). Estimated
+        because its start follows the inlet's estimated depth.
+    - node: stub
+      lift: 61.0
+      cyl: 30
+      confidence: estimated
+      source: the stub rule, docs/connectors-coax-design.md section 5
+connection-points:
+  mate: {at: [18.5, 12.0], direction: front}
+  cable: {at: [18.5, 12.0], direction: front, 'on': stub}
+skins: [default]
