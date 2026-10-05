@@ -35,6 +35,10 @@ names the ref that replaces it.
   server with four hot-swap 3.5 inch bays, front, rear and a top view under a
   removable cover, with its tray, control panel and cover parts; the Gold
   Series SKU SYS-511E-WR-01-G2 is its `gold` configuration.
+- `supermicro/riser-wio-rhs-x13sew@2` replaces `@1`: slot 3's bracket bay moved
+  2.6 mm so the riser plate no longer covers the edge of a card's first cage.
+  Both X13SEW risers gain a housing over the bracket flanges in 3D, and the
+  board well is deep enough that DIMMs stay under the cover.
 - `plan: {rotate: 180}` on a device bay: the plan of a module seated in a
   FRONT bay is turned half a turn in the top view, and the occupants of its own
   bays are offset from the opposite corner. A plan is drawn face-at-the-top, as

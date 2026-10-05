@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: sys-111e-wr
-version: 1.0.0
+version: 2.0.0
 maturity: modelled
 manufacturer: Supermicro
 model: SuperServer SYS-111E-WR
@@ -120,7 +120,7 @@ provenance:
       Product page: 2 PCIe 5.0 x16 FHFL slots and 1 PCIe 5.0 x8 (in x16) LP slot. Manual
       section 3.9: slots 1 and 2 on the "1U LHS WIO riser card", slot 3 on the "1U RHS
       WIO riser card". The slots are bays of the two riser parts
-      (supermicro/riser-wio-lhs-x13sew@1, supermicro/riser-wio-rhs-x13sew@1), each a
+      (supermicro/riser-wio-lhs-x13sew@1, supermicro/riser-wio-rhs-x13sew@2), each a
       standard bracket behind a window, so the library's cards seat in them.
   psus:
     confidence: datasheet
@@ -433,7 +433,7 @@ views:
       bays:
         - {id: psu-1, at: [5.2, 1.9], size: {w: 54.5, h: 40.25}, accepts: [supermicro/psu-pws-861a-1r@2], default: supermicro/psu-pws-861a-1r@2, group: psus, rel-pos: 1, plan: {view: top, at: [377.3, 0.0], under: [system-cover]}}
         - {id: psu-2, at: [62.0, 1.9], size: {w: 54.5, h: 40.25}, accepts: [supermicro/psu-pws-861a-1r@2], default: supermicro/psu-pws-861a-1r@2, group: psus, rel-pos: 2, plan: {view: top, at: [320.5, 0.0], under: [system-cover]}}
-        - {id: riser-rhs, at: [218.5, 0.0], size: {w: 79.5, h: 23.8}, accepts: [supermicro/riser-wio-rhs-x13sew@1], default: supermicro/riser-wio-rhs-x13sew@1, group: risers, rel-pos: 2, plan: {view: top, at: [139.0, 0.0], in: system-board, under: [system-cover]}}
+        - {id: riser-rhs, at: [218.5, 0.0], size: {w: 79.5, h: 23.8}, accepts: [supermicro/riser-wio-rhs-x13sew@2], default: supermicro/riser-wio-rhs-x13sew@2, group: risers, rel-pos: 2, plan: {view: top, at: [139.0, 0.0], in: system-board, under: [system-cover]}}
         - {id: riser-lhs, at: [298.0, 0.0], size: {w: 123.0, h: 43.0}, accepts: [supermicro/riser-wio-lhs-x13sew@1], default: supermicro/riser-wio-lhs-x13sew@1, group: risers, rel-pos: 1, plan: {view: top, at: [16.0, 0.0], under: [system-cover]}}
       placements:
         - {id: serial, ref: common/db9-receptacle@1, at: [132.8, 25.95], group: serial, rel-pos: 1}

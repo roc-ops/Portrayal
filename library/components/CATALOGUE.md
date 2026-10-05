@@ -81,7 +81,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/dc-terminal-header-6@1` | component | inlet | 32.4 × 11.1 |  | 1 | 0 | Six-pole pluggable terminal-block HEADER on a 5.08 mm pitch - the green board-mounted receptacle with six wir… |
 | `common/dc-terminal-plug-2@1` | component | inlet | 32.1 × 17.6 × 15 |  | 2 | 1 | Two-pole PLUGGABLE DC terminal block - a green header on the faceplate with a matching two-way screw-clamp pl… |
 | `common/device-label@1` | component | sticker | 80 × 40 |  | 5 | 0 | Bottom identity label in oval recess (placeholder art - never reproduce serials/MACs/credentials) |
-| `common/dimm-plan@1` | module | memory | 3.8 × 133.4 × 31.3 |  | 7 | 1 | A DIMM seen from above, standing in its socket - the thin edge of the module with its latches at either end, … |
+| `common/dimm-plan@1` | module | memory | 3.8 × 133.4 × 31.3 |  | 7 | 2 | A DIMM seen from above, standing in its socket - the thin edge of the module with its latches at either end, … |
 | `common/din-1-0-2-3-jack@1` | component | port | 7.01 × 7.01 |  | 0 | 5 | Rear-mount 1.0/2.3 bulkhead jack - the round spanner nut in front of the panel (bezel) around a std/din-1-0-2… |
 | `common/din-clip-ts35@1` | component | mount | 44 × 58 |  | 10 | 1 | DIN-rail mounting clip for a 35 mm top-hat rail (IEC 60715 TS35, 7.5 and 15 mm deep) - the plate screwed to a… |
 | `common/dip-switch-2@1` | component | button | 7 × 10 |  | 10 | 0 | Two-position DIP switch - a red body with two slide actuators side by side and ON at the top, unrotated |
@@ -808,13 +808,13 @@ aperture when it is a bare opening - never both at one position. The README's
 | `hpe/psu-flex-slot-plan@1` | component | mechanical | 68 × 190 |  | 0 | 2 | An HPE Flex Slot power supply seen from above - the can that runs into the chassis behind its rear face |
 | `hpe/riser-cage-primary-dl160@1` | component | mechanical | 123.5 × 145.6 |  | 1 | 0 | The primary PCI riser cage of the Gen10 ProLiant DL160 seen from above - the vented sheet-metal roof over PCI… |
 | `hpe/riser-flom-dl160@1` | module | riser | 203 × 24.2 × 150 |  | 1 | 0 | The FlexibleLOM riser cage of the Gen10 ProLiant DL160 as the rear presents it (FlexibleLOM/NVMe riser kit 87… |
-| `hpe/riser-primary-dl160@1` | module | riser | 203 × 24.2 × 150 |  | 1 | 2 | The primary PCI riser cage of the Gen10 ProLiant DL160 as the rear presents it, with the standard x16/x8 rise… |
+| `hpe/riser-primary-dl160@1` | module | riser | 203 × 24.2 × 150 |  | 1 | 4 | The primary PCI riser cage of the Gen10 ProLiant DL160 as the rear presents it, with the standard x16/x8 rise… |
 | `hpe/riser-secondary-dl160@1` | module | riser | 82.5 × 21 × 150 |  | 1 | 0 | The secondary PCI riser cage of the Gen10 ProLiant DL160 as the rear presents it, with the x16 riser board (8… |
 | `hpe/serial-port-879778@1` | module | expansion-card | 32.8 × 12.5 |  | 1 | 0 | The optional serial port of the Gen10 ProLiant DL160 (serial port cable, spare 879778-001) - a DE-9 on a cabl… |
 | `hpe/serial-port-blank@1` | module | blank | 32.8 × 12.5 |  | 1 | 1 | HPE serial port blank on the Gen10 ProLiant DL160's rear, covering the opening the optional serial port fills… |
 | `hpe/sff-blank@1` | module | blank | 76.2 × 15 × 25 |  | 1 | 0 | HPE SFF drive blank for the Gen10 ProLiant DL160's 2.5 inch front bays, lying flat - a black moulding with a … |
 | `hpe/sff-sc-carrier@1` | module | drive | 76.2 × 15 × 125 |  | 1 | 3 | HPE SmartCarrier (SC) for a 2.5 inch SFF drive, lying flat as the Gen10 ProLiant DL160's 8 SFF front presents… |
-| `hpe/system-board-dl160@1` | component | mechanical | 426 × 393 × 36 |  | 1 | 0 | The Gen10 ProLiant DL160 system board seen from above - the PCB the processors, memory, risers and supply con… |
+| `hpe/system-board-dl160@1` | component | mechanical | 426 × 393 × 36 |  | 1 | 1 | The Gen10 ProLiant DL160 system board seen from above - the PCB the processors, memory, risers and supply con… |
 
 ## juniper/ (170)
 
@@ -1255,8 +1255,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `supermicro/riser-wio-lhs-plan-x13sew@1` | component | mechanical | 123 × 205 |  | 0 | 1 | The slot 1 and 2 riser bracket of the SuperServer SYS-111E servers seen from above, slot wall at the top - a … |
 | `supermicro/riser-wio-lhs-x13sew@1` | module | riser | 123 × 43 × 180 |  | 4 | 2 | The left-hand-side WIO riser bracket of the SuperServer SYS-111E-WR as the rear presents it - PCIe 5.0 x16 sl… |
 | `supermicro/riser-wio-rhs-plan-x13sew@1` | component | mechanical | 79.5 × 176 |  | 0 | 1 | The slot 3 riser of the SuperServer SYS-111E servers seen from above, slot wall at the top - the bar at the s… |
-| `supermicro/riser-wio-rhs-x13sew@1` | module | riser | 79.5 × 23.8 × 180 |  | 4 | 1 | The right-hand-side WIO riser of the SuperServer SYS-111E-WR as the rear presents it - slot 3, PCIe 5.0 x8 in… |
-| `supermicro/system-board-x13sew@1` | component | mechanical | 203 × 330 × 30 |  | 4 | 0 | The Supermicro X13SEW-F / X13SEW-TF motherboard seen from above, I/O edge at the top - the proprietary WIO bo… |
+| `supermicro/riser-wio-rhs-x13sew@2` | module | riser | 79.5 × 23.8 × 180 |  | 4 | 1 | The right-hand-side WIO riser of the SuperServer SYS-111E-WR as the rear presents it - slot 3, PCIe 5.0 x8 in… |
+| `supermicro/system-board-x13sew@1` | component | mechanical | 203 × 330 × 36 |  | 4 | 0 | The Supermicro X13SEW-F / X13SEW-TF motherboard seen from above, I/O edge at the top - the proprietary WIO bo… |
 | `supermicro/system-cover-sc116b@1` | component | mechanical | 437 × 469.5 |  | 1 | 0 | The top cover of the SuperServer SYS-111E-WR - the lid over everything behind the drive cage |
 | `supermicro/system-cover-sc515b@1` | component | mechanical | 437 × 429 |  | 2 | 0 | The top cover of the SuperServer SYS-111E-FDWTR - the lid over the whole chassis, with a row of vent slots ne… |
 | `supermicro/system-cover-sc815b@1` | component | mechanical | 437 × 491.7 |  | 1 | 0 | The top cover of the SuperServer SYS-511E-WR - the lid over everything behind the drive cage |

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: riser-wio-rhs-x13sew
-version: 1.1.0
+version: 2.0.0
 class: riser
 behaviour: fills
 profile: server
@@ -25,12 +25,15 @@ provenance:
     rear) to where it meets the slot 1 and 2 brackets (298.0), and down to the ledge
     over the LAN ports.
   placing: >-
-    photo-measured - the window runs 12.1..71.0 x 6.3..22.5 on this face, wider than a
-    low-profile bracket's 54.5 opening, and its blank shows vents across all of it. The
-    bracket is 79.2 long (std/pcie-bracket-lp@1) with its flange under the three-hole
-    tab at the left and its tip at the right end, where slot 1 and 2's tips begin: on
-    the photograph the two tips come within 3 mm of each other at the same height, which
-    is inside what the image resolves, so they are drawn meeting at 298.0.
+    photo-measured - WHAT THE WINDOW SHOWS IS THE BRACKET CONNECTOR OPENING, and that
+    places the bay. The window runs 12.1..71.0 x 6.3..22.5 on this face. A low-profile
+    bracket's opening is 15.63..70.16 from its tip (std/pcie-bracket-lp@1); turned over,
+    with the bay at 2.9, it lies 11.9..66.5 here and the whole opening shows. @1 HAD THE
+    BAY AT 0.3, to make this bracket's tip meet the tips of slots 1 and 2 at 298.0, and
+    the plate then covered the first 2.5 mm of the opening - the edge of a card's first
+    cage. The tip now runs 2.6 past this part's end, behind the post of the slot 1 and 2
+    bracket, as the tips of two opposed slots do (hpe/riser-primary-dl160@1 has the same
+    overlap).
   handedness: >-
     estimated - turned over (rotate 180, tip right). The flange end is read from the tab
     the photograph shows at the left of the window; no image held shows a card in slot
@@ -55,8 +58,18 @@ bays:
     rotate: 180
     plan: {at: [0.0, 0.0]}
     behind: true
-    at: [0.3, 5.2]
+    at: [2.9, 5.2]
     size: [79.20, 18.42]
     accepts: [supermicro/pcie-blank-lp@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1, nvidia/mcx4111a-lp@1, nvidia/mcx4121a-lp@1, nvidia/mcx4131a-lp@1, nvidia/mcx512a-lp@1, nvidia/mcx512f-lp@1, nvidia/mcx515a-lp@1, nvidia/mcx516a-lp@1, nvidia/mcx621102-lp@1, nvidia/mcx621202-lp@1, nvidia/mcx623102a-lp@1, nvidia/mcx623105-lp@1, nvidia/mcx623106-lp@1, nvidia/mcx713106-lp@1, nvidia/mcx715105-lp@1, nvidia/mcx75310-lp@1, nvidia/mcx75510-lp@1, nvidia/mcx755106-lp@1]
     default: supermicro/pcie-blank-lp@1
+relief:
+  features:
+  - node: tab
+    out: 12.0
+    color: '#d6d9dc'
+    confidence: estimated
+    source: >-
+      the tab a bracket's flange lands behind, at the flange end of the window.
+      A bracket's folded flange stands 9.40 proud of its plate (PCIe CEM 5.0
+      figure 11-9); how far the tab stands is not measured, and 12 covers the fold
 skins: [default]
