@@ -1090,7 +1090,7 @@
             "view",
             "at"
            ],
-           "description": "WHERE THIS BAY'S OCCUPANT IS SEEN FROM ANOTHER FACE. A riser is seated in its rear bay and stands inside the chassis; with the lid off, the top view should show it there. The occupant's contract names the component that draws it from above (`plan.ref`), and this says which view that lands in and where - the plan's top-left in that view's mm. `in:` and `under:` are the target view's, so the plan sits in its well and paints under the lid. `mirror` flips it, for a riser whose cards face the other way. The occupants of the occupant's own bays come along at the offsets those bays declare. The result is a PROJECTION: it carries `data-of` naming the seated part and no data-path of its own, so the tree lists the part once, selecting either face marks both, and the 3D kit builds nothing from it - the body already stands there.",
+           "description": "WHERE THIS BAY'S OCCUPANT IS SEEN FROM ANOTHER FACE. A riser is seated in its rear bay and stands inside the chassis; with the lid off, the top view should show it there. The occupant's contract names the component that draws it from above (`plan.ref`), and this says which view that lands in and where - the plan's top-left in that view's mm. `in:` and `under:` are the target view's, so the plan sits in its well and paints under the lid. `mirror` flips it, for a riser whose cards face the other way, and `rotate: 180` turns it for a module seated in the front. The occupants of the occupant's own bays come along at the offsets those bays declare. The result is a PROJECTION: it carries `data-of` naming the seated part and no data-path of its own, so the tree lists the part once, selecting either face marks both, and the 3D kit builds nothing from it - the body already stands there.",
            "properties": {
             "view": {
              "type": "string"
@@ -1110,6 +1110,12 @@
             },
             "mirror": {
              "type": "boolean"
+            },
+            "rotate": {
+             "enum": [
+              180
+             ],
+             "description": "half a turn, for a module seated in a FRONT bay: its plan is drawn face-at-the-top, as a rear-seated module lies, and a front-seated one faces the other way. The plan turns in place and the occupants of its own bays are offset from the opposite corner."
             }
            }
           },
