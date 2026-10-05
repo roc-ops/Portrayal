@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1200 component majors in 26 namespaces.
+1202 component majors in 26 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -625,7 +625,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/riser-3-plan-16g@1` | component | mechanical | 92.6 × 252.8 |  | 0 | 5 | riser 3 of the PowerEdge R660 (3A, 3P, 3Q, 3R) seen from above - the cage roof over its low-profile card and … |
 | `dell/riser-3-plate-14g@1` | component | riser | 107.59 × 41.68 |  | 0 | 2 | the riser 3 plate on a 14th-generation PowerEdge - two full-height windows, shared by risers 3A and 3B |
 | `dell/riser-3a-14g@2` | module | riser | 107.59 × 41.68 × 184.8 |  | 1 | 0 | Dell riser 3A - 2 wired slots on the shared riser 3 plate |
-| `dell/riser-3a-16g@1` | module | riser | 92 × 19.8 × 219.8 |  | 1 | 0 | Dell riser 3A of the PowerEdge R660 - slot 3 on dell/riser-3-lp-cage-16g@1, fitted in riser configuration 1 |
+| `dell/riser-3a-16g@1` | module | riser | 92 × 19.8 × 219.8 |  | 1 | 2 | Dell riser 3A of the PowerEdge R660 - slot 3 on dell/riser-3-lp-cage-16g@1, fitted in riser configuration 1 |
 | `dell/riser-3b-14g@2` | module | riser | 107.59 × 41.68 × 184.8 |  | 1 | 0 | Dell riser 3B - 2 wired slots on the shared riser 3 plate |
 | `dell/riser-3p-16g@2` | module | riser | 92 × 19.8 × 219.8 |  | 1 | 0 | Dell riser 3P of the PowerEdge R660 - slot 3 on dell/riser-3-lp-gen5-cage-16g@1, fitted in riser configuratio… |
 | `dell/riser-3q-16g@2` | module | riser | 92 × 19.8 × 219.8 |  | 1 | 0 | Dell riser 3Q of the PowerEdge R660 - slot 3 on dell/riser-3-lp-gen5-cage-16g@1, fitted in riser configuratio… |
@@ -1230,10 +1230,11 @@ aperture when it is a bare opening - never both at one position. The README's
 | `smartoptics/ppm-ocu-50-50@2` | module | coupler | 55.4 × 19.5 |  | 0 | 1 | Smartoptics PPM-OCU-50-50 - a passive plug-in module holding a C-band optical coupler that splits the signal … |
 | `smartoptics/ppm-ocu-97-3@2` | module | coupler | 55.4 × 19.5 |  | 0 | 1 | Smartoptics PPM-OCU-97-3 - a passive plug-in module holding a C-band optical coupler that taps 3% of the sign… |
 
-## supermicro/ (35)
+## supermicro/ (37)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
+| `supermicro/air-shroud-sc515b@1` | component | mechanical | 147 × 145 |  | 2 | 0 | The processor air shroud of the SC515B chassis (SuperServer SYS-111E-FDWTR and FWTR) seen from above - a rect… |
 | `supermicro/air-shroud-x13sew-wio@1` | component | mechanical | 164 × 181 |  | 2 | 0 | The processor air shroud of the Supermicro X13SEW WIO servers seen from above - a black moulded duct that is … |
 | `supermicro/control-panel-sc116b@1` | component | control-panel | 22 × 20 |  | 1 | 0 | The front control panel of the Supermicro SC116B 1U chassis, as on the SuperServer SYS-111E-WR - a row of fiv… |
 | `supermicro/control-panel-sc815b@1` | component | control-panel | 64.5 × 13.1 |  | 1 | 0 | The front control panel of the Supermicro SC815B 1U chassis, as on the SuperServer SYS-511E-WR - a black stri… |
@@ -1251,6 +1252,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `supermicro/pcie-blank-fh@1` | module | blank | 120.02 × 21.59 |  | 0 | 1 | Supermicro full-height expansion slot blank of the 1U WIO chassis, lying flat - the part of it a slot window … |
 | `supermicro/pcie-blank-lp@1` | module | blank | 79.2 × 18.42 |  | 0 | 1 | Supermicro low-profile expansion slot blank of the 1U WIO chassis, lying flat - the part of it a slot window … |
 | `supermicro/power-button-sc515b@1` | component | button | 16 × 16 |  | 2 | 0 | The front power button of the Supermicro SC515B chassis, as on the SuperServer SYS-111E-FDWTR - a round black… |
+| `supermicro/psu-cage-cover-sc515b@1` | component | mechanical | 113 × 122 |  | 2 | 0 | The power supply cage of the SC515B chassis (SuperServer SYS-111E-FDWTR and FWTR) seen from above - the slott… |
 | `supermicro/psu-cage-cover-x13sew-wio@1` | component | mechanical | 113 × 216 |  | 2 | 0 | The power supply cage of the Supermicro X13SEW WIO servers seen from above - the sheet-metal cover over the i… |
 | `supermicro/psu-pws-601s-1r@1` | module | psu | 54.5 × 40 × 220 |  | 1 | 0 | Supermicro PWS-601S-1R, the 600 W -48 V DC redundant power supply module of the SuperServer SYS-111E-FDWTR - … |
 | `supermicro/psu-pws-601s-1r-plan@1` | component | mechanical | 54.5 × 220 |  | 0 | 1 | A Supermicro PWS-601S-1R power supply seen from above - the can that runs into the chassis behind its face |

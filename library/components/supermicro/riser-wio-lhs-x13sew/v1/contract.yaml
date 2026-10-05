@@ -56,13 +56,18 @@ body:
   depth: 180.0
   color: '#c8ccd0'
   # NOT ONE BOX. A box the size of this face hid both cards and the floor
-  # under them; the bracket is an arm beside the board and a riser card
-  # standing on its edge, and the cards are bodies of their own.
+  # under them; the bracket is an arm beside the board, a riser card standing
+  # on its edge and a connector for each slot, and the cards are bodies of
+  # their own that sit in those connectors.
   boxes:
-  - {id: arm, at: [16.5, 0.5], size: [1.5, 42.0], from: 0.0, depth: 180.0, color: '#d2d5d8',
+  - {id: arm, at: [1.5, 0.5], size: [1.5, 42.0], from: 0.0, depth: 180.0, color: '#d2d5d8',
      confidence: estimated, source: 'the sheet-metal arm of the bracket, running in beside the board; drawn as long as the body, not measured'}
-  - {id: riser-card, at: [19.5, 4.0], size: [1.6, 36.0], from: 12.0, depth: 150.0, color: '#1f5a3a',
-     confidence: estimated, source: 'the riser card the two slots are on, standing on its edge at the tip end of the brackets; not measured'}
+  - {id: riser-card, at: [10.2, 4.0], size: [1.6, 36.0], from: 30.0, depth: 120.0, color: '#1f5a3a',
+     confidence: estimated, source: 'the riser card the two slots are on, standing on its edge against the tip side of the connectors, as the board of dell/riser-3a-16g@1 stands against its connector; not measured'}
+  - {id: slot-1-connector, at: [12.4, 1.95], size: [10.0, 8.7], from: 44.2, depth: 89.0, color: '#15171b',
+     confidence: registry, source: 'PLACED ON THE CARD, from PCIe CEM 5.0 as common/pcie-card-fh@2 builds it: a full-height card has its edge tab 15.20..23.60 from the bracket tip, its board 4.44 below the keyed edge and its pads 46.9..131.2 behind the bracket. The connector takes the tab from 2.8 outboard of its end, is centred on the board and runs 44.2..133.2 back, the relation dell/riser-3a-16g@1 measured between its connector and its card; 10 x 8.7 x 89 is that part. A FIRST VERSION SAT 6.4 TOWARD THE TIP and left the gold pads outside it'}
+  - {id: slot-2-connector, at: [12.4, 22.27], size: [10.0, 8.7], from: 44.2, depth: 89.0, color: '#15171b',
+     confidence: registry, source: 'as slot-1-connector, one slot pitch (20.32) down'}
 elements:
   plate: {at: [0.0, 0.0], size: [123.0, 43.0], class: bezel}
 bays:

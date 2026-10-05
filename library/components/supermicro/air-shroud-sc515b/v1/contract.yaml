@@ -1,0 +1,37 @@
+format: 1
+kind: component
+name: air-shroud-sc515b
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+profile: server
+description: >-
+  The processor air shroud of the SC515B chassis (SuperServer SYS-111E-FDWTR and FWTR) seen from above - a rectangular duct over the heatsink and both DIMM banks, running from the fans to the front of the memory
+provenance:
+  sources: >-
+    SuperServer SYS-111E-FWTR / FWTR-EU / FDWTR User's Manual, MNL-2570, figure 3-6,
+    "Installing Air Shrouds for CPU and Optional NVIDIA T4 GPU", an isometric drawing
+    with the shroud lifted above the chassis and drop lines to where it lands; the
+    top-down photograph in the same manual is taken with it out.
+  size: >-
+    estimated - 147 x 145. The figure is isometric and nothing is measured off it: its
+    drop lines land on the outer edge of one DIMM bank, on the heatsink and on the fan
+    block, so the shroud is drawn over the heatsink and both DIMM banks, at the
+    positions the top-down photograph gives them. ITS FAN END IS CUT SHORT: the figure
+    shows a wider, gridded mouth against the four fans, which lies outside the interior
+    well and is not drawn.
+  relief: >-
+    estimated - 34 tall; not measured.
+size: {w: 147, h: 145}
+size-confidence: {w: estimated, h: estimated}
+relief:
+  wall: '#15181b'
+  features:
+  - node: shroud
+    out: 34
+    color: '#1b1e21'
+    confidence: estimated
+    source: stands the height of what it covers; not measured
+elements:
+  shroud: {at: [0.0, 0.0], size: [147, 145], class: bezel}
+skins: [default]

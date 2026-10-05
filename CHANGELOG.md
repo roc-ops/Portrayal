@@ -44,8 +44,9 @@ names the ref that replaces it.
   chassis as bodies under the cover and leave it empty when ejected. The fan
   (`supermicro/fan-0163l4@1`) is drawn as the top of its housing, not as
   rotors, and the SYS-111E-WR's five fans are at their photographed positions.
-  The two WIO servers gain an air shroud and a supply cage cover under the lid,
-  and the X13SEW risers declare their bodies in pieces, so the cards show.
+  All four servers gain an air shroud and a supply cage cover under the lid,
+  and the X13SEW risers declare their bodies in pieces - bracket arm, riser
+  card and a connector for each slot - so seated cards show, plugged in.
 - 3D kit (`relief.js` `ejectTravel`): a pulled part's travel limit is never less
   than its own depth plus the margin. From above a 1U chassis the limit was the
   chassis height less 10, 33 mm, and a 40 mm fan or a 31 mm DIMM never came
