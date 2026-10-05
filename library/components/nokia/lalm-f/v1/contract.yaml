@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: lalm-f
-version: 1.0.0
+version: 1.0.1
 class: supervisor
 behaviour: fills
 profile: networking
@@ -128,7 +128,7 @@ provenance:
   weight: 'datasheet - UDS p91 section 12.6: "The weight of a LALM-F is 770g (1.7lbs)"'
   relief: >-
     datasheet - the handles stand 39 mm proud (UDS 12.6 p91: 256 mm with handles, 217 without);
-    which part of a lever reaches that is not stated, and the whole lever is built to it. The
+    which part of a lever reaches that is not stated: the grip at each end is built to it as the handle, and the arm is built 3 mm proud (estimated). The
     connectors carry their own depth.
   logo-zone: 'none reserved - no view prints a vendor mark on this plate; the ESD mark at the right is drawn'
   lifecycle: 'searched only the staged corpus - listed in the 26.9 guides (2025-2026); no end-of-life notice searched'
@@ -144,8 +144,8 @@ elements:
 relief:
   features:
     - {node: ejector-left-grip, out: 39, color: '#dcdddd', confidence: datasheet, source: 'UDS 12.6 (p91): depth 256 mm with handles, 217 mm without'}
-    - {node: ejector-left-arm, out: 39, color: '#dcdddd', confidence: datasheet, source: 'UDS 12.6 (p91): depth 256 mm with handles, 217 mm without'}
-    - {node: ejector-right-arm, out: 39, color: '#dcdddd', confidence: datasheet, source: 'UDS 12.6 (p91): depth 256 mm with handles, 217 mm without'}
+    - {node: ejector-left-arm, out: 3, color: '#dcdddd', confidence: estimated, source: 'the arm of the lever lies along the plate; only the grip at the end is the handle the stated depth reaches. Not dimensioned'}
+    - {node: ejector-right-arm, out: 3, color: '#dcdddd', confidence: estimated, source: 'the arm of the lever lies along the plate; only the grip at the end is the handle the stated depth reaches. Not dimensioned'}
     - {node: ejector-right-grip, out: 39, color: '#dcdddd', confidence: datasheet, source: 'UDS 12.6 (p91): depth 256 mm with handles, 217 mm without'}
 groups:
   mgmt:

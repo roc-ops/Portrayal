@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: lbnt-a
-version: 1.0.0
+version: 1.0.1
 class: supervisor
 behaviour: fills
 profile: networking
@@ -174,8 +174,9 @@ provenance:
   relief: >-
     datasheet for the envelope, estimated for its distribution - the levers are the card's
     handles and UDS 5.6.1 states the depth as 256 mm with them and 217 mm without, so they
-    stand 39 mm proud; which part of a lever reaches that is not stated, and the whole lever
-    is given it.
+    stand 39 mm proud; which part of a lever reaches that is not stated: the grip at each
+    end is given it as the handle, and the arm along the lower edge is built 3 mm proud so
+    that it does not stand in front of the ports beside it.
   lifecycle: >-
     searched only the staged corpus - current in the MF-8 26.9 guides (Issue 09); no
     end-of-life notice was searched for on the web.
@@ -201,13 +202,13 @@ relief:
       confidence: datasheet
       source: 'UDS 5.6.1 (p37): depth 256 mm with handles, 217 mm without'
     - node: lever-left-arm
-      out: 39
-      confidence: datasheet
-      source: 'UDS 5.6.1 (p37): depth 256 mm with handles, 217 mm without'
+      out: 3
+      confidence: estimated
+      source: 'the arm of the lever lies along the plate; only the grip at the end is the handle the stated depth reaches. Not dimensioned'
     - node: lever-right-arm
-      out: 39
-      confidence: datasheet
-      source: 'UDS 5.6.1 (p37): depth 256 mm with handles, 217 mm without'
+      out: 3
+      confidence: estimated
+      source: 'the arm of the lever lies along the plate; only the grip at the end is the handle the stated depth reaches. Not dimensioned'
     - node: lever-right-grip
       out: 39
       confidence: datasheet
