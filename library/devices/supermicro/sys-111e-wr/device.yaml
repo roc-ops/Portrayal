@@ -156,9 +156,31 @@ provenance:
   faces:
     confidence: datasheet
     note: >-
-      Top, bottom, left and right are sized from the stated dimensions and declared
-      empty. Supermicro's top view is a perspective photograph of the open chassis with
-      callouts, and no document held shows any of the four straight on.
+      Bottom, left and right are sized from the stated dimensions and declared empty: no
+      document held shows any of them straight on.
+  interior:
+    confidence: photo-measured
+    note: >-
+      THE TOP VIEW IS THE CHASSIS UNDER ITS TOP COVER, rear at the top; the cover
+      (supermicro/system-cover-sc116b@1) is seated and comes off in the viewer, and
+      everything beneath it says it is under it. The interior is read off the top-down
+      photograph of the open SYS-111E-WR embedded in its manual MNL-2490 as figure 1-5
+      (856 x 1050), on which the chassis is 660 px across at the rear for 437 mm (1.510
+      px/mm) and 900 px front to rear for 597 (1.508); at the front the chassis is 675
+      px across, 2.4% more, so it passes the panel gate at the rear and loosens toward
+      the front. Positions across are read from the image centre at a scale that runs
+      from 1.510 at the rear to 1.545 at the front, and positions front to rear at
+      1.508. THE BOARD IS PLACED FROM THIS IMAGE AND LAID OUT FROM A BETTER ONE: it lies
+      115.0..318.0 across and 13.5..343.5 from the rear, and its own layout is
+      supermicro/system-board-x13sew@1, measured off the SYS-111E-FDWTR photograph at
+      twice the resolution; this image agrees with that layout to 1.5 mm across and 4 mm
+      front to rear. The fans stand 371.4 from the rear on a 45 pitch; the drive cage
+      cover runs from 469.5 to the front. THE SUPPLIES, THE RISERS AND THE CARDS ARE NOT
+      PLACED IN THIS VIEW: each is seated in its rear bay and projects here through that
+      bay's `plan:`, at the bay's own position mirrored from the rear (a blank projects
+      nothing, so the base build shows the risers empty and the `cards` example shows
+      three cards). The supplies' tops read 6 mm outward of that on this image, as parts
+      standing nearer the camera do.
 attrs:
   physical:
     ru: 1
@@ -235,16 +257,23 @@ gaps:
       not drawn; no image of it is held.
     wanted: >-
       a straight-on image of the bezel on this chassis
-  - what: interior
+  - what: interior-estimated
     scope: [top]
     reason: needs-drawing
     note: >-
-      the interior is not drawn. The product page's top view and the manual's figure
-      1-5 are perspective photographs of the open chassis; the motherboard manual's
-      layout drawing would place the board's own parts but not the fans, backplane
-      or supplies around it.
+      the interior under the top cover is drawn from one top-down photograph at
+      1.5 px/mm that is 2.4% wider at the front than at the rear. Drawn: the
+      cover (it lifts off), the board, eight DIMMs, the heatsink, five fans, and
+      seen through from the rear bays the two supplies, both risers and any
+      cards in their slots. Not drawn: the ten drives and their cage (a plain
+      fixed cover here, as photographed), the backplane (a line), the air
+      shroud, the supplies' distribution board and cabling. The two risers are
+      outlines by eye, and the slot 3 riser is in neither photograph. WHICH
+      FIVE OF THE SIX FAN POSITIONS ARE FILLED is not read: the photograph is
+      dark there, and the five nearest the supplies are drawn.
     wanted: >-
-      a plan of the chassis interior, or a top-down photograph
+      a dimensioned plan of the CSE-116BTS interior, and the fan numbering and
+      which position is the optional one
 groups:
   drives: {term: Bay, role: service, index-origin: 0, description: 'the ten hot-swap 2.5 inch bays, numbered 0 to 9 as Supermicro numbers them: the lower bay of each column even, the upper odd'}
   risers: {term: Riser, role: service, index-origin: 1, description: 'the left-hand-side riser bracket (PCIe slots 1 and 2) and the right-hand-side riser (slot 3); the slots are bays of the risers'}
@@ -257,6 +286,11 @@ groups:
   controls: {term: Panel, role: management, index-origin: 1}
   leds: {term: LED, role: indicator, index-origin: 1}
   tags: {term: Tag, role: furniture, index-origin: 1}
+  memory: {term: DIMM, role: service, index-origin: 1, description: 'the eight DDR5 slots, numbered here 1 to 8 left to right as seen from above with the rear at the top; the board prints its own slot names (DIMMA1 and so on), which are not mapped to these positions'}
+  fans: {term: Fan, role: service, index-origin: 1, description: 'the 40 x 40 x 56 mm counter-rotating fans, numbered here left to right as seen from above; the vendor fan numbering is not mapped'}
+  processors: {term: CPU, role: service, index-origin: 1}
+  interior: {term: Part, role: furniture, index-origin: 1}
+  covers: {term: Cover, role: furniture, index-origin: 1, description: 'the top cover; it lifts off in the viewer'}
 views:
   front:
     size: {w: 437.0, h: 43.0}
@@ -397,10 +431,10 @@ views:
         - {at: [432, 34.2], size: [3, 3.6], fill: '#16181a'}
     components:
       bays:
-        - {id: psu-1, at: [5.2, 1.9], size: {w: 54.5, h: 40.25}, accepts: [supermicro/psu-pws-861a-1r@1], default: supermicro/psu-pws-861a-1r@1, group: psus, rel-pos: 1}
-        - {id: psu-2, at: [62.0, 1.9], size: {w: 54.5, h: 40.25}, accepts: [supermicro/psu-pws-861a-1r@1], default: supermicro/psu-pws-861a-1r@1, group: psus, rel-pos: 2}
-        - {id: riser-rhs, at: [218.5, 0.0], size: {w: 79.5, h: 23.8}, accepts: [supermicro/riser-wio-rhs-x13sew@1], default: supermicro/riser-wio-rhs-x13sew@1, group: risers, rel-pos: 2}
-        - {id: riser-lhs, at: [298.0, 0.0], size: {w: 123.0, h: 43.0}, accepts: [supermicro/riser-wio-lhs-x13sew@1], default: supermicro/riser-wio-lhs-x13sew@1, group: risers, rel-pos: 1}
+        - {id: psu-1, at: [5.2, 1.9], size: {w: 54.5, h: 40.25}, accepts: [supermicro/psu-pws-861a-1r@1], default: supermicro/psu-pws-861a-1r@1, group: psus, rel-pos: 1, plan: {view: top, at: [377.3, 0.0], under: [system-cover]}}
+        - {id: psu-2, at: [62.0, 1.9], size: {w: 54.5, h: 40.25}, accepts: [supermicro/psu-pws-861a-1r@1], default: supermicro/psu-pws-861a-1r@1, group: psus, rel-pos: 2, plan: {view: top, at: [320.5, 0.0], under: [system-cover]}}
+        - {id: riser-rhs, at: [218.5, 0.0], size: {w: 79.5, h: 23.8}, accepts: [supermicro/riser-wio-rhs-x13sew@1], default: supermicro/riser-wio-rhs-x13sew@1, group: risers, rel-pos: 2, plan: {view: top, at: [139.0, 0.0], in: system-board, under: [system-cover]}}
+        - {id: riser-lhs, at: [298.0, 0.0], size: {w: 123.0, h: 43.0}, accepts: [supermicro/riser-wio-lhs-x13sew@1], default: supermicro/riser-wio-lhs-x13sew@1, group: risers, rel-pos: 1, plan: {view: top, at: [16.0, 0.0], under: [system-cover]}}
       placements:
         - {id: serial, ref: common/db9-receptacle@1, at: [132.8, 25.95], group: serial, rel-pos: 1}
         - {id: bmc, ref: common/rj45-eth@1, at: [165.7, 5.7], rotate: 180, group: mgmt, rel-pos: 1}
@@ -414,10 +448,30 @@ views:
         - {id: uid-rear, ref: common/led-dot@1, at: [286.4, 33.9], group: leds, rel-pos: 1, for: chassis}
   top:
     size: {w: 437.0, h: 597.0}
-    empty: >-
-      no straight-on view of the top or of the interior in any document held: the
-      product page top view and manual figure 1-5 are perspective photographs with
-      callouts. Sized from the stated dimensions.
+    panel:
+      decor:
+        - {at: [0, 0], size: [437.0, 597.0], fill: '#c9cdd1'}
+        - {at: [0, 462.0], size: [437.0, 4.0], fill: '#2c5a3c'}
+        - {at: [0, 469.5], size: [437.0, 127.5], fill: '#b9bec4'}
+    components:
+      bays:
+        - {id: dimm-1, at: [144.1, 189.9], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 1, in: system-board, under: [system-cover]}
+        - {id: dimm-2, at: [151.7, 189.9], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 2, in: system-board, under: [system-cover]}
+        - {id: dimm-3, at: [159.3, 189.9], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 3, in: system-board, under: [system-cover]}
+        - {id: dimm-4, at: [166.9, 189.9], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 4, in: system-board, under: [system-cover]}
+        - {id: dimm-5, at: [258.7, 189.9], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 5, in: system-board, under: [system-cover]}
+        - {id: dimm-6, at: [266.3, 189.9], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 6, in: system-board, under: [system-cover]}
+        - {id: dimm-7, at: [273.9, 189.9], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 7, in: system-board, under: [system-cover]}
+        - {id: dimm-8, at: [281.5, 189.9], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 8, in: system-board, under: [system-cover]}
+        - {id: fan-1, at: [100.7, 371.4], size: {w: 40.0, h: 56.0}, accepts: [supermicro/fan-0163l4@1], default: supermicro/fan-0163l4@1, group: fans, rel-pos: 1, under: [system-cover]}
+        - {id: fan-2, at: [145.7, 371.4], size: {w: 40.0, h: 56.0}, accepts: [supermicro/fan-0163l4@1], default: supermicro/fan-0163l4@1, group: fans, rel-pos: 2, under: [system-cover]}
+        - {id: fan-3, at: [190.8, 371.4], size: {w: 40.0, h: 56.0}, accepts: [supermicro/fan-0163l4@1], default: supermicro/fan-0163l4@1, group: fans, rel-pos: 3, under: [system-cover]}
+        - {id: fan-4, at: [235.8, 371.4], size: {w: 40.0, h: 56.0}, accepts: [supermicro/fan-0163l4@1], default: supermicro/fan-0163l4@1, group: fans, rel-pos: 4, under: [system-cover]}
+        - {id: fan-5, at: [280.8, 371.4], size: {w: 40.0, h: 56.0}, accepts: [supermicro/fan-0163l4@1], default: supermicro/fan-0163l4@1, group: fans, rel-pos: 5, under: [system-cover]}
+      placements:
+        - {id: system-board, ref: supermicro/system-board-x13sew@1, at: [115, 13.5], group: interior, rel-pos: 1, under: [heatsink, system-cover, dimm-1, dimm-2, dimm-3, dimm-4, dimm-5, dimm-6, dimm-7, dimm-8]}
+        - {id: heatsink, ref: supermicro/heatsink-1u-lga4677@1, at: [177.3, 190.1], group: processors, rel-pos: 1, in: system-board, under: [system-cover]}
+        - {id: system-cover, ref: supermicro/system-cover-sc116b@1, at: [0.0, 0.0], group: covers, rel-pos: 1}
   bottom:
     size: {w: 437.0, h: 597.0}
     empty: >-

@@ -45,7 +45,12 @@ provenance:
     Which processor lanes serve them is not a question on a one-socket board.
   depth: >-
     estimated - 180; no plan view of the bracket is dimensioned in any document held.
+  plan: >-
+    seen from above, the bracket is supermicro/riser-wio-lhs-plan-x13sew@1, and a card
+    in either slot lies in it at the slot wall; the two slots are one above the other,
+    so their cards share one footprint from above.
 size: {w: 123.0, h: 43.0, d: 180.0}
+plan: {ref: supermicro/riser-wio-lhs-plan-x13sew@1}
 size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
 body: {depth: 180.0, color: '#c8ccd0'}
 elements:
@@ -53,6 +58,7 @@ elements:
 bays:
   slot-1:
     slot: {connector: x16, lanes: 16, height: full, length: full, processor: 1, generation: 5}
+    plan: {at: [1.0, 0.0]}
     behind: true
     at: [0.0, 0.3]
     size: [120.02, 21.59]
@@ -60,6 +66,7 @@ bays:
     default: supermicro/pcie-blank-fh@1
   slot-2:
     slot: {connector: x16, lanes: 16, height: full, length: full, processor: 1, generation: 5}
+    plan: {at: [1.0, 0.0]}
     behind: true
     at: [0.0, 20.62]
     size: [120.02, 21.59]

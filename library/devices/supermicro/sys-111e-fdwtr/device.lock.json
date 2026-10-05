@@ -11,11 +11,57 @@
   ],
   "front/bays/riser-rhs": [
    "supermicro/riser-wio-rhs-x13sew@1"
+  ],
+  "top/bays/dimm-1": [
+   "common/dimm-plan@1"
+  ],
+  "top/bays/dimm-2": [
+   "common/dimm-plan@1"
+  ],
+  "top/bays/dimm-3": [
+   "common/dimm-plan@1"
+  ],
+  "top/bays/dimm-4": [
+   "common/dimm-plan@1"
+  ],
+  "top/bays/dimm-5": [
+   "common/dimm-plan@1"
+  ],
+  "top/bays/dimm-6": [
+   "common/dimm-plan@1"
+  ],
+  "top/bays/dimm-7": [
+   "common/dimm-plan@1"
+  ],
+  "top/bays/dimm-8": [
+   "common/dimm-plan@1"
+  ],
+  "top/bays/drive-1": [
+   "std/drive-25-plan@1"
+  ],
+  "top/bays/fan-1": [
+   "supermicro/fan-0163l4@1"
+  ],
+  "top/bays/fan-2": [
+   "supermicro/fan-0163l4@1"
+  ],
+  "top/bays/fan-3": [
+   "supermicro/fan-0163l4@1"
+  ],
+  "top/bays/fan-4": [
+   "supermicro/fan-0163l4@1"
+  ],
+  "top/bays/fan-5": [
+   "supermicro/fan-0163l4@1"
+  ],
+  "top/bays/fan-6": [
+   "supermicro/fan-0163l4@1"
   ]
  },
- "composed": "cb6310aa2e17c880",
+ "composed": "f5df299cc8db150d",
  "composed-refs": {
   "common/db9-receptacle@1": "1.1.0+92f8de85b306faeb",
+  "common/dimm-plan@1": "1.2.0+e9ae6e3f8f5062ce",
   "common/ground-screw-washer@1": "1.0.0+0555256f898c020c",
   "common/ground-stud@1": "1.0.0+d7c55a877dd242fe",
   "common/led-dot@1": "1.1.0+f09babec64cd84f9",
@@ -67,6 +113,7 @@
   "nvidia/mcx755106-fh@1": "1.0.0+2ea3ba0a817d226a",
   "nvidia/mcx755106-lp@1": "1.0.0+464b85afeb18a1d4",
   "std/db9@1": "1.1.0+98651b76e201a6b4",
+  "std/drive-25-plan@1": "1.4.0+ff73e257bd02bcd1",
   "std/osfp@1": "1.0.0+ba456f3b08fbea70",
   "std/pcie-bracket-fh@2": "2.0.0+d3e0736218959c12",
   "std/pcie-bracket-lp@1": "1.2.1+3508b9d259b9e98d",
@@ -79,12 +126,19 @@
   "std/smb@1": "1.0.0+8e814eaf9c2e6e5b",
   "std/usb-a@1": "1.3.0+3c77f06ea6794bfc",
   "std/vga@1": "1.1.0+3cb6fba099c16ff7",
+  "supermicro/fan-0163l4@1": "1.0.0+769d7e9ac77adbca",
+  "supermicro/heatsink-1u-lga4677@1": "1.0.0+07bb8d7ffedc4fc3",
   "supermicro/pcie-blank-fh@1": "1.0.0+640137e910ac68ab",
   "supermicro/pcie-blank-lp@1": "1.0.0+88e749f74c051878",
   "supermicro/power-button-sc515b@1": "1.0.0+2a5931db7245a5c0",
-  "supermicro/psu-pws-601s-1r@1": "1.0.0+5b11a1f824a2aa9a",
-  "supermicro/riser-wio-lhs-x13sew@1": "1.0.0+8ad270f0085d1ac5",
-  "supermicro/riser-wio-rhs-x13sew@1": "1.0.0+b7048897ba11f425",
+  "supermicro/psu-pws-601s-1r-plan@1": "1.0.0+4843b9ade2df48f8",
+  "supermicro/psu-pws-601s-1r@1": "1.0.0+b6c1d22eb7e4d897",
+  "supermicro/riser-wio-lhs-plan-x13sew@1": "1.0.0+34f0b309868de5d8",
+  "supermicro/riser-wio-lhs-x13sew@1": "1.0.0+2162f43c2ee2826f",
+  "supermicro/riser-wio-rhs-plan-x13sew@1": "1.0.0+4372b56ec0706a87",
+  "supermicro/riser-wio-rhs-x13sew@1": "1.0.0+dd0cd4dcd9833fc2",
+  "supermicro/system-board-x13sew@1": "1.0.0+bb97163fb89adb20",
+  "supermicro/system-cover-sc515b@1": "1.0.0+e192ac3209e45d16",
   "ufispace/n3100-4c-plan@1": "1.0.0+be04ec1081e20ece",
   "ufispace/n3100-4c@1": "1.0.0+cdd01a9412829b9b"
  },
@@ -93,12 +147,18 @@
   "cards"
  ],
  "format": 1,
- "gaps": "3b3518b49327774a",
+ "gaps": "5e713d462b79ddf2",
  "groups": [
   "controls",
+  "covers",
+  "drives",
+  "fans",
   "grounding",
+  "interior",
+  "memory",
   "mgmt",
   "nics",
+  "processors",
   "psus",
   "risers",
   "serial",
@@ -120,9 +180,27 @@
   "front/placements/usb-2",
   "front/placements/usb-3",
   "front/placements/usb-4",
-  "front/placements/vga"
+  "front/placements/vga",
+  "top/bays/dimm-1",
+  "top/bays/dimm-2",
+  "top/bays/dimm-3",
+  "top/bays/dimm-4",
+  "top/bays/dimm-5",
+  "top/bays/dimm-6",
+  "top/bays/dimm-7",
+  "top/bays/dimm-8",
+  "top/bays/drive-1",
+  "top/bays/fan-1",
+  "top/bays/fan-2",
+  "top/bays/fan-3",
+  "top/bays/fan-4",
+  "top/bays/fan-5",
+  "top/bays/fan-6",
+  "top/placements/heatsink",
+  "top/placements/system-board",
+  "top/placements/system-cover"
  ],
- "names": "8d2b83e5b76ea5a8",
+ "names": "f99b5da8e3d5caba",
  "placement-addressing": {
   "for": {
    "front/placements/power": [
@@ -144,11 +222,29 @@
    "front/placements/usb-2": 2,
    "front/placements/usb-3": 3,
    "front/placements/usb-4": 4,
-   "front/placements/vga": 1
+   "front/placements/vga": 1,
+   "top/bays/dimm-1": 1,
+   "top/bays/dimm-2": 2,
+   "top/bays/dimm-3": 3,
+   "top/bays/dimm-4": 4,
+   "top/bays/dimm-5": 5,
+   "top/bays/dimm-6": 6,
+   "top/bays/dimm-7": 7,
+   "top/bays/dimm-8": 8,
+   "top/bays/drive-1": 1,
+   "top/bays/fan-1": 1,
+   "top/bays/fan-2": 2,
+   "top/bays/fan-3": 3,
+   "top/bays/fan-4": 4,
+   "top/bays/fan-5": 5,
+   "top/bays/fan-6": 6,
+   "top/placements/heatsink": 1,
+   "top/placements/system-board": 1,
+   "top/placements/system-cover": 1
   }
  },
  "placement-attrs": "11961e03bfdedbae",
- "placement-geometry": "44136fa355b3678a",
+ "placement-geometry": "a43fe2fd8b2a8d85",
  "placement-groups": {
   "front/bays/psu-1": "psus",
   "front/bays/psu-2": "psus",
@@ -164,10 +260,28 @@
   "front/placements/usb-2": "usb",
   "front/placements/usb-3": "usb",
   "front/placements/usb-4": "usb",
-  "front/placements/vga": "video"
+  "front/placements/vga": "video",
+  "top/bays/dimm-1": "memory",
+  "top/bays/dimm-2": "memory",
+  "top/bays/dimm-3": "memory",
+  "top/bays/dimm-4": "memory",
+  "top/bays/dimm-5": "memory",
+  "top/bays/dimm-6": "memory",
+  "top/bays/dimm-7": "memory",
+  "top/bays/dimm-8": "memory",
+  "top/bays/drive-1": "drives",
+  "top/bays/fan-1": "fans",
+  "top/bays/fan-2": "fans",
+  "top/bays/fan-3": "fans",
+  "top/bays/fan-4": "fans",
+  "top/bays/fan-5": "fans",
+  "top/bays/fan-6": "fans",
+  "top/placements/heatsink": "processors",
+  "top/placements/system-board": "interior",
+  "top/placements/system-cover": "covers"
  },
  "placement-surface": "44136fa355b3678a",
- "shape": "be8d273abbbaaebf",
- "surface": "1f3e6f4a0d3763f5",
+ "shape": "29ec54edb2cdb973",
+ "surface": "e14b15937c5894a0",
  "version": "0.1.0"
 }

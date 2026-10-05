@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1175 component majors in 26 namespaces.
+1188 component majors in 26 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -22,7 +22,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
 | `std/bnc@1` | component | port | 9.7 × 8.85 | bnc | 0 | 3 | BNC bayonet coaxial panel jack core (IEC 61169-8) - the D-hole and the collar with its bore, insulator and ce… |
-| `std/c14-inlet@1` | component | inlet | 28 × 20 × 13 | c14-inlet | 4 | 58 | IEC C14 appliance inlet (mates C13 cords) - panel cutout with the keyed coupler shroud recessed behind it, ea… |
+| `std/c14-inlet@1` | component | inlet | 28 × 20 × 13 | c14-inlet | 4 | 60 | IEC C14 appliance inlet (mates C13 cords) - panel cutout with the keyed coupler shroud recessed behind it, ea… |
 | `std/c20-inlet@1` | component | inlet | 32.4 × 24.4 × 15 | c20-inlet | 1 | 12 | IEC C20 appliance inlet (mates C19 cords) - panel cutout with the rounded-rectangle coupler recess behind it,… |
 | `std/cfp@1` | component | port | 82 × 13.6 × 144.8 | cfp | 0 | 5 | CFP cage cutout - the module envelope of the CFP MSA, the aperture the module seats through |
 | `std/cfp2@1` | component | port | 41.5 × 12.4 × 107.5 | cfp2 | 0 | 9 | CFP2 cage cutout - the module envelope of the CFP2 MSA, the aperture the module seats through |
@@ -33,7 +33,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/db9@1` | component | port | 20.47 × 11.4 × 6.73 | db9 | 0 | 18 | D-subminiature DE-9 receptacle - the nine-pin shell used for RS-232 serial ports and for the dry-contact ALAR… |
 | `std/din-1-0-2-3@1` | component | port | 5.59 × 5.59 | din-1-0-2-3 | 0 | 2 | 1.0/2.3 push-pull coaxial panel jack core (DIN 41626/2) - the round hole and the plain barrel with its collar… |
 | `std/drive-25@1` | component | drive | 15 × 69.85 × 100.45 | drive-25 | 1 | 2 | 2.5 inch form factor drive per SFF-8201 - the drive itself, not a carrier: 69.85 wide by 15.00 thick, drawn s… |
-| `std/drive-25-plan@1` | module | drive | 69.85 × 100.45 × 15 | drive-25 | 1 | 2 | A 2.5 inch drive lying flat, seen from above - the same body std/drive-25@1 draws standing on edge, in the pr… |
+| `std/drive-25-plan@1` | module | drive | 69.85 × 100.45 × 15 | drive-25 | 3 | 2 | A 2.5 inch drive lying flat, seen from above - the same body std/drive-25@1 draws standing on edge, in the pr… |
 | `std/drive-35@1` | component | drive | 101.6 × 26.1 × 147 | drive-35 | 1 | 2 | 3.5 inch form factor drive per SFF-8301 - the drive itself, not a carrier: 101.60 wide by 26.10 high, present… |
 | `std/drive-35-plan@1` | module | drive | 101.6 × 147 × 26.1 | drive-35 | 1 | 2 | A 3.5 inch drive seen from above - the same body std/drive-35@1 draws from the front, in the projection a mid… |
 | `std/drive-e3s@1` | component | drive | 76 × 7.5 × 112.75 | drive-e3s | 1 | 1 | EDSFF E3.S drive per SFF-TA-1008 - the device itself, not a carrier: 76 wide by 7.5 thick, drawn lying flat, … |
@@ -62,7 +62,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 89 | 90 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
 | `std/sma@1` | component | port | 6.35 × 6.35 | sma | 19 | 8 | SMA coaxial panel jack (1/4-36UNS-2B) - threaded barrel protrudes; GNSS/RF antenna input |
 | `std/smb@1` | component | port | 4.83 × 4.83 | smb | 24 | 20 | SMB coaxial panel jack (10-32UNF-2A) - snap-on timing coax (1PPS/10MHz) |
-| `std/usb-a@1` | component | port | 12 × 4.5 × 13.7 | usb-a | 100 | 29 | USB Type-A receptacle opening - sharp corners |
+| `std/usb-a@1` | component | port | 12 × 4.5 × 13.7 | usb-a | 101 | 29 | USB Type-A receptacle opening - sharp corners |
 | `std/usb-c@1` | component | port | 8.34 × 2.56 × 6.5 | usb-c | 8 | 1 | USB Type-C receptacle opening - fully rounded ends |
 | `std/vga@1` | component | port | 20.47 × 11.4 × 6.73 | hd15 | 2 | 6 | VGA video receptacle - a female high-density DE-15, fifteen contacts in three rows inside the D-subminiature … |
 | `std/xfp@1` | component | port | 19.5 × 9.7 × 61.7 | xfp | 1 | 40 | XFP cage cutout (10G pluggable) - the recommended bezel opening of the XFP MSA, the aperture an XFP cage prot… |
@@ -74,14 +74,14 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/bnc-jack@1` | component | port | 12.7 × 12.7 |  | 1 | 2 | Front-mount BNC bulkhead jack - the 12.7 flange and the two bayonet lugs (bezel) around a std/bnc core, which… |
 | `common/button-led-sq@1` | component | button | 4 × 4 |  | 1 | 0 | A square lit push button, the lamp being the whole button face |
 | `common/compliance-sticker@1` | component | sticker | 219 × 206 |  | 47 | 0 | Bottom-cover compliance/spec label (placeholder art until a real bottom photo is available) |
-| `common/db9-receptacle@1` | component | port | 30.8 × 12.5 × 6.73 |  | 6 | 25 | DE-9 receptacle as a faceplate sees it - the shell with a jackscrew standoff either side of it, which is what… |
+| `common/db9-receptacle@1` | component | port | 30.8 × 12.5 × 6.73 |  | 7 | 25 | DE-9 receptacle as a faceplate sees it - the shell with a jackscrew standoff either side of it, which is what… |
 | `common/dc-barrel@1` | component | inlet | 12 × 13 |  | 4 | 0 | DC barrel power inlet |
 | `common/dc-terminal-24@1` | component | inlet | 24.6 × 14.4 × 9.1 |  | 1 | 4 | Three-pole DC barrier terminal block with a hinged clear cover - the screw-down -48 V input fitted to 1RU acc… |
 | `common/dc-terminal-27@1` | component | inlet | 27.5 × 15.9 × 10.4 |  | 1 | 3 | Three-pole DC barrier terminal block with a hinged clear cover - the screw-down -48 V input fitted to 1RU acc… |
 | `common/dc-terminal-header-6@1` | component | inlet | 32.4 × 11.1 |  | 1 | 0 | Six-pole pluggable terminal-block HEADER on a 5.08 mm pitch - the green board-mounted receptacle with six wir… |
 | `common/dc-terminal-plug-2@1` | component | inlet | 32.1 × 17.6 × 15 |  | 2 | 1 | Two-pole PLUGGABLE DC terminal block - a green header on the faceplate with a matching two-way screw-clamp pl… |
 | `common/device-label@1` | component | sticker | 80 × 40 |  | 5 | 0 | Bottom identity label in oval recess (placeholder art - never reproduce serials/MACs/credentials) |
-| `common/dimm-plan@1` | module | memory | 3.8 × 133.4 × 31.3 |  | 3 | 1 | A DIMM seen from above, standing in its socket - the thin edge of the module with its latches at either end, … |
+| `common/dimm-plan@1` | module | memory | 3.8 × 133.4 × 31.3 |  | 6 | 1 | A DIMM seen from above, standing in its socket - the thin edge of the module with its latches at either end, … |
 | `common/din-1-0-2-3-jack@1` | component | port | 7.01 × 7.01 |  | 0 | 5 | Rear-mount 1.0/2.3 bulkhead jack - the round spanner nut in front of the panel (bezel) around a std/din-1-0-2… |
 | `common/din-clip-ts35@1` | component | mount | 44 × 58 |  | 10 | 1 | DIN-rail mounting clip for a 35 mm top-hat rail (IEC 60715 TS35, 7.5 and 15 mm deep) - the plate screwed to a… |
 | `common/dip-switch-2@1` | component | button | 7 × 10 |  | 10 | 0 | Two-position DIP switch - a red body with two slide actuators side by side and ON at the top, unrotated |
@@ -98,7 +98,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/fibre-splice@1` | component | port | 60 × 20 |  | 0 | 1 | A fusion-splice tray holder, as fitted behind a splice cassette's rear panel - twelve trunk pigtails fusion-s… |
 | `common/ground-lug@1` | component | ground | 7 × 14 |  | 40 | 1 | Chassis grounding point with earth symbol above the stud |
 | `common/ground-screw-washer@1` | component | ground | 11 × 11 |  | 10 | 1 | Chassis grounding screw - a Phillips pan head seated on a captive washer, screwed into the housing where the … |
-| `common/ground-stud@1` | component | ground | 8.1 × 8.1 |  | 3 | 0 | Chassis grounding stud with its hex nut - a threaded stud pressed into the panel and the nut that clamps a ri… |
+| `common/ground-stud@1` | component | ground | 8.1 × 8.1 |  | 4 | 0 | Chassis grounding stud with its hex nut - a threaded stud pressed into the panel and the nut that clamps a ri… |
 | `common/ground-symbol@1` | component | ground | 6 × 6 |  | 61 | 1 | Grounding silkscreen symbol (earth in a circle), no hardware |
 | `common/keyhole-mount@1` | component | mount | 8 × 12 |  | 3 | 0 | Wall-mount keyhole slot |
 | `common/keystone-clip@2` | component | mechanical | 16.5 × 14.9 | keystone-opening | 0 | 1 | The white plastic clip FS ships with its FHD multimedia modular panel (FHD-FAPM6, SKU 143239), seated in one … |
@@ -132,7 +132,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/pcie-card-fh@2` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 14 | A generic full-height PCI Express add-in card, half-length - the standard bracket at the chassis wall and a P… |
 | `common/pcie-card-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 20 | A generic low-profile PCI Express add-in card, half-length - the standard bracket at the chassis wall and a P… |
 | `common/pcie-card-plan@1` | module | expansion-card | 120.9 × 173.8 × 21.6 |  | 0 | 21 | A full-height PCIe expansion card seen from above, lying in a riser slot - its bracket at the rear, its lengt… |
-| `common/pcie-card-plan-lp@1` | module | expansion-card | 79.2 × 173.8 × 21.6 |  | 0 | 18 | A low-profile PCIe expansion card seen from above, lying in a riser slot - its bracket at the rear, its lengt… |
+| `common/pcie-card-plan-lp@1` | module | expansion-card | 79.2 × 173.8 × 21.6 |  | 0 | 19 | A low-profile PCIe expansion card seen from above, lying in a riser slot - its bracket at the rear, its lengt… |
 | `common/power-button@1` | component | button | 12 × 12 |  | 5 | 0 | Round ON/OFF push button |
 | `common/power-switch-slide@1` | component | button | 30.74 × 13.53 |  | 2 | 0 | Panel slide power switch under a hazard tag - the recessed two-position slider a chassis carries where a rock… |
 | `common/psu-550w@2` | module | psu | 73.5 × 40 × 185 | crps-1u | 3 | 6 | 550W CRPS hot-swap PSU module - axial fan, pull handle, latch and a panel-mounted C14 inlet turned portrait |
@@ -154,7 +154,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/rivet@1` | component | mechanical | 3 × 3 |  | 7 | 0 | Sheet-metal rivet head |
 | `common/rj11-jack@1` | component | port | 14 × 13.5 |  | 1 | 0 | RJ11 telephone jack (FXS) |
 | `common/rj45-boot@1` | component | boot | 14.5 × 10 | rj45-plug | 0 | 1 | A strain-relief boot for an RJ45 (8P8C) copper plug - PVC, moulded around the plug it wraps |
-| `common/rj45-eth@1` | component | port | 15.8 × 13.2 × 18.6 |  | 61 | 40 | An Ethernet RJ45 - the std/rj45@2 housing with the two link and activity lamps nearly every Ethernet jack car… |
+| `common/rj45-eth@1` | component | port | 15.8 × 13.2 × 18.6 |  | 62 | 40 | An Ethernet RJ45 - the std/rj45@2 housing with the two link and activity lamps nearly every Ethernet jack car… |
 | `common/rj45-ganged-eth@1` | component | port | 12.7 × 11 × 18.6 |  | 75 | 34 | An Ethernet RJ45 in a ganged 2xN block - the std/rj45-ganged@2 cell with the two lamps in its keyway-side cor… |
 | `common/rj45-ganged-link@1` | component | port | 12.7 × 11 × 18.6 |  | 5 | 0 | An Ethernet RJ45 in a ganged 2xN block with ONE lamp - the std/rj45-ganged@2 cell with a single link/activity… |
 | `common/rocker-switch@1` | component | button | 21 × 15 |  | 1 | 0 | Snap-in panel rocker power switch, 21 x 15 bezel, rocker across the width - the I (on) side at the left and O… |
@@ -175,7 +175,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/usb-a@2` | component | port | 17 × 7 × 13.7 |  | 3 | 0 | USB Type-A receptacle with trident silkscreen - a shell bezel wrapping a std/usb-a opening core |
 | `common/usb-a-bezel@1` | component | port | 17 × 9.3 × 13.7 |  | 5 | 0 | USB Type-A port in a silver panel bezel - the plate spans the component so it can abut neighboring port bezel… |
 | `common/usb-symbol@1` | component | silkscreen | 6.4 × 4 |  | 28 | 1 | USB trident silkscreen symbol, no hardware - the marking printed beside a USB receptacle |
-| `common/vga-receptacle@1` | component | port | 30.8 × 12.5 × 6.73 |  | 4 | 1 | VGA receptacle as a faceplate sees it - the female HD-15 shell with a jackscrew standoff either side, which i… |
+| `common/vga-receptacle@1` | component | port | 30.8 × 12.5 × 6.73 |  | 5 | 1 | VGA receptacle as a faceplate sees it - the female HD-15 shell with a jackscrew standoff either side, which i… |
 | `common/vga-symbol@1` | component | silkscreen | 6 × 3.4 |  | 2 | 1 | The monitor mark printed beside a VGA port - a display outline flanked by two short bars, which is the form v… |
 | `common/vhdci-receptacle@1` | component | port | 40.4 × 5.2 |  | 0 | 3 | VHDCI (very-high-density cable interconnect) receptacle as a faceplate sees it - the flattened 0.8 mm-pitch s… |
 | `common/wall-plate-keyhole-2@1` | component | mount | 56 × 30 |  | 6 | 1 | Wall-mounting plate with two keyhole slots - a flat plate screwed across a device's back so the device hangs … |
@@ -1147,7 +1147,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `nvidia/mcx4111a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 14 | NVIDIA ConnectX-4 Lx MCX4111A single-port 10/25GbE SFP28 adapter, PCIe Gen3 x8, on its tall (full-height) bra… |
 | `nvidia/mcx4111a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 21 | NVIDIA ConnectX-4 Lx MCX4111A single-port 10/25GbE SFP28 adapter, PCIe Gen3 x8, on its short (low-profile) br… |
 | `nvidia/mcx4121a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 14 | NVIDIA ConnectX-4 Lx MCX4121A dual-port 10/25GbE SFP28 adapter, PCIe Gen3 x8, on its tall (full-height) brack… |
-| `nvidia/mcx4121a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 4 | 21 | NVIDIA ConnectX-4 Lx MCX4121A dual-port 10/25GbE SFP28 adapter, PCIe Gen3 x8, on its short (low-profile) brac… |
+| `nvidia/mcx4121a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 5 | 21 | NVIDIA ConnectX-4 Lx MCX4121A dual-port 10/25GbE SFP28 adapter, PCIe Gen3 x8, on its short (low-profile) brac… |
 | `nvidia/mcx4131a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 14 | NVIDIA ConnectX-4 Lx MCX4131A single-port 40/50GbE QSFP28 adapter, PCIe Gen3 x8, on its tall (full-height) br… |
 | `nvidia/mcx4131a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 21 | NVIDIA ConnectX-4 Lx MCX4131A single-port 40/50GbE QSFP28 adapter, PCIe Gen3 x8, on its short (low-profile) b… |
 | `nvidia/mcx512a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 14 | NVIDIA ConnectX-5 MCX512A dual-port 10/25GbE SFP28 adapter, PCIe x8, on its tall (full-height) bracket |
@@ -1156,7 +1156,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `nvidia/mcx512f-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 21 | NVIDIA ConnectX-5 MCX512F dual-port 10/25GbE SFP28 adapter, PCIe Gen3 x16, on its short (low-profile) bracket |
 | `nvidia/mcx515a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 1 | 14 | NVIDIA ConnectX-5 MCX515A single-port 50/100GbE QSFP28 adapter, PCIe Gen3 x16, on its tall (full-height) brac… |
 | `nvidia/mcx515a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 21 | NVIDIA ConnectX-5 MCX515A single-port 50/100GbE QSFP28 adapter, PCIe Gen3 x16, on its short (low-profile) bra… |
-| `nvidia/mcx516a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 2 | 14 | NVIDIA ConnectX-5 MCX516A dual-port 40/50/100GbE QSFP28 adapter, PCIe x16, on its tall (full-height) bracket |
+| `nvidia/mcx516a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 3 | 14 | NVIDIA ConnectX-5 MCX516A dual-port 40/50/100GbE QSFP28 adapter, PCIe x16, on its tall (full-height) bracket |
 | `nvidia/mcx516a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 1 | 21 | NVIDIA ConnectX-5 MCX516A dual-port 40/50/100GbE QSFP28 adapter, PCIe x16, on its short (low-profile) bracket |
 | `nvidia/mcx621102-fh@1` | module | expansion-card | 120.02 × 21.59 × 124.22 |  | 0 | 14 | NVIDIA ConnectX-6 Dx MCX621102A dual-port 10/25GbE SFP28 adapter, PCIe Gen4 x8, on its tall (full-height) bra… |
 | `nvidia/mcx621102-lp@1` | module | expansion-card | 79.2 × 18.42 × 124.22 |  | 0 | 21 | NVIDIA ConnectX-6 Dx MCX621102A dual-port 10/25GbE SFP28 adapter, PCIe Gen4 x8, on its short (low-profile) br… |
@@ -1230,20 +1230,33 @@ aperture when it is a bare opening - never both at one position. The README's
 | `smartoptics/ppm-ocu-50-50@2` | module | coupler | 55.4 × 19.5 |  | 0 | 1 | Smartoptics PPM-OCU-50-50 - a passive plug-in module holding a C-band optical coupler that splits the signal … |
 | `smartoptics/ppm-ocu-97-3@2` | module | coupler | 55.4 × 19.5 |  | 0 | 1 | Smartoptics PPM-OCU-97-3 - a passive plug-in module holding a C-band optical coupler that taps 3% of the sign… |
 
-## supermicro/ (10)
+## supermicro/ (23)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
 | `supermicro/control-panel-sc116b@1` | component | control-panel | 22 × 20 |  | 1 | 0 | The front control panel of the Supermicro SC116B 1U chassis, as on the SuperServer SYS-111E-WR - a row of fiv… |
 | `supermicro/drive-tray-25@1` | module | drive | 76 × 14 × 125 |  | 1 | 0 | Supermicro tool-less hot-swap tray for a 2.5 inch drive, lying flat as the SuperServer SYS-111E-WR front pres… |
+| `supermicro/fan-0163l4@1` | module | fan | 40 × 56 × 40 |  | 3 | 0 | Supermicro FAN-0163L4 seen from above - the 40 x 40 x 56 mm counter-rotating PWM fan of the SuperServer SYS-1… |
+| `supermicro/heatsink-1u-lga4677@1` | component | mechanical | 76 × 120 |  | 3 | 0 | The passive 1U processor heatsink of the SuperServer SYS-111E-WR seen from above - a finned copper-coloured b… |
 | `supermicro/pcie-blank-fh@1` | module | blank | 120.02 × 21.59 |  | 0 | 1 | Supermicro full-height expansion slot blank of the 1U WIO chassis, lying flat - the part of it a slot window … |
 | `supermicro/pcie-blank-lp@1` | module | blank | 79.2 × 18.42 |  | 0 | 1 | Supermicro low-profile expansion slot blank of the 1U WIO chassis, lying flat - the part of it a slot window … |
-| `supermicro/power-button-sc515b@1` | component | button | 16 × 16 |  | 1 | 0 | The front power button of the Supermicro SC515B chassis, as on the SuperServer SYS-111E-FDWTR - a round black… |
+| `supermicro/power-button-sc515b@1` | component | button | 16 × 16 |  | 2 | 0 | The front power button of the Supermicro SC515B chassis, as on the SuperServer SYS-111E-FDWTR - a round black… |
 | `supermicro/psu-pws-601s-1r@1` | module | psu | 54.5 × 40 × 220 |  | 1 | 0 | Supermicro PWS-601S-1R, the 600 W -48 V DC redundant power supply module of the SuperServer SYS-111E-FDWTR - … |
+| `supermicro/psu-pws-601s-1r-plan@1` | component | mechanical | 54.5 × 220 |  | 0 | 1 | A Supermicro PWS-601S-1R power supply seen from above - the can that runs into the chassis behind its face |
+| `supermicro/psu-pws-804p-1r@1` | module | psu | 54.5 × 40.25 × 220 |  | 1 | 1 | Supermicro PWS-804P-1R, the 800 W Platinum redundant power supply module of the SuperServer SYS-111E-FWTR - a… |
+| `supermicro/psu-pws-804p-1r-plan@1` | component | mechanical | 54.5 × 220 |  | 0 | 2 | A Supermicro PWS-804P-1R power supply seen from above - the can that runs into the chassis behind its face |
 | `supermicro/psu-pws-861a-1r@1` | module | psu | 54.5 × 40.25 × 322 |  | 1 | 0 | Supermicro PWS-861A-1R, the 860 W Titanium redundant power supply module of the SuperServer SYS-111E-WR - a v… |
+| `supermicro/psu-pws-861a-1r-plan@1` | component | mechanical | 54.5 × 322 |  | 0 | 1 | A Supermicro PWS-861A-1R power supply seen from above - the can that runs into the chassis behind its face |
+| `supermicro/psu-pws-862s-1r@1` | module | psu | 54.5 × 40.25 × 220 |  | 1 | 1 | Supermicro PWS-862S-1R, the 860 W Titanium redundant power supply module of the SuperServer SYS-111E-FWTR-EU … |
+| `supermicro/psu-pws-862s-1r-plan@1` | component | mechanical | 54.5 × 220 |  | 0 | 1 | A Supermicro PWS-862S-1R power supply seen from above - the can that runs into the chassis behind its face |
 | `supermicro/pull-out-tag-sc116b@1` | component | tab | 52 × 5 |  | 1 | 0 | The pull-out tag of the Supermicro SC116B chassis front - a black tab above drive bay 1 that slides out and c… |
-| `supermicro/riser-wio-lhs-x13sew@1` | module | riser | 123 × 43 × 180 |  | 2 | 1 | The left-hand-side WIO riser bracket of the SuperServer SYS-111E-WR as the rear presents it - PCIe 5.0 x16 sl… |
-| `supermicro/riser-wio-rhs-x13sew@1` | module | riser | 79.5 × 23.8 × 180 |  | 2 | 0 | The right-hand-side WIO riser of the SuperServer SYS-111E-WR as the rear presents it - slot 3, PCIe 5.0 x8 in… |
+| `supermicro/riser-wio-lhs-plan-x13sew@1` | component | mechanical | 123 × 205 |  | 0 | 1 | The slot 1 and 2 riser bracket of the SuperServer SYS-111E servers seen from above, slot wall at the top - a … |
+| `supermicro/riser-wio-lhs-x13sew@1` | module | riser | 123 × 43 × 180 |  | 3 | 2 | The left-hand-side WIO riser bracket of the SuperServer SYS-111E-WR as the rear presents it - PCIe 5.0 x16 sl… |
+| `supermicro/riser-wio-rhs-plan-x13sew@1` | component | mechanical | 79.5 × 176 |  | 0 | 1 | The slot 3 riser of the SuperServer SYS-111E servers seen from above, slot wall at the top - the bar at the s… |
+| `supermicro/riser-wio-rhs-x13sew@1` | module | riser | 79.5 × 23.8 × 180 |  | 3 | 1 | The right-hand-side WIO riser of the SuperServer SYS-111E-WR as the rear presents it - slot 3, PCIe 5.0 x8 in… |
+| `supermicro/system-board-x13sew@1` | component | mechanical | 203 × 330 × 30 |  | 3 | 0 | The Supermicro X13SEW-F / X13SEW-TF motherboard seen from above, I/O edge at the top - the proprietary WIO bo… |
+| `supermicro/system-cover-sc116b@1` | component | mechanical | 437 × 469.5 |  | 1 | 0 | The top cover of the SuperServer SYS-111E-WR - the lid over everything behind the drive cage |
+| `supermicro/system-cover-sc515b@1` | component | mechanical | 437 × 429 |  | 2 | 0 | The top cover of the SuperServer SYS-111E-FDWTR - the lid over the whole chassis, with a row of vent slots ne… |
 
 ## telco-systems/ (17)
 

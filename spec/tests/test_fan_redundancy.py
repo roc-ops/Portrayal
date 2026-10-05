@@ -218,11 +218,21 @@ def test_the_unstated_ones_are_the_ones_we_could_not_source():
     9901 made it twenty-three on the same ruling a day later - "Fan redundancy"
     in its data sheet's Table 2, "Cisco ASR 9901 Router has three fan trays" in
     the install guide, and no arithmetic anywhere - so all three fixed-port
-    chassis Cisco shipped with this wording are in this count together."""
+    chassis Cisco shipped with this wording are in this count together.
+
+    THE THREE SUPERMICRO SYS-111E SERVERS MADE IT TWENTY-SIX (the WR, the
+    FDWTR and its AC sibling the FWTR, which shares the FDWTR's manual), and
+    they are the plain kind: silent. Each manual counts its fans ("Five 40x40x56mm
+    counter-rotating PWM fans plus one additional fan housing space", "Six 4-cm
+    counter-rotating fans") and gives a fan-failure lamp, and neither manual,
+    product page, datasheet nor quick reference guide says whether the server
+    runs on with one stopped. A counter-rotating fan is two rotors in one
+    housing, which invites a guess and is not a statement."""
     unstated = sorted(slug for slug, d in devices() if run(d))
+    assert {"supermicro/sys-111e-wr", "supermicro/sys-111e-fdwtr", "supermicro/sys-111e-fwtr"} <= set(unstated)
     assert "edgecore/cor580" in unstated and "edgecore/dcs510" in unstated
     assert {"cisco/asr-9901", "cisco/asr-9902", "cisco/asr-9903"} <= set(unstated)
-    assert len(unstated) == 23, unstated
+    assert len(unstated) == 26, unstated
 
 
 def test_the_comparison_layer_can_now_reach_them():
