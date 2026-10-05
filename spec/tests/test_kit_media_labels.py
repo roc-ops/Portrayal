@@ -1,4 +1,4 @@
-"""Every coax medium the library states has a label in the kit.
+"""Every coax medium, and every AC cord end's, has a label in the kit.
 
 kit/shell.js labels a port row from its data-media through the `MEDIA` table
 and falls back to upper-casing the key. For coax that fallback reads
@@ -53,3 +53,24 @@ def test_every_stated_coax_medium_has_a_label():
     assert not missing, (
         f"library states {missing} but kit/shell.js MEDIA has no label; the "
         f"row would read the upper-cased key")
+
+
+# AC cord ends (#785). A cord end states its connector as its media (`c13`,
+# `c19`, `saf-d-grid`); the inlets themselves state `ac`. The fallback would
+# read SAF-D-GRID on a row that should say Saf-D-Grid.
+AC_CORD_ENDS = {
+    "generic/c13-plug": ("c13", "C13"),
+    "generic/c19-plug": ("c19", "C19"),
+    "generic/saf-d-grid-plug": ("saf-d-grid", "Saf-D-Grid"),
+}
+
+
+def test_each_ac_cord_end_medium_has_its_label():
+    table = media_table()
+    for part, (key, label) in AC_CORD_ENDS.items():
+        text = (LIBRARY / "components" / part / "v1" / "contract.yaml").read_text()
+        stated = re.search(r"^attrs:.*\bmedia:\s*([a-z0-9-]+)", text, re.M)
+        assert stated and stated.group(1) == key, (part, stated and stated.group(1))
+        assert table.get(key) == label, (
+            f"kit MEDIA[{key!r}] is {table.get(key)!r}, expected {label!r}")
+    assert table.get("ac") == "AC"

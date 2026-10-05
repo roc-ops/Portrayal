@@ -376,6 +376,9 @@ export function createShell(opts = {}) {
     'micro-usb-b': 'micro-USB B',
     'usb-a': 'USB-A', 'usb-c': 'USB-C', 'sc-apc': 'SC/APC', 'fiber': 'fibre',
     'coax': 'coax', 'ac': 'AC',
+    // AC cord ends (#785). `c13` and `c19` read right upper-cased; the
+    // Saf-D-Grid plug's key would read SAF-D-GRID.
+    'c13': 'C13', 'c19': 'C19', 'saf-d-grid': 'Saf-D-Grid',
   };
   // A speed is one of spec/schemas/speeds.yaml's closed set (lint L110), and
   // every one of those reads right upper-cased - 1G, 2.5G, 1.6T - so there is

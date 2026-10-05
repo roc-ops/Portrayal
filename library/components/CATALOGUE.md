@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1211 component majors in 26 namespaces.
+1214 component majors in 26 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -22,8 +22,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
 | `std/bnc@1` | component | port | 9.7 × 8.85 | bnc | 0 | 3 | BNC bayonet coaxial panel jack core (IEC 61169-8) - the D-hole and the collar with its bore, insulator and ce… |
-| `std/c14-inlet@1` | component | inlet | 28 × 20 × 13 | c14-inlet | 4 | 60 | IEC C14 appliance inlet (mates C13 cords) - panel cutout with the keyed coupler shroud recessed behind it, ea… |
-| `std/c20-inlet@1` | component | inlet | 32.4 × 24.4 × 15 | c20-inlet | 1 | 12 | IEC C20 appliance inlet (mates C19 cords) - panel cutout with the rounded-rectangle coupler recess behind it,… |
+| `std/c14-inlet@1` | component | inlet | 28 × 20 × 13 | c14-inlet | 4 | 61 | IEC C14 appliance inlet (mates C13 cords) - panel cutout with the keyed coupler shroud recessed behind it, ea… |
+| `std/c20-inlet@1` | component | inlet | 32.4 × 24.4 × 15 | c20-inlet | 1 | 13 | IEC C20 appliance inlet (mates C19 cords) - panel cutout with the rounded-rectangle coupler recess behind it,… |
 | `std/cfp@1` | component | port | 82 × 13.6 × 144.8 | cfp | 0 | 5 | CFP cage cutout - the module envelope of the CFP MSA, the aperture the module seats through |
 | `std/cfp2@1` | component | port | 41.5 × 12.4 × 107.5 | cfp2 | 0 | 9 | CFP2 cage cutout - the module envelope of the CFP2 MSA, the aperture the module seats through |
 | `std/cfp4@1` | component | port | 21.5 × 9.5 × 92 | cfp4 | 0 | 3 | CFP4 cage cutout - the module envelope of the CFP4 MSA, the aperture the module seats through |
@@ -56,7 +56,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/qsfp56@1` | component | port | 20 × 10.15 × 37 | qsfp56 | 0 | 16 | QSFP56 cage cutout (200G, shares SFF-8661 profile) |
 | `std/rj45@2` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 72 | 57 | RJ45 modular jack HOUSING - the 15.8 x 13.2 plastic face a plug enters, with the 8P8C interface recessed into… |
 | `std/rj45-ganged@2` | component | port | 12.7 × 11 × 18.6 | rj45-ganged | 75 | 27 | One cell of a shared-wall 2xN RJ45 block - the 12.7 x 11.0 face between neighbouring ports on a 13.97 pitch, … |
-| `std/saf-d-grid@1` | component | inlet | 26.8 × 19.9 × 17 | saf-d-grid | 0 | 3 | Anderson Saf-D-Grid appliance inlet - the panel cutout with the keyed coupler recessed behind it, a first-mat… |
+| `std/saf-d-grid@1` | component | inlet | 26.8 × 19.9 × 17 | saf-d-grid | 0 | 4 | Anderson Saf-D-Grid appliance inlet - the panel cutout with the keyed coupler recessed behind it, a first-mat… |
 | `std/sc-bore@1` | component | port | 8.39 × 9 × 6 | sc-simplex-receptacle | 2 | 34 | One SC opening - the rectangular hole an SC plug's housing enters, with the key slot cut into one long wall a… |
 | `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 44 | 78 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
 | `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 89 | 93 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
@@ -183,15 +183,17 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/wall-plate-keyhole-2-42@1` | component | mount | 42 × 22 |  | 4 | 0 | The smaller wall-mounting plate with two keyhole slots - the 42 mm plate on the back of the AurCore AIS small… |
 | `common/warning-triangle@1` | component | marking | 5.4 × 4.8 |  | 5 | 3 | General warning triangle - a black exclamation mark in a yellow triangle, ISO 7010 W001 |
 
-## generic/ (29)
+## generic/ (32)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
-| `generic/bnc-plug@1` | component | port | 14.3 × 14.3 | bnc-plug | 0 | 0 | A straight BNC crimp plug on a coax cable, seen from the face: the knurled bayonet coupling sleeve, the crimp… |
+| `generic/bnc-plug@1` | component | port | 14.3 × 14.3 | bnc-plug | 0 | 3 | A straight BNC crimp plug on a coax cable, seen from the face: the knurled bayonet coupling sleeve, the crimp… |
+| `generic/c13-plug@1` | component | port | 26 × 16 | c13-plug | 0 | 0 | A moulded straight IEC C13 cord connector on its cord, seen from the cable end as a front elevation sees it s… |
+| `generic/c19-plug@1` | component | port | 37 × 24 | c19-plug | 0 | 0 | A moulded straight IEC C19 cord connector on its cord, seen from the cable end as a front elevation sees it s… |
 | `generic/din-1-0-2-3-plug@1` | component | port | 7.7 × 7.7 | din-1-0-2-3-plug | 0 | 0 | A straight 1.0/2.3 crimp plug on a coax cable, seen from the face: the push-pull latch sleeve, the crimp ferr… |
 | `generic/f-type-plug@1` | component | port | 12.83 × 11.11 | f-type-plug | 0 | 0 | A straight F crimp plug on a 75 ohm coax cable, seen from the face: the 7/16 hex coupling nut, the ribbed cri… |
 | `generic/lc-duplex-plug@2` | component | port | 11.83 × 8.535 | lc-duplex | 0 | 0 | An LC duplex plug as it is SEATED - the cable end that fills BOTH ports of a duplex LC adapter at once |
-| `generic/lc-plug@2` | component | port | 5.58 × 8.535 | lc-plug | 0 | 15 | An LC fibre plug as it is SEATED, front view - the four-tier keyed silhouette of the free plug (provenance.fr… |
+| `generic/lc-plug@2` | component | port | 5.58 × 8.535 | lc-plug | 0 | 18 | An LC fibre plug as it is SEATED, front view - the four-tier keyed silhouette of the free plug (provenance.fr… |
 | `generic/mcx-plug@1` | component | port | 5 × 5 | mcx-plug | 0 | 0 | A straight MCX crimp plug on a coax cable, seen from the face: the ribbed snap-on grip, the crimp ferrule and… |
 | `generic/mpo12-plug@1` | component | port | 12.5 × 7.6 | mpo-plug | 0 | 8 | A 12-fibre MPO/MTP plug, front view - the 12.5 x 7.6 barrel-ended housing with the MT ferrule standing in its… |
 | `generic/mpo16-plug@1` | component | port | 12.5 × 7.6 | mpo16-plug | 0 | 2 | A 16-fibre MPO/MTP-16 plug, front view - the 12.5 x 7.6 housing of the MPO-12 plug with a key rib that is nar… |
@@ -207,6 +209,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `generic/qsfp-lc-simplex@1` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 0 | A generic QSFP with one LC bore - the shape of the single-fibre bidirectional (BiDi) QSFP optic, standing for… |
 | `generic/qsfp-mpo@1` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 2 | A generic QSFP with one MPO face - the shape every QSFP+, QSFP28 and QSFP56 parallel-fibre optic has, standin… |
 | `generic/rj45-plug@1` | component | port | 11.68 × 7.93 × 22.48 | rj45-plug | 0 | 9 | An RJ45 (8P8C) copper plug, the UNSHIELDED variant - a rectangular body with a spring latch on its underside … |
+| `generic/saf-d-grid-plug@1` | component | port | 26 × 18.9 | saf-d-grid-plug | 0 | 0 | A moulded Anderson Saf-D-Grid cord plug on its cord, seen from the cable end as a front elevation sees it sea… |
 | `generic/sc-plug@1` | component | port | 8.3 × 9 | sc-plug | 0 | 0 | An SC fibre plug, front view - the square keyed silhouette an SC connector presents end-on: a 7.4 x 9.0 housi… |
 | `generic/sfp-cable@1` | component | transceiver | 13.55 × 8.55 × 47.5 | sfp-module | 0 | 1 | A generic SFP+ cable end - the shape every direct-attach, active copper, active electrical and active optical… |
 | `generic/sfp-lc@1` | component | transceiver | 13.55 × 8.55 × 47.5 | sfp-module | 0 | 5 | A generic SFP with an LC duplex face - the shape every SFP, SFP+ and SFP28 optic with two LC bores has, stand… |

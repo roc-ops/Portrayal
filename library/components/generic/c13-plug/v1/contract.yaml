@@ -1,0 +1,171 @@
+format: 1
+kind: component
+name: c13-plug
+version: 1.0.0
+class: port
+mates: iec-c14
+conforms: c13-plug
+profile: networking
+description: >-
+  A moulded straight IEC C13 cord connector on its cord, seen from the cable
+  end as a front elevation sees it seated: the overmould, keyed by the two cut
+  corners on its earth side, the round strain relief and a short straight
+  stub of cord whose diameter is the cable-od field. Seats in an `iec-c14`
+  inlet at its own mate point; the cord leaves from the stub's far end.
+size: {w: 26.0, h: 16.0}
+size-confidence: {w: drawing, h: estimated}
+size-notes: the 26 width is dimensioned on the drawing; the 16.0 thickness is scaled off the same face view, which prints no figure for it
+attrs: {media: c13, connector: c13}
+fields:
+  cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 8.33}
+  jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    drawing - registry `c13-plug`. Volex Power Products catalogue, Aug-2025,
+    cat. no. V1625 "3-pole Straight Connector", p.240, and V1625BS, p.249,
+    which prints the same dimensions at a finer raster: the overmould is
+    dimensioned 26 +/-0.5 across on the face view. The 16.0 thickness is
+    SCALED on that face view (16.0-16.1 on a ruler the printed 26 fixes, 5.65
+    px/mm), drawn flush with the 15.8 +0/-0.5 nose. The catalogue gives no
+    drawing number or revision for either part.
+  no-depth: >-
+    NO `size.d`, DELIBERATELY, as on generic/bnc-plug@1. The overall length
+    (64 +/-1, dimensioned) is in the registry entry and in the relief below,
+    but a `size.d` on a component with no `behaviour` compiles to
+    `data-depth`, and the kit builds that as a pit behind the part's whole
+    box. The depth is carried by the relief features instead.
+  orientation: >-
+    DRAWN IN THE INLET'S UNROTATED CONVENTION, as generic/lc-plug@2 is drawn
+    in its bore's: std/c14-inlet@1 draws its earth pin up and its two keying
+    chamfers at the top, so this plug's cut corners are at the top and the
+    turn a seat applies carries them onto the inlet's on every host. The
+    Volex face view is drawn with the long axis vertical and the earth to the
+    left; it is turned a quarter here.
+  seated-depth: >-
+    RULING - THE NOSE SITS ON THE INLET'S MODELLED CAVITY FLOOR, the way
+    generic/lc-plug@2 seats in its bore. std/c14-inlet@1 models its cavity
+    13.0 deep, so this plug stands 64 - 13.0 = 51.0 in front of the inlet's
+    face: 5.0 of nose, 26.0 of overmould and 20.0 of strain relief. THE NOSE
+    IS LONGER THAN THE MODELLED CAVITY. Volex prints it 18 MIN, and a nose
+    that went fully home would leave 64 - 18 = 46 at most standing out. THE
+    INLET'S 13.0 IS THE ESTIMATE TO REVISIT: its own provenance.depth says
+    estimated, since no held drawing dimensions the shroud interior. When
+    that depth is measured, every `lift` and `out` below moves by the
+    difference and nothing else changes.
+  frame: >-
+    THE PLUG'S RELIEF IS MEASURED FROM THE HOST'S PRESENTED LIFT, the frame
+    generic/bnc-plug@1 and generic/lc-plug@2 use. std/c14-inlet@1 presents
+    at its own face (its `mate` carries no `on:` and no `seat-out`), so 0
+    here is the panel plane the cutout is in. The 13.0 of nose inside the
+    cavity is not built: it is behind the face, where the inlet's own cavity
+    is.
+  nose: >-
+    drawing - Volex catalogue Aug-2025 p.240 and p.249: 23 +0/-0.5 on the
+    long side (side view), 15.8 +0/-0.5 on the short (top view), 18 MIN long,
+    a rounded rectangle whose two earth-side corners are cut at 45 degrees
+    (+3/-0) and whose other two are R3.5 MIN. The chamfer leg, about 5.5, is
+    SCALED on the V1625BS face view (5.65 px/mm on the printed 26). Seen from
+    the cable end the nose is wholly behind the overmould; it is drawn so the
+    5.0 of it in front of the inlet has a node to build from.
+  body: >-
+    drawing and scaled. The 26 +/-0.5 width is dimensioned. The length, 26.0
+    from the nose shoulder to the strain relief, is SCALED on the V1625BS
+    side view calibrated on the printed 64 (V1625 reads 25.7; the printed 18
+    reads 17.9 and 18.2 on the two rulers). THE OUTLINE'S CUT CORNERS ARE
+    ESTIMATED: the face view's outer outline carries the same 45 degree cuts
+    as the nose, and their leg is taken as the nose's own 5.5 plus the 1.5 by
+    which the overmould is wider.
+  taper: >-
+    scaled - on the V1625BS side view the overmould holds its full 26 for
+    about the front 9, then tapers to the strain relief, with two small
+    serrated ears about 21.6 across near the rear. Built as TWO steps, not a
+    taper: `body` at 26 for the front 9 and `body-rear` at the 21.6 the ears
+    span for the remaining 17. The rear step overstates the moulding between
+    the ears and the strain relief; its thickness is held at the body's 16.0
+    because no view dimensions how the short axis tapers.
+  relief-boot: >-
+    scaled - the strain relief is 20.0 long (V1625BS; 20.1 on V1625) and
+    round with flex slots. Its section differs by variant: about 11.4-11.9
+    on V1625 and about 12.8 x 13.0 on V1625BS, the larger-cable part. The
+    18 AWG default cord belongs with V1625, so 11.6, the middle of its
+    reading. The flex slots are not drawn.
+  stub: >-
+    estimated - the stub rule, docs/connectors-coax-design.md section 5: a
+    straight run of cord 30 long starting where the strain relief ends (51.0
+    in front of the inlet face). The cord's bend is the installation's.
+  cable-od: >-
+    datasheet - SJT 3 x 18 AWG, the North American cord Volex lists against
+    V1625 (catalogue p.144). Belden 19348 technical data sheet, revision
+    0.388, 09-07-2025, p.1, Overall Cable Diameter (Nominal) 0.328 in; the
+    sheet prints inches only, and 8.33 mm is that figure converted. A
+    placement or a wrapper sets the cord it actually carries.
+  jacket-colour: >-
+    a FIELD. Black is the default because every held source that states a
+    colour states black (Belden 19348 lists one put-up, black; the
+    Qualtek 312007-01 rev C drawing, note 1, says jacket colour black); none
+    states a convention.
+  contacts: >-
+    NOT DRAWN, ON PURPOSE. The three contact slots (line and neutral 14
+    +/-0.2 apart, earth 4 +/-0.2 off their row, each 2.5 x 5) are on the
+    plug's front face, which is in the inlet; a front elevation of a seated
+    plug looks at the cable end.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on generic/bnc-plug@1 - every class port
+    contract states none (spec/tests/test_behaviour.py).
+  axis: >-
+    derived - `mate` and `cable` share one point, the centre of the
+    overmould (13.0, 8.0): the cord runs straight through the connector, so
+    its front and its rear are one axis seen from two directions.
+elements: {}
+relief:
+  features:
+    - node: nose
+      out: 5.0
+      shape: true
+      color: '#1c1c1c'
+      confidence: estimated
+      source: >-
+        Volex catalogue Aug-2025 p.240 and p.249, the 18 MIN insertion nose,
+        less the 13.0 std/c14-inlet@1 models its cavity deep - an estimate in
+        that part. The 5.0 is what the ruling in provenance.seated-depth
+        leaves in front of the inlet face.
+    - node: body
+      lift: 5.0
+      out: 14.0
+      shape: true
+      color: '#26282b'
+      confidence: estimated
+      source: >-
+        Volex catalogue Aug-2025 p.249 side view, scaled on the printed 64:
+        the overmould at its full 26 for about the front 9, from the nose
+        shoulder. Its start is the nose's end (provenance.seated-depth).
+    - node: body-rear
+      lift: 14.0
+      out: 31.0
+      shape: true
+      color: '#2c2e32'
+      confidence: estimated
+      source: >-
+        Volex catalogue Aug-2025 p.249 side view, scaled on the printed 64:
+        the tapering rear 17 of the 26.0 overmould, built at the 21.6 its
+        ears span (provenance.taper).
+    - node: relief-boot
+      lift: 31.0
+      cyl: 20.0
+      color: '#202225'
+      confidence: estimated
+      source: >-
+        Volex catalogue Aug-2025 p.240 and p.249 side views, scaled: the
+        strain relief, 20.0 long to the dimensioned 64 end and about 11.6
+        across on V1625. Estimated because its start follows the inlet's
+        estimated depth.
+    - node: stub
+      lift: 51.0
+      cyl: 30
+      confidence: estimated
+      source: the stub rule, docs/connectors-coax-design.md section 5
+connection-points:
+  mate: {at: [13.0, 8.0], direction: front}
+  cable: {at: [13.0, 8.0], direction: front, 'on': stub}
+skins: [default]

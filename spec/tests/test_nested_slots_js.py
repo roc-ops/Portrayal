@@ -460,6 +460,11 @@ def test_a_configurations_deep_keys_meet_the_drawings_paths(world):
     assert b["dcp"] == {"xc01/1": None, "xc01/2": None, "xc01": PLUG, "port-1510/1": SIMPLEX}
 
 
+# the nested slots the S9510-30XC's `ac` face really has: one AC inlet on each
+# supply seated in a bay (#785)
+S95_PSU_INLETS = ["psu-0/module/inlet", "psu-1/module/inlet"]
+
+
 @needs_node
 def test_a_cage_wrappers_own_aperture_is_not_a_second_slot(world):
     """A cage wrapper publishes the aperture it composes as its own cage
@@ -474,9 +479,15 @@ def test_a_cage_wrappers_own_aperture_is_not_a_second_slot(world):
     assert c40["oldNested"] and sorted(c40["slots"]) == sorted(c40["oldNested"])
     assert not [i for i in c40["slots"] if i.endswith("/cage")]
     assert [i for i in c40["unguarded"] if i.endswith("/cage")] == [], "a card's wrapper is caught without the device's list"
-    # on the device the wrapper is caught only against the device's own list
-    assert s95["device"] and s95["slots"] == []
-    assert s95["unguarded"] and all(i.endswith("/aperture") for i in s95["unguarded"])
+    # on the device the wrapper is caught only against the device's own list.
+    # What IS left on this face are the two supplies' AC inlets (#785): a
+    # supply in a bay is a module, so its inlet is a slot of its own, keyed
+    # under the bay, and no wrapper's aperture is among them.
+    assert s95["device"] and sorted(s95["slots"]) == S95_PSU_INLETS
+    # read without that list, every wrapper's aperture comes back beside them
+    extra = [i for i in s95["unguarded"] if i not in S95_PSU_INLETS]
+    assert extra and all(i.endswith("/aperture") for i in extra)
+    assert set(S95_PSU_INLETS) <= set(s95["unguarded"])
 
 
 # THE FIXES, MUTATED. Each edit is applied to a copy of kit/swap.js and must
@@ -497,7 +508,7 @@ MUTATIONS = [
     ("no slot on a seat", "if (n.getAttribute('data-path') !== `${f}-occupant`) return true;",
      "return true;", ["fhdPlug"], lambda o: len(o["fhdPlug"]["insidePlug"]) == 2),
     ("a slot on a slot is kept", "return !host || (host.bores || []).includes(e.cage);", "return true;",
-     ["wrappers"], lambda o: o["wrappers"]["s9510-30xc:ac"]["slots"] == []),
+     ["wrappers"], lambda o: sorted(o["wrappers"]["s9510-30xc:ac"]["slots"]) == S95_PSU_INLETS),
     # ("seatFace seats the offered level only" retired 2026-09-24: seatFace
     # now re-reads the face after each pass (applyFaceOverrides' frontier),
     # so a level emptied in one pass is offered in the next and an
