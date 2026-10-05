@@ -153,6 +153,23 @@ def test_the_usb_receptacle_interfaces_were_read():
     assert _usb_receptacle_interfaces() == {"usb-a", "micro-usb-b", "usb-c"}
 
 
+def _dsub_connector_interfaces():
+    """Every interface a part presents while conforming to a D-subminiature
+    shell in spec/schemas/standards.yaml, read off the library."""
+    got = set()
+    for f in (LIB / "components").rglob("v*/contract.yaml"):
+        c = load_yaml(f) or {}
+        if c.get("interface") and c.get("conforms") in ("db9", "hd15", "da15", "db25"):
+            got.add(c["interface"])
+    return got
+
+
+def test_the_dsub_connector_interfaces_were_read():
+    """The census's exclusion is keyed on these; an empty set would exclude
+    nothing and say nothing."""
+    assert _dsub_connector_interfaces() == {"db9", "hd15", "da15", "db25"}
+
+
 def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
     """A census, and it asserts it measured something.
 
@@ -172,6 +189,8 @@ def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
     assert ac_inlets
     usb_receptacles = _usb_receptacle_interfaces()
     assert usb_receptacles
+    dsub_connectors = _dsub_connector_interfaces()
+    assert dsub_connectors
     for f in (LIB / "components").rglob("v*/contract.yaml"):
         c = load_yaml(f) or {}
         if (c.get("attrs") or {}).get("media") == "rj45":
@@ -198,6 +217,14 @@ def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
         # part whose medium is a USB connector, and no fibre runs through
         # one - and their census is spec/tests/test_usb_plugs.py.
         if c.get("mates") in usb_receptacles:
+            continue
+        # NOR ARE THE D-SUB AND VGA CABLE PLUGS (#787). generic/db9-plug@1,
+        # hd15-plug@1, da15-plug@1 and db25-plug@1 mate `db9`, `hd15`, `da15`
+        # and `db25`, which the registry holds so a D-sub connector is a slot.
+        # Left out by what each IS - it mates an interface presented by a
+        # part that conforms to a D-subminiature shell, and no fibre runs
+        # through one - and their census is spec/tests/test_dsub_plugs.py.
+        if c.get("mates") in dsub_connectors:
             continue
         if c.get("mates") in connectors and c.get("class") != "cap":
             ns = f.parents[2].name

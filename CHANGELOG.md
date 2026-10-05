@@ -25,6 +25,19 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- D-subminiature and VGA panel connectors are connector slots, and four hooded
+  cable plugs seat on them. `db9`, `hd15`, `da15` and `db25` join
+  `spec/schemas/connectors.yaml`, each naming the connector with the gender the
+  library draws on a panel (the DE-9 male, the other three female), so every
+  `std/db9@1`, `std/vga@1`, `std/da15@1` and `std/db25@1` publishes a
+  `kind: connector` slot: on a chassis, on a card seated in a bay, and through
+  `common/db9-receptacle@1` and `common/vga-receptacle@1`. No existing part or
+  device changed. `generic/db9-plug@1` (female), `generic/hd15-plug@1`,
+  `generic/da15-plug@1` and `generic/db25-plug@1` (male) are the cable plugs
+  that mate them, drawn from the cable end with their two thumbscrews and a
+  30 mm stub of cable sized by `cable-od` and coloured by `jacket-color`. Each
+  seats with its flange the mating dimension in front of the panel connector;
+  see `docs/connectors-dsub-design.md` (#787).
 - USB receptacles are connector slots, and three cable plugs seat in them.
   `usb-a`, `micro-usb-b` and `usb-c` join `spec/schemas/connectors.yaml`, so
   every `std/usb-a@1`, `std/micro-usb@1` and `std/usb-c@1` publishes a
