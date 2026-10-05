@@ -1,0 +1,58 @@
+format: 1
+kind: component
+name: system-board-x13sew
+version: 2.0.0
+class: mechanical
+profile: server
+description: >-
+  The Supermicro X13SEW-F / X13SEW-TF motherboard seen from above, I/O edge at
+  the top - the proprietary WIO board both SuperServer SYS-111E servers are
+  built on, with its eight DIMM sockets in two banks either side of the
+  processor socket and the chipset heatsink between socket and I/O
+provenance:
+  sources: >-
+    (1) the top-down photograph of the open SYS-111E-FDWTR embedded in its manual
+    MNL-2570 on page 13 (1419 x 1381 at 300 ppi), on which the chassis is 1254 px across
+    for 437 mm (2.870 px/mm) and 1236 px front to rear for 429 (2.881), 0.4% apart. (2)
+    the top-down photograph of the open SYS-111E-WR embedded in its manual MNL-2490 as
+    figure 1-5 (856 x 1050), on which the chassis is 660 px across at the rear for 437
+    mm (1.510 px/mm) and 900 px front to rear for 597 (1.508). (3) The X13SEW
+    motherboard manual MNL-2413 and both system manuals, Appendix B: "X13SEW-F;
+    proprietary 8 in (W) x 13 in (L) (203 mm x 330 mm)".
+  size: >-
+    datasheet - 203 x 330, the board dimensions both system manuals print. On the FDWTR
+    photograph the board measures 203 x 330 to the pixel when its edges are taken at
+    120.6..323.6 across and 86.8..416.8 front to rear, 12.5 mm inside the I/O wall.
+  layout: >-
+    photo-measured - board-local, I/O edge at 0, read off the FDWTR photograph at 2.88
+    px/mm and turned over (that server carries the board I/O-forward): DIMM socket
+    centres at 31.0, 38.6, 46.2, 53.8, 145.6, 153.2, 160.8 and 168.4 across, on a fitted
+    7.6 pitch, the modules running 176.4..309.8 down; the processor socket centred at
+    (100.3, 236.6); the chipset heatsink 70.3..127.3 x 100.0..140.4. THE WR PHOTOGRAPH,
+    a different image of the sibling board at 1.5 px/mm, puts the DIMM centres within
+    1.5 mm across and the DIMM and heatsink centres within 4 mm down. The I/O connector
+    strip and the fan headers are drawn as marks, not measured.
+  dimm-openings: >-
+    THE EIGHT DIMM SOCKETS ARE OPENINGS IN THIS DRAWING, each the DIMM bay (3.8 x 133.4)
+    with 0.4 round it, so the board surrounds the modules and its ink covers none of
+    them. That is what lets a device declare that this placement `frames` its DIMM bays:
+    the first @2 drew the sockets as dark paint on a solid board and named them in
+    `frames` all the same, which is the one thing that key is not for.
+  slot-names: >-
+    drawing - the Motherboard Layout figure of the X13SEW manual MNL-2413, reprinted in
+    each system manual (figure 1-4 of MNL-2570, figure 1-7 of MNL-2490), with the I/O
+    edge at the top as this part is drawn: left of the socket DIMMH1, DIMMG1, DIMMF1,
+    DIMME1, and right of it DIMMA1, DIMMB1, DIMMC1, DIMMD1, reading left to right. The
+    devices name their DIMM bays from it.
+  not-a-well: >-
+    THE BOARD IS DRAWN FLAT, ON THE FLOOR OF THE CHASSIS INTERIOR, and that is what @2
+    changes. @1 was a well of its own, 30 and then 36 deep, standing in a solid chassis
+    top; the supplies, risers and fans beside it then had nothing to stand in and were
+    built down from the lid or painted on it. The interior is now one well per chassis
+    (supermicro/interior-sc116b@1 and its siblings), as dell/system-board-r660@1 is for
+    that server, and this part is the board lying in it.
+size: {w: 203.0, h: 330.0}
+size-confidence: {w: datasheet, h: datasheet}
+elements:
+  board: {at: [0.0, 0.0], size: [203.0, 330.0], class: bezel}
+skins: [default]

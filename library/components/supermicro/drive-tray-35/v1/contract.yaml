@@ -1,0 +1,78 @@
+format: 1
+kind: module
+name: drive-tray-35
+version: 1.0.0
+class: drive
+behaviour: fills
+profile: server
+description: >-
+  Supermicro hot-swap tray for a 3.5 inch drive, lying flat as the SuperServer
+  SYS-511E-WR front presents it - two rows of vents, two lamps at the right
+  end, and along the bottom the handle with its maroon release button
+attrs:
+  form-factor: 3.5in
+fields:
+  release-color:
+    label: Release button colour
+    type: text
+    default: '#8e3b3d'
+    description: maroon as photographed
+provenance:
+  sources: >-
+    (1) the front photograph of the SYS-511E-WR embedded on page 10 of its manual (1959
+    x 593 at 300 ppi), on which the body between the ear folds is 1745 px for 437 mm,
+    3.993 px/mm, and the face 171.5 px for 43 mm, 3.988 px/mm; four trays in a row. (2)
+    SuperServer SYS-511E-WR User's Manual, MNL-2491, Drive Carriers and the Drive
+    Carrier LED Indicator table.
+  size: >-
+    photo-measured - 104.0 x 24.2. The four trays measure 416.5, 417.5, 412.5 and 409.5
+    px across (104.3 to 102.6 mm, narrowing toward the far side of a view taken from
+    slightly above) on a 433.3 px pitch, 108.5 mm; and 96.5 px down.
+  depth: >-
+    estimated - 170, room for a 147 mm drive (SFF-8301) and the tray front; no document
+    held states the tray length.
+  face: >-
+    photo-measured - tray-local: two rows of fifteen rounded vents from 3.1 to 93.4; two
+    lamps one above the other at (99.5, 4.1) and (99.5, 9.8); the handle bar 8.1..80.8
+    along the bottom and the release button 80.8..92.0 x 15.4..22.5 at its end. WHICH
+    LAMP IS WHICH is not stated in the manual; the upper is drawn as activity and the
+    lower as status.
+  lamps: >-
+    SuperServer SYS-511E-WR User's Manual, MNL-2491, Drive Carrier LED Indicator:
+    activity blue - solid for an idle SAS or NVMe drive, blinking for I/O, off for an
+    idle SATA drive; status red - solid for a failed drive, 1 Hz rebuild, 4 Hz identify,
+    two blinks and a stop at 1 Hz hot spare, five seconds on at power-on (all "with VROC
+    support").
+size: {w: 104.0, h: 24.2, d: 170.0}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+body: {depth: 170.0, color: '#2a2d30'}
+elements:
+  release: {at: [80.8, 15.4], size: [11.2, 7.1], class: latch}
+  handle: {at: [8.1, 15.0], size: [72.7, 7.9], class: handle}
+  lamp-activity:
+    at: [98.4, 3.0]
+    size: [2.2, 2.2]
+    class: led
+    states:
+      - 'off'
+      - {name: idle-sas, color: '#3b82f6'}
+      - {name: activity, color: '#3b82f6', behavior: {mode: blinking, rate: 4}}
+    description: Activity. Solid blue - idle SAS or NVMe drive installed; blinking blue - I/O activity; off - idle SATA drive. The blink rate is not stated and is drawn at 4 Hz.
+  lamp-status:
+    at: [98.4, 8.7]
+    size: [2.2, 2.2]
+    class: led
+    states:
+      - 'off'
+      - {name: fault, color: '#ef4444'}
+      - {name: rebuild, color: '#ef4444', behavior: {mode: blinking, rate: 1}}
+      - {name: identify, color: '#ef4444', behavior: {mode: blinking, rate: 4}}
+    description: Status. Solid red - drive failure; red 1 Hz - rebuild; red 4 Hz - identify (each with VROC support). The hot-spare and power-on patterns are not drawn.
+relief:
+  wall: '#141618'
+  features:
+  - node: release
+    out: 1.5
+    confidence: estimated
+    source: the release button stands proud of the tray face in the photograph; not measured
+skins: [default]
