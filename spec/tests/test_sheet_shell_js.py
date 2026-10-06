@@ -37,3 +37,23 @@ def test_a_sheet_with_no_gauge_gets_a_nominal_one(out):
 @pytest.mark.parametrize("key", ["box", "unknown", "missing"])
 def test_anything_else_is_a_box(out, key):
     assert out[key] == {"sheet": False, "thickness": 0}
+
+
+def test_a_well_in_a_sheet_is_its_floor_and_nothing_round_it(out):
+    """The tray. Walls and a back are a box's; built here they are the solid
+    block in front of the host that a sheet body exists to avoid."""
+    assert out["sheetWell"] == {"walls": False, "floor": True, "back": False, "depth": 42}
+    assert out["sheetWellDeep"]["depth"] == 42      # clamped short of the far face, as any well
+    assert out["boxWell"] == {"walls": True, "floor": True, "back": True, "depth": 42}
+
+
+def test_a_handle_in_a_well_stands_on_the_wells_floor(out):
+    """`uhandle` was built from the face plane whatever it stood in, so a ring
+    `in:` a 42 mm well hung 42 mm above the floor it was drawn on."""
+    assert out["standsOnFloor"] == -42
+    assert out["standsOnFace"] == 0
+
+
+def test_a_face_a_sheet_does_not_draw_is_open_air(out):
+    assert out["missingFaceBox"] == "#3a3f44"
+    assert out["missingFaceSheet"] is None

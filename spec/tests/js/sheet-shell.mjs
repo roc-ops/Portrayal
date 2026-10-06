@@ -12,4 +12,14 @@ console.log(JSON.stringify({
   box: m.sheetShell({mount: 'rack'}),
   unknown: m.sheetShell({shell: 'lattice', thickness: 2}),
   missing: m.sheetShell(undefined),
+  // a well in a sheet body: the tray floor, and nothing round it
+  sheetWell: m.cavityShell({d: 42, sheet: true}, 44),
+  sheetWellDeep: m.cavityShell({d: 60, sheet: true}, 44),
+  boxWell: m.cavityShell({d: 42}, 44),
+  // a handle standing in a well starts at the well's floor
+  standsOnFloor: m.standsFrom({lift: -42}),
+  standsOnFace: m.standsFrom({}),
+  // a face the device does not draw
+  missingFaceBox: m.missingFaceFill(false),
+  missingFaceSheet: m.missingFaceFill(true),
 }));

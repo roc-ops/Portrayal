@@ -601,7 +601,8 @@ export function createViewer(container, opts = {}) {
                                 faceMM, wells, apertures,
                                 meshes, FRU_GROUPS, FRU_META, BODY_META, D, deep: F.deep(),
                                 bodyBoxMesh, dist: distAt, backSource,
-                                restyle: RESTYLE, scope: SCOPE});
+                                restyle: RESTYLE, scope: SCOPE,
+                                sheet: !!(devIndex && sheetShell(devIndex.chassis).sheet)});
       // a face with no drawing falls back to flat colour and contributes no group
       if (meshes.length > before) built[F.view] = meshes[meshes.length - 1];
       FACE_FLIP[F.view] = [!!F.flipLX, !!F.flipLY];

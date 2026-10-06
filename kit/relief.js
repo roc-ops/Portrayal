@@ -77,6 +77,12 @@ export const RAISED = '[data-z-out],[data-z-cyl],[data-z-bar],[data-z-uhandle],[
 // the hole, and the box's lining (openFrameFaces) is what is seen through it.
 export function cavityShell(c, INTO) {
   if (c.openFrame) return {walls: false, floor: false, back: false, depth: 0};
+  // A WELL IN A SHEET BODY IS ITS FLOOR (docs/cable-managers-design.md section
+  // 4): the tray of a lacer panel, standing where a box's recess would end.
+  // Walls and a back are what a box has round a recess; a sheet has nothing
+  // round its floor, and built here they are the solid block a sheet body
+  // exists not to be.
+  if (c.sheet) return {walls: false, floor: true, back: false, depth: Math.min(c.d, INTO - 2)};
   const open = !!(c.seeThrough || c.hollow);
   const depth = c.hollow ? Math.min(c.d, 6) : Math.min(c.d, INTO - 2);
   return {walls: true, floor: !open, back: !open, depth};
@@ -144,6 +150,21 @@ export function sheetShell(chassis) {
   if (!chassis || chassis.shell !== 'sheet') return {sheet: false, thickness: 0};
   const t = Number(chassis.thickness);
   return {sheet: true, thickness: t > 0 ? t : 1.5};
+}
+
+// WHERE A PROUD FEATURE STARTS: the summed lift of what it stands in, so a
+// handle `in:` a well rises from the well's floor. `out`, `cyl` and `bar`
+// always read it; `uhandle` was built from the face plane whatever it stood
+// in, and a ring on a tray hung the well's depth above it.
+export function standsFrom(o) {
+  const z = Number(o && o.lift);
+  return Number.isFinite(z) ? z : 0;
+}
+
+// A FACE THE DEVICE DOES NOT DRAW is a plain side of a box - and, on a sheet
+// body, nothing at all: an undeclared face of a tray is open air.
+export function missingFaceFill(sheet) {
+  return sheet ? null : '#3a3f44';
 }
 
 // A VENT IS SEEN FROM BOTH SIDES OF THE SHEET. A face's vents are paint on its
@@ -2200,6 +2221,8 @@ export async function extractRelief(url, scope, {back = false} = {}) {
               hollow: el.dataset.seeThrough === '1',
               // an open-frame mouth (render.py `data-open-frame`): punched, nothing built
               openFrame: el.dataset.openFrame === '1',
+              // the face of a sheet body (render.py `data-shell` on the root)
+              sheet: (el.closest('svg') || {dataset: {}}).dataset.shell === 'sheet',
               lift: liftOf(el),
               round: !!el.dataset.round, cavSvg: nodeSvg(cavNode || el, rect),
               grpRect, grpSvg: nodeSvg(el, grpRect), features};
@@ -2596,7 +2619,8 @@ export async function buildFaceRelief(F, ctx) {
       const cv0 = document.createElement('canvas');
       cv0.width = Math.round(fw * PX); cv0.height = Math.round(fh * PX);
       const c0 = cv0.getContext('2d');
-      c0.fillStyle = '#3a3f44'; c0.fillRect(0, 0, cv0.width, cv0.height);
+      const fill0 = missingFaceFill(!!ctx.sheet);
+      if (fill0) { c0.fillStyle = fill0; c0.fillRect(0, 0, cv0.width, cv0.height); }
       faceCv[F.view] = cv0;
       return;
     }
@@ -2763,12 +2787,14 @@ export async function buildFaceRelief(F, ctx) {
       // and everything looking in from that face - the C14 inlet's pins, the
       // rear drive bays - ended at a flat plane.
       const shell = cavityShell(c, INTO);
-      if (!shell.walls) continue;
+      if (!shell.walls && !shell.floor) continue;
       const wallMat = new THREE.MeshLambertMaterial({color: c.wall,
         side: c.wallsInside ? THREE.BackSide : THREE.DoubleSide});
       const backMat = new THREE.MeshLambertMaterial({color: 0x23262b, side: THREE.DoubleSide});
-      let walls;
-      if (c.rings) {
+      let walls = null;
+      if (!shell.walls) {
+        // a sheet's well: its floor, below, and nothing round it
+      } else if (c.rings) {
         const g = outlineWalls(c.rings, (x, y) => [LX(x, 0), LY(y, 0)], c.lift, c.lift - d);
         const geo = new THREE.BufferGeometry();
         geo.setAttribute('position', new THREE.Float32BufferAttribute(g.pos, 3));
@@ -2793,16 +2819,18 @@ export async function buildFaceRelief(F, ctx) {
         console.error('relief: cavity has a non-finite position and will not render',
                       {owner: c.owner, x: c.x, y: c.y, d, lift: c.lift});
       // an outline's walls are built in the face frame already
-      if (!c.rings) walls.position.set(LX(c.x, c.w), LY(c.y, c.h), zc);
-      addTo(walls);
+      if (walls && !c.rings) walls.position.set(LX(c.x, c.w), LY(c.y, c.h), zc);
+      if (walls) addTo(walls);
       // a box well whose sides are the chassis: a side against another face
       // shows that face's vents (ventWellWalls, once every face is read)
-      if (ctx.wells && c.wallsInside && !c.rings && !c.round && !c.tilt)
+      if (walls && ctx.wells && c.wallsInside && !c.rings && !c.round && !c.tilt)
         ctx.wells.push({view: F.view, mesh: walls, well: c, d});
       if (!shell.floor) continue;
       // textured floor: the aperture art, pushed to the back of the recess
       const floor = new THREE.Mesh(new THREE.PlaneGeometry(c.w, c.h),
-        new THREE.MeshBasicMaterial({map: canvasTex(floorCv), transparent: true, alphaTest: 0.1, alphaToCoverage: true}));
+        new THREE.MeshBasicMaterial({map: canvasTex(floorCv), transparent: true, alphaTest: 0.1, alphaToCoverage: true,
+          // a tray is seen from underneath as well; a recess's floor never is
+          side: c.sheet ? THREE.DoubleSide : THREE.FrontSide}));
       floor.position.set(LX(c.x, c.w), LY(c.y, c.h), c.lift - (d - 0.1));
       addTo(floor);
       // one raster feeds the floor and every raised feature standing in it, so
@@ -2834,9 +2862,11 @@ export async function buildFaceRelief(F, ctx) {
         backMat.alphaMap = canvasTex(clearFloor(shapeFloor(acv), floorClears, pc.x, pc.y, PX));
         backMat.alphaTest = 0.5;
       }
-      const back = new THREE.Mesh(new THREE.PlaneGeometry(c.w, c.h), backMat);
-      back.position.set(LX(c.x, c.w), LY(c.y, c.h), c.lift - (d + maxSink + 0.15));
-      addTo(back);
+      if (shell.back) {
+        const back = new THREE.Mesh(new THREE.PlaneGeometry(c.w, c.h), backMat);
+        back.position.set(LX(c.x, c.w), LY(c.y, c.h), c.lift - (d + maxSink + 0.15));
+        addTo(back);
+      }
       for (const ft of c.features) {
         if (ft.kind === 'top') {
           const hgt = Math.min(ft.val, d - 0.2);
@@ -3062,9 +3092,10 @@ export async function buildFaceRelief(F, ctx) {
         const a = u0 + r, b = u0 + uLen - r;          // leg centerlines (svg coords)
         const cc = horizontal ? o.y + o.h / 2 : o.x + o.w / 2;  // cross-axis center
         const mat = bodyMat();
+        const z0 = standsFrom(o);
         const P = (u, z) => horizontal
-          ? [u - fw / 2, (F.flipLY ? -1 : 1) * (fh / 2 - cc), z]
-          : [cc - fw / 2, (F.flipLY ? -1 : 1) * (fh / 2 - u), z];
+          ? [u - fw / 2, (F.flipLY ? -1 : 1) * (fh / 2 - cc), z0 + z]
+          : [cc - fw / 2, (F.flipLY ? -1 : 1) * (fh / 2 - u), z0 + z];
         for (const u of [a, b]) {                     // legs
           const leg = new THREE.Mesh(new THREE.CylinderGeometry(r, r, legH, 16), mat);
           leg.rotation.x = Math.PI / 2;
