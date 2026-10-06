@@ -62,8 +62,8 @@ provenance:
   rows:
     confidence: photo-measured
     note: >-
-      Jack openings read 69-86 and 97-114 px down a face that starts at 53, so the rows
-      centre 12.9 and 27.7 mm down: tops at 7.4 and 22.2 for an 11.0 part, a 14.8 step. The
+      Jack openings read 69-86 and 97-114 px down a face that runs from 53 to 137, 84 px for
+      the stated 44.45 mm, so at 0.529 mm per px the rows centre 12.9 and 27.7 mm down: tops at 7.4 and 22.2 for an 11.0 part, a 14.8 step. The
       upper jacks show their keyways up and the lower their keyways down, the usual stacked
       mirror. The SFP+ openings centre 12.5 and 27.5, which is the registry's 15.0
       belly-to-belly step, upper cage upright over the lower turned 180.
@@ -73,7 +73,9 @@ provenance:
       Each block prints twelve lamps in one row under its six columns, alternately an up and
       a down triangle, with a numeral under each running 1 to 12, 13 to 24 and so on. Two
       lamps per column, up then down, so the odd port is the upper jack. The four uplink
-      lamps under the SFP+ cages run the same way with 49 to 52 beneath them. SO A NUMERAL
+      lamps under the SFP+ cages run the same way with 49 to 52 beneath them, on a row of
+      their own that reads about a millimetre higher than the jack lamps' (centred 36.0 mm
+      down against 37.1). SO A NUMERAL
       SITS UNDER ITS LAMP AND NOT UNDER ITS JACK: twelve lamps on a 5.8 mm step stand beneath
       six columns on a 13.97 step, and L61 reports the sixteen numerals that land within a
       millimetre or so of their jack's centre by accident. The legends
@@ -111,17 +113,19 @@ provenance:
       the data sheet gives 1173 BTU per hour on AC input and 1251 on DC, and the guide's
       Table 1-2 gives 1364 BTU/hour "worst case". The guide's is carried, as the largest.
   interface-names:
+    confidence: estimated
     note: >-
       NOT IN EITHER STAGED CISCO DOCUMENT. Searched the installation guide and the data
       sheet for GigabitEthernet, FastEthernet and their short forms and found nothing; port
       naming lives in the IOS configuration guides, which are not staged. The names are the
-      NetBox devicetype-library device type for this model, a community file:
+      NetBox devicetype-library device type for this model, a community file
+      (netbox-community/devicetype-library, device-types/Cisco/WS-C4948E.yaml):
       GigabitEthernet1/1 to 1/48, TenGigabitEthernet1/49 to 1/52 and FastEthernet1 for the
       management port. THAT FILE ALSO TYPES THE MANAGEMENT PORT 100BASE-TX, which its name
       suggests and Cisco's own documents contradict - the guide says "a 10/100/1000 RJ-45
       port Ethernet Management port" and the data sheet "10/100/1000BASE-TX" - so the name
-      is taken from it and the speed from Cisco. No confidence word fits a name read from a
-      community file.
+      is taken from it and the speed from Cisco. Estimated, because a community file is the
+      only source for the names.
   colour:
     confidence: photo-measured
     note: >-
