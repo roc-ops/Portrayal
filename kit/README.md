@@ -1,7 +1,8 @@
 # @portrayal/kit
 
-The consumer half of [Portrayal](../README.md). It reads compiled artifacts and
-does something with them — draws them, lets you inspect them, exports them.
+The consumer half of [Portrayal](https://github.com/roc-ops/Portrayal#readme).
+It reads compiled artifacts and does something with them — draws them, lets
+you inspect them, exports them.
 
 **It never reads YAML.** That line is the whole point of this package: the
 manifests, the component contracts and the schema live in `spec/` and `library/`
@@ -11,7 +12,8 @@ publishes, which means a consumer needs the artifacts and not a checkout.
 ## What it reads
 
 Everything in `library/dist/`, documented as a contract in
-[`library/README.md`](../library/README.md). The short version:
+[`library/README.md`](https://github.com/roc-ops/Portrayal/blob/main/library/README.md).
+The short version:
 
 - `<device>.<config>.<view>.svg` — the drawing. Addressable: `--` DOM ids, `/`
   data-paths. Its `<metadata>` names the source it was drawn from by

@@ -446,6 +446,11 @@ names the ref that replaces it.
   bay and no cage of any view claims such a key, so no view was named, the
   face was never rewritten and the occupant showed in 2D only, with no
   warning. Every view is rewritten for such a key (#814).
+- `@portrayal/kit`: the README's links to the Portrayal README and to the
+  artifact contract are absolute GitHub URLs, so they work on the npm package
+  page, where a relative link resolved against npmjs.com and broke. The
+  package also names its `homepage` and where to report `bugs`. Both reach
+  npm with the next kit release (#716).
 
 ### Changed
 - `relief.profile` and `profile-y` now move with `out` when their part stands
