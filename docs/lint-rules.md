@@ -84,7 +84,7 @@ a test fails when this page and the linter disagree. A finding prints as
 | L75 | component | a slot's structured facts agree with its prose, and lanes fit the connector | fix `lanes`/`connector` or the description |
 | L76 | device | the RJ45 census: every Ethernet jack says whether it has lamps | use std/rj45@2 with the lamp parts, or say in provenance the jack is bare |
 | L77 | component | a `sink` sits in a cavity, because that is what it measures from | use `pocket` for a recess in an otherwise solid face |
-| L78 | component | an optical endpoint names a composed connector and a position it has | fix the part id or the position number |
+| L78 | component | an optical endpoint names a composed connector and a position it has; a front order that names a part's positions names each once, together | fix the part id or the position number; list every position of the part, or name it bare |
 | L79 | component | no fibre position is claimed twice, and a split's ratios sum to 100 | remove the duplicate path, or fix the ratios |
 | L80 | component | every fibre position is reached by a path or declared unused with a reason | route it, or add an `optical.unused` entry saying why it terminates nothing |
 | L81 | component | a composed pitch respects the standard the part conforms to - equal for a target, no narrower for a floor | move a target onto the standard's pitch, widen a floor to at least it, or say in provenance why this part differs. Where the placements share an x, make their `rotate` agree so a rotated column can be told from a stacked pair |

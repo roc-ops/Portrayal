@@ -25,6 +25,13 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- `optical.front-order` may name one position of a part (`lc07.2`) as well
+  as a part. A duplex adapter turned over, as in the lower row of a
+  belly-to-belly holder, has its bore 1 on the other hand, and listing its
+  positions in the order they are numbered (`lc07.2, lc07.1`) makes the
+  exported front ports and fibre map count along the row. A part named bare
+  counts 1 upward as before, so no existing module changes. Lint L78 holds
+  such a part to naming every position once, together.
 - MRJ21, VHDCI and RJ11 jacks are connector slots, and three cable plugs seat
   in them. `mrj21`, `vhdci` and `rj11` join `spec/schemas/connectors.yaml`, so
   every `std/mrj21@1`, `common/vhdci-receptacle@1` and `common/rj11-jack@1`
