@@ -49,6 +49,14 @@ names the ref that replaces it.
   drawn at the common 5.5 mm barrel from one manufacturer's drawing, with a
   30 mm stub of cable sized by `cable-od`; it states no rating and claims to
   be no device's own plug (#789).
+- A component's body pieces (`body.boxes`) can be round and can carry a
+  drawing. `shape: cylinder` or `ring` (with `axis`, and `wall` on a ring)
+  builds a round piece in the envelope a box would fill; `shows: [plan]` or
+  `[rear]` paints a box piece's top or back with the patch of the part's own
+  `faces.plan` or `faces.rear` drawing it covers. `components.json` gains
+  `body.drawings` and `body.face` on a part whose pieces show one. Lint L71
+  checks the new keys. Nothing existing changes: a piece that states neither
+  is the plain box it was.
 - CFP, CFP2, CFP4 and CXP cages offer optics. `generic/cfp-lc@1`,
   `generic/cfp-sc@1`, `generic/cfp-mpo@1`, `generic/cfp2-lc@1`,
   `generic/cfp2-mpo@1`, `generic/cfp4-lc@1`, `generic/cfp4-mpo@1` and

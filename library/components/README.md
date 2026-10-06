@@ -270,6 +270,14 @@ A skin is a hand-written SVG at `skins/<name>.svg`, drawn in millimetres:
   READS THEM TODAY: `relief.js` extrudes a box from the face skin and `data-z-*`,
   and whether these should texture that box is decided in
   docs/pluggables-3d-design.md. Do not add them to a new part.
+- A part that rides inside another - a holder in a drawer's slot, a card in a
+  riser's - is built in 3D only from the pieces its `body.boxes` lists, each a
+  plain colour. Two keys on a piece say more: `shape: cylinder` or `ring`
+  (with `axis`, and `wall` for a ring) for something round, and
+  `shows: [plan]` or `[rear]`, which paints a box piece's top or back with
+  the patch of the part's own `faces.plan` or `faces.rear` drawing it covers.
+  That is a flat image, not relief; the schema's `body.boxes` entry gives the
+  frames, and L71 checks them.
 - No raster images, no editor metadata, no external references. A skin is
   geometry and fills. Vendor logos are not reproduced; contracts reserve a
   `logo-zone` element instead.
