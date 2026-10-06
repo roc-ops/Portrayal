@@ -80,7 +80,7 @@ OLD_SHIFT = {"stud-tr": (0.0, 0.0), "stud-bl": (-15.3, 15.3), "stud-br": (0.0, 1
 # component's `parts:`: part -> (placements, devices).
 CENSUS = {
     "common/ground-lug@1": (63, 40),
-    "common/ground-stud@1": (5, 4),
+    "common/ground-stud@1": (11, 5),
     "juniper/mx-ground-stud@1": (10, 5),
     CASA: (1, 1),
 }
@@ -89,6 +89,8 @@ UFI2 = {"ground-1": "M4", "ground-2": "M4"}
 # device -> {placement: the size its own documents state}. Every other
 # placement of the four parts states none.
 STUD_SIZE = {
+    "amphenol-ns/300cb08": {f"ground-{side}-{i}": "1/4-20"
+                            for side in ("bottom", "left", "right") for i in (1, 2)},
     "casa/c40g": {"ground-studs-rear": "M6"},
     "edgecore/agr110": {"ground-right": "M5"},
     "edgecore/agr130": {"ground-right": "M5"},
@@ -134,6 +136,9 @@ BUILT = {
     "ufispace/s9500-22xst": ("dc", "right", "common/ground-lug@1", ["ground-1", "ground-2"]),
     # a placement turned 90
     "edgecore/dcs500": ("base", "rear", "common/ground-lug@1", ["ground-1"]),
+    # a pair on a side panel, on the 5/8 inch centres its guide states
+    "amphenol-ns/300cb08": ("base", "left", "common/ground-stud@1",
+                            ["ground-left-1", "ground-left-2"]),
 }
 EACH_BUILT = pytest.mark.parametrize("device", sorted(BUILT))
 EACH_SINGLE = pytest.mark.parametrize("part", sorted(SINGLE))
@@ -317,8 +322,8 @@ def test_the_census_of_ground_stud_placements(placed):
     got = {ref: (n, len(devs)) for ref, (n, devs) in counts.items()}
     assert got == CENSUS
     assert all(n > 0 and d > 0 for n, d in got.values())
-    assert sum(n for n, _ in got.values()) == 79
-    assert len({where for where, _, _ in placed}) == 50
+    assert sum(n for n, _ in got.values()) == 85
+    assert len({where for where, _, _ in placed}) == 51
 
 
 @pytest.fixture(scope="module")
@@ -356,7 +361,7 @@ def test_every_single_stud_placement_is_a_slot_of_its_device_offering_the_lug(pl
         want = render_mod.seat_point(p["at"], s["size"], p.get("rotate"), list(s["axis"]))
         assert c["mate"] == pytest.approx(want, abs=EPS)
         seen += 1
-    assert seen == 78
+    assert seen == 84
 
 
 def test_the_only_turned_placements_are_turned_90(placed):
@@ -402,7 +407,7 @@ def test_stud_size_is_stated_where_a_document_states_it_and_nowhere_else(placed)
         if size is not None:
             got.setdefault(device, {})[p["id"]] = size
     assert got == STUD_SIZE
-    assert sum(len(v) for v in got.values()) == 50 and len(got) == 28
+    assert sum(len(v) for v in got.values()) == 56 and len(got) == 29
     # every device that states one says where it read it
     for device in STUD_SIZE:
         entry = _device(device)["provenance"]["ground-stud-size"]
@@ -705,6 +710,24 @@ def test_two_lugs_on_a_pair_drawn_one_above_the_other_overlap(built):
     assert a[3] - b[1] == pytest.approx(27.4 - 13.2)        # 14.2 of the upper lug's length
     # the upper lug's sleeve, 5.65 to 14.65 below its axis, is over the lower stud's axis
     assert uy + 5.65 < ly < uy + 14.65
+
+
+def test_two_lugs_on_a_pair_at_its_documented_pitch_still_overlap(built):
+    """A RECORDED FACT. The Amphenol 300CB08 draws each ground landing on the
+    5/8 inch centres its guide states, 15.9, one stud above the other on a
+    side panel 43.9 high. The guide allows a single-hole lug on a stud; two
+    of this one overlap by 11.5 of their length, and the lower one runs
+    12.45 past the lower edge of the face."""
+    device = "amphenol-ns/300cb08"
+    upper = _lug(built, device, "ground-left-1")
+    lower = _lug(built, device, "ground-left-2")
+    parents = upper[1]
+    (ux, uy), (lx, ly) = (device_point(parents, h, (4.05, 4.05)) for h in (upper[2], lower[2]))
+    assert ux == pytest.approx(lx) and ly - uy == pytest.approx(15.9)
+    a, b = _lug_box(parents, upper[3]), _lug_box(parents, lower[3])
+    assert _overlap(a, b) and a[3] - b[1] == pytest.approx(27.4 - 15.9)
+    face = _device(device)["views"]["left"]["size"]
+    assert a[3] < face["h"] and b[3] - face["h"] == pytest.approx(12.45)
 
 
 def test_two_lugs_on_a_pair_drawn_side_by_side_do_not_overlap(built):

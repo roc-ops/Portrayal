@@ -34,8 +34,8 @@ names the ref that replaces it.
   composed as `stud-tr`, `stud-bl` and `stud-br`, each a nested slot. No
   drawing changed. A placement states `stud-size` (`M4`, `M5`, `M6`, `10-32`,
   `1/4-20`, `1/4 in`) where a document for its device states the size of the
-  stud or screw: 50 placements on 28 devices, each with its source in
-  `provenance.ground-stud-size`. The 50 devices that place one of the four
+  stud or screw: 56 placements on 29 devices, each with its source in
+  `provenance.ground-stud-size`. The 51 devices that place one of the four
   parts take a patch; their DCIM exports change in the drawing version line
   only. The lug is the one nominal lug and is not turned: where it overhangs
   a face, or two lugs on a pair overlap, is recorded in
