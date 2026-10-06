@@ -392,6 +392,10 @@ export function createShell(opts = {}) {
     // The ring lug that lands on a terminal screw (#789). The fallback would
     // read RING-LUG.
     'ring-lug': 'ring lug',
+    // MRJ21, VHDCI and RJ11 cable plugs (#790) state the key their jack
+    // states. Each reads right upper-cased; they are written out so the row a
+    // plug adds is labelled by the table and not by the fallback.
+    'mrj21': 'MRJ21', 'vhdci': 'VHDCI', 'rj11': 'RJ11',
   };
   // A speed is one of spec/schemas/speeds.yaml's closed set (lint L110), and
   // every one of those reads right upper-cased - 1G, 2.5G, 1.6T - so there is
