@@ -25,9 +25,12 @@ down, about a datasheet instead of a device name):
     library that exercises `also-accepts` (`qsfp-dd` also-accepts `qsfp`).
   - edgecore/ais800-32o, placement `port-1`: `groups.osfp800.attrs.media ==
     osfp`, ref `std/osfp@1`, interface `osfp` - a family alone on its ladder,
-    which offered nothing until the OSFP generics existed. The families that
-    still have a cage and no component mating it (cfp, cfp2, cfp4) are read
-    off a card, since no device places one of those cages directly.
+    which offered nothing until the OSFP generics existed. NO FAMILY WITH A
+    PLACED CAGE IS EMPTY ANY MORE (cfp, cfp2, cfp4 and cxp have generics since
+    docs/pluggables-cfp-cxp-design.md, and `sfp-dd` has no cage in the
+    library and would offer the SFP parts if it had), so the empty accept
+    list is tested on a real card cage against a pool with its family taken
+    out.
 
 Checked directly, once, in `spec/tools/portrayal/render.py`:
 
@@ -150,12 +153,8 @@ def test_an_osfp_cage_accepts_exactly_the_osfp_generics(tmp_path):
 CFP2_CARD = LIB / "components/juniper/mic3-100g-dwdm/v1/contract.yaml"
 
 
-def test_a_family_with_nothing_to_seat_says_so_explicitly():
-    """Three families - cfp, cfp2, cfp4 - have a cage in the library and no
-    component that mates one. `[]`, EMPTY, NOT ABSENT: a consumer has to be
-    able to tell "the library offers nothing here" from "this placement is
-    not a cage at all", and those are different facts only if the key is
-    always present. No DEVICE places one of those cages directly, so this is
+def test_a_cfp2_cage_on_a_card_accepts_exactly_the_cfp2_generics():
+    """No DEVICE places a CFP, CFP2, CFP4 or CXP cage directly, so this is
     read where they are placed, on a card, through the function the build
     writes `cages[]` with."""
     card = yaml.safe_load(CFP2_CARD.read_text())
@@ -164,9 +163,34 @@ def test_a_family_with_nothing_to_seat_says_so_explicitly():
     slot = render_mod.slot_entry(part, render_mod.Library(libs), render_mod._pluggable_families(),
                                  render_mod._connector_registry(),
                                  render_mod._pluggable_candidates(libs))
-    assert slot is not None and slot["interface"].startswith("cfp")
+    assert slot["interface"] == "cfp2" and slot["kind"] == "cage"
+    assert slot["accepts"] == ["generic/cfp2-lc@1", "generic/cfp2-mpo@1"]
+
+
+def test_a_family_with_nothing_to_seat_says_so_explicitly():
+    """`[]`, EMPTY, NOT ABSENT: a consumer has to be able to tell "the library
+    offers nothing here" from "this placement is not a cage at all", and
+    those are different facts only if the key is always present.
+
+    ON A FIXTURE, because the library no longer has the case. Every family
+    with a cage placed anywhere now has a part that mates it, and `sfp-dd`,
+    the one family with no optic of its own, has no cage in the library and
+    also accepts the SFP parts. So the real CFP2 cage of a real card is
+    asked against the real pool with its own family removed, which is the
+    library as it stood before the CFP2 generics. The pool is copied, not
+    edited: it is cached for the process."""
+    card = yaml.safe_load(CFP2_CARD.read_text())
+    part = next(q for q in card["parts"] if q["ref"].startswith("std/cfp"))
+    libs = [str(LIB)]
+    pool = render_mod._pluggable_candidates(libs)
+    assert pool.get("cfp2"), "the fixture removes a family that was never there"
+    without = {k: v for k, v in pool.items() if k != "cfp2"}
+    slot = render_mod.slot_entry(part, render_mod.Library(libs), render_mod._pluggable_families(),
+                                 render_mod._connector_registry(), without)
+    assert slot is not None and slot["interface"] == "cfp2" and slot["kind"] == "cage"
     assert "accepts" in slot
     assert slot["accepts"] == []
+    assert pool.get("cfp2"), "the cached pool was edited"
 
 
 def test_a_cage_entry_carries_the_documented_shape(tmp_path):

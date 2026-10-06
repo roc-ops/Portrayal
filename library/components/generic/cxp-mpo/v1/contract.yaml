@@ -1,0 +1,150 @@
+format: 1
+kind: component
+name: cxp-mpo
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: cxp
+conforms: cxp-module
+profile: networking
+description: >-
+  A generic optical CXP with one two-row MPO face - the shape of the CXP
+  transceiver with a twenty-four-fibre receptacle, standing for all of them.
+  A short snout that enters the receptacle behind a body that is wider and
+  taller than it and stands wholly outside, one MPO receptacle in the body
+  front, pinned, and a pull tab leaving the top of the body as a loop. Which
+  module it is - rate, lane count, reach, wavelength, watts - is a fact about
+  a vendor product and lives on the wrapper that composes this
+  (docs/pluggables-design.md, decision 5), never here. Not a CXP cable end.
+size: {w: 21.2, h: 9.81, d: 28.45}
+size-confidence: {w: registry, h: registry, d: registry}
+head:
+  at: [-1.35, -2.58]
+  size: {w: 23.9, h: 14.0, d: 33.55}
+  size-confidence: {w: datasheet, h: datasheet, d: drawing}
+  node: body
+attrs: {power-absent: not-applicable, form-factor: cxp, face: mpo24, media: fiber}
+fields:
+  latch-color:
+    label: Latch colour
+    type: text
+    default: '#6f6f6f'
+  label:
+    label: Module label
+    type: text
+    default: ''
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    registry - cxp-module, SFF-8642 Rev 3.3 Table 5-2: the snout, A01 21.20
+    +/-0.13 wide, A02 9.81 +/-0.13 thick and A05 28.45 +/-0.13 long. The
+    Finisar FTLD12CL3C Product Specification Rev C1 (31-Oct-16) p10 Figure 3,
+    an optical CXP with a single MPO receptacle, prints the same three: 21.2,
+    9.81 and 28.45. The FTLD10CE3C specification Rev B4 embeds the same
+    drawing.
+  power: >-
+    NOT APPLICABLE, because this contract is a GENERIC and not a part. It
+    stands in for every module of its kind, so there is no one figure to
+    state, and any wattage here would be a fiction. The figure belongs on the
+    wrapper, which knows which module it is. L27 exempts by `power-absent` and
+    this sentence is why.
+  head: >-
+    datasheet, inside the SFF-8642 envelope. THE HEAD IS THE PLUG BODY, the
+    whole of the module outside the receptacle. SFF-8642 Rev 3.3 Table 5-2
+    prints limits: A07 24.05 Max wide, A03 14.60 Max from the snout bottom to
+    the plug top and A04 16.21 Max thick, which leave 4.79 above the snout
+    and 1.61 below it. THE DRAWN WIDTH AND HEIGHT ARE VENDOR ONES: Finisar
+    p10 prints a body 23.9 wide and 14.0 high latched. Its side view scales
+    about 1.5 below the snout; the 1.61 limit is drawn there, which leaves
+    2.58 above. THE LENGTH IS 33.55, A11 62.00 Ref less the 28.45 snout, so
+    that the depth plus the head is the 62.00 SFF-8642 gives the plug.
+    FINISAR IS 0.3 LONGER: it prints 62.3 overall. The Cisco 100GBASE CXP
+    Modules Data Sheet C78-734364 gives maximum outer dimensions of 13.3 x
+    24 x 62. The reference length governs.
+  receptacle: >-
+    std/mpo24-module-receptacle@1, composed as `mpo`: the MPO opening as a
+    module carries it, a dark cavity with the pinned ferrule and its two rows
+    of twelve fibre positions at the back. The Finisar specification
+    describes a single MPO connector receptacle, and the Cisco data sheet an
+    MPO-24 optical
+    receptacle that takes a female MPO/MTP-24 connector. The mouth is the
+    12.9 x 8.0 std/mpo@2 records (estimated there). The fibres are
+    addressable as `mpo/1` to `mpo/24`; which carry which lane is the
+    wrapper fact.
+  key: >-
+    ESTIMATED - KEY UP, toward the side the pull tab leaves from. NO DOCUMENT
+    HELD AND CITED HERE SHOWS THE KEY: the Finisar p10 end view is an
+    embedded raster at 123 ppi and its key cannot be read. Key up is what
+    every other module receptacle in this library does. The receptacle is
+    composed unrotated.
+  gender: >-
+    datasheet - PINNED. The Cisco data sheet says the module receives a
+    female connector, and the Finisar end view draws two guide pins.
+  position: >-
+    ESTIMATED, scaled - centred on the module in x and 4.6 below the snout
+    top, close to its mid-height. NO DOCUMENT DIMENSIONS IT. The Finisar p10
+    end view, scaled on its printed 23.9 and 14.0, puts the ferrule centre
+    7.1 below the body top, good to about 0.3.
+  insert: >-
+    borrowed - the 13.1 x 9.4 black insert of generic/qsfp-mpo@1,
+    photo-measured there on a QSFP28 module, drawn centred on this
+    receptacle. Estimated here.
+  top: >-
+    WHICH SIDE IS UP. SFF-8642 Rev 3.3 Figure 5-3 draws the body standing
+    above the snout on the side the latch and the pull tab are on, and
+    Finisar draws the tab leaving that side. That side is drawn up. Neither
+    letters it top, and nothing held says which way up a host mounts the
+    receptacle.
+  tab: >-
+    estimated, scaled off Finisar p10 - a moulded loop leaving the top of the
+    body: two arms and a bar across the far end. Finisar prints the loop 19.7
+    wide with a 13.5 opening, so each arm is 3.1 wide, and prints its tip
+    82.2 from the shoulder the snout begins at. That tip is drawn where it is
+    printed, 82.2 out, which is 48.65 beyond this 33.55 body. The strap
+    thickness, 1.5, and the 3.1 end bar are scaled or estimated, and THE
+    S-BEND FINISAR DRAWS IN SIDE VIEW IS NOT DRAWN: the loop is flat, level
+    with the body top. SFF-8642 Figure 5-6 draws a different tab, on a cable
+    plug and as an example: a 9.91 strap to a 19.51 ring, 50.00 Ref long.
+    The arms and the end bar are nodes of this skin and not a `common/`
+    part: no other optic composes them.
+  tab-colour: >-
+    A FIELD, and the default is the NEUTRAL GREY #6f6f6f. SFF-8642 Rev 3.3
+    section 5.3 says the colour may be specified by the application and
+    codes none, so the colour is a fact about a product and a vendor wrapper
+    sets `latch-color`. The outline follows the fill (`data-stroke-derive`).
+parts:
+  - {ref: std/mpo24-module-receptacle@1, id: mpo, at: [4.15, 0.6], lift: 33.55}
+relief:
+  features:
+    - node: body
+      out: 33.55
+      color: '#9aa0a8'
+      confidence: drawing
+      source: >-
+        SFF-8642 Rev 3.3 Table 5-2, A11 62.00 Ref plug overall less A05 28.45
+        snout - see provenance.head
+    - node: arm-l
+      out: 79.1
+      lift: 33.55
+      confidence: estimated
+      source: >-
+        one arm of the pull tab loop, from the body front to where the end
+        bar begins: the printed 82.2 tip less a 3.1 bar (Finisar FTLD12CL3C
+        Rev C1 p10, scaled) - see provenance.tab
+    - node: arm-r
+      out: 79.1
+      lift: 33.55
+      confidence: estimated
+      source: the same reading as arm-l - one drawing covering both arms of one tab
+    - node: grip
+      out: 82.2
+      lift: 79.1
+      confidence: datasheet
+      source: >-
+        the far end of the tab, 82.2 from the shoulder the snout begins at
+        (Finisar FTLD12CL3C Rev C1 p10, printed). Its lift is where the arms
+        end
+connection-points:
+  mate: {at: [10.6, 4.905], direction: front}
+  optical: {at: [10.6, 4.6], direction: front}
+skins: [default]

@@ -1,0 +1,121 @@
+format: 1
+kind: component
+name: cfp4-lc
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: cfp4
+conforms: cfp4-module
+profile: networking
+description: >-
+  A generic CFP4 with an LC duplex face - the shape of the CFP4 optic with
+  two LC bores, standing for all of them. A narrow body behind a head that is
+  taller than it, two keyed bores with the latch up, and a bail whose bar
+  lies across the top of the head because the module is seated. Which module
+  it is - rate, reach, wavelength, watts - is a fact about a vendor product
+  and lives on the wrapper that composes this (docs/pluggables-design.md,
+  decision 5), never here. generic/cfp4-mpo@1 is the same module with the
+  other face.
+size: {w: 21.5, h: 9.5, d: 76}
+size-confidence: {w: registry, h: registry, d: registry}
+head:
+  at: [-0.2, -3.1]
+  size: {w: 21.9, h: 14.1, d: 16.0}
+  size-confidence: {w: datasheet, h: datasheet, d: drawing}
+  node: body
+attrs: {power-absent: not-applicable, form-factor: cfp4, face: lc-duplex, media: fiber}
+fields:
+  latch-color:
+    label: Latch colour
+    type: text
+    default: '#6f6f6f'
+  label:
+    label: Module label
+    type: text
+    default: ''
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    registry - cfp4-module, the CFP4 Baseline Drawing Rev R: A07 21.50
+    +/-0.10 wide, A10 9.50 +/-0.20 high. The 76.0 depth is A11 76.00 MIN,
+    from the rear end to the back of the enlarged front section. Three vendor outlines of a duplex LC CFP4 print the same body: the Finisar FTLC1141RDNL Product Specification Rev C1 (20-June-2016) p8 Figure 1 (21.50, 9.50 +/-0.20, 92 +/-0.200), the FS CFP4-LR4-100G datasheet p13 (21.50 +/-0.1, 9.5 +/-0.2, 92 +/-0.2) and the Gigalight GF4-S101-LR4C datasheet Rev V0 p10.
+  power: >-
+    NOT APPLICABLE, because this contract is a GENERIC and not a part. It
+    stands in for every module of its kind, so there is no one figure to
+    state, and any wattage here would be a fiction. The figure belongs on the
+    wrapper, which knows which module it is. L27 exempts by `power-absent` and
+    this sentence is why.
+  head: >-
+    datasheet for the width and the height, inside the MSA envelope. The CFP4
+    Baseline Drawing Rev R draws an enlarged section at the front of the
+    module for the optical connector and prints only limits: A01 22.10 MAX
+    wide, A12 3.40 MAX above the module top, A13 1.60 MAX below it, and a
+    length that is A08 92.00 less A11 76.00 MIN, 16.0. THE LENGTH IS DRAWN AT
+    THAT LIMIT, so that the depth plus the head is the whole 92.00 module.
+    THE WIDTH AND THE HEIGHT ARE VENDOR FIGURES: the FS CFP4-LR4-100G
+    datasheet p13 prints a head 21.90 +/-0.2 wide and 14.1 +/-0.1 high that
+    stands 1.5 +/-0.1 below the body, which leaves 3.1 above it. THE VENDORS
+    DIFFER: the Finisar FTLC1141RDNL Product Specification Rev C1 p8 prints
+    only the limits, 3.40 MAX and 1.60 MAX, and its end view scales 2.6
+    above and 1.5 below; the Gigalight GF4-M101-SR4C datasheet p13 prints a
+    13.5 head; and on the length Gigalight prints 79.0 behind the head, 13.0.
+    Everything is within the registry envelope. THE RECEPTACLE NOSE IS NOT
+    DRAWN: the MSA lets the connector receptacle stand A03 4.10 MAX in front
+    of the head across A02 17.30 MAX, and FS prints 3.6 for an LC one.
+  bores: >-
+    std/lc-bore@3, the keyed opening the other LC generics compose, twice.
+    LATCH UP, toward the module top, and TRANSMIT ON THE LEFT: the Finisar p8
+    end view, drawn with datum C, the module bottom, at the bottom and the
+    flatness callout on the top, draws the latch slot above each bore and
+    letters T and R below them, T on the left; the FS p13 end view does the
+    same. `rotate: 180` puts the tongue up. THE PITCH IS THE 6.25 of the
+    lc-duplex-receptacle registry entry; Finisar prints (6.25), FS 6.25 and
+    Gigalight 6.25 +/-0.05. The pair is centred, as all three draw it:
+    ferrules at x 7.625 and 13.875.
+  optical-axis: >-
+    datasheet, one vendor - the ferrules are 4.95 below the module top.
+    Finisar p8 prints (2X 4.55), a reference dimension, from datum C, the
+    module bottom, to the LC axes, and 9.50 less 4.55 is 4.95. THE OTHER
+    VENDOR DIFFERS: FS p13 prints 6.4 from the bottom of its head to the
+    axis, which less its 1.5 is 4.9 above the body bottom. Not reconciled;
+    the one that dimensions from the body is drawn.
+  latch: >-
+    estimated - a bail. The MSA dimensions the latch surfaces on the module
+    sides (A39 to A58) and leaves the actuator to the vendor. Finisar p8, FS
+    p13 and Gigalight draw a lever pivoting low on the two sides of the head
+    whose bar, seated, lies across the top of the head front; the Finisar
+    end view draws that bar about 1.1 tall (scaled, an embedded raster at
+    130 ppi). It is drawn the full width of the head; the side arms and the
+    pivot are not drawn. ONE VENDOR DRAWS A PULL TAB INSTEAD: the 10Gtek
+    TR-KC13L-N00 datasheet p12 outline has a long cranked tab reaching 150.44
+    overall. That is a different actuator and is not this part.
+  bail-colour: >-
+    A FIELD, and the default is the NEUTRAL GREY #6f6f6f. No CFP4 document
+    held codes a colour, so the colour is a fact about a product and a vendor
+    wrapper sets `latch-color`. The outline follows the fill
+    (`data-stroke-derive`).
+parts:
+  - {ref: std/lc-bore@3, id: tx, at: [5.275, 1], rotate: 180, lift: 16}
+  - {ref: std/lc-bore@3, id: rx, at: [11.525, 1], rotate: 180, lift: 16}
+relief:
+  features:
+    - node: body
+      out: 16.0
+      color: '#9aa0a8'
+      confidence: drawing
+      source: >-
+        CFP4 Baseline Drawing Rev R sheets 1 and 3: the enlarged section at the front of the module, A08 less
+        A11 MIN - see provenance.head
+    - node: bail
+      lift: 16.0
+      bar: 1.1
+      confidence: estimated
+      source: >-
+        A ROUND BAR across the top of the head, resting on the head front at
+        lift 16.0, as generic/xfp-lc@1 builds its bail. The diameter is the
+        drawn height of the bar, scaled - see provenance.latch
+connection-points:
+  mate: {at: [10.75, 4.75], direction: front}
+  optical-tx: {at: [7.625, 4.95], direction: front}
+  optical-rx: {at: [13.875, 4.95], direction: front}
+skins: [default]
