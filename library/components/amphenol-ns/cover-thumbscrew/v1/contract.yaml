@@ -1,0 +1,32 @@
+format: 1
+kind: component
+name: cover-thumbscrew
+version: 1.0.0
+class: screw
+behaviour: mounts
+profile: power
+description: >-
+  Captive thumbscrew holding the removable front cover of an Amphenol Network
+  Solutions 1RU power panel - turned by hand or with a Phillips driver.
+size: {w: 9.7, h: 9.7}
+size-confidence: {w: drawing, h: drawing}
+provenance:
+  size: >-
+    drawing - the outer ring of the screw in the 300CB08 installation guide 149722-2 A9 Fig. 3-1, 19 px at 1.9685
+    px/mm. No depth is stated; how far the head stands off the cover is not
+    dimensioned in any view.
+  drive: >-
+    drawing and text - Fig. 3-1 draws a cross recess and section 2.2.7 says
+    thumb screws or a Phillips screwdriver.
+elements:
+  head: {at: [0.0, 0.0], size: [9.7, 9.7], class: screw}
+relief:
+  features:
+    - node: head
+      cyl: 7.0
+      knurl: true
+      color: '#a9aeb3'
+      confidence: estimated
+      source: >-
+        the side view, Fig. 3-4, draws the screw standing off the front of the cover and does not dimension it; about 7 by eye off that view
+skins: [default]
