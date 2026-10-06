@@ -101,6 +101,12 @@ names the ref that replaces it.
   configurations. Two new parts seat in it, `cisco/nxa-pac-650w@1` and
   `cisco/nxa-fan-30cfm@1`, each covering both airflow part numbers through a
   latch-colour field.
+- The Cisco Catalyst 4948E (`cisco/ws-c4948e`), the front-to-back build: 48
+  10/100/1000 RJ-45 and 4 SFP+ on the front with the console and management
+  jacks and the status lamps; two supplies and the fan tray on the rear. Two
+  new parts seat in it, `cisco/pwr-c49e-300ac-r@1` and `cisco/ws-x4993@1`. Its
+  export names ports as IOS does, `GigabitEthernet1/1` to `1/48`,
+  `TenGigabitEthernet1/49` to `1/52` and `FastEthernet1`.
 - A device can name its own interfaces. A top-level `interfaces:` block, in
   the shape a NOS listing's has, says what the maker's own operating system
   calls each port, and the hardware's own DCIM device type uses those names:
