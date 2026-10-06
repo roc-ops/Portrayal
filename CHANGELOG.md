@@ -327,6 +327,21 @@ names the ref that replaces it.
   warning. Every view is rewritten for such a key (#814).
 
 ### Changed
+- **BREAKING for DCIM data already imported.** Telco Systems is listed as
+  `BATM/Telco Systems`, the name the vendor asks to be listed under. The
+  `manufacturer` of its fourteen devices changes, and with it every one of its
+  NetBox and Nautobot exports: the `manufacturer` field of fourteen device
+  types and thirteen module types, each device type's `slug`
+  (`telco-systems-tm-8104` is now `batm-telco-systems-tm-8104`), and the
+  directory they are written under, `Telco Systems/` to `BATM-Telco Systems/`
+  (a slash in a manufacturer is written as a hyphen in the directory, as it is
+  in a model's file name). A DCIM that imported the old files holds a
+  manufacturer named `Telco Systems`: rename it there before importing again,
+  or the new files create a second manufacturer beside it. The namespace
+  `telco-systems`, every component and device ref, every port name and every
+  drawing is unchanged, and so is the `@portrayal/telco-systems-*` package
+  name of each device. `spec/schemas/vendors.yaml` keeps `Telco Systems` and
+  `BATM Networks` as aliases.
 - **The npm packages: the component skins ship one package per namespace**,
   `@portrayal/components-<namespace>`, and `packages.json` in `@portrayal/index`
   maps each namespace to its package and version under `components`. One
