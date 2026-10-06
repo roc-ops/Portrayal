@@ -35,6 +35,23 @@ and reviewers asked for them by name. For switch lines, enumerate to the SKU
 cards but not chassis). The list is the checklist everything below runs
 against - without it, "done" means "what I happened to find."
 
+**An intake that starts from one URL is still an intake of the line.** Asked to
+stage a single datasheet, find the product page it hangs from and take
+everything that page publishes: the datasheet's siblings are usually one click
+away and the install guide, not the datasheet, is the geometry source.
+
+**Read the SKUs off the vendor's variant selector, not off a datasheet.** A
+datasheet lists the variants its author was thinking of. The Amphenol 300CB08
+datasheet names nine part numbers; the product page sells twelve, and the three
+it omits have a datasheet of their own. Where a page offers two option groups
+(fuse positions x input style), choosing one changes what the other offers, so
+walk them breadth-first and read each SKU from its own variant page.
+
+**Then cross-check against the ordering guide, in both directions.** Part
+numbers in the guide with no page, and pages with no entry in the guide, both go
+in COVERAGE.md by name. Neither list is the truth; the difference between them
+is the finding.
+
 ## What to hunt, and what each source is for
 
 | artefact | what it uniquely provides | typical count per line |
@@ -46,6 +63,8 @@ against - without it, "done" means "what I happened to find."
 | **community elevations** (NetBox devicetype-library) | fills DAM holes; already cropped to the rack face | varies |
 | **document renders** (inside the guides) | when a vendor runs no public DAM (Dell), the manuals' rendered front/rear views per configuration ARE the elevation source - they arrive free at conversion time, so a thin photos/ folder does not mean thin photo coverage | many |
 | **EOL doc archives** | vendors consolidate retired-product docs into zips; the only source for the oldest hardware | 0-1 zip |
+| **the component maker's own datasheet** | when the field-replaceable part is bought in (a breaker, a fuse holder, a connector), the box vendor publishes a part number and nothing else; the outline drawing, terminal dimensions and sometimes a STEP model are on the maker's site | 1-3 per part family |
+| **the vendor's cross-reference sheet** | a one-page "which breaker fits which panel" chart is this kind of line's compatibility matrix, and it is what reveals there are two part families, not one | 0-1 |
 
 ## Finding them: probe, don't browse
 
@@ -66,6 +85,15 @@ Verified patterns (Juniper; add other vendors' here as they are learned):
     doc figures        https://www.juniper.net/documentation/us/en/hardware/<family>/images/g<NNNNNN>.png
     NetBox             https://raw.githubusercontent.com/netbox-community/devicetype-library/master/elevation-images/<Vendor>/<vendor>-<sku>.{front,rear}.png
 
+Amphenol Network Solutions (formerly Telect):
+
+    product page       https://amphenol-ns.com/Product/<slug>            (plain HTML; one URL per variant under it)
+    category listing   https://amphenol-ns.com/Our-Products/Product-Catalogue/rvdsfcatid/<n>/rvdsfpvn/<page>
+    datasheet          https://amphenol-ns.com/Assets/P_DS_<part>.pdf    (a habit, not a rule: DS_P_<part>.pdf also occurs)
+    install guide      https://amphenol-ns.com/Assets/P_IG_<part>.pdf
+    ordering guide     https://amphenol-ns.com/Assets/P_OG_Power.pdf     (one per product area)
+    gallery photos     https://amphenol-ns.com/DesktopModules/Revindex.Dnn.RevindexStorefront/Portals/0/Gallery/<uuid>.jpg   (600 px at most, angled)
+
 Probe craft, learned the hard way:
 
 - **A 200 with an HTML content-type is a miss** dressed as a hit (portals
@@ -80,6 +108,27 @@ Probe craft, learned the hard way:
   the oldest live only inside an archive zip whose existence a redirect to an
   "archives" page revealed. Follow the redirect chain before writing
   "no guide exists."
+- **The page can link an older document than the pattern URL serves.** One
+  product page linked a 2020 install guide while the 2023 revision answered at
+  the vendor's usual `P_IG_<part>.pdf` name, linked from nowhere. After
+  crawling the links, probe the pattern anyway, and compare footers when both
+  answer.
+- **Cut the page before "related products".** A storefront page's gallery
+  markup also carries the photos of whatever is "frequently purchased with"
+  it; a regex over the whole page files a rack under a breaker panel.
+- **De-duplicate photos by bytes, per product.** Variant pages re-serve the
+  same shot under a new UUID, and half of what remains is the thumbnail of the
+  other half. Report the count after de-duplication and say what the largest
+  size is: a folder of 40 files can hold no measurable elevation at all.
+- **A 403 to a command-line client is not absence either.** Some manufacturer
+  sites refuse anything that is not a browser. Fetch through a browser session
+  and say so in SOURCES.md, so the next person does not record a miss.
+- **Note what robots.txt says about the asset path** and keep to the links the
+  product pages publish, fetched once. A pattern probe is a handful of
+  requests, not a crawl.
+- **Save the pages you parsed.** The crawler, the saved HTML and the parsed
+  manifest live beside the intake, and the crawler skips files already on
+  disk. Fixing a parsing mistake is then a re-read, not a second visit.
 - `-front-high` / `-rear-high` DAM shots are straight-on studio elevations
   (1500-2100 px, port numerals legible); `-frontwtop-` is angled. Both are
   worth keeping; only the former is measurable.
@@ -131,6 +180,12 @@ marked found / missing / not-applicable. Three rules make it honest:
   dimensions and view style for photos, and a "gaps to hunt" list. When the
   staging was rebuilt after the worktree loss, SOURCES.md was the only reason
   it took an hour instead of a day.
+- **Name converted output `<vendor>--<stem>`.** Converted figure sets from
+  every vendor share one directory, and stems like `151881` or `Drawing_307491`
+  mean nothing there and will collide.
+- **Third-party documents get their own folder** (`third-party/`) and their
+  own rows in SOURCES.md, so a breaker maker's datasheet is never cited as the
+  panel vendor's.
 - Reference material is **never committed and never published**. Transcribe
   facts into contracts; the PDFs and photos stay in `working/`.
 
@@ -182,7 +237,12 @@ The rules that two OOM kills and one lost evening bought:
      every figure is drawn at page width.
    Record the exact sort command in the intake `SOURCES.md`, so the next
    reclassify repeats it.
-6. Watch the run with a monitor that reports **failures and completion,
+6. **A PDF that is pure vector converts to nothing, and exits 0.** A customer
+   drawing with no text layer and no embedded images yields an empty `doc.md`
+   and no pictures. Check for empty output after the run and render those
+   pages (`pdftoppm -r 200 -png`) into the same output folder; such a drawing
+   is often the only source for its part.
+7. Watch the run with a monitor that reports **failures and completion,
    not progress** - and also reports the runner dying, because silence
    looks identical to "still working."
 
@@ -192,6 +252,22 @@ The rules that two OOM kills and one lost evening bought:
   `doc.md` versus the kept-figure count in `index.json`. "No figure for this
   part" means something very different at 62/62 than at 39/62. Store the
   baseline beside the intake (`figure-baseline.tsv`).
+- **The caption pattern is per publisher.** `Figure 12:` is one vendor's
+  habit; another writes `Fig. 2-7:`. Read one converted guide before trusting
+  a zero. And a list of figures without dot leaders matches the same pattern
+  as the captions it lists, so count the LAST occurrence of each caption, not
+  the first.
+- **When caption attachment is unreliable, baseline by page.** Docling can
+  hang a caption on the page-header logo and leave the drawing beside it
+  uncaptioned, or merge four views on one page into one picture. The honest
+  question then is "does every captioned page carry a kept figure that is not
+  the logo", answered from the PDF's own text per page, and the handoff says
+  to find figures by page.
+- **The banner rule eats banner-shaped products.** The front of a 1RU panel
+  is a wide, short picture that recurs across documents, which is exactly what
+  the rule looks for; it dropped the front views of five panels. Look at every
+  wide reject, not a sample, and re-sort with `--banner-max-h` when product
+  faces are among them. Record the flag in COVERAGE.md for the next re-sort.
 - **Look at a sample of the rejects.** A size filter is shaped like the last
   vendor you looked at; the one that dropped every Cisco datasheet faceplate
   made "vendor published no pictures" out of "filter ate them."
@@ -241,7 +317,15 @@ MPC7E's 545 W onto the MPC6E.
 ## Then
 
 Ingest the `doc.md` corpus into the knowledge base (one bundle per line) so
-modelling-time questions are searchable, and hand off to
+modelling-time questions are searchable. Leave out documents that converted to
+no text; they are drawings, and they belong to the figure sets. A vendor the
+knowledge base has not seen before has to be registered there before its
+documents can be found, and granting access to it is the knowledge base
+owner's step, not the intake's. **The ingest is done when a search returns the
+new documents**, not when the write succeeds: a server that was already running
+keeps its old index and its old access rules until it restarts.
+
+Then hand off to
 **portrayal-model-device** - whose first instruction, "sort the sources," now
 has a sorted staging area, a sources ledger, converted figures with captions,
 a completeness baseline, and a parsed compatibility matrix to sort.
