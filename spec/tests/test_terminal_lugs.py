@@ -600,19 +600,14 @@ def test_the_3d_pass_seats_a_lug_on_a_supply_in_a_bay(kit):
     assert t["faceApplied"] == 1 and t["faceSeated"] == 1
 
 
-def test_a_block_placed_on_the_device_is_seated_face_by_face_but_no_view_is_named(kit):
-    """A KNOWN GAP IN THE KIT, PINNED SO IT CANNOT CLOSE OR WIDEN UNNOTICED.
-    The per-face pass (seatFace) seats a lug on a block placed straight on the
-    device, as the 2D explorer does. But viewsToRewrite (kit/swap.js) names a
-    view only for a key that is a bay, a device cage, a slot under a device
-    cage, or a `/module/` path, and `psu1-input/lug-2` is none of those: the
-    block is a plain placement that publishes slots and is not itself a cage.
-    So seatViews skips the face and the 3D scene is built without the lug.
-    A lug the BUILD seats is drawn in 3D; only the runtime swap is lost.
-    WHEN THE GUARD LEARNS THIS KEY, `named` becomes ["front"] and the two
-    figures below become 1: change them here."""
+def test_the_3d_pass_seats_a_lug_on_a_block_placed_on_the_device(kit):
+    """A pole of a block placed straight on the device, `psu1-input/lug-2`, is
+    claimed by no bay and no cage of any view: the block is a plain placement
+    that publishes slots and is not itself a cage. viewsToRewrite (kit/swap.js)
+    names every view for such a key (#814), so the pass that cuts the 3D scene
+    seats the lug exactly as the per-face pass and the 2D explorer do."""
     t = kit["edgecore/csr180"]["threeD"]
     assert t["faceApplied"] == 1 and t["faceSeated"] == 1
     assert not t["faceRefused"] and not t["faceFailed"]
-    assert t["named"] == [], "viewsToRewrite now names the view: update this pin"
-    assert t["viewsApplied"] is None and t["viewsSeated"] == 0
+    assert t["named"] == ["front"]
+    assert t["viewsApplied"] == 1 and t["viewsSeated"] == 1
