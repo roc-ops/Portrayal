@@ -43,8 +43,8 @@ with the 2D about which bail is blue.
 ## What is not a box
 
 `common/qsfp-transceiver` carried six `body-*.svg` skins - top, bottom, left, right,
-rear - produced by a study page (`library/demo/part.html`, since removed) whose 3D
-loft of the pull tab was verified against photographs (the maintainer's notes, not in this repository).
+rear - produced by a study page, since removed from the repository, whose 3D loft
+of the pull tab was verified against photographs.
 The README used to say the viewer textures a box from them; nothing in `relief.js`
 or `viewer3d.js` ever read them, and D1 (2026-09-21) deleted the five
 `body-*.svg` files rather than wire them in - task 2 of this spec carried that out.
@@ -58,8 +58,8 @@ Decision to make here, with the parts in hand: either
   in the library gets, and the study's fidelity was for a study.
 
 The recommendation is delete unless a consumer asks: the library's 3D is
-"interpolated for a realistic view, not a claim about the hardware" (the owner's own
-ruling, quoted in `cisco/a99-rp-f`), and five textured faces per generic is a
+"interpolated for a realistic view, not a claim about the hardware" (the
+library's stated rule, quoted in `cisco/a99-rp-f`), and five textured faces per generic is a
 maintenance surface nothing has asked for. Either way the README stops claiming what
 the code does not do; A already corrects the sentence.
 

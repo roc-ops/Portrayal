@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Portrayal renderer v0: compile a device manifest + component skins into flat SVG.
+"""Portrayal renderer: compile a device manifest + component skins into flat SVG.
 
 One SVG per view. Deterministic output: no timestamps; tool version stamped in
 <metadata> along with resolved component versions and the digest of the device's
@@ -660,7 +660,7 @@ def _inset_feature(feat, back, group_lift=0.0):
     # what a `lift`, and anything measured from one, has to move by
     lb = back + group_lift
     # A SUNK FACET IS BELOW THE PLATE ON PURPOSE (recessed facets, in
-    # docs/superpowers/specs/2026-09-24-tilted-facets-design.md): it stands in
+    # docs/tilted-facets-design.md): it stands in
     # a pocket, so a negative `out` or `lift` is its geometry, not a feature
     # left behind the panel. Nothing here clamps or drops one.
     sunk = bool(f.get("facet")) and (f.get("lift") or 0) < 0
@@ -689,7 +689,7 @@ def _inset_feature(feat, back, group_lift=0.0):
 def _facet_wedge(feat, contract):
     """A `facet` feature's derived `out`/profile, off the facet node's own
     `elements[node].size`, computed BEFORE `_inset_feature` sees it
-    (docs/superpowers/specs/2026-09-24-tilted-facets-design.md; the schema
+    (docs/tilted-facets-design.md; the schema
     forbids a `facet` feature from also declaring them). A node missing
     from `elements` derives nothing.
 

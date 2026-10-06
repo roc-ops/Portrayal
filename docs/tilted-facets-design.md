@@ -151,23 +151,16 @@ parts:
 
 ## Migration
 
-- **This change modifies no existing contract.**
-- **After it merges,** the Nokia 7360 ISAM FX branch (roc-ops/Portrayal#538, PR #540) converts its
-  painted stopgap bands to facets, with the version bumps the geometry change requires on the cards
-  and on the shelves that seat them:
-  - FANT-H (AA, AC, BB, BC);
-  - FANT-M (ANSI and ETSI);
-  - FNIO-A and FNIO-D.
-- **The Casa UPS-32x4** is converted in a follow-up issue.
-- **Documentation in this change:**
-  - a "Tilted faces" section in `docs/modelling-a-device.md`;
-  - a line in `library/components/README.md`;
-  - a `docs/modelling-pitfalls.md` entry on reading an angle off a 3D figure. An angle read by eye
-    is `estimated`, and what you measure is a projected footprint.
+The change modified no existing contract. The Nokia 7360 ISAM FX cards
+(FANT-H, FANT-M, FNIO-A, FNIO-D) then replaced their painted bands with
+facets, with the version bumps that geometry change requires on the cards and
+on the shelves that seat them (roc-ops/Portrayal#538). The Casa UPS-32x4 is
+left for a follow-up. The modelling guide covers facets in its step 7a, and
+the pitfalls page says how to read an angle off a 3D figure.
 
 ## Recessed facets (addendum)
 
-Status: approved design. It extends the tilted-facet format above.
+Status: agreed; implemented. It extends the tilted-facet format above.
 
 ### Why
 

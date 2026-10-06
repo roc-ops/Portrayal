@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Portrayal linter v0: schema validation + contract<->skin consistency + ID grammar.
+"""Portrayal linter: schema validation + contract<->skin consistency + ID grammar.
 
 Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L1 schema: every YAML validates against its schema
@@ -3828,7 +3828,7 @@ def _lint_sunk_facet(path, node, f, data, elements, tol=0.5):
 def lint_component_facets(path, data, lib_roots):
     """L117: a tilted part stands on a facet that exists and holds it.
 
-    docs/superpowers/specs/2026-09-24-tilted-facets-design.md. The facet's rectangle is
+    docs/tilted-facets-design.md. The facet's rectangle is
     its front-view footprint; a part on it is measured by its PROJECTED box (true size
     foreshortened by cos(deg)), which is what occupies the face. A facet with a
     negative `lift` (recessed facets, the addendum to the same spec) must stand in

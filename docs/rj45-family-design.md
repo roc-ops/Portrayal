@@ -88,8 +88,7 @@ Every dimension in the family carries a confidence, and the note says which are
 settled and which this work has to acquire.
 
 The acquisition happened on 2026-09-05. Four public manufacturer documents are
-staged under `working/intake/standards/rj45/` (gitignored, with a README naming
-each and its sha256): TE customer drawing **1734264 rev A2**, an RJ45 8P8C side
+held locally, each recorded with its sha256: TE customer drawing **1734264 rev A2**, an RJ45 8P8C side
 entry jack whose front view dimensions the plug opening in three tiers; TE
 customer drawing **6368011 rev L**, a stacked 2x1 shielded RJ45 with integral
 LEDs; the **Amphenol Canada modular jack catalogue** (RJHS, RJESE, RJSAE, RJE88
