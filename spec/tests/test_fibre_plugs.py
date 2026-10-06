@@ -198,6 +198,23 @@ def _terminal_screw_interfaces():
     return got
 
 
+def _copper_multipair_interfaces():
+    """Every interface a part presents while stating one of the three copper
+    multi-conductor connectors of #790 as its medium, read off the library."""
+    got = set()
+    for f in (LIB / "components").rglob("v*/contract.yaml"):
+        c = load_yaml(f) or {}
+        if c.get("interface") and (c.get("attrs") or {}).get("media") in ("mrj21", "vhdci", "rj11"):
+            got.add(c["interface"])
+    return got
+
+
+def test_the_copper_multipair_interfaces_were_read():
+    """The census's exclusion is keyed on these; an empty set would exclude
+    nothing and say nothing."""
+    assert _copper_multipair_interfaces() == {"mrj21", "vhdci", "rj11"}
+
+
 def test_the_terminal_screw_interfaces_were_read():
     """The census's exclusion is keyed on these; an empty set would exclude
     nothing and say nothing."""
@@ -236,6 +253,8 @@ def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
     assert terminal_headers
     terminal_screws = _terminal_screw_interfaces()
     assert terminal_screws
+    copper_multipair = _copper_multipair_interfaces()
+    assert copper_multipair
     for f in (LIB / "components").rglob("v*/contract.yaml"):
         c = load_yaml(f) or {}
         if (c.get("attrs") or {}).get("media") == "rj45":
@@ -294,6 +313,15 @@ def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
         # carries one copper wire - and its census is
         # spec/tests/test_terminal_lugs.py.
         if c.get("mates") in terminal_screws:
+            continue
+        # NOR ARE THE MRJ21, VHDCI AND RJ11 CABLE PLUGS (#790).
+        # generic/mrj21-plug@1, vhdci-plug@1 and rj11-plug@1 mate `mrj21`,
+        # `vhdci` and `rj11`, which the registry holds so each jack is a slot.
+        # Left out by what each IS - it mates an interface presented by a part
+        # whose medium is one of those three copper connectors, and no fibre
+        # runs through one - and their census is
+        # spec/tests/test_small_connector_plugs.py.
+        if c.get("mates") in copper_multipair:
             continue
         if c.get("mates") in connectors and c.get("class") != "cap":
             ns = f.parents[2].name

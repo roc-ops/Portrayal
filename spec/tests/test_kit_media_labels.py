@@ -1,4 +1,4 @@
-"""Every coax medium, AC cord end, USB plug, D-sub plug and terminal plug medium has a label in the kit.
+"""Every coax medium, AC cord end, USB plug, D-sub plug, terminal plug and small connector plug medium has a label in the kit.
 
 kit/shell.js labels a port row from its data-media through the `MEDIA` table
 and falls back to upper-casing the key. For coax that fallback reads
@@ -161,3 +161,25 @@ def test_the_ring_lug_medium_has_its_label():
     stated = re.search(r"^attrs:.*\bmedia:\s*([a-z0-9-]+)", text, re.M)
     assert stated and stated.group(1) == "ring-lug"
     assert media_table().get("ring-lug") == "ring lug"
+
+
+# MRJ21, VHDCI and RJ11 cable plugs (#790). A plug states the key its jack
+# states; none of the three was in the table, and each is given the label the
+# upper-casing fallback already read, so the row a plug adds reads as the
+# connector row beside it always has.
+SMALL_PLUGS = {
+    "generic/mrj21-plug": ("std/mrj21", "mrj21", "MRJ21"),
+    "generic/vhdci-plug": ("common/vhdci-receptacle", "vhdci", "VHDCI"),
+    "generic/rj11-plug": ("common/rj11-jack", "rj11", "RJ11"),
+}
+
+
+def test_each_small_connector_plug_medium_is_its_jacks_and_has_its_label():
+    table = media_table()
+    for part, (jack, key, label) in SMALL_PLUGS.items():
+        for ref in (part, jack):
+            text = (LIBRARY / "components" / ref / "v1" / "contract.yaml").read_text()
+            stated = re.search(r"^attrs:.*\bmedia:\s*([a-z0-9-]+)", text, re.M)
+            assert stated and stated.group(1) == key, (ref, stated and stated.group(1))
+        assert table.get(key) == label == key.upper(), (
+            f"kit MEDIA[{key!r}] is {table.get(key)!r}, expected {label!r}")

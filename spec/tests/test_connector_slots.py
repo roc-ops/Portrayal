@@ -55,6 +55,8 @@ def test_the_connector_registry_is_not_vacuous():
     # dc-barrel: the DC barrel jack, one nominal connector by ruling (#789)
     # terminal-stud: a screw or stud terminal a lug lands on, one nominal connector by
     # ruling (#789)
+    # mrj21/vhdci/rj11: the high-density Ethernet, the timing fan-out and the telephone
+    # jacks, made slots for their cable plugs (#790)
     # breaker-1ru-guard: NOT A CONNECTOR. The face of a 1RU plug-in breaker, where its
     # touch guard screws on. It is here because a cover that ships on a part and comes
     # off is the slot mechanism with nothing to plug in: one host, one occupant, a
@@ -66,6 +68,7 @@ def test_the_connector_registry_is_not_vacuous():
                          "db9", "hd15", "da15", "db25",
                          "terminal-508-2", "terminal-508-5", "terminal-508-6",
                          "dc-barrel", "terminal-stud",
+                         "mrj21", "vhdci", "rj11",
                          "breaker-1ru-guard"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
@@ -83,6 +86,7 @@ def test_every_connector_presenting_part_is_a_connector_slot(comps):
                                    "db9", "hd15", "da15", "db25",
                                    "terminal-508-2", "terminal-508-5", "terminal-508-6",
                                    "dc-barrel", "terminal-stud",
+                                   "mrj21", "vhdci", "rj11",
                                    # a cover mount, not a connector - see the registry test above
                                    "breaker-1ru-guard"}
                for c in entries)
