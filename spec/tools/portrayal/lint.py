@@ -8599,9 +8599,10 @@ def _rj45_census(placements, groups, lib_roots, name=None, elsewhere=(), view=No
     # no bare-with-lamps member, so the lamps stay separate placements.
     #
     # THE LAMP MAY BE ON ANOTHER FACE. A desktop ONT puts its jack on the back
-    # edge and the jack's one lamp on the top (nokia/xs-010x-r: DATA, `for: lan`),
-    # so the device path passes the other views' placements as `elsewhere` and a
-    # lamp there that names the jack as `<view>/<id>` counts as one beside it.
+    # edge and the jack's one lamp on the top (nokia/xs-010x-r: DATA,
+    # `for: rear/lan`), so the device path passes the other views' placements as
+    # `elsewhere` and a lamp there that names the jack as `<view>/<id>` counts as
+    # one beside it.
     lamped_for = set()
     here = len(placements)
     for n, q in enumerate([*placements, *elsewhere]):

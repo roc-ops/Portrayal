@@ -305,6 +305,20 @@ def pluggable_cage(ref):
     return r in PART_IFACE or any(f in r for f in ("sfp", "xfp", "cfp", "cxp"))
 
 
+# THE FIXED PARTS A DEVICE'S PON PORT IS DRAWN WITH. An ONT's uplink is a
+# built-in SC receptacle, which no cage family names, so `pon_port` names them.
+# A device can state `pon` on a whole group (nokia/xs-010x-r does), and a lamp
+# or a label placed in that group inherits it; the attr says what the port
+# runs, the part says whether there is a port at all (#772).
+PON_PORT_PARTS = {"std/sc-bore", "common/sc-apc"}
+
+
+def pon_port(ref):
+    """Is this ref a part a PON flavour can be the type of - a pluggable cage,
+    as on a card, or one of the fixed receptacles above?"""
+    return pluggable_cage(ref) or (ref or "").split("@")[0] in PON_PORT_PARTS
+
+
 def proprietary_link(part_attrs):
     """The label of the proprietary link a placement declares, or None."""
     v = (part_attrs or {}).get(PROPRIETARY_LINK)
@@ -1259,8 +1273,9 @@ def device_port_type(p, a, group_role, names=None):
     # An ONT's uplink is a built-in SC/APC ferrule, not a cage, so iface_type
     # has no family to read and the port never typed: the box exported with
     # its LAN jack and without the port it exists for. The flavour is the
-    # device's own word, and only the ones both targets define count.
-    if not link and a.get("pon") in PON_TYPES:
+    # device's own word, and only the ones both targets define count - on a
+    # part that is a port, and not on whatever else sits in the group.
+    if not link and a.get("pon") in PON_TYPES and pon_port(p["ref"]):
         return a["pon"], None, None
     t = "other" if link else iface_type(p, a, group_role)
     if t is None:                      # unknown combination: skip, do not guess

@@ -466,6 +466,10 @@ names the ref that replaces it.
   outside its rear port's positions, and a front port collapsed to one
   position that is not the whole of its rear connector, fibre for fibre. No
   export in the library changes (roc-ops/Portrayal#771).
+- **A device's `pon` flavour types only a port**: an SC receptacle or a
+  pluggable cage. A lamp or label in a group that states `pon` no longer
+  exports as a second PON interface. No export in the library changes
+  (roc-ops/Portrayal#772).
 - **BREAKING for DCIM data already imported.** Telco Systems is listed as
   `BATM/Telco Systems`, the name the vendor asks to be listed under. The
   `manufacturer` of its fourteen devices changes, and with it every one of its
