@@ -1,6 +1,7 @@
 """Generic optics for the CFP, CFP2, CFP4 and CXP cages (docs/pluggables-cfp-cxp-design.md).
 
     generic/cfp-lc@1, generic/cfp-mpo@1      a CFP with two LC bores, or one MPO-24
+    generic/cfp-sc@1                         a CFP with two SC openings
     generic/cfp2-lc@1, generic/cfp2-mpo@1    a CFP2 with two LC bores, or one MPO-24
     generic/cfp4-lc@1, generic/cfp4-mpo@1    a CFP4 with two LC bores, or one MPO-12
     generic/cxp-mpo@1                        an optical CXP with one MPO-24
@@ -41,6 +42,7 @@ ROOT = Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
 
 CFP_LC, CFP_MPO = "generic/cfp-lc@1", "generic/cfp-mpo@1"
+CFP_SC = "generic/cfp-sc@1"
 CFP2_LC, CFP2_MPO = "generic/cfp2-lc@1", "generic/cfp2-mpo@1"
 CFP4_LC, CFP4_MPO = "generic/cfp4-lc@1", "generic/cfp4-mpo@1"
 CXP_MPO = "generic/cxp-mpo@1"
@@ -48,9 +50,12 @@ SCREW = "common/cfp-thumbscrew@1"
 REC12 = "std/mpo-module-receptacle@1"
 REC24 = "std/mpo24-module-receptacle@1"
 BORE = "std/lc-bore@3"
+SC_BORE = "std/sc-bore@1"
 MPO12, MPO24, MPO_CAP = "generic/mpo12-plug@1", "generic/mpo24-plug@1", "common/mpo-dust-cap@2"
 MPO_OFFER = {MPO12, MPO24, MPO_CAP}
 LC_OFFER = {"generic/lc-plug@2", "common/lc-dust-cap@1"}
+SCP, SCC = "generic/sc-plug@1", "common/sc-dust-cap@1"
+SC_OFFER = {SCP, SCC}
 GREY = "#6f6f6f"
 LC2 = {"tx": (BORE, 180), "rx": (BORE, 180)}
 
@@ -59,6 +64,7 @@ LC2 = {"tx": (BORE, 180), "rx": (BORE, 180)}
 OPTICS = {
     CFP_LC: ("cfp", "cfp-module", LC2, "lc", LC_OFFER),
     CFP_MPO: ("cfp", "cfp-module", {"mpo": (REC24, 0)}, "mpo", MPO_OFFER),
+    CFP_SC: ("cfp", "cfp-module", {"tx": (SC_BORE, 90), "rx": (SC_BORE, 90)}, "sc", SC_OFFER),
     CFP2_LC: ("cfp2", "cfp2-module", LC2, "lc", LC_OFFER),
     CFP2_MPO: ("cfp2", "cfp2-module", {"mpo": (REC24, 0)}, "mpo", MPO_OFFER),
     CFP4_LC: ("cfp4", "cfp4-module", LC2, "lc", LC_OFFER),
@@ -70,10 +76,11 @@ LC = (CFP_LC, CFP2_LC, CFP4_LC)
 MPO = (CFP_MPO, CFP2_MPO, CFP4_MPO, CXP_MPO)
 BAILED = (CFP2_LC, CFP2_MPO, CFP4_LC, CFP4_MPO)
 PAIRS = ((CFP_LC, CFP_MPO), (CFP2_LC, CFP2_MPO), (CFP4_LC, CFP4_MPO))
+CFP = (CFP_LC, CFP_MPO, CFP_SC)
 
 # optic -> (above the body, below it, length outside the cage, width)
 HEADS = {
-    CFP_LC: (0.2, 0.2, 14.5, 82.0), CFP_MPO: (0.2, 0.2, 14.5, 82.0),
+    CFP_LC: (0.2, 0.2, 14.5, 82.0), CFP_MPO: (0.2, 0.2, 14.5, 82.0), CFP_SC: (0.2, 0.2, 14.5, 82.0),
     CFP2_LC: (2.7, 1.6, 16.0, 42.5), CFP2_MPO: (2.7, 1.6, 16.0, 42.5),
     CFP4_LC: (3.1, 1.5, 16.0, 21.9), CFP4_MPO: (3.1, 1.5, 16.0, 21.9),
     CXP_MPO: (2.58, 1.61, 33.55, 23.9),
@@ -90,7 +97,7 @@ ENVELOPES = {
                    {"w-max": 24.05, "above-max": 4.79, "below-max": 1.61, "length-max": 33.55}, 62.0),
 }
 # where the optical axis is, below the module top
-AXIS = {CFP_LC: 6.8, CFP_MPO: 6.8, CFP2_LC: 6.79, CFP2_MPO: 6.79, CFP4_LC: 4.95, CFP4_MPO: 4.95,
+AXIS = {CFP_LC: 6.8, CFP_MPO: 6.8, CFP_SC: 6.8, CFP2_LC: 6.79, CFP2_MPO: 6.79, CFP4_LC: 4.95, CFP4_MPO: 4.95,
         CXP_MPO: 4.6}
 
 
@@ -201,8 +208,8 @@ def test_a_generic_states_no_rate_reach_wavelength_or_wattage(ref):
     d = doc(ref)
     assert not set(d["attrs"]) & set(lint.GENERIC_FORBIDDEN_ATTRS)
     assert d["attrs"]["form-factor"] == d["mates"]
-    assert d["attrs"]["face"] == {"lc": "lc-duplex", REC24: "mpo24", REC12: "mpo12"}[
-        "lc" if ref in LC else OPTICS[ref][2]["mpo"][0]]
+    assert d["attrs"]["face"] == {BORE: "lc-duplex", SC_BORE: "sc-duplex", REC24: "mpo24", REC12: "mpo12"}[
+        sorted(OPTICS[ref][2].values())[0][0]]
     with lint.collecting() as got:
         lint.lint_component_generic(path(ref) / "contract.yaml", d)
     assert not got.errors, got.errors
@@ -248,7 +255,7 @@ def test_the_head_node_is_the_skins_first_child_and_draws_the_head(ref):
     assert feats["body"]["out"] == d["head"]["size"]["d"] and feats["body"]["confidence"] == "drawing"
 
 
-@pytest.mark.parametrize("a,b", PAIRS)
+@pytest.mark.parametrize("a,b", PAIRS + ((CFP_LC, CFP_SC),))
 def test_the_two_faces_of_a_form_differ_only_in_the_face(a, b):
     da, db = doc(a), doc(b)
     same = ("size", "size-confidence", "head", "fields", "relief", "mates", "conforms", "class",
@@ -306,6 +313,49 @@ def test_the_two_lc_bores_are_latch_up_transmit_left_at_the_registry_pitch(ref):
     x, y, w, h = box(node(ref, "opening"))
     assert x < part(ref, "tx")["at"][0] and part(ref, "rx")["at"][0] + core["size"]["w"] < x + w
     assert head["at"][1] <= y and y + h <= head["at"][1] + head["size"]["h"]
+
+
+def test_the_two_sc_openings_lie_across_key_up_transmit_left_at_the_sc_duplex_pitch():
+    """std/sc-bore@1 has its key slot on the left unrotated; at `rotate: 90`
+    the 9.0 side lies across the module and the slot is in the top wall, as
+    the MSA module drawing draws the face. The two are 12.7 apart, centred,
+    on the line through the thumbscrew axes, with faceplate between them."""
+    d = doc(CFP_SC)
+    core = doc(SC_BORE)
+    cps = d["connection-points"]
+    got, spans = {}, {}
+    for pid in ("tx", "rx"):
+        p = part(CFP_SC, pid)
+        assert (p["ref"], p["rotate"]) == (SC_BORE, 90)
+        ferrule = seat_point(p["at"], core["size"], 90, core["connection-points"]["mate"]["at"])
+        assert ferrule == pytest.approx(cps[f"optical-{pid}"]["at"])
+        key = seat_point(p["at"], core["size"], 90, [0.0, core["size"]["h"] / 2])
+        assert key[0] == pytest.approx(ferrule[0]) and key[1] < ferrule[1]       # the slot is above
+        # the 7.5 x 9.0 opening itself, turned: 9.0 across, 7.5 up, centred on the ferrule
+        a = seat_point(p["at"], core["size"], 90, [0.89, 0.0])
+        b = seat_point(p["at"], core["size"], 90, [core["size"]["w"], core["size"]["h"]])
+        xs, ys = sorted((a[0], b[0])), sorted((a[1], b[1]))
+        assert xs[1] - xs[0] == pytest.approx(9.0) and ys[1] - ys[0] == pytest.approx(7.5)
+        assert (xs[0] + xs[1]) / 2 == pytest.approx(ferrule[0])
+        assert (ys[0] + ys[1]) / 2 == pytest.approx(ferrule[1])
+        head = d["head"]
+        assert head["at"][1] < key[1] and ys[1] < head["at"][1] + head["size"]["h"]
+        got[pid], spans[pid] = ferrule, xs
+    assert got["tx"][0] < got["rx"][0] and got["tx"][1] == got["rx"][1] == AXIS[CFP_SC]
+    assert got["rx"][0] - got["tx"][0] == pytest.approx(12.7)
+    assert (got["tx"][0] + got["rx"][0]) / 2 == pytest.approx(d["size"]["w"] / 2)
+    assert spans["rx"][0] - spans["tx"][1] == pytest.approx(3.7)                 # faceplate between
+    # clear of both knobs
+    knob = doc(SCREW)["size"]["w"]
+    left = part(CFP_SC, "screw-l")["at"][0] + knob
+    right = part(CFP_SC, "screw-r")["at"][0]
+    assert left < spans["tx"][0] and spans["rx"][1] < right
+    letters = [t.text for t in skin(CFP_SC).iter() if t.tag.endswith("text") and t.text]
+    assert letters == ["T", "R"]
+    assert not [e for e in skin(CFP_SC).iter() if e.get("id") == "opening"]     # no painted housing
+    prov = d["provenance"]
+    assert "KEY SLOT UP" in prov["key"] and "TRANSMIT ON THE LEFT" in prov["sides"]
+    assert "ESTIMATED" in prov["bores"] and "ESTIMATED" in prov["optical-axis"]
 
 
 @pytest.mark.parametrize("ref", MPO)
@@ -402,7 +452,7 @@ def test_the_cfp_thumbscrew_is_a_knurled_knob_painted_by_a_field():
     assert d["fields"]["latch-color"]["default"] == GREY and d["skins"] == ["default"]
 
 
-@pytest.mark.parametrize("ref", (CFP_LC, CFP_MPO))
+@pytest.mark.parametrize("ref", CFP)
 def test_a_cfp_has_two_thumbscrews_72_apart_on_the_faceplate_and_no_tab(ref):
     d = doc(ref)
     knob = doc(SCREW)["size"]
@@ -524,7 +574,7 @@ def test_each_receptacle_is_a_slot_offering_its_plugs_and_cap(comps, ref):
         assert set(by_id) == {"tx", "rx"}
         for pid, slot in by_id.items():
             assert slot["mate"] == pytest.approx(d["connection-points"][f"optical-{pid}"]["at"])
-            assert slot["rotate"] == 180
+            assert slot["rotate"] == want[pid][1]
     assert comps[ref]["head"]["size"]["d"] == d["head"]["size"]["d"]
 
 
@@ -543,7 +593,7 @@ def test_an_mpo_slot_offers_both_centre_key_plugs_and_no_sixteen_fibre_one(comps
 
 # --- what the cages offer, across the whole library ---------------------------
 
-OFFERS = {"cfp": [CFP_LC, CFP_MPO], "cfp2": [CFP2_LC, CFP2_MPO], "cfp4": [CFP4_LC, CFP4_MPO],
+OFFERS = {"cfp": [CFP_LC, CFP_MPO, CFP_SC], "cfp2": [CFP2_LC, CFP2_MPO], "cfp4": [CFP4_LC, CFP4_MPO],
           "cxp": [CXP_MPO]}
 NEW = set(OPTICS)
 # how many cages of each family the library's cards carry today, as a floor
@@ -600,10 +650,12 @@ def test_no_other_family_offers_them_and_each_pool_is_its_family(device_cages, c
 MX480, MX960, SR1E, NFXS = "juniper/mx480", "juniper/mx960", "nokia/sr-1e", "nokia/nfxs-e-bb"
 LCP, LCC = "generic/lc-plug@2", "common/lc-dust-cap@1"
 BAYS = {
-    MX480: {"dpc5": "juniper/mpc4e-3d-2cge-8xge@1", "dpc3": "juniper/mpc5e-100g10g@1",
+    MX480: {"dpc5": "juniper/mpc4e-3d-2cge-8xge@1", "dpc2": "juniper/mpc4e-3d-2cge-8xge@1",
+            "dpc3": "juniper/mpc5e-100g10g@1",
             "dpc4": "juniper/mpc3e-3d@1", "dpc4/mic0": "juniper/mic3-3d-1x100ge-cxp@1"},
     # the MX960 cards stand upright, so their cages are at rotate 90
-    MX960: {"fpc2": "juniper/mpc4e-3d-2cge-8xge-v960@1", "fpc3": "juniper/mpc5e-100g10g-v960@1",
+    MX960: {"fpc2": "juniper/mpc4e-3d-2cge-8xge-v960@1", "fpc5": "juniper/mpc4e-3d-2cge-8xge-v960@1",
+            "fpc3": "juniper/mpc5e-100g10g-v960@1",
             "fpc4": "juniper/mpc3e-3d-v960@1", "fpc4/mic0": "juniper/mic3-3d-1x100ge-cxp-v@1"},
     SR1E: {"mda-1-1": "nokia/me2-100gb-cfp4@1"},
     # the one turned CFP4 cage in the library, on the tilted face of an NT card
@@ -614,6 +666,7 @@ CONFIG = {MX480: "base", MX960: "base", SR1E: "base", NFXS: "fant-h-simplex"}
 SEATS = [
     (MX480, "dpc5/port-1-0", "dpc5/module/port-1-0", CFP_LC, {"/tx": LCP, "/rx": LCC}, 0),
     (MX480, "dpc5/port-3-0", "dpc5/module/port-3-0", CFP_MPO, {"": MPO24}, 0),
+    (MX480, "dpc2/port-1-0", "dpc2/module/port-1-0", CFP_SC, {"/tx": SCP, "/rx": SCC}, 0),
     (MX480, "dpc3/port-1-0", "dpc3/module/port-1-0", CFP2_LC, {"/tx": LCP}, 0),
     (MX480, "dpc3/port-2-0", "dpc3/module/port-2-0", CFP2_MPO, {"": MPO_CAP}, 0),
     (MX480, "dpc4/mic0/port-0-0", "dpc4/module/mic0/module/port-0-0", CXP_MPO, {"": MPO24}, 0),
@@ -621,6 +674,7 @@ SEATS = [
     (SR1E, "mda-1-1/port-2", "mda-1-1/module/port-2", CFP4_MPO, {"": MPO12}, 0),
     (MX960, "fpc2/port-1-0", "fpc2/module/port-1-0", CFP_MPO, {"": MPO_CAP}, 90),
     (MX960, "fpc2/port-3-0", "fpc2/module/port-3-0", CFP_LC, {"/rx": LCP}, 90),
+    (MX960, "fpc5/port-1-0", "fpc5/module/port-1-0", CFP_SC, {"/rx": SCP}, 90),
     (MX960, "fpc3/port-1-0", "fpc3/module/port-1-0", CFP2_MPO, {"": MPO24}, 90),
     (MX960, "fpc3/port-2-0", "fpc3/module/port-2-0", CFP2_LC, {"/tx": LCC}, 90),
     (MX960, "fpc4/mic0/port-0-0", "fpc4/module/mic0/module/port-0-0", CXP_MPO, {"": MPO_CAP}, 90),
@@ -732,7 +786,8 @@ def test_a_quarter_turned_seat_keeps_transmit_at_the_same_end_as_the_latch_side(
     turn from the cage: the module top is toward one side of the slot and
     transmit toward the top of the chassis or the bottom, together."""
     root, parents = seated[MX960]
-    for cpath, ref in (("fpc2/module/port-3-0", CFP_LC), ("fpc3/module/port-2-0", CFP2_LC)):
+    for cpath, ref, pitch in (("fpc2/module/port-3-0", CFP_LC, 6.25), ("fpc3/module/port-2-0", CFP2_LC, 6.25),
+                              ("fpc5/module/port-1-0", CFP_SC, 12.7)):
         d = doc(ref)
         optic = by_path(root, f"{cpath}-occupant")
         w, h = d["size"]["w"], d["size"]["h"]
@@ -740,11 +795,11 @@ def test_a_quarter_turned_seat_keeps_transmit_at_the_same_end_as_the_latch_side(
         tx = device_point(parents, optic, d["connection-points"]["optical-tx"]["at"])
         rx = device_point(parents, optic, d["connection-points"]["optical-rx"]["at"])
         assert abs(top[1] - bottom[1]) < 1e-6 and abs(tx[0] - rx[0]) < 1e-6      # turned a quarter
-        assert abs(abs(tx[1] - rx[1]) - 6.25) < 1e-6
+        assert abs(abs(tx[1] - rx[1]) - pitch) < 1e-6
         # the same hand as upright: top, then transmit, turn the same way round
         cross = (top[0] - bottom[0]) * (rx[1] - tx[1]) - (top[1] - bottom[1]) * (rx[0] - tx[0])
-        up = by_path(seated[MX480][0], {CFP_LC: "dpc5/module/port-1-0", CFP2_LC: "dpc3/module/port-1-0"}[ref]
-                     + "-occupant")
+        up = by_path(seated[MX480][0], {CFP_LC: "dpc5/module/port-1-0", CFP2_LC: "dpc3/module/port-1-0",
+                                        CFP_SC: "dpc2/module/port-1-0"}[ref] + "-occupant")
         p = seated[MX480][1]
         t0, b0 = device_point(p, up, [w / 2, 0]), device_point(p, up, [w / 2, h])
         tx0 = device_point(p, up, d["connection-points"]["optical-tx"]["at"])
@@ -844,6 +899,7 @@ def test_a_set_latch_colour_repaints_the_knobs_the_bail_and_the_tab():
     lib = render_mod.Library([str(LIB)])
     blue = "#2f5fa8"
     cases = [(CFP_LC, ("--screw-l--knob", "--screw-r--knob")), (CFP_MPO, ("--screw-l--knob",)),
+             (CFP_SC, ("--screw-l--knob", "--screw-r--knob")),
              (CFP2_LC, ("--bail",)), (CFP2_MPO, ("--bail",)), (CFP4_LC, ("--bail",)),
              (CFP4_MPO, ("--bail",)), (CXP_MPO, ("--arm-l", "--arm-r", "--grip"))]
     assert {c[0] for c in cases} == set(OPTICS)

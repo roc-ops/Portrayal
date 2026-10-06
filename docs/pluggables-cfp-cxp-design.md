@@ -1,6 +1,6 @@
 # Pluggables: generic optics for the CFP, CFP2, CFP4 and CXP cages
 
-Status: built 2026-10-05. Seven generic optics, one thumbscrew, one module
+Status: built 2026-10-05. Eight generic optics, one thumbscrew, one module
 receptacle and four module envelopes, each on a pattern the library already
 had. Part of [pluggables-design.md](pluggables-design.md); uses the head of
 [pluggables-heads-design.md](pluggables-heads-design.md), the connector slot
@@ -19,19 +19,20 @@ of them are on cards.
 | part | what it is | its slots offer |
 |---|---|---|
 | `generic/cfp-lc@1` | a CFP with two LC bores (`std/lc-bore@3`), latch up, transmit left, and a thumbscrew at each end of the faceplate | `generic/lc-plug@2`, `common/lc-dust-cap@1`, per bore |
+| `generic/cfp-sc@1` | a CFP with two SC openings (`std/sc-bore@1`) side by side, key slot up, transmit left, and the same two thumbscrews | `generic/sc-plug@1`, `common/sc-dust-cap@1`, per opening |
 | `generic/cfp-mpo@1` | a CFP with one two-row MPO receptacle (`std/mpo24-module-receptacle@1`), key up, pinned | `generic/mpo24-plug@1`, `generic/mpo12-plug@1`, `common/mpo-dust-cap@2` |
 | `generic/cfp2-lc@1` | a CFP2 with two LC bores and a bail across the top of its head | as `cfp-lc` |
 | `generic/cfp2-mpo@1` | a CFP2 with one two-row MPO receptacle and the same bail | as `cfp-mpo` |
 | `generic/cfp4-lc@1` | a CFP4 with two LC bores and a bail | as `cfp-lc` |
 | `generic/cfp4-mpo@1` | a CFP4 with one MPO receptacle of twelve positions (`std/mpo-module-receptacle@1`) | as `cfp-mpo` |
 | `generic/cxp-mpo@1` | an optical CXP with one two-row MPO receptacle and a pull tab loop | as `cfp-mpo` |
-| `common/cfp-thumbscrew@1` | the knurled knob the two CFP parts compose twice | - |
+| `common/cfp-thumbscrew@1` | the knurled knob the three CFP parts compose twice | - |
 | `std/mpo24-module-receptacle@1` | the MPO mouth on a module with a two-row ferrule: twenty-four fibre positions | what `std/mpo@2` offers |
 | `cfp-module`, `cfp2-module`, `cfp4-module`, `cxp-module` | the module envelopes in `spec/schemas/standards.yaml`, each with a `head:` | - |
 
 Each generic is named by form and face and states no rate, reach, wavelength
 or wattage (L99). A plug seated in an MPO optic is keyed `<cage>-occupant`;
-in a duplex LC optic, `<cage>-occupant/tx` and `<cage>-occupant/rx`.
+in a duplex LC or SC optic, `<cage>-occupant/tx` and `<cage>-occupant/rx`.
 
 ## Where the head envelope lives
 
@@ -61,8 +62,9 @@ read from a public web archive of it.
 
 | part | sources |
 |---|---|
-| `cfp-module`, both CFP optics, `cfp-thumbscrew` | CFP MSA Hardware Specification Rev 1.4 (7 June 2010): sections 5.3 and 5.6, Tables 5-2 and 5-3, Figures 5-16 and 5-17; the MSA Module Dimensions drawing it defers to (CFP MODULE, 04/07/10), keys A1 to LL1; CFP MSA Mechanical Layout, 17 Mar 10, revision 14, Figures 19 and 25 |
+| `cfp-module`, the three CFP optics, `cfp-thumbscrew` | CFP MSA Hardware Specification Rev 1.4 (7 June 2010): sections 5.3 and 5.6, Tables 5-2 and 5-3, Figures 5-16 and 5-17; the MSA Module Dimensions drawing it defers to (CFP MODULE, 04/07/10), keys A1 to LL1; CFP MSA Mechanical Layout, 17 Mar 10, revision 14, Figures 19 and 25 |
 | `cfp-lc` | Gigalight GCF-S101-LR4C datasheet (2017/2/8) p11; Modulelink CFP-100G-LR4 datasheet pp16-19, Figure 10 and Table 14; Cisco 100GBASE CFP Modules Data Sheet C78-633027 (the SC duplex form) |
+| `cfp-sc` | the end view of the MSA Module Dimensions drawing (04/07/10); CFP MSA Hardware Specification Rev 1.4 Figure 5-16 and Table 5-3; Cisco 100GBASE CFP Modules Data Sheet C78-633027 pp3-6 (photographs and the connector statement). No dimensioned vendor outline of an SC duplex CFP is held |
 | `cfp-mpo` | Gigalight GCF-M101-SR10C datasheet p8 Figure 4 and p9 Figure 5 (the FS CFP-SR10-100G datasheet p12 embeds the same drawing) |
 | `cfp2-module`, both CFP2 optics | CFP MSA CFP2 Hardware Specification Rev 1.0 (31 July 2013): sections 5.3 and 5.6, Figure 5-10; CFP2 Baseline Drawing Rev 1L (2013-08-06), sheets 1 to 3, 13 and 14 |
 | `cfp2-lc` | Finisar FTLC1122RDNL Product Specification Rev C1 (20-Oct-2017) p8; Gigalight GF2-S101-LR4C datasheet Rev V3 p12 Figure 9 |
@@ -78,6 +80,7 @@ read from a public web archive of it.
 | part | from a printed or toleranced figure | scaled or estimated |
 |---|---|---|
 | CFP optics | body; faceplate 82.00 x 14.00 x 14.50 MAX; thumbscrew axes 72.00 apart at the body mid-height; knob 9.50 long; 6.25 pitch; latch up; transmit left; key up | the optical axis height, 6.8 (scaled off one vendor end view, and where the MSA drawing puts its SC openings); the MPO insert (borrowed) |
+| `cfp-sc` | body, faceplate and thumbscrews as the other CFP optics; transmit left (lettered on Figure 5-16 and on the vendor photograph) | everything about the openings: 9.0 across by 7.5 up and 12.7 apart (scaled off the MSA drawing: 9.07, 7.55, 12.7), key slot up (the same drawing and one photograph), on the thumbscrew centreline (scaled) |
 | `cfp-thumbscrew` | length 9.50; knurled | diameter 9.2 (scaled off the MSA drawing, two views, about +/-0.2) |
 | CFP2 optics | body; head 42.5 MAX wide and 16.0 long (the MSA limits); 2.70 above and 1.60 below (one vendor, printed); LC axis 6.79 below the top (one vendor, a reference dimension); 6.25 pitch; latch up; transmit left; key up; pinned; the 14.80 x 9.80 MPO block | the MPO receptacle height (estimated, the LC axis); the bail bar, 1.9 tall (scaled); the bail arms and pivot are not drawn |
 | CFP4 optics | body; head 21.90 wide, 3.1 above and 1.5 below (one vendor, printed), 16.0 long (the MSA limit); LC axis 4.95 below the top (one vendor, a reference dimension); 6.25 pitch; latch up; transmit left; key up | the MPO receptacle height (estimated, the LC axis); the MPO insert (borrowed); the bail bar, 1.1 tall (scaled) |
@@ -89,8 +92,8 @@ read from a public web archive of it.
 - **Which connector a duplex CFP carries.** The CFP MSA lists SC, LC and MPO,
   its module drawing draws an SC duplex (two 7.5 x 9.0 openings 12.7 apart),
   and one vendor's long-reach CFP is SC. Two other vendors draw a duplex LC.
-  Both are real products. `generic/cfp-lc@1` is the LC one; an SC duplex CFP
-  is a different face and is not built.
+  Both are real products and both are built: `generic/cfp-sc@1` and
+  `generic/cfp-lc@1`.
 - **CFP thumbscrew.** The MSA prints the knob 9.50 +/-0.50 long and no
   diameter. One vendor prints 10.00 across and 15.50 long, another 14.00
   long. The MSA length is drawn, with the diameter its own drawing scales.
@@ -135,6 +138,9 @@ read from a public web archive of it.
   3.6 to 4.10. The bores and the MPO mouth are on the head front.
 - **The MPO key on a CXP is an estimate.** The one vendor end view cited is
   too coarse to read it.
+- **The SC face of a CFP has no dimensioned source.** Its openings are
+  scaled off the MSA module drawing, which is vector and dimensions neither,
+  and its key direction rests on that drawing and one photograph.
 - **One vendor each for the MPO faces of CFP and CFP4.** The second CFP sheet
   held embeds the first one's drawing, and the second CFP4 sheet embeds an LC
   outline.
@@ -146,18 +152,21 @@ read from a public web archive of it.
 - **The one turned CFP4 cage in the library ends up upright.** It is turned
   90 on a card that sits in a bay turned 270.
 - **Out of this work:** CFP8; CFP2-DCO and CFP2-ACO as parts of their own (a
-  coherent CFP2 with a duplex LC is `generic/cfp2-lc@1`); the SC duplex CFP;
-  CXP cable ends; SFP-DD optics.
+  coherent CFP2 with a duplex LC is `generic/cfp2-lc@1`); CXP cable ends;
+  SFP-DD optics.
 
 ## Decisions
 
 - 2026-10-05: the head of a CFP is its faceplate, 14.5 long, and the cage
   face stands for the front of the host bracket. The thumbscrew knobs stand
   on it and are not part of it.
-- 2026-10-05: the CFP thumbscrew is a `common/` part, because two optics
-  compose it. The CFP2 and CFP4 bails and the CXP tab are nodes of each
+- 2026-10-05: the CFP thumbscrew is a `common/` part, because the CFP optics
+  all compose it. The CFP2 and CFP4 bails and the CXP tab are nodes of each
   optic's own skin: nothing else composes them, and a relief feature that
   starts at the head front is outside what L121 holds to the head.
+- 2026-10-05: the SC duplex CFP is one part, key slot up. Unlike the SC SFP,
+  where two vendors draw the key on opposite sides and both parts exist, no
+  source read draws a CFP keyed the other way.
 - 2026-10-05: every knob, bail and tab colour defaults to the neutral grey.
   No document read for these four families codes a colour.
 - 2026-10-05: a two-row module receptacle is its own part,

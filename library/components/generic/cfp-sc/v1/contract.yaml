@@ -1,0 +1,134 @@
+format: 1
+kind: component
+name: cfp-sc
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: cfp
+conforms: cfp-module
+profile: networking
+description: >-
+  A generic CFP with an SC duplex face - the shape of the CFP optic with two
+  SC openings, standing for all of them. A long flat body behind a faceplate
+  that is wider than it, two SC openings side by side at the middle of the
+  faceplate with the key slot up, and a knurled thumbscrew at each end. Which
+  module it is - rate, reach, wavelength, watts - is a fact about a vendor
+  product and lives on the wrapper that composes this
+  (docs/pluggables-design.md, decision 5), never here. generic/cfp-lc@1 and
+  generic/cfp-mpo@1 are the same module with the other faces.
+size: {w: 77.2, h: 13.6, d: 130.25}
+size-confidence: {w: registry, h: registry, d: registry}
+head:
+  at: [-2.4, -0.2]
+  size: {w: 82.0, h: 14.0, d: 14.5}
+  size-confidence: {w: drawing, h: drawing, d: drawing}
+  node: body
+attrs: {power-absent: not-applicable, form-factor: cfp, face: sc-duplex, media: fiber}
+fields:
+  latch-color:
+    label: Knob colour
+    type: text
+    default: '#6f6f6f'
+  label:
+    label: Module label
+    type: text
+    default: ''
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    registry - cfp-module, the CFP MSA Module Dimensions drawing (CFP MODULE,
+    04/07/10): the body behind the faceplate is X1 77.20 +/-0.20 wide and BB1
+    13.60 +/-0.20 high. The 130.25 depth is the length behind the faceplate,
+    derived there from F1 144.75 +/-0.20 overall less E1 14.50 MAX. NO DIMENSIONED VENDOR OUTLINE OF AN SC DUPLEX CFP IS HELD. The Cisco 100GBASE CFP Modules Data Sheet C78-633027 gives its SC modules as 144.8 x 82 x 13.6, which is the overall length, the faceplate width and the body height.
+  power: >-
+    NOT APPLICABLE, because this contract is a GENERIC and not a part. It
+    stands in for every module of its kind, so there is no one figure to
+    state, and any wattage here would be a fiction. The figure belongs on the
+    wrapper, which knows which module it is. L27 exempts by `power-absent` and
+    this sentence is why.
+  head: >-
+    drawing - THE HEAD IS THE MODULE FACEPLATE, the flange at the front of a
+    CFP that carries the receptacle and the two thumbscrews. CFP MSA Module
+    Dimensions drawing, 04/07/10: A1 82.00 +/-0.10 wide, B1 14.00 +/-0.10
+    high, E1 14.50 MAX long. It overhangs the body 2.4 each side and 0.2
+    above and below: the faceplate top is C1 9.60 above datum A and the body
+    top AA1 9.40. IT IS DRAWN STANDING ITS OWN 14.5 OUT OF THE CAGE, so that
+    the depth plus the head is the whole 144.75 module. The CFP MSA
+    Mechanical Layout (17 Mar 10, revision 14) Figures 19 and 25 put more of
+    the module in front of the chassis panel than that - the faceplate
+    stands inside an external bracket that is itself about 18 proud (scaled)
+    - and std/cfp@1 draws no bracket, so the cage face stands for the
+    bracket front. The Cisco photographs show the same flange with a thumbscrew at each end.
+  face: >-
+    THE SC DUPLEX IS THE FACE THE MSA ITSELF DRAWS. Table 5-3 of the CFP MSA
+    Hardware Specification Rev 1.4 lists SC, LC and MPO, and the end view of
+    the MSA Module Dimensions drawing (04/07/10) draws two rectangular
+    openings with a notch in one long wall. The Cisco 100GBASE CFP Modules
+    Data Sheet C78-633027 states a dual SC/PC connector for its two
+    long-reach modules and photographs them (pp3-4). generic/cfp-lc@1 is the
+    duplex LC that other vendors draw.
+  bores: >-
+    std/sc-bore@1, the SC opening (7.5 x 9.0 with a 0.89 x 2.1 key slot),
+    twice, as `tx` and `rx`, each turned a quarter (`rotate: 90`) so that
+    its
+    LONG AXIS IS HORIZONTAL and its key slot is up. ESTIMATED, scaled: the MSA
+    drawing is vector line art and dimensions neither opening. On the ruler
+    its printed 82.00 faceplate width fixes (15.76 px/mm at 600 dpi) each
+    opening reads 9.07 across the module and 7.55 up it, which is the SC
+    opening lying on its side, and the two are 12.7 apart centre to centre.
+    THE PITCH IS DRAWN AT 12.7, the SC duplex pitch common/sc-duplex-adapter@5
+    is built on; no registry entry carries it. Section 5.6 centres the
+    connector on the module width within 0.5, so the pair is centred:
+    ferrules at x 32.25 and 44.95.
+  key: >-
+    drawing, scaled, and one photograph - KEY SLOT UP, toward the module top.
+    The MSA Module Dimensions drawing draws the notch of each opening in the
+    wall on the side of the faceplate that C1 puts 9.60 from datum A, and AA1
+    makes that side the top of the module. The Cisco data sheet p3
+    photograph of its long-reach module shows a notch in the top edge of
+    each opening with the flat lid of the module up. Figure 5-16 of the
+    hardware specification draws its notches up as well. Nothing prints the
+    direction in words. ONE PART, NOT TWO: unlike the SC SFP, no source held
+    draws a CFP keyed the other way.
+  sides: >-
+    TRANSMIT ON THE LEFT. Figure 5-16 of the CFP MSA Hardware Specification
+    Rev 1.4 letters the left opening Transmitter and the right Receiver, and
+    the Cisco p3 photograph letters Tx under the left opening and Rx under
+    the right.
+  optical-axis: >-
+    ESTIMATED, scaled - the ferrules are 6.8 below the module top, on the
+    line through the two thumbscrew axes: the MSA drawing draws the centre of
+    each opening on the thumbscrew centreline to within a pixel. Section 5.6
+    leaves the position in height to the manufacturer, and no vendor outline
+    is held to check it against.
+  thumbscrews: >-
+    composed - common/cfp-thumbscrew@1, twice, as `screw-l` and `screw-r`. A
+    CFP has no latch and no pull tab: two captive M3 thumbscrews hold it
+    (CFP MSA Hardware Specification Rev 1.4 Table 5-2). Their axes are W1
+    72.00 +/-0.20 apart, centred, and M1 2.60 +/-0.20 above datum A, which is
+    6.8 below the body top, its mid-height. At `lift: 14.5` each knob stands
+    on the faceplate front and reaches FF1 9.50 further. The Cisco photographs show knurled knobs longer than they are wide; the MSA figure is drawn.
+  knob-colour: >-
+    A FIELD, and the default is the NEUTRAL GREY #6f6f6f. No CFP MSA document
+    held codes a colour for the knobs or the faceplate, so the colour is a
+    fact about a product and a vendor wrapper sets `latch-color`, the key
+    every pluggable generic uses for the part a hand takes hold of.
+parts:
+  - {ref: std/sc-bore@1, id: tx, at: [28.055, 1.855], rotate: 90, lift: 14.5}
+  - {ref: std/sc-bore@1, id: rx, at: [40.755, 1.855], rotate: 90, lift: 14.5}
+  - {ref: common/cfp-thumbscrew@1, id: screw-l, at: [-2.0, 2.2], lift: 14.5}
+  - {ref: common/cfp-thumbscrew@1, id: screw-r, at: [70.0, 2.2], lift: 14.5}
+relief:
+  features:
+    - node: body
+      out: 14.5
+      color: '#9aa0a8'
+      confidence: drawing
+      source: >-
+        CFP MSA Module Dimensions drawing, 04/07/10, E1 14.50 MAX, length of
+        module faceplate overall - see provenance.head
+connection-points:
+  mate: {at: [38.6, 6.8], direction: front}
+  optical-tx: {at: [32.25, 6.8], direction: front}
+  optical-rx: {at: [44.95, 6.8], direction: front}
+skins: [default]

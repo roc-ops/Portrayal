@@ -26,8 +26,9 @@ names the ref that replaces it.
 
 ### Added
 - CFP, CFP2, CFP4 and CXP cages offer optics. `generic/cfp-lc@1`,
-  `generic/cfp-mpo@1`, `generic/cfp2-lc@1`, `generic/cfp2-mpo@1`,
-  `generic/cfp4-lc@1`, `generic/cfp4-mpo@1` and `generic/cxp-mpo@1` are the
+  `generic/cfp-sc@1`, `generic/cfp-mpo@1`, `generic/cfp2-lc@1`,
+  `generic/cfp2-mpo@1`, `generic/cfp4-lc@1`, `generic/cfp4-mpo@1` and
+  `generic/cxp-mpo@1` are the
   first parts to mate `cfp`, `cfp2`, `cfp4` and `cxp`, so the `accepts` list
   of every such cage in `components.json`, and in a `<device>.configs.json`
   that seats a card carrying one, goes from empty to these. Each publishes
