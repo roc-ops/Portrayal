@@ -1,0 +1,125 @@
+format: 1
+kind: component
+name: cfp-mpo
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: cfp
+conforms: cfp-module
+profile: networking
+description: >-
+  A generic CFP with one two-row MPO face - the shape of the CFP
+  parallel-fibre optic with a twenty-four-fibre receptacle, standing for all
+  of them. A long flat body behind a faceplate that is wider than it, one MPO
+  receptacle at the middle of the faceplate, key up and pinned, and a knurled
+  thumbscrew at each end. Which module it is - rate, reach, wavelength,
+  watts - is a fact about a vendor product and lives on the wrapper that
+  composes this (docs/pluggables-design.md, decision 5), never here.
+  generic/cfp-lc@1 is the same module with the other face.
+size: {w: 77.2, h: 13.6, d: 130.25}
+size-confidence: {w: registry, h: registry, d: registry}
+head:
+  at: [-2.4, -0.2]
+  size: {w: 82.0, h: 14.0, d: 14.5}
+  size-confidence: {w: drawing, h: drawing, d: drawing}
+  node: body
+attrs: {power-absent: not-applicable, form-factor: cfp, face: mpo24, media: fiber}
+fields:
+  latch-color:
+    label: Knob colour
+    type: text
+    default: '#6f6f6f'
+  label:
+    label: Module label
+    type: text
+    default: ''
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    registry - cfp-module, the CFP MSA Module Dimensions drawing (CFP MODULE,
+    04/07/10): the body behind the faceplate is X1 77.20 +/-0.20 wide and BB1
+    13.60 +/-0.20 high. The 130.25 depth is the length behind the faceplate,
+    derived there from F1 144.75 +/-0.20 overall less E1 14.50 MAX. One vendor outline of an MPO CFP is held, the Gigalight GCF-M101-SR10C datasheet p9 Figure 5, and it prints the same body (77.20, 13.60, 144.75). The FS CFP-SR10-100G datasheet p12 embeds the same image, so it is not a second source.
+  power: >-
+    NOT APPLICABLE, because this contract is a GENERIC and not a part. It
+    stands in for every module of its kind, so there is no one figure to
+    state, and any wattage here would be a fiction. The figure belongs on the
+    wrapper, which knows which module it is. L27 exempts by `power-absent` and
+    this sentence is why.
+  head: >-
+    drawing - THE HEAD IS THE MODULE FACEPLATE, the flange at the front of a
+    CFP that carries the receptacle and the two thumbscrews. CFP MSA Module
+    Dimensions drawing, 04/07/10: A1 82.00 +/-0.10 wide, B1 14.00 +/-0.10
+    high, E1 14.50 MAX long. It overhangs the body 2.4 each side and 0.2
+    above and below: the faceplate top is C1 9.60 above datum A and the body
+    top AA1 9.40. IT IS DRAWN STANDING ITS OWN 14.5 OUT OF THE CAGE, so that
+    the depth plus the head is the whole 144.75 module. The CFP MSA
+    Mechanical Layout (17 Mar 10, revision 14) Figures 19 and 25 put more of
+    the module in front of the chassis panel than that - the faceplate
+    stands inside an external bracket that is itself about 18 proud (scaled)
+    - and std/cfp@1 draws no bracket, so the cage face stands for the
+    bracket front. Gigalight p9 prints 82.00 across the end view and 14.00 for the faceplate height.
+  receptacle: >-
+    std/mpo24-module-receptacle@1, composed as `mpo`: the MPO opening as a
+    module carries it, a dark cavity with the pinned ferrule and its two rows
+    of twelve fibre positions at the back. Table 5-3 of the CFP MSA Hardware
+    Specification Rev 1.4 lists an MPO connector and names no fibre count;
+    the twenty-four-fibre one is what the parallel CFP carries (Gigalight p8
+    Figure 4; the Cisco 100GBASE CFP Modules Data Sheet C78-633027 states a
+    24-fiber MPO/MTP connector). The mouth is the 12.9 x 8.0 std/mpo@2
+    records (estimated there; the Gigalight end view scales 13.4 x 9.2 for
+    the opening it draws). The fibres are addressable as `mpo/1` to
+    `mpo/24`. Gigalight p8 draws the outside view with fibre 1 at the upper
+    right and fibre 13 at the lower right, which is how the composed part
+    numbers them; which carry which lane is the wrapper fact.
+  key: >-
+    datasheet, one vendor - KEY UP, toward the module top. Gigalight p8
+    Figure 4, the outside view of the CFP module MPO receptacle, draws the
+    key notch in the top wall, and the p9 end view letters its receive row
+    above its transmit row the same way up. NEITHER FIGURE TIES THE KEY SIDE
+    TO THE MODULE LID in so many words; key up is the reading of an upright
+    figure, and it is what every other module receptacle in this library
+    does. The receptacle is composed unrotated.
+  gender: >-
+    borrowed - PINNED, as the composed receptacle draws it. SFF-8679 Rev 1.9
+    section 7.3 says so of a QSFP module receptacle; no CFP document held
+    says it of this one.
+  position: >-
+    ESTIMATED - centred on the module in x (section 5.6 of the CFP MSA
+    Hardware Specification Rev 1.4, within 0.5; the Gigalight end view scales
+    centred) and on the line through the two thumbscrew axes, 6.8 below the
+    module top. NO DOCUMENT DIMENSIONS THE HEIGHT: section 5.6 leaves it to
+    the manufacturer.
+  insert: >-
+    borrowed - the 13.1 x 9.4 black insert of generic/qsfp-mpo@1,
+    photo-measured there on a QSFP28 module, drawn centred on this
+    receptacle. Estimated here.
+  thumbscrews: >-
+    composed - common/cfp-thumbscrew@1, twice, as `screw-l` and `screw-r`. A
+    CFP has no latch and no pull tab: two captive M3 thumbscrews hold it
+    (CFP MSA Hardware Specification Rev 1.4 Table 5-2). Their axes are W1
+    72.00 +/-0.20 apart, centred, and M1 2.60 +/-0.20 above datum A, which is
+    6.8 below the body top, its mid-height. At `lift: 14.5` each knob stands
+    on the faceplate front and reaches FF1 9.50 further. THE ONE VENDOR DRAWING DIFFERS ON THE KNOB: Gigalight p9 prints 14.00 in front of the faceplate where the MSA prints 9.50 +/-0.50; the MSA governs.
+  knob-colour: >-
+    A FIELD, and the default is the NEUTRAL GREY #6f6f6f. No CFP MSA document
+    held codes a colour for the knobs or the faceplate, so the colour is a
+    fact about a product and a vendor wrapper sets `latch-color`, the key
+    every pluggable generic uses for the part a hand takes hold of.
+parts:
+  - {ref: std/mpo24-module-receptacle@1, id: mpo, at: [32.15, 2.8], lift: 14.5}
+  - {ref: common/cfp-thumbscrew@1, id: screw-l, at: [-2.0, 2.2], lift: 14.5}
+  - {ref: common/cfp-thumbscrew@1, id: screw-r, at: [70.0, 2.2], lift: 14.5}
+relief:
+  features:
+    - node: body
+      out: 14.5
+      color: '#9aa0a8'
+      confidence: drawing
+      source: >-
+        CFP MSA Module Dimensions drawing, 04/07/10, E1 14.50 MAX, length of
+        module faceplate overall - see provenance.head
+connection-points:
+  mate: {at: [38.6, 6.8], direction: front}
+  optical: {at: [38.6, 6.8], direction: front}
+skins: [default]

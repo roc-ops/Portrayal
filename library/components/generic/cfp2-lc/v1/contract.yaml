@@ -1,0 +1,127 @@
+format: 1
+kind: component
+name: cfp2-lc
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: cfp2
+conforms: cfp2-module
+profile: networking
+description: >-
+  A generic CFP2 with an LC duplex face - the shape of the CFP2 optic with
+  two LC bores, standing for all of them, the coherent ones included. A flat
+  body behind a head that is taller than it, two keyed bores at the middle
+  with the latch up, and a bail whose bar lies across the top of the head
+  because the module is seated. Which module it is - rate, modulation, reach,
+  wavelength, watts - is a fact about a vendor product and lives on the
+  wrapper that composes this (docs/pluggables-design.md, decision 5), never
+  here. generic/cfp2-mpo@1 is the same module with the other face.
+size: {w: 41.5, h: 12.4, d: 91.5}
+size-confidence: {w: registry, h: registry, d: registry}
+head:
+  at: [-0.5, -2.7]
+  size: {w: 42.5, h: 16.7, d: 16.0}
+  size-confidence: {w: drawing, h: datasheet, d: drawing}
+  node: body
+attrs: {power-absent: not-applicable, form-factor: cfp2, face: lc-duplex, media: fiber}
+fields:
+  latch-color:
+    label: Latch colour
+    type: text
+    default: '#6f6f6f'
+  label:
+    label: Module label
+    type: text
+    default: ''
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    registry - cfp2-module, the CFP2 Baseline Drawing Rev 1L (2013-08-06):
+    A07 41.50 +/-0.20 wide, A10 12.40 +/-0.20 high. The 91.5 depth is A11
+    91.50 MIN, from the rear end to the back of the enlarged front section.
+    Two vendor outlines of a duplex LC CFP2 print the same body: the Finisar FTLC1122RDNL Product Specification Rev C1 (20-Oct-2017) p8 Figure 1 (41.50, 12.40, 107.50) and the Gigalight GF2-S101-LR4C datasheet Rev V3 p12 Figure 9 (41.50, 12.40 +/-0.20, 107.50, and 91.80 behind the head).
+  power: >-
+    NOT APPLICABLE, because this contract is a GENERIC and not a part. It
+    stands in for every module of its kind, so there is no one figure to
+    state, and any wattage here would be a fiction. The figure belongs on the
+    wrapper, which knows which module it is. L27 exempts by `power-absent` and
+    this sentence is why.
+  head: >-
+    datasheet for the height, inside the MSA envelope. The CFP2 Baseline
+    Drawing Rev 1L draws an enlarged section at the front of the module for
+    the optical connector and prints only limits: A01 42.50 MAX wide, A12
+    3.40 MAX above the module top (2.50 as an informative low-profile
+    option), A13 1.60 MAX below it, and a length that is A08 107.50 less A11
+    91.50 MIN, 16.0. THE WIDTH AND THE LENGTH ARE DRAWN AT THOSE LIMITS, so
+    that the depth plus the head is the whole 107.50 module; the Fibermall
+    CFP2-100G-SR10 datasheet Rev 1.1 p11 prints Max 42.5 across the bail.
+    THE HEIGHT IS A VENDOR FIGURE: the Gigalight outlines print a 16.70 head
+    on the 12.40 body (GF2-S101-LR4C Rev V3 p12 Figure 9), split 2.70 above
+    and 1.60 below (GF2-M101-SR10C p8, the same casting). THE VENDORS
+    DIFFER: the Finisar FTLC1122RDNL Product Specification Rev C1 p8 prints
+    2.50 MAX and 1.60 MAX; Fibermall p11 prints a 13.60 head. And on the
+    length: Gigalight prints 15.70 for the head and Fibermall 97.20 behind
+    it, 10.30. Everything is within the registry envelope. THE RECEPTACLE
+    NOSE IS NOT DRAWN: the MSA lets the connector receptacle stand A03 4.10
+    MAX in front of the head across A02 17.30 MAX, and Finisar prints 4.10
+    MAX and 16.50 for an LC one, Fibermall 3.7 and 14.80 for an MPO one.
+  bores: >-
+    std/lc-bore@3, the keyed opening the other LC generics compose, twice.
+    LATCH UP, toward the module top, and TRANSMIT ON THE LEFT: Figure 5-10 of
+    the CFP MSA CFP2 Hardware Specification Rev 1.0 draws the latch notch
+    above each bore and the transmitter left of the receiver, and both vendor
+    end views letter TX and RX the same way (Finisar draws its end view
+    bottom side up, datum C at the top, with the lettering inverted to
+    match). `rotate: 180` puts the tongue up. THE PITCH IS THE 6.25 of the
+    lc-duplex-receptacle registry entry: the baseline drawing prints A04 6.25
+    BASIC and Finisar (6.25). Section 5.6 centres the connector on the module
+    width, so the pair is centred: ferrules at x 17.625 and 23.875.
+  optical-axis: >-
+    datasheet, one vendor - the ferrules are 6.79 below the module top.
+    Finisar p8 prints (5.61), a reference dimension, from datum C, the module
+    bottom, to the LC axis, and 12.40 less 5.61 is 6.79. The baseline
+    drawing allows A14 5.90 +/-1.50. THE OTHER VENDOR DIFFERS: the Gigalight
+    p12 end view scales the axis about 4.3 above the bottom, at the low edge
+    of what the MSA allows, off a coarse raster.
+  latch: >-
+    estimated - a bail. The MSA dimensions the latch surfaces on the module
+    sides (A40 to A56) and leaves the actuator to the vendor; every vendor
+    outline held draws a lever pivoting on the two sides of the head.
+    Finisar and Gigalight draw its bar across the top: seated, it lies along
+    the top of the head front, and the Gigalight GF2-S101-LR4C p12 end view
+    draws it between the chamfered top corners, about 1.9 tall (scaled, an
+    embedded raster at 154 ppi). It is drawn the full width of the head; the
+    side arms, the pivot and the thumb scallop are not drawn. ONE VENDOR PUTS
+    IT BELOW: the Fibermall p11 end view draws its thumb scallop along the
+    bottom edge of a lower head.
+  bail-colour: >-
+    A FIELD, and the default is the NEUTRAL GREY #6f6f6f. No CFP2 document
+    held codes a colour, and the one photograph of a seated module held shows
+    a bare metal head with no coloured part, so the colour is a fact about a
+    product and a vendor wrapper sets `latch-color`. The outline follows the
+    fill (`data-stroke-derive`).
+parts:
+  - {ref: std/lc-bore@3, id: tx, at: [15.275, 2.84], rotate: 180, lift: 16}
+  - {ref: std/lc-bore@3, id: rx, at: [21.525, 2.84], rotate: 180, lift: 16}
+relief:
+  features:
+    - node: body
+      out: 16.0
+      color: '#9aa0a8'
+      confidence: drawing
+      source: >-
+        CFP2 Baseline Drawing Rev 1L sheets 1 and 3: the enlarged section at the front of the module, A08 less
+        A11 MIN - see provenance.head
+    - node: bail
+      lift: 16.0
+      bar: 1.9
+      confidence: estimated
+      source: >-
+        A ROUND BAR across the top of the head, resting on the head front at
+        lift 16.0, as generic/xfp-lc@1 builds its bail. The diameter is the
+        drawn height of the bar, scaled - see provenance.latch
+connection-points:
+  mate: {at: [20.75, 6.2], direction: front}
+  optical-tx: {at: [17.625, 6.79], direction: front}
+  optical-rx: {at: [23.875, 6.79], direction: front}
+skins: [default]

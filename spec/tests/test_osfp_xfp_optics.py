@@ -503,9 +503,9 @@ def test_no_other_family_offers_them_and_the_pool_is_the_family(device_cages, co
     pool = render_mod._pluggable_candidates([LIB])
     assert sorted(r for r, _ in pool["osfp"]) == OFFERS["osfp"]
     assert [r for r, _ in pool["xfp"]] == OFFERS["xfp"]
-    # the families that still have a cage and nothing to seat in it
-    for family in ("cfp", "cfp2", "cfp4"):
-        assert not pool.get(family), family
+    # and neither is in the pool of a family that got its optics later
+    for family in ("cfp", "cfp2", "cfp4", "cxp"):
+        assert not NEW & {r for r, _ in pool.get(family) or []}, family
 
 
 # --- seated in real cages, a plug chained in ----------------------------------

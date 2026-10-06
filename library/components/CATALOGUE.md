@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1227 component majors in 26 namespaces.
+1237 component majors in 26 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -17,14 +17,14 @@ composes it. Place the wrapper when the panel carries that furniture and the
 aperture when it is a bare opening - never both at one position. The README's
 [Namespaces](README.md#namespaces) section has the pairs and the rule.
 
-## std/ (45)
+## std/ (46)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
 | `std/bnc@1` | component | port | 9.7 × 8.85 | bnc | 0 | 3 | BNC bayonet coaxial panel jack core (IEC 61169-8) - the D-hole and the collar with its bore, insulator and ce… |
 | `std/c14-inlet@1` | component | inlet | 28 × 20 × 13 | c14-inlet | 4 | 61 | IEC C14 appliance inlet (mates C13 cords) - panel cutout with the keyed coupler shroud recessed behind it, ea… |
 | `std/c20-inlet@1` | component | inlet | 32.4 × 24.4 × 15 | c20-inlet | 1 | 13 | IEC C20 appliance inlet (mates C19 cords) - panel cutout with the rounded-rectangle coupler recess behind it,… |
-| `std/cfp@1` | component | port | 82 × 13.6 × 144.8 | cfp | 0 | 5 | CFP cage cutout - the module envelope of the CFP MSA, the aperture the module seats through |
+| `std/cfp@1` | component | port | 82 × 13.6 × 144.8 | cfp | 0 | 8 | CFP cage cutout - the module envelope of the CFP MSA, the aperture the module seats through |
 | `std/cfp2@1` | component | port | 41.5 × 12.4 × 107.5 | cfp2 | 0 | 9 | CFP2 cage cutout - the module envelope of the CFP2 MSA, the aperture the module seats through |
 | `std/cfp4@1` | component | port | 21.5 × 9.5 × 92 | cfp4 | 0 | 3 | CFP4 cage cutout - the module envelope of the CFP4 MSA, the aperture the module seats through |
 | `std/cxp@1` | component | port | 27 × 10 × 92 | cxp | 0 | 3 | CXP cage cutout - the module envelope of the CXP MSA, the aperture the module seats through |
@@ -38,14 +38,15 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/drive-35-plan@1` | module | drive | 101.6 × 147 × 26.1 | drive-35 | 1 | 2 | A 3.5 inch drive seen from above - the same body std/drive-35@1 draws from the front, in the projection a mid… |
 | `std/drive-e3s@1` | component | drive | 76 × 7.5 × 112.75 | drive-e3s | 1 | 1 | EDSFF E3.S drive per SFF-TA-1008 - the device itself, not a carrier: 76 wide by 7.5 thick, drawn lying flat, … |
 | `std/f-type@1` | component | port | 9.7 × 7.9 | f-type | 0 | 11 | F-type 75-ohm coaxial panel jack (3/8-32 UNEF-2A) - the CATV drop connector |
-| `std/lc-bore@3` | component | port | 4.7 × 6.3 × 4.5 | lc-duplex-receptacle | 0 | 22 | One LC receptacle bore - the KEYED opening an LC plug enters, not a square hole |
+| `std/lc-bore@3` | component | port | 4.7 × 6.3 × 4.5 | lc-duplex-receptacle | 0 | 26 | One LC receptacle bore - the KEYED opening an LC plug enters, not a square hole |
 | `std/lc-bulkhead-bore@1` | component | port | 4.7 × 8.06 × 4.5 | lc | 0 | 9 | One LC bore of a BULKHEAD (panel-mount) adapter - the keyed opening an LC plug enters, with the full-length k… |
 | `std/mcx@1` | component | port | 4.95 × 4.5 | mcx | 0 | 7 | MCX coaxial panel jack (IEC 61169-36) - snap-on micro coax, the 75-ohm RF drop connector on cable headend I/O… |
 | `std/micro-usb@1` | component | port | 7.5 × 2.75 × 5.9 | micro-usb-b | 35 | 19 | Micro-USB Type-B receptacle, as used for a console port |
-| `std/mpo@2` | component | port | 12.9 × 8 × 9 | mpo-adapter | 0 | 11 | One MPO/MTP adapter opening - the mouth an MPO plug enters, not the adapter around it |
-| `std/mpo-module-receptacle@1` | component | port | 12.9 × 8 × 9 | mpo-adapter | 0 | 1 | One MPO receptacle as a module carries it - the mouth an MPO-12 or MPO-24 plug enters on a transceiver, looke… |
+| `std/mpo@2` | component | port | 12.9 × 8 × 9 | mpo-adapter | 0 | 16 | One MPO/MTP adapter opening - the mouth an MPO plug enters, not the adapter around it |
+| `std/mpo-module-receptacle@1` | component | port | 12.9 × 8 × 9 | mpo-adapter | 0 | 3 | One MPO receptacle as a module carries it - the mouth an MPO-12 or MPO-24 plug enters on a transceiver, looke… |
 | `std/mpo16@1` | component | port | 12.9 × 8 × 9 | mpo-adapter | 0 | 6 | One MTP-16 adapter opening - the mouth an MTP-16 plug enters |
 | `std/mpo16-module-receptacle@1` | component | port | 12.9 × 8 × 9 | mpo-adapter | 0 | 2 | One MPO-16 receptacle as a module carries it - the mouth an MTP-16 plug enters on a transceiver, looked into:… |
+| `std/mpo24-module-receptacle@1` | component | port | 12.9 × 8 × 9 | mpo-adapter | 0 | 3 | One two-row MPO receptacle as a module carries it - the mouth an MPO-24 plug enters on a transceiver, looked … |
 | `std/mrj21@1` | component | port | 28.92 × 13.45 | mrj21 | 0 | 2 | MRJ21 ("mini-RJ21") 48-position shielded receptacle - two stepped blades with twelve contacts on each face, c… |
 | `std/osfp@1` | component | port | 23.1 × 13.5 × 47 | osfp | 9 | 4 | OSFP cage cutout (800G, one port per opening; the belly-to-belly rows of a 2RU face are two of these, not one… |
 | `std/pcie-bracket-fh@2` | component | bracket | 120.02 × 21.59 | pcie-bracket-fh | 0 | 38 | Standard (full height) PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the ch… |
@@ -57,7 +58,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/rj45@2` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 72 | 57 | RJ45 modular jack HOUSING - the 15.8 x 13.2 plastic face a plug enters, with the 8P8C interface recessed into… |
 | `std/rj45-ganged@2` | component | port | 12.7 × 11 × 18.6 | rj45-ganged | 75 | 27 | One cell of a shared-wall 2xN RJ45 block - the 12.7 x 11.0 face between neighbouring ports on a 13.97 pitch, … |
 | `std/saf-d-grid@1` | component | inlet | 26.8 × 19.9 × 17 | saf-d-grid | 0 | 4 | Anderson Saf-D-Grid appliance inlet - the panel cutout with the keyed coupler recessed behind it, a first-mat… |
-| `std/sc-bore@1` | component | port | 8.39 × 9 × 6 | sc-simplex-receptacle | 2 | 34 | One SC opening - the rectangular hole an SC plug's housing enters, with the key slot cut into one long wall a… |
+| `std/sc-bore@1` | component | port | 8.39 × 9 × 6 | sc-simplex-receptacle | 2 | 36 | One SC opening - the rectangular hole an SC plug's housing enters, with the key slot cut into one long wall a… |
 | `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 44 | 78 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
 | `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 89 | 93 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
 | `std/sma@1` | component | port | 6.35 × 6.35 | sma | 19 | 8 | SMA coaxial panel jack (1/4-36UNS-2B) - threaded barrel protrudes; GNSS/RF antenna input |
@@ -67,12 +68,13 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/vga@1` | component | port | 20.47 × 11.4 × 6.73 | hd15 | 2 | 7 | VGA video receptacle - a female high-density DE-15, fifteen contacts in three rows inside the D-subminiature … |
 | `std/xfp@1` | component | port | 19.5 × 9.7 × 61.7 | xfp | 1 | 40 | XFP cage cutout (10G pluggable) - the recommended bezel opening of the XFP MSA, the aperture an XFP cage prot… |
 
-## common/ (112)
+## common/ (113)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
 | `common/bnc-jack@1` | component | port | 12.7 × 12.7 |  | 1 | 2 | Front-mount BNC bulkhead jack - the 12.7 flange and the two bayonet lugs (bezel) around a std/bnc core, which… |
 | `common/button-led-sq@1` | component | button | 4 × 4 |  | 1 | 0 | A square lit push button, the lamp being the whole button face |
+| `common/cfp-thumbscrew@1` | component | screw | 9.2 × 9.2 |  | 0 | 3 | The knob of one of the two captive thumbscrews that fasten a CFP module to its host - a knurled cylinder stan… |
 | `common/compliance-sticker@1` | component | sticker | 219 × 206 |  | 47 | 0 | Bottom-cover compliance/spec label (placeholder art until a real bottom photo is available) |
 | `common/db9-receptacle@1` | component | port | 30.8 × 12.5 × 6.73 |  | 8 | 26 | DE-9 receptacle as a faceplate sees it - the shell with a jackscrew standoff either side of it, which is what… |
 | `common/dc-barrel@1` | component | inlet | 12 × 13 |  | 4 | 0 | DC barrel power inlet |
@@ -121,11 +123,11 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/lsh-simplex-adapter@1` | component | port | 7 × 8 | lsh-adapter | 0 | 0 | Panel-mount LSH/E2000 simplex adapter, one spring-shutter opening, as fitted to an FS FHD LSH panel |
 | `common/mdc-adapter@1` | component | port | 6.6 × 8 | mdc-adapter | 0 | 0 | Panel-mount MDC adapter, one small-form-factor body carrying FOUR fibre positions across its two ports (a "2-… |
 | `common/mpo-adapter@2` | component | port | 13.8 × 9.4 |  | 0 | 15 | Panel-mount MPO/MTP adapter - one opening in a bezel, as fitted to an FS FHD adapter panel |
-| `common/mpo-dust-cap@2` | component | cap | 12.8 × 8.1 | mpo | 0 | 9 | The grey dust cap FS ships in an MTP/MPO port - a 12.8 x 8.1 moulding that fills the port's mouth, with a thi… |
+| `common/mpo-dust-cap@2` | component | cap | 12.8 × 8.1 | mpo | 0 | 10 | The grey dust cap FS ships in an MTP/MPO port - a 12.8 x 8.1 moulding that fills the port's mouth, with a thi… |
 | `common/mpo-flange-adapter@2` | component | port | 30 × 11 | mpo | 0 | 9 | Flanged MPO/MTP bulkhead adapter carrying 12 fibres - a black flange held by two screws, a raised housing, an… |
 | `common/mpo16-adapter@1` | component | port | 13.8 × 9.4 |  | 0 | 5 | Panel-mount MTP-16 adapter - one opening in a bezel, as fitted to FS's FHD 12x MTP-16 adapter panel (SKU 3828… |
 | `common/mpo16-dust-cap@1` | component | cap | 12.8 × 8.1 | mpo16 | 0 | 1 | The grey dust cap FS ships in each opening of its FHD 12x MTP-16 adapter panel (SKU 382885) - common/mpo-dust… |
-| `common/mpo24-flange-adapter@2` | component | port | 30 × 11 | mpo | 0 | 4 | Flanged MPO/MTP bulkhead adapter carrying 24 fibres - a black flange held by two screws, a raised housing, an… |
+| `common/mpo24-flange-adapter@2` | component | port | 30 × 11 | mpo | 0 | 5 | Flanged MPO/MTP bulkhead adapter carrying 24 fibres - a black flange held by two screws, a raised housing, an… |
 | `common/multi-cord-hazard-label@1` | component | marking | 29.8 × 10.9 |  | 1 | 0 | Yellow rectangular hazard sticker with two symbols side by side - an electric-shock triangle (ISO 7010 W012) … |
 | `common/nic-symbol@1` | component | silkscreen | 5.4 × 4.6 |  | 1 | 0 | The network mark printed beside an Ethernet port - a node above three nodes on a bus, which is the figure ven… |
 | `common/orv3-busbar-connector@1` | component | inlet | 60.7 × 35.4 |  | 1 | 0 | Open Rack v3 48 V bus-bar power connector on an IT tray's rear - a blind-mate clip body with a vertical blade… |
@@ -161,7 +163,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/rj45-ganged-link@1` | component | port | 12.7 × 11 × 18.6 |  | 5 | 0 | An Ethernet RJ45 in a ganged 2xN block with ONE lamp - the std/rj45-ganged@2 cell with a single link/activity… |
 | `common/rocker-switch@1` | component | button | 21 × 15 |  | 1 | 0 | Snap-in panel rocker power switch, 21 x 15 bezel, rocker across the width - the I (on) side at the left and O… |
 | `common/sc-apc@1` | component | port | 24 × 26 |  | 1 | 0 | SC/APC fiber adapter in a molded bay (PON WAN) |
-| `common/sc-duplex-adapter@5` | component | port | 9.4 × 25.4 | sc-duplex-adapter | 0 | 9 | Panel-mount SC duplex adapter, as fitted to an FS FHD SC panel - one body carrying two SC ports STACKED verti… |
+| `common/sc-duplex-adapter@5` | component | port | 9.4 × 25.4 | sc-duplex-adapter | 0 | 10 | Panel-mount SC duplex adapter, as fitted to an FS FHD SC panel - one body carrying two SC ports STACKED verti… |
 | `common/sc-dust-cap@1` | component | cap | 8.8 × 11.45 | sc | 0 | 1 | The black dust cap FS ships in an FHD SC port - 8.8 x 11.45, with a lighter raised grip across its middle for… |
 | `common/screw-head@1` | component | screw | 3.6 × 3.6 × 0.7 |  | 80 | 9 | Generic countersunk screw head (decorative fastener) |
 | `common/serial-symbol@1` | component | silkscreen | 7.2 × 2.6 |  | 1 | 0 | The IOIOI mark printed beside a serial port - alternating bars and rings, which is how a vendor says "this on… |
@@ -184,13 +186,21 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/wall-plate-keyhole-2-42@1` | component | mount | 42 × 22 |  | 4 | 0 | The smaller wall-mounting plate with two keyhole slots - the 42 mm plate on the back of the AurCore AIS small… |
 | `common/warning-triangle@1` | component | marking | 5.4 × 4.8 |  | 5 | 3 | General warning triangle - a black exclamation mark in a yellow triangle, ISO 7010 W001 |
 
-## generic/ (42)
+## generic/ (50)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
 | `generic/bnc-plug@1` | component | port | 14.3 × 14.3 | bnc-plug | 0 | 10 | A straight BNC crimp plug on a coax cable, seen from the face: the knurled bayonet coupling sleeve, the crimp… |
 | `generic/c13-plug@1` | component | port | 26 × 16 | c13-plug | 0 | 7 | A moulded straight IEC C13 cord connector on its cord, seen from the cable end as a front elevation sees it s… |
 | `generic/c19-plug@1` | component | port | 37 × 24 | c19-plug | 0 | 0 | A moulded straight IEC C19 cord connector on its cord, seen from the cable end as a front elevation sees it s… |
+| `generic/cfp-lc@1` | component | transceiver | 77.2 × 13.6 × 130.25 | cfp-module | 0 | 2 | A generic CFP with an LC duplex face - the shape of the CFP optic with two LC bores, standing for all of them |
+| `generic/cfp-mpo@1` | component | transceiver | 77.2 × 13.6 × 130.25 | cfp-module | 0 | 2 | A generic CFP with one two-row MPO face - the shape of the CFP parallel-fibre optic with a twenty-four-fibre … |
+| `generic/cfp-sc@1` | component | transceiver | 77.2 × 13.6 × 130.25 | cfp-module | 0 | 1 | A generic CFP with an SC duplex face - the shape of the CFP optic with two SC openings, standing for all of t… |
+| `generic/cfp2-lc@1` | component | transceiver | 41.5 × 12.4 × 91.5 | cfp2-module | 0 | 1 | A generic CFP2 with an LC duplex face - the shape of the CFP2 optic with two LC bores, standing for all of th… |
+| `generic/cfp2-mpo@1` | component | transceiver | 41.5 × 12.4 × 91.5 | cfp2-module | 0 | 1 | A generic CFP2 with one two-row MPO face - the shape of the CFP2 parallel-fibre optic with a twenty-four-fibr… |
+| `generic/cfp4-lc@1` | component | transceiver | 21.5 × 9.5 × 76 | cfp4-module | 0 | 1 | A generic CFP4 with an LC duplex face - the shape of the CFP4 optic with two LC bores, standing for all of th… |
+| `generic/cfp4-mpo@1` | component | transceiver | 21.5 × 9.5 × 76 | cfp4-module | 0 | 1 | A generic CFP4 with one MPO face - the shape of the CFP4 parallel-fibre optic with a twelve-position receptac… |
+| `generic/cxp-mpo@1` | component | transceiver | 21.2 × 9.81 × 28.45 | cxp-module | 0 | 0 | A generic optical CXP with one two-row MPO face - the shape of the CXP transceiver with a twenty-four-fibre r… |
 | `generic/da15-plug@1` | component | port | 39.9 × 15.3 | da15-plug | 0 | 0 | A DA-15 alarm cable plug: the MALE fifteen-position two-row D-subminiature connector in its backshell hood on… |
 | `generic/db25-plug@1` | component | port | 53.5 × 15.7 | db25-plug | 0 | 0 | A DB-25 status cable plug: the MALE twenty-five-position D-subminiature connector in its backshell hood on it… |
 | `generic/db9-plug@1` | component | port | 31 × 15.6 | db9-plug | 0 | 1 | A DE-9 serial or alarm cable plug: the FEMALE nine-position D-subminiature connector in its backshell hood on… |
@@ -201,9 +211,9 @@ aperture when it is a bare opening - never both at one position. The README's
 | `generic/lc-plug@2` | component | port | 5.58 × 8.535 | lc-plug | 0 | 21 | An LC fibre plug as it is SEATED, front view - the four-tier keyed silhouette of the free plug (provenance.fr… |
 | `generic/mcx-plug@1` | component | port | 5 × 5 | mcx-plug | 0 | 0 | A straight MCX crimp plug on a coax cable, seen from the face: the ribbed snap-on grip, the crimp ferrule and… |
 | `generic/micro-usb-b-plug@1` | component | port | 10.6 × 8.5 | micro-usb-b-plug | 0 | 0 | A moulded straight USB 2.0 Micro-B cable plug on its cable, seen from the cable end as a front elevation sees… |
-| `generic/mpo12-plug@1` | component | port | 12.5 × 7.6 | mpo-plug | 0 | 8 | A 12-fibre MPO/MTP plug, front view - the 12.5 x 7.6 barrel-ended housing with the MT ferrule standing in its… |
+| `generic/mpo12-plug@1` | component | port | 12.5 × 7.6 | mpo-plug | 0 | 9 | A 12-fibre MPO/MTP plug, front view - the 12.5 x 7.6 barrel-ended housing with the MT ferrule standing in its… |
 | `generic/mpo16-plug@1` | component | port | 12.5 × 7.6 | mpo16-plug | 0 | 3 | A 16-fibre MPO/MTP-16 plug, front view - the 12.5 x 7.6 housing of the MPO-12 plug with a key rib that is nar… |
-| `generic/mpo24-plug@1` | component | port | 12.5 × 7.6 | mpo-plug | 0 | 3 | A 24-fibre MPO/MTP plug, front view - the SAME 12.5 x 7.6 barrel-ended housing generic/mpo12-plug@1 draws, wi… |
+| `generic/mpo24-plug@1` | component | port | 12.5 × 7.6 | mpo-plug | 0 | 4 | A 24-fibre MPO/MTP plug, front view - the SAME 12.5 x 7.6 barrel-ended housing generic/mpo12-plug@1 draws, wi… |
 | `generic/osfp-lc@1` | component | transceiver | 22.58 × 13 × 79.01 | osfp-module | 0 | 0 | A generic OSFP with an LC duplex face - the shape of the OSFP optic with two LC bores, standing for all of th… |
 | `generic/osfp-mpo16@1` | component | transceiver | 22.58 × 13 × 79.01 | osfp-module | 0 | 1 | A generic OSFP with one MPO-16 face - the shape of the OSFP parallel-fibre optic with a single-row sixteen-fi… |
 | `generic/qsfp-cable@1` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 6 | A generic QSFP cable end - the shape every QSFP+, QSFP28 and QSFP56 direct attach, active copper and active o… |
@@ -215,7 +225,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `generic/qsfp-lc@1` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 2 | A generic QSFP with an LC duplex face - the shape every QSFP+, QSFP28 and QSFP56 optic with two LC bores has,… |
 | `generic/qsfp-lc@2` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 6 | A generic QSFP with an LC duplex face - the shape every QSFP+, QSFP28 and QSFP56 optic with two LC bores has,… |
 | `generic/qsfp-lc-simplex@1` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 0 | A generic QSFP with one LC bore - the shape of the single-fibre bidirectional (BiDi) QSFP optic, standing for… |
-| `generic/qsfp-mpo@1` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 3 | A generic QSFP with one MPO face - the shape every QSFP+, QSFP28 and QSFP56 parallel-fibre optic has, standin… |
+| `generic/qsfp-mpo@1` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 6 | A generic QSFP with one MPO face - the shape every QSFP+, QSFP28 and QSFP56 parallel-fibre optic has, standin… |
 | `generic/rj45-plug@1` | component | port | 11.68 × 7.93 × 22.48 | rj45-plug | 0 | 9 | An RJ45 (8P8C) copper plug, the UNSHIELDED variant - a rectangular body with a spring latch on its underside … |
 | `generic/saf-d-grid-plug@1` | component | port | 26 × 18.9 | saf-d-grid-plug | 0 | 0 | A moulded Anderson Saf-D-Grid cord plug on its cord, seen from the cable end as a front elevation sees it sea… |
 | `generic/sc-plug@1` | component | port | 8.3 × 9 | sc-plug | 0 | 0 | An SC fibre plug, front view - the square keyed silhouette an SC connector presents end-on: a 7.4 x 9.0 housi… |
@@ -229,7 +239,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `generic/smb-plug@1` | component | port | 6.2 × 6.2 | smb-plug | 0 | 0 | A straight SMB crimp plug on a coax cable, seen from the face: the plain snap-on body, the crimp ferrule and … |
 | `generic/usb-a-plug@1` | component | port | 16 × 8 | usb-a-plug | 0 | 4 | A moulded straight USB Standard-A cable plug on its cable, seen from the cable end as a front elevation sees … |
 | `generic/usb-c-plug@1` | component | port | 12.85 × 7 | usb-c-plug | 0 | 0 | A moulded straight USB Type-C cable plug on its cable, seen from the cable end as a front elevation sees it s… |
-| `generic/xfp-lc@1` | component | transceiver | 18.35 × 8.5 × 69 | xfp-module | 0 | 0 | A generic XFP with an LC duplex face - the shape every XFP optic with two LC bores has, standing for all of t… |
+| `generic/xfp-lc@1` | component | transceiver | 18.35 × 8.5 × 69 | xfp-module | 0 | 4 | A generic XFP with an LC duplex face - the shape every XFP optic with two LC bores has, standing for all of t… |
 
 ## amphenol/ (2)
 

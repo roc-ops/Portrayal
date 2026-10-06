@@ -1,0 +1,61 @@
+format: 1
+kind: component
+name: cfp-thumbscrew
+version: 1.0.0
+class: screw
+profile: networking
+description: >-
+  The knob of one of the two captive thumbscrews that fasten a CFP module to
+  its host - a knurled cylinder standing on the front of the module
+  faceplate, seen end on. A CFP has no latch and no pull tab; the two knobs
+  are what a hand turns and pulls. Its colour is a field.
+size: {w: 9.2, h: 9.2}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  SCALED, not printed. The CFP MSA Module Dimensions drawing (04/07/10) is
+  vector line art and dimensions the knob's length and where its axis is, but
+  not its diameter. On the ruler its printed 82.00 faceplate width fixes, the
+  knob measures 9.4 across in the end view and 9.1 in the side view; 9.2 is
+  drawn, good to about 0.2.
+attrs: {role: fastener}
+fields:
+  latch-color: {label: Knob colour, type: text, default: '#6f6f6f'}
+provenance:
+  source: >-
+    CFP MSA, MSA Module Dimensions drawing, CFP MODULE, 04/07/10 - the
+    document section 5.3 of the CFP MSA Hardware Specification Rev 1.4 defers
+    the module dimensions to. Table 5-2 of that specification names the
+    fastener: a 3mm captive screw, torque 1.0 Nm.
+  size: >-
+    estimated - see size-notes. Two views of one vector drawing, scaled on
+    its own printed width.
+  length: >-
+    drawing - 9.50 +/-0.50, key FF1, thumbscrew height from the module
+    faceplate top front surface. The screw's thread, M3 x 0.5, runs the
+    length of the module behind the knob (K1, 6.0 +/-0.50 of it past the
+    rear in the fully loaded position) and is not drawn.
+  knurl: >-
+    drawing - both views draw the knob knurled along its whole length, and
+    the end view draws a cross recess in its face. The cross is painted.
+  colour: >-
+    A FIELD, and the default is the neutral grey #6f6f6f the library uses
+    where nothing fixes a colour. The CFP MSA documents held carry no colour
+    code for the knob; the one set of photographs held, in the Cisco
+    100GBASE CFP Modules Data Sheet C78-633027, shows bare metal knobs. A
+    host or a vendor wrapper sets latch-color; the key is
+    the one every pluggable generic uses for the part a hand takes hold of,
+    so one wrapper attribute paints a pull tab, a bail or these. The outline
+    follows the fill (`data-stroke-derive`).
+elements:
+  knob: {at: [0.0, 0.0], size: [9.2, 9.2], class: screw}
+relief:
+  features:
+    - node: knob
+      cyl: 9.5
+      knurl: true
+      confidence: drawing
+      source: >-
+        CFP MSA Module Dimensions drawing, 04/07/10, FF1 9.50 +/-0.50,
+        thumbscrew height from the module faceplate top front surface; the
+        diameter is the node's, scaled - see size-notes
+skins: [default]

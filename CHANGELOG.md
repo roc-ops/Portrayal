@@ -25,6 +25,20 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- CFP, CFP2, CFP4 and CXP cages offer optics. `generic/cfp-lc@1`,
+  `generic/cfp-sc@1`, `generic/cfp-mpo@1`, `generic/cfp2-lc@1`,
+  `generic/cfp2-mpo@1`, `generic/cfp4-lc@1`, `generic/cfp4-mpo@1` and
+  `generic/cxp-mpo@1` are the
+  first parts to mate `cfp`, `cfp2`, `cfp4` and `cxp`, so the `accepts` list
+  of every such cage in `components.json`, and in a `<device>.configs.json`
+  that seats a card carrying one, goes from empty to these. Each publishes
+  its receptacle as a connector slot. `common/cfp-thumbscrew@1` is the knob
+  the CFP parts compose, and `std/mpo24-module-receptacle@1` the two-row MPO
+  mouth the twenty-four-fibre faces compose. `spec/schemas/standards.yaml`
+  gains `cfp-module`, `cfp2-module`, `cfp4-module` and `cxp-module`, each
+  with the `head:` envelope its standard gives. No cage contract and no DCIM
+  export changes.
+  [docs/pluggables-cfp-cxp-design.md](docs/pluggables-cfp-cxp-design.md).
 - OSFP and XFP cages offer optics. `generic/osfp-mpo16@1`, `generic/osfp-lc@1`
   and `generic/xfp-lc@1` are the first parts to mate `osfp` and `xfp`, so the
   `accepts` list of every OSFP and XFP cage in `<device>.configs.json` and

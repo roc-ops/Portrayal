@@ -1,0 +1,123 @@
+format: 1
+kind: component
+name: cfp-lc
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: cfp
+conforms: cfp-module
+profile: networking
+description: >-
+  A generic CFP with an LC duplex face - the shape of the CFP optic with two
+  LC bores, standing for all of them. A long flat body behind a faceplate
+  that is wider than it, two keyed bores at the middle of the faceplate with
+  the latch up, and a knurled thumbscrew at each end. Which module it is -
+  rate, reach, wavelength, watts - is a fact about a vendor product and lives
+  on the wrapper that composes this (docs/pluggables-design.md, decision 5),
+  never here. generic/cfp-mpo@1 is the same module with the other face.
+size: {w: 77.2, h: 13.6, d: 130.25}
+size-confidence: {w: registry, h: registry, d: registry}
+head:
+  at: [-2.4, -0.2]
+  size: {w: 82.0, h: 14.0, d: 14.5}
+  size-confidence: {w: drawing, h: drawing, d: drawing}
+  node: body
+attrs: {power-absent: not-applicable, form-factor: cfp, face: lc-duplex, media: fiber}
+fields:
+  latch-color:
+    label: Knob colour
+    type: text
+    default: '#6f6f6f'
+  label:
+    label: Module label
+    type: text
+    default: ''
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    registry - cfp-module, the CFP MSA Module Dimensions drawing (CFP MODULE,
+    04/07/10): the body behind the faceplate is X1 77.20 +/-0.20 wide and BB1
+    13.60 +/-0.20 high. The 130.25 depth is the length behind the faceplate,
+    derived there from F1 144.75 +/-0.20 overall less E1 14.50 MAX. Two vendor outlines of a duplex LC CFP print the same body: the Gigalight GCF-S101-LR4C datasheet (2017/2/8) p11 (77.20 +/-0.20, 13.60 +/-0.20, 144.75 +/-0.20, 14.50MAX) and Table 14 of the Modulelink CFP-100G-LR4 datasheet pp18-19, which repeats the MSA keys figure for figure.
+  power: >-
+    NOT APPLICABLE, because this contract is a GENERIC and not a part. It
+    stands in for every module of its kind, so there is no one figure to
+    state, and any wattage here would be a fiction. The figure belongs on the
+    wrapper, which knows which module it is. L27 exempts by `power-absent` and
+    this sentence is why.
+  head: >-
+    drawing - THE HEAD IS THE MODULE FACEPLATE, the flange at the front of a
+    CFP that carries the receptacle and the two thumbscrews. CFP MSA Module
+    Dimensions drawing, 04/07/10: A1 82.00 +/-0.10 wide, B1 14.00 +/-0.10
+    high, E1 14.50 MAX long. It overhangs the body 2.4 each side and 0.2
+    above and below: the faceplate top is C1 9.60 above datum A and the body
+    top AA1 9.40. IT IS DRAWN STANDING ITS OWN 14.5 OUT OF THE CAGE, so that
+    the depth plus the head is the whole 144.75 module. The CFP MSA
+    Mechanical Layout (17 Mar 10, revision 14) Figures 19 and 25 put more of
+    the module in front of the chassis panel than that - the faceplate
+    stands inside an external bracket that is itself about 18 proud (scaled)
+    - and std/cfp@1 draws no bracket, so the cage face stands for the
+    bracket front. Gigalight p11 prints 82.00 +/-0.20, 14.00 +/-0.20 and 14.50MAX; Modulelink Table 14 prints A1, B1 and E1 as the MSA does.
+  face: >-
+    WHICH CONNECTOR A DUPLEX CFP CARRIES VARIES, AND THIS IS THE LC ONE.
+    Table 5-3 of the CFP MSA Hardware Specification Rev 1.4 lists SC, LC and
+    MPO, and section 5.6.1 gives an optional LC position. The MSA module
+    drawing itself draws two 7.5 x 9.0 openings 12.7 apart, which is an SC
+    duplex, and the Cisco 100GBASE CFP Modules Data Sheet C78-633027 states
+    a dual SC connector for its long-reach modules. The Gigalight and
+    Modulelink outlines both draw a duplex LC. Both forms are real; the SC
+    duplex CFP is a different face and a different part, generic/cfp-sc@1.
+  bores: >-
+    std/lc-bore@3, the keyed opening the other LC generics compose, twice.
+    LATCH UP, toward the module top, and TRANSMIT ON THE LEFT: Figure 5-16 of
+    the CFP MSA Hardware Specification Rev 1.4 draws the notch above each
+    opening and the transmitter left of the receiver; the Modulelink p16 end
+    view letters Tx and Rx the same way with its latch slots toward the edge
+    its datum chain makes the top (C1 and AA1); the Gigalight p11 end view
+    draws the slots on the side its own legend reads upright from. `rotate:
+    180` puts the tongue up. THE PITCH IS THE 6.25 of the
+    lc-duplex-receptacle registry entry (6.2 and 6.1 scaled off the two
+    outlines). Section 5.6 centres the connector on the module width within
+    0.5, so the pair is centred: ferrules at x 35.475 and 41.725.
+  optical-axis: >-
+    ESTIMATED, scaled - the ferrules are 6.8 below the module top, on the
+    line through the two thumbscrew axes. NO DOCUMENT DIMENSIONS IT: section
+    5.6 leaves the position in height to the manufacturer. The Gigalight p11
+    end view (an embedded raster at 163 ppi) draws the ferrules on the
+    thumbscrew centreline, and the MSA module drawing draws its SC openings
+    on that line too. THE OTHER VENDOR DISAGREES: the Modulelink p16 end view
+    scales the ferrule axis about 5.3 above the faceplate bottom, 8.5 below
+    the module top, in a housing that stands about 3.9 in front of the
+    faceplate. Neither that housing nor the 1.00 lip Gigalight prints is
+    drawn.
+  thumbscrews: >-
+    composed - common/cfp-thumbscrew@1, twice, as `screw-l` and `screw-r`. A
+    CFP has no latch and no pull tab: two captive M3 thumbscrews hold it
+    (CFP MSA Hardware Specification Rev 1.4 Table 5-2). Their axes are W1
+    72.00 +/-0.20 apart, centred, and M1 2.60 +/-0.20 above datum A, which is
+    6.8 below the body top, its mid-height. At `lift: 14.5` each knob stands
+    on the faceplate front and reaches FF1 9.50 further. THE VENDORS DIFFER ON THE KNOB: Gigalight p11 prints 2-diameter 10.00 and 15.50 +/-0.50 in front of the faceplate, where the MSA prints 9.50 +/-0.50; the MSA governs and the knob is the composed part, 9.2 across and 9.5 long. Modulelink Table 14 prints FF1 9.50 +/-0.50.
+  knob-colour: >-
+    A FIELD, and the default is the NEUTRAL GREY #6f6f6f. No CFP MSA document
+    held codes a colour for the knobs or the faceplate, so the colour is a
+    fact about a product and a vendor wrapper sets `latch-color`, the key
+    every pluggable generic uses for the part a hand takes hold of.
+parts:
+  - {ref: std/lc-bore@3, id: tx, at: [33.125, 2.85], rotate: 180, lift: 14.5}
+  - {ref: std/lc-bore@3, id: rx, at: [39.375, 2.85], rotate: 180, lift: 14.5}
+  - {ref: common/cfp-thumbscrew@1, id: screw-l, at: [-2.0, 2.2], lift: 14.5}
+  - {ref: common/cfp-thumbscrew@1, id: screw-r, at: [70.0, 2.2], lift: 14.5}
+relief:
+  features:
+    - node: body
+      out: 14.5
+      color: '#9aa0a8'
+      confidence: drawing
+      source: >-
+        CFP MSA Module Dimensions drawing, 04/07/10, E1 14.50 MAX, length of
+        module faceplate overall - see provenance.head
+connection-points:
+  mate: {at: [38.6, 6.8], direction: front}
+  optical-tx: {at: [35.475, 6.8], direction: front}
+  optical-rx: {at: [41.725, 6.8], direction: front}
+skins: [default]

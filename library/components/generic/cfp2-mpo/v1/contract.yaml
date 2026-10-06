@@ -1,0 +1,137 @@
+format: 1
+kind: component
+name: cfp2-mpo
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: cfp2
+conforms: cfp2-module
+profile: networking
+description: >-
+  A generic CFP2 with one two-row MPO face - the shape of the CFP2
+  parallel-fibre optic with a twenty-four-fibre receptacle, standing for all
+  of them. A flat body behind a head that is taller than it, one MPO
+  receptacle at the middle, key up and pinned, and a bail whose bar lies
+  across the top of the head because the module is seated. Which module it
+  is - rate, reach, wavelength, watts - is a fact about a vendor product and
+  lives on the wrapper that composes this (docs/pluggables-design.md,
+  decision 5), never here. generic/cfp2-lc@1 is the same module with the
+  other face.
+size: {w: 41.5, h: 12.4, d: 91.5}
+size-confidence: {w: registry, h: registry, d: registry}
+head:
+  at: [-0.5, -2.7]
+  size: {w: 42.5, h: 16.7, d: 16.0}
+  size-confidence: {w: drawing, h: datasheet, d: drawing}
+  node: body
+attrs: {power-absent: not-applicable, form-factor: cfp2, face: mpo24, media: fiber}
+fields:
+  latch-color:
+    label: Latch colour
+    type: text
+    default: '#6f6f6f'
+  label:
+    label: Module label
+    type: text
+    default: ''
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    registry - cfp2-module, the CFP2 Baseline Drawing Rev 1L (2013-08-06):
+    A07 41.50 +/-0.20 wide, A10 12.40 +/-0.20 high. The 91.5 depth is A11
+    91.50 MIN, from the rear end to the back of the enlarged front section.
+    Two vendor outlines of an MPO CFP2 print the same body: the Fibermall CFP2-100G-SR10 datasheet Rev 1.1 p11 (41.50, 12.4, 107.50) and the Gigalight GF2-M101-SR10C datasheet p8 (41.50, 12.40 +/-0.20, 107.50).
+  power: >-
+    NOT APPLICABLE, because this contract is a GENERIC and not a part. It
+    stands in for every module of its kind, so there is no one figure to
+    state, and any wattage here would be a fiction. The figure belongs on the
+    wrapper, which knows which module it is. L27 exempts by `power-absent` and
+    this sentence is why.
+  head: >-
+    datasheet for the height, inside the MSA envelope. The CFP2 Baseline
+    Drawing Rev 1L draws an enlarged section at the front of the module for
+    the optical connector and prints only limits: A01 42.50 MAX wide, A12
+    3.40 MAX above the module top (2.50 as an informative low-profile
+    option), A13 1.60 MAX below it, and a length that is A08 107.50 less A11
+    91.50 MIN, 16.0. THE WIDTH AND THE LENGTH ARE DRAWN AT THOSE LIMITS, so
+    that the depth plus the head is the whole 107.50 module; the Fibermall
+    CFP2-100G-SR10 datasheet Rev 1.1 p11 prints Max 42.5 across the bail.
+    THE HEIGHT IS A VENDOR FIGURE: the Gigalight outlines print a 16.70 head
+    on the 12.40 body (GF2-S101-LR4C Rev V3 p12 Figure 9), split 2.70 above
+    and 1.60 below (GF2-M101-SR10C p8, the same casting). THE VENDORS
+    DIFFER: the Finisar FTLC1122RDNL Product Specification Rev C1 p8 prints
+    2.50 MAX and 1.60 MAX; Fibermall p11 prints a 13.60 head. And on the
+    length: Gigalight prints 15.70 for the head and Fibermall 97.20 behind
+    it, 10.30. Everything is within the registry envelope. THE RECEPTACLE
+    NOSE IS NOT DRAWN: the MSA lets the connector receptacle stand A03 4.10
+    MAX in front of the head across A02 17.30 MAX, and Finisar prints 4.10
+    MAX and 16.50 for an LC one, Fibermall 3.7 and 14.80 for an MPO one.
+  receptacle: >-
+    std/mpo24-module-receptacle@1, composed as `mpo`: the MPO opening as a
+    module carries it, a dark cavity with the pinned ferrule and its two rows
+    of twelve fibre positions at the back. Section 5.6 of the CFP MSA CFP2
+    Hardware Specification Rev 1.0 says the module shall support LC, MTP12
+    and MTP24 connectors; this is the twenty-four-fibre one, the face both
+    vendor sheets draw. The mouth is the 12.9 x 8.0 std/mpo@2 records
+    (estimated there). The fibres are addressable as `mpo/1` to `mpo/24`.
+    Gigalight p7 Figure 3 draws the outside view with fibre 1 at the upper
+    right and fibre 13 at the lower right, which is how the composed part
+    numbers them; which carry which lane is the wrapper fact.
+  key: >-
+    datasheet - KEY UP, toward the module top. Fibermall p11 draws the key
+    slot of the receptacle toward the flat lid, in an end view aligned with
+    its side view, and Gigalight p7 Figure 3 draws the key notch up. The
+    receptacle is composed unrotated.
+  gender: >-
+    datasheet - PINNED. The Fibermall p11 end view draws two guide pins in
+    the ferrule, and the composed receptacle draws its two pins.
+  position: >-
+    ESTIMATED in height - centred on the module in x (section 5.6, within
+    0.5; both vendor end views draw it centred) and 6.79 below the module
+    top, where generic/cfp2-lc@1 has its LC axis. NO DOCUMENT DIMENSIONS THE
+    HEIGHT of an MPO receptacle on a CFP2; the baseline drawing allows an
+    optical centreline 5.90 +/-1.50 above the bottom, and this is inside it.
+  insert: >-
+    datasheet for the size - the receptacle block, 14.80 wide and 9.80 tall,
+    as Fibermall p11 prints it, drawn centred on the receptacle. Its
+    octagonal chamfer and the screw head either side of it are not drawn.
+  latch: >-
+    estimated - a bail. The MSA dimensions the latch surfaces on the module
+    sides (A40 to A56) and leaves the actuator to the vendor; every vendor
+    outline held draws a lever pivoting on the two sides of the head.
+    Finisar and Gigalight draw its bar across the top: seated, it lies along
+    the top of the head front, and the Gigalight GF2-S101-LR4C p12 end view
+    draws it between the chamfered top corners, about 1.9 tall (scaled, an
+    embedded raster at 154 ppi). It is drawn the full width of the head; the
+    side arms, the pivot and the thumb scallop are not drawn. ONE VENDOR PUTS
+    IT BELOW: the Fibermall p11 end view draws its thumb scallop along the
+    bottom edge of a lower head.
+  bail-colour: >-
+    A FIELD, and the default is the NEUTRAL GREY #6f6f6f. No CFP2 document
+    held codes a colour, and the one photograph of a seated module held shows
+    a bare metal head with no coloured part, so the colour is a fact about a
+    product and a vendor wrapper sets `latch-color`. The outline follows the
+    fill (`data-stroke-derive`).
+parts:
+  - {ref: std/mpo24-module-receptacle@1, id: mpo, at: [14.3, 2.79], lift: 16.0}
+relief:
+  features:
+    - node: body
+      out: 16.0
+      color: '#9aa0a8'
+      confidence: drawing
+      source: >-
+        CFP2 Baseline Drawing Rev 1L sheets 1 and 3: the enlarged section at the front of the module, A08 less
+        A11 MIN - see provenance.head
+    - node: bail
+      lift: 16.0
+      bar: 1.9
+      confidence: estimated
+      source: >-
+        A ROUND BAR across the top of the head, resting on the head front at
+        lift 16.0, as generic/xfp-lc@1 builds its bail. The diameter is the
+        drawn height of the bar, scaled - see provenance.latch
+connection-points:
+  mate: {at: [20.75, 6.2], direction: front}
+  optical: {at: [20.75, 6.79], direction: front}
+skins: [default]
