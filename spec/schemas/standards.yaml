@@ -2085,3 +2085,110 @@ standards:
       6.50 in front of the flange of the panel connector, the mating
       dimension of Tyco Electronics catalogue 82068, AMPLIMITE Subminiature D Connectors (revised 1-08), p.126,
       so the hood ends 53.5 in front of the panel plane. The plug is MALE: it mates the female DB-25 the library draws on a panel.
+  # Pluggable 5.08 mm terminal headers and the screw-clamp plugs that seat in
+  # them (#789, docs/connectors-dc-terminal-design.md). A header entry is the
+  # manufacturer's drawing of the family the library's header part was
+  # modelled from; no header part states `conforms:`, because each was sized
+  # from its own device before these entries existed.
+  terminal-508-2-header:
+    registry: Phoenix Contact MSTBA 2,5/..-G-5,08 header range, the dimensional drawing on the MSTBA 2,5/ 6-G-5,08 data sheet (order no. 1757284, catalogue CC-2009 p.249), p.5, at two positions
+    w: 12.16
+    h: 8.6
+    confidence: drawing
+    depth: 12.0
+    depth-confidence: drawing
+    source: >-
+      Phoenix Contact MSTBA 2,5/ 6-G-5,08 data sheet, p.5, dimensional
+      drawing: the header is a + 7.08 wide, where a is the pitch times one less
+      than the number of positions, 8.6 high off the board and 12 long, with
+      the first pin 3.54 in from the end. At two positions a is 5.08, so 12.16.
+    notes: >-
+      A PLAIN header, no flange: the range's data sheet lists MSTB 2,5/..-ST
+      plugs as its mates and no flanged plug. The same drawing shows a seated
+      plug in dashed outline, 22 from the back of the header to the back of
+      the plug and 15 high with its underside level with the underside of the
+      header. common/terminal-header-508-2@1 is drawn 10.16 by 12.1, from a
+      photograph and a borrowed height, and does not claim this entry.
+  terminal-508-6-header:
+    registry: Phoenix Contact MSTBA 2,5/ 6-G-5,08 header (order no. 1757284, catalogue CC-2009 p.249), data sheet p.5, dimensional drawing
+    w: 32.48
+    h: 8.6
+    confidence: drawing
+    depth: 12.0
+    depth-confidence: drawing
+    source: >-
+      Phoenix Contact MSTBA 2,5/ 6-G-5,08 data sheet, p.1 and p.5: dimension a
+      is 25.4, and the dimensional drawing gives the header a + 7.08 wide,
+      8.6 high off the board and 12 long, with the first pin 3.54 in from the
+      end.
+    notes: >-
+      A PLAIN header, no flange. Its data sheet lists MSTB 2,5/ 6-ST-5,08
+      (1757051) among its mates and no flanged plug. common/dc-terminal-header-6@1
+      was measured off a vendor model at 32.4 wide with a body 8.6 high, which
+      is this header to within 0.1, and does not claim this entry.
+  terminal-508-5f-header:
+    registry: Phoenix Contact MSTB 2,5/ 5-GF-5,08 header with threaded flange (order no. 1776537), data sheet of Sep 27, 2023, p.3, dimensions
+    w: 35.56
+    h: 12.1
+    confidence: verified
+    depth: 12.0
+    depth-confidence: verified
+    source: >-
+      Phoenix Contact MSTB 2,5/ 5-GF-5,08 data sheet (Sep 27, 2023), p.3:
+      width 35.56, height 12.1, length 12, installed height 8.6, pitch 5.08.
+    notes: >-
+      A header with a THREADED FLANGE at each end. Its data sheet lists
+      seventeen mating plugs on pp.16-25 and every one is a flanged form
+      (-STF or -STZF); the plain header's data sheet lists none of those.
+      That is why the flanged header is an interface of its own.
+  terminal-508-2-plug:
+    registry: Phoenix Contact MSTB 2,5/ 2-ST-5,08 plug (order no. 1757019, catalogue CC-2005 p.126), data sheet of 28.01.2005, p.4, dimensional drawing
+    w: 10.16
+    h: 15.0
+    confidence: drawing
+    depth: 18.2
+    depth-confidence: drawing
+    source: >-
+      Phoenix Contact MSTB 2,5/ 2-ST-5,08 data sheet (28.01.2005), p.1 and
+      p.4: dimension a is 5.08, and the dimensional drawing gives the plug
+      a + 5.08 wide, 15 high and 18.2 long, of which the last 8.3 is the nose
+      that enters the header, with the first pole 2.54 in from the end.
+    notes: >-
+      THE WIRE-SIDE BOX OF A SCREW-CLAMP PLUG, seen from the side the wires
+      enter. The wires enter in line with the plugging direction and the clamp
+      screws are on the top face, which this view sees edge on.
+  terminal-508-6-plug:
+    registry: Phoenix Contact MSTB 2,5/ 6-ST-5,08 plug (order no. 1757051, catalogue CC-2005 p.126), data sheet of 28.01.2005, p.4, dimensional drawing
+    w: 30.48
+    h: 15.0
+    confidence: drawing
+    depth: 18.2
+    depth-confidence: drawing
+    source: >-
+      Phoenix Contact MSTB 2,5/ 6-ST-5,08 data sheet (28.01.2005), p.1 and
+      p.4: dimension a is 25.4, and the dimensional drawing gives the plug
+      a + 5.08 wide, 15 high and 18.2 long, of which the last 8.3 is the nose
+      that enters the header, with the first pole 2.54 in from the end.
+    notes: >-
+      THE WIRE-SIDE BOX OF A SCREW-CLAMP PLUG, seen from the side the wires
+      enter. The wires enter in line with the plugging direction and the clamp
+      screws are on the top face, which this view sees edge on.
+  terminal-508-5f-plug:
+    registry: Phoenix Contact MSTB 2,5/..-STF-5,08 plug range with screw flange, the dimensional drawing on the MSTB 2,5/16-STF-5,08 data sheet (order no. 1778124), p.7, at five positions (MSTB 2,5/ 5-STF-5,08, order no. 1778014)
+    w: 35.41
+    h: 15.0
+    confidence: drawing
+    depth: 18.2
+    depth-confidence: drawing
+    source: >-
+      Phoenix Contact MSTB 2,5/16-STF-5,08 data sheet, p.7, the dimensional
+      drawing of the MSTB 2,5/..-STF range: the body is a + 5.69 wide with a
+      flange 4.7 wide at each end, 15 high and 18.2 long, of which the last
+      8.3 is the nose, and each flange screw is 5.08 outside the end pole. At
+      five positions a is 20.32, so the body is 26.01 and the plug 35.41
+      across its flanges, with the two screws 30.48 apart.
+    notes: >-
+      THE WIRE-SIDE BOX OF A FLANGED SCREW-CLAMP PLUG, across its two flanges.
+      The five-position plug's own data sheet is not held: the range drawing
+      is read at five positions. The MSTB 2,5/ 5-GF-5,08 header's data sheet
+      (p.18) names MSTB 2,5/ 5-STF-5,08, 1778014, as a mate.

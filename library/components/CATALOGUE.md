@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1237 component majors in 26 namespaces.
+1240 component majors in 26 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -80,7 +80,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/dc-barrel@1` | component | inlet | 12 × 13 |  | 4 | 0 | DC barrel power inlet |
 | `common/dc-terminal-24@1` | component | inlet | 24.6 × 14.4 × 9.1 |  | 1 | 4 | Three-pole DC barrier terminal block with a hinged clear cover - the screw-down -48 V input fitted to 1RU acc… |
 | `common/dc-terminal-27@1` | component | inlet | 27.5 × 15.9 × 10.4 |  | 1 | 3 | Three-pole DC barrier terminal block with a hinged clear cover - the screw-down -48 V input fitted to 1RU acc… |
-| `common/dc-terminal-header-6@1` | component | inlet | 32.4 × 11.1 |  | 1 | 0 | Six-pole pluggable terminal-block HEADER on a 5.08 mm pitch - the green board-mounted receptacle with six wir… |
+| `common/dc-terminal-header-6@1` | component | inlet | 32.4 × 11.1 | terminal-508-6 | 1 | 1 | Six-pole pluggable terminal-block HEADER on a 5.08 mm pitch - the green board-mounted receptacle with six wir… |
 | `common/dc-terminal-plug-2@1` | component | inlet | 32.1 × 17.6 × 15 |  | 2 | 1 | Two-pole PLUGGABLE DC terminal block - a green header on the faceplate with a matching two-way screw-clamp pl… |
 | `common/device-label@1` | component | sticker | 80 × 40 |  | 5 | 0 | Bottom identity label in oval recess (placeholder art - never reproduce serials/MACs/credentials) |
 | `common/dimm-plan@1` | module | memory | 3.8 × 133.4 × 31.3 |  | 7 | 1 | A DIMM seen from above, standing in its socket - the thin edge of the module with its latches at either end, … |
@@ -174,8 +174,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/sma-jack@1` | component | port | 9.5 × 9.5 |  | 18 | 13 | Panel-mount SMA jack with gold jam nut (bezel) around a std/sma core |
 | `common/smb-jack@1` | component | port | 7 × 7 |  | 27 | 4 | Panel-mount SMB jack with gold nut (bezel) around a std/smb core |
 | `common/st-simplex-adapter@1` | component | port | 10 × 10 | st-adapter | 0 | 1 | Panel-mount ST (BFOC) simplex adapter, one bayonet-coupled opening, as fitted to an FS FHD ST panel |
-| `common/terminal-header-508-2@1` | component | port | 10.16 × 12.1 |  | 10 | 0 | Two-position pluggable terminal HEADER on a 5.08 mm pitch, no flange - the green receptacle a two-way screw-c… |
-| `common/terminal-header-508-5f@1` | component | inlet | 35.56 × 12.1 × 12 |  | 10 | 0 | Five-position pluggable terminal HEADER on a 5.08 mm pitch with a threaded flange at each end - the green rec… |
+| `common/terminal-header-508-2@1` | component | port | 10.16 × 12.1 | terminal-508-2 | 10 | 1 | Two-position pluggable terminal HEADER on a 5.08 mm pitch, no flange - the green receptacle a two-way screw-c… |
+| `common/terminal-header-508-5f@1` | component | inlet | 35.56 × 12.1 × 12 | terminal-508-5f | 10 | 2 | Five-position pluggable terminal HEADER on a 5.08 mm pitch with a threaded flange at each end - the green rec… |
 | `common/usb-a@2` | component | port | 17 × 7 × 13.7 |  | 3 | 0 | USB Type-A receptacle with trident silkscreen - a shell bezel wrapping a std/usb-a opening core |
 | `common/usb-a-bezel@1` | component | port | 17 × 9.3 × 13.7 |  | 5 | 0 | USB Type-A port in a silver panel bezel - the plate spans the component so it can abut neighboring port bezel… |
 | `common/usb-symbol@1` | component | silkscreen | 6.4 × 4 |  | 28 | 1 | USB trident silkscreen symbol, no hardware - the marking printed beside a USB receptacle |
@@ -186,12 +186,12 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/wall-plate-keyhole-2-42@1` | component | mount | 42 × 22 |  | 4 | 0 | The smaller wall-mounting plate with two keyhole slots - the 42 mm plate on the back of the AurCore AIS small… |
 | `common/warning-triangle@1` | component | marking | 5.4 × 4.8 |  | 5 | 3 | General warning triangle - a black exclamation mark in a yellow triangle, ISO 7010 W001 |
 
-## generic/ (50)
+## generic/ (53)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
 | `generic/bnc-plug@1` | component | port | 14.3 × 14.3 | bnc-plug | 0 | 10 | A straight BNC crimp plug on a coax cable, seen from the face: the knurled bayonet coupling sleeve, the crimp… |
-| `generic/c13-plug@1` | component | port | 26 × 16 | c13-plug | 0 | 7 | A moulded straight IEC C13 cord connector on its cord, seen from the cable end as a front elevation sees it s… |
+| `generic/c13-plug@1` | component | port | 26 × 16 | c13-plug | 0 | 10 | A moulded straight IEC C13 cord connector on its cord, seen from the cable end as a front elevation sees it s… |
 | `generic/c19-plug@1` | component | port | 37 × 24 | c19-plug | 0 | 0 | A moulded straight IEC C19 cord connector on its cord, seen from the cable end as a front elevation sees it s… |
 | `generic/cfp-lc@1` | component | transceiver | 77.2 × 13.6 × 130.25 | cfp-module | 0 | 2 | A generic CFP with an LC duplex face - the shape of the CFP optic with two LC bores, standing for all of them |
 | `generic/cfp-mpo@1` | component | transceiver | 77.2 × 13.6 × 130.25 | cfp-module | 0 | 2 | A generic CFP with one two-row MPO face - the shape of the CFP parallel-fibre optic with a twenty-four-fibre … |
@@ -237,7 +237,10 @@ aperture when it is a bare opening - never both at one position. The README's
 | `generic/sfp-sc-key-up@1` | component | transceiver | 13.55 × 8.55 × 47.5 | sfp-module | 0 | 1 | A generic SFP with one SC receptacle - the shape of the PON line-terminal SFP and SFP+ optic, standing for al… |
 | `generic/sma-plug@1` | component | port | 9.17 × 7.94 | sma-plug | 0 | 3 | A straight SMA crimp plug on a coax cable, seen from the face: the hex coupling nut, the crimp ferrule and a … |
 | `generic/smb-plug@1` | component | port | 6.2 × 6.2 | smb-plug | 0 | 0 | A straight SMB crimp plug on a coax cable, seen from the face: the plain snap-on body, the crimp ferrule and … |
-| `generic/usb-a-plug@1` | component | port | 16 × 8 | usb-a-plug | 0 | 4 | A moulded straight USB Standard-A cable plug on its cable, seen from the cable end as a front elevation sees … |
+| `generic/terminal-508-2-plug@1` | component | port | 10.16 × 15 | terminal-508-2-plug | 0 | 0 | A two-position screw-clamp terminal plug on a 5.08 mm pitch, wired, seen from the wire side as a front elevat… |
+| `generic/terminal-508-5f-plug@1` | component | port | 35.41 × 15 | terminal-508-5f-plug | 0 | 0 | A five-position screw-clamp terminal plug on a 5.08 mm pitch with a screw flange at each end, wired, seen fro… |
+| `generic/terminal-508-6-plug@1` | component | port | 30.48 × 15 | terminal-508-6-plug | 0 | 0 | A six-position screw-clamp terminal plug on a 5.08 mm pitch, wired, seen from the wire side as a front elevat… |
+| `generic/usb-a-plug@1` | component | port | 16 × 8 | usb-a-plug | 0 | 7 | A moulded straight USB Standard-A cable plug on its cable, seen from the cable end as a front elevation sees … |
 | `generic/usb-c-plug@1` | component | port | 12.85 × 7 | usb-c-plug | 0 | 0 | A moulded straight USB Type-C cable plug on its cable, seen from the cable end as a front elevation sees it s… |
 | `generic/xfp-lc@1` | component | transceiver | 18.35 × 8.5 × 69 | xfp-module | 0 | 4 | A generic XFP with an LC duplex face - the shape every XFP optic with two LC bores has, standing for all of t… |
 

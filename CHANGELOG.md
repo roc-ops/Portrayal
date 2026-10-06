@@ -25,6 +25,19 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- Pluggable terminal headers are connector slots, and three screw-clamp plugs
+  seat in them. `terminal-508-2`, `terminal-508-5f` and `terminal-508-6` join
+  `spec/schemas/connectors.yaml`. `common/terminal-header-508-2@1`,
+  `common/terminal-header-508-5f@1` and `common/dc-terminal-header-6@1` (each
+  1.0.1) gain their interface and a `mate` point; no drawing changed, and the
+  11 devices that draw one take a patch. `generic/terminal-508-2-plug@1`,
+  `generic/terminal-508-5f-plug@1` and `generic/terminal-508-6-plug@1` are the
+  plugs that mate them, drawn from the wire side with one 30 mm stub of wire
+  per pole and a `wire-1` to `wire-N` point on each. `wire-od` sizes every
+  stub, `wire-color` paints every stub and `body-color` paints the body. Each
+  stands 10 mm in front of the face its header presents; see
+  `docs/connectors-dc-terminal-design.md`. The DC barrel jack is unchanged
+  (#789).
 - CFP, CFP2, CFP4 and CXP cages offer optics. `generic/cfp-lc@1`,
   `generic/cfp-sc@1`, `generic/cfp-mpo@1`, `generic/cfp2-lc@1`,
   `generic/cfp2-mpo@1`, `generic/cfp4-lc@1`, `generic/cfp4-mpo@1` and

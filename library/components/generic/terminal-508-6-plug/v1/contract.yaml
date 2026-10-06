@@ -1,0 +1,235 @@
+format: 1
+kind: component
+name: terminal-508-6-plug
+version: 1.0.0
+class: port
+mates: terminal-508-6
+conforms: terminal-508-6-plug
+profile: networking
+description: >-
+  A six-position screw-clamp terminal plug on a 5.08 mm pitch, wired, seen
+  from the wire side as a front elevation sees it seated: the body, a wire
+  entry at each pole and a short straight stub of insulated wire leaving each
+  of the six poles, every stub the diameter of the wire-od field. Seats in a
+  `terminal-508-6` header at its own mate point. It carries one wire per pole,
+  not one cable.
+size: {w: 30.48, h: 15}
+size-confidence: {w: drawing, h: drawing}
+size-notes: the width is the drawing's a + 5.08 with the a the data sheet tabulates; the height is the 15 the drawing dimensions
+attrs: {media: terminal-block, connector: terminal-508-6, positions: 6, pitch-mm: 5.08}
+fields:
+  wire-od: {label: Wire outside diameter, type: number, unit: mm, default: 4.0}
+  wire-color: {label: Wire colour, type: text, default: '#1c1c1c'}
+  body-color: {label: Body colour, type: text, default: '#4fb548'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    drawing - registry `terminal-508-6-plug`. Phoenix Contact MSTB 2,5/
+    6-ST-5,08 data sheet (order no. 1757051, 28.01.2005), p.1 and p.4:
+    dimension a is 25.4, and the dimensional drawing gives the plug a + 5.08
+    wide and 15 high, with the first pole 2.54 in from the end.
+  no-depth: >-
+    NO `size.d`, DELIBERATELY, as on generic/usb-a-plug@1 and
+    generic/c13-plug@1. The overall length (18.2) is in the registry entry,
+    and what stands in front of the header is in the relief below, but a
+    `size.d` on a component with no `behaviour` compiles to `data-depth`, and
+    the kit builds that as a pit behind the whole box of the part.
+  form: >-
+    IN-LINE WIRE ENTRY: the wires enter parallel to the plugging direction,
+    from the side opposite the nose, and the clamp screws are on the top face.
+    That is the MSTB 2,5/..-ST form, the plug the data sheet of the header
+    this mates lists as a mate. The same range has plugs with the wires
+    entering across the plugging direction (MVSTBR and MVSTBW); they are other
+    bodies and are not this part.
+  orientation: >-
+    DRAWN IN THE UNROTATED CONVENTION OF THE HEADER,
+    common/dc-terminal-header-6@1: THE BOARD SIDE OF THE HEADER DOWN, so the
+    clamp-screw tower rises above the header, and pole 1 at the left. The
+    header draws its two latch posts above the body and the vendor's
+    photograph shows the scalloped, board side below, so up is the header's
+    own up. The turn a seat applies carries the plug round with a rotated
+    header.
+  poles: >-
+    NUMBERED 1 TO 6 FROM THE LEFT of the unrotated header, as this view sees
+    it. common/dc-terminal-header-6@1 names none of its six openings, so this
+    is left to right in the unrotated header and a convention. The pole NAMES
+    are the device's: they are printed on the panel beside the header, differ
+    by device, and are not on the plug.
+  seated-depth: >-
+    RULING - THE PLUG SEATS BY THE ENGAGEMENT ITS DRAWING GIVES, MEASURED FROM
+    THE FACE THE HEADER PRESENTS. The mated figure is on the Phoenix Contact
+    MSTBA 2,5/ 6-G-5,08 header data sheet (order no. 1757284, catalogue
+    CC-2009 p.249), p.5, whose dimensional drawing shows a seated plug in
+    dashed outline: 22 from the back of the header to the back of the plug,
+    with the header 12 long, so a seated plug stands 22 - 12 = 10 in front of
+    the mouth of the header. The plug is 18.2 long (Phoenix Contact MSTB 2,5/
+    6-ST-5,08 data sheet (order no. 1757051, 28.01.2005), p.4), so 18.2 - 10 =
+    8.2 of it is inside the header, of a nose the same drawing dimensions 8.3.
+    THE HEADER AS MODELLED STATES NO DEPTH. common/dc-terminal-header-6@1 is
+    drawn flat, with no relief and no `size.d`; its provenance puts the front
+    of the header 0.3 behind the panel plane on the vendor's model. The plug
+    therefore starts on the panel plane, 0.3 in front of where that model has
+    the mouth, and the 8.2 of nose that enters a real header has no modelled
+    cavity to enter. THE HEADER'S DEPTH IS THE FIGURE TO ADD, and no figure
+    below moves when it is.
+  frame: >-
+    THE RELIEF IS MEASURED FROM THE LIFT THE HOST PRESENTS, the frame
+    generic/usb-a-plug@1 documents. common/dc-terminal-header-6@1 presents at
+    its own face, so 0 here is the panel plane. The 8.2 of nose inside the
+    header is not built.
+  axis: >-
+    derived and scaled - `mate` is at (15.24, 10.7): the middle of the row of
+    poles, and 4.3 above the underside of the plug, which is the middle of a
+    header 8.6 high whose underside is level with the plug's (the Phoenix
+    Contact MSTBA 2,5/ 6-G-5,08 header data sheet (order no. 1757284,
+    catalogue CC-2009 p.249), p.5, whose dimensional drawing shows a seated
+    plug in dashed outline, where the two undersides are drawn on one line).
+    The wires and are drawn on the same line. SCALED on the 130 ppi figure of
+    the plug, good to about 0.3: the middle of the clamp opening a wire enters
+    reads 10.6 below the top of the plug.
+  body: >-
+    drawing - the body is built as ONE box 30.48 by 15 standing 10 in front of
+    the header (provenance.seated-depth). The drawing's side view steps the
+    top of the tower in by about 0.7 at the nose end and shows a latch arm
+    beside it; neither is built.
+  entries: >-
+    scaled and estimated - a wire entry at each pole, 3.7 wide and 6.8 high
+    from 6.3 below the top of the plug, SCALED on the same figure (the funnel
+    reads 3.4 to 3.7 wide). Its floor is built 1.5 below the wire-side face,
+    an ESTIMATE: the section draws the funnel and dimensions nothing of it.
+  clamp-screws: >-
+    NOT DRAWN, ON PURPOSE. The six clamp screws (M3, Phoenix Contact MSTB 2,5/
+    6-ST-5,08 data sheet (order no. 1757051, 28.01.2005)) are on the top face
+    of the tower, which a view from the wire side sees edge on.
+  wires: >-
+    estimated - ONE STUB OF WIRE PER POLE, each a straight run 30 long from
+    the wire-side face of the body (10 in front of the header), the stub rule
+    of docs/connectors-coax-design.md section 5 applied per wire. The bend is
+    the installation. The stripped end inside the clamp (7 mm, the same data
+    sheet) is not built. EVERY POLE IS DRAWN WIRED: an unwired pole is not
+    expressible in this part.
+  wire-od: >-
+    datasheet - 4 mm: the approximate outside diameter the Waskoenig+Walter
+    H07V-K data sheet (status 05.10.2026), p.2, lists for 2.5 mm2, the nominal
+    cross section of the plug and the largest conductor it takes (0.2 to 2.5
+    mm2, AWG 24 to 12, Phoenix Contact MSTB 2,5/ 6-ST-5,08 data sheet (order
+    no. 1757051, 28.01.2005)). The data sheet states the figure to the whole
+    millimetre; the same table gives 3 for 1.5 mm2. ONE FIELD FOR ALL POLES. A
+    placement or a wrapper sets the wire it actually carries.
+  wire-colour: >-
+    a FIELD, one for all poles: `wire-color` paints every stub. Black is the
+    default as on the cable plugs; no held source states a colour. A COLOUR
+    PER POLE IS NOT EXPRESSIBLE in this part: a field per pole would be 6
+    fields here and more on a longer plug.
+  body-colour: >-
+    a FIELD. The default is the green common/terminal-header-508-5f@1 draws
+    its housing in, #4fb548, which is not the darker green
+    common/dc-terminal-header-6@1 is drawn in; the vendor's photograph of that
+    header shows the lighter green. Phoenix Contact MSTB 2,5/ 6-ST-5,08 is
+    green; the same plug is made in other colours.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on generic/usb-a-plug@1 - every class port
+    contract states none (spec/tests/test_behaviour.py).
+elements: {}
+relief:
+  features:
+    - node: body
+      out: 10
+      shape: true
+      confidence: drawing
+      source: >-
+        the 22 less the 12 of the mated figure on the MSTBA 2,5/ 6-G-5,08 data
+        sheet, p.5 (provenance.seated-depth)
+    - node: entry-1
+      out: 8.5
+      color: '#17191c'
+      confidence: estimated
+      source: >-
+        the floor of the wire entry, 1.5 below the wire-side face
+        (provenance.entries)
+    - node: entry-2
+      out: 8.5
+      color: '#17191c'
+      confidence: estimated
+      source: >-
+        the floor of the wire entry, 1.5 below the wire-side face
+        (provenance.entries)
+    - node: entry-3
+      out: 8.5
+      color: '#17191c'
+      confidence: estimated
+      source: >-
+        the floor of the wire entry, 1.5 below the wire-side face
+        (provenance.entries)
+    - node: entry-4
+      out: 8.5
+      color: '#17191c'
+      confidence: estimated
+      source: >-
+        the floor of the wire entry, 1.5 below the wire-side face
+        (provenance.entries)
+    - node: entry-5
+      out: 8.5
+      color: '#17191c'
+      confidence: estimated
+      source: >-
+        the floor of the wire entry, 1.5 below the wire-side face
+        (provenance.entries)
+    - node: entry-6
+      out: 8.5
+      color: '#17191c'
+      confidence: estimated
+      source: >-
+        the floor of the wire entry, 1.5 below the wire-side face
+        (provenance.entries)
+    - node: wire-1
+      lift: 10
+      cyl: 30
+      confidence: estimated
+      source: >-
+        the stub rule, docs/connectors-coax-design.md section 5, per wire
+        (provenance.wires)
+    - node: wire-2
+      lift: 10
+      cyl: 30
+      confidence: estimated
+      source: >-
+        the stub rule, docs/connectors-coax-design.md section 5, per wire
+        (provenance.wires)
+    - node: wire-3
+      lift: 10
+      cyl: 30
+      confidence: estimated
+      source: >-
+        the stub rule, docs/connectors-coax-design.md section 5, per wire
+        (provenance.wires)
+    - node: wire-4
+      lift: 10
+      cyl: 30
+      confidence: estimated
+      source: >-
+        the stub rule, docs/connectors-coax-design.md section 5, per wire
+        (provenance.wires)
+    - node: wire-5
+      lift: 10
+      cyl: 30
+      confidence: estimated
+      source: >-
+        the stub rule, docs/connectors-coax-design.md section 5, per wire
+        (provenance.wires)
+    - node: wire-6
+      lift: 10
+      cyl: 30
+      confidence: estimated
+      source: >-
+        the stub rule, docs/connectors-coax-design.md section 5, per wire
+        (provenance.wires)
+connection-points:
+  mate: {at: [15.24, 10.7], direction: front}
+  wire-1: {at: [2.54, 10.7], direction: front, 'on': wire-1}
+  wire-2: {at: [7.62, 10.7], direction: front, 'on': wire-2}
+  wire-3: {at: [12.7, 10.7], direction: front, 'on': wire-3}
+  wire-4: {at: [17.78, 10.7], direction: front, 'on': wire-4}
+  wire-5: {at: [22.86, 10.7], direction: front, 'on': wire-5}
+  wire-6: {at: [27.94, 10.7], direction: front, 'on': wire-6}
+skins: [default]

@@ -50,11 +50,14 @@ def test_the_connector_registry_is_not_vacuous():
     # iec-c14/iec-c20/saf-d-grid: the AC inlets, made slots for their cord ends (#785)
     # usb-a/micro-usb-b/usb-c: the USB receptacles, made slots for their cable plugs (#786)
     # db9/hd15/da15/db25: the D-sub and VGA connectors, made slots for their hooded plugs (#787)
+    # terminal-508-2/-5f/-6: the pluggable 5.08 mm terminal headers, made slots for their
+    # screw-clamp plugs (#789)
     assert set(reg) == {"lc", "lc-duplex", "sc", "mpo", "mpo16", "rj45",
                          "f-type", "sma", "smb", "mcx", "bnc", "din-1-0-2-3",
                          "iec-c14", "iec-c20", "saf-d-grid",
                          "usb-a", "micro-usb-b", "usb-c",
-                         "db9", "hd15", "da15", "db25"}
+                         "db9", "hd15", "da15", "db25",
+                         "terminal-508-2", "terminal-508-5f", "terminal-508-6"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
     fam_ifaces = {f.get("interface") for f in render_mod._pluggable_families().values()}
@@ -68,7 +71,8 @@ def test_every_connector_presenting_part_is_a_connector_slot(comps):
                                    "f-type", "sma", "smb", "mcx", "bnc", "din-1-0-2-3",
                                    "iec-c14", "iec-c20", "saf-d-grid",
                                    "usb-a", "micro-usb-b", "usb-c",
-                         "db9", "hd15", "da15", "db25"}
+                                   "db9", "hd15", "da15", "db25",
+                                   "terminal-508-2", "terminal-508-5f", "terminal-508-6"}
                for c in entries)
     # a slot has no rate ladder, so no media ceiling
     assert all(c["media"] is None for c in entries)

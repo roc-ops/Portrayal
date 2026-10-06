@@ -625,7 +625,15 @@ def test_the_lift_census():
     (the ReadyLinks GL-12xB-240D's BNC sync jacks): a BNC, 1.0/2.3 or F jack
     presents at its mated plane through `seat-out`, forwarded by its bezel, so
     its slot's lift is that seat-out and nothing else - the figure
-    `manifest.presented_interface` derives from the contract chain."""
+    `manifest.presented_interface` derives from the contract chain.
+
+    AND SO DOES A PLUGGABLE TERMINAL HEADER THAT STANDS PROUD OF ITS FACE
+    (#789). common/terminal-header-508-5f@1 and common/terminal-header-508-2@1
+    build their housing 2.5 proud and present at its mouth - their `mate`
+    sits `on: body` - so a plug seated there starts where the housing ends.
+    The slot's lift is that housing's `out`, again the figure
+    `manifest.presented_interface` derives, and the two interfaces are named
+    here so a third lifted slot still has to be argued for."""
     from portrayal import manifest
     lib = render_mod.Library([str(LIB)])
     families = render_mod._pluggable_families()
@@ -640,7 +648,8 @@ def test_the_lift_census():
                 if c["lift"]:
                     nonzero += 1
                     lifted_cages += c["kind"] == "cage"
-                    if c["interface"] in ("bnc", "din-1-0-2-3", "f-type"):
+                    if c["interface"] in ("bnc", "din-1-0-2-3", "f-type",
+                                          "terminal-508-5f", "terminal-508-2"):
                         doc = lib.resolve(_ref(d, v, c["id"]))[0]
                         want = manifest.presented_interface(
                             doc, lambda r: lib.resolve(r)[0])[2]

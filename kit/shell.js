@@ -383,6 +383,9 @@ export function createShell(opts = {}) {
     // Each reads right upper-cased; they are written out so the row a plug
     // adds is labelled by the table and not by the fallback.
     'db9': 'DB9', 'vga': 'VGA', 'da15': 'DA15', 'db25': 'DB25',
+    // Pluggable terminal headers and their screw-clamp plugs (#789). The
+    // fallback would read TERMINAL-BLOCK and DC-TERMINAL.
+    'terminal-block': 'terminal block', 'dc-terminal': 'DC terminal',
   };
   // A speed is one of spec/schemas/speeds.yaml's closed set (lint L110), and
   // every one of those reads right upper-cased - 1G, 2.5G, 1.6T - so there is

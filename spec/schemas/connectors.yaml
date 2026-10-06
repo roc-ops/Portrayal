@@ -49,3 +49,13 @@ interfaces:
   hd15: {standard: hd15, note: 'High-density D-subminiature 15 position in shell size E (VGA), FEMALE on the panel: sockets, as std/vga@1 draws it; generic/hd15-plug@1, a male cable plug, mates it. The shell is the db9 shell and neither plug mates the other connector. A male HD-15 on a panel would be a different interface'}
   da15: {standard: da15, note: 'D-subminiature 15 position in two rows, shell size A (DA-15), FEMALE on the panel: sockets, as std/da15@1 draws it; generic/da15-plug@1, a male cable plug, mates it. A male DA-15 on a panel would be a different interface'}
   db25: {standard: db25, note: 'D-subminiature 25 position, shell size B (DB-25), FEMALE on the panel: sockets, as std/db25@1 draws it; generic/db25-plug@1, a male cable plug, mates it. A male DB-25 on a panel would be a different interface'}
+  # Pluggable terminal headers on a 5.08 mm pitch (#789,
+  # docs/connectors-dc-terminal-design.md). An interface is the connector, not
+  # the use: the pitch and the number of positions are in the key, and a
+  # header feeding power and one carrying a relay contact are the same
+  # interface when they are the same header. A FLANGED header is an interface
+  # of its own, keyed `f`: the manufacturer lists only flanged plugs as its
+  # mates and none of them for the plain header.
+  terminal-508-2: {standard: terminal-508-2-header, note: 'two-position plain pluggable header on a 5.08 mm pitch (Phoenix Contact MSTBA 2,5/..-G-5,08 and equivalents); generic/terminal-508-2-plug@1 mates it'}
+  terminal-508-5f: {standard: terminal-508-5f-header, note: 'five-position pluggable header on a 5.08 mm pitch with a threaded flange at each end (Phoenix Contact MSTB 2,5/ 5-GF-5,08 and equivalents); generic/terminal-508-5f-plug@1, a plug with screw flanges, mates it'}
+  terminal-508-6: {standard: terminal-508-6-header, note: 'six-position plain pluggable header on a 5.08 mm pitch (Phoenix Contact MSTBA 2,5/ 6-G-5,08 and equivalents); generic/terminal-508-6-plug@1 mates it'}
