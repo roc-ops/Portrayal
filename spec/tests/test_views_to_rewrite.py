@@ -38,6 +38,10 @@ def test_views_to_rewrite():
         "a nested override must rewrite every view with bays, not views with only cages"
     assert out["nestedCage"] == ["front-0", "front-1"], \
         "a cage on a seated card must rewrite every view with bays"
+    assert out["plainPlacementSlot"] == ["front-0", "front-1", "rear-0"], \
+        "a slot on a placed part that is no cage must rewrite every view (#814)"
+    assert out["slotOnCage"] == ["rear-0"], \
+        "a slot under a device cage still names that cage's view only"
     assert out["miss"] == []
     assert out["empty"] == []
     assert out["emptyDevIndex"] == []

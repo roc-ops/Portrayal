@@ -396,16 +396,13 @@ installer's choice.
 - **A lug on a supply in a bay is painted with that supply,** so anything of it that
   reached past the supply would be painted under the next one. At a 10 stub it ends inside
   the TM-8104 supply's own face.
-- **A lug swapped onto a block placed straight on the device is not built in 3D yet.**
-  The build draws a seated lug in 3D with all four solids, the sleeve and wire in their
-  field colours. The explorer seats one at runtime in 2D on every block. Its 3D scene is
-  cut from faces that `seatViews` (kit/swap.js) rewrites, and `viewsToRewrite` names a
-  face only for a key that is a bay, a device cage, a slot under a device cage, or a path
-  holding `/module/`. `psu1-input/lug-2` is none of those: the block publishes slots and
-  is not itself a cage. So on the CSR180 and CSR200 a lug chosen in the explorer shows in
-  2D and not in 3D, with no warning. On a Telco supply the key is
-  `psu-1/module/terminal/lug-2` and the 3D scene seats it. `seatFace`, handed the face,
-  seats both. The kit is not changed here; a test pins the gap.
+- **A lug swapped onto a block placed straight on the device reaches the 3D scene.**
+  The explorer's 3D scene is cut from faces that `seatViews` (kit/swap.js) rewrites, and
+  `viewsToRewrite` names the faces. A key such as `psu1-input/lug-2` is claimed by no
+  bay and no cage of any view: the block publishes slots and is not itself a cage. For
+  such a key every view is rewritten (#814), since the index cannot say which face holds
+  the slot and `seatFace` does nothing on a face without it. Before that rule the lug
+  chosen on a CSR180 or CSR200 showed in 2D and was silently missing in 3D.
 - **The `cable` point states no `on:`.** That key takes a feature built with `out` or
   `cyl`; the wire is a `bar`. The depth the viewer reads for the cable end is the seat's,
   2.25 below the axis of the wire. Accepted for now; routing of cable ends is #805.
