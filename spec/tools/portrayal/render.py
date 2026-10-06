@@ -2089,6 +2089,26 @@ def bevel_face(svg, faceplate, ch, face, w, h):
         strip.set("stroke", ch.get("edge", "#22262a")); strip.set("stroke-width", "0.25")
 
 
+def _shift_heights(node, by):
+    """Move a node's absolute heights by `by` mm: its `out`, and its profile.
+
+    `out` is read as a distance from the face, so a part standing in a well, or
+    seated in a bay that is lifted, has it moved to where the part now stands.
+    A PROFILE IS A HEIGHT TOO, and for a long time was left where it was: `out`
+    went to the well's floor and the surface it describes did not, so a web
+    sloping down to a tray stood the well's depth above it on a skirt twice as
+    tall (docs/cable-managers-design.md section 4). One function, so the well
+    and the bay cannot disagree about which heights move.
+    """
+    if node.get("data-z-out") is not None:
+        node.set("data-z-out", f"{float(node.get('data-z-out')) + by:g}")
+    for k in ("data-z-profile", "data-z-profile-y"):
+        if node.get(k):
+            node.set(k, ",".join(
+                f"{float(t):g}:{float(o) + by:g}"
+                for t, o in (pair.split(":") for pair in node.get(k).split(","))))
+
+
 def render_view(device, view_name, view, lib, include=(), config_name="default", config=None,
                 silkscreen=True):
     config = config or {}
@@ -2121,6 +2141,10 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     # rather than through a box that has no inside.
     if view.get("open-frame"):
         svg.set("data-open-frame", "1")
+    # A SHEET BODY SAYS SO ON EVERY FACE, for the same reason: it is a fact
+    # about the chassis, and a face opened on its own has to carry it.
+    if (device.get("chassis") or {}).get("shell") == "sheet":
+        svg.set("data-shell", "sheet")
     # Sections are a classification, not a namespace: a drawing is opened
     # somewhere else, and `data-power-max-w` is readable there while
     # `data-power-max-w` under some section prefix would only be longer. So the
@@ -2160,8 +2184,15 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     faceplate.set("x", "0"); faceplate.set("y", "0")
     faceplate.set("width", f"{w:g}"); faceplate.set("height", f"{h:g}")
     faceplate.set("rx", "1.2")
-    faceplate.set("fill", ch.get("color", "#3a3f45"))
-    faceplate.set("stroke", ch.get("edge", "#22262a")); faceplate.set("stroke-width", "0.5")
+    # A SHEET BODY HAS NO HOUSING TO FILL. Its metal is what the view draws -
+    # the tray, the ears - and the rest of the envelope is open air, which the
+    # viewer can only show if the face does not paint it
+    # (docs/cable-managers-design.md section 4). The rect stays, unfilled and
+    # unstroked: it is the element every consumer addresses as `chassis`.
+    sheet = ch.get("shell") == "sheet"
+    faceplate.set("fill", "none" if sheet else ch.get("color", "#3a3f45"))
+    if not sheet:
+        faceplate.set("stroke", ch.get("edge", "#22262a")); faceplate.set("stroke-width", "0.5")
     bevel_face(svg, faceplate, ch, view.get("face") or view_name, w, h)
 
     resolved = {}
@@ -3112,8 +3143,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             return
         g.set("data-z-lift", f"{-floor:g}")
         for node in g.iter():
-            if node.get("data-z-out") is not None:
-                node.set("data-z-out", f"{float(node.get('data-z-out')) - floor:g}")
+            _shift_heights(node, -floor)
 
     def back_occupants(p):
         """The keys a module's back seats (B3, Task 7i): those whose host is
@@ -3571,8 +3601,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         # as sink() does for a placement.
         if bay_lift:
             for node in bay_g.iter():
-                if node.get("data-z-out") is not None:
-                    node.set("data-z-out", f"{float(node.get('data-z-out')) + bay_lift:g}")
+                _shift_heights(node, bay_lift)
 
     # FIRST PASS: the wells and the openings, interleaved by `under:`. Bays
     # paint after placements by default - a cage draws before the drives it
@@ -4541,6 +4570,10 @@ def main():
                              # how the box is installed; `rack` where the
                              # device states nothing (#734)
                              "mount": ch.get("mount", "rack"),
+                             # a body that is sheet metal and not a box; absent
+                             # on a box, as `solid` is on an unbevelled one
+                             **({"shell": ch["shell"], "thickness": ch.get("thickness")}
+                                if ch.get("shell") else {}),
                              # the chassis's own feed, where one feed is the
                              # whole story; `configs[].power` is each build's
                              # resolved answer, as for airflow

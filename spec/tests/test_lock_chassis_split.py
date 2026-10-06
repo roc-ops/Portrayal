@@ -77,6 +77,7 @@ def test_the_schema_still_closes_the_chassis_mapping():
 
 @pytest.mark.parametrize("key,value", [
     ("width", 441.0), ("height", 88.9), ("depth", 501.0), ("ru", 2),
+    ("shell", "sheet"),         # a solid box, or open air round what the parts build
 ])
 def test_a_dimension_is_still_a_major(key, value):
     """These are the keys something caches a coordinate from."""
@@ -89,6 +90,7 @@ def test_a_dimension_is_still_a_major(key, value):
     ("silk", "#ddd"),           # silkscreen text colour
     ("weight-kg", 9.5),         # a fact about the box; no coordinate reads it
     ("airflow", "back-to-front"),   # taken out in #171
+    ("thickness", 2.0),         # a sheet's stated gauge; nothing is built from it
 ])
 def test_recolouring_or_reweighing_a_chassis_is_a_patch(key, value):
     """Nothing moves, so nothing that cached a coordinate is invalidated."""

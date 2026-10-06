@@ -218,13 +218,18 @@ def test_the_populations_split_as_the_controller_ruling_expects():
     FORTY-FIVE AND THIRTY-NINE SINCE THE FIBRAIN HD HOLDERS (2026-10-06): four
     SC adapter holders, each a pass-through with a declared rear face -
     xmi1041ga and xmi1051ga (6 ports), xmn1041gb and xmn1051gb (12).
+
+    SIXTY-ONE AND FIFTY-FIVE SINCE THE REST OF THAT FAMILY (2026-10-06): ten
+    LC duplex holders (6 and 12 port, each in OM3, OM4, OM5, single-mode and
+    single-mode APC) and the six multimode SC ones (6 and 12 port in OM3, OM4
+    and OM5), all pass-throughs with a declared rear face.
     """
     idx = index()
     all_fibre = fibre_modules(idx)
     projecting = projecting_modules(idx)
     excluded = [e["name"] for e in all_fibre if e not in projecting]
-    assert len(all_fibre) == 45, sorted(e["name"] for e in all_fibre)
-    assert len(projecting) == 39, [e["name"] for e in projecting]
+    assert len(all_fibre) == 61, sorted(e["name"] for e in all_fibre)
+    assert len(projecting) == 55, [e["name"] for e in projecting]
     assert sorted(excluded) == sorted([
         "ppm-dcm-10", "ppm-dcm-20", "ppm-dcm-40", "ppm-dcm-80",
         "ppm-ocu-50-50", "ppm-ocu-97-3",
