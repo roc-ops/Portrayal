@@ -1,0 +1,65 @@
+format: 1
+kind: component
+name: input-feed-busbar
+version: 1.0.0
+class: inlet
+profile: power
+description: >-
+  One DC feed input of an Amphenol Network Solutions 1RU power panel with
+  horizontal inputs - two busbar landings side by side, one BATTERY and one
+  RETURN, that run straight back from the panel so the input cables leave to
+  the rear. Each landing takes a dual-hole lug on 3/8 inch holes.
+size: {w: 42.5, h: 30.6}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  the 300CB08 installation guide 149722-2 A9 Fig. 3-8 at 2.849 px/mm: the input assembly is framed 42.5 wide by
+  30.6 high (121 px by 87 px), with the two landings seen end-on as slots
+  6.0 and 7.7 wide and 24.9 high, and two bolt heads between them.
+provenance:
+  size: >-
+    drawing - see size-notes.
+  landings: >-
+    datasheet - 300CB08 datasheet, Inputs, -C versions: two pairs of 3/8 inch
+    holes on 5/8 to 1 inch centres per terminal, maximum lug width 1.5 inch,
+    bolts with Keps nuts and flat washers.
+  reach: >-
+    datasheet - the -C panel is 478 deep without its tie bar against 331 for
+    the stud versions, and the busbars are what the difference is: 147 behind
+    the chassis rear. Fig. 3-5, the side view, shows them running straight
+    back.
+  polarity: >-
+    WHICH LANDING IS BATTERY IS A FACT OF THE PANEL, printed beside the
+    assembly (Fig. 3-8), and it mirrors from side A to side B. The landings
+    are named for where they sit; the device prints the legends.
+attrs: {hole-diameter: 3/8 in, lug-holes: 2}
+elements:
+  landing-1: {at: [4.9, 3.2], size: [6.0, 24.9], class: inlet}
+  landing-2: {at: [30.2, 3.2], size: [7.7, 24.9], class: inlet}
+relief:
+  wall: '#0c0d0e'
+  features:
+    - node: landing-1
+      out: 147.0
+      color: '#c4c8cc'
+      confidence: datasheet
+      source: >-
+        478 deep without the tie bar less the 331 of the stud versions (300CB08 datasheet, Dimensions)
+    - node: landing-2
+      out: 147.0
+      color: '#c4c8cc'
+      confidence: datasheet
+      source: >-
+        see landing-1
+    - node: bolt-top
+      cyl: 4.0
+      color: '#b9bdc1'
+      confidence: estimated
+      source: >-
+        a bolt head between the landings in Fig. 3-8; height by eye
+    - node: bolt-bottom
+      cyl: 4.0
+      color: '#b9bdc1'
+      confidence: estimated
+      source: >-
+        see bolt-top
+skins: [default]

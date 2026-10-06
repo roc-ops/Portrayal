@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1255 component majors in 27 namespaces.
+1257 component majors in 27 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -100,8 +100,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/fibre-splice@1` | component | port | 60 × 20 |  | 0 | 1 | A fusion-splice tray holder, as fitted behind a splice cassette's rear panel - twelve trunk pigtails fusion-s… |
 | `common/ground-lug@1` | component | ground | 7 × 14 |  | 40 | 1 | Chassis grounding point with earth symbol above the stud |
 | `common/ground-screw-washer@1` | component | ground | 11 × 11 |  | 10 | 1 | Chassis grounding screw - a Phillips pan head seated on a captive washer, screwed into the housing where the … |
-| `common/ground-stud@1` | component | ground | 8.1 × 8.1 |  | 5 | 0 | Chassis grounding stud with its hex nut - a threaded stud pressed into the panel and the nut that clamps a ri… |
-| `common/ground-symbol@1` | component | ground | 6 × 6 |  | 62 | 1 | Grounding silkscreen symbol (earth in a circle), no hardware |
+| `common/ground-stud@1` | component | ground | 8.1 × 8.1 |  | 7 | 0 | Chassis grounding stud with its hex nut - a threaded stud pressed into the panel and the nut that clamps a ri… |
+| `common/ground-symbol@1` | component | ground | 6 × 6 |  | 64 | 1 | Grounding silkscreen symbol (earth in a circle), no hardware |
 | `common/keyhole-mount@1` | component | mount | 8 × 12 |  | 3 | 0 | Wall-mount keyhole slot |
 | `common/keystone-clip@2` | component | mechanical | 16.5 × 14.9 | keystone-opening | 0 | 1 | The white plastic clip FS ships with its FHD multimedia modular panel (FHD-FAPM6, SKU 143239), seated in one … |
 | `common/laser-warning@1` | component | marking | 5.4 × 4.8 |  | 6 | 13 | IEC 60825 laser hazard triangle - yellow field, black border and burst symbol |
@@ -114,7 +114,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/led-arrow@1` | component | led | 3.6 × 3.2 |  | 15 | 1 | Single triangle port LED - up skin for top-row ports, down for bottom |
 | `common/led-arrow-sm@1` | component | led | 2.25 × 2 |  | 33 | 0 | Compact triangle port LED for tight inter-port gaps - up skin for top-row ports, down for bottom |
 | `common/led-dot@1` | component | led | 2 × 2 |  | 116 | 273 | Tiny round port LED (2mm) |
-| `common/led-indicator@1` | component | led | 4 × 4 |  | 27 | 48 | Single chassis status LED |
+| `common/led-indicator@1` | component | led | 4 × 4 |  | 29 | 48 | Single chassis status LED |
 | `common/led-rect@1` | component | led | 4.6 × 2.6 |  | 30 | 3 | Rectangular system LED (cell-site style green bar) |
 | `common/led-rect-sm@1` | component | led | 2.8 × 1.6 |  | 30 | 23 | Small rectangular per-port LED - the rounded bar a dense port row carries one of beside each cage, at roughly… |
 | `common/led-slot-pair@1` | component | led | 3.7 × 1.2 |  | 0 | 4 | Two lamps behind one light-pipe slot - the rounded 3.7 x 1.2 window a bracket punches for a port's pair of in… |
@@ -255,21 +255,23 @@ aperture when it is a bare opening - never both at one position. The README's
 | `amphenol/qsfp28-passive-dac@1` | module | transceiver | 18.35 × 8.5 × 52.4 | qsfp | 0 | 0 | Amphenol NDAAFR QSFP28 to QSFP28 100G passive direct-attach copper cable, one end - 32 AWG eight-pair PVC-jac… |
 | `amphenol/qsfp56-linear-active@1` | module | transceiver | 18.35 × 8.5 × 52.4 | qsfp | 0 | 0 | Amphenol NJAAF3 QSFP56 to QSFP56 200G active copper cable, one end - 30 AWG eight-pair dual-drain cable in a … |
 
-## amphenol-ns/ (11)
+## amphenol-ns/ (13)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
-| `amphenol-ns/alarm-card-307608@1` | component | port | 39 × 42.8 |  | 1 | 0 | Rear face of the alarm card of a passive Amphenol Network Solutions 300CB08 - two three-pin wire-wrap headers… |
-| `amphenol-ns/alarm-dip-8@1` | component | button | 21.9 × 4.6 |  | 1 | 0 | Eight-position DIP switch seen through a slot in the front of an Amphenol Network Solutions 1RU power panel -… |
-| `amphenol-ns/breaker-1ru@1` | module | breaker | 17.8 × 39.1 × 127.5 |  | 1 | 1 | Single-pole bullet-terminal plug-in circuit breaker for Amphenol Network Solutions 1RU breaker panels - the b… |
-| `amphenol-ns/breaker-blank-1ru@1` | module | blank | 17.8 × 39.1 × 1 |  | 1 | 0 | Blanking cover for an unused breaker position on an Amphenol Network Solutions 1RU breaker panel |
-| `amphenol-ns/cover-thumbscrew@1` | component | screw | 9.7 × 9.7 |  | 1 | 0 | Captive thumbscrew holding the removable front cover of an Amphenol Network Solutions 1RU power panel - turne… |
+| `amphenol-ns/alarm-card-307608@1` | component | port | 39 × 42.8 |  | 3 | 0 | Rear face of the alarm card of a passive Amphenol Network Solutions 300CB08 - two three-pin wire-wrap headers… |
+| `amphenol-ns/alarm-dip-8@1` | component | button | 21.9 × 4.6 |  | 3 | 0 | Eight-position DIP switch seen through a slot in the front of an Amphenol Network Solutions 1RU power panel -… |
+| `amphenol-ns/breaker-1ru@1` | module | breaker | 17.8 × 39.1 × 127.5 |  | 3 | 1 | Single-pole bullet-terminal plug-in circuit breaker for Amphenol Network Solutions 1RU breaker panels - the b… |
+| `amphenol-ns/breaker-blank-1ru@1` | module | blank | 17.8 × 39.1 × 1 |  | 3 | 0 | Blanking cover for an unused breaker position on an Amphenol Network Solutions 1RU breaker panel |
+| `amphenol-ns/cover-thumbscrew@1` | component | screw | 9.7 × 9.7 |  | 3 | 0 | Captive thumbscrew holding the removable front cover of an Amphenol Network Solutions 1RU power panel - turne… |
 | `amphenol-ns/guard-mount-1ru@1` | component | mechanical | 3.2 × 32.3 | breaker-1ru-guard | 0 | 1 | The two threaded inserts in the face of a 1RU plug-in breaker, one above the other - where its touch guard sc… |
-| `amphenol-ns/input-feed-studs@1` | component | inlet | 64.1 × 41 |  | 1 | 0 | One DC feed input of an Amphenol Network Solutions 1RU power panel with vertical inputs - its BATT terminal a… |
+| `amphenol-ns/input-feed-busbar@1` | component | inlet | 42.5 × 30.6 |  | 1 | 0 | One DC feed input of an Amphenol Network Solutions 1RU power panel with horizontal inputs - two busbar landin… |
+| `amphenol-ns/input-feed-studs@1` | component | inlet | 64.1 × 41 |  | 2 | 0 | One DC feed input of an Amphenol Network Solutions 1RU power panel with vertical inputs - its BATT terminal a… |
 | `amphenol-ns/input-stud-pair@1` | component | inlet | 29 × 41 |  | 0 | 1 | One input terminal of an Amphenol Network Solutions 1RU power panel with vertical inputs - two 3/8-16 studs o… |
+| `amphenol-ns/output-p40@1` | component | inlet | 10.5 × 29.8 |  | 2 | 0 | One connectorized output circuit of an Amphenol Network Solutions 1RU power panel - a two-pole latching recep… |
 | `amphenol-ns/output-terminal@1` | component | inlet | 14.75 × 34 |  | 1 | 0 | One output circuit of an Amphenol Network Solutions 1RU power panel with terminal-block outputs - a BATT scre… |
 | `amphenol-ns/touch-guard-1ru@1` | component | mechanical | 17.8 × 39.1 | breaker-1ru-guard | 0 | 1 | Touch guard cover for a 1RU plug-in breaker on an Amphenol Network Solutions breaker panel - a black hood scr… |
-| `amphenol-ns/tpa-fuse-holder-307492@1` | module | breaker | 17.8 × 39.1 × 127.5 |  | 1 | 0 | 1RU TPA fuse holder, part 307492 - a plug-in carrier that takes one Cooper Bussmann TPA fuse and seats in the… |
+| `amphenol-ns/tpa-fuse-holder-307492@1` | module | breaker | 17.8 × 39.1 × 127.5 |  | 3 | 0 | 1RU TPA fuse holder, part 307492 - a plug-in carrier that takes one Cooper Bussmann TPA fuse and seats in the… |
 
 ## casa/ (39)
 

@@ -25,6 +25,14 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- Two more of the Amphenol Network Solutions 300CB08 family, the passive
+  connectorized panels: `amphenol-ns/300cb08-sc` (stud inputs) and
+  `amphenol-ns/300cb08-c` (horizontal busbar inputs). Each replaces the screw
+  terminal outputs with sixteen `amphenol-ns/output-p40@1` receptacles; the -C
+  takes its feeds on `amphenol-ns/input-feed-busbar@1`, whose landings stand
+  147 mm behind the chassis. Front, top, bottom and sides are the 300CB08. In
+  the DCIM exports each has two `dc-terminal` power ports, one per feed, and
+  its outputs are not exported yet. No existing device or export changes.
 - Barrier terminal blocks seat a lug per pole. `terminal-stud` joins
   `spec/schemas/connectors.yaml` as one nominal connector: a screw or stud
   terminal a lug lands on, claiming no size. The terminal screws of
