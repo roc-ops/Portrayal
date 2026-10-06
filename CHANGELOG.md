@@ -59,7 +59,7 @@ names the ref that replaces it.
   is the plain box it was.
 - Amphenol Network Solutions, a new vendor (`amphenol-ns`, formerly Telect):
   the 300CB08 (`amphenol-ns/300cb08`), a 1RU dual-feed DC circuit breaker
-  panel with sixteen plug-in positions, all six faces, and ten
+  panel with sixteen plug-in positions, all six faces, and eleven
   `amphenol-ns/` parts. A position takes `amphenol-ns/breaker-1ru@1`, one
   module for every rating from 2 A to 60 A, set per position by its `rating`
   field and printed on its handle; `amphenol-ns/tpa-fuse-holder-307492@1`,
