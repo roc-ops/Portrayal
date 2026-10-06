@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: tm810x-psu-dc
-version: 1.0.0
+version: 1.0.1
 class: psu
 behaviour: fills
 profile: networking
@@ -40,6 +40,13 @@ provenance:
     DIFFERENT INLET: the same image shows no silver bail over its grille, and the lattice
     runs about 16 mm in from the left edge where the AC supply's stops at about 11, so
     this part draws the wider grille and no bail.
+  terminals: >-
+    NOTHING HELD STATES WHAT THIS SUPPLY'S TERMINALS TAKE. No installation guide for the
+    TM-8104 or TM-8106 is public, and the data sheets say only "AC or DC 24/-48VDC": no
+    lug, no wire size and no screw size. The block is common/dc-terminal-24@1, whose three
+    terminal screws are seats for a wire's lug (`terminal/lug-1` to `terminal/lug-3`), and
+    the library's nominal ring lug seats there as it does on any `terminal-stud`. That it
+    is the lug this supply takes is not claimed.
 states: [absent]
 elements:
   vent-field: {at: [1.0, 1.2], size: [15.9, 37.0], class: vent}

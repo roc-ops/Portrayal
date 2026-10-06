@@ -187,6 +187,23 @@ def _terminal_header_interfaces():
     return got
 
 
+def _terminal_screw_interfaces():
+    """Every interface a `class: screw` part presents, read off the library:
+    the terminal screws of the barrier blocks, which a wire's lug lands on."""
+    got = set()
+    for f in (LIB / "components").rglob("v*/contract.yaml"):
+        c = load_yaml(f) or {}
+        if c.get("interface") and c.get("class") == "screw":
+            got.add(c["interface"])
+    return got
+
+
+def test_the_terminal_screw_interfaces_were_read():
+    """The census's exclusion is keyed on these; an empty set would exclude
+    nothing and say nothing."""
+    assert _terminal_screw_interfaces() == {"terminal-stud"}
+
+
 def test_the_terminal_header_interfaces_were_read():
     """The census's exclusion is keyed on these; an empty set would exclude
     nothing and say nothing."""
@@ -217,6 +234,8 @@ def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
     assert dsub_connectors
     terminal_headers = _terminal_header_interfaces()
     assert terminal_headers
+    terminal_screws = _terminal_screw_interfaces()
+    assert terminal_screws
     for f in (LIB / "components").rglob("v*/contract.yaml"):
         c = load_yaml(f) or {}
         if (c.get("attrs") or {}).get("media") == "rj45":
@@ -268,6 +287,13 @@ def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
         # `dc-barrel`, a power inlet's interface, and is left out with them;
         # its census is spec/tests/test_dc_barrel_plug.py.
         if c.get("mates") in terminal_headers:
+            continue
+        # NOR IS THE RING LUG (#789). generic/ring-lug@1 mates `terminal-stud`,
+        # the interface a barrier block's terminal screw presents. Left out by
+        # what it IS - it mates an interface presented by a screw, and it
+        # carries one copper wire - and its census is
+        # spec/tests/test_terminal_lugs.py.
+        if c.get("mates") in terminal_screws:
             continue
         if c.get("mates") in connectors and c.get("class") != "cap":
             ns = f.parents[2].name
