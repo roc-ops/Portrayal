@@ -61,7 +61,10 @@ provenance:
       the monitored panel as A PWR, A ALM, nrg, B ALM, B PWR, and section 1.4
       says the alarm card controls four indicator LEDs on the front. So the
       plain panel has four lamps in the outer four holes and the centre hole,
-      the nrg position, is not lit. The front photograph shows something in the
+      the nrg position, is not lit. The guide gives the colours in its power-up
+      steps (section 2.2.9): a PWR lamp is green when its feed is present, and
+      an ALM lamp is red when a breaker on that side is off or tripped with its
+      alarm switch enabled. The front photograph shows something in the
       centre hole too; what fills it is not established.
   rear:
     confidence: drawing
@@ -84,6 +87,14 @@ provenance:
       can take off. The populated
       example is an invented load to show the field working; the vendor
       publishes no standard fill.
+  ratings:
+    confidence: datasheet
+    note: >-
+      The datasheet gives the maximum input load as 325A @ 45 C per panel. The
+      installation guide prints the same row with its de-rating: 325A @45 C per
+      panel (De-rated to 200A @70 C). That is the only temperature either
+      document states for the panel, so it is what `operating-temp` carries: a
+      ceiling with its two rating points, and no lower limit.
   front-cover:
     confidence: drawing
     note: >-
@@ -131,7 +142,7 @@ attrs:
     mounting: 19 inch and 23 inch brackets included
   power:
     input-voltage: ±12 VDC, ±24 VDC and ±48 VDC nominal
-    input-dc: two feeds, 325 A each at 45 C; input wire 2/0 AWG to 350 MCM
+    input-dc: dual feed; maximum input load 325 A at 45 C per panel, de-rated to 200 A at 70 C; input wire 2/0 AWG to 350 MCM
     short-circuit-withstand-a: 5000
     output-breaker-max: 60 A single-pole; the UL rating holds to 48 A continuous per output
     input-interrupt-max: 125 percent of the panel rating
@@ -144,7 +155,7 @@ attrs:
   thermal:
     cooling: passive, perforated lid and base
   environmental:
-    operating-temp: 325 A input rating stated at 45 C; no operating range is given in the datasheet or the guide
+    operating-temp: to 70 C - 325 A per panel at 45 C, de-rated to 200 A at 70 C; no lower limit is stated
   management:
     alarm-contacts: Form C relay per side, 2 A at 30 VDC and 0.6 A at 60 VDC, on wire-wrap terminals
   compliance:
@@ -256,10 +267,10 @@ views:
         - {id: thumbscrew-right, ref: amphenol-ns/cover-thumbscrew@1, at: [420.55, 17.35], group: cover, rel-pos: 2}
         - {id: dip-a, for: chassis, ref: amphenol-ns/alarm-dip-8@1, at: [185.9, 21.3], group: alarm-enable, rel-pos: 1}
         - {id: dip-b, for: chassis, ref: amphenol-ns/alarm-dip-8@1, at: [224.0, 21.3], group: alarm-enable, rel-pos: 2}
-        - {id: led-a-pwr, for: chassis, ref: common/led-indicator@1, at: [188.8, 29.0], group: status, rel-pos: 1}
-        - {id: led-a-alm, for: chassis, ref: common/led-indicator@1, at: [201.5, 29.0], group: status, rel-pos: 2}
-        - {id: led-b-alm, for: chassis, ref: common/led-indicator@1, at: [226.9, 29.0], group: status, rel-pos: 3}
-        - {id: led-b-pwr, for: chassis, ref: common/led-indicator@1, at: [239.6, 29.0], group: status, rel-pos: 4}
+        - {id: led-a-pwr, for: chassis, ref: common/led-indicator@1, at: [188.8, 29.0], group: status, rel-pos: 1, states: ['off', {name: ok, color: '#22c55e'}]}
+        - {id: led-a-alm, for: chassis, ref: common/led-indicator@1, at: [201.5, 29.0], group: status, rel-pos: 2, states: ['off', {name: fault, color: '#ef4444'}]}
+        - {id: led-b-alm, for: chassis, ref: common/led-indicator@1, at: [226.9, 29.0], group: status, rel-pos: 3, states: ['off', {name: fault, color: '#ef4444'}]}
+        - {id: led-b-pwr, for: chassis, ref: common/led-indicator@1, at: [239.6, 29.0], group: status, rel-pos: 4, states: ['off', {name: ok, color: '#22c55e'}]}
   rear:
     size: {w: 431.8, h: 43.9}
     panel:

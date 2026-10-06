@@ -13,18 +13,20 @@ description: >-
   panel datasheet calls the breaker AIRPAX 1U Series and sells eleven ratings
   from 2 A to 60 A, standard delay.
 size: {w: 17.8, h: 39.1, d: 127.5}
-size-confidence: {w: drawing, h: drawing, d: datasheet}
+size-confidence: {w: drawing, h: drawing, d: estimated}
 size-notes: >-
   THE FACE IS THE OPENING IT SHOWS THROUGH, not the whole breaker. the 300CB08 installation guide 149722-2 A9 Fig.
   3-1 draws sixteen openings 17.8 wide by 39.1 high on a 19.81 pitch. The
   breaker behind is 19.05 MAX wide by 37.03 MAX high in the Sensata IAR/IUR/IER/CUR/CER datasheet, pages 2 and 3, so its sides
   sit behind the webs of the front cover and it is drawn 37.0 high, centred
   in the opening. The depth is dimension B for a quarter-inch bullet, 5.019 in
-  or 127.48, front of the body to the bullet tips, handle excluded.
+  or 127.48, front of the body to the bullet tips, handle excluded - an
+  estimate, because the five-sixteenth bullet is 129.35 and no document held
+  says which the panel takes.
 attrs: {model: 1RU Circuit Breaker, series: AIRPAX 1U, poles: 1, terminal: bullet}
 provenance:
   size: >-
-    drawing for the face, datasheet for the depth - see size-notes.
+    drawing for the face, estimated for the depth - see size-notes.
   depth-bullet: >-
     estimated between two datasheet rows. Sensata lists a quarter-inch bullet
     at 127.48 and a five-sixteenth bullet at 129.35. No document held says
@@ -44,9 +46,13 @@ provenance:
     exact position and size of the handle and the flag are read off that
     photograph by eye, which is taken at an angle.
   handle: >-
-    datasheet - the handle stands 15.37 (0.605 in) proud of the face in the Sensata IAR/IUR/IER/CUR/CER datasheet, pages 2 and 3.
-    It is drawn in one position; nothing in a contract can yet say on, off or
-    tripped.
+    the Sensata IAR/IUR/IER/CUR/CER datasheet, pages 2 and 3 put the handle 15.37 (0.605 in) proud of the breaker face. THE
+    BREAKER FACE SITS BEHIND THE OPENING IT SHOWS THROUGH, by an amount no
+    view dimensions: the panel bottom view, Fig. 3-12, puts the front of the
+    guards 14.7 from the chassis front, and a guard has to clear the handle,
+    so the face is at least a millimetre or two back. 3.0 is assumed, which
+    leaves the handle 12.4 proud of the opening. It is drawn in one position;
+    nothing in a contract can yet say on, off or tripped.
   rating: >-
     datasheet for the list, photo for where it prints. The eleven ratings and
     their part numbers are the 300CB08 datasheet list: 2 A 151723, 3 A 152805,
@@ -80,9 +86,9 @@ relief:
   wall: '#0f1112'
   features:
     - node: handle
-      out: 15.37
+      out: 12.4
       color: '#17191b'
-      confidence: datasheet
+      confidence: estimated
       source: >-
-        the Sensata IAR/IUR/IER/CUR/CER datasheet, pages 2 and 3: the handle stands 0.605 in, 15.37, off the face
+        15.37 off the breaker face per the Sensata IAR/IUR/IER/CUR/CER datasheet, pages 2 and 3, less an assumed 3.0 that the face sits behind the opening - see provenance.handle
 skins: [default]
