@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: dc-terminal-27
-version: 1.0.0
+version: 1.0.1
 class: inlet
 behaviour: mounts
 profile: networking
@@ -43,6 +43,17 @@ provenance:
     furthest-forward thing on the part - rather than a guess at the moulding's
     total depth including whatever sits behind the panel, which no source gives
     and nothing in the library uses.
+  screws: >-
+    EACH TERMINAL SCREW IS A COMPOSED PART, common/terminal-screw-38@1, one
+    per pole under the ids `lug-1` to `lug-3`, standing on its pole through
+    the part's `lift` of 9.0. The head and its slot are that part's drawing,
+    moved out of this skin unchanged, and its 1.4 of head is that part's
+    relief. The part presents the `terminal-stud` interface, so each pole is a
+    seat a wire's lug lands on; this block states no interface of its own.
+    THE WIRES LEAVE DOWNWARD, toward the legend printed below the block: the
+    Edgecore quick start guides draw each pole open at its lower edge between
+    the barriers. The element ids `pole-1` to `pole-3` are the poles and are
+    unchanged.
   cover: >-
     photo-measured, as a colour rather than a dimension - the block reads far
     brighter than the panel around it in both instances, with the screws
@@ -112,30 +123,10 @@ relief:
       confidence: estimated
       source: >-
         common/dc-terminal-27@1's own 3D-form key - see `body`.
-    - node: screw-1
-      cyl: 1.4
-      lift: 9.0
-      color: '#c3c9cf'
-      confidence: estimated
-      source: >-
-        common/dc-terminal-27@1's own 3D-form key - see `body`. A slotted head
-        standing on its pole and finishing just under the lip line.
-    - node: screw-2
-      cyl: 1.4
-      lift: 9.0
-      color: '#c3c9cf'
-      confidence: estimated
-      source: >-
-        common/dc-terminal-27@1's own 3D-form key - see `body`. A slotted head
-        standing on its pole and finishing just under the lip line.
-    - node: screw-3
-      cyl: 1.4
-      lift: 9.0
-      color: '#c3c9cf'
-      confidence: estimated
-      source: >-
-        common/dc-terminal-27@1's own 3D-form key - see `body`. A slotted head
-        standing on its pole and finishing just under the lip line.
+parts:
+  - {ref: common/terminal-screw-38@1, id: lug-1, at: [4.7, 6.1], lift: 9.0}
+  - {ref: common/terminal-screw-38@1, id: lug-2, at: [12.9, 6.1], lift: 9.0}
+  - {ref: common/terminal-screw-38@1, id: lug-3, at: [21.1, 6.1], lift: 9.0}
 connection-points:
   dc-in: {at: [14.8, 8.0], direction: front}
 skins: [default]

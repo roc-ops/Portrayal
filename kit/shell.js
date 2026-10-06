@@ -389,6 +389,9 @@ export function createShell(opts = {}) {
     // The DC barrel plug (#789) states `barrel`: `dc-barrel` would make `dc` a
     // connector word for lint L62.
     'barrel': 'DC barrel',
+    // The ring lug that lands on a terminal screw (#789). The fallback would
+    // read RING-LUG.
+    'ring-lug': 'ring lug',
   };
   // A speed is one of spec/schemas/speeds.yaml's closed set (lint L110), and
   // every one of those reads right upper-cased - 1G, 2.5G, 1.6T - so there is

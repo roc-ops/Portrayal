@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1241 component majors in 26 namespaces.
+1244 component majors in 26 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -68,7 +68,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/vga@1` | component | port | 20.47 × 11.4 × 6.73 | hd15 | 2 | 7 | VGA video receptacle - a female high-density DE-15, fifteen contacts in three rows inside the D-subminiature … |
 | `std/xfp@1` | component | port | 19.5 × 9.7 × 61.7 | xfp | 1 | 40 | XFP cage cutout (10G pluggable) - the recommended bezel opening of the XFP MSA, the aperture an XFP cage prot… |
 
-## common/ (113)
+## common/ (115)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -78,8 +78,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/compliance-sticker@1` | component | sticker | 219 × 206 |  | 47 | 0 | Bottom-cover compliance/spec label (placeholder art until a real bottom photo is available) |
 | `common/db9-receptacle@1` | component | port | 30.8 × 12.5 × 6.73 |  | 8 | 26 | DE-9 receptacle as a faceplate sees it - the shell with a jackscrew standoff either side of it, which is what… |
 | `common/dc-barrel@1` | component | inlet | 12 × 13 | dc-barrel | 4 | 1 | DC barrel power inlet |
-| `common/dc-terminal-24@1` | component | inlet | 24.6 × 14.4 × 9.1 |  | 1 | 4 | Three-pole DC barrier terminal block with a hinged clear cover - the screw-down -48 V input fitted to 1RU acc… |
-| `common/dc-terminal-27@1` | component | inlet | 27.5 × 15.9 × 10.4 |  | 1 | 3 | Three-pole DC barrier terminal block with a hinged clear cover - the screw-down -48 V input fitted to 1RU acc… |
+| `common/dc-terminal-24@1` | component | inlet | 24.6 × 14.4 × 9.1 |  | 1 | 6 | Three-pole DC barrier terminal block with a hinged clear cover - the screw-down -48 V input fitted to 1RU acc… |
+| `common/dc-terminal-27@1` | component | inlet | 27.5 × 15.9 × 10.4 |  | 1 | 5 | Three-pole DC barrier terminal block with a hinged clear cover - the screw-down -48 V input fitted to 1RU acc… |
 | `common/dc-terminal-header-6@1` | component | inlet | 32.4 × 11.1 | terminal-508-6 | 1 | 1 | Six-pole pluggable terminal-block HEADER on a 5.08 mm pitch - the green board-mounted receptacle with six wir… |
 | `common/dc-terminal-plug-2@1` | component | inlet | 32.1 × 17.6 × 15 |  | 2 | 1 | Two-pole PLUGGABLE DC terminal block - a green header on the faceplate with a matching two-way screw-clamp pl… |
 | `common/device-label@1` | component | sticker | 80 × 40 |  | 5 | 0 | Bottom identity label in oval recess (placeholder art - never reproduce serials/MACs/credentials) |
@@ -176,6 +176,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/st-simplex-adapter@1` | component | port | 10 × 10 | st-adapter | 0 | 1 | Panel-mount ST (BFOC) simplex adapter, one bayonet-coupled opening, as fitted to an FS FHD ST panel |
 | `common/terminal-header-508-2@1` | component | port | 10.16 × 12.1 | terminal-508-2 | 10 | 1 | Two-position pluggable terminal HEADER on a 5.08 mm pitch, no flange - the green receptacle a two-way screw-c… |
 | `common/terminal-header-508-5f@1` | component | inlet | 35.56 × 12.1 × 12 | terminal-508-5 | 10 | 2 | Five-position pluggable terminal HEADER on a 5.08 mm pitch with a threaded flange at each end - the green rec… |
+| `common/terminal-screw-34@1` | component | screw | 3.4 × 3.4 | terminal-stud | 0 | 1 | The terminal screw of a barrier terminal block, seen head on: a slotted head 3.4 across, the size common/dc-t… |
+| `common/terminal-screw-38@1` | component | screw | 3.8 × 3.8 | terminal-stud | 0 | 2 | The terminal screw of a barrier terminal block, seen head on: a slotted head 3.8 across, the size common/dc-t… |
 | `common/usb-a@2` | component | port | 17 × 7 × 13.7 |  | 3 | 0 | USB Type-A receptacle with trident silkscreen - a shell bezel wrapping a std/usb-a opening core |
 | `common/usb-a-bezel@1` | component | port | 17 × 9.3 × 13.7 |  | 5 | 0 | USB Type-A port in a silver panel bezel - the plate spans the component so it can abut neighboring port bezel… |
 | `common/usb-symbol@1` | component | silkscreen | 6.4 × 4 |  | 28 | 1 | USB trident silkscreen symbol, no hardware - the marking printed beside a USB receptacle |
@@ -186,7 +188,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/wall-plate-keyhole-2-42@1` | component | mount | 42 × 22 |  | 4 | 0 | The smaller wall-mounting plate with two keyhole slots - the 42 mm plate on the back of the AurCore AIS small… |
 | `common/warning-triangle@1` | component | marking | 5.4 × 4.8 |  | 5 | 3 | General warning triangle - a black exclamation mark in a yellow triangle, ISO 7010 W001 |
 
-## generic/ (54)
+## generic/ (55)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -204,7 +206,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `generic/da15-plug@1` | component | port | 39.9 × 15.3 | da15-plug | 0 | 0 | A DA-15 alarm cable plug: the MALE fifteen-position two-row D-subminiature connector in its backshell hood on… |
 | `generic/db25-plug@1` | component | port | 53.5 × 15.7 | db25-plug | 0 | 0 | A DB-25 status cable plug: the MALE twenty-five-position D-subminiature connector in its backshell hood on it… |
 | `generic/db9-plug@1` | component | port | 31 × 15.6 | db9-plug | 0 | 1 | A DE-9 serial or alarm cable plug: the FEMALE nine-position D-subminiature connector in its backshell hood on… |
-| `generic/dc-barrel-plug@1` | component | port | 8.2 × 8.2 | barrel-plug | 0 | 0 | A DC barrel power plug on its cable, at the common 5.5 mm barrel, seen from the cable end as a front elevatio… |
+| `generic/dc-barrel-plug@1` | component | port | 8.2 × 8.2 | barrel-plug | 0 | 1 | A DC barrel power plug on its cable, at the common 5.5 mm barrel, seen from the cable end as a front elevatio… |
 | `generic/din-1-0-2-3-plug@1` | component | port | 7.7 × 7.7 | din-1-0-2-3-plug | 0 | 0 | A straight 1.0/2.3 crimp plug on a coax cable, seen from the face: the push-pull latch sleeve, the crimp ferr… |
 | `generic/f-type-plug@1` | component | port | 12.83 × 11.11 | f-type-plug | 0 | 0 | A straight F crimp plug on a 75 ohm coax cable, seen from the face: the 7/16 hex coupling nut, the ribbed cri… |
 | `generic/hd15-plug@1` | component | port | 34 × 15.5 | hd15-plug | 0 | 0 | A moulded VGA cable plug: the MALE high-density fifteen-position D-subminiature connector in its moulded hood… |
@@ -227,6 +229,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `generic/qsfp-lc@2` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 6 | A generic QSFP with an LC duplex face - the shape every QSFP+, QSFP28 and QSFP56 optic with two LC bores has,… |
 | `generic/qsfp-lc-simplex@1` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 0 | A generic QSFP with one LC bore - the shape of the single-fibre bidirectional (BiDi) QSFP optic, standing for… |
 | `generic/qsfp-mpo@1` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 6 | A generic QSFP with one MPO face - the shape every QSFP+, QSFP28 and QSFP56 parallel-fibre optic has, standin… |
+| `generic/ring-lug@1` | component | port | 5.5 × 27.4 | ring-lug | 0 | 0 | A one-hole insulated ring terminal crimped on its wire, seen in plan as a front elevation sees it landed on a… |
 | `generic/rj45-plug@1` | component | port | 11.68 × 7.93 × 22.48 | rj45-plug | 0 | 9 | An RJ45 (8P8C) copper plug, the UNSHIELDED variant - a rectangular body with a spring latch on its underside … |
 | `generic/saf-d-grid-plug@1` | component | port | 26 × 18.9 | saf-d-grid-plug | 0 | 0 | A moulded Anderson Saf-D-Grid cord plug on its cord, seen from the cable end as a front elevation sees it sea… |
 | `generic/sc-plug@1` | component | port | 8.3 × 9 | sc-plug | 0 | 0 | An SC fibre plug, front view - the square keyed silhouette an SC connector presents end-on: a 7.4 x 9.0 housi… |
@@ -241,7 +244,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `generic/terminal-508-2-plug@1` | component | port | 10.16 × 15 | terminal-508-2-plug | 0 | 0 | A two-position screw-clamp terminal plug on a 5.08 mm pitch, wired, seen from the wire side as a front elevat… |
 | `generic/terminal-508-5-plug@1` | component | port | 35.41 × 15 | terminal-508-5-plug | 0 | 0 | A five-position screw-clamp terminal plug on a 5.08 mm pitch, the SCREW-FLANGE form with a flange and a locki… |
 | `generic/terminal-508-6-plug@1` | component | port | 30.48 × 15 | terminal-508-6-plug | 0 | 0 | A six-position screw-clamp terminal plug on a 5.08 mm pitch, wired, seen from the wire side as a front elevat… |
-| `generic/usb-a-plug@1` | component | port | 16 × 8 | usb-a-plug | 0 | 8 | A moulded straight USB Standard-A cable plug on its cable, seen from the cable end as a front elevation sees … |
+| `generic/usb-a-plug@1` | component | port | 16 × 8 | usb-a-plug | 0 | 9 | A moulded straight USB Standard-A cable plug on its cable, seen from the cable end as a front elevation sees … |
 | `generic/usb-c-plug@1` | component | port | 12.85 × 7 | usb-c-plug | 0 | 0 | A moulded straight USB Type-C cable plug on its cable, seen from the cable end as a front elevation sees it s… |
 | `generic/xfp-lc@1` | component | transceiver | 18.35 × 8.5 × 69 | xfp-module | 0 | 4 | A generic XFP with an LC duplex face - the shape every XFP optic with two LC bores has, standing for all of t… |
 

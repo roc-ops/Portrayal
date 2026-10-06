@@ -1,0 +1,56 @@
+format: 1
+kind: component
+name: terminal-screw-38
+version: 1.0.0
+class: screw
+interface: terminal-stud
+profile: networking
+description: >-
+  The terminal screw of a barrier terminal block, seen head on: a slotted
+  head 3.8 across, the size common/dc-terminal-27@1 draws. It is the screw a
+  wire's lug is landed under, so it is where a lug seats: it presents the
+  nominal `terminal-stud` interface at the top of its head, on the screw
+  axis. The block composes one per pole.
+size: {w: 3.8, h: 3.8}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  the head as common/dc-terminal-27@1 drew it before the screw became a part of its
+  own; that block's poles are photo-measured and its screw heads are drawn to
+  the scale of the same elevation, not measured
+provenance:
+  size: >-
+    estimated - the head diameter common/dc-terminal-27@1 drew for the three screws
+    of its poles, moved here unchanged. That block is read off the Edgecore CSR200 (AS5915-18X)
+    datasheet elevation, where the screws resolve through the guard and no
+    figure is given for them.
+  thread: >-
+    NOT STATED ANYWHERE HELD. No document for a device that places
+    common/dc-terminal-27@1 states the thread or the head size of its terminal
+    screws; the Edgecore quick start guides give a wire size and a torque
+    (7 in-lb maximum) and no screw. The part is named for its drawn head,
+    3.8 across, and claims no thread.
+  seat: >-
+    THE LUG SEATS ON TOP OF THE HEAD, NOT UNDER IT. `mate` sits `on: head`, so
+    a part seated here starts where the head ends, 1.4 above the pole this
+    screw stands on. A real lug lies on the pole under the head. Seated there
+    its tongue would run from the pole (9.0 off the face of the block)
+    into the block's bottom lip, which is built 10.2 off the same face, so
+    the lug is carried above the lip on the head instead and draws a head of
+    its own. See docs/connectors-dc-terminal-design.md, section 12.
+  behaviour: >-
+    DELIBERATELY OMITTED. The screw is part of the block and is never placed
+    on its own; the block states `mounts`.
+elements: {}
+relief:
+  features:
+    - node: head
+      cyl: 1.4
+      color: '#c3c9cf'
+      confidence: estimated
+      source: >-
+        common/dc-terminal-27@1's own 3D-form key for its screws, moved here
+        unchanged: a slotted head standing on its pole and finishing just
+        under the lip line.
+connection-points:
+  mate: {at: [1.9, 1.9], direction: front, 'on': head}
+skins: [default]
