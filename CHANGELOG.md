@@ -319,6 +319,12 @@ names the ref that replaces it.
   class), and no 800G prefix is documented.
 
 ### Fixed
+- `amphenol-ns/tpa-fuse-holder-307492@1` (1.0.1) keeps its fuse rating out of
+  the drawing once the rating is set in a viewer. The rating is carried by the
+  part and never printed, because the fuse is inside the holder; its text node
+  was hidden by its own `display`, which `kit/fields.js` removes from a node it
+  writes a value to. The node now sits in a group that is not displayed. The
+  300CB08 takes a patch, 1.0.1.
 - 3D kit (`swap.js` `viewsToRewrite`): a swap into a slot on a placed part
   that composes several slots and is no cage itself, such as a pole of a
   barrier terminal block (`psu1-input/lug-2`), now reaches the 3D scene. No
