@@ -125,6 +125,7 @@
 import { createShell, esc } from './shell.js';
 import { statesOfEl, messagesOfEl, charactersOfEl } from './states.js';
 import { encodeSwaps, searchWith } from './swap.js';
+import { encodeFields } from './fields.js';
 import { flatDist, packageDist } from './dist.js';
 
 // WHERE THE FILES COME FROM. The build directory by default; the npm packages
@@ -554,6 +555,7 @@ const swapKey = () => Object.entries(swapOverrides())
 // and view change; shell.js reads them back on load in that order.
 //
 //   ?device=<name>&listing=<ns>/<id>&config=<c>&view=<v>&swap=<k>~<ref>,<k>~
+//   &fields=<path>~<key>~<value>,...
 //
 // The swap string carries its own escaping (encodeSwaps in swap.js), so it is
 // written raw, and parameters this page does not own - `tex` - are kept.
@@ -571,6 +573,8 @@ function writeLocation() {
   const search = searchWith(location.search, {
     device: e(state.device), listing: e(state.listing || ''),
     config: e(state.cfg || ''), view: e(state.view || ''), swap: swaps,
+    // what the reader set on a part (#811); carries its own escaping, as swap does
+    fields: encodeFields(state.cfgFields),
   });
   if (search !== location.search) {
     try { history.replaceState(history.state, '', `${location.pathname}${search}${location.hash}`); }
@@ -648,6 +652,8 @@ async function sync3d() {
   // repainting itself.
   await Promise.resolve(v.setStates(liveStates())).catch(() => {});
   await Promise.resolve(v.setPulled(livePulled())).catch(() => {});
+  // the fields the reader set, the same map 2D painted from (#811)
+  await Promise.resolve(v.setFields(state.cfgFields)).catch(() => {});
   if (key === loadedKey) return;
   await v.load({ device: state.device, config: state.cfg, overrides: swapOverrides() });
   loadedKey = key;              // only once it is actually the thing on screen

@@ -25,6 +25,19 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- The explorer edits a part's fields. Selecting a part whose component
+  declares `fields:` - a supply's wattage, a latch colour, a filter's channel
+  numbers - shows one control per field in the inspector: a list for a
+  `choice`, an input otherwise, starting from the value the configuration
+  built. A change is written with `setFields`, in 2D and 3D, is kept across a
+  view change, goes when the part is swapped out, and is carried in the page's
+  location as `fields=<path>~<key>~<value>,...` beside `swap=`. A value the
+  field does not take is not written, from the form or from a link. A link
+  restores a field only for a part drawn on the view it opens; one set on
+  another view is dropped on reload (roc-ops/Portrayal#818).
+  `kit/fields.js` gains `fieldRows`, `fieldAccepts`, `encodeFields`,
+  `decodeFields` and `drawnField`, and the shell gains `resetField` and
+  `applyFields` (#811).
 - Barrier terminal blocks seat a lug per pole. `terminal-stud` joins
   `spec/schemas/connectors.yaml` as one nominal connector: a screw or stud
   terminal a lug lands on, claiming no size. The terminal screws of
@@ -333,6 +346,21 @@ names the ref that replaces it.
   warning. Every view is rewritten for such a key (#814).
 
 ### Changed
+- **BREAKING for DCIM data already imported.** Telco Systems is listed as
+  `BATM/Telco Systems`, the name the vendor asks to be listed under. The
+  `manufacturer` of its fourteen devices changes, and with it every one of its
+  NetBox and Nautobot exports: the `manufacturer` field of fourteen device
+  types and thirteen module types, each device type's `slug`
+  (`telco-systems-tm-8104` is now `batm-telco-systems-tm-8104`), and the
+  directory they are written under, `Telco Systems/` to `BATM-Telco Systems/`
+  (a slash in a manufacturer is written as a hyphen in the directory, as it is
+  in a model's file name). A DCIM that imported the old files holds a
+  manufacturer named `Telco Systems`: rename it there before importing again,
+  or the new files create a second manufacturer beside it. The namespace
+  `telco-systems`, every component and device ref, every port name and every
+  drawing is unchanged, and so is the `@portrayal/telco-systems-*` package
+  name of each device. `spec/schemas/vendors.yaml` keeps `Telco Systems` and
+  `BATM Networks` as aliases.
 - **The npm packages: the component skins ship one package per namespace**,
   `@portrayal/components-<namespace>`, and `packages.json` in `@portrayal/index`
   maps each namespace to its package and version under `components`. One
