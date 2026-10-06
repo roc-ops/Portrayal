@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: 300cb08-sc
-version: 1.0.0
+version: 1.0.1
 maturity: modelled
 manufacturer: Amphenol Network Solutions
 model: 300CB08-SC
@@ -93,6 +93,15 @@ provenance:
     confidence: datasheet
     note: NOT DRAWN. An optional rear tie bar, 307661, dresses the output cables (guide Fig. 2-4 and 2-27). Cable
       management is not drawn.
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      The installation guide is one document for every version of the panel and its grounding specification is
+      not limited to a version, as its input rows are: three sets of 1/4-20 threaded holes on 5/8 inch
+      centres, bolted with washers to 50 in-lb, for a dual-hole compression lug on #6 to #1 AWG wire. Its
+      description says the ground terminals take either a dual-hole or a single-hole lug and that only one
+      ground connection is required. That is the `stud-size` of all six ground placements, two on each side
+      and two on the bottom.
 attrs:
   physical:
     weight-empty-kg: 5.44
@@ -1269,6 +1278,8 @@ views:
         - 56.0
         group: grounding
         rel-pos: 1
+        attrs:
+          stud-size: 1/4-20
       - id: ground-bottom-2
         ref: common/ground-stud@1
         at:
@@ -1276,6 +1287,8 @@ views:
         - 71.9
         group: grounding
         rel-pos: 2
+        attrs:
+          stud-size: 1/4-20
   left:
     size:
       w: 330.8
@@ -1334,6 +1347,8 @@ views:
         - 11.75
         group: grounding
         rel-pos: 5
+        attrs:
+          stud-size: 1/4-20
       - id: ground-left-2
         ref: common/ground-stud@1
         at:
@@ -1341,6 +1356,8 @@ views:
         - 27.65
         group: grounding
         rel-pos: 6
+        attrs:
+          stud-size: 1/4-20
       - id: ground-left-mark
         ref: common/ground-symbol@1
         at:
@@ -1407,6 +1424,8 @@ views:
         - 11.75
         group: grounding
         rel-pos: 3
+        attrs:
+          stud-size: 1/4-20
       - id: ground-right-2
         ref: common/ground-stud@1
         at:
@@ -1414,6 +1433,8 @@ views:
         - 27.65
         group: grounding
         rel-pos: 4
+        attrs:
+          stud-size: 1/4-20
       - id: ground-right-mark
         ref: common/ground-symbol@1
         at:
