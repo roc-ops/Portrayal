@@ -27,6 +27,9 @@ from portrayal import libwalk             # noqa: E402
 from portrayal import lint                # noqa: E402
 
 NOT_RACKED = ("din-rail", "wall", "desktop")
+# occupies no rack unit, but bolts to rack holes and so still states `ru`
+ON_THE_RAIL_FACE = "rack-face"
+NO_RACK_UNIT = NOT_RACKED + (ON_THE_RAIL_FACE,)
 
 
 # --- the export --------------------------------------------------------------
@@ -37,19 +40,30 @@ def test_a_rack_device_exports_its_rack_units_and_full_depth():
     assert dx.is_full_depth({"ru": 2}) is True
 
 
-@pytest.mark.parametrize("mount", NOT_RACKED)
+@pytest.mark.parametrize("mount", NO_RACK_UNIT)
 def test_a_box_that_is_not_racked_exports_no_rack_units(mount):
     ch = {"mount": mount}
     assert dx.u_height(ch) == 0.0
     assert dx.is_full_depth(ch) is False
 
 
-@pytest.mark.parametrize("mount", NOT_RACKED)
+@pytest.mark.parametrize("mount", NO_RACK_UNIT)
 def test_the_mount_is_said_in_the_comments(mount):
     """Neither DCIM has a field for it, and `u_height: 0` alone does not tell a
     DIN-rail switch from a desktop ONT."""
     dev = {"chassis": {"mount": mount}}
     assert dx.MOUNT_PROSE[mount] in dx.comments_for(dev, "base", {})
+
+
+def test_a_rack_face_part_exports_no_rack_units_though_it_states_some():
+    ch = {"mount": "rack-face", "ru": 1}
+    assert dx.u_height(ch) == 0.0
+    assert dx.is_full_depth(ch) is False
+
+
+def test_the_rack_face_mount_is_said_in_the_comments():
+    dev = {"chassis": {"mount": "rack-face", "ru": 1}}
+    assert dx.MOUNT_PROSE["rack-face"] in dx.comments_for(dev, "base", {})
 
 
 def test_a_rack_device_says_nothing_about_mounting():
@@ -89,6 +103,11 @@ def test_L125_a_rack_device_states_its_rack_units():
     assert findings({"chassis": {"width": 440}})
     assert findings({"chassis": {"width": 440, "mount": "rack"}})
     assert not findings({"chassis": {"width": 440, "ru": 1}})
+
+
+def test_L125_a_rack_face_part_states_its_rack_units():
+    assert findings({"chassis": {"mount": "rack-face"}})
+    assert not findings({"chassis": {"mount": "rack-face", "ru": 1}})
 
 
 @pytest.mark.parametrize("mount", NOT_RACKED)

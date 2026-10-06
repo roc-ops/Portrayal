@@ -1405,6 +1405,8 @@ def u_height(ch):
     c86556e9). Upstream device types that are not racked are written exactly
     this way - Aoni B08 and CNB VP1A, for two, say `u_height: 0` and
     `is_full_depth: false`.
+
+    A `rack-face` part states `ru` and still exports 0: it occupies none.
     """
     if ch.get("mount", "rack") != "rack":
         return 0.0
@@ -1426,6 +1428,7 @@ MOUNT_PROSE = {
     "din-rail": "Mounts on a DIN rail (IEC 60715); not rack-mounted.",
     "wall": "Wall-mounted; not rack-mounted.",
     "desktop": "Desktop unit; not rack-mounted.",
+    "rack-face": "Mounts on the rack rail face at a rack unit; occupies no rack unit.",
 }
 
 
