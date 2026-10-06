@@ -227,13 +227,23 @@ def test_the_unstated_ones_are_the_ones_we_could_not_source():
     counter-rotating fans") and gives a fan-failure lamp, and neither manual,
     product page, datasheet nor quick reference guide says whether the server
     runs on with one stopped. A counter-rotating fan is two rotors in one
-    housing, which invites a guess and is not a statement."""
+    housing, which invites a guess and is not a statement.
+
+    THE NEXUS 93180YC-EX MADE IT TWENTY-EIGHT, and it is the Supermicro case
+    with the vendor saying more. Its installation guide gives four fan modules of
+    two rotors each and says what happens at the ROTOR: the switch runs on with
+    one rotor failed in any one module, and warns and powers down in two minutes
+    with more than one failed. That is a tolerance of one rotor in eight, not a
+    count of modules the box can lose, and nothing in the guide or the data
+    sheet turns it into an N+1 form - so the group carries the sentence and no
+    `redundancy`."""
     unstated = sorted(slug for slug, d in devices() if run(d))
     assert {"supermicro/sys-111e-wr", "supermicro/sys-111e-fdwtr", "supermicro/sys-111e-fwtr",
             "supermicro/sys-511e-wr"} <= set(unstated)
     assert "edgecore/cor580" in unstated and "edgecore/dcs510" in unstated
     assert {"cisco/asr-9901", "cisco/asr-9902", "cisco/asr-9903"} <= set(unstated)
-    assert len(unstated) == 27, unstated
+    assert "cisco/n9k-c93180yc-ex" in unstated
+    assert len(unstated) == 28, unstated
 
 
 def test_the_comparison_layer_can_now_reach_them():

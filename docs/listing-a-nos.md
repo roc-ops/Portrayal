@@ -76,6 +76,10 @@ a NOS reports over OpenConfig, ENTITY-MIB or ietf-hardware onto physical ids,
 `chassis`, or a `region:`. Read it from a live dump where you can; commit the
 dump, sanitised, under the hardware's `dumps/` and list it in `dumps`.
 
+**When the maker's own system runs on the maker's own box**, there is no
+listing: the file it would export is the hardware's own. The device states the
+same `interfaces:` rules itself (`docs/modelling-a-device.md`, Stage 4).
+
 ## Where the naming comes from
 
 The NOS vendor's own documentation, per platform, or a live unit. SONiC's names

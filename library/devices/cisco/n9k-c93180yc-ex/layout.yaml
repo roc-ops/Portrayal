@@ -121,6 +121,19 @@ provenance:
       inlet and not a supply rating. Neither document names the configuration or ambient.
       Heat is printed two ways - 1604 BTU/hr in the data sheet, "1603.706" per hour in the
       guide - and the data sheet's rounding is carried.
+  interface-names:
+    note: >-
+      mgmt0 IS THE INSTALLATION GUIDE'S: its setup chapter asks for "the Management (Mgmt0)
+      interface" and says "The RJ-45 and/or SFP management ports provide out-of-band
+      management" - one interface, two connectors - so both placements take the name mgmt0
+      and the export carries it once, typed from the RJ-45. Ethernet1/1 TO Ethernet1/54 IS NOT
+      IN EITHER STAGED CISCO DOCUMENT: searched the installation guide and the data sheet for
+      "Ethernet1/" and found nothing, because port naming lives in the NX-OS interfaces
+      configuration guide, which is not staged. The names are the NetBox devicetype-library
+      device type for this model, a community file, which lists Ethernet1/1 to Ethernet1/54
+      in faceplate order with 1 to 48 SFP28 and 49 to 54 QSFP28, and they are the slot/port
+      form NX-OS uses on every fixed Nexus 9300. No confidence word is given, because none
+      of the eight fits a name read from a community file.
   colour:
     confidence: estimated
     note: >-
@@ -553,6 +566,10 @@ views:
     empty: >-
       Not drawn by any staged source. The guide's figures show one side wall and say nothing
       of the other.
+interfaces:
+- {physical: 'port-{n}', name: 'Ethernet1/{n}', range: '1-54'}
+- {physical: mgmt-rj45, name: mgmt0}
+- {physical: mgmt-sfp, name: mgmt0}
 configurations:
   ac-port-side-intake:
     kind: base

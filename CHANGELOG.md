@@ -25,6 +25,19 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- The explorer edits a part's fields. Selecting a part whose component
+  declares `fields:` - a supply's wattage, a latch colour, a filter's channel
+  numbers - shows one control per field in the inspector: a list for a
+  `choice`, an input otherwise, starting from the value the configuration
+  built. A change is written with `setFields`, in 2D and 3D, is kept across a
+  view change, goes when the part is swapped out, and is carried in the page's
+  location as `fields=<path>~<key>~<value>,...` beside `swap=`. A value the
+  field does not take is not written, from the form or from a link. A link
+  restores a field only for a part drawn on the view it opens; one set on
+  another view is dropped on reload (roc-ops/Portrayal#818).
+  `kit/fields.js` gains `fieldRows`, `fieldAccepts`, `encodeFields`,
+  `decodeFields` and `drawnField`, and the shell gains `resetField` and
+  `applyFields` (#811).
 - Barrier terminal blocks seat a lug per pole. `terminal-stud` joins
   `spec/schemas/connectors.yaml` as one nominal connector: a screw or stud
   terminal a lug lands on, claiming no size. The terminal screws of
@@ -71,6 +84,38 @@ names the ref that replaces it.
   `body.drawings` and `body.face` on a part whose pieces show one. Lint L71
   checks the new keys. Nothing existing changes: a piece that states neither
   is the plain box it was.
+- The Cisco Nexus 93180YC-EX (`cisco/n9k-c93180yc-ex`): 48 SFP28 and 6 QSFP28
+  on the port side; two supplies, four fan modules, console, both management
+  ports and USB on the other; port-side intake and port-side exhaust
+  configurations. Two new parts seat in it, `cisco/nxa-pac-650w@1` and
+  `cisco/nxa-fan-30cfm@1`, each covering both airflow part numbers through a
+  latch-colour field.
+- A device can name its own interfaces. A top-level `interfaces:` block, in
+  the shape a NOS listing's has, says what the maker's own operating system
+  calls each port, and the hardware's own DCIM device type uses those names:
+  the Nexus exports `Ethernet1/1` to `Ethernet1/54` and one `mgmt0`. An id no
+  rule names keeps its faceplate id, and a listing's names still decide that
+  listing's document. The lock records the names and asks a major bump when
+  one changes; L105 refuses a rule that names nothing the device places.
+- Amphenol Network Solutions, a new vendor (`amphenol-ns`, formerly Telect):
+  the 300CB08 (`amphenol-ns/300cb08`), a 1RU dual-feed DC circuit breaker
+  panel with sixteen plug-in positions, all six faces, and eleven
+  `amphenol-ns/` parts. A position takes `amphenol-ns/breaker-1ru@1`, one
+  module for every rating from 2 A to 60 A, set per position by its `rating`
+  field and printed on its handle; `amphenol-ns/tpa-fuse-holder-307492@1`,
+  which carries its fuse as a `fuse-rating` field; or the blanking cover. A
+  breaker ships wearing `amphenol-ns/touch-guard-1ru@1`, a separate part
+  seated on it that comes off: `spec/schemas/connectors.yaml` gains
+  `breaker-1ru-guard`, marked `cover: true`, the first slot that is a cover
+  mount and not a connector. It is the first power distribution device:
+  `spec/schemas/profiles.yaml` gains a `power` profile, which owes an input
+  rating, the panel's own draw and an operating temperature and no
+  `performance` or `platform` section, and `spec/schemas/power-roles.yaml`
+  gains the class `breaker` under `passive`, for any removable circuit
+  protector. In the DCIM exports each feed is one `dc-terminal` power port
+  (`input-a`, `input-b`) and each position is a module bay; the sixteen output circuits and
+  the alarm contacts are not exported yet. No existing device or export
+  changes.
 - CFP, CFP2, CFP4 and CXP cages offer optics. `generic/cfp-lc@1`,
   `generic/cfp-sc@1`, `generic/cfp-mpo@1`, `generic/cfp2-lc@1`,
   `generic/cfp2-mpo@1`, `generic/cfp4-lc@1`, `generic/cfp4-mpo@1` and
