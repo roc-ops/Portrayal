@@ -16,60 +16,17 @@ provenance:
   relief: >-
     drawing - the same view, the web's top edge read every 2.3 mm: the ear's full height
     for 9 mm, a straight slope down to 13.5 mm at 31, level to 50, and down to the tray
-    at 66. BUILT IN EIGHT STEPS, because a proud feature has one height: the slope is a
-    staircase in 3D and a line in the side elevation. The first step is 42 and not 44,
-    the height of the well it stands in.
+    at 66. The ear end is 42 and not 44, the height of the well it stands in.
 size: {w: 1.5, h: 66}
 size-confidence: {w: datasheet, h: drawing}
 elements:
-  step-1: {at: [0.0, 0.0], size: [1.5, 11.0], class: bezel}
-  step-2: {at: [0.0, 11.0], size: [1.5, 5.0], class: bezel}
-  step-3: {at: [0.0, 16.0], size: [1.5, 5.0], class: bezel}
-  step-4: {at: [0.0, 21.0], size: [1.5, 5.0], class: bezel}
-  step-5: {at: [0.0, 26.0], size: [1.5, 5.0], class: bezel}
-  step-6: {at: [0.0, 31.0], size: [1.5, 20.0], class: bezel}
-  step-7: {at: [0.0, 51.0], size: [1.5, 7.0], class: bezel}
-  step-8: {at: [0.0, 58.0], size: [1.5, 8.0], class: bezel}
+  plate: {at: [0.0, 0.0], size: [1.5, 66], class: bezel}
 relief:
   features:
-    - node: step-1
-      out: 42
+    - node: plate
+      out: 42.0
+      profile-y: [[0, 42], [9, 42], [11, 40], [31, 13.5], [50, 13.5], [65, 3], [66, 1.5]]
       color: '#1b1d20'
       confidence: drawing
-      source: the ring-profile view of FS's 0U/1U datasheet drawing, the web's height 0 to 11 mm from the ear
-    - node: step-2
-      out: 37
-      color: '#1b1d20'
-      confidence: drawing
-      source: the ring-profile view of FS's 0U/1U datasheet drawing, the web's height 11 to 16 mm from the ear
-    - node: step-3
-      out: 30
-      color: '#1b1d20'
-      confidence: drawing
-      source: the ring-profile view of FS's 0U/1U datasheet drawing, the web's height 16 to 21 mm from the ear
-    - node: step-4
-      out: 23
-      color: '#1b1d20'
-      confidence: drawing
-      source: the ring-profile view of FS's 0U/1U datasheet drawing, the web's height 21 to 26 mm from the ear
-    - node: step-5
-      out: 16
-      color: '#1b1d20'
-      confidence: drawing
-      source: the ring-profile view of FS's 0U/1U datasheet drawing, the web's height 26 to 31 mm from the ear
-    - node: step-6
-      out: 13.5
-      color: '#1b1d20'
-      confidence: drawing
-      source: the ring-profile view of FS's 0U/1U datasheet drawing, the web's height 31 to 51 mm from the ear
-    - node: step-7
-      out: 11
-      color: '#1b1d20'
-      confidence: drawing
-      source: the ring-profile view of FS's 0U/1U datasheet drawing, the web's height 51 to 58 mm from the ear
-    - node: step-8
-      out: 6
-      color: '#1b1d20'
-      confidence: drawing
-      source: the ring-profile view of FS's 0U/1U datasheet drawing, the web's height 58 to 66 mm from the ear
+      source: the ring-profile view of FS's 0U/1U datasheet drawing, the web's top edge read every 2.3 mm
 skins: [default]

@@ -3125,6 +3125,15 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         for node in g.iter():
             if node.get("data-z-out") is not None:
                 node.set("data-z-out", f"{float(node.get('data-z-out')) - floor:g}")
+            # A PROFILE IS A HEIGHT TOO, and stayed where it was: `out` went to
+            # the floor and the surface it describes did not, so a web sloping
+            # down to a tray stood the well's depth above it on a skirt twice
+            # as tall (docs/cable-managers-design.md section 4).
+            for k in ("data-z-profile", "data-z-profile-y"):
+                if node.get(k):
+                    node.set(k, ",".join(
+                        f"{float(t):g}:{float(o) - floor:g}"
+                        for t, o in (pair.split(":") for pair in node.get(k).split(","))))
 
     def back_occupants(p):
         """The keys a module's back seats (B3, Task 7i): those whose host is

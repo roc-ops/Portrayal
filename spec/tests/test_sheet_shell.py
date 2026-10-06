@@ -91,3 +91,31 @@ def test_a_box_face_still_paints_its_housing():
 def test_a_sheet_face_still_draws_its_metal():
     """The ear plate in the fixture survives: a sheet face is not an empty one."""
     assert "#1b1d20" in _front(True)[2]
+
+
+# --- a sloped plate standing on a well's floor -------------------------------
+
+def test_a_profile_in_a_well_is_measured_from_the_wells_floor():
+    """`in:` sinks a part's `out` to the floor of the well it stands in, and left
+    its `profile` where it was - measured from the face the well is cut in. So a
+    web sloping from 42 mm to nothing, standing on a tray 42 mm down, was a
+    surface from 42 ABOVE the lid to the lid, on a skirt 84 mm tall. The profile
+    is a height like `out` is, and moves with it."""
+    dev = {"format": 1, "kind": "device", "name": "t", "version": "0.1.0", "maturity": "draft",
+           "manufacturer": "T", "model": "T",
+           "chassis": {"width": 483.0, "height": 44.0, "depth": 110.0, "ru": 1,
+                       "mount": "rack-face", "shell": "sheet", "thickness": 1.5},
+           "groups": {"tray": {"term": "Tray", "role": "furniture", "index-origin": 1}},
+           "views": {"top": {"size": {"w": 483.0, "h": 110.0}, "components": {"placements": [
+               {"ref": "fs/fhd-cmp5dr-tray@1", "id": "tray", "at": [17.3, 0.0],
+                "group": "tray", "rel-pos": 1},
+               {"ref": "fs/fhd-cmp5dr-web@1", "id": "web", "at": [17.3, 0.0],
+                "group": "tray", "rel-pos": 2, "in": "tray"}]}}}}
+    out = render.render_view(dev, "top", dev["views"]["top"], render.Library([str(LIB)]), config={})
+    out = out[0] if isinstance(out, tuple) else out
+    root = ET.fromstring(out) if isinstance(out, (str, bytes)) else out
+    plate = next(el for el in root.iter() if el.get("id") == "web--plate")
+    pairs = [tuple(map(float, p.split(":"))) for p in plate.get("data-z-profile-y").split(",")]
+    assert pairs[0] == (0.0, 0.0)            # 42 high on a floor 42 down: level with the lid
+    assert pairs[-1][1] == pytest.approx(-40.5)   # 1.5 above that floor
+    assert float(plate.get("data-z-out")) == 0.0
