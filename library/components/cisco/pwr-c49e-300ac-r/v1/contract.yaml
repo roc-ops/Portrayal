@@ -1,0 +1,99 @@
+format: 1
+kind: module
+name: pwr-c49e-300ac-r
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 300 W AC-input power supply of the Cisco Catalyst 4948E, PWR-C49E-300AC-R - the
+  front-to-back supply, which the Catalyst 4948E-F does not take. A dark grey face with a
+  captive installation screw on a flange at the left, a rocker power switch over an AC
+  receptacle, a honeycomb fan grille, a printed rating panel with the INPUT OK and
+  OUTPUT OK lamps beneath it, and a pull handle at the right edge.
+size: {w: 115.7, h: 39.5}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs:
+  model: 'PWR-C49E-300AC-R'
+  power-output-w: 300
+  input: ac
+  inlet: c14
+  input-voltage: 'low-line 85 to 132 VAC, high-line 170 to 264 VAC'
+  input-current-max: '4 A at 100 VAC, 2 A at 240 VAC'
+  input-frequency: '47 to 63 Hz'
+  output: '25 A at +12 VDC'
+  weight-kg: 0.9
+  airflow: front-to-back
+provenance:
+  model: >-
+    datasheet - the Catalyst 4948E and Catalyst 4948E-F Switch Installation Guide,
+    appendix A, "300 W AC-Input Power Supply (PWR-C49E-300AC-R)": "This power supply is
+    not supported on the Catalyst 4948E-F switch." Its sibling PWR-C49E-300AC-F is a
+    different face in a different colour and is not this part.
+  power: >-
+    datasheet - Table A-1 of the same appendix gives "Power supply output 25 A @+12 VDC",
+    which is 300 W, and the appendix and the data sheet's ordering table both call it the
+    300 W supply. An OUTPUT rating, so `power-output-w`. Input voltage, current, frequency
+    and the 2 lb (0.9 kg) weight are the same table's.
+  size: >-
+    photo-measured - the Catalyst 4948E data sheet's Figure 2, a square-on photograph of
+    the rear panel, 864 x 95 px. Its body reads 853 px across against the stated 444.4 mm,
+    1.919 px per mm, and 84 px tall at that scale is 43.8 mm against the stated 44.45, so
+    the photograph is near-orthographic and both axes are measured. The two supplies read
+    222 px wide each, 115.7 mm, including the screw flange at the left; the face is 39.5
+    tall. At under 2 px per mm every figure here is good to about half a millimetre and no
+    better. No document states the supply's dimensions.
+  elements: >-
+    photo-measured off the same photograph at the same scale, and checked for content
+    against a close-up of a real unit (a resale listing), which resolves the legends: the
+    part number at the top of the rating panel, "100 - 240VAC", "4 - 2 A", "50 - 60 Hz",
+    and "INPUT OK" and "OUTPUT OK" over the two lamps. The guide's Figure A-1 calls out
+    the same five features: power switch, captive installation screw, AC power cord
+    receptacle, power supply LEDs and handle.
+  lamps: >-
+    datasheet - Table A-1, "Power supply LEDs": INPUT OK is green when source AC is within
+    limits and red on a supply that is switched off beside one that is on; OUTPUT OK is
+    green when the 12 VDC output is within margins and red when it is out of tolerance, on
+    a fan failure, or on a switched-off supply beside a live one.
+  inlet: >-
+    The receptacle is drawn as std/c14-inlet@1, earth pin down as the photograph shows it.
+    The guide's power cords for this supply are all C15, the notched high-temperature
+    connector, so the receptacle on the metal is a C16 and this library has no part for
+    one. The opening is the same size; the notch is not drawn.
+  colour: >-
+    The face colour is the median of 450 pixels of bare plate beside the handle in the data
+    sheet's rear photograph, #656469.
+  depth: >-
+    estimated - not stated in the guide. 178 mm is 7.0 in, a figure resale listings quote
+    for this supply and no Cisco document held here confirms.
+states: [absent]
+elements:
+  screw: {at: [3.3, 16.4], size: [6.0, 6.0], class: screw}
+  fan: {at: [50.5, 1.2], size: [38.1, 37.2], class: rotor}
+  input-ok: {at: [93.6, 32.8], size: [2.4, 2.4], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#ef4444'}]}
+  output-ok: {at: [102.0, 32.8], size: [2.4, 2.4], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#ef4444'}]}
+  handle: {at: [110.2, 6.3], size: [4.4, 28.7], class: handle}
+parts:
+  - {ref: common/rocker-switch@1, id: power-switch, at: [21.3, 1.0]}
+  - {ref: std/c14-inlet@1, id: inlet, at: [18.3, 16.6], rotate: 180}
+relief:
+  wall: '#2b2e31'
+  features:
+    - node: fan
+      vent: 24
+      confidence: estimated
+      source: >-
+        cisco/pwr-c49e-300ac-r@1's own elements key - the grille's extent is measured off the
+        photograph and the depth behind it is not stated.
+    - node: handle
+      uhandle: 18.0
+      color: '#3a3d41'
+      confidence: estimated
+      source: >-
+        Not stated. The guide's Figure A-1 and the real-unit close-up show a wire loop
+        standing clear of the face; 18 mm is a reading of their proportions.
+skins: [default]
+body:
+  depth: 178
+  color: '#656469'
+  footprint: {at: [0, 0], size: [115.7, 39.5]}

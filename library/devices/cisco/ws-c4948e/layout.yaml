@@ -1,0 +1,433 @@
+format: 1
+kind: device
+name: ws-c4948e
+version: 0.1.0
+maturity: modelled
+manufacturer: Cisco
+model: WS-C4948E
+aliases:
+- {name: Catalyst 4948E, kind: marketing}
+portfolio: {line: Catalyst, family: Catalyst 4900, series: Catalyst 4948E}
+description: >-
+  48x 10/100/1000 RJ-45 and 4x 1/10G SFP+ 1RU top-of-rack switch running Cisco IOS, the
+  front-to-back build of the Catalyst 4948E. All fifty-two ports, the console and
+  management jacks, the status lamps and the recessed reset switch are on the front; two
+  300 W supplies and one four-fan tray between them are on the rear. Ports number 1-52 and
+  run DOWN each column - odd on the top row, even beneath it. Its back-to-front sibling,
+  the WS-C4948E-F, takes different supplies and a different fan tray and is not this
+  device. End-of-sale was announced in October 2016.
+profile: networking
+lint:
+  waive:
+    L61: >-
+      Sixteen port numerals sit about a millimetre off the centre of the jack they name, and
+      they should: each numeral is printed under its LAMP, not under its jack. A block's
+      twelve lamps stand on a 5.8 mm step in one row beneath six columns on a 13.97 step, so
+      a numeral lines up with its jack only by accident, near the middle of each block. The
+      positions are measured off the data sheet's front photograph.
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Four sources, none of them committed. (1) Catalyst 4948E and Catalyst 4948E-F Switch
+      Installation Guide, OL-21561-02, 162 pages: Table 1-1 features, Table 1-2
+      specifications, Figures 1-1, 1-2 and 1-7, Table 1-5 LEDs, appendix A power supplies.
+      (2) Cisco Catalyst 4948E and 4948E-F Ethernet Switches Data Sheet, c78-598933, 9
+      pages: Table 1, Table 2, Table 4, and Figures 1 to 3, which are square-on photographs
+      of the front and of both rear builds. (3) Cisco's end-of-sale notice EOL11273.
+      (4) Photographs of real units from resale listings, for what the small data-sheet
+      photographs cannot resolve. THE GUIDE'S OWN CHASSIS FIGURES ARE ISOMETRIC LINE
+      DRAWINGS and gave callouts only. No vendor 3D model and no stencil render was found.
+  gate-1:
+    confidence: measured
+    note: >-
+      BOTH DATA-SHEET PHOTOGRAPHS PASS, AT LOW RESOLUTION. The front, Figure 1, is 907 x 217
+      px with the face 827 px across and 84 tall: 9.85 against the stated 444.4 / 44.45 =
+      10.0, 1.5% out. The rear, Figure 2, is 853 px by 84: 10.15, 1.5% the other way. Scaled
+      on the stated width the front is 1.861 px per mm, AND THE RJ-45 PITCH THEN READS
+      13.97 mm - 26.0 px, averaged over the 20 steps inside the four blocks of one row -
+      which is the 0.550 in ganged-jack pitch the registry's rj45-ganged notes record from a
+      TE 2x6 magjack, on a quantity the scale never saw. The registry states that pitch in
+      its notes and not as a key, so the block gives 13.97 as a number; the 12.7 part
+      leaves 1.27 mm of wall between openings, as the photograph shows. The SFP+ pair steps 14.5 against the registry's 14.25. So both axes are read off
+      the photographs, and at under 2 px per mm every position is good to about half a
+      millimetre and no better.
+  the-width:
+    confidence: datasheet
+    note: >-
+      17.5 in is 444.5 mm; both documents print "1.75 x 17.5 x 19.4 in. (4.4 x 44.4 x 49.3
+      cm)". 444.4 x 44.45 x 492.8 is carried: the metric width as printed, and the inch
+      figures converted for height and depth, which the metric rounds to a millimetre. The
+      photographs show no ears, and the RJ-45 pitch closing on the registry at that width
+      says the figure is the body. The rack-mount brackets are a separate kit.
+  the-four-blocks:
+    confidence: photo-measured
+    note: >-
+      The 24 columns stand in four blocks of six. Their first openings read 25, 193, 361
+      and 531 px - steps of 168, 168 and 170 - so a least-squares block step of 90.59 mm
+      starting at 10.4, a 6.77 gutter. That fits the four starts to 0.2, 0.1, 0.7 and 0.3 mm.
+      A captive-looking screw sits in each gutter and a fourth before the uplinks.
+  rows:
+    confidence: photo-measured
+    note: >-
+      Jack openings read 69-86 and 97-114 px down a face that starts at 53, so the rows
+      centre 12.9 and 27.7 mm down: tops at 7.4 and 22.2 for an 11.0 part, a 14.8 step. The
+      upper jacks show their keyways up and the lower their keyways down, the usual stacked
+      mirror. The SFP+ openings centre 12.5 and 27.5, which is the registry's 15.0
+      belly-to-belly step, upper cage upright over the lower turned 180.
+  port-order:
+    confidence: photo-measured
+    note: >-
+      Each block prints twelve lamps in one row under its six columns, alternately an up and
+      a down triangle, with a numeral under each running 1 to 12, 13 to 24 and so on. Two
+      lamps per column, up then down, so the odd port is the upper jack. The four uplink
+      lamps under the SFP+ cages run the same way with 49 to 52 beneath them. The legends
+      printed ABOVE the jacks are not legible at this resolution and are a gap.
+  lamps:
+    confidence: datasheet
+    note: >-
+      Installation guide, Table 1-5 and Table 1-1. STATUS: green up and running, red system
+      fault, flashing amber power-on self-test. Port LINK lamps: green link, amber disabled,
+      blinking amber link fault. FAN: green tray OK, red a fan has failed. PS1 and PS2:
+      green input power OK, red fault. The management lamp is the data sheet's "green (good),
+      orange (disabled), or off (not connected)". Positions are Figure 1-7's callouts placed
+      on the photograph: PS1, PS2 and FAN in a column at the right, MGT and STATUS on the
+      bottom row with the recessed RESET beside STATUS.
+  console-over-management:
+    confidence: drawing
+    note: >-
+      Figure 1-1 points callout 5, the console port, at the upper jack of the stacked pair
+      and callout 3, the management port, at the lower; Figure 1-7 puts the MGT lamp under
+      the stack. The management jack takes the bare part because its lamp is that one on the
+      bottom row, not a pair in the bezel.
+  rear-face:
+    confidence: photo-measured
+    note: >-
+      The data sheet's Figure 2 at 1.919 px per mm. Supply 1 runs 8 to 230 px, the fan tray
+      232 to 598, supply 2 from 600 to 822, and a strip of bare chassis with an earth mark
+      closes the face. The guide's Figure 1-2 names them in the same order: power supply 1
+      (primary), fan tray, power supply 2 (redundant).
+  power:
+    confidence: datasheet
+    note: >-
+      Data sheet Table 2: "Typical operating power 230W at 25C" and "Maximum power 275W at
+      55C"; Table 1 calls the first "230W average". These are the switch's draw, ambient
+      stated, configuration not. Heat is printed three ways and they are not one measure:
+      the data sheet gives 1173 BTU per hour on AC input and 1251 on DC, and the guide's
+      Table 1-2 gives 1364 BTU/hour "worst case". The guide's is carried, as the largest.
+  interface-names:
+    note: >-
+      NOT IN EITHER STAGED CISCO DOCUMENT. Searched the installation guide and the data
+      sheet for GigabitEthernet, FastEthernet and their short forms and found nothing; port
+      naming lives in the IOS configuration guides, which are not staged. The names are the
+      NetBox devicetype-library device type for this model, a community file:
+      GigabitEthernet1/1 to 1/48, TenGigabitEthernet1/49 to 1/52 and FastEthernet1 for the
+      management port. THAT FILE ALSO TYPES THE MANAGEMENT PORT 100BASE-TX, which its name
+      suggests and Cisco's own documents contradict - the guide says "a 10/100/1000 RJ-45
+      port Ethernet Management port" and the data sheet "10/100/1000BASE-TX" - so the name
+      is taken from it and the speed from Cisco. No confidence word fits a name read from a
+      community file.
+  colour:
+    confidence: photo-measured
+    note: >-
+      The front face is the median of 2400 pixels of bare plate under the third block in
+      the data sheet's Figure 1, #d3d4d1. The lamp strips are a pale yellow there; their
+      value and the ink's are chosen by eye against the same photograph.
+attrs:
+  physical:
+    weight-note: '6.35 kg (14 lb) base system, no power supply or fan tray; 8.62 kg (19 lb) fully loaded with 2 power supplies and fan tray'
+    acoustics: '55.6 dBA typical and 58.6 dBA maximum sound pressure; 62.6 dBA typical and 65.6 dBA maximum sound power (ISO 7779, 25 C)'
+  performance:
+    switching-capacity: '176 Gbps'
+    throughput: '131 mpps for IPv4, 110 mpps for IPv6'
+    routes-max: '57,000'
+    mac-entries-max: '55,000'
+    multicast-routes-max: '28,000'
+    system-buffer: '17.5 MB'
+    airflow-cfm: '28 CFM at low speed, 44 CFM at full speed'
+  power:
+    power-typical-w: 230
+    power-max-w: 275
+    power-envelope: unstated
+    heat-dissipation-btu-hr: 1364
+    power-input-ac: '90 to 264 VAC'
+    power-input-dc: '-40.5 to -72 VDC'
+    power-current-max: 'AC: 4 A at 120 VAC, 2 A at 240 VAC; DC: 8 A at -48 VDC'
+    power-supply-options: 'PWR-C49E-300AC-R (300 W AC), PWR-C49-300DC (300 W DC)'
+  environmental:
+    operating-temp: '0 to 40 C (32 to 104 F)'
+    storage-temp: '-40 to 75 C (-40 to 167 F)'
+    humidity: '10 to 90%, noncondensing'
+    altitude: '-60 to 2000 m (-196 to 6561 ft)'
+    mtbf-hours: '145,422'
+  platform:
+    processor: '1 GHz'
+    memory: '1 GB SDRAM'
+  features:
+    optics-sfp-plus: >-
+      data sheet: "supports 10 Gigabit Ethernet SFP and SFP+ on all the four uplinks". The
+      installation guide's Table 1-1: 4 1-GB or 10-GB uplink ports, each needing an SFP or
+      SFP+ transceiver.
+    reset: 'recessed on the front panel; needs a pointed object'
+  compliance:
+    regulatory: 'Products bear CE Marking, indicating compliance with the 89/336/EEC and 73/23/EEC directives'
+    safety: 'UL 60950-1, CAN/CSA-C22.2 No. 60950-1, EN 60950-1, IEC 60950-1, AS/NZS 60950, IEC 60825-1, IEC 60825-2, EN 60825-1, EN 60825-2, 21 CFR 1040'
+    emissions: 'FCC Part 15 (CFR 47) Class A, ICES-003 Class A, EN55022 Class A, CISPR22 Class A, AS/NZS 3548 Class A, VCCI Class A, EN55024, ETS300 386, EN50082-1, EN61000-3-2, EN61000-3-3'
+    nebs: 'GR-63-Core NEBS Level 3, GR-1089-Core NEBS Level 3'
+    etsi: 'ETS 300 019 Storage Class 1.1, Transportation Class 2.3, Stationary Use Class 3.1'
+    rohs: 'RoHS-6 compliance'
+  lifecycle:
+    eol: announced
+    eol-announcement: https://www.cisco.com/c/en/us/products/collateral/switches/catalyst-4900-series-switches/eos-eol-notice-c51-738116.html
+    end-of-sale: '2017-10-31'
+    end-of-life: '2022-10-31'
+chassis: {width: 444.4, height: 44.45, depth: 492.8, ru: 1, weight-kg: 6.35, color: '#d3d4d1',
+  airflow: front-to-back, power: ac}
+gaps:
+- what: the-four-undrawn-faces
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  wanted: >-
+    A flat drawing of the lid, the underside and the two side walls. The guide's Figures 1-1
+    and 1-2 show the lid and one side isometrically - a logo and labels on the lid, bracket
+    screw holes and small slots on the side - and the data sheet says the chassis has "no
+    side or top venting". None can be measured. Each of the four carries an `empty:`
+    sentence saying where I looked.
+- what: legends-above-the-jacks
+  scope: [front]
+  reason: needs-photo
+  wanted: >-
+    What is printed above each column of jacks and above the two SFP+ columns. The data
+    sheet's front photograph shows a short legend over every column, about 2 mm tall, and at
+    1.86 px per mm it is a grey smudge. The numerals under the lamps resolve as digits in the
+    same photograph, which is the control: printing of that size is at the image's limit, so
+    this is unresolved and not blank. A front photograph at 5 px per mm settles it.
+- what: dc-supply
+  scope: [rear]
+  reason: needs-photo
+  wanted: >-
+    A face for the 300 W DC-input supply, PWR-C49-300DC. The guide's Figure A-12 draws it
+    isometrically with its terminal block and the data sheet lists it; no flat image of it
+    is held, so the bays accept only the AC supply here.
+- what: half-millimetre-positions
+  scope: [front, rear]
+  reason: needs-drawing
+  wanted: >-
+    A mechanical drawing or a photograph at several pixels per millimetre. Every position on
+    both faces is read at under 2 px per mm. The repeating features are pinned by the
+    registry; the lamps, the legends and the reset switch are each good to about half a
+    millimetre.
+- what: fan-tray-power
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    The fan tray's draw. Neither document gives a figure for WS-X4993 apart from the switch.
+groups:
+  rj45:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+  port-leds: {term: LED, role: indicator, index-origin: 1}
+  leds: {term: LED, role: indicator, index-origin: 1}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the out-of-band pair at the right of the front - an RJ-45 console port over a
+      10/100/1000 RJ-45 Ethernet management port - and the recessed reset switch beside the
+      status lamp. Two jobs, one purpose: reaching and restarting the switch when the data
+      plane cannot.
+  furniture: {term: Part, role: furniture, index-origin: 1}
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: >-
+        Data sheet Table 1, "Power redundancy: 1+1 AC or DC", and the guide's Figure 1-2,
+        which names the two bays power supply 1 (primary) and power supply 2 (redundant).
+  fans:
+    term: Fan tray
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy-note: >-
+        One tray of four fans. The data sheet says the tray has "redundant fans" and the
+        guide that the remaining fans speed up to compensate for one that fails; neither
+        gives an N+1 form, so none is written here.
+views:
+  front:
+    size: {w: 444.4, h: 44.45}
+    panel:
+      decor:
+      - {id: lamp-strip-1, at: [17.60, 35.00], size: [69.60, 6.20], fill: '#f1e6a8'}
+      - {id: lamp-strip-2, at: [108.19, 35.00], size: [69.60, 6.20], fill: '#f1e6a8'}
+      - {id: lamp-strip-3, at: [198.78, 35.00], size: [69.60, 6.20], fill: '#f1e6a8'}
+      - {id: lamp-strip-4, at: [289.37, 35.00], size: [69.60, 6.20], fill: '#f1e6a8'}
+      - {id: band-sfp, at: [373.60, 17.70], size: [28.50, 4.60], fill: '#c4c7c4'}
+      cutouts:
+      - {block: rj45}
+      - {block: sfp-plus}
+      - {id: console, at: [408.50, 7.70], size: [12.7, 11.0], shape: rect}
+      - {id: mgmt, at: [408.50, 19.60], size: [12.7, 11.0], shape: rect}
+      - {id: led-ps1, at: [428.90, 18.90], size: [2.0, 2.0], shape: circle}
+      - {id: led-ps2, at: [428.90, 23.80], size: [2.0, 2.0], shape: circle}
+      - {id: led-fan, at: [428.90, 29.10], size: [2.0, 2.0], shape: circle}
+      - {id: led-mgt, at: [413.80, 35.40], size: [2.0, 2.0], shape: circle}
+      - {id: led-status, at: [428.90, 35.40], size: [2.0, 2.0], shape: circle}
+      - {id: reset, at: [433.80, 34.40], size: [4.0, 4.0], shape: circle}
+    silkscreen:
+    - {block: rj45}
+    - {block: sfp-plus}
+    - {id: silk-sfp-arrows-1, at: [380.73, 20.00], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#2b2e31', for: [port-49, port-50]}
+    - {id: silk-sfp-arrows-2, at: [394.98, 20.00], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#2b2e31', for: [port-51, port-52]}
+    - {id: silk-ps1, at: [432.20, 20.30], text: PS1, font-size: 1.2, anchor: start, fill: '#2b2e31', for: led-ps1}
+    - {id: silk-ps2, at: [432.20, 25.20], text: PS2, font-size: 1.2, anchor: start, fill: '#2b2e31', for: led-ps2}
+    - {id: silk-fan, at: [432.20, 30.50], text: FAN, font-size: 1.2, anchor: start, fill: '#2b2e31', for: led-fan}
+    - {id: silk-mgt, at: [414.80, 40.20], text: MGT, font-size: 1.2, anchor: middle, fill: '#2b2e31', for: led-mgt}
+    - {id: silk-status, at: [429.90, 40.20], text: STATUS, font-size: 1.2, anchor: middle, fill: '#2b2e31', for: led-status}
+    - {id: silk-reset, at: [438.40, 36.80], text: RESET, font-size: 1.1, anchor: start, fill: '#2b2e31', for: reset}
+    - {id: silk-model, at: [434.00, 6.60], text: 'Catalyst 4948E', font-size: 1.4, anchor: middle, fill: '#2b2e31', for: chassis}
+    components:
+      blocks:
+      - id: rj45
+        ref: std/rj45-ganged@2
+        at: [10.40, 7.40]
+        count: 48
+        rows: 2
+        pitch: 13.97
+        row-pitch: 14.8
+        gang: 6
+        gutter: 6.77
+        number-from: 1
+        cutouts: true
+        rotate: {top: 180}
+        numerals: {dx-by-col: [10.10, 7.73, 5.36, 2.99, 0.62, -1.75], dx-by-row: [0.0, 5.8], dy-top: 33.20, dy-bottom: 18.40, font-size: 1.1, anchor: middle, fill: '#2b2e31'}
+        led:
+          ref: common/led-arrow-sm@1
+          id-format: 'led-port-{n}'
+          dx-by-col: [8.98, 6.61, 4.24, 1.87, -0.50, -2.87]
+          dx-by-row: [0.0, 5.8]
+          dy-top: 28.70
+          dy-bottom: 13.90
+          skin-top: up
+          skin-bottom: down
+          group: port-leds
+          states: ['off', {name: link, color: '#22c55e'}, {name: disabled, color: '#f59e0b'}, {name: fault, color: '#f59e0b'}]
+      - id: sfp-plus
+        ref: std/sfp-ganged@1
+        at: [373.60, 7.30]
+        count: 4
+        rows: 2
+        pitch: registry
+        row-pitch: registry
+        number-from: 49
+        cutouts: true
+        rotate: {bottom: 180}
+        numerals: {dx-by-row: [4.50, 10.30], dy-top: 32.90, dy-bottom: 17.90, font-size: 1.1, anchor: middle, fill: '#2b2e31'}
+        led:
+          ref: common/led-arrow-sm@1
+          id-format: 'led-port-{n}'
+          dx-by-row: [3.35, 9.15]
+          dy-top: 27.70
+          dy-bottom: 12.70
+          skin-top: up
+          skin-bottom: down
+          group: port-leds
+          states: ['off', {name: link, color: '#22c55e'}, {name: disabled, color: '#f59e0b'}, {name: fault, color: '#f59e0b'}]
+      placements:
+      - {block: rj45}
+      - {block: sfp-plus}
+      - {ref: std/rj45-ganged@2, id: console, at: [408.50, 7.70], rotate: 180, group: mgmt, rel-pos: 1,
+         attrs: {media: rj45-serial, role: console}}
+      - {ref: std/rj45-ganged@2, id: mgmt, at: [408.50, 19.60], group: mgmt, rel-pos: 2,
+         attrs: {media: rj45, speed: 1g, role: mgmt}}
+      - {ref: common/led-dot@1, id: led-ps1, at: [428.90, 18.90], group: leds, rel-pos: 1, for: chassis,
+         states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#ef4444'}]}
+      - {ref: common/led-dot@1, id: led-ps2, at: [428.90, 23.80], group: leds, rel-pos: 2, for: chassis,
+         states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#ef4444'}]}
+      - {ref: common/led-dot@1, id: led-fan, at: [428.90, 29.10], group: leds, rel-pos: 3, for: chassis,
+         states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#ef4444'}]}
+      - {ref: common/led-dot@1, id: led-mgt, at: [413.80, 35.40], group: leds, rel-pos: 4, for: mgmt,
+         states: ['off', {name: link, color: '#22c55e'}, {name: disabled, color: '#f59e0b'}]}
+      - {ref: common/led-dot@1, id: led-status, at: [428.90, 35.40], group: leds, rel-pos: 5, for: chassis,
+         states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#ef4444'}, {name: post, color: '#f59e0b'}]}
+      - {ref: common/reset-button@1, id: reset, at: [433.80, 34.40], group: mgmt, rel-pos: 3, for: chassis}
+      - {ref: common/screw-head@1, id: face-screw-1, at: [95.80, 35.70], group: furniture, rel-pos: 1}
+      - {ref: common/screw-head@1, id: face-screw-2, at: [186.40, 35.70], group: furniture, rel-pos: 2}
+      - {ref: common/screw-head@1, id: face-screw-3, at: [277.00, 35.70], group: furniture, rel-pos: 3}
+      - {ref: common/screw-head@1, id: face-screw-4, at: [368.20, 35.70], group: furniture, rel-pos: 4}
+    regions:
+    - {id: logo-zone, at: [426.5, 8.6], size: {w: 15.0, h: 7.0}, label: 'Vendor logo; not drawn'}
+    - {id: downlinks, at: [9.6, 6.4], size: {w: 357.2, h: 35.4}, label: '48 x 10/100/1000 RJ-45',
+       members: [port-1, port-2, port-3, port-4, port-5, port-6, port-7, port-8, port-9, port-10, port-11, port-12, port-13, port-14, port-15, port-16, port-17, port-18, port-19, port-20, port-21, port-22, port-23, port-24, port-25, port-26, port-27, port-28, port-29, port-30, port-31, port-32, port-33, port-34, port-35, port-36, port-37, port-38, port-39, port-40, port-41, port-42, port-43, port-44, port-45, port-46, port-47, port-48]}
+    - {id: uplinks, at: [372.6, 6.4], size: {w: 30.5, h: 35.4}, label: '4 x 1/10G SFP+',
+       members: [port-49, port-50, port-51, port-52]}
+    - {id: out-of-band, at: [407.5, 6.7], size: {w: 14.7, h: 34.6}, label: 'Console and management',
+       members: [console, mgmt, led-mgt]}
+    - {id: status-leds, at: [427.4, 17.4], size: {w: 15.6, h: 24.0}, label: 'Status LEDs and reset',
+       members: [led-ps1, led-ps2, led-fan, led-status, reset]}
+  rear:
+    size: {w: 444.4, h: 44.45}
+    components:
+      bays:
+      - {id: psu-1, at: [1.60, 2.00], size: {w: 115.7, h: 39.5}, group: psus, rel-pos: 1,
+         accepts: ['cisco/pwr-c49e-300ac-r@1'], default: 'cisco/pwr-c49e-300ac-r@1'}
+      - {id: fan-tray, at: [118.30, 2.00], size: {w: 190.7, h: 39.5}, group: fans, rel-pos: 1,
+         accepts: ['cisco/ws-x4993@1'], default: 'cisco/ws-x4993@1'}
+      - {id: psu-2, at: [310.00, 2.00], size: {w: 115.7, h: 39.5}, group: psus, rel-pos: 2,
+         accepts: ['cisco/pwr-c49e-300ac-r@1'], default: 'cisco/pwr-c49e-300ac-r@1'}
+      placements:
+      - {ref: common/ground-symbol@1, id: ground-mark, at: [433.70, 31.00], group: furniture, rel-pos: 5}
+    regions:
+    - {id: power, at: [0.8, 1.0], size: {w: 117.3, h: 41.5}, label: 'Power supply 1 (primary)',
+       members: [psu-1]}
+    - {id: cooling, at: [117.6, 1.0], size: {w: 192.1, h: 41.5}, label: 'Fan tray',
+       members: [fan-tray]}
+    - {id: power-2, at: [309.2, 1.0], size: {w: 117.3, h: 41.5}, label: 'Power supply 2 (redundant)',
+       members: [psu-2]}
+  top:
+    size: {w: 444.4, h: 492.8}
+    empty: >-
+      Not drawn flat by any staged source. The guide's Figure 1-1 shows the lid isometrically
+      with the vendor's logo and three labels on it and four slots along its rear edge; the
+      data sheet says the chassis has no top venting. Nothing there can be measured.
+  bottom:
+    size: {w: 444.4, h: 492.8}
+    empty: >-
+      Not drawn by any staged source. Neither the installation guide nor the data sheet
+      pictures the underside.
+  left:
+    size: {w: 492.8, h: 44.45}
+    empty: >-
+      Not drawn flat by any staged source. The guide's Figures 1-1 and 1-2 show a side wall
+      isometrically with bracket screw holes and small slots, and the grounding figure shows
+      the system ground lug there; the data sheet says the chassis has no side venting.
+  right:
+    size: {w: 492.8, h: 44.45}
+    empty: >-
+      Not drawn by any staged source. The guide's figures show one side wall and say nothing
+      of the other.
+interfaces:
+- {physical: 'port-{n}', name: 'GigabitEthernet1/{n}', range: '1-48'}
+- {physical: 'port-{n}', name: 'TenGigabitEthernet1/{n}', range: '49-52'}
+- {physical: mgmt, name: FastEthernet1}
+configurations:
+  ac:
+    kind: base
+    description: >-
+      Two PWR-C49E-300AC-R supplies and the WS-X4993 fan tray - the switch as it runs, with
+      every port empty
+    default: true
+references:
+- {title: 'Catalyst 4948E and Catalyst 4948E-F Switch Installation Guide (OL-21561-02)'}
+- {title: 'Cisco Catalyst 4948E and 4948E-F Ethernet Switches Data Sheet (c78-598933)'}
+- {title: 'End-of-Sale and End-of-Life Announcement for the Cisco Catalyst 4948E Ethernet Switch (EOL11273)'}
