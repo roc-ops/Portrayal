@@ -212,6 +212,39 @@
        },
        "source": {
         "type": "string"
+       },
+       "shape": {
+        "enum": [
+         "box",
+         "cylinder",
+         "ring"
+        ],
+        "description": "WHAT THE PIECE IS, when it is not a box. `cylinder` is a solid round and `ring` a round wall `wall` mm thick - a fibre storage ring in a splice tray, a spool, a post. The piece is fitted into the same `at`/`size`/`from`/`depth` envelope a box would fill, standing on `axis`. Absent means `box`, as every piece was before this key. In a bay that turns, mirrors or tilts its occupant a round piece is built as its box."
+       },
+       "axis": {
+        "enum": [
+         "x",
+         "y",
+         "z"
+        ],
+        "description": "which way a round piece's axis runs, in the face's frame: `y` is up the face (a ring standing on a tray floor), `z` runs into the part (a round seen face-on), `x` across it. Required with a round `shape` (L71); the cross-section is the other two dimensions of the envelope and L71 asks them to be equal."
+       },
+       "wall": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "description": "mm of wall on a `ring`. Required with it (L71), and less than half the cross-section."
+       },
+       "shows": {
+        "type": "array",
+        "minItems": 1,
+        "uniqueItems": true,
+        "items": {
+         "enum": [
+          "plan",
+          "rear"
+         ]
+        },
+        "description": "THE PART'S OWN DRAWINGS THIS PIECE CARRIES. `plan` paints the piece's top with the patch of the part's `faces.plan` it stands under; `rear` paints its back with the patch of `faces.rear` behind it. So a tray riding in a drawer shows its splice holders from above, and the back of an adapter block shows its ports, although a body piece is otherwise a plain colour. Both drawings run right to left against the face (a plan is drawn face-at-the-top, a rear as seen from behind), the plan's y is mm behind the face plane, and the rear's is the face's own. A flat image, not relief. Boxes only, and only drawings the part declares (L71). In a bay that turns, mirrors or tilts its occupant the piece is built plain, because its top is then not the part's top."
        }
       }
      }

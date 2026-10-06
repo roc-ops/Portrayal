@@ -77,7 +77,7 @@ a test fails when this page and the linter disagree. A finding prints as
 | L68 | library | a measurement keeps one attr name and one section across the library | use the name the message quotes |
 | L69 | device | a cooling group with more than one bay says how many fans it can lose | add `attrs.redundancy` (e.g. `n+1`) and a note |
 | L70 | device | a `fact:` gap names a real fact and does not contradict the device | fix the gap's scope or remove it |
-| L71 | component | a body box reaches no further than the part says it is deep | shrink the body box or raise `body.depth` |
+| L71 | component | a body box reaches no further than the part says it is deep; a round one states its axis (a ring its wall) and is square across it; one that `shows` a drawing is a box of a part declaring that face | shrink the body box or raise `body.depth`; state `axis`/`wall` or square the envelope; declare the face or drop `shows` |
 | L72 | device | a bay's `plan:` or `rear:` lands in a view that exists, inside the chassis | fix the plan view name or the coordinates |
 | L73 | component | a field prints somewhere, and what prints is a field; a node a field paints states no relief `color`, so its 3D sides follow the field | add a `data-from` text node for each field, or remove the field; drop a relief feature's `color` on a field-painted node |
 | L74 | component | a lamp that declares states is painted from the lamp-colour variable | fill or stroke the lamp node with `var(--led-color, <off colour>)`, not a literal colour |

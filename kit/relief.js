@@ -859,11 +859,140 @@ export function bodyBoxes(body, faceW, faceH) {
   if (body.boxes && body.boxes.length) {
     return body.boxes.map((b, i) => ({
       id: b.id || `box-${i}`, x: b.at[0], y: b.at[1], w: b.size[0], h: b.size[1],
-      z0: b.from || 0, z1: (b.from || 0) + b.depth, color: b.color || color}));
+      z0: b.from || 0, z1: (b.from || 0) + b.depth, color: b.color || color,
+      // only when stated, so a plain box resolves to exactly what it always did
+      ...(b.shape && b.shape !== 'box' ? {shape: b.shape, axis: b.axis || 'y'} : {}),
+      ...(b.shape === 'ring' ? {wall: b.wall} : {}),
+      ...(b.shows && b.shows.length ? {shows: [...b.shows]} : {})}));
   }
   const fp = body.footprint || {at: [0, 0], size: [faceW, faceH]};
   return [{id: 'body', x: fp.at[0], y: fp.at[1], w: fp.size[0], h: fp.size[1],
            z0: 0, z1: body.depth, color}];
+}
+
+// WHICH PART OF A DRAWING A BODY PIECE SHOWS. A piece that `shows: [plan]`
+// carries, on its top, the patch of the part's own plan drawing it stands
+// under; one that `shows: [rear]` carries the patch of the part's rear drawing
+// on its back. Returned as a texture transform (`repeat`, `offset`, in the
+// drawing's own 0..1 with v up, as three.js maps a canvas), so one rasterised
+// drawing serves every piece that crops it. Pure, so it is checked under node.
+//
+// BOTH DRAWINGS ARE SEEN FROM THE OTHER SIDE OF THE PART, so both run right to
+// left against the face: a plan is drawn face-at-the-top (a true view from
+// above, with the face away from the reader), and a rear is drawn as seen from
+// behind. Either way the face's x = W is the drawing's x = 0.
+//   plan  down the drawing is INTO the part: y = mm behind the face plane.
+//         A box top has v = 1 at its far end, so v runs with the drawing's y
+//         and three's canvas v runs against it - hence the negative repeat.
+//   rear  down the drawing is down the face.
+// `b` is a resolved box (bodyBoxes) in the part's own frame; `faceW` the
+// part's face width; `dw`/`dh` the drawing's size in mm.
+export function pieceArtCrop(b, which, faceW, dw, dh) {
+  if (which === 'plan')
+    return {repeat: [-b.w / dw, -(b.z1 - b.z0) / dh],
+            offset: [(faceW - b.x) / dw, 1 - b.z0 / dh]};
+  return {repeat: [b.w / dw, b.h / dh],
+          offset: [(faceW - b.x - b.w) / dw, 1 - (b.y + b.h) / dh]};
+}
+
+// ONE PIECE OF A BODY, as something to add to a scene: a box, or - where the
+// piece says so - a cylinder or a ring standing on `axis`, fitted into the
+// same `w` x `h` x `d` envelope the box would fill. `w` and `h` are passed in
+// because the callers have already taken them through the module's frame.
+// `art` is {plan, rear}: a material for the top and for the back, from
+// pieceArt. The caller positions the result at the envelope's centre.
+//
+// A ROUND PIECE IS A UNIT SOLID, SCALED. Its envelope need not be square, so
+// a ring in a 60 x 58 envelope comes out very slightly oval, with its wall
+// thinner on the short axis - honest to the numbers the contract gave, and
+// L71 asks for a square cross-section so it does not happen by accident.
+export function pieceMesh(b, w, h, d, art = {}) {
+  const plain = () => new THREE.MeshLambertMaterial({color: b.color});
+  if (b.shape === 'cylinder' || b.shape === 'ring') {
+    // unit solid on local y: diameter 1, height 1
+    let solid;
+    if (b.shape === 'ring') {
+      const cross = b.axis === 'y' ? Math.min(w, d) : b.axis === 'z' ? Math.min(w, h) : Math.min(h, d);
+      const ri = Math.max(0.5 - (b.wall || 1) / cross, 0.02);
+      const ring = new THREE.Shape().absarc(0, 0, 0.5, 0, Math.PI * 2, false);
+      ring.holes.push(new THREE.Path().absarc(0, 0, ri, 0, Math.PI * 2, true));
+      const g = new THREE.ExtrudeGeometry(ring, {depth: 1, bevelEnabled: false, curveSegments: 48});
+      g.translate(0, 0, -0.5); g.rotateX(Math.PI / 2);   // extruded on z; stand it on y
+      solid = new THREE.Mesh(g, plain());
+    } else {
+      solid = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 1, 48), plain());
+    }
+    // turned and scaled on the mesh itself: the callers set only its position,
+    // and a bare mesh is what the hit index and the pull pass expect to find
+    if (b.axis === 'z') { solid.rotation.x = Math.PI / 2; solid.scale.set(w, d, h); }
+    else if (b.axis === 'x') { solid.rotation.z = Math.PI / 2; solid.scale.set(h, w, d); }
+    else solid.scale.set(w, h, d);
+    return solid;
+  }
+  // BoxGeometry's faces: +x, -x, +y (top), -y, +z (toward the face), -z (back)
+  const mats = art.plan || art.rear
+    ? [plain(), plain(), art.plan || plain(), plain(), plain(), art.rear || plain()]
+    : plain();
+  return new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mats);
+}
+
+// IS THE HOST'S FRAME THE PART'S OWN? A piece's `axis` and the drawings it
+// `shows` are stated in the part's frame, and the build sites hand pieceMesh a
+// width and height already taken through the module's placement. Unturned and
+// unmirrored those agree. In a bay that turns or mirrors its occupant, or
+// tilts it, they do not: a box's top is no longer the part's top and a ring's
+// `y` is no longer up - so such a piece is built as the plain box it would
+// have been before either key existed, rather than as a confident wrong one.
+// Pure, so it is checked under node.
+export function pieceIsStraight(m, tilt) {
+  if (tilt) return false;
+  if (!m) return true;
+  return Math.abs(m.b) < 1e-9 && Math.abs(m.c) < 1e-9 && m.a > 0 && m.d > 0;
+}
+export const plainPiece = b => { const {shape, axis, wall, shows, ...box} = b; return box; };
+
+// THE DRAWINGS A PIECE SHOWS, rasterised once per drawing and cropped per
+// piece. `body.drawings` is the index's: {plan|rear: {file, w, h}}, the
+// part's own `faces`, and `body.face` its face size. `dist` is the same
+// path -> URL function (or bare base) the back pass uses. A piece that names
+// a drawing the part does not have, or that is not a box, gets none - L71
+// says so at lint time, so here it is simply plain.
+//
+// `cache` IS THE CALLER'S, ONE PER BUILD. svgSource applies the scope's
+// runtime state - a field's colour, a swapped occupant - so a drawing
+// rasterised for one build is wrong for the next, and a module-level cache
+// kept showing the old one. Within a build it holds one texture per drawing;
+// each piece takes a clone, which shares the upload and carries its own crop.
+//
+// A DRAWING THAT WILL NOT LOAD COSTS THE ART, NOT THE FACE. A plain box could
+// never fail to build, so a failed fetch or decode leaves the piece plain,
+// says so once, and is not remembered.
+export async function pieceArt(body, b, dist, scope, cache) {
+  const out = {};
+  if (!b.shows || b.shape || !body.drawings || !dist) return out;
+  for (const which of b.shows) {
+    const dr = body.drawings[which];
+    if (!dr) continue;
+    const url = typeof dist === 'function' ? dist(dr.file) : dist + dr.file;
+    if (cache && !cache.has(url))
+      cache.set(url, svgCanvas(url, dr.w, dr.h, false, false, scope).then(canvasTex));
+    let base;
+    try {
+      base = await (cache ? cache.get(url)
+                          : svgCanvas(url, dr.w, dr.h, false, false, scope).then(canvasTex));
+    } catch (err) {
+      if (cache) cache.delete(url);
+      console.warn(`[portrayal] a body piece's ${which} drawing did not load (${dr.file}); built plain`, err);
+      continue;
+    }
+    const tex = cache ? base.clone() : base;
+    const {repeat, offset} = pieceArtCrop(b, which, (body.face || [dr.w])[0], dr.w, dr.h);
+    tex.wrapS = tex.wrapT = THREE.RepeatWrapping;   // a negative repeat reads backwards, inside 0..1
+    tex.repeat.set(...repeat); tex.offset.set(...offset);
+    tex.needsUpdate = true;
+    out[which] = new THREE.MeshBasicMaterial({map: tex});
+  }
+  return out;
 }
 
 // WHERE A CABLE LANDS, in the chassis frame. Exported as two halves on
@@ -2415,6 +2544,7 @@ export async function ventWellWalls({wells = [], apertures = {}, frames = {}, sc
 export async function buildFaceRelief(F, ctx) {
   const {src, faceCv, faceSvg, facePunch, meshes,
          FRU_GROUPS, FRU_META, BODY_META, D, bodyBoxMesh} = ctx;
+  const pieceTex = new Map();   // one texture per drawing, for this build of this face (pieceArt)
     // HOW FAR INTO THE BOX THIS FACE LOOKS, which is not the same number on every
     // face and was the device's DEPTH on all of them. Depth is right for front and
     // rear and wrong for the other four: into a top or a bottom you go the chassis
@@ -3273,8 +3403,9 @@ export async function buildFaceRelief(F, ctx) {
         for (const b of bodyBoxes(meta.body, f.w, f.h)) {
           // toFace is the drawn (foreshortened) frame; a tilted box is unprojected
           const r = f.tilt ? unproject(localToFace(f.toFace, b), f.tilt) : localToFace(f.toFace, b);
-          const m = new THREE.Mesh(new THREE.BoxGeometry(r.w, r.h, b.z1 - b.z0),
-            new THREE.MeshLambertMaterial({color: b.color}));
+          const pb = pieceIsStraight(f.toFace, f.tilt) ? b : plainPiece(b);
+          const m = pieceMesh(pb, r.w, r.h, b.z1 - b.z0,
+                              await pieceArt(meta.body, pb, ctx.dist, ctx.scope, pieceTex));
           m.position.set(LX(r.x, r.w), LY(r.y, r.h),
                          zf - b.z0 - (b.z1 - b.z0) / 2 - 0.05);
           fg.add(m);
@@ -3380,8 +3511,9 @@ export async function buildFaceRelief(F, ctx) {
       const into = s.tilt ? tiltGroupFor(s.tilt, fruGroups[s.owner] || grp) : fruGroups[s.owner] || grp;
       for (const b of bodyBoxes(body, 0, 0)) {
         const r = s.tilt ? unproject(localToFace(s.toFace, b), s.tilt) : localToFace(s.toFace, b);
-        const m = new THREE.Mesh(new THREE.BoxGeometry(r.w, r.h, b.z1 - b.z0),
-          new THREE.MeshLambertMaterial({color: b.color}));
+        const pb = pieceIsStraight(s.toFace, s.tilt) ? b : plainPiece(b);
+        const m = pieceMesh(pb, r.w, r.h, b.z1 - b.z0,
+                            await pieceArt(body, pb, ctx.dist, ctx.scope, pieceTex));
         m.position.set(LX(r.x, r.w), LY(r.y, r.h),
                        (s.lift || 0) - b.z0 - (b.z1 - b.z0) / 2 - 0.05);
         m.userData.portrayalPath = s.path;

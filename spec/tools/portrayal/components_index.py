@@ -477,6 +477,25 @@ def main():
                     rname, rmaj = rest.split("@")
                     sides["rear"] = f"components/{rns}--{rname}--v{rmaj}--default.svg"
                 entry["body"] = {**data["body"], "sides": sides}
+                # THE PART'S OWN DRAWINGS, FOR ITS PIECES. A body box that
+                # `shows: [plan]` or `[rear]` is painted with the patch of
+                # that drawing it stands under, so the viewer needs the file
+                # and the drawing's size in mm to crop it - and the face's own
+                # size, because both drawings run right to left against it.
+                # Only when some box asks: 1,200 parts do not.
+                if any(b.get("shows") for b in data["body"].get("boxes") or []):
+                    drawings = {}
+                    for k in ("plan", "rear"):
+                        dref = face_ref(data, k)
+                        dc = load_ref(dref) if dref else None
+                        if dc:
+                            dns, drest = dref.split("/", 1)
+                            dname, dmaj = drest.split("@")
+                            drawings[k] = {
+                                "file": f"components/{dns}--{dname}--v{dmaj}--default.svg",
+                                "w": dc["size"]["w"], "h": dc["size"]["h"]}
+                    entry["body"]["drawings"] = drawings
+                    entry["body"]["face"] = [data["size"]["w"], data["size"]["h"]]
             # A PART'S OTHER DRAWINGS, flattened to refs. The viewer resolves
             # them against this same index, so the nested `{ref: ...}` form
             # would cost bytes on every page load and buy nothing. Omitted
