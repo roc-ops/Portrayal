@@ -1,0 +1,44 @@
+format: 1
+kind: component
+name: d-ring-snap-in
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  FS snap-in D-ring of the FHD-CMP5DR lacer panel, seen from above - a polycarbonate
+  loop that twists into a round seat in the tray and stands across it, cables passing
+  through along the tray
+provenance:
+  size: >-
+    drawing - the plan view of the three-view drawing in FS's 0U/1U Horizontal Cable
+    Manager Datasheet (updated 2025-05-11), at 1.331 px/mm. Each ring is a pair of lines
+    6.8 mm apart and 43.6 mm long, crossing a seat whose chord gives a 32.3 mm circle;
+    all five read the same to the pixel. The part's width is the seat's and its height
+    the ring's.
+  relief: >-
+    drawing - the ring-profile view of the same drawing: the loop is 44.3 deep and stands
+    about 41 mm above the tray, with a wall about 5.3 mm in the plane of the loop and 6.8
+    across it. Built as a round tube 6 mm in diameter, which is neither figure. The seat's
+    2 mm is estimated; no view dimensions it.
+  material: >-
+    datasheet - "D-rings Material: PC, UL 94V-2" in the same datasheet's table.
+size: {w: 32.3, h: 43.6}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: PC, flammability: UL 94V-2}
+elements:
+  seat: {at: [0.0, 5.65], size: [32.3, 32.3], class: bezel}
+  ring: {at: [12.75, 0.0], size: [6.8, 43.6], class: bezel}
+relief:
+  features:
+    - node: seat
+      cyl: 2.0
+      color: '#131517'
+      confidence: estimated
+      source: no view of the FS drawing dimensions the seat's height
+    - node: ring
+      uhandle: 41.0
+      dia: 6.0
+      color: '#0c0d0f'
+      confidence: drawing
+      source: the ring-profile view of FS's 0U/1U datasheet drawing, about 41 mm above the tray
+skins: [default]
