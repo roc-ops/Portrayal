@@ -12,7 +12,11 @@
     <rect x="3.4" y="34.1" width="11.0" height="0.9" rx="0.3" fill="#2c3033"/>
   </g>
   <g id="silkscreen">
-    <!-- the fuse is inside the holder: its rating is carried, not displayed -->
-    <text id="fuse-rating" data-from="fuse-rating" x="8.9" y="18.5" font-size="3" text-anchor="middle" fill="#e8e8e4" display="none">0</text>
+    <!-- the fuse is inside the holder: its rating is carried, not displayed. THE
+         GROUP IS WHAT HIDES IT, not the text node: the kit shows a data-from node
+         whenever it writes a value to it, and leaves the node's parents alone. -->
+    <g id="carried" display="none">
+      <text id="fuse-rating" data-from="fuse-rating" x="8.9" y="18.5" font-size="3" text-anchor="middle" fill="#e8e8e4">0</text>
+    </g>
   </g>
 </svg>
