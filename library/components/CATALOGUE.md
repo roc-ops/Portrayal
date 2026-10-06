@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1276 component majors in 28 namespaces.
+1277 component majors in 28 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
