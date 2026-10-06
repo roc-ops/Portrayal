@@ -115,6 +115,11 @@ names the ref that replaces it.
   new parts seat in it, `cisco/pwr-c49e-300ac-r@1` and `cisco/ws-x4993@1`. Its
   export names ports as IOS does, `GigabitEthernet1/1` to `1/48`,
   `TenGigabitEthernet1/49` to `1/52` and `FastEthernet1`.
+- The Smartoptics DCP-1203 (`smartoptics/dcp-1203@1`), three 100/400G
+  transponders on one DCP-2 traffic unit: six QSFP28/QSFP-DD combo cages in
+  three pairs, odd ports client and even ports line, each with its Tx and Rx
+  lamps. The DCP-2 accepts it in both traffic slots and gains a `dcp-1203-x2`
+  example configuration.
 - A device can name its own interfaces. A top-level `interfaces:` block, in
   the shape a NOS listing's has, says what the maker's own operating system
   calls each port, and the hardware's own DCIM device type uses those names:

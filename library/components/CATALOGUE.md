@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1275 component majors in 28 namespaces.
+1276 component majors in 28 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -51,7 +51,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/osfp@1` | component | port | 23.1 × 13.5 × 47 | osfp | 9 | 4 | OSFP cage cutout (800G, one port per opening; the belly-to-belly rows of a 2RU face are two of these, not one… |
 | `std/pcie-bracket-fh@2` | component | bracket | 120.02 × 21.59 | pcie-bracket-fh | 0 | 38 | Standard (full height) PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the ch… |
 | `std/pcie-bracket-lp@1` | component | bracket | 79.2 × 18.42 | pcie-bracket-lp | 0 | 48 | Low profile PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the chassis wall,… |
-| `std/qsfp-dd@1` | component | port | 19 × 10 × 37 | qsfp-dd | 32 | 19 | QSFP-DD cage cutout (400G, backward-compatible faceplate) |
+| `std/qsfp-dd@1` | component | port | 19 × 10 × 37 | qsfp-dd | 32 | 20 | QSFP-DD cage cutout (400G, backward-compatible faceplate) |
 | `std/qsfp-ganged@1` | component | port | 18.5 × 9.58 × 37 | qsfp-ganged | 50 | 26 | QSFP family per-port opening inside a ganged cage block - the cage aperture, with the SFF-8661 module envelop… |
 | `std/qsfp28@1` | component | port | 20 × 10.15 × 37 | qsfp28 | 3 | 49 | QSFP28 cage cutout (100G, 4 lanes) |
 | `std/qsfp56@1` | component | port | 20 × 10.15 × 37 | qsfp56 | 0 | 16 | QSFP56 cage cutout (200G, shares SFF-8661 profile) |
@@ -104,7 +104,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/ground-symbol@1` | component | ground | 6 × 6 |  | 65 | 1 | Grounding silkscreen symbol (earth in a circle), no hardware |
 | `common/keyhole-mount@1` | component | mount | 8 × 12 |  | 3 | 0 | Wall-mount keyhole slot |
 | `common/keystone-clip@2` | component | mechanical | 16.5 × 14.9 | keystone-opening | 0 | 1 | The white plastic clip FS ships with its FHD multimedia modular panel (FHD-FAPM6, SKU 143239), seated in one … |
-| `common/laser-warning@1` | component | marking | 5.4 × 4.8 |  | 6 | 13 | IEC 60825 laser hazard triangle - yellow field, black border and burst symbol |
+| `common/laser-warning@1` | component | marking | 5.4 × 4.8 |  | 6 | 14 | IEC 60825 laser hazard triangle - yellow field, black border and burst symbol |
 | `common/lc-boot@1` | component | boot | 6.2 × 6.2 | lc-plug | 0 | 7 | A strain-relief boot for an LC plug: a 6.2 square cross-section that goes AROUND the 5.58 x 5.65 plug body, w… |
 | `common/lc-duplex-adapter@6` | component | port | 13.2 × 11 | lc-duplex | 3 | 16 | Panel-mount LC duplex adapter - a bezel carrying two LC bores side by side, as used for Tx/Rx pairs on optica… |
 | `common/lc-duplex-dust-cap@2` | component | cap | 12.25 × 5.85 | lc-duplex | 0 | 1 | The ONE white cap FS ships over both ports of an FHD LC duplex adapter - 5.85 x 12.25 as read off that adapte… |
@@ -113,9 +113,9 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/lc-dust-cap@1` | component | cap | 4.7 × 4.7 | lc | 0 | 3 | The white dust cap an idle LC port ships with - a 4.7 square lump plugging the bore square, with a rounded-sq… |
 | `common/led-arrow@1` | component | led | 3.6 × 3.2 |  | 15 | 1 | Single triangle port LED - up skin for top-row ports, down for bottom |
 | `common/led-arrow-sm@1` | component | led | 2.25 × 2 |  | 35 | 0 | Compact triangle port LED for tight inter-port gaps - up skin for top-row ports, down for bottom |
-| `common/led-dot@1` | component | led | 2 × 2 |  | 118 | 273 | Tiny round port LED (2mm) |
+| `common/led-dot@1` | component | led | 2 × 2 |  | 118 | 274 | Tiny round port LED (2mm) |
 | `common/led-indicator@1` | component | led | 4 × 4 |  | 29 | 48 | Single chassis status LED |
-| `common/led-rect@1` | component | led | 4.6 × 2.6 |  | 30 | 3 | Rectangular system LED (cell-site style green bar) |
+| `common/led-rect@1` | component | led | 4.6 × 2.6 |  | 30 | 4 | Rectangular system LED (cell-site style green bar) |
 | `common/led-rect-sm@1` | component | led | 2.8 × 1.6 |  | 31 | 23 | Small rectangular per-port LED - the rounded bar a dense port row carries one of beside each cage, at roughly… |
 | `common/led-slot-pair@1` | component | led | 3.7 × 1.2 |  | 0 | 4 | Two lamps behind one light-pipe slot - the rounded 3.7 x 1.2 window a bracket punches for a port's pair of in… |
 | `common/led-sq@1` | component | led | 3 × 3 |  | 1 | 0 | A small square status lamp, 3 mm, flush in a panel |
@@ -187,7 +187,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/vhdci-receptacle@1` | component | port | 40.4 × 5.2 |  | 0 | 3 | VHDCI (very-high-density cable interconnect) receptacle as a faceplate sees it - the flattened 0.8 mm-pitch s… |
 | `common/wall-plate-keyhole-2@1` | component | mount | 56 × 30 |  | 6 | 1 | Wall-mounting plate with two keyhole slots - a flat plate screwed across a device's back so the device hangs … |
 | `common/wall-plate-keyhole-2-42@1` | component | mount | 42 × 22 |  | 4 | 0 | The smaller wall-mounting plate with two keyhole slots - the 42 mm plate on the back of the AurCore AIS small… |
-| `common/warning-triangle@1` | component | marking | 5.4 × 4.8 |  | 5 | 3 | General warning triangle - a black exclamation mark in a yellow triangle, ISO 7010 W001 |
+| `common/warning-triangle@1` | component | marking | 5.4 × 4.8 |  | 5 | 4 | General warning triangle - a black exclamation mark in a yellow triangle, ISO 7010 W001 |
 
 ## generic/ (55)
 
@@ -1292,15 +1292,16 @@ aperture when it is a bare opening - never both at one position. The README's
 |---|---|---|---|---|---|---|---|
 | `siemon/qsfp28-aoc@1` | module | transceiver | 18.35 × 8.5 × 52.4 | qsfp | 0 | 0 | Siemon 100G QSFP28 active optical cable, one end - four 25G lanes at 850 nm over a 3.0 mm multimode fibre cab… |
 
-## smartoptics/ (16)
+## smartoptics/ (17)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
+| `smartoptics/dcp-1203@1` | module | line-card | 205 × 44 |  | 1 | 0 | Smartoptics DCP-1203, three independent 100/400G transponders on a half-width 1RU plug-in unit for one DCP-2 … |
 | `smartoptics/dcp-2-blank@1` | module | blank | 205 × 44 |  | 1 | 0 | Smartoptics DCP-2 blind plate - the moulded blank that fills an unused traffic slot so the airflow still pass… |
 | `smartoptics/dcp-2-fan@1` | module | fan | 192 × 40 |  | 2 | 0 | Smartoptics DCP-2-FAN-FB - the DCP-2 fan tray, a hot-pluggable unit carrying four fans behind a hexagonal per… |
 | `smartoptics/dcp-2-psu-ac@1` | module | psu | 73.5 × 40 |  | 2 | 1 | Smartoptics DCP-2-PSU-AC-FB - the AC power supply for the DCP-2 chassis, a 1U CRPS module wrapping a std/c14-… |
 | `smartoptics/dcp-2-psu-dc@1` | module | psu | 73.5 × 40 |  | 2 | 2 | Smartoptics DCP-2-PSU-DC-FB - the -48V DC power supply for the DCP-2 chassis |
-| `smartoptics/dcp-404@1` | module | line-card | 205 × 44 |  | 1 | 6 | Smartoptics DCP-404 muxponder, a half-width 1RU plug-in unit for one DCP-2 traffic slot |
+| `smartoptics/dcp-404@1` | module | line-card | 205 × 44 |  | 1 | 7 | Smartoptics DCP-404 muxponder, a half-width 1RU plug-in unit for one DCP-2 traffic slot |
 | `smartoptics/dcp-f-a22@2` | module | line-card | 205 × 44 |  | 1 | 0 | Smartoptics DCP-F-A22 - a 22 dB gain EDFA amplifier that takes one slot in a DCP-2 chassis and carries two ba… |
 | `smartoptics/m32-client-lamp@1` | component | led | 13.2 × 2 |  | 1 | 0 | The DCP-M32's per-channel client indicator - a white strip carrying the Tx and Rx lettering, lit from behind |
 | `smartoptics/ppm-ad1-1510@2` | module | filter | 55.4 × 19.5 |  | 1 | 10 | Smartoptics PPM-AD1-1510-2F - a passive plug-in module that splits the 1511nm optical supervisory channel off… |

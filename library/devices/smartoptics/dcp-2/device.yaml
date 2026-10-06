@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcp-2
-version: 2.0.2
+version: 2.1.0
 maturity: modelled
 manufacturer: Smartoptics
 model: DCP-2
@@ -266,6 +266,7 @@ views:
           size: {w: 205.0, h: 44.0}
           accepts:
             - smartoptics/dcp-404@1
+            - smartoptics/dcp-1203@1
             - smartoptics/dcp-f-a22@2
             - smartoptics/dcp-2-blank@1
           default: smartoptics/dcp-2-blank@1
@@ -276,6 +277,7 @@ views:
           size: {w: 205.0, h: 44.0}
           accepts:
             - smartoptics/dcp-404@1
+            - smartoptics/dcp-1203@1
             - smartoptics/dcp-f-a22@2
             - smartoptics/dcp-2-blank@1
           default: smartoptics/dcp-2-blank@1
@@ -424,6 +426,16 @@ configurations:
     bays:
       slot-1: smartoptics/dcp-404@1
       slot-2: smartoptics/dcp-404@1
+  dcp-1203-x2:
+    kind: example
+    description: >-
+      Both traffic slots carrying a DCP-1203 transponder - six 100/400G transponders in
+      1RU, the density its Technical Description quotes: "6 x 400G DWDM channels per 1U".
+      Illustrative, like the other examples: the units are ordered separately from the
+      chassis.
+    bays:
+      slot-1: smartoptics/dcp-1203@1
+      slot-2: smartoptics/dcp-1203@1
   ila-node:
     kind: example
     description: >-
