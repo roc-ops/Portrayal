@@ -4462,6 +4462,60 @@ def _footprint(item, lib_roots):
     return (x, y, x + w, y + h)
 
 
+def _union_overlap(target, boxes):
+    """The area of `target` that the union of `boxes` covers - each box clipped
+    to the target, overlaps between boxes counted once."""
+    clips = []
+    for b in boxes:
+        x0, y0 = max(target[0], b[0]), max(target[1], b[1])
+        x1, y1 = min(target[2], b[2]), min(target[3], b[3])
+        if x1 > x0 and y1 > y0:
+            clips.append((x0, y0, x1, y1))
+    if not clips:
+        return 0.0
+    xs = sorted({c[0] for c in clips} | {c[2] for c in clips})
+    ys = sorted({c[1] for c in clips} | {c[3] for c in clips})
+    area = 0.0
+    for i in range(len(xs) - 1):
+        for j in range(len(ys) - 1):
+            mx, my = (xs[i] + xs[i + 1]) / 2, (ys[j] + ys[j + 1]) / 2
+            if any(c[0] <= mx <= c[2] and c[1] <= my <= c[3] for c in clips):
+                area += (xs[i + 1] - xs[i]) * (ys[j + 1] - ys[j])
+    return area
+
+
+def _lamp_windows(placement, fb, lib_roots):
+    """The windows a placed lamp declares - its `led`, `window` and `cutout`
+    elements - as boxes on the face, turned with the placement about the
+    centre of its footprint `fb`. [] for a part that declares none."""
+    spec = _contract(str(placement.get("ref") or ""), lib_roots)
+    els = spec.get("elements") or {}
+    els = els.values() if isinstance(els, dict) else els
+    csz = spec.get("size") or {}
+    w, h = csz.get("w"), csz.get("h")
+    if not w or not h:
+        return []
+    cx, cy = (fb[0] + fb[2]) / 2, (fb[1] + fb[3]) / 2
+    t = math.radians(float(placement.get("rotate") or 0))
+    cos, sin = round(math.cos(t), 9), round(math.sin(t), 9)
+    out = []
+    for e in els:
+        if not isinstance(e, dict) or e.get("class") not in ("led", "window", "cutout"):
+            continue
+        at, sz = e.get("at"), e.get("size")
+        if not (isinstance(at, (list, tuple)) and isinstance(sz, (list, tuple))
+                and len(at) >= 2 and len(sz) >= 2):
+            continue
+        pts = []
+        for px, py in ((at[0], at[1]), (at[0] + sz[0], at[1]),
+                       (at[0], at[1] + sz[1]), (at[0] + sz[0], at[1] + sz[1])):
+            dx, dy = px - w / 2, py - h / 2
+            pts.append((cx + dx * cos - dy * sin, cy + dx * sin + dy * cos))
+        out.append((min(p[0] for p in pts), min(p[1] for p in pts),
+                    max(p[0] for p in pts), max(p[1] for p in pts)))
+    return out
+
+
 def _is_class(placement, cls, lib_roots):
     cp = resolve_component(placement.get("ref", ""), lib_roots)
     return bool(cp) and (load_yaml(cp) or {}).get("class") == cls
@@ -4654,20 +4708,33 @@ def lint_device_cutouts(path, view_name, view, lib_roots, seen_through=()):
     #    every port, so cutting the rest was not a new convention but the one
     #    already in use. A faceplate lamp penetrates the metal, and the drawing
     #    may as well say so.
-    def _covered(fb):
-        """Is this footprint already accounted for by a hole or a connector?"""
+    #    THE UNION OF THE HOLES, NOT THE BEST ONE (#395). This asked for ONE box
+    #    over half the lamp, so a lamp seen through several windows could never
+    #    be covered however honestly its windows were punched: the AIS800-32D's
+    #    lane columns are four 1.4 mm windows each, and the only hole that
+    #    passed was the false 1.8 x 11.4 slot expand.py rightly refuses to
+    #    punch. Now the overlap of every hole is unioned (so a hole and the
+    #    port drawn in it are not counted twice), and a lamp that declares
+    #    several windows is also covered when the holes cover more than half
+    #    of THOSE - four round windows in a post leave most of the column's
+    #    bounding box as metal, and that metal is the drawing being right.
+    #    Auto-punching keeps the one-opening rule (`_single_opening`): what
+    #    windows a multi-window lamp has is read off the metal by a person.
+    def _covered(fb, q=None):
+        """Is this footprint already accounted for by holes or connectors?"""
         area = (fb[2] - fb[0]) * (fb[3] - fb[1])
         if not area:
             return True
-        for b in list(boxes.values()) + [_footprint(x, lib_roots) for x in placements
-                                         if _is_class(x, "port", lib_roots)]:
-            if not b:
-                continue
-            ix = min(fb[2], b[2]) - max(fb[0], b[0])
-            iy = min(fb[3], b[3]) - max(fb[1], b[1])
-            if ix > 0 and iy > 0 and (ix * iy) / area > 0.5:
-                return True
-        return False
+        holes = [b for b in list(boxes.values()) + [_footprint(x, lib_roots) for x in placements
+                                                    if _is_class(x, "port", lib_roots)] if b]
+        if _union_overlap(fb, holes) / area > 0.5:
+            return True
+        windows = _lamp_windows(q, fb, lib_roots) if q else []
+        if len(windows) < 2:
+            return False
+        want = sum((w[2] - w[0]) * (w[3] - w[1]) for w in windows)
+        got = sum(_union_overlap(w, holes) for w in windows)
+        return bool(want) and got / want > 0.5
 
     for q in placements:
         cp = resolve_component(q.get("ref", ""), lib_roots)
@@ -4687,7 +4754,7 @@ def lint_device_cutouts(path, view_name, view, lib_roots, seen_through=()):
             # two holes sharing metal. It is found by asking where the thing
             # sits, not what it is called.
             fb = _footprint(q, lib_roots)
-            if fb and _covered(fb):
+            if fb and _covered(fb, q):
                 continue
         what = "port" if cls == "port" else "lamp"
         warn(path, "L39", f"{view_name}: {what} {q.get('id')} has no cutout, on a "

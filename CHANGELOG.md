@@ -477,6 +477,15 @@ names the ref that replaces it.
   pluggable cage. A lamp or label in a group that states `pon` no longer
   exports as a second PON interface. No export in the library changes
   (roc-ops/Portrayal#772).
+- Lint L39 counts a lamp as punched when the holes over it together cover
+  more than half of it, not only when one hole does, and a lamp whose part
+  declares several windows also when the holes cover more than half of those
+  windows. A lamp seen through several windows could not be covered before,
+  however honestly they were punched. `expand.py` still punches a lamp
+  automatically only when its part declares one opening.
+  `edgecore/ais800-32d` (1.1.0) punches its 128 lane windows as round
+  cutouts (`led-port-N-lane-K`) and drops the L39 waiver it carried for
+  want of this (roc-ops/Portrayal#395).
 - `spec/schemas/standards.yaml`: the `sc-duplex-adapter` pitch floor is
   12.71, the narrowest of the five gaps it was measured from, not 13.0, their
   mean. L81 now accepts an evenly spaced SC adapter panel at 12.71 or wider,
