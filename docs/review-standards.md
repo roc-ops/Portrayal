@@ -66,8 +66,8 @@ list of things to do.
 - **What is never drawn stays undrawn:** rack ears, cable furniture, a vendor
   logo. The exception is a part that IS one: a `rack-face` part is its ears,
   and a cable manager modelled as its own device is drawn
-  ([cable-managers-design.md](cable-managers-design.md)). A logo gets a reserved `logo-zone`; a product name in plain text is
-  fine.
+  ([cable-managers-design.md](cable-managers-design.md)). A logo gets a
+  reserved `logo-zone`; a product name in plain text is fine.
 - **A thing at component scale is a component.** A cover, door or filler drawn
   as bare decor is an unexplained box in the tree.
 - **A cutout is not left empty,** and a lamp that has states draws with the

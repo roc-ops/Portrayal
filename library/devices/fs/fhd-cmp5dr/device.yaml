@@ -10,7 +10,7 @@ aliases:
 description: >-
   Horizontal single-sided lacer panel that takes no rack unit of its own. FS SKU #72911,
   sold as "0RU": a black steel tray with five detachable polycarbonate D-rings that bolts
-  to the rack rails in front of, or behind, another 1U device and stands 110 mm out from
+  to the rack rails in front of, or behind, another device and stands 110 mm out from
   the rail face. FS gives its capacity as 30 Cat6 24AWG cables, theoretical.
 profile: passive
 provenance:
@@ -56,7 +56,8 @@ provenance:
   rear:
     confidence: drawing
     note: >-
-      drawing - the front view: an ear at each end, 17.3 wide and 44 high, with fixing
+      drawing - the front view, seen here from behind: an ear at each end, 17.3 wide and
+      44 high, the tray's edge and the five rings end-on between them, with fixing
       holes 9 mm in from the end (the 465 between centres) and 31.5 apart. A third hole
       between them is in the quick start guide's figure and FS's close-up render. The
       ear part draws all three on its own centreline, 8.65, and their sizes are
@@ -73,7 +74,7 @@ provenance:
       drawing - each arm sweeps up from the flat tray into the upright ear, and the
       ring-profile view draws that as a sloped web. Built as a flat strip of floor, an
       upright ear, and a web on the arm's outer edge: one plate whose top edge follows
-      the slope.
+      the slope. The arm's floor stops 15.4 mm short of the rail face, as drawn.
   top-rings:
     confidence: drawing
     note: >-
@@ -92,7 +93,18 @@ provenance:
     note: >-
       drawing - left and right are the ring-profile view of the same drawing. The bottom
       is the plan again from underneath - the strip, the arms and the slots - without
-      the fillets where the arms meet the strip.
+      the fillets where the arms meet the strip, and without the five round bosses of
+      the rings' seats that the drawing and FS's render of the underside both show.
+      NO REFERENCE IMAGE EXISTS FOR THE REAR: it is the front view's elevation turned
+      round.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - the weight, the mounting hardware, "Indoor" and the ring material are in
+      the 0U/1U datasheet's table. "Steel, Powder-coated Black" and "RoHS" are the
+      specification table of FS's product page for #72911, which words the panel material
+      and the standard more fully than the datasheet's "Steel" and its REACH, CE and UKCA
+      badges; so is the 1.5 mm gauge. The page is not a held document.
   color:
     confidence: estimated
     note: >-
@@ -147,30 +159,38 @@ views:
       decor:
         - {id: ear-left, at: [0, 0], size: [17.3, 44], fill: '#1b1d20', kind: ear}
         - {id: ear-right, at: [465.7, 0], size: [17.3, 44], fill: '#1b1d20', kind: ear}
-        - {id: tray-edge, at: [17.3, 42.5], size: [448.4, 1.5], fill: '#1b1d20', kind: tray}
-        - {id: ring-1-end, at: [32.3, 1.5], size: [6.8, 41], rx: 2, fill: '#0c0d0f', kind: ring}
-        - {id: ring-2-end, at: [127.7, 1.5], size: [6.8, 41], rx: 2, fill: '#0c0d0f', kind: ring}
-        - {id: ring-3-end, at: [238.1, 1.5], size: [6.8, 41], rx: 2, fill: '#0c0d0f', kind: ring}
-        - {id: ring-4-end, at: [348.5, 1.5], size: [6.8, 41], rx: 2, fill: '#0c0d0f', kind: ring}
-        - {id: ring-5-end, at: [443.9, 1.5], size: [6.8, 41], rx: 2, fill: '#0c0d0f', kind: ring}
-        - {id: hole-l1, at: [5.15, 3.75], size: [7, 5], rx: 2.5, fill: '#0a0b0c', vent: 1.5, kind: hole}
+        - {id: tray-edge, at: [17.3, 41], size: [448.4, 1.5], fill: '#1b1d20', kind: tray}
+        - {id: guide-1-end, at: [32.3, 0], size: [6.8, 41], rx: 2, fill: '#0c0d0f', kind: ring}
+        - {id: guide-2-end, at: [127.7, 0], size: [6.8, 41], rx: 2, fill: '#0c0d0f', kind: ring}
+        - {id: guide-3-end, at: [238.1, 0], size: [6.8, 41], rx: 2, fill: '#0c0d0f', kind: ring}
+        - {id: guide-4-end, at: [348.5, 0], size: [6.8, 41], rx: 2, fill: '#0c0d0f', kind: ring}
+        - {id: guide-5-end, at: [443.9, 0], size: [6.8, 41], rx: 2, fill: '#0c0d0f', kind: ring}
+        - {id: hole-l1, at: [4.15, 3.75], size: [9, 5], rx: 2.5, fill: '#0a0b0c', vent: 1.5, kind: hole}
         - {id: hole-l2, at: [6.65, 20], size: [4, 4], rx: 2, fill: '#0a0b0c', vent: 1.5, kind: hole}
-        - {id: hole-l3, at: [5.15, 35.25], size: [7, 5], rx: 2.5, fill: '#0a0b0c', vent: 1.5, kind: hole}
-        - {id: hole-r1, at: [470.85, 3.75], size: [7, 5], rx: 2.5, fill: '#0a0b0c', vent: 1.5, kind: hole}
+        - {id: hole-l3, at: [4.15, 35.25], size: [9, 5], rx: 2.5, fill: '#0a0b0c', vent: 1.5, kind: hole}
+        - {id: hole-r1, at: [469.85, 3.75], size: [9, 5], rx: 2.5, fill: '#0a0b0c', vent: 1.5, kind: hole}
         - {id: hole-r2, at: [472.35, 20], size: [4, 4], rx: 2, fill: '#0a0b0c', vent: 1.5, kind: hole}
-        - {id: hole-r3, at: [470.85, 35.25], size: [7, 5], rx: 2.5, fill: '#0a0b0c', vent: 1.5, kind: hole}
+        - {id: hole-r3, at: [469.85, 35.25], size: [9, 5], rx: 2.5, fill: '#0a0b0c', vent: 1.5, kind: hole}
   rear:
     size: {w: 483.0, h: 44.0}
+    panel:
+      decor:
+        - {id: tray-edge, at: [17.3, 41], size: [448.4, 1.5], fill: '#1b1d20', kind: tray}
+        - {id: guide-5-end, at: [32.3, 0], size: [6.8, 41], rx: 2, fill: '#0c0d0f', kind: ring}
+        - {id: guide-4-end, at: [127.7, 0], size: [6.8, 41], rx: 2, fill: '#0c0d0f', kind: ring}
+        - {id: guide-3-end, at: [238.1, 0], size: [6.8, 41], rx: 2, fill: '#0c0d0f', kind: ring}
+        - {id: guide-2-end, at: [348.5, 0], size: [6.8, 41], rx: 2, fill: '#0c0d0f', kind: ring}
+        - {id: guide-1-end, at: [443.9, 0], size: [6.8, 41], rx: 2, fill: '#0c0d0f', kind: ring}
     components:
       placements:
-        - {ref: fs/fhd-cmp5dr-ear@1, id: ear-a, at: [0.0, 0.0], group: ears, rel-pos: 1}
-        - {ref: fs/fhd-cmp5dr-ear@1, id: ear-b, at: [465.7, 0.0], group: ears, rel-pos: 2}
+        - {ref: fs/fhd-cmp5dr-ear@1, id: ear-right, at: [0.0, 0.0], group: ears, rel-pos: 2}
+        - {ref: fs/fhd-cmp5dr-ear@1, id: ear-left, at: [465.7, 0.0], group: ears, rel-pos: 1}
   top:
     size: {w: 483.0, h: 110.0}
     panel:
       decor:
-        - {id: ear-a-edge, at: [0, 0], size: [18.8, 1.5], fill: '#1b1d20', kind: ear}
-        - {id: ear-b-edge, at: [464.2, 0], size: [18.8, 1.5], fill: '#1b1d20', kind: ear}
+        - {id: ear-left-edge, at: [0, 0], size: [17.3, 1.5], fill: '#1b1d20', kind: ear}
+        - {id: ear-right-edge, at: [465.7, 0], size: [17.3, 1.5], fill: '#1b1d20', kind: ear}
     components:
       placements:
         - {ref: fs/fhd-cmp5dr-tray@1, id: tray, at: [17.3, 0.0], group: tray, rel-pos: 1}
@@ -185,8 +205,8 @@ views:
     size: {w: 483.0, h: 110.0}
     panel:
       decor:
-        - {id: arm-a, at: [17.3, 0], size: [10.5, 48.8], fill: '#1b1d20', kind: tray}
-        - {id: arm-b, at: [455.2, 0], size: [10.5, 48.8], fill: '#1b1d20', kind: tray}
+        - {id: arm-a, at: [17.3, 15.4], size: [10.5, 33.4], fill: '#1b1d20', kind: tray}
+        - {id: arm-b, at: [455.2, 15.4], size: [10.5, 33.4], fill: '#1b1d20', kind: tray}
         - {id: strip, at: [17.3, 48.8], size: [448.4, 61.2], rx: 3, fill: '#1b1d20', kind: tray}
         - {id: slot-1a, at: [72.15, 95], size: [22.5, 3], fill: '#0a0b0c', vent: 1.5, kind: slot}
         - {id: slot-1b, at: [72.15, 89.7], size: [22.5, 3], fill: '#0a0b0c', vent: 1.5, kind: slot}

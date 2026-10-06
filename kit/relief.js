@@ -142,7 +142,7 @@ export function openFrameFaces(texts) {
 }
 
 // A SHEET BODY IS NOT A BOX (docs/cable-managers-design.md section 4). Its
-// faces paint only their metal, and viewer3d shows the rest as open air. This
+// views are elevations, and viewer3d draws nothing from the six faces. This
 // answers the one question viewer3d asks, and answers no for everything it
 // does not recognise: an index from before the key, or a shell value from a
 // newer build, draws as the solid box it always was - wrong, and visible.

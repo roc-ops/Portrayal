@@ -2089,6 +2089,26 @@ def bevel_face(svg, faceplate, ch, face, w, h):
         strip.set("stroke", ch.get("edge", "#22262a")); strip.set("stroke-width", "0.25")
 
 
+def _shift_heights(node, by):
+    """Move a node's absolute heights by `by` mm: its `out`, and its profile.
+
+    `out` is read as a distance from the face, so a part standing in a well, or
+    seated in a bay that is lifted, has it moved to where the part now stands.
+    A PROFILE IS A HEIGHT TOO, and for a long time was left where it was: `out`
+    went to the well's floor and the surface it describes did not, so a web
+    sloping down to a tray stood the well's depth above it on a skirt twice as
+    tall (docs/cable-managers-design.md section 4). One function, so the well
+    and the bay cannot disagree about which heights move.
+    """
+    if node.get("data-z-out") is not None:
+        node.set("data-z-out", f"{float(node.get('data-z-out')) + by:g}")
+    for k in ("data-z-profile", "data-z-profile-y"):
+        if node.get(k):
+            node.set(k, ",".join(
+                f"{float(t):g}:{float(o) + by:g}"
+                for t, o in (pair.split(":") for pair in node.get(k).split(","))))
+
+
 def render_view(device, view_name, view, lib, include=(), config_name="default", config=None,
                 silkscreen=True):
     config = config or {}
@@ -3123,17 +3143,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             return
         g.set("data-z-lift", f"{-floor:g}")
         for node in g.iter():
-            if node.get("data-z-out") is not None:
-                node.set("data-z-out", f"{float(node.get('data-z-out')) - floor:g}")
-            # A PROFILE IS A HEIGHT TOO, and stayed where it was: `out` went to
-            # the floor and the surface it describes did not, so a web sloping
-            # down to a tray stood the well's depth above it on a skirt twice
-            # as tall (docs/cable-managers-design.md section 4).
-            for k in ("data-z-profile", "data-z-profile-y"):
-                if node.get(k):
-                    node.set(k, ",".join(
-                        f"{float(t):g}:{float(o) - floor:g}"
-                        for t, o in (pair.split(":") for pair in node.get(k).split(","))))
+            _shift_heights(node, -floor)
 
     def back_occupants(p):
         """The keys a module's back seats (B3, Task 7i): those whose host is
@@ -3591,8 +3601,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         # as sink() does for a placement.
         if bay_lift:
             for node in bay_g.iter():
-                if node.get("data-z-out") is not None:
-                    node.set("data-z-out", f"{float(node.get('data-z-out')) + bay_lift:g}")
+                _shift_heights(node, bay_lift)
 
     # FIRST PASS: the wells and the openings, interleaved by `under:`. Bays
     # paint after placements by default - a cage draws before the drives it

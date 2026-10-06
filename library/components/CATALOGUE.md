@@ -152,7 +152,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/qsfp-pull-tab@2` | component | latch | 19 × 8.56 |  | 0 | 6 | QSFP / QSFP-DD pull tab, as the part is: a flat U-loop whose two thin arms run forward along the module's sid… |
 | `common/qsfp-transceiver@1` | module | transceiver | 18.35 × 8.5 × 83.2 | qsfp | 0 | 2 | QSFP transceiver with a white pull-latch bail, drawn from a vendor mechanical drawing |
 | `common/qsfp28-cage@3` | component | port | 19 × 14.5 × 37 |  | 1 | 0 | QSFP28 cage at the measured 19.0mm ganged pitch, four round per-lane LEDs (v3 = composed - cage bezel wraps a… |
-| `common/rack-ear@1` | component | ear | 14 × 43.5 |  | 36 | 2 | Generic 1U rack mounting ear (decorative; place outside the chassis with optional tag 'ears'; skins left/righ… |
+| `common/rack-ear@1` | component | ear | 14 × 43.5 |  | 36 | 1 | Generic 1U rack mounting ear (decorative; place outside the chassis with optional tag 'ears'; skins left/righ… |
 | `common/reset-button@1` | component | button | 4 × 4 × 2.5 |  | 114 | 7 | Recessed pinhole reset button |
 | `common/rivet@1` | component | mechanical | 3 × 3 |  | 7 | 0 | Sheet-metal rivet head |
 | `common/rj11-jack@1` | component | port | 14 × 13.5 |  | 1 | 0 | RJ11 telephone jack (FXS) |
@@ -822,7 +822,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `fs/fhd-3mtp18-lc-rear@1` | component | cassette | 99 × 31 |  | 0 | 2 | The back of FS FHD-3MTP18LCDOS2A (SKU 105333) and its OM4 twin 105335: the 36-fibre cassette's body seen from… |
 | `fs/fhd-cmp5dr-ear@1` | component | ear | 17.3 × 44 |  | 1 | 0 | One mounting ear of the FS FHD-CMP5DR lacer panel - part of the tray's own sheet, folded upright, with a slot… |
 | `fs/fhd-cmp5dr-profile@1` | component | mechanical | 110 × 44 |  | 1 | 0 | The FS FHD-CMP5DR lacer panel seen from one side - the ear on edge, the web sloping down to the tray, and one… |
-| `fs/fhd-cmp5dr-tray@1` | component | mechanical | 448.4 × 110 × 42 |  | 1 | 0 | The steel tray of the FS FHD-CMP5DR lacer panel seen from above - a strip across the front that carries the r… |
+| `fs/fhd-cmp5dr-tray@1` | component | mechanical | 448.4 × 110 × 41 |  | 1 | 0 | The steel tray of the FS FHD-CMP5DR lacer panel seen from above - a strip across the front that carries the r… |
 | `fs/fhd-cmp5dr-web@1` | component | mechanical | 1.5 × 66 |  | 1 | 0 | The web that carries the FS FHD-CMP5DR's tray off each ear, seen from above - the sheet swept up from the tra… |
 | `fs/fhd-fap12lcd-apc-os2@1` | module | adapter-panel | 108.97 × 35.05 × 29.5 |  | 7 | 0 | FS FHD-FAP12LCADZSMF - FHD fiber adapter panel, twelve LC APC duplex adapters (green), 24 fibres, OS2 |
 | `fs/fhd-fap12lcd-apc-os2-rear@1` | component | adapter-panel | 88 × 34.8 |  | 0 | 1 | The back of FS SKU 25514 (FHD-FAP12LCADZSMF): the adapter block seen from behind, the same adapters that face… |

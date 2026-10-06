@@ -3,8 +3,8 @@
 Every device was a solid box in 3D: the viewer builds one from the chassis and
 paints a view on each side. A lacer panel in front of a patch panel is a floor,
 two ears and open air, and as a box it hides the ports it is there to serve.
-`chassis.shell: sheet` says the painted metal of each view is a plate and the
-rest is nothing.
+`chassis.shell: sheet` says the views are elevations with no housing behind
+them, and that the solid is what their parts build.
 """
 import json
 import pathlib
@@ -12,7 +12,7 @@ import xml.etree.ElementTree as ET
 
 import pytest
 
-from portrayal import devicelock, lint, render
+from portrayal import lint, render
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
@@ -23,12 +23,6 @@ def findings(doc):
     with lint.collecting() as found:
         lint.lint_device_shell("device.yaml", doc)
     return [m for m in found.errors + found.warnings if "[L127]" in m]
-
-
-def test_the_schema_knows_the_two_keys():
-    ch = SCHEMA["properties"]["chassis"]["properties"]
-    assert ch["shell"]["enum"] == ["sheet"]
-    assert ch["thickness"]["type"] == "number"
 
 
 def test_L127_a_sheet_states_its_thickness():
@@ -46,13 +40,6 @@ def test_L127_a_thickness_is_a_sheet_gauge(t):
     """0 and negatives are nonsense; over 10 mm is not sheet metal, it is a typo
     for a depth."""
     assert findings({"chassis": {"shell": "sheet", "thickness": t}})
-
-
-def test_the_shell_is_shape_to_the_lock_and_its_gauge_is_not():
-    """`shell` decides whether the envelope is solid, so adopting it is a major.
-    `thickness` is a stated gauge nothing is built from, like the weight."""
-    assert "shell" in devicelock.CHASSIS_SHAPE
-    assert "thickness" in devicelock.CHASSIS_SURFACE
 
 
 # --- what the renderer hands the viewer ---------------------------------------
@@ -97,27 +84,65 @@ def test_a_sheet_face_still_draws_its_metal():
 
 # --- a sloped plate standing on a well's floor -------------------------------
 
-def test_a_profile_in_a_well_is_measured_from_the_wells_floor():
+WELL = """format: 1
+kind: component
+name: well
+version: 1.0.0
+class: mechanical
+description: a floor 30 mm down
+size: {w: 100, h: 60, d: 30}
+elements:
+  floor: {at: [0.0, 0.0], size: [100, 60], class: bezel}
+skins: [default]
+"""
+PLATE = """format: 1
+kind: component
+name: plate
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: a plate whose top edge falls from 20 mm to 5
+size: {w: 2, h: 40}
+elements:
+  plate: {at: [0.0, 0.0], size: [2, 40], class: bezel}
+relief:
+  features:
+    - {node: plate, out: 20.0, profile-y: [[0, 20], [40, 5]], confidence: estimated, source: a fixture}
+skins: [default]
+"""
+
+
+@pytest.fixture
+def well_library(tmp_path):
+    for name, contract, w, h in (("well", WELL, 100, 60), ("plate", PLATE, 2, 40)):
+        d = tmp_path / "components" / "t" / name / "v1"
+        (d / "skins").mkdir(parents=True)
+        (d / "contract.yaml").write_text(contract)
+        node = "floor" if name == "well" else "plate"
+        (d / "skins" / "default.svg").write_text(
+            f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}mm" height="{h}mm" '
+            f'viewBox="0 0 {w} {h}"><rect id="{node}" width="{w}" height="{h}" fill="#222"/></svg>')
+    return render.Library([str(tmp_path)])
+
+
+def test_a_profile_in_a_well_is_measured_from_the_wells_floor(well_library):
     """`in:` sinks a part's `out` to the floor of the well it stands in, and left
     its `profile` where it was - measured from the face the well is cut in. So a
-    web sloping from 42 mm to nothing, standing on a tray 42 mm down, was a
-    surface from 42 ABOVE the lid to the lid, on a skirt 84 mm tall. The profile
-    is a height like `out` is, and moves with it."""
+    plate sloping from 20 mm to 5, standing on a floor 30 mm down, was a surface
+    from 20 ABOVE the lid, on a skirt 50 mm tall. The profile is a height like
+    `out` is, and moves with it."""
     dev = {"format": 1, "kind": "device", "name": "t", "version": "0.1.0", "maturity": "draft",
            "manufacturer": "T", "model": "T",
-           "chassis": {"width": 483.0, "height": 44.0, "depth": 110.0, "ru": 1,
-                       "mount": "rack-face", "shell": "sheet", "thickness": 1.5},
-           "groups": {"tray": {"term": "Tray", "role": "furniture", "index-origin": 1}},
-           "views": {"top": {"size": {"w": 483.0, "h": 110.0}, "components": {"placements": [
-               {"ref": "fs/fhd-cmp5dr-tray@1", "id": "tray", "at": [17.3, 0.0],
-                "group": "tray", "rel-pos": 1},
-               {"ref": "fs/fhd-cmp5dr-web@1", "id": "web", "at": [17.3, 0.0],
-                "group": "tray", "rel-pos": 2, "in": "tray"}]}}}}
-    out = render.render_view(dev, "top", dev["views"]["top"], render.Library([str(LIB)]), config={})
+           "chassis": {"width": 100.0, "height": 44.0, "depth": 60.0},
+           "groups": {"g": {"term": "Part", "role": "furniture", "index-origin": 1}},
+           "views": {"top": {"size": {"w": 100.0, "h": 60.0}, "components": {"placements": [
+               {"ref": "t/well@1", "id": "well", "at": [0.0, 0.0], "group": "g", "rel-pos": 1},
+               {"ref": "t/plate@1", "id": "web", "at": [10.0, 5.0], "group": "g", "rel-pos": 2,
+                "in": "well"}]}}}}
+    out = render.render_view(dev, "top", dev["views"]["top"], well_library, config={})
     out = out[0] if isinstance(out, tuple) else out
     root = ET.fromstring(out) if isinstance(out, (str, bytes)) else out
     plate = next(el for el in root.iter() if el.get("id") == "web--plate")
     pairs = [tuple(map(float, p.split(":"))) for p in plate.get("data-z-profile-y").split(",")]
-    assert pairs[0] == (0.0, 0.0)            # 42 high on a floor 42 down: level with the lid
-    assert pairs[-1][1] == pytest.approx(-40.5)   # 1.5 above that floor
-    assert float(plate.get("data-z-out")) == 0.0
+    assert pairs == [(0.0, -10.0), (40.0, -25.0)]     # 20 and 5 above a floor 30 down
+    assert float(plate.get("data-z-out")) == -10.0

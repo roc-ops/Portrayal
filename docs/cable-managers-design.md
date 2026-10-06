@@ -123,8 +123,9 @@ Two things had to be put right for that:
 - `in:` sank a part's `out` to the well's floor and left its `profile` measured from the
   face the well is cut in. A profile is a height and now sinks with it.
 
-A well is built 2 mm short of the far face, so a tray in a 44 mm envelope is a well 42
-deep where the sheet would make it 42.5. The floor stands 0.5 mm high.
+A well is built no deeper than 2 mm short of the far face. The FHD-CMP5DR's tray clears
+that without help: its sheet sits 1.5 mm above the ear's bottom edge, so its floor is 41
+mm down in a 44 mm envelope.
 
 This is relief, not CAD, as section 7 of DEPTH-AND-3D.md already says of the whole
 pipeline. The tubes are round and their corners square.

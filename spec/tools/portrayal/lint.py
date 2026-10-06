@@ -6241,10 +6241,10 @@ def lint_device_mount(path, data):
 def lint_device_shell(path, data):
     """L127: a sheet body states its gauge, and a box states none.
 
-    `shell: sheet` turns each view's painted metal into a plate, and a plate
-    with no thickness is a picture of one. The other direction matters as much:
-    `thickness` on a box is read by nothing, and reads to the next person as if
-    it were.
+    A sheet body is a statement about the metal, and its gauge is the one
+    figure of that metal a datasheet gives; a sheet with none has said half of
+    it. The other direction matters as much: `thickness` on a box describes
+    nothing, and reads to the next person as if it did.
     """
     ch = data.get("chassis") or {}
     sheet = ch.get("shell") == "sheet"
