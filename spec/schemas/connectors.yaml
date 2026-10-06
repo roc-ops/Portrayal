@@ -68,4 +68,11 @@ interfaces:
   # RULING: see the note. The part that presents it is the terminal screw
   # itself, composed once per pole into its block, so each pole is a slot.
   terminal-stud: {standard: terminal-stud, note: 'the library treats a screw or stud terminal that a lug lands on as ONE nominal connector. Stud and screw sizes vary by product and most placing parts state none, so the interface claims no size; where a document states one it is an attribute of the placement and not of the interface. generic/ring-lug@1, a one-hole insulated ring terminal on its wire, mates it. A two-hole lug across a pair of studs is not this interface yet'}
+  # The high-density and telephone connectors (#790,
+  # docs/connectors-mrj21-vhdci-rj11-design.md). The cable plug that mates
+  # each is a generic plug; the far end of the cable, and any breakout, is not
+  # a part.
+  mrj21: {standard: mrj21, note: 'TE Connectivity MRJ21 48-position receptacle, six 10/100/1000 Ethernet ports to a connector, as std/mrj21@1 draws it; generic/mrj21-plug@1, the straight cable plug with two jackscrews, mates it'}
+  vhdci: {standard: vhdci, note: 'VHDCI 68-position shielded receptacle on a 0.8 mm pitch with a screwlock either side (SFF-8441, Figure 25), as common/vhdci-receptacle@1 draws it; generic/vhdci-plug@1, the thumbscrew cable plug, mates it. The count is not in the key because SFF-8441 standardizes only the 68-position connector, so no other count of it could be on a panel'}
+  rj11: {standard: rj11, note: 'the six-position modular telephone jack (6P2C, 6P4C or 6P6C: one body, and RJ11 names the wiring of the first), as common/rj11-jack@1 draws it; generic/rj11-plug@1 mates it. The four-position handset jack and the eight-position rj45 are different interfaces'}
   breaker-1ru-guard: {cover: true, note: 'NOT A CONNECTOR - A COVER MOUNT. The face of a 1RU plug-in breaker, where its touch guard screws on; amphenol-ns/touch-guard-1ru@1 mates it. Registered here because a cover that ships on a part and comes off is the same mechanism as a dust cap in a port: one slot, one occupant, a default'}

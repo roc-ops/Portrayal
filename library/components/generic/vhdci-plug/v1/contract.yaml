@@ -1,0 +1,207 @@
+format: 1
+kind: component
+name: vhdci-plug
+version: 1.0.0
+class: port
+mates: vhdci
+conforms: vhdci-plug
+profile: networking
+description: >-
+  A straight 68-position VHDCI cable plug on its cable: the 0.8 mm connector
+  in its moulded hood with a thumbscrew either side, seen from the cable end
+  as a front elevation sees it seated: the hood, the two thumbscrews, the
+  flat strain relief and a short straight stub of cable whose diameter is the
+  cable-od field. Seats on a `vhdci` receptacle at its own mate point; the
+  cable leaves from the far end of the stub. What the cable fans out to is
+  not part of it.
+size: {w: 43.4, h: 9.0}
+size-confidence: {w: estimated, h: estimated}
+size-notes: both figures are SCALED from the drawing on one cable data sheet, a 209 ppi raster where a pixel is 0.3; the specification that governs the connector dimensions no hood
+attrs: {media: vhdci, connector: vhdci}
+fields:
+  cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 10.0}
+  jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    estimated - registry `vhdci-plug`. Cliff Electronic Components data sheet
+    VHDCI Cable, FCR720501 and FCR720502 (08/2021 ISS.2): a 68 pin male to
+    male cable, drawn with an end view and a side view of each plug. The
+    drawing prints no dimension of the hood, so 43.4 across and 9.0 thick are
+    scaled (provenance.scale). THE BOX IS THE WIDEST SECTION DRAWN, the hood
+    across the bosses that carry its two thumbscrews.
+  scale: >-
+    estimated - the drawing is a raster embedded at 209 ppi, read at 3.34
+    pixels a millimetre: the scale that puts its two thumbscrews on the 37.7
+    +/-0.1 centres SFF-8441 Rev 14.1 (Figure 25, p.37) dimensions for the two
+    screwlocks. Two more quantities agree at that scale. The front shell
+    measures 33.4 across, between the 31.65 shell of the fixed connector it
+    passes over and the 35.08 flange of the free one (Figures 25 and 18); and
+    the thumbscrew knobs measure 5.2, where the data sheet states 5 mm screws.
+    THE CABLE DOES NOT AGREE: it is drawn 7.7 and stated 10.0, so the drawing
+    is a schematic along the cable and nothing is scaled from the cable.
+  exit: >-
+    STRAIGHT: the cable leaves along the mating axis, so the stub stands out
+    of the face and takes a size field. NO HELD DOCUMENT OF THE PLACING
+    DEVICE DRAWS ITS CABLE: the OSA 5420/5421 Installation and Commissioning
+    Manual R9.5.1 names the two high density cables by part number
+    (1036005401-01 and 1036005402-01) and routes them to a patch panel, and
+    shows neither. The straight exit rests on SFF-8441, which says the
+    connector is small enough to do without right angle backshells, and on
+    the one cable drawing held.
+  retention: >-
+    THUMBSCREWS. SFF-8441 allows jack screws, squeeze-to-release clips or a
+    detent on the same panel connector; common/vhdci-receptacle@1 draws a
+    screw lock either side, and the held cable drawing has thumbscrews, so
+    that is the plug built. A squeeze-latch hood would mate the same
+    receptacle and is not this part.
+  orientation: >-
+    DRAWN IN THE UNROTATED CONVENTION OF THE RECEPTACLE, long axis across.
+    THE KEY IS NOT VISIBLE FROM THE CABLE END: the D of the front shell is
+    behind the hood, and the hood, its two screws and the cable are the same
+    either way up. The Cliff end view draws a raised loop on one broad face of
+    the hood; no second view explains it and it is not drawn.
+  seated-depth: >-
+    RULING - THE PLUG SEATS BY THE MATED GAP THE SPECIFICATION GIVES,
+    MEASURED FROM THE FACE THE RECEPTACLE PRESENTS. SFF-8441 Rev 14.1 Figure
+    27 (p.39) dimensions the front of the free connector 0.34 nominal (1.34
+    maximum) from the body of the fixed one when mated, and Figure 18 (p.30)
+    the front shell of the free connector 7.10 +/-0.13 long, so the hood
+    starts 0.34 + 7.1 = 7.44 in front of the seating surface. THE RECEPTACLE
+    AS MODELLED STATES NO DEPTH: common/vhdci-receptacle@1 records that
+    nothing it held dimensioned how far its shell stands proud, and builds
+    none. SFF-8441 Figure 25 (p.37) gives that figure, 5.2 +/-0.06, with the
+    screwlocks at 5.8; it is the figure to add to the receptacle when its
+    geometry is next revised, and nothing here changes when it is, because
+    the 7.44 is measured from the seating surface and not from the shell.
+  frame: >-
+    THE RELIEF IS MEASURED FROM THE LIFT THE HOST PRESENTS.
+    common/vhdci-receptacle@1 presents at its own face (its `mate` carries no
+    `on:` and no `seat-out`), so 0 here is the plate the receptacle is on,
+    which is the seating surface of the specification.
+  shell: >-
+    drawing - SFF-8441 Rev 14.1 Figure 18, p.30: the front shell is 7.10
+    +/-0.13 long behind a flange 35.08 +/-0.13 by 5.80 +/-0.13. IT IS BUILT
+    AT THE SECTION OF THE FLANGE, which overstates the shell in front of it
+    (33.4 across, scaled). Seen from the cable end it is wholly behind the
+    hood; it is drawn so the connector in front of the hood has a node to
+    build from.
+  hood: >-
+    estimated - scaled (provenance.scale): the moulded hood is 43.4 across
+    and 9.0 thick for 17.7, then narrows over 16.0 from 28.0 to 24.4 across
+    beside the two thumbscrews. The narrowing is built as ONE step 26.2
+    across, midway. Its thickness there is not drawn and is held at 9.0.
+  relief-boot: >-
+    estimated - scaled: a flat ribbed strain relief 24.4 across and 14.3
+    long. No view shows its thickness, which is held at the 9.0 of the hood.
+  thumbscrews: >-
+    drawing and estimated - on the 37.7 centres of SFF-8441 Figure 25, p.37.
+    common/vhdci-receptacle@1 draws its two screw locks 37.2 apart,
+    photo-measured, so each thumbscrew is 0.25 outside the lock it is drawn
+    over. The knob is 5.0 in diameter by the Cliff data sheet (Screws: 5mm x
+    37.5mm). Each is built as one cylinder at the knob diameter from the
+    shoulder of the hood to the end of the knob, 20.2 (scaled), so the plain
+    shank in front of the knob is overstated.
+  stub: >-
+    estimated - the stub rule, docs/connectors-coax-design.md section 5: a
+    straight run of cable 30 long starting where the strain relief ends
+    (55.44 in front of the seating surface). The bend is the installation.
+  cable-od: >-
+    datasheet - Cliff Electronic Components data sheet VHDCI Cable (08/2021
+    ISS.2), Materials: UL2919 28 AWG, 34 twisted pairs, OD 10.0 mm. That is
+    the 68-conductor cable; a fan-out carrying sixteen outputs may be
+    thinner. A placement or a wrapper sets the cable it actually carries.
+    THE CABLE IS THICKER THAN THE HOOD SCALES: 10.0 against 9.0, so the stub
+    overhangs the box of the part by 0.5 above and below. The hood figure is
+    the scaled one, good to a pixel of 0.3, and is not raised to hide that.
+  jacket-colour: >-
+    a FIELD, and it paints the cable only. Black is the default: the one held
+    cable data sheet states black. THE HOOD IS NOT A FIELD: it is drawn in the
+    black of the moulded hood that data sheet photographs, with nickel
+    thumbscrews.
+  no-mark: >-
+    NOTHING IS PRINTED OR EMBOSSED ON THE HOOD. No logo, no lettering and no
+    screw slot is drawn: the skin is the outlines its relief builds from.
+  no-depth: >-
+    NO `size.d`, DELIBERATELY, as on generic/usb-a-plug@1 and
+    generic/db9-plug@1. The overall length is in the registry entry and in
+    the relief below; a `size.d` on a component with no `behaviour` compiles
+    to `data-depth`, which the kit builds as a pit behind the whole box.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on generic/bnc-plug@1 - every class port
+    contract states none (spec/tests/test_behaviour.py).
+  axis: >-
+    derived - `mate` and `cable` share one point, the centre of the hood
+    (21.7, 4.5), which is also the centre of the front shell: the cable runs
+    straight through the connector. The two thumbscrews are 18.85 either
+    side of it.
+elements: {}
+relief:
+  features:
+    - node: shell
+      lift: 0.34
+      out: 7.44
+      shape: true
+      color: '#c9cdd1'
+      confidence: drawing
+      source: >-
+        SFF-8441 Rev 14.1 Figure 18, p.30, the 7.10 front shell of the free
+        cable connector, starting the 0.34 nominal of Figure 27, p.39, in
+        front of the seating surface (provenance.seated-depth). Built at the
+        35.08 by 5.80 section of its flange.
+    - node: hood
+      lift: 7.44
+      out: 25.14
+      shape: true
+      color: '#26282b'
+      confidence: estimated
+      source: >-
+        Cliff Electronic Components data sheet VHDCI Cable (08/2021 ISS.2),
+        drawing, scaled (provenance.scale): the hood at its full 43.4 by 9.0
+        section, 17.7 long.
+    - node: hood-rear
+      lift: 25.14
+      out: 41.14
+      shape: true
+      color: '#2c2e32'
+      confidence: estimated
+      source: >-
+        Cliff Electronic Components data sheet VHDCI Cable (08/2021 ISS.2),
+        drawing, scaled: the narrowing rear 16.0 of the hood, built as one
+        step 26.2 across (provenance.hood).
+    - node: relief-boot
+      lift: 41.14
+      out: 55.44
+      shape: true
+      color: '#202225'
+      confidence: estimated
+      source: >-
+        Cliff Electronic Components data sheet VHDCI Cable (08/2021 ISS.2),
+        drawing, scaled: the flat strain relief, 24.4 across and 14.3 long.
+    - node: screw-l
+      lift: 25.14
+      cyl: 20.2
+      color: '#cfd3d7'
+      confidence: estimated
+      source: >-
+        Cliff Electronic Components data sheet VHDCI Cable (08/2021 ISS.2):
+        a 5 mm thumbscrew, built 20.2 long from the shoulder of the hood to
+        the end of its knob (scaled; provenance.thumbscrews).
+    - node: screw-r
+      lift: 25.14
+      cyl: 20.2
+      color: '#cfd3d7'
+      confidence: estimated
+      source: >-
+        Cliff Electronic Components data sheet VHDCI Cable (08/2021 ISS.2):
+        a 5 mm thumbscrew, built 20.2 long from the shoulder of the hood to
+        the end of its knob (scaled; provenance.thumbscrews).
+    - node: stub
+      lift: 55.44
+      cyl: 30
+      confidence: estimated
+      source: the stub rule, docs/connectors-coax-design.md section 5
+connection-points:
+  mate: {at: [21.7, 4.5], direction: front}
+  cable: {at: [21.7, 4.5], direction: front, 'on': stub}
+skins: [default]

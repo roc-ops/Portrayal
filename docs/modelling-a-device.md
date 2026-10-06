@@ -242,6 +242,8 @@ Establish `chassis.width/height/depth` and each view's `size`.
   wearing its flanges and passed every gate. Measure between the folds, record
   the ear extent in provenance, and subtract it before laying anything out.
   Lint L43 warns when a front or rear face lands between 480 and 487 mm.
+  A `mount: rack-face` part is the exception: it is a pair of ears and what
+  hangs off them, so its ears are drawn and its face is the full 483.
 - Take proportions from a figure only as fractions of a dimension you know from
   the datasheet. Two figures in one guide can disagree by twelve percent on
   absolute scale.

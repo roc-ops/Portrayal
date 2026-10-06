@@ -1,15 +1,16 @@
 format: 1
 kind: device
 name: xcu
-version: 0.1.0
+version: 0.2.0
 maturity: modelled
 manufacturer: Fibrain
 model: XCU10
 description: >-
   Extendable HD fibre patch panel, 0.5U, 19 in. A drawer on telescopic rails
   carrying four HD adapter holders across its front and two stacked splice
-  cassettes behind them: 48 SC simplex adapters at most, 48 splices. Sold
-  equipped, as XCU10-AB-CD, with adapters and pigtails to order.
+  cassettes behind them: 48 splices, so up to 48 SC simplex or 24 LC duplex
+  adapters. Sold equipped, as XCU10-AB-CD, with adapters and pigtails to
+  order.
 profile: optical
 provenance:
   method:
@@ -100,10 +101,18 @@ gaps:
     reason: vendor-silent
     note: >-
       the holders carry no printing, so their port order is this library's
-      (left to right, upper row first), and no held image shows an SC PC
-      holder, whose blue is carried over from the LC PC holders.
+      and is ASSUMED: left to right, the upper row first, bore by bore. A
+      lower-row LC adapter is an upper-row one turned over, so each LC holder
+      states its bores in the order they are met along the row and a 12-port
+      holder's ports read 13, 14, 15, 16 there. Fibrain's label field gives
+      each bore a blank cell and prints no numbers. No held image shows an SC PC holder,
+      an LC/APC holder or any multimode holder, so those adapter colours are
+      carried over or assumed; each holder says which. The LC holders use an
+      adapter measured on another vendor's cassette, turned on its side, and
+      are drawn with the dust caps that adapter ships with, where the vendor's
+      renders show open ports.
     wanted: >-
-      a photograph of a labelled, installed panel, and one of an SC PC holder.
+      a photograph of a labelled, installed panel, and of an LC and a multimode holder.
   - what: envelope-faces
     scope: [rear, bottom, left, right]
     reason: needs-photo
@@ -227,6 +236,30 @@ configurations:
       drawer/slot-2: fibrain/xmn1041gb@1
       drawer/slot-3: fibrain/xmn1041gb@1
       drawer/slot-4: fibrain/xmn1041gb@1
+  xcu10-21ic:
+    kind: orderable
+    part-numbers:
+      XCU10-21IC: {part: XCU10-21IC}
+    description: >-
+      XCU10-21IC - 24 LC duplex adapters, 48 LC G.657A1 pigtails: four 6-port
+      LC duplex holders.
+    bays:
+      drawer/slot-1: fibrain/xmi1021ga@1
+      drawer/slot-2: fibrain/xmi1021ga@1
+      drawer/slot-3: fibrain/xmi1021ga@1
+      drawer/slot-4: fibrain/xmi1021ga@1
+  xcu10-31ic:
+    kind: orderable
+    part-numbers:
+      XCU10-31IC: {part: XCU10-31IC}
+    description: >-
+      XCU10-31IC - 24 LC/APC duplex adapters, 48 LC/APC G.657A1 pigtails: four
+      6-port LC/APC duplex holders.
+    bays:
+      drawer/slot-1: fibrain/xmi1031ga@1
+      drawer/slot-2: fibrain/xmi1031ga@1
+      drawer/slot-3: fibrain/xmi1031ga@1
+      drawer/slot-4: fibrain/xmi1031ga@1
 datasheet:
   title: 'Fibrain extendable patch panel HD 0.5U for 48 splices, datasheet XCUx rev 1.1'
   sha256: 766eb5ea0c3b193bdeafcbb69899245493329477d36ddff33458d010c7a00f7a

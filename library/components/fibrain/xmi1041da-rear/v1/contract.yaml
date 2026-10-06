@@ -1,0 +1,34 @@
+format: 1
+kind: component
+name: xmi1041da-rear
+version: 1.0.0
+class: adapter-panel
+description: >-
+  The back of Fibrain XMI1041DA: the same adapters that face forward, seen from
+  behind, whose far ends take the pigtails spliced inside the panel.
+size: {w: 100.0, h: 21.0}
+size-confidence: {w: datasheet, h: datasheet}
+size-notes: >-
+  The holder's own 100 x 21 face seen from behind. No depth is declared: a
+  face is a drawing of a back, and the depth belongs to the holder, as
+  `body.depth`.
+attrs: {media: fiber}
+parts:
+  - {id: b01, ref: common/sc-simplex-adapter@1, at: [84.975, 8.800], rotate: 90, attrs: {housing-finish: '#54ccde'}}
+  - {id: b02, ref: common/sc-simplex-adapter@1, at: [69.105, 8.800], rotate: 90, attrs: {housing-finish: '#54ccde'}}
+  - {id: b03, ref: common/sc-simplex-adapter@1, at: [53.235, 8.800], rotate: 90, attrs: {housing-finish: '#54ccde'}}
+  - {id: b04, ref: common/sc-simplex-adapter@1, at: [37.365, 8.800], rotate: 90, attrs: {housing-finish: '#54ccde'}}
+  - {id: b05, ref: common/sc-simplex-adapter@1, at: [21.495, 8.800], rotate: 90, attrs: {housing-finish: '#54ccde'}}
+  - {id: b06, ref: common/sc-simplex-adapter@1, at: [5.625, 8.800], rotate: 90, attrs: {housing-finish: '#54ccde'}}
+provenance:
+  size: >-
+    datasheet - see size-notes.
+  parts: >-
+    THE FRONT's ADAPTERS, SEEN FROM BEHIND. Each front part has one entry here,
+    `bNN` behind `scNN`, at the front column mirrored across the 100 face and
+    at the same height. Turned the same way: seen from behind the key slot is still up or still down.
+  face-detail-gap: >-
+    the vendor's renders show the adapter bodies standing out of the back of
+    the holder and no printing; the moulding behind them is painted as the
+    front is.
+skins: [default]

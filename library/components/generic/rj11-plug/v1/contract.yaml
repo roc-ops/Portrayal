@@ -1,0 +1,135 @@
+format: 1
+kind: component
+name: rj11-plug
+version: 1.0.0
+class: port
+mates: rj11
+conforms: rj11-plug
+profile: networking
+description: >-
+  A six-position modular telephone plug (RJ11) on its cord: a small clear
+  rectangular body with a spring latch on its underside that engages the
+  latch slot of a jack, drawn as generic/rj45-plug@1 is drawn, with a short
+  straight stub of cord whose diameter is the cable-od field. Occupies an
+  `rj11` jack at its own mate point; the cord leaves from the far end of the
+  stub. LIKE generic/rj45-plug@1 it has a class-wide depth - see
+  `provenance.size`.
+size: {w: 9.65, h: 6.6, d: 12.43}
+size-confidence: {w: drawing, h: drawing, d: drawing}
+size-notes: the three figures are dimensioned on one maker's drawing, which marks its dimensions for reference; h is the body without the latch, as on generic/rj45-plug@1
+attrs: {media: rj11, connector: rj11}
+fields:
+  cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 2.9}
+  jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    drawing - registry `rj11-plug`. Multicomp drawing M10002356 rev A
+    (31/08/09), Modular Plug - RJ11 / RJ12, 7001-6P4C series, sheet 1: the
+    body is 9.65 wide, 6.60 high and 12.43 long, 13.35 over the nose of its
+    latch. The sheet says its dimensions are for reference purposes and that
+    it is not to scale. 6.60 IS THE BODY WITHOUT THE LATCH, and 12.43 is a
+    plain dimension of the body, so it is `size.d`, as the 22.48 of
+    generic/rj45-plug@1 is.
+  followed: >-
+    WHAT WAS FOLLOWED FROM generic/rj45-plug@1, the nearest relative: the
+    view (the body as a front view has it, contacts at the top and the latch
+    at the bottom, drawn inset within the body box), `size` as the body
+    without the latch, a `size.d`, one `body` relief feature whose `out` is
+    the length less an estimated insertion, and `mate` at the centre of the
+    body. WHAT WAS NOT: that plug presents `rj45-plug` at a `boot` point for a
+    separate boot and cable. No boot is modelled for a telephone cord, so
+    this plug presents nothing and carries its own stub of cord, as every
+    other cable plug in the library does.
+  positions: >-
+    SIX POSITIONS. The body is the six-position modular plug, which one jack
+    body takes with two, four or six contacts loaded; the drawing held is the
+    four-contact plug (6P4C) and four contacts are drawn. The one placing
+    device calls its ports RJ-11 FXS and its photographs show a six-position
+    jack with two contacts loaded. A two-contact plug is the same body.
+  latch: >-
+    drawing - same sheet: the latch stands 2.77 below the body and is 6.10
+    wide at its root and 3.20 at its tab. NOT A RELIEF FEATURE, for the
+    reason generic/rj45-plug@1 gives: the 2.77 is a displacement in the plane
+    of the face, below the body, and the skin is held to the body box, so the
+    latch is drawn inset within it and builds nothing.
+  orientation: >-
+    DRAWN IN THE UNROTATED CONVENTION OF THE JACK: common/rj11-jack@1 draws
+    its pins at the top and its keyway, the latch slot, at the bottom, so
+    this plug has its contacts at the top and its latch at the bottom, and
+    the turn a seat applies carries that round with a rotated jack. The one
+    placing device mounts both jacks at 180, latch up.
+  seated-depth: >-
+    estimated - how far the plug stands out of the jack, which is the `out`
+    of the body feature. It is 12.43 (provenance.size) less the insertion,
+    and NO HELD DOCUMENT GIVES THE INSERTION: the plug drawing is the plug
+    alone, and TE C-1775675 rev C, the six-position jack registry `rj11`
+    cites, dimensions its housing 20.57 deep and no plug stop. The estimate
+    rests on the latch, as on generic/rj45-plug@1: the catch of the latch
+    must pass the front wall of the jack and its tail must stay outside to be
+    pressed. The side view draws the catch about 6.4 behind the front of the
+    body (read off a drawing marked not to scale, so no better than a
+    millimetre); with the same ASSUMED 1.5 of front wall as the RJ45 plug
+    takes, the insertion is 7.9 and the body stands 12.43 - 7.9 = 4.53 out,
+    built as 4.5. THE JACK AS MODELLED GIVES NOTHING TO COMPARE:
+    common/rj11-jack@1 states no depth and builds no cavity. A depth is the
+    figure to add to it, and nothing here is derived from one.
+  aperture: >-
+    A MISMATCH IN THE JACK, RECORDED AND NOT CORRECTED. common/rj11-jack@1
+    draws its opening 11.6 wide, which is the width of an RJ45 opening; the
+    six-position opening is 9.88 (TE C-1775675 rev C) and this plug is 9.65.
+    A seated plug therefore shows about a millimetre of dark opening either
+    side that a real jack does not have. The body of the jack, 14.0 wide, is
+    a six-position body. The drawing of the jack is not changed here.
+  frame: >-
+    THE RELIEF IS MEASURED FROM THE LIFT THE HOST PRESENTS.
+    common/rj11-jack@1 presents at its own face (its `mate` carries no `on:`
+    and no `seat-out`), so 0 here is the face of the jack. The 7.9 of body
+    inside the jack is not built.
+  stub: >-
+    estimated - the stub rule, docs/connectors-coax-design.md section 5: a
+    straight run of cord 30 long starting where the body ends (4.5 in front
+    of the jack face). This plug has no strain relief to draw: the cord is
+    clamped inside the body. The bend is the installation.
+  cable-od: >-
+    drawing - the cable entry of the plug is 2.90 high and, for the
+    four-contact plug, 5.20 wide (Multicomp M10002356 rev A, sheets 1 and 2).
+    A TELEPHONE LINE CORD IS FLAT, and the stub is a round one of the
+    diameter of the entry height: the library draws a cable stub as a
+    cylinder sized by one field, so the 5.2 width of a flat cord is not
+    drawn. A placement or a wrapper sets the cord it actually carries.
+  jacket-colour: >-
+    a FIELD, and it paints the cord only. Black is the default the plugs of
+    this library share; no held source states a cord colour. THE BODY IS NOT
+    A FIELD: it is drawn in the clear polycarbonate the drawing lists as the
+    housing material, with gold-plated contacts.
+  no-mark: >-
+    NOTHING IS PRINTED OR EMBOSSED. No logo and no lettering is drawn.
+  behaviour: >-
+    DELIBERATELY OMITTED, the ruling generic/rj45-plug@1 carries - every
+    class port contract states none (spec/tests/test_behaviour.py).
+  axis: >-
+    derived - `mate` and `cable` share one point, the centre of the body
+    (4.825, 3.3): the conductors run straight through the plug.
+elements:
+  body: {at: [0.0, 0.0], size: [9.65, 6.6], class: port}
+connection-points:
+  mate: {at: [4.825, 3.3], direction: front}
+  cable: {at: [4.825, 3.3], direction: front, 'on': stub}
+relief:
+  features:
+    - node: body
+      out: 4.5
+      confidence: estimated
+      source: >-
+        12.43 - 7.9 = 4.53, stated 4.5. The 12.43 is the plain body length of
+        Multicomp M10002356 rev A, sheet 1 (provenance.size); the 7.9
+        insertion is ESTIMATED - the catch of the latch about 6.4 behind the
+        front plus an assumed 1.5 of jack front wall - because no held
+        document dimensions how far a plug enters (provenance.seated-depth).
+    - node: stub
+      lift: 4.5
+      cyl: 30
+      confidence: estimated
+      source: the stub rule, docs/connectors-coax-design.md section 5
+skins: [default]

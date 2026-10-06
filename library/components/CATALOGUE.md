@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1277 component majors in 28 namespaces.
+1317 component majors in 28 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -47,7 +47,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/mpo16@1` | component | port | 12.9 × 8 × 9 | mpo-adapter | 0 | 6 | One MTP-16 adapter opening - the mouth an MTP-16 plug enters |
 | `std/mpo16-module-receptacle@1` | component | port | 12.9 × 8 × 9 | mpo-adapter | 0 | 2 | One MPO-16 receptacle as a module carries it - the mouth an MTP-16 plug enters on a transceiver, looked into:… |
 | `std/mpo24-module-receptacle@1` | component | port | 12.9 × 8 × 9 | mpo-adapter | 0 | 3 | One two-row MPO receptacle as a module carries it - the mouth an MPO-24 plug enters on a transceiver, looked … |
-| `std/mrj21@1` | component | port | 28.92 × 13.45 | mrj21 | 0 | 2 | MRJ21 ("mini-RJ21") 48-position shielded receptacle - two stepped blades with twelve contacts on each face, c… |
+| `std/mrj21@1` | component | port | 28.92 × 13.45 | mrj21 | 0 | 3 | MRJ21 ("mini-RJ21") 48-position shielded receptacle - two stepped blades with twelve contacts on each face, c… |
 | `std/osfp@1` | component | port | 23.1 × 13.5 × 47 | osfp | 9 | 4 | OSFP cage cutout (800G, one port per opening; the belly-to-belly rows of a 2RU face are two of these, not one… |
 | `std/pcie-bracket-fh@2` | component | bracket | 120.02 × 21.59 | pcie-bracket-fh | 0 | 38 | Standard (full height) PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the ch… |
 | `std/pcie-bracket-lp@1` | component | bracket | 79.2 × 18.42 | pcie-bracket-lp | 0 | 48 | Low profile PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the chassis wall,… |
@@ -109,7 +109,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/lc-duplex-adapter@6` | component | port | 13.2 × 11 | lc-duplex | 3 | 16 | Panel-mount LC duplex adapter - a bezel carrying two LC bores side by side, as used for Tx/Rx pairs on optica… |
 | `common/lc-duplex-dust-cap@2` | component | cap | 12.25 × 5.85 | lc-duplex | 0 | 1 | The ONE white cap FS ships over both ports of an FHD LC duplex adapter - 5.85 x 12.25 as read off that adapte… |
 | `common/lc-duplex-shuttered-adapter@2` | component | port | 13.1 × 11.6 | lc-duplex | 0 | 8 | LC duplex panel adapter with its two ports SIDE BY SIDE and a spring shutter closing each bore - the adapter … |
-| `common/lc-duplex-v-adapter@6` | component | port | 9.28 × 13.75 | fhd-lc-cassette | 0 | 39 | LC duplex panel adapter with its two ports STACKED VERTICALLY - the shell FS fits to FHD cassettes and adapte… |
+| `common/lc-duplex-v-adapter@6` | component | port | 9.28 × 13.75 | fhd-lc-cassette | 0 | 59 | LC duplex panel adapter with its two ports STACKED VERTICALLY - the shell FS fits to FHD cassettes and adapte… |
 | `common/lc-dust-cap@1` | component | cap | 4.7 × 4.7 | lc | 0 | 3 | The white dust cap an idle LC port ships with - a 4.7 square lump plugging the bore square, with a rounded-sq… |
 | `common/led-arrow@1` | component | led | 3.6 × 3.2 |  | 15 | 1 | Single triangle port LED - up skin for top-row ports, down for bottom |
 | `common/led-arrow-sm@1` | component | led | 2.25 × 2 |  | 35 | 0 | Compact triangle port LED for tight inter-port gaps - up skin for top-row ports, down for bottom |
@@ -155,7 +155,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/rack-ear@1` | component | ear | 14 × 43.5 |  | 36 | 1 | Generic 1U rack mounting ear (decorative; place outside the chassis with optional tag 'ears'; skins left/righ… |
 | `common/reset-button@1` | component | button | 4 × 4 × 2.5 |  | 114 | 7 | Recessed pinhole reset button |
 | `common/rivet@1` | component | mechanical | 3 × 3 |  | 7 | 0 | Sheet-metal rivet head |
-| `common/rj11-jack@1` | component | port | 14 × 13.5 |  | 1 | 0 | RJ11 telephone jack (FXS) |
+| `common/rj11-jack@1` | component | port | 14 × 13.5 | rj11 | 1 | 1 | RJ11 telephone jack (FXS) |
 | `common/rj45-boot@1` | component | boot | 14.5 × 10 | rj45-plug | 0 | 1 | A strain-relief boot for an RJ45 (8P8C) copper plug - PVC, moulded around the plug it wraps |
 | `common/rj45-eth@1` | component | port | 15.8 × 13.2 × 18.6 |  | 63 | 42 | An Ethernet RJ45 - the std/rj45@2 housing with the two link and activity lamps nearly every Ethernet jack car… |
 | `common/rj45-eth-pinside@1` | component | port | 15.8 × 13.2 × 18.6 |  | 0 | 3 | An Ethernet RJ45 whose two link and activity lamps are in the side walls of the housing at its PIN end, besid… |
@@ -165,7 +165,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/sc-apc@1` | component | port | 24 × 26 |  | 1 | 0 | SC/APC fiber adapter in a molded bay (PON WAN) |
 | `common/sc-duplex-adapter@5` | component | port | 9.4 × 25.4 | sc-duplex-adapter | 0 | 11 | Panel-mount SC duplex adapter, as fitted to an FS FHD SC panel - one body carrying two SC ports STACKED verti… |
 | `common/sc-dust-cap@1` | component | cap | 8.8 × 11.45 | sc | 0 | 2 | The black dust cap FS ships in an FHD SC port - 8.8 x 11.45, with a lighter raised grip across its middle for… |
-| `common/sc-simplex-adapter@1` | component | port | 9.4 × 12.8 |  | 0 | 8 | Panel-mount SC simplex adapter - one flangeless body carrying one SC port, a real SC opening (std/sc-bore@1) … |
+| `common/sc-simplex-adapter@1` | component | port | 9.4 × 12.8 |  | 0 | 30 | Panel-mount SC simplex adapter - one flangeless body carrying one SC port, a real SC opening (std/sc-bore@1) … |
 | `common/screw-head@1` | component | screw | 3.6 × 3.6 × 0.7 |  | 82 | 9 | Generic countersunk screw head (decorative fastener) |
 | `common/serial-symbol@1` | component | silkscreen | 7.2 × 2.6 |  | 2 | 0 | The IOIOI mark printed beside a serial port - alternating bars and rings, which is how a vendor says "this on… |
 | `common/seven-segment-dual@1` | component | display | 17.4 × 12.1 |  | 2 | 0 | Two-digit seven-segment status display behind one window - the code readout an Accton/Edgecore faceplate prin… |
@@ -184,16 +184,16 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/usb-symbol@1` | component | silkscreen | 6.4 × 4 |  | 28 | 1 | USB trident silkscreen symbol, no hardware - the marking printed beside a USB receptacle |
 | `common/vga-receptacle@1` | component | port | 30.8 × 12.5 × 6.73 |  | 6 | 2 | VGA receptacle as a faceplate sees it - the female HD-15 shell with a jackscrew standoff either side, which i… |
 | `common/vga-symbol@1` | component | silkscreen | 6 × 3.4 |  | 2 | 1 | The monitor mark printed beside a VGA port - a display outline flanked by two short bars, which is the form v… |
-| `common/vhdci-receptacle@1` | component | port | 40.4 × 5.2 |  | 0 | 3 | VHDCI (very-high-density cable interconnect) receptacle as a faceplate sees it - the flattened 0.8 mm-pitch s… |
+| `common/vhdci-receptacle@1` | component | port | 40.4 × 5.2 | vhdci | 0 | 4 | VHDCI (very-high-density cable interconnect) receptacle as a faceplate sees it - the flattened 0.8 mm-pitch s… |
 | `common/wall-plate-keyhole-2@1` | component | mount | 56 × 30 |  | 6 | 1 | Wall-mounting plate with two keyhole slots - a flat plate screwed across a device's back so the device hangs … |
 | `common/wall-plate-keyhole-2-42@1` | component | mount | 42 × 22 |  | 4 | 0 | The smaller wall-mounting plate with two keyhole slots - the 42 mm plate on the back of the AurCore AIS small… |
 | `common/warning-triangle@1` | component | marking | 5.4 × 4.8 |  | 5 | 4 | General warning triangle - a black exclamation mark in a yellow triangle, ISO 7010 W001 |
 
-## generic/ (55)
+## generic/ (58)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
-| `generic/bnc-plug@1` | component | port | 14.3 × 14.3 | bnc-plug | 0 | 10 | A straight BNC crimp plug on a coax cable, seen from the face: the knurled bayonet coupling sleeve, the crimp… |
+| `generic/bnc-plug@1` | component | port | 14.3 × 14.3 | bnc-plug | 0 | 12 | A straight BNC crimp plug on a coax cable, seen from the face: the knurled bayonet coupling sleeve, the crimp… |
 | `generic/c13-plug@1` | component | port | 26 × 16 | c13-plug | 0 | 11 | A moulded straight IEC C13 cord connector on its cord, seen from the cable end as a front elevation sees it s… |
 | `generic/c19-plug@1` | component | port | 37 × 24 | c19-plug | 0 | 0 | A moulded straight IEC C19 cord connector on its cord, seen from the cable end as a front elevation sees it s… |
 | `generic/cfp-lc@1` | component | transceiver | 77.2 × 13.6 × 130.25 | cfp-module | 0 | 2 | A generic CFP with an LC duplex face - the shape of the CFP optic with two LC bores, standing for all of them |
@@ -206,7 +206,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `generic/cxp-mpo@1` | component | transceiver | 21.2 × 9.81 × 28.45 | cxp-module | 0 | 0 | A generic optical CXP with one two-row MPO face - the shape of the CXP transceiver with a twenty-four-fibre r… |
 | `generic/da15-plug@1` | component | port | 39.9 × 15.3 | da15-plug | 0 | 0 | A DA-15 alarm cable plug: the MALE fifteen-position two-row D-subminiature connector in its backshell hood on… |
 | `generic/db25-plug@1` | component | port | 53.5 × 15.7 | db25-plug | 0 | 0 | A DB-25 status cable plug: the MALE twenty-five-position D-subminiature connector in its backshell hood on it… |
-| `generic/db9-plug@1` | component | port | 31 × 15.6 | db9-plug | 0 | 1 | A DE-9 serial or alarm cable plug: the FEMALE nine-position D-subminiature connector in its backshell hood on… |
+| `generic/db9-plug@1` | component | port | 31 × 15.6 | db9-plug | 0 | 3 | A DE-9 serial or alarm cable plug: the FEMALE nine-position D-subminiature connector in its backshell hood on… |
 | `generic/dc-barrel-plug@1` | component | port | 8.2 × 8.2 | barrel-plug | 0 | 1 | A DC barrel power plug on its cable, at the common 5.5 mm barrel, seen from the cable end as a front elevatio… |
 | `generic/din-1-0-2-3-plug@1` | component | port | 7.7 × 7.7 | din-1-0-2-3-plug | 0 | 0 | A straight 1.0/2.3 crimp plug on a coax cable, seen from the face: the push-pull latch sleeve, the crimp ferr… |
 | `generic/f-type-plug@1` | component | port | 12.83 × 11.11 | f-type-plug | 0 | 0 | A straight F crimp plug on a 75 ohm coax cable, seen from the face: the 7/16 hex coupling nut, the ribbed cri… |
@@ -218,6 +218,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `generic/mpo12-plug@1` | component | port | 12.5 × 7.6 | mpo-plug | 0 | 9 | A 12-fibre MPO/MTP plug, front view - the 12.5 x 7.6 barrel-ended housing with the MT ferrule standing in its… |
 | `generic/mpo16-plug@1` | component | port | 12.5 × 7.6 | mpo16-plug | 0 | 3 | A 16-fibre MPO/MTP-16 plug, front view - the 12.5 x 7.6 housing of the MPO-12 plug with a key rib that is nar… |
 | `generic/mpo24-plug@1` | component | port | 12.5 × 7.6 | mpo-plug | 0 | 4 | A 24-fibre MPO/MTP plug, front view - the SAME 12.5 x 7.6 barrel-ended housing generic/mpo12-plug@1 draws, wi… |
+| `generic/mrj21-plug@1` | component | port | 29 × 16.4 | mrj21-plug | 0 | 0 | A straight MRJ21 cable plug on its cable: the 48-position plug of a high-density Ethernet breakout or trunk c… |
 | `generic/osfp-lc@1` | component | transceiver | 22.58 × 13 × 79.01 | osfp-module | 0 | 0 | A generic OSFP with an LC duplex face - the shape of the OSFP optic with two LC bores, standing for all of th… |
 | `generic/osfp-mpo16@1` | component | transceiver | 22.58 × 13 × 79.01 | osfp-module | 0 | 1 | A generic OSFP with one MPO-16 face - the shape of the OSFP parallel-fibre optic with a single-row sixteen-fi… |
 | `generic/qsfp-cable@1` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 6 | A generic QSFP cable end - the shape every QSFP+, QSFP28 and QSFP56 direct attach, active copper and active o… |
@@ -231,7 +232,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `generic/qsfp-lc-simplex@1` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 0 | A generic QSFP with one LC bore - the shape of the single-fibre bidirectional (BiDi) QSFP optic, standing for… |
 | `generic/qsfp-mpo@1` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 6 | A generic QSFP with one MPO face - the shape every QSFP+, QSFP28 and QSFP56 parallel-fibre optic has, standin… |
 | `generic/ring-lug@1` | component | port | 5.5 × 27.4 | ring-lug | 0 | 0 | A one-hole insulated ring terminal crimped on its wire, seen in plan as a front elevation sees it landed on a… |
-| `generic/rj45-plug@1` | component | port | 11.68 × 7.93 × 22.48 | rj45-plug | 0 | 9 | An RJ45 (8P8C) copper plug, the UNSHIELDED variant - a rectangular body with a spring latch on its underside … |
+| `generic/rj11-plug@1` | component | port | 9.65 × 6.6 × 12.43 | rj11-plug | 0 | 0 | A six-position modular telephone plug (RJ11) on its cord: a small clear rectangular body with a spring latch … |
+| `generic/rj45-plug@1` | component | port | 11.68 × 7.93 × 22.48 | rj45-plug | 0 | 10 | An RJ45 (8P8C) copper plug, the UNSHIELDED variant - a rectangular body with a spring latch on its underside … |
 | `generic/saf-d-grid-plug@1` | component | port | 26 × 18.9 | saf-d-grid-plug | 0 | 0 | A moulded Anderson Saf-D-Grid cord plug on its cord, seen from the cable end as a front elevation sees it sea… |
 | `generic/sc-plug@1` | component | port | 8.3 × 9 | sc-plug | 0 | 0 | An SC fibre plug, front view - the square keyed silhouette an SC connector presents end-on: a 7.4 x 9.0 housi… |
 | `generic/sfp-cable@1` | component | transceiver | 13.55 × 8.55 × 47.5 | sfp-module | 0 | 1 | A generic SFP+ cable end - the shape every direct-attach, active copper, active electrical and active optical… |
@@ -245,8 +247,9 @@ aperture when it is a bare opening - never both at one position. The README's
 | `generic/terminal-508-2-plug@1` | component | port | 10.16 × 15 | terminal-508-2-plug | 0 | 0 | A two-position screw-clamp terminal plug on a 5.08 mm pitch, wired, seen from the wire side as a front elevat… |
 | `generic/terminal-508-5-plug@1` | component | port | 35.41 × 15 | terminal-508-5-plug | 0 | 0 | A five-position screw-clamp terminal plug on a 5.08 mm pitch, the SCREW-FLANGE form with a flange and a locki… |
 | `generic/terminal-508-6-plug@1` | component | port | 30.48 × 15 | terminal-508-6-plug | 0 | 0 | A six-position screw-clamp terminal plug on a 5.08 mm pitch, wired, seen from the wire side as a front elevat… |
-| `generic/usb-a-plug@1` | component | port | 16 × 8 | usb-a-plug | 0 | 9 | A moulded straight USB Standard-A cable plug on its cable, seen from the cable end as a front elevation sees … |
+| `generic/usb-a-plug@1` | component | port | 16 × 8 | usb-a-plug | 0 | 11 | A moulded straight USB Standard-A cable plug on its cable, seen from the cable end as a front elevation sees … |
 | `generic/usb-c-plug@1` | component | port | 12.85 × 7 | usb-c-plug | 0 | 0 | A moulded straight USB Type-C cable plug on its cable, seen from the cable end as a front elevation sees it s… |
+| `generic/vhdci-plug@1` | component | port | 43.4 × 9 | vhdci-plug | 0 | 0 | A straight 68-position VHDCI cable plug on its cable: the 0.8 mm connector in its moulded hood with a thumbsc… |
 | `generic/xfp-lc@1` | component | transceiver | 18.35 × 8.5 × 69 | xfp-module | 0 | 4 | A generic XFP with an LC duplex face - the shape every XFP optic with two LC bores has, standing for all of t… |
 
 ## amphenol/ (2)
@@ -766,7 +769,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `edgecore/filter-slot-5915@1` | module | filter | 27.6 × 43.2 |  | 1 | 1 | The air-filter slot cover on the AS5915 cell-site gateways - the blanking plate that ships in the filter bay … |
 | `edgecore/filter-slot-5915-16x@1` | module | filter | 19 × 42.5 |  | 1 | 0 | The air-filter slot cover on the AS5915-16X - the blanking plate in the filter bay at the left-hand end of th… |
 
-## fibrain/ (13)
+## fibrain/ (45)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -775,19 +778,52 @@ aperture when it is a bare opening - never both at one position. The README's
 | `fibrain/xcu-drawer-plan@1` | component | mechanical | 431.35 × 250 |  | 0 | 1 | The Fibrain XCU10 drawer seen from above, front edge at the top of the drawing: the plate over the holder row… |
 | `fibrain/xcu-interior@1` | component | mechanical | 429.35 × 283 × 20.2 |  | 1 | 0 | The inside of the Fibrain XCU10's shell seen from above with its top off - the space between the side walls t… |
 | `fibrain/xcu-shell-top@1` | component | mechanical | 431.35 × 284 |  | 1 | 0 | The top of the Fibrain XCU10's outer shell - the sheet-steel cover the drawer slides out from under |
+| `fibrain/xmi1021ca@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMI1021CA - HD adapter holder, 6 LC duplex adapters (aqua), multimode, OM3 |
+| `fibrain/xmi1021ca-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMI1021CA: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmi1021da@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMI1021DA - HD adapter holder, 6 LC duplex adapters (aqua), multimode, OM4 |
+| `fibrain/xmi1021da-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMI1021DA: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmi1021ga@1` | module | adapter-panel | 100 × 21 × 37 |  | 1 | 1 | Fibrain XMI1021GA - HD adapter holder, 6 LC duplex adapters (blue), single-mode |
+| `fibrain/xmi1021ga-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMI1021GA: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmi1021ha@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMI1021HA - HD adapter holder, 6 LC duplex adapters (lime green), multimode, OM5 |
+| `fibrain/xmi1021ha-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMI1021HA: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmi1031ga@1` | module | adapter-panel | 100 × 21 × 37 |  | 1 | 1 | Fibrain XMI1031GA - HD adapter holder, 6 LC duplex/APC adapters (green), single-mode |
+| `fibrain/xmi1031ga-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMI1031GA: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmi1041ca@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMI1041CA - HD adapter holder, 6 SC simplex adapters (aqua), multimode, OM3 |
+| `fibrain/xmi1041ca-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMI1041CA: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmi1041da@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMI1041DA - HD adapter holder, 6 SC simplex adapters (aqua), multimode, OM4 |
+| `fibrain/xmi1041da-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMI1041DA: the same adapters that face forward, seen from behind, whose far ends take the… |
 | `fibrain/xmi1041ga@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMI1041GA - HD adapter holder, 6 SC simplex adapters (blue), single-mode |
 | `fibrain/xmi1041ga-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMI1041GA: the same adapters that face forward, seen from behind, whose far ends take the… |
-| `fibrain/xmi1051ga@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMI1051GA - HD adapter holder, 6 SC/APC simplex adapters (green), single-mode |
+| `fibrain/xmi1041ha@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMI1041HA - HD adapter holder, 6 SC simplex adapters (lime green), multimode, OM5 |
+| `fibrain/xmi1041ha-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMI1041HA: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmi1051ga@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 7 | Fibrain XMI1051GA - HD adapter holder, 6 SC/APC simplex adapters (green), single-mode |
 | `fibrain/xmi1051ga-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMI1051GA: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmn1021cb@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMN1021CB - HD adapter holder, 12 LC duplex adapters (aqua), multimode, OM3 |
+| `fibrain/xmn1021cb-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMN1021CB: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmn1021db@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMN1021DB - HD adapter holder, 12 LC duplex adapters (aqua), multimode, OM4 |
+| `fibrain/xmn1021db-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMN1021DB: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmn1021gb@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMN1021GB - HD adapter holder, 12 LC duplex adapters (blue), single-mode |
+| `fibrain/xmn1021gb-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMN1021GB: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmn1021hb@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMN1021HB - HD adapter holder, 12 LC duplex adapters (lime green), multimode, OM5 |
+| `fibrain/xmn1021hb-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMN1021HB: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmn1031gb@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMN1031GB - HD adapter holder, 12 LC duplex/APC adapters (green), single-mode |
+| `fibrain/xmn1031gb-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMN1031GB: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmn1041cb@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMN1041CB - HD adapter holder, 12 SC simplex adapters (aqua), multimode, OM3 |
+| `fibrain/xmn1041cb-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMN1041CB: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmn1041db@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMN1041DB - HD adapter holder, 12 SC simplex adapters (aqua), multimode, OM4 |
+| `fibrain/xmn1041db-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMN1041DB: the same adapters that face forward, seen from behind, whose far ends take the… |
 | `fibrain/xmn1041gb@1` | module | adapter-panel | 100 × 21 × 37 |  | 1 | 1 | Fibrain XMN1041GB - HD adapter holder, 12 SC simplex adapters (blue), single-mode |
 | `fibrain/xmn1041gb-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMN1041GB: the same adapters that face forward, seen from behind, whose far ends take the… |
-| `fibrain/xmn1051gb@1` | module | adapter-panel | 100 × 21 × 37 |  | 1 | 1 | Fibrain XMN1051GB - HD adapter holder, 12 SC/APC simplex adapters (green), single-mode |
+| `fibrain/xmn1041hb@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMN1041HB - HD adapter holder, 12 SC simplex adapters (lime green), multimode, OM5 |
+| `fibrain/xmn1041hb-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMN1041HB: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmn1051gb@1` | module | adapter-panel | 100 × 21 × 37 |  | 1 | 17 | Fibrain XMN1051GB - HD adapter holder, 12 SC/APC simplex adapters (green), single-mode |
 | `fibrain/xmn1051gb-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMN1051GB: the same adapters that face forward, seen from behind, whose far ends take the… |
 
-## fs/ (62)
+## fs/ (67)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
+| `fs/d-ring-snap-in@1` | component | mechanical | 32.3 × 43.6 |  | 1 | 0 | FS snap-in D-ring of the FHD-CMP5DR lacer panel, seen from above - a polycarbonate loop that twists into a ro… |
 | `fs/fhd-1mtp12-sc-os2-a@3` | module | cassette | 108.97 × 35.05 × 117.86 |  | 7 | 0 | FS FHD-1MTP6SCDOS2A - MTP-12 (male) to six SC duplex, 12 fibres, OS2, Type A polarity |
 | `fs/fhd-1mtp12-sc-rear@3` | component | cassette | 99 × 31 |  | 0 | 1 | The back of FS FHD-1MTP6SCDOS2A (SKU 57058): the cassette body seen from behind, carrying its single MTP-12 t… |
 | `fs/fhd-1mtp24-lc-af-rear@2` | component | cassette | 99 × 31 |  | 0 | 1 | The back of FS FHD-1MTP12LCDOS2AF (SKU 68549): the MTP-24 cassette's body seen from behind, with its polarity… |
@@ -819,6 +855,10 @@ aperture when it is a bare opening - never both at one position. The README's
 | `fs/fhd-3mtp18-lc-om4-a@1` | module | cassette | 108.97 × 35.05 × 117.86 |  | 7 | 0 | FS FHD-3MTP18LCDOM4A - three MTP-12 (male) to eighteen shuttered LC duplex, 36 fibres, OM4, Type A polarity |
 | `fs/fhd-3mtp18-lc-os2-a@1` | module | cassette | 108.97 × 35.05 × 117.86 |  | 7 | 1 | FS FHD-3MTP18LCDOS2A - three MTP-12 (male) to eighteen shuttered LC duplex, 36 fibres, OS2, Type A polarity |
 | `fs/fhd-3mtp18-lc-rear@1` | component | cassette | 99 × 31 |  | 0 | 2 | The back of FS FHD-3MTP18LCDOS2A (SKU 105333) and its OM4 twin 105335: the 36-fibre cassette's body seen from… |
+| `fs/fhd-cmp5dr-ear@1` | component | ear | 17.3 × 44 |  | 1 | 0 | One mounting ear of the FS FHD-CMP5DR lacer panel - part of the tray's own sheet, folded upright, with a slot… |
+| `fs/fhd-cmp5dr-profile@1` | component | mechanical | 110 × 44 |  | 1 | 0 | The FS FHD-CMP5DR lacer panel seen from one side - the ear on edge, the web sloping down to the tray, and one… |
+| `fs/fhd-cmp5dr-tray@1` | component | mechanical | 448.4 × 110 × 41 |  | 1 | 0 | The steel tray of the FS FHD-CMP5DR lacer panel seen from above - a strip across the front that carries the r… |
+| `fs/fhd-cmp5dr-web@1` | component | mechanical | 1.5 × 66 |  | 1 | 0 | The web that carries the FS FHD-CMP5DR's tray off each ear, seen from above - the sheet swept up from the tra… |
 | `fs/fhd-fap12lcd-apc-os2@1` | module | adapter-panel | 108.97 × 35.05 × 29.5 |  | 7 | 0 | FS FHD-FAP12LCADZSMF - FHD fiber adapter panel, twelve LC APC duplex adapters (green), 24 fibres, OS2 |
 | `fs/fhd-fap12lcd-apc-os2-rear@1` | component | adapter-panel | 88 × 34.8 |  | 0 | 1 | The back of FS SKU 25514 (FHD-FAP12LCADZSMF): the adapter block seen from behind, the same adapters that face… |
 | `fs/fhd-fap12lcd-om4@1` | module | adapter-panel | 108.97 × 35.05 × 29.5 |  | 7 | 0 | FS FHD-FAP12LCDX10GMM - FHD fiber adapter panel, twelve LC UPC duplex adapters (aqua), 24 fibres, OM3/OM4 |
@@ -1166,7 +1206,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `nokia/m20-1gb-xp-sfp@1` | module | line-card | 190.5 × 35.4 × 177.8 |  | 0 | 1 | Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 20-port GE SFP MDA-XP, M20-1GB-XP-SFP (3HE03612AA; ESS 3HE03615AA),… |
 | `nokia/m20-1gb-xp-tx@1` | module | line-card | 190.5 × 35.4 × 177.8 |  | 0 | 1 | Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 20-port 10/100/1000 copper MDA-XP, M20-1GB-XP-TX (3HE03613AA; ESS 3… |
 | `nokia/m4-10gb-xp-xfp@1` | module | line-card | 190.5 × 35.4 × 177.8 |  | 0 | 1 | Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 4-port 10GBASE XFP MDA-XP, M4-10GB-XP-XFP (3HE03686AA; ESS 3HE03688… |
-| `nokia/m48-1gb-xp-tx@1` | module | line-card | 190.5 × 35.4 × 177.8 |  | 0 | 1 | Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 48-port 10/100/1000 copper MDA-XP, M48-1GB-XP-TX (3HE05160AA; ESS 3… |
+| `nokia/m48-1gb-xp-tx@1` | module | line-card | 190.5 × 35.4 × 177.8 |  | 0 | 2 | Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 48-port 10/100/1000 copper MDA-XP, M48-1GB-XP-TX (3HE05160AA; ESS 3… |
 | `nokia/m5e10-100g-qsfp28@1` | module | line-card | 193 × 35.4 × 193 |  | 2 | 0 | Nokia 7750 SR MDA2-e-XP, 10-port 100G QSFP28 (3HE20978AA, CLI m5e10-100g-qsfp28), an FP4 media-dependent adap… |
 | `nokia/m5e16-100g-sfp112@1` | module | line-card | 193 × 35.4 × 193 |  | 2 | 0 | Nokia 7750 SR MDA2-e-XP, 16-port 100G SFP112 (3HE20977AA, CLI m5e16-100g-sfp112), an FP4 media-dependent adap… |
 | `nokia/m5e2-100g-qsfp28-2-800g-qdd@1` | module | line-card | 193 × 35.4 × 193 |  | 2 | 0 | Nokia 7750 SR MDA2-e-XP, 2-port 100G QSFP28 + 2-port 800G QDD (3HE20976AA, CLI m5e2-100g-qsfp28+2-800g-qdd), … |

@@ -402,16 +402,27 @@
     },
     "ru": {
      "type": "number",
-     "description": "rack units, for a device whose `mount` is `rack` (the default). L125: a rack device states it, and a device mounted any other way does not."
+     "description": "rack units, for a device that bolts to the rack - `mount` `rack` (the default) or `rack-face`. For a rack-face part it is the units its ears span, not units it occupies. L125: these two state it, and a device mounted any other way does not."
     },
     "mount": {
-     "description": "HOW THE BOX IS INSTALLED, which a DCIM device type has to know and the dimensions do not say. `rack` is the default and needs no statement; a device mounted any other way says so here and states no `ru`, and the DCIM export then writes `u_height: 0` and `is_full_depth: false` rather than inventing a rack unit (#734). `din-rail` is a box that clips onto a rail (IEC 60715), `wall` one that screws to a surface, `desktop` one that stands on its feet. A box that does more than one names the way it is drawn and exported, and its provenance says the rest. L125 checks it against `ru`.",
+     "description": "HOW THE BOX IS INSTALLED, which a DCIM device type has to know and the dimensions do not say. `rack` is the default and needs no statement; a device mounted any other way says so here and states no `ru`, and the DCIM export then writes `u_height: 0` and `is_full_depth: false` rather than inventing a rack unit (#734). `din-rail` is a box that clips onto a rail (IEC 60715), `wall` one that screws to a surface, `desktop` one that stands on its feet. A box that does more than one names the way it is drawn and exported, and its provenance says the rest. `rack-face` is a part that bolts to rack holes at a rack unit ON THE RAIL FACE, with its body projecting outward from the mounting plane rather than in between the posts - a lacer panel in front of a patch panel. It states `ru` (the units its ears span), its `depth` is that outward projection, and it exports `u_height: 0` like the others because it occupies none. It says nothing about front or rear: the same part goes on either face, and that is a placement's to say. The name says where on the rack the part attaches; \"zero-U\" says only what it does not use, and is as true of a vertical power strip. L125 checks it against `ru`.",
      "enum": [
       "rack",
+      "rack-face",
       "din-rail",
       "wall",
       "desktop"
      ]
+    },
+    "shell": {
+     "description": "WHAT THE BODY IS MADE OF, for a part that is not a box. Absent, the chassis is a solid box and each view is one of its sides. `sheet` is bent sheet metal: the views are drawn with no housing filled in behind them, and they are ELEVATIONS - in 3D nothing is built from the six faces, because a front view of a tray shows ears and rings that do not lie in the front plane. The solid is what the views' parts build: the floor of a well, which in a sheet body has nothing round it, and whatever stands on that floor or proud of a face. L127 holds it to `thickness`.",
+     "enum": [
+      "sheet"
+     ]
+    },
+    "thickness": {
+     "type": "number",
+     "description": "millimetres, the gauge of a `shell: sheet` body, as its datasheet states it. A fact about the part and not an instruction to the drawing: each plate's thickness in 3D is its own part's relief. Stated only with `shell: sheet` (L127)."
     },
     "weight-kg": {
      "type": "number"

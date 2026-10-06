@@ -1,0 +1,170 @@
+format: 1
+kind: component
+name: mrj21-plug
+version: 1.0.0
+class: port
+mates: mrj21
+conforms: mrj21-plug
+profile: networking
+description: >-
+  A straight MRJ21 cable plug on its cable: the 48-position plug of a
+  high-density Ethernet breakout or trunk cable in its die-cast backshell,
+  seen from the cable end as a front elevation sees it seated: the backshell,
+  the heads of its two jackscrews at opposite corners, the moulded boot and a
+  short straight stub of cable whose diameter is the cable-od field. Seats on
+  an `mrj21` receptacle at its own mate point; the cable leaves from the far
+  end of the stub. What the cable breaks out to is not part of it.
+size: {w: 29.0, h: 16.4}
+size-confidence: {w: estimated, h: estimated}
+size-notes: both figures are SCALED from a drawing that dimensions nothing of the plug; 29.0 is the backshell across and 16.4 the diameter of the boot, which is wider than the 15.7 the backshell is thick
+attrs: {media: mrj21, connector: mrj21}
+fields:
+  cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 12.2}
+  jacket-color: {label: Jacket colour, type: text, default: '#9a9da1'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    estimated - registry `mrj21-plug`. Bel Stewart Connector drawing CT210028
+    rev B0 (10-27-20), Cable Assembly, Unshielded, MRJ21 Straight Plug to 6
+    Out RJ45 Plugs, sheet 1: a vector drawing of the assembly with a face view
+    and a side view of the plug. IT DIMENSIONS NOTHING OF THE PLUG AND IS
+    MARKED NOT TO BE SCALED, so every figure here is scaled and is labelled
+    so. THE BOX IS THE WIDEST SECTION DRAWN each way: the backshell across,
+    and the boot through the thickness.
+  scale: >-
+    estimated - two quantities fix the scale at 2.517 points a millimetre. The
+    face view draws the two jackscrews 57.50 points apart along the face and
+    18.15 across it; they thread into the two guide holes of the receptacle,
+    which std/mrj21@1 has at (3.02, 3.12) and (25.90, 10.32) off a TE
+    drawing, 22.88 and 7.20 apart. The two ratios are 2.513 and 2.521. A third
+    check: at that scale the backshell is 28.99 across, against the 28.92 of
+    the receptacle shell it sits on.
+  exit: >-
+    STRAIGHT, the 180 degree backshell: the cable leaves along the mating
+    axis, so the stub stands out of the face and takes a size field. That is
+    the plug the installation guide of the one placing card draws: Figures 18
+    and 19 of the guide nokia/m48-1gb-xp-tx@1 cites, the Mini-RJ21 to RJ45 and
+    Mini-RJ21 to RJ21 cables, each draw this backshell with its boot in line.
+    The makers also list a 45 degree backshell; it is a different body and is
+    not this part.
+  orientation: >-
+    DRAWN IN THE UNROTATED CONVENTION OF THE RECEPTACLE: std/mrj21@1 has its
+    guide holes at the upper left and the lower right, so the two jackscrews
+    are at the upper left and the lower right here, each over a guide hole,
+    and the turn a seat applies carries them round with a rotated receptacle.
+    The jackscrews are the only thing that keys the plug from the cable end.
+  jackscrews: >-
+    estimated - the two heads are placed ON the guide holes of std/mrj21@1,
+    11.44 either side of the mate point and 3.605 above and 3.595 below it,
+    which is what the scale above assumes; the face view puts them 3.09 and 3.05 from the two ends of
+    the backshell, within 0.05 of that. Each head scales to 4.1 in diameter
+    and stands 3.9 behind the backshell, where the side view draws it slotted.
+    The slot is not drawn. The cross-head screws on the broad face of the
+    backshell hold its two halves and are not seen from the cable end.
+  seated-depth: >-
+    RULING - THE PLUG SEATS WITH ITS BACKSHELL ON THE FACE THE RECEPTACLE
+    PRESENTS. The side view draws the mating shroud 5.6 (scaled) in front of
+    the backshell, and that is the engagement: the shroud is in the
+    receptacle and the backshell stops on its shell. NO HELD DOCUMENT
+    DIMENSIONS THE MATED PAIR, so that the backshell touches the shell is an
+    assumption. THE RECEPTACLE AS MODELLED GIVES NOTHING TO COMPARE:
+    std/mrj21@1 states no depth and builds no cavity, by its own size-notes,
+    so there is no modelled floor and no mismatch to record; the figure to
+    add, when a mated drawing is held, is how far the shell stands in front
+    of a panel.
+  frame: >-
+    THE RELIEF IS MEASURED FROM THE LIFT THE HOST PRESENTS. std/mrj21@1
+    presents at its own face (its `mate` carries no `on:` and no `seat-out`),
+    so 0 here is the plane of the receptacle face. The 5.6 of shroud inside
+    the receptacle is not built and not drawn.
+  hood: >-
+    estimated - the die-cast backshell scales to 29.0 across, 15.7 thick and
+    35.5 long, and is built as one box. Its drawn corner radius is estimated.
+  relief-boot: >-
+    estimated - the moulded boot scales to 16.4 in diameter at its widest rib
+    and ends 58.0 behind the backshell; its ribs narrow to about 13.4 and its
+    last collar is 14.8. It is built as one cylinder at the widest section,
+    from the rear of the backshell, which overstates it between the ribs. The
+    side view shows the broad face only, so that the boot is round is an
+    assumption; it is wider than the backshell is thick by 0.7.
+  stub: >-
+    estimated - the stub rule, docs/connectors-coax-design.md section 5: a
+    straight run of cable 30 long starting where the boot ends (93.5 in front
+    of the receptacle face). The bend is the installation.
+  cable-od: >-
+    estimated - scaled on the same drawing, 12.2, for the cable it names:
+    24 AWG solid, six four-pair groups. No held data sheet prints a diameter.
+    A thinner trunk cable exists; a placement or a wrapper sets the cable it
+    actually carries.
+  jacket-colour: >-
+    a FIELD, and it paints the cable only. Grey is the default because the
+    held sources that state a colour state white or grey: the Bel Stewart
+    drawing lists a white CM cable and a grey CMP cable, and the AMP
+    NETCONNECT MRJ 21 Connector System sheet (1654775, rev. 8, 6/05) says
+    the CMR cable is grey. THE BACKSHELL IS NOT A FIELD: it is drawn in the
+    nickel of a die-cast backshell, and the boot in black, as the Bel Stewart
+    MRJ21 Cable Assemblies brochure photographs them.
+  no-mark: >-
+    NOTHING IS PRINTED OR EMBOSSED. The side view draws a key arrow and a
+    hole pattern on the broad face of the backshell; neither is on a face the
+    cable end sees, and no logo, lettering or screw slot is drawn.
+  no-depth: >-
+    NO `size.d`, DELIBERATELY, as on generic/usb-a-plug@1 and
+    generic/db9-plug@1. The overall length is in the registry entry and in
+    the relief below; a `size.d` on a component with no `behaviour` compiles
+    to `data-depth`, which the kit builds as a pit behind the whole box.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on generic/bnc-plug@1 - every class port
+    contract states none (spec/tests/test_behaviour.py).
+  axis: >-
+    derived - `mate` and `cable` share one point, the centre of the backshell
+    (14.5, 8.2), which is the centre of the receptacle shell when seated: the
+    cable runs straight through the connector.
+elements: {}
+relief:
+  features:
+    - node: hood
+      out: 35.5
+      shape: true
+      color: '#b9bdc2'
+      confidence: estimated
+      source: >-
+        Bel Stewart Connector CT210028 rev B0, sheet 1, side view, scaled
+        (provenance.scale): the backshell, 35.5 long, standing on the
+        receptacle face (provenance.seated-depth).
+    - node: screw-a
+      lift: 35.5
+      cyl: 3.9
+      color: '#cfd3d7'
+      confidence: estimated
+      source: >-
+        Bel Stewart Connector CT210028 rev B0, sheet 1, side view, scaled:
+        the jackscrew head, 4.1 in diameter, standing 3.9 behind the
+        backshell.
+    - node: screw-b
+      lift: 35.5
+      cyl: 3.9
+      color: '#cfd3d7'
+      confidence: estimated
+      source: >-
+        Bel Stewart Connector CT210028 rev B0, sheet 1, side view, scaled:
+        the jackscrew head, 4.1 in diameter, standing 3.9 behind the
+        backshell.
+    - node: relief-boot
+      lift: 35.5
+      cyl: 58.0
+      color: '#26282b'
+      confidence: estimated
+      source: >-
+        Bel Stewart Connector CT210028 rev B0, sheet 1, side view, scaled:
+        the moulded boot, ending 58.0 behind the backshell, built at its
+        widest diameter, 16.4 (provenance.relief-boot).
+    - node: stub
+      lift: 93.5
+      cyl: 30
+      confidence: estimated
+      source: the stub rule, docs/connectors-coax-design.md section 5
+connection-points:
+  mate: {at: [14.5, 8.2], direction: front}
+  cable: {at: [14.5, 8.2], direction: front, 'on': stub}
+skins: [default]
