@@ -470,6 +470,13 @@ names the ref that replaces it.
   pluggable cage. A lamp or label in a group that states `pon` no longer
   exports as a second PON interface. No export in the library changes
   (roc-ops/Portrayal#772).
+- `spec/schemas/standards.yaml`: the `sc-duplex-adapter` pitch floor is
+  12.71, the narrowest of the five gaps it was measured from, not 13.0, their
+  mean. L81 now accepts an evenly spaced SC adapter panel at 12.71 or wider,
+  where it used to refuse anything under 13.0. `fs/fhd-1mtp12-sc-os2-a@3`
+  (3.0.2) no longer undercuts the floor and drops the `pitch-note` that said
+  it did; the seven FS FHD enclosures that seat it take a patch
+  (roc-ops/Portrayal#245).
 - **BREAKING for DCIM data already imported.** Telco Systems is listed as
   `BATM/Telco Systems`, the name the vendor asks to be listed under. The
   `manufacturer` of its fourteen devices changes, and with it every one of its
