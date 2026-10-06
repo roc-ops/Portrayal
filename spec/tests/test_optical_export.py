@@ -214,13 +214,17 @@ def test_the_populations_split_as_the_controller_ruling_expects():
     modular panel and the blank carry no fibre and are in neither count. A future cassette that joins the library
     moves one of these two counts, and this is what a reviewer notices
     moving.
+
+    FORTY-FIVE AND THIRTY-NINE SINCE THE FIBRAIN HD HOLDERS (2026-10-06): four
+    SC adapter holders, each a pass-through with a declared rear face -
+    xmi1041ga and xmi1051ga (6 ports), xmn1041gb and xmn1051gb (12).
     """
     idx = index()
     all_fibre = fibre_modules(idx)
     projecting = projecting_modules(idx)
     excluded = [e["name"] for e in all_fibre if e not in projecting]
-    assert len(all_fibre) == 41, sorted(e["name"] for e in all_fibre)
-    assert len(projecting) == 35, [e["name"] for e in projecting]
+    assert len(all_fibre) == 45, sorted(e["name"] for e in all_fibre)
+    assert len(projecting) == 39, [e["name"] for e in projecting]
     assert sorted(excluded) == sorted([
         "ppm-dcm-10", "ppm-dcm-20", "ppm-dcm-40", "ppm-dcm-80",
         "ppm-ocu-50-50", "ppm-ocu-97-3",

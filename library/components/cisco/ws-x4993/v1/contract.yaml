@@ -1,0 +1,78 @@
+format: 1
+kind: module
+name: ws-x4993
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  The fan tray of the Cisco Catalyst 4948E, WS-X4993 - four variable-speed 12 VDC fans
+  behind one long perforated face, a captive installation screw at each end and a pull
+  handle across the middle. It seats between the two power supplies and prints PS 1 and
+  PS 2 at its two ends to name them. Front-to-back airflow; the Catalyst 4948E-F takes
+  the keyed WS-X4993-F instead.
+size: {w: 190.7, h: 39.5}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs:
+  model: 'WS-X4993'
+  power-absent: not-published
+  fans: 4
+  airflow: front-to-back
+provenance:
+  model: >-
+    datasheet - the Catalyst 4948E and Catalyst 4948E-F Switch Installation Guide, Table
+    1-1 and the Fan Tray section: "The Catalyst 4948E chassis supports one hot-swappable
+    fan tray (part number WS-X4993=)", "four variable-speed 12 VDC fans", and "The
+    WS-X4993-F fan tray is keyed to prevent insertion in the Catalyst 4948E chassis". The
+    trailing = is Cisco's spare-order mark and is not part of the model.
+  power: >-
+    NOT PUBLISHED. Searched the installation guide (Table 1-1, the Fan Tray section and
+    the specifications tables) and the data sheet for a fan-tray figure; both give only the
+    switch as a whole. L29 stands on it at the chassis.
+  size: >-
+    photo-measured - the Catalyst 4948E data sheet's Figure 2, the square-on rear
+    photograph, at 1.919 px per mm (853 px across a stated 444.4 mm; the height checks to
+    1.5%). The tray runs from the first supply's right edge to the second's left, 366 px,
+    190.7 mm, and is the same 39.5 tall as the supplies. Good to about half a millimetre.
+  elements: >-
+    photo-measured off the same photograph. The guide's Figure 1-3 calls out the two
+    captive installation screws and the four fans; the handle and the PS 1 and PS 2
+    legends are read off the photograph and a real-unit close-up, which also resolves the
+    part number printed at the upper left.
+  colour: >-
+    THE GUIDE AND THE PHOTOGRAPH DISAGREE IN WORDS. The guide says this tray "has a front
+    panel that is color-coded dark grey"; the data sheet's photograph of the Catalyst
+    4948E rear shows a bright bare-metal tray between two dark grey supplies, and the blue
+    one on the 4948E-F. The photograph is followed: 1120 pixels of the tray's end plate
+    have a median of #d4d4d4.
+  depth: >-
+    estimated - not stated. The guide's Figure 1-3 draws the tray as a shallow carrier
+    about as deep as it is tall plus its fans; 60 mm is a reading of that drawing's
+    proportions and not a measurement.
+states: [absent]
+elements:
+  screw-left: {at: [2.7, 16.9], size: [6.0, 6.0], class: screw}
+  screw-right: {at: [184.6, 16.9], size: [6.0, 6.0], class: screw}
+  grille: {at: [12.0, 1.5], size: [171.9, 36.5], class: rotor}
+  handle: {at: [66.7, 17.8], size: [57.3, 5.2], class: handle}
+relief:
+  wall: '#15181b'
+  features:
+    - node: grille
+      vent: 26
+      confidence: estimated
+      source: >-
+        cisco/ws-x4993@1's own elements key - the perforated field's extent is measured off
+        the photograph and the depth behind it is not stated.
+    - node: handle
+      uhandle: 12.0
+      color: '#5c6167'
+      confidence: estimated
+      source: >-
+        Not stated. The photograph shows a bar handle standing off the grille with a clear
+        shadow beneath it; 12 mm is a reading of that and not a measurement.
+skins: [default]
+body:
+  depth: 60
+  color: '#d4d4d4'
+  footprint: {at: [0, 0], size: [190.7, 39.5]}

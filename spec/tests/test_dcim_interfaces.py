@@ -778,3 +778,38 @@ def test_no_two_nested_bays_on_a_device_resolve_to_one_position():
                 bad.append(f"{p.parent.name}: `{pos}` is reached from {sorted(under)}")
     assert seen, "no nested bay was read"
     assert not bad, "\n".join(sorted(set(bad))[:30])
+
+
+# --- a device that names its own interfaces -----------------------------------
+
+def test_a_device_names_its_own_interfaces():
+    """A BOX THAT SHIPS WITH ITS MAKER'S OPERATING SYSTEM HAS NAMES OF ITS OWN.
+
+    A listing is how a NOS vendor names another maker's ports. Cisco's own
+    listing on Cisco's own Nexus would write the same file the hardware's
+    document writes, so the device states the rules itself - `interfaces:`, in
+    the listing's shape - and its own export uses them. The Nexus 93180YC-EX is
+    the first: 54 ports as NX-OS names them, and its two management connectors
+    as the ONE interface they are.
+    """
+    dev = load_yaml(LIB / "devices/cisco/n9k-c93180yc-ex/device.yaml")
+    own = dx.listing_names(dev)
+    assert own["port-1"][0] == "Ethernet1/1" and own["port-54"][0] == "Ethernet1/54"
+    assert own["mgmt-rj45"][0] == own["mgmt-sfp"][0] == "mgmt0"
+    exported = LIB / "exports/netbox/device-types/Cisco/N9K-C93180YC-EX.yaml"
+    names = [i["name"] for i in yaml.safe_load(exported.read_text())["interfaces"]]
+    assert names == ["mgmt0"] + [f"Ethernet1/{n}" for n in range(1, 55)], names
+
+
+def test_renaming_a_devices_own_interface_is_major():
+    """The lock's half of it. A DCIM that imported the type holds the name, so a
+    name that changes or goes is breaking, and naming ports for the first time
+    is not - there was nothing recorded to rename."""
+    from portrayal import devicelock
+    dev = load_yaml(LIB / "devices/cisco/n9k-c93180yc-ex/device.yaml")
+    before = devicelock.entry(dev)
+    renamed = {**dev, "interfaces": [{**r, "name": r["name"].replace("Ethernet", "Eth")}
+                                     for r in dev["interfaces"]]}
+    assert devicelock.required_bump(before, devicelock.entry(renamed)) == "major"
+    unnamed = {k: v for k, v in dev.items() if k != "interfaces"}
+    assert devicelock.required_bump(devicelock.entry(unnamed), before) == "patch"
