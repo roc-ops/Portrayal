@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1255 component majors in 27 namespaces.
+1257 component majors in 27 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -22,7 +22,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
 | `std/bnc@1` | component | port | 9.7 × 8.85 | bnc | 0 | 3 | BNC bayonet coaxial panel jack core (IEC 61169-8) - the D-hole and the collar with its bore, insulator and ce… |
-| `std/c14-inlet@1` | component | inlet | 28 × 20 × 13 | c14-inlet | 4 | 61 | IEC C14 appliance inlet (mates C13 cords) - panel cutout with the keyed coupler shroud recessed behind it, ea… |
+| `std/c14-inlet@1` | component | inlet | 28 × 20 × 13 | c14-inlet | 4 | 62 | IEC C14 appliance inlet (mates C13 cords) - panel cutout with the keyed coupler shroud recessed behind it, ea… |
 | `std/c20-inlet@1` | component | inlet | 32.4 × 24.4 × 15 | c20-inlet | 1 | 13 | IEC C20 appliance inlet (mates C19 cords) - panel cutout with the rounded-rectangle coupler recess behind it,… |
 | `std/cfp@1` | component | port | 82 × 13.6 × 144.8 | cfp | 0 | 8 | CFP cage cutout - the module envelope of the CFP MSA, the aperture the module seats through |
 | `std/cfp2@1` | component | port | 41.5 × 12.4 × 107.5 | cfp2 | 0 | 9 | CFP2 cage cutout - the module envelope of the CFP2 MSA, the aperture the module seats through |
@@ -53,17 +53,17 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/pcie-bracket-lp@1` | component | bracket | 79.2 × 18.42 | pcie-bracket-lp | 0 | 48 | Low profile PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the chassis wall,… |
 | `std/qsfp-dd@1` | component | port | 19 × 10 × 37 | qsfp-dd | 32 | 19 | QSFP-DD cage cutout (400G, backward-compatible faceplate) |
 | `std/qsfp-ganged@1` | component | port | 18.5 × 9.58 × 37 | qsfp-ganged | 50 | 26 | QSFP family per-port opening inside a ganged cage block - the cage aperture, with the SFF-8661 module envelop… |
-| `std/qsfp28@1` | component | port | 20 × 10.15 × 37 | qsfp28 | 2 | 49 | QSFP28 cage cutout (100G, 4 lanes) |
+| `std/qsfp28@1` | component | port | 20 × 10.15 × 37 | qsfp28 | 3 | 49 | QSFP28 cage cutout (100G, 4 lanes) |
 | `std/qsfp56@1` | component | port | 20 × 10.15 × 37 | qsfp56 | 0 | 16 | QSFP56 cage cutout (200G, shares SFF-8661 profile) |
 | `std/rj45@2` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 72 | 57 | RJ45 modular jack HOUSING - the 15.8 x 13.2 plastic face a plug enters, with the 8P8C interface recessed into… |
-| `std/rj45-ganged@2` | component | port | 12.7 × 11 × 18.6 | rj45-ganged | 75 | 27 | One cell of a shared-wall 2xN RJ45 block - the 12.7 x 11.0 face between neighbouring ports on a 13.97 pitch, … |
+| `std/rj45-ganged@2` | component | port | 12.7 × 11 × 18.6 | rj45-ganged | 76 | 27 | One cell of a shared-wall 2xN RJ45 block - the 12.7 x 11.0 face between neighbouring ports on a 13.97 pitch, … |
 | `std/saf-d-grid@1` | component | inlet | 26.8 × 19.9 × 17 | saf-d-grid | 0 | 4 | Anderson Saf-D-Grid appliance inlet - the panel cutout with the keyed coupler recessed behind it, a first-mat… |
 | `std/sc-bore@1` | component | port | 8.39 × 9 × 6 | sc-simplex-receptacle | 2 | 36 | One SC opening - the rectangular hole an SC plug's housing enters, with the key slot cut into one long wall a… |
-| `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 44 | 78 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
-| `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 89 | 93 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
+| `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 45 | 78 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
+| `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 90 | 93 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
 | `std/sma@1` | component | port | 6.35 × 6.35 | sma | 19 | 8 | SMA coaxial panel jack (1/4-36UNS-2B) - threaded barrel protrudes; GNSS/RF antenna input |
 | `std/smb@1` | component | port | 4.83 × 4.83 | smb | 24 | 20 | SMB coaxial panel jack (10-32UNF-2A) - snap-on timing coax (1PPS/10MHz) |
-| `std/usb-a@1` | component | port | 12 × 4.5 × 13.7 | usb-a | 102 | 30 | USB Type-A receptacle opening - sharp corners |
+| `std/usb-a@1` | component | port | 12 × 4.5 × 13.7 | usb-a | 103 | 30 | USB Type-A receptacle opening - sharp corners |
 | `std/usb-c@1` | component | port | 8.34 × 2.56 × 6.5 | usb-c | 8 | 2 | USB Type-C receptacle opening - fully rounded ends |
 | `std/vga@1` | component | port | 20.47 × 11.4 × 6.73 | hd15 | 2 | 7 | VGA video receptacle - a female high-density DE-15, fifteen contacts in three rows inside the D-subminiature … |
 | `std/xfp@1` | component | port | 19.5 × 9.7 × 61.7 | xfp | 1 | 40 | XFP cage cutout (10G pluggable) - the recommended bezel opening of the XFP MSA, the aperture an XFP cage prot… |
@@ -112,11 +112,11 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/lc-duplex-v-adapter@6` | component | port | 9.28 × 13.75 | fhd-lc-cassette | 0 | 39 | LC duplex panel adapter with its two ports STACKED VERTICALLY - the shell FS fits to FHD cassettes and adapte… |
 | `common/lc-dust-cap@1` | component | cap | 4.7 × 4.7 | lc | 0 | 3 | The white dust cap an idle LC port ships with - a 4.7 square lump plugging the bore square, with a rounded-sq… |
 | `common/led-arrow@1` | component | led | 3.6 × 3.2 |  | 15 | 1 | Single triangle port LED - up skin for top-row ports, down for bottom |
-| `common/led-arrow-sm@1` | component | led | 2.25 × 2 |  | 33 | 0 | Compact triangle port LED for tight inter-port gaps - up skin for top-row ports, down for bottom |
-| `common/led-dot@1` | component | led | 2 × 2 |  | 116 | 273 | Tiny round port LED (2mm) |
+| `common/led-arrow-sm@1` | component | led | 2.25 × 2 |  | 34 | 0 | Compact triangle port LED for tight inter-port gaps - up skin for top-row ports, down for bottom |
+| `common/led-dot@1` | component | led | 2 × 2 |  | 117 | 273 | Tiny round port LED (2mm) |
 | `common/led-indicator@1` | component | led | 4 × 4 |  | 27 | 48 | Single chassis status LED |
 | `common/led-rect@1` | component | led | 4.6 × 2.6 |  | 30 | 3 | Rectangular system LED (cell-site style green bar) |
-| `common/led-rect-sm@1` | component | led | 2.8 × 1.6 |  | 30 | 23 | Small rectangular per-port LED - the rounded bar a dense port row carries one of beside each cage, at roughly… |
+| `common/led-rect-sm@1` | component | led | 2.8 × 1.6 |  | 31 | 23 | Small rectangular per-port LED - the rounded bar a dense port row carries one of beside each cage, at roughly… |
 | `common/led-slot-pair@1` | component | led | 3.7 × 1.2 |  | 0 | 4 | Two lamps behind one light-pipe slot - the rounded 3.7 x 1.2 window a bracket punches for a port's pair of in… |
 | `common/led-sq@1` | component | led | 3 × 3 |  | 1 | 0 | A small square status lamp, 3 mm, flush in a panel |
 | `common/liquid-qd-coupler@1` | component | coupler | 38.4 × 38.4 |  | 1 | 0 | Liquid-cooling quick-disconnect (QD) coupler on an equipment rear - a hex-bodied fitting with a flush valve f… |
@@ -129,7 +129,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/mpo16-dust-cap@1` | component | cap | 12.8 × 8.1 | mpo16 | 0 | 1 | The grey dust cap FS ships in each opening of its FHD 12x MTP-16 adapter panel (SKU 382885) - common/mpo-dust… |
 | `common/mpo24-flange-adapter@2` | component | port | 30 × 11 | mpo | 0 | 5 | Flanged MPO/MTP bulkhead adapter carrying 24 fibres - a black flange held by two screws, a raised housing, an… |
 | `common/multi-cord-hazard-label@1` | component | marking | 29.8 × 10.9 |  | 1 | 0 | Yellow rectangular hazard sticker with two symbols side by side - an electric-shock triangle (ISO 7010 W012) … |
-| `common/nic-symbol@1` | component | silkscreen | 5.4 × 4.6 |  | 1 | 0 | The network mark printed beside an Ethernet port - a node above three nodes on a bus, which is the figure ven… |
+| `common/nic-symbol@1` | component | silkscreen | 5.4 × 4.6 |  | 2 | 0 | The network mark printed beside an Ethernet port - a node above three nodes on a bus, which is the figure ven… |
 | `common/orv3-busbar-connector@1` | component | inlet | 60.7 × 35.4 |  | 1 | 0 | Open Rack v3 48 V bus-bar power connector on an IT tray's rear - a blind-mate clip body with a vertical blade… |
 | `common/osfp-pull-tab@1` | component | latch | 22.58 × 4.85 |  | 0 | 2 | The pull tab of an OSFP module - a closed loop as wide as the module: two arms along the side edges and a gri… |
 | `common/pcie-card-fh@2` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 14 | A generic full-height PCI Express add-in card, half-length - the standard bracket at the chassis wall and a P… |
@@ -159,14 +159,14 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/rj45-boot@1` | component | boot | 14.5 × 10 | rj45-plug | 0 | 1 | A strain-relief boot for an RJ45 (8P8C) copper plug - PVC, moulded around the plug it wraps |
 | `common/rj45-eth@1` | component | port | 15.8 × 13.2 × 18.6 |  | 63 | 42 | An Ethernet RJ45 - the std/rj45@2 housing with the two link and activity lamps nearly every Ethernet jack car… |
 | `common/rj45-eth-pinside@1` | component | port | 15.8 × 13.2 × 18.6 |  | 0 | 3 | An Ethernet RJ45 whose two link and activity lamps are in the side walls of the housing at its PIN end, besid… |
-| `common/rj45-ganged-eth@1` | component | port | 12.7 × 11 × 18.6 |  | 75 | 35 | An Ethernet RJ45 in a ganged 2xN block - the std/rj45-ganged@2 cell with the two lamps in its keyway-side cor… |
+| `common/rj45-ganged-eth@1` | component | port | 12.7 × 11 × 18.6 |  | 76 | 35 | An Ethernet RJ45 in a ganged 2xN block - the std/rj45-ganged@2 cell with the two lamps in its keyway-side cor… |
 | `common/rj45-ganged-link@1` | component | port | 12.7 × 11 × 18.6 |  | 5 | 0 | An Ethernet RJ45 in a ganged 2xN block with ONE lamp - the std/rj45-ganged@2 cell with a single link/activity… |
 | `common/rocker-switch@1` | component | button | 21 × 15 |  | 1 | 0 | Snap-in panel rocker power switch, 21 x 15 bezel, rocker across the width - the I (on) side at the left and O… |
 | `common/sc-apc@1` | component | port | 24 × 26 |  | 1 | 0 | SC/APC fiber adapter in a molded bay (PON WAN) |
 | `common/sc-duplex-adapter@5` | component | port | 9.4 × 25.4 | sc-duplex-adapter | 0 | 10 | Panel-mount SC duplex adapter, as fitted to an FS FHD SC panel - one body carrying two SC ports STACKED verti… |
 | `common/sc-dust-cap@1` | component | cap | 8.8 × 11.45 | sc | 0 | 1 | The black dust cap FS ships in an FHD SC port - 8.8 x 11.45, with a lighter raised grip across its middle for… |
-| `common/screw-head@1` | component | screw | 3.6 × 3.6 × 0.7 |  | 80 | 9 | Generic countersunk screw head (decorative fastener) |
-| `common/serial-symbol@1` | component | silkscreen | 7.2 × 2.6 |  | 1 | 0 | The IOIOI mark printed beside a serial port - alternating bars and rings, which is how a vendor says "this on… |
+| `common/screw-head@1` | component | screw | 3.6 × 3.6 × 0.7 |  | 81 | 9 | Generic countersunk screw head (decorative fastener) |
+| `common/serial-symbol@1` | component | silkscreen | 7.2 × 2.6 |  | 2 | 0 | The IOIOI mark printed beside a serial port - alternating bars and rings, which is how a vendor says "this on… |
 | `common/seven-segment-dual@1` | component | display | 17.4 × 12.1 |  | 2 | 0 | Two-digit seven-segment status display behind one window - the code readout an Accton/Edgecore faceplate prin… |
 | `common/sfp-lc-duplex@1` | component | transceiver | 13.5 × 8.5 | sfp | 0 | 1 | SFP transceiver with an LC duplex face - two recessed bores with the fiber ferrules standing in them, and a b… |
 | `common/sfp-led-pair@1` | component | led | 12 × 4 |  | 4 | 0 | Stacked-SFP indicator pair — left lamp = upper port, right lamp = lower port, up/down triangles between |
@@ -338,7 +338,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `celestica/psu-crps-920-ac@1` | module | psu | 73.5 × 40 × 185 | crps-1u | 1 | 0 | 920 W AC CRPS supply of the Celestica ES1000-24P (PoE++) - C14 inlet turned portrait, 40 mm fan, black releas… |
 | `celestica/psu-r3059-f8001@1` | module | psu | 73.5 × 40 × 185 | crps-1u | 3 | 0 | Celestica 550 W AC CRPS supply of the DS1000 and DS2000 (and, by the DS3000 modeller's matched reading, the D… |
 
-## cisco/ (139)
+## cisco/ (141)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -453,6 +453,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `cisco/asr-9922-rp-tr@2` | module | supervisor | 41.4 × 395.7 × 628.9 |  | 2 | 0 | Cisco ASR 9900 Route Processor, Packet Transport optimised, for the ASR 9922 and ASR 9912 |
 | `cisco/asr-9922-sfc110@1` | module | fabric | 41.4 × 395.7 |  | 1 | 0 | Cisco ASR 9922 Router Switch Fabric Card, first generation |
 | `cisco/led-matrix-4@1` | component | display | 14 × 25 |  | 1 | 1 | The four-character LED matrix a Cisco ASR 9000 route processor shows its boot stage on, as the ASR 9901 carri… |
+| `cisco/nxa-fan-30cfm@1` | module | fan | 40.6 × 38.4 |  | 1 | 0 | The fan module of the Cisco Nexus 9300-EX fixed switches, ordered as NXA-FAN-30CFM-B (port-side intake, burgu… |
+| `cisco/nxa-pac-650w@1` | module | psu | 96.8 × 38.6 |  | 1 | 1 | The 650 W AC power supply of the Cisco Nexus 9300-EX fixed switches, ordered as NXA-PAC-650W-PI (port-side in… |
 | `cisco/pwr-1p6kw-ac@1` | module | psu | 74.69 × 40.2 |  | 2 | 2 | Cisco ASR 9900 fixed-chassis 1.6 kW AC power module |
 | `cisco/pwr-1p6kw-dc@1` | module | psu | 74.69 × 40.2 |  | 2 | 0 | Cisco ASR 9900 fixed-chassis 1.6 kW DC power module |
 | `cisco/pwr-2kw-dc-v2@1` | module | psu | 99.62 × 42.85 |  | 1 | 0 | Cisco ASR 9000 version 2 DC power supply, 2100 W, for a version 2 power entry module (ASR9K-DC-PEM-V2) |
