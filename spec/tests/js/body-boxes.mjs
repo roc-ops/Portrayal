@@ -31,6 +31,13 @@ const rearCrop = m.pieceArtCrop({x: 4, y: 1, w: 12, h: 9, z0: 31, z1: 37}, 'rear
 const at = (c, u, v, dw, dh) => [
   +((c.offset[0] + u * c.repeat[0]) * dw).toFixed(3),
   +((1 - (c.offset[1] + v * c.repeat[1])) * dh).toFixed(3)];
-console.log(JSON.stringify({one, fp, riser, plain, mirrored, pieces,
+// a piece keeps its shape and its art only where the host's frame is the part's own
+const straight = [m.pieceIsStraight(null), m.pieceIsStraight({a: 1, b: 0, c: 0, d: 1, e: 5, f: 5}),
+  m.pieceIsStraight({a: -1, b: 0, c: 0, d: -1, e: 0, f: 0}),      // rotate 180
+  m.pieceIsStraight({a: 0, b: 1, c: -1, d: 0, e: 0, f: 0}),       // rotate 90
+  m.pieceIsStraight({a: -1, b: 0, c: 0, d: 1, e: 0, f: 0}),       // mirrored
+  m.pieceIsStraight({a: 1, b: 0, c: 0, d: 1, e: 0, f: 0}, {deg: 8})];
+const demoted = m.plainPiece(pieces[0]);
+console.log(JSON.stringify({one, fp, riser, plain, mirrored, pieces, straight, demoted,
   planNear: at(planCrop, 0, 0, 431, 250), planFar: at(planCrop, 1, 1, 431, 250),
   rearTopLeft: at(rearCrop, 0, 1, 100, 21), rearBottomRight: at(rearCrop, 1, 0, 100, 21)}));

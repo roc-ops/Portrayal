@@ -69,6 +69,11 @@ def test_a_piece_can_be_round_and_can_show_the_part_s_own_drawing():
     # block's top-left is the face's x 16, y 1: rear x 100 - 16 = 84.
     assert out["rearTopLeft"] == [84, 1]
     assert out["rearBottomRight"] == [96, 10]
+    # A TURNED, MIRRORED OR TILTED HOST GETS THE PLAIN BOX. `axis` and `shows`
+    # are in the part's frame; in a slot that turns its occupant a box's top
+    # is not the part's top, so the piece is built as it was before either key.
+    assert out["straight"] == [True, True, False, False, False, False]
+    assert set(out["demoted"]) == {"id", "x", "y", "w", "h", "z0", "z1", "color"}
 
 
 def test_a_round_piece_says_how_it_stands_and_a_shown_drawing_exists():

@@ -689,9 +689,10 @@ export function createViewer(container, opts = {}) {
       box.position.set(pl.at[0] + pl.size[0] / 2 - W / 2,
                        H / 2 - (pl.at[1] + pl.size[1] / 2), D / 2 - 0.6);
       const bodyBox = new THREE.Group();
+      const pieceTex = new Map();   // one texture per drawing, for this build
       for (const b of bodyBoxes(COMP_ENTRY.body, W, H)) {
         const m = pieceMesh(b, b.w, b.h, b.z1 - b.z0,
-                            await pieceArt(COMP_ENTRY.body, b, distAt, SCOPE));
+                            await pieceArt(COMP_ENTRY.body, b, distAt, SCOPE, pieceTex));
         m.position.set(b.x + b.w / 2 - W / 2, H / 2 - (b.y + b.h / 2),
                        D / 2 - b.z0 - (b.z1 - b.z0) / 2);
         bodyBox.add(m);
