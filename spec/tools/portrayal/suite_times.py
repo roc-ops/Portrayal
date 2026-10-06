@@ -6,7 +6,7 @@ time. Nothing reported the growth, so nobody saw it until the job reached its
 timeout. This reads pytest's own record of a run, says where the time went, and
 when it is given an earlier run to compare against it names what is new.
 
-    suite_times.py <junit.xml> --out times.json [--base base.json] [--summary FILE]
+    suite_times.py <junit.xml>... --out times.json [--base base.json] [--summary FILE]
 
 IT FLAGS AND NEVER FAILS. A slow test is a question for a reviewer - is this
 worth what it costs, could a lint rule answer it - and a timing is not exact
@@ -208,7 +208,9 @@ def fetch_base(repo, token, skip_sha=None):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.strip().splitlines()[0])
-    ap.add_argument("junit", help="pytest's --junitxml output")
+    # SEVERAL, because CI splits the suite across jobs (shards.py) and each
+    # writes its own. The shards keep disjoint tests, so the records add up.
+    ap.add_argument("junit", nargs="+", help="pytest's --junitxml output, one per shard")
     ap.add_argument("--out", help="write this run's times here, for a later run to compare against")
     ap.add_argument("--base", help="an earlier run's times, as written by --out")
     ap.add_argument("--fetch-base", metavar="OWNER/REPO",
@@ -216,13 +218,19 @@ def main(argv=None):
     ap.add_argument("--summary", help="append the Markdown report to this file")
     a = ap.parse_args(argv)
 
-    if not pathlib.Path(a.junit).is_file():
-        print(f"::error::{a.junit} does not exist - the suite wrote no record of its run.")
-        return 1
-    tests = read_junit(a.junit)
-    if not tests:
-        print(f"::error::{a.junit} holds no test - there is nothing to time.")
-        return 1
+    tests = {}
+    for junit in a.junit:
+        if not pathlib.Path(junit).is_file():
+            print(f"::error::{junit} does not exist - the suite wrote no record of its run.")
+            return 1
+        mine = read_junit(junit)
+        if not mine:
+            print(f"::error::{junit} holds no test - there is nothing to time.")
+            return 1
+        # SUMMED, as read_junit sums within one file: two modules with one
+        # stem in different directories share a key, and may sit in two shards.
+        for k, v in mine.items():
+            tests[k] = round(tests.get(k, 0.0) + v, 3)
     if a.out:
         pathlib.Path(a.out).write_text(json.dumps({"tests": tests}, sort_keys=True) + "\n")
 

@@ -37,12 +37,20 @@ def steps(job):
     return job.get("steps") or []
 
 
+def needs(job):
+    n = job.get("needs") or []
+    return [n] if isinstance(n, str) else list(n)
+
+
 def test_lint_is_its_own_job_and_the_build_does_not_queue_behind_it(workflow):
     """`needs: lint` made a run queue twice on a busy pool. The gate it gave is
-    kept by the merge: see test_the_merge_refuses_a_failed_lint."""
+    kept by the merge: see test_the_merge_refuses_a_failed_lint. The build
+    starts at once (`dist` needs nothing), and no job waits on lint."""
     jobs = workflow["jobs"]
     assert "lint" in jobs and "build" in jobs, list(jobs)
-    assert "needs" not in jobs["build"], jobs["build"].get("needs")
+    assert not needs(jobs["dist"]), jobs["dist"].get("needs")
+    for name, job in jobs.items():
+        assert "lint" not in needs(job), f"{name} queues behind lint"
     names = [s.get("name") or s.get("uses", "") for s in steps(jobs["lint"])]
     assert any("lint" == n for n in names), names
     # and it is the FAST job: no build, no suite, no apt
@@ -54,7 +62,7 @@ def test_lint_is_its_own_job_and_the_build_does_not_queue_behind_it(workflow):
 def test_the_build_job_does_not_lint_again(workflow):
     """The second of the three lints. `NO_LINT=1` is honoured by build.sh and is
     safe here only because no head merges without the `lint` job passing."""
-    build = yaml.safe_dump(workflow["jobs"]["build"])
+    build = yaml.safe_dump(workflow["jobs"]["dist"])
     assert "NO_LINT=1 ./publish.sh" in build, build[:400]
 
 
@@ -76,8 +84,12 @@ def test_a_push_to_main_lints_but_does_not_rebuild(workflow):
     keeps a full run on main one click away."""
     on = workflow.get("on", workflow.get(True))
     assert "workflow_dispatch" in on, on
-    assert workflow["jobs"]["build"].get("if") == "github.event_name != 'push'"
-    assert "if" not in workflow["jobs"]["lint"]
+    jobs = workflow["jobs"]
+    assert jobs["dist"].get("if") == "github.event_name != 'push'"
+    assert jobs["tests"].get("if") == "github.event_name != 'push'"
+    assert jobs["build"].get("if") == "${{ !cancelled() && github.event_name != 'push' }}"
+    assert "if" not in jobs["lint"]
+    assert set(jobs) == {"lint", "dist", "tests", "build"}, "a new job needs the push rule too"
 
 
 def test_build_sh_still_lints_by_default():
@@ -98,7 +110,7 @@ def test_node_is_installed_rather_than_inherited(workflow):
     """Fourteen test modules carry `skipif(shutil.which("node") is None)`. Before
     this the suite depended on the runner image, and the day it changed those
     files would have gone quiet, not red."""
-    build = yaml.safe_dump(workflow["jobs"]["build"])
+    build = yaml.safe_dump(workflow["jobs"]["tests"])
     assert "actions/setup-node" in build
     users = [p for p in (ROOT / "spec/tests").glob("test_*.py")
              if 'which("node")' in p.read_text()]
@@ -127,9 +139,12 @@ def test_a_fork_never_reaches_the_self_hosted_pool(workflow):
 def test_the_suite_log_is_not_in_a_shared_tmp(workflow):
     """Several runners on one machine share /tmp. A fixed /tmp path lets one
     job's skip check read another job's log - green for the wrong tree."""
-    build = yaml.safe_dump(workflow["jobs"]["build"])
-    assert "/tmp/pytest.txt" not in build
-    assert "$RUNNER_TEMP/pytest.txt" in build
+    body = yaml.safe_dump(workflow)
+    assert "/tmp/pytest.txt" not in body
+    runs = {name: "\n".join(s.get("run", "") for s in steps(job))
+            for name, job in workflow["jobs"].items()}
+    assert '"$RUNNER_TEMP/out/pytest.txt"' in runs["tests"]
+    assert '"$RUNNER_TEMP/pytest.txt"' in runs["build"]
 
 
 def test_the_suite_keeps_its_temporary_files_in_the_job(workflow):
@@ -137,7 +152,7 @@ def test_the_suite_keeps_its_temporary_files_in_the_job(workflow):
     Three self-hosted runners share one user and one /tmp, and the kept trees
     filled it (ENOSPC, three PRs failed at once). Each job's temp lives under
     its own RUNNER_TEMP, which the runner deletes after the job."""
-    run = next(s["run"] for s in steps(workflow["jobs"]["build"])
+    run = next(s["run"] for s in steps(workflow["jobs"]["tests"])
                if s.get("name") == "tests")
     assert '--basetemp "$RUNNER_TEMP/pytest"' in run, run
     assert 'export TMPDIR="$RUNNER_TEMP/tmp"' in run, run
@@ -153,9 +168,10 @@ def test_the_build_job_caches_pip_against_a_real_file(workflow):
     """The cache key has to be a file pip actually reads, or it never invalidates
     - and since #178 the dependency list lives in pyproject rather than in
     spec/requirements-ci.txt."""
-    body = yaml.safe_dump(workflow["jobs"]["build"])
-    assert "cache: pip" in body
-    assert "pyproject.toml" in body
+    for name in ("dist", "tests"):
+        body = yaml.safe_dump(workflow["jobs"][name])
+        assert "cache: pip" in body, name
+        assert "pyproject.toml" in body, name
     assert (ROOT / "pyproject.toml").exists()
 
 
@@ -238,7 +254,71 @@ def test_the_kit_has_a_test_script_covering_every_module():
 
 
 def test_the_workflow_runs_the_kit(workflow):
-    assert "npm test" in yaml.safe_dump(workflow["jobs"]["build"])
+    assert "npm test" in yaml.safe_dump(workflow["jobs"]["dist"])
+
+
+# --- the split suite -----------------------------------------------------------
+
+def test_the_required_check_is_still_called_build_and_waits_for_everything(workflow):
+    """Branch protection requires a check named `build`. Splitting the suite
+    must not rename it, and it must be red when any part of the build is: it
+    needs `dist` and every shard, runs even when they fail, and its last step
+    refuses unless both succeeded."""
+    jobs = workflow["jobs"]
+    build = jobs["build"]
+    assert "name" not in build, "the check name is the job id, `build`"
+    assert set(needs(build)) == {"dist", "tests"}
+    assert "!cancelled()" in build["if"] and "always()" not in build["if"]
+    last = steps(build)[-1]
+    assert last.get("if") == "always()"
+    assert last["env"] == {"DIST": "${{ needs.dist.result }}",
+                           "TESTS": "${{ needs.tests.result }}"}
+    assert '[ "$DIST" = success ] && [ "$TESTS" = success ]' in last["run"]
+    assert needs(jobs["tests"]) == ["dist"]
+
+
+def test_the_shards_split_by_the_matrix_and_build_checks_the_split(workflow):
+    """The count lives in one place, the matrix, and reaches pytest as
+    `strategy.job-total`. The split is measured after the run, and the skip
+    guards read every shard's log."""
+    jobs = workflow["jobs"]
+    tests = jobs["tests"]
+    shards = tests["strategy"]["matrix"]["shard"]
+    assert shards == list(range(1, len(shards) + 1)) and len(shards) > 1, shards
+    assert tests["strategy"]["fail-fast"] is False
+    run = next(s["run"] for s in steps(tests) if s.get("name") == "tests")
+    assert '--shard "${{ matrix.shard }}/${{ strategy.job-total }}"' in run
+    assert "--shard-record" in run and "--shard-weights" in run
+    build = {s.get("name"): s for s in steps(jobs["build"])}
+    assert "shards.py check" in build["every test ran once"]["run"]
+    guard = build["no silent skipping"]["run"]
+    assert 'for log in "${logs[@]}"' in guard, "every shard must show a summary line"
+    assert "check_skips.py" in guard
+    for name in ("no silent skipping", "every test ran once"):
+        assert build[name].get("if") == "always()", name
+
+
+def test_the_shards_test_the_build_dist_made(workflow):
+    """BUILD BEFORE PYTEST, across jobs now: a shard that tested without the
+    build would skip four modules' worth and look green."""
+    jobs = workflow["jobs"]
+    bundle = next(s for s in steps(jobs["dist"]) if s.get("name") == "bundle")["run"]
+    assert "library/dist" in bundle and "fetch-weights" in bundle
+    names = [s.get("name") or s.get("uses", "") for s in steps(jobs["tests"])]
+    unpack = names.index("unpack the build")
+    assert names.index("tests") > unpack
+    assert any("download-artifact" in n for n in names[:unpack])
+    # poppler too: without pdftoppm the OCR tests skip
+    assert "poppler" in names
+
+
+def test_every_action_is_pinned_by_commit(workflow):
+    """#456: a tag is a pointer its owner can move."""
+    for name, job in workflow["jobs"].items():
+        for s in steps(job):
+            if "uses" in s:
+                ref = s["uses"].split("@")[1]
+                assert len(ref) == 40 and all(c in "0123456789abcdef" for c in ref), (name, s["uses"])
 
 
 # --- the skip allow-list ------------------------------------------------------

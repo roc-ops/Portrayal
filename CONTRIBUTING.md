@@ -305,8 +305,11 @@ How the maintainer merges, and why it is a script, is in
 ## The gates
 
 Every pull request, device or not, passes the same checks: `lint`, `publish`
-(build + exports), the `devicelock` check, `pytest`, and "exports are current".
-CI runs them in that order because its lock check only has to confirm that the
+(build + exports), the `devicelock` check, "exports are current", and `pytest`.
+CI builds once and runs the suite in four parallel shards against that build;
+the check named `build` passes only when every shard did, and it proves the
+shards between them ran every collected test exactly once. Locally the suite
+is one run. CI runs the steps in that order because its lock check only has to confirm that the
 lock you committed matches the tree. Locally the lock step comes earlier, as
 step 5 shows: the check must see the lock *before* you regenerate it, or the
 bump it would have asked for is lost, and publish comes *after* the bumps

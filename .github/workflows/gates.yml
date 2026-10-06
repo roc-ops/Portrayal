@@ -98,23 +98,156 @@ jobs:
       - name: lint
         run: python3 spec/tools/portrayal/lint.py --schemas spec/schemas --library library
 
-  build:
-    # NOT ON A PUSH TO MAIN. merge-if-green merges only a head that is green AND
-    # up to date with main, and `--merge` of such a head gives main the very tree
-    # that was just built and tested - so the build on the push re-ran twenty
-    # minutes of work on a known answer, and on the self-hosted pool it held one
-    # of three runners through every burst of merges. Lint still runs on the push
-    # (a minute), and `workflow_dispatch` runs everything on request.
+  # THE BUILD IS THREE JOBS NOW, AND `build` IS STILL THE ONE THAT ANSWERS.
+  # `dist` builds and publishes once; four `tests` jobs each run a quarter of
+  # the suite against that build; `build` reads all four and is the check that
+  # branch protection requires, by that exact name. A required check that is
+  # renamed is one that never reports, and the merge waits for ever.
+  #
+  # WHY SPLIT. The suite was the long pole: on a hosted runner 1,103s of a
+  # 24-minute run, after a 312s build. Merges are serial, so every minute of it
+  # was a minute of queue for the next pull request. The repository is public
+  # and hosted minutes cost it nothing, so four runners do it side by side.
+  #
+  # NOT ON A PUSH TO MAIN, any of the three. merge-if-green merges only a head
+  # that is green AND up to date with main, and `--merge` of such a head gives
+  # main the very tree that was just built and tested - so the build on the
+  # push re-ran twenty minutes of work on a known answer. Lint still runs on the
+  # push (a minute), and `workflow_dispatch` runs everything on request.
+  dist:
     if: github.event_name != 'push'
     runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository && 'ubuntu-latest') || vars.GATES_RUNNER || 'ubuntu-latest' }}
-    timeout-minutes: 30
-    # STILL NOTHING WRITTEN. The two extra reads are what `test time` needs to
-    # find an earlier run: which pull requests merged, and the artifact the
-    # newest of them published.
+    timeout-minutes: 20
+    # STILL NOTHING WRITTEN. The two extra reads find an earlier run: which pull
+    # requests merged, and the test times the newest of them published - read
+    # here to balance the shards, and by `build` to compare against.
     permissions:
       contents: read
       actions: read
       pull-requests: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      # NODE FOR THE KIT CHECK BELOW. The suite's own node is installed where
+      # the suite runs, in `tests`.
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020  # v4.4.0
+        with:
+          node-version: '20'
+
+      # THE `test` EXTRA, which is the same list spec/requirements-ci.txt held and
+      # in the one place a tool looks for it. Editable, so `import portrayal`
+      # resolves for the tools the shell scripts run by path.
+      - run: pip install -e ".[test]"
+
+      # BUILD BEFORE PYTEST, AND THIS ORDER IS THE POINT. Four test modules -
+      # behaviour, config-scope, viewbox, state-css - skip themselves when
+      # library/dist is missing, and dist is gitignored so a fresh checkout has
+      # none. A run that tests before building reports 532 passed / 509 skipped
+      # and looks green. That happened once, on a branch that changed 14
+      # devices, and none of the rendering was exercised. The shards cannot
+      # start until this job has handed them its build, below.
+      #
+      # publish.sh IS build.sh plus the exports, so this is one build and not
+      # two, and it leaves library/exports regenerated for the check below.
+      # --no-images: every rendered PNG under library/exports is gitignored, so
+      # CI was building 1104 pictures and throwing them away inside the step
+      # that costs a quarter of the run.
+      #
+      # NO_LINT=1 because the `lint` job runs it beside this one, and no head can
+      # merge unless that job passed. That is the second of the three lints a run
+      # used to do; the third is inside the suite and is skipped for the same
+      # reason, in `tests`.
+      - name: build and publish
+        run: NO_LINT=1 ./publish.sh --no-images
+
+      - name: devicelock
+        run: python3 spec/tools/portrayal/devicelock.py --library library
+
+      # The kit is eleven ES modules that nothing checked. `node --check` is a
+      # syntax check and not a test suite, which is what the script claims;
+      # before it, a broken module surfaced only if some python test happened to
+      # shell out to the one that imports it.
+      - name: kit
+        run: cd kit && npm test
+
+      # The exports are committed and a DCIM reads them, so a stale one is a
+      # real defect rather than untidiness. publish.sh above has already
+      # regenerated them from this tree; anything left in the diff is a change
+      # somebody made without republishing. #100 merged that way and it went
+      # unnoticed for two PRs. HERE RATHER THAN AFTER THE SUITE, because nothing
+      # in the suite writes to library/exports and a stale export now fails the
+      # run five minutes in instead of twenty.
+      - name: exports are current
+        run: |
+          # `git diff` SEES ONLY TRACKED FILES, so a device whose configurations
+          # produce a document that has never been committed slipped straight
+          # past this gate: publish.sh wrote four new Edgecore device types and
+          # the check reported clean, because an untracked file is not a
+          # difference to `diff`. A NEW export is exactly the case this step
+          # exists to catch - it is a document a DCIM would never receive.
+          if ! git diff --quiet -- library/exports \
+             || [ -n "$(git status --porcelain --untracked-files=all -- library/exports)" ]; then
+            echo "::error::library/exports is stale - run ./publish.sh and commit the result"
+            git --no-pager diff --stat -- library/exports
+            git status --porcelain --untracked-files=all -- library/exports
+            exit 1
+          fi
+
+      # WHAT THE SHARDS NEED, AND WHAT SPLITS THEM. The build writes two
+      # gitignored trees - library/dist, which the suite reads, and
+      # library/packages - and the exports, which the step above has just proved
+      # equal to the committed ones a shard checks out. The weights are the
+      # newest merged run's per-test times, fetched ONCE here so all four shards
+      # split by the same numbers: shards.py splits deterministically from them,
+      # and `build` measures that it did. A fetch that fails writes no weights
+      # and every test weighs the same, which balances worse and loses nothing.
+      - name: bundle
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/bundle"
+          tar -czf "$RUNNER_TEMP/bundle/build.tgz" library/dist library/packages
+          python3 spec/tools/portrayal/shards.py fetch-weights "$GITHUB_REPOSITORY" \
+            --out "$RUNNER_TEMP/bundle/shard-weights.json"
+
+      # ONE DAY, because nothing reads it after this run. `overwrite` for a
+      # re-run of this job, which finds the first attempt's artifact.
+      # compression-level 0: the tarball is already gzipped.
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        with:
+          name: build
+          path: ${{ runner.temp }}/bundle
+          if-no-files-found: error
+          overwrite: true
+          retention-days: 1
+          compression-level: 0
+
+  # FOUR, FROM THE NUMBERS. The suite is about 4,100 summed seconds and ran in
+  # 1,103s on one hosted runner, so a quarter is about 280s of wall clock -
+  # which is near the floor: the slowest single test (a whole-library lint) is
+  # 200s on its own and no split can go under it. A fifth shard would buy
+  # seconds and pay another runner's setup; three would leave each one six
+  # minutes. The count is the length of this list and nothing else:
+  # `strategy.job-total` hands it to the split.
+  tests:
+    name: tests ${{ matrix.shard }} of ${{ strategy.job-total }}
+    needs: dist
+    if: github.event_name != 'push'
+    runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository && 'ubuntu-latest') || vars.GATES_RUNNER || 'ubuntu-latest' }}
+    timeout-minutes: 20
+    strategy:
+      # EVERY SHARD FINISHES. A failure in one says nothing about the other
+      # three, and stopping them would hide their failures until the next push.
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
 
@@ -132,9 +265,6 @@ jobs:
         with:
           node-version: '20'
 
-      # THE `test` EXTRA, which is the same list spec/requirements-ci.txt held and
-      # in the one place a tool looks for it. Editable, so `import portrayal`
-      # resolves for the tools the shell scripts run by path.
       - run: pip install -e ".[test]"
 
       # pdftoppm gates the OCR tests. Without it they SKIP, which is the one
@@ -144,54 +274,32 @@ jobs:
           command -v pdftoppm \
             || { sudo apt-get update && sudo apt-get install -y poppler-utils; }
 
-      # BUILD BEFORE PYTEST, AND THIS ORDER IS THE POINT. Four test modules -
-      # behaviour, config-scope, viewbox, state-css - skip themselves when
-      # library/dist is missing, and dist is gitignored so a fresh checkout has
-      # none. A run that tests before building reports 532 passed / 509 skipped
-      # and looks green. That happened once, on a branch that changed 14
-      # devices, and none of the rendering was exercised.
-      #
-      # publish.sh IS build.sh plus the exports, so this is one build and not
-      # two, and it leaves library/exports regenerated for the check below.
-      # --no-images: every rendered PNG under library/exports is gitignored, so
-      # CI was building 1104 pictures and throwing them away inside the step
-      # that costs a quarter of the run.
-      #
-      # NO_LINT=1 because the `lint` job runs it beside this one, and no head can
-      # merge unless that job passed. That is the second of the three lints a run
-      # used to do; the third is inside the suite and is skipped for the same
-      # reason, below.
-      - name: build and publish
-        run: NO_LINT=1 ./publish.sh --no-images
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4.3.0
+        with:
+          name: build
+          path: ${{ runner.temp }}/bundle
 
-      - name: devicelock
-        run: python3 spec/tools/portrayal/devicelock.py --library library
+      - name: unpack the build
+        run: tar -xzf "$RUNNER_TEMP/bundle/build.tgz"
 
-      # The kit is eleven ES modules that nothing checked. `node --check` is a
-      # syntax check and not a test suite, which is what the script claims;
-      # before it, a broken module surfaced only if some python test happened to
-      # shell out to the one that imports it.
-      - name: kit
-        run: cd kit && npm test
-
-      # ONE WORKER PER CORE. The suite spends most of its wall clock waiting on
-      # child processes - node for the kit tests, lint.py and render.py for the
-      # tool tests - so the parent sits idle while a core is free. Measured on
-      # this suite after the loader fix: 358s serial, 235s at -n 2, 177s at -n 4.
+      # ONE WORKER PER CORE, within each shard. The suite spends most of its wall
+      # clock waiting on child processes - node for the kit tests, lint.py and
+      # render.py for the tool tests - so the parent sits idle while a core is
+      # free. Measured on this suite after the loader fix: 358s serial, 235s at
+      # -n 2, 177s at -n 4. `auto` and not a number, because the runner decides.
+      # A self-hosted pool caps it in the runner's own .env
+      # (PYTEST_XDIST_AUTO_NUM_WORKERS), which xdist reads for `auto`.
       #
-      # `auto` and not a number, because the runner decides. A GitHub-hosted
-      # ubuntu-latest has two cores; a larger runner would use them without this
-      # line being touched. THE SELF-HOSTED POOL CAPS IT IN THE RUNNER'S OWN .env
-      # (PYTEST_XDIST_AUTO_NUM_WORKERS=4, which xdist reads for `auto`): three
-      # runners share six cores, and three jobs at `auto` put 36 workers on
-      # them - tests went from about 6 minutes alone to 13 under load.
+      # `--shard` keeps one share (spec/tools/portrayal/shards.py): whole files,
+      # and whole xdist groups, balanced by the weights `dist` fetched. The
+      # others are reported as deselected. `--shard-record` writes what this
+      # shard collected and kept, for `build` to prove the shares add up.
       #
       # PORTRAYAL_LINT_ALREADY_RAN retires the third lint of the run.
       # `test_lint_green` shells out and lints the whole library at 76s, which
-      # made it the critical path INSIDE the suite - it cannot be split, which is
-      # why parallelism flattened after two workers. It is worth its time
-      # locally and is redundant here, because the `lint` job runs beside this
-      # one and a merge needs both.
+      # made it the critical path INSIDE the suite. It is worth its time locally
+      # and is redundant here, because the `lint` job runs beside this one and a
+      # merge needs both.
       #
       # NOTHING HERE SHARES MUTABLE STATE: the only test that writes outside a
       # tmp fixture makes its own tempfile.mkdtemp(), and the library the rest
@@ -199,7 +307,7 @@ jobs:
       #
       # EVERY TEMPORARY FILE LIVES AND DIES WITH THIS JOB. pytest's default
       # basetemp is /tmp/pytest-of-<user>, and it KEEPS the last few runs'
-      # trees: on the self-hosted pool three runners share one user and one
+      # trees: on the self-hosted pool three runners shared one user and one
       # /tmp, a suite leaves gigabytes there, and on 2026-09-26 13 GB of them
       # filled the box's /tmp and failed three unrelated PRs with ENOSPC.
       # `--basetemp` under RUNNER_TEMP gives each job its own tree, which pytest
@@ -212,48 +320,107 @@ jobs:
         run: |
           set -o pipefail
           export TMPDIR="$RUNNER_TEMP/tmp"
-          mkdir -p "$TMPDIR"
+          mkdir -p "$TMPDIR" "$RUNNER_TEMP/out"
           python3 -m pytest spec/tests -q -rs -n auto \
-            --junitxml "$RUNNER_TEMP/junit.xml" \
-            --basetemp "$RUNNER_TEMP/pytest" | tee "$RUNNER_TEMP/pytest.txt"
+            --shard "${{ matrix.shard }}/${{ strategy.job-total }}" \
+            --shard-weights "$RUNNER_TEMP/bundle/shard-weights.json" \
+            --shard-record "$RUNNER_TEMP/out/record.json" \
+            --junitxml "$RUNNER_TEMP/out/junit.xml" \
+            --basetemp "$RUNNER_TEMP/pytest" | tee "$RUNNER_TEMP/out/pytest.txt"
+
+      # WHAT `build` READS, uploaded even when the suite failed - a failing
+      # shard's log is the one somebody wants. `overwrite` for a re-run.
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        if: always()
+        with:
+          name: shard-${{ matrix.shard }}
+          path: ${{ runner.temp }}/out
+          if-no-files-found: error
+          overwrite: true
+          retention-days: 7
+
+  # THE CHECK BRANCH PROTECTION REQUIRES, BY NAME. It runs whatever happened
+  # above (`!cancelled()`: a superseded run reports nothing, and its successor
+  # will) and fails unless `dist` and every shard succeeded - a skipped or
+  # failed dependency must not leave a required check green. The guards that
+  # used to follow the suite run here, over all four shards together.
+  build:
+    needs: [dist, tests]
+    if: ${{ !cancelled() && github.event_name != 'push' }}
+    runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository && 'ubuntu-latest') || vars.GATES_RUNNER || 'ubuntu-latest' }}
+    timeout-minutes: 10
+    # The same two reads as `dist`: `test time` finds an earlier run.
+    permissions:
+      contents: read
+      actions: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
+        with:
+          python-version: '3.12'
+
+      # Every shard's log, junit and record, each in its own directory.
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4.3.0
+        with:
+          pattern: shard-*
+          path: ${{ runner.temp }}/shards
 
       # The guard for the failure above, and it checks WHICH test stopped running
       # rather than how many.
       #
-      # IT CHECKS THAT THE SUITE RAN AT ALL FIRST, and that is not theoretical:
-      # the first run of this workflow had no pytest installed, so the file held
-      # one line of error text, the skip count parsed as zero, and this step
-      # reported SUCCESS. A suite that never started looked exactly like a suite
-      # with nothing skipped - the same shape of blindness the step exists to
-      # prevent, one level up.
+      # IT CHECKS THAT THE SUITE RAN AT ALL FIRST - IN EVERY SHARD - and that is
+      # not theoretical: the first run of this workflow had no pytest installed,
+      # so the file held one line of error text, the skip count parsed as zero,
+      # and this step reported SUCCESS. A suite that never started looked exactly
+      # like a suite with nothing skipped - the same shape of blindness the step
+      # exists to prevent, one level up. A shard that kept no test prints no
+      # `passed` either, and fails here too.
       #
       # THE ALLOW-LIST REPLACED A BUDGET OF FIVE. An integer is a global anyone's
       # legitimate optional test spends for everyone, and it says nothing about
       # what went quiet: `node` vanishing skips fourteen files at once and a
       # budget catches that only because fourteen happens to exceed five.
       # spec/allowed-skips.txt says which reasons are facts about the world.
+      # The shards' logs are read TOGETHER, as one run's would be: the check
+      # refuses an unlisted reason and never asks that a listed one appear, so
+      # a skip only one shard has fails nobody.
       - name: no silent skipping
         if: always()
         run: |
-          if ! grep -qE '[0-9]+ (passed|failed|error)' "$RUNNER_TEMP/pytest.txt"; then
-            echo "::error::pytest produced no summary line - the suite did not run."
-            echo "::error::A missing interpreter or package looks like a clean result here."
-            tail -20 "$RUNNER_TEMP/pytest.txt" || true
-            exit 1
-          fi
+          logs=("$RUNNER_TEMP"/shards/shard-*/pytest.txt)
+          [ -f "${logs[0]}" ] || { echo "::error::no shard left a pytest log - the suite did not run."; exit 1; }
+          for log in "${logs[@]}"; do
+            if ! grep -qE '[0-9]+ (passed|failed|error)' "$log"; then
+              echo "::error::pytest produced no summary line in $log - that shard did not run."
+              echo "::error::A missing interpreter or package looks like a clean result here."
+              tail -20 "$log" || true
+              exit 1
+            fi
+          done
+          cat "${logs[@]}" > "$RUNNER_TEMP/pytest.txt"
           python3 spec/tools/portrayal/check_skips.py "$RUNNER_TEMP/pytest.txt" spec/allowed-skips.txt
+
+      # A TEST IN NO SHARD IS A SILENT SKIP with no SKIPPED line to catch it.
+      # The split is deterministic by construction; this measures it: every
+      # shard collected the same suite, and their shares cover it exactly once.
+      - name: every test ran once
+        if: always()
+        run: python3 spec/tools/portrayal/shards.py check "$RUNNER_TEMP"/shards/shard-*/record.json
 
       # WHAT THE SUITE COST, AND WHAT THIS CHANGE ADDED TO IT. The suite grew one
       # reasonable test at a time and nothing reported it. This writes where the
       # time went to the job summary and, against the newest merged pull request's
       # run, names a new test over five seconds, a file that slowed and a total
       # that grew - with the runner's load divided out, since the same tree
-      # measures up to twice as slow on a busy machine.
+      # measures up to twice as slow on a busy machine. The shards' junit files
+      # are read together, so the record is the whole suite's, as before.
       #
       # IT FLAGS AND CANNOT FAIL THE RUN. A timing is a question for a reviewer,
       # not a reason to refuse a merge, and finding the earlier run talks to an
       # API that can be rate-limited - hence `continue-on-error`. When the suite
-      # wrote no record there is nothing to say; the step above already failed.
+      # wrote no record there is nothing to say; the steps above already failed.
       - name: test time
         if: always()
         continue-on-error: true
@@ -261,13 +428,15 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          [ -f "$RUNNER_TEMP/junit.xml" ] || exit 0
-          python3 spec/tools/portrayal/suite_times.py "$RUNNER_TEMP/junit.xml" \
+          junits=("$RUNNER_TEMP"/shards/shard-*/junit.xml)
+          [ -f "${junits[0]}" ] || exit 0
+          python3 spec/tools/portrayal/suite_times.py "${junits[@]}" \
             --out "$RUNNER_TEMP/test-times.json" \
             --fetch-base "$GITHUB_REPOSITORY" --summary "$GITHUB_STEP_SUMMARY"
 
-      # The record a LATER run compares against. Only a merged head's is ever
-      # read, but the run cannot know yet whether it will merge.
+      # The record a LATER run compares against, and the weights a later run
+      # splits by. Only a merged head's is ever read, but the run cannot know
+      # yet whether it will merge.
       #
       # `overwrite`, AND IT CANNOT FAIL THE RUN EITHER: a re-run of this job
       # finds the first attempt's artifact under the same name, and without
@@ -283,23 +452,17 @@ jobs:
           overwrite: true
           retention-days: 30
 
-      # The exports are committed and a DCIM reads them, so a stale one is a
-      # real defect rather than untidiness. publish.sh above has already
-      # regenerated them from this tree; anything left in the diff is a change
-      # somebody made without republishing. #100 merged that way and it went
-      # unnoticed for two PRs.
-      - name: exports are current
+      # THE VERDICT, LAST, so the guards above have spoken first. `needs` with
+      # `!cancelled()` runs this job after a failed build or a failed shard, and
+      # that is the only way the required check can be red for them.
+      - name: every job passed
+        if: always()
+        env:
+          DIST: ${{ needs.dist.result }}
+          TESTS: ${{ needs.tests.result }}
         run: |
-          # `git diff` SEES ONLY TRACKED FILES, so a device whose configurations
-          # produce a document that has never been committed slipped straight
-          # past this gate: publish.sh wrote four new Edgecore device types and
-          # the check reported clean, because an untracked file is not a
-          # difference to `diff`. A NEW export is exactly the case this step
-          # exists to catch - it is a document a DCIM would never receive.
-          if ! git diff --quiet -- library/exports \
-             || [ -n "$(git status --porcelain --untracked-files=all -- library/exports)" ]; then
-            echo "::error::library/exports is stale - run ./publish.sh and commit the result"
-            git --no-pager diff --stat -- library/exports
-            git status --porcelain --untracked-files=all -- library/exports
+          echo "dist: $DIST, tests: $TESTS"
+          [ "$DIST" = success ] && [ "$TESTS" = success ] || {
+            echo "::error::dist was $DIST and the test shards were $TESTS - both must succeed"
             exit 1
-          fi
+          }
