@@ -1,0 +1,102 @@
+format: 1
+kind: module
+name: xcu-drawer
+version: 1.0.0
+class: mechanical
+behaviour: fills
+profile: optical
+description: >-
+  The drawer of the Fibrain XCU10 extendable patch panel - the tray that
+  slides out of the shell on telescopic rails, carrying the four HD adapter
+  holders across its front and the splice cassettes on its floor. Captive: it
+  pulls out to full extension and stays on its rails.
+size: {w: 431.35, h: 22.2, d: 250.0}
+size-confidence: {w: estimated, h: datasheet, d: estimated}
+size-notes: >-
+  The face is the whole front of the panel, 431.35 x 22.2: the drawer's front is
+  the panel's front. 22.2 is 0.5U. The width is the span of the five latch
+  pillars (see the device's provenance.chassis). THE DEPTH IS A GUESS: the
+  panel is 284 deep and the renders of the drawer pulled out show a tray a
+  little shorter than the shell; 250 is that, unmeasured.
+attrs: {model: XCU10}
+body:
+  depth: 250.0
+  travel: 250.0
+  boxes:
+    - {id: pillar-1, at: [2.00, 1.3], size: [4.27, 18.7], from: 0, depth: 40.0, color: '#101214',
+       confidence: estimated, source: 'the post between two holders that carries the red release latch; 40 deep is a guess a little over the 37 of a holder'}
+    - {id: pillar-2, at: [106.27, 1.3], size: [6.27, 18.7], from: 0, depth: 40.0, color: '#101214',
+       confidence: estimated, source: 'the post between two holders that carries the red release latch; 40 deep is a guess a little over the 37 of a holder'}
+    - {id: pillar-3, at: [212.54, 1.3], size: [6.27, 18.7], from: 0, depth: 40.0, color: '#101214',
+       confidence: estimated, source: 'the post between two holders that carries the red release latch; 40 deep is a guess a little over the 37 of a holder'}
+    - {id: pillar-4, at: [318.81, 1.3], size: [6.27, 18.7], from: 0, depth: 40.0, color: '#101214',
+       confidence: estimated, source: 'the post between two holders that carries the red release latch; 40 deep is a guess a little over the 37 of a holder'}
+    - {id: pillar-5, at: [425.08, 1.3], size: [4.27, 18.7], from: 0, depth: 40.0, color: '#101214',
+       confidence: estimated, source: 'the post between two holders that carries the red release latch; 40 deep is a guess a little over the 37 of a holder'}
+    - {id: tray-floor, at: [2.0, 20.0], size: [427.35, 0.9], from: 38.0, depth: 212.0, color: '#1b1e21', shows: [plan],
+       confidence: estimated, source: 'sheet steel floor, thickness not stated; held clear of the shell on every side so the two do not share a surface, and started behind the holders, which carry their own bodies'}
+    - {id: splice-cassette-lower, at: [118.18, 11.1], size: [195.0, 8.9], from: 85.0, depth: 93.6, color: '#2e3135',
+       confidence: datasheet, source: 'an SCM-A-24H splice cassette, 195 x 93.6 x 8.9 on DSH_SCM_A rev 1.2 - a flat moulded tray holding two fibre storage rings and two red 12-splice holders under a clear lid. The XCU datasheet fits two, and the cassette datasheet says they stack on built-in hinges. Where the stack sits on the floor is read off the extended-drawer render and is estimated'}
+    - {id: splice-cassette-upper, at: [118.98, 4.7], size: [193.4, 6.4], from: 85.8, depth: 92.0, color: '#3a3d41', shows: [plan],
+       confidence: datasheet, source: 'the second SCM-A-24H, hinged on the first, drawn 0.8 inside it all round so the two read as two, and as the tray under its clear lid: the floor and walls to 6.4 of the 8.9, with the storage rings and splice holders standing in the rest. Its top carries the plan drawing'}
+    - {id: storage-ring-a, at: [128.18, 1.7], size: [60.0, 3.0], from: 101.8, depth: 60.0, shape: ring, axis: y, wall: 2.0, color: '#8d9399',
+       confidence: estimated, source: 'one of the two round fibre storage rings moulded into an SCM-A cassette, where slack is coiled; 60 across and where it stands are read by eye off the cassette datasheet photographs'}
+    - {id: storage-ring-b, at: [243.18, 1.7], size: [60.0, 3.0], from: 101.8, depth: 60.0, shape: ring, axis: y, wall: 2.0, color: '#8d9399',
+       confidence: estimated, source: 'the other storage ring'}
+    - {id: splice-holder-a, at: [198.68, 3.2], size: [34.0, 1.5], from: 99.0, depth: 26.0, color: '#e2443a',
+       confidence: estimated, source: 'one of the two red splice holders of an SCM-A-24H, seen through the clear lid; position and size read by eye off the cassette datasheet photographs'}
+    - {id: splice-holder-b, at: [198.68, 3.2], size: [34.0, 1.5], from: 141.0, depth: 26.0, color: '#e2443a',
+       confidence: estimated, source: 'the other red splice holder'}
+    - {id: rail-left, at: [2.0, 12.0], size: [4.0, 8.0], from: 42.0, depth: 208.0, color: '#aab0b6',
+       confidence: estimated, source: 'the bright telescopic rail down each side of the tray on the extended-drawer renders; section not stated'}
+    - {id: rail-right, at: [425.35, 12.0], size: [4.0, 8.0], from: 42.0, depth: 208.0, color: '#aab0b6',
+       confidence: estimated, source: 'as rail-left'}
+elements:
+  face: {at: [0, 0], size: [431.35, 22.2], class: bezel}
+bays:
+  slot-1:
+    at: [6.27, 0.6]
+    size: [100.0, 21.0]
+    accepts: [fibrain/xbcs0@1, fibrain/xmn1051gb@1, fibrain/xmn1041gb@1, fibrain/xmi1051ga@1, fibrain/xmi1041ga@1]
+    default: fibrain/xbcs0@1
+  slot-2:
+    at: [112.54, 0.6]
+    size: [100.0, 21.0]
+    accepts: [fibrain/xbcs0@1, fibrain/xmn1051gb@1, fibrain/xmn1041gb@1, fibrain/xmi1051ga@1, fibrain/xmi1041ga@1]
+    default: fibrain/xbcs0@1
+  slot-3:
+    at: [218.81, 0.6]
+    size: [100.0, 21.0]
+    accepts: [fibrain/xbcs0@1, fibrain/xmn1051gb@1, fibrain/xmn1041gb@1, fibrain/xmi1051ga@1, fibrain/xmi1041ga@1]
+    default: fibrain/xbcs0@1
+  slot-4:
+    at: [325.08, 0.6]
+    size: [100.0, 21.0]
+    accepts: [fibrain/xbcs0@1, fibrain/xmn1051gb@1, fibrain/xmn1041gb@1, fibrain/xmi1051ga@1, fibrain/xmi1041ga@1]
+    default: fibrain/xbcs0@1
+faces:
+  plan: {ref: fibrain/xcu-drawer-plan@1}
+provenance:
+  size: >-
+    see size-notes.
+  travel: >-
+    estimated - the datasheet says 'full extension on telescopic rails' and
+    gives no figure; the travel is taken as the drawer's own depth, itself a
+    guess.
+  slots: >-
+    estimated - four slots, each the 100 x 21 face the XM holder datasheet
+    states, between pillars 6.27 wide, centred on the height. Measured off the
+    centre-line front render of the 1U sibling XHU00; see the device.
+  accepts: >-
+    datasheet - '48xSC SX / LC DX / E2000 (4 adapter holders)'. Every Fibrain
+    holder this library models is in every slot. THE DEFAULT IS THE BLIND
+    COVER, XBCS0, the part Fibrain makes for an empty HD slot; the device's
+    orderable configurations seat the holders each variant ships with.
+  latches: >-
+    estimated - a red release latch at the top of each pillar, read 7.9 wide
+    and 8.9 tall on the render, drawn inside the pillar. Part of the drawer:
+    the empty holder's own render carries none.
+  not-drawn: >-
+    the three pull handles, which hang from the top edge in front of the
+    adapters, and the rails. See the device's gaps.
+skins: [default]

@@ -17,6 +17,7 @@ FAMILY = {
     "common/lc-duplex-v-adapter": "lc",
     "common/lc-duplex-shuttered-adapter": "lc",
     "common/sc-duplex-adapter": "sc",
+    "common/sc-simplex-adapter": "sc",
     "common/mpo-adapter": "mpo",
     "common/mpo-flange-adapter": "mpo",
     "common/mpo24-flange-adapter": "mpo",
