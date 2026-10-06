@@ -1,0 +1,117 @@
+format: 1
+kind: module
+name: nxa-pac-650w
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 650 W AC power supply of the Cisco Nexus 9300-EX fixed switches, ordered as
+  NXA-PAC-650W-PI (port-side intake, burgundy latch) or NXA-PAC-650W-PE (port-side exhaust,
+  blue latch). A bright housing with a round fan grille at the left behind a four-screw
+  guard, a FAIL and an OK lamp in a column at the far left, a pull handle standing off the
+  face beside the fan, an IEC C14 inlet turned on its side and the coloured release latch
+  at the right edge.
+size: {w: 96.8, h: 38.6}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: 'NXA-PAC-650W'
+  power-output-w: 650
+  input: ac
+  inlet: c14
+  input-voltage: '100 to 240 VAC nominal (90-132 VAC, 180-264 VAC)'
+  input-current-max: '7.6 A at 90-132 VAC, 3.65 A at 180-264 VAC'
+  efficiency: 'Climate Savers Platinum Efficiency (80Plus Platinum certified)'
+  weight-kg: 1.1
+  airflow: port-side-intake
+provenance:
+  model: >-
+    datasheet - the Cisco Nexus 93180YC-EX NX-OS Mode Hardware Installation Guide, Overview,
+    and the Nexus 9300-EX data sheet's ordering table both list the two part numbers,
+    NXA-PAC-650W-PI and NXA-PAC-650W-PE. THE AIRFLOW SUFFIX IS DROPPED from the model: the two
+    differ in the latch colour, which is this contract's `latch-finish` field and a
+    per-configuration override on the device, and in the direction the fan turns, which the
+    face does not show. NXA-PAC-650W is therefore the family and not itself an orderable
+    code.
+  power: >-
+    datasheet - the installation guide's appendix B, "650-W AC Power Supply Specifications",
+    which names both part numbers: "Maximum output power per power supply 650 W". An OUTPUT
+    rating, so `power-output-w`. The input figures on this contract are from the same table.
+    The weight is the guide's "Switch and Module Weights and Quantities" row, 2.42 lb
+    (1.1 kg).
+  size: >-
+    estimated - NO STAGED DOCUMENT STATES THIS SUPPLY'S DIMENSIONS. Searched: the
+    installation guide (the specifications table gives "Form factor RSP1" and no
+    millimetres) and the Nexus 9300-EX data sheet (weight only). The face is read off the
+    NetBox devicetype-library rear elevation of the N9K-C93180YC-EX, which is a render of
+    Cisco's own Visio stencil, scaled so the body between the ear folds is the data sheet's
+    439.4 mm (0.2686 mm per pixel across, 0.257 down). Both supply bays read the same:
+    96.9 and 96.7 wide by 38.7 tall. A stencil is a diagram symbol and the front stencil of
+    this same switch is 1.7% narrow against a photograph, so these are estimates to that
+    order. A real-unit rear photograph confirms what is on the face and its arrangement,
+    not its size.
+  elements: >-
+    estimated - positions read off the same stencil render at the same scale. The lamp
+    column, the fan with its four guard screws, the thumbscrew, the handle, the inlet and
+    the latch all appear in the same order in a photograph of a real unit (an eBay listing
+    of an N9K-C93180YC-EX with blue port-side-exhaust modules), which is what the
+    arrangement rests on.
+  lamps: >-
+    datasheet - the installation guide's appendix C, "Power Supply LEDs": an OK lamp (green,
+    flashing green) and a FAIL or FAIL/ID lamp (amber, flashing amber). The stencil and the
+    photograph both put the amber one above the green one, with a warning triangle over the
+    pair and the AC-input symbol between them.
+  latch-colour: >-
+    datasheet - the installation guide's Overview table: AC power supplies are burgundy for
+    port-side intake and blue for port-side exhaust. The hex values are taken from the
+    stencil render (burgundy) and the real-unit photograph (blue); they are colours off
+    images, not a stated finish.
+  depth: >-
+    estimated - not stated in any staged document. 185 mm is a round figure for a supply of
+    this class and nothing here measures it.
+states: [absent]
+elements:
+  fail: {at: [2.5, 11.8], size: [2.8, 2.8], class: led, states: ['off', {name: fault, color: '#f59e0b'}]}
+  ok: {at: [2.5, 27.9], size: [2.8, 2.8], class: led, states: ['off', {name: ok, color: '#22c55e'}]}
+  fan: {at: [11.6, 0.7], size: [37.2, 37.2], class: rotor}
+  handle: {at: [56.1, 1.9], size: [5.9, 35.6], class: handle}
+  latch: {at: [87.6, 9.8], size: [6.8, 19.5], class: latch}
+fields:
+  latch-finish:
+    label: Latch colour
+    type: text
+    default: '#a52a4a'
+  latch-edge:
+    label: Latch edge colour
+    type: text
+    default: '#6e1c2c'
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [62.9, 8.8], rotate: 90}
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: fan
+      vent: 24
+      confidence: estimated
+      source: >-
+        cisco/nxa-pac-650w@1's own elements key - the grille's extent is read off the stencil
+        render and the depth of the cavity behind it is not stated.
+    - node: handle
+      uhandle: 20.0
+      color: '#1b1d20'
+      confidence: estimated
+      source: >-
+        Not stated in any staged document. The real-unit photograph shows the handle as a
+        loop standing well clear of the face, enough for a strap to pass behind it; 20 mm is
+        a reading of that picture's proportions and not a measurement.
+    - node: latch
+      out: 3.0
+      confidence: estimated
+      source: >-
+        cisco/nxa-pac-650w@1's own elements key - the latch stands proud in the photograph
+        and how far is not stated.
+skins: [default]
+body:
+  depth: 185
+  color: '#c3c7cc'
+  footprint: {at: [0, 0], size: [96.8, 38.6]}
