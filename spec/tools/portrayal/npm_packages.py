@@ -383,16 +383,22 @@ RATE_LIMIT_WAITS = (60, 120, 300)
 
 
 def publish(out, state, run=subprocess.run, dry_run=False, sleep=time.sleep):
-    """`npm publish` every changed package: devices and components first, the
-    index LAST, so the index never names a version npm does not have yet.
+    """`npm publish` every changed package: updates, then new packages, and
+    the index LAST, so the index never names a version npm does not have yet.
     Returns the names published, in order.
+
+    UPDATES GO FIRST because npm's quota counts only new packages, and the
+    run stops on the first one it refuses. In name order an update that sorted
+    after that package waited a day for nothing.
 
     E429 on a package npm already holds is waited on and tried again. E429 on
     a first publish is npm's quota of new packages and stops the run at once,
     as any other failure does."""
-    changed = [n for n, s in sorted(state.items()) if s["changed"]]
-    order = [n for n in changed if n != f"{SCOPE}/index"] + \
-        [n for n in changed if n == f"{SCOPE}/index"]
+    index = f"{SCOPE}/index"
+    changed = [n for n, s in sorted(state.items()) if s["changed"] and n != index]
+    order = [n for n in changed if not state[n].get("first")] + \
+        [n for n in changed if state[n].get("first")] + \
+        ([index] if state.get(index, {}).get("changed") else [])
     for name in order:
         cmd = ["npm", "publish"] + (["--dry-run"] if dry_run else [])
         for wait in RATE_LIMIT_WAITS + (None,):

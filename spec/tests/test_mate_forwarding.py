@@ -179,6 +179,12 @@ SHALLOW_BY_DESIGN = {
     # same reason.
     "common/mpo16-adapter/v1/contract.yaml":
         "raised flange; the composed aperture's own cavity is the recess",
+    # one SC opening in one raised body, so - unlike the duplex adapter, whose
+    # two openings forward nothing - it presents `sc` itself. Same reading as
+    # the MPO tiles: a `size.d` here would carve a pit behind the whole
+    # 9.4 x 12.8 body, and std/sc-bore@1's own cavity is the recess.
+    "common/sc-simplex-adapter/v1/contract.yaml":
+        "raised body; the composed aperture's own cavity is the recess",
 }
 
 

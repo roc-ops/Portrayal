@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1259 component majors in 27 namespaces.
+1273 component majors in 28 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -58,7 +58,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/rj45@2` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 72 | 57 | RJ45 modular jack HOUSING - the 15.8 x 13.2 plastic face a plug enters, with the 8P8C interface recessed into… |
 | `std/rj45-ganged@2` | component | port | 12.7 × 11 × 18.6 | rj45-ganged | 77 | 27 | One cell of a shared-wall 2xN RJ45 block - the 12.7 x 11.0 face between neighbouring ports on a 13.97 pitch, … |
 | `std/saf-d-grid@1` | component | inlet | 26.8 × 19.9 × 17 | saf-d-grid | 0 | 4 | Anderson Saf-D-Grid appliance inlet - the panel cutout with the keyed coupler recessed behind it, a first-mat… |
-| `std/sc-bore@1` | component | port | 8.39 × 9 × 6 | sc-simplex-receptacle | 2 | 36 | One SC opening - the rectangular hole an SC plug's housing enters, with the key slot cut into one long wall a… |
+| `std/sc-bore@1` | component | port | 8.39 × 9 × 6 | sc-simplex-receptacle | 2 | 37 | One SC opening - the rectangular hole an SC plug's housing enters, with the key slot cut into one long wall a… |
 | `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 45 | 78 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
 | `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 91 | 93 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
 | `std/sma@1` | component | port | 6.35 × 6.35 | sma | 19 | 8 | SMA coaxial panel jack (1/4-36UNS-2B) - threaded barrel protrudes; GNSS/RF antenna input |
@@ -68,7 +68,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/vga@1` | component | port | 20.47 × 11.4 × 6.73 | hd15 | 2 | 7 | VGA video receptacle - a female high-density DE-15, fifteen contacts in three rows inside the D-subminiature … |
 | `std/xfp@1` | component | port | 19.5 × 9.7 × 61.7 | xfp | 1 | 40 | XFP cage cutout (10G pluggable) - the recommended bezel opening of the XFP MSA, the aperture an XFP cage prot… |
 
-## common/ (115)
+## common/ (116)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -163,8 +163,9 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/rj45-ganged-link@1` | component | port | 12.7 × 11 × 18.6 |  | 5 | 0 | An Ethernet RJ45 in a ganged 2xN block with ONE lamp - the std/rj45-ganged@2 cell with a single link/activity… |
 | `common/rocker-switch@1` | component | button | 21 × 15 |  | 1 | 1 | Snap-in panel rocker power switch, 21 x 15 bezel, rocker across the width - the I (on) side at the left and O… |
 | `common/sc-apc@1` | component | port | 24 × 26 |  | 1 | 0 | SC/APC fiber adapter in a molded bay (PON WAN) |
-| `common/sc-duplex-adapter@5` | component | port | 9.4 × 25.4 | sc-duplex-adapter | 0 | 10 | Panel-mount SC duplex adapter, as fitted to an FS FHD SC panel - one body carrying two SC ports STACKED verti… |
-| `common/sc-dust-cap@1` | component | cap | 8.8 × 11.45 | sc | 0 | 1 | The black dust cap FS ships in an FHD SC port - 8.8 x 11.45, with a lighter raised grip across its middle for… |
+| `common/sc-duplex-adapter@5` | component | port | 9.4 × 25.4 | sc-duplex-adapter | 0 | 11 | Panel-mount SC duplex adapter, as fitted to an FS FHD SC panel - one body carrying two SC ports STACKED verti… |
+| `common/sc-dust-cap@1` | component | cap | 8.8 × 11.45 | sc | 0 | 2 | The black dust cap FS ships in an FHD SC port - 8.8 x 11.45, with a lighter raised grip across its middle for… |
+| `common/sc-simplex-adapter@1` | component | port | 9.4 × 12.8 |  | 0 | 8 | Panel-mount SC simplex adapter - one flangeless body carrying one SC port, a real SC opening (std/sc-bore@1) … |
 | `common/screw-head@1` | component | screw | 3.6 × 3.6 × 0.7 |  | 82 | 9 | Generic countersunk screw head (decorative fastener) |
 | `common/serial-symbol@1` | component | silkscreen | 7.2 × 2.6 |  | 2 | 0 | The IOIOI mark printed beside a serial port - alternating bars and rings, which is how a vendor says "this on… |
 | `common/seven-segment-dual@1` | component | display | 17.4 × 12.1 |  | 2 | 0 | Two-digit seven-segment status display behind one window - the code readout an Accton/Edgecore faceplate prin… |
@@ -761,6 +762,24 @@ aperture when it is a bare opening - never both at one position. The README's
 | `edgecore/fan-2u-1x1sn@1` | module | fan | 81.6 × 81.2 |  | 3 | 7 | Edgecore's FAN-2U-1x1SN rear fan tray - a near-square 2RU tray, honeycomb across its whole face, one 80 mm ro… |
 | `edgecore/filter-slot-5915@1` | module | filter | 27.6 × 43.2 |  | 1 | 1 | The air-filter slot cover on the AS5915 cell-site gateways - the blanking plate that ships in the filter bay … |
 | `edgecore/filter-slot-5915-16x@1` | module | filter | 19 × 42.5 |  | 1 | 0 | The air-filter slot cover on the AS5915-16X - the blanking plate in the filter bay at the left-hand end of th… |
+
+## fibrain/ (13)
+
+| ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
+|---|---|---|---|---|---|---|---|
+| `fibrain/xbcs0@1` | module | blank | 100 × 21 × 35 |  | 0 | 1 | Fibrain XBCS0 - blind cover for an empty slot of an HD patch panel, black |
+| `fibrain/xcu-drawer@1` | module | mechanical | 431.35 × 22.2 × 250 |  | 1 | 1 | The drawer of the Fibrain XCU10 extendable patch panel - the tray that slides out of the shell on telescopic … |
+| `fibrain/xcu-drawer-plan@1` | component | mechanical | 431.35 × 250 |  | 0 | 1 | The Fibrain XCU10 drawer seen from above, front edge at the top of the drawing: the plate over the holder row… |
+| `fibrain/xcu-interior@1` | component | mechanical | 429.35 × 283 × 20.2 |  | 1 | 0 | The inside of the Fibrain XCU10's shell seen from above with its top off - the space between the side walls t… |
+| `fibrain/xcu-shell-top@1` | component | mechanical | 431.35 × 284 |  | 1 | 0 | The top of the Fibrain XCU10's outer shell - the sheet-steel cover the drawer slides out from under |
+| `fibrain/xmi1041ga@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMI1041GA - HD adapter holder, 6 SC simplex adapters (blue), single-mode |
+| `fibrain/xmi1041ga-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMI1041GA: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmi1051ga@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMI1051GA - HD adapter holder, 6 SC/APC simplex adapters (green), single-mode |
+| `fibrain/xmi1051ga-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMI1051GA: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmn1041gb@1` | module | adapter-panel | 100 × 21 × 37 |  | 1 | 1 | Fibrain XMN1041GB - HD adapter holder, 12 SC simplex adapters (blue), single-mode |
+| `fibrain/xmn1041gb-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMN1041GB: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmn1051gb@1` | module | adapter-panel | 100 × 21 × 37 |  | 1 | 1 | Fibrain XMN1051GB - HD adapter holder, 12 SC/APC simplex adapters (green), single-mode |
+| `fibrain/xmn1051gb-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMN1051GB: the same adapters that face forward, seen from behind, whose far ends take the… |
 
 ## fs/ (62)
 
