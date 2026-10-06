@@ -92,9 +92,10 @@ IFACE_TYPE = {
     # case again. NetBox has TYPE_1TE_OSFP1600 = '1.6tbase-x-osfp1600'
     # (netbox-community/netbox netbox/dcim/choices.py at 9bcfd739) and Nautobot
     # TYPE_1600GE_OSFP = '1600gbase-x-osfp' (nautobot/nautobot nautobot/dcim/choices.py
-    # at f9cdca3d); one document is written to both trees, so either slug fails the
-    # other's import. Without a row the Celestica DS6000/DS6001's 64 OSFP224 ports fell
-    # out of the exports entirely. `other` is valid in both, labelled OSFP by
+    # at f9cdca3d); an interface is written alike to both trees (they part only in
+    # height, front-port binding and nested bays), so either slug fails the other's
+    # import. Without a row the Celestica DS6000/DS6001's 64 OSFP224 ports fell out
+    # of the exports entirely. `other` is valid in both, labelled OSFP by
     # other_label(); when the two agree on a slug this becomes it.
     ("osfp", "1.6t"): "other",
     ("qsfp", "800g"): "800gbase-x-qsfpdd",  # every 800G qsfp here is std/qsfp-dd
@@ -212,8 +213,9 @@ CAGE_FAMILY = {
 # exported as 1000BASE-X, a 10G-EPON one as 10GBASE-X. The attr is named for the
 # PON flavour and carries the port count, as `sfp: 40` does.
 #
-# ONLY THE FLAVOURS BOTH TARGETS DEFINE. One document is written to both trees,
-# so a type either library refuses fails on import. InterfaceTypeChoices has all
+# ONLY THE FLAVOURS BOTH TARGETS DEFINE. An interface is written alike to both
+# trees (they part only in height, front-port binding and nested bays), so a type
+# either library refuses fails on import. InterfaceTypeChoices has all
 # six below in netbox-community/netbox (netbox/dcim/choices.py, TYPE_EPON ..
 # TYPE_NG_PON2, at 64ce9e2d) and in nautobot/nautobot (nautobot/dcim/choices.py,
 # the "PON" group, at 3edb1fca). NetBox also has `bpon`, `25g-pon` and `50g-pon`;
@@ -232,7 +234,8 @@ PON_TYPES = frozenset(t for _a, t in PON_ATTRS)
 # TYPE_100GE_SFP112 = '100gbase-x-sfp112' (netbox-community/netbox
 # netbox/dcim/choices.py at 6a009845) - but Nautobot does not: nautobot/nautobot
 # nautobot/dcim/choices.py at 38953ac3 has 400gbase-x-qsfp112 and no SFP112.
-# One document is written to both trees, so that slug would fail every Nautobot
+# An interface is written alike to both trees (they part only in height,
+# front-port binding and nested bays), so that slug would fail every Nautobot
 # import of a card carrying it - the reason `25gs-pon` has no row either.
 #
 # BUT A CARD THAT STATES `sfp112` HAS STATED ITS RATE, and leaving the row out
@@ -300,6 +303,20 @@ def pluggable_cage(ref):
     (OSFP and QSFP contain "sfp"; CFP and CXP are nobody's substring)."""
     r = (ref or "").split("@")[0]
     return r in PART_IFACE or any(f in r for f in ("sfp", "xfp", "cfp", "cxp"))
+
+
+# THE FIXED PARTS A DEVICE'S PON PORT IS DRAWN WITH. An ONT's uplink is a
+# built-in SC receptacle, which no cage family names, so `pon_port` names them.
+# A device can state `pon` on a whole group (nokia/xs-010x-r does), and a lamp
+# or a label placed in that group inherits it; the attr says what the port
+# runs, the part says whether there is a port at all (#772).
+PON_PORT_PARTS = {"std/sc-bore", "common/sc-apc"}
+
+
+def pon_port(ref):
+    """Is this ref a part a PON flavour can be the type of - a pluggable cage,
+    as on a card, or one of the fixed receptacles above?"""
+    return pluggable_cage(ref) or (ref or "").split("@")[0] in PON_PORT_PARTS
 
 
 def proprietary_link(part_attrs):
@@ -1256,8 +1273,9 @@ def device_port_type(p, a, group_role, names=None):
     # An ONT's uplink is a built-in SC/APC ferrule, not a cage, so iface_type
     # has no family to read and the port never typed: the box exported with
     # its LAN jack and without the port it exists for. The flavour is the
-    # device's own word, and only the ones both targets define count.
-    if not link and a.get("pon") in PON_TYPES:
+    # device's own word, and only the ones both targets define count - on a
+    # part that is a port, and not on whatever else sits in the group.
+    if not link and a.get("pon") in PON_TYPES and pon_port(p["ref"]):
         return a["pon"], None, None
     t = "other" if link else iface_type(p, a, group_role)
     if t is None:                      # unknown combination: skip, do not guess
@@ -2144,12 +2162,42 @@ def for_target(doc, target, fibre_map=None):
             raise NotExpressible(
                 f"{who}: rear port {rear} carries {len(sharing)} front ports, one of them "
                 f"on several positions. Nautobot has no spelling for that")
+        # ONE POSITION ONLY WHEN THE ONE FRONT PORT IS THE WHOLE OF BOTH CONNECTORS:
+        # as wide as the rear port, with one row per fibre that pairs every
+        # position of its own with every position of the rear's. That collapse is
+        # a coarser statement and a true one. Anything less - one front fibre on
+        # two rear positions, a 2-wide front on positions 5-6 of a twelve - would
+        # say the whole rear connector passes through a port that carries part of it.
+        front = next(p for p in fronts if p["name"] == sharing[0])
+        legs = bound[sharing[0]][1]
+        width = front.get("positions") or 1
+        every = set(range(1, width + 1))
+        if (width != (rears[rear].get("positions") or 1) or len(legs) != width
+                or {leg.get("rear_position") for leg in legs} != every
+                or {leg.get("front_position") for leg in legs} != every):
+            raise NotExpressible(
+                f"{who}: front port {front['name']} is not the whole of rear port {rear}, "
+                f"fibre for fibre. Nautobot binds a front port to one rear position, and "
+                f"one position for the whole connector would not be true")
         rears[rear]["positions"] = 1
 
     taken = {}
     for port in fronts:
         rear, legs = bound[port["name"]]
-        position = 1 if rear in whole_connector else legs[0]["rear_position"]
+        if rear in whole_connector:
+            position = 1
+        else:
+            # A ONE-FIBRE FRONT PORT NAMES ITS POSITION, and it has to be one the
+            # rear port has. A missing row field wrote `rear_port_position: null`
+            # and an out-of-range one a position past the end; Nautobot refuses
+            # both, and they would be committed looking right.
+            position = legs[0].get("rear_position")
+            positions = rears[rear].get("positions") or 1
+            if (isinstance(position, bool) or not isinstance(position, int)
+                    or not 1 <= position <= positions):
+                raise NotExpressible(
+                    f"{who}: front port {port['name']} reaches {rear} position "
+                    f"{position!r}, and {rear} has positions 1..{positions}")
         if taken.setdefault((rear, position), port["name"]) != port["name"]:
             raise NotExpressible(
                 f"{who}: front ports {taken[(rear, position)]} and {port['name']} both reach "

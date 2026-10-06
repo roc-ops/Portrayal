@@ -264,7 +264,7 @@ export function cavitySeatsOn(c, o, eps = 0.01) {
     && c.x + c.w <= o.x + o.w + eps && c.y + c.h <= o.y + o.h + eps;
 }
 
-// TILTED FACETS (docs/superpowers/specs/2026-09-24-tilted-facets-design.md). A part
+// TILTED FACETS (docs/tilted-facets-design.md). A part
 // `on` a facet is drawn foreshortened in the face art; here it is built at its TRUE
 // size, flat, and then carried onto the facet plane by one matrix. Face mm, y down,
 // z out. Pure, so it is checked under node.
@@ -2068,7 +2068,7 @@ export async function extractRelief(url, scope, {back = false} = {}) {
   applyPulled(svg, scope);
   for (const el of [...q("[data-portrayal-pulled]")]) el.remove();
   const {inv, mmRect, shared, liftOf, ownerOf, nodeSvg} = nodeTools(svg, {back});
-  // TILTED FACETS (docs/superpowers/specs/2026-09-24-tilted-facets-design.md).
+  // TILTED FACETS (docs/tilted-facets-design.md).
   // A node under a `[data-tilt-on]` group is measured foreshortened; it is
   // unprojected here to its true size about its part's anchor, and the builder
   // carries it onto the facet plane with tiltFrame. Nothing below runs for a
@@ -2662,7 +2662,7 @@ export async function buildFaceRelief(F, ctx) {
     const LX = (x, w) => (F.flipLX ? -1 : 1) * (x + w / 2 - fw / 2);
     const LY = (y, h) => (F.flipLY ? -1 : 1) * (fh / 2 - (y + h / 2));
     // A PART ON A FACET IS BUILT FLAT, AT ITS TRUE SIZE, IN A GROUP WHOSE
-    // MATRIX IS ITS TILT FRAME (docs/superpowers/specs/2026-09-24-tilted-facets-design.md;
+    // MATRIX IS ITS TILT FRAME (docs/tilted-facets-design.md;
     // tiltGroupIn). The matrix is fixed: a FRU's pull moves its own group along
     // local z, which in here is the facet's normal.
     const tiltGroupFor = (t, parent) =>

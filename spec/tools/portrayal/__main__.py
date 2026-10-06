@@ -42,7 +42,9 @@ GATES = {
     "lock": ("python", ["-m", "portrayal.devicelock", "--library", "library"]),
     "build": ("script", ["./build.sh"]),
     "publish": ("script", ["./publish.sh"]),
-    "test": ("python", ["-m", "pytest", "spec/tests", "-q"]),
+    # -n auto, as CI runs it: serially the suite takes three times as long, and
+    # pytest-xdist is already in the `[test]` extra (#659).
+    "test": ("python", ["-m", "pytest", "spec/tests", "-q", "-n", "auto"]),
 }
 
 

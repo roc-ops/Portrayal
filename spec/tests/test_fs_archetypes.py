@@ -160,7 +160,7 @@ SC = "fs/fhd-1mtp12-sc-os2-a/v3"
 def test_the_sc_cassette_is_the_first_user_of_the_sc_adapter():
     """`common/sc-duplex-adapter@5` was measured and then composed by nothing.
 
-    Its 13.0 pitch floor has never been checked against a real layout, because
+    Its pitch floor had never been checked against a real layout, because
     L81 reads `conforms` off a composed part and nothing composed it.
     """
     c = contract(SC)
@@ -170,40 +170,37 @@ def test_the_sc_cassette_is_the_first_user_of_the_sc_adapter():
 
 
 def test_the_sc_adapters_are_the_first_real_check_of_the_registry_floor():
-    """L81 checks a UNIFORM composed pitch against the registry floor - this
-    one is not uniform, and that is the finding, not a bug in this test.
+    """The registry floor is the MINIMUM of the gaps it was measured from,
+    and the first real cassette composed from that same render clears it.
 
     The six centres are 57058.main.jpg's own render, the same image
-    common/sc-duplex-adapter@5's pitch floor (13.0, `pitch-kind: floor`) was
-    set from. Reproducing them here for the first real cassette shows the
-    floor is the MEAN of five noisy gaps (12.73-13.24 on the plate's true
-    edge, 12.71-13.22 as first measured off its rounded corner), not their
-    minimum: the narrowest gap sits 0.27 under it. Lint stays clean not because the
-    gaps are irregular but because the contract carries a
-    `provenance.pitch-note`: L81 returns before it ever looks at a gap once
-    that key is present at all - the documented escape hatch for a part that
-    really does violate its standard's pitch. (The uniform-pitch branch
-    further down, `if len(set(gaps)) != 1: continue`, would also skip these
-    irregular gaps, but it is never reached here to say so.) The raw number
-    is still worth pinning here rather than only in prose. See the
-    contract's `provenance.pitch-note` and task-5-report.md for why the
-    placement is not widened to hide it.
+    common/sc-duplex-adapter@5's pitch floor (`pitch-kind: floor`) was set
+    from. Until #245 that floor was 13.0, the MEAN of five noisy gaps
+    (12.71-13.22 as first measured off the plate's rounded corner,
+    12.73-13.24 on its true edge), and the cassette carried a
+    `provenance.pitch-note` excusing itself for undercutting it. A floor is a
+    minimum: it is now 12.71, the narrowest gap, so the cassette's gaps sit
+    at or above it and the note is gone. L81 still reads only a uniform
+    pitch, so this pins the irregular one here.
     """
     from portrayal import lint as L
     L.STANDARDS.update(
         L.load_yaml(ROOT / "spec/schemas/standards.yaml")["standards"])
-    assert L.STANDARDS["sc-duplex-adapter"]["pitch"] == 13.0
+    std = L.STANDARDS["sc-duplex-adapter"]
+    assert std["pitch-kind"] == "floor"
+    assert std["pitch"] == 12.71
     c = contract(SC)
+    assert not (c.get("provenance") or {}).get("pitch-note"), \
+        "the cassette no longer undercuts the floor, so it owes no pitch-note"
     xs = sorted(float(p["at"][0]) for p in c["parts"]
                 if p["ref"] == "common/sc-duplex-adapter@5")
     gaps = [round(xs[i] - xs[i - 1], 2) for i in range(1, len(xs))]
     assert len(set(gaps)) > 1, \
         f"expected the render's own measurement noise, got a uniform {gaps}"
     assert min(gaps) == 12.73, gaps
-    assert min(gaps) < 13.0, (
-        "the registry floor is a rounded MEAN of these same five gaps, not "
-        f"their minimum - {min(gaps)} is honestly narrower than it, and "
-        "task-5-report.md records that as a finding about the standard")
+    assert min(gaps) >= std["pitch"], (
+        f"the registry floor {std['pitch']} is the narrowest gap of the "
+        f"render these placements come from - {min(gaps)} undercuts it")
 
 
 def test_the_sc_front_ports_type_as_sc():

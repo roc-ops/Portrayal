@@ -1,6 +1,6 @@
 # Fibre positions you can point at
 
-Status: proposed 2026-09-23.
+Status: agreed 2026-09-23; implemented.
 
 ## The problem
 
@@ -155,16 +155,6 @@ tested the way `test_projected_rows_js.py` tests the tree rules.
   is unaffected by the rename.
 - Directional parts: transceivers keep `tx`/`rx`; PPM modules carry their
   direction in their paths.
-- Applying swaps to faces that are not on screen. That is a separate change
-  already in progress, and this work merges after it.
+- Applying swaps to faces that are not on screen, which is a separate change.
 - 3D far-end marking, and selecting a rear fibre in 3D without haloing the
   whole cassette (roc-ops/Portrayal#534).
-
-## Delivery
-
-Two pull requests, each merged only after the swap-on-other-faces change:
-
-1. **Library**: position nodes, the rename and its majors, `class: fibre`, the
-   lint rule and census, rebuilt dist and locks.
-2. **Kit**: rear slot rows, readable labels, fibre-path marking and the
-   inspector link.

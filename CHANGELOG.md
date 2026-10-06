@@ -35,6 +35,13 @@ names the ref that replaces it.
   `passive` profile for rack furniture, which owes only its weight. A
   `passive` device is exported to DCIM though it has no interfaces, console
   or bays. Design note: `docs/cable-managers-design.md`.
+- Lint L128, on devices and listings: a `part-numbers` key has no stray
+  whitespace. Whitespace other than a plain space (NBSP, a tab, a zero-width
+  space) and leading or trailing whitespace are errors; a space splitting a
+  run of capitals and digits between two hyphens (`9716-32D-O-A C-F-UK`,
+  #720) is a warning a device can waive. Keys that mean their spaces, such
+  as `AS7535-28XB-O-AC-F V2` and `7750 SR-12 (pre-2016 chassis)`, pass, and
+  nothing in the library raises it (roc-ops/Portrayal#731).
 - Fibrain's HD adapter holders for LC, and the multimode SC ones: ten LC
   duplex holders (`fibrain/xmi1021ca`, `-da`, `-ha`, `-ga` and `xmi1031ga`
   with 6 adapters; `xmn1021cb`, `-db`, `-hb`, `-gb` and `xmn1031gb` with 12)
@@ -446,6 +453,11 @@ names the ref that replaces it.
   bay and no cage of any view claims such a key, so no view was named, the
   face was never rewritten and the occupant showed in 2D only, with no
   warning. Every view is rewritten for such a key (#814).
+- `@portrayal/kit`: the README's links to the Portrayal README and to the
+  artifact contract are absolute GitHub URLs, so they work on the npm package
+  page, where a relative link resolved against npmjs.com and broke. The
+  package also names its `homepage` and where to report `bugs`. Both reach
+  npm with the next kit release (#716).
 
 ### Changed
 - `relief.profile` and `profile-y` now move with `out` when their part stands
@@ -456,6 +468,31 @@ names the ref that replaces it.
 - `chassis.ru` also means the rack units a `rack-face` part's ears span, not
   only units occupied; L125 asks a `rack-face` device for `ru`, and L43 (ears
   are not drawn) stands down for it.
+- **The Nautobot export stops on a front port it cannot state truly**, instead
+  of writing it: a one-fibre front port whose `rear_position` is missing or
+  outside its rear port's positions, and a front port collapsed to one
+  position that is not the whole of its rear connector, fibre for fibre. No
+  export in the library changes (roc-ops/Portrayal#771).
+- **A device's `pon` flavour types only a port**: an SC receptacle or a
+  pluggable cage. A lamp or label in a group that states `pon` no longer
+  exports as a second PON interface. No export in the library changes
+  (roc-ops/Portrayal#772).
+- Lint L39 counts a lamp as punched when the holes over it together cover
+  more than half of it, not only when one hole does, and a lamp whose part
+  declares several windows also when the holes cover more than half of those
+  windows. A lamp seen through several windows could not be covered before,
+  however honestly they were punched. `expand.py` still punches a lamp
+  automatically only when its part declares one opening.
+  `edgecore/ais800-32d` (1.1.0) punches its 128 lane windows as round
+  cutouts (`led-port-N-lane-K`) and drops the L39 waiver it carried for
+  want of this (roc-ops/Portrayal#395).
+- `spec/schemas/standards.yaml`: the `sc-duplex-adapter` pitch floor is
+  12.71, the narrowest of the five gaps it was measured from, not 13.0, their
+  mean. L81 now accepts an evenly spaced SC adapter panel at 12.71 or wider,
+  where it used to refuse anything under 13.0. `fs/fhd-1mtp12-sc-os2-a@3`
+  (3.0.2) no longer undercuts the floor and drops the `pitch-note` that said
+  it did; the seven FS FHD enclosures that seat it take a patch
+  (roc-ops/Portrayal#245).
 - **BREAKING for DCIM data already imported.** Telco Systems is listed as
   `BATM/Telco Systems`, the name the vendor asks to be listed under. The
   `manufacturer` of its fourteen devices changes, and with it every one of its

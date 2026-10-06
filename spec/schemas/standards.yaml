@@ -709,23 +709,27 @@ standards:
       face-on render of SKU 57058 (an FHD SC duplex adapter panel face),
       scaled on the 108.97 mm FHD module width and validated against the
       35.05 mm height to 0.57%.
-    pitch: 13.0
+    pitch: 12.71
     pitch-confidence: measured
     pitch-kind: floor
     pitch-kind-note: >-
-      13.0 is measured off 57058's six adapters (centres 20.51, 33.22, 46.35,
-      59.31, 72.28, 85.50; pitches 12.71-13.22, mean 13.00). Those centres
-      count from panel_measure's x0 as it then stood, on the plate's rounded
-      corner 1.53 mm inboard of its edge, and on a scale 0.16% short; in the
+      12.71 is the NARROWEST of the five gaps between 57058's six adapters
+      (centres 20.51, 33.22, 46.35, 59.31, 72.28, 85.50; pitches 12.71,
+      13.13, 12.96, 12.97, 13.22, mean 13.00). Those centres count from
+      panel_measure's x0 as it then stood, on the plate's rounded corner
+      1.53 mm inboard of its edge, and on a scale 0.16% short; in the
       corrected frame fs/fhd-1mtp12-sc-os2-a@3 carries they are 22.06 to
-      87.15, pitches 12.73-13.24, mean 13.02. The 13.0 floor stands. These bodies do
-      NOT abut: each is 9.32-9.49 wide, so a 13.0 pitch leaves a real 3.6 mm
-      gap visible in the render - pitch and body width are two distinct
-      measured numbers here. mpo-adapter's entry cannot be compared this way
+      87.15, pitches 12.73-13.24, mean 13.02. The floor takes the lower of
+      the two minima, 12.71, because the hardware demonstrably sits there.
+      Until Portrayal#245 this entry recorded the MEAN, 13.0, as its floor,
+      which the narrowest gap of its own source undercut by 0.29. These
+      bodies do NOT abut: each is 9.32-9.49 wide, so a 12.71 pitch leaves a
+      real 3.3 mm gap visible in the render - pitch and body width are two
+      distinct measured numbers here. mpo-adapter's entry cannot be compared this way
       at all: 35510 shows one continuous faceplate with apertures punched
       through it, no discrete adapter body visible to measure a width for, so
       there is no second number there to set a gap against. That gap here
-      means 13.0 is not a physical minimum - a layout could in principle sit
+      means 12.71 is not a physical minimum - a layout could in principle sit
       tighter, right down toward the 9.4 body width - but nothing in this
       corpus shows anyone doing that, and IEC 61754-4 does not fix a panel
       pitch at all. Recorded as a floor rather than a target because there is
@@ -752,7 +756,8 @@ standards:
       `optical.positions: 2` on common/sc-duplex-adapter means this, and its
       skin draws the pair stacked.
       THE PITCH IS THE ONLY FIGURE THIS ENTRY STILL HOLDS, AND IT IS THE
-      STRONG HALF: 13.0 is a five-gap measurement (spread 0.51) off 57058's
+      STRONG HALF: 12.71 is the narrowest of a five-gap measurement (spread
+      0.51) off 57058's
       six adapters, detected by the blue flange each carries across its top
       rather than by paleness - unlike 35510's pale MTP interiors, 57058's
       adapters are dark grey with a bright blue flange, so `openings()`
