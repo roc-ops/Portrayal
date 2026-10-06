@@ -423,3 +423,51 @@ def test_a_vendor_cannot_take_the_names_the_skins_use(tmp_path):
     cfg.write_text(cfg.read_text().replace("box-2", "acme"))
     with pytest.raises(SystemExit, match="two packages are named @portrayal/components-acme"):
         _build(tmp_path, dist)
+
+
+# ---- an update never waits behind npm's quota of new packages (#526) -------------
+
+class _Quota(_Npm):
+    """An npm that takes any update and refuses every package it does not hold."""
+    def __init__(self, held):
+        super().__init__(held)
+
+    def __call__(self, cmd, cwd=None, **kw):
+        if cmd[1] == "publish":
+            name = json.loads((pathlib.Path(cwd) / "package.json").read_text())["name"]
+            if name not in self.held:
+                class R:
+                    returncode, stdout, stderr = 1, "", "npm error code E429"
+                return R()
+        return super().__call__(cmd, cwd=cwd, **kw)
+
+
+def test_updates_are_published_before_any_new_package(tmp_path):
+    """In name order, 13 updates sat behind the new package the quota refused
+    on 6 October and went out a day late. npm does not count an update, so
+    every update goes first and only new packages are left to wait."""
+    first, _ = _build(tmp_path, _dist(tmp_path))
+    # npm holds box-2 only; box-2 then moves, and sorts AFTER the new box-1
+    held = {"@portrayal/acme-box-2": first["@portrayal/acme-box-2"]}
+    dist = _dist(tmp_path)
+    (dist / "box-2.b.rear.svg").write_text("<svg>rear b, redrawn</svg>")
+    again, _ = _build(tmp_path, dist, held)
+    npm = _Quota(held)
+    with pytest.raises(SystemExit, match="E429 on a first publish"):
+        P.publish(tmp_path / "out", again, run=npm, sleep=lambda s: None)
+    assert npm.published == ["@portrayal/acme-box-2"]
+
+
+def test_the_index_follows_the_new_packages_though_npm_holds_it(tmp_path):
+    """The index names every package's version, so it follows them all. It is
+    placed by name: once npm holds it, it is an update like any other, and
+    would go out with the updates, ahead of the new package it names."""
+    first, _ = _build(tmp_path, _dist(tmp_path))
+    held = {n: s for n, s in first.items() if n != "@portrayal/acme-box-1"}
+    # box-2 moves, and box-1 arrives at a new version for the index to carry
+    dist = _dist(tmp_path, device_version="1.3.0")
+    (dist / "box-2.b.rear.svg").write_text("<svg>rear b, redrawn</svg>")
+    again, _ = _build(tmp_path, dist, held)
+    assert not again["@portrayal/index"]["first"]
+    assert P.publish(tmp_path / "out", again, run=_Npm({})) == \
+        ["@portrayal/acme-box-2", "@portrayal/acme-box-1", "@portrayal/index"]
