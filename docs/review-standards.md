@@ -64,7 +64,9 @@ list of things to do.
   a jack upside down, a module wider than its bay: find the second image and
   measure both before accepting it.
 - **What is never drawn stays undrawn:** rack ears, cable furniture, a vendor
-  logo. A logo gets a reserved `logo-zone`; a product name in plain text is
+  logo. The exception is a part that IS one: a `rack-face` part is its ears,
+  and a cable manager modelled as its own device is drawn
+  ([cable-managers-design.md](cable-managers-design.md)). A logo gets a reserved `logo-zone`; a product name in plain text is
   fine.
 - **A thing at component scale is a component.** A cover, door or filler drawn
   as bare decor is an unexplained box in the tree.

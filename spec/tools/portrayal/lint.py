@@ -208,7 +208,7 @@ RULES = {
     "L40": ("device",     "a pluggable cage says which optics run in it, and optics prose names a group that exists", "add the group's optics attrs, or fix the group name in the prose"),
     "L41": ("device",     "a bay or placement scoped to configurations names ones that exist, not all, not none", "fix `only-in`"),
     "L42": ("device",     "a silkscreen mark says what it annotates, or `chassis` for printing about the whole unit", "add `for:`"),
-    "L43": ("device",     "a front or rear view as wide as the rack face still has its ears in it", "model the body between the ear folds; record the ear extent in provenance"),
+    "L43": ("device",     "a front or rear view as wide as the rack face still has its ears in it, unless the device is a `rack-face` part, which is its ears", "model the body between the ear folds; record the ear extent in provenance"),
     "L44": ("device",     "panel decor agrees with the face: a patterned field is not buried under parts, printing does not run off the edge", "move or trim the decor"),
     "L45": ("device",     "a view at `modelled` draws something or declares itself empty", "add content, or an `empty:` sentence of 40+ characters saying where you looked"),
     "L46": ("component",  "composed parts do not collide inside the part", "move a part, or say in provenance that the layering is deliberate"),
@@ -6226,7 +6226,10 @@ def lint_device_mount(path, data):
     # A MISSING `ru` WARNS; a contradiction refuses. The one rack device left
     # without rack units is an Open Rack v3 tray, sized in a unit `ru` cannot
     # hold, and a waiver - which only a warning can take - is where it says so.
-    if bolts_to_rack and "ru" not in ch:
+    if mount == "rack-face" and "ru" not in ch:
+        warn(path, "L125", "a `rack-face` part states `ru` - the rack units its "
+                          "ears span, though it occupies none")
+    elif bolts_to_rack and "ru" not in ch:
         warn(path, "L125", "a rack device states `ru`. If this box is not racked, "
                           "say how it is installed with `chassis.mount` "
                           "(`din-rail`, `wall`, `desktop`)")

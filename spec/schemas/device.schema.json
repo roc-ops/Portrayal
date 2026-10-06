@@ -415,14 +415,14 @@
      ]
     },
     "shell": {
-     "description": "WHAT THE BODY IS MADE OF, for a part that is not a box. Absent, the chassis is a solid box and each view is one of its sides. `sheet` is bent sheet metal: the painted metal of each view is a plate `thickness` thick lying in that face of the chassis envelope, and whatever a view leaves unpainted is open air. A view that is not declared contributes nothing. It is relief and not CAD - a swept arm is drawn as the flat gusset its side view shows. L127 holds it to `thickness`.",
+     "description": "WHAT THE BODY IS MADE OF, for a part that is not a box. Absent, the chassis is a solid box and each view is one of its sides. `sheet` is bent sheet metal: the views are drawn with no housing filled in behind them, and they are ELEVATIONS - in 3D nothing is built from the six faces, because a front view of a tray shows ears and rings that do not lie in the front plane. The solid is what the views' parts build: the floor of a well, which in a sheet body has nothing round it, and whatever stands on that floor or proud of a face. L127 holds it to `thickness`.",
      "enum": [
       "sheet"
      ]
     },
     "thickness": {
      "type": "number",
-     "description": "millimetres, the gauge of a `shell: sheet` body. Stated only with it (L127)."
+     "description": "millimetres, the gauge of a `shell: sheet` body, as its datasheet states it. A fact about the part and not an instruction to the drawing: each plate's thickness in 3D is its own part's relief. Stated only with `shell: sheet` (L127)."
     },
     "weight-kg": {
      "type": "number"

@@ -143,13 +143,11 @@ export function openFrameFaces(texts) {
 
 // A SHEET BODY IS NOT A BOX (docs/cable-managers-design.md section 4). Its
 // faces paint only their metal, and viewer3d shows the rest as open air. This
-// answers the one question viewer3d asks, and answers "box" for everything it
+// answers the one question viewer3d asks, and answers no for everything it
 // does not recognise: an index from before the key, or a shell value from a
 // newer build, draws as the solid box it always was - wrong, and visible.
 export function sheetShell(chassis) {
-  if (!chassis || chassis.shell !== 'sheet') return {sheet: false, thickness: 0};
-  const t = Number(chassis.thickness);
-  return {sheet: true, thickness: t > 0 ? t : 1.5};
+  return !!chassis && chassis.shell === 'sheet';
 }
 
 // WHERE A PROUD FEATURE STARTS: the summed lift of what it stands in, so a
@@ -159,12 +157,6 @@ export function sheetShell(chassis) {
 export function standsFrom(o) {
   const z = Number(o && o.lift);
   return Number.isFinite(z) ? z : 0;
-}
-
-// A FACE THE DEVICE DOES NOT DRAW is a plain side of a box - and, on a sheet
-// body, nothing at all: an undeclared face of a tray is open air.
-export function missingFaceFill(sheet) {
-  return sheet ? null : '#3a3f44';
 }
 
 // A VENT IS SEEN FROM BOTH SIDES OF THE SHEET. A face's vents are paint on its
@@ -2619,8 +2611,7 @@ export async function buildFaceRelief(F, ctx) {
       const cv0 = document.createElement('canvas');
       cv0.width = Math.round(fw * PX); cv0.height = Math.round(fh * PX);
       const c0 = cv0.getContext('2d');
-      const fill0 = missingFaceFill(!!ctx.sheet);
-      if (fill0) { c0.fillStyle = fill0; c0.fillRect(0, 0, cv0.width, cv0.height); }
+      c0.fillStyle = '#3a3f44'; c0.fillRect(0, 0, cv0.width, cv0.height);
       faceCv[F.view] = cv0;
       return;
     }

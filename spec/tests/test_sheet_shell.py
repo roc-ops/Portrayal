@@ -48,9 +48,11 @@ def test_L127_a_thickness_is_a_sheet_gauge(t):
     assert findings({"chassis": {"shell": "sheet", "thickness": t}})
 
 
-def test_both_keys_are_shape_to_the_lock():
-    """They change what is solid, so adopting either is a major."""
-    assert {"shell", "thickness"} <= devicelock.CHASSIS_SHAPE
+def test_the_shell_is_shape_to_the_lock_and_its_gauge_is_not():
+    """`shell` decides whether the envelope is solid, so adopting it is a major.
+    `thickness` is a stated gauge nothing is built from, like the weight."""
+    assert "shell" in devicelock.CHASSIS_SHAPE
+    assert "thickness" in devicelock.CHASSIS_SURFACE
 
 
 # --- what the renderer hands the viewer ---------------------------------------

@@ -115,13 +115,13 @@ every side of it. The solid is built from three things the library already had:
 - **Parts standing proud of a face.** The ears are placed on the `rear` view and stand
   the sheet's thickness off it.
 
-Three things had to be put right for that:
+Two things had to be put right for that:
 
 - `uhandle` was built from the face plane whatever it stood in. It now rises from the
-  floor of the well it is in, as `out`, `cyl` and `bar` did.
+  floor of the well it is in, as `out`, `cyl` and `bar` did. The rings here ended as
+  `cyl` and `bar`, an open loop being more than one handle, so no part uses it yet.
 - `in:` sank a part's `out` to the well's floor and left its `profile` measured from the
   face the well is cut in. A profile is a height and now sinks with it.
-- A view the device does not draw was a flat grey side. On a sheet body it is open air.
 
 A well is built 2 mm short of the far face, so a tray in a 44 mm envelope is a well 42
 deep where the sheet would make it 42.5. The floor stands 0.5 mm high.
@@ -255,7 +255,7 @@ the vendor's.
 
 ## 11. Order of work
 
-1. The viewer probe for the sheet body. Done: an unpainted face is open air.
+1. The viewer probe for the sheet body. Done.
 2. `rack-face`, the sheet body, the D-ring component and `fhd-cmp5dr`.
 3. The brush pattern, pass-throughs and `cmh-4drb1u`.
 4. Guides and `cmh-sfd1u`, with the ring guide applied to the D-rings of steps 2 and 3.
@@ -286,7 +286,7 @@ Agreed 2026-10-06:
 - The brush as a pattern plus a declared pass-through.
 - Rings and ducts declared as guides; capacity recorded per device.
 - Three devices first: FHD-CMP5DR, CMH-4DRB1U, CMH-SFD1U.
-- The sheet body. The probe passed, and the thin-box fallback was not needed.
+- The sheet body. The thin-box fallback was not needed.
 
 Agreed in review of the first device, 2026-10-06:
 

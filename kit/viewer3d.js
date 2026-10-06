@@ -601,8 +601,7 @@ export function createViewer(container, opts = {}) {
                                 faceMM, wells, apertures,
                                 meshes, FRU_GROUPS, FRU_META, BODY_META, D, deep: F.deep(),
                                 bodyBoxMesh, dist: distAt, backSource,
-                                restyle: RESTYLE, scope: SCOPE,
-                                sheet: !!(devIndex && sheetShell(devIndex.chassis).sheet)});
+                                restyle: RESTYLE, scope: SCOPE});
       // a face with no drawing falls back to flat colour and contributes no group
       if (meshes.length > before) built[F.view] = meshes[meshes.length - 1];
       FACE_FLIP[F.view] = [!!F.flipLX, !!F.flipLY];
@@ -776,7 +775,7 @@ export function createViewer(container, opts = {}) {
         {color: devIndex.chassis.solid.color || '#3a3f44'});
       box = new THREE.Mesh(geo, [...mats, metal]);
       scene.add(box);
-    } else if (devIndex && sheetShell(devIndex.chassis).sheet) {
+    } else if (devIndex && sheetShell(devIndex.chassis)) {
       // A SHEET BODY HAS NO SIDES (docs/cable-managers-design.md section 4). Its
       // views are elevations - a front view shows the ears and the rings end-on,
       // and none of that metal lies in the front plane - so painting them on the
@@ -787,7 +786,6 @@ export function createViewer(container, opts = {}) {
       // and their relief are placed in.
       for (const m of mats) m.visible = false;
       box = new THREE.Mesh(new THREE.BoxGeometry(W, H, D), mats);
-      box.userData.sheet = sheetShell(devIndex.chassis);
       scene.add(box);
     } else {
       box = new THREE.Mesh(new THREE.BoxGeometry(W, H, D), mats);
