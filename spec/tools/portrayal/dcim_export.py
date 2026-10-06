@@ -561,6 +561,9 @@ PART_POWER = {
     # is not. It is where a supply's cable is landed, so the same row - on a box
     # that passes the power on instead of using it.
     "amphenol-ns/input-feed-studs": "dc-terminal",
+    # AND ITS BUSBAR FORM, on the panels whose inputs run straight back: two
+    # landings, BATTERY and RETURN, one feed. The same row for the same reason.
+    "amphenol-ns/input-feed-busbar": "dc-terminal",
     # THE XM-3352's AC SUPPLY TAKES A C5 CORD IN A CLOVERLEAF C6 INLET. `iec-60320-c6` is a
     # PowerPortTypeChoices value in both targets, as `iec-60320-c14` is.
     "telco-systems/xm3352-ac-inlet": "iec-60320-c6",
@@ -844,6 +847,10 @@ NOT_A_DCIM_PORT = {
                                    "a breaker, and this exporter writes power ports only: an "
                                    "outlet needs its feeding port and its breaker position, "
                                    "which is a design the export does not have yet",
+    "amphenol-ns/output-p40": "one connectorized output circuit of a breaker panel - a two-pole "
+                              "P40 receptacle. A power OUTLET, for the reason its screw-terminal "
+                              "sibling amphenol-ns/output-terminal gives: the exporter writes "
+                              "power ports only, and outlets are a design that is not built yet",
     "amphenol-ns/alarm-card-307608": "Form C alarm relay contacts on wire-wrap headers - dry "
                                      "contacts for an external alarm loop; neither DCIM has a "
                                      "port type for an alarm contact",
