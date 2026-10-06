@@ -1,0 +1,139 @@
+format: 1
+kind: component
+name: dc-barrel-plug
+version: 1.0.0
+class: port
+mates: dc-barrel
+conforms: barrel-plug
+profile: networking
+description: >-
+  A DC barrel power plug on its cable, at the common 5.5 mm barrel, seen from
+  the cable end as a front elevation sees it seated: the flange that stops
+  against the jack, the round grip and a short straight stub of cable whose
+  diameter is the cable-od field. Seats in a `dc-barrel` jack at its own mate
+  point; the cable leaves from the far end of the stub. It is a nominal plug
+  chosen for the library, not the plug of any one device, and it states no
+  voltage and no current.
+size: {w: 8.2, h: 8.2}
+size-confidence: {w: drawing, h: drawing}
+size-notes: both figures are the 8.2 diameter of the grip on the Same Sky PP3-002A drawing, a plug chosen to stand for the class; no device that places the jack states the size of its own plug
+attrs: {media: barrel, connector: dc-barrel}
+fields:
+  cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 4.0}
+  jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    drawing - registry `barrel-plug`. Same Sky PP3-002A data sheet
+    (09/12/2024), p.2, mechanical drawing: the cover that is the grip of the
+    plug is dimensioned 8.2 in diameter on the section view.
+  nominal: >-
+    A NOMINAL SIZE CHOSEN FOR THE LIBRARY, NOT A FIGURE FROM ANY PLACING
+    DEVICE. The library treats the DC barrel jack as one connector,
+    `dc-barrel`; barrel diameters vary by product and no document held for
+    any of the four devices that place common/dc-barrel@1 states one. This
+    plug is drawn at the common 5.5 mm barrel with a 2.1 bore, from one
+    manufacturer's drawing. Every figure below is that drawing's. THAT THIS IS
+    THE RIGHT PLUG FOR A GIVEN DEVICE IS NOT CLAIMED.
+  media: >-
+    `barrel`, and the registry key is `barrel-plug`, NOT `dc-barrel`: lint L62 reads a
+    `class: port` part's media and every `conforms:` value, with its leading
+    segment, as a connector word, and `dc` as a connector word flags every
+    `dc-in` placement id in the library.
+  rating: >-
+    NONE STATED. The voltage and current a jack is fed are attributes of the
+    placement of the jack on its device (`input-voltage`, `current-max-a`).
+    The PP3-002A is rated 20 Vdc and 6 A (p.1); that is one product's rating
+    and is not carried here.
+  no-depth: >-
+    NO `size.d`, DELIBERATELY, as on generic/usb-a-plug@1 and
+    generic/c13-plug@1. The overall length (33.5) is in the registry entry
+    and what stands in front of the jack is in the relief below, but a
+    `size.d` on a component with no `behaviour` compiles to `data-depth`, and
+    the kit builds that as a pit behind the whole box of the part.
+  orientation: >-
+    SYMMETRIC. The plug is round; a turned jack carries it round and nothing
+    changes.
+  seated-depth: >-
+    RULING - THE PLUG SEATS BY THE ENGAGEMENT ITS DRAWING GIVES, MEASURED FROM
+    THE FACE THE JACK PRESENTS. PP3-002A, p.2: the barrel is 9.5 +/-0.3 long
+    from its tip to the flange, so a seated plug has all 9.5 of the barrel in
+    the jack and its flange on the face of the jack, and of the 33.5 overall
+    33.5 - 9.5 = 24 stands in front of that face. THE JACK AS MODELLED STATES
+    NO DEPTH: common/dc-barrel@1 is drawn flat, with no relief and no
+    `size.d`, so the 9.5 of barrel has no modelled cavity to enter. Its skin
+    draws a bore 6.2 across with a pin 1.8 across, which a 5.5 barrel with a
+    2.1 bore enters with room; neither figure is sourced and nothing here is
+    taken from them. THE JACK'S DEPTH IS THE FIGURE TO ADD, and no figure
+    below moves when it is.
+  frame: >-
+    THE RELIEF IS MEASURED FROM THE LIFT THE HOST PRESENTS, the frame
+    generic/usb-a-plug@1 documents. common/dc-barrel@1 presents at its own
+    face, so 0 here is the face of the jack. The barrel is not built: it is
+    behind the face.
+  barrel: >-
+    drawing, NOT DRAWN - PP3-002A, p.2: outer barrel 5.5 +/-0.05 in diameter
+    with a 2.1 +/-0.05 bore, 9.5 +/-0.3 long. From the cable end it is wholly
+    behind the flange and, seated, wholly inside the jack.
+  flange: >-
+    drawing - PP3-002A, p.2: the flange behind the barrel is 7.8 in diameter
+    and 3 long.
+  grip: >-
+    drawing and derived - PP3-002A, p.2: the cover is 8.2 in diameter and
+    ends 33.5 from the tip of the barrel. It starts where the flange ends,
+    9.5 + 3 = 12.5 from the tip, so it is built 33.5 - 12.5 = 21 long. The
+    section view draws it with a slight taper, which is not built. IT IS A
+    SCREW-ON COVER, NOT A MOULDING: the plug of a moulded power-supply cord
+    has a grip of about this size with a strain relief moulded behind it,
+    and no moulded plug's drawing is held, so no strain relief is drawn.
+  stub: >-
+    estimated - the stub rule, docs/connectors-coax-design.md section 5: a
+    straight run of cable 30 long starting where the grip ends (24 in front
+    of the face of the jack). The bend is the installation.
+  cable-od: >-
+    drawing - PP3-002A, p.2: the cable entry in the end of the cover is
+    (4), a reference dimension, so 4.0 is the largest cable this plug takes
+    and the stub is drawn at it. No cable data sheet is held. A placement or
+    a wrapper sets the cable it actually carries.
+  jacket-colour: >-
+    a FIELD. Black is the default, as on the other cable plugs; the
+    PP3-002A's cover is black (p.2, item 5) and no held source states a
+    cable colour.
+  contacts: >-
+    NOT DRAWN, ON PURPOSE. The barrel and its centre contact are on the
+    mating end, which is in the jack. POLARITY IS NOT MODELLED: which of the
+    two is positive is the device's.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on generic/usb-a-plug@1 - every class port
+    contract states none (spec/tests/test_behaviour.py).
+  axis: >-
+    derived - `mate` and `cable` share one point, the centre of the grip
+    (4.1, 4.1): the cable runs straight through the plug.
+elements: {}
+relief:
+  features:
+    - node: flange
+      cyl: 3.0
+      color: '#c9cdd1'
+      confidence: drawing
+      source: >-
+        Same Sky PP3-002A data sheet (09/12/2024), p.2: the flange, 7.8 in
+        diameter and 3 long, on the face of the jack (provenance.seated-depth).
+    - node: grip
+      lift: 3.0
+      cyl: 21.0
+      color: '#26282b'
+      confidence: drawing
+      source: >-
+        Same Sky PP3-002A data sheet (09/12/2024), p.2: the cover, 8.2 in
+        diameter, from the flange to the 33.5 end; 21 is derived
+        (provenance.grip).
+    - node: stub
+      lift: 24.0
+      cyl: 30
+      confidence: estimated
+      source: the stub rule, docs/connectors-coax-design.md section 5
+connection-points:
+  mate: {at: [4.1, 4.1], direction: front}
+  cable: {at: [4.1, 4.1], direction: front, 'on': stub}
+skins: [default]

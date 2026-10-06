@@ -4,7 +4,7 @@ plugs that seat in them (#789, docs/connectors-dc-terminal-design.md).
 The three headers (common/terminal-header-508-2@1, common/terminal-header-508-5f@1
 and common/dc-terminal-header-6@1) each present an interface
 spec/schemas/connectors.yaml lists, so every one of them is a slot;
-generic/terminal-508-2-plug@1, generic/terminal-508-5f-plug@1 and
+generic/terminal-508-2-plug@1, generic/terminal-508-5-plug@1 and
 generic/terminal-508-6-plug@1 mate them. These run against the real library, a
 components.json the indexer builds here and device copies rendered here, never
 a possibly stale dist.
@@ -48,17 +48,17 @@ PITCH = 5.08
 STANDS = 10.0       # 22 - 12, the mated figure
 LENGTH = 18.2       # the plug, end to end
 AXIS = 10.7         # the row of poles, below the top of the plug
-WIRE_OD = 4.0
+WIRE_OD = 3.0       # H07V-K 1.5 mm2; 4.0, for 2.5 mm2, is the largest the plug takes
 GREEN = "#4fb548"
 
 P2 = "generic/terminal-508-2-plug@1"
-P5F = "generic/terminal-508-5f-plug@1"
+P5F = "generic/terminal-508-5-plug@1"
 P6 = "generic/terminal-508-6-plug@1"
 
 # interface -> (the header that presents it, the plug that mates it, positions)
 PAIRS = {
     "terminal-508-2": ("common/terminal-header-508-2@1", P2, 2),
-    "terminal-508-5f": ("common/terminal-header-508-5f@1", P5F, 5),
+    "terminal-508-5": ("common/terminal-header-508-5f@1", P5F, 5),
     "terminal-508-6": ("common/dc-terminal-header-6@1", P6, 6),
 }
 HEADER_OF = {plug: hdr for hdr, plug, _n in PAIRS.values()}
@@ -151,16 +151,22 @@ def test_each_terminal_interface_is_a_connector_citing_a_standard(iface):
     assert PAIRS[iface][1] in reg[iface]["note"]
 
 
-def test_the_flanged_header_is_an_interface_of_its_own():
-    """The manufacturer lists only flanged plugs as mates of the flanged
-    header and none of them for a plain one, so `f` is part of the key: a
-    plain five-position header, when the library draws one, is a different
-    interface."""
+def test_a_flange_is_not_part_of_the_interface():
+    """One five-position interface: the mating face, which a flanged or a
+    plain header presents and a flanged or a plain plug mates. The header
+    part keeps its `-5f` name and the plug says it is the screw-flange form,
+    because the interface does not."""
     reg = render_mod._connector_registry()
     keys = {k for k in reg if k.startswith("terminal-508-")}
     assert keys == set(PAIRS)
-    assert "terminal-508-5" not in reg
-    assert "flange" in reg["terminal-508-5f"]["note"]
+    assert "terminal-508-5f" not in reg
+    note = reg["terminal-508-5"]["note"]
+    assert "a flanged or a plain header presents" in note
+    assert "a flanged or a plain plug mates" in note
+    assert _contract("common/terminal-header-508-5f@1")["interface"] == "terminal-508-5"
+    plug = _contract(P5F)
+    assert "SCREW-FLANGE" in plug["description"]
+    assert " ".join(plug["provenance"]["flanged"].split()).startswith("THE SCREW-FLANGE PLUG")
 
 
 @pytest.mark.parametrize("iface", sorted(PAIRS))
@@ -302,6 +308,8 @@ def test_its_width_is_the_drawings(ref):
 def test_its_fields_are_the_wire_and_the_body(ref):
     f = _contract(ref)["fields"]
     assert set(f) == {"wire-od", "wire-color", "body-color"}
+    text = " ".join(_contract(ref)["provenance"]["wire-od"].split())
+    assert "3 mm" in text and "1.5 mm2" in text and "THE LARGEST WIRE IT TAKES" in text
     assert f["wire-od"] == {"label": "Wire outside diameter", "type": "number",
                             "unit": "mm", "default": WIRE_OD}
     assert f["wire-color"]["default"] == "#1c1c1c"
@@ -723,7 +731,7 @@ def _diameter(parents, stub):
 # plug placed directly, `mate-to` a real header, with a wire and a body of its
 # own. One device carries two of the three.
 OVERRIDES = [
-    (P5F, "aurcore/ais4001p", "base", "top", "power", 3.0, "#c0392b", "#2b2d30"),
+    (P5F, "aurcore/ais4001p", "base", "top", "power", 4.0, "#c0392b", "#2b2d30"),
     (P2, "aurcore/ais4001p", "base", "top", "relay", 2.4, "#2a5db0", "#d9822b"),
     (P6, "readylinks/gl-12xb-240d", "base", "rear", "dc-2", 3.4, "#b03a2e", "#1f2124"),
 ]

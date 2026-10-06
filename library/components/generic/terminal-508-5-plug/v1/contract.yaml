@@ -1,30 +1,31 @@
 format: 1
 kind: component
-name: terminal-508-5f-plug
+name: terminal-508-5-plug
 version: 1.0.0
 class: port
-mates: terminal-508-5f
-conforms: terminal-508-5f-plug
+mates: terminal-508-5
+conforms: terminal-508-5-plug
 profile: networking
 description: >-
-  A five-position screw-clamp terminal plug on a 5.08 mm pitch with a screw
-  flange at each end, wired, seen from the wire side as a front elevation sees
-  it seated: the body, a wire entry at each pole, the two flange screws and a
-  short straight stub of insulated wire leaving each of the five poles, every
-  stub the diameter of the wire-od field. Seats in a `terminal-508-5f` header
-  at its own mate point. It carries one wire per pole, not one cable.
+  A five-position screw-clamp terminal plug on a 5.08 mm pitch, the
+  SCREW-FLANGE form with a flange and a locking screw at each end, wired, seen
+  from the wire side as a front elevation sees it seated: the body, a wire
+  entry at each pole, the two flange screws and a short straight stub of
+  insulated wire leaving each of the five poles, every stub the diameter of
+  the wire-od field. Seats in a `terminal-508-5` header at its own mate point.
+  It carries one wire per pole, not one cable.
 size: {w: 35.41, h: 15}
 size-confidence: {w: drawing, h: drawing}
 size-notes: the width is the range drawing's a + 5.69 and two 4.7 flanges summed at five positions, not a figure printed for this plug; the height is the 15 the drawing dimensions
-attrs: {media: terminal-block, connector: terminal-508-5f, positions: 5, pitch-mm: 5.08}
+attrs: {media: terminal-block, connector: terminal-508-5, positions: 5, pitch-mm: 5.08}
 fields:
-  wire-od: {label: Wire outside diameter, type: number, unit: mm, default: 4.0}
+  wire-od: {label: Wire outside diameter, type: number, unit: mm, default: 3.0}
   wire-color: {label: Wire colour, type: text, default: '#1c1c1c'}
   body-color: {label: Body colour, type: text, default: '#4fb548'}
 unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
 provenance:
   size: >-
-    drawing - registry `terminal-508-5f-plug`. Phoenix Contact MSTB
+    drawing - registry `terminal-508-5-plug`. Phoenix Contact MSTB
     2,5/16-STF-5,08 data sheet (order no. 1778124), the dimensional drawing of
     the MSTB 2,5/..-STF range, p.7: the body is a + 5.69 wide with a flange
     4.7 wide at each end, and 15 high. At five positions a is 20.32 (four
@@ -47,6 +48,16 @@ provenance:
     this mates lists as a mate. The same range has plugs with the wires
     entering across the plugging direction (MVSTBR and MVSTBW); they are other
     bodies and are not this part.
+  flanged: >-
+    THE SCREW-FLANGE PLUG, and it says so because the interface does not.
+    `terminal-508-5` is the five-position mating face on a 5.08 mm pitch,
+    which a flanged or a plain header presents and a flanged or a plain plug
+    mates. This part is the flanged plug because the one five-position header
+    the library places, common/terminal-header-508-5f@1, is flanged, and its
+    data sheet lists flanged plugs as its mates. Seated in a plain
+    five-position header, its two flange screws would have nothing to turn
+    into; a plain five-position plug is a different part that mates the same
+    interface and is not drawn yet.
   orientation: >-
     DRAWN IN THE UNROTATED CONVENTION OF THE HEADER,
     common/terminal-header-508-5f@1: THE BOARD SIDE OF THE HEADER DOWN, so the
@@ -131,14 +142,14 @@ provenance:
     sheet) is not built. EVERY POLE IS DRAWN WIRED: an unwired pole is not
     expressible in this part.
   wire-od: >-
-    datasheet - 4 mm: the approximate outside diameter the Waskoenig+Walter
-    H07V-K data sheet (status 05.10.2026), p.2, lists for 2.5 mm2, the nominal
-    cross section of the plug and the largest conductor it takes (0.2 to 2.5
-    mm2, AWG 24 to 12, Phoenix Contact MSTB 2,5/16-STF-5,08 data sheet (order
-    no. 1778124), the dimensional drawing of the MSTB 2,5/..-STF range). The
-    data sheet states the figure to the whole millimetre; the same table gives
-    3 for 1.5 mm2. ONE FIELD FOR ALL POLES. A placement or a wrapper sets the
-    wire it actually carries.
+    datasheet - 3 mm: the approximate outside diameter the Waskoenig+Walter
+    H07V-K data sheet (status 05.10.2026), p.2, lists for 1.5 mm2. The same
+    table gives 4 for 2.5 mm2, the nominal cross section of the plug and THE
+    LARGEST WIRE IT TAKES (0.2 to 2.5 mm2, AWG 24 to 12, Phoenix Contact MSTB
+    2,5/16-STF-5,08 data sheet (order no. 1778124), the dimensional drawing of
+    the MSTB 2,5/..-STF range). The data sheet states both figures to the
+    whole millimetre. ONE FIELD FOR ALL POLES. A placement or a wrapper sets
+    the wire it actually carries.
   wire-colour: >-
     a FIELD, one for all poles: `wire-color` paints every stub. Black is the
     default as on the cable plugs; no held source states a colour. A COLOUR

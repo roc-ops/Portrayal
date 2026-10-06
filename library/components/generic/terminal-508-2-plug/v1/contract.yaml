@@ -18,7 +18,7 @@ size-confidence: {w: drawing, h: drawing}
 size-notes: the width is the drawing's a + 5.08 with the a the data sheet tabulates; the height is the 15 the drawing dimensions
 attrs: {media: terminal-block, connector: terminal-508-2, positions: 2, pitch-mm: 5.08}
 fields:
-  wire-od: {label: Wire outside diameter, type: number, unit: mm, default: 4.0}
+  wire-od: {label: Wire outside diameter, type: number, unit: mm, default: 3.0}
   wire-color: {label: Wire colour, type: text, default: '#1c1c1c'}
   body-color: {label: Body colour, type: text, default: '#4fb548'}
 unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
@@ -117,12 +117,12 @@ provenance:
     sheet) is not built. EVERY POLE IS DRAWN WIRED: an unwired pole is not
     expressible in this part.
   wire-od: >-
-    datasheet - 4 mm: the approximate outside diameter the Waskoenig+Walter
-    H07V-K data sheet (status 05.10.2026), p.2, lists for 2.5 mm2, the nominal
-    cross section of the plug and the largest conductor it takes (0.2 to 2.5
-    mm2, AWG 24 to 12, Phoenix Contact MSTB 2,5/ 2-ST-5,08 data sheet (order
-    no. 1757019, 28.01.2005)). The data sheet states the figure to the whole
-    millimetre; the same table gives 3 for 1.5 mm2. ONE FIELD FOR ALL POLES. A
+    datasheet - 3 mm: the approximate outside diameter the Waskoenig+Walter
+    H07V-K data sheet (status 05.10.2026), p.2, lists for 1.5 mm2. The same
+    table gives 4 for 2.5 mm2, the nominal cross section of the plug and THE
+    LARGEST WIRE IT TAKES (0.2 to 2.5 mm2, AWG 24 to 12, Phoenix Contact MSTB
+    2,5/ 2-ST-5,08 data sheet (order no. 1757019, 28.01.2005)). The data sheet
+    states both figures to the whole millimetre. ONE FIELD FOR ALL POLES. A
     placement or a wrapper sets the wire it actually carries.
   wire-colour: >-
     a FIELD, one for all poles: `wire-color` paints every stub. Black is the

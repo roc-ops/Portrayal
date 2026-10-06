@@ -649,7 +649,7 @@ def test_the_lift_census():
                     nonzero += 1
                     lifted_cages += c["kind"] == "cage"
                     if c["interface"] in ("bnc", "din-1-0-2-3", "f-type",
-                                          "terminal-508-5f", "terminal-508-2"):
+                                          "terminal-508-5", "terminal-508-2"):
                         doc = lib.resolve(_ref(d, v, c["id"]))[0]
                         want = manifest.presented_interface(
                             doc, lambda r: lib.resolve(r)[0])[2]

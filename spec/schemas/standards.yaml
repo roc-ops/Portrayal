@@ -2126,7 +2126,7 @@ standards:
       (1757051) among its mates and no flanged plug. common/dc-terminal-header-6@1
       was measured off a vendor model at 32.4 wide with a body 8.6 high, which
       is this header to within 0.1, and does not claim this entry.
-  terminal-508-5f-header:
+  terminal-508-5-header:
     registry: Phoenix Contact MSTB 2,5/ 5-GF-5,08 header with threaded flange (order no. 1776537), data sheet of Sep 27, 2023, p.3, dimensions
     w: 35.56
     h: 12.1
@@ -2137,10 +2137,12 @@ standards:
       Phoenix Contact MSTB 2,5/ 5-GF-5,08 data sheet (Sep 27, 2023), p.3:
       width 35.56, height 12.1, length 12, installed height 8.6, pitch 5.08.
     notes: >-
-      A header with a THREADED FLANGE at each end. Its data sheet lists
-      seventeen mating plugs on pp.16-25 and every one is a flanged form
-      (-STF or -STZF); the plain header's data sheet lists none of those.
-      That is why the flanged header is an interface of its own.
+      THE ONE FIVE-POSITION HEADER THE LIBRARY DRAWS, and it has a THREADED
+      FLANGE at each end. The `terminal-508-5` interface cites this entry for
+      the mating face, which a plain five-position header presents too: the
+      flanges add 5.08 at each end and change nothing between them. This
+      header's data sheet lists seventeen mating plugs on pp.16-25 and every
+      one is a flanged form (-STF or -STZF).
   terminal-508-2-plug:
     registry: Phoenix Contact MSTB 2,5/ 2-ST-5,08 plug (order no. 1757019, catalogue CC-2005 p.126), data sheet of 28.01.2005, p.4, dimensional drawing
     w: 10.16
@@ -2173,7 +2175,7 @@ standards:
       THE WIRE-SIDE BOX OF A SCREW-CLAMP PLUG, seen from the side the wires
       enter. The wires enter in line with the plugging direction and the clamp
       screws are on the top face, which this view sees edge on.
-  terminal-508-5f-plug:
+  terminal-508-5-plug:
     registry: Phoenix Contact MSTB 2,5/..-STF-5,08 plug range with screw flange, the dimensional drawing on the MSTB 2,5/16-STF-5,08 data sheet (order no. 1778124), p.7, at five positions (MSTB 2,5/ 5-STF-5,08, order no. 1778014)
     w: 35.41
     h: 15.0
@@ -2192,3 +2194,46 @@ standards:
       The five-position plug's own data sheet is not held: the range drawing
       is read at five positions. The MSTB 2,5/ 5-GF-5,08 header's data sheet
       (p.18) names MSTB 2,5/ 5-STF-5,08, 1778014, as a mate.
+  # The DC barrel jack and its plug (#789). ONE NOMINAL SIZE, CHOSEN FOR THE
+  # LIBRARY: barrel diameters vary by product, and no document held for any
+  # device that places common/dc-barrel@1 states one. Neither entry is a
+  # figure from a placing device. THE KEYS DO NOT OPEN WITH `dc`: lint L62
+  # reads every `conforms:` value and its leading segment as a connector
+  # word, and `dc` as one flags every `dc-in` placement id.
+  barrel-jack:
+    registry: a nominal size chosen for the library - the jack that takes a 5.5 mm barrel plug with a 2.1 bore, read off the Same Sky PP3-002A plug data sheet (09/12/2024), p.2
+    w: 5.5
+    h: 5.5
+    radius: 2.75
+    confidence: drawing
+    depth: 9.5
+    depth-confidence: drawing
+    source: >-
+      Same Sky PP3-002A data sheet (09/12/2024), p.2, mechanical drawing of
+      the PLUG: outer barrel 5.5 +/-0.05 in diameter with a 2.1 +/-0.05 bore,
+      9.5 +/-0.3 long to the flange. The jack is whatever admits that; no
+      jack drawing is held.
+    notes: >-
+      NOT A FIGURE FROM ANY PLACING DEVICE. The `dc-barrel` interface cites
+      this entry so that it cites something, and the library treats every DC
+      barrel jack as this one connector. common/dc-barrel@1 is drawn 12 by 13
+      from a photograph and does not claim this entry. A jack's voltage and
+      current are attributes of its placement, not of the connector.
+  barrel-plug:
+    registry: a nominal size chosen for the library - Same Sky PP3-002A DC power plug data sheet (09/12/2024), p.2, mechanical drawing
+    w: 8.2
+    h: 8.2
+    radius: 4.1
+    confidence: drawing
+    depth: 33.5
+    depth-confidence: drawing
+    source: >-
+      Same Sky PP3-002A data sheet (09/12/2024), p.2: the cover that is the
+      grip is 8.2 in diameter and the plug 33.5 long overall, of which the
+      first 9.5 +/-0.3 is the 5.5 barrel and the next 3 a flange 7.8 in
+      diameter.
+    notes: >-
+      THE END-ON BOX OF A BARREL PLUG, seen from the cable end. NOT A FIGURE
+      FROM ANY PLACING DEVICE: one manufacturer's plug at the common 5.5 mm
+      barrel, chosen to stand for the class. That it is the right plug for a
+      given device is not claimed.

@@ -53,9 +53,13 @@ interfaces:
   # docs/connectors-dc-terminal-design.md). An interface is the connector, not
   # the use: the pitch and the number of positions are in the key, and a
   # header feeding power and one carrying a relay contact are the same
-  # interface when they are the same header. A FLANGED header is an interface
-  # of its own, keyed `f`: the manufacturer lists only flanged plugs as its
-  # mates and none of them for the plain header.
+  # interface when they are the same header. NOR IS A FLANGE: an interface is
+  # the mating face, which a header presents with or without screw flanges
+  # and a plug mates with or without them, so there is one five-position key
+  # and no `f`.
   terminal-508-2: {standard: terminal-508-2-header, note: 'two-position plain pluggable header on a 5.08 mm pitch (Phoenix Contact MSTBA 2,5/..-G-5,08 and equivalents); generic/terminal-508-2-plug@1 mates it'}
-  terminal-508-5f: {standard: terminal-508-5f-header, note: 'five-position pluggable header on a 5.08 mm pitch with a threaded flange at each end (Phoenix Contact MSTB 2,5/ 5-GF-5,08 and equivalents); generic/terminal-508-5f-plug@1, a plug with screw flanges, mates it'}
+  terminal-508-5: {standard: terminal-508-5-header, note: 'the five-position mating face of a pluggable header on a 5.08 mm pitch (Phoenix Contact MSTB 2,5 and equivalents), which a flanged or a plain header presents and a flanged or a plain plug mates; generic/terminal-508-5-plug@1, the screw-flange plug, mates it, because the one header placed (common/terminal-header-508-5f@1) is flanged'}
   terminal-508-6: {standard: terminal-508-6-header, note: 'six-position plain pluggable header on a 5.08 mm pitch (Phoenix Contact MSTBA 2,5/ 6-G-5,08 and equivalents); generic/terminal-508-6-plug@1 mates it'}
+  # The DC barrel jack (#789, docs/connectors-dc-terminal-design.md). ONE
+  # INTERFACE, BY RULING: see the note.
+  dc-barrel: {standard: barrel-jack, note: 'the library treats the DC barrel jack as ONE nominal connector. Barrel diameters vary by product, and none of the documents held for the four devices that place common/dc-barrel@1 states one, so the interface claims no diameter. The rating is carried as attributes of each placement of the jack (input-voltage, current-max-a) and not by the interface. generic/dc-barrel-plug@1, drawn at the common 5.5 mm barrel, mates it'}

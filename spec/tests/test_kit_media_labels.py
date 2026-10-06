@@ -129,7 +129,7 @@ def test_each_dsub_plug_medium_is_its_cores_and_has_its_label():
 # TERMINAL-BLOCK and DC-TERMINAL.
 TERMINAL_PLUGS = {
     "generic/terminal-508-2-plug": ("common/terminal-header-508-2", "terminal-block"),
-    "generic/terminal-508-5f-plug": ("common/terminal-header-508-5f", "dc-terminal"),
+    "generic/terminal-508-5-plug": ("common/terminal-header-508-5f", "dc-terminal"),
     "generic/terminal-508-6-plug": ("common/dc-terminal-header-6", "dc-terminal"),
 }
 
@@ -143,3 +143,12 @@ def test_each_terminal_plug_and_header_medium_has_its_label():
             assert stated and stated.group(1) == key, (ref, stated and stated.group(1))
     assert table.get("terminal-block") == "terminal block"
     assert table.get("dc-terminal") == "DC terminal"
+
+
+def test_the_dc_barrel_plug_medium_has_its_label():
+    """generic/dc-barrel-plug@1 states `barrel` (#789): `dc-barrel` would make
+    `dc` a connector word for lint L62. The fallback would read BARREL."""
+    text = (LIBRARY / "components/generic/dc-barrel-plug/v1/contract.yaml").read_text()
+    stated = re.search(r"^attrs:.*\bmedia:\s*([a-z0-9-]+)", text, re.M)
+    assert stated and stated.group(1) == "barrel"
+    assert media_table().get("barrel") == "DC barrel"

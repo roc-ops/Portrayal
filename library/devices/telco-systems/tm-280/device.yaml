@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: tm-280
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: Telco Systems
 model: TM-280
@@ -71,6 +71,12 @@ provenance:
       30-33.5, beyond the fitted span; the stencil draws a small rectangle at 207.2-213.8, 32.9-34.6)
       is drawn as panel decor between the two. Nothing held says what it is - a light pipe or a
       lock slot are both plausible.
+  dc-in-rating:
+    confidence: datasheet
+    note: >-
+      "5VDC @3A (max) with external power adaptor": the `input-voltage` and `current-max-a` of
+      the dc-in jack, 3 A being the stated maximum. The data sheet states no barrel size; the
+      jack is the library's one nominal `dc-barrel`.
   lamps:
     confidence: estimated
     note: >-
@@ -246,7 +252,7 @@ views:
         - {ref: 'common/rj45-ganged-eth@1', id: port-2-2, at: [130.14, 18.5], rotate: 180, group: access, rel-pos: 2}
         - {ref: 'std/sfp@1', id: port-3-1, at: [152.65, 21.9], group: combo, rel-pos: 1}
         - {ref: 'common/rj45-eth@1', id: copper-3-1, at: [168.7, 17.8], rotate: 180, group: combo-copper, rel-pos: 1, attrs: {combo-with: port-3-1}}
-        - {ref: 'common/dc-barrel@1', id: dc-in, at: [190.5, 19.4], group: inlets, rel-pos: 1, description: 5 VDC 3 A from the external adaptor}
+        - {ref: 'common/dc-barrel@1', id: dc-in, at: [190.5, 19.4], group: inlets, rel-pos: 1, description: 5 VDC 3 A from the external adaptor, attrs: {input-voltage: 5 VDC, current-max-a: 3.0}}
   rear:
     size: {w: 221.0, h: 44.0}
     empty: >-

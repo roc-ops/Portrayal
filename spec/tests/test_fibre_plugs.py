@@ -172,12 +172,17 @@ def test_the_dsub_connector_interfaces_were_read():
 
 def _terminal_header_interfaces():
     """Every interface a part presents while stating a wire-terminal medium,
-    read off the library: the pluggable terminal headers."""
+    or as a DC power inlet, read off the library: the pluggable terminal
+    headers and the DC barrel jack."""
     got = set()
     for f in (LIB / "components").rglob("v*/contract.yaml"):
         c = load_yaml(f) or {}
         media = str((c.get("attrs") or {}).get("media") or "")
         if c.get("interface") and media in ("dc-terminal", "terminal-block"):
+            got.add(c["interface"])
+        # and the DC barrel jack, a power inlet that states `input: dc`
+        if c.get("interface") and c.get("class") == "inlet" \
+                and (c.get("attrs") or {}).get("input") == "dc":
             got.add(c["interface"])
     return got
 
@@ -185,8 +190,8 @@ def _terminal_header_interfaces():
 def test_the_terminal_header_interfaces_were_read():
     """The census's exclusion is keyed on these; an empty set would exclude
     nothing and say nothing."""
-    assert _terminal_header_interfaces() == {"terminal-508-2", "terminal-508-5f",
-                                             "terminal-508-6"}
+    assert _terminal_header_interfaces() == {"terminal-508-2", "terminal-508-5",
+                                             "terminal-508-6", "dc-barrel"}
 
 
 def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
@@ -248,12 +253,14 @@ def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
         if c.get("mates") in dsub_connectors:
             continue
         # NOR ARE THE TERMINAL PLUGS (#789). generic/terminal-508-2-plug@1,
-        # terminal-508-5f-plug@1 and terminal-508-6-plug@1 mate the three
+        # terminal-508-5-plug@1 and terminal-508-6-plug@1 mate the three
         # pluggable terminal header interfaces, which the registry holds so a
         # header is a slot. Left out by what each IS - it mates an interface
         # presented by a part whose medium is a wire terminal, and it carries
         # copper wires - and their census is
-        # spec/tests/test_dc_terminal_plugs.py.
+        # spec/tests/test_dc_terminal_plugs.py. generic/dc-barrel-plug@1 mates
+        # `dc-barrel`, a power inlet's interface, and is left out with them;
+        # its census is spec/tests/test_dc_barrel_plug.py.
         if c.get("mates") in terminal_headers:
             continue
         if c.get("mates") in connectors and c.get("class") != "cap":
