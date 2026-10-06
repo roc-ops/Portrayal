@@ -78,6 +78,18 @@ function restore(node, attr) {
   node.removeAttribute(STASH[attr]);
 }
 
+// WHAT THE BUILD DREW FOR A FIELD, read off a part's group: the `data-<key>` it
+// carries, else the text of the node wired to that key. The build writes the
+// attribute only for a field a configuration set, so a part drawn from its
+// skin's own default has none and its text IS the default. Undefined for a
+// field with neither - a colour field at its default, which has no text node.
+// Here and not in the shell, so the `data-from` rule has one home.
+/** The value a part's drawing holds for `key`, or undefined. */
+export function drawnField(el, key) {
+  return el?.getAttribute?.(`data-${key}`)
+    ?? el?.querySelector?.(`[data-from="${esc(key)}"]`)?.textContent ?? undefined;
+}
+
 /**
  * Apply `vals` ({key: value}) to one part: `el` is the part's group (or its
  * projection on another face), and the nodes it is wired through are inside it.

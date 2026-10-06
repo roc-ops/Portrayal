@@ -24,7 +24,7 @@ import { nestedBays, applyOverrides, applyOccupantOverrides, applyRearOverrides,
          freshBaysUnder, seatFace, faceQueue, swapOverrides, faceEntries, faceTree, ownerPath,
          slotOptions, slotResolver } from './swap.js';
 import { jdist, faceFile, distResolver } from './dist.js';
-import { paintFields, unpaintFields, fieldRows, fieldAccepts, decodeFields } from './fields.js';
+import { paintFields, unpaintFields, fieldRows, fieldAccepts, decodeFields, drawnField } from './fields.js';
 import { fibreOf, farPath, fibreLabel, connectorLabel, moduleOf } from './optical.js';
 
 const NS = 'http://www.w3.org/2000/svg';
@@ -1905,8 +1905,7 @@ export function createShell(opts = {}) {
   function fieldValues(part) {
     const out = {};
     for (const k of Object.keys(fieldsOf(part.ref)))
-      out[k] = state.cfgFields[part.path]?.[k] ?? part.el.getAttribute(`data-${k}`)
-        ?? part.el.querySelector(`[data-from="${CSS.escape(k)}"]`)?.textContent;
+      out[k] = state.cfgFields[part.path]?.[k] ?? drawnField(part.el, k);
     return out;
   }
   // WHAT THE BUILD DREW, kept the first time a field is written, so one field
@@ -1923,8 +1922,7 @@ export function createShell(opts = {}) {
     // drawn colour back.
     for (const k of Object.keys(vals || {})) {
       if (Object.prototype.hasOwnProperty.call(kept, k)) continue;
-      kept[k] = el?.getAttribute(`data-${k}`)
-        ?? el?.querySelector(`[data-from="${CSS.escape(k)}"]`)?.textContent ?? '';
+      kept[k] = drawnField(el, k) ?? '';
     }
   }
   function resetField(path, key) {
