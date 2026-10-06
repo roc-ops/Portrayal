@@ -1,0 +1,162 @@
+format: 1
+kind: module
+name: dcp-1203
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: optical
+description: >-
+  Smartoptics DCP-1203, three independent 100/400G transponders on a half-width 1RU
+  plug-in unit for one DCP-2 traffic slot. Six QSFP28/QSFP-DD combo cages stand in three
+  pairs, numbered 1 to 6: the odd port of each pair is the client and the even port the
+  line. Each pair sits in a recess under a honeycomb vent field, and each cage has a Tx
+  and an Rx lamp stacked beside it. Power and Status lamps sit at the lower left under
+  the laser hazard marking.
+size: {w: 205.0, h: 44.0}
+size-confidence: {w: datasheet, h: datasheet}
+attrs:
+  model: DCP-1203
+  role: transponder
+  client-ports: '3'
+  line-ports: '3'
+  client-rate: 100G or 400G, grey or coherent
+  line-rate: 100G ZR+, 400G ZR, 400G OpenZR+ coherent DWDM
+  power-draw-typical-w: 40
+  power-draw-max-w: 40
+  weight-kg: 1.8
+  operating-temp: '0 to 45 C'
+provenance:
+  sources: >-
+    Three vendor documents and two renders. so-ds-dcp-1203-r1.5, the datasheet: size,
+    weight, power, the ordering line and the product render this face is measured from.
+    DCP-1203 Technical Description, dcp-release-14.0: s1.1 the port count, s3.1 the front
+    layout figure that names which cages are client and which are line, s3.1.1 and s3.1.2
+    the lamp states, s5 the general parameters. The same render appears in both.
+    THE VENDOR'S WEBSITE SHOWS A DIFFERENT FACE under the same name: an older image with
+    the cages abutting in pairs, lamps above them, and the numerals reading 1 2 3 4 3 4. It
+    is not what the current datasheet and manual draw, and it is not followed.
+    THE VISIO STENCIL MASTER FOR THIS UNIT WAS NOT USED; on the DCP-404 the stencil proved
+    to be a simplification of the product.
+  size: >-
+    datasheet - so-ds-dcp-1203-r1.5, DIMENSIONS: "44 x 205 x 270mm", 1.8 kg. The datasheet
+    heads those "(WxDxH)" and the heading is transposed, as it is on the DCP-404's sheet:
+    this is the same half-width 1RU unit for the same DCP-2 slot, 205 wide and 44 high,
+    270 deep.
+  power: >-
+    datasheet and manual, and they describe the card WITHOUT its transceivers. The
+    datasheet: "Typical consumption at 220VAC: Normal operation: 40 W, Max during power up:
+    TBD W". The Technical Description, Table 8: "DCP-1203 <40 W", then the transceivers
+    apart - "QSFP28 ~5W", "QSFP-DD grey LR4 ~10W", "QSFP56-DD ~24W". BOTH KEYS CARRY 40 AND
+    EACH HAS ITS OWN SOURCE: the datasheet calls 40 W the typical, normal-operation figure,
+    and the manual gives 40 W as the bound the card stays under. No ambient is stated.
+    THE SAME TABLE GIVES TWO POPULATED FIGURES THAT DO NOT AGREE: "Max total <136 W (regen
+    mode 4xQSFP-DD)" and "Typical power, full populated card with 400G coherent + 400G LR4
+    at 25 C = 142 W". A typical above a maximum is two different populations, not one
+    measure, and both include the optics, which answer for themselves in this library, so
+    neither is carried.
+  face-scale: >-
+    photo-measured off the datasheet render at 977 x 344. Across, the plate is 929 px for
+    the stated 205: 4.532 px/mm. Down, the vertical plate under the sloping band is 154 px;
+    taking the band as the 10.4 of the 44 that smartoptics/dcp-404@1 uses for the same
+    housing leaves 33.6 for the plate, 4.583 px/mm. THE TWO AGREE TO 1.1%, AND THAT TESTS
+    THE 10.4 AS MUCH AS THE RENDER: the agreement says a 10.4 band and an orthographic
+    plate are consistent with each other, and proves neither alone. The 10.4 is that
+    part's estimate. The band itself reads 58 px, which would be 12.7 mm in the plate's
+    plane, and is longer than 10.4 because the render looks down on a sloping surface.
+    SO EVERY x IS MEASURED, against the stated 205, and every y rests on that assumption.
+    Positions are good to about 0.3 mm across and softer down.
+  ports: >-
+    Six cage frames read 137-223, 264-350, 415-501, 541-627, 692-778 and 819-906 px: each
+    86 or 87 px, 19.1 mm, against std/qsfp-dd's 19.0, and separate, not abutting. They
+    centre 28.0 mm apart inside a pair and the pairs 61.2 apart; the six centres are
+    regularised to 33.8, 61.8, 95.0, 123.0, 156.2 and 184.2, within 0.2 of each reading.
+    Every mouth runs 28.1 to 38.5 down. The manual's s1.1 and s3.2 say every port is a
+    QSFP28/QSFP-DD combo port, so all six are the QSFP-DD cage, which takes either.
+  client-and-line: >-
+    drawing - Technical Description s3.1, the front layout figure: the arrows from "Client
+    ports QSFP28/QSFP-DD" end on cages 1, 3 and 5 and those from "Line ports
+    QSFP28/QSFP-DD" on cages 2, 4 and 6. The functional diagram in s1.1 pairs Client n with
+    Line n, so transponder n is ports 2n-1 and 2n.
+  lamps: >-
+    photo-measured for position, datasheet for meaning. A Tx lamp over an Rx lamp stands
+    beside each cage, outboard of its pair: left of ports 1, 3 and 5, right of 2, 4 and 6,
+    with "Tx" and "Rx" printed above each. They are round and about 2.0 across. s3.1.1:
+    traffic lamps are green for OK and yellow for a warning or alarm. Power and Status are
+    light rectangles at the lower left with their captions beneath; s3.1.2: Status is green
+    with no active alarm and red with a critical or major alarm, and red during start-up.
+    The manual gives no states for Power.
+  vents: >-
+    photo-measured. Each pair of cages sits in one lighter rounded recess, 48.4 wide, from
+    16.7 down to the foot of the cages. Above the cages it carries two rows of hexagons on
+    a 5.29 step: nine in the lower row centred on the pair, and six in the upper row,
+    three over each cage, offset half a step. Two more stand in a column between the two
+    cages. A slot row runs along the bottom edge on the DCP-404's 9.3 step and is taken
+    from that part. Block bounds and steps are measured; cell outlines are regularised.
+    THE SLOPING BAND IS PLAIN on this render - no hexagons and no slot row at the fold,
+    both of which the DCP-404 has.
+  markings: >-
+    photo-measured - the laser burst over the general warning triangle at the left, the
+    same two symbols in the same column as the DCP-404, about 1.4 mm higher.
+  slope: >-
+    estimated, and taken from smartoptics/dcp-404@1, whose `slope` and `slope-3d` keys carry the argument.
+    The DCP-1203 is the same half-width unit in the same slot and its render shows the same
+    band between lid and plate, 58 px tall against a 154 px plate. The 44 mm protrusion and
+    the 10.4 mm band are that part's figures, themselves estimates, and nothing in this
+    unit's documents measures either.
+  lift: >-
+    every composed part carries `lift: 44.0` because the plate it sits on stands that far
+    out of the chassis; without it the parts sit at the panel plane inside the plate. The
+    figure tracks the body's `out` and must move with it.
+elements:
+  vent-bottom-edge: {at: [2.45, 41.95], size: [200.1, 1.55], class: vent}
+groups:
+  qsfpdd-400g:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp-dd, speed: 400g}
+    description: >-
+      six QSFP28/QSFP-DD combo ports, numbered 1 to 6 on the face: odd ports are the three
+      clients and even ports the three lines
+relief:
+  features:
+    - node: body
+      out: 44.0
+      profile-y: [[0, 0.0], [10.4, 44.0], [44, 44.0]]
+      confidence: estimated
+      source: >-
+        smartoptics/dcp-404@1's body relief, taken over: the same housing in the same DCP-2
+        slot, standing 44 out of the chassis with its top 10.4 sloping back the whole
+        protrusion. That part did not measure either figure, and nothing in this unit's
+        documents does; see provenance/slope.
+    - {node: vent-bottom-edge, vent: 44.0, confidence: estimated, source: holes through the plate}
+    - {node: vent-pair-1, vent: 44.0, confidence: estimated, source: holes through the plate}
+    - {node: vent-pair-2, vent: 44.0, confidence: estimated, source: holes through the plate}
+    - {node: vent-pair-3, vent: 44.0, confidence: estimated, source: holes through the plate}
+body:
+  depth: 270.0
+  color: '#8f959c'
+skins: [default]
+parts:
+  - {ref: std/qsfp-dd@1, id: port-1, at: [24.30, 28.30], lift: 44.0, group: qsfpdd-400g, attrs: {role: client}}
+  - {ref: std/qsfp-dd@1, id: port-2, at: [52.30, 28.30], lift: 44.0, group: qsfpdd-400g, attrs: {role: line}}
+  - {ref: std/qsfp-dd@1, id: port-3, at: [85.50, 28.30], lift: 44.0, group: qsfpdd-400g, attrs: {role: client}}
+  - {ref: std/qsfp-dd@1, id: port-4, at: [113.50, 28.30], lift: 44.0, group: qsfpdd-400g, attrs: {role: line}}
+  - {ref: std/qsfp-dd@1, id: port-5, at: [146.70, 28.30], lift: 44.0, group: qsfpdd-400g, attrs: {role: client}}
+  - {ref: std/qsfp-dd@1, id: port-6, at: [174.70, 28.30], lift: 44.0, group: qsfpdd-400g, attrs: {role: line}}
+  - {ref: common/led-dot@1, id: led-1-tx, at: [19.50, 29.00], lift: 44.0, states: {lamp: ['off', {name: ok, color: '#22c55e'}, {name: alarm, color: '#eab308'}]}, attrs: {function: tx}}
+  - {ref: common/led-dot@1, id: led-1-rx, at: [19.50, 34.10], lift: 44.0, states: {lamp: ['off', {name: ok, color: '#22c55e'}, {name: alarm, color: '#eab308'}]}, attrs: {function: rx}}
+  - {ref: common/led-dot@1, id: led-2-tx, at: [74.80, 29.00], lift: 44.0, states: {lamp: ['off', {name: ok, color: '#22c55e'}, {name: alarm, color: '#eab308'}]}, attrs: {function: tx}}
+  - {ref: common/led-dot@1, id: led-2-rx, at: [74.80, 34.10], lift: 44.0, states: {lamp: ['off', {name: ok, color: '#22c55e'}, {name: alarm, color: '#eab308'}]}, attrs: {function: rx}}
+  - {ref: common/led-dot@1, id: led-3-tx, at: [80.40, 29.00], lift: 44.0, states: {lamp: ['off', {name: ok, color: '#22c55e'}, {name: alarm, color: '#eab308'}]}, attrs: {function: tx}}
+  - {ref: common/led-dot@1, id: led-3-rx, at: [80.40, 34.10], lift: 44.0, states: {lamp: ['off', {name: ok, color: '#22c55e'}, {name: alarm, color: '#eab308'}]}, attrs: {function: rx}}
+  - {ref: common/led-dot@1, id: led-4-tx, at: [135.70, 29.00], lift: 44.0, states: {lamp: ['off', {name: ok, color: '#22c55e'}, {name: alarm, color: '#eab308'}]}, attrs: {function: tx}}
+  - {ref: common/led-dot@1, id: led-4-rx, at: [135.70, 34.10], lift: 44.0, states: {lamp: ['off', {name: ok, color: '#22c55e'}, {name: alarm, color: '#eab308'}]}, attrs: {function: rx}}
+  - {ref: common/led-dot@1, id: led-5-tx, at: [141.10, 29.00], lift: 44.0, states: {lamp: ['off', {name: ok, color: '#22c55e'}, {name: alarm, color: '#eab308'}]}, attrs: {function: tx}}
+  - {ref: common/led-dot@1, id: led-5-rx, at: [141.10, 34.10], lift: 44.0, states: {lamp: ['off', {name: ok, color: '#22c55e'}, {name: alarm, color: '#eab308'}]}, attrs: {function: rx}}
+  - {ref: common/led-dot@1, id: led-6-tx, at: [196.50, 29.00], lift: 44.0, states: {lamp: ['off', {name: ok, color: '#22c55e'}, {name: alarm, color: '#eab308'}]}, attrs: {function: tx}}
+  - {ref: common/led-dot@1, id: led-6-rx, at: [196.50, 34.10], lift: 44.0, states: {lamp: ['off', {name: ok, color: '#22c55e'}, {name: alarm, color: '#eab308'}]}, attrs: {function: rx}}
+  - {ref: common/led-rect@1, id: led-power, at: [5.35, 35.70], lift: 44.0, attrs: {function: power}}
+  - {ref: common/led-rect@1, id: led-status, at: [11.60, 35.70], lift: 44.0, states: {lamp: ['off', {name: ok, color: '#22c55e'}, {name: alarm, color: '#ef4444'}]}, attrs: {function: status}}
+  - {ref: common/laser-warning@1, id: warn-laser, at: [7.50, 22.60], lift: 44.0, attrs: {marking: laser}}
+  - {ref: common/warning-triangle@1, id: warn-general, at: [7.50, 28.30], lift: 44.0, attrs: {marking: general}}
