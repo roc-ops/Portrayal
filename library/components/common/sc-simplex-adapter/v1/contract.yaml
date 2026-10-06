@@ -1,0 +1,69 @@
+format: 1
+kind: component
+name: sc-simplex-adapter
+version: 1.0.0
+class: port
+profile: networking
+description: >-
+  Panel-mount SC simplex adapter - one flangeless body carrying one SC port, a
+  real SC opening (std/sc-bore@1) with its key slot to the LEFT when
+  unrotated. The single-port counterpart of common/sc-duplex-adapter, whose
+  body carries two ports stacked: a holder that seats SC adapters one to a
+  cell, or turns them on their side, composes this one and says how it is
+  turned at the placement.
+size: {w: 9.4, h: 12.8}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  9.4 x 12.8 is the adapter body SENKO's SC Premium Adapter drawing prints
+  (DS-SC-000010 Rev A, front view: `9.4 -0.2` and `12.8 +/-0.2`), the body
+  standards.yaml's `sc-simplex-receptacle` entry records beside the 7.5 x 9.0
+  opening it surrounds. No depth in `size`: how far the body stands out of
+  whatever holds it is `relief`, not an aperture.
+attrs: {media: fiber, connector: sc}
+fields:
+  housing-finish:
+    label: Housing colour
+    type: text
+    default: '#3078c0'
+optical:
+  positions: 1
+relief:
+  features:
+    - node: bezel
+      out: 1.0
+      confidence: estimated
+      source: >-
+        carried over from common/sc-duplex-adapter@5, the same body with two
+        ports, whose frame stands about 1.0 proud on FS's oblique side
+        photograph of SKU 57058. Not measured on a simplex adapter.
+parts:
+  # The 7.5 x 9.0 opening centred in the 9.4 x 12.8 body (x 0.95-8.45,
+  # y 1.9-10.9), its key slot cut out through the left wall, lifted onto the
+  # raised body so it recesses from the proud face.
+  - {id: '1', ref: std/sc-bore@1, at: [0.06, 1.9], lift: 1.0}
+connection-points:
+  optical: {at: [4.7, 6.4], direction: front}
+provenance:
+  size: >-
+    drawing - see size-notes.
+  parts: >-
+    drawing - the opening is std/sc-bore@1, SENKO's printed 7.5 x 9.0 with the
+    2.1 key slot cut 0.89 through one long wall, centred in the body. The key
+    is on the LEFT unrotated, as that bore is drawn; a composer turns the
+    adapter to put it where its own hardware has it.
+  shipped-caps: >-
+    NO CAP IS SEATED BY DEFAULT. common/sc-duplex-adapter@5 ships each opening
+    holding common/sc-dust-cap@1 because FS's renders show every port capped.
+    The renders this part was first drawn for - Fibrain's HD adapter holders -
+    show every SC port open, so the opening is left empty and a
+    configuration seats a cap where one is wanted.
+  colour: >-
+    a field, `housing-finish`, defaulting to the blue common/sc-duplex-adapter@5
+    sampled off FS's SC duplex body (#3078c0). The frame's outline follows the
+    fill as its derived shade.
+  connection-point: >-
+    the centre of the 9.4 x 12.8 face, which is the opening's own centre.
+  bore-ids: >-
+    the bore is fibre position 1; an adapter has no direction until something
+    is plugged into it.
+skins: [default]

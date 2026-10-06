@@ -1,0 +1,232 @@
+format: 1
+kind: device
+name: xcu
+version: 0.1.0
+maturity: modelled
+manufacturer: Fibrain
+model: XCU10
+description: >-
+  Extendable HD fibre patch panel, 0.5U, 19 in. A drawer on telescopic rails
+  carrying four HD adapter holders across its front and two stacked splice
+  cassettes behind them: 48 SC simplex adapters at most, 48 splices. Sold
+  equipped, as XCU10-AB-CD, with adapters and pigtails to order.
+profile: optical
+provenance:
+  method:
+    confidence: estimated
+    note: >-
+      NO ORTHOGRAPHIC SOURCE EXISTS. Fibrain publishes a two-page datasheet with
+      three overall figures and four three-quarter renders, and no drawing or
+      installation guide (the site's media index was searched for both). The
+      overall size is the datasheet's; everything across the face is measured
+      off the one render with its camera on the centre line, which is of the 1U
+      extendable sibling XHU00 (XHU00_6.jpg, 4000 px, the 482.6 rack face at
+      7.94 px/mm). The XCU's own renders (XCU00_1 to _4) show the same row -
+      five red latches, four holders between them - and were used to confirm
+      counts, not to measure. Modelling from renders was accepted at intake.
+  chassis:
+    confidence: datasheet
+    note: >-
+      DSH_XCU00_EN rev 1.1 (05.07.2024): height 0.5U, width 19 in, depth 284 mm,
+      powder painted steel. 22.2 is half of 44.45, the figure the sibling XAU
+      sheet prints beside its own 0.5U. THE WIDTH IS NOT THE DATASHEET's: 19 in
+      is the rack face with its ears. The body is drawn 431.35 wide, estimated -
+      the five latch pillars stand on a 106.27 pitch centred on the rack face
+      (centres 28.77, 135.03, 241.36, 347.63, 453.83 of 482.6) and the body is
+      taken as the span of the row they bound, four pitches and one pillar. The
+      ears reach about 25.6 either side of that.
+  drawer:
+    confidence: estimated
+    note: >-
+      THE WHOLE FRONT IS ONE PART. The front of the panel is the front of its
+      drawer, so the front view is a single bay holding fibrain/xcu-drawer@1,
+      which carries the four holder slots, pulls out its declared travel and
+      stays captive. Its plan lands in the top view under the shell top,
+      turned half a turn because a plan is drawn face-at-the-top and the top
+      view has the rear at the top.
+  not-drawn:
+    confidence: estimated
+    note: >-
+      THE THREE PULL HANDLES ARE NOT ON THE FRONT VIEW. They hang from the top
+      edge in front of the second, third and fourth pillars and dip across the
+      adapters either side; seen square-on they cover parts of twelve ports and
+      nothing fixes their outline. The rack ears are not drawn either: the
+      library's ear is a 1U part. See `gaps`.
+  envelope-faces:
+    confidence: estimated
+    note: >-
+      rear, bottom, left and right are the envelope and are deliberately blank:
+      no held image shows the rear, and the sides are plain sheet on the
+      renders.
+chassis:
+  width: 431.35
+  height: 22.2
+  depth: 284.0
+  ru: 0.5
+  color: '#1b1e21'
+  airflow: passive
+gaps:
+  - what: face-geometry
+    scope: [front, top]
+    reason: needs-drawing
+    note: >-
+      every position across the front is measured off a render of the 1U
+      sibling, and the drawer's depth, travel and floor layout are read off
+      three-quarter renders; no dimensional drawing of the XCU is published.
+      Accepted at intake, 2026-10-05.
+    wanted: >-
+      a dimensional drawing or STEP file of XCU10, or a square-on photograph
+      with a rule in frame.
+  - what: handles-and-ears
+    scope: [front, top]
+    reason: needs-drawing
+    note: >-
+      the three pull handles and the rack ears are real and are not drawn; no
+      held image is square to either.
+    wanted: >-
+      a square-on photograph of the front, and one from above.
+  - what: e2000-capacity
+    scope: [front]
+    reason: sources-disagree
+    note: >-
+      the datasheet's configuration table gives 48 E2000 adapters in four
+      holders; the product page gives 24 for E2000, FC and ST; the breakout
+      cassette datasheet seats 8 E2000 in a 12-port body, which would be 32.
+      No E2000 holder is modelled, so the manifest carries none of the three.
+    wanted: >-
+      the E2000 holder's own part number and datasheet.
+  - what: holder-details
+    scope: [front]
+    reason: vendor-silent
+    note: >-
+      the holders carry no printing, so their port order is this library's
+      (left to right, upper row first), and no held image shows an SC PC
+      holder, whose blue is carried over from the LC PC holders.
+    wanted: >-
+      a photograph of a labelled, installed panel, and one of an SC PC holder.
+  - what: envelope-faces
+    scope: [rear, bottom, left, right]
+    reason: needs-photo
+    note: >-
+      no held image shows the rear or the underside.
+    wanted: >-
+      photographs of the rear and the underside.
+groups:
+  drawer:
+    term: Drawer
+    role: service
+    index-origin: 1
+    description: >-
+      the one sliding drawer; its four holder slots are numbered left to right.
+      Fibrain numbers nothing on the panel; the order is this library's.
+  interior:
+    term: Item
+    role: furniture
+    index-origin: 1
+    description: >-
+      the inside of the shell, the space the drawer slides in.
+  covers:
+    term: Cover
+    role: furniture
+    index-origin: 1
+    description: >-
+      the shell's top, which lifts off in the viewer to show the drawer from
+      above.
+views:
+  front:
+    size:
+      w: 431.35
+      h: 22.2
+    panel:
+      decor:
+        - {at: [0, 0], size: [431.35, 22.2], fill: '#1b1e21'}
+    components:
+      bays:
+        - id: drawer
+          at: [0, 0]
+          size: {w: 431.35, h: 22.2}
+          accepts: [fibrain/xcu-drawer@1]
+          default: fibrain/xcu-drawer@1
+          group: drawer
+          rel-pos: 1
+          plan: {view: top, at: [0, 34.0], rotate: 180, in: interior, under: [shell-top]}
+
+  rear:
+    size:
+      w: 431.35
+      h: 22.2
+    panel:
+      decor:
+        - {at: [0, 0], size: [431.35, 22.2], fill: '#1b1e21'}
+
+  top:
+    size:
+      w: 431.35
+      h: 284.0
+    panel:
+      decor:
+        - {at: [0, 0], size: [431.35, 284.0], fill: '#141618'}
+    components:
+      placements:
+        - {id: interior, ref: fibrain/xcu-interior@1, at: [1.0, 1.0], group: interior, rel-pos: 1, under: [shell-top]}
+        - {id: shell-top, ref: fibrain/xcu-shell-top@1, at: [0.0, 0.0], group: covers, rel-pos: 1}
+
+  bottom:
+    size:
+      w: 431.35
+      h: 284.0
+    panel:
+      decor:
+        - {at: [0, 0], size: [431.35, 284.0], fill: '#1b1e21'}
+
+  left:
+    size:
+      w: 284.0
+      h: 22.2
+    panel:
+      decor:
+        - {at: [0, 0], size: [284.0, 22.2], fill: '#1b1e21'}
+
+  right:
+    size:
+      w: 284.0
+      h: 22.2
+    panel:
+      decor:
+        - {at: [0, 0], size: [284.0, 22.2], fill: '#1b1e21'}
+
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The panel with its drawer in and a blind cover in each of the four
+      holder slots - the frame before a variant is chosen. Fibrain does not
+      list the XCU10 empty; every part number is an equipped one.
+  xcu10-51id:
+    kind: orderable
+    part-numbers:
+      XCU10-51ID: {part: XCU10-51ID}
+    description: >-
+      XCU10-51ID - 48 SC/APC adapters, 48 SC/APC G.657A1 pigtails: four 12-port
+      SC/APC holders.
+    bays:
+      drawer/slot-1: fibrain/xmn1051gb@1
+      drawer/slot-2: fibrain/xmn1051gb@1
+      drawer/slot-3: fibrain/xmn1051gb@1
+      drawer/slot-4: fibrain/xmn1051gb@1
+  xcu10-41id:
+    kind: orderable
+    part-numbers:
+      XCU10-41ID: {part: XCU10-41ID}
+    description: >-
+      XCU10-41ID - 48 SC adapters, 48 SC G.657A1 pigtails: four 12-port SC
+      holders.
+    bays:
+      drawer/slot-1: fibrain/xmn1041gb@1
+      drawer/slot-2: fibrain/xmn1041gb@1
+      drawer/slot-3: fibrain/xmn1041gb@1
+      drawer/slot-4: fibrain/xmn1041gb@1
+datasheet:
+  title: 'Fibrain extendable patch panel HD 0.5U for 48 splices, datasheet XCUx rev 1.1'
+  sha256: 766eb5ea0c3b193bdeafcbb69899245493329477d36ddff33458d010c7a00f7a

@@ -33,6 +33,30 @@ names the ref that replaces it.
   147 mm behind the chassis. Front, top, bottom and sides are the 300CB08. In
   the DCIM exports each has two `dc-terminal` power ports, one per feed, and
   its outputs are not exported yet. No existing device or export changes.
+- Fibrain, a new vendor: the XCU10 extendable HD patch panel (`fibrain/xcu`,
+  0.5U, 48 SC), with XCU10-51ID and XCU10-41ID as configurations. Its front is
+  one captive drawer (`fibrain/xcu-drawer@1`) whose four slots seat the HD
+  adapter holders XMI1041GA and XMI1051GA (6 SC, 6 SC/APC), XMN1041GB and
+  XMN1051GB (12 SC, 12 SC/APC) or the XBCS0 blind cover. `common/sc-simplex-adapter@1`
+  is new: one SC port to a body, with no dust cap seated. These are the first
+  parts to use `shape: ring` and `shows` on body pieces. **In the DCIM exports
+  the holders seat in bays of the drawer's module type, which NetBox takes
+  (4.5.7 or later) and Nautobot is not given: the Nautobot drawer has no bays,
+  so the holders and their 48 ports cannot be placed there yet**
+  (roc-ops/Portrayal#834). Nautobot states `u_height: 1` for this 0.5U panel.
+- The explorer edits a part's fields. Selecting a part whose component
+  declares `fields:` - a supply's wattage, a latch colour, a filter's channel
+  numbers - shows one control per field in the inspector: a list for a
+  `choice`, an input otherwise, starting from the value the configuration
+  built. A change is written with `setFields`, in 2D and 3D, is kept across a
+  view change, goes when the part is swapped out, and is carried in the page's
+  location as `fields=<path>~<key>~<value>,...` beside `swap=`. A value the
+  field does not take is not written, from the form or from a link. A link
+  restores a field only for a part drawn on the view it opens; one set on
+  another view is dropped on reload (roc-ops/Portrayal#818).
+  `kit/fields.js` gains `fieldRows`, `fieldAccepts`, `encodeFields`,
+  `decodeFields` and `drawnField`, and the shell gains `resetField` and
+  `applyFields` (#811).
 - Barrier terminal blocks seat a lug per pole. `terminal-stud` joins
   `spec/schemas/connectors.yaml` as one nominal connector: a screw or stud
   terminal a lug lands on, claiming no size. The terminal screws of
@@ -79,6 +103,25 @@ names the ref that replaces it.
   `body.drawings` and `body.face` on a part whose pieces show one. Lint L71
   checks the new keys. Nothing existing changes: a piece that states neither
   is the plain box it was.
+- The Cisco Nexus 93180YC-EX (`cisco/n9k-c93180yc-ex`): 48 SFP28 and 6 QSFP28
+  on the port side; two supplies, four fan modules, console, both management
+  ports and USB on the other; port-side intake and port-side exhaust
+  configurations. Two new parts seat in it, `cisco/nxa-pac-650w@1` and
+  `cisco/nxa-fan-30cfm@1`, each covering both airflow part numbers through a
+  latch-colour field.
+- The Cisco Catalyst 4948E (`cisco/ws-c4948e`), the front-to-back build: 48
+  10/100/1000 RJ-45 and 4 SFP+ on the front with the console and management
+  jacks and the status lamps; two supplies and the fan tray on the rear. Two
+  new parts seat in it, `cisco/pwr-c49e-300ac-r@1` and `cisco/ws-x4993@1`. Its
+  export names ports as IOS does, `GigabitEthernet1/1` to `1/48`,
+  `TenGigabitEthernet1/49` to `1/52` and `FastEthernet1`.
+- A device can name its own interfaces. A top-level `interfaces:` block, in
+  the shape a NOS listing's has, says what the maker's own operating system
+  calls each port, and the hardware's own DCIM device type uses those names:
+  the Nexus exports `Ethernet1/1` to `Ethernet1/54` and one `mgmt0`. An id no
+  rule names keeps its faceplate id, and a listing's names still decide that
+  listing's document. The lock records the names and asks a major bump when
+  one changes; L105 refuses a rule that names nothing the device places.
 - Amphenol Network Solutions, a new vendor (`amphenol-ns`, formerly Telect):
   the 300CB08 (`amphenol-ns/300cb08`), a 1RU dual-feed DC circuit breaker
   panel with sixteen plug-in positions, all six faces, and eleven
@@ -327,6 +370,12 @@ names the ref that replaces it.
   class), and no 800G prefix is documented.
 
 ### Fixed
+- `amphenol-ns/tpa-fuse-holder-307492@1` (1.0.1) keeps its fuse rating out of
+  the drawing once the rating is set in a viewer. The rating is carried by the
+  part and never printed, because the fuse is inside the holder; its text node
+  was hidden by its own `display`, which `kit/fields.js` removes from a node it
+  writes a value to. The node now sits in a group that is not displayed. The
+  300CB08 takes a patch, 1.0.1.
 - 3D kit (`swap.js` `viewsToRewrite`): a swap into a slot on a placed part
   that composes several slots and is no cage itself, such as a pole of a
   barrier terminal block (`psu1-input/lug-2`), now reaches the 3D scene. No
@@ -335,6 +384,21 @@ names the ref that replaces it.
   warning. Every view is rewritten for such a key (#814).
 
 ### Changed
+- **BREAKING for DCIM data already imported.** Telco Systems is listed as
+  `BATM/Telco Systems`, the name the vendor asks to be listed under. The
+  `manufacturer` of its fourteen devices changes, and with it every one of its
+  NetBox and Nautobot exports: the `manufacturer` field of fourteen device
+  types and thirteen module types, each device type's `slug`
+  (`telco-systems-tm-8104` is now `batm-telco-systems-tm-8104`), and the
+  directory they are written under, `Telco Systems/` to `BATM-Telco Systems/`
+  (a slash in a manufacturer is written as a hyphen in the directory, as it is
+  in a model's file name). A DCIM that imported the old files holds a
+  manufacturer named `Telco Systems`: rename it there before importing again,
+  or the new files create a second manufacturer beside it. The namespace
+  `telco-systems`, every component and device ref, every port name and every
+  drawing is unchanged, and so is the `@portrayal/telco-systems-*` package
+  name of each device. `spec/schemas/vendors.yaml` keeps `Telco Systems` and
+  `BATM Networks` as aliases.
 - **The npm packages: the component skins ship one package per namespace**,
   `@portrayal/components-<namespace>`, and `packages.json` in `@portrayal/index`
   maps each namespace to its package and version under `components`. One
