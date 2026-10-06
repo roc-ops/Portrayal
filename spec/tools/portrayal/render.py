@@ -2121,6 +2121,10 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     # rather than through a box that has no inside.
     if view.get("open-frame"):
         svg.set("data-open-frame", "1")
+    # A SHEET BODY SAYS SO ON EVERY FACE, for the same reason: it is a fact
+    # about the chassis, and a face opened on its own has to carry it.
+    if (device.get("chassis") or {}).get("shell") == "sheet":
+        svg.set("data-shell", "sheet")
     # Sections are a classification, not a namespace: a drawing is opened
     # somewhere else, and `data-power-max-w` is readable there while
     # `data-power-max-w` under some section prefix would only be longer. So the
@@ -2160,8 +2164,15 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     faceplate.set("x", "0"); faceplate.set("y", "0")
     faceplate.set("width", f"{w:g}"); faceplate.set("height", f"{h:g}")
     faceplate.set("rx", "1.2")
-    faceplate.set("fill", ch.get("color", "#3a3f45"))
-    faceplate.set("stroke", ch.get("edge", "#22262a")); faceplate.set("stroke-width", "0.5")
+    # A SHEET BODY HAS NO HOUSING TO FILL. Its metal is what the view draws -
+    # the tray, the ears - and the rest of the envelope is open air, which the
+    # viewer can only show if the face does not paint it
+    # (docs/cable-managers-design.md section 4). The rect stays, unfilled and
+    # unstroked: it is the element every consumer addresses as `chassis`.
+    sheet = ch.get("shell") == "sheet"
+    faceplate.set("fill", "none" if sheet else ch.get("color", "#3a3f45"))
+    if not sheet:
+        faceplate.set("stroke", ch.get("edge", "#22262a")); faceplate.set("stroke-width", "0.5")
     bevel_face(svg, faceplate, ch, view.get("face") or view_name, w, h)
 
     resolved = {}
@@ -4541,6 +4552,10 @@ def main():
                              # how the box is installed; `rack` where the
                              # device states nothing (#734)
                              "mount": ch.get("mount", "rack"),
+                             # a body that is sheet metal and not a box; absent
+                             # on a box, as `solid` is on an unbevelled one
+                             **({"shell": ch["shell"], "thickness": ch.get("thickness")}
+                                if ch.get("shell") else {}),
                              # the chassis's own feed, where one feed is the
                              # whole story; `configs[].power` is each build's
                              # resolved answer, as for airflow

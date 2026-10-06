@@ -292,6 +292,7 @@ RULES = {
     "L123": ("library",    "one module, one bay size - every bay that accepts a module, in any device or carrier, reserves the same size for it, to within a millimetre", "reserve one figure everywhere - the module's own `insert` or `size`; a difference that is real stays in the baseline, with the reason in the provenance of the chassis that reserves more (the warning is filed on the module, so a chassis `lint.waive` cannot clear it)"),
     "L125": ("device",     "a device says how it is installed - a rack device (the default `mount`) or a `rack-face` part states `ru` (warning), and a device whose `chassis.mount` is `din-rail`, `wall` or `desktop` states none (error)", "give a rack device its `ru` from the datasheet; for a box that is not racked, state `chassis.mount` and drop `ru`, so its DCIM export says `u_height: 0` rather than an invented rack unit"),
     "L126": ("device",     "a bevelled chassis is a solid the box can have - every edge named by two faces that meet, none bevelled twice, no face cut away and no bevel swallowed by its neighbours - its face drawings are the chassis's own size, and every part, bay and cutout on a face lies on the flat face rather than on a bevel", "name edges as two adjacent faces (`front-left`), shrink a bevel that cuts too much, drop a view `size` that differs from the chassis on a bevelled face, or move the part onto the flat face - spec/tools/portrayal/bevel.py says where it is"),
+    "L127": ("device",     "a `shell: sheet` body states `chassis.thickness`, between 0 and 10 mm, and a box states none (error)", "give a sheet body the gauge its datasheet states; on a box, drop `thickness`"),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -6228,6 +6229,28 @@ def lint_device_mount(path, data):
                           "describes a rack this box is not in - drop it")
 
 
+def lint_device_shell(path, data):
+    """L127: a sheet body states its gauge, and a box states none.
+
+    `shell: sheet` turns each view's painted metal into a plate, and a plate
+    with no thickness is a picture of one. The other direction matters as much:
+    `thickness` on a box is read by nothing, and reads to the next person as if
+    it were.
+    """
+    ch = data.get("chassis") or {}
+    sheet = ch.get("shell") == "sheet"
+    t = ch.get("thickness")
+    if sheet and t is None:
+        err(path, "L127", "`chassis.shell` is `sheet`, so state `chassis.thickness` "
+                          "- the gauge of the metal, in millimetres")
+    elif not sheet and t is not None:
+        err(path, "L127", f"`chassis.thickness` {t!r} is the gauge of a sheet body, and "
+                          "this chassis is a box - drop it, or state `shell: sheet`")
+    elif sheet and not (0 < t <= 10):
+        err(path, "L127", f"`chassis.thickness` {t!r} is not a sheet gauge - it is "
+                          "millimetres of metal, more than 0 and at most 10")
+
+
 def _inside(pt, poly, tol=0.05):
     """A point inside a convex polygon, to within `tol` mm of its edges."""
     sign = 0
@@ -10620,6 +10643,7 @@ def main():
                 lint_device_airflow_home(f, d)
                 lint_device_power_home(f, d)
                 lint_device_mount(f, d)
+                lint_device_shell(f, d)
                 lint_device_power_stated(f, d)
                 lint_device_provenance_confidence(f, d)
                 lint_quoted_prose(f, d)
