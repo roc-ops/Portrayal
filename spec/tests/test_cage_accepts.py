@@ -24,9 +24,10 @@ down, about a datasheet instead of a device name):
     qsfp-dd`, ref `std/qsfp-dd@1`, interface `qsfp-dd` - the ONLY case in this
     library that exercises `also-accepts` (`qsfp-dd` also-accepts `qsfp`).
   - edgecore/ais800-32o, placement `port-1`: `groups.osfp800.attrs.media ==
-    osfp`, ref `std/osfp@1`, interface `osfp` - one of four families (osfp,
-    xfp, cfp, cfp2) with a cage in the library and no component that mates
-    it, so its accept list is legitimately `[]`.
+    osfp`, ref `std/osfp@1`, interface `osfp` - a family alone on its ladder,
+    which offered nothing until the OSFP generics existed. The families that
+    still have a cage and no component mating it (cfp, cfp2, cfp4) are read
+    off a card, since no device places one of those cages directly.
 
 Checked directly, once, in `spec/tools/portrayal/render.py`:
 
@@ -135,17 +136,37 @@ def test_a_qsfp_dd_cage_accepts_its_own_family_and_the_also_accepted_qsfp_parts(
                                "siemon/qsfp28-aoc@1", "volex/qsfp-dd-passive-dac@1"]
 
 
-def test_an_osfp_cage_accepts_nothing_but_says_so_explicitly(tmp_path):
-    """Five families - osfp, xfp, cfp, cfp2, cfp4 - have a cage in the library and
-    no component that mates one. `[]`, EMPTY, NOT ABSENT: a consumer has to
-    be able to tell "the library offers nothing here" from "this placement
-    is not a cage at all", and those are different facts only if the key is
-    always present."""
+def test_an_osfp_cage_accepts_exactly_the_osfp_generics(tmp_path):
+    """An OSFP cage offered nothing until the OSFP generics existed
+    (docs/pluggables-osfp-xfp-design.md). `osfp` is alone on its ladder, so
+    the list is its own family and nothing else."""
     idx = _build(AIS800_32O, tmp_path)
     cage = _cage(idx, "front", "port-1")
     assert cage["interface"] == "osfp"
-    assert "accepts" in cage
-    assert cage["accepts"] == []
+    assert cage["media"] == "osfp"
+    assert cage["accepts"] == ["generic/osfp-lc@1", "generic/osfp-mpo16@1"]
+
+
+CFP2_CARD = LIB / "components/juniper/mic3-100g-dwdm/v1/contract.yaml"
+
+
+def test_a_family_with_nothing_to_seat_says_so_explicitly():
+    """Three families - cfp, cfp2, cfp4 - have a cage in the library and no
+    component that mates one. `[]`, EMPTY, NOT ABSENT: a consumer has to be
+    able to tell "the library offers nothing here" from "this placement is
+    not a cage at all", and those are different facts only if the key is
+    always present. No DEVICE places one of those cages directly, so this is
+    read where they are placed, on a card, through the function the build
+    writes `cages[]` with."""
+    card = yaml.safe_load(CFP2_CARD.read_text())
+    part = next(q for q in card["parts"] if q["ref"].startswith("std/cfp"))
+    libs = [str(LIB)]
+    slot = render_mod.slot_entry(part, render_mod.Library(libs), render_mod._pluggable_families(),
+                                 render_mod._connector_registry(),
+                                 render_mod._pluggable_candidates(libs))
+    assert slot is not None and slot["interface"].startswith("cfp")
+    assert "accepts" in slot
+    assert slot["accepts"] == []
 
 
 def test_a_cage_entry_carries_the_documented_shape(tmp_path):

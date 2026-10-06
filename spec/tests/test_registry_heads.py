@@ -1,4 +1,4 @@
-"""The three module envelopes carry the MSAs' OUTSIDE-the-cage envelope
+"""The five module envelopes carry the MSAs' OUTSIDE-the-cage envelope
 (docs/pluggables-heads-design.md section 2 and 4.1)."""
 import pathlib
 
@@ -14,6 +14,9 @@ EXPECT = {
     "qsfp-module": {"w-max": 19.0, "above-max": 3.4, "below-max": 1.6, "length-max": 20.0},
     "qsfp-dd-module": {"w-max": 19.0, "above-max": 3.4, "below-max": 1.6,
                        "length-max": {"type-1": 20.0, "type-2": 35.0}},
+    "osfp-module": {"w-max": 22.93, "above-max": 0.0, "below-max": 1.6,
+                    "length-max": {"type-1": 21.39, "type-2": 37.39}},
+    "xfp-module": {"w-max": 22.35, "above-max": 3.0, "below-max": 2.0, "length-max": 9.0},
 }
 
 
@@ -30,6 +33,8 @@ def test_only_the_sfp_length_is_a_recommendation():
     assert REG["sfp-module"]["head"].get("length-kind") == "recommended"
     assert "length-kind" not in REG["qsfp-module"]["head"]
     assert "length-kind" not in REG["qsfp-dd-module"]["head"]
+    assert "length-kind" not in REG["osfp-module"]["head"]
+    assert "length-kind" not in REG["xfp-module"]["head"]
 
 
 def test_the_head_is_wider_than_the_module_it_stands_in_front_of():

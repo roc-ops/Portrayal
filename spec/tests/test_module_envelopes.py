@@ -13,6 +13,8 @@ MODULES = {
     "sfp-module": "SFF-8432",
     "qsfp-module": "SFF-8661",
     "qsfp-dd-module": "QSFP-DD",
+    "osfp-module": "OSFP Module Specification",
+    "xfp-module": "INF-8077i",
 }
 
 

@@ -1,0 +1,145 @@
+format: 1
+kind: component
+name: osfp-lc
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: osfp
+conforms: osfp-module
+profile: networking
+description: >-
+  A generic OSFP with an LC duplex face - the shape of the OSFP optic with
+  two LC bores, standing for all of them. The finned heat sink across the
+  top of the module, a nose below it that stands out of the cage with two
+  keyed bores in it, latch up, and a pull tab. Which module it is -
+  rate, reach, wavelength, watts - is a fact about a vendor product and
+  lives on the wrapper that composes this (docs/pluggables-design.md,
+  decision 5), never here. generic/osfp-mpo16@1 is the same module with the
+  other face.
+size: {w: 22.58, h: 13.0, d: 79.01}
+size-confidence: {w: registry, h: registry, d: registry}
+head:
+  at: [-0.175, 3.8]
+  size: {w: 22.93, h: 10.8, d: 21.39}
+  size-confidence: {w: drawing, h: drawing, d: drawing}
+  node: body
+  type: 1
+attrs: {power-absent: not-applicable, form-factor: osfp, face: lc-duplex, media: fiber}
+fields:
+  latch-color:
+    label: Latch colour
+    type: text
+    default: '#6f6f6f'
+  label:
+    label: Module label
+    type: text
+    default: ''
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    registry - osfp-module, OSFP Module Specification Rev 5.22 Figure 3-2:
+    22.58 +/-0.10 wide, 13.00 +0.10/-0.20 high inside the cage. The 79.01
+    depth is the inserted length, derived there from Figure 5-6 (68.40 from
+    the cage front to the forward stop) and Figure 3-8 (10.61 +/-0.20 from
+    the stop to the rear end). The 6COM 6C-OSFP-400G-LR4 datasheet Rev 1.0
+    p15 outline, a duplex LC module, prints the same body: 22.58 +/-0.1, 13
+    +0.1/-0.2, 69.8 MIN and 10.61 +/-0.2.
+  power: >-
+    NOT APPLICABLE, because this contract is a GENERIC and not a part. It
+    stands in for every module of its kind, so there is no one figure to
+    state, and any wattage here would be a fiction. The figure belongs on the
+    wrapper, which knows which module it is. L27 exempts by `power-absent` and
+    this sentence is why.
+  head: >-
+    drawing - THE HEAD IS THE NOSE, the part of the module that stands the
+    whole way out of the cage, and not the heat sink above it. OSFP Module
+    Specification Rev 5.22 Figure 3-2 Note 1 lets the front of the module be
+    up to 22.93 wide and reach 1.6 MAX below the module bottom, and Figure
+    3-3 allows a Type 1 module nothing above the module top. The nose is
+    drawn at those limits: 22.93 wide, its bottom 1.6 below the 13.0 body.
+    Its top is 3.8 below the module top, where the heat sink ends: Figure
+    3-16 gives (9.20), reference, from the module bottom to the base of the
+    heat sink. So the nose is 9.2 + 1.6 = 10.8 tall. THE LENGTH IS 21.39,
+    the figure Figures 5-6 and 8-4 print in parentheses for a fully inserted
+    module, and the registry limit for Type 1: 100.40 MAX overall less the
+    79.01 inserted, hence `type: 1`. THE VENDOR DRAWING AGREES: 6COM p15
+    prints 22.93 MAX across the front view, 100.4 MAX overall and 1.6 MAX
+    below the body, and its front view, scaled on the 22.93, is 14.7 tall
+    from the heat sink top to the nose bottom (13.0 + 1.6 = 14.6) with the
+    nose top 3.9 below the module top. No second vendor drawing of a duplex
+    LC OSFP is held.
+  heat-sink: >-
+    drawing for the pattern, and an EXAMPLE by the MSA itself. The band across
+    the top 3.8 of the face is the front of the integrated heat sink, drawn
+    as the closed-top example of Figure 3-16: ten vent holes 1.80 wide and
+    3.20 tall under a 0.30 skin, all reference dimensions. The figure gives
+    1.00 side walls and 0.30 ribs, which sum 0.12 over the 22.58 body; the
+    row is drawn centred with the ribs kept and the side walls 0.94.
+    Section 3.3 allows other designs (Figure 3-20 dimensions an open-top one
+    with seven 1.90 slots) and section 14.4.1 says the heat sink of an actual
+    module may differ from the one shown. The 6COM front view draws a
+    shallower grille, about 1.3 tall. THE BAND STANDS 1.39 OUT, not 21.39:
+    Figure 3-3 draws the heat sink top level with the module top as far as
+    the line the 20.0 max envelope starts at, and falling to the nose from
+    there. 21.39 less 20.0 is 1.39.
+  bores: >-
+    std/lc-bore@3, the keyed opening the other LC generics compose, twice.
+    LATCH UP, toward the heat sink, and TRANSMIT ON THE LEFT: OSFP Module
+    Specification Rev 5.22 Figure 14-27 draws the latch notch above each bore
+    and TX left of RX looking at the front, and the 6COM front view draws the
+    same and letters them T and R. `rotate: 180` puts the tongue up. THE
+    PITCH IS THE 6.25 of the lc-duplex-receptacle registry entry; the 6COM
+    front view scales 6.3. Section 14.4 asks for the optical centreline within
+    2 of the module centreline, so the pair is centred: ferrules at x 8.165
+    and 14.415.
+  optical-axis: >-
+    ESTIMATED, scaled - the ferrules are 8.7 below the module top. NO
+    DOCUMENT DIMENSIONS IT. The 6COM p15 front view (an embedded raster at
+    209 ppi), scaled on its printed 22.93 MAX, puts both ferrule centres 8.7
+    +/-0.3 below the heat sink top. Figure 14-27 is a schematic and says the
+    height of the connector on an actual module may differ.
+  tab: >-
+    composed - common/osfp-pull-tab@1, a loop as wide as the module. At
+    `lift: 21.39` it stands on the nose front and reaches 49.31 further (OSFP
+    Module Specification Rev 5.22 Figure B-1; 6COM p15 prints the same 139.1
+    REF to the stop). At `at: [0, 1.35]` the strap leaves the nose level with
+    its top, 3.8 down, and the grip ends up 1.35 to 3.75 below the module
+    top, in front of the heat sink and clear of the bores, as 6COM draws it.
+    The arms run at x 0 to 2.4 and 20.18 to 22.58, clear of the bores (5.815
+    to 16.765).
+  tab-colour: >-
+    A FIELD, and the default is the NEUTRAL GREY #6f6f6f the other LC
+    generics use. OSFP Module Specification Rev 5.22 section 3.8, Table 3-3,
+    codes the pull tab by product type - yellow for 1310 nm to 500 m, green
+    to 2 km, blue to 10 km, red to 40 km, white for 1550 nm - and a duplex LC
+    face carries several of them, so the face does not choose. NOTE THAT
+    TABLE 3-3 ALSO USES GREY, for an active optical cable: the default here
+    is the library neutral and not that code. A vendor wrapper sets
+    `latch-color`.
+parts:
+  - {ref: std/lc-bore@3, id: tx, at: [5.815, 4.75], rotate: 180, lift: 21.39}
+  - {ref: std/lc-bore@3, id: rx, at: [12.065, 4.75], rotate: 180, lift: 21.39}
+  - {ref: common/osfp-pull-tab@1, id: tab, at: [0.0, 1.35], lift: 21.39}
+relief:
+  features:
+    - node: body
+      out: 21.39
+      color: '#8d949c'
+      confidence: drawing
+      source: >-
+        OSFP Module Specification Rev 5.22 Figures 5-6 and 8-4, (21.39), the
+        length of a fully inserted module outside the cage: 100.40 MAX less
+        68.40 less 10.61 - see provenance.head
+    - node: sink
+      out: 1.39
+      color: '#8d949c'
+      confidence: drawing
+      source: >-
+        the front of the heat sink, level with the module top until the 20.0
+        max envelope of the nose begins (OSFP Module Specification Rev 5.22
+        Figure 3-3): 21.39 less 20.0 - see provenance.heat-sink
+connection-points:
+  mate: {at: [11.29, 6.5], direction: front}
+  optical-tx: {at: [8.165, 8.7], direction: front}
+  optical-rx: {at: [14.415, 8.7], direction: front}
+skins: [default]

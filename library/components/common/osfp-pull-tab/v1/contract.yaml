@@ -1,0 +1,158 @@
+format: 1
+kind: component
+name: osfp-pull-tab
+version: 1.0.0
+class: latch
+profile: networking
+description: >-
+  The pull tab of an OSFP module - a closed loop as wide as the module: two
+  arms along the side edges and a grip across the far end. The strap leaves
+  the nose level with its top and climbs toward the grip, which ends up in
+  front of the heat sink and clear of the fibre connector. Open in the
+  middle, so the connector passes through. No speed lettering: the generic
+  that composes it carries no rate.
+size: {w: 22.58, h: 4.85}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  Both are SCALED off a vendor raster, not printed. w is the module width:
+  both vendor plan views draw the outer edges of the loop on the module side
+  edges. h is the 2.4 strap plus the 2.45 it climbs, in the 6COM side view.
+attrs: {role: pull-latch}
+fields:
+  latch-color: {label: Latch colour, type: text, default: '#6f6f6f'}
+provenance:
+  source: >-
+    OSFP Module Specification Rev 5.22, Appendix B (informative), Figure B-1
+    OSFP pull tab length, from the stop feature: a module may have a pull
+    tab, drawn as a flat strap leaving the nose at about the level of its top.
+    The shape is not dimensioned there. It is SCALED off the 6COM
+    6C-OSFP-400G-LR4 datasheet Rev 1.0 p15 outline drawing (an embedded
+    raster, 1396 x 682 at 209 ppi), on the ruler its printed 69.8 MIN fixes
+    (5.16 px/mm, checked on the printed 13 height), good to about 0.3. The
+    second vendor is the FS 400GBASE-SR8 OSFP datasheet p11 Figure 3, used
+    for the reach and for the disagreement recorded under `shape`.
+  size: >-
+    estimated - see size-notes. The FS p11 bottom view prints MAX22.93 across
+    the arm roots, the MSA limit for the front of the module (Figure
+    3-2 Note 1), so the loop is no wider than the head it stands on.
+  reach: >-
+    drawing, derived - 49.31 from the front of the module. Figure B-1 prints
+    (139.1), reference, from the end of the tab to the forward stop of the module;
+    Figure 3-2 limits the module to 100.40 MAX overall and Figure 3-8 puts
+    its rear end 10.61 +/-0.20 behind the stop, so the module front is 89.79
+    ahead of the stop and the tab ends 49.31 ahead of that. BOTH VENDORS
+    AGREE: 6COM p15 prints 139.1 REF to the same stop, 100.4 MAX and 10.61
+    +/-0.2, the same 49.31; FS p11 prints 149.7 +/-0.5 overall and 100 +/-0.5
+    for the module, 49.7.
+  shape: >-
+    estimated, scaled off the 6COM p15 side and bottom views. The strap is
+    2.4 thick and each arm 2.4 wide. It leaves the nose 3.9 below the module
+    top, runs level for 8.1, climbs 2.45 over the next 21.4, and runs level
+    again to the end; the grip is the last 7.8, across the full width. The
+    climb is drawn as three boxes at the mean of the edge over each third,
+    the staircase common/qsfp-pull-tab@2 uses for its S-bend; relief builds
+    boxes, and each one starts where the one before it ends. THE MSA DRAWS IT
+    FLAT (Figure B-1, an informative figure with one dimension) and THE TWO
+    VENDORS BOTH RAISE THE GRIP: the FS p11 side view dips about 1 and then
+    climbs about 3 to a tip about 1.8 below the module top, against 1.45
+    here. The vendors are drawn because they agree with each other on where
+    the grip ends up. The rounded corners of the grip and the lettering 6COM
+    moulds into it are not drawn.
+  root: >-
+    NOT DRAWN. Each vendor draws a deep block at the arm roots, as tall as
+    the nose: the 6COM one lies alongside the nose, behind the module front, inside
+    the head a host already draws; the FS one stands about 14 forward of it; Figure
+    B-1 draws a short one against the nose front. Three sources, three
+    places, so the arms start on the nose front as a plain strap.
+  height: >-
+    a host composes this part so that the strap leaves the nose level with
+    its top: the root of each arm is 2.45 below the top of this part. 6COM
+    scales the nose top 3.9 below the module top and Figure B-1 about 4.3.
+  colour: >-
+    the neutral grey #6f6f6f of common/qsfp-pull-tab@2. OSFP Module
+    Specification Rev 5.22 section 3.8, Table 3-3, codes the pull tab by
+    product type, so the colour belongs to the product and a host or a vendor
+    wrapper sets latch-color. The outline follows the fill
+    (`data-stroke-derive`).
+elements:
+  arm-l: {at: [0.0, 2.45], size: [2.4, 2.4], class: latch}
+  arm-l-2: {at: [0.0, 2.04], size: [2.4, 2.4], class: latch}
+  arm-l-3: {at: [0.0, 1.23], size: [2.4, 2.4], class: latch}
+  arm-l-4: {at: [0.0, 0.41], size: [2.4, 2.4], class: latch}
+  arm-l-5: {at: [0.0, 0.0], size: [2.4, 2.4], class: latch}
+  arm-r: {at: [20.18, 2.45], size: [2.4, 2.4], class: latch}
+  arm-r-2: {at: [20.18, 2.04], size: [2.4, 2.4], class: latch}
+  arm-r-3: {at: [20.18, 1.23], size: [2.4, 2.4], class: latch}
+  arm-r-4: {at: [20.18, 0.41], size: [2.4, 2.4], class: latch}
+  arm-r-5: {at: [20.18, 0.0], size: [2.4, 2.4], class: latch}
+  grip: {at: [0.0, 0.0], size: [22.58, 2.4], class: latch}
+relief:
+  features:
+    - node: arm-l
+      out: 8.1
+      confidence: estimated
+      source: >-
+        the root of the strap, level with the top of the nose, from the nose front to 8.1 out (scaled, 6COM p15 side view)
+    - node: arm-l-2
+      out: 15.23
+      lift: 8.1
+      confidence: estimated
+      source: >-
+        the first third of the climb, 8.1 to 15.23 out: the strap rises 2.45 between 8.1 and 29.5 (scaled, 6COM p15 side view), and this box is at its mean over the span, 0.41 up. Its lift is where the root ends
+    - node: arm-l-3
+      out: 22.37
+      lift: 15.23
+      confidence: estimated
+      source: >-
+        the second third of the climb, at the mean of the same edge over the span, 1.22 up. Its lift is where the box before it ends
+    - node: arm-l-4
+      out: 29.5
+      lift: 22.37
+      confidence: estimated
+      source: >-
+        the last third of the climb, at the mean of the same edge over the span, 2.04 up. Its lift is where the box before it ends
+    - node: arm-l-5
+      out: 41.51
+      lift: 29.5
+      confidence: estimated
+      source: >-
+        the level run at the top of the climb, from 29.5 to where the grip begins: the 49.31 reach less the 7.8 grip (scaled, 6COM p15 bottom view)
+    - node: arm-r
+      out: 8.1
+      confidence: estimated
+      source: >-
+        the same reading as arm-l - one drawing covering both arms of one tab
+    - node: arm-r-2
+      out: 15.23
+      lift: 8.1
+      confidence: estimated
+      source: >-
+        the same reading as arm-l-2 - one drawing covering both arms of one tab
+    - node: arm-r-3
+      out: 22.37
+      lift: 15.23
+      confidence: estimated
+      source: >-
+        the same reading as arm-l-3 - one drawing covering both arms of one tab
+    - node: arm-r-4
+      out: 29.5
+      lift: 22.37
+      confidence: estimated
+      source: >-
+        the same reading as arm-l-4 - one drawing covering both arms of one tab
+    - node: arm-r-5
+      out: 41.51
+      lift: 29.5
+      confidence: estimated
+      source: >-
+        the same reading as arm-l-5 - one drawing covering both arms of one tab
+    - node: grip
+      out: 49.31
+      lift: 41.51
+      confidence: drawing
+      source: >-
+        the far end of the tab: OSFP Module Specification Rev 5.22 Figure B-1
+        (139.1) from the tab end to the forward stop, less the 89.79 from the
+        module front to the same stop (100.40 MAX less 10.61, Figures 3-2 and
+        3-8) - see provenance.reach. Its lift is where the arms end
+skins: [default]

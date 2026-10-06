@@ -1,0 +1,154 @@
+format: 1
+kind: component
+name: osfp-mpo16
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: osfp
+conforms: osfp-module
+profile: networking
+description: >-
+  A generic OSFP with one MPO-16 face - the shape of the OSFP parallel-fibre
+  optic with a single-row sixteen-fibre receptacle, standing for all of them.
+  The finned heat sink across the top of the module, a nose below it that
+  stands out of the cage with one MPO-16 receptacle in it, key up and
+  pinned, and a pull tab. Which module it is - rate, reach, wavelength,
+  watts - is a fact about a vendor product and lives on the wrapper that
+  composes this (docs/pluggables-design.md, decision 5), never here.
+size: {w: 22.58, h: 13.0, d: 79.01}
+size-confidence: {w: registry, h: registry, d: registry}
+head:
+  at: [-0.175, 3.8]
+  size: {w: 22.93, h: 10.8, d: 21.39}
+  size-confidence: {w: drawing, h: drawing, d: drawing}
+  node: body
+  type: 1
+attrs: {power-absent: not-applicable, form-factor: osfp, face: mpo16, media: fiber}
+fields:
+  latch-color:
+    label: Latch colour
+    type: text
+    default: '#6f6f6f'
+  label:
+    label: Module label
+    type: text
+    default: ''
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    registry - osfp-module, OSFP Module Specification Rev 5.22 Figure 3-2:
+    22.58 +/-0.10 wide, 13.00 +0.10/-0.20 high inside the cage. The 79.01
+    depth is the inserted length, derived there from Figure 5-6 (68.40 from
+    the cage front to the forward stop) and Figure 3-8 (10.61 +/-0.20 from
+    the stop to the rear end). The FS 400GBASE-SR8 OSFP datasheet p11 Figure
+    3, an MPO-16 module, prints the same body: 22.58 +/-0.10 and 13
+    +0.1/-0.2.
+  power: >-
+    NOT APPLICABLE, because this contract is a GENERIC and not a part. It
+    stands in for every module of its kind, so there is no one figure to
+    state, and any wattage here would be a fiction. The figure belongs on the
+    wrapper, which knows which module it is. L27 exempts by `power-absent` and
+    this sentence is why.
+  head: >-
+    drawing - THE HEAD IS THE NOSE, the part of the module that stands the
+    whole way out of the cage, and not the heat sink above it. OSFP Module
+    Specification Rev 5.22 Figure 3-2 Note 1 lets the front of the module be
+    up to 22.93 wide and reach 1.6 MAX below the module bottom, and Figure
+    3-3 allows a Type 1 module nothing above the module top. The nose is
+    drawn at those limits: 22.93 wide, its bottom 1.6 below the 13.0 body.
+    Its top is 3.8 below the module top, where the heat sink ends: Figure
+    3-16 gives (9.20), reference, from the module bottom to the base of the
+    heat sink. So the nose is 9.2 + 1.6 = 10.8 tall. THE LENGTH IS 21.39,
+    the figure Figures 5-6 and 8-4 print in parentheses for a fully inserted
+    module, and the registry limit for Type 1: 100.40 MAX overall less the
+    79.01 inserted, hence `type: 1`. TWO VENDORS: FS p11 prints MAX22.93
+    across the front, 100 +/-0.5 overall (21.0 outside the cage) and 1.65
+    +/-0.1 below the body, 0.05 over the 1.60 MAX; the MSA governs and 1.6
+    is drawn. The 6COM 6C-OSFP-400G-LR4 datasheet Rev 1.0 p15 (a duplex LC
+    module) prints 22.93 MAX, 100.4 MAX and 1.6 MAX, and its front view
+    scales the nose top 3.9 below the module top.
+  heat-sink: >-
+    drawing for the pattern, and an EXAMPLE by the MSA itself. The band across
+    the top 3.8 of the face is the front of the integrated heat sink, drawn
+    as the closed-top example of Figure 3-16: ten vent holes 1.80 wide and
+    3.20 tall under a 0.30 skin, all reference dimensions. The figure gives
+    1.00 side walls and 0.30 ribs, which sum 0.12 over the 22.58 body; the
+    row is drawn centred with the ribs kept and the side walls 0.94.
+    Section 3.3 allows other designs (Figure 3-20 dimensions an open-top one
+    with seven 1.90 slots) and section 14.4.1 says the heat sink of an actual
+    module may differ from the one shown. The 6COM front view draws a
+    shallower grille, about 1.3 tall. THE BAND STANDS 1.39 OUT, not 21.39:
+    Figure 3-3 draws the heat sink top level with the module top as far as
+    the line the 20.0 max envelope starts at, and falling to the nose from
+    there. 21.39 less 20.0 is 1.39.
+  receptacle: >-
+    std/mpo16-module-receptacle@1, composed as `mpo16`: the MTP-16 opening as
+    a module carries it, a dark cavity with the pinned ferrule and its sixteen
+    fibre positions at the back. Section 14.4.12 names a male MPO-16
+    connector. The mouth is the 12.9 x 8.0 std/mpo16@1 records (estimated
+    there), and the slot offers what that opening offers. The fibres are
+    addressable as `mpo16/1` to `mpo16/16`; which carry which lane is the
+    wrapper fact, and Figure 14-46 is where the MSA assigns them.
+  key: >-
+    drawing - KEY UP, toward the heat sink: OSFP Module Specification Rev
+    5.22 Figure 14-46 draws the key notch in the top wall of the receptacle,
+    right of centre looking in. The receptacle is composed unrotated and
+    draws its notch there, and generic/mpo16-plug@1 draws its key on top,
+    offset right, so a seated plug agrees with that figure. No vendor end
+    view of an MPO-16 OSFP is held.
+  gender: >-
+    drawing - PINNED. Section 14.4.12 calls the receptacle a male MPO-16
+    connector, and the composed receptacle draws its two pins.
+  position: >-
+    ESTIMATED - centred on the module in x (section 14.4 asks for the optical
+    centreline within 2 of the module centreline) and at the mid-height of
+    the nose, 9.2 below the module top. NO DOCUMENT DIMENSIONS THE HEIGHT.
+    Figure 14-46 is a schematic and scales the mouth centre about 8.4 down;
+    the 6COM front view of the duplex LC module puts its ferrules 8.7 down.
+    Mid-height keeps the 8.0 mouth and its insert inside the nose.
+  insert: >-
+    borrowed - the 13.1 x 9.4 black insert of generic/qsfp-mpo@1,
+    photo-measured there on a QSFP28 module, drawn centred on this receptacle.
+    Estimated here: nothing held shows the insert of an OSFP MPO-16 module.
+  tab: >-
+    composed - common/osfp-pull-tab@1, a loop as wide as the module. At
+    `lift: 21.39` it stands on the nose front and reaches 49.31 further (OSFP
+    Module Specification Rev 5.22 Figure B-1; FS p11 prints 49.7). At `at:
+    [0, 1.35]` the strap leaves the nose level with its top, 3.8 down, and
+    the grip ends up 1.35 to 3.75 below the module top, in front of the heat
+    sink and clear of the receptacle. The arms run at x 0 to 2.4 and 20.18
+    to 22.58, clear of the insert (4.74 to 17.84).
+  tab-colour: >-
+    A FIELD, and the default is the NEUTRAL GREY #6f6f6f the other generics
+    use where the face does not fix the colour. OSFP Module Specification Rev
+    5.22 section 3.8, Table 3-3, codes the pull tab by product type - beige
+    for 850 nm, yellow for 1310 nm to 500 m, green to 2 km, blue to 10 km -
+    and an MPO-16 face carries both the 850 nm parallel module and the 1310
+    nm one, so the face does not choose. NOTE THAT TABLE 3-3 ALSO USES GREY,
+    for an active optical cable: the default here is the library neutral and
+    not that code. A vendor wrapper sets `latch-color`.
+parts:
+  - {ref: std/mpo16-module-receptacle@1, id: mpo16, at: [4.84, 5.2], lift: 21.39}
+  - {ref: common/osfp-pull-tab@1, id: tab, at: [0.0, 1.35], lift: 21.39}
+relief:
+  features:
+    - node: body
+      out: 21.39
+      color: '#8d949c'
+      confidence: drawing
+      source: >-
+        OSFP Module Specification Rev 5.22 Figures 5-6 and 8-4, (21.39), the
+        length of a fully inserted module outside the cage: 100.40 MAX less
+        68.40 less 10.61 - see provenance.head
+    - node: sink
+      out: 1.39
+      color: '#8d949c'
+      confidence: drawing
+      source: >-
+        the front of the heat sink, level with the module top until the 20.0
+        max envelope of the nose begins (OSFP Module Specification Rev 5.22
+        Figure 3-3): 21.39 less 20.0 - see provenance.heat-sink
+connection-points:
+  mate: {at: [11.29, 6.5], direction: front}
+  optical: {at: [11.29, 9.2], direction: front}
+skins: [default]

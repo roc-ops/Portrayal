@@ -25,6 +25,15 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- OSFP and XFP cages offer optics. `generic/osfp-mpo16@1`, `generic/osfp-lc@1`
+  and `generic/xfp-lc@1` are the first parts to mate `osfp` and `xfp`, so the
+  `accepts` list of every OSFP and XFP cage in `<device>.configs.json` and
+  `components.json` goes from empty to these. Each publishes its receptacle
+  as a connector slot. `common/osfp-pull-tab@1` is the tab the OSFP parts
+  compose. `spec/schemas/standards.yaml` gains `osfp-module` and
+  `xfp-module`, each with the `head:` envelope its MSA gives. No cage
+  contract and no DCIM export changes.
+  [docs/pluggables-osfp-xfp-design.md](docs/pluggables-osfp-xfp-design.md).
 - D-subminiature and VGA panel connectors are connector slots, and four hooded
   cable plugs seat on them. `db9`, `hd15`, `da15` and `db25` join
   `spec/schemas/connectors.yaml`, each naming the connector with the gender the

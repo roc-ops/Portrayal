@@ -1349,6 +1349,85 @@ standards:
         outside the cage are maximums): 19 MAX wide, 3.4 MAX above, 1.6 MAX below,
         20 MAX long for a Type 1 module and 35 MAX for Type 2 (section 7.1: Type 2
         allows an additional extension outside the cage).
+  osfp-module:
+    registry: 'OSFP MSA, OSFP Module Specification Rev 5.22 (2025-08-09), section 3.1, Figure 3-2 OSFP overall dimensions, with Figure 3-3 (size of module front), Figure 3-8 (back, side view) and Figure 5-6 (1x1 cage, axial reference dimensions)'
+    w: 22.58
+    h: 13.00
+    confidence: verified
+    depth: 79.01
+    depth-confidence: verified
+    depth-notes: 'the INSERTED length, DERIVED from two printed figures: Figure
+      5-6 gives (68.40), reference, from the front of the cage to the forward
+      stop (module datum B, cage datum G) with the module fully pushed in, and
+      Figure 3-8 gives 10.61 +/-0.20 from datum B to the rear end of the
+      housing. 68.40 + 10.61 = 79.01. It closes against the overall length:
+      Figure 3-2 limits a Type 1 or Type 2 module to 100.40 MAX, and 100.40
+      less 79.01 is the 21.39 Figure 5-6 and Figure 8-4 print, in
+      parentheses, as the length standing outside the cage. THE NOSE IS NOT
+      INSIDE THIS DEPTH, so d + out is the whole module. The cage front is
+      not the bezel: Figure 5-23 puts the bezel 76.20 +/-0.30 from the
+      connector datum K, which Figure 5-6 puts (11.80) behind the stop, so
+      the cage stands about 4 through the panel, and this depth is measured
+      from the cage front, as the MSA measures it'
+    notes: >-
+      THE MODULE ENVELOPE, not a panel aperture. Figure 3-2: 22.58 +/-0.10
+      wide (datum A), 13.00 +0.10/-0.20 high inside the cage (Note 4; Figure
+      3-16 adds that the module height applies to the heat sink top also),
+      R0.50 MIN or C0.5 MIN on the corners. Shared by OSFP, OSFP800 and
+      OSFP1600 (section 4 changes the card edge and the latch pocket, not this
+      outline); the rate is never in this entry. OSFP-RHS, the flat-topped
+      module for a riding heat sink (section 12), is a different envelope and
+      is not this entry. NO CAGE ENTRY STANDS BESIDE THIS ONE: the MSA
+      dimensions a bezel cut-out (Figure 5-23, 24.28 +/-0.10 by 14.70
+      +/-0.10 for a 1x1 cage) and a port (Figure 8-3, 22.88 by 13.30 inside
+      the compressed EMI fingers), and std/osfp@1 draws neither.
+    head:
+      w-max: 22.93
+      above-max: 0.0
+      below-max: 1.6
+      length-max: {type-1: 21.39, type-2: 37.39}
+      source: >-
+        OSFP Module Specification Rev 5.22 Figure 3-2, Note 1 (the front of
+        the module, pull tab and other components can extend 1.6 MAX from the
+        bottom of the module and can be up to 22.93 wide in the max envelope
+        shown) and Figure 3-3: 0.00 MAX above the module top and 1.60 MAX
+        below it for Type 1 and Type 2. The length is DERIVED: 100.40 MAX
+        overall (Type 1) and 116.40 MAX (Type 2) less the 79.01 inserted
+        length; Figures 5-6 and 8-4 print the Type 1 result, (21.39). Type 3
+        (3.60 MAX above, incompatible with the stacked cages) is not in this
+        envelope.
+  xfp-module:
+    registry: 'XFP MSA INF-8077i Rev 4.5 (2005-08-31), section 6.3, Figure 31 Drawing of XFP Transceiver, Part 1 and Figure 32 Part 2'
+    w: 18.35
+    h: 8.5
+    confidence: verified
+    depth: 69.0
+    depth-confidence: verified
+    depth-notes: 'the INSERTED length, DERIVED from two printed figures on
+      Figure 31: 62.1 MIN from the back of the enlarged front section to
+      datum D, and 6.9 +/-0.15 from datum D to the rear end of the module.
+      62.1 + 6.9 = 69.0. It closes against the overall length the same
+      figure allows: 71.1 MAX from the front of the module to datum D, which
+      less 62.1 is the 9.0 REF the figure prints for the enlarged section.
+      THE ENLARGED SECTION IS NOT INSIDE THIS DEPTH, so d + out is the whole
+      module, 78.0'
+    notes: >-
+      THE MODULE ENVELOPE, not a panel aperture. Figure 31: 18.35 +/-0.1 wide
+      (datum E), 8.5 +/-0.1 high (datum F), R0.3 MIN on the body corners
+      (Note 4). One envelope for every XFP; the rate and the protocol are
+      never in this entry. The cage it seats in is the `xfp` entry above.
+    head:
+      w-max: 22.35
+      above-max: 3.0
+      below-max: 2.0
+      length-max: 9.0
+      source: >-
+        INF-8077i Rev 4.5 Figure 31 and Note 2 (indicated dimensions define
+        the enlarged section of the transceiver to accommodate the mating
+        plug and actuator mechanism; a bail actuator is the preferred
+        design): 3 MAX above the module top and 2 MAX below it. Figure 32
+        allows 2 MAX each side of the 18.35 REF body, 22.35 across. The
+        length is 71.1 MAX less 62.1 MIN, printed as 9.0 REF.
   lc-plug:
     registry: SENKO DS-LC-000004 Rev A, LC Plug Connector Drawing
     w: 5.58
