@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9502-16smt
-version: 1.0.11
+version: 1.0.12
 maturity: modelled
 manufacturer: UfiSpace
 model: S9502-16SMT
@@ -226,6 +226,13 @@ provenance:
       searched 2026-08-28: 'UfiSpace S9502-16SMT end of life end of sale' - no announcement found;
       the vendor product page and the datasheet PDF are live. none-announced is a real finding
       here, not an absence of looking.
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      the hardware installation guide lists, in its package contents, a screw kit for the grounding
+      lug of 2 x M4*L8.0mm screws, and its grounding steps lock the grounding lug to the designated
+      grounding location with 2 M4 screws: the `stud-size` of ground-1 and ground-2. The accessory lug
+      is one two-hole lug held by both screws.
 
 attrs:
   performance:
@@ -614,8 +621,8 @@ views:
         - {ref: common/screw-head@1, id: screw-r1, at: [82, 20], group: furniture, rel-pos: 21}
         - {ref: common/screw-head@1, id: screw-r2, at: [150, 20], group: furniture, rel-pos: 22}
         - {ref: common/screw-head@1, id: screw-r3, at: [218, 20], group: furniture, rel-pos: 23}
-        - {ref: common/ground-lug@1, id: ground-1, at: [40, 15], group: grounding, rel-pos: 2}
-        - {ref: common/ground-lug@1, id: ground-2, at: [51, 15], group: grounding, rel-pos: 3}
+        - {ref: common/ground-lug@1, id: ground-1, at: [40, 15], group: grounding, rel-pos: 2, attrs: {stud-size: M4}}
+        - {ref: common/ground-lug@1, id: ground-2, at: [51, 15], group: grounding, rel-pos: 3, attrs: {stud-size: M4}}
 configurations:
   dc:
     kind: base

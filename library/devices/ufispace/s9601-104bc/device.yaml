@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9601-104bc
-version: 3.0.3
+version: 3.0.4
 maturity: modelled
 manufacturer: UfiSpace
 model: S9601-104BC
@@ -351,6 +351,13 @@ provenance:
       searched 2026-08-28, 'UfiSpace S9601-104BC end of life end of sale' - no announcement found;
       the product page is live and the unit is actively distributed (EPS Global lists it).
       none-announced is a real finding, not an omission.
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      the hardware installation guide lists, in its package contents, a screw kit for the grounding
+      lug of 2 x M4*L8.0mm screws, and its grounding steps lock the grounding lug to the designated
+      grounding location with 2 M4 screws: the `stud-size` of ground-1, the upper of the two holes and
+      the only one placed. The accessory lug is one two-hole lug held by both screws.
 
 attrs:
   performance:
@@ -1139,7 +1146,7 @@ views:
            description: 'the upper of the two tapped M4 holes of that rear grounding
              location. THE STUDS THEMSELVES STAND PROUD OF THE RIGHT-HAND CHASSIS EDGE in
              Figure 4 and are drawn inside it here, because the ear-fold body is 440 mm
-             and anything beyond it is not metal this drawing carries'}
+             and anything beyond it is not metal this drawing carries', attrs: {stud-size: M4}}
     regions:
       - {id: exhaust, at: [3, 2], size: {w: 336, h: 84}, physical-context: Exhaust, label: Fan exhaust, members: [fan-0, fan-1, fan-2, fan-3]}
       - {id: power, at: [349, 2], size: {w: 77, h: 84}, label: Power supplies, members: [psu-0, psu-1]}

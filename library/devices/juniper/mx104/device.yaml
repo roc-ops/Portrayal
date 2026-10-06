@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx104
-version: 2.0.20
+version: 2.0.21
 maturity: modelled
 manufacturer: Juniper
 model: MX104
@@ -67,6 +67,12 @@ provenance:
     note: >-
       left face carries the estimated fan-tray band (side-mounted cooling per the guide); other
       faces rail-band estimates. Axis conventions per viewer3d.js as the siblings
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      the hardware guide, grounding points specifications: two threaded holes that fit SAE 10-32
+      screws, spaced at 0.625 in. (15.86 mm) centres, for one two-hole cable lug: the `stud-size` of
+      both studs.
 
 attrs:
   physical:
@@ -272,8 +278,8 @@ views:
           -1.1 H 2.4 M -1.6 0.5 H 1.6 M -0.7 2.1 H 0.7', fill: '#e8eaec', for: chassis}
     components:
       placements:
-        - {id: ground-stud-0, ref: juniper/mx-ground-stud@1, at: [193.50, 132.50], for: chassis, group: grounding, rel-pos: 0}
-        - {id: ground-stud-1, ref: juniper/mx-ground-stud@1, at: [209.50, 132.50], for: chassis, group: grounding, rel-pos: 1}
+        - {id: ground-stud-0, ref: juniper/mx-ground-stud@1, at: [193.50, 132.50], for: chassis, group: grounding, rel-pos: 0, attrs: {stud-size: '10-32'}}
+        - {id: ground-stud-1, ref: juniper/mx-ground-stud@1, at: [209.50, 132.50], for: chassis, group: grounding, rel-pos: 1, attrs: {stud-size: '10-32'}}
 
   left:
     size:

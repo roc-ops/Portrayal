@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9510-30xc
-version: 3.0.4
+version: 3.0.5
 maturity: modelled
 manufacturer: UfiSpace
 model: S9510-30XC
@@ -265,6 +265,13 @@ provenance:
       searched 2026-08-28, 'UfiSpace S9510-30XC end of life' - no announcement. The vendor lists
       the product on its telecom access pages as a current FlexE/TSN cell site gateway.
       none-announced is a checked state, not an absence.
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      the hardware installation guide lists, in its package contents, a screw kit for the grounding
+      lug of 2 x M4*L8.0mm screws, and its grounding steps lock the grounding lug to the designated
+      grounding location with 2 M4 screws: the `stud-size` of ground-1 and ground-2. The accessory lug
+      is one two-hole lug held by both screws.
 
 attrs:
   performance:
@@ -739,8 +746,8 @@ views:
       - {at: [40, 12.8], text: GND, font-size: 2.4, anchor: start, fill: '#f5f7fa', for: ground-1}
     components:
       placements:
-        - {ref: common/ground-lug@1, id: ground-1, at: [31, 15], group: grounding, rel-pos: 2}
-        - {ref: common/ground-lug@1, id: ground-2, at: [42, 15], group: grounding, rel-pos: 3}
+        - {ref: common/ground-lug@1, id: ground-1, at: [31, 15], group: grounding, rel-pos: 2, attrs: {stud-size: M4}}
+        - {ref: common/ground-lug@1, id: ground-2, at: [42, 15], group: grounding, rel-pos: 3, attrs: {stud-size: M4}}
         - {ref: common/screw-head@1, id: screw-r7, at: [150, 20], group: furniture, rel-pos: 16}
         - {ref: common/screw-head@1, id: screw-r8, at: [260, 20], group: furniture, rel-pos: 17}
 configurations:

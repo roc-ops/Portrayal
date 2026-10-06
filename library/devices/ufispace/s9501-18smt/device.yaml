@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9501-18smt
-version: 3.0.4
+version: 3.0.5
 maturity: modelled
 manufacturer: UfiSpace
 model: S9501-18SMT
@@ -297,6 +297,13 @@ provenance:
       searched 2026-08-28, 'UfiSpace S9501-18SMT end of life end of sale' - no announcement found;
       the product page is live, the unit is listed by resellers and it carries an Open Compute
       Project product entry. none-announced is a real finding, not an omission.
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      the hardware installation guide lists, in its package contents, a screw kit for the grounding
+      lug of 2 x M4*L8.0mm screws, and its grounding steps lock the grounding lug to the designated
+      grounding location with 2 M4 screws: the `stud-size` of ground-1 to ground-4, two holes at each
+      of the two designated locations. The accessory lug is one two-hole lug held by both screws.
 
 attrs:
   performance:
@@ -796,16 +803,16 @@ views:
         - {ref: common/ground-lug@1, id: ground-1, at: [5.9, 12.0], group: grounding, rel-pos: 2,
            description: 'HIG Figure 22 Location-1, the forward of the two designated
              grounding locations - a tapped M4 hole for the accessory grounding lug
-             (50 x 11.1 x 7.5 mm, #6 AWG, 2 x M4*L8.0 screws and 4 lock washers)'}
+             (50 x 11.1 x 7.5 mm, #6 AWG, 2 x M4*L8.0 screws and 4 lock washers)', attrs: {stud-size: M4}}
         - {ref: common/ground-lug@1, id: ground-2, at: [21.7, 12.0], group: grounding, rel-pos: 3,
            description: 'HIG Figure 22 Location-1, the second of its two tapped holes -
-             measured hole pitch 15.8 mm'}
+             measured hole pitch 15.8 mm', attrs: {stud-size: M4}}
         - {ref: common/ground-lug@1, id: ground-3, at: [189.8, 12.0], group: grounding, rel-pos: 4,
            description: 'HIG Figure 22 Location-2, the rearward designated grounding
-             location, first tapped hole'}
+             location, first tapped hole', attrs: {stud-size: M4}}
         - {ref: common/ground-lug@1, id: ground-4, at: [205.5, 12.0], group: grounding, rel-pos: 5,
            description: 'HIG Figure 22 Location-2, second tapped hole - measured hole
-             pitch 15.7 mm'}
+             pitch 15.7 mm', attrs: {stud-size: M4}}
 configurations:
   dc:
     kind: base

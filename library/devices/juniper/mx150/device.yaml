@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx150
-version: 1.0.12
+version: 1.0.13
 maturity: modelled
 manufacturer: Juniper
 model: MX150
@@ -78,6 +78,12 @@ provenance:
     note: >-
       near-blank by evidence - rail bands estimated; axis conventions per viewer3d.js as on the
       siblings
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      the hardware guide, Table 22, parts and tools required for connecting an MX150 to earth ground:
+      two 10-32 x .25 in. screws, for a two-hole grounding lug (Panduit LCC10-14BWL or an equivalent):
+      the `stud-size` of both studs.
 
 attrs:
   physical:
@@ -318,8 +324,8 @@ views:
     components:
       placements:
         - {id: esd-rear-jack, ref: common/esd-jack@1, at: [33.2, 10.4], for: chassis, group: grounding, rel-pos: 0}
-        - {id: ground-stud-0, ref: juniper/mx-ground-stud@1, at: [17.50, 3.00], for: chassis, group: grounding, rel-pos: 0}
-        - {id: ground-stud-1, ref: juniper/mx-ground-stud@1, at: [30.50, 3.00], for: chassis, group: grounding, rel-pos: 1}
+        - {id: ground-stud-0, ref: juniper/mx-ground-stud@1, at: [17.50, 3.00], for: chassis, group: grounding, rel-pos: 0, attrs: {stud-size: '10-32'}}
+        - {id: ground-stud-1, ref: juniper/mx-ground-stud@1, at: [30.50, 3.00], for: chassis, group: grounding, rel-pos: 1, attrs: {stud-size: '10-32'}}
         - {id: fan-0, ref: common/fan-module@1, at: [48.0, 2.0], skin: default, group: fans, rel-pos: 0,
            attrs: {function: fixed chassis fan}}
         - {id: fan-1, ref: common/fan-module@1, at: [105.0, 2.0], skin: default, group: fans, rel-pos: 1,

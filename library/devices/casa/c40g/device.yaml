@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: c40g
-version: 0.5.14
+version: 0.5.15
 maturity: modelled
 manufacturer: Casa Systems
 model: C40G
@@ -339,6 +339,13 @@ provenance:
       rear 2 and 3, and I/O cards in the rest, and it is the only place either guide says where
       blank filler plates go by number - "Rear slots (non-redundant system) - Blank filler plates:
       2, 3". Bay defaults are unchanged
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      the C40G Hardware Installation Guide, Connecting the chassis to ground, says the shelf ground
+      terminal provides two M6 screws for a double-lug ground terminal cable on AWG 6 wire: the
+      `stud-size` of the terminal. The guide counts two screws and its figures draw three studs (the
+      `ground-stud-count` gap); the size is stated once and is carried for the terminal as a whole.
 
 attrs:
   power:
@@ -609,7 +616,7 @@ views:
         - {id: rear-5, at: [39.35, 12.0], size: {w: 345.5, h: 30.47}, rotate: 90, accepts: [casa/rfd@1, casa/rfu-16x8@1, casa/ups-32x4@1, casa/io-6p12@2, casa/io-6p12-io2@1, casa/blank-faceplate@1, 'casa/oob-2p8@1'], default: casa/io-6p12@2, group: rear-slots, rel-pos: 5}
       placements:
         - {id: ac-inlet-panel, ref: casa/c40g-ac-inlet-panel@1, at: [37.5, 196.0], group: power, rel-pos: 0, only-in: [ac-power]}
-        - {id: ground-studs-rear, ref: casa/c40g-ground-studs@1, at: [9.0, 219.8], group: grounding, rel-pos: 1}
+        - {id: ground-studs-rear, ref: casa/c40g-ground-studs@1, at: [9.0, 219.8], group: grounding, rel-pos: 1, attrs: {stud-size: M6}}
   top:
     size: {w: 432.95, h: 388.45}
     panel:

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: 300cb08
-version: 1.0.1
+version: 1.0.2
 maturity: modelled
 manufacturer: Amphenol Network Solutions
 model: 300CB08
@@ -133,6 +133,15 @@ provenance:
       because the callout states the figure and the drawing is coarse. Each
       side carries one landing and the bottom a third; the guide says only one
       ground connection is required.
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      the installation guide's specifications give the earth ground terminals as
+      three sets of 1/4-20 threaded holes on 5/8 inch centres, bolted with washers
+      to 50 in-lb, for a dual-hole compression lug on #6 to #1 AWG wire; its
+      description says they take either a dual-hole or a single-hole lug and that
+      only one ground connection is required: the `stud-size` of all six ground
+      placements, two on each side and two on the bottom.
 attrs:
   physical:
     weight-empty-kg: 5.44
@@ -347,8 +356,8 @@ views:
       - {id: vent-bottom-front-right, at: [255.8, 208.0], size: [167.0, 85.0], fill: '#3a3c3e', pattern: holes, pattern-pitch: [5.0, 5.0], pattern-offset: [255.8, 208.0], vent: 1.0, confidence: estimated, source: 'extent read off the bottom view, Fig. 3-12, at 1.336 px/mm; the hole pitch and the sheet thickness are not dimensioned'}
     components:
       placements:
-        - {id: ground-bottom-1, ref: common/ground-stud@1, at: [210.9, 56.0], group: grounding, rel-pos: 1}
-        - {id: ground-bottom-2, ref: common/ground-stud@1, at: [210.9, 71.9], group: grounding, rel-pos: 2}
+        - {id: ground-bottom-1, ref: common/ground-stud@1, at: [210.9, 56.0], group: grounding, rel-pos: 1, attrs: {stud-size: '1/4-20'}}
+        - {id: ground-bottom-2, ref: common/ground-stud@1, at: [210.9, 71.9], group: grounding, rel-pos: 2, attrs: {stud-size: '1/4-20'}}
   left:
     size: {w: 330.8, h: 43.9}
     panel:
@@ -360,8 +369,8 @@ views:
       - {id: bracket-hole-4, at: [228.9, 22.1], size: [7.0, 7.0], fill: '#55585b', rx: 3.5}
     components:
       placements:
-        - {id: ground-left-1, ref: common/ground-stud@1, at: [57.95, 11.75], group: grounding, rel-pos: 5}
-        - {id: ground-left-2, ref: common/ground-stud@1, at: [57.95, 27.65], group: grounding, rel-pos: 6}
+        - {id: ground-left-1, ref: common/ground-stud@1, at: [57.95, 11.75], group: grounding, rel-pos: 5, attrs: {stud-size: '1/4-20'}}
+        - {id: ground-left-2, ref: common/ground-stud@1, at: [57.95, 27.65], group: grounding, rel-pos: 6, attrs: {stud-size: '1/4-20'}}
         - {id: ground-left-mark, ref: common/ground-symbol@1, at: [75.0, 18.95], for: ground-left-1, group: grounding, rel-pos: 7}
   right:
     size: {w: 330.8, h: 43.9}
@@ -374,8 +383,8 @@ views:
       - {id: bracket-hole-4, at: [94.9, 22.1], size: [7.0, 7.0], fill: '#55585b', rx: 3.5}
     components:
       placements:
-        - {id: ground-right-1, ref: common/ground-stud@1, at: [264.75, 11.75], group: grounding, rel-pos: 3}
-        - {id: ground-right-2, ref: common/ground-stud@1, at: [264.75, 27.65], group: grounding, rel-pos: 4}
+        - {id: ground-right-1, ref: common/ground-stud@1, at: [264.75, 11.75], group: grounding, rel-pos: 3, attrs: {stud-size: '1/4-20'}}
+        - {id: ground-right-2, ref: common/ground-stud@1, at: [264.75, 27.65], group: grounding, rel-pos: 4, attrs: {stud-size: '1/4-20'}}
         - {id: ground-right-mark, ref: common/ground-symbol@1, at: [249.8, 18.95], for: ground-right-1, group: grounding, rel-pos: 8}
 configurations:
   base:
