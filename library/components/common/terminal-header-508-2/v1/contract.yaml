@@ -1,9 +1,10 @@
 format: 1
 kind: component
 name: terminal-header-508-2
-version: 1.0.0
+version: 1.0.1
 class: port
 profile: networking
+interface: terminal-508-2
 description: >-
   Two-position pluggable terminal HEADER on a 5.08 mm pitch, no flange - the green
   receptacle a two-way screw-clamp plug seats in. The dry-contact RELAY (alarm) output
@@ -19,6 +20,10 @@ provenance:
     the five-way part (h 12.1); no depth is given, because a port without a behaviour would read one as a pit cut
     into the face, and the header stands proud of it - its relief says how far - the same series without a flange; no datasheet for
     this exact two-way part is held.
+  mate: >-
+    derived - the centre of the pair of contacts, which is the centre of the housing, on
+    the mouth of the housing (`on: body`): a plug seated here stands off by the 2.5 the
+    housing is built proud, and starts where the housing ends.
 elements:
   body: {at: [0.0, 0.0], size: [10.16, 12.1], class: connector}
 relief:
@@ -55,4 +60,6 @@ relief:
       confidence: estimated
       source: >-
         common/terminal-header-508-2@1's own 3D-form key - see `body`. The contact standing in the well.
+connection-points:
+  mate: {at: [5.08, 6.05], direction: front, 'on': body}
 skins: [default]

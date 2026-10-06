@@ -1,15 +1,26 @@
 format: 1
 kind: component
 name: dc-barrel
-version: 1.0.0
+version: 1.0.1
 class: inlet
+interface: dc-barrel
 description: DC barrel power inlet
 size: {w: 12.0, h: 13.0}
 attrs: {input: dc}
 provenance:
   size: photo-measured (HLX-TGV rear panel)
+  interface: >-
+    A RULING, NOT A READING. The library treats the DC barrel jack as ONE nominal connector,
+    `dc-barrel`: barrel diameters vary by product, and no document held for any of the four
+    devices that place this part states one. The interface is presented at a `mate` point
+    at the coordinates of the existing `power` point, the centre of the bore; `power` is
+    kept. (Lint L11 asks a part that states an interface for a point named `mate`, so
+    `interface-at: power` alone is refused.) The voltage and the
+    current a jack is fed are attributes of each placement (`input-voltage`,
+    `current-max-a`), not of this part and not of the interface.
 elements:
   inlet: {at: [1.5, 2.0], size: [9.0, 9.0], class: inlet}
 connection-points:
   power: {at: [6.0, 6.5], direction: front}
+  mate: {at: [6.0, 6.5], direction: front}
 skins: [default]

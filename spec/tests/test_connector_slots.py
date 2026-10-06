@@ -50,6 +50,9 @@ def test_the_connector_registry_is_not_vacuous():
     # iec-c14/iec-c20/saf-d-grid: the AC inlets, made slots for their cord ends (#785)
     # usb-a/micro-usb-b/usb-c: the USB receptacles, made slots for their cable plugs (#786)
     # db9/hd15/da15/db25: the D-sub and VGA connectors, made slots for their hooded plugs (#787)
+    # terminal-508-2/-5/-6: the pluggable 5.08 mm terminal headers, made slots for their
+    # screw-clamp plugs (#789)
+    # dc-barrel: the DC barrel jack, one nominal connector by ruling (#789)
     # breaker-1ru-guard: NOT A CONNECTOR. The face of a 1RU plug-in breaker, where its
     # touch guard screws on. It is here because a cover that ships on a part and comes
     # off is the slot mechanism with nothing to plug in: one host, one occupant, a
@@ -59,6 +62,8 @@ def test_the_connector_registry_is_not_vacuous():
                          "iec-c14", "iec-c20", "saf-d-grid",
                          "usb-a", "micro-usb-b", "usb-c",
                          "db9", "hd15", "da15", "db25",
+                         "terminal-508-2", "terminal-508-5", "terminal-508-6",
+                         "dc-barrel",
                          "breaker-1ru-guard"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
@@ -73,7 +78,9 @@ def test_every_connector_presenting_part_is_a_connector_slot(comps):
                                    "f-type", "sma", "smb", "mcx", "bnc", "din-1-0-2-3",
                                    "iec-c14", "iec-c20", "saf-d-grid",
                                    "usb-a", "micro-usb-b", "usb-c",
-                         "db9", "hd15", "da15", "db25",
+                                   "db9", "hd15", "da15", "db25",
+                                   "terminal-508-2", "terminal-508-5", "terminal-508-6",
+                                   "dc-barrel",
                                    # a cover mount, not a connector - see the registry test above
                                    "breaker-1ru-guard"}
                for c in entries)

@@ -49,4 +49,18 @@ interfaces:
   hd15: {standard: hd15, note: 'High-density D-subminiature 15 position in shell size E (VGA), FEMALE on the panel: sockets, as std/vga@1 draws it; generic/hd15-plug@1, a male cable plug, mates it. The shell is the db9 shell and neither plug mates the other connector. A male HD-15 on a panel would be a different interface'}
   da15: {standard: da15, note: 'D-subminiature 15 position in two rows, shell size A (DA-15), FEMALE on the panel: sockets, as std/da15@1 draws it; generic/da15-plug@1, a male cable plug, mates it. A male DA-15 on a panel would be a different interface'}
   db25: {standard: db25, note: 'D-subminiature 25 position, shell size B (DB-25), FEMALE on the panel: sockets, as std/db25@1 draws it; generic/db25-plug@1, a male cable plug, mates it. A male DB-25 on a panel would be a different interface'}
+  # Pluggable terminal headers on a 5.08 mm pitch (#789,
+  # docs/connectors-dc-terminal-design.md). An interface is the connector, not
+  # the use: the pitch and the number of positions are in the key, and a
+  # header feeding power and one carrying a relay contact are the same
+  # interface when they are the same header. NOR IS A FLANGE: an interface is
+  # the mating face, which a header presents with or without screw flanges
+  # and a plug mates with or without them, so there is one five-position key
+  # and no `f`.
+  terminal-508-2: {standard: terminal-508-2-header, note: 'two-position plain pluggable header on a 5.08 mm pitch (Phoenix Contact MSTBA 2,5/..-G-5,08 and equivalents); generic/terminal-508-2-plug@1 mates it'}
+  terminal-508-5: {standard: terminal-508-5-header, note: 'the five-position mating face of a pluggable header on a 5.08 mm pitch (Phoenix Contact MSTB 2,5 and equivalents), which a flanged or a plain header presents and a flanged or a plain plug mates; generic/terminal-508-5-plug@1, the screw-flange plug, mates it, because the one header placed (common/terminal-header-508-5f@1) is flanged'}
+  terminal-508-6: {standard: terminal-508-6-header, note: 'six-position plain pluggable header on a 5.08 mm pitch (Phoenix Contact MSTBA 2,5/ 6-G-5,08 and equivalents); generic/terminal-508-6-plug@1 mates it'}
+  # The DC barrel jack (#789, docs/connectors-dc-terminal-design.md). ONE
+  # INTERFACE, BY RULING: see the note.
+  dc-barrel: {standard: barrel-jack, note: 'the library treats the DC barrel jack as ONE nominal connector. Barrel diameters vary by product, and none of the documents held for the four devices that place common/dc-barrel@1 states one, so the interface claims no diameter. The rating is carried as attributes of each placement of the jack (input-voltage, current-max-a) and not by the interface. generic/dc-barrel-plug@1, drawn at the common 5.5 mm barrel, mates it'}
   breaker-1ru-guard: {cover: true, note: 'NOT A CONNECTOR - A COVER MOUNT. The face of a 1RU plug-in breaker, where its touch guard screws on; amphenol-ns/touch-guard-1ru@1 mates it. Registered here because a cover that ships on a part and comes off is the same mechanism as a dust cap in a port: one slot, one occupant, a default'}

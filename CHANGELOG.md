@@ -25,6 +25,38 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- Pluggable terminal headers are connector slots, and three screw-clamp plugs
+  seat in them. `terminal-508-2`, `terminal-508-5` and `terminal-508-6` join
+  `spec/schemas/connectors.yaml`. `common/terminal-header-508-2@1`,
+  `common/terminal-header-508-5f@1` and `common/dc-terminal-header-6@1` (1.0.1,
+  the five-position header 1.0.2) gain their interface and a `mate` point; no drawing changed, and the
+  11 devices that draw one take a patch. `generic/terminal-508-2-plug@1`,
+  `generic/terminal-508-5-plug@1` and `generic/terminal-508-6-plug@1` are the
+  plugs that mate them, drawn from the wire side with one 30 mm stub of wire
+  per pole and a `wire-1` to `wire-N` point on each. `wire-od` sizes every
+  stub, `wire-color` paints every stub and `body-color` paints the body. Each
+  stands 10 mm in front of the face its header presents; see
+  `docs/connectors-dc-terminal-design.md`. `terminal-508-5` is the
+  five-position mating face with or without flanges; the plug drawn is the
+  screw-flange form (#789).
+- The DC barrel jack is a connector slot, and a barrel plug seats in it. The
+  library treats the jack as one nominal connector, `dc-barrel`: barrel
+  diameters vary by product and no document held for a device that places one
+  states its size. `common/dc-barrel@1` (1.0.1) gains the interface and a
+  `mate` point beside `power`; its drawing is unchanged, and the four devices
+  that place it take a patch. Each placement now states `input-voltage` and
+  `current-max-a` from its device's documents. `generic/dc-barrel-plug@1` is
+  drawn at the common 5.5 mm barrel from one manufacturer's drawing, with a
+  30 mm stub of cable sized by `cable-od`; it states no rating and claims to
+  be no device's own plug (#789).
+- A component's body pieces (`body.boxes`) can be round and can carry a
+  drawing. `shape: cylinder` or `ring` (with `axis`, and `wall` on a ring)
+  builds a round piece in the envelope a box would fill; `shows: [plan]` or
+  `[rear]` paints a box piece's top or back with the patch of the part's own
+  `faces.plan` or `faces.rear` drawing it covers. `components.json` gains
+  `body.drawings` and `body.face` on a part whose pieces show one. Lint L71
+  checks the new keys. Nothing existing changes: a piece that states neither
+  is the plain box it was.
 - Amphenol Network Solutions, a new vendor (`amphenol-ns`, formerly Telect):
   the 300CB08 (`amphenol-ns/300cb08`), a 1RU dual-feed DC circuit breaker
   panel with sixteen plug-in positions, all six faces, and ten

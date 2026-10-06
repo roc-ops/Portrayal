@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: hlx-tgv
-version: 2.0.7
+version: 2.0.8
 maturity: modelled
 manufacturer: Halny
 model: HLX-TGV
@@ -13,6 +13,11 @@ provenance:
     note: >-
       datasheet (Dimension WxDxH 172 x 115 x 40mm; DC +12V/1.0A). Mount `desktop`: the reference
       front and rear views show the box standing on four corner feet with its LEDs on the top face.
+  dc-in-rating:
+    confidence: datasheet
+    note: >-
+      datasheet (DC +12V/1.0A): the `input-voltage` and `current-max-a` of the dc-in jack. The
+      datasheet states no barrel size; the jack is the library's one nominal `dc-barrel`.
   rear-layout:
     confidence: photo-measured
     note: >-
@@ -116,7 +121,7 @@ views:
     components:
       placements:
         - {ref: common/power-button@1, id: power-btn, at: [12, 13], for: chassis, group: mgmt, rel-pos: 1}
-        - {ref: common/dc-barrel@1, id: dc-in, at: [32, 12.5], group: inlets, rel-pos: 1}
+        - {ref: common/dc-barrel@1, id: dc-in, at: [32, 12.5], group: inlets, rel-pos: 1, attrs: {input-voltage: 12 VDC, current-max-a: 1.0}}
         - {ref: common/rj45-eth@1, id: eth-10g, at: [68.1, 11.65], attrs: {speed: 10g}, group: rj45-10g, rel-pos: 1}
         # UNDO THE FLIP. common/rj45-jack@2 (the retired part) declared
         # "pins down, clip notch up" as its own default, which is what the

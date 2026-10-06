@@ -1,4 +1,4 @@
-"""Every coax medium, AC cord end, USB plug and D-sub plug medium has a label in the kit.
+"""Every coax medium, AC cord end, USB plug, D-sub plug and terminal plug medium has a label in the kit.
 
 kit/shell.js labels a port row from its data-media through the `MEDIA` table
 and falls back to upper-casing the key. For coax that fallback reads
@@ -119,3 +119,36 @@ def test_each_dsub_plug_medium_is_its_cores_and_has_its_label():
             assert stated and stated.group(1) == key, (ref, stated and stated.group(1))
         assert table.get(key) == label == key.upper(), (
             f"kit MEDIA[{key!r}] is {table.get(key)!r}, expected {label!r}")
+
+
+# Terminal plugs (#789). All three state `terminal-block`, the connector word
+# the two-position header states. The two flanged and six-position headers
+# state `dc-terminal`, which a `class: port` plug cannot: lint L62 reads a
+# port part's media as a connector word, and `dc` as one flags every `dc-in`
+# placement id. Neither key was in the table; the fallback read
+# TERMINAL-BLOCK and DC-TERMINAL.
+TERMINAL_PLUGS = {
+    "generic/terminal-508-2-plug": ("common/terminal-header-508-2", "terminal-block"),
+    "generic/terminal-508-5-plug": ("common/terminal-header-508-5f", "dc-terminal"),
+    "generic/terminal-508-6-plug": ("common/dc-terminal-header-6", "dc-terminal"),
+}
+
+
+def test_each_terminal_plug_and_header_medium_has_its_label():
+    table = media_table()
+    for part, (header, header_key) in TERMINAL_PLUGS.items():
+        for ref, key in ((part, "terminal-block"), (header, header_key)):
+            text = (LIBRARY / "components" / ref / "v1" / "contract.yaml").read_text()
+            stated = re.search(r"^attrs:.*\bmedia:\s*([a-z0-9-]+)", text, re.M)
+            assert stated and stated.group(1) == key, (ref, stated and stated.group(1))
+    assert table.get("terminal-block") == "terminal block"
+    assert table.get("dc-terminal") == "DC terminal"
+
+
+def test_the_dc_barrel_plug_medium_has_its_label():
+    """generic/dc-barrel-plug@1 states `barrel` (#789): `dc-barrel` would make
+    `dc` a connector word for lint L62. The fallback would read BARREL."""
+    text = (LIBRARY / "components/generic/dc-barrel-plug/v1/contract.yaml").read_text()
+    stated = re.search(r"^attrs:.*\bmedia:\s*([a-z0-9-]+)", text, re.M)
+    assert stated and stated.group(1) == "barrel"
+    assert media_table().get("barrel") == "DC barrel"
