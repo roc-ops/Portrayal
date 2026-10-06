@@ -15,11 +15,11 @@ description: >-
   hole; the wire leaves from the far end of the stub. It is a nominal lug
   chosen for the library, for 16 to 14 AWG wire, and not the lug of any one
   device.
-size: {w: 5.5, h: 47.4}
+size: {w: 5.5, h: 27.4}
 size-confidence: {w: datasheet, h: estimated}
 size-notes: >-
   the width is the tongue width B of the JST FV2-MS3; the height is that
-  terminal's overall length L, 17.4, and the 30 stub of wire, a rule and not a
+  terminal's overall length L, 17.4, and the 10 stub of wire, a rule and not a
   reading
 attrs: {media: ring-lug, connector: terminal-stud}
 fields:
@@ -30,7 +30,7 @@ provenance:
   size: >-
     datasheet - registry `ring-lug`. JST solderless terminals catalogue, RING
     TONGUE (R type) Vinyl-insulated (flared), sheet of 23-06-08, the FV2-MS3
-    row: tongue width B 5.5 and overall length L 17.4. The other 30 of the
+    row: tongue width B 5.5 and overall length L 17.4. The other 10 of the
     height is the stub of wire (provenance.wire).
   nominal: >-
     A NOMINAL LUG CHOSEN FOR THE LIBRARY, NOT A FIGURE FROM ANY PLACING
@@ -102,10 +102,14 @@ provenance:
     from the package contents picture on p.1 of each. The JST sheet lists
     blue as the colour of the whole 16 to 14 AWG range.
   wire: >-
-    estimated - the stub rule, docs/connectors-coax-design.md section 5: a
-    straight run of wire 30 long from the end of the sleeve, IN THE PLANE OF
-    THE FACE. The bend is the installation. It is built concentric with the
-    sleeve.
+    estimated - A STRAIGHT RUN OF WIRE 10 LONG from the end of the sleeve, IN
+    THE PLANE OF THE FACE. The stub rule of docs/connectors-coax-design.md
+    section 5 gives a cable end 30, and was written for a stub that points at
+    the viewer, where its length hides nothing. A stub lying in the plane of
+    the face covers what is beside the terminal: 30 runs far past the lower
+    edge of a 1RU chassis and across the supply below on a two-supply shelf.
+    So a stub in the plane of the face is 10. The bend is the installation.
+    It is built concentric with the sleeve.
   wire-od: >-
     datasheet, AND NOT A FIELD - 3.0: the approximate outside diameter the
     Waskoenig+Walter H07V-K data sheet (status 05.10.2026), p.2, lists for
@@ -130,7 +134,8 @@ provenance:
     `cable` is at the free end of the stub and points down, along the wire.
     It states no `on:`: that key takes a feature built with `out` or `cyl`,
     and the wire is a `bar`, so the depth the viewer reads for the cable end
-    is the seat's own, 2.25 below the axis of the wire.
+    is the seat's own, 2.25 below the axis of the wire. Accepted for now: the
+    viewer's routing of cable ends is #805.
   behaviour: >-
     DELIBERATELY OMITTED, as on generic/usb-a-plug@1 - every class port
     contract states none (spec/tests/test_behaviour.py).
@@ -170,5 +175,5 @@ relief:
         sleeve (provenance.wire).
 connection-points:
   mate: {at: [2.75, 2.75], direction: front}
-  cable: {at: [2.75, 47.4], direction: down}
+  cable: {at: [2.75, 27.4], direction: down}
 skins: [default]

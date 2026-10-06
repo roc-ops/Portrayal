@@ -34,7 +34,7 @@ names the ref that replaces it.
   the interface, so each pole is a nested slot (`psu1-input/lug-2`, or
   `psu-1/terminal/lug-2` on a Telco Systems DC supply). The blocks draw
   exactly as before and keep every id. `generic/ring-lug@1` is the one-hole
-  insulated ring terminal that seats there, on a 30 mm stub of wire lying in
+  insulated ring terminal that seats there, on a 10 mm stub of wire lying in
   the plane of the face; `wire-color` and `barrel-color` paint it. It is a
   nominal lug for 16 to 14 AWG wire, not the lug of any one device. The
   Edgecore CSR180 and CSR200 and the Telco Systems TM-8104 and TM-8106 take a

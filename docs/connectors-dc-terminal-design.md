@@ -285,7 +285,7 @@ Each device takes a patch. Every slot offers exactly one part, the ring lug.
 
 `generic/ring-lug@1` is a one-hole insulated ring terminal on its wire, seen in plan as a
 front elevation sees it landed on a screw: the ring tongue, the sleeve over the crimp
-barrel, a 30 mm stub of insulated wire leaving the sleeve in the plane of the face, and
+barrel, a 10 mm stub of insulated wire leaving the sleeve in the plane of the face, and
 the head of the screw that holds it. `class: port`, `mates: terminal-stud`, no `behaviour`
 and no `size.d`. `mate` is at the centre of the stud hole. `cable` is at the free end of
 the stub and points down, along the wire.
@@ -318,6 +318,13 @@ claimed, and the Telco supply's provenance says nothing states what it takes.
 
 The terminals on that sheet for a 5-6 or 3.5 stud are 6.4 wide and more, which the 6.0
 pole window does not admit.
+
+**A stub in the plane of the face is 10 long, not 30.** The stub rule of
+[connectors-coax-design.md](connectors-coax-design.md) section 5 was written for a stub
+that points at the viewer, where its length hides nothing. Lying in the plane of the face
+a stub covers what is beside the terminal: at 30 it ran far past the lower edge of a 1RU
+chassis and across the supply below on the TM-8104. At 10 it still overhangs the lower
+edge of the CSR180 a little, which is what a wire does.
 
 Fields: `wire-color` (black) and `barrel-color` (the blue above).
 
@@ -386,11 +393,22 @@ installer's choice.
 - **The DC power supplies and power entry modules that draw their own terminals** are
   not covered; their terminals are art in the supply's skin and are not seats.
 - **One wire size, one colour for the wire, and every seat takes the same lug.**
-- **A lug on a supply in a bay is painted with that supply.** On the TM-8104 the stub of
-  a lug on the upper supply runs under the drawing of the supply below it.
+- **A lug on a supply in a bay is painted with that supply,** so anything of it that
+  reached past the supply would be painted under the next one. At a 10 stub it ends inside
+  the TM-8104 supply's own face.
+- **A lug swapped onto a block placed straight on the device is not built in 3D yet.**
+  The build draws a seated lug in 3D with all four solids, the sleeve and wire in their
+  field colours. The explorer seats one at runtime in 2D on every block. Its 3D scene is
+  cut from faces that `seatViews` (kit/swap.js) rewrites, and `viewsToRewrite` names a
+  face only for a key that is a bay, a device cage, a slot under a device cage, or a path
+  holding `/module/`. `psu1-input/lug-2` is none of those: the block publishes slots and
+  is not itself a cage. So on the CSR180 and CSR200 a lug chosen in the explorer shows in
+  2D and not in 3D, with no warning. On a Telco supply the key is
+  `psu-1/module/terminal/lug-2` and the 3D scene seats it. `seatFace`, handed the face,
+  seats both. The kit is not changed here; a test pins the gap.
 - **The `cable` point states no `on:`.** That key takes a feature built with `out` or
   `cyl`; the wire is a `bar`. The depth the viewer reads for the cable end is the seat's,
-  2.25 below the axis of the wire.
+  2.25 below the axis of the wire. Accepted for now; routing of cable ends is #805.
 
 `spec/tests/test_terminal_lugs.py` holds the registry entry, the seat parts, each block's
 seats and slots, the bare blocks' compiled screws, a lug on one pole of the CSR180, the

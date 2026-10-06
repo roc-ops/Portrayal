@@ -39,6 +39,9 @@ EPS = 1e-6
 SVG = "{http://www.w3.org/2000/svg}"
 IFACE, LUG = "terminal-stud", "generic/ring-lug@1"
 POLES = ("lug-1", "lug-2", "lug-3")
+# a stub lying in the plane of the face is 10, not the 30 of one that points
+# at the viewer (docs/connectors-dc-terminal-design.md section 12.4)
+STUB = 10.0
 
 # block -> (its seat part, head diameter, head height, pole top, lip top,
 #           the three screw axes in the block's frame, the pole elements)
@@ -100,7 +103,7 @@ def test_terminal_stud_is_one_nominal_connector_and_claims_no_size():
     assert "w" not in std[IFACE] and "h" not in std[IFACE]
     assert "NO ENVELOPE IS CLAIMED" in std[IFACE]["notes"]
     lug = std["ring-lug"]
-    assert (lug["w"], lug["h"], lug["depth"]) == (5.5, 47.4, 4.5)
+    assert (lug["w"], lug["h"], lug["depth"]) == (5.5, 27.4, 4.5)
     assert "FV2-MS3" in lug["source"] and "NOT A FIGURE FROM ANY PLACING DEVICE" in lug["notes"]
 
 
@@ -237,11 +240,11 @@ def test_it_is_a_lug_that_mates_terminal_stud():
     assert c["kind"] == "component" and c["class"] == "port"
     assert c["mates"] == IFACE and c["conforms"] == "ring-lug"
     assert "behaviour" not in c and "interface" not in c
-    assert c["size"] == {"w": 5.5, "h": 47.4}          # no depth
+    assert c["size"] == {"w": 5.5, "h": 27.4}          # no depth
     assert c["attrs"] == {"media": "ring-lug", "connector": IFACE}
     assert c["unplaced"]
     assert c["connection-points"] == {"mate": {"at": [2.75, 2.75], "direction": "front"},
-                                      "cable": {"at": [2.75, 47.4], "direction": "down"}}
+                                      "cable": {"at": [2.75, 27.4], "direction": "down"}}
 
 
 def test_its_fields_are_two_colours_and_no_wire_size():
@@ -253,6 +256,7 @@ def test_its_fields_are_two_colours_and_no_wire_size():
     assert "NOT A FIELD" in why and "data-r-from" in why and "`bar`" in why
     assert "NOT CLAIMED" in c["provenance"]["nominal"]
     assert "CANNOT TURN AN OCCUPANT" in c["provenance"]["orientation"]
+    assert "10 LONG" in c["provenance"]["wire"] and "#805" in c["provenance"]["cable-point"]
 
 
 def test_the_skin_is_a_tongue_a_sleeve_a_wire_and_a_head():
@@ -262,7 +266,7 @@ def test_the_skin_is_a_tongue_a_sleeve_a_wire_and_a_head():
     sleeve, wire = root.find(f"{SVG}rect[@id='sleeve']"), root.find(f"{SVG}rect[@id='wire']")
     num = lambda e, *ks: [float(e.get(k)) for k in ks]
     assert num(sleeve, "x", "y", "width", "height") == [0.5, 8.4, 4.5, 9.0]
-    assert num(wire, "x", "y", "width", "height") == [1.25, 17.4, 3.0, 30.0]
+    assert num(wire, "x", "y", "width", "height") == [1.25, 17.4, 3.0, STUB]
     # the wire leaves along the long axis of the part, on the hole's axis
     assert 1.25 + 3.0 / 2 == 0.5 + 4.5 / 2 == 2.75
     assert sleeve.get("data-fill-from") == "barrel-color"
@@ -410,7 +414,7 @@ def test_the_lug_seats_on_the_screw_axis_with_its_wire_leaving_downward(built, d
                                [(x, y), (x + w, y), (x + w, y + h), (x, y + h)]))
     # the wire is on the screw's axis, wholly below it, and runs down the face
     assert (x0 + x1) / 2 == pytest.approx(hx, abs=EPS)
-    assert y0 > hy and y1 - y0 == pytest.approx(30.0) and x1 - x0 == pytest.approx(3.0)
+    assert y0 > hy and y1 - y0 == pytest.approx(STUB) and x1 - x0 == pytest.approx(3.0)
     # and it leaves over the block's lower edge, toward the legend
     _, _, _, by1 = box(apply(device_matrix(parents, host),
                              [(0, 0), (b["size"][0], b["size"][1])]))
@@ -497,14 +501,18 @@ def kit(built, tmp_path_factory):
     assert shutil.which("node"), "node is needed to run the kit's slot walk"
     dist = tmp_path_factory.mktemp("lugs-dist")
     comps = build_components(dist)
-    faces, cages, asks = {}, {}, {}
+    faces, cages, asks, bays = {}, {}, {}, {}
     for device in KIT_FACES:
         config, view, path, block, key = SEATED[device]
         (root, _), _ = built[device]
         faces[device] = spec_of(root)
         cages[device] = []          # every stud seat is a NESTED slot, none is the device's
         asks[device] = {"slot": f"{path}/{WIRED}", "ref": LUG}
+        d = _device(device)
+        bays[device] = [{"id": b["id"]} for b in
+                        (((d["views"][view] or {}).get("components") or {}).get("bays") or [])]
     payload = {"components": list(comps.values()), "faces": faces, "cages": cages, "asks": asks,
+               "bays": bays,
                "skins": {r: json.dumps(spec_of(ET.parse(skin_file(dist, comps[r])).getroot()))
                          for r in (LUG, *SEATS)}}
     p = subprocess.run(["node", str(KIT_SCRIPT)], input=json.dumps(payload),
@@ -554,3 +562,57 @@ def test_the_kit_seats_a_lug_exactly_as_the_build_does(kit, built, device):
     assert g["again"] == 1, "a second swap stacked a second lug"
     assert g["others"] and set(g["others"]) == {0}, "a neighbouring pole was wired"
     assert g["left"] == 0, "emptying the pole left a lug"
+
+
+@pytest.mark.parametrize("device", KIT_FACES)
+def test_the_kit_seated_lug_carries_its_four_solids_at_their_depths(kit, built, device):
+    """What relief.js is handed for the lug the kit seated: the tongue, the
+    head, the sleeve and the wire, each with the depth figure the 3D build
+    reads, on a group lifted to the top of the host screw."""
+    path, block = SEATED[device][2:4]
+    b = BLOCKS[block]
+    lug = kit[device]["lug"]
+    (root, parents), _ = built[device]
+    host_lift = lift_of(parents, by_path(root, path))
+    zero = b["pole"] + b["cyl"]
+    assert float(lug["attrs"]["data-z-lift"]) == pytest.approx(zero)
+    z = {c["a"]["id"].rsplit("--", 1)[1]: c["a"] for c in lug["children"]
+         if c["a"].get("id") and any(k.startswith("data-z-") for k in c["a"])}
+    assert sorted(z) == ["head", "sleeve", "tongue", "wire"]
+    # `out` is absolute from the face the block is on; the rest stack on lifts
+    assert float(z["tongue"]["data-z-out"]) == pytest.approx(host_lift + zero + 0.8)
+    assert z["tongue"]["data-z-shape"] == "1"
+    assert (float(z["head"]["data-z-lift"]), float(z["head"]["data-z-cyl"])) == (0.8, 1.4)
+    assert float(z["sleeve"]["data-z-bar"]) == 4.5 and "data-z-lift" not in z["sleeve"]
+    assert (float(z["wire"]["data-z-lift"]), float(z["wire"]["data-z-bar"])) == (0.75, 3.0)
+    # no `data-z-color` on the two painted solids: 3D takes the fill, which is
+    # the field's colour
+    assert "data-z-color" not in z["sleeve"] and "data-z-color" not in z["wire"]
+
+
+def test_the_3d_pass_seats_a_lug_on_a_supply_in_a_bay(kit):
+    """The explorer's 3D scene is cut from faces rewritten by seatViews. A
+    seat on a supply in a bay is named by its drawing path, which holds
+    `/module/`, and the pass seats it."""
+    t = kit["telco-systems/tm-8104"]["threeD"]
+    assert t["named"] == ["front"]
+    assert t["viewsApplied"] == 1 and t["viewsSeated"] == 1
+    assert t["faceApplied"] == 1 and t["faceSeated"] == 1
+
+
+def test_a_block_placed_on_the_device_is_seated_face_by_face_but_no_view_is_named(kit):
+    """A KNOWN GAP IN THE KIT, PINNED SO IT CANNOT CLOSE OR WIDEN UNNOTICED.
+    The per-face pass (seatFace) seats a lug on a block placed straight on the
+    device, as the 2D explorer does. But viewsToRewrite (kit/swap.js) names a
+    view only for a key that is a bay, a device cage, a slot under a device
+    cage, or a `/module/` path, and `psu1-input/lug-2` is none of those: the
+    block is a plain placement that publishes slots and is not itself a cage.
+    So seatViews skips the face and the 3D scene is built without the lug.
+    A lug the BUILD seats is drawn in 3D; only the runtime swap is lost.
+    WHEN THE GUARD LEARNS THIS KEY, `named` becomes ["front"] and the two
+    figures below become 1: change them here."""
+    t = kit["edgecore/csr180"]["threeD"]
+    assert t["faceApplied"] == 1 and t["faceSeated"] == 1
+    assert not t["faceRefused"] and not t["faceFailed"]
+    assert t["named"] == [], "viewsToRewrite now names the view: update this pin"
+    assert t["viewsApplied"] is None and t["viewsSeated"] == 0

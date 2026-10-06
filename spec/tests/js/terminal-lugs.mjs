@@ -6,7 +6,7 @@
 // offers, and what it seats, is compared in Python with what render.py drew
 // for a configuration that asks for the same lug.
 //
-// stdin JSON {components, faces, skins, cages, asks}; one JSON object out, a
+// stdin JSON {components, faces, skins, cages, bays, asks}; one JSON object out, a
 // key per face. A face that throws records {error} under its key.
 import {build, install} from './fake-dom.mjs';
 
@@ -65,8 +65,23 @@ for (const [name, ask] of Object.entries(input.asks)) {
     const others = studs.filter(e => e.id !== ask.slot).map(e => occupantsAt(root, e.id).length);
     if (entry) await m.applyOccupantOverrides(root, [walk().find(e => e.id === ask.slot)],
                                               {[ask.slot]: null}, loadSkin);
+    // THE 3D PASS, on fresh copies of the face: which views the override map
+    // is taken to touch (viewsToRewrite), what seatViews then seats, and what
+    // the per-face pass seats when it is handed the face directly.
+    const devIndex = {bays: {front: input.bays[name] || []}, cages: {front: deviceCages}};
+    const map = {[ask.slot]: ask.ref};
+    const named = m.viewsToRewrite(devIndex, map);
+    const viaViews = build(input.faces[name]);
+    const views = await m.seatViews({front: viaViews}, devIndex, map, loadSkin, compByRef);
+    const direct = build(input.faces[name]);
+    const face = await m.seatFace(direct, {bays: devIndex.bays.front, cages: deviceCages},
+                                  map, loadSkin, compByRef);
+    const threeD = {named, viewsSeated: occupantsAt(viaViews, ask.slot).length,
+                    viewsApplied: views.front ? views.front.applied : null,
+                    faceApplied: face.applied, faceRefused: face.refused, faceFailed: face.failed,
+                    faceSeated: occupantsAt(direct, ask.slot).length};
     out[name] = {studs: studs.map(plain), offered, result, lug, occRef, again, others,
-                 left: occupantsAt(root, ask.slot).length};
+                 left: occupantsAt(root, ask.slot).length, threeD};
   } catch (e) { out[name] = {error: String(e && e.stack || e)}; }
 }
 console.log(JSON.stringify(out));
