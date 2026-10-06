@@ -318,6 +318,14 @@ names the ref that replaces it.
   boxes do not all count the same way (the AS7316-26XB restarts per speed
   class), and no 800G prefix is documented.
 
+### Fixed
+- 3D kit (`swap.js` `viewsToRewrite`): a swap into a slot on a placed part
+  that composes several slots and is no cage itself, such as a pole of a
+  barrier terminal block (`psu1-input/lug-2`), now reaches the 3D scene. No
+  bay and no cage of any view claims such a key, so no view was named, the
+  face was never rewritten and the occupant showed in 2D only, with no
+  warning. Every view is rewritten for such a key (#814).
+
 ### Changed
 - **The npm packages: the component skins ship one package per namespace**,
   `@portrayal/components-<namespace>`, and `packages.json` in `@portrayal/index`
