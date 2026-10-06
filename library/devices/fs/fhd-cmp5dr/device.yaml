@@ -67,27 +67,31 @@ provenance:
       projected from the plan and ring-profile views. None of it lies in the front plane,
       and none of it is built in 3D from this view.
   top-arms:
-    confidence: known-wrong
+    confidence: drawing
     note: >-
-      known-wrong - each arm sweeps up from the flat tray into the vertical ear, and the
-      ring-profile view draws that as a sloped web. It is built as a flat strip of floor
-      meeting an upright ear: the web stands 17 mm in from the end of the part, where
-      there is no face to draw it on, and nothing yet stands a plate on a floor.
+      drawing - each arm sweeps up from the flat tray into the upright ear, and the
+      ring-profile view draws that as a sloped web. Built as a flat strip of floor, an
+      upright ear, and a web on the arm's outer edge whose slope is eight steps in 3D
+      and a straight line in the side elevation.
   top-rings:
-    confidence: known-wrong
+    confidence: drawing
     note: >-
-      known-wrong - each ring is split at its top front corner so a cable can be laid in,
-      turns through 360 degrees and lifts out. It is built as a closed loop, fitted, across
-      the tray. FS's mark, stamped on the tray by the right-hand ring, is not drawn: a
-      vendor mark never is.
+      drawing - each ring is an open loop: the slit at its top front corner, 3.8 mm, is
+      where a cable is laid in. It also turns through 360 degrees and lifts out, and is
+      drawn fitted, across the tray. FS's mark, stamped on the tray by the right-hand
+      ring, is not drawn: a vendor mark never is.
+  ears:
+    confidence: drawing
+    note: >-
+      drawing - THE EARS ARE DRAWN, where every other device in the library leaves them
+      off. They are not something added to this part: they are the same sheet as the
+      tray, and the part is nothing but them and what hangs off them.
   views:
     confidence: drawing
     note: >-
-      drawing - left and right are elevations from the ring-profile view of the same
-      drawing: the ear's edge, the tray's edge and one ring's loop, 44.3 deep and about 41
-      high with a 5.3 mm wall. The sloped web of the profile is not drawn; a decor patch is
-      a rectangle. The bottom is the plan again from underneath - the strip, the arms and
-      the slots - without the fillets where the arms meet the strip.
+      drawing - left and right are the ring-profile view of the same drawing. The bottom
+      is the plan again from underneath - the strip, the arms and the slots - without
+      the fillets where the arms meet the strip.
   color:
     confidence: estimated
     note: >-
@@ -125,6 +129,11 @@ groups:
     role: furniture
     index-origin: 1
     description: the steel tray
+  ears:
+    term: Ear
+    role: furniture
+    index-origin: 1
+    description: the two mounting ears, part of the tray's own sheet
   rings:
     term: Ring
     role: furniture
@@ -143,25 +152,29 @@ views:
         - {id: ring-3-end, at: [238.1, 1.5], size: [6.8, 41], rx: 2, fill: '#0c0d0f', kind: ring}
         - {id: ring-4-end, at: [348.5, 1.5], size: [6.8, 41], rx: 2, fill: '#0c0d0f', kind: ring}
         - {id: ring-5-end, at: [443.9, 1.5], size: [6.8, 41], rx: 2, fill: '#0c0d0f', kind: ring}
-        - {id: hole-l1, at: [6, 3.25], size: [6, 6], rx: 3, fill: '#0a0b0c', vent: 1.5, kind: hole}
-        - {id: hole-l2, at: [6.5, 19.5], size: [5, 5], rx: 2.5, fill: '#0a0b0c', vent: 1.5, kind: hole}
-        - {id: hole-l3, at: [6, 34.75], size: [6, 6], rx: 3, fill: '#0a0b0c', vent: 1.5, kind: hole}
-        - {id: hole-r1, at: [471, 3.25], size: [6, 6], rx: 3, fill: '#0a0b0c', vent: 1.5, kind: hole}
-        - {id: hole-r2, at: [471.5, 19.5], size: [5, 5], rx: 2.5, fill: '#0a0b0c', vent: 1.5, kind: hole}
-        - {id: hole-r3, at: [471, 34.75], size: [6, 6], rx: 3, fill: '#0a0b0c', vent: 1.5, kind: hole}
+        - {id: hole-l1, at: [5.15, 3.75], size: [7, 5], rx: 2.5, fill: '#0a0b0c', vent: 1.5, kind: hole}
+        - {id: hole-l2, at: [6.65, 20], size: [4, 4], rx: 2, fill: '#0a0b0c', vent: 1.5, kind: hole}
+        - {id: hole-l3, at: [5.15, 35.25], size: [7, 5], rx: 2.5, fill: '#0a0b0c', vent: 1.5, kind: hole}
+        - {id: hole-r1, at: [470.85, 3.75], size: [7, 5], rx: 2.5, fill: '#0a0b0c', vent: 1.5, kind: hole}
+        - {id: hole-r2, at: [472.35, 20], size: [4, 4], rx: 2, fill: '#0a0b0c', vent: 1.5, kind: hole}
+        - {id: hole-r3, at: [470.85, 35.25], size: [7, 5], rx: 2.5, fill: '#0a0b0c', vent: 1.5, kind: hole}
   rear:
     size: {w: 483.0, h: 44.0}
-    panel:
-      decor:
-        - {id: ear-a, at: [0, 0], size: [17.3, 44], fill: '#1b1d20', kind: ear, out: 1.5,
-           confidence: datasheet, source: 'FS product page for #72911 - 1.5mm cold-rolled steel'}
-        - {id: ear-b, at: [465.7, 0], size: [17.3, 44], fill: '#1b1d20', kind: ear, out: 1.5,
-           confidence: datasheet, source: 'FS product page for #72911 - 1.5mm cold-rolled steel'}
+    components:
+      placements:
+        - {ref: fs/fhd-cmp5dr-ear@1, id: ear-a, at: [0.0, 0.0], group: ears, rel-pos: 1}
+        - {ref: fs/fhd-cmp5dr-ear@1, id: ear-b, at: [465.7, 0.0], group: ears, rel-pos: 2}
   top:
     size: {w: 483.0, h: 110.0}
+    panel:
+      decor:
+        - {id: ear-a-edge, at: [0, 0], size: [18.8, 1.5], fill: '#1b1d20', kind: ear}
+        - {id: ear-b-edge, at: [464.2, 0], size: [18.8, 1.5], fill: '#1b1d20', kind: ear}
     components:
       placements:
         - {ref: fs/fhd-cmp5dr-tray@1, id: tray, at: [17.3, 0.0], group: tray, rel-pos: 1}
+        - {ref: fs/fhd-cmp5dr-web@1, id: web-a, at: [17.3, 0.0], group: tray, rel-pos: 2, in: tray}
+        - {ref: fs/fhd-cmp5dr-web@1, id: web-b, at: [464.2, 0.0], group: tray, rel-pos: 3, in: tray}
         - {ref: fs/d-ring-snap-in@1, id: ring-1, at: [19.55, 66.4], group: rings, rel-pos: 1, in: tray}
         - {ref: fs/d-ring-snap-in@1, id: ring-2, at: [114.95, 66.4], group: rings, rel-pos: 2, in: tray}
         - {ref: fs/d-ring-snap-in@1, id: ring-3, at: [225.35, 66.4], group: rings, rel-pos: 3, in: tray}
@@ -192,18 +205,14 @@ views:
         - {id: slot-4d, at: [401.85, 55.2], size: [3, 23.3], fill: '#0a0b0c', vent: 1.5, kind: slot}
   left:
     size: {w: 110.0, h: 44.0}
-    panel:
-      decor:
-        - {id: ear-edge, at: [0, 0], size: [1.5, 44], fill: '#1b1d20', kind: ear}
-        - {id: tray-edge, at: [0, 42.5], size: [110, 1.5], fill: '#1b1d20', kind: tray}
-        - {id: ring-profile, at: [68.35, 4.15], size: [39, 36.2], rx: 5, stroke: '#0c0d0f', stroke-width: 5.3, kind: ring}
+    components:
+      placements:
+        - {ref: fs/fhd-cmp5dr-profile@1, id: profile, at: [0.0, 0.0], skin: left, group: tray, rel-pos: 4}
   right:
     size: {w: 110.0, h: 44.0}
-    panel:
-      decor:
-        - {id: ear-edge, at: [108.5, 0], size: [1.5, 44], fill: '#1b1d20', kind: ear}
-        - {id: tray-edge, at: [0, 42.5], size: [110, 1.5], fill: '#1b1d20', kind: tray}
-        - {id: ring-profile, at: [2.65, 4.15], size: [39, 36.2], rx: 5, stroke: '#0c0d0f', stroke-width: 5.3, kind: ring}
+    components:
+      placements:
+        - {ref: fs/fhd-cmp5dr-profile@1, id: profile, at: [0.0, 0.0], skin: right, group: tray, rel-pos: 5}
 configurations:
   base:
     kind: base

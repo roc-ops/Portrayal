@@ -18,8 +18,11 @@ provenance:
   relief: >-
     drawing - the ring-profile view of the same drawing: the loop is 44.3 deep and stands
     about 41 mm above the tray, with a wall about 5.3 mm in the plane of the loop and 6.8
-    across it. Built as a round tube 6 mm in diameter, which is neither figure. The seat's
-    2 mm is estimated; no view dimensions it.
+    across it. THE LOOP IS OPEN: the top bar turns down at the front into a hooked end 9 mm
+    long, and the front leg stops 3.8 mm below it, which is the slit a cable is laid in
+    through without being threaded. Built as round tube, legs 6.8 and bar 6, which is
+    neither of the wall's two figures, and with square corners where the real ring's are
+    radiused. The seat's 2 mm is estimated; no view dimensions it.
   material: >-
     datasheet - "D-rings Material: PC, UL 94V-2" in the same datasheet's table.
 size: {w: 32.3, h: 43.6}
@@ -27,7 +30,10 @@ size-confidence: {w: drawing, h: drawing}
 attrs: {material: PC, flammability: UL 94V-2}
 elements:
   seat: {at: [0.0, 5.65], size: [32.3, 32.3], class: bezel}
-  ring: {at: [12.75, 0.0], size: [6.8, 43.6], class: bezel}
+  top: {at: [12.75, 0.0], size: [6.8, 43.6], class: bezel}
+  leg-rear: {at: [12.75, 0.0], size: [6.8, 6.8], class: bezel}
+  leg-front: {at: [12.75, 36.8], size: [6.8, 6.8], class: bezel}
+  hook: {at: [12.75, 36.8], size: [6.8, 6.8], class: bezel}
 relief:
   features:
     - node: seat
@@ -35,10 +41,26 @@ relief:
       color: '#131517'
       confidence: estimated
       source: no view of the FS drawing dimensions the seat's height
-    - node: ring
-      uhandle: 41.0
-      dia: 6.0
+    - node: leg-rear
+      cyl: 41.0
       color: '#0c0d0f'
       confidence: drawing
-      source: the ring-profile view of FS's 0U/1U datasheet drawing, about 41 mm above the tray
+      source: the ring-profile view of FS's 0U/1U datasheet drawing, the loop about 41 mm above the tray
+    - node: top
+      bar: 6.0
+      lift: 35.0
+      color: '#0c0d0f'
+      confidence: drawing
+      source: the same view, the top bar's upper edge about 41 mm above the tray
+    - node: hook
+      cyl: 9.0
+      lift: 32.0
+      color: '#0c0d0f'
+      confidence: drawing
+      source: the same view, the hooked end coming 9 mm down from the top of the loop
+    - node: leg-front
+      cyl: 28.2
+      color: '#0c0d0f'
+      confidence: drawing
+      source: the same view, the front leg ending 3.8 mm below the hooked end - the slit
 skins: [default]
