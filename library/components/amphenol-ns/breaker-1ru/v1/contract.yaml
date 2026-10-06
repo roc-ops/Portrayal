@@ -1,0 +1,67 @@
+format: 1
+kind: module
+name: breaker-1ru
+version: 1.0.0
+class: breaker
+behaviour: fills
+profile: power
+description: >-
+  Single-pole bullet-terminal plug-in circuit breaker for Amphenol Network
+  Solutions 1RU breaker panels, drawn as it sits in the panel - behind its
+  touch guard cover. The panel datasheet calls it AIRPAX 1U Series and sells
+  eleven ratings from 2 A to 60 A, standard delay, as part numbers 151723,
+  152805, 149710 to 149716, 149718 and 149719.
+size: {w: 17.8, h: 39.1, d: 127.5}
+size-confidence: {w: drawing, h: drawing, d: datasheet}
+size-notes: >-
+  THE FACE IS THE TOUCH GUARD AS THE PANEL FRONT VIEW DRAWS IT, not the bare
+  breaker. the 300CB08 installation guide 149722-2 A9 Fig. 3-1 draws sixteen guard cells 17.8 wide by 39.1 high on a
+  19.81 pitch (35 px and 77 px at 1.9685 px/mm). The bare breaker behind it is
+  19.05 MAX wide by 37.03 MAX high in the Sensata IAR/IUR/IER/CUR/CER
+  datasheet (page 2 and 3), so the guard is narrower than the body it covers
+  and the body hides behind the front cover between cells. The depth is that
+  datasheet dimension B for a quarter-inch bullet, 5.019 in or 127.48, front of
+  the body to the bullet tips, handle excluded.
+attrs: {model: 1RU Circuit Breaker, series: AIRPAX 1U, poles: 1, terminal: bullet}
+provenance:
+  size: >-
+    drawing for the face, datasheet for the depth - see size-notes.
+  depth-bullet: >-
+    estimated between two datasheet rows. Sensata lists a quarter-inch bullet
+    at 127.48 and a five-sixteenth bullet at 129.35. No document held says
+    which the panel takes; 127.5 is the shorter.
+  identity: >-
+    datasheet - the 300CB08 datasheet names the breaker AIRPAX 1U Series and
+    the 300CB08 installation guide 149722-2 A9 section 1.4 says the panel has positions for 16 bullet-style, plug-in
+    circuit breakers. NOTHING HELD MAPS AN AMPHENOL PART NUMBER TO A SENSATA
+    CATALOGUE NUMBER, so the series is the vendor statement and the exact
+    Airpax part is not known.
+  face: >-
+    drawing and photo. The guard is black in every product photograph. Two
+    round holes, one above the other, are the puller threads the guide
+    describes in section 2.3.1, at 8.0 and 30.5 down the cell in Fig. 3-1.
+  rating: >-
+    datasheet for the list, photo for where it prints. The eleven ratings and
+    their part numbers are the 300CB08 datasheet list: 2 A 151723, 3 A 152805,
+    5 A 149710, 10 A 149711, 15 A 149712, 20 A 149713, 25 A 149714, 30 A
+    149715, 40 A 149716, 50 A 149718, 60 A 149719. THE RATING IS PRINTED ON
+    THE HANDLE, AND THE TOUCH GUARD HIDES THE HANDLE - the one product
+    photograph of a bare breaker shows a white 50 on it. So the field is
+    carried in the drawing as a text node that is not displayed: the value
+    travels with the part and no ink is drawn that the installed face does
+    not show.
+fields:
+  rating:
+    label: Rating
+    type: choice
+    options: [2, 3, 5, 10, 15, 20, 25, 30, 40, 50, 60]
+    default: 60
+    unit: A
+    description: >-
+      trip rating in amperes; each value is a separate vendor part number,
+      listed under provenance
+elements:
+  guard: {at: [0.0, 0.0], size: [17.8, 39.1], class: mechanical}
+  thread-top: {at: [7.4, 6.5], size: [3.0, 3.0], class: mechanical}
+  thread-bottom: {at: [7.4, 29.0], size: [3.0, 3.0], class: mechanical}
+skins: [default]

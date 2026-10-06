@@ -1,0 +1,26 @@
+format: 1
+kind: component
+name: input-stud-pair
+version: 1.0.0
+class: inlet
+profile: power
+description: >-
+  One input terminal of an Amphenol Network Solutions 1RU power panel with
+  vertical inputs - two 3/8-16 studs one above the other on 1 inch centres,
+  taking a dual-hole compression lug up to 1.15 inch wide.
+size: {w: 29.0, h: 41.0}
+size-confidence: {w: drawing, h: drawing}
+provenance:
+  size: >-
+    drawing - the 300CB08 installation guide 149722-2 A9 Fig. 3-6: each terminal sits in a bay about 29 wide across
+    the full height of the rear (94 px at 3.2006 px/mm), with the two studs
+    25.3 apart, which is the 1 inch the callout states.
+  studs: >-
+    datasheet - 300CB08 datasheet, Inputs: two pairs of 3/8-16 studs on 1 inch
+    centres per terminal, maximum lug width 1.15 inch, Keps nuts and flat
+    washers.
+attrs: {stud-thread: 3/8-16, stud-centres-mm: 25.4, lug-holes: 2}
+elements:
+  stud-top: {at: [5.5, 0.0], size: [18.0, 18.0], class: inlet}
+  stud-bottom: {at: [5.5, 23.0], size: [18.0, 18.0], class: inlet}
+skins: [default]

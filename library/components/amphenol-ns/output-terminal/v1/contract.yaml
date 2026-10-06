@@ -1,0 +1,30 @@
+format: 1
+kind: component
+name: output-terminal
+version: 1.0.0
+class: inlet
+profile: power
+description: >-
+  One output circuit of an Amphenol Network Solutions 1RU power panel with
+  terminal-block outputs - a BATT screw above an RTN screw, each a #10-32
+  taking a single-hole lug up to half an inch wide.
+size: {w: 14.75, h: 34.0}
+size-confidence: {w: drawing, h: drawing}
+provenance:
+  size: >-
+    drawing - the 300CB08 installation guide 149722-2 A9 Fig. 3-6: eight circuits per side on a 14.75 pitch (47.2 px
+    at 3.2006 px/mm), the BATT screw centred 13.6 down the rear face and the
+    RTN screw 30.2 down. The drawing shows the two rows in one plane; the
+    guide calls the blocks staggered, and how far one row stands behind the
+    other is not dimensioned.
+  screws: >-
+    datasheet - 300CB08 datasheet, Outputs: 16 #10-32 screws, maximum lug
+    width 0.50 inch, 20 in-lb.
+  rows: >-
+    photo - BATT is printed beside the upper row and RTN beside the lower in
+    the rear photograph of the guide (Fig. 1-2).
+attrs: {screw-thread: '#10-32', lug-holes: 1}
+elements:
+  batt: {at: [2.975, 4.1], size: [8.8, 8.8], class: inlet}
+  rtn: {at: [2.975, 20.7], size: [8.8, 8.8], class: inlet}
+skins: [default]
