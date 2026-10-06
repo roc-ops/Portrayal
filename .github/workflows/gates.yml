@@ -21,7 +21,9 @@ on:
 # skip the run on a docs-only diff, and this repository cannot: four files under
 # docs/ are asserted by tests - `lint-rules.md` against the linter's own rule
 # table, `modelling-a-device.md`, `optical-paths-design.md` and
-# `what-a-configuration-cannot-say.md` - plus DESIGN.md and two CATALOGUE.md.
+# `what-a-configuration-cannot-say.md` - plus DESIGN.md and the changelog
+# fragments under changelog.d/. (The component CATALOGUE.md was one of them;
+# the build writes it now and it is not committed.)
 # A "docs-only" change is one of the ways this suite most easily goes red, so
 # filtering it out would turn the cheapest failure into the one nobody catches.
 # The saving is bought instead where it helps every run: a pip cache, a lint job

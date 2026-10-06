@@ -23,7 +23,8 @@ SCHEMAS = Path(__file__).resolve().parents[2] / "schemas"
 # so a consumer had no way to tell a breaking change to the dist from a Tuesday
 # (#185). This number goes up when a field a reader depends on is removed,
 # renamed or changes meaning; adding one does not move it. CHANGELOG.md records
-# what each change was.
+# what each change was (a fragment under changelog.d/ until a version is cut,
+# which test_dist_contract reads as well).
 CONTRACT = 2
 
 # Placement and group attrs worth indexing. An allowlist, not everything: `states`

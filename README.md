@@ -120,16 +120,17 @@ source documents stay out of the repository. See `PRIOR-ART.md`.
 - `docs/modelling-a-device.md` — how to model a device from reference material, stage by stage with a check at each; `docs/modelling-pitfalls.md` for when a figure or a rule misbehaves
 - `docs/failure-by-omission.md` — the audit for tools that report success by reporting nothing, and the census-and-register method it produced
 - `library/components/CATALOGUE.md` — every component on one page: size, what it conforms to,
-  how many devices use it. Generated, and a test fails when it and the library disagree
-- `CHANGELOG.md` — what changed in the dist contract, the part of this repository a consumer outside it reads
+  how many devices use it. Written by `./build.sh` in a checkout and not committed, so it is not on GitHub
+- `CHANGELOG.md` — what changed in the dist contract, the part of this repository a consumer outside it reads;
+  changes not yet in a version are also under `changelog.d/`, one file per pull request
 - `PRIOR-ART.md` — the research this rests on, and the gap it fills
 
 ## Status
 
 Early. Manifests are `format: 1` (schema v1) and the package is 0.x, so the
-format can still change: every change is in `CHANGELOG.md` with how to move
-across, and [docs/format-stability.md](docs/format-stability.md) says what is
-promised.
+format can still change: every change is in `CHANGELOG.md` (or, until a
+version is cut, in `changelog.d/`) with how to move across, and
+[docs/format-stability.md](docs/format-stability.md) says what is promised.
 
 The library holds 158 devices from 16 vendors: white-box switches and routers
 (UfiSpace, Edgecore, Celestica), carrier routers and access platforms (Juniper

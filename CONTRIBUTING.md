@@ -239,7 +239,9 @@ id (`libdata.each_device()`), so a failure names the device in the id and the
 rule in the message rather than handing you a list of slugs and a test name.
 
 Commit the regenerated `device.lock.json` and `library/exports/` with your
-change. CI fails on a stale export.
+change. CI fails on a stale export. The build also writes
+`library/components/CATALOGUE.md`, the one-page list of every component; it is
+gitignored and is not committed.
 
 `--update` rewrites **only the devices whose fingerprint moved** - usually the
 one you edited, plus any that seat a component you bumped - so `git status` is
@@ -253,6 +255,22 @@ One device per pull request. The
 [template](.github/PULL_REQUEST_TEMPLATE.md) asks for the sources, the
 maturity you claim, the matched-scale comparison sentence, the gates you ran,
 and the merge danger. A reviewer reads that before the diff.
+
+#### The changelog entry
+
+A change that a consumer outside the repository could notice gets an entry,
+and the entry goes in a **new file under [`changelog.d/`](changelog.d/README.md)**,
+named after the branch or topic, not in `CHANGELOG.md`. The file holds the
+entry under `### Added`, `### Changed`, `### Removed` or `### Fixed`, written
+the way `CHANGELOG.md` writes its entries. Every pull request used to add its
+entry at the same place in `CHANGELOG.md`, so any two conflicted; a file no
+other pull request touches cannot. The fragments are folded into
+`CHANGELOG.md` when a version is cut, and a test checks each one on every run:
+
+```sh
+python3 spec/tools/portrayal/changelog.py --check   # the fragments are well formed
+python3 spec/tools/portrayal/changelog.py --show    # CHANGELOG.md with them folded in
+```
 
 #### Merge danger
 
@@ -273,8 +291,8 @@ the maintainer to read it. It is one-way if any of these is true:
   that seats the part.
 - **A committed export is renamed or removed,** or a port name or interface
   type in one changes. A DCIM that has already imported the old document keeps
-  the old data; [`CHANGELOG.md`](CHANGELOG.md) marks these as breaking for
-  data already imported.
+  the old data; its changelog entry marks it as breaking for data already
+  imported.
 - **The manifest format, a schema key or a lint code is removed, renamed or
   changes meaning.** [`docs/format-stability.md`](docs/format-stability.md)
   has the rules.

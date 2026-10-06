@@ -108,6 +108,9 @@ def _strings(o):
 def _prose_files():
     md = [ROOT / p for p in _DOCS if (ROOT / p).exists()]
     md += sorted(ROOT.glob("docs/**/*.md")) + sorted(ROOT.glob("spec/*.md"))
+    # the changelog's unreleased entries, one file per pull request until a
+    # version is cut and they are folded into CHANGELOG.md
+    md += sorted(ROOT.glob("changelog.d/*.md"))
     ym = []
     for pattern in ("library/devices/**/layout.yaml", "library/labs/**/*.yaml",
                     "library/devices/**/listings/*.yaml",
