@@ -21,6 +21,7 @@ attrs:
   line-ports: '3'
   client-rate: 100G or 400G, grey or coherent
   line-rate: 100G ZR+, 400G ZR, 400G OpenZR+ coherent DWDM
+  power-draw-typical-w: 40
   power-draw-max-w: 40
   weight-kg: 1.8
   operating-temp: '0 to 45 C'
@@ -45,8 +46,9 @@ provenance:
     datasheet and manual, and they describe the card WITHOUT its transceivers. The
     datasheet: "Typical consumption at 220VAC: Normal operation: 40 W, Max during power up:
     TBD W". The Technical Description, Table 8: "DCP-1203 <40 W", then the transceivers
-    apart - "QSFP28 ~5W", "QSFP-DD grey LR4 ~10W", "QSFP56-DD ~24W". 40 is filed as the
-    maximum because the manual gives it as an upper bound; no ambient is stated.
+    apart - "QSFP28 ~5W", "QSFP-DD grey LR4 ~10W", "QSFP56-DD ~24W". BOTH KEYS CARRY 40 AND
+    EACH HAS ITS OWN SOURCE: the datasheet calls 40 W the typical, normal-operation figure,
+    and the manual gives 40 W as the bound the card stays under. No ambient is stated.
     THE SAME TABLE GIVES TWO POPULATED FIGURES THAT DO NOT AGREE: "Max total <136 W (regen
     mode 4xQSFP-DD)" and "Typical power, full populated card with 400G coherent + 400G LR4
     at 25 C = 142 W". A typical above a maximum is two different populations, not one
@@ -55,10 +57,14 @@ provenance:
   face-scale: >-
     photo-measured off the datasheet render at 977 x 344. Across, the plate is 929 px for
     the stated 205: 4.532 px/mm. Down, the vertical plate under the sloping band is 154 px;
-    taking the band as the 10.4 of the 44 that smartoptics/dcp-404@1 measured on the same
-    housing leaves 33.6 for the plate, 4.583 px/mm. THE TWO AGREE TO 1.1%, which is the
-    check that the plate is close to orthographic in a render whose lid is plainly in
-    perspective. Positions are good to about 0.3 mm across and a little softer down.
+    taking the band as the 10.4 of the 44 that smartoptics/dcp-404@1 uses for the same
+    housing leaves 33.6 for the plate, 4.583 px/mm. THE TWO AGREE TO 1.1%, AND THAT TESTS
+    THE 10.4 AS MUCH AS THE RENDER: the agreement says a 10.4 band and an orthographic
+    plate are consistent with each other, and proves neither alone. The 10.4 is that
+    part's estimate. The band itself reads 58 px, which would be 12.7 mm in the plate's
+    plane, and is longer than 10.4 because the render looks down on a sloping surface.
+    SO EVERY x IS MEASURED, against the stated 205, and every y rests on that assumption.
+    Positions are good to about 0.3 mm across and softer down.
   ports: >-
     Six cage frames read 137-223, 264-350, 415-501, 541-627, 692-778 and 819-906 px: each
     86 or 87 px, 19.1 mm, against std/qsfp-dd's 19.0, and separate, not abutting. They
@@ -138,19 +144,19 @@ parts:
   - {ref: std/qsfp-dd@1, id: port-4, at: [113.50, 28.30], lift: 44.0, group: qsfpdd-400g, attrs: {role: line}}
   - {ref: std/qsfp-dd@1, id: port-5, at: [146.70, 28.30], lift: 44.0, group: qsfpdd-400g, attrs: {role: client}}
   - {ref: std/qsfp-dd@1, id: port-6, at: [174.70, 28.30], lift: 44.0, group: qsfpdd-400g, attrs: {role: line}}
-  - {ref: common/led-dot@1, id: led-1-tx, at: [19.50, 29.00], lift: 44.0, attrs: {function: tx}}
-  - {ref: common/led-dot@1, id: led-1-rx, at: [19.50, 34.10], lift: 44.0, attrs: {function: rx}}
-  - {ref: common/led-dot@1, id: led-2-tx, at: [74.80, 29.00], lift: 44.0, attrs: {function: tx}}
-  - {ref: common/led-dot@1, id: led-2-rx, at: [74.80, 34.10], lift: 44.0, attrs: {function: rx}}
-  - {ref: common/led-dot@1, id: led-3-tx, at: [80.40, 29.00], lift: 44.0, attrs: {function: tx}}
-  - {ref: common/led-dot@1, id: led-3-rx, at: [80.40, 34.10], lift: 44.0, attrs: {function: rx}}
-  - {ref: common/led-dot@1, id: led-4-tx, at: [135.70, 29.00], lift: 44.0, attrs: {function: tx}}
-  - {ref: common/led-dot@1, id: led-4-rx, at: [135.70, 34.10], lift: 44.0, attrs: {function: rx}}
-  - {ref: common/led-dot@1, id: led-5-tx, at: [141.10, 29.00], lift: 44.0, attrs: {function: tx}}
-  - {ref: common/led-dot@1, id: led-5-rx, at: [141.10, 34.10], lift: 44.0, attrs: {function: rx}}
-  - {ref: common/led-dot@1, id: led-6-tx, at: [196.50, 29.00], lift: 44.0, attrs: {function: tx}}
-  - {ref: common/led-dot@1, id: led-6-rx, at: [196.50, 34.10], lift: 44.0, attrs: {function: rx}}
+  - {ref: common/led-dot@1, id: led-1-tx, at: [19.50, 29.00], lift: 44.0, states: {lamp: ['off', {name: ok, color: '#22c55e'}, {name: alarm, color: '#eab308'}]}, attrs: {function: tx}}
+  - {ref: common/led-dot@1, id: led-1-rx, at: [19.50, 34.10], lift: 44.0, states: {lamp: ['off', {name: ok, color: '#22c55e'}, {name: alarm, color: '#eab308'}]}, attrs: {function: rx}}
+  - {ref: common/led-dot@1, id: led-2-tx, at: [74.80, 29.00], lift: 44.0, states: {lamp: ['off', {name: ok, color: '#22c55e'}, {name: alarm, color: '#eab308'}]}, attrs: {function: tx}}
+  - {ref: common/led-dot@1, id: led-2-rx, at: [74.80, 34.10], lift: 44.0, states: {lamp: ['off', {name: ok, color: '#22c55e'}, {name: alarm, color: '#eab308'}]}, attrs: {function: rx}}
+  - {ref: common/led-dot@1, id: led-3-tx, at: [80.40, 29.00], lift: 44.0, states: {lamp: ['off', {name: ok, color: '#22c55e'}, {name: alarm, color: '#eab308'}]}, attrs: {function: tx}}
+  - {ref: common/led-dot@1, id: led-3-rx, at: [80.40, 34.10], lift: 44.0, states: {lamp: ['off', {name: ok, color: '#22c55e'}, {name: alarm, color: '#eab308'}]}, attrs: {function: rx}}
+  - {ref: common/led-dot@1, id: led-4-tx, at: [135.70, 29.00], lift: 44.0, states: {lamp: ['off', {name: ok, color: '#22c55e'}, {name: alarm, color: '#eab308'}]}, attrs: {function: tx}}
+  - {ref: common/led-dot@1, id: led-4-rx, at: [135.70, 34.10], lift: 44.0, states: {lamp: ['off', {name: ok, color: '#22c55e'}, {name: alarm, color: '#eab308'}]}, attrs: {function: rx}}
+  - {ref: common/led-dot@1, id: led-5-tx, at: [141.10, 29.00], lift: 44.0, states: {lamp: ['off', {name: ok, color: '#22c55e'}, {name: alarm, color: '#eab308'}]}, attrs: {function: tx}}
+  - {ref: common/led-dot@1, id: led-5-rx, at: [141.10, 34.10], lift: 44.0, states: {lamp: ['off', {name: ok, color: '#22c55e'}, {name: alarm, color: '#eab308'}]}, attrs: {function: rx}}
+  - {ref: common/led-dot@1, id: led-6-tx, at: [196.50, 29.00], lift: 44.0, states: {lamp: ['off', {name: ok, color: '#22c55e'}, {name: alarm, color: '#eab308'}]}, attrs: {function: tx}}
+  - {ref: common/led-dot@1, id: led-6-rx, at: [196.50, 34.10], lift: 44.0, states: {lamp: ['off', {name: ok, color: '#22c55e'}, {name: alarm, color: '#eab308'}]}, attrs: {function: rx}}
   - {ref: common/led-rect@1, id: led-power, at: [5.35, 35.70], lift: 44.0, attrs: {function: power}}
-  - {ref: common/led-rect@1, id: led-status, at: [11.60, 35.70], lift: 44.0, attrs: {function: status}}
+  - {ref: common/led-rect@1, id: led-status, at: [11.60, 35.70], lift: 44.0, states: {lamp: ['off', {name: ok, color: '#22c55e'}, {name: alarm, color: '#ef4444'}]}, attrs: {function: status}}
   - {ref: common/laser-warning@1, id: warn-laser, at: [7.50, 22.60], lift: 44.0, attrs: {marking: laser}}
   - {ref: common/warning-triangle@1, id: warn-general, at: [7.50, 28.30], lift: 44.0, attrs: {marking: general}}
