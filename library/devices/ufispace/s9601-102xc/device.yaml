@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9601-102xc
-version: 3.0.6
+version: 3.0.7
 maturity: modelled
 manufacturer: UfiSpace
 model: S9601-102XC
@@ -401,6 +401,13 @@ provenance:
       searched 2026-08-28, 'UfiSpace S9601-102XC end of life end of sale' - no announcement found;
       the product is current and the guide is dated August 2026. none-announced is a real finding,
       not an omission.
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      the hardware installation guide lists, in its package contents, a screw kit for the grounding
+      lug of 2 x M4*L8.0mm screws, and its grounding steps lock the grounding lug to the designated
+      grounding location with 2 M4 screws: the `stud-size` of ground-1 and ground-2. The accessory lug
+      is one two-hole lug held by both screws.
 
 attrs:
   performance:
@@ -1111,10 +1118,10 @@ views:
         - {ref: common/ground-lug@1, id: ground-1, at: [349.8, 7.5], group: grounding, rel-pos: 1,
            description: 'HIG section 8 - the designated grounding location, at the rear of
              the case and shipped covered with a protective label; two M4 screws and two
-             washers, upper hole'}
+             washers, upper hole', attrs: {stud-size: M4}}
         - {ref: common/ground-lug@1, id: ground-2, at: [349.8, 24.0], group: grounding, rel-pos: 2,
            description: 'the lower of the two tapped holes of the same rear grounding
-             location'}
+             location', attrs: {stud-size: M4}}
     regions:
       - {id: exhaust, at: [8, 2], size: {w: 335, h: 85}, physical-context: Exhaust, label: Fan exhaust, members: [fan-0, fan-1, fan-2, fan-3]}
       - {id: power, at: [370, 2], size: {w: 56, h: 85}, label: Power supplies, members: [psu-0, psu-1]}

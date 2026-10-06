@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9501-28smt
-version: 3.0.5
+version: 3.0.6
 maturity: modelled
 manufacturer: UfiSpace
 model: S9501-28SMT
@@ -251,6 +251,13 @@ provenance:
       searched 2026-08-28, 'UfiSpace S9501-28SMT end of life' - no announcement of any kind. The
       vendor's product page, FAQ page and datasheet are all live and the unit is actively marketed
       by resellers. none-announced is a real finding, not an omission.
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      the hardware installation guide lists, in its package contents, a screw kit for the grounding
+      lug of 2 x M4*L8.0mm screws, and its grounding steps lock the grounding lug to the designated
+      grounding location with 2 M4 screws: the `stud-size` of ground-1 and ground-2. The accessory lug
+      is one two-hole lug held by both screws.
 
 attrs:
   performance:
@@ -744,8 +751,8 @@ views:
            description: 'the designated grounding location of HIG section 8 and the Figure 5
              inset - two tapped M4 holes on the right flank just behind the front face, for
              the accessory grounding lug (50 x 11.1 x 7.5 mm, #6 AWG). The inset has no
-             scale, so this is a fraction of the depth, not a measurement'}
-        - {ref: common/ground-lug@1, id: ground-2, at: [33, 14.5], group: grounding, rel-pos: 2}
+             scale, so this is a fraction of the depth, not a measurement', attrs: {stud-size: M4}}
+        - {ref: common/ground-lug@1, id: ground-2, at: [33, 14.5], group: grounding, rel-pos: 2, attrs: {stud-size: M4}}
         - {ref: common/screw-head@1, id: screw-r1, at: [110, 20], group: furniture, rel-pos: 11}
         - {ref: common/screw-head@1, id: screw-r2, at: [215, 20], group: furniture, rel-pos: 12}
 configurations:

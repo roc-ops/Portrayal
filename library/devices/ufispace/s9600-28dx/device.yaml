@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-28dx
-version: 4.0.5
+version: 4.0.6
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-28DX
@@ -254,6 +254,13 @@ provenance:
       searched 2026-08-28, 'UfiSpace S9600-28DX end of life' - no announcement of any kind; the
       product page and datasheet are live and the unit is actively marketed. none-announced is a
       real finding, not an omission.
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      the hardware installation guide lists, in its package contents, a screw kit for the grounding
+      lug of 2 x M4*L8.0mm screws, and its grounding steps lock the grounding lug to the designated
+      grounding location with 2 M4 screws: the `stud-size` of ground-1, which is drawn once for both
+      holes. The accessory lug is one two-hole lug held by both screws.
 
 attrs:
   performance:
@@ -678,7 +685,7 @@ views:
            description: 'the designated grounding location of HIG section 8 - two tapped M4
              holes on the rear, between the fans and the PSUs, shipped covered with a
              protective label that is removed before the accessory lug (29 x 37.5 x 12.5 mm,
-             #6 AWG) is bolted on. Measured off HIG Figure 7 at x 347.3-357.9, y 6.6-31.9'}
+             #6 AWG) is bolted on. Measured off HIG Figure 7 at x 347.3-357.9, y 6.6-31.9', attrs: {stud-size: M4}}
         - {ref: common/ground-symbol@1, id: ground-mark, at: [358.5, 18.9], group: grounding, rel-pos: 2}
     regions:
       - {id: exhaust, at: [6, 0], size: {w: 337, h: 87.7}, physical-context: Exhaust, label: Fan exhaust, members: [fan-0, fan-1, fan-2, fan-3]}

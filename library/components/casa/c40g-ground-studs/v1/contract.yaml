@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: c40g-ground-studs
-version: 1.0.1
+version: 1.0.2
 class: ground
 behaviour: mounts
 profile: networking
@@ -50,16 +50,18 @@ provenance:
     to clear the nut. NOT MEASURED and not independently re-estimated here: it is the
     same hardware drawn the same way, so a second guess would be a second number for
     one thing. What would settle it is a caliper or any side-on photograph of a C40G rear'
-relief:
-  wall: '#4a4f55'
-  features:
-    - {node: stud-top-tr, cyl: 3.5, thread: 1.0, confidence: estimated, source: 'casa/ground-bolts@1 - NO PRECEDENT beyond it, a grounding stud. A FLOOR: it has to clear the nut'}
-    - {node: washer-tr, cyl: 0.7, confidence: estimated, source: 'casa/ground-bolts@1 star washer - NOT MEASURED there either'}
-    - {node: nut-tr, cyl: 2.2, lift: 0.7, confidence: estimated, source: 'casa/ground-bolts@1 terminal nut - NOT MEASURED there either'}
-    - {node: stud-top-bl, cyl: 3.5, thread: 1.0, confidence: estimated, source: 'casa/ground-bolts@1 - NO PRECEDENT beyond it, a grounding stud. A FLOOR: it has to clear the nut'}
-    - {node: washer-bl, cyl: 0.7, confidence: estimated, source: 'casa/ground-bolts@1 star washer - NOT MEASURED there either'}
-    - {node: nut-bl, cyl: 2.2, lift: 0.7, confidence: estimated, source: 'casa/ground-bolts@1 terminal nut - NOT MEASURED there either'}
-    - {node: stud-top-br, cyl: 3.5, thread: 1.0, confidence: estimated, source: 'casa/ground-bolts@1 - NO PRECEDENT beyond it, a grounding stud. A FLOOR: it has to clear the nut'}
-    - {node: washer-br, cyl: 0.7, confidence: estimated, source: 'casa/ground-bolts@1 star washer - NOT MEASURED there either'}
-    - {node: nut-br, cyl: 2.2, lift: 0.7, confidence: estimated, source: 'casa/ground-bolts@1 terminal nut - NOT MEASURED there either'}
+  seats: >-
+    EACH STUD IS A PART OF ITS OWN, casa/shelf-ground-stud@1, composed three times as
+    `stud-tr`, `stud-bl` and `stud-br`, the ids the three groups carried in this skin. The
+    washer, nut and stud art and their relief moved into that part unchanged, so this
+    terminal compiles to the same drawing; what is left in this skin is the earth mark.
+    Each stud presents the nominal `terminal-stud` interface, so each is a seat for a
+    lug. ALL THREE ARE SEATS because all three are drawn: the guide counts two M6 screws
+    for one double-lug cable and does not say which two of the three positions they are
+    (stud-count above). A one-hole lug on each stud is a stand-in; the cable the guide
+    calls for is one two-hole lug with a 45 degree tongue.
+parts:
+  - {ref: casa/shelf-ground-stud@1, id: stud-tr, at: [16.05, 0.75]}
+  - {ref: casa/shelf-ground-stud@1, id: stud-bl, at: [0.75, 16.05]}
+  - {ref: casa/shelf-ground-stud@1, id: stud-br, at: [16.05, 16.05]}
 skins: [default]

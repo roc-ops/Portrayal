@@ -1,13 +1,29 @@
 format: 1
 kind: component
 name: ground-lug
-version: 1.4.0
+version: 1.4.1
 class: ground
+interface: terminal-stud
 behaviour: mounts
 description: Chassis grounding point with earth symbol above the stud
 size: {w: 7.0, h: 14.0}
 provenance:
   size: photo-measured
+  seat: >-
+    THE PART PRESENTS `terminal-stud` ON THE STUD AXIS, AT THE TOP OF ITS SCREW
+    HEAD. `mate` sits `on: screw-cap`, the last of the three solids this part
+    stacks: the boss 0 to 3.2, the washer 3.2 to 3.7 and the screw head 3.7 to
+    4.7 off the panel. A lug seated here starts at 4.7 and draws a head of its
+    own. A real lug lies under the washer and the head; seated there it would
+    share their volume. The same choice, for the same reason, as
+    common/terminal-screw-34@1. See docs/connectors-dc-terminal-design.md,
+    section 13.
+  drawn-size: >-
+    NO STUD SIZE IS CLAIMED BY THE PART. It draws a screw head about 5.1 across in a box
+    7.0 wide, about an M3 pan head to scale, and it is placed on devices whose
+    documents state M4, M5, M6 and 1/4 in. hardware. Where a document states a
+    size it is the `stud-size` attribute of that placement. A real lug for
+    those sizes is wider than this part; the drawing is not changed here.
 elements:
   stud: {at: [0.7, 7.0], size: [5.6, 5.6], class: stud}
   symbol: {at: [1.5, 1.0], size: [4.0, 4.5], class: silkscreen}
@@ -36,4 +52,6 @@ relief:
       source: >-
         common/ground-lug@1 itself - unsourced. Its provenance covers the part's FACE (size,
         photo-measured) and carries no key about how far anything stands off it.
+connection-points:
+  mate: {at: [3.5, 9.8], direction: front, 'on': screw-cap}
 skins: [default]

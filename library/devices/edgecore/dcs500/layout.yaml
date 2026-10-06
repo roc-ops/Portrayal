@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcs500
-version: 2.0.3
+version: 2.0.4
 maturity: modelled
 manufacturer: Edgecore
 model: DCS500
@@ -163,6 +163,12 @@ provenance:
       edgecore/dcs500-fan@1 - from x 88.58, y 22.9-85.5. Above each supply a grounding
       plate carries two screws under a ground symbol, and the upper band carries each
       tray's numeral. The chassis prints each supply's name above its outer top corner.
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      the quick start guide's package contents list a grounding kit of one grounding lug, 2 M5 screws
+      and 2 washers: the `stud-size` of ground-1 and ground-0, each of which is drawn once for a
+      grounding plate that carries two screws.
 attrs:
   performance:
     switching-capacity: 6.4 Tbps (12.8 Tbps full duplex)
@@ -485,8 +491,8 @@ views:
       placements:
         - {ref: common/rack-ear@1, id: rear-ear-left, at: [-14, 0.1], skin: left, optional: ears, group: furniture, rel-pos: 4}
         - {ref: common/rack-ear@1, id: rear-ear-right, at: [438.4, 0.1], skin: right, optional: ears, group: furniture, rel-pos: 5}
-        - {ref: common/ground-lug@1, id: ground-1, at: [54.70, 25.20], rotate: 90, group: grounding, rel-pos: 1}
-        - {ref: common/ground-lug@1, id: ground-0, at: [374.10, 25.20], rotate: 90, group: grounding, rel-pos: 0}
+        - {ref: common/ground-lug@1, id: ground-1, at: [54.70, 25.20], rotate: 90, group: grounding, rel-pos: 1, attrs: {stud-size: M5}}
+        - {ref: common/ground-lug@1, id: ground-0, at: [374.10, 25.20], rotate: 90, group: grounding, rel-pos: 0, attrs: {stud-size: M5}}
     regions:
       - {id: exhaust, at: [88.58, 0], size: {w: 267.96, h: 87.7}, physical-context: Exhaust,
          label: Fan tray exhaust (front-to-back build), members: [fan-0, fan-1, fan-2, fan-3]}

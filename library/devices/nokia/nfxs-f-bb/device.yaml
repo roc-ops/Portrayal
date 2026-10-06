@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: nfxs-f-bb
-version: 0.1.4
+version: 0.1.5
 maturity: modelled
 manufacturer: Nokia
 model: 7360 ISAM FX-4 (NFXS-F BB)
@@ -138,6 +138,12 @@ provenance:
       airflow specifications (air flows in the front, and out the rear of the shelf)". For the
       horizontal installation drawn here the fan unit sits at the right-hand end and the air crosses
       the cards; the direction is not stated in any staged document, so no airflow is declared.
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      HIM R6.9 s14.3.1 gives the lug of each grounding cable connector of the FX-4 as a 4 AWG
+      dual-hole lug with 1/4 in. holes at 3/4 in. spacing: the `stud-size` of ground, read from the
+      holes of the lug the guide calls for. The placement is drawn once for a pair of studs.
 attrs:
   physical:
     part-number: 3FE64991BB
@@ -258,7 +264,7 @@ views:
         - {at: [128.0, 12.0], size: [142.0, 198.0], pattern: vent, vent: 40, confidence: estimated, source: 'HIM R6.9 Figure 173 (perspective) draws the right side perforated over its rear half; extent by eye, hole size and pitch not documented'}
     components:
       placements:
-        - {ref: common/ground-lug@1, id: ground, at: [18.5, 104.0], group: grounding, rel-pos: 1}
+        - {ref: common/ground-lug@1, id: ground, at: [18.5, 104.0], group: grounding, rel-pos: 1, attrs: {stud-size: '1/4 in'}}
   top:
     size: {w: 447.0, h: 278.3}
     empty: >-

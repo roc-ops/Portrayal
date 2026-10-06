@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9500-30xs
-version: 3.0.5
+version: 3.0.6
 maturity: modelled
 manufacturer: UfiSpace
 model: S9500-30XS
@@ -219,6 +219,13 @@ provenance:
       searched 2026-08-28: 'UfiSpace S9500-30XS end of life', and the vendor's own product page
       fetched and read for a notice. No announcement found; the product page is live and carries
       active downloads. none-announced is a real finding, not an absence.
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      the hardware installation guide lists, in its package contents, a screw kit for the grounding
+      lug of 2 x M4*L8.0mm screws, and its grounding steps lock the grounding lug to the designated
+      grounding location with 2 M4 screws: the `stud-size` of ground-lug, which is drawn once for both
+      holes. The accessory lug is one two-hole lug held by both screws.
 
 attrs:
   performance:
@@ -732,7 +739,7 @@ views:
         - {ref: common/screw-head@1, id: screw-r1, at: [52.2, 8.0], group: furniture, rel-pos: 5}
         - {ref: common/screw-head@1, id: screw-r2, at: [52.2, 20.0], group: furniture, rel-pos: 6}
         - {ref: common/screw-head@1, id: screw-r3, at: [52.2, 32.0], group: furniture, rel-pos: 7}
-        - {ref: common/ground-lug@1, id: ground-lug, at: [264.5, 14.5], group: grounding, rel-pos: 2}
+        - {ref: common/ground-lug@1, id: ground-lug, at: [264.5, 14.5], group: grounding, rel-pos: 2, attrs: {stud-size: M4}}
 configurations:
   base:
     kind: base

@@ -25,6 +25,22 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- Ground studs seat a ring lug. `common/ground-lug@1`,
+  `common/ground-stud@1` and `juniper/mx-ground-stud@1` each gain
+  `interface: terminal-stud` and a `mate` point on the stud axis, on top of
+  what the part builds, so every placement of one is a slot of its device
+  that offers `generic/ring-lug@1`. The three studs of
+  `casa/c40g-ground-studs@1` are now `casa/shelf-ground-stud@1`, composed as
+  `stud-tr`, `stud-bl` and `stud-br`, each a nested slot. No drawing changed.
+  A placement states `stud-size` (`M4`, `M5`, `M6`, `10-32`, `1/4-20`,
+  `1/4 in`) where a document for its device states the size of the stud or
+  screw: 68 placements on 31 devices, each with its source in
+  `provenance.ground-stud-size`. The 53 devices that place one of the four
+  parts take a patch; their DCIM exports change in the drawing version line
+  only. The lug is the one nominal lug and is not turned: where it overhangs
+  a face, or two lugs on a pair overlap, is recorded in
+  `docs/connectors-dc-terminal-design.md`, section 13, with a two-hole lug as
+  later work (#789).
 - Two more of the Amphenol Network Solutions 300CB08 family, the passive
   connectorized panels: `amphenol-ns/300cb08-sc` (stud inputs) and
   `amphenol-ns/300cb08-c` (horizontal busbar inputs). Each replaces the screw
