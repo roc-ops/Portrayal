@@ -100,8 +100,8 @@ the list.
   cage front. Not changed here.
 - **Out of this work:** OSFP-RHS, OSFP Type 2 and Type 3 fronts, the dual
   and multi-connector OSFP faces, OSFP MPO-12, OSFP copper and active
-  cables, and the CFP, CFP2, CFP4 and CXP families, whose cages still offer
-  nothing.
+  cables, and the CFP, CFP2, CFP4 and CXP families, which followed in
+  [pluggables-cfp-cxp-design.md](pluggables-cfp-cxp-design.md).
 
 ## Decisions
 

@@ -15,6 +15,10 @@ MODULES = {
     "qsfp-dd-module": "QSFP-DD",
     "osfp-module": "OSFP Module Specification",
     "xfp-module": "INF-8077i",
+    "cfp-module": "CFP MSA Hardware Specification",
+    "cfp2-module": "CFP2 Baseline Drawing",
+    "cfp4-module": "CFP4 Baseline Drawing",
+    "cxp-module": "SFF-8642",
 }
 
 

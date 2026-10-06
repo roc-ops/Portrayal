@@ -1,0 +1,156 @@
+format: 1
+kind: component
+name: mpo24-module-receptacle
+version: 1.0.0
+interface: mpo
+class: port
+profile: networking
+conforms: mpo-adapter
+optical: {positions: 24}
+description: >-
+  One two-row MPO receptacle as a module carries it - the mouth an MPO-24
+  plug enters on a transceiver, looked into: a dark cavity, the key notch
+  centred in its top wall, and the MT ferrule at the back with two guide pins
+  and two rows of twelve fibres. The same opening, key and interface as
+  std/mpo-module-receptacle@1, so it offers the same plugs and dust cap; what
+  differs is the ferrule behind it, twenty-four positions for twelve.
+size: {w: 12.9, h: 8.0, d: 9.0}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+attrs: {media: fiber, connector: mpo}
+provenance:
+  size: >-
+    ESTIMATED, borrowed - the 12.9 x 8.0 mouth of std/mpo@2, the same opening
+    seen on a module and not on a panel: SFF-8436 Rev 4.9 section 5.1 says a
+    module receptacle meets the MPO adapter interface of IEC 61754-7. See
+    std/mpo@2 for the derivation (the printed 12.5 x 7.6 plug plus a measured
+    clearance). The size box is kept so an optic that composed std/mpo@2 keeps
+    its layout.
+  depth: >-
+    ESTIMATED at 9.0, the figure std/mpo@2 carries. No document held gives the
+    depth of a module receptacle.
+  what-differs: >-
+    WHY A THIRD PART FOR ONE OPENING. std/mpo@2 is the panel adapter's open
+    sleeve and std/mpo-module-receptacle@1 the module mouth with ONE row of
+    twelve fibres. This is the same mouth with the two-row ferrule a
+    twenty-four-fibre module carries, so that fibre n of the module is an
+    address. A different ferrule under the same key is a separate part with
+    the count in `optical.positions` (docs/pluggables-design.md, decision
+    10); the precedent is generic/mpo24-plug@1 beside generic/mpo12-plug@1.
+  slot: >-
+    THE INTERFACE IS `mpo`, so the slot offers what every `mpo` opening
+    offers: generic/mpo24-plug@1, generic/mpo12-plug@1 and
+    common/mpo-dust-cap@2. The accept list is derived from the interface
+    and the interface is the housing and its key
+    (spec/schemas/connectors.yaml, `mpo`), which a twelve-fibre plug shares:
+    it enters and latches. Its one row lies on the centreline, between
+    these two rows, so it is the wrong plug for the ferrule, and nothing in
+    the slot says otherwise; generic/mpo24-plug@1 is the plug this part is
+    drawn for.
+  gender: >-
+    datasheet - PINNED. SFF-8679 Rev 1.9 section 7.3 describes the module receptacle as a male MPO connector with two alignment pins. The plugs that land here are
+    unpinned.
+  ferrule: >-
+    drawing, measured, undimensioned - 6.10 x 2.50, the window the MT ferrule
+    stands in on US Conec customer drawing C20044 rev B, sheet 2 front view,
+    as generic/mpo12-plug@1 records it (its `provenance.ferrule`), centred on
+    the opening. That drawing's kit table offers the twelve- and the
+    twenty-four-fibre ferrule in the one housing, so the window is the same
+    for both. The receptacle's own ferrule is the mating half of that one; no
+    drawing of a module receptacle is held.
+  guide-pins: >-
+    the pitch is 4.6: the US Conec MTP-16 handout SM-0022-0823 p1 prints 4.6mm
+    for the traditional MT ferrule (against 5.3mm for the sixteen-fibre one),
+    and the two guide-pin bores measure 4.59 apart on C20044 rev B
+    (generic/mpo12-plug@1 `provenance.ferrule`). The maintainer's end-on
+    photograph of a QSFP28 SR4 reads 4.4 on the recessed ferrule. THE PIN
+    DIAMETER IS NOT DIMENSIONED in anything held: 0.7 is drawn, the lower end
+    of the 0.70 to 0.80 the bores the pins enter measure on C20044, so it is
+    a measured bore and an estimated pin.
+  keyway: >-
+    ESTIMATED, derived from the plug - CENTRED. The MPO-12 key moulding is
+    4.39 wide and 0.90 tall, centred on the housing to 0.02 and 0.42 inside
+    its top flat (US Conec C20044 rev B, measured; generic/mpo12-plug@1
+    `provenance.key`). The notch is that key where a seated plug puts it,
+    plus the 0.2 a side the opening allows the housing: 4.79 x 1.30, from 0.4
+    below the top of the mouth. No drawing held dimensions an MPO keyway
+    (std/mpo@2 `provenance.key`), so this is the plug's key and not a reading
+    of a receptacle. KEY UP is SFF-8679 Rev 1.9 section 7.3.1.
+  fibre-positions: >-
+    ELEMENTS 1 TO 24 ARE THE FIBRES, drawn as dots 0.125 across on the
+    ferrule, in two rows of twelve at the 0.25 pitch. THE ROWS ARE 0.50
+    APART: the US Conec MTP-16 handout SM-0022-0823 p1 prints 0.25mm fibre
+    pitch within the row and 0.50mm between rows for its two-row MT
+    ferrules. That sheet is about the sixteen-fibre family, and NO DOCUMENT
+    HELD DIMENSIONS A TWENTY-FOUR-FIBRE FERRULE, so the figure is borrowed
+    from it; generic/mpo24-plug@1 and common/mpo24-flange-adapter@2 address
+    their rows 0.5 apart on the same footing. THIS VIEW LOOKS INTO THE
+    RECEPTACLE, key up. The row on the key side, the upper, carries 1 to 12
+    and the other 13 to 24, each with its first position at the RIGHT. That
+    is the mirror of a plug seen on its own end face, where key up puts
+    fibre 1 at the left of the key-side row (ANSI/TIA-568.3-D, as
+    generic/mpo24-plug@1 cites it), and it is the side the library draws a
+    SEATED plug's fibres on, because a seated plug is seen from its boot
+    end. So position n here is where fibre n of the seated plug lands. WHICH
+    POSITIONS TRANSMIT AND WHICH RECEIVE IS NOT STATED: that is a fact about
+    the module a wrapper is, and a generic states none.
+  recess: >-
+    ESTIMATED, every figure. The ferrule face stands 5.0 up from the floor of
+    the 9.0 cavity, so 4.0 behind the mouth: the maintainer's end-on
+    photograph of a QSFP28 SR4 shows the ferrule recessed, and nothing
+    dimensions how far. The pins stand 1.9 proud of the ferrule face,
+    which is printed (US Conec C20044 rev B SECTION A-A, 1.9).
+elements:
+  opening: {at: [0, 0], size: [12.9, 8.0], class: cutout}
+  '1': {at: [7.7625, 3.6875], size: [0.125, 0.125], class: fibre}
+  '2': {at: [7.5125, 3.6875], size: [0.125, 0.125], class: fibre}
+  '3': {at: [7.2625, 3.6875], size: [0.125, 0.125], class: fibre}
+  '4': {at: [7.0125, 3.6875], size: [0.125, 0.125], class: fibre}
+  '5': {at: [6.7625, 3.6875], size: [0.125, 0.125], class: fibre}
+  '6': {at: [6.5125, 3.6875], size: [0.125, 0.125], class: fibre}
+  '7': {at: [6.2625, 3.6875], size: [0.125, 0.125], class: fibre}
+  '8': {at: [6.0125, 3.6875], size: [0.125, 0.125], class: fibre}
+  '9': {at: [5.7625, 3.6875], size: [0.125, 0.125], class: fibre}
+  '10': {at: [5.5125, 3.6875], size: [0.125, 0.125], class: fibre}
+  '11': {at: [5.2625, 3.6875], size: [0.125, 0.125], class: fibre}
+  '12': {at: [5.0125, 3.6875], size: [0.125, 0.125], class: fibre}
+  '13': {at: [7.7625, 4.1875], size: [0.125, 0.125], class: fibre}
+  '14': {at: [7.5125, 4.1875], size: [0.125, 0.125], class: fibre}
+  '15': {at: [7.2625, 4.1875], size: [0.125, 0.125], class: fibre}
+  '16': {at: [7.0125, 4.1875], size: [0.125, 0.125], class: fibre}
+  '17': {at: [6.7625, 4.1875], size: [0.125, 0.125], class: fibre}
+  '18': {at: [6.5125, 4.1875], size: [0.125, 0.125], class: fibre}
+  '19': {at: [6.2625, 4.1875], size: [0.125, 0.125], class: fibre}
+  '20': {at: [6.0125, 4.1875], size: [0.125, 0.125], class: fibre}
+  '21': {at: [5.7625, 4.1875], size: [0.125, 0.125], class: fibre}
+  '22': {at: [5.5125, 4.1875], size: [0.125, 0.125], class: fibre}
+  '23': {at: [5.2625, 4.1875], size: [0.125, 0.125], class: fibre}
+  '24': {at: [5.0125, 4.1875], size: [0.125, 0.125], class: fibre}
+relief:
+  # CAVITY ALONE, NO POCKET, as on std/mpo@2: `relief.cavity` names the skin node
+  # whose art is the recess and the depth is `size.d`. The ferrule and the pins
+  # are `top` features standing up from the floor, the way std/lc-bore@3 and
+  # std/sc-bore@1 stand their ferrules, so nothing is a slab over the mouth.
+  wall: '#15181b'
+  cavity: opening
+  features:
+    - node: ferrule
+      top: 5.0
+      confidence: estimated
+      source: >-
+        NOT MEASURED - see provenance.recess. The top of this box carries the
+        fibre dots, which are painted on it.
+    - node: pin-l
+      top: 6.9
+      color: '#b9bfc6'
+      confidence: estimated
+      source: >-
+        the ferrule face plus the printed 1.9 the guide pins stand
+        proud of it (US Conec C20044 rev B SECTION A-A, 1.9); the face itself is estimated
+    - node: pin-r
+      top: 6.9
+      color: '#b9bfc6'
+      confidence: estimated
+      source: the same reading as pin-l
+connection-points:
+  mate: {at: [6.45, 4.0], direction: front}
+skins: [default]

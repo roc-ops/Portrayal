@@ -28,15 +28,17 @@
 # that vocabulary is going. Add it the day a device needs it, not before.
 #
 # Every `source` says what the family rests on, including when that is
-# nothing held in `working/`. Four families - `cfp`, `cfp2`,
-# `cfp4` and `cxp` - have NO CAGE-DEFINING MSA AT ALL in the corpus; their `source` says
-# NOT HELD and names the `std/` cage that justifies the family's existence
-# instead. `sfp` and `sfp-dd` say NOT HELD too, for the MSA their own source
-# names (SFF-8432, the SFP-DD MSA) - a held document can still be cited
-# wrongly, which is what SFF-8663 vs `qsfp56` turned out to be below, and
-# marking a citation unheld is what stops that happening quietly a second
-# time. A registry that implied we hold documents we do not is the laundering
-# this library refuses everywhere else, and a ladder is not an exception.
+# nothing held. `cfp`, `cfp2`, `cfp4` and `cxp` each name the document that
+# dimensions the MODULE and, where there is one, the host: the CFP MSA
+# documents went offline with the MSA's site and were read from a public
+# archive of it. What none of them settles is the `std/` cage beside the
+# family, which each `source` says. `sfp` and `sfp-dd` say NOT HELD, for the
+# MSA their own source names (SFF-8432, the SFP-DD MSA) - a held document can
+# still be cited wrongly, which is what SFF-8663 vs `qsfp56` turned out to be
+# below, and marking a citation unheld is what stops that happening quietly a
+# second time. A registry that implied we hold documents we do not is the
+# laundering this library refuses everywhere else, and a ladder is not an
+# exception.
 format: 1
 families:
   sfp:
@@ -59,7 +61,7 @@ families:
     source: 'QSFP-DD HW 6.3 section 1 - QSFP-DD cages are compatible with 4-lane QSFP28/QSFP112'
   osfp: {interface: osfp, rates: [osfp], source: 'OSFP MSA, OSFP Module Specification Rev 5.22, sections 3 and 5 - the OSFP module and its cage; std/osfp exists. Whether an OSFP1600 cage (section 6) takes an OSFP800 module is not read here, and OSFP-RHS (section 12) is a different cage and is not on this rung'}
   xfp:  {interface: xfp,  rates: [xfp],  source: 'XFP MSA INF-8077i Rev 4.5 - one module and one cage; std/xfp exists'}
-  cfp:  {interface: cfp,  rates: [cfp],  source: 'CFP MSA - not held; std/cfp exists'}
-  cfp2: {interface: cfp2, rates: [cfp2], source: 'CFP MSA - not held; std/cfp2 exists'}
-  cfp4: {interface: cfp4, rates: [cfp4], source: 'CFP MSA CFP4 Hardware Specification Rev 1.1 dimensions the module (Figure 5-7) but defines no cage; the CFP4 baseline drawing that does is not held; std/cfp4 exists'}
-  cxp:  {interface: cxp,  rates: [cxp],  source: 'CXP - not held; std/cxp exists'}
+  cfp:  {interface: cfp,  rates: [cfp],  source: 'CFP MSA Hardware Specification Rev 1.4 (7 June 2010) with the two documents it defers to, the MSA Module Dimensions drawing (04/07/10) and the CFP MSA Mechanical Layout (17 Mar 10, revision 14) - one module and one host railing system; std/cfp exists and draws the module faceplate width, not the 82.8 x 14.8 panel opening'}
+  cfp2: {interface: cfp2, rates: [cfp2], source: 'CFP MSA CFP2 Hardware Specification Rev 1.0 (31 July 2013) and the CFP2 Baseline Drawing Rev 1L (2013-08-06) it makes normative - one module and one cage, coherent modules included; std/cfp2 exists and draws the module body, not the panel opening'}
+  cfp4: {interface: cfp4, rates: [cfp4], source: 'CFP MSA CFP4 Hardware Specification Rev 1.1 (18 March 2015) and the CFP4 Baseline Drawing Rev R it makes normative, which dimensions the module (sheets 1 to 3) and the host cage, board and panel (sheets 6 to 16); std/cfp4 exists and draws the module body, not the panel opening'}
+  cxp:  {interface: cxp,  rates: [cxp],  source: 'SFF-8642 Rev 3.3 (CXP10) and SFF-8617 Rev 1.7, which SFF-8647 Rev 1.5 (CXP14) defers to - one plug and one receptacle at every rate; InfiniBand Architecture Volume 2 Annex A6 is not held; std/cxp exists and is an estimate these documents do not bear out (the cut-out is 23.50 x 12.10)'}
