@@ -25,6 +25,17 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- Fibrain, a new vendor: the XCU10 extendable HD patch panel (`fibrain/xcu`,
+  0.5U, 48 SC), with XCU10-51ID and XCU10-41ID as configurations. Its front is
+  one captive drawer (`fibrain/xcu-drawer@1`) whose four slots seat the HD
+  adapter holders XMI1041GA and XMI1051GA (6 SC, 6 SC/APC), XMN1041GB and
+  XMN1051GB (12 SC, 12 SC/APC) or the XBCS0 blind cover. `common/sc-simplex-adapter@1`
+  is new: one SC port to a body, with no dust cap seated. These are the first
+  parts to use `shape: ring` and `shows` on body pieces. **In the DCIM exports
+  the holders seat in bays of the drawer's module type, which NetBox takes
+  (4.5.7 or later) and Nautobot is not given: the Nautobot drawer has no bays,
+  so the holders and their 48 ports cannot be placed there yet**
+  (roc-ops/Portrayal#834). Nautobot states `u_height: 1` for this 0.5U panel.
 - The explorer edits a part's fields. Selecting a part whose component
   declares `fields:` - a supply's wattage, a latch colour, a filter's channel
   numbers - shows one control per field in the inspector: a list for a
