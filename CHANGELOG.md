@@ -95,6 +95,19 @@ names the ref that replaces it.
   `body.drawings` and `body.face` on a part whose pieces show one. Lint L71
   checks the new keys. Nothing existing changes: a piece that states neither
   is the plain box it was.
+- The Cisco Nexus 93180YC-EX (`cisco/n9k-c93180yc-ex`): 48 SFP28 and 6 QSFP28
+  on the port side; two supplies, four fan modules, console, both management
+  ports and USB on the other; port-side intake and port-side exhaust
+  configurations. Two new parts seat in it, `cisco/nxa-pac-650w@1` and
+  `cisco/nxa-fan-30cfm@1`, each covering both airflow part numbers through a
+  latch-colour field.
+- A device can name its own interfaces. A top-level `interfaces:` block, in
+  the shape a NOS listing's has, says what the maker's own operating system
+  calls each port, and the hardware's own DCIM device type uses those names:
+  the Nexus exports `Ethernet1/1` to `Ethernet1/54` and one `mgmt0`. An id no
+  rule names keeps its faceplate id, and a listing's names still decide that
+  listing's document. The lock records the names and asks a major bump when
+  one changes; L105 refuses a rule that names nothing the device places.
 - Amphenol Network Solutions, a new vendor (`amphenol-ns`, formerly Telect):
   the 300CB08 (`amphenol-ns/300cb08`), a 1RU dual-feed DC circuit breaker
   panel with sixteen plug-in positions, all six faces, and eleven

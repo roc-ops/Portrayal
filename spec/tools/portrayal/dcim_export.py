@@ -1543,6 +1543,13 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None):
     # EMPTY map would mean "the NOS exposes nothing", and a listing with no
     # `interfaces` exported a switch with no ports at all.
     names = listing_names(listing) if (listing or {}).get("interfaces") else None
+    # WHAT THE BOX'S OWN OPERATING SYSTEM CALLS THEM, when the hardware ships with
+    # one and says so in its own `interfaces:` - a Nexus switch is `Ethernet1/1`
+    # under NX-OS whoever sells it. These RENAME and decide nothing: which
+    # placement is an interface is still the hardware document's own rule below,
+    # and an id no rule names keeps its faceplate id. A listing's names win, as
+    # they always have - its document is about that NOS and not this one.
+    own = listing_names(dev) if names is None and dev.get("interfaces") else {}
 
     console, mgmt_sfp, bays, powers, timing = [], [], [], {}, {}
     for view in views_for(dev, cfg_name):
@@ -1651,7 +1658,7 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None):
                         continue
                     name, breakout = names[iid]
                 else:
-                    name, breakout = iid, None
+                    name, breakout = own.get(iid, (iid, None))
                 iface = {"name": name, "type": t}
                 if iface_label:
                     iface["label"] = iface_label
