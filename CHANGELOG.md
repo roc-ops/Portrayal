@@ -461,6 +461,11 @@ names the ref that replaces it.
 - `chassis.ru` also means the rack units a `rack-face` part's ears span, not
   only units occupied; L125 asks a `rack-face` device for `ru`, and L43 (ears
   are not drawn) stands down for it.
+- **The Nautobot export stops on a front port it cannot state truly**, instead
+  of writing it: a one-fibre front port whose `rear_position` is missing or
+  outside its rear port's positions, and a front port collapsed to one
+  position that is not the whole of its rear connector, fibre for fibre. No
+  export in the library changes (roc-ops/Portrayal#771).
 - **BREAKING for DCIM data already imported.** Telco Systems is listed as
   `BATM/Telco Systems`, the name the vendor asks to be listed under. The
   `manufacturer` of its fourteen devices changes, and with it every one of its

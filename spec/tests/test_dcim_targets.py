@@ -95,12 +95,62 @@ def test_a_reversing_adapter_is_not_called_straight_through():
     assert "different order" in out["comments"] and "fibre map" in out["comments"]
 
 
-def test_a_wide_front_port_with_one_stated_path_is_still_a_whole_connector():
+def test_a_wide_front_port_with_one_stated_path_stops_the_export():
+    """Twelve fibres wide with one row stated: the map says one fibre passes,
+    and one position for the whole connector would say all twelve do (#771)."""
     doc, fmap = panel()
     fmap["rows"] = fmap["rows"][:1]
-    out = dx.for_target(doc, "nautobot", fmap)
-    assert out["front-ports"][0]["rear_port_position"] == 1
-    assert out["rear-ports"][0]["positions"] == 1
+    with pytest.raises(dx.NotExpressible, match="P1.*module./1.*not the whole of"):
+        dx.for_target(doc, "nautobot", fmap)
+
+
+@pytest.mark.parametrize("stated,whole", [(2.5, 3.0), (0.5, 1.0)])
+def test_any_half_u_rounds_up_not_to_even(stated, whole):
+    """3.5 and 1.5 round up under round() too; 2.5 and 0.5 do not."""
+    doc = {"manufacturer": "Acme", "model": "S3", "u_height": stated, "comments": "x"}
+    assert dx.for_target(doc, "nautobot")["u_height"] == whole
+
+
+# --- a front port that is not what its rows say (#771) ------------------------
+
+def test_a_one_fibre_front_port_with_no_rear_position_stops_the_export():
+    doc, fmap = breakout()
+    del fmap["rows"][2]["rear_position"]
+    with pytest.raises(dx.NotExpressible, match="B4.*module./3.*None.*1..4"):
+        dx.for_target(doc, "nautobot", fmap)
+
+
+@pytest.mark.parametrize("bad", [0, 5, 9])
+def test_a_one_fibre_front_port_past_its_rear_port_stops_the_export(bad):
+    doc, fmap = breakout()
+    fmap["rows"][0]["rear_position"] = bad
+    with pytest.raises(dx.NotExpressible, match=f"module./1.*position {bad}.*1..4"):
+        dx.for_target(doc, "nautobot", fmap)
+
+
+def test_a_one_position_front_port_on_two_rear_positions_stops_the_export():
+    """Two rows from one `positions: 1` front port into a 2-position rear: the
+    collapse would have rewritten the rear to one position without a word."""
+    doc = {"manufacturer": "Acme", "model": "T2", "comments": "x",
+           "rear-ports": [{"name": "{module}/R", "type": "lc-upc", "positions": 2}],
+           "front-ports": [{"name": "{module}/F", "type": "lc-upc", "positions": 1}]}
+    rows = [{"front": "{module}/F", "front_position": 1, "rear": "{module}/R", "rear_position": p}
+            for p in (1, 2)]
+    with pytest.raises(dx.NotExpressible, match="T2.*module./F.*not the whole of"):
+        dx.for_target(doc, "nautobot", {"model": "T2", "rows": rows})
+
+
+def test_a_wide_front_port_on_part_of_its_rear_port_stops_the_export():
+    """A 2-wide front port on positions 5-6 of a twelve-position rear: one
+    position would claim the other ten fibres pass through it too."""
+    doc = {"manufacturer": "Acme", "model": "W2", "comments": "x",
+           "rear-ports": [{"name": "{module}/R", "type": "mpo", "positions": 12}],
+           "front-ports": [{"name": "{module}/F", "type": "lc-upc", "positions": 2}]}
+    rows = [{"front": "{module}/F", "front_position": f, "rear": "{module}/R", "rear_position": r}
+            for f, r in ((1, 5), (2, 6))]
+    with pytest.raises(dx.NotExpressible, match="W2.*module./F.*not the whole of"):
+        dx.for_target(doc, "nautobot", {"model": "W2", "rows": rows})
+    assert doc["rear-ports"][0]["positions"] == 12
 
 
 def test_a_front_port_with_no_row_stops_the_export():
