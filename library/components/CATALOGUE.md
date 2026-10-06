@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1311 component majors in 28 namespaces.
+1316 component majors in 28 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -819,10 +819,11 @@ aperture when it is a bare opening - never both at one position. The README's
 | `fibrain/xmn1051gb@1` | module | adapter-panel | 100 × 21 × 37 |  | 1 | 17 | Fibrain XMN1051GB - HD adapter holder, 12 SC/APC simplex adapters (green), single-mode |
 | `fibrain/xmn1051gb-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMN1051GB: the same adapters that face forward, seen from behind, whose far ends take the… |
 
-## fs/ (62)
+## fs/ (67)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
+| `fs/d-ring-snap-in@1` | component | mechanical | 32.3 × 43.6 |  | 1 | 0 | FS snap-in D-ring of the FHD-CMP5DR lacer panel, seen from above - a polycarbonate loop that twists into a ro… |
 | `fs/fhd-1mtp12-sc-os2-a@3` | module | cassette | 108.97 × 35.05 × 117.86 |  | 7 | 0 | FS FHD-1MTP6SCDOS2A - MTP-12 (male) to six SC duplex, 12 fibres, OS2, Type A polarity |
 | `fs/fhd-1mtp12-sc-rear@3` | component | cassette | 99 × 31 |  | 0 | 1 | The back of FS FHD-1MTP6SCDOS2A (SKU 57058): the cassette body seen from behind, carrying its single MTP-12 t… |
 | `fs/fhd-1mtp24-lc-af-rear@2` | component | cassette | 99 × 31 |  | 0 | 1 | The back of FS FHD-1MTP12LCDOS2AF (SKU 68549): the MTP-24 cassette's body seen from behind, with its polarity… |
@@ -854,6 +855,10 @@ aperture when it is a bare opening - never both at one position. The README's
 | `fs/fhd-3mtp18-lc-om4-a@1` | module | cassette | 108.97 × 35.05 × 117.86 |  | 7 | 0 | FS FHD-3MTP18LCDOM4A - three MTP-12 (male) to eighteen shuttered LC duplex, 36 fibres, OM4, Type A polarity |
 | `fs/fhd-3mtp18-lc-os2-a@1` | module | cassette | 108.97 × 35.05 × 117.86 |  | 7 | 1 | FS FHD-3MTP18LCDOS2A - three MTP-12 (male) to eighteen shuttered LC duplex, 36 fibres, OS2, Type A polarity |
 | `fs/fhd-3mtp18-lc-rear@1` | component | cassette | 99 × 31 |  | 0 | 2 | The back of FS FHD-3MTP18LCDOS2A (SKU 105333) and its OM4 twin 105335: the 36-fibre cassette's body seen from… |
+| `fs/fhd-cmp5dr-ear@1` | component | ear | 17.3 × 44 |  | 1 | 0 | One mounting ear of the FS FHD-CMP5DR lacer panel - part of the tray's own sheet, folded upright, with a slot… |
+| `fs/fhd-cmp5dr-profile@1` | component | mechanical | 110 × 44 |  | 1 | 0 | The FS FHD-CMP5DR lacer panel seen from one side - the ear on edge, the web sloping down to the tray, and one… |
+| `fs/fhd-cmp5dr-tray@1` | component | mechanical | 448.4 × 110 × 41 |  | 1 | 0 | The steel tray of the FS FHD-CMP5DR lacer panel seen from above - a strip across the front that carries the r… |
+| `fs/fhd-cmp5dr-web@1` | component | mechanical | 1.5 × 66 |  | 1 | 0 | The web that carries the FS FHD-CMP5DR's tray off each ear, seen from above - the sheet swept up from the tra… |
 | `fs/fhd-fap12lcd-apc-os2@1` | module | adapter-panel | 108.97 × 35.05 × 29.5 |  | 7 | 0 | FS FHD-FAP12LCADZSMF - FHD fiber adapter panel, twelve LC APC duplex adapters (green), 24 fibres, OS2 |
 | `fs/fhd-fap12lcd-apc-os2-rear@1` | component | adapter-panel | 88 × 34.8 |  | 0 | 1 | The back of FS SKU 25514 (FHD-FAP12LCADZSMF): the adapter block seen from behind, the same adapters that face… |
 | `fs/fhd-fap12lcd-om4@1` | module | adapter-panel | 108.97 × 35.05 × 29.5 |  | 7 | 0 | FS FHD-FAP12LCDX10GMM - FHD fiber adapter panel, twelve LC UPC duplex adapters (aqua), 24 fibres, OM3/OM4 |

@@ -25,6 +25,16 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- The FS FHD-CMP5DR lacer panel (`fs/fhd-cmp5dr`), the first passive part
+  that shares a rack unit with other equipment, and what it needs:
+  `chassis.mount: rack-face` (a part bolted to the rail face that projects
+  outward; it states `ru`, the units its ears span, and exports
+  `u_height: 0`); `chassis.shell: sheet` with `chassis.thickness`, a bent
+  sheet-metal body whose views are elevations and which builds in 3D only
+  what its parts build (lint L127 holds a sheet to its gauge); and a
+  `passive` profile for rack furniture, which owes only its weight. A
+  `passive` device is exported to DCIM though it has no interfaces, console
+  or bays. Design note: `docs/cable-managers-design.md`.
 - Fibrain's HD adapter holders for LC, and the multimode SC ones: ten LC
   duplex holders (`fibrain/xmi1021ca`, `-da`, `-ha`, `-ga` and `xmi1031ga`
   with 6 adapters; `xmn1021cb`, `-db`, `-hb`, `-gb` and `xmn1031gb` with 12)
@@ -417,6 +427,8 @@ names the ref that replaces it.
   class), and no 800G prefix is documented.
 
 ### Fixed
+- 3D kit: a `uhandle` standing `in:` a well rises from the well's floor, as
+  `out`, `cyl` and `bar` already did, rather than from the face plane.
 - `amphenol-ns/tpa-fuse-holder-307492@1` (1.0.1) keeps its fuse rating out of
   the drawing once the rating is set in a viewer. The rating is carried by the
   part and never printed, because the fuse is inside the holder; its text node
@@ -431,6 +443,14 @@ names the ref that replaces it.
   warning. Every view is rewritten for such a key (#814).
 
 ### Changed
+- `relief.profile` and `profile-y` now move with `out` when their part stands
+  `in:` a well or is seated in a lifted bay, so the heights stay heights
+  above what the part stands on. The schema used to say a profile was not
+  shifted by `in:`; no part in the library before the FS FHD-CMP5DR met that
+  case, so nothing already built changes.
+- `chassis.ru` also means the rack units a `rack-face` part's ears span, not
+  only units occupied; L125 asks a `rack-face` device for `ru`, and L43 (ears
+  are not drawn) stands down for it.
 - **BREAKING for DCIM data already imported.** Telco Systems is listed as
   `BATM/Telco Systems`, the name the vendor asks to be listed under. The
   `manufacturer` of its fourteen devices changes, and with it every one of its
