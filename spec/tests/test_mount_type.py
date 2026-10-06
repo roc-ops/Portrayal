@@ -158,3 +158,21 @@ def test_the_r740xd_exports_as_the_2u_server_it_is(tree):
     assert files
     for f in files:
         assert yaml.safe_load(f.read_text())["u_height"] == 2.0, f.name
+
+
+# --- L43 ---------------------------------------------------------------------
+
+def _l43(doc):
+    with lint.collecting() as found:
+        lint.lint_device_rack_ears("device.yaml", doc)
+    return [m for m in found.errors + found.warnings if "[L43]" in m]
+
+
+def test_L43_a_rack_face_part_is_its_ears():
+    """L43 says ears are never drawn and the body is the metal between them. A
+    part that bolts to the rail face IS a pair of ears and whatever hangs off
+    them - there is no body between the folds to draw instead - so a 483 mm
+    front on one is the part, not a device modelled wearing its flanges."""
+    views = {"front": {"size": {"w": 483.0, "h": 44.0}}}
+    assert _l43({"chassis": {"width": 483.0, "ru": 1}, "views": views})
+    assert not _l43({"chassis": {"width": 483.0, "ru": 1, "mount": "rack-face"}, "views": views})

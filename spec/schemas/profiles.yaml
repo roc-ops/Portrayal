@@ -104,6 +104,19 @@ profiles:
       - section: environmental
         any-of: [operating-temp, operating-temp-f2b, operating-temp-b2f]
 
+  passive:
+    description: >-
+      rack furniture with nothing in it to power or to forward - a cable manager,
+      a lacer panel, a blanking plate. NO `power`, `performance`, `platform` OR
+      `environmental` SECTION IS OWED: a bent sheet of steel has no draw, no
+      capacity in packets and no operating temperature a vendor states, and
+      asking for them is the same mistake `optical` describes for cpu and
+      memory. What its datasheet does state, and a rack plan needs, is what it
+      weighs (docs/cable-managers-design.md section 5).
+    requires:
+      - section: physical
+        keys: [weight-kg]
+
   optical:
     description: >-
       DWDM transport - mux/demux, transponder, amplifier. No CPU or memory is

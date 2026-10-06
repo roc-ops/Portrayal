@@ -4807,7 +4807,13 @@ def lint_device_rack_ears(path, data):
     So the test is what is SEATED out there, not how wide the face is. Bare
     flanges have nothing in the outer 25 mm; populated ears do. No new field to
     author and nothing to remember - the drawing says which kind of device it is.
+
+    A `rack-face` PART IS ITS EARS. It bolts to the rail face and everything
+    else hangs off the two ears, so there is no body between the folds to have
+    drawn instead, and its 483 mm is the part (docs/cable-managers-design.md).
     """
+    if (data.get("chassis") or {}).get("mount") == "rack-face":
+        return
     for vname, view in (data.get("views") or {}).items():
         if vname not in ("front", "rear"):
             continue
