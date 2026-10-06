@@ -112,8 +112,10 @@ power-outlets:
 - A placement of a listed part becomes one outlet. Its `power_port` is the id its
   `fed-by` resolves to; an outlet whose `fed-by` resolves to nothing that exports a power
   port fails the export, because both targets reject a dangling reference at import.
-- The same block is written for NetBox and for Nautobot. Both read the device-type
-  library's `power-outlets` list with `power_port` naming a port by its name.
+- The same block is written for NetBox and for Nautobot. NOT YET CHECKED: the key each
+  target's device-type import reads for the feeding port. The models call it `power_port`
+  and `power_port_template`; the import spelling is to be read from each importer, and
+  proved by importing the 300CB08 into both, before the exporter writes it.
 - `amphenol-ns/output-terminal` leaves `NOT_A_DCIM_PORT`; the register's stale-entry test
   insists on it.
 
@@ -165,6 +167,6 @@ Changing an existing `fed-by` re-files an imported outlet's feed and is a major.
   the first one modelled.
 - **An alarm contact.** The panel's Form C alarm relays have no port type in either
   target. They stay in `NOT_A_DCIM_PORT`.
-- **Ratings.** Both targets carry an outlet's type and no current rating; a power port
-  carries `maximum_draw` and `allocated_draw`, in watts. A feed rated in amperes at one of
-  three nominal voltages has no honest single wattage, so none is written.
+- **Ratings.** An outlet template in either target carries a type and no current rating.
+  A feed rated in amperes at one of three nominal voltages has no honest single wattage,
+  so no draw figure is written on the power ports either.
