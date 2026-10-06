@@ -44,6 +44,57 @@ def test_the_kit_resolves_both_body_forms_to_one_list():
     assert round(mr["x"], 2) == round(13.95 + 107.59 + 0.75 - 1.6, 2) and round(mr["w"], 2) == 1.6
 
 
+@pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
+def test_a_piece_can_be_round_and_can_show_the_part_s_own_drawing():
+    """A splice tray riding in a drawer is a box, and what makes it a splice
+    tray - two storage rings, two splice holders - was a colour. A piece can
+    now be a ring or a cylinder, and a box can carry the patch of the part's
+    plan or rear drawing it covers."""
+    script = SPEC / "tests/js/body-boxes.mjs"
+    p = subprocess.run(["node", str(script)], capture_output=True, text=True, cwd=str(script.parent))
+    assert p.returncode == 0, p.stderr
+    out = json.loads(p.stdout.strip().splitlines()[-1])
+    ring, post, tray, plainbox = out["pieces"]
+    assert (ring["shape"], ring["axis"], ring["wall"]) == ("ring", "y", 2)
+    assert (post["shape"], post["axis"]) == ("cylinder", "z") and "wall" not in post
+    assert tray["shows"] == ["plan"] and "shape" not in tray
+    # `shape: box` is the default spelled out, and resolves to a plain box
+    assert set(plainbox) == {"id", "x", "y", "w", "h", "z0", "z1", "color"}
+    # THE PLAN RUNS RIGHT TO LEFT AGAINST THE FACE AND DOWN INTO THE PART. The
+    # tray's corner nearest the face and the face's left (u 0, v 0 on a box
+    # top) is face x 118, 85 behind the plane: plan x 431 - 118 = 313, y 85.
+    assert out["planNear"] == [313, 85]
+    assert out["planFar"] == [118, 178.6]
+    # THE REAR RUNS RIGHT TO LEFT TOO, and down the face. Seen from behind, the
+    # block's top-left is the face's x 16, y 1: rear x 100 - 16 = 84.
+    assert out["rearTopLeft"] == [84, 1]
+    assert out["rearBottomRight"] == [96, 10]
+
+
+def test_a_round_piece_says_how_it_stands_and_a_shown_drawing_exists():
+    def part(box, faces=None):
+        d = {"size": {"w": 100.0, "h": 20.0, "d": 100.0},
+             "body": {"depth": 100.0, "boxes": [{"at": [0, 0], "depth": 10.0,
+                                                 "confidence": "estimated", **box}]}}
+        if faces:
+            d["faces"] = faces
+        return d
+    run = lambda p: _caught("L71", lint.lint_component_body_boxes, pathlib.Path("x.yaml"), p)
+    ok = {"id": "r", "size": [10, 4], "shape": "ring", "axis": "y", "wall": 1.5}
+    assert not run(part(ok))
+    assert any("no `axis`" in m for m in run(part({**ok, "axis": None})))
+    assert any("no `wall`" in m for m in run(part({**ok, "wall": None})))
+    assert any("that is a cylinder" in m for m in run(part({**ok, "wall": 5})))
+    # across a y axis the cross-section is width by depth: 10 x 10 here
+    assert any("as wide as it is deep" in m for m in run(part({**ok, "size": [12, 4]})))
+    assert any("not round" in m for m in run(part({"id": "b", "size": [10, 4], "axis": "y"})))
+    shown = {"id": "t", "size": [10, 4], "shows": ["plan"]}
+    assert any("declares no `faces.plan`" in m for m in run(part(shown)))
+    assert not run(part(shown, {"plan": {"ref": "x/y-plan@1"}}))
+    assert any("only a box" in m for m in
+               run(part({**ok, "shows": ["plan"]}, {"plan": {"ref": "x/y-plan@1"}})))
+
+
 def _caught(code, fn, *a):
     with lint.collecting() as got:
         fn(*a)

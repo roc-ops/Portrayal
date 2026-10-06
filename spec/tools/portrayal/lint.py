@@ -236,7 +236,7 @@ RULES = {
     "L68": ("library",    "a measurement keeps one attr name and one section across the library", "use the name the message quotes"),
     "L69": ("device",     "a cooling group with more than one bay says how many fans it can lose", "add `attrs.redundancy` (e.g. `n+1`) and a note"),
     "L70": ("device",     "a `fact:` gap names a real fact and does not contradict the device", "fix the gap's scope or remove it"),
-    "L71": ("component",  "a body box reaches no further than the part says it is deep", "shrink the body box or raise `body.depth`"),
+    "L71": ("component",  "a body box reaches no further than the part says it is deep; a round one states its axis (a ring its wall) and is square across it; one that `shows` a drawing is a box of a part declaring that face", "shrink the body box or raise `body.depth`; state `axis`/`wall` or square the envelope; declare the face or drop `shows`"),
     "L72": ("device",     "a bay's `plan:` or `rear:` lands in a view that exists, inside the chassis", "fix the plan view name or the coordinates"),
     "L73": ("component",  "a field prints somewhere, and what prints is a field; a node a field paints states no relief `color`, so its 3D sides follow the field", "add a `data-from` text node for each field, or remove the field; drop a relief feature's `color` on a field-painted node"),
     "L74": ("component",  "a lamp that declares states is painted from the lamp-colour variable", "fill or stroke the lamp node with `var(--led-color, <off colour>)`, not a literal colour"),
@@ -2374,6 +2374,44 @@ def lint_component_body_boxes(path, data, _lib_roots=None):
                              f"is read from body.depth, so it must be the reach")
         if not b.get("confidence"):
             unmarked += 1
+        # A ROUND PIECE SAYS WHICH WAY IT STANDS, AND IS ROUND. The kit fits a
+        # unit solid into the envelope, so an envelope that is not square
+        # across the axis builds an oval nobody asked for, and a ring whose
+        # wall is half its width is a cylinder spelled differently.
+        name, shape = b.get("id") or i, b.get("shape") or "box"
+        if shape in ("cylinder", "ring"):
+            axis = b.get("axis")
+            if not axis:
+                err(path, "L71", f"body box {name} is a {shape} and states no `axis` - "
+                                 f"y for one standing up the face, z for one seen face-on")
+            else:
+                w, h = (float(v) for v in b["size"])
+                a, c = {"y": (w, float(b["depth"])), "z": (w, h),
+                        "x": (h, float(b["depth"]))}[axis]
+                if abs(a - c) > 0.05:
+                    err(path, "L71", f"body box {name} is a {shape} on {axis} and its "
+                                     f"cross-section is {a:g} x {c:g} - a round piece is as "
+                                     f"wide as it is deep")
+                if shape == "ring":
+                    if not b.get("wall"):
+                        err(path, "L71", f"body box {name} is a ring and states no `wall`")
+                    elif float(b["wall"]) >= min(a, c) / 2:
+                        err(path, "L71", f"body box {name} is a ring {min(a, c):g} across with "
+                                         f"a {float(b['wall']):g} wall - that is a cylinder")
+        elif b.get("axis") or b.get("wall"):
+            err(path, "L71", f"body box {name} states an axis or a wall and is not round - "
+                             f"say `shape: cylinder` or `ring`, or drop them")
+        # A PIECE SHOWS ONLY DRAWINGS THE PART HAS. `shows` names the part's own
+        # `faces`, and the index publishes just those; a piece naming a face
+        # the part never declared is built plain, silently, for as long as the
+        # contract lives - the failure L77 exists for, one key over.
+        for which in b.get("shows") or []:
+            if shape != "box":
+                err(path, "L71", f"body box {name} is a {shape} and `shows` a drawing - "
+                                 f"only a box has a flat top or back to carry one")
+            elif not face_ref(data, which):
+                err(path, "L71", f"body box {name} shows the part's `{which}` drawing and "
+                                 f"the part declares no `faces.{which}`")
     if unmarked:
         warn(path, "L71", f"{unmarked} of {len(boxes)} body boxes carry no confidence")
 
