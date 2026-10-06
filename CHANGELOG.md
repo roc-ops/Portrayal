@@ -25,6 +25,20 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- Barrier terminal blocks seat a lug per pole. `terminal-stud` joins
+  `spec/schemas/connectors.yaml` as one nominal connector: a screw or stud
+  terminal a lug lands on, claiming no size. The terminal screws of
+  `common/dc-terminal-24@1` and `common/dc-terminal-27@1` (1.0.1) are now
+  parts of their own, `common/terminal-screw-34@1` and
+  `common/terminal-screw-38@1`, composed as `lug-1` to `lug-3`; each presents
+  the interface, so each pole is a nested slot (`psu1-input/lug-2`, or
+  `psu-1/terminal/lug-2` on a Telco Systems DC supply). The blocks draw
+  exactly as before and keep every id. `generic/ring-lug@1` is the one-hole
+  insulated ring terminal that seats there, on a 30 mm stub of wire lying in
+  the plane of the face; `wire-color` and `barrel-color` paint it. It is a
+  nominal lug for 16 to 14 AWG wire, not the lug of any one device. The
+  Edgecore CSR180 and CSR200 and the Telco Systems TM-8104 and TM-8106 take a
+  patch. See `docs/connectors-dc-terminal-design.md`, section 12.
 - Pluggable terminal headers are connector slots, and three screw-clamp plugs
   seat in them. `terminal-508-2`, `terminal-508-5` and `terminal-508-6` join
   `spec/schemas/connectors.yaml`. `common/terminal-header-508-2@1`,

@@ -1,6 +1,6 @@
 # Connectors: pluggable terminal headers and the DC barrel jack
 
-Status: implemented, 2026-10-06. Issue #789, first part. Builds on
+Status: implemented, 2026-10-06. Issue #789, first and second parts. Builds on
 [pluggables-caps-design.md](pluggables-caps-design.md) (a presented connector interface is
 a SLOT that offers every part whose `mates:` names it) and follows
 [connectors-usb-design.md](connectors-usb-design.md): a registry entry per interface and a
@@ -207,9 +207,8 @@ devices and a `cable-od` from a placement.
 
 ## 10. What follows
 
-The second part of #789 is the fixed terminals: barrier blocks and ground studs. Those
-take a lug per pole, not a plug, so the slot there is the pole and the part that seats is
-a ring or fork lug on its wire.
+The second part of #789 is the fixed terminals. The barrier blocks are section 12. Ground
+studs and the terminals drawn inside DC power supplies follow.
 
 ## 11. Testing
 
@@ -232,6 +231,173 @@ test:
    contact, the seated depth, and the published slot.
 8. `wire-od`, `wire-color` and `body-color` from a placement.
 
+## 12. Barrier terminal blocks: a seat per pole, and the ring lug
+
+A barrier block is not plugged. Each wire is crimped into a lug and the lug is landed on a
+terminal screw, so the slot is the pole and the part that seats is the lug on its wire.
+
+### 12.1 The interface
+
+**Ruling: the library treats a screw or stud terminal that a lug lands on as one nominal
+connector, `terminal-stud`.** Stud and screw sizes vary by product and most placing parts
+state none, so the interface claims no size, as `dc-barrel` claims no diameter. Where a
+document states a size it is an attribute of the placement.
+
+No attribute for a stud or screw size is introduced yet. None existed in the library, and
+nothing in this change states a size: no document held for any of the four devices gives
+the thread or the head of its terminal screws. The first part whose document prints a
+size brings the attribute with it.
+
+### 12.2 The seat is the screw
+
+| part | head | height | used by |
+|---|---|---|---|
+| `common/terminal-screw-34@1` | 3.4 | 1.2 | `common/dc-terminal-24@1` |
+| `common/terminal-screw-38@1` | 3.8 | 1.4 | `common/dc-terminal-27@1` |
+
+Each is `class: screw`, states no `media` and no `conforms`, and presents `terminal-stud`
+at a `mate` point on the screw axis. It is the screw itself: the slotted head and its
+`cyl` relief were moved out of each block's skin and contract into it, unchanged.
+
+They are two parts and not one with a size field. A field can set the radius of a circle;
+it cannot resize the slot, the box of the part or the height of its relief, and the two
+blocks draw heads of different sizes.
+
+### 12.3 The blocks
+
+`common/dc-terminal-24@1` and `common/dc-terminal-27@1` (each 1.0.1) compose three seats,
+`lug-1` to `lug-3`, each on its pole's screw with the `lift` of the pole's top face (7.9
+and 9.0). Neither block states an interface of its own, so each publishes its seats as
+nested slots. The element ids `pole-1` to `pole-3`, the size, the class, the attrs and the
+`dc-in` point are unchanged, and each block compiles to the same drawing as before: the
+faces of the CSR180, the CSR200 and the TM-8104 were rasterised before and after and
+compared pixel for pixel, with no difference.
+
+| device | reaches the block through | slot keys |
+|---|---|---|
+| `edgecore/csr180` | two placements of `common/dc-terminal-24@1` | `psu1-input/lug-1` to `psu2-input/lug-3` |
+| `edgecore/csr200` | two placements of `common/dc-terminal-27@1` | `psu1-input/lug-1` to `psu2-input/lug-3` |
+| `telco-systems/tm-8104`, `tm-8106` | `telco-systems/tm810x-psu-dc@1` in a supply bay | `psu-1/terminal/lug-1` to `psu-2/terminal/lug-3` |
+
+Each device takes a patch. Every slot offers exactly one part, the ring lug.
+
+### 12.4 The lug
+
+`generic/ring-lug@1` is a one-hole insulated ring terminal on its wire, seen in plan as a
+front elevation sees it landed on a screw: the ring tongue, the sleeve over the crimp
+barrel, a 30 mm stub of insulated wire leaving the sleeve in the plane of the face, and
+the head of the screw that holds it. `class: port`, `mates: terminal-stud`, no `behaviour`
+and no `size.d`. `mate` is at the centre of the stud hole. `cable` is at the free end of
+the stub and points down, along the wire.
+
+**It is a nominal lug chosen for the library.** The screw size is not documented for any
+of the four devices. What their documents do fix is the wire and the room:
+
+| device | its document says |
+|---|---|
+| Edgecore CSR180 | quick start guide: four ring lugs in the package, pictured with blue sleeves; #14 AWG / 1.5 mm2 wire, AWG 10 to 14 suggested; terminal screws 7 in-lb maximum |
+| Edgecore CSR200 | quick start guide: four ring lugs, the same picture; #14 AWG / 1.5 mm2 wire |
+| Telco Systems TM-8104, TM-8106 | no installation guide is held; the data sheets say only that the supply is 24 or -48 VDC |
+
+So the lug is the narrow-tongue terminal for 16 to 14 AWG wire whose tongue fits the 6.0
+pole window of the smaller block. That it is the right lug for a given terminal is not
+claimed, and the Telco supply's provenance says nothing states what it takes.
+
+| figure | value | source |
+|---|---|---|
+| tongue width | 5.5 | JST solderless terminals catalogue, RING TONGUE (R type) Vinyl-insulated (flared), sheet of 23-06-08, FV2-MS3, B |
+| stud hole | 3.2 | the same row, d2; listed for an American 3-4 or metric 3 stud |
+| overall length | 17.4 | the same row, L |
+| hole centre to sleeve | 5.6, drawn 5.65 | the same row, F; drawn so the sleeve ends at L |
+| sleeve | 9.0 long, 4.5 across | the same row |
+| material thickness | 0.8 | the same row, T |
+| sleeve colour | blue | the Edgecore guides' package pictures, sampled; the JST sheet lists blue for the whole 16 to 14 AWG range |
+| wire | 3.0 across | Waskoenig+Walter H07V-K data sheet, status 05.10.2026, p.2, 1.5 mm2 |
+| neck | about 3.3 at the sleeve | scaled from the catalogue drawing |
+| screw head | 3.8 across, 1.4 high | borrowed from `common/terminal-screw-38@1`, an estimate |
+
+The terminals on that sheet for a 5-6 or 3.5 stud are 6.4 wide and more, which the 6.0
+pole window does not admit.
+
+Fields: `wire-color` (black) and `barrel-color` (the blue above).
+
+**There is no `wire-od` field.** A wire lying in the plane of the face cannot take a size
+field today. The one size binding, `data-r-from`, sets the radius of a circle, which is
+how the plugs' stubs are sized, end on. This stub is a rectangle in plan and a `bar` in
+3D, and a `bar` takes its diameter from the number in the contract. A field would need a
+binding that sets a rectangle's width and a `bar` that reads its diameter from its node.
+A ring terminal is in any case made for one wire range, so another wire is another lug.
+
+### 12.5 How the lug and the host's screw are layered
+
+A real lug lies on the pole with the screw through its hole. That form was tried first
+and does not build cleanly on these blocks. Each block builds a lip along its lower edge
+that stands higher than its poles, and the tongue of a lug lying on the pole runs into it:
+
+| block | pole top | lip | the tongue would be at | and would cross the lip |
+|---|---|---|---|---|
+| `common/dc-terminal-24@1` | 7.9 | 9.0 | 7.9 to 8.7 | from 4.15 to 5.6 below the screw axis |
+| `common/dc-terminal-27@1` | 9.0 | 10.2 | 9.0 to 9.8 | from 4.55 to 5.6 below the screw axis |
+
+The lips are estimates, and the Edgecore guides draw each pole open at its lower edge
+between the barriers, so the lip is probably the wrong shape there. No block is changed
+here: cutting a notch would alter a drawing this change promises to leave alone.
+
+So the seat presents at the top of its screw head (`mate` sits `on: head`), 9.1 and 10.4
+off the face of the block, and the whole lug stands above the lips:
+
+| block | host head | tongue | the lug's head | sleeve | wire |
+|---|---|---|---|---|---|
+| `common/dc-terminal-24@1` | 7.9 to 9.1 | 9.1 to 9.9 | 9.9 to 11.3 | 9.1 to 13.6 | 9.85 to 12.85 |
+| `common/dc-terminal-27@1` | 9.0 to 10.4 | 10.4 to 11.2 | 11.2 to 12.6 | 10.4 to 14.9 | 11.15 to 14.15 |
+
+- **In 2D** the lug paints over the host's head and draws a head of its own over its
+  hole. An open hole would show only the middle of the host's head, since a ring
+  terminal's hole is smaller than the head that holds it.
+- **In 3D** the host's head ends where the tongue starts, so no solid of the lug shares
+  its volume, and the head the lug draws stands on the tongue.
+- **What is wrong with it:** the tongue is 1.2 or 1.4 higher than it should be, the
+  height of the host's head. The sleeve's underside is built level with the tongue's,
+  where a real sleeve is centred nearer the tongue and hangs below it.
+- The head the lug draws is one size and does not follow its host's.
+
+### 12.6 Which way the wire leaves
+
+The wire leaves downward in the lug's own unrotated frame. On both Edgecore blocks the
+guides draw the screws facing the viewer, the barriers between the poles and each pole
+open toward the legend printed below the block, so a seated lug's wire leaves over the
+block's lower edge with no turn.
+
+**A configuration cannot turn an occupant on its own.** `occupants:` carries a ref, an
+id, attrs and a skin; a seat applies its host's turn and nothing else. That is right for
+a barrier block and is a limit for a ground stud, where the direction of the lug is the
+installer's choice.
+
+### 12.7 Limits, and what is not covered
+
+- **No two-hole lug.** `nokia/sr-1-dc-terminal-block@1` is not touched. The 7750 SR-1
+  chassis installation guide (3HE22130AAAATQZZA01, release 25.10) calls for a Panduit
+  LCD6-10AH-L two-hole, 45-degree lug on #6 AWG wire across each pair of 10-32 studs
+  (Table 58, Table 59 and Figure 50: hole 0.27 in, spacing 0.63 in). A one-hole lug on
+  each stud would put two lugs on one terminal, overlapping. That block waits for a lug
+  that spans a pair.
+- **Ground landings are not covered:** `common/ground-lug@1`, `common/ground-stud@1` and
+  the vendor ground studs and pads.
+- **The DC power supplies and power entry modules that draw their own terminals** are
+  not covered; their terminals are art in the supply's skin and are not seats.
+- **One wire size, one colour for the wire, and every seat takes the same lug.**
+- **A lug on a supply in a bay is painted with that supply.** On the TM-8104 the stub of
+  a lug on the upper supply runs under the drawing of the supply below it.
+- **The `cable` point states no `on:`.** That key takes a feature built with `out` or
+  `cyl`; the wire is a `bar`. The depth the viewer reads for the cable end is the seat's,
+  2.25 below the axis of the wire.
+
+`spec/tests/test_terminal_lugs.py` holds the registry entry, the seat parts, each block's
+seats and slots, the bare blocks' compiled screws, a lug on one pole of the CSR180, the
+CSR200 and a TM-8104 supply in its bay with its neighbours empty, the depths of every
+solid against the host's head and the lips, the two colour fields, and the kit's own
+slot walk offering the seats and seating a lug as the build does.
+
 ## Decisions taken
 
 - 2026-10-05: the three pluggable terminal headers are connector slots; each gains its
@@ -244,3 +410,10 @@ test:
 - 2026-10-06: the default wire is 3.0 mm.
 - 2026-10-06: the DC barrel jack is one nominal connector, `dc-barrel`; its voltage and
   current are attributes of each placement.
+- 2026-10-06: a screw or stud terminal a lug lands on is one nominal connector,
+  `terminal-stud`; the terminal screw is the part that presents it, one per pole.
+- 2026-10-06: the ring lug has no `wire-od` field; a wire in the plane of the face cannot
+  take a size field yet.
+- 2026-10-06: the lug lies on the head of its host's screw, above the lips of the block,
+  and no block's shape is changed.
+- 2026-10-06: the Nokia 7750 SR-1 terminal block waits for a two-hole lug.
