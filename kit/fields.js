@@ -129,3 +129,85 @@ export function unpaintFields(root) {
   }
   return root;
 }
+
+// ------------------------------------------------------------ the field editor
+// What a host needs to offer a part's fields in a form (#811): the rows to draw,
+// what a typed value is worth, and the string a location carries them in. Pure,
+// like everything above - the explorer builds the controls, this says what goes
+// in them.
+
+/**
+ * The rows of a field form: one per field the component declares, in the order
+ * it declares them. `fields` is components.json's `fields` for the part;
+ * `current` is what the drawing holds now ({key: value}, typically read off the
+ * part's `data-<key>` attributes). A field nothing has set shows its contract
+ * default. Values are strings, as the drawing holds them.
+ */
+export function fieldRows(fields, current = {}) {
+  return Object.entries(fields || {}).map(([key, f]) => {
+    const def = f?.default == null ? '' : String(f.default);
+    const held = current?.[key];
+    const value = held == null || held === '' ? def : String(held);
+    const type = f?.type === 'choice' && Array.isArray(f.options) ? 'choice'
+      : f?.type === 'number' ? 'number' : 'text';
+    return {
+      key, type, value, default: def,
+      label: f?.label || key,
+      unit: f?.unit || '',
+      description: f?.description || '',
+      options: type === 'choice' ? f.options.map(String) : [],
+      pattern: typeof f?.pattern === 'string' ? f.pattern : '',
+    };
+  });
+}
+
+/**
+ * Is `value` one this field takes? A choice takes its options and nothing
+ * else; a number takes a finite number; a text field with a `pattern` takes
+ * what matches the whole of it. An unreadable pattern refuses nothing.
+ */
+export function fieldAccepts(field, value) {
+  const v = value == null ? '' : String(value);
+  if (!field) return false;
+  if (field.type === 'choice' && Array.isArray(field.options))
+    return field.options.map(String).includes(v);
+  if (field.type === 'number') return v.trim() !== '' && Number.isFinite(Number(v));
+  if (typeof field.pattern === 'string' && field.pattern) {
+    try { return new RegExp(`^(?:${field.pattern})$`).test(v); } catch (e) { return true; }
+  }
+  return true;
+}
+
+// `path~key~value`, comma-separated, each of the three pieces escaped on its own
+// - the shape `swap=` has (swap.js encodeSwaps), with one more piece. Sorted, so
+// one state is one string.
+/** `{path: {key: value}}` as the string a location carries; '' for nothing. */
+export function encodeFields(map) {
+  // `~` is the one separator encodeURIComponent leaves alone
+  const e = v => encodeURIComponent(v).replace(/~/g, '%7E');
+  const out = [];
+  for (const path of Object.keys(map || {}).sort())
+    for (const key of Object.keys(map[path] || {}).sort()) {
+      const v = map[path][key];
+      if (v == null) continue;
+      out.push(`${e(path)}~${e(key)}~${e(String(v))}`);
+    }
+  return out.join(',');
+}
+
+// NEVER THROWS, and one bad entry does not take the rest with it, for the
+// reason decodeSwaps gives: the string is typed, pasted and truncated by people.
+/** The reverse of encodeFields. Unknown shapes are dropped entry by entry. */
+export function decodeFields(s) {
+  const out = {};
+  if (typeof s !== 'string' || !s) return out;
+  for (const part of s.split(',')) {
+    const bits = part.split('~');
+    if (bits.length !== 3) continue;
+    let path, key, value;
+    try { [path, key, value] = bits.map(decodeURIComponent); } catch (e) { continue; }
+    if (!path || !key || path === '__proto__' || key === '__proto__') continue;
+    (out[path] ||= {})[key] = value;
+  }
+  return out;
+}
