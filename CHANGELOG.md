@@ -25,6 +25,17 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- Fibrain's HD adapter holders for LC, and the multimode SC ones: ten LC
+  duplex holders (`fibrain/xmi1021ca`, `-da`, `-ha`, `-ga` and `xmi1031ga`
+  with 6 adapters; `xmn1021cb`, `-db`, `-hb`, `-gb` and `xmn1031gb` with 12)
+  and six SC holders in OM3, OM4 and OM5 (`xmi1041ca`, `-da`, `-ha`;
+  `xmn1041cb`, `-db`, `-hb`). The XCU10 gains XCU10-21IC and XCU10-31IC, its
+  24-adapter LC and LC/APC variants, and its drawer's slots accept all twenty
+  holders. **As with the SC holders, these seat in bays of the drawer's module
+  type, which NetBox takes (4.5.7 or later) and Nautobot is not given: none of
+  their ports can be placed in Nautobot yet** (roc-ops/Portrayal#834). The 12-port LC
+  holders are the first modules to state `optical.front-order` by position:
+  their lower row is turned over, and its ports still count left to right.
 - `optical.front-order` may name one position of a part (`lc07.2`) as well
   as a part. A duplex adapter turned over, as in the lower row of a
   belly-to-belly holder, has its bore 1 on the other hand, and listing its
