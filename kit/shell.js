@@ -1133,7 +1133,7 @@ export function createShell(opts = {}) {
     // written through setFields, the call a host already has. The part is the
     // element that carries the ref: the row itself, or the module seated in it
     // when the row is a bay.
-    const part = fieldPart(e);
+    const part = fieldPart(e, path);
     const rows = part ? fieldRows(fieldsOf(part.ref), fieldValues(part)) : [];
     for (const r of rows) {
       const id = `fld-${esc(r.key)}`;
@@ -1592,7 +1592,8 @@ export function createShell(opts = {}) {
       delta: swapDelta,
       // the mounted face may have arrived for this view while it loaded
       store: (view, face) => !state.faces[view] && !!(state.faces[view] = face),
-    });
+    // a face that arrives here knows only what the build drew (#811)
+    }).then(n => { repaintFields(); return n; });
   }
 
   // THE TREE AGAIN, WITH THE READER STILL IN IT. refreshTree draws every fold
@@ -1885,20 +1886,27 @@ export function createShell(opts = {}) {
   // THE PART A ROW'S FIELDS BELONG TO: the element carrying the component ref -
   // the selected element itself, or the module seated in it when it is a bay.
   // {path, ref, el}, or null where there is no component to ask.
-  function fieldPart(e) {
-    const own = e?.dataset?.ref ? e : e?.querySelector?.('[data-ref][data-path]');
+  function fieldPart(e, path) {
+    // ONLY A BAY LENDS ITS ROW TO WHAT IS SEATED IN IT. Any other element with
+    // no ref of its own is a container - the chassis, a region, a group - and
+    // the first part under one is not the thing the reader selected.
+    const own = e?.dataset?.ref ? e
+      : (path != null && bayFor(path)) ? e?.querySelector?.('[data-ref][data-path]') : null;
     const ref = own?.dataset.ref?.split(':')[0];
-    const path = own?.getAttribute('data-path');
-    if (!ref || !path) return null;
+    const at = own?.getAttribute('data-path');
+    if (!ref || !at) return null;
     try { if (!Object.keys(fieldsOf(ref)).length) return null; } catch (err) { return null; }
-    return {path, ref, el: own};
+    return {path: at, ref, el: own};
   }
   // What the drawing holds for each field: this session's value, else the
-  // `data-<key>` the build (or an earlier paint) left on the part's group.
+  // `data-<key>` the build (or an earlier paint) left on the part's group, else
+  // the text its node is drawn with - the build writes the attribute only for
+  // a field a configuration set.
   function fieldValues(part) {
     const out = {};
     for (const k of Object.keys(fieldsOf(part.ref)))
-      out[k] = state.cfgFields[part.path]?.[k] ?? part.el.getAttribute(`data-${k}`);
+      out[k] = state.cfgFields[part.path]?.[k] ?? part.el.getAttribute(`data-${k}`)
+        ?? part.el.querySelector(`[data-from="${CSS.escape(k)}"]`)?.textContent;
     return out;
   }
   // WHAT THE BUILD DREW, kept the first time a field is written, so one field
@@ -1908,8 +1916,16 @@ export function createShell(opts = {}) {
   function rememberBuilt(path, vals) {
     const el = faceDocs().map(d => d.querySelector(`[data-path="${CSS.escape(path)}"]`)).find(Boolean);
     const kept = (builtFields[path] ||= {});
-    for (const k of Object.keys(vals || {}))
-      if (!Object.prototype.hasOwnProperty.call(kept, k)) kept[k] = el?.getAttribute(`data-${k}`) ?? '';
+    // THE BUILD WRITES `data-<key>` ONLY FOR A FIELD A CONFIGURATION SET. A part
+    // drawn from its skin's own default has no attribute, and its text is the
+    // default the node carries - so that text is what "built" means for it.
+    // A colour field has no text node, and '' is right there: it puts the
+    // drawn colour back.
+    for (const k of Object.keys(vals || {})) {
+      if (Object.prototype.hasOwnProperty.call(kept, k)) continue;
+      kept[k] = el?.getAttribute(`data-${k}`)
+        ?? el?.querySelector(`[data-from="${CSS.escape(k)}"]`)?.textContent ?? '';
+    }
   }
   function resetField(path, key) {
     const mine = state.cfgFields[path];
@@ -1950,7 +1966,8 @@ export function createShell(opts = {}) {
     const ignored = [];
     for (const [path, vals] of Object.entries(map || {})) {
       const el = faceDocs().map(d => d.querySelector(`[data-path="${CSS.escape(path)}"][data-ref]`)).find(Boolean);
-      const decl = el ? fieldsOf(el.dataset.ref.split(':')[0]) : {};
+      let decl = {};
+      try { if (el) decl = fieldsOf(el.dataset.ref.split(':')[0]); } catch (err) { /* not ns/name@major */ }
       const ok = {};
       for (const [k, v] of Object.entries(vals))
         if (decl[k] && fieldAccepts(decl[k], v)) ok[k] = v; else ignored.push(`${path}~${k}`);
