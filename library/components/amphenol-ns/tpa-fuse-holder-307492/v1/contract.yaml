@@ -1,0 +1,68 @@
+format: 1
+kind: module
+name: tpa-fuse-holder-307492
+version: 1.0.0
+class: breaker
+behaviour: fills
+profile: power
+description: >-
+  1RU TPA fuse holder, part 307492 - a plug-in carrier that takes one Cooper
+  Bussmann TPA fuse and seats in the same position as a 1RU breaker on an
+  Amphenol Network Solutions breaker or fuse panel. The fuse goes in through
+  the side of the holder, behind a sliding cover, so nothing of it shows from
+  the front: what the panel shows is the ribbed pull grip of the holder.
+size: {w: 17.8, h: 39.1, d: 127.5}
+size-confidence: {w: borrowed, h: borrowed, d: borrowed}
+size-notes: >-
+  BORROWED FROM amphenol-ns/breaker-1ru@1, because the holder fits the
+  position a breaker fits (300CB08 datasheet: for use with TPA fuses,
+  requires TPA fuse holder 307492) and no document held dimensions the holder
+  itself. The face is the opening it shows through; the depth is the
+  breaker's, front to bullet tips.
+attrs: {model: 1RU TPA Fuse Holder, vendor-sku: '307492'}
+provenance:
+  size: >-
+    borrowed - amphenol-ns/breaker-1ru@1; see size-notes.
+  face: >-
+    estimated - the 250TPA08 installation guide (Fig. 2-11, 2-12 and 2-24) draw the holder in three-quarter view and the product
+    photograph shows it the same way: a black moulding whose front end has a
+    round hole near the top and a ribbed pull grip below. No view is face-on
+    and none is dimensioned, so the hole and the ribs are placed by eye.
+  fuse: >-
+    datasheet for the list. The 300CB08 datasheet sells TPA fuses for this
+    holder at 170 VDC: 5 A 124818, 10 A 124819, 15 A 124820, 20 A 124821, 25 A
+    125244, 30 A 122734, 40 A 122738, 50 A 122739. THE FUSE IS INSIDE THE
+    HOLDER: the guide has the holder pulled out, its side cover slid back and
+    the fuse dropped in (250TPA08 guide, section 2.2.9). So the fuse is a
+    field carried by the holder and not a part drawn on its face, and its
+    text node is not displayed. A holder with no fuse fitted says 0.
+fields:
+  fuse-rating:
+    label: Fuse
+    type: choice
+    options: [0, 5, 10, 15, 20, 25, 30, 40, 50]
+    default: 0
+    unit: A
+    description: >-
+      rating of the TPA fuse fitted in the holder, in amperes; 0 for none.
+      Each value is a separate vendor part number, listed under provenance
+elements:
+  body: {at: [0.0, 1.05], size: [17.8, 37.0], class: mechanical}
+  eye: {at: [5.7, 6.6], size: [6.4, 6.4], class: mechanical}
+  grip: {at: [2.4, 22.6], size: [13.0, 13.4], class: handle}
+relief:
+  wall: '#0f1112'
+  features:
+    - node: grip
+      out: 10.0
+      shape: true
+      color: '#17191b'
+      confidence: estimated
+      source: >-
+        the pull grip stands well forward of the holder face in the product photograph; no figure gives a distance
+    - node: eye
+      pocket: 3.0
+      confidence: estimated
+      source: >-
+        a round hole in the front of the holder, depth by eye off the product photograph
+skins: [default]

@@ -219,6 +219,11 @@ def shipped_default(ref, slot_id):
     ships: a composed adapter's own slot when that adapter ships at "self", an
     adapter's bore when it ships at "bores" - otherwise nothing."""
     from test_shipped_caps import SHIPS
+    # THE ONE DEFAULT THAT IS NOT A FIBRE CAP (#807): a 1RU plug-in breaker ships
+    # wearing its touch guard, seated on the guard mount it composes. Not in SHIPS,
+    # which is the fibre adapters' table and is iterated as such.
+    if (ref, slot_id) == ("amphenol-ns/breaker-1ru@1", "guard"):
+        return "amphenol-ns/touch-guard-1ru@1"
     part = next((q for q in _contract(ref).get("parts") or []
                  if q.get("id") == slot_id), {})
     level, cap = SHIPS.get(part.get("ref", "").split(":")[0], (None, None))

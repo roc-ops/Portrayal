@@ -554,6 +554,13 @@ PART_POWER = {
     # landed in one pluggable screw-clamp plug on the top face, the TM-7124S case
     # again. Still where a supply's wire is landed, so the same row (#737).
     "common/terminal-header-508-5f": "dc-terminal",
+    # AND A DISTRIBUTION PANEL'S FEED INPUT: a BATT terminal and an RTN terminal,
+    # each two 3/8-16 studs taking a dual-hole lug. ONE POWER PORT PER FEED, both
+    # poles, as every other row here is - so the part mapped is the feed, and
+    # the single-pole terminal it composes twice (amphenol-ns/input-stud-pair)
+    # is not. It is where a supply's cable is landed, so the same row - on a box
+    # that passes the power on instead of using it.
+    "amphenol-ns/input-feed-studs": "dc-terminal",
     # THE XM-3352's AC SUPPLY TAKES A C5 CORD IN A CLOVERLEAF C6 INLET. `iec-60320-c6` is a
     # PowerPortTypeChoices value in both targets, as `iec-60320-c14` is.
     "telco-systems/xm3352-ac-inlet": "iec-60320-c6",
@@ -832,6 +839,14 @@ NOT_A_DCIM_PORT = {
                                     "device's power attrs; no connector here has a DCIM type",
     "casa/c40g-ac-inlet-panel": "an inlet PANEL - a bolted assembly carrying the receptacles, "
                                 "not a connector; the C40G's own inlets are not modelled yet",
+    "amphenol-ns/output-terminal": "one output circuit of a breaker panel - a BATT screw over an "
+                                   "RTN screw. It is a power OUTLET, fed from an input through "
+                                   "a breaker, and this exporter writes power ports only: an "
+                                   "outlet needs its feeding port and its breaker position, "
+                                   "which is a design the export does not have yet",
+    "amphenol-ns/alarm-card-307608": "Form C alarm relay contacts on wire-wrap headers - dry "
+                                     "contacts for an external alarm loop; neither DCIM has a "
+                                     "port type for an alarm contact",
 
     # `dell/rj45-port-14g` USED TO BE HERE, as "a modelling gap, not an exporter
     # one": the NDC's four jacks carried no speed, so the exporter could not say
