@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1251 component majors in 27 namespaces.
+1252 component majors in 27 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -252,7 +252,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `amphenol/qsfp28-passive-dac@1` | module | transceiver | 18.35 × 8.5 × 52.4 | qsfp | 0 | 0 | Amphenol NDAAFR QSFP28 to QSFP28 100G passive direct-attach copper cable, one end - 32 AWG eight-pair PVC-jac… |
 | `amphenol/qsfp56-linear-active@1` | module | transceiver | 18.35 × 8.5 × 52.4 | qsfp | 0 | 0 | Amphenol NJAAF3 QSFP56 to QSFP56 200G active copper cable, one end - 30 AWG eight-pair dual-drain cable in a … |
 
-## amphenol-ns/ (10)
+## amphenol-ns/ (11)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -262,7 +262,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `amphenol-ns/breaker-blank-1ru@1` | module | blank | 17.8 × 39.1 × 1 |  | 1 | 0 | Blanking cover for an unused breaker position on an Amphenol Network Solutions 1RU breaker panel |
 | `amphenol-ns/cover-thumbscrew@1` | component | screw | 9.7 × 9.7 |  | 1 | 0 | Captive thumbscrew holding the removable front cover of an Amphenol Network Solutions 1RU power panel - turne… |
 | `amphenol-ns/guard-mount-1ru@1` | component | mechanical | 3.2 × 32.3 | breaker-1ru-guard | 0 | 1 | The two threaded inserts in the face of a 1RU plug-in breaker, one above the other - where its touch guard sc… |
-| `amphenol-ns/input-stud-pair@1` | component | inlet | 29 × 41 |  | 1 | 0 | One input terminal of an Amphenol Network Solutions 1RU power panel with vertical inputs - two 3/8-16 studs o… |
+| `amphenol-ns/input-feed-studs@1` | component | inlet | 64.1 × 41 |  | 1 | 0 | One DC feed input of an Amphenol Network Solutions 1RU power panel with vertical inputs - its BATT terminal a… |
+| `amphenol-ns/input-stud-pair@1` | component | inlet | 29 × 41 |  | 0 | 1 | One input terminal of an Amphenol Network Solutions 1RU power panel with vertical inputs - two 3/8-16 studs o… |
 | `amphenol-ns/output-terminal@1` | component | inlet | 14.75 × 34 |  | 1 | 0 | One output circuit of an Amphenol Network Solutions 1RU power panel with terminal-block outputs - a BATT scre… |
 | `amphenol-ns/touch-guard-1ru@1` | component | mechanical | 17.8 × 39.1 | breaker-1ru-guard | 0 | 1 | Touch guard cover for a 1RU plug-in breaker on an Amphenol Network Solutions breaker panel - a black hood scr… |
 | `amphenol-ns/tpa-fuse-holder-307492@1` | module | breaker | 17.8 × 39.1 × 127.5 |  | 1 | 0 | 1RU TPA fuse holder, part 307492 - a plug-in carrier that takes one Cooper Bussmann TPA fuse and seats in the… |

@@ -169,9 +169,12 @@ gaps:
   scope: [rear]
   reason: vendor-silent
   note: >-
-    each side has two input terminals, one BATT and one RTN, and no drawing or
-    sentence held says which is the outer one. The rear photograph in the guide
-    prints BATT and RTN beside the output rows only.
+    each feed is two stud terminals, one BATT and one RTN, and no drawing or
+    sentence held says which is the outer one: the input-lug figure of the
+    guide (Fig. 2-7) carries no legend, and its rear photograph prints BATT and
+    RTN beside the output rows only. Each side is one part, `input-a` and
+    `input-b`, whose two terminals are `terminal-1` and `terminal-2` by
+    position, not by polarity.
   wanted: a rear photograph that resolves the input legends, or the panel itself.
 - what: fuse-holder-face
   scope: [front]
@@ -189,7 +192,7 @@ groups:
   cover: {term: Screw, role: furniture, index-origin: 1}
   outputs-a: {term: Output, role: traffic, index-origin: 1}
   outputs-b: {term: Output, role: traffic, index-origin: 1}
-  feeds: {term: Input, role: service, index-origin: 1, description: 'two terminals per side, BATT and RTN; which is which is a recorded gap'}
+  feeds: {term: Input, role: service, index-origin: 1, description: 'one feed per side, A and B, each a BATT and an RTN stud terminal; which terminal is which is a recorded gap'}
   alarms: {term: Alarm, role: management, index-origin: 1}
   grounding: {term: Ground, role: furniture, index-origin: 1}
 views:
@@ -301,10 +304,8 @@ views:
       - {at: [239.2, 30.2], text: 'RTN', font-size: 2.0, anchor: middle, rotate: 90, for: output-a8}
     components:
       placements:
-        - {id: input-b-outer, ref: amphenol-ns/input-stud-pair@1, at: [0.2, 1.45], group: feeds, rel-pos: 1}
-        - {id: input-b-inner, ref: amphenol-ns/input-stud-pair@1, at: [35.3, 1.45], group: feeds, rel-pos: 2}
-        - {id: input-a-inner, ref: amphenol-ns/input-stud-pair@1, at: [367.5, 1.45], group: feeds, rel-pos: 3}
-        - {id: input-a-outer, ref: amphenol-ns/input-stud-pair@1, at: [402.6, 1.45], group: feeds, rel-pos: 4}
+        - {id: input-b, ref: amphenol-ns/input-feed-studs@1, at: [0.2, 1.45], group: feeds, rel-pos: 2}
+        - {id: input-a, ref: amphenol-ns/input-feed-studs@1, at: [367.5, 1.45], group: feeds, rel-pos: 1}
         - {id: output-b8, ref: amphenol-ns/output-terminal@1, at: [72.5, 5.1], group: outputs-b, rel-pos: 8}
         - {id: output-b7, ref: amphenol-ns/output-terminal@1, at: [87.25, 5.1], group: outputs-b, rel-pos: 7}
         - {id: output-b6, ref: amphenol-ns/output-terminal@1, at: [102.0, 5.1], group: outputs-b, rel-pos: 6}

@@ -1,0 +1,30 @@
+format: 1
+kind: component
+name: input-feed-studs
+version: 1.0.0
+class: inlet
+profile: power
+description: >-
+  One DC feed input of an Amphenol Network Solutions 1RU power panel with
+  vertical inputs - its BATT terminal and its RTN terminal side by side, each
+  two 3/8-16 studs taking a dual-hole lug. One feed, both poles: side A is one
+  of these and side B is another.
+size: {w: 64.1, h: 41.0}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  Two stud terminals 35.1 apart, centre to centre, in the 300CB08 installation guide 149722-2 A9 Fig. 3-6: their
+  centres read 14.7 and 49.8 from the edge of the rear face (3.2006 px/mm).
+  Each terminal is amphenol-ns/input-stud-pair@1, 29.0 wide, so the pair spans
+  64.1.
+provenance:
+  size: >-
+    drawing - see size-notes.
+  poles: >-
+    datasheet - the BATT and RTN inputs each accommodate a dual-hole lug (guide
+    section 1.4), two pairs of studs per terminal. WHICH OF THE TWO TERMINALS
+    IS BATT is not stated or legible in any document held, so they are named
+    for where they sit and not for their polarity.
+parts:
+  - {ref: amphenol-ns/input-stud-pair@1, id: terminal-1, at: [0.0, 0.0]}
+  - {ref: amphenol-ns/input-stud-pair@1, id: terminal-2, at: [35.1, 0.0]}
+skins: [default]
