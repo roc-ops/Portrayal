@@ -1,8 +1,9 @@
 format: 1
 kind: component
 name: mx-ground-stud
-version: 1.0.0
+version: 1.0.1
 class: ground
+interface: terminal-stud
 behaviour: mounts
 profile: networking
 description: >-
@@ -25,6 +26,15 @@ provenance:
     hardware per its guide text. Neither is drawn to thread here'
   relief: 'estimated - the stud stands proud; height not dimensioned
     anywhere, cyl per the library stud convention'
+  seat: >-
+    THE PART PRESENTS `terminal-stud` ON THE STUD AXIS, AT THE END OF THE STUD.
+    `mate` sits `on: stud`, the one solid this part builds: it starts 3.0 off
+    the panel and is 5.0 long, so a lug seated here starts at 8.0 and draws a
+    head of its own. A real lug lies against the panel under the screw or nut
+    that holds it; seated there it would share the volume of the stud. The guides
+    call for ONE two-hole lug across the pair, and the size of the hardware
+    differs by chassis: it is the `stud-size` attribute of each placement. See
+    docs/connectors-dc-terminal-design.md, section 13.
 relief:
   wall: '#4a4f55'
   features:
@@ -35,4 +45,6 @@ relief:
     confidence: estimated
     source: photo-class - a threaded stud with washer stands proud of
       the panel; height not dimensioned
+connection-points:
+  mate: {at: [3.5, 3.5], direction: front, 'on': stud}
 skins: [default]

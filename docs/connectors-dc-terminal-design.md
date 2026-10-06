@@ -1,6 +1,6 @@
 # Connectors: pluggable terminal headers and the DC barrel jack
 
-Status: implemented, 2026-10-06. Issue #789, first and second parts. Builds on
+Status: implemented, 2026-10-06. Issue #789, all three parts. Builds on
 [pluggables-caps-design.md](pluggables-caps-design.md) (a presented connector interface is
 a SLOT that offers every part whose `mates:` names it) and follows
 [connectors-usb-design.md](connectors-usb-design.md): a registry entry per interface and a
@@ -207,8 +207,9 @@ devices and a `cable-od` from a placement.
 
 ## 10. What follows
 
-The second part of #789 is the fixed terminals. The barrier blocks are section 12. Ground
-studs and the terminals drawn inside DC power supplies follow.
+The second part of #789 is the fixed terminals. The barrier blocks are section 12 and the
+ground studs section 13. The terminals drawn inside DC power supplies, and a two-hole lug,
+are later work.
 
 ## 11. Testing
 
@@ -388,8 +389,8 @@ installer's choice.
   (Table 58, Table 59 and Figure 50: hole 0.27 in, spacing 0.63 in). A one-hole lug on
   each stud would put two lugs on one terminal, overlapping. That block waits for a lug
   that spans a pair.
-- **Ground landings are not covered:** `common/ground-lug@1`, `common/ground-stud@1` and
-  the vendor ground studs and pads.
+- **Ground studs are section 13.** The ground pads, plates and bolts listed there are not
+  covered.
 - **The DC power supplies and power entry modules that draw their own terminals** are
   not covered; their terminals are art in the supply's skin and are not seats.
 - **One wire size, one colour for the wire, and every seat takes the same lug.**
@@ -413,6 +414,170 @@ CSR200 and a TM-8104 supply in its bay with its neighbours empty, the depths of 
 solid against the host's head and the lips, the two colour fields, and the kit's own
 slot walk offering the seats and seating a lug as the build does.
 
+## 13. Ground studs: a seat per stud
+
+A chassis ground point is a stud or a tapped hole that a lug is landed on, so it is the
+same nominal connector as a terminal screw, `terminal-stud`, and the same lug seats on it.
+
+### 13.1 The parts
+
+| part | what it draws | a lug rests on | lift |
+|---|---|---|---|
+| `common/ground-lug@1` (1.4.1) | a boss, a washer and a cross-head screw under an earth symbol | the screw head, `on: screw-cap` | 4.7 |
+| `common/ground-stud@1` (1.0.1) | a stud with its hex nut | the end of the stud, `on: stud` | 6.0 |
+| `juniper/mx-ground-stud@1` (1.0.1) | a threaded stud on a washer | the end of the stud, `on: stud` | 8.0 |
+| `casa/shelf-ground-stud@1` (1.0.0, new) | a star washer, a hex nut and the end of a stud | the end of the stud, `on: stud-top` | 3.5 |
+
+Each of the first three gained `interface: terminal-stud` and a `mate` point on the stud
+axis and nothing else: the drawing, the size, the class and the elements are unchanged, and
+each took a patch. Every placement of one is therefore a slot of its device, in the view's
+`cages[]`, keyed by the placement id, the way a USB jack became one.
+
+**Each seat is on top of everything its part builds,** as section 12.5 seats a lug on the
+head of a terminal screw and for the same reason. A real lug lies under the screw head or
+the nut. Seated there, its tongue and the head it draws would share the volume of the
+solids the part builds:
+
+| part | the part builds, off the panel | the lug's tongue | head | sleeve | wire |
+|---|---|---|---|---|---|
+| `common/ground-lug@1` | boss 0 to 3.2, washer 3.2 to 3.7, screw head 3.7 to 4.7 | 4.7 to 5.5 | 5.5 to 6.9 | 4.7 to 9.2 | 5.45 to 8.45 |
+| `common/ground-stud@1` | nut 0 to 3.2, stud 0 to 6.0 | 6.0 to 6.8 | 6.8 to 8.2 | 6.0 to 10.5 | 6.75 to 9.75 |
+| `juniper/mx-ground-stud@1` | stud 3.0 to 8.0 | 8.0 to 8.8 | 8.8 to 10.2 | 8.0 to 12.5 | 8.75 to 11.75 |
+| `casa/shelf-ground-stud@1` | washer 0 to 0.7, nut 0.7 to 2.9, stud 0 to 3.5 | 3.5 to 4.3 | 4.3 to 5.7 | 3.5 to 8.0 | 4.25 to 7.25 |
+
+On `common/ground-stud@1` the nut ends at 3.2 and the stud at 6.0. A lug on the nut would
+have the stud, drawn 4.0 across, through its 3.2 hole and through the head it draws, so
+the seat is the end of the stud. Every one of those heights is an estimate in its own
+contract, and so the lug stands too far off the panel by the height of the hardware above
+the real seat.
+
+### 13.2 The Casa terminal
+
+`casa/c40g-ground-studs@1` drew three studs in one skin. Each stud is now a part,
+`casa/shelf-ground-stud@1`, composed three times as `stud-tr`, `stud-bl` and `stud-br`,
+the ids the three groups carried in the skin. The washer, nut and stud art and their
+relief moved into that part unchanged, as section 12.2 moved the terminal screws. The
+terminal states no interface, so it publishes three nested slots,
+`ground-studs-rear/stud-tr` and so on, and the rear of the C40G compiles to the same
+pixels as before.
+
+No existing stud part draws this hardware. `casa/ground-bolts@1` holds the same art for a
+pair and is not touched.
+
+**All three studs are seats.** The C40G hardware installation guide says the terminal
+provides two M6 screws for one double-lug cable, and its figures draw three studs; the
+device records the disagreement as its `ground-stud-count` gap and follows the figures. No
+document says which two of the three positions take the lug, so none is left out.
+
+### 13.3 `stud-size`
+
+Section 12.1 left the size of a stud or screw to the first document that printed one.
+Ground points are where documents print them. The attribute is `stud-size`, text, on the
+placement: `M4`, `M5`, `M6`, `10-32`, `1/4-20`, `1/4 in`. It is written only where a
+document for that device states the size, each with its source in the device's
+`provenance.ground-stud-size`.
+
+| devices | `stud-size` | their documents say |
+|---|---|---|
+| 13 UfiSpace: M3000-14XC, S9500-22XST, S9500-30XS, S9501-18SMT, S9501-28SMT, S9502-16SMT, S9510-28DC, S9510-30XC, S9511-20CT, S9600-102XC, S9600-28DX, S9601-102XC, S9601-104BC | M4 | hardware installation guide: a screw kit of 2 x M4*L8.0mm for the grounding lug, locked with 2 M4 screws |
+| Edgecore AGR110, AGR130 (`ground-right`), DCS500 | M5 | quick start guide, package contents: one grounding lug, 2 M5 screws and 2 washers |
+| Edgecore AIS800-64D, AIS800-64O | M6 | quick start guide: two M6 screws and washers through one grounding lug |
+| Casa C40G | M6 | hardware installation guide: two M6 screws |
+| Nokia Lightspan MF-8 (LMFS-F) | M6 | installation manual s4.5.2.2: a dual-hole M6 lug, 6.35 mm holes, 16 mm spacing |
+| Juniper MX80, MX104, MX150 | 10-32 | hardware guides: holes for SAE 10-32 screws at 0.625 in. centres; MX150 Table 22 |
+| Juniper MX240, MX480 | 1/4-20 | hardware guides: PEM nuts for UNC 1/4-20 screws at 0.625 in. centres |
+| Nokia 7360 FX-16, FX-8, FX-4 | 1/4 in | HIM R6.9: a 1/4 in. stud at 1 in. spacing (FX-16); a dual-hole lug with 1/4 in. holes at 3/4 in. spacing (FX-8, FX-4) |
+
+That is 50 placements on 28 devices. The other 29 placements state none, because no
+document held prints a size for them: every ground point of the other 22 devices, and the
+left-hand point of the AGR110 and the AGR130, where the kit fits the right-hand one. On the FX-8 and the FX-4 the
+figure is the hole of the lug the guide calls for, not a stated stud.
+
+The interface still claims no size and nothing reads the attribute: not the lug, not the
+kit, not the DCIM exports. It is a fact carried beside the slot.
+
+### 13.4 Which way the wire leaves
+
+A seat applies its host's turn and a configuration cannot turn an occupant (section
+12.6), so a lug's wire leaves in the lug's own "down" turned by the placement. Seating a
+lug on every one of the 81 seats in the library gives:
+
+- **77 leave down the face and 4 leave to the left.** The only turned placements are the
+  two on the Edgecore DCS500 and the two on the Nokia FX-16 side panels, all at
+  `rotate: 90`. On the FX-16 the same turn is placed on the left and on the right side
+  view, so the wire runs toward the rear on one side and toward the front on the other.
+- **48 run past the lower edge of the face,** by 2.95 to 20.05. A lug is 24.65 long below
+  its stud and most of these are on 1RU rears and side panels, where the stud sits in the
+  lower half. The longest overhang is on the Edgecore DCS520, whose studs are 4.6 above
+  the lower edge of a 2RU rear.
+- **Two run across a port:** on the Supermicro SYS-111E-FWTR and SYS-111E-FDWTR the stud
+  is in the vent field above LAN1 and the sleeve lies across that jack. This is the worst
+  case.
+- **One runs across another connector and its legend:** on the Juniper MX150 the second
+  stud is above the ESD jack.
+- **One runs across a bay:** the left-pointing lug of `ground-0` on the DCS500 reaches the
+  edge of the first fan bay.
+- **Seven, on five devices, run across a printed legend only:** both studs of the Juniper
+  MX240 and MX480, and the stud of the Edgecore ECS4120-28Fv2-I, ECS4530-54CSFP and
+  ECS4530-54CSFP-I.
+- **Nine run across the second stud of their own pair** (13.5).
+- None runs off the top or a side of its face.
+
+On a ground point the direction of the lug is the installer's choice, so every one of
+these is a limit of the model and not a reading of the hardware. Nothing is turned here:
+turning an occupant needs a key a configuration does not have.
+
+### 13.5 What this shows that was wrong already
+
+Making each stud a seat puts a to-scale lug beside drawings that were never to scale with
+one. None of this is corrected here.
+
+- **`common/ground-lug@1` is drawn smaller than the hardware it stands for.** Its screw
+  head is about 5.1 across in a part 7.0 wide, about an M3 pan head, and the lug is the
+  M3-class terminal 5.5 wide. The devices that state a size state M4, M5, M6 and 1/4 in. A
+  real lug for those is wider than the part.
+- **Most pairs are the two holes of one two-hole lug.** Thirteen pairs of
+  `common/ground-lug@1` on twelve devices, the five pairs of `juniper/mx-ground-stud@1`
+  and the pair of `common/ground-stud@1` on the Nokia LMFS-F are two holes that one lug
+  spans; the Casa terminal takes one two-hole lug across two of its three studs. Two
+  one-hole lugs are a stand-in.
+
+  | drawn | pitch | devices | two one-hole lugs |
+  |---|---|---|---|
+  | side by side | 11.0 | UfiSpace S9500-22XST, S9501-28SMT, S9502-16SMT, S9510-28DC, S9510-30XC, S9511-20CT | lie beside each other, 5.5 apart |
+  | side by side | 13.0 to 16.0 | UfiSpace M3000-14XC (13.0), S9501-18SMT (15.8 and 15.7); Juniper MX150 (13.0), MX104 (16.0) | lie beside each other |
+  | one above the other | 13.2 to 16.5 | Edgecore AIS800-64D, AIS800-64O (16.2); UfiSpace S9600-102XC (14.7), S9601-102XC (16.5); Juniper MX240, MX480 (13.2), MX80 (14.0); Nokia LMFS-F (16.3); Casa C40G (15.3) | OVERLAP: the upper lug lies across the lower stud |
+
+  The documents give the pitch as 0.625 in. (15.86) on the MX80, MX104, MX240 and MX480
+  and as 16 on the LMFS-F; several are drawn closer than that.
+- **Some single placements stand for a two-hole landing.** One `common/ground-lug@1` is
+  placed where the device's documents describe a plate or a pair for one two-hole lug: the
+  right-hand point of the Edgecore AGR110 and AGR130, both points of the DCS500, the
+  points of the AGR560, EPS112 and EPS203, the points of the Nokia FX-16, FX-8 and FX-4,
+  and those of the UfiSpace S9500-30XS, S9600-28DX and S9601-104BC. That is fourteen
+  placements on twelve devices. A one-hole lug there is one hole short.
+
+A two-hole lug, on its own interface or on a seat that spans a pair, is the part that
+answers the last two. It is the same part `nokia/sr-1-dc-terminal-block@1` waits for
+(section 12.7).
+
+### 13.6 What is not covered
+
+- **A two-hole lug,** and so every pair above.
+- **`cisco/a9k-ground-pad@1` and `common/ground-screw-washer@1`,** which are not seats.
+- **The ground plates and bolts:** `casa/ground-bolts@1`, `edgecore/agr-ground-plate@1`,
+  `juniper/mx204-ground-plate@1`, `juniper/mx304-ground-plate@1` and the ground point on
+  `maiaedge/pbc-2000-rear-bracket@1`.
+- **The terminals drawn inside DC power supplies and power entry modules.**
+- **Turning a lug,** and a lug of another size: every seat takes the one nominal lug.
+
+`spec/tests/test_ground_stud_lugs.py` holds each part's interface and seat, the Casa
+terminal's three composed studs and the art they kept, a census of all 79 placements with
+every one a slot, every `stud-size` and its absence elsewhere, a lug seated on a real
+device for each part with its solids above what the part builds, a turned placement, two
+pairs with the overlap recorded, and the kit offering the studs and seating a lug as the
+build does, with the view its 3D pass names.
+
 ## Decisions taken
 
 - 2026-10-05: the three pluggable terminal headers are connector slots; each gains its
@@ -432,3 +597,10 @@ slot walk offering the seats and seating a lug as the build does.
 - 2026-10-06: the lug lies on the head of its host's screw, above the lips of the block,
   and no block's shape is changed.
 - 2026-10-06: the Nokia 7750 SR-1 terminal block waits for a two-hole lug.
+- 2026-10-06: a ground stud is a `terminal-stud` seat; the lug lands on top of what the
+  part builds.
+- 2026-10-06: all three studs of the Casa C40G terminal are seats.
+- 2026-10-06: `stud-size` is a text attribute of a placement, written only where a
+  document for that device states it.
+- 2026-10-06: no lug is turned and no ground part is redrawn; the overlaps and overhangs
+  that result are recorded.

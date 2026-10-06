@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ais800-64o
-version: 3.0.4
+version: 3.0.5
 maturity: modelled
 manufacturer: Edgecore
 model: AIS800-64O
@@ -253,6 +253,12 @@ provenance:
       banks, which is measured and not assumed - see the optical-wall note.
       THE GREY IS SAMPLED, NOT GUESSED: the panel metal reads RGB (94, 95, 99) on the
       elevation, which is the chassis colour below.
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      the quick start guide fixes the grounding wire to the grounding point on the rear panel with two
+      M6 screws and washers through one grounding lug (Panduit LCDXN2-14AF-E or an equivalent): the
+      `stud-size` of ground-screw-1 and ground-screw-2.
 attrs:
   environmental:
     operating-temp: '0 to 40 C (front-to-back); 0 to 35 C (back-to-front), subject to used optics'
@@ -653,8 +659,8 @@ views:
       - {id: fan-4, at: [351.63, 4.60], size: {w: 81.6, h: 81.2}, group: fans, rel-pos: 4,
          accepts: ['edgecore/fan-2u-1x1sn@1'], default: 'edgecore/fan-2u-1x1sn@1'}
       placements:
-      - {ref: common/ground-lug@1, id: ground-screw-1, at: [3.70, 32.80], group: mgmt, rel-pos: 7, for: chassis}
-      - {ref: common/ground-lug@1, id: ground-screw-2, at: [3.90, 49.00], group: mgmt, rel-pos: 8, for: chassis}
+      - {ref: common/ground-lug@1, id: ground-screw-1, at: [3.70, 32.80], group: mgmt, rel-pos: 7, for: chassis, attrs: {stud-size: M6}}
+      - {ref: common/ground-lug@1, id: ground-screw-2, at: [3.90, 49.00], group: mgmt, rel-pos: 8, for: chassis, attrs: {stud-size: M6}}
     regions:
     - {id: power, at: [14.5, 4.0], size: {w: 75.0, h: 82.0}, label: 'Power supplies 1 and 2',
        members: [psu-1, psu-2]}

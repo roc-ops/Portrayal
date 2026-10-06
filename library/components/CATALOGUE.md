@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1244 component majors in 26 namespaces.
+1245 component majors in 26 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -98,9 +98,9 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/fan-module-46@1` | module | fan | 46.6 × 40 |  | 3 | 1 | Hot-swappable 1U fan module, 46.6mm pitch - 44.6mm square unioned with a 2mm left mounting tab (captive screw… |
 | `common/fc-simplex-adapter@1` | component | port | 10 × 10 | fc-adapter | 0 | 0 | Panel-mount FC simplex adapter, one threaded bayonet-coupled opening, as fitted to an FS FHD FC panel |
 | `common/fibre-splice@1` | component | port | 60 × 20 |  | 0 | 1 | A fusion-splice tray holder, as fitted behind a splice cassette's rear panel - twelve trunk pigtails fusion-s… |
-| `common/ground-lug@1` | component | ground | 7 × 14 |  | 40 | 1 | Chassis grounding point with earth symbol above the stud |
+| `common/ground-lug@1` | component | ground | 7 × 14 | terminal-stud | 40 | 1 | Chassis grounding point with earth symbol above the stud |
 | `common/ground-screw-washer@1` | component | ground | 11 × 11 |  | 10 | 1 | Chassis grounding screw - a Phillips pan head seated on a captive washer, screwed into the housing where the … |
-| `common/ground-stud@1` | component | ground | 8.1 × 8.1 |  | 4 | 0 | Chassis grounding stud with its hex nut - a threaded stud pressed into the panel and the nut that clamps a ri… |
+| `common/ground-stud@1` | component | ground | 8.1 × 8.1 | terminal-stud | 4 | 0 | Chassis grounding stud with its hex nut - a threaded stud pressed into the panel and the nut that clamps a ri… |
 | `common/ground-symbol@1` | component | ground | 6 × 6 |  | 61 | 1 | Grounding silkscreen symbol (earth in a circle), no hardware |
 | `common/keyhole-mount@1` | component | mount | 8 × 12 |  | 3 | 0 | Wall-mount keyhole slot |
 | `common/keystone-clip@2` | component | mechanical | 16.5 × 14.9 | keystone-opening | 0 | 1 | The white plastic clip FS ships with its FHD multimedia modular panel (FHD-FAPM6, SKU 143239), seated in one … |
@@ -176,7 +176,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/st-simplex-adapter@1` | component | port | 10 × 10 | st-adapter | 0 | 1 | Panel-mount ST (BFOC) simplex adapter, one bayonet-coupled opening, as fitted to an FS FHD ST panel |
 | `common/terminal-header-508-2@1` | component | port | 10.16 × 12.1 | terminal-508-2 | 10 | 1 | Two-position pluggable terminal HEADER on a 5.08 mm pitch, no flange - the green receptacle a two-way screw-c… |
 | `common/terminal-header-508-5f@1` | component | inlet | 35.56 × 12.1 × 12 | terminal-508-5 | 10 | 2 | Five-position pluggable terminal HEADER on a 5.08 mm pitch with a threaded flange at each end - the green rec… |
-| `common/terminal-screw-34@1` | component | screw | 3.4 × 3.4 | terminal-stud | 0 | 1 | The terminal screw of a barrier terminal block, seen head on: a slotted head 3.4 across, the size common/dc-t… |
+| `common/terminal-screw-34@1` | component | screw | 3.4 × 3.4 | terminal-stud | 0 | 2 | The terminal screw of a barrier terminal block, seen head on: a slotted head 3.4 across, the size common/dc-t… |
 | `common/terminal-screw-38@1` | component | screw | 3.8 × 3.8 | terminal-stud | 0 | 2 | The terminal screw of a barrier terminal block, seen head on: a slotted head 3.8 across, the size common/dc-t… |
 | `common/usb-a@2` | component | port | 17 × 7 × 13.7 |  | 3 | 0 | USB Type-A receptacle with trident silkscreen - a shell bezel wrapping a std/usb-a opening core |
 | `common/usb-a-bezel@1` | component | port | 17 × 9.3 × 13.7 |  | 5 | 0 | USB Type-A port in a silver panel bezel - the plate spans the component so it can abut neighboring port bezel… |
@@ -255,7 +255,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `amphenol/qsfp28-passive-dac@1` | module | transceiver | 18.35 × 8.5 × 52.4 | qsfp | 0 | 0 | Amphenol NDAAFR QSFP28 to QSFP28 100G passive direct-attach copper cable, one end - 32 AWG eight-pair PVC-jac… |
 | `amphenol/qsfp56-linear-active@1` | module | transceiver | 18.35 × 8.5 × 52.4 | qsfp | 0 | 0 | Amphenol NJAAF3 QSFP56 to QSFP56 200G active copper cable, one end - 30 AWG eight-pair dual-drain cable in a … |
 
-## casa/ (39)
+## casa/ (40)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -267,7 +267,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `casa/c40g-ac-inlet-panel@1` | module | inlet | 349.2 × 68.5 × 20 |  | 1 | 0 | Casa C40G AC input panel - the bolted panel across the bottom of the REAR face on an AC chassis, where a DC c… |
 | `casa/c40g-fan@1` | module | fan | 34.7 × 205 × 380 |  | 1 | 0 | Casa C40G system fan module, RIGHT-hand position |
 | `casa/c40g-fan-left@1` | module | fan | 34.7 × 205 × 380 |  | 1 | 1 | Casa C40G LEFT fan module - the secondary position, and the one that carries the slot numbering |
-| `casa/c40g-ground-studs@1` | component | ground | 27.6 × 27.6 |  | 1 | 0 | Casa C40G shelf ground terminal - the grounding landing in the left strip of the rear face, near the bottom |
+| `casa/c40g-ground-studs@1` | component | ground | 27.6 × 27.6 |  | 1 | 1 | Casa C40G shelf ground terminal - the grounding landing in the left strip of the rear face, near the bottom |
 | `casa/c40g-pem@1` | module | power | 158 × 68.5 × 200 |  | 1 | 0 | Casa C40G DC power entry module |
 | `casa/c40g-psu-ac@1` | module | psu | 81 × 38.2 × 300 |  | 1 | 1 | Casa C40G AC power supply unit, 1100 W |
 | `casa/c40g-psu-cover@1` | module | filter | 349.2 × 38.2 × 12 |  | 1 | 0 | Casa C40G snap-on power supply unit cover with integrated air filter - the full-width panel across the bottom… |
@@ -278,7 +278,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `casa/ds-8x8@1` | module | line-card | 30.47 × 345.5 × 380 |  | 2 | 0 | Casa DS 8X8 downstream line card for the C100G/C40G CCAP chassis |
 | `casa/ds-8x96@1` | module | line-card | 30.47 × 345.5 × 380 |  | 2 | 0 | Casa DS 8X96 downstream line card for the C100G/C40G CCAP chassis |
 | `casa/fan@1` | module | fan | 137.25 × 91.2 × 150 |  | 1 | 0 | Casa C100G fan assembly module |
-| `casa/ground-bolts@1` | component | mechanical | 27.6 × 11.3 |  | 1 | 2 | Casa C100G rear grounding lug landing |
+| `casa/ground-bolts@1` | component | mechanical | 27.6 × 11.3 |  | 1 | 3 | Casa C100G rear grounding lug landing |
 | `casa/ground-strap@1` | component | ground | 15 × 7.9 |  | 1 | 0 | Casa C100G ESD strap receptacle |
 | `casa/io-6p12@2` | module | line-card | 30.47 × 345.5 × 380 |  | 2 | 3 | Casa 6+12 I/O module - the rear half of a BDM position, carrying six downstream (D0-D5) and twelve upstream (… |
 | `casa/io-6p12-io2@1` | module | line-card | 30.47 × 345.5 × 380 |  | 2 | 0 | Casa 6+12 IO2 module - the 204 MHz-capable rear half of a BDM2 or BDM2m position, carrying six downstream (D0… |
@@ -289,6 +289,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `casa/pem@1` | module | power | 207 × 91.6 × 250 |  | 1 | 15 | Casa C-series Power Entry Module |
 | `casa/rfd@1` | module | line-card | 30.47 × 345.5 × 380 |  | 2 | 0 | Casa RF Downstream I/O module (RFD) - the rear half of a DQM position, carrying the eight downstream F-type p… |
 | `casa/rfu-16x8@1` | module | line-card | 30.47 × 345.5 × 380 |  | 2 | 0 | Casa RF Upstream I/O module (RFU), 16x8 variant - the rear half of a DCU position, carrying sixteen upstream … |
+| `casa/shelf-ground-stud@1` | component | ground | 10.8 × 10.8 | terminal-stud | 0 | 1 | One stud of a Casa shelf ground terminal, seen end on: a star washer, the hex nut on it and the end of the th… |
 | `casa/smm-2x10g@1` | module | supervisor | 30.47 × 345.5 × 380 |  | 2 | 0 | Casa standard SMM 2x10GE - the C100G/C40G Switch and Management Module in its original density |
 | `casa/smm-300g@1` | module | supervisor | 30.47 × 345.5 × 380 |  | 2 | 1 | Casa/CommScope SMM300G Switch and Management Module - the 300G supervisor for the C100G and C40G CCAP chassis |
 | `casa/smm-300gm@1` | module | supervisor | 30.47 × 345.5 × 380 |  | 2 | 0 | Casa/CommScope SMM300GM Switch and Management Module - the supervisor for the C100G and C40G CCAP chassis, an… |
@@ -979,7 +980,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `juniper/ms-mpc-v2k@1` | module | line-card | 41 × 425 |  | 3 | 0 | Juniper Multiservices MPC (MS-MPC) - a services card with no network ports; the face is a vent field (module … |
 | `juniper/ms-mpc-v960@1` | module | line-card | 30.1 × 405 |  | 1 | 0 | Juniper Multiservices MPC (MS-MPC) - a services card with no network ports; the face is a vent field (module … |
 | `juniper/mx-dpc-blank@1` | module | blank | 420.9 × 29.5 |  | 2 | 0 | Blank cover panel for an unoccupied MX240/MX480 DPC/MPC slot, as the MX480 reference photograph shows in slot… |
-| `juniper/mx-ground-stud@1` | component | ground | 7 × 7 |  | 5 | 0 | Juniper MX protective-earthing stud - the threaded terminal the family chassis carry in pairs under the panel… |
+| `juniper/mx-ground-stud@1` | component | ground | 7 × 7 | terminal-stud | 5 | 0 | Juniper MX protective-earthing stud - the threaded terminal the family chassis carry in pairs under the panel… |
 | `juniper/mx-mic-blank@1` | module | blank | 168 × 27 |  | 2 | 3 | Juniper MIC slot blank cover (horizontal window) |
 | `juniper/mx-mic-blank-v@1` | module | blank | 27 × 168 |  | 0 | 8 | Juniper MIC slot blank cover (vertical window) |
 | `juniper/mx-mic6-blank@1` | module | blank | 27 × 200 |  | 0 | 1 | Juniper MIC slot blank cover (vertical window) |

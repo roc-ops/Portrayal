@@ -1,0 +1,57 @@
+format: 1
+kind: component
+name: shelf-ground-stud
+version: 1.0.0
+class: ground
+interface: terminal-stud
+profile: networking
+description: >-
+  One stud of a Casa shelf ground terminal, seen end on: a star washer, the
+  hex nut on it and the end of the threaded stud. It is the stud a ground lug
+  is landed on, so it is where a lug seats: it presents the nominal
+  `terminal-stud` interface on the stud axis, at the end of the stud.
+  casa/c40g-ground-studs@1 composes one per stud.
+size: {w: 10.8, h: 10.8}
+size-confidence: {w: borrowed, h: borrowed}
+size-notes: >-
+  the star washer as casa/c40g-ground-studs@1 drew it before the stud became a
+  part of its own, 10.8 across its points; that terminal lifted the washer, the
+  nut and the stud from casa/ground-bolts@1
+provenance:
+  size: >-
+    borrowed - casa/c40g-ground-studs@1, which drew this washer, nut and stud
+    three times in its own skin and took them from casa/ground-bolts@1. Moved
+    here unchanged: the box is the washer, 10.8 across its points, the nut is
+    7.8 across its corners and the stud end 3.1 across. None of the three is a
+    measurement of a C40G.
+  thread: >-
+    The C40G hardware installation guide, Connecting the chassis to ground,
+    calls the screws of the shelf ground terminal M6. The stud end is drawn
+    3.1 across, which is not an M6 thread to scale; the drawing is the
+    artwork of casa/ground-bolts@1 and is not redrawn here. The size is
+    stated on the placement of the terminal, as `stud-size`.
+  seat: >-
+    THE LUG SEATS ON THE END OF THE STUD, NOT UNDER THE NUT. `mate` sits
+    `on: stud-top`, so a part seated here starts where the stud ends, 3.5 off
+    the panel, above the nut, which ends at 2.9. A real lug lies under the
+    nut and the star washer. Seated there its tongue would share the volume
+    of the nut and the stud this part builds, so it is carried on the end of
+    the stud and draws a head of its own. See
+    docs/connectors-dc-terminal-design.md, section 13.
+  relief: >-
+    estimated - carried across from casa/c40g-ground-studs@1 unchanged, which
+    carried it from casa/ground-bolts@1: washer 0.7, nut 2.2 sitting on it,
+    stud 3.5 as a floor because it has to clear the nut. Not measured.
+  behaviour: >-
+    DELIBERATELY OMITTED. The stud is part of the terminal and is never
+    placed on its own; the terminal states `mounts`.
+elements: {}
+relief:
+  wall: '#4a4f55'
+  features:
+    - {node: stud-top, cyl: 3.5, thread: 1.0, confidence: estimated, source: 'casa/ground-bolts@1 - NO PRECEDENT beyond it, a grounding stud. A FLOOR: it has to clear the nut'}
+    - {node: washer, cyl: 0.7, confidence: estimated, source: 'casa/ground-bolts@1 star washer - NOT MEASURED there either'}
+    - {node: nut, cyl: 2.2, lift: 0.7, confidence: estimated, source: 'casa/ground-bolts@1 terminal nut - NOT MEASURED there either'}
+connection-points:
+  mate: {at: [5.4, 5.4], direction: front, 'on': stud-top}
+skins: [default]

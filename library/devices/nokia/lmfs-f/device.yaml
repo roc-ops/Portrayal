@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: lmfs-f
-version: 0.1.1
+version: 0.1.2
 maturity: modelled
 manufacturer: Nokia
 model: Lightspan MF-8
@@ -219,6 +219,12 @@ provenance:
       DS render, averaged over plain areas: flange 95,102,111 (#5f666f), fan cover and frame
       86,95,106 (#565f6a), right legend strip 67,74,82. A vendor render, so this is the vendor's
       presentation of a blue-grey slate finish; no photograph of a unit is held.
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      USIM s4.5.2.2 recommends a dual-hole M6 lug cable with a stud hole of 6.35 mm (1/4 in.) and a
+      hole spacing of 16 mm, on 3 AWG cable, for the two-point chassis grounding point, and says a
+      single-lug cable will also work: the `stud-size` of ground-stud-1 and ground-stud-2.
 attrs:
   physical:
     part-number: 3FE 79748 AA
@@ -427,8 +433,8 @@ views:
         - {id: fan, at: [17.4, 3.2], size: {w: 38.1, h: 348.5}, accepts: [nokia/lfan-f@1], default: nokia/lfan-f@1, group: fans, rel-pos: 1}
       placements:
         - {ref: common/esd-jack@1, id: esd-point, at: [4.7, 112.3], group: grounding, rel-pos: 1}
-        - {ref: common/ground-stud@1, id: ground-stud-1, at: [3.65, 235.35], group: grounding, rel-pos: 2}
-        - {ref: common/ground-stud@1, id: ground-stud-2, at: [3.65, 251.65], group: grounding, rel-pos: 3}
+        - {ref: common/ground-stud@1, id: ground-stud-1, at: [3.65, 235.35], group: grounding, rel-pos: 2, attrs: {stud-size: M6}}
+        - {ref: common/ground-stud@1, id: ground-stud-2, at: [3.65, 251.65], group: grounding, rel-pos: 3, attrs: {stud-size: M6}}
         - {ref: common/ground-symbol@1, id: ground-symbol, at: [4.7, 282.6], for: [ground-stud-1, ground-stud-2], group: grounding, rel-pos: 4}
         - {ref: nokia/mf8-horizontal-front-cover@1, id: front-cover, at: [20.4, 0.0], only-in: [front-cover], group: covers, rel-pos: 1}
   rear:

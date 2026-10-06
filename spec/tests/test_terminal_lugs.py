@@ -107,11 +107,17 @@ def test_terminal_stud_is_one_nominal_connector_and_claims_no_size():
     assert "FV2-MS3" in lug["source"] and "NOT A FIGURE FROM ANY PLACING DEVICE" in lug["notes"]
 
 
-def test_no_stud_size_attribute_is_introduced_yet():
-    """Nothing in this change states a screw or stud size, so no attribute
-    carries one. The first document that prints a size brings the name."""
-    for f in list((LIB / "components").rglob("v*/contract.yaml")) + \
-            list((LIB / "devices").rglob("device.yaml")):
+def test_no_barrier_block_states_a_stud_size():
+    """No document held for a device that places a barrier block states the
+    size of its terminal screws, so none of them carries `stud-size`. The
+    attribute arrived with the ground studs, whose documents do print sizes
+    (test_ground_stud_lugs.py holds every placement that states one)."""
+    files = [LIB / "devices" / d / "device.yaml" for d in
+             ("edgecore/csr180", "edgecore/csr200", "telco-systems/tm-8104",
+              "telco-systems/tm-8106")]
+    files += [f for f in (LIB / "components").rglob("v*/contract.yaml")]
+    assert len(files) > 4
+    for f in files:
         assert not re.search(r"\bstud-size\s*:", f.read_text()), f
 
 
@@ -135,12 +141,16 @@ def test_the_seat_is_the_screw_itself(block):
     assert root.find(f"{SVG}path[@id='slot']") is not None
 
 
-def test_the_parts_that_present_terminal_stud_are_the_two_screws_and_one_lug_mates_it():
+def test_the_screws_that_present_terminal_stud_are_these_two_and_one_lug_mates_it():
+    """The `class: screw` parts that present the interface are the two
+    terminal screws. The ground studs present it too (`class: ground`,
+    test_ground_stud_lugs.py); they are not terminal screws and are left to
+    their own census."""
     presents, mates = [], []
     for f in (LIB / "components").rglob("v*/contract.yaml"):
         c = _yaml(f)
         ref = f"{f.parents[2].name}/{c['name']}@{c['version'].split('.')[0]}"
-        if c.get("interface") == IFACE:
+        if c.get("interface") == IFACE and c.get("class") == "screw":
             presents.append(ref)
         if c.get("mates") == IFACE:
             mates.append(ref)

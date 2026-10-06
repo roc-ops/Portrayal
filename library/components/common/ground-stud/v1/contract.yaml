@@ -1,8 +1,9 @@
 format: 1
 kind: component
 name: ground-stud
-version: 1.0.0
+version: 1.0.1
 class: ground
+interface: terminal-stud
 behaviour: mounts
 profile: networking
 description: >-
@@ -20,6 +21,14 @@ provenance:
   depth: >-
     estimated - the stud and nut stand about 6 mm off the panel in the photograph's
     perspective; not measured.
+  seat: >-
+    THE PART PRESENTS `terminal-stud` ON THE STUD AXIS, AT THE END OF THE STUD.
+    `mate` sits `on: stud`, which this part builds 6.0 off the panel, above the
+    nut, which ends at 3.2. A lug seated here starts at 6.0 and draws a head of
+    its own. A real lug lies under the nut. Seated on the nut instead, at 3.2,
+    its tongue and the head it draws would share the volume of the stud, which
+    is drawn 4.0 across and passes through a 3.2 hole. See
+    docs/connectors-dc-terminal-design.md, section 13.
 elements:
   nut: {at: [0.0, 0.5], size: [8.1, 7.0], class: stud}
 relief:
@@ -38,4 +47,6 @@ relief:
       source: >-
         common/ground-stud@1 depth key - read by eye off the datasheet photograph's
         perspective; not measured.
+connection-points:
+  mate: {at: [4.05, 4.05], direction: front, 'on': stud}
 skins: [default]
