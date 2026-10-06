@@ -32,7 +32,9 @@ names the ref that replaces it.
   built. A change is written with `setFields`, in 2D and 3D, is kept across a
   view change, goes when the part is swapped out, and is carried in the page's
   location as `fields=<path>~<key>~<value>,...` beside `swap=`. A value the
-  field does not take is not written, from the form or from a link.
+  field does not take is not written, from the form or from a link. A link
+  restores a field only for a part drawn on the view it opens; one set on
+  another view is dropped on reload (roc-ops/Portrayal#818).
   `kit/fields.js` gains `fieldRows`, `fieldAccepts`, `encodeFields` and
   `decodeFields`, and the shell gains `resetField` and `applyFields` (#811).
 - Barrier terminal blocks seat a lug per pole. `terminal-stud` joins

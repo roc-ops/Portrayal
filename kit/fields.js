@@ -168,7 +168,9 @@ export function fieldRows(fields, current = {}) {
  */
 export function fieldAccepts(field, value) {
   const v = value == null ? '' : String(value);
-  if (!field) return false;
+  // a declaration is an object. `decl[key]` on a plain object finds a function
+  // for `constructor` or `toString`, and that is not a field
+  if (!field || typeof field !== 'object') return false;
   if (field.type === 'choice' && Array.isArray(field.options))
     return field.options.map(String).includes(v);
   if (field.type === 'number') return v.trim() !== '' && Number.isFinite(Number(v));
@@ -195,19 +197,33 @@ export function encodeFields(map) {
   return out.join(',');
 }
 
+// What a location may carry: a link is not a place to hold a document, and a
+// contract's pattern is tested against every value kept.
+const MAX_ENTRIES = 256, MAX_VALUE = 256;
+
 // NEVER THROWS, and one bad entry does not take the rest with it, for the
 // reason decodeSwaps gives: the string is typed, pasted and truncated by people.
 /** The reverse of encodeFields. Unknown shapes are dropped entry by entry. */
 export function decodeFields(s) {
-  const out = {};
-  if (typeof s !== 'string' || !s) return out;
-  for (const part of s.split(',')) {
+  if (typeof s !== 'string' || !s) return {};
+  // GATHERED IN MAPS, NOT IN `{}`. The string is whatever a link carries, and
+  // on a plain object `out['constructor']` is `Object` itself: the write
+  // `(out[path] ||= {})[key] = value` then landed on a global
+  // (`constructor~keys~x` replaced Object.keys with a string) or threw on a
+  // read-only member (`constructor~prototype~x`), taking the page with it.
+  // Object.fromEntries defines own properties, so a name every object inherits
+  // is an ordinary key in what is returned.
+  const got = new Map();
+  for (const part of s.split(',').slice(0, MAX_ENTRIES)) {
     const bits = part.split('~');
     if (bits.length !== 3) continue;
     let path, key, value;
     try { [path, key, value] = bits.map(decodeURIComponent); } catch (e) { continue; }
     if (!path || !key || path === '__proto__' || key === '__proto__') continue;
-    (out[path] ||= {})[key] = value;
+    // no field's value is this long, and a pattern is run over whatever is kept
+    if (value.length > MAX_VALUE) continue;
+    if (!got.has(path)) got.set(path, new Map());
+    got.get(path).set(key, value);
   }
-  return out;
+  return Object.fromEntries([...got].map(([path, kv]) => [path, Object.fromEntries(kv)]));
 }

@@ -18,9 +18,21 @@ console.log(JSON.stringify({
     pattern: fieldAccepts(colour, '#00ff00'), notPattern: fieldAccepts(colour, '#00ff00;x'),
     badPattern: fieldAccepts({type: 'text', pattern: '('}, 'anything'),
     undeclared: fieldAccepts(undefined, '1'),
+    inherited: fieldAccepts({}.constructor, '1') || fieldAccepts({}.toString, '1'),
   },
   enc,
   dec: decodeFields(enc),
   junk: decodeFields('a~b,a~b~c~d,~k~v,p~~v,__proto__~k~v,%E0~k~v,ok~k~v'),
   empty: [encodeFields({}), encodeFields(null), JSON.stringify(decodeFields('')), JSON.stringify(decodeFields(null))],
+  // names every object inherits are ordinary keys, written nowhere but the result
+  inherited: (() => {
+    const before = [Object.keys, Object.prototype.hasOwnProperty, Object.zz];
+    const got = decodeFields('constructor~keys~x,constructor~prototype~y,hasOwnProperty~call~z,toString~zz~w,ok~k~v');
+    return {got, own: Object.hasOwn(got, 'constructor') && Object.hasOwn(got, 'toString'),
+            untouched: Object.keys === before[0] && Object.prototype.hasOwnProperty === before[1]
+              && typeof Object.prototype.hasOwnProperty.call === 'function' && Object.zz === undefined
+              && typeof Object.prototype === 'object'};
+  })(),
+  long: decodeFields(`a~k~${'x'.repeat(257)},b~k~${'x'.repeat(256)}`),
+  many: Object.keys(decodeFields(Array.from({length: 300}, (_, i) => `p${i}~k~v`).join(','))).length,
 }));

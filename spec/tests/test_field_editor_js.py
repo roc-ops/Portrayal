@@ -59,6 +59,8 @@ def test_a_value_the_field_does_not_take_is_refused(out):
     assert a["pattern"] and not a["notPattern"]
     # an unreadable pattern refuses nothing; an undeclared field takes nothing
     assert a["badPattern"] and not a["undeclared"]
+    # `decl["constructor"]` is a function on any object; it is not a declaration
+    assert not a["inherited"]
 
 
 def test_the_location_string_round_trips_every_separator(out):
@@ -72,3 +74,22 @@ def test_the_location_string_round_trips_every_separator(out):
 
 def test_a_bad_entry_is_dropped_and_the_rest_kept(out):
     assert out["junk"] == {"ok": {"k": "v"}}
+
+
+
+def test_a_name_every_object_inherits_is_an_ordinary_key(out):
+    """`fields=` is whatever a link carries. Gathered in a plain object,
+    `constructor~keys~x` replaced Object.keys with a string and
+    `constructor~prototype~x` threw, before any device had loaded."""
+    got = out["inherited"]
+    assert got["got"] == {"constructor": {"keys": "x", "prototype": "y"},
+                          "hasOwnProperty": {"call": "z"}, "toString": {"zz": "w"},
+                          "ok": {"k": "v"}}
+    assert got["own"] and got["untouched"]
+
+
+def test_a_location_is_not_a_place_to_hold_a_document(out):
+    """A contract's pattern is run over every value kept, so a value has a
+    length and a string has a number of entries."""
+    assert list(out["long"]) == ["b"] and len(out["long"]["b"]["k"]) == 256
+    assert out["many"] == 256

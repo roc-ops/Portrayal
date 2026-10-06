@@ -1970,7 +1970,8 @@ export function createShell(opts = {}) {
       try { if (el) decl = fieldsOf(el.dataset.ref.split(':')[0]); } catch (err) { /* not ns/name@major */ }
       const ok = {};
       for (const [k, v] of Object.entries(vals))
-        if (decl[k] && fieldAccepts(decl[k], v)) ok[k] = v; else ignored.push(`${path}~${k}`);
+        // an OWN key: `decl.constructor` is a function on any object, declared or not
+        if (Object.hasOwn(decl, k) && fieldAccepts(decl[k], v)) ok[k] = v; else ignored.push(`${path}~${k}`);
       if (Object.keys(ok).length) setFields(path, ok);
     }
     return {ignored};
