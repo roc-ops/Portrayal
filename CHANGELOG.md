@@ -35,6 +35,13 @@ names the ref that replaces it.
   `passive` profile for rack furniture, which owes only its weight. A
   `passive` device is exported to DCIM though it has no interfaces, console
   or bays. Design note: `docs/cable-managers-design.md`.
+- Lint L128, on devices and listings: a `part-numbers` key has no stray
+  whitespace. Whitespace other than a plain space (NBSP, a tab, a zero-width
+  space) and leading or trailing whitespace are errors; a space splitting a
+  run of capitals and digits between two hyphens (`9716-32D-O-A C-F-UK`,
+  #720) is a warning a device can waive. Keys that mean their spaces, such
+  as `AS7535-28XB-O-AC-F V2` and `7750 SR-12 (pre-2016 chassis)`, pass, and
+  nothing in the library raises it (roc-ops/Portrayal#731).
 - Fibrain's HD adapter holders for LC, and the multimode SC ones: ten LC
   duplex holders (`fibrain/xmi1021ca`, `-da`, `-ha`, `-ga` and `xmi1031ga`
   with 6 adapters; `xmn1021cb`, `-db`, `-hb`, `-gb` and `xmn1031gb` with 12)

@@ -293,6 +293,7 @@ RULES = {
     "L125": ("device",     "a device says how it is installed - a rack device (the default `mount`) or a `rack-face` part states `ru` (warning), and a device whose `chassis.mount` is `din-rail`, `wall` or `desktop` states none (error)", "give a rack device its `ru` from the datasheet; for a box that is not racked, state `chassis.mount` and drop `ru`, so its DCIM export says `u_height: 0` rather than an invented rack unit"),
     "L126": ("device",     "a bevelled chassis is a solid the box can have - every edge named by two faces that meet, none bevelled twice, no face cut away and no bevel swallowed by its neighbours - its face drawings are the chassis's own size, and every part, bay and cutout on a face lies on the flat face rather than on a bevel", "name edges as two adjacent faces (`front-left`), shrink a bevel that cuts too much, drop a view `size` that differs from the chassis on a bevelled face, or move the part onto the flat face - spec/tools/portrayal/bevel.py says where it is"),
     "L127": ("device",     "a `shell: sheet` body states `chassis.thickness`, between 0 and 10 mm, and a box states none (error)", "give a sheet body the gauge its datasheet states; on a box, drop `thickness`"),
+    "L128": ("device, listing", "a part-number key has no stray whitespace - none leading or trailing, none but the plain ASCII space (an error), and none splitting a run of capitals and digits between two hyphens (`-A C-`, a warning)", "retype the SKU as the vendor prints it; a space the vendor really prints inside a hyphenated token is waived with the document that shows it"),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -5625,6 +5626,71 @@ def lint_device_top_level_skus(path, data):
          "if no configuration describes them, the variant they name is not modelled yet")
 
 
+# A run of capitals and digits between two hyphens, broken by whitespace:
+# `9716-32D-O-A C-F-UK`. A vendor's own suffix (` V2`), a word-separated
+# description (`ASR 9901 Router, AC supplies`) and a model with a qualifier
+# (`7750 SR-12 (pre-2016 chassis)`) have no hyphen on both sides of the space.
+_PN_SPLIT_TOKEN = re.compile(r"-([A-Z0-9]+(?:\s+[A-Z0-9]+)+)(?=-)")
+# Zero-width characters are not whitespace to str.isspace(), and are as
+# invisible in a diff as an NBSP.
+_PN_ZERO_WIDTH = {"​", "‌", "‍", "⁠", "﻿"}
+
+
+def lint_part_number_keys(path, data):
+    """L128: a part number has no stray space in it.
+
+    A `part-numbers` key is the DCIM `model`, its slug and the export's file
+    name, under the vendor and under every NOS that lists the device. #720 was
+    `9716-32D-O-A C-F-UK` beside `9716-32D-O-AC-F-US`, `-EU` and `-JP`: one
+    space, and the UK build exported under a model nobody can order. Worse, a
+    space sorts before a letter, and where every SKU carries a cord the export
+    is named for the first SKU in sort order (#725), so the typo also chose
+    which name the device type went out under.
+
+    A blanket "no whitespace" would be wrong: Edgecore's csr440 SKUs end in its
+    own ` V2`, the ASR 9000 keys are descriptive (`ASR 9901 Router, AC
+    supplies`), and Nokia's `7750 SR-12 (pre-2016 chassis)` means its spaces.
+    So this reads three things that are never meant:
+
+    - whitespace other than the plain ASCII space (NBSP, a tab, a zero-width
+      space), which a copy from a vendor PDF or web page brings with it - an
+      error, because nobody types one on purpose;
+    - leading or trailing whitespace - an error, for the same reason;
+    - whitespace that splits a run of capitals and digits between two hyphens
+      (`-A C-`), which no SKU in the library does on purpose - a warning, so a
+      vendor that really prints one can be waived with its reason.
+
+    Configurations' keys in a device and in a listing are both read, and the
+    top level too, though L59 already says nothing reads it.
+    """
+    maps = [("part-numbers", data.get("part-numbers"))]
+    for cname, cfg in (data.get("configurations") or {}).items():
+        if isinstance(cfg, dict):
+            maps.append((f"configurations/{cname}/part-numbers", cfg.get("part-numbers")))
+    for where, pns in maps:
+        if not isinstance(pns, dict):
+            continue
+        for key in pns:
+            if not isinstance(key, str):
+                continue
+            odd = sorted({ch for ch in key
+                          if (ch.isspace() and ch != " ") or ch in _PN_ZERO_WIDTH})
+            if odd:
+                names = ", ".join(f"U+{ord(ch):04X}" for ch in odd)
+                err(path, "L128", f"{where}: {key!r} contains {names} - whitespace that is "
+                    "not a plain space, usually carried in by a copy from a PDF or web page. "
+                    "It becomes the DCIM model and file name exactly as written; retype it")
+            if key != key.strip():
+                err(path, "L128", f"{where}: {key!r} has leading or trailing whitespace. "
+                    "The key is the DCIM model, slug and export file name; strip it")
+            for m in _PN_SPLIT_TOKEN.finditer(key):
+                warn(path, "L128", f"{where}: {key!r} has whitespace inside the hyphenated "
+                     f"token -{m.group(1)}-. No SKU in the library splits one on purpose, and "
+                     "a stray space here renames the DCIM model and can change which SKU "
+                     "names the export (#720). Close it up, or waive with the vendor's "
+                     "document if it really prints the space")
+
+
 def lint_device_configuration_kind(path, data):
     """L57: a configuration says whether you can order it.
 
@@ -10690,6 +10756,7 @@ def main():
                 lint_device_gap_scope(f, d)
                 lint_device_configuration_kind(f, d)
                 lint_device_top_level_skus(f, d)
+                lint_part_number_keys(f, d)
                 lint_device_empty_declaration(f, d)
                 lint_device_power_redundancy(f, d)
                 lint_device_fan_redundancy(f, d)
@@ -10724,6 +10791,7 @@ def main():
                 err(f, "L1", f"{'/'.join(str(p) for p in e.path)}: {e.message}")
             if isinstance(data, dict):
                 lint_listing(f, data, args.library)
+                lint_part_number_keys(f, data)
                 lint_quoted_prose(f, data)
             n += 1
 
