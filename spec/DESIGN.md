@@ -127,7 +127,10 @@ Three layers:
    manifest outside this repository that pins the old major is told what to pin
    instead. From 1.0 a retired major is deprecated for at least one release
    before it is removed: that release is the coexistence above, spent on the
-   consumers it exists for. Inside the repository, L89 still fails on a
+   consumers it exists for. The deprecation will be a `deprecated:` marker on
+   the retired major's contract, naming the ref that replaces it. The marker,
+   and L89 telling a deprecated major that still ships from a dead one, are
+   pending (roc-ops/Portrayal#448). Inside the repository, L89 still fails on a
    superseded major that nothing references — it will not accept
    an `unplaced:` sentence from a major that a newer live major supersedes.
    There is one exception, and it is the reason the check asks whether anything
