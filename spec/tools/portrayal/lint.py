@@ -6107,7 +6107,7 @@ TOP_LEVEL_ORDER = (
     # same kind of statement: this is what we know and how we know it, and this
     # is the rule we have argued with and why.
     "lint", "provenance", "attrs", "chassis", "gaps", "groups", "views",
-    "configurations", "datasheet", "references",
+    "interfaces", "configurations", "datasheet", "references",
 )
 
 
@@ -7271,6 +7271,25 @@ def lint_device_placement_interfaces(path, data, lib_roots):
                     err(path, "L105", f"{vname}: interface {i!r} is presented by both "
                                       f"{owner[i]} and {p.get('id')}")
                 owner.setdefault(i, p.get("id"))
+
+    # THE DEVICE'S OWN `interfaces:` NAME ONLY WHAT IT HAS. A rule whose
+    # `physical` is no placement and no presented interface renames nothing,
+    # and reads in the manifest as a port the export will carry. Its `{n}`
+    # needs a range for the same reason a listing's does.
+    rules = data.get("interfaces") or []
+    if rules:
+        have = set()
+        for view in (data.get("views") or {}).values():
+            for p in ((view or {}).get("components") or {}).get("placements") or []:
+                have.update(p.get("interfaces") or [p.get("id")])
+        for rule in rules:
+            if "{n}" in str(rule.get("physical") or "") and "-" not in str(rule.get("range") or ""):
+                err(path, "L105", f"interfaces: {rule.get('physical')!r} has {{n}} and no range")
+        missing = sorted({i for _pat, i in _listing_targets(rules, "physical")} - have)
+        if missing:
+            err(path, "L105", f"interfaces: {', '.join(missing[:6])}"
+                              f"{' and more' if len(missing) > 6 else ''} "
+                              f"named by a rule and placed nowhere on this device")
 
 PART_KIND_WORDS = {"timing": "a timing input", "rf": "an RF connector",
                    "console": "a console port", "power": "a power inlet",

@@ -549,6 +549,11 @@ def buckets(doc, versions=None):
             # `networking` to `optical` with no version asked for, which is the
             # gap the `portfolio` note above records having found.
             **({"profile": doc.get("profile")} if doc.get("profile") else {}),
+            # THE PORT NAMES THE DEVICE'S OWN OPERATING SYSTEM USES. Naming them
+            # for the first time moves this bucket; renaming one is caught
+            # apart, in `_bucket_bump`, because it is breaking. Conditional, so
+            # a device that states none is not rehashed for the key.
+            **({"interfaces": doc.get("interfaces")} if doc.get("interfaces") else {}),
             # A WAIVER IS A CLAIM, and an unfingerprinted claim can be retyped
             # with no version asked for - the gap `portfolio` and then `profile`
             # each had. Adding, removing or rewording `lint.waive` changes what
@@ -628,6 +633,15 @@ def entry(doc, versions=None):
          # RECORDED AND NOT ONLY HASHED, so a finding can name the part that
          # moved. A digest can say something changed; it cannot say what.
          "composed-refs": _composed(doc, versions or {})}
+    # WHAT THE DEVICE'S OWN OPERATING SYSTEM CALLS EACH PORT, when it says. A
+    # DCIM that imported the type holds these names, so one that changes or goes
+    # is breaking - the rule a listing's `interfaces` already has. Recorded only
+    # where a device states any, so no other device's lock learns a key.
+    if doc.get("interfaces"):
+        from portrayal import dcim_export
+        e["interface-names"] = {
+            phys: name for phys, (name, _b)
+            in sorted(dcim_export.listing_names(doc).items())}
     e.update(buckets(doc, versions))
     return e
 
@@ -698,6 +712,14 @@ def _bucket_bump(old, new):
     """
     if old is None:
         return None
+    # A PORT'S NAME CHANGED OR WENT. Checked before the buckets, because every
+    # one of them can be untouched while this moves. A device naming its ports
+    # for the first time renames nothing a lock recorded, so it is not asked
+    # for a major here; the export it changes is the pull request's to declare.
+    new_names = new.get("interface-names") or {}
+    for phys, was in (old.get("interface-names") or {}).items():
+        if new_names.get(phys) != was:
+            return "major"
     if old.get("shape") == new["shape"] and old.get("names") == new["names"]:
         # A COMPOSED CHANGE IS A PATCH. The device's own geometry and ids are
         # untouched; a part it draws was redrawn, so anything holding a

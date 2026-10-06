@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: m3000-14xc
-version: 3.0.3
+version: 3.0.4
 maturity: modelled
 manufacturer: UfiSpace
 model: M3000-14XC
@@ -234,6 +234,13 @@ provenance:
       searched 2026-08-28, 'UfiSpace M3000-14XC end of life' - no announcement found; the product
       page is live and the unit is actively marketed. none-announced is a real finding, not an
       omission.
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      the hardware installation guide lists, in its package contents, a screw kit for the grounding
+      lug of 2 x M4*L8.0mm screws, and its grounding steps lock the grounding lug to the designated
+      grounding location with 2 M4 screws: the `stud-size` of ground-1 and ground-2. The accessory lug
+      is one two-hole lug held by both screws.
 
 attrs:
   performance:
@@ -651,8 +658,8 @@ views:
         - {ref: common/ground-lug@1, id: ground-1, at: [45, 15], group: grounding, rel-pos: 1,
            description: 'the designated grounding location of HIG section 8 / Figure 22 - two
              tapped M4 holes behind the front face for the accessory grounding lug
-             (50 x 11.1 x 7.5 mm, 6 AWG); position is a fraction of the Fig 22 side figure'}
-        - {ref: common/ground-lug@1, id: ground-2, at: [58, 15], group: grounding, rel-pos: 2}
+             (50 x 11.1 x 7.5 mm, 6 AWG); position is a fraction of the Fig 22 side figure', attrs: {stud-size: M4}}
+        - {ref: common/ground-lug@1, id: ground-2, at: [58, 15], group: grounding, rel-pos: 2, attrs: {stud-size: M4}}
 configurations:
   dc:
     kind: base

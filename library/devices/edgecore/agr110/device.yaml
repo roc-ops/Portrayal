@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: agr110
-version: 8.2.8
+version: 8.2.9
 maturity: modelled
 manufacturer: Edgecore
 model: AS5916-54XL
@@ -466,6 +466,12 @@ provenance:
       modules must have a back-to-front (B2F) airflow direction" - but that is the family's caution, not
       an ordering code, and no B2F part number appears. Configurations here are therefore ac and dc, both
       front-to-back, and the absence of a B2F SKU is stated rather than assumed away.
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      the quick start guide's package contents list a grounding kit of one grounding lug, 2 M5 screws
+      and 2 washers: the `stud-size` of ground-right, the plate with two holes that the kit fits
+      (rear-grounding). ground-left states none: nothing held says what that opening takes.
 attrs:
   performance: {switching-capacity: 800 Gbps, processing-rate: 700 Mpps}
   power: {power-max-w: 450, power-envelope: unstated, input-ac: '100-240 VAC, 50-60 Hz, 6 A maximum',
@@ -2030,7 +2036,7 @@ views:
         rel-pos: 5
       placements:
       - {ref: common/ground-lug@1, id: ground-left, at: [4.4, 27.0], group: grounding, rel-pos: 1}
-      - {ref: common/ground-lug@1, id: ground-right, at: [426.9, 16.3], group: grounding, rel-pos: 2}
+      - {ref: common/ground-lug@1, id: ground-right, at: [426.9, 16.3], group: grounding, rel-pos: 2, attrs: {stud-size: M5}}
     regions:
     - id: exhaust
       at: [0, 0]

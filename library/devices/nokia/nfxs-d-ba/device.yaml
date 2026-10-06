@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: nfxs-d-ba
-version: 0.1.4
+version: 0.1.5
 maturity: modelled
 manufacturer: Nokia
 model: 7360 ISAM FX-16 (NFXS-D BA)
@@ -214,6 +214,12 @@ provenance:
     note: >-
       Searched the staged Nokia corpus for an end-of-sale notice for 3FE 65209 BA and found none; the
       shelf is still chapter 3 of the 2026 Lightspan UDS. Not searched on the web.
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      HIM R6.9 s6.3.1 gives each of the two grounding cable connectors of the FX-16 as a 1/4 in. stud
+      with 1 in. hole spacing, for a 4 AWG dual-hole lug: the `stud-size` of ground-left and
+      ground-right, each of which is drawn once for a pair of studs.
 attrs:
   physical:
     part-number: 3FE65209BA
@@ -566,12 +572,12 @@ views:
     size: {w: 280.0, h: 622.5}
     components:
       placements:
-        - {ref: common/ground-lug@1, id: ground-left, at: [219.7, 579.85], rotate: 90, group: grounding, rel-pos: 1}
+        - {ref: common/ground-lug@1, id: ground-left, at: [219.7, 579.85], rotate: 90, group: grounding, rel-pos: 1, attrs: {stud-size: '1/4 in'}}
   right:
     size: {w: 280.0, h: 622.5}
     components:
       placements:
-        - {ref: common/ground-lug@1, id: ground-right, at: [53.3, 579.85], rotate: 90, group: grounding, rel-pos: 2}
+        - {ref: common/ground-lug@1, id: ground-right, at: [53.3, 579.85], rotate: 90, group: grounding, rel-pos: 2, attrs: {stud-size: '1/4 in'}}
   top:
     size: {w: 499.4, h: 280.0}
     empty: >-

@@ -1455,7 +1455,10 @@ export async function applyAllOverrides(rootEl, deviceBays, overrides, loadSkin,
 //     all. A nested path is never a device bay id (nestedBays only ever
 //     produces one by walking what a device bay's OWN drawing seated - see
 //     nestedBays above), so it is found only by walking from a bay, and a
-//     view with no bays has nothing to walk, cages included.
+//     view with no bays has nothing to walk, cages included;
+//   - a key names a slot (`<placement>/<part>`) that no bay and no cage of
+//     ANY view claims - a slot on a placed part that composes several and is
+//     no cage itself (#814). Then EVERY view is rewritten.
 //
 // The view set is read off BOTH `devIndex.bays` and `devIndex.cages`, not
 // gated on `devIndex.bays` existing at all - a device that declares cages and
@@ -1469,6 +1472,18 @@ export function viewsToRewrite(devIndex, overrides) {
   const byBays = devIndex?.bays || {};
   const byCages = devIndex?.cages || {};
   const views = new Set([...Object.keys(byBays), ...Object.keys(byCages)]);
+  // A slot on a part that is PLACED and is not itself a cage - a pole of a
+  // barrier block, `psu1-input/lug-2`; an inlet of a multi-inlet panel - is
+  // claimed by no bay and no cage of any view, so the rules above name
+  // nothing and 3D never saw the swap (#814). Which view holds it cannot be
+  // read off the index, so every view is named: seatFace is a no-op on a
+  // face that has no such slot.
+  const claimedBy = (k, view) =>
+    (byBays[view] || []).some(b => b.id === k)
+    || (byCages[view] || []).some(c => c.id === k || k.startsWith(c.id + '/') || underCarrier(k, c.id));
+  const unclaimedSlot = keys.some(k => k.includes('/') && !k.includes('/module/')
+                                      && ![...views].some(view => claimedBy(k, view)));
+  if (unclaimedSlot) return [...views];
   const out = [];
   for (const view of views) {
     const bays = byBays[view] || [];

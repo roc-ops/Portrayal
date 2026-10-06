@@ -63,3 +63,9 @@ interfaces:
   # The DC barrel jack (#789, docs/connectors-dc-terminal-design.md). ONE
   # INTERFACE, BY RULING: see the note.
   dc-barrel: {standard: barrel-jack, note: 'the library treats the DC barrel jack as ONE nominal connector. Barrel diameters vary by product, and none of the documents held for the four devices that place common/dc-barrel@1 states one, so the interface claims no diameter. The rating is carried as attributes of each placement of the jack (input-voltage, current-max-a) and not by the interface. generic/dc-barrel-plug@1, drawn at the common 5.5 mm barrel, mates it'}
+  # Screw and stud terminals a lug lands on (#789,
+  # docs/connectors-dc-terminal-design.md section 12). ONE INTERFACE, BY
+  # RULING: see the note. The part that presents it is the terminal screw
+  # itself, composed once per pole into its block, so each pole is a slot.
+  terminal-stud: {standard: terminal-stud, note: 'the library treats a screw or stud terminal that a lug lands on as ONE nominal connector. Stud and screw sizes vary by product and most placing parts state none, so the interface claims no size; where a document states one it is an attribute of the placement and not of the interface. generic/ring-lug@1, a one-hole insulated ring terminal on its wire, mates it. A two-hole lug across a pair of studs is not this interface yet'}
+  breaker-1ru-guard: {cover: true, note: 'NOT A CONNECTOR - A COVER MOUNT. The face of a 1RU plug-in breaker, where its touch guard screws on; amphenol-ns/touch-guard-1ru@1 mates it. Registered here because a cover that ships on a part and comes off is the same mechanism as a dust cap in a port: one slot, one occupant, a default'}

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx240
-version: 1.1.21
+version: 1.1.22
 maturity: modelled
 manufacturer: Juniper
 model: MX240
@@ -83,6 +83,12 @@ provenance:
       exhaust field; sides carry an estimated vent-field band (right) and rail band (left), top
       and bottom rail edges only. Axis conventions per viewer3d.js: LEFT view x = 0 is the REAR,
       RIGHT view x = 0 is the FRONT, top/bottom y = 0 at the FRONT
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      the hardware guide, chassis grounding points specifications: two threaded inserts (PEM nuts)
+      that fit UNC 1/4-20 screws, spaced at 0.625 in. (15.86 mm) centres, for one two-hole cable lug:
+      the `stud-size` of both studs.
 
 attrs:
   physical:
@@ -259,8 +265,8 @@ views:
            group: cooling, rel-pos: 1}
       placements:
         - {id: esd-rear-jack, ref: common/esd-jack@1, at: [353.4, 170.6], for: chassis, group: grounding, rel-pos: 0}
-        - {id: ground-stud-0, ref: juniper/mx-ground-stud@1, at: [423.20, 18.70], for: chassis, group: grounding, rel-pos: 0}
-        - {id: ground-stud-1, ref: juniper/mx-ground-stud@1, at: [423.20, 31.90], for: chassis, group: grounding, rel-pos: 1}
+        - {id: ground-stud-0, ref: juniper/mx-ground-stud@1, at: [423.20, 18.70], for: chassis, group: grounding, rel-pos: 0, attrs: {stud-size: '1/4-20'}}
+        - {id: ground-stud-1, ref: juniper/mx-ground-stud@1, at: [423.20, 31.90], for: chassis, group: grounding, rel-pos: 1, attrs: {stud-size: '1/4-20'}}
 
   left:
     size:

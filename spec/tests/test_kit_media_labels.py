@@ -152,3 +152,12 @@ def test_the_dc_barrel_plug_medium_has_its_label():
     stated = re.search(r"^attrs:.*\bmedia:\s*([a-z0-9-]+)", text, re.M)
     assert stated and stated.group(1) == "barrel"
     assert media_table().get("barrel") == "DC barrel"
+
+
+def test_the_ring_lug_medium_has_its_label():
+    """generic/ring-lug@1 states `ring-lug` (#789); the fallback would read
+    RING-LUG."""
+    text = (LIBRARY / "components/generic/ring-lug/v1/contract.yaml").read_text()
+    stated = re.search(r"^attrs:.*\bmedia:\s*([a-z0-9-]+)", text, re.M)
+    assert stated and stated.group(1) == "ring-lug"
+    assert media_table().get("ring-lug") == "ring lug"

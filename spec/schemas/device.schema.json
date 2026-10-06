@@ -1475,6 +1475,49 @@
     }
    }
   },
+  "interfaces": {
+   "type": "array",
+   "minItems": 1,
+   "description": "WHAT THE VENDOR'S OWN OPERATING SYSTEM CALLS EACH PORT, for a box that ships with one. The same rules a NOS vendor's listing states (docs/listing-a-nos.md): `physical` is a placement id or an id a placement presents, with `{n}` over `range`; `name` is the interface name, with `{n}` or arithmetic on it. The DCIM export of the hardware's own device type names each interface by the rule that names its id, and by the faceplate id where no rule does. Two connectors of one interface take one name and export once. A listing's own `interfaces` still decide that listing's document. Changing a name is a major bump: a DCIM that imported the type holds the old one.",
+   "items": {
+    "type": "object",
+    "required": [
+     "physical",
+     "name"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "physical": {
+      "type": "string",
+      "description": "physical id or pattern, e.g. 'port-{n}'"
+     },
+     "name": {
+      "type": "string",
+      "description": "NOS interface name pattern, e.g. 'swp{n}' or 'Ethernet{(n-1)*4}'"
+     },
+     "range": {
+      "type": "string",
+      "description": "e.g. '1-32'; omit for single"
+     },
+     "breakout": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+       "modes": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       "child-name": {
+        "type": "string",
+        "description": "pattern for breakout children"
+       }
+      }
+     }
+    }
+   }
+  },
   "gaps": {
    "type": "array",
    "description": "unknowns no rule can ever find, because the manifest looks complete. 'The HIG has no port-lamp table' is a fact about a DOCUMENT, not about this file, and only someone who read the source knows it. Detectable gaps - a port with no media, an indicator with no `for:` - are derived from the lint rules at build time and must NOT be listed here: a hand-kept list of machine-findable problems goes stale the first time someone fixes one. Declare the unknowns, derive the rest.",

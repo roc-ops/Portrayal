@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ais800-64d
-version: 3.0.3
+version: 3.0.4
 maturity: modelled
 manufacturer: Edgecore
 model: AIS800-64D
@@ -263,6 +263,12 @@ provenance:
       the AC unit, which was the airflow rule reaching one part further than its evidence. THE TWO BUILDS
       ARE DERATED DIFFERENTLY: front-to-back 0-40 C and back-to-front 0-35 C, "subject to used optics",
       both at 1800 m.
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      the quick start guide fixes the grounding wire to the grounding point on the rear panel with two
+      M6 screws and washers through one grounding lug (Panduit LCDXN2-14AF-E or an equivalent): the
+      `stud-size` of ground-screw-1 and ground-screw-2.
 attrs:
   environmental:
     operating-temp: 0 to 40 C (front-to-back); 0 to 35 C (back-to-front), subject to used optics
@@ -1875,8 +1881,8 @@ views:
         - edgecore/fan-2u-1x1sn@1
         default: edgecore/fan-2u-1x1sn@1
       placements:
-      - {ref: common/ground-lug@1, id: ground-screw-1, at: [3.7, 32.8], group: mgmt, rel-pos: 7, for: chassis}
-      - {ref: common/ground-lug@1, id: ground-screw-2, at: [3.9, 49.0], group: mgmt, rel-pos: 8, for: chassis}
+      - {ref: common/ground-lug@1, id: ground-screw-1, at: [3.7, 32.8], group: mgmt, rel-pos: 7, for: chassis, attrs: {stud-size: M6}}
+      - {ref: common/ground-lug@1, id: ground-screw-2, at: [3.9, 49.0], group: mgmt, rel-pos: 8, for: chassis, attrs: {stud-size: M6}}
     regions:
     - id: power
       at: [14.5, 4.0]

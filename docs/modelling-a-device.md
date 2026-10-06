@@ -509,6 +509,25 @@ present them (L105). Breakout is different and stays a description on one
 interface: it is a mode a port is configured into, not two ports that always
 exist.
 
+A box that ships with its maker's own operating system says what that system
+calls each port, in a top-level `interfaces:` block shaped like a
+[listing's](listing-a-nos.md):
+
+```yaml
+interfaces:
+- {physical: 'port-{n}', name: 'Ethernet1/{n}', range: '1-54'}
+- {physical: mgmt-rj45, name: mgmt0}
+- {physical: mgmt-sfp, name: mgmt0}
+```
+
+The hardware's own DCIM device type then names each interface by its rule, and
+by its faceplate id where no rule names it. Two connectors of one interface
+take one name and export once. Cite where the names are stated, as for any
+other fact, and leave the block out where nothing states them. A name is what
+a DCIM holds after import, so changing one is a major bump. A white box that
+runs other vendors' systems has no block; each NOS vendor's listing names its
+ports.
+
 A line card says the same thing on a part. The FELT-B numbers its 18 cages'
 ports 1 to 36, with a CSFP taking both of a cage's pair and an SFP only the odd
 one, so each cage part carries `interfaces: [port-1, port-2]` and the module

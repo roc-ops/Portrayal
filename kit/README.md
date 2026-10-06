@@ -62,7 +62,7 @@ jsDelivr with `?dist=cdn` (and `&index=<version>`).
 | `share.js` | GLB and USDZ export |
 | `gif.js` | GIF capture |
 | `swap.js` | swapping a component into a bay |
-| `fields.js` | writing a field on a part at runtime - its text and its colour, the build's rule, for 2D and 3D alike |
+| `fields.js` | writing a field on a part at runtime - its text and its colour, the build's rule, for 2D and 3D alike; and what a form of a part's fields needs: its rows (`fieldRows`), whether a value is one the field takes (`fieldAccepts`), and the `fields=` location string (`encodeFields`, `decodeFields`) |
 | `devsel.js` | device selection and filtering - hardware by its maker, and each NOS vendor's listings under that vendor (`listings.json`, #709) |
 | `nosnames.js` | what the chosen listing's NOS calls each port (`swp7`, `Ethernet24`, `ge100-0/0/7`), expanded by the same grammar as the DCIM export (#712) |
 | `dist.js` | artifact fetching, and where each file is: a build directory or the npm packages |

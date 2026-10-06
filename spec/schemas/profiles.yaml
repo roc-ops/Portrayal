@@ -128,3 +128,21 @@ profiles:
         any-of: [power-max-w, power-max-ac-w, power-max-dc-w]
       - section: environmental
         any-of: [operating-temp, operating-temp-f2b, operating-temp-b2f]
+
+  power:
+    description: >-
+      power distribution - a breaker or fuse panel, a distribution bay. The box
+      passes current and protects circuits; it forwards nothing and computes
+      nothing, so no `performance` and no `platform` section is owed, the same
+      argument `optical` makes for cpu and memory. WHAT IT OWES IS ITS INPUT
+      RATING, because that is the figure a panel is bought on, and its own draw
+      where it has any - an alarm card or a monitoring controller - which is
+      small and is what `power-max-w` holds here. The power a panel CARRIES is
+      not a draw and must not be written as one.
+    requires:
+      - section: power
+        any-of: [input-dc, input-ac]
+      - section: power
+        any-of: [power-max-w, power-max-ac-w, power-max-dc-w]
+      - section: environmental
+        any-of: [operating-temp, operating-temp-f2b, operating-temp-b2f]

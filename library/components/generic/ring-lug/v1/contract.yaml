@@ -1,0 +1,179 @@
+format: 1
+kind: component
+name: ring-lug
+version: 1.0.0
+class: port
+mates: terminal-stud
+conforms: ring-lug
+profile: networking
+description: >-
+  A one-hole insulated ring terminal crimped on its wire, seen in plan as a
+  front elevation sees it landed on a terminal screw: the ring tongue, the
+  blue sleeve over the crimp barrel, a short straight stub of insulated wire
+  leaving the sleeve in the plane of the face, and the head of the screw that
+  holds it. Seats on a `terminal-stud` terminal at the centre of its stud
+  hole; the wire leaves from the far end of the stub. It is a nominal lug
+  chosen for the library, for 16 to 14 AWG wire, and not the lug of any one
+  device.
+size: {w: 5.5, h: 27.4}
+size-confidence: {w: datasheet, h: estimated}
+size-notes: >-
+  the width is the tongue width B of the JST FV2-MS3; the height is that
+  terminal's overall length L, 17.4, and the 10 stub of wire, a rule and not a
+  reading
+attrs: {media: ring-lug, connector: terminal-stud}
+fields:
+  wire-color: {label: Wire colour, type: text, default: '#1c1c1c'}
+  barrel-color: {label: Sleeve colour, type: text, default: '#3250d2'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    datasheet - registry `ring-lug`. JST solderless terminals catalogue, RING
+    TONGUE (R type) Vinyl-insulated (flared), sheet of 23-06-08, the FV2-MS3
+    row: tongue width B 5.5 and overall length L 17.4. The other 10 of the
+    height is the stub of wire (provenance.wire).
+  nominal: >-
+    A NOMINAL LUG CHOSEN FOR THE LIBRARY, NOT A FIGURE FROM ANY PLACING
+    DEVICE. The library treats a screw or stud terminal a lug lands on as one
+    connector, `terminal-stud`. THE SCREW SIZE IS NOT DOCUMENTED FOR ANY
+    DEVICE THAT PLACES A BARRIER BLOCK: the Edgecore CSR180 and CSR200 quick
+    start guides list four ring lugs in the package, picture them with blue
+    sleeves, call for #14 AWG / 1.5 mm2 wire and give a torque, and state no
+    screw; no installation guide is held for the Telco Systems TM-8104 and
+    TM-8106, whose data sheets say only that the supply is 24 or -48 VDC. So
+    the lug is chosen by what those documents do fix: the wire range, 16 to
+    14 AWG, and a tongue no wider than the 6.0 pole window of
+    common/dc-terminal-24@1. The FV2-MS3 is the one terminal on the sheet for
+    that wire range with a tongue under 6.0; it is listed for an American 3-4
+    or metric 3 stud. The forms for a 5-6 or 3.5 stud are 6.4 wide and more.
+    THAT THIS IS THE RIGHT LUG FOR A GIVEN TERMINAL IS NOT CLAIMED.
+  media: >-
+    `ring-lug`, and the registry key is the same. Lint L62 reads a `class:
+    port` part's media and every `conforms:` value, with its leading segment,
+    as a connector word; `ring-lug` and `ring` open no placement id in the
+    library, where `lug`, `stud`, `screw`, `ground` and `terminal` do.
+  no-depth: >-
+    NO `size.d`, DELIBERATELY, as on generic/dc-barrel-plug@1. The sleeve
+    diameter is in the registry entry and what stands in front of the
+    terminal is in the relief below, but a `size.d` on a component with no
+    `behaviour` compiles to `data-depth`, and the kit builds that as a pit
+    behind the whole box of the part.
+  orientation: >-
+    THE WIRE LEAVES DOWNWARD in the lug's own unrotated frame, the ring at
+    the top. A seat applies its host's turn to the lug and A CONFIGURATION
+    CANNOT TURN AN OCCUPANT ON ITS OWN: `occupants:` carries a ref, an id,
+    attrs and a skin. On the barrier blocks the wires do leave downward. On a
+    terminal where the direction is the installer's choice, the lug follows
+    the host.
+  seated-depth: >-
+    THE LUG LIES ON THE HEAD OF THE HOST'S SCREW, NOT UNDER IT, AND THAT IS
+    KNOWN TO BE WRONG BY THE HEIGHT OF THAT HEAD. A real lug lies on the pole
+    with the screw through its hole. Seated so on common/dc-terminal-24@1 the
+    tongue, 7.9 to 8.7 off the face of the block, would run from 4.15 to 5.6
+    below the screw axis through the block's bottom lip, which is built to
+    9.0; on common/dc-terminal-27@1 the tongue at 9.0 to 9.8 would run from
+    4.55 to 5.6 below the axis through a lip built to 10.2. The lips are
+    estimates and the Edgecore guides draw the poles open at the bottom, but
+    no block is changed here. So the seat presents at the top of its screw
+    head, 9.1 and 10.4 off those faces, the whole lug stands above the lips,
+    and the host's head is hidden under the tongue. The tongue is therefore
+    1.2 or 1.4 higher than it should be.
+  frame: >-
+    THE RELIEF IS MEASURED FROM THE LIFT THE HOST PRESENTS, the frame
+    generic/usb-a-plug@1 documents: 0 here is the top of the host's screw
+    head.
+  tongue: >-
+    datasheet and scaled - JST FV2-MS3: tongue width B 5.5, stud hole d2 3.2,
+    material thickness T 0.8. The hole centre is half of B from the tip. The
+    drawing gives F, hole centre to the sleeve, as 5.6; the tongue is drawn
+    to 5.65 so that the sleeve ends at L (17.4 - 9.0 - 2.75). The neck is
+    SCALED from the catalogue drawing: it narrows to about 3.3 where it
+    enters the sleeve.
+  sleeve: >-
+    datasheet - JST FV2-MS3: the vinyl sleeve is 9.0 long and 4.5 in
+    diameter (D), the flared end. It is built as a plain tube 4.5 across; the
+    flare and the narrower waist over the crimp are not built. ITS UNDERSIDE
+    IS BUILT LEVEL WITH THE UNDERSIDE OF THE TONGUE, an estimate: the
+    catalogue draws the terminal in plan only, and a sleeve centred on the
+    tongue would hang 1.85 below it, into the lip of the block.
+  sleeve-colour: >-
+    a FIELD, `barrel-color`. The default is the blue the Edgecore CSR180 and
+    CSR200 quick start guides picture the four supplied ring lugs in, sampled
+    from the package contents picture on p.1 of each. The JST sheet lists
+    blue as the colour of the whole 16 to 14 AWG range.
+  wire: >-
+    estimated - A STRAIGHT RUN OF WIRE 10 LONG from the end of the sleeve, IN
+    THE PLANE OF THE FACE. The stub rule of docs/connectors-coax-design.md
+    section 5 gives a cable end 30, and was written for a stub that points at
+    the viewer, where its length hides nothing. A stub lying in the plane of
+    the face covers what is beside the terminal: 30 runs far past the lower
+    edge of a 1RU chassis and across the supply below on a two-supply shelf.
+    So a stub in the plane of the face is 10. The bend is the installation.
+    It is built concentric with the sleeve.
+  wire-od: >-
+    datasheet, AND NOT A FIELD - 3.0: the approximate outside diameter the
+    Waskoenig+Walter H07V-K data sheet (status 05.10.2026), p.2, lists for
+    1.5 mm2, the wire the Edgecore guides call for (#14 AWG / 1.5 mm2) and
+    the default of the terminal plugs. A WIRE LYING IN THE PLANE OF THE FACE
+    CANNOT TAKE A SIZE FIELD TODAY: the one size binding, `data-r-from`, sets
+    the radius of a circle, and this stub is a rectangle in plan built as a
+    `bar`, whose diameter is the figure written in the relief below. A field
+    would need a binding that sets a rectangle's width and a `bar` that reads
+    its diameter from its node. A ring terminal is made for one wire range,
+    so another wire is in any case another lug.
+  wire-colour: >-
+    a FIELD, `wire-color`. Black is the default, as on the other cable ends;
+    no held source states a colour.
+  head: >-
+    estimated - THE LUG DRAWS THE HEAD OF THE SCREW THAT HOLDS IT, because
+    the host's own head is under the tongue. It is drawn 3.8 across and 1.4
+    high with a slot, borrowed from common/terminal-screw-38@1, the larger of
+    the two host screws, itself an estimate. It does not change with the
+    host.
+  cable-point: >-
+    `cable` is at the free end of the stub and points down, along the wire.
+    It states no `on:`: that key takes a feature built with `out` or `cyl`,
+    and the wire is a `bar`, so the depth the viewer reads for the cable end
+    is the seat's own, 2.25 below the axis of the wire. Accepted for now: the
+    viewer's routing of cable ends is #805.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on generic/usb-a-plug@1 - every class port
+    contract states none (spec/tests/test_behaviour.py).
+elements: {}
+relief:
+  features:
+    - node: tongue
+      out: 0.8
+      shape: true
+      color: '#c9cdd1'
+      confidence: datasheet
+      source: >-
+        JST solderless terminals catalogue, RING TONGUE (R type)
+        Vinyl-insulated (flared), sheet of 23-06-08: material thickness T 0.8
+        for the FV2 range.
+    - node: head
+      lift: 0.8
+      cyl: 1.4
+      color: '#c3c9cf'
+      confidence: estimated
+      source: >-
+        borrowed in form from common/terminal-screw-38@1, itself an estimate:
+        a slotted head 1.4 high, standing on the tongue (provenance.head).
+    - node: sleeve
+      bar: 4.5
+      confidence: datasheet
+      source: >-
+        JST FV2-MS3: sleeve diameter D 4.5. That its underside is level with
+        the underside of the tongue is an estimate (provenance.sleeve).
+    - node: wire
+      lift: 0.75
+      bar: 3.0
+      confidence: datasheet
+      source: >-
+        Waskoenig+Walter H07V-K data sheet (status 05.10.2026), p.2: outside
+        diameter approximately 3 for 1.5 mm2. The lift centres it on the
+        sleeve (provenance.wire).
+connection-points:
+  mate: {at: [2.75, 2.75], direction: front}
+  cable: {at: [2.75, 27.4], direction: down}
+skins: [default]

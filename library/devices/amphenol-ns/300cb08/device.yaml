@@ -1,0 +1,502 @@
+format: 1
+kind: device
+name: 300cb08
+version: 1.0.2
+maturity: modelled
+manufacturer: Amphenol Network Solutions
+model: 300CB08
+description: >-
+  1RU dual-feed DC circuit breaker panel. Two electrically isolated sides, A
+  and B, each fed at up to 325 A and each distributing to eight plug-in
+  breaker positions of up to 60 A. This is the plain 300CB08: vertical
+  dual-stud inputs and screw terminal-block outputs at the rear, a passive
+  alarm card, and no circuit monitoring. Universal ±12, ±24 and ±48 V DC.
+profile: power
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      FROM THE DIMENSIONED VIEWS IN SECTION 3 OF THE INSTALLATION GUIDE. The
+      front is P_IG_300CB08 (installation guide 149722-2 A9) Fig. 3-1, the embedded 1189 x 257 image on page 38, and the
+      rear is Fig. 3-6, the embedded 1576 x 243 image on page 39. Both are CAD
+      elevations and both were checked before use: on the front the 19.00 and
+      23.00 inch bracket dimensions and the 17.00 inch body all give 1.9685
+      px/mm, and the body then reads 43.7 high against the 43.9 the side view
+      dimensions. Each image is about 2 to 3 px/mm, so every position taken
+      from them is good to roughly half a millimetre and no better.
+  chassis:
+    confidence: drawing
+    note: >-
+      431.8 wide is the 17.00 inch dimension on Fig. 3-1, between the bracket
+      folds. 43.9 high is the 1.73 inch dimension on the side view; the
+      datasheet rounds the same height to 1.75 inch (44 mm). 330.8 deep is the
+      13.02 inch dimension on the bottom view, Fig. 3-12, front of the metal to
+      the rear; the datasheet gives 13.0 inch (331 mm). The same view gives
+      345.5 overall, the extra 14.7 being the front cover and breaker guards
+      standing proud of the chassis front.
+  ears:
+    confidence: drawing
+    note: >-
+      NOT DRAWN. The panel ships with separate 19 inch and 23 inch mounting
+      brackets (PMTG19, PMTG23) that bolt to the sides; Fig. 3-1 dimensions
+      them at 482.6 and 584.2 over the body.
+  front:
+    confidence: drawing
+    note: >-
+      Breaker cells, thumbscrews, lamp holes, switch slots and the designation
+      card slot are measured on Fig. 3-1. Sixteen cells 17.8 x 39.1 on a 19.81
+      pitch (39 px), the first at 14.2 and the ninth at 261.1, which mirror
+      about the centre to a tenth. What is printed on the front comes from the
+      front photograph in the same guide (Fig. 1-1) and its positions are
+      fractions of the centre panel read off that photograph, which is taken
+      from slightly above: the wording is as printed, the positions are
+      approximate. The DC, alarm and electrostatic symbols are drawn as plain
+      strokes in the places the photograph shows them; their exact artwork is
+      not resolved at that size. The front prints in dark ink on the pale
+      panel.
+  lamps:
+    confidence: drawing
+    note: >-
+      Fig. 3-1 draws five lamp holes on a 12.7 pitch. Fig. 2-11 names them for
+      the monitored panel as A PWR, A ALM, nrg, B ALM, B PWR, and section 1.4
+      says the alarm card controls four indicator LEDs on the front. So the
+      plain panel has four lamps in the outer four holes and the centre hole,
+      the nrg position, is not lit. The guide gives the colours in its power-up
+      steps (section 2.2.9): a PWR lamp is green when its feed is present, and
+      an ALM lamp is red when a breaker on that side is off or tripped with its
+      alarm switch enabled. The front photograph shows something in the
+      centre hole too; what fills it is not established.
+  rear:
+    confidence: drawing
+    note: >-
+      Fig. 3-6 at 3.2006 px/mm, scaled on the symmetric extent of the drawing
+      (98 to 1480 px) taken as the 431.8 body, which then reads 43.6 high. The
+      right bracket of that drawing is cropped, so its 19 inch span could not
+      be used as a second check the way the front one was. The outputs are
+      printed 8 to 1 left to right on each bank. As seen from the rear the
+      left bank is side B and the right bank is side A, because side A is on
+      the left of the front.
+  breaker-ratings:
+    confidence: datasheet
+    note: >-
+      ONE MODULE CARRIES ELEVEN RATINGS AS A FIELD. The datasheet sells
+      breakers from 2 A to 60 A as eleven part numbers that differ in nothing
+      but the figure printed on the handle, so they are one part with a
+      `rating` field, set per position in a configuration. Each breaker ships
+      with a touch guard seated on it, a separate part that a configuration
+      can take off. The populated
+      example is an invented load to show the field working; the vendor
+      publishes no standard fill.
+  ratings:
+    confidence: datasheet
+    note: >-
+      The datasheet gives the maximum input load as 325A @ 45 C per panel. The
+      installation guide prints the same row with its de-rating: 325A @45 C per
+      panel (De-rated to 200A @70 C). That is the only temperature either
+      document states for the panel, so it is what `operating-temp` carries: a
+      ceiling with its two rating points, and no lower limit.
+  front-cover:
+    confidence: drawing
+    note: >-
+      THE FRONT FACE IS A REMOVABLE COVER. The guide has a procedure for it
+      (section 2.2.7): two thumbscrews release a bar that spans the front, with
+      sixteen openings the breaker guards show through and the lamps, switch
+      slots and card slot in its centre. It is drawn as the panel, not as a
+      part, because the panel is never seen without it in service and the
+      breakers, not the cover, are what a position holds. The slot under the
+      lamps is the designation card holder the datasheet lists.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      searched 2026-10-05 for an end-of-life, end-of-sale or discontinuation
+      notice for the 300CB08 and found none; the vendor product page lists it
+      as current. The installation guide marks a different part, the original
+      nrg300CB08, as EOL and replaced by the -SENS and -CTRL versions.
+  rear-cover:
+    confidence: datasheet
+    note: >-
+      NOT DRAWN. A clear polycarbonate cover closes the whole rear over the
+      input and output terminals (datasheet, Primary Features; guide Fig.
+      2-20). It is transparent and everything behind it is what the rear view
+      shows.
+  envelope-faces:
+    confidence: drawing
+    note: >-
+      Top, bottom, left and right are sized from the chassis. The bottom vent
+      fields and its two ground bolts are placed from Fig. 3-12 at 1.336 px/mm,
+      a coarse reading. The top is given the same two side fields the
+      photographs show running the depth of the lid; their extent is estimated.
+      The sides are placed from the side view, Fig. 3-4, at 1.717 px/mm: four
+      bracket holes 29.1 apart starting 11.1 from the front, and a two-bolt
+      ground landing 268.8 from the front. THE GROUND BOLTS ARE DRAWN ON THE
+      STATED 5/8 INCH CENTRES, 15.9 apart, not the 18.3 the drawing measures,
+      because the callout states the figure and the drawing is coarse. Each
+      side carries one landing and the bottom a third; the guide says only one
+      ground connection is required.
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      the installation guide's specifications give the earth ground terminals as
+      three sets of 1/4-20 threaded holes on 5/8 inch centres, bolted with washers
+      to 50 in-lb, for a dual-hole compression lug on #6 to #1 AWG wire; its
+      description says they take either a dual-hole or a single-hole lug and that
+      only one ground connection is required: the `stud-size` of all six ground
+      placements, two on each side and two on the bottom.
+attrs:
+  physical:
+    weight-empty-kg: 5.44
+    weight-configured-kg: 7.71
+    weight-configured-scope: populated, 17.0 lb in the datasheet; unpopulated is 12.0 lb
+    overall-mm: 431.8 x 44 x 331 without brackets (17 x 1.75 x 13.0 in)
+    mounting: 19 inch and 23 inch brackets included
+  power:
+    input-voltage: ±12 VDC, ±24 VDC and ±48 VDC nominal
+    input-dc: dual feed; maximum input load 325 A at 45 C per panel, de-rated to 200 A at 70 C; input wire 2/0 AWG to 350 MCM
+    short-circuit-withstand-a: 5000
+    output-breaker-max: 60 A single-pole; the UL rating holds to 48 A continuous per output
+    input-interrupt-max: 125 percent of the panel rating
+    power-max-w: 1.44
+    power-max-scope: >-
+      the alarm card alone at 48 V (30 mA); 0.48 W at 24 V and 0.22 W at 12 V.
+      It is the only thing in the panel that draws. Separately the guide gives
+      a nominal power LOSS of less than 45 W per side at 325 A and 48 V, which
+      is heat in the conductors and not a draw.
+  thermal:
+    cooling: passive, perforated lid and base
+  environmental:
+    operating-temp: to 70 C - 325 A per panel at 45 C, de-rated to 200 A at 70 C; no lower limit is stated
+  management:
+    alarm-contacts: Form C relay per side, 2 A at 30 VDC and 0.6 A at 60 VDC, on wire-wrap terminals
+  compliance:
+    safety: UL Listed
+    nebs: Level 3
+  lifecycle:
+    eol: none-announced
+chassis: {width: 431.8, height: 43.9, depth: 330.8, ru: 1, color: '#e6e4de', airflow: passive, weight-kg: 5.44}
+gaps:
+- what: input-polarity
+  scope: [rear]
+  reason: vendor-silent
+  note: >-
+    each feed is two stud terminals, one BATT and one RTN, and no drawing or
+    sentence held says which is the outer one: the input-lug figure of the
+    guide (Fig. 2-7) carries no legend, and its rear photograph prints BATT and
+    RTN beside the output rows only. Each side is one part, `input-a` and
+    `input-b`, whose two terminals are `terminal-1` and `terminal-2` by
+    position, not by polarity.
+  wanted: a rear photograph that resolves the input legends, or the panel itself.
+- what: fuse-holder-face
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    the TPA fuse holder, part 307492, is seated from three-quarter views only:
+    its face is placed by eye and its size is borrowed from the breaker whose
+    position it fits.
+  wanted: a face-on, dimensioned view of 307492.
+groups:
+  breakers-a: {term: Position, role: traffic, index-origin: 1, description: 'side A breaker positions, numbered 1 to 8 left to right'}
+  breakers-b: {term: Position, role: traffic, index-origin: 1, description: 'side B breaker positions; the panel prints POS 1 at the centre end and POS 8 at the right'}
+  status: {term: LED, role: indicator, index-origin: 1}
+  alarm-enable: {term: Switch, role: management, index-origin: 1, description: 'one eight-way DIP switch per side; a switch enables the alarm for the breaker position of the same number'}
+  cover: {term: Screw, role: furniture, index-origin: 1}
+  outputs-a: {term: Output, role: traffic, index-origin: 1}
+  outputs-b: {term: Output, role: traffic, index-origin: 1}
+  feeds: {term: Input, role: service, index-origin: 1, description: 'one feed per side, A and B, each a BATT and an RTN stud terminal; which terminal is which is a recorded gap'}
+  alarms: {term: Alarm, role: management, index-origin: 1}
+  grounding: {term: Ground, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 431.8, h: 43.9}
+    panel:
+      decor:
+      - {at: [0, 0], size: [431.8, 43.9], fill: '#e6e4de'}
+      - {at: [13.2, 1.5], size: [158.5, 41.1], fill: '#0e0f10'}
+      - {at: [260.1, 1.5], size: [158.5, 41.1], fill: '#0e0f10'}
+      - {at: [185.9, 36.6], size: [60.0, 2.5], fill: '#3a3c3e'}
+      - {at: [214.0, 28.8], size: [4.4, 4.4], fill: '#9a9c9d', rx: 2.2}
+    silkscreen:
+      - {at: [6.4, 10.5], text: 'A', font-size: 7.5, anchor: middle, for: chassis, fill: '#2b2d30'}
+      - {at: [6.4, 31.0], text: '325A', font-size: 1.6, anchor: middle, for: chassis, fill: '#2b2d30'}
+      - {at: [6.4, 33.0], text: 'INPUT', font-size: 1.6, anchor: middle, for: chassis, fill: '#2b2d30'}
+      - {at: [6.4, 40.5], text: 'POS 1', font-size: 1.8, anchor: middle, for: breaker-a1, fill: '#2b2d30'}
+      - {at: [425.4, 10.5], text: 'B', font-size: 7.5, anchor: middle, for: chassis, fill: '#2b2d30'}
+      - {at: [425.4, 31.0], text: '325A', font-size: 1.6, anchor: middle, for: chassis, fill: '#2b2d30'}
+      - {at: [425.4, 33.0], text: 'INPUT', font-size: 1.6, anchor: middle, for: chassis, fill: '#2b2d30'}
+      - {at: [425.4, 40.5], text: 'POS 8', font-size: 1.8, anchor: middle, for: breaker-b8, fill: '#2b2d30'}
+      - {at: [176.5, 8.0], text: 'Amphenol', font-size: 5.2, anchor: start, for: chassis, fill: '#2b2d30'}
+      - {at: [176.7, 11.0], text: 'NETWORK SOLUTIONS', font-size: 1.5, anchor: start, for: chassis, fill: '#2b2d30'}
+      - {at: [255.0, 7.0], text: '300CB08', font-size: 2.6, anchor: end, for: chassis, fill: '#2b2d30'}
+      - {at: [216.2, 15.0], text: '±12/24/48', font-size: 2.6, anchor: middle, for: chassis, fill: '#2b2d30'}
+      - {at: [214.6, 18.2], text: 'V', font-size: 2.6, anchor: middle, for: chassis, fill: '#2b2d30'}
+      - {id: dc-rating, at: [215.8, 16.7], path: 'M 0 0 H 3.0 M 0 1.1 H 0.8 M 1.1 1.1 H 1.9 M 2.2 1.1 H 3.0', stroke-width: 0.3, for: chassis, fill: '#2b2d30'}
+      - {at: [187.4, 20.2], text: '1', font-size: 2.2, anchor: middle, for: dip-a, fill: '#2b2d30'}
+      - {at: [206.3, 20.2], text: '8', font-size: 2.2, anchor: middle, for: dip-a, fill: '#2b2d30'}
+      - {at: [225.5, 20.2], text: '1', font-size: 2.2, anchor: middle, for: dip-b, fill: '#2b2d30'}
+      - {at: [244.4, 20.2], text: '8', font-size: 2.2, anchor: middle, for: dip-b, fill: '#2b2d30'}
+      - {id: dc-a, at: [183.5, 30.45], path: 'M 0 0 H 3.0 M 0 1.1 H 0.8 M 1.1 1.1 H 1.9 M 2.2 1.1 H 3.0', stroke-width: 0.35, for: led-a-pwr, fill: '#2b2d30'}
+      - {id: alm-a, at: [197.2, 29.35], path: 'M 0 0 L 1.9 3.3 H -1.9 Z M 0 1.1 V 2.2 M 0 2.6 V 2.75', stroke-width: 0.35, for: led-a-alm, fill: '#2b2d30'}
+      - {id: alm-b, at: [235.2, 29.35], path: 'M 0 0 L 1.9 3.3 H -1.9 Z M 0 1.1 V 2.2 M 0 2.6 V 2.75', stroke-width: 0.35, for: led-b-alm, fill: '#2b2d30'}
+      - {id: dc-b, at: [245.9, 30.45], path: 'M 0 0 H 3.0 M 0 1.1 H 0.8 M 1.1 1.1 H 1.9 M 2.2 1.1 H 3.0', stroke-width: 0.35, for: led-b-pwr, fill: '#2b2d30'}
+      - {id: esd-mark, at: [252.5, 21.5], path: 'M 0 0 L 2.6 4.5 H -2.6 Z', stroke-width: 0.4, for: chassis, fill: '#2b2d30'}
+      - {at: [174.5, 41.8], text: 'POS 8', font-size: 2.0, anchor: start, for: breaker-a8, fill: '#2b2d30'}
+      - {at: [258.0, 41.8], text: 'POS 1', font-size: 2.0, anchor: end, for: breaker-b1, fill: '#2b2d30'}
+    components:
+      bays:
+        - {id: breaker-a1, at: [14.2, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+           default: amphenol-ns/breaker-blank-1ru@1, group: breakers-a, rel-pos: 1}
+        - {id: breaker-a2, at: [34.01, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+           default: amphenol-ns/breaker-blank-1ru@1, group: breakers-a, rel-pos: 2}
+        - {id: breaker-a3, at: [53.82, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+           default: amphenol-ns/breaker-blank-1ru@1, group: breakers-a, rel-pos: 3}
+        - {id: breaker-a4, at: [73.63, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+           default: amphenol-ns/breaker-blank-1ru@1, group: breakers-a, rel-pos: 4}
+        - {id: breaker-a5, at: [93.44, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+           default: amphenol-ns/breaker-blank-1ru@1, group: breakers-a, rel-pos: 5}
+        - {id: breaker-a6, at: [113.25, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+           default: amphenol-ns/breaker-blank-1ru@1, group: breakers-a, rel-pos: 6}
+        - {id: breaker-a7, at: [133.06, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+           default: amphenol-ns/breaker-blank-1ru@1, group: breakers-a, rel-pos: 7}
+        - {id: breaker-a8, at: [152.87, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+           default: amphenol-ns/breaker-blank-1ru@1, group: breakers-a, rel-pos: 8}
+        - {id: breaker-b1, at: [261.1, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+           default: amphenol-ns/breaker-blank-1ru@1, group: breakers-b, rel-pos: 1}
+        - {id: breaker-b2, at: [280.91, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+           default: amphenol-ns/breaker-blank-1ru@1, group: breakers-b, rel-pos: 2}
+        - {id: breaker-b3, at: [300.72, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+           default: amphenol-ns/breaker-blank-1ru@1, group: breakers-b, rel-pos: 3}
+        - {id: breaker-b4, at: [320.53, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+           default: amphenol-ns/breaker-blank-1ru@1, group: breakers-b, rel-pos: 4}
+        - {id: breaker-b5, at: [340.34, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+           default: amphenol-ns/breaker-blank-1ru@1, group: breakers-b, rel-pos: 5}
+        - {id: breaker-b6, at: [360.15, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+           default: amphenol-ns/breaker-blank-1ru@1, group: breakers-b, rel-pos: 6}
+        - {id: breaker-b7, at: [379.96, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+           default: amphenol-ns/breaker-blank-1ru@1, group: breakers-b, rel-pos: 7}
+        - {id: breaker-b8, at: [399.77, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+           default: amphenol-ns/breaker-blank-1ru@1, group: breakers-b, rel-pos: 8}
+      placements:
+        - {id: thumbscrew-left, ref: amphenol-ns/cover-thumbscrew@1, at: [1.55, 17.35], group: cover, rel-pos: 1}
+        - {id: thumbscrew-right, ref: amphenol-ns/cover-thumbscrew@1, at: [420.55, 17.35], group: cover, rel-pos: 2}
+        - {id: dip-a, for: chassis, ref: amphenol-ns/alarm-dip-8@1, at: [185.9, 21.3], group: alarm-enable, rel-pos: 1}
+        - {id: dip-b, for: chassis, ref: amphenol-ns/alarm-dip-8@1, at: [224.0, 21.3], group: alarm-enable, rel-pos: 2}
+        - {id: led-a-pwr, for: chassis, ref: common/led-indicator@1, at: [188.8, 29.0], group: status, rel-pos: 1, states: ['off', {name: ok, color: '#22c55e'}]}
+        - {id: led-a-alm, for: chassis, ref: common/led-indicator@1, at: [201.5, 29.0], group: status, rel-pos: 2, states: ['off', {name: fault, color: '#ef4444'}]}
+        - {id: led-b-alm, for: chassis, ref: common/led-indicator@1, at: [226.9, 29.0], group: status, rel-pos: 3, states: ['off', {name: fault, color: '#ef4444'}]}
+        - {id: led-b-pwr, for: chassis, ref: common/led-indicator@1, at: [239.6, 29.0], group: status, rel-pos: 4, states: ['off', {name: ok, color: '#22c55e'}]}
+  rear:
+    size: {w: 431.8, h: 43.9}
+    panel:
+      decor:
+      - {at: [0, 0], size: [431.8, 43.9], fill: '#e6e4de'}
+      - {at: [65.6, 0.5], size: [129.7, 42.9], fill: '#1b1d20'}
+      - {at: [236.5, 0.5], size: [129.7, 42.9], fill: '#1b1d20'}
+    silkscreen:
+      - {at: [79.88, 3.6], text: '8', font-size: 2.2, anchor: middle, for: output-b8}
+      - {at: [94.62, 3.6], text: '7', font-size: 2.2, anchor: middle, for: output-b7}
+      - {at: [109.38, 3.6], text: '6', font-size: 2.2, anchor: middle, for: output-b6}
+      - {at: [124.12, 3.6], text: '5', font-size: 2.2, anchor: middle, for: output-b5}
+      - {at: [138.88, 3.6], text: '4', font-size: 2.2, anchor: middle, for: output-b4}
+      - {at: [153.62, 3.6], text: '3', font-size: 2.2, anchor: middle, for: output-b3}
+      - {at: [168.38, 3.6], text: '2', font-size: 2.2, anchor: middle, for: output-b2}
+      - {at: [183.12, 3.6], text: '1', font-size: 2.2, anchor: middle, for: output-b1}
+      - {at: [250.78, 3.6], text: '8', font-size: 2.2, anchor: middle, for: output-a8}
+      - {at: [265.52, 3.6], text: '7', font-size: 2.2, anchor: middle, for: output-a7}
+      - {at: [280.27, 3.6], text: '6', font-size: 2.2, anchor: middle, for: output-a6}
+      - {at: [295.02, 3.6], text: '5', font-size: 2.2, anchor: middle, for: output-a5}
+      - {at: [309.77, 3.6], text: '4', font-size: 2.2, anchor: middle, for: output-a4}
+      - {at: [324.52, 3.6], text: '3', font-size: 2.2, anchor: middle, for: output-a3}
+      - {at: [339.27, 3.6], text: '2', font-size: 2.2, anchor: middle, for: output-a2}
+      - {at: [354.02, 3.6], text: '1', font-size: 2.2, anchor: middle, for: output-a1}
+      - {at: [192.7, 13.6], text: 'BATT', font-size: 2.0, anchor: middle, rotate: 90, for: output-b1}
+      - {at: [192.7, 30.2], text: 'RTN', font-size: 2.0, anchor: middle, rotate: 90, for: output-b1}
+      - {at: [239.2, 13.6], text: 'BATT', font-size: 2.0, anchor: middle, rotate: 90, for: output-a8}
+      - {at: [239.2, 30.2], text: 'RTN', font-size: 2.0, anchor: middle, rotate: 90, for: output-a8}
+    components:
+      placements:
+        - {id: input-b, ref: amphenol-ns/input-feed-studs@1, at: [0.2, 1.45], group: feeds, rel-pos: 2}
+        - {id: input-a, ref: amphenol-ns/input-feed-studs@1, at: [367.5, 1.45], group: feeds, rel-pos: 1}
+        - {id: output-b8, ref: amphenol-ns/output-terminal@1, at: [72.5, 5.1], group: outputs-b, rel-pos: 8}
+        - {id: output-b7, ref: amphenol-ns/output-terminal@1, at: [87.25, 5.1], group: outputs-b, rel-pos: 7}
+        - {id: output-b6, ref: amphenol-ns/output-terminal@1, at: [102.0, 5.1], group: outputs-b, rel-pos: 6}
+        - {id: output-b5, ref: amphenol-ns/output-terminal@1, at: [116.75, 5.1], group: outputs-b, rel-pos: 5}
+        - {id: output-b4, ref: amphenol-ns/output-terminal@1, at: [131.5, 5.1], group: outputs-b, rel-pos: 4}
+        - {id: output-b3, ref: amphenol-ns/output-terminal@1, at: [146.25, 5.1], group: outputs-b, rel-pos: 3}
+        - {id: output-b2, ref: amphenol-ns/output-terminal@1, at: [161.0, 5.1], group: outputs-b, rel-pos: 2}
+        - {id: output-b1, ref: amphenol-ns/output-terminal@1, at: [175.75, 5.1], group: outputs-b, rel-pos: 1}
+        - {id: output-a8, ref: amphenol-ns/output-terminal@1, at: [243.4, 5.1], group: outputs-a, rel-pos: 8}
+        - {id: output-a7, ref: amphenol-ns/output-terminal@1, at: [258.15, 5.1], group: outputs-a, rel-pos: 7}
+        - {id: output-a6, ref: amphenol-ns/output-terminal@1, at: [272.9, 5.1], group: outputs-a, rel-pos: 6}
+        - {id: output-a5, ref: amphenol-ns/output-terminal@1, at: [287.65, 5.1], group: outputs-a, rel-pos: 5}
+        - {id: output-a4, ref: amphenol-ns/output-terminal@1, at: [302.4, 5.1], group: outputs-a, rel-pos: 4}
+        - {id: output-a3, ref: amphenol-ns/output-terminal@1, at: [317.15, 5.1], group: outputs-a, rel-pos: 3}
+        - {id: output-a2, ref: amphenol-ns/output-terminal@1, at: [331.9, 5.1], group: outputs-a, rel-pos: 2}
+        - {id: output-a1, ref: amphenol-ns/output-terminal@1, at: [346.65, 5.1], group: outputs-a, rel-pos: 1}
+        - {id: alarm-card, ref: amphenol-ns/alarm-card-307608@1, at: [196.5, 0.5], group: alarms, rel-pos: 1}
+  top:
+    size: {w: 431.8, h: 330.8}
+    panel:
+      decor:
+      - {at: [0, 0], size: [431.8, 330.8], fill: '#e6e4de'}
+      - {at: [9.0, 20.0], size: [167.0, 280.0], fill: '#d9d7d1'}
+      - {id: vent-top-left, at: [9.0, 20.0], size: [167.0, 280.0], fill: '#3a3c3e', pattern: holes, pattern-pitch: [5.0, 5.0], pattern-offset: [9.0, 20.0], vent: 1.0, confidence: estimated, source: 'the lid is perforated in two fields either side of a solid centre strip in every product photograph; extent, pitch and sheet thickness are not dimensioned in any view'}
+      - {at: [255.8, 20.0], size: [167.0, 280.0], fill: '#d9d7d1'}
+      - {id: vent-top-right, at: [255.8, 20.0], size: [167.0, 280.0], fill: '#3a3c3e', pattern: holes, pattern-pitch: [5.0, 5.0], pattern-offset: [255.8, 20.0], vent: 1.0, confidence: estimated, source: 'the lid is perforated in two fields either side of a solid centre strip in every product photograph; extent, pitch and sheet thickness are not dimensioned in any view'}
+  bottom:
+    size: {w: 431.8, h: 330.8}
+    panel:
+      decor:
+      - {at: [0, 0], size: [431.8, 330.8], fill: '#e6e4de'}
+      - {at: [9.0, 50.0], size: [167.0, 88.0], fill: '#d9d7d1'}
+      - {id: vent-bottom-rear-left, at: [9.0, 50.0], size: [167.0, 88.0], fill: '#3a3c3e', pattern: holes, pattern-pitch: [5.0, 5.0], pattern-offset: [9.0, 50.0], vent: 1.0, confidence: estimated, source: 'extent read off the bottom view, Fig. 3-12, at 1.336 px/mm; the hole pitch and the sheet thickness are not dimensioned'}
+      - {at: [255.8, 50.0], size: [167.0, 88.0], fill: '#d9d7d1'}
+      - {id: vent-bottom-rear-right, at: [255.8, 50.0], size: [167.0, 88.0], fill: '#3a3c3e', pattern: holes, pattern-pitch: [5.0, 5.0], pattern-offset: [255.8, 50.0], vent: 1.0, confidence: estimated, source: 'extent read off the bottom view, Fig. 3-12, at 1.336 px/mm; the hole pitch and the sheet thickness are not dimensioned'}
+      - {at: [9.0, 208.0], size: [167.0, 85.0], fill: '#d9d7d1'}
+      - {id: vent-bottom-front-left, at: [9.0, 208.0], size: [167.0, 85.0], fill: '#3a3c3e', pattern: holes, pattern-pitch: [5.0, 5.0], pattern-offset: [9.0, 208.0], vent: 1.0, confidence: estimated, source: 'extent read off the bottom view, Fig. 3-12, at 1.336 px/mm; the hole pitch and the sheet thickness are not dimensioned'}
+      - {at: [255.8, 208.0], size: [167.0, 85.0], fill: '#d9d7d1'}
+      - {id: vent-bottom-front-right, at: [255.8, 208.0], size: [167.0, 85.0], fill: '#3a3c3e', pattern: holes, pattern-pitch: [5.0, 5.0], pattern-offset: [255.8, 208.0], vent: 1.0, confidence: estimated, source: 'extent read off the bottom view, Fig. 3-12, at 1.336 px/mm; the hole pitch and the sheet thickness are not dimensioned'}
+    components:
+      placements:
+        - {id: ground-bottom-1, ref: common/ground-stud@1, at: [210.9, 56.0], group: grounding, rel-pos: 1, attrs: {stud-size: '1/4-20'}}
+        - {id: ground-bottom-2, ref: common/ground-stud@1, at: [210.9, 71.9], group: grounding, rel-pos: 2, attrs: {stud-size: '1/4-20'}}
+  left:
+    size: {w: 330.8, h: 43.9}
+    panel:
+      decor:
+      - {at: [0, 0], size: [330.8, 43.9], fill: '#e6e4de'}
+      - {id: bracket-hole-1, at: [316.2, 22.1], size: [7.0, 7.0], fill: '#55585b', rx: 3.5}
+      - {id: bracket-hole-2, at: [287.1, 22.1], size: [7.0, 7.0], fill: '#55585b', rx: 3.5}
+      - {id: bracket-hole-3, at: [258.0, 22.1], size: [7.0, 7.0], fill: '#55585b', rx: 3.5}
+      - {id: bracket-hole-4, at: [228.9, 22.1], size: [7.0, 7.0], fill: '#55585b', rx: 3.5}
+    components:
+      placements:
+        - {id: ground-left-1, ref: common/ground-stud@1, at: [57.95, 11.75], group: grounding, rel-pos: 5, attrs: {stud-size: '1/4-20'}}
+        - {id: ground-left-2, ref: common/ground-stud@1, at: [57.95, 27.65], group: grounding, rel-pos: 6, attrs: {stud-size: '1/4-20'}}
+        - {id: ground-left-mark, ref: common/ground-symbol@1, at: [75.0, 18.95], for: ground-left-1, group: grounding, rel-pos: 7}
+  right:
+    size: {w: 330.8, h: 43.9}
+    panel:
+      decor:
+      - {at: [0, 0], size: [330.8, 43.9], fill: '#e6e4de'}
+      - {id: bracket-hole-1, at: [7.6, 22.1], size: [7.0, 7.0], fill: '#55585b', rx: 3.5}
+      - {id: bracket-hole-2, at: [36.7, 22.1], size: [7.0, 7.0], fill: '#55585b', rx: 3.5}
+      - {id: bracket-hole-3, at: [65.8, 22.1], size: [7.0, 7.0], fill: '#55585b', rx: 3.5}
+      - {id: bracket-hole-4, at: [94.9, 22.1], size: [7.0, 7.0], fill: '#55585b', rx: 3.5}
+    components:
+      placements:
+        - {id: ground-right-1, ref: common/ground-stud@1, at: [264.75, 11.75], group: grounding, rel-pos: 3, attrs: {stud-size: '1/4-20'}}
+        - {id: ground-right-2, ref: common/ground-stud@1, at: [264.75, 27.65], group: grounding, rel-pos: 4, attrs: {stud-size: '1/4-20'}}
+        - {id: ground-right-mark, ref: common/ground-symbol@1, at: [249.8, 18.95], for: ground-right-1, group: grounding, rel-pos: 8}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The panel as it ships: no breakers, and a blanking cover over every
+      position. Breakers are sold separately.
+    bays:
+      breaker-a1: amphenol-ns/breaker-blank-1ru@1
+      breaker-a2: amphenol-ns/breaker-blank-1ru@1
+      breaker-a3: amphenol-ns/breaker-blank-1ru@1
+      breaker-a4: amphenol-ns/breaker-blank-1ru@1
+      breaker-a5: amphenol-ns/breaker-blank-1ru@1
+      breaker-a6: amphenol-ns/breaker-blank-1ru@1
+      breaker-a7: amphenol-ns/breaker-blank-1ru@1
+      breaker-a8: amphenol-ns/breaker-blank-1ru@1
+      breaker-b1: amphenol-ns/breaker-blank-1ru@1
+      breaker-b2: amphenol-ns/breaker-blank-1ru@1
+      breaker-b3: amphenol-ns/breaker-blank-1ru@1
+      breaker-b4: amphenol-ns/breaker-blank-1ru@1
+      breaker-b5: amphenol-ns/breaker-blank-1ru@1
+      breaker-b6: amphenol-ns/breaker-blank-1ru@1
+      breaker-b7: amphenol-ns/breaker-blank-1ru@1
+      breaker-b8: amphenol-ns/breaker-blank-1ru@1
+    part-numbers:
+      300CB08: {}
+  populated:
+    kind: example
+    description: >-
+      All sixteen positions fitted with breakers behind their touch guards, as
+      every product photograph shows the panel, with an invented spread of
+      ratings. An illustration, not an orderable bundle.
+    bays:
+      breaker-a1: amphenol-ns/breaker-1ru@1
+      breaker-a2: amphenol-ns/breaker-1ru@1
+      breaker-a3: amphenol-ns/breaker-1ru@1
+      breaker-a4: amphenol-ns/breaker-1ru@1
+      breaker-a5: amphenol-ns/breaker-1ru@1
+      breaker-a6: amphenol-ns/breaker-1ru@1
+      breaker-a7: amphenol-ns/breaker-1ru@1
+      breaker-a8: amphenol-ns/breaker-1ru@1
+      breaker-b1: amphenol-ns/breaker-1ru@1
+      breaker-b2: amphenol-ns/breaker-1ru@1
+      breaker-b3: amphenol-ns/breaker-1ru@1
+      breaker-b4: amphenol-ns/breaker-1ru@1
+      breaker-b5: amphenol-ns/breaker-1ru@1
+      breaker-b6: amphenol-ns/breaker-1ru@1
+      breaker-b7: amphenol-ns/breaker-1ru@1
+      breaker-b8: amphenol-ns/breaker-1ru@1
+    bay-attrs:
+      breaker-a1: {rating: 60}
+      breaker-a2: {rating: 60}
+      breaker-a3: {rating: 50}
+      breaker-a4: {rating: 40}
+      breaker-a5: {rating: 30}
+      breaker-a6: {rating: 30}
+      breaker-a7: {rating: 20}
+      breaker-a8: {rating: 10}
+      breaker-b1: {rating: 60}
+      breaker-b2: {rating: 60}
+      breaker-b3: {rating: 50}
+      breaker-b4: {rating: 40}
+      breaker-b5: {rating: 30}
+      breaker-b6: {rating: 30}
+      breaker-b7: {rating: 20}
+      breaker-b8: {rating: 10}
+  with-fuses:
+    kind: example
+    description: >-
+      Side A on breakers and side B on TPA fuses in their holders, to show the
+      two things a position takes. An illustration; the vendor sells the
+      holder and the fuses for this panel and publishes no standard fill.
+    bays:
+      breaker-a1: amphenol-ns/breaker-1ru@1
+      breaker-a2: amphenol-ns/breaker-1ru@1
+      breaker-a3: amphenol-ns/breaker-1ru@1
+      breaker-a4: amphenol-ns/breaker-1ru@1
+      breaker-a5: amphenol-ns/breaker-1ru@1
+      breaker-a6: amphenol-ns/breaker-1ru@1
+      breaker-a7: amphenol-ns/breaker-1ru@1
+      breaker-a8: amphenol-ns/breaker-1ru@1
+      breaker-b1: amphenol-ns/tpa-fuse-holder-307492@1
+      breaker-b2: amphenol-ns/tpa-fuse-holder-307492@1
+      breaker-b3: amphenol-ns/tpa-fuse-holder-307492@1
+      breaker-b4: amphenol-ns/tpa-fuse-holder-307492@1
+      breaker-b5: amphenol-ns/tpa-fuse-holder-307492@1
+      breaker-b6: amphenol-ns/tpa-fuse-holder-307492@1
+      breaker-b7: amphenol-ns/tpa-fuse-holder-307492@1
+      breaker-b8: amphenol-ns/tpa-fuse-holder-307492@1
+    bay-attrs:
+      breaker-a1: {rating: 60}
+      breaker-a2: {rating: 60}
+      breaker-a3: {rating: 50}
+      breaker-a4: {rating: 40}
+      breaker-a5: {rating: 30}
+      breaker-a6: {rating: 30}
+      breaker-a7: {rating: 20}
+      breaker-a8: {rating: 10}
+      breaker-b1: {fuse-rating: 50}
+      breaker-b2: {fuse-rating: 50}
+      breaker-b3: {fuse-rating: 40}
+      breaker-b4: {fuse-rating: 30}
+      breaker-b5: {fuse-rating: 20}
+      breaker-b6: {fuse-rating: 20}
+      breaker-b7: {fuse-rating: 10}
+      breaker-b8: {fuse-rating: 5}
+datasheet:
+  title: 'Amphenol Network Solutions 300CB08/nrg300CB08 8/8 Position Circuit Breaker Panel data sheet, 07.11.24 v.20'
+  url: https://amphenol-ns.com/Assets/P_DS_300CB08.pdf
+  sha256: bb153cf40f63c275ad365ff33a0bae945ebd0c5201f31057703f068f2f0b53dc
+references:
+  - {title: 'Amphenol Network Solutions 250TPA08/nrg250TPA08 Installation Guide', url: 'https://amphenol-ns.com/Assets/P_IG_250TPA08.pdf', sha256: 3d9ceb293fe54f8194259569aa7ffcefa813774b31092ea90dbbd5b285cf0dde}
+  - {title: 'Amphenol Network Solutions 300CB08/nrg300CB08/nrgILS300CB08 Installation Guide, 149722-2 Rev A9, 3.26.2025', url: 'https://amphenol-ns.com/Assets/P_IG_300CB08.pdf', sha256: e2921793b28b30e92cda92b231cb2daec4b711c85acdc6b1644b8cb0e449ffd6}
+  - {title: 'Sensata Airpax IAR/IUR/IER/CUR/CER 1U, 1RU hydraulic magnetic circuit protectors datasheet, 2020', url: 'https://www.sensata.com/sites/default/files/a/sensata-IAR-IUR-IER-CUR-CER-magnetic-circuit-protectors-datasheet.pdf', sha256: c99f911806c9ce7dbd4f86a8607e2d0dace04031c5993cc0c7051e307e77b41f}

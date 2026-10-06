@@ -43,6 +43,12 @@ out.nested = m.viewsToRewrite(devIndex, {'slot-1/module/ppm-1': 'generic/ppm@1'}
 // the build's and only its optic was chosen
 out.nestedCage = m.viewsToRewrite(devIndex, {'slot-1/module/xg0': 'generic/sfp-lc@1'}).sort();
 
+// a slot on a placed part that is no cage itself (#814): `psu1-input/lug-2`
+// is claimed by no bay and no cage of any view, so every view is rewritten
+out.plainPlacementSlot = m.viewsToRewrite(devIndex, {'psu1-input/lug-2': 'generic/ring-lug@1'}).sort();
+// ... and a slot under a cage the device does have still names that view only
+out.slotOnCage = m.viewsToRewrite(devIndex, {'port-9/1': 'generic/lc-plug@2'}).sort();
+
 // an override naming nothing this device has touches no view
 out.miss = m.viewsToRewrite(devIndex, {'nope': 'x'});
 

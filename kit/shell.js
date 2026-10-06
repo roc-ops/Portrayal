@@ -24,7 +24,7 @@ import { nestedBays, applyOverrides, applyOccupantOverrides, applyRearOverrides,
          freshBaysUnder, seatFace, faceQueue, swapOverrides, faceEntries, faceTree, ownerPath,
          slotOptions, slotResolver } from './swap.js';
 import { jdist, faceFile, distResolver } from './dist.js';
-import { paintFields, unpaintFields } from './fields.js';
+import { paintFields, unpaintFields, fieldRows, fieldAccepts, decodeFields, drawnField } from './fields.js';
 import { fibreOf, farPath, fibreLabel, connectorLabel, moduleOf } from './optical.js';
 
 const NS = 'http://www.w3.org/2000/svg';
@@ -389,6 +389,9 @@ export function createShell(opts = {}) {
     // The DC barrel plug (#789) states `barrel`: `dc-barrel` would make `dc` a
     // connector word for lint L62.
     'barrel': 'DC barrel',
+    // The ring lug that lands on a terminal screw (#789). The fallback would
+    // read RING-LUG.
+    'ring-lug': 'ring lug',
   };
   // A speed is one of spec/schemas/speeds.yaml's closed set (lint L110), and
   // every one of those reads right upper-cased - 1G, 2.5G, 1.6T - so there is
@@ -1125,11 +1128,42 @@ export function createShell(opts = {}) {
         `<option value="${esc(o.value)}"${o.selected ? ' selected' : ''}>${esc(o.label)}</option>`);
       html += `<div class="row"><span>on it</span><select id="chain" data-cage="${esc(chain.id)}">${opts.join('')}</select></div>`;
     }
+    // THE PART'S OWN FIELDS (#811): what its component says a form may change -
+    // a breaker's rating, a supply's wattage, a latch's colour - offered here and
+    // written through setFields, the call a host already has. The part is the
+    // element that carries the ref: the row itself, or the module seated in it
+    // when the row is a bay.
+    const part = fieldPart(e, path);
+    const rows = part ? fieldRows(fieldsOf(part.ref), fieldValues(part)) : [];
+    for (const r of rows) {
+      const id = `fld-${esc(r.key)}`;
+      const ctl = r.type === 'choice'
+        ? `<select id="${id}" data-field="${esc(r.key)}">` + r.options.map(o =>
+            `<option value="${esc(o)}"${o === r.value ? ' selected' : ''}>${esc(o)}</option>`).join('') + `</select>`
+        : `<input id="${id}" data-field="${esc(r.key)}" type="${r.type === 'number' ? 'number' : 'text'}" `
+          + `value="${esc(r.value)}"${r.pattern ? ` pattern="${esc(r.pattern)}"` : ''} size="10">`;
+      const set = Object.prototype.hasOwnProperty.call(state.cfgFields[part.path] || {}, r.key);
+      html += `<div class="row"${r.description ? ` title="${esc(r.description)}"` : ''}><span>${esc(r.label)}</span>`
+            + `${ctl}${r.unit ? ` <span class="unit">${esc(r.unit)}</span>` : ''}`
+            + (set ? ` <button data-reset="${esc(r.key)}" title="back to what the drawing was built with">↺</button>` : '')
+            + `</div>`;
+    }
     if (ref) {
       const c = compByRef(ref.split(':')[0].split('@')[0] + '@' + ref.split('@')[1].split(':')[0]);
       if (c) html += `<div class="row"><button id="open">Open module ↗</button></div>`;
     }
     box.innerHTML = html;
+
+    for (const ctl of box.querySelectorAll('[data-field]'))
+      ctl.onchange = () => {
+        const f = fieldsOf(part.ref)[ctl.dataset.field];
+        // a value the field does not take is not written: the control goes back
+        // to what the drawing holds, which is what the next inspect() shows
+        if (fieldAccepts(f, ctl.value)) setFields(part.path, {[ctl.dataset.field]: ctl.value});
+        inspect(path, e);
+      };
+    for (const b of box.querySelectorAll('[data-reset]'))
+      b.onclick = () => { resetField(part.path, b.dataset.reset); inspect(path, e); };
 
     const occ = box.querySelector('#occ');
     if (occ) occ.onchange = () => swapBay(path, occ.value);
@@ -1345,6 +1379,7 @@ export function createShell(opts = {}) {
 
   async function swapBay(bayId, ref) {
     if (!(await seat(bayId, ref))) return;
+    dropFieldsUnder(bayId);
     seatDetached({[bayId]: stateRef(bayId)}).then(refreshMerged, warnFaces);
     redrawTree();
     select(bayId, true);
@@ -1356,6 +1391,8 @@ export function createShell(opts = {}) {
   async function swapCage(cageId, ref) {
     if (!cagesOnFace().some(c => c.id === cageId)) return;
     if (!(await seat(cageId, ref))) return;
+    dropFieldsUnder(cageId);
+    dropFieldsUnder(`${cageId}-occupant`);
     seatDetached({[cageId]: stateRef(cageId)}).then(refreshMerged, warnFaces);
     redrawTree();
     select(cageId, true);
@@ -1555,7 +1592,8 @@ export function createShell(opts = {}) {
       delta: swapDelta,
       // the mounted face may have arrived for this view while it loaded
       store: (view, face) => !state.faces[view] && !!(state.faces[view] = face),
-    });
+    // a face that arrives here knows only what the build drew (#811)
+    }).then(n => { repaintFields(); return n; });
   }
 
   // THE TREE AGAIN, WITH THE READER STILL IN IT. refreshTree draws every fold
@@ -1668,6 +1706,7 @@ export function createShell(opts = {}) {
     el.inspect.innerHTML = '';
     el.status.textContent = state.module ? '' :
       `${(state.meta.bays[bayView()] || []).length} bays`;
+    repaintFields();
     emit('load', svg);
   }
 
@@ -1729,6 +1768,7 @@ export function createShell(opts = {}) {
     state.refused = {};
     state.failed = {};
     state.cfgFields = {};
+    for (const k of Object.keys(builtFields)) delete builtFields[k];
   }
 
   el.cfg.onchange = e => { state.cfg = e.target.value; state.module = null; syncCfgBays(); loadStage(); };
@@ -1787,10 +1827,16 @@ export function createShell(opts = {}) {
     // link for a device that is not here says nothing about the fallback.
     const same = start.name === want;
     const swaps = same ? decodeSwaps(rawParam(location.search, 'swap')) : {};
+    const fields = same ? decodeFields(rawParam(location.search, 'fields')) : {};
     await loadDevice(start.name, same ? {config: q.get('config'), view: q.get('view')} : {});
     if (Object.keys(swaps).length) {
       const {ignored} = await applySwaps(swaps);
       if (ignored.length) console.warn('[portrayal] swaps naming nothing on', start.name, ignored);
+    }
+    // AFTER THE SWAPS: a field names a part, and the part may be one a swap seated
+    if (Object.keys(fields).length) {
+      const {ignored} = applyFields(fields);
+      if (ignored.length) console.warn('[portrayal] fields naming nothing on', start.name, ignored);
     }
   })();
 
@@ -1816,6 +1862,7 @@ export function createShell(opts = {}) {
   // shared with the 3D side; the host mirrors the same map into the 3D viewer's
   // setFields.
   function setFields(path, vals) {
+    if (vals) rememberBuilt(path, vals);
     if (!vals) delete state.cfgFields[path];
     else state.cfgFields[path] = {...(state.cfgFields[path] || {}), ...vals};
     for (const d of faceDocs())
@@ -1836,8 +1883,100 @@ export function createShell(opts = {}) {
   }
   function fieldsOf(ref) { return compByRef(ref)?.fields || {}; }
 
+  // THE PART A ROW'S FIELDS BELONG TO: the element carrying the component ref -
+  // the selected element itself, or the module seated in it when it is a bay.
+  // {path, ref, el}, or null where there is no component to ask.
+  function fieldPart(e, path) {
+    // ONLY A BAY LENDS ITS ROW TO WHAT IS SEATED IN IT. Any other element with
+    // no ref of its own is a container - the chassis, a region, a group - and
+    // the first part under one is not the thing the reader selected.
+    const own = e?.dataset?.ref ? e
+      : (path != null && bayFor(path)) ? e?.querySelector?.('[data-ref][data-path]') : null;
+    const ref = own?.dataset.ref?.split(':')[0];
+    const at = own?.getAttribute('data-path');
+    if (!ref || !at) return null;
+    try { if (!Object.keys(fieldsOf(ref)).length) return null; } catch (err) { return null; }
+    return {path: at, ref, el: own};
+  }
+  // What the drawing holds for each field: this session's value, else the
+  // `data-<key>` the build (or an earlier paint) left on the part's group, else
+  // the text its node is drawn with - the build writes the attribute only for
+  // a field a configuration set.
+  function fieldValues(part) {
+    const out = {};
+    for (const k of Object.keys(fieldsOf(part.ref)))
+      out[k] = state.cfgFields[part.path]?.[k] ?? drawnField(part.el, k);
+    return out;
+  }
+  // WHAT THE BUILD DREW, kept the first time a field is written, so one field
+  // can be put back without the page reloading: setFields(path, null) restores
+  // colours and leaves text saying whatever it last said.
+  const builtFields = {};
+  function rememberBuilt(path, vals) {
+    const el = faceDocs().map(d => d.querySelector(`[data-path="${CSS.escape(path)}"]`)).find(Boolean);
+    const kept = (builtFields[path] ||= {});
+    // THE BUILD WRITES `data-<key>` ONLY FOR A FIELD A CONFIGURATION SET. A part
+    // drawn from its skin's own default has no attribute, and its text is the
+    // default the node carries - so that text is what "built" means for it.
+    // A colour field has no text node, and '' is right there: it puts the
+    // drawn colour back.
+    for (const k of Object.keys(vals || {})) {
+      if (Object.prototype.hasOwnProperty.call(kept, k)) continue;
+      kept[k] = drawnField(el, k) ?? '';
+    }
+  }
+  function resetField(path, key) {
+    const mine = state.cfgFields[path];
+    if (!mine || !Object.prototype.hasOwnProperty.call(mine, key)) return;
+    const built = builtFields[path]?.[key] ?? '';
+    for (const d of faceDocs())
+      for (const el of d.querySelectorAll(
+          `[data-path="${CSS.escape(path)}"],[data-projection][data-of="${CSS.escape(path)}"]`))
+        paintFields(el, {[key]: built});
+    delete mine[key];
+    if (!Object.keys(mine).length) delete state.cfgFields[path];
+    emit('fields', {path, fields: state.cfgFields[path] || null, all: state.cfgFields});
+    emit('change');
+  }
+  // A FACE THAT HAS JUST BEEN FETCHED knows only what the build drew, so every
+  // field this session set is painted onto it again - the view change and the
+  // merged tree both bring in faces the values were never written to.
+  function repaintFields() {
+    for (const [path, vals] of Object.entries(state.cfgFields))
+      for (const d of faceDocs())
+        for (const el of d.querySelectorAll(
+            `[data-path="${CSS.escape(path)}"],[data-projection][data-of="${CSS.escape(path)}"]`))
+          paintFields(el, vals);
+  }
+  // A PART THAT HAS BEEN SWAPPED OUT TAKES ITS FIELDS WITH IT: a rating set on
+  // one breaker says nothing about the fuse holder that replaced it.
+  function dropFieldsUnder(key) {
+    let dropped = false;
+    for (const p of Object.keys(state.cfgFields))
+      if (p === key || p.startsWith(key + '/')) { delete state.cfgFields[p]; delete builtFields[p]; dropped = true; }
+    if (dropped) emit('fields', {path: key, fields: null, all: state.cfgFields});
+  }
+  // FIELDS OFF A LOCATION (`fields=`, fields.js decodeFields), taken only where
+  // they name a part that is drawn, a field its component declares and a value
+  // that field takes - the gate applySwaps is for `swap=`, for the same reason:
+  // whatever passes is written back to the URL and sent to the 3D scene.
+  function applyFields(map) {
+    const ignored = [];
+    for (const [path, vals] of Object.entries(map || {})) {
+      const el = faceDocs().map(d => d.querySelector(`[data-path="${CSS.escape(path)}"][data-ref]`)).find(Boolean);
+      let decl = {};
+      try { if (el) decl = fieldsOf(el.dataset.ref.split(':')[0]); } catch (err) { /* not ns/name@major */ }
+      const ok = {};
+      for (const [k, v] of Object.entries(vals))
+        // an OWN key: `decl.constructor` is a function on any object, declared or not
+        if (Object.hasOwn(decl, k) && fieldAccepts(decl[k], v)) ok[k] = v; else ignored.push(`${path}~${k}`);
+      if (Object.keys(ok).length) setFields(path, ok);
+    }
+    return {ignored};
+  }
+
   return {
-    state, el, ready, on, emit, setFields, fieldsOf,
+    state, el, ready, on, emit, setFields, fieldsOf, resetField, applyFields,
     select, fit, refreshTree, loadFaces, loadDevice, loadStage, openModule, swapBay,
     swapCage, cageFor, applySwaps, swapDelta,
     over, setPulled, pulledPaths,

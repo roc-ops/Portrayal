@@ -1,0 +1,56 @@
+format: 1
+kind: component
+name: output-p40
+version: 1.0.0
+class: inlet
+profile: power
+description: >-
+  One connectorized output circuit of an Amphenol Network Solutions 1RU power
+  panel - a two-pole latching receptacle, BATT above RTN, that takes a P40
+  plug (Amphenol PRM series, 4 mm contacts). Plugs are sold separately as kits
+  150325, 150326 and 152799.
+size: {w: 10.5, h: 29.8}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  the 300CB08 installation guide 149722-2 A9 Fig. 3-10: sixteen receptacles on a 13.41 pitch (38.33 px at 2.858
+  px/mm), each 10.5 wide by 29.8 high. The plug that mates it is 9.7 wide by
+  34.2 high in the customer drawing of the PRM0400 plug, which fits the width;
+  the plug stands taller than the receptacle's drawn frame because its latch
+  arms pass outside it.
+provenance:
+  size: >-
+    drawing - see size-notes.
+  poles: >-
+    drawing - Fig. 3-10 prints BATT beside the upper row and RTN beside the
+    lower, and the plug's customer drawing engraves BATT and RTN on its two
+    cavities.
+  plug: >-
+    NOT MODELLED. The receptacle presents no interface yet, so nothing seats
+    in it. The plug has a dimensioned customer drawing (Amphenol PRM series,
+    female, plug side, 4 mm, rev A1), so it can be drawn when the receptacle
+    becomes a connector slot.
+attrs: {connector: P40, contact-mm: 4}
+elements:
+  batt: {at: [0.7, 2.9], size: [9.1, 9.1], class: inlet}
+  rtn: {at: [0.7, 13.9], size: [9.1, 9.1], class: inlet}
+relief:
+  wall: '#0c0d0e'
+  features:
+    - node: shell
+      out: 6.0
+      shape: true
+      color: '#1b1d20'
+      confidence: estimated
+      source: >-
+        the receptacle shroud stands off the rear face in the rear photograph of the connectorized panel on its product page; no view dimensions it
+    - node: batt
+      pocket: 5.0
+      confidence: estimated
+      source: >-
+        a contact cavity in the shroud; depth by eye
+    - node: rtn
+      pocket: 5.0
+      confidence: estimated
+      source: >-
+        see batt
+skins: [default]

@@ -633,7 +633,14 @@ def test_the_lift_census():
     sits `on: body` - so a plug seated there starts where the housing ends.
     The slot's lift is that housing's `out`, again the figure
     `manifest.presented_interface` derives, and the two interfaces are named
-    here so a third lifted slot still has to be argued for."""
+    here so a third lifted slot still has to be argued for.
+
+    AND SO DOES A GROUND STUD (#789). common/ground-lug@1, common/ground-stud@1
+    and juniper/mx-ground-stud@1 present `terminal-stud` at the top of the
+    stud, nut or screw head they build - their `mate` sits `on:` that feature
+    - so a lug seated there starts where the part ends and shares no volume
+    with it. The slot's lift is that feature's far end, 4.7, 6.0 or 8.0, once
+    more the figure `manifest.presented_interface` derives."""
     from portrayal import manifest
     lib = render_mod.Library([str(LIB)])
     families = render_mod._pluggable_families()
@@ -649,7 +656,8 @@ def test_the_lift_census():
                     nonzero += 1
                     lifted_cages += c["kind"] == "cage"
                     if c["interface"] in ("bnc", "din-1-0-2-3", "f-type",
-                                          "terminal-508-5", "terminal-508-2"):
+                                          "terminal-508-5", "terminal-508-2",
+                                          "terminal-stud"):
                         doc = lib.resolve(_ref(d, v, c["id"]))[0]
                         want = manifest.presented_interface(
                             doc, lambda r: lib.resolve(r)[0])[2]

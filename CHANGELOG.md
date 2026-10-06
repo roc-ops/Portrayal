@@ -25,6 +25,68 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- Ground studs seat a ring lug. `common/ground-lug@1`,
+  `common/ground-stud@1` and `juniper/mx-ground-stud@1` each gain
+  `interface: terminal-stud` and a `mate` point on the stud axis, on top of
+  what the part builds, so every placement of one is a slot of its device
+  that offers `generic/ring-lug@1`. The three studs of
+  `casa/c40g-ground-studs@1` are now `casa/shelf-ground-stud@1`, composed as
+  `stud-tr`, `stud-bl` and `stud-br`, each a nested slot. No drawing changed.
+  A placement states `stud-size` (`M4`, `M5`, `M6`, `10-32`, `1/4-20`,
+  `1/4 in`) where a document for its device states the size of the stud or
+  screw: 68 placements on 31 devices, each with its source in
+  `provenance.ground-stud-size`. The 53 devices that place one of the four
+  parts take a patch; their DCIM exports change in the drawing version line
+  only. The lug is the one nominal lug and is not turned: where it overhangs
+  a face, or two lugs on a pair overlap, is recorded in
+  `docs/connectors-dc-terminal-design.md`, section 13, with a two-hole lug as
+  later work (#789).
+- Two more of the Amphenol Network Solutions 300CB08 family, the passive
+  connectorized panels: `amphenol-ns/300cb08-sc` (stud inputs) and
+  `amphenol-ns/300cb08-c` (horizontal busbar inputs). Each replaces the screw
+  terminal outputs with sixteen `amphenol-ns/output-p40@1` receptacles; the -C
+  takes its feeds on `amphenol-ns/input-feed-busbar@1`, whose landings stand
+  147 mm behind the chassis. Front, top, bottom and sides are the 300CB08. In
+  the DCIM exports each has two `dc-terminal` power ports, one per feed, and
+  its outputs are not exported yet. No existing device or export changes.
+- Fibrain, a new vendor: the XCU10 extendable HD patch panel (`fibrain/xcu`,
+  0.5U, 48 SC), with XCU10-51ID and XCU10-41ID as configurations. Its front is
+  one captive drawer (`fibrain/xcu-drawer@1`) whose four slots seat the HD
+  adapter holders XMI1041GA and XMI1051GA (6 SC, 6 SC/APC), XMN1041GB and
+  XMN1051GB (12 SC, 12 SC/APC) or the XBCS0 blind cover. `common/sc-simplex-adapter@1`
+  is new: one SC port to a body, with no dust cap seated. These are the first
+  parts to use `shape: ring` and `shows` on body pieces. **In the DCIM exports
+  the holders seat in bays of the drawer's module type, which NetBox takes
+  (4.5.7 or later) and Nautobot is not given: the Nautobot drawer has no bays,
+  so the holders and their 48 ports cannot be placed there yet**
+  (roc-ops/Portrayal#834). Nautobot states `u_height: 1` for this 0.5U panel.
+- The explorer edits a part's fields. Selecting a part whose component
+  declares `fields:` - a supply's wattage, a latch colour, a filter's channel
+  numbers - shows one control per field in the inspector: a list for a
+  `choice`, an input otherwise, starting from the value the configuration
+  built. A change is written with `setFields`, in 2D and 3D, is kept across a
+  view change, goes when the part is swapped out, and is carried in the page's
+  location as `fields=<path>~<key>~<value>,...` beside `swap=`. A value the
+  field does not take is not written, from the form or from a link. A link
+  restores a field only for a part drawn on the view it opens; one set on
+  another view is dropped on reload (roc-ops/Portrayal#818).
+  `kit/fields.js` gains `fieldRows`, `fieldAccepts`, `encodeFields`,
+  `decodeFields` and `drawnField`, and the shell gains `resetField` and
+  `applyFields` (#811).
+- Barrier terminal blocks seat a lug per pole. `terminal-stud` joins
+  `spec/schemas/connectors.yaml` as one nominal connector: a screw or stud
+  terminal a lug lands on, claiming no size. The terminal screws of
+  `common/dc-terminal-24@1` and `common/dc-terminal-27@1` (1.0.1) are now
+  parts of their own, `common/terminal-screw-34@1` and
+  `common/terminal-screw-38@1`, composed as `lug-1` to `lug-3`; each presents
+  the interface, so each pole is a nested slot (`psu1-input/lug-2`, or
+  `psu-1/terminal/lug-2` on a Telco Systems DC supply). The blocks draw
+  exactly as before and keep every id. `generic/ring-lug@1` is the one-hole
+  insulated ring terminal that seats there, on a 10 mm stub of wire lying in
+  the plane of the face; `wire-color` and `barrel-color` paint it. It is a
+  nominal lug for 16 to 14 AWG wire, not the lug of any one device. The
+  Edgecore CSR180 and CSR200 and the Telco Systems TM-8104 and TM-8106 take a
+  patch. See `docs/connectors-dc-terminal-design.md`, section 12.
 - Pluggable terminal headers are connector slots, and three screw-clamp plugs
   seat in them. `terminal-508-2`, `terminal-508-5` and `terminal-508-6` join
   `spec/schemas/connectors.yaml`. `common/terminal-header-508-2@1`,
@@ -57,6 +119,44 @@ names the ref that replaces it.
   `body.drawings` and `body.face` on a part whose pieces show one. Lint L71
   checks the new keys. Nothing existing changes: a piece that states neither
   is the plain box it was.
+- The Cisco Nexus 93180YC-EX (`cisco/n9k-c93180yc-ex`): 48 SFP28 and 6 QSFP28
+  on the port side; two supplies, four fan modules, console, both management
+  ports and USB on the other; port-side intake and port-side exhaust
+  configurations. Two new parts seat in it, `cisco/nxa-pac-650w@1` and
+  `cisco/nxa-fan-30cfm@1`, each covering both airflow part numbers through a
+  latch-colour field.
+- The Cisco Catalyst 4948E (`cisco/ws-c4948e`), the front-to-back build: 48
+  10/100/1000 RJ-45 and 4 SFP+ on the front with the console and management
+  jacks and the status lamps; two supplies and the fan tray on the rear. Two
+  new parts seat in it, `cisco/pwr-c49e-300ac-r@1` and `cisco/ws-x4993@1`. Its
+  export names ports as IOS does, `GigabitEthernet1/1` to `1/48`,
+  `TenGigabitEthernet1/49` to `1/52` and `FastEthernet1`.
+- A device can name its own interfaces. A top-level `interfaces:` block, in
+  the shape a NOS listing's has, says what the maker's own operating system
+  calls each port, and the hardware's own DCIM device type uses those names:
+  the Nexus exports `Ethernet1/1` to `Ethernet1/54` and one `mgmt0`. An id no
+  rule names keeps its faceplate id, and a listing's names still decide that
+  listing's document. The lock records the names and asks a major bump when
+  one changes; L105 refuses a rule that names nothing the device places.
+- Amphenol Network Solutions, a new vendor (`amphenol-ns`, formerly Telect):
+  the 300CB08 (`amphenol-ns/300cb08`), a 1RU dual-feed DC circuit breaker
+  panel with sixteen plug-in positions, all six faces, and eleven
+  `amphenol-ns/` parts. A position takes `amphenol-ns/breaker-1ru@1`, one
+  module for every rating from 2 A to 60 A, set per position by its `rating`
+  field and printed on its handle; `amphenol-ns/tpa-fuse-holder-307492@1`,
+  which carries its fuse as a `fuse-rating` field; or the blanking cover. A
+  breaker ships wearing `amphenol-ns/touch-guard-1ru@1`, a separate part
+  seated on it that comes off: `spec/schemas/connectors.yaml` gains
+  `breaker-1ru-guard`, marked `cover: true`, the first slot that is a cover
+  mount and not a connector. It is the first power distribution device:
+  `spec/schemas/profiles.yaml` gains a `power` profile, which owes an input
+  rating, the panel's own draw and an operating temperature and no
+  `performance` or `platform` section, and `spec/schemas/power-roles.yaml`
+  gains the class `breaker` under `passive`, for any removable circuit
+  protector. In the DCIM exports each feed is one `dc-terminal` power port
+  (`input-a`, `input-b`) and each position is a module bay; the sixteen output circuits and
+  the alarm contacts are not exported yet. No existing device or export
+  changes.
 - CFP, CFP2, CFP4 and CXP cages offer optics. `generic/cfp-lc@1`,
   `generic/cfp-sc@1`, `generic/cfp-mpo@1`, `generic/cfp2-lc@1`,
   `generic/cfp2-mpo@1`, `generic/cfp4-lc@1`, `generic/cfp4-mpo@1` and
@@ -285,7 +385,36 @@ names the ref that replaces it.
   boxes do not all count the same way (the AS7316-26XB restarts per speed
   class), and no 800G prefix is documented.
 
+### Fixed
+- `amphenol-ns/tpa-fuse-holder-307492@1` (1.0.1) keeps its fuse rating out of
+  the drawing once the rating is set in a viewer. The rating is carried by the
+  part and never printed, because the fuse is inside the holder; its text node
+  was hidden by its own `display`, which `kit/fields.js` removes from a node it
+  writes a value to. The node now sits in a group that is not displayed. The
+  300CB08 takes a patch, 1.0.1.
+- 3D kit (`swap.js` `viewsToRewrite`): a swap into a slot on a placed part
+  that composes several slots and is no cage itself, such as a pole of a
+  barrier terminal block (`psu1-input/lug-2`), now reaches the 3D scene. No
+  bay and no cage of any view claims such a key, so no view was named, the
+  face was never rewritten and the occupant showed in 2D only, with no
+  warning. Every view is rewritten for such a key (#814).
+
 ### Changed
+- **BREAKING for DCIM data already imported.** Telco Systems is listed as
+  `BATM/Telco Systems`, the name the vendor asks to be listed under. The
+  `manufacturer` of its fourteen devices changes, and with it every one of its
+  NetBox and Nautobot exports: the `manufacturer` field of fourteen device
+  types and thirteen module types, each device type's `slug`
+  (`telco-systems-tm-8104` is now `batm-telco-systems-tm-8104`), and the
+  directory they are written under, `Telco Systems/` to `BATM-Telco Systems/`
+  (a slash in a manufacturer is written as a hyphen in the directory, as it is
+  in a model's file name). A DCIM that imported the old files holds a
+  manufacturer named `Telco Systems`: rename it there before importing again,
+  or the new files create a second manufacturer beside it. The namespace
+  `telco-systems`, every component and device ref, every port name and every
+  drawing is unchanged, and so is the `@portrayal/telco-systems-*` package
+  name of each device. `spec/schemas/vendors.yaml` keeps `Telco Systems` and
+  `BATM Networks` as aliases.
 - **The npm packages: the component skins ship one package per namespace**,
   `@portrayal/components-<namespace>`, and `packages.json` in `@portrayal/index`
   maps each namespace to its package and version under `components`. One

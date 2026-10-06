@@ -1,0 +1,28 @@
+format: 1
+kind: component
+name: guard-mount-1ru
+version: 1.0.0
+class: mechanical
+profile: power
+interface: breaker-1ru-guard
+description: >-
+  The two threaded inserts in the face of a 1RU plug-in breaker, one above
+  the other - where its touch guard screws on, and where the breaker puller
+  threads in once the guard is off.
+size: {w: 3.2, h: 32.3}
+size-confidence: {w: estimated, h: datasheet}
+size-notes: >-
+  The inserts are 29.11 apart, centre to centre, in the Sensata IAR/IUR/IER/CUR/CER datasheet, pages 2 and 3; 32.3 is that plus
+  one insert. Their 3.2 diameter is read by eye off the product photograph of
+  a bare breaker; the datasheet gives the thread, 6-32, and not the insert.
+provenance:
+  size: >-
+    datasheet for the spacing, estimated for the diameter - see size-notes.
+  mate: >-
+    midway between the two inserts, which is the centre of the breaker face.
+elements:
+  insert-top: {at: [0.0, 0.0], size: [3.2, 3.2], class: mechanical}
+  insert-bottom: {at: [0.0, 29.1], size: [3.2, 3.2], class: mechanical}
+connection-points:
+  mate: {at: [1.6, 16.15], direction: front}
+skins: [default]

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9500-22xst
-version: 2.0.5
+version: 2.0.6
 maturity: modelled
 manufacturer: UfiSpace
 model: S9500-22XST
@@ -258,6 +258,13 @@ provenance:
       searched 2026-08-28: 'UfiSpace S9500-22XST end of life end of sale' - no announcement found;
       the vendor product page and the datasheet PDF are live and distributor listings carry it.
       none-announced is a real finding here, not an absence of looking.
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      the hardware installation guide lists, in its package contents, a screw kit for the grounding
+      lug of 2 x M4*L8.0mm screws, and its grounding steps lock the grounding lug to the designated
+      grounding location with 2 M4 screws: the `stud-size` of ground-1 and ground-2. The accessory lug
+      is one two-hole lug held by both screws.
 
 attrs:
   performance:
@@ -692,8 +699,8 @@ views:
         - {ref: common/screw-head@1, id: screw-r1, at: [62, 20], group: furniture, rel-pos: 5}
         - {ref: common/screw-head@1, id: screw-r2, at: [152, 20], group: furniture, rel-pos: 6}
         - {ref: common/screw-head@1, id: screw-r3, at: [242, 20], group: furniture, rel-pos: 7}
-        - {ref: common/ground-lug@1, id: ground-1, at: [40, 15], group: grounding, rel-pos: 1}
-        - {ref: common/ground-lug@1, id: ground-2, at: [51, 15], group: grounding, rel-pos: 2}
+        - {ref: common/ground-lug@1, id: ground-1, at: [40, 15], group: grounding, rel-pos: 1, attrs: {stud-size: M4}}
+        - {ref: common/ground-lug@1, id: ground-2, at: [51, 15], group: grounding, rel-pos: 2, attrs: {stud-size: M4}}
 configurations:
   dc:
     kind: base

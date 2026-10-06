@@ -554,6 +554,16 @@ PART_POWER = {
     # landed in one pluggable screw-clamp plug on the top face, the TM-7124S case
     # again. Still where a supply's wire is landed, so the same row (#737).
     "common/terminal-header-508-5f": "dc-terminal",
+    # AND A DISTRIBUTION PANEL'S FEED INPUT: a BATT terminal and an RTN terminal,
+    # each two 3/8-16 studs taking a dual-hole lug. ONE POWER PORT PER FEED, both
+    # poles, as every other row here is - so the part mapped is the feed, and
+    # the single-pole terminal it composes twice (amphenol-ns/input-stud-pair)
+    # is not. It is where a supply's cable is landed, so the same row - on a box
+    # that passes the power on instead of using it.
+    "amphenol-ns/input-feed-studs": "dc-terminal",
+    # AND ITS BUSBAR FORM, on the panels whose inputs run straight back: two
+    # landings, BATTERY and RETURN, one feed. The same row for the same reason.
+    "amphenol-ns/input-feed-busbar": "dc-terminal",
     # THE XM-3352's AC SUPPLY TAKES A C5 CORD IN A CLOVERLEAF C6 INLET. `iec-60320-c6` is a
     # PowerPortTypeChoices value in both targets, as `iec-60320-c14` is.
     "telco-systems/xm3352-ac-inlet": "iec-60320-c6",
@@ -832,6 +842,18 @@ NOT_A_DCIM_PORT = {
                                     "device's power attrs; no connector here has a DCIM type",
     "casa/c40g-ac-inlet-panel": "an inlet PANEL - a bolted assembly carrying the receptacles, "
                                 "not a connector; the C40G's own inlets are not modelled yet",
+    "amphenol-ns/output-terminal": "one output circuit of a breaker panel - a BATT screw over an "
+                                   "RTN screw. It is a power OUTLET, fed from an input through "
+                                   "a breaker, and this exporter writes power ports only: an "
+                                   "outlet needs its feeding port and its breaker position, "
+                                   "which is a design the export does not have yet",
+    "amphenol-ns/output-p40": "one connectorized output circuit of a breaker panel - a two-pole "
+                              "P40 receptacle. A power OUTLET, for the reason its screw-terminal "
+                              "sibling amphenol-ns/output-terminal gives: the exporter writes "
+                              "power ports only, and outlets are a design that is not built yet",
+    "amphenol-ns/alarm-card-307608": "Form C alarm relay contacts on wire-wrap headers - dry "
+                                     "contacts for an external alarm loop; neither DCIM has a "
+                                     "port type for an alarm contact",
 
     # `dell/rj45-port-14g` USED TO BE HERE, as "a modelling gap, not an exporter
     # one": the NDC's four jacks carried no speed, so the exporter could not say
@@ -1546,6 +1568,13 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None):
     # EMPTY map would mean "the NOS exposes nothing", and a listing with no
     # `interfaces` exported a switch with no ports at all.
     names = listing_names(listing) if (listing or {}).get("interfaces") else None
+    # WHAT THE BOX'S OWN OPERATING SYSTEM CALLS THEM, when the hardware ships with
+    # one and says so in its own `interfaces:` - a Nexus switch is `Ethernet1/1`
+    # under NX-OS whoever sells it. These RENAME and decide nothing: which
+    # placement is an interface is still the hardware document's own rule below,
+    # and an id no rule names keeps its faceplate id. A listing's names win, as
+    # they always have - its document is about that NOS and not this one.
+    own = listing_names(dev) if names is None and dev.get("interfaces") else {}
 
     console, mgmt_sfp, bays, powers, timing = [], [], [], {}, {}
     for view in views_for(dev, cfg_name):
@@ -1654,7 +1683,7 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None):
                         continue
                     name, breakout = names[iid]
                 else:
-                    name, breakout = iid, None
+                    name, breakout = own.get(iid, (iid, None))
                 iface = {"name": name, "type": t}
                 if iface_label:
                     iface["label"] = iface_label
@@ -2248,8 +2277,20 @@ def _listed_hardware(text):
         return ""
 
 
+def manufacturer_dir(manufacturer):
+    """The directory a manufacturer's files are written under.
+
+    A SLASH IS A PATH SEPARATOR, NOT A CHARACTER, as it is in a model
+    (A9K-16T/8-B writes A9K-16T-8-B.yaml): `BATM/Telco Systems` would have
+    opened a `BATM` directory with `Telco Systems` inside it, one level deeper
+    than every reader of this tree looks. The document keeps the real name;
+    only the directory is sanitised.
+    """
+    return str(manufacturer).replace("/", "-")
+
+
 def write(doc, root, target, owner=None, listed=False):
-    d = Path(root) / target / "device-types" / doc["manufacturer"]
+    d = Path(root) / target / "device-types" / manufacturer_dir(doc["manufacturer"])
     d.mkdir(parents=True, exist_ok=True)
     f = d / (doc["model"] + ".yaml")
     if owner is not None:
@@ -2315,7 +2356,7 @@ def render_image(dist, root, target, doc, dev_name, cfg_name, face):
     # px/mm the 13 RU C100G alone came to 1.9 MB, and a contribution that ships
     # 29 MB of PNG is not one anybody wants to merge.
     return rasterize(face_file(dist, dev_name, cfg_name, face),
-                     Path(root) / target / "elevation-images" / doc["manufacturer"]
+                     Path(root) / target / "elevation-images" / manufacturer_dir(doc["manufacturer"])
                      / f"{doc['slug']}.{face}.png", 2)
 
 
@@ -2338,7 +2379,7 @@ def render_module_image(dist, root, target, doc, ns, name, ver):
     # 58 KB and the Cisco A9K ones are 7 KB, and these come out 10-80 KB. Going
     # up one stop tripled that for detail nothing displays.
     return rasterize(Path(dist) / "components" / f"{ns}--{name}--{ver}--default.svg",
-                     Path(root) / target / "module-images" / doc["manufacturer"]
+                     Path(root) / target / "module-images" / manufacturer_dir(doc["manufacturer"])
                      / (doc["model"].replace("/", "-") + ".front.png"), 1)
 
 
@@ -2466,7 +2507,7 @@ def export_modules(dist, root, images=None):
         # so all 376 module images stopped rendering without a word.
         name, ver, ns = contract.get("name"), contract.get("major"), contract.get("ns")
         for target in TARGETS:
-            d = Path(root) / target / "module-types" / man
+            d = Path(root) / target / "module-types" / manufacturer_dir(man)
             d.mkdir(parents=True, exist_ok=True)
             # Cisco ships part numbers with slashes in them - A9K-16T/8-B - and
             # a slash is a path separator, not a character. The model keeps the
@@ -2485,7 +2526,7 @@ def export_modules(dist, root, images=None):
         # Written once per MODEL for the same reason the type is: its filename
         # is the model too, so it collided in exactly the same silence.
         if fibre_map is not None:
-            d = Path(root) / "fibre-maps" / man
+            d = Path(root) / "fibre-maps" / manufacturer_dir(man)
             d.mkdir(parents=True, exist_ok=True)
             (d / (model.replace("/", "-") + ".yaml")).write_text(
                 "---\n" + yaml.dump(fibre_map, Dumper=Indented, sort_keys=False,

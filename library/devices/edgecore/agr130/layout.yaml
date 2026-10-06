@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: agr130
-version: 0.1.8
+version: 0.1.9
 maturity: modelled
 manufacturer: Edgecore
 model: AS5916-54XKS
@@ -537,6 +537,12 @@ provenance:
       but that is the family's caution, not an ordering code, and no B2F part number appears.
       Configurations here are therefore ac and dc, both front-to-back, and the absence of a B2F
       SKU is stated rather than assumed away.
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      the quick start guide's package contents list a grounding kit of one grounding lug, 2 M5 screws
+      and 2 washers: the `stud-size` of ground-right, the plate with two holes that the kit fits
+      (rear-grounding). ground-left states none: nothing held says what that opening takes.
 attrs:
   performance:
     switching-capacity: 800 Gbps
@@ -941,7 +947,7 @@ views:
       - {id: fan-5, at: [315.39, 2.00], size: {w: 46.6, h: 40.0}, accepts: [common/fan-module-46@1], default: common/fan-module-46@1, group: fans, rel-pos: 5}
       placements:
       - {ref: common/ground-lug@1, id: ground-left, at: [4.40, 27.00], group: grounding, rel-pos: 1}
-      - {ref: common/ground-lug@1, id: ground-right, at: [426.90, 16.30], group: grounding, rel-pos: 2}
+      - {ref: common/ground-lug@1, id: ground-right, at: [426.90, 16.30], group: grounding, rel-pos: 2, attrs: {stud-size: M5}}
     regions:
     - {id: exhaust, at: [0, 0], size: {w: 438.4, h: 44.0}, physical-context: Exhaust,
        label: Rear airflow (exhaust - every published SKU is front-to-back)}

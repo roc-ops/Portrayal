@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx80
-version: 1.0.19
+version: 1.0.20
 maturity: modelled
 manufacturer: Juniper
 model: MX80
@@ -66,6 +66,12 @@ provenance:
     note: >-
       near-blank by evidence - rail bands estimated; axis conventions per viewer3d.js as the
       siblings
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      the hardware guide, grounding points specifications: two threaded holes that fit SAE 10-32
+      screws, spaced at 0.625 in. (15.86 mm) centres, for one two-hole cable lug: the `stud-size` of
+      both studs.
 
 attrs:
   physical:
@@ -293,8 +299,8 @@ views:
            group: service-covers, rel-pos: 0}
       placements:
         - {id: esd-rear-jack, ref: common/esd-jack@1, at: [427.0, 7.0], for: chassis, group: grounding, rel-pos: 0}
-        - {id: ground-stud-0, ref: juniper/mx-ground-stud@1, at: [391.25, 9.25], for: chassis, group: grounding, rel-pos: 0}
-        - {id: ground-stud-1, ref: juniper/mx-ground-stud@1, at: [391.25, 23.25], for: chassis, group: grounding, rel-pos: 1}
+        - {id: ground-stud-0, ref: juniper/mx-ground-stud@1, at: [391.25, 9.25], for: chassis, group: grounding, rel-pos: 0, attrs: {stud-size: '10-32'}}
+        - {id: ground-stud-1, ref: juniper/mx-ground-stud@1, at: [391.25, 23.25], for: chassis, group: grounding, rel-pos: 1, attrs: {stud-size: '10-32'}}
         - {id: clk, ref: std/smb@1, at: [65.6, 72.6], group: timing, rel-pos: 0,
            attrs: {function: external clock input}}
         - {id: sync, ref: std/smb@1, at: [102.6, 72.6], group: timing, rel-pos: 1,
