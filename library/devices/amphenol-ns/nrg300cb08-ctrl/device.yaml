@@ -129,9 +129,10 @@ attrs:
     output-breaker-max: 60 A single-pole; the UL rating holds to 48 A continuous per output
     input-interrupt-max: 125 percent of the panel rating
     power-max-w: 1.44
-    power-max-scope: the alarm card alone at 48 V (30 mA); 0.48 W at 24 V and 0.22 W at 12 V. It is the only thing
-      in the panel that draws. Separately the guide gives a nominal power LOSS of less than 45 W per side at 325
-      A and 48 V, which is heat in the conductors and not a draw.
+    power-max-scope: the alarm card alone at 48 V (30 mA); 0.48 W at 24 V and 0.22 W at 12 V. THE MONITORING CARD
+      ALSO DRAWS FROM THE A AND B FEEDS, and no document held states how much (gap monitoring-card-draw), so this
+      figure is a floor for the panel, not its total. Separately the guide gives a nominal power LOSS of less than
+      45 W per side at 325 A and 48 V, which is heat in the conductors and not a draw.
   thermal:
     cooling: passive, perforated lid and base
   environmental:
@@ -176,6 +177,20 @@ gaps:
     datasheet or the two controller configuration guides; searched for mA, watt, consumption and current draw. `power-max-w`
     is the alarm card alone.
   wanted: the controller and sensor card current at 12, 24 and 48 V.
+- what: nrgnet-pitch
+  scope:
+  - rear
+  reason: vendor-silent
+  note: the two five-way nrgNET connectors are drawn at a 3.81 pitch, read off five ways in about 20 on Fig. 3-7;
+    no document states the header or its pitch.
+  wanted: the nrgNET header part number or pitch.
+- what: temp-jack-type
+  scope:
+  - rear
+  reason: vendor-silent
+  note: the two nrgTEMP probe jacks are drawn from a photograph; no document held names the jack, and the probe
+    ends in a phone-style plug of no stated size.
+  wanted: the probe jack type and plug size.
 - what: display-characters
   scope:
   - front
