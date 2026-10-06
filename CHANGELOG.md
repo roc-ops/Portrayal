@@ -32,6 +32,19 @@ names the ref that replaces it.
   exported front ports and fibre map count along the row. A part named bare
   counts 1 upward as before, so no existing module changes. Lint L78 holds
   such a part to naming every position once, together.
+- MRJ21, VHDCI and RJ11 jacks are connector slots, and three cable plugs seat
+  in them. `mrj21`, `vhdci` and `rj11` join `spec/schemas/connectors.yaml`, so
+  every `std/mrj21@1`, `common/vhdci-receptacle@1` and `common/rj11-jack@1`
+  publishes a `kind: connector` slot: nested on the Nokia M48-1GB-XP-TX MDA and
+  on the three Oscilloquartz HD cards, and on the Halny HLX-TGV chassis.
+  `common/vhdci-receptacle@1` and `common/rj11-jack@1` gain
+  their interface, and the RJ11 jack a `mate` point; no drawing changed, and
+  the three cards and five devices that carry them take a patch.
+  `generic/mrj21-plug@1`, `generic/vhdci-plug@1` and `generic/rj11-plug@1` are
+  the straight cable plugs that mate them, each with a 30 mm stub of cable
+  sized by `cable-od` and coloured by `jacket-color`. The MRJ21 plug and the
+  VHDCI hood are scaled from drawings that dimension neither; see
+  `docs/connectors-mrj21-vhdci-rj11-design.md` (#790).
 - Ground studs seat a ring lug. `common/ground-lug@1`,
   `common/ground-stud@1` and `juniper/mx-ground-stud@1` each gain
   `interface: terminal-stud` and a `mate` point on the stud axis, on top of
