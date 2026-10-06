@@ -29,7 +29,7 @@ import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, sv
          setNodeLampColors, nodeLampColors, markHex,
          setPulled as setReliefPulled, pulledPaths,
          buildFaceRelief, bodyBoxes, pieceMesh, pieceArt, fruFor,
-         nodeTools, tiltOf, tiltTools, tiltGroupIn, unproject, openFrameFaces,
+         nodeTools, tiltOf, tiltTools, tiltGroupIn, unproject, openFrameFaces, sheetShell,
          faceFrame, ventWellWalls } from './relief.js';
 import { seatViews, seatBack, refusalReason } from './swap.js';
 import { bevelledArrays } from './bevel.js';
@@ -774,6 +774,17 @@ export function createViewer(container, opts = {}) {
       const metal = new THREE.MeshLambertMaterial(
         {color: devIndex.chassis.solid.color || '#3a3f44'});
       box = new THREE.Mesh(geo, [...mats, metal]);
+      scene.add(box);
+    } else if (devIndex && sheetShell(devIndex.chassis).sheet) {
+      // A SHEET BODY: the same six faces, each showing only what its drawing
+      // painted. render.py left the faceplate unfilled, so the raster is
+      // transparent wherever there is no metal, and the face materials already
+      // cut punched pixels away (alphaTest, above) - that is open air with no
+      // change here. What a box never needed is the other side: a tray is seen
+      // from above and from below, so its plates are drawn from both.
+      for (const m of mats) m.side = THREE.DoubleSide;
+      box = new THREE.Mesh(new THREE.BoxGeometry(W, H, D), mats);
+      box.userData.sheet = sheetShell(devIndex.chassis);
       scene.add(box);
     } else {
       box = new THREE.Mesh(new THREE.BoxGeometry(W, H, D), mats);

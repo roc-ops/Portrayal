@@ -135,6 +135,17 @@ export function openFrameFaces(texts) {
     .map(([face]) => face);
 }
 
+// A SHEET BODY IS NOT A BOX (docs/cable-managers-design.md section 4). Its
+// faces paint only their metal, and viewer3d shows the rest as open air. This
+// answers the one question viewer3d asks, and answers "box" for everything it
+// does not recognise: an index from before the key, or a shell value from a
+// newer build, draws as the solid box it always was - wrong, and visible.
+export function sheetShell(chassis) {
+  if (!chassis || chassis.shell !== 'sheet') return {sheet: false, thickness: 0};
+  const t = Number(chassis.thickness);
+  return {sheet: true, thickness: t > 0 ? t : 1.5};
+}
+
 // A VENT IS SEEN FROM BOTH SIDES OF THE SHEET. A face's vents are paint on its
 // plate, and the plate is drawn from outside only; the interior under a lifted
 // cover is a well (`relief.walls: inside`) whose sides are plain colour. So
