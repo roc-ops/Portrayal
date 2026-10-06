@@ -1,10 +1,11 @@
 format: 1
 kind: component
 name: dc-terminal-header-6
-version: 1.0.0
+version: 1.0.1
 class: inlet
 behaviour: mounts
 profile: networking
+interface: terminal-508-6
 description: >-
   Six-pole pluggable terminal-block HEADER on a 5.08 mm pitch - the green board-mounted
   receptacle with six wire-plug openings and a latch post above each end, fitted behind a
@@ -26,6 +27,15 @@ provenance:
   depth: >-
     drawing - the header's front sits 0.3 behind the rear-panel plane in the GLB, so it is
     drawn flat; nothing stands proud.
+  mate: >-
+    derived - the centre of the 32.4 x 8.6 body, which is the middle of the row of six
+    openings (3.5 to 28.9). The header is drawn flat, so a plug seated here starts on the
+    panel plane. The interface is the plain six-position header's, `terminal-508-6`: 32.4
+    wide with a body 8.6 high is the Phoenix Contact MSTBA 2,5/ 6-G-5,08 (a + 7.08 = 32.48
+    by 8.6 on its data sheet, p.5) to within 0.1, and the vendor's photograph of the rear
+    panel shows an open shroud with a pin in each position and a scalloped lower edge.
 elements:
   body: {at: [0.0, 2.5], size: [32.4, 8.6], class: connector}
+connection-points:
+  mate: {at: [16.2, 6.8], direction: front}
 skins: [default]

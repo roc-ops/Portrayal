@@ -1,10 +1,11 @@
 format: 1
 kind: component
 name: terminal-header-508-5f
-version: 1.0.0
+version: 1.0.1
 class: inlet
 behaviour: mounts
 profile: networking
+interface: terminal-508-5
 description: >-
   Five-position pluggable terminal HEADER on a 5.08 mm pitch with a threaded flange at
   each end - the green receptacle a screw-clamp plug seats in and is then screwed down
@@ -26,6 +27,13 @@ provenance:
     width (5.08) in, a threaded insert centred in each flange - and the vendor video for
     how this one looks: green housing, brass inserts, open cells with a contact visible in
     each.
+  mate: >-
+    derived - the centre of the row of five contacts, which is the centre of the housing,
+    on the mouth of the housing (`on: body`): a plug seated here stands off by the 2.5 the
+    housing is built proud, and starts where the housing ends. The interface,
+    `terminal-508-5`, is the five-position mating face and says nothing of the flanges: a
+    plain header presents it too. The data sheet above lists seventeen mating plugs
+    (pp.16-25) and every one has screw flanges.
 elements:
   body: {at: [0.0, 0.0], size: [35.56, 12.1], class: connector}
 relief:
@@ -110,4 +118,6 @@ relief:
       confidence: estimated
       source: >-
         common/terminal-header-508-5f@1's own 3D-form key - see `body`. The brass insert, flush with the flange.
+connection-points:
+  mate: {at: [17.78, 6.05], direction: front, 'on': body}
 skins: [default]

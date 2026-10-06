@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: xs-010x-r
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: Nokia
 model: XS-010X-R
@@ -107,6 +107,12 @@ provenance:
       Product Guide Table 2-10 p27: maximum power (not to exceed) 7.7 W with the 10G port
       operational, minimum 4.3 W with it idle. The data sheet prints power consumption below
       8.6 W, recorded as a gap. Fed 12 V DC 1 A from a wall adapter (Table 2-2).
+  dc-in-rating:
+    confidence: datasheet
+    note: >-
+      Product Guide Table 2-2: fed 12 V DC 1 A from a wall adapter - the `input-voltage` and
+      `current-max-a` of the dc-in jack. The guide's block diagram calls it a 12 V barrel and
+      states no barrel size; the jack is the library's one nominal `dc-barrel`.
   lamps:
     confidence: datasheet
     note: >-
@@ -283,7 +289,7 @@ views:
         - {ref: std/sc-bore@1, id: pon, at: [31.405, 8.75], rotate: 90, group: pon, rel-pos: 1}
         - {ref: std/rj45@2, id: lan, at: [51.3, 5.1], group: rj45-10g, rel-pos: 1}
         - {ref: common/reset-button@1, id: reset, at: [74.3, 12.0], for: chassis, group: controls, rel-pos: 2}
-        - {ref: common/dc-barrel@1, id: dc-in, at: [81.8, 6.0], group: inlets, rel-pos: 1}
+        - {ref: common/dc-barrel@1, id: dc-in, at: [81.8, 6.0], group: inlets, rel-pos: 1, attrs: {input-voltage: 12 VDC, current-max-a: 1.0}}
         - {ref: common/power-button@1, id: power-btn, at: [94.3, 6.2], for: chassis, group: controls, rel-pos: 1}
   top:
     size: {w: 135.0, h: 135.0}

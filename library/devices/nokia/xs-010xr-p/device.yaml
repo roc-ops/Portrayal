@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: xs-010xr-p
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: Nokia
 model: XS-010XR-P
@@ -102,6 +102,12 @@ provenance:
       Two feeds: the 12 V DC jack (12 V DC 1 A, Table 4-2) or PoE on the 10GE jack, which the
       guide calls a PoE 802.3af PD function and also POE+; the optional injector 1AF32488DA is
       56 V 0.62 A.
+  dc-in-rating:
+    confidence: datasheet
+    note: >-
+      Product Guide Table 4-2: 12 V DC 1 A at the DC jack - the `input-voltage` and
+      `current-max-a` of the dc-in jack. The guide's block diagram calls it a 12 V barrel and
+      states no barrel size; the jack is the library's one nominal `dc-barrel`.
   power-jack:
     confidence: drawing
     note: >-
@@ -283,7 +289,7 @@ views:
         - {ref: common/rj45-eth@1, id: port-10ge, at: [89.3, 11.65], group: rj45-10g, rel-pos: 1}
         - {ref: common/reset-button@1, id: reset, at: [113.9, 19.9], for: chassis, group: controls, rel-pos: 2}
         - {ref: common/power-button@1, id: power-btn, at: [126.6, 13.5], for: chassis, group: controls, rel-pos: 1}
-        - {ref: common/dc-barrel@1, id: dc-in, at: [142.3, 13.5], group: inlets, rel-pos: 1}
+        - {ref: common/dc-barrel@1, id: dc-in, at: [142.3, 13.5], group: inlets, rel-pos: 1, attrs: {input-voltage: 12 VDC, current-max-a: 1.0}}
         - {ref: std/sc-bore@1, id: pon, at: [165.505, 15.6], rotate: 90, group: pon, rel-pos: 1}
         - {ref: common/laser-warning@1, id: laser-mark, at: [184.5, 17.7], for: pon, group: furniture, rel-pos: 1}
   top:
