@@ -143,6 +143,7 @@ def test_the_library_states_a_mount_for_every_box_that_is_not_racked():
 @pytest.mark.parametrize("vendor,model,want", [
     ("ReadyLinks", "GL-8xEP", 0.0),
     ("Halny", "HLX-TGV-EU", 0.0),
+    ("FS.com", "FHD-CMP5DR", 0.0),
 ])
 def test_the_exports_of_boxes_that_are_not_racked_occupy_no_rack(tree, vendor, model, want):
     path = LIB / "exports" / tree / "device-types" / vendor / f"{model}.yaml"
@@ -176,3 +177,17 @@ def test_L43_a_rack_face_part_is_its_ears():
     views = {"front": {"size": {"w": 483.0, "h": 44.0}}}
     assert _l43({"chassis": {"width": 483.0, "ru": 1}, "views": views})
     assert not _l43({"chassis": {"width": 483.0, "ru": 1, "mount": "rack-face"}, "views": views})
+
+
+# --- rack furniture is exported though it has nothing to plug in ----------------
+
+def test_a_header_alone_is_not_worth_a_file_unless_the_part_is_passive():
+    """A switch with no interfaces, console or bays is an export that failed to
+    resolve anything, and writing it would publish an empty device type. A lacer
+    panel has none of the three BY NATURE, and its header - what it is, what it
+    weighs, that it takes no rack unit - is everything a rack plan asks of it."""
+    header = {"manufacturer": "T", "model": "T", "u_height": 0.0}
+    assert not dx.worth_a_file(header, {"profile": "networking"})
+    assert not dx.worth_a_file(header, {})
+    assert dx.worth_a_file(header, {"profile": "passive"})
+    assert dx.worth_a_file({**header, "interfaces": [{}]}, {"profile": "networking"})

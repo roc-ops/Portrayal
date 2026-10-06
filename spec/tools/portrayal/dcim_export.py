@@ -1432,6 +1432,21 @@ MOUNT_PROSE = {
 }
 
 
+def worth_a_file(doc, dev):
+    """Whether a built device type says enough to be written.
+
+    Nothing but a header - no interfaces, no console, no bays - is what a box
+    looks like when the export resolved none of its parts, and a file for it
+    would publish an empty device type. RACK FURNITURE IS THE EXCEPTION, and by
+    nature rather than by failure: a `passive` part (profiles.yaml) has nothing
+    to plug in, and its header - what it is, what it weighs, that it takes no
+    rack unit - is everything a rack plan asks of it.
+    """
+    if any(k in doc for k in ("console-ports", "interfaces", "module-bays")):
+        return True
+    return (dev or {}).get("profile") == "passive"
+
+
 def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None):
     ch = dev.get("chassis", {})
     cfg = cfg or {}
@@ -2663,9 +2678,8 @@ def export_device(dist, device_name, out_root, images):
         for lkey, listing in [(None, None)] + dist.listings_for(dev.get("ns"), device_name):
             doc = build(dev, cfg_name, cfg, listing, images, frus, label)
             doc = apply_listing(doc, listing, cfg_name, label)
-            if not any(k in doc for k in
-                       ("console-ports", "interfaces", "module-bays")):
-                continue                       # nothing but a header: not worth a file
+            if not worth_a_file(doc, dev):
+                continue
             owner = f"{lkey or dev.get('ns') + '/' + device_name}:{cfg_name}"
             for target in TARGETS:
                 f = write(for_target(doc, target), out_root, target, owner,
