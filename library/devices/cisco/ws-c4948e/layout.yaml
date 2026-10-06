@@ -17,14 +17,6 @@ description: >-
   the WS-C4948E-F, takes different supplies and a different fan tray and is not this
   device. End-of-sale was announced in October 2016.
 profile: networking
-lint:
-  waive:
-    L61: >-
-      Sixteen port numerals sit about a millimetre off the centre of the jack they name, and
-      they should: each numeral is printed under its LAMP, not under its jack. A block's
-      twelve lamps stand on a 5.8 mm step in one row beneath six columns on a 13.97 step, so
-      a numeral lines up with its jack only by accident, near the middle of each block. The
-      positions are measured off the data sheet's front photograph.
 provenance:
   sources:
     confidence: datasheet
@@ -81,7 +73,10 @@ provenance:
       Each block prints twelve lamps in one row under its six columns, alternately an up and
       a down triangle, with a numeral under each running 1 to 12, 13 to 24 and so on. Two
       lamps per column, up then down, so the odd port is the upper jack. The four uplink
-      lamps under the SFP+ cages run the same way with 49 to 52 beneath them. The legends
+      lamps under the SFP+ cages run the same way with 49 to 52 beneath them. SO A NUMERAL
+      SITS UNDER ITS LAMP AND NOT UNDER ITS JACK: twelve lamps on a 5.8 mm step stand beneath
+      six columns on a 13.97 step, and L61 reports the sixteen numerals that land within a
+      millimetre or so of their jack's centre by accident. The legends
       printed ABOVE the jacks are not legible at this resolution and are a gap.
   lamps:
     confidence: datasheet
@@ -168,6 +163,7 @@ attrs:
       data sheet: "supports 10 Gigabit Ethernet SFP and SFP+ on all the four uplinks". The
       installation guide's Table 1-1: 4 1-GB or 10-GB uplink ports, each needing an SFP or
       SFP+ transceiver.
+  management:
     reset: 'recessed on the front panel; needs a pointed object'
   compliance:
     regulatory: 'Products bear CE Marking, indicating compliance with the 89/336/EEC and 73/23/EEC directives'
@@ -377,6 +373,9 @@ views:
        members: [led-ps1, led-ps2, led-fan, led-status, reset]}
   rear:
     size: {w: 444.4, h: 44.45}
+    panel:
+      decor:
+      - {id: end-plate, at: [425.70, 0.00], size: [18.70, 44.45], fill: '#656469'}
     components:
       bays:
       - {id: psu-1, at: [1.60, 2.00], size: {w: 115.7, h: 39.5}, group: psus, rel-pos: 1,
