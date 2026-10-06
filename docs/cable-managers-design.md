@@ -1,7 +1,9 @@
 # Cable managers: rack-face mounting, sheet bodies, brushes and guides
 
-Status: design, 2026-10-06. Not implemented. The first passive rack parts in the library
-that hold or pass cables rather than terminate them: the FS horizontal cable managers.
+Status: 2026-10-06. Sections 2 to 4 and the first device of section 7 are implemented;
+brushes, pass-throughs, guides and lab placement are design. The first passive rack parts
+in the library that hold or pass cables rather than terminate them: the FS horizontal
+cable managers.
 
 ## 1. What exists, and what is missing
 
@@ -38,10 +40,11 @@ Four things a cable manager needs are missing:
 4. **The DCIM export writes `u_height: 0` and `is_full_depth: false`** for a rack-face
    device, with a comment line saying it mounts on the rail face at a rack unit and
    occupies none. Neither target schema has a field for the mounting position.
-5. **A sheet body.** `chassis.shell: sheet` with a `thickness` in millimetres. The 2D views
-   are drawn as usual. In 3D no box is built: the painted metal of each view becomes a
-   plate of that thickness on its face, and whatever a view leaves unpainted is open air.
-   Without it a rack-face part would be a solid block hiding the ports it serves.
+5. **A sheet body.** `chassis.shell: sheet` with a `thickness` in millimetres. The six
+   views are drawn as usual, with no housing filled in behind them, and they are
+   ELEVATIONS: in 3D nothing is built from the faces. The solid is what the views' parts
+   build, section 4. Without it a rack-face part would be a solid block hiding the ports
+   it serves.
 6. **A `brush` decoration pattern**, with a bristle direction. It paints itself as a solid
    field, so it needs no backing plate, and in 3D it is an opaque slab filling its opening.
 7. **A pass-through is declared**, per view, as `passes:` entries with `id`, `at`, `size`,
@@ -78,33 +81,53 @@ chassis:
 ```
 
 L125 changes: `rack` and `rack-face` state `ru`; `din-rail`, `wall` and `desktop` state
-none. `shell: sheet` requires `thickness`.
+none. `shell: sheet` requires `thickness`, and `thickness` is stated only with it (L127).
 
-The views a sheet part draws are the ones its metal lies in. For the FHD-CMP5DR: `top`
-for the tray with its slots and ring seats, which is the view the vendor dimensions;
-`rear` for the two ears, which lie in the mounting plane; `left` and `right` for the
-gussets; `front` for the elevation a rack drawing shows, ears and rings end-on.
+L43 stands down for a rack-face part. That rule says ears are never drawn and the body is
+the metal between them; a part that bolts to the rail face is its ears and whatever hangs
+off them, so its 483 mm is the part. The ears of the FHD-CMP5DR are drawn, with their
+fixing holes, for the same reason: they are the tray's own sheet, not something added.
 
-The snap-in D-ring is a component placed five times on the tray and standing proud by its
-own height. It is shared with the 1U D-ring managers.
+A sheet part has six views like any other, because a rack drawing and the explorer ask
+for them. For the FHD-CMP5DR: `top` carries the tray, the two webs and the five rings;
+`rear` the two ears; `front`, `left`, `right` and `bottom` are elevations.
+
+The snap-in D-ring is a component placed five times on the tray. It is an open loop: a
+rear leg, a top bar, a hooked end and a front leg that stops short of it, and the gap
+between the last two is the slit a cable is laid in through.
 
 ## 4. The sheet body in 3D
 
 The viewer builds a box from the chassis and rasterises each view onto a side. For a
-sheet body it builds no box. For each declared view it takes the view's painted area as
-an outline, extrudes it inward by `thickness`, and places it on that face of the
-chassis envelope. Relief on a view is built on its plate as it is on a box face today.
-A view that is not declared contributes nothing.
+sheet body it draws nothing from the six faces. That is what a first reading of "sheet"
+gets wrong: a front view shows the ears and the rings end-on, and none of that metal lies
+in the front plane, so a face painted onto the envelope stands a picture of the part on
+every side of it. The solid is built from three things the library already had:
+
+- **A floor.** The tray is a component placed on the `top` view that is a well, a recess
+  as deep as the envelope less the sheet. In a sheet body a well builds its floor and
+  nothing round it, seen from both sides; in a box it builds walls and a back as before.
+  Whatever the floor's drawing leaves unpainted - a slot, the cut-out between the arms -
+  is a hole.
+- **Parts standing on the floor.** A part placed `in:` the well rises from its floor. The
+  rings are tubes and the web between each ear and the tray is one plate whose top edge
+  follows a `profile-y`.
+- **Parts standing proud of a face.** The ears are placed on the `rear` view and stand
+  the sheet's thickness off it.
+
+Three things had to be put right for that:
+
+- `uhandle` was built from the face plane whatever it stood in. It now rises from the
+  floor of the well it is in, as `out`, `cyl` and `bar` did.
+- `in:` sank a part's `out` to the well's floor and left its `profile` measured from the
+  face the well is cut in. A profile is a height and now sinks with it.
+- A view the device does not draw was a flat grey side. On a sheet body it is open air.
+
+A well is built 2 mm short of the far face, so a tray in a 44 mm envelope is a well 42
+deep where the sheet would make it 42.5. The floor stands 0.5 mm high.
 
 This is relief, not CAD, as section 7 of DEPTH-AND-3D.md already says of the whole
-pipeline. A swept arm between an ear and a tray is drawn as the flat gusset its side view
-shows.
-
-This is the largest unknown in the design: how much of the viewer assumes a box has not
-been measured. The implementation begins with a throwaway probe of the viewer. If a sheet
-body proves impractical, the fallback is a thin box, with the chassis as the floor plate
-and the ears and rings as raised features on its top. That needs no viewer change and
-costs a correct front elevation.
+pipeline. The tubes are round and their corners square.
 
 The open tray of the brush manager uses the same sheet body. A finger duct with its cover
 is a closed box and needs nothing new.
@@ -148,9 +171,10 @@ Three lint rules:
   drift apart.
 - A guide's aperture fits inside the part that declares it.
 
-Every device has a profile that sets what it must declare, such as ports and power. A
-cable manager has neither. Whether it needs a small `passive` profile is settled by
-running the existing lint on a bare manager and reading what it asks for.
+Every device names a profile, which sets what it must state before it counts as
+specified. A cable manager is none of `networking`, `server` or `optical`, so there is a
+fourth, `passive`: rack furniture with nothing in it to power or to forward. It owes no
+power, performance, platform or environmental section, only its weight.
 
 ## 6. Lab placement
 
@@ -209,14 +233,15 @@ the vendor's.
 
 ## 9. What is estimated, and what is not expressible
 
-- **The stand-off between the ear plane and the tray of the FHD-CMP5DR** is not
-  dimensioned. It is measured from the ring-profile view.
+- **How far the tray of the FHD-CMP5DR stands from its host** is not stated by any
+  document. The part's own profile is measured from the ring-profile view.
 - **The brush has no dimensions.** Bristle length and window size are measured from
   renders against the 482.6 width.
 - **Colour and finish** are the vendor's render material.
 - **The vendor's depth is an overall projection**, rings or duct included. It is not a
   body depth, and each device says which it states.
-- **Curved sheet metal** is drawn as flat plates.
+- **Curved sheet metal** is drawn as flat plates: the swept arm of the FHD-CMP5DR is a
+  strip of floor, an upright ear and a sloped web.
 - **A detachable, rotatable ring** is drawn fitted, in one orientation.
 
 ## 10. Out of scope
@@ -230,7 +255,7 @@ the vendor's.
 
 ## 11. Order of work
 
-1. The viewer probe for the sheet body, section 4. Throwaway.
+1. The viewer probe for the sheet body. Done: an unpainted face is open air.
 2. `rack-face`, the sheet body, the D-ring component and `fhd-cmp5dr`.
 3. The brush pattern, pass-throughs and `cmh-4drb1u`.
 4. Guides and `cmh-sfd1u`, with the ring guide applied to the D-rings of steps 2 and 3.
@@ -261,4 +286,12 @@ Agreed 2026-10-06:
 - The brush as a pattern plus a declared pass-through.
 - Rings and ducts declared as guides; capacity recorded per device.
 - Three devices first: FHD-CMP5DR, CMH-4DRB1U, CMH-SFD1U.
-- The sheet body, with the thin box as the fallback if the viewer probe fails.
+- The sheet body. The probe passed, and the thin-box fallback was not needed.
+
+Agreed in review of the first device, 2026-10-06:
+
+- A sheet's views are elevations and build nothing in 3D; its solid is floors and relief.
+- The ears of a rack-face part are drawn, with their holes: they are the product.
+- A ring is an open loop with its slit.
+- The web between ear and tray is one sloped plate, not steps.
+- The plan is 110 mm deep, the drawing's figure, where the spec table says 109.
