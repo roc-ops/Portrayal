@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: tpa-fuse-holder-307492
-version: 1.0.0
+version: 1.0.1
 class: breaker
 behaviour: fills
 profile: power
@@ -34,8 +34,10 @@ provenance:
     125244, 30 A 122734, 40 A 122738, 50 A 122739. THE FUSE IS INSIDE THE
     HOLDER: the guide has the holder pulled out, its side cover slid back and
     the fuse dropped in (250TPA08 guide, section 2.2.9). So the fuse is a
-    field carried by the holder and not a part drawn on its face, and its
-    text node is not displayed. A holder with no fuse fitted says 0.
+    field carried by the holder and not a part drawn on its face. Its text
+    node sits in a group that is not displayed: the kit un-hides a node it
+    writes a value to, so hiding the node itself held only until the fuse
+    rating was first set in a viewer. A holder with no fuse fitted says 0.
 fields:
   fuse-rating:
     label: Fuse

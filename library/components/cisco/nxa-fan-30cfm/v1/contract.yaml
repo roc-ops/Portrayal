@@ -1,0 +1,99 @@
+format: 1
+kind: module
+name: nxa-fan-30cfm
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  The fan module of the Cisco Nexus 9300-EX fixed switches, ordered as NXA-FAN-30CFM-B
+  (port-side intake, burgundy) or NXA-FAN-30CFM-F (port-side exhaust, blue). Two rotors
+  behind a honeycomb grille that fills the face, a pair of coloured squeeze latches across
+  its middle with a fan mark on the left one, and a status lamp in the upper left corner.
+size: {w: 40.6, h: 38.4}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: 'NXA-FAN-30CFM'
+  power-absent: not-published
+  rotors: 2
+  weight-kg: 0.12
+  airflow: front-to-back
+provenance:
+  model: >-
+    datasheet - the Cisco Nexus 93180YC-EX NX-OS Mode Hardware Installation Guide, Overview:
+    "Port-side intake airflow with burgundy coloring (NXA-FAN-30CFM-B)" and "Port-side
+    exhaust airflow with blue coloring (NXA-FAN-30CFM-F)", and "Each fan module has two
+    rotors". THE AIRFLOW SUFFIX IS DROPPED from the model, as on cisco/nxa-pac-650w@1: -B
+    and -F differ in the latch colour, which is the `latch-finish` field. The weight is the
+    guide's weights table, 0.26 lb (0.12 kg).
+  power: >-
+    NOT PUBLISHED. Searched the installation guide's appendix B and the Nexus 9300-EX data
+    sheet for a per-module fan figure; both give only the whole switch (210 W typical, 470 W
+    maximum). L29 stands on it at the chassis.
+  size: >-
+    estimated - no staged document states a fan module dimension. Read off the NetBox
+    devicetype-library rear elevation of the N9K-C93180YC-EX (a render of Cisco's Visio
+    stencil) scaled so the body between the ear folds is the data sheet's 439.4 mm. THE
+    PITCH IS THE BETTER NUMBER: the four modules step 168, 168 and 169 pixels, 45.1 mm,
+    and each face reads 40.6 wide inside that step with a divider between. 38.4 tall on
+    the same render's vertical scale.
+  elements: >-
+    estimated - the latches, hub and lamp are read off the same render. A photograph of a
+    real unit with blue modules shows the same face: honeycomb across the whole module, two
+    latches gripping a dark centre, a fan mark on the left latch.
+  lamp: >-
+    datasheet for the states - the guide's appendix C, "Fan Module LEDs": STS green
+    (operational), red (not operational), off (no power). ITS POSITION IS THE STENCIL'S AND
+    THE GUIDE DISAGREES IN WORDS: the guide says the lamp "is located below the air holes on
+    the front of the module", while the stencil render and the photograph both show the
+    only lamp-like feature in the upper left corner. The pictures are followed.
+  latch-colour: >-
+    datasheet for the convention - the installation guide's Overview table gives burgundy
+    for port-side intake and blue for port-side exhaust. The default burgundy, #ac2f54, is
+    the median of 1320 pixels of the supply latch in the stencil render of the rear face.
+    The blue a port-side-exhaust configuration sets, #50a2cf, is the median of 1800 pixels
+    of the supply latch in the real-unit photograph. The edge colours are darker shades
+    chosen by eye.
+  depth: >-
+    estimated - not stated. A 40 mm dual-rotor module of this class is taken as 100 mm
+    deep, and nothing here measures it.
+states: [absent]
+elements:
+  status: {at: [3.2, 2.8], size: [2.2, 2.2], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#ef4444'}]}
+  grille: {at: [2.4, 1.4], size: [35.8, 35.6], class: rotor}
+  latch-left: {at: [0.4, 12.4], size: [12.9, 13.3], class: latch}
+  latch-right: {at: [27.3, 12.4], size: [12.9, 13.3], class: latch}
+fields:
+  latch-finish:
+    label: Latch colour
+    type: text
+    default: '#ac2f54'
+  latch-edge:
+    label: Latch edge colour
+    type: text
+    default: '#6e1c2c'
+relief:
+  wall: '#15181b'
+  features:
+    - node: grille
+      vent: 26
+      confidence: estimated
+      source: >-
+        cisco/nxa-fan-30cfm@1's own elements key - the honeycomb's extent is read off the
+        stencil render and the depth behind it is not stated.
+    - node: latch-left
+      out: 6.0
+      confidence: estimated
+      source: >-
+        cisco/nxa-fan-30cfm@1's own elements key - the latches stand proud of the grille in
+        the photograph and how far is not stated.
+    - node: latch-right
+      out: 6.0
+      confidence: estimated
+      source: >-
+        cisco/nxa-fan-30cfm@1's own elements key - as latch-left.
+skins: [default]
+body:
+  depth: 100
+  color: '#26292d'
+  footprint: {at: [0, 0], size: [40.6, 38.4]}

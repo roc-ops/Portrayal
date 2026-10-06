@@ -20,6 +20,8 @@ FIBRE_CONNECTORS = [
     # the MTP-16 panel tile: the MPO tile with sixteen fibre positions
     "common/mpo16-adapter/v1",
     "common/sc-duplex-adapter/v5",
+    # one SC port to a body, for holders that seat adapters singly
+    "common/sc-simplex-adapter/v1",
     "common/st-simplex-adapter/v1", "common/fc-simplex-adapter/v1",
     "common/lsh-simplex-adapter/v1", "common/mdc-adapter/v1",
     "common/fibre-splice/v1",
