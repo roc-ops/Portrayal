@@ -374,6 +374,68 @@ def test_the_two_row_cassette_follows_its_front_order():
     assert got == want, got
 
 
+# --- a front order may name single positions ----------------------------------
+
+BELLY = {
+    "parts": [
+        {"id": "u1", "ref": "common/lc-duplex-v-adapter@6", "at": [5.0, 1.0], "rotate": 90},
+        {"id": "u2", "ref": "common/lc-duplex-v-adapter@6", "at": [20.0, 1.0], "rotate": 90},
+        {"id": "l1", "ref": "common/lc-duplex-v-adapter@6", "at": [5.0, 10.0], "rotate": 270},
+        {"id": "l2", "ref": "common/lc-duplex-v-adapter@6", "at": [20.0, 10.0], "rotate": 270},
+    ],
+    "optical": {"paths": [{"from": f"{p}.{k}", "to": f"{p}.{3 - k}"}
+                          for p in ("u1", "u2", "l1", "l2") for k in (1,)]},
+}
+
+
+def _two_fibres(ref):
+    return {"optical": {"positions": 2}}
+
+
+def test_a_turned_over_adapter_numbers_its_bores_in_the_stated_order():
+    """The lower row of a belly-to-belly holder is the upper row turned over,
+    so bore 1 of a lower adapter is the one a reader counting along the row
+    meets second. `front-order` names the positions one by one for those
+    parts, and the port number follows that order rather than the bore's own
+    number - while a part named bare counts 1 upward as it always did."""
+    plain = {**BELLY, "optical": {**BELLY["optical"],
+                                  "front-order": ["u1", "u2", "l1", "l2"]}}
+    labels = lambda d: [P.front_label(d, f"{p}.{k}", _two_fibres)
+                        for p in ("u1", "u2", "l1", "l2") for k in (1, 2)]
+    assert labels(plain) == ["1", "2", "3", "4", "5", "6", "7", "8"]
+    turned = {**BELLY, "optical": {**BELLY["optical"], "front-order":
+              ["u1", "u2", "l1.2", "l1.1", "l2.2", "l2.1"]}}
+    #                  u1.1 u1.2 u2.1 u2.2 l1.1 l1.2 l2.1 l2.2
+    assert labels(turned) == ["1", "2", "3", "4", "6", "5", "8", "7"]
+    # the exported ports are still eight, named 1 to 8, and the fibre map row
+    # for l1.2 names port 5
+    assert [p["name"] for p in P.ports(turned, _two_fibres)["front"]] == \
+        [str(n) for n in range(1, 9)]
+    assert P.front_port(turned, "l1.2", _two_fibres) == ("5", 1)
+    assert P.split_order_item("lc07.2") == ("lc07", 2)
+    assert P.split_order_item("mtp-1") == ("mtp-1", None)
+
+
+def run78(doc, path="t/contract.yaml"):
+    with L.collecting() as _found:
+        L.lint_component_optical_endpoints(path, doc, [str(ROOT / "library")])
+    return [e for e in _found.errors if "[L78]" in e and "front-order" in e]
+
+
+def test_a_front_order_that_names_positions_names_each_once_together():
+    def doc(order):
+        return {**BELLY, "optical": {**BELLY["optical"], "front-order": order}}
+    assert run78(doc(["u1", "u2", "l1.2", "l1.1", "l2.2", "l2.1"])) == []
+    assert any("exactly once" in e for e in run78(doc(["u1", "u2", "l1.2", "l2.2", "l2.1"])))
+    assert any("exactly once" in e for e in run78(doc(["u1", "u2", "l1.2", "l1.2", "l2"])))
+    assert any("exactly once" in e for e in run78(doc(["u1", "u2", "l1.3", "l1.1", "l2"])))
+    assert any("separate places" in e
+               for e in run78(doc(["u1", "l1.2", "u2", "l1.1", "l2"])))
+    assert any("does not compose" in e for e in run78(doc(["u1", "u2", "l1", "zz.1", "l2"])))
+    assert any("bare and by position" in e
+               for e in run78(doc(["u1", "u2", "l1", "l1.2", "l1.1", "l2"])))
+
+
 def run88(doc, path="t/contract.yaml"):
     with L.collecting() as _found:
         L.lint_component_optical_front_order(path, doc)

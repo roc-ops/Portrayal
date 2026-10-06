@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1284 component majors in 28 namespaces.
+1316 component majors in 28 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -109,7 +109,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/lc-duplex-adapter@6` | component | port | 13.2 × 11 | lc-duplex | 3 | 16 | Panel-mount LC duplex adapter - a bezel carrying two LC bores side by side, as used for Tx/Rx pairs on optica… |
 | `common/lc-duplex-dust-cap@2` | component | cap | 12.25 × 5.85 | lc-duplex | 0 | 1 | The ONE white cap FS ships over both ports of an FHD LC duplex adapter - 5.85 x 12.25 as read off that adapte… |
 | `common/lc-duplex-shuttered-adapter@2` | component | port | 13.1 × 11.6 | lc-duplex | 0 | 8 | LC duplex panel adapter with its two ports SIDE BY SIDE and a spring shutter closing each bore - the adapter … |
-| `common/lc-duplex-v-adapter@6` | component | port | 9.28 × 13.75 | fhd-lc-cassette | 0 | 39 | LC duplex panel adapter with its two ports STACKED VERTICALLY - the shell FS fits to FHD cassettes and adapte… |
+| `common/lc-duplex-v-adapter@6` | component | port | 9.28 × 13.75 | fhd-lc-cassette | 0 | 59 | LC duplex panel adapter with its two ports STACKED VERTICALLY - the shell FS fits to FHD cassettes and adapte… |
 | `common/lc-dust-cap@1` | component | cap | 4.7 × 4.7 | lc | 0 | 3 | The white dust cap an idle LC port ships with - a 4.7 square lump plugging the bore square, with a rounded-sq… |
 | `common/led-arrow@1` | component | led | 3.6 × 3.2 |  | 15 | 1 | Single triangle port LED - up skin for top-row ports, down for bottom |
 | `common/led-arrow-sm@1` | component | led | 2.25 × 2 |  | 35 | 0 | Compact triangle port LED for tight inter-port gaps - up skin for top-row ports, down for bottom |
@@ -165,7 +165,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/sc-apc@1` | component | port | 24 × 26 |  | 1 | 0 | SC/APC fiber adapter in a molded bay (PON WAN) |
 | `common/sc-duplex-adapter@5` | component | port | 9.4 × 25.4 | sc-duplex-adapter | 0 | 11 | Panel-mount SC duplex adapter, as fitted to an FS FHD SC panel - one body carrying two SC ports STACKED verti… |
 | `common/sc-dust-cap@1` | component | cap | 8.8 × 11.45 | sc | 0 | 2 | The black dust cap FS ships in an FHD SC port - 8.8 x 11.45, with a lighter raised grip across its middle for… |
-| `common/sc-simplex-adapter@1` | component | port | 9.4 × 12.8 |  | 0 | 8 | Panel-mount SC simplex adapter - one flangeless body carrying one SC port, a real SC opening (std/sc-bore@1) … |
+| `common/sc-simplex-adapter@1` | component | port | 9.4 × 12.8 |  | 0 | 30 | Panel-mount SC simplex adapter - one flangeless body carrying one SC port, a real SC opening (std/sc-bore@1) … |
 | `common/screw-head@1` | component | screw | 3.6 × 3.6 × 0.7 |  | 82 | 9 | Generic countersunk screw head (decorative fastener) |
 | `common/serial-symbol@1` | component | silkscreen | 7.2 × 2.6 |  | 2 | 0 | The IOIOI mark printed beside a serial port - alternating bars and rings, which is how a vendor says "this on… |
 | `common/seven-segment-dual@1` | component | display | 17.4 × 12.1 |  | 2 | 0 | Two-digit seven-segment status display behind one window - the code readout an Accton/Edgecore faceplate prin… |
@@ -769,7 +769,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `edgecore/filter-slot-5915@1` | module | filter | 27.6 × 43.2 |  | 1 | 1 | The air-filter slot cover on the AS5915 cell-site gateways - the blanking plate that ships in the filter bay … |
 | `edgecore/filter-slot-5915-16x@1` | module | filter | 19 × 42.5 |  | 1 | 0 | The air-filter slot cover on the AS5915-16X - the blanking plate in the filter bay at the left-hand end of th… |
 
-## fibrain/ (13)
+## fibrain/ (45)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -778,13 +778,45 @@ aperture when it is a bare opening - never both at one position. The README's
 | `fibrain/xcu-drawer-plan@1` | component | mechanical | 431.35 × 250 |  | 0 | 1 | The Fibrain XCU10 drawer seen from above, front edge at the top of the drawing: the plate over the holder row… |
 | `fibrain/xcu-interior@1` | component | mechanical | 429.35 × 283 × 20.2 |  | 1 | 0 | The inside of the Fibrain XCU10's shell seen from above with its top off - the space between the side walls t… |
 | `fibrain/xcu-shell-top@1` | component | mechanical | 431.35 × 284 |  | 1 | 0 | The top of the Fibrain XCU10's outer shell - the sheet-steel cover the drawer slides out from under |
+| `fibrain/xmi1021ca@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMI1021CA - HD adapter holder, 6 LC duplex adapters (aqua), multimode, OM3 |
+| `fibrain/xmi1021ca-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMI1021CA: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmi1021da@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMI1021DA - HD adapter holder, 6 LC duplex adapters (aqua), multimode, OM4 |
+| `fibrain/xmi1021da-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMI1021DA: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmi1021ga@1` | module | adapter-panel | 100 × 21 × 37 |  | 1 | 1 | Fibrain XMI1021GA - HD adapter holder, 6 LC duplex adapters (blue), single-mode |
+| `fibrain/xmi1021ga-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMI1021GA: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmi1021ha@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMI1021HA - HD adapter holder, 6 LC duplex adapters (lime green), multimode, OM5 |
+| `fibrain/xmi1021ha-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMI1021HA: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmi1031ga@1` | module | adapter-panel | 100 × 21 × 37 |  | 1 | 1 | Fibrain XMI1031GA - HD adapter holder, 6 LC duplex/APC adapters (green), single-mode |
+| `fibrain/xmi1031ga-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMI1031GA: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmi1041ca@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMI1041CA - HD adapter holder, 6 SC simplex adapters (aqua), multimode, OM3 |
+| `fibrain/xmi1041ca-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMI1041CA: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmi1041da@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMI1041DA - HD adapter holder, 6 SC simplex adapters (aqua), multimode, OM4 |
+| `fibrain/xmi1041da-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMI1041DA: the same adapters that face forward, seen from behind, whose far ends take the… |
 | `fibrain/xmi1041ga@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMI1041GA - HD adapter holder, 6 SC simplex adapters (blue), single-mode |
 | `fibrain/xmi1041ga-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMI1041GA: the same adapters that face forward, seen from behind, whose far ends take the… |
-| `fibrain/xmi1051ga@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMI1051GA - HD adapter holder, 6 SC/APC simplex adapters (green), single-mode |
+| `fibrain/xmi1041ha@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMI1041HA - HD adapter holder, 6 SC simplex adapters (lime green), multimode, OM5 |
+| `fibrain/xmi1041ha-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMI1041HA: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmi1051ga@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 7 | Fibrain XMI1051GA - HD adapter holder, 6 SC/APC simplex adapters (green), single-mode |
 | `fibrain/xmi1051ga-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMI1051GA: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmn1021cb@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMN1021CB - HD adapter holder, 12 LC duplex adapters (aqua), multimode, OM3 |
+| `fibrain/xmn1021cb-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMN1021CB: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmn1021db@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMN1021DB - HD adapter holder, 12 LC duplex adapters (aqua), multimode, OM4 |
+| `fibrain/xmn1021db-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMN1021DB: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmn1021gb@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMN1021GB - HD adapter holder, 12 LC duplex adapters (blue), single-mode |
+| `fibrain/xmn1021gb-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMN1021GB: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmn1021hb@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMN1021HB - HD adapter holder, 12 LC duplex adapters (lime green), multimode, OM5 |
+| `fibrain/xmn1021hb-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMN1021HB: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmn1031gb@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMN1031GB - HD adapter holder, 12 LC duplex/APC adapters (green), single-mode |
+| `fibrain/xmn1031gb-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMN1031GB: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmn1041cb@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMN1041CB - HD adapter holder, 12 SC simplex adapters (aqua), multimode, OM3 |
+| `fibrain/xmn1041cb-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMN1041CB: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmn1041db@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMN1041DB - HD adapter holder, 12 SC simplex adapters (aqua), multimode, OM4 |
+| `fibrain/xmn1041db-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMN1041DB: the same adapters that face forward, seen from behind, whose far ends take the… |
 | `fibrain/xmn1041gb@1` | module | adapter-panel | 100 × 21 × 37 |  | 1 | 1 | Fibrain XMN1041GB - HD adapter holder, 12 SC simplex adapters (blue), single-mode |
 | `fibrain/xmn1041gb-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMN1041GB: the same adapters that face forward, seen from behind, whose far ends take the… |
-| `fibrain/xmn1051gb@1` | module | adapter-panel | 100 × 21 × 37 |  | 1 | 1 | Fibrain XMN1051GB - HD adapter holder, 12 SC/APC simplex adapters (green), single-mode |
+| `fibrain/xmn1041hb@1` | module | adapter-panel | 100 × 21 × 37 |  | 0 | 1 | Fibrain XMN1041HB - HD adapter holder, 12 SC simplex adapters (lime green), multimode, OM5 |
+| `fibrain/xmn1041hb-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMN1041HB: the same adapters that face forward, seen from behind, whose far ends take the… |
+| `fibrain/xmn1051gb@1` | module | adapter-panel | 100 × 21 × 37 |  | 1 | 17 | Fibrain XMN1051GB - HD adapter holder, 12 SC/APC simplex adapters (green), single-mode |
 | `fibrain/xmn1051gb-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMN1051GB: the same adapters that face forward, seen from behind, whose far ends take the… |
 
 ## fs/ (67)

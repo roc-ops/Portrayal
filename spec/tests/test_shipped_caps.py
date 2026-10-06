@@ -403,7 +403,7 @@ def test_every_device_that_reaches_an_adapter_ships_its_ports_capped(tmp_path):
     names = sorted(f.parent.name for f in devs)
     assert names == ["ch3000", "dcp-2", "dcp-m32-cso-zr", "dcp-r-34d-cs",
                      "dcp-r-9d-cs", "fhd-1ube", "fhd-1ufce", "fhd-1ufmt-n",
-                     "fhd-1ufmt-s", "fhd-1ume", "fhd-2ufce", "fhd-4ufce"], names
+                     "fhd-1ufmt-s", "fhd-1ume", "fhd-2ufce", "fhd-4ufce", "xcu"], names
     total, bad_caps, rear_total = defaultdict(int), [], 0
     for f in devs:
         out = tmp_path / f.parent.name
@@ -450,8 +450,13 @@ def test_every_device_that_reaches_an_adapter_ships_its_ports_capped(tmp_path):
 # each), 72; fhd-4ufce `populated` six fhd-2mtp12-lc-os2-a and six LC panels,
 # 12 each, 144. So LC vertical 101 + 60 + 72 + 144 = 377, MPO tiles 5 x 12 =
 # 60, SC bores 4 x 12 = 48.
+# THE FIBRAIN XCU10 (2026-10-06): its two LC configurations, xcu10-21ic and
+# xcu10-31ic, each seat four 6-port LC holders in the drawer - 2 x 4 x 6 = 48
+# of the vertical adapter turned on its side, each shipping its duplex cap, so
+# 425. Its holders are a module inside the drawer module and show no built
+# backs.
 EXPECTED_DEVICE_SLOTS = {"common/lc-duplex-adapter@6": 478,
-                         "common/lc-duplex-v-adapter@6": 377,
+                         "common/lc-duplex-v-adapter@6": 425,
                          "common/mpo-adapter@2": 60,
                          "common/sc-duplex-adapter@5": 48}
 # The backs, one cap per MPO port: fhd-1ufce `populated`'s four cassette

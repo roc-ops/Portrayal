@@ -84,12 +84,56 @@ def _front_parts(entry):
 
     front_order = (entry.get("optical") or {}).get("front-order")
     if front_order:
-        return [(float(i), pid, parts[pid]["ref"])
-                for i, pid in enumerate(front_order) if pid in parts]
+        # an entry may name one position (`lc07.2`, see `bore_order`); the
+        # PARTS are numbered in the order each is first named
+        out, seen = [], set()
+        for item in front_order:
+            pid = split_order_item(item)[0]
+            if pid in parts and pid not in seen:
+                seen.add(pid)
+                out.append((float(len(out)), pid, parts[pid]["ref"]))
+        return out
 
     out = [(float((p.get("at") or [0, 0])[0]), pid, p["ref"])
            for pid, p in parts.items()]
     return sorted(out)
+
+
+def split_order_item(item):
+    """`(part id, position or None)` for one `optical.front-order` entry.
+
+    A bare part id means the part, its positions counted 1 upward. `lc07.2`
+    means one position of it. Part ids are segments and hold no dot, so the
+    split is unambiguous; a suffix that is not a whole number from 1 leaves the
+    item as a part id nothing will match, which L88 reports.
+    """
+    s = str(item)
+    pid, dot, pos = s.rpartition(".")
+    if dot and pos.isdigit() and int(pos) >= 1:
+        return pid, int(pos)
+    return s, None
+
+
+def bore_order(entry):
+    """`{part id: [positions, in numbering order]}` where a module states one.
+
+    WITHIN A CONNECTOR, POSITION ORDER IS USUALLY THE NUMBERING, AND NOT ALWAYS.
+    A duplex adapter's positions are its own - bore 1, bore 2 - and counting
+    them in that order is right wherever the adapter stands the way it was
+    drawn. Turn it over, as the lower row of a belly-to-belly holder is, and
+    bore 1 is on the other hand: the fibres still enter the bores they enter,
+    but a reader counting ports along the row meets bore 2 first. That is a
+    fact about the face, like the order of the parts themselves, so it is
+    stated in the same place: `front-order` names the positions one by one,
+    `lc07.2, lc07.1`, for a part whose numbering does not run 1 upward. A part
+    named bare is absent from the result and counts as it always did.
+    """
+    out = {}
+    for item in ((entry.get("optical") or {}).get("front-order") or []):
+        pid, pos = split_order_item(item)
+        if pos is not None:
+            out.setdefault(pid, []).append(pos)
+    return out
 
 
 def front_label(entry, endpoint, load_ref):
@@ -104,10 +148,14 @@ def front_label(entry, endpoint, load_ref):
     if face:
         return None                      # a rear endpoint has no front label
     caps = optical.capacities(entry, load_ref)
+    order = bore_order(entry)
     n = 0
     for _x, pid, ref in _front_parts(entry):
         width = caps.get(pid) or 0
         if pid == part:
+            if pid in order:
+                # the position's place in the stated order, not its own number
+                return str(n + order[pid].index(pos) + 1) if pos in order[pid] else None
             return str(n + pos)
         n += width
     return None

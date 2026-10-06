@@ -1,0 +1,149 @@
+format: 1
+kind: module
+name: xmn1021hb
+version: 1.0.0
+class: adapter-panel
+behaviour: fills
+description: >-
+  Fibrain XMN1021HB - HD adapter holder, 12 LC duplex adapters (lime green),
+  multimode, OM5. Fills one slot of a Fibrain HD patch panel.
+size: {w: 100.0, h: 21.0, d: 37.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+attrs: {media: fiber, model: XMN1021HB}
+body:
+  depth: 37.0
+  # A BODY IN PIECES, as fibrain/xmn1051gb@1 says why: the moulding, and the
+  # back half of each adapter standing out of it, each showing the patch of
+  # the rear face it covers.
+  boxes:
+    - {id: moulding, at: [0.5, 0.7], size: [99.0, 19.6], from: 1.0, depth: 30.0, color: '#17191b', shows: [rear],
+       confidence: estimated, source: 'the moulding of the 100 x 21 x 37 holder of DSH_XMx rev 1.1, drawn just inside its face; the moulding is taken as 6 short of the overall depth, by eye off the renders'}
+    - {id: lc01-back, at: [3.750, 1.520], size: [13.15, 8.68], from: 31.0, depth: 6.0, color: '#a0ae61', shows: [rear],
+       confidence: estimated, source: 'the adapter body standing out of the back of the holder, as the vendor renders show it; 6 is read by eye'}
+    - {id: lc02-back, at: [19.620, 1.520], size: [13.15, 8.68], from: 31.0, depth: 6.0, color: '#a0ae61', shows: [rear],
+       confidence: estimated, source: 'the adapter body standing out of the back of the holder, as the vendor renders show it; 6 is read by eye'}
+    - {id: lc03-back, at: [35.490, 1.520], size: [13.15, 8.68], from: 31.0, depth: 6.0, color: '#a0ae61', shows: [rear],
+       confidence: estimated, source: 'the adapter body standing out of the back of the holder, as the vendor renders show it; 6 is read by eye'}
+    - {id: lc04-back, at: [51.360, 1.520], size: [13.15, 8.68], from: 31.0, depth: 6.0, color: '#a0ae61', shows: [rear],
+       confidence: estimated, source: 'the adapter body standing out of the back of the holder, as the vendor renders show it; 6 is read by eye'}
+    - {id: lc05-back, at: [67.230, 1.520], size: [13.15, 8.68], from: 31.0, depth: 6.0, color: '#a0ae61', shows: [rear],
+       confidence: estimated, source: 'the adapter body standing out of the back of the holder, as the vendor renders show it; 6 is read by eye'}
+    - {id: lc06-back, at: [83.100, 1.520], size: [13.15, 8.68], from: 31.0, depth: 6.0, color: '#a0ae61', shows: [rear],
+       confidence: estimated, source: 'the adapter body standing out of the back of the holder, as the vendor renders show it; 6 is read by eye'}
+    - {id: lc07-back, at: [3.750, 10.800], size: [13.15, 8.68], from: 31.0, depth: 6.0, color: '#a0ae61', shows: [rear],
+       confidence: estimated, source: 'the adapter body standing out of the back of the holder, as the vendor renders show it; 6 is read by eye'}
+    - {id: lc08-back, at: [19.620, 10.800], size: [13.15, 8.68], from: 31.0, depth: 6.0, color: '#a0ae61', shows: [rear],
+       confidence: estimated, source: 'the adapter body standing out of the back of the holder, as the vendor renders show it; 6 is read by eye'}
+    - {id: lc09-back, at: [35.490, 10.800], size: [13.15, 8.68], from: 31.0, depth: 6.0, color: '#a0ae61', shows: [rear],
+       confidence: estimated, source: 'the adapter body standing out of the back of the holder, as the vendor renders show it; 6 is read by eye'}
+    - {id: lc10-back, at: [51.360, 10.800], size: [13.15, 8.68], from: 31.0, depth: 6.0, color: '#a0ae61', shows: [rear],
+       confidence: estimated, source: 'the adapter body standing out of the back of the holder, as the vendor renders show it; 6 is read by eye'}
+    - {id: lc11-back, at: [67.230, 10.800], size: [13.15, 8.68], from: 31.0, depth: 6.0, color: '#a0ae61', shows: [rear],
+       confidence: estimated, source: 'the adapter body standing out of the back of the holder, as the vendor renders show it; 6 is read by eye'}
+    - {id: lc12-back, at: [83.100, 10.800], size: [13.15, 8.68], from: 31.0, depth: 6.0, color: '#a0ae61', shows: [rear],
+       confidence: estimated, source: 'the adapter body standing out of the back of the holder, as the vendor renders show it; 6 is read by eye'}
+parts:
+  - {id: lc01, ref: common/lc-duplex-v-adapter@6, at: [5.685, -1.015], rotate: 90, attrs: {housing-finish: '#a0ae61'}}
+  - {id: lc02, ref: common/lc-duplex-v-adapter@6, at: [21.555, -1.015], rotate: 90, attrs: {housing-finish: '#a0ae61'}}
+  - {id: lc03, ref: common/lc-duplex-v-adapter@6, at: [37.425, -1.015], rotate: 90, attrs: {housing-finish: '#a0ae61'}}
+  - {id: lc04, ref: common/lc-duplex-v-adapter@6, at: [53.295, -1.015], rotate: 90, attrs: {housing-finish: '#a0ae61'}}
+  - {id: lc05, ref: common/lc-duplex-v-adapter@6, at: [69.165, -1.015], rotate: 90, attrs: {housing-finish: '#a0ae61'}}
+  - {id: lc06, ref: common/lc-duplex-v-adapter@6, at: [85.035, -1.015], rotate: 90, attrs: {housing-finish: '#a0ae61'}}
+  - {id: lc07, ref: common/lc-duplex-v-adapter@6, at: [5.685, 8.265], rotate: 270, attrs: {housing-finish: '#a0ae61'}}
+  - {id: lc08, ref: common/lc-duplex-v-adapter@6, at: [21.555, 8.265], rotate: 270, attrs: {housing-finish: '#a0ae61'}}
+  - {id: lc09, ref: common/lc-duplex-v-adapter@6, at: [37.425, 8.265], rotate: 270, attrs: {housing-finish: '#a0ae61'}}
+  - {id: lc10, ref: common/lc-duplex-v-adapter@6, at: [53.295, 8.265], rotate: 270, attrs: {housing-finish: '#a0ae61'}}
+  - {id: lc11, ref: common/lc-duplex-v-adapter@6, at: [69.165, 8.265], rotate: 270, attrs: {housing-finish: '#a0ae61'}}
+  - {id: lc12, ref: common/lc-duplex-v-adapter@6, at: [85.035, 8.265], rotate: 270, attrs: {housing-finish: '#a0ae61'}}
+faces:
+  rear: {ref: fibrain/xmn1021hb-rear@1}
+optical:
+  media: om5
+  polish: upc
+  front-order:
+    [lc01, lc02, lc03, lc04, lc05, lc06, lc07.2, lc07.1, lc08.2, lc08.1, lc09.2, lc09.1, lc10.2, lc10.1, lc11.2, lc11.1, lc12.2, lc12.1]
+  paths:
+    - {from: lc01.1, to: 'rear:b01.1'}
+    - {from: lc01.2, to: 'rear:b01.2'}
+    - {from: lc02.1, to: 'rear:b02.1'}
+    - {from: lc02.2, to: 'rear:b02.2'}
+    - {from: lc03.1, to: 'rear:b03.1'}
+    - {from: lc03.2, to: 'rear:b03.2'}
+    - {from: lc04.1, to: 'rear:b04.1'}
+    - {from: lc04.2, to: 'rear:b04.2'}
+    - {from: lc05.1, to: 'rear:b05.1'}
+    - {from: lc05.2, to: 'rear:b05.2'}
+    - {from: lc06.1, to: 'rear:b06.1'}
+    - {from: lc06.2, to: 'rear:b06.2'}
+    - {from: lc07.1, to: 'rear:b07.1'}
+    - {from: lc07.2, to: 'rear:b07.2'}
+    - {from: lc08.1, to: 'rear:b08.1'}
+    - {from: lc08.2, to: 'rear:b08.2'}
+    - {from: lc09.1, to: 'rear:b09.1'}
+    - {from: lc09.2, to: 'rear:b09.2'}
+    - {from: lc10.1, to: 'rear:b10.1'}
+    - {from: lc10.2, to: 'rear:b10.2'}
+    - {from: lc11.1, to: 'rear:b11.1'}
+    - {from: lc11.2, to: 'rear:b11.2'}
+    - {from: lc12.1, to: 'rear:b12.1'}
+    - {from: lc12.2, to: 'rear:b12.2'}
+provenance:
+  size: >-
+    datasheet - DSH_XMx_EN rev 1.1 (03.06.2024), technical specification: height
+    21, width 100, depth 37 mm, plastic. One holder fills one HD slot.
+  parts: >-
+    ESTIMATED. The six columns stand on the 15.87 pitch measured for the SC
+    holders off the vendor's centre-line front render of the 1U extendable
+    panel (fibrain/xmn1051gb@1 records the reading), centred on the 100 face.
+    The adapter is common/lc-duplex-v-adapter turned a quarter turn, landing
+    13.75 x 9.28; two rows abut, 18.56, centred on the 21.
+    THAT ADAPTER IS FS's, MEASURED ON AN FS CASSETTE: 9.28 x 13.75 with its two
+    ports stacked. It is used here on its side because it is the library's LC
+    duplex body that fits two rows in a 21 mm face and takes a colour; whether
+    Fibrain's own LC adapter has that outline is not measured. The vendor's
+    renders of the LC holders (XM-Uchwyt-adapterow_4 and _5) show an adapter
+    filling the same cell as the SC one.
+  orientation: >-
+    photo for the 12-port, carried over for the 6 - the vendor's render of the
+    12-port LC holder (XM-Uchwyt-adapterow_5.jpg) shows the upper row with its
+    latch slots up and the lower row with them down, the two rows belly to
+    belly, as the SC holders are. The 6-port render (_4) shows one row with
+    the slots up.
+  numbering: >-
+    ASSUMED. Fibrain prints nothing on the holder; port numbers go on a separate
+    label field (XL00). Ids run left to right, the upper row first.
+    WITHIN AN ADAPTER the two bores count left to right as well, in both
+    rows. A lower-row adapter is an upper-row one turned over, so its own
+    bore 1 is on the right; `optical.front-order` therefore names its
+    positions `.2` then `.1`, and a 12-port holder's ports read 13, 14, 15,
+    16 along its lower row. Fibrain's label field gives each bore a blank
+    cell in that order and prints no numbers, so this is assumed.
+  colour: >-
+    ASSUMED, NOT SEEN. No held image shows a Fibrain multimode holder. Lime green
+    is the usual colour of an OM5 adapter and the one this library's other
+    OM5 panels carry (#a0ae61); it is not read off anything of Fibrain's.
+  catalogue: >-
+    datasheet - ordering information lists XMN1021HB as 'FO Holder 12x LCdx,
+    MM, OM5'.
+    THE 12-PORT PART NUMBERS ARE THE DATASHEET's. The product page and the 2020
+    HD catalogue print this row differently (a repeated number, or one ending
+    in A, which is a 6-port number); the datasheet is taken as right and that
+    is unconfirmed.
+  optical: >-
+    EVERY PATH IS ONE MATING SLEEVE, NOT A STRAND. A holder carries adapters and
+    no glass: a fibre entering bore k of a front adapter leaves through the
+    same bore at the back, so front `lcNN.k` reaches rear `bNN.k`. The rear
+    face composes each adapter at the mirrored column and TURNED THE OTHER
+    WAY, so that bore k is the same sleeve seen from behind; that puts its
+    latch slot on the wrong side of the rear drawing, a stated art error,
+    because a mirrored host cannot seat an occupant.
+  dust-caps: >-
+    DRAWN CAPPED, AND THE VENDOR's RENDERS SHOW THE PORTS OPEN. The adapter
+    ships holding a duplex dust cap, as common/lc-duplex-v-adapter@6 declares
+    it, and a cap is what an unused port holds. The library ships its
+    configurations bare of `occupants:` keys (docs/pluggables-design.md,
+    decision 2), so no configuration here empties them; whoever populates the
+    panel does. The SC holders of this family are open, because
+    common/sc-simplex-adapter@1 seats no cap - an inconsistency of that part,
+    not a fact about Fibrain.
+skins: [default]

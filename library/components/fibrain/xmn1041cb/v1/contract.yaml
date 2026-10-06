@@ -1,0 +1,112 @@
+format: 1
+kind: module
+name: xmn1041cb
+version: 1.0.0
+class: adapter-panel
+behaviour: fills
+description: >-
+  Fibrain XMN1041CB - HD adapter holder, 12 SC simplex adapters (aqua),
+  multimode, OM3. Fills one slot of a Fibrain HD patch panel.
+size: {w: 100.0, h: 21.0, d: 37.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+attrs: {media: fiber, model: XMN1041CB}
+body:
+  depth: 37.0
+  # A BODY IN PIECES, as fibrain/xmn1051gb@1 says why: the moulding, and the
+  # back half of each adapter standing out of it, each showing the patch of
+  # the rear face it covers.
+  boxes:
+    - {id: moulding, at: [0.5, 0.7], size: [99.0, 19.6], from: 1.0, depth: 30.0, color: '#17191b', shows: [rear],
+       confidence: estimated, source: 'the moulding of the 100 x 21 x 37 holder of DSH_XMx rev 1.1, drawn just inside its face; the moulding is taken as 6 short of the overall depth, by eye off the renders'}
+    - {id: sc01-back, at: [4.225, 1.400], size: [12.20, 8.80], from: 31.0, depth: 6.0, color: '#54ccde', shows: [rear],
+       confidence: estimated, source: 'the adapter body standing out of the back of the holder, as the vendor renders show it; 6 is read by eye'}
+    - {id: sc02-back, at: [20.095, 1.400], size: [12.20, 8.80], from: 31.0, depth: 6.0, color: '#54ccde', shows: [rear],
+       confidence: estimated, source: 'the adapter body standing out of the back of the holder, as the vendor renders show it; 6 is read by eye'}
+    - {id: sc03-back, at: [35.965, 1.400], size: [12.20, 8.80], from: 31.0, depth: 6.0, color: '#54ccde', shows: [rear],
+       confidence: estimated, source: 'the adapter body standing out of the back of the holder, as the vendor renders show it; 6 is read by eye'}
+    - {id: sc04-back, at: [51.835, 1.400], size: [12.20, 8.80], from: 31.0, depth: 6.0, color: '#54ccde', shows: [rear],
+       confidence: estimated, source: 'the adapter body standing out of the back of the holder, as the vendor renders show it; 6 is read by eye'}
+    - {id: sc05-back, at: [67.705, 1.400], size: [12.20, 8.80], from: 31.0, depth: 6.0, color: '#54ccde', shows: [rear],
+       confidence: estimated, source: 'the adapter body standing out of the back of the holder, as the vendor renders show it; 6 is read by eye'}
+    - {id: sc06-back, at: [83.575, 1.400], size: [12.20, 8.80], from: 31.0, depth: 6.0, color: '#54ccde', shows: [rear],
+       confidence: estimated, source: 'the adapter body standing out of the back of the holder, as the vendor renders show it; 6 is read by eye'}
+    - {id: sc07-back, at: [4.225, 10.800], size: [12.20, 8.80], from: 31.0, depth: 6.0, color: '#54ccde', shows: [rear],
+       confidence: estimated, source: 'the adapter body standing out of the back of the holder, as the vendor renders show it; 6 is read by eye'}
+    - {id: sc08-back, at: [20.095, 10.800], size: [12.20, 8.80], from: 31.0, depth: 6.0, color: '#54ccde', shows: [rear],
+       confidence: estimated, source: 'the adapter body standing out of the back of the holder, as the vendor renders show it; 6 is read by eye'}
+    - {id: sc09-back, at: [35.965, 10.800], size: [12.20, 8.80], from: 31.0, depth: 6.0, color: '#54ccde', shows: [rear],
+       confidence: estimated, source: 'the adapter body standing out of the back of the holder, as the vendor renders show it; 6 is read by eye'}
+    - {id: sc10-back, at: [51.835, 10.800], size: [12.20, 8.80], from: 31.0, depth: 6.0, color: '#54ccde', shows: [rear],
+       confidence: estimated, source: 'the adapter body standing out of the back of the holder, as the vendor renders show it; 6 is read by eye'}
+    - {id: sc11-back, at: [67.705, 10.800], size: [12.20, 8.80], from: 31.0, depth: 6.0, color: '#54ccde', shows: [rear],
+       confidence: estimated, source: 'the adapter body standing out of the back of the holder, as the vendor renders show it; 6 is read by eye'}
+    - {id: sc12-back, at: [83.575, 10.800], size: [12.20, 8.80], from: 31.0, depth: 6.0, color: '#54ccde', shows: [rear],
+       confidence: estimated, source: 'the adapter body standing out of the back of the holder, as the vendor renders show it; 6 is read by eye'}
+parts:
+  - {id: sc01, ref: common/sc-simplex-adapter@1, at: [5.625, -0.600], rotate: 90, attrs: {housing-finish: '#54ccde'}}
+  - {id: sc02, ref: common/sc-simplex-adapter@1, at: [21.495, -0.600], rotate: 90, attrs: {housing-finish: '#54ccde'}}
+  - {id: sc03, ref: common/sc-simplex-adapter@1, at: [37.365, -0.600], rotate: 90, attrs: {housing-finish: '#54ccde'}}
+  - {id: sc04, ref: common/sc-simplex-adapter@1, at: [53.235, -0.600], rotate: 90, attrs: {housing-finish: '#54ccde'}}
+  - {id: sc05, ref: common/sc-simplex-adapter@1, at: [69.105, -0.600], rotate: 90, attrs: {housing-finish: '#54ccde'}}
+  - {id: sc06, ref: common/sc-simplex-adapter@1, at: [84.975, -0.600], rotate: 90, attrs: {housing-finish: '#54ccde'}}
+  - {id: sc07, ref: common/sc-simplex-adapter@1, at: [5.625, 8.800], rotate: 270, attrs: {housing-finish: '#54ccde'}}
+  - {id: sc08, ref: common/sc-simplex-adapter@1, at: [21.495, 8.800], rotate: 270, attrs: {housing-finish: '#54ccde'}}
+  - {id: sc09, ref: common/sc-simplex-adapter@1, at: [37.365, 8.800], rotate: 270, attrs: {housing-finish: '#54ccde'}}
+  - {id: sc10, ref: common/sc-simplex-adapter@1, at: [53.235, 8.800], rotate: 270, attrs: {housing-finish: '#54ccde'}}
+  - {id: sc11, ref: common/sc-simplex-adapter@1, at: [69.105, 8.800], rotate: 270, attrs: {housing-finish: '#54ccde'}}
+  - {id: sc12, ref: common/sc-simplex-adapter@1, at: [84.975, 8.800], rotate: 270, attrs: {housing-finish: '#54ccde'}}
+faces:
+  rear: {ref: fibrain/xmn1041cb-rear@1}
+optical:
+  media: om3
+  polish: upc
+  front-order:
+    [sc01, sc02, sc03, sc04, sc05, sc06, sc07, sc08, sc09, sc10, sc11, sc12]
+  paths:
+    - {from: sc01.1, to: 'rear:b01.1'}
+    - {from: sc02.1, to: 'rear:b02.1'}
+    - {from: sc03.1, to: 'rear:b03.1'}
+    - {from: sc04.1, to: 'rear:b04.1'}
+    - {from: sc05.1, to: 'rear:b05.1'}
+    - {from: sc06.1, to: 'rear:b06.1'}
+    - {from: sc07.1, to: 'rear:b07.1'}
+    - {from: sc08.1, to: 'rear:b08.1'}
+    - {from: sc09.1, to: 'rear:b09.1'}
+    - {from: sc10.1, to: 'rear:b10.1'}
+    - {from: sc11.1, to: 'rear:b11.1'}
+    - {from: sc12.1, to: 'rear:b12.1'}
+provenance:
+  size: >-
+    datasheet - DSH_XMx_EN rev 1.1 (03.06.2024), technical specification: height
+    21, width 100, depth 37 mm, plastic. One holder fills one HD slot.
+  parts: >-
+    ESTIMATED. The six columns stand on the 15.87 pitch measured for the SC
+    holders off the vendor's centre-line front render of the 1U extendable
+    panel (fibrain/xmn1051gb@1 records the reading), centred on the 100 face.
+    The adapter is common/sc-simplex-adapter turned a quarter turn, landing
+    12.8 x 9.4; two rows abut, 18.8, centred on the 21.
+  orientation: >-
+    carried over from the single-mode SC holders (fibrain/xmn1051gb@1,
+    fibrain/xmi1051ga@1), whose renders show the upper row's key slot up and
+    the lower row's down, and a 6-port's single row with the key up. No image
+    of a multimode SC holder is held.
+  numbering: >-
+    ASSUMED. Fibrain prints nothing on the holder; port numbers go on a separate
+    label field (XL00). Ids run left to right, the upper row first.
+  colour: >-
+    ASSUMED, NOT SEEN. No held image shows a Fibrain multimode holder. Aqua
+    is the usual colour of an OM3 adapter and the one this library's other
+    OM3 panels carry (#54ccde); it is not read off anything of Fibrain's.
+  catalogue: >-
+    datasheet - ordering information lists XMN1041CB as 'FO Holder 12x SC,
+    MM, OM3'.
+    THE 12-PORT PART NUMBERS ARE THE DATASHEET's. The product page and the 2020
+    HD catalogue print this row differently (a repeated number, or one ending
+    in A, which is a 6-port number); the datasheet is taken as right and that
+    is unconfirmed.
+  optical: >-
+    EVERY PATH IS ONE MATING SLEEVE, NOT A STRAND. A holder carries adapters and
+    no glass: a fibre entering a front adapter leaves through the same adapter
+    at the back, so front `scNN.1` reaches rear `bNN.1`. The rear face
+    composes each adapter at the mirrored column.
+skins: [default]

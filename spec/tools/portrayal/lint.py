@@ -243,7 +243,7 @@ RULES = {
     "L75": ("component",  "a slot's structured facts agree with its prose, and lanes fit the connector", "fix `lanes`/`connector` or the description"),
     "L76": ("device",     "the RJ45 census: every Ethernet jack says whether it has lamps", "use std/rj45@2 with the lamp parts, or say in provenance the jack is bare"),
     "L77": ("component",  "a `sink` sits in a cavity, because that is what it measures from", "use `pocket` for a recess in an otherwise solid face"),
-    "L78": ("component",  "an optical endpoint names a composed connector and a position it has", "fix the part id or the position number"),
+    "L78": ("component",  "an optical endpoint names a composed connector and a position it has; a front order that names a part's positions names each once, together", "fix the part id or the position number; list every position of the part, or name it bare"),
     "L79": ("component",  "no fibre position is claimed twice, and a split's ratios sum to 100", "remove the duplicate path, or fix the ratios"),
     "L80": ("component",  "every fibre position is reached by a path or declared unused with a reason", "route it, or add an `optical.unused` entry saying why it terminates nothing"),
     "L81": ("component",  "a composed pitch respects the standard the part conforms to - equal for a target, no narrower for a floor", "move a target onto the standard's pitch, widen a floor to at least it, or say in provenance why this part differs. Where the placements share an x, make their `rotate` agree so a rotated column can be told from a stacked pair"),
@@ -2681,6 +2681,36 @@ def lint_component_optical_endpoints(path, data, lib_roots):
     if not paths:
         return
     caps = optical.capacities(data, _optical_load_ref(lib_roots))
+    # A FRONT ORDER THAT NAMES POSITIONS NAMES ALL OF THEM, ONCE, TOGETHER.
+    # `front-order` may spell a part out position by position (`lc07.2,
+    # lc07.1`) where its numbering does not run 1 upward. Half a part is not an
+    # order: a position left out has no port number, one named twice has two,
+    # and a part's positions split by another part's would number fibres of one
+    # connector either side of a different one.
+    order, runs, last, bare = optical_ports.bore_order(data), {}, None, set()
+    for item in (opt.get("front-order") or []):
+        pid, pos = optical_ports.split_order_item(item)
+        if pos is None:
+            bare.add(pid)
+        if pid != last:
+            runs[pid] = runs.get(pid, 0) + 1
+            last = pid
+    for pid, listed in order.items():
+        if pid not in caps:
+            err(path, "L78", f"front-order names positions of {pid!r}, which this "
+                             "part does not compose as a connector")
+            continue
+        if sorted(listed) != list(range(1, caps[pid] + 1)):
+            err(path, "L78", f"front-order lists positions {listed} of {pid}, which "
+                             f"presents {caps[pid]} - name each of them exactly once, "
+                             "or name the part bare")
+        if pid in bare:
+            err(path, "L78", f"front-order names {pid} bare and by position - "
+                             "one or the other")
+        if runs.get(pid, 0) > 1:
+            err(path, "L78", f"front-order names {pid}'s positions in {runs[pid]} "
+                             "separate places - one connector's positions are "
+                             "numbered together")
     for p in paths:
         for ep, _ratio in optical.endpoints(p):
             try:
