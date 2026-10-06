@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1244 component majors in 27 namespaces.
+1247 component majors in 27 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -86,7 +86,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/dimm-plan@1` | module | memory | 3.8 × 133.4 × 31.3 |  | 7 | 1 | A DIMM seen from above, standing in its socket - the thin edge of the module with its latches at either end, … |
 | `common/din-1-0-2-3-jack@1` | component | port | 7.01 × 7.01 |  | 0 | 5 | Rear-mount 1.0/2.3 bulkhead jack - the round spanner nut in front of the panel (bezel) around a std/din-1-0-2… |
 | `common/din-clip-ts35@1` | component | mount | 44 × 58 |  | 10 | 1 | DIN-rail mounting clip for a 35 mm top-hat rail (IEC 60715 TS35, 7.5 and 15 mm deep) - the plate screwed to a… |
-| `common/dip-switch-2@1` | component | button | 7 × 10 |  | 10 | 0 | Two-position DIP switch - a red body with two slide actuators side by side and ON at the top, unrotated |
+| `common/dip-switch-2@1` | component | button | 7 × 10 |  | 10 | 1 | Two-position DIP switch - a red body with two slide actuators side by side and ON at the top, unrotated |
 | `common/drive-blank-25@2` | module | blank | 15.3 × 73 × 25 |  | 2 | 1 | Filler for a 2.5 inch SFF drive bay - the carrier moulding without the drive: same release with its orange ri… |
 | `common/drive-blank-35@1` | module | blank | 105.5 × 26.9 × 25 |  | 1 | 0 | Filler for a 3.5 inch LFF drive bay - the carrier moulding without the drive: same release with its orange ri… |
 | `common/drive-carrier-25@2` | module | drive | 15.3 × 73 × 123.7 |  | 2 | 2 | Hot-plug carrier for a 2.5 inch SFF drive, stood on edge as a rack server's front bays present them - two ill… |
@@ -248,17 +248,20 @@ aperture when it is a bare opening - never both at one position. The README's
 | `amphenol/qsfp28-passive-dac@1` | module | transceiver | 18.35 × 8.5 × 52.4 | qsfp | 0 | 0 | Amphenol NDAAFR QSFP28 to QSFP28 100G passive direct-attach copper cable, one end - 32 AWG eight-pair PVC-jac… |
 | `amphenol/qsfp56-linear-active@1` | module | transceiver | 18.35 × 8.5 × 52.4 | qsfp | 0 | 0 | Amphenol NJAAF3 QSFP56 to QSFP56 200G active copper cable, one end - 30 AWG eight-pair dual-drain cable in a … |
 
-## amphenol-ns/ (7)
+## amphenol-ns/ (10)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
 | `amphenol-ns/alarm-card-307608@1` | component | port | 39 × 42.8 |  | 1 | 0 | Rear face of the alarm card of a passive Amphenol Network Solutions 300CB08 - two three-pin wire-wrap headers… |
 | `amphenol-ns/alarm-dip-8@1` | component | button | 21.9 × 4.6 |  | 1 | 0 | Eight-position DIP switch seen through a slot in the front of an Amphenol Network Solutions 1RU power panel -… |
-| `amphenol-ns/breaker-1ru@1` | module | breaker | 17.8 × 39.1 × 127.5 |  | 1 | 0 | Single-pole bullet-terminal plug-in circuit breaker for Amphenol Network Solutions 1RU breaker panels, drawn … |
+| `amphenol-ns/breaker-1ru@1` | module | breaker | 17.8 × 39.1 × 127.5 |  | 1 | 1 | Single-pole bullet-terminal plug-in circuit breaker for Amphenol Network Solutions 1RU breaker panels - the b… |
 | `amphenol-ns/breaker-blank-1ru@1` | module | blank | 17.8 × 39.1 × 1 |  | 1 | 0 | Blanking cover for an unused breaker position on an Amphenol Network Solutions 1RU breaker panel |
 | `amphenol-ns/cover-thumbscrew@1` | component | screw | 9.7 × 9.7 |  | 1 | 0 | Captive thumbscrew holding the removable front cover of an Amphenol Network Solutions 1RU power panel - turne… |
+| `amphenol-ns/guard-mount-1ru@1` | component | mechanical | 3.2 × 32.3 | breaker-1ru-guard | 0 | 1 | The two threaded inserts in the face of a 1RU plug-in breaker, one above the other - where its touch guard sc… |
 | `amphenol-ns/input-stud-pair@1` | component | inlet | 29 × 41 |  | 1 | 0 | One input terminal of an Amphenol Network Solutions 1RU power panel with vertical inputs - two 3/8-16 studs o… |
 | `amphenol-ns/output-terminal@1` | component | inlet | 14.75 × 34 |  | 1 | 0 | One output circuit of an Amphenol Network Solutions 1RU power panel with terminal-block outputs - a BATT scre… |
+| `amphenol-ns/touch-guard-1ru@1` | component | mechanical | 17.8 × 39.1 | breaker-1ru-guard | 0 | 1 | Touch guard cover for a 1RU plug-in breaker on an Amphenol Network Solutions breaker panel - a black hood scr… |
+| `amphenol-ns/tpa-fuse-holder-307492@1` | module | breaker | 17.8 × 39.1 × 127.5 |  | 1 | 0 | 1RU TPA fuse holder, part 307492 - a plug-in carrier that takes one Cooper Bussmann TPA fuse and seats in the… |
 
 ## casa/ (39)
 

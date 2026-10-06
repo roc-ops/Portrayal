@@ -226,6 +226,12 @@ def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
         # through one - and their census is spec/tests/test_dsub_plugs.py.
         if c.get("mates") in dsub_connectors:
             continue
+        # NOR IS A COVER (#807). amphenol-ns/touch-guard-1ru@1 mates
+        # `breaker-1ru-guard`, the face of a plug-in breaker, which the registry
+        # holds so a guard that ships on a breaker can come off. Left out by what
+        # the INTERFACE is - the registry marks it `cover: true` - not by name.
+        if (connectors.get(c.get("mates")) or {}).get("cover"):
+            continue
         if c.get("mates") in connectors and c.get("class") != "cap":
             ns = f.parents[2].name
             found[f"{ns}/{c['name']}@{c['version'].split('.')[0]}"] = c

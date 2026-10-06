@@ -21,6 +21,51 @@ provenance:
     washers.
 attrs: {stud-thread: 3/8-16, stud-centres-mm: 25.4, lug-holes: 2}
 elements:
-  stud-top: {at: [5.5, 0.0], size: [18.0, 18.0], class: inlet}
-  stud-bottom: {at: [5.5, 23.0], size: [18.0, 18.0], class: inlet}
+  stud-top: {at: [10.9, 5.4], size: [7.2, 7.2], class: inlet}
+  stud-bottom: {at: [10.9, 28.4], size: [7.2, 7.2], class: inlet}
+relief:
+  wall: '#0c0d0e'
+  features:
+    - node: washer-top
+      out: 2.0
+      shape: true
+      color: '#b9bdc1'
+      confidence: estimated
+      source: >-
+        a flat washer under each nut, per the datasheet (Keps nuts and flat washers); thickness not stated
+    - node: nut-top
+      out: 10.0
+      shape: true
+      color: '#d0d3d6'
+      confidence: estimated
+      source: >-
+        a 3/8-16 hex nut is about 8.5 thick and sits on the washer; neither figure is in the documents held
+    - node: stud-top
+      cyl: 24.0
+      thread: 1.59
+      color: '#a4a9ae'
+      confidence: estimated
+      source: >-
+        3/8-16 is 16 threads per inch, a 1.59 pitch; how far the stud stands past the nut is by eye off the rear photograph of the guide, Fig. 1-2
+    - node: washer-bottom
+      out: 2.0
+      shape: true
+      color: '#b9bdc1'
+      confidence: estimated
+      source: >-
+        a flat washer under each nut, per the datasheet (Keps nuts and flat washers); thickness not stated
+    - node: nut-bottom
+      out: 10.0
+      shape: true
+      color: '#d0d3d6'
+      confidence: estimated
+      source: >-
+        a 3/8-16 hex nut is about 8.5 thick and sits on the washer; neither figure is in the documents held
+    - node: stud-bottom
+      cyl: 24.0
+      thread: 1.59
+      color: '#a4a9ae'
+      confidence: estimated
+      source: >-
+        3/8-16 is 16 threads per inch, a 1.59 pitch; how far the stud stands past the nut is by eye off the rear photograph of the guide, Fig. 1-2
 skins: [default]

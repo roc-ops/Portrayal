@@ -1,0 +1,64 @@
+format: 1
+kind: component
+name: touch-guard-1ru
+version: 1.0.0
+class: mechanical
+behaviour: occupies
+mates: breaker-1ru-guard
+profile: power
+description: >-
+  Touch guard cover for a 1RU plug-in breaker on an Amphenol Network Solutions
+  breaker panel - a black hood screwed over the breaker handle so a circuit is
+  not switched by accident. One ships on every breaker; a replacement set of
+  sixteen is part 307794.
+size: {w: 17.8, h: 39.1}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  The guard as the panel front view draws it: the 300CB08 installation guide 149722-2 A9 Fig. 3-1 shows sixteen
+  guard cells 17.8 wide by 39.1 high (35 px and 77 px at 1.9685 px/mm), one
+  filling each opening of the front cover.
+attrs: {vendor-sku: '307794', vendor-sku-note: a set of sixteen}
+provenance:
+  size: >-
+    drawing - see size-notes.
+  face: >-
+    drawing and photo. Black in every product photograph. Fig. 3-1 draws two
+    screw heads one above the other, 8.0 and 30.5 down the cell; they are the
+    screws that hold the guard to the breaker (Fig. 2-9a).
+  shape: >-
+    Fig. 2-9a is the only view of the guard off the breaker and shows a curved
+    hood. HOW MUCH OF THE HANDLE IT LEAVES VISIBLE FROM STRAIGHT ON is not
+    established: it is drawn as covering it, which is what the front
+    photographs look like at their size.
+  mate: >-
+    the centre of the cell, the point the breaker presents its guard mount at.
+elements:
+  guard: {at: [0.0, 0.0], size: [17.8, 39.1], class: mechanical}
+  hood: {at: [1.4, 2.6], size: [15.0, 33.9], class: mechanical}
+  screw-top: {at: [7.4, 6.5], size: [3.0, 3.0], class: screw}
+  screw-bottom: {at: [7.4, 29.0], size: [3.0, 3.0], class: screw}
+connection-points:
+  mate: {at: [8.9, 19.55], direction: front}
+relief:
+  wall: '#0f1112'
+  features:
+    - node: hood
+      out: 17.0
+      shape: true
+      color: '#17191b'
+      confidence: estimated
+      source: >-
+        the hood has to clear a handle that stands 15.37 off the breaker face, so 17 is the least it can be; no view dimensions it. The bottom view of the panel, Fig. 3-12, gives 14.7 from the chassis front to the front of the guards, which fits a breaker face a little behind the front cover
+    - node: screw-top
+      out: 17.05
+      color: '#3a3e42'
+      confidence: estimated
+      source: >-
+        a guard screw in the face of the hood; drawn a hair proud of it so the head stays visible on the hood top
+    - node: screw-bottom
+      out: 17.05
+      color: '#3a3e42'
+      confidence: estimated
+      source: >-
+        see screw-top
+skins: [default]

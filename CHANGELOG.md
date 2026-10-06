@@ -27,17 +27,23 @@ names the ref that replaces it.
 ### Added
 - Amphenol Network Solutions, a new vendor (`amphenol-ns`, formerly Telect):
   the 300CB08 (`amphenol-ns/300cb08`), a 1RU dual-feed DC circuit breaker
-  panel with sixteen plug-in breaker positions, all six faces, and seven
-  `amphenol-ns/` parts. `amphenol-ns/breaker-1ru@1` is one module for every
-  rating, 2 A to 60 A, set per position by its `rating` field. It is the first
-  power distribution device: `spec/schemas/profiles.yaml` gains a `power`
-  profile, which owes an input rating, the panel's own draw and an operating
-  temperature and no `performance` or `platform` section, and
-  `spec/schemas/power-roles.yaml` gains the class `breaker` under `passive`,
-  for any removable circuit protector. In the DCIM exports the input
-  terminals are `dc-terminal` power ports and each breaker position is a
-  module bay; the sixteen output circuits and the alarm contacts are not
-  exported yet. No existing device or export changes.
+  panel with sixteen plug-in positions, all six faces, and ten
+  `amphenol-ns/` parts. A position takes `amphenol-ns/breaker-1ru@1`, one
+  module for every rating from 2 A to 60 A, set per position by its `rating`
+  field and printed on its handle; `amphenol-ns/tpa-fuse-holder-307492@1`,
+  which carries its fuse as a `fuse-rating` field; or the blanking cover. A
+  breaker ships wearing `amphenol-ns/touch-guard-1ru@1`, a separate part
+  seated on it that comes off: `spec/schemas/connectors.yaml` gains
+  `breaker-1ru-guard`, marked `cover: true`, the first slot that is a cover
+  mount and not a connector. It is the first power distribution device:
+  `spec/schemas/profiles.yaml` gains a `power` profile, which owes an input
+  rating, the panel's own draw and an operating temperature and no
+  `performance` or `platform` section, and `spec/schemas/power-roles.yaml`
+  gains the class `breaker` under `passive`, for any removable circuit
+  protector. In the DCIM exports the input terminals are `dc-terminal` power
+  ports and each position is a module bay; the sixteen output circuits and
+  the alarm contacts are not exported yet. No existing device or export
+  changes.
 - CFP, CFP2, CFP4 and CXP cages offer optics. `generic/cfp-lc@1`,
   `generic/cfp-sc@1`, `generic/cfp-mpo@1`, `generic/cfp2-lc@1`,
   `generic/cfp2-mpo@1`, `generic/cfp4-lc@1`, `generic/cfp4-mpo@1` and

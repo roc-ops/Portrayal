@@ -7,21 +7,20 @@ behaviour: fills
 profile: power
 description: >-
   Single-pole bullet-terminal plug-in circuit breaker for Amphenol Network
-  Solutions 1RU breaker panels, drawn as it sits in the panel - behind its
-  touch guard cover. The panel datasheet calls it AIRPAX 1U Series and sells
-  eleven ratings from 2 A to 60 A, standard delay, as part numbers 151723,
-  152805, 149710 to 149716, 149718 and 149719.
+  Solutions 1RU breaker panels - the bare breaker, with its handle, the
+  rating printed on the handle and an on/off flag beside it. It ships into
+  the panel wearing a touch guard, which is a separate part seated on it. The
+  panel datasheet calls the breaker AIRPAX 1U Series and sells eleven ratings
+  from 2 A to 60 A, standard delay.
 size: {w: 17.8, h: 39.1, d: 127.5}
 size-confidence: {w: drawing, h: drawing, d: datasheet}
 size-notes: >-
-  THE FACE IS THE TOUCH GUARD AS THE PANEL FRONT VIEW DRAWS IT, not the bare
-  breaker. the 300CB08 installation guide 149722-2 A9 Fig. 3-1 draws sixteen guard cells 17.8 wide by 39.1 high on a
-  19.81 pitch (35 px and 77 px at 1.9685 px/mm). The bare breaker behind it is
-  19.05 MAX wide by 37.03 MAX high in the Sensata IAR/IUR/IER/CUR/CER
-  datasheet (page 2 and 3), so the guard is narrower than the body it covers
-  and the body hides behind the front cover between cells. The depth is that
-  datasheet dimension B for a quarter-inch bullet, 5.019 in or 127.48, front of
-  the body to the bullet tips, handle excluded.
+  THE FACE IS THE OPENING IT SHOWS THROUGH, not the whole breaker. the 300CB08 installation guide 149722-2 A9 Fig.
+  3-1 draws sixteen openings 17.8 wide by 39.1 high on a 19.81 pitch. The
+  breaker behind is 19.05 MAX wide by 37.03 MAX high in the Sensata IAR/IUR/IER/CUR/CER datasheet, pages 2 and 3, so its sides
+  sit behind the webs of the front cover and it is drawn 37.0 high, centred
+  in the opening. The depth is dimension B for a quarter-inch bullet, 5.019 in
+  or 127.48, front of the body to the bullet tips, handle excluded.
 attrs: {model: 1RU Circuit Breaker, series: AIRPAX 1U, poles: 1, terminal: bullet}
 provenance:
   size: >-
@@ -37,19 +36,30 @@ provenance:
     CATALOGUE NUMBER, so the series is the vendor statement and the exact
     Airpax part is not known.
   face: >-
-    drawing and photo. The guard is black in every product photograph. Two
-    round holes, one above the other, are the puller threads the guide
-    describes in section 2.3.1, at 8.0 and 30.5 down the cell in Fig. 3-1.
+    datasheet for the layout, photo for the look. the Sensata IAR/IUR/IER/CUR/CER datasheet, pages 2 and 3 put two threaded
+    inserts 29.11 apart on the face, 3.91 from each end, and a handle window
+    8.26 wide. The one product photograph of a bare breaker, on the 300CB08
+    product page, shows a black body, brass inserts, a black handle with the
+    rating in white on it, and a red-over-green flag beside the handle. The
+    exact position and size of the handle and the flag are read off that
+    photograph by eye, which is taken at an angle.
+  handle: >-
+    datasheet - the handle stands 15.37 (0.605 in) proud of the face in the Sensata IAR/IUR/IER/CUR/CER datasheet, pages 2 and 3.
+    It is drawn in one position; nothing in a contract can yet say on, off or
+    tripped.
   rating: >-
     datasheet for the list, photo for where it prints. The eleven ratings and
     their part numbers are the 300CB08 datasheet list: 2 A 151723, 3 A 152805,
     5 A 149710, 10 A 149711, 15 A 149712, 20 A 149713, 25 A 149714, 30 A
-    149715, 40 A 149716, 50 A 149718, 60 A 149719. THE RATING IS PRINTED ON
-    THE HANDLE, AND THE TOUCH GUARD HIDES THE HANDLE - the one product
-    photograph of a bare breaker shows a white 50 on it. So the field is
-    carried in the drawing as a text node that is not displayed: the value
-    travels with the part and no ink is drawn that the installed face does
-    not show.
+    149715, 40 A 149716, 50 A 149718, 60 A 149719. The rating is printed on
+    the handle, where the photograph shows a white 50.
+  guard-mount: >-
+    the 300CB08 installation guide 149722-2 A9 section 2.2.8 and Fig. 2-9a: a touch guard cover is screwed onto the
+    face of each breaker, into the two inserts, before the breaker goes in.
+    The two inserts are composed here as the guard mount, a part of their own,
+    and the breaker ships with a guard seated on it.
+    With the guard off, the same inserts take the breaker puller (section
+    2.3.1).
 fields:
   rating:
     label: Rating
@@ -61,7 +71,18 @@ fields:
       trip rating in amperes; each value is a separate vendor part number,
       listed under provenance
 elements:
-  guard: {at: [0.0, 0.0], size: [17.8, 39.1], class: mechanical}
-  thread-top: {at: [7.4, 6.5], size: [3.0, 3.0], class: mechanical}
-  thread-bottom: {at: [7.4, 29.0], size: [3.0, 3.0], class: mechanical}
+  body: {at: [0.0, 1.05], size: [17.8, 37.0], class: mechanical}
+  handle: {at: [4.9, 12.0], size: [8.0, 12.0], class: button}
+  flag: {at: [13.6, 14.0], size: [2.6, 8.0], class: marking}
+parts:
+  - {ref: amphenol-ns/guard-mount-1ru@1, id: guard, at: [7.3, 3.4], default: amphenol-ns/touch-guard-1ru@1}
+relief:
+  wall: '#0f1112'
+  features:
+    - node: handle
+      out: 15.37
+      color: '#17191b'
+      confidence: datasheet
+      source: >-
+        the Sensata IAR/IUR/IER/CUR/CER datasheet, pages 2 and 3: the handle stands 0.605 in, 15.37, off the face
 skins: [default]
