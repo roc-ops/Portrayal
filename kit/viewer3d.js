@@ -777,13 +777,15 @@ export function createViewer(container, opts = {}) {
       box = new THREE.Mesh(geo, [...mats, metal]);
       scene.add(box);
     } else if (devIndex && sheetShell(devIndex.chassis).sheet) {
-      // A SHEET BODY: the same six faces, each showing only what its drawing
-      // painted. render.py left the faceplate unfilled, so the raster is
-      // transparent wherever there is no metal, and the face materials already
-      // cut punched pixels away (alphaTest, above) - that is open air with no
-      // change here. What a box never needed is the other side: a tray is seen
-      // from above and from below, so its plates are drawn from both.
-      for (const m of mats) m.side = THREE.DoubleSide;
+      // A SHEET BODY HAS NO SIDES (docs/cable-managers-design.md section 4). Its
+      // views are elevations - a front view shows the ears and the rings end-on,
+      // and none of that metal lies in the front plane - so painting them on the
+      // six faces of the envelope would stand a picture of the part on every
+      // side of it. Nothing is drawn from the faces; the solid is what the
+      // views' parts build: the floor of a well (relief.js cavityShell) and
+      // whatever stands proud. The box stays, invisible, as the frame the faces
+      // and their relief are placed in.
+      for (const m of mats) m.visible = false;
       box = new THREE.Mesh(new THREE.BoxGeometry(W, H, D), mats);
       box.userData.sheet = sheetShell(devIndex.chassis);
       scene.add(box);
