@@ -1,0 +1,123 @@
+format: 1
+kind: component
+name: xfp-lc
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: xfp
+conforms: xfp-module
+profile: networking
+description: >-
+  A generic XFP with an LC duplex face - the shape every XFP optic with two
+  LC bores has, standing for all of them. A long body behind a head that is
+  wider and taller than it, two keyed bores with the latch up, and a bail
+  whose bar lies across the top of the head because the module is seated.
+  Which module it is - rate, protocol, reach, wavelength, watts - is a fact
+  about a vendor product and lives on the wrapper that composes this
+  (docs/pluggables-design.md, decision 5), never here.
+size: {w: 18.35, h: 8.5, d: 69.0}
+size-confidence: {w: registry, h: registry, d: registry}
+head:
+  at: [-1.9, -2.85]
+  size: {w: 22.15, h: 12.15, d: 9.0}
+  size-confidence: {w: datasheet, h: datasheet, d: drawing}
+  node: body
+attrs: {power-absent: not-applicable, form-factor: xfp, face: lc-duplex, media: fiber}
+fields:
+  latch-color:
+    label: Latch colour
+    type: text
+    default: '#6f6f6f'
+  label:
+    label: Module label
+    type: text
+    default: ''
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    registry - xfp-module, XFP MSA INF-8077i Rev 4.5 Figure 31: 18.35 +/-0.1
+    wide (datum E), 8.5 +/-0.1 high (datum F). The 69.0 depth is the inserted
+    length, derived there from 62.1 MIN (the back of the enlarged front
+    section to datum D) and 6.9 +/-0.15 (datum D to the rear end). Two vendor
+    outlines print the same body: the Approved Networks XFP-LR data sheet REV
+    4.2 p3 (18.35 +/-0.1 wide, 8.40 +0.2/-0 high, 78.00 +/-0.2 overall) and
+    the FS 10GBASE-LR XFP datasheet p9 (18.35 +/-0.1, 8.50 +/-0.1, 77.70
+    overall).
+  power: >-
+    NOT APPLICABLE, because this contract is a GENERIC and not a part. It
+    stands in for every module of its kind, so there is no one figure to
+    state, and any wattage here would be a fiction. The figure belongs on the
+    wrapper, which knows which module it is. L27 exempts by `power-absent` and
+    this sentence is why.
+  head: >-
+    datasheet, inside the MSA envelope. INF-8077i Rev 4.5 Figure 31 Note 2
+    defines an enlarged section at the front of the transceiver for the
+    mating plug and the actuator - 3 MAX above the module top, 2 MAX below
+    it, and (Figure 32) 2 MAX each side - and prints only maxima. THE DRAWN
+    FIGURES ARE VENDOR ONES. Height: the Approved Networks XFP-LR data sheet
+    REV 4.2 p3 side view prints 2.85 above the body and 0.80 below it on a
+    12.05 +/-0.1 head; on the registry 8.5 body that is 12.15. Width: the FS
+    10GBASE-LR XFP datasheet p9 end view prints 22.15 across the head, 1.9
+    each side of the body. Length 9.0: Figure 31 prints 9.0 REF (71.1 MAX
+    less 62.1 MIN), and the Approved 78.00 overall less the 69.0 inserted is
+    the same 9.0. THE TWO VENDORS DIFFER IN HEIGHT: FS prints 13 for the
+    whole head and its side view scales about 2.6 above and 1.7 below.
+    Approved is drawn because it prints the split. Everything is within the
+    registry envelope, so nothing is listed in `exceeds`.
+  bores: >-
+    std/lc-bore@3, the keyed opening the other LC generics compose, twice, at
+    the x positions of generic/qsfp-lc@2 (the two bodies are both 18.35
+    wide). LATCH UP and TRANSMIT ON THE LEFT: both vendor end views draw the
+    latch slot above each bore, and the FS one letters them T and R. `rotate:
+    180` puts the tongue up. The 6.25 pitch is printed on both (6.25 +/-0.5
+    on Approved, with 4.70 for the bore square) and is the
+    lc-duplex-receptacle registry figure. INF-8077i Figure 31 draws the end
+    view with two bores and dimensions neither.
+  optical-axis: >-
+    ESTIMATED, scaled - the ferrules are on the mid-height of the body, 4.25
+    below its top. NO DOCUMENT DIMENSIONS IT. The Approved end view, scaled
+    on its printed 6.25 pitch, puts the ferrule centres 7.12 below the head
+    top, which less the printed 2.85 is 4.27. The FS end view, scaled the
+    same way, puts them 7.6 below the top of its bail.
+  latch: >-
+    estimated - a bail, the actuator INF-8077i Figure 31 Note 2 calls the
+    preferred design. Seated, its bar lies across the top of the head: the
+    FS end view draws a bar the full 22.15 wide and about 1.3 tall (scaled)
+    along the top edge, and the Approved end view draws the bail as a frame
+    over the top and both sides. Only the bar is drawn. Its side arms and
+    pivot differ by vendor and are not.
+  bail-colour: >-
+    A FIELD, and the default is the NEUTRAL GREY #6f6f6f of generic/sfp-lc@1.
+    INF-8077i Rev 4.5 section 6.7 says an exposed feature of the transceiver
+    shall be colour coded - beige for 850 nm, blue for 1310 nm, white or red
+    for 1550 nm - so the colour is a fact about the product, and a generic
+    stands for every product of its shape (L99). The grey is in no row of
+    that table. A vendor wrapper sets `latch-color`. The outline follows the
+    fill (`data-stroke-derive`).
+parts:
+  - {ref: std/lc-bore@3, id: tx, at: [3.70, 0.30], rotate: 180, lift: 9.0}
+  - {ref: std/lc-bore@3, id: rx, at: [9.95, 0.30], rotate: 180, lift: 9.0}
+relief:
+  features:
+    - node: body
+      out: 9.0
+      color: '#9aa0a8'
+      confidence: drawing
+      source: >-
+        XFP MSA INF-8077i Rev 4.5 Figure 31, 9.0 REF: the enlarged section of
+        the transceiver, 71.1 MAX less 62.1 MIN from datum D - see
+        provenance.head
+    - node: bail
+      lift: 9.0
+      bar: 1.3
+      confidence: estimated
+      source: >-
+        A ROUND BAR across the top of the head, resting on the head front at
+        lift 9.0, as generic/sfp-lc@1 builds its bail. The diameter is the
+        drawn height of the bar, scaled off the FS p9 end view - see
+        provenance.latch
+connection-points:
+  mate: {at: [9.175, 4.25], direction: front}
+  optical-tx: {at: [6.05, 4.25], direction: front}
+  optical-rx: {at: [12.30, 4.25], direction: front}
+skins: [default]
