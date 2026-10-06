@@ -25,6 +25,19 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- The explorer edits a part's fields. Selecting a part whose component
+  declares `fields:` - a supply's wattage, a latch colour, a filter's channel
+  numbers - shows one control per field in the inspector: a list for a
+  `choice`, an input otherwise, starting from the value the configuration
+  built. A change is written with `setFields`, in 2D and 3D, is kept across a
+  view change, goes when the part is swapped out, and is carried in the page's
+  location as `fields=<path>~<key>~<value>,...` beside `swap=`. A value the
+  field does not take is not written, from the form or from a link. A link
+  restores a field only for a part drawn on the view it opens; one set on
+  another view is dropped on reload (roc-ops/Portrayal#818).
+  `kit/fields.js` gains `fieldRows`, `fieldAccepts`, `encodeFields`,
+  `decodeFields` and `drawnField`, and the shell gains `resetField` and
+  `applyFields` (#811).
 - Barrier terminal blocks seat a lug per pole. `terminal-stud` joins
   `spec/schemas/connectors.yaml` as one nominal connector: a screw or stud
   terminal a lug lands on, claiming no size. The terminal screws of
