@@ -160,11 +160,13 @@ def test_the_netbox_front_ports_carry_no_binding():
 
 @pytest.mark.parametrize("vendor,model,stated,whole", [
     ("Juniper", "MX104", 3.5, 4.0),
-    ("Telco Systems", "TM-7124S", 1.5, 2.0),
+    ("BATM/Telco Systems", "TM-7124S", 1.5, 2.0),
 ])
 def test_the_half_u_boxes_differ_between_the_trees_only_in_height(vendor, model, stated, whole):
-    nb = yaml.safe_load((EXPORTS / "netbox/device-types" / vendor / f"{model}.yaml").read_text())
-    nt = yaml.safe_load((EXPORTS / "nautobot/device-types" / vendor / f"{model}.yaml").read_text())
+    where = dx.manufacturer_dir(vendor)
+    nb = yaml.safe_load((EXPORTS / "netbox/device-types" / where / f"{model}.yaml").read_text())
+    nt = yaml.safe_load((EXPORTS / "nautobot/device-types" / where / f"{model}.yaml").read_text())
+    assert nb["manufacturer"] == nt["manufacturer"] == vendor
     assert (nb["u_height"], nt["u_height"]) == (stated, whole)
     assert f"{stated:g}U" in nt["comments"]
     assert {k for k in nb if nb[k] != nt.get(k)} == {"u_height", "comments"}
@@ -185,3 +187,37 @@ def test_the_trees_differ_nowhere_else():
             rewritten.add(rel)
     assert len(rewritten) > 30
     assert differ == rewritten, sorted(differ ^ rewritten)
+
+
+# --- a manufacturer whose name holds a slash ---------------------------------
+
+def test_a_slash_in_a_manufacturer_is_not_a_directory():
+    """`BATM/Telco Systems` is one manufacturer. Joined into a path as written
+    it opened a `BATM` directory with `Telco Systems` inside it, one level
+    below where every reader of the tree looks. The document keeps the name;
+    the directory does not keep the slash."""
+    assert dx.manufacturer_dir("BATM/Telco Systems") == "BATM-Telco Systems"
+    assert dx.manufacturer_dir("Juniper") == "Juniper"
+    assert "/" not in dx.manufacturer_dir("a/b/c")
+
+
+def test_every_export_sits_one_directory_below_its_tree_under_its_manufacturer():
+    """The files, not the function: each device type and module type is at
+    `<tree>/<kind>/<manufacturer directory>/<file>`, and the directory is its
+    own manufacturer's. A slashed name is among them, or this measured nothing
+    about the case it is here for."""
+    seen, slashed = 0, set()
+    for tree in ("netbox", "nautobot"):
+        for kind in ("device-types", "module-types"):
+            top = EXPORTS / tree / kind
+            for f in sorted(top.rglob("*.yaml")):
+                doc = yaml.safe_load(f.read_text())
+                rel = f.relative_to(top)
+                assert len(rel.parts) == 2, f"{f}: not one directory below {kind}"
+                assert rel.parts[0] == dx.manufacturer_dir(doc["manufacturer"]), f
+                seen += 1
+                if "/" in doc["manufacturer"]:
+                    slashed.add(doc["manufacturer"])
+    assert seen > 1000, "measured almost no exports - run ./publish.sh --no-images"
+    assert slashed, "no manufacturer with a slash was read"
+
