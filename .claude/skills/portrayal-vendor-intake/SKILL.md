@@ -213,7 +213,9 @@ The rules that two OOM kills and one lost evening bought:
    `extract.py` exits 1 when any file it was given FAILed (it still carries
    on past the failure), so the marker is trustworthy. Before that it
    printed `FAIL` and exited 0; for a log from an older run, grep `^FAIL`.
-4. If converting on a remote box: `nohup ... &` survives the ssh dropping,
+4. *Optional, only if you convert on another machine* (the maintainer runs
+   docling on a separate GPU box; converting locally works, more slowly):
+   `nohup ... &` survives the ssh dropping,
    but the launching ssh may hang holding stdout - launch, kill the ssh,
    verify by reconnecting and checking the process and the log.
 5. Finish with one `--reclassify` pass over everything: banner/icon
@@ -316,6 +318,9 @@ MPC7E's 545 W onto the MPC6E.
 
 ## Then
 
+*Optional, maintainer-only.* The maintainer keeps a private knowledge base of
+converted guides; a contributor without one skips this paragraph, and the
+`doc.md` files in `working/images/` serve the same purpose by grep.
 Ingest the `doc.md` corpus into the knowledge base (one bundle per line) so
 modelling-time questions are searchable. Leave out documents that converted to
 no text; they are drawings, and they belong to the figure sets. A vendor the
