@@ -17,7 +17,7 @@ attrs:
   power-absent: not-published
   rotors: 2
   weight-kg: 0.12
-  airflow: port-side-intake
+  airflow: front-to-back
 provenance:
   model: >-
     datasheet - the Cisco Nexus 93180YC-EX NX-OS Mode Hardware Installation Guide, Overview:
@@ -48,9 +48,12 @@ provenance:
     the front of the module", while the stencil render and the photograph both show the
     only lamp-like feature in the upper left corner. The pictures are followed.
   latch-colour: >-
-    datasheet for the convention - burgundy is port-side intake and blue is port-side
-    exhaust, from the guide's Overview table. The hex values are colours off the stencil
-    render and the photograph.
+    datasheet for the convention - the installation guide's Overview table gives burgundy
+    for port-side intake and blue for port-side exhaust. The default burgundy, #ac2f54, is
+    the median of 1320 pixels of the supply latch in the stencil render of the rear face.
+    The blue a port-side-exhaust configuration sets, #50a2cf, is the median of 1800 pixels
+    of the supply latch in the real-unit photograph. The edge colours are darker shades
+    chosen by eye.
   depth: >-
     estimated - not stated. A 40 mm dual-rotor module of this class is taken as 100 mm
     deep, and nothing here measures it.
@@ -64,7 +67,7 @@ fields:
   latch-finish:
     label: Latch colour
     type: text
-    default: '#a52a4a'
+    default: '#ac2f54'
   latch-edge:
     label: Latch edge colour
     type: text

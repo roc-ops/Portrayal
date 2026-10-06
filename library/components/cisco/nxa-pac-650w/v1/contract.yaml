@@ -23,7 +23,7 @@ attrs:
   input-current-max: '7.6 A at 90-132 VAC, 3.65 A at 180-264 VAC'
   efficiency: 'Climate Savers Platinum Efficiency (80Plus Platinum certified)'
   weight-kg: 1.1
-  airflow: port-side-intake
+  airflow: front-to-back
 provenance:
   model: >-
     datasheet - the Cisco Nexus 93180YC-EX NX-OS Mode Hardware Installation Guide, Overview,
@@ -55,17 +55,20 @@ provenance:
     column, the fan with its four guard screws, the thumbscrew, the handle, the inlet and
     the latch all appear in the same order in a photograph of a real unit (an eBay listing
     of an N9K-C93180YC-EX with blue port-side-exhaust modules), which is what the
-    arrangement rests on.
+    arrangement rests on. THE INLET IS TURNED WITH ITS EARTH PIN TOWARD THE LATCH: the stencil
+    draws two pins in a column on the fan side and the third alone on the latch side.
   lamps: >-
     datasheet - the installation guide's appendix C, "Power Supply LEDs": an OK lamp (green,
     flashing green) and a FAIL or FAIL/ID lamp (amber, flashing amber). The stencil and the
     photograph both put the amber one above the green one, with a warning triangle over the
     pair and the AC-input symbol between them.
   latch-colour: >-
-    datasheet - the installation guide's Overview table: AC power supplies are burgundy for
-    port-side intake and blue for port-side exhaust. The hex values are taken from the
-    stencil render (burgundy) and the real-unit photograph (blue); they are colours off
-    images, not a stated finish.
+    datasheet for the convention - the installation guide's Overview table gives burgundy
+    for port-side intake and blue for port-side exhaust. The default burgundy, #ac2f54, is
+    the median of 1320 pixels of the supply latch in the stencil render of the rear face.
+    The blue a port-side-exhaust configuration sets, #50a2cf, is the median of 1800 pixels
+    of the supply latch in the real-unit photograph. The edge colours are darker shades
+    chosen by eye.
   depth: >-
     estimated - not stated in any staged document. 185 mm is a round figure for a supply of
     this class and nothing here measures it.
@@ -80,7 +83,7 @@ fields:
   latch-finish:
     label: Latch colour
     type: text
-    default: '#a52a4a'
+    default: '#ac2f54'
   latch-edge:
     label: Latch edge colour
     type: text
