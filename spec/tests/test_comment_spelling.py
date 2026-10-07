@@ -1,5 +1,9 @@
 """The comment-spelling check reads comments and nothing else."""
+from pathlib import Path
+
 from portrayal import comment_spelling as cs
+
+ROOT = Path(__file__).resolve().parents[2]
 
 
 def found(tmp_path, src):
@@ -29,3 +33,20 @@ def test_code_and_strings_are_not_looked_at(tmp_path):
 
 def test_british_spelling_passes(tmp_path):
     assert found(tmp_path, "// the colour of the centre\n") == []
+
+
+def test_a_marker_inside_a_string_is_not_a_comment(tmp_path):
+    assert found(tmp_path, "const a = 'a // color';\nconst b = \"x /* center */\";\n") == []
+
+
+def test_a_string_holding_a_block_opener_does_not_swallow_the_file(tmp_path):
+    assert len(found(tmp_path, "const a = '/*';\n// the color\n")) == 1
+
+
+def test_a_block_and_a_line_comment_on_one_line_are_both_read(tmp_path):
+    assert len(found(tmp_path, "/* color */ // center\n")) == 2
+
+
+def test_the_kit_rack_comments_are_british():
+    """The D6 check, run by pytest so CI enforces it."""
+    assert list(cs.findings(ROOT / "kit/rack")) == []

@@ -25,24 +25,46 @@ QUOTED = re.compile(r"`[^`]*`")
 
 
 def comments(text):
-    """(line number, comment text) for every comment in a JS source."""
-    out, block = [], False
-    for n, line in enumerate(text.splitlines(), 1):
-        if block:
-            end = line.find("*/")
-            out.append((n, line if end < 0 else line[:end]))
-            block = end < 0
+    """(line number, comment text) for every comment in a JS source.
+
+    A small scanner, string-aware: '...', "..." and `...` spans (with escapes)
+    are skipped, so a comment marker inside one starts nothing. A block comment
+    is reported line by line; a // after a closed /* */ on one line is read too.
+    Regex literals are not understood - none of these files hide a marker in one.
+    """
+    out, n, i, quote = [], 1, 0, None
+    while i < len(text):
+        c, two = text[i], text[i:i + 2]
+        if quote:
+            if c == "\\":
+                i += 1
+                n += text[i:i + 1] == "\n"
+            elif c == quote:
+                quote = None
+            elif c == "\n":
+                n += 1
+                if quote != "`":
+                    quote = None  # an unterminated ' or " ends at the line
+        elif c in "'\"`":
+            quote = c
+        elif two == "//":
+            end = text.find("\n", i)
+            end = len(text) if end < 0 else end
+            out.append((n, text[i + 2:end]))
+            i = end
             continue
-        # a // or /* outside a string: good enough for these files, whose
-        # strings hold no comment markers - checked by the test
-        m = re.search(r"(?<![:'\"`])//(.*)$", line)
-        if m:
-            out.append((n, m.group(1)))
-        s = line.find("/*")
-        if s >= 0 and not m:
-            end = line.find("*/", s + 2)
-            out.append((n, line[s + 2:] if end < 0 else line[s + 2:end]))
-            block = end < 0
+        elif two == "/*":
+            end = text.find("*/", i + 2)
+            end = len(text) if end < 0 else end
+            chunk = text[i + 2:end]
+            for k, part in enumerate(chunk.split("\n")):
+                out.append((n + k, part))
+            n += chunk.count("\n")
+            i = end + 2
+            continue
+        elif c == "\n":
+            n += 1
+        i += 1
     return out
 
 

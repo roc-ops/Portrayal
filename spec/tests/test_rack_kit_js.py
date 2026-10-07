@@ -8,7 +8,9 @@ from pathlib import Path
 import pytest
 
 JS = Path(__file__).resolve().parent / "js"
-FILES = sorted(JS.glob("rack-*.mjs"))
+# rack-face-width.mjs is a plain script with its own wrapper (test_rack_face_width.py);
+# this one owns only the rack modules ported from portrayal-site.
+FILES = sorted(p for p in JS.glob("rack-*.mjs") if p.name != "rack-face-width.mjs")
 
 
 @pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
