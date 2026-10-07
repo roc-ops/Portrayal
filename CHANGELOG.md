@@ -33,6 +33,23 @@ names the ref that replaces it.
   `interface` and `mates`, beside `conforms`, when it states them. The page
   and the index are counted by the same functions in `components_catalogue.py`.
   Additive; the `contract` number does not move.
+- Power outlets in the DCIM export, for a distribution panel's outputs
+  (roc-ops/Portrayal#806). Two placement keys say what an outlet needs:
+  `fed-by` names the placement whose power port the output hands on, and
+  `through` names the bay - the breaker or fuse position - the circuit runs
+  through. A placement of a part in `dcim_export.PART_OUTLET` exports as a
+  `power-outlets` row on the device type, named by its placement id, with
+  `power_port` set from `fed-by`; `through` is written as a sentence on the
+  outlet's description and appended to the bay's (`; protects output-a1`),
+  since Nautobot drops an outlet's description on import. Both targets read
+  the same block. The three Amphenol 300CB08 panels gain sixteen outlets each
+  (`dc-terminal` on the 300CB08, `other` labelled `P40` on the -C and -SC);
+  nothing is renamed or removed. Stating `fed-by` or `through` is a minor
+  device version, changing one a major. Lint L132 (`fed-by` names a placement
+  that exports a power port), L133 (`through` names a bay), L134 (every outlet
+  states `fed-by`: a warning, an error at `verified`) and L135 (no two
+  outputs name one position: a warning). Design note:
+  `docs/power-outlets-design.md`.
 - The FS FHD-CMP5DR lacer panel (`fs/fhd-cmp5dr`), the first passive part
   that shares a rack unit with other equipment, and what it needs:
   `chassis.mount: rack-face` (a part bolted to the rail face that projects
