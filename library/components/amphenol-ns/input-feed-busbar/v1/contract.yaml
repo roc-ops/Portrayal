@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: input-feed-busbar
-version: 1.0.0
+version: 1.0.1
 class: inlet
 profile: power
 description: >-
@@ -23,10 +23,16 @@ provenance:
     holes on 5/8 to 1 inch centres per terminal, maximum lug width 1.5 inch,
     bolts with Keps nuts and flat washers.
   reach: >-
-    datasheet - the -C panel is 478 deep without its tie bar against 331 for
-    the stud versions, and the busbars are what the difference is: 147 behind
-    the chassis rear. Fig. 3-5, the side view, shows them running straight
-    back.
+    drawing - THE TWO LANDINGS OF A FEED ARE NOT THE SAME LENGTH. The
+    installation guide's -C bottom views dimension them from the front of the
+    metal: 462.2 to the longer (Fig. 3-13 upper, the 300CB08-C) and 462.23
+    and 405.08 to the longer and the shorter (the nrgILS300CB08-C, p43). On
+    both drawings the shorter landing of each feed is the one nearer the
+    panel's side, which is `landing-1`. Behind the 367.0 chassis of a -C panel
+    that is 38.1 for `landing-1` and 95.2 for `landing-2`. This part used to
+    build both 147, the datasheet's 478 less the stud panel's 331, which
+    subtracted a depth without the front guards from one with them and gave
+    both landings the length of neither (#860).
   polarity: >-
     WHICH LANDING IS BATTERY IS A FACT OF THE PANEL, printed beside the
     assembly (Fig. 3-8), and it mirrors from side A to side B. The landings
@@ -41,17 +47,17 @@ relief:
   wall: '#0c0d0e'
   features:
     - node: landing-1
-      out: 147.0
+      out: 38.1
       color: '#c4c8cc'
-      confidence: datasheet
+      confidence: drawing
       source: >-
-        478 deep without the tie bar less the 331 of the stud versions (300CB08 datasheet, Dimensions)
+        405.08 to the shorter landing less the 367.0 chassis (provenance.reach)
     - node: landing-2
-      out: 147.0
+      out: 95.2
       color: '#c4c8cc'
-      confidence: datasheet
+      confidence: drawing
       source: >-
-        see landing-1
+        462.2 to the longer landing less the 367.0 chassis (provenance.reach)
     - node: bolt-top
       cyl: 4.0
       color: '#b9bdc1'

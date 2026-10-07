@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: nrg300cb08-ctrl-c
-version: 1.1.2
+version: 2.0.0
 maturity: modelled
 manufacturer: Amphenol Network Solutions
 model: nrg300CB08-CTRL-C
@@ -15,16 +15,21 @@ profile: power
 provenance:
   method:
     confidence: drawing
-    note: THE MONITORED CTRL PANEL WITH THE CONNECTORIZED -C REAR. The front, top, bottom and sides are amphenol-ns/nrg300cb08-ctrl
-      and take its readings; the rear outputs, inputs, depth and weight are amphenol-ns/300cb08-c, whose datasheet
-      rows this version shares, and the rear centre block is the monitored one, read off Fig. 3-9 of the installation
-      guide.
+    note: THE MONITORED CTRL PANEL WITH THE CONNECTORIZED -C REAR. The front and its legends are amphenol-ns/nrg300cb08-ctrl's;
+      the rear outputs, inputs, chassis depth, bottom, top, sides and weight are amphenol-ns/300cb08-c's, whose
+      datasheet rows this version shares, and the rear centre block is the monitored one, read off Fig. 3-9 of the
+      installation guide.
   chassis:
     confidence: drawing
-    note: '431.8 wide and 43.9 high as the 300CB08. THE DEPTH MODELLED IS THE CHASSIS, 330.8, the figure the plain
-      panel bottom view dimensions. The datasheet gives this version as 478 deep without its tie bar: the extra
-      147 is the input busbars standing behind the chassis rear, and they are drawn as that, on the input parts.
-      With the tie bar it is 559.'
+    note: '431.8 wide and 43.9 high as the 300CB08. THE CHASSIS IS 367.0 DEEP, front of the metal to the tops of
+      the output receptacles, READ OFF THE -C BOTTOM VIEW, Fig. 3-13 (upper), at 1.493 px/mm on both axes: the drawing
+      prints 462.2 from the front of the metal to the tip of the longer busbar landing, 543.6 with the tie bar and
+      558.4 overall, and all three agree with its 644 px across the 431.8 body to a tenth. The receptacle tops lie
+      367.4 from the front on it, and 366.4 on the nrgILS300CB08-C bottom view beside it (p43, 1.190 px/mm). THIS
+      IS 36.2 MORE THAN THE 300CB08''s 330.8: the bottom pan of a -C panel runs about 335, where the stud panel''s
+      is shorter, so the -C is not the stud chassis with busbars added (#860). The busbars stand behind that, on
+      the input parts. The datasheet gives 478 without the tie bar, which is the 462.2 plus the 14.7 the front guards
+      stand proud.'
   ears:
     confidence: drawing
     note: NOT DRAWN. The panel ships with separate 19 inch and 23 inch mounting brackets (PMTG19, PMTG23) that bolt
@@ -90,13 +95,16 @@ provenance:
       Primary Features; guide Fig. 2-20). It is transparent and everything behind it is what the rear view shows.
   envelope-faces:
     confidence: drawing
-    note: 'Top, bottom, left and right are sized from the chassis. The bottom vent fields and its two ground bolts
-      are placed from Fig. 3-12 at 1.336 px/mm, a coarse reading. The top is given the same two side fields the
-      photographs show running the depth of the lid; their extent is estimated. The sides are placed from the side
-      view, Fig. 3-4, at 1.717 px/mm: four bracket holes 29.1 apart starting 11.1 from the front, and a two-bolt
-      ground landing 268.8 from the front. THE GROUND BOLTS ARE DRAWN ON THE STATED 5/8 INCH CENTRES, 15.9 apart,
-      not the 18.3 the drawing measures, because the callout states the figure and the drawing is coarse. Each side
-      carries one landing and the bottom a third; the guide says only one ground connection is required.'
+    note: 'Top, bottom, left and right are sized from the 367.0 chassis. THE BOTTOM IS READ off this version''s
+      own bottom view, Fig. 3-13 (upper), at 1.493 px/mm, origin the receptacle tops: the rear pair of vent fields
+      144.0 deep from 33.1, the front pair 86.4 deep from 246.0, and the two ground bolts at 216.0 across, drawn
+      on the stated 5/8 inch centres (15.9 apart) at 41.05 and 56.95. The top is given the two side fields the photographs
+      show running the depth of the lid, their extent estimated. THE SIDES ARE THE STUD PANEL''S SIDE VIEW, Fig.
+      3-4 at 1.717 px/mm, not re-read for this version (gap c-side-view): four bracket holes 29.1 apart starting
+      11.1 from the front, placed from the front, and a two-bolt ground landing on 5/8 inch centres placed from
+      the REAR, 62 from it as on the stud panel and so 305.0 from the front here; the side lug Fig. 3-13 draws lies
+      about 65 from the rear. Each side carries one landing and the bottom a third; the guide says only one ground
+      connection is required.'
   ground-stud-size:
     confidence: datasheet
     note: 'The installation guide is one document for every version of the panel and its grounding specification
@@ -161,7 +169,7 @@ attrs:
 chassis:
   width: 431.8
   height: 43.9
-  depth: 330.8
+  depth: 367.0
   ru: 1
   color: '#e6e4de'
   airflow: passive
@@ -210,6 +218,16 @@ gaps:
   note: the face letters a RESET button and no document says what a press does; searched the guides and release
     notes for reset, press and factory.
   wanted: the reset procedure.
+- what: c-side-view
+  scope:
+  - left
+  - right
+  reason: needs-drawing
+  note: 'the chassis is 367.0 deep, read off this version''s bottom view (#860), but its side view, Fig. 3-5, was
+    not re-read: the four bracket holes are the stud panel''s placed from the front, and the two-bolt ground landing
+    the stud panel''s placed from the rear, where the bottom view shows the side lug about 65 from the rear against
+    the 62 the side view gives the stud panel.'
+  wanted: the -C side view, Fig. 3-5, measured for the bracket holes and the ground landing.
 groups:
   breakers-a:
     term: Position
@@ -1274,7 +1292,7 @@ views:
   top:
     size:
       w: 431.8
-      h: 330.8
+      h: 367.0
     panel:
       decor:
       - at:
@@ -1282,14 +1300,14 @@ views:
         - 0
         size:
         - 431.8
-        - 330.8
+        - 367.0
         fill: '#e6e4de'
       - at:
         - 9.0
         - 20.0
         size:
         - 167.0
-        - 280.0
+        - 316.2
         fill: '#d9d7d1'
       - id: vent-top-left
         at:
@@ -1297,7 +1315,7 @@ views:
         - 20.0
         size:
         - 167.0
-        - 280.0
+        - 316.2
         fill: '#3a3c3e'
         pattern: holes
         pattern-pitch:
@@ -1315,7 +1333,7 @@ views:
         - 20.0
         size:
         - 167.0
-        - 280.0
+        - 316.2
         fill: '#d9d7d1'
       - id: vent-top-right
         at:
@@ -1323,7 +1341,7 @@ views:
         - 20.0
         size:
         - 167.0
-        - 280.0
+        - 316.2
         fill: '#3a3c3e'
         pattern: holes
         pattern-pitch:
@@ -1339,7 +1357,7 @@ views:
   bottom:
     size:
       w: 431.8
-      h: 330.8
+      h: 367.0
     panel:
       decor:
       - at:
@@ -1347,22 +1365,22 @@ views:
         - 0
         size:
         - 431.8
-        - 330.8
+        - 367.0
         fill: '#e6e4de'
       - at:
         - 9.0
-        - 50.0
+        - 33.1
         size:
         - 167.0
-        - 88.0
+        - 144.0
         fill: '#d9d7d1'
       - id: vent-bottom-rear-left
         at:
         - 9.0
-        - 50.0
+        - 33.1
         size:
         - 167.0
-        - 88.0
+        - 144.0
         fill: '#3a3c3e'
         pattern: holes
         pattern-pitch:
@@ -1370,25 +1388,25 @@ views:
         - 5.0
         pattern-offset:
         - 9.0
-        - 50.0
+        - 33.1
         vent: 1.0
         confidence: estimated
-        source: extent read off the bottom view, Fig. 3-12, at 1.336 px/mm; the hole pitch and the sheet thickness
-          are not dimensioned
+        source: extent read off the -C bottom view, Fig. 3-13 (upper), at 1.493 px/mm; the hole pitch and the sheet
+          thickness are not dimensioned
       - at:
         - 255.8
-        - 50.0
+        - 33.1
         size:
         - 167.0
-        - 88.0
+        - 144.0
         fill: '#d9d7d1'
       - id: vent-bottom-rear-right
         at:
         - 255.8
-        - 50.0
+        - 33.1
         size:
         - 167.0
-        - 88.0
+        - 144.0
         fill: '#3a3c3e'
         pattern: holes
         pattern-pitch:
@@ -1396,25 +1414,25 @@ views:
         - 5.0
         pattern-offset:
         - 255.8
-        - 50.0
+        - 33.1
         vent: 1.0
         confidence: estimated
-        source: extent read off the bottom view, Fig. 3-12, at 1.336 px/mm; the hole pitch and the sheet thickness
-          are not dimensioned
+        source: extent read off the -C bottom view, Fig. 3-13 (upper), at 1.493 px/mm; the hole pitch and the sheet
+          thickness are not dimensioned
       - at:
         - 9.0
-        - 208.0
+        - 246.0
         size:
         - 167.0
-        - 85.0
+        - 86.4
         fill: '#d9d7d1'
       - id: vent-bottom-front-left
         at:
         - 9.0
-        - 208.0
+        - 246.0
         size:
         - 167.0
-        - 85.0
+        - 86.4
         fill: '#3a3c3e'
         pattern: holes
         pattern-pitch:
@@ -1422,25 +1440,25 @@ views:
         - 5.0
         pattern-offset:
         - 9.0
-        - 208.0
+        - 246.0
         vent: 1.0
         confidence: estimated
-        source: extent read off the bottom view, Fig. 3-12, at 1.336 px/mm; the hole pitch and the sheet thickness
-          are not dimensioned
+        source: extent read off the -C bottom view, Fig. 3-13 (upper), at 1.493 px/mm; the hole pitch and the sheet
+          thickness are not dimensioned
       - at:
         - 255.8
-        - 208.0
+        - 246.0
         size:
         - 167.0
-        - 85.0
+        - 86.4
         fill: '#d9d7d1'
       - id: vent-bottom-front-right
         at:
         - 255.8
-        - 208.0
+        - 246.0
         size:
         - 167.0
-        - 85.0
+        - 86.4
         fill: '#3a3c3e'
         pattern: holes
         pattern-pitch:
@@ -1448,18 +1466,18 @@ views:
         - 5.0
         pattern-offset:
         - 255.8
-        - 208.0
+        - 246.0
         vent: 1.0
         confidence: estimated
-        source: extent read off the bottom view, Fig. 3-12, at 1.336 px/mm; the hole pitch and the sheet thickness
-          are not dimensioned
+        source: extent read off the -C bottom view, Fig. 3-13 (upper), at 1.493 px/mm; the hole pitch and the sheet
+          thickness are not dimensioned
     components:
       placements:
       - id: ground-bottom-1
         ref: common/ground-stud@1
         at:
-        - 210.9
-        - 56.0
+        - 211.95
+        - 37.0
         group: grounding
         rel-pos: 1
         attrs:
@@ -1467,15 +1485,15 @@ views:
       - id: ground-bottom-2
         ref: common/ground-stud@1
         at:
-        - 210.9
-        - 71.9
+        - 211.95
+        - 52.9
         group: grounding
         rel-pos: 2
         attrs:
           stud-size: 1/4-20
   left:
     size:
-      w: 330.8
+      w: 367.0
       h: 43.9
     panel:
       decor:
@@ -1483,12 +1501,12 @@ views:
         - 0
         - 0
         size:
-        - 330.8
+        - 367.0
         - 43.9
         fill: '#e6e4de'
       - id: bracket-hole-1
         at:
-        - 316.2
+        - 352.4
         - 22.1
         size:
         - 7.0
@@ -1497,7 +1515,7 @@ views:
         rx: 3.5
       - id: bracket-hole-2
         at:
-        - 287.1
+        - 323.3
         - 22.1
         size:
         - 7.0
@@ -1506,7 +1524,7 @@ views:
         rx: 3.5
       - id: bracket-hole-3
         at:
-        - 258.0
+        - 294.2
         - 22.1
         size:
         - 7.0
@@ -1515,7 +1533,7 @@ views:
         rx: 3.5
       - id: bracket-hole-4
         at:
-        - 228.9
+        - 265.1
         - 22.1
         size:
         - 7.0
@@ -1552,7 +1570,7 @@ views:
         rel-pos: 7
   right:
     size:
-      w: 330.8
+      w: 367.0
       h: 43.9
     panel:
       decor:
@@ -1560,7 +1578,7 @@ views:
         - 0
         - 0
         size:
-        - 330.8
+        - 367.0
         - 43.9
         fill: '#e6e4de'
       - id: bracket-hole-1
@@ -1604,7 +1622,7 @@ views:
       - id: ground-right-1
         ref: common/ground-stud@1
         at:
-        - 264.75
+        - 300.95
         - 11.75
         group: grounding
         rel-pos: 3
@@ -1613,7 +1631,7 @@ views:
       - id: ground-right-2
         ref: common/ground-stud@1
         at:
-        - 264.75
+        - 300.95
         - 27.65
         group: grounding
         rel-pos: 4
@@ -1622,7 +1640,7 @@ views:
       - id: ground-right-mark
         ref: common/ground-symbol@1
         at:
-        - 249.8
+        - 286.0
         - 18.95
         for: ground-right-1
         group: grounding
