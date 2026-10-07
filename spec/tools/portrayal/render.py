@@ -992,6 +992,14 @@ def solve_seat(lib, who, occ_ref, host_name, host, occ_rotate=None, occ_in=None,
 # (`seat-turns`), and the build seats by the same `default_seat_turn`, so the
 # kit never re-derives it (docs/connectors-dc-terminal-design.md, 13.4).
 SEAT_DIRECTIONS = {"down": 0, "left": 90, "up": 180, "right": 270}
+# THE NAMES ARE WHERE THE WIRE GOES. SEAT_DIRECTIONS is the rotate that sends
+# a wire drawn leading DOWN - the ring lug's `cable` - each way. A two-hole lug
+# is drawn ACROSS, its `cable` leading right (#828), so the same rotate sends
+# its wire a quarter turn round from the name: read straight off
+# SEAT_DIRECTIONS, a pair stood on end in the right half of a face tried
+# "right" first and led its wire UP. `_lead_offset` is that quarter turn, read
+# off the occupant's own `cable` direction.
+_LEAD_ANGLE = {"right": 0, "down": 90, "left": 180, "up": 270}
 _CROSS_EPS = 1e-6
 
 
@@ -1051,8 +1059,13 @@ def turnable_seats(device, view, lib, connectors=None):
     placement with its own `at` and every bay, except what the seat stands on
     - a box holding the seat's mate point, the host and a plate under it -
     and, inside such a box, the parts it composes that do not hold the point:
-    the other studs of a terminal are OTHER SEATS. A placement left out of the
-    default build (`optional:`) and a mirrored host are not considered.
+    the other studs of a terminal are OTHER SEATS. EXCEPT the parts a spanning
+    host's own slot SPANS (manifest.spanned_slots): a two-hole lug lands on
+    both studs of its pair, and neither holds the pair's midpoint, so counted
+    as obstacles they made every direction cross two, and the default fell to
+    the "least bad" order for every pair in the library (#828, #829). A
+    placement left out of the default build (`optional:`) and a mirrored host
+    are not considered.
     """
     if connectors is None:
         connectors = _connector_registry()
@@ -1099,16 +1112,20 @@ def turnable_seats(device, view, lib, connectors=None):
 
     seats = {}
 
-    def _seat(key, host_c, mate, base):
+    def _seat(key, host_c, mate, base, host_q=None):
         allowed = allowed_turns(host_c, _res, connectors)
         if len(allowed) < 2 or mate is None:
             return
+        # what the occupant lands on: the bores of the host placement's own
+        # spanning slot (none for a seat one level in, whose host is a part)
+        landed = set(spanned_slots(host_c, _res, connectors)) if host_q is not None else set()
         obstacles = [box for _q, _c, box in placed if not _holds(box, mate)]
         obstacles += [box for box in bays if not _holds(box, mate)]
         for q, c, box in placed:
             if _holds(box, mate):
-                obstacles += [pb for _p, _pc, pb in _parts_boxes(q, c)
-                              if not _holds(pb, mate)]
+                obstacles += [pb for p, _pc, pb in _parts_boxes(q, c)
+                              if not _holds(pb, mate)
+                              and not (q is host_q and p.get("id") in landed)]
         seats[key] = {"mate": mate, "rotate": float(base or 0) % 360,
                       "turns": allowed, "interface": presented_interface(host_c, _res)[0],
                       "obstacles": obstacles, "legends": legends, "face": face}
@@ -1120,7 +1137,7 @@ def turnable_seats(device, view, lib, connectors=None):
         if m_at is not None:
             _seat(q["id"], c,
                   seat_point(q["at"], _xy_size(c["size"]), q.get("rotate"), m_at),
-                  summed_rotate(q.get("rotate"), presented_turn(c, _res, connectors)))
+                  summed_rotate(q.get("rotate"), presented_turn(c, _res, connectors)), q)
         # ONE LEVEL IN: a slot composed into the placed part, seated in the
         # part's own frame and turned by the placement (_seat_nested_occupants)
         for part, pc, _pb in _parts_boxes(q, c):
@@ -1137,16 +1154,30 @@ def turnable_seats(device, view, lib, connectors=None):
     return seats
 
 
+def _lead_offset(occ_contract):
+    """The rotate, beyond SEAT_DIRECTIONS, that sends THIS occupant's wire the
+    way a direction's name says: 0 for a part whose `cable` leads down (the
+    ring lug; a part with no `cable` point, or one leading front or rear, is
+    taken to lead down), 90 for one drawn leading right (a two-hole lug):
+    SVG turns clockwise, and a wire leading right reaches down at rotate 90."""
+    cp = ((occ_contract or {}).get("connection-points") or {}).get("cable") or {}
+    lead = _LEAD_ANGLE.get(cp.get("direction"), _LEAD_ANGLE["down"])
+    return (_LEAD_ANGLE["down"] - lead) % 360
+
+
 def default_seat_turn(seat, occ_contract):
     """THE TURN, RELATIVE TO THE SEAT, an occupant takes on `seat` (one of
     turnable_seats) when its configuration states none - rule B, above.
     Always one of the seat's own `turns`; 0 where none of the four
-    directions is one of them."""
+    directions is one of them. The directions are the way the occupant's
+    WIRE leaves (_lead_offset), so a two-hole lug drawn leading right is
+    tried down, toward the nearer side, the other side, up, as a ring lug is."""
     near = "left" if seat["mate"][0] <= seat["face"]["w"] / 2 else "right"
     far = "right" if near == "left" else "left"
+    offset = _lead_offset(occ_contract)
     tried = []
     for rank, name in enumerate(("down", near, far, "up")):
-        absolute = SEAT_DIRECTIONS[name]
+        absolute = (SEAT_DIRECTIONS[name] + offset) % 360
         turn = int(round(absolute - seat["rotate"])) % 360
         if turn not in seat["turns"] or any(t == turn for *_r, t in tried):
             continue

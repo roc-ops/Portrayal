@@ -60,8 +60,11 @@ def _conn():
 def test_the_registry_lets_a_lug_turn_freely_on_a_stud_and_names_no_other_turns():
     reg = yaml.safe_load((ROOT / "spec/schemas/connectors.yaml").read_text())["interfaces"]
     assert reg["terminal-stud"]["turns"] == [0, 90, 180, 270]
-    # only the stud turns today; every other interface allows 0 alone
-    assert [k for k, v in reg.items() if "turns" in v] == ["terminal-stud"]
+    # a two-hole lug across a pair (#828) may lead its wire either way ALONG
+    # the pair and never across it; every other interface allows 0 alone
+    pairs = ("stud-pair-5-8", "stud-pair-3-4", "stud-pair-1")
+    assert all(reg[k]["turns"] == [0, 180] for k in pairs)
+    assert sorted(k for k, v in reg.items() if "turns" in v) == sorted(["terminal-stud", *pairs])
 
 
 @pytest.mark.parametrize("ref", STUDS)
@@ -206,19 +209,25 @@ def _angle(parents, el):
 
 @pytest.fixture(scope="module")
 def mx150(tmp_path_factory):
-    """mx150: a lug on each stud, one stating `turn: 90`, one stating none."""
+    """mx150: a ring lug on each stud of its ground pair (#828 made the two
+    studs one `juniper/mx-ground-stud-pair-3-4@1`, `ground-studs`; each stud is
+    still a slot of its own, one level in), one stating `turn: 90`, one stating
+    none."""
     name, o, config, r = _render(tmp_path_factory.mktemp("mx150"), "juniper/mx150", {
-        "ground-stud-0": {"ref": LUG, "turn": 90}, "ground-stud-1": LUG})
+        "ground-studs/1": {"ref": LUG, "turn": 90}, "ground-studs/2": LUG})
     assert r.returncode == 0, r.stderr[-800:]
     return name, o, config
 
 
+TWO_HOLE_34 = "generic/two-hole-lug-3-4@1"
+
+
 def test_the_expansion_carries_a_turn_and_the_drawing_records_it(mx150):
     """The stud with no turn takes the default, up, because down crosses the
-    ESD jack and both sides cross a stud or a fan."""
+    ESD jack and both sides cross the other stud or a fan."""
     name, o, config = mx150
     root, parents = _face(o, name, config, "rear")
-    for key, turn in (("ground-stud-0", 90), ("ground-stud-1", 180)):
+    for key, turn in (("ground-studs/1", 90), ("ground-studs/2", 180)):
         host, occ = by_path(root, key), by_path(root, f"{key}-occupant")
         assert occ.get("data-seat-turn") == str(turn)
         assert (_angle(parents, occ) - _angle(parents, host) - turn) % 360 == pytest.approx(0, abs=1e-6)
@@ -226,12 +235,18 @@ def test_the_expansion_carries_a_turn_and_the_drawing_records_it(mx150):
         ox, oy = device_point(parents, occ, own_mate(occ))
         assert (hx, hy) == pytest.approx((ox, oy), abs=EPS)
     idx = json.loads((o / f"{name}.configs.json").read_text())
-    assert idx["seat-turns"] == {"rear": {"ground-stud-0": {LUG: 0}, "ground-stud-1": {LUG: 180}}}
+    # the pair is a seat of its own, for the two-hole lug: it leads left, the
+    # nearer edge, across the ESD jack below its second stud either way (the
+    # census's pinned residual)
+    assert idx["seat-turns"] == {"rear": {"ground-studs": {TWO_HOLE_34: 180},
+                                          "ground-studs/1": {LUG: 0},
+                                          "ground-studs/2": {LUG: 180}}}
     cages = {c["id"]: c for c in idx["cages"]["rear"]}
-    assert cages["ground-stud-0"]["turns"] == [0, 90, 180, 270]
+    assert cages["ground-studs"]["turns"] == [0, 180]
+    assert cages["ground-studs"]["bores"] == ["1", "2"]
     # a slot with no choice publishes none
     assert all(c["turns"] is None for v in idx["cages"].values() for c in v
-               if c["interface"] != "terminal-stud")
+               if c["interface"] != "terminal-stud" and not c["interface"].startswith("stud-pair-"))
 
 
 def _node(occ, name):
@@ -247,7 +262,7 @@ def test_a_lug_turned_90_lies_along_x_and_its_cable_leaves_left(mx150):
     in relief.js changed for it - it reads the rotate() on the group."""
     name, o, config = mx150
     root, parents = _face(o, name, config, "rear")
-    host, occ = by_path(root, "ground-stud-0"), by_path(root, "ground-stud-0-occupant")
+    host, occ = by_path(root, "ground-studs/1"), by_path(root, "ground-studs/1-occupant")
     hx, hy = device_point(parents, host, (3.5, 3.5))
     for part in ("wire", "sleeve"):
         el = _node(occ, part)
@@ -315,8 +330,10 @@ def _occupants_lint(occupants, device="juniper/mx150"):
 
 
 def test_l146_passes_an_allowed_turn_and_no_turn():
-    assert not _occupants_lint({"ground-stud-0": {"ref": LUG, "turn": 270},
-                                "ground-stud-1": LUG})
+    # the MX150's studs are one level into its pair host (#828)
+    assert not _occupants_lint({"ground-studs/1": {"ref": LUG, "turn": 270},
+                                "ground-studs/2": LUG})
+    assert not _occupants_lint({"ground-studs": {"ref": TWO_HOLE_34, "turn": 180}})
     assert not _occupants_lint({"psu1-input/lug-2": {"ref": LUG, "turn": 0}},
                                device="edgecore/csr180")
 
@@ -325,6 +342,12 @@ def test_l146_fails_a_turn_the_host_does_not_allow():
     bad = _occupants_lint({"psu1-input/lug-2": {"ref": LUG, "turn": 180}},
                           device="edgecore/csr180")
     assert len(bad) == 1 and "turn 180 is not one common/terminal-screw-34@1 allows (0)" in bad[0]
+    # a two-hole lug turned across its pair
+    bad = _occupants_lint({"ground-studs": {"ref": TWO_HOLE_34, "turn": 90}})
+    assert len(bad) == 1 and \
+        "turn 90 is not one juniper/mx-ground-stud-pair-3-4@1 allows (0, 180)" in bad[0], bad
+    # and the nested keys the pass case uses are read, not skipped
+    assert _occupants_lint({"ground-studs/1": {"ref": LUG, "turn": 45}})
 
 
 def _point_lint(contract):
@@ -353,61 +376,129 @@ def test_l147_fails_a_widening_a_point_that_is_not_presented_and_no_interface():
 
 # --- 5. the default, across the library ---------------------------------------------
 
-# (direction it leaves the face, as rule B chooses) -> seats, and the devices
-# they are on. 2026-10-07: 147 seats on 61 devices - the design's 141 on 60,
-# measured before the nrgILS300CB08-SC joined with its six.
-WANT = {"down": 98, "left": 25, "up": 6, "right": 18}
-NAMES = {0: "down", 90: "left", 180: "up", 270: "right"}
+# (the way the WIRE leaves the face, as rule B chooses) -> seats, and the
+# devices they are on, for each lug. 2026-10-07, after the grounding batch
+# (#828, #830) joined #829.
+#
+# THE RING LUG: 155 seats on 63 devices. On main (796eb08) the same census read
+# 147 on 61; the pair hosts added eight stud seats and two devices: the MX204
+# and MX304 plates now compose two screws each that a ring lug lands on (+4,
+# two devices), the FX-16's two single studs became two pairs (+2), and the
+# FX-8's and FX-4's single stud each became a pair (+1, +1). Every other
+# converted device keeps its stud count: its studs moved one level into a pair
+# host and are still seats.
+WANT = {"down": 103, "left": 24, "up": 6, "right": 22}
+# THE TWO-HOLE LUG on a pair host: 51 seats on 25 devices - three on each of
+# the eleven Amphenol 300CB08 panels, one on each AIS800, the seven MX, the
+# LMFS-F, two on the FX-16, one on the FX-8 and FX-4, and the SR-1-DC block's
+# four poles (one level in)
+WANT_PAIRS = {"down": 45, "left": 4, "up": 1, "right": 1}
+NAMES = {0: "right", 90: "down", 180: "left", 270: "up"}
+LEADS = {"right": 0, "down": 90, "left": 180, "up": 270}
+PAIR_IFACES = ("stud-pair-5-8", "stud-pair-3-4", "stud-pair-1")
 # what a default still lies across: a legend, the soft preference, where every
 # direction that crosses no part crosses one
 RESIDUAL = {("ufispace/s9600-102xc", "rear", "ground-2"): ("down", 0, 1),
-            ("ufispace/s9601-102xc", "rear", "ground-2"): ("down", 0, 1)}
-# the crossings the seat's own direction made, which the default must not
+            ("ufispace/s9601-102xc", "rear", "ground-2"): ("down", 0, 1),
+            # the plate's lug, down, over a legend; up crosses the ESD jack
+            ("juniper/mx304", "rear", "ground-plate"): ("down", 0, 1)}
+# what a two-hole lug's default still lies across a PART, either way along its
+# pair - the least bad. Both are the model's geometry, not the rule's: the
+# MX150's ESD jack (y 10.4) starts under the tongue of a lug 10.67 wide across
+# studs at y 6.5, and the MX480's pair stands 0.34 inside the PEM3 bay's edge.
+HARD_RESIDUAL = {("juniper/mx150", "rear", "ground-studs"): ("left", 1, 0),
+                 ("juniper/mx480", "rear", "ground-studs"): ("down", 1, 0)}
+# the crossings the seat's own direction made, which the default must not.
+# The MX150's second stud is `ground-stud-1` of main, one level into its pair.
 CROSSED_BEFORE = {("supermicro/sys-111e-fwtr", "front", "ground-stud"),
                   ("supermicro/sys-111e-fdwtr", "front", "ground-stud"),
-                  ("juniper/mx150", "rear", "ground-stud-1"),
+                  ("juniper/mx150", "rear", "ground-studs/2"),
                   ("edgecore/dcs500", "rear", "ground-0")}
 
 
 @pytest.fixture(scope="module")
 def census():
-    lug = _res(LUG)
+    """Every turnable seat in the library, with the lug that mates it: the
+    ring lug on a stud, the two-hole lug of its pitch on a pair."""
+    candidates = R._pluggable_candidates([str(LIB)])
     rows = {}
     for f in sorted((LIB / "devices").rglob("device.yaml")):
         d = yaml.safe_load(f.read_text())
         slug = f"{f.parents[1].name}/{f.parent.name}"
         for v, view in (d.get("views") or {}).items():
             for key, seat in R.turnable_seats(d, view, _lib).items():
-                assert seat["interface"] == "terminal-stud", (slug, key)
+                assert seat["interface"] in ("terminal-stud", *PAIR_IFACES), (slug, key)
+                [(ref, lug)] = candidates[seat["interface"]]
+                assert (ref == LUG) == (seat["interface"] == "terminal-stud")
                 t = R.default_seat_turn(seat, lug)
+                assert t in seat["turns"], (slug, key)
                 absolute = int((seat["rotate"] + t) % 360)
+                lead = LEADS[lug["connection-points"]["cable"]["direction"]]
                 box = R.occupant_box(seat["mate"], lug, absolute)
                 box0 = R.occupant_box(seat["mate"], lug, seat["rotate"])
                 rows[(slug, v, key)] = dict(
-                    dir=NAMES[absolute], turn=t,
+                    lug=ref, dir=NAMES[(absolute + lead) % 360], turn=t,
                     hard=sum(R._crosses(box, o) for o in seat["obstacles"]),
                     soft=sum(R._crosses(box, o) for o in seat["legends"]),
                     hard0=sum(R._crosses(box0, o) for o in seat["obstacles"]))
     return rows
 
 
+def _ring(census):
+    return {k: r for k, r in census.items() if r["lug"] == LUG}
+
+
+def _pairs(census):
+    return {k: r for k, r in census.items() if r["lug"] != LUG}
+
+
 def test_the_default_distribution_is_pinned(census):
-    assert dict(collections.Counter(r["dir"] for r in census.values())) == WANT
-    assert len({k[0] for k in census}) == 61
+    ring, pairs = _ring(census), _pairs(census)
+    assert dict(collections.Counter(r["dir"] for r in ring.values())) == WANT
+    assert len({k[0] for k in ring}) == 63
+    assert dict(collections.Counter(r["dir"] for r in pairs.values())) == WANT_PAIRS
+    assert len({k[0] for k in pairs}) == 25
+    # a pair is turned only along itself
+    assert {r["turn"] for r in pairs.values()} == {0, 180}
 
 
 def test_no_default_crosses_a_part_a_bay_or_another_seat(census):
-    assert not [k for k, r in census.items() if r["hard"]]
-    left = {k: (r["dir"], r["hard"], r["soft"]) for k, r in census.items() if r["soft"]}
+    assert not [k for k, r in _ring(census).items() if r["hard"]]
+    hard = {k: (r["dir"], r["hard"], r["soft"]) for k, r in census.items() if r["hard"]}
+    assert hard == HARD_RESIDUAL
+    left = {k: (r["dir"], r["hard"], r["soft"]) for k, r in census.items()
+            if r["soft"] and not r["hard"]}
     assert left == RESIDUAL
+
+
+def test_a_pairs_own_studs_are_not_in_its_lugs_way():
+    """A two-hole lug lands on both studs of its pair, and neither holds the
+    pair's midpoint: counted as obstacles they made every direction cross
+    two, and every pair in the library took the "least bad" turn. The
+    Amphenol 300CB08's bottom pair has nothing else near it."""
+    d = yaml.safe_load((LIB / "devices/amphenol-ns/300cb08/device.yaml").read_text())
+    seat = R.turnable_seats(d, d["views"]["bottom"], _lib)["ground-bottom"]
+    lug = _res("generic/two-hole-lug-5-8@1")
+    for t in seat["turns"]:
+        box = R.occupant_box(seat["mate"], lug, (seat["rotate"] + t) % 360)
+        assert not [o for o in seat["obstacles"] if R._crosses(box, o)], t
+    # one level in, a ring lug's neighbour IS in its way: the other stud
+    stud = R.turnable_seats(d, d["views"]["bottom"], _lib)["ground-bottom/1"]
+    assert len(stud["obstacles"]) == len(seat["obstacles"]) + 1
 
 
 def test_the_four_crossings_the_seat_gave_are_gone(census):
     for k in CROSSED_BEFORE:
         assert census[k]["hard0"] >= 1, k
         assert census[k]["hard"] == 0 and census[k]["dir"] != "down", k
-    # and every pair the seat's own direction laid across its partner
-    assert sum(1 for r in census.values() if r["hard0"]) >= 40
+    # main's forty-odd were pairs of single studs, the upper lug lying across
+    # the lower stud; those pairs are pair hosts now, a two-hole lug's seat.
+    # Twelve ring-lug seats still cross something at their own direction -
+    # the four above, both studs of the MX240's and MX480's pairs, the MX304
+    # plate's first screw, Casa's top stud and the UfiSpace S9600/S9601
+    # `ground-1` - and the default clears every one
+    crossed = {k for k, r in _ring(census).items() if r["hard0"]}
+    assert len(crossed) == 12 and not [k for k in crossed if census[k]["hard"]]
 
 
 def test_a_barrier_block_pole_is_no_turnable_seat():
@@ -422,9 +513,9 @@ def test_a_barrier_block_pole_is_no_turnable_seat():
 def test_a_configuration_turn_asks_a_patch():
     d = yaml.safe_load((LIB / "devices/juniper/mx240/device.yaml").read_text())
     cfg = next(iter(d["configurations"]))
-    d["configurations"][cfg].setdefault("occupants", {})["ground-stud-0"] = LUG
+    d["configurations"][cfg].setdefault("occupants", {})["ground-studs/1"] = LUG
     turned = copy.deepcopy(d)
-    turned["configurations"][cfg]["occupants"]["ground-stud-0"] = {"ref": LUG, "turn": 270}
+    turned["configurations"][cfg]["occupants"]["ground-studs/1"] = {"ref": LUG, "turn": 270}
     versions = devicelock.component_versions(LIB)
     old, new = devicelock.entry(d, versions), devicelock.entry(turned, versions)
     assert devicelock.required_bump(old, new) == "patch"
@@ -435,9 +526,9 @@ def test_the_dcim_exports_do_not_read_a_turn():
     cfg_name = next(iter(d["configurations"]))
     cfg = d["configurations"][cfg_name]
     plain = copy.deepcopy(cfg)
-    plain.setdefault("occupants", {})["ground-stud-0"] = LUG
+    plain.setdefault("occupants", {})["ground-studs/1"] = LUG
     turned = copy.deepcopy(cfg)
-    turned.setdefault("occupants", {})["ground-stud-0"] = {"ref": LUG, "turn": 270}
+    turned.setdefault("occupants", {})["ground-studs/1"] = {"ref": LUG, "turn": 270}
     a = dcim_export.build(d, cfg_name, plain, None)
     b = dcim_export.build(d, cfg_name, turned, None)
     assert json.dumps(a, sort_keys=True, default=str) == json.dumps(b, sort_keys=True, default=str)

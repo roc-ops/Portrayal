@@ -518,7 +518,11 @@ about its own `mate`, and tries the four directions in the order an installer wo
 DOWN; toward the NEARER SIDE EDGE of the face; the other side; UP. It takes the first
 in which the lug crosses no placement, no bay and no other seat. A part the stud stands
 on is not crossed, and the other studs of a terminal that composes them are other
-seats. Running past the edge of the face is allowed: on a 1RU rear most studs sit low,
+seats; the two studs a pair host's own slot spans are not, because the two-hole lug
+lands on both (#828). The directions name where the WIRE goes, read off the occupant's
+own `cable` point: a ring lug is drawn leading down and a two-hole lug leading right
+(13.7), so a pair stood on end leads its wire down at turn 0 and a pair side by side,
+which cannot lead down, leads toward the nearer edge. Running past the edge of the face is allowed: on a 1RU rear most studs sit low,
 and a wire leaves the box. A printed legend is a soft preference: of the directions that
 cross nothing hard, the one over the fewest legends wins, in the same order. The answer
 is computed from the view as authored, so one answer serves every configuration; it is
@@ -527,24 +531,29 @@ slot by its path, `ground-studs-rear/stud-tr`), each slot publishes its `turns`,
 seated occupant carries `data-seat-turn`. The kit seats by those and never re-derives
 the default; a reader's turn travels in its own `turn=` parameter of a share link.
 
-Across the library, 2026-10-07, 147 seats on 61 devices:
+Across the library, 2026-10-07, once the grounding batch (13.7) made 51 pairs: 155
+ring-lug seats on 63 devices and 51 two-hole-lug seats on 25 devices:
 
-| the wire leaves | seats |
-|---|---|
-| down | 98 |
-| toward the left edge | 25 |
-| toward the right edge | 18 |
-| up | 6 |
+| the wire leaves | ring lug | two-hole lug |
+|---|---|---|
+| down | 103 | 45 |
+| toward the left edge | 24 | 4 |
+| toward the right edge | 22 | 1 |
+| up | 6 | 1 |
 
-No default crosses a part, a bay or another seat. Two cross a legend, the FAN legend
+No ring lug's default crosses a part, a bay or another seat. Two cross a legend, the FAN legend
 beside `ground-2` on the UfiSpace S9600-102XC and S9601-102XC, where every direction
-that crosses no part crosses that or another. The crossings the seat's own direction
+that crosses no part crosses that or another; the MX304 plate's two-hole lug crosses a
+legend down, and the ESD jack up. Two two-hole lugs cross a part whichever way they lead
+along their pair, both because of where the model puts things: the MX150's ESD jack
+starts under the tongue of a lug 10.67 wide across its studs, and the MX480's pair
+stands 0.34 inside the PEM3 bay's edge. The crossings the seat's own direction
 made, listed below, are gone: on the Supermicro SYS-111E-FWTR and SYS-111E-FDWTR the
 wire leads up, away from LAN1; on the Juniper MX150 the second stud leads up, away from
 the ESD jack; on the Edgecore DCS500 `ground-0` leads to the right of the fan bay; and
 every upper stud of a pair drawn one above the other leads sideways, clear of the lower
-stud. `spec/tests/test_occupant_turn.py` pins the distribution and the two residual
-legends.
+stud. `spec/tests/test_occupant_turn.py` pins both distributions, the three residual
+legends and the two residual parts.
 
 **What the seat's own direction gave, turn 0, kept as the record it was.** A lug's wire
 leaves in the lug's own "down" turned by the placement. Seating a lug on every one of

@@ -120,8 +120,9 @@ def test_a_pair_interface_spans_two_studs_at_its_pitch(iface):
     assert _contract(lug)["conforms"] == e["standard"]
     assert float(std[e["standard"]]["pitch"]) == PAIRS[iface][0]
     assert std[e["standard"]]["pitch-kind"] == "target"
-    # #829 gives these `turns`; this change does not
-    assert "turns" not in e
+    # #829: a lug across a pair may lead its wire either way ALONG the pair,
+    # never across it
+    assert e["turns"] == [0, 180]
 
 
 # --- 2. the sized screws -----------------------------------------------------------
@@ -293,8 +294,16 @@ def _lug_of(pid):
 
 @pytest.fixture(scope="module")
 def built(tmp_path_factory):
+    """`seated` STATES `turn: 0` on every lug: what sections 5 and 7 read is
+    the seat's OWN geometry, the pair's axis turned by the placement. Where a
+    configuration states no turn the build computes one (#829, rule B), and a
+    pair allows 0 and 180, so half of these would lead their wire the other
+    way along the pair, first hole on the second stud; `defaulted` holds
+    that."""
     out = {}
-    for name, occ in (("bare", {}), ("seated", {p: _lug_of(p) for p in PLACED})):
+    for name, occ in (("bare", {}),
+                      ("seated", {p: {"ref": _lug_of(p), "turn": 0} for p in PLACED}),
+                      ("defaulted", {p: _lug_of(p) for p in PLACED})):
         tmp = tmp_path_factory.mktemp(name)
         dev = _device_with(tmp, occ)
         r = _render(dev, tmp / "o")
@@ -330,8 +339,8 @@ def test_the_ring_lug_is_still_offered_on_each_stud_of_a_pair():
             assert c["interface"] == "terminal-stud" and c["accepts"] == [RING], host
 
 
-def _lug(built, pid):
-    root, parents, _ = built["seated"]
+def _lug(built, pid, name="seated"):
+    root, parents, _ = built[name]
     host = by_path(root, pid)
     occ = by_path(root, f"{pid}-occupant")
     assert occ.get("data-ref", "").startswith(_lug_of(pid)) and occ.get("data-for") == pid
@@ -385,6 +394,91 @@ def test_the_wire_leaves_along_the_pair_right_or_down(built, pid):
     # the lug takes its host's turn, plus the pair's own axis in the host's frame
     if not AXIS.get(PLACED[pid][0]):
         assert_same_turn(parents, occ, host)
+
+
+def _studs(built, name, pid):
+    root, parents, _ = built[name]
+    out = []
+    for sid in ("1", "2"):
+        stud = by_path(root, f"{pid}/{sid}")
+        axis = _contract(stud.get("data-ref").rsplit(":", 1)[0])["connection-points"]["mate"]["at"]
+        out.append(device_point(parents, stud, axis))
+    return out
+
+
+@pytest.mark.parametrize("pid", sorted(PLACED))
+def test_at_the_default_turn_the_holes_still_land_on_the_studs(built, pid):
+    """#829: with no `turn:` the build computes one, and on a pair it is one of
+    the pair's own [0, 180] - along the pair, never across it. The lug turns
+    about the pair's midpoint, so at 180 its holes still land on the two
+    studs, first hole on the second; and its wire leaves past the stud it now
+    ends on. The turn drawn is the one configs.json publishes for the kit."""
+    parents, host, occ = _lug(built, pid, "defaulted")
+    turn = int(occ.get("data-seat-turn"))
+    assert turn in (0, 180)
+    _, _, index = built["defaulted"]
+    assert index["seat-turns"][VIEW][pid][_lug_of(pid)] == turn
+    pitch, ref = PAIRS[HOSTS[PLACED[pid][0]][0]]
+    W = LUGS[ref][0]
+    holes = [device_point(parents, occ, (W / 2 + i * pitch, W / 2)) for i in (0, 1)]
+    studs = _studs(built, "defaulted", pid)
+    want = studs if turn == 0 else studs[::-1]
+    for hole, stud in zip(holes, want):
+        assert hole == pytest.approx(stud, abs=EPS)
+    # the wire leaves along the pair, past the hole that is last along it
+    (lx, ly), x0, y0, x1, y1 = holes[1], *_wire_box(parents, occ)
+    lead = (PLACED[pid][1] + AXIS.get(PLACED[pid][0], 0) + turn) % 360
+    assert {0: x0 > lx, 90: y0 > ly, 180: x1 < lx, 270: y1 < ly}[lead]
+
+
+def test_both_turns_of_a_pair_are_defaulted_in_this_build(built):
+    """The test above is vacuous for 180 unless some pair takes it."""
+    turns = {int(_lug(built, p, "defaulted")[2].get("data-seat-turn")) for p in PLACED}
+    assert turns == {0, 180}
+
+
+TWO_HOLE_LUG = "generic/two-hole-lug-5-8@1"
+
+
+def _pair_seat(x, rotate, obstacles=()):
+    return {"mate": [x, 20.0], "rotate": float(rotate), "turns": [0, 180],
+            "interface": "stud-pair-5-8", "obstacles": list(obstacles), "legends": [],
+            "face": {"w": 400.0, "h": 44.0}}
+
+
+@pytest.mark.parametrize("x", (50.0, 350.0))
+def test_a_pair_on_end_leads_its_wire_down_by_default_in_either_half(x):
+    """Rule B names where the WIRE goes. A two-hole lug is drawn across, its
+    wire leading right, so a pair stood on end (seat turned 90) leads it down
+    at turn 0 - whichever half of the face it is in. Reading the directions as
+    a ring lug's rotates instead, the right half tried "right" (rotate 270)
+    first, which on this lug is the wire UP."""
+    lug = _contract(TWO_HOLE_LUG)
+    assert lug["connection-points"]["cable"]["direction"] == "right"
+    assert render_mod.default_seat_turn(_pair_seat(x, 90), lug) == 0
+    # something below the pair: then up, the only other way along it
+    below = (x - 3.0, 40.0, x + 3.0, 50.0)
+    assert render_mod.default_seat_turn(_pair_seat(x, 90, [below]), lug) == 180
+
+
+@pytest.mark.parametrize("x, turn", ((50.0, 180), (350.0, 0)))
+def test_a_pair_side_by_side_leads_toward_the_nearer_edge(x, turn):
+    """Down is across the pair, which it does not allow; the nearer side edge
+    is next. Drawn leading right, the left half turns it 180."""
+    lug = _contract(TWO_HOLE_LUG)
+    assert render_mod.default_seat_turn(_pair_seat(x, 0), lug) == turn
+
+
+def test_a_ring_lug_reads_the_directions_as_it_always_did():
+    """The ring lug's wire leads down, so its directions are SEAT_DIRECTIONS
+    unchanged: no seat of the census moves with the two-hole lug's reading."""
+    ring = _contract(RING)
+    assert ring["connection-points"]["cable"]["direction"] == "down"
+    assert render_mod._lead_offset(ring) == 0
+    assert render_mod._lead_offset(_contract(TWO_HOLE_LUG)) == 90
+    seat = {**_pair_seat(350.0, 90), "turns": [0, 90, 180, 270]}
+    # a stud turned 90, nothing in the way: down is a turn of 270
+    assert render_mod.default_seat_turn(seat, ring) == 270
 
 
 @pytest.mark.parametrize("pid", sorted(PLACED))
