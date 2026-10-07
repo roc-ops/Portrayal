@@ -900,15 +900,9 @@ NOT_A_DCIM_PORT = {
                                     "device's power attrs; no connector here has a DCIM type",
     "casa/c40g-ac-inlet-panel": "an inlet PANEL - a bolted assembly carrying the receptacles, "
                                 "not a connector; the C40G's own inlets are not modelled yet",
-    "amphenol-ns/output-terminal": "one output circuit of a breaker panel - a BATT screw over an "
-                                   "RTN screw. It is a power OUTLET, fed from an input through "
-                                   "a breaker, and this exporter writes power ports only: an "
-                                   "outlet needs its feeding port and its breaker position, "
-                                   "which is a design the export does not have yet",
-    "amphenol-ns/output-p40": "one connectorized output circuit of a breaker panel - a two-pole "
-                              "P40 receptacle. A power OUTLET, for the reason its screw-terminal "
-                              "sibling amphenol-ns/output-terminal gives: the exporter writes "
-                              "power ports only, and outlets are a design that is not built yet",
+    # `amphenol-ns/output-terminal` and `amphenol-ns/output-p40` were here, as
+    # power OUTLETS the exporter had no design for, until #806 gave them one:
+    # PART_OUTLET. The register's stale-entry test is what took them off.
     "amphenol-ns/nrg-rear-block": "the rear centre of a monitored breaker panel: alarm relay "
                                   "headers, two RS485 nrgNET terminal connectors and two "
                                   "temperature probe jacks. None is a network interface a DCIM "
@@ -1739,6 +1733,7 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
     own = listing_names(dev) if names is None and dev.get("interfaces") else {}
 
     console, mgmt_sfp, bays, powers, timing = [], [], [], {}, {}
+    outlets = {}
     for view in views_for(dev, cfg_name):
         parts = view_parts(view)
         for p in scoped(parts["placements"], cfg_name):
@@ -1781,6 +1776,14 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
                 powers.setdefault(p["id"], {
                     "name": p["id"] or "Inlet",
                     "type": PART_POWER[p["ref"].split("@")[0]]})
+                if trace is not None:
+                    trace.add(p["id"])
+            # WHERE IT HANDS POWER ON (#806): one outlet per placement of a
+            # PART_OUTLET part, keyed on the ref as the inlet above is. Its
+            # feed and its position are the placement's own `fed-by` and
+            # `through`, resolved once every view has been read.
+            if p["ref"].split("@")[0] in PART_OUTLET:
+                outlets.setdefault(p["id"], p)
                 if trace is not None:
                     trace.add(p["id"])
             con = device_console_row(p, a)
@@ -1909,6 +1912,9 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
     # (`for: pem0`), which is the fact a DCIM has no field for yet.
     if powers:
         out["power-ports"] = [powers[k] for k in sorted(powers)]
+    if outlets:
+        out["power-outlets"] = outlet_rows(outlets, powers, bays,
+                                           f"{dev['manufacturer']} {model}")
     if bays:
         out["module-bays"] = sorted(bays, key=bay_order)
 
@@ -1955,6 +1961,69 @@ def bay_row(bay_id, accepts=None):
 def bay_order(b):
     """Bays by kind, then by number. Asked of a BUILT row, before any token."""
     return (b["name"].split()[0], _num(b["position"].rsplit("-", 1)[-1]))
+
+
+def outlet_rows(outlets, powers, bays, who):
+    """A device type's `power-outlets`, from its PART_OUTLET placements (#806).
+
+    `outlets` is placement id -> placement, `powers` the device type's power
+    ports keyed the same way, and `bays` its built bay rows, whose descriptions
+    gain the outlets each one protects. Rows are named by placement id, as
+    every exported port is, and in natural order.
+
+    `power_port` IS WHAT BOTH TARGETS IMPORT. NetBox's
+    PowerOutletTemplateImportForm (netbox/dcim/forms/object_import.py at
+    743b0683) matches it by name among the same type's power ports; Nautobot's
+    import form (nautobot/dcim/forms.py at 6c1299e2) reads the same key and
+    maps it to `power_port_template`. Both import power ports before outlets,
+    and both models' clean() refuse a port from another type - which is why an
+    outlet is on the DEVICE type and not on the breaker's module type. So one
+    block serves both, and `for_target` does not rewrite it.
+
+    A `fed-by` THAT NAMES NO POWER PORT STOPS THE EXPORT: both targets refuse
+    a dangling `power_port` at import, and a committed file that looks right
+    and fails there is the outcome NotExpressible exists to prevent. An outlet
+    with no `fed-by` is written without one - importable, and L134 counts it.
+
+    `feed_leg` IS NOT WRITTEN. It is a phase of a three-phase supply (A, B, C
+    in both targets); a DC panel's side A and side B are two feeds, not two
+    legs of one, and would collide with it by spelling alone.
+
+    THE POSITION IS A SENTENCE, TWICE. Neither target relates an outlet to a
+    module bay, so `through` is written on the outlet's description - which
+    NetBox keeps and Nautobot's outlet import form drops - and appended to the
+    bay's description, which Nautobot's module-bay import keeps. A bay's
+    description is a sentence about the drawing to `dcim_significant`, so the
+    collision check is not moved by it.
+    """
+    rows = []
+    protects = {}
+    for pid in sorted(outlets, key=_natural):
+        p = outlets[pid]
+        ref = p["ref"].split("@")[0]
+        row = {"name": pid, "type": PART_OUTLET[ref]}
+        if ref in OUTLET_LABEL:
+            row["label"] = OUTLET_LABEL[ref]
+        fed = p.get("fed-by")
+        if fed is not None:
+            if fed not in powers:
+                raise NotExpressible(
+                    f"{who}: outlet {pid} is fed by {fed!r}, which exports no power port "
+                    f"on this type. Both targets refuse an outlet whose power_port names "
+                    f"nothing (lint L132)")
+            row["power_port"] = powers[fed]["name"]
+        via = p.get("through")
+        if via is not None:
+            row["description"] = fit(f"Through breaker position {via}")
+            protects.setdefault(via, []).append(pid)
+        rows.append(row)
+    for bay in bays:
+        held = protects.get(bay["position"])
+        if held:
+            said = bay.get("description")
+            bay["description"] = fit_items(
+                (f"{said}; protects " if said else "Protects "), held)
+    return rows
 
 
 def build_module(contract, manufacturer, load_ref=None, dropped=None,
@@ -2144,6 +2213,11 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None,
 # fact about installing a type, and every reader of a built document - the
 # collision check, the tests - still sees the card's own ids.
 MODULE_TOKEN = "{module}"
+# NOT `power-outlets`, because no module type carries one: outlets are written
+# on the device type only (outlet_rows). A module that one day carries outlets
+# with an input of its own - a rack PDU's hot-swap outlet module - would add
+# `power-outlets` here AND tokenise each row's `power_port` the same way, or
+# the outlet would name a port its own type no longer calls by that name.
 MODULE_PORT_KEYS = ("interfaces", "console-ports", "power-ports",
                     "front-ports", "rear-ports")
 

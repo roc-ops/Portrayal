@@ -103,7 +103,9 @@ def _device_exports(pl, ref, attrs, group_role):
     """
     if ref in dx.PART_POWER:                        # power-ports
         return True
-    if ref in dx.PART_RF:                           # RF and timing, as `other`
+    if ref in dx.PART_OUTLET:                       # power-outlets (#806)
+        return True
+    if ref in dx.PART_RF:                          # RF and timing, as `other`
         return True
     if pl["ref"] in dx.FAMILY_PART and dx.rj45_timing_label({**pl, "attrs": attrs}):
         return True                                 # a bare RJ45 naming a timing job
@@ -207,6 +209,15 @@ def test_every_register_entry_names_a_real_component():
     for - which is this file's own failure mode arriving one level up."""
     missing = sorted(r for r in dx.NOT_A_DCIM_PORT if r not in _contracts())
     assert not missing, f"NOT_A_DCIM_PORT names parts that do not exist: {missing}"
+
+
+def test_an_outlet_part_is_not_also_registered_silent():
+    """PART_OUTLET and the register share no ref (#806): a part that exports an
+    outlet has something to say, and a reason for saying nothing would be
+    false the day it was written."""
+    both = sorted(set(dx.PART_OUTLET) & set(dx.NOT_A_DCIM_PORT))
+    assert not both, f"in PART_OUTLET and NOT_A_DCIM_PORT: {both}"
+    assert dx.PART_OUTLET, "no outlet part - the check measured nothing"
 
 
 def test_every_register_entry_gives_a_reason():
