@@ -43,7 +43,7 @@ export it to a DCIM without a checkout of this repository.
 | `devices.json` | the portfolio index: identity (with `aliases`, the other names a box is sold or listed under), capability, gaps, search blob, and `listings` - which NOS vendors list it |
 | `components.json` | the lean component index — identity, size, skins, attrs, parts (with each part's `group`), the component's own `groups` and `cages` |
 | `components-detail.json` | the same refs with `provenance` and `relief`, split out because they were 88% of the bytes and no viewer reads them |
-| `labs.json` | rack layouts |
+| `labs.json` | rack layouts: each lab's devices, every placement with its position resolved (`ru`, `face`, `mount`, `host`, `unit`), and its links. The shape is in `docs/format-stability.md` |
 | `gaps.json` | what this library admits it does not know |
 | `vendors.json` | corporate lineage and NOS-vendor registry — what turns `arrcus` into "Arrcus" |
 | `listings.json` | every NOS vendor's listing, whole - `hardware`, names, part numbers, `terms`, `interfaces`, `entity-map` - with its `manufacturer` resolved |

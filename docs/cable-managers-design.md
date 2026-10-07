@@ -1,7 +1,9 @@
 # Cable managers: rack-face mounting, sheet bodies, brushes and guides
 
-Status: 2026-10-06. Sections 2 to 4 and the first device of section 7 are implemented;
-brushes, pass-throughs, guides and lab placement are design. The first passive rack parts
+Status: 2026-10-06. Sections 2 to 4, the first device of section 7 and the library side
+of section 6 (lab placement, the lab schema and its checks) are implemented; brushes,
+pass-throughs and guides are design, and the rack drawing of section 6 is still to come
+in the site repository. The first passive rack parts
 in the library that hold or pass cables rather than terminate them: the FS horizontal
 cable managers.
 
@@ -207,6 +209,15 @@ elevation it draws over its host on that face. That change is in the site reposi
 lands after this one. A site older than the `labs.json` it reads ignores the new keys and
 draws the manager as an ordinary device on that rack unit, which is wrong and visible;
 the site's contract check is what catches the gap.
+
+As built: the schema is `spec/schemas/lab.schema.json`, and the checks are lint rules
+L132 to L136, the codes a listing's checks set the pattern for. L132 to L135 are errors
+and `labs_index.py` will not write a lab that fails one; L136, the report of a rack-face
+part placed by `ru` over a host, is a warning, because that placement is legal. Run over
+`roadm-ring-demo` before they were made errors, they found nothing: nine 1U rack devices
+on distinct units, every ref a library device, no rack-face part. In `labs.json` each
+placement keeps every key the lab wrote and gains `ru` (resolved), `face`, `mount`,
+`host` and `unit`; [format-stability.md](format-stability.md) has the shape.
 
 ## 7. The three devices
 
