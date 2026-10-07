@@ -69,8 +69,12 @@ names the ref that replaces it.
   with four steel D-rings and a brush strip behind five windows, from the
   vendor's dimensioned front and side views, with `fs/cmh-4drb1u-panel@1`,
   `-ring@1`, `-end@1` and `-flange@1`; and `fs/cmh-sfd1u`, the FS CMH-SFD1U
-  (#29038), a 1U ABS finger duct with its cover (`fs/cmh-sfd1u-cover@1`),
-  twelve finger gaps a side at 34.1 mm and a `duct` guide.
+  (#29038), a 1U ABS finger duct built hollow as a sheet body: the base
+  plate as the well (`fs/cmh-sfd1u-base@1`), two rows of thirteen fingers
+  standing in it (`fs/cmh-sfd1u-finger@1`, `-finger-end@1`) with twelve
+  gaps a side at 34.1 mm, and the cover across their tips
+  (`fs/cmh-sfd1u-cover@1`), which comes off to open the channel; the channel
+  and its ends are open, and a `duct` guide declares it.
 - The FS FHD-CMP5DR lacer panel (`fs/fhd-cmp5dr`), the first passive part
   that shares a rack unit with other equipment, and what it needs:
   `chassis.mount: rack-face` (a part bolted to the rail face that projects

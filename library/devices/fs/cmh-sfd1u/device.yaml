@@ -38,6 +38,24 @@ provenance:
       base stands 11.3 mm behind the plane of the ears, the fingers 60 mm in front of it,
       and the cover clips on over their tips. The rear view is the back of the base; the
       front view is the cover.
+  shell:
+    confidence: drawing
+    note: >-
+      drawing - A HOLLOW DUCT, NOT A BOX. Cables lie in the channel between the two rows
+      of fingers, so the body is a sheet body (docs/cable-managers-design.md section 4)
+      and its six views are elevations. The solid is what its parts build: the base
+      plate on the front view as a well 75.5 deep, whose floor is open at the two
+      pass-through holes; the two rows of fingers standing in it, each with its share of
+      the root of the wall;
+      the cover in it across the finger tips, which lifts off and opens the channel; and
+      the back of the base standing 11.3 proud of the rear face. The channel and its two
+      ends are open air.
+  thickness:
+    confidence: estimated
+    note: >-
+      estimated - no FS document states a wall gauge for the ABS moulding. 7.3 is the
+      finger wall read off the side view of the datasheet at 2.45 px/mm, 18 px; the base
+      and the cover are thinner or thicker, each in its own part.
   weight:
     confidence: datasheet
     note: datasheet - 0.45 kg, the FS product page specification table for #29038.
@@ -72,10 +90,9 @@ provenance:
     confidence: drawing
     note: >-
       drawing - the side view of CMH-SFD1U, 2.45 px/mm across its 42: the base, the two
-      finger walls 7.3 thick with 25 between them, and the hooked tips the cover clips to.
-      The duct is open at both ends; a cable runs out of it there. The opening is built as
-      a recess 18 deep, which stops short of the first slot; the channel really runs the
-      width of the duct.
+      finger walls 7.3 thick with 25 between them, and the hooked tips the cover clips to,
+      drawn as the cover lips over them. The duct is open at both ends, and a cable runs
+      out of it there: nothing is built across the ends.
   rear:
     confidence: drawing
     note: >-
@@ -83,8 +100,8 @@ provenance:
       of the datasheet, which draws them through the channel: 76.4 wide (3.03 in [77mm]),
       25 high, 171.2 apart (6.74 in), 325.2 over both (12.8 in), symmetric about the middle.
       The render of the back confirms two holes, the fingers seen through them, and a
-      round boss in the middle. The recess is built 60 deep, which is estimated; through a
-      hole the real part shows the inside of the channel up to the cover.
+      round boss in the middle. The back is built as five plates round the two holes,
+      11.3 proud of the rear face, and each hole goes through into the channel.
   rear-not-drawn:
     confidence: drawing
     note: >-
@@ -95,8 +112,8 @@ provenance:
     confidence: drawing
     note: >-
       drawing - the base behind the ear plane reads 440.7 wide on the top view, 3.9 mm
-      wider each side than the duct it carries. The body is one box, the width of the duct,
-      so the base is drawn that width.
+      wider each side than the duct it carries; it is drawn the width of the duct, the
+      body between the ear folds.
   guides:
     confidence: drawing
     note: >-
@@ -142,6 +159,8 @@ chassis:
   height: 42.0
   depth: 87.0
   ru: 1
+  shell: sheet
+  thickness: 7.3
   weight-kg: 0.45
   color: '#2a2c2e'
 gaps:
@@ -153,6 +172,16 @@ gaps:
       cover is drawn as one fitted plate.
     wanted: a drawing or a close render of the cover's end
 groups:
+  body:
+    term: Duct
+    role: furniture
+    index-origin: 1
+    description: the base plate
+  fingers:
+    term: Finger
+    role: furniture
+    index-origin: 1
+    description: the two rows of fingers, thirteen a row, upper row first
   cover:
     term: Cover
     role: furniture
@@ -163,45 +192,79 @@ views:
     size: {w: 433.0, h: 42.0}
     components:
       placements:
-        - {ref: fs/cmh-sfd1u-cover@1, id: cover, at: [0.0, 0.0], group: cover, rel-pos: 1}
+        - {ref: fs/cmh-sfd1u-base@1, id: base, at: [0.0, 0.0], group: body, rel-pos: 1}
+        - {ref: fs/cmh-sfd1u-finger-end@1, id: finger-upper-1, at: [0.0, 1.2], group: fingers, rel-pos: 1, in: base, under: cover}
+        - {ref: fs/cmh-sfd1u-finger@1, id: finger-upper-2, at: [28.95, 1.2], group: fingers, rel-pos: 2, in: base, under: cover}
+        - {ref: fs/cmh-sfd1u-finger@1, id: finger-upper-3, at: [63.05, 1.2], group: fingers, rel-pos: 3, in: base, under: cover}
+        - {ref: fs/cmh-sfd1u-finger@1, id: finger-upper-4, at: [97.15, 1.2], group: fingers, rel-pos: 4, in: base, under: cover}
+        - {ref: fs/cmh-sfd1u-finger@1, id: finger-upper-5, at: [131.25, 1.2], group: fingers, rel-pos: 5, in: base, under: cover}
+        - {ref: fs/cmh-sfd1u-finger@1, id: finger-upper-6, at: [165.35, 1.2], group: fingers, rel-pos: 6, in: base, under: cover}
+        - {ref: fs/cmh-sfd1u-finger@1, id: finger-upper-7, at: [199.45, 1.2], group: fingers, rel-pos: 7, in: base, under: cover}
+        - {ref: fs/cmh-sfd1u-finger@1, id: finger-upper-8, at: [233.55, 1.2], group: fingers, rel-pos: 8, in: base, under: cover}
+        - {ref: fs/cmh-sfd1u-finger@1, id: finger-upper-9, at: [267.65, 1.2], group: fingers, rel-pos: 9, in: base, under: cover}
+        - {ref: fs/cmh-sfd1u-finger@1, id: finger-upper-10, at: [301.75, 1.2], group: fingers, rel-pos: 10, in: base, under: cover}
+        - {ref: fs/cmh-sfd1u-finger@1, id: finger-upper-11, at: [335.85, 1.2], group: fingers, rel-pos: 11, in: base, under: cover}
+        - {ref: fs/cmh-sfd1u-finger@1, id: finger-upper-12, at: [369.95, 1.2], group: fingers, rel-pos: 12, in: base, under: cover}
+        - {ref: fs/cmh-sfd1u-finger-end@1, id: finger-upper-13, at: [404.05, 1.2], rotate: 180, group: fingers, rel-pos: 13, in: base, under: cover}
+        - {ref: fs/cmh-sfd1u-finger-end@1, id: finger-lower-1, at: [0.0, 33.5], group: fingers, rel-pos: 14, in: base, under: cover}
+        - {ref: fs/cmh-sfd1u-finger@1, id: finger-lower-2, at: [28.95, 33.5], group: fingers, rel-pos: 15, in: base, under: cover}
+        - {ref: fs/cmh-sfd1u-finger@1, id: finger-lower-3, at: [63.05, 33.5], group: fingers, rel-pos: 16, in: base, under: cover}
+        - {ref: fs/cmh-sfd1u-finger@1, id: finger-lower-4, at: [97.15, 33.5], group: fingers, rel-pos: 17, in: base, under: cover}
+        - {ref: fs/cmh-sfd1u-finger@1, id: finger-lower-5, at: [131.25, 33.5], group: fingers, rel-pos: 18, in: base, under: cover}
+        - {ref: fs/cmh-sfd1u-finger@1, id: finger-lower-6, at: [165.35, 33.5], group: fingers, rel-pos: 19, in: base, under: cover}
+        - {ref: fs/cmh-sfd1u-finger@1, id: finger-lower-7, at: [199.45, 33.5], group: fingers, rel-pos: 20, in: base, under: cover}
+        - {ref: fs/cmh-sfd1u-finger@1, id: finger-lower-8, at: [233.55, 33.5], group: fingers, rel-pos: 21, in: base, under: cover}
+        - {ref: fs/cmh-sfd1u-finger@1, id: finger-lower-9, at: [267.65, 33.5], group: fingers, rel-pos: 22, in: base, under: cover}
+        - {ref: fs/cmh-sfd1u-finger@1, id: finger-lower-10, at: [301.75, 33.5], group: fingers, rel-pos: 23, in: base, under: cover}
+        - {ref: fs/cmh-sfd1u-finger@1, id: finger-lower-11, at: [335.85, 33.5], group: fingers, rel-pos: 24, in: base, under: cover}
+        - {ref: fs/cmh-sfd1u-finger@1, id: finger-lower-12, at: [369.95, 33.5], group: fingers, rel-pos: 25, in: base, under: cover}
+        - {ref: fs/cmh-sfd1u-finger-end@1, id: finger-lower-13, at: [404.05, 33.5], rotate: 180, group: fingers, rel-pos: 26, in: base, under: cover}
+        - {ref: fs/cmh-sfd1u-cover@1, id: cover, at: [0.0, 0.0], group: cover, rel-pos: 1, in: base}
     guides:
       - {id: duct, kind: duct, at: [0, 8.5], size: [433.0, 25.0], run: x, finger-pitch: 34.1, finger-gap: 16.0, confidence: drawing, source: 'FS finger duct datasheet, front view 0.98 in [25mm] and top view pitch and gap'}
   rear:
     size: {w: 433.0, h: 42.0}
     panel:
       decor:
-        - {id: pass-through-1, at: [54.2, 8.7], size: [76.4, 24.7], rx: 3, fill: '#0a0b0c', sink: 60, kind: pass-through}
-        - {id: pass-through-2, at: [302.4, 8.7], size: [76.4, 24.7], rx: 3, fill: '#0a0b0c', sink: 60, kind: pass-through}
+        - {id: back-top, at: [0, 0], size: [433, 8.7], fill: '#232527', out: 11.3, kind: base}
+        - {id: back-bottom, at: [0, 33.4], size: [433, 8.6], fill: '#232527', out: 11.3, kind: base}
+        - {id: back-left, at: [0, 8.7], size: [54.2, 24.7], fill: '#232527', out: 11.3, kind: base}
+        - {id: back-middle, at: [130.6, 8.7], size: [171.8, 24.7], fill: '#232527', out: 11.3, kind: base}
+        - {id: back-right, at: [378.8, 8.7], size: [54.2, 24.7], fill: '#232527', out: 11.3, kind: base}
+    passes:
+      - {id: pass-through-1, at: [54.2, 8.7], size: [76.4, 24.7], shape: rect, cover: open}
+      - {id: pass-through-2, at: [302.4, 8.7], size: [76.4, 24.7], shape: rect, cover: open}
   top:
     size: {w: 433.0, h: 87.0}
     panel:
       decor:
         - {id: base, at: [0, 0], size: [433, 11.3], fill: '#232527', kind: base}
         - {id: ear-plane, at: [0, 10.7], size: [433, 0.6], fill: '#121315', kind: fold}
-        - {id: slot-1, at: [20.95, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-1-neck, at: [26.95, 66], size: [4, 6], fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-2, at: [55.05, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-2-neck, at: [61.05, 66], size: [4, 6], fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-3, at: [89.15, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-3-neck, at: [95.15, 66], size: [4, 6], fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-4, at: [123.25, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-4-neck, at: [129.25, 66], size: [4, 6], fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-5, at: [157.35, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-5-neck, at: [163.35, 66], size: [4, 6], fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-6, at: [191.45, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-6-neck, at: [197.45, 66], size: [4, 6], fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-7, at: [225.55, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-7-neck, at: [231.55, 66], size: [4, 6], fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-8, at: [259.65, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-8-neck, at: [265.65, 66], size: [4, 6], fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-9, at: [293.75, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-9-neck, at: [299.75, 66], size: [4, 6], fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-10, at: [327.85, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-10-neck, at: [333.85, 66], size: [4, 6], fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-11, at: [361.95, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-11-neck, at: [367.95, 66], size: [4, 6], fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-12, at: [396.05, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-12-neck, at: [402.05, 66], size: [4, 6], fill: '#0a0b0c', sink: 33, kind: finger-gap}
+        - {id: wall, at: [0, 11.3], size: [433, 60.7], fill: '#2a2c2e', kind: finger-wall}
+        - {id: slot-1, at: [20.95, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-1-neck, at: [26.95, 66], size: [4, 6], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-2, at: [55.05, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-2-neck, at: [61.05, 66], size: [4, 6], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-3, at: [89.15, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-3-neck, at: [95.15, 66], size: [4, 6], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-4, at: [123.25, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-4-neck, at: [129.25, 66], size: [4, 6], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-5, at: [157.35, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-5-neck, at: [163.35, 66], size: [4, 6], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-6, at: [191.45, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-6-neck, at: [197.45, 66], size: [4, 6], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-7, at: [225.55, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-7-neck, at: [231.55, 66], size: [4, 6], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-8, at: [259.65, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-8-neck, at: [265.65, 66], size: [4, 6], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-9, at: [293.75, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-9-neck, at: [299.75, 66], size: [4, 6], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-10, at: [327.85, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-10-neck, at: [333.85, 66], size: [4, 6], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-11, at: [361.95, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-11-neck, at: [367.95, 66], size: [4, 6], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-12, at: [396.05, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-12-neck, at: [402.05, 66], size: [4, 6], fill: '#0a0b0c', kind: finger-gap}
         - {id: cover, at: [0, 72], size: [433, 15], fill: '#333639', kind: cover}
   bottom:
     size: {w: 433.0, h: 87.0}
@@ -209,45 +272,52 @@ views:
       decor:
         - {id: base, at: [0, 0], size: [433, 11.3], fill: '#232527', kind: base}
         - {id: ear-plane, at: [0, 10.7], size: [433, 0.6], fill: '#121315', kind: fold}
-        - {id: slot-1, at: [20.95, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-1-neck, at: [26.95, 66], size: [4, 6], fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-2, at: [55.05, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-2-neck, at: [61.05, 66], size: [4, 6], fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-3, at: [89.15, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-3-neck, at: [95.15, 66], size: [4, 6], fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-4, at: [123.25, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-4-neck, at: [129.25, 66], size: [4, 6], fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-5, at: [157.35, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-5-neck, at: [163.35, 66], size: [4, 6], fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-6, at: [191.45, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-6-neck, at: [197.45, 66], size: [4, 6], fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-7, at: [225.55, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-7-neck, at: [231.55, 66], size: [4, 6], fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-8, at: [259.65, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-8-neck, at: [265.65, 66], size: [4, 6], fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-9, at: [293.75, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-9-neck, at: [299.75, 66], size: [4, 6], fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-10, at: [327.85, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-10-neck, at: [333.85, 66], size: [4, 6], fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-11, at: [361.95, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-11-neck, at: [367.95, 66], size: [4, 6], fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-12, at: [396.05, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', sink: 33, kind: finger-gap}
-        - {id: slot-12-neck, at: [402.05, 66], size: [4, 6], fill: '#0a0b0c', sink: 33, kind: finger-gap}
+        - {id: wall, at: [0, 11.3], size: [433, 60.7], fill: '#2a2c2e', kind: finger-wall}
+        - {id: slot-1, at: [20.95, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-1-neck, at: [26.95, 66], size: [4, 6], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-2, at: [55.05, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-2-neck, at: [61.05, 66], size: [4, 6], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-3, at: [89.15, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-3-neck, at: [95.15, 66], size: [4, 6], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-4, at: [123.25, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-4-neck, at: [129.25, 66], size: [4, 6], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-5, at: [157.35, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-5-neck, at: [163.35, 66], size: [4, 6], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-6, at: [191.45, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-6-neck, at: [197.45, 66], size: [4, 6], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-7, at: [225.55, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-7-neck, at: [231.55, 66], size: [4, 6], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-8, at: [259.65, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-8-neck, at: [265.65, 66], size: [4, 6], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-9, at: [293.75, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-9-neck, at: [299.75, 66], size: [4, 6], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-10, at: [327.85, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-10-neck, at: [333.85, 66], size: [4, 6], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-11, at: [361.95, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-11-neck, at: [367.95, 66], size: [4, 6], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-12, at: [396.05, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-12-neck, at: [402.05, 66], size: [4, 6], fill: '#0a0b0c', kind: finger-gap}
         - {id: cover, at: [0, 72], size: [433, 15], fill: '#333639', kind: cover}
   left:
     size: {w: 87.0, h: 42.0}
     panel:
       decor:
         - {id: base, at: [0, 0], size: [11.3, 42], fill: '#232527', kind: base}
-        - {id: channel-end, at: [11.3, 8.5], size: [60.7, 25], fill: '#0a0b0c', sink: 18, kind: channel}
-        - {id: cover, at: [72, 0], size: [15, 42], fill: '#333639', kind: cover}
+        - {id: wall-upper, at: [11.3, 1.2], size: [60.7, 7.3], fill: '#2a2c2e', kind: finger-wall}
+        - {id: wall-lower, at: [11.3, 33.5], size: [60.7, 7.3], fill: '#2a2c2e', kind: finger-wall}
+        - {id: cover-face, at: [85.5, 0], size: [1.5, 42], fill: '#333639', kind: cover}
+        - {id: cover-lip-upper, at: [72, 0], size: [15, 1.5], fill: '#333639', kind: cover}
+        - {id: cover-lip-lower, at: [72, 40.5], size: [15, 1.5], fill: '#333639', kind: cover}
   right:
     size: {w: 87.0, h: 42.0}
     panel:
       decor:
         - {id: base, at: [75.7, 0], size: [11.3, 42], fill: '#232527', kind: base}
-        - {id: channel-end, at: [15, 8.5], size: [60.7, 25], fill: '#0a0b0c', sink: 18, kind: channel}
-        - {id: cover, at: [0, 0], size: [15, 42], fill: '#333639', kind: cover}
+        - {id: wall-upper, at: [15, 1.2], size: [60.7, 7.3], fill: '#2a2c2e', kind: finger-wall}
+        - {id: wall-lower, at: [15, 33.5], size: [60.7, 7.3], fill: '#2a2c2e', kind: finger-wall}
+        - {id: cover-face, at: [0, 0], size: [1.5, 42], fill: '#333639', kind: cover}
+        - {id: cover-lip-upper, at: [0, 0], size: [15, 1.5], fill: '#333639', kind: cover}
+        - {id: cover-lip-lower, at: [0, 40.5], size: [15, 1.5], fill: '#333639', kind: cover}
 configurations:
   base:
     kind: base
