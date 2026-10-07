@@ -6515,7 +6515,7 @@ def lint_device_passes(path, data, lib_roots):
         vp = view_parts(view)
         parts = []
         for q in vp["placements"]:
-            if not q.get("at") or q.get("mate-to"):
+            if not q.get("at") or q.get("mate-to") or not q.get("ref"):
                 continue
             cp = resolve_component(q["ref"], lib_roots)
             c = (load_yaml(cp) or {}) if cp else {}
@@ -6531,11 +6531,11 @@ def lint_device_passes(path, data, lib_roots):
             well = (bool(sz.get("d")) and c.get("kind") != "module"
                     and (c.get("behaviour") != "mounts"
                          or bool((c.get("relief") or {}).get("cavity"))))
-            parts.append((q["id"], (x, y, x + w, y + h), well))
+            parts.append((q.get("id"), (x, y, x + w, y + h), well))
         for b in vp["bays"]:
             bb = _decor_box(b)
             if bb:
-                parts.append((b["id"], bb, False))
+                parts.append((b.get("id"), bb, False))
         brushes = [(d, _decor_box(d)) for d in vp["decor"]
                    if d.get("pattern") == "brush" and _decor_box(d)]
         seen = set()
@@ -6608,7 +6608,13 @@ def lint_component_guide(path, data):
     if not g:
         return
     size = data.get("size") or {}
-    ap = g.get("aperture") or {}
+    ap = (g.get("aperture") if isinstance(g, dict) else None) or {}
+    # the schema has already said what is wrong with a malformed guide, and
+    # lint runs on past a schema error - so read nothing it has not promised
+    if (not isinstance(ap, dict) or g.get("run") not in ("x", "y", "z")
+            or not all(isinstance(ap.get(k), (int, float)) and not isinstance(ap.get(k), bool)
+                        for k in ("w", "h"))):
+        return
     reach = _relief_reach(data)
     bounds = {"x": (("w", size.get("h"), "size.h"), ("h", reach, "its reach out of the face")),
               "y": (("w", size.get("w"), "size.w"), ("h", reach, "its reach out of the face")),

@@ -158,3 +158,15 @@ def test_a_duct_compiles_to_an_unpainted_rect():
     assert (r.get("data-guide-finger-pitch"), r.get("data-guide-finger-gap")) == ("33.6", "16")
     assert (r.get("x"), r.get("y"), r.get("width"), r.get("height")) == ("10", "8", "400", "27")
     assert r.get("fill") == "none" and r.get("stroke") == "none"
+
+
+@pytest.mark.parametrize("guide", [
+    {"kind": "ring", "aperture": {"w": 5, "h": 5}},
+    {"kind": "ring", "aperture": {"w": "5", "h": 5}, "run": "x"},
+    {"kind": "ring", "aperture": [5, 5], "run": "x"},
+])
+def test_L131_a_malformed_guide_is_the_schemas_to_report_not_a_traceback(guide):
+    """lint runs on past a schema error, so the rule must not crash on one."""
+    from portrayal import lint
+    with lint.collecting():
+        lint.lint_component_guide("c.yaml", {"size": {"w": 10, "h": 10, "d": 5}, "guide": guide})

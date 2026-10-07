@@ -220,3 +220,10 @@ def test_L44_sees_a_brush_through_its_declared_window(lib):
     doc = good()
     del doc["views"]["front"]["passes"]
     assert _l44(doc, lib)
+
+
+def test_a_placement_with_no_ref_does_not_crash_the_pass_check(lib):
+    """lint_device_passes runs whether or not the device passed its schema."""
+    doc = good()
+    doc["views"]["front"]["components"]["placements"].append({"id": "x", "at": [0, 0]})
+    findings(doc, lib, "L129")
