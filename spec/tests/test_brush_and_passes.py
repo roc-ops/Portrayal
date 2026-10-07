@@ -5,7 +5,6 @@ is never an air aperture. A pass-through (`passes:`) declares that cables can
 cross a face there. L129 keeps a pass on its face and off the parts; L130 keeps
 a `cover: brush` and the brush drawn over it in step.
 """
-import copy
 import json
 import pathlib
 import xml.etree.ElementTree as ET
@@ -192,3 +191,17 @@ def test_a_horizontal_brush_has_its_own_tile(lib):
     root = ET.fromstring(out) if isinstance(out, (str, bytes)) else out
     tile = next(el for el in root.iter() if el.get("id") == "portrayal-brush-horizontal")
     assert float(tile.get("width")) > float(tile.get("height"))
+
+
+# --- the device that proves it -----------------------------------------------
+
+def test_the_brush_manager_declares_what_it_draws():
+    doc = yaml.safe_load((LIB / "devices/fs/cmh-4drb1u/device.yaml").read_text())
+    passes = {(v, p["id"]): p for v, vw in doc["views"].items() for p in vw.get("passes") or []}
+    covers = sorted(p.get("cover", "open") for p in passes.values())
+    # five brush windows in the panel and the brush strip behind them; the two
+    # end walls' holes are open
+    assert covers.count("brush") == 6 and covers.count("open") == 2
+    with lint.collecting() as found:
+        lint.lint_device_passes("device.yaml", doc, [str(LIB)])
+    assert not [m for m in found.errors + found.warnings if "[L129]" in m or "[L130]" in m]

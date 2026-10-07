@@ -2550,8 +2550,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             pat.set("width", f"{tw:g}"); pat.set("height", f"{th:g}")
             pat.set("patternUnits", "userSpaceOnUse")
             for x, y, w_, h_, fill in ((0, 0, 1.6, 9.0, "#121315"),
-                                       (0.25, 0, 0.35, 9.0, "#2b2e32"),
-                                       (1.0, 2.5, 0.25, 6.5, "#202326")):
+                                       (0.25, 0, 0.35, 9.0, "#24272b"),
+                                       (1.0, 2.5, 0.25, 6.5, "#1c1e21")):
                 if not vert:
                     x, y, w_, h_ = y, x, h_, w_
                 b_ = ET.SubElement(pat, f"{{{SVG_NS}}}rect")
