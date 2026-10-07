@@ -5501,6 +5501,7 @@ def lint_device_overhang(path, data, lib_roots):
     oh = ch.get("overhang") or {}
     stated = {"left": float(oh.get("left") or 0), "right": float(oh.get("right") or 0)}
     reach = {"left": 0.0, "right": 0.0}
+    asked = set()
     for vname, face, pid, kind, (x0, y0, x1, y1), optional, (vw, vh) in \
             _offface_boxes(data, lib_roots):
         lo, hi = -x0, x1 - vw
@@ -5524,6 +5525,19 @@ def lint_device_overhang(path, data, lib_roots):
                                   f"a {vw:g} face); a side view's x is the depth, which "
                                   "`chassis.overhang` does not cover")
             continue
+        # THE REACH IS MEASURED FROM THE RACK FACE, so a front or rear that a
+        # part reaches past is drawn as one, ears and what they carry included.
+        # Measured off a front drawn at the body between the folds, a part on
+        # an ear would read as overhang and be exported as reaching past the
+        # rack when it is inside it. A face nothing reaches past is not asked.
+        lo_mm, hi_mm = capability.RACK_FACE_MM
+        if (face in ("front", "rear") and max(lo, hi) > OVERHANG_TOL
+                and not lo_mm <= vw <= hi_mm and (vname, face) not in asked):
+            asked.add((vname, face))
+            err(path, "L150", f"{vname}: {kind} {pid or '(no id)'} reaches past a {face} "
+                              f"drawn {vw:g} wide; a part beyond the face is measured from "
+                              f"the rack face, {lo_mm:g}-{hi_mm:g} mm with the ears - draw "
+                              "the ears and what they carry, as the R740xd does")
         for side, by in ((near, lo), (far, hi)):
             if by > OVERHANG_TOL and by > stated[side] + OVERHANG_TOL:
                 have = (f"`chassis.overhang.{side}` is {stated[side]:g}" if oh

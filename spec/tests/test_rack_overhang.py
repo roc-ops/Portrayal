@@ -37,7 +37,7 @@ def _codes(doc, code):
     return [m for m in found.errors + found.warnings if f"[{code}]" in m]
 
 
-def _dev(placements, view="front", w=430.0, h=44.0, **chassis):
+def _dev(placements, view="front", w=482.6, h=44.0, **chassis):
     ch = {"width": 430.0, "height": 44.0, "depth": 100.0, "ru": 1, **chassis}
     return {"chassis": ch,
             "views": {view: {"size": {"w": w, "h": h},
@@ -51,13 +51,21 @@ def _at(x, y=0.0, **kw):
 # --- L150 --------------------------------------------------------------------
 
 def test_L150_a_part_on_the_face_is_quiet():
-    assert not _codes(_dev([_at(0.0), _at(417.3)]), "L150")
+    assert not _codes(_dev([_at(0.0), _at(469.9)]), "L150")
 
 
 def test_L150_a_part_past_the_face_with_no_overhang_is_an_error():
     found = _codes(_dev([_at(-20.0)]), "L150")
     assert found and "states no `chassis.overhang`" in found[0]
-    assert _codes(_dev([_at(430.0)]), "L150")
+    assert _codes(_dev([_at(482.6)]), "L150")
+
+
+def test_L150_an_overhang_is_measured_from_a_front_drawn_at_the_rack_face():
+    """A front drawn at the body between the folds would call a part on an ear
+    overhang, and the export would say it reaches past the rack."""
+    found = _codes(_dev([_at(-20.0)], w=430.0, overhang={"left": 20.0}), "L150")
+    assert any("measured from the rack face" in m for m in found)
+    assert not _codes(_dev([_at(-20.0)], overhang={"left": 20.0}), "L150")
 
 
 def test_L150_half_a_millimetre_is_the_face():
@@ -103,7 +111,7 @@ def test_L150_a_bay_or_cutout_past_the_face_is_reported():
     doc["views"]["front"]["components"]["bays"] = [{"id": "b", "at": [-10, 0], "size": [20, 20]}]
     assert _codes(doc, "L150")
     doc = _dev([])
-    doc["views"]["front"]["panel"] = {"cutouts": [{"id": "c", "at": [425, 0], "size": [10, 10]}]}
+    doc["views"]["front"]["panel"] = {"cutouts": [{"id": "c", "at": [477.6, 0], "size": [10, 10]}]}
     assert _codes(doc, "L150")
 
 
