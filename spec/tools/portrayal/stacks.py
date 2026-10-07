@@ -1,4 +1,4 @@
-"""Belly-to-belly cage stacks: which cages pair, and which way each one faces.
+"""Stacked cages: which cages pair, and which way each one faces.
 
 ONE IMPLEMENTATION, READ BY LINT L108 AND BY ITS TESTS, so the rule and the
 census that checks the rule cannot disagree about what a pair is.
@@ -29,10 +29,21 @@ repeated, and six faces with a separate single row under a stack.
 QSFP AND QSFP-DD ARE ONE FACE FAMILY - they share the bezel opening, and a QSFP
 cage over a QSFP-DD cage (cisco/asr-9902) stacks belly-to-belly like any other.
 
-OSFP IS NOT CHECKED. std/osfp@1's skin draws a latch slot at the bottom and its
-lip at the top, which may be a different convention from the other cages', and
-no OSFP generic exists to seat in one. It is left as drawn until that is
-settled, and `SKIPPED` says so wherever it matters.
+OSFP STACKS THE SAME WAY UP, NOT BELLY-TO-BELLY (#799). The OSFP Module
+Specification Rev 5.22 draws its stacked 2x1 cages with both modules heat sink
+up (section 7.1, Figures 7-1 and 7-2), and its Table 7-1 says what the 19.9 mm
+pitch is for: a riding heat sink "on the top side of bottom port", which a
+lower module turned over would not have there. A stacked OSFP cage is ONE
+connector on one face of the host board, so its two ports always face the same
+way: upper 0 over lower 0 on the board's top face, and 180 over 180 where the
+whole 2x1 cage is on its underside (the spec's "belly-to-belly" application,
+section 7.6 and Figures 7-39/7-40, is cages on both faces of one board). A
+column pair on a card drawn on its side is two cages turned alike (90/90 or
+270/270). A pair turned 0 over 180 is two single cages either side of a board -
+a construction the MSA allows, but not a stacked cage - so it takes a recorded
+reading in `stack-exceptions:`, like any other stack built otherwise.
+`WANT` holds each family's convention; a pair is held to its own family's.
+`SKIPPED` is empty since then, and is kept so a family set aside again says why.
 
 AN EXCEPTION IS DECLARED BY THE PAIR, with a reason, in `stack-exceptions:` - a
 top-level list in a device manifest (or the layout.yaml it is generated from)
@@ -52,17 +63,18 @@ cannot outlive the stack it excused, nor sit on one its reading never turned.
 """
 
 # face family by presented interface; anything not here is out of scope
-FAMILY = {"sfp": "sfp", "qsfp": "qsfp", "qsfp-dd": "qsfp"}
+FAMILY = {"sfp": "sfp", "qsfp": "qsfp", "qsfp-dd": "qsfp", "osfp": "osfp"}
 # interfaces a stack of which is deliberately not checked, and why
-SKIPPED = {"osfp": "std/osfp@1 draws its latch slot at the bottom and its lip at "
-                   "the top, which may be a different convention, and no OSFP "
-                   "generic exists to seat; OSFP stacks are left as drawn"}
+SKIPPED = {}
 
 EPS = 0.05          # mm - touching neighbours in adjacent columns are not overlapping
 OVERLAP = 0.6       # of the smaller cage's extent across the belly axis
 REACH = 2.2         # a partner lies within this many cage depths along it
 
-WANT = {"row": (0, 180), "column": (270, 90)}
+# the turns (first, second) a pair may take, by face family and by kind
+BELLY_TO_BELLY = {"row": {(0, 180)}, "column": {(270, 90)}}
+SAME_WAY_UP = {"row": {(0, 0), (180, 180)}, "column": {(90, 90), (270, 270)}}
+WANT = {"sfp": BELLY_TO_BELLY, "qsfp": BELLY_TO_BELLY, "osfp": SAME_WAY_UP}
 
 
 def _inner(contract, resolve, depth=0):
@@ -160,8 +172,25 @@ def checked(pair):
         pair["second"]["interface"] not in SKIPPED
 
 
+def want(pair):
+    """The turns (first, second) the pair's face family allows it."""
+    return WANT[pair["first"]["family"]][pair["kind"]]
+
+
 def conforms(pair):
-    return (pair["first"]["rotate"], pair["second"]["rotate"]) == WANT[pair["kind"]]
+    return (pair["first"]["rotate"], pair["second"]["rotate"]) in want(pair)
+
+
+def convention(pair):
+    """The convention a pair is held to, in words, for a finding."""
+    if WANT[pair["first"]["family"]] is SAME_WAY_UP:
+        turn = ("upper and lower turned alike, 0/0 (or 180/180 under the board)"
+                if pair["kind"] == "row"
+                else "left and right turned alike, 90/90 or 270/270")
+        return (f"{turn} - a stacked cage seats both modules the same way up (OSFP MSA "
+                f"rev 5.22 section 7.1, Table 7-1, Figures 7-1 and 7-2)")
+    return ("upper 0, lower 180" if pair["kind"] == "row"
+            else "left 270, right 90") + " - both bails outward"
 
 
 def state(pair):
@@ -242,17 +271,16 @@ def findings(doc, resolve, is_device):
         if conforms(pr):
             continue
         a, b = pr["first"], pr["second"]
-        want = WANT[pr["kind"]]
         where = f"{vname}: " if vname else ""
-        pos = ("upper", "lower") if pr["kind"] == "row" else ("left", "right")
+        kind = "same-way-up" if WANT[a["family"]] is SAME_WAY_UP else "belly-to-belly"
         msgs.append(
-            f"{where}{a['id']} over {b['id']} is a belly-to-belly {pr['kind']} pair "
-            f"turned {a['rotate']}/{b['rotate']} ({state(pr)}); the convention is "
-            f"{pos[0]} {want[0]}, {pos[1]} {want[1]} - both bails outward. Turn them, or "
+            f"{where}{a['id']} over {b['id']} is a {kind} {a['family'].upper()} "
+            f"{pr['kind']} pair turned {a['rotate']}/{b['rotate']} ({state(pr)}); the "
+            f"convention is {convention(pr)}. Turn them, or "
             f"declare the pair in `stack-exceptions:` with the reading that says otherwise")
     for key, e in exc.items():
         if key not in hit:
             msgs.append(f"stack-exceptions names {sorted(key[1])}, which is not "
-                        f"a checked belly-to-belly pair here (OSFP stacks are not checked) - "
+                        f"a checked stacked pair here - "
                         f"remove the stale entry or fix the ids")
     return msgs

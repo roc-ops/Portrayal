@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: c13-plug
-version: 1.0.0
+version: 1.1.0
 class: port
 mates: iec-c14
 conforms: c13-plug
@@ -45,19 +45,19 @@ provenance:
   seated-depth: >-
     RULING - THE NOSE SITS ON THE INLET'S MODELLED CAVITY FLOOR, the way
     generic/lc-plug@2 seats in its bore. std/c14-inlet@1 models its cavity
-    13.0 deep, so this plug stands 64 - 13.0 = 51.0 in front of the inlet's
-    face: 5.0 of nose, 26.0 of overmould and 20.0 of strain relief. THE NOSE
+    17.0 deep, so this plug stands 64 - 17.0 = 47.0 in front of the inlet's
+    face: 1.0 of nose, 26.0 of overmould and 20.0 of strain relief. THE NOSE
     IS LONGER THAN THE MODELLED CAVITY. Volex prints it 18 MIN, and a nose
-    that went fully home would leave 64 - 18 = 46 at most standing out. THE
-    INLET'S 13.0 IS THE ESTIMATE TO REVISIT: its own provenance.depth says
-    estimated, since no held drawing dimensions the shroud interior. When
-    that depth is measured, every `lift` and `out` below moves by the
-    difference and nothing else changes.
+    that went fully home would leave 64 - 18 = 46 at most standing out. The
+    inlet's 17.0 is now a drawing figure (Adam Tech S00087C rev D, shroud
+    face to floor 17.00 +0/-1.00, #793), 1.0 short of the nose's minimum;
+    it was 13.0 estimated, and every `lift` and `out` below moved by the
+    4.0 difference. REVISIT only if the inlet's depth moves again.
   frame: >-
     THE PLUG'S RELIEF IS MEASURED FROM THE HOST'S PRESENTED LIFT, the frame
     generic/bnc-plug@1 and generic/lc-plug@2 use. std/c14-inlet@1 presents
     at its own face (its `mate` carries no `on:` and no `seat-out`), so 0
-    here is the panel plane the cutout is in. The 13.0 of nose inside the
+    here is the panel plane the cutout is in. The 17.0 of nose inside the
     cavity is not built: it is behind the face, where the inlet's own cavity
     is.
   nose: >-
@@ -67,7 +67,7 @@ provenance:
     (+3/-0) and whose other two are R3.5 MIN. The chamfer leg, about 5.5, is
     SCALED on the V1625BS face view (5.65 px/mm on the printed 26). Seen from
     the cable end the nose is wholly behind the overmould; it is drawn so the
-    5.0 of it in front of the inlet has a node to build from.
+    1.0 of it in front of the inlet has a node to build from.
   body: >-
     drawing and scaled. The 26 +/-0.5 width is dimensioned. The length, 26.0
     from the nose shoulder to the strain relief, is SCALED on the V1625BS
@@ -92,7 +92,7 @@ provenance:
     reading. The flex slots are not drawn.
   stub: >-
     estimated - the stub rule, docs/connectors-coax-design.md section 5: a
-    straight run of cord 30 long starting where the strain relief ends (51.0
+    straight run of cord 30 long starting where the strain relief ends (47.0
     in front of the inlet face). The cord's bend is the installation's.
   cable-od: >-
     datasheet - SJT 3 x 18 AWG, the North American cord Volex lists against
@@ -121,18 +121,18 @@ elements: {}
 relief:
   features:
     - node: nose
-      out: 5.0
+      out: 1.0
       shape: true
       color: '#1c1c1c'
       confidence: estimated
       source: >-
         Volex catalogue Aug-2025 p.240 and p.249, the 18 MIN insertion nose,
-        less the 13.0 std/c14-inlet@1 models its cavity deep - an estimate in
-        that part. The 5.0 is what the ruling in provenance.seated-depth
-        leaves in front of the inlet face.
+        less the 17.0 std/c14-inlet@1 models its cavity deep (Adam Tech
+        S00087C rev D). The 1.0 is what the ruling in provenance.seated-depth
+        leaves in front of the inlet face; estimated because 18 is a minimum.
     - node: body
-      lift: 5.0
-      out: 14.0
+      lift: 1.0
+      out: 10.0
       shape: true
       color: '#26282b'
       confidence: estimated
@@ -141,8 +141,8 @@ relief:
         the overmould at its full 26 for about the front 9, from the nose
         shoulder. Its start is the nose's end (provenance.seated-depth).
     - node: body-rear
-      lift: 14.0
-      out: 31.0
+      lift: 10.0
+      out: 27.0
       shape: true
       color: '#2c2e32'
       confidence: estimated
@@ -151,7 +151,7 @@ relief:
         the tapering rear 17 of the 26.0 overmould, built at the 21.6 its
         ears span (provenance.taper).
     - node: relief-boot
-      lift: 31.0
+      lift: 27.0
       cyl: 20.0
       color: '#202225'
       confidence: estimated
@@ -161,7 +161,7 @@ relief:
         across on V1625. Estimated because its start follows the inlet's
         estimated depth.
     - node: stub
-      lift: 51.0
+      lift: 47.0
       cyl: 30
       confidence: estimated
       source: the stub rule, docs/connectors-coax-design.md section 5

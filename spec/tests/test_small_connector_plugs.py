@@ -11,9 +11,10 @@ builds here and device copies rendered here, never a possibly stale dist.
 Nothing is rasterised.
 
 THE SEATED DEPTH IS A RULING PER PLUG, and the tests below hold the parts to
-it. None of the three jacks models a depth, so there is no modelled floor to
+it. The MRJ21 and VHDCI jacks model no depth, so there is no modelled floor to
 compare; a test here fails by design when one gains a depth, because each
-plug's provenance says it states none.
+plug's provenance says it states none. The RJ11 jack gained its housing's
+20.57 (#837), which is not a plug stop, and its plug says so.
 """
 import json
 import shutil
@@ -147,7 +148,16 @@ def test_each_jack_presents_its_interface_at_the_centre_of_its_opening(iface):
     assert at == pytest.approx(jack["connection-points"]["mate"]["at"])
     el = jack["elements"]["jack" if iface == "rj11" else "opening"]
     centre = [el["at"][0] + el["size"][0] / 2, el["at"][1] + el["size"][1] / 2]
-    if iface == "vhdci":
+    if iface == "rj11":
+        # the centre of the BODY TIER the plug's body fills (9.88 x 6.85 from
+        # the top of the opening), not of the whole opening, whose lower 4.41
+        # is the shoulder and latch slot: centred across, 6.85 / 2 down
+        assert at == pytest.approx([centre[0], el["at"][1] + 6.85 / 2])
+        plug = _contract(PAIRS[iface][1])
+        ph = plug["size"]["h"]
+        assert el["at"][1] <= at[1] - ph / 2 and at[1] + ph / 2 <= el["at"][1] + 6.85
+        assert "BODY TIER" in flat(jack["provenance"]["mate"])
+    elif iface == "vhdci":
         # the point the receptacle already had: midway between its two screw
         # locks, which is the middle of the part and 0.1 off the middle of the
         # slot as drawn. It is not moved; the plug's screws are symmetric
@@ -162,7 +172,7 @@ def test_each_jack_presents_its_interface_at_the_centre_of_its_opening(iface):
     assert "on" not in mate and "seat-out" not in mate
 
 
-@EACH_IFACE
+@pytest.mark.parametrize("iface", ["mrj21", "vhdci"])
 def test_no_jack_models_a_depth(iface):
     """Fails by design when a jack gains a depth or a cavity: each plug's
     provenance.seated-depth says its jack states none, and is to be read
@@ -173,11 +183,45 @@ def test_no_jack_models_a_depth(iface):
     assert PAIRS[iface][0] in text and "states no depth" in text.lower(), text
 
 
-def test_the_two_edited_jacks_took_a_patch_and_kept_their_drawings():
+def test_the_rj11_jack_models_its_housing_depth_and_a_cavity():
+    """#837: TE C-1775675 rev C's 20.57, the registry's figure, with the
+    three-tier opening recessed as std/rj45@2 recesses its own. Fails by
+    design when the depth moves: the plug's provenance.seated-depth cites it
+    and says it is not a plug stop."""
+    jack = _contract("common/rj11-jack@1")
+    assert jack["size"]["d"] == pytest.approx(std()["rj11"]["depth"]) == pytest.approx(20.57)
+    assert jack["relief"]["cavity"] == "cavity"
+    assert jack["relief"]["size"] == {"w": 9.88, "h": 11.26}
+    assert jack["elements"]["jack"]["size"] == [9.88, 11.26]
+    text = flat(_contract(RJ11)["provenance"]["seated-depth"])
+    assert "common/rj11-jack@1 is 20.57 deep" in text and "not a plug stop" in text, text
+
+
+def test_the_rj11_jack_draws_the_six_position_tiers_and_two_contacts():
+    """The cavity node is the opening's outline in three tiers (body 9.88 x
+    6.85, shoulder 6.60 x 1.69, latch slot 4.04 x 2.72), and two contacts
+    are loaded, positions 3 and 4 on the 1.02 pitch."""
+    n = skin_nodes("common/rj11-jack@1")
+    d = n["cavity"].get("d").split()
+    assert d[:3] == ["M", "2.06", "1.5"]
+    steps = [(d[i], float(d[i + 1])) for i in range(3, len(d) - 1, 2)]
+    assert steps == [("h", 9.88), ("v", 6.85), ("h", -1.64), ("v", 1.69), ("h", -1.28),
+                     ("v", 2.72), ("h", -4.04), ("v", -2.72), ("h", -1.28), ("v", -1.69),
+                     ("h", -1.64)]
+    pins = [e for e in n["jack-pins"] if e.tag.endswith("rect")]
+    xs = [float(e.get("x")) + float(e.get("width")) / 2 for e in pins]
+    assert xs == pytest.approx([6.49, 7.51])
+    assert xs[1] - xs[0] == pytest.approx(1.02)
+
+
+def test_the_edited_jacks_kept_their_bodies():
     v, r = _contract("common/vhdci-receptacle@1"), _contract("common/rj11-jack@1")
-    assert v["version"] == "1.0.1" and r["version"] == "1.1.1"
-    assert v["size"] == {"w": 40.4, "h": 5.2} and r["size"] == {"w": 14.0, "h": 13.5}
-    assert r["connection-points"]["tel"] == {"at": [7.0, 6.7], "direction": "front"}
+    assert v["version"] == "1.0.1" and r["version"] == "1.2.0"
+    assert v["size"] == {"w": 40.4, "h": 5.2}
+    assert r["size"] == {"w": 14.0, "h": 13.5, "d": 20.57}
+    # `tel` moved with `mate` to the body tier's centre (#837): one place for both
+    assert r["connection-points"]["tel"] == {"at": [7.0, 4.925], "direction": "front"}
+    assert r["connection-points"]["tel"]["at"] == r["connection-points"]["mate"]["at"]
     assert _contract("std/mrj21@1")["version"] == "1.0.0"
 
 
@@ -283,7 +327,8 @@ def test_it_is_a_plug_that_mates_its_interface(ref):
     name = ref.split("/")[1].split("@")[0]
     assert d["conforms"] == name and name in std()
     assert d["unplaced"] == _contract("generic/usb-a-plug@1")["unplaced"]
-    assert d["skins"] == ["default"] and d["version"] == "1.0.0"
+    # the RJ11 plug took a provenance patch when #837 redrew its jack
+    assert d["skins"] == ["default"] and d["version"] == ("1.0.1" if ref == RJ11 else "1.0.0")
 
 
 @EACH
@@ -472,9 +517,18 @@ def test_the_rj11_plug_has_its_latch_where_the_jack_has_its_keyway():
         n = skin_nodes(ref)
         h = _contract(ref)["size"]["h"]
         assert float(n["contacts"].get("y")) < h / 2 < float(n["latch"].get("y")), ref
-    jack = (LIB / "components/common/rj11-jack/v1/skins/default.svg").read_text()
-    pins = jack[jack.index('id="jack-pins"'):]
-    assert 'y="2.1"' in pins and 'id="jack-keyway" d="M 4.6 8.8' in jack
+    n = skin_nodes("common/rj11-jack@1")
+    h = _contract("common/rj11-jack@1")["size"]["h"]
+    pins = [e for e in n["jack-pins"] if e.tag.endswith("rect")]
+    assert len(pins) == 2 and all(float(e.get("y")) < h / 2 for e in pins)
+    # the latch slot is the cavity's lowest tier, below the middle
+    d = n["cavity"].get("d").split()
+    ys, y = [], float(d[2])
+    for i in range(3, len(d) - 1, 2):
+        if d[i] == "v":
+            y += float(d[i + 1])
+            ys.append(y)
+    assert max(ys) > h / 2
     # the plug passes into the six-position opening
     assert _contract(RJ11)["size"]["w"] == 9.65 < 9.88
     assert "9.88" in flat(std()["rj11"]["source"])

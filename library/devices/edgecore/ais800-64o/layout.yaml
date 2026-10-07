@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ais800-64o
-version: 4.0.0
+version: 4.0.1
 maturity: modelled
 manufacturer: Edgecore
 model: AIS800-64O
@@ -33,6 +33,22 @@ description: >-
   the post beside each cage, and this one gangs its columns and puts two lamps in the
   legend row above them.
 profile: networking
+stack-exceptions:
+- pairs: [[port-1, port-2], [port-3, port-4], [port-5, port-6], [port-7, port-8], [port-9, port-10],
+    [port-11, port-12], [port-13, port-14], [port-15, port-16], [port-17, port-18], [port-19,
+    port-20], [port-21, port-22], [port-23, port-24], [port-25, port-26], [port-27, port-28],
+    [port-29, port-30], [port-31, port-32], [port-33, port-34], [port-35, port-36], [port-37,
+    port-38], [port-39, port-40], [port-41, port-42], [port-43, port-44], [port-45, port-46],
+    [port-47, port-48], [port-49, port-50], [port-51, port-52], [port-53, port-54], [port-55,
+    port-56], [port-57, port-58], [port-59, port-60], [port-61, port-62], [port-63, port-64]]
+  reason: >-
+    HELD AS DRAWN, NOT A READING OF THIS TURN (#799). The quick start guide's page 1 front elevation
+    draws both cages of each bank alike and the two banks mirrored - the vent band across the top of
+    the upper opening in the upper bank, across the bottom of the lower opening in the lower bank -
+    which is a stacked 2x1 cage on each face of one board (OSFP MSA rev 5.22 sections 7.1 and 7.6)
+    and wants 0/0 in the upper bank and 180/180 in the lower; the guide's page 3 install render
+    reads the lower bank otherwise. The two documents disagree, so the geometry is held until a
+    photograph settles it; see the gap stacked-osfp-orientation.
 provenance:
   stack-orientation:
     confidence: drawing
@@ -40,8 +56,13 @@ provenance:
       The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is the
       upper cage upright (rotate 0) over the lower turned 180, so both cage lips face the band
       between the two cages and both bails face outward. Decided by the port lamps, which point up
-      over down: the 1 SFP pair (mgmt-inband-1/mgmt-inband-2). OSFP stacks are left as drawn (S7):
-      the 32 OSFP pairs (port-1/port-2 to port-63/port-64).
+      over down: the 1 SFP pair (mgmt-inband-1/mgmt-inband-2). The 32 OSFP pairs (port-1/port-2
+      to port-63/port-64) are drawn upper 0 / lower 180 and that is HELD, NOT SETTLED (#799):
+      L108 holds an OSFP stack to the same way up, the guide's page 1 elevation reads 0/0 in
+      the upper bank and 180/180 in the lower (vent band at the top of the upper bank's upper
+      opening, at the bottom of the lower bank's lower one), and its page 3 install render
+      seats an optic heat sink up in the lower bank. Every pair is named in stack-exceptions
+      and the gap stacked-osfp-orientation says what settles it.
   sources:
     confidence: datasheet
     note: >-
@@ -381,6 +402,14 @@ gaps:
     documents draw two elevations, a LED enlargement, five photographs, the FRU figures and
     a power-connection page, and not one of them shows a third face. Each carries an
     `empty:` sentence saying where I looked, per docs/deliberately-empty-faces.md.
+- what: stacked-osfp-orientation
+  scope: [front]
+  reason: sources-disagree
+  wanted: >-
+    Which way each OSFP bank faces. The quick start guide's page 1 elevation reads 0/0 in the upper
+    bank and 180/180 in the lower (each bank a stacked 2x1 cage, the banks mirrored about the
+    board), its page 3 install render reads the lower bank otherwise, and the drawing keeps 0/180. A
+    photograph of the front settles it; until then every pair is held in stack-exceptions.
 groups:
   osfp800:
     term: Port

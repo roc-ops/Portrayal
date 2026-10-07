@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: me1-100gb-cfp2
-version: 1.1.1
+version: 1.1.2
 class: line-card
 behaviour: fills
 profile: networking
@@ -80,7 +80,8 @@ provenance:
     1200 dpi (pdfimages finds no raster). Lamps: Lnk (113.1, 13.8), Act (113.1, 18.9), Laser
     Disabled (118.2, 18.9), legends Lnk above, Act and Laser/Disabled below. The cage is drawn
     as a raised bezel 126.1-171.1 x 10.4-26.2 round an inner panel 127.9-169.3 x 11.0-25.5
-    (41.3 x 14.6); std/cfp2 (41.5 x 12.4) is centred in the inner panel. The figure also draws
+    (41.3 x 14.6); std/cfp2 (41.5 x 14.3, the baseline drawing's panel opening height) is
+    centred in the inner panel. The figure also draws
     an oblong slot on the inner panel, which the std cage hides (gap: what it is, a door or a
     dust plug, is not stated). Port number '1' printed above the cage at x 147.9
   ports: >-
@@ -107,7 +108,7 @@ groups:
     index-origin: 1
     description: the card lamps Stat and Pwr at the left end
 parts:
-  - {ref: std/cfp2@1, id: port-1, group: ports, at: [127.85, 12.05], attrs: {media: cfp2, speed: 100g}}
+  - {ref: std/cfp2@2, id: port-1, group: ports, at: [127.85, 11.10], attrs: {media: cfp2, speed: 100g}}
   - {ref: common/led-dot@1, id: stat, group: status-leds, at: [10.61, 6.62], states: {lamp: ['off', {name: initializing, color: '#39b54a', behavior: blinking}, {name: up, color: '#39b54a'}, {name: down, color: '#f5a623'}]}}
   - {ref: common/led-dot@1, id: pwr, group: status-leds, at: [10.61, 10.73], states: {lamp: ['off', {name: 'on', color: '#2f6fdb'}]}}
   - {ref: common/led-dot@1, id: lnk-1, group: port-leds, at: [112.1, 12.81], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: {mode: blinking, rate: 4}}, {name: no-link, color: '#f5a623'}]}}

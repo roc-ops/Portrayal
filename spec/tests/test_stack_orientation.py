@@ -92,11 +92,68 @@ def test_sfp_over_qsfp_is_not_a_pair():
     assert _pairs(items) == []
 
 
-def test_osfp_pairs_for_the_census_but_is_not_checked():
+def test_osfp_pairs_and_is_checked():
     items = [_cage("a", (0, 0), ref="std/osfp@1"), _cage("b", (0, 15), ref="std/osfp@1")]
     (pr,) = stacks.pairs(stacks.cages(items, _resolve))
-    assert not stacks.checked(pr)
-    assert stacks.findings({"parts": items}, _resolve, False) == []
+    assert stacks.checked(pr) and pr["first"]["family"] == "osfp"
+
+
+def test_osfp_over_sfp_is_not_a_pair():
+    items = [_cage("a", (0, 0), ref="std/osfp@1"), _cage("b", (0, 15))]
+    assert _pairs(items) == []
+
+
+# --- OSFP: the same way up (#799) ----------------------------------------------
+# A stacked OSFP cage is one connector seating both modules heat sink up (OSFP
+# MSA rev 5.22 section 7.1, Table 7-1, Figures 7-1 and 7-2); the whole cage may
+# sit under the board, which turns both alike.
+
+def _osfp(id_, at, rotate=0):
+    return _cage(id_, at, rotate, ref="std/osfp@1")
+
+
+@pytest.mark.parametrize("rots", [(0, 0), (180, 180)])
+def test_an_osfp_row_pair_turned_alike_is_the_convention(rots):
+    assert _findings({"parts": [_osfp("a", (0, 0), rots[0]), _osfp("b", (0, 14.9), rots[1])]}) == []
+
+
+@pytest.mark.parametrize("rots", [(0, 180), (180, 0)])
+def test_an_osfp_row_pair_turned_belly_to_belly_is_a_finding(rots):
+    (msg,) = _findings({"parts": [_osfp("a", (0, 0), rots[0]), _osfp("b", (0, 14.9), rots[1])]})
+    assert "same-way-up OSFP row pair" in msg and "0/0" in msg and "OSFP MSA" in msg
+    assert "upper 0, lower 180" not in msg
+
+
+def test_an_osfp_column_pair_on_its_side_is_turned_alike():
+    for rots in ((90, 90), (270, 270)):
+        assert _findings({"parts": [_osfp("l", (0, 0), rots[0]), _osfp("r", (14.9, 0), rots[1])]}) == []
+    (msg,) = _findings({"parts": [_osfp("l", (0, 0), 270), _osfp("r", (14.9, 0), 90)]})
+    assert "OSFP column pair" in msg
+
+
+def test_the_sfp_convention_did_not_move_with_osfp():
+    """(0, 0) is right for an OSFP stack and still wrong for an SFP one."""
+    (msg,) = _findings({"parts": [_cage("a", (0, 0)), _cage("b", (0, 15))]})
+    assert "belly-to-belly SFP row pair" in msg and "upper 0, lower 180" in msg
+
+
+def test_an_osfp_pair_built_belly_to_belly_takes_an_exception_and_a_turned_alike_one_refuses_it():
+    belly = [_osfp("a", (0, 0)), _osfp("b", (0, 18.86), 180)]
+    doc = {"parts": belly, "stack-exceptions": [{"pair": ["a", "b"], "reason": "x" * 40}]}
+    assert _findings(doc) == []
+    doc["parts"] = [_osfp("a", (0, 0)), _osfp("b", (0, 18.86))]
+    (msg,) = _findings(doc)
+    assert "already follows the convention" in msg
+
+
+def test_every_osfp_stack_in_the_library_is_turned_alike_or_excepted():
+    """The census for the family L108 began checking in #799, so a vacuous
+    walk cannot pass it: it has to find the OSFP stacks the library draws."""
+    osfp = [(p, pr, e) for p, _v, pr, e in _census() if pr["first"]["family"] == "osfp"]
+    assert len(osfp) >= 200
+    turned_alike = [r for r in osfp if stacks.conforms(r[1])]
+    assert len(turned_alike) >= 50          # ais800-32o, exp800-16o, s9321-64eo
+    assert all(e or stacks.conforms(pr) for _p, pr, e in osfp)
 
 
 # --- the rule ---------------------------------------------------------------
@@ -137,7 +194,7 @@ def test_an_exception_that_names_no_pair_is_itself_a_finding():
     doc = {"parts": [_cage("a", (0, 0)), _cage("b", (0, 15), 180)],
            "stack-exceptions": [{"pair": ["a", "zz"], "reason": "x" * 40}]}
     (msg,) = _findings(doc)
-    assert "not a checked belly-to-belly pair" in msg
+    assert "not a checked stacked pair" in msg
 
 
 def test_an_exception_on_a_pair_that_already_conforms_is_a_finding():

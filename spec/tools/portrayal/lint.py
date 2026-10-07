@@ -276,7 +276,7 @@ RULES = {
     "L107": ("component, device", "no quoted run in a contract or manifest is longer than 25 words - a vendor's facts are transcribed, its prose is not reproduced", "paraphrase and cite the section (\"the ASR 9903 guide, Power Supply LEDs, says a flashing green lamp means...\"); a state table becomes `state = meaning` pairs, not a quotation"),
     "L109": ("component",  "a declared `optical.polarity` is what the paths actually wire - A straight, AF pair-flipped (and its rows exchanged at 24 fibres), universal - judged at the trunk connector's own width, and only at a width a held source draws (a warning otherwise)", "fix the paths or the polarity; the paths are the evidence, `polarity` is only the claim. For a width no source draws, add it to POLARITY_WIDTHS with the figure that draws it"),
     "L110": ("component, device", "a port's `speed` is one of the closed set in spec/schemas/speeds.yaml - the highest native rate the port runs at, and nothing else", "spell the rate from the set (a 10/100/1000 jack is `1g`); media goes in `media`, a USB generation in `usb`, a PON flavour in `pon`, a caveat in the placement's `description`"),
-    "L108": ("component, device", "a belly-to-belly SFP/QSFP/QSFP-DD cage pair faces the library's way - upper 0 over lower 180, or left 270 beside right 90 on a card drawn on its side - so both bails face outward (OSFP stacks are not checked)", "turn the pair; where a recorded reading says the stack is built otherwise, name the pair in `stack-exceptions:` with that reading as its `reason`"),
+    "L108": ("component, device", "a stacked cage pair faces the library's way - an SFP/QSFP/QSFP-DD pair belly-to-belly, upper 0 over lower 180, or left 270 beside right 90 on a card drawn on its side, so both bails face outward; an OSFP pair the same way up, turned alike - 0 over 0, or 180 over 180 for a cage under the board, or both 90 or both 270 on its side - because a stacked OSFP cage is one connector and the OSFP MSA rev 5.22 draws both its modules heat sink up (section 7.1, Table 7-1, Figures 7-1 and 7-2)", "turn the pair; where a recorded reading says the stack is built otherwise, name the pair in `stack-exceptions:` with that reading as its `reason`"),
     "L111": ("library",    "an alias names one box - no two devices claim the same `aliases[].name` (case-insensitive) unless every claimant marks it `shared: true`, and no alias repeats its own or another device's `model`", "drop or rename the alias; if an OEM name really maps to either of a pair, set `shared: true` on it in EVERY claimant and say why in its `note`"),
     "L112": ("component",  "a connector draws a node 1..N for each of its optical.positions, and a cassette's rear face reuses no front id", "compose a bore with the position's number as its id, or declare an element of class fibre; rename a clashing rear id"),
     "L113": ("device",     "a device port whose effective media carries a network interface (a pluggable cage, or `rj45`) has a `speed` and a group with a `role` - warning at `modelled`, error at `verified`", "add the rate the source states, on the port or its group; a console, timing or alarm jack takes the media that says so (`rj45-serial`, `rj45-tod`, `rj48`) instead of a speed; where no document states a rate, leave it and record the search in `gaps:`"),
@@ -7634,7 +7634,7 @@ def lint_device_pluggable_media(path, data, _lib_roots=None):
 
 
 def _stack_findings(path, data, lib_roots, is_device):
-    """L108: every belly-to-belly cage pair faces the library's way, or says why not.
+    """L108: every stacked cage pair faces the library's way, or says why not.
 
     THE CONVENTION IS ONE MEANING OF `rotate` (docs/pluggables-3d-design.md,
     the stacked-cage decisions of 2026-09-21): 0 is a module seated upright,
@@ -7648,8 +7648,13 @@ def _stack_findings(path, data, lib_roots, is_device):
     THE PAIRING IS stacks.py's, and the tests read the same module - a rule and
     a census that disagreed about what a pair is would each pass on its own.
     Exceptions are per pair, in `stack-exceptions:`, and one that names no
-    checked pair is a finding too. OSFP stacks are skipped, and the message
-    says so, because std/osfp@1's art may follow a different convention.
+    checked pair is a finding too.
+
+    OSFP STACKS ARE HELD TO THE SAME WAY UP, not belly-to-belly (#799): the
+    OSFP MSA rev 5.22 draws its stacked 2x1 cages heat sink up in both rows
+    (section 7.1, Table 7-1, Figures 7-1 and 7-2), so an OSFP row pair is
+    turned alike - 0/0, or 180/180 for a cage on the board's underside.
+    stacks.WANT holds each family's convention.
     """
     def resolve(ref):
         c = _contract(ref.split(":")[0], lib_roots) if ref else {}

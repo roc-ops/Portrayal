@@ -557,8 +557,8 @@ standards:
     h: 20.0
     radius: 3.0
     confidence: verified
-    depth: 13.0
-    depth-confidence: estimated
+    depth: 17.0
+    depth-confidence: drawing
     notes: Standard desktop/switch PSU inlet. Colloquially 'C13 inlet'; the male
       appliance inlet is formally C14. Panel cutout 28.0 +0.2/0 x 20.0 +0.2/0,
       corners max R3, verified against the SCHURTER 6100-3 datasheet (screw-on,
@@ -572,20 +572,24 @@ standards:
       series with its 24.6 x 48.6 flange; all max R3 on M3 at 40 centres. Treat
       28.0 x 20.0 as the reference, not as the only legal cutout. Flange and cutout
       are mounting-style specific; the boss and the coupler profile are the IEC
-      invariants. Depth 13.0 is still estimated - no drawing dimensions the shroud
-      interior, only the whole moulding behind the flange (E 20.5 solder / 23.5
-      quick connect on 6100-3, 25.6 on the flying-lead series behind a 2.9 flange).
-      Those are total body lengths the way the TE SFP cage measures 63.25 overall
-      against 41.0 bezel-to-connector; this field wants the latter kind of number.
-      The pins' 12.2 rise in std/c14-inlet encodes the same guess - both want
-      calipers.
+      invariants. Depth 17.0 is the shroud face to the cavity floor, 17.00 +0/-1.00
+      on Adam Tech drawing S00087C rev D (7/7/20), IEC-A-X series, sheet 1 section
+      view (https://app.adam-tech.com/products/download/data_sheet/203645/iec-a-2-data-sheet.pdf),
+      with the pins rising 15.00 +0.50/-0 off that floor, the floor 12.00 behind
+      the flange's panel side, a 5.00 boss on a 3.00 flange; the same drawing at
+      rev C for the IEC-C-X series agrees
+      (https://app.adam-tech.com/products/download/data_sheet/203640/iec-c-1-data-sheet.pdf).
+      The whole-moulding lengths elsewhere (E 20.5 solder / 23.5 quick connect on
+      6100-3, 25.6 on the flying-lead series behind a 2.9 flange, 19.4 on Bulgin
+      and Cliff CL 19210) bound it and are not it. Was 13.0 estimated before
+      roc-ops/Portrayal#793.
   c20-inlet:
     registry: IEC 60320-1 (C20 appliance inlet, mates C19)
     w: 32.4
     h: 24.4
     radius: 4.5
     confidence: verified
-    depth: 15.0
+    depth: 19.0
     depth-confidence: estimated
     notes: High-current datacenter PSU inlet. Panel cutout 32.4 +0.1/0 x 24.4 +0.1/0,
       corners max R4.5, from a SCHURTER C20 dimension drawing. The prior 32.5 x 22.0
@@ -593,7 +597,15 @@ standards:
       far too tight at 1.0 - R4.5 is a visibly rounded rectangle. Flange 34.9 x 26.9,
       37.9 across the mounting ears. Unlike C13/C14 the C19/C20 coupler profile is a
       plain rounded rectangle, NOT keyed with chamfers - polarity comes from the pin
-      layout (earth top centre, line and neutral below). Depth still estimated.
+      layout (earth top centre, line and neutral below). Depth 19.0 is ESTIMATED,
+      as the C13/C14 pair stands - the C19 nose is 20 MIN (Volex catalogue
+      Aug-2025, VAC19, p.262) and the cavity is taken 1 less, as the C14's 17.00
+      (Adam Tech S00087C rev D) is 1 less than the C13's 18 MIN nose (Volex V1625,
+      p.240). 19-20 is the ceiling the held whole-moulding drawings set (SCHURTER
+      1601 via Farnell 1832658, a 4.20 boss and an 18.40 body; International
+      Configurations 57745, a 21 body behind a 3.0 flange); no held drawing
+      sections the cavity (std/c20-inlet@1 provenance.depth-gap). Was 15.0 before
+      roc-ops/Portrayal#793.
   saf-d-grid:
     registry: >-
       Anderson Power Products Saf-D-Grid (no IEC or ISO standard governs it;
@@ -1097,77 +1109,115 @@ standards:
       which is 2.3 and 1.4 percent off this opening - a vendor drawing and the MSA
       agreeing without either being fitted to the other.
   cfp:
-    registry: CFP MSA Hardware Specification Rev 1.4
-    w: 82.0
-    h: 13.6
-    radius: 0.8
+    registry: CFP MSA Mechanical Layout, 17 Mar 10, revision 14, Figure 25
+    w: 82.8
+    h: 14.8
+    radius: 0.5
     confidence: verified
-    depth: 144.8
-    depth-confidence: verified
+    depth: 126.15
+    depth-confidence: estimated
+    depth-notes: 'bezel to host connector, DERIVED from a scaled figure: the
+      module''s F1 144.75 overall (CFP MSA Module Dimensions drawing, 04/07/10)
+      less the about 18.6 the Mechanical Layout''s Figure 19 puts the faceplate
+      front in front of the panel, scaled on its (103.5) reference'
+    cavity: {w: 77.2, h: 13.6}
+    cavity-confidence: verified
     pitch: 86.0
     pitch-confidence: estimated
     pitch-kind: floor
-    pitch-kind-note: The notes below call this "a layout floor read from vendor
-      faceplates, not an MSA figure" - a minimum spacing, not a fixed one. A
-      device may sit its ports wider.
+    pitch-kind-note: A minimum spacing read from vendor faceplates, not an MSA
+      figure; a device may sit its ports wider. The Mechanical Layout dimensions
+      one opening and no spacing between two.
     notes: >-
-      CFP MSA Hardware Specification Rev 1.4 - module 82.0 wide x 13.6 high x 144.75 long; the bezel opening is drawn at the module envelope because the MSA dimensions the module and host board, not a recommended bezel. Pitch is a layout floor read from vendor faceplates, not an
-      MSA figure.
+      THE SYSTEM PANEL OPENING: CFP MSA Mechanical Layout revision 14, section 11.1
+      Figure 25 (page 19), 82.8 +/-0.1 by 14.8 +/-0.1, corners R0.5 MAX, in a panel
+      1 MIN to 3 MAX thick. The module faceplate (82.00 x 14.00, Module Dimensions
+      drawing A1 and B1) passes through it, inside an external bracket standing
+      about 18 in front of the panel (Figure 19, section 8); the library draws no
+      bracket and the cage face stands for its front. The cavity is the cfp-module
+      body, X1 77.20 x BB1 13.60, which runs back through the host rails. Until #802
+      this entry was 82.0 x 13.6 x 144.8, the faceplate width on the body height
+      and the module's overall length.
 
   cfp2:
-    registry: CFP2 MSA Hardware Specification
+    registry: CFP MSA CFP2 Baseline Drawing Rev 1L (2013-08-06), sheets 13 and 14
     w: 41.5
-    h: 12.4
-    radius: 0.8
+    h: 14.3
+    radius: 0.5
     confidence: verified
-    depth: 107.5
-    depth-confidence: verified
-    pitch: 45.0
-    pitch-confidence: estimated
+    depth: 87.5
+    depth-confidence: estimated
+    depth-notes: 'bezel to host connector, DERIVED: sheet 14 puts the module front
+      (100.70) from the host board hole and the panel''s inside face 79.20 min.
+      from it; a 1.5 panel puts its front 80.70 from the hole, and a 107.50 module
+      (A08) reaches 87.50 behind that. The panel may be 1.0 to 3.0 thick'
+    cavity: {w: 41.5, h: 12.4}
+    cavity-confidence: verified
+    pitch: 42.5
+    pitch-confidence: verified
     pitch-kind: floor
-    pitch-kind-note: The notes below call this "a layout floor read from vendor
-      faceplates, not an MSA figure" - a minimum spacing, not a fixed one. A
-      device may sit its ports wider.
+    pitch-kind-note: Sheets 13 and 14 seat TWO modules in one 86.35 opening,
+      four openings on a 90.25 pitch, and print no spacing between the two; the
+      floor is the A01 42.50 MAX faceplate (sheet 3), the closest two modules'
+      faceplates can sit. Half the opening is 43.18. A device may sit its ports
+      wider.
     notes: >-
-      CFP2 MSA Hardware Specification - module 41.5 wide x 12.4 high x 107.5 long; opening drawn at the module envelope as std/cfp. Pitch is a layout floor read from vendor faceplates, not an
-      MSA figure.
+      THE SYSTEM PANEL OPENING, one module's share. Sheet 13/15 (SYSTEM PANEL):
+      14.30 +/-0.10 high and 86.35 +/-0.10 wide, corners R0.50 max, panel 1.0 to
+      3.0 thick; sheet 14/15 seats two modules in each opening, so the width is not
+      a single-module figure and is drawn at the A07 41.50 module body, the
+      cavity's width. The cavity is the cfp2-module body, A07 41.50 x A10 12.40.
+      Until #802 this entry was the module body, 41.5 x 12.4 x 107.5, on a 45.0
+      floor that contradicted the drawing's two modules per 86.35.
 
   cfp4:
-    registry: CFP MSA CFP4 Hardware Specification Rev 1.1, Figure 5-7
-    w: 21.5
-    h: 9.5
+    registry: CFP MSA CFP4 Baseline Drawing Rev R, sheets 3, 14 and 15
+    w: 22.1
+    h: 11.3
+    radius: 0.5
     confidence: verified
-    depth: 92.0
-    depth-confidence: verified
+    depth: 67.9
+    depth-confidence: estimated
+    depth-notes: 'bezel to host connector, DERIVED: sheet 15 puts the module front
+      (89.60) from the host board hole and the panel''s inside face 64.00 min.
+      from it; a 1.5 panel puts its front 65.50 from the hole, and a 92.00 module
+      (A08) reaches 67.90 behind that. The panel may be 1.0 to 3.0 thick'
+    cavity: {w: 21.5, h: 9.5}
+    cavity-confidence: verified
     notes: >-
-      CFP MSA CFP4 Hardware Specification Rev 1.1 (18 Mar 2015), Figure 5-7 "CFP4
-      Module Dimension Overview" - module body 21.50 wide x 9.50 high, 92.00 long
-      overall and 76.00 min behind the header; the header stands up to 3.40 above
-      and 1.60 below the body. The bezel opening is drawn at the module body, as
-      cfp and cfp2 are, because section 5.3 dimensions the module only and calls
-      its figures reference, deferring normative dimensions to the CFP4 baseline
-      drawing, and section 5.4 puts the host system and board layout in a
-      separate document; neither is held. No radius, because no corner figure is
-      sourced. No pitch either - Figures 5-1 and 5-2 draw a quad-port
-      host cage but dimension no spacing, and no vendor faceplate has been read for one.
+      THE SYSTEM PANEL OPENING, one module's share. Sheet 14/17 (SYSTEM PANEL):
+      11.30 +/-0.1 high and 89.75 +/-0.1 wide, corners R0.50 max, four across on a
+      91.75 pitch; sheet 15/17 seats FOUR modules in each opening, so the width is
+      not a single-module figure and is drawn at the A01 22.10 MAX faceplate (sheet
+      3), four of which fit the 89.75. The cavity is the cfp4-module body, A07
+      21.50 x A10 9.50. No pitch: no spacing between the four modules inside one
+      opening is printed. Until #802 this entry was the module body from the
+      CFP4 Hardware Specification Rev 1.1 Figure 5-7, 21.5 x 9.5 x 92.0, written
+      when the baseline drawing was not held.
 
   cxp:
-    registry: CXP (InfiniBand Vol 2 Annex A6 / SFF-8642 class)
-    w: 27.0
-    h: 10.0
-    radius: 0.8
-    confidence: estimated
-    depth: 92.0
-    depth-confidence: estimated
-    pitch: 30.0
-    pitch-confidence: estimated
+    registry: SFF-8642 Rev 3.3 Tables 5-4, 5-6, 5-7 and 5-8 (SFF-8617 Rev 1.7 prints the same)
+    w: 23.5
+    h: 12.1
+    confidence: verified
+    depth: 28.96
+    depth-confidence: verified
+    depth-notes: G10 connector datum to bezel 28.96 +/-0.25 (Table 5-6, p24)
+    cavity: {w: 21.6, h: 10.2}
+    cavity-confidence: verified
+    pitch: 27.0
+    pitch-confidence: verified
     pitch-kind: floor
-    pitch-kind-note: The notes below call this "a layout floor read from vendor
-      faceplates, not an MSA figure" - a minimum spacing, not a fixed one. A
-      device may sit its ports wider.
+    pitch-kind-note: Table 5-8 prints F05 27.00 Min, the horizontal pitch of
+      individual receptacles (F04 16.50 Min vertical); the D16 27.00 shell width
+      at the screw-attach features is why. A device may sit its ports wider.
     notes: >-
-      CXP (InfiniBand Vol 2 Annex A6 / SFF-8642 class) - module ~27 wide x ~10 high; the MSA documents in this intake do not dimension the bezel, so the opening is the approximate module envelope. Pitch is a layout floor read from vendor faceplates, not an
-      MSA figure.
+      THE PANEL CUT-OUT: SFF-8642 Rev 3.3 Table 5-7 (p25), F01 23.50 +/-0.05 by F02
+      12.10 +/-0.05, centred F03 6.29 above the PCB surface, on the snout opening's
+      centreline (Table 5-4 D10 6.29). The cavity is the snout opening, D12 21.60
+      x D14 10.20 (Table 5-4, p21), which the plug's 21.20 x 9.81 snout enters. No
+      radius: no corner figure is printed. Until #802 this entry was an estimate,
+      27.0 x 10.0 x 92.0 on a 30.0 floor, that the standard does not bear out.
   pcie-bracket-fh:
     w: 120.02
     h: 21.59
@@ -1451,12 +1501,11 @@ standards:
       module body overall (marked draft on the drawing, Note 1); BB1 13.60
       +/-0.20, height of module body overall; CC1 R0.6 on the outside
       corners. One envelope for every CFP; the rate is never in this entry.
-      THE `cfp` ENTRY ABOVE IS 82.0 WIDE BECAUSE IT TOOK THE FACEPLATE WIDTH,
-      A1, for the module: the body behind the faceplate is 77.20. The host
-      side is the CFP MSA Mechanical Layout, 17 Mar 10, revision 14: a panel
-      opening 82.8 +/-0.1 by 14.8 +/-0.1 (Figure 25) that the faceplate
-      passes through, inside an external bracket standing in front of the
-      panel (Figure 19). std/cfp@1 draws neither.
+      The host side is the `cfp` entry above: the CFP MSA Mechanical Layout,
+      17 Mar 10, revision 14, panel opening 82.8 +/-0.1 by 14.8 +/-0.1
+      (Figure 25) that the faceplate passes through, inside an external
+      bracket standing in front of the panel (Figure 19). std/cfp@2 draws the
+      opening, with this body as its cavity, and no bracket.
     head:
       w-max: 82.0
       above-max: 0.2
@@ -1490,8 +1539,8 @@ standards:
       One envelope for every CFP2, coherent or not; the rate is never in this
       entry. The host side is sheets 13 and 14 of the same drawing: a panel
       opening 14.30 +/-0.10 high (86.35 +/-0.10 wide for the dual cage) and
-      a cage that stands (4.70) through a panel 1.0 to 3.0 thick. std/cfp2@1
-      draws the module body, not that opening.
+      a cage that stands (4.70) through a panel 1.0 to 3.0 thick. std/cfp2@2
+      draws that opening's height, with this body as its cavity.
     head:
       w-max: 42.5
       above-max: 3.4
@@ -1524,7 +1573,8 @@ standards:
       specification are these, which that specification calls reference and
       this drawing makes normative. The host side is sheets 14 to 16 of the
       same drawing (a panel opening 11.30 +/-0.1 high, 89.75 +/-0.1 wide for
-      the quad cage); std/cfp4@1 draws the module body, not that opening.
+      the quad cage); std/cfp4@2 draws that opening's height, with this body
+      as its cavity.
     head:
       w-max: 22.1
       above-max: 3.4
@@ -1554,10 +1604,10 @@ standards:
       21.20 +/-0.13 wide, A02 9.81 +/-0.13 thick. SFF-8642 calls the free end
       a plug and draws a cable assembly; an optical CXP module is the same
       plug with a fibre receptacle in its body. One envelope for CXP at every
-      rate. THE `cxp` ENTRY ABOVE IS AN ESTIMATE THAT THIS DOCUMENT DOES NOT
-      BEAR OUT: Table 5-7 prints a panel cut-out 23.50 +/-0.05 by 12.10
-      +/-0.05, Table 5-8 a minimum pitch of 27.00 across and 16.50 up, and
-      nothing about the plug is 92 long. Not changed here.
+      rate. The host side is the `cxp` entry above, from the same document:
+      the Table 5-7 panel cut-out 23.50 +/-0.05 by 12.10 +/-0.05, the Table
+      5-6 bezel 28.96 from the connector datum and the Table 5-8 minimum
+      pitch of 27.00 across and 16.50 up.
     head:
       w-max: 24.05
       above-max: 4.79
@@ -2112,8 +2162,12 @@ standards:
       plugs as its mates and no flanged plug. The same drawing shows a seated
       plug in dashed outline, 22 from the back of the header to the back of
       the plug and 15 high with its underside level with the underside of the
-      header. common/terminal-header-508-2@1 is drawn 10.16 by 12.1, from a
-      photograph and a borrowed height, and does not claim this entry.
+      header. common/terminal-header-508-2@2 is drawn 12.16 wide, this
+      entry's width and the MSTBA 2,5/ 2-G-5,08 (order no. 1757242) data
+      sheet's [w] (#804), and 12.1 high, that data sheet's [h], which counts
+      the 3.5 solder pin below the board; its installed height is this
+      entry's 8.6. It does not claim this entry while the two heights differ
+      (#873).
   terminal-508-6-header:
     registry: Phoenix Contact MSTBA 2,5/ 6-G-5,08 header (order no. 1757284, catalogue CC-2009 p.249), data sheet p.5, dimensional drawing
     w: 32.48
@@ -2403,8 +2457,10 @@ standards:
       the name of the wiring with two contacts loaded, RJ14 with four and
       RJ12 or RJ25 with six, and one plug body fits all of them. NO ENVELOPE
       IS CLAIMED: the `rj11` interface cites this entry for what the connector
-      is; common/rj11-jack@1, the one part that presents it, is photo-measured
-      at 14.0 x 13.5 off a different maker's jack and states no `conforms`.
+      is; common/rj11-jack@1, the one part that presents it, draws this
+      entry's 9.88 opening (its tiers scaled off the same front view) and its
+      20.57 depth (#837), in a housing photo-measured at 14.0 x 13.5 off a
+      different maker's jack, and so states no `conforms`.
       The four-position handset jack (4P4C) and the eight-position RJ45 are
       different bodies and are not this entry. The cable plug that mates it
       is `rj11-plug`.

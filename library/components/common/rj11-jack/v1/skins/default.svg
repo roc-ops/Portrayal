@@ -1,11 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="14mm" height="13.5mm" viewBox="0 0 14 13.5">
-  <rect id="body" x="0" y="0" width="14" height="13.5" rx="0.8" fill="#c9cdd1"/>
-  <rect id="jack" x="1.2" y="1.5" width="11.6" height="10.5" rx="0.7" fill="#17191c" stroke="#5c6167" stroke-width="0.3"/>
-  <path id="jack-keyway" d="M 4.6 8.8 v 2 h 1.2 v 1.2 h 2.4 v -1.2 h 1.2 v -2 z" fill="#2b2f33"/>
+  <!-- THE HOUSING IS SOLID AND THE OPENING IS PUNCHED THROUGH IT, as std/rj45@2
+       draws its own. One evenodd path: the housing face, minus the three-tier
+       six-position interface (TE C-1775675 rev C, opening 9.88 wide). Body 9.88 x
+       6.85 from y 1.5; shoulder 6.60 wide, 1.69 high; latch slot 4.04 wide, 2.72
+       high, leaving 0.74 of wall below it. The cavity node is the same outline so
+       the 3D view recesses exactly what the face shows. -->
+  <path id="housing" fill-rule="evenodd" fill="#c9cdd1" stroke="#5c6167" stroke-width="0.15" d="
+    M 0.8 0 h 12.4 a 0.8 0.8 0 0 1 0.8 0.8 v 11.9 a 0.8 0.8 0 0 1 -0.8 0.8 h -12.4 a 0.8 0.8 0 0 1 -0.8 -0.8 v -11.9 a 0.8 0.8 0 0 1 0.8 -0.8 z
+    M 2.06 1.5 h 9.88 v 6.85 h -1.64 v 1.69 h -1.28 v 2.72 h -4.04 v -2.72 h -1.28 v -1.69 h -1.64 z"/>
+  <path id="cavity" fill="#17191c" d="
+    M 2.06 1.5 h 9.88 v 6.85 h -1.64 v 1.69 h -1.28 v 2.72 h -4.04 v -2.72 h -1.28 v -1.69 h -1.64 z"/>
+  <path id="jack" fill="none" d="M 2.06 1.5 h 9.88 v 11.26 h -9.88 z"/>
+  <!-- two contacts loaded, positions 3 and 4 of six on the 1.02 pitch (6P2C) -->
   <g id="jack-pins" fill="#a8873c">
-    <rect x="4.9" y="2.1" width="0.6" height="2.1"/>
-    <rect x="6.0" y="2.1" width="0.6" height="2.1"/>
-    <rect x="7.1" y="2.1" width="0.6" height="2.1"/>
-    <rect x="8.2" y="2.1" width="0.6" height="2.1"/>
+    <rect x="6.26" y="2.1" width="0.46" height="2.3"/>
+    <rect x="7.28" y="2.1" width="0.46" height="2.3"/>
   </g>
 </svg>

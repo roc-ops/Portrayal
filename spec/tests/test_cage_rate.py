@@ -510,7 +510,7 @@ def test_a_cfp2_stating_200g_is_not_the_cage_default():
     """`200gbase-x-cfp2` is in both targets (NetBox and Nautobot TYPE_200GE_CFP2),
     so unlike SFP112 it needs no `other`. Without the row a CFP2 port stating
     200g fell to PART_IFACE's std/cfp2 default, 100gbase-x-cfp2."""
-    part = {"ref": "std/cfp2@1", "attrs": {"media": "cfp2", "speed": "200g"}}
+    part = {"ref": "std/cfp2@2", "attrs": {"media": "cfp2", "speed": "200g"}}
     assert dx.placed_type(part) == "200gbase-x-cfp2"
     assert dx.PART_IFACE["std/cfp2"] == "100gbase-x-cfp2"   # the default is unchanged
 
@@ -662,7 +662,7 @@ def test_l96_names_a_declaration_that_is_not_a_label():
 def test_only_a_pluggable_cage_carries_one():
     """A GROUP HOLDS A RECEIVER'S RF JACKS BESIDE ITS CAGE, and read on every
     member the declaration retyped an F-type output from `docsis` to the link."""
-    assert dx.pluggable_cage("std/sfp-ganged@1") and dx.pluggable_cage("std/cfp2@1")
+    assert dx.pluggable_cage("std/sfp-ganged@1") and dx.pluggable_cage("std/cfp2@2")
     assert dx.pluggable_cage("acme/osfp-cage@1")
     assert not dx.pluggable_cage("std/f-type@1")
     assert not dx.pluggable_cage("common/rj45-eth@1")
