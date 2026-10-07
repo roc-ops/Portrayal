@@ -1,9 +1,10 @@
 format: 1
 kind: component
 name: output-p40
-version: 1.0.0
+version: 1.1.0
 class: inlet
 profile: power
+interface: p40
 description: >-
   One connectorized output circuit of an Amphenol Network Solutions 1RU power
   panel - a two-pole latching receptacle, BATT above RTN, that takes a P40
@@ -25,10 +26,16 @@ provenance:
     lower, and the plug's customer drawing engraves BATT and RTN on its two
     cavities.
   plug: >-
-    NOT MODELLED. The receptacle presents no interface yet, so nothing seats
-    in it. The plug has a dimensioned customer drawing (Amphenol PRM series,
-    female, plug side, 4 mm, rev A1), so it can be drawn when the receptacle
-    becomes a connector slot.
+    a SLOT since 1.1.0: the receptacle presents interface `p40`, and
+    amphenol-ns/p40-plug@1, drawn from its maker's customer drawing (Amphenol
+    PRM series, female, plug side, 4 mm, rev A1), mates it. Nothing is seated
+    by default; the panels ship without plugs.
+  mate: >-
+    derived - midway between the two cavities, (5.25, 12.95), on the mouth of
+    the shroud (`on: shell`): a plug seated here stands off by the 6.0 the
+    shroud is built proud, itself an estimate. The cavities are 11.0 apart as
+    scaled off the panel drawing; the plug's own drawing puts its contacts
+    9.8 apart, the better figure, so the two are aligned on their mid points.
 attrs: {connector: P40, contact-mm: 4}
 elements:
   batt: {at: [0.7, 2.9], size: [9.1, 9.1], class: inlet}
@@ -53,4 +60,6 @@ relief:
       confidence: estimated
       source: >-
         see batt
+connection-points:
+  mate: {at: [5.25, 12.95], direction: front, 'on': shell}
 skins: [default]

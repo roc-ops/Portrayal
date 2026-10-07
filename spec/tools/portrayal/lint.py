@@ -185,7 +185,7 @@ RULES = {
     "L16": ("device",     "keys inside a view read in manufacturing order", "reorder: empty, size, open-frame, panel, silkscreen, components, regions"),
     "L17": ("component, device", "a placement's or part's group is declared under `groups:`, and a component that declares groups puts every port part in one", "declare the group with term, role and index-origin; join the loose port to a group"),
     "L18": ("device",     "a port inherits media from its group rather than restating it", "drop the per-port media, or fix the group's `attrs.media`"),
-    "L19": ("device",     "an indicator declares `for:` the thing it indicates", "add `for:` to the lamp placement"),
+    "L19": ("device",     "an indicator declares `for:` the thing it indicates - a lamp, button or display placement, and a bay in a group whose role is `indicator`", "add `for:` to the lamp placement or the bay; a panel that reports on the whole box is `for: chassis`"),
     "L20": ("component, device", "state names are tokens and each `behavior` is well-formed, on a contract's states, an element's, or a placement's", "a state name is a token like `link`; prose goes in `description`; `behavior` is solid, blinking, alternating or sequence, with `behavior.color` for the second colour"),
     "L21": ("device",     "chassis silkscreen does not sit under a bay where the module covers it", "move the mark, or put it in the module's own skin if the module carries it"),
     "L22": ("component, device", "a group's declared media/speed matches the ports it holds", "fix the group's `attrs`, or move the odd port to its own group"),
@@ -274,7 +274,7 @@ RULES = {
     "L105": ("component, device", "a placement's or part's `interfaces:` are held by a port the export files as a switch interface, named once in the view or component, and never the id of a placement, part, element or bay", "rename the colliding placement or interface - both are real and a DCIM needs a name for each - or move `interfaces:` onto the cage that presents them"),
     "L106": ("component",  "`interface-at` names a declared connection point, and a connection point's `on:` names a `relief.features[]` node that carries an `out`, or a `cyl` whose far end (`lift + cyl`) is its rear; a numeric `seat-out` is a number at or above 0, never beside `on:`, and only on the presented point (`interface-at`, default `mate`)", "fix the name, or give the feature the `out` (or `cyl`) a part seated on it stands off by; a point on the part's own face needs no `on:`; move a `seat-out` to the presented point; quote the key (`'on':`) - a bare `on` is YAML boolean true"),
     "L107": ("component, device", "no quoted run in a contract or manifest is longer than 25 words - a vendor's facts are transcribed, its prose is not reproduced", "paraphrase and cite the section (\"the ASR 9903 guide, Power Supply LEDs, says a flashing green lamp means...\"); a state table becomes `state = meaning` pairs, not a quotation"),
-    "L109": ("component",  "a declared `optical.polarity` is what the paths actually wire - A straight, AF pair-flipped (and its rows exchanged at 24 fibres), universal", "fix the paths or the polarity; the paths are the evidence, `polarity` is only the claim"),
+    "L109": ("component",  "a declared `optical.polarity` is what the paths actually wire - A straight, AF pair-flipped (and its rows exchanged at 24 fibres), universal - judged at the trunk connector's own width, and only at a width a held source draws (a warning otherwise)", "fix the paths or the polarity; the paths are the evidence, `polarity` is only the claim. For a width no source draws, add it to POLARITY_WIDTHS with the figure that draws it"),
     "L110": ("component, device", "a port's `speed` is one of the closed set in spec/schemas/speeds.yaml - the highest native rate the port runs at, and nothing else", "spell the rate from the set (a 10/100/1000 jack is `1g`); media goes in `media`, a USB generation in `usb`, a PON flavour in `pon`, a caveat in the placement's `description`"),
     "L108": ("component, device", "a belly-to-belly SFP/QSFP/QSFP-DD cage pair faces the library's way - upper 0 over lower 180, or left 270 beside right 90 on a card drawn on its side - so both bails face outward (OSFP stacks are not checked)", "turn the pair; where a recorded reading says the stack is built otherwise, name the pair in `stack-exceptions:` with that reading as its `reason`"),
     "L111": ("library",    "an alias names one box - no two devices claim the same `aliases[].name` (case-insensitive) unless every claimant marks it `shared: true`, and no alias repeats its own or another device's `model`", "drop or rename the alias; if an OEM name really maps to either of a pair, set `shared: true` on it in EVERY claimant and say why in its `note`"),
@@ -310,6 +310,8 @@ RULES = {
     "L141": ("lab",        "a rack-face part's host is a `rack` device, and `unit` is within the host's height, 1 to its `chassis.ru` (error)", "put the part `on` the rack device behind it; count `unit` from 1 at the host's bottom unit"),
     "L142": ("lab",        "every placement fits inside the rack's `height-ru`, no two rack devices share a rack unit, and no two rack-face parts claim one rack unit on one face (error)", "move one of the two, or put one rack-face part on the other face"),
     "L143": ("lab",        "a rack-face part placed by `ru` over a rack device is reported with that host (warning)", "place it `on` the host with its `unit` so it moves with the host, or leave it by `ru` if it belongs to the rack rather than the device"),
+    "L144": ("device",     "members of one group that one configuration draws on one face hold one `rel-pos` each; alternatives (variant views, `only-in` builds) may share one (warning)", "give each member its own position, or move the unlike members - ESD jacks among earthing studs, lane lamps among port lamps - to a group of their own"),
+    "L145": ("device",     "a group is not named only for the class of its members - `ports` names no port family (warning)", "name the group for the family it holds (`sfp28`, `rj45-1g`), or a mixed block for the job it does and say so in `mixed:`"),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -2926,6 +2928,27 @@ POLARITY_PATTERNS = {
                             for p in range(1, n + 1)],
 }
 
+# THE WIDTHS A HELD SOURCE DRAWS EACH PATTERN AT, and no others
+# (roc-ops/Portrayal#524). A pattern is a formula in n, and a formula answers at
+# every n whether or not anyone has looked: `af` at 24 was the pair swap alone,
+# read off a twelve-fibre figure, until the datasheet's own MTP-24 page said
+# otherwise (#520). Even "straight" is a fact about a part at a width rather
+# than about the letter: FS's 24-fibre Type A TRUNK takes fibre 1 to fibre 13
+# (Fiber Polarity Technical White Paper, p. 6). So a pattern is judged only at
+# a width a figure draws it at, and anywhere else L109 says it did not judge
+# rather than passing or failing a generalisation. Add a width here only with
+# the figure that draws it. All four are the FHD MTP-12/24 Cassettes Datasheet:
+#   a          12  p. 4, I. MTP-12 Cassette, Type A
+#              24  p. 6, VI. MTP-24 Cassette, Type A
+#   af         12  p. 4, II. MTP-12 Cassette, Type AF
+#              24  p. 6, VIII. MTP-24 Cassette, Type AF (rows exchanged)
+#   universal  12  p. 7, V. Universal - drawn for MTP-12 only
+POLARITY_WIDTHS = {
+    "a": (12, 24),
+    "af": (12, 24),
+    "universal": (12,),
+}
+
 
 def lint_component_optical_polarity(path, data, lib_roots):
     """L109: a declared polarity is what the paths wire.
@@ -2942,10 +2965,31 @@ def lint_component_optical_polarity(path, data, lib_roots):
     stacked adapters (the lower bore, FS's odd port). The two FHD adapters had
     it the other way round until this rule's first use exposed it.
 
-    Only rear connectors reached from the front are compared, one at a time,
+    Only trunk connectors reached from the front are compared, one at a time,
     port order against the pattern for that connector's width. A polarity this
     table does not know is not judged - it is still a claim, just not one this
     rule can test.
+
+    THE WIDTH IS THE CONNECTOR'S, NOT THE PATH COUNT (#524). An MTP-24 with
+    fibres declared `unused`, or wired to twelve ports, is still an MTP-24 and
+    its ports take the MTP-24's fibres; counting the paths judged it as a
+    narrower connector, which since #520 is a different pattern for `af`. So
+    the width is the connector's own `optical.positions`, resolved through the
+    faces as L80 resolves it, and only the ports actually wired are compared.
+    They must still be one contiguous run, inside the connector's block of
+    ports - a block that starts at a multiple of the width, which is how every
+    cassette in the library numbers its MTPs.
+
+    A WIDTH NO SOURCE DRAWS IS NOT JUDGED (#524) - see POLARITY_WIDTHS. It is a
+    warning that says so, not a pass: the claim stands unchecked, and the
+    warning is the record that it does.
+
+    THE TRUNK IS WHAT `optical_ports.is_trunk` SAYS: the rear face of a
+    two-faced cassette, or the connector a single-faced module names in
+    `optical.trunk` (#246). Reading only the `rear:` prefix skipped a
+    trunk-stated module without a word. One carrying a polarity is judged the
+    same way, its front ports numbered as `front_label` numbers them - trunk
+    positions counted, as the DCIM export counts them.
     """
     opt = data.get("optical") or {}
     pol = str(opt.get("polarity") or "").lower()
@@ -2953,37 +2997,58 @@ def lint_component_optical_polarity(path, data, lib_roots):
     if pattern is None or not opt.get("paths"):
         return
 
-    def load_ref(ref):
-        f = resolve_component(ref, lib_roots)
-        return load_yaml(f) if f else None
-
-    by_rear = {}
+    load_ref = _optical_load_ref(lib_roots)
+    caps = optical.capacities(data, load_ref)
+    by_trunk = {}
     for p in opt["paths"]:
-        eps = [p.get("from"), p.get("to")]
-        front = next((e for e in eps if e and ":" not in e), None)
-        rear = next((e for e in eps if e and ":" in e), None)
-        if not front or not rear:
+        eps = [ep for ep, _ratio in optical.endpoints(p)]
+        if len(eps) != 2:
+            continue            # a split is not a cassette pattern
+        try:
+            sides = [optical_ports.is_trunk(data, ep) for ep in eps]
+        except ValueError:
+            continue            # L78's error to report, not this one's
+        if sides.count(True) != 1:
             continue
+        trunk_ep, front = (eps[0], eps[1]) if sides[0] else (eps[1], eps[0])
         label = optical_ports.front_label(data, front, load_ref)
         if label is None:
             continue
-        _face, rpart, rpos = optical.split_endpoint(rear)
-        by_rear.setdefault(rpart, []).append((int(label), int(rpos)))
-    for rpart, pairs in sorted(by_rear.items()):
+        face, tpart, tpos = optical.split_endpoint(trunk_ep)
+        by_trunk.setdefault(optical.part_key(face, tpart), []).append((int(label), tpos))
+    sourced = POLARITY_WIDTHS.get(pol, ())
+    unjudged = {}
+    for key, pairs in sorted(by_trunk.items()):
+        width = caps.get(key)
+        if not width:
+            continue            # not a connector - L78's to report
         pairs.sort()
         ports = [pt for pt, _ in pairs]
-        base = ports[0] - 1
-        n = len(pairs)
-        if ports != list(range(base + 1, base + n + 1)):
+        base = (ports[0] - 1) // width * width
+        if ports != list(range(ports[0], ports[-1] + 1)) or ports[-1] > base + width:
             continue            # not one contiguous run of ports - not a cassette pattern
+        name = key.split(":", 1)[-1]
+        if width not in sourced:
+            unjudged.setdefault(width, []).append(name)
+            continue
+        want_all = pattern(width)
         got = [f for _, f in pairs]
-        want = pattern(n)
+        want = [want_all[pt - base - 1] for pt in ports]
         if got != want:
-            first = next(i for i in range(n) if got[i] != want[i])
-            err(path, "L109", f"declares polarity {pol!r}, but port {base + first + 1} takes "
-                              f"{rpart} fibre {got[first]} where {pol!r} puts fibre "
-                              f"{want[first]} (ports {base + 1}-{base + n} wire "
-                              f"{got}); the paths are the evidence - fix them or the claim")
+            first = next(i for i in range(len(got)) if got[i] != want[i])
+            err(path, "L109", f"declares polarity {pol!r}, but port {ports[first]} takes "
+                              f"{name} fibre {got[first]} where {pol!r} puts fibre "
+                              f"{want[first]} (ports {ports[0]}-{ports[-1]} wire "
+                              f"{got} on a {width}-fibre connector); the paths are the "
+                              "evidence - fix them or the claim")
+    # ONE WARNING PER WIDTH, not per connector: twelve identical lines for one
+    # panel's twelve MTPs say one thing twelve times.
+    for width, names in sorted(unjudged.items()):
+        warn(path, "L109", f"declares polarity {pol!r} on {width}-fibre connector(s) "
+                           f"{', '.join(names)}, and no held source draws {pol!r} at "
+                           f"{width} fibres (only at {', '.join(map(str, sourced))}) - "
+                           "polarity not judged at this width; add the width to "
+                           "POLARITY_WIDTHS with the figure that draws it")
 
 
 # L112 EXEMPTIONS, BY NAME AND WITH A REASON. A part leaves this table when the
@@ -3875,6 +3940,20 @@ def lint_component_collisions(path, data, lib_roots):
     floods or misses. As a fraction of the smaller part the distribution is empty
     between 10 and 50 percent - hairline contact on one side, real collision on
     the other - so a threshold in that gap separates them with nothing near it.
+
+    WHAT A PART DRAWS, NOT ITS BOX (#684). A hollow part - common/qsfp-pull-tab@2,
+    a U-loop open in the middle so the fibre connector passes through - has a box
+    that spans both LC bores of the generic that composes it, and seven warnings
+    across five generics sat in the baseline for tabs that draw nothing over
+    what they frame. So a pair whose boxes collide is measured again on what
+    each part's skin draws (`_drawn_boxes`): the area of the drawn overlap,
+    against the smaller part's box as before. The refinement can only lower a
+    fraction, so it removes findings and never adds one; a skin it cannot read
+    whole counts as its box. THE SKIN, not the contract's elements or relief
+    features: those name what is addressed or extruded, not everything painted
+    (common/qsfp28-cage@3's body rect is in neither), so reading them would hide
+    real collisions. And not a declared open region: that would be a second,
+    hand-kept record of what the skin already says.
     """
     boxes = []
     for q in (data.get("parts") or []):
@@ -3886,7 +3965,8 @@ def lint_component_collisions(path, data, lib_roots):
         w, h = size
         facet = facets.facet_of(data, q["on"]) if q.get("on") else None
         x0, y0, x1, y1 = facets.projected_box(q["at"], w, h, q.get("rotate"), facet)
-        boxes.append((q.get("id", "?"), x0, y0, x1, y1, bool(q.get("behind"))))
+        boxes.append((q.get("id", "?"), x0, y0, x1, y1, bool(q.get("behind")),
+                      q, facet))
 
     for i, a in enumerate(boxes):
         for b in boxes[i + 1:]:
@@ -3902,13 +3982,141 @@ def lint_component_collisions(path, data, lib_roots):
             smaller = min((a[3] - a[1]) * (a[4] - a[2]), (b[3] - b[1]) * (b[4] - b[2]))
             if smaller <= 0:
                 continue
-            frac = (ox * oy) / smaller
+            if (ox * oy) / smaller < 0.25:
+                continue
+            clips = []
+            for p in _placed_drawn(a[6], a[7], lib_roots):
+                for r in _placed_drawn(b[6], b[7], lib_roots):
+                    c = (max(p[0], r[0]), max(p[1], r[1]), min(p[2], r[2]), min(p[3], r[3]))
+                    if c[2] > c[0] and c[3] > c[1]:
+                        clips.append(c)
+            if not clips:
+                continue
+            hull = (min(c[0] for c in clips), min(c[1] for c in clips),
+                    max(c[2] for c in clips), max(c[3] for c in clips))
+            frac = _union_overlap(hull, clips) / smaller
+            ox, oy = hull[2] - hull[0], hull[3] - hull[1]
             if frac >= 0.25:
                 warn(path, "L46", f"composed parts {a[0]} and {b[0]} overlap by "
                      f"{ox:.2f}x{oy:.2f}mm, which is {frac*100:.0f}% of the smaller "
                      "one. Two parts drawn in one place is the commonest defect a "
                      "human finds and no rule saw; if the layering is deliberate, "
                      "say so in provenance")
+
+
+# Skin content that draws nothing on the face, and so is skipped rather than
+# read: definitions, metadata, and the paint servers they hold.
+_SKIN_INERT = ("defs", "title", "desc", "metadata", "style", "clipPath", "mask",
+               "linearGradient", "radialGradient", "pattern", "symbol")
+_DRAWN_CACHE = {}
+
+
+def _drawn_boxes(ref, lib_roots, depth=0):
+    """What a part DRAWS, as boxes in its own frame (0..w, 0..h): its default
+    skin's shapes plus, recursively, whatever it composes. The part's whole box,
+    as one, wherever the skin cannot be read exactly - no skin, a viewBox that
+    is not the part's size, a group transform, a path, a line, a <use>, an
+    image, anything but a rect, circle, ellipse, polygon or text, a composed
+    part on a facet - and past 64 shapes. A rule that guessed at a path's extent
+    would under-report a real collision, so it does not guess. Nothing is
+    rasterised; CI has no cairosvg. None for a ref with no size."""
+    key = (ref, tuple(lib_roots))
+    if key in _DRAWN_CACHE:
+        return _DRAWN_CACHE[key]
+    ct = _contract(ref, lib_roots)
+    sz = ct.get("size") or {}
+    w, h = sz.get("w"), sz.get("h")
+    if not w or not h:
+        _DRAWN_CACHE[key] = None
+        return None
+    whole = [(0.0, 0.0, float(w), float(h))]
+    _DRAWN_CACHE[key] = whole                    # a cycle reads as solid
+    out = _skin_shapes(ref, ct, float(w), float(h), lib_roots)
+    for part in (ct.get("parts") or []) if out is not None else ():
+        psz = _instance_size(part.get("ref"), lib_roots)
+        sub = (_drawn_boxes(str(part.get("ref") or ""), lib_roots, depth + 1)
+               if depth < 4 and psz and part.get("at") and not part.get("on") else None)
+        if not sub:
+            out = None                           # cannot place it exactly
+            break
+        out += [_turned(b, psz[0], psz[1], part.get("rotate"), None, part["at"])
+                for b in sub]
+    result = out if out and len(out) <= 64 else whole
+    _DRAWN_CACHE[key] = result
+    return result
+
+
+def _skin_shapes(ref, ct, w, h, lib_roots):
+    """The boxes a contract's default skin draws, or None if it cannot be read
+    whole (see `_drawn_boxes`)."""
+    cp = resolve_component(ref, lib_roots)
+    if not cp:
+        return None
+    skins = ct.get("skins") or ["default"]
+    try:
+        root = ET.parse(Path(cp).parent / "skins" / f"{skins[0]}.svg").getroot()
+        vb = [float(v) for v in (root.get("viewBox") or "").replace(",", " ").split()]
+    except (ET.ParseError, OSError, ValueError):
+        return None
+    if len(vb) != 4 or abs(vb[0]) > 0.01 or abs(vb[1]) > 0.01 \
+            or abs(vb[2] - w) > 0.01 or abs(vb[3] - h) > 0.01:
+        return None
+    out = []
+
+    def walk(el):
+        for ch in el:
+            if not isinstance(ch.tag, str):
+                continue                         # a comment
+            tag = ch.tag.replace(_SVG_NS, "")
+            if tag in _SKIN_INERT:
+                continue
+            tf = (ch.get("transform") or "").strip()
+            if tag == "g":
+                if tf or not walk(ch):
+                    return False
+                continue
+            if tf and not re.fullmatch(r"rotate\([^)]*\)", tf):
+                return False
+            if tag not in ("rect", "circle", "ellipse", "polygon", "text"):
+                return False
+            b = _svg_box(tag, ch)
+            if b is None:
+                if tag == "text":
+                    continue                     # an empty text draws nothing
+                return False
+            out.append(b)
+        return True
+
+    return out if walk(root) else None
+
+
+def _turned(b, w, h, rotate, facet, at):
+    """Box `b`, in a (w, h) part's own frame, placed as render.py places the
+    part - turned about the part's centre, scaled by the facet, moved to `at`:
+    facets.projected_box for a box inside the part."""
+    cx, cy = w / 2, h / 2
+    t = math.radians(float(rotate or 0))
+    cos, sin = round(math.cos(t), 9), round(math.sin(t), 9)
+    xs, ys = [], []
+    for px, py in ((b[0], b[1]), (b[2], b[1]), (b[0], b[3]), (b[2], b[3])):
+        dx, dy = px - cx, py - cy
+        xs.append(cx + dx * cos - dy * sin)
+        ys.append(cy + dx * sin + dy * cos)
+    x0, y0, x1, y1 = min(xs), min(ys), max(xs), max(ys)
+    if facet:
+        c = facets.cos_of(facet)
+        if facets.axis_of(facet) == "y":
+            y0, y1 = y0 * c, y1 * c
+        else:
+            x0, x1 = x0 * c, x1 * c
+    return (at[0] + x0, at[1] + y0, at[0] + x1, at[1] + y1)
+
+
+def _placed_drawn(q, facet, lib_roots):
+    """What a composed placement draws, as boxes on its host's face."""
+    w, h = _instance_size(q["ref"], lib_roots)
+    local = _drawn_boxes(q["ref"], lib_roots) or [(0.0, 0.0, float(w), float(h))]
+    return [_turned(b, w, h, q.get("rotate"), facet, q["at"]) for b in local]
 
 
 def _lint_sunk_facet(path, node, f, data, elements, tol=0.5):
@@ -4735,7 +4943,26 @@ def lint_device_cutouts(path, view_name, view, lib_roots, seen_through=()):
             continue
         w, h = size
         x, y = q["at"]
-        if q.get("rotate") in (90, 270, -90):
+        # THE OPENING, NOT THE FOOTPRINT, WHERE THE PART SAYS WHICH IS WHICH
+        # (#248). common/qsfp28-cage@3 is 14.5 tall because it carries the
+        # chassis lamp band above the cage; the cage itself is centred on its
+        # opening (TE 2322551-4: 0.887 of gasket above and below a 9.58 mouth),
+        # so the composed std/qsfp-ganged@1 sits at y 4.2 of 14.5 and every
+        # correctly punched hole read as 1.74mm off. A part that composes its
+        # aperture states where the opening is; centre THAT on the hole. The
+        # opening's offset from the footprint centre turns with the placement.
+        ap = _composed_aperture(str(q.get("ref") or ""), lib_roots)
+        if ap:
+            (aw, ah), (ax, ay) = ap
+            dx, dy = ax + aw / 2 - w / 2, ay + ah / 2 - h / 2
+            t = math.radians(float(q.get("rotate") or 0))
+            cos, sin = round(math.cos(t), 9), round(math.sin(t), 9)
+            mx = x + w / 2 + dx * cos - dy * sin
+            my = y + h / 2 + dx * sin + dy * cos
+            if (q.get("rotate") or 0) % 180 == 90:
+                aw, ah = ah, aw
+            x, y, w, h = mx - aw / 2, my - ah / 2, aw, ah
+        elif q.get("rotate") in (90, 270, -90):
             cx, cy = x + w / 2, y + h / 2
             x, y, w, h = cx - h / 2, cy - w / 2, h, w
         cw, ch = c["size"]
@@ -4748,7 +4975,8 @@ def lint_device_cutouts(path, view_name, view, lib_roots, seen_through=()):
             # disagreement between two measurements, which is the same family as
             # L39's other findings and is recorded the same way.
             warn(path, "L39", f"{view_name}: {cid} does not sit in its own cutout - "
-                             f"the part lands at ({x:g}, {y:g}) {w:g} x {h:g} and the "
+                             f"{'the opening it composes' if ap else 'the part'} lands at "
+                             f"({x:g}, {y:g}) {w:g} x {h:g} and the "
                              f"hole is at ({c['at'][0]:g}, {c['at'][1]:g}) {cw:g} x {ch:g}, "
                              f"off-centre by {miss:.2f}mm against a {tol:.2f}mm tolerance. "
                              "A part may be smaller than its opening (clearance) or larger "
@@ -8002,6 +8230,81 @@ def lint_device_cage_media_disagreement(path, data, lib_roots):
                  f"{media_name!r} cage, or the declared media is wrong")
 
 
+def lint_device_rel_pos(path, data):
+    """L144 - members of one group on one face hold one position each.
+
+    `rel-pos` is a member's place in its group, and the tree, the DCIM export
+    and an ENTITY-MIB walk all number the group by it. Two members at one
+    position leave the numbering ambiguous: nothing can tell which is the
+    first. A structural sweep found nine groups doing it (#414), and new
+    devices have since repeated it. Two shapes recur:
+
+    - Unlike parts in one group. On six Juniper MX chassis the `grounding`
+      group holds the ESD jacks at position 0 beside the first earthing stud
+      or plate, though the guides treat the wrist-strap ESD points and the
+      protective-earthing points as different things.
+    - Several parts per port indexed by the port. Lane lamps, or a link and a
+      speed lamp, each take their port's number, so four lamps share one.
+
+    READ PER CONFIGURATION AND PER FACE. Variant views of one face and bays
+    that `only-in` scopes to different builds are alternatives, never drawn
+    together, so they may share a position: a low-profile riser and a
+    full-height one in the same slot are the same position, built two ways.
+    Only members a single build draws on one face are compared. A position
+    reused on ANOTHER face is not reported here: front and rear ears that each
+    count from 1 are common and read unambiguously with their face.
+
+    A warning, because the cure renumbers or regroups members, and either
+    changes placement addressing - a major bump on a published device.
+    """
+    configs = data.get("configurations") or {"default": {}}
+    seen = {}                               # (view, group, rel-pos) -> ids
+    for cname, cfg in configs.items():
+        for _face, (vname, view) in sorted(resolve_views(data, cfg).items()):
+            vp = view_parts(view)
+            at = {}
+            for item in vp["bays"] + vp["placements"]:
+                if item.get("only-in") and cname not in item["only-in"]:
+                    continue
+                if item.get("group") is None or item.get("rel-pos") is None:
+                    continue
+                at.setdefault((item["group"], item["rel-pos"]), []).append(item.get("id"))
+            for (group, pos), ids in at.items():
+                if len(ids) > 1:
+                    # ONE CLASH AS ONE BUILD DRAWS IT. A union over builds would
+                    # list two alternatives side by side as if they clashed.
+                    seen.setdefault((vname, group, pos), sorted(ids))
+    by_group = {}
+    for (vname, group, pos), ids in sorted(seen.items(), key=lambda kv: (kv[0][0], kv[0][1], kv[0][2])):
+        by_group.setdefault((vname, group), []).append((pos, ids))
+    for (vname, group), clashes in by_group.items():
+        pos, ids = clashes[0]
+        more = f" (and {len(clashes) - 1} more position(s))" if len(clashes) > 1 else ""
+        warn(path, "L144", f"{vname}: group {group!r} gives {len(ids)} members position "
+                           f"{pos} - {', '.join(ids[:4])}{more}. A position names one "
+                           "member; give each its own, or move the unlike ones to "
+                           "their own group")
+
+
+# A GROUP NAME THAT IS ONLY THE CLASS OF ITS MEMBERS. The modelling guide's rule
+# is one group per port family, named for the family - `sfp28`, `qsfp28` - and
+# a block that spans media named for the job it does together. `ports` says
+# neither; it is what every port group is. `leds` is NOT here: fifty-odd devices
+# use it for the chassis status cluster (SYS, FAN, PSU lamps), which is one job,
+# and the guide states no rule for lamp group names (#414).
+CLASS_ONLY_GROUP_NAMES = {"ports", "port"}
+
+
+def lint_device_group_names(path, data):
+    """L145 - a port group is named for its family, not for being ports."""
+    for gname in (data.get("groups") or {}):
+        if gname in CLASS_ONLY_GROUP_NAMES:
+            warn(path, "L145", f"group {gname!r} names no port family. Name it for the "
+                               "family it holds (`sfp28`, `rj45-1g`), or, for a mixed "
+                               "block, for the job its members do together and say so "
+                               "in `mixed:`")
+
+
 def lint_device_groups(path, data, lib_roots):
     """L22 and L23 - what a port group promises, and what it actually holds.
 
@@ -9405,6 +9708,46 @@ def _aperture_of(ref, lib_roots, depth=0):
     return ((sz["w"], sz["h"]), (0.0, 0.0)) if sz.get("w") else None
 
 
+def _composed_aperture(ref, lib_roots):
+    """The opening a part COMPOSES, as ((w, h), (x, y)) in the part's own frame,
+    or None.
+
+    Only for a part that does not itself conform to a sized standard and whose
+    parts hold exactly one that does - a cage bezel around a std/ core. A part
+    that conforms is its own opening, and one that composes no standard opening
+    (a lamp, a label, a latch) has nothing to measure but its footprint; both
+    are None, and the caller keeps measuring the footprint."""
+    def sized(ct):
+        conf = ct.get("conforms")
+        st = STANDARDS.get(conf) if isinstance(conf, str) else None
+        if st and st.get("w") is not None and st.get("h") is not None:
+            return st["w"], st["h"]
+        return None
+
+    def walk(ct, ox, oy, depth):
+        out = []
+        for part in (ct.get("parts") or []):
+            sub = _contract(str(part.get("ref") or ""), lib_roots)
+            o = part.get("at") or [0, 0]
+            if not sub:
+                continue
+            if part.get("rotate"):
+                out.append(None)          # a turned core: not worth guessing
+                continue
+            wh = sized(sub)
+            if wh:
+                out.append((wh, (ox + o[0], oy + o[1])))
+            elif depth < 3:
+                out += walk(sub, ox + o[0], oy + o[1], depth + 1)
+        return out
+
+    ct = _contract(ref, lib_roots)
+    if not ct or sized(ct):
+        return None
+    found = walk(ct, 0.0, 0.0, 1)
+    return found[0] if len(found) == 1 else None
+
+
 def _air_fraction(box, decor, grid=9):
     """How much of `box` lies over open perforation, reading decor in PAINT ORDER.
 
@@ -9953,6 +10296,8 @@ def lint_device(path, validator, lib_roots):
         check_states(path, f"groups/{gname}", (gdef or {}).get("states"),
                      (gdef or {}).get("attrs"))
     lint_device_groups(path, data, lib_roots)
+    lint_device_rel_pos(path, data)
+    lint_device_group_names(path, data)
     lint_device_speed_vocabulary(path, data)
     lint_device_port_rate(path, data, lib_roots)
     lint_device_port_optics(path, data, lib_roots)
@@ -10091,6 +10436,19 @@ def lint_device(path, validator, lib_roots):
                 warn(path, "L6", f"bay {b['id']} names no default and no "
                                  "configuration fills it, so it draws as an empty "
                                  "frame in every drawing of this device")
+            # L19 FOR A BAY, TOO, WHEN ITS GROUP IS AN INDICATOR. The check above
+            # reads a lamp, a button or a display by its component's class, and
+            # a bay has no class of its own: the MX960 and MX2000 craft
+            # interfaces are bays in a group whose role is `indicator`, and all
+            # four said nothing about what they report on (#414). The group's
+            # role is the only thing that says this bay is read, so it is what
+            # the rule reads. A craft panel reports on the whole router, which
+            # is `for: chassis`.
+            bay_role = ((data.get("groups") or {}).get(b.get("group")) or {}).get("role")
+            if not b.get("for") and bay_role == "indicator":
+                warn(path, "L19", f"{vname}/{b['id']}: bay in indicator group "
+                                  f"{b.get('group')!r} declares no 'for:', so nothing "
+                                  "knows what it indicates")
         for r in vp["regions"]:
             check_segment(path, "L2", r["id"])
             for m in r.get("members", []) or []:

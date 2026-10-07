@@ -281,6 +281,40 @@ def test_two_backings_in_one_place_still_collide():
     assert caught("L46", lint.lint_component_collisions, P, bad, [str(LIB)])
 
 
+TAB = "common/qsfp-pull-tab@2"       # 19.0 x 8.56, a U-loop open in the middle
+BORE = "std/lc-bore@3"               # 4.7 x 6.3
+
+
+def test_a_hollow_part_is_measured_on_what_it_draws():
+    """#684. The pull tab's box spans both bores of generic/qsfp-lc@2, but the
+    tab is open in the middle: its arms and risers stop at x 1.625 and start at
+    16.725, and its grip hides about 0.7 of each bore's top. That is the real
+    part, and it is under the threshold once the tab is read as what it draws."""
+    host = _component([
+        {"id": "tx", "ref": BORE, "at": [3.70, 0.95], "rotate": 180},
+        {"id": "rx", "ref": BORE, "at": [9.95, 0.95], "rotate": 180},
+        {"id": "tab", "ref": TAB, "at": [-0.325, -1.23]},
+    ])
+    assert not caught("L46", lint.lint_component_collisions, P, host, [str(LIB)])
+
+
+def test_a_part_under_a_hollow_parts_arm_still_collides():
+    """The other side of #684: a bore set where the tab's arm and riser run is
+    two things drawn in one place, open middle or not."""
+    bad = _component([
+        {"id": "tx", "ref": BORE, "at": [0.0, 1.5]},
+        {"id": "tab", "ref": TAB, "at": [0.0, 0.0]},
+    ])
+    assert caught("L46", lint.lint_component_collisions, P, bad, [str(LIB)])
+
+
+def test_a_part_whose_skin_cannot_be_read_whole_counts_as_its_box():
+    """The bore is drawn with a path, whose extent the rule does not guess at,
+    so it is solid: a second bore over it is still reported."""
+    assert lint._drawn_boxes(BORE, [str(LIB)]) == [(0.0, 0.0, 4.7, 6.3)]
+    assert len(lint._drawn_boxes(TAB, [str(LIB)])) == 15
+
+
 def test_a_lamp_state_nothing_draws_is_reported(tmp_path):
     """A part may declare ok/fail, generate CSS, offer the state in the viewer
     and change no pixel, because only `var(--led-color, ...)` lights anything.
@@ -502,6 +536,42 @@ def test_a_part_sitting_off_centre_is_reported():
     hits = _cut(_landed((3.75, 0.0), (48.6, 40.0), (0.0, 0.0)))
     assert hits, "an off-centre part went unreported"
     assert "does not sit in its own cutout" in hits[0]
+
+
+CAGE = "common/qsfp28-cage@3"     # 19.0 x 14.5, std/qsfp-ganged@1 at [0.25, 4.2]
+
+
+def _standards(monkeypatch):
+    """The composed opening is found by what its core conforms to, which the
+    lint run reads from spec/schemas/standards.yaml before anything else."""
+    monkeypatch.setattr(lint, "STANDARDS", dict(
+        lint.load_yaml(SPEC / "schemas/standards.yaml")["standards"]))
+
+
+def _caged(rotate, hole_at):
+    q = {"id": "p", "ref": CAGE, "at": [10.0, 10.0]}
+    if rotate:
+        q["rotate"] = rotate
+    return {"panel": {"cutouts": [{"id": "p", "at": list(hole_at), "size": [18.5, 9.58]}]},
+            "components": {"placements": [q]}}
+
+
+def test_a_composed_opening_is_measured_not_the_footprint(monkeypatch):
+    """#248. The QSFP28 cage carries the chassis lamp band above the cage, so its
+    composed opening sits 4.2 below its top edge and 0.72 above its bottom; the
+    TE 2322551-4 drawing has the cage itself centred on that opening. A hole
+    punched where the component's own aperture is - upright or turned - is right."""
+    _standards(monkeypatch)
+    assert not _cut(_caged(0, (10.25, 14.2)))
+    assert not _cut(_caged(180, (10.25, 10.72)))
+
+
+def test_a_hole_centred_on_a_composed_parts_footprint_is_reported(monkeypatch):
+    """The other side of #248: centring the hole on the 14.5 footprint puts it
+    1.74 up into the lamp band, off the opening the part actually presents."""
+    _standards(monkeypatch)
+    hits = _cut(_caged(0, (10.25, 12.46)))
+    assert hits and "does not sit in its own cutout" in hits[0]
 
 
 # --- component bays: a riser is a bay that holds bays ---------------------

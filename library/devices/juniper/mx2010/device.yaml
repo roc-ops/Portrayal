@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx2010
-version: 0.2.21
+version: 0.3.0
 maturity: modelled
 manufacturer: Juniper
 model: MX2010
@@ -92,7 +92,7 @@ gaps:
 groups:
   craft:
     term: Panel
-    role: indicator
+    role: management
     index-origin: 0
   res:
     term: Slot
@@ -163,7 +163,7 @@ views:
       bays:
         - {id: craft, at: [0.0, 15.0], size: {w: 440.0, h: 95.0},
            accepts: [juniper/mx2000-craft@1], default: juniper/mx2000-craft@1,
-           group: craft, rel-pos: 0}
+           for: chassis, group: craft, rel-pos: 0}
         - {id: cbre0, at: [5.0, 275.0], size: {w: 55.0, h: 405.0},
            accepts: [juniper/mx2000-cb-re-v@1, juniper/mx2000-cb-re-128g-v@1, juniper/mx2000-cb-re-1800-v@1], default: juniper/mx2000-cb-re-v@1,
            group: res, rel-pos: 0}

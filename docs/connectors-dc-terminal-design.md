@@ -486,10 +486,10 @@ document for that device states the size, each with its source in the device's
 | Nokia Lightspan MF-8 (LMFS-F) | M6 | installation manual s4.5.2.2: a dual-hole M6 lug, 6.35 mm holes, 16 mm spacing |
 | Juniper MX80, MX104, MX150 | 10-32 | hardware guides: holes for SAE 10-32 screws at 0.625 in. centres; MX150 Table 22 |
 | Juniper MX240, MX480 | 1/4-20 | hardware guides: PEM nuts for UNC 1/4-20 screws at 0.625 in. centres |
-| Amphenol 300CB08, 300CB08-SC, 300CB08-C, the six nrg300CB08 CTRL and SENS versions and the nrgILS300CB08 | 1/4-20 | the one installation guide for every version, specifications: three sets of 1/4-20 threaded holes on 5/8 in. centres; a dual-hole or a single-hole lug |
+| Amphenol 300CB08, 300CB08-SC, 300CB08-C, the six nrg300CB08 CTRL and SENS versions, the nrgILS300CB08 and its -SC | 1/4-20 | the one installation guide for every version, specifications: three sets of 1/4-20 threaded holes on 5/8 in. centres; a dual-hole or a single-hole lug |
 | Nokia 7360 FX-16, FX-8, FX-4 | 1/4 in | HIM R6.9: a 1/4 in. stud at 1 in. spacing (FX-16); a dual-hole lug with 1/4 in. holes at 3/4 in. spacing (FX-8, FX-4) |
 
-That is 110 placements on 38 devices. The other 29 placements state none, because no
+That is 116 placements on 39 devices. The other 29 placements state none, because no
 document held prints a size for them: every ground point of the other 22 devices, and the
 left-hand point of the AGR110 and the AGR130, where the kit fits the right-hand one. On the FX-8 and the FX-4 the
 figure is the hole of the lug the guide calls for, not a stated stud.
@@ -501,13 +501,13 @@ kit, not the DCIM exports. It is a fact carried beside the slot.
 
 A seat applies its host's turn and a configuration cannot turn an occupant (section
 12.6), so a lug's wire leaves in the lug's own "down" turned by the placement. Seating a
-lug on every one of the 141 seats in the library gives:
+lug on every one of the 147 seats in the library gives:
 
-- **137 leave down the face and 4 leave to the left.** The only turned placements are the
+- **143 leave down the face and 4 leave to the left.** The only turned placements are the
   two on the Edgecore DCS500 and the two on the Nokia FX-16 side panels, all at
   `rotate: 90`. On the FX-16 the same turn is placed on the left and on the right side
   view, so the wire runs toward the rear on one side and toward the front on the other.
-- **68 run past the lower edge of the face,** by 2.95 to 20.05. A lug is 24.65 long below
+- **70 run past the lower edge of the face,** by 2.95 to 20.05. A lug is 24.65 long below
   its stud and most of these are on 1RU rears and side panels, where the stud sits in the
   lower half. The longest overhang is on the Edgecore DCS520, whose studs are 4.6 above
   the lower edge of a 2RU rear.
@@ -521,9 +521,9 @@ lug on every one of the 141 seats in the library gives:
 - **Seven, on five devices, run across a printed legend only:** both studs of the Juniper
   MX240 and MX480, and the stud of the Edgecore ECS4120-28Fv2-I, ECS4530-54CSFP and
   ECS4530-54CSFP-I.
-- **Thirty-nine run across the second stud of their own pair** (13.5). Thirty of them
-  are on the ten Amphenol 300CB08 panels (the plain, -SC and -C, the six nrg300CB08
-  CTRL and SENS versions and the nrgILS300CB08), which share their ground landings and
+- **Forty-two run across the second stud of their own pair** (13.5). Thirty-three of them
+  are on the eleven Amphenol 300CB08 panels (the plain, -SC and -C, the six nrg300CB08
+  CTRL and SENS versions, the nrgILS300CB08 and its -SC), which share their ground landings and
   whose three landings are each drawn one stud above the other: on the
   side views the wire leaves down, the lower lug 12.45 past the lower edge, and on the
   bottom view it leaves toward the front of the panel.
@@ -544,18 +544,18 @@ one. None of this is corrected here.
   real lug for those is wider than the part.
 - **Most pairs are the two holes of one two-hole lug.** Thirteen pairs of
   `common/ground-lug@1` on twelve devices, the five pairs of `juniper/mx-ground-stud@1`
-  and thirty-one pairs of `common/ground-stud@1`, one on the Nokia LMFS-F and three on each of
-  the ten Amphenol 300CB08 panels, are two holes that one lug spans; the Casa terminal takes one two-hole lug across two of its three studs. Two
+  and thirty-four pairs of `common/ground-stud@1`, one on the Nokia LMFS-F and three on each of
+  the eleven Amphenol 300CB08 panels, are two holes that one lug spans; the Casa terminal takes one two-hole lug across two of its three studs. Two
   one-hole lugs are a stand-in.
 
   | drawn | pitch | devices | two one-hole lugs |
   |---|---|---|---|
   | side by side | 11.0 | UfiSpace S9500-22XST, S9501-28SMT, S9502-16SMT, S9510-28DC, S9510-30XC, S9511-20CT | lie beside each other, 5.5 apart |
   | side by side | 13.0 to 16.0 | UfiSpace M3000-14XC (13.0), S9501-18SMT (15.8 and 15.7); Juniper MX150 (13.0), MX104 (16.0) | lie beside each other |
-  | one above the other | 13.2 to 16.5 | Edgecore AIS800-64D, AIS800-64O (16.2); UfiSpace S9600-102XC (14.7), S9601-102XC (16.5); Juniper MX240, MX480 (13.2), MX80 (14.0); Nokia LMFS-F (16.3); Amphenol 300CB08 and its nine versions (15.9, three pairs each); Casa C40G (15.3) | OVERLAP: the upper lug lies across the lower stud |
+  | one above the other | 13.2 to 16.5 | Edgecore AIS800-64D, AIS800-64O (16.2); UfiSpace S9600-102XC (14.7), S9601-102XC (16.5); Juniper MX240, MX480 (13.2), MX80 (14.0); Nokia LMFS-F (16.3); Amphenol 300CB08 and its ten versions (15.9, three pairs each); Casa C40G (15.3) | OVERLAP: the upper lug lies across the lower stud |
 
   The documents give the pitch as 0.625 in. (15.86) on the MX80, MX104, MX240 and MX480,
-  as 16 on the LMFS-F and as 5/8 in. (15.9) on the ten 300CB08 panels, which are drawn at it; several
+  as 16 on the LMFS-F and as 5/8 in. (15.9) on the eleven 300CB08 panels, which are drawn at it; several
   are drawn closer than that. The LMFS-F and 300CB08 documents also allow a single-hole
   lug on one stud, so one lug there is a documented landing and two are not.
 - **Some single placements stand for a two-hole landing.** One `common/ground-lug@1` is
@@ -580,11 +580,80 @@ answers the last two. It is the same part `nokia/sr-1-dc-terminal-block@1` waits
 - **Turning a lug,** and a lug of another size: every seat takes the one nominal lug.
 
 `spec/tests/test_ground_stud_lugs.py` holds each part's interface and seat, the Casa
-terminal's three composed studs and the art they kept, a census of all 139 placements with
+terminal's three composed studs and the art they kept, a census of all 145 placements with
 every one a slot, every `stud-size` and its absence elsewhere, a lug seated on a real
 device for each part with its solids above what the part builds, a turned placement, two
 pairs with the overlap recorded, and the kit offering the studs and seating a lug as the
 build does, with the view its 3D pass names.
+
+## 14. The P40 output connector
+
+The connectorized Amphenol Network Solutions power panels (the 300CB08-C and -SC and their
+four nrgSMART versions) end each output in a two-pole latching receptacle,
+`amphenol-ns/output-p40@1`, that takes a P40 plug: the Amphenol PRM series with 4 mm RADSOK
+contacts, BATT above RTN. The receptacle was drawn and presented nothing (#831), and the
+plug was not drawn.
+
+### 14.1 Decisions
+
+1. **One vendor interface, `p40`.** It is in `spec/schemas/connectors.yaml` with no
+   `standard`: no standard is held for the connector, and the registry entry says so. Only
+   a pair of spanned interfaces reads a `standard` (L116), and this is not one.
+2. **The receptacle gains its interface and its mate point and nothing else**, as the
+   terminal headers did (section 2): `mate` is midway between its two cavities, on the mouth
+   of the shroud it builds 6.0 proud (`on: shell`). The receptacle goes to 1.1.0 and the six
+   panels that place it take a patch.
+3. **One plug, `amphenol-ns/p40-plug@1`.** It is the connector maker's part sold by the panel
+   maker as three kits (150325, 150326, 152799) that differ only in the contacts and the wire
+   they take, so the housing is one part and the kit is the wire it carries. It lives in the
+   panel vendor's namespace, beside the receptacle, because it is one vendor's connector and
+   no other part in the library takes it.
+4. **Drawn from the wire side, one 30 mm stub per pole**, exactly as the screw-clamp plugs
+   (sections 2 and 7): points `wire-1` (BATT) and `wire-2` (RTN), and the fields `wire-od`,
+   `wire-color` and `body-color`. The default wire is 8.0, the largest insulation the housing
+   takes; no held document states the wire the panels are meant for beyond 14 to 6 AWG.
+
+### 14.2 Sources
+
+| part | source | what it gives |
+|---|---|---|
+| plug | Amphenol customer drawing PRM SERIES FEMALE, PLUG SIDE 4MM, rev A1, 4 JAN 20 | 9.7 wide and 34.2 high across the latch arms (end view), 35.1 long (side view), 8 mm maximum insulation, contact and kit numbers, BATT and RTN engraved |
+| receptacle | 300CB08 installation guide 149722-2 A9, Fig. 3-8 and 3-10, at 2.85 px/mm | the 10.5 by 29.8 frame, two cavities 11.0 apart, BATT over RTN (#831) |
+| colour | the connector kit photographs on the vendor's product pages | a black housing |
+
+The drawing is marked SCALE NONE, so everything inside the plug's outline is a fraction of a
+dimension the same view prints (the 34.2 on the end view, the 35.1 on the side view).
+
+### 14.3 The seated depth, and what is estimated
+
+**No document draws the plug mated.** The side view puts two contact noses 12.8 in front of
+the housing with the latch hooks at their roots; the plug is taken to seat with its housing
+on the mouth of the receptacle's shroud, so 35.1 - 12.8 = 22.3 of it stands in front of
+that mouth, and its outer face is 28.3 from the panel. Both the 12.8 and the shroud's 6.0
+are estimates, and the 12.8 is the figure to revisit against a mated drawing.
+
+**The two drawings disagree on the pole pitch.** The plug's contacts are 9.8 apart on its
+maker's drawing; the receptacle's cavities, scaled off the coarse panel drawing, are 11.0
+apart. The plug's figure is the better one; the two are aligned on their mid points, so each
+contact is drawn 0.6 off its cavity, and the receptacle is not redrawn here.
+
+Also estimated: the floor of each wire opening (1.5 below the wire-side face), the housing
+height between the latch arms (26.2) and the press tabs (6.8 by 4.0). The latch arms' flare,
+the engraving and the moulded maker's name are not built.
+
+### 14.4 What is not covered
+
+- **A seated plug by default.** The panels ship without plugs; nothing seats one.
+- **A wire colour per pole.** The industry habit of a red BATT and a black RTN is stated by
+  no held source, and one field paints both stubs.
+- **The DCIM side.** `amphenol-ns/output-p40` is a power outlet in the exports (#806); being a
+  slot changes nothing there.
+
+`spec/tests/test_p40_plug.py` holds the interface, the receptacle's mate and unchanged
+drawing, a census of every part presenting or mating `p40` and every placement of the
+receptacle, the plug's size, fields, poles and relief, and the plug seated in two real
+panels: mate on mate, the slot offering exactly the plug, the stand-off, and every solid
+right side out.
 
 ## Decisions taken
 
@@ -612,3 +681,7 @@ build does, with the view its 3D pass names.
   document for that device states it.
 - 2026-10-06: no lug is turned and no ground part is redrawn; the overlaps and overhangs
   that result are recorded.
+- 2026-10-07: the P40 receptacle presents a vendor interface, `p40`, citing no standard,
+  and gains its mate point and nothing else.
+- 2026-10-07: one P40 plug, `amphenol-ns/p40-plug@1`, drawn from the wire side with a stub
+  per pole; it seats 22.3 in front of the receptacle's shroud, an estimate.
