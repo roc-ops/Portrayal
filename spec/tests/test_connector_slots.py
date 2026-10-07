@@ -61,6 +61,9 @@ def test_the_connector_registry_is_not_vacuous():
     # touch guard screws on. It is here because a cover that ships on a part and comes
     # off is the slot mechanism with nothing to plug in: one host, one occupant, a
     # default. The registry marks it `cover: true` (#807)
+    # p40: the two-pole output connector of the Amphenol NS connectorized power panels,
+    # made a slot for its plug, amphenol-ns/p40-plug@1; a vendor connector citing no
+    # standard (docs/connectors-dc-terminal-design.md section 14)
     assert set(reg) == {"lc", "lc-duplex", "sc", "mpo", "mpo16", "rj45",
                          "f-type", "sma", "smb", "mcx", "bnc", "din-1-0-2-3",
                          "iec-c14", "iec-c20", "saf-d-grid",
@@ -69,7 +72,7 @@ def test_the_connector_registry_is_not_vacuous():
                          "terminal-508-2", "terminal-508-5", "terminal-508-6",
                          "dc-barrel", "terminal-stud",
                          "mrj21", "vhdci", "rj11",
-                         "breaker-1ru-guard"}
+                         "breaker-1ru-guard", "p40"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
     fam_ifaces = {f.get("interface") for f in render_mod._pluggable_families().values()}

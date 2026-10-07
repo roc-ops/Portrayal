@@ -1,0 +1,150 @@
+format: 1
+kind: component
+name: p40-plug
+version: 1.0.0
+class: port
+mates: p40
+profile: power
+description: >-
+  The P40 output plug of an Amphenol Network Solutions power panel - the
+  Amphenol PRM series two-pole latching plug, PRM0400, 4 mm RADSOK contacts -
+  wired, seen from the wire side as a front elevation sees it seated: the
+  black housing, the two latch arms above and below it, and a short straight
+  stub of insulated wire leaving each pole, BATT over RTN. Seats in a `p40`
+  receptacle at its own mate point. It carries one wire per pole, not one
+  cable.
+size: {w: 9.7, h: 34.2}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  the end view of the Amphenol customer drawing PRM SERIES FEMALE, PLUG SIDE
+  4MM, rev A1 (4 JAN 20), dimensions it 0.38 in [9.7] wide and 1.35 in [34.2]
+  high, the height across the two latch arms.
+attrs: {media: p40, connector: P40, positions: 2, contact-mm: 4}
+fields:
+  wire-od: {label: Wire outside diameter, type: number, unit: mm, default: 8.0}
+  wire-color: {label: Wire colour, type: text, default: '#1c1c1c'}
+  body-color: {label: Body colour, type: text, default: '#1a1b1d'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    drawing - see size-notes. The drawing is one sheet and the only
+    dimensioned source for the plug; it gives the overall length, 1.38 in
+    [35.1], and nothing inside the outline. Everything else below is scaled
+    off its end and side views at 11.8 px/mm (a 600 dpi render), good to about
+    0.3.
+  kits: >-
+    datasheet - the 300CB08 and nrgILS300CB08 datasheets sell the plug as P40
+    connector kits 150325 (12-10 AWG), 150326 (8-6 AWG) and 152799 (14-16 AWG),
+    each a plug, a retainer clip and two contacts; the customer drawing tables
+    the first two with their contacts, 150334 and 150333. The housing is the
+    same in every kit, so this is ONE part and the kit is the wire it carries.
+  no-depth: >-
+    NO `size.d`, DELIBERATELY, as on generic/terminal-508-2-plug@1: the
+    overall length is in provenance.seated-depth and what stands in front of
+    the receptacle is in the relief, but a `size.d` on a part with no
+    `behaviour` compiles to a pit behind it.
+  orientation: >-
+    DRAWN AS amphenol-ns/output-p40@1 IS PLACED, UNTURNED: BATT above RTN.
+    The drawing engraves BATT and RTN on the two cavities; the panel drawings
+    (Fig. 3-8 and 3-10 of the 300CB08 installation guide) print BATT beside
+    the upper row and RTN beside the lower. Pole 1 is BATT.
+  seated-depth: >-
+    ESTIMATED. No document draws the plug mated. The side view puts the two
+    contact noses 13.1 in front of the housing, with the latch hooks at their
+    roots; the plug is taken to seat with the housing face on the mouth of the
+    receptacle shroud and the noses inside it, so 35.1 - 13.1 = 22.0 of it
+    stands in front of the mouth. The receptacle's shroud is itself an
+    estimate (it presents 6.0 proud of the panel, amphenol-ns/output-p40@1),
+    so the plug's outer face is 28.0 from the panel. Neither figure is
+    measured; THE 13.1 IS THE ONE TO REVISIT against a mated drawing.
+  frame: >-
+    THE RELIEF IS MEASURED FROM THE LIFT THE HOST PRESENTS, the frame
+    generic/terminal-508-2-plug@1 documents: 0 here is the mouth of the
+    receptacle shroud. The noses inside the receptacle are not built.
+  axis: >-
+    scaled - the two wire openings are centred across the 9.7 and at 12.3 and
+    22.4 below the top of the latch arms, 10.1 apart; `mate` is between them
+    at (4.85, 17.35). THE RECEPTACLE DRAWS ITS CAVITIES 11.0 APART, scaled off
+    the coarse panel drawing at 2.858 px/mm; the plug's figure is off the
+    connector maker's own drawing and is the better one. The two are aligned
+    on their mid points, so each contact is 0.45 off its cavity.
+  body: >-
+    scaled - the housing is 9.7 wide and 26.2 high between the roots of the
+    latch arms (side view); the two arms flare to the 34.2 the end view
+    dimensions and end in ribbed press tabs about 6.8 wide and 3.1 deep. The
+    housing is built as one box and each arm as one box, all three standing
+    the 22.0 of provenance.seated-depth; the arms' flare is not built.
+  entries: >-
+    scaled and estimated - a round wire opening at each pole, 8.0 across, the
+    largest insulation the drawing allows (note 2, max insulation size .315 in
+    [8 mm]); its floor is built 1.5 below the wire-side face, an ESTIMATE.
+  legends: >-
+    NOT DRAWN. BATT and RTN are laser engraved on the wire-side face and the
+    maker's name and PRM0400 are moulded on the side; the engraving is small
+    and the wires stand in front of it.
+  wires: >-
+    estimated - ONE STUB OF WIRE PER POLE, a straight run 30 long from the
+    wire-side face, the stub rule of docs/connectors-coax-design.md section 5
+    applied per wire, as on generic/terminal-508-2-plug@1. EVERY POLE IS DRAWN
+    WIRED.
+  wire-od: >-
+    drawing - 8.0, the largest insulation the housing takes (note 2). No held
+    document states the diameter of the wire the panels are meant for; the
+    datasheets give 14 to 6 AWG. A placement or a wrapper sets the wire it
+    carries.
+  wire-colour: >-
+    a FIELD, one for both poles; black is the default, as on the other plugs.
+    No held source states a colour. A colour per pole is not expressible here.
+  body-colour: >-
+    photo - black, in every photograph of the connector kits on the vendor's
+    product pages; a FIELD.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port plug.
+elements: {}
+relief:
+  features:
+    - node: body
+      out: 22.0
+      shape: true
+      confidence: estimated
+      source: >-
+        35.1 less the 13.1 of nose the side view draws (provenance.seated-depth)
+    - node: latch-top
+      out: 22.0
+      confidence: estimated
+      source: >-
+        the latch arm runs the length of the housing in the side view (provenance.body)
+    - node: latch-bottom
+      out: 22.0
+      confidence: estimated
+      source: >-
+        see latch-top
+    - node: entry-1
+      out: 20.5
+      color: '#0b0c0d'
+      confidence: estimated
+      source: >-
+        the floor of the wire opening, 1.5 below the wire-side face (provenance.entries)
+    - node: entry-2
+      out: 20.5
+      color: '#0b0c0d'
+      confidence: estimated
+      source: >-
+        see entry-1
+    - node: wire-1
+      lift: 22.0
+      cyl: 30
+      confidence: estimated
+      source: >-
+        the stub rule, docs/connectors-coax-design.md section 5, per wire (provenance.wires)
+    - node: wire-2
+      lift: 22.0
+      cyl: 30
+      confidence: estimated
+      source: >-
+        see wire-1
+connection-points:
+  mate: {at: [4.85, 17.35], direction: front}
+  wire-1: {at: [4.85, 12.3], direction: front, 'on': wire-1}
+  wire-2: {at: [4.85, 22.4], direction: front, 'on': wire-2}
+skins: [default]

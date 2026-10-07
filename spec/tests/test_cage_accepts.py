@@ -640,7 +640,13 @@ def test_the_lift_census():
     stud, nut or screw head they build - their `mate` sits `on:` that feature
     - so a lug seated there starts where the part ends and shares no volume
     with it. The slot's lift is that feature's far end, 4.7, 6.0 or 8.0, once
-    more the figure `manifest.presented_interface` derives."""
+    more the figure `manifest.presented_interface` derives.
+
+    AND SO DOES THE P40 OUTPUT RECEPTACLE (docs/connectors-dc-terminal-design.md
+    section 14). amphenol-ns/output-p40@1 presents `p40` at the mouth of the
+    shroud it builds proud of the panel - its `mate` sits `on: shell` - so a
+    plug seated there starts where the shroud ends. Its lift is that shroud's
+    `out`, 6.0, the figure `manifest.presented_interface` derives."""
     from portrayal import manifest
     lib = render_mod.Library([str(LIB)])
     families = render_mod._pluggable_families()
@@ -657,7 +663,7 @@ def test_the_lift_census():
                     lifted_cages += c["kind"] == "cage"
                     if c["interface"] in ("bnc", "din-1-0-2-3", "f-type",
                                           "terminal-508-5", "terminal-508-2",
-                                          "terminal-stud"):
+                                          "terminal-stud", "p40"):
                         doc = lib.resolve(_ref(d, v, c["id"]))[0]
                         want = manifest.presented_interface(
                             doc, lambda r: lib.resolve(r)[0])[2]
