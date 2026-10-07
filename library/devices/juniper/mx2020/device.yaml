@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx2020
-version: 0.2.21
+version: 0.3.0
 maturity: modelled
 manufacturer: Juniper
 model: MX2020
@@ -81,7 +81,7 @@ gaps:
 groups:
   craft:
     term: Panel
-    role: indicator
+    role: management
     index-origin: 0
   res:
     term: Slot
@@ -164,7 +164,7 @@ views:
       bays:
         - {id: craft, at: [0.0, 12.0], size: {w: 440.0, h: 95.0},
            accepts: [juniper/mx2000-craft@1], default: juniper/mx2000-craft@1,
-           group: craft, rel-pos: 0}
+           for: chassis, group: craft, rel-pos: 0}
         - {id: fpc10, at: [15.0, 300.0], size: {w: 41.0, h: 425.0},
            accepts: [juniper/mpc-3d-16xge-sfpp-v2k@1, juniper/mpc1e-3d-v2k@1, juniper/mpc2e-3d-v2k@1, juniper/mpc3e-3d-v2k@1, juniper/mpc4e-3d-2cge-8xge-v2k@1, juniper/mpc4e-3d-32xge-sfpp-v2k@1, juniper/mpc5e-100g10g-v2k@1, juniper/mpc5e-40g10g-v2k@1, juniper/mpc7e-10g-v2k@1, juniper/mpc7e-mrate-v2k@1, juniper/ms-mpc-v2k@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
            default: juniper/mx2000-mpc-blank-v@1, group: fpcs, rel-pos: 10}
