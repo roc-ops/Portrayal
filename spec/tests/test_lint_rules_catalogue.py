@@ -228,6 +228,16 @@ ISSUED = {
     "L126": "device",
     "L127": "device",
     "L128": "device, listing",
+    # L129-L131 are RESERVED in lint.py for the cable-manager rules being
+    # written on other branches; whichever lands second keeps its own scopes
+    "L129": "device",
+    "L130": "device",
+    "L131": "device",
+    "L132": "lab",
+    "L133": "lab",
+    "L134": "lab",
+    "L135": "lab",
+    "L136": "lab",
 }
 
 

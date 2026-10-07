@@ -123,6 +123,7 @@ import yaml
 from portrayal import attrsections as attrs_mod
 from portrayal import bevel as bevel_mod
 from portrayal import facets
+from portrayal import labs
 from portrayal import libwalk
 from portrayal import capability
 from portrayal import dcim_export
@@ -294,6 +295,11 @@ RULES = {
     "L126": ("device",     "a bevelled chassis is a solid the box can have - every edge named by two faces that meet, none bevelled twice, no face cut away and no bevel swallowed by its neighbours - its face drawings are the chassis's own size, and every part, bay and cutout on a face lies on the flat face rather than on a bevel", "name edges as two adjacent faces (`front-left`), shrink a bevel that cuts too much, drop a view `size` that differs from the chassis on a bevelled face, or move the part onto the flat face - spec/tools/portrayal/bevel.py says where it is"),
     "L127": ("device",     "a `shell: sheet` body states `chassis.thickness`, between 0 and 10 mm, and a box states none (error)", "give a sheet body the gauge its datasheet states; on a box, drop `thickness`"),
     "L128": ("device, listing", "a part-number key has no stray whitespace - none leading or trailing, none but the plain ASCII space (an error), and none splitting a run of capitals and digits between two hyphens (`-A C-`, a warning)", "retype the SKU as the vendor prints it; a space the vendor really prints inside a hyphenated token is waived with the document that shows it"),
+    "L132": ("lab",        "every placement's `ref` is a library device (and its `cfg` one of that device's configurations), every placement id is unique, and every `on` names another placement in the lab (error)", "name the device by its `name`, e.g. `fhd-1ufce`; give each placement its own id; point `on` at the id of the placement the part sits on"),
+    "L133": ("lab",        "`face`, `on` and `unit` appear only on a device whose `chassis.mount` is `rack-face`; a rack-face device is placed by `on` or by `ru`, not both, and a rack device by `ru` (error)", "drop the key from a rack device; give a rack-face part either `on` (and `unit`) or `ru`"),
+    "L134": ("lab",        "a rack-face part's host is a `rack` device, and `unit` is within the host's height, 1 to its `chassis.ru` (error)", "put the part `on` the rack device behind it; count `unit` from 1 at the host's bottom unit"),
+    "L135": ("lab",        "every placement fits inside the rack's `height-ru`, no two rack devices share a rack unit, and no two rack-face parts claim one rack unit on one face (error)", "move one of the two, or put one rack-face part on the other face"),
+    "L136": ("lab",        "a rack-face part placed by `ru` over a rack device is reported with that host (warning)", "place it `on` the host with its `unit` so it moves with the host, or leave it by `ru` if it belongs to the rack rather than the device"),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -301,7 +307,11 @@ RULES = {
 # gap is named here rather than read as a deleted rule. The catalogue test
 # counts these as present, and fails once a reserved code is also in RULES -
 # whichever branch lands second deletes its line.
-RESERVED = {}
+RESERVED = {
+    "L129": "cable-manager pass-throughs and brushes (docs/cable-managers-design.md section 5)",
+    "L130": "cable-manager pass-throughs and brushes (docs/cable-managers-design.md section 5)",
+    "L131": "cable-manager guides (docs/cable-managers-design.md section 5)",
+}
 
 # A CODE THAT NAMED A RULE WHICH IS GONE. A device manifest waives a rule by its
 # code (`lint.waive`), and so does the baseline, so a code is an address: once
@@ -5902,6 +5912,30 @@ def lint_listing(path, data, roots):
             break
 
 
+# THE LAB CODES. The rules are in labs.py, because labs_index.py has to resolve
+# the same placements to write labs.json and the two must not disagree; this is
+# where they are reported. L132-L135 are errors, L136 a warning.
+LAB_CODES = ("L132", "L133", "L134", "L135", "L136")
+
+
+def lint_lab(path, data, roots):
+    """L132-L136: a lab's placements resolve to rack positions that fit.
+
+    A lab names library devices and places them in one rack: a `rack` device by
+    `ru`, a `rack-face` part (a cable manager on the rail face) `on` a host or
+    by `ru`, on a `face` (docs/cable-managers-design.md section 6). L132 holds
+    the names, L133 which keys belong to which mount, L134 the host and its
+    units, L135 that nothing overlaps; all errors, because a lab that breaks
+    them cannot be drawn and labs_index.py will not compile it. L136 is a
+    report, not a fault: a rack-face part placed by `ru` in front of a device
+    is legal, and the warning names the host it would move with.
+    """
+    found, _placed = labs.check(data, roots)
+    for code, sev, msg in found:
+        assert code in LAB_CODES, code
+        (err if sev == "error" else warn)(path, code, msg)
+
+
 def lint_library_listings(roots):
     """L124: under one NOS vendor, every exported model and every name is one box's.
 
@@ -10861,6 +10895,19 @@ def main():
                 lint_listing(f, data, args.library)
                 lint_part_number_keys(f, data)
                 lint_quoted_prose(f, data)
+            n += 1
+        for f in libwalk.iter_labs([root]):
+            lint_duplicate_keys(f)
+            data = load_yaml(f)
+            if not isinstance(data, dict):
+                err(f, "L1", "a lab is a mapping with `format`, `kind: lab`, `name` and `devices`")
+                n += 1
+                continue
+            bad = labs.schema_errors(data)
+            for m in bad:
+                err(f, "L1", m)
+            if not bad:
+                lint_lab(f, data, args.library)
             n += 1
 
     # The matrix is a PORTFOLIO view - it ranks devices against each other - so
