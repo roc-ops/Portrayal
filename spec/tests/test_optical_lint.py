@@ -217,6 +217,20 @@ def test_two_unbanded_paths_off_one_source_are_still_a_hidden_split():
     assert len(run(L.lint_component_optical_conflicts, doc, "L79")) == 1
 
 
+def test_two_paths_on_one_band_off_one_source_are_still_a_hidden_split():
+    """A band names a wavelength; two legs on the same one divide its power,
+    which is the ratio this rule exists to see."""
+    doc = three([{"from": "line.2", "to": "osc.1", "band": BAND},
+                 {"from": "line.2", "to": "edfa.1", "band": dict(BAND)}])
+    assert len(run(L.lint_component_optical_conflicts, doc, "L79")) == 1
+
+
+def test_two_different_bands_off_one_source_are_an_add_drop_filter():
+    doc = three([{"from": "line.2", "to": "osc.1", "band": BAND},
+                 {"from": "line.2", "to": "edfa.1", "band": {"centre-nm": 1635, "width-nm": 70}}])
+    assert run(L.lint_component_optical_conflicts, doc, "L79") == []
+
+
 def test_a_path_with_no_trunk_is_l131():
     doc = module([{"from": "common.1", "to": "split.1"}])
     hits = run(L.lint_component_optical_trunk, doc, "L131")

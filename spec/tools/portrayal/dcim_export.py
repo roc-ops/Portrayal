@@ -892,6 +892,9 @@ NOT_A_DCIM_PORT = {
     # `amphenol-ns/output-terminal` and `amphenol-ns/output-p40` were here, as
     # power OUTLETS the exporter had no design for, until #806 gave them one:
     # PART_OUTLET. The register's stale-entry test is what took them off.
+    "amphenol-ns/nrg-ils-rear-block": "the rear centre of an nrgILS panel: two nrgNET RJ45s, a "
+                                      "private bus between panels, a temperature probe jack and three "
+                                      "unnamed headers; none is a network interface a DCIM has a type for",
     "amphenol-ns/nrg-rear-block": "the rear centre of a monitored breaker panel: alarm relay "
                                   "headers, two RS485 nrgNET terminal connectors and two "
                                   "temperature probe jacks. None is a network interface a DCIM "

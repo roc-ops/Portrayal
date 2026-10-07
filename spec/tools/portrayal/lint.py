@@ -2774,9 +2774,12 @@ def lint_component_optical_conflicts(path, data, _lib_roots=None):
     written as two plain paths - `{from: common.1, to: split.1}` and
     `{from: common.1, to: split.2}` - carries no ratios at all, so writing a
     genuine split that way hides it from the ratio check entirely. A source
-    is therefore allowed to be a `from` in at most one path; a part that
-    splits must say so with the ratio list, which is the one form this rule
-    can actually verify.
+    is therefore a `from` in one path only - a part that splits says so with
+    the ratio list, which is the one form this rule can verify - with one
+    exception, an add/drop filter: several single-destination paths from one
+    source, every one but at most one carrying a `band`, and no two carrying
+    the same band. Two legs on one band would be a power split wearing a
+    wavelength's name, so they are refused like two plain paths.
     """
     paths = (data.get("optical") or {}).get("paths") or []
     seen = {}
@@ -2790,9 +2793,13 @@ def lint_component_optical_conflicts(path, data, _lib_roots=None):
     starts = {}
     for p in paths:
         starts.setdefault(p.get("from"), []).append(p)
+    def _band_key(b):
+        return tuple(sorted(b.items())) if isinstance(b, dict) else b
     banded = {src for src, ps in starts.items()
               if len(ps) > 1 and all(isinstance(q.get("to"), str) for q in ps)
-              and sum(1 for q in ps if not q.get("band")) <= 1}
+              and sum(1 for q in ps if not q.get("band")) <= 1
+              and len({_band_key(q["band"]) for q in ps if q.get("band")})
+              == sum(1 for q in ps if q.get("band"))}
     for i, p in enumerate(paths):
         eps = optical.endpoints(p)
         for ep, _r in eps[1:]:
@@ -2808,8 +2815,8 @@ def lint_component_optical_conflicts(path, data, _lib_roots=None):
                              "across two paths hides its ratios from this "
                              "check, so a split is written as ONE path with "
                              "a ratio list, not two plain paths (paths that "
-                             "each carry a `band`, all but one, are an "
-                             "add/drop filter and are allowed)")
+                             "each carry a different `band`, all but one, are "
+                             "an add/drop filter and are allowed)")
         sources[src] = i
         ratios = [r for _e, r in eps[1:] if r is not None]
         if ratios:
