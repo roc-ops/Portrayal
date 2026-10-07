@@ -11,11 +11,15 @@
   turns: the wire goes down, toward the nearer side edge of the face, the other
   side or up, the first direction in which the whole lug crosses no part, bay or
   other seat; running past the edge of the face is allowed and a printed legend
-  is avoided where it can be. Across the library's 147 ground-stud seats that is
-  98 down, 25 left, 18 right and 6 up, none across a part, and the lug no longer
-  lies across LAN1 on the Supermicro SYS-111E-FWTR and SYS-111E-FDWTR, the ESD
-  jack on the Juniper MX150, a fan bay on the Edgecore DCS500 or the second stud
-  of a pair. No library configuration seats a lug, so no drawing changes (#829).
+  is avoided where it can be. Across the library's 155 ring-lug seats on 63
+  devices that is 103 down, 24 left, 22 right and 6 up, none across a part, and
+  the ring lug no longer lies across LAN1 on the Supermicro SYS-111E-FWTR and
+  SYS-111E-FDWTR, the ESD jack on the Juniper MX150, a fan bay on the Edgecore
+  DCS500 or the second stud of a pair. A two-hole lug on a stud pair (#828)
+  turns 0 or 180 only, and its 51 seats on 25 devices lead 45 down, 4 left, 1
+  right and 1 up; two of them, on the MX150 and the MX480, cross a part either
+  way and are recorded. No library configuration seats a lug, so no drawing
+  changes (#829).
 - `<device>.configs.json` publishes `turns` on every slot entry (the angles an
   occupant may take on top of `rotate`, null where there is no choice) and
   `seat-turns`, `{view: {slot key: {ref: turn}}}`, the turn the build seats a
