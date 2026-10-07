@@ -968,6 +968,50 @@
     }
    }
   },
+  "guide": {
+   "type": "object",
+   "required": [
+    "kind",
+    "aperture",
+    "run"
+   ],
+   "additionalProperties": false,
+   "description": "SOMETHING CABLES RUN THROUGH, declared on the part so that every placement of it inherits it (docs/cable-managers-design.md, decision 8). `ring` is a loop - a D-ring, a lacing bar's hook - with the opening a bundle passes through and the direction it passes. Nothing consumes it yet: it compiles to `data-guide`, `data-guide-run` and `data-guide-aperture` on every instance of the part, so that cable routing has something to read, and the DCIM exports ignore it. L131 holds the opening inside the part.",
+   "properties": {
+    "kind": {
+     "enum": [
+      "ring"
+     ]
+    },
+    "aperture": {
+     "type": "object",
+     "required": [
+      "w",
+      "h"
+     ],
+     "additionalProperties": false,
+     "description": "millimetres, the clear opening, seen looking along `run`. Its `w` is the opening across the drawing that is not the run (x where the run is y or z, y where the run is x) and its `h` the other: y where the run is z, out of the face where the run is x or y.",
+     "properties": {
+      "w": {
+       "type": "number",
+       "exclusiveMinimum": 0
+      },
+      "h": {
+       "type": "number",
+       "exclusiveMinimum": 0
+      }
+     }
+    },
+    "run": {
+     "enum": [
+      "x",
+      "y",
+      "z"
+     ],
+     "description": "the direction cables pass through it, in the frame of the face the part is drawn on: `x` across the drawing, `y` down it, `z` out of the face"
+    }
+   }
+  },
   "presents": {
    "enum": [
     "wh",

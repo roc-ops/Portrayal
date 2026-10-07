@@ -407,6 +407,12 @@ def main():
             # the contract declares none, like `groups`.
             if data.get("head"):
                 entry["head"] = data["head"]
+            # THE GUIDE (docs/cable-managers-design.md section 5), verbatim:
+            # the opening cables run through and its direction. A router of
+            # cables reads it here, not from the contract on disk. Omitted when
+            # the contract declares none, like `head`.
+            if data.get("guide"):
+                entry["guide"] = data["guide"]
             # WHERE IT MATES, in its own frame - the contract's own `mate.at`,
             # never a forwarded one: an occupant mates with its own point
             # (L11). A consumer seating it in a cage solves its `at` from this
