@@ -147,7 +147,8 @@ def test_the_screws_that_present_terminal_stud_are_these_two_and_one_lug_mates_i
     """The `class: screw` parts that present the interface are the two
     terminal screws. The ground studs present it too (`class: ground`,
     test_ground_stud_lugs.py); they are not terminal screws and are left to
-    their own census."""
+    their own census. So does the 10-32 stud of the SR-1 DC terminal block,
+    which a pair host composes two to a pole (#828, test_grounding_devices.py)."""
     presents, mates = [], []
     for f in (LIB / "components").rglob("v*/contract.yaml"):
         c = _yaml(f)
@@ -156,7 +157,7 @@ def test_the_screws_that_present_terminal_stud_are_these_two_and_one_lug_mates_i
             presents.append(ref)
         if c.get("mates") == IFACE:
             mates.append(ref)
-    assert sorted(presents) == SEATS and len(SEATS) == 2
+    assert sorted(presents) == sorted([*SEATS, "nokia/sr-1-dc-stud@1"]) and len(SEATS) == 2
     assert mates == [LUG]
 
 
@@ -240,9 +241,12 @@ def test_the_telco_supply_says_nothing_states_what_it_takes():
     assert [p["id"] for p in c["parts"] if p["ref"] in BLOCKS] == ["terminal"]
 
 
-def test_the_nokia_block_is_left_for_the_two_hole_lug():
+def test_the_nokia_block_lands_a_two_hole_lug_on_each_pole():
+    """Not one of these blocks: each pole is a pair of studs that one two-hole
+    lug spans (#828), held in test_grounding_devices.py."""
     c = _contract("nokia/sr-1-dc-terminal-block@1")
-    assert "interface" not in c and not c.get("parts")
+    assert "interface" not in c
+    assert {p["ref"] for p in c["parts"]} == {"nokia/sr-1-dc-pole@1"}
 
 
 # --- 4. the lug ------------------------------------------------------------------

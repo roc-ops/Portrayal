@@ -648,7 +648,11 @@ def test_the_lift_census():
     section 14). amphenol-ns/output-p40@1 presents `p40` at the mouth of the
     shroud it builds proud of the panel - its `mate` sits `on: shell` - so a
     plug seated there starts where the shroud ends. Its lift is that shroud's
-    `out`, 6.0, the figure `manifest.presented_interface` derives."""
+    `out`, 6.0, the figure `manifest.presented_interface` derives.
+
+    AND SO DOES A PAIR OF STUDS (#828, section 13.7). A pair host presents its
+    `stud-pair-*` interface at the top of its studs, its `mate`'s `seat-out`,
+    so a two-hole lug lands where a one-hole lug on either stud would."""
     from portrayal import manifest
     lib = render_mod.Library([str(LIB)])
     families = render_mod._pluggable_families()
