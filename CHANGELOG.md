@@ -97,6 +97,15 @@ names the ref that replaces it.
   147 mm behind the chassis. Front, top, bottom and sides are the 300CB08. In
   the DCIM exports each has two `dc-terminal` power ports, one per feed, and
   its outputs are not exported yet. No existing device or export changes.
+- The two monitored panels of the Amphenol Network Solutions 300CB08 family
+  with the plain rear: `amphenol-ns/nrg300cb08-ctrl` (integrated nrgSMART
+  controller: front display `amphenol-ns/nrg-oled@1`, MGMT and LAN RJ45s,
+  RESET) and `amphenol-ns/nrg300cb08-sens` (sensor card, no network jacks).
+  Both take the new rear centre `amphenol-ns/nrg-rear-block@1` (alarm headers,
+  nrgNET IN and OUT, two temperature probe jacks), which the DCIM exporter
+  skips as not a DCIM port. In the DCIM exports the CTRL has two management
+  interfaces, `mgmt` and `lan` (100base-tx), and both have two `dc-terminal`
+  power ports. No existing device or export changes.
 - Fibrain, a new vendor: the XCU10 extendable HD patch panel (`fibrain/xcu`,
   0.5U, 48 SC), with XCU10-51ID and XCU10-41ID as configurations. Its front is
   one captive drawer (`fibrain/xcu-drawer@1`) whose four slots seat the HD

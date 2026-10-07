@@ -868,6 +868,10 @@ NOT_A_DCIM_PORT = {
                               "P40 receptacle. A power OUTLET, for the reason its screw-terminal "
                               "sibling amphenol-ns/output-terminal gives: the exporter writes "
                               "power ports only, and outlets are a design that is not built yet",
+    "amphenol-ns/nrg-rear-block": "the rear centre of a monitored breaker panel: alarm relay "
+                                  "headers, two RS485 nrgNET terminal connectors and two "
+                                  "temperature probe jacks. None is a network interface a DCIM "
+                                  "has a type for; nrgNET is a private serial bus between panels",
     "amphenol-ns/alarm-card-307608": "Form C alarm relay contacts on wire-wrap headers - dry "
                                      "contacts for an external alarm loop; neither DCIM has a "
                                      "port type for an alarm contact",
