@@ -3875,6 +3875,20 @@ def lint_component_collisions(path, data, lib_roots):
     floods or misses. As a fraction of the smaller part the distribution is empty
     between 10 and 50 percent - hairline contact on one side, real collision on
     the other - so a threshold in that gap separates them with nothing near it.
+
+    WHAT A PART DRAWS, NOT ITS BOX (#684). A hollow part - common/qsfp-pull-tab@2,
+    a U-loop open in the middle so the fibre connector passes through - has a box
+    that spans both LC bores of the generic that composes it, and seven warnings
+    across five generics sat in the baseline for tabs that draw nothing over
+    what they frame. So a pair whose boxes collide is measured again on what
+    each part's skin draws (`_drawn_boxes`): the area of the drawn overlap,
+    against the smaller part's box as before. The refinement can only lower a
+    fraction, so it removes findings and never adds one; a skin it cannot read
+    whole counts as its box. THE SKIN, not the contract's elements or relief
+    features: those name what is addressed or extruded, not everything painted
+    (common/qsfp28-cage@3's body rect is in neither), so reading them would hide
+    real collisions. And not a declared open region: that would be a second,
+    hand-kept record of what the skin already says.
     """
     boxes = []
     for q in (data.get("parts") or []):
@@ -3886,7 +3900,8 @@ def lint_component_collisions(path, data, lib_roots):
         w, h = size
         facet = facets.facet_of(data, q["on"]) if q.get("on") else None
         x0, y0, x1, y1 = facets.projected_box(q["at"], w, h, q.get("rotate"), facet)
-        boxes.append((q.get("id", "?"), x0, y0, x1, y1, bool(q.get("behind"))))
+        boxes.append((q.get("id", "?"), x0, y0, x1, y1, bool(q.get("behind")),
+                      q, facet))
 
     for i, a in enumerate(boxes):
         for b in boxes[i + 1:]:
@@ -3902,13 +3917,141 @@ def lint_component_collisions(path, data, lib_roots):
             smaller = min((a[3] - a[1]) * (a[4] - a[2]), (b[3] - b[1]) * (b[4] - b[2]))
             if smaller <= 0:
                 continue
-            frac = (ox * oy) / smaller
+            if (ox * oy) / smaller < 0.25:
+                continue
+            clips = []
+            for p in _placed_drawn(a[6], a[7], lib_roots):
+                for r in _placed_drawn(b[6], b[7], lib_roots):
+                    c = (max(p[0], r[0]), max(p[1], r[1]), min(p[2], r[2]), min(p[3], r[3]))
+                    if c[2] > c[0] and c[3] > c[1]:
+                        clips.append(c)
+            if not clips:
+                continue
+            hull = (min(c[0] for c in clips), min(c[1] for c in clips),
+                    max(c[2] for c in clips), max(c[3] for c in clips))
+            frac = _union_overlap(hull, clips) / smaller
+            ox, oy = hull[2] - hull[0], hull[3] - hull[1]
             if frac >= 0.25:
                 warn(path, "L46", f"composed parts {a[0]} and {b[0]} overlap by "
                      f"{ox:.2f}x{oy:.2f}mm, which is {frac*100:.0f}% of the smaller "
                      "one. Two parts drawn in one place is the commonest defect a "
                      "human finds and no rule saw; if the layering is deliberate, "
                      "say so in provenance")
+
+
+# Skin content that draws nothing on the face, and so is skipped rather than
+# read: definitions, metadata, and the paint servers they hold.
+_SKIN_INERT = ("defs", "title", "desc", "metadata", "style", "clipPath", "mask",
+               "linearGradient", "radialGradient", "pattern", "symbol")
+_DRAWN_CACHE = {}
+
+
+def _drawn_boxes(ref, lib_roots, depth=0):
+    """What a part DRAWS, as boxes in its own frame (0..w, 0..h): its default
+    skin's shapes plus, recursively, whatever it composes. The part's whole box,
+    as one, wherever the skin cannot be read exactly - no skin, a viewBox that
+    is not the part's size, a group transform, a path, a line, a <use>, an
+    image, anything but a rect, circle, ellipse, polygon or text, a composed
+    part on a facet - and past 64 shapes. A rule that guessed at a path's extent
+    would under-report a real collision, so it does not guess. Nothing is
+    rasterised; CI has no cairosvg. None for a ref with no size."""
+    key = (ref, tuple(lib_roots))
+    if key in _DRAWN_CACHE:
+        return _DRAWN_CACHE[key]
+    ct = _contract(ref, lib_roots)
+    sz = ct.get("size") or {}
+    w, h = sz.get("w"), sz.get("h")
+    if not w or not h:
+        _DRAWN_CACHE[key] = None
+        return None
+    whole = [(0.0, 0.0, float(w), float(h))]
+    _DRAWN_CACHE[key] = whole                    # a cycle reads as solid
+    out = _skin_shapes(ref, ct, float(w), float(h), lib_roots)
+    for part in (ct.get("parts") or []) if out is not None else ():
+        psz = _instance_size(part.get("ref"), lib_roots)
+        sub = (_drawn_boxes(str(part.get("ref") or ""), lib_roots, depth + 1)
+               if depth < 4 and psz and part.get("at") and not part.get("on") else None)
+        if not sub:
+            out = None                           # cannot place it exactly
+            break
+        out += [_turned(b, psz[0], psz[1], part.get("rotate"), None, part["at"])
+                for b in sub]
+    result = out if out and len(out) <= 64 else whole
+    _DRAWN_CACHE[key] = result
+    return result
+
+
+def _skin_shapes(ref, ct, w, h, lib_roots):
+    """The boxes a contract's default skin draws, or None if it cannot be read
+    whole (see `_drawn_boxes`)."""
+    cp = resolve_component(ref, lib_roots)
+    if not cp:
+        return None
+    skins = ct.get("skins") or ["default"]
+    try:
+        root = ET.parse(Path(cp).parent / "skins" / f"{skins[0]}.svg").getroot()
+        vb = [float(v) for v in (root.get("viewBox") or "").replace(",", " ").split()]
+    except (ET.ParseError, OSError, ValueError):
+        return None
+    if len(vb) != 4 or abs(vb[0]) > 0.01 or abs(vb[1]) > 0.01 \
+            or abs(vb[2] - w) > 0.01 or abs(vb[3] - h) > 0.01:
+        return None
+    out = []
+
+    def walk(el):
+        for ch in el:
+            if not isinstance(ch.tag, str):
+                continue                         # a comment
+            tag = ch.tag.replace(_SVG_NS, "")
+            if tag in _SKIN_INERT:
+                continue
+            tf = (ch.get("transform") or "").strip()
+            if tag == "g":
+                if tf or not walk(ch):
+                    return False
+                continue
+            if tf and not re.fullmatch(r"rotate\([^)]*\)", tf):
+                return False
+            if tag not in ("rect", "circle", "ellipse", "polygon", "text"):
+                return False
+            b = _svg_box(tag, ch)
+            if b is None:
+                if tag == "text":
+                    continue                     # an empty text draws nothing
+                return False
+            out.append(b)
+        return True
+
+    return out if walk(root) else None
+
+
+def _turned(b, w, h, rotate, facet, at):
+    """Box `b`, in a (w, h) part's own frame, placed as render.py places the
+    part - turned about the part's centre, scaled by the facet, moved to `at`:
+    facets.projected_box for a box inside the part."""
+    cx, cy = w / 2, h / 2
+    t = math.radians(float(rotate or 0))
+    cos, sin = round(math.cos(t), 9), round(math.sin(t), 9)
+    xs, ys = [], []
+    for px, py in ((b[0], b[1]), (b[2], b[1]), (b[0], b[3]), (b[2], b[3])):
+        dx, dy = px - cx, py - cy
+        xs.append(cx + dx * cos - dy * sin)
+        ys.append(cy + dx * sin + dy * cos)
+    x0, y0, x1, y1 = min(xs), min(ys), max(xs), max(ys)
+    if facet:
+        c = facets.cos_of(facet)
+        if facets.axis_of(facet) == "y":
+            y0, y1 = y0 * c, y1 * c
+        else:
+            x0, x1 = x0 * c, x1 * c
+    return (at[0] + x0, at[1] + y0, at[0] + x1, at[1] + y1)
+
+
+def _placed_drawn(q, facet, lib_roots):
+    """What a composed placement draws, as boxes on its host's face."""
+    w, h = _instance_size(q["ref"], lib_roots)
+    local = _drawn_boxes(q["ref"], lib_roots) or [(0.0, 0.0, float(w), float(h))]
+    return [_turned(b, w, h, q.get("rotate"), facet, q["at"]) for b in local]
 
 
 def _lint_sunk_facet(path, node, f, data, elements, tol=0.5):
