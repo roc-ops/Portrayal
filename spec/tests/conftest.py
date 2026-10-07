@@ -7,6 +7,11 @@ import yaml
 
 import libdata  # noqa: E402
 
+# `--shard I/N`: CI splits the suite across several jobs. The hooks live with
+# the tool that checks the split afterwards (spec/tools/portrayal/shards.py), and
+# do nothing unless the option is given.
+from portrayal.shards import pytest_addoption, pytest_collection_modifyitems  # noqa: E402,F401
+
 # PyYAML SHIPS TWO PARSERS AND THE TESTS WERE USING THE SLOW ONE. `yaml.safe_load`
 # is the pure-Python loader; libyaml's CSafeLoader reads the same documents 7.4x
 # faster - 89 device manifests in 2.4s against 17.6s, measured on this corpus.

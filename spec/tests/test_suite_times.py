@@ -51,6 +51,22 @@ def test_a_test_is_named_by_its_file_and_its_own_name(tmp_path):
                                "test_viewbox::TestRear.test_two": 0.25}
 
 
+def test_the_shards_records_add_up_to_one_run(tmp_path):
+    """CI splits the suite across jobs, each with its own junit file. A key two
+    shards share - one stem in two directories - is summed, as within a file."""
+    a = junit(tmp_path, [("spec.tests.test_a", "test_x", "2"),
+                         ("spec.tests.test_same", "test_s", "1")], name="a.xml")
+    b = junit(tmp_path, [("spec.tests.test_b", "test_z", "40"),
+                         ("spec.tests.browser.test_same", "test_s", "3")], name="b.xml")
+    out = tmp_path / "times.json"
+    r = run(a, b, "--out", out)
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "3 tests in 3 files took 46s of summed test time." in r.stdout
+    assert json.loads(out.read_text())["tests"] == {
+        "test_a::test_x": 2.0, "test_b::test_z": 40.0, "test_same::test_s": 4.0}
+    assert run(a, tmp_path / "missing.xml").returncode == 1
+
+
 def test_the_report_gives_the_summed_seconds_and_the_slowest_file_first(tmp_path):
     f = junit(tmp_path, [("spec.tests.test_a", "test_x", "2"), ("spec.tests.test_a", "test_y", "3"),
                          ("spec.tests.test_b", "test_z", "40")])
@@ -220,17 +236,32 @@ def test_an_expired_or_differently_named_artifact_is_not_a_base():
 # --- the workflow -------------------------------------------------------------
 
 @pytest.fixture(scope="module")
-def build():
-    return yaml.safe_load(GATES.read_text())["jobs"]["build"]
+def jobs():
+    return yaml.safe_load(GATES.read_text())["jobs"]
+
+
+@pytest.fixture(scope="module")
+def build(jobs):
+    return jobs["build"]
 
 
 def step(build, name):
     return next(s for s in build["steps"] if s.get("name") == name)
 
 
-def test_the_suite_writes_the_record_the_report_reads(build):
-    assert '--junitxml "$RUNNER_TEMP/junit.xml"' in step(build, "tests")["run"]
-    assert '"$RUNNER_TEMP/junit.xml"' in step(build, "test time")["run"]
+def test_the_suite_writes_the_record_the_report_reads(jobs, build):
+    """Each shard writes its own junit into the directory it uploads; `build`
+    downloads every shard's and reads them all as one run."""
+    shard = jobs["tests"]
+    assert '--junitxml "$RUNNER_TEMP/out/junit.xml"' in step(shard, "tests")["run"]
+    upload = next(s for s in shard["steps"] if "upload-artifact" in s.get("uses", ""))
+    assert upload["with"]["path"] == "${{ runner.temp }}/out"
+    assert upload["with"]["name"] == "shard-${{ matrix.shard }}"
+    assert upload.get("if") == "always()", "a failing shard's record is the one wanted"
+    download = next(s for s in build["steps"] if "download-artifact" in s.get("uses", ""))
+    assert download["with"]["pattern"] == "shard-*"
+    run = step(build, "test time")["run"]
+    assert '"$RUNNER_TEMP"/shards/shard-*/junit.xml' in run and '"${junits[@]}"' in run
 
 
 def test_the_report_cannot_turn_a_green_run_red(build):
@@ -249,6 +280,10 @@ def test_the_times_are_published_for_the_next_run_to_compare_against(build):
     assert uses.startswith("actions/upload-artifact@") and len(uses.split("@")[1]) == 40, uses
 
 
-def test_the_job_may_read_artifacts_and_pull_requests_and_write_nothing(build):
-    perms = build["permissions"]
-    assert perms == {"contents": "read", "actions": "read", "pull-requests": "read"}
+def test_the_job_may_read_artifacts_and_pull_requests_and_write_nothing(jobs):
+    """`build` fetches the base to compare against, `dist` the weights the
+    shards split by; the shards themselves read nothing beyond the default."""
+    for name in ("build", "dist"):
+        perms = jobs[name]["permissions"]
+        assert perms == {"contents": "read", "actions": "read", "pull-requests": "read"}, name
+    assert "permissions" not in jobs["tests"]
