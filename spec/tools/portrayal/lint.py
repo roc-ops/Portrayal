@@ -295,6 +295,8 @@ RULES = {
     "L126": ("device",     "a bevelled chassis is a solid the box can have - every edge named by two faces that meet, none bevelled twice, no face cut away and no bevel swallowed by its neighbours - its face drawings are the chassis's own size, and every part, bay and cutout on a face lies on the flat face rather than on a bevel", "name edges as two adjacent faces (`front-left`), shrink a bevel that cuts too much, drop a view `size` that differs from the chassis on a bevelled face, or move the part onto the flat face - spec/tools/portrayal/bevel.py says where it is"),
     "L127": ("device",     "a `shell: sheet` body states `chassis.thickness`, between 0 and 10 mm, and a box states none (error)", "give a sheet body the gauge its datasheet states; on a box, drop `thickness`"),
     "L128": ("device, listing", "a part-number key has no stray whitespace - none leading or trailing, none but the plain ASCII space (an error), and none splitting a run of capitals and digits between two hyphens (`-A C-`, a warning)", "retype the SKU as the vendor prints it; a space the vendor really prints inside a hyphenated token is waived with the document that shows it"),
+    "L129": ("device",     "a declared pass-through (`passes:`) lies inside its face and overlaps no component - except a well that holds it whole, the plate it is cut through - and no two in a view share an id", "move the pass-through off the part, or onto the face; a window punched in a part's floor is declared over that well"),
+    "L130": ("device",     "a pass-through whose `cover` is `brush` has a `pattern: brush` decor drawn over the whole of it, and a brush drawn over a pass-through belongs to one whose cover is `brush`", "draw the brush over the opening, or change `cover` to say what the picture shows"),
     "L132": ("lab",        "every placement's `ref` is a library device (and its `cfg` one of that device's configurations), every placement id is unique, and every `on` names another placement in the lab (error)", "name the device by its `name`, e.g. `fhd-1ufce`; give each placement its own id; point `on` at the id of the placement the part sits on"),
     "L133": ("lab",        "`face`, `on` and `unit` appear only on a device whose `chassis.mount` is `rack-face`; a rack-face device is placed by `on` or by `ru`, not both, and a rack device by `ru` (error)", "drop the key from a rack device; give a rack-face part either `on` (and `unit`) or `ru`"),
     "L134": ("lab",        "a rack-face part's host is a `rack` device, and `unit` is within the host's height, 1 to its `chassis.ru` (error)", "put the part `on` the rack device behind it; count `unit` from 1 at the host's bottom unit"),
@@ -308,8 +310,6 @@ RULES = {
 # counts these as present, and fails once a reserved code is also in RULES -
 # whichever branch lands second deletes its line.
 RESERVED = {
-    "L129": "cable-manager pass-throughs and brushes (docs/cable-managers-design.md section 5)",
-    "L130": "cable-manager pass-throughs and brushes (docs/cable-managers-design.md section 5)",
     "L131": "cable-manager guides (docs/cable-managers-design.md section 5)",
 }
 
@@ -6458,6 +6458,110 @@ def lint_device_shell(path, data):
                           "millimetres of metal, more than 0 and at most 10")
 
 
+def _box_overlap(a, b):
+    """The overlap of two (x0, y0, x1, y1) boxes along x and along y."""
+    return (min(a[2], b[2]) - max(a[0], b[0]), min(a[3], b[3]) - max(a[1], b[1]))
+
+
+def _box_within(inner, outer, tol=0.05):
+    return (inner[0] >= outer[0] - tol and inner[1] >= outer[1] - tol
+            and inner[2] <= outer[2] + tol and inner[3] <= outer[3] + tol)
+
+
+def lint_device_passes(path, data, lib_roots):
+    """L129 and L130: a declared pass-through is where cables can really cross.
+
+    `passes:` says that cables can cross this face here to the opposite side
+    (docs/cable-managers-design.md section 5). Nothing consumes it yet, which
+    is exactly when a declaration drifts: the picture moves and the statement
+    does not, and nobody notices until the routing work reads it.
+
+    L129 - A PASS LIES INSIDE ITS FACE AND OVERLAPS NO COMPONENT. A cable cannot
+    cross where a port or a ring stands. The one part a pass may lie in is a
+    WELL that holds it whole - the plate it is cut through: the windows of the
+    CMH-4DRB1U are holes in the floor of the panel they are punched in, and a
+    rule that reported that would be reporting the hole as an obstacle to
+    itself. A pass only partly over a well is still reported; so is one over
+    any part that is not a well.
+
+    L130 - THE PICTURE AND THE DECLARATION AGREE. A pass whose cover is `brush`
+    has a brush decor drawn over the whole of it; and a brush drawn where a
+    pass is declared says that pass is covered by a brush. A brush with no pass
+    under it is not reported - a box can carry a brush strip nobody has
+    declared yet, and the warning that wants is a different one.
+    """
+    for vname, view in (data.get("views") or {}).items():
+        view = view or {}
+        passes = view.get("passes") or []
+        if not passes:
+            continue
+        size = view.get("size") or {}
+        ch = data.get("chassis") or {}
+        vw = float(size.get("w") or ch.get("width") or 0)
+        vh = float(size.get("h") or ch.get("height") or 0)
+        vp = view_parts(view)
+        parts = []
+        for q in vp["placements"]:
+            if not q.get("at") or q.get("mate-to"):
+                continue
+            cp = resolve_component(q["ref"], lib_roots)
+            c = (load_yaml(cp) or {}) if cp else {}
+            sz = c.get("size") or {}
+            if "w" not in sz or "h" not in sz:
+                continue
+            w, h = float(sz["w"]), float(sz["h"])
+            x, y = float(q["at"][0]), float(q["at"][1])
+            if q.get("rotate") in (90, 270, -90):
+                cx, cy = x + w / 2, y + h / 2
+                x, y, w, h = cx - h / 2, cy - w / 2, h, w
+            # a well, by the aperture rule render.py applies (see L13's _well)
+            well = (bool(sz.get("d")) and c.get("kind") != "module"
+                    and (c.get("behaviour") != "mounts"
+                         or bool((c.get("relief") or {}).get("cavity"))))
+            parts.append((q["id"], (x, y, x + w, y + h), well))
+        for b in vp["bays"]:
+            bb = _decor_box(b)
+            if bb:
+                parts.append((b["id"], bb, False))
+        brushes = [(d, _decor_box(d)) for d in vp["decor"]
+                   if d.get("pattern") == "brush" and _decor_box(d)]
+        seen = set()
+        for p in passes:
+            pid = p.get("id")
+            pb = _decor_box(p)
+            if not pb:
+                continue
+            if pid in seen:
+                err(path, "L129", f"{vname}: pass-through {pid!r} is declared twice")
+            seen.add(pid)
+            if vw and vh and not _box_within(pb, (0, 0, vw, vh)):
+                err(path, "L129", f"{vname}/{pid}: the pass-through runs off the face "
+                                  f"({vw:g} x {vh:g}) - a cable cannot cross where there "
+                                  "is no face")
+            for qid, qb, well in parts:
+                ox, oy = _box_overlap(pb, qb)
+                if ox <= 0.05 or oy <= 0.05:
+                    continue
+                if well and _box_within(pb, qb):
+                    continue
+                err(path, "L129", f"{vname}/{pid}: the pass-through overlaps {qid} by "
+                                  f"{ox:.2f}x{oy:.2f}mm - a cable cannot cross where a "
+                                  "part stands. Only a well that holds it whole, the "
+                                  "plate it is cut through, may lie under it")
+            cover = p.get("cover", "open")
+            over = [(d, db) for d, db in brushes
+                    if min(_box_overlap(pb, db)) > 0.05]
+            if cover == "brush" and not any(_box_within(pb, db) for _, db in over):
+                err(path, "L130", f"{vname}/{pid}: the pass-through's cover is `brush` and "
+                                  "no brush decor covers the whole of it - draw "
+                                  "`pattern: brush` over it, or say `cover: open`")
+            if cover != "brush" and over:
+                d = over[0][0]
+                err(path, "L130", f"{vname}/{pid}: a brush decor at {d.get('at')} is drawn "
+                                  f"over the pass-through, whose cover is {cover!r} - "
+                                  "the picture and the declaration disagree")
+
+
 def _inside(pt, poly, tol=0.05):
     """A point inside a convex polygon, to within `tol` mm of its edges."""
     sign = 0
@@ -10878,6 +10982,7 @@ def main():
                 lint_device_component_attrs_resolve(f, d)
                 lint_device_spanned_exclusion(f, d, args.library)
                 lint_device_bevel(f, d, args.library)
+                lint_device_passes(f, d, args.library)
                 try:
                     dev_maturity[str(f.parent.relative_to(root / "devices"))] = \
                         d.get("maturity", "draft")

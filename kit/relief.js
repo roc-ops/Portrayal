@@ -2245,6 +2245,12 @@ export async function extractRelief(url, scope, {back = false} = {}) {
     const rect = mmRect(el);
     const e = {...rect, owner: ownerOf(el), d: +el.dataset.groove, wall: '#25282c', round: false,
                lift: liftOf(el),
+               // ON A SHEET BODY A SUNK DECOR IS A PLATE AT THAT DEPTH, as a
+               // well is (cavityShell): a brush strip filling a window punched
+               // in a panel 76 mm back is a slab there, and walls round it
+               // would stand a tube the hardware does not have
+               // (docs/cable-managers-design.md section 2, decision 6)
+               sheet: (el.closest('svg') || {dataset: {}}).dataset.shell === 'sheet',
                cavSvg: nodeSvg(el, rect), grpRect: rect,
                grpSvg: nodeSvg(el, rect), features: []};
     const t = tiltOf(el);
