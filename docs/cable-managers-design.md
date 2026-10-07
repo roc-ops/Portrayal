@@ -271,6 +271,12 @@ the vendor's.
 - `rack-side` and `rack-top`.
 - Mounting position in the DCIM exports, which have no field for it.
 
+Parts beyond the ears were out of scope here and are not now (#865): a `rack` manager
+whose end rings reach past the rack width draws its front at the 482.6 rack face, ears
+and all, places the rings past it, and states the reach in `chassis.overhang` (the
+CMH-6DR1U); a duct as wide as the rack with its flange behind it states `chassis.ears:
+behind` (the USCMH-SFDABSB2U). See docs/modelling-a-device.md, Stage 1.
+
 ## 11. Order of work
 
 1. The viewer probe for the sheet body. Done.

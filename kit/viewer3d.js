@@ -610,6 +610,7 @@ export function createViewer(container, opts = {}) {
                                 faceMM, wells, apertures,
                                 meshes, FRU_GROUPS, FRU_META, BODY_META, D, deep: F.deep(),
                                 bodyBoxMesh, dist: distAt, backSource,
+                                sheet: !!(devIndex && sheetShell(devIndex.chassis)),
                                 restyle: RESTYLE, scope: SCOPE});
       // a face with no drawing falls back to flat colour and contributes no group
       if (meshes.length > before) built[F.view] = meshes[meshes.length - 1];
@@ -731,7 +732,12 @@ export function createViewer(container, opts = {}) {
       scene.add(box);
       box.userData.bodyBox = bodyBox;
       scene.add(bodyBox);
-    } else if (faceMM.front && faceMM.front[0] > W + 0.5) {
+    } else if (faceMM.front && faceMM.front[0] > W + 0.5 &&
+               !(devIndex && sheetShell(devIndex.chassis))) {
+      // (A SHEET BODY'S RACK FACE IS NO PLATE: its ears are the floor of a
+      // well like the rest of its sheet, and the branch below builds nothing
+      // from the faces - a 25.4 mm slab across the CMH-6DR1U's front would
+      // stand where its ears are a 1.2 mm plate 88 mm back, #865.)
       // A RACK FACE IS WIDER THAN THE BODY IT BOLTS TO. Dell builds the mounting
       // flanges into the R740xd's faceplate and puts the VGA, the power button
       // and the health lamp in them, so the front drawing is 482.6 mm over a

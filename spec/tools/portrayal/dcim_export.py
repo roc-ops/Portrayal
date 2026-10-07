@@ -1470,6 +1470,12 @@ def comments_for(dev, cfg_name, cfg):
     mount = (dev.get("chassis") or {}).get("mount", "rack")
     if mount in MOUNT_PROSE:
         lines += [MOUNT_PROSE[mount], ""]
+    # PARTS BEYOND THE RACK WIDTH, which neither schema can hold either: a
+    # rack drawing reserves the rails' width, and an end ring 43 mm past each
+    # ear takes the space a vertical manager beside the posts would (#865).
+    reach = overhang_prose((dev.get("chassis") or {}).get("overhang"))
+    if reach:
+        lines += [reach, ""]
 
     ds = dev.get("datasheet") or {}
     if ds.get("url"):
@@ -1620,6 +1626,24 @@ MOUNT_PROSE = {
     "desktop": "Desktop unit; not rack-mounted.",
     "rack-face": "Mounts on the rack rail face at a rack unit; occupies no rack unit.",
 }
+
+
+def overhang_prose(overhang):
+    """`chassis.overhang` as one sentence, or None where nothing reaches (#865)."""
+    oh = overhang or {}
+    left, right = float(oh.get("left") or 0), float(oh.get("right") or 0)
+    if not (left or right):
+        return None
+    mm = lambda v: f"{v:g} mm"
+    if left == right:
+        where = f"{mm(left)} on each side"
+    elif not (left and right):
+        side = "left" if left else "right"
+        where = f"{mm(left or right)} on the {side} only, seen from the front"
+    else:
+        where = f"{mm(left)} on the left and {mm(right)} on the right, seen from the front"
+    return ("Parts reach beyond the 19-inch rack width (the rack face, ears included): "
+            f"{where}.")
 
 
 def worth_a_file(doc, dev):

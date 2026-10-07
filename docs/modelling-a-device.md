@@ -244,6 +244,19 @@ Establish `chassis.width/height/depth` and each view's `size`.
   Lint L43 warns when a front or rear face lands between 480 and 487 mm.
   A `mount: rack-face` part is the exception: it is a pair of ears and what
   hangs off them, so its ears are drawn and its face is the full 483.
+- **Three more cases, each one stated (#865).** Ears that carry parts are
+  drawn: the R740xd's front is the 482.6 rack face because its flanges hold a
+  VGA and the power button, and L43 stands down when something is seated in
+  the outer 25 mm. Parts that reach BEYOND the rack face - the CMH-6DR1U's end
+  rings, 43 mm past each ear - are ordinary placements at negative x or past
+  the view's width on that rack-face front, and `chassis.overhang: {left,
+  right}` states the reach: L150 refuses a part outside its face that the
+  figure does not cover, and L151 warns when no part reaches it. Optional
+  placements are not checked, and decor never is, since the renderer clips it
+  to the face. And a body that really is the rack's width, with its flanges
+  folded back BEHIND it (the USCMH-SFDABSB2U duct), says `chassis.ears:
+  behind`: its 482.6 is the part, its `chassis.width` says so, and L43 stands
+  down.
 - Take proportions from a figure only as fractions of a dimension you know from
   the datasheet. Two figures in one guide can disagree by twelve percent on
   absolute scale.
