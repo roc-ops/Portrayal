@@ -598,6 +598,39 @@ PART_POWER = {
     "common/orv3-busbar-connector": "other",
 }
 
+# WHERE A DEVICE HANDS POWER ON: a power OUTLET, the other half of PART_POWER
+# (docs/power-outlets-design.md, #806). A distribution panel's output circuit
+# is one, and a placement of a part listed here becomes one row of the device
+# type's `power-outlets`, named by its placement id, its `power_port` the id
+# its `fed-by` names. Keyed on the ref for the reason PART_POWER is: what the
+# part IS does not depend on which group it sits in.
+#
+# EVERY VALUE IS A PowerOutletTypeChoices VALUE IN BOTH TARGETS, read from
+# netbox-community/netbox netbox/dcim/choices.py at 64ce9e2d (TYPE_DC =
+# 'dc-terminal', TYPE_OTHER = 'other') and nautobot/nautobot
+# nautobot/dcim/choices.py at 3edb1fca (the same two). OUTLET_TYPES is that
+# shared list, and the assertion under it is not decoration: Nautobot's
+# component import form turns an unknown type into `other` without a word, so
+# a typo here would import as a different, valid-looking answer.
+OUTLET_TYPES = frozenset({"dc-terminal", "other"})
+PART_OUTLET = {
+    # ONE OUTPUT CIRCUIT OF A BREAKER PANEL, a BATT screw over an RTN screw: the
+    # two poles of one circuit, so one outlet, as one feed is one power port.
+    # `dc-terminal` is an outlet type as well as a port type upstream.
+    "amphenol-ns/output-terminal": "dc-terminal",
+    # ITS CONNECTORIZED FORM, a two-pole P40 receptacle. Neither target has a
+    # P40 (or any Anderson Powerpole) outlet type, so it is `other` with the
+    # connector as its label - OTHER_LABEL's treatment of an interface whose
+    # form factor upstream does not name.
+    "amphenol-ns/output-p40": "other",
+}
+# The label an `other` outlet carries, so it says what to plug into it.
+OUTLET_LABEL = {"amphenol-ns/output-p40": "P40"}
+assert set(PART_OUTLET.values()) <= OUTLET_TYPES, \
+    f"PART_OUTLET names a type neither target lists: {set(PART_OUTLET.values()) - OUTLET_TYPES}"
+assert all(PART_OUTLET.get(r) == "other" for r in OUTLET_LABEL), \
+    "OUTLET_LABEL labels an outlet that is not `other`"
+
 # ...AND WHAT A SUPPLY SAYS WHEN IT DRAWS NO INLET.
 #
 # PART_POWER reads a COMPOSED inlet, which is the strong form and the one to

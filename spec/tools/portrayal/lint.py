@@ -294,6 +294,10 @@ RULES = {
     "L126": ("device",     "a bevelled chassis is a solid the box can have - every edge named by two faces that meet, none bevelled twice, no face cut away and no bevel swallowed by its neighbours - its face drawings are the chassis's own size, and every part, bay and cutout on a face lies on the flat face rather than on a bevel", "name edges as two adjacent faces (`front-left`), shrink a bevel that cuts too much, drop a view `size` that differs from the chassis on a bevelled face, or move the part onto the flat face - spec/tools/portrayal/bevel.py says where it is"),
     "L127": ("device",     "a `shell: sheet` body states `chassis.thickness`, between 0 and 10 mm, and a box states none (error)", "give a sheet body the gauge its datasheet states; on a box, drop `thickness`"),
     "L128": ("device, listing", "a part-number key has no stray whitespace - none leading or trailing, none but the plain ASCII space (an error), and none splitting a run of capitals and digits between two hyphens (`-A C-`, a warning)", "retype the SKU as the vendor prints it; a space the vendor really prints inside a hyphenated token is waived with the document that shows it"),
+    "L132": ("device",     "a placement's `fed-by` names a placement on this device, in any view, whose part exports a power port (`dcim_export.PART_POWER`), and it stands on a part that exports a power outlet (`dcim_export.PART_OUTLET`) - an error, because both DCIMs refuse an outlet whose `power_port` names nothing", "name the input this output hands on, by its placement id; drop a `fed-by` on a part that is not an outlet"),
+    "L133": ("device",     "a placement's `through` names a bay on this device, in any view - the breaker or fuse position the circuit runs through (an error)", "name the bay by its id, as the front face spells it"),
+    "L134": ("device",     "every placement of a part in `dcim_export.PART_OUTLET` states `fed-by` - a warning at `draft` and `modelled`, an error at `verified`: an outlet with no feed imports, and names no power port", "state `fed-by: <input id>` on each output, read from the panel's own wiring or datasheet"),
+    "L135": ("device",     "one position, one circuit - no two placements name the same `through` (a warning)", "correct the `through` that names the wrong position; if two outputs really are paralleled behind one breaker, waive with the document that says so"),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -301,7 +305,13 @@ RULES = {
 # gap is named here rather than read as a deleted rule. The catalogue test
 # counts these as present, and fails once a reserved code is also in RULES -
 # whichever branch lands second deletes its line.
-RESERVED = {}
+RESERVED = {
+    # roc-ops/Portrayal#246's change takes L129-L131; #806 (power outlets) was
+    # written beside it and took L132-L135.
+    "L129": "a rule landing on another branch (roc-ops/Portrayal#246)",
+    "L130": "a rule landing on another branch (roc-ops/Portrayal#246)",
+    "L131": "a rule landing on another branch (roc-ops/Portrayal#246)",
+}
 
 # A CODE THAT NAMED A RULE WHICH IS GONE. A device manifest waives a rule by its
 # code (`lint.waive`), and so does the baseline, so a code is an address: once
@@ -6401,6 +6411,67 @@ def lint_device_mount(path, data):
                           "describes a rack this box is not in - drop it")
 
 
+def lint_device_power_outlets(path, data):
+    """L132-L135: a power outlet names its feed, and its position resolves.
+
+    `fed-by` and `through` cross a face - the output is on the rear and its
+    breaker on the front - so both are bare ids resolved over the whole device,
+    not over the view they stand in (#806, docs/power-outlets-design.md).
+
+    L132 `fed-by` names a placement whose part exports a power port, on a part
+    that exports an outlet: both targets import an outlet's `power_port` by
+    name within the same type and refuse one that names nothing, so this is
+    an error. L133 `through` names a bay - the position whose occupant protects
+    the circuit. L134 every outlet states a feed: an outlet with none imports,
+    and is the incomplete model #806 exists to end, so a warning below
+    `verified` and an error at it. L135 one position, one circuit: two outputs
+    paralleled behind one breaker are possible, so a warning that can carry
+    the waiver saying so.
+    """
+    loud = err if data.get("maturity") == "verified" else warn
+    placed, bays = {}, set()
+    for vname, view in (data.get("views") or {}).items():
+        vp = view_parts(view or {})
+        for p in vp["placements"]:
+            placed.setdefault(p["id"], []).append((vname, p))
+        bays.update(b["id"] for b in vp["bays"])
+    feeds = {pid for pid, ps in placed.items()
+             if any(p["ref"].split("@")[0] in dcim_export.PART_POWER for _v, p in ps)}
+    through = {}
+    for pid, ps in sorted(placed.items()):
+        for vname, p in ps:
+            ref = p["ref"].split("@")[0]
+            outlet = ref in dcim_export.PART_OUTLET
+            fed = p.get("fed-by")
+            if fed is not None and not outlet:
+                err(path, "L132", f"{vname}/{pid}: states `fed-by: {fed}`, but {ref} "
+                                  "exports no power outlet, so nothing carries it - "
+                                  "drop it, or add the part to dcim_export.PART_OUTLET")
+            elif fed is not None and fed not in feeds:
+                what = ("no placement on this device" if fed not in placed else
+                        "a placement whose part exports no power port")
+                err(path, "L132", f"{vname}/{pid}: `fed-by: {fed}` names {what}. It "
+                                  "must name the input this output hands on - a "
+                                  "placement whose part is in dcim_export.PART_POWER")
+            elif outlet and fed is None:
+                loud(path, "L134", f"{vname}/{pid}: a power outlet ({ref}) states no "
+                                   "`fed-by`, so its export names no feeding power port")
+            via = p.get("through")
+            if via is None:
+                continue
+            if via not in bays:
+                err(path, "L133", f"{vname}/{pid}: `through: {via}` names no bay on this "
+                                  "device - it is the breaker or fuse position the "
+                                  "circuit runs through")
+            through.setdefault(via, []).append(f"{vname}/{pid}")
+    for via, who in sorted(through.items()):
+        if len(who) > 1:
+            warn(path, "L135", f"{', '.join(who)} all run `through: {via}`. One position "
+                               "protects one circuit; if these outputs really are "
+                               "paralleled behind one breaker, waive with the document "
+                               "that says so")
+
+
 def lint_device_shell(path, data):
     """L127: a sheet body states its gauge, and a box states none.
 
@@ -10837,6 +10908,7 @@ def main():
                 lint_device_power_home(f, d)
                 lint_device_mount(f, d)
                 lint_device_shell(f, d)
+                lint_device_power_outlets(f, d)
                 lint_device_power_stated(f, d)
                 lint_device_provenance_confidence(f, d)
                 lint_quoted_prose(f, d)
