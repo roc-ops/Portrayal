@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: cmh-dfds2u-cover
-version: 1.0.0
+version: 1.1.0
 class: mechanical
 behaviour: mounts
 description: >-
@@ -19,14 +19,21 @@ provenance:
     over the finger heads.
   color: >-
     estimated - Color: Black in the specification table.
-  mark: >-
-    drawing - FS renders its round logo mark on the cover near the left end. A vendor
-    mark is never drawn, and nothing is reserved for it.
+  logo-zone: >-
+    reserved, not drawn - FS prints its round mark and FS wordmark on the cover near
+    the left end; the library reproduces no vendor logo. Box measured on gallery
+    image 4 of the FS product page, a straight-on front render, at 3.41 px/mm
+    across off the 267.1 between the left edges of the two top clips (910 px) and
+    3.28 px/mm down off the 84.1 of the plate, the render looking down a little; to
+    about 0.7 mm across and 1 mm down. The mark is the same size as on the
+    CMH-SFDS1U cover but sits 6.5 further right, so the two do not share a box.
+    Both covers of the duct are this part; FS renders only the front one.
 size: {w: 440.0, h: 84.1}
 size-confidence: {w: drawing, h: drawing}
 attrs: {material: Steel}
 elements:
   plate: {at: [0.0, 0.0], size: [440.0, 84.1], class: bezel}
+  logo-zone: {at: [33.4, 6.7], size: [20.8, 9.8], class: label}
   clip-1: {at: [75.4, 0.0], size: [22.1, 23.0], class: bezel}
   clip-2: {at: [342.5, 0.0], size: [22.1, 23.0], class: bezel}
   clip-3: {at: [75.4, 61.1], size: [22.1, 23.0], class: bezel}
