@@ -376,10 +376,13 @@ guides draw the screws facing the viewer, the barriers between the poles and eac
 open toward the legend printed below the block, so a seated lug's wire leaves over the
 block's lower edge with no turn.
 
-**A configuration cannot turn an occupant on its own.** `occupants:` carries a ref, an
-id, attrs and a skin; a seat applies its host's turn and nothing else. That is right for
-a barrier block and is a limit for a ground stud, where the direction of the lug is the
-installer's choice.
+**The lug on a terminal screw does not turn (#829).** A configuration may turn an
+occupant on its seat with `turn:` where the seat allows it (section 13.4). The
+`terminal-stud` interface allows the four right angles, and each terminal screw narrows
+that to 0 on its own `mate` point (`turns: [0]`): the barriers either side of the pole
+fix the direction, and a turn there would lay the lug across the barrier. L146 and the
+build refuse any other turn on a pole, and a lug seated on one draws exactly what it drew
+before.
 
 ### 12.7 Limits, and what is not covered
 
@@ -499,9 +502,53 @@ kit, not the DCIM exports. It is a fact carried beside the slot.
 
 ### 13.4 Which way the wire leaves
 
-A seat applies its host's turn and a configuration cannot turn an occupant (section
-12.6), so a lug's wire leaves in the lug's own "down" turned by the placement. Seating a
-lug on every one of the 147 seats in the library gives:
+**A configuration states the turn, or the build chooses it (#829).** `occupants:` takes
+`turn:`, the occupant's turn on its seat, RELATIVE to the seat: `render.solve_seat`
+draws it at the host's turn, plus any axis a spanning host's pair runs on, plus the
+turn. The turns a seat allows are its interface's `turns` in
+`spec/schemas/connectors.yaml` narrowed by the part's presented point
+(`manifest.allowed_turns`); `terminal-stud` allows 0, 90, 180 and 270, every ground stud
+part takes all four, and an interface naming none allows 0 alone. L146 holds a
+configuration's `turn:` to the list; L147 holds a point's `turns` to a subset of its
+interface's.
+
+**Where a configuration states no turn, the default is rule B, "may leave the face".**
+`render.default_seat_turn` takes the whole lug, its 10 stub of wire included, turned
+about its own `mate`, and tries the four directions in the order an installer would:
+DOWN; toward the NEARER SIDE EDGE of the face; the other side; UP. It takes the first
+in which the lug crosses no placement, no bay and no other seat. A part the stud stands
+on is not crossed, and the other studs of a terminal that composes them are other
+seats. Running past the edge of the face is allowed: on a 1RU rear most studs sit low,
+and a wire leaves the box. A printed legend is a soft preference: of the directions that
+cross nothing hard, the one over the fewest legends wins, in the same order. The answer
+is computed from the view as authored, so one answer serves every configuration; it is
+published per view as `seat-turns` in configs.json (`{slot key: {ref: turn}}`, a nested
+slot by its path, `ground-studs-rear/stud-tr`), each slot publishes its `turns`, and the
+seated occupant carries `data-seat-turn`. The kit seats by those and never re-derives
+the default; a reader's turn travels in its own `turn=` parameter of a share link.
+
+Across the library, 2026-10-07, 147 seats on 61 devices:
+
+| the wire leaves | seats |
+|---|---|
+| down | 98 |
+| toward the left edge | 25 |
+| toward the right edge | 18 |
+| up | 6 |
+
+No default crosses a part, a bay or another seat. Two cross a legend, the FAN legend
+beside `ground-2` on the UfiSpace S9600-102XC and S9601-102XC, where every direction
+that crosses no part crosses that or another. The crossings the seat's own direction
+made, listed below, are gone: on the Supermicro SYS-111E-FWTR and SYS-111E-FDWTR the
+wire leads up, away from LAN1; on the Juniper MX150 the second stud leads up, away from
+the ESD jack; on the Edgecore DCS500 `ground-0` leads to the right of the fan bay; and
+every upper stud of a pair drawn one above the other leads sideways, clear of the lower
+stud. `spec/tests/test_occupant_turn.py` pins the distribution and the two residual
+legends.
+
+**What the seat's own direction gave, turn 0, kept as the record it was.** A lug's wire
+leaves in the lug's own "down" turned by the placement. Seating a lug on every one of
+the 147 seats in the library at turn 0 gives:
 
 - **143 leave down the face and 4 leave to the left.** The only turned placements are the
   two on the Edgecore DCS500 and the two on the Nokia FX-16 side panels, all at
@@ -530,8 +577,8 @@ lug on every one of the 147 seats in the library gives:
 - None runs off the top or a side of its face.
 
 On a ground point the direction of the lug is the installer's choice, so every one of
-these is a limit of the model and not a reading of the hardware. Nothing is turned here:
-turning an occupant needs a key a configuration does not have.
+these was a limit of the model and not a reading of the hardware. The default above
+answers them; a configuration that knows the installed direction states it.
 
 ### 13.5 What this shows that was wrong already
 
@@ -577,7 +624,8 @@ answers the last two. It is the same part `nokia/sr-1-dc-terminal-block@1` waits
   `juniper/mx204-ground-plate@1`, `juniper/mx304-ground-plate@1` and the ground point on
   `maiaedge/pbc-2000-rear-bracket@1`.
 - **The terminals drawn inside DC power supplies and power entry modules.**
-- **Turning a lug,** and a lug of another size: every seat takes the one nominal lug.
+- **A lug of another size:** every seat takes the one nominal lug. Turning one is
+  section 13.4.
 
 `spec/tests/test_ground_stud_lugs.py` holds each part's interface and seat, the Casa
 terminal's three composed studs and the art they kept, a census of all 145 placements with
@@ -752,6 +800,13 @@ right side out.
   document for that device states it.
 - 2026-10-06: no lug is turned and no ground part is redrawn; the overlaps and overhangs
   that result are recorded.
+- 2026-10-07: a configuration turns a seated occupant with `turn:`, relative to the seat,
+  one of the turns its host allows: the interface's `turns` narrowed by the presented
+  point's. `terminal-stud` allows the four right angles; a terminal screw allows 0 (#829).
+- 2026-10-07: where none is stated, the default is rule B, "may leave the face": down,
+  the nearer side, the other side, up - the first that crosses no part, bay or other
+  seat - with legends a soft preference, published as `seat-turns`; a share link
+  carries a turn in its own `turn=` parameter (#829).
 - 2026-10-07: the P40 receptacle presents a vendor interface, `p40`, citing no standard,
   and gains its mate point and nothing else.
 - 2026-10-07: one P40 plug, `amphenol-ns/p40-plug@1`, drawn from the wire side with a stub

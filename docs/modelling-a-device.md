@@ -502,6 +502,24 @@ Now populate. Reuse before building.
 Occupants (a transceiver in a cage) use `mate-to:` and carry no position of
 their own.
 
+**An occupant turns with its host, and may turn further on a seat that allows
+it.** A configuration's `occupants:` value can be a mapping, and its `turn:`
+is how far the occupant is turned on its seat, in degrees, relative to the
+seat: `occupants: {ground-stud-1: {ref: generic/ring-lug@1, turn: 90}}` leads
+the lug's wire to the face's left on an upright stud. The turns a seat allows
+are its interface's `turns` in `spec/schemas/connectors.yaml`, narrowed by the
+`turns` on the part's presented connection point: a ground stud allows 0, 90,
+180 and 270, because the direction of a lug there is the installer's choice; a
+barrier block's terminal screw allows 0 alone; a cage allows 0 alone. L146
+holds a `turn:` to the list and the build refuses any other. Leave `turn:` out
+and the build chooses: the wire goes down, then toward the nearer side edge of
+the face, then the other side, then up, taking the first direction in which
+the whole lug crosses no part, no bay and no other seat. Running past the edge
+of the face is allowed; a printed legend is avoided where a direction allows
+it. The choice is published per view as `seat-turns` in configs.json, and the
+explorer seats by it. State a turn only where a source shows the installed
+lug (docs/connectors-dc-terminal-design.md, section 13.4).
+
 A placement that presents **more than one interface** says so with
 `interfaces:`. A Compact SFP (CSFP) cage is the case that needs it: the module
 fits a standard SFP cage and carries two independent BiDi fibre connections,
