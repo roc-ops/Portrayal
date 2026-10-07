@@ -1,0 +1,93 @@
+format: 1
+kind: component
+name: cmh-5dr1u-n-ring
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  A steel D-ring of the FS CMH-5DR1U-N and CMH-6DR1U cable managers seen from the
+  front - a strip bent into an open loop that stands off a flat panel, its shorter
+  upper arm hooking down and its longer lower arm curling up in front of it, the gap
+  between them the slit a cable is laid in through
+provenance:
+  size: >-
+    drawing - the front view of the CMH-5DR1U-N in FS's Horizontal Cable Managers with
+    D-rings datasheet, at 2.161 px/mm across from its 482.6 line (1043 px) and 2.227
+    px/mm down from its 44 (98 px), a 3 % difference between the axes, so widths are
+    read across and heights down. Each ring is a pair of lines 27.5 px apart, 12.7 mm,
+    all five the same; the CMH-6DR1U front view of the same datasheet gives 12.4. The
+    side view gives the ring's outer height, 92 px, 41.3 mm, centred on the panel, and
+    the CMH-6DR1U side view dimensions the same ring 1.7 in [42mm].
+  same-as-cmh-4drb1u-ring: >-
+    drawing - NOT `fs/cmh-4drb1u-ring@1`, though the arms match. That ring is 27.5 px
+    wide on the same datasheet too, and its arms are the same 3 in and 3.4 in, but its
+    outer height reads 88 px down at 2.227, 39.5 mm, against 92 px here, and it starts
+    3.1 mm below the top of its recessed panel where this one starts 1.3 below a flat
+    one. Four pixels on one document, read the same way on both.
+  relief: >-
+    drawing - the side view of the same figure, which dimensions the upper arm 3 in
+    [77mm] and the lower 3.4 in [88mm] from the face of the panel. Read at 2.227 px/mm
+    down: the upper arm's hooked end comes 20 mm down from the top of the ring, and
+    the lower arm's end curls 20.7 mm up from the bottom, so the two ends stand 0.7 mm
+    apart in height and 11 mm apart in depth - that gap is the slit. The strip is
+    taken as 1.2 mm, the figure the same datasheet dimensions for the CMH-4DRB1U's
+    ring; no view of this one dimensions it. The drawing leans the lower arm's end
+    outward by about 8 mm; it is built upright, as flat plates with square bends.
+  orientation: >-
+    photo-measured - FS's renders of both managers (#177305 gallery image 1, #64184
+    feature image 1) show the short arm on top with its hook down and the long arm
+    below curling up. The datasheet's side view of the CMH-6DR1U draws the ring the
+    other way up, with the same two dimensions; the renders are taken, because they
+    agree with each other and with the CMH-5DR1U-N drawing.
+  material: >-
+    datasheet - "D-rings Material: Steel, Powder-coated Black" for both managers in the
+    specification table of FS's Horizontal Cable Managers with D-rings datasheet.
+  guide: >-
+    drawing - the clear opening inside the loop on the CMH-5DR1U-N side view: the
+    ring's 41.3 less the strip at top and bottom, 39 mm, by the 77 of the upper arm
+    less the strip, 75.8 mm, to the hook. The lower arm reaches further, to 88, but
+    the hook is where a bundle wider than the slit is held. Seen looking along the
+    panel, which is the run: `w` is the height and `h` the depth out of the panel.
+  color: >-
+    estimated - black, darker than the panel so that it separates from it. Every image
+    FS publishes of the part is a render.
+size: {w: 12.7, h: 44}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: 'Steel, Powder-coated Black'}
+guide: {kind: ring, aperture: {w: 39.0, h: 75.8}, run: x}
+elements:
+  back: {at: [0.0, 1.3], size: [12.7, 41.4], class: bezel}
+  arm-top: {at: [0.0, 1.3], size: [12.7, 1.2], class: bezel}
+  hook: {at: [0.0, 1.3], size: [12.7, 20.0], class: bezel}
+  arm-bottom: {at: [0.0, 41.5], size: [12.7, 1.2], class: bezel}
+  lip: {at: [0.0, 22.0], size: [12.7, 20.7], class: bezel}
+relief:
+  features:
+    - node: back
+      out: 1.2
+      color: '#0c0d0f'
+      confidence: estimated
+      source: the strip taken as the 1.2 mm FS dimensions for the CMH-4DRB1U ring on the same datasheet
+    - node: arm-top
+      out: 77.0
+      color: '#0c0d0f'
+      confidence: drawing
+      source: the side view of the CMH-5DR1U-N in FS's D-rings datasheet, the upper arm 3 in [77mm]
+    - node: hook
+      lift: 75.8
+      out: 77.0
+      color: '#0c0d0f'
+      confidence: drawing
+      source: the same view, the upper arm's end hooking 20 mm down
+    - node: arm-bottom
+      out: 88.0
+      color: '#0c0d0f'
+      confidence: drawing
+      source: the same view, the lower arm 3.4 in [88mm]
+    - node: lip
+      lift: 86.8
+      out: 88.0
+      color: '#0c0d0f'
+      confidence: drawing
+      source: the same view, the lower arm's end curling 20.7 mm up
+skins: [default]
