@@ -1,7 +1,7 @@
 """Tilted facets: the projection shared by render.py and lint.py.
 
 A facet is a relief feature angled `deg` off the panel, facing up/down/left/right
-(docs/superpowers/specs/2026-09-24-tilted-facets-design.md). A part `on` a facet keeps
+(docs/tilted-facets-design.md). A part `on` a facet keeps
 its true size; what the front view shows is that size foreshortened by cos(deg)
 along the facet's axis. Everything here is pure so the two consumers cannot disagree.
 """

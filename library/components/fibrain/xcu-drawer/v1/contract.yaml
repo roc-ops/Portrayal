@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: xcu-drawer
-version: 1.0.0
+version: 1.1.0
 class: mechanical
 behaviour: fills
 profile: optical
@@ -57,22 +57,106 @@ bays:
   slot-1:
     at: [6.27, 0.6]
     size: [100.0, 21.0]
-    accepts: [fibrain/xbcs0@1, fibrain/xmn1051gb@1, fibrain/xmn1041gb@1, fibrain/xmi1051ga@1, fibrain/xmi1041ga@1]
+    accepts:
+      - fibrain/xbcs0@1
+      - fibrain/xmn1051gb@1
+      - fibrain/xmn1041gb@1
+      - fibrain/xmi1051ga@1
+      - fibrain/xmi1041ga@1
+      - fibrain/xmi1021ca@1
+      - fibrain/xmi1021da@1
+      - fibrain/xmi1021ha@1
+      - fibrain/xmi1021ga@1
+      - fibrain/xmi1031ga@1
+      - fibrain/xmi1041ca@1
+      - fibrain/xmi1041da@1
+      - fibrain/xmi1041ha@1
+      - fibrain/xmn1021cb@1
+      - fibrain/xmn1021db@1
+      - fibrain/xmn1021hb@1
+      - fibrain/xmn1021gb@1
+      - fibrain/xmn1031gb@1
+      - fibrain/xmn1041cb@1
+      - fibrain/xmn1041db@1
+      - fibrain/xmn1041hb@1
     default: fibrain/xbcs0@1
   slot-2:
     at: [112.54, 0.6]
     size: [100.0, 21.0]
-    accepts: [fibrain/xbcs0@1, fibrain/xmn1051gb@1, fibrain/xmn1041gb@1, fibrain/xmi1051ga@1, fibrain/xmi1041ga@1]
+    accepts:
+      - fibrain/xbcs0@1
+      - fibrain/xmn1051gb@1
+      - fibrain/xmn1041gb@1
+      - fibrain/xmi1051ga@1
+      - fibrain/xmi1041ga@1
+      - fibrain/xmi1021ca@1
+      - fibrain/xmi1021da@1
+      - fibrain/xmi1021ha@1
+      - fibrain/xmi1021ga@1
+      - fibrain/xmi1031ga@1
+      - fibrain/xmi1041ca@1
+      - fibrain/xmi1041da@1
+      - fibrain/xmi1041ha@1
+      - fibrain/xmn1021cb@1
+      - fibrain/xmn1021db@1
+      - fibrain/xmn1021hb@1
+      - fibrain/xmn1021gb@1
+      - fibrain/xmn1031gb@1
+      - fibrain/xmn1041cb@1
+      - fibrain/xmn1041db@1
+      - fibrain/xmn1041hb@1
     default: fibrain/xbcs0@1
   slot-3:
     at: [218.81, 0.6]
     size: [100.0, 21.0]
-    accepts: [fibrain/xbcs0@1, fibrain/xmn1051gb@1, fibrain/xmn1041gb@1, fibrain/xmi1051ga@1, fibrain/xmi1041ga@1]
+    accepts:
+      - fibrain/xbcs0@1
+      - fibrain/xmn1051gb@1
+      - fibrain/xmn1041gb@1
+      - fibrain/xmi1051ga@1
+      - fibrain/xmi1041ga@1
+      - fibrain/xmi1021ca@1
+      - fibrain/xmi1021da@1
+      - fibrain/xmi1021ha@1
+      - fibrain/xmi1021ga@1
+      - fibrain/xmi1031ga@1
+      - fibrain/xmi1041ca@1
+      - fibrain/xmi1041da@1
+      - fibrain/xmi1041ha@1
+      - fibrain/xmn1021cb@1
+      - fibrain/xmn1021db@1
+      - fibrain/xmn1021hb@1
+      - fibrain/xmn1021gb@1
+      - fibrain/xmn1031gb@1
+      - fibrain/xmn1041cb@1
+      - fibrain/xmn1041db@1
+      - fibrain/xmn1041hb@1
     default: fibrain/xbcs0@1
   slot-4:
     at: [325.08, 0.6]
     size: [100.0, 21.0]
-    accepts: [fibrain/xbcs0@1, fibrain/xmn1051gb@1, fibrain/xmn1041gb@1, fibrain/xmi1051ga@1, fibrain/xmi1041ga@1]
+    accepts:
+      - fibrain/xbcs0@1
+      - fibrain/xmn1051gb@1
+      - fibrain/xmn1041gb@1
+      - fibrain/xmi1051ga@1
+      - fibrain/xmi1041ga@1
+      - fibrain/xmi1021ca@1
+      - fibrain/xmi1021da@1
+      - fibrain/xmi1021ha@1
+      - fibrain/xmi1021ga@1
+      - fibrain/xmi1031ga@1
+      - fibrain/xmi1041ca@1
+      - fibrain/xmi1041da@1
+      - fibrain/xmi1041ha@1
+      - fibrain/xmn1021cb@1
+      - fibrain/xmn1021db@1
+      - fibrain/xmn1021hb@1
+      - fibrain/xmn1021gb@1
+      - fibrain/xmn1031gb@1
+      - fibrain/xmn1041cb@1
+      - fibrain/xmn1041db@1
+      - fibrain/xmn1041hb@1
     default: fibrain/xbcs0@1
 faces:
   plan: {ref: fibrain/xcu-drawer-plan@1}
@@ -89,7 +173,13 @@ provenance:
     centre-line front render of the 1U sibling XHU00; see the device.
   accepts: >-
     datasheet - '48xSC SX / LC DX / E2000 (4 adapter holders)'. Every Fibrain
-    holder this library models is in every slot. THE DEFAULT IS THE BLIND
+    holder this library models is in every slot. WHAT THE DATASHEET SELLS IS
+    NARROWER THAN WHAT A SLOT TAKES: its configuration table offers 6, 12, 24
+    or 48 SC adapters and 6, 12 or 24 LC duplex ones, the panel's 48 splices,
+    and prints no 48 for LC. A 12-port LC duplex holder fits a slot like any
+    other XM holder, and two of them are the 24-adapter fill; four would be
+    96 fibres in a 48-splice panel, which Fibrain does not offer and no
+    configuration here seats. THE DEFAULT IS THE BLIND
     COVER, XBCS0, the part Fibrain makes for an empty HD slot; the device's
     orderable configurations seat the holders each variant ships with.
   latches: >-

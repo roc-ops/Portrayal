@@ -1,17 +1,28 @@
 # @portrayal/kit
 
-The consumer half of [Portrayal](../README.md). It reads compiled artifacts and
-does something with them — draws them, lets you inspect them, exports them.
+The consumer half of [Portrayal](https://github.com/roc-ops/Portrayal#readme).
+It reads compiled artifacts and does something with them — draws them, lets
+you inspect them, exports them.
 
 **It never reads YAML.** That line is the whole point of this package: the
 manifests, the component contracts and the schema live in `spec/` and `library/`
 and are the compiler's business. Everything here works from what `build.sh`
 publishes, which means a consumer needs the artifacts and not a checkout.
 
+## Install
+
+```sh
+npm install @portrayal/kit
+```
+
+`three` is an optional peer dependency, needed only for the 3D half (see
+[three.js](#threejs) below).
+
 ## What it reads
 
 Everything in `library/dist/`, documented as a contract in
-[`library/README.md`](../library/README.md). The short version:
+[`library/README.md`](https://github.com/roc-ops/Portrayal/blob/main/library/README.md).
+The short version:
 
 - `<device>.<config>.<view>.svg` — the drawing. Addressable: `--` DOM ids, `/`
   data-paths. Its `<metadata>` names the source it was drawn from by
@@ -57,6 +68,8 @@ jsDelivr with `?dist=cdn` (and `&index=<version>`).
 | `shell.js` | the explorer shell — device picker, view switching, tree |
 | `viewer3d.js` | 2D→3D: rasterises each face onto a chassis-sized box, adds relief meshes; a host can hold coloured marks on many parts (`setMarks`) and paint a lamp its own colour (`setLampColors`) |
 | `relief.js` | turns `data-depth` / `data-z-*` annotations into geometry |
+| `bevel.js` | a bevelled chassis body from the polygons the build publishes, triangulated and mapped for the 3D view |
+| `lamps.js` | animated lamps in 3D: each blinking lamp drawn once per keyframe and swapped by the clock (used by `viewer3d.js`, not exported on its own) |
 | `marks.js` | annotation and callouts |
 | `states.js` | state toggling (LEDs, link states) and what a display can read |
 | `share.js` | GLB and USDZ export |
@@ -65,6 +78,7 @@ jsDelivr with `?dist=cdn` (and `&index=<version>`).
 | `fields.js` | writing a field on a part at runtime - its text and its colour, the build's rule, for 2D and 3D alike; and what a form of a part's fields needs: its rows (`fieldRows`), whether a value is one the field takes (`fieldAccepts`), and the `fields=` location string (`encodeFields`, `decodeFields`) |
 | `devsel.js` | device selection and filtering - hardware by its maker, and each NOS vendor's listings under that vendor (`listings.json`, #709) |
 | `nosnames.js` | what the chosen listing's NOS calls each port (`swp7`, `Ethernet24`, `ge100-0/0/7`), expanded by the same grammar as the DCIM export (#712) |
+| `optical.js` | where a fibre goes: an optical module's front number and far end for a path, read from `components.json` |
 | `dist.js` | artifact fetching, and where each file is: a build directory or the npm packages |
 | `zones.js` | the ports and bays of a compiled face, each with its box in millimetres - what the diagram exports put a connectable shape over |
 | `drawio.js` | draw.io: a shape library, a rack elevation, or one live drawing as a `.drawio` (`toDrawio`), with a named connection point per port |

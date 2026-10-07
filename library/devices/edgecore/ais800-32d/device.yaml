@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ais800-32d
-version: 1.0.5
+version: 1.1.0
 maturity: modelled
 manufacturer: Edgecore
 model: AIS800-32D
@@ -15,20 +15,6 @@ description: >-
   this one's QSFP-DD800 wall - and the two walls are laid out differently, which is the whole reason they
   are two models.
 profile: networking
-lint:
-  waive:
-    L39: >-
-      THE WARNING IS RIGHT AND THE HOLE LINT WOULD ACCEPT IS A FALSE CLAIM, which is the CSR440's L76
-      case again. The thirty-two port lamps are common/qsfp-lane-leds-column@1, a column of FOUR windows,
-      and expand.py declines by design to punch a multi-window lamp because a single 1.8 x 11.4 slot would
-      claim the metal has a slot rather than four windows. THE METAL HAS BEEN READ: on the elevation each
-      column shows four round windows about 1.4 mm across at y 7.32, 10.39, 13.36 and 16.42 for the upper
-      port and 23.25, 26.32, 29.48 and 32.45 for the lower, a 3.04 mm pitch the part's own lanes land
-      on within 0.15 mm. THE HONEST HOLES WERE TRIED AND LINT REJECTED THEM: four 1.4 mm windows per column
-      each cover about 7.5% of the column's footprint, and L39's own coverage test accepts a lamp only
-      when ONE hole covers more than half of it - so the four true windows do not count, and the one hole
-      that would count is the slot the tool itself refuses. The lanes reach the 3D build as domes on the
-      column; the panel is drawn without a slot; this records why the warning stands.
 provenance:
   stack-orientation:
     confidence: estimated
@@ -172,7 +158,12 @@ provenance:
       ONE legend for the port - "QSFP-DD800 LEDs: Yellow (800G), Blue (400G), White (200G), Green (100G)"
       - and draws four windows. common/qsfp-lane-leds-column@1 hit the same conflict on the DCS510 and
       reduced its states to the off/on default rather than invent a per-lamp vocabulary; that is inherited
-      here. See the port-lamp-semantics gap.
+      here. See the port-lamp-semantics gap. THE FOUR WINDOWS ARE PUNCHED AS FOUR ROUND 1.4 mm CUTOUTS
+      PER PORT, `led-port-N-lane-K`, each derived from the seated column's own lane element rather than
+      measured again, so they land on the rows above within 0.2 mm. expand.py punches only a lamp with
+      one opening, so these are written out by hand; one 1.8 x 11.4 slot would claim metal the elevation
+      does not show. Until #395 L39 accepted a lamp only when one hole covered more than half of it, so
+      these four did not count and the device waived the warning.
   the-sfp28-cages-have-a-lamp-each:
     confidence: measured
     note: >-
@@ -435,6 +426,134 @@ views:
       - {id: led-fan, at: [417.51, 39.15], size: [2.8, 1.6], shape: rect}
       - {id: led-psu1, at: [422.86, 39.15], size: [2.8, 1.6], shape: rect}
       - {id: led-psu2, at: [428.3, 39.15], size: [2.8, 1.6], shape: rect}
+      - {id: led-port-1-lane-1, at: [5.35, 6.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-1-lane-2, at: [5.35, 9.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-1-lane-3, at: [5.35, 12.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-1-lane-4, at: [5.35, 15.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-2-lane-1, at: [5.35, 22.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-2-lane-2, at: [5.35, 25.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-2-lane-3, at: [5.35, 28.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-2-lane-4, at: [5.35, 31.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-3-lane-1, at: [29.59, 6.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-3-lane-2, at: [29.59, 9.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-3-lane-3, at: [29.59, 12.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-3-lane-4, at: [29.59, 15.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-4-lane-1, at: [29.59, 22.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-4-lane-2, at: [29.59, 25.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-4-lane-3, at: [29.59, 28.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-4-lane-4, at: [29.59, 31.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-5-lane-1, at: [53.83, 6.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-5-lane-2, at: [53.83, 9.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-5-lane-3, at: [53.83, 12.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-5-lane-4, at: [53.83, 15.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-6-lane-1, at: [53.83, 22.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-6-lane-2, at: [53.83, 25.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-6-lane-3, at: [53.83, 28.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-6-lane-4, at: [53.83, 31.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-7-lane-1, at: [78.07, 6.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-7-lane-2, at: [78.07, 9.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-7-lane-3, at: [78.07, 12.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-7-lane-4, at: [78.07, 15.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-8-lane-1, at: [78.07, 22.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-8-lane-2, at: [78.07, 25.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-8-lane-3, at: [78.07, 28.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-8-lane-4, at: [78.07, 31.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-9-lane-1, at: [102.31, 6.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-9-lane-2, at: [102.31, 9.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-9-lane-3, at: [102.31, 12.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-9-lane-4, at: [102.31, 15.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-10-lane-1, at: [102.31, 22.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-10-lane-2, at: [102.31, 25.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-10-lane-3, at: [102.31, 28.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-10-lane-4, at: [102.31, 31.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-11-lane-1, at: [126.55, 6.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-11-lane-2, at: [126.55, 9.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-11-lane-3, at: [126.55, 12.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-11-lane-4, at: [126.55, 15.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-12-lane-1, at: [126.55, 22.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-12-lane-2, at: [126.55, 25.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-12-lane-3, at: [126.55, 28.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-12-lane-4, at: [126.55, 31.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-13-lane-1, at: [150.8, 6.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-13-lane-2, at: [150.8, 9.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-13-lane-3, at: [150.8, 12.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-13-lane-4, at: [150.8, 15.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-14-lane-1, at: [150.8, 22.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-14-lane-2, at: [150.8, 25.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-14-lane-3, at: [150.8, 28.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-14-lane-4, at: [150.8, 31.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-15-lane-1, at: [175.04, 6.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-15-lane-2, at: [175.04, 9.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-15-lane-3, at: [175.04, 12.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-15-lane-4, at: [175.04, 15.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-16-lane-1, at: [175.04, 22.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-16-lane-2, at: [175.04, 25.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-16-lane-3, at: [175.04, 28.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-16-lane-4, at: [175.04, 31.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-17-lane-1, at: [199.28, 6.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-17-lane-2, at: [199.28, 9.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-17-lane-3, at: [199.28, 12.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-17-lane-4, at: [199.28, 15.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-18-lane-1, at: [199.28, 22.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-18-lane-2, at: [199.28, 25.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-18-lane-3, at: [199.28, 28.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-18-lane-4, at: [199.28, 31.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-19-lane-1, at: [223.52, 6.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-19-lane-2, at: [223.52, 9.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-19-lane-3, at: [223.52, 12.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-19-lane-4, at: [223.52, 15.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-20-lane-1, at: [223.52, 22.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-20-lane-2, at: [223.52, 25.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-20-lane-3, at: [223.52, 28.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-20-lane-4, at: [223.52, 31.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-21-lane-1, at: [247.76, 6.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-21-lane-2, at: [247.76, 9.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-21-lane-3, at: [247.76, 12.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-21-lane-4, at: [247.76, 15.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-22-lane-1, at: [247.76, 22.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-22-lane-2, at: [247.76, 25.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-22-lane-3, at: [247.76, 28.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-22-lane-4, at: [247.76, 31.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-23-lane-1, at: [272.0, 6.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-23-lane-2, at: [272.0, 9.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-23-lane-3, at: [272.0, 12.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-23-lane-4, at: [272.0, 15.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-24-lane-1, at: [272.0, 22.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-24-lane-2, at: [272.0, 25.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-24-lane-3, at: [272.0, 28.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-24-lane-4, at: [272.0, 31.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-25-lane-1, at: [296.24, 6.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-25-lane-2, at: [296.24, 9.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-25-lane-3, at: [296.24, 12.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-25-lane-4, at: [296.24, 15.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-26-lane-1, at: [296.24, 22.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-26-lane-2, at: [296.24, 25.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-26-lane-3, at: [296.24, 28.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-26-lane-4, at: [296.24, 31.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-27-lane-1, at: [320.48, 6.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-27-lane-2, at: [320.48, 9.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-27-lane-3, at: [320.48, 12.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-27-lane-4, at: [320.48, 15.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-28-lane-1, at: [320.48, 22.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-28-lane-2, at: [320.48, 25.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-28-lane-3, at: [320.48, 28.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-28-lane-4, at: [320.48, 31.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-29-lane-1, at: [344.72, 6.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-29-lane-2, at: [344.72, 9.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-29-lane-3, at: [344.72, 12.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-29-lane-4, at: [344.72, 15.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-30-lane-1, at: [344.72, 22.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-30-lane-2, at: [344.72, 25.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-30-lane-3, at: [344.72, 28.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-30-lane-4, at: [344.72, 31.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-31-lane-1, at: [368.97, 6.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-31-lane-2, at: [368.97, 9.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-31-lane-3, at: [368.97, 12.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-31-lane-4, at: [368.97, 15.62], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-32-lane-1, at: [368.97, 22.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-32-lane-2, at: [368.97, 25.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-32-lane-3, at: [368.97, 28.55], size: [1.4, 1.4], shape: circle}
+      - {id: led-port-32-lane-4, at: [368.97, 31.55], size: [1.4, 1.4], shape: circle}
       - {id: port-1, at: [8.05, 6.73], size: [19.0, 10.0], shape: rect}
       - {id: port-2, at: [8.05, 24.73], size: [19.0, 10.0], shape: rect}
       - {id: port-3, at: [32.29, 6.73], size: [19.0, 10.0], shape: rect}

@@ -29,7 +29,7 @@ import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, sv
          setNodeLampColors, nodeLampColors, markHex,
          setPulled as setReliefPulled, pulledPaths,
          buildFaceRelief, bodyBoxes, pieceMesh, pieceArt, fruFor,
-         nodeTools, tiltOf, tiltTools, tiltGroupIn, unproject, openFrameFaces,
+         nodeTools, tiltOf, tiltTools, tiltGroupIn, unproject, openFrameFaces, sheetShell,
          faceFrame, ventWellWalls } from './relief.js';
 import { seatViews, seatBack, refusalReason } from './swap.js';
 import { bevelledArrays } from './bevel.js';
@@ -774,6 +774,18 @@ export function createViewer(container, opts = {}) {
       const metal = new THREE.MeshLambertMaterial(
         {color: devIndex.chassis.solid.color || '#3a3f44'});
       box = new THREE.Mesh(geo, [...mats, metal]);
+      scene.add(box);
+    } else if (devIndex && sheetShell(devIndex.chassis)) {
+      // A SHEET BODY HAS NO SIDES (docs/cable-managers-design.md section 4). Its
+      // views are elevations - a front view shows the ears and the rings end-on,
+      // and none of that metal lies in the front plane - so painting them on the
+      // six faces of the envelope would stand a picture of the part on every
+      // side of it. Nothing is drawn from the faces; the solid is what the
+      // views' parts build: the floor of a well (relief.js cavityShell) and
+      // whatever stands proud. The box stays, invisible, as the frame the faces
+      // and their relief are placed in.
+      for (const m of mats) m.visible = false;
+      box = new THREE.Mesh(new THREE.BoxGeometry(W, H, D), mats);
       scene.add(box);
     } else {
       box = new THREE.Mesh(new THREE.BoxGeometry(W, H, D), mats);
