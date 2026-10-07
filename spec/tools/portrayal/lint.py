@@ -297,6 +297,7 @@ RULES = {
     "L128": ("device, listing", "a part-number key has no stray whitespace - none leading or trailing, none but the plain ASCII space (an error), and none splitting a run of capitals and digits between two hyphens (`-A C-`, a warning)", "retype the SKU as the vendor prints it; a space the vendor really prints inside a hyphenated token is waived with the document that shows it"),
     "L129": ("device",     "a declared pass-through (`passes:`) lies inside its face and overlaps no component - except a well that holds it whole, the plate it is cut through - and no two in a view share an id", "move the pass-through off the part, or onto the face; a window punched in a part's floor is declared over that well"),
     "L130": ("device",     "a pass-through whose `cover` is `brush` has a `pattern: brush` decor drawn over the whole of it, and a brush drawn over a pass-through belongs to one whose cover is `brush`", "draw the brush over the opening, or change `cover` to say what the picture shows"),
+    "L131": ("component, device", "a guide fits what declares it - a ring's opening inside the part, seen along its run (its size, and its relief or `size.d` out of the face), and a duct inside its view, with a finger gap less than the finger pitch", "measure the clear opening, not the outside of the loop; give the part the relief that holds the opening; move the duct onto its face, or re-read the pitch and the gap off the drawing"),
     "L132": ("lab",        "every placement's `ref` is a library device (and its `cfg` one of that device's configurations), every placement id is unique, and every `on` names another placement in the lab (error)", "name the device by its `name`, e.g. `fhd-1ufce`; give each placement its own id; point `on` at the id of the placement the part sits on"),
     "L133": ("lab",        "`face`, `on` and `unit` appear only on a device whose `chassis.mount` is `rack-face`; a rack-face device is placed by `on` or by `ru`, not both, and a rack device by `ru` (error)", "drop the key from a rack device; give a rack-face part either `on` (and `unit`) or `ru`"),
     "L134": ("lab",        "a rack-face part's host is a `rack` device, and `unit` is within the host's height, 1 to its `chassis.ru` (error)", "put the part `on` the rack device behind it; count `unit` from 1 at the host's bottom unit"),
@@ -310,7 +311,6 @@ RULES = {
 # counts these as present, and fails once a reserved code is also in RULES -
 # whichever branch lands second deletes its line.
 RESERVED = {
-    "L131": "cable-manager guides (docs/cable-managers-design.md section 5)",
 }
 
 # A CODE THAT NAMED A RULE WHICH IS GONE. A device manifest waives a rule by its
@@ -6560,6 +6560,85 @@ def lint_device_passes(path, data, lib_roots):
                 err(path, "L130", f"{vname}/{pid}: a brush decor at {d.get('at')} is drawn "
                                   f"over the pass-through, whose cover is {cover!r} - "
                                   "the picture and the declaration disagree")
+def _relief_reach(data):
+    """How far a part stands out of its face: the furthest of its relief, or
+    its `size.d` when it has none. `out` is absolute; `cyl`, `bar` and
+    `uhandle` stand on their `lift` (relief-out-is-absolute-lift-is-summed).
+    None when the contract says nothing about its third dimension."""
+    reach = []
+    for f in ((data.get("relief") or {}).get("features") or []):
+        if not isinstance(f, dict):
+            continue
+        lift = f.get("lift") if isinstance(f.get("lift"), (int, float)) else 0
+        if isinstance(f.get("out"), (int, float)):
+            reach.append(f["out"])
+        for k in ("cyl", "bar", "uhandle"):
+            if isinstance(f.get(k), (int, float)):
+                reach.append(lift + f[k])
+    if reach:
+        return max(reach)
+    d = (data.get("size") or {}).get("d")
+    return d if isinstance(d, (int, float)) else None
+
+
+def lint_component_guide(path, data):
+    """L131: a ring's opening fits inside the part that declares it.
+
+    A guide is read by whatever routes cables, and an opening bigger than the
+    loop around it is a number nobody measured. The opening is seen looking
+    along `run`, so which of the part's dimensions bounds each side of it
+    depends on the run: across the drawing it is bounded by `size.h` and by
+    how far the part stands out of the face; down it, by `size.w` and that
+    reach; out of the face, by `size.w` and `size.h`.
+    """
+    g = data.get("guide")
+    if not g:
+        return
+    size = data.get("size") or {}
+    ap = g.get("aperture") or {}
+    reach = _relief_reach(data)
+    bounds = {"x": (("w", size.get("h"), "size.h"), ("h", reach, "its reach out of the face")),
+              "y": (("w", size.get("w"), "size.w"), ("h", reach, "its reach out of the face")),
+              "z": (("w", size.get("w"), "size.w"), ("h", size.get("h"), "size.h"))}[g["run"]]
+    for side, bound, what in bounds:
+        if bound is None:
+            err(path, "L131", f"guide: the opening's {side} {ap.get(side)!r} runs out of the "
+                              f"face, and the part states no relief and no size.d to hold it")
+        elif ap.get(side) is not None and ap[side] > bound + 0.05:
+            err(path, "L131", f"guide: the opening's {side} {ap[side]:g} is wider than the "
+                              f"part that holds it - {what} is {bound:g}")
+
+
+def lint_device_guides(path, data):
+    """L131: a duct lies inside its view, and its fingers leave a gap.
+
+    The device half of the rule a ring's contract answers in
+    lint_component_guide: a channel declared off the face it runs along is
+    a channel on no part, and a finger gap as wide as the pitch is fingers
+    with no width.
+    """
+    for vname, view in (data.get("views") or {}).items():
+        size = (view or {}).get("size") or {}
+        seen = set()
+        for gd in (view or {}).get("guides") or []:
+            gid = gd.get("id")
+            if gid in seen:
+                err(path, "L131", f"{vname}: guide {gid!r} is declared twice")
+            seen.add(gid)
+            (x, y), (w, h) = gd["at"], gd["size"]
+            vw, vh = size.get("w"), size.get("h")
+            if vw is not None and vh is not None and (
+                    x < -0.05 or y < -0.05 or x + w > vw + 0.05 or y + h > vh + 0.05):
+                err(path, "L131", f"{vname}/{gid}: ({x:g},{y:g})-({x + w:g},{y + h:g}) runs "
+                                  f"off the {vw:g} x {vh:g} view it is declared on")
+            pitch, gap = gd.get("finger-pitch"), gd.get("finger-gap")
+            if pitch is not None and gap is not None and gap >= pitch:
+                err(path, "L131", f"{vname}/{gid}: a finger gap of {gap:g} is not less than "
+                                  f"the pitch {pitch:g}, which leaves the fingers no width")
+            along = w if gd["run"] == "x" else h
+            if pitch is not None and pitch > along + 0.05:
+                err(path, "L131", f"{vname}/{gid}: a finger pitch of {pitch:g} is longer than "
+                                  f"the duct, {along:g} along its run")
 
 
 def _inside(pt, poly, tol=0.05):
@@ -9694,6 +9773,7 @@ def lint_device(path, validator, lib_roots):
     lint_device_empty_views(path, data)
     lint_device_occupants(path, data, lib_roots)
     lint_device_cable_od(path, data)
+    lint_device_guides(path, data)
     # Every id each view offers, indexed by view name. A `for:` may name a target
     # in ANOTHER view of the same device (`rear/psu-0`), so the check below cannot
     # be answered from the view it is standing in.
@@ -10950,6 +11030,7 @@ def main():
                 lint_component_rj45_lamps(f, d, args.library)
                 lint_component_groups(f, d, args.library)
                 lint_component_part_interfaces(f, d, args.library)
+                lint_component_guide(f, d)
                 lint_quoted_prose(f, d)
             n += 1
         for f in sorted(root.glob("devices/**/device.yaml")):

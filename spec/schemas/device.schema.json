@@ -1443,6 +1443,61 @@
        }
       }
      },
+     "guides": {
+      "type": "array",
+      "description": "WHERE CABLES RUN ALONG THIS FACE, declared rather than read off the drawing (docs/cable-managers-design.md, decision 8). `duct` is a channel walled by fingers: its box on this view, the direction cables run along it, and the pitch and the gap of the fingers along its walls. Nothing consumes it yet: it compiles to an unpainted `data-class=\"guide\"` rect on the face, and the DCIM exports ignore it. A ring that every placement of a part carries is declared on the part's contract as `guide:`, not here. L131 holds a duct inside its view.",
+      "items": {
+       "type": "object",
+       "required": [
+        "id",
+        "kind",
+        "at",
+        "size",
+        "run"
+       ],
+       "additionalProperties": false,
+       "properties": {
+        "id": {
+         "$ref": "#/$defs/segment"
+        },
+        "kind": {
+         "enum": [
+          "duct"
+         ]
+        },
+        "at": {
+         "$ref": "#/$defs/xy"
+        },
+        "size": {
+         "$ref": "#/$defs/xy"
+        },
+        "run": {
+         "enum": [
+          "x",
+          "y"
+         ],
+         "description": "the direction cables run along the channel, across (`x`) or down (`y`) this view"
+        },
+        "finger-pitch": {
+         "type": "number",
+         "exclusiveMinimum": 0,
+         "description": "millimetres, centre to centre of the fingers along the run"
+        },
+        "finger-gap": {
+         "type": "number",
+         "exclusiveMinimum": 0,
+         "description": "millimetres, the clear gap between two fingers, which a cable is laid through into the channel"
+        },
+        "confidence": {
+         "$ref": "#/$defs/confidence"
+        },
+        "source": {
+         "type": "string",
+         "description": "where precisely, in one phrase"
+        }
+       }
+      }
+     },
      "regions": {
       "type": "array",
       "items": {

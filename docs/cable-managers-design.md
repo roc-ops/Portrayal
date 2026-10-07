@@ -1,8 +1,8 @@
 # Cable managers: rack-face mounting, sheet bodies, brushes and guides
 
-Status: 2026-10-06. Sections 2 to 4, the brush and pass-throughs of section 5, the
-first two devices of section 7 and the library side of section 6 (lab placement, the lab
-schema and its checks) are implemented; guides are design, and the rack drawing of
+Status: 2026-10-07. Sections 2 to 5 (brushes, pass-throughs and guides; lint L129 to
+L131), the three devices of section 7 and the library side of section 6 (lab placement,
+the lab schema and its checks; lint L132 to L136) are implemented; the rack drawing of
 section 6 is still to come in the site repository. The first passive rack parts in the
 library that hold or pass cables rather than terminate them: the FS horizontal cable
 managers.
@@ -271,6 +271,7 @@ the vendor's.
 2. `rack-face`, the sheet body, the D-ring component and `fhd-cmp5dr`.
 3. The brush pattern, pass-throughs and `cmh-4drb1u`. Done.
 4. Guides and `cmh-sfd1u`, with the ring guide applied to the D-rings of steps 2 and 3.
+   Done for the snap-in D-ring of step 2.
 5. Lab placement, the lab schema and checks, and the site change.
 
 Each of steps 2 to 5 is its own change, and each pairs one feature with the part that

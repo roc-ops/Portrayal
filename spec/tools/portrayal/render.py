@@ -1465,6 +1465,15 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     if contract.get("behaviour"):
         g.set("data-behaviour", contract["behaviour"])
     g.set("data-ref", f"{ref}:{contract['version']}")
+    # A GUIDE TRAVELS WITH THE PART (docs/cable-managers-design.md, decision
+    # 8): a ring declared once on the contract is on every placement of it.
+    # Attributes only - nothing is painted, so the drawing does not change.
+    _guide = contract.get("guide")
+    if _guide:
+        g.set("data-guide", _guide["kind"])
+        g.set("data-guide-run", _guide["run"])
+        g.set("data-guide-aperture",
+              f"{_guide['aperture']['w']:g} {_guide['aperture']['h']:g}")
     # A cavity is a hole you look INTO - a port aperture, a cage. A MODULE is a
     # solid body that fills its bay, and its depth says how far it reaches into
     # the chassis, not that the face has an N-mm hole in it. Emitting data-depth
@@ -2748,6 +2757,25 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         if box and not (region.get("at") and region.get("size")):
             r.set("data-extent", "derived")
 
+    # GUIDES (docs/cable-managers-design.md section 5): where cables run along
+    # this face. Unpainted, like a region, and not a click target - a duct is
+    # read by whatever routes cables, never by somebody pointing at it. The
+    # DCIM exports ignore it.
+    for gd in parts["guides"]:
+        r = ET.SubElement(svg, f"{{{SVG_NS}}}rect")
+        r.set("id", f"guide--{gd['id']}")
+        r.set("data-class", "guide")
+        r.set("data-guide", gd["kind"])
+        r.set("data-guide-run", gd["run"])
+        for k in ("finger-pitch", "finger-gap"):
+            if gd.get(k) is not None:
+                r.set(f"data-guide-{k}", f"{gd[k]:g}")
+        (gx, gy), (gw, gh) = gd["at"], gd["size"]
+        r.set("x", f"{gx:g}"); r.set("y", f"{gy:g}")
+        r.set("width", f"{gw:g}"); r.set("height", f"{gh:g}")
+        r.set("fill", "none"); r.set("stroke", "none")
+        r.set("pointer-events", "none")
+
     # CUTOUTS. The panel is punched before anything is printed on it or put into
     # it, so the holes paint first. A hole with nothing in it shows the dark inside
     # of the chassis, which is exactly what the drawing shows too; a placed component
@@ -3340,7 +3368,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                     if (k.startswith("data-z-") or k.startswith("data-cp")
                             or k in ("data-depth", "data-body-depth",
                                      "data-ref", "data-behaviour",
-                                     "data-vent", "data-groove")):
+                                     "data-vent", "data-groove")
+                            or k.startswith("data-guide")):
                         del node.attrib[k]
         # WHAT THE BLOCK IS FOR travels with every member, because the consumer
         # that needs it is looking at a member and has no way back to `groups:`.

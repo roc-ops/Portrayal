@@ -228,10 +228,9 @@ ISSUED = {
     "L126": "device",
     "L127": "device",
     "L128": "device, listing",
-    # L131 is RESERVED in lint.py for the guide rule being written on another branch
     "L129": "device",
     "L130": "device",
-    "L131": "device",
+    "L131": "component, device",
     "L132": "lab",
     "L133": "lab",
     "L134": "lab",
