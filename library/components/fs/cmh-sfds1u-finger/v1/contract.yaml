@@ -1,0 +1,47 @@
+format: 1
+kind: component
+name: cmh-sfds1u-finger
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  One finger of the FS CMH-SFDS1U finger duct, seen end-on from the cover side, one pitch
+  wide - the moulded block it stands on, its stem, and the T-shaped head that carries the
+  hinge of the cover
+provenance:
+  size: >-
+    drawing - the plan of CMH-SFDS1U in the FS Horizontal Cable Managers with Finger Duct
+    datasheet (steel, portal id 6867), at 1.567 px/mm: stems 44.4 apart, taken as 44.0 so
+    that ten fill the 440 body; the stem 10.2 wide and the T head 39.4. The 9.0 is the
+    finger wall on the end view.
+  relief: >-
+    drawing - the same plan, measured from the floor of the well, 2 mm in front of the back
+    of the backbone: the moulded block to 26.0 (28 from the back), the stem to 94.4, where
+    the head starts (96.4), and the head with its hinge knuckle to the underside of the
+    cover at 109.5. The fork of the stem into two legs over its root is drawn as the stem.
+size: {w: 44.0, h: 9.0}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: Plastic}
+elements:
+  root: {at: [0.0, 0.0], size: [44.0, 9.0], class: bezel}
+  stem: {at: [16.9, 0.0], size: [10.2, 9.0], class: bezel}
+  head: {at: [2.3, 0.0], size: [39.4, 9.0], class: bezel}
+relief:
+  features:
+    - node: root
+      out: 26.0
+      color: '#2c2d30'
+      confidence: drawing
+      source: the plan of CMH-SFDS1U in the FS steel finger duct datasheet, the block 28 mm from the back
+    - node: stem
+      out: 94.4
+      color: '#2c2d30'
+      confidence: drawing
+      source: the same plan, the stem to the head at 96.4 mm from the back
+    - node: head
+      lift: 94.4
+      out: 109.5
+      color: '#323437'
+      confidence: drawing
+      source: the same plan and the end view, the T head and its knuckle up to the cover
+skins: [default]
