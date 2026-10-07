@@ -490,7 +490,10 @@ CHASSIS_SHAPE = {"width", "height", "depth", "ru", "bevel", "shell"}
 # nothing on the drawing, so stating it on an existing device is a patch (#734).
 # `thickness` IS A STATED GAUGE, like the weight beside it: nothing is drawn or
 # built from it, so correcting one moves nothing.
-CHASSIS_SURFACE = {"color", "edge", "silk", "weight-kg", "airflow", "power", "mount", "thickness"}
+# `full-depth` IS A STATED FACT for the DCIM export, as `mount` is: nothing on
+# the drawing moves when it changes (#854).
+CHASSIS_SURFACE = {"color", "edge", "silk", "weight-kg", "airflow", "power", "mount", "thickness",
+                   "full-depth"}
 
 
 def buckets(doc, versions=None):

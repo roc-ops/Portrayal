@@ -424,6 +424,10 @@
      "type": "number",
      "description": "millimetres, the gauge of a `shell: sheet` body, as its datasheet states it. A fact about the part and not an instruction to the drawing: each plate's thickness in 3D is its own part's relief. Stated only with `shell: sheet` (L127)."
     },
+    "full-depth": {
+     "type": "boolean",
+     "description": "WHETHER A RACK DEVICE TAKES BOTH FACES of the rack units it spans, the fact NetBox and Nautobot write as `is_full_depth` and use to decide whether the opposite face of those units is free. A `rack` device is full depth unless it says `false` here: a cable manager 87 mm deep in front of the rails leaves the rear face of its unit free for another part. Stated, not derived from `depth`, because a threshold would quietly re-file every shallow box already imported. Only on a `rack` device (L125); any other mount already exports `false` (#854)."
+    },
     "weight-kg": {
      "type": "number"
     },

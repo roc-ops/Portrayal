@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: cmh-sfd1u
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: FS.com
 model: CMH-SFD1U
@@ -15,6 +15,12 @@ description: >-
   the width of the rack. Two pass-through holes in the base lead cables to the other side.
 profile: passive
 provenance:
+  full-depth:
+    confidence: drawing
+    note: >-
+      `full-depth: false` - the fingers stand 60 mm in front of the mounting
+      plane and the base only 11.3 behind it (the vendor's side view), so the
+      rear face of its rack unit stays free for another part (#854).
   method:
     confidence: drawing
     note: >-
@@ -159,6 +165,7 @@ chassis:
   height: 42.0
   depth: 87.0
   ru: 1
+  full-depth: false
   shell: sheet
   thickness: 7.3
   weight-kg: 0.45

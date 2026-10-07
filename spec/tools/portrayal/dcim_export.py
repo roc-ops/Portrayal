@@ -1605,8 +1605,13 @@ def is_full_depth(ch):
     is a question with no meaning for a box on a DIN rail or a wall. Rack devices
     keep the `True` this always wrote - whether a short rack box is full depth is
     a separate question, and not this change's.
+
+    That question is answered by the device, not guessed from `depth`: a rack
+    device that leaves the opposite face of its units free states
+    `chassis.full-depth: false` - a cable manager in front of the rails (#854).
+    A threshold on depth would re-file every shallow box already imported.
     """
-    return ch.get("mount", "rack") == "rack"
+    return ch.get("mount", "rack") == "rack" and ch.get("full-depth", True) is not False
 
 
 MOUNT_PROSE = {

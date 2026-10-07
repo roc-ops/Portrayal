@@ -291,7 +291,7 @@ RULES = {
     "L122": ("component, device", "a `cable-od` value is a diameter in millimetres from 2 to 15 - on a field's default, a composing part's attrs, and a device placement's attrs - written as plain ASCII digits and a point, the only number the build and the kit draw", "give the cable's outside diameter in mm as a number, from the product's own document"),
     "L124": ("library",    "under one NOS vendor, no two listings export the same DCIM model, and no alias is claimed by two listings unless each marks it `shared`", "give one listing a configuration `model` or its own SKU; drop the duplicate alias, or mark it `shared: true` in every claimant with a `note`"),
     "L123": ("library",    "one module, one bay size - every bay that accepts a module, in any device or carrier, reserves the same size for it, to within a millimetre", "reserve one figure everywhere - the module's own `insert` or `size`; a difference that is real stays in the baseline, with the reason in the provenance of the chassis that reserves more (the warning is filed on the module, so a chassis `lint.waive` cannot clear it)"),
-    "L125": ("device",     "a device says how it is installed - a rack device (the default `mount`) or a `rack-face` part states `ru` (warning), and a device whose `chassis.mount` is `din-rail`, `wall` or `desktop` states none (error)", "give a rack device its `ru` from the datasheet; for a box that is not racked, state `chassis.mount` and drop `ru`, so its DCIM export says `u_height: 0` rather than an invented rack unit"),
+    "L125": ("device",     "a device says how it is installed - a rack device (the default `mount`) or a `rack-face` part states `ru` (warning), and a device whose `chassis.mount` is `din-rail`, `wall` or `desktop` states none (error); `chassis.full-depth` appears only on a rack device (error)", "give a rack device its `ru` from the datasheet; for a box that is not racked, state `chassis.mount` and drop `ru`, so its DCIM export says `u_height: 0` rather than an invented rack unit"),
     "L126": ("device",     "a bevelled chassis is a solid the box can have - every edge named by two faces that meet, none bevelled twice, no face cut away and no bevel swallowed by its neighbours - its face drawings are the chassis's own size, and every part, bay and cutout on a face lies on the flat face rather than on a bevel", "name edges as two adjacent faces (`front-left`), shrink a bevel that cuts too much, drop a view `size` that differs from the chassis on a bevelled face, or move the part onto the flat face - spec/tools/portrayal/bevel.py says where it is"),
     "L127": ("device",     "a `shell: sheet` body states `chassis.thickness`, between 0 and 10 mm, and a box states none (error)", "give a sheet body the gauge its datasheet states; on a box, drop `thickness`"),
     "L128": ("device, listing", "a part-number key has no stray whitespace - none leading or trailing, none but the plain ASCII space (an error), and none splitting a run of capitals and digits between two hyphens (`-A C-`, a warning)", "retype the SKU as the vendor prints it; a space the vendor really prints inside a hyphenated token is waived with the document that shows it"),
@@ -6552,6 +6552,12 @@ def lint_device_mount(path, data):
     elif not bolts_to_rack and "ru" in ch:
         err(path, "L125", f"`chassis.mount` is {mount!r}, so `ru` {ch['ru']!r} "
                           "describes a rack this box is not in - drop it")
+    # `full-depth` answers whether a rack device takes both faces of its units
+    # (#854); a part that is not between the posts has no such question.
+    if "full-depth" in ch and mount != "rack":
+        err(path, "L125", f"`chassis.full-depth` is for a rack device, and this one "
+                          f"mounts {mount!r} - it already exports `is_full_depth: "
+                          "false`; drop it")
 
 
 def lint_device_power_outlets(path, data):
