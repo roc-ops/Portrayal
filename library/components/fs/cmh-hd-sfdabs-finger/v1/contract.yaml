@@ -1,0 +1,60 @@
+format: 1
+kind: component
+name: cmh-hd-sfdabs-finger
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  One finger of the FS HD ABS finger ducts (CMH-HD-SFDABS3U, CMH-HD-SFDABS4U), seen end-on from the
+  front - a T-shaped ABS finger on a Y-shaped root, standing from the back plate toward
+  the cover, one finger pitch wide. Every model of the line carries the same finger, ten
+  to a wall, in five moulded blocks of two
+provenance:
+  size: >-
+    drawing - the plan views of the FS HD datasheets, orthographic to half a per cent
+    (482.6 across against the stated depth down). Ten finger stems stand on a 44.4 mm
+    pitch, centre to centre over nine pitches, in five blocks whose seams fall 88.7 apart
+    over the 443.4 mm of the five blocks; the pitch is taken as a tenth of that, 44.34, so
+    a finger is centred in each half block. The stem is 11.2 wide, the T head 40.2, which
+    leaves a 4.14 mm neck between two heads that a cable is pressed through. Its 9.8 is
+    the wall on the side views (9.3 to 10.2 on five drawings). The embedded drawings are
+    60 dpi rasters, about 0.8 px/mm on the part, so every figure here is good to a
+    millimetre and a half.
+  relief: >-
+    drawing - heights above the front face of the back plate, the floor of the duct, read
+    on the plan of CMH-UHD-SFDABS2U at 3.754 px/mm and checked on CMH-HD-SFDABS3U: the
+    moulded block is solid to 25.3, and the U between two fingers bottoms out at 27.5,
+    rounds up to 30.2 9.6 mm out from the middle of the gap, and climbs straight along the
+    arms of the Y to the root of the stem at 50.1. The root is one node whose top follows
+    that section across the pitch. The stem runs to the back of the T head at
+    94.9; the T head is 10.8 deep, to 105.7, which
+    leaves it 3.7 mm short of the front of the cover. The drawing
+    outlines the arms of the Y and leaves the triangle between them white; whether it is
+    open or a web is not resolved at this scale, and it is built solid.
+size: {w: 44.34, h: 9.8}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: ABS}
+elements:
+  root: {at: [0.0, 0.0], size: [44.34, 9.8], class: bezel}
+  stem: {at: [16.57, 0.0], size: [11.2, 9.8], class: bezel}
+  tip: {at: [2.07, 0.0], size: [40.2, 9.8], class: bezel}
+relief:
+  features:
+    - node: root
+      out: 50.1
+      profile: [[0, 27.5], [5, 27.5], [7.7, 28.6], [9.6, 30.2], [16.6, 50.1], [27.74, 50.1], [34.74, 30.2], [36.64, 28.6], [39.34, 27.5], [44.34, 27.5]]
+      color: '#2a2c2e'
+      confidence: drawing
+      source: the plan of CMH-UHD-SFDABS2U in its FS datasheet, the U between two fingers read every 20 px
+    - node: stem
+      out: 94.9
+      color: '#2a2c2e'
+      confidence: drawing
+      source: the plan views of the FS HD datasheets, the stem from the fork of the Y to the back of the T head
+    - node: tip
+      lift: 94.9
+      out: 105.7
+      color: '#2a2c2e'
+      confidence: drawing
+      source: the same views, the T head
+skins: [default]

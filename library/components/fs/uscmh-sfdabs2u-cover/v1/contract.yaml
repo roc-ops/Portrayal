@@ -1,0 +1,54 @@
+format: 1
+kind: component
+name: uscmh-sfdabs2u-cover
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  The hinged cover of the FS USCMH-SFDABS2U finger duct, seen from the front - an ABS
+  channel whose curved face closes the duct and whose two edges hinge and clip on the
+  finger tips, so that it opens upward or downward or lifts off
+provenance:
+  size: >-
+    drawing - the front view of USCMH-SFDABS2U in the FS 1&2RU Horizontal Single Sided Manager datasheet draws the cover over the duct
+    between the ear folds, 436.3 wide, and 88.8 high.
+  relief: >-
+    drawing - the cover takes the first 22.36 mm of the 71.45 the duct stands in front
+    of the plane of the ears; it is placed in the well, so its face stands 69.75 to
+    71.25 above the floor and its edges 48.89 to 71.25. The face is 1.5 thick and the
+    edges 1.5 high, both estimated. THE FACE IS CURVED, a few millimetres proud at the
+    middle of the height in the side views and the renders; it is drawn flat.
+  color: >-
+    estimated - "Color: Black" in the datasheet table; every image FS publishes of the
+    part is a render, and the cover is drawn a shade lighter than the duct.
+  mark: >-
+    drawing - FS renders a round mark on the cover near its left end. A vendor mark is
+    never drawn, and nothing is reserved for it.
+size: {w: 436.3, h: 88.8}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: ABS}
+elements:
+  plate: {at: [0.0, 0.0], size: [436.3, 88.8], class: bezel}
+  lip-top: {at: [0.0, 0.0], size: [436.3, 1.5], class: bezel}
+  lip-bottom: {at: [0.0, 87.3], size: [436.3, 1.5], class: bezel}
+relief:
+  features:
+    - node: plate
+      lift: 69.75
+      out: 71.25
+      color: '#333639'
+      confidence: estimated
+      source: no view dimensions the cover section; a thin curved moulding in the renders
+    - node: lip-top
+      lift: 48.89
+      out: 71.25
+      color: '#333639'
+      confidence: drawing
+      source: the FS 1&2RU Horizontal Single Sided Manager datasheet, the cover over the first 22.36 mm in front of the finger tips
+    - node: lip-bottom
+      lift: 48.89
+      out: 71.25
+      color: '#333639'
+      confidence: drawing
+      source: the FS 1&2RU Horizontal Single Sided Manager datasheet, the cover over the first 22.36 mm in front of the finger tips
+skins: [default]

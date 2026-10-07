@@ -1,0 +1,46 @@
+format: 1
+kind: component
+name: uscmh-5dr1u-cover
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  The detachable cover of the FS USCMH-5DR1U cable manager seen from the front - a long
+  plate that clips over the fronts of the five rings and closes the channel, with a lip
+  folded back along its top edge
+provenance:
+  size: >-
+    estimated - 430 by 43.6. FS's drawing of the part (in the 0U/1U Horizontal Cable
+    Manager datasheet) draws the cover in an exploded view as long as the panel and
+    about as high, and does not dimension it; the renders (gallery images 1 to 3) show
+    it spanning the rings from end to end and the panel's height. Taken as the panel
+    between its folds, and 0.2 inside the 44 at top and bottom.
+  relief: >-
+    estimated - the cover's face takes the last 0.8 mm of the 82 FS's product page gives
+    the part, in front of the rings' 80 and the plate's 1.2; it is placed in the panel's
+    well, so its face stands 80 to 80.8 above the floor. The exploded view and FS's
+    render of the cover lying loose (gallery image 5) show a lip folded back along one
+    long edge; drawn along the top, 8 mm deep and as thick as the face, both estimated.
+  color: >-
+    estimated - black, a shade lighter than the panel so that the two separate. Every
+    image FS publishes of the part is a render.
+size: {w: 430, h: 44}
+size-confidence: {w: estimated, h: estimated}
+elements:
+  plate: {at: [0.0, 0.2], size: [430, 43.6], class: bezel}
+  lip: {at: [0.0, 0.2], size: [430, 0.8], class: bezel}
+relief:
+  features:
+    - node: plate
+      lift: 80.0
+      out: 80.8
+      color: '#222427'
+      confidence: estimated
+      source: the last 0.8 mm of the 82 on FS's product page, in front of the 80 mm rings
+    - node: lip
+      lift: 72.8
+      out: 80.8
+      color: '#222427'
+      confidence: estimated
+      source: a lip folded back along one long edge in FS's exploded drawing and render, not dimensioned
+skins: [default]

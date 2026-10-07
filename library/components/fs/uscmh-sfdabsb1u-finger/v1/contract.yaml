@@ -1,0 +1,41 @@
+format: 1
+kind: component
+name: uscmh-sfdabsb1u-finger
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  One finger of the FS USCMH-SFDABSB1U finger duct, seen from the front - a pair of ABS ribs that
+  stand from the base plate toward the cover and end in a T-shaped tip the cover hinges
+  and clips on
+provenance:
+  size: >-
+    drawing - the top view of USCMH-SFDABSB1U in the FS Horizontal Single Sided Manager datasheet for USCMH-SFDABSB1U and -B2U: the fingers stand 19.5 mm wide on a
+    53.9 mm pitch, the middle one on the middle of the duct (USCMH-SFDABS1U at 4.26 px/mm,
+    83 px wide on a 229.3 px pitch). The T-shaped tip is 32 wide in the straight-on render
+    with the cover off. The 10 mm thickness of a finger across the height of the duct is
+    estimated: the side views of the line read the walls about a quarter of the height,
+    and are not to scale up the height.
+  relief: >-
+    drawing - the top view: a finger stands from the plate to the back of the cover, 116.56
+    out from the floor of the well; its tip is the last 3 mm, estimated from the renders.
+size: {w: 32, h: 10}
+size-confidence: {w: drawing, h: estimated}
+attrs: {material: ABS}
+elements:
+  stem: {at: [6.25, 0.0], size: [19.5, 10], class: bezel}
+  tip: {at: [0.0, 0.0], size: [32, 10], class: bezel}
+relief:
+  features:
+    - node: stem
+      out: 113.56
+      color: '#2a2c2e'
+      confidence: drawing
+      source: the top view of USCMH-SFDABSB1U in the FS Horizontal Single Sided Manager datasheet for USCMH-SFDABSB1U and -B2U, the finger from the plate toward the cover
+    - node: tip
+      lift: 113.56
+      out: 116.56
+      color: '#2a2c2e'
+      confidence: estimated
+      source: the T-shaped tip in the renders of the front with the cover off
+skins: [default]

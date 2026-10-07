@@ -1,0 +1,54 @@
+format: 1
+kind: component
+name: uscmh-sfdabsb1u-cover
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  The hinged cover of the FS USCMH-SFDABSB1U finger duct, seen from the front - an ABS
+  channel whose curved face closes the duct and whose two edges hinge and clip on the
+  finger tips, so that it opens upward or downward or lifts off
+provenance:
+  size: >-
+    drawing - the front view of USCMH-SFDABSB1U in the FS Horizontal Single Sided Manager datasheet for USCMH-SFDABSB1U and -B2U draws the cover over the duct
+    between the ear folds, 436.3 wide, and 44.3 high.
+  relief: >-
+    drawing - the cover takes the first 10.5 mm of the 127.26 the duct stands in front
+    of the plane of the ears; it is placed in the well, so its face stands 125.56 to
+    127.06 above the floor and its edges 116.56 to 127.06. The face is 1.5 thick and the
+    edges 1.5 high, both estimated. THE FACE IS CURVED, a few millimetres proud at the
+    middle of the height in the side views and the renders; it is drawn flat.
+  color: >-
+    estimated - "Color: Black" in the datasheet table; every image FS publishes of the
+    part is a render, and the cover is drawn a shade lighter than the duct.
+  mark: >-
+    drawing - FS renders a round mark on the cover near its left end. A vendor mark is
+    never drawn, and nothing is reserved for it.
+size: {w: 436.3, h: 44.3}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: ABS}
+elements:
+  plate: {at: [0.0, 0.0], size: [436.3, 44.3], class: bezel}
+  lip-top: {at: [0.0, 0.0], size: [436.3, 1.5], class: bezel}
+  lip-bottom: {at: [0.0, 42.8], size: [436.3, 1.5], class: bezel}
+relief:
+  features:
+    - node: plate
+      lift: 125.56
+      out: 127.06
+      color: '#333639'
+      confidence: estimated
+      source: no view dimensions the cover section; a thin curved moulding in the renders
+    - node: lip-top
+      lift: 116.56
+      out: 127.06
+      color: '#333639'
+      confidence: drawing
+      source: the FS Horizontal Single Sided Manager datasheet for USCMH-SFDABSB1U and -B2U, the cover over the first 10.5 mm in front of the finger tips
+    - node: lip-bottom
+      lift: 116.56
+      out: 127.06
+      color: '#333639'
+      confidence: drawing
+      source: the FS Horizontal Single Sided Manager datasheet for USCMH-SFDABSB1U and -B2U, the cover over the first 10.5 mm in front of the finger tips
+skins: [default]

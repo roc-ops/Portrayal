@@ -1,0 +1,295 @@
+format: 1
+kind: device
+name: cmh-uhd-sfdabs3u
+version: 0.1.0
+maturity: modelled
+manufacturer: FS.com
+model: CMH-UHD-SFDABS3U
+description: >-
+  3U single-sided UHD horizontal cable manager: a black ABS finger duct
+  175 mm deep with a hinged cover. A back plate between the rack ears carries a
+  wall of ten T-shaped fingers along its top edge and another along its bottom, each
+  wall five moulded blocks of two, and the cover latches over the finger heads to close
+  a channel that runs the width of the rack. Three pass-through windows in
+  the plate lead cables to the other side.
+profile: passive
+provenance:
+  full-depth:
+    confidence: drawing
+    note: >-
+      `full-depth: false` - the plate is the mounting plane and everything else stands in
+      front of it, 175 mm on the plan, so the rear face of its rack unit stays free for
+      another part.
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE VENDOR DRAWING. FS publishes one datasheet for the part
+      (datasheet 12090, published 2026-10-06) with a front, plan, side and rear view;
+      there is no product page, gallery, render or stencil, so the drawing is the only
+      picture of it. The plan reads 3.639 px/mm across the 482.6 and 3.645 down the 132.5 of the side view, so the views are orthographic. Its
+      drawing is embedded as a 60 dpi raster, about 0.8 px/mm on the part, and every figure
+      here is good to a millimetre and a half; the converted figures were measured, which
+      are the same raster upsampled.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - THE BODY BETWEEN THE EARS. The table gives 5.2"x19"x6.89" (132.5x482.6x175mm)
+      overall. The ears are the ends of the flat back plate, 132.5 high with two slotted
+      holes each, 465 between hole centres; they are not drawn, and they take 19.6 mm at
+      each end. The five finger blocks span 443.4 between them on the plan (443.4 and 442.9
+      on two drawings), and that is the width. `depth` is the vendor 175, all of it in
+      front of the mounting plane.
+  shell:
+    confidence: drawing
+    note: >-
+      drawing - A HOLLOW DUCT, NOT A BOX. Cables lie in the channel between the two finger
+      walls, so the body is a sheet body (docs/cable-managers-design.md section 4) and its
+      six views are elevations. The solid is what its parts build: the back plate on the
+      front view as a well 172.4 deep, its floor the plate and open at the
+      windows; the two walls of fingers standing in it; and the cover in it across the
+      finger heads, which lifts off and opens the channel. The plate is built as the floor,
+      inside the 175 envelope. The channel and its two ends are open air.
+  thickness:
+    confidence: estimated
+    note: >-
+      estimated - no FS document states a gauge for the ABS moulding. 2.6 is the back
+      plate, drawn as two lines 10 px apart on the plan at 3.75 px/mm; the walls and the
+      cover carry their own figures in their parts.
+  front:
+    confidence: drawing
+    note: >-
+      drawing - the cover, fitted, with its four latches, from the front view. The `duct`
+      guide is the channel between the inner faces of the two finger walls, the side view: the two walls 9.3 to 10.2 thick, 9.8 taken, stand 5.2 in from the top and bottom edges of the plate (4.8 to 5.6 on five drawings), so the channel between them is 102.5.
+  top:
+    confidence: drawing
+    note: >-
+      drawing - the plan, rear at y=0: the back plate, the solid root of the finger blocks,
+      the ten stems on a 44.34 pitch and their T heads, and the cover across the front. The
+      arms of the Y between each root and stem are not drawn on this elevation; the root of
+      each finger builds them in 3D. The gaps between the stems are open air.
+  bottom:
+    confidence: drawing
+    note: >-
+      drawing - the side view draws two equal walls and the rear view two equal rows of
+      blocks; the bottom is the plan again.
+  left:
+    confidence: drawing
+    note: >-
+      drawing - the side view: the plate, the two finger walls standing to the T heads, the
+      hinge rails over them and the cover face. The duct is open at both ends, and a cable
+      runs out of it there: nothing is built across the ends.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the back of the plate from the rear view, with its three pass-through
+      windows (three windows 140.1 x 94.4 with 10 mm corners on a 150.0 pitch, 19.0 from the top edge; 140.0 x 94.1, the HD 3U figure, is taken, the same window in the same plate). The windows are drawn here square-cornered, as the
+      plate round them; the floor of the well, which is what 3D builds, carries the corners.
+      The rear view also draws the latches of the cover and the seams of the finger blocks
+      through and past the windows; they are the parts behind, not marks on the plate.
+  guides:
+    confidence: drawing
+    note: >-
+      drawing - the duct on the front view is the channel between the finger walls, run
+      across the rack. Its finger pitch is 44.34 and its gap the 33.14 between two
+      stems; the neck between two T heads, where a cable is pressed in, is 4.14.
+  capacity:
+    confidence: datasheet
+    note: >-
+      datasheet - "Cable Capacity (Theoretical Value)" in the specification table, 288
+      pcs (Cat6 24AWG). FS gives one cable type and no fill basis for this part. Not
+      divided between the walls: FS states it for the manager.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - material, colour, style, the mounting hardware, the operating temperature
+      and humidity, and the indoor environment are the specification table; the UL 94V-0
+      rating of the finger ducts is stated in the overview of the same datasheet.
+  color:
+    confidence: estimated
+    note: >-
+      estimated - "Color: Black". FS publishes no photograph or render of the part; the
+      shades are the ones the CMH-SFD1U renders give the sibling ABS duct, base, walls and
+      cover.
+attrs:
+  physical:
+    material: ABS
+    color: Black
+    mounting-hardware: M6*15mm Screw x4 and M6 Nut x4
+  performance:
+    cable-capacity: 288
+    cable-capacity-basis: >-
+      Cat6 24AWG, a theoretical value - FS CMH-UHD-SFDABS3U datasheet specification table, which
+      states no fill basis
+  environmental:
+    operating-temp: -10 to 60°C (14 to 140°F)
+    operating-humidity: 95% Relative Humidity (max.), Non-condensing
+  compliance:
+    environment: Indoor
+    flammability: UL 94V-0 (finger ducts)
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 443.4
+  height: 132.5
+  depth: 175
+  ru: 3
+  full-depth: false
+  shell: sheet
+  thickness: 2.6
+  color: '#2a2c2e'
+gaps:
+  - what: weight
+    scope: [base]
+    reason: vendor-silent
+    note: >-
+      the FS CMH-UHD-SFDABS3U datasheet, the only document FS publishes for the part, states no
+      weight, and the part has no product page.
+    wanted: the weight from FS, or the part on a scale
+  - what: cover-hinge
+    scope: [cover]
+    reason: vendor-silent
+    note: >-
+      the datasheet calls the cover dual hinged, opening upward or downward; the side view
+      draws a knuckle over each finger wall, and the cover is drawn as one fitted plate with
+      a rail along each.
+    wanted: a drawing or a photograph of the hinge
+groups:
+  body:
+    term: Duct
+    role: furniture
+    index-origin: 1
+    description: the back plate
+  fingers:
+    term: Finger
+    role: furniture
+    index-origin: 1
+    description: the two walls of fingers, ten a wall, upper wall first
+  cover:
+    term: Cover
+    role: furniture
+    index-origin: 1
+    description: the hinged cover over the finger heads
+views:
+  front:
+    size: {w: 443.4, h: 132.5}
+    components:
+      placements:
+        - {ref: fs/cmh-uhd-sfdabs3u-base@1, id: base, at: [0.0, 0.0], group: body, rel-pos: 1}
+        - {ref: fs/cmh-uhd-sfdabs-finger@1, id: finger-upper-1, at: [0, 5.2], group: fingers, rel-pos: 1, in: base, under: cover}
+        - {ref: fs/cmh-uhd-sfdabs-finger@1, id: finger-upper-2, at: [44.34, 5.2], group: fingers, rel-pos: 2, in: base, under: cover}
+        - {ref: fs/cmh-uhd-sfdabs-finger@1, id: finger-upper-3, at: [88.68, 5.2], group: fingers, rel-pos: 3, in: base, under: cover}
+        - {ref: fs/cmh-uhd-sfdabs-finger@1, id: finger-upper-4, at: [133.02, 5.2], group: fingers, rel-pos: 4, in: base, under: cover}
+        - {ref: fs/cmh-uhd-sfdabs-finger@1, id: finger-upper-5, at: [177.36, 5.2], group: fingers, rel-pos: 5, in: base, under: cover}
+        - {ref: fs/cmh-uhd-sfdabs-finger@1, id: finger-upper-6, at: [221.7, 5.2], group: fingers, rel-pos: 6, in: base, under: cover}
+        - {ref: fs/cmh-uhd-sfdabs-finger@1, id: finger-upper-7, at: [266.04, 5.2], group: fingers, rel-pos: 7, in: base, under: cover}
+        - {ref: fs/cmh-uhd-sfdabs-finger@1, id: finger-upper-8, at: [310.38, 5.2], group: fingers, rel-pos: 8, in: base, under: cover}
+        - {ref: fs/cmh-uhd-sfdabs-finger@1, id: finger-upper-9, at: [354.72, 5.2], group: fingers, rel-pos: 9, in: base, under: cover}
+        - {ref: fs/cmh-uhd-sfdabs-finger@1, id: finger-upper-10, at: [399.06, 5.2], group: fingers, rel-pos: 10, in: base, under: cover}
+        - {ref: fs/cmh-uhd-sfdabs-finger@1, id: finger-lower-1, at: [0, 117.5], group: fingers, rel-pos: 11, in: base, under: cover}
+        - {ref: fs/cmh-uhd-sfdabs-finger@1, id: finger-lower-2, at: [44.34, 117.5], group: fingers, rel-pos: 12, in: base, under: cover}
+        - {ref: fs/cmh-uhd-sfdabs-finger@1, id: finger-lower-3, at: [88.68, 117.5], group: fingers, rel-pos: 13, in: base, under: cover}
+        - {ref: fs/cmh-uhd-sfdabs-finger@1, id: finger-lower-4, at: [133.02, 117.5], group: fingers, rel-pos: 14, in: base, under: cover}
+        - {ref: fs/cmh-uhd-sfdabs-finger@1, id: finger-lower-5, at: [177.36, 117.5], group: fingers, rel-pos: 15, in: base, under: cover}
+        - {ref: fs/cmh-uhd-sfdabs-finger@1, id: finger-lower-6, at: [221.7, 117.5], group: fingers, rel-pos: 16, in: base, under: cover}
+        - {ref: fs/cmh-uhd-sfdabs-finger@1, id: finger-lower-7, at: [266.04, 117.5], group: fingers, rel-pos: 17, in: base, under: cover}
+        - {ref: fs/cmh-uhd-sfdabs-finger@1, id: finger-lower-8, at: [310.38, 117.5], group: fingers, rel-pos: 18, in: base, under: cover}
+        - {ref: fs/cmh-uhd-sfdabs-finger@1, id: finger-lower-9, at: [354.72, 117.5], group: fingers, rel-pos: 19, in: base, under: cover}
+        - {ref: fs/cmh-uhd-sfdabs-finger@1, id: finger-lower-10, at: [399.06, 117.5], group: fingers, rel-pos: 20, in: base, under: cover}
+        - {ref: fs/cmh-uhd-sfdabs3u-cover@1, id: cover, at: [1.8, 1.9], group: cover, rel-pos: 1, in: base}
+    guides:
+      - {id: duct, kind: duct, at: [0, 15], size: [443.4, 102.5], run: x, finger-pitch: 44.34, finger-gap: 33.14, confidence: drawing, source: 'FS CMH-UHD-SFDABS3U datasheet, the side view walls and the plan finger pitch'}
+  rear:
+    size: {w: 443.4, h: 132.5}
+    panel:
+      decor:
+        - {id: back-1, at: [0, 0], size: [443.4, 19.2], fill: '#232527', kind: base, sink: 0.05}
+        - {id: back-2, at: [0, 19.2], size: [1.7, 94.1], fill: '#232527', kind: base, sink: 0.05}
+        - {id: back-3, at: [141.7, 19.2], size: [10, 94.1], fill: '#232527', kind: base, sink: 0.05}
+        - {id: back-4, at: [291.7, 19.2], size: [10, 94.1], fill: '#232527', kind: base, sink: 0.05}
+        - {id: back-5, at: [441.7, 19.2], size: [1.7, 94.1], fill: '#232527', kind: base, sink: 0.05}
+        - {id: back-6, at: [0, 113.3], size: [443.4, 19.2], fill: '#232527', kind: base, sink: 0.05}
+    passes:
+      - {id: pass-through-1, at: [1.7, 19.2], size: [140, 94.1], shape: rect, cover: open}
+      - {id: pass-through-2, at: [151.7, 19.2], size: [140, 94.1], shape: rect, cover: open}
+      - {id: pass-through-3, at: [301.7, 19.2], size: [140, 94.1], shape: rect, cover: open}
+  top:
+    size: {w: 443.4, h: 175}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [443.4, 2.6], fill: '#232527', kind: base, sink: 0.05}
+        - {id: root, at: [0, 2.6], size: [443.4, 27.5], fill: '#202224', kind: finger-root}
+        - {id: stem-1, at: [16.57, 30.1], size: [11.2, 130.7], fill: '#26282a', kind: finger}
+        - {id: head-1, at: [2.07, 160.8], size: [40.2, 10.8], fill: '#2a2c2e', kind: finger}
+        - {id: stem-2, at: [60.91, 30.1], size: [11.2, 130.7], fill: '#26282a', kind: finger}
+        - {id: head-2, at: [46.41, 160.8], size: [40.2, 10.8], fill: '#2a2c2e', kind: finger}
+        - {id: stem-3, at: [105.25, 30.1], size: [11.2, 130.7], fill: '#26282a', kind: finger}
+        - {id: head-3, at: [90.75, 160.8], size: [40.2, 10.8], fill: '#2a2c2e', kind: finger}
+        - {id: stem-4, at: [149.59, 30.1], size: [11.2, 130.7], fill: '#26282a', kind: finger}
+        - {id: head-4, at: [135.09, 160.8], size: [40.2, 10.8], fill: '#2a2c2e', kind: finger}
+        - {id: stem-5, at: [193.93, 30.1], size: [11.2, 130.7], fill: '#26282a', kind: finger}
+        - {id: head-5, at: [179.43, 160.8], size: [40.2, 10.8], fill: '#2a2c2e', kind: finger}
+        - {id: stem-6, at: [238.27, 30.1], size: [11.2, 130.7], fill: '#26282a', kind: finger}
+        - {id: head-6, at: [223.77, 160.8], size: [40.2, 10.8], fill: '#2a2c2e', kind: finger}
+        - {id: stem-7, at: [282.61, 30.1], size: [11.2, 130.7], fill: '#26282a', kind: finger}
+        - {id: head-7, at: [268.11, 160.8], size: [40.2, 10.8], fill: '#2a2c2e', kind: finger}
+        - {id: stem-8, at: [326.95, 30.1], size: [11.2, 130.7], fill: '#26282a', kind: finger}
+        - {id: head-8, at: [312.45, 160.8], size: [40.2, 10.8], fill: '#2a2c2e', kind: finger}
+        - {id: stem-9, at: [371.29, 30.1], size: [11.2, 130.7], fill: '#26282a', kind: finger}
+        - {id: head-9, at: [356.79, 160.8], size: [40.2, 10.8], fill: '#2a2c2e', kind: finger}
+        - {id: stem-10, at: [415.63, 30.1], size: [11.2, 130.7], fill: '#26282a', kind: finger}
+        - {id: head-10, at: [401.13, 160.8], size: [40.2, 10.8], fill: '#2a2c2e', kind: finger}
+        - {id: cover, at: [1.8, 173], size: [439.8, 2], fill: '#333639', kind: cover}
+  bottom:
+    size: {w: 443.4, h: 175}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [443.4, 2.6], fill: '#232527', kind: base, sink: 0.05}
+        - {id: root, at: [0, 2.6], size: [443.4, 27.5], fill: '#202224', kind: finger-root}
+        - {id: stem-1, at: [16.57, 30.1], size: [11.2, 130.7], fill: '#26282a', kind: finger}
+        - {id: head-1, at: [2.07, 160.8], size: [40.2, 10.8], fill: '#2a2c2e', kind: finger}
+        - {id: stem-2, at: [60.91, 30.1], size: [11.2, 130.7], fill: '#26282a', kind: finger}
+        - {id: head-2, at: [46.41, 160.8], size: [40.2, 10.8], fill: '#2a2c2e', kind: finger}
+        - {id: stem-3, at: [105.25, 30.1], size: [11.2, 130.7], fill: '#26282a', kind: finger}
+        - {id: head-3, at: [90.75, 160.8], size: [40.2, 10.8], fill: '#2a2c2e', kind: finger}
+        - {id: stem-4, at: [149.59, 30.1], size: [11.2, 130.7], fill: '#26282a', kind: finger}
+        - {id: head-4, at: [135.09, 160.8], size: [40.2, 10.8], fill: '#2a2c2e', kind: finger}
+        - {id: stem-5, at: [193.93, 30.1], size: [11.2, 130.7], fill: '#26282a', kind: finger}
+        - {id: head-5, at: [179.43, 160.8], size: [40.2, 10.8], fill: '#2a2c2e', kind: finger}
+        - {id: stem-6, at: [238.27, 30.1], size: [11.2, 130.7], fill: '#26282a', kind: finger}
+        - {id: head-6, at: [223.77, 160.8], size: [40.2, 10.8], fill: '#2a2c2e', kind: finger}
+        - {id: stem-7, at: [282.61, 30.1], size: [11.2, 130.7], fill: '#26282a', kind: finger}
+        - {id: head-7, at: [268.11, 160.8], size: [40.2, 10.8], fill: '#2a2c2e', kind: finger}
+        - {id: stem-8, at: [326.95, 30.1], size: [11.2, 130.7], fill: '#26282a', kind: finger}
+        - {id: head-8, at: [312.45, 160.8], size: [40.2, 10.8], fill: '#2a2c2e', kind: finger}
+        - {id: stem-9, at: [371.29, 30.1], size: [11.2, 130.7], fill: '#26282a', kind: finger}
+        - {id: head-9, at: [356.79, 160.8], size: [40.2, 10.8], fill: '#2a2c2e', kind: finger}
+        - {id: stem-10, at: [415.63, 30.1], size: [11.2, 130.7], fill: '#26282a', kind: finger}
+        - {id: head-10, at: [401.13, 160.8], size: [40.2, 10.8], fill: '#2a2c2e', kind: finger}
+        - {id: cover, at: [1.8, 173], size: [439.8, 2], fill: '#333639', kind: cover}
+  left:
+    size: {w: 175, h: 132.5}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [2.6, 132.5], fill: '#232527', kind: base, sink: 0.05}
+        - {id: wall-upper, at: [2.6, 5.2], size: [169, 9.8], fill: '#2a2c2e', kind: finger-wall}
+        - {id: wall-lower, at: [2.6, 117.5], size: [169, 9.8], fill: '#2a2c2e', kind: finger-wall}
+        - {id: hinge-upper, at: [171.6, 5.2], size: [1.4, 9.8], fill: '#333639', kind: cover}
+        - {id: hinge-lower, at: [171.6, 117.5], size: [1.4, 9.8], fill: '#333639', kind: cover}
+        - {id: cover-face, at: [173, 1.9], size: [2, 128.7], fill: '#333639', kind: cover}
+  right:
+    size: {w: 175, h: 132.5}
+    panel:
+      decor:
+        - {id: plate, at: [172.4, 0], size: [2.6, 132.5], fill: '#232527', kind: base, sink: 0.05}
+        - {id: wall-upper, at: [3.4, 5.2], size: [169, 9.8], fill: '#2a2c2e', kind: finger-wall}
+        - {id: wall-lower, at: [3.4, 117.5], size: [169, 9.8], fill: '#2a2c2e', kind: finger-wall}
+        - {id: hinge-upper, at: [2, 5.2], size: [1.4, 9.8], fill: '#333639', kind: cover}
+        - {id: hinge-lower, at: [2, 117.5], size: [1.4, 9.8], fill: '#333639', kind: cover}
+        - {id: cover-face, at: [0, 1.9], size: [2, 128.7], fill: '#333639', kind: cover}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The finger duct as FS ships it, cover fitted.'
+datasheet:
+  title: 'FS CMH-UHD-SFDABS3U Horizontal Cable Managers Datasheet'
+  sha256: dddba1a494c05623dd86f549c10a71e833b124908d6fa606584302e418c4b2ff

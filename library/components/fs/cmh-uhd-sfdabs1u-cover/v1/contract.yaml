@@ -1,0 +1,62 @@
+format: 1
+kind: component
+name: cmh-uhd-sfdabs1u-cover
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  The detachable cover of the FS CMH-UHD-SFDABS1U finger duct, seen from the front - an ABS
+  plate hinged along both finger walls, so it opens upward or downward, with two latches
+  at its top edge and two at its bottom
+provenance:
+  size: >-
+    drawing - the front view of the FS CMH-UHD-SFDABS1U datasheet: the cover runs 439.8 wide,
+    1.8 in from each end of the 443.4 body (439.8 to 440.2 on five drawings, against the
+    T heads at 440.4 on the plan). the 1U cover is 52 high over a 44 ear (dimensioned on the front view; 51.7 measured), its hinges standing 4 mm into the rack units above and below, and it is drawn that high. The latches read 22.7 from its top edge and 23.4 from its bottom edge.
+  latches: >-
+    drawing - the same view: four latches 22.4 wide, two at the top edge at 121.4 and
+    299.7 from the left end of the body and two at the bottom at 77.0 and 344.0, the same
+    on every drawing of the HD and UHD lines. They are drawn on the face and build no
+    relief of their own: the plan shows them wrapped round the hinge, not standing
+    proud of the cover.
+  relief: >-
+    drawing - the plan: the cover face is the front 2 mm of the 175, estimated
+    from two lines 7 px apart at 3.75 px/mm, so its face stands 170.4 to 172.4
+    above the floor; the hinge rails over the two finger walls drop to the front of the T
+    heads at 169.
+  color: >-
+    estimated - "Color: Black" in the specification table. FS publishes no photograph or
+    render of the part; the shade is the one the CMH-SFD1U renders give the cover of the
+    sibling ABS duct.
+size: {w: 439.8, h: 52}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: ABS}
+elements:
+  plate: {at: [0.0, 0.0], size: [439.8, 52], class: bezel}
+  hinge-top: {at: [0.0, 0], size: [439.8, 13.8], class: bezel}
+  hinge-bottom: {at: [0.0, 38.2], size: [439.8, 13.8], class: bezel}
+  clip-1: {at: [119.6, 0], size: [22.4, 22.7], class: bezel}
+  clip-2: {at: [297.9, 0], size: [22.4, 22.7], class: bezel}
+  clip-3: {at: [75.2, 28.6], size: [22.4, 23.4], class: bezel}
+  clip-4: {at: [342.2, 28.6], size: [22.4, 23.4], class: bezel}
+relief:
+  features:
+    - node: plate
+      lift: 170.4
+      out: 172.4
+      color: '#333639'
+      confidence: estimated
+      source: the plan of the FS CMH-UHD-SFDABS1U datasheet, the cover drawn as two lines 7 px apart
+    - node: hinge-top
+      lift: 169
+      out: 172.4
+      color: '#333639'
+      confidence: drawing
+      source: the side view of the FS CMH-UHD-SFDABS1U datasheet, the hinge over the upper finger wall, out to the edge of the cover
+    - node: hinge-bottom
+      lift: 169
+      out: 172.4
+      color: '#333639'
+      confidence: drawing
+      source: the side view of the FS CMH-UHD-SFDABS1U datasheet, the hinge over the lower finger wall, out to the edge of the cover
+skins: [default]
