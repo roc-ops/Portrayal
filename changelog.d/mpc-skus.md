@@ -18,6 +18,11 @@
   (#417). Its NetBox and Nautobot module-type file is renamed to match, and an
   import keyed on the old model creates a second module type rather than
   updating the first.
+- **BREAKING for DCIM data already imported (Nautobot):** no carrier now
+  takes `MIC-3D-10GE-SFP-E` (#417; it fits only the NG MPCs, which are not
+  modelled yet), so its Nautobot module type names its ports
+  `{module}/port-0-N` instead of `{module.parent}/{module}/port-0-N`. The six
+  MICs no carrier takes say so in `unplaced:`.
 - `juniper/mic-3d-4xge-xfp@2` and `mic-3d-4xge-xfp-v@2` (2.0.0): the four XFP
   cages are re-laid from the Interface Module Reference's Figure 31
   (g100580), measured on the embedded image and scaled on the 19.5 mm XFP
