@@ -38,6 +38,14 @@
   before changes: an LC bore presents at its own face. A stud presents at its
   top, which is where a lug across a pair lies (#828).
 
+### Removed
+- `juniper/mx204-ground-plate@1`, replaced by `juniper/mx204-ground-plate@2`
+  (two 10-32 screws on the guide's 0.75 in. centres, presenting a
+  `stud-pair-3-4`; @1 drew the holes 16.0 apart) (#828, #830).
+- `juniper/mx304-ground-plate@1`, replaced by `juniper/mx304-ground-plate@2`
+  (two M6 screws on 5/8 in. centres, presenting a `stud-pair-5-8`) (#828,
+  #830).
+
 ### Fixed
 - `devicelock` no longer calls a change minor because it added an id while
   something already there moved: the added placements are taken back out and
