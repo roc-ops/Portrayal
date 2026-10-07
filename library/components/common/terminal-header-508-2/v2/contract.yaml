@@ -1,0 +1,70 @@
+format: 1
+kind: component
+name: terminal-header-508-2
+version: 2.0.0
+class: port
+profile: networking
+interface: terminal-508-2
+description: >-
+  Two-position pluggable terminal HEADER on a 5.08 mm pitch, no flange - the green
+  receptacle a two-way screw-clamp plug seats in. The dry-contact RELAY (alarm) output
+  of the AurCore AIS industrial switches. Drawn empty, as the vendor photographs it.
+size: {w: 12.16, h: 12.1}
+size-confidence: {w: datasheet, h: datasheet}
+attrs: {media: terminal-block, positions: 2, pitch-mm: 5.08}
+provenance:
+  size: >-
+    datasheet - Phoenix Contact MSTBA 2,5/ 2-G-5,08 (order no. 1757242) data sheet,
+    25/07/2019, pp.1-2: width [w] 12.16, height [h] 12.1, pitch 5.08. The width is the
+    range drawing's a + 7.08 at two positions (registry `terminal-508-2-header`, from the
+    MSTBA 2,5/ 6-G-5,08 data sheet, order no. 1757284, p.5), with each contact 3.54 in
+    from its end of the housing. The previous major drew it 10.16, photo-measured as two
+    bare 5.08 cells off the AIS4001P vendor video (#804). The 12.1 HEIGHT is the data
+    sheet's [h], which includes the 3.5 solder pin below the board; the same sheet gives
+    an installed height of 8.6. Which of the two this face should be drawn is open (#873)
+    and is not changed here. No depth is given, because a port without a behaviour would read
+    one as a pit cut into the face, and the header stands proud of it - its relief says
+    how far.
+  mate: >-
+    derived - (6.08, 6.05), the centre of the pair of contacts, which is the centre of the housing, on
+    the mouth of the housing (`on: body`): a plug seated here stands off by the 2.5 the
+    housing is built proud, and starts where the housing ends.
+elements:
+  body: {at: [0.0, 0.0], size: [12.16, 12.1], class: connector}
+relief:
+  wall: '#245c21'
+  features:
+    - node: body
+      out: 2.5
+      shape: true
+      color: '#4fb548'
+      confidence: estimated
+      source: >-
+        ESTIMATED - the vendor video (1:00-1:02) shows the housing standing a few millimetres proud of the top face with its cells open and a contact in each; no figure gives the height. common/terminal-header-508-2@2's own 3D-form key.
+    - node: cell-1
+      out: 0.8
+      color: '#2f6e2a'
+      confidence: estimated
+      source: >-
+        common/terminal-header-508-2@2's own 3D-form key - see `body`. The well floor, below the housing top.
+    - node: pin-1
+      out: 1.6
+      color: '#c9cdd2'
+      confidence: estimated
+      source: >-
+        common/terminal-header-508-2@2's own 3D-form key - see `body`. The contact standing in the well.
+    - node: cell-2
+      out: 0.8
+      color: '#2f6e2a'
+      confidence: estimated
+      source: >-
+        common/terminal-header-508-2@2's own 3D-form key - see `body`. The well floor, below the housing top.
+    - node: pin-2
+      out: 1.6
+      color: '#c9cdd2'
+      confidence: estimated
+      source: >-
+        common/terminal-header-508-2@2's own 3D-form key - see `body`. The contact standing in the well.
+connection-points:
+  mate: {at: [6.08, 6.05], direction: front, 'on': body}
+skins: [default]
