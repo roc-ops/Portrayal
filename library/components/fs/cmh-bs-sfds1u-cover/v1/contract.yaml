@@ -1,0 +1,35 @@
+format: 1
+kind: component
+name: cmh-bs-sfds1u-cover
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  The detachable cover of the FS CMH-BS-SFDS1U, seen from the front - a flat plate clipped
+  over the hooked tips of the two slotted walls
+provenance:
+  size: >-
+    drawing - the plan and end view of the CMH-BS-SFDS1U datasheet: the cover spans the
+    duct, 435.2, and its height, 43.8.
+  relief: >-
+    estimated - the cover face sits at the front of the duct, 66.2 to 67.4 above the floor
+    of the well, a 1.2 sheet; the end view draws the hooks it clips to but not its section.
+  color: >-
+    estimated - Color: Black in the specification table; no image exists.
+  mark: >-
+    drawing - FS renders its round logo mark on the cover near the left end. A vendor
+    mark is never drawn, and nothing is reserved for it.
+size: {w: 435.2, h: 43.8}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: Steel}
+elements:
+  plate: {at: [0.0, 0.0], size: [435.2, 43.8], class: bezel}
+relief:
+  features:
+    - node: plate
+      lift: 66.2
+      out: 67.4
+      color: '#272829'
+      confidence: estimated
+      source: no view dimensions the cover section; a 1.2 sheet at the front of the duct
+skins: [default]
