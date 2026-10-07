@@ -980,11 +980,18 @@ def _reach(tree, ref, chain, seen=()):
 
 
 def _withheld_paths(ref, chain, seen=()):
-    """NetBox names under a bay Nautobot is not given, which it cannot reach."""
+    """NetBox names under a bay Nautobot is not given, which it cannot reach -
+    and the ports of a module that splits, which Nautobot's type does not state
+    (several front ports on one rear position have no spelling there, so
+    dcim_export.for_target drops both lists and says so, #246)."""
     nb, nt = _written("netbox", ref), _written("nautobot", ref)
     if nb is None or ref in seen:
         return set()
     out = set()
+    if "This module splits" in str((nt or {}).get("comments") or ""):
+        for key in dx.MODULE_PORT_KEYS:
+            for row in nb.get(key) or []:
+                out.add(_resolve(row["name"], "/".join(chain)))
     plain = {b["position"] for b in (nt or {}).get("module-bays") or []}
     contract = _dist().component_by_ref(ref) or {}
     for bid, b in (contract.get("bays") or {}).items():

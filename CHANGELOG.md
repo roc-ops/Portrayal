@@ -42,8 +42,9 @@ names the ref that replaces it.
   `power_port` set from `fed-by`; `through` is written as a sentence on the
   outlet's description and appended to the bay's (`; protects output-a1`),
   since Nautobot drops an outlet's description on import. Both targets read
-  the same block. The three Amphenol 300CB08 panels gain sixteen outlets each
-  (`dc-terminal` on the 300CB08, `other` labelled `P40` on the -C and -SC);
+  the same block. The nine Amphenol 300CB08 panels gain sixteen outlets each
+  (`dc-terminal` on the 300CB08 and the monitored nrg300CB08-CTRL and -SENS,
+  `other` labelled `P40` on the connectorized -C and -SC of both);
   nothing is renamed or removed. Stating `fed-by` or `through` is a minor
   device version, changing one a major. Lint L132 (`fed-by` names a placement
   that exports a power port), L133 (`through` names a bay), L134 (every outlet
