@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: nrg300cb08-ctrl-c
-version: 2.0.0
+version: 3.0.0
 maturity: modelled
 manufacturer: Amphenol Network Solutions
 model: nrg300CB08-CTRL-C
@@ -98,20 +98,33 @@ provenance:
     note: 'Top, bottom, left and right are sized from the 367.0 chassis. THE BOTTOM IS READ off this version''s
       own bottom view, Fig. 3-13 (upper), at 1.493 px/mm, origin the receptacle tops: the rear pair of vent fields
       144.0 deep from 33.1, the front pair 86.4 deep from 246.0, and the two ground bolts at 216.0 across, drawn
-      on the stated 5/8 inch centres (15.9 apart) at 41.05 and 56.95. The top is given the two side fields the photographs
+      on the stated 5/8 inch centres, one pair (see ground-pairs), its screws 15.875 apart about 49.0. The top is given the two side fields the photographs
       show running the depth of the lid, their extent estimated. THE SIDES ARE THE STUD PANEL''S SIDE VIEW, Fig.
       3-4 at 1.717 px/mm, not re-read for this version (gap c-side-view): four bracket holes 29.1 apart starting
       11.1 from the front, placed from the front, and a two-bolt ground landing on 5/8 inch centres placed from
       the REAR, 62 from it as on the stud panel and so 305.0 from the front here; the side lug Fig. 3-13 draws lies
       about 65 from the rear. Each side carries one landing and the bottom a third; the guide says only one ground
       connection is required.'
+  ground-pairs:
+    confidence: datasheet
+    note: >-
+      EACH LANDING IS ONE PAIR, NOT TWO STUDS (#828, #830). The installation guide's three sets of
+      1/4-20 threaded holes on 5/8 inch centres are each the landing of one dual-hole lug, so each
+      is common/ground-stud-pair-5-8-1-4@1, two 1/4-20 pan-head screws at exactly 15.875, the
+      pitch of the stud-pair-5-8 interface (formerly two common/ground-stud@1 placements 15.9
+      apart). Each pair is placed at rotate 90, one screw above the other as the side view, Fig.
+      3-4, and the bottom view draw the landings, centred where the two studs' midpoint was. A
+      two-hole lug seated on a pair leaves its wire down the face (toward the front on the bottom
+      view); each screw still takes a single-hole lug on its own, which the guide also allows. The
+      earth mark beside each side landing is centred on its pair, 1.8 lower than it sat beside the
+      two studs.
   ground-stud-size:
     confidence: datasheet
     note: 'The installation guide is one document for every version of the panel and its grounding specification
       is not limited to a version, as its input rows are: three sets of 1/4-20 threaded holes on 5/8 inch centres,
       bolted with washers to 50 in-lb, for a dual-hole compression lug on #6 to #1 AWG wire. Its description says
       the ground terminals take either a dual-hole or a single-hole lug and that only one ground connection is required.
-      That is the `stud-size` of all six ground placements, two on each side and two on the bottom.'
+      That is the `stud-size` of all three ground pairs, one on each side and one on the bottom.'
   monitoring:
     confidence: datasheet
     note: 'nrgSMART measures feed and per-circuit current, voltage and two probe temperatures. The controller and
@@ -1473,22 +1486,14 @@ views:
           thickness are not dimensioned
     components:
       placements:
-      - id: ground-bottom-1
-        ref: common/ground-stud@1
+      - id: ground-bottom
+        ref: common/ground-stud-pair-5-8-1-4@1
         at:
-        - 211.95
-        - 37.0
+        - 201.8125
+        - 42.75
+        rotate: 90
         group: grounding
         rel-pos: 1
-        attrs:
-          stud-size: 1/4-20
-      - id: ground-bottom-2
-        ref: common/ground-stud@1
-        at:
-        - 211.95
-        - 52.9
-        group: grounding
-        rel-pos: 2
         attrs:
           stud-size: 1/4-20
   left:
@@ -1542,32 +1547,24 @@ views:
         rx: 3.5
     components:
       placements:
-      - id: ground-left-1
-        ref: common/ground-stud@1
+      - id: ground-left
+        ref: common/ground-stud-pair-5-8-1-4@1
         at:
-        - 57.95
-        - 11.75
+        - 47.8125
+        - 17.5
+        rotate: 90
         group: grounding
-        rel-pos: 5
-        attrs:
-          stud-size: 1/4-20
-      - id: ground-left-2
-        ref: common/ground-stud@1
-        at:
-        - 57.95
-        - 27.65
-        group: grounding
-        rel-pos: 6
+        rel-pos: 3
         attrs:
           stud-size: 1/4-20
       - id: ground-left-mark
         ref: common/ground-symbol@1
         at:
         - 75.0
-        - 18.95
-        for: ground-left-1
+        - 20.75
+        for: ground-left
         group: grounding
-        rel-pos: 7
+        rel-pos: 4
   right:
     size:
       w: 367.0
@@ -1619,32 +1616,24 @@ views:
         rx: 3.5
     components:
       placements:
-      - id: ground-right-1
-        ref: common/ground-stud@1
+      - id: ground-right
+        ref: common/ground-stud-pair-5-8-1-4@1
         at:
-        - 300.95
-        - 11.75
+        - 290.8125
+        - 17.5
+        rotate: 90
         group: grounding
-        rel-pos: 3
-        attrs:
-          stud-size: 1/4-20
-      - id: ground-right-2
-        ref: common/ground-stud@1
-        at:
-        - 300.95
-        - 27.65
-        group: grounding
-        rel-pos: 4
+        rel-pos: 2
         attrs:
           stud-size: 1/4-20
       - id: ground-right-mark
         ref: common/ground-symbol@1
         at:
         - 286.0
-        - 18.95
-        for: ground-right-1
+        - 20.75
+        for: ground-right
         group: grounding
-        rel-pos: 8
+        rel-pos: 5
 configurations:
   base:
     kind: base
