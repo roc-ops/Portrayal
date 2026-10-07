@@ -124,7 +124,9 @@ source documents stay out of the repository. See `PRIOR-ART.md`.
 - `docs/modelling-a-device.md` — how to model a device from reference material, stage by stage with a check at each; `docs/modelling-pitfalls.md` for when a figure or a rule misbehaves
 - `docs/failure-by-omission.md` — the audit for tools that report success by reporting nothing, and the census-and-register method it produced
 - `library/components/CATALOGUE.md` — every component on one page: size, what it conforms to,
-  how many devices use it. Written by `./build.sh` in a checkout and not committed, so it is not on GitHub
+  how many devices use it. Written by `./build.sh` in a checkout and not committed; the published
+  library's copy is [portrayal.dev/components/catalog](https://portrayal.dev/components/catalog),
+  searchable, and its data is [components.json](https://portrayal.dev/assets/dist/components.json)
 - `CHANGELOG.md` — what changed in the dist contract, the part of this repository a consumer outside it reads;
   changes not yet in a version are also under `changelog.d/`, one file per pull request
 - `PRIOR-ART.md` — the research this rests on, and the gap it fills
