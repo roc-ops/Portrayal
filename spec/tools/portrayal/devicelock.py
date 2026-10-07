@@ -485,9 +485,7 @@ def _composed(doc, versions):
 # `shell` IS GEOMETRY TOO: it decides whether the envelope is a solid box or
 # open air round what the views' parts build (docs/cable-managers-design.md
 # section 4).
-# `overhang` IS GEOMETRY: it widens the envelope a part may be placed in, so
-# the footprint a rack drawing reserves changes with it (#865).
-CHASSIS_SHAPE = {"width", "height", "depth", "ru", "bevel", "shell", "overhang"}
+CHASSIS_SHAPE = {"width", "height", "depth", "ru", "bevel", "shell"}
 # `mount` IS NOT A DIMENSION EITHER: it says how the box is installed and moves
 # nothing on the drawing, so stating it on an existing device is a patch (#734).
 # `thickness` IS A STATED GAUGE, like the weight beside it: nothing is drawn or
@@ -496,8 +494,11 @@ CHASSIS_SHAPE = {"width", "height", "depth", "ru", "bevel", "shell", "overhang"}
 # the drawing moves when it changes (#854).
 # `ears` IS A STATEMENT about where the folds are, read only by L43: the face
 # is drawn at the size it already states either way (#865).
+# `overhang` IS A STATEMENT, like `mount`: it says how far parts already placed
+# reach past the rack face, and those parts carry their own geometry. Declaring
+# the reach a device already had moves nothing (#865).
 CHASSIS_SURFACE = {"color", "edge", "silk", "weight-kg", "airflow", "power", "mount", "thickness",
-                   "full-depth", "ears"}
+                   "full-depth", "ears", "overhang"}
 
 
 def _shape_digest(doc, placed, drop=()):

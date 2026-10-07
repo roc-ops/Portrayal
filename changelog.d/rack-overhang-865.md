@@ -7,7 +7,8 @@
   (optional placements and decor are not checked); L151 warns when no part
   reaches a stated figure. `<device>.configs.json` carries it as
   `chassis.overhang`, and the DCIM exports say it in the comments, since
-  neither schema has a field for it. It is geometry to devicelock.
+  neither schema has a field for it. To devicelock it is a statement, like
+  `mount`: the parts that reach past the face carry their own geometry.
 - `chassis.ears: behind` states that a rack device's ear folds are behind its
   body, so a 482.6 mm front is the part and L43 stands down (#865).
   `<device>.configs.json` carries it as `chassis.ears`; devicelock files it
@@ -25,11 +26,10 @@
   `overhang: {left: 43, right: 43}`. Its D-rings move 26.3 mm right on the
   wider face; the moved geometry takes the major. Its DCIM exports gain the
   overhang comment.
-- `nokia/lmfs-f` 2.0.0 states `overhang: {right: 47}`, the reach of its horizontal
+- `nokia/lmfs-f` 1.0.1 states `overhang: {right: 47}`, the reach of its horizontal
   front dust filter past the right flange, which it already drew in the
-  front-cover configuration. `overhang` is geometry to devicelock, so stating
-  it takes a major though nothing on the drawing moved. Its DCIM exports gain
-  the overhang comment.
+  front-cover configuration; nothing on the drawing moved. Its DCIM exports
+  gain the overhang comment.
 - A drawing bigger than its face (a part beyond it grows the viewBox) carries
   the face it declares as `data-face-w` and `data-face-h` on its root, and the
   3D viewer lays the face out on that rather than on the drawing's extent, so

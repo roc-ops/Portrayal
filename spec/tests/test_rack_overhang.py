@@ -171,8 +171,10 @@ def test_no_overhang_says_nothing():
     assert "beyond the 19-inch" not in dx.comments_for({"chassis": {"ru": 1}}, "base", {})
 
 
-def test_the_lock_files_overhang_as_shape_and_ears_as_surface():
-    assert "overhang" in devicelock.CHASSIS_SHAPE
+def test_the_lock_files_overhang_and_ears_as_surface():
+    """Stating the reach a device already had moves nothing; the parts past the
+    face carry their own geometry (#865)."""
+    assert "overhang" in devicelock.CHASSIS_SURFACE and "overhang" not in devicelock.CHASSIS_SHAPE
     assert "ears" in devicelock.CHASSIS_SURFACE
 
 
