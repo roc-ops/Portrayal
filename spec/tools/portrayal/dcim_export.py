@@ -55,7 +55,6 @@ from portrayal.artifacts import Dist, face_file
 
 from portrayal.manifest import view_parts, alias_names, config_airflow
 from portrayal import optical_ports
-from portrayal.faces import face_ref
 
 # Portrayal media/speed -> DCIM interface type. Every value here is valid in
 # both libraries: NetBox's enum is a strict superset of Nautobot's (227 types
@@ -819,27 +818,19 @@ PART_SKIP = {"common/qsfp-pull-tab", "std/lc-bore"}
 # Writing a reason is cheap; ten of these say "upstream has no type for this",
 # which is a fine reason and a very different one from "nobody noticed".
 NOT_A_DCIM_PORT = {
-    # --- fibre: deferred, with a design note rather than a gap ---------------
-    # A front port in both libraries requires a rear port to terminate on, and
-    # nothing in a contract says which of a single-faced module's parts is the
-    # trunk - exporting front ports with no rear counterpart is the shape
-    # netbox#21830 rejected outright. See build_module's `rear-ports` comment
-    # and docs/optical-paths-design.md C3.
-    #
-    # ONE ADAPTER, AND THE TWO THAT ARE NOT HERE ARE THE POINT. The FS
-    # cassettes' lc-duplex-v and sc-duplex adapters export their whole fibre
-    # list, because those modules declare a rear face - so they were wrong to be
-    # listed here, and the register's own stale-entry test is what threw them
-    # out. What is left is the single-faced case: a Smartoptics PPM coupler's
-    # paths run front-to-front, so there is no trunk, plus the 117 placements on
-    # DCP chassis, where the device pass has no fibre path at all.
-    "common/lc-duplex-adapter": "single-faced modules have no trunk to terminate on, and the "
-                                "device pass has no fibre path; optical-paths-design.md C3",
+    # --- fibre ---------------------------------------------------------------
+    # `common/lc-duplex-adapter` WAS HERE until the trunk (#246): a PPM's
+    # paths ran front-to-front and nothing named its network side, so no
+    # placement anywhere exported. The PPMs now state `optical.trunk` and
+    # export front and rear ports, so the register's stale-entry test took the
+    # entry off - and the placements that still export nothing, 117 on DCP
+    # chassis and two on the A22, are named in their own type's comments by
+    # `unexported_optical` instead of falling through in silence (#204).
     "std/lc-bore": "the rx/tx bore of a transceiver, not a port on anything - see PART_SKIP",
     "std/sc-bore": "the SC/APC optical ports of single-faced CH3000 back plates (commscope/bp-a5, "
                    "bp-f2, bp-f4) and the half-depth passives and switch (np3*, op3*, "
-                   "os32m2b); no trunk to terminate on, the same case as "
-                   "common/lc-duplex-adapter",
+                   "os32m2b); a bore drawn inside an active part, with no glass modelled "
+                   "behind it and no trunk to terminate on",
     "common/sc-apc": "PON; the connector is the same ferrule for xg-pon (10G/2.5G) and "
                      "xgs-pon (10G/10G), which upstream separates, so the ref cannot pick "
                      "one - a device placement that states `pon` does, and exports "
@@ -966,6 +957,25 @@ MGMT_NOT_A_DCIM_PORT = {
                                    "nobody has identified",
 }
 MGMT_EXPORTED_ROLES = {"mgmt", "console", "aux"}
+
+
+# A FIBRE ADAPTER WITH NO GLASS BEHIND IT IS NEITHER KIND OF DCIM PORT, AND THE
+# RECORD SAYS SO (#204). Not an interface: in this exporter `type` names the
+# SIGNAL, and a passive LC adapter on a ROADM line port carries whatever the
+# line carries - `other` labelled LC would encode the connector as the
+# interface, the mistake FAMILY_PART's comment records being made twice. Not a
+# front/rear port pair: that needs a path to a trunk, and a device, or a module
+# such as the A22 amplifier, models no glass behind its adapters. So these
+# export nothing - the decision #204 asked for - and the ids go in the type's
+# comments, so an adapter visibly on the faceplate and absent from the record
+# reads as a decision rather than a modelling gap.
+def unexported_optical(ids):
+    return ("Optical ports not exported: " + ", ".join(sorted(ids, key=_natural))
+            + ". Each is a fibre adapter with no fibre path modelled behind it: not an "
+              "interface, because an interface type names a signal and a passive adapter "
+              "carries whatever the fibre does, and not a front/rear port pair, because "
+              "that needs a path to a trunk.")
+
 
 # Both libraries take ALMOST the same device-type document. They differ in what
 # they REQUIRE - NetBox also demands u_height and is_full_depth, which we always
@@ -1815,6 +1825,7 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
     # the faceplate port is not a switch interface, so they are not listed twice.
     listed_sfp = {i["name"] for i in mgmt_sfp}
     ports = {}
+    unexported_fibre = set()
     for view in views_for(dev, cfg_name):
         for p in scoped(view_parts(view)["placements"], cfg_name):
             pid = p["id"]
@@ -1838,6 +1849,12 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
             # `interfaces:` that it turns away is a lint error, not a silence.
             t, iface_label, _why = device_port_type(p, a, group_role(p), names)
             if t is None:
+                # A DEVICE HAS NO GLASS - the fibre graph lives on modules - so
+                # a fibre adapter on a chassis is a ROADM line or client port
+                # with nothing modelled behind it, and it exports nothing. It is
+                # named in the comments below rather than dropped (#204).
+                if optical_ports.family_of(p.get("ref") or ""):
+                    unexported_fibre.add(pid)
                 continue
             # ONE CAGE, SEVERAL INTERFACES (#443). A CSFP cage presents two BiDi
             # interfaces and says so with `interfaces:`; each is exported, typed
@@ -1917,6 +1934,8 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
         out["module-bays"] = sorted(bays, key=bay_order)
 
     body = comments_for(dev, cfg_name, cfg)
+    if unexported_fibre:
+        body = (body + "\n\n" + unexported_optical(unexported_fibre)).strip()
     if body:
         out["comments"] = body
     return out
@@ -2053,6 +2072,7 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None,
     # (effective_part) - and a port in a `management` group is mgmt_only, the
     # same rule `build` applies to a device port.
     comp_groups = contract.get("groups") or {}
+    unrouted_fibre = []
     for part in contract.get("parts") or []:
         if not isinstance(part, dict):
             continue
@@ -2063,6 +2083,8 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None,
         # stays out of it, as it does on a device, where `build` lists those
         # jacks apart from the ports.
         kind, row = route_part(part, attrs, defaulted)
+        if kind is None and optical_ports.family_of(part.get("ref") or ""):
+            unrouted_fibre.append(str(part.get("id")))
         if kind is None:
             if dropped is not None:
                 # THE else THIS CHAIN DID NOT HAVE. A part matching no branch fell
@@ -2139,23 +2161,21 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None,
     # in the DCIM sense - nothing terminates electrically - so these are its
     # entire port list, and a module with no `optical` adds nothing here.
     #
-    # GATED ON A DECLARED REAR FACE, not merely on having paths. Section C3
-    # calls the rear connector "the trunk", but a single-faced module such as
-    # a PPM coupler has no rear face at all - its paths run entirely between
-    # parts drawn on its one face (`common.1 -> split.1/2` for an OCU coupler,
-    # never a `rear:`-prefixed endpoint) - and nothing in the contract names
-    # which of its parts is the trunk. `common` and `split` are part ids a
-    # modeller chose, not declared roles, and path direction does not settle
-    # it either: the cassette's own paths run FROM the front
-    # (`lc1.1 -> rear:mtp.1`) while an OCU's run FROM what would be the trunk
-    # (`common.1 -> split.n`) - opposite conventions, so a rule built on
-    # either would invent a role the contract never states. Exporting every
-    # fibre position of a single-faced module as a front port with no rear
-    # counterpart is exactly the shape netbox#21830 rejected ("We do not get
-    # to omit rear ports"), so a single-faced module exports neither list and
-    # waits for the vocabulary a future plan owes.
+    # GATED ON A TRUNK, not merely on having paths: a declared rear face, or a
+    # stated `optical.trunk` (optical_ports.projects). Section C3 calls the
+    # rear connector "the trunk", and a single-faced module such as a PPM
+    # coupler has no rear face - its paths run between parts drawn on its one
+    # face (`common.1 -> split.1/2`). Neither its part ids nor its paths'
+    # direction say which end is the trunk - a cassette's paths run FROM the
+    # front (`lc1.1 -> rear:mtp.1`), a coupler's FROM the common port - so the
+    # contract states it, and the stated positions go on rear ports exactly as
+    # a rear-face connector does (roc-ops/Portrayal#246). A module with paths
+    # and neither is a lint error (L131); were one to reach here it would
+    # export neither list, because front ports with no rear port are the shape
+    # netbox#21830 rejected ("We do not get to omit rear ports").
     view = contract_view(contract)
-    if face_ref(view, "rear") and (contract.get("optical") or {}).get("paths"):
+    projected = optical_ports.projects(view)
+    if projected:
         fibre = optical_ports.ports(view, load_ref)
         if fibre["rear"]:
             out["rear-ports"] = fibre["rear"]
@@ -2179,6 +2199,12 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None,
         body.append("Facts carried in the model that this schema has no field for:")
         body += facts
         body.append("")
+    # A FIBRE ADAPTER THE PROJECTION DID NOT TAKE IS SAID, NOT DROPPED (#204).
+    # On a module whose glass projects, its adapters are front and rear ports;
+    # on one with no glass modelled - the A22 amplifier's EDFA and OCM ports -
+    # they are neither, and the record says which ones and why.
+    if unrouted_fibre and not projected:
+        body += [unexported_optical(unrouted_fibre), ""]
     # Same reasoning as the device stamp: a module type is cached in a DCIM too,
     # and its faceplate can move under it.
     #
@@ -2429,6 +2455,31 @@ def for_target(doc, target, fibre_map=None):
     for row in (fibre_map or {}).get("rows") or []:
         rows.setdefault(row["front"], []).append(row)
     rears = {r["name"]: r for r in doc.get("rear-ports") or []}
+
+    # A DECLARED SPLIT HAS NO NAUTOBOT SPELLING AT ALL, and it is not malformed:
+    # a coupler's legs, or an add/drop filter's band and remainder, are several
+    # front ports on ONE rear position, which NetBox's many-to-many holds and
+    # Nautobot's unique (rear_port_template, rear_port_position) cannot. So the
+    # Nautobot type states no front or rear ports and says where they are,
+    # rather than stopping the export or binding a leg to a position it does
+    # not reach. DECLARED means the shared rows carry the split's own evidence
+    # - a ratio or a band. Two fronts on one position with neither is a
+    # collision, and still stops the export below.
+    shared = {}
+    for row in (fibre_map or {}).get("rows") or []:
+        shared.setdefault((row.get("rear"), row.get("rear_position")), []).append(row)
+    split = sorted({rear for (rear, _pos), legs in shared.items()
+                    if len({leg.get("front") for leg in legs}) > 1
+                    and any("ratio" in leg or "band" in leg for leg in legs)})
+    if split:
+        doc.pop("front-ports", None)
+        doc.pop("rear-ports", None)
+        _note(doc, f"This module splits: several of its front ports share one position "
+                   f"of rear port {', '.join(split)}. Nautobot allows one front port per "
+                   "rear port position, so this type states no front or rear ports; "
+                   "they are in the NetBox type, and the split, leg by leg, is in this "
+                   "module's fibre map.")
+        return doc
 
     bound, whole_connector = {}, set()
     for port in fronts:
@@ -2890,15 +2941,14 @@ def export_modules(dist, root, images=None):
 
         tokenize_module(doc)
         # THE FIBRE MAP IS BUILT BEFORE THE TYPE IS WRITTEN, because the
-        # Nautobot type is bound from it (`for_target`). It is gated the same
-        # way build_module gates rear-ports: on a declared rear face, not merely
-        # on having paths. A single-faced module (a PPM coupler) has paths that
-        # run front-to-front, so `_row` answers None for every leg and a map for
-        # it would be all rows and no ports - the same shape netbox#21830
-        # rejected for the port lists themselves.
+        # Nautobot type is bound from it (`for_target`). It is gated exactly as
+        # build_module gates rear-ports, by `optical_ports.projects`: a declared
+        # rear face or a stated `optical.trunk`, not merely paths. Without a
+        # trunk `_row` answers None for every leg, and a map would be all rows
+        # and no ports - the shape netbox#21830 rejected for the ports themselves.
         view = contract_view(contract)
         fibre_map = None
-        if face_ref(view, "rear") and (contract.get("optical") or {}).get("paths"):
+        if optical_ports.projects(view):
             fibre_map = tokenize_fibre_map(
                 optical_ports.fibre_map(view, dist.component_by_ref, model))
         # `major` ARRIVES PREFIXED. It is the version directory's own name, so

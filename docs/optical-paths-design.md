@@ -208,12 +208,29 @@ So:
   front ports against one rear position. The ratio has no field in the type
   format, so it goes in `description` - the same place the vendor puts it.
 
+  **Which end is the trunk is stated where no rear face says it.** A rear face
+  is the trunk by construction. A single-faced module - a PPM coupler, a DCM,
+  an add/drop filter, a tap with every connector on its front - names its
+  common, network-side positions in `optical.trunk`, in `front-order`'s item
+  grammar (a bare part id is all its positions, `dcm.2` is one). The projection
+  puts them on rear ports exactly as it puts a rear-face connector there: one
+  rear port per trunk part, named `<PART>-1` like `MTP-1`, its positions the
+  part's trunk positions in order. The front ports keep the faceplate's own
+  count, so an OCU's legs export as `3` and `4` beside the gap its common
+  adapter leaves. Neither a part id (`common`, `split`) nor a path's direction
+  could have answered this: a cassette's paths run from the front and a
+  coupler's from the trunk. L129-L131 hold it (#246).
+
 ### The mapping is a third export
 
-**The device-type YAML no longer carries the front-to-rear binding at all.** The
-current `front-port` schema is `{name, type, positions}` with
-`additionalProperties: false` and no `rear_port` key, consistent with #20564
-having removed the FK. The mapping is now per-INSTANCE M2M.
+**The device-type YAML this project writes does not carry the front-to-rear
+binding.** The `front-port` schema is `{name, type, positions}` with no
+`rear_port` key, consistent with #20564 having removed the FK, and the mapping
+is per-INSTANCE M2M. An earlier version of this note said the type format had
+nowhere to put the binding at all, and that is no longer true: NetBox >= 4.6
+has type-level `port-mappings` (PortTemplateMapping), which a module type can
+carry. Adopting them is tracked as its own piece of work; until it lands, the
+fibre map below is where the binding lives.
 
 **Nautobot is the exception, and it was found by importing.** Its
 FrontPortTemplate still has a non-null rear port and rear-port position, and its
@@ -223,9 +240,13 @@ the Nautobot document is written with the binding, read from the same rows as
 the fibre map. One front port reaches one rear position there, which holds
 every breakout, conversion, mesh and splice cassette as it stands. It does not
 hold an MPO front connector against an MPO rear one; that pair is written as a
-single position, and the fibres stay in the map. A tap - several front ports on
-one rear position - has no Nautobot spelling at all, and the export stops on one
-rather than writing a file that cannot load.
+single position, and the fibres stay in the map. A split - several front ports
+on one rear position, declared by a `ratio` or a `band` on the shared rows - has
+no Nautobot spelling at all, so its Nautobot type states no front or rear ports
+and says that they, and the split, are in the NetBox type and the fibre map. Two
+front ports on one rear position with neither is a collision rather than a
+split, and the export still stops on it rather than writing a file that cannot
+load.
 
 So it ships beside `exports/netbox/` and `exports/nautobot/` as a fibre map,
 carrying the rows the M2M wants:
@@ -302,12 +323,13 @@ on a handful of modules before the bulk build.
 1-5 (PRs #236, #237, #239, #240, #242) and proved themselves on one cassette, as
 this section asked. Step 5 is then plan 6 (the enclosure and one cassette
 per two-faced shape) and the bulk build that follows it; step 6, the PPM retro-fit,
-owes the two things this document still records as undesigned - a `combine` syntax,
-and a way to name which optical endpoint is a trunk. **The trunk is now the larger
-of the two and is not only the PPMs' problem:** every one of the 19 TAP cassettes
-carries its live and monitor ports on a single face, so 29 parts in all are waiting
-on that vocabulary, and it should be designed before the bulk build rather than
-after it.
+owed two things this document recorded as undesigned - a `combine` syntax, and a
+way to name which optical endpoint is a trunk. **The trunk is designed and built**
+(`optical.trunk`, #246, section C3), ahead of the bulk build as this section
+argued: the eight path-bearing PPMs state one and export front and rear ports,
+including both AD1 add/drop filters, retrofitted with their glass in the same
+change, and the 19 single-faced TAP cassettes have the vocabulary they were
+waiting on. `combine` is still open; see below.
 
 ## Open questions
 
@@ -325,14 +347,18 @@ four cassettes need 435.86 mm side by side, which is wider. It does not threaten
 the 1UFCE, whose 448.0 comes from a dimensioned orthographic drawing in its own
 datasheet, but it is unexplained.
 
+**Which end is the trunk was the other open question, and it is settled**
+(section C3, #246).
+
 **Combines are undesigned.** The vocabulary can express a split - one path,
 one `from`, a ratio list of destinations - and L79 can verify its ratios. It
 cannot express the opposite: two sources landing on one destination, which is
 what `ppm-ad1-1510`'s add/drop direction and the add/drop filters of plan 6
-will need. Today's parts dodge this by writing add/drop as a split off the
-line port instead, and L79 treats any real collision on a destination as a
-flat error with no declared-combine escape hatch the way a declared split has
-one. What the syntax should look like - a ratio list on the destination side,
+will need. Today's parts dodge this by writing add/drop as banded legs off the
+line port instead - `ppm-ad1-1510` and `-1625` do exactly that, one banded and
+one unbanded path off each line bore, which L79 allows for paths that carry a
+`band` - and L79 treats any real collision on a destination as a flat error
+with no declared-combine escape hatch the way a declared split has one. What the syntax should look like - a ratio list on the destination side,
 a distinct `combine` keyword, something else - needs plan 6's own evidence
 before it is worth deciding; recorded here so it is not mistaken for settled
 by section D's table, which used to claim it.
