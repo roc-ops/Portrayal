@@ -1,23 +1,61 @@
 format: 1
 kind: component
 name: rj11-jack
-version: 1.1.1
+version: 1.2.0
 class: port
 profile: networking
 interface: rj11
-description: RJ11 telephone jack (FXS)
-size: {w: 14.0, h: 13.5}
+description: RJ11 telephone jack (FXS) - the six-position modular jack housing a
+  plug enters, with the interface recessed into solid walls in three tiers (body,
+  latch shoulder, latch slot) and two contacts loaded (6P2C). Pins up, latch slot
+  down when unrotated; rotate 180 at placement for a jack fitted the other way up.
+size: {w: 14.0, h: 13.5, d: 20.57}
 attrs: {media: rj11}
 provenance:
-  size: photo-measured (HLX-TGV rear panel)
-  elements.jack: 'skin-read - default.svg draws rect id=jack at 1.2, 1.5 sized
-    11.6 x 10.5, the 6P4C opening, with jack-keyway inside it and the four pins
-    above. Declared class cutout, matching the opening std/rj45 declares. The box
-    is unchanged, it already matched the skin to the digit. There is no std/rj11
-    and no rj11 key in spec/schemas/standards.yaml, so this aperture stays drawn
-    here and the L26 warning is the record of that'
+  size: >-
+    photo-measured (HLX-TGV rear panel) - the 14.0 x 13.5 housing face. TE C-1775675
+    rev C draws its six-position housing 13.34 wide (15.7 over the side lugs) and 15.0
+    high, a different maker's body; the photographed one is kept.
+  depth: >-
+    drawing - TE customer drawing C-1775675 rev C (30 Dec 2014), "Modular Jack, Side
+    Entry, Low Profile, DIP", sheet 1 side view: 20.57 overall, the registry `rj11`
+    figure. The drawing lists the one housing with six, four or two contacts loaded
+    (6P, 4P, 2P; 1775675-1 to -4). The 3D view builds the cavity this deep, as std/rj45@2
+    builds its 18.6; no plug stop is dimensioned.
+  elements.jack: >-
+    drawing and scaled - TE C-1775675 rev C, sheet 1 front view. The opening is
+    dimensioned 9.88 wide; its three tiers are SCALED off the same view at 55.06 px/mm
+    on that printed 9.88 (a 600 dpi render; the printed 13.34 housing reads 13.33):
+    body 9.88 x 6.85, a 6.60 wide shoulder 1.69 high beneath it, and a 4.04 wide latch
+    slot 2.72 high, 11.26 in all, with 0.71 of housing below the slot on TE's body. It
+    is centred in the 14.0 body (x 2.06) from y 1.5, which leaves 0.74 below the slot;
+    the 1.5 top wall is the previous drawing's, kept because the photographed body is
+    shorter than TE's. Declared class cutout, as std/rj45@2 declares its opening. Was
+    drawn 11.6 x 10.5, the RJ45 width, until #837. There is no std/rj11 and the
+    registry `rj11` entry claims no envelope, so the aperture stays drawn here and the
+    L26 warning is the record of that.
+  pins: >-
+    drawing - TE C-1775675 rev C: six contact positions on the 1.02 pitch (2.54 x 2
+    staggered tails below), and the 2P loading is listed. TWO contacts are drawn,
+    positions 3 and 4, 0.46 wide as std/rj45@2 draws them (TE 1734264 detail C): the
+    Halny HLX-TGV's FXS jacks, the one placing device, are photographed with two
+    loaded. A jack with four or six loaded is the same body and would be a second
+    skin.
+  walls: >-
+    the sides of the opening are the housing, drawn solid, as on std/rj45@2: it is what
+    grips a plug. The body colour is the previous drawing's light grey, photo-read; TE
+    makes its housing black.
+  mate: >-
+    UNCHANGED by the #837 redraw at (7.0, 6.75), which was the centre of the 11.6 x
+    10.5 opening drawn before. It is the opening's centre across and 0.38 above its
+    centre down (the slot made the opening 11.26 tall); not moved, so a seated plug
+    and every device frame stay where they were.
 elements:
-  jack: {at: [1.2, 1.5], size: [11.6, 10.5], class: cutout}
+  jack: {at: [2.06, 1.5], size: [9.88, 11.26], class: cutout}
+relief:
+  wall: '#3a3f45'
+  cavity: cavity
+  size: {w: 9.88, h: 11.26}
 connection-points:
   tel: {at: [7.0, 6.7], direction: front}
   mate: {at: [7.0, 6.75], direction: front}

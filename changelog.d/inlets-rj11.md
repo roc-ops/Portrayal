@@ -10,3 +10,11 @@
   devices whose supplies or chassis carry one of these inlets take a patch
   (97 C14, 30 C20, `dell/r740xd` both); their DCIM exports change in the
   drawing version line only (#793).
+- `common/rj11-jack@1` (1.2.0) is drawn as the six-position jack it is: the
+  opening is 9.88 wide (TE C-1775675 rev C) in three tiers (body, latch
+  shoulder, latch slot) recessed into a solid housing, as `std/rj45@2` draws
+  its own, where it was the 11.6 RJ45 width; two contacts are loaded (6P2C);
+  and it is 20.57 deep with a built cavity, where it stated no depth. Its
+  body, `tel` and `mate` points are unchanged, so `generic/rj11-plug@1`
+  (1.0.1, provenance only) seats where it did and now clears the opening by
+  about 0.12 a side. `halny/hlx-tgv` takes a patch (#837).

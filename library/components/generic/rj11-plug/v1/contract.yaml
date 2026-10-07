@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: rj11-plug
-version: 1.0.0
+version: 1.0.1
 class: port
 mates: rj11
 conforms: rj11-plug
@@ -71,21 +71,20 @@ provenance:
     body (read off a drawing marked not to scale, so no better than a
     millimetre); with the same ASSUMED 1.5 of front wall as the RJ45 plug
     takes, the insertion is 7.9 and the body stands 12.43 - 7.9 = 4.53 out,
-    built as 4.5. THE JACK AS MODELLED GIVES NOTHING TO COMPARE:
-    common/rj11-jack@1 states no depth and builds no cavity. A depth is the
-    figure to add to it, and nothing here is derived from one.
+    built as 4.5. THE JACK NOW STATES A DEPTH and does not settle this:
+    common/rj11-jack@1 is 20.57 deep with a built cavity since #837 (TE
+    C-1775675 rev C), which is the housing's overall depth, not a plug stop.
+    The 7.9 sits well inside it; nothing here is derived from it.
   aperture: >-
-    A MISMATCH IN THE JACK, RECORDED AND NOT CORRECTED. common/rj11-jack@1
-    draws its opening 11.6 wide, which is the width of an RJ45 opening; the
-    six-position opening is 9.88 (TE C-1775675 rev C) and this plug is 9.65.
-    A seated plug therefore shows about a millimetre of dark opening either
-    side that a real jack does not have. The body of the jack, 14.0 wide, is
-    a six-position body. The drawing of the jack is not changed here.
+    MATCHED SINCE #837. common/rj11-jack@1 draws its opening 9.88 wide, the
+    six-position opening of TE C-1775675 rev C, and this plug is 9.65, so a
+    seated plug clears it by about 0.12 either side. It was drawn 11.6, the
+    width of an RJ45 opening, until #837 redrew it.
   frame: >-
     THE RELIEF IS MEASURED FROM THE LIFT THE HOST PRESENTS.
     common/rj11-jack@1 presents at its own face (its `mate` carries no `on:`
     and no `seat-out`), so 0 here is the face of the jack. The 7.9 of body
-    inside the jack is not built.
+    inside the jack is not built; the jack's own 20.57 cavity is behind it.
   stub: >-
     estimated - the stub rule, docs/connectors-coax-design.md section 5: a
     straight run of cord 30 long starting where the body ends (4.5 in front
