@@ -33,8 +33,21 @@ H58_14 = "common/ground-stud-pair-5-8-1-4@1"
 
 def _amphenol(model):
     """The 300CB08 panels' three landings, at the old studs' midpoints; the
-    nrgILS chassis is deeper and its bottom and right landings sit further on."""
+    nrgILS chassis is deeper and its bottom and right landings sit further on.
+
+    THE THREE -C PANELS are 367.0 deep and were re-read on main (#867): the
+    bottom is read off their own bottom view, guide Fig. 3-13 (upper), which
+    puts the two ground bolts at 216.0 across, one 5/8 in. pair whose screws
+    sit 15.875 apart about 49.0 (main read them at 41.05 and 56.95, 15.9
+    apart, before the pair); the side landing is placed from the
+    REAR, 62 from it as on the stud panel, so 305.0 from the front (device
+    provenance `envelope-faces`). The left view runs from the rear, so its
+    62.0 is the same on every version."""
     ils = model.startswith("nrgils")
+    if model.endswith("-c"):
+        return {("bottom", "ground-bottom"): (216.0, 49.0),
+                ("left", "ground-left"): (62.0, 23.75),
+                ("right", "ground-right"): (305.0, 23.75)}
     return {("bottom", "ground-bottom"): (216.2 if ils else 214.95, 68.0),
             ("left", "ground-left"): (62.0, 23.75),
             ("right", "ground-right"): (311.2 if ils else 268.8, 23.75)}

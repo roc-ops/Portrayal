@@ -88,11 +88,20 @@ OLD_NUT_TR = "25.35,6.15 23.4,9.53 19.5,9.53 17.55,6.15 19.5,2.77 23.4,2.77"
 OLD_SHIFT = {"stud-tr": (0.0, 0.0), "stud-bl": (-15.3, 15.3), "stud-br": (0.0, 15.3)}
 
 # The census, counted off the library by walking every device view and every
-# component's `parts:`: part -> (placements, devices).
+# component's `parts:`: part -> (placements, devices). 59 placements on 39
+# devices. On main (796eb08) the same walk read 145 on 61; the grounding batch
+# (#828, #830) moved 86 single studs into pair hosts, which compose a sized
+# screw or the MX stud twice and which test_two_hole_lugs.py and
+# test_grounding_devices.py count:
+#   common/ground-stud@1      71 -> 3   the eleven Amphenol 300CB08 panels (six
+#                                       each, 66) and the Nokia LMFS-F (2)
+#   common/ground-lug@1       63 -> 55  the Edgecore AIS800-64D and -64O (two
+#                                       each), the Nokia FX-16 (2), FX-8 and FX-4
+#   juniper/mx-ground-stud@1  10 -> 0   the MX80, MX104, MX150, MX240 and MX480
+# and 22 devices with them, every one of whose ground studs was in a pair.
 CENSUS = {
     "common/ground-lug@1": (55, 35),
     "common/ground-stud@1": (3, 3),
-    "juniper/mx-ground-stud@1": (10, 5),
     CASA: (1, 1),
 }
 # juniper/mx-ground-stud@1 IS PLACED BY NO DEVICE SINCE #828: the five MX
@@ -109,6 +118,10 @@ PAIRED = {
     "juniper/mx480": {"ground-studs": "1/4-20"},
     "juniper/mx304": {"ground-plate": "M6"},
 }
+
+# the hosts the MX pairs and plates are placed as
+MX_PAIR_HOSTS = ("juniper/mx-ground-stud-pair-5-8@1", "juniper/mx-ground-stud-pair-3-4@1",
+                 "juniper/mx204-ground-plate@2", "juniper/mx304-ground-plate@2")
 
 UFI2 = {"ground-1": "M4", "ground-2": "M4"}
 # device -> {placement: the size its own documents state}. Every other
@@ -366,8 +379,11 @@ def test_the_census_of_ground_stud_placements(placed):
     got = {ref: (n, len(devs)) for ref, (n, devs) in counts.items()}
     assert got == CENSUS
     assert all(n > 0 and d > 0 for n, d in got.values())
-    assert sum(n for n, _ in got.values()) == 69
-    assert len({where for where, _, _ in placed}) == 44
+    assert sum(n for n, _ in got.values()) == 59
+    assert len({where for where, _, _ in placed}) == 39
+    # the MX stud is still a part, composed twice by each MX pair host, and no
+    # device places it straight on a face any more
+    assert "juniper/mx-ground-stud@1" not in got
 
 
 @pytest.fixture(scope="module")
@@ -405,7 +421,8 @@ def test_every_single_stud_placement_is_a_slot_of_its_device_offering_the_lug(pl
         want = render_mod.seat_point(p["at"], s["size"], p.get("rotate"), list(s["axis"]))
         assert c["mate"] == pytest.approx(want, abs=EPS)
         seen += 1
-    assert seen == 68
+    # every placement of the census but the Casa terminal's one
+    assert seen == 58
 
 
 def test_the_only_turned_placements_are_turned_90(placed):
@@ -444,13 +461,21 @@ def test_the_casa_terminal_publishes_exactly_its_three_studs_as_slots(comps, slo
 # --- 3. stud-size ------------------------------------------------------------------
 
 def test_stud_size_is_stated_where_a_document_states_it_and_nowhere_else(placed):
+    """70 placements on 34 devices state a size for a single stud or a common
+    pair host (STUD_SIZE), and the seven MX pairs and plates state theirs on
+    the pair placement (PAIRED). The 80 on 39 this read before counted the
+    five MX chassis' ten single studs, which are one pair placement each now."""
     got = {}
     for device, view, p in [*placed, *placements_of(PAIR_HOSTS)]:
         size = (p.get("attrs") or {}).get("stud-size")
         if size is not None:
             got.setdefault(device, {})[p["id"]] = size
     assert got == STUD_SIZE
-    assert sum(len(v) for v in got.values()) == 80 and len(got) == 39
+    assert sum(len(v) for v in got.values()) == 70 and len(got) == 34
+    mx = {}
+    for device, view, p in placements_of(MX_PAIR_HOSTS):
+        mx.setdefault(device, {})[p["id"]] = (p.get("attrs") or {}).get("stud-size")
+    assert mx == PAIRED
     # every device that states one says where it read it
     for device in (*STUD_SIZE, *PAIRED):
         entry = _device(device)["provenance"]["ground-stud-size"]
