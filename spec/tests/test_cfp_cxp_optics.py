@@ -769,10 +769,15 @@ def test_it_seats_in_a_real_cage_on_a_real_card_with_its_plug_or_cap(seated, sea
     assert BAYS[device][cpath.split("/module")[0] if cpath.count("/module/") == 1
                         else "/".join(cpath.replace("/module", "").split("/")[:2])] \
         .startswith(card.get("data-ref").rsplit(":", 1)[0].rsplit("@", 1)[0])
-    # the optic is centred on the mate point of the cage
+    # the optic is centred on the mate point of the cage - to the precision the
+    # drawing is written at: a facet's foreshortening is written as
+    # `scale(1, cos)` to six significant digits (facets.scale_transform), so
+    # cos 45 reads 0.707107, 2.2e-7 off, and a point ~17 mm along the facet
+    # carries ~4e-6 of it. The CFP4 on the FANT-G's 45 degree tooth (#802) is
+    # the case; a seat that is truly off is off by tenths, not millionths.
     cx, cy = device_point(parents, cage, cage_mate(cage))
     ox, oy = device_point(parents, optic, own_mate(optic))
-    assert abs(cx - ox) < 1e-6 and abs(cy - oy) < 1e-6
+    assert abs(cx - ox) < 1e-5 and abs(cy - oy) < 1e-5
     depth = d["head"]["size"]["d"]
     for suffix, want in chain.items():
         occ = by_path(root, f"{cpath}-occupant{suffix}-occupant")
