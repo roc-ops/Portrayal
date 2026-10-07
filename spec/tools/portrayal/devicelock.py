@@ -580,6 +580,15 @@ def buckets(doc, versions=None):
                       for v, w in (doc.get("views") or {}).items()},
             "regions": {v: (w or {}).get("regions")
                         for v, w in (doc.get("views") or {}).items()},
+            # WHERE CABLES CAN CROSS A FACE (docs/cable-managers-design.md
+            # section 5) is a statement a consumer reads, so moving one asks
+            # for a version. Conditional, as `aliases` is: a device that
+            # declares none is not rehashed for a key it does not have.
+            **({"passes": {v: (w or {}).get("passes")
+                           for v, w in (doc.get("views") or {}).items()
+                           if (w or {}).get("passes")}}
+               if any((w or {}).get("passes") for w in (doc.get("views") or {}).values())
+               else {}),
             # A face's `empty` decides whether it counts as finished, so editing
             # it moves a capability LEVEL. Unfingerprinted, that could be
             # rewritten - or quietly deleted - with nothing asking for a version.
