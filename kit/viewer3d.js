@@ -1564,12 +1564,30 @@ export function createViewer(container, opts = {}) {
     for (const [k, vals] of map instanceof Map ? map : Object.entries(map || {}))
       if (vals && Object.keys(vals).length) next[k] = {...vals};
     const changed = new Set();
+    // and which field keys changed on them, for the position check below
+    const keys = new Set();
     for (const k of new Set([...Object.keys(FIELDS), ...Object.keys(next)]))
-      if (JSON.stringify(FIELDS[k]) !== JSON.stringify(next[k])) changed.add(k);
+      if (JSON.stringify(FIELDS[k]) !== JSON.stringify(next[k])) {
+        changed.add(k);
+        for (const f of new Set([...Object.keys(FIELDS[k] || {}), ...Object.keys(next[k] || {})]))
+          if ((FIELDS[k] || {})[f] !== (next[k] || {})[f]) keys.add(f);
+      }
     FIELDS = next;
     if (!changed.size || !box) return 0;
     setNodeFields(FIELDS, SCOPE);
     const touches = text => [...changed].some(p => text.includes(`data-path="${p}"`));
+    // A POSITION RE-SHAPES (docs/switch-positions-design.md section 6). A field
+    // that moves or shows a node changes where relief stands, which a repaint
+    // cannot say, so the scene is rebuilt the way a config switch rebuilds it.
+    // There is no per-part rebuild; a field with neither effect keeps the
+    // repaint below.
+    const positional = text => [...keys].some(f =>
+      text.includes(`data-move-from="${f}"`) || text.includes(`data-show-from="${f}"`));
+    if ([...RESTYLE, ...LOD].some(e => touches(e.svgText) && positional(e.svgText))) {
+      await build(CFG);
+      if (DEV) await buildHitIndex(CFG);
+      return changed.size;
+    }
     let n = 0;
     for (const e of RESTYLE) {
       if (!touches(e.svgText)) continue;

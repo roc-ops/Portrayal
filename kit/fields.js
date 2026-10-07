@@ -61,13 +61,46 @@ const esc = s => (typeof CSS !== 'undefined' && CSS.escape ? CSS.escape(s) : Str
 // what `data-r-from` accepts as a number; render.py's R_FROM_NUMBER, spelled alike
 const R_FROM_NUMBER = /^[ \t\n\r]*[0-9.]+[ \t\n\r]*$/;
 const STASH = {fill: 'data-portrayal-fill', stroke: 'data-portrayal-stroke',
-               r: 'data-portrayal-r'};
+               r: 'data-portrayal-r', transform: 'data-portrayal-transform',
+               display: 'data-portrayal-display'};
 
 /** Set a colour attribute, remembering what was drawn the first time. */
 function paint(node, attr, value) {
   if (!node.hasAttribute(STASH[attr]))
     node.setAttribute(STASH[attr], node.getAttribute(attr) ?? '');
   node.setAttribute(attr, value);
+}
+
+// A POSITION (docs/switch-positions-design.md): `data-move` is a table of
+// "option: dx dy [deg], ..." and render.py's parse_moves reads it alike. A
+// malformed entry throws, as the build raises: a table nobody can read must
+// not quietly move nothing.
+const MOVE_ENTRY = /^\s*([^:,\s]+)\s*:\s*(-?[0-9.]+)\s+(-?[0-9.]+)(?:\s+(-?[0-9.]+))?\s*$/;
+export function parseMoves(spec) {
+  const out = {};
+  for (const part of String(spec || '').split(',')) {
+    if (!part.trim()) continue;
+    const m = MOVE_ENTRY.exec(part);
+    if (!m) throw new Error(`data-move entry '${part.trim()}' is not 'option: dx dy [deg]'`);
+    out[m[1]] = [Number(m[2]), Number(m[3]), Number(m[4] || 0)];
+  }
+  return out;
+}
+// Python's _num: an integer without ".0", anything else as JS writes it
+const num = x => String(x);
+function centre(node) {
+  const tag = node.localName || node.tagName;
+  const g = a => Number(node.getAttribute(a) || 0);
+  if (tag === 'rect') return [g('x') + g('width') / 2, g('y') + g('height') / 2];
+  if (tag === 'circle' || tag === 'ellipse') return [g('cx'), g('cy')];
+  throw new Error(`data-move turns a <${tag}>; only rect, circle and ellipse can turn`);
+}
+/** The transform a move applies, the text render.py's move_transform writes. */
+export function moveTransform(node, [dx, dy, deg]) {
+  const parts = [];
+  if (dx || dy) parts.push(`translate(${num(dx)} ${num(dy)})`);
+  if (deg) { const [cx, cy] = centre(node); parts.push(`rotate(${num(deg)} ${num(cx)} ${num(cy)})`); }
+  return parts.join(' ');
 }
 
 /** Put back what was drawn, if anything here ever changed it. */
@@ -104,6 +137,8 @@ export function paintFields(el, vals) {
     const key = esc(k);
     for (const t of el.querySelectorAll(`[data-from="${key}"]`)) {
       t.textContent = val;
+      // a node a position shows or hides is shown by that field alone
+      if (t.hasAttribute('data-show-from')) continue;
       if (val) t.removeAttribute('display'); else t.setAttribute('display', 'none');
     }
     for (const n of el.querySelectorAll(`[data-fill-from="${key}"]`))
@@ -124,18 +159,39 @@ export function paintFields(el, vals) {
     const d = R_FROM_NUMBER.test(val) ? Number(val) : NaN;
     for (const n of el.querySelectorAll(`[data-r-from="${key}"]`))
       if (Number.isFinite(d) && d > 0) paint(n, 'r', String(d / 2)); else restore(n, 'r');
+    // A POSITION. MOVE puts the option's offset in front of the transform the
+    // node was drawn with; SHOW displays the node only for the options it
+    // lists. Empty, or an option the table does not name, is as drawn - the
+    // skin draws the default (render.py fill_from_attrs, the same two rules).
+    for (const n of el.querySelectorAll(`[data-move-from="${key}"]`)) {
+      const move = colour ? parseMoves(n.getAttribute('data-move'))[colour] : undefined;
+      if (!move) { restore(n, 'transform'); continue; }
+      if (!n.hasAttribute(STASH.transform))
+        n.setAttribute(STASH.transform, n.getAttribute('transform') ?? '');
+      const drawn = n.getAttribute(STASH.transform);
+      const tf = [moveTransform(n, move), drawn].filter(Boolean).join(' ');
+      if (tf) n.setAttribute('transform', tf); else n.removeAttribute('transform');
+    }
+    for (const n of el.querySelectorAll(`[data-show-from="${key}"]`)) {
+      if (!colour) { restore(n, 'display'); continue; }
+      const shown = String(n.getAttribute('data-show') || '').split(/\s+/).includes(colour);
+      if (!n.hasAttribute(STASH.display))
+        n.setAttribute(STASH.display, n.getAttribute('display') ?? '');
+      if (shown) n.removeAttribute('display'); else n.setAttribute('display', 'none');
+    }
   }
   return el;
 }
 
 /**
- * Put every colour and radius this helper changed under `root` back to what was drawn.
+ * Put every colour, radius, transform and display this helper changed under
+ * `root` back to what was drawn.
  * Text is not touched: a text node has no drawn value to return to that the
  * document does not already hold, and a part whose fields are cleared keeps
  * whatever its label last said, as it always has.
  */
 export function unpaintFields(root) {
-  for (const attr of ['fill', 'stroke', 'r']) {
+  for (const attr of ['fill', 'stroke', 'r', 'transform', 'display']) {
     if (root.hasAttribute && root.hasAttribute(STASH[attr])) restore(root, attr);
     for (const n of root.querySelectorAll(`[${STASH[attr]}]`)) restore(n, attr);
   }

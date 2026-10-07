@@ -314,6 +314,8 @@ RULES = {
     "L145": ("device",     "a group is not named only for the class of its members - `ports` names no port family (warning)", "name the group for the family it holds (`sfp28`, `rj45-1g`), or a mixed block for the job it does and say so in `mixed:`"),
     "L146": ("device",     "an occupant's `turn` is one its host allows - the host's interface `turns` in connectors.yaml, narrowed by its presented point's own (an error; the build refuses it too)", "choose one of the listed turns, or drop `turn:` to take the default the build computes; a barrier block's terminal screw allows 0 alone"),
     "L147": ("component",  "a connection point's `turns` is a subset of the turns its part's interface allows in connectors.yaml, and only the presented point states one (an error)", "list only turns the interface allows - a point narrows the list, it cannot widen it; move `turns` to the point the interface is presented at, or drop it"),
+    "L148": ("component",  "a node a field moves or shows names a `choice` field the contract declares, and every option its `data-move` or `data-show` lists is one of that field's options (an error)", "declare the field as a choice, or name only its options in the table; spell a move `option: dx dy [deg]`"),
+    "L149": ("component",  "a node a position moves stays inside its part under every move: its box, translated and turned, lies within `size` (an error)", "shorten the move, or move the node in the skin so its travel stays on the part"),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -3470,13 +3472,14 @@ def lint_component_fields(path, data, _lib_roots=None):
         if not sp.exists():
             continue
         text = sp.read_text(errors="replace")
-        keys = set(re.findall(r'data-(?:(?:fill-|stroke-|r-)?from|stroke-derive)="([^"]+)"', text))
+        keys = set(re.findall(r'data-(?:(?:fill-|stroke-|r-|move-|show-)?from|stroke-derive)="([^"]+)"', text))
         seen[skin] = keys
         for k in fields:
             if k not in keys and k not in composed:
                 err(path, "L73", f"field {k} has no data-from, data-fill-from, "
-                                 f"data-stroke-from, data-stroke-derive or data-r-from "
-                                 f"node in skin {skin}")
+                                 f"data-stroke-from, data-stroke-derive, data-r-from, "
+                                 f"data-move-from or data-show-from node in skin {skin}")
+        _lint_positions(path, data, fields, skin, text)
         # A FIELD-PAINTED NODE TAKES ITS 3D SIDES FROM ITS ART (#643). relief.js
         # derives a solid's side colour from the node's painted art, and reads
         # it again on every repaint, so a field change recolours the sides -
@@ -3513,6 +3516,86 @@ def lint_component_fields(path, data, _lib_roots=None):
             err(path, "L73", f"field {k} is a choice with no options")
         if (f or {}).get("options") and f.get("default") is not None and f["default"] not in f["options"]:
             err(path, "L73", f"field {k}: default {f['default']!r} is not one of its options")
+
+
+def _shape_box(el):
+    """(x0, y0, x1, y1) of a rect, circle or ellipse in its own frame, or None."""
+    tag = el.tag.rsplit("}", 1)[-1]
+    g = lambda a: float(el.get(a) or 0)
+    if tag == "rect":
+        return g("x"), g("y"), g("x") + g("width"), g("y") + g("height")
+    if tag == "circle":
+        return g("cx") - g("r"), g("cy") - g("r"), g("cx") + g("r"), g("cy") + g("r")
+    if tag == "ellipse":
+        return g("cx") - g("rx"), g("cy") - g("ry"), g("cx") + g("rx"), g("cy") + g("ry")
+    return None
+
+
+def _lint_positions(path, data, fields, skin, text):
+    """L148 and L149: a position field's table is answered by its options, and a
+    moved node stays on its part (docs/switch-positions-design.md section 7).
+
+    L148: a node that moves or shows from a field names a `choice` field the
+    contract declares, every option its `data-move` or `data-show` lists is one
+    of that field's options, and the table parses. A key the field does not
+    have is a position nobody can set, which reads exactly like one that works.
+
+    L149: the box of every moved node, under each of its moves, lies inside the
+    component's `size`. An actuator configured off its own face is drawn on the
+    chassis beside it and extruded there in 3D. Rects, circles and ellipses are
+    measured; a node of another shape is not, and says nothing."""
+    if "data-move-from" not in text and "data-show-from" not in text:
+        return
+    try:
+        root = ET.fromstring(text)
+    except ET.ParseError:
+        return
+    size = data.get("size") or {}
+    W, H = float(size.get("w") or 0), float(size.get("h") or 0)
+    for el in root.iter():
+        for attr, table in (("data-move-from", "data-move"), ("data-show-from", "data-show")):
+            key = el.get(attr)
+            if key is None:
+                continue
+            node = el.get("id") or el.tag.rsplit("}", 1)[-1]
+            f = fields.get(key) or {}
+            if f.get("type") != "choice":
+                err(path, "L148", f"skin {skin}: {node} has {attr}={key!r}, which is not a "
+                                  "choice field the contract declares")
+                continue
+            options = {str(o) for o in f.get("options") or []}
+            if attr == "data-move-from":
+                try:
+                    moves = _manifest.parse_moves(el.get(table) or "")
+                except ValueError as e:
+                    err(path, "L148", f"skin {skin}: {node}: {e}")
+                    continue
+                listed = set(moves)
+            else:
+                moves, listed = {}, set((el.get(table) or "").split())
+            if not listed:
+                err(path, "L148", f"skin {skin}: {node} has {attr}={key!r} and an empty {table}")
+            for o in sorted(listed - options):
+                err(path, "L148", f"skin {skin}: {node}'s {table} names {o!r}, which is not an "
+                                  f"option of {key} ({', '.join(sorted(options))})")
+            box = _shape_box(el) if moves and W and H else None
+            for o, (dx, dy, deg) in sorted(moves.items()):
+                if box is None:
+                    break
+                x0, y0, x1, y1 = box
+                cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
+                pts = [(x0, y0), (x1, y0), (x0, y1), (x1, y1)]
+                if deg:
+                    a = math.radians(deg)
+                    pts = [(cx + (x - cx) * math.cos(a) - (y - cy) * math.sin(a),
+                            cy + (x - cx) * math.sin(a) + (y - cy) * math.cos(a)) for x, y in pts]
+                xs = [x + dx for x, _ in pts]
+                ys = [y + dy for _, y in pts]
+                eps = 0.01
+                if min(xs) < -eps or min(ys) < -eps or max(xs) > W + eps or max(ys) > H + eps:
+                    err(path, "L149", f"skin {skin}: {node} moved for {key}={o} spans "
+                                      f"x {min(xs):.2f}-{max(xs):.2f}, y {min(ys):.2f}-{max(ys):.2f}, "
+                                      f"outside the part's {W:g} x {H:g}")
 
 
 CABLE_OD_RANGE = (2.0, 15.0)

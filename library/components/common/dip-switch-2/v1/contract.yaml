@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: dip-switch-2
-version: 1.0.0
+version: 1.1.0
 class: button
 profile: networking
 description: >-
@@ -20,6 +20,15 @@ provenance:
   actuators: >-
     PHOTO-MEASURED at the same scale: two white slots, each about 2.6 x 3.2 unrotated with
     the slider at the OFF end; the printed 1, 2 and ON are on the body.
+  positions: >-
+    FIELDS, since 1.1.0 (docs/switch-positions-design.md): `sw-1` and `sw-2` are each
+    `off` or `on`, and `on` carries its slider 3.2 up its slot, from the OFF end to the
+    same 0.2 short of the ON end. The skin draws `off`, the position the vendor
+    photographs, so a placement that sets nothing is drawn as before. What each
+    switch does is the device's to say, in the placement's `positions:`.
+fields:
+  sw-1: {label: Switch 1, type: choice, options: ['off', 'on'], default: 'off'}
+  sw-2: {label: Switch 2, type: choice, options: ['off', 'on'], default: 'off'}
 elements:
   switch-1: {at: [0.9, 2.6], size: [2.4, 6.4], class: button}
   switch-2: {at: [3.7, 2.6], size: [2.4, 6.4], class: button}

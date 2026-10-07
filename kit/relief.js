@@ -2067,6 +2067,10 @@ export async function extractRelief(url, scope, {back = false} = {}) {
   // no geometry behind, not a flat one.
   applyPulled(svg, scope);
   for (const el of [...q("[data-portrayal-pulled]")]) el.remove();
+  // AND A NODE A POSITION HIDES, for the same reason (docs/switch-positions-
+  // design.md section 6): a breaker's off flag is not drawn while it is on, and
+  // measured hidden it would extrude a 0x0 feature rather than none.
+  for (const el of [...q('[data-show-from][display="none"]')]) el.remove();
   const {inv, mmRect, shared, liftOf, ownerOf, nodeSvg} = nodeTools(svg, {back});
   // TILTED FACETS (docs/tilted-facets-design.md).
   // A node under a `[data-tilt-on]` group is measured foreshortened; it is
