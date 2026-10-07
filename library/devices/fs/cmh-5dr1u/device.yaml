@@ -1,0 +1,217 @@
+format: 1
+kind: device
+name: cmh-5dr1u
+version: 0.1.0
+maturity: modelled
+manufacturer: FS.com
+model: CMH-5DR1U
+aliases:
+  - {name: '120680', kind: vendor}
+description: >-
+  1U horizontal cable manager, FS SKU #120680: a flat black steel panel on the rack
+  rails with five detachable polycarbonate D-rings that twist into round seats in it and
+  stand 85.5 mm out. Each ring is a long braced loop whose front end curls back under
+  itself, and a cable is laid in through the slit the curl leaves.
+profile: passive
+provenance:
+  full-depth:
+    confidence: drawing
+    note: >-
+      `full-depth: false` - the rings stand 85.5 mm in front of the panel and the
+      panel's folded edges reach only 12.2 behind it (the vendor's side view), so the
+      rear face of its rack unit stays free for another part (#854).
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FIRST, FROM THE VENDOR'S OWN DIMENSIONED DRAWINGS. Two FS datasheets draw
+      the part. The Horizontal Cable Managers with D-rings datasheet has a side view and
+      a front view dimensioned in inches with millimetres in brackets: the front view is
+      2.161 px/mm across from the 482.6 line (1043 px) and 2.205 down from the 44 (97
+      px), a 2 % difference between the axes, and its 430, 90 and 35.1 lines agree with
+      the across scale to under a millimetre. FS's 0U/1U Horizontal Cable Manager
+      datasheet draws the same part with 482.4, 465, 31.5 and 97.4; the 0.3 mm between
+      the two is drawing, not part, and the D-rings datasheet's figures are taken.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - 430 x 44 x 97.7. The plate is flat over the whole 19 in [482.6mm] and its
+      top and bottom edges fold back over 16.93 in [430mm], 1.04 in [26.3mm] in from each
+      end; the flat ends outside the folds are the ears, which this library does not
+      draw, so the body is the 430. Both datasheets' tables give the depth as 3.37 in
+      (85.5 mm): the D-rings datasheet's side view shows that this is the ring from the
+      face of the plate, and dimensions 3.85 in [97.7mm] from the back of the folded
+      edges to the front of the ring, which is the envelope.
+  thickness:
+    confidence: estimated
+    note: >-
+      estimated - 1.2 mm, the sheet FS dimensions on the CMH-4DRB1U drawing of the
+      D-rings datasheet. No view of this part dimensions its sheet.
+  weight:
+    confidence: datasheet
+    note: datasheet - "Weight 1.01lbs (0.46kg)" in the 0U/1U datasheet's table.
+  front:
+    confidence: drawing
+    note: >-
+      drawing - the front view of the D-rings datasheet: the plate between the folds and
+      the five rings on their seats. Rings centred 35 mm from the left fold and 90 apart:
+      the drawing dimensions 1.04 in [26.3mm] plus 1.38 in [35.1mm] to the first ring's
+      centre and 3.54 in [90mm] between centres, and the five read 90.0 mm apart,
+      symmetric about the middle. The ring's contract has the rest. FS's mark, printed
+      on the plate just inside the left fold, is not drawn: a vendor mark never is.
+  rear:
+    confidence: photo-measured
+    note: >-
+      photo-measured - the back of the plate, plain, as FS's render of the back (gallery
+      image 2) shows it: the ring seats' backs and the folded edges and nothing else.
+      The seats' backs are not drawn.
+  top:
+    confidence: drawing
+    note: >-
+      drawing - an elevation: the folded edge behind the plate, and the five rings' top
+      members from above. The bottom is the same from underneath, where each ring's
+      bottom member stops short of its curled foot.
+  left:
+    confidence: drawing
+    note: >-
+      drawing - an elevation, the D-rings datasheet's side view: the folded edges behind
+      the plate and the ring's profile in front of it, without its bracing. The right is
+      the same, turned round.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - the weight, the ring material, the mounting hardware and "Indoor" are
+      the 0U/1U datasheet's table; "Steel, Powder-coated Black" for the panel is the
+      D-rings datasheet's.
+  cable-capacity:
+    confidence: datasheet
+    note: >-
+      datasheet - "Cable Capacity (Theoretical Value) 55pcs (Cat6 24AWG)" in the 0U/1U
+      datasheet's table, and 55 Cat6 24AWG 6.1 mm cables at 100 % fill, 17 at the
+      recommended 30 %, in the D-rings datasheet's Cable Capacity Reference Guide. Stated
+      once, here, and not divided among the rings.
+  color:
+    confidence: estimated
+    note: >-
+      estimated - "Steel, Powder-coated Black" and "Color: Black". Every image FS
+      publishes of the part is a render.
+attrs:
+  physical:
+    weight-kg: 0.46
+    material: Steel, Powder-coated Black
+    ring-material: PC, UL 94V-2
+    mounting-hardware: M6*15mm Screw x4 and M6 Nut x4
+  performance:
+    cable-capacity: 55
+    cable-capacity-basis: >-
+      Cat6 24AWG (6.1 mm) cables at 100 % fill, theoretical; 17 at the recommended 30 %
+      - FS 0U/1U Horizontal Cable Manager datasheet table, and the Cable Capacity
+      Reference Guide of the Horizontal Cable Managers with D-rings datasheet
+  compliance:
+    environment: Indoor
+chassis:
+  width: 430.0
+  height: 44.0
+  depth: 97.7
+  ru: 1
+  full-depth: false
+  shell: sheet
+  thickness: 1.2
+  weight-kg: 0.46
+  color: '#1b1d20'
+groups:
+  body:
+    term: Panel
+    role: furniture
+    index-origin: 1
+    description: the flat steel panel and its folded edges
+  guides:
+    term: Ring
+    role: furniture
+    index-origin: 1
+    description: five detachable polycarbonate D-rings, cables passing through along the panel
+views:
+  front:
+    size: {w: 430.0, h: 44.0}
+    components:
+      placements:
+        - {ref: fs/cmh-5dr1u-panel@1, id: panel, at: [0.0, 0.0], group: body, rel-pos: 1}
+        - {ref: fs/cmh-5dr1u-ring@1, id: guide-1, at: [18.6, 0.0], group: guides, rel-pos: 1, in: panel}
+        - {ref: fs/cmh-5dr1u-ring@1, id: guide-2, at: [108.6, 0.0], group: guides, rel-pos: 2, in: panel}
+        - {ref: fs/cmh-5dr1u-ring@1, id: guide-3, at: [198.6, 0.0], group: guides, rel-pos: 3, in: panel}
+        - {ref: fs/cmh-5dr1u-ring@1, id: guide-4, at: [288.6, 0.0], group: guides, rel-pos: 4, in: panel}
+        - {ref: fs/cmh-5dr1u-ring@1, id: guide-5, at: [378.6, 0.0], group: guides, rel-pos: 5, in: panel}
+  rear:
+    size: {w: 430.0, h: 44.0}
+    panel:
+      decor:
+        - {id: panel-back, at: [0, 0], size: [430, 44], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: fold-top, at: [0, 0], size: [430, 1.2], rx: 0, fill: '#232528', kind: flange}
+        - {id: fold-bottom, at: [0, 42.8], size: [430, 1.2], rx: 0, fill: '#232528', kind: flange}
+  top:
+    size: {w: 430.0, h: 97.7}
+    panel:
+      decor:
+        - {id: plate-edge, at: [0, 11], size: [430, 1.2], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: guide-1-top, at: [30.05, 12.2], size: [9.9, 85.5], rx: 1.5, fill: '#111315', kind: ring}
+        - {id: guide-2-top, at: [120.05, 12.2], size: [9.9, 85.5], rx: 1.5, fill: '#111315', kind: ring}
+        - {id: guide-3-top, at: [210.05, 12.2], size: [9.9, 85.5], rx: 1.5, fill: '#111315', kind: ring}
+        - {id: guide-4-top, at: [300.05, 12.2], size: [9.9, 85.5], rx: 1.5, fill: '#111315', kind: ring}
+        - {id: guide-5-top, at: [390.05, 12.2], size: [9.9, 85.5], rx: 1.5, fill: '#111315', kind: ring}
+    components:
+      placements:
+        - {ref: fs/cmh-5dr1u-flange@1, id: flange-top, at: [0.0, 0.0], group: body, rel-pos: 2}
+  bottom:
+    size: {w: 430.0, h: 97.7}
+    panel:
+      decor:
+        - {id: plate-edge, at: [0, 11], size: [430, 1.2], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: guide-1-bottom, at: [30.05, 12.2], size: [9.9, 67.8], rx: 1.5, fill: '#111315', kind: ring}
+        - {id: guide-2-bottom, at: [120.05, 12.2], size: [9.9, 67.8], rx: 1.5, fill: '#111315', kind: ring}
+        - {id: guide-3-bottom, at: [210.05, 12.2], size: [9.9, 67.8], rx: 1.5, fill: '#111315', kind: ring}
+        - {id: guide-4-bottom, at: [300.05, 12.2], size: [9.9, 67.8], rx: 1.5, fill: '#111315', kind: ring}
+        - {id: guide-5-bottom, at: [390.05, 12.2], size: [9.9, 67.8], rx: 1.5, fill: '#111315', kind: ring}
+        - {id: guide-1-foot, at: [30.05, 84.1], size: [9.9, 13.6], rx: 1.5, fill: '#0d0f10', kind: ring}
+        - {id: guide-2-foot, at: [120.05, 84.1], size: [9.9, 13.6], rx: 1.5, fill: '#0d0f10', kind: ring}
+        - {id: guide-3-foot, at: [210.05, 84.1], size: [9.9, 13.6], rx: 1.5, fill: '#0d0f10', kind: ring}
+        - {id: guide-4-foot, at: [300.05, 84.1], size: [9.9, 13.6], rx: 1.5, fill: '#0d0f10', kind: ring}
+        - {id: guide-5-foot, at: [390.05, 84.1], size: [9.9, 13.6], rx: 1.5, fill: '#0d0f10', kind: ring}
+    components:
+      placements:
+        - {ref: fs/cmh-5dr1u-flange@1, id: flange-bottom, at: [0.0, 0.0], group: body, rel-pos: 3}
+  left:
+    size: {w: 97.7, h: 44.0}
+    panel:
+      decor:
+        - {id: fold-top, at: [0, 0], size: [12.2, 1.2], rx: 0, fill: '#1b1d20', kind: flange}
+        - {id: fold-bottom, at: [0, 42.8], size: [12.2, 1.2], rx: 0, fill: '#1b1d20', kind: flange}
+        - {id: plate-edge, at: [11, 0], size: [1.2, 44], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: ring-base, at: [12.2, 0.2], size: [9, 43.6], rx: 0, fill: '#111315', kind: ring}
+        - {id: ring-top, at: [12.2, 0.2], size: [85.5, 8.3], rx: 1.5, fill: '#111315', kind: ring}
+        - {id: ring-bottom, at: [12.2, 35.3], size: [67.8, 8.5], rx: 1.5, fill: '#111315', kind: ring}
+        - {id: ring-front, at: [89.5, 0.2], size: [8.2, 43.6], rx: 1.5, fill: '#111315', kind: ring}
+        - {id: ring-foot, at: [84.1, 35.3], size: [5.4, 8.5], rx: 1.5, fill: '#111315', kind: ring}
+  right:
+    size: {w: 97.7, h: 44.0}
+    panel:
+      decor:
+        - {id: fold-top, at: [85.5, 0], size: [12.2, 1.2], rx: 0, fill: '#1b1d20', kind: flange}
+        - {id: fold-bottom, at: [85.5, 42.8], size: [12.2, 1.2], rx: 0, fill: '#1b1d20', kind: flange}
+        - {id: plate-edge, at: [85.5, 0], size: [1.2, 44], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: ring-base, at: [76.5, 0.2], size: [9, 43.6], rx: 0, fill: '#111315', kind: ring}
+        - {id: ring-top, at: [0, 0.2], size: [85.5, 8.3], rx: 1.5, fill: '#111315', kind: ring}
+        - {id: ring-bottom, at: [17.7, 35.3], size: [67.8, 8.5], rx: 1.5, fill: '#111315', kind: ring}
+        - {id: ring-front, at: [0, 0.2], size: [8.2, 43.6], rx: 1.5, fill: '#111315', kind: ring}
+        - {id: ring-foot, at: [8.2, 35.3], size: [5.4, 8.5], rx: 1.5, fill: '#111315', kind: ring}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The cable manager as FS ships #120680, five rings fitted.'
+datasheet:
+  title: 'FS 0U/1U Horizontal Cable Manager datasheet'
+  sha256: 53de28d2e21c642e0c91f9d081046d5d224b021d5f5831d4e010bd8fece5da2b
+references:
+  - title: 'FS Horizontal Cable Managers with D-rings datasheet'
+    sha256: 6139a0ad822d496db3b2a66173b744697f90dfbc718ca66e1a705457f527045e
+  - title: 'FS CMH-5DR1U Horizontal Cable Manager Quick Start Guide'
+    sha256: b6c1d25d4d75dce5ca32a7cb9f394d9133bb13b88fc06a1c6b23d842501a6c94

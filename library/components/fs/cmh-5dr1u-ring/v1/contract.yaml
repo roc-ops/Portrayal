@@ -1,0 +1,97 @@
+format: 1
+kind: component
+name: cmh-5dr1u-ring
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  A detachable polycarbonate D-ring of the FS CMH-5DR1U cable manager seen from the
+  front - a long braced loop that twists into a round seat in the panel and stands 85.5
+  mm out of it, its front end curling back under itself to leave the slit a cable is
+  laid in through
+provenance:
+  size: >-
+    drawing - the front view of the CMH-5DR1U in FS's Horizontal Cable Managers with
+    D-rings datasheet, at 2.161 px/mm across from its 482.6 line (1043 px) and 2.205
+    down from its 44 (97 px). Each ring is a band 21.5 px across, 9.9 mm, standing on a
+    round seat whose arcs fit a circle of 32.8 mm, read at four heights; all five read
+    the same. The part's width is the seat's. The side view draws the loop as tall as
+    the panel, 44, and it is drawn 0.2 inside it at top and bottom.
+  not-the-snap-in-ring: >-
+    drawing - NOT `fs/d-ring-snap-in@1`, though it locks into the same kind of round
+    seat: that ring is 6.8 mm across and stands 44 mm off its tray, this one is 9.9
+    across and 85.5 deep, with a braced body and an obround opening (FS's 0U/1U
+    datasheet draws both, and the product renders show the two shapes).
+  relief: >-
+    drawing - the side view of the same figure, at 2.211 px/mm along from its 3.85 in
+    [97.7mm] line and 2.25 down: the ring stands 3.37 in [85.5mm] from the face of the
+    panel; its top member is 0.33 in [8.5mm] deep from the outside to the opening,
+    with the bracing inside it; the opening is 2.7 in [68.7mm] long, from 9.0 to 77.3
+    mm out, and 26.8 mm high; the bottom member is 8.5 deep and ends 67.8 mm out; the
+    front leg is 8.2 thick and curls back under the opening to 71.9 mm out, so the slit
+    between the bottom member's end and the curl is 4.1 mm wide. The base against the
+    panel is the first 9 mm. Built as plates with square corners where the real loop is
+    round, and the bracing is not drawn. The seat's 1.5 mm is estimated; no view
+    dimensions it.
+  material: >-
+    datasheet - "D-rings Material: PC, UL 94V-2" in the specification table of FS's
+    0U/1U Horizontal Cable Manager datasheet, and "Polycarbonate (PC), UL 94V-2" in the
+    D-rings datasheet's.
+  fitting: >-
+    drawing - FS's CMH-5DR1U quick start guide draws the ring pushed into a round seat
+    with two notches and turned to lock; FS's renders (gallery images 3 and 6) show an
+    empty seat as that hole. The ring is drawn fitted; the panel is drawn without the
+    holes, which a fitted ring fills.
+  guide: >-
+    drawing - the clear opening on the side view: 26.8 high by the 2.7 in [68.7mm] of
+    the drawing, taken as 68.3 between the base and the front leg at 2.211 px/mm. Seen
+    looking along the panel, which is the run: `w` is the height and `h` the depth out
+    of the panel. The slit is not counted as opening.
+  color: >-
+    estimated - black. Every image FS publishes of the part is a render.
+size: {w: 32.8, h: 44}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: PC, flammability: UL 94V-2}
+guide: {kind: ring, aperture: {w: 26.8, h: 68.3}, run: x}
+elements:
+  seat: {at: [0.0, 5.6], size: [32.8, 32.8], class: bezel}
+  base: {at: [11.45, 0.2], size: [9.9, 43.6], class: bezel}
+  top: {at: [11.45, 0.2], size: [9.9, 8.3], class: bezel}
+  bottom: {at: [11.45, 35.3], size: [9.9, 8.5], class: bezel}
+  front: {at: [11.45, 0.2], size: [9.9, 43.6], class: bezel}
+  foot: {at: [11.45, 35.3], size: [9.9, 8.5], class: bezel}
+relief:
+  features:
+    - node: seat
+      cyl: 1.5
+      color: '#151719'
+      confidence: estimated
+      source: no view of the FS drawing dimensions the seat's height
+    - node: base
+      out: 9.0
+      color: '#111315'
+      confidence: drawing
+      source: the side view of the CMH-5DR1U in FS's D-rings datasheet, the opening starting 9 mm out
+    - node: top
+      out: 85.5
+      color: '#111315'
+      confidence: drawing
+      source: the same view, the ring 3.37 in [85.5mm] deep and its top member 0.33 in [8.5mm]
+    - node: bottom
+      out: 67.8
+      color: '#111315'
+      confidence: drawing
+      source: the same view, the bottom member ending 67.8 mm out at the slit
+    - node: front
+      lift: 77.3
+      out: 85.5
+      color: '#111315'
+      confidence: drawing
+      source: the same view, the front leg from the end of the 2.7 in [68.7mm] opening to the 85.5
+    - node: foot
+      lift: 71.9
+      out: 77.3
+      color: '#111315'
+      confidence: drawing
+      source: the same view, the front leg curling back to 71.9 mm, leaving a 4.1 mm slit
+skins: [default]
