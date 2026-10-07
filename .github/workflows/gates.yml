@@ -10,7 +10,15 @@
 name: gates
 
 on:
+  # A DRAFT GETS LINT, NOT THE SUITE. Every push to a draft used to run the full
+  # build and four shards - 95 runs and about 1,620 runner-minutes in the two days
+  # after 2026-10-05, a fifth of them cancelled by the next push - for a branch
+  # nobody could merge. `dist`, `tests` and `build` skip on a draft; `lint` still
+  # answers in two minutes. `ready_for_review` is listed because it is NOT among
+  # the default types, and without it marking a draft ready would start nothing:
+  # the suite would wait for the next push.
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
   push:
     branches: [main]
   # A FULL RUN ON MAIN, ON REQUEST. A push to main runs lint only (see `build`
@@ -115,7 +123,7 @@ jobs:
   # push re-ran twenty minutes of work on a known answer. Lint still runs on the
   # push (a minute), and `workflow_dispatch` runs everything on request.
   dist:
-    if: github.event_name != 'push'
+    if: github.event_name != 'push' && !github.event.pull_request.draft
     runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository && 'ubuntu-latest') || vars.GATES_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 20
     # STILL NOTHING WRITTEN. The two extra reads find an earlier run: which pull
@@ -239,7 +247,7 @@ jobs:
   tests:
     name: tests ${{ matrix.shard }} of ${{ strategy.job-total }}
     needs: dist
-    if: github.event_name != 'push'
+    if: github.event_name != 'push' && !github.event.pull_request.draft
     runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository && 'ubuntu-latest') || vars.GATES_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 20
     strategy:
@@ -344,9 +352,15 @@ jobs:
   # will) and fails unless `dist` and every shard succeeded - a skipped or
   # failed dependency must not leave a required check green. The guards that
   # used to follow the suite run here, over all four shards together.
+  #
+  # ON A DRAFT IT SKIPS, and a skipped `build` reads as passing to branch
+  # protection. That is safe only because a draft cannot be merged: marking it
+  # ready starts a fresh run on the same head (`ready_for_review` above), whose
+  # `build` is pending until the suite has run. Merge on that run's conclusion,
+  # never on a `skipped` one.
   build:
     needs: [dist, tests]
-    if: ${{ !cancelled() && github.event_name != 'push' }}
+    if: ${{ !cancelled() && github.event_name != 'push' && !github.event.pull_request.draft }}
     runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository && 'ubuntu-latest') || vars.GATES_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 10
     # The same two reads as `dist`: `test time` finds an earlier run.

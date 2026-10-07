@@ -85,11 +85,36 @@ def test_a_push_to_main_lints_but_does_not_rebuild(workflow):
     on = workflow.get("on", workflow.get(True))
     assert "workflow_dispatch" in on, on
     jobs = workflow["jobs"]
-    assert jobs["dist"].get("if") == "github.event_name != 'push'"
-    assert jobs["tests"].get("if") == "github.event_name != 'push'"
-    assert jobs["build"].get("if") == "${{ !cancelled() && github.event_name != 'push' }}"
+    assert jobs["dist"].get("if") == "github.event_name != 'push' && !github.event.pull_request.draft"
+    assert jobs["tests"].get("if") == "github.event_name != 'push' && !github.event.pull_request.draft"
+    assert jobs["build"].get("if") == (
+        "${{ !cancelled() && github.event_name != 'push' && !github.event.pull_request.draft }}")
     assert "if" not in jobs["lint"]
     assert set(jobs) == {"lint", "dist", "tests", "build"}, "a new job needs the push rule too"
+
+
+def test_a_draft_lints_and_its_suite_waits_for_ready(workflow):
+    """A DRAFT GETS LINT, NOT THE SUITE. Every push to a draft ran the full build
+    and four shards for a branch nobody could merge. The guard is only safe with
+    `ready_for_review` among the types: it is not a default type, and without it
+    marking a draft ready would start no run at all, so the suite would wait for
+    the next push. The three default types must stay listed, or listing any type
+    would silently drop them."""
+    on = workflow.get("on", workflow.get(True))
+    types = set(on["pull_request"]["types"])
+    assert {"opened", "synchronize", "reopened", "ready_for_review"} <= types, types
+    jobs = workflow["jobs"]
+    guarded = [n for n in jobs if "!github.event.pull_request.draft" in str(jobs[n].get("if", ""))]
+    assert sorted(guarded) == ["build", "dist", "tests"], guarded
+    assert "if" not in jobs["lint"], "lint is the feedback a draft keeps"
+
+
+def test_a_skipped_build_cannot_merge():
+    """A skipped required check reads as passing to branch protection, and a
+    draft's `build` is skipped. What stops that head merging is the merge script,
+    which takes nothing but `success`."""
+    t = (ROOT / ".github/merge-if-green.sh").read_text()
+    assert '$3!="success"' in t
 
 
 def test_build_sh_still_lints_by_default():
