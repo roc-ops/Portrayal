@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ppm-ad1-1625
-version: 2.1.0
+version: 2.2.0
 class: filter
 behaviour: fills
 profile: optical
@@ -86,6 +86,27 @@ provenance:
     no orthographic photograph of a PPM exists; both readings above are of DRAWINGS.
     Lamp inventory and any marking other than the part number are unknown, and the
     module may well carry none - a passive filter has nothing to report.
+  optical: >-
+    datasheet - ds-ppm-r4.0, section "OSC ADD/DROP FILTER (PPM-AD1-1625-2F)". ITS
+    SIGNAL-FLOW FIGURE settles every leg: Line Rx enters and leaves by Ext Tx and by
+    the 1625nm (OTDR) Tx; Ext Rx and the OTDR Rx enter and leave by Line Tx. Its
+    spec table gives the add/drop channel band as 1600-1670nm - "Add/drop loss, OTDR
+    1625 <-> Line (Pass band)" - and the pass-through band as 1260-1582nm for "Ext <->
+    Line (Reflection band)". The `band` on the OTDR legs is that 1600-1670: centre
+    1635, the midpoint of the vendor's edges and NOT the 1625 the part is named for,
+    width 70. The Ext legs carry the rest. DCP-F UM s4.5.1 corroborates the band from
+    the other side: the DCP-F-RA12's OTDR port takes 1600-1670nm.
+    BORE 1 IS TX AND BORE 2 IS RX on every adapter: the faceplate captions each pair
+    Tx then Rx, left to right, and "Signals entering the module are denoted Rx.
+    Signals exiting the module are denoted Tx." - the same reading the four DCMs take
+    of the same adapter.
+    LINE IS THE TRUNK: it is the line-fibre side and the one port every path passes
+    through, which is what the projection puts on rear port LINE-1 (roc-ops/Portrayal
+    #246). THE ADD DIRECTION IS A COMBINE - two inputs onto Line Tx - and the
+    vocabulary has no combine yet (docs/optical-paths-design.md, Open questions), so
+    it is written as banded legs off line.1: the same glass, read from the other end.
+    `media: os2` is the family's, as on the OCUs and DCMs; the datasheet says only
+    1260-1670nm and LC/UPC, which is single-mode territory but not the word OS2.
 elements:
   caption-otdr: {at: [3.75, 16.2], size: [13.2, 2.05], class: marking}
   caption-ext: {at: [22.50, 16.2], size: [13.2, 2.05], class: marking}
@@ -94,6 +115,21 @@ parts:
   - {ref: common/lc-duplex-adapter@6, id: otdr, at: [3.75, 4.0], attrs: {role: otdr}}
   - {ref: common/lc-duplex-adapter@6, id: ext, at: [22.50, 4.0], attrs: {role: ext}}
   - {ref: common/lc-duplex-adapter@6, id: line, at: [35.70, 4.0], attrs: {role: line}}
+optical:
+  # WHAT THE PART DOES, WHICH USED TO BE AN ATTR. `channel-nm` stays for a
+  # reader; this is the same fact as glass. Bore 1 is Tx and bore 2 is Rx on all
+  # three adapters - see provenance/optical, which also says why the add
+  # direction (a combine) is written from the line side.
+  media: os2
+  polish: upc
+  trunk: [line]
+  paths:
+    # drop: Line Rx in, the 1600-1670nm OTDR band out by otdr Tx, the rest out by ext Tx
+    - {from: line.2, to: otdr.1, band: {centre-nm: 1635, width-nm: 70}}
+    - {from: line.2, to: ext.1}
+    # add: otdr Rx and ext Rx in, out by Line Tx - written off line.1
+    - {from: line.1, to: otdr.2, band: {centre-nm: 1635, width-nm: 70}}
+    - {from: line.1, to: ext.2}
 relief:
   wall: '#22262a'
   features:

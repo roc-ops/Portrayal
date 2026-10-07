@@ -166,6 +166,21 @@ def test_respelling_a_set_is_not_a_change(before, after):
     assert bump(before, after) is None
 
 
+@pytest.mark.parametrize("key, value, other", [
+    ("fed-by", "input-a", "input-b"),
+    ("through", "breaker-a1", "breaker-a2"),
+])
+def test_an_outlets_feed_and_position_are_addressing(key, value, other):
+    """#806. `fed-by` and `through` are written into the DCIM export, as the
+    outlet's `power_port` and its description: stating one adds to what an
+    import holds (minor), and changing or dropping one re-files an outlet a
+    DCIM already holds (major)."""
+    assert bump({}, {key: value}) == "minor"
+    assert bump({key: value}, {key: other}) == "major"
+    assert bump({key: value}, {}) == "major"
+    assert bump({key: value}, {key: value}) is None
+
+
 def test_interfaces_keep_their_order():
     """The DCIM export emits interfaces in the order written."""
     assert bump({"interfaces": ["a", "b"]}, {"interfaces": ["b", "a"]}) == "major"

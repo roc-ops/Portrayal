@@ -220,6 +220,13 @@ def _placement_attrs(doc):
 #                     was none only admits more, like `accepts` growing (minor).
 #                     Nothing reads it yet but the schema; it is hashed now so
 #                     the first bay to state one is not stated in silence.
+#   `fed-by`, `through`  (placement) the power input an outlet hands on and
+#                     the breaker position it runs through (#806). The DCIM
+#                     export writes them as the outlet's `power_port` and its
+#                     description, so a DCIM that imported the type holds them:
+#                     changing or dropping one re-files an imported outlet's
+#                     feed (major); stating one where there was none is the
+#                     export gaining a fact and losing nothing (minor).
 # SURFACE - what a reader sees and nothing computes a coordinate or an address
 # from. Patch.
 #   `states`, `description`  what a lamp's colours mean, and the vendor's words
@@ -241,7 +248,7 @@ BAY_HASHED = {"id", "at", "size", "rotate", "mirror", "default", "accepts",
               "group"}
 PLACEMENT_GEOMETRY = {"inset", "lift", "in", "under", "only-in", "optional",
                       "interfaces", "opening", "floor", "plan", "rear"}
-PLACEMENT_ADDRESSING = {"for", "rel-pos", "interface"}
+PLACEMENT_ADDRESSING = {"for", "rel-pos", "interface", "fed-by", "through"}
 PLACEMENT_SURFACE = {"states", "description", "provenance", "physical-context",
                      "frames"}
 
@@ -647,9 +654,9 @@ def entry(doc, versions=None):
 
 
 def _addressing_bump(old, new):
-    """What `for`, `rel-pos` and a bay's `interface` demand: major when a value
-    a placement stated changes or goes, minor when a `for` or an `interface` is
-    stated where there was none.
+    """What `for`, `rel-pos`, a bay's `interface` and an outlet's `fed-by` and
+    `through` demand: major when a value a placement stated changes or goes,
+    minor when any of them but `rel-pos` is stated where there was none.
 
     STATING A `rel-pos` WHERE THERE WAS NONE ASKS FOR NOTHING, which is the
     ruling test_device_versioning.py already holds: six of the eight chassis
@@ -668,9 +675,9 @@ def _addressing_bump(old, new):
         if any(now.get(key) != value for key, value in was.items()
                if key in still_here):
             return "major"              # rebound, renumbered or unstated
-    for field in ("for", "interface"):
+    for field in ("for", "interface", "fed-by", "through"):
         if set(now_all.get(field) or {}) - set(was_all.get(field) or {}):
-            return "minor"              # bound, or opened, where it was not
+            return "minor"              # bound, opened or fed where it was not
     return None
 
 
@@ -1107,7 +1114,8 @@ def check(library: pathlib.Path):
                             "only-in, optional, interfaces, opening, floor, "
                             "plan, rear)")
             if _addressing_bump(was, now) is not None:
-                what.append("placement addressing (for, rel-pos, interface)")
+                what.append("placement addressing (for, rel-pos, interface, "
+                            "fed-by, through)")
             if "placement-surface" in was and \
                     was["placement-surface"] != now["placement-surface"]:
                 what.append("placement surface (states, description, "

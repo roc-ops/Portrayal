@@ -118,55 +118,117 @@ def test_the_front_numbering_reproduces_the_faceplate():
     assert P.front_label(view, "lc6.2", idx.get) == "12"
 
 
-def test_a_single_faced_module_with_paths_exports_no_ports():
-    """A module with `optical.paths` but no declared rear face states no
-    trunk. `common` and `split` (an OCU coupler's own part ids) are a
-    modeller's names, not roles, and path direction does not settle which
-    part is the trunk either - see the gate's comment in `build_module`. So a
-    single-faced module, however many fibre positions it carries, projects to
-    neither `front-ports` nor `rear-ports` rather than guessing: exporting one
-    side alone is exactly what netbox#21830 rejected.
-
-    THE LOOKUP RESOLVES FOR REAL. A `lambda ref: None` stub makes every part's
-    fibre count zero regardless of the gate this test exists to check - delete
-    the rear-face gate in `build_module` and `ports()` still answers empty
-    fronts, because `optical.capacities` cannot see any positions either way.
-    So this uses the same `known` dict shape `test_a_split_carries_its_ratio`
-    uses below: the adapters genuinely resolve to two fibre positions each,
-    which is what makes the gate the thing standing between this contract and
-    a non-empty `front-ports`.
-    """
-    from portrayal import dcim_export as D
+def _coupler(trunk=None):
     contract = {
         "name": "t-coupler",
         "parts": [
-            {"id": "common", "ref": "common/lc-duplex-adapter@6"},
-            {"id": "split", "ref": "common/lc-duplex-adapter@6"},
+            {"id": "common", "ref": "common/lc-duplex-adapter@6", "at": [0, 0]},
+            {"id": "split", "ref": "common/lc-duplex-adapter@6", "at": [13.2, 0]},
         ],
         "optical": {
             "polish": "upc",
             "paths": [{"from": "common.1",
-                       "to": [{"at": "split.1", "ratio": 50},
-                              {"at": "split.2", "ratio": 50}]}],
+                       "to": [{"at": "split.1", "ratio": 70},
+                              {"at": "split.2", "ratio": 30}]}],
         },
     }
-    known = {"common/lc-duplex-adapter@6": {"optical": {"positions": 2}}}
-    doc = D.build_module(contract, "Vendor", known.get)
+    if trunk:
+        contract["optical"]["trunk"] = trunk
+    return contract
+
+
+KNOWN = {"common/lc-duplex-adapter@6": {"optical": {"positions": 2}}}
+
+
+def test_a_single_faced_module_with_no_trunk_exports_no_ports():
+    """A module with `optical.paths`, no rear face and no `optical.trunk`
+    states nothing a rear port could be built from. `common` and `split` are
+    a modeller's names, not roles, and path direction does not settle which
+    part is the trunk either - so the projection exports neither list rather
+    than guessing: one side alone is exactly what netbox#21830 rejected. L131
+    makes this contract a lint error; the exporter still holds the line.
+
+    THE LOOKUP RESOLVES FOR REAL - the adapters genuinely carry two positions
+    each, so the gate, not an empty capacity, is what stops the export.
+    """
+    from portrayal import dcim_export as D
+    doc = D.build_module(_coupler(), "Vendor", KNOWN.get)
     assert "front-ports" not in doc
     assert "rear-ports" not in doc
 
 
-def test_the_real_ppm_coupler_export_has_no_ports():
-    """PPM-OCU-50-50 in the built export: the same gate, against the actual
-    corpus rather than a literal dict. It has two adapters and a live optical
-    graph but only one face, so it must carry neither key."""
-    f = (ROOT / "library/exports/netbox/module-types/Smartoptics"
-         / "PPM-OCU-50-50.yaml")
-    if not f.exists():
+def test_a_stated_trunk_goes_on_a_rear_port_and_the_front_keeps_its_numbers():
+    """#246. The trunk part becomes one rear port named as a rear connector is
+    (`COMMON-1`), carrying its positions; the legs stay front ports under the
+    faceplate's own count, so the common adapter's two bores leave a gap at 1
+    and 2 rather than renumbering the legs."""
+    from portrayal import dcim_export as D
+    doc = D.build_module(_coupler(["common"]), "Vendor", KNOWN.get)
+    assert doc["rear-ports"] == [{"name": "COMMON-1", "type": "lc-upc", "positions": 2}]
+    assert doc["front-ports"] == [{"name": "3", "type": "lc-upc", "positions": 1},
+                                  {"name": "4", "type": "lc-upc", "positions": 1}]
+    m = P.fibre_map(_coupler(["common"]), KNOWN.get, "T")
+    assert [(r["front"], r["rear"], r["rear_position"], r["ratio"]) for r in m["rows"]] == [
+        ("3", "COMMON-1", 1, 70), ("4", "COMMON-1", 1, 30)]
+
+
+def test_a_trunk_named_by_position_is_renumbered_within_its_rear_port():
+    """`dcm.2` alone is the whole of its rear port, so it is position 1 of it,
+    and its partner bore stays front port 1."""
+    entry = {"parts": [{"id": "dcm", "ref": "common/lc-duplex-adapter@6", "at": [0, 0]}],
+             "optical": {"polish": "upc", "trunk": ["dcm.2"],
+                         "paths": [{"from": "dcm.2", "to": "dcm.1"}]}}
+    got = P.ports(entry, KNOWN.get)
+    assert got == {"front": [{"name": "1", "type": "lc-upc", "positions": 1}],
+                   "rear": [{"name": "DCM-1", "type": "lc-upc", "positions": 1}]}
+    assert P.fibre_map(entry, KNOWN.get, "D")["rows"] == [
+        {"front": "1", "front_position": 1, "rear": "DCM-1", "rear_position": 1}]
+
+
+def test_is_trunk_reads_the_face_and_the_list():
+    entry = {"optical": {"trunk": ["line", "dcm.2"]}}
+    assert P.is_trunk(entry, "rear:mtp.3")
+    assert P.is_trunk(entry, "line.1") and P.is_trunk(entry, "line.2")
+    assert P.is_trunk(entry, "dcm.2") and not P.is_trunk(entry, "dcm.1")
+    assert not P.is_trunk(entry, "osc.1")
+    assert not P.is_trunk({}, "line.1")
+
+
+def test_a_banded_leg_carries_its_band_into_the_map():
+    """An add/drop filter puts two front ports on one rear position; the band
+    is what says it is not a split of unstated ratio."""
+    entry = {"parts": [{"id": "osc", "ref": "common/lc-duplex-adapter@6", "at": [0, 0]},
+                       {"id": "edfa", "ref": "common/lc-duplex-adapter@6", "at": [13, 0]},
+                       {"id": "line", "ref": "common/lc-duplex-adapter@6", "at": [26, 0]}],
+             "optical": {"polish": "upc", "trunk": ["line"],
+                         "paths": [{"from": "line.2", "to": "osc.1",
+                                    "band": {"centre-nm": 1511, "width-nm": 13}},
+                                   {"from": "line.2", "to": "edfa.1"}]}}
+    rows = P.fibre_map(entry, KNOWN.get, "AD")["rows"]
+    assert rows == [
+        {"front": "1", "front_position": 1, "rear": "LINE-1", "rear_position": 2,
+         "band": {"centre-nm": 1511, "width-nm": 13}},
+        {"front": "3", "front_position": 1, "rear": "LINE-1", "rear_position": 2}]
+
+
+def test_the_real_ppm_coupler_exports_its_trunk_as_the_rear_port():
+    """PPM-OCU-50-50 in the built export: the common adapter is rear port
+    COMMON-1 and the two legs are front ports 3 and 4, in NetBox. Nautobot
+    cannot hold several front ports on one rear position, so its type states
+    neither list and says the split is in the fibre map."""
+    nb = ROOT / "library/exports/netbox/module-types/Smartoptics/PPM-OCU-50-50.yaml"
+    nt = ROOT / "library/exports/nautobot/module-types/Smartoptics/PPM-OCU-50-50.yaml"
+    fm = ROOT / "library/exports/fibre-maps/Smartoptics/PPM-OCU-50-50.yaml"
+    if not nb.exists():
         pytest.skip("library/exports not built - run ./publish.sh --no-images")
-    doc = yaml.safe_load(f.read_text())
-    assert "front-ports" not in doc
-    assert "rear-ports" not in doc
+    doc = yaml.safe_load(nb.read_text())
+    assert [p["name"] for p in doc["rear-ports"]] == ["{module}/COMMON-1"]
+    assert [p["name"] for p in doc["front-ports"]] == ["{module}/3", "{module}/4"]
+    naut = yaml.safe_load(nt.read_text())
+    assert "front-ports" not in naut and "rear-ports" not in naut
+    assert "fibre map" in naut["comments"]
+    rows = yaml.safe_load(fm.read_text())["rows"]
+    assert sorted(r["ratio"] for r in rows) == [50, 50]
 
 
 def test_the_fibre_map_carries_one_row_per_leg():

@@ -16,6 +16,15 @@ interfaces:
   - name: '{module}/sfp-2'
     type: 1000base-x-sfp
     mgmt_only: true
+module-bays:
+  - name: ppm-1
+    position: ppm-1
+    description: 'Accepts: ppm-ad1-1510, ppm-ad1-1625, ppm-dcm-10, ppm-dcm-20, ppm-dcm-40, ppm-dcm-80,
+      ppm-ocu-50-50, ppm-ocu-97-3, ppm-dummy'
+  - name: ppm-2
+    position: ppm-2
+    description: 'Accepts: ppm-ad1-1510, ppm-ad1-1625, ppm-dcm-10, ppm-dcm-20, ppm-dcm-40, ppm-dcm-80,
+      ppm-ocu-50-50, ppm-ocu-97-3, ppm-dummy'
 comments: 'Smartoptics DCP-F-A22 - a 22 dB gain EDFA amplifier that takes one slot in a DCP-2 chassis
   and carries two bays for passive plug-in modules. Half-width 1RU, the same 205 x 44 footprint as the
   DCP-404.
@@ -32,5 +41,10 @@ comments: 'Smartoptics DCP-F-A22 - a 22 dB gain EDFA amplifier that takes one sl
   - power-draw-typical-w: 30
 
   - role: amplifier
+
+
+  Optical ports not exported: edfa, ocm. Each is a fibre adapter with no fibre path modelled behind it:
+  not an interface, because an interface type names a signal and a passive adapter carries whatever the
+  fibre does, and not a front/rear port pair, because that needs a path to a trunk.
 
   Contract version 2.1.1 (smartoptics/dcp-f-a22).'

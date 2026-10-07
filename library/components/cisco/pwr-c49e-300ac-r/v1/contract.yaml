@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: pwr-c49e-300ac-r
-version: 1.0.0
+version: 1.0.1
 class: psu
 behaviour: fills
 profile: networking
@@ -56,11 +56,14 @@ provenance:
     green when the 12 VDC output is within margins and red when it is out of tolerance, on
     a fan failure, or on a switched-off supply beside a live one.
   inlet: >-
-    The receptacle is drawn as std/c14-inlet@1, earth pin down as the photograph shows it.
-    The guide's power cords for this supply are all C15, the notched high-temperature
-    connector, so the receptacle on the metal is a C16 and this library has no part for
-    one. The opening is the same size; the notch is not drawn, and `inlet: c14` on this
-    contract names the part that stands in, not the connector on the metal.
+    photo - a C14, drawn as std/c14-inlet@1, earth pin down as the photograph shows it. A
+    close-up of a real unit's rear shows the earth-side wall of the shroud as one straight
+    edge with no ridge, which is a C14; a C16 has a ridge there. The guide agrees: chapter
+    4, "Installing the AC-Input Power Supply", step 6, plugs in "C15 or C13 connector", and
+    appendix A's cord table for the 300 W supplies lists CAB-N5K6A-NA=, whose appliance end
+    Figure A-8 labels IEC60320/C13. A C13 plug has no groove, so it cannot enter a C16. The
+    same appendix says every 300 W cord has a C15 plug; a C15 plug fits a C14 inlet too, so
+    that note names the cord, not the receptacle.
   colour: >-
     The face colour is the median of 450 pixels of bare plate beside the handle in the data
     sheet's rear photograph, #656469.

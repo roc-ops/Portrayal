@@ -228,6 +228,13 @@ ISSUED = {
     "L126": "device",
     "L127": "device",
     "L128": "device, listing",
+    "L129": "component",
+    "L130": "component",
+    "L131": "component",
+    "L132": "device",
+    "L133": "device",
+    "L134": "device",
+    "L135": "device",
 }
 
 
@@ -249,8 +256,11 @@ def test_every_live_or_retired_code_was_issued():
     unpinned = sorted((set(lint.RULES) | set(lint.RETIRED)) - set(ISSUED), key=lambda c: int(c[1:]))
     assert not unpinned, (f"codes not in ISSUED: {unpinned}. A new rule appends its code and "
                           "scope to ISSUED in this file")
+    # A RESERVED code is issued too, to a rule on another branch: that branch
+    # pins its scope here when it lands, so until then it is not a skip.
     newest = max(int(c[1:]) for c in ISSUED)
-    assert sorted(int(c[1:]) for c in ISSUED) == list(range(newest + 1)), \
+    assert sorted(int(c[1:]) for c in set(ISSUED) | set(lint.RESERVED)) == \
+        list(range(newest + 1)), \
         "ISSUED skips a number; codes are issued in order and none is skipped"
 
 

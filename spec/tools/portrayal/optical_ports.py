@@ -37,6 +37,11 @@ FAMILY = {
 # enum has no second form would be a fact nobody asked for.
 POLISHED = ("lc", "sc")
 FIXED_POLISH = {"fc": "apc", "lsh": "apc"}
+# A LATENT GAP, NOT A LIVE ONE: Nautobot's PortTypeChoices has no `mdc` and no
+# `fc-apc` (nautobot cb08ef68, dcim/choices.py ~1229), where NetBox has both
+# (netbox a6e0fa03, v4.7.2, dcim/choices.py ~1673). Nothing exported today
+# composes either family, so no committed Nautobot file carries one; the first
+# module that does will need a Nautobot answer before it ships.
 
 
 def family_of(ref):
@@ -199,6 +204,60 @@ def _front_port_names(entry, load_ref):
     return out
 
 
+def trunk_positions(entry, load_ref):
+    """`{part id: [positions, ascending]}` that `optical.trunk` names.
+
+    THE TRUNK IS STATED, NOT INFERRED (roc-ops/Portrayal#246). A single-faced
+    module - a PPM coupler, a DCM, an add/drop filter - has no rear face to
+    make one end the network side, and neither its part ids nor its paths'
+    direction say which end it is: a cassette's paths run FROM the front, a
+    coupler's FROM the common port. So the contract names it, in
+    `front-order`'s grammar: a bare part id is every position of the part, and
+    `dcm.2` is one. Parts are returned in the order the list first names them,
+    which is the order their rear ports are listed in.
+    """
+    caps = optical.capacities(entry, load_ref)
+    out = {}
+    for item in ((entry.get("optical") or {}).get("trunk") or []):
+        pid, pos = split_order_item(item)
+        want = range(1, (caps.get(pid) or 0) + 1) if pos is None else [pos]
+        have = out.setdefault(pid, [])
+        have.extend(p for p in want if p not in have)
+    return {pid: sorted(v) for pid, v in out.items()}
+
+
+def is_trunk(entry, endpoint):
+    """Is this endpoint the module's common end - the side a DCIM calls rear?
+
+    A face-prefixed endpoint (`rear:mtp.3`) is, by construction: the rear
+    face IS the trunk. Otherwise it is exactly when `optical.trunk` names the
+    position, or names its part bare - which covers whatever positions the
+    part has, so no lookup is needed to answer.
+    """
+    face, part, pos = optical.split_endpoint(endpoint)
+    if face:
+        return True
+    for item in ((entry.get("optical") or {}).get("trunk") or []):
+        pid, p = split_order_item(item)
+        if pid == part and (p is None or p == pos):
+            return True
+    return False
+
+
+def projects(entry):
+    """Does the DCIM projection export this module's glass at all?
+
+    It needs paths, and it needs a trunk: a declared rear face, or a stated
+    `optical.trunk`. Without either there is nothing to put on a rear port,
+    and front ports with no rear port are the shape netbox#21830 rejected.
+    THE ONE GATE, asked by `build_module` and `export_modules` alike, so the
+    port lists and the fibre map cannot disagree about which modules project.
+    """
+    from portrayal.faces import face_ref
+    opt = entry.get("optical") or {}
+    return bool(opt.get("paths")) and bool(face_ref(entry, "rear") or opt.get("trunk"))
+
+
 def ports(entry, load_ref):
     """`{"front": [...], "rear": [...]}` for one module entry.
 
@@ -211,16 +270,26 @@ def ports(entry, load_ref):
     polish = (entry.get("optical") or {}).get("polish")
     rear_kind = (entry.get("optical") or {}).get("rear-kind")
 
+    # A TRUNK POSITION LEAVES THE FRONT LIST AND THE NUMBERING DOES NOT SKIP
+    # IT. Front ports are named as `front_label` counts, every position along
+    # the face, so an OCU whose common adapter is the trunk exports its legs as
+    # `3` and `4` - the faceplate's own count, with an honest gap - and no
+    # published number changes meaning.
+    trunk = trunk_positions(entry, load_ref)
     front, n = [], 0
     for _x, pid, ref in _front_parts(entry):
         t = port_type(family_of(ref), polish)
+        width = caps.get(pid) or 0
+        kept = [i for i in range(1, width + 1) if i not in trunk.get(pid, ())]
         if family_of(ref) in GROUPED_FRONT:
             n += 1
-            front.append({"name": str(n), "type": t, "positions": caps.get(pid) or 0})
+            if kept:
+                front.append({"name": str(n), "type": t, "positions": len(kept)})
             continue
-        for i in range(1, (caps.get(pid) or 0) + 1):
+        for i in range(1, width + 1):
             n += 1
-            front.append({"name": str(n), "type": t, "positions": 1})
+            if i in kept:
+                front.append({"name": str(n), "type": t, "positions": 1})
 
     rear = []
     names = rear_port_names(entry, load_ref)
@@ -229,6 +298,12 @@ def ports(entry, load_ref):
         ref = _face_part_ref(entry, face, pid, load_ref)
         t = port_type(family_of(ref), polish) or rear_kind
         rear.append({"name": names[pid], "type": t, "positions": caps[key]})
+    refs = {str(p["id"]): p.get("ref") for p in (entry.get("parts") or [])
+            if isinstance(p, dict) and p.get("id")}
+    for pid, positions in trunk.items():
+        rear.append({"name": names[pid],
+                     "type": port_type(family_of(refs.get(pid) or ""), polish),
+                     "positions": len(positions)})
     return {"front": front, "rear": rear}
 
 
@@ -248,6 +323,12 @@ def rear_port_names(entry, load_ref):
         pid = key.split(":", 1)[1]
         seen[pid] = seen.get(pid, 0) + 1
         out[pid] = f"{pid.upper()}-{seen[pid]}"
+    # A STATED TRUNK PART IS NAMED THE SAME WAY, so a PPM coupler's common
+    # adapter is `COMMON-1` beside a cassette's `MTP-1`. L129 keeps a trunk off
+    # a module whose rear face carries fibre, so the two never share a name.
+    for pid in trunk_positions(entry, load_ref):
+        seen[pid] = seen.get(pid, 0) + 1
+        out[pid] = f"{pid.upper()}-{seen[pid]}"
     return out
 
 
@@ -264,11 +345,13 @@ def _face_part_ref(entry, face, pid, load_ref):
 def fibre_map(entry, load_ref, model):
     """The per-instance front-to-rear bindings, as a flat row list.
 
-    THE DEVICE-TYPE YAML NO LONGER CARRIES THIS. netbox#20564 replaced the
-    FrontPort->RearPort FK with a bidirectional M2M, and the front-port schema
-    is `{name, type, positions}` with `additionalProperties: false` and no
-    `rear_port` key - so the mapping has nowhere to live in the type format and
-    ships beside it instead.
+    THE DEVICE-TYPE YAML THIS PROJECT WRITES DOES NOT CARRY THIS. netbox#20564
+    replaced the FrontPort->RearPort FK with a bidirectional M2M, and the
+    front-port schema is `{name, type, positions}` with no `rear_port` key, so
+    the binding ships beside the type instead. That is no longer the only place
+    it could go: NetBox >= 4.6 has type-level `port-mappings`
+    (PortTemplateMapping), which a type document can carry. Adopting them is
+    tracked separately; until then this map is where the binding lives.
 
     THERE IS NO UPSTREAM SCHEMA FOR THIS ARTEFACT, so this defines one. It is
     generated only and never hand-edited, which keeps the contracts the single
@@ -277,13 +360,20 @@ def fibre_map(entry, load_ref, model):
     """
     opt = entry.get("optical") or {}
     rear_name = rear_port_names(entry, load_ref)
+    trunk = trunk_positions(entry, load_ref)
 
     rows = []
     for path in (opt.get("paths") or []):
         legs = optical.endpoints(path)
         src, _ = legs[0]
         for dst, ratio in legs[1:]:
-            rows.append(_row(entry, src, dst, ratio, rear_name, load_ref))
+            row = _row(entry, src, dst, ratio, rear_name, load_ref, trunk)
+            # A BANDED LEG SAYS WHICH BAND, the way a split leg says its ratio:
+            # an add/drop filter puts two front ports on one rear position, and
+            # without the band the map would read as a split of no stated ratio.
+            if row and path.get("band"):
+                row["band"] = dict(path["band"])
+            rows.append(row)
     rows = [r for r in rows if r]
     rows.sort(key=lambda r: (r["rear"], r["rear_position"]))
     out = {"model": model}
@@ -295,17 +385,26 @@ def fibre_map(entry, load_ref, model):
     return out
 
 
-def _row(entry, a, b, ratio, rear_name, load_ref):
-    """One leg as a row, whichever end of it is the rear."""
+def _row(entry, a, b, ratio, rear_name, load_ref, trunk=None):
+    """One leg as a row, whichever end of it is the rear.
+
+    THE REAR END IS THE TRUNK END, which `is_trunk` answers: a rear-face
+    endpoint, or a position `optical.trunk` names. A stated trunk position is
+    renumbered within its own rear port - `dcm.2` alone is position 1 of
+    `DCM-1` - because that rear port carries only the trunk positions.
+    """
     fa, pa, na = optical.split_endpoint(a)
     fb, pb, nb = optical.split_endpoint(b)
-    if fa and not fb:
+    ta, tb = is_trunk(entry, a), is_trunk(entry, b)
+    if ta and not tb:
         rear_ep, front_ep = (fa, pa, na), (fb, pb, nb)
-    elif fb and not fa:
+    elif tb and not ta:
         rear_ep, front_ep = (fb, pb, nb), (fa, pa, na)
     else:
-        return None                      # front-to-front or rear-to-rear
-    _f, rpid, rpos = rear_ep
+        return None                      # front-to-front or trunk-to-trunk: L130
+    rface, rpid, rpos = rear_ep
+    if not rface:
+        rpos = (trunk or {}).get(rpid, [rpos]).index(rpos) + 1
     _g, _fpid, _fpos = front_ep
     label, fpos = front_port(entry, f"{_fpid}.{_fpos}", load_ref) or (None, 1)
     row = {"front": label, "front_position": fpos,
