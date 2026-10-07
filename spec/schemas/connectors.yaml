@@ -67,7 +67,29 @@ interfaces:
   # docs/connectors-dc-terminal-design.md section 12). ONE INTERFACE, BY
   # RULING: see the note. The part that presents it is the terminal screw
   # itself, composed once per pole into its block, so each pole is a slot.
-  terminal-stud: {standard: terminal-stud, note: 'the library treats a screw or stud terminal that a lug lands on as ONE nominal connector. Stud and screw sizes vary by product and most placing parts state none, so the interface claims no size; where a document states one it is an attribute of the placement and not of the interface. generic/ring-lug@1, a one-hole insulated ring terminal on its wire, mates it. A two-hole lug across a pair of studs is not this interface yet'}
+  # TURNS: the turns, relative to the seat, at which an occupant may be seated
+  # on a slot presenting the interface (#829, docs/connectors-dc-terminal-
+  # design.md section 13.4). A ring lug turns freely about its stud, so all
+  # four right angles. An interface that names no `turns` allows 0 alone, and
+  # a part's own `mate` point may narrow the list (`turns:` on the point), as
+  # a barrier block's terminal screw narrows it to 0.
+  terminal-stud: {standard: terminal-stud, turns: [0, 90, 180, 270], note: 'the library treats a screw or stud terminal that a lug lands on as ONE nominal connector. Stud and screw sizes vary by product and most placing parts state none, so the interface claims no size; where a document states one it is an attribute of the placement and not of the interface. generic/ring-lug@1, a one-hole insulated ring terminal on its wire, mates it. A two-hole lug across a pair of studs is not this interface: it mates a `stud-pair-*` interface, which spans two of these'}
+  # PAIRS OF STUDS ONE TWO-HOLE LUG LANDS ACROSS (#828,
+  # docs/connectors-dc-terminal-design.md section 13.7). Each SPANS two
+  # `terminal-stud` seats, as `lc-duplex` spans two `lc` bores: a part
+  # presenting one composes the two studs at the interface's pitch and
+  # presents the pair at their midpoint, and the pair and its two studs are
+  # mutually exclusive (L115). THE PITCH IS THE INTERFACE: a two-hole lug is one
+  # stamping, so a lug for 5/8 in. centres does not land on studs 3/4 in. apart,
+  # and the pitch is in the key. The stud SIZE is not: it is the placement's
+  # `stud-size`, as on a single stud. The axis a pair runs on is derived from
+  # the order its studs are composed in (manifest.spanning_axis), so one lug
+  # serves a pair side by side and one stood on end, and the order says which
+  # way the wire leaves. `turns: [0, 180]` (#829): a lug across a pair can lie
+  # either way along it, and no other way.
+  stud-pair-5-8: {standard: two-hole-lug-5-8, turns: [0, 180], note: 'two studs or tapped holes on 5/8 in. (15.875) centres that one two-hole lug lands across; generic/two-hole-lug-5-8@1 mates it. The ring lug still mates each stud alone', spans: {interface: terminal-stud, count: 2}}
+  stud-pair-3-4: {standard: two-hole-lug-3-4, turns: [0, 180], note: 'two studs or tapped holes on 3/4 in. (19.05) centres that one two-hole lug lands across; generic/two-hole-lug-3-4@1 mates it. The ring lug still mates each stud alone', spans: {interface: terminal-stud, count: 2}}
+  stud-pair-1: {standard: two-hole-lug-1, turns: [0, 180], note: 'two studs or tapped holes on 1 in. (25.4) centres that one two-hole lug lands across; generic/two-hole-lug-1@1 mates it. The ring lug still mates each stud alone', spans: {interface: terminal-stud, count: 2}}
   # The high-density and telephone connectors (#790,
   # docs/connectors-mrj21-vhdci-rj11-design.md). The cable plug that mates
   # each is a generic plug; the far end of the cable, and any breakout, is not

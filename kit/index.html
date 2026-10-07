@@ -124,7 +124,7 @@
 <script type="module">
 import { createShell, esc } from './shell.js';
 import { statesOfEl, messagesOfEl, charactersOfEl } from './states.js';
-import { encodeSwaps, searchWith } from './swap.js';
+import { encodeSwaps, encodeTurns, searchWith } from './swap.js';
 import { encodeFields } from './fields.js';
 import { flatDist, packageDist } from './dist.js';
 
@@ -547,7 +547,9 @@ const swapOverrides = () => shell.swapDelta();
 // decides it is already showing the right thing and swapping in 3D does nothing.
 const swapKey = () => Object.entries(swapOverrides())
   .sort(([a], [b]) => a < b ? -1 : 1)
-  .map(([k, v]) => `${k}=${v || ''}`).join(',');
+  .map(([k, v]) => `${k}=${v || ''}`).join(',')
+  // a lug turned is a scene to rebuild as much as one swapped (#829)
+  + `|${encodeTurns(shell.turnDelta())}`;
 
 // A SWAP SURVIVES A RELOAD. This page's OWN location carries the device, its
 // configuration, its view and the swaps, rewritten in place (replaceState, so
@@ -555,7 +557,10 @@ const swapKey = () => Object.entries(swapOverrides())
 // and view change; shell.js reads them back on load in that order.
 //
 //   ?device=<name>&listing=<ns>/<id>&config=<c>&view=<v>&swap=<k>~<ref>,<k>~
-//   &fields=<path>~<key>~<value>,...
+//   &fields=<path>~<key>~<value>,...&turn=<k>~<deg>,...
+//
+// `turn=` is a parameter of its own (#829, swap.js encodeTurns): a third `~`
+// piece in `swap=` would have made every older link lose the lug.
 //
 // The swap string carries its own escaping (encodeSwaps in swap.js), so it is
 // written raw, and parameters this page does not own - `tex` - are kept.
@@ -575,6 +580,8 @@ function writeLocation() {
     config: e(state.cfg || ''), view: e(state.view || ''), swap: swaps,
     // what the reader set on a part (#811); carries its own escaping, as swap does
     fields: encodeFields(state.cfgFields),
+    // the turns the reader gave a seated lug (#829); none on an untouched page
+    turn: encodeTurns(shell.turnDelta()),
   });
   if (search !== location.search) {
     try { history.replaceState(history.state, '', `${location.pathname}${search}${location.hash}`); }
@@ -655,7 +662,8 @@ async function sync3d() {
   // the fields the reader set, the same map 2D painted from (#811)
   await Promise.resolve(v.setFields(state.cfgFields)).catch(() => {});
   if (key === loadedKey) return;
-  await v.load({ device: state.device, config: state.cfg, overrides: swapOverrides() });
+  await v.load({ device: state.device, config: state.cfg, overrides: swapOverrides(),
+                 turns: shell.turnsNow() });
   loadedKey = key;              // only once it is actually the thing on screen
   mountExtras(v);
   fruBar(v);

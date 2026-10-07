@@ -199,8 +199,10 @@ def test_a_cage_entry_carries_the_documented_shape(tmp_path):
     assert set(cage) == {"id", "at", "interface", "media", "group", "rel-pos",
                           "rotate", "accepts", "occupant",
                           "mate", "lift", "occupant-attrs", "mirror", "group-states",
-                          "kind", "default", "bores"}
+                          "kind", "default", "bores", "turns"}
     assert cage["kind"] == "cage"
+    # A CAGE TURNS NOTHING (#829): `turns` is null where there is no choice
+    assert cage["turns"] is None
     # WHAT THE SLOT SHIPS HOLDING (B3), null where it ships empty - present on
     # every entry for the same reason `accepts` is: "nothing" and "not a
     # question this entry answers" have to be told apart.
@@ -646,7 +648,11 @@ def test_the_lift_census():
     section 14). amphenol-ns/output-p40@1 presents `p40` at the mouth of the
     shroud it builds proud of the panel - its `mate` sits `on: shell` - so a
     plug seated there starts where the shroud ends. Its lift is that shroud's
-    `out`, 6.0, the figure `manifest.presented_interface` derives."""
+    `out`, 6.0, the figure `manifest.presented_interface` derives.
+
+    AND SO DOES A PAIR OF STUDS (#828, section 13.7). A pair host presents its
+    `stud-pair-*` interface at the top of its studs, its `mate`'s `seat-out`,
+    so a two-hole lug lands where a one-hole lug on either stud would."""
     from portrayal import manifest
     lib = render_mod.Library([str(LIB)])
     families = render_mod._pluggable_families()
@@ -663,7 +669,11 @@ def test_the_lift_census():
                     lifted_cages += c["kind"] == "cage"
                     if c["interface"] in ("bnc", "din-1-0-2-3", "f-type",
                                           "terminal-508-5", "terminal-508-2",
-                                          "terminal-stud", "p40"):
+                                          "terminal-stud", "p40",
+                                          # a pair of studs a two-hole lug spans
+                                          # presents at its studs' top (#828)
+                                          "stud-pair-5-8", "stud-pair-3-4",
+                                          "stud-pair-1"):
                         doc = lib.resolve(_ref(d, v, c["id"]))[0]
                         want = manifest.presented_interface(
                             doc, lambda r: lib.resolve(r)[0])[2]

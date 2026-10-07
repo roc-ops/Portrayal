@@ -802,6 +802,16 @@
       "$ref": "#/$defs/segment",
       "description": "the `relief.features[]` node this point sits on. A part seated at this point stands off by that feature's `out` - ABSOLUTE from this part's own face, so a feature's `lift` does not add to it. Read on the point the `interface` is presented at (`interface-at`, default `mate`), where it sets how far a part seated there stands off, and on a `cable` point, where it sets the depth the cable leaves from (render.py writes it as `data-cp-on` for the viewer's cable points); lint L106 requires the node to exist and to carry an `out`."
      },
+     "turns": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+       "type": "integer",
+       "enum": [0, 90, 180, 270]
+      },
+      "description": "THE TURNS AN OCCUPANT MAY BE SEATED AT HERE, relative to the seat, narrowing the list the presented interface allows (`turns:` on its entry in spec/schemas/connectors.yaml; an interface naming none allows 0 alone). Read on the presented point - the one `interface-at` names, default `mate` - by manifest.allowed_turns, which takes the two lists' intersection. A barrier block's terminal screw says `[0]`: the barriers fix the pole, where the same interface on a ground stud turns freely. Lint L147 holds the list to a subset of the interface's (#829)."
+     },
      "seat-out": {
       "type": "number",
       "minimum": 0,

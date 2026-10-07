@@ -1,0 +1,53 @@
+format: 1
+kind: component
+name: ground-screw-1-4
+version: 1.0.0
+class: ground
+interface: terminal-stud
+profile: networking
+description: >-
+  A 1/4-20 pan-head screw in a tapped grounding hole, seen head on: a cross
+  recessed pan head 12.5 across. It is what a lug is landed under, so it is
+  where one seats: it presents the nominal `terminal-stud` interface on its
+  axis, at the top of its head. Composed by the parts that land a lug on a
+  pair of sized ground screws (#830); never placed alone.
+size: {w: 12.5, h: 12.5}
+size-confidence: {w: registry, h: registry}
+size-notes: >-
+  the head diameter of the standard's 1/4-20 pan head, its largest; the thread
+  is not drawn
+attrs: {connector: terminal-stud}
+provenance:
+  size: >-
+    registry - ASME B18.6.3 pan head machine screws, the 1/4 row: head diameter A 0.492 in. (12.50), head height H 0.144 in. (3.66) (engineersedge.com, pan_head1). The maximum head is drawn.
+  relief: >-
+    registry - the head height of the same row, 3.66, built as a cylinder from
+    the face the screw is driven into. The screw's shank and the lug under the
+    head are not built.
+  sized: >-
+    A SIZED PART BESIDE THE NOMINAL ONE. common/ground-lug@1 stays the
+    library's nominal ground screw, drawn at about M3 and placed on forty
+    devices whatever their documents say (#830, docs/connectors-dc-terminal-design.md
+    section 13.5). This part is drawn at the size a document states, and is
+    used only where one does: inside a part landing a two-hole lug on a pair.
+  seat: >-
+    THE LUG SEATS ON TOP OF THE HEAD, NOT UNDER IT, for the reason every stud
+    part in the library gives: `mate` sits `on: head`, so a lug seated here
+    starts 3.66 off the face and no solid of it shares the head's volume. A
+    real lug lies on the panel under the head. See
+    docs/connectors-dc-terminal-design.md, sections 12.5 and 13.
+  behaviour: >-
+    DELIBERATELY OMITTED. The screw is composed by the part that lands the
+    lug and is never placed on its own; that part states `mounts`.
+elements: {}
+relief:
+  features:
+    - node: head
+      cyl: 3.66
+      color: '#b9bec4'
+      confidence: registry
+      source: >-
+        ASME B18.6.3 pan head machine screws, the 1/4 row: head diameter A 0.492 in. (12.50), head height H 0.144 in. (3.66) (engineersedge.com, pan_head1): head height.
+connection-points:
+  mate: {at: [6.25, 6.25], direction: front, 'on': head}
+skins: [default]

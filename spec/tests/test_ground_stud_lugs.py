@@ -14,6 +14,7 @@ Held to the real library and to builds made here: nothing is rasterised and
 nothing reads library/dist.
 """
 import json
+import math
 import re
 import shutil
 import subprocess
@@ -31,7 +32,7 @@ from portrayal.artifacts import face_file
 from test_coax_slots import _contract, _skin_path
 from test_head_3d import apply, box, lift_of
 from test_lifted_seat_js import build_components, mismatches, skin_file, spec_of
-from test_nested_occupants import (assert_same_turn, by_path, device_matrix,
+from test_nested_occupants import (by_path, device_matrix,
                                    device_point, own_mate)
 from test_nested_slots_js import built_occupant
 
@@ -41,6 +42,12 @@ RENDER = ROOT / "spec/tools/portrayal/render.py"
 EPS = 1e-6
 SVG = "{http://www.w3.org/2000/svg}"
 IFACE, LUG = "terminal-stud", "generic/ring-lug@1"
+# the sized ground screws (#830) a pair host composes; test_two_hole_lugs.py
+# holds them and the pair hosts.
+SIZED_SCREWS = ("common/ground-screw-m6@1", "common/ground-screw-1-4@1",
+                "common/ground-screw-10-32@1")
+# the 10-32 studs of the SR-1 DC terminal block, two per pole host (#828)
+SR1_STUD = "nokia/sr-1-dc-stud@1"
 
 # part -> what it was before it became a slot, and where a lug lands on it.
 #   axis   the stud axis in the part's own frame
@@ -61,6 +68,10 @@ SINGLE = {
         solids={"stud": (3.0, 8.0)}),
 }
 CASA, CASA_STUD = "casa/c40g-ground-studs@1", "casa/shelf-ground-stud@1"
+# the pair hosts a device places straight on a face (#828); test_two_hole_lugs.py
+# and test_grounding_devices.py hold them, and only their `stud-size` is read here
+PAIR_HOSTS = ("common/ground-stud-pair-5-8-m6@1", "common/ground-stud-pair-5-8-1-4@1",
+              "common/ground-stud-pair-3-4-1-4@1", "common/ground-stud-pair-1-1-4@1")
 # the three studs of the Casa terminal: seat id -> stud axis in the terminal's frame
 CASA_SEATS = {"stud-tr": (21.45, 6.15), "stud-bl": (6.15, 21.45), "stud-br": (21.45, 21.45)}
 CASA_TOP = 3.5
@@ -77,13 +88,40 @@ OLD_NUT_TR = "25.35,6.15 23.4,9.53 19.5,9.53 17.55,6.15 19.5,2.77 23.4,2.77"
 OLD_SHIFT = {"stud-tr": (0.0, 0.0), "stud-bl": (-15.3, 15.3), "stud-br": (0.0, 15.3)}
 
 # The census, counted off the library by walking every device view and every
-# component's `parts:`: part -> (placements, devices).
+# component's `parts:`: part -> (placements, devices). 59 placements on 39
+# devices. On main (796eb08) the same walk read 145 on 61; the grounding batch
+# (#828, #830) moved 86 single studs into pair hosts, which compose a sized
+# screw or the MX stud twice and which test_two_hole_lugs.py and
+# test_grounding_devices.py count:
+#   common/ground-stud@1      71 -> 3   the eleven Amphenol 300CB08 panels (six
+#                                       each, 66) and the Nokia LMFS-F (2)
+#   common/ground-lug@1       63 -> 55  the Edgecore AIS800-64D and -64O (two
+#                                       each), the Nokia FX-16 (2), FX-8 and FX-4
+#   juniper/mx-ground-stud@1  10 -> 0   the MX80, MX104, MX150, MX240 and MX480
+# and 22 devices with them, every one of whose ground studs was in a pair.
 CENSUS = {
-    "common/ground-lug@1": (63, 40),
-    "common/ground-stud@1": (71, 15),
-    "juniper/mx-ground-stud@1": (10, 5),
+    "common/ground-lug@1": (55, 35),
+    "common/ground-stud@1": (3, 3),
     CASA: (1, 1),
 }
+# juniper/mx-ground-stud@1 IS PLACED BY NO DEVICE SINCE #828: the five MX
+# chassis that placed it twice each place one pair host instead, which
+# composes it twice (test_two_hole_lugs.py), and the MX204's and MX304's plates
+# became pairs of 10-32 and M6 screws. Those pairs state the size the guides give, on the pair
+# placement.
+PAIRED = {
+    "juniper/mx80": {"ground-studs": "10-32"},
+    "juniper/mx104": {"ground-studs": "10-32"},
+    "juniper/mx150": {"ground-studs": "10-32"},
+    "juniper/mx204": {"ground-plate": "10-32"},
+    "juniper/mx240": {"ground-studs": "1/4-20"},
+    "juniper/mx480": {"ground-studs": "1/4-20"},
+    "juniper/mx304": {"ground-plate": "M6"},
+}
+
+# the hosts the MX pairs and plates are placed as
+MX_PAIR_HOSTS = ("juniper/mx-ground-stud-pair-5-8@1", "juniper/mx-ground-stud-pair-3-4@1",
+                 "juniper/mx204-ground-plate@2", "juniper/mx304-ground-plate@2")
 
 UFI2 = {"ground-1": "M4", "ground-2": "M4"}
 # device -> {placement: the size its own documents state}. Every other
@@ -95,35 +133,29 @@ UFI2 = {"ground-1": "M4", "ground-2": "M4"}
 # version:
 # its grounding specification, 1/4-20 threaded holes on 5/8 inch centres, is
 # not limited to a version the way its input rows are.
-AMPHENOL6 = {f"ground-{side}-{i}": "1/4-20"
-             for side in ("bottom", "left", "right") for i in (1, 2)}
+AMPHENOL3 = {f"ground-{side}": "1/4-20" for side in ("bottom", "left", "right")}
 STUD_SIZE = {
-    "amphenol-ns/300cb08": AMPHENOL6,
-    "amphenol-ns/300cb08-sc": AMPHENOL6,
-    "amphenol-ns/300cb08-c": AMPHENOL6,
-    "amphenol-ns/nrg300cb08-ctrl": AMPHENOL6,
-    "amphenol-ns/nrg300cb08-sens": AMPHENOL6,
-    "amphenol-ns/nrg300cb08-ctrl-c": AMPHENOL6,
-    "amphenol-ns/nrg300cb08-ctrl-sc": AMPHENOL6,
-    "amphenol-ns/nrg300cb08-sens-c": AMPHENOL6,
-    "amphenol-ns/nrg300cb08-sens-sc": AMPHENOL6,
-    "amphenol-ns/nrgils300cb08": AMPHENOL6,
-    "amphenol-ns/nrgils300cb08-sc": AMPHENOL6,
+    "amphenol-ns/300cb08": AMPHENOL3,
+    "amphenol-ns/300cb08-sc": AMPHENOL3,
+    "amphenol-ns/300cb08-c": AMPHENOL3,
+    "amphenol-ns/nrg300cb08-ctrl": AMPHENOL3,
+    "amphenol-ns/nrg300cb08-sens": AMPHENOL3,
+    "amphenol-ns/nrg300cb08-ctrl-c": AMPHENOL3,
+    "amphenol-ns/nrg300cb08-ctrl-sc": AMPHENOL3,
+    "amphenol-ns/nrg300cb08-sens-c": AMPHENOL3,
+    "amphenol-ns/nrg300cb08-sens-sc": AMPHENOL3,
+    "amphenol-ns/nrgils300cb08": AMPHENOL3,
+    "amphenol-ns/nrgils300cb08-sc": AMPHENOL3,
     "casa/c40g": {"ground-studs-rear": "M6"},
     "edgecore/agr110": {"ground-right": "M5"},
     "edgecore/agr130": {"ground-right": "M5"},
     "edgecore/dcs500": {"ground-0": "M5", "ground-1": "M5"},
-    "edgecore/ais800-64d": {"ground-screw-1": "M6", "ground-screw-2": "M6"},
-    "edgecore/ais800-64o": {"ground-screw-1": "M6", "ground-screw-2": "M6"},
-    "juniper/mx104": {"ground-stud-0": "10-32", "ground-stud-1": "10-32"},
-    "juniper/mx150": {"ground-stud-0": "10-32", "ground-stud-1": "10-32"},
-    "juniper/mx80": {"ground-stud-0": "10-32", "ground-stud-1": "10-32"},
-    "juniper/mx240": {"ground-stud-0": "1/4-20", "ground-stud-1": "1/4-20"},
-    "juniper/mx480": {"ground-stud-0": "1/4-20", "ground-stud-1": "1/4-20"},
+    "edgecore/ais800-64d": {"ground-screws": "M6"},
+    "edgecore/ais800-64o": {"ground-screws": "M6"},
     "nokia/nfxs-d-ba": {"ground-left": "1/4 in", "ground-right": "1/4 in"},
     "nokia/nfxs-e-bb": {"ground": "1/4 in"},
     "nokia/nfxs-f-bb": {"ground": "1/4 in"},
-    "nokia/lmfs-f": {"ground-stud-1": "M6", "ground-stud-2": "M6"},
+    "nokia/lmfs-f": {"ground-studs": "M6"},
     "ufispace/m3000-14xc": UFI2,
     "ufispace/s9500-22xst": UFI2,
     "ufispace/s9500-30xs": {"ground-lug": "M4"},
@@ -148,15 +180,20 @@ BUILT = {
     "readylinks/gl-12xb-240d": ("base", "rear", "common/ground-stud@1", ["ground-stud"]),
     "casa/c40g": ("base", "rear", CASA, ["ground-studs-rear/stud-tr"]),
     # a pair, one stud above the other, both seated
-    "juniper/mx240": ("base", "rear", "juniper/mx-ground-stud@1",
-                      ["ground-stud-0", "ground-stud-1"]),
+    "ufispace/s9600-102xc": ("dc", "rear", "common/ground-lug@1", ["ground-1", "ground-2"]),
     # a pair side by side, both seated
     "ufispace/s9500-22xst": ("dc", "right", "common/ground-lug@1", ["ground-1", "ground-2"]),
     # a placement turned 90
     "edgecore/dcs500": ("base", "rear", "common/ground-lug@1", ["ground-1"]),
-    # a pair on a side panel, on the 5/8 inch centres its guide states
-    "amphenol-ns/300cb08": ("base", "left", "common/ground-stud@1",
-                            ["ground-left-1", "ground-left-2"]),
+}
+# THE SEATS ASKED FOR AT THE SEAT'S OWN DIRECTION, `turn: 0` (#829). Every
+# other seat in BUILT states no turn and takes the default the build computes
+# (render.default_seat_turn); these keep the geometry sections 4 and 5 record
+# - the turned placement's lug leaving left, and the two pairs that overlap
+# when nobody turns a lug - which the default no longer draws.
+TURNS = {
+    "edgecore/dcs500": {"ground-1": 0},
+    "ufispace/s9600-102xc": {"ground-1": 0, "ground-2": 0},
 }
 EACH_BUILT = pytest.mark.parametrize("device", sorted(BUILT))
 EACH_SINGLE = pytest.mark.parametrize("part", sorted(SINGLE))
@@ -200,6 +237,8 @@ def placements_of(parts):
     for f in sorted((LIB / "components").rglob("v*/contract.yaml")):
         c = _yaml(f)
         ref = f"{f.parents[2].name}/{c['name']}@{c['version'].split('.')[0]}"
+        if str(c.get("interface") or "").startswith("stud-pair-"):
+            continue            # a pair host: test_two_hole_lugs.py counts those
         for p in c.get("parts") or []:
             if p.get("ref") in parts:
                 out.append((ref, None, p))
@@ -300,18 +339,18 @@ def test_the_parts_that_present_terminal_stud_and_the_one_lug_that_mates_it():
         if c.get("mates") == IFACE:
             mates.append(ref)
     assert sorted(presents) == sorted([*SINGLE, CASA_STUD, "common/terminal-screw-34@1",
-                                       "common/terminal-screw-38@1"])
+                                       "common/terminal-screw-38@1", *SIZED_SCREWS, SR1_STUD])
     assert mates == [LUG]
     lug = _contract(LUG)
-    assert lug["version"] == "1.0.0" and lug["size"] == {"w": 5.5, "h": 27.4}
+    # 1.0.1: the provenance says it turns (#829); nothing it draws changed
+    assert lug["version"] == "1.0.1" and lug["size"] == {"w": 5.5, "h": 27.4}
     assert sorted(lug["fields"]) == ["barrel-color", "wire-color"]
 
 
 def test_what_is_out_of_scope_is_still_not_a_seat():
     for ref in ("cisco/a9k-ground-pad@1", "common/ground-screw-washer@1", "casa/ground-bolts@1",
-                "edgecore/agr-ground-plate@1", "juniper/mx204-ground-plate@1",
-                "juniper/mx304-ground-plate@1", "common/ground-symbol@1",
-                "nokia/sr-1-dc-terminal-block@1"):
+                "edgecore/agr-ground-plate@1", "common/ground-symbol@1",
+                ):
         c = _contract(ref)
         assert "interface" not in c, ref
         assert not [p for p in c.get("parts") or []
@@ -340,8 +379,11 @@ def test_the_census_of_ground_stud_placements(placed):
     got = {ref: (n, len(devs)) for ref, (n, devs) in counts.items()}
     assert got == CENSUS
     assert all(n > 0 and d > 0 for n, d in got.values())
-    assert sum(n for n, _ in got.values()) == 145
-    assert len({where for where, _, _ in placed}) == 61
+    assert sum(n for n, _ in got.values()) == 59
+    assert len({where for where, _, _ in placed}) == 39
+    # the MX stud is still a part, composed twice by each MX pair host, and no
+    # device places it straight on a face any more
+    assert "juniper/mx-ground-stud@1" not in got
 
 
 @pytest.fixture(scope="module")
@@ -379,14 +421,14 @@ def test_every_single_stud_placement_is_a_slot_of_its_device_offering_the_lug(pl
         want = render_mod.seat_point(p["at"], s["size"], p.get("rotate"), list(s["axis"]))
         assert c["mate"] == pytest.approx(want, abs=EPS)
         seen += 1
-    assert seen == 144
+    # every placement of the census but the Casa terminal's one
+    assert seen == 58
 
 
 def test_the_only_turned_placements_are_turned_90(placed):
     turned = sorted((device, p["id"], p["rotate"]) for device, _, p in placed if p.get("rotate"))
     assert turned == [("edgecore/dcs500", "ground-0", 90), ("edgecore/dcs500", "ground-1", 90),
-                      ("nokia/nfxs-d-ba", "ground-left", 90),
-                      ("nokia/nfxs-d-ba", "ground-right", 90)]
+]
 
 
 @pytest.fixture(scope="module")
@@ -419,28 +461,36 @@ def test_the_casa_terminal_publishes_exactly_its_three_studs_as_slots(comps, slo
 # --- 3. stud-size ------------------------------------------------------------------
 
 def test_stud_size_is_stated_where_a_document_states_it_and_nowhere_else(placed):
+    """70 placements on 34 devices state a size for a single stud or a common
+    pair host (STUD_SIZE), and the seven MX pairs and plates state theirs on
+    the pair placement (PAIRED). The 80 on 39 this read before counted the
+    five MX chassis' ten single studs, which are one pair placement each now."""
     got = {}
-    for device, view, p in placed:
+    for device, view, p in [*placed, *placements_of(PAIR_HOSTS)]:
         size = (p.get("attrs") or {}).get("stud-size")
         if size is not None:
             got.setdefault(device, {})[p["id"]] = size
     assert got == STUD_SIZE
-    assert sum(len(v) for v in got.values()) == 116 and len(got) == 39
+    assert sum(len(v) for v in got.values()) == 70 and len(got) == 34
+    mx = {}
+    for device, view, p in placements_of(MX_PAIR_HOSTS):
+        mx.setdefault(device, {})[p["id"]] = (p.get("attrs") or {}).get("stud-size")
+    assert mx == PAIRED
     # every device that states one says where it read it
-    for device in STUD_SIZE:
+    for device in (*STUD_SIZE, *PAIRED):
         entry = _device(device)["provenance"]["ground-stud-size"]
         assert "`stud-size`" in entry["note"] and entry["confidence"] == "datasheet", device
     # and no other file in the library states the attribute at all
     stated = [f for f in [*(LIB / "components").rglob("v*/contract.yaml"),
                           *(LIB / "devices").rglob("device.yaml")]
               if re.search(r"\bstud-size\s*:", f.read_text())]
-    assert sorted(f"{f.parents[1].name}/{f.parent.name}" for f in stated) == sorted(STUD_SIZE)
+    assert sorted(f"{f.parents[1].name}/{f.parent.name}" for f in stated) == sorted({**STUD_SIZE, **PAIRED})
 
 
 def test_stud_size_is_text_and_changes_no_part():
     """The interface claims no size and the lug is one nominal lug: a
     placement's `stud-size` is a fact carried beside the slot."""
-    assert {v for sizes in STUD_SIZE.values() for v in sizes.values()} == \
+    assert {v for sizes in (*STUD_SIZE.values(), *PAIRED.values()) for v in sizes.values()} == \
         {"M4", "M5", "M6", "10-32", "1/4-20", "1/4 in"}
     for ref in (*SINGLE, CASA_STUD, LUG):
         assert "stud-size" not in (_contract(ref).get("fields") or {}), ref
@@ -479,10 +529,11 @@ def built(tmp_path_factory):
         bare = _face(o, name, device)
         index = json.loads((o / f"{name}.configs.json").read_text())
 
-        def edit(d, config=config, keys=keys):
+        def edit(d, config=config, keys=keys, device=device):
             occ = d["configurations"][config].setdefault("occupants", {})
             for k in keys:
-                occ[k] = LUG
+                t = TURNS.get(device, {}).get(k)
+                occ[k] = LUG if t is None else {"ref": LUG, "turn": t}
         name, o = _render(tmp_path_factory.mktemp("seated"), device, edit)
         out[device] = (bare, _face(o, name, device), index)
     assert set(out) == set(BUILT)
@@ -600,6 +651,12 @@ def _axis_and_top(host):
     return SINGLE[ref]["axis"], SINGLE[ref]["top"]
 
 
+def _angle(parents, el):
+    """The turn the composed drawing gives `el`, in degrees, SVG's sense."""
+    m = device_matrix(parents, el)
+    return math.degrees(math.atan2(m[1][0], m[0][0])) % 360
+
+
 def _lug_box(parents, occ):
     return box(apply(device_matrix(parents, occ), [(0, 0), (5.5, 0), (5.5, 27.4), (0, 27.4)]))
 
@@ -623,7 +680,11 @@ def test_a_lug_seats_with_its_mate_on_the_stud_axis(built, device):
         hx, hy = device_point(parents, host, axis)
         ox, oy = device_point(parents, occ, own_mate(occ))
         assert abs(hx - ox) < EPS and abs(hy - oy) < EPS, key
-        assert_same_turn(parents, occ, host)
+        # turned with its stud, and then by its own turn on the seat (#829),
+        # which the drawing records on every seat that turns
+        turn = int(occ.get("data-seat-turn"))
+        assert turn == TURNS.get(device, {}).get(key, turn)
+        assert (_angle(parents, occ) - _angle(parents, host) - turn) % 360 == pytest.approx(0, abs=1e-6)
 
 
 @EACH_BUILT
@@ -666,9 +727,9 @@ def test_the_seated_lugs_solids_start_above_everything_its_stud_builds(built, de
 
 
 def test_the_wire_leaves_downward_on_an_unturned_stud(built):
+    """Where down crosses nothing, the default is down (#829, rule B)."""
     for device, key in (("edgecore/agr110", "ground-right"),
-                        ("readylinks/gl-12xb-240d", "ground-stud"),
-                        ("casa/c40g", "ground-studs-rear/stud-tr")):
+                        ("readylinks/gl-12xb-240d", "ground-stud")):
         root, parents, host, occ = _lug(built, device, key)
         axis, _ = _axis_and_top(host)
         hx, hy = device_point(parents, host, axis)
@@ -676,6 +737,21 @@ def test_the_wire_leaves_downward_on_an_unturned_stud(built):
         assert (x0 + x1) / 2 == pytest.approx(hx, abs=EPS)
         assert y0 == pytest.approx(hy + 14.65) and y1 == pytest.approx(hy + 24.65)
         assert x1 - x0 == pytest.approx(3.0)
+
+
+def test_the_casa_upper_stud_leads_its_wire_left_by_default(built):
+    """THE DEFAULT TURNS A LUG OFF ANOTHER SEAT (#829, rule B). Down from the
+    Casa terminal's upper right stud the lug would lie across the lower right
+    stud, another seat; the stud is in the left half of the rear, so the
+    nearer side is the left, and the wire leaves that way, level with the
+    stud, turned 90 on its seat."""
+    root, parents, host, occ = _lug(built, "casa/c40g", "ground-studs-rear/stud-tr")
+    assert occ.get("data-seat-turn") == "90"
+    axis, _ = _axis_and_top(host)
+    hx, hy = device_point(parents, host, axis)
+    x0, y0, x1, y1 = _wire_box(parents, occ)
+    assert (y0 + y1) / 2 == pytest.approx(hy, abs=EPS) and y1 - y0 == pytest.approx(3.0)
+    assert x1 == pytest.approx(hx - 14.65) and x0 == pytest.approx(hx - 24.65)
 
 
 def test_on_a_1ru_rear_the_wire_runs_past_the_lower_edge_of_the_face(built):
@@ -688,9 +764,11 @@ def test_on_a_1ru_rear_the_wire_runs_past_the_lower_edge_of_the_face(built):
 
 
 def test_a_stud_turned_90_turns_its_lug_and_the_wire_leaves_to_the_left(built):
-    """A seat applies its host's turn and nothing else. The DCS500's two
-    ground points are placed at `rotate: 90`, so the lug's own down is the
-    face's left: the wire runs level, away from the stud toward x = 0."""
+    """A seat applies its host's turn, and a lug asked for at `turn: 0` takes
+    nothing more (#829). The DCS500's two ground points are placed at
+    `rotate: 90`, so the lug's own down is the face's left: the wire runs
+    level, away from the stud toward x = 0. Left to the default it would
+    leave down (`turn: 270`)."""
     device, key = "edgecore/dcs500", "ground-1"
     p = next(q for q in _device(device)["views"]["rear"]["components"]["placements"]
              if q["id"] == key)
@@ -712,40 +790,21 @@ def _overlap(a, b):
 
 
 def test_two_lugs_on_a_pair_drawn_one_above_the_other_overlap(built):
-    """A RECORDED FACT, NOT A WANTED ONE. The MX240's two grounding points
-    take ONE two-hole lug; they are drawn 13.2 apart, one above the other. A
-    one-hole lug on each is 24.65 long below its axis, so the upper lug lies
-    across the lower stud and the lower lug's ring. A two-hole lug is later
-    work (docs/connectors-dc-terminal-design.md section 13)."""
-    device = "juniper/mx240"
-    upper = _lug(built, device, "ground-stud-0")
-    lower = _lug(built, device, "ground-stud-1")
+    """A RECORDED FACT, NOT A WANTED ONE, at `turn: 0` on both (#829). The UfiSpace S9600-102XC's two
+    grounding holes take ONE two-hole lug; they are drawn 14.7 apart, one
+    above the other, and no document held gives their pitch, so they are not
+    a pair host (#828 defers them). A one-hole lug on each is 24.65 long below
+    its axis, so the upper lug lies across the lower one's ring. (This case was
+    the MX240's until #828 made its studs a pair a two-hole lug spans.)"""
+    device = "ufispace/s9600-102xc"
+    upper = _lug(built, device, "ground-1")
+    lower = _lug(built, device, "ground-2")
     parents = upper[1]
-    (ux, uy), (lx, ly) = (device_point(parents, h, (3.5, 3.5)) for h in (upper[2], lower[2]))
-    assert ux == pytest.approx(lx) and ly - uy == pytest.approx(13.2)
+    (ux, uy), (lx, ly) = (device_point(parents, h, (3.5, 9.8)) for h in (upper[2], lower[2]))
+    assert ux == pytest.approx(lx) and ly - uy == pytest.approx(14.7)
     a, b = _lug_box(parents, upper[3]), _lug_box(parents, lower[3])
     assert _overlap(a, b)
-    assert a[3] - b[1] == pytest.approx(27.4 - 13.2)        # 14.2 of the upper lug's length
-    # the upper lug's sleeve, 5.65 to 14.65 below its axis, is over the lower stud's axis
-    assert uy + 5.65 < ly < uy + 14.65
-
-
-def test_two_lugs_on_a_pair_at_its_documented_pitch_still_overlap(built):
-    """A RECORDED FACT. The Amphenol 300CB08 draws each ground landing on the
-    5/8 inch centres its guide states, 15.9, one stud above the other on a
-    side panel 43.9 high. The guide allows a single-hole lug on a stud; two
-    of this one overlap by 11.5 of their length, and the lower one runs
-    12.45 past the lower edge of the face."""
-    device = "amphenol-ns/300cb08"
-    upper = _lug(built, device, "ground-left-1")
-    lower = _lug(built, device, "ground-left-2")
-    parents = upper[1]
-    (ux, uy), (lx, ly) = (device_point(parents, h, (4.05, 4.05)) for h in (upper[2], lower[2]))
-    assert ux == pytest.approx(lx) and ly - uy == pytest.approx(15.9)
-    a, b = _lug_box(parents, upper[3]), _lug_box(parents, lower[3])
-    assert _overlap(a, b) and a[3] - b[1] == pytest.approx(27.4 - 15.9)
-    face = _device(device)["views"]["left"]["size"]
-    assert a[3] < face["h"] and b[3] - face["h"] == pytest.approx(12.45)
+    assert a[3] - b[1] == pytest.approx(27.4 - 14.7)        # 12.7 of the upper lug's length
 
 
 def test_two_lugs_on_a_pair_drawn_side_by_side_do_not_overlap(built):
@@ -804,7 +863,12 @@ def kit(built, tmp_path_factory):
         config, view, part, keys = BUILT[device]
         (root, _), _, index = built[device]
         cases[device] = {"face": spec_of(root), "view": view, "slot": slot, "ref": LUG,
-                         "bays": index["bays"], "cages": index["cages"]}
+                         "bays": index["bays"], "cages": index["cages"],
+                         # the build's default turns, and the turn it was asked for
+                         "seatTurns": index.get("seat-turns") or {},
+                         "turn": TURNS.get(device, {}).get(slot),
+                         # and the turn a turn-only change asks for
+                         "turnTo": TURN_TO}
     payload = {"components": list(comps.values()), "cases": cases,
                "skins": {r: json.dumps(spec_of(ET.parse(skin_file(dist, comps[r])).getroot()))
                          for r in (LUG, *SINGLE, CASA, CASA_STUD)}}
@@ -865,6 +929,38 @@ def test_the_kit_seats_a_lug_exactly_as_the_build_does(kit, built, device):
     assert g["left"] == 0, "emptying the stud left a lug"
 
 
+TURN_TO = 180
+
+
+def _drawn(transform, size=(5.5, 27.4), mate=(2.75, 2.75)):
+    """(mate point, rotate) of a lug drawn `translate(x,y) [rotate(r cx cy)]`,
+    in the frame the transform is written in."""
+    nums = [float(v) for v in re.findall(r"-?[\d.]+(?:e-?\d+)?", transform)]
+    x, y = nums[0], nums[1]
+    r = nums[2] if "rotate(" in transform else 0.0
+    cx, cy = size[0] / 2, size[1] / 2
+    a = math.radians(r)
+    dx, dy = mate[0] - cx, mate[1] - cy
+    return (x + cx + dx * math.cos(a) - dy * math.sin(a),
+            y + cy + dx * math.sin(a) + dy * math.cos(a)), r % 360
+
+
+@pytest.mark.parametrize("device", sorted(KIT_ASKS))
+def test_a_turn_only_change_re_seats_the_lug_on_its_stud(kit, built, device):
+    """#829: the reader turns a seated lug and swaps nothing. The kit takes
+    it out and seats it again at the new turn - one lug, on the stud, its
+    turn recorded - and asking for the same turn again changes nothing."""
+    g = kit[device]
+    assert g["turnOnly"]["applied"] == 1 and g["turnAgain"] == 0
+    t = g["turnedLug"]
+    assert t["count"] == 1 and t["attrs"]["data-seat-turn"] == str(TURN_TO)
+    before, r0 = _drawn(g["lug"]["transform"])
+    after, r1 = _drawn(t["transform"])
+    assert after == pytest.approx(before, abs=1e-6)
+    turn0 = int(g["lug"]["attrs"]["data-seat-turn"])
+    assert (r1 - r0 - (TURN_TO - turn0)) % 360 == pytest.approx(0, abs=1e-9)
+
+
 @pytest.mark.parametrize("device", sorted(KIT_ASKS))
 def test_the_kit_seated_lug_is_lifted_to_the_top_of_its_stud(kit, built, device):
     slot = KIT_ASKS[device]
@@ -896,6 +992,8 @@ def test_the_3d_pass_names_the_one_view_that_holds_a_ground_stud(kit, built):
         assert t["viewsApplied"] == 1 and t["viewsSeated"] == 1
         assert t["faceApplied"] == 1 and t["faceSeated"] == 1
         assert not t["faceRefused"] and not t["faceFailed"]
+        # at the turn the 2D seat took (#829): the 3D pass reads the same turns
+        assert t["viewsTransform"] == t["faceTransform"] == kit[device]["lug"]["transform"]
 
 
 def test_the_3d_pass_seats_a_lug_on_a_stud_of_the_casa_terminal(kit):
@@ -907,3 +1005,6 @@ def test_the_3d_pass_seats_a_lug_on_a_stud_of_the_casa_terminal(kit):
     assert t["viewsApplied"] == 1 and t["viewsSeated"] == 1
     assert t["faceApplied"] == 1 and t["faceSeated"] == 1
     assert not t["faceRefused"] and not t["faceFailed"]
+    # turned 90 by default, in 3D as in 2D (#829)
+    assert t["viewsTransform"] == t["faceTransform"] == kit["casa/c40g"]["lug"]["transform"]
+    assert "rotate(90 " in t["faceTransform"]

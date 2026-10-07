@@ -1,0 +1,56 @@
+format: 1
+kind: component
+name: ground-stud-pair-1-1-4
+version: 1.0.0
+class: ground
+# THE PAIR IS ITSELF A SLOT (#828, docs/connectors-dc-terminal-design.md
+# section 13.7): one two-hole lug lands across both studs, at their midpoint.
+# That slot and the two stud slots below are mutually exclusive (L115), as a
+# duplex adapter's slot and its two bores are.
+interface: stud-pair-1
+behaviour: mounts
+profile: networking
+description: >-
+  A pair of 1/4-20 pan-head screws in tapped grounding holes on 1 in. (25.4) centres, the landing one two-hole lug takes. Generic: it stands for any chassis whose documents give that pitch and that screw, and carries no vendor's facts.
+size: {w: 37.9, h: 12.5}
+size-confidence: {w: datasheet, h: borrowed}
+size-notes: >-
+  the two studs' own boxes, 25.4 apart centre to centre: the width is the
+  pitch and one stud, the height one stud
+attrs: {connector: stud-pair-1}
+provenance:
+  size: >-
+    datasheet and borrowed - the 1 in. pitch is the interface's
+    (spec/schemas/standards.yaml `two-hole-lug-1`, the lug that
+    mates the pair, 25.4); each stud is
+    common/ground-screw-1-4@1, whose own figures are borrowed unchanged.
+  pitch: >-
+    THE PITCH IS THE INTERFACE, NOT A READING OF ANY ONE DEVICE. A two-hole lug
+    is one stamping with its holes 1 in. apart, so this part composes its
+    studs at exactly 25.4 and lint L116 holds it there to 0.01. A device
+    whose documents state another spacing does not place it.
+  seat: >-
+    THE PAIR PRESENTS AT THE TOP OF ITS STUDS. `mate` is the midpoint of the two
+    studs' own `mate` points and states `seat-out: 3.66`, the height each
+    stud presents at (its own seat, `on:` the solid it builds), so a lug across
+    the pair lies exactly where a one-hole lug on either stud would. L116 holds
+    the two to one figure.
+  axis: >-
+    THE STUDS ARE COMPOSED LEFT TO RIGHT, so the pair runs along +x, the
+    canonical axis a two-hole lug is drawn on, and a lug seated here leaves its
+    wire to the right (manifest.spanning_axis). A pair stood on end is this part
+    placed at `rotate: 90`, which carries the first stud to the top and the wire
+    downward.
+elements: {}
+parts:
+  # FIRST STUD, then second: the order is the axis (provenance.axis). Each is
+  # a slot of its own, `<placement>/1` and `<placement>/2`, which the ring lug
+  # still seats in.
+  - {ref: common/ground-screw-1-4@1, id: '1', at: [0, 0]}
+  - {ref: common/ground-screw-1-4@1, id: '2', at: [25.4, 0]}
+connection-points:
+  # WHERE A TWO-HOLE LUG SEATS: the midpoint of the studs' own mate points,
+  # (6.25, 6.25) and (31.65, 6.25), at the height
+  # they present.
+  mate: {at: [18.95, 6.25], direction: front, seat-out: 3.66}
+skins: [default]

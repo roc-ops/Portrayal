@@ -11,8 +11,10 @@
 // drew for a configuration that asks for the same lug.
 //
 // stdin JSON {components, skins, cases: {name: {face, view, slot, ref, bays,
-// cages}}}; one JSON object out, a key per case. A case that throws records
-// {error} under its key.
+// cages, seatTurns, turn}}}; one JSON object out, a key per case. A case that
+// throws records {error} under its key. `seatTurns` is the index's
+// `seat-turns` (#829) and `turn` the turn the build was asked for, or null for
+// the default it computes.
 import {build, install} from './fake-dom.mjs';
 
 const m = await import('../../../kit/swap.js');
@@ -56,18 +58,33 @@ for (const [name, c] of Object.entries(input.cases)) {
     const deviceCages = c.cages[c.view] || [];
     // every slot of the face: the device's own cages and the nested ones
     const walk = () => m.faceCages(root, deviceCages, compByRef);
-    const studs = walk().filter(e => e.interface === 'terminal-stud');
+    // the interfaces this case is about: a single stud's, or (#828) a pair's
+    // as well, which test_two_hole_lugs.py asks for
+    const ifaces = c.ifaces || ['terminal-stud'];
+    const studs = walk().filter(e => ifaces.includes(e.interface));
     const offered = m.faceCages(root, deviceCages, compByRef, {offered: true})
-      .filter(e => e.interface === 'terminal-stud').map(e => e.id);
+      .filter(e => ifaces.includes(e.interface)).map(e => e.id);
     const find = () => walk().find(e => e.id === c.slot);
     const entry = find();
+    // THE TURN IT TAKES (#829): the one the build was asked for, else the
+    // view's published default - never re-derived here
+    const set = c.turn == null ? {} : {[c.slot]: c.turn};
+    const turns = {set, seat: (c.seatTurns || {})[c.view] || {}};
     const result = entry
-      ? await m.applyOccupantOverrides(root, [entry], {[c.slot]: c.ref}, loadSkin)
+      ? await m.applyOccupantOverrides(root, [entry], {[c.slot]: c.ref}, loadSkin, undefined, turns)
       : {error: `no slot ${c.slot}`};
     const lug = seated(root, c.slot);
     const occRef = entry ? m.occupantRef(root, find()) : null;
+    // A TURN-ONLY CHANGE (#829): nothing swapped, the lug taken out and seated
+    // again at `turnTo`; a second identical ask changes nothing
+    const toBook = {set: {[c.slot]: c.turnTo}, seat: turns.seat};
+    const turnOnly = entry
+      ? await m.applyOccupantOverrides(root, [find()], {}, loadSkin, undefined, toBook) : null;
+    const turnedLug = seated(root, c.slot);
+    const turnAgain = entry
+      ? (await m.applyOccupantOverrides(root, [find()], {}, loadSkin, undefined, toBook)).applied : null;
     // a second swap replaces; it does not stack
-    if (entry) await m.applyOccupantOverrides(root, [find()], {[c.slot]: c.ref}, loadSkin);
+    if (entry) await m.applyOccupantOverrides(root, [find()], {[c.slot]: c.ref}, loadSkin, undefined, turns);
     const again = occupantsAt(root, c.slot).length;
     const others = studs.filter(e => e.id !== c.slot).map(e => occupantsAt(root, e.id).length);
     if (entry) await m.applyOccupantOverrides(root, [find()], {[c.slot]: null}, loadSkin);
@@ -75,20 +92,24 @@ for (const [name, c] of Object.entries(input.cases)) {
     // build published it for EVERY view: which views the override map is
     // taken to touch (viewsToRewrite), what seatViews then seats, and what
     // the per-face pass seats when it is handed the face directly.
-    const devIndex = {bays: c.bays, cages: c.cages};
+    const devIndex = {bays: c.bays, cages: c.cages, 'seat-turns': c.seatTurns || {}};
     const views = [...new Set([...Object.keys(c.bays || {}), ...Object.keys(c.cages || {})])];
     const map = {[c.slot]: c.ref};
     const named = m.viewsToRewrite(devIndex, map);
     const viaViews = build(c.face);
-    const res = await m.seatViews({[c.view]: viaViews}, devIndex, map, loadSkin, compByRef);
+    const res = await m.seatViews({[c.view]: viaViews}, devIndex, map, loadSkin, compByRef, set);
     const direct = build(c.face);
-    const face = await m.seatFace(direct, {bays: (c.bays || {})[c.view] || [], cages: deviceCages},
+    const face = await m.seatFace(direct, {bays: (c.bays || {})[c.view] || [], cages: deviceCages, turns},
                                   map, loadSkin, compByRef);
+    // and the two 3D copies face the way the 2D seat does
+    const turnOf = r => occupantsAt(r, c.slot)[0]?.getAttribute('transform') ?? null;
     const threeD = {named, views, viewsSeated: occupantsAt(viaViews, c.slot).length,
                     viewsApplied: res[c.view] ? res[c.view].applied : null,
                     faceApplied: face.applied, faceRefused: face.refused, faceFailed: face.failed,
-                    faceSeated: occupantsAt(direct, c.slot).length};
+                    faceSeated: occupantsAt(direct, c.slot).length,
+                    viewsTransform: turnOf(viaViews), faceTransform: turnOf(direct)};
     out[name] = {studs: studs.map(plain), offered, result, lug, occRef, again, others,
+                 turnOnly, turnedLug, turnAgain,
                  left: occupantsAt(root, c.slot).length, threeD};
   } catch (e) { out[name] = {error: String(e && e.stack || e)}; }
 }

@@ -143,6 +143,59 @@ def component_refs(device):
     return out
 
 
+# Approximate glyph metrics, in em. Real faces differ by a few percent, which is
+# why L21 carries a tolerance rather than pretending these are exact.
+CAP_EM, DESC_EM, ADV_EM = 0.72, 0.10, 0.60
+
+
+def text_extent(m):
+    """Bounding box of a text mark, (x0, y0, x1, y1) in view mm.
+
+    HERE AND NOT IN lint.py, where L21 first measured with it, because
+    render.default_seat_turn asks the same question of a legend (#829), and
+    two copies of the glyph metrics would be one edit from disagreeing.
+
+    `at` is the BASELINE, not the top edge - which is the whole reason L21
+    exists: 2.2mm digits anchored 1.2mm below a port still reached up into it.
+
+    A ROTATED MARK RUNS ALONG A DIFFERENT AXIS, and measuring it as if it did not
+    is how a label printed neatly down a chassis's right edge gets reported as
+    running off the face: its length was being added to x, where the metal ends,
+    instead of to y, where there is room. The same arithmetic accused rotated
+    module legends of painting over the modules beside them. Only the right
+    angles are handled - anything else is rare enough that the unrotated box is
+    the safer approximation, and being slightly too generous costs a missed
+    warning rather than a fabricated one."""
+    x, y = m["at"]
+    fs = m.get("font-size", 2.2)
+    w = len(str(m["text"])) * fs * ADV_EM
+    up, down = fs * CAP_EM, fs * DESC_EM
+    # THE DEFAULT HAS TO BE THE ONE THE RENDERER USES. render.py draws an
+    # unanchored silkscreen mark CENTRED on its `at` (render.py:880); this read
+    # it as running rightward from `at`, so every extent check on the 433 marks
+    # in this library that state no anchor was off by half a text width - in the
+    # direction that hides an overlap on the left and invents one on the right.
+    # A mark then lints as one thing and draws as another, and no rule reports
+    # the difference because both halves are working from their own assumption.
+    anchor = m.get("anchor", "middle")
+    lead = w if anchor == "end" else (w / 2 if anchor == "middle" else 0.0)
+    rot = int(m.get("rotate", 0)) % 360
+    # WHICH SIDE THE CAPS FALL ON is the renderer's `rotate(deg x y)` applied to
+    # an upright mark, whose caps point up (-y). SVG turns clockwise on screen,
+    # so at 90 up becomes +x and the caps sit RIGHT of the baseline; at 270
+    # (-90, reading bottom to top) they sit LEFT. This had the two swapped, so
+    # an upright legend set against a part's left edge - XM-7380's CONSOLE, its
+    # glyphs painting 1.2mm clear of the USB port - was reported as buried in
+    # it, and a legend whose caps really did reach into a part went unreported.
+    if rot == 90:            # runs downward, cap side to the RIGHT of the baseline
+        return (x - down, y - lead, x + up, y - lead + w)
+    if rot == 270:           # runs upward, cap side to the LEFT
+        return (x - up, y + lead - w, x + down, y + lead)
+    if rot == 180:           # runs leftward, cap side below
+        return (x - w + lead, y - down, x + lead, y + up)
+    return (x - lead, y - up, x - lead + w, y + down)
+
+
 def _turn(v, rotate):
     """Rotate vector v by `rotate` degrees, SVG convention (x' = x cos - y sin,
     y' = x sin + y cos). Exact for the right angles the corpus uses."""
@@ -529,6 +582,41 @@ def presented_turn(contract, resolve, connectors):
     turn = summed_rotate(part.get("rotate"), spanning_axis(core, resolve, connectors)
                          if core else None)
     return turn if float(turn or 0) % 360 else None
+
+
+def allowed_turns(contract, resolve, connectors):
+    """THE TURNS AN OCCUPANT MAY BE SEATED AT ON THIS HOST, relative to the
+    seat, in the order the registry lists them (#829). [0] for a host whose
+    interface names none, and for a contract that presents nothing.
+
+    TWO LISTS, INTERSECTED. The interface's `turns` in spec/schemas/
+    connectors.yaml says what the connector allows - a ring lug turns freely
+    about its stud, so `terminal-stud` allows the four right angles, and a
+    two-hole lug across a pair of studs only 0 and 180. The presented point's
+    own `turns` narrows it for one part: a barrier block's terminal screw is
+    the same `terminal-stud` and allows 0 alone, because the barriers fix the
+    pole. The point is the one `presented_interface` seats on - this
+    contract's own presented point, or the presented point of the core a
+    wrapper forwards (`forwarded_part`) - so a wrapper adds no list of its own.
+
+    THE TURN IS ADDED AFTER THE SEAT'S OWN: `render.solve_seat` draws the
+    occupant at `summed_rotate(summed_rotate(host rotate, axis), turn)`, so 0
+    is always the seat's own direction, and the turn a configuration states
+    keeps its meaning whichever way the host is placed.
+    """
+    interface, _at, _lift = presented_interface(contract or {}, resolve)
+    if not interface:
+        return [0]
+    reg = (connectors or {}).get(interface) or {}
+    offered = [int(t) for t in (reg.get("turns") or [0])]
+    part = forwarded_part(contract, resolve)
+    point = presented_point(resolve(part["ref"]) or {}) if part is not None \
+        else presented_point(contract)
+    narrowed = (point or {}).get("turns")
+    if narrowed is None:
+        return offered
+    keep = {int(t) for t in narrowed}
+    return [t for t in offered if t in keep]
 
 
 def resolve_views(device, cfg):

@@ -535,6 +535,11 @@
           },
           "skin": {
            "type": "string"
+          },
+          "turn": {
+           "type": "integer",
+           "enum": [0, 90, 180, 270],
+           "description": "HOW FAR THE OCCUPANT IS TURNED ON ITS SEAT, in degrees, RELATIVE TO THE SEAT: added after the host's own turn and any axis a spanning host's pair runs on. One of the turns the host allows - its interface's `turns` in spec/schemas/connectors.yaml, narrowed by its presented point's own (manifest.allowed_turns); an interface naming none allows 0 alone, and lint L146 holds the value to the list. A ring lug on a ground stud turns freely, so the direction its wire leaves in is the installer's choice and this states it. Left out, the build computes the default (render.default_seat_turn: down, toward the nearer side edge, the other side, up - the first that crosses no part, bay or other seat) and publishes it as `seat-turns` in configs.json (#829)."
           }
          }
         }

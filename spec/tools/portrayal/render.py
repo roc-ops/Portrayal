@@ -37,7 +37,7 @@ from portrayal.manifest import (presented_point, back_hosts, back_parts, key_on_
                       seated_ref, occupants_under, occupant_local_id,
                       occupant_spec, nested_key_host, slot_default, drawn_refs,
                       spanned_slots, spanning_axis, summed_rotate, presented_turn,
-                      alias_names, config_airflow,
+                      allowed_turns, text_extent, alias_names, config_airflow,
                       config_power, device_options)
 from portrayal import capability
 from portrayal import bevel as _bevel
@@ -845,7 +845,7 @@ def group_merged_attrs(grp, own_attrs):
 
 
 def solve_seat(lib, who, occ_ref, host_name, host, occ_rotate=None, occ_in=None,
-               floor_of=None):
+               floor_of=None, occ_turn=None):
     """WHERE ONE OCCUPANT SEATS ON ONE HOST: (at, rotate, lift), in the frame
     the host's `at` is written in, with every rule a seat is held to.
 
@@ -862,7 +862,9 @@ def solve_seat(lib, who, occ_ref, host_name, host, occ_rotate=None, occ_in=None,
     manifest.presented_interface) - is taken through the host's rotation
     (seat_point), and the occupant is solved to land its own `mate` there
     while drawn at that rotation plus, for a host whose slot SPANS a pair,
-    the axis that pair runs on (manifest.spanning_axis; seat_at). `lift` is
+    the axis that pair runs on (manifest.spanning_axis; seat_at), plus the
+    occupant's own `occ_turn` - a configuration's `turn:`, one of the turns
+    the host allows (manifest.allowed_turns; refused otherwise). `lift` is
     the host's presented lift plus its `host-lift`, less the floor of a well
     it stands `in:` (floor_of, device frame only)."""
     hc, _ = lib.resolve(host["ref"])
@@ -917,6 +919,23 @@ def solve_seat(lib, who, occ_ref, host_name, host, occ_rotate=None, occ_in=None,
             f"{who}: declares rotate {occ_rotate} but its host "
             f"{host_name!r} seats at {orot or 0} - a seated part turns "
             "with its host; drop the rotate")
+    # AND AN OCCUPANT MAY TURN ON ITS SEAT, WHERE THE HOST ALLOWS IT (#829). A
+    # ring lug turns freely about a ground stud, so the direction its wire
+    # leaves in is the installer's choice, and a configuration states it as
+    # `turn:`. RELATIVE TO THE SEAT: added after the host's own turn and any
+    # spanning axis, so 0 is always the direction the seat itself gives and a
+    # turn keeps its meaning however the host is placed. 0 is always allowed -
+    # it is the seat's own answer - and adds nothing, so a seat that states no
+    # turn draws exactly what it always drew.
+    if occ_turn is not None and int(occ_turn) % 360:
+        allowed = allowed_turns(hc, _res, _connector_registry())
+        if int(occ_turn) % 360 not in allowed:
+            raise ValueError(
+                f"{who}: turn {occ_turn} is not one its host {host_name!r} "
+                f"allows ({', '.join(str(t) for t in allowed)}) - the turns "
+                "an occupant may take are its interface's `turns` in "
+                "connectors.yaml, narrowed by the host's presented point")
+        orot = summed_rotate(orot, int(occ_turn) % 360)
     # A SEATED PART ALREADY SINKS WITH A SUNK HOST - through host-lift,
     # below - so its own `in:` would sink it a second time: -3.46 where
     # 3.27 is right (final review I2). A host is sunk when it stands
@@ -952,6 +971,269 @@ def solve_seat(lib, who, occ_ref, host_name, host, occ_rotate=None, occ_in=None,
     if host.get("in") and not host.get("projection-of"):
         lift -= floor_of(host["in"])
     return at, orot, lift
+
+
+
+# WHICH WAY A TURNABLE OCCUPANT FACES WHEN NOBODY SAID (#829, rule B). A ring
+# lug turns freely about a ground stud, so the direction its wire leaves in is
+# the installer's choice, and an installer leads it where it covers nothing:
+# DOWN, which is how the lug is drawn and how most guides draw it; then TOWARD
+# THE NEARER SIDE EDGE of the face; then the other side; then UP. Each is an
+# ABSOLUTE direction on the face, so a seat turned 90 reaches "down" by a turn
+# of 270. The first that crosses no part, no bay and no other seat is taken.
+# RUNNING PAST THE EDGE OF THE FACE IS ALLOWED: a wire leaves the box, and on a
+# 1RU rear most studs sit low. A printed legend is a SOFT preference - a wire
+# across a legend hides ink, a wire across a jack is a wire in the way - so of
+# the directions that cross nothing hard, the one over the fewest legends wins,
+# in the order above. Where every direction crosses something hard, the least
+# bad: fewest crossings, then fewest legends, then the order.
+#
+# ONE ANSWER, PUBLISHED: `seat_turns` writes these per view into configs.json
+# (`seat-turns`), and the build seats by the same `default_seat_turn`, so the
+# kit never re-derives it (docs/connectors-dc-terminal-design.md, 13.4).
+SEAT_DIRECTIONS = {"down": 0, "left": 90, "up": 180, "right": 270}
+# THE NAMES ARE WHERE THE WIRE GOES. SEAT_DIRECTIONS is the rotate that sends
+# a wire drawn leading DOWN - the ring lug's `cable` - each way. A two-hole lug
+# is drawn ACROSS, its `cable` leading right (#828), so the same rotate sends
+# its wire a quarter turn round from the name: read straight off
+# SEAT_DIRECTIONS, a pair stood on end in the right half of a face tried
+# "right" first and led its wire UP. `_lead_offset` is that quarter turn, read
+# off the occupant's own `cable` direction.
+_LEAD_ANGLE = {"right": 0, "down": 90, "left": 180, "up": 270}
+_CROSS_EPS = 1e-6
+
+
+def _xy_size(size):
+    """A `size` written either way - {w, h} or [w, h] - as {w, h} floats."""
+    if isinstance(size, dict):
+        return {"w": float(size["w"]), "h": float(size["h"])}
+    return {"w": float(size[0]), "h": float(size[1])}
+
+
+def _turned_box(at, size, rotate):
+    """(x0, y0, x1, y1) of a part drawn translate(at) rotate(deg w/2 h/2)."""
+    w, h = size["w"], size["h"]
+    pts = [seat_point(at, size, rotate, c) for c in ((0, 0), (w, 0), (0, h), (w, h))]
+    xs, ys = [p[0] for p in pts], [p[1] for p in pts]
+    return (min(xs), min(ys), max(xs), max(ys))
+
+
+def _crosses(a, b):
+    """Two boxes share area - touching edges do not cross."""
+    return (min(a[2], b[2]) - max(a[0], b[0]) > _CROSS_EPS
+            and min(a[3], b[3]) - max(a[1], b[1]) > _CROSS_EPS)
+
+
+def _holds(box, pt):
+    return box[0] <= pt[0] <= box[2] and box[1] <= pt[1] <= box[3]
+
+
+def occupant_box(mate_pt, occ_contract, rotate):
+    """The box an occupant covers when its `mate` lands on `mate_pt` and it is
+    drawn at the absolute `rotate` - THE WHOLE PART: a ring lug's 10 stub of
+    wire is part of what an installer leads somewhere."""
+    size = _xy_size(occ_contract["size"])
+    om = (occ_contract.get("connection-points") or {}).get("mate") or {}
+    mx, my = (om.get("at") or [size["w"] / 2, size["h"] / 2])[:2]
+    xs, ys = [], []
+    for x, y in ((0, 0), (size["w"], 0), (0, size["h"]), (size["w"], size["h"])):
+        dx, dy = _turn((x - mx, y - my), rotate)
+        xs.append(mate_pt[0] + dx)
+        ys.append(mate_pt[1] + dy)
+    return (min(xs), min(ys), max(xs), max(ys))
+
+
+def turnable_seats(device, view, lib, connectors=None):
+    """{slot key: seat} for every slot of `view` (a view mapping of `device`) whose host allows
+    an occupant MORE THAN ONE turn (manifest.allowed_turns) - the seats a
+    default turn is a question for. Keyed as `occupants:` keys them: a device
+    placement by its id, a slot composed one level into a placed part as
+    `<placement>/<part>` (the Casa C40G terminal's three studs).
+
+    Each seat carries what default_seat_turn reads: `mate` (device frame),
+    `rotate` (the turn the seat itself gives an occupant, absolute), `turns`,
+    `interface`, `obstacles` and `legends` (boxes), `face` (the view's size).
+
+    THE OBSTACLES ARE THE VIEW AS AUTHORED, not one configuration's drawing,
+    so one answer serves every configuration and is published once: every
+    placement with its own `at` and every bay, except what the seat stands on
+    - a box holding the seat's mate point, the host and a plate under it -
+    and, inside such a box, the parts it composes that do not hold the point:
+    the other studs of a terminal are OTHER SEATS. EXCEPT the parts a spanning
+    host's own slot SPANS (manifest.spanned_slots): a two-hole lug lands on
+    both studs of its pair, and neither holds the pair's midpoint, so counted
+    as obstacles they made every direction cross two, and the default fell to
+    the "least bad" order for every pair in the library (#828, #829). A
+    placement left out of the default build (`optional:`) and a mirrored host
+    are not considered.
+    """
+    if connectors is None:
+        connectors = _connector_registry()
+    vp = view_parts(view or {})
+    ch = device.get("chassis") or {}
+    face = _xy_size(vp["size"]) if vp.get("size") else \
+        {"w": float(ch.get("width") or 0), "h": float(ch.get("height") or 0)}
+
+    def _res(ref):
+        try:
+            return lib.resolve(ref)[0]
+        except Exception:
+            return None
+
+    placed = []                       # (placement, contract, box)
+    for q in vp["placements"]:
+        if (not q.get("at") or q.get("mate-to") or q.get("optional")
+                or not q.get("ref")):
+            continue
+        c = _res(q["ref"])
+        if not c or not c.get("size"):
+            continue
+        placed.append((q, c, _turned_box(q["at"], _xy_size(c["size"]), q.get("rotate"))))
+    bays = [_turned_box(b["at"], _xy_size(b["size"]), b.get("rotate"))
+            for b in vp["bays"] if b.get("at") and b.get("size")]
+    legends = [text_extent(m) for m in vp["silkscreen"]
+               if m.get("text") not in (None, "") and m.get("at")]
+
+    def _parts_boxes(q, c):
+        """Each composed part of placement `q` as (id, contract, box) in the
+        device frame."""
+        out = []
+        csize = _xy_size(c["size"])
+        for part in c.get("parts") or []:
+            pc = _res(part.get("ref")) if part.get("ref") else None
+            if not pc or not pc.get("size") or not part.get("at"):
+                continue
+            local = _turned_box(part["at"], _xy_size(pc["size"]), part.get("rotate"))
+            pts = [seat_point(q["at"], csize, q.get("rotate"), xy)
+                   for xy in ((local[0], local[1]), (local[2], local[3]))]
+            out.append((part, pc, (min(p[0] for p in pts), min(p[1] for p in pts),
+                                   max(p[0] for p in pts), max(p[1] for p in pts))))
+        return out
+
+    seats = {}
+
+    def _seat(key, host_c, mate, base, host_q=None):
+        allowed = allowed_turns(host_c, _res, connectors)
+        if len(allowed) < 2 or mate is None:
+            return
+        # what the occupant lands on: the bores of the host placement's own
+        # spanning slot (none for a seat one level in, whose host is a part)
+        landed = set(spanned_slots(host_c, _res, connectors)) if host_q is not None else set()
+        obstacles = [box for _q, _c, box in placed if not _holds(box, mate)]
+        obstacles += [box for box in bays if not _holds(box, mate)]
+        for q, c, box in placed:
+            if _holds(box, mate):
+                obstacles += [pb for p, _pc, pb in _parts_boxes(q, c)
+                              if not _holds(pb, mate)
+                              and not (q is host_q and p.get("id") in landed)]
+        seats[key] = {"mate": mate, "rotate": float(base or 0) % 360,
+                      "turns": allowed, "interface": presented_interface(host_c, _res)[0],
+                      "obstacles": obstacles, "legends": legends, "face": face}
+
+    for q, c, _box in placed:
+        if q.get("mirror"):
+            continue
+        _iface, m_at, _lift = presented_interface(c, _res)
+        if m_at is not None:
+            _seat(q["id"], c,
+                  seat_point(q["at"], _xy_size(c["size"]), q.get("rotate"), m_at),
+                  summed_rotate(q.get("rotate"), presented_turn(c, _res, connectors)), q)
+        # ONE LEVEL IN: a slot composed into the placed part, seated in the
+        # part's own frame and turned by the placement (_seat_nested_occupants)
+        for part, pc, _pb in _parts_boxes(q, c):
+            if not part.get("id") or part.get("mirror"):
+                continue
+            _i, p_at, _l = presented_interface(pc, _res)
+            if p_at is None:
+                continue
+            local = seat_point(part["at"], _xy_size(pc["size"]), part.get("rotate"), p_at)
+            own = summed_rotate(part.get("rotate"), presented_turn(pc, _res, connectors))
+            _seat(f"{q['id']}/{part['id']}", pc,
+                  seat_point(q["at"], _xy_size(c["size"]), q.get("rotate"), local),
+                  (float(own or 0) + float(q.get("rotate") or 0)) % 360)
+    return seats
+
+
+def _lead_offset(occ_contract):
+    """The rotate, beyond SEAT_DIRECTIONS, that sends THIS occupant's wire the
+    way a direction's name says: 0 for a part whose `cable` leads down (the
+    ring lug; a part with no `cable` point, or one leading front or rear, is
+    taken to lead down), 90 for one drawn leading right (a two-hole lug):
+    SVG turns clockwise, and a wire leading right reaches down at rotate 90."""
+    cp = ((occ_contract or {}).get("connection-points") or {}).get("cable") or {}
+    lead = _LEAD_ANGLE.get(cp.get("direction"), _LEAD_ANGLE["down"])
+    return (_LEAD_ANGLE["down"] - lead) % 360
+
+
+def default_seat_turn(seat, occ_contract):
+    """THE TURN, RELATIVE TO THE SEAT, an occupant takes on `seat` (one of
+    turnable_seats) when its configuration states none - rule B, above.
+    Always one of the seat's own `turns`; 0 where none of the four
+    directions is one of them. The directions are the way the occupant's
+    WIRE leaves (_lead_offset), so a two-hole lug drawn leading right is
+    tried down, toward the nearer side, the other side, up, as a ring lug is."""
+    near = "left" if seat["mate"][0] <= seat["face"]["w"] / 2 else "right"
+    far = "right" if near == "left" else "left"
+    offset = _lead_offset(occ_contract)
+    tried = []
+    for rank, name in enumerate(("down", near, far, "up")):
+        absolute = (SEAT_DIRECTIONS[name] + offset) % 360
+        turn = int(round(absolute - seat["rotate"])) % 360
+        if turn not in seat["turns"] or any(t == turn for *_r, t in tried):
+            continue
+        box = occupant_box(seat["mate"], occ_contract, absolute)
+        hard = sum(1 for o in seat["obstacles"] if _crosses(box, o))
+        soft = sum(1 for o in seat["legends"] if _crosses(box, o))
+        tried.append((hard, soft, rank, turn))
+    if not tried:
+        return 0
+    clean = [t for t in tried if t[0] == 0]
+    return min(clean or tried, key=lambda t: (t[1], t[2]) if clean else t[:3])[3]
+
+
+def seat_turns(device, view, lib, candidates, connectors=None, seats=None):
+    """`seat-turns` for one view, as configs.json publishes it: {slot key:
+    {ref: turn}} for every turnable seat and every part that mates its
+    interface (`candidates`, _pluggable_candidates). What the build seats a
+    configured occupant at when it states no `turn:`, so the kit reads it and
+    never re-derives the default."""
+    if seats is None:
+        seats = turnable_seats(device, view, lib, connectors)
+    out = {}
+    for key, seat in sorted(seats.items()):
+        refs = sorted({ref: c for ref, c in candidates.get(seat["interface"], [])}.items())
+        if refs:
+            out[key] = {ref: default_seat_turn(seat, c) for ref, c in refs}
+    return out
+
+
+def _turn_keys(seats, key, spec, lib):
+    """`{turn, seat-turn}` for an occupant `spec` seated on slot `key` - the
+    two internal placement keys the occupants expansion carries - or {} for a
+    seat that turns nothing and a spec that states no turn."""
+    turn = seat_turn_of(seats, key, spec["ref"], lib, spec.get("turn"))
+    if turn is None:
+        return {}
+    out = {"turn": turn}
+    if key in seats:
+        out["seat-turn"] = turn
+    return out
+
+
+def seat_turn_of(seats, key, ref, lib, spec_turn=None):
+    """The turn the build seats `ref` at on slot `key`: the configuration's own
+    `turn:`, else the computed default where the seat turns, else None (the
+    seat turns nothing, and nothing is written)."""
+    if spec_turn is not None:
+        return int(spec_turn) % 360
+    seat = seats.get(key)
+    if seat is None:
+        return None
+    try:
+        occ = lib.resolve(ref)[0]
+    except Exception:
+        return None
+    return default_seat_turn(seat, occ) if occ and occ.get("size") else None
 
 
 def refuse_bay_module_default(lib, ref, where):
@@ -1237,7 +1519,8 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                 seated_now.append(host_id)
                 continue
             at, orot, lift = solve_seat(lib, _label(host_id, key), spec["ref"],
-                                        f"{path}/{host_id}", host)
+                                        f"{path}/{host_id}", host,
+                                        occ_turn=spec.get("turn"))
             # AN OCCUPANT INHERITS ITS HOST'S TILT (mirrors the device-level
             # `mate-to` resolution in render_view, and the same
             # `_tilt_offset`) - fresh from the cage itself when `host_id`
@@ -1314,6 +1597,10 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                     apply_states(og, grp["states"], inst_palette)
             if lift:
                 og.set("data-z-lift", f"{lift:g}")
+            # ON A SEAT THAT TURNS, the turn it was seated at (#829): render_view
+            # gave a configured key its default where it stated none
+            if len(allowed_turns(_res(host["ref"]) or {}, _res, _conn)) > 1:
+                og.set("data-seat-turn", str(int(spec.get("turn") or 0) % 360))
             og.set("data-for", f"{path}/{host_id}")
             g.append(og)
             hosts[local] = {"ref": spec["ref"], "at": at, "rotate": orot,
@@ -2287,6 +2574,10 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     # an error: the two cases are told apart by whether progress is possible,
     # not by when the set was sampled.
     remaining = dict(config.get("occupants") or {})
+    # THE SEATS AN OCCUPANT MAY TURN ON (#829), and the turn each takes where
+    # its configuration states none: the view as authored, the same answer
+    # main() publishes as `seat-turns`, so the build and the kit cannot differ.
+    turn_seats = turnable_seats(device, view, lib)
     # {id: chain} for the ids in `remaining` that are a default rather than a
     # configuration's key - `chain` being the refs already seated on that one
     # seat, which is what tells a loop from two slots shipping the same part
@@ -2375,6 +2666,12 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                if q.get("id") == host), None),
                 **({"attrs": spec["attrs"]} if spec.get("attrs") else {}),
                 **({"skin": spec["skin"]} if spec.get("skin") else {}),
+                # HOW FAR IT TURNS ON ITS SEAT (#829): the configuration's
+                # `turn:`, else the default the seat computes. INTERNAL to this
+                # expansion - a hand-written `mate-to` takes none - and read
+                # by the resolution below; `seat-turn` is what the drawing
+                # records on a seat that turns at all (`data-seat-turn`).
+                **_turn_keys(turn_seats, host, spec, lib),
             })
             seated_now.append(host)
         if not seated_now:
@@ -3030,7 +3327,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             # seat on a card (_seat_nested_occupants).
             at, orot, total_lift = solve_seat(
                 lib, p["id"], p["ref"], p["mate-to"], host,
-                occ_rotate=p.get("rotate"), occ_in=p.get("in"), floor_of=floor_of)
+                occ_rotate=p.get("rotate"), occ_in=p.get("in"), floor_of=floor_of,
+                occ_turn=p.get("turn"))
             # AN OCCUPANT INHERITS ITS HOST'S TILT. `solve_seat` (through
             # `presented_interface`) knows nothing of facets, so `at` lands
             # on the host's FLAT aperture point. Two sources for a tilt:
@@ -3412,6 +3710,10 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         df = data_for(p.get("for"))
         if df:
             g.set("data-for", df)
+        # HOW FAR A SEATED PART IS TURNED ON A SEAT THAT TURNS (#829), so a
+        # reader holding the drawing knows the turn without re-deriving it
+        if p.get("seat-turn") is not None:
+            g.set("data-seat-turn", str(p["seat-turn"]))
         # WHAT LIES OVER THIS PART, PUBLISHED. `under:` has ordered the paint
         # since it was added - the lid draws after the shroud it closes over -
         # but the relation itself never left this file, so a viewer that wanted
@@ -3473,6 +3775,16 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     # what seated, for the check after the bays are drawn.
     nested_occupants = {k: v for k, v in (config.get("occupants") or {}).items()
                         if "/" in k}
+    # A NESTED SEAT THAT TURNS takes its default turn here, where the face is
+    # known (#829): `ground-studs-rear/stud-tr` on the Casa terminal. The
+    # instance that seats it is drawn inside its carrier and cannot see the
+    # face, so the turn rides on the key's own spec.
+    for k, v in list(nested_occupants.items()):
+        if k in turn_seats and v != "":
+            spec = occupant_spec(k, v)
+            turn = _turn_keys(turn_seats, k, spec, lib).get("turn")
+            if turn is not None:
+                nested_occupants[k] = {**spec, "turn": turn}
     nested_used = set()
     this_view_bays = {b["id"] for b in parts["bays"]}
     this_view_placements = {q["id"] for q in parts["placements"]
@@ -4390,7 +4702,8 @@ def slot_entry(p, lib, families, connectors, candidates, group=None,
         return _slot_dict(p, contract, interface, None, refs, occupant, mate_at,
                           lift, extra_lift, group, "connector",
                           spanned_slots(contract, _resolve, connectors),
-                          presented_turn(contract, _resolve, connectors))
+                          presented_turn(contract, _resolve, connectors),
+                          allowed_turns(contract, _resolve, connectors))
     _family_name, family = found
     # `media` is the port's declared media - the cage's ceiling on its
     # family's ladder. THE PLACEMENT'S OWN `attrs.media` IS READ FIRST,
@@ -4430,11 +4743,12 @@ def slot_entry(p, lib, families, connectors, candidates, group=None,
                       _cage_accepts(candidates, families, accept_family, media),
                       occupant, mate_at, lift, extra_lift, group, "cage",
                       spanned_slots(contract, _resolve, connectors),
-                      presented_turn(contract, _resolve, connectors))
+                      presented_turn(contract, _resolve, connectors),
+                      allowed_turns(contract, _resolve, connectors))
 
 
 def _slot_dict(p, contract, interface, media, accepts, occupant, mate_at, lift,
-               extra_lift, group, kind, bores, axis):
+               extra_lift, group, kind, bores, axis, turns=None):
     """The published entry, one shape for a cage and a connector slot alike;
     only `kind`, `media` and how `accepts` was derived differ."""
     return {
@@ -4451,6 +4765,14 @@ def _slot_dict(p, contract, interface, media, accepts, occupant, mate_at, lift,
         # published entry and the drawing cannot come apart. A slot that spans
         # nothing publishes its placement's `rotate` unchanged, `None` included.
         "rotate": summed_rotate(p.get("rotate"), axis),
+        # AND THE TURNS AN OCCUPANT MAY TAKE ON TOP OF IT (#829), relative to
+        # `rotate`: manifest.allowed_turns, the list solve_seat holds a
+        # configuration's `turn:` to. Published only where there is a choice
+        # - a ground stud's four right angles - and None elsewhere, so a
+        # consumer offers a turn control exactly where the build takes one.
+        # The turn the build seats a part at when nothing chose one is in
+        # configs.json `seat-turns`, never re-derived.
+        "turns": turns if turns and len(turns) > 1 else None,
         "accepts": accepts,
         "occupant": (occupant.get("ref") if isinstance(occupant, dict) else occupant)
                     if occupant else None,
@@ -4600,7 +4922,8 @@ def component_presents(ref, lib, families, candidates, connectors=None):
     entry = _slot_dict({"id": "", "at": [0.0, 0.0]}, contract, interface, None, refs,
                        None, mate_at, lift, 0.0, None, kind,
                        spanned_slots(contract, _resolve, connectors),
-                       presented_turn(contract, _resolve, connectors))
+                       presented_turn(contract, _resolve, connectors),
+                       allowed_turns(contract, _resolve, connectors))
     for k in ("id", "at", "group", "rel-pos", "occupant", "occupant-attrs"):
         entry.pop(k, None)
     return entry
@@ -5011,7 +5334,20 @@ def main():
                  "cages": {v: cage_entries(device, v, lib, _families, _candidates,
                                             _default_occupants,
                                             connectors=_connectors)
-                           for v in device["views"]}}
+                           for v in device["views"]},
+                 # THE TURN AN OCCUPANT TAKES ON A SEAT THAT TURNS, where its
+                 # configuration states none (#829) - {view: {slot key: {ref:
+                 # turn}}}, keyed as `cages` is. The turn is RELATIVE to the
+                 # slot's `rotate`, one of its `turns`, and is what the build
+                 # seats at (render.default_seat_turn: down, toward the nearer
+                 # side edge, the other side, up - the first that crosses no
+                 # part, bay or other seat). A nested slot is keyed by its
+                 # path, `ground-studs-rear/stud-tr`. Published once so the
+                 # kit never re-derives it; a view with no such seat is absent.
+                 "seat-turns": {v: st for v in device["views"]
+                                for st in [seat_turns(device, device["views"][v], lib,
+                                                      _candidates, _connectors)]
+                                if st}}
     (outdir / f"{device['name']}.configs.json").write_text(json.dumps(cfg_index, indent=1, sort_keys=True))
     print(f"wrote {device['name']}.configs.json")
 

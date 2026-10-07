@@ -22,6 +22,7 @@ import { nestedBays, applyOverrides, applyOccupantOverrides, applyRearOverrides,
          rawParam, liesOver, seatClaims, occupantRef, refusalReason,
          builtOccupants, builtBays, faceCages, cageAt, pruneCarrier,
          freshBaysUnder, seatFace, faceQueue, swapOverrides, faceEntries, faceTree, ownerPath,
+         builtTurns, turnOverrides, acceptTurns, decodeTurns, seatTurn, turnable,
          slotOptions, slotResolver } from './swap.js';
 import { jdist, faceFile, distResolver } from './dist.js';
 import { paintFields, unpaintFields, fieldRows, fieldAccepts, decodeFields, drawnField } from './fields.js';
@@ -199,6 +200,9 @@ export function createShell(opts = {}) {
   // what is drawn - a listing draws nothing - only whose box this is.
   const state = {device: null, listing: null, cfg: null, view: null, module: null, sel: null,
                  svg: null, meta: null, cfgBays: {}, cfgOccupants: {}, cfgFields: {},
+                 // {slot path: turn} - the configuration's `turn:`s, then the
+                 // reader's (#829); a slot absent takes the build's default
+                 cfgTurns: {},
                  touched: new Set(), refused: {}, failed: {}, cfgGen: 0};
 
   const handlers = {};
@@ -268,6 +272,14 @@ export function createShell(opts = {}) {
   // drawing's path (a deep key walked through its bays - builtOccupants)
   const builtOccOf = cfg => builtOccupants(cfg, allOf(state.meta?.cages),
                                            {bays: allOf(state.meta?.bays), compByRef, placementRef});
+  // and the turns it states (#829), keyed the same way
+  const builtTurnsOf = cfg => builtTurns(cfg, allOf(state.meta?.cages),
+                                         {bays: allOf(state.meta?.bays), compByRef, placementRef});
+  // THE TURNS A SEAT ON `view` IS SEATED WITH (swap.js seatTurn): the state's,
+  // else the default the build published for that view (`seat-turns`), read
+  // through bayView as the face's bays and cages are
+  const turnBook = (view = state.view) => ({
+    set: state.cfgTurns || {}, seat: state.meta?.['seat-turns']?.[bayView(view)] || {}});
 
   // ---------------------------------------------------------------- stage
 
@@ -1095,6 +1107,16 @@ export function createShell(opts = {}) {
         `<option value="${esc(o.value)}"${o.selected ? ' selected' : ''}>${esc(o.label)}</option>`);
       const label = cage.kind === 'connector' ? 'connector' : 'optic';
       html += `<div class="row"><span>${label}</span><select id="optic" data-cage="${esc(cage.id)}">${opts.join('')}</select></div>`;
+      // A SEAT THAT TURNS (#829): which way what it holds faces, from the
+      // angles the slot publishes. Offered only while it holds something; its
+      // value is the state's turn, else the build's default for that part.
+      if (cur && turnable(cage)) {
+        const now = seatTurn(cage, cur, turnBook());
+        const dir = {0: 'down', 90: 'left', 180: 'up', 270: 'right'};
+        const tOpts = cage.turns.map(t =>
+          `<option value="${t}"${t === now ? ' selected' : ''}>${t}°${cage.rotate ? '' : ` (${dir[t] || t})`}</option>`);
+        html += `<div class="row"><span>turn</span><select id="turn" data-cage="${esc(cage.id)}">${tOpts.join('')}</select></div>`;
+      }
       if (cage.key && cage.key !== cage.id)
         html += `<div class="row"><span>key</span><code>${esc(cage.key)}</code></div>`;
       if (!accepts.length)
@@ -1173,6 +1195,8 @@ export function createShell(opts = {}) {
     if (occ) occ.onchange = () => swapBay(path, occ.value);
     const optic = box.querySelector('#optic');
     if (optic) optic.onchange = () => swapCage(optic.dataset.cage, optic.value);
+    const turnSel = box.querySelector('#turn');
+    if (turnSel) turnSel.onchange = () => turnCage(turnSel.dataset.cage, +turnSel.value);
     const onIt = box.querySelector('#chain');
     if (onIt) onIt.onchange = () => swapCage(onIt.dataset.cage, onIt.value);
     const open = box.querySelector('#open');
@@ -1347,7 +1371,8 @@ export function createShell(opts = {}) {
       if ((was || null) !== ref) dropUnder(key, ref);
       state.cfgBays[key] = ref;
     } else {
-      const {refused, failed} = await applyOccupantOverrides(svg, [cage], {[key]: ref}, loadSkin, onFace);
+      const {refused, failed} = await applyOccupantOverrides(svg, [cage], {[key]: ref}, loadSkin, onFace,
+                                                             turnBook());
       if (!onFace()) return null;
       const held = Object.prototype.hasOwnProperty.call(state.cfgOccupants, key)
         ? state.cfgOccupants[key] : cage.default ?? null;
@@ -1398,6 +1423,25 @@ export function createShell(opts = {}) {
     dropFieldsUnder(cageId);
     dropFieldsUnder(`${cageId}-occupant`);
     seatDetached({[cageId]: stateRef(cageId)}).then(refreshMerged, warnFaces);
+    redrawTree();
+    select(cageId, true);
+    emit('change');
+  }
+
+  // WHICH WAY A SEATED LUG FACES (#829): the slot keeps what it holds, and
+  // that is taken out and seated again at `deg` - on screen, in every face
+  // held (the queue's stamp carries the turn, so a face holding the same ref
+  // still takes it), and in 3D and the URL through the state.
+  async function turnCage(cageId, deg) {
+    const cage = cagesOnFace().find(c => c.id === cageId);
+    if (!cage || !turnable(cage) || !cage.turns.includes(+deg) || !state.svg) return;
+    state.cfgTurns[cageId] = +deg;
+    const svg = state.svg, gen = state.cfgGen;
+    const live = claim(cageId);
+    await applyOccupantOverrides(svg, [cage], {}, loadSkin,
+                                 () => live() && svg === state.svg && gen === state.cfgGen, turnBook());
+    if (svg !== state.svg || gen !== state.cfgGen) return;
+    seatDetached({[cageId]: occupantRef(svg, cage)}).then(refreshMerged, warnFaces);
     redrawTree();
     select(cageId, true);
     emit('change');
@@ -1455,6 +1499,12 @@ export function createShell(opts = {}) {
       if (!state.touched.has(key)) continue;
       await seat(key, stateRef(key));
     }
+    // AND THE TURNS (#829): a lug the reader turned and never swapped is the
+    // build's, at the build's turn, on a fresh face - seated again at the
+    // state's. One already drawn at it is left alone.
+    if (svg !== state.svg || gen !== state.cfgGen || !Object.keys(state.cfgTurns || {}).length) return;
+    await applyOccupantOverrides(svg, cagesOnFace(), {}, loadSkin,
+                                 () => svg === state.svg && gen === state.cfgGen, turnBook());
   }
 
   // THE SWAPS A RELOAD CARRIES (the explorer's `swap=`), taken into the state
@@ -1524,6 +1574,40 @@ export function createShell(opts = {}) {
     return {ignored};
   }
 
+  // THE TURNS A RELOAD CARRIES (`turn=`, #829), after the swaps - a turn is
+  // for what a slot holds, and the link's swaps decide that. What is taken is
+  // swap.js's `acceptTurns`: a slot that exists, as the state now fills the
+  // bays and slots, and publishes `turns` holding the angle.
+  async function applyTurns(map) {
+    const own = (o, k) => Object.prototype.hasOwnProperty.call(o || {}, k);
+    const cfg = (state.meta?.configs || []).find(c => c.name === state.cfg);
+    const bo = builtOccOf(cfg);
+    const {accepted, ignored} = acceptTurns(map, {
+      bays: allOf(state.meta?.bays), cages: allOf(state.meta?.cages), compByRef, placementRef,
+      bayRef: (p, bay) => own(state.cfgBays, p) ? state.cfgBays[p] : bay.default ?? null,
+      occRef: (p, s) => own(state.cfgOccupants, p) ? state.cfgOccupants[p]
+        : own(bo, p) ? bo[p] : s.default ?? null});
+    if (!Object.keys(accepted).length) return {ignored};
+    Object.assign(state.cfgTurns, accepted);
+    await reseat();
+    const seated = {};
+    for (const key of Object.keys(accepted)) {
+      const cage = cagesOnFace().find(c => c.id === key);
+      seated[key] = cage ? occupantRef(state.svg, cage) : stateRef(key) ?? null;
+    }
+    seatDetached(seated).then(refreshMerged, warnFaces);
+    refreshTree();
+    emit('change');
+    return {ignored};
+  }
+
+  // THE TURNS AS THE URL CARRIES THEM: what differs from what the
+  // configuration states, so an untouched page writes no `turn=` (#829)
+  function turnDelta() {
+    const cfg = (state.meta?.configs || []).find(c => c.name === state.cfg);
+    return turnOverrides({cfgTurns: state.cfgTurns, built: builtTurnsOf(cfg)});
+  }
+
   function openModule(ref) { state.module = ref; loadStage(); }
 
   // ---------------------------------------------------------------- loading
@@ -1554,7 +1638,8 @@ export function createShell(opts = {}) {
   // `faceQueue`; the faces it is asked about are the ones held for THIS
   // device and configuration when the job was asked for (`facesFor`).
   const faceParts = view => ({bays: state.meta?.bays?.[bayView(view)] || [],
-                              cages: state.meta?.cages?.[bayView(view)] || []});
+                              cages: state.meta?.cages?.[bayView(view)] || [],
+                              turns: turnBook(view)});
   function swapDelta() {
     return swapOverrides({
       cfg: (state.meta?.configs || []).find(c => c.name === state.cfg),
@@ -1565,6 +1650,8 @@ export function createShell(opts = {}) {
   }
   const faceWork = faceQueue({
     loadSkin,
+    // a slot's turn is part of what a face holds there (#829)
+    stamp: (k, v) => `${v ?? ''}~${state.cfgTurns?.[k] ?? ''}`,
     seat: (face, view, map, skin) => seatFace(face, faceParts(view), map, skin, compByRef),
   });
   const warnFaces = err => console.warn('[portrayal] seating the faces not on screen', err);
@@ -1768,6 +1855,8 @@ export function createShell(opts = {}) {
     // read through swap.js's `builtOccupants`, which reduces a mapping value
     // to its ref and drops a chained key that names no cage
     state.cfgOccupants = builtOccOf(c);
+    // the turns it states (#829); a seat it does not turn takes the default
+    state.cfgTurns = builtTurnsOf(c);
     state.touched = new Set();
     state.refused = {};
     state.failed = {};
@@ -1832,10 +1921,16 @@ export function createShell(opts = {}) {
     const same = start.name === want;
     const swaps = same ? decodeSwaps(rawParam(location.search, 'swap')) : {};
     const fields = same ? decodeFields(rawParam(location.search, 'fields')) : {};
+    // `turn=` (#829), read raw for the same reason, applied after the swaps
+    const turns = same ? decodeTurns(rawParam(location.search, 'turn')) : {};
     await loadDevice(start.name, same ? {config: q.get('config'), view: q.get('view')} : {});
     if (Object.keys(swaps).length) {
       const {ignored} = await applySwaps(swaps);
       if (ignored.length) console.warn('[portrayal] swaps naming nothing on', start.name, ignored);
+    }
+    if (Object.keys(turns).length) {
+      const {ignored} = await applyTurns(turns);
+      if (ignored.length) console.warn('[portrayal] turns naming no turning seat on', start.name, ignored);
     }
     // AFTER THE SWAPS: a field names a part, and the part may be one a swap seated
     if (Object.keys(fields).length) {
@@ -1983,6 +2078,9 @@ export function createShell(opts = {}) {
     state, el, ready, on, emit, setFields, fieldsOf, resetField, applyFields,
     select, fit, refreshTree, loadFaces, loadDevice, loadStage, openModule, swapBay,
     swapCage, cageFor, applySwaps, swapDelta,
+    // a seated lug's turn (#829): set one, apply a link's, the URL's delta,
+    // and the whole state the 3D scene seats with
+    turnCage, applyTurns, turnDelta, turnsNow: () => ({...state.cfgTurns}),
     over, setPulled, pulledPaths,
     compByRef, devices: () => DEVICES, components: () => COMPONENTS,
     device: () => DEVICES.find(d => d.name === state.device),

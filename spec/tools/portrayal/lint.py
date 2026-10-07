@@ -312,6 +312,8 @@ RULES = {
     "L143": ("lab",        "a rack-face part placed by `ru` over a rack device is reported with that host (warning)", "place it `on` the host with its `unit` so it moves with the host, or leave it by `ru` if it belongs to the rack rather than the device"),
     "L144": ("device",     "members of one group that one configuration draws on one face hold one `rel-pos` each; alternatives (variant views, `only-in` builds) may share one (warning)", "give each member its own position, or move the unlike members - ESD jacks among earthing studs, lane lamps among port lamps - to a group of their own"),
     "L145": ("device",     "a group is not named only for the class of its members - `ports` names no port family (warning)", "name the group for the family it holds (`sfp28`, `rj45-1g`), or a mixed block for the job it does and say so in `mixed:`"),
+    "L146": ("device",     "an occupant's `turn` is one its host allows - the host's interface `turns` in connectors.yaml, narrowed by its presented point's own (an error; the build refuses it too)", "choose one of the listed turns, or drop `turn:` to take the default the build computes; a barrier block's terminal screw allows 0 alone"),
+    "L147": ("component",  "a connection point's `turns` is a subset of the turns its part's interface allows in connectors.yaml, and only the presented point states one (an error)", "list only turns the interface allows - a point narrows the list, it cannot widen it; move `turns` to the point the interface is presented at, or drop it"),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -961,9 +963,9 @@ def check_states(path, where, states, attrs, elements=None):
                           f"description:")
 
 
-# Approximate glyph metrics, in em. Real faces differ by a few percent, which is
-# why L21 carries a tolerance rather than pretending these are exact.
-CAP_EM, DESC_EM, ADV_EM = 0.72, 0.10, 0.60
+# Approximate glyph metrics, in em: manifest.CAP_EM and its siblings, beside
+# manifest.text_extent, which render.py reads too (#829).
+CAP_EM, DESC_EM, ADV_EM = _manifest.CAP_EM, _manifest.DESC_EM, _manifest.ADV_EM
 # How far a mark may reach into a part before it is a finding. The metrics above
 # are estimates and a mark that grazes a boundary is not what this rule is for;
 # 0.3mm is comfortably below the real cases, which buried 0.4 to 1.8mm of glyph.
@@ -984,47 +986,7 @@ def _path_extent(path_d, at):
     return (at[0] + min(xs), at[1] + min(ys), at[0] + max(xs), at[1] + max(ys))
 
 
-def _text_extent(m):
-    """Bounding box of a text mark. `at` is the BASELINE, not the top edge - which
-    is the whole reason this rule exists: 2.2mm digits anchored 1.2mm below a port
-    still reached up into it.
-
-    A ROTATED MARK RUNS ALONG A DIFFERENT AXIS, and measuring it as if it did not
-    is how a label printed neatly down a chassis's right edge gets reported as
-    running off the face: its length was being added to x, where the metal ends,
-    instead of to y, where there is room. The same arithmetic accused rotated
-    module legends of painting over the modules beside them. Only the right
-    angles are handled - anything else is rare enough that the unrotated box is
-    the safer approximation, and being slightly too generous costs a missed
-    warning rather than a fabricated one."""
-    x, y = m["at"]
-    fs = m.get("font-size", 2.2)
-    w = len(str(m["text"])) * fs * ADV_EM
-    up, down = fs * CAP_EM, fs * DESC_EM
-    # THE DEFAULT HAS TO BE THE ONE THE RENDERER USES. render.py draws an
-    # unanchored silkscreen mark CENTRED on its `at` (render.py:880); this read
-    # it as running rightward from `at`, so every extent check on the 433 marks
-    # in this library that state no anchor was off by half a text width - in the
-    # direction that hides an overlap on the left and invents one on the right.
-    # A mark then lints as one thing and draws as another, and no rule reports
-    # the difference because both halves are working from their own assumption.
-    anchor = m.get("anchor", "middle")
-    lead = w if anchor == "end" else (w / 2 if anchor == "middle" else 0.0)
-    rot = int(m.get("rotate", 0)) % 360
-    # WHICH SIDE THE CAPS FALL ON is the renderer's `rotate(deg x y)` applied to
-    # an upright mark, whose caps point up (-y). SVG turns clockwise on screen,
-    # so at 90 up becomes +x and the caps sit RIGHT of the baseline; at 270
-    # (-90, reading bottom to top) they sit LEFT. This had the two swapped, so
-    # an upright legend set against a part's left edge - XM-7380's CONSOLE, its
-    # glyphs painting 1.2mm clear of the USB port - was reported as buried in
-    # it, and a legend whose caps really did reach into a part went unreported.
-    if rot == 90:            # runs downward, cap side to the RIGHT of the baseline
-        return (x - down, y - lead, x + up, y - lead + w)
-    if rot == 270:           # runs upward, cap side to the LEFT
-        return (x - up, y + lead - w, x + down, y + lead)
-    if rot == 180:           # runs leftward, cap side below
-        return (x - w + lead, y - down, x + lead, y + up)
-    return (x - lead, y - up, x - lead + w, y + down)
+_text_extent = _manifest.text_extent
 
 
 def check_segment(path, code, value):
@@ -4384,6 +4346,67 @@ def _mate_check(path, where, occ_ref, host_ref, lib_roots):
                          f"{host_ref} presents {want!r}")
 
 
+def _turn_check(path, where, spec, host_ref, lib_roots):
+    """L146 - an occupant's `turn` is one its host allows (#829).
+
+    The turns a host allows are its interface's `turns` in spec/schemas/
+    connectors.yaml, narrowed by its presented point's own - manifest.
+    allowed_turns, the list render.solve_seat refuses a turn against, so the
+    build and lint cannot disagree about which turn seats. 0 is always the
+    seat's own direction and is never reported."""
+    if not isinstance(spec, dict) or spec.get("turn") is None:
+        return
+    try:
+        turn = int(spec["turn"]) % 360
+    except (TypeError, ValueError):
+        return                          # the schema reports a turn that is not a number
+    if not turn:
+        return
+    hp = resolve_component(host_ref, lib_roots)
+    if not hp:
+        return
+
+    def _res(ref):
+        q = resolve_component(ref, lib_roots)
+        return load_yaml(q) if q else None
+    allowed = _manifest.allowed_turns(load_yaml(hp) or {}, _res, _connectors())
+    if turn not in allowed:
+        err(path, "L146", f"{where}: turn {spec['turn']} is not one {host_ref} allows "
+                          f"({', '.join(str(t) for t in allowed)}) - its interface's "
+                          "`turns` in connectors.yaml, narrowed by its presented point")
+
+
+def lint_component_point_turns(path, data):
+    """L147 - a connection point's `turns` is a subset of its interface's (#829).
+
+    A point may NARROW what its interface allows - a barrier block's terminal
+    screw holds a lug at 0 where a ground stud turns it freely - and never
+    widen it: a turn the interface does not list is a turn no part that mates
+    it was drawn for. Only the presented point is read for a seat
+    (manifest.allowed_turns), so `turns` on any other point, or on a part that
+    presents no interface, says something nothing reads, and is reported."""
+    cps = data.get("connection-points") or {}
+    presented = data.get("interface-at") or "mate"
+    iface = data.get("interface")
+    offered = [int(t) for t in ((_connectors().get(iface) or {}).get("turns") or [0])] \
+        if iface else []
+    for name, cp in cps.items():
+        turns = (cp or {}).get("turns")
+        if turns is None:
+            continue
+        if not iface or name != presented:
+            err(path, "L147", f"connection-points/{name}: states `turns`, but "
+                              + ("this part presents no interface" if not iface else
+                                 f"the point {iface!r} is presented at is {presented!r}")
+                              + " - only the presented point's turns are read")
+            continue
+        wider = sorted({int(t) % 360 for t in turns} - set(offered))
+        if wider:
+            err(path, "L147", f"connection-points/{name}: turns {wider} are not "
+                              f"among the turns {iface!r} allows ({offered}) in "
+                              "connectors.yaml - a point narrows its interface's list")
+
+
 def _also_accepted(want, have):
     """Does a cage presenting `want` take a part that mates `have` through
     its family's `also-accepts` (spec/schemas/pluggables.yaml)? The build
@@ -4492,6 +4515,7 @@ def lint_device_occupants(path, data, lib_roots):
                     continue
                 if ref:
                     _mate_check(path, where, ref, host_ref, lib_roots)
+                    _turn_check(path, where, spec, host_ref, lib_roots)
                     # A CAGE ON A SEATED CARD takes the same rate check as a
                     # device cage (#630), framed by the card: its media is the
                     # part's own attrs, then the card's component group (#511)
@@ -4513,6 +4537,7 @@ def lint_device_occupants(path, data, lib_roots):
                     continue
                 if ref:
                     _mate_check(path, where, ref, host["ref"], lib_roots)
+                    _turn_check(path, where, spec, host["ref"], lib_roots)
                     _rate_check(path, where, ref, host, data, lib_roots)
                 continue
             try:
@@ -4527,6 +4552,7 @@ def lint_device_occupants(path, data, lib_roots):
                 continue
             if ref:
                 _mate_check(path, where, ref, host_ref, lib_roots)
+                _turn_check(path, where, spec, host_ref, lib_roots)
 
 
 def lint_device_overlap(path, view_name, view, lib_roots):
@@ -7885,16 +7911,28 @@ def lint_component_spanned_geometry(path, data, lib_roots):
     # feature its own point sits `on:`; what a bore stands at is its
     # placement's `lift`. A connector spanning the pair rests on the face the
     # pair is let into, so the two are one number.
+    #
+    # WHAT A BORE STANDS AT IS WHERE IT PRESENTS: its placement's `lift` plus
+    # the bore's own seat out (manifest._seat_out). An LC bore presents at its
+    # own face, so that is its lift and nothing more; a ground stud presents
+    # at the END OF THE STUD, `on:` the solid it builds, so a pair of studs
+    # placed at the panel presents its two-hole lug at the studs' top, where a
+    # one-hole lug on either stud already stands (#828). Either way it is one
+    # figure for one level of hardware.
     presented = presented_interface(data, _res)[2]
     places = {q.get("id"): q for q in data.get("parts") or []}
     for bid in ids:
-        got = float((places.get(bid) or {}).get("lift") or 0.0)
+        q = places.get(bid) or {}
+        core = _res(q.get("ref")) or {}
+        own = presented_interface(core, _res)[2] if core.get("interface") else 0.0
+        got = float(q.get("lift") or 0.0) + own
         if abs(got - presented) > SPAN_TOLERANCE:
             err(path, "L116", f"presents {iface!r} at a lift of {presented:g}, "
-                f"but its bore {bid!r} is placed at lift {got:g} - a connector "
-                "spanning the pair rests on the same face the pair is let "
-                "into, so a simplex part in the bore and a duplex part over "
-                "both would stand at different depths")
+                f"but its bore {bid!r} presents at {got:g} (placed at lift "
+                f"{float(q.get('lift') or 0.0):g}, seating {own:g} off its own "
+                "face) - a connector spanning the pair rests on the same face "
+                "each of its bores presents, so a simplex part in the bore and a "
+                "duplex part over both would stand at different depths")
     # AND THE RIGHT WAY ROUND: the axis the order of the bores derives carries
     # a duplex connector's latches onto the side their keyways face.
     _spanning_latch_on_keyway(path, data, _res)
@@ -11544,6 +11582,7 @@ def main():
                 lint_component_role(f, d)
                 lint_component_forwarded_mate(f, d, args.library)
                 lint_component_seat_point(f, d)
+                lint_component_point_turns(f, d)
                 lint_component_stack_orientation(f, d, args.library)
                 lint_component_slot_defaults(f, d, args.library)
                 lint_component_spanned_geometry(f, d, args.library)

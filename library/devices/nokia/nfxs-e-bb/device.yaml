@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: nfxs-e-bb
-version: 0.1.5
+version: 1.0.0
 maturity: modelled
 manufacturer: Nokia
 model: 7360 ISAM FX-8 (NFXS-E BB)
@@ -152,12 +152,21 @@ provenance:
       necessary air flow in the GFC". For the horizontal installation drawn here the fan unit sits at
       the right-hand end and the air crosses the cards; the direction is not stated in any staged
       document, so no airflow is declared.
+  ground-pair:
+    confidence: estimated
+    note: >-
+      THE CONNECTOR IS ONE PAIR (#828, #830): common/ground-stud-pair-3-4-1-4@1, two 1/4 in. (1/4-20)
+      pan-head screws at exactly 19.05, the stud-pair-3-4 interface's pitch, the 3/4 in. spacing of
+      the dual-hole lug the HIM names. Placed at rotate 90, one screw above the other, because
+      Figure 103 draws the connector's two studs stacked in its callout box; centred where the
+      single common/ground-lug@1 stood for the pair. The screw size is the lug's 1/4 in. hole, not
+      a stated stud. The position stays the estimate of the ground note.
   ground-stud-size:
     confidence: datasheet
     note: >-
       HIM R6.9 s10.3.1 gives the lug of each grounding cable connector of the FX-8 as a 4 AWG
       dual-hole lug with 1/4 in. holes at 3/4 in. spacing: the `stud-size` of ground, read from the
-      holes of the lug the guide calls for. The placement is drawn once for a pair of studs.
+      holes of the lug the guide calls for. The placement is the pair.
 attrs:
   physical:
     part-number: 3FE64936BB
@@ -290,7 +299,7 @@ views:
         - {at: [60.0, 15.0], size: [210.0, 325.0], pattern: vent, vent: 40, confidence: estimated, source: 'HIM R6.9 Figure 103 and Lightspan HIM Figure 158 (perspective) draw the right side perforated behind a front strip; extent by eye, hole size and pitch not documented'}
     components:
       placements:
-        - {ref: common/ground-lug@1, id: ground, at: [18.5, 220.0], group: grounding, rel-pos: 1, attrs: {stud-size: '1/4 in'}}
+        - {ref: common/ground-stud-pair-3-4-1-4@1, id: ground, at: [6.225, 220.75], rotate: 90, group: grounding, rel-pos: 1, attrs: {stud-size: '1/4 in'}}
   top:
     size: {w: 446.5, h: 278.3}
     empty: >-

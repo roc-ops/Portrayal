@@ -201,6 +201,7 @@ def test_a_card_cage_accepts_what_a_device_cage_of_its_media_accepts(index, tmp_
             assert c["accepts"] == device_cage["accepts"], (ref, c["id"])
 
 
+SPANNING = ("lc-duplex", "stud-pair-5-8", "stud-pair-3-4", "stud-pair-1")
 CAGE_KEYS = {"id", "at", "mate", "lift", "rotate", "interface", "media",
              "accepts", "occupant-attrs", "mirror", "group-states", "kind",
              # what this slot ships holding (B3), null where it ships empty -
@@ -211,7 +212,10 @@ CAGE_KEYS = {"id", "at", "mate", "lift", "rotate", "interface", "media",
              "bores",
              # the facet the cage stands `on`, null where it stands on none
              # (P3 amended): a fact of the card's frame, so a card's alone
-             "tilt"}
+             "tilt",
+             # the turns an occupant may take on top of `rotate` (#829), null
+             # where there is no choice - every cage, and a terminal screw
+             "turns"}
 
 
 def shipped_default(ref, slot_id):
@@ -242,8 +246,9 @@ def test_a_card_cage_carries_exactly_the_r1_keys(index):
             assert set(c) == CAGE_KEYS, (ref, c["id"], sorted(set(c) ^ CAGE_KEYS))
             # the only defaults are the caps the adapters ship (B3 task 8)
             assert c["default"] == shipped_default(ref, c["id"]), (ref, c["id"])
-            # and only a duplex adapter's own slot spans anything
-            assert c["bores"] == (["1", "2"] if c["interface"] == "lc-duplex"
+            # and only a spanning slot spans anything: a duplex adapter's own,
+            # or a pair of studs one two-hole lug lands across (#828)
+            assert c["bores"] == (["1", "2"] if c["interface"] in SPANNING
                                   else []), (ref, c["id"])
             checked += 1
     assert checked > 0

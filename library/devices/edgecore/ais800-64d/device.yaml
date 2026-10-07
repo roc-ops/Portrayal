@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ais800-64d
-version: 3.0.4
+version: 4.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: AIS800-64D
@@ -173,12 +173,11 @@ provenance:
       28.98): a pair 13.46 mm apart with the third blade 8.4 mm off their line, which is the C19/C20 triangle,
       and each blade is about 1 x 3 mm, which is a C19/C20 blade. The part is turned so that pair stands
       vertical at the right and the odd blade sits at the left, which is `rotate: 270` and is what the
-      render draws.
-      THE BLADES AGREE TOO. On the photograph each blade is narrow and TALL - its long axis parallel to
-      the line joining the pair - and std/c20-inlet@1 has drawn them that way since 1.3.1, which lays
-      all three blades along the long side of the coupler as IEC 60320 C19/C20 has them (the SCHURTER
-      C20 front view it cites draws the same). Turned 270, they stand tall. Until 1.3.1 the part drew
-      them across that line; see roc-ops/Portrayal#398.
+      render draws. THE BLADES AGREE TOO. On the photograph each blade is narrow and TALL - its long axis
+      parallel to the line joining the pair - and std/c20-inlet@1 has drawn them that way since 1.3.1,
+      which lays all three blades along the long side of the coupler as IEC 60320 C19/C20 has them (the
+      SCHURTER C20 front view it cites draws the same). Turned 270, they stand tall. Until 1.3.1 the part
+      drew them across that line; see roc-ops/Portrayal#398.
   the-rj45s-are-not-all-the-same-way-up:
     confidence: measured
     note: >-
@@ -263,12 +262,25 @@ provenance:
       the AC unit, which was the airflow rule reaching one part further than its evidence. THE TWO BUILDS
       ARE DERATED DIFFERENTLY: front-to-back 0-40 C and back-to-front 0-35 C, "subject to used optics",
       both at 1800 m.
+  ground-pair:
+    confidence: estimated
+    note: >-
+      ONE TWO-HOLE LANDING, NOT TWO SCREWS (#828, #830). The quick start guide fixes one grounding lug
+      with two M6 screws, so the point is common/ground-stud-pair-5-8-m6@1, two M6 pan heads, placed at
+      rotate 90 (one above the other, as the photograph's two holes are) and centred on the holes' midpoint,
+      (7.3, 47.9). THE 5/8 IN. PITCH IS INFERRED, NOT STATED: no document held dimensions the holes, and
+      the photograph's 16.2 is a reading off a product shot. The lug the guide names, Panduit LCDXN2-14AF-E,
+      carries Panduit's 'A' hole-spacing code, 5/8 in., so the screws are drawn at that lug's 15.875,
+      the pitch of the stud-pair-5-8 interface. Formerly two common/ground-lug@1 placements, ground-screw-1
+      and ground-screw-2, 16.2 apart and drawn 2.8 below the photographed holes, each with an earth mark
+      of its own. The one earth symbol the photograph shows, silkscreened above the plate at (7.4, 26.1),
+      is common/ground-symbol@1 there, centred over the pair.
   ground-stud-size:
     confidence: datasheet
     note: >-
       the quick start guide fixes the grounding wire to the grounding point on the rear panel with two
-      M6 screws and washers through one grounding lug (Panduit LCDXN2-14AF-E or an equivalent): the
-      `stud-size` of ground-screw-1 and ground-screw-2.
+      M6 screws and washers through one grounding lug (Panduit LCDXN2-14AF-E or an equivalent): the `stud-size`
+      of ground-screws, the pair.
 attrs:
   environmental:
     operating-temp: 0 to 40 C (front-to-back); 0 to 35 C (back-to-front), subject to used optics
@@ -293,6 +305,16 @@ attrs:
   lifecycle: {eol: none-announced}
 chassis: {width: 440.0, height: 87.0, depth: 649.2, ru: 2, weight-kg: 21.2, color: '#5c5d61', airflow: front-to-back}
 gaps:
+- what: ground-pair-pitch
+  scope:
+  - ground-screws
+  reason: vendor-silent
+  wanted: >-
+    The spacing of the two grounding screw holes on the rear panel. Neither staged document dimensions
+    them: the quick start guide names the screws (two M6) and the lug (Panduit LCDXN2-14AF-E or an equivalent),
+    and the datasheet's rear photograph puts the holes about 16.2 apart, which is a reading off a product
+    shot. The pair is drawn at the 5/8 in. of the named lug's hole-spacing code; a drawing that dimensions
+    the holes, or the lug's own datasheet, would confirm it.
 - what: module-lamp-legend
   scope:
   - rear
@@ -1881,8 +1903,15 @@ views:
         - edgecore/fan-2u-1x1sn@1
         default: edgecore/fan-2u-1x1sn@1
       placements:
-      - {ref: common/ground-lug@1, id: ground-screw-1, at: [3.7, 32.8], group: mgmt, rel-pos: 7, for: chassis, attrs: {stud-size: M6}}
-      - {ref: common/ground-lug@1, id: ground-screw-2, at: [3.9, 49.0], group: mgmt, rel-pos: 8, for: chassis, attrs: {stud-size: M6}}
+      - ref: common/ground-stud-pair-5-8-m6@1
+        id: ground-screws
+        at: [-6.6375, 41.9]
+        rotate: 90
+        group: mgmt
+        rel-pos: 7
+        for: chassis
+        attrs: {stud-size: M6}
+      - {ref: common/ground-symbol@1, id: ground-symbol, at: [4.3, 23.1], group: mgmt, rel-pos: 8, for: ground-screws}
     regions:
     - id: power
       at: [14.5, 4.0]
@@ -1905,8 +1934,7 @@ views:
       size: {w: 14.0, h: 45.0}
       label: Grounding point (2 x M6)
       members:
-      - ground-screw-1
-      - ground-screw-2
+      - ground-screws
   top:
     size: {w: 440.0, h: 649.2}
     empty: >-

@@ -94,7 +94,9 @@ export function createViewer(container, opts = {}) {
   // is extracted from the COMPILED face files, which know only what the built
   // configuration says, so without these a swap made in the 2D inspector is
   // invisible here - on every device, in both directions.
-  let OVERRIDES = {}, COMP_INDEX = null;
+  // TURNS is the host's {slot id: turn} (#829), handed beside the swaps: a
+  // lug the reader turned faces the same way here as in 2D
+  let OVERRIDES = {}, TURNS = {}, COMP_INDEX = null;
   // Runtime lamp/element states, data-path -> the state classes the page has on
   // that element. Same story as the swaps above and for the same reason: the
   // scene is rasterised from the compiled files, which carry the RULES for every
@@ -431,7 +433,7 @@ export function createViewer(container, opts = {}) {
   };
   async function applyBayOverrides(cfg) {
     clearSvgOverrides(SCOPE);
-    if (COMP || !Object.keys(OVERRIDES).length) return 0;
+    if (COMP || (!Object.keys(OVERRIDES).length && !Object.keys(TURNS).length)) return 0;
     // EVERY FACE AT ONCE, through the one pass node can run (swap.js
     // `seatViews`): each face `viewsToRewrite` names, and every face with a
     // rear hole, goes through `seatFace` - the device's bays at every level
@@ -450,8 +452,10 @@ export function createViewer(container, opts = {}) {
       if (doc.querySelector('parsererror')) continue;
       roots[view] = doc.documentElement;
     }
-    const seated = await seatViews(roots, {bays: devIndex.bays || {}, cages: devIndex.cages || {}},
-                                   OVERRIDES, loadSkin, byRef);
+    // `seat-turns`: the turn a lug takes where nobody chose one (#829)
+    const seated = await seatViews(roots, {bays: devIndex.bays || {}, cages: devIndex.cages || {},
+                                           'seat-turns': devIndex['seat-turns'] || {}},
+                                   OVERRIDES, loadSkin, byRef, TURNS);
     let total = 0;
     for (const [view, res] of Object.entries(seated)) {
       const {applied: viewApplied, dropped = [], refused = [], failed = [], cages: faceCages = []} = res;
@@ -1249,6 +1253,8 @@ export function createViewer(container, opts = {}) {
       // `overrides` is the host's live swap state. Absent leaves the previous set
       // standing, so a caller that does not use the feature never has to mention it.
       if (spec.overrides) OVERRIDES = {...spec.overrides};
+      // and `turns` the same way (#829)
+      if (spec.turns) TURNS = {...spec.turns};
       if (spec.component) await loadComponent(spec.component, spec.skin || spec.config);
       else await loadDevice(spec.device || DEV, spec.config);
       // a config switch keeps the host's selection; the boxes were rebuilt

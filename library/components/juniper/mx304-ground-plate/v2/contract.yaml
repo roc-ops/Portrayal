@@ -1,0 +1,64 @@
+format: 1
+kind: component
+name: mx304-ground-plate
+version: 2.0.0
+class: ground
+# THE PLATE IS A PAIR OF STUDS ONE TWO-HOLE LUG LANDS ACROSS (#828,
+# docs/connectors-dc-terminal-design.md section 13.7): it presents
+# `stud-pair-5-8` at the midpoint of its two screws, and each screw is a slot
+# of its own, `<placement>/1` and `<placement>/2`. The two levels are
+# mutually exclusive (L115).
+interface: stud-pair-5-8
+behaviour: mounts
+profile: networking
+description: >-
+  Protective-earthing landing on the MX304 rear right - a vertical bright
+  plate with two M6 pan-head screws on 5/8 in. centres, one above the other,
+  under the panel's earth symbol, that one two-hole lug (the guide's two-holed
+  earthing terminal bracket) lands across. The guide requires the chassis
+  permanently earthed.
+attrs:
+  model: MX304 grounding terminal
+  connector: stud-pair-5-8
+provenance:
+  size: >-
+    estimated - the 16 x 36 plate outline read off mx304-rear-ac-high.jpg, NOT
+    measured against anything of known size and approximate; unchanged from @1.
+  holes: >-
+    datasheet - THE GUIDE'S "0.63-in. (16-mm) centers" IS THE 5/8 IN. PATTERN,
+    15.875. The guide's grounding specifications say the grounding points are
+    "spaced at 0.63-in. (16-mm) centers". 0.63 in. is how two-hole lug tables
+    print 5/8 in. (Panduit's LCD6-10A-L, a 5/8 in. lug, is listed at "0.63" hole
+    spacing), and 16 mm is the metric rounding of 15.875; read as a metric 16.0
+    it would be 0.125 off the stamped pitch of every 5/8 in. lug, which no
+    vendor's lug matches. So the screws are composed on 15.875, the
+    `stud-pair-5-8` pitch (L116 holds it to 0.01), centred where @1 centred its
+    holes (x 8.0, y 18.0 of the plate). @1 drew them 16.0 apart, the metric
+    figure taken literally.
+  screws: >-
+    datasheet and registry - the guide: "two threaded holes on the rear side
+    ... fit M6 pan head screws", and the grounding lug is secured "with M6 pan
+    head screws". Drawn as common/ground-screw-m6@1, the ISO 7045 M6 pan head,
+    12.0 across. (The guide also calls the terminal "sized for M6 hex screws";
+    the pan head is the screw it tells the installer to fit.)
+  axis: >-
+    THE SCREWS ARE COMPOSED TOP THEN BOTTOM, so the pair runs down the plate
+    and a lug seated across it leaves its wire downward
+    (manifest.spanning_axis), as the photograph shows the bracket fitted.
+  seat: >-
+    THE PAIR PRESENTS AT THE TOP OF ITS SCREW HEADS, 4.6 off the plate: `mate`
+    is the midpoint of the two screws' own mate points and states `seat-out`,
+    the height each screw presents at, as every pair host does.
+size:
+  w: 16.0
+  h: 36.0
+size-confidence: {w: estimated, h: estimated}
+elements: {}
+parts:
+  # FIRST SCREW (top), then second (bottom): the pair's axis (provenance.axis).
+  - {ref: common/ground-screw-m6@1, id: '1', at: [2.0, 4.0625]}
+  - {ref: common/ground-screw-m6@1, id: '2', at: [2.0, 19.9375]}
+connection-points:
+  # the midpoint of (8.0, 10.0625) and (8.0, 25.9375)
+  mate: {at: [8.0, 18.0], direction: front, seat-out: 4.6}
+skins: [default]

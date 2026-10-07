@@ -314,6 +314,13 @@ def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
         # spec/tests/test_terminal_lugs.py.
         if c.get("mates") in terminal_screws:
             continue
+        # NOR ARE THE TWO-HOLE LUGS (#828). generic/two-hole-lug-*@1 mate a
+        # `stud-pair-*` interface, which spans two `terminal-stud` seats. Left
+        # out by what each IS - a lug on one copper wire - and their census is
+        # spec/tests/test_two_hole_lugs.py.
+        if (connectors.get(c.get("mates")) or {}).get("spans", {}).get("interface") \
+                in terminal_screws:
+            continue
         # NOR ARE THE MRJ21, VHDCI AND RJ11 CABLE PLUGS (#790).
         # generic/mrj21-plug@1, vhdci-plug@1 and rj11-plug@1 mate `mrj21`,
         # `vhdci` and `rj11`, which the registry holds so each jack is a slot.

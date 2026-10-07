@@ -132,7 +132,9 @@ def test_the_seat_is_the_screw_itself(block):
     assert "media" not in (c.get("attrs") or {})
     assert c["size"] == {"w": b["head"], "h": b["head"]}
     r = b["head"] / 2
-    assert c["connection-points"]["mate"] == {"at": [r, r], "direction": "front", "on": "head"}
+    # the barriers fix the pole: the lug on a terminal screw does not turn (#829)
+    assert c["connection-points"]["mate"] == {"at": [r, r], "direction": "front", "on": "head",
+                                              "turns": [0]}
     assert feats(b["seat"])["head"]["cyl"] == b["cyl"]
     assert "lift" not in feats(b["seat"])["head"]
     root = ET.parse(_skin_path(b["seat"])).getroot()
@@ -145,7 +147,8 @@ def test_the_screws_that_present_terminal_stud_are_these_two_and_one_lug_mates_i
     """The `class: screw` parts that present the interface are the two
     terminal screws. The ground studs present it too (`class: ground`,
     test_ground_stud_lugs.py); they are not terminal screws and are left to
-    their own census."""
+    their own census. So does the 10-32 stud of the SR-1 DC terminal block,
+    which a pair host composes two to a pole (#828, test_grounding_devices.py)."""
     presents, mates = [], []
     for f in (LIB / "components").rglob("v*/contract.yaml"):
         c = _yaml(f)
@@ -154,7 +157,7 @@ def test_the_screws_that_present_terminal_stud_are_these_two_and_one_lug_mates_i
             presents.append(ref)
         if c.get("mates") == IFACE:
             mates.append(ref)
-    assert sorted(presents) == SEATS and len(SEATS) == 2
+    assert sorted(presents) == sorted([*SEATS, "nokia/sr-1-dc-stud@1"]) and len(SEATS) == 2
     assert mates == [LUG]
 
 
@@ -238,9 +241,12 @@ def test_the_telco_supply_says_nothing_states_what_it_takes():
     assert [p["id"] for p in c["parts"] if p["ref"] in BLOCKS] == ["terminal"]
 
 
-def test_the_nokia_block_is_left_for_the_two_hole_lug():
+def test_the_nokia_block_lands_a_two_hole_lug_on_each_pole():
+    """Not one of these blocks: each pole is a pair of studs that one two-hole
+    lug spans (#828), held in test_grounding_devices.py."""
     c = _contract("nokia/sr-1-dc-terminal-block@1")
-    assert "interface" not in c and not c.get("parts")
+    assert "interface" not in c
+    assert {p["ref"] for p in c["parts"]} == {"nokia/sr-1-dc-pole@1"}
 
 
 # --- 4. the lug ------------------------------------------------------------------
@@ -265,7 +271,7 @@ def test_its_fields_are_two_colours_and_no_wire_size():
     why = c["provenance"]["wire-od"]
     assert "NOT A FIELD" in why and "data-r-from" in why and "`bar`" in why
     assert "NOT CLAIMED" in c["provenance"]["nominal"]
-    assert "CANNOT TURN AN OCCUPANT" in c["provenance"]["orientation"]
+    assert "MAY TURN IT FURTHER" in c["provenance"]["orientation"] and "#829" in c["provenance"]["orientation"]
     assert "10 LONG" in c["provenance"]["wire"] and "#805" in c["provenance"]["cable-point"]
 
 
