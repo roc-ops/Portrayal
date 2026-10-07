@@ -1,0 +1,1688 @@
+format: 1
+kind: device
+name: nrgils300cb08
+version: 1.0.0
+maturity: modelled
+manufacturer: Amphenol Network Solutions
+model: nrgILS300CB08
+description: '1RU dual-feed -48 V DC circuit breaker panel with nrgILS intelligent load shedding: the 300CB08 breaker
+  layout with a controller that measures feed and per-circuit current and voltage and can switch each output circuit
+  off and on through a solid-state switch, on a schedule, on a failed ping or by hand. Front display, web interface,
+  REST API and SNMP over Ethernet; IN and OUT nrgNET jacks link it to further panels. Vertical dual-stud inputs
+  and screw terminal-block outputs. Two isolated sides, each fed at up to 325 A and each distributing to eight plug-in
+  breaker positions of up to 60 A.'
+profile: power
+provenance:
+  method:
+    confidence: drawing
+    note: THE nrgILS IS THE CTRL FRONT ON A DEEPER CHASSIS WITH ITS OWN REAR CENTRE. the 300CB08/nrg300CB08/nrgILS300CB08
+      installation guide 149722-2 A9 covers the nrgILS beside the 300CB08 and the nrg300CB08, and captions its controller
+      front, Fig. 3-2, and its plain rear, Fig. 3-7, for the nrgILS too. the nrgILS300CB08 datasheet (08.10.26 v.5)
+      photographs the front and agrees with Fig. 3-2 in every feature, so the front, its legends and its parts are
+      amphenol-ns/nrg300cb08-ctrl's. Its rear photograph shows a centre block Fig. 3-7 does not draw, and the guide's
+      own nrgILS bottom view, Fig. 3-12, is 42.4 deeper than the 300CB08's; both are modelled from those, and Fig.
+      3-7 is not used for the centre block. the nrgILS controller configuration/user guide 155376 is a software
+      guide and supplies only behaviour.
+  chassis:
+    confidence: drawing
+    note: '431.8 wide and 43.9 high as the 300CB08. THE DEPTH IS 373.2, read off the nrgILS bottom view, Fig. 3-12
+      (lower), which dimensions the panel 387.9 (15.27 inch) overall: the drawing is 1.19 px/mm on both axes (514
+      px across the 431.8 body, 461 px down the 387.9), and less the 14.7 the front guards stand proud, as on the
+      300CB08''s own drawing above it, the chassis is 373.2. The extra 42.4 is all in the bottom pan; the rear terminal
+      band measures the same on both drawings. THE SPECIFICATION TABLES DISAGREE: the installation guide gives the
+      nrgILS300CB08 13.6 inch (346), the same row as the 300CB08 (gap depth).'
+  ears:
+    confidence: drawing
+    note: NOT DRAWN. The nrgILS datasheet gives 19 inch mounting brackets as included with the panel and 23 inch
+      brackets as sold separately (its dimension rows); both bolt to the sides. Fig. 3-1 dimensions them at 482.6
+      and 584.2 over the body.
+  front:
+    confidence: drawing
+    note: 'The breaker cells and thumbscrews are the 300CB08. THE CENTRE PANEL IS THE CONTROLLER ONE, measured on
+      Fig. 3-2, the embedded 1188 x 258 image on page 38, at the same 1.9685 px/mm: two RJ45 openings 14.7 wide
+      either side of a display window 24.9 by 7.6, a small round button under the window, the two switch slots where
+      the plain panel has them but 1.0 higher, five lamp holes 1.3 higher, and the card slot. What is printed comes
+      from Fig. 2-14, which letters MGMT, an address above it, LAN, RESET, 1 and 8 at each slot, nrg over the centre
+      lamp and the voltage at the lower left. That figure shows no maker name and no model on this face, and none
+      is printed here. Legend positions are read off that figure by eye. THE ADDRESS ABOVE MGMT IS NOT DRAWN: the
+      face prints the controller''s factory default management address, a private (RFC 1918) address, centred over
+      the jack about 3.9 from the top edge, and the repository''s private-address gate keeps such addresses out
+      of tracked files. Its place is left blank.'
+  lamps:
+    confidence: drawing
+    note: 'Five lamps: A PWR, A ALM, nrg, B ALM, B PWR. PWR is green with its feed present and ALM red on an alarm,
+      as on the plain panel. The nrg lamp is the controller: the controller guide says the Identify button blinks
+      it; the installation guide gives off, red, green and flashing red for the older nrg300CB08 in terms of nrgNET
+      power, which these panels do not take. Red, green and a blink are recorded and no more. The nrgILS datasheet
+      close-up shows the PWR lamps white-blue rather than green and the designation card slot glowing; a lit photograph
+      at that size cannot separate lamp colour from white balance and reflection, so nothing is changed for it.'
+  rear:
+    confidence: drawing
+    note: 'The plain rear of the 300CB08 (Fig. 3-6, at 3.2006 px/mm) with the nrgILS centre block where the passive
+      panel has its alarm card. THE CENTRE BLOCK IS NOT FIG. 3-7: that figure, captioned for the nrgILS beside the
+      nrgSMART panels, draws five-way nrgNET headers and two probe jacks, while the guide''s own specifications
+      give ILS panels a removable RJ45 nrgNET connector and the nrgILS datasheet photographs two stacked RJ45 jacks
+      under an nrgNET legend. See amphenol-ns/nrg-ils-rear-block@1 for how little of it could be measured.'
+  breaker-ratings:
+    confidence: datasheet
+    note: ONE MODULE CARRIES ELEVEN RATINGS AS A FIELD. The datasheet sells breakers from 2 A to 60 A as eleven
+      part numbers that differ in nothing but the figure printed on the handle, so they are one part with a `rating`
+      field, set per position in a configuration. Each breaker ships with a touch guard seated on it, a separate
+      part that a configuration can take off. The populated example is an invented load to show the field working;
+      the vendor publishes no standard fill.
+  ratings:
+    confidence: datasheet
+    note: The nrgILS datasheet gives the maximum input load as 325A @45 C per panel; the installation guide that
+      covers the nrgILS prints the same row with its de-rating to 200 A at 70 C. That is what `operating-temp` carries.
+  front-cover:
+    confidence: drawing
+    note: 'THE FRONT FACE IS A REMOVABLE COVER. The guide has a procedure for it (section 2.2.7): two thumbscrews
+      release a bar that spans the front, with sixteen openings the breaker guards show through and the lamps, switch
+      slots and card slot in its centre. It is drawn as the panel, not as a part, because the panel is never seen
+      without it in service and the breakers, not the cover, are what a position holds. The slot under the lamps
+      is the designation card holder the datasheet lists.'
+  lifecycle:
+    confidence: estimated
+    note: searched 2026-10-07 for an end-of-life, end-of-sale or discontinuation notice for the nrgILS300CB08 and
+      found none; the vendor product page listed it as current at intake, 2026-10-05.
+  rear-cover:
+    confidence: datasheet
+    note: NOT DRAWN. A clear polycarbonate cover closes the whole rear over the input and output terminals (datasheet,
+      Primary Features; guide Fig. 2-20). It is transparent and everything behind it is what the rear view shows.
+  envelope-faces:
+    confidence: drawing
+    note: 'Top, bottom, left and right are sized from the chassis. THE BOTTOM IS RE-READ off the nrgILS bottom view,
+      Fig. 3-12 (lower), at 1.19 px/mm, origin the rear edge as on the 300CB08: the same four side fields, the rear
+      pair 143.8 deep and the front pair 86.7, and a centre column the 300CB08 lacks, 32.8 wide, in two runs either
+      side of a screw. The two ground bolts sit at the head of that column, 216.2 from the left on their centres,
+      drawn on the stated 5/8 inch centres. The top keeps the 300CB08''s two estimated side fields, lengthened by
+      the extra depth. The sides take the 300CB08''s readings off its side view, Fig. 3-4, which the guide does
+      not repeat for the nrgILS: the four bracket holes are placed from the front and the two-bolt ground landing
+      from the rear, where the nrgILS bottom view shows the side lug within 5 of its 300CB08 position.'
+  ground-stud-size:
+    confidence: datasheet
+    note: 'the installation guide''s specifications give the earth ground terminals as three sets of 1/4-20 threaded
+      holes on 5/8 inch centres, bolted with washers to 50 in-lb, for a dual-hole compression lug on #6 to #1 AWG
+      wire; its description says they take either a dual-hole or a single-hole lug and that only one ground connection
+      is required: the `stud-size` of all six ground placements, two on each side and two on the bottom.'
+  monitoring:
+    confidence: datasheet
+    note: The nrgILS measures feed and per-circuit voltage and current (voltage to +/-0.1 V from 20 to 60 V; current
+      +/-5 % and +/-0.2 A) and reads an analog nrgTEMP probe and an I2C nrgILSTEMP temperature and humidity probe
+      (the nrgILS300CB08 datasheet (08.10.26 v.5); the nrgILS controller configuration/user guide 155376, section
+      6.1). Each output passes through a solid-state switch the software can open, which a DIP switch per circuit
+      overrides ON (the 300CB08/nrg300CB08/nrgILS300CB08 installation guide 149722-2 A9, step 21; the nrgILS controller
+      configuration/user guide 155376, section 6.3). NO DOCUMENT STATES WHAT THE PANEL DRAWS, so `power-max-w` is
+      not given (gap panel-draw).
+  network:
+    confidence: datasheet
+    note: 'THE DATASHEET LISTS ONE ETHERNET CONNECTION, 10/100/1000 WITH PoE AND IPv4/IPv6; the front carries two
+      jacks, MGMT and LAN, in Fig. 3-2 and in both datasheet photographs. Which jack the datasheet means, what the
+      other does on this firmware, and whether PoE powers the controller or is offered on the port, no document
+      held says (gaps ethernet-ports, poe-role). Both are recorded as the same gigabit jack. Both jacks are turned
+      180: Fig. 3-2 draws their lamp windows at the top, and the datasheet close-up agrees. The address printed
+      above MGMT is not drawn, as on amphenol-ns/nrg300cb08-ctrl.'
+  display:
+    confidence: datasheet
+    note: the datasheet calls it an LCD; its close-up shows the same two-line black and white display, white text
+      on black, as the nrgSMART controller, so amphenol-ns/nrg-oled@1 is reused. The datasheet sells a replacement
+      LCD/carrier board with SOM, 090-1000-0011. The RESET button under it is named on the face and described nowhere.
+attrs:
+  physical:
+    weight-empty-kg: 6.4
+    weight-configured-kg: 8.66
+    weight-configured-scope: populated, 19.1 lb in the nrgILS datasheet; unpopulated is 14.1 lb
+    overall-mm: '431.8 x 44 x 387.9 without brackets: 387.9 is the dimension on the nrgILS bottom view, Fig. 3-12;
+      the specification tables give 346 (gap depth)'
+    mounting: 19 inch brackets included; 23 inch brackets sold separately
+  power:
+    input-voltage: -48 VDC nominal (gap input-voltage)
+    input-dc: dual feed; maximum input load 325 A at 45 C per panel, de-rated to 200 A at 70 C; input wire 2/0 AWG
+      to 350 MCM
+    short-circuit-withstand-a: 5000
+    output-breaker-max: 60 A single-pole; the UL rating holds to 48 A continuous per output
+    input-interrupt-max: 125 percent of the panel rating
+  thermal:
+    cooling: passive, perforated lid and base
+  environmental:
+    operating-temp: to 70 C - 325 A per panel at 45 C, de-rated to 200 A at 70 C; no lower limit is stated
+  management:
+    interfaces: HTTPS web interface, REST API, SNMP v1, v2c and v3, SNTP, syslog; IPv4 and IPv6
+    alarm-contacts: Form C relay per side, 2 A at 30 VDC and 0.6 A at 60 VDC, on wire-wrap terminals
+  compliance:
+    safety: UL Listed
+    nebs: Level 3
+  lifecycle:
+    eol: none-announced
+  features:
+    load-shedding: 'per-circuit solid-state switching under software control: scheduled on/off, power cycle after
+      failed pings, manual override; a DIP switch per circuit forces it on'
+    monitoring: feed and per-circuit voltage and current; one analog (nrgTEMP) and one digital I2C (nrgILSTEMP)
+      temperature probe
+    ethernet: one Ethernet connection, 10/100/1000 with PoE, in the datasheet (gap ethernet-ports)
+chassis:
+  width: 431.8
+  height: 43.9
+  depth: 373.2
+  ru: 1
+  color: '#e6e4de'
+  airflow: passive
+  weight-kg: 6.4
+gaps:
+- what: input-polarity
+  scope:
+  - rear
+  reason: vendor-silent
+  note: 'each feed is two stud terminals, one BATT and one RTN, and no drawing or sentence held says which is the
+    outer one: the input-lug figure of the guide (Fig. 2-7) carries no legend, and its rear photograph prints BATT
+    and RTN beside the output rows only. Each side is one part, `input-a` and `input-b`, whose two terminals are
+    `terminal-1` and `terminal-2` by position, not by polarity.'
+  wanted: a rear photograph that resolves the input legends, or the panel itself.
+- what: display-characters
+  scope:
+  - front
+  reason: vendor-silent
+  note: the nrgSMART controller datasheet prints its display as 2-line, Xx characters, with the count left blank,
+    and the nrgILS datasheet calls this one an LCD and gives no count. Forty is the estimate amphenol-ns/nrg-oled@1
+    carries, from one photograph of the nrgSMART display.
+  wanted: the display part or its character count.
+- what: reset-button
+  scope:
+  - front
+  reason: vendor-silent
+  note: the face letters a RESET button and no document says what a press does; searched the guides and release
+    notes for reset, press and factory.
+  wanted: the reset procedure.
+- what: depth
+  scope:
+  - bottom
+  - left
+  - right
+  - top
+  reason: sources-disagree
+  note: Fig. 3-12 dimensions the nrgILS bottom view 387.9 (15.27 inch) overall, 42.4 more than the 300CB08 view
+    above it; the specification tables of the same guide give the nrgILS300CB08 13.6 inch (346), the 300CB08's row
+    repeated. The model carries the drawing, 373.2 of chassis.
+  wanted: a dimensioned nrgILS side view, or the panel itself.
+- what: input-voltage
+  scope:
+  - front
+  reason: sources-disagree
+  note: the nrgILS datasheet gives -48 VDC alone; the face it photographs prints +/-12/24/48 V, the nrgSMART legend.
+    The model carries the datasheet and draws the face as printed.
+  wanted: the vendor's voltage range for the nrgILS controller.
+- what: ethernet-ports
+  scope:
+  - network
+  reason: sources-disagree
+  note: the datasheet lists one Ethernet connection, 10/100/1000 with PoE; the face has MGMT and LAN jacks in Fig.
+    3-2 and both datasheet photographs. The nrgils controller configuration/user guide 155376 configures one LAN
+    and says nothing of MGMT.
+  wanted: which jack is the network connection and what the other one does.
+- what: poe-role
+  scope:
+  - network
+  reason: vendor-silent
+  note: 'the datasheet says POE and nothing more: not whether the controller can be powered from it or offers power
+    on it, nor the class.'
+  wanted: the PoE role and class.
+- what: panel-draw
+  scope:
+  - front
+  reason: vendor-silent
+  note: neither the nrgILS datasheet, the installation guide nor the configuration guide states what the controller
+    and its circuit switches draw; searched for watt, mA and consumption.
+  wanted: the panel's own draw at -48 V.
+- what: rear-block
+  scope:
+  - rear
+  reason: needs-drawing
+  note: the nrgILS rear centre is seen only in the datasheet's 790 px three-quarter photograph, where the plate
+    is about 65 px across; every position in amphenol-ns/nrg-ils-rear-block@1 is a fraction by eye.
+  wanted: a face-on rear drawing or photograph of the nrgILS centre block.
+- what: rear-headers
+  scope:
+  - rear
+  reason: vendor-silent
+  note: three small white headers under the probe jack are named by no document; probably the two alarm outputs
+    and the I2C probe, in an unknown order.
+  wanted: the rear legends or a pinout.
+groups:
+  breakers-a:
+    term: Position
+    role: traffic
+    index-origin: 1
+    description: side A breaker positions, numbered 1 to 8 left to right
+  breakers-b:
+    term: Position
+    role: traffic
+    index-origin: 1
+    description: side B breaker positions; the panel prints POS 1 at the centre end and POS 8 at the right
+  status:
+    term: LED
+    role: indicator
+    index-origin: 1
+  alarm-enable:
+    term: Switch
+    role: management
+    index-origin: 1
+    description: one eight-way DIP switch per side, a switch per breaker position of the same number; on this panel
+      a switch UP forces its circuit on and out of software control; and the controller RESET button
+  cover:
+    term: Screw
+    role: furniture
+    index-origin: 1
+  outputs-a:
+    term: Output
+    role: traffic
+    index-origin: 1
+  outputs-b:
+    term: Output
+    role: traffic
+    index-origin: 1
+  feeds:
+    term: Input
+    role: service
+    index-origin: 1
+    description: one feed per side, A and B, each a BATT and an RTN stud terminal; which terminal is which is a
+      recorded gap
+  alarms:
+    term: Alarm
+    role: management
+    index-origin: 1
+    description: 'the rear centre block: nrgNET IN and OUT, a probe jack and three unnamed headers'
+  grounding:
+    term: Ground
+    role: furniture
+    index-origin: 1
+  network:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs:
+      media: rj45
+      speed: 1g
+    description: the controller network jacks, MGMT and LAN; the datasheet gives one Ethernet connection at 10/100/1000
+      with PoE and does not say which
+views:
+  front:
+    size:
+      w: 431.8
+      h: 43.9
+    panel:
+      decor:
+      - at:
+        - 0
+        - 0
+        size:
+        - 431.8
+        - 43.9
+        fill: '#e6e4de'
+      - at:
+        - 13.2
+        - 1.5
+        size:
+        - 158.5
+        - 41.1
+        fill: '#0e0f10'
+      - at:
+        - 260.1
+        - 1.5
+        size:
+        - 158.5
+        - 41.1
+        fill: '#0e0f10'
+      - at:
+        - 185.9
+        - 35.9
+        size:
+        - 60.0
+        - 1.6
+        fill: '#3a3c3e'
+    silkscreen:
+    - at:
+      - 6.4
+      - 10.5
+      text: A
+      font-size: 7.5
+      anchor: middle
+      for: chassis
+      fill: '#2b2d30'
+    - at:
+      - 6.4
+      - 31.0
+      text: 325A
+      font-size: 1.6
+      anchor: middle
+      for: chassis
+      fill: '#2b2d30'
+    - at:
+      - 6.4
+      - 33.0
+      text: INPUT
+      font-size: 1.6
+      anchor: middle
+      for: chassis
+      fill: '#2b2d30'
+    - at:
+      - 6.4
+      - 40.5
+      text: POS 1
+      font-size: 1.8
+      anchor: middle
+      for: breaker-a1
+      fill: '#2b2d30'
+    - at:
+      - 425.4
+      - 10.5
+      text: B
+      font-size: 7.5
+      anchor: middle
+      for: chassis
+      fill: '#2b2d30'
+    - at:
+      - 425.4
+      - 31.0
+      text: 325A
+      font-size: 1.6
+      anchor: middle
+      for: chassis
+      fill: '#2b2d30'
+    - at:
+      - 425.4
+      - 33.0
+      text: INPUT
+      font-size: 1.6
+      anchor: middle
+      for: chassis
+      fill: '#2b2d30'
+    - at:
+      - 425.4
+      - 40.5
+      text: POS 8
+      font-size: 1.8
+      anchor: middle
+      for: breaker-b8
+      fill: '#2b2d30'
+    - at:
+      - 177.3
+      - 11.66
+      text: MGMT
+      font-size: 1.5
+      anchor: middle
+      for: mgmt
+      fill: '#2b2d30'
+    - at:
+      - 254.6
+      - 11.66
+      text: LAN
+      font-size: 1.5
+      anchor: middle
+      for: lan
+      fill: '#2b2d30'
+    - at:
+      - 216.3
+      - 20.73
+      text: RESET
+      font-size: 1.4
+      anchor: start
+      for: reset
+      fill: '#2b2d30'
+    - at:
+      - 184.4
+      - 23.2
+      text: '1'
+      font-size: 2.0
+      anchor: middle
+      for: dip-a
+      fill: '#2b2d30'
+    - at:
+      - 209.4
+      - 23.2
+      text: '8'
+      font-size: 2.0
+      anchor: middle
+      for: dip-a
+      fill: '#2b2d30'
+    - at:
+      - 222.5
+      - 23.2
+      text: '1'
+      font-size: 2.0
+      anchor: middle
+      for: dip-b
+      fill: '#2b2d30'
+    - at:
+      - 247.5
+      - 23.2
+      text: '8'
+      font-size: 2.0
+      anchor: middle
+      for: dip-b
+      fill: '#2b2d30'
+    - at:
+      - 216.2
+      - 26.9
+      text: nrg
+      font-size: 1.6
+      anchor: middle
+      for: led-nrg
+      fill: '#2b2d30'
+    - id: dc-a
+      at:
+      - 183.5
+      - 29.15
+      path: M 0 0 H 3.0 M 0 1.1 H 0.8 M 1.1 1.1 H 1.9 M 2.2 1.1 H 3.0
+      stroke-width: 0.35
+      for: led-a-pwr
+      fill: '#2b2d30'
+    - id: alm-a
+      at:
+      - 197.2
+      - 28.05
+      path: M 0 0 L 1.9 3.3 H -1.9 Z M 0 1.1 V 2.2 M 0 2.6 V 2.75
+      stroke-width: 0.35
+      for: led-a-alm
+      fill: '#2b2d30'
+    - id: alm-b
+      at:
+      - 235.2
+      - 28.05
+      path: M 0 0 L 1.9 3.3 H -1.9 Z M 0 1.1 V 2.2 M 0 2.6 V 2.75
+      stroke-width: 0.35
+      for: led-b-alm
+      fill: '#2b2d30'
+    - id: dc-b
+      at:
+      - 245.9
+      - 29.15
+      path: M 0 0 H 3.0 M 0 1.1 H 0.8 M 1.1 1.1 H 1.9 M 2.2 1.1 H 3.0
+      stroke-width: 0.35
+      for: led-b-pwr
+      fill: '#2b2d30'
+    - at:
+      - 179.6
+      - 37.4
+      text: ±12/24/48
+      font-size: 1.6
+      anchor: middle
+      for: chassis
+      fill: '#2b2d30'
+    - at:
+      - 178.4
+      - 39.6
+      text: V
+      font-size: 1.6
+      anchor: middle
+      for: chassis
+      fill: '#2b2d30'
+    - id: dc-rating
+      at:
+      - 179.4
+      - 38.6
+      path: M 0 0 H 2.2 M 0 0.8 H 0.6 M 0.8 0.8 H 1.4 M 1.6 0.8 H 2.2
+      stroke-width: 0.25
+      for: chassis
+      fill: '#2b2d30'
+    - id: esd-mark
+      at:
+      - 254.5
+      - 36.4
+      path: M 0 0 L 2.2 3.8 H -2.2 Z
+      stroke-width: 0.35
+      for: chassis
+      fill: '#2b2d30'
+    components:
+      bays:
+      - id: breaker-a1
+        at:
+        - 14.2
+        - 2.5
+        size:
+          w: 17.8
+          h: 39.1
+        accepts:
+        - amphenol-ns/breaker-1ru@1
+        - amphenol-ns/breaker-blank-1ru@1
+        default: amphenol-ns/breaker-blank-1ru@1
+        group: breakers-a
+        rel-pos: 1
+      - id: breaker-a2
+        at:
+        - 34.01
+        - 2.5
+        size:
+          w: 17.8
+          h: 39.1
+        accepts:
+        - amphenol-ns/breaker-1ru@1
+        - amphenol-ns/breaker-blank-1ru@1
+        default: amphenol-ns/breaker-blank-1ru@1
+        group: breakers-a
+        rel-pos: 2
+      - id: breaker-a3
+        at:
+        - 53.82
+        - 2.5
+        size:
+          w: 17.8
+          h: 39.1
+        accepts:
+        - amphenol-ns/breaker-1ru@1
+        - amphenol-ns/breaker-blank-1ru@1
+        default: amphenol-ns/breaker-blank-1ru@1
+        group: breakers-a
+        rel-pos: 3
+      - id: breaker-a4
+        at:
+        - 73.63
+        - 2.5
+        size:
+          w: 17.8
+          h: 39.1
+        accepts:
+        - amphenol-ns/breaker-1ru@1
+        - amphenol-ns/breaker-blank-1ru@1
+        default: amphenol-ns/breaker-blank-1ru@1
+        group: breakers-a
+        rel-pos: 4
+      - id: breaker-a5
+        at:
+        - 93.44
+        - 2.5
+        size:
+          w: 17.8
+          h: 39.1
+        accepts:
+        - amphenol-ns/breaker-1ru@1
+        - amphenol-ns/breaker-blank-1ru@1
+        default: amphenol-ns/breaker-blank-1ru@1
+        group: breakers-a
+        rel-pos: 5
+      - id: breaker-a6
+        at:
+        - 113.25
+        - 2.5
+        size:
+          w: 17.8
+          h: 39.1
+        accepts:
+        - amphenol-ns/breaker-1ru@1
+        - amphenol-ns/breaker-blank-1ru@1
+        default: amphenol-ns/breaker-blank-1ru@1
+        group: breakers-a
+        rel-pos: 6
+      - id: breaker-a7
+        at:
+        - 133.06
+        - 2.5
+        size:
+          w: 17.8
+          h: 39.1
+        accepts:
+        - amphenol-ns/breaker-1ru@1
+        - amphenol-ns/breaker-blank-1ru@1
+        default: amphenol-ns/breaker-blank-1ru@1
+        group: breakers-a
+        rel-pos: 7
+      - id: breaker-a8
+        at:
+        - 152.87
+        - 2.5
+        size:
+          w: 17.8
+          h: 39.1
+        accepts:
+        - amphenol-ns/breaker-1ru@1
+        - amphenol-ns/breaker-blank-1ru@1
+        default: amphenol-ns/breaker-blank-1ru@1
+        group: breakers-a
+        rel-pos: 8
+      - id: breaker-b1
+        at:
+        - 261.1
+        - 2.5
+        size:
+          w: 17.8
+          h: 39.1
+        accepts:
+        - amphenol-ns/breaker-1ru@1
+        - amphenol-ns/breaker-blank-1ru@1
+        default: amphenol-ns/breaker-blank-1ru@1
+        group: breakers-b
+        rel-pos: 1
+      - id: breaker-b2
+        at:
+        - 280.91
+        - 2.5
+        size:
+          w: 17.8
+          h: 39.1
+        accepts:
+        - amphenol-ns/breaker-1ru@1
+        - amphenol-ns/breaker-blank-1ru@1
+        default: amphenol-ns/breaker-blank-1ru@1
+        group: breakers-b
+        rel-pos: 2
+      - id: breaker-b3
+        at:
+        - 300.72
+        - 2.5
+        size:
+          w: 17.8
+          h: 39.1
+        accepts:
+        - amphenol-ns/breaker-1ru@1
+        - amphenol-ns/breaker-blank-1ru@1
+        default: amphenol-ns/breaker-blank-1ru@1
+        group: breakers-b
+        rel-pos: 3
+      - id: breaker-b4
+        at:
+        - 320.53
+        - 2.5
+        size:
+          w: 17.8
+          h: 39.1
+        accepts:
+        - amphenol-ns/breaker-1ru@1
+        - amphenol-ns/breaker-blank-1ru@1
+        default: amphenol-ns/breaker-blank-1ru@1
+        group: breakers-b
+        rel-pos: 4
+      - id: breaker-b5
+        at:
+        - 340.34
+        - 2.5
+        size:
+          w: 17.8
+          h: 39.1
+        accepts:
+        - amphenol-ns/breaker-1ru@1
+        - amphenol-ns/breaker-blank-1ru@1
+        default: amphenol-ns/breaker-blank-1ru@1
+        group: breakers-b
+        rel-pos: 5
+      - id: breaker-b6
+        at:
+        - 360.15
+        - 2.5
+        size:
+          w: 17.8
+          h: 39.1
+        accepts:
+        - amphenol-ns/breaker-1ru@1
+        - amphenol-ns/breaker-blank-1ru@1
+        default: amphenol-ns/breaker-blank-1ru@1
+        group: breakers-b
+        rel-pos: 6
+      - id: breaker-b7
+        at:
+        - 379.96
+        - 2.5
+        size:
+          w: 17.8
+          h: 39.1
+        accepts:
+        - amphenol-ns/breaker-1ru@1
+        - amphenol-ns/breaker-blank-1ru@1
+        default: amphenol-ns/breaker-blank-1ru@1
+        group: breakers-b
+        rel-pos: 7
+      - id: breaker-b8
+        at:
+        - 399.77
+        - 2.5
+        size:
+          w: 17.8
+          h: 39.1
+        accepts:
+        - amphenol-ns/breaker-1ru@1
+        - amphenol-ns/breaker-blank-1ru@1
+        default: amphenol-ns/breaker-blank-1ru@1
+        group: breakers-b
+        rel-pos: 8
+      placements:
+      - id: thumbscrew-left
+        ref: amphenol-ns/cover-thumbscrew@1
+        at:
+        - 1.55
+        - 17.35
+        group: cover
+        rel-pos: 1
+      - id: thumbscrew-right
+        ref: amphenol-ns/cover-thumbscrew@1
+        at:
+        - 420.55
+        - 17.35
+        group: cover
+        rel-pos: 2
+      - id: mgmt
+        ref: common/rj45-eth@1
+        at:
+        - 181.4
+        - 4.6
+        rotate: 180
+        group: network
+        rel-pos: 1
+        attrs:
+          media: rj45
+          speed: 1g
+          role: mgmt
+      - id: lan
+        ref: common/rj45-eth@1
+        at:
+        - 234.6
+        - 4.6
+        rotate: 180
+        group: network
+        rel-pos: 2
+        attrs:
+          media: rj45
+          speed: 1g
+          role: mgmt
+      - id: display
+        for: chassis
+        ref: amphenol-ns/nrg-oled@1
+        at:
+        - 203.7
+        - 6.9
+        group: status
+        rel-pos: 6
+      - id: reset
+        for: chassis
+        ref: common/reset-button@1
+        at:
+        - 210.1
+        - 18.3
+        group: alarm-enable
+        rel-pos: 3
+      - id: dip-a
+        for: chassis
+        ref: amphenol-ns/alarm-dip-8@1
+        at:
+        - 185.9
+        - 20.3
+        group: alarm-enable
+        rel-pos: 1
+      - id: dip-b
+        for: chassis
+        ref: amphenol-ns/alarm-dip-8@1
+        at:
+        - 224.0
+        - 20.3
+        group: alarm-enable
+        rel-pos: 2
+      - id: led-a-pwr
+        for: chassis
+        ref: common/led-indicator@1
+        at:
+        - 188.8
+        - 27.7
+        group: status
+        rel-pos: 1
+        states:
+        - 'off'
+        - name: ok
+          color: '#22c55e'
+      - id: led-a-alm
+        for: chassis
+        ref: common/led-indicator@1
+        at:
+        - 201.5
+        - 27.7
+        group: status
+        rel-pos: 2
+        states:
+        - 'off'
+        - name: fault
+          color: '#ef4444'
+      - id: led-nrg
+        for: chassis
+        ref: common/led-indicator@1
+        at:
+        - 214.2
+        - 27.7
+        group: status
+        rel-pos: 5
+        states:
+        - 'off'
+        - name: fault
+          color: '#ef4444'
+        - name: ok
+          color: '#22c55e'
+        - name: locate
+          color: '#22c55e'
+          behavior: blinking
+      - id: led-b-alm
+        for: chassis
+        ref: common/led-indicator@1
+        at:
+        - 226.9
+        - 27.7
+        group: status
+        rel-pos: 3
+        states:
+        - 'off'
+        - name: fault
+          color: '#ef4444'
+      - id: led-b-pwr
+        for: chassis
+        ref: common/led-indicator@1
+        at:
+        - 239.6
+        - 27.7
+        group: status
+        rel-pos: 4
+        states:
+        - 'off'
+        - name: ok
+          color: '#22c55e'
+  rear:
+    size:
+      w: 431.8
+      h: 43.9
+    panel:
+      decor:
+      - at:
+        - 0
+        - 0
+        size:
+        - 431.8
+        - 43.9
+        fill: '#e6e4de'
+      - at:
+        - 65.6
+        - 0.5
+        size:
+        - 129.7
+        - 42.9
+        fill: '#1b1d20'
+      - at:
+        - 236.5
+        - 0.5
+        size:
+        - 129.7
+        - 42.9
+        fill: '#1b1d20'
+    silkscreen:
+    - at:
+      - 79.88
+      - 3.6
+      text: '8'
+      font-size: 2.2
+      anchor: middle
+      for: output-b8
+    - at:
+      - 94.62
+      - 3.6
+      text: '7'
+      font-size: 2.2
+      anchor: middle
+      for: output-b7
+    - at:
+      - 109.38
+      - 3.6
+      text: '6'
+      font-size: 2.2
+      anchor: middle
+      for: output-b6
+    - at:
+      - 124.12
+      - 3.6
+      text: '5'
+      font-size: 2.2
+      anchor: middle
+      for: output-b5
+    - at:
+      - 138.88
+      - 3.6
+      text: '4'
+      font-size: 2.2
+      anchor: middle
+      for: output-b4
+    - at:
+      - 153.62
+      - 3.6
+      text: '3'
+      font-size: 2.2
+      anchor: middle
+      for: output-b3
+    - at:
+      - 168.38
+      - 3.6
+      text: '2'
+      font-size: 2.2
+      anchor: middle
+      for: output-b2
+    - at:
+      - 183.12
+      - 3.6
+      text: '1'
+      font-size: 2.2
+      anchor: middle
+      for: output-b1
+    - at:
+      - 250.78
+      - 3.6
+      text: '8'
+      font-size: 2.2
+      anchor: middle
+      for: output-a8
+    - at:
+      - 265.52
+      - 3.6
+      text: '7'
+      font-size: 2.2
+      anchor: middle
+      for: output-a7
+    - at:
+      - 280.27
+      - 3.6
+      text: '6'
+      font-size: 2.2
+      anchor: middle
+      for: output-a6
+    - at:
+      - 295.02
+      - 3.6
+      text: '5'
+      font-size: 2.2
+      anchor: middle
+      for: output-a5
+    - at:
+      - 309.77
+      - 3.6
+      text: '4'
+      font-size: 2.2
+      anchor: middle
+      for: output-a4
+    - at:
+      - 324.52
+      - 3.6
+      text: '3'
+      font-size: 2.2
+      anchor: middle
+      for: output-a3
+    - at:
+      - 339.27
+      - 3.6
+      text: '2'
+      font-size: 2.2
+      anchor: middle
+      for: output-a2
+    - at:
+      - 354.02
+      - 3.6
+      text: '1'
+      font-size: 2.2
+      anchor: middle
+      for: output-a1
+    - at:
+      - 192.7
+      - 13.6
+      text: BATT
+      font-size: 2.0
+      anchor: middle
+      rotate: 90
+      for: output-b1
+    - at:
+      - 192.7
+      - 30.2
+      text: RTN
+      font-size: 2.0
+      anchor: middle
+      rotate: 90
+      for: output-b1
+    - at:
+      - 239.2
+      - 13.6
+      text: BATT
+      font-size: 2.0
+      anchor: middle
+      rotate: 90
+      for: output-a8
+    - at:
+      - 239.2
+      - 30.2
+      text: RTN
+      font-size: 2.0
+      anchor: middle
+      rotate: 90
+      for: output-a8
+    components:
+      placements:
+      - id: input-b
+        ref: amphenol-ns/input-feed-studs@1
+        at:
+        - 0.2
+        - 1.45
+        group: feeds
+        rel-pos: 2
+      - id: input-a
+        ref: amphenol-ns/input-feed-studs@1
+        at:
+        - 367.5
+        - 1.45
+        group: feeds
+        rel-pos: 1
+      - id: output-b8
+        ref: amphenol-ns/output-terminal@1
+        at:
+        - 72.5
+        - 5.1
+        group: outputs-b
+        rel-pos: 8
+      - id: output-b7
+        ref: amphenol-ns/output-terminal@1
+        at:
+        - 87.25
+        - 5.1
+        group: outputs-b
+        rel-pos: 7
+      - id: output-b6
+        ref: amphenol-ns/output-terminal@1
+        at:
+        - 102.0
+        - 5.1
+        group: outputs-b
+        rel-pos: 6
+      - id: output-b5
+        ref: amphenol-ns/output-terminal@1
+        at:
+        - 116.75
+        - 5.1
+        group: outputs-b
+        rel-pos: 5
+      - id: output-b4
+        ref: amphenol-ns/output-terminal@1
+        at:
+        - 131.5
+        - 5.1
+        group: outputs-b
+        rel-pos: 4
+      - id: output-b3
+        ref: amphenol-ns/output-terminal@1
+        at:
+        - 146.25
+        - 5.1
+        group: outputs-b
+        rel-pos: 3
+      - id: output-b2
+        ref: amphenol-ns/output-terminal@1
+        at:
+        - 161.0
+        - 5.1
+        group: outputs-b
+        rel-pos: 2
+      - id: output-b1
+        ref: amphenol-ns/output-terminal@1
+        at:
+        - 175.75
+        - 5.1
+        group: outputs-b
+        rel-pos: 1
+      - id: output-a8
+        ref: amphenol-ns/output-terminal@1
+        at:
+        - 243.4
+        - 5.1
+        group: outputs-a
+        rel-pos: 8
+      - id: output-a7
+        ref: amphenol-ns/output-terminal@1
+        at:
+        - 258.15
+        - 5.1
+        group: outputs-a
+        rel-pos: 7
+      - id: output-a6
+        ref: amphenol-ns/output-terminal@1
+        at:
+        - 272.9
+        - 5.1
+        group: outputs-a
+        rel-pos: 6
+      - id: output-a5
+        ref: amphenol-ns/output-terminal@1
+        at:
+        - 287.65
+        - 5.1
+        group: outputs-a
+        rel-pos: 5
+      - id: output-a4
+        ref: amphenol-ns/output-terminal@1
+        at:
+        - 302.4
+        - 5.1
+        group: outputs-a
+        rel-pos: 4
+      - id: output-a3
+        ref: amphenol-ns/output-terminal@1
+        at:
+        - 317.15
+        - 5.1
+        group: outputs-a
+        rel-pos: 3
+      - id: output-a2
+        ref: amphenol-ns/output-terminal@1
+        at:
+        - 331.9
+        - 5.1
+        group: outputs-a
+        rel-pos: 2
+      - id: output-a1
+        ref: amphenol-ns/output-terminal@1
+        at:
+        - 346.65
+        - 5.1
+        group: outputs-a
+        rel-pos: 1
+      - id: monitor-block
+        ref: amphenol-ns/nrg-ils-rear-block@1
+        at:
+        - 196.5
+        - 0.5
+        group: alarms
+        rel-pos: 1
+  top:
+    size:
+      w: 431.8
+      h: 373.2
+    panel:
+      decor:
+      - at:
+        - 0
+        - 0
+        size:
+        - 431.8
+        - 373.2
+        fill: '#e6e4de'
+      - at:
+        - 9.0
+        - 20.0
+        size:
+        - 167.0
+        - 322.4
+        fill: '#d9d7d1'
+      - id: vent-top-left
+        at:
+        - 9.0
+        - 20.0
+        size:
+        - 167.0
+        - 322.4
+        fill: '#3a3c3e'
+        pattern: holes
+        pattern-pitch:
+        - 5.0
+        - 5.0
+        pattern-offset:
+        - 9.0
+        - 20.0
+        vent: 1.0
+        confidence: estimated
+        source: the lid is perforated in two fields either side of a solid centre strip in every product photograph;
+          extent, pitch and sheet thickness are not dimensioned in any view
+      - at:
+        - 255.8
+        - 20.0
+        size:
+        - 167.0
+        - 322.4
+        fill: '#d9d7d1'
+      - id: vent-top-right
+        at:
+        - 255.8
+        - 20.0
+        size:
+        - 167.0
+        - 322.4
+        fill: '#3a3c3e'
+        pattern: holes
+        pattern-pitch:
+        - 5.0
+        - 5.0
+        pattern-offset:
+        - 255.8
+        - 20.0
+        vent: 1.0
+        confidence: estimated
+        source: the lid is perforated in two fields either side of a solid centre strip in every product photograph;
+          extent, pitch and sheet thickness are not dimensioned in any view
+  bottom:
+    size:
+      w: 431.8
+      h: 373.2
+    panel:
+      decor:
+      - at:
+        - 0
+        - 0
+        size:
+        - 431.8
+        - 373.2
+        fill: '#e6e4de'
+      - at:
+        - 9.0
+        - 52.6
+        size:
+        - 167.0
+        - 143.8
+        fill: '#d9d7d1'
+      - id: vent-bottom-rear-left
+        at:
+        - 9.0
+        - 52.6
+        size:
+        - 167.0
+        - 143.8
+        fill: '#3a3c3e'
+        pattern: holes
+        pattern-pitch:
+        - 5.0
+        - 5.0
+        pattern-offset:
+        - 9.0
+        - 52.6
+        vent: 1.0
+        confidence: estimated
+        source: extent read off the nrgILS bottom view, Fig. 3-12 (lower), at 1.19 px/mm; hole pitch and sheet thickness
+          are not dimensioned
+      - at:
+        - 255.8
+        - 52.6
+        size:
+        - 167.0
+        - 143.8
+        fill: '#d9d7d1'
+      - id: vent-bottom-rear-right
+        at:
+        - 255.8
+        - 52.6
+        size:
+        - 167.0
+        - 143.8
+        fill: '#3a3c3e'
+        pattern: holes
+        pattern-pitch:
+        - 5.0
+        - 5.0
+        pattern-offset:
+        - 255.8
+        - 52.6
+        vent: 1.0
+        confidence: estimated
+        source: extent read off the nrgILS bottom view, Fig. 3-12 (lower), at 1.19 px/mm; hole pitch and sheet thickness
+          are not dimensioned
+      - at:
+        - 200.2
+        - 92.9
+        size:
+        - 32.8
+        - 58.0
+        fill: '#d9d7d1'
+      - id: vent-bottom-centre-rear
+        at:
+        - 200.2
+        - 92.9
+        size:
+        - 32.8
+        - 58.0
+        fill: '#3a3c3e'
+        pattern: holes
+        pattern-pitch:
+        - 5.0
+        - 5.0
+        pattern-offset:
+        - 200.2
+        - 92.9
+        vent: 1.0
+        confidence: estimated
+        source: extent read off the nrgILS bottom view, Fig. 3-12 (lower), at 1.19 px/mm; hole pitch and sheet thickness
+          are not dimensioned
+      - at:
+        - 200.2
+        - 179.6
+        size:
+        - 32.8
+        - 172.4
+        fill: '#d9d7d1'
+      - id: vent-bottom-centre-front
+        at:
+        - 200.2
+        - 179.6
+        size:
+        - 32.8
+        - 172.4
+        fill: '#3a3c3e'
+        pattern: holes
+        pattern-pitch:
+        - 5.0
+        - 5.0
+        pattern-offset:
+        - 200.2
+        - 179.6
+        vent: 1.0
+        confidence: estimated
+        source: extent read off the nrgILS bottom view, Fig. 3-12 (lower), at 1.19 px/mm; hole pitch and sheet thickness
+          are not dimensioned
+      - at:
+        - 9.0
+        - 265.3
+        size:
+        - 167.0
+        - 86.7
+        fill: '#d9d7d1'
+      - id: vent-bottom-front-left
+        at:
+        - 9.0
+        - 265.3
+        size:
+        - 167.0
+        - 86.7
+        fill: '#3a3c3e'
+        pattern: holes
+        pattern-pitch:
+        - 5.0
+        - 5.0
+        pattern-offset:
+        - 9.0
+        - 265.3
+        vent: 1.0
+        confidence: estimated
+        source: extent read off the nrgILS bottom view, Fig. 3-12 (lower), at 1.19 px/mm; hole pitch and sheet thickness
+          are not dimensioned
+      - at:
+        - 255.8
+        - 265.3
+        size:
+        - 167.0
+        - 86.7
+        fill: '#d9d7d1'
+      - id: vent-bottom-front-right
+        at:
+        - 255.8
+        - 265.3
+        size:
+        - 167.0
+        - 86.7
+        fill: '#3a3c3e'
+        pattern: holes
+        pattern-pitch:
+        - 5.0
+        - 5.0
+        pattern-offset:
+        - 255.8
+        - 265.3
+        vent: 1.0
+        confidence: estimated
+        source: extent read off the nrgILS bottom view, Fig. 3-12 (lower), at 1.19 px/mm; hole pitch and sheet thickness
+          are not dimensioned
+    components:
+      placements:
+      - id: ground-bottom-1
+        ref: common/ground-stud@1
+        at:
+        - 212.15
+        - 56.0
+        group: grounding
+        rel-pos: 1
+        attrs:
+          stud-size: 1/4-20
+      - id: ground-bottom-2
+        ref: common/ground-stud@1
+        at:
+        - 212.15
+        - 71.9
+        group: grounding
+        rel-pos: 2
+        attrs:
+          stud-size: 1/4-20
+  left:
+    size:
+      w: 373.2
+      h: 43.9
+    panel:
+      decor:
+      - at:
+        - 0
+        - 0
+        size:
+        - 373.2
+        - 43.9
+        fill: '#e6e4de'
+      - id: bracket-hole-1
+        at:
+        - 358.6
+        - 22.1
+        size:
+        - 7.0
+        - 7.0
+        fill: '#55585b'
+        rx: 3.5
+      - id: bracket-hole-2
+        at:
+        - 329.5
+        - 22.1
+        size:
+        - 7.0
+        - 7.0
+        fill: '#55585b'
+        rx: 3.5
+      - id: bracket-hole-3
+        at:
+        - 300.4
+        - 22.1
+        size:
+        - 7.0
+        - 7.0
+        fill: '#55585b'
+        rx: 3.5
+      - id: bracket-hole-4
+        at:
+        - 271.3
+        - 22.1
+        size:
+        - 7.0
+        - 7.0
+        fill: '#55585b'
+        rx: 3.5
+    components:
+      placements:
+      - id: ground-left-1
+        ref: common/ground-stud@1
+        at:
+        - 57.95
+        - 11.75
+        group: grounding
+        rel-pos: 5
+        attrs:
+          stud-size: 1/4-20
+      - id: ground-left-2
+        ref: common/ground-stud@1
+        at:
+        - 57.95
+        - 27.65
+        group: grounding
+        rel-pos: 6
+        attrs:
+          stud-size: 1/4-20
+      - id: ground-left-mark
+        ref: common/ground-symbol@1
+        at:
+        - 75.0
+        - 18.95
+        for: ground-left-1
+        group: grounding
+        rel-pos: 7
+  right:
+    size:
+      w: 373.2
+      h: 43.9
+    panel:
+      decor:
+      - at:
+        - 0
+        - 0
+        size:
+        - 373.2
+        - 43.9
+        fill: '#e6e4de'
+      - id: bracket-hole-1
+        at:
+        - 7.6
+        - 22.1
+        size:
+        - 7.0
+        - 7.0
+        fill: '#55585b'
+        rx: 3.5
+      - id: bracket-hole-2
+        at:
+        - 36.7
+        - 22.1
+        size:
+        - 7.0
+        - 7.0
+        fill: '#55585b'
+        rx: 3.5
+      - id: bracket-hole-3
+        at:
+        - 65.8
+        - 22.1
+        size:
+        - 7.0
+        - 7.0
+        fill: '#55585b'
+        rx: 3.5
+      - id: bracket-hole-4
+        at:
+        - 94.9
+        - 22.1
+        size:
+        - 7.0
+        - 7.0
+        fill: '#55585b'
+        rx: 3.5
+    components:
+      placements:
+      - id: ground-right-1
+        ref: common/ground-stud@1
+        at:
+        - 307.15
+        - 11.75
+        group: grounding
+        rel-pos: 3
+        attrs:
+          stud-size: 1/4-20
+      - id: ground-right-2
+        ref: common/ground-stud@1
+        at:
+        - 307.15
+        - 27.65
+        group: grounding
+        rel-pos: 4
+        attrs:
+          stud-size: 1/4-20
+      - id: ground-right-mark
+        ref: common/ground-symbol@1
+        at:
+        - 292.2
+        - 18.95
+        for: ground-right-1
+        group: grounding
+        rel-pos: 8
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The panel as it ships: no breakers, and a blanking cover over every position. Breakers are sold
+      separately.'
+    bays:
+      breaker-a1: amphenol-ns/breaker-blank-1ru@1
+      breaker-a2: amphenol-ns/breaker-blank-1ru@1
+      breaker-a3: amphenol-ns/breaker-blank-1ru@1
+      breaker-a4: amphenol-ns/breaker-blank-1ru@1
+      breaker-a5: amphenol-ns/breaker-blank-1ru@1
+      breaker-a6: amphenol-ns/breaker-blank-1ru@1
+      breaker-a7: amphenol-ns/breaker-blank-1ru@1
+      breaker-a8: amphenol-ns/breaker-blank-1ru@1
+      breaker-b1: amphenol-ns/breaker-blank-1ru@1
+      breaker-b2: amphenol-ns/breaker-blank-1ru@1
+      breaker-b3: amphenol-ns/breaker-blank-1ru@1
+      breaker-b4: amphenol-ns/breaker-blank-1ru@1
+      breaker-b5: amphenol-ns/breaker-blank-1ru@1
+      breaker-b6: amphenol-ns/breaker-blank-1ru@1
+      breaker-b7: amphenol-ns/breaker-blank-1ru@1
+      breaker-b8: amphenol-ns/breaker-blank-1ru@1
+    part-numbers:
+      nrgILS300CB08: {}
+  populated:
+    kind: example
+    description: All sixteen positions fitted with breakers behind their touch guards, as every product photograph
+      shows the panel, with an invented spread of ratings. An illustration, not an orderable bundle.
+    bays:
+      breaker-a1: amphenol-ns/breaker-1ru@1
+      breaker-a2: amphenol-ns/breaker-1ru@1
+      breaker-a3: amphenol-ns/breaker-1ru@1
+      breaker-a4: amphenol-ns/breaker-1ru@1
+      breaker-a5: amphenol-ns/breaker-1ru@1
+      breaker-a6: amphenol-ns/breaker-1ru@1
+      breaker-a7: amphenol-ns/breaker-1ru@1
+      breaker-a8: amphenol-ns/breaker-1ru@1
+      breaker-b1: amphenol-ns/breaker-1ru@1
+      breaker-b2: amphenol-ns/breaker-1ru@1
+      breaker-b3: amphenol-ns/breaker-1ru@1
+      breaker-b4: amphenol-ns/breaker-1ru@1
+      breaker-b5: amphenol-ns/breaker-1ru@1
+      breaker-b6: amphenol-ns/breaker-1ru@1
+      breaker-b7: amphenol-ns/breaker-1ru@1
+      breaker-b8: amphenol-ns/breaker-1ru@1
+    bay-attrs:
+      breaker-a1:
+        rating: 60
+      breaker-a2:
+        rating: 60
+      breaker-a3:
+        rating: 50
+      breaker-a4:
+        rating: 40
+      breaker-a5:
+        rating: 30
+      breaker-a6:
+        rating: 30
+      breaker-a7:
+        rating: 20
+      breaker-a8:
+        rating: 10
+      breaker-b1:
+        rating: 60
+      breaker-b2:
+        rating: 60
+      breaker-b3:
+        rating: 50
+      breaker-b4:
+        rating: 40
+      breaker-b5:
+        rating: 30
+      breaker-b6:
+        rating: 30
+      breaker-b7:
+        rating: 20
+      breaker-b8:
+        rating: 10
+datasheet:
+  title: Amphenol Network Solutions nrgILS300CB08 nrgSMART Intelligent Load Shedding data sheet, 08.10.26 v.5
+  url: https://amphenol-ns.com/Assets/P_DS_nrgILS300CB08.pdf
+  sha256: b9014a52b892d2870d12acf091b237e31dffdbff777054fad70504d669900185
+references:
+- title: Amphenol Network Solutions 300CB08/nrg300CB08/nrgILS300CB08 Installation Guide, 149722-2 Rev A9, 3.26.2025
+  url: https://amphenol-ns.com/Assets/P_IG_300CB08.pdf
+  sha256: e2921793b28b30e92cda92b231cb2daec4b711c85acdc6b1644b8cb0e449ffd6
+- title: Amphenol Network Solutions nrgILS (GEN III) Controller Configuration/User Guide, 155376
+  url: https://amphenol-ns.com/Assets/ILS_155376.pdf
+  sha256: 50ac250fe64b444a7d222bad27d8af297544308db8034a7e75cdfae15a2dbafd
+- title: Sensata Airpax IAR/IUR/IER/CUR/CER 1U, 1RU hydraulic magnetic circuit protectors datasheet, 2020
+  url: https://www.sensata.com/sites/default/files/a/sensata-IAR-IUR-IER-CUR-CER-magnetic-circuit-protectors-datasheet.pdf
+  sha256: c99f911806c9ce7dbd4f86a8607e2d0dace04031c5993cc0c7051e307e77b41f

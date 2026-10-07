@@ -80,7 +80,7 @@ OLD_SHIFT = {"stud-tr": (0.0, 0.0), "stud-bl": (-15.3, 15.3), "stud-br": (0.0, 1
 # component's `parts:`: part -> (placements, devices).
 CENSUS = {
     "common/ground-lug@1": (63, 40),
-    "common/ground-stud@1": (59, 13),
+    "common/ground-stud@1": (65, 14),
     "juniper/mx-ground-stud@1": (10, 5),
     CASA: (1, 1),
 }
@@ -88,10 +88,11 @@ CENSUS = {
 UFI2 = {"ground-1": "M4", "ground-2": "M4"}
 # device -> {placement: the size its own documents state}. Every other
 # placement of the four parts states none.
-# THE NINE AMPHENOL PANELS STATE THE SAME SIZE FROM THE SAME DOCUMENT. The
+# THE TEN AMPHENOL PANELS STATE THE SAME SIZE FROM THE SAME DOCUMENT. The
 # connectorized (-SC, -C) and monitored (nrg300CB08-CTRL, -SENS, and their -SC
-# and -C) versions share the 300CB08's sides and bottom, and one installation
-# guide covers every version:
+# and -C) versions share the 300CB08's sides and bottom, the nrgILS300CB08 the
+# same landings on a deeper chassis, and one installation guide covers every
+# version:
 # its grounding specification, 1/4-20 threaded holes on 5/8 inch centres, is
 # not limited to a version the way its input rows are.
 AMPHENOL6 = {f"ground-{side}-{i}": "1/4-20"
@@ -106,6 +107,7 @@ STUD_SIZE = {
     "amphenol-ns/nrg300cb08-ctrl-sc": AMPHENOL6,
     "amphenol-ns/nrg300cb08-sens-c": AMPHENOL6,
     "amphenol-ns/nrg300cb08-sens-sc": AMPHENOL6,
+    "amphenol-ns/nrgils300cb08": AMPHENOL6,
     "casa/c40g": {"ground-studs-rear": "M6"},
     "edgecore/agr110": {"ground-right": "M5"},
     "edgecore/agr130": {"ground-right": "M5"},
@@ -337,8 +339,8 @@ def test_the_census_of_ground_stud_placements(placed):
     got = {ref: (n, len(devs)) for ref, (n, devs) in counts.items()}
     assert got == CENSUS
     assert all(n > 0 and d > 0 for n, d in got.values())
-    assert sum(n for n, _ in got.values()) == 133
-    assert len({where for where, _, _ in placed}) == 59
+    assert sum(n for n, _ in got.values()) == 139
+    assert len({where for where, _, _ in placed}) == 60
 
 
 @pytest.fixture(scope="module")
@@ -376,7 +378,7 @@ def test_every_single_stud_placement_is_a_slot_of_its_device_offering_the_lug(pl
         want = render_mod.seat_point(p["at"], s["size"], p.get("rotate"), list(s["axis"]))
         assert c["mate"] == pytest.approx(want, abs=EPS)
         seen += 1
-    assert seen == 132
+    assert seen == 138
 
 
 def test_the_only_turned_placements_are_turned_90(placed):
@@ -422,7 +424,7 @@ def test_stud_size_is_stated_where_a_document_states_it_and_nowhere_else(placed)
         if size is not None:
             got.setdefault(device, {})[p["id"]] = size
     assert got == STUD_SIZE
-    assert sum(len(v) for v in got.values()) == 104 and len(got) == 37
+    assert sum(len(v) for v in got.values()) == 110 and len(got) == 38
     # every device that states one says where it read it
     for device in STUD_SIZE:
         entry = _device(device)["provenance"]["ground-stud-size"]
