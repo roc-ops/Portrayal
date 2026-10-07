@@ -95,15 +95,17 @@ modelled cavity depth in front of the inlet's face:
 
 | plug | overall | nose | modelled cavity | nose left in front | stands off | stub ends |
 |---|---|---|---|---|---|---|
-| C13 | 64 | 18 MIN | 13.0 (estimated) | 5.0 | 51.0 | 81.0 |
-| C19 | 76 | 20 (MIN) | 15.0 (estimated) | 5.0 | 61.0 | 91.0 |
+| C13 | 64 | 18 MIN | 17.0 (drawing, #793) | 1.0 | 47.0 | 77.0 |
+| C19 | 76 | 20 (MIN) | 19.0 (estimated, #793) | 1.0 | 57.0 | 87.0 |
 | Saf-D-Grid | 80.5 | about 25.5 (scaled) | 17.0 (measured) | 8.5 | 63.5 | 93.5 |
 
 **The nose is longer than the modelled cavity on all three.** For the IEC pair the nose is
-the printed figure and the inlet depth is the estimate to revisit: a nose that went fully
-home would leave 46 and 56 at most, 5 less than is drawn. When an inlet's depth is measured,
-its plug's `lift` and `out` figures move by the difference and nothing else changes; a test
-pins the two together so one cannot move without the other.
+the printed figure: a nose that went fully home would leave 46 and 56 at most, 1 less than
+is drawn. #793 moved both inlets 4 deeper: the C14's 17.0 is dimensioned (Adam Tech drawing
+S00087C rev D, shroud face to floor 17.00 +0/-1.00), and the C20's 19.0 is estimated from it
+(the C19 nose less 1, as the C13/C14 pair stands) and is still the depth to revisit. When an
+inlet's depth moves, its plug's `lift` and `out` figures move by the difference and nothing
+else changes; a test pins the two together so one cannot move without the other.
 
 For Saf-D-Grid it is the other way round. The 17.0 is dimensioned on drawing 115171S1 rev
 12, which also puts 5.8 of housing in front of the panel that `std/saf-d-grid@1` does not

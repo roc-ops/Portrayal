@@ -557,8 +557,8 @@ standards:
     h: 20.0
     radius: 3.0
     confidence: verified
-    depth: 13.0
-    depth-confidence: estimated
+    depth: 17.0
+    depth-confidence: drawing
     notes: Standard desktop/switch PSU inlet. Colloquially 'C13 inlet'; the male
       appliance inlet is formally C14. Panel cutout 28.0 +0.2/0 x 20.0 +0.2/0,
       corners max R3, verified against the SCHURTER 6100-3 datasheet (screw-on,
@@ -572,20 +572,24 @@ standards:
       series with its 24.6 x 48.6 flange; all max R3 on M3 at 40 centres. Treat
       28.0 x 20.0 as the reference, not as the only legal cutout. Flange and cutout
       are mounting-style specific; the boss and the coupler profile are the IEC
-      invariants. Depth 13.0 is still estimated - no drawing dimensions the shroud
-      interior, only the whole moulding behind the flange (E 20.5 solder / 23.5
-      quick connect on 6100-3, 25.6 on the flying-lead series behind a 2.9 flange).
-      Those are total body lengths the way the TE SFP cage measures 63.25 overall
-      against 41.0 bezel-to-connector; this field wants the latter kind of number.
-      The pins' 12.2 rise in std/c14-inlet encodes the same guess - both want
-      calipers.
+      invariants. Depth 17.0 is the shroud face to the cavity floor, 17.00 +0/-1.00
+      on Adam Tech drawing S00087C rev D (7/7/20), IEC-A-X series, sheet 1 section
+      view (https://app.adam-tech.com/products/download/data_sheet/203645/iec-a-2-data-sheet.pdf),
+      with the pins rising 15.00 +0.50/-0 off that floor, the floor 12.00 behind
+      the flange's panel side, a 5.00 boss on a 3.00 flange; the same drawing at
+      rev C for the IEC-C-X series agrees
+      (https://app.adam-tech.com/products/download/data_sheet/203640/iec-c-1-data-sheet.pdf).
+      The whole-moulding lengths elsewhere (E 20.5 solder / 23.5 quick connect on
+      6100-3, 25.6 on the flying-lead series behind a 2.9 flange, 19.4 on Bulgin
+      and Cliff CL 19210) bound it and are not it. Was 13.0 estimated before
+      roc-ops/Portrayal#793.
   c20-inlet:
     registry: IEC 60320-1 (C20 appliance inlet, mates C19)
     w: 32.4
     h: 24.4
     radius: 4.5
     confidence: verified
-    depth: 15.0
+    depth: 19.0
     depth-confidence: estimated
     notes: High-current datacenter PSU inlet. Panel cutout 32.4 +0.1/0 x 24.4 +0.1/0,
       corners max R4.5, from a SCHURTER C20 dimension drawing. The prior 32.5 x 22.0
@@ -593,7 +597,15 @@ standards:
       far too tight at 1.0 - R4.5 is a visibly rounded rectangle. Flange 34.9 x 26.9,
       37.9 across the mounting ears. Unlike C13/C14 the C19/C20 coupler profile is a
       plain rounded rectangle, NOT keyed with chamfers - polarity comes from the pin
-      layout (earth top centre, line and neutral below). Depth still estimated.
+      layout (earth top centre, line and neutral below). Depth 19.0 is ESTIMATED,
+      as the C13/C14 pair stands - the C19 nose is 20 MIN (Volex catalogue
+      Aug-2025, VAC19, p.262) and the cavity is taken 1 less, as the C14's 17.00
+      (Adam Tech S00087C rev D) is 1 less than the C13's 18 MIN nose (Volex V1625,
+      p.240). 19-20 is the ceiling the held whole-moulding drawings set (SCHURTER
+      1601 via Farnell 1832658, a 4.20 boss and an 18.40 body; International
+      Configurations 57745, a 21 body behind a 3.0 flange); no held drawing
+      sections the cavity (std/c20-inlet@1 provenance.depth-gap). Was 15.0 before
+      roc-ops/Portrayal#793.
   saf-d-grid:
     registry: >-
       Anderson Power Products Saf-D-Grid (no IEC or ISO standard governs it;
