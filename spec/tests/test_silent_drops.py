@@ -37,9 +37,9 @@ LIB = ROOT / "library"
 
 from portrayal import dcim_export as dx
 from portrayal import lint
-from portrayal.faces import face_ref                  # noqa: E402
 from portrayal.manifest import load_yaml, view_parts   # noqa: E402
 from portrayal import libwalk
+from portrayal import optical_ports
 
 # `port` is a connector on a faceplate; `inlet` is power entry. Both are things a
 # DCIM has somewhere to put, which is what makes their silence worth auditing.
@@ -71,10 +71,10 @@ def _module_exports(part, attrs, fibre):
     how the first draft of this file accused four MPO adapters that export
     perfectly well: a module with a declared rear face and optical paths emits
     its whole fibre list through `optical_ports`, never touching the branch
-    chain below. Gated exactly as build_module gates it, so a single-faced
-    module - a PPM coupler, whose paths run front-to-front - stays silent here
-    because it is silent there, which is the decision optical-paths-design.md
-    C3 records rather than an oversight.
+    chain below. Gated exactly as build_module gates it -
+    `optical_ports.projects`, a rear face or a stated `optical.trunk` - so the
+    PPMs, which state a trunk since #246, are heard here because they export
+    there.
     """
     full_ref = part["ref"]
     ref = full_ref.split("@")[0]
@@ -103,10 +103,14 @@ def _device_exports(pl, ref, attrs, group_role):
     """
     if ref in dx.PART_POWER:                        # power-ports
         return True
-    if ref in dx.PART_RF:                           # RF and timing, as `other`
+    if ref in dx.PART_OUTLET:                       # power-outlets (#806)
+        return True
+    if ref in dx.PART_RF:                          # RF and timing, as `other`
         return True
     if pl["ref"] in dx.FAMILY_PART and dx.rj45_timing_label({**pl, "attrs": attrs}):
         return True                                 # a bare RJ45 naming a timing job
+    if dx.device_console_row(pl, attrs):            # console-ports, micro-USB too (#384)
+        return True
     if attrs.get("role") == "console" or group_role in dx.PORT_ROLES:
         return dx.iface_type(pl, attrs, group_role) is not None   # interfaces
     return False
@@ -132,7 +136,7 @@ def _census():
         if doc.get("kind") != "module":
             continue
         attrs = doc.get("attrs") or {}
-        fibre = bool(face_ref(doc, "rear") and (doc.get("optical") or {}).get("paths"))
+        fibre = optical_ports.projects(doc)
         for part in (doc.get("parts") or []):
             if not isinstance(part, dict) or "ref" not in part:
                 continue
@@ -207,11 +211,73 @@ def test_every_register_entry_names_a_real_component():
     assert not missing, f"NOT_A_DCIM_PORT names parts that do not exist: {missing}"
 
 
+def test_an_outlet_part_is_not_also_registered_silent():
+    """PART_OUTLET and the register share no ref (#806): a part that exports an
+    outlet has something to say, and a reason for saying nothing would be
+    false the day it was written."""
+    both = sorted(set(dx.PART_OUTLET) & set(dx.NOT_A_DCIM_PORT))
+    assert not both, f"in PART_OUTLET and NOT_A_DCIM_PORT: {both}"
+    assert dx.PART_OUTLET, "no outlet part - the check measured nothing"
+
+
 def test_every_register_entry_gives_a_reason():
     """A reason, not a shrug. Long enough to say WHY rather than to restate the
     part's name, which is what a one-word entry always turns out to be."""
     thin = {r: why for r, why in dx.NOT_A_DCIM_PORT.items() if len(why) < 40}
     assert not thin, f"register entries with no real reason: {thin}"
+
+
+OPTICAL_NOTE = "Optical ports not exported: "
+
+
+def _named_in(comments):
+    """The ids `dcim_export.unexported_optical` wrote into a type's comments."""
+    line = next((ln for ln in str(comments or "").split("\n")
+                 if ln.startswith(OPTICAL_NOTE)), None)
+    if line is None:
+        return set()
+    return set(line[len(OPTICAL_NOTE):].split(". ", 1)[0].split(", "))
+
+
+def test_a_fibre_adapter_that_exports_nothing_is_named_in_its_types_comments():
+    """#204, held as the register above holds a part: by NAME, per placement.
+
+    Once the PPMs state a trunk, `common/lc-duplex-adapter` exports somewhere
+    and leaves NOT_A_DCIM_PORT - and the census, which asks whether ANY
+    placement of a part is heard, stops seeing the 117 on DCP chassis that
+    still export nothing. So every fibre adapter on a device that is not an
+    interface must be named in that device type's comments, and every one on a
+    module whose glass does not project must be named in the module type's.
+    """
+    devices = modules = 0
+    for p in sorted((LIB / "devices").glob("*/*/device.yaml")):
+        dev = load_yaml(p) or {}
+        cfgs = dev.get("configurations") or {"default": {}}
+        for cfg_name, cfg in cfgs.items():
+            fibre = {pl["id"] for view in dx.views_for(dev, cfg_name)
+                     for pl in dx.scoped(view_parts(view)["placements"], cfg_name)
+                     if optical_ports.family_of(pl["ref"])}
+            if not fibre:
+                continue
+            doc = dx.build(dev, cfg_name, cfg, None)
+            exported = {i["name"] for i in doc.get("interfaces") or []}
+            missing = sorted(fibre - exported - _named_in(doc.get("comments")))
+            assert not missing, f"{p.parent.name} ({cfg_name}): fibre adapters silent: {missing}"
+            devices += 1
+    for doc in _contracts().values():
+        if doc.get("kind") != "module":
+            continue
+        fibre = {str(pt["id"]) for pt in doc.get("parts") or []
+                 if isinstance(pt, dict) and optical_ports.family_of(pt.get("ref") or "")}
+        if not fibre or optical_ports.projects(doc):
+            continue
+        built = dx.build_module(doc, "Vendor")
+        typed = {i["name"] for i in built.get("interfaces") or []}
+        missing = sorted(fibre - typed - _named_in(built.get("comments")))
+        assert not missing, f"{doc.get('name')}: fibre adapters silent: {missing}"
+        modules += 1
+    # the three DCP chassis, and the A22 among the modules
+    assert devices >= 3 and modules >= 1, (devices, modules)
 
 
 def test_the_census_is_not_vacuous():

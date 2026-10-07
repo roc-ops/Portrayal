@@ -6,22 +6,22 @@ weight_unit: kg
 description: UfiSpace N3100-4C 5G timing adapter - a full-height PCIe Gen4 x16 add-in card that offloads
   the PTP stack and servo from a COTS server for O-RAN fronthaul timing
 interfaces:
-  - name: '{module}/clk-1pps'
+  - name: '{module.parent}/{module}/clk-1pps'
     type: other
     label: SMB
-  - name: '{module}/clk-10mhz'
+  - name: '{module.parent}/{module}/clk-10mhz'
     type: other
     label: SMB
-  - name: '{module}/gnss-ant'
+  - name: '{module.parent}/{module}/gnss-ant'
     type: other
     label: SMA
-  - name: '{module}/port-0'
+  - name: '{module.parent}/{module}/port-0'
     type: 25gbase-x-sfp28
-  - name: '{module}/port-1'
+  - name: '{module.parent}/{module}/port-1'
     type: 25gbase-x-sfp28
-  - name: '{module}/port-2'
+  - name: '{module.parent}/{module}/port-2'
     type: 25gbase-x-sfp28
-  - name: '{module}/port-3'
+  - name: '{module.parent}/{module}/port-3'
     type: 25gbase-x-sfp28
 comments: 'UfiSpace N3100-4C 5G timing adapter - a full-height PCIe Gen4 x16 add-in card that offloads
   the PTP stack and servo from a COTS server for O-RAN fronthaul timing. Stratum 3E OCXO, Cyclone V SoC

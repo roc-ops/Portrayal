@@ -189,3 +189,111 @@ def test_a_component_with_no_paths_at_all_is_not_checked_by_L80():
     else in this file catches this gap either.
     """
     assert run(L.lint_component_optical_coverage, module([])) == []
+
+
+# --- the trunk: L78's trunk half, L79's band exception, L129, L130, L131 ------
+
+def three(paths, trunk=None):
+    """An add/drop filter's face: OSC, EDFA and Line duplex adapters."""
+    doc = module(paths, parts=[{"ref": "common/lc-duplex-adapter@6", "id": i}
+                               for i in ("osc", "edfa", "line")])
+    if trunk is not None:
+        doc["optical"]["trunk"] = trunk
+    return doc
+
+
+BAND = {"centre-nm": 1511, "width-nm": 13}
+
+
+def test_banded_paths_off_one_source_are_an_add_drop_filter_not_a_hidden_split():
+    doc = three([{"from": "line.2", "to": "osc.1", "band": BAND},
+                 {"from": "line.2", "to": "edfa.1"}])
+    assert run(L.lint_component_optical_conflicts, doc, "L79") == []
+
+
+def test_two_unbanded_paths_off_one_source_are_still_a_hidden_split():
+    doc = three([{"from": "line.2", "to": "osc.1"},
+                 {"from": "line.2", "to": "edfa.1"}])
+    assert len(run(L.lint_component_optical_conflicts, doc, "L79")) == 1
+
+
+def test_two_paths_on_one_band_off_one_source_are_still_a_hidden_split():
+    """A band names a wavelength; two legs on the same one divide its power,
+    which is the ratio this rule exists to see."""
+    doc = three([{"from": "line.2", "to": "osc.1", "band": BAND},
+                 {"from": "line.2", "to": "edfa.1", "band": dict(BAND)}])
+    assert len(run(L.lint_component_optical_conflicts, doc, "L79")) == 1
+
+
+def test_two_different_bands_off_one_source_are_an_add_drop_filter():
+    doc = three([{"from": "line.2", "to": "osc.1", "band": BAND},
+                 {"from": "line.2", "to": "edfa.1", "band": {"centre-nm": 1635, "width-nm": 70}}])
+    assert run(L.lint_component_optical_conflicts, doc, "L79") == []
+
+
+def test_a_path_with_no_trunk_is_l131():
+    doc = module([{"from": "common.1", "to": "split.1"}])
+    hits = run(L.lint_component_optical_trunk, doc, "L131")
+    assert len(hits) == 1 and "no trunk" in hits[0], hits
+
+
+def test_a_stated_trunk_satisfies_l131_and_l130():
+    doc = module([{"from": "common.1", "to": "split.1"}],
+                 unused={"common.2": "x" * 30, "split.2": "x" * 30})
+    doc["optical"]["trunk"] = ["common"]
+    assert run(L.lint_component_optical_trunk, doc) == []
+
+
+def test_a_front_to_front_leg_on_a_projected_module_is_l130():
+    doc = three([{"from": "line.2", "to": "osc.1"}, {"from": "osc.2", "to": "edfa.1"}],
+                trunk=["line"])
+    hits = run(L.lint_component_optical_trunk, doc, "L130")
+    assert len(hits) == 1 and "osc.2 -> edfa.1" in hits[0], hits
+
+
+def test_a_trunk_to_trunk_leg_is_l130():
+    doc = three([{"from": "line.2", "to": "line.1"}], trunk=["line"])
+    assert len(run(L.lint_component_optical_trunk, doc, "L130")) == 1
+
+
+def test_a_trunk_beside_a_fibre_rear_face_is_l129():
+    """The real cassette has a rear MTP; a trunk there is a second answer."""
+    import yaml
+    f = ROOT / "library/components/fs/fhd-1mtp6lcd-os2-a/v4/contract.yaml"
+    doc = yaml.safe_load(f.read_text())
+    assert run(L.lint_component_optical_trunk, doc) == []
+    doc["optical"]["trunk"] = ["lc1"]
+    hits = run(L.lint_component_optical_trunk, doc, "L129")
+    assert len(hits) == 1 and "rear face" in hits[0], hits
+
+
+def test_a_trunk_position_declared_unused_is_l129_but_a_bare_part_may_hold_one():
+    doc = module([{"from": "common.1", "to": "split.1"}],
+                 unused={"common.2": "x" * 30, "split.2": "x" * 30})
+    doc["optical"]["trunk"] = ["common.2"]
+    hits = run(L.lint_component_optical_trunk, doc, "L129")
+    assert len(hits) == 1 and "common.2" in hits[0], hits
+    doc["optical"]["trunk"] = ["common"]
+    assert run(L.lint_component_optical_trunk, doc, "L129") == []
+
+
+def test_a_trunk_naming_no_connector_or_no_position_is_l78():
+    doc = module([{"from": "common.1", "to": "split.1"}])
+    doc["optical"]["trunk"] = ["ghost", "common.3"]
+    hits = run(L.lint_component_optical_endpoints, doc, "L78")
+    assert len(hits) == 2, hits
+    assert any("ghost" in h for h in hits) and any("common.3" in h for h in hits)
+
+
+def test_every_path_bearing_ppm_states_its_trunk_and_lints_clean():
+    """The eight retrofitted PPMs, quiet on every trunk rule."""
+    import yaml
+    names = ["ppm-ad1-1510", "ppm-ad1-1625", "ppm-ocu-50-50", "ppm-ocu-97-3",
+             "ppm-dcm-10", "ppm-dcm-20", "ppm-dcm-40", "ppm-dcm-80"]
+    for n in names:
+        f = ROOT / f"library/components/smartoptics/{n}/v2/contract.yaml"
+        doc = yaml.safe_load(f.read_text())
+        assert doc["optical"].get("trunk"), n
+        for rule in (L.lint_component_optical_trunk, L.lint_component_optical_endpoints,
+                     L.lint_component_optical_conflicts, L.lint_component_optical_coverage):
+            assert run(rule, doc) == [], (n, rule.__name__)

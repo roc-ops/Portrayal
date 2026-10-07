@@ -3,6 +3,15 @@ manufacturer: Smartoptics
 model: PPM-DCM10-100GHz
 description: Smartoptics PPM-DCM10-100GHz - a passive plug-in module holding a channelised Fiber Bragg
   Grating that applies the opposite dispersion of 10km of standard single-mode fibre
+rear-ports:
+  - name: '{module.parent}/{module}/DCM-1'
+    type: lc-upc
+    positions: 1
+front-ports:
+  - name: '{module.parent}/{module}/1'
+    type: lc-upc
+    rear_port: '{module.parent}/{module}/DCM-1'
+    rear_port_position: 1
 comments: 'Smartoptics PPM-DCM10-100GHz - a passive plug-in module holding a channelised Fiber Bragg Grating
   that applies the opposite dispersion of 10km of standard single-mode fibre. One LC duplex adapter, Rx
   in and Tx out, on a half-height plate that seats in a DCP-F carrier''s PPM bay.
@@ -18,4 +27,4 @@ comments: 'Smartoptics PPM-DCM10-100GHz - a passive plug-in module holding a cha
 
   - role: dispersion-compensation
 
-  Contract version 2.1.0 (smartoptics/ppm-dcm-10).'
+  Contract version 2.2.0 (smartoptics/ppm-dcm-10).'

@@ -4,14 +4,14 @@ model: RE-S-1300-2048
 description: Juniper RE-S-1300 Routing Engine (RE-S-1300-2048, EOL) as photographed in the MX240's SCB-MX
   bays
 console-ports:
-  - name: '{module}/aux'
+  - name: '{module.parent}/{module}/aux'
     type: rj-45
-  - name: '{module}/console'
+  - name: '{module.parent}/{module}/console'
     type: rj-45
-  - name: '{module}/usb'
+  - name: '{module.parent}/{module}/usb'
     type: usb-a
 interfaces:
-  - name: '{module}/ethernet'
+  - name: '{module.parent}/{module}/ethernet'
     type: 1000base-t
     mgmt_only: true
 comments: 'Juniper RE-S-1300 Routing Engine (RE-S-1300-2048, EOL) as photographed in the MX240''s SCB-MX
