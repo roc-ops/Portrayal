@@ -165,6 +165,32 @@ them still finds `ru`, and draws a rack-face part as an ordinary device on its
 rack unit. A lab that fails its schema or a check (lint L139 to L142) is not
 written, and the build stops.
 
+## The rack file
+
+`rack.json` is the catalogue a rack tool reads in one fetch, so it need not open
+every device's index. It is written by `rack_index.py` after the compiled faces
+exist, from `devices.json`, each `<name>.configs.json` and the default
+configuration's front, rear and top views.
+
+```json
+{"format": 1, "generated-from": "...", "devices": {"fhd-cmp5dr": {"...": "..."}}}
+```
+
+`format` is 1. Each device, keyed by `name`, always carries `manufacturer`,
+`model`, `family`, `ru`, `h`, `w`, `d`, `airflow`, `default` and `configs`
+(the names of its configurations). Four keys appear only when the device has
+them:
+
+- `mount`: the device's `chassis.mount`, present only when it is not `rack`.
+- `shell`: `chassis.shell`, `sheet` for a body that is a sheet and not a box.
+- `capacity`: `{"count", "basis"}`, the cable capacity the vendor states.
+- `guides` and `passes`: per view (`top`, `front`, `rear`), the sorted ids a
+  cable route can pass through on the default configuration's drawing.
+
+`ru` is `chassis.ru` when stated (0 included, for a zero-U part), else the
+height over 44.45 mm, at least 1. Removing or renaming a key, or changing what
+one means, is a contract change and raises `format`; adding a key is not.
+
 ## What else a consumer holds
 
 Three more things reach a consumer outside this repository, and none of them

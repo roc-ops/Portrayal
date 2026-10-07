@@ -79,7 +79,7 @@ def test_what_the_gates_run_is_what_the_compiler_holds():
 
     entry = {"lint", "render", "dcim_export", "devicelock", "check_skips", "suite_times", "shards", "expand",
              "devices_index", "components_index", "labs_index", "gaps_index",
-             "registry_index", "comparable_index", "components_catalogue", "npm_packages",
+             "registry_index", "comparable_index", "rack_index", "components_catalogue", "npm_packages",
              "changelog"}
     seen, stack = set(), list(entry)
     while stack:

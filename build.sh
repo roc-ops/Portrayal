@@ -104,6 +104,9 @@ python3 spec/tools/portrayal/components_catalogue.py --library library \
   --out library/components/CATALOGUE.md &
 pids+=("$!")
 for pid in "${pids[@]}"; do wait "$pid"; done
+# THE RACK CATALOGUE reads devices.json and the compiled faces, so it runs
+# after both exist: rack.json, which the kit's rack/catalog.js loads.
+python3 spec/tools/portrayal/rack_index.py --dist "$OUT"
 # THE LOCK, ASSEMBLED. Each device carries its own `device.lock.json` beside its
 # manifest (#182); this is the one-file view, for a consumer outside the
 # checkout that wants the whole picture in one fetch - the same reason
