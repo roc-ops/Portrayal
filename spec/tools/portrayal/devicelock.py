@@ -1114,7 +1114,8 @@ def check(library: pathlib.Path):
                             "only-in, optional, interfaces, opening, floor, "
                             "plan, rear)")
             if _addressing_bump(was, now) is not None:
-                what.append("placement addressing (for, rel-pos, interface)")
+                what.append("placement addressing (for, rel-pos, interface, "
+                            "fed-by, through)")
             if "placement-surface" in was and \
                     was["placement-surface"] != now["placement-surface"]:
                 what.append("placement surface (states, description, "
