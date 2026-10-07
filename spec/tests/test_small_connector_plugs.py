@@ -219,7 +219,9 @@ def test_the_edited_jacks_kept_their_bodies():
     assert v["version"] == "1.0.1" and r["version"] == "1.2.0"
     assert v["size"] == {"w": 40.4, "h": 5.2}
     assert r["size"] == {"w": 14.0, "h": 13.5, "d": 20.57}
-    assert r["connection-points"]["tel"] == {"at": [7.0, 6.7], "direction": "front"}
+    # `tel` moved with `mate` to the body tier's centre (#837): one place for both
+    assert r["connection-points"]["tel"] == {"at": [7.0, 4.925], "direction": "front"}
+    assert r["connection-points"]["tel"]["at"] == r["connection-points"]["mate"]["at"]
     assert _contract("std/mrj21@1")["version"] == "1.0.0"
 
 

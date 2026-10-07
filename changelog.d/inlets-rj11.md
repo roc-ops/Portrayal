@@ -15,6 +15,9 @@
   shoulder, latch slot) recessed into a solid housing, as `std/rj45@2` draws
   its own, where it was the 11.6 RJ45 width; two contacts are loaded (6P2C);
   and it is 20.57 deep with a built cavity, where it stated no depth. Its
-  body, `tel` and `mate` points are unchanged, so `generic/rj11-plug@1`
-  (1.0.1, provenance only) seats where it did and now clears the opening by
-  about 0.12 a side. `halny/hlx-tgv` takes a patch (#837).
+  body is unchanged; its `mate` and `tel` points move from (7.0, 6.75) and
+  (7.0, 6.7) to (7.0, 4.925), the centre of the 9.88 x 6.85 body tier, so a
+  seated `generic/rj11-plug@1` (1.0.1, provenance only) sits centred in the
+  tier and clears the opening by about 0.12 a side, where at the old point it
+  stood 1.8 off it. Nothing on a device addresses either point, so
+  `halny/hlx-tgv` takes a patch (#837).
