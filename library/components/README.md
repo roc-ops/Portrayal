@@ -13,12 +13,14 @@ The modelling guide covers measuring and drawing the part itself.
 
 ## Find it before you draw it
 
-Most parts already exist. **Read [CATALOGUE.md](CATALOGUE.md) first** — every
-component major on one page, with its size, the standard it conforms to, and how
-many devices already use it. It needs no build, and a test fails if it disagrees
-with the library.
+Most parts already exist. **Read `library/components/CATALOGUE.md` first** —
+every component major on one page, with its size, the standard it conforms to,
+and how many devices already use it. It is generated and not committed, so it
+is in a checkout and not on GitHub: `./build.sh` writes it, and so does
+`python3 spec/tools/portrayal/components_catalogue.py --library library --out library/components/CATALOGUE.md`
+without a build. Rebuild after pulling, or it lists the library you had.
 
-To search it from a shell instead:
+To search it, or the contracts behind it, from a shell:
 
 ```sh
 grep -i qsfp28 library/components/CATALOGUE.md              # every QSFP28 part, with its size
