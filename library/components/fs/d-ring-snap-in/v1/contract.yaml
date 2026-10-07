@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: d-ring-snap-in
-version: 1.0.0
+version: 1.1.0
 class: mechanical
 behaviour: mounts
 description: >-
@@ -31,9 +31,17 @@ provenance:
     publishes of the part is a render.
   material: >-
     datasheet - "D-rings Material: PC, UL 94V-2" in the same datasheet's table.
+  guide: >-
+    drawing - the clear opening inside the loop on the ring-profile view of the same
+    drawing, at 1.331 px/mm: 43 px between the inner lines of the two legs and 39 px
+    from the underside of the top bar down to the seat, so 32.0 by 29.5 mm, to the
+    drawing's 0.75 mm. Seen looking along the tray, which is the run: `w` lies along
+    the plan's depth and `h` stands out of the tray. The slit is not counted as
+    opening; a cable is laid in through it and then held.
 size: {w: 32.3, h: 43.6}
 size-confidence: {w: drawing, h: drawing}
 attrs: {material: PC, flammability: UL 94V-2}
+guide: {kind: ring, aperture: {w: 32.0, h: 29.5}, run: x}
 elements:
   seat: {at: [0.0, 5.65], size: [32.3, 32.3], class: bezel}
   top: {at: [12.75, 0.0], size: [6.8, 43.6], class: bezel}
