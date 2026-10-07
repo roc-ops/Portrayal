@@ -609,7 +609,7 @@ PART_POWER = {
 # netbox-community/netbox netbox/dcim/choices.py at 64ce9e2d (TYPE_DC =
 # 'dc-terminal', TYPE_OTHER = 'other') and nautobot/nautobot
 # nautobot/dcim/choices.py at 3edb1fca (the same two). OUTLET_TYPES is that
-# shared list, and the assertion under it is not decoration: Nautobot's
+# shared list, and the test holding PART_OUTLET to it is not decoration: Nautobot's
 # component import form turns an unknown type into `other` without a word, so
 # a typo here would import as a different, valid-looking answer.
 OUTLET_TYPES = frozenset({"dc-terminal", "other"})
@@ -625,11 +625,9 @@ PART_OUTLET = {
     "amphenol-ns/output-p40": "other",
 }
 # The label an `other` outlet carries, so it says what to plug into it.
+# test_power_outlets.py holds both tables to OUTLET_TYPES (an assert here would
+# run on import, which test_tools_layout forbids).
 OUTLET_LABEL = {"amphenol-ns/output-p40": "P40"}
-assert set(PART_OUTLET.values()) <= OUTLET_TYPES, \
-    f"PART_OUTLET names a type neither target lists: {set(PART_OUTLET.values()) - OUTLET_TYPES}"
-assert all(PART_OUTLET.get(r) == "other" for r in OUTLET_LABEL), \
-    "OUTLET_LABEL labels an outlet that is not `other`"
 
 # ...AND WHAT A SUPPLY SAYS WHEN IT DRAWS NO INLET.
 #

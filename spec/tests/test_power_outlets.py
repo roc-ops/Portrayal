@@ -103,6 +103,8 @@ def test_every_outlet_type_is_one_both_targets_list():
     assert dx.PART_OUTLET
     assert set(dx.PART_OUTLET.values()) <= dx.OUTLET_TYPES
     assert dx.OUTLET_TYPES == {"dc-terminal", "other"}
+    assert all(dx.PART_OUTLET.get(r) == "other" for r in dx.OUTLET_LABEL), \
+        "OUTLET_LABEL labels an outlet that is not `other`"
 
 
 @pytest.mark.parametrize("target", dx.TARGETS)
