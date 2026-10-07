@@ -1,0 +1,370 @@
+format: 1
+kind: device
+name: cmh-dfds1u
+version: 0.1.0
+maturity: modelled
+manufacturer: FS.com
+model: CMH-DFDS1U
+aliases:
+  - {name: '315741', kind: vendor}
+description: >-
+  1U dual-sided high-capacity steel horizontal cable manager, FS SKU #315741: a steel
+  backbone between the rack ears with a finger duct on each side - ten moulded T-shaped
+  fingers along the top and ten along the bottom of each channel - and a steel cover on four
+  hinge clips over each. The covers are 57.8 mm high, taller than the 1U rack unit the ears
+  fill.
+profile: passive
+provenance:
+  full-depth:
+    confidence: drawing
+    note: >-
+      FULL DEPTH, the default - the duct stands 115.3 mm to each side of its backbone (the
+      plan, 230.6 over both covers), so it reaches the face behind the mounting plane as
+      well as the front.
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE VENDOR DRAWING. the FS High Capacity Horizontal Cable Managers
+      datasheet (portal id 7671) draws CMH-DFDS1U as a plan and a front view, dimensioned
+      482.61, 465.11, 57.81, 32.00 and 230.60. The embedded image is small (647 x 529,
+      watermarked): 0.873 px/mm across the 482.61 and 0.872 along the 230.6, and resolves
+      about 1.2 mm. The straight-on render of the front (gallery image 5) and the plan
+      render (image 4) are the second reading.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - THE BODY BETWEEN THE EARS. 482.61 over the ears; the cover between them
+      reads 388 of 421.5 px, 444, which at this resolution is the 440 of the family to two
+      pixels a side; 440 is taken. The ears are not drawn. Depth 230.6 is the plan and the
+      spec table.
+  height:
+    confidence: drawing
+    note: >-
+      drawing - 57.8, AS THE DRAWING DIMENSIONS IT, TALLER THAN ITS RACK UNIT. The front
+      view puts the 57.81 dimension on the cover, from its top edge to its bottom edge, and
+      draws the ears inside it, top and bottom; the ear holes are dimensioned 32.00 apart.
+      The spec table and the portfolio state 57.8. So the covers overhang the ears and the
+      1U they fill by about 7 mm above and below, and the chassis is drawn 57.8 high in a 1U
+      part. Two readings disagree with the figure and are not taken: the same front view,
+      scaled off its own ear holes, draws the cover 54.2; the straight-on render reads 49 to
+      51.5 against the 440 width, as CMH-SFDS1U reads its own 51 by the same method.
+  shell:
+    confidence: drawing
+    note: >-
+      drawing - A HOLLOW DUCT ON EACH SIDE. A sheet body whose views are elevations. The
+      front and rear views each carry the backbone as a well 114.7 deep, its floor the
+      backbone, the two rows of fingers standing in it and a cover that comes off; the two
+      floors stand 1.2 apart.
+  thickness:
+    confidence: estimated
+    note: >-
+      estimated - no FS document states the gauge; 1.2 is taken, as for the other FS steel
+      managers in the library.
+  weight:
+    confidence: datasheet
+    note: >-
+      datasheet - 1.65 kg, the FS product page specification for #315741, as read at intake.
+  backbone:
+    confidence: estimated
+    note: >-
+      estimated - the backbone is drawn 44 high, centred, the height of the ears it runs
+      into; no view shows it end-on. The plan puts it at the middle of the 230.6.
+  front:
+    confidence: drawing
+    note: >-
+      drawing - the cover, fitted, 440 x 57.8, with four hinge clips staggered as on the
+      front view: two on the top edge at 77.9 and 343.6 from the left end and two on the
+      bottom at 121.4 and 300.0. The finger rows are 9.0 thick and 4.7 in from the top and
+      bottom, ESTIMATED: there is no side view, and they are taken from the same moulding on
+      CMH-SFDS1U and CMH-DFDS2U.
+  fingers:
+    confidence: drawing
+    note: >-
+      drawing - ten fingers a row each side on the plan, stems 38.8 px apart, 44.4, the
+      moulding of the other steel ducts; 44.0 is taken so that ten fill the 440 body. The
+      fork of each stem is drawn as the stem.
+  top:
+    confidence: drawing
+    note: >-
+      drawing - the plan, rear cover at y=0: the rear channel, the backbone at the middle,
+      the front channel.
+  bottom:
+    confidence: drawing
+    note: >-
+      drawing - the bottom row of fingers is the top row again.
+  left:
+    confidence: estimated
+    note: >-
+      estimated - no side view is drawn; the end elevation is built from the plan depths and
+      the estimated rows. Both channels are open at the ends.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the rear channel is the front channel turned round, as the plan draws it.
+  backbone-holes:
+    confidence: photo-measured
+    note: >-
+      photo-measured - gallery image 3 of #315741 shows light through the backbone in two
+      places across the open front channel, so it may be pierced as the single-sided
+      backbones are; no view gives the openings. Drawn solid; see the gap.
+  guides:
+    confidence: drawing
+    note: >-
+      drawing - one duct on each of the front and rear views, the channel between the finger
+      rows.
+  capacity:
+    confidence: datasheet
+    note: >-
+      datasheet - searched: the high capacity datasheet carries no capacity figure, and the
+      cable managers portfolio gives dimensions only. Recorded as a gap.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - style, sides, material and the UL 94 V-0 rating of the finger ducts are
+      the Technical Specification table and overview of the FS High Capacity Horizontal
+      Cable Managers datasheet (portal id 7671); indoor its Environment row.
+  color:
+    confidence: estimated
+    note: >-
+      estimated - no colour row in the datasheet; every render is black, drawn in the shades
+      CMH-SFDS1U reads off its renders.
+attrs:
+  physical:
+    weight-kg: 1.65
+    material: Steel
+  compliance:
+    flammability: UL 94 V-0 (the finger ducts)
+    environment: Indoor
+chassis:
+  width: 440.0
+  height: 57.8
+  depth: 230.6
+  ru: 1
+  shell: sheet
+  thickness: 1.2
+  weight-kg: 1.65
+  color: '#1b1c1e'
+gaps:
+  - what: cable-capacity
+    scope: [base]
+    reason: vendor-silent
+    note: >-
+      no FS document held states a cable capacity for CMH-DFDS1U: the datasheet that covers
+      it has no Cable Capacity Reference Guide, and the cable managers portfolio lists only
+      dimensions. The product page could not be read (403 from the shop front).
+    wanted: the capacity row of the product page, or a capacity table in a later datasheet
+  - what: backbone-pass-through
+    scope: [front, rear]
+    reason: vendor-silent
+    note: >-
+      no view draws the backbone face. Gallery image 3 of #315741 shows light through it in
+      two places across the open front channel; the openings are not drawn, and the backbone
+      is drawn solid.
+    wanted: a straight view of the backbone with a cover off
+groups:
+  body:
+    term: Duct
+    role: furniture
+    index-origin: 1
+    description: the backbone, seen from the front channel and from the rear one
+  fingers:
+    term: Finger
+    role: furniture
+    index-origin: 1
+    description: >-
+      the fingers, 10 a row: front channel upper row, front lower, then rear upper and rear
+      lower
+  cover:
+    term: Cover
+    role: furniture
+    index-origin: 1
+    description: the two covers, front then rear
+views:
+  front:
+    size: {w: 440.0, h: 57.8}
+    components:
+      placements:
+        - {ref: fs/cmh-dfds1u-base@1, id: base, at: [0.0, 0.0], group: body, rel-pos: 1}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-upper-1, at: [0.0, 4.7], group: fingers, rel-pos: 1, in: base, under: cover}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-upper-2, at: [44.0, 4.7], group: fingers, rel-pos: 2, in: base, under: cover}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-upper-3, at: [88.0, 4.7], group: fingers, rel-pos: 3, in: base, under: cover}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-upper-4, at: [132.0, 4.7], group: fingers, rel-pos: 4, in: base, under: cover}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-upper-5, at: [176.0, 4.7], group: fingers, rel-pos: 5, in: base, under: cover}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-upper-6, at: [220.0, 4.7], group: fingers, rel-pos: 6, in: base, under: cover}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-upper-7, at: [264.0, 4.7], group: fingers, rel-pos: 7, in: base, under: cover}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-upper-8, at: [308.0, 4.7], group: fingers, rel-pos: 8, in: base, under: cover}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-upper-9, at: [352.0, 4.7], group: fingers, rel-pos: 9, in: base, under: cover}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-upper-10, at: [396.0, 4.7], group: fingers, rel-pos: 10, in: base, under: cover}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-lower-1, at: [0.0, 44.1], group: fingers, rel-pos: 11, in: base, under: cover}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-lower-2, at: [44.0, 44.1], group: fingers, rel-pos: 12, in: base, under: cover}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-lower-3, at: [88.0, 44.1], group: fingers, rel-pos: 13, in: base, under: cover}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-lower-4, at: [132.0, 44.1], group: fingers, rel-pos: 14, in: base, under: cover}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-lower-5, at: [176.0, 44.1], group: fingers, rel-pos: 15, in: base, under: cover}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-lower-6, at: [220.0, 44.1], group: fingers, rel-pos: 16, in: base, under: cover}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-lower-7, at: [264.0, 44.1], group: fingers, rel-pos: 17, in: base, under: cover}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-lower-8, at: [308.0, 44.1], group: fingers, rel-pos: 18, in: base, under: cover}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-lower-9, at: [352.0, 44.1], group: fingers, rel-pos: 19, in: base, under: cover}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-lower-10, at: [396.0, 44.1], group: fingers, rel-pos: 20, in: base, under: cover}
+        - {ref: fs/cmh-dfds1u-cover@1, id: cover, at: [0.0, 0.0], group: cover, rel-pos: 1, in: base}
+    guides:
+        - {id: duct, kind: duct, at: [0, 13.7], size: [440.0, 30.4], run: x, finger-pitch: 44.0, finger-gap: 33.8, confidence: drawing, source: 'FS high capacity datasheet, CMH-DFDS1U plan; rows estimated'}
+  rear:
+    size: {w: 440.0, h: 57.8}
+    components:
+      placements:
+        - {ref: fs/cmh-dfds1u-base@1, id: base-rear, at: [0.0, 0.0], group: body, rel-pos: 2}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-rear-upper-1, at: [0.0, 4.7], group: fingers, rel-pos: 21, in: base-rear, under: cover-rear}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-rear-upper-2, at: [44.0, 4.7], group: fingers, rel-pos: 22, in: base-rear, under: cover-rear}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-rear-upper-3, at: [88.0, 4.7], group: fingers, rel-pos: 23, in: base-rear, under: cover-rear}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-rear-upper-4, at: [132.0, 4.7], group: fingers, rel-pos: 24, in: base-rear, under: cover-rear}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-rear-upper-5, at: [176.0, 4.7], group: fingers, rel-pos: 25, in: base-rear, under: cover-rear}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-rear-upper-6, at: [220.0, 4.7], group: fingers, rel-pos: 26, in: base-rear, under: cover-rear}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-rear-upper-7, at: [264.0, 4.7], group: fingers, rel-pos: 27, in: base-rear, under: cover-rear}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-rear-upper-8, at: [308.0, 4.7], group: fingers, rel-pos: 28, in: base-rear, under: cover-rear}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-rear-upper-9, at: [352.0, 4.7], group: fingers, rel-pos: 29, in: base-rear, under: cover-rear}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-rear-upper-10, at: [396.0, 4.7], group: fingers, rel-pos: 30, in: base-rear, under: cover-rear}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-rear-lower-1, at: [0.0, 44.1], group: fingers, rel-pos: 31, in: base-rear, under: cover-rear}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-rear-lower-2, at: [44.0, 44.1], group: fingers, rel-pos: 32, in: base-rear, under: cover-rear}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-rear-lower-3, at: [88.0, 44.1], group: fingers, rel-pos: 33, in: base-rear, under: cover-rear}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-rear-lower-4, at: [132.0, 44.1], group: fingers, rel-pos: 34, in: base-rear, under: cover-rear}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-rear-lower-5, at: [176.0, 44.1], group: fingers, rel-pos: 35, in: base-rear, under: cover-rear}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-rear-lower-6, at: [220.0, 44.1], group: fingers, rel-pos: 36, in: base-rear, under: cover-rear}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-rear-lower-7, at: [264.0, 44.1], group: fingers, rel-pos: 37, in: base-rear, under: cover-rear}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-rear-lower-8, at: [308.0, 44.1], group: fingers, rel-pos: 38, in: base-rear, under: cover-rear}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-rear-lower-9, at: [352.0, 44.1], group: fingers, rel-pos: 39, in: base-rear, under: cover-rear}
+        - {ref: fs/cmh-dfds1u-finger@1, id: finger-rear-lower-10, at: [396.0, 44.1], group: fingers, rel-pos: 40, in: base-rear, under: cover-rear}
+        - {ref: fs/cmh-dfds1u-cover@1, id: cover-rear, at: [0.0, 0.0], group: cover, rel-pos: 2, in: base-rear}
+    guides:
+        - {id: duct-rear, kind: duct, at: [0, 13.7], size: [440.0, 30.4], run: x, finger-pitch: 44.0, finger-gap: 33.8, confidence: drawing, source: 'FS high capacity datasheet, CMH-DFDS1U plan; rows estimated'}
+  top:
+    size: {w: 440.0, h: 230.6}
+    panel:
+      decor:
+        - {id: backbone, at: [0.0, 114.7], size: [440.0, 1.2], fill: '#1b1c1e', kind: base}
+        - {id: rear-channel, at: [0.0, 1.2], size: [440.0, 113.5], fill: '#0a0b0c', kind: channel}
+        - {id: rear-blocks, at: [0.0, 87.3], size: [440.0, 27.4], fill: '#2c2d30', kind: finger-block}
+        - {id: rear-stem-1, at: [16.9, 17.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: rear-head-1, at: [2.3, 1.8], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: rear-stem-2, at: [60.9, 17.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: rear-head-2, at: [46.3, 1.8], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: rear-stem-3, at: [104.9, 17.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: rear-head-3, at: [90.3, 1.8], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: rear-stem-4, at: [148.9, 17.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: rear-head-4, at: [134.3, 1.8], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: rear-stem-5, at: [192.9, 17.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: rear-head-5, at: [178.3, 1.8], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: rear-stem-6, at: [236.9, 17.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: rear-head-6, at: [222.3, 1.8], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: rear-stem-7, at: [280.9, 17.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: rear-head-7, at: [266.3, 1.8], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: rear-stem-8, at: [324.9, 17.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: rear-head-8, at: [310.3, 1.8], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: rear-stem-9, at: [368.9, 17.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: rear-head-9, at: [354.3, 1.8], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: rear-stem-10, at: [412.9, 17.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: rear-head-10, at: [398.3, 1.8], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: rear-cover-edge, at: [0.0, 0.6], size: [440.0, 1.2], fill: '#272829', kind: cover}
+        - {id: channel, at: [0.0, 115.9], size: [440.0, 113.5], fill: '#0a0b0c', kind: channel}
+        - {id: blocks, at: [0.0, 115.9], size: [440.0, 27.4], fill: '#2c2d30', kind: finger-block}
+        - {id: stem-1, at: [16.9, 143.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: head-1, at: [2.3, 213.3], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: stem-2, at: [60.9, 143.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: head-2, at: [46.3, 213.3], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: stem-3, at: [104.9, 143.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: head-3, at: [90.3, 213.3], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: stem-4, at: [148.9, 143.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: head-4, at: [134.3, 213.3], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: stem-5, at: [192.9, 143.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: head-5, at: [178.3, 213.3], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: stem-6, at: [236.9, 143.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: head-6, at: [222.3, 213.3], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: stem-7, at: [280.9, 143.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: head-7, at: [266.3, 213.3], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: stem-8, at: [324.9, 143.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: head-8, at: [310.3, 213.3], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: stem-9, at: [368.9, 143.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: head-9, at: [354.3, 213.3], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: stem-10, at: [412.9, 143.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: head-10, at: [398.3, 213.3], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: cover-edge, at: [0.0, 228.8], size: [440.0, 1.2], fill: '#272829', kind: cover}
+  bottom:
+    size: {w: 440.0, h: 230.6}
+    panel:
+      decor:
+        - {id: backbone, at: [0.0, 114.7], size: [440.0, 1.2], fill: '#1b1c1e', kind: base}
+        - {id: rear-channel, at: [0.0, 1.2], size: [440.0, 113.5], fill: '#0a0b0c', kind: channel}
+        - {id: rear-blocks, at: [0.0, 87.3], size: [440.0, 27.4], fill: '#2c2d30', kind: finger-block}
+        - {id: rear-stem-1, at: [16.9, 17.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: rear-head-1, at: [2.3, 1.8], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: rear-stem-2, at: [60.9, 17.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: rear-head-2, at: [46.3, 1.8], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: rear-stem-3, at: [104.9, 17.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: rear-head-3, at: [90.3, 1.8], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: rear-stem-4, at: [148.9, 17.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: rear-head-4, at: [134.3, 1.8], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: rear-stem-5, at: [192.9, 17.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: rear-head-5, at: [178.3, 1.8], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: rear-stem-6, at: [236.9, 17.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: rear-head-6, at: [222.3, 1.8], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: rear-stem-7, at: [280.9, 17.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: rear-head-7, at: [266.3, 1.8], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: rear-stem-8, at: [324.9, 17.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: rear-head-8, at: [310.3, 1.8], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: rear-stem-9, at: [368.9, 17.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: rear-head-9, at: [354.3, 1.8], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: rear-stem-10, at: [412.9, 17.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: rear-head-10, at: [398.3, 1.8], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: rear-cover-edge, at: [0.0, 0.6], size: [440.0, 1.2], fill: '#272829', kind: cover}
+        - {id: channel, at: [0.0, 115.9], size: [440.0, 113.5], fill: '#0a0b0c', kind: channel}
+        - {id: blocks, at: [0.0, 115.9], size: [440.0, 27.4], fill: '#2c2d30', kind: finger-block}
+        - {id: stem-1, at: [16.9, 143.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: head-1, at: [2.3, 213.3], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: stem-2, at: [60.9, 143.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: head-2, at: [46.3, 213.3], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: stem-3, at: [104.9, 143.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: head-3, at: [90.3, 213.3], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: stem-4, at: [148.9, 143.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: head-4, at: [134.3, 213.3], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: stem-5, at: [192.9, 143.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: head-5, at: [178.3, 213.3], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: stem-6, at: [236.9, 143.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: head-6, at: [222.3, 213.3], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: stem-7, at: [280.9, 143.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: head-7, at: [266.3, 213.3], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: stem-8, at: [324.9, 143.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: head-8, at: [310.3, 213.3], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: stem-9, at: [368.9, 143.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: head-9, at: [354.3, 213.3], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: stem-10, at: [412.9, 143.3], size: [10.2, 70.0], fill: '#2c2d30', kind: finger}
+        - {id: head-10, at: [398.3, 213.3], size: [39.4, 15.5], fill: '#323437', kind: finger-head}
+        - {id: cover-edge, at: [0.0, 228.8], size: [440.0, 1.2], fill: '#272829', kind: cover}
+  left:
+    size: {w: 230.6, h: 57.8}
+    panel:
+      decor:
+        - {id: backbone, at: [114.7, 6.9], size: [1.2, 44.0], fill: '#1b1c1e', sink: 0.05, kind: base}
+        - {id: rear-wall-upper, at: [1.8, 4.7], size: [112.9, 9.0], fill: '#2c2d30', kind: finger-wall}
+        - {id: rear-wall-lower, at: [1.8, 44.1], size: [112.9, 9.0], fill: '#2c2d30', kind: finger-wall}
+        - {id: rear-cover-face, at: [0.6, 0.0], size: [1.2, 57.8], fill: '#272829', kind: cover}
+        - {id: wall-upper, at: [115.9, 4.7], size: [112.9, 9.0], fill: '#2c2d30', kind: finger-wall}
+        - {id: wall-lower, at: [115.9, 44.1], size: [112.9, 9.0], fill: '#2c2d30', kind: finger-wall}
+        - {id: cover-face, at: [228.8, 0.0], size: [1.2, 57.8], fill: '#272829', kind: cover}
+  right:
+    size: {w: 230.6, h: 57.8}
+    panel:
+      decor:
+        - {id: backbone, at: [114.7, 6.9], size: [1.2, 44.0], fill: '#1b1c1e', sink: 0.05, kind: base}
+        - {id: rear-wall-upper, at: [115.9, 4.7], size: [112.9, 9.0], fill: '#2c2d30', kind: finger-wall}
+        - {id: rear-wall-lower, at: [115.9, 44.1], size: [112.9, 9.0], fill: '#2c2d30', kind: finger-wall}
+        - {id: rear-cover-face, at: [228.8, 0.0], size: [1.2, 57.8], fill: '#272829', kind: cover}
+        - {id: wall-upper, at: [1.8, 4.7], size: [112.9, 9.0], fill: '#2c2d30', kind: finger-wall}
+        - {id: wall-lower, at: [1.8, 44.1], size: [112.9, 9.0], fill: '#2c2d30', kind: finger-wall}
+        - {id: cover-face, at: [0.6, 0.0], size: [1.2, 57.8], fill: '#272829', kind: cover}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The finger duct as FS ships #315741, both covers fitted.'
+datasheet:
+  title: 'FS High Capacity Horizontal Cable Managers datasheet'
+  sha256: 95c4b54cb509d0874888b8d53e2e868b94a6079b62cf0370128fb78c9fb332ee
