@@ -191,3 +191,22 @@ def test_a_header_alone_is_not_worth_a_file_unless_the_part_is_passive():
     assert not dx.worth_a_file(header, {})
     assert dx.worth_a_file(header, {"profile": "passive"})
     assert dx.worth_a_file({**header, "interfaces": [{}]}, {"profile": "networking"})
+
+
+def test_a_rack_device_that_leaves_the_far_face_free_says_so():
+    """#854: is_full_depth is stated, not guessed from depth - an 87 mm cable
+    manager says `full-depth: false`, and a short box that says nothing keeps
+    the `true` it has always exported."""
+    assert dx.is_full_depth({"ru": 1, "depth": 87, "full-depth": False}) is False
+    assert dx.is_full_depth({"ru": 1, "depth": 87}) is True
+    assert dx.is_full_depth({"ru": 1, "full-depth": True}) is True
+
+
+def test_full_depth_belongs_to_a_rack_device():
+    from portrayal import lint
+    with lint.collecting() as found:
+        lint.lint_device_mount("d.yaml", {"chassis": {"mount": "wall", "full-depth": False}})
+    assert any("[L125]" in m and "full-depth" in m for m in found.errors)
+    with lint.collecting() as found:
+        lint.lint_device_mount("d.yaml", {"chassis": {"ru": 1, "full-depth": False}})
+    assert not found.errors
