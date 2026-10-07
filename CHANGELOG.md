@@ -471,6 +471,36 @@ names the ref that replaces it.
   `eth0` for management. The rest carry an `ocnos-port-names` gap: Edgecore
   boxes do not all count the same way (the AS7316-26XB restarts per speed
   class), and no 800G prefix is documented.
+- **`optical.trunk`**, an optional component key (roc-ops/Portrayal#246): the
+  positions that are a single-faced module's common, network-side end, in
+  `front-order`'s item grammar. The DCIM projection puts them on rear ports
+  as it puts a rear-face connector there - one per trunk part, named
+  `<PART>-1` - so a module whose connectors are all on one face exports at
+  last. Front port names keep the faceplate's count, so no published number
+  changes meaning; components.json carries the key inside `optical` as it
+  carries the rest. The eight path-bearing Smartoptics PPMs state one, and
+  `ppm-ad1-1510` and `ppm-ad1-1625` gain their glass from ds-ppm-r4.0's
+  signal-flow figures: add and drop written as banded legs off the line port.
+  A fibre-map row on a banded leg carries its `band`.
+- **New exports for the PPMs.** `exports/fibre-maps/Smartoptics/`, a fibre
+  map for each of the eight; front and rear ports in the eight NetBox module
+  types and the four DCM Nautobot types. Nautobot cannot put several front
+  ports on one rear position, so the two OCU couplers' and two AD1 filters'
+  Nautobot types state no ports and say the split is in the NetBox type and
+  the fibre map.
+- **A fibre adapter that exports nothing is named, not dropped**
+  (roc-ops/Portrayal#204). Device and module types record the ones with no
+  glass behind them in their comments - 117 on the three DCP chassis, two on
+  the DCP-F-A22, and the LC adapters of seven CommScope CH3000 modules - as
+  the decision #204 asked for: neither an interface nor a front/rear pair.
+  Only `comments` changes on those types. `common/lc-duplex-adapter` leaves NOT_A_DCIM_PORT.
+- Lint **L129**, **L130** and **L131**, on components (#246): `optical.trunk`
+  is for a single-faced module and names no `unused` position by number
+  (L129); every leg of a projected module runs between the front and the
+  trunk (L130); and a module with `optical.paths` has a trunk, a rear face or
+  `optical.trunk` (L131, an error). L78 checks trunk entries name a connector
+  and a position it has, and L79 allows a source to start several paths when
+  all but one carry a `band` - an add/drop filter, not a hidden split.
 
 ### Fixed
 - 3D kit: a `uhandle` standing `in:` a well rises from the well's floor, as

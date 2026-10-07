@@ -153,19 +153,13 @@ def test_the_fibre_map_is_published_beside_the_two_targets():
 # Section D's library-wide sweeps.
 #
 # `fibre_modules(idx)` selects on `optical.paths` and `kind == "module"`, which
-# is every module carrying a fibre graph - the one FS cassette AND the six
-# Smartoptics PPM modules (ppm-dcm-10/20/40/80, ppm-ocu-50-50, ppm-ocu-97-3)
-# whose connectors are all on one faceplate and whose paths run front-to-front
-# (`common.1 -> split.1/2`, never a `rear:`-prefixed endpoint). Those six
-# declare no `faces.rear`, so `build_module`/`export_modules` in dcim_export.py
-# deliberately export no front-ports, no rear-ports and no fibre map for them:
-# nothing in the vocabulary says which of their endpoints is the trunk, and
-# netbox#21830 refuses front ports without rear ports.
-#
-# So every sweep below is scoped to `projecting_modules(idx)` - modules that
-# declare a rear face, via the SAME accessor the exporter uses
-# (`dcim_export.contract_view` + `faces.face_ref(view, "rear")`) - rather than
-# the raw `fibre_modules` selection, which would fail every one of them.
+# is every module carrying a fibre graph. The exporter projects one when it has
+# a trunk - a declared rear face, or a stated `optical.trunk` (#246) - which is
+# `optical_ports.projects`, the one gate `build_module` and `export_modules`
+# both ask. The eight Smartoptics PPMs are single-faced and state a trunk;
+# every FS and Fibrain module has a rear face. L131 makes a path-bearing module
+# with neither an error, so the two lists are the same list, and a test below
+# keeps the gate itself honest with a contract built to fail it.
 def fibre_modules(idx):
     return [e for e in idx.values()
             if (e.get("optical") or {}).get("paths") and e.get("kind") == "module"]
@@ -174,18 +168,21 @@ def fibre_modules(idx):
 def projecting_modules(idx):
     """`fibre_modules`, narrowed to those the exporter actually projects.
 
-    Uses `dcim_export.contract_view` + `faces.face_ref(view, "rear")` - the
-    same accessor `build_module`/`export_modules` gate on - never the raw
+    Asks `optical_ports.projects` of `dcim_export.contract_view(e)` - the same
+    gate and the same shape `build_module`/`export_modules` use - never the raw
     flattened `faces` shape the index carries.
     """
     from portrayal import dcim_export as D
+    from portrayal import optical_ports as P
+    return [e for e in fibre_modules(idx) if P.projects(D.contract_view(e))]
+
+
+def rear_faced_modules(idx):
+    """The projecting modules whose trunk is a rear face - the FS and Fibrain
+    population that exported before `optical.trunk` existed."""
+    from portrayal import dcim_export as D
     from portrayal.faces import face_ref
-    out = []
-    for e in fibre_modules(idx):
-        view = D.contract_view(e)
-        if face_ref(view, "rear"):
-            out.append(e)
-    return out
+    return [e for e in projecting_modules(idx) if face_ref(D.contract_view(e), "rear")]
 
 
 def test_the_sweep_finds_fibre_modules_at_all():
@@ -223,45 +220,57 @@ def test_the_populations_split_as_the_controller_ruling_expects():
     LC duplex holders (6 and 12 port, each in OM3, OM4, OM5, single-mode and
     single-mode APC) and the six multimode SC ones (6 and 12 port in OM3, OM4
     and OM5), all pass-throughs with a declared rear face.
+
+    SIXTY-THREE, ALL PROJECTING, SINCE THE TRUNK (#246): the six PPMs that
+    were excluded state `optical.trunk` and export, and the two AD1 add/drop
+    filters gained their glass in the same change. Fifty-five rear-faced, eight
+    single-faced with a stated trunk, none left out.
     """
     idx = index()
     all_fibre = fibre_modules(idx)
     projecting = projecting_modules(idx)
+    rear_faced = rear_faced_modules(idx)
     excluded = [e["name"] for e in all_fibre if e not in projecting]
-    assert len(all_fibre) == 61, sorted(e["name"] for e in all_fibre)
-    assert len(projecting) == 55, [e["name"] for e in projecting]
-    assert sorted(excluded) == sorted([
+    assert len(all_fibre) == 63, sorted(e["name"] for e in all_fibre)
+    assert len(projecting) == 63, [e["name"] for e in projecting]
+    assert len(rear_faced) == 55, [e["name"] for e in rear_faced]
+    assert not excluded, excluded
+    assert sorted(e["name"] for e in projecting if e not in rear_faced) == sorted([
+        "ppm-ad1-1510", "ppm-ad1-1625",
         "ppm-dcm-10", "ppm-dcm-20", "ppm-dcm-40", "ppm-dcm-80",
         "ppm-ocu-50-50", "ppm-ocu-97-3",
-    ]), excluded
+    ])
 
 
-def test_a_fibre_module_with_no_rear_face_exports_nothing_optical():
-    """The controller ruling, pinned by a test rather than merely implemented.
+def test_a_fibre_module_with_no_trunk_exports_nothing_optical():
+    """The gate, against a contract built to fail it - the library has none.
 
-    A fibre module with no declared rear face - the six Smartoptics PPMs, whose
-    connectors are all on one faceplate and whose paths run front-to-front - is
-    NOT a smaller, degenerate case of the exporter's usual output: it must
-    produce no front-ports, no rear-ports and no fibre map at all, because
-    nothing in the vocabulary says which of its endpoints is the trunk.
+    A module with paths and neither a rear face nor `optical.trunk` is a lint
+    error (L131), so no shipped part exercises this branch. It must still
+    export no front-ports, no rear-ports and no fibre map: front ports with no
+    rear port are what netbox#21830 rejected. The adapters resolve to two
+    positions each, so the gate - not an empty capacity - is what stops it.
     """
     from portrayal import dcim_export as D
-    idx = index()
-    all_fibre = fibre_modules(idx)
-    projecting = projecting_modules(idx)
-    unfaced = [e for e in all_fibre if e not in projecting]
-    assert unfaced, "no unfaced fibre module found - this guard is vacuous"
-    for e in unfaced:
-        # build_module takes the RAW entry, not contract_view's shape - it
-        # calls contract_view(contract) internally to do its own rear-face gate.
-        doc = D.build_module(e, "Smartoptics", idx.get)
-        assert "front-ports" not in doc, e["name"]
-        assert "rear-ports" not in doc, e["name"]
-        if EXPORTS.exists():
-            model = str((e.get("attrs") or {}).get("model") or e["name"])
-            hits = list((EXPORTS / "fibre-maps").rglob(
-                model.replace("/", "-") + ".yaml"))
-            assert not hits, f"{model}: fibre map exported with no rear face"
+    from portrayal import optical_ports as P
+    contract = {
+        "name": "t-coupler", "kind": "module",
+        "parts": [{"id": "common", "ref": "common/lc-duplex-adapter@6"},
+                  {"id": "split", "ref": "common/lc-duplex-adapter@6"}],
+        "optical": {"polish": "upc",
+                    "paths": [{"from": "common.1",
+                               "to": [{"at": "split.1", "ratio": 50},
+                                      {"at": "split.2", "ratio": 50}]}]},
+    }
+    known = {"common/lc-duplex-adapter@6": {"optical": {"positions": 2}}}
+    assert not P.projects(D.contract_view(contract))
+    doc = D.build_module(contract, "Vendor", known.get)
+    assert "front-ports" not in doc and "rear-ports" not in doc
+    contract["optical"]["trunk"] = ["common"]
+    assert P.projects(D.contract_view(contract))
+    doc = D.build_module(contract, "Vendor", known.get)
+    assert [p["name"] for p in doc["front-ports"]] == ["3", "4"]
+    assert doc["rear-ports"] == [{"name": "COMMON-1", "type": "lc-upc", "positions": 2}]
 
 
 def test_every_fibre_module_exports_ports_matching_its_graph():
@@ -273,8 +282,10 @@ def test_every_fibre_module_exports_ports_matching_its_graph():
         view = D.contract_view(e)
         caps = O.capacities(view, idx.get)
         got = P.ports(view, idx.get)
-        front_fibres = sum(n for k, n in caps.items() if ":" not in k)
-        rear_fibres = sum(n for k, n in caps.items() if ":" in k)
+        # A STATED TRUNK MOVES ITS POSITIONS FROM THE FRONT COUNT TO THE REAR
+        trunk = sum(len(v) for v in P.trunk_positions(view, idx.get).values())
+        front_fibres = sum(n for k, n in caps.items() if ":" not in k) - trunk
+        rear_fibres = sum(n for k, n in caps.items() if ":" in k) + trunk
         # POSITIONS, not ports, on both faces: a front LC bore is one port of
         # one position, but a front MPO adapter (the FHD MTP panels) is one
         # port of twelve or sixteen, as a rear connector always was
@@ -410,6 +421,11 @@ def test_the_exported_module_files_carry_the_ports_the_graph_implies():
         for target in D.TARGETS:
             doc = _exported_module_doc(target, man, model)
             assert doc is not None, f"{model} ({target}): no exported file"
+            if target == "nautobot" and "This module splits" in (doc.get("comments") or ""):
+                # several front ports on one rear position: Nautobot has no
+                # spelling, so the type states neither list (for_target)
+                assert "front-ports" not in doc and "rear-ports" not in doc, model
+                continue
             exp_front, exp_rear = base_front, base_rear
             if target == "nautobot":
                 seat = D.seat_names({"front-ports": [{"name": n} for n in base_front],

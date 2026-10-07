@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ppm-ocu-97-3
-version: 2.1.0
+version: 2.2.0
 class: coupler
 behaviour: fills
 profile: optical
@@ -112,6 +112,14 @@ provenance:
     no orthographic photograph of a PPM exists; both readings above are of DRAWINGS.
     Lamp inventory and any marking other than the part number are unknown, and the
     module may well carry none - a passive coupler has nothing to report.
+  trunk: >-
+    datasheet - ds-ppm-r4.0's render labels the left adapter's live bore 100 and the
+    right adapter's two bores 97 and 3: the 100 bore is the one carrying the whole signal,
+    which the coupler splits into the legs or combines from them. That is the
+    common, network-side end, so `optical.trunk` names the `common` adapter bare -
+    its second bore is the dead NA position `unused` already declares - and the
+    DCIM projection puts it on rear port COMMON-1 with the legs as front ports 3
+    and 4 (roc-ops/Portrayal#246).
 elements:
   caption-common: {at: [22.50, 16.2], size: [13.2, 2.05], class: marking}
   caption-split: {at: [35.70, 16.2], size: [13.2, 2.05], class: marking}
@@ -126,6 +134,9 @@ optical:
   # against the bores it actually has.
   media: os2
   polish: upc
+  # THE COMMON PORT IS THE TRUNK - see provenance/trunk. Named bare: its
+  # second bore is the dead NA position declared under `unused`.
+  trunk: [common]
   paths:
     - from: common.1
       to:
