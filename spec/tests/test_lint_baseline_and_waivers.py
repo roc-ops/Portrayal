@@ -176,28 +176,25 @@ def test_waivers_have_not_become_the_answer():
     whether the warning is right; on the CSR310 it was, ten times, and the fix was
     arithmetic rather than a sixth entry here.
 
-    SEVEN IS THE AIS800-32D's L39, and it moved the cap the same way the CSR440 did:
-    the alternative was built and rejected BY LINT ITSELF. Its thirty-two port lamps
-    are common/qsfp-lane-leds-column@1, a column of four windows, and expand.py
-    declines by design to punch a multi-window lamp because one 1.8 x 11.4 slot would
-    claim metal the elevation shows as four 1.4 mm windows on a 3.04 mm pitch. The
-    four true windows were tried as explicit cutouts: L39's coverage test accepts a
-    lamp only when ONE hole covers more than half its footprint, and each window covers
-    about 7.5%, so the honest holes do not count and the only hole that would is the
-    false slot. The warning is right, the fix lint would take is wrong, and the
-    waiver records that disproof. What would let this go back to six is a coverage
-    test that sums the windows a multi-window lamp declares - a change to L39, not to
-    the device. Its L61 offsets, by contrast, went to the baseline like every other
-    device's, because L61 is deliberately never waived (see the module docstring).
+    THE AIS800-32D's L39 WAS SEVENTH, AND IT CAME BACK OFF (#395). Its thirty-two
+    port lamps are common/qsfp-lane-leds-column@1, a column of four 1.4 mm windows,
+    and L39 accepted a lamp only when ONE hole covered more than half its footprint,
+    so the four honest windows could not count and the only hole that would was a
+    false 1.8 x 11.4 slot. L39 now unions the holes, and counts a lamp that declares
+    several windows as covered when the holes cover them; the device punches its
+    128 windows and waives nothing. The cap went down with it, which is the
+    direction it is meant to move. Its L61 offsets, by contrast, went to the
+    baseline like every other device's, because L61 is deliberately never waived
+    (see the module docstring).
 
-    EIGHT IS THE DS6001's L125 (#734), and its fix is wrong for the same reason.
+    SEVEN IS THE DS6001's L125 (#734), and its fix is wrong for the same reason.
     L125 asks a rack device for `ru`, and the DS6001 is an Open Rack v3 tray: 2OU
     of 48 mm, a unit `ru` cannot hold - 96 mm is 2.16 U and the tray does not fit
     an EIA rack at all - so the only `ru` that would silence it is invented. What
-    would let this go back to seven is an Open Rack value for `chassis.mount`."""
+    would let this go back to six is an Open Rack value for `chassis.mount`."""
     waived = [p for p in libwalk.iter_devices([LIB])
               if ((yaml.safe_load(p.read_text()) or {}).get("lint") or {}).get("waive")]
-    assert len(waived) <= 8, f"{len(waived)} devices waive a rule: {[p.parent.name for p in waived]}"
+    assert len(waived) <= 7, f"{len(waived)} devices waive a rule: {[p.parent.name for p in waived]}"
 
 
 # --- render's half ------------------------------------------------------------

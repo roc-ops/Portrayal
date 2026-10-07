@@ -1,4 +1,4 @@
-"""Facets in the schema and L117 (docs/superpowers/specs/2026-09-24-tilted-facets-design.md).
+"""Facets in the schema and L117 (docs/tilted-facets-design.md).
 
 Fixtures are planted in a tmp library; no live part is borrowed."""
 import json

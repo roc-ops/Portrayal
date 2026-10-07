@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1311 component majors in 28 namespaces.
+1319 component majors in 28 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -51,7 +51,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/osfp@1` | component | port | 23.1 × 13.5 × 47 | osfp | 9 | 4 | OSFP cage cutout (800G, one port per opening; the belly-to-belly rows of a 2RU face are two of these, not one… |
 | `std/pcie-bracket-fh@2` | component | bracket | 120.02 × 21.59 | pcie-bracket-fh | 0 | 38 | Standard (full height) PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the ch… |
 | `std/pcie-bracket-lp@1` | component | bracket | 79.2 × 18.42 | pcie-bracket-lp | 0 | 48 | Low profile PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the chassis wall,… |
-| `std/qsfp-dd@1` | component | port | 19 × 10 × 37 | qsfp-dd | 32 | 19 | QSFP-DD cage cutout (400G, backward-compatible faceplate) |
+| `std/qsfp-dd@1` | component | port | 19 × 10 × 37 | qsfp-dd | 32 | 20 | QSFP-DD cage cutout (400G, backward-compatible faceplate) |
 | `std/qsfp-ganged@1` | component | port | 18.5 × 9.58 × 37 | qsfp-ganged | 50 | 26 | QSFP family per-port opening inside a ganged cage block - the cage aperture, with the SFF-8661 module envelop… |
 | `std/qsfp28@1` | component | port | 20 × 10.15 × 37 | qsfp28 | 3 | 49 | QSFP28 cage cutout (100G, 4 lanes) |
 | `std/qsfp56@1` | component | port | 20 × 10.15 × 37 | qsfp56 | 0 | 16 | QSFP56 cage cutout (200G, shares SFF-8661 profile) |
@@ -100,11 +100,11 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/fibre-splice@1` | component | port | 60 × 20 |  | 0 | 1 | A fusion-splice tray holder, as fitted behind a splice cassette's rear panel - twelve trunk pigtails fusion-s… |
 | `common/ground-lug@1` | component | ground | 7 × 14 | terminal-stud | 40 | 1 | Chassis grounding point with earth symbol above the stud |
 | `common/ground-screw-washer@1` | component | ground | 11 × 11 |  | 10 | 1 | Chassis grounding screw - a Phillips pan head seated on a captive washer, screwed into the housing where the … |
-| `common/ground-stud@1` | component | ground | 8.1 × 8.1 | terminal-stud | 7 | 0 | Chassis grounding stud with its hex nut - a threaded stud pressed into the panel and the nut that clamps a ri… |
-| `common/ground-symbol@1` | component | ground | 6 × 6 |  | 65 | 1 | Grounding silkscreen symbol (earth in a circle), no hardware |
+| `common/ground-stud@1` | component | ground | 8.1 × 8.1 | terminal-stud | 9 | 0 | Chassis grounding stud with its hex nut - a threaded stud pressed into the panel and the nut that clamps a ri… |
+| `common/ground-symbol@1` | component | ground | 6 × 6 |  | 67 | 1 | Grounding silkscreen symbol (earth in a circle), no hardware |
 | `common/keyhole-mount@1` | component | mount | 8 × 12 |  | 3 | 0 | Wall-mount keyhole slot |
 | `common/keystone-clip@2` | component | mechanical | 16.5 × 14.9 | keystone-opening | 0 | 1 | The white plastic clip FS ships with its FHD multimedia modular panel (FHD-FAPM6, SKU 143239), seated in one … |
-| `common/laser-warning@1` | component | marking | 5.4 × 4.8 |  | 6 | 13 | IEC 60825 laser hazard triangle - yellow field, black border and burst symbol |
+| `common/laser-warning@1` | component | marking | 5.4 × 4.8 |  | 6 | 14 | IEC 60825 laser hazard triangle - yellow field, black border and burst symbol |
 | `common/lc-boot@1` | component | boot | 6.2 × 6.2 | lc-plug | 0 | 7 | A strain-relief boot for an LC plug: a 6.2 square cross-section that goes AROUND the 5.58 x 5.65 plug body, w… |
 | `common/lc-duplex-adapter@6` | component | port | 13.2 × 11 | lc-duplex | 3 | 16 | Panel-mount LC duplex adapter - a bezel carrying two LC bores side by side, as used for Tx/Rx pairs on optica… |
 | `common/lc-duplex-dust-cap@2` | component | cap | 12.25 × 5.85 | lc-duplex | 0 | 1 | The ONE white cap FS ships over both ports of an FHD LC duplex adapter - 5.85 x 12.25 as read off that adapte… |
@@ -113,9 +113,9 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/lc-dust-cap@1` | component | cap | 4.7 × 4.7 | lc | 0 | 3 | The white dust cap an idle LC port ships with - a 4.7 square lump plugging the bore square, with a rounded-sq… |
 | `common/led-arrow@1` | component | led | 3.6 × 3.2 |  | 15 | 1 | Single triangle port LED - up skin for top-row ports, down for bottom |
 | `common/led-arrow-sm@1` | component | led | 2.25 × 2 |  | 35 | 0 | Compact triangle port LED for tight inter-port gaps - up skin for top-row ports, down for bottom |
-| `common/led-dot@1` | component | led | 2 × 2 |  | 118 | 273 | Tiny round port LED (2mm) |
-| `common/led-indicator@1` | component | led | 4 × 4 |  | 29 | 48 | Single chassis status LED |
-| `common/led-rect@1` | component | led | 4.6 × 2.6 |  | 30 | 3 | Rectangular system LED (cell-site style green bar) |
+| `common/led-dot@1` | component | led | 2 × 2 |  | 118 | 274 | Tiny round port LED (2mm) |
+| `common/led-indicator@1` | component | led | 4 × 4 |  | 31 | 48 | Single chassis status LED |
+| `common/led-rect@1` | component | led | 4.6 × 2.6 |  | 30 | 4 | Rectangular system LED (cell-site style green bar) |
 | `common/led-rect-sm@1` | component | led | 2.8 × 1.6 |  | 31 | 23 | Small rectangular per-port LED - the rounded bar a dense port row carries one of beside each cage, at roughly… |
 | `common/led-slot-pair@1` | component | led | 3.7 × 1.2 |  | 0 | 4 | Two lamps behind one light-pipe slot - the rounded 3.7 x 1.2 window a bracket punches for a port's pair of in… |
 | `common/led-sq@1` | component | led | 3 × 3 |  | 1 | 0 | A small square status lamp, 3 mm, flush in a panel |
@@ -153,11 +153,11 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/qsfp-transceiver@1` | module | transceiver | 18.35 × 8.5 × 83.2 | qsfp | 0 | 2 | QSFP transceiver with a white pull-latch bail, drawn from a vendor mechanical drawing |
 | `common/qsfp28-cage@3` | component | port | 19 × 14.5 × 37 |  | 1 | 0 | QSFP28 cage at the measured 19.0mm ganged pitch, four round per-lane LEDs (v3 = composed - cage bezel wraps a… |
 | `common/rack-ear@1` | component | ear | 14 × 43.5 |  | 36 | 1 | Generic 1U rack mounting ear (decorative; place outside the chassis with optional tag 'ears'; skins left/righ… |
-| `common/reset-button@1` | component | button | 4 × 4 × 2.5 |  | 114 | 7 | Recessed pinhole reset button |
+| `common/reset-button@1` | component | button | 4 × 4 × 2.5 |  | 115 | 7 | Recessed pinhole reset button |
 | `common/rivet@1` | component | mechanical | 3 × 3 |  | 7 | 0 | Sheet-metal rivet head |
 | `common/rj11-jack@1` | component | port | 14 × 13.5 | rj11 | 1 | 1 | RJ11 telephone jack (FXS) |
 | `common/rj45-boot@1` | component | boot | 14.5 × 10 | rj45-plug | 0 | 1 | A strain-relief boot for an RJ45 (8P8C) copper plug - PVC, moulded around the plug it wraps |
-| `common/rj45-eth@1` | component | port | 15.8 × 13.2 × 18.6 |  | 63 | 42 | An Ethernet RJ45 - the std/rj45@2 housing with the two link and activity lamps nearly every Ethernet jack car… |
+| `common/rj45-eth@1` | component | port | 15.8 × 13.2 × 18.6 |  | 64 | 42 | An Ethernet RJ45 - the std/rj45@2 housing with the two link and activity lamps nearly every Ethernet jack car… |
 | `common/rj45-eth-pinside@1` | component | port | 15.8 × 13.2 × 18.6 |  | 0 | 3 | An Ethernet RJ45 whose two link and activity lamps are in the side walls of the housing at its PIN end, besid… |
 | `common/rj45-ganged-eth@1` | component | port | 12.7 × 11 × 18.6 |  | 76 | 35 | An Ethernet RJ45 in a ganged 2xN block - the std/rj45-ganged@2 cell with the two lamps in its keyway-side cor… |
 | `common/rj45-ganged-link@1` | component | port | 12.7 × 11 × 18.6 |  | 5 | 0 | An Ethernet RJ45 in a ganged 2xN block with ONE lamp - the std/rj45-ganged@2 cell with a single link/activity… |
@@ -187,7 +187,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/vhdci-receptacle@1` | component | port | 40.4 × 5.2 | vhdci | 0 | 4 | VHDCI (very-high-density cable interconnect) receptacle as a faceplate sees it - the flattened 0.8 mm-pitch s… |
 | `common/wall-plate-keyhole-2@1` | component | mount | 56 × 30 |  | 6 | 1 | Wall-mounting plate with two keyhole slots - a flat plate screwed across a device's back so the device hangs … |
 | `common/wall-plate-keyhole-2-42@1` | component | mount | 42 × 22 |  | 4 | 0 | The smaller wall-mounting plate with two keyhole slots - the 42 mm plate on the back of the AurCore AIS small… |
-| `common/warning-triangle@1` | component | marking | 5.4 × 4.8 |  | 5 | 3 | General warning triangle - a black exclamation mark in a yellow triangle, ISO 7010 W001 |
+| `common/warning-triangle@1` | component | marking | 5.4 × 4.8 |  | 5 | 4 | General warning triangle - a black exclamation mark in a yellow triangle, ISO 7010 W001 |
 
 ## generic/ (58)
 
@@ -259,23 +259,25 @@ aperture when it is a bare opening - never both at one position. The README's
 | `amphenol/qsfp28-passive-dac@1` | module | transceiver | 18.35 × 8.5 × 52.4 | qsfp | 0 | 0 | Amphenol NDAAFR QSFP28 to QSFP28 100G passive direct-attach copper cable, one end - 32 AWG eight-pair PVC-jac… |
 | `amphenol/qsfp56-linear-active@1` | module | transceiver | 18.35 × 8.5 × 52.4 | qsfp | 0 | 0 | Amphenol NJAAF3 QSFP56 to QSFP56 200G active copper cable, one end - 30 AWG eight-pair dual-drain cable in a … |
 
-## amphenol-ns/ (13)
+## amphenol-ns/ (15)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
-| `amphenol-ns/alarm-card-307608@1` | component | port | 39 × 42.8 |  | 3 | 0 | Rear face of the alarm card of a passive Amphenol Network Solutions 300CB08 - two three-pin wire-wrap headers… |
-| `amphenol-ns/alarm-dip-8@1` | component | button | 21.9 × 4.6 |  | 3 | 0 | Eight-position DIP switch seen through a slot in the front of an Amphenol Network Solutions 1RU power panel -… |
-| `amphenol-ns/breaker-1ru@1` | module | breaker | 17.8 × 39.1 × 127.5 |  | 3 | 1 | Single-pole bullet-terminal plug-in circuit breaker for Amphenol Network Solutions 1RU breaker panels - the b… |
-| `amphenol-ns/breaker-blank-1ru@1` | module | blank | 17.8 × 39.1 × 1 |  | 3 | 0 | Blanking cover for an unused breaker position on an Amphenol Network Solutions 1RU breaker panel |
-| `amphenol-ns/cover-thumbscrew@1` | component | screw | 9.7 × 9.7 |  | 3 | 0 | Captive thumbscrew holding the removable front cover of an Amphenol Network Solutions 1RU power panel - turne… |
+| `amphenol-ns/alarm-card-307608@1` | component | port | 39 × 42.8 |  | 3 | 1 | Rear face of the alarm card of a passive Amphenol Network Solutions 300CB08 - two three-pin wire-wrap headers… |
+| `amphenol-ns/alarm-dip-8@1` | component | button | 21.9 × 4.6 |  | 5 | 0 | Eight-position DIP switch seen through a slot in the front of an Amphenol Network Solutions 1RU power panel -… |
+| `amphenol-ns/breaker-1ru@1` | module | breaker | 17.8 × 39.1 × 127.5 |  | 5 | 1 | Single-pole bullet-terminal plug-in circuit breaker for Amphenol Network Solutions 1RU breaker panels - the b… |
+| `amphenol-ns/breaker-blank-1ru@1` | module | blank | 17.8 × 39.1 × 1 |  | 5 | 0 | Blanking cover for an unused breaker position on an Amphenol Network Solutions 1RU breaker panel |
+| `amphenol-ns/cover-thumbscrew@1` | component | screw | 9.7 × 9.7 |  | 5 | 0 | Captive thumbscrew holding the removable front cover of an Amphenol Network Solutions 1RU power panel - turne… |
 | `amphenol-ns/guard-mount-1ru@1` | component | mechanical | 3.2 × 32.3 | breaker-1ru-guard | 0 | 1 | The two threaded inserts in the face of a 1RU plug-in breaker, one above the other - where its touch guard sc… |
 | `amphenol-ns/input-feed-busbar@1` | component | inlet | 42.5 × 30.6 |  | 1 | 0 | One DC feed input of an Amphenol Network Solutions 1RU power panel with horizontal inputs - two busbar landin… |
-| `amphenol-ns/input-feed-studs@1` | component | inlet | 64.1 × 41 |  | 2 | 0 | One DC feed input of an Amphenol Network Solutions 1RU power panel with vertical inputs - its BATT terminal a… |
+| `amphenol-ns/input-feed-studs@1` | component | inlet | 64.1 × 41 |  | 4 | 0 | One DC feed input of an Amphenol Network Solutions 1RU power panel with vertical inputs - its BATT terminal a… |
 | `amphenol-ns/input-stud-pair@1` | component | inlet | 29 × 41 |  | 0 | 1 | One input terminal of an Amphenol Network Solutions 1RU power panel with vertical inputs - two 3/8-16 studs o… |
+| `amphenol-ns/nrg-oled@1` | component | display | 24.9 × 7.6 |  | 1 | 0 | Front display of an nrgSMART integrated controller - a two-line black and white OLED that scrolls the control… |
+| `amphenol-ns/nrg-rear-block@1` | component | port | 39 × 42.8 |  | 2 | 0 | Rear centre block of an Amphenol Network Solutions nrgSMART power panel with an integrated controller or sens… |
 | `amphenol-ns/output-p40@1` | component | inlet | 10.5 × 29.8 |  | 2 | 0 | One connectorized output circuit of an Amphenol Network Solutions 1RU power panel - a two-pole latching recep… |
-| `amphenol-ns/output-terminal@1` | component | inlet | 14.75 × 34 |  | 1 | 0 | One output circuit of an Amphenol Network Solutions 1RU power panel with terminal-block outputs - a BATT scre… |
+| `amphenol-ns/output-terminal@1` | component | inlet | 14.75 × 34 |  | 3 | 0 | One output circuit of an Amphenol Network Solutions 1RU power panel with terminal-block outputs - a BATT scre… |
 | `amphenol-ns/touch-guard-1ru@1` | component | mechanical | 17.8 × 39.1 | breaker-1ru-guard | 0 | 1 | Touch guard cover for a 1RU plug-in breaker on an Amphenol Network Solutions breaker panel - a black hood scr… |
-| `amphenol-ns/tpa-fuse-holder-307492@1` | module | breaker | 17.8 × 39.1 × 127.5 |  | 3 | 0 | 1RU TPA fuse holder, part 307492 - a plug-in carrier that takes one Cooper Bussmann TPA fuse and seats in the… |
+| `amphenol-ns/tpa-fuse-holder-307492@1` | module | breaker | 17.8 × 39.1 × 127.5 |  | 5 | 0 | 1RU TPA fuse holder, part 307492 - a plug-in carrier that takes one Cooper Bussmann TPA fuse and seats in the… |
 
 ## casa/ (40)
 
@@ -819,10 +821,11 @@ aperture when it is a bare opening - never both at one position. The README's
 | `fibrain/xmn1051gb@1` | module | adapter-panel | 100 × 21 × 37 |  | 1 | 17 | Fibrain XMN1051GB - HD adapter holder, 12 SC/APC simplex adapters (green), single-mode |
 | `fibrain/xmn1051gb-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMN1051GB: the same adapters that face forward, seen from behind, whose far ends take the… |
 
-## fs/ (62)
+## fs/ (67)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
+| `fs/d-ring-snap-in@1` | component | mechanical | 32.3 × 43.6 |  | 1 | 0 | FS snap-in D-ring of the FHD-CMP5DR lacer panel, seen from above - a polycarbonate loop that twists into a ro… |
 | `fs/fhd-1mtp12-sc-os2-a@3` | module | cassette | 108.97 × 35.05 × 117.86 |  | 7 | 0 | FS FHD-1MTP6SCDOS2A - MTP-12 (male) to six SC duplex, 12 fibres, OS2, Type A polarity |
 | `fs/fhd-1mtp12-sc-rear@3` | component | cassette | 99 × 31 |  | 0 | 1 | The back of FS FHD-1MTP6SCDOS2A (SKU 57058): the cassette body seen from behind, carrying its single MTP-12 t… |
 | `fs/fhd-1mtp24-lc-af-rear@2` | component | cassette | 99 × 31 |  | 0 | 1 | The back of FS FHD-1MTP12LCDOS2AF (SKU 68549): the MTP-24 cassette's body seen from behind, with its polarity… |
@@ -854,6 +857,10 @@ aperture when it is a bare opening - never both at one position. The README's
 | `fs/fhd-3mtp18-lc-om4-a@1` | module | cassette | 108.97 × 35.05 × 117.86 |  | 7 | 0 | FS FHD-3MTP18LCDOM4A - three MTP-12 (male) to eighteen shuttered LC duplex, 36 fibres, OM4, Type A polarity |
 | `fs/fhd-3mtp18-lc-os2-a@1` | module | cassette | 108.97 × 35.05 × 117.86 |  | 7 | 1 | FS FHD-3MTP18LCDOS2A - three MTP-12 (male) to eighteen shuttered LC duplex, 36 fibres, OS2, Type A polarity |
 | `fs/fhd-3mtp18-lc-rear@1` | component | cassette | 99 × 31 |  | 0 | 2 | The back of FS FHD-3MTP18LCDOS2A (SKU 105333) and its OM4 twin 105335: the 36-fibre cassette's body seen from… |
+| `fs/fhd-cmp5dr-ear@1` | component | ear | 17.3 × 44 |  | 1 | 0 | One mounting ear of the FS FHD-CMP5DR lacer panel - part of the tray's own sheet, folded upright, with a slot… |
+| `fs/fhd-cmp5dr-profile@1` | component | mechanical | 110 × 44 |  | 1 | 0 | The FS FHD-CMP5DR lacer panel seen from one side - the ear on edge, the web sloping down to the tray, and one… |
+| `fs/fhd-cmp5dr-tray@1` | component | mechanical | 448.4 × 110 × 41 |  | 1 | 0 | The steel tray of the FS FHD-CMP5DR lacer panel seen from above - a strip across the front that carries the r… |
+| `fs/fhd-cmp5dr-web@1` | component | mechanical | 1.5 × 66 |  | 1 | 0 | The web that carries the FS FHD-CMP5DR's tray off each ear, seen from above - the sheet swept up from the tra… |
 | `fs/fhd-fap12lcd-apc-os2@1` | module | adapter-panel | 108.97 × 35.05 × 29.5 |  | 7 | 0 | FS FHD-FAP12LCADZSMF - FHD fiber adapter panel, twelve LC APC duplex adapters (green), 24 fibres, OS2 |
 | `fs/fhd-fap12lcd-apc-os2-rear@1` | component | adapter-panel | 88 × 34.8 |  | 0 | 1 | The back of FS SKU 25514 (FHD-FAP12LCADZSMF): the adapter block seen from behind, the same adapters that face… |
 | `fs/fhd-fap12lcd-om4@1` | module | adapter-panel | 108.97 × 35.05 × 29.5 |  | 7 | 0 | FS FHD-FAP12LCDX10GMM - FHD fiber adapter panel, twelve LC UPC duplex adapters (aqua), 24 fibres, OM3/OM4 |
@@ -1328,15 +1335,16 @@ aperture when it is a bare opening - never both at one position. The README's
 |---|---|---|---|---|---|---|---|
 | `siemon/qsfp28-aoc@1` | module | transceiver | 18.35 × 8.5 × 52.4 | qsfp | 0 | 0 | Siemon 100G QSFP28 active optical cable, one end - four 25G lanes at 850 nm over a 3.0 mm multimode fibre cab… |
 
-## smartoptics/ (16)
+## smartoptics/ (17)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
+| `smartoptics/dcp-1203@1` | module | line-card | 205 × 44 |  | 1 | 0 | Smartoptics DCP-1203, three independent 100/400G transponders on a half-width 1RU plug-in unit for one DCP-2 … |
 | `smartoptics/dcp-2-blank@1` | module | blank | 205 × 44 |  | 1 | 0 | Smartoptics DCP-2 blind plate - the moulded blank that fills an unused traffic slot so the airflow still pass… |
 | `smartoptics/dcp-2-fan@1` | module | fan | 192 × 40 |  | 2 | 0 | Smartoptics DCP-2-FAN-FB - the DCP-2 fan tray, a hot-pluggable unit carrying four fans behind a hexagonal per… |
 | `smartoptics/dcp-2-psu-ac@1` | module | psu | 73.5 × 40 |  | 2 | 1 | Smartoptics DCP-2-PSU-AC-FB - the AC power supply for the DCP-2 chassis, a 1U CRPS module wrapping a std/c14-… |
 | `smartoptics/dcp-2-psu-dc@1` | module | psu | 73.5 × 40 |  | 2 | 2 | Smartoptics DCP-2-PSU-DC-FB - the -48V DC power supply for the DCP-2 chassis |
-| `smartoptics/dcp-404@1` | module | line-card | 205 × 44 |  | 1 | 6 | Smartoptics DCP-404 muxponder, a half-width 1RU plug-in unit for one DCP-2 traffic slot |
+| `smartoptics/dcp-404@1` | module | line-card | 205 × 44 |  | 1 | 7 | Smartoptics DCP-404 muxponder, a half-width 1RU plug-in unit for one DCP-2 traffic slot |
 | `smartoptics/dcp-f-a22@2` | module | line-card | 205 × 44 |  | 1 | 0 | Smartoptics DCP-F-A22 - a 22 dB gain EDFA amplifier that takes one slot in a DCP-2 chassis and carries two ba… |
 | `smartoptics/m32-client-lamp@1` | component | led | 13.2 × 2 |  | 1 | 0 | The DCP-M32's per-channel client indicator - a white strip carrying the Tx and Rx lettering, lit from behind |
 | `smartoptics/ppm-ad1-1510@2` | module | filter | 55.4 × 19.5 |  | 1 | 10 | Smartoptics PPM-AD1-1510-2F - a passive plug-in module that splits the 1511nm optical supervisory channel off… |

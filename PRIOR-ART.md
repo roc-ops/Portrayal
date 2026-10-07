@@ -79,10 +79,11 @@ what would close it*. Those are differences of scope rather than of quality: NDX
 is a data catalogue, and this is a geometry library.
 
 **What we should take.** Sectioned attributes (see issue on attr sections): our
-`attrs` is a flat bag of 74 keys across 13 devices with visible drift -
+`attrs` was a flat bag of 74 keys across 13 devices when this was written
+(2026-08-25, the library's size then), with visible drift -
 `power-ac-max-w` beside `power-max-ac-w`, three spellings of operating
 temperature. Certifications and regulatory compliance, which every datasheet
-carries and which we hold for 2 of 13 devices. Lifecycle, in the narrower form
+carries and which we held for 2 of those 13 devices. Lifecycle, in the narrower form
 described in that issue.
 
 **Use as a source: cross-check only, and only against publicly verifiable

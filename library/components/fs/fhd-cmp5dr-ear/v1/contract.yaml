@@ -1,0 +1,33 @@
+format: 1
+kind: component
+name: fhd-cmp5dr-ear
+version: 1.0.0
+class: ear
+behaviour: mounts
+description: >-
+  One mounting ear of the FS FHD-CMP5DR lacer panel - part of the tray's own sheet,
+  folded upright, with a slot, a round hole and a slot for the rack screws
+provenance:
+  size: >-
+    drawing - the front view of the three-view drawing in FS's 0U/1U Horizontal Cable
+    Manager Datasheet (updated 2025-05-11), at 1.331 px/mm: 44 high, dimensioned, and 17.3
+    wide, from the end of the 483 to the tray's body edge.
+  size-holes: >-
+    drawing - the same view dimensions 31.5 between the two slots' centres and 465 between
+    the ears' hole centres, which puts them 9 mm in from the end; drawn on the ear's
+    centreline, 8.65, since one part serves both ends. The slots read 14 x 8 px over their
+    outline, 9 x 5 inside it; the round hole's 4 mm is estimated, at five pixels.
+  relief: >-
+    datasheet - FS's product page for #72911, "rugged 1.5mm cold-rolled steel".
+size: {w: 17.3, h: 44}
+size-confidence: {w: drawing, h: drawing}
+elements:
+  plate: {at: [0.0, 0.0], size: [17.3, 44], class: bezel}
+relief:
+  features:
+    - node: plate
+      out: 1.5
+      color: '#1b1d20'
+      confidence: datasheet
+      source: 'FS product page for #72911 - 1.5mm cold-rolled steel'
+skins: [default]

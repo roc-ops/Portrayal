@@ -32,7 +32,11 @@ onto `sys.path` in fourteen spellings across 94 files. `pip install -e .` is wha
 makes `import portrayal` resolve, for `python -m portrayal lint` and for the
 `python3 spec/tools/portrayal/....py` paths the rest of this file gives alike.
 The extras are `[test]`, `[render]` (rasterising DCIM images), `[intake]` and
-`[bench]`.
+`[bench]`. `[render]` installs cairosvg, which needs the system cairo library
+under it: `brew install cairo` on macOS, `apt install libcairo2` on Debian or
+Ubuntu. Without it, `./publish.sh` stops at its first check; run
+`./publish.sh --no-images` instead, which writes the exports without the
+pictures.
 
 `spec/tools/` is five directories and the split is what the gates run:
 
@@ -53,7 +57,7 @@ If you prefer a driver to a path, `python -m portrayal` wraps the gates:
 python -m portrayal lint         # the library against the schemas
 python -m portrayal lock         # what version bump your change needs
 python -m portrayal build        # or `publish`, which adds the DCIM exports
-python -m portrayal test
+python -m portrayal test         # runs the suite in parallel, with -n auto
 ```
 
 `./build.sh` is the check that your environment works. It lints the whole
@@ -89,6 +93,10 @@ with [`docs/modelling-pitfalls.md`](docs/modelling-pitfalls.md) for when a figur
 or a rule misbehaves. It walks the order the panel is
 manufactured in: chassis and faces, then the holes punched in them, then the
 printing, then the components seated in the holes; with a check at each stage.
+Start from [`docs/device-template.yaml`](docs/device-template.yaml): copy it to
+`library/devices/<vendor>/<model>/device.yaml` and replace every value. It has
+each key a small fixed-port switch needs, with a comment saying what goes there,
+and the test suite lints it so it stays valid.
 The short version of what you will write:
 
 - `chassis` dimensions and six `views`, each sized. A face with nothing on it
@@ -132,6 +140,13 @@ python3 spec/tools/portrayal/lint.py --schemas spec/schemas --library library --
 and commit the result with your change. A baseline that has drifted from the tree
 is worse than none - it reports phantom fixes and hides real additions - so a
 test fails when the two disagree.
+
+**A warning about a stock component is not yours either.** The parts under
+`library/components/` that you place carry warnings of their own (an L97 on
+the fan module, the PSU or an RJ45 jack, say), and lint names them when it
+checks your device. If you did not edit the component, the warning was there
+before you; the baseline line above says so. Fix it if you want to, as its own
+change.
 
 **A baseline is not a waiver.** It says "already true", not "decided". Where a
 device genuinely will not satisfy a rule and somebody has worked out why, the
@@ -217,21 +232,25 @@ it reports zero findings, and only then:
 ```sh
 python3 spec/tools/portrayal/devicelock.py --library library --update
 ./publish.sh --no-images                                  # build + DCIM exports
-python3 -m pytest spec/tests -q                           # after publish; it skips without dist/
+python3 -m pytest spec/tests -q -n auto                   # after publish; it skips without dist/
 ```
 
 **Expect skips, and know which kind.** Most of the suite reads the build in
 `library/dist/`, so on a tree that has not been built it skips several hundred
 tests rather than failing them: run `./build.sh` (or `./publish.sh`) first. A
-handful also skip on a built tree, because the reference images they compare
-against are not in this repository. A skip count in the hundreds means no build,
-not a clean suite.
+handful also skip on a built tree, each with its reason: most compare against
+reference images that are not in this repository, and one or two look for a
+part the library does not have yet. `-rs` prints the reasons. A skip count in
+the hundreds means no build, not a clean suite.
+
+`-n auto` runs the suite on every core, as CI does. Serially it takes about
+three times as long.
 
 To run every library-wide sweep against **one** device - the equivalent of
 `./build.sh --device` for the suite:
 
 ```sh
-python3 -m pytest spec/tests -q -k juniper/mx204
+python3 -m pytest spec/tests -q -n auto -k juniper/mx204
 ```
 
 The sweeps are parametrised over the library with the device's slug as the test

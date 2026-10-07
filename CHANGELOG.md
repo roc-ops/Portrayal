@@ -25,6 +25,23 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- The FS FHD-CMP5DR lacer panel (`fs/fhd-cmp5dr`), the first passive part
+  that shares a rack unit with other equipment, and what it needs:
+  `chassis.mount: rack-face` (a part bolted to the rail face that projects
+  outward; it states `ru`, the units its ears span, and exports
+  `u_height: 0`); `chassis.shell: sheet` with `chassis.thickness`, a bent
+  sheet-metal body whose views are elevations and which builds in 3D only
+  what its parts build (lint L127 holds a sheet to its gauge); and a
+  `passive` profile for rack furniture, which owes only its weight. A
+  `passive` device is exported to DCIM though it has no interfaces, console
+  or bays. Design note: `docs/cable-managers-design.md`.
+- Lint L128, on devices and listings: a `part-numbers` key has no stray
+  whitespace. Whitespace other than a plain space (NBSP, a tab, a zero-width
+  space) and leading or trailing whitespace are errors; a space splitting a
+  run of capitals and digits between two hyphens (`9716-32D-O-A C-F-UK`,
+  #720) is a warning a device can waive. Keys that mean their spaces, such
+  as `AS7535-28XB-O-AC-F V2` and `7750 SR-12 (pre-2016 chassis)`, pass, and
+  nothing in the library raises it (roc-ops/Portrayal#731).
 - Fibrain's HD adapter holders for LC, and the multimode SC ones: ten LC
   duplex holders (`fibrain/xmi1021ca`, `-da`, `-ha`, `-ga` and `xmi1031ga`
   with 6 adapters; `xmn1021cb`, `-db`, `-hb`, `-gb` and `xmn1031gb` with 12)
@@ -80,6 +97,15 @@ names the ref that replaces it.
   147 mm behind the chassis. Front, top, bottom and sides are the 300CB08. In
   the DCIM exports each has two `dc-terminal` power ports, one per feed, and
   its outputs are not exported yet. No existing device or export changes.
+- The two monitored panels of the Amphenol Network Solutions 300CB08 family
+  with the plain rear: `amphenol-ns/nrg300cb08-ctrl` (integrated nrgSMART
+  controller: front display `amphenol-ns/nrg-oled@1`, MGMT and LAN RJ45s,
+  RESET) and `amphenol-ns/nrg300cb08-sens` (sensor card, no network jacks).
+  Both take the new rear centre `amphenol-ns/nrg-rear-block@1` (alarm headers,
+  nrgNET IN and OUT, two temperature probe jacks), which the DCIM exporter
+  skips as not a DCIM port. In the DCIM exports the CTRL has two management
+  interfaces, `mgmt` and `lan` (100base-tx), and both have two `dc-terminal`
+  power ports. No existing device or export changes.
 - Fibrain, a new vendor: the XCU10 extendable HD patch panel (`fibrain/xcu`,
   0.5U, 48 SC), with XCU10-51ID and XCU10-41ID as configurations. Its front is
   one captive drawer (`fibrain/xcu-drawer@1`) whose four slots seat the HD
@@ -162,6 +188,11 @@ names the ref that replaces it.
   new parts seat in it, `cisco/pwr-c49e-300ac-r@1` and `cisco/ws-x4993@1`. Its
   export names ports as IOS does, `GigabitEthernet1/1` to `1/48`,
   `TenGigabitEthernet1/49` to `1/52` and `FastEthernet1`.
+- The Smartoptics DCP-1203 (`smartoptics/dcp-1203@1`), three 100/400G
+  transponders on one DCP-2 traffic unit: six QSFP28/QSFP-DD combo cages in
+  three pairs, odd ports client and even ports line, each with its Tx and Rx
+  lamps. The DCP-2 accepts it in both traffic slots and gains a `dcp-1203-x2`
+  example configuration.
 - A device can name its own interfaces. A top-level `interfaces:` block, in
   the shape a NOS listing's has, says what the maker's own operating system
   calls each port, and the hardware's own DCIM device type uses those names:
@@ -417,6 +448,8 @@ names the ref that replaces it.
   class), and no 800G prefix is documented.
 
 ### Fixed
+- 3D kit: a `uhandle` standing `in:` a well rises from the well's floor, as
+  `out`, `cyl` and `bar` already did, rather than from the face plane.
 - `amphenol-ns/tpa-fuse-holder-307492@1` (1.0.1) keeps its fuse rating out of
   the drawing once the rating is set in a viewer. The rating is carried by the
   part and never printed, because the fuse is inside the holder; its text node
@@ -429,8 +462,46 @@ names the ref that replaces it.
   bay and no cage of any view claims such a key, so no view was named, the
   face was never rewritten and the occupant showed in 2D only, with no
   warning. Every view is rewritten for such a key (#814).
+- `@portrayal/kit`: the README's links to the Portrayal README and to the
+  artifact contract are absolute GitHub URLs, so they work on the npm package
+  page, where a relative link resolved against npmjs.com and broke. The
+  package also names its `homepage` and where to report `bugs`. Both reach
+  npm with the next kit release (#716).
 
 ### Changed
+- `relief.profile` and `profile-y` now move with `out` when their part stands
+  `in:` a well or is seated in a lifted bay, so the heights stay heights
+  above what the part stands on. The schema used to say a profile was not
+  shifted by `in:`; no part in the library before the FS FHD-CMP5DR met that
+  case, so nothing already built changes.
+- `chassis.ru` also means the rack units a `rack-face` part's ears span, not
+  only units occupied; L125 asks a `rack-face` device for `ru`, and L43 (ears
+  are not drawn) stands down for it.
+- **The Nautobot export stops on a front port it cannot state truly**, instead
+  of writing it: a one-fibre front port whose `rear_position` is missing or
+  outside its rear port's positions, and a front port collapsed to one
+  position that is not the whole of its rear connector, fibre for fibre. No
+  export in the library changes (roc-ops/Portrayal#771).
+- **A device's `pon` flavour types only a port**: an SC receptacle or a
+  pluggable cage. A lamp or label in a group that states `pon` no longer
+  exports as a second PON interface. No export in the library changes
+  (roc-ops/Portrayal#772).
+- Lint L39 counts a lamp as punched when the holes over it together cover
+  more than half of it, not only when one hole does, and a lamp whose part
+  declares several windows also when the holes cover more than half of those
+  windows. A lamp seen through several windows could not be covered before,
+  however honestly they were punched. `expand.py` still punches a lamp
+  automatically only when its part declares one opening.
+  `edgecore/ais800-32d` (1.1.0) punches its 128 lane windows as round
+  cutouts (`led-port-N-lane-K`) and drops the L39 waiver it carried for
+  want of this (roc-ops/Portrayal#395).
+- `spec/schemas/standards.yaml`: the `sc-duplex-adapter` pitch floor is
+  12.71, the narrowest of the five gaps it was measured from, not 13.0, their
+  mean. L81 now accepts an evenly spaced SC adapter panel at 12.71 or wider,
+  where it used to refuse anything under 13.0. `fs/fhd-1mtp12-sc-os2-a@3`
+  (3.0.2) no longer undercuts the floor and drops the `pitch-note` that said
+  it did; the seven FS FHD enclosures that seat it take a patch
+  (roc-ops/Portrayal#245).
 - **BREAKING for DCIM data already imported.** Telco Systems is listed as
   `BATM/Telco Systems`, the name the vendor asks to be listed under. The
   `manufacturer` of its fourteen devices changes, and with it every one of its

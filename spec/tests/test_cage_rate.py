@@ -423,6 +423,33 @@ def test_a_device_pon_port_takes_its_flavour():
     assert dx.device_port_type(sc, {"pon": "xgs-pon"}, "furniture")[0] is None
 
 
+def test_a_lamp_in_a_pon_group_is_not_a_second_pon_port():
+    """`pon` on a GROUP reaches every placement in it (nokia/xs-010x-r states it
+    there). The flavour says what a port runs; it does not make a lamp or a
+    label a port, and before #772 either would have exported as one."""
+    dev = {"vendor": "acme", "manufacturer": "Acme", "name": "x", "model": "X1",
+           "chassis": {"u": 1},
+           "groups": {"pon": {"term": "Port", "role": "traffic",
+                              "attrs": {"media": "fiber", "speed": "10g", "pon": "xgs-pon"}}},
+           "views": {"rear": {"components": {"placements": [
+               {"ref": "std/sc-bore@1", "id": "pon", "at": [0, 0], "group": "pon"},
+               {"ref": "common/led-dot@1", "id": "led-pon", "at": [20, 0], "group": "pon",
+                "for": "pon"},
+               {"ref": "common/laser-warning@1", "id": "laser-mark", "at": [30, 0],
+                "group": "pon"}]}}}}
+    got = dx.build(dev, "base", {}, None)["interfaces"]
+    assert got == [{"name": "pon", "type": "xgs-pon"}]
+    lamp = {"ref": "common/led-dot@1", "id": "led-pon"}
+    assert dx.device_port_type(lamp, {"pon": "xgs-pon"}, "traffic")[0] is None
+    # With a listing (names given) the role guards are skipped, so the part
+    # test is all that stands between the lamp and an interface.
+    names = {"led-pon": ("pon0", None)}
+    assert dx.device_port_type(lamp, {"pon": "xgs-pon"}, "traffic", names)[0] is None
+    # A device's own pluggable cage that states the flavour still takes it.
+    assert dx.device_port_type({"ref": "std/sfp@1", "id": "p1"}, {"pon": "gpon"},
+                               "traffic")[0] == "gpon"
+
+
 def test_a_multi_pon_card_exports_every_port_as_pon():
     p = LIB / "exports/netbox/module-types/Nokia/FGUT-A.yaml"
     if not p.exists():

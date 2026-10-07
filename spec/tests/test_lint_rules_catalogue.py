@@ -226,6 +226,8 @@ ISSUED = {
     "L124": "library",
     "L125": "device",
     "L126": "device",
+    "L127": "device",
+    "L128": "device, listing",
 }
 
 

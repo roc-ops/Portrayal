@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
-"""Portrayal renderer v0: compile a device manifest + component skins into flat SVG.
+"""Portrayal renderer: compile a device manifest + component skins into flat SVG.
 
 One SVG per view. Deterministic output: no timestamps; tool version stamped in
 <metadata> along with resolved component versions and the digest of the device's
 published <device>.source.json.
 """
 import argparse
+import contextlib
 import copy
 import functools
 import hashlib
 import json
 import math
+import os
 import re
 import sys
+import tempfile
+import time
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
@@ -660,7 +664,7 @@ def _inset_feature(feat, back, group_lift=0.0):
     # what a `lift`, and anything measured from one, has to move by
     lb = back + group_lift
     # A SUNK FACET IS BELOW THE PLATE ON PURPOSE (recessed facets, in
-    # docs/superpowers/specs/2026-09-24-tilted-facets-design.md): it stands in
+    # docs/tilted-facets-design.md): it stands in
     # a pocket, so a negative `out` or `lift` is its geometry, not a feature
     # left behind the panel. Nothing here clamps or drops one.
     sunk = bool(f.get("facet")) and (f.get("lift") or 0) < 0
@@ -689,7 +693,7 @@ def _inset_feature(feat, back, group_lift=0.0):
 def _facet_wedge(feat, contract):
     """A `facet` feature's derived `out`/profile, off the facet node's own
     `elements[node].size`, computed BEFORE `_inset_feature` sees it
-    (docs/superpowers/specs/2026-09-24-tilted-facets-design.md; the schema
+    (docs/tilted-facets-design.md; the schema
     forbids a `facet` feature from also declaring them). A node missing
     from `elements` derives nothing.
 
@@ -2089,6 +2093,26 @@ def bevel_face(svg, faceplate, ch, face, w, h):
         strip.set("stroke", ch.get("edge", "#22262a")); strip.set("stroke-width", "0.25")
 
 
+def _shift_heights(node, by):
+    """Move a node's absolute heights by `by` mm: its `out`, and its profile.
+
+    `out` is read as a distance from the face, so a part standing in a well, or
+    seated in a bay that is lifted, has it moved to where the part now stands.
+    A PROFILE IS A HEIGHT TOO, and for a long time was left where it was: `out`
+    went to the well's floor and the surface it describes did not, so a web
+    sloping down to a tray stood the well's depth above it on a skirt twice as
+    tall (docs/cable-managers-design.md section 4). One function, so the well
+    and the bay cannot disagree about which heights move.
+    """
+    if node.get("data-z-out") is not None:
+        node.set("data-z-out", f"{float(node.get('data-z-out')) + by:g}")
+    for k in ("data-z-profile", "data-z-profile-y"):
+        if node.get(k):
+            node.set(k, ",".join(
+                f"{float(t):g}:{float(o) + by:g}"
+                for t, o in (pair.split(":") for pair in node.get(k).split(","))))
+
+
 def render_view(device, view_name, view, lib, include=(), config_name="default", config=None,
                 silkscreen=True):
     config = config or {}
@@ -2121,6 +2145,10 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     # rather than through a box that has no inside.
     if view.get("open-frame"):
         svg.set("data-open-frame", "1")
+    # A SHEET BODY SAYS SO ON EVERY FACE, for the same reason: it is a fact
+    # about the chassis, and a face opened on its own has to carry it.
+    if (device.get("chassis") or {}).get("shell") == "sheet":
+        svg.set("data-shell", "sheet")
     # Sections are a classification, not a namespace: a drawing is opened
     # somewhere else, and `data-power-max-w` is readable there while
     # `data-power-max-w` under some section prefix would only be longer. So the
@@ -2160,8 +2188,15 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     faceplate.set("x", "0"); faceplate.set("y", "0")
     faceplate.set("width", f"{w:g}"); faceplate.set("height", f"{h:g}")
     faceplate.set("rx", "1.2")
-    faceplate.set("fill", ch.get("color", "#3a3f45"))
-    faceplate.set("stroke", ch.get("edge", "#22262a")); faceplate.set("stroke-width", "0.5")
+    # A SHEET BODY HAS NO HOUSING TO FILL. Its metal is what the view draws -
+    # the tray, the ears - and the rest of the envelope is open air, which the
+    # viewer can only show if the face does not paint it
+    # (docs/cable-managers-design.md section 4). The rect stays, unfilled and
+    # unstroked: it is the element every consumer addresses as `chassis`.
+    sheet = ch.get("shell") == "sheet"
+    faceplate.set("fill", "none" if sheet else ch.get("color", "#3a3f45"))
+    if not sheet:
+        faceplate.set("stroke", ch.get("edge", "#22262a")); faceplate.set("stroke-width", "0.5")
     bevel_face(svg, faceplate, ch, view.get("face") or view_name, w, h)
 
     resolved = {}
@@ -3112,8 +3147,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             return
         g.set("data-z-lift", f"{-floor:g}")
         for node in g.iter():
-            if node.get("data-z-out") is not None:
-                node.set("data-z-out", f"{float(node.get('data-z-out')) - floor:g}")
+            _shift_heights(node, -floor)
 
     def back_occupants(p):
         """The keys a module's back seats (B3, Task 7i): those whose host is
@@ -3571,8 +3605,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         # as sink() does for a placement.
         if bay_lift:
             for node in bay_g.iter():
-                if node.get("data-z-out") is not None:
-                    node.set("data-z-out", f"{float(node.get('data-z-out')) + bay_lift:g}")
+                _shift_heights(node, bay_lift)
 
     # FIRST PASS: the wells and the openings, interleaved by `under:`. Bays
     # paint after placements by default - a cage draws before the drives it
@@ -3897,6 +3930,194 @@ def _family_by_rate(families, media):
     return None
 
 
+# THE CANDIDATE WALK, KEPT ON DISK BETWEEN PROCESSES (#543).
+#
+# `_pluggable_candidates` parses every contract in the library to find the ones
+# that declare `mates:` - about 1300 parses for about 70 candidates, roughly a
+# second per process, paid once by every device build.sh renders and once by
+# components_index. Which contracts are candidates, and under which interface,
+# is now written to a file named for a digest of the bytes it was computed
+# from, the way L62's vocabulary is (#542, `lint._id_corpus`), and the next
+# process reads that instead.
+#
+# THE SAME RULES AS #542, FOR THE SAME REASONS. Keyed on CONTENT, never on
+# mtimes: a digest of every contract's bytes, in walk order (the order is part
+# of the answer - it is the order a cage's candidates are listed in), so an
+# entry whose inputs differ in any byte is simply never found. The CODE is an
+# input too: render.py, which holds the filter, libwalk.py, which finds the
+# files and names their refs, and manifest.py, which holds the parser - read
+# once, at import, so the digest names the code this process loaded. A miss
+# parses the bytes that were hashed, not a second read. Any failure on the
+# cache path falls back to computing.
+#
+# WHAT IS STORED IS THE SELECTION, NOT THE CONTRACTS: (interface, index in the
+# walk) per candidate. Each candidate's contract is then `load_yaml`'s, exactly
+# as before - so a caller gets the same dict it always did, and nothing about a
+# contract's shape has to survive a trip through JSON.
+#
+# THE DIRECTORY IS lint's (`_id_corpus_cache_dir`: $PORTRAYAL_CACHE_DIR, else
+# $XDG_CACHE_HOME/portrayal, else ~/.cache/portrayal), so one setting moves
+# both caches, and the suite's conftest keeps this one out of ~/.cache too.
+_CANDIDATES_CACHE_FORMAT = 1
+_CANDIDATES_CACHE_KEEP = 50         # entries kept; the oldest by mtime go first
+_CANDIDATES_TMP_MAX_AGE = 3600      # seconds before a stray temp file is an orphan
+
+
+def _candidates_code():
+    """sha256 over the bytes of the three modules the selection depends on, or
+    None if one cannot be read - in which case the digest raises and the cache
+    is not used."""
+    from portrayal import manifest as _manifest_mod
+    top = hashlib.sha256()
+    for name, path in (("render", __file__), ("libwalk", libwalk.__file__),
+                       ("manifest", _manifest_mod.__file__)):
+        try:
+            top.update(f"{name}\0{hashlib.sha256(Path(path).read_bytes()).hexdigest()}\n"
+                       .encode())
+        except OSError:
+            return None
+    return top.hexdigest()
+
+
+_CANDIDATES_CODE = _candidates_code()   # as loaded; see above
+
+
+def _candidates_cache_dir():
+    """lint's cache directory - one setting for both caches."""
+    from portrayal.lint import _id_corpus_cache_dir
+    return _id_corpus_cache_dir()
+
+
+def _candidates_files(lib_roots):
+    """Every contract `_pluggable_candidates` reads, in the order it reads them:
+    (root index, path relative to the root, path, bytes, sha256 of the bytes).
+    Bytes and hash are None for a file that vanished between the walk and the
+    read - load_yaml answered None for that, and it is not a candidate."""
+    files = []
+    for n, root in enumerate(libwalk._roots(lib_roots)):
+        for cf in libwalk.iter_components([root]):
+            try:
+                data = cf.read_bytes()
+            except FileNotFoundError:
+                data = None
+            sha = hashlib.sha256(data).hexdigest() if data is not None else None
+            files.append((n, cf.relative_to(root).as_posix(), cf, data, sha))
+    return files
+
+
+def _candidates_digest(files):
+    """sha256 over the cache format, the code (_CANDIDATES_CODE), the parser,
+    and for every contract IN WALK ORDER its root's position, its path relative
+    to that root and a hash of its bytes - without the roots' absolute paths, so
+    every checkout of the same commit shares one entry. Not sorted: the walk's
+    order is the order candidates are listed in, so it is part of the answer."""
+    if _CANDIDATES_CODE is None:
+        raise OSError("the candidate walk's source could not be read at import")
+    from portrayal import manifest as _manifest_mod
+    parser = f"{yaml.__version__}\0{_manifest_mod._Loader.__name__}"
+    top = hashlib.sha256(
+        f"portrayal-pluggable-candidates\0{_CANDIDATES_CACHE_FORMAT}\0code\0"
+        f"{_CANDIDATES_CODE}\0parser\0{parser}\n".encode())
+    for n, rel, _cf, _data, sha in files:
+        top.update(f"{n}\0{rel}\0{sha or 'missing'}\n".encode("utf-8", "surrogateescape"))
+    return top.hexdigest()
+
+
+# WHAT EACH CONTRACT CONTRIBUTES, MEMOISED BY THE HASH OF ITS BYTES, as lint's
+# `_ID_CORPUS_FACTS` is for L62: content-keyed, so it cannot go stale, and
+# holding nothing but the one value the selection reads off a document. A miss
+# whose roots include a tmp library beside the real one then parses only the
+# tmp files; the tests' warm render server primes it for the real library
+# (`_candidates_prime`), so its forked children do not parse 1300 contracts.
+_CANDIDATE_MATES = {}
+
+
+def _candidate_mates(data, sha):
+    """The interface one contract offers itself under - its `mates:`, unless it
+    is `superseded-by` something - or None. The parser load_yaml uses, on the
+    hashed bytes; memoised by sha256."""
+    if data is None:
+        return None
+    if sha in _CANDIDATE_MATES:
+        return _CANDIDATE_MATES[sha]
+    from portrayal import manifest as _manifest_mod
+    c = yaml.load(data, Loader=_manifest_mod._Loader) or {}
+    mates = None if c.get("superseded-by") else (c.get("mates") or None)
+    _CANDIDATE_MATES[sha] = mates
+    return mates
+
+
+def _candidates_prime(lib_roots):
+    """Fill the per-contract memo for `lib_roots` and nothing else: no selection
+    is made and nothing is written to disk."""
+    for _n, _rel, _cf, data, sha in _candidates_files(lib_roots):
+        _candidate_mates(data, sha)
+
+
+def _candidates_cache_load(path, digest, nfiles):
+    """The cached selection as [(interface, index)], or None if the entry is
+    missing, unreadable, or anything other than what `_candidates_cache_store`
+    writes for `digest` over `nfiles` contracts."""
+    try:
+        with open(path, "rb") as fh:
+            doc = json.loads(fh.read().decode("utf-8"))
+        if (not isinstance(doc, dict) or doc.get("format") != _CANDIDATES_CACHE_FORMAT
+                or doc.get("digest") != digest or doc.get("files") != nfiles):
+            return None
+        rows = doc["picked"]
+        if not isinstance(rows, list):
+            return None
+        picked, last = [], -1
+        for row in rows:
+            if not (isinstance(row, list) and len(row) == 2 and type(row[0]) is str
+                    and row[0] and type(row[1]) is int and last < row[1] < nfiles):
+                return None
+            last = row[1]
+            picked.append((row[0], row[1]))
+        return picked
+    except Exception:
+        return None
+
+
+def _candidates_cache_store(cache_dir, digest, picked, nfiles):
+    """Write the entry atomically - a temp file in the same directory, then
+    os.replace - and prune to the newest _CANDIDATES_CACHE_KEEP entries. Every
+    failure is swallowed: not caching is always a correct outcome."""
+    payload = json.dumps({"format": _CANDIDATES_CACHE_FORMAT, "digest": digest,
+                          "files": nfiles, "picked": [[m, i] for m, i in picked]},
+                         separators=(",", ":"))
+    tmp = None
+    try:
+        cache_dir = Path(cache_dir)
+        cache_dir.mkdir(parents=True, exist_ok=True)
+        fd, tmp = tempfile.mkstemp(dir=cache_dir, prefix=".pluggable-candidates-",
+                                   suffix=".tmp")
+        with os.fdopen(fd, "w", encoding="utf-8") as fh:
+            fh.write(payload)
+        os.replace(tmp, cache_dir / f"pluggable-candidates-{digest}.json")
+        tmp = None
+    except Exception:
+        return
+    finally:
+        if tmp is not None:
+            with contextlib.suppress(OSError):
+                os.unlink(tmp)
+    with contextlib.suppress(Exception):
+        aged = []
+        for e in cache_dir.glob("pluggable-candidates-*.json"):
+            with contextlib.suppress(OSError):
+                aged.append((e.stat().st_mtime, e.name, e))
+        aged.sort(reverse=True)
+        for _m, _n, e in aged[_CANDIDATES_CACHE_KEEP:]:
+            with contextlib.suppress(OSError):
+                e.unlink()
+        cutoff = time.time() - _CANDIDATES_TMP_MAX_AGE
+        for t in cache_dir.glob(".pluggable-candidates-*.tmp"):
+            with contextlib.suppress(OSError):
+                if t.stat().st_mtime < cutoff:
+                    t.unlink()
+
+
 def _pluggable_candidates(lib_roots):
     """Every library component that could seat in SOME pluggable cage or
     connector slot, indexed by the interface it `mates`: `{interface: [(ref, contract), ...]}`.
@@ -3925,16 +4146,37 @@ def _pluggable_candidates(lib_roots):
     a connector slot must offer (B3). Every other part that declares `mates:`
     is `behaviour: occupies`, and no plug mates a pluggables family's
     interface, so no cage's accept list changes by this.
+
+    WHICH CONTRACTS ARE CANDIDATES IS KEPT ON DISK (#543), under a digest of
+    every contract's bytes - see `_candidates_digest`. A hit parses only the
+    candidates themselves (about 70 of 1300); a miss parses each contract from
+    the bytes that were hashed. Either way each candidate's contract is what
+    `load_yaml` returns for it, as it always was.
     """
+    files = _candidates_files(lib_roots)
+    try:
+        digest = _candidates_digest(files)
+        cache_dir = _candidates_cache_dir()
+        entry = cache_dir / f"pluggable-candidates-{digest}.json"
+        picked = _candidates_cache_load(entry, digest, len(files))
+    except Exception:          # the cache is an optimisation, never a reason to fail
+        digest, picked = None, None
+    if picked is not None:
+        # touched, so pruning drops the least recently USED entries
+        with contextlib.suppress(OSError):
+            os.utime(entry)
+    else:
+        picked = [(mates, i) for i, (_n, _rel, _cf, data, sha) in enumerate(files)
+                  if (mates := _candidate_mates(data, sha)) is not None]
+        # a file that vanished mid-walk is a tree being changed under us:
+        # answer from what was read, but do not record it for anyone else
+        if (digest is not None and all(data is not None for *_, data, _sha in files)
+                and all(type(m) is str for m, _i in picked)):
+            _candidates_cache_store(cache_dir, digest, picked, len(files))
     out = {}
-    for cf in libwalk.iter_components(lib_roots):
-        c = load_yaml(cf) or {}
-        if c.get("superseded-by"):
-            continue
-        mates = c.get("mates")
-        if not mates:
-            continue
-        out.setdefault(mates, []).append((libwalk.ref_of(cf), c))
+    for mates, i in picked:
+        cf = files[i][2]
+        out.setdefault(mates, []).append((libwalk.ref_of(cf), load_yaml(cf) or {}))
     return out
 
 
@@ -4541,6 +4783,10 @@ def main():
                              # how the box is installed; `rack` where the
                              # device states nothing (#734)
                              "mount": ch.get("mount", "rack"),
+                             # a body that is sheet metal and not a box; absent
+                             # on a box, as `solid` is on an unbevelled one
+                             **({"shell": ch["shell"], "thickness": ch.get("thickness")}
+                                if ch.get("shell") else {}),
                              # the chassis's own feed, where one feed is the
                              # whole story; `configs[].power` is each build's
                              # resolved answer, as for airflow

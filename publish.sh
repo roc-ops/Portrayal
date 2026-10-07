@@ -36,7 +36,8 @@ OUT="${1:-library/dist}"
 # inside the parallel export below, and before the build is spent. The exporter
 # refuses the same way when it is run on its own.
 if [ "${IMAGES[*]}" = "--images" ] && ! python3 -c "import cairosvg" 2>/dev/null; then
-  echo "publish.sh: the pictures need cairosvg - pip install -e \".[render]\", or run" >&2
+  echo "publish.sh: the pictures need cairosvg - pip install -e \".[render]\", and the" >&2
+  echo "  system cairo library under it (brew install cairo, apt install libcairo2); or run" >&2
   echo "  ./publish.sh --no-images to write the exports without them" >&2
   exit 1
 fi

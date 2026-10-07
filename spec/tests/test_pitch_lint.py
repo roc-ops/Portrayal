@@ -214,7 +214,7 @@ def test_every_standard_with_a_pitch_is_conformed_to_by_something():
 def test_a_wired_standards_floor_is_actually_enforced():
     """Proof the wiring does something, not merely that the key is present.
 
-    Three SC adapters at 12.0 sit inside `sc-duplex-adapter`'s measured 13.0
+    Three SC adapters at 12.0 sit inside `sc-duplex-adapter`'s measured 12.71
     floor. Before the adapter named the standard this composed silently.
     """
     doc = {"parts": [{"id": f"p{i}", "ref": "common/sc-duplex-adapter@5",
@@ -222,7 +222,7 @@ def test_a_wired_standards_floor_is_actually_enforced():
                      for i, x in enumerate((0.0, 12.0, 24.0))]}
     got = run(doc)
     assert len(got) == 1, got
-    assert "12.00" in got[0] and "13.00" in got[0], got
+    assert "12.00" in got[0] and "12.71" in got[0], got
 
 
 def test_a_wired_standards_floor_allows_a_wider_layout():

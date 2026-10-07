@@ -28,6 +28,7 @@ from libdata import built_component
 # major (libdata.built_component), so a major bump cannot turn this into a skip.
 BASE_PLATE = {
     "smartoptics/dcp-404": "body",
+    "smartoptics/dcp-1203": "body",
     "common/lc-duplex-adapter": "bezel",
 }
 

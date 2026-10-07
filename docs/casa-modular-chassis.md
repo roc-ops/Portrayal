@@ -1,8 +1,8 @@
 # Casa C100G / C40G — modular chassis model
 
 Facts extracted from the vendor hardware installation guides (C100G rev 07/08/2022,
-C40G rev 07/07/2022). The guides themselves are vendor material and live in the
-gitignored `working/intake/casa/`, not in this repo. Cited, not copied.
+C40G rev 07/07/2022). The guides themselves are vendor material and are held
+locally, not in this repo. Cited, not copied.
 
 These are the first genuinely **modular** devices in the library, so the slot rules
 below are also the first real test of whether the contract can express a chassis
@@ -225,9 +225,9 @@ I/O combined, so it has more inside it. It should be its own component, not a sk
 - The PEM area is at the bottom rear with **PEM 1 / PEM 2** silkscreen, twin IEC
   inlets with their own switches, and ground studs.
 
-## The maintainer's hand-built SVGs — what they add
+## The hand-built SVGs — what they add
 
-Two hand-drawn chassis SVGs (front and back) in `working/intake/casa/handbuilt/`.
+Two hand-drawn chassis SVGs (front and back), held locally.
 Independently built from the hardware, so where they agree with what I read off the
 guide figures that is real corroboration, and where they have parts I do not, they are
 the better source.
@@ -497,7 +497,7 @@ chassis-specific parts stay with their device.
 ## Source figures
 
 Vector line art extracted with `pdftocairo -svg` (hundreds of paths per page, so it is
-real geometry, not a scan). Staged at `working/intake/casa/svg/`.
+real geometry, not a scan). Held locally beside the guides.
 
 | figure | C100G page | subject |
 |---|---|---|
@@ -516,4 +516,4 @@ C40G equivalents are at pages 26, 27, 28, 32, 35, 36, 38–42, 44, 46, 47, 49, 5
 note it has four rear views (AC/DC × redundant/non-redundant) where the C100G has one.
 
 Photographs of the C100G-BDM2M-RF front line card (top, bottom, back) and the I/O card
-are in `working/intake/casa/photos/`.
+are held locally with the guides.
