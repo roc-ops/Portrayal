@@ -531,6 +531,11 @@ export function createViewer(container, opts = {}) {
     // and what is off stays off, for the same reason and at the same moment: the
     // faces and the relief are both cut from a document that already knows
     setReliefPulled(PULLED, SCOPE);
+    // and what is written on parts (#850). setFields before the first scene has
+    // nothing to repaint and returns before it reaches the registry, so a host
+    // that hands its fields over as it creates the viewer - a link's latch
+    // colour - had them drawn grey, and the same map again changed nothing
+    setNodeFields(FIELDS, SCOPE);
     RESTYLE = [];
     gen++;
     const f = v => distAt(faceFile(devIndex, cfg, v));
