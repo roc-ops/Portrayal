@@ -1,0 +1,74 @@
+format: 1
+kind: component
+name: uscmh-5dr1u-ring
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  A polycarbonate ring ("DIY frame") of the FS USCMH-5DR1U cable manager seen from the
+  front - a narrow rectangular frame clipped into the panel, its upper and lower arms
+  running 80 mm out and turning in towards each other at the front, the gap between
+  their ends the slit a cable is laid in through
+provenance:
+  size: >-
+    drawing - FS's drawing of the part in the 0U/1U Horizontal Cable Manager datasheet
+    dimensions the frame 43.5 high (the 43.5 across its profile) and 10 wide (its view
+    from the front), and FS's renders show five of them, one at each end and one
+    between each pair of windows. Drawn centred on the panel's 44.
+  relief: >-
+    drawing for the 80, estimated for the rest - the same drawing dimensions the frame
+    80 from the plate. Its profile, read at about 1.07 px/mm, shows arms of a double
+    wall about 2.5 mm thick, a base about 4.5 mm deep with two clips through the plate,
+    and the arms' front ends turned in about 7 mm deep, leaving a slit about 4 mm wide
+    at mid-height; FS's close-up render (feature image 2) shows the two turned-in ends
+    and the gap between them. Built as plates with square corners.
+  material: >-
+    datasheet - "D-rings Material: PC, UL 94V-2" in the third column of the 0U/1U
+    datasheet's table, which carries this part's 80 mm and 0.41 kg under the CMH-5DR1U's
+    name.
+  guide: >-
+    estimated - the clear opening inside the frame: its 43.5 less the two arms, 38.5
+    high, by the 80 less the base and the turned-in ends, 68.5 deep. Seen looking along
+    the panel, which is the run: `w` is the height and `h` the depth out of the panel.
+  color: >-
+    estimated - black. Every image FS publishes of the part is a render.
+size: {w: 10, h: 44}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: PC, flammability: UL 94V-2}
+guide: {kind: ring, aperture: {w: 38.5, h: 68.5}, run: x}
+elements:
+  base: {at: [0.0, 0.25], size: [10, 43.5], class: bezel}
+  arm-top: {at: [0.0, 0.25], size: [10, 2.5], class: bezel}
+  arm-bottom: {at: [0.0, 41.25], size: [10, 2.5], class: bezel}
+  end-top: {at: [0.0, 0.25], size: [10, 19.75], class: bezel}
+  end-bottom: {at: [0.0, 24.0], size: [10, 19.75], class: bezel}
+relief:
+  features:
+    - node: base
+      out: 4.5
+      color: '#111315'
+      confidence: estimated
+      source: the profile on FS's 0U/1U datasheet drawing, a base about 4.5 mm deep at 1.07 px/mm
+    - node: arm-top
+      out: 80.0
+      color: '#111315'
+      confidence: drawing
+      source: FS's 0U/1U datasheet drawing, the frame 80 from the plate
+    - node: arm-bottom
+      out: 80.0
+      color: '#111315'
+      confidence: drawing
+      source: FS's 0U/1U datasheet drawing, the frame 80 from the plate
+    - node: end-top
+      lift: 73.0
+      out: 80.0
+      color: '#111315'
+      confidence: estimated
+      source: the profile on the same drawing, the upper arm's end turned in about 7 mm deep
+    - node: end-bottom
+      lift: 73.0
+      out: 80.0
+      color: '#111315'
+      confidence: estimated
+      source: the profile on the same drawing, the lower arm's end turned in, a 4 mm slit between the two
+skins: [default]
