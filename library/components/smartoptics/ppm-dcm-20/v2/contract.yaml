@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ppm-dcm-20
-version: 2.1.0
+version: 2.2.0
 class: filter
 behaviour: fills
 profile: optical
@@ -95,6 +95,13 @@ provenance:
     no orthographic photograph of a PPM exists; both readings above are of DRAWINGS.
     Lamp inventory and any marking other than the part number are unknown, and the
     module may well carry none - a passive filter has nothing to report.
+  trunk: >-
+    ds-ppm-r4.0 draws the DCM as one strand, Rx in and Tx out, and names no common
+    side - a dispersion compensator is a pass-through. A DCIM still needs one end on
+    a rear port (netbox#21830 refuses front ports without one), so `optical.trunk`
+    names dcm.2, the Rx bore the line signal enters by, and the projection exports
+    dcm.1 as front port 1 bound to rear port DCM-1 (roc-ops/Portrayal#246). Which end
+    is called rear is a DCIM convention here, not a vendor statement.
 elements:
   caption-dcm: {at: [4.50, 16.2], size: [13.2, 2.05], class: marking}
 parts:
@@ -111,6 +118,8 @@ optical:
   # bores are ends of that one path.
   media: os2
   polish: upc
+  # THE RX BORE IS THE TRUNK - see provenance/trunk.
+  trunk: [dcm.2]
   paths:
     - {from: dcm.2, to: dcm.1}
 relief:

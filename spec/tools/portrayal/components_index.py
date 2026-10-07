@@ -183,7 +183,15 @@ def fibre_ends(data, load_ref):
             continue
         src, dests = eps[0], eps[1:]
         label = {ep: optical_ports.front_label(data, ep, load_ref) for ep in eps}
-        if len(dests) == 1:
+        if len(dests) == 1 and src in ends:
+            # A SOURCE OF SEVERAL BANDED PATHS - an add/drop filter's line
+            # port, one path per band - reaches every far end, not the last
+            # one written; L79 allows it only where the paths carry bands.
+            b = dests[0]
+            far = ends[src]["to"]
+            ends[src]["to"] = (far if isinstance(far, list) else [far]) + [b]
+            ends[b] = {"to": src, "label": label[b] if label[b] is not None else label[src]}
+        elif len(dests) == 1:
             b = dests[0]
             ends[src] = {"to": b, "label": label[src] if label[src] is not None else label[b]}
             ends[b] = {"to": src, "label": label[b] if label[b] is not None else label[src]}

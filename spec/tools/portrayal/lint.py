@@ -244,8 +244,8 @@ RULES = {
     "L75": ("component",  "a slot's structured facts agree with its prose, and lanes fit the connector", "fix `lanes`/`connector` or the description"),
     "L76": ("device",     "the RJ45 census: every Ethernet jack says whether it has lamps", "use std/rj45@2 with the lamp parts, or say in provenance the jack is bare"),
     "L77": ("component",  "a `sink` sits in a cavity, because that is what it measures from", "use `pocket` for a recess in an otherwise solid face"),
-    "L78": ("component",  "an optical endpoint names a composed connector and a position it has; a front order that names a part's positions names each once, together", "fix the part id or the position number; list every position of the part, or name it bare"),
-    "L79": ("component",  "no fibre position is claimed twice, and a split's ratios sum to 100", "remove the duplicate path, or fix the ratios"),
+    "L78": ("component",  "an optical endpoint names a composed connector and a position it has; a front order that names a part's positions names each once, together; a trunk entry names a connector on this face and a position it has", "fix the part id or the position number; list every position of the part, or name it bare"),
+    "L79": ("component",  "no fibre position is claimed twice, and a split's ratios sum to 100; a source starts one path, unless every path it starts but one carries a `band` (an add/drop filter)", "remove the duplicate path, or fix the ratios; write a split as one path with a ratio list"),
     "L80": ("component",  "every fibre position is reached by a path or declared unused with a reason", "route it, or add an `optical.unused` entry saying why it terminates nothing"),
     "L81": ("component",  "a composed pitch respects the standard the part conforms to - equal for a target, no narrower for a floor", "move a target onto the standard's pitch, widen a floor to at least it, or say in provenance why this part differs. Where the placements share an x, make their `rotate` agree so a rotated column can be told from a stacked pair"),
     "L82": ("component",  "a part names its plan drawing one way or the other, never both", "keep `plan:` or `faces.plan`, not both - they mean the same thing"),
@@ -295,6 +295,13 @@ RULES = {
     "L126": ("device",     "a bevelled chassis is a solid the box can have - every edge named by two faces that meet, none bevelled twice, no face cut away and no bevel swallowed by its neighbours - its face drawings are the chassis's own size, and every part, bay and cutout on a face lies on the flat face rather than on a bevel", "name edges as two adjacent faces (`front-left`), shrink a bevel that cuts too much, drop a view `size` that differs from the chassis on a bevelled face, or move the part onto the flat face - spec/tools/portrayal/bevel.py says where it is"),
     "L127": ("device",     "a `shell: sheet` body states `chassis.thickness`, between 0 and 10 mm, and a box states none (error)", "give a sheet body the gauge its datasheet states; on a box, drop `thickness`"),
     "L128": ("device, listing", "a part-number key has no stray whitespace - none leading or trailing, none but the plain ASCII space (an error), and none splitting a run of capitals and digits between two hyphens (`-A C-`, a warning)", "retype the SKU as the vendor prints it; a space the vendor really prints inside a hyphenated token is waived with the document that shows it"),
+    "L129": ("component",  "`optical.trunk` is for a single-faced module - not one whose rear face carries fibre - and a position it names by number is not also declared `unused`", "drop `trunk` where the rear face already is the trunk; name a part bare when it carries a dead position, or route the position"),
+    "L130": ("component",  "every leg of a module whose glass is projected runs between the front and the trunk (a rear-face connector or an `optical.trunk` position)", "fix the path, or the trunk; a front-to-front or trunk-to-trunk leg has no row in the fibre map and would be dropped"),
+    "L131": ("component",  "a module with `optical.paths` has a trunk - a rear face carrying its common end, or `optical.trunk` (error)", "add `optical.trunk` naming the common, network-side positions, from the vendor's own port roles, and say in provenance where they were read"),
+    "L132": ("device",     "a placement's `fed-by` names a placement on this device, in any view, whose part exports a power port (`dcim_export.PART_POWER`), and it stands on a part that exports a power outlet (`dcim_export.PART_OUTLET`) - an error, because both DCIMs refuse an outlet whose `power_port` names nothing", "name the input this output hands on, by its placement id; drop a `fed-by` on a part that is not an outlet"),
+    "L133": ("device",     "a placement's `through` names a bay on this device, in any view - the breaker or fuse position the circuit runs through (an error)", "name the bay by its id, as the front face spells it"),
+    "L134": ("device",     "every placement of a part in `dcim_export.PART_OUTLET` states `fed-by` - a warning at `draft` and `modelled`, an error at `verified`: an outlet with no feed imports, and names no power port", "state `fed-by: <input id>` on each output, read from the panel's own wiring or datasheet"),
+    "L135": ("device",     "one position, one circuit - no two placements name the same `through` (a warning)", "correct the `through` that names the wrong position; if two outputs really are paralleled behind one breaker, waive with the document that says so"),
     "L136": ("device",     "a declared pass-through (`passes:`) lies inside its face and overlaps no component - except a well that holds it whole, the plate it is cut through - and no two in a view share an id", "move the pass-through off the part, or onto the face; a window punched in a part's floor is declared over that well"),
     "L137": ("device",     "a pass-through whose `cover` is `brush` has a `pattern: brush` decor drawn over the whole of it, and a brush drawn over a pass-through belongs to one whose cover is `brush`", "draw the brush over the opening, or change `cover` to say what the picture shows"),
     "L138": ("component, device", "a guide fits what declares it - a ring's opening inside the part, seen along its run (its size, and its relief or `size.d` out of the face), and a duct inside its view, with a finger gap less than the finger pitch", "measure the clear opening, not the outside of the loop; give the part the relief that holds the opening; move the duct onto its face, or re-read the pitch and the gap off the drawing"),
@@ -2722,6 +2729,20 @@ def lint_component_optical_endpoints(path, data, lib_roots):
             err(path, "L78", f"front-order names {pid}'s positions in {runs[pid]} "
                              "separate places - one connector's positions are "
                              "numbered together")
+    # A TRUNK ENTRY IS HELD TO THE SAME STANDARD AS AN ENDPOINT. `dcm.3` on a
+    # duplex adapter, or a part that is not a connector, would put a rear port
+    # on a fibre that does not exist - and silently, since nothing downstream
+    # asks about a position it was never told of. A trunk names a part on
+    # THIS face: a rear face is already the trunk, and L129 says so.
+    for item in (opt.get("trunk") or []):
+        pid, pos = optical_ports.split_order_item(item)
+        if pid not in caps:
+            err(path, "L78", f"optical.trunk names {pid!r}, which this part either "
+                             "does not compose on its own face or which declares no "
+                             "`optical.positions` - only a connector can be a trunk")
+        elif pos is not None and pos > caps[pid]:
+            err(path, "L78", f"optical.trunk names {item} and {pid} presents "
+                             f"{caps[pid]}")
     for p in paths:
         for ep, _ratio in optical.endpoints(p):
             try:
@@ -2763,13 +2784,32 @@ def lint_component_optical_conflicts(path, data, _lib_roots=None):
     written as two plain paths - `{from: common.1, to: split.1}` and
     `{from: common.1, to: split.2}` - carries no ratios at all, so writing a
     genuine split that way hides it from the ratio check entirely. A source
-    is therefore allowed to be a `from` in at most one path; a part that
-    splits must say so with the ratio list, which is the one form this rule
-    can actually verify.
+    is therefore a `from` in one path only - a part that splits says so with
+    the ratio list, which is the one form this rule can verify - with one
+    exception, an add/drop filter: several single-destination paths from one
+    source, every one but at most one carrying a `band`, and no two carrying
+    the same band. Two legs on one band would be a power split wearing a
+    wavelength's name, so they are refused like two plain paths.
     """
     paths = (data.get("optical") or {}).get("paths") or []
     seen = {}
     sources = {}
+    # A WAVELENGTH SPLIT IS NOT A HIDDEN POWER SPLIT. An add/drop filter is
+    # "two paths off one endpoint, one banded and one not" (the schema's own
+    # `band` description): the band takes its channel and the unbanded path
+    # carries the rest, so there is no ratio to hide. A source may start
+    # several paths exactly when each is a single destination and all but at
+    # most one carry a `band` (roc-ops/Portrayal#246, ppm-ad1-1510/-1625).
+    starts = {}
+    for p in paths:
+        starts.setdefault(p.get("from"), []).append(p)
+    def _band_key(b):
+        return tuple(sorted(b.items())) if isinstance(b, dict) else b
+    banded = {src for src, ps in starts.items()
+              if len(ps) > 1 and all(isinstance(q.get("to"), str) for q in ps)
+              and sum(1 for q in ps if not q.get("band")) <= 1
+              and len({_band_key(q["band"]) for q in ps if q.get("band")})
+              == sum(1 for q in ps if q.get("band"))}
     for i, p in enumerate(paths):
         eps = optical.endpoints(p)
         for ep, _r in eps[1:]:
@@ -2779,12 +2819,14 @@ def lint_component_optical_conflicts(path, data, _lib_roots=None):
                                  "takes one ferrule")
             seen[ep] = i
         src = p.get("from")
-        if src in sources:
+        if src in sources and src not in banded:
             err(path, "L79", f"{src} is the source of two paths "
                              f"({sources[src]} and {i}) - splitting a source "
                              "across two paths hides its ratios from this "
                              "check, so a split is written as ONE path with "
-                             "a ratio list, not two plain paths")
+                             "a ratio list, not two plain paths (paths that "
+                             "each carry a different `band`, all but one, are "
+                             "an add/drop filter and are allowed)")
         sources[src] = i
         ratios = [r for _e, r in eps[1:] if r is not None]
         if ratios:
@@ -2792,6 +2834,70 @@ def lint_component_optical_conflicts(path, data, _lib_roots=None):
             if total != 100:
                 err(path, "L79", f"path {i} from {p['from']} splits into ratios "
                                  f"summing to {total:g}, not 100")
+
+
+def lint_component_optical_trunk(path, data, lib_roots):
+    """L129, L130, L131: which end of the glass is the trunk, and that it is said.
+
+    THE PROJECTION PUTS THE TRUNK ON REAR PORTS (optical-paths-design.md C3),
+    and before `optical.trunk` it could only find one on a rear face - so a
+    single-faced module with paths exported nothing at all, and said nothing
+    about it (roc-ops/Portrayal#246). The key closes that, and these three
+    keep it honest:
+
+    L131 - A MODULE WITH PATHS HAS A TRUNK. Without one the exporter has
+    nothing to put on a rear port and drops the whole graph; an error from the
+    first day, because every path-bearing module in the library states one.
+
+    L129 - ONE WAY TO SAY IT. A rear face carrying fibre is the trunk by
+    construction, so `trunk` beside it would be two answers to one question.
+    And a position named BY NUMBER in the trunk is a claim that it carries
+    fibre, which an `unused` entry for the same position denies; a part named
+    bare may still hold a dead bore (the OCU's `common.2`).
+
+    L130 - EVERY LEG CROSSES. `_row` turns a front-to-trunk leg into a fibre-map
+    row and answers None for anything else, so a front-to-front leg on a
+    projected module was dropped without a word. Now it is a finding.
+    """
+    opt = data.get("optical") or {}
+    paths = opt.get("paths") or []
+    trunk = opt.get("trunk") or []
+    if not paths and not trunk:
+        return
+    caps = optical.capacities(data, _optical_load_ref(lib_roots))
+    rear_fibre = sorted(k for k in caps if ":" in k)
+    if trunk and rear_fibre:
+        err(path, "L129", f"states optical.trunk {trunk} and its rear face carries fibre "
+                          f"({', '.join(rear_fibre)}) - the rear face is the trunk by "
+                          "construction, so `trunk` is for a single-faced module only")
+    unused = opt.get("unused") or {}
+    for item in trunk:
+        if item in unused:
+            err(path, "L129", f"optical.trunk names {item}, which `unused` declares "
+                              "terminates nothing - name the part bare if one of its "
+                              "positions is dead, or route the position")
+    if not paths:
+        return
+    if not (face_ref(data, "rear") or trunk):
+        err(path, "L131", "has optical.paths and no trunk - no rear face and no "
+                          "`optical.trunk` - so the DCIM projection has nothing to put "
+                          "on a rear port and exports none of this module's glass. "
+                          "State `optical.trunk` from the vendor's own port roles")
+        return
+    for i, p in enumerate(paths):
+        legs = optical.endpoints(p)
+        src = legs[0][0]
+        for dst, _ratio in legs[1:]:
+            try:
+                a, b = optical_ports.is_trunk(data, src), optical_ports.is_trunk(data, dst)
+            except ValueError:
+                continue                 # L78's error to report, not this one's
+            if a == b:
+                where = "the trunk" if a else "the front"
+                err(path, "L130", f"path {i} runs {src} -> {dst}, both on {where}; "
+                                  "a leg of a projected module runs between the front "
+                                  "and the trunk, and this one would have no row in "
+                                  "the fibre map")
 
 
 # THE THREE POLARITIES FS BUILDS, as the fibre each front port takes, port by
@@ -6448,6 +6554,67 @@ def lint_device_mount(path, data):
                           "describes a rack this box is not in - drop it")
 
 
+def lint_device_power_outlets(path, data):
+    """L132-L135: a power outlet names its feed, and its position resolves.
+
+    `fed-by` and `through` cross a face - the output is on the rear and its
+    breaker on the front - so both are bare ids resolved over the whole device,
+    not over the view they stand in (#806, docs/power-outlets-design.md).
+
+    L132 `fed-by` names a placement whose part exports a power port, on a part
+    that exports an outlet: both targets import an outlet's `power_port` by
+    name within the same type and refuse one that names nothing, so this is
+    an error. L133 `through` names a bay - the position whose occupant protects
+    the circuit. L134 every outlet states a feed: an outlet with none imports,
+    and is the incomplete model #806 exists to end, so a warning below
+    `verified` and an error at it. L135 one position, one circuit: two outputs
+    paralleled behind one breaker are possible, so a warning that can carry
+    the waiver saying so.
+    """
+    loud = err if data.get("maturity") == "verified" else warn
+    placed, bays = {}, set()
+    for vname, view in (data.get("views") or {}).items():
+        vp = view_parts(view or {})
+        for p in vp["placements"]:
+            placed.setdefault(p["id"], []).append((vname, p))
+        bays.update(b["id"] for b in vp["bays"])
+    feeds = {pid for pid, ps in placed.items()
+             if any(p["ref"].split("@")[0] in dcim_export.PART_POWER for _v, p in ps)}
+    through = {}
+    for pid, ps in sorted(placed.items()):
+        for vname, p in ps:
+            ref = p["ref"].split("@")[0]
+            outlet = ref in dcim_export.PART_OUTLET
+            fed = p.get("fed-by")
+            if fed is not None and not outlet:
+                err(path, "L132", f"{vname}/{pid}: states `fed-by: {fed}`, but {ref} "
+                                  "exports no power outlet, so nothing carries it - "
+                                  "drop it, or add the part to dcim_export.PART_OUTLET")
+            elif fed is not None and fed not in feeds:
+                what = ("no placement on this device" if fed not in placed else
+                        "a placement whose part exports no power port")
+                err(path, "L132", f"{vname}/{pid}: `fed-by: {fed}` names {what}. It "
+                                  "must name the input this output hands on - a "
+                                  "placement whose part is in dcim_export.PART_POWER")
+            elif outlet and fed is None:
+                loud(path, "L134", f"{vname}/{pid}: a power outlet ({ref}) states no "
+                                   "`fed-by`, so its export names no feeding power port")
+            via = p.get("through")
+            if via is None:
+                continue
+            if via not in bays:
+                err(path, "L133", f"{vname}/{pid}: `through: {via}` names no bay on this "
+                                  "device - it is the breaker or fuse position the "
+                                  "circuit runs through")
+            through.setdefault(via, []).append(f"{vname}/{pid}")
+    for via, who in sorted(through.items()):
+        if len(who) > 1:
+            warn(path, "L135", f"{', '.join(who)} all run `through: {via}`. One position "
+                               "protects one circuit; if these outputs really are "
+                               "paralleled behind one breaker, waive with the document "
+                               "that says so")
+
+
 def lint_device_shell(path, data):
     """L127: a sheet body states its gauge, and a box states none.
 
@@ -6573,6 +6740,8 @@ def lint_device_passes(path, data, lib_roots):
                 err(path, "L137", f"{vname}/{pid}: a brush decor at {d.get('at')} is drawn "
                                   f"over the pass-through, whose cover is {cover!r} - "
                                   "the picture and the declaration disagree")
+
+
 def _relief_reach(data):
     """How far a part stands out of its face: the furthest of its relief, or
     its `size.d` when it has none. `out` is absolute; `cyl`, `bar` and
@@ -11036,6 +11205,7 @@ def main():
                 lint_component_optical_rear_kind(f, d)
                 lint_component_optical_front_order(f, d)
                 lint_component_optical_conflicts(f, d)
+                lint_component_optical_trunk(f, d, args.library)
                 lint_component_optical_coverage(f, d, args.library)
                 lint_component_optical_polarity(f, d, args.library)
                 lint_component_optical_position_nodes(f, d, args.library)
@@ -11076,6 +11246,7 @@ def main():
                 lint_device_power_home(f, d)
                 lint_device_mount(f, d)
                 lint_device_shell(f, d)
+                lint_device_power_outlets(f, d)
                 lint_device_power_stated(f, d)
                 lint_device_provenance_confidence(f, d)
                 lint_quoted_prose(f, d)

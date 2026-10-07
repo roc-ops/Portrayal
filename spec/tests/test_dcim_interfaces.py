@@ -560,15 +560,45 @@ def _resolve(name, position):
     return name.replace(dx.MODULE_TOKEN, position)
 
 
+@functools.lru_cache(maxsize=1)
+def _dist():
+    if not (LIB / "dist/components.json").exists():
+        pytest.skip("not built - run ./build.sh")
+    from portrayal.artifacts import Dist
+    return Dist(LIB / "dist")
+
+
+@functools.lru_cache(maxsize=1)
+def _depths_by_file():
+    """`seating_depths`, keyed the way the trees file a module type."""
+    return {(dx.manufacturer_dir(man), model.replace("/", "-")): ds
+            for (man, model), ds in dx.seating_depths(_dist()).items() if man}
+
+
+def _chain(depth):
+    """The prefix `seat_names` writes at `depth`: `{module.parent}/{module}/` at 2."""
+    return "/".join("{" + ".".join(["module"] + ["parent"] * up) + "}"
+                    for up in range(depth - 1, -1, -1)) + "/"
+
+
 def test_every_module_port_name_is_bay_scoped():
-    bad, seen = [], 0
+    """`{module}/x` everywhere in NetBox. In Nautobot, a model seated only in a
+    nested bay names the chain above it, `{module.parent}/{module}/x` (#765)."""
+    depths = _depths_by_file()
+    bad, seen, nested = [], 0, 0
     for p, d in _module_exports():
+        ds = depths.get((p.parent.name, p.stem)) or set()
+        deep = p.parts[-4] == "nautobot" and len(ds) == 1 and min(ds) > 1
+        want = _chain(min(ds)) if deep else dx.module_scoped("")
         for key in dx.MODULE_PORT_KEYS:
             for row in d.get(key) or []:
                 seen += 1
-                if not str(row["name"]).startswith(dx.module_scoped("")):
-                    bad.append(f"{p.parent.name}/{p.stem}: {key} {row['name']!r}")
+                nested += deep
+                name = str(row["name"])
+                if not name.startswith(want) or name[len(want):].startswith("{"):
+                    bad.append(f"{p.parts[-4]}/{p.parent.name}/{p.stem}: {key} {name!r}")
     assert seen, "no module-type port was read - run ./publish.sh --no-images"
+    assert nested, "no Nautobot port of a nested-only module was read"
     assert not bad, "\n".join(bad[:20])
 
 
@@ -664,22 +694,119 @@ def _nested_paths(ref, prefix, seen=()):
             yield from _nested_paths(sub, pos, seen + (ref,))
 
 
-def test_a_nested_bay_is_written_for_netbox_and_not_for_nautobot():
-    """`nested_bays_for`: NetBox templates a bay's position and Nautobot does not,
-    so one gets `{module}/mic0` and the other no nested bay at all."""
+def test_a_nested_bay_is_templated_for_netbox_and_plain_for_nautobot():
+    """`nested_bays_for`: NetBox templates a bay's position; Nautobot copies it
+    verbatim and renders no bay name, so it is given the bay plain (#765)."""
     doc = {"model": "X", "module-bays": [{"name": "mic0", "position": "mic0"}],
            "interfaces": [{"name": "{module}/port-1"}]}
     nb = dx.nested_bays_for(doc, "netbox")
     assert nb["module-bays"] == [{"name": "{module}/mic0", "position": "{module}/mic0"}]
-    assert "module-bays" not in dx.nested_bays_for(doc, "nautobot")
+    nt = dx.nested_bays_for(doc, "nautobot")
+    assert nt["module-bays"] == [{"name": "mic0", "position": "mic0"}]
+    assert "comments" not in nt
     assert doc["module-bays"][0]["position"] == "mic0", "the built document was changed"
     plain = {"model": "Y", "interfaces": []}
     assert dx.nested_bays_for(plain, "nautobot") is plain
 
 
-def test_the_written_module_types_carry_nested_bays_only_for_netbox():
+def test_a_withheld_bay_is_left_out_for_nautobot_and_named_in_its_comments():
+    """A bay accepting a model also seated in a chassis bay cannot be given to
+    Nautobot; NetBox still takes it."""
+    doc = {"model": "X", "comments": "A carrier.",
+           "module-bays": [{"name": "mic0", "position": "mic0"},
+                           {"name": "mic1", "position": "mic1"}]}
+    nt = dx.nested_bays_for(doc, "nautobot", withheld={"mic1"})
+    assert nt["module-bays"] == [{"name": "mic0", "position": "mic0"}]
+    assert nt["comments"].startswith("A carrier.")
+    assert "mic1" in nt["comments"] and "nautobot/nautobot#5823" in nt["comments"]
+    assert doc["comments"] == "A carrier." and len(doc["module-bays"]) == 2, \
+        "the built document was changed"
+    every = dx.nested_bays_for(doc, "nautobot", withheld={"mic0", "mic1"})
+    assert "module-bays" not in every and "mic0, mic1" in every["comments"]
+    assert len(dx.nested_bays_for(doc, "netbox", withheld={"mic1"})["module-bays"]) == 2
+
+
+def test_seat_names_writes_the_bay_chain_for_the_depth():
+    doc = {"model": "X",
+           "interfaces": [{"name": "{module}/p0"}],
+           "rear-ports": [{"name": "{module}/MTP-1", "positions": 1}],
+           "front-ports": [{"name": "{module}/1", "rear_port": "{module}/MTP-1",
+                            "rear_port_position": 1}]}
+    for depth in (None, 0, 1):
+        assert dx.seat_names(doc, depth) is doc
+    two = dx.seat_names(doc, 2)
+    assert two["interfaces"] == [{"name": "{module.parent}/{module}/p0"}]
+    assert two["rear-ports"][0]["name"] == "{module.parent}/{module}/MTP-1"
+    assert two["front-ports"][0] == {"name": "{module.parent}/{module}/1",
+                                     "rear_port": "{module.parent}/{module}/MTP-1",
+                                     "rear_port_position": 1}
+    three = dx.seat_names(doc, 3)
+    assert three["interfaces"][0]["name"] == \
+        "{module.parent.parent}/{module.parent}/{module}/p0"
+    assert doc["interfaces"][0]["name"] == "{module}/p0", "the built document was changed"
+
+
+def _render_nautobot(name, positions):
+    """Nautobot's ModularComponentModel.render_name_template (nautobot/dcim/
+    models/device_components.py:149-191 at cb08ef6885d8): `{module}` is the
+    position of the bay the module sits in, `{module.parent}` the next bay up,
+    and so on, blank positions skipped. `positions` runs outermost first."""
+    chain = [p for p in positions if p]
+    for up in range(len(chain) - 1, -1, -1):
+        name = name.replace("{" + ".".join(["module"] + ["parent"] * up) + "}",
+                            chain[-1 - up])
+    assert "{module" not in name, (name, positions)
+    return name
+
+
+# THE BAYS NAUTOBOT IS NOT GIVEN (#765), by carrier: each accepts a model that
+# is also seated directly in a chassis bay. A new name here is a model that a
+# device has started seating at a second depth.
+WITHHELD = {
+    **{f"Cisco/A9K-MOD{n}-{v}": ["bay-0", "bay-1"]
+       for n in (80, 160, 200, 400) for v in ("SE", "TR")},
+    "Dell/riser-2s-16g": ["e3s-0", "e3s-1"],      # its slot-1 is given
+    "Juniper/MPC3E": ["mic0", "mic1"],
+    "Juniper/MX-MPC1E-3D": ["mic0", "mic1"],
+    "Juniper/MX-MPC2E-3D": ["mic0", "mic1"],
+    "Nokia/IOM4-e": ["mda-1", "mda-2"],
+    "Nokia/IOM4-e-HS": ["mda-1", "mda-2"],
+    "Nokia/IOM5-e": ["mda-1", "mda-2"],
+}
+
+# Every module model seated both in a chassis bay and in a module's bay. A new
+# one here is a device seating a nested-only model directly (or the reverse),
+# which renames that model's Nautobot ports back to `{module}/x`.
+MULTI_DEPTH = [
+    "Cisco/A9K-MPA-1X40GE", "Cisco/A9K-MPA-20X1GE", "Cisco/A9K-MPA-2X10GE",
+    "Cisco/A9K-MPA-4X10GE", "Cisco/MPA blank",
+    "Dell/e3s-carrier", "Dell/e3s-carrier-blank",
+    "Juniper/MIC-3D-16CHE1-T1-CE", "Juniper/MIC-3D-1OC192-XFP",
+    "Juniper/MIC-3D-20GE-SFP", "Juniper/MIC-3D-2XGE-XFP",
+    "Juniper/MIC-3D-4CHOC3-2CHOC12", "Juniper/MIC-3D-4COC3-1COC12-CE",
+    "Juniper/MIC-3D-4OC3OC12-1OC48", "Juniper/MIC-3D-8CHOC3-4CHOC12",
+    "Juniper/MIC-3D-8DS3-E3", "Juniper/MIC-3D-8OC3-2OC12-ATM",
+    "Juniper/MIC-3D-8OC3OC12-4OC48", "Juniper/MIC-MACSEC-20GE",
+    "Juniper/MS-MIC-16G", "Juniper/mx-mic-blank",
+    "Nokia/ACC - SR-e MDA Impedance Panel", "Nokia/ME-ISA2-MS",
+    "Nokia/ME1-100GB-CFP2", "Nokia/ME10-10GB-SFP+", "Nokia/ME12-10/1GB-SFP+",
+    "Nokia/ME16-10/25GB-SFP28+2-100GB", "Nokia/ME2-100GB-CFP4",
+    "Nokia/ME2-100GB-MS-QSFP28", "Nokia/ME2-100GB-QSFP28",
+    "Nokia/ME3-200GB-CFP2-DCO", "Nokia/ME3-400GB-QSFP-DD", "Nokia/ME40-1GB-CSFP",
+    "Nokia/ME6-100GB-QSFP28", "Nokia/ME6-10GB-SFP+",
+]
+
+
+def test_the_multi_depth_models_are_the_pinned_ones():
+    got = sorted(f"{man}/{model}" for (man, model), ds in dx.seating_depths(_dist()).items()
+                 if man and len(ds) > 1)
+    assert got == MULTI_DEPTH
+
+
+def test_the_written_module_types_carry_their_nested_bays():
     """The files, not the function: every NetBox module type carries exactly the
-    bays its contract declares, templated, and its Nautobot twin carries none."""
+    bays its contract declares, templated; its Nautobot twin carries the same
+    ids plainly, less the pinned withheld ones."""
     nb = LIB / "exports/netbox/module-types"
     if not nb.exists():
         pytest.skip("not published - run ./publish.sh --no-images")
@@ -689,7 +816,7 @@ def test_the_written_module_types_carry_nested_bays_only_for_netbox():
         if c.get("kind") == "module" and isinstance(c.get("bays"), dict) and c["bays"]:
             model = str((c.get("attrs") or {}).get("model") or c["name"]).replace("/", "-")
             declared.setdefault(model, set()).add(frozenset(c["bays"]))
-    seen = 0
+    seen, withheld = 0, {}
     for p in sorted(nb.glob("*/*.yaml")):
         bays = (yaml.safe_load(p.read_text()) or {}).get("module-bays") or []
         if not bays:
@@ -700,10 +827,18 @@ def test_the_written_module_types_carry_nested_bays_only_for_netbox():
             assert b["name"] == b["position"] and b["position"].startswith("{module}/"), (p, b)
         got = frozenset(b["position"].split("/", 1)[1] for b in bays)
         assert got in declared.get(p.stem, ()), f"{p}: exports {sorted(got)}"
-        twin = LIB / "exports/nautobot/module-types" / p.parent.name / p.name
-        assert twin.exists(), twin
-        assert "module-bays" not in (yaml.safe_load(twin.read_text()) or {}), twin
+        twin_p = LIB / "exports/nautobot/module-types" / p.parent.name / p.name
+        twin = yaml.safe_load(twin_p.read_text()) or {}
+        plain = twin.get("module-bays") or []
+        for b in plain:
+            assert "{" not in b["position"] and "{" not in b["name"], (twin_p, b)
+        held = got - {b["position"] for b in plain}
+        assert {b["position"] for b in plain} <= got, twin_p
+        if held:
+            withheld[f"{p.parent.name}/{p.stem}"] = sorted(held)
+            assert "nautobot/nautobot#5823" in twin.get("comments", ""), twin_p
     assert seen, "no module type with a nested bay was read - run ./publish.sh --no-images"
+    assert withheld == WITHHELD
 
 
 def _resolve_bay(template, parent_position):
@@ -741,6 +876,159 @@ def test_a_card_in_a_riser_slot_installs_as_the_drawing_names_it():
     for n in names:
         bay, slot, port = n.split("/", 2)
         assert f'data-path="{bay}/module/{slot}/module/{port}"' in face, n
+
+
+def test_a_card_in_a_riser_slot_installs_in_nautobot_as_netbox_names_it():
+    """The Nautobot twin of the test above: the riser's bays are plain, and each
+    card, seated only in a riser, names `{module.parent}/{module}/x` - which
+    Nautobot renders to the NetBox name."""
+    ex = LIB / "exports/nautobot"
+    dev_p = ex / "device-types/HPE/878972-B21.yaml"
+    riser_p = ex / "module-types/HPE/riser-primary-dl160.yaml"
+    cards = {"slot-1": "NVIDIA/MCX515A tall bracket.yaml",
+             "slot-2": "NVIDIA/MCX516A short bracket.yaml"}
+    missing = [p.name for p in (dev_p, riser_p, *(ex / "module-types" / c for c in cards.values()))
+               if not p.exists()]
+    if missing:
+        pytest.skip(f"not built: {', '.join(missing)} - run ./publish.sh --no-images")
+    outer = {b["name"]: b["position"]
+             for b in yaml.safe_load(dev_p.read_text())["module-bays"]}["riser-primary"]
+    inner = {b["name"]: b["position"]
+             for b in yaml.safe_load(riser_p.read_text())["module-bays"]}
+    assert sorted(inner) == ["slot-1", "slot-2"]
+    names, netbox = [], []
+    for slot, rel in cards.items():
+        card = yaml.safe_load((ex / "module-types" / rel).read_text())
+        nb = yaml.safe_load((LIB / "exports/netbox/module-types" / rel).read_text())
+        names += [_render_nautobot(i["name"], [outer, inner[slot]]) for i in card["interfaces"]]
+        netbox += [_resolve(i["name"], f"riser-primary/{slot}") for i in nb["interfaces"]]
+    assert names == netbox and len(set(names)) == 3, names
+
+
+def test_the_xcu_drawer_seats_its_holders_in_nautobot():
+    """#834: the XCU10's only bay seats the drawer, and the drawer's four slots
+    the holders. Nautobot now has the slots, and the 48 front ports of four
+    holders install under the names NetBox gives them."""
+    trees = {t: LIB / "exports" / t for t in ("netbox", "nautobot")}
+    rel_dev = "device-types/Fibrain/XCU10-51ID.yaml"
+    rel_drawer, rel_holder = "module-types/Fibrain/XCU10.yaml", "module-types/Fibrain/XMN1051GB.yaml"
+    missing = [str(t / r) for t in trees.values() for r in (rel_dev, rel_drawer, rel_holder)
+               if not (t / r).exists()]
+    if missing:
+        pytest.skip(f"not built: {', '.join(missing)} - run ./publish.sh --no-images")
+    got = {}
+    for t, root in trees.items():
+        dev, drawer, holder = (yaml.safe_load((root / r).read_text())
+                               for r in (rel_dev, rel_drawer, rel_holder))
+        [bay] = dev["module-bays"]
+        assert bay["position"] == "drawer"
+        slots = [b["position"] for b in drawer["module-bays"]]
+        assert len(slots) == 4, (t, slots)
+        names = []
+        for slot in slots:
+            for port in holder["front-ports"]:
+                if t == "netbox":
+                    names.append(_resolve(port["name"], _resolve_bay(slot, "drawer")))
+                else:
+                    names.append(_render_nautobot(port["name"], ["drawer", slot]))
+        got[t] = names
+    assert len(got["netbox"]) == len(set(got["netbox"])) == 48
+    assert got["nautobot"] == got["netbox"]
+    assert got["netbox"][0] == "drawer/slot-1/1"
+
+
+def _written(tree, ref):
+    """The module type `ref` is written as in `tree`, or None."""
+    c = _dist().component_by_ref(ref)
+    if not c or c.get("kind") != "module":
+        return None
+    man, model = dx.module_key(_dist(), c)
+    if not man:
+        return None
+    p = (LIB / "exports" / tree / "module-types" / dx.manufacturer_dir(man)
+         / (model.replace("/", "-") + ".yaml"))
+    return _load_export(p) if p.exists() else None
+
+
+@functools.lru_cache(maxsize=None)
+def _load_export(p):
+    return yaml.safe_load(p.read_text()) or {}
+
+
+def _reach(tree, ref, chain, seen=()):
+    """Every port name the module `ref` and what it seats can install as, with
+    the module in a bay whose position chain (outermost first) is `chain`. The
+    names are each DCIM's own rendering: NetBox resolves one `{module}` to the
+    leaf bay's templated position, Nautobot walks the plain positions."""
+    doc = _written(tree, ref)
+    if doc is None or ref in seen:
+        return set()
+    out = set()
+    for key in dx.MODULE_PORT_KEYS:
+        for row in doc.get(key) or []:
+            out.add(_resolve(row["name"], "/".join(chain)) if tree == "netbox"
+                    else _render_nautobot(row["name"], chain))
+    contract = _dist().component_by_ref(ref) or {}
+    for bid, b in (contract.get("bays") or {}).items():
+        mine = {b2["position"] for b2 in doc.get("module-bays") or []}
+        pos = dx.module_scoped(bid) if tree == "netbox" else bid
+        if pos not in mine:
+            continue                    # withheld - the sweep counts it
+        for sub in (b or {}).get("accepts") or []:
+            out |= _reach(tree, sub, chain + [bid], seen + (ref,))
+    return out
+
+
+def _withheld_paths(ref, chain, seen=()):
+    """NetBox names under a bay Nautobot is not given, which it cannot reach -
+    and the ports of a module that splits, which Nautobot's type does not state
+    (several front ports on one rear position have no spelling there, so
+    dcim_export.for_target drops both lists and says so, #246)."""
+    nb, nt = _written("netbox", ref), _written("nautobot", ref)
+    if nb is None or ref in seen:
+        return set()
+    out = set()
+    if "This module splits" in str((nt or {}).get("comments") or ""):
+        for key in dx.MODULE_PORT_KEYS:
+            for row in nb.get(key) or []:
+                out.add(_resolve(row["name"], "/".join(chain)))
+    plain = {b["position"] for b in (nt or {}).get("module-bays") or []}
+    contract = _dist().component_by_ref(ref) or {}
+    for bid, b in (contract.get("bays") or {}).items():
+        for sub in (b or {}).get("accepts") or []:
+            if bid in plain:
+                out |= _withheld_paths(sub, chain + [bid], seen + (ref,))
+            else:
+                out |= _reach("netbox", sub, chain + [bid], seen + (ref,))
+    return out
+
+
+def test_every_nautobot_device_reaches_the_ports_its_netbox_twin_does():
+    """#834's sweep, over every device and every module any of its bays accepts:
+    the port names Nautobot can install are NetBox's, less those under a
+    withheld bay - and none of those are on a device whose withheld bays leave
+    it reaching nothing at all."""
+    if not (LIB / "exports/nautobot/module-types").exists():
+        pytest.skip("not published - run ./publish.sh --no-images")
+    bad, seen, nested = [], 0, 0
+    for d in _dist().devices:
+        dev = _dist().manifest(d["name"])
+        nb, nt, held = set(), set(), set()
+        for view in (dev.get("views") or {}).values():
+            for b in view_parts(view)["bays"]:
+                for ref in b.get("accepts") or []:
+                    nb |= _reach("netbox", ref, [b["id"]])
+                    nt |= _reach("nautobot", ref, [b["id"]])
+                    held |= _withheld_paths(ref, [b["id"]])
+        seen += len(nb)
+        nested += sum(n.count("/") > 1 for n in nt)
+        if nt - held != nb - held or not nt <= nb:
+            bad.append(f"{d['name']}: Nautobot only {sorted(nt - nb)[:4]}, "
+                       f"NetBox only {sorted(nb - held - nt)[:4]}")
+        if nb and not nt:
+            bad.append(f"{d['name']}: Nautobot reaches no module port, NetBox {len(nb)}")
+    assert seen and nested, "no module port was reached"
+    assert not bad, "\n".join(bad[:30])
 
 
 def test_two_line_cards_each_bring_their_own_nested_bays():

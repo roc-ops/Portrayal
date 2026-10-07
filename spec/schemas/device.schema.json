@@ -1378,6 +1378,14 @@
             }
            ]
           },
+          "fed-by": {
+           "$ref": "#/$defs/segment",
+           "description": "THE POWER INPUT THIS OUTPUT HANDS ON, for a power outlet on a distribution panel: the id of a placement on this device, in any view, whose part exports a power port (dcim_export.PART_POWER). The DCIM export writes it as the outlet's `power_port`, which both NetBox and Nautobot import by name within the same device type. Stated on each placement and never inferred from an `-a`/`-b` in a name. Lint L132 (it resolves) and L134 (an outlet states one). Stating one is a minor version; changing one re-files an imported outlet's feed and is a major. roc-ops/Portrayal#806"
+          },
+          "through": {
+           "$ref": "#/$defs/segment",
+           "description": "THE POSITION THIS CIRCUIT RUNS THROUGH: the id of a bay on this device, in any view, whose occupant protects it - a breaker or fuse position. It crosses a face (the output is on the rear, the breaker on the front), which `for:` cannot say: `for:` is a UI binding emitted as data-for that waives L13's overlap check, and these two are not near each other. The DCIM export writes it as a sentence, on the outlet's description and on the bay's, because neither target relates an outlet to a module bay. Optional; a panel with fixed, unprotected outputs has none. Lint L133 (it resolves) and L135 (one position, one circuit). roc-ops/Portrayal#806"
+          },
           "frames": {
            "oneOf": [
             {
