@@ -2,7 +2,7 @@
 
 A `brush` decor is a brush strip filling an opening: it paints itself solid and
 is never an air aperture. A pass-through (`passes:`) declares that cables can
-cross a face there. L129 keeps a pass on its face and off the parts; L130 keeps
+cross a face there. L136 keeps a pass on its face and off the parts; L137 keeps
 a `cover: brush` and the brush drawn over it in step.
 """
 import json
@@ -86,20 +86,20 @@ def findings(doc, lib, code):
 
 def test_the_good_device_is_valid_and_clean(lib):
     jsonschema.validate(good(), SCHEMA)
-    assert not findings(good(), lib, "L129")
-    assert not findings(good(), lib, "L130")
+    assert not findings(good(), lib, "L136")
+    assert not findings(good(), lib, "L137")
 
 
 def test_L129_a_pass_off_its_face(lib):
     d = good()
     d["views"]["front"]["passes"][1]["at"] = [90, 10]
-    assert findings(d, lib, "L129")
+    assert findings(d, lib, "L136")
 
 
 def test_L129_a_pass_over_a_part(lib):
     d = good()
     d["views"]["front"]["passes"][1]["at"] = [40, 10]     # across the post
-    f = findings(d, lib, "L129")
+    f = findings(d, lib, "L136")
     assert f and "post" in f[0]
 
 
@@ -109,31 +109,31 @@ def test_L129_a_pass_only_partly_in_its_well(lib):
     d["views"]["front"]["components"]["placements"][0]["at"] = [20.0, 0.0]
     d["views"]["front"]["components"]["placements"][1]["at"] = [65.0, 0.0]
     d["views"]["front"]["passes"] = [d["views"]["front"]["passes"][0]]
-    assert findings(d, lib, "L129")
+    assert findings(d, lib, "L136")
 
 
 def test_L129_two_passes_one_id(lib):
     d = good()
     d["views"]["front"]["passes"][1]["id"] = "window"
-    assert findings(d, lib, "L129")
+    assert findings(d, lib, "L136")
 
 
 def test_L130_a_brush_cover_with_no_brush_drawn(lib):
     d = good()
     d["views"]["front"]["panel"]["decor"] = []
-    assert findings(d, lib, "L130")
+    assert findings(d, lib, "L137")
 
 
 def test_L130_a_brush_that_covers_half_the_opening(lib):
     d = good()
     d["views"]["front"]["panel"]["decor"][0]["size"] = [15, 20]
-    assert findings(d, lib, "L130")
+    assert findings(d, lib, "L137")
 
 
 def test_L130_a_brush_drawn_over_an_open_pass(lib):
     d = good()
     d["views"]["front"]["passes"][0]["cover"] = "open"
-    assert findings(d, lib, "L130")
+    assert findings(d, lib, "L137")
 
 
 def test_the_schema_refuses_an_unknown_cover_and_shape():
@@ -204,7 +204,7 @@ def test_the_brush_manager_declares_what_it_draws():
     assert covers.count("brush") == 6 and covers.count("open") == 2
     with lint.collecting() as found:
         lint.lint_device_passes("device.yaml", doc, [str(LIB)])
-    assert not [m for m in found.errors + found.warnings if "[L129]" in m or "[L130]" in m]
+    assert not [m for m in found.errors + found.warnings if "[L136]" in m or "[L137]" in m]
 
 
 def _l44(doc, lib):
@@ -226,4 +226,4 @@ def test_a_placement_with_no_ref_does_not_crash_the_pass_check(lib):
     """lint_device_passes runs whether or not the device passed its schema."""
     doc = good()
     doc["views"]["front"]["components"]["placements"].append({"id": "x", "at": [0, 0]})
-    findings(doc, lib, "L129")
+    findings(doc, lib, "L136")

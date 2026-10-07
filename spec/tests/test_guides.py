@@ -3,7 +3,7 @@
 A `ring` is declared once on a component's contract and is on every placement
 of it; a `duct` is declared on the device view it runs along. Nothing consumes
 either yet. Both compile to attributes on the drawing, so that routing has
-something to read, and L131 holds each inside what declares it.
+something to read, and L138 holds each inside what declares it.
 """
 import copy
 import json
@@ -32,20 +32,20 @@ def _ring():
 def component_findings(doc):
     with lint.collecting() as found:
         lint.lint_component_guide("contract.yaml", doc)
-    return [m for m in found.errors + found.warnings if "[L131]" in m]
+    return [m for m in found.errors + found.warnings if "[L138]" in m]
 
 
 def device_findings(doc):
     with lint.collecting() as found:
         lint.lint_device_guides("device.yaml", doc)
-    return [m for m in found.errors + found.warnings if "[L131]" in m]
+    return [m for m in found.errors + found.warnings if "[L138]" in m]
 
 
 def _view(*guides, size=(430.0, 42.0)):
     return {"views": {"front": {"size": {"w": size[0], "h": size[1]}, "guides": list(guides)}}}
 
 
-# --- L131, the ring ------------------------------------------------------------
+# --- L138, the ring ------------------------------------------------------------
 
 def test_the_d_ring_declares_a_ring_its_schema_accepts():
     doc = _ring()
@@ -88,7 +88,7 @@ def test_L131_reads_the_face_axes_for_a_ring_seen_end_on():
     assert component_findings(doc)
 
 
-# --- L131, the duct ------------------------------------------------------------
+# --- L138, the duct ------------------------------------------------------------
 
 def test_a_duct_guide_validates():
     doc = {"format": 1, "kind": "device", "name": "t", "version": "0.1.0", "maturity": "draft",

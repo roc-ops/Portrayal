@@ -8,15 +8,15 @@
   brush is an opaque slab in 3D.
   `passes:` on a view declares where cables cross the face, each
   `{id, at, size, shape: rect | obround, cover: open | brush}`, compiled to
-  invisible `data-class="pass"` outlines in a `--passes` group. Lint L129: a
+  invisible `data-class="pass"` outlines in a `--passes` group. Lint L136: a
   pass lies inside its face and overlaps no component but a well that holds it
-  whole. Lint L130: a pass covered by a brush has a brush drawn over it, and a
+  whole. Lint L137: a pass covered by a brush has a brush drawn over it, and a
   brush over a pass belongs to one whose cover is `brush`.
   `guide: {kind: ring, aperture: {w, h}, run}` on a component contract, and
   `guides:` (`kind: duct`, with `finger-pitch` and `finger-gap`) on a device
   view, compile to `data-guide*` attributes and an unpainted
   `data-class="guide"` rect; `components.json` carries a contract's `guide`.
-  Lint L131: a ring's opening fits inside its part, seen along its run, and a
+  Lint L138: a ring's opening fits inside its part, seen along its run, and a
   duct lies inside its view with a gap less than its pitch.
   Nothing consumes passes or guides yet, and the DCIM exports ignore both; the
   device lock fingerprints them only where they are declared.
@@ -28,13 +28,13 @@
   bottom unit), or at a rack unit by `ru`. Labs have a schema,
   `spec/schemas/lab.schema.json` (published as
   `https://portrayal.dev/schemas/v1/lab.schema.json`), checked by lint (L1)
-  and by the build, and five rules: L132 (refs, ids and `on` resolve), L133
+  and by the build, and five rules: L139 (refs, ids and `on` resolve), L140
   (`face`/`on`/`unit` only on a rack-face part, placed by `on` or `ru` and
-  not both), L134 (the host is a rack device and `unit` is within it), L135
+  not both), L141 (the host is a rack device and `unit` is within it), L142
   (everything fits the rack, no two rack devices share a unit, no two
-  rack-face parts claim one unit on one face), all errors, and L136, a
+  rack-face parts claim one unit on one face), all errors, and L143, a
   warning naming the host behind a rack-face part placed by `ru`.
-  `labs_index.py` will not write a lab that fails L1 or L132-L135.
+  `labs_index.py` will not write a lab that fails L1 or L139-L142.
   `roadm-ring-demo` passes all of them. Every `labs.json` placement keeps its
   keys and gains its resolved `ru`, `face`, `mount`, `host` and `unit`; new
   fields only, `contract` stays at 2, and a site that reads none of them still

@@ -1,8 +1,8 @@
 # Cable managers: rack-face mounting, sheet bodies, brushes and guides
 
-Status: 2026-10-07. Sections 2 to 5 (brushes, pass-throughs and guides; lint L129 to
-L131), the three devices of section 7 and the library side of section 6 (lab placement,
-the lab schema and its checks; lint L132 to L136) are implemented; the rack drawing of
+Status: 2026-10-07. Sections 2 to 5 (brushes, pass-throughs and guides; lint L136 to
+L138), the three devices of section 7 and the library side of section 6 (lab placement,
+the lab schema and its checks; lint L139 to L143) are implemented; the rack drawing of
 section 6 is still to come in the site repository. The first passive rack parts in the
 library that hold or pass cables rather than terminate them: the FS horizontal cable
 managers.
@@ -211,8 +211,8 @@ draws the manager as an ordinary device on that rack unit, which is wrong and vi
 the site's contract check is what catches the gap.
 
 As built: the schema is `spec/schemas/lab.schema.json`, and the checks are lint rules
-L132 to L136, the codes a listing's checks set the pattern for. L132 to L135 are errors
-and `labs_index.py` will not write a lab that fails one; L136, the report of a rack-face
+L139 to L143, the codes a listing's checks set the pattern for. L139 to L142 are errors
+and `labs_index.py` will not write a lab that fails one; L143, the report of a rack-face
 part placed by `ru` over a host, is a warning, because that placement is legal. Run over
 `roadm-ring-demo` before they were made errors, they found nothing: nine 1U rack devices
 on distinct units, every ref a library device, no rack-face part. In `labs.json` each

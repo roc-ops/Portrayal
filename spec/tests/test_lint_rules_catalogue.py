@@ -228,14 +228,14 @@ ISSUED = {
     "L126": "device",
     "L127": "device",
     "L128": "device, listing",
-    "L129": "device",
-    "L130": "device",
-    "L131": "component, device",
-    "L132": "lab",
-    "L133": "lab",
-    "L134": "lab",
-    "L135": "lab",
-    "L136": "lab",
+    "L136": "device",
+    "L137": "device",
+    "L138": "component, device",
+    "L139": "lab",
+    "L140": "lab",
+    "L141": "lab",
+    "L142": "lab",
+    "L143": "lab",
 }
 
 

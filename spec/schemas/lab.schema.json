@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://portrayal.dev/schemas/v1/lab.schema.json",
   "title": "Portrayal lab (v1) - library devices placed in one rack, and the links between them",
-  "description": "A LAB IS A RACK ELEVATION PLUS A LINK LIST. It lives at labs/<name>/lab.yaml, names library devices by their `name`, and names ports by placement id; nothing about geometry lives here, because a viewer resolves port positions from the compiled drawings. The build checks every placement (L132-L136) and writes each one to labs.json with its position resolved: the absolute rack unit, the face and the host. Rack units count the way the rack counts, U1 at the bottom, and a placement's `ru` is the lowest unit it takes.",
+  "description": "A LAB IS A RACK ELEVATION PLUS A LINK LIST. It lives at labs/<name>/lab.yaml, names library devices by their `name`, and names ports by placement id; nothing about geometry lives here, because a viewer resolves port positions from the compiled drawings. The build checks every placement (L139-L143) and writes each one to labs.json with its position resolved: the absolute rack unit, the face and the host. Rack units count the way the rack counts, U1 at the bottom, and a placement's `ru` is the lowest unit it takes.",
   "type": "object",
   "required": [
     "format",
@@ -44,7 +44,7 @@
         "height-ru": {
           "type": "integer",
           "minimum": 1,
-          "description": "rack units in the frame; omitted means 42. Every placement fits inside it (L135)"
+          "description": "rack units in the frame; omitted means 42. Every placement fits inside it (L142)"
         },
         "rails-only": {
           "type": "boolean",
@@ -75,20 +75,20 @@
         "ref"
       ],
       "additionalProperties": false,
-      "description": "ONE DEVICE IN THE RACK. A `rack` device is placed by `ru`. A `rack-face` part - one that bolts to the rail face over a rack unit it shares, docs/cable-managers-design.md section 6 - is placed on a host (`on`, with `unit`) or at a rack unit (`ru`), never both, and says which `face`. `face`, `on` and `unit` are for rack-face parts only (L133).",
+      "description": "ONE DEVICE IN THE RACK. A `rack` device is placed by `ru`. A `rack-face` part - one that bolts to the rail face over a rack unit it shares, docs/cable-managers-design.md section 6 - is placed on a host (`on`, with `unit`) or at a rack unit (`ru`), never both, and says which `face`. `face`, `on` and `unit` are for rack-face parts only (L140).",
       "properties": {
         "id": {
           "type": "string",
           "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$",
-          "description": "unique in the lab (L132); `on` and every link end name a placement by it"
+          "description": "unique in the lab (L139); `on` and every link end name a placement by it"
         },
         "ref": {
           "type": "string",
-          "description": "a library device's `name`, e.g. `fhd-1ufce` (L132)"
+          "description": "a library device's `name`, e.g. `fhd-1ufce` (L139)"
         },
         "cfg": {
           "type": "string",
-          "description": "which of the device's configurations; omitted means its default (L132)"
+          "description": "which of the device's configurations; omitted means its default (L139)"
         },
         "label": {
           "type": "string"
@@ -96,7 +96,7 @@
         "ru": {
           "type": "integer",
           "minimum": 1,
-          "description": "the lowest rack unit the device takes, U1 at the bottom of the rack (L135)"
+          "description": "the lowest rack unit the device takes, U1 at the bottom of the rack (L142)"
         },
         "face": {
           "enum": [
@@ -107,12 +107,12 @@
         },
         "on": {
           "type": "string",
-          "description": "rack-face parts only: the id of the rack device it sits in front of (or behind), so that it moves with that device (L132, L134)"
+          "description": "rack-face parts only: the id of the rack device it sits in front of (or behind), so that it moves with that device (L139, L141)"
         },
         "unit": {
           "type": "integer",
           "minimum": 1,
-          "description": "rack-face parts placed `on` a host only: which of the host's rack units, counted the way the rack counts - 1 is the host's bottom unit. Omitted means 1. Several parts on one tall host are several placements with different `unit` values (L134)"
+          "description": "rack-face parts placed `on` a host only: which of the host's rack units, counted the way the rack counts - 1 is the host's bottom unit. Omitted means 1. Several parts on one tall host are several placements with different `unit` values (L141)"
         },
         "turned": {
           "type": "boolean",

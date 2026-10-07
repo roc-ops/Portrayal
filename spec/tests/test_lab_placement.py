@@ -109,37 +109,37 @@ def test_the_library_lab_passes_the_schema_and_every_check():
 # ---- one failing lab per check -----------------------------------------------
 
 FAILING = {
-    "L132 a ref that is no device":
-        ("L132", lab(enc_1u={"id": "enc-1u", "ref": "fhd-9ufce", "ru": 20},
+    "L139 a ref that is no device":
+        ("L139", lab(enc_1u={"id": "enc-1u", "ref": "fhd-9ufce", "ru": 20},
                      mgr_c=None)),
-    "L132 an on that names no placement":
-        ("L132", lab(mgr_c={"id": "mgr-c", "ref": "fhd-cmp5dr", "on": "enc-2u"})),
-    "L132 an id used twice":
-        ("L132", lab(dup={"id": "enc-1u", "ref": "fhd-1ufce", "ru": 25})),
-    "L132 a cfg the device does not have":
-        ("L132", lab(enc_1u={"id": "enc-1u", "ref": "fhd-1ufce", "ru": 20, "cfg": "no-such"})),
-    "L133 face on a rack device":
-        ("L133", lab(enc_1u={"id": "enc-1u", "ref": "fhd-1ufce", "ru": 20, "face": "rear"})),
-    "L133 a rack device placed on another":
-        ("L133", lab(enc_1u={"id": "enc-1u", "ref": "fhd-1ufce", "on": "enc-4u"},
+    "L139 an on that names no placement":
+        ("L139", lab(mgr_c={"id": "mgr-c", "ref": "fhd-cmp5dr", "on": "enc-2u"})),
+    "L139 an id used twice":
+        ("L139", lab(dup={"id": "enc-1u", "ref": "fhd-1ufce", "ru": 25})),
+    "L139 a cfg the device does not have":
+        ("L139", lab(enc_1u={"id": "enc-1u", "ref": "fhd-1ufce", "ru": 20, "cfg": "no-such"})),
+    "L140 face on a rack device":
+        ("L140", lab(enc_1u={"id": "enc-1u", "ref": "fhd-1ufce", "ru": 20, "face": "rear"})),
+    "L140 a rack device placed on another":
+        ("L140", lab(enc_1u={"id": "enc-1u", "ref": "fhd-1ufce", "on": "enc-4u"},
                      mgr_c=None)),
-    "L133 a rack-face part with on and ru":
-        ("L133", lab(mgr_c={"id": "mgr-c", "ref": "fhd-cmp5dr", "on": "enc-1u", "ru": 20})),
-    "L133 a rack-face part with neither":
-        ("L133", lab(mgr_d={"id": "mgr-d", "ref": "fhd-cmp5dr", "face": "front"})),
-    "L133 a unit with no host":
-        ("L133", lab(mgr_d={"id": "mgr-d", "ref": "fhd-cmp5dr", "ru": 30, "unit": 1})),
-    "L134 a unit beyond the host's height":
-        ("L134", lab(mgr_a={"id": "mgr-a", "ref": "fhd-cmp5dr", "on": "enc-4u", "unit": 5})),
-    "L134 a host that is itself rack-face":
-        ("L134", lab(mgr_c={"id": "mgr-c", "ref": "fhd-cmp5dr", "on": "mgr-d"})),
-    "L135 two rack devices overlapping":
-        ("L135", lab(enc_1u={"id": "enc-1u", "ref": "fhd-1ufce", "ru": 13}, mgr_c=None)),
-    "L135 two rack-face parts on one unit and face":
-        ("L135", lab(mgr_b={"id": "mgr-b", "ref": "fhd-cmp5dr", "on": "enc-4u",
+    "L140 a rack-face part with on and ru":
+        ("L140", lab(mgr_c={"id": "mgr-c", "ref": "fhd-cmp5dr", "on": "enc-1u", "ru": 20})),
+    "L140 a rack-face part with neither":
+        ("L140", lab(mgr_d={"id": "mgr-d", "ref": "fhd-cmp5dr", "face": "front"})),
+    "L140 a unit with no host":
+        ("L140", lab(mgr_d={"id": "mgr-d", "ref": "fhd-cmp5dr", "ru": 30, "unit": 1})),
+    "L141 a unit beyond the host's height":
+        ("L141", lab(mgr_a={"id": "mgr-a", "ref": "fhd-cmp5dr", "on": "enc-4u", "unit": 5})),
+    "L141 a host that is itself rack-face":
+        ("L141", lab(mgr_c={"id": "mgr-c", "ref": "fhd-cmp5dr", "on": "mgr-d"})),
+    "L142 two rack devices overlapping":
+        ("L142", lab(enc_1u={"id": "enc-1u", "ref": "fhd-1ufce", "ru": 13}, mgr_c=None)),
+    "L142 two rack-face parts on one unit and face":
+        ("L142", lab(mgr_b={"id": "mgr-b", "ref": "fhd-cmp5dr", "on": "enc-4u",
                             "face": "front", "unit": 3})),
-    "L135 a device outside the rack":
-        ("L135", lab(enc_1u={"id": "enc-1u", "ref": "fhd-1ufce", "ru": 43}, mgr_c=None)),
+    "L142 a device outside the rack":
+        ("L142", lab(enc_1u={"id": "enc-1u", "ref": "fhd-1ufce", "ru": 43}, mgr_c=None)),
 }
 
 
@@ -154,7 +154,7 @@ def test_each_check_fails_its_lab(case):
 def test_a_rack_face_part_by_ru_over_a_host_is_reported_with_it():
     d = lab(mgr_d={"id": "mgr-d", "ref": "fhd-cmp5dr", "ru": 11, "face": "rear"})
     found, p = run(d)
-    assert [(c, s) for c, s, _ in found] == [("L136", "warning")]
+    assert [(c, s) for c, s, _ in found] == [("L143", "warning")]
     assert "enc-4u" in found[0][2] and "unit: 2" in found[0][2]
     assert (p["mgr-d"]["ru"], p["mgr-d"]["host"], p["mgr-d"]["unit"]) == (11, "enc-4u", 2)
 
@@ -174,10 +174,10 @@ def test_the_schema_rejects_a_malformed_placement(bad):
 def test_lint_reports_the_checks_under_their_codes():
     path = "library/labs/x/lab.yaml"
     with lint.collecting() as found:
-        lint.lint_lab(path, FAILING["L134 a unit beyond the host's height"][1], [LIB])
+        lint.lint_lab(path, FAILING["L141 a unit beyond the host's height"][1], [LIB])
         lint.lint_lab(path, lab(mgr_d={"id": "mgr-d", "ref": "fhd-cmp5dr", "ru": 11}), [LIB])
-    assert len(found.errors) == 1 and "[L134]" in found.errors[0]
-    assert len(found.warnings) == 1 and "[L136]" in found.warnings[0]
+    assert len(found.errors) == 1 and "[L141]" in found.errors[0]
+    assert len(found.warnings) == 1 and "[L143]" in found.warnings[0]
 
 
 def _index(tmp_path, monkeypatch, d):
@@ -207,6 +207,6 @@ def test_labs_json_carries_resolved_positions(tmp_path, monkeypatch):
 
 
 def test_labs_index_refuses_a_lab_that_fails_a_check(tmp_path, monkeypatch, capsys):
-    rc, out = _index(tmp_path, monkeypatch, FAILING["L135 two rack devices overlapping"][1])
+    rc, out = _index(tmp_path, monkeypatch, FAILING["L142 two rack devices overlapping"][1])
     assert rc == 1 and not out.exists()
-    assert "[L135]" in capsys.readouterr().out
+    assert "[L142]" in capsys.readouterr().out

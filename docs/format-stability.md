@@ -162,7 +162,7 @@ placement keeps every key its lab wrote, and carries five more:
 
 They are new fields and did not raise `contract`, which is still 2. A reader that knows none of
 them still finds `ru`, and draws a rack-face part as an ordinary device on its
-rack unit. A lab that fails its schema or a check (lint L132 to L135) is not
+rack unit. A lab that fails its schema or a check (lint L139 to L142) is not
 written, and the build stops.
 
 ## What else a consumer holds

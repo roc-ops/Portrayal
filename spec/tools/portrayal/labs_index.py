@@ -13,7 +13,7 @@ rack unit, `face`, `mount`, `host` and `unit`. Every key the lab wrote is kept,
 so a viewer that knows none of the new ones still finds `ru` and draws the part
 on the right unit. A lab that fails the schema or a check is not written: the
 build stops and says why, the same findings `lint.py` reports as L1 and
-L132-L135.
+L139-L142.
 """
 import argparse
 import json

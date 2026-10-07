@@ -295,14 +295,14 @@ RULES = {
     "L126": ("device",     "a bevelled chassis is a solid the box can have - every edge named by two faces that meet, none bevelled twice, no face cut away and no bevel swallowed by its neighbours - its face drawings are the chassis's own size, and every part, bay and cutout on a face lies on the flat face rather than on a bevel", "name edges as two adjacent faces (`front-left`), shrink a bevel that cuts too much, drop a view `size` that differs from the chassis on a bevelled face, or move the part onto the flat face - spec/tools/portrayal/bevel.py says where it is"),
     "L127": ("device",     "a `shell: sheet` body states `chassis.thickness`, between 0 and 10 mm, and a box states none (error)", "give a sheet body the gauge its datasheet states; on a box, drop `thickness`"),
     "L128": ("device, listing", "a part-number key has no stray whitespace - none leading or trailing, none but the plain ASCII space (an error), and none splitting a run of capitals and digits between two hyphens (`-A C-`, a warning)", "retype the SKU as the vendor prints it; a space the vendor really prints inside a hyphenated token is waived with the document that shows it"),
-    "L129": ("device",     "a declared pass-through (`passes:`) lies inside its face and overlaps no component - except a well that holds it whole, the plate it is cut through - and no two in a view share an id", "move the pass-through off the part, or onto the face; a window punched in a part's floor is declared over that well"),
-    "L130": ("device",     "a pass-through whose `cover` is `brush` has a `pattern: brush` decor drawn over the whole of it, and a brush drawn over a pass-through belongs to one whose cover is `brush`", "draw the brush over the opening, or change `cover` to say what the picture shows"),
-    "L131": ("component, device", "a guide fits what declares it - a ring's opening inside the part, seen along its run (its size, and its relief or `size.d` out of the face), and a duct inside its view, with a finger gap less than the finger pitch", "measure the clear opening, not the outside of the loop; give the part the relief that holds the opening; move the duct onto its face, or re-read the pitch and the gap off the drawing"),
-    "L132": ("lab",        "every placement's `ref` is a library device (and its `cfg` one of that device's configurations), every placement id is unique, and every `on` names another placement in the lab (error)", "name the device by its `name`, e.g. `fhd-1ufce`; give each placement its own id; point `on` at the id of the placement the part sits on"),
-    "L133": ("lab",        "`face`, `on` and `unit` appear only on a device whose `chassis.mount` is `rack-face`; a rack-face device is placed by `on` or by `ru`, not both, and a rack device by `ru` (error)", "drop the key from a rack device; give a rack-face part either `on` (and `unit`) or `ru`"),
-    "L134": ("lab",        "a rack-face part's host is a `rack` device, and `unit` is within the host's height, 1 to its `chassis.ru` (error)", "put the part `on` the rack device behind it; count `unit` from 1 at the host's bottom unit"),
-    "L135": ("lab",        "every placement fits inside the rack's `height-ru`, no two rack devices share a rack unit, and no two rack-face parts claim one rack unit on one face (error)", "move one of the two, or put one rack-face part on the other face"),
-    "L136": ("lab",        "a rack-face part placed by `ru` over a rack device is reported with that host (warning)", "place it `on` the host with its `unit` so it moves with the host, or leave it by `ru` if it belongs to the rack rather than the device"),
+    "L136": ("device",     "a declared pass-through (`passes:`) lies inside its face and overlaps no component - except a well that holds it whole, the plate it is cut through - and no two in a view share an id", "move the pass-through off the part, or onto the face; a window punched in a part's floor is declared over that well"),
+    "L137": ("device",     "a pass-through whose `cover` is `brush` has a `pattern: brush` decor drawn over the whole of it, and a brush drawn over a pass-through belongs to one whose cover is `brush`", "draw the brush over the opening, or change `cover` to say what the picture shows"),
+    "L138": ("component, device", "a guide fits what declares it - a ring's opening inside the part, seen along its run (its size, and its relief or `size.d` out of the face), and a duct inside its view, with a finger gap less than the finger pitch", "measure the clear opening, not the outside of the loop; give the part the relief that holds the opening; move the duct onto its face, or re-read the pitch and the gap off the drawing"),
+    "L139": ("lab",        "every placement's `ref` is a library device (and its `cfg` one of that device's configurations), every placement id is unique, and every `on` names another placement in the lab (error)", "name the device by its `name`, e.g. `fhd-1ufce`; give each placement its own id; point `on` at the id of the placement the part sits on"),
+    "L140": ("lab",        "`face`, `on` and `unit` appear only on a device whose `chassis.mount` is `rack-face`; a rack-face device is placed by `on` or by `ru`, not both, and a rack device by `ru` (error)", "drop the key from a rack device; give a rack-face part either `on` (and `unit`) or `ru`"),
+    "L141": ("lab",        "a rack-face part's host is a `rack` device, and `unit` is within the host's height, 1 to its `chassis.ru` (error)", "put the part `on` the rack device behind it; count `unit` from 1 at the host's bottom unit"),
+    "L142": ("lab",        "every placement fits inside the rack's `height-ru`, no two rack devices share a rack unit, and no two rack-face parts claim one rack unit on one face (error)", "move one of the two, or put one rack-face part on the other face"),
+    "L143": ("lab",        "a rack-face part placed by `ru` over a rack device is reported with that host (warning)", "place it `on` the host with its `unit` so it moves with the host, or leave it by `ru` if it belongs to the rack rather than the device"),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -4991,7 +4991,7 @@ def lint_device_decor(path, view_name, view, lib_roots):
     # A DECLARED PASS-THROUGH IS AN OPENING TOO. The CMH-4DRB1U's windows are
     # cut in its panel well's own drawing, which declares no relief `shape`, so
     # by the panel's box its five brushes read 100% buried; the view's
-    # `passes:` say where the face is open, and L129 already holds each one
+    # `passes:` say where the face is open, and L136 already holds each one
     # inside the well it is cut through. An obround is counted as its box.
     for p in vp.get("passes") or []:
         pb = _decor_box(p)
@@ -5927,19 +5927,19 @@ def lint_listing(path, data, roots):
 
 # THE LAB CODES. The rules are in labs.py, because labs_index.py has to resolve
 # the same placements to write labs.json and the two must not disagree; this is
-# where they are reported. L132-L135 are errors, L136 a warning.
-LAB_CODES = ("L132", "L133", "L134", "L135", "L136")
+# where they are reported. L139-L142 are errors, L143 a warning.
+LAB_CODES = ("L139", "L140", "L141", "L142", "L143")
 
 
 def lint_lab(path, data, roots):
-    """L132-L136: a lab's placements resolve to rack positions that fit.
+    """L139-L143: a lab's placements resolve to rack positions that fit.
 
     A lab names library devices and places them in one rack: a `rack` device by
     `ru`, a `rack-face` part (a cable manager on the rail face) `on` a host or
-    by `ru`, on a `face` (docs/cable-managers-design.md section 6). L132 holds
-    the names, L133 which keys belong to which mount, L134 the host and its
-    units, L135 that nothing overlaps; all errors, because a lab that breaks
-    them cannot be drawn and labs_index.py will not compile it. L136 is a
+    by `ru`, on a `face` (docs/cable-managers-design.md section 6). L139 holds
+    the names, L140 which keys belong to which mount, L141 the host and its
+    units, L142 that nothing overlaps; all errors, because a lab that breaks
+    them cannot be drawn and labs_index.py will not compile it. L143 is a
     report, not a fault: a rack-face part placed by `ru` in front of a device
     is legal, and the warning names the host it would move with.
     """
@@ -6482,14 +6482,14 @@ def _box_within(inner, outer, tol=0.05):
 
 
 def lint_device_passes(path, data, lib_roots):
-    """L129 and L130: a declared pass-through is where cables can really cross.
+    """L136 and L137: a declared pass-through is where cables can really cross.
 
     `passes:` says that cables can cross this face here to the opposite side
     (docs/cable-managers-design.md section 5). Nothing consumes it yet, which
     is exactly when a declaration drifts: the picture moves and the statement
     does not, and nobody notices until the routing work reads it.
 
-    L129 - A PASS LIES INSIDE ITS FACE AND OVERLAPS NO COMPONENT. A cable cannot
+    L136 - A PASS LIES INSIDE ITS FACE AND OVERLAPS NO COMPONENT. A cable cannot
     cross where a port or a ring stands. The one part a pass may lie in is a
     WELL that holds it whole - the plate it is cut through: the windows of the
     CMH-4DRB1U are holes in the floor of the panel they are punched in, and a
@@ -6497,7 +6497,7 @@ def lint_device_passes(path, data, lib_roots):
     itself. A pass only partly over a well is still reported; so is one over
     any part that is not a well.
 
-    L130 - THE PICTURE AND THE DECLARATION AGREE. A pass whose cover is `brush`
+    L137 - THE PICTURE AND THE DECLARATION AGREE. A pass whose cover is `brush`
     has a brush decor drawn over the whole of it; and a brush drawn where a
     pass is declared says that pass is covered by a brush. A brush with no pass
     under it is not reported - a box can carry a brush strip nobody has
@@ -6545,10 +6545,10 @@ def lint_device_passes(path, data, lib_roots):
             if not pb:
                 continue
             if pid in seen:
-                err(path, "L129", f"{vname}: pass-through {pid!r} is declared twice")
+                err(path, "L136", f"{vname}: pass-through {pid!r} is declared twice")
             seen.add(pid)
             if vw and vh and not _box_within(pb, (0, 0, vw, vh)):
-                err(path, "L129", f"{vname}/{pid}: the pass-through runs off the face "
+                err(path, "L136", f"{vname}/{pid}: the pass-through runs off the face "
                                   f"({vw:g} x {vh:g}) - a cable cannot cross where there "
                                   "is no face")
             for qid, qb, well in parts:
@@ -6557,7 +6557,7 @@ def lint_device_passes(path, data, lib_roots):
                     continue
                 if well and _box_within(pb, qb):
                     continue
-                err(path, "L129", f"{vname}/{pid}: the pass-through overlaps {qid} by "
+                err(path, "L136", f"{vname}/{pid}: the pass-through overlaps {qid} by "
                                   f"{ox:.2f}x{oy:.2f}mm - a cable cannot cross where a "
                                   "part stands. Only a well that holds it whole, the "
                                   "plate it is cut through, may lie under it")
@@ -6565,12 +6565,12 @@ def lint_device_passes(path, data, lib_roots):
             over = [(d, db) for d, db in brushes
                     if min(_box_overlap(pb, db)) > 0.05]
             if cover == "brush" and not any(_box_within(pb, db) for _, db in over):
-                err(path, "L130", f"{vname}/{pid}: the pass-through's cover is `brush` and "
+                err(path, "L137", f"{vname}/{pid}: the pass-through's cover is `brush` and "
                                   "no brush decor covers the whole of it - draw "
                                   "`pattern: brush` over it, or say `cover: open`")
             if cover != "brush" and over:
                 d = over[0][0]
-                err(path, "L130", f"{vname}/{pid}: a brush decor at {d.get('at')} is drawn "
+                err(path, "L137", f"{vname}/{pid}: a brush decor at {d.get('at')} is drawn "
                                   f"over the pass-through, whose cover is {cover!r} - "
                                   "the picture and the declaration disagree")
 def _relief_reach(data):
@@ -6595,7 +6595,7 @@ def _relief_reach(data):
 
 
 def lint_component_guide(path, data):
-    """L131: a ring's opening fits inside the part that declares it.
+    """L138: a ring's opening fits inside the part that declares it.
 
     A guide is read by whatever routes cables, and an opening bigger than the
     loop around it is a number nobody measured. The opening is seen looking
@@ -6621,15 +6621,15 @@ def lint_component_guide(path, data):
               "z": (("w", size.get("w"), "size.w"), ("h", size.get("h"), "size.h"))}[g["run"]]
     for side, bound, what in bounds:
         if bound is None:
-            err(path, "L131", f"guide: the opening's {side} {ap.get(side)!r} runs out of the "
+            err(path, "L138", f"guide: the opening's {side} {ap.get(side)!r} runs out of the "
                               f"face, and the part states no relief and no size.d to hold it")
         elif ap.get(side) is not None and ap[side] > bound + 0.05:
-            err(path, "L131", f"guide: the opening's {side} {ap[side]:g} is wider than the "
+            err(path, "L138", f"guide: the opening's {side} {ap[side]:g} is wider than the "
                               f"part that holds it - {what} is {bound:g}")
 
 
 def lint_device_guides(path, data):
-    """L131: a duct lies inside its view, and its fingers leave a gap.
+    """L138: a duct lies inside its view, and its fingers leave a gap.
 
     The device half of the rule a ring's contract answers in
     lint_component_guide: a channel declared off the face it runs along is
@@ -6642,21 +6642,21 @@ def lint_device_guides(path, data):
         for gd in (view or {}).get("guides") or []:
             gid = gd.get("id")
             if gid in seen:
-                err(path, "L131", f"{vname}: guide {gid!r} is declared twice")
+                err(path, "L138", f"{vname}: guide {gid!r} is declared twice")
             seen.add(gid)
             (x, y), (w, h) = gd["at"], gd["size"]
             vw, vh = size.get("w"), size.get("h")
             if vw is not None and vh is not None and (
                     x < -0.05 or y < -0.05 or x + w > vw + 0.05 or y + h > vh + 0.05):
-                err(path, "L131", f"{vname}/{gid}: ({x:g},{y:g})-({x + w:g},{y + h:g}) runs "
+                err(path, "L138", f"{vname}/{gid}: ({x:g},{y:g})-({x + w:g},{y + h:g}) runs "
                                   f"off the {vw:g} x {vh:g} view it is declared on")
             pitch, gap = gd.get("finger-pitch"), gd.get("finger-gap")
             if pitch is not None and gap is not None and gap >= pitch:
-                err(path, "L131", f"{vname}/{gid}: a finger gap of {gap:g} is not less than "
+                err(path, "L138", f"{vname}/{gid}: a finger gap of {gap:g} is not less than "
                                   f"the pitch {pitch:g}, which leaves the fingers no width")
             along = w if gd["run"] == "x" else h
             if pitch is not None and pitch > along + 0.05:
-                err(path, "L131", f"{vname}/{gid}: a finger pitch of {pitch:g} is longer than "
+                err(path, "L138", f"{vname}/{gid}: a finger pitch of {pitch:g} is longer than "
                                   f"the duct, {along:g} along its run")
 
 

@@ -118,7 +118,7 @@ def iter_labs(roots):
     """Every lab.yaml under every root, sorted, as paths. A LIST.
 
     A lab places devices in a rack and draws nothing of its own; labs_index.py
-    compiles them and lint.py checks them (L132-L136).
+    compiles them and lint.py checks them (L139-L143).
     """
     return [f for r in _roots(roots)
             for f in sorted(Path(r).glob("labs/**/lab.yaml"))]
