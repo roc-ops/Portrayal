@@ -274,7 +274,7 @@ RULES = {
     "L105": ("component, device", "a placement's or part's `interfaces:` are held by a port the export files as a switch interface, named once in the view or component, and never the id of a placement, part, element or bay", "rename the colliding placement or interface - both are real and a DCIM needs a name for each - or move `interfaces:` onto the cage that presents them"),
     "L106": ("component",  "`interface-at` names a declared connection point, and a connection point's `on:` names a `relief.features[]` node that carries an `out`, or a `cyl` whose far end (`lift + cyl`) is its rear; a numeric `seat-out` is a number at or above 0, never beside `on:`, and only on the presented point (`interface-at`, default `mate`)", "fix the name, or give the feature the `out` (or `cyl`) a part seated on it stands off by; a point on the part's own face needs no `on:`; move a `seat-out` to the presented point; quote the key (`'on':`) - a bare `on` is YAML boolean true"),
     "L107": ("component, device", "no quoted run in a contract or manifest is longer than 25 words - a vendor's facts are transcribed, its prose is not reproduced", "paraphrase and cite the section (\"the ASR 9903 guide, Power Supply LEDs, says a flashing green lamp means...\"); a state table becomes `state = meaning` pairs, not a quotation"),
-    "L109": ("component",  "a declared `optical.polarity` is what the paths actually wire - A straight, AF pair-flipped (and its rows exchanged at 24 fibres), universal", "fix the paths or the polarity; the paths are the evidence, `polarity` is only the claim"),
+    "L109": ("component",  "a declared `optical.polarity` is what the paths actually wire - A straight, AF pair-flipped (and its rows exchanged at 24 fibres), universal - judged at the trunk connector's own width, and only at a width a held source draws (a warning otherwise)", "fix the paths or the polarity; the paths are the evidence, `polarity` is only the claim. For a width no source draws, add it to POLARITY_WIDTHS with the figure that draws it"),
     "L110": ("component, device", "a port's `speed` is one of the closed set in spec/schemas/speeds.yaml - the highest native rate the port runs at, and nothing else", "spell the rate from the set (a 10/100/1000 jack is `1g`); media goes in `media`, a USB generation in `usb`, a PON flavour in `pon`, a caveat in the placement's `description`"),
     "L108": ("component, device", "a belly-to-belly SFP/QSFP/QSFP-DD cage pair faces the library's way - upper 0 over lower 180, or left 270 beside right 90 on a card drawn on its side - so both bails face outward (OSFP stacks are not checked)", "turn the pair; where a recorded reading says the stack is built otherwise, name the pair in `stack-exceptions:` with that reading as its `reason`"),
     "L111": ("library",    "an alias names one box - no two devices claim the same `aliases[].name` (case-insensitive) unless every claimant marks it `shared: true`, and no alias repeats its own or another device's `model`", "drop or rename the alias; if an OEM name really maps to either of a pair, set `shared: true` on it in EVERY claimant and say why in its `note`"),
@@ -2926,6 +2926,27 @@ POLARITY_PATTERNS = {
                             for p in range(1, n + 1)],
 }
 
+# THE WIDTHS A HELD SOURCE DRAWS EACH PATTERN AT, and no others
+# (roc-ops/Portrayal#524). A pattern is a formula in n, and a formula answers at
+# every n whether or not anyone has looked: `af` at 24 was the pair swap alone,
+# read off a twelve-fibre figure, until the datasheet's own MTP-24 page said
+# otherwise (#520). Even "straight" is a fact about a part at a width rather
+# than about the letter: FS's 24-fibre Type A TRUNK takes fibre 1 to fibre 13
+# (Fiber Polarity Technical White Paper, p. 6). So a pattern is judged only at
+# a width a figure draws it at, and anywhere else L109 says it did not judge
+# rather than passing or failing a generalisation. Add a width here only with
+# the figure that draws it. All four are the FHD MTP-12/24 Cassettes Datasheet:
+#   a          12  p. 4, I. MTP-12 Cassette, Type A
+#              24  p. 6, VI. MTP-24 Cassette, Type A
+#   af         12  p. 4, II. MTP-12 Cassette, Type AF
+#              24  p. 6, VIII. MTP-24 Cassette, Type AF (rows exchanged)
+#   universal  12  p. 7, V. Universal - drawn for MTP-12 only
+POLARITY_WIDTHS = {
+    "a": (12, 24),
+    "af": (12, 24),
+    "universal": (12,),
+}
+
 
 def lint_component_optical_polarity(path, data, lib_roots):
     """L109: a declared polarity is what the paths wire.
@@ -2942,10 +2963,31 @@ def lint_component_optical_polarity(path, data, lib_roots):
     stacked adapters (the lower bore, FS's odd port). The two FHD adapters had
     it the other way round until this rule's first use exposed it.
 
-    Only rear connectors reached from the front are compared, one at a time,
+    Only trunk connectors reached from the front are compared, one at a time,
     port order against the pattern for that connector's width. A polarity this
     table does not know is not judged - it is still a claim, just not one this
     rule can test.
+
+    THE WIDTH IS THE CONNECTOR'S, NOT THE PATH COUNT (#524). An MTP-24 with
+    fibres declared `unused`, or wired to twelve ports, is still an MTP-24 and
+    its ports take the MTP-24's fibres; counting the paths judged it as a
+    narrower connector, which since #520 is a different pattern for `af`. So
+    the width is the connector's own `optical.positions`, resolved through the
+    faces as L80 resolves it, and only the ports actually wired are compared.
+    They must still be one contiguous run, inside the connector's block of
+    ports - a block that starts at a multiple of the width, which is how every
+    cassette in the library numbers its MTPs.
+
+    A WIDTH NO SOURCE DRAWS IS NOT JUDGED (#524) - see POLARITY_WIDTHS. It is a
+    warning that says so, not a pass: the claim stands unchecked, and the
+    warning is the record that it does.
+
+    THE TRUNK IS WHAT `optical_ports.is_trunk` SAYS: the rear face of a
+    two-faced cassette, or the connector a single-faced module names in
+    `optical.trunk` (#246). Reading only the `rear:` prefix skipped a
+    trunk-stated module without a word. One carrying a polarity is judged the
+    same way, its front ports numbered as `front_label` numbers them - trunk
+    positions counted, as the DCIM export counts them.
     """
     opt = data.get("optical") or {}
     pol = str(opt.get("polarity") or "").lower()
@@ -2953,37 +2995,58 @@ def lint_component_optical_polarity(path, data, lib_roots):
     if pattern is None or not opt.get("paths"):
         return
 
-    def load_ref(ref):
-        f = resolve_component(ref, lib_roots)
-        return load_yaml(f) if f else None
-
-    by_rear = {}
+    load_ref = _optical_load_ref(lib_roots)
+    caps = optical.capacities(data, load_ref)
+    by_trunk = {}
     for p in opt["paths"]:
-        eps = [p.get("from"), p.get("to")]
-        front = next((e for e in eps if e and ":" not in e), None)
-        rear = next((e for e in eps if e and ":" in e), None)
-        if not front or not rear:
+        eps = [ep for ep, _ratio in optical.endpoints(p)]
+        if len(eps) != 2:
+            continue            # a split is not a cassette pattern
+        try:
+            sides = [optical_ports.is_trunk(data, ep) for ep in eps]
+        except ValueError:
+            continue            # L78's error to report, not this one's
+        if sides.count(True) != 1:
             continue
+        trunk_ep, front = (eps[0], eps[1]) if sides[0] else (eps[1], eps[0])
         label = optical_ports.front_label(data, front, load_ref)
         if label is None:
             continue
-        _face, rpart, rpos = optical.split_endpoint(rear)
-        by_rear.setdefault(rpart, []).append((int(label), int(rpos)))
-    for rpart, pairs in sorted(by_rear.items()):
+        face, tpart, tpos = optical.split_endpoint(trunk_ep)
+        by_trunk.setdefault(optical.part_key(face, tpart), []).append((int(label), tpos))
+    sourced = POLARITY_WIDTHS.get(pol, ())
+    unjudged = {}
+    for key, pairs in sorted(by_trunk.items()):
+        width = caps.get(key)
+        if not width:
+            continue            # not a connector - L78's to report
         pairs.sort()
         ports = [pt for pt, _ in pairs]
-        base = ports[0] - 1
-        n = len(pairs)
-        if ports != list(range(base + 1, base + n + 1)):
+        base = (ports[0] - 1) // width * width
+        if ports != list(range(ports[0], ports[-1] + 1)) or ports[-1] > base + width:
             continue            # not one contiguous run of ports - not a cassette pattern
+        name = key.split(":", 1)[-1]
+        if width not in sourced:
+            unjudged.setdefault(width, []).append(name)
+            continue
+        want_all = pattern(width)
         got = [f for _, f in pairs]
-        want = pattern(n)
+        want = [want_all[pt - base - 1] for pt in ports]
         if got != want:
-            first = next(i for i in range(n) if got[i] != want[i])
-            err(path, "L109", f"declares polarity {pol!r}, but port {base + first + 1} takes "
-                              f"{rpart} fibre {got[first]} where {pol!r} puts fibre "
-                              f"{want[first]} (ports {base + 1}-{base + n} wire "
-                              f"{got}); the paths are the evidence - fix them or the claim")
+            first = next(i for i in range(len(got)) if got[i] != want[i])
+            err(path, "L109", f"declares polarity {pol!r}, but port {ports[first]} takes "
+                              f"{name} fibre {got[first]} where {pol!r} puts fibre "
+                              f"{want[first]} (ports {ports[0]}-{ports[-1]} wire "
+                              f"{got} on a {width}-fibre connector); the paths are the "
+                              "evidence - fix them or the claim")
+    # ONE WARNING PER WIDTH, not per connector: twelve identical lines for one
+    # panel's twelve MTPs say one thing twelve times.
+    for width, names in sorted(unjudged.items()):
+        warn(path, "L109", f"declares polarity {pol!r} on {width}-fibre connector(s) "
+                           f"{', '.join(names)}, and no held source draws {pol!r} at "
+                           f"{width} fibres (only at {', '.join(map(str, sourced))}) - "
+                           "polarity not judged at this width; add the width to "
+                           "POLARITY_WIDTHS with the figure that draws it")
 
 
 # L112 EXEMPTIONS, BY NAME AND WITH A REASON. A part leaves this table when the
