@@ -56,9 +56,12 @@ for (const [name, c] of Object.entries(input.cases)) {
     const deviceCages = c.cages[c.view] || [];
     // every slot of the face: the device's own cages and the nested ones
     const walk = () => m.faceCages(root, deviceCages, compByRef);
-    const studs = walk().filter(e => e.interface === 'terminal-stud');
+    // the interfaces this case is about: a single stud's, or (#828) a pair's
+    // as well, which test_two_hole_lugs.py asks for
+    const ifaces = c.ifaces || ['terminal-stud'];
+    const studs = walk().filter(e => ifaces.includes(e.interface));
     const offered = m.faceCages(root, deviceCages, compByRef, {offered: true})
-      .filter(e => e.interface === 'terminal-stud').map(e => e.id);
+      .filter(e => ifaces.includes(e.interface)).map(e => e.id);
     const find = () => walk().find(e => e.id === c.slot);
     const entry = find();
     const result = entry

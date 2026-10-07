@@ -55,6 +55,29 @@ def test_an_added_bay_is_minor():
     assert dl.required_bump(a, dl.entry(dev(extra_bay="slot-1"))) == "minor"
 
 
+def test_an_added_bay_does_not_launder_a_moved_one():
+    """#828: the old rule read "ids added" as additive whatever else moved, so
+    a slot that moved in the same edit that added another took a minor. The
+    moved slot is what a consumer cached; the addition does not excuse it."""
+    a = dl.entry(dev(at=(0, 0)))
+    assert dl.required_bump(a, dl.entry(dev(at=(1, 0), extra_bay="slot-1"))) == "major"
+    # and a view resized beside an addition is geometry too
+    grown = dev(extra_bay="slot-1")
+    grown["views"]["front"]["size"] = {"w": 100, "h": 44}
+    assert dl.required_bump(a, dl.entry(grown)) == "major"
+    # the purely additive case is still minor
+    assert dl.required_bump(a, dl.entry(dev(extra_bay="slot-1"))) == "minor"
+
+
+def test_an_entry_read_back_from_a_lock_carries_nothing_new():
+    """The answer `_bucket_bump` needs lives in memory beside the entry and is
+    never written: an entry still equals its own JSON round trip."""
+    import json
+    e = dl.entry(dev())
+    assert json.loads(json.dumps(e)) == e and callable(e.shape_without)
+    assert e.shape_without(set()) == e["shape"]
+
+
 def test_a_removed_bay_is_major():
     a = dl.entry(dev(extra_bay="slot-1"))
     assert dl.required_bump(a, dl.entry(dev())) == "major"

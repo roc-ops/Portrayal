@@ -41,6 +41,9 @@ RENDER = ROOT / "spec/tools/portrayal/render.py"
 EPS = 1e-6
 SVG = "{http://www.w3.org/2000/svg}"
 IFACE, LUG = "terminal-stud", "generic/ring-lug@1"
+# the sized ground screws (#830) a pair host composes; test_two_hole_lugs.py
+# holds them and the pair hosts.
+SIZED_SCREWS = ("common/ground-screw-m6@1", "common/ground-screw-1-4@1")
 
 # part -> what it was before it became a slot, and where a lug lands on it.
 #   axis   the stud axis in the part's own frame
@@ -200,6 +203,8 @@ def placements_of(parts):
     for f in sorted((LIB / "components").rglob("v*/contract.yaml")):
         c = _yaml(f)
         ref = f"{f.parents[2].name}/{c['name']}@{c['version'].split('.')[0]}"
+        if str(c.get("interface") or "").startswith("stud-pair-"):
+            continue            # a pair host: test_two_hole_lugs.py counts those
         for p in c.get("parts") or []:
             if p.get("ref") in parts:
                 out.append((ref, None, p))
@@ -300,7 +305,7 @@ def test_the_parts_that_present_terminal_stud_and_the_one_lug_that_mates_it():
         if c.get("mates") == IFACE:
             mates.append(ref)
     assert sorted(presents) == sorted([*SINGLE, CASA_STUD, "common/terminal-screw-34@1",
-                                       "common/terminal-screw-38@1"])
+                                       "common/terminal-screw-38@1", *SIZED_SCREWS])
     assert mates == [LUG]
     lug = _contract(LUG)
     assert lug["version"] == "1.0.0" and lug["size"] == {"w": 5.5, "h": 27.4}

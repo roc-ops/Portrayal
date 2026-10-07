@@ -496,6 +496,27 @@ CHASSIS_SURFACE = {"color", "edge", "silk", "weight-kg", "airflow", "power", "mo
                    "full-depth"}
 
 
+def _shape_digest(doc, placed, drop=()):
+    """The `shape` digest: chassis dimensions, view sizes and every placed
+    thing - less the placements keyed in `drop`, which is how `_bucket_bump`
+    asks whether a change that ADDED ids also moved something already there."""
+    chassis = {k: v for k, v in (doc.get("chassis") or {}).items()
+               if k not in CHASSIS_SURFACE}
+    return _digest({
+        "chassis": chassis or None,
+        "views": {v: (w or {}).get("size") for v, w in (doc.get("views") or {}).items()},
+        "placed": {k: v for k, v in placed.items() if k not in set(drop)},
+    })
+
+
+class _Entry(dict):
+    """A lock entry, carrying in memory - and never into the lock - the one
+    question the recorded entry cannot answer: what the `shape` digest would
+    be without some of the device's placements. JSON writes it as the plain
+    dict it is, and it compares equal to the entry read back from a file."""
+    shape_without = None
+
+
 def buckets(doc, versions=None):
     """The four things a device change can be, hashed apart.
 
@@ -527,11 +548,7 @@ def buckets(doc, versions=None):
     chassis = dict(doc.get("chassis") or {})
     chassis_surface = {k: chassis.pop(k) for k in CHASSIS_SURFACE if k in chassis}
     return {
-        "shape": _digest({
-            "chassis": chassis or None,
-            "views": {v: (w or {}).get("size") for v, w in (doc.get("views") or {}).items()},
-            "placed": placed,
-        }),
+        "shape": _shape_digest(doc, placed),
         "names": _digest({
             "ids": sorted(placed),
             "groups": sorted((doc.get("groups") or {}).keys()),
@@ -669,7 +686,10 @@ def entry(doc, versions=None):
             phys: name for phys, (name, _b)
             in sorted(dcim_export.listing_names(doc).items())}
     e.update(buckets(doc, versions))
-    return e
+    out = _Entry(e)
+    placed = _placements(doc)
+    out.shape_without = lambda drop: _shape_digest(doc, placed, drop)
+    return out
 
 
 def _addressing_bump(old, new):
@@ -786,6 +806,17 @@ def _bucket_bump(old, new):
     if old.get("shape") != new["shape"] and \
             set(old.get("ids") or []) == set(new["ids"]):
         return "major"          # same ids, different geometry: a slot moved
+    # AN ADDITION DOES NOT LAUNDER A MOVE (#828). With ids added, the shape
+    # digest differs whatever else happened, and this used to call the change
+    # minor - so a slot that moved in the same edit that added another was
+    # never asked for its major. Take the added placements back out: if the
+    # rest no longer hashes to the old shape, something already there moved,
+    # resized or turned, or a view or the chassis did.
+    if old.get("shape") != new["shape"]:
+        without = getattr(new, "shape_without", None)
+        added = set(new["ids"]) - set(old.get("ids") or [])
+        if without is not None and without(added) != old.get("shape"):
+            return "major"
     return "minor"              # strictly additive
 
 

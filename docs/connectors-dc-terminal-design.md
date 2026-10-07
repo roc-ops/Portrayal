@@ -571,7 +571,7 @@ answers the last two. It is the same part `nokia/sr-1-dc-terminal-block@1` waits
 
 ### 13.6 What is not covered
 
-- **A two-hole lug,** and so every pair above.
+- **A two-hole lug,** and so every pair above. Section 13.7 adds it.
 - **`cisco/a9k-ground-pad@1` and `common/ground-screw-washer@1`,** which are not seats.
 - **The ground plates and bolts:** `casa/ground-bolts@1`, `edgecore/agr-ground-plate@1`,
   `juniper/mx204-ground-plate@1`, `juniper/mx304-ground-plate@1` and the ground point on
@@ -585,6 +585,62 @@ every one a slot, every `stud-size` and its absence elsewhere, a lug seated on a
 device for each part with its solids above what the part builds, a turned placement, two
 pairs with the overlap recorded, and the kit offering the studs and seating a lug as the
 build does, with the view its 3D pass names.
+
+### 13.7 A two-hole lug across a pair (#828)
+
+**The pitch is the interface.** A two-hole lug is one stamping, so a lug for 5/8 in.
+centres does not land on studs 3/4 in. apart. Three interfaces in
+`spec/schemas/connectors.yaml`, `stud-pair-5-8`, `stud-pair-3-4` and `stud-pair-1`, each
+`spans: {interface: terminal-stud, count: 2}`, the mechanism `lc-duplex` uses for two LC
+bores. Each cites the standards entry of the lug that mates it, `two-hole-lug-5-8`, `-3-4`
+and `-1`, which carries the pitch, 15.875, 19.05 and 25.4, as `lc-duplex` cites the bore
+entry carrying 6.25. The stud size is not in the key; it stays the placement's `stud-size`.
+
+**A pair host** presents the interface and composes two stud parts at exactly that pitch,
+the first at the left. Its `mate` is the midpoint of the studs' own mate points, with
+`seat-out` the height each stud presents at, so a lug across the pair lies where a one-hole
+lug on either stud already does (13.1). L116 holds the count, the pitch, the midpoint and
+the depth; its depth arm now reads what a spanned part PRESENTS, its placed `lift` plus its
+own seat out, which for an LC bore is its lift as before and for a stud is the top of the
+stud. L115 makes the pair and its two studs one level or the other, and each stud still
+offers the ring lug alone.
+
+| host | studs | interface |
+|---|---|---|
+| `juniper/mx-ground-stud-pair-5-8@1` | `juniper/mx-ground-stud@1` twice | `stud-pair-5-8` |
+| `juniper/mx-ground-stud-pair-3-4@1` | `juniper/mx-ground-stud@1` twice | `stud-pair-3-4` |
+| `common/ground-stud-pair-5-8-m6@1` | `common/ground-screw-m6@1` twice | `stud-pair-5-8` |
+| `common/ground-stud-pair-5-8-1-4@1` | `common/ground-screw-1-4@1` twice | `stud-pair-5-8` |
+| `common/ground-stud-pair-3-4-1-4@1` | `common/ground-screw-1-4@1` twice | `stud-pair-3-4` |
+| `common/ground-stud-pair-1-1-4@1` | `common/ground-screw-1-4@1` twice | `stud-pair-1` |
+
+**The sized screws (#830, part 1).** `common/ground-lug@1` stays the library's nominal
+ground screw, unsized, as the owner ruled. `common/ground-screw-m6@1` (ISO 7045 pan head,
+12.0 across, 4.6 high) and `common/ground-screw-1-4@1` (ASME B18.6.3 pan head, 12.50
+across, 3.66 high) are drawn at a stated size and used only inside a pair host. An M4 and
+an M5 screw are not added: no pair with a sourced pitch takes one yet.
+
+**The lugs.** `generic/two-hole-lug-5-8@1` (Panduit LCD6-10A-L, #6 AWG),
+`generic/two-hole-lug-3-4@1` (LCC10-14BW-L, #10 AWG) and `generic/two-hole-lug-1@1`
+(LCD6-14D-L, #6 AWG), read off distributors' attribute tables (`estimated`: the Panduit
+drawings refused the fetch). Each is drawn ACROSS, the canonical axis of a spanning
+connector: holes along +x from the tongue's tip, the barrel and a 10 stub of wire leaving
+along +x. Fields `wire-color` and `barrel-color`, as on the ring lug.
+
+**Which way the wire leaves** is the pair's axis, derived from the order its studs are
+composed in (`manifest.spanning_axis`), plus the host placement's `rotate`. A pair side by
+side sends the wire right; a pair stood on end is the host placed at `rotate: 90`, which
+puts the first stud on top and sends the wire down. Turning a lug the other way along its
+pair is #829, which gives the three pair interfaces `turns: [0, 180]`.
+
+**Not built:** a lug whose tongue is bent at 90 or 45 degrees (the UfiSpace S96xx and the
+Nokia SR-1 documents call for one); a pair whose documented pitch is not one of the three
+(the MX304's and the LMFS-F's 16 mm, 0.125 off 5/8 in. against L116's 0.01).
+
+`spec/tests/test_two_hole_lugs.py` holds the registry, the screws, every host's pitch,
+midpoint, depth and axis under L115 and L116, each lug drawn across, every host placed side
+by side and on end on a built face with a lug whose holes land on the studs and whose wire
+leaves right or down, its solids above the studs, and the kit seating it as the build does.
 
 ## 14. The P40 output connector
 

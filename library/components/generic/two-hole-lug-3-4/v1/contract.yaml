@@ -1,0 +1,124 @@
+format: 1
+kind: component
+name: two-hole-lug-3-4
+version: 1.0.0
+class: port
+mates: stud-pair-3-4
+conforms: two-hole-lug-3-4
+profile: networking
+description: >-
+  A straight two-hole compression lug crimped on its wire, seen in plan as a
+  front elevation sees it landed across a pair of studs 3/4 in. apart: the
+  flat tongue with its two holes, the barrel over the crimp, a short straight
+  stub of wire leaving the barrel in line with the holes, and the heads of the
+  two screws or nuts that hold it. Seats on a `stud-pair-3-4` pair at the
+  midpoint of its holes. A nominal lug chosen for the library (Panduit LCC10-14BW-L,
+  #10 AWG wire, 1/4 in. studs), not the lug of any one device.
+size: {w: 62.32, h: 10.67}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  the width is the lug's overall length, 52.32, and the 10 stub of wire, a rule
+  and not a reading; the height is the tongue width
+attrs: {media: two-hole-lug, connector: stud-pair-3-4}
+fields:
+  wire-color: {label: Wire colour, type: text, default: '#1c1c1c'}
+  barrel-color: {label: Barrel colour, type: text, default: '#c9cdd1'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    estimated - registry `two-hole-lug-3-4`. digikey.com, Panduit LCC10-14BW-L (product 298-14803-ND): overall length 2.060 in. (52.32), width 0.420 in. (10.67), barrel OD 0.220 in. (5.59), ring ID 0.270 in. (6.86), tab thickness 0.050 in. (1.27), 10 AWG, 1/4 stud; masterelectronics.com, the same part: .75 in. hole spacing, long barrel with window. Estimated, not datasheet,
+    because these are a distributor's transcription: Panduit's own product
+    drawings refused the fetch (HTTP 403).
+  nominal: >-
+    A NOMINAL LUG CHOSEN FOR THE LIBRARY, NOT A FIGURE FROM ANY PLACING
+    DEVICE. The interface is the pitch, 3/4 in. (19.05); stud and wire size vary
+    by device and are the placement's `stud-size`, not this part's. THAT THIS
+    IS THE RIGHT LUG FOR A GIVEN DEVICE IS NOT CLAIMED.
+  axis: >-
+    DRAWN ACROSS, the canonical axis of a spanning connector
+    (manifest.CANONICAL_SPAN_AXIS, L116): the holes run along +x from the
+    tongue's tip and the wire leaves along +x. The pair the lug seats on says
+    which way that is on the face: its studs' order is the axis, so a pair
+    side by side sends the wire right and one stood on end sends it down. A
+    lug at 90 degrees or 45 degrees to its tongue (UfiSpace, Nokia SR-1) is
+    another part and is not drawn.
+  tongue: >-
+    estimated - digikey.com, Panduit LCC10-14BW-L (product 298-14803-ND): overall length 2.060 in. (52.32), width 0.420 in. (10.67), barrel OD 0.220 in. (5.59), ring ID 0.270 in. (6.86), tab thickness 0.050 in. (1.27), 10 AWG, 1/4 stud. The tongue is the
+    width, 10.67, with its tip rounded to half of it; each hole is the ring ID,
+    6.86, and the first is centred half the tongue width from the tip, an
+    estimate (no table gives the edge distance). The second is the pitch
+    beyond it. The tongue runs to the barrel, 29.72 from the tip.
+  barrel: >-
+    estimated - no table held gives this part's barrel length. The tongue is taken to end half its width past the second hole, as it begins half its width before the first, and the barrel is the rest of the overall length: 52.32 - (10.67 + 19.05) = 22.6. It is built as a plain tube, 5.59 across, the
+    barrel OD, its underside level with the tongue's, as generic/ring-lug@1's
+    sleeve is; the inspection window and the crimp are not drawn.
+  barrel-colour: >-
+    a FIELD, `barrel-color`. The default is the tin plate of the part; the
+    LCD range is colour-coded by a mark on the barrel, which is not drawn.
+  wire: >-
+    estimated - a straight stub of wire 10 long in line with the holes, the
+    rule generic/ring-lug@1 states for a wire lying in the plane of the face,
+    drawn as wide as the barrel it leaves, 5.59: no held source gives the
+    outside diameter of the insulated wire.
+  wire-colour: >-
+    a FIELD, `wire-color`. Black is the default, as on the other cable ends;
+    no held source states a colour.
+  heads: >-
+    estimated - THE LUG DRAWS THE TWO HEADS THAT HOLD IT, because the host's
+    own studs are under the tongue. Each is drawn 8.54 across, four fifths of
+    the tongue, and 1.4 high, the form generic/ring-lug@1 borrows from
+    common/terminal-screw-38@1. They do not change with the host.
+  seated-depth: >-
+    THE LUG LIES ON THE TOP OF ITS HOST'S STUDS, NOT UNDER THEIR NUTS, as the
+    one-hole lug does and for its reason (docs/connectors-dc-terminal-design.md
+    section 13.1): seated at the panel, the tongue and the heads it draws would
+    share the volume of the studs. It stands too far off the panel by the
+    height of the hardware.
+  frame: >-
+    THE RELIEF IS MEASURED FROM THE LIFT THE HOST PRESENTS: 0 here is the top
+    of the host's studs.
+  cable-point: >-
+    `cable` is at the free end of the stub and points right, along the wire,
+    in the lug's own frame. It states no `on:`, as on generic/ring-lug@1.
+  no-depth: >-
+    NO `size.d`, DELIBERATELY, as on generic/ring-lug@1: on a component with no
+    `behaviour` it compiles to a pit behind the whole box of the part.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on generic/ring-lug@1.
+elements: {}
+relief:
+  features:
+    - node: tongue
+      out: 1.27
+      shape: true
+      color: '#c9cdd1'
+      confidence: estimated
+      source: >-
+        Panduit LCC10-14BW-L tab thickness, 1.27, as the distributor tables give it
+        (provenance.size).
+    - node: head-1
+      lift: 1.27
+      cyl: 1.4
+      color: '#c3c9cf'
+      confidence: estimated
+      source: provenance.heads
+    - node: head-2
+      lift: 1.27
+      cyl: 1.4
+      color: '#c3c9cf'
+      confidence: estimated
+      source: provenance.heads
+    - node: barrel
+      bar: 5.59
+      confidence: estimated
+      source: >-
+        Panduit LCC10-14BW-L barrel OD, 5.59 (provenance.size); its underside level with
+        the tongue's (provenance.barrel).
+    - node: wire
+      bar: 5.59
+      confidence: estimated
+      source: provenance.wire
+connection-points:
+  mate: {at: [14.86, 5.335], direction: front}
+  cable: {at: [62.32, 5.335], direction: right}
+skins: [default]

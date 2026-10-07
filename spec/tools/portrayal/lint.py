@@ -7885,16 +7885,28 @@ def lint_component_spanned_geometry(path, data, lib_roots):
     # feature its own point sits `on:`; what a bore stands at is its
     # placement's `lift`. A connector spanning the pair rests on the face the
     # pair is let into, so the two are one number.
+    #
+    # WHAT A BORE STANDS AT IS WHERE IT PRESENTS: its placement's `lift` plus
+    # the bore's own seat out (manifest._seat_out). An LC bore presents at its
+    # own face, so that is its lift and nothing more; a ground stud presents
+    # at the END OF THE STUD, `on:` the solid it builds, so a pair of studs
+    # placed at the panel presents its two-hole lug at the studs' top, where a
+    # one-hole lug on either stud already stands (#828). Either way it is one
+    # figure for one level of hardware.
     presented = presented_interface(data, _res)[2]
     places = {q.get("id"): q for q in data.get("parts") or []}
     for bid in ids:
-        got = float((places.get(bid) or {}).get("lift") or 0.0)
+        q = places.get(bid) or {}
+        core = _res(q.get("ref")) or {}
+        own = presented_interface(core, _res)[2] if core.get("interface") else 0.0
+        got = float(q.get("lift") or 0.0) + own
         if abs(got - presented) > SPAN_TOLERANCE:
             err(path, "L116", f"presents {iface!r} at a lift of {presented:g}, "
-                f"but its bore {bid!r} is placed at lift {got:g} - a connector "
-                "spanning the pair rests on the same face the pair is let "
-                "into, so a simplex part in the bore and a duplex part over "
-                "both would stand at different depths")
+                f"but its bore {bid!r} presents at {got:g} (placed at lift "
+                f"{float(q.get('lift') or 0.0):g}, seating {own:g} off its own "
+                "face) - a connector spanning the pair rests on the same face "
+                "each of its bores presents, so a simplex part in the bore and a "
+                "duplex part over both would stand at different depths")
     # AND THE RIGHT WAY ROUND: the axis the order of the bores derives carries
     # a duplex connector's latches onto the side their keyways face.
     _spanning_latch_on_keyway(path, data, _res)

@@ -64,6 +64,8 @@ def test_the_connector_registry_is_not_vacuous():
     # p40: the two-pole output connector of the Amphenol NS connectorized power panels,
     # made a slot for its plug, amphenol-ns/p40-plug@1; a vendor connector citing no
     # standard (docs/connectors-dc-terminal-design.md section 14)
+    # stud-pair-5-8/-3-4/-1: a pair of studs one two-hole lug lands across, each
+    # spanning two terminal-stud seats, the pitch in the key (#828)
     assert set(reg) == {"lc", "lc-duplex", "sc", "mpo", "mpo16", "rj45",
                          "f-type", "sma", "smb", "mcx", "bnc", "din-1-0-2-3",
                          "iec-c14", "iec-c20", "saf-d-grid",
@@ -71,6 +73,7 @@ def test_the_connector_registry_is_not_vacuous():
                          "db9", "hd15", "da15", "db25",
                          "terminal-508-2", "terminal-508-5", "terminal-508-6",
                          "dc-barrel", "terminal-stud",
+                         "stud-pair-5-8", "stud-pair-3-4", "stud-pair-1",
                          "mrj21", "vhdci", "rj11",
                          "breaker-1ru-guard", "p40"}
     # No connector interface is also a cage family's: one core, two registries,
@@ -89,6 +92,7 @@ def test_every_connector_presenting_part_is_a_connector_slot(comps):
                                    "db9", "hd15", "da15", "db25",
                                    "terminal-508-2", "terminal-508-5", "terminal-508-6",
                                    "dc-barrel", "terminal-stud",
+                                   "stud-pair-5-8", "stud-pair-3-4", "stud-pair-1",
                                    "mrj21", "vhdci", "rj11",
                                    # a cover mount, not a connector - see the registry test above
                                    "breaker-1ru-guard"}
