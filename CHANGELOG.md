@@ -25,6 +25,14 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- `components.json` carries the catalogue's derived columns on each entry
+  (one entry per component major, one row of `library/components/CATALOGUE.md`):
+  `seats`, the number of devices that seat it (the page's `devices` column);
+  `composed-by`, the number of other component majors that compose it (the
+  page's `in parts` column, the reverse of `parts`); and the contract's
+  `interface` and `mates`, beside `conforms`, when it states them. The page
+  and the index are counted by the same functions in `components_catalogue.py`.
+  Additive; the `contract` number does not move.
 - The FS FHD-CMP5DR lacer panel (`fs/fhd-cmp5dr`), the first passive part
   that shares a rack unit with other equipment, and what it needs:
   `chassis.mount: rack-face` (a part bolted to the rail face that projects
