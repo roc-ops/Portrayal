@@ -1,0 +1,97 @@
+format: 1
+kind: component
+name: nrg-ils-rear-block
+version: 1.0.0
+class: port
+profile: power
+description: >-
+  Rear centre block of an Amphenol Network Solutions nrgILS power panel: a
+  dark plate lettered nrgNET, with the two nrgNET RJ45s stacked IN over OUT on
+  the left, and on the right a probe jack over three small white headers. It
+  takes the place the passive panel gives its alarm card.
+size: {w: 39.0, h: 42.8}
+size-confidence: {w: borrowed, h: borrowed}
+size-notes: >-
+  The opening the 300CB08 installation guide 149722-2 A9 gives the centre
+  block of every 300CB08 rear (Fig. 3-6, 39.0 by 42.8). The only image of this
+  block is the rear photograph in the nrgILS300CB08 datasheet (Fig. 2), a 790
+  px three-quarter view in which the plate spans about 65 px, so nothing
+  inside it is measured: every position below is a fraction of the plate read
+  by eye, good to two millimetres at best.
+provenance:
+  size: >-
+    borrowed - see size-notes. The plate fills the gap between the two output
+    banks in the photograph, as the passive alarm card does.
+  nrgnet: >-
+    datasheet and photo. The installation guide gives the nrgNET connector of
+    ILS panels as a removable RJ45, IN from the controller or the upstream
+    panel and OUT to the downstream one; the nrgILS datasheet calls it an
+    Ethernet IN and OUT. The photograph shows two RJ45 jacks stacked under the
+    nrgNET legend, the upper taken to be IN as on the nrgSMART block. They are
+    drawn in this part's skin, not composed as std/rj45@2: nrgNET is a private
+    bus between panels, not a network interface a DCIM has a type for, and the
+    nrgSMART block draws its connectors the same way.
+  probe-jack: >-
+    photo - a black square-bodied jack with a round hole at the top of the
+    right-hand column, as the nrgSMART block's TEMP 1. The datasheet sells two
+    probes, nrgTEMP (legacy analog) and nrgILSTEMP (I2C temperature and
+    humidity), and the configuration guide 155376 names Temperature 1 analog
+    and Temperature 2 digital. Which socket takes the digital probe is not
+    resolved.
+  headers: >-
+    photo - three small white rectangular headers stacked under the probe
+    jack. NOTHING HELD NAMES THEM. The plain panel's two alarm headers are
+    white three-way headers of about this size, and the I2C probe needs a
+    socket, so they are probably the two alarm outputs and the digital probe,
+    in an order nobody states.
+  legend: >-
+    photo - nrgNET is printed in white at the top left of the plate, and a
+    short legend sits over the right-hand column that the photograph does not
+    resolve. Only nrgNET is drawn.
+attrs: {nrgnet-connector: rj45}
+elements:
+  nrgnet-in: {at: [2.2, 13.0], size: [16.0, 12.8], class: port}
+  nrgnet-out: {at: [2.2, 28.4], size: [16.0, 12.8], class: port}
+  probe: {at: [26.0, 3.0], size: [11.0, 14.0], class: port}
+  header-1: {at: [24.6, 19.4], size: [12.6, 5.0], class: port}
+  header-2: {at: [24.6, 26.4], size: [12.6, 5.0], class: port}
+  header-3: {at: [24.6, 33.4], size: [12.6, 5.0], class: port}
+relief:
+  features:
+    - node: nrgnet-in
+      out: 2.0
+      color: '#c9cbcd'
+      confidence: estimated
+      source: >-
+        a jack shell standing a little off the plate in the datasheet photograph; height by eye
+    - node: nrgnet-out
+      out: 2.0
+      color: '#c9cbcd'
+      confidence: estimated
+      source: >-
+        see nrgnet-in
+    - node: probe
+      out: 3.0
+      color: '#1b1d20'
+      confidence: estimated
+      source: >-
+        as amphenol-ns/nrg-rear-block@1 draws its probe jacks; unsourced there too
+    - node: header-1
+      out: 4.0
+      color: '#f1f0eb'
+      confidence: estimated
+      source: >-
+        a header standing off the plate in the datasheet photograph; height by eye
+    - node: header-2
+      out: 4.0
+      color: '#f1f0eb'
+      confidence: estimated
+      source: >-
+        see header-1
+    - node: header-3
+      out: 4.0
+      color: '#f1f0eb'
+      confidence: estimated
+      source: >-
+        see header-1
+skins: [default]
