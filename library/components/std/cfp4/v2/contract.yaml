@@ -1,0 +1,50 @@
+format: 1
+kind: component
+name: cfp4
+version: 2.0.0
+class: port
+profile: networking
+conforms: cfp4
+interface: cfp4
+description: CFP4 system panel opening, one module's share (CFP4 Baseline Drawing), the opening a CFP4 module seats through
+size: {w: 22.1, h: 11.3, d: 67.9}
+size-confidence: {w: drawing, h: drawing, d: estimated}
+attrs: {media: cfp4}
+provenance:
+  size: >-
+    drawing - CFP MSA CFP4 Baseline Drawing Rev R. HEIGHT: sheet 14/17 (SYSTEM
+    PANEL), the panel opening 11.30 +/-0.1 high, corners R0.50 max. WIDTH: that
+    opening is 89.75 +/-0.1 wide, four across on a 91.75 pitch, and sheet 15/17
+    (SYSTEM ASSEMBLE) seats FOUR modules in each, so no single-module width is
+    printed. The width drawn is the A01 22.10 MAX module faceplate (sheet 3), the
+    widest part that passes through, which four times is 88.40 inside the 89.75.
+    THIS IS THE PANEL OPENING, as std/sfp@1 and std/qsfp28@1 draw theirs; the first
+    major drew the 21.5 x 9.5 module body from the hardware specification's Figure
+    5-7, when the baseline drawing was not yet held (#802).
+  depth: >-
+    ESTIMATED, derived the way std/cfp2@2's is - the bezel to the host connector.
+    Sheet 15/17 puts the module front (89.60) from the host board [-A-] hole and the
+    panel's inside face 64.00 min. from it (67.00 max. for a 3.0 panel); with a 1.5
+    panel the front of the panel is 65.50 from the hole, so a 92.00 module (A08,
+    sheet 3) reaches 67.90 behind it. Each millimetre of panel thickness moves it one.
+  relief.size: >-
+    registry - the cfp4-module envelope, A07 21.50 x A10 9.50 (sheet 3), the body
+    that runs back into the cage, centred.
+elements:
+  opening: {at: [0.0, 0.0], size: [22.1, 11.3], class: cutout}
+relief:
+  wall: '#aab0b7'
+  cavity: cavity
+  size: {w: 21.5, h: 9.5}
+  features:
+    - node: collar
+      out: 1.0
+      color: '#7d848c'
+      confidence: estimated
+      source: >-
+        std/ cage collars - the library's one cage-lip figure, shared by every std/
+        cage; the baseline drawing shows the cage standing (4.70) through the panel
+        and dimensions no lip.
+connection-points:
+  mate: {at: [11.05, 5.65], direction: front}
+skins: [default]

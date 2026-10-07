@@ -37,7 +37,8 @@ in a duplex LC or SC optic, `<cage>-occupant/tx` and `<cage>-occupant/rx`.
 ## Where the head envelope lives
 
 On the module entry the optic conforms to. No cage contract and no cage
-registry entry changed.
+registry entry changed in this work; #802 later redrew the four cages as their
+panel openings (below).
 
 | entry | w | h | depth | head: w-max | above | below | length |
 |---|---|---|---|---|---|---|---|
@@ -121,18 +122,21 @@ read from a public web archive of it.
 
 ## Known gaps
 
-- **`std/cfp@1` is the faceplate width on the body height.** Its 82.0 is the
-  module faceplate, A1; the body behind it is 77.20. The MSA host is a panel
-  opening 82.8 by 14.8 inside an external bracket that stands in front of the
-  panel, and the cage draws neither. The optic's faceplate covers the cage
-  opening exactly in width and stands 14.5 out, where the MSA host puts the
-  faceplate front about 18.6 in front of the panel (scaled). Not changed
-  here.
-- **`std/cxp@1` is an estimate the standard does not bear out.** SFF-8642
-  prints a 23.50 by 12.10 cut-out and a 62.00 plug; the cage is 27.0 by 10.0
-  by 92.0. A seated CXP optic therefore leaves 1.55 of the cage opening
-  showing either side of its head, and its head stands 2.5 above and 1.5
-  below the drawn opening. Not changed here.
+- **The cages were the module, not the opening (closed by #802).** The
+  first majors of the four cages drew a module envelope: `std/cfp` the
+  faceplate width on the body height, `std/cxp` an estimate SFF-8642 does not
+  bear out, `std/cfp2` and `std/cfp4` the module bodies. Their second majors
+  draw the panel opening each document prints, as `std/sfp@1` and
+  `std/qsfp28@1` do: CFP 82.8 x 14.8 (Mechanical Layout Figure 25), CXP
+  23.50 x 12.10 (SFF-8642 Table 5-7), CFP2 14.30 high (Baseline Drawing sheet
+  13) at the 41.50 body width, CFP4 11.30 high (sheet 14) at the 22.10
+  faceplate width. Their depth is the bezel to the connector (28.96 printed
+  for CXP; 126.15, 87.5 and 67.9 derived for the CFP family, each estimated)
+  and their cavity the module body or, for CXP, the snout opening. A seated
+  optic is still centred on the cage's mate point and its head and plugs
+  stand where they did; only the cage around it changed. The CFP cage face
+  still stands for the front of the MSA's external bracket, which is not
+  drawn.
 - **The receptacle nose of a CFP2 or CFP4 is not drawn.** The MSA lets the
   connector receptacle stand up to 4.10 in front of the head; vendors print
   3.6 to 4.10. The bores and the MPO mouth are on the head front.
@@ -178,6 +182,11 @@ read from a public web archive of it.
   whole module.
 - 2026-10-05: the `cfp`, `cfp2`, `cfp4` and `cxp` rungs of
   `spec/schemas/pluggables.yaml` name the documents they now rest on.
+- 2026-10-07 (#802): the four cages are the panel openings, `d` the bezel
+  to the connector, `relief.size` the module behind the opening, with the one
+  1.0 collar. The CFP2 pitch floor is the 42.50 faceplate, because the
+  baseline drawing seats two modules in one 86.35 opening; the CXP floor is
+  SFF-8642's 27.00.
 - 2026-10-05: no family with a placed cage is empty any more, so the test
   that an empty accept list is `[]` and not absent runs on a fixture: a real
   card's cage against the candidate pool with its family removed.

@@ -159,21 +159,47 @@ def test_the_cfp2_and_cfp4_heads_are_the_enlarged_section_plus_the_receptacle():
         assert doc(ref)["head"]["size"]["d"] == 16.0
 
 
-def test_no_cage_contract_or_cage_entry_changed():
-    """The envelope outside the cage is on the MODULE entry the optic conforms
-    to, as for SFP, QSFP, OSFP and XFP. The four cages and their registry
-    entries are as they were, including where the standard read here
-    disagrees with them."""
+# each cage's second major is the panel opening its document prints (#802):
+# (w, h, depth, the cavity behind the opening, the module entry the cavity is)
+CAGES = {
+    "cfp": (82.8, 14.8, 126.15, (77.2, 13.6), "cfp-module"),
+    "cfp2": (41.5, 14.3, 87.5, (41.5, 12.4), "cfp2-module"),
+    "cfp4": (22.1, 11.3, 67.9, (21.5, 9.5), "cfp4-module"),
+    "cxp": (23.5, 12.1, 28.96, (21.6, 10.2), None),
+}
+
+
+def test_each_cage_is_the_panel_opening_with_the_module_behind_it():
+    """The four cages draw what std/sfp@1 and std/qsfp28@1 draw: the box is the
+    panel opening, `d` the bezel to the connector, `relief.size` the interior a
+    module runs back into, and the one 1.0 collar. Each cage and its registry
+    entry carry the same figures, and a CFP family cage's cavity is its module
+    entry's body. The envelope outside the cage stays on the MODULE entry."""
     std = standards()
-    for name, size in (("cfp", (82.0, 13.6, 144.8)), ("cfp2", (41.5, 12.4, 107.5)),
-                       ("cfp4", (21.5, 9.5, 92.0)), ("cxp", (27.0, 10.0, 92.0))):
-        cage = doc(f"std/{name}@1")
-        assert cage["version"] == "1.0.0" and cage["conforms"] == cage["interface"] == name
-        assert (cage["size"]["w"], cage["size"]["h"], cage["size"]["d"]) == size
+    for name, (w, h, depth, cavity, module) in CAGES.items():
+        cage = doc(f"std/{name}@2")
+        assert cage["version"].startswith("2.") and cage["conforms"] == cage["interface"] == name
+        assert (cage["size"]["w"], cage["size"]["h"], cage["size"]["d"]) == (w, h, depth)
+        assert (std[name]["w"], std[name]["h"], std[name]["depth"]) == (w, h, depth)
         assert "head" not in std[name]
-        assert (std[name]["w"], std[name]["h"], std[name]["depth"]) == size
-    # the module body is narrower than the cage that took the faceplate width
-    assert std["cfp-module"]["w"] < std["cfp"]["w"] == std["cfp-module"]["head"]["w-max"]
+        rel = cage["relief"]
+        assert (rel["size"]["w"], rel["size"]["h"]) == cavity
+        assert (std[name]["cavity"]["w"], std[name]["cavity"]["h"]) == cavity
+        assert rel["cavity"] == "cavity" and node(f"std/{name}@2", "cavity") is not None
+        assert [(f["node"], f["out"]) for f in rel["features"]] == [("collar", 1.0)]
+        assert cage["connection-points"]["mate"]["at"] == [w / 2, h / 2]
+        if module:
+            assert cavity == (std[module]["w"], std[module]["h"])
+        # the first major is gone once nothing names it (L89)
+        assert not path(f"std/{name}@1").exists()
+    # a CXP plug's snout enters the SFF-8642 snout opening and stops short of
+    # the connector; F05 27.00 Min is the floor
+    plug = std["cxp-module"]
+    assert plug["w"] < std["cxp"]["cavity"]["w"] and plug["h"] < std["cxp"]["cavity"]["h"]
+    assert plug["depth"] < std["cxp"]["depth"] and std["cxp"]["pitch"] == 27.0
+    # two CFP2 modules share one 86.35 opening (Baseline Drawing sheets 13-14),
+    # so the floor is the A01 42.50 faceplate and not the first entry's 45.0
+    assert std["cfp2"]["pitch"] == std["cfp2-module"]["head"]["w-max"] == 42.5 <= 86.35 / 2
 
 
 def test_the_pluggables_rungs_name_what_they_rest_on():
@@ -197,10 +223,10 @@ def test_it_is_a_generic_transceiver_of_its_family(ref):
     std = standards()[conforms]
     assert (d["size"]["w"], d["size"]["h"], d["size"]["d"]) == (std["w"], std["h"], std["depth"])
     assert d["size-confidence"] == {"w": "registry", "h": "registry", "d": "registry"}
-    assert d["unplaced"] and d["version"] == "1.0.0" and d["skins"] == ["default"]
+    assert d["unplaced"] and d["version"].startswith("1.0.") and d["skins"] == ["default"]
     # it seats centre on centre
     assert d["connection-points"]["mate"]["at"] == pytest.approx([d["size"]["w"] / 2, d["size"]["h"] / 2])
-    assert doc(f"std/{mates}@1")["interface"] == mates
+    assert doc(f"std/{mates}@2")["interface"] == mates
 
 
 @EACH
@@ -735,7 +761,7 @@ def test_it_seats_in_a_real_cage_on_a_real_card_with_its_plug_or_cap(seated, sea
     cage = by_path(root, cpath)
     optic = by_path(root, f"{cpath}-occupant")
     d = doc(ref)
-    assert cage.get("data-ref", "").startswith(f"std/{d['mates']}@1")
+    assert cage.get("data-ref", "").startswith(f"std/{d['mates']}@2")
     assert optic.get("data-ref", "").startswith(ref)
     assert _turn(cage) == turn and _turn(optic) == turn
     # the card is a module seated in a bay of the chassis, and the cage is inside it
@@ -763,22 +789,20 @@ def test_it_seats_in_a_real_cage_on_a_real_card_with_its_plug_or_cap(seated, sea
 
 
 @EACH_SEAT
-def test_the_seated_head_covers_its_cage_or_stays_between_its_neighbours(seated, seat):
-    """The head is centred on the cage. On CFP, CFP2 and CFP4 it is at least
-    as large as the cage opening on every side it overhangs; on CXP the cage
-    is an estimate wider than the plug, and the head stays inside its width."""
+def test_the_seated_head_is_centred_on_its_opening_and_near_its_width(seated, seat):
+    """The head is centred on the cage, and since the cages became the panel
+    openings (#802) a head and its opening are within a millimetre of each
+    other across: a CFP faceplate (82.0) and a CFP4 head (21.9) pass inside
+    their openings (82.8, 22.1), and a CFP2 head (42.5) and a CXP plug body
+    (23.9) stand over theirs (41.5, 23.5)."""
     device, _, cpath, ref, _, _ = seat
     d = doc(ref)
-    cage = doc(f"std/{d['mates']}@1")["size"]
+    cage = doc(f"std/{d['mates']}@2")["size"]
     head = d["head"]
     off = (cage["w"] - d["size"]["w"]) / 2          # the optic's x origin in the cage frame
     left, right = off + head["at"][0], off + head["at"][0] + head["size"]["w"]
     assert left + right == pytest.approx(cage["w"])
-    if d["mates"] == "cxp":
-        assert 0 < left and right < cage["w"]
-    else:
-        assert left <= 0 + 0.3 and right >= cage["w"] - 0.3
-        assert right - left <= cage["w"] + 1.2
+    assert abs((right - left) - cage["w"]) <= 1.0
 
 
 def test_a_quarter_turned_seat_keeps_transmit_at_the_same_end_as_the_latch_side(seated):

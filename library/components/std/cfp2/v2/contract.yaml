@@ -1,0 +1,54 @@
+format: 1
+kind: component
+name: cfp2
+version: 2.0.0
+class: port
+profile: networking
+conforms: cfp2
+interface: cfp2
+description: CFP2 system panel opening, one module's share (CFP2 Baseline Drawing), the opening a CFP2 module seats through
+size: {w: 41.5, h: 14.3, d: 87.5}
+size-confidence: {w: drawing, h: drawing, d: estimated}
+attrs: {media: cfp2}
+provenance:
+  size: >-
+    drawing - CFP MSA CFP2 Baseline Drawing Rev 1L (2013-08-06). HEIGHT: sheet 13/15
+    (SYSTEM PANEL), the panel opening 14.30 +/-0.10 high, corners R0.50 max, in a
+    panel 1.0 to 3.0 thick. WIDTH: that opening is 86.35 +/-0.10 wide, four across on
+    a 90.25 pitch, and sheet 14/15 (SYSTEM ASSEMBLE) seats TWO modules in each, so one
+    opening is a dual cage's and no single-module width is printed. The width drawn is
+    the A07 41.50 module body (sheet 3), as the first major drew it: half of 86.35 is
+    43.18 and the A01 faceplate is 42.50 MAX, and either would close the wall a
+    device draws between two cages side by side (edgecore/amx-3200-sled400 measures
+    two openings 42.50 apart with a wall of about 0.8 between). THIS IS THE PANEL
+    OPENING, as std/sfp@1 and std/qsfp28@1 draw theirs; the first major drew the
+    41.5 x 12.4 module body (#802).
+  depth: >-
+    ESTIMATED, derived - the bezel to the host connector. Sheet 14/15 puts the module
+    front (100.70) from the host board [-A-] hole and the panel's inside face 79.20
+    min. from it (82.20 max. for a 3.0 panel); with a 1.5 panel the front of the
+    panel is 80.70 from the hole, so a 107.50 module (A08, sheet 3) reaches 87.50
+    behind it. Each millimetre of panel thickness moves it one. The module stands 20.0
+    in front of the panel, the 16.0 enlarged section and the 4.10 receptacle, which
+    is the head a seated generic CFP2 draws.
+  relief.size: >-
+    registry - the cfp2-module envelope, A07 41.50 x A10 12.40 (sheet 3), the body
+    that runs back into the cage, centred on the opening's height.
+elements:
+  opening: {at: [0.0, 0.0], size: [41.5, 14.3], class: cutout}
+relief:
+  wall: '#aab0b7'
+  cavity: cavity
+  size: {w: 41.5, h: 12.4}
+  features:
+    - node: collar
+      out: 1.0
+      color: '#7d848c'
+      confidence: estimated
+      source: >-
+        std/ cage collars - the library's one cage-lip figure, shared by every std/
+        cage; the baseline drawing shows the cage standing (4.70) through the panel
+        and dimensions no lip.
+connection-points:
+  mate: {at: [20.75, 7.15], direction: front}
+skins: [default]
