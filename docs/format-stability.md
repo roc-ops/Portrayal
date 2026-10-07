@@ -175,9 +175,10 @@ has a number of its own.
 package is at 0.x, a superseded major may be removed, and every removal is
 listed in `CHANGELOG.md` with the ref that replaces it. From 1.0, a retired
 major is deprecated for at least one release before it is removed. The
-deprecation will be a `deprecated:` marker on the retired major's contract,
-naming the ref that replaces it. The marker, and L89 telling a deprecated
-major that still ships from a dead one, are pending (roc-ops/Portrayal#448).
+deprecation is the `superseded-by:` key the schema already has, on the
+retired major's contract, naming the ref that replaces it. L89 telling a
+superseded major that still ships from a dead one is pending
+(roc-ops/Portrayal#448).
 DESIGN §9 has the reasoning.
 
 **A lint code.** A device manifest waives a rule by its code (`lint.waive`),
