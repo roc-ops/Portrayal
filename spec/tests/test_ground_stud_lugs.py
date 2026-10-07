@@ -14,6 +14,7 @@ Held to the real library and to builds made here: nothing is rasterised and
 nothing reads library/dist.
 """
 import json
+import math
 import re
 import shutil
 import subprocess
@@ -31,7 +32,7 @@ from portrayal.artifacts import face_file
 from test_coax_slots import _contract, _skin_path
 from test_head_3d import apply, box, lift_of
 from test_lifted_seat_js import build_components, mismatches, skin_file, spec_of
-from test_nested_occupants import (assert_same_turn, by_path, device_matrix,
+from test_nested_occupants import (by_path, device_matrix,
                                    device_point, own_mate)
 from test_nested_slots_js import built_occupant
 
@@ -168,6 +169,16 @@ BUILT = {
     # a pair on a side panel, on the 5/8 inch centres its guide states
     "amphenol-ns/300cb08": ("base", "left", "common/ground-stud@1",
                             ["ground-left-1", "ground-left-2"]),
+}
+# THE SEATS ASKED FOR AT THE SEAT'S OWN DIRECTION, `turn: 0` (#829). Every
+# other seat in BUILT states no turn and takes the default the build computes
+# (render.default_seat_turn); these keep the geometry sections 4 and 5 record
+# - the turned placement's lug leaving left, and the two pairs that overlap
+# when nobody turns a lug - which the default no longer draws.
+TURNS = {
+    "edgecore/dcs500": {"ground-1": 0},
+    "ufispace/s9600-102xc": {"ground-1": 0, "ground-2": 0},
+    "amphenol-ns/300cb08": {"ground-left-1": 0, "ground-left-2": 0},
 }
 EACH_BUILT = pytest.mark.parametrize("device", sorted(BUILT))
 EACH_SINGLE = pytest.mark.parametrize("part", sorted(SINGLE))
@@ -316,7 +327,8 @@ def test_the_parts_that_present_terminal_stud_and_the_one_lug_that_mates_it():
                                        "common/terminal-screw-38@1", *SIZED_SCREWS])
     assert mates == [LUG]
     lug = _contract(LUG)
-    assert lug["version"] == "1.0.0" and lug["size"] == {"w": 5.5, "h": 27.4}
+    # 1.0.1: the provenance says it turns (#829); nothing it draws changed
+    assert lug["version"] == "1.0.1" and lug["size"] == {"w": 5.5, "h": 27.4}
     assert sorted(lug["fields"]) == ["barrel-color", "wire-color"]
 
 
@@ -491,10 +503,11 @@ def built(tmp_path_factory):
         bare = _face(o, name, device)
         index = json.loads((o / f"{name}.configs.json").read_text())
 
-        def edit(d, config=config, keys=keys):
+        def edit(d, config=config, keys=keys, device=device):
             occ = d["configurations"][config].setdefault("occupants", {})
             for k in keys:
-                occ[k] = LUG
+                t = TURNS.get(device, {}).get(k)
+                occ[k] = LUG if t is None else {"ref": LUG, "turn": t}
         name, o = _render(tmp_path_factory.mktemp("seated"), device, edit)
         out[device] = (bare, _face(o, name, device), index)
     assert set(out) == set(BUILT)
@@ -612,6 +625,12 @@ def _axis_and_top(host):
     return SINGLE[ref]["axis"], SINGLE[ref]["top"]
 
 
+def _angle(parents, el):
+    """The turn the composed drawing gives `el`, in degrees, SVG's sense."""
+    m = device_matrix(parents, el)
+    return math.degrees(math.atan2(m[1][0], m[0][0])) % 360
+
+
 def _lug_box(parents, occ):
     return box(apply(device_matrix(parents, occ), [(0, 0), (5.5, 0), (5.5, 27.4), (0, 27.4)]))
 
@@ -635,7 +654,11 @@ def test_a_lug_seats_with_its_mate_on_the_stud_axis(built, device):
         hx, hy = device_point(parents, host, axis)
         ox, oy = device_point(parents, occ, own_mate(occ))
         assert abs(hx - ox) < EPS and abs(hy - oy) < EPS, key
-        assert_same_turn(parents, occ, host)
+        # turned with its stud, and then by its own turn on the seat (#829),
+        # which the drawing records on every seat that turns
+        turn = int(occ.get("data-seat-turn"))
+        assert turn == TURNS.get(device, {}).get(key, turn)
+        assert (_angle(parents, occ) - _angle(parents, host) - turn) % 360 == pytest.approx(0, abs=1e-6)
 
 
 @EACH_BUILT
@@ -678,9 +701,9 @@ def test_the_seated_lugs_solids_start_above_everything_its_stud_builds(built, de
 
 
 def test_the_wire_leaves_downward_on_an_unturned_stud(built):
+    """Where down crosses nothing, the default is down (#829, rule B)."""
     for device, key in (("edgecore/agr110", "ground-right"),
-                        ("readylinks/gl-12xb-240d", "ground-stud"),
-                        ("casa/c40g", "ground-studs-rear/stud-tr")):
+                        ("readylinks/gl-12xb-240d", "ground-stud")):
         root, parents, host, occ = _lug(built, device, key)
         axis, _ = _axis_and_top(host)
         hx, hy = device_point(parents, host, axis)
@@ -688,6 +711,21 @@ def test_the_wire_leaves_downward_on_an_unturned_stud(built):
         assert (x0 + x1) / 2 == pytest.approx(hx, abs=EPS)
         assert y0 == pytest.approx(hy + 14.65) and y1 == pytest.approx(hy + 24.65)
         assert x1 - x0 == pytest.approx(3.0)
+
+
+def test_the_casa_upper_stud_leads_its_wire_left_by_default(built):
+    """THE DEFAULT TURNS A LUG OFF ANOTHER SEAT (#829, rule B). Down from the
+    Casa terminal's upper right stud the lug would lie across the lower right
+    stud, another seat; the stud is in the left half of the rear, so the
+    nearer side is the left, and the wire leaves that way, level with the
+    stud, turned 90 on its seat."""
+    root, parents, host, occ = _lug(built, "casa/c40g", "ground-studs-rear/stud-tr")
+    assert occ.get("data-seat-turn") == "90"
+    axis, _ = _axis_and_top(host)
+    hx, hy = device_point(parents, host, axis)
+    x0, y0, x1, y1 = _wire_box(parents, occ)
+    assert (y0 + y1) / 2 == pytest.approx(hy, abs=EPS) and y1 - y0 == pytest.approx(3.0)
+    assert x1 == pytest.approx(hx - 14.65) and x0 == pytest.approx(hx - 24.65)
 
 
 def test_on_a_1ru_rear_the_wire_runs_past_the_lower_edge_of_the_face(built):
@@ -700,9 +738,11 @@ def test_on_a_1ru_rear_the_wire_runs_past_the_lower_edge_of_the_face(built):
 
 
 def test_a_stud_turned_90_turns_its_lug_and_the_wire_leaves_to_the_left(built):
-    """A seat applies its host's turn and nothing else. The DCS500's two
-    ground points are placed at `rotate: 90`, so the lug's own down is the
-    face's left: the wire runs level, away from the stud toward x = 0."""
+    """A seat applies its host's turn, and a lug asked for at `turn: 0` takes
+    nothing more (#829). The DCS500's two ground points are placed at
+    `rotate: 90`, so the lug's own down is the face's left: the wire runs
+    level, away from the stud toward x = 0. Left to the default it would
+    leave down (`turn: 270`)."""
     device, key = "edgecore/dcs500", "ground-1"
     p = next(q for q in _device(device)["views"]["rear"]["components"]["placements"]
              if q["id"] == key)
@@ -724,7 +764,7 @@ def _overlap(a, b):
 
 
 def test_two_lugs_on_a_pair_drawn_one_above_the_other_overlap(built):
-    """A RECORDED FACT, NOT A WANTED ONE. The UfiSpace S9600-102XC's two
+    """A RECORDED FACT, NOT A WANTED ONE, at `turn: 0` on both (#829). The UfiSpace S9600-102XC's two
     grounding holes take ONE two-hole lug; they are drawn 14.7 apart, one
     above the other, and no document held gives their pitch, so they are not
     a pair host (#828 defers them). A one-hole lug on each is 24.65 long below
@@ -742,9 +782,9 @@ def test_two_lugs_on_a_pair_drawn_one_above_the_other_overlap(built):
 
 
 def test_two_lugs_on_a_pair_at_its_documented_pitch_still_overlap(built):
-    """A RECORDED FACT. The Amphenol 300CB08 draws each ground landing on the
-    5/8 inch centres its guide states, 15.9, one stud above the other on a
-    side panel 43.9 high. The guide allows a single-hole lug on a stud; two
+    """A RECORDED FACT, at `turn: 0` on both (#829). The Amphenol 300CB08 draws
+    each ground landing on the 5/8 inch centres its guide states, 15.9, one
+    stud above the other on a side panel 43.9 high. The guide allows a single-hole lug on a stud; two
     of this one overlap by 11.5 of their length, and the lower one runs
     12.45 past the lower edge of the face."""
     device = "amphenol-ns/300cb08"
@@ -815,7 +855,12 @@ def kit(built, tmp_path_factory):
         config, view, part, keys = BUILT[device]
         (root, _), _, index = built[device]
         cases[device] = {"face": spec_of(root), "view": view, "slot": slot, "ref": LUG,
-                         "bays": index["bays"], "cages": index["cages"]}
+                         "bays": index["bays"], "cages": index["cages"],
+                         # the build's default turns, and the turn it was asked for
+                         "seatTurns": index.get("seat-turns") or {},
+                         "turn": TURNS.get(device, {}).get(slot),
+                         # and the turn a turn-only change asks for
+                         "turnTo": TURN_TO}
     payload = {"components": list(comps.values()), "cases": cases,
                "skins": {r: json.dumps(spec_of(ET.parse(skin_file(dist, comps[r])).getroot()))
                          for r in (LUG, *SINGLE, CASA, CASA_STUD)}}
@@ -876,6 +921,38 @@ def test_the_kit_seats_a_lug_exactly_as_the_build_does(kit, built, device):
     assert g["left"] == 0, "emptying the stud left a lug"
 
 
+TURN_TO = 180
+
+
+def _drawn(transform, size=(5.5, 27.4), mate=(2.75, 2.75)):
+    """(mate point, rotate) of a lug drawn `translate(x,y) [rotate(r cx cy)]`,
+    in the frame the transform is written in."""
+    nums = [float(v) for v in re.findall(r"-?[\d.]+(?:e-?\d+)?", transform)]
+    x, y = nums[0], nums[1]
+    r = nums[2] if "rotate(" in transform else 0.0
+    cx, cy = size[0] / 2, size[1] / 2
+    a = math.radians(r)
+    dx, dy = mate[0] - cx, mate[1] - cy
+    return (x + cx + dx * math.cos(a) - dy * math.sin(a),
+            y + cy + dx * math.sin(a) + dy * math.cos(a)), r % 360
+
+
+@pytest.mark.parametrize("device", sorted(KIT_ASKS))
+def test_a_turn_only_change_re_seats_the_lug_on_its_stud(kit, built, device):
+    """#829: the reader turns a seated lug and swaps nothing. The kit takes
+    it out and seats it again at the new turn - one lug, on the stud, its
+    turn recorded - and asking for the same turn again changes nothing."""
+    g = kit[device]
+    assert g["turnOnly"]["applied"] == 1 and g["turnAgain"] == 0
+    t = g["turnedLug"]
+    assert t["count"] == 1 and t["attrs"]["data-seat-turn"] == str(TURN_TO)
+    before, r0 = _drawn(g["lug"]["transform"])
+    after, r1 = _drawn(t["transform"])
+    assert after == pytest.approx(before, abs=1e-6)
+    turn0 = int(g["lug"]["attrs"]["data-seat-turn"])
+    assert (r1 - r0 - (TURN_TO - turn0)) % 360 == pytest.approx(0, abs=1e-9)
+
+
 @pytest.mark.parametrize("device", sorted(KIT_ASKS))
 def test_the_kit_seated_lug_is_lifted_to_the_top_of_its_stud(kit, built, device):
     slot = KIT_ASKS[device]
@@ -907,6 +984,8 @@ def test_the_3d_pass_names_the_one_view_that_holds_a_ground_stud(kit, built):
         assert t["viewsApplied"] == 1 and t["viewsSeated"] == 1
         assert t["faceApplied"] == 1 and t["faceSeated"] == 1
         assert not t["faceRefused"] and not t["faceFailed"]
+        # at the turn the 2D seat took (#829): the 3D pass reads the same turns
+        assert t["viewsTransform"] == t["faceTransform"] == kit[device]["lug"]["transform"]
 
 
 def test_the_3d_pass_seats_a_lug_on_a_stud_of_the_casa_terminal(kit):
@@ -918,3 +997,6 @@ def test_the_3d_pass_seats_a_lug_on_a_stud_of_the_casa_terminal(kit):
     assert t["viewsApplied"] == 1 and t["viewsSeated"] == 1
     assert t["faceApplied"] == 1 and t["faceSeated"] == 1
     assert not t["faceRefused"] and not t["faceFailed"]
+    # turned 90 by default, in 3D as in 2D (#829)
+    assert t["viewsTransform"] == t["faceTransform"] == kit["casa/c40g"]["lug"]["transform"]
+    assert "rotate(90 " in t["faceTransform"]

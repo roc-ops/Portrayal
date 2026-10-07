@@ -471,9 +471,13 @@ export function tiltScale(tilt) {
 // the published `mate` is the flat seat_point, so `mate - at` is its turned
 // offset), less the optic's own mate, turned and foreshortened the same way.
 // With no tilt both scales are 1 and it is `seat_at` again.
-export function occupantAt(cage, comp) {
+//
+// `turnDeg` is the occupant's own turn on its seat (#829), RELATIVE to the
+// seat: added to `cage.rotate` as render.py's solve_seat adds a configuration's
+// `turn:` (seatRotate). 0, the default, is the seat's own direction.
+export function occupantAt(cage, comp, turnDeg = 0) {
   const cx = comp.size.w / 2, cy = comp.size.h / 2;
-  const [dx, dy] = turn([comp.mate[0] - cx, comp.mate[1] - cy], cage.rotate);
+  const [dx, dy] = turn([comp.mate[0] - cx, comp.mate[1] - cy], seatRotate(cage, turnDeg));
   const r4 = v => Math.round(v * 1e4) / 1e4;
   if (!cage.tilt) return [r4(cage.mate[0] - cx - dx), r4(cage.mate[1] - cy - dy)];
   const [sx, sy] = tiltScale(cage.tilt);
@@ -486,12 +490,47 @@ export function occupantAt(cage, comp) {
 // its OWN centre, with its host's rotate - and is SCALED BEFORE IT TURNS on a
 // facet (instance_group's `tilt`), the scale written as facets.scale_transform
 // writes it (`:.6g`, which pyG is).
-export function occupantTransform(cage, comp) {
-  const [x, y] = occupantAt(cage, comp);
+export function occupantTransform(cage, comp, turnDeg = 0) {
+  const [x, y] = occupantAt(cage, comp, turnDeg);
   const [sx, sy] = tiltScale(cage.tilt);
+  const rot = seatRotate(cage, turnDeg);
   return `translate(${x},${y})`
        + (cage.tilt ? ` scale(${pyG(sx)},${pyG(sy)})` : '')
-       + (cage.rotate ? ` rotate(${cage.rotate} ${comp.size.w / 2} ${comp.size.h / 2})` : '');
+       + (rot ? ` rotate(${rot} ${comp.size.w / 2} ${comp.size.h / 2})` : '');
+}
+
+// THE TURN AN OCCUPANT IS DRAWN AT ON `cage`, given its own turn on the seat
+// (#829): render.py's `summed_rotate(orot, turn)` - the cage's `rotate` and
+// the turn summed into [0, 360). A turn of 0 leaves the cage's own answer
+// untouched, `null` included, so an unturned seat draws what it always drew.
+export function seatRotate(cage, turnDeg = 0) {
+  const t = (((+turnDeg || 0) % 360) + 360) % 360;
+  if (!t) return cage?.rotate;
+  return ((((+cage?.rotate || 0) + t) % 360) + 360) % 360;
+}
+
+// A SEAT THAT TURNS (#829): the slot publishes `turns`, the angles an
+// occupant may take on top of its `rotate` (render.py `_slot_dict`, from
+// manifest.allowed_turns), only where there is more than one.
+export const turnable = cage => Array.isArray(cage?.turns) && cage.turns.length > 1;
+
+// WHICH TURN `ref` TAKES ON `cage` - one answer for the face on screen, the
+// faces held and the 3D pass. `turns` is `{set, seat}`:
+//   set   {slot id: turn} - what the reader (or the configuration) chose,
+//         keyed by the drawing path as `swap=` keys are;
+//   seat  {slot key: {ref: turn}} - the view's `seat-turns` (configs.json),
+//         the default the build computes when nothing chose one.
+// A turn the slot does not allow is not taken, and a slot that turns nothing
+// is 0 - what the build seats there.
+export function seatTurn(cage, ref, turns = null) {
+  if (!turnable(cage)) return 0;
+  const ok = t => t != null && t !== '' && cage.turns.includes(+t);
+  const own = turns?.set && Object.prototype.hasOwnProperty.call(turns.set, cage.id)
+    ? turns.set[cage.id] : null;
+  if (ok(own)) return +own;
+  const bare = String(ref || '').split(':')[0];
+  const seat = turns?.seat?.[cage.key ?? cage.id]?.[bare];
+  return ok(seat) ? +seat : 0;
 }
 
 // A LIFTED SLOT IS SEATED, AS THE BUILD SEATS IT (B3 Task 9). For a slot whose
@@ -641,7 +680,8 @@ function liftOccupant(wrap, L) {
 // `front-6/module/xg0-occupant` (occupantNames). `occPath` defaults to
 // `occId`, so a device cage reads exactly as before.
 export function occupantAttrs(cage, ref, comp, skinRootAttrs = {}, occId = occupantNames(cage).id,
-                              occPath = cage.moduleId ? occupantNames(cage).path : occId) {
+                              occPath = cage.moduleId ? occupantNames(cage).path : occId,
+                              turnDeg = 0) {
   const out = {};
   for (const [k, v] of Object.entries(skinRootAttrs || {}))
     if (k.startsWith('data-') && k !== 'data-path') out[k] = v;
@@ -652,6 +692,9 @@ export function occupantAttrs(cage, ref, comp, skinRootAttrs = {}, occId = occup
   out['data-for'] = cage.id;
   const own = (+cage.lift || 0) - (+cage['seat-depth'] || 0);
   if (Math.abs(own) > 1e-9) out['data-z-lift'] = pyG(own);
+  // ON A SEAT THAT TURNS, the turn it was seated at (#829), as render.py
+  // writes `data-seat-turn` on every occupant of such a seat
+  if (turnable(cage)) out['data-seat-turn'] = String((((+turnDeg || 0) % 360) + 360) % 360);
   // THE FACET IT STANDS ON, as _seat_nested_occupants names it: the facet
   // node of the CARD it is seated in (`<card id>--<on>`), and the facing in
   // the card's frame - what relief.js tiltOf reads to build it tilted in 3D.
@@ -673,16 +716,17 @@ export function occupantAttrs(cage, ref, comp, skinRootAttrs = {}, occId = occup
 // on a seated card (nestedCages).
 export function seatOccupant(ownerDoc, cage, ref, comp, skinText,
                              occId = occupantNames(cage).id,
-                             occPath = cage.moduleId ? occupantNames(cage).path : occId) {
+                             occPath = cage.moduleId ? occupantNames(cage).path : occId,
+                             turnDeg = 0) {
   if (refusalReason(cage)) return null;
   const doc = new DOMParser().parseFromString(skinText, 'image/svg+xml');
   const root = doc.getElementById(comp.name);
   const rootAttrs = {};
   if (root) for (const a of [...root.attributes]) rootAttrs[a.name] = a.value;
   const wrap = ownerDoc.createElementNS(NS, 'g');
-  for (const [k, v] of Object.entries(occupantAttrs(cage, ref, comp, rootAttrs, occId, occPath)))
+  for (const [k, v] of Object.entries(occupantAttrs(cage, ref, comp, rootAttrs, occId, occPath, turnDeg)))
     wrap.setAttribute(k, v);
-  wrap.setAttribute('transform', occupantTransform(cage, comp));
+  wrap.setAttribute('transform', occupantTransform(cage, comp, turnDeg));
   for (const n of [...doc.documentElement.childNodes])
     (n === root ? [...n.childNodes] : [n]).forEach(k => wrap.appendChild(ownerDoc.importNode(k, true)));
   rename(wrap, comp.name, occId, occPath, '');
@@ -762,12 +806,21 @@ export function seatClaims() {
 // claim is none of the three - it is simply not this call's to make. swap.js
 // has no console calls; reporting is the caller's job, as with
 // applyAllOverrides' `dropped`. Emptying a refused cage (null) is not refused.
+//
+// AND AT THE TURN IT TAKES (#829): `turns` is seatTurn's `{set, seat}`, so a
+// lug seated here faces where the build would face it - the reader's turn,
+// else the view's published default. A key in `turns.set` and not in
+// `overrides` is a TURN-ONLY change: what the slot holds now is taken out and
+// seated again at the new turn, unless it is already drawn at it.
 export async function applyOccupantOverrides(rootEl, cages, overrides, loadSkin,
-                                             isCurrent = () => true) {
+                                             isCurrent = () => true, turns = null) {
   let applied = 0;
   const refused = [], failed = [];
   for (const cage of cages) {
-    if (!Object.prototype.hasOwnProperty.call(overrides, cage.id)) continue;
+    const keyed = Object.prototype.hasOwnProperty.call(overrides, cage.id);
+    const turnOnly = !keyed && turnable(cage) && !!turns?.set
+      && Object.prototype.hasOwnProperty.call(turns.set, cage.id);
+    if (!keyed && !turnOnly) continue;
     const host = slotElement(rootEl, cage);
     if (!host) continue;
     // A CAGE ON A CARD SEATS INSIDE THE CARD. Its module group is re-found
@@ -776,7 +829,12 @@ export async function applyOccupantOverrides(rootEl, cages, overrides, loadSkin,
     // replaces that group, and a cage of the card that left is no cage.
     const card = cage.moduleId ? cardOf(rootEl, cage) : null;
     if (cage.moduleId && !card) continue;
-    const ref = overrides[cage.id];
+    const ref = keyed ? overrides[cage.id] : occupantRef(rootEl, cage);
+    if (turnOnly) {
+      if (!ref) continue;                     // nothing seated, nothing to turn
+      const now = occupantsOf(rootEl, cage)[0];
+      if (now && +(now.getAttribute('data-seat-turn') || 0) === seatTurn(cage, ref, turns)) continue;
+    }
     const refuse = !!ref && !!refusalReason(cage);
     const loaded = ref && !refuse ? await loadSkin(ref) : null;
     if (!isCurrent(cage.id)) continue;        // a newer swap owns this cage
@@ -785,7 +843,10 @@ export async function applyOccupantOverrides(rootEl, cages, overrides, loadSkin,
     applied++;
     if (refuse) { refused.push(cage.id); continue; }
     if (!ref) continue;                       // deliberately empty
-    const occ = seatOccupant(rootEl.ownerDocument, cage, ref, loaded.comp, loaded.text);
+    const names = occupantNames(cage);
+    const occ = seatOccupant(rootEl.ownerDocument, cage, ref, loaded.comp, loaded.text,
+                             names.id, cage.moduleId ? names.path : names.id,
+                             seatTurn(cage, ref, turns));
     // ON A BACK (B3 Task 10b) the seat is the same one, made a projection as
     // render.py makes what it seats there: `data-of` for `data-path`, and no
     // relief, ref, behaviour or connection point
@@ -1465,7 +1526,12 @@ export async function applyAllOverrides(rootEl, deviceBays, overrides, loadSkin,
 // no bays anywhere (an optics-only faceplate) used to be skipped outright by
 // the old `!devIndex?.bays` guard before this function's decision was ever
 // consulted.
-export function viewsToRewrite(devIndex, overrides) {
+//
+// A TURN IS A REWRITE TOO (#829): `turns` is {slot id: turn}, and a key in it
+// names its view exactly as a swap of the same key would.
+export function viewsToRewrite(devIndex, overrides, turns = {}) {
+  overrides = {...Object.fromEntries(Object.keys(turns || {}).map(k => [k, null])),
+               ...(overrides || {})};
   const keys = Object.keys(overrides || {});
   if (!keys.length) return [];
   const nestedOverride = keys.some(k => k.includes('/module/'));
@@ -1516,10 +1582,15 @@ export function viewsToRewrite(devIndex, overrides) {
 // a slot it is on (`<slot>-occupant/...`) is still to be applied, and the
 // face is read again after each pass. `seen` ends the walk; `maxDepth` is
 // the belt, as it is there.
-export async function applyFaceOverrides(rootEl, {bays = [], cages = []}, overrides,
+//
+// `turns` is seatTurn's `{set, seat}` (#829): every occupant this pass seats
+// faces as the build would face it, and a key in `turns.set` alone re-seats
+// what its slot holds at the new turn.
+export async function applyFaceOverrides(rootEl, {bays = [], cages = [], turns = null}, overrides,
                                          loadSkin, compByRef, maxDepth = 4) {
   const {applied, dropped} = await applyAllOverrides(rootEl, bays, overrides, loadSkin, compByRef);
-  const own = k => Object.prototype.hasOwnProperty.call(overrides || {}, k);
+  const own = k => Object.prototype.hasOwnProperty.call(overrides || {}, k)
+    || Object.prototype.hasOwnProperty.call(turns?.set || {}, k);
   const seen = new Set();
   const res = {applied: 0, refused: [], failed: []};
   const slotsNow = () => faceCages(rootEl, cages, compByRef);
@@ -1529,7 +1600,7 @@ export async function applyFaceOverrides(rootEl, {bays = [], cages = []}, overri
     const frontier = todo.filter(c => !todo.some(o => o !== c && underCarrier(c.id, o.id)));
     if (!frontier.length) break;
     for (const c of frontier) seen.add(c.id);
-    const r = await applyOccupantOverrides(rootEl, frontier, overrides, loadSkin);
+    const r = await applyOccupantOverrides(rootEl, frontier, overrides, loadSkin, undefined, turns);
     res.applied += r.applied;
     res.refused.push(...r.refused);
     res.failed.push(...r.failed);
@@ -1553,8 +1624,8 @@ export async function applyFaceOverrides(rootEl, {bays = [], cages = []}, overri
 // The rear pass's refused and failed keys join the face pass's (B3 Task
 // 10c), once each: a key on a back the face pass read off the build's back
 // and the rear pass re-seated on the swapped one is one key.
-export async function seatFace(rootEl, {bays = [], cages = []}, overrides, loadSkin, compByRef) {
-  const face = await applyFaceOverrides(rootEl, {bays, cages}, overrides, loadSkin, compByRef);
+export async function seatFace(rootEl, {bays = [], cages = [], turns = null}, overrides, loadSkin, compByRef) {
+  const face = await applyFaceOverrides(rootEl, {bays, cages, turns}, overrides, loadSkin, compByRef);
   const rear = await applyRearOverrides(rootEl, overrides, loadSkin, compByRef);
   const once = (a, b) => [...new Set([...a, ...b])];
   return {...face, applied: face.applied + rear.applied, rear,
@@ -1572,17 +1643,21 @@ export async function seatFace(rootEl, {bays = [], cages = []}, overrides, loadS
 // was cut from.
 //
 // `faces` is {view: parsed root}, changed in place; `devIndex` the device's
-// `{bays, cages}` by view (configs.json). Resolves to {view: seatFace's
-// result} for the faces it seated.
-export async function seatViews(faces, devIndex, overrides, loadSkin, compByRef) {
-  const named = new Set(viewsToRewrite(devIndex, overrides));
+// `{bays, cages, 'seat-turns'}` by view (configs.json). `turns` is the
+// reader's {slot id: turn} (#829); each face seats with it and its own view's
+// `seat-turns`, the default a lug takes where nobody chose. Resolves to
+// {view: seatFace's result} for the faces it seated.
+export async function seatViews(faces, devIndex, overrides, loadSkin, compByRef, turns = {}) {
+  const named = new Set(viewsToRewrite(devIndex, overrides, turns));
   const out = {};
-  if (!Object.keys(overrides || {}).length) return out;
+  if (!Object.keys(overrides || {}).length && !Object.keys(turns || {}).length) return out;
   for (const [view, root] of Object.entries(faces || {})) {
     if (!root) continue;
     if (!named.has(view) && !root.querySelector('[data-rear-of]')) continue;
     out[view] = await seatFace(root, {bays: devIndex?.bays?.[view] || [],
-                                      cages: devIndex?.cages?.[view] || []},
+                                      cages: devIndex?.cages?.[view] || [],
+                                      turns: {set: turns || {},
+                                              seat: devIndex?.['seat-turns']?.[view] || {}}},
                                overrides, loadSkin, compByRef);
   }
   return out;
@@ -1612,7 +1687,12 @@ export async function seatViews(faces, devIndex, overrides, loadSkin, compByRef)
 //
 // A job's skins are loaded once: every face that holds a swapped module asks
 // for the same skin, and a module shown front and back asks twice per face.
-export function faceQueue({seat, loadSkin}) {
+//
+// `stamp(key, value)` is what "the face already holds it" compares - the value
+// itself unless the caller says more: the shell stamps a slot's turn on too
+// (#829), so turning a lug re-seats it in every held face though its ref is
+// the one they hold.
+export function faceQueue({seat, loadSkin, stamp = (k, v) => v ?? null}) {
   let work = Promise.resolve();
   const run = job => {
     const r = work.then(job);
@@ -1630,13 +1710,13 @@ export function faceQueue({seat, loadSkin}) {
     for (const k of Object.keys(map))
       for (const held of Object.keys(h))
         if (underCarrier(held, k) && !own(map, held)) delete h[held];
-    for (const [k, v] of Object.entries(map)) h[k] = v ?? null;
+    for (const [k, v] of Object.entries(map)) h[k] = stamp(k, v);
     holds.set(face, h);
   };
   const todo = (face, map) => {
     const h = holds.get(face);
     return Object.fromEntries(Object.entries(map)
-      .filter(([k, v]) => !(h && own(h, k) && h[k] === (v ?? null))));
+      .filter(([k, v]) => !(h && own(h, k) && h[k] === stamp(k, v))));
   };
   const skins = () => {
     const memo = new Map();
@@ -1733,6 +1813,88 @@ export function decodeSwaps(s) {
     if (!k || k === '__proto__') continue;
     out[k] = v || null;
   }
+  return out;
+}
+
+// THE TURNS AS A URL PARAMETER (#829), BESIDE `swap=` AND NOT IN IT:
+//
+//   turn=<key>~<deg>,<key>~<deg>
+//
+// A third `~` piece in `swap=` would have been shorter, and every link
+// written before it would have lost the lug: decodeSwaps drops an entry with
+// two `~`, and an older kit reading a newer link would drop the swap the turn
+// rode on. A parameter of its own costs an old kit nothing - it does not read
+// it - and a link without one is the build's default turns. Escaped and sorted
+// as encodeSwaps is, so one state is one string.
+export function encodeTurns(map) {
+  if (!map || typeof map !== 'object') return '';
+  return Object.keys(map).sort((a, b) => a < b ? -1 : a > b ? 1 : 0)
+    .filter(k => Number.isInteger(+map[k]) && map[k] !== null && map[k] !== '')
+    .map(k => `${enc(k)}~${(((+map[k]) % 360) + 360) % 360}`).join(',');
+}
+
+// NEVER THROWS, for decodeSwaps' reason, and one bad entry does not take the
+// rest with it. A value is a whole number of degrees and nothing else: no
+// sign games, no fractions, no units. `__proto__` is dropped. Whether the
+// slot exists and allows the turn is acceptTurns' question, not this one's.
+export function decodeTurns(s) {
+  const out = {};
+  if (typeof s !== 'string' || !s) return out;
+  for (const part of s.split(',').slice(0, 256)) {
+    const i = part.indexOf('~');
+    if (i <= 0 || part.indexOf('~', i + 1) >= 0) continue;
+    let k;
+    try { k = decodeURIComponent(part.slice(0, i)); } catch (e) { continue; }
+    const v = part.slice(i + 1);
+    if (!k || k === '__proto__' || !/^\d{1,3}$/.test(v)) continue;
+    out[k] = +v % 360;
+  }
+  return out;
+}
+
+// WHICH ENTRIES OF A RELOADED TURN MAP ARE REAL (#829) - the gate acceptSwaps
+// is for `swap=`, for the same reason: what passes is written back into the
+// URL and handed to the 3D scene. A turn is taken only for a slot that exists
+// (slotResolver, with the caller's own `bayRef`/`occRef`, so a slot on a
+// module a link swaps in is found) and that PUBLISHES `turns` holding that
+// angle. Returns `{accepted, ignored}`.
+export function acceptTurns(map, opts = {}) {
+  const accepted = {}, ignored = [];
+  const R = slotResolver(opts);
+  for (const [k, v] of Object.entries(map || {})) {
+    let e = null;
+    try { e = R.entryAt(k); } catch (err) { e = null; }
+    if (e?.isCage && turnable(e) && e.turns.includes(+v)) accepted[k] = +v;
+    else ignored.push(k);
+  }
+  return {accepted, ignored};
+}
+
+// THE TURNS A CONFIGURATION STATES (#829), as {slot path: turn} - the
+// occupants it keys with a mapping that carries `turn:`, at the drawing's
+// path as builtOccupants puts the refs. A key that states none is absent: its
+// turn is the default the build computed (`seat-turns`), which is what the
+// state falls back to as well.
+export function builtTurns(cfg, cages, ctx = null) {
+  const occ = cfg?.occupants;
+  const out = {};
+  if (!occ || typeof occ !== 'object') return out;
+  const toPath = ctx ? keyPath(cfg, cages, ctx) : configBayPath;
+  for (const [k, v] of Object.entries(occ)) {
+    if (!v || typeof v !== 'object' || !Number.isInteger(v.turn)) continue;
+    out[k.includes('/') ? toPath(k) : k] = ((v.turn % 360) + 360) % 360;
+  }
+  return out;
+}
+
+// WHICH TURNS IN THE STATE ARE THE READER'S - what differs from what the
+// configuration states (builtTurns). That map is `turn=`, so an untouched
+// page writes none.
+export function turnOverrides({cfgTurns = {}, built = {}}) {
+  const out = {};
+  for (const [k, v] of Object.entries(cfgTurns || {}))
+    if (v != null && (Object.prototype.hasOwnProperty.call(built || {}, k) ? built[k] : null) !== v)
+      out[k] = v;
   return out;
 }
 
