@@ -527,6 +527,9 @@ names the ref that replaces it.
   their description and version only.
 - Lint L127 reads a `chassis.thickness` that is not a number as a finding
   rather than raising.
+- Lint L44 counts a view's declared pass-throughs as openings in the part
+  that holds them, so a brush seen through a well's windows is not called
+  buried; `fs/cmh-4drb1u` needs no waiver.
 - `relief.profile` and `profile-y` now move with `out` when their part stands
   `in:` a well or is seated in a lifted bay, so the heights stay heights
   above what the part stands on. The schema used to say a profile was not

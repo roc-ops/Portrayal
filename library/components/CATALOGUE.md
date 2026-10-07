@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1319 component majors in 28 namespaces.
+1324 component majors in 28 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -821,10 +821,15 @@ aperture when it is a bare opening - never both at one position. The README's
 | `fibrain/xmn1051gb@1` | module | adapter-panel | 100 × 21 × 37 |  | 1 | 17 | Fibrain XMN1051GB - HD adapter holder, 12 SC/APC simplex adapters (green), single-mode |
 | `fibrain/xmn1051gb-rear@1` | component | adapter-panel | 100 × 21 |  | 0 | 1 | The back of Fibrain XMN1051GB: the same adapters that face forward, seen from behind, whose far ends take the… |
 
-## fs/ (67)
+## fs/ (72)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
+| `fs/cmh-4drb1u-end@1` | component | mechanical | 42 × 44 × 1.2 |  | 1 | 0 | One end wall of the FS CMH-4DRB1U recessed cable manager seen from the side - the sheet that carries the pane… |
+| `fs/cmh-4drb1u-flange@1` | component | mechanical | 440 × 8 × 1.2 |  | 1 | 0 | The top or bottom flange of the FS CMH-4DRB1U recessed cable manager seen from above or below - the panel's e… |
+| `fs/cmh-4drb1u-panel@1` | component | mechanical | 440 × 44 × 86 |  | 1 | 0 | The steel panel of the FS CMH-4DRB1U recessed cable manager seen from the front - the plate between the ear f… |
+| `fs/cmh-4drb1u-ring@1` | component | mechanical | 12.5 × 44 |  | 1 | 0 | A steel D-ring of the FS CMH-4DRB1U cable manager seen from the front - a strip bent into an open loop that s… |
+| `fs/cmh-sfd1u-cover@1` | component | mechanical | 433 × 42 |  | 1 | 0 | The detachable cover of the FS CMH-SFD1U finger duct, seen from the front - an ABS channel that clips over th… |
 | `fs/d-ring-snap-in@1` | component | mechanical | 32.3 × 43.6 |  | 1 | 0 | FS snap-in D-ring of the FHD-CMP5DR lacer panel, seen from above - a polycarbonate loop that twists into a ro… |
 | `fs/fhd-1mtp12-sc-os2-a@3` | module | cassette | 108.97 × 35.05 × 117.86 |  | 7 | 0 | FS FHD-1MTP6SCDOS2A - MTP-12 (male) to six SC duplex, 12 fibres, OS2, Type A polarity |
 | `fs/fhd-1mtp12-sc-rear@3` | component | cassette | 99 × 31 |  | 0 | 1 | The back of FS FHD-1MTP6SCDOS2A (SKU 57058): the cassette body seen from behind, carrying its single MTP-12 t… |

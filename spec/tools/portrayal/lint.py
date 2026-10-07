@@ -4988,6 +4988,19 @@ def lint_device_decor(path, view_name, view, lib_roots):
             boxes.append(((cx - h / 2, cy - w / 2, cx + h / 2, cy + w / 2), holes))
         else:
             boxes.append(((q["at"][0], q["at"][1], q["at"][0] + w, q["at"][1] + h), holes))
+    # A DECLARED PASS-THROUGH IS AN OPENING TOO. The CMH-4DRB1U's windows are
+    # cut in its panel well's own drawing, which declares no relief `shape`, so
+    # by the panel's box its five brushes read 100% buried; the view's
+    # `passes:` say where the face is open, and L129 already holds each one
+    # inside the well it is cut through. An obround is counted as its box.
+    for p in vp.get("passes") or []:
+        pb = _decor_box(p)
+        if not pb:
+            continue
+        ring = [(pb[0], pb[1]), (pb[2], pb[1]), (pb[2], pb[3]), (pb[0], pb[3])]
+        for fb, holes in boxes:
+            if fb[0] <= pb[0] and fb[1] <= pb[1] and pb[2] <= fb[2] and pb[3] <= fb[3]:
+                holes.append(ring)
 
     for d in vp["decor"]:
         if not d.get("pattern"):

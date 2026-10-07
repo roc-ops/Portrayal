@@ -205,3 +205,18 @@ def test_the_brush_manager_declares_what_it_draws():
     with lint.collecting() as found:
         lint.lint_device_passes("device.yaml", doc, [str(LIB)])
     assert not [m for m in found.errors + found.warnings if "[L129]" in m or "[L130]" in m]
+
+
+def _l44(doc, lib):
+    with lint.collecting() as found:
+        lint.lint_device_decor("device.yaml", "front", doc["views"]["front"], [str(lib)])
+    return [m for m in found.warnings if "[L44]" in m]
+
+
+def test_L44_sees_a_brush_through_its_declared_window(lib):
+    """The well's drawing has no relief `shape`, so by its box alone the brush
+    behind it is buried; the declared pass is the hole it is seen through."""
+    assert not _l44(good(), lib)
+    doc = good()
+    del doc["views"]["front"]["passes"]
+    assert _l44(doc, lib)
