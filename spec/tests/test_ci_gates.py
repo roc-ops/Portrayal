@@ -109,6 +109,18 @@ def test_a_draft_lints_and_its_suite_waits_for_ready(workflow):
     assert "if" not in jobs["lint"], "lint is the feedback a draft keeps"
 
 
+def test_a_draft_run_cannot_cancel_a_ready_run(workflow):
+    """A push and "ready for review" a second apart start two runs on one head.
+    If they share a concurrency group, the push's run - its payload still says
+    draft - cancels the ready one and runs lint alone, and the skipped `build`
+    it leaves reads as passing to branch protection (#867). Draft status in the
+    group keeps the two apart, so the ready run always lands a real `build`."""
+    group = workflow["concurrency"]["group"]
+    assert "github.event.pull_request.draft" in group, group
+    assert "github.ref" in group, "pushes to one ref must still supersede each other"
+    assert workflow["concurrency"]["cancel-in-progress"] is True
+
+
 def test_a_skipped_build_cannot_merge():
     """A skipped required check reads as passing to branch protection, and a
     draft's `build` is skipped. What stops that head merging is the merge script,

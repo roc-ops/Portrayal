@@ -1,0 +1,38 @@
+format: 1
+kind: component
+name: cmh-bs-sfds1u-finger-end
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  The end finger of a row of the FS CMH-BS-SFDS1U, seen from the cover side, as it stands at
+  the left-hand end - the end block of the slotted wall from the end of the duct to its
+  first slot; the right-hand end is the same part turned round
+provenance:
+  size: >-
+    drawing - the same plan: the end block of the slotted wall is 17.6 wide from the end of
+    the duct to the first slot; the part runs on to the middle of that slot, 23.0. The
+    thickness, 6.0, is estimated.
+  relief: >-
+    drawing - the same plan, from the floor of the well 2 mm in front of the back: the root
+    of the wall solid to 17.0, where the slots round off (19 from the back), and the finger
+    to the underside of the cover at 66.2.
+size: {w: 23.0, h: 6.0}
+size-confidence: {w: drawing, h: estimated}
+attrs: {material: ABS}
+elements:
+  root: {at: [0.0, 0.0], size: [23.0, 6.0], class: bezel}
+  stem: {at: [0.0, 0.0], size: [17.6, 6.0], class: bezel}
+relief:
+  features:
+    - node: root
+      out: 17.0
+      color: '#2c2d30'
+      confidence: drawing
+      source: the plan of the CMH-BS-SFDS1U datasheet, the slot roots 19 mm from the back
+    - node: stem
+      out: 66.2
+      color: '#2c2d30'
+      confidence: drawing
+      source: the same plan, the finger from the root to the cover
+skins: [default]

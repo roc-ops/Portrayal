@@ -1,0 +1,55 @@
+format: 1
+kind: component
+name: cmh-sfd2u-cover
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  The detachable cover of the FS CMH-SFD2U finger duct, seen from the front - an ABS
+  channel whose face closes the duct and whose two lips clip over the finger tips
+provenance:
+  size: >-
+    drawing - the top view of CMH-SFD2U in the FS Horizontal Cable Managers with Finger
+    Duct datasheet draws the cover over the same 433 as CMH-SFD1U's, the width of the duct
+    body it closes. Its 86.5 is the side view of the same page across the two finger walls,
+    3.4 in [86.5mm], whose hooked tips the lips clip over.
+  relief: >-
+    drawing - the top view: the cover takes the last 15 mm of the 87, from 72 mm to the
+    front, over the finger tips, as on CMH-SFD1U; it is placed in the well, so its face
+    stands 74 to 75.5 above the floor and its lips 60.5 to 75.5. The face is 1.5 thick and
+    the lips 1.5 high, both estimated: no view dimensions the cover section.
+  color: >-
+    estimated - "Color: Black" in the datasheet table. Every image FS publishes of the
+    part is a render; the cover is drawn the shade CMH-SFD1U's is, a little lighter than
+    the duct.
+  mark: >-
+    drawing - FS renders a round mark on the cover near its left end. A vendor mark is
+    never drawn, and nothing is reserved for it.
+size: {w: 433.0, h: 86.5}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: ABS}
+elements:
+  plate: {at: [0.0, 0.0], size: [433.0, 86.5], class: bezel}
+  lip-top: {at: [0.0, 0.0], size: [433.0, 1.5], class: bezel}
+  lip-bottom: {at: [0.0, 85.0], size: [433.0, 1.5], class: bezel}
+relief:
+  features:
+    - node: plate
+      lift: 74.0
+      out: 75.5
+      color: '#333639'
+      confidence: estimated
+      source: no view dimensions the cover section; a thin moulding in the renders
+    - node: lip-top
+      lift: 60.5
+      out: 75.5
+      color: '#333639'
+      confidence: drawing
+      source: the top view of CMH-SFD2U in the FS Horizontal Cable Managers with Finger Duct datasheet, the cover over the last 15 mm of the 87
+    - node: lip-bottom
+      lift: 60.5
+      out: 75.5
+      color: '#333639'
+      confidence: drawing
+      source: the top view of CMH-SFD2U in the FS Horizontal Cable Managers with Finger Duct datasheet, the cover over the last 15 mm of the 87
+skins: [default]

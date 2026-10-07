@@ -1,0 +1,254 @@
+format: 1
+kind: device
+name: uscmh-5dr1u
+version: 0.1.0
+maturity: modelled
+manufacturer: FS.com
+model: USCMH-5DR1U
+aliases:
+  - {name: '317013', kind: vendor}
+description: >-
+  1U horizontal cable manager, FS SKU #317013: a flat black SPCC steel panel on the rack
+  rails with five polycarbonate frames clipped into it and a detachable cover over their
+  fronts, which closes an 80 mm channel across the rack. Each frame is open at the front
+  in a slit between its turned-in ends, and four obround windows in the panel lead
+  cables through to the back.
+profile: passive
+provenance:
+  full-depth:
+    confidence: drawing
+    note: >-
+      `full-depth: false` - the frames and cover stand 82 mm in front of the panel's
+      back, and only the panel's folded edges stand behind it, so the rear face of its
+      rack unit stays free for another part (#854).
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE VENDOR'S DRAWING, WHICH IS COARSE. FS's 0U/1U Horizontal Cable
+      Manager datasheet draws this part on its last page: a front view of the panel
+      (482 x 44), the frame's profile (80 x 43.5), the frame from the front (10) and an
+      exploded view with the cover. The front view is 1.0726 px/mm across from the 482
+      (517 px) and 1.068 down from the 44 (47 px), 0.4 % apart, so it is orthographic;
+      at that scale a pixel is a millimetre. FS's renders (gallery images 1 to 6 and
+      feature images 1 to 4) were used for what the drawing does not dimension.
+  chassis:
+    confidence: estimated
+    note: >-
+      estimated for the 430 and the 88.8; drawing for the 44. The drawing gives 482
+      overall and does not mark the folds; the body is taken as the 430 between the
+      folded edges that FS dimensions on its other three flat 1U D-ring panels, which
+      leaves the outer frames 10.8 mm inside the folds. THE DEPTH SOURCES DISAGREE, and
+      the drawing settles them: the 0U/1U datasheet's table and the product page's
+      title say 3.14 in (80 mm), the product page's specification table says 3.23 in (82
+      mm), and the drawing dimensions the frame alone 80. So 80 is the frame without
+      the cover and 82 is the part with it; FS's dimensioned render (gallery image 4)
+      gives both, 3.14 in at the frames and 3.23 in to the face of the cover. The panel's
+      folded edges stand behind that, taken as 8 (estimated, in the flange contract), so
+      the envelope is 88.8.
+  thickness:
+    confidence: estimated
+    note: >-
+      estimated - 1.2 mm, the sheet FS dimensions on the CMH-4DRB1U drawing. Nothing
+      dimensions this part's sheet; the material is "SPCC" on the product page.
+  weight:
+    confidence: datasheet
+    note: >-
+      datasheet - "Weight 0.9lbs (0.41kg)" in the third column of the 0U/1U datasheet's
+      table. That column is headed CMH-5DR1U, a second time, but carries this part's
+      3.14 in depth and its weight, and the drawing on the same datasheet's last page is
+      this part's: it is the USCMH-5DR1U column misheaded.
+  front:
+    confidence: drawing
+    note: >-
+      drawing - the front view: four obround windows 71.1 x 30, centred 51 and 153 mm
+      either side of the middle, and a frame at the middle and every 102 mm either side
+      of it, where the drawing puts a pair of clip slots and a round hole; the slot pairs
+      read 102 apart at 1.07 px/mm. The cover is placed over the frames; pulling it shows
+      the channel. FS's mark, printed on the left ear, is outside the body.
+  rear:
+    confidence: estimated
+    note: >-
+      estimated - the back of the plate with the four windows through it. FS publishes
+      no image of the back.
+  top:
+    confidence: estimated
+    note: >-
+      estimated - an elevation: the folded edge behind the plate, the frames' upper arms
+      from above and the cover's lip across their fronts. The bottom is the same from
+      underneath, without the lip.
+  left:
+    confidence: drawing
+    note: >-
+      drawing - an elevation, the drawing's frame profile in front of the plate with the
+      cover across its front, and the folded edges behind it. The right is the same,
+      turned round.
+  passes:
+    confidence: drawing
+    note: >-
+      drawing - the four windows, open; the renders show them through to the back.
+      Declared on the rear view, where they open onto the back of the plate: on the
+      front the cover stands 80 mm in front of them, and a pass-through may not lie
+      under a part on its face (L136), which reads the face in two dimensions.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - the ring material, the mounting hardware, the capacity and "Indoor"
+      are the third column of the 0U/1U datasheet's table. "SPCC" for the panel is FS's
+      product page for #317013, which is not a held document.
+  cable-capacity:
+    confidence: datasheet
+    note: >-
+      datasheet - "Cable Capacity (Theoretical Value) 55pcs (Cat6 24AWG)" in the third
+      column of the 0U/1U datasheet's table, for the whole manager. Stated once, here,
+      and not divided among the frames.
+  color:
+    confidence: estimated
+    note: >-
+      estimated - "Color: Black". Every image FS publishes of the part is a render.
+attrs:
+  physical:
+    weight-kg: 0.41
+    material: SPCC
+    ring-material: PC, UL 94V-2
+    mounting-hardware: M6*15mm Screw x4 and M6 Nut x4
+  performance:
+    cable-capacity: 55
+    cable-capacity-basis: >-
+      Cat6 24AWG cables, theoretical - FS 0U/1U Horizontal Cable Manager datasheet,
+      specification table, third column
+  compliance:
+    environment: Indoor
+chassis:
+  width: 430.0
+  height: 44.0
+  depth: 88.8
+  ru: 1
+  full-depth: false
+  shell: sheet
+  thickness: 1.2
+  weight-kg: 0.41
+  color: '#1b1d20'
+gaps:
+  - what: body-width
+    scope: [front, rear, top, bottom]
+    reason: needs-drawing
+    note: >-
+      FS's drawing gives 482 overall and does not mark where the panel's edges fold;
+      the 430 between the folds is FS's figure for its three other flat 1U D-ring
+      panels.
+    wanted: a drawing that dimensions the folds, or a ruler on the part
+  - what: cover
+    scope: [front, top, left, right]
+    reason: needs-drawing
+    note: >-
+      the cover is drawn in an exploded view and in renders only; its length, height,
+      thickness and lip are estimated, and so is how deep the panel's folded edges run.
+    wanted: a dimensioned section of the cover and the panel
+groups:
+  body:
+    term: Panel
+    role: furniture
+    index-origin: 1
+    description: the flat steel panel and its folded edges
+  guides:
+    term: Ring
+    role: furniture
+    index-origin: 1
+    description: five polycarbonate frames, cables passing through along the panel
+  cover:
+    term: Cover
+    role: furniture
+    index-origin: 1
+    description: the detachable cover over the frames
+views:
+  front:
+    size: {w: 430.0, h: 44.0}
+    components:
+      placements:
+        - {ref: fs/uscmh-5dr1u-panel@1, id: panel, at: [0.0, 0.0], group: body, rel-pos: 1}
+        - {ref: fs/uscmh-5dr1u-ring@1, id: guide-1, at: [6.0, 0.0], group: guides, rel-pos: 1, in: panel, under: cover}
+        - {ref: fs/uscmh-5dr1u-ring@1, id: guide-2, at: [108.0, 0.0], group: guides, rel-pos: 2, in: panel, under: cover}
+        - {ref: fs/uscmh-5dr1u-ring@1, id: guide-3, at: [210.0, 0.0], group: guides, rel-pos: 3, in: panel, under: cover}
+        - {ref: fs/uscmh-5dr1u-ring@1, id: guide-4, at: [312.0, 0.0], group: guides, rel-pos: 4, in: panel, under: cover}
+        - {ref: fs/uscmh-5dr1u-ring@1, id: guide-5, at: [414.0, 0.0], group: guides, rel-pos: 5, in: panel, under: cover}
+        - {ref: fs/uscmh-5dr1u-cover@1, id: cover, at: [0.0, 0.0], group: cover, rel-pos: 1, in: panel}
+  rear:
+    size: {w: 430.0, h: 44.0}
+    panel:
+      decor:
+        - {id: panel-back, at: [0, 0], size: [430, 44], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: fold-top, at: [0, 0], size: [430, 1.2], rx: 0, fill: '#232528', kind: flange}
+        - {id: fold-bottom, at: [0, 42.8], size: [430, 1.2], rx: 0, fill: '#232528', kind: flange}
+        - {id: window-4, at: [26.45, 7], size: [71.1, 30], rx: 15, fill: '#0a0b0c', vent: 1.2, kind: window}
+        - {id: window-3, at: [128.45, 7], size: [71.1, 30], rx: 15, fill: '#0a0b0c', vent: 1.2, kind: window}
+        - {id: window-2, at: [230.45, 7], size: [71.1, 30], rx: 15, fill: '#0a0b0c', vent: 1.2, kind: window}
+        - {id: window-1, at: [332.45, 7], size: [71.1, 30], rx: 15, fill: '#0a0b0c', vent: 1.2, kind: window}
+    passes:
+      - {id: window-4, at: [26.45, 7], size: [71.1, 30], shape: obround, cover: open}
+      - {id: window-3, at: [128.45, 7], size: [71.1, 30], shape: obround, cover: open}
+      - {id: window-2, at: [230.45, 7], size: [71.1, 30], shape: obround, cover: open}
+      - {id: window-1, at: [332.45, 7], size: [71.1, 30], shape: obround, cover: open}
+  top:
+    size: {w: 430.0, h: 88.8}
+    panel:
+      decor:
+        - {id: plate-edge, at: [0, 6.8], size: [430, 1.2], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: guide-1-arm, at: [6, 8], size: [10, 72.8], rx: 0, fill: '#111315', kind: ring}
+        - {id: guide-2-arm, at: [108, 8], size: [10, 72.8], rx: 0, fill: '#111315', kind: ring}
+        - {id: guide-3-arm, at: [210, 8], size: [10, 72.8], rx: 0, fill: '#111315', kind: ring}
+        - {id: guide-4-arm, at: [312, 8], size: [10, 72.8], rx: 0, fill: '#111315', kind: ring}
+        - {id: guide-5-arm, at: [414, 8], size: [10, 72.8], rx: 0, fill: '#111315', kind: ring}
+        - {id: cover-lip, at: [0, 80.8], size: [430, 8], rx: 0, fill: '#222427', kind: cover}
+    components:
+      placements:
+        - {ref: fs/uscmh-5dr1u-flange@1, id: flange-top, at: [0.0, 0.0], group: body, rel-pos: 2}
+  bottom:
+    size: {w: 430.0, h: 88.8}
+    panel:
+      decor:
+        - {id: plate-edge, at: [0, 6.8], size: [430, 1.2], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: guide-1-arm, at: [6, 8], size: [10, 80], rx: 0, fill: '#111315', kind: ring}
+        - {id: guide-2-arm, at: [108, 8], size: [10, 80], rx: 0, fill: '#111315', kind: ring}
+        - {id: guide-3-arm, at: [210, 8], size: [10, 80], rx: 0, fill: '#111315', kind: ring}
+        - {id: guide-4-arm, at: [312, 8], size: [10, 80], rx: 0, fill: '#111315', kind: ring}
+        - {id: guide-5-arm, at: [414, 8], size: [10, 80], rx: 0, fill: '#111315', kind: ring}
+        - {id: cover-edge, at: [0, 88], size: [430, 0.8], rx: 0, fill: '#222427', kind: cover}
+    components:
+      placements:
+        - {ref: fs/uscmh-5dr1u-flange@1, id: flange-bottom, at: [0.0, 0.0], group: body, rel-pos: 3}
+  left:
+    size: {w: 88.8, h: 44.0}
+    panel:
+      decor:
+        - {id: fold-top, at: [0, 0], size: [8, 1.2], rx: 0, fill: '#1b1d20', kind: flange}
+        - {id: fold-bottom, at: [0, 42.8], size: [8, 1.2], rx: 0, fill: '#1b1d20', kind: flange}
+        - {id: plate-edge, at: [6.8, 0], size: [1.2, 44], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: ring-base, at: [8, 0.25], size: [4.5, 43.5], rx: 0, fill: '#111315', kind: ring}
+        - {id: ring-arm-top, at: [8, 0.25], size: [80, 2.5], rx: 0, fill: '#111315', kind: ring}
+        - {id: ring-arm-bottom, at: [8, 41.25], size: [80, 2.5], rx: 0, fill: '#111315', kind: ring}
+        - {id: ring-end-top, at: [81, 0.25], size: [7, 19.75], rx: 0, fill: '#111315', kind: ring}
+        - {id: ring-end-bottom, at: [81, 24], size: [7, 19.75], rx: 0, fill: '#111315', kind: ring}
+        - {id: cover-face, at: [88, 0.2], size: [0.8, 43.6], rx: 0, fill: '#222427', kind: cover}
+        - {id: cover-lip, at: [80.8, 0.2], size: [8, 0.8], rx: 0, fill: '#222427', kind: cover}
+  right:
+    size: {w: 88.8, h: 44.0}
+    panel:
+      decor:
+        - {id: fold-top, at: [80.8, 0], size: [8, 1.2], rx: 0, fill: '#1b1d20', kind: flange}
+        - {id: fold-bottom, at: [80.8, 42.8], size: [8, 1.2], rx: 0, fill: '#1b1d20', kind: flange}
+        - {id: plate-edge, at: [80.8, 0], size: [1.2, 44], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: ring-base, at: [76.3, 0.25], size: [4.5, 43.5], rx: 0, fill: '#111315', kind: ring}
+        - {id: ring-arm-top, at: [0.8, 0.25], size: [80, 2.5], rx: 0, fill: '#111315', kind: ring}
+        - {id: ring-arm-bottom, at: [0.8, 41.25], size: [80, 2.5], rx: 0, fill: '#111315', kind: ring}
+        - {id: ring-end-top, at: [0.8, 0.25], size: [7, 19.75], rx: 0, fill: '#111315', kind: ring}
+        - {id: ring-end-bottom, at: [0.8, 24], size: [7, 19.75], rx: 0, fill: '#111315', kind: ring}
+        - {id: cover-face, at: [0, 0.2], size: [0.8, 43.6], rx: 0, fill: '#222427', kind: cover}
+        - {id: cover-lip, at: [0, 0.2], size: [8, 0.8], rx: 0, fill: '#222427', kind: cover}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The cable manager as FS ships #317013, five frames and the cover fitted.'
+datasheet:
+  title: 'FS 0U/1U Horizontal Cable Manager datasheet'
+  sha256: 53de28d2e21c642e0c91f9d081046d5d224b021d5f5831d4e010bd8fece5da2b

@@ -1,0 +1,38 @@
+format: 1
+kind: component
+name: cmh-bs-sfds1u-finger
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  One finger of the FS CMH-BS-SFDS1U, seen from the cover side - an ABS tooth of the slotted
+  wall between two slots, standing from the base to the cover, one slot pitch wide with half
+  a slot either side
+provenance:
+  size: >-
+    drawing - the plan of the CMH-BS-SFDS1U datasheet at 1.2547 px/mm: slots 10.8 wide on a
+    27.8 pitch, a finger 16.9 between them; the part is one pitch wide, half a slot either
+    side. The 6.0 thickness is estimated: no view draws the wall section.
+  relief: >-
+    drawing - the same plan, from the floor of the well 2 mm in front of the back: the root
+    of the wall solid to 17.0, where the slots round off (19 from the back), and the finger
+    to the underside of the cover at 66.2.
+size: {w: 27.8, h: 6.0}
+size-confidence: {w: drawing, h: estimated}
+attrs: {material: ABS}
+elements:
+  root: {at: [0.0, 0.0], size: [27.8, 6.0], class: bezel}
+  stem: {at: [5.45, 0.0], size: [16.9, 6.0], class: bezel}
+relief:
+  features:
+    - node: root
+      out: 17.0
+      color: '#2c2d30'
+      confidence: drawing
+      source: the plan of the CMH-BS-SFDS1U datasheet, the slot roots 19 mm from the back
+    - node: stem
+      out: 66.2
+      color: '#2c2d30'
+      confidence: drawing
+      source: the same plan, the finger from the root to the cover
+skins: [default]

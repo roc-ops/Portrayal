@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: cmh-sfd1u
-version: 0.1.1
+version: 0.1.2
 maturity: modelled
 manufacturer: FS.com
 model: CMH-SFD1U
@@ -107,7 +107,9 @@ provenance:
       25 high, 171.2 apart (6.74 in), 325.2 over both (12.8 in), symmetric about the middle.
       The render of the back confirms two holes, the fingers seen through them, and a
       round boss in the middle. The back is built as five plates round the two holes,
-      11.3 proud of the rear face, and each hole goes through into the channel.
+      sunk 0.05 inside the rear face so the base closes between the well floor and
+      the back within the 87 mm envelope, and each hole goes through into the channel.
+      (0.1.1 built them 11.3 OUTWARD, 98.3 deep overall with a gap behind the floor.)
   rear-not-drawn:
     confidence: drawing
     note: >-
@@ -233,11 +235,11 @@ views:
     size: {w: 433.0, h: 42.0}
     panel:
       decor:
-        - {id: back-top, at: [0, 0], size: [433, 8.7], fill: '#232527', out: 11.3, kind: base}
-        - {id: back-bottom, at: [0, 33.4], size: [433, 8.6], fill: '#232527', out: 11.3, kind: base}
-        - {id: back-left, at: [0, 8.7], size: [54.2, 24.7], fill: '#232527', out: 11.3, kind: base}
-        - {id: back-middle, at: [130.6, 8.7], size: [171.8, 24.7], fill: '#232527', out: 11.3, kind: base}
-        - {id: back-right, at: [378.8, 8.7], size: [54.2, 24.7], fill: '#232527', out: 11.3, kind: base}
+        - {id: back-top, at: [0, 0], size: [433, 8.7], fill: '#232527', sink: 0.05, kind: base}
+        - {id: back-bottom, at: [0, 33.4], size: [433, 8.6], fill: '#232527', sink: 0.05, kind: base}
+        - {id: back-left, at: [0, 8.7], size: [54.2, 24.7], fill: '#232527', sink: 0.05, kind: base}
+        - {id: back-middle, at: [130.6, 8.7], size: [171.8, 24.7], fill: '#232527', sink: 0.05, kind: base}
+        - {id: back-right, at: [378.8, 8.7], size: [54.2, 24.7], fill: '#232527', sink: 0.05, kind: base}
     passes:
       - {id: pass-through-1, at: [54.2, 8.7], size: [76.4, 24.7], shape: rect, cover: open}
       - {id: pass-through-2, at: [302.4, 8.7], size: [76.4, 24.7], shape: rect, cover: open}
@@ -245,7 +247,7 @@ views:
     size: {w: 433.0, h: 87.0}
     panel:
       decor:
-        - {id: base, at: [0, 0], size: [433, 11.3], fill: '#232527', kind: base}
+        - {id: base, at: [0, 0], size: [433, 11.3], fill: '#232527', sink: 0.05, kind: base}
         - {id: ear-plane, at: [0, 10.7], size: [433, 0.6], fill: '#121315', kind: fold}
         - {id: wall, at: [0, 11.3], size: [433, 60.7], fill: '#2a2c2e', kind: finger-wall}
         - {id: slot-1, at: [20.95, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', kind: finger-gap}
@@ -277,7 +279,7 @@ views:
     size: {w: 433.0, h: 87.0}
     panel:
       decor:
-        - {id: base, at: [0, 0], size: [433, 11.3], fill: '#232527', kind: base}
+        - {id: base, at: [0, 0], size: [433, 11.3], fill: '#232527', sink: 0.05, kind: base}
         - {id: ear-plane, at: [0, 10.7], size: [433, 0.6], fill: '#121315', kind: fold}
         - {id: wall, at: [0, 11.3], size: [433, 60.7], fill: '#2a2c2e', kind: finger-wall}
         - {id: slot-1, at: [20.95, 22.2], size: [16, 43.8], rx: 6, fill: '#0a0b0c', kind: finger-gap}
@@ -309,7 +311,7 @@ views:
     size: {w: 87.0, h: 42.0}
     panel:
       decor:
-        - {id: base, at: [0, 0], size: [11.3, 42], fill: '#232527', kind: base}
+        - {id: base, at: [0, 0], size: [11.3, 42], fill: '#232527', sink: 0.05, kind: base}
         - {id: wall-upper, at: [11.3, 1.2], size: [60.7, 7.3], fill: '#2a2c2e', kind: finger-wall}
         - {id: wall-lower, at: [11.3, 33.5], size: [60.7, 7.3], fill: '#2a2c2e', kind: finger-wall}
         - {id: cover-face, at: [85.5, 0], size: [1.5, 42], fill: '#333639', kind: cover}
@@ -319,7 +321,7 @@ views:
     size: {w: 87.0, h: 42.0}
     panel:
       decor:
-        - {id: base, at: [75.7, 0], size: [11.3, 42], fill: '#232527', kind: base}
+        - {id: base, at: [75.7, 0], size: [11.3, 42], fill: '#232527', sink: 0.05, kind: base}
         - {id: wall-upper, at: [15, 1.2], size: [60.7, 7.3], fill: '#2a2c2e', kind: finger-wall}
         - {id: wall-lower, at: [15, 33.5], size: [60.7, 7.3], fill: '#2a2c2e', kind: finger-wall}
         - {id: cover-face, at: [0, 0], size: [1.5, 42], fill: '#333639', kind: cover}

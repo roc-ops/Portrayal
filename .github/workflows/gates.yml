@@ -49,8 +49,17 @@ permissions:
 
 # A second push to a PR makes the first run pointless - it is testing a tree
 # nobody will merge.
+#
+# A DRAFT RUN AND A READY RUN NEVER CANCEL EACH OTHER: draft status is part of
+# the group. Without it, a push and "ready for review" a second apart started
+# two runs on one head, and the push's - whose payload still said draft -
+# cancelled the ready one and ran lint alone. Its skipped `build` was then the
+# only `build` on the head, and branch protection reads a skipped required check
+# as passing: the pull request was mergeable on lint (#867). Keyed by draft, the
+# ready run always finishes and lands a real `build`; a later push to the ready
+# pull request still cancels it, as before.
 concurrency:
-  group: gates-${{ github.workflow }}-${{ github.ref }}
+  group: gates-${{ github.workflow }}-${{ github.ref }}-${{ github.event.pull_request.draft == true }}
   cancel-in-progress: true
 
 # WHERE THE JOBS RUN IS A REPOSITORY VARIABLE, NOT THIS FILE. While the
