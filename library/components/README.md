@@ -19,6 +19,12 @@ and how many devices already use it. It is generated and not committed, so it
 is in a checkout and not on GitHub: `./build.sh` writes it, and so does
 `python3 spec/tools/portrayal/components_catalogue.py --library library --out library/components/CATALOGUE.md`
 without a build. Rebuild after pulling, or it lists the library you had.
+Without a checkout, the published library's catalogue is
+[portrayal.dev/components/catalog](https://portrayal.dev/components/catalog), with a
+search box and the descriptions in full; a script or an agent is better served by
+the data behind it, [components.json](https://portrayal.dev/assets/dist/components.json),
+whose `seats`, `composed-by`, `interface` and `mates` are the page's columns. Either
+shows what is published, which can trail `main`.
 
 To search it, or the contracts behind it, from a shell:
 
