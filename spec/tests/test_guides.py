@@ -119,6 +119,13 @@ def test_L131_fails_a_duct_declared_twice():
     assert device_findings(_view(DUCT, dict(DUCT)))
 
 
+def test_the_finger_duct_declares_one_that_passes():
+    doc = yaml.safe_load((LIB / "devices/fs/cmh-sfd1u/device.yaml").read_text())
+    guides = [g for v in doc["views"].values() for g in (v or {}).get("guides") or []]
+    assert [g["kind"] for g in guides] == ["duct"]
+    assert not device_findings(doc)
+
+
 # --- what the drawing carries ---------------------------------------------------
 
 def _render(view):
