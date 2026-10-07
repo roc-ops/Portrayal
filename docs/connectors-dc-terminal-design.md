@@ -621,20 +621,21 @@ plug was not drawn.
 | receptacle | 300CB08 installation guide 149722-2 A9, Fig. 3-8 and 3-10, at 2.85 px/mm | the 10.5 by 29.8 frame, two cavities 11.0 apart, BATT over RTN (#831) |
 | colour | the connector kit photographs on the vendor's product pages | a black housing |
 
-Everything inside the plug's outline is scaled off the drawing at 11.8 px/mm.
+The drawing is marked SCALE NONE, so everything inside the plug's outline is a fraction of a
+dimension the same view prints (the 34.2 on the end view, the 35.1 on the side view).
 
 ### 14.3 The seated depth, and what is estimated
 
-**No document draws the plug mated.** The side view puts two contact noses 13.1 in front of
+**No document draws the plug mated.** The side view puts two contact noses 12.8 in front of
 the housing with the latch hooks at their roots; the plug is taken to seat with its housing
-on the mouth of the receptacle's shroud, so 35.1 - 13.1 = 22.0 of it stands in front of
-that mouth, and its outer face is 28.0 from the panel. Both the 13.1 and the shroud's 6.0
-are estimates, and the 13.1 is the figure to revisit against a mated drawing.
+on the mouth of the receptacle's shroud, so 35.1 - 12.8 = 22.3 of it stands in front of
+that mouth, and its outer face is 28.3 from the panel. Both the 12.8 and the shroud's 6.0
+are estimates, and the 12.8 is the figure to revisit against a mated drawing.
 
-**The two drawings disagree on the pole pitch.** The plug's contacts are 10.1 apart on its
+**The two drawings disagree on the pole pitch.** The plug's contacts are 9.8 apart on its
 maker's drawing; the receptacle's cavities, scaled off the coarse panel drawing, are 11.0
 apart. The plug's figure is the better one; the two are aligned on their mid points, so each
-contact is drawn 0.45 off its cavity, and the receptacle is not redrawn here.
+contact is drawn 0.6 off its cavity, and the receptacle is not redrawn here.
 
 Also estimated: the floor of each wire opening (1.5 below the wire-side face), the housing
 height between the latch arms (26.2) and the press tabs (6.8 by 4.0). The latch arms' flare,
@@ -683,4 +684,4 @@ right side out.
 - 2026-10-07: the P40 receptacle presents a vendor interface, `p40`, citing no standard,
   and gains its mate point and nothing else.
 - 2026-10-07: one P40 plug, `amphenol-ns/p40-plug@1`, drawn from the wire side with a stub
-  per pole; it seats 22.0 in front of the receptacle's shroud, an estimate.
+  per pole; it seats 22.3 in front of the receptacle's shroud, an estimate.

@@ -9,8 +9,8 @@ copies rendered here, never a possibly stale dist.
 
 The plug follows generic/terminal-508-2-plug@1 part for part: ONE WIRE PER
 POLE, a stub and a named point for each, every stub sized by `wire-od` and
-painted by `wire-color`. ITS SEATED DEPTH IS AN ESTIMATE: 22.0 in front of
-the mouth of the receptacle's shroud, the drawing's 35.1 less the 13.1 of
+painted by `wire-color`. ITS SEATED DEPTH IS AN ESTIMATE: 22.3 in front of
+the mouth of the receptacle's shroud, the drawing's 35.1 less the 12.8 of
 nose it draws. The receptacle's shroud, 6.0, is an estimate too.
 """
 import json
@@ -34,11 +34,11 @@ IFACE = "p40"
 RECEPTACLE = "amphenol-ns/output-p40@1"
 PLUG = "amphenol-ns/p40-plug@1"
 SHROUD = 6.0        # the receptacle presents at the mouth of its shroud
-STANDS = 22.0       # 35.1 - 13.1: the plug in front of that mouth
+STANDS = 22.3       # 35.1 - 12.8: the plug in front of that mouth
 STUB = 30.0
 WIRE_OD = 8.0       # the largest insulation the housing takes (drawing note 2)
-POLE_Y = (12.3, 22.4)
-MATE = (4.85, 17.35)
+POLE_Y = (12.0, 21.8)
+MATE = (4.85, 16.9)
 WIRES = ("wire-1", "wire-2")
 
 # Every device that places the receptacle, and how many it places.
@@ -147,8 +147,8 @@ def test_the_relief_stands_the_estimate_and_the_stubs_run_from_it():
 
 def test_the_estimate_is_recorded_in_provenance():
     prov = _contract(PLUG)["provenance"]
-    assert "ESTIMATED" in prov["seated-depth"] and "13.1" in prov["seated-depth"]
-    assert "10.1" in prov["axis"] and "11.0" in prov["axis"]
+    assert "ESTIMATED" in prov["seated-depth"] and "12.8" in prov["seated-depth"]
+    assert "9.8" in prov["axis"] and "11.0" in prov["axis"]
 
 
 # --- 3. seated in real panels -----------------------------------------------------------
