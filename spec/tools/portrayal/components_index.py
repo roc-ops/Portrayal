@@ -28,6 +28,7 @@ from portrayal.render import (SVG_NS, STATE_CSS, Library, instance_group,  # noq
 from portrayal import libwalk  # noqa: E402
 from portrayal import optical, optical_ports  # noqa: E402
 from portrayal import facets as _facets  # noqa: E402
+from portrayal.components_catalogue import seat_counts, composer_counts  # noqa: E402
 
 
 def preview_box(data, lib, skin="default", skin_dir=None, _seen=()):
@@ -272,6 +273,8 @@ def main():
     index = []
     faces_named = named_as_faces(args.library)
     in_bays = seated_in_bays(args.library)
+    seats = seat_counts(args.library)
+    composers = composer_counts(args.library)
     for root in args.library:
         for cf in sorted(Path(root).glob("components/*/*/v*/contract.yaml")):
             data = load_yaml(cf)
@@ -289,6 +292,16 @@ def main():
                 # `None` on every part and could only fall back to `class`, which
                 # is exactly the fallback the field exists to replace.
                 "behaviour": data.get("behaviour"),
+                # HOW MANY DEVICES SEAT THIS MAJOR, the number CATALOGUE.md
+                # shows in its `devices` column and counted by the same
+                # function (components_catalogue.seat_counts): a placement or
+                # bay places it, a bay accepts it, or a configuration puts it
+                # in one. Naming it in prose does not count. 0 when none does.
+                "seats": seats.get(ref, 0),
+                # HOW MANY OTHER COMPONENT MAJORS COMPOSE THIS ONE, the page's
+                # `in parts` column (components_catalogue.composer_counts). The
+                # reverse of `parts` below, which lists what THIS one composes.
+                "composed-by": composers.get(ref, 0),
                 "size": data["size"], "description": data.get("description", ""),
                 # WHERE EACH DIMENSION CAME FROM, per dimension, and it is here for the
                 # same reason relief-confidence is: without it a value that is IMPOSSIBLE
@@ -412,6 +425,14 @@ def main():
             # (L11). A consumer seating it in a cage solves its `at` from this
             # and the cage's published `mate` (render.seat_at). Omitted when
             # the contract has no mate point.
+            # THE INTERFACE IT PRESENTS AND THE ONE IT MATES, verbatim, beside
+            # `conforms`: the page's `conforms / interface` column is the
+            # first of the three a contract states (components_catalogue.fits).
+            # `mates` is that interface name; `mate` below is a point. Omitted
+            # when the contract states neither.
+            for k in ("interface", "mates"):
+                if data.get(k):
+                    entry[k] = data[k]
             cmate = (data.get("connection-points") or {}).get("mate")
             if cmate and cmate.get("at") is not None:
                 entry["mate"] = list(cmate["at"])

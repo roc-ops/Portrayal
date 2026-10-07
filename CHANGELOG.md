@@ -25,6 +25,14 @@ names the ref that replaces it.
 ## Unreleased
 
 ### Added
+- `components.json` carries the catalogue's derived columns on each entry
+  (one entry per component major, one row of `library/components/CATALOGUE.md`):
+  `seats`, the number of devices that seat it (the page's `devices` column);
+  `composed-by`, the number of other component majors that compose it (the
+  page's `in parts` column, the reverse of `parts`); and the contract's
+  `interface` and `mates`, beside `conforms`, when it states them. The page
+  and the index are counted by the same functions in `components_catalogue.py`.
+  Additive; the `contract` number does not move.
 - The FS FHD-CMP5DR lacer panel (`fs/fhd-cmp5dr`), the first passive part
   that shares a rack unit with other equipment, and what it needs:
   `chassis.mount: rack-face` (a part bolted to the rail face that projects
@@ -106,13 +114,6 @@ names the ref that replaces it.
   skips as not a DCIM port. In the DCIM exports the CTRL has two management
   interfaces, `mgmt` and `lan` (100base-tx), and both have two `dc-terminal`
   power ports. No existing device or export changes.
-- The four monitored connectorized panels of the same family:
-  `amphenol-ns/nrg300cb08-ctrl-c`, `nrg300cb08-ctrl-sc`, `nrg300cb08-sens-c`
-  and `nrg300cb08-sens-sc`. Each is the CTRL or SENS front with the -C or -SC
-  rear (sixteen `amphenol-ns/output-p40@1` outputs, busbar or stud feeds) and
-  `amphenol-ns/nrg-rear-block@1` where the passive panel has its alarm card.
-  Their DCIM exports are as the CTRL and SENS. No existing device or export
-  changes.
 - Fibrain, a new vendor: the XCU10 extendable HD patch panel (`fibrain/xcu`,
   0.5U, 48 SC), with XCU10-51ID and XCU10-41ID as configurations. Its front is
   one captive drawer (`fibrain/xcu-drawer@1`) whose four slots seat the HD

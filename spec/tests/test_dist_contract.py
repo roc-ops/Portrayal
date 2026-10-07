@@ -19,7 +19,7 @@ import pytest
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 DIST = ROOT / "library/dist"
 
-from portrayal import devices_index   # noqa: E402
+from portrayal import changelog, devices_index   # noqa: E402
 
 
 def _devices_json():
@@ -36,9 +36,13 @@ def test_the_build_states_a_contract_version():
 
 
 def test_the_changelog_exists_and_names_the_current_contract():
-    body = (ROOT / "CHANGELOG.md").read_text()
+    """Read with the fragments folded in: the pull request that raises the
+    contract announces it in a fragment under changelog.d/, and the number
+    reaches CHANGELOG.md itself only when a version is cut."""
+    body = changelog.unreleased(ROOT)
     assert f"contract: {devices_index.CONTRACT}" in body, (
-        "CHANGELOG.md does not mention the contract version the build writes")
+        "neither CHANGELOG.md nor a fragment in changelog.d/ mentions the "
+        "contract version the build writes")
 
 
 def test_every_device_name_is_unique():

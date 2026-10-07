@@ -119,3 +119,25 @@ npm deprecate @portrayal/components "split by namespace: see @portrayal/componen
 ```
 
 `@portrayal/kit` is not part of this. It is published by hand from `kit/`.
+
+## Cutting a version: the changelog
+
+Pull requests record their changes in `changelog.d/`, one file each, and do not
+edit `CHANGELOG.md` (`changelog.d/README.md` says why). Until a version is cut
+the unreleased record is the `## Unreleased` section of `CHANGELOG.md`
+followed by those files. Cutting a version folds them in:
+
+```sh
+python3 spec/tools/portrayal/changelog.py --show       # read the result first
+python3 spec/tools/portrayal/changelog.py --assemble   # write it, delete the fragments
+```
+
+`--assemble` puts each entry after the entries already under the same heading
+in `## Unreleased`, adding the heading at the end of the section if it is not
+there yet, and deletes each fragment file it folded, keeping
+`changelog.d/README.md`. It refuses, and changes nothing, if any fragment does
+not parse. Fragments fold in file-name order, so read the result and reorder
+entries by hand where the order matters. Then rename `## Unreleased` to the
+version and open a new empty `## Unreleased` above it, in the same pull
+request. The npm release above does not read the changelog and does not need
+this step.
