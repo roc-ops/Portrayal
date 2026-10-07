@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: cmh-sfd1u-cover
-version: 1.0.0
+version: 1.1.0
 class: mechanical
 behaviour: mounts
 description: >-
@@ -23,14 +23,20 @@ provenance:
     estimated - "Color: Black" in the datasheet table. Every image FS publishes of the
     part is a render; the cover there reads a median of 45 on each channel against 37 on
     the base, so it is drawn a shade lighter than the duct.
-  mark: >-
-    drawing - FS renders a round mark on the cover near its left end. A vendor mark is
-    never drawn, and nothing is reserved for it.
+  logo-zone: >-
+    reserved, not drawn, estimated - FS's newer renders (the product page's close-up
+    of the left end, the detached-cover close-up and the boxed-set images) show a
+    round mark alone, no wordmark, on the cover face near its left end, about
+    mid-height; the older gallery renders show none. No view is straight on: the
+    box is read off the left-end close-up at about 2.5 px/mm from the 42 of the face
+    beside it, with the run along the face corrected by the mark's own aspect, to
+    about 3 mm. The library reproduces no vendor logo.
 size: {w: 433.0, h: 42.0}
 size-confidence: {w: drawing, h: drawing}
 attrs: {material: ABS}
 elements:
   plate: {at: [0.0, 0.0], size: [433.0, 42.0], class: bezel}
+  logo-zone: {at: [25.0, 14.0], size: [14.0, 14.0], class: label}
   lip-top: {at: [0.0, 0.0], size: [433.0, 1.5], class: bezel}
   lip-bottom: {at: [0.0, 40.5], size: [433.0, 1.5], class: bezel}
 relief:
