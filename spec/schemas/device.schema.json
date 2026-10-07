@@ -1361,6 +1361,18 @@
             }
            ]
           },
+          "positions": {
+           "description": "what each position of a part's position fields MEANS on this device (docs/switch-positions-design.md section 8): a field key, then each option and its meaning - `sw-3: {on: alarm enabled for breaker position A3, 'off': alarm silenced}`. Documentation carried into the drawing as `data-positions`; it sets nothing, because a position is a field and is set by `attrs`",
+           "type": "object",
+           "minProperties": 1,
+           "additionalProperties": {
+            "type": "object",
+            "minProperties": 1,
+            "additionalProperties": {
+             "type": "string"
+            }
+           }
+          },
           "description": {
            "type": "string",
            "description": "the vendor's own sentence about this indicator, kept beside the tokens - 'Blue = 100G, Green = 40G'. Prose, never a state list"

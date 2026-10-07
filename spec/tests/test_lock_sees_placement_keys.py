@@ -121,6 +121,7 @@ SURFACE = [
     ({}, {"provenance": {"at": "hig p12"}}),
     ({}, {"physical-context": "NetworkingDevice"}),
     ({}, {"frames": ["led-1"]}),
+    ({}, {"positions": {"sw-1": {"on": "fast ring enabled"}}}),
 ]
 
 
