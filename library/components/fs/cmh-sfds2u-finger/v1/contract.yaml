@@ -1,0 +1,47 @@
+format: 1
+kind: component
+name: cmh-sfds2u-finger
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  One finger of the FS CMH-SFDS2U finger duct, seen end-on from the cover side, one pitch
+  wide - the moulded block it stands on, its stem, and the T-shaped head that carries the
+  hinge of the cover
+provenance:
+  size: >-
+    drawing - the plan of CMH-SFDS2U in the FS High Capacity Horizontal Cable Managers
+    datasheet (portal id 7671): ten fingers to the row, taken at 44.0 as on CMH-SFDS1U; stem
+    10.2 and head 39.4 are the CMH-SFDS1U figures for the same moulding, which this small
+    drawing cannot resolve better. The 9.0 is the CMH-SFDS1U finger wall.
+  relief: >-
+    drawing - the plan at 0.668 px/mm along the depth, from the floor of the well 2 mm in
+    front of the back: the block to 29.8 (31.8 from the back), the stem to 93.4 (95.4), and
+    the head and its knuckle to the underside of the cover at 112.2. The fork of the stem is
+    drawn as the stem.
+size: {w: 44.0, h: 9.0}
+size-confidence: {w: drawing, h: estimated}
+attrs: {material: Plastic}
+elements:
+  root: {at: [0.0, 0.0], size: [44.0, 9.0], class: bezel}
+  stem: {at: [16.9, 0.0], size: [10.2, 9.0], class: bezel}
+  head: {at: [2.3, 0.0], size: [39.4, 9.0], class: bezel}
+relief:
+  features:
+    - node: root
+      out: 29.8
+      color: '#2c2d30'
+      confidence: drawing
+      source: the plan of CMH-SFDS2U in the FS high capacity datasheet, the block 31.8 mm from the back
+    - node: stem
+      out: 93.4
+      color: '#2c2d30'
+      confidence: drawing
+      source: the same plan, the stem to the head at 95.4 mm
+    - node: head
+      lift: 93.4
+      out: 112.2
+      color: '#323437'
+      confidence: drawing
+      source: the same plan, the head and knuckle up to the cover
+skins: [default]
