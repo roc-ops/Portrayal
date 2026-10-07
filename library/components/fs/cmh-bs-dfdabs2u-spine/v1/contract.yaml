@@ -1,0 +1,34 @@
+format: 1
+kind: component
+name: cmh-bs-dfdabs2u-spine
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  One half of the spine of the FS CMH-BS-DFDABS2U, seen from its side between the two
+  finger walls - the moulded beam in the middle of the duct that carries the rack ears
+  and both finger walls, standing from the middle of the duct to the floor of the channel
+  on that side; under each wall the roots of the fingers stand in for it
+provenance:
+  size: >-
+    drawing - the plan of the FS CMH-BS-DFDABS2U datasheet at 5.55 px/mm: the spine runs the 434.0 of the duct and is 25.1 thick, 75.7
+    to 100.8 from the front, symmetric about the middle of the 176. Its 70 is the channel
+    between the two finger walls, which are estimated (the device says how); the finger
+    roots, which stand from the same floor, fill it under the walls.
+  relief: >-
+    drawing - the same view: half the spine, 12.2 above a floor 0.1 short of the middle.
+    The plan draws two rows of cells and two bolts in it; it is built solid. The rack ears
+    are a flange at its rear face, 99.6 from the front, and are not drawn.
+size: {w: 434, h: 70}
+size-confidence: {w: drawing, h: estimated}
+attrs: {material: ABS}
+elements:
+  beam: {at: [0.0, 0.0], size: [434, 70], class: bezel}
+relief:
+  features:
+    - node: beam
+      out: 12.2
+      color: '#232527'
+      confidence: drawing
+      source: the plan of the FS CMH-BS-DFDABS2U datasheet at 5.55 px/mm, the spine 75.7 to 100.8 from the front
+skins: [default]

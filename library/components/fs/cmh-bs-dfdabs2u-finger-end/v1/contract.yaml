@@ -1,0 +1,54 @@
+format: 1
+kind: component
+name: cmh-bs-dfdabs2u-finger-end
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  The end block of a finger wall of the FS CMH-BS-DFDABS2U, seen end-on from its side, as
+  it stands at the left-hand end - from the end of the duct to its first slot, with its tip
+  flared toward that slot; the right-hand end is the same part turned round
+provenance:
+  size: >-
+    drawing - the plan of the FS CMH-BS-DFDABS2U datasheet at 5.55 px/mm. The slots between the fingers stand 34.61 apart, centre to
+    centre over nine pitches; the drawing prints 18.1 for a slot and 16.4 for a finger,
+    and they measure 18.3 and 16.3. The finger tips flare to leave a 4.5 mm neck under the
+    cover, so a tip is 30.1. No view draws the section of a wall; its 7.3 is the finger
+    wall of the CMH-SFD1U side view, the sibling ABS duct, and is estimated.
+  size-end: >-
+    drawing - the same view: the end block is 20.7 wide, and the first slot, 15.1, is
+    narrower than the rest. Twelve slots and eleven fingers fill the 434.0 between the two
+    blocks, so a block reaches 26.645 to the edge of the first finger, its tip 24.4 to leave
+    the 4.5 neck.
+  relief: >-
+    drawing - the same view, heights above a floor 0.1 short of the middle of the spine:
+    the root is solid to the round bottom of the slot, 65.8 from the face, so 22.1; the
+    stem runs to where the tip flares, drawn 13 to 23.8 from the face and built at its
+    mean, 18, so 69.9; the tip runs to the underside of the cover lips, 10.4 from the
+    face, so 77.5.
+size: {w: 26.645, h: 7.3}
+size-confidence: {w: drawing, h: estimated}
+attrs: {material: ABS}
+elements:
+  root: {at: [0.0, 0.0], size: [26.645, 7.3], class: bezel}
+  stem: {at: [0.0, 0.0], size: [20.7, 7.3], class: bezel}
+  tip: {at: [0.0, 0.0], size: [24.4, 7.3], class: bezel}
+relief:
+  features:
+    - node: root
+      out: 22.1
+      color: '#2a2c2e'
+      confidence: drawing
+      source: the plan of the FS CMH-BS-DFDABS2U datasheet at 5.55 px/mm, the round bottoms of the slots 65.8 from the face
+    - node: stem
+      out: 69.9
+      color: '#2a2c2e'
+      confidence: drawing
+      source: the plan of the FS CMH-BS-DFDABS2U datasheet at 5.55 px/mm, the end block from the spine to its flared tip
+    - node: tip
+      lift: 69.9
+      out: 77.5
+      color: '#2a2c2e'
+      confidence: drawing
+      source: the plan of the FS CMH-BS-DFDABS2U datasheet at 5.55 px/mm, the flared tip under the cover lips
+skins: [default]
