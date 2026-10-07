@@ -82,7 +82,11 @@ export function parseMoves(spec) {
     if (!part.trim()) continue;
     const m = MOVE_ENTRY.exec(part);
     if (!m) throw new Error(`data-move entry '${part.trim()}' is not 'option: dx dy [deg]'`);
-    out[m[1]] = [Number(m[2]), Number(m[3]), Number(m[4] || 0)];
+    const v = [Number(m[2]), Number(m[3]), Number(m[4] || 0)];
+    // '.' and '1.2.3' match the pattern and are not numbers; render.py's
+    // float() raises on them, so the kit throws rather than write NaN (#874)
+    if (!v.every(Number.isFinite)) throw new Error(`data-move entry '${part.trim()}' is not 'option: dx dy [deg]'`);
+    out[m[1]] = v;
   }
   return out;
 }

@@ -314,7 +314,7 @@ RULES = {
     "L145": ("device",     "a group is not named only for the class of its members - `ports` names no port family (warning)", "name the group for the family it holds (`sfp28`, `rj45-1g`), or a mixed block for the job it does and say so in `mixed:`"),
     "L146": ("device",     "an occupant's `turn` is one its host allows - the host's interface `turns` in connectors.yaml, narrowed by its presented point's own (an error; the build refuses it too)", "choose one of the listed turns, or drop `turn:` to take the default the build computes; a barrier block's terminal screw allows 0 alone"),
     "L147": ("component",  "a connection point's `turns` is a subset of the turns its part's interface allows in connectors.yaml, and only the presented point states one (an error)", "list only turns the interface allows - a point narrows the list, it cannot widen it; move `turns` to the point the interface is presented at, or drop it"),
-    "L148": ("component",  "a node a field moves or shows names a `choice` field the contract declares, and every option its `data-move` or `data-show` lists is one of that field's options (an error)", "declare the field as a choice, or name only its options in the table; spell a move `option: dx dy [deg]`"),
+    "L148": ("component",  "a node a field moves or shows names a `choice` field the contract declares, and every option its `data-move` or `data-show` lists is one of that field's options; every option of a field with SHOW nodes shows at least one node, or is listed in the field's `drawn-by-absence` (an error)", "declare the field as a choice, or name only its options in the table; spell a move `option: dx dy [deg]`; show a node for the option, or list it in `drawn-by-absence`"),
     "L149": ("component",  "a node a position moves stays inside its part under every move: its box, translated and turned, lies within `size` (an error)", "shorten the move, or move the node in the skin so its travel stays on the part"),
 }
 
@@ -3555,6 +3555,25 @@ def _lint_positions(path, data, fields, skin, text):
         return
     size = data.get("size") or {}
     W, H = float(size.get("w") or 0), float(size.get("h") or 0)
+    # which options of each SHOW field this skin shows some node for
+    shown = {}
+    for el in root.iter():
+        k = el.get("data-show-from")
+        if k is not None:
+            shown.setdefault(k, set()).update((el.get("data-show") or "").split())
+    for k, got in sorted(shown.items()):
+        f = fields.get(k) or {}
+        if f.get("type") != "choice":
+            continue                     # reported below, per node
+        options = [str(o) for o in f.get("options") or []]
+        absent = [str(o) for o in f.get("drawn-by-absence") or []]
+        for o in absent:
+            if o not in options:
+                err(path, "L148", f"{k}: drawn-by-absence names {o!r}, which is not one of its options")
+        for o in options:
+            if o not in got and o not in absent:
+                err(path, "L148", f"skin {skin}: no node is shown for {k}={o} - show one, or "
+                                  f"list {o!r} in the field's drawn-by-absence if nothing is drawn for it")
     for el in root.iter():
         for attr, table in (("data-move-from", "data-move"), ("data-show-from", "data-show")):
             key = el.get(attr)

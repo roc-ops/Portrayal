@@ -1084,5 +1084,8 @@ def parse_moves(spec):
         if not m:
             raise ValueError(f"data-move entry {part.strip()!r} is not 'option: dx dy [deg]'")
         opt, dx, dy, deg = m.groups()
-        out[opt] = (float(dx), float(dy), float(deg or 0))
+        try:
+            out[opt] = (float(dx), float(dy), float(deg or 0))
+        except ValueError:      # '.' and '1.2.3' match the pattern and are not numbers
+            raise ValueError(f"data-move entry {part.strip()!r} is not 'option: dx dy [deg]'") from None
     return out
