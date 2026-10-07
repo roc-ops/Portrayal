@@ -10,4 +10,4 @@
 ### Changed
 - `amphenol-ns/output-p40@1` is 1.1.0: it gains its interface and mate point,
   and its drawing does not change. The six panels that place it take a
-  patch. No export changes.
+  patch; their DCIM exports change in the drawing version line only.
