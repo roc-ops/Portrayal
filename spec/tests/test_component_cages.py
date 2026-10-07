@@ -211,7 +211,10 @@ CAGE_KEYS = {"id", "at", "mate", "lift", "rotate", "interface", "media",
              "bores",
              # the facet the cage stands `on`, null where it stands on none
              # (P3 amended): a fact of the card's frame, so a card's alone
-             "tilt"}
+             "tilt",
+             # the turns an occupant may take on top of `rotate` (#829), null
+             # where there is no choice - every cage, and a terminal screw
+             "turns"}
 
 
 def shipped_default(ref, slot_id):

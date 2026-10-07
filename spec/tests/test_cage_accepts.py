@@ -199,8 +199,10 @@ def test_a_cage_entry_carries_the_documented_shape(tmp_path):
     assert set(cage) == {"id", "at", "interface", "media", "group", "rel-pos",
                           "rotate", "accepts", "occupant",
                           "mate", "lift", "occupant-attrs", "mirror", "group-states",
-                          "kind", "default", "bores"}
+                          "kind", "default", "bores", "turns"}
     assert cage["kind"] == "cage"
+    # A CAGE TURNS NOTHING (#829): `turns` is null where there is no choice
+    assert cage["turns"] is None
     # WHAT THE SLOT SHIPS HOLDING (B3), null where it ships empty - present on
     # every entry for the same reason `accepts` is: "nothing" and "not a
     # question this entry answers" have to be told apart.

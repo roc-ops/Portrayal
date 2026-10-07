@@ -132,7 +132,9 @@ def test_the_seat_is_the_screw_itself(block):
     assert "media" not in (c.get("attrs") or {})
     assert c["size"] == {"w": b["head"], "h": b["head"]}
     r = b["head"] / 2
-    assert c["connection-points"]["mate"] == {"at": [r, r], "direction": "front", "on": "head"}
+    # the barriers fix the pole: the lug on a terminal screw does not turn (#829)
+    assert c["connection-points"]["mate"] == {"at": [r, r], "direction": "front", "on": "head",
+                                              "turns": [0]}
     assert feats(b["seat"])["head"]["cyl"] == b["cyl"]
     assert "lift" not in feats(b["seat"])["head"]
     root = ET.parse(_skin_path(b["seat"])).getroot()
@@ -265,7 +267,7 @@ def test_its_fields_are_two_colours_and_no_wire_size():
     why = c["provenance"]["wire-od"]
     assert "NOT A FIELD" in why and "data-r-from" in why and "`bar`" in why
     assert "NOT CLAIMED" in c["provenance"]["nominal"]
-    assert "CANNOT TURN AN OCCUPANT" in c["provenance"]["orientation"]
+    assert "MAY TURN IT FURTHER" in c["provenance"]["orientation"] and "#829" in c["provenance"]["orientation"]
     assert "10 LONG" in c["provenance"]["wire"] and "#805" in c["provenance"]["cable-point"]
 
 

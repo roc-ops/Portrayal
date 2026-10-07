@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: ring-lug
-version: 1.0.0
+version: 1.0.1
 class: port
 mates: terminal-stud
 conforms: ring-lug
@@ -60,11 +60,17 @@ provenance:
     behind the whole box of the part.
   orientation: >-
     THE WIRE LEAVES DOWNWARD in the lug's own unrotated frame, the ring at
-    the top. A seat applies its host's turn to the lug and A CONFIGURATION
-    CANNOT TURN AN OCCUPANT ON ITS OWN: `occupants:` carries a ref, an id,
-    attrs and a skin. On the barrier blocks the wires do leave downward. On a
-    terminal where the direction is the installer's choice, the lug follows
-    the host.
+    the top. A seat applies its host's turn to the lug, and A CONFIGURATION
+    MAY TURN IT FURTHER where the host allows (#829): `occupants:` takes
+    `turn:`, relative to the seat. A ground stud allows the four right angles,
+    because the direction of a lug there is the installer's choice; a barrier
+    block's terminal screw allows 0 alone, and on the blocks the wires do
+    leave downward. Where a configuration states no turn, the build leads the
+    wire down, toward the nearer side edge, the other side or up - the first
+    that crosses no part, bay or other seat, running past the edge of the
+    face if it must - and publishes that turn as `seat-turns`
+    (docs/connectors-dc-terminal-design.md, section 13.4). The whole lug,
+    stub of wire included, is what is held clear.
   seated-depth: >-
     THE LUG LIES ON THE HEAD OF THE HOST'S SCREW, NOT UNDER IT, AND THAT IS
     KNOWN TO BE WRONG BY THE HEIGHT OF THAT HEAD. A real lug lies on the pole

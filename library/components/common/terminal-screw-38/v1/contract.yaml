@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: terminal-screw-38
-version: 1.0.0
+version: 1.0.1
 class: screw
 interface: terminal-stud
 profile: networking
@@ -37,6 +37,12 @@ provenance:
     into the block's bottom lip, which is built 10.2 off the same face, so
     the lug is carried above the lip on the head instead and draws a head of
     its own. See docs/connectors-dc-terminal-design.md, section 12.
+  turns: >-
+    THE LUG ON THIS SCREW DOES NOT TURN: `mate` allows the turn 0 alone, of
+    the four the `terminal-stud` interface allows. The barriers either side
+    of the pole fix the direction a lug leaves in, over the block's lower
+    edge, where the Edgecore guides draw each pole open toward the legend
+    below the block (docs/connectors-dc-terminal-design.md, section 12.6).
   behaviour: >-
     DELIBERATELY OMITTED. The screw is part of the block and is never placed
     on its own; the block states `mounts`.
@@ -52,5 +58,5 @@ relief:
         unchanged: a slotted head standing on its pole and finishing just
         under the lip line.
 connection-points:
-  mate: {at: [1.9, 1.9], direction: front, 'on': head}
+  mate: {at: [1.9, 1.9], direction: front, 'on': head, turns: [0]}
 skins: [default]
