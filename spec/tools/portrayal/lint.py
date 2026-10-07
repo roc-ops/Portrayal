@@ -6418,7 +6418,8 @@ def lint_device_shell(path, data):
     elif not sheet and t is not None:
         err(path, "L127", f"`chassis.thickness` {t!r} is the gauge of a sheet body, and "
                           "this chassis is a box - drop it, or state `shell: sheet`")
-    elif sheet and not (0 < t <= 10):
+    elif sheet and not (isinstance(t, (int, float)) and not isinstance(t, bool)
+                        and 0 < t <= 10):
         err(path, "L127", f"`chassis.thickness` {t!r} is not a sheet gauge - it is "
                           "millimetres of metal, more than 0 and at most 10")
 
