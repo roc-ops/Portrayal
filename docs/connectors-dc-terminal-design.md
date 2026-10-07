@@ -586,6 +586,75 @@ device for each part with its solids above what the part builds, a turned placem
 pairs with the overlap recorded, and the kit offering the studs and seating a lug as the
 build does, with the view its 3D pass names.
 
+## 14. The P40 output connector
+
+The connectorized Amphenol Network Solutions power panels (the 300CB08-C and -SC and their
+four nrgSMART versions) end each output in a two-pole latching receptacle,
+`amphenol-ns/output-p40@1`, that takes a P40 plug: the Amphenol PRM series with 4 mm RADSOK
+contacts, BATT above RTN. The receptacle was drawn and presented nothing (#831), and the
+plug was not drawn.
+
+### 14.1 Decisions
+
+1. **One vendor interface, `p40`.** It is in `spec/schemas/connectors.yaml` with no
+   `standard`: no standard is held for the connector, and the registry entry says so. Only
+   a pair of spanned interfaces reads a `standard` (L116), and this is not one.
+2. **The receptacle gains its interface and its mate point and nothing else**, as the
+   terminal headers did (section 2): `mate` is midway between its two cavities, on the mouth
+   of the shroud it builds 6.0 proud (`on: shell`). The receptacle goes to 1.1.0 and the six
+   panels that place it take a patch.
+3. **One plug, `amphenol-ns/p40-plug@1`.** It is the connector maker's part sold by the panel
+   maker as three kits (150325, 150326, 152799) that differ only in the contacts and the wire
+   they take, so the housing is one part and the kit is the wire it carries. It lives in the
+   panel vendor's namespace, beside the receptacle, because it is one vendor's connector and
+   no other part in the library takes it.
+4. **Drawn from the wire side, one 30 mm stub per pole**, exactly as the screw-clamp plugs
+   (sections 2 and 7): points `wire-1` (BATT) and `wire-2` (RTN), and the fields `wire-od`,
+   `wire-color` and `body-color`. The default wire is 8.0, the largest insulation the housing
+   takes; no held document states the wire the panels are meant for beyond 14 to 6 AWG.
+
+### 14.2 Sources
+
+| part | source | what it gives |
+|---|---|---|
+| plug | Amphenol customer drawing PRM SERIES FEMALE, PLUG SIDE 4MM, rev A1, 4 JAN 20 | 9.7 wide and 34.2 high across the latch arms (end view), 35.1 long (side view), 8 mm maximum insulation, contact and kit numbers, BATT and RTN engraved |
+| receptacle | 300CB08 installation guide 149722-2 A9, Fig. 3-8 and 3-10, at 2.85 px/mm | the 10.5 by 29.8 frame, two cavities 11.0 apart, BATT over RTN (#831) |
+| colour | the connector kit photographs on the vendor's product pages | a black housing |
+
+The drawing is marked SCALE NONE, so everything inside the plug's outline is a fraction of a
+dimension the same view prints (the 34.2 on the end view, the 35.1 on the side view).
+
+### 14.3 The seated depth, and what is estimated
+
+**No document draws the plug mated.** The side view puts two contact noses 12.8 in front of
+the housing with the latch hooks at their roots; the plug is taken to seat with its housing
+on the mouth of the receptacle's shroud, so 35.1 - 12.8 = 22.3 of it stands in front of
+that mouth, and its outer face is 28.3 from the panel. Both the 12.8 and the shroud's 6.0
+are estimates, and the 12.8 is the figure to revisit against a mated drawing.
+
+**The two drawings disagree on the pole pitch.** The plug's contacts are 9.8 apart on its
+maker's drawing; the receptacle's cavities, scaled off the coarse panel drawing, are 11.0
+apart. The plug's figure is the better one; the two are aligned on their mid points, so each
+contact is drawn 0.6 off its cavity, and the receptacle is not redrawn here.
+
+Also estimated: the floor of each wire opening (1.5 below the wire-side face), the housing
+height between the latch arms (26.2) and the press tabs (6.8 by 4.0). The latch arms' flare,
+the engraving and the moulded maker's name are not built.
+
+### 14.4 What is not covered
+
+- **A seated plug by default.** The panels ship without plugs; nothing seats one.
+- **A wire colour per pole.** The industry habit of a red BATT and a black RTN is stated by
+  no held source, and one field paints both stubs.
+- **The DCIM side.** `amphenol-ns/output-p40` is a power outlet in the exports (#806); being a
+  slot changes nothing there.
+
+`spec/tests/test_p40_plug.py` holds the interface, the receptacle's mate and unchanged
+drawing, a census of every part presenting or mating `p40` and every placement of the
+receptacle, the plug's size, fields, poles and relief, and the plug seated in two real
+panels: mate on mate, the slot offering exactly the plug, the stand-off, and every solid
+right side out.
+
 ## Decisions taken
 
 - 2026-10-05: the three pluggable terminal headers are connector slots; each gains its
@@ -612,3 +681,7 @@ build does, with the view its 3D pass names.
   document for that device states it.
 - 2026-10-06: no lug is turned and no ground part is redrawn; the overlaps and overhangs
   that result are recorded.
+- 2026-10-07: the P40 receptacle presents a vendor interface, `p40`, citing no standard,
+  and gains its mate point and nothing else.
+- 2026-10-07: one P40 plug, `amphenol-ns/p40-plug@1`, drawn from the wire side with a stub
+  per pole; it seats 22.3 in front of the receptacle's shroud, an estimate.
