@@ -44,9 +44,20 @@ provenance:
       strip (four C20 inlets with their switches, one per supply), a vent band, four ~103 x 480 mm
       supply bays and the lower tray with its four cable spools
   power:
+    confidence: datasheet
     note: >-
-      vendor-silent at chassis level in this extraction - the DC and high-capacity variants exist
-      but no usable wattage table was captured; L27/L29 warnings stand
+      guide power requirements, Table 95 - base system 50 W (maximum and typical), normal-capacity
+      cooling 600 W maximum at full fan speed and 400 W typical at normal speed, high-capacity
+      cooling 640 W and 450 W; the guide defines typical as power under certain temperatures and
+      normal operating conditions. Table 96 rates the FRUs, and every module this chassis accepts
+      carries a figure on its contract except the craft interface (L29). The guide gives no
+      chassis total and instructs a per-configuration budget; the MX Series family datasheet does
+      give one, typical power draw 6520 W AC and 6670 W DC, with no configuration, ambient or side
+      named - carried as power-typical-w (AC) with the DC figure in power-typical-scope, envelope
+      unstated. Table 98 is a worked sample (eleven MPC-3D-16XGE-SFPP, three SCBE2, 6265 W
+      output on normal-capacity AC) and is not carried. Table 84 states maximum thermal output AC
+      27,007 BTU/hour (7920 W) and DC 18,987 BTU/hour (5568 W) - carried under thermal as a
+      provisioning ceiling
   color:
     note: >-
       photo - dark charcoal chassis and craft, silver cards and supplies, light-blue craft accent
@@ -59,6 +70,17 @@ provenance:
 attrs:
   physical:
     weight-max-kg: 169.64
+  power:
+    power-typical-w: 6520
+    power-envelope: unstated
+    power-typical-scope: AC typical power draw from the MX Series family
+      datasheet, which names no configuration, ambient or side; DC 6670 W
+    base-system-w: 50
+    cooling-system-w: 640 W high-capacity at full speed (450 W typical at
+      normal speed); normal-capacity 600 W (400 W typical) - Table 95
+  thermal:
+    max-thermal-output: AC 27,007 BTU/h (7920 W); DC 18,987 BTU/h (5568 W)
+      (Table 84; provisioning ceiling)
 chassis:
   width: 441.1
   height: 704.9
@@ -82,11 +104,7 @@ gaps:
     scope: [psus]
     reason: needs-photo
     wanted: the DC PEM and high-capacity variants; only the photographed
-      AC unit is modelled, and no vendor wattage table was captured.
-  - what: chassis-power
-    reason: vendor-silent
-    wanted: a chassis or per-PEM power table - not in the captured text
-      layer of the three-part extraction.
+      AC unit is modelled.
 groups:
   craft:
     term: Panel

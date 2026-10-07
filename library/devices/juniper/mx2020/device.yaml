@@ -46,7 +46,9 @@ provenance:
   power:
     confidence: datasheet
     note: >-
-      datasheet-table - the guide power overview: two -48 V pools as the MX2010 (8+1 per wall)
+      datasheet-table - the guide power overview: two -48 V pools as the MX2010 (8+1 per wall).
+      No chassis draw is carried, because the guide contradicts itself - see the
+      chassis-power-figure gap
   color:
     note: >-
       photo - grey chassis, dark craft band, silver-grey modules
@@ -78,6 +80,24 @@ gaps:
     reason: needs-photo
     wanted: the four fan trays and four PDMs as FRU bays - drawn as the
       grilles and zones they sit behind.
+  - what: chassis-power-figure
+    scope:
+    - fact:peak-power-w
+    - fact:typical-power-w
+    reason: sources-disagree
+    note: >-
+      The guide states figures that do not hold together, so none is carried. Table 65 gives the
+      base system (no MPCs, ADCs or MICs; four fan trays, eight PSMs) 9,439 W at 55 C and 2,142 W
+      typical - the same two numbers the MX2010 guide (Table 60) gives its own, smaller base
+      system, and 2,142 W is the MX2010 typical INPUT power per PSM (MX2010 guide Table 71). The
+      DC thermal example (Table 91) assumes 34.5 kW of output for a loaded chassis as the zone 0
+      figure, more than half of the 45,000 W Table 89 gives the whole system including redundant
+      capacity; the MX2010 guide (Table 84) uses the same 34.5 kW for its own chassis. Table 100, the typical thermal example,
+      is garbled: it divides 36,274 by 0.91 and multiplies by 3.41 to reach 11,690 BTU/hr, which
+      that arithmetic does not produce, and labels 36,274 as kW of output.
+    wanted: >-
+      an MX2020 power-planning page or datasheet that states a chassis draw, with its
+      configuration, ambient and side.
 groups:
   craft:
     term: Panel

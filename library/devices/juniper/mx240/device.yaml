@@ -60,13 +60,17 @@ provenance:
       guide Figure 1 callout - ESD point at the front top-left; placed at 8.0, 17.0 off the
       photograph, approximate (the socket is small and dark against the dark band)
   power:
+    confidence: datasheet
     note: >-
       guide power tables - base system 40 W, cooling 70/85 W (normal/high capacity, from a
       dedicated PSU tap excluded from the output budget), SCB-MX 185 W at 55 C, DPCE-R-40GE-SFP
-      335 W, DPC-R-4XGE-XFP 310 W (Table 93; ambient unqualified for DPC rows). No chassis-level
-      draw is published - the vendor instructs computing a budget per configuration (Table 94
-      worked example), so no power-typical/max is carried on the device and the module figures are
-      what sums
+      335 W, DPC-R-4XGE-XFP 310 W (Table 93; ambient unqualified for DPC rows). The guide gives
+      no chassis total and instructs a per-configuration budget; the MX Series family datasheet
+      does give one, typical power draw 1860 W AC and 1690 W DC, with no configuration, ambient
+      or side named - carried as power-typical-w (AC) with the DC figure in power-typical-scope,
+      envelope unstated. Table 94 is a worked sample (two MPC-3D-16XGE-SFPP, two SCBE2 with
+      RE-S-1800, 1555 W output) and is not carried. Table 89's maximum thermal output (AC 7161
+      BTU/hour, 2100 W; DC 5074 BTU/hour, 1488 W) stays under thermal as a provisioning ceiling
   lifecycle:
     note: >-
       announced - the third-party EOL trackers (IT-Planet, Park Place) list MX240 EOL 2020-06-30 /
@@ -111,6 +115,10 @@ attrs:
   performance:
     throughput: 3 Tbps-class (datasheet family table)
   power:
+    power-typical-w: 1860
+    power-envelope: unstated
+    power-typical-scope: AC typical power draw from the MX Series family
+      datasheet, which names no configuration, ambient or side; DC 1690 W
     base-system-w: 40
     cooling-system-w: 85 W high-capacity (70 W normal); dedicated PSU tap,
       excluded from the output-power budget per the guide note

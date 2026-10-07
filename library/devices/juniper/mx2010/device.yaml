@@ -46,7 +46,8 @@ provenance:
     confidence: datasheet
     note: >-
       datasheet-table - the guide power overview: the -48 V pool is 22.5 kW with 2.5 kW reserved
-      for PSM redundancy (8+1 across nine PSMs)
+      for PSM redundancy (8+1 across nine PSMs). No chassis draw is carried, because the guide
+      contradicts itself - see the chassis-power-figure gap
   color:
     note: >-
       photo - grey chassis, dark craft band with the light-blue accent, silver-grey modules
@@ -89,6 +90,24 @@ gaps:
     reason: needs-photo
     wanted: the AC, 240V-China and HVAC/HVDC PSM faces; the photographed
       unit is -48 V DC.
+  - what: chassis-power-figure
+    scope:
+    - fact:peak-power-w
+    - fact:typical-power-w
+    reason: sources-disagree
+    note: >-
+      The guide states a figure and it does not hold together, so none is carried. Table 60 gives
+      the base system (no MPCs, ADCs or MICs) 9,439 W at 55 C and 2,142 W typical, identical to
+      the MX2020 base row (MX2020 guide Table 65) for a different base system: this row lists two
+      fan trays and four PSMs, the MX2020 row four and eight. 2,142 W is also exactly Table 71's
+      typical INPUT power per PSM. The row's two fan trays disagree with Table 61, which lists
+      four (two upper, two lower). And the DC thermal example (Table 84) assumes 34.5 kW of output
+      for a loaded chassis, more than the 22.5 kW Table 82 gives the whole system, and its input
+      line divides 16.5 by 0.91 to reach 37.9 kW; the MX2020 guide uses the same 34.5 kW. Table
+      80's sample counts 5.5 kW for the CB-REs, SFBs and fan trays alone.
+    wanted: >-
+      an MX2010 power-planning page or datasheet that states a chassis draw for this chassis
+      rather than one shared with the MX2020.
 groups:
   craft:
     term: Panel
