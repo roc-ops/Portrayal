@@ -1,6 +1,6 @@
 # Switch positions: a field that moves what it sets
 
-Status: design, 2026-10-06. Issue #808. Nothing here is built. Builds on fields
+Status: built, 2026-10-07 (#872, with the follow-ups of #874). Issue #808. Builds on fields
 ([`library/components/README.md`](../library/components/README.md), "Skins") and on
 `kit/fields.js`, which paints a field in 2D and 3D.
 
@@ -123,9 +123,13 @@ position needs more: the relief of a moved node is built from the node's box.
 - The build writes each relief node's position from the node as moved, so a scene built
   from a configuration that sets a position is already right.
 - At runtime, a field that carries `data-move-from` or `data-show-from` on a node with
-  relief marks its part as needing a rebuild, and the viewer rebuilds that part the way it
-  rebuilds one after a swap. A field with neither effect keeps today's path: repaint, no
-  rebuild.
+  relief marks its part as needing a rebuild, and the viewer rebuilds the scene the way it
+  rebuilds one after a configuration switch (there is no per-part rebuild). A field with
+  neither effect keeps today's path: repaint, no rebuild.
+- A node a position hides is removed before the face is measured, as a pulled part is. So
+  that a part whose only SHOW node starts hidden still rebuilds when that node should
+  appear, each part group first records the position fields its nodes use, as
+  `data-position-fields`, and the viewer reads that mark as well as the nodes (#874).
 
 ## 7. Lint
 
@@ -133,8 +137,8 @@ position needs more: the relief of a moved node is built from the node's box.
   node a field is kept by.
 - **New: every option of a moving or showing field is answered.** For a `data-move-from`
   node, each key in `data-move` is one of the field's options. For a field with any
-  `data-show-from` node, each option shows at least one node, or the contract says which
-  option is drawn by absence.
+  `data-show-from` node, each option shows at least one node, or the field lists it in
+  `drawn-by-absence` - a breaker that is simply on, with no flag (L148).
 - **New: a moved node stays inside its part.** The box of a node under each of its moves
   lies within the component's `size`, so an actuator cannot be configured off its own
   face.

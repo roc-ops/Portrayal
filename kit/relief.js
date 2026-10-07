@@ -2049,6 +2049,22 @@ export function nodeTools(svg, {back = false} = {}) {
 // can carry arbitrary shapes (plug-outline apertures, LED holes) via alpha.
 // `back` says the drawing is a module's back, built inside the module's FRU
 // (buildFaceRelief's back pass): nothing on it is a FRU of its own (bodyRole).
+/**
+ * Write on each part group (`[data-path]`) the position fields its own nodes
+ * move or show, as `data-position-fields="sw-1 state"`. Read by viewer3d's
+ * rebuild check, which sees only the text left after hidden nodes are removed.
+ */
+export function markPositionFields(root) {
+  for (const n of root.querySelectorAll('[data-move-from],[data-show-from]')) {
+    const part = n.closest('[data-path]');
+    if (!part) continue;
+    const have = new Set((part.getAttribute('data-position-fields') || '').split(/\s+/).filter(Boolean));
+    for (const a of ['data-move-from', 'data-show-from']) if (n.hasAttribute(a)) have.add(n.getAttribute(a));
+    part.setAttribute('data-position-fields', [...have].sort().join(' '));
+  }
+  return root;
+}
+
 export async function extractRelief(url, scope, {back = false} = {}) {
   const div = document.createElement('div');
   div.style.cssText = 'position:absolute;left:-10000px;top:0;width:1000px;visibility:hidden';
@@ -2079,6 +2095,15 @@ export async function extractRelief(url, scope, {back = false} = {}) {
   // no geometry behind, not a flat one.
   applyPulled(svg, scope);
   for (const el of [...q("[data-portrayal-pulled]")]) el.remove();
+  // AND A NODE A POSITION HIDES, for the same reason (docs/switch-positions-
+  // design.md section 6): a breaker's off flag is not drawn while it is on, and
+  // measured hidden it would extrude a 0x0 feature rather than none. FIRST, the
+  // part it belongs to says which of its fields are positions, on its own
+  // group: the viewer decides to rebuild by reading this text, and a part
+  // whose only SHOW node starts hidden would otherwise carry no sign of it and
+  // never rebuild to show it (#874).
+  markPositionFields(svg);
+  for (const el of [...q('[data-show-from][display="none"]')]) el.remove();
   const {inv, mmRect, shared, liftOf, ownerOf, nodeSvg} = nodeTools(svg, {back});
   // TILTED FACETS (docs/tilted-facets-design.md).
   // A node under a `[data-tilt-on]` group is measured foreshortened; it is

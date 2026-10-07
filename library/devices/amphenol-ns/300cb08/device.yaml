@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: 300cb08
-version: 2.0.0
+version: 2.0.1
 maturity: modelled
 manufacturer: Amphenol Network Solutions
 model: 300CB08
@@ -289,8 +289,36 @@ views:
       placements:
         - {id: thumbscrew-left, ref: amphenol-ns/cover-thumbscrew@1, at: [1.55, 17.35], group: cover, rel-pos: 1}
         - {id: thumbscrew-right, ref: amphenol-ns/cover-thumbscrew@1, at: [420.55, 17.35], group: cover, rel-pos: 2}
-        - {id: dip-a, for: chassis, ref: amphenol-ns/alarm-dip-8@1, at: [185.9, 21.3], group: alarm-enable, rel-pos: 1}
-        - {id: dip-b, for: chassis, ref: amphenol-ns/alarm-dip-8@1, at: [224.0, 21.3], group: alarm-enable, rel-pos: 2}
+        - id: dip-a
+          for: chassis
+          ref: amphenol-ns/alarm-dip-8@1
+          at: [185.9, 21.3]
+          group: alarm-enable
+          rel-pos: 1
+          positions:
+            sw-1: {down: 'alarm enabled for breaker position A1', up: 'alarm off for position A1, which should then be empty'}
+            sw-2: {down: 'alarm enabled for breaker position A2', up: 'alarm off for position A2, which should then be empty'}
+            sw-3: {down: 'alarm enabled for breaker position A3', up: 'alarm off for position A3, which should then be empty'}
+            sw-4: {down: 'alarm enabled for breaker position A4', up: 'alarm off for position A4, which should then be empty'}
+            sw-5: {down: 'alarm enabled for breaker position A5', up: 'alarm off for position A5, which should then be empty'}
+            sw-6: {down: 'alarm enabled for breaker position A6', up: 'alarm off for position A6, which should then be empty'}
+            sw-7: {down: 'alarm enabled for breaker position A7', up: 'alarm off for position A7, which should then be empty'}
+            sw-8: {down: 'alarm enabled for breaker position A8', up: 'alarm off for position A8, which should then be empty'}
+        - id: dip-b
+          for: chassis
+          ref: amphenol-ns/alarm-dip-8@1
+          at: [224.0, 21.3]
+          group: alarm-enable
+          rel-pos: 2
+          positions:
+            sw-1: {down: 'alarm enabled for breaker position B1', up: 'alarm off for position B1, which should then be empty'}
+            sw-2: {down: 'alarm enabled for breaker position B2', up: 'alarm off for position B2, which should then be empty'}
+            sw-3: {down: 'alarm enabled for breaker position B3', up: 'alarm off for position B3, which should then be empty'}
+            sw-4: {down: 'alarm enabled for breaker position B4', up: 'alarm off for position B4, which should then be empty'}
+            sw-5: {down: 'alarm enabled for breaker position B5', up: 'alarm off for position B5, which should then be empty'}
+            sw-6: {down: 'alarm enabled for breaker position B6', up: 'alarm off for position B6, which should then be empty'}
+            sw-7: {down: 'alarm enabled for breaker position B7', up: 'alarm off for position B7, which should then be empty'}
+            sw-8: {down: 'alarm enabled for breaker position B8', up: 'alarm off for position B8, which should then be empty'}
         - {id: led-a-pwr, for: chassis, ref: common/led-indicator@1, at: [188.8, 29.0], group: status, rel-pos: 1, states: ['off', {name: ok, color: '#22c55e'}]}
         - {id: led-a-alm, for: chassis, ref: common/led-indicator@1, at: [201.5, 29.0], group: status, rel-pos: 2, states: ['off', {name: fault, color: '#ef4444'}]}
         - {id: led-b-alm, for: chassis, ref: common/led-indicator@1, at: [226.9, 29.0], group: status, rel-pos: 3, states: ['off', {name: fault, color: '#ef4444'}]}
@@ -461,6 +489,9 @@ configurations:
       breaker-b6: {rating: 30}
       breaker-b7: {rating: 20}
       breaker-b8: {rating: 10}
+    component-attrs:
+      dip-a: {sw-1: down, sw-2: down, sw-3: down, sw-4: down, sw-5: down, sw-6: down, sw-7: down, sw-8: down}
+      dip-b: {sw-1: down, sw-2: down, sw-3: down, sw-4: down, sw-5: down, sw-6: down, sw-7: down, sw-8: down}
   with-fuses:
     kind: example
     description: >-
@@ -501,6 +532,9 @@ configurations:
       breaker-b6: {fuse-rating: 20}
       breaker-b7: {fuse-rating: 10}
       breaker-b8: {fuse-rating: 5}
+    component-attrs:
+      dip-a: {sw-1: down, sw-2: down, sw-3: down, sw-4: down, sw-5: down, sw-6: down, sw-7: down, sw-8: down}
+      dip-b: {sw-1: down, sw-2: down, sw-3: down, sw-4: down, sw-5: down, sw-6: down, sw-7: down, sw-8: down}
 datasheet:
   title: 'Amphenol Network Solutions 300CB08/nrg300CB08 8/8 Position Circuit Breaker Panel data sheet, 07.11.24 v.20'
   url: https://amphenol-ns.com/Assets/P_DS_300CB08.pdf
