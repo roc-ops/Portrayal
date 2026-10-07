@@ -388,6 +388,7 @@ def test_the_exported_module_files_carry_the_ports_the_graph_implies():
     from portrayal import optical_ports as P
     d = dist()
     idx = index()
+    depths = D.seating_depths(d)
     checked = 0
     for e in projecting_modules(idx):
         man = d.manufacturer_of(e.get("ns"))
@@ -397,13 +398,24 @@ def test_the_exported_module_files_carry_the_ports_the_graph_implies():
         view = D.contract_view(e)
         expected = P.ports(view, idx.get)
         # The file carries the names bay-scoped (dcim_export.tokenize_module).
-        exp_front = {D.module_scoped(p["name"]) for p in expected["front"]}
-        exp_rear = {D.module_scoped(p["name"]) for p in expected["rear"]}
-        assert exp_front and exp_rear, \
+        base_front = {D.module_scoped(p["name"]) for p in expected["front"]}
+        base_rear = {D.module_scoped(p["name"]) for p in expected["rear"]}
+        assert base_front and base_rear, \
             f"{model}: the graph itself carries no ports - this guard is vacuous"
+        # NAUTOBOT NAMES THE BAY CHAIN of a module seated only in a nested bay
+        # (dcim_export.seat_names, #765), so its expected names go through the
+        # same rename at the model's one depth.
+        seated = depths.get((man, model)) or set()
+        depth = next(iter(seated)) if len(seated) == 1 else None
         for target in D.TARGETS:
             doc = _exported_module_doc(target, man, model)
             assert doc is not None, f"{model} ({target}): no exported file"
+            exp_front, exp_rear = base_front, base_rear
+            if target == "nautobot":
+                seat = D.seat_names({"front-ports": [{"name": n} for n in base_front],
+                                     "rear-ports": [{"name": n} for n in base_rear]}, depth)
+                exp_front = {r["name"] for r in seat["front-ports"]}
+                exp_rear = {r["name"] for r in seat["rear-ports"]}
             got_front = {p["name"] for p in doc.get("front-ports") or []}
             got_rear = {p["name"] for p in doc.get("rear-ports") or []}
             assert got_front, f"{model} ({target}): exported front-ports is empty"

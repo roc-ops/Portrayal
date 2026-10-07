@@ -3,14 +3,14 @@ manufacturer: Juniper
 model: RE-S-2000-4096
 description: Juniper RE-S-2000 Routing Engine (RE-S-2000-4096, EOL) - 2.0 GHz, 4 GB
 console-ports:
-  - name: '{module}/aux'
+  - name: '{module.parent}/{module}/aux'
     type: rj-45
-  - name: '{module}/console'
+  - name: '{module.parent}/{module}/console'
     type: rj-45
-  - name: '{module}/usb'
+  - name: '{module.parent}/{module}/usb'
     type: usb-a
 interfaces:
-  - name: '{module}/ethernet'
+  - name: '{module.parent}/{module}/ethernet'
     type: 1000base-t
 comments: 'Juniper RE-S-2000 Routing Engine (RE-S-2000-4096, EOL) - 2.0 GHz, 4 GB. Face layout is the
   RE-S-1300 family faceplate: HDD/MASTER and OK-FAIL/ONLINE lamps, ONLINE/OFFLINE button, RESET, USB,

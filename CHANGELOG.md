@@ -521,6 +521,27 @@ names the ref that replaces it.
   (3.0.2) no longer undercuts the floor and drops the `pitch-note` that said
   it did; the seven FS FHD enclosures that seat it take a patch
   (roc-ops/Portrayal#245).
+- **BREAKING for DCIM data already imported.** Nautobot module types now
+  carry their own module bays, and a module seated only in such a nested bay
+  names its ports by the chain of bays above it. Nautobot copies a bay's
+  position as written and renders no bay name, so its bays are written plain
+  (`mic0` at `mic0`), and the parent goes into the port names of what seats
+  there: `{module.parent}/{module}/port-1`, which Nautobot renders to
+  `fpc3/mic0/port-1`, the name NetBox gives the same port. 47 Nautobot module
+  types gain 95 bays; the Fibrain XCU10's drawer now seats its four adapter
+  holders, so its 48 fibre ports are reachable in Nautobot as in NetBox.
+  A bay accepting a model that is also seated directly in a chassis bay (the
+  A9K MPAs, the 7750 MDA-e family, the MX MIC-3D family, Dell's E3.S carrier;
+  35 models in all) is withheld, because that model's ports must keep
+  `{module}/x`; 30 bays on 15 carriers, each named in the type's comments,
+  wait for position templating upstream (nautobot/nautobot#5823). The renames
+  are 934 component templates in 125 Nautobot module types, and every one of
+  those types was offered no bay by any earlier Nautobot export, so no data
+  imported through these exports holds the old names. The caveats are a
+  module installed by hand directly in a device bay, which keeps its old
+  names, and a type re-imported over an existing one, whose templates a
+  re-import does not update. NetBox exports and fibre maps do not change
+  (roc-ops/Portrayal#765, roc-ops/Portrayal#834).
 - **BREAKING for DCIM data already imported.** Telco Systems is listed as
   `BATM/Telco Systems`, the name the vendor asks to be listed under. The
   `manufacturer` of its fourteen devices changes, and with it every one of its

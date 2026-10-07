@@ -4,18 +4,18 @@ model: MCX713114T tall bracket
 description: NVIDIA ConnectX-7 MCX713114T quad-port 25/50GbE SFP56 adapter with PPS in/out SMA jacks (one
   ganged 1x4 cage), full-height, PCIe Gen4 x16, on its tall (full-height) bracket
 interfaces:
-  - name: '{module}/port-1'
+  - name: '{module.parent}/{module}/port-1'
     type: 50gbase-x-sfp56
-  - name: '{module}/port-2'
+  - name: '{module.parent}/{module}/port-2'
     type: 50gbase-x-sfp56
-  - name: '{module}/port-3'
+  - name: '{module.parent}/{module}/port-3'
     type: 50gbase-x-sfp56
-  - name: '{module}/port-4'
+  - name: '{module.parent}/{module}/port-4'
     type: 50gbase-x-sfp56
-  - name: '{module}/port-pps-in'
+  - name: '{module.parent}/{module}/port-pps-in'
     type: other
     label: SMA
-  - name: '{module}/port-pps-out'
+  - name: '{module.parent}/{module}/port-pps-out'
     type: other
     label: SMA
 comments: 'NVIDIA ConnectX-7 MCX713114T quad-port 25/50GbE SFP56 adapter with PPS in/out SMA jacks (one
