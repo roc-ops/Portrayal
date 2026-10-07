@@ -255,3 +255,56 @@ def test_a_placement_may_say_what_a_position_means():
     pl = (schema["properties"]["views"]["additionalProperties"]["properties"]["components"]
           ["properties"]["placements"]["items"]["properties"])
     assert pl["positions"]["additionalProperties"]["additionalProperties"] == {"type": "string"}
+
+
+# --- the 300CB08 family's alarm DIPs -----------------------------------------------------
+
+ALARM = "amphenol-ns/alarm-dip-8@1"
+PANELS = sorted(p.parent.name for p in (LIB / "devices/amphenol-ns").glob("*/device.yaml")
+                if ALARM in p.read_text())
+
+
+def test_the_alarm_dip_lints_clean():
+    p = LIB / "components/amphenol-ns/alarm-dip-8/v1/contract.yaml"
+    c = yaml.safe_load(p.read_text())
+    assert set(c["fields"]) == {f"sw-{i}" for i in range(1, 9)}
+    assert all(f["options"] == ["up", "down"] and f["default"] == "up" for f in c["fields"].values())
+    for code in ("L73", "L148", "L149"):
+        assert not _caught(code, lint.lint_component_fields, p, c), code
+
+
+def test_every_panel_says_what_its_switches_mean_and_its_examples_set_them():
+    """Eleven panels place the part. Each states a meaning for every switch of
+    both blocks, the nrgILS its own, and every example configuration sets the
+    switch of each fitted breaker position down - the guide's rule."""
+    assert len(PANELS) == 11, PANELS
+    for name in PANELS:
+        d = yaml.safe_load((LIB / "devices/amphenol-ns" / name / "device.yaml").read_text())
+        dips = {p["id"]: p for v in d["views"].values()
+                for p in ((v or {}).get("components") or {}).get("placements") or [] if p.get("ref") == ALARM}
+        assert set(dips) == {"dip-a", "dip-b"}, name
+        for pid, p in dips.items():
+            assert set(p["positions"]) == {f"sw-{i}" for i in range(1, 9)}, (name, pid)
+            words = p["positions"]["sw-3"]["up"]
+            assert ("software" in words) == name.startswith("nrgils"), (name, words)
+        for cfg, c in d["configurations"].items():
+            fitted = {k for k, v in (c.get("bays") or {}).items() if v and "blank" not in v}
+            want = {}
+            for side in "ab":
+                sw = {f"sw-{i}": "down" for i in range(1, 9) if f"breaker-{side}{i}" in fitted}
+                if sw:
+                    want[f"dip-{side}"] = sw
+            assert (c.get("component-attrs") or {}) == want, (name, cfg)
+
+
+def test_a_populated_panel_draws_its_switches_down(tmp_path):
+    name, o, r = _render(tmp_path, "amphenol-ns/300cb08", lambda d: None)
+    assert r.returncode == 0, r.stderr[-800:]
+    for cfg, want in (("base", None), ("populated", "translate(0 1.5)"), ("with-fuses", "translate(0 1.5)")):
+        f = o / (f"{name}.front.svg" if cfg == "base" else f"{name}.{cfg}.front.svg")
+        root = ET.parse(f).getroot()
+        got = [e.get("transform") for e in root.iter()
+               if (e.get("id") or "").startswith(("dip-a--slider-", "dip-b--slider-"))]
+        assert len(got) == 16 and set(got) == {want}, (cfg, got)
+        dip = next(e for e in root.iter() if e.get("id") == "dip-a")
+        assert json.loads(dip.get("data-positions"))["sw-1"]["down"] == "alarm enabled for breaker position A1"

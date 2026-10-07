@@ -1170,7 +1170,7 @@ def check(library: pathlib.Path):
             if "placement-surface" in was and \
                     was["placement-surface"] != now["placement-surface"]:
                 what.append("placement surface (states, description, "
-                            "provenance, physical-context, frames)")
+                            "provenance, physical-context, frames, positions)")
             if was.get("gaps") != now["gaps"]:
                 what.append("gaps")
             # NAME THE COMPOSED CHANGE. The one bucket whose cause is not in
