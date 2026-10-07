@@ -1,0 +1,83 @@
+format: 1
+kind: component
+name: nrg-rear-block
+version: 1.0.0
+class: port
+profile: power
+description: >-
+  Rear centre block of an Amphenol Network Solutions nrgSMART power panel with
+  an integrated controller or sensor card: the two alarm relay headers of the
+  plain panel, and below them two nrgNET connectors, IN over OUT, and two
+  nrgTEMP probe jacks.
+size: {w: 39.0, h: 42.8}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  The centre block of the 300CB08 installation guide 149722-2 A9 Fig. 3-7, the same 39.0 by 42.8 the plain panel
+  gives its alarm card in Fig. 3-6. The connectors inside it are placed from a
+  threefold enlargement of that figure, about 3.2 px/mm before enlarging, so
+  each is good to a millimetre and no better.
+provenance:
+  size: >-
+    drawing - see size-notes.
+  nrgnet: >-
+    datasheet and photo. A removable 5-pin connector with screw-down terminals
+    (controller datasheet), RS485, pins COM+, COM-, S, PWR+, PWR- with the two
+    power pins unused on these panels (the 300CB08 installation guide 149722-2 A9 table 2.9.2). The guide photographs
+    them as green pluggable headers silkscreened IN on the upper and OUT on the
+    lower (Fig. 2-30). Their pitch is not stated; the drawing gives five ways in
+    about 20, so 3.81 is drawn.
+  nrgtemp: >-
+    photo - two black square-bodied jacks with a round hole, the upper
+    silkscreened TEMP 1 (the 300CB08 installation guide 149722-2 A9, the photograph captioned Empty Temp Ports). THE
+    JACK TYPE IS NOT STATED in any document held; the probe ends in a
+    phone-style plug of no stated size. The lower is taken to be TEMP 2.
+  alarm-headers: >-
+    drawing - as amphenol-ns/alarm-card-307608@1, whose two headers this block
+    repeats; which header is side A is not marked there either.
+attrs: {nrgnet-pins: 5, nrgnet-bus: RS485}
+elements:
+  alarm-b: {at: [2.9, 1.9], size: [12.5, 6.4], class: port}
+  alarm-a: {at: [23.2, 1.9], size: [12.2, 6.4], class: port}
+  nrgnet-in: {at: [1.0, 13.9], size: [20.3, 6.9], class: port}
+  nrgnet-out: {at: [1.0, 27.7], size: [20.3, 6.9], class: port}
+  temp-1: {at: [23.8, 12.0], size: [10.7, 9.5], class: port}
+  temp-2: {at: [23.8, 24.9], size: [10.7, 10.2], class: port}
+relief:
+  features:
+    - node: alarm-b
+      out: 6.0
+      color: '#f1f0eb'
+      confidence: estimated
+      source: >-
+        as amphenol-ns/alarm-card-307608@1 draws the same header; unsourced there too
+    - node: alarm-a
+      out: 6.0
+      color: '#f1f0eb'
+      confidence: estimated
+      source: >-
+        see alarm-b
+    - node: nrgnet-in
+      out: 8.0
+      color: '#3f9d5a'
+      confidence: estimated
+      source: >-
+        a pluggable terminal header standing off the rear in the guide photograph, Fig. 2-30; height by eye
+    - node: nrgnet-out
+      out: 8.0
+      color: '#3f9d5a'
+      confidence: estimated
+      source: >-
+        see nrgnet-in
+    - node: temp-1
+      out: 3.0
+      color: '#1b1d20'
+      confidence: estimated
+      source: >-
+        a jack body standing a little off the rear in the same photograph; height by eye
+    - node: temp-2
+      out: 3.0
+      color: '#1b1d20'
+      confidence: estimated
+      source: >-
+        see temp-1
+skins: [default]

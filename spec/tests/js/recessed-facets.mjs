@@ -1,4 +1,4 @@
-// Recessed facets (docs/superpowers/specs/2026-09-24-tilted-facets-design.md,
+// Recessed facets (docs/tilted-facets-design.md,
 // the addendum): a facet whose lift is negative stands in a pocket. Checked
 // here: the pocket floor is cleared under it, facetZ and facetInfo read the
 // sunk surface, and a sunk tooth's skirt ends at its own base.

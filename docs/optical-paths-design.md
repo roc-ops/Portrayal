@@ -339,8 +339,8 @@ by section D's table, which used to claim it.
 
 ## Sources
 
-Staged in the maintainer's gitignored `working/intake/fs/fhd/` - `SOURCES.md`, `COVERAGE.md`,
-`CATALOGUE.tsv`, five converted PDFs, 139 product images, and a Visio stencil
+Held locally, not in this repository: a sources ledger, a coverage note, a
+product catalogue, five converted PDFs, 139 product images, and a Visio stencil
 that turned out to be perspective marketing art with no connection points.
 Read `COVERAGE.md` before modelling: the module envelope came from product
 imagery, not from FS's family documentation, which dimensions no cassette

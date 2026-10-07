@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fhd-1mtp12-sc-os2-a
-version: 3.0.1
+version: 3.0.2
 class: cassette
 behaviour: fills
 description: >-
@@ -108,9 +108,11 @@ provenance:
     corrected frame, the blue flange along each adapter's top puts every
     housing's left edge within 0.13 of these, and the row's own margins at
     17.31 / 17.14.
-    THE NARROWEST GAP (12.73, between sc1 and sc2) SITS 0.27 MM UNDER THE
-    REGISTRY'S 13.0 MM FLOOR - see provenance.pitch-note below and
-    task-5-report.md for why this is not corrected by widening the placement.
+    THE NARROWEST GAP (12.73, between sc1 and sc2) SITS 0.02 ABOVE THE REGISTRY'S
+    12.71 MM FLOOR, which is the narrowest of these same gaps as first
+    measured (Portrayal#245: the floor was 13.0 until then, the MEAN of the
+    five gaps, and this cassette carried a pitch-note for undercutting it).
+    The placement is the honest reading of the render, not widened.
     `at.y` of 4.825 CENTRES the part vertically ((35.05 - 25.4) / 2). It was
     11.525 while common/sc-duplex-adapter@1 was 12.0 tall; @2 measured the
     body at 25.4, and the centre - 17.525, half the face - did not move, only
@@ -122,27 +124,6 @@ provenance:
     0.68 - against a face half-height of 17.525. Close enough, at the same
     noise scale as the x measurement, that centring is the reading here, the
     same pattern fs/fhd-1mtp6lcd-os2-a@4's own `at.y` provenance uses.
-  pitch-note: >-
-    common/sc-duplex-adapter@5 composes six-across at an IRREGULAR pitch -
-    the raw measured centres, not a uniform multiple. THIS NOTE IS WHY L81
-    STAYS SILENT, though, not the irregular spacing: `lint_component_composed_pitch`
-    returns before it ever looks at a gap once `provenance.pitch-note` is
-    present at all (`if (data.get("provenance") or {}).get("pitch-note"):
-    return`, lint.py) - the documented escape hatch for a part that really
-    does violate its standard's pitch, which this one does. Were this note
-    absent, the check would still fall through the uniform-pitch branch
-    further down (`if len(set(gaps)) != 1: continue`) for the same reason,
-    but that branch is never reached here to begin with. The narrowest
-    individual gap, 12.73 mm between sc1 and sc2, is itself 0.27 mm under
-    sc-duplex-adapter's 13.0 mm registry floor. That floor is the MEAN of
-    these same five render-measured gaps (12.71-13.22 as first measured,
-    12.73-13.24 in the frame 2.0.0 corrected), rounded to a clean
-    number when standards.yaml's sc-duplex-adapter entry was written; a mean
-    is not a minimum, and this is the first component ever composed at that
-    pitch to say so. The placement is NOT widened to hide this: it is the
-    honest reading of the same image the floor itself was set from. See
-    task-5-report.md. This is a finding about the registry entry, not a
-    defect in this cassette.
   face-detail-gap: >-
     THE SIX SC CUTOUTS ARE NOT DRAWN HERE, for the same reason as the LC
     cassette's plate: each composed common/sc-duplex-adapter@5 draws its own

@@ -207,6 +207,12 @@ def _warm():
     # content-keyed entry cannot go stale - a file that changes is a new key.
     import portrayal.lint as lint
     lint._id_corpus_prime([LIB])
+    # AND THE PLUGGABLE CANDIDATE WALK'S, FOR THE SAME REASON (#543): its
+    # selection is cached on disk by content, and its per-contract memo is
+    # keyed by the sha256 of each contract's bytes, so this is not rule state
+    # either - nothing is selected and nothing is written.
+    import portrayal.render as render
+    render._candidates_prime([LIB])
 
 
 def _child(req):

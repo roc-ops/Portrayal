@@ -1,4 +1,4 @@
-"""kit/relief.js tiltFrame / unproject / facetZ (docs/superpowers/specs/2026-09-24-tilted-facets-design.md)."""
+"""kit/relief.js tiltFrame / unproject / facetZ (docs/tilted-facets-design.md)."""
 import json
 import math
 import shutil

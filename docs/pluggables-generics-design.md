@@ -160,10 +160,10 @@ opening a `std/sc-bore` would need. Searched: SENKO DS-SC-000006 (plug; no front
 view, unlike the LC plug datasheet the LC bore was built from), DS-SC-000010 and
 DS-SC-000011 (adapters; housing and panel cutout only), FS SC/UPC simplex adapter and
 Molex 106167 (the same), TE catalogue 1307895 pp. 49-52 (the 13.0-13.5 x 18.0
-SC-footprint panel cutout for adapters, not the keyed opening), and the maintainer's standards copies (nothing).
+SC-footprint panel cutout for adapters, not the keyed opening), and the standards held locally (nothing).
 TIA-604-3 / IEC 61754-4 are paywalled. So the SC face waits for a drawing exactly as
 the MPO faces do, `generic/sfp-sc` is not in this plan, and
-the maintainer's gitignored `working/intake/fiber-connectors/sc/COVERAGE.md` records the search. What would
+a coverage note held locally records the search. What would
 settle it: a TE customer drawing of an SC simplex adapter or connector with a front
 view, or the standard.
 
@@ -214,7 +214,7 @@ transceiver, not a port". `std/sc-bore` joins that skip list.
 
 ## Order of work
 
-1. Fetch the OSFP MSA into `working/intake/optic/msa/` beside a `SOURCES.md`; read
+1. Fetch the OSFP MSA (free) and keep it locally beside the others; read
    SFF-8432 Table 4-3 and SFF-8661 Fig 5-1 from the local copies.
 2. `standards.yaml`: the four module entries.
 3. `vendors.yaml`: the `generic` namespace. L99 and its fixture test.

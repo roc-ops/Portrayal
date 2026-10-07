@@ -64,6 +64,21 @@ device_list() {
     for d in "${DEVSEL[@]}"; do ls library/devices/*/*/device.yaml | grep -- "$d"; done
   fi
 }
+# WARM THE RENDERS' SHARED CACHES ONCE, BEFORE THE PARALLEL WAVE (#544). Every
+# render reads L62's vocabulary (#542) and the pluggable candidate selection
+# (#543) from a disk cache keyed by the library's content. From an empty cache -
+# CI's, every run, since NO_LINT=1 skips the lint pass that would otherwise
+# have filled it - the first $JOBS renders all start before any of them has
+# written an entry, so each computes the same answer. This computes it once,
+# with the functions the renders call and on the roots they are given. It
+# changes no output: a warm cache answers exactly what a cold one computes,
+# and if the cache cannot be written the renders simply compute as before.
+python3 -c "
+import sys
+from portrayal import lint, render
+lint._id_corpus(sys.argv[1:])
+render._pluggable_candidates(sys.argv[1:])
+" library
 device_list \
   | xargs -P "$JOBS" -I{} python3 spec/tools/portrayal/render.py {} \
       --library library --out "$OUT" ${STALE+"${STALE[@]}"} >/dev/null

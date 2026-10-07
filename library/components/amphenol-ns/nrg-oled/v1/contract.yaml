@@ -1,0 +1,30 @@
+format: 1
+kind: component
+name: nrg-oled
+version: 1.0.0
+class: display
+profile: power
+description: >-
+  Front display of an nrgSMART integrated controller - a two-line black and
+  white OLED that scrolls the controller name, nrgOS version, active panel
+  count, IP address, panel name and serial, feed currents and voltages and
+  the two probe temperatures, and flashes between white and black
+  backgrounds on an alarm.
+size: {w: 24.9, h: 7.6}
+size-confidence: {w: drawing, h: drawing}
+provenance:
+  size: >-
+    drawing - the window in the 300CB08 installation guide 149722-2 A9 Fig. 3-2, 49 px by 15 px at 1.9685 px/mm.
+  readout: >-
+    the nrgSMART integrated controller system configuration guide 151881, section on the front LCD: the list of parameters it scrolls, and
+    that an alarm flashes the background and shows a bell beside the
+    controller name.
+  characters: >-
+    ESTIMATED, and the vendor's own datasheet leaves it blank: it reads
+    2-line display Xx characters. A photograph in the installation guide
+    shows a first line of seventeen characters, nrg240GT54-CTRL-C after a
+    symbol, so a line holds more than sixteen; twenty per line, forty in all,
+    is the next common size and is what is recorded.
+elements:
+  screen: {at: [0.8, 0.8], size: [23.3, 6.0], class: display, characters: 40}
+skins: [default]

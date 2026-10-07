@@ -113,10 +113,41 @@ def seated_by(library):
     return users
 
 
+def _counts(users_of, roots):
+    """ref -> how many distinct users `users_of(root)` names for it, over one
+    library or several; a user named by two roots is counted once."""
+    if isinstance(roots, (str, Path)):
+        roots = [roots]
+    users = defaultdict(set)
+    for root in roots:
+        for ref, names in users_of(Path(root)).items():
+            users[ref] |= names
+    return {ref: len(names) for ref, names in users.items()}
+
+
+def seat_counts(roots):
+    """ref -> how many devices seat that component major: the page's `devices`
+    column, and `seats` on each entry of dist/components.json. One function, so
+    the page and the index cannot count differently."""
+    return _counts(seated_by, roots)
+
+
+def composer_counts(roots):
+    """ref -> how many OTHER component majors compose that one: the page's
+    `in parts` column, and `composed-by` on each entry of dist/components.json."""
+    return _counts(composed_by, roots)
+
+
+def fits(doc):
+    """The page's `conforms / interface` column: what a contract conforms to,
+    else the interface it presents, else what it mates."""
+    return doc.get("conforms") or doc.get("interface") or doc.get("mates") or ""
+
+
 def build(library):
     library = Path(library)
-    users = seated_by(library)
-    parts = composed_by(library)
+    seats = seat_counts(library)
+    composers = composer_counts(library)
     groups = defaultdict(list)
     for contract in sorted(library.glob("components/*/*/v*/contract.yaml")):
         ns, name, vdir = contract.parts[-4], contract.parts[-3], contract.parts[-2]
@@ -127,9 +158,9 @@ def build(library):
             "kind": doc.get("kind", ""),
             "class": doc.get("class", ""),
             "size": size_text(doc.get("size")),
-            "fits": doc.get("conforms") or doc.get("interface") or doc.get("mates") or "",
-            "used": len(users.get(ref, ())),
-            "parts": len(parts.get(ref, ())),
+            "fits": fits(doc),
+            "used": seats.get(ref, 0),
+            "parts": composers.get(ref, 0),
             "what": first_sentence(doc.get("description")),
         })
     order = ["std", "common", "generic"] + sorted(

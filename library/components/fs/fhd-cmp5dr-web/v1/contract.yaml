@@ -1,0 +1,33 @@
+format: 1
+kind: component
+name: fhd-cmp5dr-web
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  The web that carries the FS FHD-CMP5DR's tray off each ear, seen from above - the
+  sheet swept up from the tray's arm into the upright ear, standing on the arm's
+  outer edge
+provenance:
+  size: >-
+    drawing - the ring-profile view of the three-view drawing in FS's 0U/1U Horizontal
+    Cable Manager Datasheet (updated 2025-05-11), at 1.331 px/mm: the web runs 66 mm
+    forward from the ear, to where the first ring stands. Its 1.5 is the sheet.
+  relief: >-
+    drawing - the same view, the web's top edge read every 2.3 mm: the ear's full height
+    for 8 mm, a straight slope down to 13.5 mm above the ear's bottom edge at 31, level
+    to 50, and down to the tray at 64. THE FIGURES ARE HEIGHTS ABOVE THE TRAY'S FLOOR,
+    which is 3 mm above the ear's bottom edge, so 41, 10.5 and nothing.
+size: {w: 1.5, h: 66}
+size-confidence: {w: datasheet, h: drawing}
+elements:
+  plate: {at: [0.0, 0.0], size: [1.5, 66], class: bezel}
+relief:
+  features:
+    - node: plate
+      out: 41.0
+      profile-y: [[0, 41], [8, 41], [11, 39], [31, 10.5], [50, 10.5], [64, 0], [66, 0]]
+      color: '#1b1d20'
+      confidence: drawing
+      source: the ring-profile view of FS's 0U/1U datasheet drawing, the web's top edge read every 2.3 mm
+skins: [default]

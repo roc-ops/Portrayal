@@ -63,7 +63,7 @@ content test would trade a visible, honest failure for an invisible, dishonest p
 Adding a `regions` entry naming the bottom plate WOULD satisfy the predicate today - regions count
 as content. It was rejected. A region that says "bottom plate, no features documented" passes the
 check by annotating that we have nothing, which is the same species as prose-in-attrs, invented
-captions, and every other statement this project has spent the session removing. **A check passed
+captions, and every other statement this project has worked to remove. **A check passed
 by describing an absence is worse than a check failed honestly**, because the failure is visible
 and the annotation is not.
 
@@ -116,7 +116,7 @@ Sketch, not a proposal for syntax:
 with `_has_content` unchanged for level 1 - a declared-empty face is still not a DRAWING - and
 level 3 accepting `content OR declared-empty`.
 
-## The ruling that came back, verbatim, because it decides this class of question
+## The rule, because it decides this class of question
 
   ANNOTATING AN ABSENCE is illegitimate - a region whose entire content is "there is nothing here"
   passes a content check by describing the lack of content.
