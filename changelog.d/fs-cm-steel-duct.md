@@ -6,7 +6,8 @@
   `fs/cmh-bs-sfds1u` (1U, steel channel with ABS fingers) are single-sided and
   state `full-depth: false`. `fs/cmh-dfds1u` (1U, covers 57.8 mm high) and
   `fs/cmh-dfds2u` (2U) are dual-sided, with a channel and a cover facing the
-  front and another facing the rear, and are full depth. Each brings its own
+  front and another facing the rear; they bolt to the front rails and, at 230.6
+  and 232 mm, do not reach the rear rails, so they too state `full-depth: false`. Each brings its own
   base, finger and cover components (`fs/<model>-base@1`, `-finger@1`,
   `-cover@1`, and `fs/cmh-bs-sfds1u-finger-end@1`). Only CMH-BS-SFDS1U has a
   stated cable capacity; the other four carry a `vendor-silent` gap for it.
