@@ -20,8 +20,9 @@
 
 ### Fixed
 - The craft interface bays of `juniper/mx960` (1.1.0), `mx2008`, `mx2010`
-  and `mx2020` (0.3.0) state `for: chassis`. The hardware guides describe
-  the craft interface as the router's status panel, with LEDs for the
-  router's components. `dell/r660` (5.1.0) does the same for its left
+  and `mx2020` (0.3.0) state `for: chassis`, and their `craft` group's role
+  is `management`, as it already was on the MX240 and MX480: the craft
+  interface is where an operator reads and acts on the router's state, with
+  LEDs for its components, buttons and an alarm cut-off. `dell/r660` (5.1.0) does the same for its left
   control panel, which the R660 Installation and Service Manual describes as
   holding the system health, system ID and status lamps (#414).
