@@ -46,6 +46,7 @@ PLACERS = {
     "amphenol-ns/300cb08-c": 16, "amphenol-ns/300cb08-sc": 16,
     "amphenol-ns/nrg300cb08-ctrl-c": 16, "amphenol-ns/nrg300cb08-ctrl-sc": 16,
     "amphenol-ns/nrg300cb08-sens-c": 16, "amphenol-ns/nrg300cb08-sens-sc": 16,
+    "amphenol-ns/nrgils300cb08-sc": 16,
 }
 # (device, config, view, host): one at each end of each bank, on two panels
 SEATS = [
