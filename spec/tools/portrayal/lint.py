@@ -310,6 +310,8 @@ RULES = {
     "L141": ("lab",        "a rack-face part's host is a `rack` device, and `unit` is within the host's height, 1 to its `chassis.ru` (error)", "put the part `on` the rack device behind it; count `unit` from 1 at the host's bottom unit"),
     "L142": ("lab",        "every placement fits inside the rack's `height-ru`, no two rack devices share a rack unit, and no two rack-face parts claim one rack unit on one face (error)", "move one of the two, or put one rack-face part on the other face"),
     "L143": ("lab",        "a rack-face part placed by `ru` over a rack device is reported with that host (warning)", "place it `on` the host with its `unit` so it moves with the host, or leave it by `ru` if it belongs to the rack rather than the device"),
+    "L144": ("device",     "members of one group that one configuration draws on one face hold one `rel-pos` each; alternatives (variant views, `only-in` builds) may share one (warning)", "give each member its own position, or move the unlike members - ESD jacks among earthing studs, lane lamps among port lamps - to a group of their own"),
+    "L145": ("device",     "a group is not named only for the class of its members - `ports` names no port family (warning)", "name the group for the family it holds (`sfp28`, `rj45-1g`), or a mixed block for the job it does and say so in `mixed:`"),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -8228,6 +8230,81 @@ def lint_device_cage_media_disagreement(path, data, lib_roots):
                  f"{media_name!r} cage, or the declared media is wrong")
 
 
+def lint_device_rel_pos(path, data):
+    """L144 - members of one group on one face hold one position each.
+
+    `rel-pos` is a member's place in its group, and the tree, the DCIM export
+    and an ENTITY-MIB walk all number the group by it. Two members at one
+    position leave the numbering ambiguous: nothing can tell which is the
+    first. A structural sweep found nine groups doing it (#414), and new
+    devices have since repeated it. Two shapes recur:
+
+    - Unlike parts in one group. On six Juniper MX chassis the `grounding`
+      group holds the ESD jacks at position 0 beside the first earthing stud
+      or plate, though the guides treat the wrist-strap ESD points and the
+      protective-earthing points as different things.
+    - Several parts per port indexed by the port. Lane lamps, or a link and a
+      speed lamp, each take their port's number, so four lamps share one.
+
+    READ PER CONFIGURATION AND PER FACE. Variant views of one face and bays
+    that `only-in` scopes to different builds are alternatives, never drawn
+    together, so they may share a position: a low-profile riser and a
+    full-height one in the same slot are the same position, built two ways.
+    Only members a single build draws on one face are compared. A position
+    reused on ANOTHER face is not reported here: front and rear ears that each
+    count from 1 are common and read unambiguously with their face.
+
+    A warning, because the cure renumbers or regroups members, and either
+    changes placement addressing - a major bump on a published device.
+    """
+    configs = data.get("configurations") or {"default": {}}
+    seen = {}                               # (view, group, rel-pos) -> ids
+    for cname, cfg in configs.items():
+        for _face, (vname, view) in sorted(resolve_views(data, cfg).items()):
+            vp = view_parts(view)
+            at = {}
+            for item in vp["bays"] + vp["placements"]:
+                if item.get("only-in") and cname not in item["only-in"]:
+                    continue
+                if item.get("group") is None or item.get("rel-pos") is None:
+                    continue
+                at.setdefault((item["group"], item["rel-pos"]), []).append(item.get("id"))
+            for (group, pos), ids in at.items():
+                if len(ids) > 1:
+                    # ONE CLASH AS ONE BUILD DRAWS IT. A union over builds would
+                    # list two alternatives side by side as if they clashed.
+                    seen.setdefault((vname, group, pos), sorted(ids))
+    by_group = {}
+    for (vname, group, pos), ids in sorted(seen.items(), key=lambda kv: (kv[0][0], kv[0][1], kv[0][2])):
+        by_group.setdefault((vname, group), []).append((pos, ids))
+    for (vname, group), clashes in by_group.items():
+        pos, ids = clashes[0]
+        more = f" (and {len(clashes) - 1} more position(s))" if len(clashes) > 1 else ""
+        warn(path, "L144", f"{vname}: group {group!r} gives {len(ids)} members position "
+                           f"{pos} - {', '.join(ids[:4])}{more}. A position names one "
+                           "member; give each its own, or move the unlike ones to "
+                           "their own group")
+
+
+# A GROUP NAME THAT IS ONLY THE CLASS OF ITS MEMBERS. The modelling guide's rule
+# is one group per port family, named for the family - `sfp28`, `qsfp28` - and
+# a block that spans media named for the job it does together. `ports` says
+# neither; it is what every port group is. `leds` is NOT here: fifty-odd devices
+# use it for the chassis status cluster (SYS, FAN, PSU lamps), which is one job,
+# and the guide states no rule for lamp group names (#414).
+CLASS_ONLY_GROUP_NAMES = {"ports", "port"}
+
+
+def lint_device_group_names(path, data):
+    """L145 - a port group is named for its family, not for being ports."""
+    for gname in (data.get("groups") or {}):
+        if gname in CLASS_ONLY_GROUP_NAMES:
+            warn(path, "L145", f"group {gname!r} names no port family. Name it for the "
+                               "family it holds (`sfp28`, `rj45-1g`), or, for a mixed "
+                               "block, for the job its members do together and say so "
+                               "in `mixed:`")
+
+
 def lint_device_groups(path, data, lib_roots):
     """L22 and L23 - what a port group promises, and what it actually holds.
 
@@ -10219,6 +10296,8 @@ def lint_device(path, validator, lib_roots):
         check_states(path, f"groups/{gname}", (gdef or {}).get("states"),
                      (gdef or {}).get("attrs"))
     lint_device_groups(path, data, lib_roots)
+    lint_device_rel_pos(path, data)
+    lint_device_group_names(path, data)
     lint_device_speed_vocabulary(path, data)
     lint_device_port_rate(path, data, lib_roots)
     lint_device_port_optics(path, data, lib_roots)
