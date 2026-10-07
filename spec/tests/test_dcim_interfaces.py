@@ -766,9 +766,9 @@ WITHHELD = {
     **{f"Cisco/A9K-MOD{n}-{v}": ["bay-0", "bay-1"]
        for n in (80, 160, 200, 400) for v in ("SE", "TR")},
     "Dell/riser-2s-16g": ["e3s-0", "e3s-1"],      # its slot-1 is given
-    "Juniper/MPC3E": ["mic0", "mic1"],
     "Juniper/MX-MPC1E-3D": ["mic0", "mic1"],
     "Juniper/MX-MPC2E-3D": ["mic0", "mic1"],
+    "Juniper/MX-MPC3E-3D": ["mic0", "mic1"],
     "Nokia/IOM4-e": ["mda-1", "mda-2"],
     "Nokia/IOM4-e-HS": ["mda-1", "mda-2"],
     "Nokia/IOM5-e": ["mda-1", "mda-2"],

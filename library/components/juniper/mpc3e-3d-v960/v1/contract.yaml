@@ -1,16 +1,15 @@
 format: 1
 kind: module
 name: mpc3e-3d-v960
-version: 1.1.0
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
-  Juniper MPC3E carrier - two MIC slots taking MIC3 and selected classic MICs (Table 12); the NG variants share the faceplate. Vertical form for the MX960 cage.
+  Juniper MPC3E carrier (MX-MPC3E-3D) - two MIC slots taking MIC3 and selected classic MICs (Table 12). The base SKU only; MPC3E-3D-NG and MPC3E-3D-NG-Q share the faceplate but not its wattage or its MIC column, and are not this contract. Vertical form for the MX960 cage.
 attrs:
-  model: MPC3E
+  model: MX-MPC3E-3D
   power-draw-max-w: 440
-  model-variants: MPC3E-3D-NG, MPC3E-3D-NG-Q
 provenance:
   size: 'registry + layout - the face is the slot geometry of its chassis
     family; positions are laid out from the module reference port
@@ -25,6 +24,24 @@ provenance:
     WITH-MICs FIGURE - 500 W at 55 C in the MX2008 and MX2010 books, 520 W in others, both
     against 'two 40 W MICs' - which is a reason to carry the card-alone number rather than a
     composite. The 440 W itself is identical in every guide that prints the row.
+    attrs.model was 'MPC3E' until roc-ops/Portrayal#417 - the table's Component column, where every
+    other MPC contract carries the Model Number column; it is MX-MPC3E-3D now. The NG SKUs print their
+    own rows ('| MPC3E-3D-NG | MPC3E-3D-NG | 534W ... |', '| MPC3E-3D-NG-Q | MPC3E-3D-NG-Q | 583W ... |')
+    and their own columns in Table 12, so they are not this contract and will be their own parts.
+  accepts: >-
+    MX Series Interface Module Reference, 'MIC/MPC Compatibility', Table 12 'MIC/MPC3 Compatibility' (PDF pp. 63-66): the
+    accepts lists are exactly the MPC3E column, restricted to the MICs this library models.
+    REMOVED by roc-ops/Portrayal#417, each an en dash in the MPC3E column and a release only under
+    MPC3E-3D-NG and -NG-Q: mic-3d-4xge-xfp (row MIC-3D-4XGE-XFP), mic-3d-10ge-sfp-e (row
+    MIC-3D-10GE-SFP-E, 24.2) and mic-3d-8oc3-2oc12-atm (row MIC-3D-8OC3-2OC12-ATM).
+    ADDED by roc-ops/Portrayal#417, each a release in the MPC3E column: mic-3d-1oc192-xfp (row
+    MIC-3D-1OC192-XFP, 13.3); mic-3d-4oc3oc12-1oc48 and mic-3d-8oc3oc12-4oc48 (the table prints the
+    row MIC-3D-4OC3OC12-1OC48, MIC-3D-8OC3OC12-4OC48 twice, at 13.3 and at 12.1 - supported either
+    way); mic-3d-8ds3-e3 (row MIC-3D-8DS3-E3, MIC-3D-8CHDS3-E3-B, 12.1); ms-mic-16g (row MS-MIC-16G,
+    13.2R2); mic-macsec-20ge (row MIC-MACSEC-20GE, 18.3R1). The MS-MIC-16G row carries two notes the
+    bays cannot express: only one MS-MIC-16G per MPC, and beside MIC3-3D-2X40GE-QSFPP,
+    MIC3-3D-10XGE-SFPP or MIC3-3D-1X100GE-CFP the pair does not meet NEBS. In the column but not
+    listed: MIC-3D-20GE-SFP-E and MIC-3D-8CHDS3-E3-B (not modelled in this library).
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'
@@ -39,9 +56,12 @@ bays:
     accepts:
     - juniper/mic-3d-20ge-sfp-v@1
     - juniper/mic-3d-2xge-xfp-v@1
-    - juniper/mic-3d-4xge-xfp-v@1
-    - juniper/mic-3d-10ge-sfp-e-v@1
-    - juniper/mic-3d-8oc3-2oc12-atm-v@1
+    - juniper/mic-3d-1oc192-xfp-v@1
+    - juniper/mic-3d-4oc3oc12-1oc48-v@1
+    - juniper/mic-3d-8oc3oc12-4oc48-v@1
+    - juniper/mic-3d-8ds3-e3-v@1
+    - juniper/mic-macsec-20ge-v@1
+    - juniper/ms-mic-16g-v@1
     - juniper/mic3-3d-10xge-sfpp-v@1
     - juniper/mic3-3d-2x40ge-qsfpp-v@1
     - juniper/mic3-3d-1x100ge-cfp-v@1
@@ -55,9 +75,12 @@ bays:
     accepts:
     - juniper/mic-3d-20ge-sfp-v@1
     - juniper/mic-3d-2xge-xfp-v@1
-    - juniper/mic-3d-4xge-xfp-v@1
-    - juniper/mic-3d-10ge-sfp-e-v@1
-    - juniper/mic-3d-8oc3-2oc12-atm-v@1
+    - juniper/mic-3d-1oc192-xfp-v@1
+    - juniper/mic-3d-4oc3oc12-1oc48-v@1
+    - juniper/mic-3d-8oc3oc12-4oc48-v@1
+    - juniper/mic-3d-8ds3-e3-v@1
+    - juniper/mic-macsec-20ge-v@1
+    - juniper/ms-mic-16g-v@1
     - juniper/mic3-3d-10xge-sfpp-v@1
     - juniper/mic3-3d-2x40ge-qsfpp-v@1
     - juniper/mic3-3d-1x100ge-cfp-v@1
