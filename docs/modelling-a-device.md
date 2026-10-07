@@ -407,6 +407,9 @@ Now populate. Reuse before building.
    names only where it sits. If a block spans media because the vendor treats
    it as one thing, a management cluster, a timing block, say so in `mixed:`
    and name the job they do together (L23).
+   ESD jacks go in a group named `esd` (term `Point`, role `furniture`), not in
+   `grounding`: a wrist-strap point is not where the chassis is earthed, and
+   sharing a group with the studs gives two unlike things one numbering (L144).
 
    **A card's ports take the card's groups.** A port on a module seated in a
    bay (a routing engine's console, a line card's QSFP28) is not a device

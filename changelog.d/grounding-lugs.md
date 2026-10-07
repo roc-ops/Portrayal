@@ -15,6 +15,24 @@
   pair hosts. `common/ground-lug@1` stays the nominal, unsized ground screw.
 
 ### Changed
+- The Juniper MX ground studs are pairs a two-hole lug spans (#828), each
+  device a major. `juniper/mx80` 2.0.0, `mx240` 2.0.0 and `mx480` 2.0.0 (a
+  vertical pair, was 14.0 / 13.2 / 13.2 apart) and `mx104` 3.0.0 (was 16.0)
+  place one `juniper/mx-ground-stud-pair-5-8@1` at the 0.625 in. their guides
+  state; `mx150` 2.0.0 places `juniper/mx-ground-stud-pair-3-4@1` at 3/4 in.,
+  inferred from the lug its guide names (was 13.0). The placements
+  `ground-stud-0` and `ground-stud-1` are gone: the pair is `ground-studs`, its
+  studs `ground-studs/1` and `/2`. `mx204` 4.0.0 seats
+  `juniper/mx204-ground-plate@2`, two 10-32 screws on the guide's 0.75 in.
+  (@1 drew 16.0, and is removed); the plate is the pair, its screws
+  `ground-plate/1` and `/2`. `mx304` 4.0.0 seats
+  `juniper/mx304-ground-plate@2`, two M6 screws one above the other on 5/8 in.,
+  the guide's "0.63-in. (16-mm) centers" (@1 drew 16.0, and is removed); its
+  screws are `ground-plate/1` and `/2`.
+- ESD jacks on the MX80, MX150, MX204, MX240, MX304 and MX480 are in a group of
+  their own, `esd` (Point, furniture), not `grounding` (#414). The MX204's laser label moved from `grounding` to a new
+  `furniture` group. A placement moving group is breaking for anything that
+  addressed it by group.
 - L116's depth arm reads where a spanned part PRESENTS, its placed `lift` plus
   its own seat out, rather than its `lift` alone. Nothing the library placed
   before changes: an LC bore presents at its own face. A stud presents at its

@@ -54,10 +54,16 @@ HOSTS = {
     "common/ground-stud-pair-1-1-4@1": ("stud-pair-1", "common/ground-screw-1-4@1", 3.66),
     "juniper/mx-ground-stud-pair-5-8@1": ("stud-pair-5-8", "juniper/mx-ground-stud@1", 8.0),
     "juniper/mx-ground-stud-pair-3-4@1": ("stud-pair-3-4", "juniper/mx-ground-stud@1", 8.0),
+    "juniper/mx204-ground-plate@2": ("stud-pair-3-4", "common/ground-screw-10-32@1", 2.79),
+    "juniper/mx304-ground-plate@2": ("stud-pair-5-8", "common/ground-screw-m6@1", 4.6),
 }
+# host -> the axis its studs' order derives, where it is not 0 (left to right):
+# the MX304's plate is vertical and composes its screws top then bottom
+AXIS = {"juniper/mx304-ground-plate@2": 90}
 # screw -> (head diameter, head height) from the standard each cites
 SCREWS = {"common/ground-screw-m6@1": (12.0, 4.6),
-          "common/ground-screw-1-4@1": (12.5, 3.66)}
+          "common/ground-screw-1-4@1": (12.5, 3.66),
+          "common/ground-screw-10-32@1": (9.47, 2.79)}
 # lug -> (tongue width, overall length without the stub, tab thickness, barrel OD)
 LUGS = {"generic/two-hole-lug-5-8@1": (11.68, 54.61, 2.03, 7.87),
         "generic/two-hole-lug-3-4@1": (10.67, 52.32, 1.27, 5.59),
@@ -150,13 +156,17 @@ def test_a_pair_host_composes_two_studs_at_the_interface_pitch(ref):
     assert manifest.spanned_slots(c, _contract, render_mod._connector_registry()) == ["1", "2"]
     m = _mates(ref)
     assert math.dist(m["1"], m["2"]) == pytest.approx(pitch, abs=1e-9)
-    assert m["1"][1] == m["2"][1] and m["1"][0] < m["2"][0]       # left to right
+    if AXIS.get(ref) == 90:
+        assert m["1"][0] == m["2"][0] and m["1"][1] < m["2"][1]   # top to bottom
+    else:
+        assert m["1"][1] == m["2"][1] and m["1"][0] < m["2"][0]   # left to right
     _, at, lift = manifest.presented_interface(c, _contract)
-    assert at == pytest.approx([(m["1"][0] + m["2"][0]) / 2, m["1"][1]])
+    assert at == pytest.approx([(a + b) / 2 for a, b in zip(m["1"], m["2"])])
     assert lift == pytest.approx(top)
     # each stud presents at that same height, on its own
     assert manifest.presented_interface(_contract(stud), _contract)[2] == pytest.approx(top)
-    assert manifest.spanning_axis(c, _contract, render_mod._connector_registry()) == 0
+    assert manifest.spanning_axis(c, _contract, render_mod._connector_registry()) == \
+        AXIS.get(ref, 0)
 
 
 @pytest.mark.parametrize("ref", sorted(HOSTS))
@@ -254,7 +264,7 @@ _x = 20.0
 for _i, _host in enumerate(sorted(HOSTS)):
     for _rot in (0, 90):
         PLACED[f"pair-{_i}-{_rot}"] = (_host, _rot, [_x, 5.0])
-        _x += 35.0
+        _x += 29.0
 CONFIG, VIEW = "ac", "rear"
 
 
@@ -305,8 +315,8 @@ def test_each_pair_is_a_slot_of_the_device_with_its_studs_as_bores(built):
         assert c["accepts"] == [PAIRS[iface][1]] and c["default"] is None
         assert c["bores"] == ["1", "2"]
         assert c["lift"] == pytest.approx(HOSTS[host][2])
-        # the placement's own turn plus the axis the studs lie on (0)
-        assert (c["rotate"] or 0) == rot
+        # the placement's own turn plus the axis the studs lie on
+        assert (c["rotate"] or 0) == (rot + AXIS.get(host, 0)) % 360
 
 
 def test_the_ring_lug_is_still_offered_on_each_stud_of_a_pair():
@@ -357,19 +367,24 @@ def _wire_box(parents, occ):
 
 @pytest.mark.parametrize("pid", sorted(PLACED))
 def test_the_wire_leaves_along_the_pair_right_or_down(built, pid):
-    """Side by side, the wire leaves to the right of the second stud; stood on
-    end (rotate 90), the first stud is on top and the wire leaves downward."""
+    """The wire leaves along the pair, past the second stud: the host's own
+    axis (its studs' order) turned by the placement. Side by side and unturned,
+    to the right; stood on end, downward; a vertical plate turned 90, left."""
     parents, host, occ = _lug(built, pid)
     second = by_path(_root(built), f"{pid}/2")
     sx, sy = device_point(parents, second, _contract(
         second.get("data-ref").rsplit(":", 1)[0])["connection-points"]["mate"]["at"])
     x0, y0, x1, y1 = _wire_box(parents, occ)
-    if PLACED[pid][1] == 0:
+    turn = (PLACED[pid][1] + AXIS.get(PLACED[pid][0], 0)) % 360
+    if turn == 0:
         assert x0 > sx and (y0 + y1) / 2 == pytest.approx(sy, abs=EPS)
-    else:
+    elif turn == 90:
         assert y0 > sy and (x0 + x1) / 2 == pytest.approx(sx, abs=EPS)
-    # the lug takes its host's turn: the pair's axis is 0 in the host's frame
-    assert_same_turn(parents, occ, host)
+    else:
+        assert turn == 180 and x1 < sx and (y0 + y1) / 2 == pytest.approx(sy, abs=EPS)
+    # the lug takes its host's turn, plus the pair's own axis in the host's frame
+    if not AXIS.get(PLACED[pid][0]):
+        assert_same_turn(parents, occ, host)
 
 
 @pytest.mark.parametrize("pid", sorted(PLACED))
@@ -474,3 +489,113 @@ def test_the_kit_seats_a_two_hole_lug_exactly_as_the_build_does(kit, built, pid)
     t = g["threeD"]
     assert t["named"] == [VIEW] and t["viewsSeated"] == 1 and t["faceSeated"] == 1
     assert not t["faceRefused"] and not t["faceFailed"]
+
+
+# --- 8. the Juniper MX chassis (#828, and the ESD regroup held from #414) --------
+
+# device -> (view, placement, host, rotate, stud-size)
+MX = {
+    "juniper/mx80": ("rear", "ground-studs", "juniper/mx-ground-stud-pair-5-8@1", 90, "10-32"),
+    "juniper/mx104": ("rear", "ground-studs", "juniper/mx-ground-stud-pair-5-8@1", None, "10-32"),
+    "juniper/mx150": ("rear", "ground-studs", "juniper/mx-ground-stud-pair-3-4@1", None, "10-32"),
+    "juniper/mx204": ("rear", "ground-plate", "juniper/mx204-ground-plate@2", None, "10-32"),
+    "juniper/mx240": ("rear", "ground-studs", "juniper/mx-ground-stud-pair-5-8@1", 90, "1/4-20"),
+    "juniper/mx480": ("rear", "ground-studs", "juniper/mx-ground-stud-pair-5-8@1", 90, "1/4-20"),
+    "juniper/mx304": ("rear", "ground-plate", "juniper/mx304-ground-plate@2", None, "M6"),
+}
+# device -> {ESD jack: rel-pos} in the `esd` group
+ESD = {
+    "juniper/mx80": {"esd-rear-jack": 0},
+    "juniper/mx150": {"esd-rear-jack": 0},
+    "juniper/mx204": {"esd-front-jack": 0, "esd-rear-jack": 1},
+    "juniper/mx240": {"esd-front-jack": 0, "esd-rear-jack": 1},
+    "juniper/mx304": {"esd-front-jack": 0, "esd-rear-jack": 1},
+    "juniper/mx480": {"esd-front-jack": 0, "esd-rear-jack": 1},
+}
+
+
+def _placements(device):
+    d = _yaml(LIB / "devices" / device / "device.yaml")
+    return d, {(v, p["id"]): p for v, b in d["views"].items()
+               for p in ((b or {}).get("components") or {}).get("placements") or []}
+
+
+@pytest.mark.parametrize("device", sorted(MX))
+def test_each_mx_pair_is_one_placement_of_a_pair_host(device):
+    view, pid, host, rot, size = MX[device]
+    d, placed = _placements(device)
+    p = placed[(view, pid)]
+    assert (p["ref"], p.get("rotate"), p["group"], p["rel-pos"]) == (host, rot, "grounding", 0)
+    assert p["attrs"]["stud-size"] == size
+    # nothing else is in `grounding`, and no single MX stud is placed any more
+    assert [k for k, q in placed.items() if q.get("group") == "grounding"] == [(view, pid)]
+    assert not [q for q in placed.values() if q["ref"] == "juniper/mx-ground-stud@1"]
+    # and the device says where its pitch came from
+    prov = d["provenance"]
+    note = (prov.get("ground-stud-pitch") or prov.get("ground-plate"))["note"]
+    assert any(w in note for w in ("0.625-in.", "0.75-in.", "0.63-in.", "INFERRED"))
+
+
+@pytest.mark.parametrize("device", sorted(set(MX) - {"juniper/mx204", "juniper/mx304"}))
+def test_each_mx_stud_cutout_moved_with_its_stud(device):
+    """MX cutouts are named for the studs and centred on them: each stud's
+    axis, through the host's placement, is the centre of its cutout."""
+    view, pid, host, rot, _ = MX[device]
+    d, placed = _placements(device)
+    p = placed[(view, pid)]
+    c = _contract(host)
+    cuts = {q["id"]: q for q in d["views"][view]["panel"]["cutouts"]}
+    pitch = PAIRS[c["interface"]][0]
+    centres = []
+    for sid, cid in (("1", "ground-stud-0"), ("2", "ground-stud-1")):
+        at = manifest.seat_point(p["at"], c["size"], p.get("rotate"), _mates(host)[sid])
+        q = cuts[cid]
+        centre = (q["at"][0] + q["size"][0] / 2, q["at"][1] + q["size"][1] / 2)
+        assert at == pytest.approx(centre, abs=1e-6), (sid, at, centre)
+        centres.append(centre)
+    assert math.dist(*centres) == pytest.approx(pitch, abs=1e-9)
+
+
+def test_the_mx150_pitch_is_inferred_and_says_so():
+    d = _yaml(LIB / "devices/juniper/mx150/device.yaml")
+    e = d["provenance"]["ground-stud-pitch"]
+    assert e["confidence"] == "estimated" and "INFERRED" in e["note"] and "LCC10-14BW" in e["note"]
+    assert "ground-pair-pitch" in {g["what"] for g in d["gaps"]}
+
+
+def test_the_mx304_plate_reads_its_guides_16_mm_as_five_eighths():
+    """The guide writes "0.63-in. (16-mm)": the lug-table rounding of 0.625
+    and the metric rounding of 15.875. The plate is a 5/8 in. pair of M6
+    screws, stood on end, the same plate outline as before, and the device
+    carries no gap about it."""
+    c = _contract("juniper/mx304-ground-plate@2")
+    assert c["interface"] == "stud-pair-5-8" and c["size"] == {"w": 16.0, "h": 36.0}
+    assert "0.63" in c["provenance"]["holes"] and "15.875" in c["provenance"]["holes"]
+    assert not (LIB / "components/juniper/mx304-ground-plate/v1").exists()
+    d = _yaml(LIB / "devices/juniper/mx304/device.yaml")
+    assert "ground-pair-pitch" not in {g["what"] for g in d["gaps"]}
+    assert "0.63-in." in d["provenance"]["ground-stud-pitch"]["note"]
+
+
+@pytest.mark.parametrize("device", sorted(ESD))
+def test_esd_jacks_are_their_own_group(device):
+    d, placed = _placements(device)
+    g = d["groups"]["esd"]
+    assert (g["term"], g["role"], g["index-origin"]) == ("Point", "furniture", 0)
+    got = {pid: p["rel-pos"] for (v, pid), p in placed.items() if p.get("group") == "esd"}
+    assert got == ESD[device]
+    assert all(p["ref"] == "common/esd-jack@1" for (v, pid), p in placed.items() if pid in got)
+
+
+def test_the_mx204_laser_label_is_furniture_and_its_empty_mark_is_gone():
+    d, placed = _placements("juniper/mx204")
+    p = placed[("front", "laser-warning")]
+    assert (p["group"], p["rel-pos"]) == ("furniture", 0)
+    assert d["groups"]["furniture"]["role"] == "furniture"
+    assert not [m for m in d["views"]["front"]["silkscreen"] if m.get("for") == "laser-warning"]
+
+
+def test_the_l144_baseline_holds_no_mx_entry_any_more():
+    base = json.loads((LIB / "lint-baseline.json").read_text())
+    for name in ("mx80", "mx150", "mx204", "mx240", "mx304", "mx480"):
+        assert "L144" not in base.get(f"devices/juniper/{name}/device.yaml", {}), name

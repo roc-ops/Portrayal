@@ -633,9 +633,24 @@ side sends the wire right; a pair stood on end is the host placed at `rotate: 90
 puts the first stud on top and sends the wire down. Turning a lug the other way along its
 pair is #829, which gives the three pair interfaces `turns: [0, 180]`.
 
+**The Juniper MX chassis are the first placed.** The MX80, MX240 and MX480 pairs (drawn
+14.0, 13.2 and 13.2 apart, one stud above the other) are each one
+`juniper/mx-ground-stud-pair-5-8@1` at `rotate: 90`, at the 0.625 in. their guides give; the
+MX104's (16.0, side by side) is the same host unturned. The MX150's 13.0 is
+`juniper/mx-ground-stud-pair-3-4@1`: no MX150 document gives the spacing, and the 3/4 in. is
+inferred from the lug its Table 22 names, the Panduit LCC10-14BWL. Each pair moved
+symmetrically about the midpoint the photographs placed, with its cutouts. The MX204's plate
+became `juniper/mx204-ground-plate@2`, two 10-32 screws on the 0.75 in. its guide states
+(@1 drew 16.0). The MX304's plate became `juniper/mx304-ground-plate@2`, two M6 screws
+stood one above the other on 5/8 in.: its guide's "0.63-in. (16-mm) centers" is the 5/8 in.
+pattern, 0.63 the lug-table rounding of 0.625 and 16 the metric rounding of 15.875 (@1 drew
+16.0, the metric figure taken literally). So section 13's census moves:
+`juniper/mx-ground-stud@1` is placed by no device and composed by the two MX hosts, leaving
+135 single-stud placements on 56 devices, 106 of them with a `stud-size` on 34 devices,
+beside the seven pair placements.
+
 **Not built:** a lug whose tongue is bent at 90 or 45 degrees (the UfiSpace S96xx and the
-Nokia SR-1 documents call for one); a pair whose documented pitch is not one of the three
-(the MX304's and the LMFS-F's 16 mm, 0.125 off 5/8 in. against L116's 0.01).
+Nokia SR-1 documents call for one); a pair whose documented pitch is not one of the three.
 
 `spec/tests/test_two_hole_lugs.py` holds the registry, the screws, every host's pitch,
 midpoint, depth and axis under L115 and L116, each lug drawn across, every host placed side

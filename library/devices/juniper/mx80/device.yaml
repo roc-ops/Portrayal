@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx80
-version: 1.0.20
+version: 2.0.0
 maturity: modelled
 manufacturer: Juniper
 model: MX80
@@ -72,6 +72,18 @@ provenance:
       the hardware guide, grounding points specifications: two threaded holes that fit SAE 10-32
       screws, spaced at 0.625 in. (15.86 mm) centres, for one two-hole cable lug: the `stud-size` of
       both studs.
+  ground-stud-pitch:
+    confidence: datasheet
+    note: >-
+      the hardware guide, grounding points specifications: 0.625-in. (15.86-mm)
+      centres, which is 5/8 in., 15.875; the guide rounds the conversion.
+      `ground-studs` is one placement of juniper/mx-ground-stud-pair-5-8@1, which composes
+      juniper/mx-ground-stud@1 twice at exactly 15.875 (L116) and presents
+      `stud-pair-5-8`, so one two-hole lug (generic/two-hole-lug-5-8@1) lands across the pair
+      and the ring lug still lands on either stud, `ground-studs/1` and `/2`.
+      The two studs were drawn 14.0 apart; they moved symmetrically about the
+      midpoint the photograph placed, (394.75, 19.75), one stud above the other, so the host is placed at
+      `rotate: 90` and a lug's wire leaves downward, and their cutouts with them.
 
 attrs:
   physical:
@@ -172,7 +184,14 @@ groups:
     role: furniture
     index-origin: 0
     description: the protective-earthing stud pair under the rear earth
-      symbol
+      symbol (guide Figure 23)
+  esd:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: >-
+      the wrist-strap ESD point at the rear right (guide Figure 64, ESD Points; the
+      grounding points are Figure 23)
 views:
   front:
     size:
@@ -282,8 +301,8 @@ views:
       cutouts:
         - {id: clk, at: [65.6, 72.6], size: [4.83, 4.83], shape: circle}
         - {id: sync, at: [102.6, 72.6], size: [4.83, 4.83], shape: circle}
-        - {id: ground-stud-0, at: [392.0, 10.0], size: [5.5, 5.5], shape: circle}
-        - {id: ground-stud-1, at: [392.0, 24.0], size: [5.5, 5.5], shape: circle}
+        - {id: ground-stud-0, at: [392.0, 9.0625], size: [5.5, 5.5], shape: circle}
+        - {id: ground-stud-1, at: [392.0, 24.9375], size: [5.5, 5.5], shape: circle}
         - {id: esd-rear, at: [428.0, 8.0], size: [4.0, 4.0], shape: circle}
     silkscreen:
       - {at: [258.0, 20.0], text: MPC 0, font-size: 3.2, anchor: start, fill: '#3a3e43', for: chassis}
@@ -298,9 +317,8 @@ views:
            accepts: [juniper/mx80-rear-cover@1], default: juniper/mx80-rear-cover@1,
            group: service-covers, rel-pos: 0}
       placements:
-        - {id: esd-rear-jack, ref: common/esd-jack@1, at: [427.0, 7.0], for: chassis, group: grounding, rel-pos: 0}
-        - {id: ground-stud-0, ref: juniper/mx-ground-stud@1, at: [391.25, 9.25], for: chassis, group: grounding, rel-pos: 0, attrs: {stud-size: '10-32'}}
-        - {id: ground-stud-1, ref: juniper/mx-ground-stud@1, at: [391.25, 23.25], for: chassis, group: grounding, rel-pos: 1, attrs: {stud-size: '10-32'}}
+        - {id: esd-rear-jack, ref: common/esd-jack@1, at: [427.0, 7.0], for: chassis, group: esd, rel-pos: 0}
+        - {id: ground-studs, ref: juniper/mx-ground-stud-pair-5-8@1, at: [383.3125, 16.25], rotate: 90, for: chassis, group: grounding, rel-pos: 0, attrs: {stud-size: '10-32'}}
         - {id: clk, ref: std/smb@1, at: [65.6, 72.6], group: timing, rel-pos: 0,
            attrs: {function: external clock input}}
         - {id: sync, ref: std/smb@1, at: [102.6, 72.6], group: timing, rel-pos: 1,

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx104
-version: 2.0.21
+version: 3.0.0
 maturity: modelled
 manufacturer: Juniper
 model: MX104
@@ -73,6 +73,17 @@ provenance:
       the hardware guide, grounding points specifications: two threaded holes that fit SAE 10-32
       screws, spaced at 0.625 in. (15.86 mm) centres, for one two-hole cable lug: the `stud-size` of
       both studs.
+  ground-stud-pitch:
+    confidence: datasheet
+    note: >-
+      the hardware guide, grounding points specifications: 0.625-in. (15.86-mm)
+      centres, which is 5/8 in., 15.875; the guide rounds the conversion.
+      `ground-studs` is one placement of juniper/mx-ground-stud-pair-5-8@1, which composes
+      juniper/mx-ground-stud@1 twice at exactly 15.875 (L116) and presents
+      `stud-pair-5-8`, so one two-hole lug (generic/two-hole-lug-5-8@1) lands across the pair
+      and the ring lug still lands on either stud, `ground-studs/1` and `/2`.
+      The two studs were drawn 16.0 apart; they moved symmetrically about the
+      midpoint the photograph placed, (205.0, 136.0), side by side, so a lug's wire leaves to the right, and their cutouts with them.
 
 attrs:
   physical:
@@ -271,15 +282,14 @@ views:
       decor:
         - {at: [186.0, 128.0], size: [40.0, 16.0], rx: 1.2, fill: '#c9ccd0'}
       cutouts:
-        - {id: ground-stud-0, at: [194.0, 133.0], size: [6.0, 6.0], shape: circle}
-        - {id: ground-stud-1, at: [210.0, 133.0], size: [6.0, 6.0], shape: circle}
+        - {id: ground-stud-0, at: [194.0625, 133.0], size: [6.0, 6.0], shape: circle}
+        - {id: ground-stud-1, at: [209.9375, 133.0], size: [6.0, 6.0], shape: circle}
     silkscreen:
       - {at: [206.0, 124.0], path: 'M 0 -4.2 A 4.2 4.2 0 1 0 0.01 -4.2 Z M -2.4
           -1.1 H 2.4 M -1.6 0.5 H 1.6 M -0.7 2.1 H 0.7', fill: '#e8eaec', for: chassis}
     components:
       placements:
-        - {id: ground-stud-0, ref: juniper/mx-ground-stud@1, at: [193.50, 132.50], for: chassis, group: grounding, rel-pos: 0, attrs: {stud-size: '10-32'}}
-        - {id: ground-stud-1, ref: juniper/mx-ground-stud@1, at: [209.50, 132.50], for: chassis, group: grounding, rel-pos: 1, attrs: {stud-size: '10-32'}}
+        - {id: ground-studs, ref: juniper/mx-ground-stud-pair-5-8@1, at: [193.5625, 132.5], for: chassis, group: grounding, rel-pos: 0, attrs: {stud-size: '10-32'}}
 
   left:
     size:

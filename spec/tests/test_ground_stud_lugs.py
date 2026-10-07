@@ -43,7 +43,8 @@ SVG = "{http://www.w3.org/2000/svg}"
 IFACE, LUG = "terminal-stud", "generic/ring-lug@1"
 # the sized ground screws (#830) a pair host composes; test_two_hole_lugs.py
 # holds them and the pair hosts.
-SIZED_SCREWS = ("common/ground-screw-m6@1", "common/ground-screw-1-4@1")
+SIZED_SCREWS = ("common/ground-screw-m6@1", "common/ground-screw-1-4@1",
+                "common/ground-screw-10-32@1")
 
 # part -> what it was before it became a slot, and where a lug lands on it.
 #   axis   the stud axis in the part's own frame
@@ -84,8 +85,21 @@ OLD_SHIFT = {"stud-tr": (0.0, 0.0), "stud-bl": (-15.3, 15.3), "stud-br": (0.0, 1
 CENSUS = {
     "common/ground-lug@1": (63, 40),
     "common/ground-stud@1": (71, 15),
-    "juniper/mx-ground-stud@1": (10, 5),
     CASA: (1, 1),
+}
+# juniper/mx-ground-stud@1 IS PLACED BY NO DEVICE SINCE #828: the five MX
+# chassis that placed it twice each place one pair host instead, which
+# composes it twice (test_two_hole_lugs.py), and the MX204's and MX304's plates
+# became pairs of 10-32 and M6 screws. Those pairs state the size the guides give, on the pair
+# placement.
+PAIRED = {
+    "juniper/mx80": {"ground-studs": "10-32"},
+    "juniper/mx104": {"ground-studs": "10-32"},
+    "juniper/mx150": {"ground-studs": "10-32"},
+    "juniper/mx204": {"ground-plate": "10-32"},
+    "juniper/mx240": {"ground-studs": "1/4-20"},
+    "juniper/mx480": {"ground-studs": "1/4-20"},
+    "juniper/mx304": {"ground-plate": "M6"},
 }
 
 UFI2 = {"ground-1": "M4", "ground-2": "M4"}
@@ -118,11 +132,6 @@ STUD_SIZE = {
     "edgecore/dcs500": {"ground-0": "M5", "ground-1": "M5"},
     "edgecore/ais800-64d": {"ground-screw-1": "M6", "ground-screw-2": "M6"},
     "edgecore/ais800-64o": {"ground-screw-1": "M6", "ground-screw-2": "M6"},
-    "juniper/mx104": {"ground-stud-0": "10-32", "ground-stud-1": "10-32"},
-    "juniper/mx150": {"ground-stud-0": "10-32", "ground-stud-1": "10-32"},
-    "juniper/mx80": {"ground-stud-0": "10-32", "ground-stud-1": "10-32"},
-    "juniper/mx240": {"ground-stud-0": "1/4-20", "ground-stud-1": "1/4-20"},
-    "juniper/mx480": {"ground-stud-0": "1/4-20", "ground-stud-1": "1/4-20"},
     "nokia/nfxs-d-ba": {"ground-left": "1/4 in", "ground-right": "1/4 in"},
     "nokia/nfxs-e-bb": {"ground": "1/4 in"},
     "nokia/nfxs-f-bb": {"ground": "1/4 in"},
@@ -151,8 +160,7 @@ BUILT = {
     "readylinks/gl-12xb-240d": ("base", "rear", "common/ground-stud@1", ["ground-stud"]),
     "casa/c40g": ("base", "rear", CASA, ["ground-studs-rear/stud-tr"]),
     # a pair, one stud above the other, both seated
-    "juniper/mx240": ("base", "rear", "juniper/mx-ground-stud@1",
-                      ["ground-stud-0", "ground-stud-1"]),
+    "ufispace/s9600-102xc": ("dc", "rear", "common/ground-lug@1", ["ground-1", "ground-2"]),
     # a pair side by side, both seated
     "ufispace/s9500-22xst": ("dc", "right", "common/ground-lug@1", ["ground-1", "ground-2"]),
     # a placement turned 90
@@ -314,8 +322,7 @@ def test_the_parts_that_present_terminal_stud_and_the_one_lug_that_mates_it():
 
 def test_what_is_out_of_scope_is_still_not_a_seat():
     for ref in ("cisco/a9k-ground-pad@1", "common/ground-screw-washer@1", "casa/ground-bolts@1",
-                "edgecore/agr-ground-plate@1", "juniper/mx204-ground-plate@1",
-                "juniper/mx304-ground-plate@1", "common/ground-symbol@1",
+                "edgecore/agr-ground-plate@1", "common/ground-symbol@1",
                 "nokia/sr-1-dc-terminal-block@1"):
         c = _contract(ref)
         assert "interface" not in c, ref
@@ -345,8 +352,8 @@ def test_the_census_of_ground_stud_placements(placed):
     got = {ref: (n, len(devs)) for ref, (n, devs) in counts.items()}
     assert got == CENSUS
     assert all(n > 0 and d > 0 for n, d in got.values())
-    assert sum(n for n, _ in got.values()) == 145
-    assert len({where for where, _, _ in placed}) == 61
+    assert sum(n for n, _ in got.values()) == 135
+    assert len({where for where, _, _ in placed}) == 56
 
 
 @pytest.fixture(scope="module")
@@ -384,7 +391,7 @@ def test_every_single_stud_placement_is_a_slot_of_its_device_offering_the_lug(pl
         want = render_mod.seat_point(p["at"], s["size"], p.get("rotate"), list(s["axis"]))
         assert c["mate"] == pytest.approx(want, abs=EPS)
         seen += 1
-    assert seen == 144
+    assert seen == 134
 
 
 def test_the_only_turned_placements_are_turned_90(placed):
@@ -430,22 +437,22 @@ def test_stud_size_is_stated_where_a_document_states_it_and_nowhere_else(placed)
         if size is not None:
             got.setdefault(device, {})[p["id"]] = size
     assert got == STUD_SIZE
-    assert sum(len(v) for v in got.values()) == 116 and len(got) == 39
+    assert sum(len(v) for v in got.values()) == 106 and len(got) == 34
     # every device that states one says where it read it
-    for device in STUD_SIZE:
+    for device in (*STUD_SIZE, *PAIRED):
         entry = _device(device)["provenance"]["ground-stud-size"]
         assert "`stud-size`" in entry["note"] and entry["confidence"] == "datasheet", device
     # and no other file in the library states the attribute at all
     stated = [f for f in [*(LIB / "components").rglob("v*/contract.yaml"),
                           *(LIB / "devices").rglob("device.yaml")]
               if re.search(r"\bstud-size\s*:", f.read_text())]
-    assert sorted(f"{f.parents[1].name}/{f.parent.name}" for f in stated) == sorted(STUD_SIZE)
+    assert sorted(f"{f.parents[1].name}/{f.parent.name}" for f in stated) == sorted({**STUD_SIZE, **PAIRED})
 
 
 def test_stud_size_is_text_and_changes_no_part():
     """The interface claims no size and the lug is one nominal lug: a
     placement's `stud-size` is a fact carried beside the slot."""
-    assert {v for sizes in STUD_SIZE.values() for v in sizes.values()} == \
+    assert {v for sizes in (*STUD_SIZE.values(), *PAIRED.values()) for v in sizes.values()} == \
         {"M4", "M5", "M6", "10-32", "1/4-20", "1/4 in"}
     for ref in (*SINGLE, CASA_STUD, LUG):
         assert "stud-size" not in (_contract(ref).get("fields") or {}), ref
@@ -717,22 +724,21 @@ def _overlap(a, b):
 
 
 def test_two_lugs_on_a_pair_drawn_one_above_the_other_overlap(built):
-    """A RECORDED FACT, NOT A WANTED ONE. The MX240's two grounding points
-    take ONE two-hole lug; they are drawn 13.2 apart, one above the other. A
-    one-hole lug on each is 24.65 long below its axis, so the upper lug lies
-    across the lower stud and the lower lug's ring. A two-hole lug is later
-    work (docs/connectors-dc-terminal-design.md section 13)."""
-    device = "juniper/mx240"
-    upper = _lug(built, device, "ground-stud-0")
-    lower = _lug(built, device, "ground-stud-1")
+    """A RECORDED FACT, NOT A WANTED ONE. The UfiSpace S9600-102XC's two
+    grounding holes take ONE two-hole lug; they are drawn 14.7 apart, one
+    above the other, and no document held gives their pitch, so they are not
+    a pair host (#828 defers them). A one-hole lug on each is 24.65 long below
+    its axis, so the upper lug lies across the lower one's ring. (This case was
+    the MX240's until #828 made its studs a pair a two-hole lug spans.)"""
+    device = "ufispace/s9600-102xc"
+    upper = _lug(built, device, "ground-1")
+    lower = _lug(built, device, "ground-2")
     parents = upper[1]
-    (ux, uy), (lx, ly) = (device_point(parents, h, (3.5, 3.5)) for h in (upper[2], lower[2]))
-    assert ux == pytest.approx(lx) and ly - uy == pytest.approx(13.2)
+    (ux, uy), (lx, ly) = (device_point(parents, h, (3.5, 9.8)) for h in (upper[2], lower[2]))
+    assert ux == pytest.approx(lx) and ly - uy == pytest.approx(14.7)
     a, b = _lug_box(parents, upper[3]), _lug_box(parents, lower[3])
     assert _overlap(a, b)
-    assert a[3] - b[1] == pytest.approx(27.4 - 13.2)        # 14.2 of the upper lug's length
-    # the upper lug's sleeve, 5.65 to 14.65 below its axis, is over the lower stud's axis
-    assert uy + 5.65 < ly < uy + 14.65
+    assert a[3] - b[1] == pytest.approx(27.4 - 14.7)        # 12.7 of the upper lug's length
 
 
 def test_two_lugs_on_a_pair_at_its_documented_pitch_still_overlap(built):

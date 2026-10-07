@@ -1,0 +1,68 @@
+format: 1
+kind: component
+name: mx204-ground-plate
+version: 2.0.0
+class: ground
+# THE PLATE IS A PAIR OF STUDS ONE TWO-HOLE LUG LANDS ACROSS (#828,
+# docs/connectors-dc-terminal-design.md section 13.7): it presents
+# `stud-pair-3-4` at the midpoint of its two screws, and each screw is a slot
+# of its own, `<placement>/1` and `<placement>/2`. The two levels are
+# mutually exclusive (L115).
+interface: stud-pair-3-4
+behaviour: mounts
+profile: networking
+description: >-
+  Protective-earthing landing on the MX204 rear left panel - a bright recessed
+  metal plate with two 10-32 screws on 3/4 in. centres, under the panel's
+  earth symbol, that one two-hole lug lands across. The guide requires this
+  terminal permanently connected to earth in addition to the power-cord
+  ground pin.
+attrs:
+  model: MX204 grounding terminal
+  connector: stud-pair-3-4
+provenance:
+  size: >-
+    estimated - the plate outline, 36 x 15, read off mx204-rear-high.jpg and not
+    measured against anything of known size (provenance.plate); unchanged from @1.
+  holes: >-
+    datasheet - THE PITCH IS THE GUIDE'S, 3/4 IN. The MX204 hardware guide says
+    twice that the grounding points are spaced at 0.75-in. (19.1-mm) centres
+    (Ground the MX204 Router; Grounding Points on the Router, Figure 17). The
+    screws are composed on 19.05 centres, the `stud-pair-3-4` pitch, centred
+    where @1 centred its holes (x 18.0 of the plate, y 7.5).
+    @1 DREW THEM 16.0 APART, measured off the 600 dpi g009862 render (lug
+    circles at x 38.6 and 54.6 of the rack face): a drawing, overruled by the
+    guide's stated figure. The drawing's scale on that axis is not wrong
+    elsewhere on the face, so the 3.05 is recorded rather than explained.
+  thread: >-
+    sources-disagree - the same guide says the studs are sized for 10-32 screws
+    (Grounding Points on the Router, and "Two threaded holes ... fit 10-32
+    screws") and, in Ground the MX204 Router, for M5 pan head screws supplied in
+    the accessory kit. 10-32 is drawn, as @1 described it: two places say it
+    and one says M5. The two heads differ by 0.03 in diameter.
+  screws: >-
+    registry - common/ground-screw-10-32@1, the ASME B18.6.3 No. 10 pan head,
+    9.47 across. @1's outer lug circles measured about 9.5 on the same render,
+    which is the head drawn here.
+  plate: 'estimated - the bright plate outline is read off mx204-rear-high.jpg
+    (recessed rectangle around both holes); its 36 x 15 mm extent was NOT
+    measured against anything of known size and is approximate. Unchanged from
+    @1.'
+  seat: >-
+    THE PAIR PRESENTS AT THE TOP OF ITS SCREW HEADS, 2.79 off the plate:
+    `mate` is the midpoint of the two screws' own mate points and states
+    `seat-out`, the height each screw presents at, as every pair host does.
+size:
+  w: 36.0
+  h: 15.0
+size-confidence: {w: estimated, h: estimated}
+elements: {}
+parts:
+  # FIRST SCREW, then second, left to right: the pair's axis, so a lug's wire
+  # leaves to the right (manifest.spanning_axis).
+  - {ref: common/ground-screw-10-32@1, id: '1', at: [3.74, 2.765]}
+  - {ref: common/ground-screw-10-32@1, id: '2', at: [22.79, 2.765]}
+connection-points:
+  # the midpoint of (8.475, 7.5) and (27.525, 7.5)
+  mate: {at: [18.0, 7.5], direction: front, seat-out: 2.79}
+skins: [default]

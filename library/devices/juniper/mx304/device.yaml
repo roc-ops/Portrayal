@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx304
-version: 3.0.14
+version: 4.0.0
 maturity: modelled
 manufacturer: Juniper
 model: MX304
@@ -79,9 +79,26 @@ provenance:
       use - carried in attrs. GM/PTP supports 1-GbE and 10-GbE optics per the same topic
   grounding:
     note: >-
-      guide grounding specifications + photo - two threaded holes for M6 pan-head screws on 16 mm
-      centres at the rear right, under the earth symbol; the protective earthing terminal bracket
-      attaches here. Modelled as juniper/mx304-ground-plate
+      guide grounding specifications + photo - two threaded holes for M6 pan-head screws at the
+      rear right, under the earth symbol; the protective earthing terminal bracket attaches here.
+      Modelled as juniper/mx304-ground-plate@2, which presents `stud-pair-5-8`, so one two-hole
+      lug (generic/two-hole-lug-5-8@1) lands across the pair and the ring lug still lands on
+      either screw, `ground-plate/1` and `/2`; a lug's wire leaves downward
+  ground-stud-pitch:
+    confidence: datasheet
+    note: >-
+      the guide's "0.63-in. (16-mm) centers" is the 5/8 in. pattern, 15.875: 0.63 in. is how
+      two-hole lug tables print 5/8 in. (Panduit LCD6-10A-L, a 5/8 in. lug, is listed at 0.63
+      hole spacing) and 16 mm is the metric rounding of 15.875. A literal 16.0 would be 0.125
+      off the pitch of every 5/8 in. lug. @1 drew the holes 16.0 apart; they moved symmetrically
+      about the same centre inside the plate, and the plate, its cutout and the earth symbol did
+      not move (#828)
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      the guide: two threaded holes on the rear side fit M6 pan head screws, and the grounding
+      lug is secured with M6 pan head screws: the `stud-size` of the plate's pair. The guide
+      also calls the terminal "sized for M6 hex screws"
   esd:
     note: >-
       guide Figure 11 (ESD Points) - one point on the front badge strip top, one on the rear right
@@ -251,6 +268,15 @@ groups:
     term: Point
     role: furniture
     index-origin: 0
+    description: the rear protective-earthing plate, two M6 screws on 5/8 in. centres
+      (guide Figure 28)
+  esd:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: >-
+      the wrist-strap ESD points, on the front badge strip and the rear right
+      (guide Figure 11, ESD Points)
 views:
   front:
     size:
@@ -289,7 +315,7 @@ views:
            accepts: [juniper/mx304-lmic16@1, juniper/jnp304-blnk@1],
            default: juniper/mx304-lmic16@1, group: lmics, rel-pos: 1}
       placements:
-        - {id: esd-front-jack, ref: common/esd-jack@1, at: [430.9, 2.3], for: chassis, group: grounding, rel-pos: 0}
+        - {id: esd-front-jack, ref: common/esd-jack@1, at: [430.9, 2.3], for: chassis, group: esd, rel-pos: 0}
   rear:
     size:
       w: 440.8
@@ -354,7 +380,7 @@ views:
         - {id: fan-2, at: [334.2, 1.5], size: {w: 82.0, h: 85.5},
            accepts: [juniper/mx304-fan@1], default: juniper/mx304-fan@1, group: fans, rel-pos: 2}
       placements:
-        - {id: esd-rear-jack, ref: common/esd-jack@1, at: [429.1, 7.7], for: chassis, group: grounding, rel-pos: 0}
+        - {id: esd-rear-jack, ref: common/esd-jack@1, at: [429.1, 7.7], for: chassis, group: esd, rel-pos: 1}
         - {id: clk-10mhz-out, ref: std/smb@1, at: [96.19, 9.19], group: timing, rel-pos: 0,
            attrs: {function: 10 MHz clock output}}
         - {id: clk-10mhz-in, ref: std/smb@1, at: [104.69, 9.19], group: timing, rel-pos: 1,
@@ -377,8 +403,8 @@ views:
         - {id: led-fan-0, ref: common/led-dot@1, at: [201.6, 77.6], for: fan-0, group: fan-leds, rel-pos: 0}
         - {id: led-fan-1, ref: common/led-dot@1, at: [310.7, 77.6], for: fan-1, group: fan-leds, rel-pos: 1}
         - {id: led-fan-2, ref: common/led-dot@1, at: [419.3, 77.6], for: fan-2, group: fan-leds, rel-pos: 2}
-        - {id: ground-plate, ref: juniper/mx304-ground-plate@1, at: [422.4, 24.5],
-           group: grounding, rel-pos: 0}
+        - {id: ground-plate, ref: juniper/mx304-ground-plate@2, at: [422.4, 24.5],
+           group: grounding, rel-pos: 0, attrs: {stud-size: M6}}
   left:
     size:
       w: 610.0

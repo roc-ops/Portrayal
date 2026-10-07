@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx480
-version: 1.1.25
+version: 2.0.0
 maturity: modelled
 manufacturer: Juniper
 model: MX480
@@ -74,6 +74,20 @@ provenance:
       the hardware guide, chassis grounding points specifications: two threaded inserts (PEM nuts)
       that fit UNC 1/4-20 screws, spaced at 0.625 in. (15.86 mm) centres, for one two-hole cable lug:
       the `stud-size` of both studs.
+  ground-stud-pitch:
+    confidence: datasheet
+    note: >-
+      the hardware guide, chassis grounding points specifications: 0.625-in.
+      (15.86-mm) centres, which is 5/8 in., 15.875; the guide rounds the
+      conversion.
+      `ground-studs` is one placement of juniper/mx-ground-stud-pair-5-8@1, which composes
+      juniper/mx-ground-stud@1 twice at exactly 15.875 (L116) and presents
+      `stud-pair-5-8`, so one two-hole lug (generic/two-hole-lug-5-8@1) lands across the pair
+      and the ring lug still lands on either stud, `ground-studs/1` and `/2`.
+      The two studs were drawn 13.2 apart; they moved symmetrically about the
+      midpoint the photograph placed, (426.7, 28.8), the MX240's (gaps.rear-ground-and-esd), one stud above
+      the other, so the host is placed at `rotate: 90` and a lug's wire leaves
+      downward, and their cutouts with them.
 
 attrs:
   physical:
@@ -119,7 +133,8 @@ gaps:
     scope: [rear]
     reason: needs-photo
     wanted: a rear photograph resolving the earthing studs and ESD socket -
-      placed at the MX240's positions, estimated.
+      placed at the MX240's positions, estimated. The studs' 5/8 in. pitch is
+      the guide's (provenance.ground-stud-pitch); where the pair sits is not.
 groups:
   slots:
     term: Slot
@@ -156,7 +171,15 @@ groups:
     role: furniture
     index-origin: 0
     description: the protective-earthing stud pair under the rear earth
-      symbol
+      symbol (guide, chassis grounding points specifications)
+  esd:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: >-
+      the wrist-strap ESD points, front and rear (the ESD procedure text: "one
+      of the ESD points on the chassis"); the rear one is placed at the MX240's
+      position (gaps.rear-ground-and-esd)
 views:
   front:
     size:
@@ -208,7 +231,7 @@ views:
            accepts: [juniper/scb-mx@1], default: juniper/scb-mx@1,
            group: scbs, rel-pos: 0}
       placements:
-        - {id: esd-front-jack, ref: common/esd-jack@1, at: [5.0, 17.0], for: chassis, group: grounding, rel-pos: 0}
+        - {id: esd-front-jack, ref: common/esd-jack@1, at: [5.0, 17.0], for: chassis, group: esd, rel-pos: 0}
   rear:
     size:
       w: 443.0
@@ -217,8 +240,8 @@ views:
       decor:
         - {at: [7.0, 90.0], size: [429.0, 258.0], rx: 1.2, fill: '#b3b7bb'}
       cutouts:
-        - {id: ground-stud-0, at: [423.2, 18.7], size: [7.0, 7.0], shape: circle}
-        - {id: ground-stud-1, at: [423.2, 31.9], size: [7.0, 7.0], shape: circle}
+        - {id: ground-stud-0, at: [423.2, 17.3625], size: [7.0, 7.0], shape: circle}
+        - {id: ground-stud-1, at: [423.2, 33.2375], size: [7.0, 7.0], shape: circle}
         - {id: esd-rear, at: [354.4, 300.0], size: [4.0, 4.0], shape: circle}
     silkscreen:
       - {at: [58.0, 100.0], text: PEM 0, font-size: 3.0, anchor: middle, fill: '#3a3e43', for: pem0}
@@ -252,9 +275,8 @@ views:
            accepts: [juniper/mx480-fan-tray@1], default: juniper/mx480-fan-tray@1,
            group: cooling, rel-pos: 1}
       placements:
-        - {id: esd-rear-jack, ref: common/esd-jack@1, at: [353.4, 299.0], for: chassis, group: grounding, rel-pos: 0}
-        - {id: ground-stud-0, ref: juniper/mx-ground-stud@1, at: [423.20, 18.70], for: chassis, group: grounding, rel-pos: 0, attrs: {stud-size: '1/4-20'}}
-        - {id: ground-stud-1, ref: juniper/mx-ground-stud@1, at: [423.20, 31.90], for: chassis, group: grounding, rel-pos: 1, attrs: {stud-size: '1/4-20'}}
+        - {id: esd-rear-jack, ref: common/esd-jack@1, at: [353.4, 299.0], for: chassis, group: esd, rel-pos: 1}
+        - {id: ground-studs, ref: juniper/mx-ground-stud-pair-5-8@1, at: [415.2625, 25.3], rotate: 90, for: chassis, group: grounding, rel-pos: 0, attrs: {stud-size: '1/4-20'}}
 
   left:
     size:

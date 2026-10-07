@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx150
-version: 1.0.13
+version: 2.0.0
 maturity: modelled
 manufacturer: Juniper
 model: MX150
@@ -84,6 +84,20 @@ provenance:
       the hardware guide, Table 22, parts and tools required for connecting an MX150 to earth ground:
       two 10-32 x .25 in. screws, for a two-hole grounding lug (Panduit LCC10-14BWL or an equivalent):
       the `stud-size` of both studs.
+  ground-stud-pitch:
+    confidence: estimated
+    note: >-
+      INFERRED, NOT STATED. No MX150 document held gives the spacing. Table 22
+      calls for a Panduit LCC10-14BWL or equivalent, and that lug's holes are
+      .75 in. apart (masterelectronics.com, LCC10-14BW-L: '1/4 stud hole, .75
+      hole spacing'), so the pair is drawn at 3/4 in., 19.05. The photograph's
+      13.0 was approximate and is not a measurement of the pitch.
+      `ground-studs` is one placement of juniper/mx-ground-stud-pair-3-4@1, which composes
+      juniper/mx-ground-stud@1 twice at exactly 19.05 (L116) and presents
+      `stud-pair-3-4`, so one two-hole lug (generic/two-hole-lug-3-4@1) lands across the pair
+      and the ring lug still lands on either stud, `ground-studs/1` and `/2`.
+      The two studs were drawn 13.0 apart; they moved symmetrically about the
+      midpoint the photograph placed, (27.5, 6.5), side by side, so a lug's wire leaves to the right, and their cutouts with them.
 
 attrs:
   physical:
@@ -102,6 +116,13 @@ chassis:
   ru: 1
   color: '#6d7175'
 gaps:
+  - what: ground-pair-pitch
+    scope: [grounding]
+    reason: vendor-silent
+    wanted: >-
+      a document or a measured photograph giving the spacing of the MX150's two grounding
+      holes. No MX150 document held states it; the pair is drawn at 3/4 in. because Table 22's
+      lug, the Panduit LCC10-14BWL, has its holes .75 in. apart (provenance.ground-stud-pitch).
   - what: fan-and-switch-representation
     scope: [rear]
     reason: needs-drawing
@@ -160,7 +181,13 @@ groups:
     role: furniture
     index-origin: 0
     description: the protective-earthing stud pair under the rear earth
-      symbol
+      symbol (guide Figure 3, callout 1, ground area)
+  esd:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: >-
+      the wrist-strap ESD point on the rear panel (guide Figure 3, callout 2)
 views:
   front:
     size:
@@ -309,8 +336,8 @@ views:
       decor:
         - {at: [13.0, 2.5], size: [28.0, 9.0], rx: 1.0, fill: '#c9ccd0'}
       cutouts:
-        - {id: ground-stud-0, at: [18.0, 3.5], size: [6.0, 6.0], shape: circle}
-        - {id: ground-stud-1, at: [31.0, 3.5], size: [6.0, 6.0], shape: circle}
+        - {id: ground-stud-0, at: [14.975, 3.5], size: [6.0, 6.0], shape: circle}
+        - {id: ground-stud-1, at: [34.025, 3.5], size: [6.0, 6.0], shape: circle}
         - {id: esd-rear, at: [34.4, 11.6], size: [3.6, 3.6], shape: circle}
         - {id: fan-0, at: [48.0, 2.0], size: [34.0, 34.0], shape: circle}
         - {id: fan-1, at: [105.0, 2.0], size: [34.0, 34.0], shape: circle}
@@ -323,9 +350,8 @@ views:
          anchor: middle, fill: '#e8eaec', for: chassis}
     components:
       placements:
-        - {id: esd-rear-jack, ref: common/esd-jack@1, at: [33.2, 10.4], for: chassis, group: grounding, rel-pos: 0}
-        - {id: ground-stud-0, ref: juniper/mx-ground-stud@1, at: [17.50, 3.00], for: chassis, group: grounding, rel-pos: 0, attrs: {stud-size: '10-32'}}
-        - {id: ground-stud-1, ref: juniper/mx-ground-stud@1, at: [30.50, 3.00], for: chassis, group: grounding, rel-pos: 1, attrs: {stud-size: '10-32'}}
+        - {id: esd-rear-jack, ref: common/esd-jack@1, at: [33.2, 10.4], for: chassis, group: esd, rel-pos: 0}
+        - {id: ground-studs, ref: juniper/mx-ground-stud-pair-3-4@1, at: [14.475, 3], for: chassis, group: grounding, rel-pos: 0, attrs: {stud-size: '10-32'}}
         - {id: fan-0, ref: common/fan-module@1, at: [48.0, 2.0], skin: default, group: fans, rel-pos: 0,
            attrs: {function: fixed chassis fan}}
         - {id: fan-1, ref: common/fan-module@1, at: [105.0, 2.0], skin: default, group: fans, rel-pos: 1,
