@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: sr-1-dc-terminal-block
-version: 1.0.0
+version: 1.1.0
 class: inlet
 behaviour: mounts
 profile: networking
@@ -40,11 +40,11 @@ provenance:
     12.7); actuator guard 25.6-49.5 x 1.1-18.0 with the rocker 29.6-45.0 x 4.8-15.3 and its
     LED window 41.5-43.3 x 8.4-12.1 on the "I" side; the standby symbol at (21.3, 5.7) and
     "I" at (53.3, 5.7); four barrier columns 14.0 wide at centres 11.6 / 28.7 / 45.9 / 62.8;
-    studs at y 31.4 and 47.3; cable entries (open U shapes) 55.4-69.1; printed strip
+    upper studs at y 31.4; cable entries (open U shapes) 55.4-69.1; printed strip
     3.0-71.9 x 70.1-83.8, the A/B divider at 37.7.
   studs: >-
-    datasheet - SR1 Figure 48 p153: stud spacing on centre 0.625 in (15.86 mm), which is the
-    vertical pitch drawn here (Figure 5 measures 15.7); barrier interior width 0.60 in (15.24)
+    datasheet - SR1 Figure 48 p153: stud spacing on centre 0.625 in (15.86 mm), the vertical
+    pitch drawn here at exactly 15.875 (Figure 5 measures 15.7); barrier interior width 0.60 in (15.24)
     against 14.0 drawn; interior height 1.775 in (45.09). Table 58: 10-32 studs; "Eight
     terminal block nuts, one for each terminal block stud" (p72).
   switch: >-
@@ -63,6 +63,17 @@ provenance:
     VDC. The block is a passive input and draws nothing itself; SR1 p50 says the DC
     chassis's CPM/IOM "also includes a power supply card", which is internal.
   colour: 'estimated - no photograph; the cover grey is the figure''s tint'
+  poles: >-
+    EACH POLE IS A PAIR HOST (#828). The guide lands one Panduit LCD6-10AH-L two-hole
+    lug across the two 10-32 studs of each pole (Tables 58 and 59), so each pole is
+    nokia/sr-1-dc-pole@1, presenting `stud-pair-5-8`, composed at the upper stud's
+    ring corner: a-neg, a-rtn, b-neg and b-rtn, left to right as the legend strip
+    reads. Each is a slot of the device (`<placement>/a-neg`), and each of its studs,
+    nokia/sr-1-dc-stud@1, a slot of its own (`<placement>/a-neg/1`, `/2`). The stud
+    art moved out of this skin into the stud part unchanged, and the lower studs moved
+    down 0.015 to the 5/8 in. pitch. The barrier elements feed-a-neg to feed-b-rtn
+    keep their ids. The 45-degree lug the guide names is not built; the straight
+    generic/two-hole-lug-5-8@1 stands in (see nokia/sr-1-dc-pole@1).
 elements:
   cover: {at: [0.3, 6.1], size: [73.6, 64.0], class: cover}
   power-switch: {at: [25.6, 1.1], size: [23.9, 16.9], class: button}
@@ -83,6 +94,13 @@ relief:
       source: >-
         the actuator guard stands proud around the rocker in Figure 38 (isometric) and
         Figure 23; no document gives a figure
+parts:
+  # one pole per barrier, at the upper stud's ring corner: barrier centres
+  # 11.6 / 28.7 / 45.9 / 62.8, upper stud y 31.4, ring radius 5.6
+  - {ref: nokia/sr-1-dc-pole@1, id: a-neg, at: [6.0, 25.8]}
+  - {ref: nokia/sr-1-dc-pole@1, id: a-rtn, at: [23.1, 25.8]}
+  - {ref: nokia/sr-1-dc-pole@1, id: b-neg, at: [40.3, 25.8]}
+  - {ref: nokia/sr-1-dc-pole@1, id: b-rtn, at: [57.2, 25.8]}
 connection-points:
   feed-a: {at: [20.2, 39.3], direction: rear}
   feed-b: {at: [54.4, 39.3], direction: rear}

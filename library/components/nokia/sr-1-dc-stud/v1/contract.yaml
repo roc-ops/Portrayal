@@ -1,0 +1,50 @@
+format: 1
+kind: component
+name: sr-1-dc-stud
+version: 1.0.0
+class: screw
+interface: terminal-stud
+profile: networking
+description: >-
+  One 10-32 stud of the 7750 SR-1 DC terminal block, seen end on: the stud end
+  and its nut inside the ring the block's drawing gives each stud. It is the
+  stud a power lug is landed on, so it is where a lug seats: it presents the
+  nominal `terminal-stud` interface on the stud axis, at the end of the stud.
+  nokia/sr-1-dc-pole@1 composes two per pole.
+size: {w: 11.2, h: 11.2}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  the ring nokia/sr-1-dc-terminal-block@1 drew round each stud before the stud
+  became a part of its own, 11.2 across, read off SR1 Figure 5 p48
+provenance:
+  size: >-
+    drawing - nokia/sr-1-dc-terminal-block@1, which drew this ring, nut and
+    stud end eight times in its own skin from SR1 Figure 5 p48 (7750 SR-1
+    Chassis Installation Guide 25.10, 3HE22130AAAATQZZA01). Moved here
+    unchanged: ring 11.2 across, nut 5.4, stud end 2.0.
+  thread: >-
+    datasheet - SR1 Table 58 p152-153: 10-32 studs, and p72: "Eight terminal
+    block nuts, one for each terminal block stud". The stud end is drawn 2.0
+    across, which is not a 10-32 thread (4.83) to scale; the drawing is the
+    figure's and is not redrawn here.
+  seat: >-
+    THE LUG SEATS ON THE END OF THE STUD, NOT UNDER THE NUT. `mate` sits
+    `on: stud`, so a part seated here starts where the stud ends, above the
+    nut. A real lug lies on the barrier under the nut. See
+    docs/connectors-dc-terminal-design.md, sections 12.5 and 13.
+  relief: >-
+    estimated - no document gives a height for the nut or the stud. The nut is
+    built 3.2, the 1/8 in. of a #10 hex machine screw nut; the stud 5.0 as a
+    floor because it has to clear the nut. The block itself builds nothing
+    under them.
+  behaviour: >-
+    DELIBERATELY OMITTED. The stud is part of the terminal block and is never
+    placed on its own; the block states `mounts`.
+elements: {}
+relief:
+  features:
+    - {node: stud, cyl: 5.0, color: '#c9cdd2', confidence: estimated, source: 'no document gives the stud length; a floor, because it has to clear the nut'}
+    - {node: nut, cyl: 3.2, color: '#8a9097', confidence: estimated, source: 'the 1/8 in. thickness of a #10 hex machine screw nut; the nut is not specified beyond its count (SR1 p72)'}
+connection-points:
+  mate: {at: [5.6, 5.6], direction: front, 'on': stud}
+skins: [default]

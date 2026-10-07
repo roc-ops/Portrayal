@@ -1,0 +1,60 @@
+format: 1
+kind: component
+name: sr-1-dc-pole
+version: 1.0.0
+class: inlet
+# THE PAIR IS ITSELF A SLOT (#828, docs/connectors-dc-terminal-design.md
+# section 13.7): one two-hole lug lands across both studs, at their midpoint.
+# That slot and the two stud slots below are mutually exclusive (L115), as a
+# duplex adapter's slot and its two bores are.
+interface: stud-pair-5-8
+behaviour: mounts
+profile: networking
+description: >-
+  One pole of the 7750 SR-1 DC terminal block: two 10-32 studs one above the other on 5/8 in. (15.875) centres, the landing one two-hole power lug takes. nokia/sr-1-dc-terminal-block@1 composes four, -48V and RTN for feeds A and B.
+size: {w: 11.2, h: 27.075}
+size-confidence: {w: drawing, h: datasheet}
+size-notes: >-
+  the two studs' own boxes, 15.875 apart centre to centre, one above the
+  other: the height is the pitch and one stud, the width one stud
+attrs: {connector: stud-pair-5-8}
+provenance:
+  size: >-
+    datasheet and drawing - SR1 Figure 48 p153 (7750 SR-1 Chassis Installation
+    Guide 25.10, 3HE22130AAAATQZZA01): stud spacing on centre 0.625 in., the
+    5/8 in. of the stud-pair-5-8 interface (spec/schemas/standards.yaml
+    `two-hole-lug-5-8`, 15.875); each stud is nokia/sr-1-dc-stud@1, drawn
+    from Figure 5.
+  pitch: >-
+    THE PITCH IS THE INTERFACE AND THE GUIDE AGREES. Figure 48 states 0.625 in.
+    and Figure 50 the lug's stud spacing 0.63 in., so the studs are composed at
+    exactly 15.875; lint L116 holds them there to 0.01. The block drew them
+    15.86 apart before, 0.015 less.
+  axis: >-
+    THE STUDS ARE COMPOSED TOP TO BOTTOM, so the pair runs down the face and a
+    lug seated here leaves its wire downward (manifest.spanning_axis), toward
+    the open cable entry Figure 5 draws at the foot of each barrier.
+  lug: >-
+    THE DOCUMENTED LUG IS NOT THE ONE OFFERED. The guide calls for a Panduit
+    LCD6-10AH-L, a two-hole lug on #6 AWG wire whose tongue is bent at 45
+    degrees (Tables 58 and 59, Figure 50: hole 0.27 in., spacing 0.63 in.). No
+    angled two-hole lug is built; the straight generic/two-hole-lug-5-8@1 that
+    mates this interface stands in for it, with the wire leaving straight
+    down rather than at 45 degrees.
+  seat: >-
+    THE PAIR PRESENTS AT THE TOP OF ITS STUDS. `mate` is the midpoint of the two
+    studs' own `mate` points and states `seat-out: 5`, the height each stud
+    presents at, so a lug across the pair lies exactly where a one-hole lug on
+    either stud would. L116 holds the two to one figure.
+elements: {}
+parts:
+  # FIRST STUD, then second: the order is the axis (provenance.axis). Each is
+  # a slot of its own, `<pole>/1` and `<pole>/2`, which the ring lug still
+  # seats in.
+  - {ref: nokia/sr-1-dc-stud@1, id: '1', at: [0, 0]}
+  - {ref: nokia/sr-1-dc-stud@1, id: '2', at: [0, 15.875]}
+connection-points:
+  # WHERE A TWO-HOLE LUG SEATS: the midpoint of the studs' own mate points,
+  # (5.6, 5.6) and (5.6, 21.475), at the height they present.
+  mate: {at: [5.6, 13.5375], direction: front, seat-out: 5}
+skins: [default]
