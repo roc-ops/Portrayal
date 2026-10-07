@@ -2,8 +2,8 @@
 
 Status: 2026-10-07. Sections 2 to 5 (brushes, pass-throughs and guides; lint L136 to
 L138), the three devices of section 7 and the library side of section 6 (lab placement,
-the lab schema and its checks; lint L139 to L143) are implemented; the rack drawing of
-section 6 is still to come in the site repository. The first passive rack parts in the
+the lab schema and its checks; lint L139 to L143) are implemented, and the site's Rack
+Builder draws rack-face parts (section 6, as built). The first passive rack parts in the
 library that hold or pass cables rather than terminate them: the FS horizontal cable
 managers.
 
@@ -209,6 +209,12 @@ elevation it draws over its host on that face. That change is in the site reposi
 lands after this one. A site older than the `labs.json` it reads ignores the new keys and
 draws the manager as an ordinary device on that rack unit, which is wrong and visible;
 the site's contract check is what catches the gap.
+
+As built on the site: the drawing landed in the site's Rack Builder, which keeps its
+own rack file and places a manager on a host or a rack unit there, rather than in a
+viewer of `labs.json` - the site reads no `labs.json` today. `labs.json` carries the
+resolved placements (`ru`, `face`, `mount`, `host`, `unit`) for any consumer that
+does.
 
 As built: the schema is `spec/schemas/lab.schema.json`, and the checks are lint rules
 L139 to L143, the codes a listing's checks set the pattern for. L139 to L142 are errors
