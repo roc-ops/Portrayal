@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: nrg300cb08-ctrl
-version: 1.1.0
+version: 2.0.0
 maturity: modelled
 manufacturer: Amphenol Network Solutions
 model: nrg300CB08-CTRL
@@ -89,15 +89,28 @@ provenance:
       are placed from Fig. 3-12 at 1.336 px/mm, a coarse reading. The top is given the same two side fields the
       photographs show running the depth of the lid; their extent is estimated. The sides are placed from the side
       view, Fig. 3-4, at 1.717 px/mm: four bracket holes 29.1 apart starting 11.1 from the front, and a two-bolt
-      ground landing 268.8 from the front. THE GROUND BOLTS ARE DRAWN ON THE STATED 5/8 INCH CENTRES, 15.9 apart,
+      ground landing 268.8 from the front. THE GROUND BOLTS ARE DRAWN ON THE STATED 5/8 INCH CENTRES, 15.875 apart (one pair, see ground-pairs),
       not the 18.3 the drawing measures, because the callout states the figure and the drawing is coarse. Each side
       carries one landing and the bottom a third; the guide says only one ground connection is required.'
+  ground-pairs:
+    confidence: datasheet
+    note: >-
+      EACH LANDING IS ONE PAIR, NOT TWO STUDS (#828, #830). The installation guide's three sets of
+      1/4-20 threaded holes on 5/8 inch centres are each the landing of one dual-hole lug, so each
+      is common/ground-stud-pair-5-8-1-4@1, two 1/4-20 pan-head screws at exactly 15.875, the
+      pitch of the stud-pair-5-8 interface (formerly two common/ground-stud@1 placements 15.9
+      apart). Each pair is placed at rotate 90, one screw above the other as the side view, Fig.
+      3-4, and the bottom view, Fig. 3-12, draw the landings, centred where the two studs'
+      midpoint was. A two-hole lug seated on a pair leaves its wire down the face (toward the
+      front on the bottom view); each screw still takes a single-hole lug on its own, which the
+      guide also allows. The earth mark beside each side landing is centred on its pair, 1.8 lower
+      than it sat beside the two studs.
   ground-stud-size:
     confidence: datasheet
     note: 'the installation guide''s specifications give the earth ground terminals as three sets of 1/4-20 threaded
       holes on 5/8 inch centres, bolted with washers to 50 in-lb, for a dual-hole compression lug on #6 to #1 AWG
       wire; its description says they take either a dual-hole or a single-hole lug and that only one ground connection
-      is required: the `stud-size` of all six ground placements, two on each side and two on the bottom.'
+      is required: the `stud-size` of all three ground pairs, one on each side and one on the bottom.'
   monitoring:
     confidence: datasheet
     note: 'nrgSMART measures feed and per-circuit current, voltage and two probe temperatures. The controller and
@@ -1379,22 +1392,14 @@ views:
           are not dimensioned
     components:
       placements:
-      - id: ground-bottom-1
-        ref: common/ground-stud@1
+      - id: ground-bottom
+        ref: common/ground-stud-pair-5-8-1-4@1
         at:
-        - 210.9
-        - 56.0
+        - 200.7625
+        - 61.75
+        rotate: 90
         group: grounding
         rel-pos: 1
-        attrs:
-          stud-size: 1/4-20
-      - id: ground-bottom-2
-        ref: common/ground-stud@1
-        at:
-        - 210.9
-        - 71.9
-        group: grounding
-        rel-pos: 2
         attrs:
           stud-size: 1/4-20
   left:
@@ -1448,32 +1453,24 @@ views:
         rx: 3.5
     components:
       placements:
-      - id: ground-left-1
-        ref: common/ground-stud@1
+      - id: ground-left
+        ref: common/ground-stud-pair-5-8-1-4@1
         at:
-        - 57.95
-        - 11.75
+        - 47.8125
+        - 17.5
+        rotate: 90
         group: grounding
-        rel-pos: 5
-        attrs:
-          stud-size: 1/4-20
-      - id: ground-left-2
-        ref: common/ground-stud@1
-        at:
-        - 57.95
-        - 27.65
-        group: grounding
-        rel-pos: 6
+        rel-pos: 3
         attrs:
           stud-size: 1/4-20
       - id: ground-left-mark
         ref: common/ground-symbol@1
         at:
         - 75.0
-        - 18.95
-        for: ground-left-1
+        - 20.75
+        for: ground-left
         group: grounding
-        rel-pos: 7
+        rel-pos: 4
   right:
     size:
       w: 330.8
@@ -1525,32 +1522,24 @@ views:
         rx: 3.5
     components:
       placements:
-      - id: ground-right-1
-        ref: common/ground-stud@1
+      - id: ground-right
+        ref: common/ground-stud-pair-5-8-1-4@1
         at:
-        - 264.75
-        - 11.75
+        - 254.6125
+        - 17.5
+        rotate: 90
         group: grounding
-        rel-pos: 3
-        attrs:
-          stud-size: 1/4-20
-      - id: ground-right-2
-        ref: common/ground-stud@1
-        at:
-        - 264.75
-        - 27.65
-        group: grounding
-        rel-pos: 4
+        rel-pos: 2
         attrs:
           stud-size: 1/4-20
       - id: ground-right-mark
         ref: common/ground-symbol@1
         at:
         - 249.8
-        - 18.95
-        for: ground-right-1
+        - 20.75
+        for: ground-right
         group: grounding
-        rel-pos: 8
+        rel-pos: 5
 configurations:
   base:
     kind: base
