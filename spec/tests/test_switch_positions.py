@@ -124,6 +124,27 @@ def test_setting_the_default_after_a_move_draws_as_drawn(kit):
     assert kit["backToDefault"] == build_snap({})
 
 
+def test_the_build_records_what_a_moved_node_was_drawn_with():
+    root = ET.fromstring(PART)
+    fill_from_attrs(root, {"sw-1": "on"})
+    by = {e.get("id"): e for e in root.iter()}
+    assert by["slider"].get("data-move-base") == ""
+    assert by["drawn-moved"].get("data-move-base") == "translate(1 1)"
+    root = ET.fromstring(PART)
+    fill_from_attrs(root, {})
+    assert all(e.get("data-move-base") is None for e in root.iter())
+
+
+def test_the_kit_moves_a_built_position_back_to_the_default(kit):
+    """A configuration set the switch on, so the build moved it. Setting it
+    off at runtime puts it where the skin drew it; clearing the field leaves
+    it as built, and so does unpaint."""
+    assert kit["builtOff"] == [None, "translate(1 1)"]
+    assert kit["builtUnpainted"] == ["translate(0 -3.2)", "translate(0.5 0) translate(1 1)"]
+    assert kit["builtEmpty"] == ["translate(0 -3.2)", "translate(0.5 0) translate(1 1)"]
+    assert kit["builtOn"] == ["translate(0 -3.2)", "translate(0.5 0) translate(1 1)"]
+
+
 def test_the_kit_reads_the_table_alike(kit):
     assert kit["parse"] == {"on": [0, -3.2, 0], "off": [1, 2, 90]}
     assert kit["badParse"] == "threw"

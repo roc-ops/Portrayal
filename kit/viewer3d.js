@@ -1586,6 +1586,10 @@ export function createViewer(container, opts = {}) {
     if ([...RESTYLE, ...LOD].some(e => touches(e.svgText) && positional(e.svgText))) {
       await build(CFG);
       if (DEV) await buildHitIndex(CFG);
+      // what load() does after a rebuild: the selection and the host's marks
+      // went with the old scene
+      if (selected) select(selected, {frame: false});
+      if (MARKS.length) drawMarks();
       return changed.size;
     }
     let n = 0;

@@ -648,6 +648,11 @@ def fill_from_attrs(root, attrs):
         tf = move_transform(node, move)
         if tf:
             drawn = node.get("transform")
+            # what the skin drew, so the kit can put a node a CONFIGURATION
+            # moved back to the default position at runtime: without it the
+            # moved transform would be all the kit could see, and setting the
+            # default would leave the node where the configuration put it
+            node.set("data-move-base", drawn or "")
             node.set("transform", f"{tf} {drawn}" if drawn else tf)
     for node in root.iter():
         key = node.get("data-show-from")

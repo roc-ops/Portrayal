@@ -164,12 +164,17 @@ export function paintFields(el, vals) {
     // lists. Empty, or an option the table does not name, is as drawn - the
     // skin draws the default (render.py fill_from_attrs, the same two rules).
     for (const n of el.querySelectorAll(`[data-move-from="${key}"]`)) {
-      const move = colour ? parseMoves(n.getAttribute('data-move'))[colour] : undefined;
-      if (!move) { restore(n, 'transform'); continue; }
+      // empty is "as built": whatever the build drew, a configuration's move included
+      if (!colour) { restore(n, 'transform'); continue; }
       if (!n.hasAttribute(STASH.transform))
         n.setAttribute(STASH.transform, n.getAttribute('transform') ?? '');
-      const drawn = n.getAttribute(STASH.transform);
-      const tf = [moveTransform(n, move), drawn].filter(Boolean).join(' ');
+      // THE SKIN'S OWN TRANSFORM is the base a move composes on. A node the
+      // build moved for a configuration says what it was drawn with in
+      // `data-move-base`; otherwise what was here first is the drawing. An
+      // option the table does not list - the default - is that base alone.
+      const base = n.getAttribute('data-move-base') ?? n.getAttribute(STASH.transform);
+      const move = parseMoves(n.getAttribute('data-move'))[colour];
+      const tf = [move ? moveTransform(n, move) : '', base].filter(Boolean).join(' ');
       if (tf) n.setAttribute('transform', tf); else n.removeAttribute('transform');
     }
     for (const n of el.querySelectorAll(`[data-show-from="${key}"]`)) {
