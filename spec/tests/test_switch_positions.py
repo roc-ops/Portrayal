@@ -35,11 +35,13 @@ PART = f'''<svg xmlns="{SVG}">
   <rect id="drawn-moved" x="0" y="0" width="1" height="1" transform="translate(1 1)"
         data-move-from="sw-1" data-move="on: 0.5 0"/>
   <rect id="rocker" x="0" y="0" width="4" height="2" data-move-from="sw-1" data-move="on: 0 0 180"/>
+  <rect id="placed-rocker" x="0" y="0" width="4" height="2" transform="translate(10 0)"
+        data-move-from="sw-1" data-move="on: 1 0 180"/>
   <rect id="flag-on" x="0" y="0" width="1" height="1" data-show-from="state" data-show="on"/>
   <rect id="flag-off" x="0" y="0" width="1" height="1" display="none" data-show-from="state" data-show="off tripped"/>
   <text id="label" data-from="note" data-show-from="state" data-show="tripped" display="none">x</text>
 </svg>'''
-IDS = ("slider", "drawn-moved", "rocker", "flag-on", "flag-off", "label")
+IDS = ("slider", "drawn-moved", "rocker", "placed-rocker", "flag-on", "flag-off", "label")
 
 # One list, fed to the build and to the kit.
 # A text node a position shows is shown by that field alone: writing its text
@@ -74,6 +76,13 @@ def test_a_turn_pivots_on_the_node_centre():
     assert build_snap({"sw-1": "on"})["rocker"]["transform"] == "rotate(180 2 1)"
 
 
+def test_a_turn_on_a_drawn_offset_node_stays_in_place():
+    """The turn runs first, in the node's own frame, then the drawn offset,
+    then the move: a rocker drawn at x 10..14 turns in place and moves 1."""
+    assert build_snap({"sw-1": "on"})["placed-rocker"]["transform"] == \
+        "translate(1 0) translate(10 0) rotate(180 2 1)"
+
+
 def test_show_follows_the_field_and_unset_leaves_the_drawing():
     assert build_snap({})["flag-on"]["display"] is None and build_snap({})["flag-off"]["display"] == "none"
     s = build_snap({"state": "tripped"})
@@ -85,6 +94,16 @@ def test_the_table_parses_and_a_bad_entry_is_loud():
     assert parse_moves("on: 0 -3.2, off: 1 2 90") == {"on": (0.0, -3.2, 0.0), "off": (1.0, 2.0, 90.0)}
     with pytest.raises(ValueError):
         parse_moves("on: up")
+
+
+def test_an_unquoted_on_or_off_fails_the_build():
+    """YAML 1.1 reads `sw-1: on` as True. Taken as unset it would draw the
+    default and look set; the build says to quote it."""
+    root = ET.fromstring(PART)
+    contract = {"name": "dip", "fields": {"sw-1": {"type": "choice", "options": ["off", "on"]}}}
+    for v, word in ((True, "'on'"), (False, "'off'")):
+        with pytest.raises(ValueError, match=f"quote it: {word}"):
+            check_positions(root, {"sw-1": v}, contract, "dip")
 
 
 def test_an_option_the_field_does_not_declare_fails_the_build():
@@ -198,6 +217,12 @@ def test_an_undeclared_option_fails_the_render(tmp_path):
     _name, _o, r = _render(tmp_path, "aurcore/ais4001p", _set_dip("up"))
     assert r.returncode != 0
     assert "is not a position" in r.stderr
+
+
+def test_an_unquoted_on_fails_the_render(tmp_path):
+    _name, _o, r = _render(tmp_path, "aurcore/ais4001p", _set_dip(True))
+    assert r.returncode != 0
+    assert "quote it: 'on'" in r.stderr
 
 
 def test_the_ten_placements_draw_as_before():

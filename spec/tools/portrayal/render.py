@@ -645,15 +645,15 @@ def fill_from_attrs(root, attrs):
         move = parse_moves(node.get("data-move") or "").get(v)
         if move is None:
             continue
-        tf = move_transform(node, move)
-        if tf:
-            drawn = node.get("transform")
+        drawn = node.get("transform")
+        tf = move_transform(node, move, drawn)
+        if tf != (drawn or ""):
             # what the skin drew, so the kit can put a node a CONFIGURATION
             # moved back to the default position at runtime: without it the
             # moved transform would be all the kit could see, and setting the
             # default would leave the node where the configuration put it
             node.set("data-move-base", drawn or "")
-            node.set("transform", f"{tf} {drawn}" if drawn else tf)
+            node.set("transform", tf)
     for node in root.iter():
         key = node.get("data-show-from")
         if key is None:
@@ -678,6 +678,12 @@ def check_positions(root, attrs, contract, inst_id):
     keys = {n.get(a) for n in root.iter() for a in ("data-move-from", "data-show-from")
             if n.get(a) is not None}
     for key in sorted(keys):
+        # AN UNQUOTED on OR off IS A BOOLEAN. YAML 1.1 reads `sw-1: on` as True,
+        # which position_value would take for "unset" and draw the default -
+        # the silent typo this check exists to catch. A position is text.
+        if isinstance(attrs.get(key), bool):
+            raise ValueError(f"{inst_id}: {key} = {attrs[key]!r} is a YAML boolean, not a "
+                             f"position - quote it: '{'on' if attrs[key] else 'off'}'")
         v = position_value(attrs, key)
         if v is None:
             continue
@@ -714,13 +720,22 @@ def _num(x):
     return str(int(x)) if float(x).is_integer() else repr(float(x))
 
 
-def move_transform(node, move):
-    """The transform a move applies, written the way kit/fields.js writes it,
-    so the build and the kit put the same text on a node."""
+def move_transform(node, move, base=None):
+    """The whole transform of a moved node, written the way kit/fields.js writes
+    it, so the build and the kit put the same text on a node.
+
+    `translate(dx dy) <base> rotate(deg cx cy)`: SVG applies a list right to
+    left, so the turn runs first, about the centre of the node's own geometry
+    in its own frame; then the transform the skin drew; then the move's
+    offset, in the frame the node sits in. A turn written before the drawn
+    transform would pivot about the local centre in the parent's frame and
+    swing a drawn-offset node off its place."""
     dx, dy, deg = move
     parts = []
     if dx or dy:
         parts.append(f"translate({_num(dx)} {_num(dy)})")
+    if base:
+        parts.append(base)
     if deg:
         cx, cy = _node_centre(node)
         parts.append(f"rotate({_num(deg)} {_num(cx)} {_num(cy)})")

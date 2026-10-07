@@ -13,6 +13,8 @@ const part = () => build({a: {id: 'p'}, c: [
                   'data-move-from': 'sw-1', 'data-move': 'on: 0.5 0'}},
   {t: 'rect', a: {id: 'rocker', x: '0', y: '0', width: '4', height: '2',
                   'data-move-from': 'sw-1', 'data-move': 'on: 0 0 180'}},
+  {t: 'rect', a: {id: 'placed-rocker', x: '0', y: '0', width: '4', height: '2', transform: 'translate(10 0)',
+                  'data-move-from': 'sw-1', 'data-move': 'on: 1 0 180'}},
   {t: 'rect', a: {id: 'flag-on', x: '0', y: '0', width: '1', height: '1',
                   'data-show-from': 'state', 'data-show': 'on'}},
   {t: 'rect', a: {id: 'flag-off', x: '0', y: '0', width: '1', height: '1', display: 'none',
@@ -21,7 +23,7 @@ const part = () => build({a: {id: 'p'}, c: [
                   display: 'none'}},
 ]});
 const find = (root, id) => [root, ...root.descendants()].find(n => n.getAttribute('id') === id);
-const snap = g => Object.fromEntries(['slider', 'drawn-moved', 'rocker', 'flag-on', 'flag-off', 'label']
+const snap = g => Object.fromEntries(['slider', 'drawn-moved', 'rocker', 'placed-rocker', 'flag-on', 'flag-off', 'label']
   .map(id => [id, {transform: find(g, id).getAttribute('transform'), display: find(g, id).getAttribute('display')}]));
 
 // the Python test passes its list of value maps as JSON, so the two sides read one list

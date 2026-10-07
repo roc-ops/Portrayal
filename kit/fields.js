@@ -95,10 +95,15 @@ function centre(node) {
   if (tag === 'circle' || tag === 'ellipse') return [g('cx'), g('cy')];
   throw new Error(`data-move turns a <${tag}>; only rect, circle and ellipse can turn`);
 }
-/** The transform a move applies, the text render.py's move_transform writes. */
-export function moveTransform(node, [dx, dy, deg]) {
+/**
+ * The whole transform of a moved node, the text render.py's move_transform
+ * writes: `translate(dx dy) <base> rotate(deg cx cy)`, so a turn pivots on the
+ * node's own centre in its own frame and the offset lands in the parent's.
+ */
+export function moveTransform(node, [dx, dy, deg], base = '') {
   const parts = [];
   if (dx || dy) parts.push(`translate(${num(dx)} ${num(dy)})`);
+  if (base) parts.push(base);
   if (deg) { const [cx, cy] = centre(node); parts.push(`rotate(${num(deg)} ${num(cx)} ${num(cy)})`); }
   return parts.join(' ');
 }
@@ -174,7 +179,7 @@ export function paintFields(el, vals) {
       // option the table does not list - the default - is that base alone.
       const base = n.getAttribute('data-move-base') ?? n.getAttribute(STASH.transform);
       const move = parseMoves(n.getAttribute('data-move'))[colour];
-      const tf = [move ? moveTransform(n, move) : '', base].filter(Boolean).join(' ');
+      const tf = move ? moveTransform(n, move, base) : base;
       if (tf) n.setAttribute('transform', tf); else n.removeAttribute('transform');
     }
     for (const n of el.querySelectorAll(`[data-show-from="${key}"]`)) {

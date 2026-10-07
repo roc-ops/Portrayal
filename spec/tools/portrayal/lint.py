@@ -3543,7 +3543,10 @@ def _lint_positions(path, data, fields, skin, text):
     L149: the box of every moved node, under each of its moves, lies inside the
     component's `size`. An actuator configured off its own face is drawn on the
     chassis beside it and extruded there in 3D. Rects, circles and ellipses are
-    measured; a node of another shape is not, and says nothing."""
+    measured; a node of another shape is not, and says nothing. THE BOX IS THE
+    NODE'S OWN GEOMETRY: a `transform` drawn on the node or on a group around
+    it is not applied, so a node drawn offset by one is measured where its
+    coordinates say, not where it lands."""
     if "data-move-from" not in text and "data-show-from" not in text:
         return
     try:
