@@ -166,17 +166,20 @@ are. It sets nothing; the value is set by `attrs`.
    default is the position drawn today.
 2. The eight-way alarm DIP of the 300CB08, with its `populated` and `with-fuses`
    configurations setting the switches of their fitted positions down.
-3. The plug-in breaker's `state`: `on`, `off`, `tripped`, moving the handle and showing a
-   flag.
+3. The plug-in breaker's `state`: `on`, `off`, `tripped`, moving the handle. BUILT WITHOUT
+   A FLAG: the red-over-green mark beside the handle is a printed I/O legend, not an
+   indicator, and the Airpax datasheet says a trip carries the handle to OFF, so `tripped`
+   is drawn as `off` (`amphenol-ns/breaker-1ru@1`, provenance `state`). SHOW and
+   `drawn-by-absence` wait for a part whose face really changes.
 4. `common/rocker-switch@1` and `common/power-switch-slide@1`.
 
 Each is a contract minor: a field is added and nothing that exists moves.
 
 ## 10. Open questions
 
-- **Two flags or one painted flag.** A breaker's red and green could be one node whose
-  fill follows the field, if a choice field's option could name a colour. SHOW with two
-  nodes is used here because it needs no mapping from an option to a colour.
+- **Two flags or one painted flag.** Moot for the 1RU breaker, whose red and green are
+  printed. For a part with a real trip flag, SHOW with two nodes still needs no mapping
+  from an option to a colour.
 - **A position that depends on what is seated.** The alarm switch of a position should be
   down when that position holds a breaker. This note leaves that to the configuration,
   which states both. Deriving one from the other would be the first rule that sets a field

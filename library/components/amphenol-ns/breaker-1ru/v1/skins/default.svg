@@ -1,16 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="17.8mm" height="39.1mm" viewBox="0 0 17.8 39.1">
-  <!-- bare 1RU plug-in breaker: body, two threaded inserts, the handle with its rating, the on/off flag -->
+  <!-- bare 1RU plug-in breaker: body, the handle slot, the handle with its rating, and the printed
+       I/O legend beside it (red I over green O). The handle is drawn ON, at the top of its slot;
+       `state` off or tripped carries it 5.8 down, to the O (the handle goes to OFF on a trip). -->
   <rect id="body" x="0" y="1.05" width="17.8" height="37.0" rx="0.6" fill="#1a1c1e" stroke="#060707" stroke-width="0.25"/>
   <rect id="window" x="4.3" y="10.6" width="9.2" height="14.8" rx="0.5" fill="#0a0b0c"/>
   <g id="flag">
     <rect x="13.6" y="14.0" width="2.6" height="4.0" fill="#c8312b"/>
+    <path d="M 14.9 14.8 V 17.2" stroke="#f2f1ec" stroke-width="0.45"/>
     <rect x="13.6" y="18.0" width="2.6" height="4.0" fill="#2f9a56"/>
+    <circle cx="14.9" cy="20.0" r="0.85" fill="none" stroke="#f2f1ec" stroke-width="0.4"/>
   </g>
-  <g id="handle">
-    <rect x="4.9" y="12.0" width="8.0" height="12.0" rx="1.0" fill="#232628" stroke="#050606" stroke-width="0.25"/>
-    <rect x="5.7" y="14.6" width="6.4" height="6.8" rx="0.4" fill="#ecebe6"/>
+  <g id="handle" data-move-from="state" data-move="off: 0 5.8, tripped: 0 5.8">
+    <rect x="4.9" y="11.1" width="8.0" height="8.0" rx="1.0" fill="#232628" stroke="#050606" stroke-width="0.25"/>
+    <rect x="5.7" y="12.1" width="6.4" height="6.0" rx="0.4" fill="#ecebe6"/>
     <g id="silkscreen">
-      <text id="rating" data-from="rating" x="8.9" y="19.7" font-size="4.6" font-family="Helvetica, Arial, sans-serif" font-weight="bold" text-anchor="middle" fill="#111213">60</text>
+      <text id="rating" data-from="rating" x="8.9" y="16.6" font-size="4.2" font-family="Helvetica, Arial, sans-serif" font-weight="bold" text-anchor="middle" fill="#111213">60</text>
     </g>
   </g>
 </svg>
