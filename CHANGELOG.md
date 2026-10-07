@@ -78,6 +78,13 @@ names the ref that replaces it.
   skips as not a DCIM port. In the DCIM exports the CTRL has two management
   interfaces, `mgmt` and `lan` (100base-tx), and both have two `dc-terminal`
   power ports. No existing device or export changes.
+- The four monitored connectorized panels of the same family:
+  `amphenol-ns/nrg300cb08-ctrl-c`, `nrg300cb08-ctrl-sc`, `nrg300cb08-sens-c`
+  and `nrg300cb08-sens-sc`. Each is the CTRL or SENS front with the -C or -SC
+  rear (sixteen `amphenol-ns/output-p40@1` outputs, busbar or stud feeds) and
+  `amphenol-ns/nrg-rear-block@1` where the passive panel has its alarm card.
+  Their DCIM exports are as the CTRL and SENS. No existing device or export
+  changes.
 - Fibrain, a new vendor: the XCU10 extendable HD patch panel (`fibrain/xcu`,
   0.5U, 48 SC), with XCU10-51ID and XCU10-41ID as configurations. Its front is
   one captive drawer (`fibrain/xcu-drawer@1`) whose four slots seat the HD
