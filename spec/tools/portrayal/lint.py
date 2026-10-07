@@ -4735,7 +4735,26 @@ def lint_device_cutouts(path, view_name, view, lib_roots, seen_through=()):
             continue
         w, h = size
         x, y = q["at"]
-        if q.get("rotate") in (90, 270, -90):
+        # THE OPENING, NOT THE FOOTPRINT, WHERE THE PART SAYS WHICH IS WHICH
+        # (#248). common/qsfp28-cage@3 is 14.5 tall because it carries the
+        # chassis lamp band above the cage; the cage itself is centred on its
+        # opening (TE 2322551-4: 0.887 of gasket above and below a 9.58 mouth),
+        # so the composed std/qsfp-ganged@1 sits at y 4.2 of 14.5 and every
+        # correctly punched hole read as 1.74mm off. A part that composes its
+        # aperture states where the opening is; centre THAT on the hole. The
+        # opening's offset from the footprint centre turns with the placement.
+        ap = _composed_aperture(str(q.get("ref") or ""), lib_roots)
+        if ap:
+            (aw, ah), (ax, ay) = ap
+            dx, dy = ax + aw / 2 - w / 2, ay + ah / 2 - h / 2
+            t = math.radians(float(q.get("rotate") or 0))
+            cos, sin = round(math.cos(t), 9), round(math.sin(t), 9)
+            mx = x + w / 2 + dx * cos - dy * sin
+            my = y + h / 2 + dx * sin + dy * cos
+            if (q.get("rotate") or 0) % 180 == 90:
+                aw, ah = ah, aw
+            x, y, w, h = mx - aw / 2, my - ah / 2, aw, ah
+        elif q.get("rotate") in (90, 270, -90):
             cx, cy = x + w / 2, y + h / 2
             x, y, w, h = cx - h / 2, cy - w / 2, h, w
         cw, ch = c["size"]
@@ -4748,7 +4767,8 @@ def lint_device_cutouts(path, view_name, view, lib_roots, seen_through=()):
             # disagreement between two measurements, which is the same family as
             # L39's other findings and is recorded the same way.
             warn(path, "L39", f"{view_name}: {cid} does not sit in its own cutout - "
-                             f"the part lands at ({x:g}, {y:g}) {w:g} x {h:g} and the "
+                             f"{'the opening it composes' if ap else 'the part'} lands at "
+                             f"({x:g}, {y:g}) {w:g} x {h:g} and the "
                              f"hole is at ({c['at'][0]:g}, {c['at'][1]:g}) {cw:g} x {ch:g}, "
                              f"off-centre by {miss:.2f}mm against a {tol:.2f}mm tolerance. "
                              "A part may be smaller than its opening (clearance) or larger "
@@ -9403,6 +9423,46 @@ def _aperture_of(ref, lib_roots, depth=0):
         return found[0]
     sz = ct.get("size") or {}
     return ((sz["w"], sz["h"]), (0.0, 0.0)) if sz.get("w") else None
+
+
+def _composed_aperture(ref, lib_roots):
+    """The opening a part COMPOSES, as ((w, h), (x, y)) in the part's own frame,
+    or None.
+
+    Only for a part that does not itself conform to a sized standard and whose
+    parts hold exactly one that does - a cage bezel around a std/ core. A part
+    that conforms is its own opening, and one that composes no standard opening
+    (a lamp, a label, a latch) has nothing to measure but its footprint; both
+    are None, and the caller keeps measuring the footprint."""
+    def sized(ct):
+        conf = ct.get("conforms")
+        st = STANDARDS.get(conf) if isinstance(conf, str) else None
+        if st and st.get("w") is not None and st.get("h") is not None:
+            return st["w"], st["h"]
+        return None
+
+    def walk(ct, ox, oy, depth):
+        out = []
+        for part in (ct.get("parts") or []):
+            sub = _contract(str(part.get("ref") or ""), lib_roots)
+            o = part.get("at") or [0, 0]
+            if not sub:
+                continue
+            if part.get("rotate"):
+                out.append(None)          # a turned core: not worth guessing
+                continue
+            wh = sized(sub)
+            if wh:
+                out.append((wh, (ox + o[0], oy + o[1])))
+            elif depth < 3:
+                out += walk(sub, ox + o[0], oy + o[1], depth + 1)
+        return out
+
+    ct = _contract(ref, lib_roots)
+    if not ct or sized(ct):
+        return None
+    found = walk(ct, 0.0, 0.0, 1)
+    return found[0] if len(found) == 1 else None
 
 
 def _air_fraction(box, decor, grid=9):

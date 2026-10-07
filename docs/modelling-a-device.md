@@ -424,7 +424,9 @@ Now populate. Reuse before building.
    declares any group, every port part on it should join one.
 6. **`rotate:` pivots a placement on its own pre-rotation centre**, so after
    turning a part recompute `at`; the landed box is not where the unrotated one
-   sat. Look at the render. L39 compares the landed box with the hole.
+   sat. Look at the render. L39 compares the landed box with the hole; for a
+   part that composes its opening (a cage bezel around a `std/` core), it
+   compares that opening, not the part's whole footprint.
 7a. **Ports on an angled surface sit `on` a facet.** Some faceplates carry
     their connectors on a housing or sawtooth angled off the panel. Declare
     the surface once, as a relief feature with `facet: {deg, facing}`, and
