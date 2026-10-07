@@ -107,6 +107,8 @@ def _device_exports(pl, ref, attrs, group_role):
         return True
     if pl["ref"] in dx.FAMILY_PART and dx.rj45_timing_label({**pl, "attrs": attrs}):
         return True                                 # a bare RJ45 naming a timing job
+    if dx.device_console_row(pl, attrs):            # console-ports, micro-USB too (#384)
+        return True
     if attrs.get("role") == "console" or group_role in dx.PORT_ROLES:
         return dx.iface_type(pl, attrs, group_role) is not None   # interfaces
     return False

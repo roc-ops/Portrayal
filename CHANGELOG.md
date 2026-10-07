@@ -475,6 +475,17 @@ names the ref that replaces it.
   page, where a relative link resolved against npmjs.com and broke. The
   package also names its `homepage` and where to report `bugs`. Both reach
   npm with the next kit release (#716).
+- DCIM exports: a micro-USB console reaches the device type as a console port,
+  `Console (Micro-USB)`, type `usb-micro-b`, beside the RJ45 `Console` the
+  panel labels apart from it; and an RJ45 AUX serial port on a chassis is a
+  console port named `AUX`, as a card's already was. 96 device types in each
+  of `library/exports/netbox` and `nautobot` gain ports (31 devices with a
+  micro-USB console, plus the ASR 9001, ASR 9901 and MX80 with AUX), and
+  nothing already exported is renamed, retyped or removed. A USB storage or
+  service port is still not exported, by the existing rule that a USB data
+  port is not a console; every management-cluster port that is not exported is
+  now named, with its reason, in `MGMT_NOT_A_DCIM_PORT`, and a test asks the
+  exporter about each one (roc-ops/Portrayal#384).
 
 ### Changed
 - `relief.profile` and `profile-y` now move with `out` when their part stands

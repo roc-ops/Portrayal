@@ -819,10 +819,18 @@ NOT_A_DCIM_PORT = {
     # data port is none of those unless it is a console, which std/usb-a is on
     # the 26 placements PART_CONSOLE catches. The rest are storage, maintenance
     # and iDRAC Direct, and there is nowhere honest to put them.
-    "std/micro-usb": "USB maintenance port (iDRAC Direct); not a console, and no device-type field fits",
+    # `std/micro-usb` WAS HERE, as "USB maintenance port (iDRAC Direct); not a
+    # console". That was true of the two Dell servers and false of 31 devices
+    # whose micro-USB jack is labelled Console; #384 gave those a console-port
+    # path (device_console_row), and iDRAC Direct moved to MGMT_NOT_A_DCIM_PORT.
     "common/usb-a": "USB storage/maintenance port; not a console - std/usb-a's console placements type via PART_CONSOLE",
     "common/usb-a-bezel": "the same USB storage/maintenance port as common/usb-a, in a taller panel bezel; split out of that name's @3 in #264 and it needs its own entry because this register keys on the NAME, not the major",
-    "std/usb-c": "USB-C power input on the GL-8xEP, group `usbc-power`; power in, not a port",
+    # `std/usb-c` WAS HERE, as the GL-8xEP's USB-C power input. It was stale: the
+    # DS6000, DS6001 and AS7326-56X have exported a USB-C console all along, and
+    # test_silent_drops' mirror of `build` did not know the console exit, so it
+    # could not tell (#384). The GL-8xEP's power input is not a management port
+    # and the census does not ask about it; the storage USB-Cs are in
+    # MGMT_NOT_A_DCIM_PORT.
 
     # --- connectors upstream has no type for ---------------------------------
     "common/db9-receptacle": "the placements left here are alarm relays, status and craft ports - "
@@ -883,6 +891,56 @@ NOT_A_DCIM_PORT = {
     # placements now declare their speed. The entry had to go with it - a register
     # of parts that export nothing is wrong about one that does.
 }
+
+# THE MANAGEMENT CLUSTER'S PORTS THAT DO NOT REACH A DCIM, AND WHY (#384).
+#
+# NOT_A_DCIM_PORT asks of a PART whether it exports anywhere. That cannot see a
+# part that exports on some placements and is dropped on others, which is how
+# the DCS511's micro-USB console went missing: `std/micro-usb` was registered as
+# an iDRAC Direct port, and the 31 devices that label one Console inherited the
+# silence. So the management cluster is also counted PER PLACEMENT:
+# test_dcim_mgmt_ports.py asks `build` itself (its `trace`) about every
+# port-class placement whose role is mgmt, console or aux, or whose group's
+# role is `management`, and each one that exports nothing must either be a part
+# NOT_A_DCIM_PORT already explains or match a (part, placement role) key here.
+#
+# NO KEY MAY NAME role mgmt, console OR aux. Those are the ports a DCIM exists to
+# know about, so the test refuses an exemption for them outright: a management
+# jack, an SFP management port or a console that does not export is a defect,
+# never an entry. What is left is USB storage and service ports, which no
+# device-type field holds - PART_CONSOLE and device_console_row take a USB jack
+# only when the device says it is a console, and that is the existing line,
+# drawn in NOT_A_DCIM_PORT's USB block before this register - and three jacks
+# whose job is not one a DCIM has a type for.
+MGMT_NOT_A_DCIM_PORT = {
+    ("std/usb-a", None): "a USB-A port the device gives no role - service and storage on servers "
+                         "and switches alike; not a console, and no device-type field holds a USB "
+                         "data port (NOT_A_DCIM_PORT's USB block)",
+    ("std/usb-a", "storage"): "a USB storage port; not a console, and no device-type field holds a "
+                              "USB data port (NOT_A_DCIM_PORT's USB block)",
+    ("std/usb-a", "maintenance"): "a USB maintenance port; not a console, and no device-type field "
+                                  "holds a USB data port (NOT_A_DCIM_PORT's USB block)",
+    ("std/usb-a", "ilo-service"): "HPE iLO Service Port, a USB link to the BMC for a laptop or a "
+                                  "key; not a console, and no device-type field holds it",
+    ("std/micro-usb", None): "iDRAC Direct on the Dell R660 and R740xd - a USB maintenance link to "
+                             "the BMC, not a console; no device-type field holds it",
+    ("std/micro-usb", "storage"): "a micro-USB storage port (the EPS121/EPS122); not a console, and "
+                                  "no device-type field holds a USB data port",
+    ("std/usb-c", None): "the GL-12xB-240D's USB-C, printed USB beside the CONSOLE jack; its "
+                         "device records a `usb-function` gap - console, storage or power is "
+                         "unknown - and an unknown job is not exported as a console",
+    ("std/usb-c", "storage"): "a USB-C storage port (the AIS800s, the CSR440); not a console, and no "
+                              "device-type field holds a USB data port",
+    ("std/rj45", None): "the MX104's ext-ref-clock, a bare RJ-48 timing input that states neither "
+                        "a speed nor a timing word; iface_type's guard refuses it, and it has "
+                        "never exported",
+    ("std/rj45-ganged", "alarm"): "an alarm-contact jack (the CSR440); neither library has an alarm "
+                                  "port, and rj-45 would read as a console",
+    ("std/rj45-ganged", "timing"): "the CSR180's stack-a-upper, which its own device marks "
+                                   "`timing: unidentified` - there is no true type to give a jack "
+                                   "nobody has identified",
+}
+MGMT_EXPORTED_ROLES = {"mgmt", "console", "aux"}
 
 # Both libraries take ALMOST the same device-type document. They differ in what
 # they REQUIRE - NetBox also demands u_height and is_full_depth, which we always
@@ -1253,6 +1311,51 @@ def device_timing_row(p, a):
     return None
 
 
+# THE CONSOLE PORT TYPES A DEVICE PLACEMENT CAN TAKE, each checked present in
+# BOTH targets' ConsolePortTypeChoices: netbox-community/netbox
+# netbox/dcim/choices.py at 64ce9e2d (`rj-45`, `usb-a`, `usb-c`, `usb-micro-b`)
+# and nautobot/nautobot nautobot/dcim/choices.py on develop at 3edb1fca (the same
+# four). `usb-micro-b` is new with #384; the others were already exported.
+MICRO_USB_REF = "std/micro-usb"
+
+
+def device_console_row(p, a):
+    """The console-port row `build` lists a device placement under, or None.
+    `a` is the placement's attrs with its group's merged under them. The row has
+    no `_id`; `build` adds it to tell two consoles of one kind apart.
+
+    A MICRO-USB CONSOLE IS A CONSOLE (#384). The DCS511 prints "Micro-USB
+    Console" and "RJ45 Console" over two jacks and its datasheet lists "1 x RJ-45
+    serial console / 1 x Micro USB console port", but this path knew the RJ45,
+    USB-A and USB-C consoles and not the micro-USB one, so 31 devices exported one
+    console where their panels carry two. The placement has to SAY console - its
+    role, or its id or function, the DB9_CONSOLE reading - because
+    `std/micro-usb` is also the R660's and R740xd's iDRAC Direct port, which is
+    a USB maintenance port and stays out (NOT_A_DCIM_PORT's USB reasoning).
+
+    AN AUX PORT IS THE SECOND SERIAL LINE, and a DCIM's console ports are where
+    a serial line goes - `route_part` has filed a card's AUX jack as a console
+    since RJ45_CONSOLE was written, while the same jack on a chassis (the
+    ASR-9001, ASR-9901 and MX80) exported nothing. Named AUX, as all three print
+    it.
+    """
+    role, media, ref = a.get("role"), a.get("media"), p["ref"]
+    if role == "console" and media == "rj45-serial":
+        return {"name": "Console", "type": "rj-45"}
+    if role == "aux" and media == "rj45-serial":
+        return {"name": "AUX", "type": "rj-45"}
+    if role == "console" and ref.startswith("std/usb-c"):
+        return {"name": "Console (USB-C)", "type": "usb-c"}
+    # A USB-A CONSOLE BESIDE THE RJ45 ONE: the XM-8424H prints CONSOLE over both, and the
+    # data sheet lists a "USB console". `usb-a` is a console-port type in both targets.
+    if role == "console" and ref.startswith("std/usb-a"):
+        return {"name": "Console (USB-A)", "type": "usb-a"}
+    if (ref.split("@")[0] == MICRO_USB_REF
+            and DB9_CONSOLE.search(db9_words({**p, "attrs": a}))):
+        return {"name": "Console (Micro-USB)", "type": "usb-micro-b"}
+    return None
+
+
 def device_port_type(p, a, group_role, names=None):
     """What `build` exports a device placement as when it is a switch port:
     (type, label, None), or (None, None, why) when it is not one.
@@ -1491,7 +1594,11 @@ def worth_a_file(doc, dev):
     return (dev or {}).get("profile") == "passive"
 
 
-def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None):
+def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=None):
+    """One configuration's device type. `trace`, when a set, collects the id of
+    every placement that reached the document - interface, console, power or
+    timing row - so a census can ask the exporter itself what it dropped rather
+    than a mirror of it (test_dcim_mgmt_ports.py, #384)."""
     ch = dev.get("chassis", {})
     cfg = cfg or {}
 
@@ -1635,24 +1742,27 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None):
             row = device_timing_row(p, a)
             if row:
                 timing.setdefault(p["id"], row)
+                if trace is not None:
+                    trace.add(p["id"])
             if p["ref"].split("@")[0] in PART_POWER:
                 powers.setdefault(p["id"], {
                     "name": p["id"] or "Inlet",
                     "type": PART_POWER[p["ref"].split("@")[0]]})
-            if role == "console" and media == "rj45-serial":
-                console.append({"name": "Console", "type": "rj-45", "_id": p["id"]})
-            elif role == "console" and p["ref"].startswith("std/usb-c"):
-                console.append({"name": "Console (USB-C)", "type": "usb-c", "_id": p["id"]})
-            # A USB-A CONSOLE BESIDE THE RJ45 ONE: the XM-8424H prints CONSOLE over both, and the
-            # data sheet lists a "USB console". `usb-a` is a console-port type in both targets.
-            elif role == "console" and p["ref"].startswith("std/usb-a"):
-                console.append({"name": "Console (USB-A)", "type": "usb-a", "_id": p["id"]})
+                if trace is not None:
+                    trace.add(p["id"])
+            con = device_console_row(p, a)
+            if con:
+                console.append({**con, "_id": p["id"]})
+                if trace is not None:
+                    trace.add(p["id"])
             elif (role == "mgmt" and a.get("speed") == "10g"
                   and not (names and p["id"] in names)):
                 mgmt_sfp.append({"name": p["id"].replace("port-", ""),
                                  "type": "10gbase-x-sfpp", "mgmt_only": True,
                                  "description": "10G management port (faceplate label; "
                                                 "not presented as a switch interface)"})
+                if trace is not None:
+                    trace.add(p["id"])
         for b in scoped(parts["bays"], cfg_name):
             bays.append(bay_row(b["id"], b.get("accepts")))
 
@@ -1720,6 +1830,8 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None):
                 # reads the front panel in
                 ports.setdefault(name, ((0 if iface.get("mgmt_only") else 1),
                                         _num(iid.rsplit("-", 1)[-1]), iface))
+                if trace is not None:
+                    trace.add(pid)
 
     ifaces = ([i for _, _, i in sorted(ports.values(), key=lambda k: k[:2]) if i.get("mgmt_only")]
               + sorted(mgmt_sfp, key=lambda i: i["name"])
