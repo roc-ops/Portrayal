@@ -5,3 +5,8 @@
   floor; the plates and the base's side walls are now sunk just inside the
   faces. The 2D views and the DCIM exports are unchanged apart from the
   version.
+
+### Changed
+- `fs/cmh-4drb1u-ring@1` 1.1.0 declares its ring guide, a 37.2 x 74.8 mm
+  opening run along the rack, so every FS ring carries one. `fs/cmh-4drb1u`
+  1.0.2 for the composed change; its drawings gain only the guide attributes.
