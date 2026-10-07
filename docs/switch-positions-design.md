@@ -171,7 +171,9 @@ are. It sets nothing; the value is set by `attrs`.
    indicator, and the Airpax datasheet says a trip carries the handle to OFF, so `tripped`
    is drawn as `off` (`amphenol-ns/breaker-1ru@1`, provenance `state`). SHOW and
    `drawn-by-absence` wait for a part whose face really changes.
-4. `common/rocker-switch@1` and `common/power-switch-slide@1`.
+4. `common/rocker-switch@1`: `off`/`on`, the first SHOW user - each half is a node raised
+   for the position that does not press it. `common/power-switch-slide@1` is not given
+   positions: no source says which end of its travel is ON or how far its slider moves.
 
 Each is a contract minor: a field is added and nothing that exists moves.
 

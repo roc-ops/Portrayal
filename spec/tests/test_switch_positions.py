@@ -436,3 +436,35 @@ def test_an_unknown_breaker_state_fails_the_render(tmp_path):
         d["configurations"]["populated"]["bay-attrs"]["breaker-a1"]["state"] = "mid-trip"
     _name, _o, r = _render(tmp_path, "amphenol-ns/300cb08", edit)
     assert r.returncode != 0 and "is not a position" in r.stderr
+
+
+# --- the rocker: the first part with a SHOW node hidden by default ---------------------------
+
+ROCKER = "common/rocker-switch@1"
+
+
+def test_the_rocker_raises_the_half_it_is_not_set_to():
+    """ON presses the I half and raises the O half; OFF the reverse. Each
+    option shows one node, so no option is drawn by absence."""
+    p = LIB / "components/common/rocker-switch/v1/contract.yaml"
+    c = yaml.safe_load(p.read_text())
+    assert c["fields"]["state"] == {"label": "State", "type": "choice", "options": ["off", "on"], "default": "off"}
+    for code in ("L73", "L148", "L149"):
+        assert not _caught(code, lint.lint_component_fields, p, c), code
+    by = {e.get("id"): e for e in ET.parse(p.parent / "skins/default.svg").getroot().iter()}
+    assert by["raised-i"].get("data-show") == "off" and by["raised-i"].get("display") is None
+    assert by["raised-o"].get("data-show") == "on" and by["raised-o"].get("display") == "none"
+
+
+def test_a_placement_sets_the_rocker_on(tmp_path):
+    def edit(d):
+        for v in d["views"].values():
+            for p in ((v or {}).get("components") or {}).get("placements") or []:
+                if p.get("id") == "power-switch-1":
+                    p["attrs"] = {**(p.get("attrs") or {}), "state": "on"}
+    name, o, r = _render(tmp_path, "readylinks/gl-12xb-240d", edit)
+    assert r.returncode == 0, r.stderr[-800:]
+    root = ET.parse(o / f"{name}.rear.svg").getroot()
+    disp = {e.get("id"): e.get("display") for e in root.iter() if (e.get("id") or "").startswith("power-switch-")}
+    assert disp["power-switch-1--raised-o"] is None and disp["power-switch-1--raised-i"] == "none"
+    assert disp["power-switch-2--raised-o"] == "none" and disp["power-switch-2--raised-i"] is None
