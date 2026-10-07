@@ -149,12 +149,14 @@ def test_each_jack_presents_its_interface_at_the_centre_of_its_opening(iface):
     el = jack["elements"]["jack" if iface == "rj11" else "opening"]
     centre = [el["at"][0] + el["size"][0] / 2, el["at"][1] + el["size"][1] / 2]
     if iface == "rj11":
-        # the point the jack had before #837 redrew its opening: the centre of
-        # the 11.6 x 10.5 opening drawn then, kept so a seated plug did not
-        # move. Centred across; the latch slot made the opening 11.26 tall.
-        assert at == pytest.approx([centre[0], 6.75])
-        assert at[1] == pytest.approx(centre[1] - 0.38)
-        assert "UNCHANGED" in flat(jack["provenance"]["mate"])
+        # the centre of the BODY TIER the plug's body fills (9.88 x 6.85 from
+        # the top of the opening), not of the whole opening, whose lower 4.41
+        # is the shoulder and latch slot: centred across, 6.85 / 2 down
+        assert at == pytest.approx([centre[0], el["at"][1] + 6.85 / 2])
+        plug = _contract(PAIRS[iface][1])
+        ph = plug["size"]["h"]
+        assert el["at"][1] <= at[1] - ph / 2 and at[1] + ph / 2 <= el["at"][1] + 6.85
+        assert "BODY TIER" in flat(jack["provenance"]["mate"])
     elif iface == "vhdci":
         # the point the receptacle already had: midway between its two screw
         # locks, which is the middle of the part and 0.1 off the middle of the
