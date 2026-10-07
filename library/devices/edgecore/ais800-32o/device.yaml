@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ais800-32o
-version: 1.0.5
+version: 2.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: AIS800-32O
@@ -84,17 +84,23 @@ provenance:
       and the lower at 18.87 to 31.85 - a row pitch of 14.54 against the AIS800-32D's 18.00, and drawn
       openings of 12.58 and 12.98 against its 8.70. std/osfp@1's registry aperture is 13.5 tall, so seating
       it on a 14.54 pitch leaves the two rows 1.04 mm apart. That is what a stacked OSFP 2x1 cage is;
-      the registry owns the aperture and the device owns the pitch, as the EXP100 records. Drawn widths
-      are 22.4 against the registry's 23.1, the same consistent bias the twin shows at 18.3 against 19.0.
-      THE INTER-ROW BAND IS DRAWN ON A BACKING RECT AND THAT IS DELIBERATE, as on the twin. Panel pattern
-      decor paints only its holes, so a slot field on a dark panel is invisible; this band is BRIGHT on
-      the hardware - here a single row of round perforations less than a millimetre tall, which is all
-      the room an OSFP row pitch of 14.54 leaves for it - so each column gets its own light rect beneath
-      the pattern - SIXTEEN bands, not one strip, because the band belongs to the cage assembly and stops
-      between columns. The left and bottom fields get none, because those really are dark slots punched
-      in the grey panel. THE WALL STARTS 2.4 MM HIGHER AND THAT COSTS THE PANEL A VENT BAND. The twin
-      prints a row of slots at y 3.30 to 5.90, above its cages; here the cages begin at 4.33 and occupy
-      that strip, so this face carries no top vent field. Its bottom field is correspondingly taller,
+      the registry owns the aperture and the device owns the pitch, as the EXP100 records. BOTH ROWS ARE
+      THE SAME WAY UP, rotate 0 (#799). The OSFP MSA rev 5.22 draws its stacked 2x1 cage, on this 14.9
+      pitch, with both modules heat sink up (section 7.1, Table 7-1, Figures 7-1 and 7-2) - one connector,
+      with no room for a board between the rows - and this guide shows the same: the page 1 front elevation
+      draws the card slot low in both openings of a column and the vent band only across the top of the
+      upper one, and the page 3 install render seats an optic heat sink up in a lower-row cage. The lower
+      row was drawn turned 180 until #799, which overlapped the two seated noses by about 1.7 mm. Drawn
+      widths are 22.4 against the registry's 23.1, the same consistent bias the twin shows at 18.3 against
+      19.0. THE INTER-ROW BAND IS DRAWN ON A BACKING RECT AND THAT IS DELIBERATE, as on the twin. Panel
+      pattern decor paints only its holes, so a slot field on a dark panel is invisible; this band is
+      BRIGHT on the hardware - here a single row of round perforations less than a millimetre tall, which
+      is all the room an OSFP row pitch of 14.54 leaves for it - so each column gets its own light rect
+      beneath the pattern - SIXTEEN bands, not one strip, because the band belongs to the cage assembly
+      and stops between columns. The left and bottom fields get none, because those really are dark slots
+      punched in the grey panel. THE WALL STARTS 2.4 MM HIGHER AND THAT COSTS THE PANEL A VENT BAND. The
+      twin prints a row of slots at y 3.30 to 5.90, above its cages; here the cages begin at 4.33 and
+      occupy that strip, so this face carries no top vent field. Its bottom field is correspondingly taller,
       starting at 37.20 where the twin's starts at 39.20.
   the-management-cluster-is-shared-with-the-twin:
     confidence: measured
@@ -695,37 +701,37 @@ views:
         - {name: ok, color: '#22c55e'}
         - {name: fault, color: '#ef4444'}
       - {ref: std/osfp@1, id: port-1, at: [7.05, 4.33], group: osfp800, rel-pos: 1}
-      - {ref: std/osfp@1, id: port-2, at: [7.05, 18.87], rotate: 180, group: osfp800, rel-pos: 2}
+      - {ref: std/osfp@1, id: port-2, at: [7.05, 18.87], group: osfp800, rel-pos: 2}
       - {ref: std/osfp@1, id: port-3, at: [30.47, 4.33], group: osfp800, rel-pos: 3}
-      - {ref: std/osfp@1, id: port-4, at: [30.47, 18.87], rotate: 180, group: osfp800, rel-pos: 4}
+      - {ref: std/osfp@1, id: port-4, at: [30.47, 18.87], group: osfp800, rel-pos: 4}
       - {ref: std/osfp@1, id: port-5, at: [53.9, 4.33], group: osfp800, rel-pos: 5}
-      - {ref: std/osfp@1, id: port-6, at: [53.9, 18.87], rotate: 180, group: osfp800, rel-pos: 6}
+      - {ref: std/osfp@1, id: port-6, at: [53.9, 18.87], group: osfp800, rel-pos: 6}
       - {ref: std/osfp@1, id: port-7, at: [77.32, 4.33], group: osfp800, rel-pos: 7}
-      - {ref: std/osfp@1, id: port-8, at: [77.32, 18.87], rotate: 180, group: osfp800, rel-pos: 8}
+      - {ref: std/osfp@1, id: port-8, at: [77.32, 18.87], group: osfp800, rel-pos: 8}
       - {ref: std/osfp@1, id: port-9, at: [103.84, 4.33], group: osfp800, rel-pos: 9}
-      - {ref: std/osfp@1, id: port-10, at: [103.84, 18.87], rotate: 180, group: osfp800, rel-pos: 10}
+      - {ref: std/osfp@1, id: port-10, at: [103.84, 18.87], group: osfp800, rel-pos: 10}
       - {ref: std/osfp@1, id: port-11, at: [127.27, 4.33], group: osfp800, rel-pos: 11}
-      - {ref: std/osfp@1, id: port-12, at: [127.27, 18.87], rotate: 180, group: osfp800, rel-pos: 12}
+      - {ref: std/osfp@1, id: port-12, at: [127.27, 18.87], group: osfp800, rel-pos: 12}
       - {ref: std/osfp@1, id: port-13, at: [150.69, 4.33], group: osfp800, rel-pos: 13}
-      - {ref: std/osfp@1, id: port-14, at: [150.69, 18.87], rotate: 180, group: osfp800, rel-pos: 14}
+      - {ref: std/osfp@1, id: port-14, at: [150.69, 18.87], group: osfp800, rel-pos: 14}
       - {ref: std/osfp@1, id: port-15, at: [174.11, 4.33], group: osfp800, rel-pos: 15}
-      - {ref: std/osfp@1, id: port-16, at: [174.11, 18.87], rotate: 180, group: osfp800, rel-pos: 16}
+      - {ref: std/osfp@1, id: port-16, at: [174.11, 18.87], group: osfp800, rel-pos: 16}
       - {ref: std/osfp@1, id: port-17, at: [200.63, 4.33], group: osfp800, rel-pos: 17}
-      - {ref: std/osfp@1, id: port-18, at: [200.63, 18.87], rotate: 180, group: osfp800, rel-pos: 18}
+      - {ref: std/osfp@1, id: port-18, at: [200.63, 18.87], group: osfp800, rel-pos: 18}
       - {ref: std/osfp@1, id: port-19, at: [224.06, 4.33], group: osfp800, rel-pos: 19}
-      - {ref: std/osfp@1, id: port-20, at: [224.06, 18.87], rotate: 180, group: osfp800, rel-pos: 20}
+      - {ref: std/osfp@1, id: port-20, at: [224.06, 18.87], group: osfp800, rel-pos: 20}
       - {ref: std/osfp@1, id: port-21, at: [247.48, 4.33], group: osfp800, rel-pos: 21}
-      - {ref: std/osfp@1, id: port-22, at: [247.48, 18.87], rotate: 180, group: osfp800, rel-pos: 22}
+      - {ref: std/osfp@1, id: port-22, at: [247.48, 18.87], group: osfp800, rel-pos: 22}
       - {ref: std/osfp@1, id: port-23, at: [270.91, 4.33], group: osfp800, rel-pos: 23}
-      - {ref: std/osfp@1, id: port-24, at: [270.91, 18.87], rotate: 180, group: osfp800, rel-pos: 24}
+      - {ref: std/osfp@1, id: port-24, at: [270.91, 18.87], group: osfp800, rel-pos: 24}
       - {ref: std/osfp@1, id: port-25, at: [297.42, 4.33], group: osfp800, rel-pos: 25}
-      - {ref: std/osfp@1, id: port-26, at: [297.42, 18.87], rotate: 180, group: osfp800, rel-pos: 26}
+      - {ref: std/osfp@1, id: port-26, at: [297.42, 18.87], group: osfp800, rel-pos: 26}
       - {ref: std/osfp@1, id: port-27, at: [320.85, 4.33], group: osfp800, rel-pos: 27}
-      - {ref: std/osfp@1, id: port-28, at: [320.85, 18.87], rotate: 180, group: osfp800, rel-pos: 28}
+      - {ref: std/osfp@1, id: port-28, at: [320.85, 18.87], group: osfp800, rel-pos: 28}
       - {ref: std/osfp@1, id: port-29, at: [344.27, 4.33], group: osfp800, rel-pos: 29}
-      - {ref: std/osfp@1, id: port-30, at: [344.27, 18.87], rotate: 180, group: osfp800, rel-pos: 30}
+      - {ref: std/osfp@1, id: port-30, at: [344.27, 18.87], group: osfp800, rel-pos: 30}
       - {ref: std/osfp@1, id: port-31, at: [367.7, 4.33], group: osfp800, rel-pos: 31}
-      - {ref: std/osfp@1, id: port-32, at: [367.7, 18.87], rotate: 180, group: osfp800, rel-pos: 32}
+      - {ref: std/osfp@1, id: port-32, at: [367.7, 18.87], group: osfp800, rel-pos: 32}
     regions:
     - id: optics
       at: [6.0, 3.5]

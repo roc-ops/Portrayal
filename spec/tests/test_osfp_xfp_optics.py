@@ -510,16 +510,16 @@ def test_no_other_family_offers_them_and_the_pool_is_the_family(device_cages, co
 
 # --- seated in real cages, a plug chained in ----------------------------------
 
-AIS = "edgecore/ais800-32o"       # port-1 over port-2, the lower one at rotate 180
+AIS = "edgecore/ais800-32o"       # port-1 over port-2, both rotate 0 - the same way up (#799)
 MX80 = "juniper/mx80"
 MX960 = "juniper/mx960"           # fpc6 takes a card whose XFP cages are at rotate 90
 CARD = "juniper/dpc-r-4xge-xfp-v@1"
 # (device, cage key, cage path, optic, {slot key suffix: occupant}, turn)
 SEATS = [
     (AIS, "port-1", "port-1", OSFP_MPO16, {"": "generic/mpo16-plug@1"}, 0),
-    (AIS, "port-2", "port-2", OSFP_LC, {"/tx": "generic/lc-plug@2", "/rx": "common/lc-dust-cap@1"}, 180),
+    (AIS, "port-2", "port-2", OSFP_LC, {"/tx": "generic/lc-plug@2", "/rx": "common/lc-dust-cap@1"}, 0),
     (AIS, "port-3", "port-3", OSFP_LC, {"/tx": "generic/lc-plug@2"}, 0),
-    (AIS, "port-4", "port-4", OSFP_MPO16, {"": "common/mpo16-dust-cap@1"}, 180),
+    (AIS, "port-4", "port-4", OSFP_MPO16, {"": "common/mpo16-dust-cap@1"}, 0),
     (MX80, "xe-1", "xe-1", XFP_LC, {"/tx": "generic/lc-plug@2", "/rx": "common/lc-dust-cap@1"}, 0),
     (MX960, "fpc6/port-1", "fpc6/module/port-1", XFP_LC, {"/tx": "generic/lc-plug@2"}, 90),
 ]
@@ -593,24 +593,54 @@ def test_it_seats_in_a_real_cage_with_its_plug_in_it(seated, seat):
         assert float(occ.get("data-z-lift")) == pytest.approx(depth)
 
 
-def test_the_lower_row_optic_is_the_upper_one_turned_over(seated):
-    """A stacked column draws its lower cage at rotate 180, and the optic
-    takes the turn from the cage: the heat sink is toward the outside of the
-    pair on both, the noses toward each other, and transmit swaps sides."""
+def test_the_lower_row_optic_is_the_upper_one_moved_down(seated):
+    """A stacked OSFP column seats both modules heat sink up (OSFP MSA rev 5.22
+    section 7.1, Figures 7-1 and 7-2), so since #799 the lower cage is drawn at
+    rotate 0 like the upper and its optic is the upper one moved down a row:
+    heat sink above the nose in both rows, transmit on the same side."""
     root, parents = seated[AIS]
     top, low = by_path(root, "port-3-occupant"), by_path(root, "port-2-occupant")
     assert doc(OSFP_LC)["connection-points"]["optical-tx"]["at"][0] < 11.29
-    for optic, sign in ((top, 1), (low, -1)):
+    for optic in (top, low):
         sink = device_point(parents, optic, [11.29, 1.9])
         nose = device_point(parents, optic, [11.29, 9.2])
         mid = device_point(parents, optic, [11.29, 6.5])
         tx = device_point(parents, optic, [8.165, 8.7])
-        assert (nose[1] - sink[1]) * sign > 0 and (tx[0] - mid[0]) * sign < 0
-    upper_nose = device_point(parents, by_path(root, "port-1-occupant"), [11.29, 9.2])[1]
-    lower_nose = device_point(parents, low, [11.29, 9.2])[1]
-    upper_sink = device_point(parents, by_path(root, "port-1-occupant"), [11.29, 1.9])[1]
+        assert nose[1] > sink[1] and tx[0] < mid[0]
+    upper = by_path(root, "port-1-occupant")
+    upper_sink = device_point(parents, upper, [11.29, 1.9])[1]
+    upper_nose = device_point(parents, upper, [11.29, 9.2])[1]
     lower_sink = device_point(parents, low, [11.29, 1.9])[1]
-    assert upper_sink < upper_nose < lower_nose < lower_sink
+    lower_nose = device_point(parents, low, [11.29, 9.2])[1]
+    assert upper_sink < upper_nose < lower_sink < lower_nose
+
+
+# THE NOSE OVERLAP #799 WAS FILED FOR. Turned belly-to-belly, the two noses -
+# each reaching the MSA's 1.6 MAX below its module (Figure 3-3) - met in the band
+# and overlapped by 1.66 on this 14.54 row pitch. The same way up, the upper nose
+# reaches only toward the lower module's heat sink, and what is left is the row
+# pitch less 14.6 (13.0 module + 1.6 nose): -0.06 here, because this face's
+# drawn pitch is 0.36 under the MSA's 14.90 +/-0.10 (Figure 8-3), where it would
+# clear by 0.30. It stays pinned so a change to either number is seen.
+AIS_ROW_PITCH = 14.54
+
+
+def _head_bottom(optic):
+    h = doc(optic.get("data-ref").rsplit(":", 1)[0])["head"]
+    return h["at"][1] + h["size"]["h"]
+
+
+def test_the_stacked_noses_no_longer_meet_in_the_band(seated):
+    root, parents = seated[AIS]
+    upper, lower = by_path(root, "port-1-occupant"), by_path(root, "port-2-occupant")
+    assert _head_bottom(upper) == pytest.approx(14.6) and _head_bottom(lower) == pytest.approx(14.6)
+    upper_reach = device_point(parents, upper, [11.29, _head_bottom(upper)])[1]
+    lower_top = device_point(parents, lower, [11.29, 0.0])[1]
+    gap = lower_top - upper_reach
+    assert gap == pytest.approx(AIS_ROW_PITCH - 14.6, abs=1e-6)
+    # turned belly-to-belly, the lower nose came up to meet it
+    lower_turned_reach = lower_top + 13.0 - 14.6
+    assert upper_reach - lower_turned_reach == pytest.approx(1.66, abs=0.01)
 
 
 def test_the_seated_mpo16_plug_keeps_its_key_toward_the_heat_sink(seated):
