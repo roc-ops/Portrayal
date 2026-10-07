@@ -12,9 +12,11 @@ description: >-
   connections. Qualified optics: SFP-OC12-MM, -SR, -IR1, -LR1, -LR2.
   Seats in a SIP-700 SPA subslot; it is a module, not a device.
 unplaced: >-
-  no ASR 9000 chassis in this library accepts this card: their slot bays name a different card
-  generation. The card itself is sourced; what is missing is the datasheet's Chassis
-  compatibility row, which says exactly which chassis take it. Tracked in
+  no SIP in this library seats this SPA because it is double-height: the SIP and SPA Hardware
+  Installation Guide, Table 10 p10, lists it as double-height, so it fills two SIP-700
+  subslots side by side, and a module that spans two bays cannot be seated - a bay holds one
+  module sized to itself and has no way to claim its neighbour. The SIP-700 contract lists its
+  single-width SPAs and leaves the two doubles out for this reason. Tracked in
   roc-ops/Portrayal#262.
 size: {w: 34.58, h: 167.87}
 attrs:
