@@ -164,6 +164,22 @@ def test_the_kit_moves_a_built_position_back_to_the_default(kit):
     assert kit["builtOn"] == ["translate(0 -3.2)", "translate(0.5 0) translate(1 1)"]
 
 
+def test_a_number_that_is_not_one_is_refused_in_both_halves(kit):
+    """'.' and '1.2.3' match the entry pattern; neither half may draw NaN (#874)."""
+    for s in ("on: . 0", "on: 1.2.3 0", "on: 0 0 ."):
+        with pytest.raises(ValueError, match="is not 'option: dx dy"):
+            parse_moves(s)
+    assert kit["badNumber"] == ["threw", "threw", "threw"]
+
+
+def test_a_part_says_which_fields_are_positions_before_a_hidden_node_goes(kit):
+    """The viewer rebuilds when a changed field moves or shows a node, reading
+    the face text - from which a hidden SHOW node has been removed. A part whose
+    only SHOW node starts hidden must still say so, on its own group (#874)."""
+    assert kit["marks"] == {"brk": "state", "dip": "sw-1 sw-2", "plain": None}
+    assert kit["flagGone"] is True
+
+
 def test_the_kit_reads_the_table_alike(kit):
     assert kit["parse"] == {"on": [0, -3.2, 0], "off": [1, 2, 90]}
     assert kit["badParse"] == "threw"
@@ -288,6 +304,32 @@ def test_l149_refuses_a_move_off_the_part(tmp_path):
     p, c = _component(tmp_path, f'<svg xmlns="{SVG}"><rect id="s" x="1" y="6" width="2" height="2" '
                                 'data-move-from="sw-1" data-move="on: 0 -3"/></svg>', SW)
     assert not _caught("L149", lint.lint_component_fields, p, c)
+
+
+STATE = {"state": {"type": "choice", "options": ["on", "off", "tripped"], "default": "on"}}
+FLAGS = (f'<svg xmlns="{SVG}"><rect id="f1" x="1" y="1" width="2" height="2" data-show-from="state" '
+         'data-show="off"/><rect id="f2" x="1" y="1" width="2" height="2" display="none" '
+         'data-show-from="state" data-show="tripped"/></svg>')
+
+
+def test_l148_asks_every_show_option_to_show_something(tmp_path):
+    """`on` shows no node and the field does not say it is drawn by absence."""
+    p, c = _component(tmp_path, FLAGS, STATE)
+    hits = _caught("L148", lint.lint_component_fields, p, c)
+    assert any("no node is shown for state=on" in h for h in hits), hits
+
+
+def test_l148_accepts_an_option_drawn_by_absence(tmp_path):
+    fields = {"state": {**STATE["state"], "drawn-by-absence": ["on"]}}
+    p, c = _component(tmp_path, FLAGS, fields)
+    assert not _caught("L148", lint.lint_component_fields, p, c)
+
+
+def test_l148_refuses_an_absence_that_is_not_an_option(tmp_path):
+    fields = {"state": {**STATE["state"], "drawn-by-absence": ["on", "unknown"]}}
+    p, c = _component(tmp_path, FLAGS, fields)
+    hits = _caught("L148", lint.lint_component_fields, p, c)
+    assert any("'unknown'" in h for h in hits), hits
 
 
 def test_l73_counts_a_position_as_wiring(tmp_path):

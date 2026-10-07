@@ -1581,8 +1581,12 @@ export function createViewer(container, opts = {}) {
     // cannot say, so the scene is rebuilt the way a config switch rebuilds it.
     // There is no per-part rebuild; a field with neither effect keeps the
     // repaint below.
-    const positional = text => [...keys].some(f =>
-      text.includes(`data-move-from="${f}"`) || text.includes(`data-show-from="${f}"`));
+    // the nodes themselves, or the mark their part carries - a hidden SHOW node
+    // was removed from this text before it was kept (relief.js markPositionFields)
+    const marked = text => new Set([...text.matchAll(/data-position-fields="([^"]*)"/g)]
+      .flatMap(m => m[1].split(/\s+/)));
+    const positional = text => { const m = marked(text); return [...keys].some(f =>
+      m.has(f) || text.includes(`data-move-from="${f}"`) || text.includes(`data-show-from="${f}"`)); };
     if ([...RESTYLE, ...LOD].some(e => touches(e.svgText) && positional(e.svgText))) {
       await build(CFG);
       if (DEV) await buildHitIndex(CFG);
