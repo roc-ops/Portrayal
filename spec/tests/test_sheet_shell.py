@@ -35,10 +35,11 @@ def test_L127_a_box_has_no_sheet_thickness():
     assert not findings({"chassis": {"width": 440}})
 
 
-@pytest.mark.parametrize("t", [0, -1, 12.5])
+@pytest.mark.parametrize("t", [0, -1, 12.5, "1.5", True, [1.5]])
 def test_L127_a_thickness_is_a_sheet_gauge(t):
     """0 and negatives are nonsense; over 10 mm is not sheet metal, it is a typo
-    for a depth."""
+    for a depth. Something that is not a number is a finding too, and not a
+    traceback, on a file the schema has yet to refuse."""
     assert findings({"chassis": {"shell": "sheet", "thickness": t}})
 
 

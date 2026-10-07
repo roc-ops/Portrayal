@@ -7,13 +7,13 @@ about it while the package is at 0.x.
 | Number | Where it appears | What it versions |
 |---|---|---|
 | `format` | every device manifest, component contract, listing and lab (`format: 1`) | the **file format** a manifest is written in |
-| schema `v1` | the schema `$id`s and titles in `spec/schemas/` (device, component and listing; a lab has no schema yet) | the same thing, named: schema v1 *is* format 1 |
+| schema `v1` | the schema `$id`s and titles in `spec/schemas/` (device, component, listing and lab) | the same thing, named: schema v1 *is* format 1 |
 | package | `version` in `pyproject.toml` (0.1.0) | the **tools**: the linter, the compiler, the indexers and the exporter |
 | `contract` | `devices.json` (`contract: 2` at 0.1.0) | the **published build** a consumer reads from `library/dist/`; `CHANGELOG.md` records each one |
 
 The schemas are published at `https://portrayal.dev/schemas/v1/`, one file
 per schema (`device.schema.json`, `component.schema.json`,
-`listing.schema.json`), and that URL is each schema's `$id`, so an editor or a
+`listing.schema.json`, `lab.schema.json`), and that URL is each schema's `$id`, so an editor or a
 validator that follows the `$id` finds the schema it names. A new format number
 is published beside the old one under its own label (`/schemas/v2/`); a
 published label is never reused for a different format.
@@ -135,6 +135,35 @@ Numbers are rounded to 4 decimals (0.1 µm).
 **The bytes** are deterministic: keys sorted, rows in document order, no
 whitespace, a final newline. The build writes the file whenever it writes the
 face, `--if-stale` included.
+
+## The labs file
+
+`labs.json` is every lab under `library/labs/`, each with `name`, `title`,
+`description`, `rack`, `devices` and `links`. A lab names devices by `name` and
+ports by placement id, and holds no geometry: a viewer finds port positions in
+the compiled drawings. What it does resolve is where each device is. Every
+placement keeps every key its lab wrote, and carries five more:
+
+```json
+{"id": "mgr-a", "ref": "fhd-cmp5dr", "on": "enc-4u", "face": "front", "unit": 3,
+ "ru": 12, "mount": "rack-face", "host": "enc-4u"}
+```
+
+- `ru`: the lowest rack unit the device takes, counted from U1 at the bottom of
+  the rack. A placement `on` a host has no `ru` of its own and is given one:
+  the host's `ru` plus `unit` less one.
+- `face`: `front` or `rear`. A rack device is always `front`; a rack-face part
+  says which rail face it bolts to, and defaults to `front`.
+- `mount`: the device's `chassis.mount`, `rack` or `rack-face`.
+- `host`: for a rack-face part, the id of the rack device on the unit behind
+  it, whether the lab placed it `on` that device or by `ru`; otherwise `null`.
+- `unit`: which of the host's rack units, from 1 at the host's bottom; `null`
+  without a host.
+
+They are new fields and did not raise `contract`, which is still 2. A reader that knows none of
+them still finds `ru`, and draws a rack-face part as an ordinary device on its
+rack unit. A lab that fails its schema or a check (lint L139 to L142) is not
+written, and the build stops.
 
 ## What else a consumer holds
 

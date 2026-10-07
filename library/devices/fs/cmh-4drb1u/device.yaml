@@ -1,0 +1,276 @@
+format: 1
+kind: device
+name: cmh-4drb1u
+version: 1.0.0
+maturity: modelled
+manufacturer: FS.com
+model: CMH-4DRB1U
+aliases:
+  - {name: '68690', kind: vendor}
+description: >-
+  Recessed 1U horizontal cable manager, FS SKU #68690: a black steel panel set back
+  behind the rack rails, four steel D-rings standing off it, and a brush strip behind
+  five windows in the panel that lets cables through to the rear of the rack. Each end
+  wall carries an open pass-through hole.
+profile: passive
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FIRST, FROM THE VENDOR'S OWN DIMENSIONED DRAWING - which is not in the
+      part's own datasheet. That one (CMH-4DRB1U Horizontal Cable Manager Datasheet,
+      updated 2025-12-09) carries only a dimensioned render (3.00 / 3.40 / 17.32 / 19.00
+      in). FS's Horizontal Cable Managers with D-rings datasheet draws the CMH-4DRB1U in
+      a side view and a front view, dimensioned. Its front view is 2.199 px/mm across
+      from the 482.6 line (1061 px) and 2.227 px/mm down from the 44 (98 px), a 1.3 %
+      difference between the axes; the 440, 100, 79 and 40 lines agree with the across
+      scale to under a millimetre. Positions are read on the across axis and heights on
+      the down one.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - 440 x 44 x 88. The 440 is the drawing's 17.32 in [440 mm] between the
+      ear folds, which is what this library models: the ears are not drawn. The part is
+      482.6 overall with them (19 in; the CMH-4DRB1U datasheet's table says 483), so
+      each ear stands 21.3 mm outside the body. The 88 is the datasheet's 3.46 in depth,
+      and the drawing's side view shows that it is the D-ring: the lower arm is
+      dimensioned 3.4 in [88 mm] from the back of the panel, and nothing stands behind
+      the panel but the brush. The 44 is 1.73 in on both.
+  mount:
+    confidence: estimated
+    note: >-
+      estimated - "Recessed": the panel sits behind the rack rails and the rings reach
+      forward through them. No document says how far. FS's front render (gallery image
+      2) is taken from above, so a point further back stands higher in the frame; the
+      panel's top and bottom edges stand 49 and 62 px above the ears', at 1.33 px per mm
+      of depth, which the rings' own 76 and 88 mm arms set in the same frame. So the
+      panel is about 42 mm behind the rail plane, and the rings' tips 46 mm in front of
+      it. The envelope's front is the rings' tips.
+  thickness:
+    confidence: drawing
+    note: drawing - the side view dimensions the ring's strip 0.05 in [1.2 mm]; the panel is taken as the same sheet.
+  front:
+    confidence: drawing
+    note: >-
+      drawing - the front view: the panel between the folds with its five obround
+      windows and the four rings. Rings centred 50 and 150 mm either side of the
+      middle: the drawing dimensions 3.9 in [100 mm] between the first two, and the
+      first 1.1 in [27.9 mm] plus 2.5 in [63.6 mm] from the part's end, which is 70.2
+      from the fold. Each ring is 12.5 wide. The window figures are the panel's, in its
+      contract. The brush is seen through the windows; it is one strip, behind the
+      panel, as the rear shows.
+  rear:
+    confidence: photo-measured
+    note: >-
+      photo-measured - THE BRUSH HAS NO DIMENSIONS in any document. FS's rear render
+      (gallery image 5, near straight-on) gives the body 1380 px across, 3.136 px/mm
+      against the drawing's 440; the strip spans 1305 px, 416 mm, read as centred
+      because the render sees a little of each end wall at different angles (8.6 and
+      15.3 mm in). Down, the body is 125 px for 44 mm: a 6.3 mm lip above the bristles,
+      33.4 of bristles and 4.3 below. Four rivets along the top lip at 32, 157, 283 and
+      408 mm, symmetric about the middle. FS's close-up of the rear (gallery image 7)
+      shows the bristles running up and down, and the strip held by screws along the
+      lower edge, which are not drawn.
+  left:
+    confidence: estimated
+    note: >-
+      estimated - an elevation, from the drawing's side view of the ring (its arms, its
+      hooked end and its curled lip, as the ring's contract reads them) with the end
+      wall in front of it. The end wall's depth and its hole are estimated from the
+      renders, and its contract says how. The right is the same, turned round.
+  top:
+    confidence: estimated
+    note: >-
+      estimated - an elevation: the panel's folded top flange, the end walls on edge
+      and the four rings' upper arms from above, with the lower arms reaching 12 mm
+      further. The bottom is the same from underneath. The flange's 8 mm is estimated
+      in its contract.
+  passes:
+    confidence: drawing
+    note: >-
+      drawing - the datasheet's table says "Pass-through Holes: 7". Declared here as
+      the five windows in the panel, brush-covered, and the hole in each end wall,
+      open: seven. The brush strip on the rear is declared too, because it is where
+      those five come out; it is the same strip, not an eighth hole.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - material, mounting hardware, "Indoor", the operating temperature and
+      the humidity are the CMH-4DRB1U datasheet's specification table.
+  cable-capacity:
+    confidence: datasheet
+    note: >-
+      datasheet - 87, and the two documents that state it disagree on its basis. The
+      CMH-4DRB1U datasheet's table reads "Cable Capacity (Theoretical Value) 87pcs
+      (28AWG)". The Cable Capacity Reference Guide in the D-rings datasheet gives the
+      same manager 87 Cat6 24AWG 6.1 mm cables at 100 % fill, and 221 for Cat6 slim
+      28AWG 3.8 mm, so the 87 is the Cat6 figure and the first table's "28AWG" is its
+      label for the wrong row. Recorded as the reference guide states it, which also
+      gives 26 at the recommended 30 % fill.
+  color:
+    confidence: estimated
+    note: >-
+      estimated - "Steel, Powder-coated Black" and "Color: Black". Every image FS
+      publishes of the part is a render.
+attrs:
+  physical:
+    material: Steel, Powder-coated Black
+    mounting-hardware: M6*15mm Screw x4 and M6 Nut x4
+  performance:
+    cable-capacity: 87
+    cable-capacity-basis: >-
+      Cat6 24AWG (6.1 mm) cables at 100 % fill, theoretical - FS Horizontal Cable
+      Managers with D-rings datasheet, Cable Capacity Reference Guide
+  environmental:
+    operating-temp: -10 to 60°C (14 to 140°F)
+    operating-humidity: 95% Relative Humidity (max.), Non-condensing
+  compliance:
+    environment: Indoor
+chassis:
+  width: 440.0
+  height: 44.0
+  depth: 88.0
+  ru: 1
+  shell: sheet
+  thickness: 1.2
+  color: '#1b1d20'
+gaps:
+  - what: weight
+    scope: [base]
+    reason: vendor-silent
+    note: >-
+      neither FS datasheet that covers the part, nor the cable managers portfolio,
+      states a weight.
+    wanted: the product page's weight, or the part on a scale
+  - what: cable-capacity-basis
+    scope: [cable-capacity-basis]
+    reason: sources-disagree
+    note: >-
+      87 cables in both FS documents; the CMH-4DRB1U datasheet labels it 28AWG and the
+      D-rings datasheet's reference guide gives it as Cat6 24AWG at 100 % fill, with 221
+      for 28AWG. The guide is taken.
+    wanted: FS to correct one of the two tables
+  - what: recess
+    scope: [left, right, top, bottom]
+    reason: vendor-silent
+    note: >-
+      no document says how far the panel sits behind the rack rails, so the end walls'
+      depth and where the ears would be are read off a render taken from above.
+    wanted: a dimensioned plan, or a ruler on the part
+groups:
+  body:
+    term: Panel
+    role: furniture
+    index-origin: 1
+    description: the steel panel, its end walls and its folded flanges
+  guides:
+    term: Ring
+    role: furniture
+    index-origin: 1
+    description: four steel D-rings, cables passing through along the panel
+views:
+  front:
+    size: {w: 440.0, h: 44.0}
+    panel:
+      decor:
+        - {id: brush-1, at: [20.6, 8.9], size: [41.5, 26.6], rx: 13.3, pattern: brush, bristle: vertical}
+        - {id: brush-2, at: [88.4, 8.9], size: [75.6, 26.6], rx: 13.3, pattern: brush, bristle: vertical}
+        - {id: brush-3, at: [182.2, 8.9], size: [80.6, 26.6], rx: 13.3, pattern: brush, bristle: vertical}
+        - {id: brush-4, at: [281.9, 8.9], size: [75.6, 26.6], rx: 13.3, pattern: brush, bristle: vertical}
+        - {id: brush-5, at: [377.9, 8.9], size: [41.5, 26.6], rx: 13.3, pattern: brush, bristle: vertical}
+    components:
+      placements:
+        - {ref: fs/cmh-4drb1u-panel@1, id: panel, at: [0.0, 0.0], group: body, rel-pos: 1}
+        - {ref: fs/cmh-4drb1u-ring@1, id: guide-1, at: [63.75, 0.0], group: guides, rel-pos: 1, in: panel}
+        - {ref: fs/cmh-4drb1u-ring@1, id: guide-2, at: [163.75, 0.0], group: guides, rel-pos: 2, in: panel}
+        - {ref: fs/cmh-4drb1u-ring@1, id: guide-3, at: [263.75, 0.0], group: guides, rel-pos: 3, in: panel}
+        - {ref: fs/cmh-4drb1u-ring@1, id: guide-4, at: [363.75, 0.0], group: guides, rel-pos: 4, in: panel}
+    passes:
+      - {id: window-1, at: [21.1, 9.4], size: [40.5, 25.6], shape: obround, cover: brush}
+      - {id: window-2, at: [88.9, 9.4], size: [74.6, 25.6], shape: obround, cover: brush}
+      - {id: window-3, at: [182.7, 9.4], size: [79.6, 25.6], shape: obround, cover: brush}
+      - {id: window-4, at: [282.4, 9.4], size: [74.6, 25.6], shape: obround, cover: brush}
+      - {id: window-5, at: [378.4, 9.4], size: [40.5, 25.6], shape: obround, cover: brush}
+  rear:
+    size: {w: 440.0, h: 44.0}
+    panel:
+      decor:
+        - {id: panel-back, at: [0, 0], size: [440, 44], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: brush, at: [12, 6.3], size: [416, 33.4], rx: 0, pattern: brush, bristle: vertical, sink: 1}
+        - {id: rivet-1, at: [30.5, 2], size: [3, 3], rx: 1.5, fill: '#2a2d31', kind: rivet}
+        - {id: rivet-2, at: [155.5, 2], size: [3, 3], rx: 1.5, fill: '#2a2d31', kind: rivet}
+        - {id: rivet-3, at: [281.5, 2], size: [3, 3], rx: 1.5, fill: '#2a2d31', kind: rivet}
+        - {id: rivet-4, at: [406.5, 2], size: [3, 3], rx: 1.5, fill: '#2a2d31', kind: rivet}
+    passes:
+      - {id: rear-brush, at: [12, 6.3], size: [416, 33.4], shape: rect, cover: brush}
+  top:
+    size: {w: 440.0, h: 88.0}
+    panel:
+      decor:
+        - {id: end-left-edge, at: [0, 0], size: [1.2, 42], rx: 0, fill: '#1b1d20', kind: end-wall}
+        - {id: end-right-edge, at: [438.8, 0], size: [1.2, 42], rx: 0, fill: '#1b1d20', kind: end-wall}
+        - {id: guide-1-arm, at: [63.75, 1.2], size: [12.5, 74.8], rx: 0, fill: '#0c0d0f', kind: ring}
+        - {id: guide-2-arm, at: [163.75, 1.2], size: [12.5, 74.8], rx: 0, fill: '#0c0d0f', kind: ring}
+        - {id: guide-3-arm, at: [263.75, 1.2], size: [12.5, 74.8], rx: 0, fill: '#0c0d0f', kind: ring}
+        - {id: guide-4-arm, at: [363.75, 1.2], size: [12.5, 74.8], rx: 0, fill: '#0c0d0f', kind: ring}
+        - {id: guide-1-lower, at: [63.75, 76], size: [12.5, 12], rx: 0, fill: '#16181b', kind: ring}
+        - {id: guide-2-lower, at: [163.75, 76], size: [12.5, 12], rx: 0, fill: '#16181b', kind: ring}
+        - {id: guide-3-lower, at: [263.75, 76], size: [12.5, 12], rx: 0, fill: '#16181b', kind: ring}
+        - {id: guide-4-lower, at: [363.75, 76], size: [12.5, 12], rx: 0, fill: '#16181b', kind: ring}
+    components:
+      placements:
+        - {ref: fs/cmh-4drb1u-flange@1, id: flange-top, at: [0.0, 0.0], group: body, rel-pos: 4}
+  bottom:
+    size: {w: 440.0, h: 88.0}
+    panel:
+      decor:
+        - {id: end-left-edge, at: [0, 0], size: [1.2, 42], rx: 0, fill: '#1b1d20', kind: end-wall}
+        - {id: end-right-edge, at: [438.8, 0], size: [1.2, 42], rx: 0, fill: '#1b1d20', kind: end-wall}
+        - {id: guide-1-arm, at: [63.75, 1.2], size: [12.5, 86.8], rx: 0, fill: '#0c0d0f', kind: ring}
+        - {id: guide-2-arm, at: [163.75, 1.2], size: [12.5, 86.8], rx: 0, fill: '#0c0d0f', kind: ring}
+        - {id: guide-3-arm, at: [263.75, 1.2], size: [12.5, 86.8], rx: 0, fill: '#0c0d0f', kind: ring}
+        - {id: guide-4-arm, at: [363.75, 1.2], size: [12.5, 86.8], rx: 0, fill: '#0c0d0f', kind: ring}
+    components:
+      placements:
+        - {ref: fs/cmh-4drb1u-flange@1, id: flange-bottom, at: [0.0, 0.0], group: body, rel-pos: 5}
+  left:
+    size: {w: 88.0, h: 44.0}
+    panel:
+      decor:
+        - {id: interior, at: [9, 6], size: [24, 32], rx: 12, fill: '#0a0b0c', kind: interior}
+        - {id: ring-back, at: [0, 3.1], size: [1.2, 39.6], rx: 0, fill: '#0c0d0f', kind: ring}
+        - {id: ring-arm-top, at: [0, 3.1], size: [76, 1.2], rx: 0, fill: '#0c0d0f', kind: ring}
+        - {id: ring-hook, at: [74.8, 3.1], size: [1.2, 18.2], rx: 0, fill: '#0c0d0f', kind: ring}
+        - {id: ring-arm-bottom, at: [0, 41.5], size: [88, 1.2], rx: 0, fill: '#0c0d0f', kind: ring}
+        - {id: ring-lip, at: [86.8, 20], size: [1.2, 22.7], rx: 0, fill: '#0c0d0f', kind: ring}
+    components:
+      placements:
+        - {ref: fs/cmh-4drb1u-end@1, id: end-left, at: [0.0, 0.0], group: body, rel-pos: 2}
+    passes:
+      - {id: end-hole, at: [9, 6], size: [24, 32], shape: obround, cover: open}
+  right:
+    size: {w: 88.0, h: 44.0}
+    panel:
+      decor:
+        - {id: interior, at: [55, 6], size: [24, 32], rx: 12, fill: '#0a0b0c', kind: interior}
+        - {id: ring-back, at: [86.8, 3.1], size: [1.2, 39.6], rx: 0, fill: '#0c0d0f', kind: ring}
+        - {id: ring-arm-top, at: [12, 3.1], size: [76, 1.2], rx: 0, fill: '#0c0d0f', kind: ring}
+        - {id: ring-hook, at: [12, 3.1], size: [1.2, 18.2], rx: 0, fill: '#0c0d0f', kind: ring}
+        - {id: ring-arm-bottom, at: [0, 41.5], size: [88, 1.2], rx: 0, fill: '#0c0d0f', kind: ring}
+        - {id: ring-lip, at: [0, 20], size: [1.2, 22.7], rx: 0, fill: '#0c0d0f', kind: ring}
+    components:
+      placements:
+        - {ref: fs/cmh-4drb1u-end@1, id: end-right, at: [46.0, 0.0], group: body, rel-pos: 3}
+    passes:
+      - {id: end-hole, at: [55, 6], size: [24, 32], shape: obround, cover: open}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The cable manager as FS ships #68690, four rings fitted.'
+datasheet:
+  title: 'FS CMH-4DRB1U Horizontal Cable Manager datasheet'
+  sha256: 5daf74c28cc5156aff26a107180848e967726d60e32be1d04e27aeb03ba4682f
+references:
+  - title: 'FS Horizontal Cable Managers with D-rings datasheet'
+    sha256: 6139a0ad822d496db3b2a66173b744697f90dfbc718ca66e1a705457f527045e

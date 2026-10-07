@@ -773,8 +773,17 @@
             "grille",
             "slots",
             "slots-h",
-            "ribs"
-           ]
+            "ribs",
+            "brush"
+           ],
+           "description": "`brush` is a brush strip: bristles closing an opening that cables pass through. Unlike the other patterns it paints itself as a solid field - the bristles and the dark between them - so it needs no backing rect, and it is never an air aperture. In 3D it is opaque wherever it is drawn; on a sheet body give it `sink` for the depth of the plate it fills, and it is built as a slab there. Say which way the bristles run with `bristle`"
+          },
+          "bristle": {
+           "enum": [
+            "vertical",
+            "horizontal"
+           ],
+           "description": "with `pattern: brush`: which way the bristles run across the opening, as drawn on this face. Vertical bristles meet in a horizontal line"
           },
           "vent": {
            "type": "number",
@@ -907,6 +916,54 @@
            "description": "degrees to turn the aperture about its own centre. A `d-sub` or `slot` hole has a direction and the part that fills it already says which - the placement's own `rotate` - so without this a turned connector sat in an untuned hole and the corners its aperture does not have showed as ink."
           }
          }
+        }
+       }
+      }
+     },
+     "passes": {
+      "type": "array",
+      "description": "PASS-THROUGHS: where cables can cross this face to the opposite side (docs/cable-managers-design.md section 5) - a brush window, an open hole in a cable manager's wall. Compiled to an invisible `data-class=\"pass\"` rect on the drawing, which is how every consumer reads depth; the DCIM exports ignore it, and nothing routes cables through it yet. L136 keeps it on the face and off the parts; L137 keeps a `cover: brush` and the brush decor drawn over it in step.",
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "id",
+        "at",
+        "size"
+       ],
+       "properties": {
+        "id": {
+         "$ref": "#/$defs/segment"
+        },
+        "at": {
+         "$ref": "#/$defs/xy"
+        },
+        "size": {
+         "$ref": "#/$defs/xy",
+         "description": "[w, h] in mm"
+        },
+        "shape": {
+         "enum": [
+          "rect",
+          "obround"
+         ],
+         "default": "rect",
+         "description": "`obround` is a stadium: the short sides are half circles"
+        },
+        "cover": {
+         "enum": [
+          "open",
+          "brush"
+         ],
+         "default": "open",
+         "description": "what closes the opening: nothing, or a brush strip drawn over it as `pattern: brush` decor (L137)"
+        },
+        "confidence": {
+         "$ref": "#/$defs/confidence"
+        },
+        "source": {
+         "type": "string",
+         "description": "where precisely, in one phrase"
         }
        }
       }
@@ -1390,6 +1447,61 @@
            ]
           }
          ]
+        }
+       }
+      }
+     },
+     "guides": {
+      "type": "array",
+      "description": "WHERE CABLES RUN ALONG THIS FACE, declared rather than read off the drawing (docs/cable-managers-design.md, decision 8). `duct` is a channel walled by fingers: its box on this view, the direction cables run along it, and the pitch and the gap of the fingers along its walls. Nothing consumes it yet: it compiles to an unpainted `data-class=\"guide\"` rect on the face, and the DCIM exports ignore it. A ring that every placement of a part carries is declared on the part's contract as `guide:`, not here. L138 holds a duct inside its view.",
+      "items": {
+       "type": "object",
+       "required": [
+        "id",
+        "kind",
+        "at",
+        "size",
+        "run"
+       ],
+       "additionalProperties": false,
+       "properties": {
+        "id": {
+         "$ref": "#/$defs/segment"
+        },
+        "kind": {
+         "enum": [
+          "duct"
+         ]
+        },
+        "at": {
+         "$ref": "#/$defs/xy"
+        },
+        "size": {
+         "$ref": "#/$defs/xy"
+        },
+        "run": {
+         "enum": [
+          "x",
+          "y"
+         ],
+         "description": "the direction cables run along the channel, across (`x`) or down (`y`) this view"
+        },
+        "finger-pitch": {
+         "type": "number",
+         "exclusiveMinimum": 0,
+         "description": "millimetres, centre to centre of the fingers along the run"
+        },
+        "finger-gap": {
+         "type": "number",
+         "exclusiveMinimum": 0,
+         "description": "millimetres, the clear gap between two fingers, which a cable is laid through into the channel"
+        },
+        "confidence": {
+         "$ref": "#/$defs/confidence"
+        },
+        "source": {
+         "type": "string",
+         "description": "where precisely, in one phrase"
         }
        }
       }

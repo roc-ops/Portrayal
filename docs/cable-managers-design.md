@@ -1,9 +1,11 @@
 # Cable managers: rack-face mounting, sheet bodies, brushes and guides
 
-Status: 2026-10-06. Sections 2 to 4 and the first device of section 7 are implemented;
-brushes, pass-throughs, guides and lab placement are design. The first passive rack parts
-in the library that hold or pass cables rather than terminate them: the FS horizontal
-cable managers.
+Status: 2026-10-07. Sections 2 to 5 (brushes, pass-throughs and guides; lint L136 to
+L138), the three devices of section 7 and the library side of section 6 (lab placement,
+the lab schema and its checks; lint L139 to L143) are implemented; the rack drawing of
+section 6 is still to come in the site repository. The first passive rack parts in the
+library that hold or pass cables rather than terminate them: the FS horizontal cable
+managers.
 
 ## 1. What exists, and what is missing
 
@@ -208,6 +210,15 @@ lands after this one. A site older than the `labs.json` it reads ignores the new
 draws the manager as an ordinary device on that rack unit, which is wrong and visible;
 the site's contract check is what catches the gap.
 
+As built: the schema is `spec/schemas/lab.schema.json`, and the checks are lint rules
+L139 to L143, the codes a listing's checks set the pattern for. L139 to L142 are errors
+and `labs_index.py` will not write a lab that fails one; L143, the report of a rack-face
+part placed by `ru` over a host, is a warning, because that placement is legal. Run over
+`roadm-ring-demo` before they were made errors, they found nothing: nine 1U rack devices
+on distinct units, every ref a library device, no rack-face part. In `labs.json` each
+placement keeps every key the lab wrote and gains `ru` (resolved), `face`, `mount`,
+`host` and `unit`; [format-stability.md](format-stability.md) has the shape.
+
 ## 7. The three devices
 
 | device | vendor part | what it proves |
@@ -258,8 +269,9 @@ the vendor's.
 
 1. The viewer probe for the sheet body. Done.
 2. `rack-face`, the sheet body, the D-ring component and `fhd-cmp5dr`.
-3. The brush pattern, pass-throughs and `cmh-4drb1u`.
+3. The brush pattern, pass-throughs and `cmh-4drb1u`. Done.
 4. Guides and `cmh-sfd1u`, with the ring guide applied to the D-rings of steps 2 and 3.
+   Done for the snap-in D-ring of step 2.
 5. Lab placement, the lab schema and checks, and the site change.
 
 Each of steps 2 to 5 is its own change, and each pairs one feature with the part that

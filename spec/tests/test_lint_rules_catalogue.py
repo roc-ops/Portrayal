@@ -235,6 +235,14 @@ ISSUED = {
     "L133": "device",
     "L134": "device",
     "L135": "device",
+    "L136": "device",
+    "L137": "device",
+    "L138": "component, device",
+    "L139": "lab",
+    "L140": "lab",
+    "L141": "lab",
+    "L142": "lab",
+    "L143": "lab",
 }
 
 

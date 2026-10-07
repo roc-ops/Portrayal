@@ -1,0 +1,55 @@
+format: 1
+kind: component
+name: cmh-sfd1u-finger-end
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  The end finger of a row of the FS CMH-SFD1U finger duct, seen from the front, as it
+  stands at the left-hand end - from the end of the duct to its first gap, with its tip
+  flared toward that gap; the right-hand end is the same part turned round
+provenance:
+  size: >-
+    drawing - the top view of CMH-SFD1U in the FS Horizontal Cable Managers with Finger Duct datasheet, at 2.192 px/mm. The gaps stand 34.1 mm
+    apart, centre to centre, over eleven pitches; the dimension line prints 1.32 in
+    [33.6mm], twelve pixels short over the row, and the front view agrees with the
+    drawing at 34.2. A gap is 16.0 (0.63 in [16mm]), so a finger is 18.1 wide; its tip
+    flares to leave a 4 mm neck under the cover, so the tip is 30.1. Its 7.3 is the wall
+    on the side view at 2.45 px/mm.
+  relief: >-
+    drawing - the same top view: a finger stands from the floor of the well to the
+    underside of the cover, 72 mm from the back of the base, so 60.5 out; the flared tip
+    is the last 6, from 66. Its root, the wall between the base and the rounded roots of
+    the gaps, is solid for 10.7 above the floor (22.2 mm from the back of the base) and
+    is drawn as part of the finger, half a gap either side.
+  size-end: >-
+    drawing - the twelve gaps are centred on the duct, so the first is centred 28.95 mm
+    from each end and starts at 20.95; the end finger is 20.95 wide, 26.95 at its tip,
+    and its root runs to the middle of the first gap, 28.95. The drawing carries a
+    comb of small ribs on the end blocks; they are not drawn.
+size: {w: 28.95, h: 7.3}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: ABS}
+elements:
+  root: {at: [0.0, 0.0], size: [28.95, 7.3], class: bezel}
+  stem: {at: [0.0, 0.0], size: [20.95, 7.3], class: bezel}
+  tip: {at: [0.0, 0.0], size: [26.95, 7.3], class: bezel}
+relief:
+  features:
+    - node: root
+      out: 10.7
+      color: '#2a2c2e'
+      confidence: drawing
+      source: the top view of CMH-SFD1U in the FS Horizontal Cable Managers with Finger Duct datasheet, the gap roots 22.2 mm from the back of the base
+    - node: stem
+      out: 54.5
+      color: '#2a2c2e'
+      confidence: drawing
+      source: the top view of CMH-SFD1U in the FS Horizontal Cable Managers with Finger Duct datasheet, the end block from the base to where its tip flares
+    - node: tip
+      lift: 54.5
+      out: 60.5
+      color: '#2a2c2e'
+      confidence: drawing
+      source: the same view, the flared tip from 66 to 72 mm, under the cover
+skins: [default]

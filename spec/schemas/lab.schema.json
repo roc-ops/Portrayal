@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://portrayal.dev/schemas/v1/lab.schema.json",
+  "title": "Portrayal lab (v1) - library devices placed in one rack, and the links between them",
+  "description": "A LAB IS A RACK ELEVATION PLUS A LINK LIST. It lives at labs/<name>/lab.yaml, names library devices by their `name`, and names ports by placement id; nothing about geometry lives here, because a viewer resolves port positions from the compiled drawings. The build checks every placement (L139-L143) and writes each one to labs.json with its position resolved: the absolute rack unit, the face and the host. Rack units count the way the rack counts, U1 at the bottom, and a placement's `ru` is the lowest unit it takes.",
+  "type": "object",
+  "required": [
+    "format",
+    "kind",
+    "name",
+    "devices"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "format": {
+      "const": 1
+    },
+    "kind": {
+      "const": "lab"
+    },
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "the lab's id, by convention its directory"
+    },
+    "title": {
+      "type": "string",
+      "description": "the heading a viewer shows; omitted means `name`"
+    },
+    "description": {
+      "type": "string"
+    },
+    "provenance": {
+      "type": "object",
+      "description": "where each part of the lab came from, one sentence per topic - the layout, the topology, what was assumed",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "rack": {
+      "type": "object",
+      "description": "the frame. A viewer may read keys beyond these two, so others are allowed",
+      "properties": {
+        "height-ru": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "rack units in the frame; omitted means 42. Every placement fits inside it (L142)"
+        },
+        "rails-only": {
+          "type": "boolean",
+          "description": "draw the rails without a cabinet round them"
+        }
+      }
+    },
+    "devices": {
+      "type": "array",
+      "description": "the placements, one per device in the rack",
+      "items": {
+        "$ref": "#/$defs/placement"
+      }
+    },
+    "links": {
+      "type": "array",
+      "description": "the cables. Each end is [placement id, port id] or [placement id, port id, strand]",
+      "items": {
+        "$ref": "#/$defs/link"
+      }
+    }
+  },
+  "$defs": {
+    "placement": {
+      "type": "object",
+      "required": [
+        "id",
+        "ref"
+      ],
+      "additionalProperties": false,
+      "description": "ONE DEVICE IN THE RACK. A `rack` device is placed by `ru`. A `rack-face` part - one that bolts to the rail face over a rack unit it shares, docs/cable-managers-design.md section 6 - is placed on a host (`on`, with `unit`) or at a rack unit (`ru`), never both, and says which `face`. `face`, `on` and `unit` are for rack-face parts only (L140).",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$",
+          "description": "unique in the lab (L139); `on` and every link end name a placement by it"
+        },
+        "ref": {
+          "type": "string",
+          "description": "a library device's `name`, e.g. `fhd-1ufce` (L139)"
+        },
+        "cfg": {
+          "type": "string",
+          "description": "which of the device's configurations; omitted means its default (L139)"
+        },
+        "label": {
+          "type": "string"
+        },
+        "ru": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "the lowest rack unit the device takes, U1 at the bottom of the rack (L142)"
+        },
+        "face": {
+          "enum": [
+            "front",
+            "rear"
+          ],
+          "description": "rack-face parts only: the rail face it bolts to. Omitted means front. On the rear it is behind the rear rails and turned round"
+        },
+        "on": {
+          "type": "string",
+          "description": "rack-face parts only: the id of the rack device it sits in front of (or behind), so that it moves with that device (L139, L141)"
+        },
+        "unit": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "rack-face parts placed `on` a host only: which of the host's rack units, counted the way the rack counts - 1 is the host's bottom unit. Omitted means 1. Several parts on one tall host are several placements with different `unit` values (L141)"
+        },
+        "turned": {
+          "type": "boolean",
+          "description": "the device is racked back to front: its other panel faces out of the face it is mounted to"
+        }
+      }
+    },
+    "link": {
+      "type": "object",
+      "required": [
+        "from",
+        "to"
+      ],
+      "properties": {
+        "media": {
+          "type": "string",
+          "description": "the cable's media, e.g. `smf`, `ethernet`"
+        },
+        "from": {
+          "$ref": "#/$defs/end"
+        },
+        "to": {
+          "$ref": "#/$defs/end"
+        },
+        "span": {
+          "type": "string",
+          "description": "a name for the run, so a viewer can colour spans apart"
+        }
+      }
+    },
+    "end": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 3,
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: fhd-cmp5dr
-version: 1.0.0
+version: 1.0.1
 maturity: modelled
 manufacturer: FS.com
 model: FHD-CMP5DR
@@ -11,7 +11,7 @@ description: >-
   Horizontal single-sided lacer panel that takes no rack unit of its own. FS SKU #72911,
   sold as "0RU": a black steel tray with five detachable polycarbonate D-rings that bolts
   to the rack rails in front of, or behind, another device and stands 110 mm out from
-  the rail face. FS gives its capacity as 30 Cat6 24AWG cables, theoretical.
+  the rail face.
 profile: passive
 provenance:
   method:
@@ -105,6 +105,12 @@ provenance:
       specification table of FS's product page for #72911, which words the panel material
       and the standard more fully than the datasheet's "Steel" and its REACH, CE and UKCA
       badges; so is the 1.5 mm gauge. The page is not a held document.
+  cable-capacity:
+    confidence: datasheet
+    note: >-
+      datasheet - "Cable Capacity (Theoretical Value) 30pcs (Cat6 24AWG)" in the 0U/1U
+      datasheet's table, for the whole manager. Stated once, here, and not divided
+      among the rings (docs/cable-managers-design.md, decision 9).
   color:
     confidence: estimated
     note: >-
@@ -115,6 +121,11 @@ attrs:
     weight-kg: 0.52
     material: Steel, Powder-coated Black
     mounting-hardware: M6*15mm Screw x4 and M6 Nut x4
+  performance:
+    cable-capacity: 30
+    cable-capacity-basis: >-
+      Cat6 24AWG cables, theoretical - FS 0U/1U Horizontal Cable Manager datasheet,
+      specification table
   compliance:
     environment: Indoor
     rohs: RoHS

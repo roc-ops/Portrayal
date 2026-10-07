@@ -1465,6 +1465,15 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     if contract.get("behaviour"):
         g.set("data-behaviour", contract["behaviour"])
     g.set("data-ref", f"{ref}:{contract['version']}")
+    # A GUIDE TRAVELS WITH THE PART (docs/cable-managers-design.md, decision
+    # 8): a ring declared once on the contract is on every placement of it.
+    # Attributes only - nothing is painted, so the drawing does not change.
+    _guide = contract.get("guide")
+    if _guide:
+        g.set("data-guide", _guide["kind"])
+        g.set("data-guide-run", _guide["run"])
+        g.set("data-guide-aperture",
+              f"{_guide['aperture']['w']:g} {_guide['aperture']['h']:g}")
     # A cavity is a hole you look INTO - a port aperture, a cage. A MODULE is a
     # solid body that fills its bay, and its depth says how far it reaches into
     # the chassis, not that the face has an N-mm hole in it. Emitting data-depth
@@ -2534,6 +2543,30 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             rct = ET.SubElement(pat, f"{{{SVG_NS}}}rect")
             rct.set("x", "2.9"); rct.set("y", "2.5"); rct.set("width", "2.2"); rct.set("height", "9")
             rct.set("rx", "1.1"); rct.set("fill", "#3c4046")
+        # A BRUSH PAINTS ITSELF (docs/cable-managers-design.md section 2,
+        # decision 6). The other patterns draw only their cells and leave the
+        # plate to show between them, which is why a vent field on a dark face
+        # needs a backing rect to be seen at all. A brush strip is not a
+        # pattern in the plate: it fills an opening, and the opening shows
+        # nothing of the plate. So its tile is solid - the dark between the
+        # bristles and the bristles - and it is never an air aperture.
+        for bristle in sorted({d.get("bristle") or "vertical" for d in parts["decor"]
+                               if d.get("pattern") == "brush"}):
+            pat = ET.SubElement(defs, f"{{{SVG_NS}}}pattern")
+            vert = bristle == "vertical"
+            tw, th = (1.6, 9.0) if vert else (9.0, 1.6)
+            pat.set("id", f"portrayal-brush-{bristle}")
+            pat.set("width", f"{tw:g}"); pat.set("height", f"{th:g}")
+            pat.set("patternUnits", "userSpaceOnUse")
+            for x, y, w_, h_, fill in ((0, 0, 1.6, 9.0, "#121315"),
+                                       (0.25, 0, 0.35, 9.0, "#24272b"),
+                                       (1.0, 2.5, 0.25, 6.5, "#1c1e21")):
+                if not vert:
+                    x, y, w_, h_ = y, x, h_, w_
+                b_ = ET.SubElement(pat, f"{{{SVG_NS}}}rect")
+                b_.set("x", f"{x:g}"); b_.set("y", f"{y:g}")
+                b_.set("width", f"{w_:g}"); b_.set("height", f"{h_:g}")
+                b_.set("fill", fill)
         if "ribs" in used_patterns:
             pat = ET.SubElement(defs, f"{{{SVG_NS}}}pattern")
             pat.set("id", "portrayal-ribs"); pat.set("width", "7.2"); pat.set("height", "6")
@@ -2587,6 +2620,9 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         n = seen_kinds[kind] = seen_kinds.get(kind, -1) + 1
         r.set("id", d.get("id") or f"{kind}-{n}")
         r.set("data-kind", kind)
+        if d.get("pattern") == "brush":
+            # which way the bristles run, for anything reading the drawing
+            r.set("data-bristle", d.get("bristle") or "vertical")
         if kind == "vent-field":
             # a hole, not a texture - stated for anything reading the drawing
             # rather than looking at it
@@ -2619,13 +2655,15 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             # pitch, or do both. TRANSLATE BEFORE SCALE: that lands the scaled
             # tile's own origin on the offset, which is what "align the lattice
             # to this rect" has to mean once the tile is no longer 14 x 8.
+            tile = (f"brush-{d.get('bristle') or 'vertical'}" if d.get("pattern") == "brush"
+                    else d.get("pattern"))
             if d.get("pattern") and (d.get("pattern-offset") or d.get("pattern-pitch")):
-                base = svg.find(f".//*[@id='portrayal-{d['pattern']}']")
+                base = svg.find(f".//*[@id='portrayal-{tile}']")
                 ox, oy = d.get("pattern-offset") or (0.0, 0.0)
                 pw, ph = d.get("pattern-pitch") or (float(base.get("width")),
                                                     float(base.get("height")))
                 sx, sy = pw / float(base.get("width")), ph / float(base.get("height"))
-                pid = (f"portrayal-{d['pattern']}-o{ox:g}-{oy:g}-s{sx:.6g}-{sy:.6g}"
+                pid = (f"portrayal-{tile}-o{ox:g}-{oy:g}-s{sx:.6g}-{sy:.6g}"
                        .replace(".", "_"))
                 if svg.find(f".//*[@id='{pid}']") is None:
                     clone = ET.fromstring(ET.tostring(base))
@@ -2635,7 +2673,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                     svg.find(f".//{{{SVG_NS}}}defs").append(clone)
                 r.set("fill", f"url(#{pid})")
             else:
-                r.set("fill", f"url(#portrayal-{d['pattern']})" if d.get("pattern") else d.get("fill", "#2e3236"))
+                r.set("fill", f"url(#portrayal-{tile})" if d.get("pattern") else d.get("fill", "#2e3236"))
         if d.get("vent"):
             r.set("data-vent", f"{d['vent']:g}")
         if d.get("out"):
@@ -2718,6 +2756,25 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             r.set("pointer-events", "none")
         if box and not (region.get("at") and region.get("size")):
             r.set("data-extent", "derived")
+
+    # GUIDES (docs/cable-managers-design.md section 5): where cables run along
+    # this face. Unpainted, like a region, and not a click target - a duct is
+    # read by whatever routes cables, never by somebody pointing at it. The
+    # DCIM exports ignore it.
+    for gd in parts["guides"]:
+        r = ET.SubElement(svg, f"{{{SVG_NS}}}rect")
+        r.set("id", f"guide--{gd['id']}")
+        r.set("data-class", "guide")
+        r.set("data-guide", gd["kind"])
+        r.set("data-guide-run", gd["run"])
+        for k in ("finger-pitch", "finger-gap"):
+            if gd.get(k) is not None:
+                r.set(f"data-guide-{k}", f"{gd[k]:g}")
+        (gx, gy), (gw, gh) = gd["at"], gd["size"]
+        r.set("x", f"{gx:g}"); r.set("y", f"{gy:g}")
+        r.set("width", f"{gw:g}"); r.set("height", f"{gh:g}")
+        r.set("fill", "none"); r.set("stroke", "none")
+        r.set("pointer-events", "none")
 
     # CUTOUTS. The panel is punched before anything is printed on it or put into
     # it, so the holes paint first. A hole with nothing in it shows the dark inside
@@ -3311,7 +3368,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                     if (k.startswith("data-z-") or k.startswith("data-cp")
                             or k in ("data-depth", "data-body-depth",
                                      "data-ref", "data-behaviour",
-                                     "data-vent", "data-groove")):
+                                     "data-vent", "data-groove")
+                            or k.startswith("data-guide")):
                         del node.attrib[k]
         # WHAT THE BLOCK IS FOR travels with every member, because the consumer
         # that needs it is looking at a member and has no way back to `groups:`.
@@ -3752,6 +3810,35 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                               or n.get("data-class") == "silkscreen"
                               or n.tag == f"{{{SVG_NS}}}text")]:
                 parent.remove(node)
+
+    # WHERE CABLES CAN CROSS THIS FACE (docs/cable-managers-design.md section
+    # 5). A declaration, not a picture: the brush or the open hole is drawn by
+    # the decor and the parts, and this says what they are for. It compiles to
+    # attributes on the drawing because that is how every consumer already
+    # reads depth - one invisible outline per pass, named, with its shape and
+    # its cover - and it is the LAST thing on the face, so it covers nothing
+    # and takes no click. The DCIM exports ignore it.
+    if parts["passes"]:
+        pg = ET.SubElement(svg, f"{{{SVG_NS}}}g")
+        pg.set("id", "--passes")
+        pg.set("data-class", "passes")
+        pg.set("pointer-events", "none")
+        for ps in parts["passes"]:
+            (px, py), (pw_, ph_) = ps["at"], ps["size"]
+            shape = ps.get("shape") or "rect"
+            el = ET.SubElement(pg, f"{{{SVG_NS}}}{'path' if shape == 'obround' else 'rect'}")
+            el.set("id", f"pass--{ps['id']}")
+            el.set("data-class", "pass")
+            el.set("data-pass", ps["id"])
+            el.set("data-pass-shape", shape)
+            el.set("data-pass-cover", ps.get("cover") or "open")
+            if shape == "obround":
+                el.set("d", _slot_path(px, py, pw_, ph_))
+            else:
+                el.set("x", f"{px:g}"); el.set("y", f"{py:g}")
+                el.set("width", f"{pw_:g}"); el.set("height", f"{ph_:g}")
+            el.set("fill", "none")
+            el.set("stroke", "none")
 
     meta_payload = {
         "generator": {"tool": "portrayal-render", "version": TOOL_VERSION},

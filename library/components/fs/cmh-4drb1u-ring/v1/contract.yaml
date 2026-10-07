@@ -1,0 +1,76 @@
+format: 1
+kind: component
+name: cmh-4drb1u-ring
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  A steel D-ring of the FS CMH-4DRB1U cable manager seen from the front - a strip
+  bent into an open loop that stands off the panel, its upper arm hooking down and
+  its longer lower arm curling up in front of it, the gap between them the slit a
+  cable is laid in through
+provenance:
+  size: >-
+    drawing - the front view of the CMH-4DRB1U in FS's Horizontal Cable Managers with
+    D-rings datasheet, at 2.199 px/mm: each ring is a pair of lines 27.5 px apart,
+    12.5 mm, all four the same. The side view of the same figure gives its height,
+    88 px at 2.2 px/mm, 39.6 mm, from 3.1 below the top of the panel to 1.3 above its
+    bottom. This is not FS's snap-in ring: that one is polycarbonate, 6.8 mm across,
+    and twists into a seat on a tray.
+  relief: >-
+    drawing - the side view of the same figure, which dimensions the upper arm 3 in
+    [76 mm] and the lower 3.4 in [88 mm] from the back of the panel, and the strip
+    0.05 in [1.2 mm]. Read at 2.2 px/mm: the upper arm's hooked end comes down 18.2 mm
+    from the top of the ring; the lower arm's end curls up 22.7 mm from the bottom, so
+    the two ends overlap 1.3 mm in height and stand 12 mm apart in depth - that gap is
+    the slit. Built as flat plates with square bends where the real strip is radiused,
+    and the lower arm's curl as an upright plate; the 86 is the 88 less the 2 mm a well
+    is built short of the far face. FS's render dimensions the same ring 3.00 and 3.40
+    in, which are these two arms.
+  material: >-
+    datasheet - "D-rings Material: Steel, Powder-coated Black" in the specification
+    table of FS's Horizontal Cable Managers with D-rings datasheet, and "D-Ring
+    Material: Steel" in the CMH-4DRB1U datasheet's own table. That datasheet's
+    overview says "ABS plastic D-rings"; both tables and every render say steel.
+  color: >-
+    estimated - black, darker than the panel so that it separates from it. Every image
+    FS publishes of the part is a render.
+size: {w: 12.5, h: 44}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: 'Steel, Powder-coated Black'}
+elements:
+  back: {at: [0.0, 3.1], size: [12.5, 39.6], class: bezel}
+  arm-top: {at: [0.0, 3.1], size: [12.5, 1.2], class: bezel}
+  hook: {at: [0.0, 3.1], size: [12.5, 18.2], class: bezel}
+  arm-bottom: {at: [0.0, 41.5], size: [12.5, 1.2], class: bezel}
+  lip: {at: [0.0, 20.0], size: [12.5, 22.7], class: bezel}
+relief:
+  features:
+    - node: back
+      out: 1.2
+      color: '#0c0d0f'
+      confidence: drawing
+      source: the side view of FS's D-rings datasheet drawing, the strip 0.05 in [1.2 mm]
+    - node: arm-top
+      out: 76.0
+      color: '#0c0d0f'
+      confidence: drawing
+      source: the same view, the upper arm 3 in [76 mm] from the back of the panel
+    - node: hook
+      lift: 74.8
+      out: 76.0
+      color: '#0c0d0f'
+      confidence: drawing
+      source: the same view, the upper arm's end hooking 18.2 mm down
+    - node: arm-bottom
+      out: 86.0
+      color: '#0c0d0f'
+      confidence: drawing
+      source: the same view, the lower arm 3.4 in [88 mm] from the back of the panel
+    - node: lip
+      lift: 84.8
+      out: 86.0
+      color: '#0c0d0f'
+      confidence: drawing
+      source: the same view, the lower arm's end curling 22.7 mm up
+skins: [default]

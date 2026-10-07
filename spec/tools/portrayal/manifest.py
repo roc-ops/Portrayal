@@ -77,6 +77,8 @@ def view_parts(view):
         "silkscreen": view.get("silkscreen") or [],
         "bays": comps.get("bays") or [],
         "placements": comps.get("placements") or [],
+        "passes": view.get("passes") or [],
+        "guides": view.get("guides") or [],
         "regions": view.get("regions") or [],
     }
 
@@ -104,7 +106,7 @@ def split_target(t):
 
 
 # the order a view's keys must appear in - the order the part is made
-VIEW_KEY_ORDER = ("size", "open-frame", "panel", "silkscreen", "components", "regions")
+VIEW_KEY_ORDER = ("size", "open-frame", "panel", "silkscreen", "components", "passes", "guides", "regions")
 PANEL_KEY_ORDER = ("decor", "cutouts")
 COMPONENT_KEY_ORDER = ("bays", "placements")
 
