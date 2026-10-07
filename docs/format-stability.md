@@ -145,8 +145,11 @@ has a number of its own.
 (`name@2`), so removing a major breaks a manifest that pins it. While the
 package is at 0.x, a superseded major may be removed, and every removal is
 listed in `CHANGELOG.md` with the ref that replaces it. From 1.0, a retired
-major is deprecated for at least one release before it is removed. DESIGN §9
-has the reasoning.
+major is deprecated for at least one release before it is removed. The
+deprecation will be a `deprecated:` marker on the retired major's contract,
+naming the ref that replaces it. The marker, and L89 telling a deprecated
+major that still ships from a dead one, are pending (roc-ops/Portrayal#448).
+DESIGN §9 has the reasoning.
 
 **A lint code.** A device manifest waives a rule by its code (`lint.waive`),
 so lint codes are never renumbered or reused. A rule that is deleted keeps its

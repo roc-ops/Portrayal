@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Portrayal linter v0: schema validation + contract<->skin consistency + ID grammar.
+"""Portrayal linter: schema validation + contract<->skin consistency + ID grammar.
 
 Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L1 schema: every YAML validates against its schema
@@ -293,6 +293,7 @@ RULES = {
     "L125": ("device",     "a device says how it is installed - a rack device (the default `mount`) or a `rack-face` part states `ru` (warning), and a device whose `chassis.mount` is `din-rail`, `wall` or `desktop` states none (error)", "give a rack device its `ru` from the datasheet; for a box that is not racked, state `chassis.mount` and drop `ru`, so its DCIM export says `u_height: 0` rather than an invented rack unit"),
     "L126": ("device",     "a bevelled chassis is a solid the box can have - every edge named by two faces that meet, none bevelled twice, no face cut away and no bevel swallowed by its neighbours - its face drawings are the chassis's own size, and every part, bay and cutout on a face lies on the flat face rather than on a bevel", "name edges as two adjacent faces (`front-left`), shrink a bevel that cuts too much, drop a view `size` that differs from the chassis on a bevelled face, or move the part onto the flat face - spec/tools/portrayal/bevel.py says where it is"),
     "L127": ("device",     "a `shell: sheet` body states `chassis.thickness`, between 0 and 10 mm, and a box states none (error)", "give a sheet body the gauge its datasheet states; on a box, drop `thickness`"),
+    "L128": ("device, listing", "a part-number key has no stray whitespace - none leading or trailing, none but the plain ASCII space (an error), and none splitting a run of capitals and digits between two hyphens (`-A C-`, a warning)", "retype the SKU as the vendor prints it; a space the vendor really prints inside a hyphenated token is waived with the document that shows it"),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -3828,7 +3829,7 @@ def _lint_sunk_facet(path, node, f, data, elements, tol=0.5):
 def lint_component_facets(path, data, lib_roots):
     """L117: a tilted part stands on a facet that exists and holds it.
 
-    docs/superpowers/specs/2026-09-24-tilted-facets-design.md. The facet's rectangle is
+    docs/tilted-facets-design.md. The facet's rectangle is
     its front-view footprint; a part on it is measured by its PROJECTED box (true size
     foreshortened by cos(deg)), which is what occupies the face. A facet with a
     negative `lift` (recessed facets, the addendum to the same spec) must stand in
@@ -4461,6 +4462,60 @@ def _footprint(item, lib_roots):
     return (x, y, x + w, y + h)
 
 
+def _union_overlap(target, boxes):
+    """The area of `target` that the union of `boxes` covers - each box clipped
+    to the target, overlaps between boxes counted once."""
+    clips = []
+    for b in boxes:
+        x0, y0 = max(target[0], b[0]), max(target[1], b[1])
+        x1, y1 = min(target[2], b[2]), min(target[3], b[3])
+        if x1 > x0 and y1 > y0:
+            clips.append((x0, y0, x1, y1))
+    if not clips:
+        return 0.0
+    xs = sorted({c[0] for c in clips} | {c[2] for c in clips})
+    ys = sorted({c[1] for c in clips} | {c[3] for c in clips})
+    area = 0.0
+    for i in range(len(xs) - 1):
+        for j in range(len(ys) - 1):
+            mx, my = (xs[i] + xs[i + 1]) / 2, (ys[j] + ys[j + 1]) / 2
+            if any(c[0] <= mx <= c[2] and c[1] <= my <= c[3] for c in clips):
+                area += (xs[i + 1] - xs[i]) * (ys[j + 1] - ys[j])
+    return area
+
+
+def _lamp_windows(placement, fb, lib_roots):
+    """The windows a placed lamp declares - its `led`, `window` and `cutout`
+    elements - as boxes on the face, turned with the placement about the
+    centre of its footprint `fb`. [] for a part that declares none."""
+    spec = _contract(str(placement.get("ref") or ""), lib_roots)
+    els = spec.get("elements") or {}
+    els = els.values() if isinstance(els, dict) else els
+    csz = spec.get("size") or {}
+    w, h = csz.get("w"), csz.get("h")
+    if not w or not h:
+        return []
+    cx, cy = (fb[0] + fb[2]) / 2, (fb[1] + fb[3]) / 2
+    t = math.radians(float(placement.get("rotate") or 0))
+    cos, sin = round(math.cos(t), 9), round(math.sin(t), 9)
+    out = []
+    for e in els:
+        if not isinstance(e, dict) or e.get("class") not in ("led", "window", "cutout"):
+            continue
+        at, sz = e.get("at"), e.get("size")
+        if not (isinstance(at, (list, tuple)) and isinstance(sz, (list, tuple))
+                and len(at) >= 2 and len(sz) >= 2):
+            continue
+        pts = []
+        for px, py in ((at[0], at[1]), (at[0] + sz[0], at[1]),
+                       (at[0], at[1] + sz[1]), (at[0] + sz[0], at[1] + sz[1])):
+            dx, dy = px - w / 2, py - h / 2
+            pts.append((cx + dx * cos - dy * sin, cy + dx * sin + dy * cos))
+        out.append((min(p[0] for p in pts), min(p[1] for p in pts),
+                    max(p[0] for p in pts), max(p[1] for p in pts)))
+    return out
+
+
 def _is_class(placement, cls, lib_roots):
     cp = resolve_component(placement.get("ref", ""), lib_roots)
     return bool(cp) and (load_yaml(cp) or {}).get("class") == cls
@@ -4653,20 +4708,33 @@ def lint_device_cutouts(path, view_name, view, lib_roots, seen_through=()):
     #    every port, so cutting the rest was not a new convention but the one
     #    already in use. A faceplate lamp penetrates the metal, and the drawing
     #    may as well say so.
-    def _covered(fb):
-        """Is this footprint already accounted for by a hole or a connector?"""
+    #    THE UNION OF THE HOLES, NOT THE BEST ONE (#395). This asked for ONE box
+    #    over half the lamp, so a lamp seen through several windows could never
+    #    be covered however honestly its windows were punched: the AIS800-32D's
+    #    lane columns are four 1.4 mm windows each, and the only hole that
+    #    passed was the false 1.8 x 11.4 slot expand.py rightly refuses to
+    #    punch. Now the overlap of every hole is unioned (so a hole and the
+    #    port drawn in it are not counted twice), and a lamp that declares
+    #    several windows is also covered when the holes cover more than half
+    #    of THOSE - four round windows in a post leave most of the column's
+    #    bounding box as metal, and that metal is the drawing being right.
+    #    Auto-punching keeps the one-opening rule (`_single_opening`): what
+    #    windows a multi-window lamp has is read off the metal by a person.
+    def _covered(fb, q=None):
+        """Is this footprint already accounted for by holes or connectors?"""
         area = (fb[2] - fb[0]) * (fb[3] - fb[1])
         if not area:
             return True
-        for b in list(boxes.values()) + [_footprint(x, lib_roots) for x in placements
-                                         if _is_class(x, "port", lib_roots)]:
-            if not b:
-                continue
-            ix = min(fb[2], b[2]) - max(fb[0], b[0])
-            iy = min(fb[3], b[3]) - max(fb[1], b[1])
-            if ix > 0 and iy > 0 and (ix * iy) / area > 0.5:
-                return True
-        return False
+        holes = [b for b in list(boxes.values()) + [_footprint(x, lib_roots) for x in placements
+                                                    if _is_class(x, "port", lib_roots)] if b]
+        if _union_overlap(fb, holes) / area > 0.5:
+            return True
+        windows = _lamp_windows(q, fb, lib_roots) if q else []
+        if len(windows) < 2:
+            return False
+        want = sum((w[2] - w[0]) * (w[3] - w[1]) for w in windows)
+        got = sum(_union_overlap(w, holes) for w in windows)
+        return bool(want) and got / want > 0.5
 
     for q in placements:
         cp = resolve_component(q.get("ref", ""), lib_roots)
@@ -4686,7 +4754,7 @@ def lint_device_cutouts(path, view_name, view, lib_roots, seen_through=()):
             # two holes sharing metal. It is found by asking where the thing
             # sits, not what it is called.
             fb = _footprint(q, lib_roots)
-            if fb and _covered(fb):
+            if fb and _covered(fb, q):
                 continue
         what = "port" if cls == "port" else "lamp"
         warn(path, "L39", f"{view_name}: {what} {q.get('id')} has no cutout, on a "
@@ -5623,6 +5691,71 @@ def lint_device_top_level_skus(path, data):
          "export, which is why a device with real SKUs in the file can still export under "
          "a model name nobody can order. Move them onto the configuration they describe; "
          "if no configuration describes them, the variant they name is not modelled yet")
+
+
+# A run of capitals and digits between two hyphens, broken by whitespace:
+# `9716-32D-O-A C-F-UK`. A vendor's own suffix (` V2`), a word-separated
+# description (`ASR 9901 Router, AC supplies`) and a model with a qualifier
+# (`7750 SR-12 (pre-2016 chassis)`) have no hyphen on both sides of the space.
+_PN_SPLIT_TOKEN = re.compile(r"-([A-Z0-9]+(?:\s+[A-Z0-9]+)+)(?=-)")
+# Zero-width characters are not whitespace to str.isspace(), and are as
+# invisible in a diff as an NBSP.
+_PN_ZERO_WIDTH = {"​", "‌", "‍", "⁠", "﻿"}
+
+
+def lint_part_number_keys(path, data):
+    """L128: a part number has no stray space in it.
+
+    A `part-numbers` key is the DCIM `model`, its slug and the export's file
+    name, under the vendor and under every NOS that lists the device. #720 was
+    `9716-32D-O-A C-F-UK` beside `9716-32D-O-AC-F-US`, `-EU` and `-JP`: one
+    space, and the UK build exported under a model nobody can order. Worse, a
+    space sorts before a letter, and where every SKU carries a cord the export
+    is named for the first SKU in sort order (#725), so the typo also chose
+    which name the device type went out under.
+
+    A blanket "no whitespace" would be wrong: Edgecore's csr440 SKUs end in its
+    own ` V2`, the ASR 9000 keys are descriptive (`ASR 9901 Router, AC
+    supplies`), and Nokia's `7750 SR-12 (pre-2016 chassis)` means its spaces.
+    So this reads three things that are never meant:
+
+    - whitespace other than the plain ASCII space (NBSP, a tab, a zero-width
+      space), which a copy from a vendor PDF or web page brings with it - an
+      error, because nobody types one on purpose;
+    - leading or trailing whitespace - an error, for the same reason;
+    - whitespace that splits a run of capitals and digits between two hyphens
+      (`-A C-`), which no SKU in the library does on purpose - a warning, so a
+      vendor that really prints one can be waived with its reason.
+
+    Configurations' keys in a device and in a listing are both read, and the
+    top level too, though L59 already says nothing reads it.
+    """
+    maps = [("part-numbers", data.get("part-numbers"))]
+    for cname, cfg in (data.get("configurations") or {}).items():
+        if isinstance(cfg, dict):
+            maps.append((f"configurations/{cname}/part-numbers", cfg.get("part-numbers")))
+    for where, pns in maps:
+        if not isinstance(pns, dict):
+            continue
+        for key in pns:
+            if not isinstance(key, str):
+                continue
+            odd = sorted({ch for ch in key
+                          if (ch.isspace() and ch != " ") or ch in _PN_ZERO_WIDTH})
+            if odd:
+                names = ", ".join(f"U+{ord(ch):04X}" for ch in odd)
+                err(path, "L128", f"{where}: {key!r} contains {names} - whitespace that is "
+                    "not a plain space, usually carried in by a copy from a PDF or web page. "
+                    "It becomes the DCIM model and file name exactly as written; retype it")
+            if key != key.strip():
+                err(path, "L128", f"{where}: {key!r} has leading or trailing whitespace. "
+                    "The key is the DCIM model, slug and export file name; strip it")
+            for m in _PN_SPLIT_TOKEN.finditer(key):
+                warn(path, "L128", f"{where}: {key!r} has whitespace inside the hyphenated "
+                     f"token -{m.group(1)}-. No SKU in the library splits one on purpose, and "
+                     "a stray space here renames the DCIM model and can change which SKU "
+                     "names the export (#720). Close it up, or waive with the vendor's "
+                     "document if it really prints the space")
 
 
 def lint_device_configuration_kind(path, data):
@@ -8599,9 +8732,10 @@ def _rj45_census(placements, groups, lib_roots, name=None, elsewhere=(), view=No
     # no bare-with-lamps member, so the lamps stay separate placements.
     #
     # THE LAMP MAY BE ON ANOTHER FACE. A desktop ONT puts its jack on the back
-    # edge and the jack's one lamp on the top (nokia/xs-010x-r: DATA, `for: lan`),
-    # so the device path passes the other views' placements as `elsewhere` and a
-    # lamp there that names the jack as `<view>/<id>` counts as one beside it.
+    # edge and the jack's one lamp on the top (nokia/xs-010x-r: DATA,
+    # `for: rear/lan`), so the device path passes the other views' placements as
+    # `elsewhere` and a lamp there that names the jack as `<view>/<id>` counts as
+    # one beside it.
     lamped_for = set()
     here = len(placements)
     for n, q in enumerate([*placements, *elsewhere]):
@@ -10689,6 +10823,7 @@ def main():
                 lint_device_gap_scope(f, d)
                 lint_device_configuration_kind(f, d)
                 lint_device_top_level_skus(f, d)
+                lint_part_number_keys(f, d)
                 lint_device_empty_declaration(f, d)
                 lint_device_power_redundancy(f, d)
                 lint_device_fan_redundancy(f, d)
@@ -10723,6 +10858,7 @@ def main():
                 err(f, "L1", f"{'/'.join(str(p) for p in e.path)}: {e.message}")
             if isinstance(data, dict):
                 lint_listing(f, data, args.library)
+                lint_part_number_keys(f, data)
                 lint_quoted_prose(f, data)
             n += 1
 

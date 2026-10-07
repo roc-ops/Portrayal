@@ -338,6 +338,32 @@ def test_l76_still_counts_an_ethernet_jack_with_truly_no_lamps():
     assert len(ws) == 1 and "1 Ethernet jack(s) on a part with no lamps" in ws[0]
 
 
+# THE LAMP ON ANOTHER FACE (#772). nokia/xs-010x-r puts its LAN jack on the rear
+# edge and the jack's one lamp on the top, `for: rear/lan`. The jack is lamped
+# only when a lamp in another view names it as `<view>/<id>`.
+def _two_faces(lamp_for):
+    dev = _dev([{"id": "lan", "ref": "std/rj45@2", "at": [0, 0], "group": "mgmt",
+                 "attrs": {"role": "mgmt"}}])
+    lamp = {"id": "led-lan", "ref": "common/led-dot@1", "at": [50, 50], "group": "mgmt",
+            "attrs": {"function": "link"}}
+    if lamp_for is not None:
+        lamp["for"] = lamp_for
+    dev["views"]["top"] = {"size": {"w": 100, "h": 30}, "components": {"placements": [lamp]}}
+    return dev
+
+
+def test_l76_takes_a_lamp_on_another_face_that_names_the_jack():
+    assert l76(_two_faces("front/lan")) == []
+
+
+@pytest.mark.parametrize("lamp_for", [None, "front/other", "top/lan", "lan"])
+def test_l76_counts_the_jack_when_the_other_face_lamp_does_not_name_it(lamp_for):
+    """No `for:`, a different jack, the lamp's own view, and a bare id that does
+    not say which face - none of them is this jack's lamp."""
+    ws = l76(_two_faces(lamp_for))
+    assert len(ws) == 1 and "1 Ethernet jack(s) on a part with no lamps" in ws[0]
+
+
 def _wants(id_, role=None, group="mgmt"):
     q = {"id": id_, "group": group, "attrs": ({"role": role} if role else {})}
     return lint.rj45_wants_lamps(q, {"mgmt": {"attrs": {}}})

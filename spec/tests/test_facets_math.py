@@ -1,4 +1,4 @@
-"""Projection math for tilted facets (docs/superpowers/specs/2026-09-24-tilted-facets-design.md)."""
+"""Projection math for tilted facets (docs/tilted-facets-design.md)."""
 import math
 
 import pytest

@@ -1,6 +1,6 @@
 """kit/relief.js for recessed facets: the pocket floor cleared under a sunk facet,
 facetZ / facetInfo below 0, and a sunk tooth's skirt ending at its own base
-(docs/superpowers/specs/2026-09-24-tilted-facets-design.md, Recessed facets)."""
+(docs/tilted-facets-design.md, Recessed facets)."""
 import json
 import math
 import shutil
