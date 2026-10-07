@@ -25,7 +25,7 @@ a test fails when this page and the linter disagree. A finding prints as
 | L16 | device | keys inside a view read in manufacturing order | reorder: empty, size, open-frame, panel, silkscreen, components, regions |
 | L17 | component, device | a placement's or part's group is declared under `groups:`, and a component that declares groups puts every port part in one | declare the group with term, role and index-origin; join the loose port to a group |
 | L18 | device | a port inherits media from its group rather than restating it | drop the per-port media, or fix the group's `attrs.media` |
-| L19 | device | an indicator declares `for:` the thing it indicates | add `for:` to the lamp placement |
+| L19 | device | an indicator declares `for:` the thing it indicates - a lamp, button or display placement, and a bay in a group whose role is `indicator` | add `for:` to the lamp placement or the bay; a panel that reports on the whole box is `for: chassis` |
 | L20 | component, device | state names are tokens and each `behavior` is well-formed, on a contract's states, an element's, or a placement's | a state name is a token like `link`; prose goes in `description`; `behavior` is solid, blinking, alternating or sequence, with `behavior.color` for the second colour |
 | L21 | device | chassis silkscreen does not sit under a bay where the module covers it | move the mark, or put it in the module's own skin if the module carries it |
 | L22 | component, device | a group's declared media/speed matches the ports it holds | fix the group's `attrs`, or move the odd port to its own group |
