@@ -95,6 +95,14 @@ for ix in devices_index components_index labs_index gaps_index registry_index co
   python3 "spec/tools/portrayal/$ix.py" --library library --out "$OUT" &
   pids+=("$!")
 done
+# THE COMPONENT CATALOGUE, beside the indexes because it is one more walk of the
+# library that reads nothing they write. It goes to library/components/, where
+# the components README sends a contributor, and not into "$OUT": it is a page
+# for whoever is about to draw a part, not something a consumer of the dist
+# reads. Gitignored, so a build is what keeps it current.
+python3 spec/tools/portrayal/components_catalogue.py --library library \
+  --out library/components/CATALOGUE.md &
+pids+=("$!")
 for pid in "${pids[@]}"; do wait "$pid"; done
 # THE LOCK, ASSEMBLED. Each device carries its own `device.lock.json` beside its
 # manifest (#182); this is the one-file view, for a consumer outside the

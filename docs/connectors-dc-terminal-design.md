@@ -486,10 +486,10 @@ document for that device states the size, each with its source in the device's
 | Nokia Lightspan MF-8 (LMFS-F) | M6 | installation manual s4.5.2.2: a dual-hole M6 lug, 6.35 mm holes, 16 mm spacing |
 | Juniper MX80, MX104, MX150 | 10-32 | hardware guides: holes for SAE 10-32 screws at 0.625 in. centres; MX150 Table 22 |
 | Juniper MX240, MX480 | 1/4-20 | hardware guides: PEM nuts for UNC 1/4-20 screws at 0.625 in. centres |
-| Amphenol 300CB08, 300CB08-SC, 300CB08-C, nrg300CB08-CTRL, nrg300CB08-SENS | 1/4-20 | the one installation guide for every version, specifications: three sets of 1/4-20 threaded holes on 5/8 in. centres; a dual-hole or a single-hole lug |
+| Amphenol 300CB08, 300CB08-SC, 300CB08-C, the six nrg300CB08 CTRL and SENS versions and the nrgILS300CB08 | 1/4-20 | the one installation guide for every version, specifications: three sets of 1/4-20 threaded holes on 5/8 in. centres; a dual-hole or a single-hole lug |
 | Nokia 7360 FX-16, FX-8, FX-4 | 1/4 in | HIM R6.9: a 1/4 in. stud at 1 in. spacing (FX-16); a dual-hole lug with 1/4 in. holes at 3/4 in. spacing (FX-8, FX-4) |
 
-That is 80 placements on 33 devices. The other 29 placements state none, because no
+That is 110 placements on 38 devices. The other 29 placements state none, because no
 document held prints a size for them: every ground point of the other 22 devices, and the
 left-hand point of the AGR110 and the AGR130, where the kit fits the right-hand one. On the FX-8 and the FX-4 the
 figure is the hole of the lug the guide calls for, not a stated stud.
@@ -501,13 +501,13 @@ kit, not the DCIM exports. It is a fact carried beside the slot.
 
 A seat applies its host's turn and a configuration cannot turn an occupant (section
 12.6), so a lug's wire leaves in the lug's own "down" turned by the placement. Seating a
-lug on every one of the 111 seats in the library gives:
+lug on every one of the 141 seats in the library gives:
 
-- **107 leave down the face and 4 leave to the left.** The only turned placements are the
+- **137 leave down the face and 4 leave to the left.** The only turned placements are the
   two on the Edgecore DCS500 and the two on the Nokia FX-16 side panels, all at
   `rotate: 90`. On the FX-16 the same turn is placed on the left and on the right side
   view, so the wire runs toward the rear on one side and toward the front on the other.
-- **58 run past the lower edge of the face,** by 2.95 to 20.05. A lug is 24.65 long below
+- **68 run past the lower edge of the face,** by 2.95 to 20.05. A lug is 24.65 long below
   its stud and most of these are on 1RU rears and side panels, where the stud sits in the
   lower half. The longest overhang is on the Edgecore DCS520, whose studs are 4.6 above
   the lower edge of a 2RU rear.
@@ -521,9 +521,9 @@ lug on every one of the 111 seats in the library gives:
 - **Seven, on five devices, run across a printed legend only:** both studs of the Juniper
   MX240 and MX480, and the stud of the Edgecore ECS4120-28Fv2-I, ECS4530-54CSFP and
   ECS4530-54CSFP-I.
-- **Twenty-four run across the second stud of their own pair** (13.5). Fifteen of them are
-  on the Amphenol 300CB08, 300CB08-SC, 300CB08-C, nrg300CB08-CTRL and nrg300CB08-SENS,
-  which share their sides and bottom and
+- **Thirty-nine run across the second stud of their own pair** (13.5). Thirty of them
+  are on the ten Amphenol 300CB08 panels (the plain, -SC and -C, the six nrg300CB08
+  CTRL and SENS versions and the nrgILS300CB08), which share their ground landings and
   whose three landings are each drawn one stud above the other: on the
   side views the wire leaves down, the lower lug 12.45 past the lower edge, and on the
   bottom view it leaves toward the front of the panel.
@@ -544,18 +544,18 @@ one. None of this is corrected here.
   real lug for those is wider than the part.
 - **Most pairs are the two holes of one two-hole lug.** Thirteen pairs of
   `common/ground-lug@1` on twelve devices, the five pairs of `juniper/mx-ground-stud@1`
-  and sixteen pairs of `common/ground-stud@1`, one on the Nokia LMFS-F and three on each of
-  the Amphenol 300CB08, 300CB08-SC, 300CB08-C, nrg300CB08-CTRL and nrg300CB08-SENS, are two holes that one lug spans; the Casa terminal takes one two-hole lug across two of its three studs. Two
+  and thirty-one pairs of `common/ground-stud@1`, one on the Nokia LMFS-F and three on each of
+  the ten Amphenol 300CB08 panels, are two holes that one lug spans; the Casa terminal takes one two-hole lug across two of its three studs. Two
   one-hole lugs are a stand-in.
 
   | drawn | pitch | devices | two one-hole lugs |
   |---|---|---|---|
   | side by side | 11.0 | UfiSpace S9500-22XST, S9501-28SMT, S9502-16SMT, S9510-28DC, S9510-30XC, S9511-20CT | lie beside each other, 5.5 apart |
   | side by side | 13.0 to 16.0 | UfiSpace M3000-14XC (13.0), S9501-18SMT (15.8 and 15.7); Juniper MX150 (13.0), MX104 (16.0) | lie beside each other |
-  | one above the other | 13.2 to 16.5 | Edgecore AIS800-64D, AIS800-64O (16.2); UfiSpace S9600-102XC (14.7), S9601-102XC (16.5); Juniper MX240, MX480 (13.2), MX80 (14.0); Nokia LMFS-F (16.3); Amphenol 300CB08, 300CB08-SC, 300CB08-C, nrg300CB08-CTRL, nrg300CB08-SENS (15.9, three pairs each); Casa C40G (15.3) | OVERLAP: the upper lug lies across the lower stud |
+  | one above the other | 13.2 to 16.5 | Edgecore AIS800-64D, AIS800-64O (16.2); UfiSpace S9600-102XC (14.7), S9601-102XC (16.5); Juniper MX240, MX480 (13.2), MX80 (14.0); Nokia LMFS-F (16.3); Amphenol 300CB08 and its nine versions (15.9, three pairs each); Casa C40G (15.3) | OVERLAP: the upper lug lies across the lower stud |
 
   The documents give the pitch as 0.625 in. (15.86) on the MX80, MX104, MX240 and MX480,
-  as 16 on the LMFS-F and as 5/8 in. (15.9) on the five 300CB08 panels, which are drawn at it; several
+  as 16 on the LMFS-F and as 5/8 in. (15.9) on the ten 300CB08 panels, which are drawn at it; several
   are drawn closer than that. The LMFS-F and 300CB08 documents also allow a single-hole
   lug on one stud, so one lug there is a documented landing and two are not.
 - **Some single placements stand for a two-hole landing.** One `common/ground-lug@1` is
@@ -580,7 +580,7 @@ answers the last two. It is the same part `nokia/sr-1-dc-terminal-block@1` waits
 - **Turning a lug,** and a lug of another size: every seat takes the one nominal lug.
 
 `spec/tests/test_ground_stud_lugs.py` holds each part's interface and seat, the Casa
-terminal's three composed studs and the art they kept, a census of all 109 placements with
+terminal's three composed studs and the art they kept, a census of all 139 placements with
 every one a slot, every `stud-size` and its absence elsewhere, a lug seated on a real
 device for each part with its solids above what the part builds, a turned placement, two
 pairs with the overlap recorded, and the kit offering the studs and seating a lug as the
