@@ -396,3 +396,43 @@ def test_a_populated_panel_draws_its_switches_down(tmp_path):
         assert len(got) == 16 and set(got) == {want}, (cfg, got)
         dip = next(e for e in root.iter() if e.get("id") == "dip-a")
         assert json.loads(dip.get("data-positions"))["sw-1"]["down"] == "alarm enabled for breaker position A1"
+
+
+# --- the plug-in breaker's state -----------------------------------------------------------
+
+BREAKER = "amphenol-ns/breaker-1ru@1"
+
+
+def test_the_breaker_state_lints_clean_and_tripped_is_drawn_as_off():
+    """A trip puts the handle at OFF (Sensata IAR/IUR datasheet, Trip
+    Indication), so `tripped` moves the handle exactly as `off` does."""
+    p = LIB / "components/amphenol-ns/breaker-1ru/v1/contract.yaml"
+    c = yaml.safe_load(p.read_text())
+    assert c["fields"]["state"]["options"] == ["on", "off", "tripped"]
+    assert c["fields"]["state"]["default"] == "on"
+    for code in ("L73", "L148", "L149"):
+        assert not _caught(code, lint.lint_component_fields, p, c), code
+    root = ET.parse(p.parent / "skins/default.svg").getroot()
+    handle = next(e for e in root.iter() if e.get("id") == "handle")
+    moves = parse_moves(handle.get("data-move"))
+    assert moves["off"] == moves["tripped"] == (0.0, 5.8, 0.0)
+
+
+def test_a_bay_sets_a_breaker_off_and_tripped(tmp_path):
+    def edit(d):
+        d["configurations"]["populated"]["bay-attrs"]["breaker-a1"]["state"] = "off"
+        d["configurations"]["populated"]["bay-attrs"]["breaker-a2"]["state"] = "tripped"
+    name, o, r = _render(tmp_path, "amphenol-ns/300cb08", edit)
+    assert r.returncode == 0, r.stderr[-800:]
+    root = ET.parse(o / f"{name}.populated.front.svg").getroot()
+    by = {e.get("id"): e for e in root.iter() if (e.get("id") or "").endswith("--handle")}
+    got = {k.split("--")[0]: v.get("transform") for k, v in by.items()}
+    assert got["breaker-a1"] == got["breaker-a2"] == "translate(0 5.8)", got
+    assert all(v is None for k, v in got.items() if k not in ("breaker-a1", "breaker-a2")), got
+
+
+def test_an_unknown_breaker_state_fails_the_render(tmp_path):
+    def edit(d):
+        d["configurations"]["populated"]["bay-attrs"]["breaker-a1"]["state"] = "mid-trip"
+    _name, _o, r = _render(tmp_path, "amphenol-ns/300cb08", edit)
+    assert r.returncode != 0 and "is not a position" in r.stderr
