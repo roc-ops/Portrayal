@@ -32,9 +32,12 @@ provenance:
       Fig. 3-2, the embedded 1188 x 258 image on page 38, at the same 1.9685 px/mm: two RJ45 openings 14.7 wide
       either side of a display window 24.9 by 7.6, a small round button under the window, the two switch slots where
       the plain panel has them but 1.0 higher, five lamp holes 1.3 higher, and the card slot. What is printed comes
-      from Fig. 2-14, which letters MGMT, 172.16.1.1 above it, LAN, RESET, 1 and 8 at each slot, nrg over the centre
+      from Fig. 2-14, which letters MGMT, an address above it, LAN, RESET, 1 and 8 at each slot, nrg over the centre
       lamp and the voltage at the lower left. That figure shows no maker name and no model on this face, and none
-      is printed here. Legend positions are read off that figure by eye.'
+      is printed here. Legend positions are read off that figure by eye. THE ADDRESS ABOVE MGMT IS NOT DRAWN: the
+      face prints the controller''s factory default management address, a private (RFC 1918) address, centred over
+      the jack about 3.9 from the top edge, and the repository''s private-address gate keeps such addresses out
+      of tracked files. Its place is left blank.'
   lamps:
     confidence: drawing
     note: 'Five lamps: A PWR, A ALM, nrg, B ALM, B PWR. PWR is green with its feed present and ALM red on an alarm,
@@ -134,9 +137,10 @@ attrs:
     output-breaker-max: 60 A single-pole; the UL rating holds to 48 A continuous per output
     input-interrupt-max: 125 percent of the panel rating
     power-max-w: 1.44
-    power-max-scope: the alarm card alone at 48 V (30 mA); 0.48 W at 24 V and 0.22 W at 12 V. It is the only thing
-      in the panel that draws. Separately the guide gives a nominal power LOSS of less than 45 W per side at 325
-      A and 48 V, which is heat in the conductors and not a draw.
+    power-max-scope: the alarm card alone at 48 V (30 mA); 0.48 W at 24 V and 0.22 W at 12 V. THE MONITORING CARD
+      ALSO DRAWS FROM THE A AND B FEEDS, and no document held states how much (gap monitoring-card-draw), so this
+      figure is a floor for the panel, not its total. Separately the guide gives a nominal power LOSS of less than
+      45 W per side at 325 A and 48 V, which is heat in the conductors and not a draw.
   thermal:
     cooling: passive, perforated lid and base
   environmental:
@@ -180,6 +184,20 @@ gaps:
     datasheet or the two controller configuration guides; searched for mA, watt, consumption and current draw. `power-max-w`
     is the alarm card alone.
   wanted: the controller and sensor card current at 12, 24 and 48 V.
+- what: nrgnet-pitch
+  scope:
+  - rear
+  reason: vendor-silent
+  note: the two five-way nrgNET connectors are drawn at a 3.81 pitch, read off five ways in about 20 on Fig. 3-7;
+    no document states the header or its pitch.
+  wanted: the nrgNET header part number or pitch.
+- what: temp-jack-type
+  scope:
+  - rear
+  reason: vendor-silent
+  note: the two nrgTEMP probe jacks are drawn from a photograph; no document held names the jack, and the probe
+    ends in a phone-style plug of no stated size.
+  wanted: the probe jack type and plug size.
 - what: display-characters
   scope:
   - front
@@ -357,14 +375,6 @@ views:
       font-size: 1.8
       anchor: middle
       for: breaker-b8
-      fill: '#2b2d30'
-    - at:
-      - 189.3
-      - 3.9
-      text: 172.16.1.1
-      font-size: 1.6
-      anchor: middle
-      for: mgmt
       fill: '#2b2d30'
     - at:
       - 177.3
