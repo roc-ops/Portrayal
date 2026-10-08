@@ -1,0 +1,39 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://portrayal.dev/schemas/v1/marks.schema.json",
+ "title": "Portrayal marked-up drawing (v1)",
+ "description": "An annotated drawing as one document of CSS selectors over a compiled face: what kit/marks.js normalise() returns, encode() carries in a URL and apply() draws.",
+ "type": "object",
+ "required": ["v", "device", "config", "view", "legend", "crop", "marks", "swaps", "fields"],
+ "additionalProperties": false,
+ "properties": {
+  "v": {"const": 1, "description": "The document version."},
+  "device": {"type": "string", "description": "The device the selectors are written against, by its library name; empty for none."},
+  "config": {"type": "string", "description": "The configuration of that device; empty for its default."},
+  "view": {"type": "string", "description": "Which face: front, rear, or another view the device has; empty for its default."},
+  "legend": {"type": ["boolean", "object"], "description": "Whether a legend strip is drawn. An object is a legend with options and reads as true."},
+  "crop": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/rect"}], "description": "A region of the face, in millimetres of its drawing, or null for the whole face."},
+  "marks": {"type": "array", "items": {"$ref": "#/$defs/mark"}, "description": "The marks, in drawing order."},
+  "swaps": {"type": "object", "additionalProperties": {"type": ["string", "null"]},
+            "description": "What the reader seated before marking up: bay or cage path to component ref, null for one emptied. Only what differs from the configuration's build."},
+  "fields": {"type": "object", "additionalProperties": {"type": "object", "additionalProperties": {"type": ["string", "null"]}},
+             "description": "What the reader wrote on parts: part path to {field: value}, null for a value cleared."}
+ },
+ "$defs": {
+  "rect": {"type": "object", "required": ["x", "y", "w", "h"], "additionalProperties": false,
+           "description": "A rectangle in millimetres of the face's drawing.",
+           "properties": {"x": {"type": "number", "description": "Left edge."}, "y": {"type": "number", "description": "Top edge."},
+                          "w": {"type": "number", "exclusiveMinimum": 0, "description": "Width, above 0."},
+                          "h": {"type": "number", "exclusiveMinimum": 0, "description": "Height, above 0."}}},
+  "mark": {"type": "object", "required": ["id", "select", "color", "state", "label", "lamp"], "additionalProperties": false,
+           "description": "One statement about the parts a selector matches.",
+           "properties": {
+            "id": {"type": "string", "description": "A name for the mark, kept as given; empty when it has none."},
+            "select": {"type": "string", "description": "A CSS selector over the compiled drawing, e.g. [data-path='psu-0']."},
+            "color": {"type": "string", "description": "Ink: a ring drawn around the matched parts, as a CSS colour; empty for none."},
+            "state": {"type": "string", "description": "A lamp state the matched parts show, from their contract's vocabulary; empty for none."},
+            "label": {"type": "string", "description": "Text for the legend; empty for none."},
+            "lamp": {"type": "string", "pattern": "^(#([0-9a-f]{3}|[0-9a-f]{4}|[0-9a-f]{6}|[0-9a-f]{8}))?$",
+                     "description": "The colour the lamp itself shows, as lower-case hex; empty for however the drawing paints it."}}}
+ }
+}

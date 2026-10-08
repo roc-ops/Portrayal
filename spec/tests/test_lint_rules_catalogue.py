@@ -251,6 +251,9 @@ ISSUED = {
     "L149": "component",
     "L150": "device",
     "L151": "device",
+    "L152": "device",
+    "L153": "lab",
+    "L154": "lab",
 }
 
 

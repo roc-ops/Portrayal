@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://portrayal.dev/schemas/v1/lab.schema.json",
   "title": "Portrayal lab (v1) - library devices placed in one rack, and the links between them",
-  "description": "A LAB IS A RACK ELEVATION PLUS A LINK LIST. It lives at labs/<name>/lab.yaml, names library devices by their `name`, and names ports by placement id; nothing about geometry lives here, because a viewer resolves port positions from the compiled drawings. The build checks every placement (L139-L143) and writes each one to labs.json with its position resolved: the absolute rack unit, the face and the host. Rack units count the way the rack counts, U1 at the bottom, and a placement's `ru` is the lowest unit it takes.",
+  "description": "A LAB IS A RACK ELEVATION PLUS A LINK LIST. It lives at labs/<name>/lab.yaml, names library devices by their `name`, and names ports by placement id; nothing about geometry lives here, because a viewer resolves port positions from the compiled drawings. The build checks every placement (L139-L143, L153, L154) and writes each one to labs.json with its position resolved: the absolute rack unit, the face and the host. Rack units count the way the rack counts, U1 at the bottom, and a placement's `ru` is the lowest unit it takes.",
   "type": "object",
   "required": [
     "format",
@@ -75,7 +75,7 @@
         "ref"
       ],
       "additionalProperties": false,
-      "description": "ONE DEVICE IN THE RACK. A `rack` device is placed by `ru`. A `rack-face` part - one that bolts to the rail face over a rack unit it shares, docs/cable-managers-design.md section 6 - is placed on a host (`on`, with `unit`) or at a rack unit (`ru`), never both, and says which `face`. `face`, `on` and `unit` are for rack-face parts only (L140).",
+      "description": "ONE DEVICE IN THE RACK. A `rack` device is placed by `ru`. A `rack-face` part - one that bolts to the rail face over a rack unit it shares, docs/cable-managers-design.md section 6 - is placed on a host (`on`, with `unit`) or at a rack unit (`ru`), never both, and says which `face`; one narrower than the rack opening may say which `side` of it. A `rack-side` part - one that stands beside the rack on the side of an upright, docs/vertical-cable-managers-design.md section 3.5 - says which `side`, and is placed by `ru`, its bottom unit (default 1), on a `face`. `on` and `unit` are for rack-face parts only, `face` for rack-face and rack-side parts (L140, L153).",
       "properties": {
         "id": {
           "type": "string",
@@ -96,14 +96,21 @@
         "ru": {
           "type": "integer",
           "minimum": 1,
-          "description": "the lowest rack unit the device takes, U1 at the bottom of the rack (L142)"
+          "description": "the lowest rack unit the device takes, U1 at the bottom of the rack (L142); for a rack-side part the unit it starts beside, omitted meaning 1 (L154)"
         },
         "face": {
           "enum": [
             "front",
             "rear"
           ],
-          "description": "rack-face parts only: the rail face it bolts to. Omitted means front. On the rear it is behind the rear rails and turned round"
+          "description": "rack-face and rack-side parts only: the rail face it bolts to, or the face a rack-side part's working side looks out of. Omitted means front. On the rear it is behind the rear rails and turned round"
+        },
+        "side": {
+          "enum": [
+            "left",
+            "right"
+          ],
+          "description": "which side of the rack, seen from the front. A `rack-side` part states it: the upright it stands beside (L153). A `rack-face` part narrower than the rack opening may: the rail it bolts to, so that one on each rail shares a rack unit and a face (L142, L153). Omitted on a rack-face part means it takes the whole unit on its face"
         },
         "on": {
           "type": "string",
