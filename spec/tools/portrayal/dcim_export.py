@@ -2294,7 +2294,7 @@ def tokenize_module(doc):
     return doc
 
 
-def nested_bays_for(doc, target, withheld=()):
+def nested_bays_for(doc, target, withheld=(), through=()):
     """A written MODULE document's own bays as ONE DCIM takes them. Asked of
     module types only: a device type's `module-bays` are the chassis' own, are
     positioned by their id in both DCIMs, and never pass through here.
@@ -2338,6 +2338,12 @@ def nested_bays_for(doc, target, withheld=()):
     type's comments say which and why: what closes it is position templating
     on Nautobot's bay template, nautobot/nautobot#5823, open upstream.
 
+    EXCEPT A CARRIER'S ONLY BAY (#917). `through` is the bay ids given with a
+    blank position instead (`pass_through_bays`): Nautobot skips a blank
+    position when it names ports, so the MX2000 adapter's `mpc` takes the very
+    MPC an MX960 slot takes, and that MPC's `{module}/x` renders as the slot
+    the adapter sits in, `fpc3/x`. NetBox keeps `fpc3/mpc/x`; the comments say so.
+
     IT NEEDS NETBOX 4.5.7. Position templating on a bay arrived in 4.5.6
     (release note #20467) and the single token's leaf rule in 4.5.7 (#20474).
     Before that the install FORMS refuse a card whose token count is not the
@@ -2364,8 +2370,13 @@ def nested_bays_for(doc, target, withheld=()):
         out["module-bays"] = [{**b, "name": module_scoped(b["name"]),
                                "position": module_scoped(b["position"])} for b in bays]
     elif target == "nautobot":
-        withheld = set(withheld)
-        kept = [dict(b) for b in bays if b["position"] not in withheld]
+        withheld, through = set(withheld), set(through)
+        if withheld & through:
+            raise ValueError(f"{doc.get('model')}: bay(s) {sorted(withheld & through)} "
+                             "both withheld and passed through")
+        kept = [{**b, "position": ""} if b["position"] in through else dict(b)
+                for b in bays if b["position"] not in withheld]
+        passed = [b["name"] for b in bays if b["position"] in through]
         gone = [b["position"] for b in bays if b["position"] in withheld]
         if kept:
             out["module-bays"] = kept
@@ -2377,6 +2388,13 @@ def nested_bays_for(doc, target, withheld=()):
                        "that module's port names cannot carry this bay's parent, and "
                        "Nautobot copies a bay's position as written (position "
                        "templating is nautobot/nautobot#5823).")
+        if passed:
+            _note(out, f"Given to Nautobot with a blank position: module bay(s) "
+                       f"{', '.join(passed)}. It accepts modules that also seat directly "
+                       "in a chassis bay, and Nautobot skips a blank position when it "
+                       "names ports, so a module here is named by the bay this one sits "
+                       f"in: <slot>/x, where NetBox, which templates a bay's position, "
+                       f"says <slot>/{passed[0]}/x.")
     else:
         raise ValueError(f"no rule for a nested bay on target {target!r}")
     return out
@@ -2848,47 +2866,94 @@ def module_key(dist, contract):
     return (man, str((contract.get("attrs") or {}).get("model") or contract["name"]))
 
 
-def seating_depths(dist):
-    """{(manufacturer, model): {depth, ...}} - how deep in a bay tree each
-    module model is seated anywhere in the library (#765).
-
-    Depth 1 is a bay on a device: every view, every configuration, because a
-    module type is one document whichever chassis it is ordered for. Depth
-    d + 1 is a bay on a module seated at d. Computed to a fixpoint over keys
-    rather than refs, so a twin that no device names still passes its parent's
-    depth to what it seats. A model no bay accepts has no entry.
-    """
-    def key_of(ref):
-        c = dist.component_by_ref(ref)
-        return module_key(dist, c) if c and c.get("kind") == "module" else None
-
-    depths = {}
+def _chassis_seated(dist):
+    """The module keys a device bay accepts: every view, every configuration."""
+    seated = set()
     for d in dist.devices:
         dev = dist.manifest(d["name"])
         for view in (dev.get("views") or {}).values():
             for b in view_parts(view)["bays"]:
                 for ref in b.get("accepts") or []:
-                    k = key_of(ref)
-                    if k:
-                        depths.setdefault(k, set()).add(1)
+                    c = dist.component_by_ref(ref)
+                    if c and c.get("kind") == "module":
+                        seated.add(module_key(dist, c))
+    return seated
 
-    carriers = []                                # (key, [accepted keys])
+
+def pass_through_bays(dist):
+    """{(manufacturer, model): {bay id}} - the bays Nautobot is given with a
+    BLANK position (#917), so that what seats in one is named by the bay its
+    carrier sits in.
+
+    A carrier qualifies when its bay is its ONLY bay and accepts a model that
+    also seats directly in a chassis bay - the MX2000 line-card adapter, whose
+    `mpc` takes the MX240/MX480/MX960 cards. Such a bay is otherwise withheld
+    (`nested_bays_for`): the card's ports say `{module}/x`, and a position of
+    `mpc` would name every adapter's card `mpc/x`. Nautobot's
+    render_name_template SKIPS a blank position and fills `{module}` with the
+    next one up (nautobot/nautobot nautobot/dcim/models/device_components.py:
+    149-191 at v3.2.6, 3dc554b4), and ModuleBayTemplate.position is
+    `blank=True` (device_component_templates.py:542 at the same commit). So a
+    card in the adapter in `fpc3` names its port `fpc3/x`, which is unique
+    because the carrier has no second bay to share `fpc3` with. NetBox, which
+    templates the position, still says `fpc3/mpc/x`.
+
+    A carrier with ports of its own would share that prefix with its occupant;
+    `export_modules` refuses one rather than writing two `fpc3/x`.
+    """
+    direct = _chassis_seated(dist)
+    out = {}
+    for c in dist.modules():
+        bays = c.get("bays")
+        if not isinstance(bays, dict) or len(bays) != 1 or c.get("superseded-by"):
+            continue
+        (bid, b), = bays.items()
+        if any((rc := dist.component_by_ref(r)) and rc.get("kind") == "module"
+               and module_key(dist, rc) in direct
+               for r in (b or {}).get("accepts") or []):
+            out.setdefault(module_key(dist, c), set()).add(bid)
+    return out
+
+
+def seating_depths(dist):
+    """{(manufacturer, model): {depth, ...}} - how deep in a bay tree each
+    module model is seated anywhere in the library (#765), counted the way
+    Nautobot counts it: by the positions it renders.
+
+    Depth 1 is a bay on a device: every view, every configuration, because a
+    module type is one document whichever chassis it is ordered for. Depth
+    d + 1 is a bay on a module seated at d - except a pass-through bay
+    (`pass_through_bays`), whose blank position Nautobot skips, so what seats
+    there is at its carrier's depth. Computed to a fixpoint over keys rather
+    than refs, so a twin that no device names still passes its parent's depth
+    to what it seats. A model no bay accepts has no entry.
+    """
+    def key_of(ref):
+        c = dist.component_by_ref(ref)
+        return module_key(dist, c) if c and c.get("kind") == "module" else None
+
+    depths = {k: {1} for k in _chassis_seated(dist)}
+    through = pass_through_bays(dist)
+
+    carriers = []                                # (key, [(accepted key, step)])
     for c in dist.modules():
         bays = c.get("bays")
         # A retired major seats nothing: it is not exported (export_modules),
         # so the depths its bays would pass on describe no document.
         if not isinstance(bays, dict) or c.get("superseded-by"):
             continue
-        under = [key_of(ref) for b in bays.values() for ref in (b or {}).get("accepts") or []]
-        carriers.append((module_key(dist, c), [k for k in under if k]))
+        key = module_key(dist, c)
+        under = [(key_of(ref), 0 if bid in through.get(key, ()) else 1)
+                 for bid, b in bays.items() for ref in (b or {}).get("accepts") or []]
+        carriers.append((key, [(k, s) for k, s in under if k]))
 
     # A bay tree is finite and acyclic in any library that renders; the bound
     # stops a cycle from looping rather than deciding anything.
     for _ in range(16):
         grew = False
         for parent, kids in carriers:
-            for k in kids:
-                new = {d + 1 for d in depths.get(parent, ())} - depths.get(k, set())
+            for k, step in kids:
+                new = {d + step for d in depths.get(parent, ())} - depths.get(k, set())
                 if new:
                     depths.setdefault(k, set()).update(new)
                     grew = True
@@ -2957,6 +3022,7 @@ def export_modules(dist, root, images=None):
     # port names of what seats in them. NetBox's output does not read it.
     depths = seating_depths(dist)
     multi = {k for k, ds in depths.items() if len(ds) > 1}
+    through_all = pass_through_bays(dist)
 
     wrote = 0
     collisions = []                              # ((man, model), ref, kind)
@@ -3006,10 +3072,17 @@ def export_modules(dist, root, images=None):
         name, ver, ns = contract.get("name"), contract.get("major"), contract.get("ns")
         # A BAY NAUTOBOT CANNOT BE GIVEN: one accepting a model that is also
         # seated directly in a chassis bay, read from every author's contract.
+        # A PASS-THROUGH BAY is given instead, with a blank position (#917).
+        through = through_all.get((man, model)) or set()
+        if through and any(doc.get(k) for k in MODULE_PORT_KEYS):
+            raise SystemExit(f"{man} {model}: bay(s) {', '.join(sorted(through))} pass "
+                             "through to Nautobot with a blank position, so the carrier's "
+                             "own ports would share its occupant's names (pass_through_bays)")
         withheld = {bid for c in authors for bid, b in (c.get("bays") or {}).items()
-                    if any(dist.component_by_ref(r)
-                           and module_key(dist, dist.component_by_ref(r)) in multi
-                           for r in (b or {}).get("accepts") or [])}
+                    if bid not in through
+                    and any(dist.component_by_ref(r)
+                            and module_key(dist, dist.component_by_ref(r)) in multi
+                            for r in (b or {}).get("accepts") or [])}
         seated = depths.get((man, model)) or set()
         depth = next(iter(seated)) if len(seated) == 1 else None
         for target in TARGETS:
@@ -3018,7 +3091,8 @@ def export_modules(dist, root, images=None):
             # Cisco ships part numbers with slashes in them - A9K-16T/8-B - and
             # a slash is a path separator, not a character. The model keeps the
             # real name; only the filename is sanitised.
-            written = for_target(nested_bays_for(doc, target, withheld), target, fibre_map)
+            written = for_target(nested_bays_for(doc, target, withheld, through),
+                                 target, fibre_map)
             if target == "nautobot":
                 written = seat_names(written, depth)
             (d / (model.replace("/", "-") + ".yaml")).write_text(

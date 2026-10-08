@@ -149,10 +149,26 @@ def build(library):
     seats = seat_counts(library)
     composers = composer_counts(library)
     groups = defaultdict(list)
+    kits = []
     for contract in sorted(library.glob("components/*/*/v*/contract.yaml")):
         ns, name, vdir = contract.parts[-4], contract.parts[-3], contract.parts[-2]
         doc = load_yaml(contract) or {}
         ref = f"{ns}/{name}@{vdir[1:]}"
+        # A KIT IS NOT A COMPONENT A DEVICE SEATS (#905): it has no class and no
+        # size, and counted here it would read as one more part. It gets a table
+        # of its own after the namespaces, outside the component total.
+        if doc.get("kind") == "kit":
+            kits.append({
+                "ref": ref,
+                "motion": doc.get("motion") or "",
+                "install": doc.get("install") or "",
+                "configs": ", ".join(str((c or {}).get("id"))
+                                     for c in doc.get("configurations") or []),
+                "parts": ", ".join(str((p or {}).get("ref"))
+                                   for p in doc.get("parts") or []),
+                "what": first_sentence(doc.get("description")),
+            })
+            continue
         groups[ns].append({
             "ref": ref,
             "kind": doc.get("kind", ""),
@@ -197,6 +213,17 @@ def build(library):
                   "|---|---|---|---|---|---|---|---|"]
         for r in rows:
             lines.append(f"| `{r['ref']}` | {r['kind']} | {r['class']} | {r['size']} | {r['fits']} | {r['used']} | {r['parts']} | {r['what']} |")
+        lines.append("")
+    # ONLY WHEN THERE IS ONE, so the page is unchanged for a library without.
+    if kits:
+        lines += [f"## Rail kits ({len(kits)})", "",
+                  "A `kind: kit` is a set of the components above that a device names from",
+                  "`chassis.kits` and never places, so it is not counted among them.",
+                  "",
+                  "| ref | motion | install | configurations | parts | what it is |",
+                  "|---|---|---|---|---|---|"]
+        for k in kits:
+            lines.append(f"| `{k['ref']}` | {k['motion']} | {k['install']} | {k['configs']} | {k['parts']} | {k['what']} |")
         lines.append("")
     # after the opening paragraph, which ends at the first blank line
     lines[lines.index("", 2) + 1:lines.index("", 2) + 1] = [

@@ -322,6 +322,11 @@ RULES = {
     "L152": ("device",     "a `rack-side` part's front view is taller than it is wide - it is drawn as it stands beside the rack (warning)", "draw it standing: the front's `w` is the width across the rack's face direction and `h` the height it runs; swap them if the spec line printed them the other way"),
     "L153": ("lab",        "`side` (left or right) appears only on a `rack-side` part, which states it, and on a `rack-face` part narrower than the rack opening; a rack-side part takes no `on` or `unit` (error)", "give a rack-side part its `side` and place it by `ru`; drop `side` from a full-width part"),
     "L154": ("lab",        "a rack-side part fits the rack's `height-ru`, and no two rack-side parts on one side of the rack overlap in height (error)", "move one of the two up, or stand it on the other side of the rack"),
+    "L155": ("kit",        "every part `ref` of a `kind: kit` resolves to a component in the library that is not itself a kit, and no two parts share an `id` (error)", "fix the ref (namespace/name@major) or write the part's contract; a kit lists ordinary rails, brackets and ears, never another kit"),
+    "L156": ("kit",        "every configuration of a kit has its own `id`, and names in `parts` only ids of the kit's own `parts` (error)", "list the part ids the configuration uses, as the kit's `parts` spell them; give each configuration an id of its own"),
+    "L157": ("kit",        "every depth range of a kit configuration, one `[min, max]` or one per hole type, has min below max (error)", "write the range as `[min, max]` in mm, from the source; a single figure is a `preset`, not a range"),
+    "L158": ("kit",        "`travel` appears only on a kit whose `motion` is `sliding` (error)", "drop `travel`, or set `motion: sliding` if the rails really slide out for service"),
+    "L159": ("kit",        "every accessory `ref` of a kit resolves to a component in the library that is not a kit (error)", "fix the ref (namespace/name@major), or write the arm's or the bar's contract"),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -3366,6 +3371,93 @@ def lint_component_superseded_by(path, data, lib_roots):
     if not resolve_component(ref, lib_roots):
         err(path, "L101",
             f"superseded-by: {ref}, which is not in the library")
+
+
+def _kit_ranges(depth):
+    """(label, [min, max]) for each range of a configuration's `depth`: the one
+    range, or one per hole type. The schema has already said each is a pair of
+    numbers, so this only names them."""
+    if isinstance(depth, list):
+        return [("depth", depth)]
+    if isinstance(depth, dict):
+        return [(f"depth.{hole}", rng) for hole, rng in depth.items()]
+    return []
+
+
+def _kit_ref_problem(ref, lib_roots):
+    """Why a kit's part or accessory ref is not usable, or None when it is."""
+    contract = libwalk.load_contract(ref, lib_roots)
+    if contract is None:
+        return "which is not in the library"
+    if isinstance(contract, dict) and contract.get("kind") == "kit":
+        return "which is a kit - a kit lists ordinary components, never another kit"
+    return None
+
+
+def lint_kit(path, data, lib_roots):
+    """L155-L159: a `kind: kit` holds together (roc-ops/Portrayal#905).
+
+    A KIT IS A LIST, NOT A DRAWING. It names rails, brackets and ears by ref,
+    says which of them make up each way it can be assembled, and gives the rack
+    depth each of those fits; the parts carry the geometry. So what can go wrong
+    is a reference that points at nothing, or a figure that cannot be a range.
+    The schema holds the shape; these hold what the shape cannot say:
+
+      L155  each part ref resolves to a component that is not a kit, and the
+            part ids are distinct - a configuration names parts by id, so two
+            parts under one id would make it ambiguous;
+      L156  each configuration names only the kit's own part ids, and has an id
+            of its own - a device's `chassis.kits[].depth.config` names one;
+      L157  every range has min < max;
+      L158  `travel` only with `motion: sliding`;
+      L159  each accessory ref resolves to a component that is not a kit.
+
+    ERRORS, ALL OF THEM. The kind is new and no kit exists yet, so there is no
+    backlog for a warning to carry while it shrinks.
+    """
+    if not isinstance(data, dict) or data.get("kind") != "kit":
+        return
+    ids = []
+    for i, part in enumerate(data.get("parts") or []):
+        if not isinstance(part, dict):
+            continue
+        ref, pid = part.get("ref"), part.get("id")
+        if isinstance(ref, str):
+            why = _kit_ref_problem(ref, lib_roots)
+            if why:
+                err(path, "L155", f"parts[{i}] ({pid}): ref {ref}, {why}")
+        if pid in ids:
+            err(path, "L155", f"parts[{i}]: id {pid!r} is used by another part of this kit "
+                "- a configuration names parts by id, so each needs its own")
+        ids.append(pid)
+    known = set(ids)
+    seen_cfg = set()
+    for i, cfg in enumerate(data.get("configurations") or []):
+        if not isinstance(cfg, dict):
+            continue
+        cid = cfg.get("id")
+        if cid in seen_cfg:
+            err(path, "L156", f"configurations[{i}]: id {cid!r} is used by another "
+                "configuration - a device's `chassis.kits[].depth.config` names one by id")
+        seen_cfg.add(cid)
+        cparts = cfg.get("parts")
+        for pid in cparts if isinstance(cparts, list) else []:
+            if pid not in known:
+                err(path, "L156", f"configuration {cid}: part {pid!r} is not one of this "
+                    f"kit's parts ({', '.join(sorted(map(str, known))) or 'none'})")
+        for label, rng in _kit_ranges(cfg.get("depth")):
+            if isinstance(rng, list) and len(rng) == 2 \
+                    and all(isinstance(x, (int, float)) for x in rng) and not rng[0] < rng[1]:
+                err(path, "L157", f"configuration {cid}: {label} {rng} - min must be below max")
+    if "travel" in data and data.get("motion") != "sliding":
+        err(path, "L158", f"travel: {data['travel']} on a kit whose motion is "
+            f"{data.get('motion')!r} - only a sliding kit travels")
+    for i, acc in enumerate(data.get("accessories") or []):
+        if not isinstance(acc, dict) or not isinstance(acc.get("ref"), str):
+            continue
+        why = _kit_ref_problem(acc["ref"], lib_roots)
+        if why:
+            err(path, "L159", f"accessories[{i}] ({acc.get('kind')}): ref {acc['ref']}, {why}")
 
 
 def lint_component_pluggable_rate(path, data, _lib_roots=None):
@@ -11939,6 +12031,17 @@ def main():
                 continue
             lint_duplicate_keys(f)
             d = lint_component(f, comp_v)
+            # A KIT IS A PARTS LIST, NOT A DRAWING (#905): no size, no skin, no
+            # elements, so the component rules below have nothing to read and
+            # several would index the `size` a kit does not have. It takes the
+            # kit rules and the ones that read any contract, and nothing else.
+            if isinstance(d, dict) and d.get("kind") == "kit":
+                lint_attrs_null(f, d)
+                lint_kit(f, d, args.library)
+                lint_component_superseded_by(f, d, args.library)
+                lint_quoted_prose(f, d)
+                n += 1
+                continue
             # a file that would not parse has already been reported; running the
             # rest against None just buries that message under a traceback
             if d is not None:

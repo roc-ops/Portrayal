@@ -182,6 +182,92 @@ rack-side part across its 45 units, which is wrong and visible, as the
 rack-face case was. A lab that fails its schema or a check (lint L139 to L142,
 L153, L154) is not written, and the build stops.
 
+## The kits file
+
+`kits.json` is every rail, bracket and slide kit in the library: each
+component contract with `kind: kit`, the kind added beside `component` and
+`module` in #905. A kit is a set of ordinary components that a device names
+from `chassis.kits` and never places, so it is never an entry of
+`components.json`, and `components_index.py` writes it here instead, on every
+build. While the library holds no kit the file is `{"kits": []}`.
+
+```json
+{"kits": [{"ref": "acme/slide@1", "ns": "acme", "name": "slide", "major": "v1",
+  "version": "1.0.0", "kind": "kit", "description": "...",
+  "motion": "sliding", "travel": "full", "install": "drop-in",
+  "parts": [{"ref": "acme/inner@1", "id": "inner", "count": 2}],
+  "configurations": [{"id": "four-post", "racks": ["4-post"], "parts": ["inner"],
+                      "depth": {"square": [631, 868]}, "rail-depth": 714}],
+  "accessories": [{"kind": "cma", "ref": "acme/cma@1", "rail-depth": 845}],
+  "superseded-by": null, "provenance": {"depth": "..."}}]}
+```
+
+Rows are sorted by `ref`, and every row carries every key above. A key the
+contract leaves out is `null` (`travel`, `install`, `superseded-by`), an empty
+list (`accessories`) or an empty object (`provenance`). `parts`,
+`configurations` and `accessories` are as the contract writes them; the
+component schema describes each key. A part is a ref, not geometry: the
+geometry of a kit's parts is read from `components.json` by their refs.
+
+The file is new, and did not raise `contract`, which is still 2. Removing or
+renaming a key, or changing what one means, is a `contract` change; adding a
+key is not.
+
+## The cable types file
+
+`cable-types.json` names the cable types a rack tool can lay: each one's
+media, a typical outside diameter and its minimum bend radius, every figure
+with its source. `cable_types_index.py` writes it from
+`spec/schemas/cable-types.yaml` and refuses a table that fails its checks, so
+the build stops. It is new at `contract: 2` and did not raise it.
+
+```json
+{"format": 1, "version": "1.0.0", "generated-from": "spec/schemas/cable-types.yaml",
+ "sources": {"foa-tia568": {"title": "...", "url": "https://..."}},
+ "types": {"cat6a": {"id": "cat6a", "label": "Cat 6A U/UTP", "media": "cat6a",
+   "family": "copper", "shield": "U/UTP", "od_mm": 7.5, "od_sources": ["portrayal-estimate"],
+   "min_bend_radius": {
+     "installed": {"xOD": 4, "basis": "standard", "sources": ["elliott-min-bend"]},
+     "loaded": {"xOD": 8, "basis": "standard", "sources": ["elliott-min-bend"]}}}}}
+```
+
+`format` is 1 and versions the shape: a removed or renamed key raises it, a
+new key does not. `version` versions the table's contents, so a changed
+figure is deliberate: a corrected value or a new type is a minor, a removed
+type or a changed id is a major.
+
+Each type, keyed by its `id`, always carries:
+
+- `id`, `label`, and `media`: the Rack Builder cable media it is a kind of.
+  The bare ids `os2`, `om3`, `om4`, `om5`, `cat6`, `cat6a`, `dac` and `aoc` are
+  those media values themselves, so a rack cable's media names its type. A
+  refinement (`cat6a-ftp`, `os2-g657a2`, `dac-26awg`) has its own id and
+  names the media it refines. `power` is the media of the power cords, which
+  no Rack Builder media names yet.
+- `family`: `fiber`, `copper`, `dac`, `aoc` or `power`.
+- `od_mm` and `od_sources`: a typical outside diameter, a sketch and not a
+  measurement of any one cable.
+- `min_bend_radius`: `{installed, loaded}`. Installed is the radius once the
+  cable is in place and unloaded, which a route or a bundle is checked
+  against; loaded is the radius while it is pulled, and is data only. Each is
+  `{mm}`, a fixed radius, or `{xOD}`, a multiple of `od_mm`, with `basis`
+  (`standard` or `convention`), `sources` (keys of `sources`), and optionally
+  `note` and `unverified: true`, which marks a placeholder. `loaded` is `null`
+  where no source gives one; `installed` is always present.
+
+A type may also carry `fiber` (`mode`, `grade`, `core_um`, and for a named
+class `class` and its own `min_bend`), `shield` or `awg`. A `power` type
+always carries `conductor`, the cord it is made of (`H05VV-F 3G1.0`), so the
+same connector pair on another cord (a North American SJT) is a type of its
+own. A fibre type's installed radius is the cord's cable rule;
+`fiber.min_bend` is the fibre class's macrobend test radius, kept as data
+for a consumer that knows the cord allows the tighter figure.
+
+The kit's `rack/cable-types.js` reads it: `radiusMm(type)` turns a radius into
+millimetres, `bendLookup(types)` gives a cable's installed radius from its
+`type` when the table has that type, else from its `media`, and `loadCableTypes(dist)` fetches the file and
+refuses any `format` but 1.
+
 ## The rack catalogue
 
 `rack.json` is the catalogue a rack tool reads in one fetch, so it need not open
