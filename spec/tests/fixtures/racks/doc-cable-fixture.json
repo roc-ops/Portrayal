@@ -1,0 +1,133 @@
+{
+  "format": "portrayal-rack",
+  "version": 1,
+  "id": "doc-cable-fixture",
+  "racks": [
+    {
+      "id": "r1",
+      "name": "Cable test",
+      "frame": {
+        "kind": "four-post",
+        "heightRU": 24,
+        "numbering": "bottom-up",
+        "holes": {
+          "style": "square",
+          "thread": null
+        },
+        "railDepth": 740,
+        "usableDepth": 1000,
+        "ref": null
+      },
+      "items": [
+        {
+          "id": "i1",
+          "ref": "asr-9006",
+          "cfg": "base",
+          "label": "core-1",
+          "ru": 2,
+          "face": "front",
+          "turned": false,
+          "swaps": {
+            "slot-2": "cisco/a9k-16x100ge-tr@1",
+            "slot-2/module/p0": "generic/qsfp-lc@2"
+          },
+          "fields": {}
+        },
+        {
+          "id": "i2",
+          "ref": "as7726-32x",
+          "cfg": "ac-f2b",
+          "label": "leaf-1",
+          "ru": 14,
+          "face": "front",
+          "turned": false,
+          "swaps": {
+            "port-1": "generic/qsfp-lc@2"
+          },
+          "fields": {}
+        },
+        {
+          "id": "i3",
+          "ref": "tm-280",
+          "cfg": "base",
+          "label": "demarc",
+          "ru": 14,
+          "face": "rear",
+          "turned": false,
+          "swaps": {},
+          "fields": {}
+        },
+        {
+          "id": "i4",
+          "ref": "tm-280",
+          "cfg": "base",
+          "label": "demarc",
+          "ru": 20,
+          "face": "rear",
+          "turned": false,
+          "swaps": {},
+          "fields": {}
+        }
+      ],
+      "zeroU": [],
+      "cables": [
+        {
+          "id": "c1",
+          "a": {
+            "item": "i2",
+            "path": "port-1",
+            "view": "front"
+          },
+          "b": {
+            "item": "i1",
+            "path": "slot-2/module/p0",
+            "view": "front"
+          },
+          "media": "os2",
+          "purpose": "uplink",
+          "label": "A1",
+          "length": {
+            "value": 2,
+            "unit": "m",
+            "source": "entered"
+          },
+          "route": []
+        },
+        {
+          "id": "c2",
+          "a": {
+            "item": "i2",
+            "path": "mgmt-eth",
+            "view": "front"
+          },
+          "b": {
+            "item": "i3",
+            "path": "port-2-1",
+            "view": "front"
+          },
+          "media": "cat6a",
+          "purpose": "management",
+          "label": "",
+          "route": []
+        },
+        {
+          "id": "c3",
+          "a": {
+            "item": "i2",
+            "path": "port-2",
+            "view": "front"
+          },
+          "b": {
+            "item": "i4",
+            "path": "port-2-1",
+            "view": "front"
+          },
+          "media": "os2",
+          "purpose": "uplink",
+          "label": "",
+          "route": []
+        }
+      ]
+    }
+  ]
+}

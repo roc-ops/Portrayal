@@ -86,6 +86,119 @@ jsDelivr with `?dist=cdn` (and `&index=<version>`).
 
 Plain ES modules. No bundler, no build step.
 
+## Racks
+
+The `rack/` modules are the Rack Builder's rules, without its page. They read
+no DOM and fetch nothing but the catalogue, so the same rack is checked the
+same way in a browser, in node and in an agent. Each is imported on its own,
+as `@portrayal/kit/rack/<module>`:
+
+| module | what it does |
+|---|---|
+| `rack/catalog.js` | `loadCatalog(dist)`: the rack catalogue, and the `chassisOf(ref)` lookup everything else takes |
+| `rack/model.js` | the rack file: `newDoc`, `parseDoc`, `serialize`, and an edit of an item, frame or name that returns a new rack |
+| `rack/rails.js` | the rack's rails: unit height, opening and where a device sits between them |
+| `rack/fit.js` | whether a device fits at a unit, on a face, and how a shrink trims a rack |
+| `rack/managers.js` | cable managers: `placement` of a manager onto the device behind it, and moving one |
+| `rack/cable-rules.js` | cables: which two ports may be joined, `withCable`, media and lengths |
+| `rack/route.js`, `rack/route-path.js`, `rack/cable-geometry.js` | where a cable runs: `resolveRoute`, `routedLength`, pathway fill, and the geometry under them |
+| `rack/export-data.js` | the rack as rows: `bomRows`, `cableScheduleRows` and the device-import data |
+| `rack/dcim-rules.js` | what a NetBox or Nautobot import needs of a rack |
+| `rack/validate.js` | `validate(schema, value)`, a small JSON Schema validator, and `same` |
+| `rack/commands.js` | every edit as a named, validated command, and `apply` for a batch of them |
+| `rack/history.js` | undo and redo as snapshots |
+| `rack/editor.js` | `createRackEditor`: a rack document you edit by commands, with undo, redo and change events |
+| `rack/queries.js` | reading a rack: `fitsAt`, `freeUs`, `catalog`, `describe`, `freePorts`, `suggestMedia`, `looseEnds` |
+
+### Where this came from
+
+`kit/rack/` was moved here from `roc-ops/portrayal-site`, where it was
+`site/rack/`, at that repository's commit `d1a1aa8e`. This repository is now the source of
+truth: edit these modules here. portrayal-site vendors
+`kit/rack/*.js` read-only, and its contract check refuses a copy that has
+drifted. The rules these modules follow are stated in their own comments,
+and the rack file format in [`docs/format-stability.md`](../docs/format-stability.md)
+and `schemas/v1/rack.schema.json`.
+
+### The catalogue
+
+`rack.json` is written by the build beside `devices.json`. For every device it
+holds the rack units, the depth and height, how it mounts, whether its body is
+sheet, the cable capacity its vendor states, and the ids a route can pass
+through. `loadCatalog(dist)` takes what the other loaders take: a base URL, or
+a function from a path in the build to its URL. It therefore works with
+`flatDist` over a build directory, and with `packageDist`, which serves
+`rack.json` from `@portrayal/index` (a device that is itself named `rack` would
+collide with it there). `packageDist` needs an `@portrayal/index` release that
+contains `rack.json`; an earlier one has none, and the load fails.
+
+```js
+import { loadCatalog } from '@portrayal/kit/rack/catalog';
+import { newDoc, withItem } from '@portrayal/kit/rack/model';
+import { placement } from '@portrayal/kit/rack/managers';
+import { withCable } from '@portrayal/kit/rack/cable-rules';
+import { resolveRoute, routedLength } from '@portrayal/kit/rack/route';
+import { bomRows, cableScheduleRows } from '@portrayal/kit/rack/export-data';
+
+const catalog = await loadCatalog('/portrayal/dist');   // or await packageDist(), or a flatDist()
+const { chassisOf } = catalog;
+
+let rack = newDoc().racks[0];
+const lower = withItem(rack, { ref: 'as7726-32x', cfg: 'ac-f2b', ru: 10, label: 'leaf-1' });
+const upper = withItem(lower.rack, { ref: 'as7726-32x', cfg: 'ac-f2b', ru: 20, label: 'leaf-2' });
+
+// A cable manager put where a device is lands on it.
+const where = placement(upper.rack, { face: 'front', ru: 10 }, chassisOf);
+const manager = withItem(upper.rack, { ref: 'fhd-cmp5dr', cfg: 'base', ...where, label: 'mgr-1' });
+
+const cabled = withCable(manager.rack, {
+  a: { item: lower.item.id, path: 'port-1', view: 'front' },
+  b: { item: upper.item.id, path: 'port-2', view: 'front' },
+  media: 'cat6a',
+});
+rack = cabled.rack;
+
+// A ctx comes from the drawings: the guides on each part and the x of each
+// port, in mm from the rack's centre line. A plain one is enough for lanes.
+const ctx = { chassisOf, guidesOf: () => [], portX: () => -100 };
+const route = resolveRoute(rack, cabled.cable, ctx);
+const length = routedLength(rack, cabled.cable, ctx);   // { measured, value }, in metres
+
+const devices = rack.items.filter(i => chassisOf(i.ref)?.mount !== 'rack-face')
+  .map(i => ({ ref: i.ref, cfg: i.cfg, ...catalog.devices[i.ref] }));
+const bom = bomRows({ devices, frame: rack.frame, railUs: [1, 1] });
+const schedule = cableScheduleRows(rack);
+```
+
+`loadCatalog` reads through `fetch` and `location`, which a browser has and plain
+node does not. In node, build the same lookup from the file:
+
+```js
+import { readFileSync } from 'node:fs';
+import { chassisLookup, catalogEntries } from '@portrayal/kit/rack/catalog';
+
+const { devices } = JSON.parse(readFileSync('rack.json', 'utf8'));
+const chassisOf = chassisLookup(devices);
+const entries = catalogEntries(devices);
+```
+
+The rest of the example takes `chassisOf` and `devices` from either.
+
+`resolveRoute` returns the waypoints a cable follows (`waypoints`), any stored
+ones that no longer stand for anything (`gone`), and whether the route is the
+automatic one (`auto`). `routedLength` is that route, measured, with the
+nearest stock length above it.
+
+To change a rack by name rather than by function, use the command core:
+`createRackEditor({ doc, chassisOf })` applies `place`, `move`, `patch`,
+`remove`, `attach`, `detach`, `frame`, `rename`, `dcim`, the `cable.*`
+commands and the page's own `lengths.routed` as all-or-nothing batches, with `undo`, `redo` and an `on('change')`
+event. Each command names its arguments in `COMMANDS` (`rack/commands.js`), and
+`rack/queries.js` answers what a command would need to know first.
+
+A rack file is described by
+[`rack.schema.json`](https://portrayal.dev/schemas/v1/rack.schema.json).
+
 ## Exporting to draw.io and OmniGraffle
 
 Both are the face as a picture, with one invisible shape over every port and

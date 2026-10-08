@@ -1,6 +1,6 @@
 {
   "name": "@portrayal/kit",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Read, draw, inspect and export Portrayal device artifacts. Consumes compiled SVG + JSON; never reads YAML.",
   "license": "Apache-2.0",
   "type": "module",
@@ -20,7 +20,7 @@
   "scripts": {
     "prepack": "cp ../LICENSE ../NOTICE .",
     "postpack": "rm -f LICENSE NOTICE",
-    "test": "node --check shell.js && node --check viewer3d.js && node --check relief.js && node --check lamps.js && node --check marks.js && node --check fields.js && node --check states.js && node --check dist.js && node --check swap.js && node --check share.js && node --check devsel.js && node --check nosnames.js && node --check gif.js && node --check optical.js && node --check zones.js && node --check bevel.js && node --check drawio.js && node --check omnigraffle.js"
+    "test": "node --check shell.js && node --check viewer3d.js && node --check relief.js && node --check lamps.js && node --check marks.js && node --check fields.js && node --check states.js && node --check dist.js && node --check swap.js && node --check share.js && node --check devsel.js && node --check nosnames.js && node --check gif.js && node --check optical.js && node --check zones.js && node --check bevel.js && node --check drawio.js && node --check omnigraffle.js && for f in rack/*.js; do node --check $f || exit 1; done"
   },
   "exports": {
     "./shell": "./shell.js",
@@ -39,7 +39,23 @@
     "./zones": "./zones.js",
     "./bevel": "./bevel.js",
     "./drawio": "./drawio.js",
-    "./omnigraffle": "./omnigraffle.js"
+    "./omnigraffle": "./omnigraffle.js",
+    "./rack/cable-geometry": "./rack/cable-geometry.js",
+    "./rack/cable-rules": "./rack/cable-rules.js",
+    "./rack/catalog": "./rack/catalog.js",
+    "./rack/commands": "./rack/commands.js",
+    "./rack/dcim-rules": "./rack/dcim-rules.js",
+    "./rack/editor": "./rack/editor.js",
+    "./rack/export-data": "./rack/export-data.js",
+    "./rack/fit": "./rack/fit.js",
+    "./rack/history": "./rack/history.js",
+    "./rack/managers": "./rack/managers.js",
+    "./rack/model": "./rack/model.js",
+    "./rack/queries": "./rack/queries.js",
+    "./rack/rails": "./rack/rails.js",
+    "./rack/route": "./rack/route.js",
+    "./rack/route-path": "./rack/route-path.js",
+    "./rack/validate": "./rack/validate.js"
   },
   "peerDependencies": {
     "three": "^0.161.0"
@@ -51,6 +67,7 @@
   },
   "files": [
     "*.js",
+    "rack/*.js",
     "portrayal.png",
     "README.md",
     "LICENSE",

@@ -1,0 +1,400 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://portrayal.dev/schemas/v1/rack.schema.json",
+ "title": "Portrayal rack file (v2)",
+ "description": "A Rack Builder document: one or more racks, the devices in them, and the cables between their ports. What kit/rack/model.js parseDoc accepts and serialize writes.",
+ "type": "object",
+ "required": [
+  "format",
+  "version",
+  "id",
+  "racks"
+ ],
+ "properties": {
+  "format": {
+   "const": "portrayal-rack",
+   "description": "Always portrayal-rack."
+  },
+  "version": {
+   "const": 2,
+   "description": "The file version. Older files are migrated on load; newer ones are refused."
+  },
+  "id": {
+   "type": "string",
+   "minLength": 1,
+   "description": "The document's id, unique in a browser's library."
+  },
+  "racks": {
+   "type": "array",
+   "minItems": 1,
+   "description": "The racks. The Rack Builder edits the first.",
+   "items": {
+    "$ref": "#/$defs/rack"
+   }
+  }
+ },
+ "$defs": {
+  "rack": {
+   "type": "object",
+   "required": [
+    "id",
+    "name",
+    "frame",
+    "items",
+    "zeroU",
+    "cables"
+   ],
+   "properties": {
+    "id": {
+     "type": "string",
+     "description": "Unique within the document."
+    },
+    "name": {
+     "type": "string",
+     "description": "What the rack is called."
+    },
+    "frame": {
+     "$ref": "#/$defs/frame"
+    },
+    "items": {
+     "type": "array",
+     "description": "Devices and cable managers on the rails.",
+     "items": {
+      "$ref": "#/$defs/item"
+     }
+    },
+    "zeroU": {
+     "type": "array",
+     "description": "Side-mounted parts along the attachment points. Reserved: none can be placed yet.",
+     "items": {
+      "type": "object"
+     }
+    },
+    "cables": {
+     "type": "array",
+     "description": "Port-to-port cables.",
+     "items": {
+      "$ref": "#/$defs/cable"
+     }
+    },
+    "dcim": {
+     "type": "object",
+     "description": "Names a NetBox or Nautobot import needs. Present only once set; unknown fields are kept.",
+     "properties": {
+      "site": {
+       "type": "string",
+       "description": "NetBox's site, Nautobot's location."
+      },
+      "role": {
+       "type": "string",
+       "description": "The device role."
+      }
+     }
+    }
+   }
+  },
+  "frame": {
+   "type": "object",
+   "required": [
+    "kind",
+    "heightRU",
+    "numbering",
+    "holes",
+    "railDepth",
+    "usableDepth",
+    "ref"
+   ],
+   "properties": {
+    "kind": {
+     "enum": [
+      "four-post",
+      "two-post"
+     ],
+     "description": "Four posts, or two."
+    },
+    "heightRU": {
+     "type": "integer",
+     "minimum": 1,
+     "description": "How many U tall."
+    },
+    "numbering": {
+     "enum": [
+      "bottom-up",
+      "top-down"
+     ],
+     "description": "Which way the U labels count. Positions are always stored bottom-up."
+    },
+    "holes": {
+     "type": "object",
+     "required": [
+      "style",
+      "thread"
+     ],
+     "description": "The rail holes.",
+     "properties": {
+      "style": {
+       "enum": [
+        "square",
+        "tapped"
+       ],
+       "description": "Square (cage nuts) or tapped."
+      },
+      "thread": {
+       "enum": [
+        "12-24",
+        "10-32",
+        "M6",
+        null
+       ],
+       "description": "The thread of tapped holes; null for square."
+      }
+     }
+    },
+    "railDepth": {
+     "type": [
+      "number",
+      "null"
+     ],
+     "exclusiveMinimum": 0,
+     "description": "Millimeters between front and rear rails; null on two posts."
+    },
+    "usableDepth": {
+     "type": "number",
+     "exclusiveMinimum": 0,
+     "description": "Millimeters from the front rail to the deepest point a device may reach."
+    },
+    "ref": {
+     "type": [
+      "string",
+      "null"
+     ],
+     "description": "A catalog rack this frame was taken from, if any."
+    }
+   }
+  },
+  "item": {
+   "type": "object",
+   "required": [
+    "id",
+    "ref",
+    "cfg",
+    "label",
+    "ru",
+    "face",
+    "turned",
+    "swaps",
+    "fields"
+   ],
+   "dependentRequired": {
+    "on": [
+     "unit"
+    ],
+    "unit": [
+     "on"
+    ]
+   },
+   "properties": {
+    "id": {
+     "type": "string",
+     "minLength": 1,
+     "description": "Unique within the rack, and never reused while a cable end names it."
+    },
+    "ref": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The device, by its catalog ref."
+    },
+    "cfg": {
+     "type": "string",
+     "description": "Which of the device's configurations."
+    },
+    "label": {
+     "type": "string",
+     "description": "The name shown on the drawing."
+    },
+    "ru": {
+     "type": "integer",
+     "minimum": 1,
+     "description": "The U its bottom sits in, counted bottom-up."
+    },
+    "face": {
+     "enum": [
+      "front",
+      "rear"
+     ],
+     "description": "The face it is mounted on."
+    },
+    "turned": {
+     "type": "boolean",
+     "description": "Mounted back to front."
+    },
+    "swaps": {
+     "type": "object",
+     "description": "What the Explorer seated: slot path to part ref."
+    },
+    "fields": {
+     "type": "object",
+     "description": "Editable text the Explorer set."
+    },
+    "on": {
+     "type": "string",
+     "description": "A cable manager's host: the id of the device it bolts over."
+    },
+    "unit": {
+     "type": "integer",
+     "minimum": 1,
+     "description": "Which of the host's units, from 1 at its bottom."
+    }
+   }
+  },
+  "end": {
+   "type": "object",
+   "required": [
+    "item",
+    "path",
+    "view"
+   ],
+   "properties": {
+    "item": {
+     "type": "string",
+     "description": "The device's id. A removed device's id is kept, and the end reads as loose."
+    },
+    "path": {
+     "type": "string",
+     "description": "The port's path on the face."
+    },
+    "view": {
+     "enum": [
+      "front",
+      "rear"
+     ],
+     "description": "Which of the device's own panels the port is on."
+    }
+   }
+  },
+  "waypoint": {
+   "type": "object",
+   "description": "One stop on a route: an element of a placed device's drawing (item and via), or a lane beside the rails at a U (lane and ru).",
+   "properties": {
+    "item": {
+     "type": "string",
+     "minLength": 1,
+     "description": "A placed device's id, with via."
+    },
+    "via": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The element of that device's drawing the cable passes through, such as a ring or a duct."
+    },
+    "lane": {
+     "type": "string",
+     "minLength": 1,
+     "description": "A lane beside the rails, with ru."
+    },
+    "ru": {
+     "type": "integer",
+     "description": "The U the lane is crossed at."
+    }
+   },
+   "dependentRequired": {
+    "item": [
+     "via"
+    ],
+    "via": [
+     "item"
+    ],
+    "lane": [
+     "ru"
+    ],
+    "ru": [
+     "lane"
+    ]
+   }
+  },
+  "cable": {
+   "type": "object",
+   "required": [
+    "id",
+    "a",
+    "b",
+    "media",
+    "purpose",
+    "label",
+    "route"
+   ],
+   "properties": {
+    "id": {
+     "type": "string",
+     "minLength": 1,
+     "description": "Unique within the rack."
+    },
+    "a": {
+     "$ref": "#/$defs/end"
+    },
+    "b": {
+     "$ref": "#/$defs/end"
+    },
+    "media": {
+     "type": "string",
+     "description": "The cable type (os2, om3, om4, om5, cat6, cat6a, dac, aoc), or empty."
+    },
+    "purpose": {
+     "type": "string",
+     "description": "What it is for."
+    },
+    "label": {
+     "type": "string",
+     "description": "The text on its tags."
+    },
+    "length": {
+     "type": "object",
+     "required": [
+      "value",
+      "unit",
+      "source"
+     ],
+     "description": "A usable length.",
+     "properties": {
+      "value": {
+       "type": "number",
+       "exclusiveMinimum": 0,
+       "description": "Above 0."
+      },
+      "unit": {
+       "type": "string",
+       "minLength": 1,
+       "description": "As written; m when the file stated none."
+      },
+      "source": {
+       "type": "string",
+       "description": "Where it came from: entered, or routed when the Rack Builder worked it out from the route."
+      },
+      "measured": {
+       "type": "number",
+       "exclusiveMinimum": 0,
+       "description": "Meters along the route, before rounding up to a stock length. Present when the source is routed."
+      }
+     }
+    },
+    "lengthAsWritten": {
+     "description": "A length the loader could not use, kept whole as it was written."
+    },
+    "route": {
+     "type": "array",
+     "description": "The waypoints the cable runs through, in order. Empty means the Rack Builder chooses the way.",
+     "items": {
+      "$ref": "#/$defs/waypoint"
+     }
+    },
+    "routeEdited": {
+     "type": "boolean",
+     "description": "True once someone has changed the route by hand, so it is no longer chosen for them."
+    },
+    "routeAsWritten": {
+     "type": "array",
+     "description": "A route containing an entry the loader could not read, kept whole as it was written. The readable waypoints are in route."
+    }
+   }
+  }
+ }
+}

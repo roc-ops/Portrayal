@@ -1,0 +1,51 @@
+{
+  "format": "portrayal-rack",
+  "version": 1,
+  "id": "doc-dcim-acceptance",
+  "racks": [
+    {
+      "id": "r1",
+      "name": "pt-verify-rack",
+      "frame": {"kind": "four-post", "heightRU": 24, "numbering": "bottom-up",
+                "holes": {"style": "square", "thread": null}, "railDepth": 740, "usableDepth": 1000, "ref": null},
+      "dcim": {"site": "pt-verify-site", "role": "pt-verify-role"},
+      "items": [
+        {"id": "i1", "ref": "asr-9006", "cfg": "base", "label": "pt-verify-core-1", "ru": 2, "face": "front", "turned": false,
+         "swaps": {"slot-2": "cisco/a9k-16x100ge-tr@1", "slot-2/module/p0": "generic/qsfp-lc@2", "slot-2/module/p1": "generic/qsfp-lc@2"},
+         "fields": {}},
+        {"id": "i2", "ref": "as7726-32x", "cfg": "ac-f2b", "label": "pt-verify-leaf-1", "ru": 14, "face": "front", "turned": false,
+         "swaps": {"port-1": "generic/qsfp-lc@2", "port-3": "generic/qsfp-lc@2"}, "fields": {}},
+        {"id": "i3", "ref": "tm-280", "cfg": "base", "label": "pt-verify-demarc", "ru": 14, "face": "rear", "turned": false,
+         "swaps": {}, "fields": {}},
+        {"id": "i4", "ref": "tm-280", "cfg": "base", "label": "pt-verify-demarc", "ru": 20, "face": "rear", "turned": false,
+         "swaps": {}, "fields": {}},
+        {"id": "i5", "ref": "tm-280", "cfg": "base", "label": "pt-verify-boundary-name-64-nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn", "ru": 22, "face": "rear", "turned": false,
+         "swaps": {}, "fields": {}},
+        {"id": "i6", "ref": "tm-280", "cfg": "base", "label": "pt-verify-Twin", "ru": 18, "face": "rear", "turned": false,
+         "swaps": {}, "fields": {}},
+        {"id": "i7", "ref": "tm-280", "cfg": "base", "label": "pt-verify-twin", "ru": 16, "face": "rear", "turned": false,
+         "swaps": {}, "fields": {}}
+      ],
+      "zeroU": [],
+      "cables": [
+        {"id": "c1", "a": {"item": "i2", "path": "port-1", "view": "front"}, "b": {"item": "i1", "path": "slot-2/module/p0", "view": "front"},
+         "media": "os2", "purpose": "uplink", "label": "pt-verify-A1", "length": {"value": 2, "unit": "m", "source": "entered"}, "route": []},
+        {"id": "c2", "a": {"item": "i2", "path": "mgmt-eth", "view": "front"}, "b": {"item": "i4", "path": "port-2-1", "view": "front"},
+         "media": "cat6a", "purpose": "management", "label": "pt-verify-mgmt", "route": []},
+        {"id": "c3", "a": {"item": "i2", "path": "port-2", "view": "front"}, "b": {"item": "i3", "path": "port-2-1", "view": "front"},
+         "media": "os2", "purpose": "uplink", "label": "pt-verify-loose", "route": []},
+        {"id": "c4", "a": {"item": "i4", "path": "port-2-2", "view": "front"}, "b": {"item": "i3", "path": "port-2-2", "view": "front"},
+         "media": "cat6", "purpose": "handoff", "label": "pt-verify-pair", "length": {"value": 1.5, "unit": "ft", "source": "entered"}, "route": []},
+        {"id": "c5", "a": {"item": "i2", "path": "port-3", "view": "front"}, "b": {"item": "i1", "path": "slot-2/module/p1", "view": "front"},
+         "media": "", "purpose": "uplink", "label": "pt-verify-blank", "length": {"value": 1.5, "unit": "ft", "source": "entered"}, "route": []},
+        {"id": "c6", "a": {"item": "i4", "path": "con", "view": "front"}, "b": {"item": "i3", "path": "copper-3-1", "view": "front"},
+         "media": "cat6", "purpose": "console", "label": "pt-verify-console", "route": []},
+        {"id": "c7", "a": {"item": "i5", "path": "port-2-1", "view": "front"}, "b": {"item": "i6", "path": "port-2-1", "view": "front"},
+         "media": "cat6", "purpose": "boundary description of exactly 200 characters, written to NetBox as the description of the cable: ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", "label": "pt-verify-boundary-label-100-lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll",
+         "length": {"value": 999999.99, "unit": "m", "source": "entered"}, "route": []},
+        {"id": "c8", "a": {"item": "i6", "path": "port-2-2", "view": "front"}, "b": {"item": "i7", "path": "port-2-2", "view": "front"},
+         "media": "cat6", "purpose": "handoff", "label": "pt-verify-limit", "length": {"value": 32766.5, "unit": "m", "source": "entered"}, "route": []}
+      ]
+    }
+  ]
+}
