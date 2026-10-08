@@ -726,6 +726,41 @@ def test_a_withheld_bay_is_left_out_for_nautobot_and_named_in_its_comments():
     assert len(dx.nested_bays_for(doc, "netbox", withheld={"mic1"})["module-bays"]) == 2
 
 
+def test_a_pass_through_bay_is_given_to_nautobot_with_a_blank_position():
+    """#917: a carrier's only bay, accepting a model also seated in a chassis
+    bay, goes to Nautobot at position '' and is named in the comments; NetBox
+    templates it as any other bay."""
+    doc = {"model": "X", "comments": "A shell.",
+           "module-bays": [{"name": "mpc", "position": "mpc"}]}
+    nt = dx.nested_bays_for(doc, "nautobot", through={"mpc"})
+    assert nt["module-bays"] == [{"name": "mpc", "position": ""}]
+    assert "blank position" in nt["comments"] and "<slot>/mpc/x" in nt["comments"]
+    assert doc["module-bays"][0]["position"] == "mpc", "the built document was changed"
+    nb = dx.nested_bays_for(doc, "netbox", through={"mpc"})
+    assert nb["module-bays"] == [{"name": "{module}/mpc", "position": "{module}/mpc"}]
+    with pytest.raises(ValueError):
+        dx.nested_bays_for(doc, "nautobot", withheld={"mpc"}, through={"mpc"})
+
+
+def test_an_mpc_in_the_mx2000_adapter_installs_under_its_slot_in_nautobot():
+    """#917, as Nautobot installs it: the adapter into an MX2010 slot, an MPC
+    into the adapter's `mpc`. Every port takes the slot's name, as the same
+    MPC does in an MX960, and two slots' MPCs do not collide."""
+    ex = LIB / "exports/nautobot"
+    dev_p = ex / "device-types/Juniper/MX2010.yaml"
+    ad_p = ex / "module-types/Juniper/MX2000-LC-ADAPTER.yaml"
+    mpc_p = ex / "module-types/Juniper/MPC7E-MRATE.yaml"
+    # The exports are committed, so a missing one is a failure, not a skip.
+    dev, ad, mpc = (yaml.safe_load(p.read_text()) for p in (dev_p, ad_p, mpc_p))
+    slots = {b["name"]: b["position"] for b in dev["module-bays"]}
+    (bay,) = ad["module-bays"]
+    assert bay == {**bay, "name": "mpc", "position": ""}
+    names = [_render_nautobot(i["name"], [slots[s], bay["position"]])
+             for s in ("fpc3", "fpc4") for i in mpc["interfaces"]]
+    assert len(names) == len(set(names)) == 2 * len(mpc["interfaces"]) > 0
+    assert all(n.split("/", 1)[0] in ("fpc3", "fpc4") for n in names), names[:4]
+
+
 def test_seat_names_writes_the_bay_chain_for_the_depth():
     doc = {"model": "X",
            "interfaces": [{"name": "{module}/p0"}],
@@ -767,13 +802,21 @@ WITHHELD = {
        for n in (80, 160, 200, 400) for v in ("SE", "TR")},
     "Dell/riser-2s-16g": ["e3s-0", "e3s-1"],      # its slot-1 is given
     "Juniper/MX-MPC1E-3D": ["mic0", "mic1"],
-    # the adapter seats MPCs that also seat directly in an MX240/MX480/MX960 (#261)
-    "Juniper/MX2000-LC-ADAPTER": ["mpc"],
+    # NOT the MX2000 adapter's `mpc` (#917): its only bay, given with a blank
+    # position instead - PASS_THROUGH below.
     "Juniper/MX-MPC2E-3D": ["mic0", "mic1"],
     "Juniper/MX-MPC3E-3D": ["mic0", "mic1"],
     "Nokia/IOM4-e": ["mda-1", "mda-2"],
     "Nokia/IOM4-e-HS": ["mda-1", "mda-2"],
     "Nokia/IOM5-e": ["mda-1", "mda-2"],
+}
+
+# THE BAYS NAUTOBOT IS GIVEN WITH A BLANK POSITION (#917), by carrier: its only
+# bay, accepting a model also seated directly in a chassis bay. Nautobot skips a
+# blank position when it names ports, so an MPC in the adapter in `fpc3` names
+# its port `fpc3/x`, as in an MX960's `fpc3` (NetBox: `fpc3/mpc/x`).
+PASS_THROUGH = {
+    "Juniper/MX2000-LC-ADAPTER": ["mpc"],
 }
 
 # Every module model seated both in a chassis bay and in a module's bay. A new
@@ -788,16 +831,9 @@ MULTI_DEPTH = sorted([
     "Juniper/MIC-3D-4OC3OC12-1OC48", "Juniper/MIC-3D-8DS3-E3",
     "Juniper/MIC-3D-8OC3OC12-4OC48", "Juniper/MIC-MACSEC-20GE",
     "Juniper/MS-MIC-16G", "Juniper/mx-mic-blank",
-    # #261: the MX2000 adapter seats the MX240 card, so every MPC is seated at
-    # depth 1 (MX240-MX960) and 2 (in the adapter), and the MICs only an MPC
-    # takes at 2 and 3. Their Nautobot ports went back to `{module}/x`.
-    "Juniper/MIC-3D-4XGE-XFP", "Juniper/MIC3-3D-10XGE-SFPP",
-    "Juniper/MIC3-3D-1X100GE-CFP", "Juniper/MIC3-3D-1X100GE-CXP",
-    "Juniper/MIC3-3D-2X40GE-QSFPP", "Juniper/MPC-3D-16XGE-SFPP",
-    "Juniper/MPC4E-3D-2CGE-8XGE", "Juniper/MPC4E-3D-32XGE-SFPP",
-    "Juniper/MPC5E-100G10G", "Juniper/MPC5E-40G10G", "Juniper/MPC7E-10G",
-    "Juniper/MPC7E-MRATE", "Juniper/MS-MPC", "Juniper/MX-MPC1E-3D",
-    "Juniper/MX-MPC2E-3D", "Juniper/MX-MPC3E-3D",
+    # NOT the MPCs the MX2000 adapter seats, nor the MICs only an MPC takes
+    # (#917): the adapter's bay is a pass-through, so an MPC in it is at its
+    # slot's depth, 1, as in an MX960, and those MICs at 2 only.
     "Nokia/ACC - SR-e MDA Impedance Panel", "Nokia/ME-ISA2-MS",
     "Nokia/ME1-100GB-CFP2", "Nokia/ME10-10GB-SFP+", "Nokia/ME12-10/1GB-SFP+",
     "Nokia/ME16-10/25GB-SFP28+2-100GB", "Nokia/ME2-100GB-CFP4",
@@ -826,7 +862,7 @@ def test_the_written_module_types_carry_their_nested_bays():
         if c.get("kind") == "module" and isinstance(c.get("bays"), dict) and c["bays"]:
             model = str((c.get("attrs") or {}).get("model") or c["name"]).replace("/", "-")
             declared.setdefault(model, set()).add(frozenset(c["bays"]))
-    seen, withheld = 0, {}
+    seen, withheld, passed = 0, {}, {}
     for p in sorted(nb.glob("*/*.yaml")):
         bays = (yaml.safe_load(p.read_text()) or {}).get("module-bays") or []
         if not bays:
@@ -842,13 +878,19 @@ def test_the_written_module_types_carry_their_nested_bays():
         plain = twin.get("module-bays") or []
         for b in plain:
             assert "{" not in b["position"] and "{" not in b["name"], (twin_p, b)
-        held = got - {b["position"] for b in plain}
-        assert {b["position"] for b in plain} <= got, twin_p
+            assert b["position"] in ("", b["name"]), (twin_p, b)
+        held = got - {b["name"] for b in plain}
+        assert {b["name"] for b in plain} <= got, twin_p
         if held:
             withheld[f"{p.parent.name}/{p.stem}"] = sorted(held)
             assert "nautobot/nautobot#5823" in twin.get("comments", ""), twin_p
+        blank = sorted(b["name"] for b in plain if b["position"] == "")
+        if blank:
+            passed[f"{p.parent.name}/{p.stem}"] = blank
+            assert len(plain) == 1 and "blank position" in twin.get("comments", ""), twin_p
     assert seen, "no module type with a nested bay was read - run ./publish.sh --no-images"
     assert withheld == WITHHELD
+    assert passed == PASS_THROUGH
 
 
 def _resolve_bay(template, parent_position):
