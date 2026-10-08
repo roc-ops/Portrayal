@@ -75,6 +75,21 @@ PAIRS.update({
     "nokia/lmfs-f": {("front", "ground-studs"):
                      ("common/ground-stud-pair-5-8-m6@1", 90, (7.7, 247.55), "M6")},
 })
+# #830: the UfiSpace accessory lug on two M4 screws, measured 15.6 to 15.9 apart
+# on the flank figures of five guides, centred where each guide's own flank
+# figure puts its holes (x from the front on a right view). The S9601-104BC
+# lug is on its LEFT flank (x from the rear), at the height of the boss its
+# rear elevation shows, its depth estimated.
+H58_M4 = "common/ground-stud-pair-5-8-m4@1"
+PAIRS.update({f"ufispace/{m}": {(view, "ground-screws"): (H58_M4, None, c, "M4")}
+              for m, view, c in (("m3000-14xc", "right", (16.6, 21.8)),
+                                 ("s9500-22xst", "right", (16.2, 22.0)),
+                                 ("s9501-28smt", "right", (16.2, 22.0)),
+                                 ("s9502-16smt", "right", (16.5, 21.8)),
+                                 ("s9510-28dc", "right", (16.2, 22.0)),
+                                 ("s9510-30xc", "right", (16.2, 22.0)),
+                                 ("s9511-20ct", "right", (16.4, 21.8)),
+                                 ("s9601-104bc", "left", (16.4, 37.2)))})
 CASES = [(d, v, i) for d, pairs in sorted(PAIRS.items()) for (v, i) in sorted(pairs)]
 
 
@@ -164,6 +179,52 @@ def test_the_inferred_pitches_say_they_are_inferred():
         assert "ground-pair-pitch" in [g["what"] for g in d["gaps"]]
     note = _device("nokia/lmfs-f")["provenance"]["ground-pair"]["note"]
     assert "16 mm (0.63 in.)" in note and "15.875" in note
+
+
+def test_the_ufispace_pairs_say_where_their_pitch_was_read():
+    """#830: each pitch is a reading of the guide's own flank figure, at about
+    0.65 mm a pixel, drawn at the 5/8 in. it points at; a gap says no
+    document dimensions it. The S9601-104BC earth mark points at its flank."""
+    for device in PAIRS:
+        if not device.startswith("ufispace/"):
+            continue
+        d = _device(device)
+        note = d["provenance"]["ground-pair"]["note"]
+        assert "15.6 to 15.9" in note and "px" in note, device
+        assert "ground-pair-pitch" in [g["what"] for g in d["gaps"]] or \
+            device == "ufispace/s9601-104bc", device
+    d = _device("ufispace/s9601-104bc")
+    assert _placement("ufispace/s9601-104bc", "rear", "ground-mark")["for"] == "left/ground-screws"
+    assert d["provenance"]["ground-pair"]["confidence"] == "estimated"
+    assert "ground-pair-depth" in [g["what"] for g in d["gaps"]]
+
+
+# #830 part 3: a two-hole plate drawn as one stud is now its two screws, still
+# the nominal common/ground-lug@1 because no pair host fits: the DCS500 pitch
+# reads 17.2, no lug pattern, and the other three state no screw size.
+# device -> (rotate, the stud axes on the rear, stud-size or None)
+TWO_SCREW = {
+    "edgecore/dcs500": (90, {"ground-1": (49.85, 32.7), "ground-1b": (67.05, 32.7),
+                             "ground-0": (370.55, 32.7), "ground-0b": (387.75, 32.7)}, "M5"),
+    "edgecore/eps112": (None, {"ground-1": (9.5, 11.85), "ground-2": (9.5, 28.15)}, None),
+    "edgecore/eps203": (None, {"ground-1": (9.3, 11.7), "ground-2": (9.3, 27.9)}, None),
+    "edgecore/agr560": (None, {"ground-1": (7.3, 39.85), "ground-2": (7.3, 55.95)}, None),
+}
+
+
+@pytest.mark.parametrize("device", sorted(TWO_SCREW))
+def test_a_two_hole_plate_draws_both_screws(device):
+    rot, studs, size = TWO_SCREW[device]
+    got = {p["id"]: p for p in _device(device)["views"]["rear"]["components"]["placements"]
+           if p["ref"] == "common/ground-lug@1"}
+    assert set(got) == set(studs)
+    c = _contract("common/ground-lug@1")
+    for pid, axis in studs.items():
+        p = got[pid]
+        assert p.get("rotate") == rot and (p.get("attrs") or {}).get("stud-size") == size
+        seat = render_mod.seat_point(p["at"], c["size"], rot, c["connection-points"]["mate"]["at"])
+        assert seat == pytest.approx(list(axis), abs=1e-3), pid
+    assert "ground-pair" in _device(device)["provenance"]
 
 
 def test_the_lmfs_f_esd_point_has_a_group_of_its_own():

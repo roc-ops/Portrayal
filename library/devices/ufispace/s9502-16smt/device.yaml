@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9502-16smt
-version: 1.0.12
+version: 2.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9502-16SMT
@@ -226,13 +226,31 @@ provenance:
       searched 2026-08-28: 'UfiSpace S9502-16SMT end of life end of sale' - no announcement found;
       the vendor product page and the datasheet PDF are live. none-announced is a real finding
       here, not an absence of looking.
+  ground-pair:
+    confidence: drawing
+    note: >-
+      ONE TWO-HOLE LANDING, NOT TWO SCREWS (#830). The accessory grounding lug (50 x 11.1 x
+      7.5 mm, #6 AWG) is fixed with two M4 screws, so the point is
+      common/ground-stud-pair-5-8-m4@1, two M4 pan heads on 5/8 in. (15.875) centres, unturned
+      because the holes lie along the depth. MEASURED, NOT ASSUMED: HIG Figure 15, the flank
+      elevation section 6 draws, measured on the docling figure (1488 x 1415 px page strip;
+      the PDF embeds 637 x 315): chassis bar x 334 to 1198 px for the 250 mm depth, 3.46
+      px/mm, y 968 to 1118 for 43.5. The two holes centre at 363.8 and 418.4 px, y 1043.4, so
+      the holes sit 8.6 and 24.4 mm behind the front face, 15.80 mm apart, centred 16.5 from
+      the front and 21.8 from the top. The same accessory lug, read the same way on five
+      UfiSpace flank figures (Figure 22 of the 302 mm S95xx guides and of the M3000-14XC
+      guide, Figure 15 of the S9502-16SMT and S9511-20CT guides), gives 15.6 to 15.9, against
+      about 0.65 mm per pixel of the embedded art: the 5/8 in. two-hole pattern. AXIS: x = 0
+      is the FRONT on a right view, and the front is the left end of the figure, as on
+      ufispace/s9501-18smt. Formerly two common/ground-lug@1 placements, ground-1 and
+      ground-2, at x 40 and 51 at y 15 (studs 11.0 apart, centred 45.5 from the front).
   ground-stud-size:
     confidence: datasheet
     note: >-
       the hardware installation guide lists, in its package contents, a screw kit for the grounding
       lug of 2 x M4*L8.0mm screws, and its grounding steps lock the grounding lug to the designated
-      grounding location with 2 M4 screws: the `stud-size` of ground-1 and ground-2. The accessory lug
-      is one two-hole lug held by both screws.
+      grounding location with 2 M4 screws: the `stud-size` of ground-screws, the pair. The
+      accessory lug is one two-hole lug held by both screws.
 
 attrs:
   performance:
@@ -288,6 +306,15 @@ chassis:
   airflow: passive
   weight-kg: 4.32
 gaps:
+- what: ground-pair-pitch
+  scope: [ground-screws]
+  reason: vendor-silent
+  note: >-
+    No held document dimensions the two grounding holes. The hardware installation guide names
+    the screws (two M4) and the accessory lug (50 x 11.1 x 7.5 mm, #6 AWG) and draws the holes;
+    the flank figure reads 15.6 to 15.9 apart, and the pair is drawn at the 5/8 in. (15.875) that
+    reading and the two-hole lug both point at.
+  wanted: a drawing that dimensions the grounding holes, or the accessory lug's own datasheet
 - what: port-led-semantics
   scope: [rj45-1g, sfp-1g, sfp-plus, port-leds]
   reason: vendor-silent
@@ -615,14 +642,13 @@ views:
       w: 250
       h: 43.5
     silkscreen:
-      - {at: [46, 12.0], text: GND, font-size: 2.4, anchor: middle, for: ground-1}
+      - {at: [16.5, 12.0], text: GND, font-size: 2.4, anchor: middle, for: ground-screws}
     components:
       placements:
         - {ref: common/screw-head@1, id: screw-r1, at: [82, 20], group: furniture, rel-pos: 21}
         - {ref: common/screw-head@1, id: screw-r2, at: [150, 20], group: furniture, rel-pos: 22}
         - {ref: common/screw-head@1, id: screw-r3, at: [218, 20], group: furniture, rel-pos: 23}
-        - {ref: common/ground-lug@1, id: ground-1, at: [40, 15], group: grounding, rel-pos: 2, attrs: {stud-size: M4}}
-        - {ref: common/ground-lug@1, id: ground-2, at: [51, 15], group: grounding, rel-pos: 3, attrs: {stud-size: M4}}
+        - {ref: common/ground-stud-pair-5-8-m4@1, id: ground-screws, at: [4.5625, 17.8], group: grounding, rel-pos: 2, attrs: {stud-size: M4}}
 configurations:
   dc:
     kind: base

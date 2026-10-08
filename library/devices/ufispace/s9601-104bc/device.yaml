@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9601-104bc
-version: 3.0.5
+version: 4.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9601-104BC
@@ -247,8 +247,10 @@ provenance:
       chassis already use for this fan (ufispace/s9600-102xc and ufispace/fan-803816-hi's own
       provenance), which is corroboration and not a borrowed number. PSUs stacked at x 350.9, y
       2.8 and 46.2, size 73.5 x 40 from the HIG table and confirmed on the figure. The narrow
-      strip right of the supplies carries, top to bottom, PSU0, an earth symbol with the grounding
-      studs at the chassis edge beside it, 0123 over FAN, and PSU1.
+      strip right of the supplies carries, top to bottom, PSU0, an earth symbol, 0123 over FAN, and
+      PSU1. Beside the earth symbol a round boss, about 10 across, stands proud of the chassis
+      edge: the end of the grounding lug on the LEFT flank, seen from behind (provenance
+      ground-pair).
   rear-fan-height:
     note: >-
       THE TABLE AND THE FIGURE DISAGREE ABOUT THE FAN AND THE TABLE IS FOLLOWED. The HIG's
@@ -291,11 +293,9 @@ provenance:
     confidence: drawing
     note: >-
       drawing-fraction and estimated - the mirror of the left, and deliberately the same content,
-      because the guide describes the two sides identically ('one on each chassis side'). THE
-      GROUNDING POINT IS NOT ON A FLANK ON THIS CHASSIS: HIG section 8 says 'The location for
-      securing the grounding lug is at the rear of the case and is covered with a protective
-      label', and Figure 4's rear elevation prints the earth symbol on the strip right of the
-      supplies, so both flanks are plain. AXIS: x = 0 is the FRONT on a right view, so the locking
+      because the guide describes the two sides identically ('one on each chassis side'). The
+      grounding point is on the LEFT flank at its rear end, not on this one (provenance
+      ground-pair), so this flank is plain. AXIS: x = 0 is the FRONT on a right view, so the locking
       screw sits at the opposite end of this face from where it sits on the left one.
   power:
     note: >-
@@ -351,13 +351,34 @@ provenance:
       searched 2026-08-28, 'UfiSpace S9601-104BC end of life end of sale' - no announcement found;
       the product page is live and the unit is actively distributed (EPS Global lists it).
       none-announced is a real finding, not an omission.
+  ground-pair:
+    confidence: estimated
+    note: >-
+      ONE TWO-HOLE LANDING ON THE LEFT FLANK, AT ITS REAR END (#830). HIG section 8 says the
+      location for the grounding lug is at the rear of the case, and three sources put it on
+      the flank there rather than on the rear face: HIG Figure 20 draws the lug and its two
+      screws going onto the side wall beside the supplies, barrel toward the rear; the vendor
+      three-quarter render (photos 1-view) shows the fitted lug on the flank whose rear corner it
+      overhangs; and the Figure 4 rear elevation (the docling figure, 1485 x 625 px, square at 1.29
+      px/mm on both axes) shows its
+      barrel end as a round boss about 10 across standing proud of the right-hand edge of the
+      rear, centred 37.2 below the top (469 px against the 421 to 534 px body). The right edge
+      of a rear view is the LEFT flank. The accessory lug (50 x 11.1 x 7.5 mm, #6 AWG) is fixed
+      with two M4 screws, so the point is common/ground-stud-pair-5-8-m4@1, unturned because the
+      lug lies along the depth, at the 5/8 in. the same lug measures on five UfiSpace flank
+      figures (15.6 to 15.9). HEIGHT is the boss: 37.2. DEPTH IS ESTIMATED: no figure shows this
+      flank square-on, so the pair is centred 16.4 from the rear, where the same accessory lug
+      sits from its end of the chassis on the S9511-20CT, S9502-16SMT and M3000-14XC flank
+      figures (16.4 to 16.6). AXIS: x = 0 is the REAR on a left view. Formerly one
+      common/ground-lug@1, ground-1, the upper hole of a vertical pair drawn on the rear strip
+      at (433.0, 28.0), with a light pad behind it that no figure shows; both are removed.
   ground-stud-size:
     confidence: datasheet
     note: >-
       the hardware installation guide lists, in its package contents, a screw kit for the grounding
       lug of 2 x M4*L8.0mm screws, and its grounding steps lock the grounding lug to the designated
-      grounding location with 2 M4 screws: the `stud-size` of ground-1, the upper of the two holes and
-      the only one placed. The accessory lug is one two-hole lug held by both screws.
+      grounding location with 2 M4 screws: the `stud-size` of ground-screws, the pair. The accessory
+      lug is one two-hole lug held by both screws.
 
 attrs:
   performance:
@@ -447,6 +468,16 @@ chassis:
   airflow: front-to-back
 
 gaps:
+- what: ground-pair-depth
+  scope: [ground-screws]
+  reason: needs-drawing
+  note: >-
+    The grounding lug is on the left flank at its rear end (HIG Figure 20, the vendor render and
+    the boss on the Figure 4 rear elevation), and its height is read off that boss. How far
+    forward of the rear edge its two holes sit is shown square-on by no held figure, so the pair
+    is centred 16.4 from the rear by analogy with the same accessory lug on three UfiSpace flank
+    figures; and no document dimensions the hole spacing, drawn at 5/8 in.
+  wanted: a flank elevation of the S9601-104BC, or a photograph of its left side
 - what: model-badge
   scope: [front]
   reason: needs-photo
@@ -1118,11 +1149,6 @@ views:
     size:
       w: 440
       h: 87.7
-    panel:
-      decor:
-        # The strip right of the supplies: the grounding pad, shipped covered with a
-        # protective label, and the plain metal the PSU and FAN legends are printed on.
-        - {at: [426.0, 27.0], size: [13.5, 16.0], fill: '#b0b5bb', rx: 0.6}
     silkscreen:
       - {text: PSU0, at: [433.7, 24.2], font-size: 2.0, anchor: middle, for: psu-0}
       - {text: PSU1, at: [433.7, 65.0], font-size: 2.0, anchor: middle, for: psu-1}
@@ -1137,16 +1163,13 @@ views:
         - {id: psu-0, at: [350.9, 2.8], size: {w: 73.5, h: 40.0}, accepts: [ufispace/psu-132-crps-dc@1, ufispace/psu-132-crps-ac@1], group: psus, rel-pos: 0, default: ufispace/psu-132-crps-dc@1}
         - {id: psu-1, at: [350.9, 46.2], size: {w: 73.5, h: 40.0}, accepts: [ufispace/psu-132-crps-dc@1, ufispace/psu-132-crps-ac@1], group: psus, rel-pos: 1, default: ufispace/psu-132-crps-dc@1}
       placements:
-        - {ref: common/ground-symbol@1, id: ground-mark, at: [426.5, 31.7], group: grounding, rel-pos: 1,
+        - {ref: common/ground-symbol@1, id: ground-mark, at: [426.5, 31.7], for: left/ground-screws,
+           group: grounding, rel-pos: 1,
            description: 'the earth symbol printed on the strip right of the supplies, at
-             the height HIG Figure 4 draws it. HIG section 8 - the designated grounding
-             location is at the rear of the case and ships covered with a protective
-             label, and takes a #6 AWG lug on two M4 screws with four washers'}
-        - {ref: common/ground-lug@1, id: ground-1, at: [433.0, 28.0], group: grounding, rel-pos: 2,
-           description: 'the upper of the two tapped M4 holes of that rear grounding
-             location. THE STUDS THEMSELVES STAND PROUD OF THE RIGHT-HAND CHASSIS EDGE in
-             Figure 4 and are drawn inside it here, because the ear-fold body is 440 mm
-             and anything beyond it is not metal this drawing carries', attrs: {stud-size: M4}}
+             the height HIG Figure 4 draws it, beside the end of the grounding lug on the
+             left flank. HIG section 8 - the designated grounding location is at the rear of
+             the case and ships covered with a protective label, and takes a #6 AWG lug on
+             two M4 screws with four washers'}
     regions:
       - {id: exhaust, at: [3, 2], size: {w: 336, h: 84}, physical-context: Exhaust, label: Fan exhaust, members: [fan-0, fan-1, fan-2, fan-3]}
       - {id: power, at: [349, 2], size: {w: 77, h: 84}, label: Power supplies, members: [psu-0, psu-1]}
@@ -1198,6 +1221,11 @@ views:
            description: 'HIG section 5 - the inner rail''s M4 locking screw, which the
              guide says must be positioned at the FRONT of the chassis. On a left view
              x = 0 is the rear, so the front is the far end of this face', group: furniture, rel-pos: 9}
+        - {ref: common/ground-stud-pair-5-8-m4@1, id: ground-screws, at: [4.4625, 33.2], group: grounding, rel-pos: 2,
+           description: 'the designated grounding location of HIG section 8, at the rear end of
+             this flank - two tapped M4 holes for the accessory grounding lug (50 x 11.1 x
+             7.5 mm, #6 AWG), one two-hole landing; height from the boss on the Figure 4 rear
+             elevation, depth estimated', attrs: {stud-size: M4}}
   right:
     size:
       w: 440
@@ -1206,7 +1234,7 @@ views:
       decor:
         # AXIS: x = 0 is the FRONT on a right view - the mirror of the left face, so the
         # same five rail pins appear in the reversed order along the depth. The grounding
-        # point is on the REAR of this chassis, not on a flank.
+        # point is on the LEFT flank, not on this one.
         - {at: [53, 42], size: [5.0, 5.0], rx: 2.5, fill: '#1a1d20'}
         - {at: [131, 42], size: [5.0, 5.0], rx: 2.5, fill: '#1a1d20'}
         - {at: [209, 42], size: [5.0, 5.0], rx: 2.5, fill: '#1a1d20'}

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: eps203
-version: 1.0.8
+version: 2.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS4630-54NPE
@@ -199,6 +199,19 @@ provenance:
       EPS203/AS4630-54NPE)" - two chassis, not three, because the EPS201 takes a 150 W `YM-1151D` instead
       - so it is `edgecore/eps200-psu-1200w@1`. This is the ruling roc-ops/Portrayal#426 made for the
       2RU fan tray applied before the second chassis arrives rather than after.
+  ground-pair:
+    confidence: photo-measured
+    note: >-
+      TWO HOLES ON ONE PLATE, ONE ABOVE THE OTHER (#830). The grounding point (datasheet callout 11) is
+      a plate at the far left of the rear with two holes, one above the other, and the earth symbol beside
+      them. Read on the datasheet rear (fig-0010, body x 131 to 1568 px for 438 and y 516 to 660 px for
+      44, 3.28 and 3.27 px/mm) the holes centre at x 159 to 161 px and y 554.0 and 607.5 px: x 8.8, y
+      11.6 and 28.0, 16.4 apart. On the rear photograph (photos 4-EPS203-B, 489 x 357, 1.11 to 1.14 px/mm)
+      at x 12 px and y 166.5 and 184.5 px: x 9.9, y 11.9 and 27.7, 15.8 to 16.2 apart. Drawn at x 9.3,
+      y 11.7 and 27.9, 16.2 apart, as two common/ground-lug@1 placements. NO SIZE IS CLAIMED: neither
+      document names the screw or a lug, so the parts stay the nominal unsized ground screw and no pair
+      host is placed. Formerly one common/ground-lug@1, ground, whose stud sat between the holes and to
+      their right, at (15.5, 24.8).
 attrs:
   environmental: {operating-temp: 0 to 45 C (32 to 113 F), storage-temp: -40 to 70 C (-40 to 158 F), humidity: 'Operating:
       5% to 90% non-condensing'}
@@ -223,8 +236,20 @@ attrs:
       group: 36 x 1G/2.5G at IEEE 802.3af/at and bt Type 3/Type 4 90 W, and 12 x 1G/2.5G/5G/10G at the
       same. Cat 6 cabling, per the datasheet's prose.
   lifecycle: {eol: none-announced}
-chassis: {width: 438.0, height: 44.0, depth: 474.0, ru: 1, weight-kg: 8.5, color: '#3c3f43', airflow: front-to-back, power: ac}
+chassis: {width: 438.0, height: 44.0, depth: 474.0, ru: 1, weight-kg: 8.5, color: '#3c3f43', airflow: front-to-back,
+  power: ac}
 gaps:
+- what: ground-pair-pitch
+  scope:
+  - ground-1
+  - ground-2
+  reason: vendor-silent
+  note: >-
+    The grounding plate carries two screws for one lug, but no held document dimensions them: the datasheet
+    rear and the rear photograph read the two holes 15.8 to 16.4 apart, and neither document names the
+    screw or a lug. A two-hole lug lands on a pair host built at a lug pattern and a screw size, so both
+    screws stay the nominal common/ground-lug@1 at the reading until a source gives the size and the spacing.
+  wanted: the grounding screw size and hole spacing, or the part number of the kit lug
 - what: the-model-name-on-the-panel
   scope:
   - front
@@ -1483,7 +1508,8 @@ views:
         - edgecore/eps200-psu-1200w@1
         default: edgecore/eps200-psu-1200w@1
       placements:
-      - {ref: common/ground-lug@1, id: ground, at: [12.0, 15.0], group: grounding, rel-pos: 1}
+      - {ref: common/ground-lug@1, id: ground-1, at: [5.8, 1.9], group: grounding, rel-pos: 1}
+      - {ref: common/ground-lug@1, id: ground-2, at: [5.8, 18.1], group: grounding, rel-pos: 2}
       - {ref: common/rack-ear@1, id: rear-ear-left, at: [-14, 0.25], skin: left, optional: ears, group: furniture,
         rel-pos: 1}
       - {ref: common/rack-ear@1, id: rear-ear-right, at: [438, 0.25], skin: right, optional: ears, group: furniture,

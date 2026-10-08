@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9500-22xst
-version: 2.0.7
+version: 3.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9500-22XST
@@ -258,13 +258,32 @@ provenance:
       searched 2026-08-28: 'UfiSpace S9500-22XST end of life end of sale' - no announcement found;
       the vendor product page and the datasheet PDF are live and distributor listings carry it.
       none-announced is a real finding here, not an absence of looking.
+  ground-pair:
+    confidence: drawing
+    note: >-
+      ONE TWO-HOLE LANDING, NOT TWO SCREWS (#830). The accessory grounding lug (50 x 11.1 x
+      7.5 mm, #6 AWG) is fixed with two M4 screws, so the point is
+      common/ground-stud-pair-5-8-m4@1, two M4 pan heads on 5/8 in. (15.875) centres, unturned
+      because the holes lie along the depth. MEASURED, NOT ASSUMED: HIG Figure 22, the flank
+      elevation section 8 draws for this chassis, measured on the docling figure (910 x 446
+      px, an upsample of the 544 x 266 px image the PDF embeds): chassis bar x 76.5 to 843 px
+      for the 302 mm depth, 2.54 px/mm, and 111 px for the 43.5 mm height. The two M4 holes of
+      Location-1 centre at 97.6 and 137.6 px, y 121 px, so the holes sit 8.3 and 24.1 mm
+      behind the front face, 15.76 mm apart, centred 16.2 from the front and 22 from the top.
+      The same accessory lug, read the same way on five UfiSpace flank figures (Figure 22 of
+      the 302 mm S95xx guides and of the M3000-14XC guide, Figure 15 of the S9502-16SMT and
+      S9511-20CT guides), gives 15.6 to 15.9, against about 0.65 mm per pixel of the embedded
+      art: the 5/8 in. two-hole pattern. AXIS: x = 0 is the FRONT on a right view, and the
+      front is the left end of the figure, as on ufispace/s9501-18smt. Formerly two
+      common/ground-lug@1 placements, ground-1 and ground-2, at x 40 and 51 at y 15 (studs
+      11.0 apart, centred 45.5 from the front).
   ground-stud-size:
     confidence: datasheet
     note: >-
       the hardware installation guide lists, in its package contents, a screw kit for the grounding
       lug of 2 x M4*L8.0mm screws, and its grounding steps lock the grounding lug to the designated
-      grounding location with 2 M4 screws: the `stud-size` of ground-1 and ground-2. The accessory lug
-      is one two-hole lug held by both screws.
+      grounding location with 2 M4 screws: the `stud-size` of ground-screws, the pair. The
+      accessory lug is one two-hole lug held by both screws.
 
 attrs:
   performance:
@@ -325,6 +344,15 @@ chassis:
   airflow: front-to-back
 
 gaps:
+- what: ground-pair-pitch
+  scope: [ground-screws]
+  reason: vendor-silent
+  note: >-
+    No held document dimensions the two grounding holes. The hardware installation guide names
+    the screws (two M4) and the accessory lug (50 x 11.1 x 7.5 mm, #6 AWG) and draws the holes;
+    the flank figure reads 15.6 to 15.9 apart, and the pair is drawn at the 5/8 in. (15.875) that
+    reading and the two-hole lug both point at.
+  wanted: a drawing that dimensions the grounding holes, or the accessory lug's own datasheet
 - what: port-led-semantics
   scope: [rj45-1g, sfp-plus, sfp28, qsfp28, port-leds]
   reason: vendor-silent
@@ -693,14 +721,13 @@ views:
       w: 302
       h: 43.5
     silkscreen:
-      - {at: [46, 12.0], text: GND, font-size: 2.4, anchor: middle, for: ground-1}
+      - {at: [16.2, 12.0], text: GND, font-size: 2.4, anchor: middle, for: ground-screws}
     components:
       placements:
         - {ref: common/screw-head@1, id: screw-r1, at: [62, 20], group: furniture, rel-pos: 5}
         - {ref: common/screw-head@1, id: screw-r2, at: [152, 20], group: furniture, rel-pos: 6}
         - {ref: common/screw-head@1, id: screw-r3, at: [242, 20], group: furniture, rel-pos: 7}
-        - {ref: common/ground-lug@1, id: ground-1, at: [40, 15], group: grounding, rel-pos: 1, attrs: {stud-size: M4}}
-        - {ref: common/ground-lug@1, id: ground-2, at: [51, 15], group: grounding, rel-pos: 2, attrs: {stud-size: M4}}
+        - {ref: common/ground-stud-pair-5-8-m4@1, id: ground-screws, at: [4.2625, 18], group: grounding, rel-pos: 1, attrs: {stud-size: M4}}
 configurations:
   dc:
     kind: base

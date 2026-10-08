@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: eps112
-version: 1.0.8
+version: 2.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS4625-30P
@@ -261,6 +261,21 @@ provenance:
       its own port count, its own supply and its own face. What it shares with them is the
       shell - 440 x 350.3 x 44, the same rack kit "RKIT-L-4625 ... for EPS100/AS4625
       series" - and the fan pitch.
+  ground-pair:
+    confidence: photo-measured
+    note: >-
+      TWO SCREWS ON ONE PLATE, ONE ABOVE THE OTHER (#830). The grounding point (datasheet
+      callout 9, guide callout 7) is a plain plate at the far left of the rear carrying two
+      pan-head screws, one above the other, with the earth symbol to its right. Read on the
+      rear photograph (photos 4-EPS112-B, 960 x 700, body x 1 to 958 and y 304 to 398 px, 2.18
+      and 2.16 px/mm) the heads centre at x 22 px and y 329.5 and 364.5 px, 35 px apart: x
+      9.6, y 11.8 and 28.0, 16.2 apart. On the datasheet rear (fig-0008, 3.27 px/mm across,
+      3.21 down) they centre at x 124.5 px and y 508.5 and 562 px: x 9.3, y 11.7 and 28.4,
+      16.4 to 16.7 apart. Drawn at x 9.5, y 11.85 and 28.15, 16.3 apart, as two
+      common/ground-lug@1 placements. NO SIZE IS CLAIMED: neither document names the screw or
+      a lug, so the parts stay the nominal unsized ground screw and no pair host is placed.
+      Formerly one common/ground-lug@1, ground, whose stud sat on the lower screw (8.05,
+      28.0).
 attrs:
   environmental:
     operating-temp: '0 to 45 C (32 to 113 F) at sea level'
@@ -287,6 +302,15 @@ attrs:
 chassis: {width: 440.0, height: 44.0, depth: 350.35, ru: 1, weight-kg: 6.42, color: '#414141',
   airflow: front-to-back, power: ac}
 gaps:
+- what: ground-pair-pitch
+  scope: [ground-1, ground-2]
+  reason: vendor-silent
+  note: >-
+    The grounding plate carries two screws for one lug, but no held document dimensions
+    them: the rear photograph and the datasheet rear read the two screws 16.2 to 16.7 apart, and neither document names the screw or a lug. A two-hole lug lands on a
+    pair host built at a lug pattern and a screw size, so both screws stay the nominal
+    common/ground-lug@1 at the reading until a source gives the size and the spacing.
+  wanted: the grounding screw size and hole spacing, or the part number of the kit lug
 - what: shell-height-disagreement
   scope: [front, rear]
   reason: sources-disagree
@@ -596,7 +620,8 @@ views:
       - {ref: edgecore/eps112-fan-fixed@1, id: fan-1, at: [57.67, 10.67], group: fans, rel-pos: 1}
       - {ref: edgecore/eps112-fan-fixed@1, id: fan-2, at: [105.36, 10.67], group: fans, rel-pos: 2}
       - {ref: edgecore/eps112-fan-fixed@1, id: fan-3, at: [153.23, 10.67], group: fans, rel-pos: 3}
-      - {ref: common/ground-lug@1, id: ground, at: [4.55, 18.20], group: grounding, rel-pos: 1}
+      - {ref: common/ground-lug@1, id: ground-1, at: [6.00, 2.05], group: grounding, rel-pos: 1}
+      - {ref: common/ground-lug@1, id: ground-2, at: [6.00, 18.35], group: grounding, rel-pos: 2}
       - {ref: common/rack-ear@1, id: rear-ear-left, at: [-14, 0.25], skin: left, optional: ears, group: furniture, rel-pos: 1}
       - {ref: common/rack-ear@1, id: rear-ear-right, at: [440, 0.25], skin: right, optional: ears, group: furniture, rel-pos: 2}
   top:

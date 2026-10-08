@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: agr560
-version: 2.0.10
+version: 3.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS9947-36XKB
@@ -255,6 +255,19 @@ provenance:
       table says "-48 - -60 VDC, 50 A max. per PSU" and the datasheet "-40 - -60 VDC". Both
       are recorded; the datasheet's wider figure is used because it is the document that
       also states the wattage.
+  ground-pair:
+    confidence: photo-measured
+    note: >-
+      TWO HOLES ON ONE PLATE, ONE ABOVE THE OTHER (#830). The grounding point (guide callout
+      11, 'grounding points' in its grounding steps) is a plate at the far left of the rear,
+      below the earth symbol, with two holes one above the other; the guide kit is one
+      grounding lug, 2 screws and 2 washers. Read on the rear photograph (photos 3-AGR560-B,
+      960 x 700, body x 1 to 958 and y 253 to 445 px, 2.18 and 2.22 px/mm) the holes centre at
+      x 17 px and y 341.5 and 377.0 px: x 7.3, y 39.9 and 55.9, 35.5 px or 16.0 to 16.3 apart.
+      Drawn at x 7.3, y 39.85 and 55.95, 16.1 apart, as two common/ground-lug@1 placements. NO
+      SIZE IS CLAIMED: the guide does not size the screws, so the parts stay the nominal
+      unsized ground screw and no pair host is placed. Formerly one common/ground-lug@1,
+      ground, on the upper hole only, at (6.9, 39.8).
 attrs:
   environmental:
     operating-temp: '0 to 45 C (32 to 113 F)'
@@ -313,6 +326,15 @@ attrs:
 chassis: {width: 440.0, height: 87.0, depth: 649.2, ru: 2, weight-kg: 20.5, color: '#3c3c3f',
   airflow: front-to-back}
 gaps:
+- what: ground-pair-pitch
+  scope: [ground-1, ground-2]
+  reason: vendor-silent
+  note: >-
+    The grounding plate carries two screws for one lug, but no held document dimensions
+    them: the rear photograph reads the two holes 16.0 to 16.3 apart, and the guide kit is one grounding lug and 2 screws, unsized. A two-hole lug lands on a
+    pair host built at a lug pattern and a screw size, so both screws stay the nominal
+    common/ground-lug@1 at the reading until a source gives the size and the spacing.
+  wanted: the grounding screw size and hole spacing, or the part number of the kit lug
 - what: dc-connector-identity
   scope: [rear]
   reason: needs-drawing
@@ -1020,7 +1042,8 @@ views:
       - {id: fan-3, at: [351.63, 4.6], size: {w: 81.6, h: 81.2}, group: fans, rel-pos: 3,
          accepts: [edgecore/fan-2u-1x1sn@1], default: edgecore/fan-2u-1x1sn@1}
       placements:
-      - {ref: common/ground-lug@1, id: ground, at: [3.40, 30.00], group: grounding, rel-pos: 1}
+      - {ref: common/ground-lug@1, id: ground-1, at: [3.80, 30.05], group: grounding, rel-pos: 1}
+      - {ref: common/ground-lug@1, id: ground-2, at: [3.80, 46.15], group: grounding, rel-pos: 2}
       - {ref: common/rack-ear@1, id: rear-ear-left, at: [-14, 0.25], skin: left, optional: ears, group: furniture, rel-pos: 1}
       - {ref: common/rack-ear@1, id: rear-ear-right, at: [440, 0.25], skin: right, optional: ears, group: furniture, rel-pos: 2}
 
