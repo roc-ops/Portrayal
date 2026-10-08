@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mpc3e-3d
-version: 2.0.0
+version: 2.0.1
 class: line-card
 behaviour: fills
 profile: networking
@@ -10,6 +10,11 @@ description: >-
   The base SKU only; MPC3E-3D-NG and MPC3E-3D-NG-Q share the faceplate but not its wattage or its MIC
   column, and are not this contract. One card for the MX240, MX480 and MX960, drawn horizontal; the MX960
   seats it turned 90.
+unplaced: >-
+  SUPERSEDED by juniper/mpc3e-3d@3, the MIC plate re-measured at 168.8 x 29.2 and the carriers
+  re-laid to match (#261, part 2). This major is kept and deprecated rather than deleted, so a
+  manifest that pins it still resolves (#448); nothing in this library seats it.
+superseded-by: juniper/mpc3e-3d@3
 attrs:
   model: MX-MPC3E-3D
   power-draw-max-w: 440

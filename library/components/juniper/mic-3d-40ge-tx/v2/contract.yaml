@@ -1,0 +1,96 @@
+format: 1
+kind: module
+name: mic-3d-40ge-tx
+version: 2.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper Tri-Rate 40-port RJ45 MIC, dual-wide: it seats across both MIC slots of its MPC, which the bay system cannot express, so it is here for reference and in no accepts list (roc-ops/Portrayal#34). Dual-wide: one 338.1 x 29.2 plate across both MIC slots of its MPC, the span of the two photo-measured MIC windows (#261).
+unplaced: >-
+  no MPC in this library accepts it. It is DUAL-WIDE - it seats across both MIC slots of its
+  MPC - and the MPC contracts model two separate single-width bays, so there is no bay shaped
+  like this card to list it in. Seating it needs a way to say that one module fills two bays,
+  which the format does not have.
+attrs:
+  model: MIC-3D-40GE-TX
+  power-draw-max-w: 41
+provenance:
+  size: >-
+    photo-measured - the MIC plate, 168.8 x 29.2, from the MX104 and MX80 front photographs as
+    size-notes says: plates 520, 521 and 520.5 px at 3.090 px/mm on the MX104 (body 1350.5 px over 437.0
+    mm; the ganged-SFP pitch reads 44.0 to 44.2 px, 3.091), 521.8 and 522.5 px at 3.088 on the MX80
+    (ganged-SFP pitch 44.0 px; 1374 px between the ear wings over 445.0 mm agrees); heights 90 to 90.75
+    px. The dual-wide width is the two windows and their seam, 168.8 + 0.5 + 168.8.
+  power: >-
+    guide FRU table - MX240 guide Table 93 'FRU Power Requirements', MIC section:
+    '| Tri-Rate MIC | MIC-3D-40GE-TX | 41W |', in nine guides. A maximum for the MIC alone, without
+    optics; the row prints no temperature ladder, so there is no ambient to name and none is
+    claimed. The module reference reaches the same number by a second route - 'Power requirement:
+    0.85 A @48 V (41 W)' - which corroborates the value without adding a rung, being an electrical
+    figure at no stated ambient.
+  numbering: 'guide - ports number within each PIC group with an n/ group
+    legend, per the module reference port-numbering figures (g000930,
+    g100786); the exact print positions are layout-derived'
+  layout: >-
+    estimated - RE-ENVELOPED, NOT REDRAWN, at 2.0.0 (#261): every part and printed mark of the 1.x art
+    moved by (-2.45, +1.1) onto the measured plate (centring the old art where its width allows);
+    positions along the plate stay as 1.x had them. What 1.x said of them: registry + layout - the face
+    is the slot geometry of its chassis family; positions are laid out from the module reference port
+    description and registry cage sizes, NOT measured from a faceplate drawing. No faceplate figure was
+    usable for this model
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: common/rj45-ganged-eth@1, id: port-0-0, at: [13.55, 4.70], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-0-1, at: [13.55, 16.90], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-0-2, at: [26.25, 4.70], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-0-3, at: [26.25, 16.90], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-0-4, at: [38.95, 4.70], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-0-5, at: [38.95, 16.90], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-0-6, at: [51.65, 4.70], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-0-7, at: [51.65, 16.90], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-0-8, at: [64.35, 4.70], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-0-9, at: [64.35, 16.90], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-0, at: [84.05, 4.70], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-1, at: [84.05, 16.90], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-2, at: [96.75, 4.70], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-3, at: [96.75, 16.90], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-4, at: [109.45, 4.70], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-5, at: [109.45, 16.90], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-6, at: [122.15, 4.70], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-7, at: [122.15, 16.90], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-8, at: [134.85, 4.70], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-9, at: [134.85, 16.90], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-0, at: [154.55, 4.70], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-1, at: [154.55, 16.90], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-2, at: [167.25, 4.70], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-3, at: [167.25, 16.90], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-4, at: [179.95, 4.70], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-5, at: [179.95, 16.90], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-6, at: [192.65, 4.70], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-7, at: [192.65, 16.90], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-8, at: [205.35, 4.70], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-9, at: [205.35, 16.90], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-0, at: [225.05, 4.70], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-1, at: [225.05, 16.90], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-2, at: [237.75, 4.70], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-3, at: [237.75, 16.90], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-4, at: [250.45, 4.70], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-5, at: [250.45, 16.90], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-6, at: [263.15, 4.70], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-7, at: [263.15, 16.90], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-8, at: [275.85, 4.70], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-9, at: [275.85, 16.90], attrs: {media: rj45}}
+size:
+  w: 338.1
+  h: 29.2
+size-confidence: {w: photo-measured, h: photo-measured}
+size-notes: >-
+  w and h are the dual-wide plate (#261): one plate across both MIC slots of its MPC. The MX2010
+  photograph seats a dual-wide MIC (40 RJ45s) whose plate runs the length of both windows with no seam
+  between them, 325 px against 162.5 px for one single-wide MIC; the width is the span of the
+  carrier's two photo-measured 168.8 mm windows and the 0.5 mm seam between them. The height is the
+  single-wide MIC's 29.2.

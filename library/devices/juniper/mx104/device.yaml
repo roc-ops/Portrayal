@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx104
-version: 3.0.1
+version: 4.0.0
 maturity: modelled
 manufacturer: Juniper
 model: MX104
@@ -91,6 +91,19 @@ provenance:
       The two studs were drawn 16.0 apart; they moved symmetrically about the
       midpoint the photograph placed, (205.0, 136.0), side by side, so a lug's wire leaves to the right, and their cutouts with them.
 
+  mic-bays:
+    confidence: photo-measured
+    note: >-
+      the four MIC bays are the MIC plate, 168.8 x 29.2 (#261), placed off the front photograph. Across,
+      at 3.090 px/mm (body 74.5 to 1425.0 px over 437.0 mm, confirmed by the ganged-SFP pitch at 3.091):
+      the left plates start at 129.0 to 129.5 px, 17.8 mm, and the right at 652.5 px, 187.1 mm, a pitch of
+      523 px or 169.3 mm, which leaves a 0.5 mm seam between 168.8 plates. Down, on the chassis-height scale (473.5 px over 154.7 mm,
+      3.061, the top at 9.0 px): the upper plates run 138.75 to 229.5 px (42.4 to 72.0) and the lower
+      235.5 to 325.5 px (74.0 to 103.4), and a 29.2 plate centred in each gives y 42.6 and 74.1. The slot
+      legends sit beside the plates' upper thirds, as printed. Until 4.0.0 the bays were 168 x 27 at x
+      17.8 and 193.0, y 49 and 81 - a 175.2 pitch and rows 6 to 7 mm low. The rest of the front's vertical
+      frame is not re-measured here: the fixed XE row centre reads 28.3 against a modelled 25.2, and the
+      PEM/RE band starts at 105.2 against 108.7.
 attrs:
   physical:
     weight: 9 kg bare; 14.5 kg with power supplies, fan tray and MICs
@@ -118,7 +131,7 @@ gaps:
     reason: sources-disagree
     wanted: a corrected MX104 physical table - the module rows scramble
       width/depth/height (a MIC listed 15.9 cm wide when the photographed
-      face is ~168 mm, PSU axes likewise); faces are photo-sized and marked
+      face measures 168.8 mm, roc-ops/Portrayal#261; PSU axes likewise); faces are photo-sized and marked
       approximate.
   - what: ac-power-variant
     scope: [psus]
@@ -236,26 +249,26 @@ views:
       - {at: [327.0, 19.0], text: IN, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: clk-10mhz-in}
       - {at: [334.2, 19.0], text: OUT, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: clk-10mhz-out}
       - {at: [365.0, 10.0], text: junos, font-size: 3.0, anchor: middle, fill: '#f0f1f2', for: chassis}
-      - {at: [8.0, 50.0], text: '1/0', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: mic-1-0}
-      - {at: [430.0, 50.0], text: '1/1', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: mic-1-1}
-      - {at: [8.0, 92.0], text: '0/0', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: mic-0-0}
-      - {at: [430.0, 92.0], text: '0/1', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: mic-0-1}
+      - {at: [8.0, 44.6], text: '1/0', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: mic-1-0}
+      - {at: [430.0, 44.6], text: '1/1', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: mic-1-1}
+      - {at: [8.0, 80.4], text: '0/0', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: mic-0-0}
+      - {at: [430.0, 80.4], text: '0/1', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: mic-0-1}
       - {at: [430.0, 118.0], text: RE1, font-size: 1.8, anchor: middle, fill: '#e8eaec', for: re1}
       - {at: [430.0, 141.0], text: RE0, font-size: 1.8, anchor: middle, fill: '#e8eaec', for: re0}
     components:
       bays:
-        - {id: mic-1-0, at: [17.8, 49.0], size: {w: 168.0, h: 27.0},
-           accepts: [juniper/mic-3d-16che1-t1-ce@1, juniper/mic-3d-1oc192-xfp@1, juniper/mic-3d-20ge-sfp@1, juniper/mic-3d-2xge-xfp@1, juniper/mic-3d-4choc3-1oc12@1, juniper/mic-3d-4choc3-2choc12@1, juniper/mic-3d-4oc3oc12-1oc48@1, juniper/mic-3d-8choc3-4choc12@1, juniper/mic-3d-8oc3oc12-4oc48@1, juniper/mic-macsec-20ge@1, juniper/ms-mic-16g@1, juniper/mx-mic-blank@1],
-           default: juniper/mic-3d-20ge-sfp@1, group: mics, rel-pos: 2}
-        - {id: mic-1-1, at: [193.0, 49.0], size: {w: 168.0, h: 27.0},
-           accepts: [juniper/mic-3d-16che1-t1-ce@1, juniper/mic-3d-1oc192-xfp@1, juniper/mic-3d-20ge-sfp@1, juniper/mic-3d-2xge-xfp@1, juniper/mic-3d-4choc3-1oc12@1, juniper/mic-3d-4choc3-2choc12@1, juniper/mic-3d-4oc3oc12-1oc48@1, juniper/mic-3d-8choc3-4choc12@1, juniper/mic-3d-8oc3oc12-4oc48@1, juniper/mic-macsec-20ge@1, juniper/ms-mic-16g@1, juniper/mx-mic-blank@1],
-           default: juniper/mic-3d-4choc3-1oc12@1, group: mics, rel-pos: 3}
-        - {id: mic-0-0, at: [17.8, 81.0], size: {w: 168.0, h: 27.0},
-           accepts: [juniper/mic-3d-16che1-t1-ce@1, juniper/mic-3d-1oc192-xfp@1, juniper/mic-3d-20ge-sfp@1, juniper/mic-3d-2xge-xfp@1, juniper/mic-3d-4choc3-1oc12@1, juniper/mic-3d-4choc3-2choc12@1, juniper/mic-3d-4oc3oc12-1oc48@1, juniper/mic-3d-8choc3-4choc12@1, juniper/mic-3d-8oc3oc12-4oc48@1, juniper/mic-macsec-20ge@1, juniper/ms-mic-16g@1, juniper/mx-mic-blank@1],
-           default: juniper/mic-3d-2xge-xfp@1, group: mics, rel-pos: 0}
-        - {id: mic-0-1, at: [193.0, 81.0], size: {w: 168.0, h: 27.0},
-           accepts: [juniper/mic-3d-16che1-t1-ce@1, juniper/mic-3d-1oc192-xfp@1, juniper/mic-3d-20ge-sfp@1, juniper/mic-3d-2xge-xfp@1, juniper/mic-3d-4choc3-1oc12@1, juniper/mic-3d-4choc3-2choc12@1, juniper/mic-3d-4oc3oc12-1oc48@1, juniper/mic-3d-8choc3-4choc12@1, juniper/mic-3d-8oc3oc12-4oc48@1, juniper/mic-macsec-20ge@1, juniper/ms-mic-16g@1, juniper/mx-mic-blank@1],
-           default: juniper/mic-3d-20ge-sfp@1, group: mics, rel-pos: 1}
+        - {id: mic-1-0, at: [17.8, 42.6], size: {w: 168.8, h: 29.2},
+           accepts: [juniper/mic-3d-16che1-t1-ce@2, juniper/mic-3d-1oc192-xfp@2, juniper/mic-3d-20ge-sfp@2, juniper/mic-3d-2xge-xfp@2, juniper/mic-3d-4choc3-1oc12@2, juniper/mic-3d-4choc3-2choc12@2, juniper/mic-3d-4oc3oc12-1oc48@2, juniper/mic-3d-8choc3-4choc12@2, juniper/mic-3d-8oc3oc12-4oc48@2, juniper/mic-macsec-20ge@2, juniper/ms-mic-16g@2, juniper/mx-mic-blank@2],
+           default: juniper/mic-3d-20ge-sfp@2, group: mics, rel-pos: 2}
+        - {id: mic-1-1, at: [187.1, 42.6], size: {w: 168.8, h: 29.2},
+           accepts: [juniper/mic-3d-16che1-t1-ce@2, juniper/mic-3d-1oc192-xfp@2, juniper/mic-3d-20ge-sfp@2, juniper/mic-3d-2xge-xfp@2, juniper/mic-3d-4choc3-1oc12@2, juniper/mic-3d-4choc3-2choc12@2, juniper/mic-3d-4oc3oc12-1oc48@2, juniper/mic-3d-8choc3-4choc12@2, juniper/mic-3d-8oc3oc12-4oc48@2, juniper/mic-macsec-20ge@2, juniper/ms-mic-16g@2, juniper/mx-mic-blank@2],
+           default: juniper/mic-3d-4choc3-1oc12@2, group: mics, rel-pos: 3}
+        - {id: mic-0-0, at: [17.8, 74.1], size: {w: 168.8, h: 29.2},
+           accepts: [juniper/mic-3d-16che1-t1-ce@2, juniper/mic-3d-1oc192-xfp@2, juniper/mic-3d-20ge-sfp@2, juniper/mic-3d-2xge-xfp@2, juniper/mic-3d-4choc3-1oc12@2, juniper/mic-3d-4choc3-2choc12@2, juniper/mic-3d-4oc3oc12-1oc48@2, juniper/mic-3d-8choc3-4choc12@2, juniper/mic-3d-8oc3oc12-4oc48@2, juniper/mic-macsec-20ge@2, juniper/ms-mic-16g@2, juniper/mx-mic-blank@2],
+           default: juniper/mic-3d-2xge-xfp@2, group: mics, rel-pos: 0}
+        - {id: mic-0-1, at: [187.1, 74.1], size: {w: 168.8, h: 29.2},
+           accepts: [juniper/mic-3d-16che1-t1-ce@2, juniper/mic-3d-1oc192-xfp@2, juniper/mic-3d-20ge-sfp@2, juniper/mic-3d-2xge-xfp@2, juniper/mic-3d-4choc3-1oc12@2, juniper/mic-3d-4choc3-2choc12@2, juniper/mic-3d-4oc3oc12-1oc48@2, juniper/mic-3d-8choc3-4choc12@2, juniper/mic-3d-8oc3oc12-4oc48@2, juniper/mic-macsec-20ge@2, juniper/ms-mic-16g@2, juniper/mx-mic-blank@2],
+           default: juniper/mic-3d-20ge-sfp@2, group: mics, rel-pos: 1}
         - {id: pem0, at: [9.7, 108.7], size: {w: 103.7, h: 45.0},
            accepts: [juniper/mx104-psu-dc@1], default: juniper/mx104-psu-dc@1,
            group: psus, rel-pos: 0}
@@ -361,10 +374,10 @@ configurations:
       question most people ask first and the one `default` used to answer with whatever
       the drawing happened to be populated with.
     bays:
-      mic-1-0: juniper/mx-mic-blank@1
-      mic-1-1: juniper/mx-mic-blank@1
-      mic-0-0: juniper/mx-mic-blank@1
-      mic-0-1: juniper/mx-mic-blank@1
+      mic-1-0: juniper/mx-mic-blank@2
+      mic-1-1: juniper/mx-mic-blank@2
+      mic-0-0: juniper/mx-mic-blank@2
+      mic-0-1: juniper/mx-mic-blank@2
 datasheet:
   title: 'Juniper MX104 3D Universal Edge Router datasheet'
   sha256: 96561332a5e0e3aeff9652625099508353c066846ad357f35027f03d6b42558d

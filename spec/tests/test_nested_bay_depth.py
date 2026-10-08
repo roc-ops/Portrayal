@@ -72,12 +72,23 @@ def test_the_walk_reaches_every_level_and_stops_on_its_own():
         "and reported none of them")
 
 
-def test_the_library_still_has_no_three_level_carrier():
+THREE_LEVEL = [
+    # #261: the MX2000 line-card adapter seats the MX240 MPC carriers, which seat
+    # MICs. The real coverage beside the hand-built fixture is the MX2020 row of
+    # test_nested_cage_seat_js.py: an optic in a MIC in an MPC in the adapter.
+    "mx2000-lc-adapter/mpc -> juniper/mpc1e-3d@3",
+    "mx2000-lc-adapter/mpc -> juniper/mpc2e-3d@3",
+    "mx2000-lc-adapter/mpc -> juniper/mpc3e-3d@3",
+]
+
+
+def test_the_three_level_carriers_are_the_pinned_ones():
     """The premise the fixture rests on, checked rather than assumed.
 
-    If this ever fails it is GOOD NEWS - somebody modelled a carrier that
-    accepts a carrier - but the hand-built fixture above stops being the only
-    coverage, and a real one should be added beside it.
+    Until #261 the library had no carrier that accepts a carrier and this test
+    asserted so. The MX2000 adapter is one, and a real three-level case now
+    stands beside the hand-built fixture (THREE_LEVEL). A new one here wants
+    the same: a real row in a nested-seat test.
     """
     f = DIST / "components.json"
     if not f.exists():
@@ -99,7 +110,7 @@ def test_the_library_still_has_no_three_level_carrier():
     assert not unresolved, (
         "nested bays naming components the index does not carry, so the "
         f"resolver cannot offer them: {unresolved[:5]}")
-    assert not deep, (
+    assert sorted(deep) == THREE_LEVEL, (
         "a carrier now accepts a carrier, so three-level nesting is reachable "
         f"in real data: {deep[:5]}. That is fine - the walk handles it - but "
         "spec/tests/js/nested-bay-depth.mjs is a hand-built fixture, and this "

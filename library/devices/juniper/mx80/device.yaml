@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx80
-version: 2.0.3
+version: 3.0.0
 maturity: modelled
 manufacturer: Juniper
 model: MX80
@@ -98,6 +98,18 @@ provenance:
       midpoint the photograph placed, (394.75, 19.75), one stud above the other, so the host is placed at
       `rotate: 90` and a lug's wire leaves downward, and their cutouts with them.
 
+  mic-bays:
+    confidence: photo-measured
+    note: >-
+      the two MIC bays are the MIC plate, 168.8 x 29.2 (#261), placed off the front photograph at 3.088
+      px/mm - the ganged-SFP pitch of the 20x1GE MIC, 44.0 px, which also gives 445.0 mm for the 1374 px
+      between the ear wings (62 to 1436 px), the frame this device is drawn in. The plates run 150.7 to
+      672.5 and 674.5 to 1197.0 px (x 28.7 and 198.3, a 169.6 pitch, which leaves 0.8 mm between 168.8 plates; the 2 px
+      gap in the photograph reads 0.6, its plates reading 169.0
+      wide there, within a pixel of 168.8) and 29.5 to 120.0
+      px down from a chassis top at 9.5 px (y 6.5). Until 3.0.0 they were 168 x 27 at x 25.0 and 193.4, y
+      11. The fixed panel is not re-measured here: its XFP row reads a 31.3 pitch on the same scale
+      against a modelled 29.4.
 attrs:
   physical:
     weight-note: Table 31 gives 30 lb (13.6 kg) for the modular chassis with fan
@@ -267,12 +279,12 @@ views:
       - {at: [365.5, 67.37], text: LINK, font-size: 1.2, anchor: start, fill: '#e8eaec', for: xe-3}
     components:
       bays:
-        - {id: mic-1-0, at: [25.0, 11.0], size: {w: 168.0, h: 27.0},
-           accepts: [juniper/mic-3d-16che1-t1-ce@1, juniper/mic-3d-1oc192-xfp@1, juniper/mic-3d-20ge-sfp@1, juniper/mic-3d-2xge-xfp@1, juniper/mic-3d-4choc3-1oc12@1, juniper/mic-3d-4choc3-2choc12@1, juniper/mic-3d-4oc3oc12-1oc48@1, juniper/mic-3d-8choc3-4choc12@1, juniper/mic-3d-8ds3-e3@1, juniper/mic-3d-8oc3-2oc12-atm@1, juniper/mic-3d-8oc3oc12-4oc48@1, juniper/mic-macsec-20ge@1, juniper/ms-mic-16g@1, juniper/mx-mic-blank@1],
-           default: juniper/mic-3d-20ge-sfp@1, group: mics, rel-pos: 0}
-        - {id: mic-1-1, at: [193.4, 11.0], size: {w: 168.0, h: 27.0},
-           accepts: [juniper/mic-3d-16che1-t1-ce@1, juniper/mic-3d-1oc192-xfp@1, juniper/mic-3d-20ge-sfp@1, juniper/mic-3d-2xge-xfp@1, juniper/mic-3d-4choc3-1oc12@1, juniper/mic-3d-4choc3-2choc12@1, juniper/mic-3d-4oc3oc12-1oc48@1, juniper/mic-3d-8choc3-4choc12@1, juniper/mic-3d-8ds3-e3@1, juniper/mic-3d-8oc3-2oc12-atm@1, juniper/mic-3d-8oc3oc12-4oc48@1, juniper/mic-macsec-20ge@1, juniper/ms-mic-16g@1, juniper/mx-mic-blank@1],
-           default: juniper/mic-3d-2xge-xfp@1, group: mics, rel-pos: 1}
+        - {id: mic-1-0, at: [28.7, 6.5], size: {w: 168.8, h: 29.2},
+           accepts: [juniper/mic-3d-16che1-t1-ce@2, juniper/mic-3d-1oc192-xfp@2, juniper/mic-3d-20ge-sfp@2, juniper/mic-3d-2xge-xfp@2, juniper/mic-3d-4choc3-1oc12@2, juniper/mic-3d-4choc3-2choc12@2, juniper/mic-3d-4oc3oc12-1oc48@2, juniper/mic-3d-8choc3-4choc12@2, juniper/mic-3d-8ds3-e3@2, juniper/mic-3d-8oc3-2oc12-atm@2, juniper/mic-3d-8oc3oc12-4oc48@2, juniper/mic-macsec-20ge@2, juniper/ms-mic-16g@2, juniper/mx-mic-blank@2],
+           default: juniper/mic-3d-20ge-sfp@2, group: mics, rel-pos: 0}
+        - {id: mic-1-1, at: [198.3, 6.5], size: {w: 168.8, h: 29.2},
+           accepts: [juniper/mic-3d-16che1-t1-ce@2, juniper/mic-3d-1oc192-xfp@2, juniper/mic-3d-20ge-sfp@2, juniper/mic-3d-2xge-xfp@2, juniper/mic-3d-4choc3-1oc12@2, juniper/mic-3d-4choc3-2choc12@2, juniper/mic-3d-4oc3oc12-1oc48@2, juniper/mic-3d-8choc3-4choc12@2, juniper/mic-3d-8ds3-e3@2, juniper/mic-3d-8oc3-2oc12-atm@2, juniper/mic-3d-8oc3oc12-4oc48@2, juniper/mic-macsec-20ge@2, juniper/ms-mic-16g@2, juniper/mx-mic-blank@2],
+           default: juniper/mic-3d-2xge-xfp@2, group: mics, rel-pos: 1}
         - {id: ps0, at: [14.7, 44.0], size: {w: 72.0, h: 44.0},
            accepts: [juniper/mx80-psu-ac@1], default: juniper/mx80-psu-ac@1,
            group: psus, rel-pos: 0}
@@ -395,8 +407,8 @@ configurations:
       the question most people ask first and the one `default` used to answer with
       whatever the drawing happened to be populated with.
     bays:
-      mic-1-0: juniper/mx-mic-blank@1
-      mic-1-1: juniper/mx-mic-blank@1
+      mic-1-0: juniper/mx-mic-blank@2
+      mic-1-1: juniper/mx-mic-blank@2
   mx80:
     kind: model
     description: Full-capacity MX80 - both MIC slots active, 80 Gbps class.

@@ -300,6 +300,11 @@ def main():
                 # `None` on every part and could only fall back to `class`, which
                 # is exactly the fallback the field exists to replace.
                 "behaviour": data.get("behaviour"),
+                # RETIRED, IN FAVOUR OF THIS REF (the schema's `superseded-by`).
+                # A retired major is kept so a manifest pinning it resolves, and
+                # a consumer offering parts must not offer it: the DCIM module
+                # export reads this to leave it out.
+                "superseded-by": data.get("superseded-by"),
                 # HOW MANY DEVICES SEAT THIS MAJOR, the number CATALOGUE.md
                 # shows in its `devices` column and counted by the same
                 # function (components_catalogue.seat_counts): a placement or

@@ -1,0 +1,64 @@
+format: 1
+kind: module
+name: mic-3d-4choc3-1oc12
+version: 2.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper channelized OC3/STM1 circuit-emulation MIC with SFP - four cages in two ganged pairs, one PIC. MIC form: the MIC's own 168.8 x 29.2 plate, photo-measured (#261).
+attrs:
+  oc3: 4
+  model: MIC-3D-4COC3-1COC12-CE
+  power-draw-max-w: 36.48
+provenance:
+  sonet-rate: >-
+    datasheet - the SONET rate and the port count: the MX Series Interface Module Reference,
+    'Channelized OC3/STM1 (Multi-Rate) Circuit Emulation MIC with SFP', gives 'Four OC3/STM1 ports' and
+    'Ports are numbered 0 through 3', and its MICs-supported tables print 4 in the port column. Until
+    #261 this contract carried eight cages in two PICs (oc3: 8), which no source states.
+  size: >-
+    photo-measured - the MIC plate, 168.8 x 29.2, from the MX104 and MX80 front photographs as
+    size-notes says: plates 520, 521 and 520.5 px at 3.090 px/mm on the MX104 (body 1350.5 px over 437.0
+    mm; the ganged-SFP pitch reads 44.0 to 44.2 px, 3.091), 521.8 and 522.5 px at 3.088 on the MX80
+    (ganged-SFP pitch 44.0 px; 1374 px between the ear wings over 445.0 mm agrees); heights 90 to 90.75
+    px.
+  power: >-
+    guide FRU power table, MX chassis guides: '36.48 Wat 131 F (55 C) 35.04 Wat 40 C 33.96 Wat 77 F (25 C)'. The max at 55 C is
+    carried, because the worst rated case is what a chassis budget needs.
+    Read off the row, with the part number alone in its own cell - the looser
+    extraction that preceded this put the MPC7E's number on the MPC6E and took a
+    25 C figure for a max, so a row only counts here when nothing else in it
+    could be the subject.
+    The note this replaces said the module reference does not carry it. True of
+    the book it named; the chassis guides do.
+  numbering: >-
+    photo-measured - ports 0 to 3 in one PIC, as the module reference numbers them and the photograph
+    prints them.
+  layout: >-
+    photo-measured - the MX104 front photograph seats this card in slot 1/1 (plate 652.5 to 1173.5 px at
+    3.090 px/mm, #261): one row of four SFP cages in two ganged pairs, mouths 717.5 to 798.5 and 814.5
+    to 894.5 px, pair centres 34.2 and 65.5 mm from the plate's left end at the SFF-8433 pitch of 14.25,
+    the row centred 36 px (11.6 mm) below the plate top. Printed '0 1 LINK 2 3 LINK' beneath, the model
+    name and OK/FAIL vertical at the left end.
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/sfp-ganged@1, id: port-0-0, at: [19.95, 6.40], attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-1, at: [34.20, 6.40], attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-2, at: [51.25, 6.40], attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-3, at: [65.50, 6.40], attrs: {media: sfp}}
+size:
+  w: 168.8
+  h: 29.2
+size-confidence: {w: photo-measured, h: photo-measured}
+size-notes: >-
+  w and h are the MIC's own plate, photo-measured (#261). Square-on front photographs of the MX104 and
+  the MX80 put four plates at 168.3 to 169.2 by 29.1 to 29.3 mm, each photograph scaled two
+  independent ways - across its chassis body and on the SFF-8433 ganged-SFP pitch of 14.25 mm, which
+  agree to 0.1% - and the MX2010 photograph's ratio of MIC to MPC plate (162.5 to 379.5 px) agrees.
+  The guides' MIC rows (6.25 x 6.8 x 1.25 in, the axes assigned differently in different books) do not
+  dimension the face and are not used. Until 2.0.0 (juniper/mic-3d-4choc3-1oc12@1, kept as a deprecated major superseded by this one) this was the 168 x 27 'window', an estimate read
+  off the carrier.

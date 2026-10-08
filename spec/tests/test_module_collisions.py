@@ -42,9 +42,10 @@ from portrayal import dcim_export as dx
 KNOWN_DIVERGENT = {
     # The four Juniper MX entries that stood here (DPC-R-4XGE-XFP, RE-S-1300-2048,
     # SCB-MX, DPCE-R-40GE-SFP) were vertical MX960 twins whose descriptions led with
-    # how the card is drawn. #261 removed the twins: the MX960 seats the horizontal
-    # card at `rotate: 90`, so each of those models has one author and nothing to
-    # disagree with.
+    # how the card is drawn. #261 replaced the twins: the MX960 seats the horizontal
+    # card at `rotate: 90`, so each of those models has one live author and nothing
+    # to disagree with (part 2's retired twins carry `superseded-by` and are not
+    # exported).
     # ONE SKU MODELLED TWICE, at 80 mm and 82.5 mm - a real duplicate rather
     # than two authors of one card, and roc-ops/Portrayal#266 is where it is resolved.
     ("UfiSpace", "FAN-803816-HI"): "ufispace/fan-803816-hi",
@@ -60,6 +61,9 @@ def _groups():
     dist = Dist(DIST)
     out = collections.defaultdict(list)
     for c in sorted(dist.modules(), key=lambda c: (c.get("ns") or "", c.get("name") or "")):
+        # A retired major (`superseded-by`) is not exported, so it authors nothing.
+        if c.get("superseded-by"):
+            continue
         man = dist.manufacturer_of(c.get("ns"))
         if not man:
             continue
@@ -97,26 +101,53 @@ def test_the_divergent_list_is_exactly_what_is_pinned():
 
 
 def test_every_other_collision_is_a_real_collapse():
-    """The forty twins. They share a model AND produce the same document, so
-    writing one file is deduplication rather than loss - which is only true
-    because the port order stopped depending on which way the card was drawn."""
+    """No two live contracts share a model outside KNOWN_DIVERGENT. There were
+    31 such groups, every one a Juniper MX card drawn twice (MX960 `-v`/`-v960`
+    twins, then MX2000 `-v2k` cards and vertical MICs). #261 seats the
+    horizontal card turned instead, and the twins it kept are retired
+    (`superseded-by`), which the exporter leaves out - so the count is zero,
+    and a new group means a new second author, which must be looked at."""
     collapsing = {k: [r for _d, r in v] for k, v in _groups().items()
                   if len(v) > 1 and k not in KNOWN_DIVERGENT}
-    assert len(collapsing) >= 31, f"only {len(collapsing)} group(s) collapse cleanly"
-    for key, refs in collapsing.items():
-        docs = [dx.dcim_significant(d) for d, _r in _groups()[key]]
-        assert all(d == docs[0] for d in docs), f"{key} does not actually agree"
+    assert collapsing == {}, collapsing
 
 
-def test_a_collapsed_type_names_every_author():
+def test_a_collapsed_type_names_every_author(tmp_path):
     """The surviving document is a function of the whole group, not of which
-    contract `sorted()` happened to reach first. The stamp is where that shows."""
-    p = LIB / "exports/netbox/module-types/Juniper/MPC7E-MRATE.yaml"
-    if not p.exists():
-        pytest.skip("the MPC7E-MRATE export is not in this library")
-    comments = (yaml.safe_load(p.read_text()) or {}).get("comments") or ""
-    for author in ("juniper/mpc7e-mrate)", "juniper/mpc7e-mrate-v2k)"):
-        assert author in comments, f"{author} is not named in the stamp:\n{comments}"
+    contract `sorted()` happened to reach first. The stamp is where that shows.
+
+    A BUILT FIXTURE, because the library no longer has a live model with two
+    authors (see above): two copies of one real card under one model, through
+    `export_modules`, and both names must be in the one file's stamp."""
+    import copy
+    if not (DIST / "components.json").exists():
+        pytest.skip("no build; run ./build.sh")
+    from portrayal.artifacts import Dist
+    dist = Dist(DIST)
+    base = dist.component_by_ref("juniper/mpc7e-mrate@2")
+    assert base is not None, "juniper/mpc7e-mrate@2 is the fixture's template"
+    twins = []
+    for name, version in (("fixture-twin-a", "1.0.0"), ("fixture-twin-b", "1.0.1")):
+        c = copy.deepcopy(base)
+        c.update({"name": name, "major": "v1", "version": version})
+        c["attrs"] = dict(c.get("attrs") or {}, model="FIXTURE-TWIN")
+        twins.append(c)
+
+    class Only:
+        def modules(self):
+            return twins
+
+        def __getattr__(self, name):
+            return getattr(dist, name)
+
+    dx.export_modules(Only(), str(tmp_path))
+    written = sorted(tmp_path.rglob("FIXTURE-TWIN.yaml"))
+    assert [p.parent.parent.parent.name for p in written] == ["nautobot", "netbox"], written
+    for p in written:
+        comments = (yaml.safe_load(p.read_text()) or {}).get("comments") or ""
+        for c in twins:
+            ref = f"{c['ns']}/{c['name']}"
+            assert f"({ref})" in comments, f"{ref} is not named in the stamp:\n{comments}"
 
 
 def test_ports_are_ordered_by_name_not_by_where_they_are_drawn():

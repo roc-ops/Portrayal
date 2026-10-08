@@ -523,7 +523,7 @@ def test_no_device_or_card_places_a_bare_bnc_or_din_core():
 
 # --- #672: mini-SMB is the 75-ohm SMB series ---------------------------------
 
-@pytest.mark.parametrize("ref", ["juniper/mic-3d-8ds3-e3@1", "juniper/mic-3d-8ds3-e3-v@1"])
+@pytest.mark.parametrize("ref", ["juniper/mic-3d-8ds3-e3@2"])
 def test_the_ds3_mic_jacks_are_smb_stating_75_ohm(ref):
     """The MX datasheets name the MIC's jack 75-ohm mini-SMB, and mini-SMB is
     the 75-ohm SMB series (intermateable with 50-ohm SMB), so each of the 16

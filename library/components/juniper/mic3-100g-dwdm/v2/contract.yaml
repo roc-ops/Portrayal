@@ -1,0 +1,63 @@
+format: 1
+kind: module
+name: mic3-100g-dwdm
+version: 2.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper 100G DWDM OTN MIC3 with CFP2-ACO (one port). Dual-wide: one 338.1 x 29.2 plate across both MIC slots of its MPC, the span of the two photo-measured MIC windows (#261).
+unplaced: >-
+  no MPC in this library accepts it. It is DUAL-WIDE - the module reference's 'Dual-wide MIC
+  that installs into two MIC slots' - and the MPC3E models two single-wide MIC bays, so no bay is
+  shaped like this card. Seating it needs a way to say that one module fills two bays, which the
+  format does not have (roc-ops/Portrayal#34). Until #261 it sat in the MPC3E's single-wide bays,
+  drawn at single width.
+attrs:
+  model: MIC3-100G-DWDM
+  power-draw-max-w: 91
+provenance:
+  size: >-
+    photo-measured - the MIC plate, 168.8 x 29.2, from the MX104 and MX80 front photographs as
+    size-notes says: plates 520, 521 and 520.5 px at 3.090 px/mm on the MX104 (body 1350.5 px over 437.0
+    mm; the ganged-SFP pitch reads 44.0 to 44.2 px, 3.091), 521.8 and 522.5 px at 3.088 on the MX80
+    (ganged-SFP pitch 44.0 px; 1374 px between the ear wings over 445.0 mm agrees); heights 90 to 90.75
+    px. The dual-wide width is the two windows and their seam, 168.8 + 0.5 + 168.8.
+  power: >-
+    guide FRU power table, MX chassis guides: 'With optics: 91 Wat 131 F (55 C) 83 Wat 77 F (25 C)'. The max at 55 C is
+    carried, because the worst rated case is what a chassis budget needs.
+    THE FIGURE INCLUDES OPTICS, which the vendor says. The transceivers here 
+    are `common/` generics that L27 deliberately never asks for a wattage, so 
+    nothing else in a total carries them and this does not double count.
+    Read off the row, with the part number alone in its own cell - the looser
+    extraction that preceded this put the MPC7E's number on the MPC6E and took a
+    25 C figure for a max, so a row only counts here when nothing else in it
+    could be the subject.
+    The note this replaces said the module reference does not carry it. True of
+    the book it named; the chassis guides do.
+  numbering: 'guide - ports number within each PIC group with an n/ group
+    legend, per the module reference port-numbering figures (g000930,
+    g100786); the exact print positions are layout-derived'
+  layout: >-
+    estimated - RE-ENVELOPED, NOT REDRAWN, at 2.0.0 (#261): every part and printed mark of the 1.x art
+    moved by (+0.4, +1.1) onto the measured plate (centring the old art where its width allows);
+    positions along the plate stay as 1.x had them. What 1.x said of them: registry + layout - the face
+    is the slot geometry of its chassis family; positions are laid out from the module reference port
+    description and registry cage sizes, NOT measured from a faceplate drawing. No faceplate figure was
+    usable for this model
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/cfp2@2, id: port-0-0, at: [16.40, 7.45], attrs: {media: cfp2}}
+size:
+  w: 338.1
+  h: 29.2
+size-confidence: {w: photo-measured, h: photo-measured}
+size-notes: >-
+  w and h are the dual-wide plate (#261): one plate across both MIC slots of its MPC. The MX2010
+  photograph seats a dual-wide MIC (40 RJ45s) whose plate runs the length of both windows with no seam
+  between them, 325 px against 162.5 px for one single-wide MIC; the width is the span of the
+  carrier's two photo-measured 168.8 mm windows and the 0.5 mm seam between them. The height is the
+  single-wide MIC's 29.2.

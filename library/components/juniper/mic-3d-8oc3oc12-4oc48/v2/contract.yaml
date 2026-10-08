@@ -1,0 +1,84 @@
+format: 1
+kind: module
+name: mic-3d-8oc3oc12-4oc48
+version: 2.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper SONET/SDH OC3/OC12 MIC with SFP (eight ports, four OC48-capable). MIC form: the MIC's own 168.8 x 29.2 plate, photo-measured (#261).
+attrs:
+  oc12: 8
+  model: MIC-3D-8OC3OC12-4OC48
+  power-draw-max-w: 29
+provenance:
+  stack-orientation: >-
+    The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is
+    the upper cage upright (rotate 0) over the lower turned 180, so both cage lips face
+    the band between the two cages and both bails face outward. Decided by the rule, not
+    an observation, so a photograph of the stack overturns it: the 4 SFP pairs
+    (port-0-0/port-0-1 to port-0-6/port-0-7). 4 of these were drawn with the upper cage
+    turned before the std cage art moved its lip to the bottom of the opening; turning
+    them keeps the lips in the middle band where they were drawn and seats every optic
+    bail-outward. Turning a composed cage in place changes no box, id or anything a
+    device places, so it is a minor bump (S6).
+  sonet-rate: >-
+    the SONET rate, transcribed from this contract's own description: 'SONET/SDH OC3/OC12
+    MIC with SFP (eight ports, four OC48-capable)'. Without it the SFP cage has no rate to
+    read and the export typed it Gigabit Ethernet, which an OC-12 port is not. Nothing new
+    was measured. THE PORT'S RATED CAPABILITY, not the lowest mode it will run. This card
+    does OC-3 too, and the model number says so - but an SFP+ cage that takes a 1G optic is
+    typed 10G here for the same reason: `type` is what the port IS rated for. Where the
+    model offers FEWER ports at a HIGHER rate ("N OC48-capable"), that is an alternative
+    mode of the whole card and not a property of one cage, and the faceplate this draws is
+    the other mode - so every cage on it carries the same rate.
+  size: >-
+    photo-measured - the MIC plate, 168.8 x 29.2, from the MX104 and MX80 front photographs as
+    size-notes says: plates 520, 521 and 520.5 px at 3.090 px/mm on the MX104 (body 1350.5 px over 437.0
+    mm; the ganged-SFP pitch reads 44.0 to 44.2 px, 3.091), 521.8 and 522.5 px at 3.088 on the MX80
+    (ganged-SFP pitch 44.0 px; 1374 px between the ear wings over 445.0 mm agrees); heights 90 to 90.75
+    px.
+  power: >-
+    guide FRU power table, MX chassis guides: '| | 8-Port: MIC-3D-8OC3OC12-4OC48 | 8-Port: 29 Wat 131° F (55° C) 27.75 Wat 40° C 26.5 Wat'. The 55 C rung is
+    carried, being the worst rated case a chassis budget has to survive.
+    Taken by matching the row's OWN LABEL: these tables pair parts with figures
+    in one row - `4-Port: X 8-Port: Y` against `4-Port: 41 W 8-Port: 52 W` - and
+    reading first-wins puts the small card's number on the big one. Aligning on
+    the N-Port label instead is self-checking, and it checks out: 4-port 41 W
+    against 8-port 52 W, 4-port 24 W against 8-port 29 W.
+    Seen in 8 guide(s): mx2008, mx2010-p0001-0300, mx2010-p0301-0600, mx2020-p0301-0600.
+  numbering: 'guide - ports number within each PIC group with an n/ group
+    legend, per the module reference port-numbering figures (g000930,
+    g100786); the exact print positions are layout-derived'
+  layout: >-
+    estimated - RE-ENVELOPED, NOT REDRAWN, at 2.0.0 (#261): every part and printed mark of the 1.x art
+    moved by (+0.4, +1.1) onto the measured plate (centring the old art where its width allows);
+    positions along the plate stay as 1.x had them. What 1.x said of them: registry + layout - the face
+    is the slot geometry of its chassis family; positions are laid out from the module reference port
+    description and registry cage sizes, NOT measured from a faceplate drawing. No faceplate figure was
+    usable for this model
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/sfp-ganged@1, id: port-0-0, at: [16.40, 4.70], attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-1, at: [16.40, 16.30], rotate: 180, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-2, at: [30.65, 4.70], attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-3, at: [30.65, 16.30], rotate: 180, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-4, at: [44.90, 4.70], attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-5, at: [44.90, 16.30], rotate: 180, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-6, at: [59.15, 4.70], attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-7, at: [59.15, 16.30], rotate: 180, attrs: {media: sfp}}
+size:
+  w: 168.8
+  h: 29.2
+size-confidence: {w: photo-measured, h: photo-measured}
+size-notes: >-
+  w and h are the MIC's own plate, photo-measured (#261). Square-on front photographs of the MX104 and
+  the MX80 put four plates at 168.3 to 169.2 by 29.1 to 29.3 mm, each photograph scaled two
+  independent ways - across its chassis body and on the SFF-8433 ganged-SFP pitch of 14.25 mm, which
+  agree to 0.1% - and the MX2010 photograph's ratio of MIC to MPC plate (162.5 to 379.5 px) agrees.
+  The guides' MIC rows (6.25 x 6.8 x 1.25 in, the axes assigned differently in different books) do not
+  dimension the face and are not used. Until 2.0.0 this was the 168 x 27 'window', an estimate read
+  off the carrier.
