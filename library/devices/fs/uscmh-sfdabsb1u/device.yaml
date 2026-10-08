@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: uscmh-sfdabsb1u
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: FS.com
 model: USCMH-SFDABSB1U
@@ -11,6 +11,17 @@ description: >-
   1U single-sided horizontal cable manager, FS SKU #317023: the deep USCMH-SFDABS1U, a black ABS finger duct whose fingers stand 127 mm in front of the rack ears, with a double-hinged cover that opens upward or downward. Nine fingers along the top edge of the base plate and nine along the bottom, and the curved cover clips on their tips to close the channel; a ribbed moulding stiffens the plate behind.
 profile: passive
 provenance:
+  capacity:
+    confidence: estimated
+    note: >-
+      estimated - 70 cables, FS states none for the USCMH finger ducts. The channel
+      clear cross-section, 22.3 mm high (the duct guide) by 125.56 mm deep (the well floor
+      to the underside of the cover), divided by 39.9 mm2 a cable: the pooled ratio of the
+      three FS ABS finger ducts whose capacity FS does state (CMH-SFD1U 48 in 1850 mm2,
+      CMH-DFD1U 96 in 3700, CMH-SFD2U 124 in 5143). Those agree to within 8%, which is
+      this figure's uncertainty at best; this is a different moulding. Across every FS
+      manager the ratio runs 38.5 to 82.8 (the HD and UHD lines scale per rack unit), so
+      it is fitted on the ABS ducts only.
   full-depth:
     confidence: drawing
     note: >-
@@ -121,6 +132,9 @@ attrs:
     material: ABS
     color: Black
     mounting-hardware: M4 Floating Nut Set x4
+  performance:
+    cable-capacity: 70
+    cable-capacity-basis: 'ESTIMATE, not stated by FS - Cat6 24AWG (6.1 mm) at 100% fill: a channel cross-section of 22.3 x 125.56 mm (2800 mm2, the duct guide height by the depth from the floor to the cover) at 39.9 mm2 a cable, the ratio in the Cat6 24AWG capacities FS states for the CMH-SFD1U, CMH-DFD1U and CMH-SFD2U (38.5 to 41.5)'
   compliance:
     environment: Indoor
     rohs: RoHS Compliant
@@ -145,7 +159,8 @@ gaps:
     reason: vendor-silent
     note: >-
       FS states no cable capacity for USCMH-SFDABSB1U in any document held; the CMH-SFD1U family
-      has a Cable Capacity Reference Guide table and this line does not.
+      has a Cable Capacity Reference Guide table and this line does not. The 70 carried
+      is an estimate from the channel cross-section (see provenance `capacity`).
     wanted: a capacity table for the USCMH finger ducts
   - what: cover-hinge
     scope: [front]
