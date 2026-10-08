@@ -1,0 +1,104 @@
+format: 1
+kind: module
+name: mpc7e-mrate
+version: 2.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MPC7E-MRATE fixed MPC - twelve multirate QSFP28 cages in two PIC groups of six. One card for
+  the MX240, MX480 and MX960, drawn horizontal; the MX960 seats it turned 90.
+attrs:
+  model: MPC7E-MRATE
+  power-draw-max-w: 545
+provenance:
+  stack-orientation: >-
+    The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is
+    the upper cage upright (rotate 0) over the lower turned 180, so both cage lips face
+    the band between the two cages and both bails face outward. Decided by the rule, not
+    an observation, so a photograph of the stack overturns it: the 6 QSFP pairs
+    (port-0-0/port-0-1 to port-1-4/port-1-5). 6 of these were drawn with the upper cage
+    turned before the std cage art moved its lip to the bottom of the opening; turning
+    them keeps the lips in the middle band where they were drawn and seats every optic
+    bail-outward. Turning a composed cage in place changes no box, id or anything a
+    device places, so it is a minor bump (S6).
+  size: >-
+    estimated from the family - not photographed. The plate is 396.0 x 29.5 centred in a 413.5 lever envelope,
+    the figures measured off the three photographed cards of this form factor (DPC 40xGE, DPC-R-4XGE,
+    SCB-MX: plate x px 127.5-1463.5 = 396.2 mm on the MX240 front at 3.372 px/mm). RE-ENVELOPED, NOT REDRAWN,
+    at 2.0.0: every part, bay, lamp and legend at 1.x card x >= 26.15 moved by x' = 8.75 + (x - 26.15)
+    * 396.0 / 394.85, the old plate run 26.15-421.0 onto the new 8.75-404.75; y is unchanged. Only the
+    levers, the model name and the status group were placed afresh (provenance below). Positions along
+    the plate stay layout-derived, as 1.x had them.
+  power: >-
+    guide FRU power table, MX960 chassis guide and identically in the MX2010,
+    MX2020, MX240 and MX480 siblings: 'With optics: 545 W at 131 F (55 C), 465 W
+    at 104 F (40 C), 440 W at 77 F (25 C)'. The max at 55 C is carried, because
+    the worst rated case is what a chassis budget needs.
+    THE FIGURE INCLUDES OPTICS, which the vendor says and which decides a double
+    count: the transceivers seated in this card are `common/` generics that L27
+    deliberately never asks for a wattage, so nothing else in a total carries
+    them. The same row also gives 400 W typical and 1088 W with MICs and optics;
+    neither is this card's own max, and the MICs are separately modelled parts
+    that answer for themselves. READ OFF THE ROW BY HAND. The module reference does not carry it, which
+    is what the note replaced
+    here said and it was true of the book it named. THE CHASSIS GUIDES DO: every
+    MX chassis guide ends with an FRU power table and this card is in it. That is
+    the intake skill's own lesson arriving late - a second source answering the
+    question the first could not, and nothing going back to ask it.
+  numbering: 'guide - ports number within each PIC group with an n/ group legend, per the module reference
+    port-numbering figures (g000930, g100786); the exact print positions are layout-derived'
+  levers: >-
+    photo-measured - the MX240 front photograph: each ejector lever is 97 px = 28.8 mm long and 25-27
+    px = 7.4-8.0 mm tall, its tip 9.5 mm past the plate end; drawn 29.0 x 7.4 with the tip at the envelope
+    edge (8.75 mm past the plate, which the 413.5 envelope fixes). Centred on the plate: the right-hand
+    levers read centred; the left-hand ones read 2.4 mm low, which a lever standing proud of the face
+    shows in a photograph taken from above centre. Until 2.0.0 they were drawn 16 x 9 at x 1.2, about
+    16 mm left of the real lever and too high.
+  model-name: >-
+    photo-measured - DPC 40xGE, DPC-R-4XGE and SCB-MX each print the model name from card x 11.4 (the
+    plate's left end plus 2.65), baseline 25.5 below the plate top, under the lever. The other cards take
+    the same position as the family's.
+  status-group: >-
+    estimated - the photographed DPCs' status-group position, not photographed on this card: the OK/FAIL
+    legend vertical at card x 32.3 centred on y 12.7 and its lamp below it at (32.3, 21.5), as DPC-R-4XGE
+    prints them. 1.x drew both at old x 31.0, which the re-envelope would have put under the new lever.
+  group-legends: >-
+    the n/ group legends that lead each PIC's port numbers move with the ports they label, keeping their
+    offset to the group (baseline 28.1, below the status lamp and the model name), so they stay clear
+    of the lever and name the same group.
+  layout-shift: >-
+    estimated, layout-derived - every port, lamp and legend of the 1.x layout (which began at old x 44.0)
+    was re-enveloped and then moved a further 8.4 mm right, so port 0 starts at card x 35.05 and the last
+    content ends well short of the right lever (384.5): shifted clear of the photographed lever and status
+    group; the photographed DPCs show this area as lamp and legend space. Pitches and the order along
+    the card are unchanged.
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/qsfp28@1, id: port-0-0, at: [35.05, 3.60], attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-0-1, at: [35.05, 14.95], rotate: 180, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-0-2, at: [56.61, 3.60], attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-0-3, at: [56.61, 14.95], rotate: 180, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-0-4, at: [78.18, 3.60], attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-0-5, at: [78.18, 14.95], rotate: 180, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-1-0, at: [106.76, 3.60], attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-1-1, at: [106.76, 14.95], rotate: 180, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-1-2, at: [128.32, 3.60], attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-1-3, at: [128.32, 14.95], rotate: 180, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-1-4, at: [149.89, 3.60], attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-1-5, at: [149.89, 14.95], rotate: 180, attrs: {media: qsfp28}}
+size:
+  w: 413.5
+  h: 29.5
+size-confidence: {w: drawing, h: estimated}
+size-notes: >-
+  w is the lever envelope and h the plate height, of ONE card that every MX240, MX480 and MX960 slot takes
+  - the MX960 seats it turned 90, as its own hardware guide says by stating an MPC/DPC/SCB as one 17 x
+  22 x 1.25 in part in all three books (#261). The 413.5 is Juniper's Visio stencil, whose every MPC/DPC/SCB
+  master is the same 0.1156 x 1.6281 page-inch rectangle at an exactly 1:10 scale (29.36 x 413.54 mm),
+  read as the lever-tip envelope because the three front photographs measure lever tip to lever tip at
+  413.5-414.9 while the plate between them is 396.0. The 29.5 is the plate height, estimated: the MX240
+  photograph reads it 28.6-29.0 at 3.37 px/mm and nothing dimensions it.
