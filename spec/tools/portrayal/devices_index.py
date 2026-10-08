@@ -222,6 +222,10 @@ def main():
                 # where it sits in the vendor's catalogue. The picker groups on
                 # this; absent is fine and sorts under the manufacturer alone.
                 "portfolio": d.get("portfolio") or {},
+                # WHAT CLASS OF DEVICE IT IS (spec/schemas/profiles.yaml):
+                # rack_index reads it for the plain word a rack catalogue
+                # searches by. Every manifest states one.
+                "profile": d.get("profile"),
                 # WHAT IT CAN BE BOUGHT WITH, before anything is loaded: the
                 # feeds (`ac`, `dc`, `hvdc`) and airflows its orderable builds
                 # resolve to, so a picker can filter "DC, back-to-front" across

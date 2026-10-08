@@ -3,6 +3,8 @@ device's rack units, depth, mount, shell, stated cable capacity, and the ids a
 cable route can pass through, per view of its default configuration."""
 import json
 
+import pytest
+
 from portrayal import rack_index
 
 FACE = """<svg xmlns="http://www.w3.org/2000/svg">
@@ -25,9 +27,9 @@ def test_marked_on_a_missing_face_is_empty(tmp_path):
     assert rack_index.marked(tmp_path / "nope.svg") == ([], [])
 
 
-def _dist(tmp_path, chassis, attrs=None, faces=None):
+def _dist(tmp_path, chassis, attrs=None, faces=None, device=None):
     (tmp_path / "devices.json").write_text(json.dumps({"devices": [
-        {"name": "mgr", "manufacturer": "FS.com", "model": "FHD-CMP5DR"}]}))
+        {"name": "mgr", "manufacturer": "FS.com", "model": "FHD-CMP5DR", "profile": "passive", **(device or {})}]}))
     (tmp_path / "mgr.configs.json").write_text(json.dumps({
         "chassis": chassis, "default": "base", "configs": [{"name": "base"}], "attrs": attrs or {}}))
     for view, text in (faces or {}).items():
@@ -69,3 +71,55 @@ def test_a_face_the_index_does_not_name_falls_back_to_the_conventional_file(tmp_
     d = _dist(tmp_path, {"h": 44}, faces={"front": FACE})
     assert rack_index.face_file({"configs": [{"name": "base"}]}, "mgr", "base", "front") == "mgr.base.front.svg"
     assert rack_index.build(d)["devices"]["mgr"]["guides"]["front"][0] == "duct"
+
+
+
+@pytest.mark.parametrize("device, chassis, kind", [
+    ({"profile": "server"}, {}, "server"),
+    ({"profile": "power"}, {}, "pdu"),
+    ({"profile": "passive"}, {"mount": "rack-face"}, "cable manager"),
+    ({"profile": "optical"}, {"airflow": "passive"}, "patch panel"),
+    ({"profile": "optical"}, {"airflow": "front-to-back"}, "optical"),
+    ({"profile": "networking", "portfolio": {"family": "Aggregation Services Router"}}, {}, "router"),
+    ({"profile": "networking", "portfolio": {"family": "Universal Routing Platform"}}, {}, "router"),
+    ({"profile": "networking", "portfolio": {"family": "Leaf Switch"}}, {}, "switch"),
+    ({"profile": "networking", "description": "1U top-of-rack switch, 48 x 25G"}, {}, "switch"),
+    ({"profile": "networking", "description": "The 2RU Nokia 7750 SR-1 service router"}, {}, "router"),
+    ({"profile": "networking", "portfolio": {"family": "PTP grandmaster"}}, {}, "network device"),
+    ({"profile": "lab-bench"}, {}, "device"),
+    ({}, {}, "device"),
+])
+def test_kind_is_a_plain_word_from_the_profile_and_the_vendors_own_words(device, chassis, kind):
+    assert rack_index.kind_of(device, chassis) == kind
+
+
+def test_every_device_carries_its_kind(tmp_path):
+    d = _dist(tmp_path, {"h": 44, "airflow": "passive"}, device={"profile": "optical"})
+    assert rack_index.build(d)["devices"]["mgr"]["kind"] == "patch panel"
+    assert rack_index.build(d)["format"] == 1
+
+
+def test_devices_json_carries_each_manifests_profile():
+    """rack_index reads `profile` from devices.json, so the built index must publish it."""
+    from pathlib import Path
+    built = Path(__file__).resolve().parents[2] / "library/dist/devices.json"
+    if not built.exists():
+        pytest.skip("library/dist not built - run ./build.sh")
+    devices = {x["name"]: x for x in json.loads(built.read_text())["devices"]}
+    assert devices["r740xd"]["profile"] == "server"
+    assert devices["fhd-cmp5dr"]["profile"] == "passive"
+    assert devices["fhd-1ufce"]["profile"] == "optical"
+    assert all(x["profile"] for x in devices.values())
+
+
+def test_the_real_library_gets_a_plain_kind():
+    """kind_of on the shipped manifests: a patch panel, a router and a cable manager."""
+    import yaml
+    from pathlib import Path
+    root = Path(__file__).resolve().parents[2] / "library/devices"
+    def kind(name):
+        d = yaml.safe_load((root / name / "device.yaml").read_text())
+        return rack_index.kind_of(d, d.get("chassis") or {})
+    assert kind("fs/fhd-1ufce") == "patch panel"
+    assert kind("juniper/mx960") == "router"
+    assert kind("fs/cmh-bs-dfdabs2u") == "cable manager"

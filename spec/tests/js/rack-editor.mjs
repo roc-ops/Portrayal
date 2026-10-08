@@ -89,3 +89,20 @@ test('a listener that throws neither undoes the edit nor stops the others', () =
   assert.equal(ed.rack().items.length, 1);
   assert.deepEqual([evs.length, later, errors.length], [1, ['apply'], 1]);
 });
+
+test('a per-call ctx reaches the commands for apply and preview, and is not kept', async () => {
+  const {COMMANDS} = await import('../../../kit/rack/commands.js');
+  const seen = [];
+  COMMANDS['test.spy'] = {run: (rack, _a, ctx) => { seen.push(ctx); return {rack: {...rack, name: `${rack.name}+`}, summary: 'Spied.', findings: []}; },
+                          args: {type: 'object', additionalProperties: false, properties: {rack: {type: 'string'}}}};
+  try {
+    const {ed} = fresh();
+    const slotsOf = () => null;
+    ed.apply({op: 'test.spy'}, {origin: 'agent', ctx: {slotsOf}});
+    ed.preview({op: 'test.spy'}, {ctx: {slotsOf, extra: 1}});
+    ed.apply({op: 'test.spy'});
+    ed.preview({op: 'test.spy'});
+    assert.deepEqual(seen.map(c => [typeof c.chassisOf, typeof c.slotsOf, c.extra ?? null]),
+      [['function', 'function', null], ['function', 'function', 1], ['function', 'undefined', null], ['function', 'undefined', null]]);
+  } finally { delete COMMANDS['test.spy']; }
+});
