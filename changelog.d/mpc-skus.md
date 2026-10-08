@@ -28,7 +28,10 @@
   (g100580), measured on the embedded image and scaled on the 19.5 mm XFP
   opening, at a pitch of about 32.7 mm instead of the guessed 22.0 and 21.1
   mm (#238). The card keeps its size. The MPC2E carriers seat the new
-  majors.
+  majors. The cage positions are ESTIMATED: photos of the MX104 and MX80 put
+  the MIC plate at 168.6 mm and the XFP bezel at about 21 mm, which would
+  make the figure's pitch about 35 mm; #261 re-measures this MIC from the
+  MX104 photo.
 
 ### Removed
 - `juniper/mic-3d-4xge-xfp@1` and `juniper/mic-3d-4xge-xfp-v@1`, whose cages

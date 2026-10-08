@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mic-3d-4xge-xfp
-version: 2.0.0
+version: 2.0.1
 class: line-card
 behaviour: fills
 profile: networking
@@ -21,7 +21,13 @@ provenance:
   size: 'the face is the 168 x 27 MIC window of its carriers, not the part (size-notes);
     the cage positions are measured from a vendor figure - see layout'
   layout: >-
-    drawing - MX Series Interface Module Reference, Figure 31 'Port Numbering for 4-Port 10-Gigabit
+    estimated - THE FIGURE'S SCALE IS IN QUESTION. Square-on photos of the MX104 and MX80, each
+    scaled two independent ways (the chassis, and the ganged-SFP pitch of 14.25), put the MIC plate
+    at 168.6 x 28.9 mm and the XFP bezel at 20.9-21.1 mm outside, 18.3-18.6 mm dark opening. Read on
+    a 21 mm bezel, Figure 31 gives a ~170 mm plate and a ~35 mm cage pitch, not the 158.2 and 32.69
+    below; read on 19.5 it gives these. The cages below are the 19.5 reading, far closer than the
+    22.0 drawn before, and stay estimated until roc-ops/Portrayal#261 re-measures this MIC from the
+    MX104 photo directly. THE READING: MX Series Interface Module Reference, Figure 31 'Port Numbering for 4-Port 10-Gigabit
     Ethernet MIC with XFP' (g100580, PDF p. 297), measured on the EMBEDDED image (1462 x 466 px at
     300 ppi, pdfimages), not a page render. SCALE: the XFP bezel opening, 19.5 mm (INF-8077i Figs
     37-38), drawn 174.0 px outer edge to outer edge on all four ports alike, = 8.923 px/mm. TWO
