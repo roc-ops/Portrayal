@@ -57,7 +57,8 @@ def test_every_package_has_an_init_and_pyproject_lists_it():
 
 def test_what_the_gates_run_is_what_the_compiler_holds():
     """THE ASSERTION THAT CANNOT GO STALE: the closure of everything build.sh,
-    publish.sh and CI invoke, walked through the imports, must be exactly the
+    publish.sh and CI invoke, and the tools a contributor runs against the tree
+    (preflight), walked through the imports, must be exactly the
     modules left in the compiler directory. Add a tool the gates need and it has
     to live here; stop needing one and it has to leave.
     """

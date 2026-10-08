@@ -359,12 +359,12 @@ exits non-zero if any check fails.
 | Check | Fails when |
 |---|---|
 | `exports` | the DCIM exports regenerated from your tree differ from `library/exports/`, or a regenerated export is not committed |
-| `skips` | a `pytest.skip`, `skipif` or `importorskip` you added gives a reason [`spec/allowed-skips.txt`](spec/allowed-skips.txt) does not allow (a reason naming a build or tool CI always provides is fine) |
+| `skips` | a `pytest.skip`, `skipif` or `importorskip` you added gives a reason [`spec/allowed-skips.txt`](spec/allowed-skips.txt) does not allow. The only other reasons accepted are, word for word, the few that name what CI always provides: `node not installed`, `npm not installed`, and `library/dist not built` (or another build output) with its `- run ./build.sh` hint |
 | `private` | a line you added has a machine path, a private address or a personal email: the patterns of `test_no_internal_hosts.py` |
 | `changelog` | `library/`, `spec/` or `kit/` changed with no `changelog.d/` fragment, or a fragment is malformed |
 | `devicelock` | `devicelock.py` has findings, or a lock you re-recorded no longer matches the bump against the lock on the base |
-| `lint` | lint on the devices you touched, and every device that seats a component you touched, has an error or a warning `library/lint-baseline.json` does not carry |
-| `kit` | `kit/` changed and `npm test` fails |
+| `lint` | lint on the devices you touched and every device that seats a component you touched, plus the library-wide rules a `--device` run skips (L89 when what reaches a component major can have changed), has an error or a warning `library/lint-baseline.json` does not carry |
+| `kit` | `kit/` changed and `npm test` fails, or a `spec/tests/*_js.py` test that names a changed kit module fails |
 
 A change lint cannot scope to devices (a schema, a listing, a lab, lint
 itself) gets the full lint, which takes about a minute longer. Preflight is

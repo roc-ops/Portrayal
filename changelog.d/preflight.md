@@ -8,5 +8,7 @@
   sources), added skip reasons against `spec/allowed-skips.txt`, private
   strings in added lines, the changelog fragment, `devicelock` (also against
   the base lock for a device the diff re-locked), lint on the touched devices
-  and every device that seats a touched component with no warning beyond the
-  baseline, and `npm test` when `kit/` changed. No build and no suite run.
+  and every device that seats a touched component plus the library-wide
+  rules a `--device` run skips, with no warning beyond the baseline, and
+  `npm test` with the kit behaviour tests that name a changed module when
+  `kit/` changed. No build and no suite run.

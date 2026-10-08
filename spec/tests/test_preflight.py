@@ -7,6 +7,12 @@ real: each seeded case is a git repository in tmp_path with a base commit and
 an edit on top, read through the same `changed_files` / `added_lines` the
 command uses.
 
+CHEAP ON PURPOSE. The command's point is speed, and so is this file's: the
+library the lock and lint tests edit is ONE device and the parts it reaches,
+not a copy of 235; the planning tests read the real tree and write nothing;
+the export stub is proved against the build the suite already has rather than
+by a second full export.
+
 THE PRIVATE STRINGS BELOW ARE ASSEMBLED, never written out: this file is
 tracked, and test_no_internal_hosts sweeps every tracked file for exactly the
 patterns these tests need to plant.
@@ -19,11 +25,15 @@ from pathlib import Path
 
 import pytest
 
-from portrayal import devicelock, preflight
+from portrayal import devicelock, lint, preflight
+
+# the one-device library is built once per worker; keep its users on one worker
+pytestmark = pytest.mark.xdist_group("preflight")
 
 ROOT = Path(__file__).resolve().parents[2]
 LIBRARY = ROOT / "library"
-DEVICE = "edgecore/as7726-32x"          # a switch with a lock and NOS listings
+DIST = LIBRARY / "dist"
+DEVICE = "edgecore/as7726-32x"          # a switch with a lock and baseline warnings
 COMPONENT = "library/components/common/led-dot/v1/contract.yaml"   # placed widely
 
 
@@ -32,9 +42,9 @@ def git(root, *args):
                           text=True).stdout
 
 
-def make_repo(root, files):
+def make_repo(root, files=None):
     root.mkdir(parents=True, exist_ok=True)
-    for rel, text in files.items():
+    for rel, text in (files or {}).items():
         p = root / rel
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(text)
@@ -78,8 +88,13 @@ SKIPS_BASE = {
     ('pytest.skip("a brand new reason")', False),
     ('pytest.skip(f"{ref} is gone")', False),
     ('pytest.skip(REASON)', False),                                    # not a literal
+    # each of these mentions a prerequisite and still fires on CI
+    ('pytest.skip("cairosvg not installed")', False),                  # CI has no cairosvg
+    ('pytest.skip("too slow, run ./build.sh by hand some day")', False),
+    ('pytest.skip("common/zz-renamed-part not built")', False),        # a part, not a build
     ('pytest.skip("the multi-window lamp part not in this library")', True),
     ('pytest.skip("library/dist not built - run ./build.sh")', True),  # CI builds it
+    ('pytest.skip("node not installed")', True),                       # CI installs it
     ('x = 1', True),
 ])
 def test_skips_fail_on_a_new_reason_the_allow_list_does_not_carry(tmp_path, added, ok):
@@ -170,48 +185,109 @@ def test_kit_runs_npm_test_when_kit_changes(tmp_path, script, ok):
 
 # ------------------------------------------------------------------- exports ---
 
-@pytest.fixture(scope="module")
-def regenerated(tmp_path_factory):
-    out = tmp_path_factory.mktemp("exports")
-    errors = preflight.regenerate_exports(ROOT, out)
-    assert not errors, errors
-    return out
+def test_exports_fail_on_a_stale_a_missing_and_an_extra_file(tmp_path):
+    fresh, tree = tmp_path / "fresh", tmp_path / "tree"
+    for d in (fresh, tree):
+        (d / "netbox/X").mkdir(parents=True)
+        (d / "netbox/X/same.yaml").write_text("same\n")
+    (fresh / "netbox/X/edited.yaml").write_text("new\n")
+    (tree / "netbox/X/edited.yaml").write_text("old\n")
+    (fresh / "netbox/X/added.yaml").write_text("a\n")
+    (tree / "netbox/X/renamed-away.yaml").write_text("r\n")
+    assert preflight.compare_exports(fresh, tree) == (
+        ["netbox/X/edited.yaml"], ["netbox/X/added.yaml"], ["netbox/X/renamed-away.yaml"])
+    assert preflight.compare_exports(fresh, fresh) == ([], [], [])
 
 
-def test_the_regeneration_matches_the_committed_exports(regenerated):
-    """THE STUB DIST IS PROVED HERE. The exports are regenerated from sources
-    with no render, and on a tree whose exports are current - which CI's
-    `exports are current` step guarantees before the suite runs - every byte
-    must agree. Non-vacuous: the comparison covers the whole tree."""
-    stale, missing, extra = preflight.compare_exports(regenerated, LIBRARY / "exports", ROOT)
-    n = len(preflight._tree_files(regenerated))
-    assert n > 1000, f"only {n} files regenerated"
-    assert (stale, missing, extra) == ([], [], []), (stale[:5], missing[:5], extra[:5])
+def test_exports_fail_when_current_but_not_committed(tmp_path, monkeypatch):
+    base = make_repo(tmp_path, {"library/exports/netbox/a.yaml": "old\n"})
+    (tmp_path / "library/exports/netbox/a.yaml").write_text("new\n")
+
+    def regenerate(root, out):            # what publish.sh would now write
+        (Path(out) / "netbox").mkdir(parents=True)
+        (Path(out) / "netbox/a.yaml").write_text("new\n")
+        return []
+    monkeypatch.setattr(preflight, "regenerate_exports", regenerate)
+    res = preflight.check_exports(ctx_of(tmp_path, base))
+    assert not res.ok and "not committed" in res.summary, res.summary
+    git(tmp_path, "commit", "-qam", "regenerated")
+    assert preflight.check_exports(ctx_of(tmp_path, base)).ok
 
 
-def test_exports_fail_on_a_stale_a_missing_and_an_extra_file(regenerated, tmp_path):
-    tree = tmp_path / "exports"
-    shutil.copytree(regenerated, tree)
-    files = sorted(p for p in tree.rglob("*.yaml"))
-    files[0].write_text(files[0].read_text() + "# hand edit\n")
-    files[1].unlink()
-    (files[2].parent / "Gone-Model.yaml").write_text("---\n")
-    stale, missing, extra = preflight.compare_exports(regenerated, tree)
-    rel = lambda p: str(p.relative_to(tree))               # noqa: E731
-    assert stale == [rel(files[0])]
-    assert missing == [rel(files[1])]
-    assert extra == [rel(files[2].parent / "Gone-Model.yaml")]
+@pytest.mark.skipif(not (DIST / "devices.json").exists(),
+                    reason="library/dist not built - run ./build.sh")
+def test_the_stub_dist_carries_what_the_build_does(tmp_path):
+    """THE STUB IS PROVED AGAINST THE REAL BUILD. Everything the exporter reads
+    from a dist, the stub must say as the build says it: the devices.json
+    fields, the manifest byte for byte, and which faces each configuration
+    draws (the exporter's `front_image`/`rear_image`)."""
+    n = preflight._stub_dist(LIBRARY, tmp_path)
+    real = {d["name"]: d for d in json.loads((DIST / "devices.json").read_text())["devices"]}
+    stub = json.loads((tmp_path / "devices.json").read_text())["devices"]
+    assert n == len(stub) == len(real) > 100
+    assert [d["name"] for d in stub] == list(real), "devices.json order differs"
+    for d in stub:
+        assert d == {k: real[d["name"]].get(k) for k in d}, d["name"]
+        name = d["name"]
+        assert (tmp_path / f"{name}.source.json").read_bytes() == \
+            (DIST / f"{name}.source.json").read_bytes(), name
+        faces = lambda root: {c["name"]: sorted(c.get("files") or {})          # noqa: E731
+                              for c in json.loads((root / f"{name}.configs.json")
+                                                  .read_text())["configs"]}
+        assert faces(tmp_path) == faces(DIST), name
 
 
-# --------------------------------------- devicelock and lint, on a library copy ---
+# ---------------------------------------- lint planning, on the real tree, read-only ---
+
+def test_a_touched_component_fans_out_to_every_device_that_places_it():
+    ctx = preflight.Context(ROOT, None, [COMPONENT])
+    devices, contracts, full, _ = preflight.lint_plan(ctx)
+    assert full == []
+    assert [str(c.relative_to(ROOT)) for c in contracts] == [COMPONENT]
+    assert len(devices) > 20, f"led-dot reaches only {len(devices)} device(s)?"
+    devs = LIBRARY / "devices"
+    assert devs / "aurcore/ais2001" in devices            # places it by name
+    # reaches it only through a card's parts: the walk is transitive
+    assert "common/led-dot@1" not in (devs / "commscope/ch3000/device.yaml").read_text()
+    assert devs / "commscope/ch3000" in devices
+
+
+def test_a_library_wide_change_asks_for_the_full_lint():
+    lab = str(next((LIBRARY / "labs").rglob("lab.yaml")).relative_to(ROOT))
+    _, _, full, _ = preflight.lint_plan(preflight.Context(ROOT, None, [lab]))
+    assert full == [lab]
+
+
+# ------------------------ devicelock and lint, on a one-device library in git ---
 
 @pytest.fixture(scope="module")
 def library_repo(tmp_path_factory):
-    """A git repository holding a copy of the library, committed as the base.
-    Each test edits it and the `fresh` fixture puts it back."""
+    """A git repository holding ONE device and every file its drawing reaches,
+    the lint baseline, committed as the base. The `fresh` fixture puts it back
+    after each test."""
     root = tmp_path_factory.mktemp("repo")
-    shutil.copytree(LIBRARY, root / "library",
-                    ignore=shutil.ignore_patterns("dist", "packages", "exports", "CATALOGUE.md"))
+    lib = root / "library"
+    dev = LIBRARY / "devices" / DEVICE
+    shutil.copytree(dev, lib / "devices" / DEVICE)
+    for f in lint.device_dependencies(dev / "device.yaml", [str(LIBRARY)]):
+        f = Path(f).resolve()
+        if f.name == "contract.yaml":              # the whole major: skins and all
+            dst = lib / f.parent.relative_to(LIBRARY.resolve())
+            if not dst.exists():
+                shutil.copytree(f.parent, dst)
+    # THE BASELINE DESCRIBES THE LIBRARY IT SITS IN. A one-device library
+    # draws library-wide warnings the full one does not (L103: a pluggable
+    # family with no part in it), so what the library-wide rules say about
+    # this copy is added to its baseline before the base commit - exactly
+    # what `--update-baseline` would record for it.
+    counts = json.loads((LIBRARY / "lint-baseline.json").read_text())
+    wide = preflight._worker("lint", {"mode": "library", "schemas": str(preflight.SCHEMAS),
+                                      "library": str(lib)}, root)
+    assert not wide["errors"], wide["errors"]
+    for f, rules in wide["counts"].items():
+        for code, n in rules.items():
+            counts.setdefault(f, {})[code] = max(n, counts.get(f, {}).get(code, 0))
+    (lib / "lint-baseline.json").write_text(json.dumps(counts, indent=1, sort_keys=True) + "\n")
     base = make_repo(root, {"changelog.d/README.md": "how\n"})
     return root, base
 
@@ -220,7 +296,7 @@ def library_repo(tmp_path_factory):
 def fresh(library_repo):
     root, base = library_repo
     yield root, base
-    git(root, "checkout", "-q", "--", ".")
+    git(root, "reset", "-q", "--hard", base)
     git(root, "clean", "-qfd")
 
 
@@ -251,29 +327,22 @@ def test_devicelock_and_lint_pass_on_the_clean_copy(fresh):
     assert res.ok, res.details
     res = preflight.check_lint(ctx)
     assert res.ok, res.details
-    assert res.summary.startswith("1 device(s)"), res.summary
+    assert res.summary.startswith("1 device(s) + library-wide rules:"), res.summary
 
 
-def test_devicelock_fails_on_an_unbumped_change(fresh):
+def test_devicelock_fails_on_an_unbumped_change_and_on_a_relock_without_the_bump(fresh):
+    """`--update` before the bump re-records the change and the working-tree
+    check goes quiet; the merge-base lock still has the old version."""
     root, base = fresh
     dev = root / "library/devices" / DEVICE / "device.yaml"
     _edit(dev, "\ndescription: ", "\ndescription: Planted - ")
     res = preflight.check_devicelock(ctx_of(root, base))
     assert not res.ok
     assert any(DEVICE in d and "bump" in d for d in res.details), res.details
-
-
-def test_devicelock_fails_on_a_relock_without_the_bump(fresh):
-    """`--update` before the bump re-records the change and the working-tree
-    check goes quiet; the merge-base lock still has the old version."""
-    root, base = fresh
-    dev = root / "library/devices" / DEVICE / "device.yaml"
-    _edit(dev, "\ndescription: ", "\ndescription: Planted - ")
     devicelock.update(root / "library")
-    assert devicelock.check(root / "library") == []          # the gap this closes
     res = preflight.check_devicelock(ctx_of(root, base))
     assert not res.ok
-    assert any(d.startswith("against the merge base") for d in res.details), res.details
+    assert all(d.startswith("against the merge base") for d in res.details), res.details
     # and the right order passes
     _edit(dev, f"version: {_version(dev)}", f"version: {_bump(_version(dev))}")
     devicelock.update(root / "library")
@@ -294,54 +363,31 @@ def test_lint_fails_on_a_warning_the_baseline_does_not_carry(fresh):
     """Seeded from the other side: the baseline forgets one of the device's
     warnings, committed into the base, so the same warning is now new."""
     root, base = fresh
+    key = f"devices/{DEVICE}/device.yaml"
     path = root / "library" / "lint-baseline.json"
     counts = json.loads(path.read_text())
-    key = next(k for k in sorted(counts) if k.startswith("devices/")
-               and (root / "library" / k).exists() and k.endswith("device.yaml"))
     code = sorted(counts[key])[0]
     counts[key][code] -= 1
     path.write_text(json.dumps(counts, indent=1, sort_keys=True) + "\n")
     git(root, "commit", "-qam", "baseline forgets one")
     base2 = git(root, "rev-parse", "HEAD").strip()
-    try:
-        dev = root / "library" / key
-        dev.write_text(dev.read_text() + "# touched\n")
-        res = preflight.check_lint(ctx_of(root, base2))
-        assert not res.ok
-        assert any(f"[{code}] {key}" in d for d in res.details), res.details
-    finally:
-        git(root, "reset", "-q", "--hard", base)
+    dev = root / "library" / key
+    dev.write_text(dev.read_text() + "# touched\n")
+    res = preflight.check_lint(ctx_of(root, base2))
+    assert not res.ok
+    assert any(d.startswith(f"+1 [{code}] {key} - e.g.") for d in res.details), res.details
 
 
-def test_a_touched_component_fans_out_to_every_device_that_places_it(fresh):
+def test_lint_fails_on_a_component_no_device_places(fresh):
+    """L89 is a library-wide rule a `--device` run skips. A new major nothing
+    seats is an error in CI's full lint, and must be one here."""
     root, base = fresh
-    (root / COMPONENT).write_text((root / COMPONENT).read_text() + "# touched\n")
-    devices, contracts, full = preflight.lint_plan(ctx_of(root, base))
-    assert full == []
-    assert [str(c.relative_to(root)) for c in contracts] == [COMPONENT]
-    assert len(devices) > 20, f"led-dot reaches only {len(devices)} device(s)?"
-    devs = root / "library/devices"
-    assert devs / "aurcore/ais2001" in devices            # places it by name
-    # reaches it only through a card's parts: the walk is transitive
-    assert "common/led-dot@1" not in (devs / "commscope/ch3000/device.yaml").read_text()
-    assert devs / "commscope/ch3000" in devices
-
-
-def test_lint_reaches_a_component_no_device_places(fresh):
-    root, base = fresh
-    src = root / COMPONENT
+    src = ROOT / COMPONENT                        # a part this device does not seat
     dst = root / "library/components/common/zz-preflight-probe/v1/contract.yaml"
     shutil.copytree(src.parent, dst.parent)
     _edit(dst, "name: led-dot", "name: zz-preflight-probe")
-    dst.write_text(dst.read_text() + "planted-unknown-key: 1\n")
-    res = preflight.check_lint(ctx_of(root, base))
+    ctx = ctx_of(root, base)
+    assert preflight.lint_plan(ctx)[3], "a new major must bring L89 in"
+    res = preflight.check_lint(ctx)
     assert not res.ok
-    assert any("zz-preflight-probe" in d for d in res.details), res.details
-
-
-def test_a_library_wide_change_asks_for_the_full_lint(fresh):
-    root, base = fresh
-    lab = next((root / "library/labs").rglob("lab.yaml"))
-    lab.write_text(lab.read_text() + "# touched\n")
-    devices, contracts, full = preflight.lint_plan(ctx_of(root, base))
-    assert full == [str(lab.relative_to(root))]
+    assert any("[L89]" in d and "zz-preflight-probe" in d for d in res.details), res.details
