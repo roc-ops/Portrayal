@@ -171,7 +171,26 @@ are. It sets nothing; the value is set by `attrs`.
    indicator, and the Airpax datasheet says a trip carries the handle to OFF, so `tripped`
    is drawn as `off` (`amphenol-ns/breaker-1ru@1`, provenance `state`). SHOW and
    `drawn-by-absence` wait for a part whose face really changes.
-4. `common/rocker-switch@1` and `common/power-switch-slide@1`.
+4. `common/rocker-switch@1`: `off`/`on`, the first SHOW user - a see-saw surface tipped
+   about its centre, one node per position, each a sloped relief `profile`. `common/power-switch-slide@1` is not given
+   positions: no source says which end of its travel is ON or how far its slider moves.
+5. Seven parts that draw their own rocker take the same see-saw, each where the art prints
+   which end is I and which is O: `juniper/jnp10k-pwr-ac2@1` and `juniper/mx80-psu-ac@1`
+   (`state`), `telco-systems/tm-7124s-psu-ac@1` (`state`), `casa/c40g-ac-inlet-panel@1`
+   (`switch-1` to `switch-4`), `casa/pem@1` (`breaker-1` to `breaker-4`),
+   `nokia/sr-7-pem-3@1` (`breaker`) and `nokia/sr-12-pem-3@1` (`power-switch`). The PEM's are
+   rocker breakers; a tripped rocker breaker rests at OFF, so two options cover it. Their
+   heights are estimated: the part's own earlier rocker height raised, 0.45 of it low.
+
+   The rest stay drawn as they are, for these reasons:
+
+   | part | why it has no positions |
+   |---|---|
+   | `nokia/sr-1-dc-terminal-block@1` | its lamp sits on the rocker, and a lamp is one element; drawing it on both tipped surfaces would make two |
+   | `juniper/mx480-psu-ac@1` | the art prints no I or O, so nothing says which end is ON |
+   | `juniper/mx2000-psm-dc-v@1` | the same: no end is marked |
+   | `nokia/lpwr-f@1` | the same: no end is marked |
+   | `cisco/a9k-ac-pem-v3@1` | the same: no end is marked |
 
 Each is a contract minor: a field is added and nothing that exists moves.
 

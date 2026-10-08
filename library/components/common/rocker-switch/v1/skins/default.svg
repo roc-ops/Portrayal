@@ -1,11 +1,27 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="21mm" height="15mm" viewBox="0 0 21 15">
+  <!-- A see-saw rocker: one surface that tips about its centre, so the end it is set to is
+       pressed into the bezel and the other end rises out of it. Drawn OFF - the I end raised;
+       `state` on shows the surface tipped the other way. The shading is lighter at the raised end. -->
+  <defs>
+    <linearGradient id="rise-left" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#3b4045"/><stop offset="1" stop-color="#1c1f22"/>
+    </linearGradient>
+    <linearGradient id="rise-right" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#1c1f22"/><stop offset="1" stop-color="#3b4045"/>
+    </linearGradient>
+  </defs>
   <g id="bezel">
     <rect x="0.1" y="0.1" width="20.8" height="14.8" rx="0.8" fill="#1d2023" stroke="#55595e" stroke-width="0.2"/>
   </g>
   <g id="rocker">
-    <rect x="1.75" y="1.75" width="17.5" height="11.5" rx="0.5" fill="#26292d" stroke="#44484d" stroke-width="0.2"/>
-    <line x1="10.5" y1="2.2" x2="10.5" y2="12.8" stroke="#16181b" stroke-width="0.3"/>
-    <g id="silkscreen">
+    <!-- each tipped surface carries its own I (bar) and O (ring), so in 3D they ride on it -->
+    <g id="rocker-off" data-show-from="state" data-show="off">
+      <rect x="1.75" y="1.75" width="17.5" height="11.5" rx="0.5" fill="url(#rise-left)" stroke="#44484d" stroke-width="0.2"/>
+      <line x1="4.4" y1="7.5" x2="7.2" y2="7.5" stroke="#e9ecef" stroke-width="0.6"/>
+      <circle cx="15.2" cy="7.5" r="1.35" fill="none" stroke="#e9ecef" stroke-width="0.5"/>
+    </g>
+    <g id="rocker-on" data-show-from="state" data-show="on" display="none">
+      <rect x="1.75" y="1.75" width="17.5" height="11.5" rx="0.5" fill="url(#rise-right)" stroke="#44484d" stroke-width="0.2"/>
       <line x1="4.4" y1="7.5" x2="7.2" y2="7.5" stroke="#e9ecef" stroke-width="0.6"/>
       <circle cx="15.2" cy="7.5" r="1.35" fill="none" stroke="#e9ecef" stroke-width="0.5"/>
     </g>

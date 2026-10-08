@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: pem
-version: 1.6.1
+version: 1.7.0
 class: power
 behaviour: fills
 profile: networking
@@ -24,6 +24,8 @@ attrs:
 
 size: {w: 207.0, h: 91.6, d: 250.0}
 provenance:
+  positions: >-
+    FIELDS, since 1.7.0 (docs/switch-positions-design.md, #808): `breaker-1`, `breaker-2`, `breaker-3`, `breaker-4`, each `off` or `on`. Each rocker is a SEE-SAW: one surface tipped about its centre, so the end it is set to presses in and the other end rises. O (a ring) at the left and I (a dash) at the right of each paddle, as the PEM drawing prints them; OFF raises the I end and ON the O end, each a node shown for its position, shaded lighter toward its raised end and built in 3D as a sloped profile. The heights are estimated. The skin draws OFF; nothing held says how a unit ships.
   power: >-
     THIS IS A POWER ENTRY MODULE AND THE CONDUIT ARGUMENT DOES NOT FIT IT. That
     argument - a tray carries what the modules seated in it produce, so watts are
@@ -107,9 +109,10 @@ provenance:
     wrong by calling the nut "read off real Edgecore terminal hardware". What the owner
     measured on that PSU is its walls at 12.7 and its bolts at 6.35; the nut subdivides
     the 6.35. agr-panel-screw says "estimated - not measured" outright and led-dot carries
-    no depth provenance at all. The two with no library precedent are the 3.0 mm
-    breaker bezel and the 6.0 mm terminal block, and they are flagged here rather
-    than buried: they are the only invented magnitudes in this file.
+    no depth provenance at all. The ones with no library precedent are the breakers
+    (a 1.0 bezel under a paddle tipped from 1.35 to 3.0, provenance.positions) and
+    the 6.0 mm terminal block, and they are flagged here rather than buried: they
+    are the only invented magnitudes in this file.
     WHAT WOULD SETTLE IT: a caliper on a C100G PEM, or any three-quarter photograph
     of the rear face - one oblique shot with the terminal covers off would fix the
     block height, the bezel and the stud length together'
@@ -124,6 +127,11 @@ provenance:
     module as a psu - and kit/relief.js now admits power and cooling
     to that list, so it ejects'
   depth: estimated - not measured
+fields:
+  breaker-1: {label: Breaker 1, type: choice, options: ['off', 'on'], default: 'off'}
+  breaker-2: {label: Breaker 2, type: choice, options: ['off', 'on'], default: 'off'}
+  breaker-3: {label: Breaker 3, type: choice, options: ['off', 'on'], default: 'off'}
+  breaker-4: {label: Breaker 4, type: choice, options: ['off', 'on'], default: 'off'}
 elements:
   breaker-4: {at: [22.4, 3.2], size: [31.2, 14.6], class: circuit-breaker}
   breaker-3: {at: [63.7, 3.2], size: [31.2, 14.6], class: circuit-breaker}
@@ -139,16 +147,32 @@ elements:
 relief:
   wall: '#4a4f55'
   features:
+    - {node: breaker-1-off, out: 3.0, profile: [[0, 1.35], [26.8, 3.0]], confidence: estimated, source: 'the tilt of a see-saw rocker: the raised end at the part''s own estimated rocker height, the low end at
+    0.45 of it, the ratio the GL-12xB GLB rocker shows (common/rocker-switch@1); no source gives this part''s; the breaker''s 3.0 is the PEM''s own earlier estimate'}
+    - {node: breaker-1-on, out: 3.0, profile: [[0, 3.0], [26.8, 1.35]], confidence: estimated, source: 'the tilt of a see-saw rocker: the raised end at the part''s own estimated rocker height, the low end at
+    0.45 of it, the ratio the GL-12xB GLB rocker shows (common/rocker-switch@1); no source gives this part''s; the breaker''s 3.0 is the PEM''s own earlier estimate'}
+    - {node: breaker-2-off, out: 3.0, profile: [[0, 1.35], [26.8, 3.0]], confidence: estimated, source: 'the tilt of a see-saw rocker: the raised end at the part''s own estimated rocker height, the low end at
+    0.45 of it, the ratio the GL-12xB GLB rocker shows (common/rocker-switch@1); no source gives this part''s; the breaker''s 3.0 is the PEM''s own earlier estimate'}
+    - {node: breaker-2-on, out: 3.0, profile: [[0, 3.0], [26.8, 1.35]], confidence: estimated, source: 'the tilt of a see-saw rocker: the raised end at the part''s own estimated rocker height, the low end at
+    0.45 of it, the ratio the GL-12xB GLB rocker shows (common/rocker-switch@1); no source gives this part''s; the breaker''s 3.0 is the PEM''s own earlier estimate'}
+    - {node: breaker-3-off, out: 3.0, profile: [[0, 1.35], [26.8, 3.0]], confidence: estimated, source: 'the tilt of a see-saw rocker: the raised end at the part''s own estimated rocker height, the low end at
+    0.45 of it, the ratio the GL-12xB GLB rocker shows (common/rocker-switch@1); no source gives this part''s; the breaker''s 3.0 is the PEM''s own earlier estimate'}
+    - {node: breaker-3-on, out: 3.0, profile: [[0, 3.0], [26.8, 1.35]], confidence: estimated, source: 'the tilt of a see-saw rocker: the raised end at the part''s own estimated rocker height, the low end at
+    0.45 of it, the ratio the GL-12xB GLB rocker shows (common/rocker-switch@1); no source gives this part''s; the breaker''s 3.0 is the PEM''s own earlier estimate'}
+    - {node: breaker-4-off, out: 3.0, profile: [[0, 1.35], [26.8, 3.0]], confidence: estimated, source: 'the tilt of a see-saw rocker: the raised end at the part''s own estimated rocker height, the low end at
+    0.45 of it, the ratio the GL-12xB GLB rocker shows (common/rocker-switch@1); no source gives this part''s; the breaker''s 3.0 is the PEM''s own earlier estimate'}
+    - {node: breaker-4-on, out: 3.0, profile: [[0, 3.0], [26.8, 1.35]], confidence: estimated, source: 'the tilt of a see-saw rocker: the raised end at the part''s own estimated rocker height, the low end at
+    0.45 of it, the ratio the GL-12xB GLB rocker shows (common/rocker-switch@1); no source gives this part''s; the breaker''s 3.0 is the PEM''s own earlier estimate'}
     # WHICH node is raised and WHICH primitive it is comes from Figure 1-6; the
     # MAGNITUDES do not - see provenance/relief. Every mm below is `estimated`.
     #
     # The four rocker breakers are a moulded bezel standing off the plate: the
     # figure draws each as a black surround with a lighter, clearly inboard panel
     # carrying the round trip button and the rocker paddle.
-    - {node: breaker-4, out: 3.0, confidence: estimated, source: 'NO PRECEDENT - a panel rocker/breaker bezel. Invented here and reused across casa/pem and casa/c40g-ac-inlet-panel'}
-    - {node: breaker-3, out: 3.0, confidence: estimated, source: 'NO PRECEDENT - a panel rocker/breaker bezel. Invented here and reused across casa/pem and casa/c40g-ac-inlet-panel'}
-    - {node: breaker-2, out: 3.0, confidence: estimated, source: 'NO PRECEDENT - a panel rocker/breaker bezel. Invented here and reused across casa/pem and casa/c40g-ac-inlet-panel'}
-    - {node: breaker-1, out: 3.0, confidence: estimated, source: 'NO PRECEDENT - a panel rocker/breaker bezel. Invented here and reused across casa/pem and casa/c40g-ac-inlet-panel'}
+    - {node: breaker-4, out: 1.0, confidence: estimated, source: 'the bezel or frame the rocker sits in, lowered to 1.0 so the tipped surface stands out of it; estimated'}
+    - {node: breaker-3, out: 1.0, confidence: estimated, source: 'the bezel or frame the rocker sits in, lowered to 1.0 so the tipped surface stands out of it; estimated'}
+    - {node: breaker-2, out: 1.0, confidence: estimated, source: 'the bezel or frame the rocker sits in, lowered to 1.0 so the tipped surface stands out of it; estimated'}
+    - {node: breaker-1, out: 1.0, confidence: estimated, source: 'the bezel or frame the rocker sits in, lowered to 1.0 so the tipped surface stands out of it; estimated'}
     # Each terminal block is a moulded body standing proud, with the studs on its
     # face. `out` goes on the GROUP so the black surround, the well and the
     # centre divider all travel with it; a raised sibling left behind would read
