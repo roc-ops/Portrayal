@@ -13,8 +13,11 @@ about it while the package is at 0.x.
 
 The schemas are published at `https://portrayal.dev/schemas/v1/`, one file
 per schema (`device.schema.json`, `component.schema.json`,
-`listing.schema.json`, `lab.schema.json`), and that URL is each schema's `$id`, so an editor or a
-validator that follows the `$id` finds the schema it names. A new format number
+`listing.schema.json`, `lab.schema.json`, `rack.schema.json`), and that URL is each schema's `$id`, so an editor or a
+validator that follows the `$id` finds the schema it names. `rack.schema.json` describes
+the Rack Builder's own file (`format: "portrayal-rack"`, its own `version`, now 2), not a
+manifest, so it is published under `/schemas/v1/` as a schema of this repository but does
+not carry format 1. A new format number
 is published beside the old one under its own label (`/schemas/v2/`); a
 published label is never reused for a different format.
 

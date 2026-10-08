@@ -159,7 +159,7 @@ function readItems(list, cables) {
 // or {lane, ru}, a lane beside the rails at a U. An entry of neither shape is
 // not thrown away: the whole route as written moves to `routeAsWritten`, as a
 // length this page cannot use moves to `lengthAsWritten`.
-const isWaypoint = w => w && typeof w === 'object' && !Array.isArray(w) && (
+export const isWaypoint = w => w && typeof w === 'object' && !Array.isArray(w) && (
   (typeof w.item === 'string' && w.item && typeof w.via === 'string' && w.via) ||
   (typeof w.lane === 'string' && w.lane && Number.isInteger(w.ru)));
 const readRoute = r => {
