@@ -8,7 +8,7 @@ import {fits, isRackFace, heightOf} from './fit.js';
 import {placement, managersOf} from './managers.js';
 import {uLabel} from './model.js';
 import {portFree, endKey, proposeMedia, mismatch, endName, carriedU, portPathOf, matches, lengthText} from './cable-rules.js';
-import {lanesOf, pathwaysOf, resolveRoute, routedLength, routeText} from './route.js';
+import {lanesOf, pathwaysOf, resolveRoute, pathLength, routePath, routeText} from './route.js';
 import {catalogEntries} from './catalog.js';
 import {GONE, CABLE_GONE} from './commands.js';
 import {slotEnv, slotTree, partName, partOf} from './slots.js';
@@ -188,13 +188,21 @@ async function cableInfo(rack, cable, ctx) {
   const edited = cable.routeEdited === true;
   // A route context's readers come from the page's drawings and may throw; a
   // measure that fails is "not measured", never an error.
-  let routed = null, waypoints = edited ? cable.route || [] : [];
+  let routed = null, waypoints = edited ? cable.route || [] : [], rings = null;
   if (ctx.route) {
     try {
       waypoints = resolveRoute(rack, cable, ctx.route).waypoints;
-      const r = routedLength(rack, cable, ctx.route);
+      // one path for the length and the rings (#930)
+      const path = routePath(rack, cable, ctx.route);
+      const r = pathLength(path);
       routed = r ? {metres: Math.round(r.measured * 100) / 100, stock: r.value} : null;
-    } catch { routed = null; }
+      // the rings it passes: which way through, the depth (and whether that
+      // is estimated), and where it enters and leaves, in mm; a ring it would
+      // enter and leave by one face is `passed: false`
+      const at = p => [p.x, p.y, p.z].map(v => Math.round(v * 10) / 10);
+      if (path?.rings.length) rings = path.rings.map(g => ({item: g.item, via: g.via, run: g.run, depth: g.depth,
+        estimated: g.estimated, passed: g.passed, ...(g.passed ? {sense: g.sense, entry: at(g.entry), exit: at(g.exit)} : {face: at(g.face)})}));
+    } catch { routed = null; rings = null; }
   }
   // slack: the cable's own length less the routed one, in metres
   // (only metres and feet convert; any other unit leaves slack unknown)
@@ -221,7 +229,7 @@ async function cableInfo(rack, cable, ctx) {
   }
   return {kind: 'cable', id: cable.id, a: end(cable.a), b: end(cable.b), media: cable.media, purpose: cable.purpose, label: cable.label,
     length: l ? {value: l.value, unit: l.unit ?? 'm', source: l.source ?? 'entered'} : null, routed, slack,
-    route: {edited, waypoints, text: routeText(waypoints, label, rack.frame)}, lanes: lanesOf(rack.frame), passes,
+    route: {edited, waypoints, text: routeText(waypoints, label, rack.frame), ...(rings ? {rings} : {})}, lanes: lanesOf(rack.frame), passes,
     loose, mismatch: warn, ...(unchecked ? {unchecked: true} : {})};
 }
 
