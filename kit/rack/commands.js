@@ -8,7 +8,7 @@
 import {withItem, updateItem, withoutItem, withFrame, renamed, withDcim, detached, positionOf, isWaypoint} from './model.js';
 import {fits, isRackFace, heightOf, shrinkRack} from './fit.js';
 import {placement, moveItem, managersOf} from './managers.js';
-import {canCable, withCable, updateCable, withoutCable, cablesOf, withoutCablesOf, cableName,
+import {canCable, withCable, updateCable, withoutCable, cablesOf, withoutCablesOf, cableName, endName, endKey,
         connectorOf, mediaKind, portPathOf, MEDIA, MEDIA_LABELS} from './cable-rules.js';
 import {validate, same} from './validate.js';
 import {withRoutedLengths} from './route.js';
@@ -285,15 +285,31 @@ function cableAdd(rack, {a, b, media = '', purpose = '', label = '', length = nu
   return done(next, `Added cable ${cableName(cable)}.`, {created: {id: cable.id}});
 }
 
-function cableUpdate(rack, {id, ...p}) {
+// RE-POINTING AN END (`a`, `b`) keeps the cable - its id, media, purpose,
+// label and length - and checks the new port as cable.add would, with the
+// cable itself out of the way. A route drawn by hand is kept, and said to be
+// possibly stale.
+const endOf = e => ({item: e.item, path: e.path, view: e.view === 'rear' ? 'rear' : 'front'});
+function cableUpdate(rack, {id, a, b, ...p}, {chassisOf}) {
   const c = cableOf(rack, id);
   if (!c) return {error: CABLE_GONE};
+  const ends = {a: a ? endOf(a) : c.a, b: b ? endOf(b) : c.b};
+  const moved = ['a', 'b'].filter(k => endKey(ends[k]) !== endKey(c[k]));
+  if (moved.some(k => !itemOf(rack, ends[k].item))) return {error: GONE};
+  const uOf = heightOf(chassisOf);
+  if (moved.length) {
+    const can = canCable(rack, ends.a, ends.b, {ignoreId: id, uOf});
+    if (!can.ok) return {error: can.reason};
+  }
   const want = 'length' in p ? {...p, length: lengthOf(p.length)} : p;
   // A length named at all replaces one the loader kept as written.
   const changed = Object.keys(want).filter(k => !same(want[k], c[k] ?? null) || (k === 'length' && 'lengthAsWritten' in c));
-  if (!changed.length) return unchanged(rack);
-  const next = updateCable(rack, id, want);
-  return done(next, `Edited cable ${cableName(cableOf(next, id))}.`);
+  if (!changed.length && !moved.length) return unchanged(rack);
+  const next = updateCable(rack, id, {...want, ...Object.fromEntries(moved.map(k => [k, ends[k]]))});
+  const name = cableName(cableOf(next, id));
+  const said = moved.map(k => `Moved end ${k.toUpperCase()} of cable ${name} to ${endName(next, ends[k], uOf)}.`);
+  return {rack: next, summary: said.length ? said.join(' ') : `Edited cable ${name}.`,
+          findings: moved.length && c.routeEdited === true ? [note(`${c.id}'s route was drawn for its old end.`)] : []};
 }
 
 function cableRemove(rack, {id}) {
@@ -404,8 +420,9 @@ export const COMMANDS = {
       value: {type: ['string', 'number', 'null'], description: 'The new value; null for the default.'}})},
   'cable.add': {run: cableAdd, description: 'Run a cable between two free ports. Refused when a port already has a cable or a device is gone.',
     args: args(['a', 'b'], {a: END, b: END, ...CABLE_FIELDS, as: AS})},
-  'cable.update': {run: cableUpdate, description: "Change a cable's type, purpose, label or length.",
-    args: args(['id'], {id: ID('cable'), ...CABLE_FIELDS})},
+  'cable.update': {run: cableUpdate, description: "Change a cable's type, purpose, label or length, or move either end to another port. A moved end keeps the cable's id and everything else about it; refused when the new port already has a cable.",
+    args: args(['id'], {id: ID('cable'), a: {...END, description: 'Move end A to this port; left where it is when left out.'},
+      b: {...END, description: 'Move end B to this port; left where it is when left out.'}, ...CABLE_FIELDS})},
   'cable.remove': {run: cableRemove, description: 'Delete a cable.', args: args(['id'], {id: ID('cable')})},
   'cable.route': {run: cableRoute, description: 'Route a cable by hand through the waypoints given, in order. Its routed length follows.',
     args: args(['id', 'route'], {id: ID('cable'),
