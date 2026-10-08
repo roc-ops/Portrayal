@@ -14,6 +14,10 @@ const SHORT = 2;                     // U: a jumper this close, with no manager,
 
 export const lanesOf = frame => (frame.kind === 'two-post'
   ? ['left', 'right'] : ['left-front', 'right-front', 'left-rear', 'right-rear']);
+// The rings, ducts and pass-throughs a device offers a route, as rack.json lists
+// them per view: one sorted list of ids, whatever the view.
+export const pathwaysOf = chassis =>
+  [...new Set(['guides', 'passes'].flatMap(k => Object.values(chassis?.[k] || {}).flat()))].sort();
 const laneFor = (frame, side, pane) => (frame.kind === 'two-post' ? side : `${side}-${pane}`);
 const itemOf = (rack, id) => rack.items.find(i => i.id === id) || null;
 

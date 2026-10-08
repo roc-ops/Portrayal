@@ -194,9 +194,9 @@ configuration's front, rear and top views.
 ```
 
 `format` is 1. Each device, keyed by `name`, always carries `manufacturer`,
-`model`, `family`, `ru`, `h`, `w`, `d`, `airflow`, `default` and `configs`
-(the names of its configurations). Four keys appear only when the device has
-them:
+`model`, `family`, `ru`, `h`, `w`, `d`, `airflow`, `default`, `configs`
+(the names of its configurations) and `kind`. Four keys appear only when the
+device has them:
 
 - `mount`: the device's `chassis.mount`, present only when it is not `rack`.
 - `shell`: `chassis.shell`, `sheet` for a body that is a sheet and not a box.
@@ -207,6 +207,19 @@ them:
 `ru` is `chassis.ru` when stated (0 included, for a zero-U part), else the
 height over 44.45 mm, at least 1. Removing or renaming a key, or changing what
 one means, is a contract change and raises `format`; adding a key is not.
+
+`kind` is an advisory word for what the device is, for searching a catalogue,
+read from the manifest's `profile` and the vendor's own words. Today its words
+are `switch`, `router`, `network device`, `server`, `pdu`, `patch panel`,
+`optical`, `cable manager`, and `device` when the profile says no more. The key
+is part of the format; its vocabulary is not. A word may be added, split or
+refined, and a device may move from one word to another, without a format
+change, so a reader should not treat the list above as closed.
+
+`devices.json` gained `profile`, the manifest's device class. It mirrors the
+profiles in `spec/schemas/profiles.yaml` and follows that file. It is a new
+field, so `contract` stays 2: a reader that does not know it still finds every
+field it read before.
 
 ## What else a consumer holds
 

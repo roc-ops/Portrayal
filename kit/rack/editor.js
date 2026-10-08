@@ -30,7 +30,12 @@ export function createRackEditor({doc, chassisOf, cap = 100}) {
   };
   const list = cmds => (Array.isArray(cmds) ? cmds : [cmds]);
 
-  function apply(cmds, {origin = 'ui'} = {}) {
+  // A PER-CALL CONTEXT (`ctx`, e.g. the slots `loadSlots` read) is
+  // laid over {chassisOf} for that one call and kept nowhere: the page's own
+  // calls, which pass none, are checked exactly as before.
+  const withCtx = extra => (extra ? {...ctx, ...extra} : ctx);
+
+  function apply(cmds, {origin = 'ui', ctx: extra = null} = {}) {
     const commands = list(cmds), before = rack();
     // A SYSTEM COMMAND is the page's own (routed lengths it measured): an agent
     // or a control that sends one is refused like any other bad command.
@@ -38,7 +43,7 @@ export function createRackEditor({doc, chassisOf, cap = 100}) {
       const index = commands.findIndex(c => typeof c?.op === 'string' && Object.hasOwn(COMMANDS, c.op) && COMMANDS[c.op].system);
       if (index >= 0) return {error: `${commands[index].op} is the page's own command.`, index};
     }
-    const res = applyCommands(before, commands, ctx);
+    const res = applyCommands(before, commands, withCtx(extra));
     if (res.error || res.noop) return res;
     put(res.rack);
     if (res.step) history.record(before, res.rack, res.summary, origin);
@@ -71,7 +76,7 @@ export function createRackEditor({doc, chassisOf, cap = 100}) {
       return {findings};
     },
     apply,
-    preview: cmds => applyCommands(rack(), list(cmds), ctx),
+    preview: (cmds, {ctx: extra = null} = {}) => applyCommands(rack(), list(cmds), withCtx(extra)),
     undo: () => travel('undo'),
     redo: () => travel('redo'),
     // For the probe hook only (?probe=1): a whole rack put in as one step.
