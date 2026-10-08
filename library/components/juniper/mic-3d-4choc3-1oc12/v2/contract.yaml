@@ -6,27 +6,17 @@ class: line-card
 behaviour: fills
 profile: networking
 description: >-
-  Juniper channelized OC3/STM1 circuit-emulation MIC with SFP - eight cages in two 2x2 PIC groups. MIC form: the MIC's own 168.8 x 29.2 plate, photo-measured (#261).
+  Juniper channelized OC3/STM1 circuit-emulation MIC with SFP - four cages in two ganged pairs, one PIC. MIC form: the MIC's own 168.8 x 29.2 plate, photo-measured (#261).
 attrs:
-  oc3: 8
+  oc3: 4
   model: MIC-3D-4COC3-1COC12-CE
   power-draw-max-w: 36.48
 provenance:
-  stack-orientation: >-
-    The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is
-    the upper cage upright (rotate 0) over the lower turned 180, so both cage lips face
-    the band between the two cages and both bails face outward. Decided by the rule, not
-    an observation, so a photograph of the stack overturns it: the 4 SFP pairs
-    (port-0-0/port-0-1 to port-1-2/port-1-3). 4 of these were drawn with the upper cage
-    turned before the std cage art moved its lip to the bottom of the opening; turning
-    them keeps the lips in the middle band where they were drawn and seats every optic
-    bail-outward. Turning a composed cage in place changes no box, id or anything a
-    device places, so it is a minor bump (S6).
   sonet-rate: >-
-    the SONET rate, transcribed from this contract's own description: 'channelized OC3/STM1
-    circuit-emulation MIC with SFP - eight cages'. Without it the SFP cage has no rate to
-    read and the export typed it Gigabit Ethernet, which an OC-3 port is not. Nothing new
-    was measured.
+    datasheet - the SONET rate and the port count: the MX Series Interface Module Reference,
+    'Channelized OC3/STM1 (Multi-Rate) Circuit Emulation MIC with SFP', gives 'Four OC3/STM1 ports' and
+    'Ports are numbered 0 through 3', and its MICs-supported tables print 4 in the port column. Until
+    #261 this contract carried eight cages in two PICs (oc3: 8), which no source states.
   size: >-
     photo-measured - the MIC plate, 168.8 x 29.2, from the MX104 and MX80 front photographs as
     size-notes says: plates 520, 521 and 520.5 px at 3.090 px/mm on the MX104 (body 1350.5 px over 437.0
@@ -42,29 +32,24 @@ provenance:
     could be the subject.
     The note this replaces said the module reference does not carry it. True of
     the book it named; the chassis guides do.
-  numbering: 'guide - ports number within each PIC group with an n/ group
-    legend, per the module reference port-numbering figures (g000930,
-    g100786); the exact print positions are layout-derived'
+  numbering: >-
+    photo-measured - ports 0 to 3 in one PIC, as the module reference numbers them and the photograph
+    prints them.
   layout: >-
-    estimated - RE-ENVELOPED, NOT REDRAWN, at 2.0.0 (#261): every part and printed mark of the 1.x art
-    moved by (+0.4, +1.1) onto the measured plate (centring the old art where its width allows);
-    positions along the plate stay as 1.x had them. What 1.x said of them: registry + layout - the face
-    is the slot geometry of its chassis family; positions are laid out from the module reference port
-    description and registry cage sizes, NOT measured from a faceplate drawing. No faceplate figure was
-    usable for this model
+    photo-measured - the MX104 front photograph seats this card in slot 1/1 (plate 652.5 to 1173.5 px at
+    3.090 px/mm, #261): one row of four SFP cages in two ganged pairs, mouths 717.5 to 798.5 and 814.5
+    to 894.5 px, pair centres 34.2 and 65.5 mm from the plate's left end at the SFF-8433 pitch of 14.25,
+    the row centred 36 px (11.6 mm) below the plate top. Printed '0 1 LINK 2 3 LINK' beneath, the model
+    name and OK/FAIL vertical at the left end.
 states:
 - ok
 - fail
 - absent
 parts:
-- {ref: std/sfp-ganged@1, id: port-0-0, at: [16.40, 4.70], attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-0-1, at: [16.40, 16.30], rotate: 180, attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-0-2, at: [30.65, 4.70], attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-0-3, at: [30.65, 16.30], rotate: 180, attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-1-0, at: [51.90, 4.70], attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-1-1, at: [51.90, 16.30], rotate: 180, attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-1-2, at: [66.15, 4.70], attrs: {media: sfp}}
-- {ref: std/sfp-ganged@1, id: port-1-3, at: [66.15, 16.30], rotate: 180, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-0, at: [19.95, 6.40], attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-1, at: [34.20, 6.40], attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-2, at: [51.25, 6.40], attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-3, at: [65.50, 6.40], attrs: {media: sfp}}
 size:
   w: 168.8
   h: 29.2
