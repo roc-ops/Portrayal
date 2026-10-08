@@ -1,0 +1,86 @@
+format: 1
+kind: module
+name: mic-3d-8ds3-e3
+version: 2.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper DS3/E3 MIC - eight ports as sixteen 75-ohm coax pairs (RX over TX); the faceplate jack is 75-ohm mini-SMB, which is the 75-ohm SMB series (SMB interface, intermateable with 50-ohm SMB), so each is an SMB jack stating impedance 75. The MX2000 and MX104 datasheets name it (see the connector provenance). BNC is only the far end of the CBL-DS3-E3-M-S cable. MIC form: the MIC's own 168.8 x 29.2 plate, photo-measured (#261).
+attrs:
+  model: MIC-3D-8DS3-E3
+  power-draw-max-w: 36
+  model-variants: MIC-3D-8CHDS3-E3-B
+provenance:
+  size: >-
+    photo-measured - the MIC plate, 168.8 x 29.2, from the MX104 and MX80 front photographs as
+    size-notes says: plates 520, 521 and 520.5 px at 3.090 px/mm on the MX104 (body 1350.5 px over 437.0
+    mm; the ganged-SFP pitch reads 44.0 to 44.2 px, 3.091), 521.8 and 522.5 px at 3.088 on the MX80
+    (ganged-SFP pitch 44.0 px; 1374 px between the ear wings over 445.0 mm agrees); heights 90 to 90.75
+    px.
+  power: >-
+    guide FRU power table, MX chassis guides: '| DS3/E3 MIC | MIC-3D-8DS3-E3 MIC-3D'. The 55 C rung is
+    carried, being the worst rated case a chassis budget has to survive.
+    Taken by matching the row's OWN LABEL: these tables pair parts with figures
+    in one row - `4-Port: X 8-Port: Y` against `4-Port: 41 W 8-Port: 52 W` - and
+    reading first-wins puts the small card's number on the big one. Aligning on
+    the N-Port label instead is self-checking, and it checks out: 4-port 41 W
+    against 8-port 52 W, 4-port 24 W against 8-port 29 W.
+    Seen in 8 guide(s): mx2008, mx2010-p0001-0300, mx2020-p0001-0300, mx2020-p0301-0600.
+  connector: >-
+    datasheet - the MX2020 and MX2010 3D Universal Edge Routers datasheet
+    1000417-010-EN, p.9, lists MIC-3D-8DS3-E3 as an 8 port DS3/E3 MIC with a
+    75 ohm mini SMB interface, and the MX104 3D Universal Edge Router datasheet
+    1000446-002-EN, p.4, lists MIC-3D-8CHDS3-E3-B as 75 ohm miniSMB. The MX
+    Series 5G Universal Routing Platform Interface Module Reference (Cables and
+    connectors, after Figure 16) names the accessory cable CBL-DS3-E3-M-S as
+    mini-SMB to BNC, so BNC is the far end of that cable and not the faceplate.
+    Mini-SMB is not a separate interface: it is the 75-ohm SMB series, named
+    for the miniature 75-ohm cable it takes (RG-179, Belden 735A). The Cinch
+    RF/microwave catalogue (rev01 032017) p.121 gives its SMB - Mini-75 Ohm
+    series as compatible with MIL-STD-348 Series SMB, and p.122 gives its
+    mating engagement as intermateable with standard 50-ohm SMB. So each jack
+    is std/smb@1 with impedance 75 (drawing), and its slot presents smb.
+  numbering: 'guide - ports number within each PIC group with an n/ group
+    legend, per the module reference port-numbering figures (g000930,
+    g100786); the exact print positions are layout-derived'
+  layout: >-
+    estimated - RE-ENVELOPED, NOT REDRAWN, at 2.0.0 (#261): every part and printed mark of the 1.x art
+    moved by (+0.4, +1.1) onto the measured plate (centring the old art where its width allows);
+    positions along the plate stay as 1.x had them. What 1.x said of them: registry + layout - the face
+    is the slot geometry of its chassis family; positions are laid out from the module reference port
+    description and registry cage sizes, NOT measured from a faceplate drawing. No faceplate figure was
+    usable for this model
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/smb@1, id: port-0-0, at: [16.40, 4.70], rotate: 180, attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-1, at: [16.40, 10.73], attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-2, at: [23.90, 4.70], rotate: 180, attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-3, at: [23.90, 10.73], attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-4, at: [31.40, 4.70], rotate: 180, attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-5, at: [31.40, 10.73], attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-6, at: [38.90, 4.70], rotate: 180, attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-7, at: [38.90, 10.73], attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-8, at: [46.40, 4.70], rotate: 180, attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-9, at: [46.40, 10.73], attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-10, at: [53.90, 4.70], rotate: 180, attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-11, at: [53.90, 10.73], attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-12, at: [61.40, 4.70], rotate: 180, attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-13, at: [61.40, 10.73], attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-14, at: [68.90, 4.70], rotate: 180, attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-15, at: [68.90, 10.73], attrs: {media: coax, impedance: 75}}
+size:
+  w: 168.8
+  h: 29.2
+size-confidence: {w: photo-measured, h: photo-measured}
+size-notes: >-
+  w and h are the MIC's own plate, photo-measured (#261). Square-on front photographs of the MX104 and
+  the MX80 put four plates at 168.3 to 169.2 by 29.1 to 29.3 mm, each photograph scaled two
+  independent ways - across its chassis body and on the SFF-8433 ganged-SFP pitch of 14.25 mm, which
+  agree to 0.1% - and the MX2010 photograph's ratio of MIC to MPC plate (162.5 to 379.5 px) agrees.
+  The guides' MIC rows (6.25 x 6.8 x 1.25 in, the axes assigned differently in different books) do not
+  dimension the face and are not used. Until 2.0.0 this was the 168 x 27 'window', an estimate read
+  off the carrier.
