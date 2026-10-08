@@ -1,0 +1,59 @@
+format: 1
+kind: component
+name: cmv-sfd45u5w-cover
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  The cover of one 22.5U section of the FS CMV-SFD45U5W vertical finger duct, seen from
+  the front - a plain PVC plate wider than the duct, with a hinge rail down its back over
+  each finger wall, so it swings open to either side or lifts off
+provenance:
+  size: >-
+    drawing - the cover back view of the FS Vertical Cable Managers with Finger Ducts datasheet, page 4: 5.46 in [138.8mm] wide and 41.34 in [1050mm]
+    high, at 0.814 px/mm. It is drawn 1054, half the duct's stated 2108, so the two covers
+    meet at the joint: the drawing's two 1050 make 2100, and the 8 mm between that and
+    the stated height is not placed by any document.
+  rails: >-
+    drawing - the same view draws two double lines down the back of the cover, 6.1 to 22.1
+    and 116.7 to 132.7 from its left edge: hinge rails over the two finger walls, drawn at
+    the walls' 6.7 and 116.1. The datasheet says the cover is hinged and detachable; the
+    renders show it open on its left rail (63033.x2) and closed.
+  relief: >-
+    estimated - the plate is drawn 1.5 thick, at the front of the 165.1, and the rails
+    from the front of the finger tips (152.0 from the rear) to its back. No view
+    dimensions the cover section.
+  logo-zone: >-
+    not reserved - every render of the cover (63033.g2, 63033.x2, 63033.g5) shows a plain
+    face, with no mark on it.
+  color: >-
+    estimated - "Cover Material: PVC", "Color: Black" in the datasheet table; drawn a
+    shade lighter than the ABS duct, as the renders show it.
+size: {w: 138.8, h: 1054}
+size-confidence: {w: drawing, h: estimated}
+attrs: {material: PVC}
+elements:
+  plate: {at: [0.0, 0.0], size: [138.8, 1054], class: bezel}
+  rail-left: {at: [6.7, 0.0], size: [16, 1054], class: bezel}
+  rail-right: {at: [116.1, 0.0], size: [16, 1054], class: bezel}
+relief:
+  features:
+    - node: plate
+      lift: 136.7
+      out: 138.2
+      color: '#2f3134'
+      confidence: estimated
+      source: no view dimensions the cover section; a thin plate in the renders
+    - node: rail-left
+      lift: 125.1
+      out: 136.7
+      color: '#2a2c2e'
+      confidence: estimated
+      source: the cover back view of the FS Vertical Cable Managers with Finger Ducts datasheet, page 4, the rail over the left wall; its depth from the clips on the side view
+    - node: rail-right
+      lift: 125.1
+      out: 136.7
+      color: '#2a2c2e'
+      confidence: estimated
+      source: the cover back view of the FS Vertical Cable Managers with Finger Ducts datasheet, page 4, the rail over the right wall; its depth from the clips on the side view
+skins: [default]
