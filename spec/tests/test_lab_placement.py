@@ -138,6 +138,10 @@ FAILING = {
     "L142 two rack-face parts on one unit and face":
         ("L142", lab(mgr_b={"id": "mgr-b", "ref": "fhd-cmp5dr", "on": "enc-4u",
                             "face": "front", "unit": 3})),
+    "L153 a side on a rack-face part as wide as the rack":
+        ("L153", lab(mgr_c={"id": "mgr-c", "ref": "fhd-cmp5dr", "on": "enc-1u", "side": "left"})),
+    "L153 a side on a rack device":
+        ("L153", lab(enc_1u={"id": "enc-1u", "ref": "fhd-1ufce", "ru": 20, "side": "right"})),
     "L142 a device outside the rack":
         ("L142", lab(enc_1u={"id": "enc-1u", "ref": "fhd-1ufce", "ru": 43}, mgr_c=None)),
 }
@@ -162,7 +166,7 @@ def test_a_rack_face_part_by_ru_over_a_host_is_reported_with_it():
 @pytest.mark.parametrize("bad", [
     {"id": "mgr-c", "ref": "fhd-cmp5dr", "on": "enc-1u", "face": "top"},
     {"id": "mgr-c", "ref": "fhd-cmp5dr", "on": "enc-1u", "unit": 0},
-    {"id": "mgr-c", "ref": "fhd-cmp5dr", "on": "enc-1u", "side": "left"},
+    {"id": "mgr-c", "ref": "fhd-cmp5dr", "on": "enc-1u", "side": "middle"},
     {"id": "mgr-c", "on": "enc-1u"},
 ])
 def test_the_schema_rejects_a_malformed_placement(bad):

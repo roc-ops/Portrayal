@@ -1,0 +1,42 @@
+format: 1
+kind: component
+name: cmv-sfd45u5w-finger
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  One finger of the FS CMV-SFD45U5W vertical finger duct, seen from the front - a moulded
+  ABS loop that stands forward from its wall, with a hooked tip at its front end that
+  turns up and leaves a narrow neck a cable is pressed through into the channel
+provenance:
+  size: >-
+    drawing - the side view of the FS Vertical Cable Managers with Finger Ducts datasheet, page 4, at 1.612 px/mm across the 165.1 and down the 1022.4:
+    23 fingers a section, 71.64 px apart, 44.44 mm - one rack unit; the arm is 30.5 px
+    high, 18.9, and the gap between arms 25.5. The tip rises 21.1 above the top of its arm
+    and ends 13.7 below it, 34.8 high, so 12.4 of neck is left between one tip and the
+    next arm's. Across the width a finger is its wall's 16 (the back view).
+  relief: >-
+    drawing - the same side view: the arm runs forward from the floor of the well to the
+    back of the tip, 142.7 from the rear face, and the tip is the last 9.3, to 152.0 (5.96
+    in [151.5mm] dimensioned from the tips to the back). The slots between the arms are
+    rounded at their roots, 43.4 from the rear; the arm is drawn as a square bar.
+size: {w: 16, h: 40}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: ABS}
+elements:
+  tip: {at: [0.0, 0.0], size: [16, 34.8], class: bezel}
+  arm: {at: [0.0, 21.1], size: [16, 18.9], class: bezel}
+relief:
+  features:
+    - node: arm
+      out: 115.8
+      color: '#26282a'
+      confidence: drawing
+      source: the side view of the FS Vertical Cable Managers with Finger Ducts datasheet, page 4, the arm from the back plate to the tip, 142.7 from the rear
+    - node: tip
+      lift: 115.8
+      out: 125.1
+      color: '#2a2c2e'
+      confidence: drawing
+      source: the same view, the tip from 142.7 to 152.0 from the rear, 5.96 in [151.5mm]
+skins: [default]

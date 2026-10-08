@@ -1,0 +1,30 @@
+format: 1
+kind: component
+name: cmv-sfd45u5w-wall
+version: 1.0.0
+class: mechanical
+description: >-
+  One finger wall of the FS CMV-SFD45U5W vertical finger duct seen from the front - the
+  moulded root along one edge of the back plate that a row of fingers springs from, both
+  sections as one length
+provenance:
+  size: >-
+    drawing - the back view of the FS Vertical Cable Managers with Finger Ducts datasheet, page 4, at 1.276 px/mm: the finger roots take the outer 16 mm
+    of the 125.4 each side (21 px). Its height is the duct's 2108.
+  relief: >-
+    drawing - the side view of the same page, at 1.612 px/mm: the rounded roots of the
+    slots between the fingers stand 43.4 from the rear face (70 px), so the wall rises
+    16.5 from the floor of the well, which is 26.9 from the rear.
+size: {w: 16, h: 2108}
+size-confidence: {w: drawing, h: datasheet}
+attrs: {material: ABS}
+elements:
+  root: {at: [0.0, 0.0], size: [16, 2108], class: bezel}
+relief:
+  features:
+    - node: root
+      out: 16.5
+      color: '#202224'
+      confidence: drawing
+      source: the side view of the FS Vertical Cable Managers with Finger Ducts datasheet, page 4, the slot roots 43.4 from the rear face
+skins: [default]

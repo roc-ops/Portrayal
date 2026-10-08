@@ -9,11 +9,12 @@ one source of truth - move a port in the device manifest and the cable follows.
 WHERE A DEVICE IS, though, is resolved here. A rack-face part placed `on` a
 host says which unit of the host, not which unit of the rack, so every placement
 is written with its position worked out (`labs.check`): `ru` the lowest absolute
-rack unit, `face`, `mount`, `host` and `unit`. Every key the lab wrote is kept,
+rack unit, `face`, `mount`, `host`, `unit` and `side` (which side of the rack a
+rack-side part stands on, or which rail a narrow rack-face part bolts to). Every key the lab wrote is kept,
 so a viewer that knows none of the new ones still finds `ru` and draws the part
 on the right unit. A lab that fails the schema or a check is not written: the
-build stops and says why, the same findings `lint.py` reports as L1 and
-L139-L142.
+build stops and says why, the same findings `lint.py` reports as L1,
+L139-L142, L153 and L154.
 """
 import argparse
 import json

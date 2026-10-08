@@ -1597,7 +1597,9 @@ def u_height(ch):
     this way - Aoni B08 and CNB VP1A, for two, say `u_height: 0` and
     `is_full_depth: false`.
 
-    A `rack-face` part states `ru` and still exports 0: it occupies none.
+    A `rack-face` part states `ru` and still exports 0: it occupies none. So
+    does a `rack-side` part, which stands beside the rack on the side of an
+    upright (docs/vertical-cable-managers-design.md).
     """
     if ch.get("mount", "rack") != "rack":
         return 0.0
@@ -1625,6 +1627,7 @@ MOUNT_PROSE = {
     "wall": "Wall-mounted; not rack-mounted.",
     "desktop": "Desktop unit; not rack-mounted.",
     "rack-face": "Mounts on the rack rail face at a rack unit; occupies no rack unit.",
+    "rack-side": "Mounts on the side of a rack's upright, beside the rack; occupies no rack unit.",
 }
 
 

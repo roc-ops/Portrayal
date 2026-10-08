@@ -1,0 +1,701 @@
+format: 1
+kind: device
+name: cmv-sfd42u9w
+version: 0.1.0
+maturity: modelled
+manufacturer: FS.com
+model: CMV-SFD42U9W
+aliases:
+  - {name: '188944', kind: vendor}
+description: >-
+  42U single-sided vertical cable manager, FS SKU #188944: a black finger duct 3.5 in wide
+  and 1866.9 mm tall (exactly 42U) in two 21U sections, that stands beside a 42U or 45U
+  open-frame rack on brackets bolted to the side of the upright. A folded steel channel
+  punched with six rectangular windows carries a row of moulded T fingers down each
+  flange, 21 a section at one rack unit apart, and a hinged cover a section latches over
+  the crossbars to close a channel 63 mm wide. It takes no rack unit.
+profile: passive
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE VENDOR DRAWING, AT THE RESOLUTION IT HAS. The FS 42U Vertical
+      Cable Managers with Finger Ducts datasheet (page 5) draws the whole duct three ways
+      - a back view, a side view and a cover back view - in millimetres, and notes that
+      it is two equal parts, 73.5 in (1866.9mm) high. The embedded rasters are about 100
+      by 720 px, so every figure is read on the 600 dpi page render, where each native
+      pixel is a 5 px block, and only as a fraction of a figure the same view prints: the
+      side view 152.6 across (283 px) and 1866.9 down (3090 px), the back view its 311,
+      1555 and 228.2 down and the stated 88.9 across. The two axes of one view differ by
+      up to 10 per cent, so nothing is carried between axes. The product-page renders of
+      #188944 are the second reading (x1 dimensioned, cover closed and open; g2 straight
+      on; g4, g5, g7 the channel; g6 and g8 the fingers and the cover hinge; g9 the
+      included brackets and fixings).
+  mount:
+    confidence: drawing
+    note: >-
+      drawing - `rack-side`. The side view hangs four brackets off the back of the duct,
+      622, 311 and 622 apart, and FS compatibility matrix accepts the part on the APC
+      AR201 45U two-post and the AR203A 44U four-post open frames; the specification
+      table says it matches 42U and 45U open racks. No install guide is published for
+      it. The brackets (Quick Release Brackets x4 and Brackets x4, render g9 and x2) are
+      hardware and are not drawn. It occupies no rack unit; `ru: 42` is the height it
+      runs beside, and which side of the rack is a lab placement to say
+      (docs/vertical-cable-managers-design.md).
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - THE DUCT AS IT STANDS, cover fitted: `width` across the rack face
+      direction, `height` the height it runs, `depth` front to back. 1866.9 x 88.9 x 152.6
+      is the specification table (73.5 x 3.5 x 6.00 in), and 1866.9 is 42 x 44.45. The
+      side view prints 152.6 from the back of the channel to the front of the cover; the
+      render x1 dimensions 3.5 in across the cover and 6.00 in along the side, and a
+      section 36.75 in [933mm].
+  sections:
+    confidence: drawing
+    note: >-
+      drawing - THE TWO SECTIONS ARE DRAWN AS ONE LENGTH, each 933.45, half the 1866.9,
+      with the joint a seam. The cover back view draws the two covers meeting at the
+      joint, and the render x1 dimensions a section 933 mm.
+  shell:
+    confidence: drawing
+    note: >-
+      drawing - A HOLLOW DUCT, NOT A BOX, as every FS finger duct in the library is
+      (docs/cable-managers-design.md section 4). The body is a sheet body and its six views
+      are elevations; the solid is what its parts build: the web of the channel as a well
+      151.1 deep on the front view, its floor open at the six windows; the two finger walls
+      and 84 fingers standing in it; and the two covers, which pull off and open the
+      channel. The back is built as plates sunk 0.05 inside the rear face, round the
+      windows.
+  thickness:
+    confidence: estimated
+    note: >-
+      estimated - no FS document states a gauge. 1.5 is the web and the cover plate; the
+      parts carry their own thicknesses.
+  floor:
+    confidence: estimated
+    note: >-
+      estimated - the floor of the well is the front of the web, taken 1.5 from the rear:
+      the side view draws the web at the back of the 152.6 as a single line.
+  front:
+    confidence: drawing
+    note: >-
+      drawing - the covers, fitted. With them off the front is the channel between the two
+      finger walls, the crossbars of the fingers end-on along each edge and the web with
+      its windows and keyholes at the bottom of it. The walls are taken 13 wide (the back
+      view draws a strip of small square windows down each edge about that wide), so the
+      channel is 62.9. The 42 fingers stand at one rack unit, centred in each section.
+  fingers-shape:
+    confidence: drawing
+    note: >-
+      drawing - the side view draws each finger as a T: a V widening to its root at the
+      wall, a stem 12.7 high, and a crossbar along the duct at its front end; renders g6,
+      g8 and x4 show the same T, moulded, clipped into square windows along the channel
+      flange. The V is drawn as a block, and the crossbar is estimated at 30 high.
+  material:
+    confidence: drawing
+    note: >-
+      drawing - THE SOURCES DISAGREE AND THE RENDERS ARE TAKEN. The product page gives the
+      body material as SPCC; the datasheet gives the backbone as Plastic (ABS), and both
+      the datasheet heading and the page title call it a plastic manager. The renders
+      g4, g5 and g7 show a folded sheet channel with punched square holes, countersunk
+      screws and sheared edges, and moulded T fingers clipped into it, so the backbone is
+      stated as SPCC and the fingers as plastic. The disagreement is a `gaps:` entry.
+  cover:
+    confidence: drawing
+    note: >-
+      drawing - THE SOURCES DISAGREE AND THE DRAWING IS TAKEN. The product page style is
+      Finger Duct, with no cover, and the specification table lists none; the drawing has
+      a Cover Back View, the render x1 shows the cover closed and swung open, and renders
+      g2, g3 and g6 to g8 show it fitted. The cover is drawn, one a section, and the
+      disagreement is a `gaps:` entry.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the back view: the web 88.9 wide with six rectangular windows on its
+      centre line, 47.3 wide and 146.4 high, each a declared pass-through, open, through
+      into the channel; a keyhole above each (R11 over R6.78), the first 83.7 below the
+      top and 311 apart, and a small window 26.8 by 31.6 below each of the first five large ones, painted.
+      The view is symmetric about its centre line, so the rear is the back view
+      unmirrored.
+  rear-not-drawn:
+    confidence: drawing
+    note: >-
+      drawing - the rows of small square windows down both edges of the web, the screw
+      holes and the brackets are not drawn: the windows are the clips of the finger bases
+      seen through the web, under one native pixel each, and the brackets are hardware.
+  top:
+    confidence: drawing
+    note: >-
+      drawing - the end of the duct seen from above, rear at y=0, from the side view
+      depths: the web, the channel flanges to 37.2, the finger bases to 65.2, the V root,
+      stem and crossbar to 143.4, the cover lips and the cover plate to 152.6. No view
+      draws the end; it is the side view figures laid across the back view widths.
+  bottom:
+    confidence: drawing
+    note: >-
+      drawing - the bottom end is the top end again: the side view is the same at both
+      ends.
+  left:
+    confidence: drawing
+    note: >-
+      drawing - the side view of the datasheet, rear at x=0: the channel flange, the row
+      of finger bases, 42 fingers and the edge of the two covers, with the joint a seam.
+      The bracket plates the view hangs behind the channel are not drawn.
+  right:
+    confidence: drawing
+    note: >-
+      drawing - the left view mirrored: the duct is the same on both sides.
+  guides:
+    confidence: estimated
+    note: >-
+      estimated - the duct on the front view is the channel between the two finger walls,
+      62.9 wide on the estimated 13 walls, run down the height (`run: y`); its finger
+      pitch is the rack unit of the side view and its gap the 31.75 between stems.
+  capacity:
+    confidence: datasheet
+    note: >-
+      datasheet - NOT STATED. The cable capacity table of the datasheet lists CMV-5U3W,
+      CMV-SFD45U5W and CMV-DFD45U5W and not this part, and the product page gives none; no
+      cable-capacity is stated, and the absence is a `gaps:` entry.
+  weight:
+    confidence: datasheet
+    note: datasheet - 10 kg, the FS product page specification table for #188944.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - style, colour, the included brackets and fixings, the open racks it
+      matches and RoHS and ISO 9001 are the specification table and Standards Compliance
+      list of the datasheet and the product page; the materials are under `material`.
+  color:
+    confidence: estimated
+    note: >-
+      estimated - "Color: Black". Every image FS publishes of the part is a render; it is
+      drawn in the shades of the FS ABS ducts, the cover a shade lighter.
+attrs:
+  physical:
+    weight-kg: 10
+    material: SPCC
+    finger-material: Plastic
+    color: Black
+    mounting-hardware: Quick Release Brackets x4, Brackets x4, M4 Countersunk Head Screws x32, Clip Screws and Nuts x8
+  compliance:
+    rohs: RoHS Compliant
+    iso: ISO9001 Certificate
+chassis:
+  width: 88.9
+  height: 1866.9
+  depth: 152.6
+  ru: 42
+  mount: rack-side
+  shell: sheet
+  thickness: 1.5
+  weight-kg: 10
+  color: '#2a2c2e'
+gaps:
+  - what: material
+    scope: [front, rear, left, right]
+    reason: sources-disagree
+    note: >-
+      the product page gives the body as SPCC; the datasheet gives the backbone as
+      Plastic (ABS) and the page and datasheet headings call it plastic. The renders show
+      a folded steel channel with plastic fingers, which is what is stated.
+    wanted: FS confirming the material, or a real unit
+  - what: cover
+    scope: [front]
+    reason: sources-disagree
+    note: >-
+      the product page style is Finger Duct and the specification table lists no cover;
+      the drawing has a Cover Back View and the renders show a hinged cover, which is
+      drawn.
+    wanted: FS confirming whether #188944 ships with its covers
+  - what: cable-capacity
+    scope: [front]
+    reason: vendor-silent
+    note: >-
+      no FS document states a cable capacity for this part; the capacity table of its
+      datasheet covers only the 45U and 5U ducts.
+    wanted: an FS capacity figure for CMV-SFD42U9W
+  - what: finger-width
+    scope: [front, top, bottom]
+    reason: needs-drawing
+    note: >-
+      the back view prints no width, the views are anisotropic, and no view draws the
+      duct end-on, so the 13 mm walls and fingers across the face and the 30 mm
+      crossbars are estimated.
+    wanted: an end view of the duct, or a ruler on a real one
+  - what: bracket-stand-off
+    scope: [left, right]
+    reason: vendor-silent
+    note: >-
+      the side view draws four brackets behind the channel but dimensions only their
+      spacing; how far the duct stands from the upright is not given, and no install
+      guide is published for this part.
+    wanted: an install guide, or a dimensioned drawing of a bracket fitted
+groups:
+  body:
+    term: Duct
+    role: furniture
+    index-origin: 1
+    description: the channel web and the two finger walls, left first
+  fingers:
+    term: Finger
+    role: furniture
+    index-origin: 1
+    description: the fingers, the left wall top to bottom and then the right, 21 a section
+  cover:
+    term: Cover
+    role: furniture
+    index-origin: 1
+    description: the hinged covers, one a section, the upper first
+views:
+  front:
+    size: {w: 88.9, h: 1866.9}
+    components:
+      placements:
+        - {ref: fs/cmv-sfd42u9w-base@1, id: base, at: [0.0, 0.0], group: body, rel-pos: 1}
+        - {ref: fs/cmv-sfd42u9w-wall@1, id: wall-left, at: [0.0, 0.0], group: body, rel-pos: 2, in: base, under: [finger-left-1, finger-left-2, finger-left-3, finger-left-4, finger-left-5, finger-left-6, finger-left-7, finger-left-8, finger-left-9, finger-left-10, finger-left-11, finger-left-12, finger-left-13, finger-left-14, finger-left-15, finger-left-16, finger-left-17, finger-left-18, finger-left-19, finger-left-20, finger-left-21, finger-left-22, finger-left-23, finger-left-24, finger-left-25, finger-left-26, finger-left-27, finger-left-28, finger-left-29, finger-left-30, finger-left-31, finger-left-32, finger-left-33, finger-left-34, finger-left-35, finger-left-36, finger-left-37, finger-left-38, finger-left-39, finger-left-40, finger-left-41, finger-left-42, cover-1, cover-2]}
+        - {ref: fs/cmv-sfd42u9w-wall@1, id: wall-right, at: [75.9, 0.0], group: body, rel-pos: 3, in: base, under: [finger-right-1, finger-right-2, finger-right-3, finger-right-4, finger-right-5, finger-right-6, finger-right-7, finger-right-8, finger-right-9, finger-right-10, finger-right-11, finger-right-12, finger-right-13, finger-right-14, finger-right-15, finger-right-16, finger-right-17, finger-right-18, finger-right-19, finger-right-20, finger-right-21, finger-right-22, finger-right-23, finger-right-24, finger-right-25, finger-right-26, finger-right-27, finger-right-28, finger-right-29, finger-right-30, finger-right-31, finger-right-32, finger-right-33, finger-right-34, finger-right-35, finger-right-36, finger-right-37, finger-right-38, finger-right-39, finger-right-40, finger-right-41, finger-right-42, cover-1, cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-1, at: [0.0, 7.23], group: fingers, rel-pos: 1, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-2, at: [0.0, 51.67], group: fingers, rel-pos: 2, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-3, at: [0.0, 96.12], group: fingers, rel-pos: 3, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-4, at: [0.0, 140.57], group: fingers, rel-pos: 4, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-5, at: [0.0, 185.03], group: fingers, rel-pos: 5, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-6, at: [0.0, 229.47], group: fingers, rel-pos: 6, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-7, at: [0.0, 273.93], group: fingers, rel-pos: 7, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-8, at: [0.0, 318.38], group: fingers, rel-pos: 8, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-9, at: [0.0, 362.82], group: fingers, rel-pos: 9, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-10, at: [0.0, 407.27], group: fingers, rel-pos: 10, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-11, at: [0.0, 451.73], group: fingers, rel-pos: 11, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-12, at: [0.0, 496.18], group: fingers, rel-pos: 12, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-13, at: [0.0, 540.62], group: fingers, rel-pos: 13, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-14, at: [0.0, 585.08], group: fingers, rel-pos: 14, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-15, at: [0.0, 629.52], group: fingers, rel-pos: 15, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-16, at: [0.0, 673.98], group: fingers, rel-pos: 16, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-17, at: [0.0, 718.42], group: fingers, rel-pos: 17, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-18, at: [0.0, 762.88], group: fingers, rel-pos: 18, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-19, at: [0.0, 807.33], group: fingers, rel-pos: 19, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-20, at: [0.0, 851.77], group: fingers, rel-pos: 20, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-21, at: [0.0, 896.23], group: fingers, rel-pos: 21, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-22, at: [0.0, 940.67], group: fingers, rel-pos: 22, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-23, at: [0.0, 985.12], group: fingers, rel-pos: 23, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-24, at: [0.0, 1029.58], group: fingers, rel-pos: 24, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-25, at: [0.0, 1074.03], group: fingers, rel-pos: 25, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-26, at: [0.0, 1118.47], group: fingers, rel-pos: 26, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-27, at: [0.0, 1162.92], group: fingers, rel-pos: 27, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-28, at: [0.0, 1207.38], group: fingers, rel-pos: 28, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-29, at: [0.0, 1251.83], group: fingers, rel-pos: 29, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-30, at: [0.0, 1296.28], group: fingers, rel-pos: 30, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-31, at: [0.0, 1340.72], group: fingers, rel-pos: 31, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-32, at: [0.0, 1385.17], group: fingers, rel-pos: 32, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-33, at: [0.0, 1429.62], group: fingers, rel-pos: 33, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-34, at: [0.0, 1474.08], group: fingers, rel-pos: 34, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-35, at: [0.0, 1518.53], group: fingers, rel-pos: 35, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-36, at: [0.0, 1562.97], group: fingers, rel-pos: 36, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-37, at: [0.0, 1607.42], group: fingers, rel-pos: 37, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-38, at: [0.0, 1651.88], group: fingers, rel-pos: 38, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-39, at: [0.0, 1696.33], group: fingers, rel-pos: 39, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-40, at: [0.0, 1740.78], group: fingers, rel-pos: 40, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-41, at: [0.0, 1785.22], group: fingers, rel-pos: 41, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-left-42, at: [0.0, 1829.67], group: fingers, rel-pos: 42, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-1, at: [75.9, 7.23], group: fingers, rel-pos: 43, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-2, at: [75.9, 51.67], group: fingers, rel-pos: 44, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-3, at: [75.9, 96.12], group: fingers, rel-pos: 45, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-4, at: [75.9, 140.57], group: fingers, rel-pos: 46, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-5, at: [75.9, 185.03], group: fingers, rel-pos: 47, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-6, at: [75.9, 229.47], group: fingers, rel-pos: 48, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-7, at: [75.9, 273.93], group: fingers, rel-pos: 49, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-8, at: [75.9, 318.38], group: fingers, rel-pos: 50, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-9, at: [75.9, 362.82], group: fingers, rel-pos: 51, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-10, at: [75.9, 407.27], group: fingers, rel-pos: 52, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-11, at: [75.9, 451.73], group: fingers, rel-pos: 53, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-12, at: [75.9, 496.18], group: fingers, rel-pos: 54, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-13, at: [75.9, 540.62], group: fingers, rel-pos: 55, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-14, at: [75.9, 585.08], group: fingers, rel-pos: 56, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-15, at: [75.9, 629.52], group: fingers, rel-pos: 57, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-16, at: [75.9, 673.98], group: fingers, rel-pos: 58, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-17, at: [75.9, 718.42], group: fingers, rel-pos: 59, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-18, at: [75.9, 762.88], group: fingers, rel-pos: 60, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-19, at: [75.9, 807.33], group: fingers, rel-pos: 61, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-20, at: [75.9, 851.77], group: fingers, rel-pos: 62, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-21, at: [75.9, 896.23], group: fingers, rel-pos: 63, in: base, under: [cover-1]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-22, at: [75.9, 940.67], group: fingers, rel-pos: 64, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-23, at: [75.9, 985.12], group: fingers, rel-pos: 65, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-24, at: [75.9, 1029.58], group: fingers, rel-pos: 66, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-25, at: [75.9, 1074.03], group: fingers, rel-pos: 67, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-26, at: [75.9, 1118.47], group: fingers, rel-pos: 68, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-27, at: [75.9, 1162.92], group: fingers, rel-pos: 69, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-28, at: [75.9, 1207.38], group: fingers, rel-pos: 70, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-29, at: [75.9, 1251.83], group: fingers, rel-pos: 71, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-30, at: [75.9, 1296.28], group: fingers, rel-pos: 72, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-31, at: [75.9, 1340.72], group: fingers, rel-pos: 73, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-32, at: [75.9, 1385.17], group: fingers, rel-pos: 74, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-33, at: [75.9, 1429.62], group: fingers, rel-pos: 75, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-34, at: [75.9, 1474.08], group: fingers, rel-pos: 76, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-35, at: [75.9, 1518.53], group: fingers, rel-pos: 77, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-36, at: [75.9, 1562.97], group: fingers, rel-pos: 78, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-37, at: [75.9, 1607.42], group: fingers, rel-pos: 79, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-38, at: [75.9, 1651.88], group: fingers, rel-pos: 80, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-39, at: [75.9, 1696.33], group: fingers, rel-pos: 81, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-40, at: [75.9, 1740.78], group: fingers, rel-pos: 82, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-41, at: [75.9, 1785.22], group: fingers, rel-pos: 83, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-finger@1, id: finger-right-42, at: [75.9, 1829.67], group: fingers, rel-pos: 84, in: base, under: [cover-2]}
+        - {ref: fs/cmv-sfd42u9w-cover@1, id: cover-1, at: [0.0, 0.0], group: cover, rel-pos: 1, in: base}
+        - {ref: fs/cmv-sfd42u9w-cover@1, id: cover-2, at: [0.0, 933.45], group: cover, rel-pos: 2, in: base}
+    guides:
+      - {id: duct, kind: duct, at: [13, 0], size: [62.9, 1866.9], run: y, finger-pitch: 44.45, finger-gap: 31.75, confidence: estimated, source: 'FS 42U Vertical Cable Managers with Finger Ducts datasheet, page 5: the pitch on the side view; the walls 13 wide, estimated'}
+  rear:
+    size: {w: 88.9, h: 1866.9}
+    panel:
+      decor:
+        - {id: back-1, at: [0, 0], size: [20.8, 933.45], fill: '#232527', sink: 0.05, kind: base}
+        - {id: back-2, at: [68.1, 0], size: [20.8, 933.45], fill: '#232527', sink: 0.05, kind: base}
+        - {id: back-3, at: [20.8, 0], size: [47.3, 137.1], fill: '#232527', sink: 0.05, kind: base}
+        - {id: back-4, at: [20.8, 283.5], size: [47.3, 164.6], fill: '#232527', sink: 0.05, kind: base}
+        - {id: back-5, at: [20.8, 594.5], size: [47.3, 164.6], fill: '#232527', sink: 0.05, kind: base}
+        - {id: back-6, at: [20.8, 905.5], size: [47.3, 27.95], fill: '#232527', sink: 0.05, kind: base}
+        - {id: back-7, at: [0, 933.45], size: [20.8, 933.45], fill: '#232527', sink: 0.05, kind: base}
+        - {id: back-8, at: [68.1, 933.45], size: [20.8, 933.45], fill: '#232527', sink: 0.05, kind: base}
+        - {id: back-9, at: [20.8, 933.45], size: [47.3, 136.65], fill: '#232527', sink: 0.05, kind: base}
+        - {id: back-10, at: [20.8, 1216.5], size: [47.3, 164.6], fill: '#232527', sink: 0.05, kind: base}
+        - {id: back-11, at: [20.8, 1527.5], size: [47.3, 164.6], fill: '#232527', sink: 0.05, kind: base}
+        - {id: back-12, at: [20.8, 1838.5], size: [47.3, 28.4], fill: '#232527', sink: 0.05, kind: base}
+        - {id: seam, at: [0, 933.15], size: [88.9, 0.6], fill: '#101112', kind: seam}
+        - {id: keyhole-1, at: [33.45, 65.7], size: [22, 22], rx: 11, fill: '#141517', kind: keyhole}
+        - {id: keyhole-1-slot, at: [37.67, 88.12], size: [13.56, 13.56], rx: 6.78, fill: '#141517', kind: keyhole}
+        - {id: window-1, at: [31.05, 302.3], size: [26.8, 31.6], fill: '#141517', kind: window}
+        - {id: keyhole-2, at: [33.45, 376.7], size: [22, 22], rx: 11, fill: '#141517', kind: keyhole}
+        - {id: keyhole-2-slot, at: [37.67, 399.12], size: [13.56, 13.56], rx: 6.78, fill: '#141517', kind: keyhole}
+        - {id: window-2, at: [31.05, 613.3], size: [26.8, 31.6], fill: '#141517', kind: window}
+        - {id: keyhole-3, at: [33.45, 687.7], size: [22, 22], rx: 11, fill: '#141517', kind: keyhole}
+        - {id: keyhole-3-slot, at: [37.67, 710.12], size: [13.56, 13.56], rx: 6.78, fill: '#141517', kind: keyhole}
+        - {id: window-3, at: [31.05, 924.3], size: [26.8, 31.6], fill: '#141517', kind: window}
+        - {id: keyhole-4, at: [33.45, 998.7], size: [22, 22], rx: 11, fill: '#141517', kind: keyhole}
+        - {id: keyhole-4-slot, at: [37.67, 1021.12], size: [13.56, 13.56], rx: 6.78, fill: '#141517', kind: keyhole}
+        - {id: window-4, at: [31.05, 1235.3], size: [26.8, 31.6], fill: '#141517', kind: window}
+        - {id: keyhole-5, at: [33.45, 1309.7], size: [22, 22], rx: 11, fill: '#141517', kind: keyhole}
+        - {id: keyhole-5-slot, at: [37.67, 1332.12], size: [13.56, 13.56], rx: 6.78, fill: '#141517', kind: keyhole}
+        - {id: window-5, at: [31.05, 1546.3], size: [26.8, 31.6], fill: '#141517', kind: window}
+        - {id: keyhole-6, at: [33.45, 1620.7], size: [22, 22], rx: 11, fill: '#141517', kind: keyhole}
+        - {id: keyhole-6-slot, at: [37.67, 1643.12], size: [13.56, 13.56], rx: 6.78, fill: '#141517', kind: keyhole}
+    passes:
+      - {id: pass-through-1, at: [20.8, 137.1], size: [47.3, 146.4], shape: rect, cover: open}
+      - {id: pass-through-2, at: [20.8, 448.1], size: [47.3, 146.4], shape: rect, cover: open}
+      - {id: pass-through-3, at: [20.8, 759.1], size: [47.3, 146.4], shape: rect, cover: open}
+      - {id: pass-through-4, at: [20.8, 1070.1], size: [47.3, 146.4], shape: rect, cover: open}
+      - {id: pass-through-5, at: [20.8, 1381.1], size: [47.3, 146.4], shape: rect, cover: open}
+      - {id: pass-through-6, at: [20.8, 1692.1], size: [47.3, 146.4], shape: rect, cover: open}
+  top:
+    size: {w: 88.9, h: 152.6}
+    panel:
+      decor:
+        - {id: web, at: [0, 0], size: [88.9, 1.5], fill: '#232527', sink: 0.05, kind: base}
+        - {id: flange-left, at: [0, 1.5], size: [1.5, 35.7], fill: '#232527', sink: 0.05, kind: base}
+        - {id: flange-right, at: [87.4, 1.5], size: [1.5, 35.7], fill: '#232527', sink: 0.05, kind: base}
+        - {id: wall-left, at: [0, 37.2], size: [13, 28], fill: '#202224', kind: finger-wall}
+        - {id: root-left, at: [0, 65.2], size: [13, 12], fill: '#202224', kind: finger}
+        - {id: stem-left, at: [0, 77.2], size: [13, 58.1], fill: '#26282a', kind: finger}
+        - {id: tip-left, at: [0, 135.3], size: [13, 8.1], fill: '#2a2c2e', kind: finger}
+        - {id: wall-right, at: [75.9, 37.2], size: [13, 28], fill: '#202224', kind: finger-wall}
+        - {id: root-right, at: [75.9, 65.2], size: [13, 12], fill: '#202224', kind: finger}
+        - {id: stem-right, at: [75.9, 77.2], size: [13, 58.1], fill: '#26282a', kind: finger}
+        - {id: tip-right, at: [75.9, 135.3], size: [13, 8.1], fill: '#2a2c2e', kind: finger}
+        - {id: lip-left, at: [0, 143.4], size: [1.5, 7.7], fill: '#2a2c2e', kind: cover}
+        - {id: lip-right, at: [87.4, 143.4], size: [1.5, 7.7], fill: '#2a2c2e', kind: cover}
+        - {id: cover, at: [0, 151.1], size: [88.9, 1.5], fill: '#2f3134', kind: cover}
+  bottom:
+    size: {w: 88.9, h: 152.6}
+    panel:
+      decor:
+        - {id: web, at: [0, 0], size: [88.9, 1.5], fill: '#232527', sink: 0.05, kind: base}
+        - {id: flange-left, at: [0, 1.5], size: [1.5, 35.7], fill: '#232527', sink: 0.05, kind: base}
+        - {id: flange-right, at: [87.4, 1.5], size: [1.5, 35.7], fill: '#232527', sink: 0.05, kind: base}
+        - {id: wall-left, at: [0, 37.2], size: [13, 28], fill: '#202224', kind: finger-wall}
+        - {id: root-left, at: [0, 65.2], size: [13, 12], fill: '#202224', kind: finger}
+        - {id: stem-left, at: [0, 77.2], size: [13, 58.1], fill: '#26282a', kind: finger}
+        - {id: tip-left, at: [0, 135.3], size: [13, 8.1], fill: '#2a2c2e', kind: finger}
+        - {id: wall-right, at: [75.9, 37.2], size: [13, 28], fill: '#202224', kind: finger-wall}
+        - {id: root-right, at: [75.9, 65.2], size: [13, 12], fill: '#202224', kind: finger}
+        - {id: stem-right, at: [75.9, 77.2], size: [13, 58.1], fill: '#26282a', kind: finger}
+        - {id: tip-right, at: [75.9, 135.3], size: [13, 8.1], fill: '#2a2c2e', kind: finger}
+        - {id: lip-left, at: [0, 143.4], size: [1.5, 7.7], fill: '#2a2c2e', kind: cover}
+        - {id: lip-right, at: [87.4, 143.4], size: [1.5, 7.7], fill: '#2a2c2e', kind: cover}
+        - {id: cover, at: [0, 151.1], size: [88.9, 1.5], fill: '#2f3134', kind: cover}
+  left:
+    size: {w: 152.6, h: 1866.9}
+    panel:
+      decor:
+        - {id: base, at: [0, 0], size: [37.2, 1866.9], fill: '#232527', sink: 0.05, kind: base}
+        - {id: wall, at: [37.2, 0], size: [28, 1866.9], fill: '#202224', kind: finger-wall}
+        - {id: root-1, at: [65.2, 10.23], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-1, at: [77.2, 15.88], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-1, at: [135.3, 7.23], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-2, at: [65.2, 54.67], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-2, at: [77.2, 60.32], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-2, at: [135.3, 51.67], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-3, at: [65.2, 99.12], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-3, at: [77.2, 104.78], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-3, at: [135.3, 96.12], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-4, at: [65.2, 143.57], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-4, at: [77.2, 149.22], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-4, at: [135.3, 140.57], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-5, at: [65.2, 188.03], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-5, at: [77.2, 193.68], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-5, at: [135.3, 185.03], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-6, at: [65.2, 232.47], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-6, at: [77.2, 238.12], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-6, at: [135.3, 229.47], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-7, at: [65.2, 276.93], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-7, at: [77.2, 282.57], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-7, at: [135.3, 273.93], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-8, at: [65.2, 321.38], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-8, at: [77.2, 327.02], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-8, at: [135.3, 318.38], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-9, at: [65.2, 365.82], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-9, at: [77.2, 371.47], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-9, at: [135.3, 362.82], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-10, at: [65.2, 410.27], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-10, at: [77.2, 415.92], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-10, at: [135.3, 407.27], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-11, at: [65.2, 454.73], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-11, at: [77.2, 460.38], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-11, at: [135.3, 451.73], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-12, at: [65.2, 499.18], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-12, at: [77.2, 504.82], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-12, at: [135.3, 496.18], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-13, at: [65.2, 543.62], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-13, at: [77.2, 549.27], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-13, at: [135.3, 540.62], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-14, at: [65.2, 588.08], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-14, at: [77.2, 593.73], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-14, at: [135.3, 585.08], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-15, at: [65.2, 632.52], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-15, at: [77.2, 638.17], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-15, at: [135.3, 629.52], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-16, at: [65.2, 676.98], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-16, at: [77.2, 682.62], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-16, at: [135.3, 673.98], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-17, at: [65.2, 721.42], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-17, at: [77.2, 727.07], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-17, at: [135.3, 718.42], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-18, at: [65.2, 765.88], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-18, at: [77.2, 771.52], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-18, at: [135.3, 762.88], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-19, at: [65.2, 810.33], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-19, at: [77.2, 815.98], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-19, at: [135.3, 807.33], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-20, at: [65.2, 854.77], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-20, at: [77.2, 860.42], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-20, at: [135.3, 851.77], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-21, at: [65.2, 899.23], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-21, at: [77.2, 904.88], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-21, at: [135.3, 896.23], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-22, at: [65.2, 943.67], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-22, at: [77.2, 949.32], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-22, at: [135.3, 940.67], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-23, at: [65.2, 988.12], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-23, at: [77.2, 993.77], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-23, at: [135.3, 985.12], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-24, at: [65.2, 1032.58], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-24, at: [77.2, 1038.23], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-24, at: [135.3, 1029.58], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-25, at: [65.2, 1077.03], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-25, at: [77.2, 1082.68], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-25, at: [135.3, 1074.03], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-26, at: [65.2, 1121.47], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-26, at: [77.2, 1127.12], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-26, at: [135.3, 1118.47], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-27, at: [65.2, 1165.92], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-27, at: [77.2, 1171.58], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-27, at: [135.3, 1162.92], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-28, at: [65.2, 1210.38], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-28, at: [77.2, 1216.03], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-28, at: [135.3, 1207.38], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-29, at: [65.2, 1254.83], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-29, at: [77.2, 1260.48], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-29, at: [135.3, 1251.83], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-30, at: [65.2, 1299.28], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-30, at: [77.2, 1304.93], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-30, at: [135.3, 1296.28], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-31, at: [65.2, 1343.72], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-31, at: [77.2, 1349.38], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-31, at: [135.3, 1340.72], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-32, at: [65.2, 1388.17], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-32, at: [77.2, 1393.83], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-32, at: [135.3, 1385.17], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-33, at: [65.2, 1432.62], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-33, at: [77.2, 1438.28], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-33, at: [135.3, 1429.62], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-34, at: [65.2, 1477.08], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-34, at: [77.2, 1482.73], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-34, at: [135.3, 1474.08], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-35, at: [65.2, 1521.53], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-35, at: [77.2, 1527.18], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-35, at: [135.3, 1518.53], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-36, at: [65.2, 1565.97], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-36, at: [77.2, 1571.62], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-36, at: [135.3, 1562.97], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-37, at: [65.2, 1610.42], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-37, at: [77.2, 1616.08], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-37, at: [135.3, 1607.42], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-38, at: [65.2, 1654.88], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-38, at: [77.2, 1660.53], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-38, at: [135.3, 1651.88], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-39, at: [65.2, 1699.33], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-39, at: [77.2, 1704.98], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-39, at: [135.3, 1696.33], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-40, at: [65.2, 1743.78], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-40, at: [77.2, 1749.43], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-40, at: [135.3, 1740.78], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-41, at: [65.2, 1788.22], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-41, at: [77.2, 1793.88], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-41, at: [135.3, 1785.22], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-42, at: [65.2, 1832.67], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-42, at: [77.2, 1838.33], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-42, at: [135.3, 1829.67], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: cover-1, at: [143.4, 0], size: [9.2, 933.45], fill: '#2f3134', kind: cover}
+        - {id: cover-2, at: [143.4, 933.45], size: [9.2, 933.45], fill: '#2f3134', kind: cover}
+        - {id: seam, at: [0, 933.15], size: [152.6, 0.6], fill: '#101112', kind: seam}
+  right:
+    size: {w: 152.6, h: 1866.9}
+    panel:
+      decor:
+        - {id: base, at: [115.4, 0], size: [37.2, 1866.9], fill: '#232527', sink: 0.05, kind: base}
+        - {id: wall, at: [87.4, 0], size: [28, 1866.9], fill: '#202224', kind: finger-wall}
+        - {id: root-1, at: [75.4, 10.23], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-1, at: [17.3, 15.88], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-1, at: [9.2, 7.23], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-2, at: [75.4, 54.67], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-2, at: [17.3, 60.32], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-2, at: [9.2, 51.67], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-3, at: [75.4, 99.12], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-3, at: [17.3, 104.78], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-3, at: [9.2, 96.12], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-4, at: [75.4, 143.57], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-4, at: [17.3, 149.22], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-4, at: [9.2, 140.57], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-5, at: [75.4, 188.03], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-5, at: [17.3, 193.68], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-5, at: [9.2, 185.03], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-6, at: [75.4, 232.47], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-6, at: [17.3, 238.12], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-6, at: [9.2, 229.47], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-7, at: [75.4, 276.93], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-7, at: [17.3, 282.57], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-7, at: [9.2, 273.93], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-8, at: [75.4, 321.38], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-8, at: [17.3, 327.02], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-8, at: [9.2, 318.38], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-9, at: [75.4, 365.82], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-9, at: [17.3, 371.47], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-9, at: [9.2, 362.82], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-10, at: [75.4, 410.27], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-10, at: [17.3, 415.92], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-10, at: [9.2, 407.27], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-11, at: [75.4, 454.73], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-11, at: [17.3, 460.38], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-11, at: [9.2, 451.73], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-12, at: [75.4, 499.18], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-12, at: [17.3, 504.82], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-12, at: [9.2, 496.18], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-13, at: [75.4, 543.62], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-13, at: [17.3, 549.27], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-13, at: [9.2, 540.62], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-14, at: [75.4, 588.08], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-14, at: [17.3, 593.73], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-14, at: [9.2, 585.08], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-15, at: [75.4, 632.52], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-15, at: [17.3, 638.17], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-15, at: [9.2, 629.52], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-16, at: [75.4, 676.98], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-16, at: [17.3, 682.62], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-16, at: [9.2, 673.98], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-17, at: [75.4, 721.42], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-17, at: [17.3, 727.07], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-17, at: [9.2, 718.42], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-18, at: [75.4, 765.88], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-18, at: [17.3, 771.52], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-18, at: [9.2, 762.88], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-19, at: [75.4, 810.33], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-19, at: [17.3, 815.98], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-19, at: [9.2, 807.33], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-20, at: [75.4, 854.77], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-20, at: [17.3, 860.42], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-20, at: [9.2, 851.77], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-21, at: [75.4, 899.23], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-21, at: [17.3, 904.88], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-21, at: [9.2, 896.23], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-22, at: [75.4, 943.67], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-22, at: [17.3, 949.32], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-22, at: [9.2, 940.67], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-23, at: [75.4, 988.12], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-23, at: [17.3, 993.77], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-23, at: [9.2, 985.12], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-24, at: [75.4, 1032.58], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-24, at: [17.3, 1038.23], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-24, at: [9.2, 1029.58], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-25, at: [75.4, 1077.03], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-25, at: [17.3, 1082.68], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-25, at: [9.2, 1074.03], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-26, at: [75.4, 1121.47], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-26, at: [17.3, 1127.12], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-26, at: [9.2, 1118.47], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-27, at: [75.4, 1165.92], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-27, at: [17.3, 1171.58], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-27, at: [9.2, 1162.92], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-28, at: [75.4, 1210.38], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-28, at: [17.3, 1216.03], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-28, at: [9.2, 1207.38], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-29, at: [75.4, 1254.83], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-29, at: [17.3, 1260.48], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-29, at: [9.2, 1251.83], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-30, at: [75.4, 1299.28], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-30, at: [17.3, 1304.93], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-30, at: [9.2, 1296.28], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-31, at: [75.4, 1343.72], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-31, at: [17.3, 1349.38], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-31, at: [9.2, 1340.72], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-32, at: [75.4, 1388.17], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-32, at: [17.3, 1393.83], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-32, at: [9.2, 1385.17], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-33, at: [75.4, 1432.62], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-33, at: [17.3, 1438.28], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-33, at: [9.2, 1429.62], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-34, at: [75.4, 1477.08], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-34, at: [17.3, 1482.73], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-34, at: [9.2, 1474.08], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-35, at: [75.4, 1521.53], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-35, at: [17.3, 1527.18], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-35, at: [9.2, 1518.53], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-36, at: [75.4, 1565.97], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-36, at: [17.3, 1571.62], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-36, at: [9.2, 1562.97], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-37, at: [75.4, 1610.42], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-37, at: [17.3, 1616.08], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-37, at: [9.2, 1607.42], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-38, at: [75.4, 1654.88], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-38, at: [17.3, 1660.53], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-38, at: [9.2, 1651.88], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-39, at: [75.4, 1699.33], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-39, at: [17.3, 1704.98], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-39, at: [9.2, 1696.33], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-40, at: [75.4, 1743.78], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-40, at: [17.3, 1749.43], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-40, at: [9.2, 1740.78], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-41, at: [75.4, 1788.22], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-41, at: [17.3, 1793.88], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-41, at: [9.2, 1785.22], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: root-42, at: [75.4, 1832.67], size: [12, 24], fill: '#202224', kind: finger}
+        - {id: stem-42, at: [17.3, 1838.33], size: [58.1, 12.7], fill: '#26282a', kind: finger}
+        - {id: tip-42, at: [9.2, 1829.67], size: [8.1, 30], fill: '#2a2c2e', kind: finger}
+        - {id: cover-1, at: [0, 0], size: [9.2, 933.45], fill: '#2f3134', kind: cover}
+        - {id: cover-2, at: [0, 933.45], size: [9.2, 933.45], fill: '#2f3134', kind: cover}
+        - {id: seam, at: [0, 933.15], size: [152.6, 0.6], fill: '#101112', kind: seam}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The finger duct as FS ships #188944, both sections stacked, covers fitted.'
+datasheet:
+  title: 'FS 42U Vertical Cable Managers with Finger Ducts datasheet'
+  sha256: 4e090eb551fa8c82cdf45a33af428f065a1e707c2075f5f0c355b5ced13911f6
