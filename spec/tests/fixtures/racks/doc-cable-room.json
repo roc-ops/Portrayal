@@ -1,0 +1,95 @@
+{
+  "format": "portrayal-rack",
+  "version": 1,
+  "id": "doc-cable-room",
+  "racks": [
+    {
+      "id": "r1",
+      "name": "Cable room",
+      "frame": {
+        "kind": "four-post",
+        "heightRU": 42,
+        "numbering": "bottom-up",
+        "holes": {
+          "style": "square",
+          "thread": null
+        },
+        "railDepth": 740,
+        "usableDepth": 1000,
+        "ref": null
+      },
+      "items": [
+        {
+          "id": "i1",
+          "ref": "as7726-32x",
+          "cfg": "ac-f2b",
+          "label": "top",
+          "ru": 42,
+          "face": "front",
+          "turned": false,
+          "swaps": {},
+          "fields": {}
+        },
+        {
+          "id": "i2",
+          "ref": "as7726-32x",
+          "cfg": "ac-f2b",
+          "label": "bottom",
+          "ru": 1,
+          "face": "front",
+          "turned": false,
+          "swaps": {},
+          "fields": {}
+        },
+        {
+          "id": "i3",
+          "ref": "tm-280",
+          "cfg": "base",
+          "label": "low demarc",
+          "ru": 1,
+          "face": "rear",
+          "turned": false,
+          "swaps": {},
+          "fields": {}
+        }
+      ],
+      "zeroU": [],
+      "cables": [
+        {
+          "id": "c1",
+          "a": {
+            "item": "i1",
+            "path": "mgmt-eth",
+            "view": "front"
+          },
+          "b": {
+            "item": "i2",
+            "path": "mgmt-eth",
+            "view": "front"
+          },
+          "media": "cat6a",
+          "purpose": "management",
+          "label": "",
+          "route": []
+        },
+        {
+          "id": "c2",
+          "a": {
+            "item": "i3",
+            "path": "port-2-1",
+            "view": "front"
+          },
+          "b": {
+            "item": "i9",
+            "path": "port-1",
+            "view": "front"
+          },
+          "media": "cat6a",
+          "purpose": "management",
+          "label": "",
+          "route": []
+        }
+      ]
+    }
+  ]
+}
