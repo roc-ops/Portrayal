@@ -8,7 +8,7 @@ import {fits, isRackFace, heightOf} from './fit.js';
 import {placement, managersOf} from './managers.js';
 import {uLabel} from './model.js';
 import {portFree, endKey, proposeMedia, mismatch, endName, carriedU, portPathOf, matches} from './cable-rules.js';
-import {lanesOf, resolveRoute, routedLength, routeText} from './route.js';
+import {lanesOf, pathwaysOf, resolveRoute, routedLength, routeText} from './route.js';
 import {catalogEntries} from './catalog.js';
 import {GONE, CABLE_GONE} from './commands.js';
 import {slotEnv, slotTree, partName, partOf} from './slots.js';
@@ -139,7 +139,7 @@ function itemFacts(rack, item, ctx) {
 
 // The pathway ids a route may name on a device: its rings and ducts
 // (`guides`) and pass-throughs (`passes`), every view, from rack.json.
-const pathwayIds = c => [...new Set(['guides', 'passes'].flatMap(k => Object.values(c?.[k] || {}).flat()))].sort();
+const pathwayIds = pathwaysOf;
 
 async function cableInfo(rack, cable, ctx) {
   const uOf = ctx.chassisOf ? heightOf(ctx.chassisOf) : carriedU;
@@ -157,6 +157,10 @@ async function cableInfo(rack, cable, ctx) {
       routed = r ? {metres: Math.round(r.measured * 100) / 100, stock: r.value} : null;
     } catch { routed = null; }
   }
+  // slack: the cable's own length less the routed one, in metres
+  const own = l && l.source !== 'routed' && typeof l.value === 'number'
+    ? l.value * ((l.unit ?? 'm') === 'ft' ? 0.3048 : 1) : null;
+  const slack = own != null && routed ? {metres: Math.round((own - routed.metres) * 100) / 100} : null;
   // the devices a route through this cable's ends can name: its two, and the
   // cable managers bolted on them
   const near = [...new Set([cable.a.item, cable.b.item])].filter(id => rack.items.some(i => i.id === id))
@@ -173,7 +177,7 @@ async function cableInfo(rack, cable, ctx) {
     }
   }
   return {kind: 'cable', id: cable.id, a: end(cable.a), b: end(cable.b), media: cable.media, purpose: cable.purpose, label: cable.label,
-    length: l ? {value: l.value, unit: l.unit ?? 'm', source: l.source ?? 'entered'} : null, routed,
+    length: l ? {value: l.value, unit: l.unit ?? 'm', source: l.source ?? 'entered'} : null, routed, slack,
     route: {edited, waypoints, text: routeText(waypoints, label, rack.frame)}, lanes: lanesOf(rack.frame), passes,
     loose, mismatch: warn};
 }
