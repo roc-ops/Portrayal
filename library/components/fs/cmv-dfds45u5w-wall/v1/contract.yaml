@@ -1,0 +1,30 @@
+format: 1
+kind: component
+name: cmv-dfds45u5w-wall
+version: 1.0.0
+class: mechanical
+description: >-
+  One steel return of the FS CMV-DFDS45U5W vertical finger duct seen from the cover side -
+  the flange folded forward along one edge of the spine that a row
+  of finger blocks is fixed to, both sections as one length
+provenance:
+  size: >-
+    estimated - the end view of the FS Vertical Cable Managers with Finger Ducts datasheet for the steel managers (portal id 6868), page 4, draws the return in line
+    with the finger row, 3 px thick; it is drawn the 9.0 of the row, where the row stands.
+    Its height is the 2000.25 of the duct, the joint between the sections a seam.
+  relief: >-
+    drawing - the dual side view: the return runs from the
+    spine to the finger blocks, about 40 mm from the middle of the spine (17 px at 0.4177 px/mm); drawn 37.7 from the floor as on CMV-SFDS45U5W.
+size: {w: 9, h: 2000.25}
+size-confidence: {w: estimated, h: drawing}
+attrs: {material: Steel}
+elements:
+  root: {at: [0.0, 0.0], size: [9, 2000.25], class: bezel}
+relief:
+  features:
+    - node: root
+      out: 37.7
+      color: '#1d1e20'
+      confidence: drawing
+      source: the side view of the steel datasheet, the return to the finger blocks
+skins: [default]
