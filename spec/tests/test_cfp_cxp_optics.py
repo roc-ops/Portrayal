@@ -623,7 +623,9 @@ OFFERS = {"cfp": [CFP_LC, CFP_MPO, CFP_SC], "cfp2": [CFP2_LC, CFP2_MPO], "cfp4":
           "cxp": [CXP_MPO]}
 NEW = set(OPTICS)
 # how many cages of each family the library's cards carry today, as a floor
-ON_CARDS = {"cfp": 8, "cfp2": 16, "cfp4": 4, "cxp": 6}
+# #261 removed the MX960 vertical twins: mpc4e-3d-2cge-8xge-v960 took two CFP cages
+# with it and mpc5e-100g10g-v960 two CFP2, and the MX960 now seats the horizontal cards.
+ON_CARDS = {"cfp": 6, "cfp2": 14, "cfp4": 4, "cxp": 6}
 
 
 @pytest.fixture(scope="module")
@@ -676,18 +678,24 @@ def test_no_other_family_offers_them_and_each_pool_is_its_family(device_cages, c
 MX480, MX960, SR1E, NFXS = "juniper/mx480", "juniper/mx960", "nokia/sr-1e", "nokia/nfxs-e-bb"
 LCP, LCC = "generic/lc-plug@2", "common/lc-dust-cap@1"
 BAYS = {
-    MX480: {"dpc5": "juniper/mpc4e-3d-2cge-8xge@1", "dpc2": "juniper/mpc4e-3d-2cge-8xge@1",
-            "dpc3": "juniper/mpc5e-100g10g@1",
-            "dpc4": "juniper/mpc3e-3d@1", "dpc4/mic0": "juniper/mic3-3d-1x100ge-cxp@1"},
-    # the MX960 cards stand upright, so their cages are at rotate 90
-    MX960: {"fpc2": "juniper/mpc4e-3d-2cge-8xge-v960@1", "fpc5": "juniper/mpc4e-3d-2cge-8xge-v960@1",
-            "fpc3": "juniper/mpc5e-100g10g-v960@1",
-            "fpc4": "juniper/mpc3e-3d-v960@1", "fpc4/mic0": "juniper/mic3-3d-1x100ge-cxp-v@1"},
+    MX480: {"dpc5": "juniper/mpc4e-3d-2cge-8xge@2", "dpc2": "juniper/mpc4e-3d-2cge-8xge@2",
+            "dpc3": "juniper/mpc5e-100g10g@2",
+            "dpc4": "juniper/mpc3e-3d@2", "dpc4/mic0": "juniper/mic3-3d-1x100ge-cxp@1"},
+    # the MX960 seats the SAME horizontal cards, turned 90 by the bay (#261): a
+    # cage on them is drawn at rotate 0 and takes its quarter turn from its card
+    MX960: {"fpc2": "juniper/mpc4e-3d-2cge-8xge@2", "fpc5": "juniper/mpc4e-3d-2cge-8xge@2",
+            "fpc3": "juniper/mpc5e-100g10g@2",
+            "fpc4": "juniper/mpc3e-3d@2", "fpc4/mic0": "juniper/mic3-3d-1x100ge-cxp@1"},
     SR1E: {"mda-1-1": "nokia/me2-100gb-cfp4@1"},
     # the one turned CFP4 cage in the library, on the tilted face of an NT card
     NFXS: {"nt-b": "nokia/fant-g-ba@1"},
 }
 CONFIG = {MX480: "base", MX960: "base", SR1E: "base", NFXS: "fant-h-simplex"}
+# THE TURN A CAGE INHERITS FROM THE BAY ITS CARD SITS IN. The MX960's cards are
+# the horizontal ones at `rotate: 90`, so the quarter turn is on the card and the
+# cage is drawn upright inside it; the FANT-G's cage is turned on its own card.
+# The last field of a seat is the turn the seat is exercised in, either way.
+CARD_TURN = {MX960: 90}
 # (device, cage key, cage path, optic, {slot key suffix: occupant}, the cage's turn)
 SEATS = [
     (MX480, "dpc5/port-1-0", "dpc5/module/port-1-0", CFP_LC, {"/tx": LCP, "/rx": LCC}, 0),
@@ -763,7 +771,12 @@ def test_it_seats_in_a_real_cage_on_a_real_card_with_its_plug_or_cap(seated, sea
     d = doc(ref)
     assert cage.get("data-ref", "").startswith(f"std/{d['mates']}@2")
     assert optic.get("data-ref", "").startswith(ref)
-    assert _turn(cage) == turn and _turn(optic) == turn
+    # the optic takes its cage's turn, and the cage's turn plus its card's is the seat's
+    inherited = CARD_TURN.get(device, 0)
+    assert _turn(optic) == _turn(cage)
+    assert (_turn(cage) + inherited) % 360 == turn
+    if device in CARD_TURN:
+        assert _turn(by_path(root, cpath.split("/")[0] + "/module")) == inherited
     # the card is a module seated in a bay of the chassis, and the cage is inside it
     card = by_path(root, cpath.rsplit("/module/", 1)[0] + "/module")
     assert BAYS[device][cpath.split("/module")[0] if cpath.count("/module/") == 1

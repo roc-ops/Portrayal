@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx480
-version: 2.0.2
+version: 3.0.0
 maturity: modelled
 manufacturer: Juniper
 model: MX480
@@ -16,6 +16,28 @@ description: >-
   tray and air filter vertical at the rear sides.
 profile: networking
 provenance:
+  card-slots:
+    confidence: photo-measured
+    note: >-
+      the MX480 front photograph, re-read for #261: the body runs x px 35-1466 = 443 mm, 3.230
+      px/mm across (an SFF-8433 ganged-SFP pitch of 46.05 px cross-checks 3.232), and 1139 px =
+      355.6 mm down, 3.203 - isotropic to 0.8%, NOT the 5.1% the scale note used to state, which
+      took the ear-inclusive 1500 px as the body. The card plates run x px 155-1435 = 396.3 mm,
+      chassis x 37.15-433.4. Each slot is the 413.5 x 29.5 lever envelope of the card, centred
+      on the measured plate at x 28.5-442.0, with `opening` 396.0 x 29.5 - the plate, not the
+      levers, which stand proud of the face and read less reliably. SLOT PITCH 31.3, MEASURED AS
+      A RANGE: the eight slots span 808 px between the outer gaps, 101.0 px each, which is 31.27
+      mm at the across scale and 31.53 at the down scale; x is the better-anchored axis (two
+      independent rulers agree on it), so 31.3, with 31.2-31.5 the honest range. Centred on the
+      photograph's own cage centre, chassis y 216.5. Until 3.0.0 the slots were 420.9 wide at x
+      11.5 on a 31.86 pitch.
+  slot-tabs:
+    confidence: photo-measured
+    note: >-
+      the MX480 front photograph: a grey strip, x px 74-146 = chassis x 12.1-34.4, carries a
+      slot-number tab beside each slot (x 17.0-28.0), white for the DPC/MPC slots and blue for
+      SCB 1 and SCB 0. The slot numbers are printed on those tabs, at x 22.8; until 3.0.0 they
+      were drawn at x 5.6 on the dark side rail.
   sources:
     note: >-
       MX480 Universal Routing Platform Hardware Guide, HPE datasheet a00150825enw, and the Juniper
@@ -28,16 +50,19 @@ provenance:
       8RU. Ears are NOT MODELLED by project convention
   scale:
     note: >-
-      photo - the rear photograph passes the orthographic gate at 0.8% (3.33 px/mm isotropic); the
-      front photograph is 5.1% ANISOTROPIC in y and was anchored per axis (x 3.379 px/mm to 443, y
-      3.214 to 355.6). Feature sizes come from the registry and the shared card family
+      photo - the rear photograph passes the orthographic gate at 0.8% (3.33 px/mm isotropic). The
+      front photograph is isotropic to 0.8% (x 3.230 px/mm over the 443 mm body, px 35-1466; y
+      3.203 to 355.6). Until 3.0.0 this note called it 5.1% anisotropic, anchored at x 3.379 px/mm:
+      that took the ear-inclusive 1500 px as the body, so the front's x positions placed before
+      3.0.0 (the vent band, the ESD point) are compressed about 4.5%; the card slots were re-placed
+      at 3.0.0 (card-slots), the rest awaits its own pass. Feature sizes come from the registry and
+      the shared card family
   front-rows:
     note: >-
-      photo - vent band 0-38.6, craft 38.6-80.6, card cage 87.0-341.9 as eight 31.86 mm slots, top
+      photo - vent band 0-38.6, craft 38.6-80.6, card cage 92.2-340.8 as eight 31.3 mm slots, top
       to bottom DPC 5, 4, 3, 2, 1, 0, then SCB 1 and SCB 0 (craft tabs: blue 0/1 for SCBs, white
-      0-5 for DPCs; left flange numbers match). Card apertures span x 11.5-432.4. NOTE the MX240
-      photo gave the same card family a 30.45 mm pitch - the 5% front-photo anisotropy here bounds
-      the truth; each device is internally consistent and the shared cards fit both
+      0-5 for DPCs; the slot-number tabs match). The slot-number tab strip runs x 12.1-34.4 and the
+      card plates x 37.25-433.25 (card-slots, slot-tabs)
   populated-with:
     note: >-
       photo - slot 4 carries DPC 4x10GE (the DPC-R-4XGE-XFP face), slots 3 and 0 carry DPC 40xGE
@@ -128,10 +153,11 @@ gaps:
   - what: front-photo-anisotropy
     scope: [front]
     reason: needs-drawing
-    wanted: a mechanical drawing or an isotropic front photograph - the DAM
-      front photo is 5.1% compressed in y, so the 31.86 mm slot pitch here
-      and the MX240's 30.45 mm disagree for the same card family; each
-      device is internally consistent and the truth is between them.
+    wanted: a mechanical drawing - the DAM front photo reads 0.8%
+      anisotropic against the nominal 355.6 mm height, which leaves the
+      slot pitch a range, 31.2-31.5 mm (31.3 modelled on the better-anchored
+      x scale), and the front's x positions placed before 3.0.0 (vent band,
+      ESD point) were laid at a scale 4.5% off and are not yet re-placed.
   - what: weight-and-max-config
     reason: vendor-silent
     wanted: a clean Table 88-equivalent weight row - the extraction carries
@@ -201,47 +227,65 @@ views:
     panel:
       decor:
         - {at: [20.0, 4.0], size: [310.0, 30.0], pattern: vent, vent: 40}
+        - {at: [12.1, 91.3], size: [22.3, 250.4], fill: '#7b7c80', confidence: photo-measured,
+           source: 'photo - the grey slot-number tab strip the card plates no longer cover; see provenance slot-tabs'}
+        - {at: [17, 103.35], size: [11, 7.2], rx: 3.0, fill: '#e8e9eb', confidence: photo-measured,
+           source: 'photo - slot-number tab; see provenance slot-tabs'}
+        - {at: [17, 134.65], size: [11, 7.2], rx: 3.0, fill: '#e8e9eb', confidence: photo-measured,
+           source: 'photo - slot-number tab; see provenance slot-tabs'}
+        - {at: [17, 165.95], size: [11, 7.2], rx: 3.0, fill: '#e8e9eb', confidence: photo-measured,
+           source: 'photo - slot-number tab; see provenance slot-tabs'}
+        - {at: [17, 197.25], size: [11, 7.2], rx: 3.0, fill: '#e8e9eb', confidence: photo-measured,
+           source: 'photo - slot-number tab; see provenance slot-tabs'}
+        - {at: [17, 228.55], size: [11, 7.2], rx: 3.0, fill: '#e8e9eb', confidence: photo-measured,
+           source: 'photo - slot-number tab; see provenance slot-tabs'}
+        - {at: [17, 259.85], size: [11, 7.2], rx: 3.0, fill: '#e8e9eb', confidence: photo-measured,
+           source: 'photo - slot-number tab; see provenance slot-tabs'}
+        - {at: [17, 291.15], size: [11, 7.2], rx: 3.0, fill: '#8fcbeb', confidence: photo-measured,
+           source: 'photo - slot-number tab; see provenance slot-tabs'}
+        - {at: [17, 322.45], size: [11, 7.2], rx: 3.0, fill: '#8fcbeb', confidence: photo-measured,
+           source: 'photo - slot-number tab; see provenance slot-tabs'}
       cutouts:
         - {id: esd-front, at: [6.0, 18.0], size: [4.0, 4.0], shape: circle}
     silkscreen:
       - {at: [8.0, 27.4], path: 'M -1.4 1.2 L 0 -1.2 L 1.4 1.2 Z M -2.1 2.2
           L -0.9 2.2 M 0.9 2.2 L 2.1 2.2', fill: '#c7ccd1', for: chassis}
-      - {at: [5.6, 103.7], text: '5', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: dpc5}
-      - {at: [5.6, 135.5], text: '4', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: dpc4}
-      - {at: [5.6, 167.4], text: '3', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: dpc3}
-      - {at: [5.6, 199.3], text: '2', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: dpc2}
-      - {at: [5.6, 231.1], text: '1', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: dpc1}
-      - {at: [5.6, 263.0], text: '0', font-size: 2.6, anchor: middle, fill: '#e8eaec', for: dpc0}
-      - {at: [5.6, 294.8], text: '1', font-size: 2.6, anchor: middle, fill: '#9fc8e8', for: scb1}
-      - {at: [5.6, 326.7], text: '0', font-size: 2.6, anchor: middle, fill: '#9fc8e8', for: scb0}
+      - {at: [22.8, 107.85], text: '5', font-size: 2.6, anchor: middle, fill: '#3a3e43', for: dpc5}
+      - {at: [22.8, 139.15], text: '4', font-size: 2.6, anchor: middle, fill: '#3a3e43', for: dpc4}
+      - {at: [22.8, 170.45], text: '3', font-size: 2.6, anchor: middle, fill: '#3a3e43', for: dpc3}
+      - {at: [22.8, 201.75], text: '2', font-size: 2.6, anchor: middle, fill: '#3a3e43', for: dpc2}
+      - {at: [22.8, 233.05], text: '1', font-size: 2.6, anchor: middle, fill: '#3a3e43', for: dpc1}
+      - {at: [22.8, 264.35], text: '0', font-size: 2.6, anchor: middle, fill: '#3a3e43', for: dpc0}
+      - {at: [22.8, 295.65], text: '1', font-size: 2.6, anchor: middle, fill: '#3a3e43', for: scb1}
+      - {at: [22.8, 326.95], text: '0', font-size: 2.6, anchor: middle, fill: '#3a3e43', for: scb0}
     components:
       bays:
         - {id: craft, at: [11.5, 38.6], size: {w: 420.9, h: 42.0},
            accepts: [juniper/mx480-craft@1], default: juniper/mx480-craft@1,
            group: craft, rel-pos: 0}
-        - {id: dpc5, at: [11.5, 87.0], size: {w: 420.9, h: 29.5},
-           accepts: [juniper/scb-mx@1, juniper/dpc-r-4xge-xfp@1, juniper/dpce-20ge-2xge@1, juniper/dpce-2xge-xfp@1, juniper/dpce-40ge-tx@1, juniper/dpce-q-20ge-sfp@1, juniper/dpce-r-40ge-sfp@1, juniper/mpc-3d-16xge-sfpp@1, juniper/mpc10e-10c-mrate@1, juniper/mpc10e-15c-mrate@1, juniper/mpc1e-3d@1, juniper/mpc2e-3d@1, juniper/mpc3e-3d@1, juniper/mpc4e-3d-2cge-8xge@1, juniper/mpc4e-3d-32xge-sfpp@1, juniper/mpc5e-100g10g@1, juniper/mpc5e-40g10g@1, juniper/mpc7e-10g@1, juniper/mpc7e-mrate@1, juniper/ms-dpc@1, juniper/ms-mpc@1, juniper/mx-dpc-blank@1],
-           default: juniper/mx-dpc-blank@1, group: slots, rel-pos: 7}
-        - {id: dpc4, at: [11.5, 118.9], size: {w: 420.9, h: 29.5},
-           accepts: [juniper/scb-mx@1, juniper/dpc-r-4xge-xfp@1, juniper/dpce-20ge-2xge@1, juniper/dpce-2xge-xfp@1, juniper/dpce-40ge-tx@1, juniper/dpce-q-20ge-sfp@1, juniper/dpce-r-40ge-sfp@1, juniper/mpc-3d-16xge-sfpp@1, juniper/mpc10e-10c-mrate@1, juniper/mpc10e-15c-mrate@1, juniper/mpc1e-3d@1, juniper/mpc2e-3d@1, juniper/mpc3e-3d@1, juniper/mpc4e-3d-2cge-8xge@1, juniper/mpc4e-3d-32xge-sfpp@1, juniper/mpc5e-100g10g@1, juniper/mpc5e-40g10g@1, juniper/mpc7e-10g@1, juniper/mpc7e-mrate@1, juniper/ms-dpc@1, juniper/ms-mpc@1, juniper/mx-dpc-blank@1],
-           default: juniper/dpc-r-4xge-xfp@1, group: slots, rel-pos: 6}
-        - {id: dpc3, at: [11.5, 150.7], size: {w: 420.9, h: 29.5},
-           accepts: [juniper/scb-mx@1, juniper/dpc-r-4xge-xfp@1, juniper/dpce-20ge-2xge@1, juniper/dpce-2xge-xfp@1, juniper/dpce-40ge-tx@1, juniper/dpce-q-20ge-sfp@1, juniper/dpce-r-40ge-sfp@1, juniper/mpc-3d-16xge-sfpp@1, juniper/mpc10e-10c-mrate@1, juniper/mpc10e-15c-mrate@1, juniper/mpc1e-3d@1, juniper/mpc2e-3d@1, juniper/mpc3e-3d@1, juniper/mpc4e-3d-2cge-8xge@1, juniper/mpc4e-3d-32xge-sfpp@1, juniper/mpc5e-100g10g@1, juniper/mpc5e-40g10g@1, juniper/mpc7e-10g@1, juniper/mpc7e-mrate@1, juniper/ms-dpc@1, juniper/ms-mpc@1, juniper/mx-dpc-blank@1],
-           default: juniper/dpce-r-40ge-sfp@1, group: slots, rel-pos: 5}
-        - {id: dpc2, at: [11.5, 182.6], size: {w: 420.9, h: 29.5},
-           accepts: [juniper/scb-mx@1, juniper/dpc-r-4xge-xfp@1, juniper/dpce-20ge-2xge@1, juniper/dpce-2xge-xfp@1, juniper/dpce-40ge-tx@1, juniper/dpce-q-20ge-sfp@1, juniper/dpce-r-40ge-sfp@1, juniper/mpc-3d-16xge-sfpp@1, juniper/mpc10e-10c-mrate@1, juniper/mpc10e-15c-mrate@1, juniper/mpc1e-3d@1, juniper/mpc2e-3d@1, juniper/mpc3e-3d@1, juniper/mpc4e-3d-2cge-8xge@1, juniper/mpc4e-3d-32xge-sfpp@1, juniper/mpc5e-100g10g@1, juniper/mpc5e-40g10g@1, juniper/mpc7e-10g@1, juniper/mpc7e-mrate@1, juniper/ms-dpc@1, juniper/ms-mpc@1, juniper/mx-dpc-blank@1],
-           default: juniper/mx-dpc-blank@1, group: slots, rel-pos: 4}
-        - {id: dpc1, at: [11.5, 214.4], size: {w: 420.9, h: 29.5},
-           accepts: [juniper/scb-mx@1, juniper/dpc-r-4xge-xfp@1, juniper/dpce-20ge-2xge@1, juniper/dpce-2xge-xfp@1, juniper/dpce-40ge-tx@1, juniper/dpce-q-20ge-sfp@1, juniper/dpce-r-40ge-sfp@1, juniper/mpc-3d-16xge-sfpp@1, juniper/mpc10e-10c-mrate@1, juniper/mpc10e-15c-mrate@1, juniper/mpc1e-3d@1, juniper/mpc2e-3d@1, juniper/mpc3e-3d@1, juniper/mpc4e-3d-2cge-8xge@1, juniper/mpc4e-3d-32xge-sfpp@1, juniper/mpc5e-100g10g@1, juniper/mpc5e-40g10g@1, juniper/mpc7e-10g@1, juniper/mpc7e-mrate@1, juniper/ms-dpc@1, juniper/ms-mpc@1, juniper/mx-dpc-blank@1],
-           default: juniper/mx-dpc-blank@1, group: slots, rel-pos: 3}
-        - {id: dpc0, at: [11.5, 246.3], size: {w: 420.9, h: 29.5},
-           accepts: [juniper/scb-mx@1, juniper/dpc-r-4xge-xfp@1, juniper/dpce-20ge-2xge@1, juniper/dpce-2xge-xfp@1, juniper/dpce-40ge-tx@1, juniper/dpce-q-20ge-sfp@1, juniper/dpce-r-40ge-sfp@1, juniper/mpc-3d-16xge-sfpp@1, juniper/mpc10e-10c-mrate@1, juniper/mpc10e-15c-mrate@1, juniper/mpc1e-3d@1, juniper/mpc2e-3d@1, juniper/mpc3e-3d@1, juniper/mpc4e-3d-2cge-8xge@1, juniper/mpc4e-3d-32xge-sfpp@1, juniper/mpc5e-100g10g@1, juniper/mpc5e-40g10g@1, juniper/mpc7e-10g@1, juniper/mpc7e-mrate@1, juniper/ms-dpc@1, juniper/ms-mpc@1, juniper/mx-dpc-blank@1],
-           default: juniper/dpce-r-40ge-sfp@1, group: slots, rel-pos: 2}
-        - {id: scb1, at: [11.5, 278.1], size: {w: 420.9, h: 29.5},
-           accepts: [juniper/scb-mx@1], default: juniper/scb-mx@1,
+        - {id: dpc5, at: [28.5, 92.2], size: {w: 413.5, h: 29.5}, opening: {w: 396, h: 29.5},
+           accepts: [juniper/scb-mx@2, juniper/dpc-r-4xge-xfp@2, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@2, juniper/mpc2e-3d@2, juniper/mpc3e-3d@2, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx-dpc-blank@2],
+           default: juniper/mx-dpc-blank@2, group: slots, rel-pos: 7}
+        - {id: dpc4, at: [28.5, 123.5], size: {w: 413.5, h: 29.5}, opening: {w: 396, h: 29.5},
+           accepts: [juniper/scb-mx@2, juniper/dpc-r-4xge-xfp@2, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@2, juniper/mpc2e-3d@2, juniper/mpc3e-3d@2, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx-dpc-blank@2],
+           default: juniper/dpc-r-4xge-xfp@2, group: slots, rel-pos: 6}
+        - {id: dpc3, at: [28.5, 154.8], size: {w: 413.5, h: 29.5}, opening: {w: 396, h: 29.5},
+           accepts: [juniper/scb-mx@2, juniper/dpc-r-4xge-xfp@2, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@2, juniper/mpc2e-3d@2, juniper/mpc3e-3d@2, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx-dpc-blank@2],
+           default: juniper/dpce-r-40ge-sfp@2, group: slots, rel-pos: 5}
+        - {id: dpc2, at: [28.5, 186.1], size: {w: 413.5, h: 29.5}, opening: {w: 396, h: 29.5},
+           accepts: [juniper/scb-mx@2, juniper/dpc-r-4xge-xfp@2, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@2, juniper/mpc2e-3d@2, juniper/mpc3e-3d@2, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx-dpc-blank@2],
+           default: juniper/mx-dpc-blank@2, group: slots, rel-pos: 4}
+        - {id: dpc1, at: [28.5, 217.4], size: {w: 413.5, h: 29.5}, opening: {w: 396, h: 29.5},
+           accepts: [juniper/scb-mx@2, juniper/dpc-r-4xge-xfp@2, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@2, juniper/mpc2e-3d@2, juniper/mpc3e-3d@2, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx-dpc-blank@2],
+           default: juniper/mx-dpc-blank@2, group: slots, rel-pos: 3}
+        - {id: dpc0, at: [28.5, 248.7], size: {w: 413.5, h: 29.5}, opening: {w: 396, h: 29.5},
+           accepts: [juniper/scb-mx@2, juniper/dpc-r-4xge-xfp@2, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@2, juniper/mpc2e-3d@2, juniper/mpc3e-3d@2, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx-dpc-blank@2],
+           default: juniper/dpce-r-40ge-sfp@2, group: slots, rel-pos: 2}
+        - {id: scb1, at: [28.5, 280], size: {w: 413.5, h: 29.5}, opening: {w: 396, h: 29.5},
+           accepts: [juniper/scb-mx@2], default: juniper/scb-mx@2,
            group: scbs, rel-pos: 1}
-        - {id: scb0, at: [11.5, 310.0], size: {w: 420.9, h: 29.5},
-           accepts: [juniper/scb-mx@1], default: juniper/scb-mx@1,
+        - {id: scb0, at: [28.5, 311.3], size: {w: 413.5, h: 29.5}, opening: {w: 396, h: 29.5},
+           accepts: [juniper/scb-mx@2], default: juniper/scb-mx@2,
            group: scbs, rel-pos: 0}
       placements:
         - {id: esd-front-jack, ref: common/esd-jack@1, at: [5.0, 17.0], for: chassis, group: esd, rel-pos: 0}
@@ -343,12 +387,12 @@ configurations:
       which is the question most people ask first and the one `default` used to answer
       with whatever the drawing happened to be populated with.
     bays:
-      dpc5: juniper/mx-dpc-blank@1
-      dpc4: juniper/mx-dpc-blank@1
-      dpc3: juniper/mx-dpc-blank@1
-      dpc2: juniper/mx-dpc-blank@1
-      dpc1: juniper/mx-dpc-blank@1
-      dpc0: juniper/mx-dpc-blank@1
+      dpc5: juniper/mx-dpc-blank@2
+      dpc4: juniper/mx-dpc-blank@2
+      dpc3: juniper/mx-dpc-blank@2
+      dpc2: juniper/mx-dpc-blank@2
+      dpc1: juniper/mx-dpc-blank@2
+      dpc0: juniper/mx-dpc-blank@2
   ac:
     kind: orderable
     description: AC-powered chassis as photographed - four normal-capacity AC

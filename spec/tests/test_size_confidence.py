@@ -85,7 +85,10 @@ def test_every_chassis_sized_part_now_says_it_is_an_estimate():
     unmarked = [ref for ref, doc in _chassis_sized()
                 if (doc.get("size-confidence") or {}).get("w") != "estimated"]
     assert not unmarked, unmarked
-    assert len(_chassis_sized()) >= 100, "the group has shrunk without explanation"
+    # 102 until #261, which took 36 out of the group: the 18 MX960 vertical twins
+    # were removed, and the 18 horizontal MX cards they twinned now state the Visio
+    # stencil's lever envelope as a drawn width rather than a chassis opening.
+    assert len(_chassis_sized()) >= 66, "the group has shrunk without explanation"
 
 
 def test_each_one_says_which_chassis_opening_it_is():
@@ -110,7 +113,8 @@ def test_prose_would_call_most_of_them_measured_which_is_the_point():
     grp = _chassis_sized()
     misread = [ref for ref, doc in grp
                if "measured" in str((doc.get("provenance") or {}).get("size", ""))]
-    assert len(misread) >= 90, (
+    # 90 until #261 took 36 MX card contracts out of the group (see above)
+    assert len(misread) >= 59, (
         f"only {len(misread)} of {len(grp)} would be misread as measured; if the "
         "prose was rewritten, this test has served its purpose and can go")
     assert len(misread) < len(grp), (

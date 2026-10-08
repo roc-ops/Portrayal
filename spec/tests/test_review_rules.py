@@ -341,7 +341,7 @@ def test_a_lamp_state_nothing_draws_is_reported(tmp_path):
 
 
 def test_a_lamp_that_does_light_is_silent():
-    p = LIB / "components/juniper/dpc-r-4xge-xfp/v1/contract.yaml"
+    p = LIB / "components/juniper/dpc-r-4xge-xfp/v2/contract.yaml"
     d = yaml.safe_load(p.read_text())
     assert not caught("L47", lint.lint_component_states_render, p, d, [str(LIB)])
 

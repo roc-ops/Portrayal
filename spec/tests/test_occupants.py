@@ -262,7 +262,7 @@ def _seat_on_card(ref):
     on the part itself)."""
     data = yaml.safe_load((LIB / "devices/juniper/mx240/device.yaml").read_text())
     cfg = data["configurations"]["base"]
-    cfg.setdefault("bays", {})["dpc2"] = "juniper/dpce-20ge-2xge@1"
+    cfg.setdefault("bays", {})["dpc2"] = "juniper/dpce-20ge-2xge@2"
     cfg["occupants"] = {"dpc2/port-0-0": ref}
     return errors_for("juniper/mx240/device.yaml", data)
 

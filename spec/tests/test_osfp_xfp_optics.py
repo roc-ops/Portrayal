@@ -488,7 +488,9 @@ def test_every_cage_of_the_family_offers_exactly_the_new_optics(device_cages, co
     on_devices = [c for _, c in device_cages if c["interface"] == family]
     on_cards = [s for ref, e in comps.items() for s in (e.get("cages") or [])
                 if s["interface"] == family and s["kind"] == "cage"]
-    floor = {"osfp": (416, 4), "xfp": (4, 128)}[family]
+    # 128 XFP cages on cards until #261 removed the MX960 vertical twins with eight of
+    # them: dpc-r-4xge-xfp-v (4), dpce-2xge-xfp-v960 (2) and dpce-20ge-2xge-v960 (2)
+    floor = {"osfp": (416, 4), "xfp": (4, 120)}[family]
     assert len(on_devices) >= floor[0] and len(on_cards) >= floor[1], (len(on_devices), len(on_cards))
     for c in on_devices + on_cards:
         assert c["accepts"] == OFFERS[family], (c["id"], c["accepts"])
@@ -512,8 +514,11 @@ def test_no_other_family_offers_them_and_the_pool_is_the_family(device_cages, co
 
 AIS = "edgecore/ais800-32o"       # port-1 over port-2, both rotate 0 - the same way up (#799)
 MX80 = "juniper/mx80"
-MX960 = "juniper/mx960"           # fpc6 takes a card whose XFP cages are at rotate 90
-CARD = "juniper/dpc-r-4xge-xfp-v@1"
+MX960 = "juniper/mx960"           # fpc6 seats the horizontal card turned 90 by its bay (#261)
+CARD = "juniper/dpc-r-4xge-xfp@2"
+# the turn a cage inherits from its card's bay: on the MX960 the quarter turn is
+# the card's, and its XFP cages are drawn upright inside it
+CARD_TURN = {MX960: 90}
 # (device, cage key, cage path, optic, {slot key suffix: occupant}, turn)
 SEATS = [
     (AIS, "port-1", "port-1", OSFP_MPO16, {"": "generic/mpo16-plug@1"}, 0),
@@ -575,7 +580,10 @@ def test_it_seats_in_a_real_cage_with_its_plug_in_it(seated, seat):
     optic = by_path(root, f"{cpath}-occupant")
     assert cage.get("data-ref", "").startswith({"osfp": "std/osfp@1", "xfp": "std/xfp@1"}[doc(ref)["mates"]])
     assert optic.get("data-ref", "").startswith(ref)
-    assert _turn(cage) == turn and _turn(optic) == turn
+    inherited = CARD_TURN.get(device, 0)
+    assert _turn(optic) == _turn(cage) and (_turn(cage) + inherited) % 360 == turn
+    if device in CARD_TURN:
+        assert _turn(by_path(root, cpath.split("/")[0] + "/module")) == inherited
     # the optic is centred on the mate point of the cage
     cx, cy = device_point(parents, cage, cage_mate(cage))
     ox, oy = device_point(parents, optic, own_mate(optic))
