@@ -383,11 +383,20 @@ SKIP_CALLS = {"skip", "skipif", "importorskip"}
 # build output) and any sentence that happened to mention ./build.sh. Each
 # pattern names exactly a thing CI provides; anything else is the allow-list's
 # decision, not this file's.
+#
+# THE SUBJECT IS ALWAYS A FIXED BUILD OUTPUT, never an interpolation: `_literal`
+# reads f"{part} not built" as "{...} not built", and on CI that expands to a
+# part name check_skips does not allow. A runtime value may follow the fixed
+# prefix (`library/dist not built: {...}`), where it only says which file.
+BUILD_OUTPUTS = ("library/dist", "library/exports", "dist", "dist/",
+                 # the indexes build.sh writes into the dist, by name
+                 "devices.json", "components.json", "components-detail.json",
+                 "labs.json", "gaps.json", "vendors.json", "listings.json",
+                 "comparable-facts.json", "rack.json", "devices.lock.json")
 PREREQUISITES = tuple(re.compile(p) for p in (
     r"(node|npm) not installed",
-    r"(library/dist|library/exports|[\w./-]+\.json|\{\.\.\.\}) not built"
-    r"( - run \./(build|publish)\.sh( --no-images)?)?",
-    r"not built: \{\.\.\.\} - run \./(build|publish)\.sh( --no-images)?",
+    r"(" + "|".join(re.escape(o) for o in BUILD_OUTPUTS) + r") not built"
+    r"((?: - |; )run \./(build|publish)\.sh( --no-images)?)?(: \{\.\.\.\})?",
 ))
 
 
@@ -621,8 +630,11 @@ COMPONENT_DIR = re.compile(r"^library/components/([^/]+)/([^/]+)/(v\d+)/")
 
 
 # A changed line that can move what reaches a component major: a ref (`ns/x@2`),
-# a bay's `accepts`, a placement's `default`, a part's `unplaced:` waiver.
-REACH = re.compile(r"\baccepts\b|\bdefault\b|\bunplaced\b|[a-z0-9-]/[a-z0-9._-]+@\d")
+# a bay's `accepts`, a placement's `default`, a part's `unplaced:` waiver - or
+# a YAML anchor or alias (`&cards`, `*cards`), because an alias carries a list
+# of refs that the changed line itself does not spell.
+REACH = re.compile(r"\baccepts\b|\bdefault\b|\bunplaced\b|[a-z0-9-]/[a-z0-9._-]+@\d"
+                   r"|(?:^|[\s\[,:-])[*&][A-Za-z_][\w-]*")
 
 
 def _reach_changed(ctx, yamls):
@@ -660,7 +672,8 @@ def lint_plan(ctx):
             d = ctx.root / "library" / "devices" / m.group(1) / m.group(2)
             if (d / "device.yaml").exists():
                 devices.add(d)
-                yamls.append(p) if p.endswith(".yaml") else None
+                if p.endswith(".yaml"):
+                    yamls.append(p)
             else:
                 full.append(p)            # a listing, or a device that is gone
         elif c:
@@ -668,7 +681,8 @@ def lint_plan(ctx):
                 / "contract.yaml"
             if f.exists():
                 contracts.add(f)
-                yamls.append(p) if p.endswith(".yaml") else None
+                if p.endswith(".yaml"):
+                    yamls.append(p)
             else:
                 full.append(p)            # a major that is gone
         else:
@@ -841,14 +855,25 @@ def check_kit(ctx):
                    if any(m in t.read_text(encoding="utf-8") for m in mods)) if mods else []
     if not tests:
         return passed(name, "npm test passed; no *_js.py test names a changed module")
-    r = subprocess.run([sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider",
-                        "-n", str(ctx.jobs), *tests], cwd=ctx.root, env=_env(),
-                       capture_output=True, text=True)
+    # THE CHILD'S TEMPORARY FILES GO BESIDE THE CHECKOUT, not on the system
+    # disk: parallel suites have filled that before. The directory name holds
+    # "pytest", which pytest's tmp_path machinery expects of its base.
+    with tempfile.TemporaryDirectory(prefix=".pytest-preflight-", dir=ctx.root.parent) as tmp:
+        env = dict(_env(), TMPDIR=tmp)
+        r = subprocess.run([sys.executable, "-m", "pytest", "-q", "-rs", "-p", "no:cacheprovider",
+                            "-n", str(ctx.jobs), *tests], cwd=ctx.root, env=env,
+                           capture_output=True, text=True)
+    # A SKIP IS NOT A PASS, and a behaviour test that skipped for want of a
+    # build tested nothing: say how many, and which.
+    skips = [l.strip() for l in r.stdout.splitlines() if l.startswith("SKIPPED")]
+    n_skip = sum(int(m.group(1)) for l in skips for m in [re.match(r"SKIPPED \[(\d+)\]", l)] if m)
     if r.returncode:
         return failed(name, f"npm test passed; {len(tests)} kit behaviour test file(s) failed",
                       (r.stdout + r.stderr).strip().splitlines()[-20:],
                       "python3 -m pytest -q " + " ".join(tests))
-    return passed(name, f"npm test and {len(tests)} kit behaviour test file(s) passed")
+    return passed(name, f"npm test and {len(tests)} kit behaviour test file(s) passed"
+                        + (f", {n_skip} test(s) skipped" if n_skip else ", none skipped"),
+                  skips)
 
 
 # -------------------------------------------------------------------- main ---
@@ -877,13 +902,14 @@ def render_text(results, base, mbase, n_changed, seconds):
     for r in results:
         lines.append(f"{'PASS' if r.ok else 'FAIL'}  {r.name:<10}  {r.summary}  "
                      f"({r.seconds:.1f}s)")
-        if not r.ok:
-            for d in r.details[:25]:
-                lines.append(f"        {d}")
-            if len(r.details) > 25:
-                lines.append(f"        ... and {len(r.details) - 25} more")
-            if r.fix:
-                lines.append(f"        fix: {r.fix}")
+        # a FAIL's details are the findings; a PASS carries details only when
+        # it has something to declare (the kit's skipped tests)
+        for d in r.details[:25]:
+            lines.append(f"        {d}")
+        if len(r.details) > 25:
+            lines.append(f"        ... and {len(r.details) - 25} more")
+        if not r.ok and r.fix:
+            lines.append(f"        fix: {r.fix}")
     bad = [r.name for r in results if not r.ok]
     lines.append(f"preflight: {'FAIL (' + ', '.join(bad) + ')' if bad else 'PASS'} "
                  f"in {seconds:.1f}s")

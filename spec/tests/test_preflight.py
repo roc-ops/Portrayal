@@ -92,6 +92,12 @@ SKIPS_BASE = {
     ('pytest.skip("cairosvg not installed")', False),                  # CI has no cairosvg
     ('pytest.skip("too slow, run ./build.sh by hand some day")', False),
     ('pytest.skip("common/zz-renamed-part not built")', False),        # a part, not a build
+    # an interpolation as the SUBJECT expands on CI to a name nobody allowed
+    ('pytest.skip(f"{part} not built")', False),
+    ('pytest.skip(f"{part} not built - run ./build.sh")', False),
+    ('pytest.skip("anything-at-all.json not built")', False),          # not an index
+    ('pytest.skip("components.json not built")', True),                # an index build.sh writes
+    ('pytest.skip(f"library/dist not built: {name}")', True),          # value after a fixed prefix
     ('pytest.skip("the multi-window lamp part not in this library")', True),
     ('pytest.skip("library/dist not built - run ./build.sh")', True),  # CI builds it
     ('pytest.skip("node not installed")', True),                       # CI installs it
@@ -183,6 +189,36 @@ def test_kit_runs_npm_test_when_kit_changes(tmp_path, script, ok):
     assert preflight.check_kit(ctx_of(tmp_path, base)).ok is ok
 
 
+@pytest.mark.skipif(shutil.which("npm") is None, reason="npm not installed")
+def test_kit_runs_the_behaviour_tests_naming_a_changed_module_and_counts_skips(tmp_path):
+    pkg = {"name": "k", "version": "0.0.0", "scripts": {"test": "exit 0"}}
+    base = make_repo(tmp_path, {
+        "kit/package.json": json.dumps(pkg), "kit/swap.js": "1\n",
+        "spec/tests/test_swap_js.py": textwrap.dedent("""\
+            import pytest
+            MODULE = "kit/swap.js"
+            def test_runs():
+                assert True
+            def test_skips():
+                pytest.skip("node not installed")
+            """),
+        "spec/tests/test_other_js.py": "def test_x():\n    assert False\n",   # names nothing
+    })
+    (tmp_path / "kit/swap.js").write_text("2\n")
+    res = preflight.check_kit(ctx_of(tmp_path, base))
+    assert res.ok, res.details
+    assert "1 kit behaviour test file(s) passed, 1 test(s) skipped" in res.summary, res.summary
+    assert any("node not installed" in d for d in res.details), res.details
+
+
+def test_reach_sees_refs_and_yaml_aliases():
+    for line in ("    ref: common/x@2", "accepts: *asr-cards", "cards: &asr-cards",
+                 "  - *lc-adapters", "unplaced: reference only"):
+        assert preflight.REACH.search(line), line
+    for line in ("description: a 2x QSFP28 port", "label: Port *1", "w: 41.4"):
+        assert not preflight.REACH.search(line), line
+
+
 # ------------------------------------------------------------------- exports ---
 
 def test_exports_fail_on_a_stale_a_missing_and_an_extra_file(tmp_path):
@@ -230,11 +266,13 @@ def test_the_stub_dist_carries_what_the_build_does(tmp_path):
         assert d == {k: real[d["name"]].get(k) for k in d}, d["name"]
         name = d["name"]
         assert (tmp_path / f"{name}.source.json").read_bytes() == \
-            (DIST / f"{name}.source.json").read_bytes(), name
+            (DIST / f"{name}.source.json").read_bytes(), \
+            f"{name}: library/dist is stale - rebuild with ./build.sh (or the stub is wrong)"
         faces = lambda root: {c["name"]: sorted(c.get("files") or {})          # noqa: E731
                               for c in json.loads((root / f"{name}.configs.json")
                                                   .read_text())["configs"]}
-        assert faces(tmp_path) == faces(DIST), name
+        assert faces(tmp_path) == faces(DIST), \
+            f"{name}: library/dist is stale - rebuild with ./build.sh (or the stub is wrong)"
 
 
 # ---------------------------------------- lint planning, on the real tree, read-only ---

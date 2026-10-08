@@ -359,7 +359,7 @@ exits non-zero if any check fails.
 | Check | Fails when |
 |---|---|
 | `exports` | the DCIM exports regenerated from your tree differ from `library/exports/`, or a regenerated export is not committed |
-| `skips` | a `pytest.skip`, `skipif` or `importorskip` you added gives a reason [`spec/allowed-skips.txt`](spec/allowed-skips.txt) does not allow. The only other reasons accepted are, word for word, the few that name what CI always provides: `node not installed`, `npm not installed`, and `library/dist not built` (or another build output) with its `- run ./build.sh` hint |
+| `skips` | a `pytest.skip`, `skipif` or `importorskip` you added gives a reason [`spec/allowed-skips.txt`](spec/allowed-skips.txt) does not allow. The only other reasons accepted are, word for word, the few that name what CI always provides: `node not installed`, `npm not installed`, and `<output> not built` where `<output>` is `library/dist`, `library/exports`, `dist` or an index build.sh writes (`devices.json`, `components.json` and the rest), optionally followed by `- run ./build.sh` or `./publish.sh` and then `: <value>`. A runtime value as the subject (`f"{part} not built"`) is not accepted, because on CI it is a part name |
 | `private` | a line you added has a machine path, a private address or a personal email: the patterns of `test_no_internal_hosts.py` |
 | `changelog` | `library/`, `spec/` or `kit/` changed with no `changelog.d/` fragment, or a fragment is malformed |
 | `devicelock` | `devicelock.py` has findings, or a lock you re-recorded no longer matches the bump against the lock on the base |
