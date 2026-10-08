@@ -142,26 +142,34 @@ function fit(rack, {id, path, ref}, ctx) {
   const it = itemOf(rack, id);
   if (!it) return {error: GONE};
   const was = it.swaps || {};
-  // a different part in a carrier is a fresh seat: what was in it goes
-  // (swap.js pruneCarrier, #484 R5), its fields with it
-  const next = Object.fromEntries(Object.entries(was).filter(([k]) => k === path || !underCarrier(k, path)));
-  if (ref === 'default') delete next[path]; else next[path] = ref;
-  if (same(next, was)) return unchanged(rack);
   const s = slotsFor(ctx, it.ref);
   if (s?.error) return s;
-  let holds = ref === 'default' ? undefined : ref, isCage = false, view = null;
+  // the swaps with only this slot changed: the map the slot is judged on
+  const flat = {...was};
+  if (ref === 'default') delete flat[path]; else flat[path] = ref;
+  // SEATING WHAT THE SLOT ALREADY HOLDS CHANGES NOTHING, and so prunes nothing
+  // of what sits inside that part
+  if (!s && (ref === 'default' ? !own(was, path) : own(was, path) && was[path] === ref)) return unchanged(rack);
+  let holds = ref === 'default' ? undefined : ref, isCage = false, view = null, next = flat;
   if (s) {
     const env = slotEnv(it, s, ctx.compByRef);
+    const target = resolverFor(env, flat).entryAt(path);
+    // a part the slot does not take is refused even when it is the one held
+    if (target && ref && ref !== 'default' && !(target.accepts || []).includes(ref))
+      return {error: `${path} does not take ${ref}. It takes: ${firstEight(target.accepts || [])}.`};
+    if (target && holdsAt(env, was, path, target) === holdsAt(env, flat, path, target)) return unchanged(rack);
+    // a different part in a carrier is a fresh seat: what was in it goes
+    // (swap.js pruneCarrier, #484 R5), its fields with it
+    next = Object.fromEntries(Object.entries(flat).filter(([k]) => k === path || !underCarrier(k, path)));
     const R = resolverFor(env, next);
-    const target = R.entryAt(path);
     if (!target) return {error: `${path} is not a bay or cage on ${it.label}. It has: ${slotList(env, R, path)}.`};
     isCage = !!target.isCage;
     view = target.view ?? null;
-    if (ref && ref !== 'default' && !(target.accepts || []).includes(ref))
-      return {error: `${path} does not take ${ref}. It takes: ${firstEight(target.accepts || [])}.`};
     if (ref && ref !== 'default' && acceptSwaps(next, env).ignored.includes(path))
       return {error: `${path} cannot take ${ref} while the slot it shares a seat with holds something.`};
     holds = holdsAt(env, next, path, target);
+  } else {
+    next = Object.fromEntries(Object.entries(flat).filter(([k]) => k === path || !underCarrier(k, path)));
   }
   const fields = Object.fromEntries(Object.entries(it.fields || {})
     .filter(([k]) => k !== `${path}/module` && !underCarrier(k, path)));

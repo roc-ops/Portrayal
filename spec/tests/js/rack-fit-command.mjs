@@ -115,3 +115,32 @@ test('fit: a batch is one undo step, swaps and fields alike', async () => {
   ed.undo();
   assert.deepEqual([ed.rack().items[0].swaps, ed.rack().items[0].fields], [{}, {'bay-1/module': {'latch-color': 'green'}}]);
 });
+
+test('fit: seating what a slot already holds is a no-op that leaves what sits inside it', () => {
+  const pp = add(M.newRack(), 'pp', 5, {label: 'pp-1', swaps: {'bay-2': 'acme/carrier@1', 'bay-2/module/sub-1': 'acme/lc6@1'},
+    fields: {'bay-2/module': {x: '1'}}});
+  const r1 = run(pp, {id: 'i1', path: 'bay-2', ref: 'acme/carrier@1'});
+  assert.equal(r1.rack, pp);
+  assert.deepEqual(pp.items[0].swaps['bay-2/module/sub-1'], 'acme/lc6@1');
+  assert.deepEqual(pp.items[0].fields, {'bay-2/module': {x: '1'}});
+  const lf = add(M.newRack(), 'leaf', 10, {label: 'leaf-1', swaps: {'port-1': 'acme/sr@1', 'port-1-occupant': 'acme/x@1'},
+    fields: {'port-1-occupant': {label: 'a'}}});
+  assert.equal(run(lf, {id: 'i1', path: 'port-1', ref: 'acme/sr@1'}).rack, lf);
+  // the configuration's own default, and an empty slot left empty
+  assert.equal(run(LEAF, {id: 'i1', path: 'port-1', ref: 'acme/sr@1'}).rack, LEAF);
+  assert.equal(run(LEAF, {id: 'i1', path: 'port-2', ref: null}).rack, LEAF);
+  assert.equal(run(LEAF, {id: 'i1', path: 'port-2', ref: 'default'}).rack, LEAF);
+  // without slots, the same part under its own key
+  const bare = {chassisOf};
+  assert.equal(run(lf, {id: 'i1', path: 'port-1', ref: 'acme/sr@1'}, bare).rack, lf);
+});
+
+test('fit: a different part in a cage keeps the sibling cages\' swaps and fields, and the input untouched', () => {
+  const lf = add(M.newRack(), 'leaf', 10, {label: 'leaf-1',
+    swaps: {'port-1-occupant': 'a', 'port-10-occupant': 'b'}, fields: {'port-1-occupant': {l: '1'}, 'port-10-occupant': {l: '2'}}});
+  const snap = JSON.parse(JSON.stringify(lf.items[0]));
+  const r = run(lf, {id: 'i1', path: 'port-1', ref: 'acme/lr@1'});
+  assert.equal(r.rack.items[0].swaps['port-10-occupant'], 'b');
+  assert.deepEqual(r.rack.items[0].fields, {'port-10-occupant': {l: '2'}});
+  assert.deepEqual(JSON.parse(JSON.stringify(lf.items[0])), snap);
+});
