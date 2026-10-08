@@ -5680,26 +5680,49 @@ def lint_device_decor(path, view_name, view, lib_roots):
     vw = size.get("w")
     if not vw:
         return
-    # DECOR WHOLLY OFF THE FACE IS NEVER DRAWN. render.py clips the panel at the
-    # view's box and does not grow the drawing for decor, so a band whose box
-    # misses the face entirely is a dead rect - the EPS122's 90 W band sat at
-    # x 601.74 on a 440 mm face, measured in another frame, and nothing said so.
-    # L150 covers placements, bays and cutouts and leaves decor out on purpose;
-    # this is the decor half. Only a box with NO overlap is reported: decor that
-    # merely runs past an edge is clipped to what is on the metal, which is fine.
+    # DECOR WHOLLY OUTSIDE THE DRAWING IS NEVER SEEN. render.py sets the SVG
+    # viewBox to the face, 0 0 w h, and grows it only for the placements the
+    # default build draws (an end ring past the ear, #865) - never for decor.
+    # There is no clipPath, so what decides whether a rect is seen is the
+    # viewBox: a band whose box misses it entirely is a dead rect. The EPS122's
+    # 90 W band sat at x 601.74 on a 440 mm face, measured in another frame, and
+    # nothing said so. So this measures against the GROWN extents, the face plus
+    # every non-optional placement's box, the way render.py computes them;
+    # decor in an overhang zone that a placement opens up is drawn, and passes.
+    # Optional placements are left out because the default build leaves them
+    # out. L150 covers placements, bays and cutouts and leaves decor out on
+    # purpose; this is the decor half. Only a box with NO overlap is reported:
+    # decor that merely runs past an edge is partly seen, which is fine.
     vh = size.get("h")
+    ext = [0.0, 0.0, float(vw), float(vh) if vh else None]
+    for q in vp["placements"]:
+        if q.get("optional") or not q.get("at"):
+            continue
+        c = _instance_size(q.get("ref"), lib_roots)
+        if not c:
+            continue
+        w, h = c
+        if q.get("rotate") in (90, 270, -90):
+            cx, cy = q["at"][0] + w / 2, q["at"][1] + h / 2
+            qb = (cx - h / 2, cy - w / 2, cx + h / 2, cy + w / 2)
+        else:
+            qb = (q["at"][0], q["at"][1], q["at"][0] + w, q["at"][1] + h)
+        ext[0], ext[1], ext[2] = min(ext[0], qb[0]), min(ext[1], qb[1]), max(ext[2], qb[2])
+        if ext[3] is not None:
+            ext[3] = max(ext[3], qb[3])
+    face = f"{vw} x {vh}" if vh else f"{vw} wide"
     for d in vp["decor"]:
         db = _decor_box(d)
         if not db:
             continue
-        off = db[0] >= float(vw) or db[2] <= 0
-        if vh:
-            off = off or db[1] >= float(vh) or db[3] <= 0
+        off = db[0] >= ext[2] or db[2] <= ext[0]
+        if ext[3] is not None:
+            off = off or db[1] >= ext[3] or db[3] <= ext[1]
         if off:
             warn(path, "L44", f"{view_name}: decor {d.get('id') or '(no id)'} at "
-                 f"{d['at']} lies wholly outside the {vw} x {vh} face, so it is "
-                 "clipped and never drawn. It was measured in another frame or "
-                 "does not belong on this view")
+                 f"{d['at']} lies wholly outside the {face} face and every part "
+                 "drawn beyond it, so it is never seen. It was measured in "
+                 "another frame or does not belong on this view")
     for m in vp["silkscreen"]:
         t, at = m.get("text"), m.get("at")
         if not t or not at:

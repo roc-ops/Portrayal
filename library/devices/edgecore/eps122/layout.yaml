@@ -46,10 +46,13 @@ provenance:
       measured. `chassis.height` still records the vendor's published 44: this is a
       drawing-scale fact, not a dimension change.
       WHICH INSTRUMENT FOR WHICH JOB, and this one is the opposite of the DCS520's. The
-      guide's LINE ART is the geometry instrument even at 5.03 px/mm, and the datasheet
-      PHOTOGRAPHS at 9.07 px/mm are for detail and colour - because the ganged-pitch fit
-      below comes out with an rms of 0.082 mm on the line art and 0.74 mm on the
-      photograph. White RJ-45 bezels are soft at 9 px/mm; a drawn edge is not.
+      guide's LINE ART is the geometry instrument, and the datasheet PHOTOGRAPHS are for
+      detail and colour - because the ganged-pitch fit below comes out with an rms of
+      0.082 mm on the line art and 0.74 mm on the photograph. NATIVE RESOLUTIONS, since a
+      page render is not one: the guide's elevations are embedded JPEGs about 1119 px
+      across, about 2.5 px/mm (5.03 in a 600 dpi page render), and the datasheet front
+      photograph is embedded at 1004 px, 2.29 px/mm (9.07 in a page render, a 4x upsample).
+      White RJ-45 bezels are soft in a photograph; a drawn edge is not.
   the-port-wall:
     confidence: measured
     note: >-
@@ -111,21 +114,29 @@ provenance:
     confidence: measured
     note: >-
       TWO ORANGE BANDS, NOT ONE: a strip behind the legend row above ports 41-48 and a
-      second behind the numeral row below them. Both elevations of this model draw both -
-      the guide's line art and the datasheet photograph - and the guide's right-hand
-      enlargement shows them carrying the "41 (up)(down) 42" legends and the lower numerals.
-      MEASURED ON THE GUIDE'S FRONT ELEVATION rendered at 600 dpi, calibrated on the centres
-      of the first and third cream RJ-45 bezel blocks (64.485 and 301.545 in this file), which
-      gives 5.028 px/mm - the 5.03 the gate-1 note already found: both bands run x 301.76 to
-      about 360.0, starting in the gap between the 39/40 and 41/42 columns, which is the
-      third block's own centre. The drawing's bezel ends 1.0 mm before the band does, so
-      against this file's narrower bezel the band ends at 357.50 + 1.0 = 358.5. Height
-      from the face edges at the same scale: upper y 8.35-11.54, lower y 38.39-42.56. The
-      datasheet photograph (embedded at 2.29 px/mm, calibrated on the outer bezel edges)
-      agrees to 1 mm on x and on the lower band, and puts the upper band 0.5 mm lower.
+      second behind the lamp row below them. Both elevations of this model draw both - the
+      guide's line art and the datasheet photograph - and the guide's right-hand enlargement
+      shows them carrying the 41-48 legends above and the port lamps below.
+      MEASURED ON THE GUIDE'S FRONT ELEVATION AT ITS NATIVE RESOLUTION, the embedded JPEG of
+      1119 x 122 px. Calibrated on the centres of the first and third cream RJ-45 bezel
+      blocks (64.485 and 301.545 in this file), x reads 2.52 px/mm, so one source pixel is
+      0.4 mm and the figures are rounded to that. Both bands start at x 301.7, in the gap
+      between the 39/40 and 41/42 columns, which is the third block's own centre, and run 2
+      to 3 px past the drawn bezel's right end; against this file's bezel, which ends at
+      357.5, they end at 358.5. y is read on the VERTICAL scale, the face's own 111 px over
+      44.45, 2.50 px/mm: upper band y 8.4-11.6, lower y 38.6-42.8. The horizontal scale
+      would put both 0.1-0.4 mm higher. The datasheet photograph (embedded at 2.29 px/mm,
+      calibrated on the outer bezel edges) agrees to 1 mm.
+      COLOUR COUNTED, NOT GLANCED AT: a median of (228, 102, 31) over 19,502 saturated pixels
+      on the guide's enlargement, the highest-resolution source; (214, 97, 33) over 2,382 on
+      the elevation. The datasheet photograph prints it redder, (243, 97, 93), and is not
+      used for colour. Sibling edgecore/eps112 marks its own 90 W ports with #e65919,
+      counted on its own guide at (230, 89, 25). The two counts differ by 13 levels of green
+      across two documents, which is document-to-document variation; this file keeps its
+      own count rather than borrowing a sibling's.
       The first build carried one band at x 601.74 x 110.81, exactly twice a band at
       300.87 x 55.4 - measured in a doubled frame and never halved - so it lay wholly off
-      the 440 mm face and was clipped and never drawn (roc-ops/Portrayal#878).
+      the 440 mm face and was never seen (roc-ops/Portrayal#878).
   why-this-is-its-own-device:
     confidence: datasheet
     note: >-
@@ -164,12 +175,15 @@ gaps:
   scope: [front]
   reason: needs-drawing
   wanted: >-
-    WHAT IS PRINTED UNDER EVERY PORT COLUMN. Both instruments show a row of small light
-    marks about 1.5 mm across below the RJ-45 block, one per column, and NEITHER RESOLVES
-    THEM - the guide's line art at 5.03 px/mm and the datasheet photograph at 9.07 px/mm
-    both reduce them to blur at nine times magnification. They are either a second port
-    numbering or a second lamp row, and the face is modelled without them rather than with
-    a guess. One enlargement of the lower edge closes this.
+    WHERE EACH PORT LAMP SITS IN THE ROW UNDER THE PORTS. What the row IS is settled: the
+    guide's right-hand enlargement (embedded at about 7 px/mm) shows, under every column,
+    the two port numbers each followed by a small dark window - "41 [] 42 []" - and its
+    callouts 3 and 4 point into that row for the "RJ-45 Port LEDs: Green (link), Amber
+    (link with PoE)" and the "SFP+ Port LEDs: Green (10G), Amber (1G)". So it is a per-port
+    lamp row with its numbering, not a second legend. Only the geometry is open: the
+    enlargement covers ports 39-54 alone, and the full elevation at about 2.5 px/mm shows
+    the row but not the windows' size or offset. The lamps are not drawn until a measured
+    window size and offset can be repeated across all fifty-four ports.
 - what: fixed-fan-depth
   scope: [rear]
   reason: vendor-silent
@@ -251,8 +265,8 @@ views:
       - {id: vent-left, at: [5.80, 0.80], size: [19.70, 8.20], pattern: vent, pattern-pitch: [3.10, 1.80], vent: 40}
       - {id: brand-plate, at: [26.00, 1.00], size: [56.00, 8.60], fill: '#17191c'}
       - {id: vent-right, at: [84.00, 0.80], size: [337.30, 8.20], pattern: vent, pattern-pitch: [3.10, 1.80], vent: 40}
-      - {id: poe-hi-band, at: [301.76, 8.35], size: [56.74, 3.19], fill: '#e8761f'}
-      - {id: poe-hi-band-lower, at: [301.76, 38.39], size: [56.74, 4.17], fill: '#e8761f'}
+      - {id: poe-hi-band, at: [301.7, 8.4], size: [56.8, 3.2], fill: '#e4661f'}
+      - {id: poe-hi-band-lower, at: [301.7, 38.6], size: [56.8, 4.2], fill: '#e4661f'}
       - {id: rj45-bezel-1, at: [8.53, 12.82], size: [111.91, 24.2], fill: '#f1eeea'}
       - {id: rj45-bezel-2, at: [127.06, 12.82], size: [111.91, 24.2], fill: '#f1eeea'}
       - {id: rj45-bezel-3, at: [245.59, 12.82], size: [111.91, 24.2], fill: '#f1eeea'}
