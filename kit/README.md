@@ -95,7 +95,7 @@ as `@portrayal/kit/rack/<module>`:
 
 | module | what it does |
 |---|---|
-| `rack/catalog.js` | `loadCatalog(dist)`: the rack catalogue, and the `chassisOf(ref)` lookup everything else takes |
+| `rack/catalog.js` | `loadCatalog(dist)`: the rack catalogue, and the `chassisOf(ref)` lookup everything else takes; `loadSlots(dist, refs)`: the bays, cages and parts the commands check against |
 | `rack/model.js` | the rack file: `newDoc`, `parseDoc`, `serialize`, and an edit of an item, frame or name that returns a new rack |
 | `rack/rails.js` | the rack's rails: unit height, opening and where a device sits between them |
 | `rack/fit.js` | whether a device fits at a unit, on a face, and how a shrink trims a rack |
@@ -108,7 +108,8 @@ as `@portrayal/kit/rack/<module>`:
 | `rack/commands.js` | every edit as a named, validated command, and `apply` for a batch of them |
 | `rack/history.js` | undo and redo as snapshots |
 | `rack/editor.js` | `createRackEditor`: a rack document you edit by commands, with undo, redo and change events |
-| `rack/queries.js` | reading a rack: `fitsAt`, `freeUs`, `catalog`, `describe`, `freePorts`, `suggestMedia`, `looseEnds` |
+| `rack/queries.js` | reading a rack: `fitsAt`, `freeUs`, `catalog`, `describe`, `inspect`, `selectCables`, `freePorts`, `suggestMedia`, `looseEnds` |
+| `rack/slots.js` | what a placed device holds, read without a drawing: its bays and cages, what its configuration builds, and its own swaps |
 
 ### Where this came from
 
@@ -191,10 +192,33 @@ nearest stock length above it.
 
 To change a rack by name rather than by function, use the command core:
 `createRackEditor({ doc, chassisOf })` applies `place`, `move`, `patch`,
-`remove`, `attach`, `detach`, `frame`, `rename`, `dcim`, the `cable.*`
-commands and the page's own `lengths.routed` as all-or-nothing batches, with `undo`, `redo` and an `on('change')`
-event. Each command names its arguments in `COMMANDS` (`rack/commands.js`), and
-`rack/queries.js` answers what a command would need to know first.
+`remove`, `attach`, `detach`, `frame`, `rename`, `dcim`, `fit`, `field`, the
+`cable.*` commands and the page's own `lengths.routed` as all-or-nothing
+batches, with `undo`, `redo` and an `on('change')` event. Each command names
+its arguments in `COMMANDS` (`rack/commands.js`), and `rack/queries.js`
+answers what a command would need to know first.
+
+### Commands and questions for an agent
+
+`fit` seats, empties or restores one bay or cage, and `field` sets one setting
+of one seated part; neither touches the rest of the device. `cable.update`
+takes `a` or `b` to move an end and keep the cable, and `cable.route` checks
+each new waypoint against the rack. These check what they are given against
+the parts lists when the caller loads them: `loadSlots(dist, refs)` fetches
+each device's `<ref>.configs.json` and `components.json` once, and
+`editor.apply(cmds, { origin, ctx })` and `editor.preview(cmds, { ctx })` lay
+that `ctx` over `{ chassisOf }` for the one call. Without it, nothing is
+checked, as before.
+
+`inspect(rack, id, ctx)` reads one device whole: its configurations, every bay
+and cage with what it holds and what it takes, and its parts' settings. For a
+cable it reads both ends, the route, the routed length (with `ctx.route`), the
+slack, the pathways it may name, and its loose ends (with `ctx.cableFacts`).
+`selectCables(rack, selector, ctx)` turns `{ item }`, `{ item, path }`,
+`{ loose: true }`, `{ purpose }` or `{ media }` into cable ids, for a caller to
+expand into plain commands. `describe(rack, ctx, { section, offset, limit })`
+reads one stretch of a long rack in full. `catalog(devices, { kind })` finds a
+"patch panel" or a "switch" by `rack.json`'s `kind`.
 
 A rack file is described by
 [`rack.schema.json`](https://portrayal.dev/schemas/v1/rack.schema.json).

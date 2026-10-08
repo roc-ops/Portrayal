@@ -19,7 +19,7 @@ import {fieldAccepts} from '../fields.js';
 export const GONE = 'That device is no longer in the rack.';
 export const CABLE_GONE = 'That cable is no longer in the rack.';
 export const NOT_ADDED = 'The cable was not added because a device it ran to was removed.';
-export const CLEARED = 'Your Explorer changes were for the old configuration, so they were cleared.';
+export const CLEARED = 'Its swaps and fields were for the old configuration, so they were cleared.';
 
 const itemOf = (rack, id) => rack.items.find(i => i.id === id) || null;
 const cableOf = (rack, id) => (rack.cables || []).find(c => c.id === id) || null;
@@ -413,12 +413,12 @@ function lengthsRouted(rack, {routeCtx}) {
 // ── the table an agent reads ────────────────────────────────────────────
 const RACK = {type: 'string', description: 'The id of the rack to edit. Only the first rack can be edited today.'};
 const AS = {type: 'string', minLength: 1, description: 'A name for what this creates; later commands in the same batch can use "@name" as its id.'};
-const ID = what => ({type: 'string', minLength: 1, description: `The id of the ${what}, as describe() lists it, or "@name" from earlier in this batch.`});
+const ID = what => ({type: 'string', minLength: 1, description: `The id of the ${what}, as the rack's description lists it, or "@name" from earlier in this batch.`});
 const FACE = {enum: ['front', 'rear'], description: 'Which face of the rack: front or rear.'};
 const RU = {type: 'integer', minimum: 1, description: 'The U its bottom sits in, counted from 1 at the bottom of the rails.'};
 const END = {type: 'object', required: ['item', 'path', 'view'], additionalProperties: false,
   description: 'One end of a cable: a port on a device.',
-  properties: {item: ID('device'), path: {type: 'string', minLength: 1, description: 'The port, as freePorts() names it (e.g. port-1).'},
+  properties: {item: ID('device'), path: {type: 'string', minLength: 1, description: "The port, as the device's free ports name it (e.g. port-1)."},
                view: {enum: ['front', 'rear'], description: "Which of the device's own panels the port is on: front or rear."}}};
 const LENGTH = {type: ['object', 'null'], required: ['value'], additionalProperties: false,
   description: 'How long the cable is, or null for not known.',
@@ -442,16 +442,16 @@ const args = (required, properties) => ({type: 'object', required, additionalPro
                                          properties: {...properties, rack: RACK}});
 
 export const COMMANDS = {
-  place: {run: place, description: 'Put a device in the rack with its bottom at a U on a face. A cable manager put over a device bolts onto it. Refused, with the reason, when it does not fit.',
-    args: args(['ref', 'face', 'ru'], {ref: {type: 'string', minLength: 1, description: 'The device, as catalog() lists it (its ref).'},
+  place: {run: place, description: 'Put a device in the rack with its bottom at a U on a face. A cable manager put over a device bolts onto it. Refused, with the reason, when it does not fit, or when the device has no such configuration.',
+    args: args(['ref', 'face', 'ru'], {ref: {type: 'string', minLength: 1, description: 'The device, as the catalogue lists it (its ref).'},
       cfg: {type: 'string', description: "Which of the device's configurations; its default when left out."},
       face: FACE, ru: RU, label: {type: 'string', description: 'The name shown on the drawing; its model when left out.'}, as: AS})},
   move: {run: move, description: 'Move a device to another U and/or face. Its cable managers move with it; a cable manager moved onto a device bolts onto it.',
     args: args(['id'], {id: ID('device'), ru: RU, face: FACE})},
-  patch: {run: patch, description: "Change a placed device's configuration, label, turned state, or its Explorer swaps and fields.",
-    args: args(['id'], {id: ID('device'), cfg: {type: 'string', description: 'Which of its configurations.'},
-      swaps: {type: 'object', description: 'What is seated where: slot path to part ref, as the Explorer writes it.'},
-      fields: {type: 'object', description: 'Editable text on the device, as the Explorer writes it.'},
+  patch: {run: patch, description: "Change a placed device's configuration, label or turned state, or replace all of what is seated in it and all of its part settings at once. A new configuration on its own clears what was seated and set; to change one slot or one setting, use fit or field.",
+    args: args(['id'], {id: ID('device'), cfg: {type: 'string', description: 'Which of its configurations; it keeps its own when left out.'},
+      swaps: {type: 'object', description: 'Every slot path to the part ref seated there, replacing the whole map. A slot left out holds what its configuration builds.'},
+      fields: {type: 'object', description: 'Every part path to its settings ({key: value}), replacing the whole map.'},
       label: {type: 'string', description: 'The name shown on the drawing.'},
       turned: {type: 'boolean', description: 'true when mounted back to front.'}})},
   remove: {run: remove, description: 'Take a device out of the rack. Its cables are kept as loose ends, or removed with it; its cable managers stay on the rack.',

@@ -113,3 +113,16 @@ def test_devices_json_carries_each_manifests_profile(tmp_path):
     assert devices["fhd-cmp5dr"]["profile"] == "passive"
     assert devices["fhd-1ufce"]["profile"] == "optical"
     assert all(x["profile"] for x in devices.values())
+
+
+def test_the_real_library_gets_a_plain_kind():
+    """kind_of on the shipped manifests: a patch panel, a router and a cable manager."""
+    import yaml
+    from pathlib import Path
+    root = Path(__file__).resolve().parents[2] / "library/devices"
+    def kind(name):
+        d = yaml.safe_load((root / name / "device.yaml").read_text())
+        return rack_index.kind_of(d, d.get("chassis") or {})
+    assert kind("fs/fhd-1ufce") == "patch panel"
+    assert kind("juniper/mx960") == "router"
+    assert kind("fs/cmh-bs-dfdabs2u") == "cable manager"

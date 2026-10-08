@@ -213,6 +213,10 @@ one means, is a contract change and raises `format`; adding a key is not.
 `router`, `network device`, `server`, `pdu`, `patch panel`, `optical`,
 `cable manager`, or `device` when the profile says no more.
 
+`devices.json` gained `profile`, the manifest's device class, for this. It is a new
+field, so `contract` stays 2: a reader that does not know it still finds every
+field it read before.
+
 ## What else a consumer holds
 
 Three more things reach a consumer outside this repository, and none of them
