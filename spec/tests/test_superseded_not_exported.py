@@ -60,7 +60,7 @@ def _written(root):
 def test_the_index_carries_superseded_by_for_every_retired_contract():
     """The export can only skip what the index tells it about."""
     _dist()
-    idx = {_ref(c): c for c in json.loads((DIST / "components.json").read_text())}
+    idx = {_ref(c): c for c in json.loads((DIST / "components.json").read_text())["components"]}
     retired = []
     for cf in sorted((ROOT / "library" / "components").glob("*/*/v*/contract.yaml")):
         data = load_yaml(cf) or {}

@@ -60,6 +60,9 @@ def _groups():
     dist = Dist(DIST)
     out = collections.defaultdict(list)
     for c in sorted(dist.modules(), key=lambda c: (c.get("ns") or "", c.get("name") or "")):
+        # A retired major (`superseded-by`) is not exported, so it authors nothing.
+        if c.get("superseded-by"):
+            continue
         man = dist.manufacturer_of(c.get("ns"))
         if not man:
             continue
