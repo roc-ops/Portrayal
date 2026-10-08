@@ -1,0 +1,43 @@
+format: 1
+kind: component
+name: c39-outlet
+version: 1.0.0
+class: inlet
+profile: power
+description: >-
+  Eaton's C39 outlet on a Rack PDU G4 - a proprietary combination of the C13 and
+  C19 outlets that takes either a C14 or a C20 plug, with high retention. A rounded
+  recess with a cross-shaped nose and three contacts.
+size: {w: 35.4, h: 26.6}
+size-confidence: {w: drawing, h: drawing}
+attrs: {outlet: eaton-c39, rating-a: 16, accepts: 'C14, C20'}
+provenance:
+  method: >-
+    drawing - Eaton drawing 9001-22301 (EVMI2130X, first issue 18-Aug-2023, D size,
+    scale 0.400) is vector, so the outlets were read from its path geometry at
+    1.133858 pt/mm rather than off a raster; the 1730, 1555.8, 72.00 and 55.80
+    dimensions on the same sheet all land within 0.02 mm at that scale. The drawing
+    lies the PDU down, cord end left; this part is drawn as the PDU stands, cord end
+    down, so the drawing's length runs up the part and its width across it.
+  size: >-
+    drawing - the recess on 9001-22301, 26.6 along the PDU by 35.4 across (the first
+    C39 of section A spans x 221.64 to 248.24 and y 6.6 to 42.0 in drawing mm), with
+    R4.5 corners; the nose inside it 15.6 by 22.75 with the C19 earth lobe
+    standing out of one side and a notch in the other.
+  identity: >-
+    datasheet - the G4 installation and setup guide P-164001156 rev 3, section 1.5,
+    "Eaton C39 with High Retention": a proprietary Eaton combination outlet, a
+    combination of the C13 and C19 styles designed to accept both C14 and C20 plugs,
+    with native high retention. Not an IEC 60320 sheet, which is why it is an eaton/
+    part and not a std/ one; the drawing calls it EATON C39 - COMBO C13/C19, and both
+    DCIM targets carry it as the outlet type `eaton-c39`, label Eaton C39.
+  rating: >-
+    drawing - 9001-22301 OUTPUT RATING: 16A PER C39.
+  depth: >-
+    not modelled, as on eaton/c13-outlet@1: no document held dimensions the recess.
+  interface: >-
+    NO `interface:` YET, as on eaton/c13-outlet@1: nothing in the library is a C14 or
+    C20 plug.
+elements:
+  recess: {at: [0, 0], size: [35.4, 26.6], class: inlet}
+skins: [default]

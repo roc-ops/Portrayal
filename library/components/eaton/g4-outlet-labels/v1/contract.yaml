@@ -1,0 +1,49 @@
+format: 1
+kind: component
+name: g4-outlet-labels
+version: 1.0.0
+class: marking
+profile: power
+description: >-
+  The printed strip beside an Eaton Rack PDU G4 outlet section - a band in the
+  section's colour with a dark window under each of its seven outlets carrying the
+  outlet's number. The colour and the seven numbers are fields; the strip is one
+  drawing for every section.
+size: {w: 4, h: 180.29}
+size-confidence: {w: drawing, h: drawing}
+provenance:
+  method: >-
+    drawing - Eaton drawing 9001-22301 (EVMI2130X, first issue 18-Aug-2023, D size,
+    scale 0.400) is vector, so the outlets were read from its path geometry at
+    1.133858 pt/mm rather than off a raster; the 1730, 1555.8, 72.00 and 55.80
+    dimensions on the same sheet all land within 0.02 mm at that scale. The drawing
+    lies the PDU down, cord end left; this part is drawn as the PDU stands, cord end
+    down, so the drawing's length runs up the part and its width across it.
+  size: >-
+    drawing - 9001-22301 draws the strip 4.0 across (y 45.5 to 49.5 in drawing mm)
+    and 180.29 along (x 195.6 to 375.9 for the first section), 0.5 inside each end
+    of the section's moulding, with a 9.8 window centred on each outlet at the 25.4
+    outlet pitch and the coloured band in between and at the ends.
+  colour: >-
+    photo-measured - the band is a FIELD (`section-color`), not a skin
+    (library/components/README.md, #177): the yellow, blue and orange are the
+    modal saturated pixels of the EVMI2130X-OUTLET-BANK_C5, _C6 and _C7 masters
+    (3000 px), about #f0d040, #40c0f0 and #f09040, and the placements carry them.
+  numbers: >-
+    photo - the EVMI2130X outlet close-ups read A1-A7, B8-B14 and C15-C21 on the
+    breakered sections and A22-A28, B29-B35 and C36-C42 on the others, light text
+    in a dark window, set across the strip so that they read along the PDU; the
+    drawing prints the same numbers. They are fields on this part, so the device
+    places one strip per section and fills its seven.
+fields:
+  section-color: {label: Section colour, type: text, default: '#f4d440'}
+  label-1: {label: 'Outlet 1 number', type: text, default: A1}
+  label-2: {label: 'Outlet 2 number', type: text, default: A2}
+  label-3: {label: 'Outlet 3 number', type: text, default: A3}
+  label-4: {label: 'Outlet 4 number', type: text, default: A4}
+  label-5: {label: 'Outlet 5 number', type: text, default: A5}
+  label-6: {label: 'Outlet 6 number', type: text, default: A6}
+  label-7: {label: 'Outlet 7 number', type: text, default: A7}
+elements:
+  band: {at: [0, 0], size: [4, 180.29], class: marking}
+skins: [default]

@@ -1,0 +1,43 @@
+format: 1
+kind: component
+name: c13-outlet
+version: 1.0.0
+class: inlet
+profile: power
+description: >-
+  An IEC 60320 C13 outlet as Eaton moulds it into a Rack PDU G4 outlet section - the
+  recess a C14 plug's shroud enters, with the C13 nose and its three contacts standing
+  in it. Drawn as the PDU stands, cord end down, its chamfered end uppermost.
+size: {w: 30.4, h: 22}
+size-confidence: {w: drawing, h: drawing}
+attrs: {outlet: iec-60320-c13, rating-a: 10}
+provenance:
+  method: >-
+    drawing - Eaton drawing 9001-22301 (EVMI2130X, first issue 18-Aug-2023, D size,
+    scale 0.400) is vector, so the outlets were read from its path geometry at
+    1.133858 pt/mm rather than off a raster; the 1730, 1555.8, 72.00 and 55.80
+    dimensions on the same sheet all land within 0.02 mm at that scale. The drawing
+    lies the PDU down, cord end left; this part is drawn as the PDU stands, cord end
+    down, so the drawing's length runs up the part and its width across it.
+  size: >-
+    drawing - the recess on 9001-22301, 22.0 along the PDU by 30.4 across (the first
+    C13 of section A spans x 198.34 to 220.34 and y 9.1 to 39.5 in drawing mm), with
+    R5.5 corners at the cord end and 5.4 chamfers at the other. The nose is 15.7 by
+    22.9 (the 15.8 by 23 of a moulded C13's nose in the Volex catalogue, which is the
+    other half of this mating pair), its contact slots 6.2 by 3.6.
+  rating: >-
+    drawing - 9001-22301 OUTPUT RATING: 10A PER C13.
+  depth: >-
+    not modelled. No document held dimensions how deep the recess or the contacts
+    run, so the part has no `d` and builds flat; a C14 plug's shroud depth would be
+    a borrowed figure for a different part.
+  interface: >-
+    NO `interface:` YET. The library has cord ends that seat in inlets (C13 and C19
+    plugs into C14 and C20 inlets, docs/connectors-power-design.md); it has no C14
+    or C20 plug, the far end of a cord, so a slot here would offer nothing (#792).
+  orientation: >-
+    drawing - every C13 on the PDU has its chamfered end away from the cord, so the
+    part is drawn that way and every placement is unrotated.
+elements:
+  recess: {at: [0, 0], size: [30.4, 22], class: inlet}
+skins: [default]

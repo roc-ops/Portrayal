@@ -595,6 +595,13 @@ PART_POWER = {
     # netbox-community/netbox (netbox/dcim/choices.py at 9bcfd739) or nautobot/nautobot
     # (at f9cdca3d). A clip is not a screw terminal, so it is `other`, as the barrel is.
     "common/orv3-busbar-connector": "other",
+    # A RACK PDU'S FIXED INPUT CORD. The Eaton G4 EVMI2130X has no inlet: its feed
+    # is a 10 ft cord ending in a NEMA L21-30P twist-lock plug, and the part that
+    # stands for it is the cord leaving the end cap. `nema-l21-30p` is a
+    # PowerPortTypeChoices value in both targets (netbox-community/netbox
+    # netbox/dcim/choices.py at 2b3f4b48, TYPE_NEMA_L2130P; nautobot/nautobot
+    # nautobot/dcim/choices.py at c77e4255, the same).
+    "eaton/g4-cord-l21-30p": "nema-l21-30p",
 }
 
 # WHERE A DEVICE HANDS POWER ON: a power OUTLET, the other half of PART_POWER
@@ -611,7 +618,13 @@ PART_POWER = {
 # shared list, and the test holding PART_OUTLET to it is not decoration: Nautobot's
 # component import form turns an unknown type into `other` without a word, so
 # a typo here would import as a different, valid-looking answer.
-OUTLET_TYPES = frozenset({"dc-terminal", "other"})
+#
+# AND THE AC OUTLETS OF A RACK PDU (the Eaton G4 EVMI2130X, the first PDU here).
+# `iec-60320-c13` and `eaton-c39` are PowerOutletTypeChoices values in both:
+# netbox-community/netbox netbox/dcim/choices.py at 2b3f4b48 (TYPE_IEC_C13, and
+# TYPE_EATON_C39 'eaton-c39' labelled "Eaton C39") and nautobot/nautobot
+# nautobot/dcim/choices.py at c77e4255 (the same two).
+OUTLET_TYPES = frozenset({"dc-terminal", "other", "iec-60320-c13", "eaton-c39"})
 PART_OUTLET = {
     # ONE OUTPUT CIRCUIT OF A BREAKER PANEL, a BATT screw over an RTN screw: the
     # two poles of one circuit, so one outlet, as one feed is one power port.
@@ -622,6 +635,11 @@ PART_OUTLET = {
     # connector as its label - OTHER_LABEL's treatment of an interface whose
     # form factor upstream does not name.
     "amphenol-ns/output-p40": "other",
+    # A RACK PDU'S OUTLETS. An IEC C13 is upstream's `iec-60320-c13`. Eaton's C39
+    # takes a C14 or a C20 plug and is no IEC sheet - it is Eaton's own, and both
+    # targets name it, so it is `eaton-c39` rather than `other`.
+    "eaton/c13-outlet": "iec-60320-c13",
+    "eaton/c39-outlet": "eaton-c39",
 }
 # The label an `other` outlet carries, so it says what to plug into it.
 # test_power_outlets.py holds both tables to OUTLET_TYPES (an assert here would
