@@ -750,9 +750,7 @@ def test_an_mpc_in_the_mx2000_adapter_installs_under_its_slot_in_nautobot():
     dev_p = ex / "device-types/Juniper/MX2010.yaml"
     ad_p = ex / "module-types/Juniper/MX2000-LC-ADAPTER.yaml"
     mpc_p = ex / "module-types/Juniper/MPC7E-MRATE.yaml"
-    missing = [p.name for p in (dev_p, ad_p, mpc_p) if not p.exists()]
-    if missing:
-        pytest.skip(f"not published: {', '.join(missing)} - run ./publish.sh --no-images")
+    # The exports are committed, so a missing one is a failure, not a skip.
     dev, ad, mpc = (yaml.safe_load(p.read_text()) for p in (dev_p, ad_p, mpc_p))
     slots = {b["name"]: b["position"] for b in dev["module-bays"]}
     (bay,) = ad["module-bays"]
