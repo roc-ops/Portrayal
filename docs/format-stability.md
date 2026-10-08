@@ -7,7 +7,7 @@ about it while the package is at 0.x.
 | Number | Where it appears | What it versions |
 |---|---|---|
 | `format` | every device manifest, component contract, listing and lab (`format: 1`) | the **file format** a manifest is written in |
-| schema `v1` | the schema `$id`s and titles in `spec/schemas/` (device, component, listing and lab; and the rack file) | for the manifest schemas, the same thing, named: schema v1 *is* format 1. `rack.schema.json` is also published under `/v1/`, as its first publication label, but describes rack file `version` 2; a later rack schema is published under the next unused label, never under its rack version number (below) |
+| schema `v1` | the schema `$id`s and titles in `spec/schemas/` (device, component, listing and lab; the marked-up drawing; and the rack file) | for the manifest schemas, the same thing, named: schema v1 *is* format 1. `marks.schema.json` is v1 of the marked-up drawing, whose own key is `v` (1). `rack.schema.json` is also published under `/v1/`, as its first publication label, but describes rack file `version` 2; a later rack schema is published under the next unused label, never under its rack version number (below) |
 | package | `version` in `pyproject.toml` (0.1.0) | the **tools**: the linter, the compiler, the indexers and the exporter |
 | rack catalogue `format` | `rack.json` (`format: 1`) | the **catalogue** a rack tool reads in one fetch; its own number, apart from the manifests' `format` |
 | rack file `version` | the Rack Builder's file (`format: "portrayal-rack"`, `version: 2`) | the **rack file** a user saves; `parseDoc` migrates an older one on load |
