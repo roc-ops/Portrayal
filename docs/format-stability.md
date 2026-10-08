@@ -182,6 +182,37 @@ rack-side part across its 45 units, which is wrong and visible, as the
 rack-face case was. A lab that fails its schema or a check (lint L139 to L142,
 L153, L154) is not written, and the build stops.
 
+## The kits file
+
+`kits.json` is every rail, bracket and slide kit in the library: each
+component contract with `kind: kit`, the kind added beside `component` and
+`module` in #905. A kit is a set of ordinary components that a device names
+from `chassis.kits` and never places, so it is never an entry of
+`components.json`, and `components_index.py` writes it here instead, on every
+build. While the library holds no kit the file is `{"kits": []}`.
+
+```json
+{"kits": [{"ref": "acme/slide@1", "ns": "acme", "name": "slide", "major": "v1",
+  "version": "1.0.0", "kind": "kit", "description": "...",
+  "motion": "sliding", "travel": "full", "install": "drop-in",
+  "parts": [{"ref": "acme/inner@1", "id": "inner", "count": 2}],
+  "configurations": [{"id": "four-post", "racks": ["4-post"], "parts": ["inner"],
+                      "depth": {"square": [631, 868]}, "rail-depth": 714}],
+  "accessories": [{"kind": "cma", "ref": "acme/cma@1", "rail-depth": 845}],
+  "superseded-by": null, "provenance": {"depth": "..."}}]}
+```
+
+Rows are sorted by `ref`, and every row carries every key above. A key the
+contract leaves out is `null` (`travel`, `install`, `superseded-by`), an empty
+list (`accessories`) or an empty object (`provenance`). `parts`,
+`configurations` and `accessories` are as the contract writes them; the
+component schema describes each key. A part is a ref, not geometry: the
+geometry of a kit's parts is read from `components.json` by their refs.
+
+The file is new, and did not raise `contract`, which is still 2. Removing or
+renaming a key, or changing what one means, is a `contract` change; adding a
+key is not.
+
 ## The rack catalogue
 
 `rack.json` is the catalogue a rack tool reads in one fetch, so it need not open
