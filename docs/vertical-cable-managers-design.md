@@ -1,10 +1,12 @@
 # Vertical cable managers: rack-side mounting
 
-Status: agreed 2026-10-07. Steps 1 and 2 of section 7 are built: `chassis.mount:
+Status: agreed 2026-10-07. Steps 1 to 3 of section 7 are built: `chassis.mount:
 rack-side` with lint L152, lab placement by `side` with L153 and L154, L142's per-face
-and per-side claim, and the devices `fs/cmv-sfd45u5w` and `fs/cmv-5u3w`. Steps 3 and 4
-are not. Follows docs/cable-managers-design.md, which reserved `rack-side` for this. Scope: the FS-made vertical managers; the four
-resold APC parts wait for their vendor's drawings.
+and per-side claim, and the six FS parts - `fs/cmv-sfd45u5w`, `fs/cmv-dfd45u5w`,
+`fs/cmv-sfds45u5w`, `fs/cmv-dfds45u5w`, `fs/cmv-sfd42u9w` and `fs/cmv-5u3w`. Step 4, the
+site, is not. Follows docs/cable-managers-design.md, which reserved `rack-side` for this.
+Scope: the FS-made vertical managers; the four resold APC parts wait for their vendor's
+drawings.
 
 ## 1. What the parts are, and how they mount
 
@@ -99,14 +101,16 @@ As built (steps 1 and 2):
 - A `rack-side` part's front is taller than it is wide (warning): a duct drawn on its
   side is the likeliest authoring error.
 - Lab checks: `side` only on `rack-side` and on a `rack-face` part narrower than the
-  opening; two `rack-side` parts on one side overlap in height only if they are
-  stacked sections (error). As built: L152 is the portrait check, L153 the `side`
-  check and L154 the height and overlap check; L142 claims per face and side.
+  opening (L153); a `rack-side` part fits the rack's height, and no two `rack-side`
+  parts on one side of the rack overlap in height, whatever their `face` - sections
+  of one duct stack one above the other (L154, error). L152 is the portrait check;
+  L142 claims per face and side.
 
 ## 5. What is estimated, and what is not expressible
 
-- The gap between the duct and the upright is drawn but never dimensioned; the
-  bracket's own sheet gives its size, so the stand-off is taken from it and marked.
+- The gap between the duct and the upright is drawn but never dimensioned, and no
+  source settles it: every duct carries it as a `bracket-stand-off` gap, and the
+  VRTCMB brackets, which are hardware, are not drawn.
 - The APC AR201 the parts pair with is not in the library; the site's frame stands
   in for it.
 - A duct shared between two racks is one part in two places until a lab or a rack
