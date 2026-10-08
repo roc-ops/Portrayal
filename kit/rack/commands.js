@@ -6,8 +6,8 @@
 // changes nothing hands back the very rack it was given, so a caller can tell.
 
 import {withItem, updateItem, withoutItem, withFrame, renamed, withDcim, detached, positionOf, isWaypoint,
-        nextId, zeroUById, zeroUOffset, zeroUBottom, SIDES} from './model.js';
-import {fits, fitsZeroU, isRackFace, isNarrow, heightOf, shrinkRack, settleZeroU} from './fit.js';
+        nextId, zeroUById, zeroUOffset, zeroUBottom} from './model.js';
+import {fits, fitsZeroU, isRackFace, isNarrow, railOf, heightOf, shrinkRack, settleZeroU} from './fit.js';
 import {whereText, zeroUName} from './zero-u.js';
 import {placement, moveItem, managersOf} from './managers.js';
 import {canCable, withCable, updateCable, withoutCable, cablesOf, withoutCablesOf, cableName, endName, endKey,
@@ -286,7 +286,7 @@ function field(rack, {id, path, key, value}, ctx) {
 // A narrow rack-face part (fit.js isNarrow: a finger bracket) on one rail
 // takes its units on that face and rail only. It stands alone: bolting onto a
 // device behind it (`on`) is what a part across both rails does.
-const railText = (it, chassisOf) => (SIDES.includes(it.side) && isNarrow(chassisOf(it.ref)) ? `, on the ${it.side} rail` : '');
+const railText = (it, chassisOf) => { const rail = railOf(it, chassisOf); return rail ? `, on the ${rail} rail` : ''; };
 const wide = (c, ref) => ({error: `${c?.model ?? ref} spans the opening, so it has no side.`});
 
 function sidePlace(rack, {ref, cfg, face, ru, side, label}, ctx) {
