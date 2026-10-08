@@ -108,7 +108,7 @@ as `@portrayal/kit/rack/<module>`:
 | `rack/commands.js` | every edit as a named, validated command, and `apply` for a batch of them |
 | `rack/history.js` | undo and redo as snapshots |
 | `rack/editor.js` | `createRackEditor`: a rack document you edit by commands, with undo, redo and change events |
-| `rack/queries.js` | reading a rack: `fitsAt`, `freeUs`, `describe`, `freePorts`, `suggestMedia`, `looseEnds` |
+| `rack/queries.js` | reading a rack: `fitsAt`, `freeUs`, `catalog`, `describe`, `freePorts`, `suggestMedia`, `looseEnds` |
 
 ### The catalogue
 
@@ -166,8 +166,8 @@ nearest stock length above it.
 
 To change a rack by name rather than by function, use the command core:
 `createRackEditor({ doc, chassisOf })` applies `place`, `move`, `patch`,
-`remove`, `attach`, `detach`, `frame`, `rename`, `dcim` and the `cable.*`
-commands as all-or-nothing batches, with `undo`, `redo` and an `on('change')`
+`remove`, `attach`, `detach`, `frame`, `rename`, `dcim`, the `cable.*`
+commands and the page's own `lengths.routed` as all-or-nothing batches, with `undo`, `redo` and an `on('change')`
 event. Each command names its arguments in `COMMANDS` (`rack/commands.js`), and
 `rack/queries.js` answers what a command would need to know first.
 

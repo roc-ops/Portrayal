@@ -17,7 +17,9 @@ per schema (`device.schema.json`, `component.schema.json`,
 validator that follows the `$id` finds the schema it names. `rack.schema.json` describes
 the Rack Builder's own file (`format: "portrayal-rack"`, its own `version`, now 2), not a
 manifest, so it is published under `/schemas/v1/` as a schema of this repository but does
-not carry format 1. A new format number
+not carry format 1. The `/v1/` is its publication label; the rack file's own `version`
+(2 today) is migrated on load by `parseDoc`, so a later rack version is published under a
+new label rather than overwriting `/v1/`. A new format number
 is published beside the old one under its own label (`/schemas/v2/`); a
 published label is never reused for a different format.
 
