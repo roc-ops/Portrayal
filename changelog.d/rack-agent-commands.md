@@ -1,6 +1,7 @@
 ### Added
-- `@portrayal/kit/rack` has commands and questions an agent can use without
-  reading the code (`docs/rack-agent-commands-design.md`). `fit` seats, empties
+- `@portrayal/kit` 0.4.0: `@portrayal/kit/rack` has commands and questions
+  an agent can use without reading the code
+  (`docs/rack-agent-commands-design.md`). `fit` seats, empties
   or restores one bay or cage; `field` sets one setting of one seated part;
   `cable.update` takes `a` and `b` to move an end and keep the cable.
   `cable.route` refuses a waypoint the rack lacks and judges only the new ones.
