@@ -56,7 +56,8 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L43 device: a front or rear view as wide as the 19-inch rack face still has
       its mounting ears in it; the modelled body is the metal between the folds
   L44 device: panel decor agrees with what is on the face - a patterned field is
-      not buried under the parts, and printing does not run off the edge
+      not buried under the parts, printing does not run off the edge, and no decor
+      lies wholly off the face where it is clipped and never drawn
   L45 device: a view at `modelled` draws something, or it is a size with no face
   L46 component: composed parts do not collide with each other inside the part
   L52 component: a stated power figure says where it was read from
@@ -210,7 +211,7 @@ RULES = {
     "L41": ("device",     "a bay or placement scoped to configurations names ones that exist, not all, not none", "fix `only-in`"),
     "L42": ("device",     "a silkscreen mark says what it annotates, or `chassis` for printing about the whole unit", "add `for:`"),
     "L43": ("device",     "a front or rear view as wide as the rack face still has its ears in it, unless the device is a `rack-face` part, which is its ears, or states `chassis.ears: behind`, whose face is the part", "model the body between the ear folds; record the ear extent in provenance"),
-    "L44": ("device",     "panel decor agrees with the face: a patterned field is not buried under parts, printing does not run off the edge", "move or trim the decor"),
+    "L44": ("device",     "panel decor agrees with the face: a patterned field is not buried under parts, printing does not run off the edge, no decor lies wholly off the face", "move or trim the decor"),
     "L45": ("device",     "a view at `modelled` draws something or declares itself empty", "add content, or an `empty:` sentence of 40+ characters saying where you looked"),
     "L46": ("component",  "composed parts do not collide inside the part", "move a part, or say in provenance that the layering is deliberate"),
     "L47": ("component",  "a state nothing draws is not declared", "draw a lamp element for the state, or remove the state"),
@@ -5595,7 +5596,7 @@ def _decor_box(d):
 def lint_device_decor(path, view_name, view, lib_roots):
     """L44: decor is background, and background still has to be true.
 
-    TWO CHECKS, AND ONE OF THEM IS DELIBERATELY NOT THE OBVIOUS ONE. Erroring on
+    THREE CHECKS, AND ONE OF THEM IS DELIBERATELY NOT THE OBVIOUS ONE. Erroring on
     any decor that a feature overlaps was the first idea and is wrong: decor IS
     what sits behind things, and 206 overlaps across 11 devices are correct by
     construction - a grille band behind a power shelf, a brand band under a
@@ -5608,6 +5609,8 @@ def lint_device_decor(path, view_name, view, lib_roots):
     be seen: honeycomb or grille that is almost entirely buried is either
     mismeasured or should not be there. Two fields in the library exceed the
     threshold, which is the signal-to-noise a warning wants.
+
+    The third check is decor whose box misses the face entirely - see below.
 
     The second check is printing that runs off the face - the MX204's model name
     was clipped at the view edge. Text extent is ESTIMATED at 0.62 em per
@@ -5677,6 +5680,49 @@ def lint_device_decor(path, view_name, view, lib_roots):
     vw = size.get("w")
     if not vw:
         return
+    # DECOR WHOLLY OUTSIDE THE DRAWING IS NEVER SEEN. render.py sets the SVG
+    # viewBox to the face, 0 0 w h, and grows it only for the placements the
+    # default build draws (an end ring past the ear, #865) - never for decor.
+    # There is no clipPath, so what decides whether a rect is seen is the
+    # viewBox: a band whose box misses it entirely is a dead rect. The EPS122's
+    # 90 W band sat at x 601.74 on a 440 mm face, measured in another frame, and
+    # nothing said so. So this measures against the GROWN extents, the face plus
+    # every non-optional placement's box, the way render.py computes them;
+    # decor in an overhang zone that a placement opens up is drawn, and passes.
+    # Optional placements are left out because the default build leaves them
+    # out. L150 covers placements, bays and cutouts and leaves decor out on
+    # purpose; this is the decor half. Only a box with NO overlap is reported:
+    # decor that merely runs past an edge is partly seen, which is fine.
+    vh = size.get("h")
+    ext = [0.0, 0.0, float(vw), float(vh) if vh else None]
+    for q in vp["placements"]:
+        if q.get("optional") or not q.get("at"):
+            continue
+        c = _instance_size(q.get("ref"), lib_roots)
+        if not c:
+            continue
+        w, h = c
+        if q.get("rotate") in (90, 270, -90):
+            cx, cy = q["at"][0] + w / 2, q["at"][1] + h / 2
+            qb = (cx - h / 2, cy - w / 2, cx + h / 2, cy + w / 2)
+        else:
+            qb = (q["at"][0], q["at"][1], q["at"][0] + w, q["at"][1] + h)
+        ext[0], ext[1], ext[2] = min(ext[0], qb[0]), min(ext[1], qb[1]), max(ext[2], qb[2])
+        if ext[3] is not None:
+            ext[3] = max(ext[3], qb[3])
+    face = f"{vw} x {vh}" if vh else f"{vw} wide"
+    for d in vp["decor"]:
+        db = _decor_box(d)
+        if not db:
+            continue
+        off = db[0] >= ext[2] or db[2] <= ext[0]
+        if ext[3] is not None:
+            off = off or db[1] >= ext[3] or db[3] <= ext[1]
+        if off:
+            warn(path, "L44", f"{view_name}: decor {d.get('id') or '(no id)'} at "
+                 f"{d['at']} lies wholly outside the {face} face and every part "
+                 "drawn beyond it, so it is never seen. It was measured in "
+                 "another frame or does not belong on this view")
     for m in vp["silkscreen"]:
         t, at = m.get("text"), m.get("at")
         if not t or not at:

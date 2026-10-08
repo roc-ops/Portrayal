@@ -50,7 +50,7 @@ a test fails when this page and the linter disagree. A finding prints as
 | L41 | device | a bay or placement scoped to configurations names ones that exist, not all, not none | fix `only-in` |
 | L42 | device | a silkscreen mark says what it annotates, or `chassis` for printing about the whole unit | add `for:` |
 | L43 | device | a front or rear view as wide as the rack face still has its ears in it, unless the device is a `rack-face` part, which is its ears, or states `chassis.ears: behind`, whose face is the part | model the body between the ear folds; record the ear extent in provenance |
-| L44 | device | panel decor agrees with the face: a patterned field is not buried under parts, printing does not run off the edge | move or trim the decor |
+| L44 | device | panel decor agrees with the face: a patterned field is not buried under parts, printing does not run off the edge, no decor lies wholly off the face | move or trim the decor |
 | L45 | device | a view at `modelled` draws something or declares itself empty | add content, or an `empty:` sentence of 40+ characters saying where you looked |
 | L46 | component | composed parts do not collide inside the part | move a part, or say in provenance that the layering is deliberate |
 | L47 | component | a state nothing draws is not declared | draw a lamp element for the state, or remove the state |
