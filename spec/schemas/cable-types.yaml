@@ -9,7 +9,7 @@
 # THE ID. A type's id is lower case. The bare ids `os2`, `om3`, `om4`, `om5`,
 # `cat6`, `cat6a`, `dac` and `aoc` are exactly the Rack Builder's cable
 # `media` values (kit/rack/cable-rules.js MEDIA), so a rack cable's media names
-# its type with no mapping. A refinement of one of them (`cat6a-stp`,
+# its type with no mapping. A refinement of one of them (`cat6a-ftp`,
 # `os2-g657a2`) names the bare media it refines in `media`. #897's later named
 # types (pickers, colours, mismatch checks) join this table under new ids and
 # new optional keys.
@@ -34,11 +34,11 @@
 # is Portrayal's own estimate (`portrayal-estimate`), the figure the kit's
 # fill sketch already uses where it has one.
 #
-# FIBRE. A fibre cable's installed minimum is the larger of its cable rule and
-# its fibre class's own macrobend limit (`fiber.min_bend`). For standard
-# single-mode fibre the class limit governs; for a bend-insensitive class the
-# cable rule does, and the class limit is kept as data for a consumer that
-# knows the cord's maker allows the tighter figure.
+# FIBRE. A fibre cord's installed minimum is TIA-568's cable rule for the
+# cord. Its fibre class's own macrobend test radius (`fiber.min_bend`) is kept
+# as data: larger than the cord rule for standard G.652.D fibre, smaller for a
+# bend-insensitive G.657 class, for a consumer that knows the cord's maker
+# allows the tighter figure.
 #
 # VERSION. `version` is the table's own: a corrected value or a new type is a
 # minor, a removed type or a changed id is a major. `format` is the shape of
@@ -125,8 +125,8 @@ types:
     od_mm: 3.0
     od_sources: [portrayal-estimate]
     min_bend_radius:
-      installed: {mm: 30, basis: standard, sources: [foa-tia568, itu-g652, hfcl-macrobend],
-                  note: "G.652.D's 30 mm macrobend test radius, taken as the class limit; the cord's own cable rule is 25 mm"}
+      installed: {mm: 25, basis: standard, sources: [foa-tia568],
+                  note: "the cord's cable rule; the fibre class is tested at 30 mm"}
       loaded: {mm: 50, basis: standard, sources: [foa-tia568], note: under a 222 N pull}
   os2-g657a1:
     label: OS2 single-mode fibre, bend-insensitive G.657.A1, duplex cord
@@ -160,9 +160,10 @@ types:
       loaded: {mm: 50, basis: standard, sources: [foa-tia568], note: under a 222 N pull}
 
   # ── copper twisted pair ────────────────────────────────────────────────
-  # 4x OD installed for balanced cable (TIA-568 and ISO 11801 horizontal), the
-  # same for stranded patch cords; ISO's 8x OD is for pulling during
-  # installation. A screened cable's 8x OD installed is vendor practice.
+  # These are patch cords. A stranded cord is 4x OD installed whether it is
+  # screened or not (TIA-568 as trueCABLE summarises it); 8x OD is the figure
+  # for solid screened horizontal cable, and ISO's 8x OD is for pulling during
+  # installation. `-ftp` is F/UTP; `-sftp` is left for S/FTP.
   cat6:
     label: Cat 6 U/UTP
     media: cat6
@@ -173,16 +174,16 @@ types:
     min_bend_radius:
       installed: {xOD: 4, basis: standard, sources: [elliott-min-bend, truecable-bend]}
       loaded: {xOD: 8, basis: standard, sources: [elliott-min-bend], note: "ISO 11801, while pulled during installation"}
-  cat6-stp:
-    label: Cat 6 screened (F/UTP or S/FTP)
+  cat6-ftp:
+    label: Cat 6 F/UTP (screened) patch cord
     media: cat6
     family: copper
     shield: F/UTP
     od_mm: 7.0
     od_sources: [portrayal-estimate]
     min_bend_radius:
-      installed: {xOD: 8, basis: convention, sources: [ampcom-bend],
-                  note: vendor practice for screened cable; ISO's 4x OD horizontal figure does not single it out}
+      installed: {xOD: 4, basis: standard, sources: [truecable-bend],
+                  note: "a stranded patch cord, screened or not; 8xOD is the solid horizontal-cable figure"}
       loaded: null
   cat6a:
     label: Cat 6A U/UTP
@@ -194,16 +195,16 @@ types:
     min_bend_radius:
       installed: {xOD: 4, basis: standard, sources: [elliott-min-bend, truecable-bend]}
       loaded: {xOD: 8, basis: standard, sources: [elliott-min-bend], note: "ISO 11801, while pulled during installation"}
-  cat6a-stp:
-    label: Cat 6A screened (F/UTP or S/FTP)
+  cat6a-ftp:
+    label: Cat 6A F/UTP (screened) patch cord
     media: cat6a
     family: copper
     shield: F/UTP
     od_mm: 7.5
     od_sources: [ampcom-bend]
     min_bend_radius:
-      installed: {xOD: 8, basis: convention, sources: [ampcom-bend],
-                  note: vendor practice for screened cable; ISO's 4x OD horizontal figure does not single it out}
+      installed: {xOD: 4, basis: standard, sources: [truecable-bend],
+                  note: "a stranded patch cord, screened or not; 8xOD is the solid horizontal-cable figure"}
       loaded: null
 
   # ── direct attach and active optical ───────────────────────────────────
@@ -249,10 +250,13 @@ types:
   # No Rack Builder media names power yet; `power` is the media these share.
   # Makers' figures for H05VV-F cord are not known to agree; this takes the
   # one sourced figure, and marks it unverified until a second maker confirms it.
+  # A type is one connector pair on one cord (`conductor`), so a North American
+  # SJT cord is a type of its own beside these.
   power-c13:
     label: IEC 60320 C13/C14 power cord, H05VV-F 3G1.0
     media: power
     family: power
+    conductor: H05VV-F 3G1.0
     od_mm: 7.1
     od_sources: [oznur-h05vv-f]
     min_bend_radius:
@@ -263,6 +267,7 @@ types:
     label: IEC 60320 C19/C20 power cord, H05VV-F 3G1.5
     media: power
     family: power
+    conductor: H05VV-F 3G1.5
     od_mm: 7.9
     od_sources: [oznur-h05vv-f]
     min_bend_radius:

@@ -18,7 +18,7 @@ const TYPES = {
     installed: {xOD: 4, basis: 'standard', sources: src}, loaded: {xOD: 8, basis: 'standard', sources: src}}},
   aoc: {id: 'aoc', media: 'aoc', od_mm: 3.0, min_bend_radius: {
     installed: {xOD: 10, basis: 'standard', sources: src}, loaded: null}},
-  'cat6a-stp': {id: 'cat6a-stp', media: 'cat6a', od_mm: 7.5, min_bend_radius: {
+  'fixture-8od': {id: 'fixture-8od', media: 'cat6a', od_mm: 7.5, min_bend_radius: {
     installed: {xOD: 8, basis: 'convention', sources: src}, loaded: null}},
   nood: {id: 'nood', media: 'nood', min_bend_radius: {installed: {xOD: 4, basis: 'convention', sources: src}}},
 };
@@ -38,7 +38,7 @@ test('no radius, or a multiple of a diameter the type does not give, is null', (
 });
 
 test('installedRadiusMm resolves a type by id, and an unknown id is null', () => {
-  assert.equal(T.installedRadiusMm(TYPES, 'cat6a-stp'), 60);
+  assert.equal(T.installedRadiusMm(TYPES, 'fixture-8od'), 60);
   assert.equal(T.installedRadiusMm(TYPES, 'cat5e'), null);
   assert.equal(T.installedRadiusMm(TYPES, 'constructor'), null);
   assert.equal(T.installedRadiusMm(TYPES, '__proto__'), null);
@@ -48,7 +48,7 @@ test('installedRadiusMm resolves a type by id, and an unknown id is null', () =>
 test('bendOf reads a cable by its type, else its media; none is null', () => {
   const bendOf = T.bendLookup(TYPES);
   assert.equal(bendOf({id: 'c1', media: 'om4'}), 25);
-  assert.equal(bendOf({id: 'c2', media: 'cat6a', type: 'cat6a-stp'}), 60);
+  assert.equal(bendOf({id: 'c2', media: 'cat6a', type: 'fixture-8od'}), 60);
   assert.equal(bendOf({id: 'c3', media: ''}), null);
   assert.equal(bendOf({id: 'c4', media: 'toString'}), null);
   assert.equal(bendOf({id: 'c5'}), null);
@@ -60,7 +60,7 @@ test('a type this table does not know falls back to the cable\'s media', () => {
   assert.equal(bendOf({media: 'cat6', type: 'cat6-from-a-newer-table'}), 24);
   assert.equal(bendOf({media: 'cat6', type: 'constructor'}), 24);
   assert.equal(bendOf({media: '', type: 'nope'}), null);
-  assert.equal(T.cableTypeOf(TYPES, {media: 'om4', type: 'cat6a-stp'}).id, 'cat6a-stp');
+  assert.equal(T.cableTypeOf(TYPES, {media: 'om4', type: 'fixture-8od'}).id, 'fixture-8od');
   assert.equal(T.cableTypeOf(TYPES, {media: 'om4', type: 'x'}).id, 'om4');
   assert.equal(T.diameterLookup(TYPES)({media: 'cat6', type: 'x'}), 6.0);
 });

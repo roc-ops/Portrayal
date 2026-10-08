@@ -54,8 +54,8 @@ def test_every_source_is_a_public_https_url(built):
 def test_the_issue_s_coverage(built):
     # #919: OM3, OM4, OM5, OS2 with G.657.A1/A2, Cat6 and Cat6A UTP and
     # screened, DAC, AOC and power cords.
-    need = {"om3", "om4", "om5", "os2", "os2-g657a1", "os2-g657a2", "cat6", "cat6-stp",
-            "cat6a", "cat6a-stp", "dac", "aoc"}
+    need = {"om3", "om4", "om5", "os2", "os2-g657a1", "os2-g657a2", "cat6", "cat6-ftp",
+            "cat6a", "cat6a-ftp", "dac", "aoc"}
     assert need <= set(built["types"])
     assert any(t["family"] == "power" for t in built["types"].values())
 
@@ -88,8 +88,11 @@ def test_the_bare_types_agree_with_the_kit_s_fill_diameters(built):
     # TIA-568 via the FOA: a two-fibre inside-plant cable, 25 mm, 50 mm pulled
     ("om4", "installed", {"mm": 25}),
     ("om4", "loaded", {"mm": 50}),
-    # the G.652.D class limit governs plain OS2; G.657 leaves the cable rule
-    ("os2", "installed", {"mm": 30}),
+    # OS2 cords take TIA's cord rule too; G.652.D's 30 mm is its test radius
+    ("os2", "installed", {"mm": 25}),
+    # screened stranded patch cords are 4x OD, as unscreened ones (trueCABLE)
+    ("cat6a-ftp", "installed", {"xOD": 4}),
+    ("cat6-ftp", "installed", {"xOD": 4}),
     ("os2-g657a2", "installed", {"mm": 25}),
     # TIA-568 / ISO 11801 balanced cable: 4x OD installed, 8x pulled
     ("cat6a", "installed", {"xOD": 4}),
@@ -106,15 +109,20 @@ def test_sourced_values(built, tid, which, rule):
 def test_the_bases_say_how_sure_each_figure_is(built):
     t = built["types"]
     assert t["om4"]["min_bend_radius"]["installed"]["basis"] == "standard"
-    assert t["cat6a-stp"]["min_bend_radius"]["installed"]["basis"] == "convention"
+    assert t["cat6a-ftp"]["min_bend_radius"]["installed"]["basis"] == "standard"
+    assert t["cat6a-ftp"]["min_bend_radius"]["installed"]["sources"] == ["truecable-bend"]
     assert t["dac"]["min_bend_radius"]["installed"]["basis"] == "convention"
     assert t["os2-g657a1"]["fiber"]["min_bend"]["mm"] == 10
     # TIA-568 does not cover AOC assemblies: its rule is applied by analogy
     for which in ("installed", "loaded"):
         r = t["aoc"]["min_bend_radius"][which]
         assert r["basis"] == "convention" and r["unverified"] is True
-    # G.652.D's 30 mm is a test radius, so it cites the Recommendation
-    assert "itu-g652" in t["os2"]["min_bend_radius"]["installed"]["sources"]
+    # G.652.D's 30 mm is a test radius, kept on the fibre and citing the Recommendation
+    assert t["os2"]["fiber"]["min_bend"]["mm"] == 30
+    assert set(t["os2"]["fiber"]["min_bend"]["sources"]) == {"itu-g652", "hfcl-macrobend"}
+    # a power type names its cord, so another cord is another type
+    assert t["power-c13"]["conductor"] == "H05VV-F 3G1.0"
+    assert t["power-c19"]["conductor"] == "H05VV-F 3G1.5"
 
 
 def _doc():
@@ -136,6 +144,7 @@ def test_the_source_table_passes_its_own_checks():
     (lambda d: d["types"]["cat6"].pop("od_mm"), "od_mm must be"),
     (lambda d: d["types"].pop("om4"), "media om4: no type has the id om4"),
     (lambda d: d["types"]["cat6"].update(fiber={"mode": "multimode"}), "only a fiber type"),
+    (lambda d: d["types"]["power-c13"].pop("conductor"), "names its cord's `conductor`"),
 ])
 def test_a_bad_table_is_refused(break_it, says):
     d = _doc()
@@ -187,4 +196,4 @@ def test_the_kit_resolves_the_published_table(built, tmp_path):
     (tmp_path / "probe.mjs").write_text(script)
     out = subprocess.run(["node", str(tmp_path / "probe.mjs"), str(tmp_path / "cable-types.json")],
                          capture_output=True, text=True, check=True)
-    assert json.loads(out.stdout) == [25, 30, 24, 30, 30, 23, 42.6, None]
+    assert json.loads(out.stdout) == [25, 25, 24, 30, 30, 23, 42.6, None]

@@ -210,7 +210,7 @@ Each type, keyed by its `id`, always carries:
 - `id`, `label`, and `media`: the Rack Builder cable media it is a kind of.
   The bare ids `os2`, `om3`, `om4`, `om5`, `cat6`, `cat6a`, `dac` and `aoc` are
   those media values themselves, so a rack cable's media names its type. A
-  refinement (`cat6a-stp`, `os2-g657a2`, `dac-26awg`) has its own id and
+  refinement (`cat6a-ftp`, `os2-g657a2`, `dac-26awg`) has its own id and
   names the media it refines. `power` is the media of the power cords, which
   no Rack Builder media names yet.
 - `family`: `fiber`, `copper`, `dac`, `aoc` or `power`.
@@ -225,10 +225,12 @@ Each type, keyed by its `id`, always carries:
   where no source gives one; `installed` is always present.
 
 A type may also carry `fiber` (`mode`, `grade`, `core_um`, and for a named
-class `class` and its own `min_bend`), `shield` or `awg`. A fibre type's
-installed radius is already the larger of its cable rule and its fibre
-class's limit; `fiber.min_bend` is kept for a consumer that knows the cord
-allows the tighter figure.
+class `class` and its own `min_bend`), `shield` or `awg`. A `power` type
+always carries `conductor`, the cord it is made of (`H05VV-F 3G1.0`), so the
+same connector pair on another cord (a North American SJT) is a type of its
+own. A fibre type's installed radius is the cord's cable rule;
+`fiber.min_bend` is the fibre class's macrobend test radius, kept as data
+for a consumer that knows the cord allows the tighter figure.
 
 The kit's `rack/cable-types.js` reads it: `radiusMm(type)` turns a radius into
 millimetres, `bendLookup(types)` gives a cable's installed radius from its

@@ -111,6 +111,8 @@ def problems(doc):
             out.append(f"{w}: fiber is not a mapping")
         elif fib is not None and "min_bend" in fib:
             out += radius_problems(f"{w} fiber.min_bend", fib["min_bend"], sources, False)
+        if t.get("family") == "power" and not (isinstance(t.get("conductor"), str) and t["conductor"]):
+            out.append(f"{w}: a power type names its cord's `conductor`")
         if (fib is not None) != (t.get("family") == "fiber"):
             out.append(f"{w}: a fiber type, and only a fiber type, states `fiber`")
     # Every bare Rack Builder media has to be a type of its own, so a cable's
