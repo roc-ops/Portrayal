@@ -372,19 +372,21 @@ Working it out needs `ctx.route` (section 3.1):
    refusals name no single cable as the culprit when the parting is mutual:
    - **A detour means parting and meeting again.** A member that detours
      between two shared elements leaves the others at the first and meets them
-     at the second. Refused, naming it and the members that go directly:
+     at the second. Refused, naming it and the other members that pass both elements, directly or through other shared elements:
      "c4 parts from c1, c2 and c3 at mgr-1 ring 3 and meets them again at
      left-front U20. Bundle them separately, or give the bundle a route." The
      same holds with only two members: with c1 through ring 3, ring 4, ring 5
      and the lane, and c2 from ring 3 straight to the lane, the trunk would be
      c2's straight run and c1 would be pulled off its rings, so it is refused
      ("c1 parts from c2 at mgr-1 ring 3 ..."). If every member making a join
-     detours, and none goes directly, the join is a run no cable takes, and it
-     is refused for the reason step 6 gives.
+     detours, and the two elements are joined by no other route through shared
+     elements, the join is a run no cable takes, and it is refused for the
+     reason step 6 gives.
    - **A loop means parting and meeting again without a detour:** a member
      goes directly between two elements that others reach through further
      shared elements. Refused, naming the member that makes the loop's join
-     with the fewest members, and those it parts from, so the blame does not
+     with the fewest members; a tie goes to the join that comes first in path
+     order, and those it parts from, so the blame does not
      depend on the order the cables were named. Example: c1, c2 and c3 run
      ring 3, ring 4, ring 5, then the lane L; c4 runs ring 3, then straight to
      L. The loop is ring 3, 4, 5, L and back to ring 3; its join ring 3 to L is
