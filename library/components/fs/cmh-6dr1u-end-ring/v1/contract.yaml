@@ -1,0 +1,97 @@
+format: 1
+kind: component
+name: cmh-6dr1u-end-ring
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  One end ring of the FS CMH-6DR1U cable manager seen from the front - a steel strip
+  bent into a square loop lying flat at mid-height, one side bolted across the front of
+  the ear and the loop standing out in front of it, its far side split with a curled end
+  so that a vertical run can be laid in beside the rack post; the right ring is this
+  part turned half round
+provenance:
+  size: >-
+    drawing - the front view of the CMH-6DR1U in FS's Horizontal Cable Managers with
+    D-rings datasheet, at 1.861 px/mm across and 1.92 down: each ring is a band 161 px
+    wide, 86.5 mm, the plan's 3.4 in [86mm], from 1.7 in [43mm] outside the end of the
+    482.6 to 43 inside it; and 24 px high, 12.5 mm, centred 22.1 down the 44 mm plate.
+    Drawn 86 x 12, centred on the plate's height.
+  relief: >-
+    drawing - the plan of the ring on the same page, at 1.77 px/mm across and 1.78 down:
+    a square loop 3.4 in [86mm] across and 3.1 in [78mm] deep, the side along the ear
+    unbroken and the far side split, its left piece 36.8 long and its right piece from
+    50 to the corner, whose free end curls out to the 3.4 in [86mm] the plan dimensions
+    on that side. The curl is built as a short square lip at the 86. The strip is taken
+    as the 1.2 mm FS dimensions for the CMH-4DRB1U ring on the same datasheet; no view of
+    this ring dimensions it.
+  orientation: >-
+    estimated - the plan draws one ring and does not say which end of the part it is,
+    nor which side of the plan lies against the ear. The unbroken side is taken against
+    the ear, where it is bolted, and the split side in front, where a cable is laid in;
+    the plan is drawn as the left ring, and the right ring is the same part turned half
+    round.
+  guide: >-
+    drawing - the clear opening inside the loop, seen from above along the vertical run:
+    the 86 less the strip at each leg, 83.6, by the 78 less the strip at the ear and at
+    the split side, 75.6.
+  material: >-
+    datasheet - "D-rings Material: Steel, Powder-coated Black" in the specification
+    table of FS's Horizontal Cable Managers with D-rings datasheet, which states no
+    separate material for the end rings.
+  color: >-
+    estimated - the D-rings' black. Every image FS publishes of the part is a render.
+size: {w: 86, h: 12}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: 'Steel, Powder-coated Black'}
+guide: {kind: ring, aperture: {w: 83.6, h: 75.6}, run: y}
+elements:
+  back: {at: [0.0, 0.0], size: [86, 12], class: bezel}
+  leg-left: {at: [0.0, 0.0], size: [1.2, 12], class: bezel}
+  leg-right: {at: [84.8, 0.0], size: [1.2, 12], class: bezel}
+  front-left: {at: [0.0, 0.0], size: [36.8, 12], class: bezel}
+  front-right: {at: [50.0, 0.0], size: [36.0, 12], class: bezel}
+  curl-root: {at: [48.8, 0.0], size: [1.2, 12], class: bezel}
+  curl-tip: {at: [40.0, 0.0], size: [10.0, 12], class: bezel}
+relief:
+  features:
+    - node: back
+      out: 1.2
+      color: '#0c0d0f'
+      confidence: estimated
+      source: the strip taken as the 1.2 mm FS dimensions for the CMH-4DRB1U ring on the same datasheet
+    - node: leg-left
+      out: 78.0
+      color: '#0c0d0f'
+      confidence: drawing
+      source: the plan of the end ring in FS's D-rings datasheet, 3.1 in [78mm] deep
+    - node: leg-right
+      out: 78.0
+      color: '#0c0d0f'
+      confidence: drawing
+      source: the plan of the end ring in FS's D-rings datasheet, 3.1 in [78mm] deep
+    - node: front-left
+      lift: 76.8
+      out: 78.0
+      color: '#0c0d0f'
+      confidence: drawing
+      source: the same plan, the split side's left piece 36.8 long
+    - node: front-right
+      lift: 76.8
+      out: 78.0
+      color: '#0c0d0f'
+      confidence: drawing
+      source: the same plan, the split side's right piece from 50 to the corner
+    - node: curl-root
+      lift: 78.0
+      out: 84.8
+      color: '#0c0d0f'
+      confidence: drawing
+      source: the same plan, the curled end out to 3.4 in [86mm] on the right
+    - node: curl-tip
+      lift: 84.8
+      out: 86.0
+      color: '#0c0d0f'
+      confidence: estimated
+      source: the curl, a curved lip in the plan, built as a square one at the 86
+skins: [default]

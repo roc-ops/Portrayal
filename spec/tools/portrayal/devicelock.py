@@ -493,8 +493,13 @@ CHASSIS_SHAPE = {"width", "height", "depth", "ru", "bevel", "shell"}
 # built from it, so correcting one moves nothing.
 # `full-depth` IS A STATED FACT for the DCIM export, as `mount` is: nothing on
 # the drawing moves when it changes (#854).
+# `ears` IS A STATEMENT about where the folds are, read only by L43: the face
+# is drawn at the size it already states either way (#865).
+# `overhang` IS A STATEMENT, like `mount`: it says how far parts already placed
+# reach past the rack face, and those parts carry their own geometry. Declaring
+# the reach a device already had moves nothing (#865).
 CHASSIS_SURFACE = {"color", "edge", "silk", "weight-kg", "airflow", "power", "mount", "thickness",
-                   "full-depth"}
+                   "full-depth", "ears", "overhang"}
 
 
 def _shape_digest(doc, placed, drop=()):

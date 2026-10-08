@@ -428,6 +428,22 @@
      "type": "boolean",
      "description": "WHETHER A RACK DEVICE TAKES BOTH FACES of the rack units it spans, the fact NetBox and Nautobot write as `is_full_depth` and use to decide whether the opposite face of those units is free. A `rack` device is full depth unless it says `false` here: a cable manager 87 mm deep in front of the rails leaves the rear face of its unit free for another part. Stated, not derived from `depth`, because a threshold would quietly re-file every shallow box already imported. Only on a `rack` device (L125); any other mount already exports `false` (#854)."
     },
+    "overhang": {
+     "type": "object",
+     "description": "HOW FAR REAL PARTS REACH BEYOND THE RACK FACE, in millimetres each side (#865). A `rack` device is drawn between its ear folds, and nothing could stand outside them; some rack hardware has parts that do - the FS CMH-6DR1U bolts a steel end ring to the front of each ear, reaching 43 mm past the 482.6 mm rack width to hold a vertical run beside the posts. Such a device draws its front at the rack-face width with the ears drawn, holding what they carry (as the R740xd does), and a part beyond the face is an ordinary placement at negative x or past the view's width. This states the envelope, so the reach is a claim and not an accident of an `at`: L150 refuses a part outside its view that the side's figure does not cover, and L151 warns when no part reaches a stated figure. `left` and `right` are as seen from the front. Only on a `rack` device (L125). Neither DCIM schema has a field for it; the export writes it as a comment.",
+     "additionalProperties": false,
+     "minProperties": 1,
+     "properties": {
+      "left": {"type": "number", "minimum": 0},
+      "right": {"type": "number", "minimum": 0}
+     }
+    },
+    "ears": {
+     "description": "WHERE THE EAR FOLDS ARE, for a rack device whose front is the part itself and not a rack face (#865). `behind`: the mounting flanges sit behind the body, so a front 482.6 mm wide is the body's own width and not ears drawn by mistake - the FS USCMH-SFDABSB2U is a duct as wide as the rack, standing in front of the rails on flanges folded back behind it. L43, which warns that a 480-487 mm face is a rack face with its ears on, stands down when this is stated. Only on a `rack` device (L125).",
+     "enum": [
+      "behind"
+     ]
+    },
     "weight-kg": {
      "type": "number"
     },

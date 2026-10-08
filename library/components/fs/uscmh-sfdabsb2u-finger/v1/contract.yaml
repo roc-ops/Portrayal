@@ -1,0 +1,42 @@
+format: 1
+kind: component
+name: uscmh-sfdabsb2u-finger
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  One finger of the FS USCMH-SFDABSB2U finger duct, seen from the front - a pair of
+  straight ABS ribs standing from the base rail to the back of the cover, a slot between
+  them
+provenance:
+  size: >-
+    drawing - the top view of CMH-SFDABSB2U in the FS Horizontal Single Sided Manager
+    datasheet, at 5.309 px/mm across from its 482.59: seven fingers on a 48.5 mm pitch,
+    the middle one on the middle of the duct, each a pair of ribs 25.4 mm across over
+    the straight run, 8.3 wide with a 9 mm slot between them. 9.5 high, the finger
+    wall's thickness in the side view at its own 5.24 px/mm.
+  relief: >-
+    drawing - the side view: the walls run from the base rails, 138.0 behind the front
+    of the cover, to the back of the cover, 17.5 behind it, so a finger stands 120.5 out
+    of the floor of the well. The top view flares each finger to 28.4 mm over its first
+    quarter, at the rail, and draws a hooked cable retainer on each side near the cover;
+    neither is drawn.
+size: {w: 25.4, h: 9.5}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: ABS}
+elements:
+  rib-left: {at: [0.0, 0.0], size: [8.3, 9.5], class: bezel}
+  rib-right: {at: [17.1, 0.0], size: [8.3, 9.5], class: bezel}
+relief:
+  features:
+    - node: rib-left
+      out: 120.5
+      color: '#2a2c2e'
+      confidence: drawing
+      source: the side view of CMH-SFDABSB2U in the FS Horizontal Single Sided Manager datasheet, the finger walls from the rails to the cover
+    - node: rib-right
+      out: 120.5
+      color: '#2a2c2e'
+      confidence: drawing
+      source: the side view of CMH-SFDABSB2U in the FS Horizontal Single Sided Manager datasheet, the finger walls from the rails to the cover
+skins: [default]
