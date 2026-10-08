@@ -34,10 +34,22 @@ const pastTop = (rack, ru) => (ru != null && ru > rack.frame.heightRU
   ? {error: `U${ru} is past the top of this ${rack.frame.heightRU}U rack.`} : null);
 
 // ── items ───────────────────────────────────────────────────────────────
-function place(rack, {ref, cfg, face, ru, label}, {chassisOf}) {
+// A CONFIGURATION THE DEVICE DOES NOT LIST is refused when its slots are
+// loaded (`loadSlots` in `catalog.js`), naming the ones it does list.
+function cfgRefused(ctx, ref, cfg, label) {
+  const s = slotsFor(ctx, ref);
+  if (!s) return null;
+  if (s.error) return s;
+  const names = (s.configs || []).map(k => k.name);
+  return names.includes(cfg) ? null : {error: `${label} has no configuration ${cfg}. It has: ${names.join(', ') || 'none'}.`};
+}
+
+function place(rack, {ref, cfg, face, ru, label}, ctx) {
+  const {chassisOf} = ctx;
   const top = pastTop(rack, ru);
   if (top) return top;
   const c = chassisOf(ref);
+  if (cfg != null) { const bad = cfgRefused(ctx, ref, cfg, c?.model ?? ref); if (bad) return bad; }
   const spot = isRackFace(c) ? placement(rack, {face, ru}, chassisOf) : {face, ru};
   const f = fits(rack, {ref, ...spot}, chassisOf);
   if (!f.ok) return {error: f.reason};
@@ -63,21 +75,38 @@ function move(rack, {id, ru, face}, {chassisOf}) {
 
 // A configuration change is a delta against the OLD configuration: one that
 // leaves an item with no swaps or fields to carry forward says they went.
-function patch(rack, {id, ...given}) {
+// A NEW CONFIGURATION ALONE starts the device afresh: its swaps and fields
+// were for the old one, so they go, as the site's inspector already clears
+// them. Swaps or fields sent with it are kept as sent.
+function patch(rack, {id, ...given}, ctx) {
   const it = itemOf(rack, id);
   if (!it) return {error: GONE};
+  const newCfg = 'cfg' in given && given.cfg !== it.cfg;
+  if (newCfg) { const bad = cfgRefused(ctx, it.ref, given.cfg, it.label); if (bad) return bad; }
   // The rack keeps its own copy, as withItem does: a caller that goes on to
   // change the object it passed changes neither the rack nor its history.
-  const p = {...given, ...('swaps' in given ? {swaps: {...given.swaps}} : {}),
-             ...('fields' in given ? {fields: structuredClone(given.fields)} : {})};
+  const p = {...given, ...('swaps' in given ? {swaps: {...given.swaps}} : newCfg ? {swaps: {}} : {}),
+             ...('fields' in given ? {fields: structuredClone(given.fields)} : newCfg ? {fields: {}} : {})};
+  // A WHOLE SWAPS MAP still replaces the item's, but with the slots loaded a
+  // ref a slot does not take, or a key that is no slot, is left out and named.
+  const findings = [];
+  if ('swaps' in given) {
+    const s = slotsFor(ctx, it.ref);
+    if (s?.error) return s;
+    if (s) {
+      const {accepted, ignored} = acceptSwaps(p.swaps, slotEnv({...it, cfg: p.cfg ?? it.cfg}, s, ctx.compByRef));
+      p.swaps = accepted;
+      if (ignored.length) findings.push(note(`Left out ${ignored.join(', ')}: not a slot on ${it.label}, or a part that slot does not take.`));
+    }
+  }
   const changes = Object.fromEntries(['cfg', 'swaps', 'fields', 'label', 'turned']
     .filter(k => k in p && !same(p[k], it[k])).map(k => [k, p[k]]));
-  if (!Object.keys(changes).length) return unchanged(rack);
+  if (!Object.keys(changes).length) return findings.length ? {...unchanged(rack), findings} : unchanged(rack);
   const next = {...it, ...changes};
   const had = Object.keys(it.swaps ?? {}).length || Object.keys(it.fields ?? {}).length;
   const has = Object.keys(next.swaps ?? {}).length || Object.keys(next.fields ?? {}).length;
   return {rack: updateItem(rack, id, changes), summary: `Changed ${it.label}.`,
-          findings: 'cfg' in changes && had && !has ? [note(CLEARED)] : []};
+          findings: [...('cfg' in changes && had && !has ? [note(CLEARED)] : []), ...findings]};
 }
 
 function remove(rack, {id, cables = 'keep'}) {
