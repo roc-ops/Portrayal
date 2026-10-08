@@ -70,7 +70,10 @@ def test_every_schema_id_names_its_published_home(path):
     doc = json.loads(path.read_text())
     assert doc["$id"] == f"https://portrayal.dev/schemas/v1/{path.name}", doc["$id"]
     assert "(v1)" in doc["title"], doc["title"]
-    assert doc["properties"]["format"] == {"const": 1}, "schema v1 is format 1"
+    # A manifest names its version `format`; the marks document is carried in a
+    # URL, where every byte counts, and has always named it `v`.
+    key = "v" if path.name == "marks.schema.json" else "format"
+    assert doc["properties"][key]["const"] == 1, "schema v1 is format 1"
 
 
 def test_the_id_sweep_is_not_vacuous():
