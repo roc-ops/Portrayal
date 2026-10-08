@@ -35,9 +35,14 @@ test('a port right of center goes right; a port at the center goes left', () => 
   let r = add(M.newRack(), 'sw', 20);
   r = add(r, 'fhd-cmp5dr', 20, {on: 'i1', unit: 1});
   r = add(r, 'pp', 30);
-  const right = R.autoRoute(r, cable({item: 'i1', path: 'p'}, {item: 'i3', path: 'q'}), ctxFor(r, {'i1|p': 120, 'i3|q': 120}));
+  // Under ring 4 (110, within half its depth): through it, then ring 5.
+  const right = R.autoRoute(r, cable({item: 'i1', path: 'p'}, {item: 'i3', path: 'q'}), ctxFor(r, {'i1|p': 112, 'i3|q': 120}));
   assert.deepEqual(right.slice(0, 2), [{item: 'i2', via: 'guide-4'}, {item: 'i2', via: 'guide-5'}]);
   assert.equal(right[2].lane, 'right-front');
+  // Past ring 4 on the way out: ring 4 is behind the port, and the cable
+  // would enter and leave it by one face (#930), so it goes on from ring 5.
+  const past = R.autoRoute(r, cable({item: 'i1', path: 'p'}, {item: 'i3', path: 'q'}), ctxFor(r, {'i1|p': 120, 'i3|q': 120}));
+  assert.deepEqual(past.slice(0, 2), [{item: 'i2', via: 'guide-5'}, {lane: 'right-front', ru: 20}]);
   const mid = R.autoRoute(r, cable({item: 'i1', path: 'p'}, {item: 'i3', path: 'q'}), ctxFor(r, {'i1|p': 0, 'i3|q': 0}));
   assert.deepEqual(mid[0], {item: 'i2', via: 'guide-3'});
   assert.equal(mid.find(w => w.lane).lane, 'left-front');

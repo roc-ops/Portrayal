@@ -102,7 +102,7 @@ as `@portrayal/kit/rack/<module>`:
 | `rack/managers.js` | cable managers: `placement` of a manager onto the device behind it, and moving one |
 | `rack/cable-rules.js` | cables: which two ports may be joined, `withCable`, media and lengths |
 | `rack/cable-types.js` | the cable types (`cable-types.json`): `loadCableTypes(dist)` fetches them and returns `typeOf`, `bendOf` and `diameterOf` over them; the same lookups are exported to build over a table already in hand (a fixture, a cached copy): `typeOf(types, id)`, `cableTypeOf(types, cable)`, `radiusMm(type, which)`, `installedRadiusMm(types, id)`, `bendLookup(types)` and `diameterLookup(types)`, each radius in millimetres |
-| `rack/route.js`, `rack/route-path.js`, `rack/cable-geometry.js` | where a cable runs: `resolveRoute`, `routedLength`, pathway fill, and the geometry under them |
+| `rack/route.js`, `rack/route-path.js`, `rack/cable-geometry.js` | where a cable runs: `resolveRoute`, `routePath`, `ringMarks`, `orientMarks`, `reverseMarks`, `routedLength`, `pathLength`, pathway fill, `ringFindings`, and the geometry under them (`throughRings`) |
 | `rack/export-data.js` | the rack as rows: `bomRows`, `cableScheduleRows` and the device-import data |
 | `rack/dcim-rules.js` | what a NetBox or Nautobot import needs of a rack |
 | `rack/validate.js` | `validate(schema, value)`, a small JSON Schema validator, and `same` |
@@ -192,6 +192,26 @@ The rest of the example takes `chassisOf` and `devices` from either.
 ones that no longer stand for anything (`gone`), and whether the route is the
 automatic one (`auto`). `routedLength` is that route, measured, with the
 nearest stock length above it.
+
+A cable passes through a D-ring along the ring's `run`, not to a point inside
+it: `routePath(rack, cable, ctx)` is the path every measure reads, each ring
+expanded to the point where the cable enters it and the point where it leaves,
+half the ring's `depth` (`RING_DEPTH`, 10 mm, estimated, when the ring states
+none) either side of its centre. A route that would enter and leave a ring by
+one face is not drawn through it; `ringFindings(rack, ctx)` reports it, and
+neither `fill` nor `capacityOver` counts it there. `routePath` decides each
+ring once; `ringMarks(rack, cable, ctx)` gives those decisions, one per
+waypoint, and `routed2d` and `routePoints3d` take them as an optional last
+argument, so the drawings pass through each ring straight and the way it was
+measured. A mark's `sense` is along the rack's axes (x right as seen from the
+front, y up); a drawing whose axis runs the other way turns it with
+`orientMarks(marks, flip)`: a front elevation flips y (`{ y: -1 }`), the
+mirrored rear pane flips x and y (`{ x: -1, y: -1 }`), and the 3D scene passes
+its marks unchanged. `reverseMarks` is for a path drawn from its other end.
+**Routed lengths changed in 0.5.0**: each ring adds up to its depth, and the
+automatic route no longer takes a ring behind the port, which could shorten a
+length by up to 100 mm. A rack's stored `routed` lengths are re-measured the
+next time a page measures them (`lengths.routed`).
 
 To change a rack by name rather than by function, use the command core:
 `createRackEditor({ doc, chassisOf })` applies `place`, `move`, `patch`,

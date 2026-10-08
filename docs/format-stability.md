@@ -213,6 +213,96 @@ The file is new, and did not raise `contract`, which is still 2. Removing or
 renaming a key, or changing what one means, is a `contract` change; adding a
 key is not.
 
+### Ears and kits on a device
+
+A device manifest names its kits under `chassis.kits` and says where its ears
+can put the faceplate under `chassis.ears` (#906). Both keys are optional and
+both are additive to format 1: `chassis.ears` was the string `behind` (#865),
+which stays valid with its meaning unchanged, and it may now also be an
+object.
+
+```yaml
+chassis:
+  ears:
+    behind: true            # optional; the same statement as the bare string
+    h: 43.5                 # optional; mm the ears span, when not the chassis height
+    y: 0.15                 # optional; mm from the bottom of the chassis to the ears
+    positions:
+      - {name: flush, at: 0, default: true}
+      - {name: mid, at: 228, racks: [2-post], part: {kit: acme/slide@1, part: mid}}
+  kits:
+    - {ref: acme/slide@1, supply: in-box,
+       depth: {config: four-post, range: {square: [685, 868]}}}
+```
+
+- A position's `name` is one of `flush`, `recessed`, `mid`, `rear` and
+  `proud`, and is required. `label` is the vendor's word for it. `at` is
+  millimetres from the front of the faceplate back to the plane the ears bolt
+  to, positive when the ears are behind the faceplate, and is written only
+  when a source gives it. At most one position is `default` (L160). `racks`
+  takes the words a kit configuration's `racks` takes. `part` names a kit the
+  device lists and the `id` of one of that kit's parts (L162).
+- A kit entry's `ref` is a `kind: kit` (L161), listed once. `supply` is
+  `in-box` or `optional`, and `variant: reversed` marks a reverse-mount kit.
+  `depth` replaces the `depth` of one configuration of the kit for this device:
+  `config` names the configuration and `range` has the shape that
+  configuration's `depth` has (L163).
+- Both keys are for a `rack` device only (L125). A kit is never placed,
+  composed or seated in a bay (L5, L10).
+
+In the device lock both keys are chassis surface, so stating either is a
+patch, and a listed kit, its parts and its accessories join the `composed`
+digest, so a kit edited in place asks each device that lists it for a patch.
+Those are the refs `<device>.configs.json` reads to resolve each kit, below.
+
+### Ears and kits in configs.json
+
+`<device>.configs.json` carries both under `chassis`, absent where the device
+states neither (#907):
+
+```json
+{"chassis": {"...": "...",
+  "ears": {"h": 43.5, "y": 0.15, "positions": [
+    {"name": "flush", "at": 0.0, "default": true},
+    {"name": "mid", "at": 228.0, "racks": ["2-post"],
+     "part": {"kit": "acme/slide@1", "part": "mid"}}]},
+  "kits": [{"ref": "acme/slide@1", "supply": "in-box", "variant": null,
+    "depth": {"config": "four-post", "range": {"square": [685, 868]}},
+    "version": "1.0.0", "description": "...",
+    "motion": "sliding", "travel": "full", "install": "drop-in",
+    "configurations": [{"id": "four-post", "racks": ["4-post"],
+                        "parts": ["inner"], "depth": {"square": [685, 868]}}],
+    "parts": [{"ref": "acme/inner@1", "id": "inner", "count": 2, "version": "1.0.0",
+               "class": "bracket", "size": {"w": 20, "h": 40}, "body": null}],
+    "accessories": [{"kind": "cma", "ref": "acme/cma@1", "version": "1.0.0",
+                     "class": "bracket", "size": {"w": 30, "h": 40}, "body": null}]}]}}
+```
+
+- **`ears` is an object, always.** The bare string `ears: behind` is
+  published as `{"behind": true}`; an object is published with the keys it
+  states (`behind`, `h`, `y`, `positions`) and no others, so a reader asks
+  `ears.behind === true` and reads `ears.positions || []`. `h`, `y` and each
+  position's `at` are floats. A position keeps every key the manifest writes.
+  From #865 to #907 the bare string was published as the string, on main
+  only; no release carried it. The one device that states it,
+  `fs/uscmh-sfdabsb2u`, now publishes the object.
+- **Each listed kit is resolved inline**, in the order the device lists them.
+  A row carries every key above: the device's `ref`, `supply`, `variant` and
+  `depth` override (`null` where absent), then the kit's `version`,
+  `description`, `motion`, `travel`, `install` (`null` where the kit leaves
+  them out), `configurations`, `parts` and `accessories`. A part keeps `ref`,
+  `id` and `count`, and an accessory every key the kit writes; each gains its
+  contract's `version`, `class`, `size` and `body` (`null` where absent).
+- **The override is applied.** A `depth` override replaces the `depth` of the
+  configuration it names, so `configurations` are what this device can do; the
+  row's `depth` says that one was overridden. The kit's own figures are in
+  `kits.json`.
+
+Neither raised `contract`, which is still 2: `kits` is a new key, and `ears`
+changed shape before any release published it, with nothing in the kit
+reading it. From the next release both are under `contract` like every other
+key.
+
 ## The cable types file
 
 `cable-types.json` names the cable types a rack tool can lay: each one's
