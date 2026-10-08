@@ -346,16 +346,16 @@ function cableRemove(rack, {id}) {
   return c ? done(withoutCable(rack, id), `Deleted cable ${cableName(c)}.`) : {error: CABLE_GONE};
 }
 
-// A route by hand is the whole list of waypoints, in order, as route.js stores
-// them. The page names each edit its own way ("Waypoint added."), so it may
-// give the summary; an agent gets the plain one.
 // A waypoint must name something the rack has. Checked only when the catalogue
-// is given; without it, a route is stored as written, as before.
-function waypointError(rack, route, {chassisOf} = {}) {
+// is given; without it, a route is stored as written. A waypoint already in the
+// cable's stored route is not judged again: the page resends the whole route on
+// every edit, stale entries included.
+function waypointError(rack, route, stored, {chassisOf, guidesOf} = {}) {
   if (typeof chassisOf !== 'function') return null;
   const lanes = lanesOf(rack.frame);
   for (const [k, w] of route.entries()) {
     const n = k + 1;
+    if (stored.some(o => same(o, w))) continue;
     if ('lane' in w) {
       if (!lanes.includes(w.lane)) return `Waypoint ${n}: there is no gutter called ${w.lane}. This rack has: ${lanes.join(', ')}.`;
       if (!Number.isInteger(w.ru) || w.ru < 1 || w.ru > rack.frame.heightRU) return `Waypoint ${n}: U${w.ru} is not on this ${rack.frame.heightRU}U rack.`;
@@ -363,20 +363,30 @@ function waypointError(rack, route, {chassisOf} = {}) {
     }
     const it = rack.items.find(i => i.id === w.item);
     if (!it) return `Waypoint ${n} names ${w.item}, which is not in the rack.`;
-    const ch = chassisOf(it.ref);
-    if (!ch) continue;
-    const ids = pathwaysOf(ch);
+    let ids;
+    if (typeof guidesOf === 'function') {
+      // the configured face, as the page draws it
+      ids = [...new Set(guidesOf(it.id).map(g => g.via))].sort();
+    } else {
+      const ch = chassisOf(it.ref);
+      // rack.json lists the default configuration only: a configured item's pathways are unknown here
+      if (!ch || it.cfg !== ch.default || Object.keys(it.swaps || {}).length) continue;
+      ids = pathwaysOf(ch);
+    }
     if (!ids.length) return `Waypoint ${n}: ${it.label} has no rings, ducts or pass-throughs.`;
     if (!ids.includes(w.via)) return `Waypoint ${n}: ${it.label} has no ring, duct or pass-through called ${w.via}. It has: ${ids.join(', ')}.`;
   }
   return null;
 }
+// A route by hand is the whole list of waypoints, in order, as route.js stores
+// them. The page names each edit its own way ("Waypoint added."), so it may
+// give the summary; an agent gets the plain one.
 function cableRoute(rack, {id, route, summary}, ctx) {
   const c = cableOf(rack, id);
   if (!c) return {error: CABLE_GONE};
   const bad = route.findIndex(w => !isWaypoint(w));
   if (bad >= 0) return {error: `Waypoint ${bad + 1} is neither a pathway nor a gutter.`};
-  const wrong = waypointError(rack, route, ctx);
+  const wrong = waypointError(rack, route, c.route ?? [], ctx);
   if (wrong) return {error: wrong};
   if (c.routeEdited === true && same(c.route ?? [], route) && !('routeAsWritten' in c)) return unchanged(rack);
   return done(updateCable(rack, id, {route: structuredClone(route), routeEdited: true}), summary ?? `Routed cable ${cableName(c)} by hand.`);

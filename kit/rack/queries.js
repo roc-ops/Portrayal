@@ -158,7 +158,8 @@ async function cableInfo(rack, cable, ctx) {
     } catch { routed = null; }
   }
   // slack: the cable's own length less the routed one, in metres
-  const own = l && l.source !== 'routed' && typeof l.value === 'number'
+  // (only metres and feet convert; any other unit leaves slack unknown)
+  const own = l && l.source !== 'routed' && typeof l.value === 'number' && ['m', 'ft'].includes(l.unit ?? 'm')
     ? l.value * ((l.unit ?? 'm') === 'ft' ? 0.3048 : 1) : null;
   const slack = own != null && routed ? {metres: Math.round((own - routed.metres) * 100) / 100} : null;
   // the devices a route through this cable's ends can name: its two, and the

@@ -71,3 +71,32 @@ test('inspect gives a cable its slack: its own length less the routed length', a
   assert.equal(await slack(base), null);
   assert.equal((await inspect(withLength({value: 2, unit: 'm', source: 'entered'}), 'c1', {chassisOf})).slack, null);
 });
+
+test('cable.route judges only waypoints the cable does not already store', () => {
+  const stale = [{item: 'i9', via: 'x'}, {lane: 'left-front', ru: 99}, {lane: 'left-front', ru: 5}];
+  const base = rackWith();
+  const r = {...base, cables: [{...base.cables[0], route: stale, routeEdited: true}]};
+  const s = route(r, [{lane: 'left-front', ru: 5}, {lane: 'left-front', ru: 99}, {item: 'i9', via: 'x'}]);
+  assert.equal(s.error, undefined);
+  assert.equal(route(r, [{item: 'i9', via: 'x'}, {lane: 'left-front', ru: 5}]).error, undefined);
+  assert.deepEqual(route(r, [...stale, {item: 'i2', via: '?'}]),
+    {error: 'Waypoint 4: cm-1 has no ring, duct or pass-through called ?. It has: guide-1, guide-2, window-1.'});
+});
+
+test('cable.route reads a configured face from guidesOf, and skips a configured item without it', () => {
+  const r = rackWith();
+  const guidesOf = () => [{via: 'extra-ring'}, {via: 'guide-1'}];
+  assert.equal(route(r, [{item: 'i2', via: 'extra-ring'}], {chassisOf, guidesOf}).error, undefined);
+  assert.deepEqual(route(r, [{item: 'i2', via: '?'}], {chassisOf, guidesOf}),
+    {error: 'Waypoint 1: cm-1 has no ring, duct or pass-through called ?. It has: extra-ring, guide-1.'});
+  const odd = {...r, items: r.items.map(i => (i.id === 'i2' ? {...i, swaps: {'bay-1': 'x'}} : i))};
+  assert.equal(route(odd, [{item: 'i2', via: '?'}]).error, undefined);
+  const other = {...r, items: r.items.map(i => (i.id === 'i1' ? {...i, cfg: 'dc'} : i))};
+  assert.equal(route(other, [{item: 'i1', via: '?'}]).error, undefined);
+});
+
+test('inspect gives no slack for a unit it cannot convert', async () => {
+  const base = rackWith();
+  const r = {...base, cables: [{...base.cables[0], length: {value: 30, unit: 'cm', source: 'entered'}}]};
+  assert.equal((await inspect(r, 'c1', {chassisOf, route: ROUTE_CTX})).slack, null);
+});
