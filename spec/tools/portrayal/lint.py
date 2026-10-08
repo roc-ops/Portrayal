@@ -6765,7 +6765,7 @@ def _ref_strings(node):
     Deliberately not a list of the keys a ref may appear under. That list is
     already written twice in this repository - `component_refs` for devices,
     `_inputs` for the renderer - and BOTH of them stop at a contract's `parts`,
-    so neither sees the sixteen MIC twins that `mpc1e-3d-v960` names in a bay.
+    so neither sees the sixteen MIC twins that `mpc1e-3d-v2k` names in a bay.
     A rule that decides whether a part may be DELETED cannot afford that shape
     of miss, and the failure modes are not symmetric: reading one string too
     many leaves a dead part alive, reading one too few deletes a live one.

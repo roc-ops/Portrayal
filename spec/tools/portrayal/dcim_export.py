@@ -2818,14 +2818,14 @@ def dcim_significant(doc):
     """
     out = {k: v for k, v in doc.items() if k not in ("comments", "_stamp")}
     # A NESTED BAY'S `Accepts:` LINE IS A SENTENCE ABOUT THE DRAWING. The MPCs
-    # are drawn once per chassis orientation and each seats that orientation's
-    # MICs (`mic-3d-20ge-sfp` against `mic-3d-20ge-sfp-v`), which are one
-    # module type each; the bay a DCIM gets - its name and position - is the
-    # same. Compared with the description in, three twins read as different
-    # hardware the day their bays were first exported. IT CAN HIDE A REAL
-    # DIFFERENCE IN WHAT A BAY ACCEPTS - `scb-mx` takes two routing engines and
-    # `scb-mx960-v` one - and that is accepted: neither DCIM holds what a bay
-    # accepts as data, only as this sentence.
+    # are drawn once per orientation - the horizontal MX240/MX480/MX960 card and
+    # the MX2000's `-v2k` carrier - and each seats that orientation's MICs
+    # (`mic-3d-20ge-sfp` against `mic-3d-20ge-sfp-v`), which are one module type
+    # each; the bay a DCIM gets - its name and position - is the same. Compared
+    # with the description in, three twins read as different hardware the day
+    # their bays were first exported. IT CAN HIDE A REAL DIFFERENCE IN WHAT A BAY
+    # ACCEPTS, and that is accepted: neither DCIM holds what a bay accepts as
+    # data, only as this sentence.
     # What is WRITTEN for such twins is the first one's sentence, so it names
     # one orientation's MICs; the bay is right for all of them.
     if out.get("module-bays"):
