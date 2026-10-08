@@ -48,3 +48,8 @@ test('selectCables: a selector it cannot read is refused with a sentence', async
   assert.deepEqual(await selectCables(R, {path: 'port-1'}), {error: 'A selector with a path needs its item.'});
   assert.deepEqual(await selectCables(R, {loose: false}), {error: 'A selector takes loose: true, or leaves it out.'});
 });
+
+test('selectCables: loose with unchecked ends says so', async () => {
+  const partial = async () => ({unchecked: true, ends: new Map([['i9|front|port-1', {reason: 'the device was removed'}]])});
+  assert.deepEqual(await selectCables(R, {loose: true}, {cableFacts: partial}), {ids: ['c3'], unchecked: true});
+});

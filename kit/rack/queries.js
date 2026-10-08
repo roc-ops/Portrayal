@@ -253,6 +253,8 @@ export async function selectCables(rack, selector, ctx = {}) {
     if (typeof ctx.cableFacts !== 'function') return {error: NO_FACTS};
     const facts = await ctx.cableFacts(rack);
     list = list.filter(c => [c.a, c.b].some(e => facts.ends.get(endKey(e))?.reason));
+    // some ends could not be checked: say so, as looseEnds does
+    if (facts.unchecked) return {ids: list.map(c => c.id), unchecked: true};
   }
   return {ids: list.map(c => c.id)};
 }

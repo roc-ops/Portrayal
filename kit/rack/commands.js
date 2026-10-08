@@ -212,7 +212,7 @@ function fit(rack, {id, path, ref}, ctx) {
     const known = holds === null || comp;
     const ports = portIds(comp), under = `${path}/module/`;
     const cut = known ? (rack.cables || []).flatMap(c => [c.a, c.b].filter(e => e.item === id && e.path.startsWith(under)
-      && !ports.has(e.path.slice(under.length).split('/')[0])).map(e => ({c, e}))) : [];
+      && !ports.has(portPathOf(e.path.slice(under.length)).split('/')[0])).map(e => ({c, e}))) : [];
     if (cut.length) {
       const paths = [...new Set(cut.map(x => x.e.path))], ids = [...new Set(cut.map(x => x.c.id))];
       findings.push(note(`Kept the cables on ${paths.join(', ')} as loose ends (${ids.join(', ')}): ${holds ? `${paths.length === 1 ? 'this port is' : 'these ports are'} not on ${name}` : `${path} is empty`}.`));
@@ -366,7 +366,7 @@ function waypointError(rack, route, stored, {chassisOf, guidesOf} = {}) {
     let ids;
     if (typeof guidesOf === 'function') {
       // the configured face, as the page draws it
-      ids = [...new Set(guidesOf(it.id).map(g => g.via))].sort();
+      ids = [...new Set((guidesOf(it.id) || []).map(g => g.via))].sort();
     } else {
       const ch = chassisOf(it.ref);
       // rack.json lists the default configuration only: a configured item's pathways are unknown here
@@ -487,7 +487,7 @@ export const COMMANDS = {
     args: args(['id'], {id: ID('cable'), a: {...END, description: 'Move end A to this port; left where it is when left out.'},
       b: {...END, description: 'Move end B to this port; left where it is when left out.'}, ...CABLE_FIELDS})},
   'cable.remove': {run: cableRemove, description: 'Delete a cable.', args: args(['id'], {id: ID('cable')})},
-  'cable.route': {run: cableRoute, description: 'Route a cable by hand through the waypoints given, in order. Its routed length follows.',
+  'cable.route': {run: cableRoute, description: 'Route a cable by hand through the waypoints given, in order. Its routed length follows. Refused for a pathway or gutter the rack lacks; the refusal lists what exists.',
     args: args(['id', 'route'], {id: ID('cable'),
       route: {type: 'array', description: 'The waypoints, in order: {item, via} for a pathway on a device, {lane, ru} for a gutter at a U.',
         items: WAYPOINT},

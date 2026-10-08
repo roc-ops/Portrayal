@@ -216,7 +216,7 @@ cable it reads both ends, the route, the routed length (with `ctx.route`), the
 slack, the pathways it may name, and its loose ends (with `ctx.cableFacts`).
 `selectCables(rack, selector, ctx)` turns `{ item }`, `{ item, path }`,
 `{ loose: true }`, `{ purpose }` or `{ media }` into cable ids, for a caller to
-expand into plain commands. `describe(rack, ctx, { section, offset, limit })`
+expand into plain commands (with `{ loose: true }` and some ends unchecked, the result also says `unchecked: true`). `describe(rack, ctx, { section, offset, limit })`
 reads one stretch of a long rack in full. `catalog(devices, { kind })` finds a
 "patch panel" or a "switch" by `rack.json`'s `kind`.
 
