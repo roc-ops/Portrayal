@@ -4289,6 +4289,15 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         vw, vh = extents[2] - extents[0], extents[3] - extents[1]
         svg.set("viewBox", f"{extents[0]:g} {extents[1]:g} {vw:g} {vh:g}")
         svg.set("width", f"{vw:g}mm"); svg.set("height", f"{vh:g}mm")
+        # THE FACE THE VIEW DECLARES, once the drawing is bigger than it. A
+        # part beyond the face - an end ring past the ear (#865), a cover
+        # past the flange - grows the viewBox, and its origin can go negative.
+        # The face itself is still 0 0 w h, and a reader that wants the face
+        # rather than everything drawn (the 3D plate, a pick) reads it here
+        # instead of guessing it back out of the viewBox. Written only when
+        # the two differ, so every other drawing is unchanged.
+        svg.set("data-face-w", f"{w:g}")
+        svg.set("data-face-h", f"{h:g}")
     return svg
 
 
@@ -5322,7 +5331,14 @@ def main():
                              "power": ch.get("power"),
                              # a bevelled body, as the polygons the viewer
                              # builds its mesh from; absent on a plain box
-                             **({"solid": _bevel.published(ch)} if ch.get("bevel") else {})},
+                             **({"solid": _bevel.published(ch)} if ch.get("bevel") else {}),
+                             # how far parts reach beyond the rack face each
+                             # side, and where the ear folds are when they are
+                             # behind the body; absent where unstated (#865)
+                             **({"overhang": {"left": float(ch["overhang"].get("left", 0)),
+                                              "right": float(ch["overhang"].get("right", 0))}}
+                                if ch.get("overhang") else {}),
+                             **({"ears": ch["ears"]} if ch.get("ears") else {})},
                  # WHAT THE DEVICE CAN BE BOUGHT WITH - the union over its
                  # orderable and base builds of `configs[].power` and
                  # `configs[].airflow`. The filter an HCL runs ("DC, back-to-

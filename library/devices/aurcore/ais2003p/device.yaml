@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ais2003p
-version: 0.1.2
+version: 1.0.0
 maturity: modelled
 manufacturer: AurCore
 model: AIS2003P
@@ -95,6 +95,17 @@ provenance:
       build's back render), pole 1 at the rear; the RELAY header and the ground screw with its
       earth symbol are near the front edge. The video (1:00-1:02) confirms every part and legend
       close up but not their places on the face. Good to a few millimetres.
+  relay-orientation:
+    confidence: photo-measured
+    note: >-
+      photo-measured - the two-position RELAY header is placed turned 90, its two contacts
+      running front to back, parallel to the five of the power header, with its keyed, open
+      side toward the RELAY legend as the power header's is toward the POWER legend. Read off
+      the AurCore product video (frames at 0:34 and 1:02, the AIS4001P top face close up) and
+      the vendor's AIS4001P and AIS2001 product images 2 (three-quarter) and 3 (back
+      render), which show the same on both housings. It is placed at the centre it had unturned, 1.0 left of the old `at`
+      because the header is now 12.16 wide, the Phoenix Contact MSTBA 2,5/ 2-G-5,08 width
+      (#804).
   rear-layout:
     confidence: estimated
     note: >-
@@ -433,7 +444,7 @@ views:
     components:
       placements:
       - {ref: common/terminal-header-508-5f@1, id: power, at: [9.32, 35.55], rotate: 90, group: power-input, rel-pos: 1}
-      - {ref: common/terminal-header-508-2@1, id: relay, at: [20.42, 85.65], group: relay, rel-pos: 1}
+      - {ref: common/terminal-header-508-2@2, id: relay, at: [19.42, 85.65], rotate: 90, group: relay, rel-pos: 1}
       - {ref: common/ground-screw-washer@1, id: ground-screw, at: [49.7, 89.8], for: chassis, group: grounding, rel-pos: 1}
       - {ref: common/ground-symbol@1, id: ground-mark, at: [42.8, 92.3], for: ground-screw, group: grounding, rel-pos: 2}
   bottom:

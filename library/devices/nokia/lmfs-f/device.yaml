@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: lmfs-f
-version: 1.0.0
+version: 1.0.1
 maturity: modelled
 manufacturer: Nokia
 model: Lightspan MF-8
@@ -197,6 +197,14 @@ provenance:
       by 47 mm, onto the cable tray of the same kit, which is not part of the shelf and is not
       drawn. Its small light window lands on the fan module's location lamp, which checks the
       position.
+  overhang:
+    confidence: datasheet
+    note: >-
+      USIM s2.3.7.1 (p72-74) puts the horizontal front dust filter assembly's right edge 55 mm
+      beyond the right mounting holes, which on the 481 mm face drawn here is 47 mm past its
+      right end (front-cover). Nothing reaches past the left. The cover is placed only in the
+      front-cover configuration, and the reach is stated so that its drawing past the flange is
+      a claim and not a stray `at` (#865).
   bottom-dust-filter:
     confidence: datasheet
     note: >-
@@ -273,6 +281,7 @@ chassis:
   height: 355.0
   depth: 246.0
   ru: 8
+  overhang: {right: 47.0}
   weight-kg: 11.5
   airflow: side
   power: dc

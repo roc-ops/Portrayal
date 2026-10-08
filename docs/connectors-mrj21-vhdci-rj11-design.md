@@ -85,20 +85,21 @@ diameter agree at that scale and the cable does not, so nothing is scaled from t
 |---|---|---|---|---|---|
 | MRJ21 | backshell on the receptacle face; shroud 5.6 inside (scaled) | 0 | 93.5 | 123.5 | no depth |
 | VHDCI | SFF-8441 mated gap 0.34 and front shell 7.10; hood from 7.44 | 0.34 | 55.44 | 85.44 | no depth |
-| RJ11 | body 12.43 less an estimated 7.9 insertion | 0 | 4.5 | 34.5 | no depth |
+| RJ11 | body 12.43 less an estimated 7.9 insertion | 0 | 4.5 | 34.5 | 20.57, the housing (#837) |
 
-None of the three jacks models a depth, so no modelled floor disagrees with a plug. What is
+The MRJ21 and VHDCI jacks model no depth, so no modelled floor disagrees with a plug; the
+RJ11 jack has modelled its housing's 20.57 since #837, which is not a plug stop. What is
 missing instead:
 
 - `common/vhdci-receptacle@1` records that nothing it held gave how far its shell stands
   proud. SFF-8441 Figure 25 gives 5.2, with the screwlocks at 5.8.
-- `common/rj11-jack@1` states no depth; the TE jack is 20.57 deep. It also draws its
-  opening 11.6 wide, the width of an RJ45 opening, where the six-position opening is 9.88,
-  so a seated plug shows about a millimetre of opening either side.
+- `common/rj11-jack@1` stated no depth and drew its opening 11.6 wide, the width of an
+  RJ45 opening. #837 redrew it from TE C-1775675 rev C: the 9.88 six-position opening in
+  three tiers, two contacts, and the 20.57 housing depth with a cavity.
 - No held document dimensions a mated MRJ21 pair, so that the backshell stops on the shell
   face is an assumption.
 
-No jack geometry is changed here.
+No jack geometry was changed here; #837 changed the RJ11 jack's afterwards.
 
 ## 6. Which way round
 

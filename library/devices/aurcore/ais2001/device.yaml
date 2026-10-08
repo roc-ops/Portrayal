@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ais2001
-version: 0.1.2
+version: 1.0.0
 maturity: modelled
 manufacturer: AurCore
 model: AIS2001
@@ -75,6 +75,17 @@ provenance:
       behind it; the CONSOLE jack behind that, a bare RJ45 with its keyway toward the front -
       the console is on the top face of the small housing, where the large one has it on the
       front; the ground screw and its earth symbol at the front edge. Good to a few millimetres.
+  relay-orientation:
+    confidence: photo-measured
+    note: >-
+      photo-measured - the two-position RELAY header is placed turned 90, its two contacts
+      running front to back, parallel to the five of the power header, with its keyed, open
+      side toward the RELAY legend as the power header's is toward the POWER legend. Read off
+      the AurCore product video (frames at 0:34 and 1:02, the AIS4001P top face close up) and
+      the vendor's AIS4001P and AIS2001 product images 2 (three-quarter) and 3 (back
+      render), which show the same on both housings. It is placed at the centre it had unturned, 1.0 left of the old `at`
+      because the header is now 12.16 wide, the Phoenix Contact MSTBA 2,5/ 2-G-5,08 width
+      (#804).
   rear-layout:
     confidence: estimated
     note: >-
@@ -344,7 +355,7 @@ views:
     components:
       placements:
       - {ref: common/terminal-header-508-5f@1, id: power, at: [10.92, 53.55], rotate: 90, group: power-input, rel-pos: 1}
-      - {ref: common/terminal-header-508-2@1, id: relay, at: [22.92, 28.35], group: relay, rel-pos: 1}
+      - {ref: common/terminal-header-508-2@2, id: relay, at: [21.92, 28.35], rotate: 90, group: relay, rel-pos: 1}
       - {ref: std/rj45@2, id: console, at: [23.1, 10.9], group: mgmt, attrs: {role: console, media: rj45-serial}, rel-pos: 1}
       - {ref: common/ground-screw-washer@1, id: ground-screw, at: [48.0, 80.0], for: chassis, group: grounding, rel-pos: 1}
       - {ref: common/ground-symbol@1, id: ground-mark, at: [38.6, 82.5], for: ground-screw, group: grounding, rel-pos: 2}

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ais800-32o
-version: 1.0.5
+version: 2.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: AIS800-32O
@@ -95,6 +95,13 @@ provenance:
       std/osfp@1's registry aperture is 13.5 tall, so seating it on a 14.54 pitch leaves the two
       rows 1.04 mm apart. That is what a stacked OSFP 2x1 cage is; the registry owns the
       aperture and the device owns the pitch, as the EXP100 records.
+      BOTH ROWS ARE THE SAME WAY UP, rotate 0 (#799). The OSFP MSA rev 5.22 draws its stacked
+      2x1 cage, on this 14.9 pitch, with both modules heat sink up (section 7.1, Table 7-1,
+      Figures 7-1 and 7-2) - one connector, with no room for a board between the rows - and
+      this guide shows the same: the page 1 front elevation draws the card slot low in both
+      openings of a column and the vent band only across the top of the upper one, and the
+      page 3 install render seats an optic heat sink up in a lower-row cage. The lower row was
+      drawn turned 180 until #799, which overlapped the two seated noses by about 1.7 mm.
       Drawn widths are 22.4 against the registry's 23.1, the same consistent bias the twin shows
       at 18.3 against 19.0.
       THE INTER-ROW BAND IS DRAWN ON A BACKING RECT AND THAT IS DELIBERATE, as on the twin.
@@ -503,7 +510,6 @@ views:
         row-pitch: 14.54
         number-from: 1
         cutouts: true
-        rotate: {bottom: 180}
         numerals: {dx-by-row: [6.35, 17.15], dy-top: 32.07, dy-bottom: 17.53, font-size: 2.8, anchor: middle, fill: '#f2f4f6'}
       placements:
       - {ref: std/sfp@1, id: mgmt-inband-1, at: [394.70, 6.90], group: mgmt, rel-pos: 1,

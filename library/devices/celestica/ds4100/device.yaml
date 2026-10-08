@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ds4100
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: Celestica
 model: DS4100
@@ -13,6 +13,19 @@ description: >-
   at the ends and seven hot-swap orange fan modules between them (6+1). A COM-E x86 control plane, an
   optional RunBMC and 12.8 Tbps of switching.
 profile: networking
+stack-exceptions:
+- pairs: [[port-1, port-2], [port-3, port-4], [port-5, port-6], [port-7, port-8], [port-9, port-10],
+    [port-11, port-12], [port-13, port-14], [port-15, port-16]]
+  reason: >-
+    A RECORDED READING (provenance.the-osfp-wall). The installation guide's Front Panel Callouts
+    figure, orthographic at 4.08 px/mm, draws each lower cage as the upper one turned over: the
+    upper cage has its card slot low in the opening and two round retention bumps on its top edge,
+    the lower cage its card slot high and its bumps on its bottom edge. The 18.86 mm row pitch is
+    neither stacked-cage pitch of the OSFP MSA rev 5.22 (14.9, 19.9 - section 7.1, Table 7-1) and
+    leaves room for a host board between the rows: two single cages either side of one board, the
+    MSA's belly-to-belly application (section 7.6), so the lower cage really is turned 180. The
+    product render ds4100-A.png does not contradict it - the lower cage's top edge carries dark
+    notches where the upper cage's carries raised bumps (#799).
 provenance:
   sources:
     confidence: datasheet
@@ -48,9 +61,14 @@ provenance:
       pitch 18.86. At 4.08 px/mm every figure here is good to about a quarter of a millimetre. NUMBERING:
       the panel prints `1 (up) (down) 2` between each column's two cages and on to `15 (up) (down) 16`,
       so odd ports are the upper row and even the lower, numbering left to right. Upper cages are rotate
-      0 and lower 180, the library's belly-to-belly rule (L108) - the drawing is consistent with it (each
-      cage's dark latch notches hang into the band between the rows) but that is the rule, not a separate
-      reading.
+      0 and lower 180, AND THAT IS A READING, NOT A RULE (#799): an OSFP stack is held to the same way
+      up (L108), and this one is built otherwise. The callout figure draws each lower cage as the upper
+      turned over - the upper's card slot low in its opening with two retention bumps on its top edge,
+      the lower's card slot high with its bumps on its bottom edge - and the 18.86 row pitch is neither
+      of the OSFP MSA's stacked-cage pitches (14.9, 19.9) but leaves room for the host board between
+      the rows: two single cages either side of one board (OSFP MSA rev 5.22 section 7.6). The render
+      ds4100-A.png agrees as far as it shows: the lower cage's top edge carries dark notches where the
+      upper's carries raised bumps. Each pair is named in stack-exceptions.
   legends:
     confidence: measured
     note: >-

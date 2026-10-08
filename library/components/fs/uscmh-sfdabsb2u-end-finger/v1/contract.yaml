@@ -1,0 +1,32 @@
+format: 1
+kind: component
+name: uscmh-sfdabsb2u-end-finger
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  One of the flat end fingers of the FS USCMH-SFDABSB2U finger duct, seen from the front -
+  a plain ABS wall, wider than a finger, two at each end of each row
+provenance:
+  size: >-
+    drawing - the top view of CMH-SFDABSB2U in the FS Horizontal Single Sided Manager
+    datasheet, at 5.309 px/mm across: two flat walls at each end, the outer one from the
+    end of the duct to 19.2 and the inner from 40.5 to 60.1, mirrored at the right. One
+    part serves all four, 19.4 wide, between the two readings. 9.5 high, the finger
+    wall's thickness in the side view.
+  relief: >-
+    drawing - the side view: the same 120.5 from the base rails to the back of the cover
+    as a finger.
+size: {w: 19.4, h: 9.5}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: ABS}
+elements:
+  wall: {at: [0.0, 0.0], size: [19.4, 9.5], class: bezel}
+relief:
+  features:
+    - node: wall
+      out: 120.5
+      color: '#2a2c2e'
+      confidence: drawing
+      source: the side view of CMH-SFDABSB2U in the FS Horizontal Single Sided Manager datasheet, the finger walls from the rails to the cover
+skins: [default]

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ds6001
-version: 0.1.1
+version: 0.1.2
 maturity: draft
 manufacturer: Celestica
 model: DS6001
@@ -10,7 +10,7 @@ description: >-
   Celestica DS6001 - 2OU Open Rack v3, 64-port 1.6TbE OSFP224 hybrid liquid-cooled data
   centre switch on a Broadcom Tomahawk 6 (102.4 Tbps), fed from the rack's 48 VDC bus bar.
   The front is a black bezel with two banks of eight OSFP224 columns, four rows each (two
-  belly-to-belly pairs), the system lamps, USB-C console and reset in the gutter between the
+  stacked pairs), the system lamps, USB-C console and reset in the gutter between the
   banks, 1PPS/10 MHz, MGMT, USB, CPU and BMC consoles and ToD at the left and two stacked
   SFP56 management ports (numbered 65 and 66) at the right. The rear carries a liquid
   quick-disconnect pair at each end, four fan modules (3+1) in two pairs, and the ORv3 bus-bar
@@ -24,6 +24,21 @@ lint:
       `ru` would be a conversion the hardware never makes - 96 mm is 2.16 U and the tray does not fit
       an EIA rack at all - and `mount` has no Open Rack value yet. Until one exists this device states
       neither, and its DCIM export keeps the 1U it has always written (#734).
+stack-exceptions:
+- pairs: [[port-1, port-2], [port-5, port-6], [port-9, port-10], [port-13, port-14], [port-17,
+    port-18], [port-21, port-22], [port-25, port-26], [port-29, port-30], [port-33, port-34],
+    [port-37, port-38], [port-41, port-42], [port-45, port-46], [port-49, port-50], [port-53,
+    port-54], [port-57, port-58], [port-61, port-62], [port-3, port-4], [port-7, port-8], [port-11,
+    port-12], [port-15, port-16], [port-19, port-20], [port-23, port-24], [port-27, port-28],
+    [port-31, port-32], [port-35, port-36], [port-39, port-40], [port-43, port-44], [port-47,
+    port-48], [port-51, port-52], [port-55, port-56], [port-59, port-60], [port-63, port-64]]
+  reason: >-
+    HELD AS DRAWN, NOT A READING OF THIS TURN (#799). The OSFP MSA rev 5.22 draws its stacked 2x1
+    cages with both ports the same way up (section 7.1, Table 7-1), so 0/180 is not a stacked cage;
+    but the renders of this face are too dark in rows 3 and 4 to read which way either cage of a
+    lower block faces, and the sibling celestica/ds6000 suggests the lower blocks are the upper ones
+    turned over (0/0 over 180/180) rather than all 0. The geometry is held until it is decided; the
+    gap stacked-osfp-orientation says what settles it.
 provenance:
   sources:
     confidence: datasheet
@@ -72,8 +87,11 @@ provenance:
       legends between rows 1-2 and 3-4 read `1-HP (up)(down) 2-HP` and `3-HP (up)(down) 4-HP`
       in column 1, so column k holds ports 4k+1 to 4k+4 top to bottom and the right bank
       starts at 33; ds6001-A-3 confirms "33 34" and "35 36" at its first column and "-HP" on
-      ports 1 to 10 only. Rows 1-2 and 3-4 are each a belly-to-belly pair (upper 0 / lower
-      180, the library's OSFP precedent). The drawn aperture on the render is 22.9 x 10.7;
+      ports 1 to 10 only. Rows 1-2 and 3-4 are each a stacked pair, drawn upper 0 / lower 180,
+      and that turn is HELD, NOT SETTLED (#799): the OSFP MSA rev 5.22 seats both ports of a
+      stacked cage the same way up, rows 3-4 are too dark on the renders to read, and the
+      sibling DS6000 reads 0/0 over 180/180. Every pair is named in stack-exceptions; the gap
+      stacked-osfp-orientation says what settles it. The drawn aperture on the render is 22.9 x 10.7;
       the std/osfp@1 13.5 mm height is used and fits between the rows with 6.8 mm for legends.
   the-hp-ports:
     confidence: photo-measured
@@ -227,6 +245,14 @@ gaps:
     The left-cluster RJ45s' keyway side does not resolve at 1.9 px/mm; they are drawn
     unrotated. On the DS6000 the same vendor's jacks are keyway up.
   wanted: 'A close photograph of the DS6001 left cluster.'
+- what: stacked-osfp-orientation
+  scope: [front]
+  reason: needs-photo
+  wanted: >-
+    Which way each OSFP block faces. Rows 3 and 4 on the held renders are too dark to read, and the
+    sibling DS6000's render suggests 0/0 over 180/180 rather than the 0/180 drawn here. A lighter
+    photograph or an installation-guide elevation of the front settles it; until then every pair is
+    held in stack-exceptions.
 groups:
   osfp224:
     term: Port

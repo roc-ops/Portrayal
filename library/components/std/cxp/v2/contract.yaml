@@ -1,0 +1,58 @@
+format: 1
+kind: component
+name: cxp
+version: 2.0.0
+class: port
+profile: networking
+conforms: cxp
+interface: cxp
+description: CXP receptacle panel cut-out (SFF-8642), the opening a CXP plug or module seats through
+size: {w: 23.5, h: 12.1, d: 28.96}
+size-confidence: {w: drawing, h: drawing, d: drawing}
+attrs: {media: cxp}
+provenance:
+  size: >-
+    registry - SFF-8642 Rev 3.3 (2018-08-31) Table 5-7 p25, Receptacle Panel Cutout
+    Dimensions: F01 cutout length 23.50 +/-0.05 by F02 cutout height 12.10 +/-0.05,
+    centred F03 6.29 +/-0.05 above the PCB surface, the same height as the snout
+    opening (Table 5-4 D10 6.29). THIS IS THE PANEL OPENING, as std/sfp@1 and
+    std/qsfp28@1 draw theirs. SFF-8617 Rev 1.7 prints the same tables. Replaces
+    the first major's 27.0 x 10.0, an estimate of the module envelope that this document
+    does not bear out (#802).
+  depth: >-
+    registry - SFF-8642 Rev 3.3 Table 5-6 p24, G10 connector datum to bezel 28.96
+    +/-0.25: the bezel to the connector, the depth std/qsfp28@1 takes from SFF-8663.
+    A seated plug's snout is A05 28.45 long (Table 5-2), so it stops 0.5 short of it.
+    The first major had 92.0, an estimate of a module length nothing in the standard gives.
+  relief.size: >-
+    registry - SFF-8642 Rev 3.3 Table 5-4 p21, the receptacle's snout opening: D12
+    21.60 +/-0.05 wide by D14 10.20 +/-0.05 high, centred on the cut-out (D10 and F03
+    are both 6.29). This is the recess behind the panel opening that the plug's 21.20 x
+    9.81 snout enters.
+  card-slots: >-
+    registry - SFF-8642 Rev 3.3 Table 5-4: two card slots D21 18.20 wide by D22 1.20
+    high, the lower D28 3.75 above datum N and the upper D29 4.50 above that, so 2.54
+    below and 1.96 above the opening centre. Drawn with the PCB at the bottom of the
+    face; nothing in the standard says which way up a host mounts the receptacle.
+  pitch: >-
+    registry - SFF-8642 Rev 3.3 Table 5-8 p25: F05 27.00 Min across, F04 16.50 Min up.
+    D16 27.00, the shell width at its screw-attach features, is why the horizontal
+    floor is what it is.
+elements:
+  opening: {at: [0.0, 0.0], size: [23.5, 12.1], class: cutout}
+relief:
+  wall: '#aab0b7'
+  cavity: cavity
+  size: {w: 21.6, h: 10.2}
+  features:
+    - node: collar
+      out: 1.0
+      color: '#7d848c'
+      confidence: estimated
+      source: >-
+        std/ cage collars - the library's one cage-lip figure, shared by every std/
+        cage; SFF-8642 dimensions the cut-out and the bezel distance, and nothing about
+        how far a receptacle's lip stands proud of the panel.
+connection-points:
+  mate: {at: [11.75, 6.05], direction: front}
+skins: [default]
