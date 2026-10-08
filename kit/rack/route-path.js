@@ -3,8 +3,10 @@
 // corner rounded by r, so it reads as dressed cable rather than a hang.
 // `rings`, when given, is parallel to `pts`: null, or a ring's mark at each
 // point that is a ring's centre - route.js ringMarks gives them, with the
-// decision routePath made - so the cable passes through it straight, the way
-// it was measured, and its corners are rounded outside it (throughRings).
+// decision routePath made, turned to the drawing's axes by orientMarks (an
+// elevation's y is down; the rear pane's x is mirrored too) - so the cable
+// passes through it straight, the way it was measured, and its corners are
+// rounded outside it (throughRings).
 export function routed2d(pts, r = 4, rings = null) {
   if (rings) pts = throughRings(pts, rings, {lead: r}).points;
   let d = `M${pts[0][0]} ${pts[0][1]}`;
@@ -38,7 +40,10 @@ export function routed2d(pts, r = 4, rings = null) {
 // `back` (true: it would enter and leave by one face). A mark that carries
 // them is obeyed, so a drawing, whose points sit in its own frame (a lead out
 // of the connector, an elevation with no z), draws what was measured and
-// counted. A mark without them is decided here, by the same rule:
+// counted. `sense` is along the axes of the points given: a drawing whose
+// axis runs against the rack's (an SVG's y down, the mirrored rear pane's x)
+// turns its marks first (route.js orientMarks). A mark without them is
+// decided here, by the same rule:
 //
 // Which way through: the side the point before stands on; else the side the
 // point after goes to; else toward + on the run. A point stands on NEITHER

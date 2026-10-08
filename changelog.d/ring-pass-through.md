@@ -11,7 +11,10 @@
   cable, ctx)` hands its decisions to the drawings: `routed2d` and
   `routePoints3d` take them as an optional last argument, draw each ring the
   way it was decided, and round their corners outside it (`throughRings` in
-  `rack/route-path.js`). A route that would enter and leave a ring by one face
+  `rack/route-path.js`). A mark's sense is in the rack's axes; a drawing that
+  flips one turns its marks with `orientMarks` (a front elevation `{y: -1}`,
+  the mirrored rear pane `{x: -1, y: -1}`), and `reverseMarks` serves a path
+  drawn from its other end. A route that would enter and leave a ring by one face
   is not drawn through it, is counted neither in that ring's fill nor in its
   manager's capacity, and is reported by `ringFindings(rack, ctx)`. A point
   further off the run in the face than along it (a port well below the ring)

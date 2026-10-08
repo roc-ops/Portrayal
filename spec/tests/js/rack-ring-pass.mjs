@@ -261,19 +261,26 @@ test('the drawings obey routePath: 2D and 3D draw each ring as routePath decided
       const decided = path.rings.map(g => [g.passed, g.sense]);
       const centres = R.resolveRoute(r, c, ctx).waypoints.map(w => R.pointOf(r, w, ctx));
       const a = path.points[0], b = path.points[path.points.length - 1];
-      // 2D: an elevation, y down, no z
-      const flat = p => [p.x, -p.y];
-      const two = throughRings([flat(a), ...centres.map(flat), flat(b)], [null, ...marks, null], {lead: 4});
+      // 2D: the front elevation, y down, no z; and the rear pane, mirrored in x as well
+      const flat = p => [p.x, -p.y], rear = p => [-p.x, -p.y];
+      const two = throughRings([flat(a), ...centres.map(flat), flat(b)], [null, ...R.orientMarks(marks, {y: -1}), null], {lead: 4});
+      const back2 = throughRings([rear(a), ...centres.map(rear), rear(b)], [null, ...R.orientMarks(marks, {x: -1, y: -1}), null], {lead: 4});
       // 3D: out of each connector 40 mm first, the rings at their stand-off,
       // and this cable spread 6 mm up at each ring it shares (scene3d's SPREAD)
       const lift = p => ({x: p.x, y: p.y + 6, z: p.z});
       const outA = {x: a.x, y: a.y, z: a.z + 40}, outB = {x: b.x, y: b.y, z: b.z + 40};
       const three = throughRings([outA, ...centres.map(lift), outB], [null, ...marks, null], {lead: 30});
-      for (const got of [two, three]) {
-        const drawn = [...got.passes.map(p => [p.index, true, p.sense]), ...got.back.map(p => [p.index, false, p.sense])]
+      // each frame draws routePath's decisions, in its own axes; mirrored back to
+      // the rack's, its points are the 3D frame's along the run
+      for (const [got, sx] of [[two, 1], [back2, -1], [three, 1]]) {
+        const drawn = [...got.passes.map(p => [p.index, true, p.sense * sx]), ...got.back.map(p => [p.index, false, p.sense * sx])]
           .sort((u, v) => u[0] - v[0]).map(([, passed, sense]) => [passed, sense]);
         assert.deepEqual(drawn, decided, `port ${x}, ${below} below, ${lane}`);
       }
+      const runX = (pts, f) => pts.map(f);
+      assert.deepEqual(runX(throughRings([rear(a), ...centres.map(rear), rear(b)], [null, ...R.orientMarks(marks, {x: -1, y: -1}), null]).points, p => -p[0]),
+        runX(throughRings([flat(a), ...centres.map(flat), flat(b)], [null, ...R.orientMarks(marks, {y: -1}), null]).points, p => p[0]),
+        `rear pane mirrors the front: port ${x}, ${below} below, ${lane}`);
       // drawn from the other end (a cross-face cable's tag side): the same path, reversed
       const pts2 = [flat(a), ...centres.map(flat), flat(b)];
       const fwd = throughRings(pts2, [null, ...marks, null]).points;
@@ -336,4 +343,44 @@ test('capacity, like fill, does not count a cable at a manager it only doubles b
     assert.deepEqual(R.routePath(mixed, back, ctx).findings.map(f => f.via), ['guide-1']);
     assert.deepEqual(R.capacityOver(mixed, ctx), []);
   } finally { delete SIZES.lacer.capacity; }
+});
+
+test('a mirrored rear pane draws the ring as decided, not hooked: orientMarks turns x', () => {
+  // a rear ring: port at x -100, ring at -150, lane at the left; the rack's sense is -1
+  const ring = {run: 'x', depth: 10, sense: -1, back: false};
+  const lane = -(OPENING / 2 + RAIL_W + R.LANE_GAP / 2);
+  // the rear pane is seen mirrored: x' = -x
+  const pts = [[100, 0], [150, 0], [-lane, 0]];
+  const drawn = throughRings(pts, [null, ...R.orientMarks([ring], {x: -1, y: -1}), null]).points;
+  assert.deepEqual(drawn.map(p => p[0]), [100, 145, 155, -lane]);
+  const xs = drawn.map(p => p[0]);
+  assert.ok(xs.every((v, k) => k === 0 || v > xs[k - 1]), `no hook: ${xs.join(' ')}`);
+  // unturned, the rack's sense in the mirrored pane is the hook #930 removes
+  assert.deepEqual(throughRings(pts, [null, ring, null]).points.map(p => p[0]), [100, 155, 145, -lane]);
+  // a doubled-back ring's face is on the side both neighbours are on, in the pane too
+  const back = {run: 'x', depth: 10, sense: -1, back: true};    // rack: face at -145, the port's side
+  const face = throughRings([[100, 0], [150, 0], [90, 0]], [null, ...R.orientMarks([back], {x: -1}), null]).points[1];
+  assert.deepEqual(face, [145, 0]);
+});
+
+test('a ring that runs up the rack, in an elevation whose y is down: orientMarks turns y', () => {
+  // a y-run ring (as the CMH-6DR1U end ring) on the lacer at x -150; the port 30 mm below it, the lane level with it
+  const r = rackOf();
+  const ctx = ctxOf([{via: 'end', x: -150, run: 'y'}], {i1: -150, i3: -100}, {i1: Y20 - 30});
+  const c = cableOf([{item: 'i2', via: 'end'}, {lane: 'left-front', ru: 20}, {lane: 'left-front', ru: 30}]);
+  const path = R.routePath(r, c, ctx), marks = R.ringMarks(r, c, ctx);
+  assert.deepEqual(path.rings.map(g => [g.run, g.passed, g.sense]), [['y', true, 1]]);   // upward
+  const [a, entry, exit] = path.points;
+  assert.deepEqual([entry.y, exit.y], [Y20 - R.RING_DEPTH / 2, Y20 + R.RING_DEPTH / 2]);
+  // the elevation: y down
+  const centres = R.resolveRoute(r, c, ctx).waypoints.map(w => R.pointOf(r, w, ctx));
+  const flat = p => [p.x, -p.y];
+  const pts = [flat(a), ...centres.map(flat), flat(path.points[path.points.length - 1])];
+  const drawn = throughRings(pts, [null, ...R.orientMarks(marks, {y: -1}), null]).points;
+  assert.deepEqual(drawn.slice(1, 3).map(p => p[1]), [-entry.y, -exit.y]);
+  // unturned it would enter from above and hook back down
+  const hooked = throughRings(pts, [null, ...marks, null]).points;
+  assert.deepEqual(hooked.slice(1, 3).map(p => p[1]), [-exit.y, -entry.y]);
+  // and the 3D scene, in the rack's own axes, takes the marks unchanged
+  assert.deepEqual(R.orientMarks(marks, {}), marks);
 });

@@ -349,8 +349,12 @@ into two points:
 - **What is not reported.** A cable that stands on neither side still reaches back a
   little, unreported: one under the ring goes along the run to the face it enters, up to
   half the ring's depth (5 mm by the estimate), and one that comes up steeply from
-  beside the ring goes back along the run to its entry face by less than its height
-  below the ring. Both are drawn and measured as they are; neither is called a finding.
+  beside the ring goes back along the run to its entry face by its offset along the run
+  plus half the ring's depth: less than its height below the ring plus that half-depth
+  (a port 29 mm along and 30 mm below reaches back 34 mm). Both are drawn and measured
+  as they are; neither is called a finding. A cable whose port is not found on its
+  drawing has no path, so no marks and no findings: it is counted in every ring on its
+  route, in fill and in capacity, whichever way it would go through.
 - **The automatic route** takes only the rings that run along `x` and lie on the way
   from the port toward its gutter (a port within half a ring's depth of its centre goes
   through it), so it never doubles back and never makes either of those reaches past a
@@ -383,12 +387,18 @@ functions; it never decides a ring itself:
    ring `{run, depth, sense, back}`. Add `ringFindings(rack, ctx, nameOf)` to the facts
    and show the findings where fill and capacity are shown.
 4. 2D (`cable-view.js`, `cables.js`): carry the marks with each link's points, dropping
-   a mark whenever its waypoint is dropped (one the pane cannot place), and call
-   `routed2d([a, ...via, b], 4, [null, ...marks, null])`. A cable drawn from its other
-   end reverses its points: pass `reverseMarks(marks)` with them, which reverses the
+   a mark whenever its waypoint is dropped (one the pane cannot place). A mark's
+   `sense` is along the rack's axes (x right as seen from the front, y up), and a pane
+   whose axis runs the other way turns it with `orientMarks(marks, flip)`: the front
+   pane flips y (`{y: -1}`, an SVG's y is down); the rear pane, seen mirrored, flips x
+   and y (`{x: -1, y: -1}`). Then call `routed2d([a, ...via, b], 4, [null, ...oriented,
+   null])`. Unturned, a rear ring or a ring that runs up the rack is entered from the
+   wrong face and drawn as the hook this change removes. A cable drawn from its other
+   end reverses its points: pass `reverseMarks(oriented)` with them, which reverses the
    list and turns the sense of every ring passed (a ring not passed keeps its face).
 5. 3D (`scene3d.js`, `cables.js`): return the marks with the waypoint positions,
-   dropped in step, and call `routePoints3d(THREE, a, b, wps, 30, marks)`. The spread of
+   dropped in step, and call `routePoints3d(THREE, a, b, wps, 30, marks)`. The scene is
+   in the rack's own axes, so its marks pass unchanged. The spread of
    cables across a shared ring applies to its centre, before the expansion.
 6. Update the routing checks for the new ring choice and lengths, and add a browser
    check that a cable's 3D points between a ring's entry and exit share the ring

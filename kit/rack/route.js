@@ -268,10 +268,20 @@ export function routePath(rack, cable, ctx) {
 export const reverseMarks = marks => [...marks].reverse()
   .map(m => (m && (m.sense === 1 || m.sense === -1) && m.back !== true ? {...m, sense: -m.sense} : m));
 
+// MARKS FOR A DRAWING'S OWN AXES. A mark's `sense` is along the rack's axes:
+// x right as seen from the front, y up, z out of the front. A drawing whose
+// axis runs the other way says so, and each ring on that axis, passed or
+// doubled back, has its sense turned: an SVG elevation has y down ({y: -1});
+// the rear pane is also seen mirrored ({x: -1, y: -1}); the 3D scene is in
+// the rack's own axes and passes its marks unchanged.
+export const orientMarks = (marks, flip = {}) => marks.map(m => (m && (m.sense === 1 || m.sense === -1)
+  && flip[m.run] === -1 ? {...m, sense: -m.sense} : m));
+
 // THE RING MARKS A DRAWING PASSES ON, parallel to resolveRoute(rack, cable,
 // ctx).waypoints: null for a lane, a duct or a pass-through, and for a ring
-// routePath's decision, {run, depth, sense, back}. Drop them in step with any
-// waypoint the drawing cannot place. When a port is not found there is no
+// routePath's decision, {run, depth, sense, back}, in the rack's axes (a
+// drawing that flips one passes them through orientMarks). Drop them in step
+// with any waypoint the drawing cannot place. When a port is not found there is no
 // decision, and a ring's mark is {run, depth} alone: the drawing then decides
 // it from its own points.
 export function ringMarks(rack, cable, ctx) {
