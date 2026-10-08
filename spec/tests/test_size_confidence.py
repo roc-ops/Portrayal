@@ -88,11 +88,12 @@ def test_every_chassis_sized_part_now_says_it_is_an_estimate():
     # 102 until #261, which took 36 out of the group: the 18 MX960 vertical twins
     # were removed, and the 18 horizontal MX cards they twinned now state the Visio
     # stencil's lever envelope as a drawn width rather than a chassis opening.
-    # 66 until #261 part 2, which took 51 more out: the 11 MX2000 `-v2k` carriers
-    # and the 20 vertical MIC twins were removed, and 20 horizontal MICs now state
-    # their photo-measured plate rather than a "registry + layout" window. The 15
-    # left are the native MX2000 cards, MIC6/MRATE MICs, blanks and the like.
-    assert len(_chassis_sized()) >= 15, "the group has shrunk without explanation"
+    # #261 part 2 re-measured 20 horizontal MICs as their plate, but their previous
+    # majors, the 11 MX2000 `-v2k` carriers and the 20 vertical MIC twins are kept,
+    # retired (`superseded-by`, #448), and still say "registry + layout": 66
+    # measured, 15 of them on live contracts (native MX2000 cards, MIC6/MRATE MICs,
+    # blanks and the like).
+    assert len(_chassis_sized()) >= 66, "the group has shrunk without explanation"
 
 
 def test_each_one_says_which_chassis_opening_it_is():
@@ -117,9 +118,9 @@ def test_prose_would_call_most_of_them_measured_which_is_the_point():
     grp = _chassis_sized()
     misread = [ref for ref, doc in grp
                if "measured" in str((doc.get("provenance") or {}).get("size", ""))]
-    # 90 until #261 took 36 MX card contracts out of the group (see above), and 59
-    # until #261 part 2 took the MICs and the MX2000 twins out (see above)
-    assert len(misread) >= 9, (
+    # 90 until #261 took 36 MX card contracts out of the group (see above); 59
+    # measured after part 2, whose retired majors are still in the group
+    assert len(misread) >= 59, (
         f"only {len(misread)} of {len(grp)} would be misread as measured; if the "
         "prose was rewritten, this test has served its purpose and can go")
     assert len(misread) < len(grp), (

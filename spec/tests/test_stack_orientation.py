@@ -260,13 +260,11 @@ def test_the_census_measured_something():
     """A walk that found nothing would pass every assertion below."""
     rows = _census()
     assert sum(1 for r in rows if r[1] is not None) > 1500
-    # component-owned pairs: 800+ until #261 part 2 removed the vertical MIC twins
-    # (each a copy of its horizontal MIC's stacked pairs) and MIC-3D-4COC3-1COC12-CE's
-    # four invented pairs; 736 remain
-    assert sum(1 for r in rows if r[1] is None) > 700
-    # columns: 500+ until #261 part 2 removed the vertical MIC twins, whose stacked
-    # pairs were turned into columns; 394 remain
-    assert sum(1 for r in rows if r[2]["kind"] == "column") > 350
+    # component-owned pairs and columns count every contract, the majors #261
+    # part 2 retired but kept (`superseded-by`, #448) included: 896 pairs and 504
+    # columns measured.
+    assert sum(1 for r in rows if r[1] is None) > 800
+    assert sum(1 for r in rows if r[2]["kind"] == "column") > 500
 
 
 def test_every_checked_stack_in_the_library_faces_the_convention_or_says_why():

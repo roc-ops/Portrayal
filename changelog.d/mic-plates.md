@@ -74,8 +74,9 @@
 - Nautobot module types `MIC-3D-4XGE-XFP`, `MIC3-3D-10XGE-SFPP`,
   `MIC3-3D-1X100GE-CFP`, `MIC3-3D-1X100GE-CXP`, `MIC3-3D-2X40GE-QSFPP` and
   `MIC3-100G-DWDM` name their interfaces `{module}/port-...`. They were
-  `{module.parent}/{module}/port-...`. These MICs are now seated at two
-  depths: in an MPC on the MX240 to MX960, and in an MPC inside the
-  adapter on the MX2000. The exporter writes a model seated at several
-  depths with the one-token name. NetBox is unchanged. **BREAKING for DCIM
-  data already imported** (Nautobot).
+  `{module.parent}/{module}/port-...`. The exporter writes the one-token
+  name for a model seated at several depths or at none. The first five are
+  now seated at two depths: in an MPC on the MX240 to MX960, and in an MPC
+  inside the adapter on the MX2000. `MIC3-100G-DWDM` is seated nowhere,
+  because no bay can take a dual-wide MIC (above). NetBox is unchanged.
+  **BREAKING for DCIM data already imported** (Nautobot).
