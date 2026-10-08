@@ -94,7 +94,6 @@ def test_declaring_the_rate_answers_the_question():
 @pytest.mark.parametrize("ref,attr,count,expected", [
     # Each of these took a table default that its own description contradicts.
     ("juniper/dpce-r-40ge-sfp", "sfp", 40, "1000base-x-sfp"),     # "40x1GbE"
-    ("juniper/dpce-r-40ge-sfp-v", "sfp", 40, "1000base-x-sfp"),
     ("juniper/dpce-q-20ge-sfp", "sfp", 20, "1000base-x-sfp"),     # "twenty SFP"
     ("juniper/mic-3d-20ge-sfp", "sfp", 20, "1000base-x-sfp"),     # "Gigabit Ethernet MIC"
     ("juniper/mic-macsec-20ge", "sfp", 20, "1000base-x-sfp"),     # "MACsec Gigabit Ethernet"
@@ -709,9 +708,9 @@ ETHERNET_XFP = {
     "cisco/a9k-8t-b": 8, "cisco/a9k-8t-e": 8, "cisco/a9k-8t-l": 8,
     "cisco/a9k-mpa-2x10ge": 2, "cisco/a9k-mpa-4x10ge": 4,
     # MX Series Interface Module Reference: "10-Gigabit Ethernet ... with XFP"
-    "juniper/dpc-r-4xge-xfp": 4, "juniper/dpc-r-4xge-xfp-v": 4,
-    "juniper/dpce-2xge-xfp": 2, "juniper/dpce-2xge-xfp-v960": 2,
-    "juniper/dpce-20ge-2xge": 2, "juniper/dpce-20ge-2xge-v960": 2,
+    "juniper/dpc-r-4xge-xfp": 4,
+    "juniper/dpce-2xge-xfp": 2,
+    "juniper/dpce-20ge-2xge": 2,
     "juniper/mic-3d-2xge-xfp": 2, "juniper/mic-3d-2xge-xfp-v": 2,
     "juniper/mic-3d-4xge-xfp": 4, "juniper/mic-3d-4xge-xfp-v": 4,
 }

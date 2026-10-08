@@ -227,8 +227,9 @@ def test_every_composed_usb_receptacle_is_a_slot_or_is_forwarded(comps):
                 assert got == iface and not c.get("interface"), (ref, p["id"])
                 forwarded.append((ref, c["kind"]))
     # the scan measured something: the counts the library held when this was
-    # written, at least
-    assert seen["usb-a"] >= 32 and seen["micro-usb-b"] >= 18 and seen["usb-c"] >= 2, seen
+    # written, at least - less re-s-1300-v's one USB-A, removed with the MX960
+    # vertical twins in #261 (the MX960's SCB seats juniper/re-s-1300@1 now)
+    assert seen["usb-a"] >= 31 and seen["micro-usb-b"] >= 18 and seen["usb-c"] >= 2, seen
     # A forwarded receptacle is published where its composer is PLACED, so
     # its composer has to be a part a face places: the two bezels. The third
     # is a card a card holds, which nothing places - the known gap the test

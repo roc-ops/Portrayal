@@ -126,7 +126,7 @@ def test_the_sentence_is_what_clears_it(tmp_path):
 
 
 def test_a_bay_on_a_seated_part_counts_as_a_use(tmp_path):
-    """How the MIC twins are referenced. `mpc1e-3d-v960` names ten of them in
+    """How the MIC twins are referenced. `mpc1e-3d-v2k` names ten of them in
     a bay's `accepts`, and no device names any of them directly - so a walk that
     stopped at a contract's `parts:` would have called all ten dead. Both
     existing dependency walkers in this repository stop there."""

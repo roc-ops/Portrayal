@@ -40,21 +40,11 @@ from portrayal import dcim_export as dx
 # other's is not. That is better than the silence it replaces and worse than
 # resolving it, so the list is pinned and may only shrink.
 KNOWN_DIVERGENT = {
-    # The vertical author's description leads with how the card is DRAWN - "as
-    # mounted in the MX960" - where its forty siblings lead with the card and
-    # put the orientation in a second sentence, which `build_module` never
-    # reads. Prose about our model, not about the hardware. #261 collapses the
-    # twins properly.
-    ("Juniper", "DPC-R-4XGE-XFP"): "juniper/dpc-r-4xge-xfp-v",
-    ("Juniper", "RE-S-1300-2048"): "juniper/re-s-1300-v",
-    ("Juniper", "SCB-MX"): "juniper/scb-mx960-v",
-    # The same. The NUMBERING half of this one is fixed: the vertical author's
-    # flat `port-0..port-39` became `port-0-0..port-3-9` at @2, the scheme the
-    # horizontal author's description names ("numbered per PIC, x/0..x/9, four
-    # PICs"), and every one of the forty kept its position. What still pins the
-    # entry is the description, exactly as for the three above - so #293 did
-    # NOT take it off this list, and #261 is still what collapses the twins.
-    ("Juniper", "DPCE-R-40GE-SFP"): "juniper/dpce-r-40ge-sfp-v",
+    # The four Juniper MX entries that stood here (DPC-R-4XGE-XFP, RE-S-1300-2048,
+    # SCB-MX, DPCE-R-40GE-SFP) were vertical MX960 twins whose descriptions led with
+    # how the card is drawn. #261 removed the twins: the MX960 seats the horizontal
+    # card at `rotate: 90`, so each of those models has one author and nothing to
+    # disagree with.
     # ONE SKU MODELLED TWICE, at 80 mm and 82.5 mm - a real duplicate rather
     # than two authors of one card, and roc-ops/Portrayal#266 is where it is resolved.
     ("UfiSpace", "FAN-803816-HI"): "ufispace/fan-803816-hi",
@@ -112,7 +102,7 @@ def test_every_other_collision_is_a_real_collapse():
     because the port order stopped depending on which way the card was drawn."""
     collapsing = {k: [r for _d, r in v] for k, v in _groups().items()
                   if len(v) > 1 and k not in KNOWN_DIVERGENT}
-    assert len(collapsing) >= 35, f"only {len(collapsing)} group(s) collapse cleanly"
+    assert len(collapsing) >= 31, f"only {len(collapsing)} group(s) collapse cleanly"
     for key, refs in collapsing.items():
         docs = [dx.dcim_significant(d) for d, _r in _groups()[key]]
         assert all(d == docs[0] for d in docs), f"{key} does not actually agree"
@@ -125,8 +115,7 @@ def test_a_collapsed_type_names_every_author():
     if not p.exists():
         pytest.skip("the MPC7E-MRATE export is not in this library")
     comments = (yaml.safe_load(p.read_text()) or {}).get("comments") or ""
-    for author in ("juniper/mpc7e-mrate)", "juniper/mpc7e-mrate-v960)",
-                   "juniper/mpc7e-mrate-v2k)"):
+    for author in ("juniper/mpc7e-mrate)", "juniper/mpc7e-mrate-v2k)"):
         assert author in comments, f"{author} is not named in the stamp:\n{comments}"
 
 

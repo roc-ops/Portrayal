@@ -1,0 +1,144 @@
+format: 1
+kind: module
+name: dpce-r-40ge-sfp
+version: 2.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper DPCE-R-40GE-SFP (Gigabit Ethernet Enhanced DPC, EOL) - 40x1GbE SFP
+  in four 2x5 blocks with per-port lamp matrices between the block pairs,
+  as photographed in MX240 slot 2 ("DPC 40xGE"). Ports are numbered per PIC
+  (x/0..x/9, four PICs).
+attrs:
+  model: DPCE-R-40GE-SFP
+  # FORTY 1GbE, WHICH THIS CARD'S OWN DESCRIPTION AND MODEL NUMBER BOTH SAY.
+  # Without it `cage_type` finds no media attr for the `sfp` family and falls
+  # through to PART_IFACE's std/sfp-ganged default, which is SFP+ - so the
+  # export said forty 10G ports. Exactly the shape of roc-ops/Portrayal#23, where
+  # A9K-40GE-B kept exporting 10G until its contract said `sfp: 40`.
+  sfp: 40
+  power-draw-max-w: 335
+  lifecycle-note: EOL per PSN-TSB16810; modelled because it is the card the reference photograph 
+    carries
+provenance:
+  stack-orientation: >-
+    The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is
+    the upper cage upright (rotate 0) over the lower turned 180, so both cage lips face
+    the band between the two cages and both bails face outward. Decided by the rule, not
+    an observation, so a photograph of the stack overturns it: the 20 SFP pairs
+    (port-0-0/port-0-1 to port-3-8/port-3-9). 20 of these were drawn with the upper cage
+    turned before the std cage art moved its lip to the bottom of the opening; turning
+    them keeps the lips in the middle band where they were drawn and seats every optic
+    bail-outward. Turning a composed cage in place changes no box, id or anything a
+    device places, so it is a minor bump (S6).
+  states: >-
+    NO HEALTH LAMP ON THIS CARD - IT IS ON THE CRAFT INTERFACE, which is the same
+    answer #212 found for the MX240's fans. MX240 hardware guide, "DPC and MPC LEDs
+    on the Craft Interface": every DPC or MPC shows its status on LEDs on the craft
+    interface, labelled 1/0, 1, 2 and onward, in a row along the bottom of the craft
+    interface. Table 10 gives them OK green and FAIL red, and juniper/mx240-craft@1 now
+    draws and lights them.
+    WHAT THIS CARD DOES DRAW IS PER-PORT, NOT PER-CARD. The `indicator-panels` group
+    is the dot-matrix link clusters between the block pairs - eighty of them - and
+    `indicator-panels` above records why they carry no individual ids: the
+    lamp-to-port mapping is not legible at photo resolution. They are link lamps for
+    forty ports, not a health lamp for the card, so they were never what `ok` and
+    `fail` were about.
+  size: >-
+    photo-measured - the plate is 396.0 x 29.5 centred in a 413.5 lever envelope. Plate edges off the
+    MX240 front photograph (body px 2.5-1496.5 = 443 mm, 3.372 px/mm; SFF-8433 ganged-SFP pitch cross-checks
+    3.379): x px 127.5-1463.5 = 396.2 mm, the same edges on DPC 40xGE, DPC-R-4XGE and SCB-MX; corroborated
+    by the MX480 (396.3 at 3.230 px/mm) and the MX960 (815 px, 393-397 depending on the axis's scale).
+    RE-ENVELOPED, NOT REDRAWN, at 2.0.0: every part, bay, lamp and legend at 1.x card x >= 26.15 moved
+    by x' = 8.75 + (x - 26.15) * 396.0 / 394.85, the old plate run 26.15-421.0 onto the new 8.75-404.75;
+    y is unchanged. Only the levers, the model name and the status group were placed afresh (provenance
+    below). 
+  power: 'guide Table 93 DPC section: DPCE-R-40GE-SFP 335 W maximum. The vendor does not qualify an ambient
+    for the DPC rows - filed as max per the project rule, and this sentence is the record that max is
+    our reading'
+  indicator-panels: 'photo - the dot-matrix lamp clusters between block pairs carry the per-port link
+    lamps; individual lamp-to-port mapping is not legible at photo resolution and the guide DPC LED table
+    describes one link lamp per port. Drawn as the matrix panels without per-lamp ids'
+  levers: >-
+    photo-measured - the MX240 front photograph: each ejector lever is 97 px = 28.8 mm long and 25-27
+    px = 7.4-8.0 mm tall, its tip 9.5 mm past the plate end; drawn 29.0 x 7.4 with the tip at the envelope
+    edge (8.75 mm past the plate, which the 413.5 envelope fixes). Centred on the plate: the right-hand
+    levers read centred; the left-hand ones read 2.4 mm low, which a lever standing proud of the face
+    shows in a photograph taken from above centre. Until 2.0.0 they were drawn 16 x 9 at x 1.2, about
+    16 mm left of the real lever and too high.
+  model-name: >-
+    photo-measured - DPC 40xGE, DPC-R-4XGE and SCB-MX each print the model name from card x 11.4 (the
+    plate's left end plus 2.65), baseline 25.5 below the plate top, under the lever. The other cards take
+    the same position as the family's.
+  status-group: >-
+    photo-measured - the MX240 front photograph, slot 2: the OK/FAIL legend runs vertically at card x
+    32.3, y 11.7-19.9, just right of the lever's end (1.x drew it at old x 62). The photograph also shows
+    a lamp under the legend at (32.3, 21.4); this card draws none, by the states ruling above, and that
+    disagreement is left for its own change.
+  size-ports: >-
+    photo - cage blocks re-enveloped from 1.x's card x 76.8/151.2/249.6/323.7, each five sfp-ganged columns
+    (registry 14.25 pitch; photo reads 14.3), two rows belly-to-belly at y 4.5 and 16.5 (rotate 180)
+states: [absent]
+parts:
+- {ref: std/sfp-ganged@1, id: port-0-0, at: [59.55, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-0-2, at: [73.84, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-0-4, at: [88.13, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-0-6, at: [102.42, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-0-8, at: [116.71, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-0-1, at: [59.55, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-0-3, at: [73.84, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-0-5, at: [88.13, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-0-7, at: [102.42, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-0-9, at: [116.71, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-1-0, at: [134.16, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-1-2, at: [148.46, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-1-4, at: [162.75, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-1-6, at: [177.04, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-1-8, at: [191.33, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-1-1, at: [134.16, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-1-3, at: [148.46, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-1-5, at: [162.75, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-1-7, at: [177.04, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-1-9, at: [191.33, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-2-0, at: [232.85, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-2-2, at: [247.14, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-2-4, at: [261.43, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-2-6, at: [275.73, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-2-8, at: [290.02, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-2-1, at: [232.85, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-2-3, at: [247.14, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-2-5, at: [261.43, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-2-7, at: [275.73, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-2-9, at: [290.02, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-3-0, at: [307.17, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-3-2, at: [321.46, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-3-4, at: [335.75, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-3-6, at: [350.04, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-3-8, at: [364.33, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-3-1, at: [307.17, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-3-3, at: [321.46, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-3-5, at: [335.75, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-3-7, at: [350.04, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-3-9, at: [364.33, 16.5], rotate: 180}
+elements:
+  lever-left:
+    at: [0.0, 11.05]
+    size: [29.0, 7.4]
+    class: latch
+  lever-right:
+    at: [384.5, 11.05]
+    size: [29.0, 7.4]
+    class: latch
+size:
+  w: 413.5
+  h: 29.5
+size-notes: >-
+  w is the lever envelope and h the plate height, of ONE card that every MX240, MX480 and MX960 slot takes
+  - the MX960 seats it turned 90, as its own hardware guide says by stating an MPC/DPC/SCB as one 17 x
+  22 x 1.25 in part in all three books (#261). The 413.5 is Juniper's Visio stencil, whose every MPC/DPC/SCB
+  master is the same 0.1156 x 1.6281 page-inch rectangle at an exactly 1:10 scale (29.36 x 413.54 mm),
+  read as the lever-tip envelope because the three front photographs measure lever tip to lever tip at
+  413.5-414.9 while the plate between them is 396.0. The 29.5 is the plate height, estimated: the MX240
+  photograph reads it 28.6-29.0 at 3.37 px/mm and nothing dimensions it.
+size-confidence: {w: drawing, h: estimated}
