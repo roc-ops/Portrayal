@@ -672,6 +672,7 @@ offers the ring lug alone.
 | `juniper/mx-ground-stud-pair-5-8@1` | `juniper/mx-ground-stud@1` twice | `stud-pair-5-8` |
 | `juniper/mx-ground-stud-pair-3-4@1` | `juniper/mx-ground-stud@1` twice | `stud-pair-3-4` |
 | `common/ground-stud-pair-5-8-m6@1` | `common/ground-screw-m6@1` twice | `stud-pair-5-8` |
+| `common/ground-stud-pair-5-8-m4@1` | `common/ground-screw-m4@1` twice | `stud-pair-5-8` |
 | `common/ground-stud-pair-5-8-1-4@1` | `common/ground-screw-1-4@1` twice | `stud-pair-5-8` |
 | `common/ground-stud-pair-3-4-1-4@1` | `common/ground-screw-1-4@1` twice | `stud-pair-3-4` |
 | `common/ground-stud-pair-1-1-4@1` | `common/ground-screw-1-4@1` twice | `stud-pair-1` |
@@ -679,8 +680,21 @@ offers the ring lug alone.
 **The sized screws (#830, part 1).** `common/ground-lug@1` stays the library's nominal
 ground screw, unsized, as the owner ruled. `common/ground-screw-m6@1` (ISO 7045 pan head,
 12.0 across, 4.6 high) and `common/ground-screw-1-4@1` (ASME B18.6.3 pan head, 12.50
-across, 3.66 high) are drawn at a stated size and used only inside a pair host. An M4 and
-an M5 screw are not added: no pair with a sourced pitch takes one yet.
+across, 3.66 high) are drawn at a stated size and used only inside a pair host.
+`common/ground-screw-m4@1` (ISO 7045, 8.0 across, 3.1 high) joined them with the UfiSpace
+pairs: eight chassis fix their accessory lug with two M4 screws, and seven of their guides
+draw the holes on a flank figure - three distinct drawings, one of them shared byte for byte
+by four guides and another by two - that reads 15.6 to 15.9 apart, so each landing is one
+`common/ground-stud-pair-5-8-m4@1`. An M5 screw is still not added: the one device stating
+M5 for a two-hole plate, the Edgecore DCS500, reads 17.2 between its screws, which is no
+lug pattern, so its screws stay single placements.
+
+**One earth symbol per landing.** `common/ground-lug@1` draws an earth symbol above its
+stud, so a two-screw plate drawn as two of them printed two where the chassis prints one.
+`common/ground-screw@1` is the same stud, washer and cap without the symbol, presenting
+`terminal-stud` at the same 4.7: an unsized landing places `common/ground-lug@1` on the
+screw the printed symbol sits by and `common/ground-screw@1` on the other (the Edgecore
+AGR560, DCS500, EPS112 and EPS203).
 
 **The lugs.** `generic/two-hole-lug-5-8@1` (Panduit LCD6-10A-L, #6 AWG),
 `generic/two-hole-lug-3-4@1` (LCC10-14BW-L, #10 AWG) and `generic/two-hole-lug-1@1`

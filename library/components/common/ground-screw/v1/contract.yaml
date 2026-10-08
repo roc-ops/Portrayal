@@ -1,0 +1,55 @@
+format: 1
+kind: component
+name: ground-screw
+version: 1.0.0
+class: ground
+interface: terminal-stud
+behaviour: mounts
+profile: networking
+description: >-
+  A nominal grounding screw with no earth symbol: the stud, washer and cross-head cap of
+  common/ground-lug@1 alone. For the second screw of a two-hole grounding landing whose
+  size no document states, where the chassis prints one earth symbol for the pair and
+  common/ground-lug@1, which draws its own, stands on the first (#830).
+size: {w: 5.6, h: 5.6}
+size-confidence: {w: borrowed, h: borrowed}
+size-notes: >-
+  the stud box of common/ground-lug@1 (its `stud` element, 5.6 across), unchanged
+provenance:
+  size: >-
+    borrowed - common/ground-lug@1, its stud, washer and screw cap, moved to this part's
+    own origin. NO STUD SIZE IS CLAIMED, for the reason that part gives: it draws about an
+    M3 pan head. Where a document states a size, use a sized screw
+    (common/ground-screw-m4@1, -m6@1, -1-4@1) inside a pair host instead.
+  seat: >-
+    THE PART PRESENTS `terminal-stud` ON THE STUD AXIS, AT THE TOP OF ITS SCREW HEAD,
+    exactly as common/ground-lug@1 does: `mate` sits `on: screw-cap`, the last of the three
+    solids, 4.7 off the panel, so a ring lug seats on either screw of a landing at the same
+    height. See docs/connectors-dc-terminal-design.md, section 13.
+elements:
+  stud: {at: [0, 0], size: [5.6, 5.6], class: stud}
+relief:
+  features:
+    - node: stud
+      cyl: 3.2
+      color: '#8a9099'
+      confidence: estimated
+      source: >-
+        common/ground-lug@1, borrowed unchanged - unsourced there too.
+    - node: washer
+      cyl: 0.5
+      lift: 3.2
+      color: '#6e747c'
+      confidence: estimated
+      source: >-
+        common/ground-lug@1, borrowed unchanged - unsourced there too.
+    - node: screw-cap
+      cyl: 1.0
+      lift: 3.7
+      color: '#8a9099'
+      confidence: estimated
+      source: >-
+        common/ground-lug@1, borrowed unchanged - unsourced there too.
+connection-points:
+  mate: {at: [2.8, 2.8], direction: front, 'on': screw-cap}
+skins: [default]

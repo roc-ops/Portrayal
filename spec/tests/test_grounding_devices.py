@@ -75,6 +75,21 @@ PAIRS.update({
     "nokia/lmfs-f": {("front", "ground-studs"):
                      ("common/ground-stud-pair-5-8-m6@1", 90, (7.7, 247.55), "M6")},
 })
+# #830: the UfiSpace accessory lug on two M4 screws, measured 15.6 to 15.9 apart
+# on the flank figures of five guides, centred where each guide's own flank
+# figure puts its holes (x from the front on a right view). The S9601-104BC
+# lug is on its LEFT flank (x from the rear), at the height of the boss its
+# rear elevation shows, its depth estimated.
+H58_M4 = "common/ground-stud-pair-5-8-m4@1"
+PAIRS.update({f"ufispace/{m}": {(view, "ground-screws"): (H58_M4, None, c, "M4")}
+              for m, view, c in (("m3000-14xc", "right", (16.6, 21.8)),
+                                 ("s9500-22xst", "right", (16.2, 22.0)),
+                                 ("s9501-28smt", "right", (16.2, 22.0)),
+                                 ("s9502-16smt", "right", (16.5, 21.8)),
+                                 ("s9510-28dc", "right", (16.2, 22.0)),
+                                 ("s9510-30xc", "right", (16.2, 22.0)),
+                                 ("s9511-20ct", "right", (16.4, 21.8)),
+                                 ("s9601-104bc", "left", (16.4, 37.2)))})
 CASES = [(d, v, i) for d, pairs in sorted(PAIRS.items()) for (v, i) in sorted(pairs)]
 
 
@@ -164,6 +179,78 @@ def test_the_inferred_pitches_say_they_are_inferred():
         assert "ground-pair-pitch" in [g["what"] for g in d["gaps"]]
     note = _device("nokia/lmfs-f")["provenance"]["ground-pair"]["note"]
     assert "16 mm (0.63 in.)" in note and "15.875" in note
+
+
+def test_each_ufispace_pair_records_its_reading_and_its_gap():
+    """#830: each UfiSpace pair states where it was read (`ground-pair`) and,
+    because no document dimensions the holes, a gap for the pitch - or, on the
+    S9601-104BC, for the depth no figure shows. Its earth mark on the rear
+    points at the pair on the left flank."""
+    for device in PAIRS:
+        if not device.startswith("ufispace/"):
+            continue
+        d = _device(device)
+        assert "ground-pair" in d["provenance"], device
+        want = "ground-pair-depth" if device == "ufispace/s9601-104bc" else "ground-pair-pitch"
+        assert want in [g["what"] for g in d["gaps"]], device
+    assert _placement("ufispace/s9601-104bc", "rear", "ground-mark")["for"] == "left/ground-screws"
+
+
+# #830 part 3: a two-hole plate drawn as one stud is now its two screws. No
+# pair host fits - the DCS500 pitch reads 17.2, no lug pattern, and the other
+# three state no screw size - so both screws are common/ground-screw@1, the
+# nominal screw WITHOUT an earth symbol, and the one symbol each plate prints
+# is device silkscreen where the chassis prints it (provenance ground-pair).
+# device -> (rotate, {id: stud axis}, stud-size, {mark centre: the ids it is for})
+PLAIN = "common/ground-screw@1"
+TWO_SCREW = {
+    "edgecore/dcs500": ({"ground-1": 90, "ground-0": 90},
+                        {"ground-1": (49.85, 32.7), "ground-1b": (67.05, 32.7),
+                         "ground-0": (370.55, 32.7), "ground-0b": (387.75, 32.7)}, "M5",
+                        {(58.2, 19.0): "ground-1", (377.6, 19.0): "ground-0"}),
+    "edgecore/eps112": ({}, {"ground-1": (9.5, 11.85), "ground-2": (9.5, 28.15)}, None,
+                        {(23.7, 28.7): ["ground-1", "ground-2"]}),
+    "edgecore/eps203": ({}, {"ground-1": (9.3, 11.7), "ground-2": (9.3, 27.9)}, None,
+                        {(20.2, 20.1): ["ground-1", "ground-2"]}),
+    "edgecore/agr560": ({}, {"ground-1": (7.3, 39.85), "ground-2": (7.3, 55.95)}, None,
+                        {(7.5, 24.9): ["ground-1", "ground-2"]}),
+}
+
+
+@pytest.mark.parametrize("device", sorted(TWO_SCREW))
+def test_a_two_hole_plate_draws_both_screws_and_its_printed_mark(device):
+    rots, studs, size, marks = TWO_SCREW[device]
+    rear = _device(device)["views"]["rear"]
+    placed = {p["id"]: p for p in rear["components"]["placements"]
+              if p["ref"] in (PLAIN, "common/ground-lug@1")}
+    assert set(placed) == set(studs)
+    c = _contract(PLAIN)
+    for pid, axis in studs.items():
+        p = placed[pid]
+        assert p["ref"] == PLAIN, pid
+        assert p.get("rotate") == rots.get(pid), pid
+        assert (p.get("attrs") or {}).get("stud-size") == size
+        seat = render_mod.seat_point(p["at"], c["size"], p.get("rotate"),
+                                     c["connection-points"]["mate"]["at"])
+        assert seat == pytest.approx(list(axis), abs=1e-3), pid
+    # the earth symbol the chassis prints, once per plate, where it prints it
+    got = {tuple(m["at"]): m["for"] for m in rear.get("silkscreen") or []
+           if m.get("for") and set([m["for"]] if isinstance(m["for"], str) else m["for"]) & set(studs)}
+    assert got == {k: v for k, v in marks.items()}
+    assert "ground-pair" in _device(device)["provenance"]
+
+
+def test_the_plain_screw_seats_a_ring_lug_where_ground_lug_does():
+    """The symbol-less screw is common/ground-lug@1's stud alone: the same
+    interface, presented at the same height. Its full geometry - axis, seat,
+    solids - is held beside ground-lug@1's in the SINGLE table of
+    test_ground_stud_lugs.py."""
+    from portrayal import manifest
+    lug, screw = _contract("common/ground-lug@1"), _contract(PLAIN)
+    assert screw["interface"] == lug["interface"] == "terminal-stud"
+    assert "symbol" not in (screw.get("elements") or {})
+    assert manifest.presented_interface(screw, _contract)[2] == \
+        pytest.approx(manifest.presented_interface(lug, _contract)[2])
 
 
 def test_the_lmfs_f_esd_point_has_a_group_of_its_own():
