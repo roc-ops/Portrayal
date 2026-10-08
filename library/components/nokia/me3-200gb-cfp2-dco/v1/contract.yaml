@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: me3-200gb-cfp2-dco
-version: 1.0.0
+version: 1.0.1
 class: line-card
 behaviour: fills
 profile: networking
@@ -99,9 +99,9 @@ provenance:
     watts. Note 2: on the SR-7 and SR-12 the system is held to 40C with this card fitted
   ports: >-
     datasheet - 'three CFP2 interface ports that support both CFP2 and CFP2-DCO transceivers',
-    'numbered c1 to c3, from left to right' (XP p92-93, Table 40). Composed as std/cfp2@1 (a
+    'numbered c1 to c3, from left to right' (XP p92-93, Table 40). Composed as std/cfp2@2 (a
     CFP2-DCO is a CFP2 module): Fig 41 draws each bezel 44.65 x 15.60 with a 42.59 x 13.56
-    opening, and the 41.5 x 12.4 MSA aperture is centred in it. Speed 200g is the card's rating
+    opening, and the 41.5 x 14.3 MSA panel opening is centred in it. Speed 200g is the card's rating
     (me3-200gb, 'physical 200 Gigabit Ethernet'); a plain CFP2 in the same port runs 100G. The
     connector and guide detail drawn inside each opening is the empty cage's interior and is
     left to the aperture's own art
@@ -155,9 +155,9 @@ groups:
     index-origin: 1
     description: the card lamps Stat and Pwr at the left end
 parts:
-  - {ref: std/cfp2@1, id: c1, group: ports, at: [25.61, 8.46]}
-  - {ref: std/cfp2@1, id: c2, group: ports, at: [76.45, 8.46]}
-  - {ref: std/cfp2@1, id: c3, group: ports, at: [127.39, 8.46]}
+  - {ref: std/cfp2@2, id: c1, group: ports, at: [25.61, 7.51]}
+  - {ref: std/cfp2@2, id: c2, group: ports, at: [76.45, 7.51]}
+  - {ref: std/cfp2@2, id: c3, group: ports, at: [127.39, 7.51]}
   - {ref: common/led-dot@1, id: lnk-c1, group: port-leds, at: [70.87, 6.87], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: {mode: blinking, rate: 4}}, {name: no-link, color: '#f5a623'}]}}
   - {ref: common/led-dot@1, id: act-c1, group: port-leds, at: [70.87, 11.25], states: {lamp: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
   - {ref: common/led-dot@1, id: lnk-c2, group: port-leds, at: [121.6, 6.87], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: {mode: blinking, rate: 4}}, {name: no-link, color: '#f5a623'}]}}

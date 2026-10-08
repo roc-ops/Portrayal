@@ -1,7 +1,7 @@
 """Pluggable 5.08 mm terminal headers are connector slots, and the screw-clamp
 plugs that seat in them (#789, docs/connectors-dc-terminal-design.md).
 
-The three headers (common/terminal-header-508-2@1, common/terminal-header-508-5f@1
+The three headers (common/terminal-header-508-2@2, common/terminal-header-508-5f@1
 and common/dc-terminal-header-6@1) each present an interface
 spec/schemas/connectors.yaml lists, so every one of them is a slot;
 generic/terminal-508-2-plug@1, generic/terminal-508-5-plug@1 and
@@ -57,7 +57,7 @@ P6 = "generic/terminal-508-6-plug@1"
 
 # interface -> (the header that presents it, the plug that mates it, positions)
 PAIRS = {
-    "terminal-508-2": ("common/terminal-header-508-2@1", P2, 2),
+    "terminal-508-2": ("common/terminal-header-508-2@2", P2, 2),
     "terminal-508-5": ("common/terminal-header-508-5f@1", P5F, 5),
     "terminal-508-6": ("common/dc-terminal-header-6@1", P6, 6),
 }
@@ -72,17 +72,19 @@ FLANGED = {P5F}
 # The two AurCore headers build a housing 2.5 proud and present at its mouth;
 # the ReadyLinks header is drawn flat.
 PRESENTS = {
-    "common/terminal-header-508-2@1": 2.5,
+    "common/terminal-header-508-2@2": 2.5,
     "common/terminal-header-508-5f@1": 2.5,
     "common/dc-terminal-header-6@1": 0.0,
 }
 # What each header was before this work, and still is: size, class, attrs and
-# elements. Giving it an interface changed none of them.
+# elements. Giving it an interface changed none of them. The two-position header
+# is the exception the next major made: @2 is 12.16 wide, the Phoenix Contact
+# MSTBA 2,5/ 2-G-5,08 (1757242) width, where @1 was photo-measured at 10.16 (#804).
 UNCHANGED = {
-    "common/terminal-header-508-2@1": (
-        {"w": 10.16, "h": 12.1}, "port",
+    "common/terminal-header-508-2@2": (
+        {"w": 12.16, "h": 12.1}, "port",
         {"media": "terminal-block", "positions": 2, "pitch-mm": 5.08},
-        {"body": {"at": [0.0, 0.0], "size": [10.16, 12.1], "class": "connector"}}),
+        {"body": {"at": [0.0, 0.0], "size": [12.16, 12.1], "class": "connector"}}),
     "common/terminal-header-508-5f@1": (
         {"w": 35.56, "h": 12.1, "d": 12.0}, "inlet",
         {"media": "dc-terminal", "positions": 5, "pitch-mm": 5.08},
@@ -193,7 +195,7 @@ def test_a_header_gained_its_interface_and_kept_its_drawing(hdr):
     assert c["class"] == cls
     assert c["attrs"] == attrs
     assert c["elements"] == elements
-    assert c["version"].split(".")[0] == "1"
+    assert c["version"].split(".")[0] == hdr.rsplit("@", 1)[1]
     assert "conforms" not in c and "mates" not in c
 
 
@@ -248,7 +250,7 @@ def test_every_header_a_device_places_is_counted():
                     placed[p["ref"]] += 1
     assert all(n > 0 for n in placed.values()), placed
     assert placed["common/terminal-header-508-5f@1"] >= 10, placed
-    assert placed["common/terminal-header-508-2@1"] >= 10, placed
+    assert placed["common/terminal-header-508-2@2"] >= 10, placed
     assert placed["common/dc-terminal-header-6@1"] >= 2, placed
     composed = []
     for f in sorted((LIB / "components").glob("*/*/v*/contract.yaml")):
@@ -317,7 +319,7 @@ def test_its_fields_are_the_wire_and_the_body(ref):
 
 
 def test_the_default_body_is_the_green_the_headers_are_drawn_in():
-    for hdr in ("common/terminal-header-508-2@1", "common/terminal-header-508-5f@1"):
+    for hdr in ("common/terminal-header-508-2@2", "common/terminal-header-508-5f@1"):
         assert skin(hdr)["body"].get("fill") == GREEN
 
 
@@ -514,9 +516,9 @@ def test_it_says_which_way_is_up_and_which_way_the_wires_leave(ref):
 # (plug, device, configuration, view, the host placement, the turn it is placed at)
 SEATS = [
     (P5F, "aurcore/ais4001p", "base", "top", "power", 90),
-    (P2, "aurcore/ais4001p", "base", "top", "relay", 0),
+    (P2, "aurcore/ais4001p", "base", "top", "relay", 90),
     (P5F, "aurcore/ais2001", "base", "top", "power", 90),
-    (P2, "aurcore/ais2001", "base", "top", "relay", 0),
+    (P2, "aurcore/ais2001", "base", "top", "relay", 90),
     (P6, "readylinks/gl-12xb-240d", "base", "rear", "dc-1", 0),
     (P6, "readylinks/gl-12xb-240d", "base", "rear", "dc-2", 0),
 ]
@@ -592,7 +594,8 @@ def _front(parents, el):
 
 def test_the_seats_are_the_placements_they_say_they_are():
     """The premise of the seats, read off the library: each host is that
-    header, placed at that turn, and one of the three is placed turned."""
+    header, placed at that turn, and two of the three are placed turned:
+    both AurCore headers, the two-position one since #804."""
     for ref, device, _config, view, host, turn in SEATS:
         d = yaml.safe_load((LIB / "devices" / device / "device.yaml").read_text())
         hit = [p for p in d["views"][view]["components"]["placements"] if p.get("id") == host]
@@ -612,8 +615,9 @@ def test_it_seats_with_its_mate_on_the_headers_mate(seated, seat):
 
 
 def test_the_turned_seats_are_measured_turned(seated):
-    """Not a flat pass: the two flanged headers are drawn turned in the
-    compiled face, so the turn is measured and not assumed."""
+    """Not a flat pass: the two flanged headers and the two two-position
+    headers beside them (#804) are drawn turned in the compiled face, so the
+    turn is measured and not assumed."""
     turned = 0
     for seat in SEATS:
         parents, host, _occ, _ = _seat(seated, seat)
@@ -621,7 +625,7 @@ def test_the_turned_seats_are_measured_turned(seated):
         is_turned = abs(m[0][0] - 1) > EPS or abs(m[1][1] - 1) > EPS
         assert is_turned == (seat[5] != 0), seat
         turned += is_turned
-    assert turned == 2
+    assert turned == 4
 
 
 @EACH_SEAT

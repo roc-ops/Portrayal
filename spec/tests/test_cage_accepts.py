@@ -630,7 +630,7 @@ def test_the_lift_census():
     `manifest.presented_interface` derives from the contract chain.
 
     AND SO DOES A PLUGGABLE TERMINAL HEADER THAT STANDS PROUD OF ITS FACE
-    (#789). common/terminal-header-508-5f@1 and common/terminal-header-508-2@1
+    (#789). common/terminal-header-508-5f@1 and common/terminal-header-508-2@2
     build their housing 2.5 proud and present at its mouth - their `mate`
     sits `on: body` - so a plug seated there starts where the housing ends.
     The slot's lift is that housing's `out`, again the figure

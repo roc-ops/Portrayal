@@ -1,14 +1,14 @@
 format: 1
 kind: component
 name: c14-inlet
-version: 1.3.0
+version: 1.4.0
 class: inlet
 profile: networking
 conforms: c14-inlet
 interface: iec-c14
 description: IEC C14 appliance inlet (mates C13 cords) - panel cutout with the
   keyed coupler shroud recessed behind it, earth pin up, line and neutral below
-size: {w: 28.0, h: 20.0, d: 13.0}
+size: {w: 28.0, h: 20.0, d: 17.0}
 attrs: {media: ac, input: ac}
 provenance:
   size: standard (IEC 60320-1) via SCHURTER 6100-3 datasheet - panel cutout
@@ -16,8 +16,22 @@ provenance:
   shroud: proportional from the same drawing (~25.0 wide), NOT dimensioned - the
     datasheet dimensions the 28 x 20.5 boss and the 27.5 x 19.5 rear body but not
     the coupler profile inside them
-  depth: estimated (shroud interior undimensioned; bounded by the behind-flange
-    body length E of 20.5 solder / 23.5 quick connect)
+  depth: >-
+    drawing - Adam Tech drawing S00087C rev D (7/7/20), IEC-A-X series panel-mount
+    C14 inlet, sheet 1 section view
+    (https://app.adam-tech.com/products/download/data_sheet/203645/iec-a-2-data-sheet.pdf):
+    shroud face to cavity floor 17.00 +0/-1.00, the floor 12.00 behind the flange's panel
+    side, the boss standing 5.00 proud of a 3.00 flange. Cross-checked by IEC-C-X, the
+    same drawing number at rev C
+    (https://app.adam-tech.com/products/download/data_sheet/203640/iec-c-1-data-sheet.pdf),
+    and bounded by the 19.4 housings of Bulgin (3.2 + 16.2) and Cliff CL 19210. The cavity
+    is measured from the shroud front, which is this part's face: the inlet presents at
+    its own face, flush with its host. Was 13.0 estimated until #793; a C13 nose (18 MIN,
+    Volex V1625) is longer than either, and generic/c13-plug@1 seats on this floor.
+  pins: >-
+    drawing - same S00087C rev D section view: the three pins rise 15.00 +0.50/-0 off the
+    cavity floor, so their tips sit 2.0 behind the shroud face. Their cross-section and
+    centres are drawn, not dimensioned, in the skin.
 elements:
   opening: {at: [0.0, 0.0], size: [28.0, 20.0], class: cutout}
 relief:
@@ -25,35 +39,32 @@ relief:
   cavity: inlet-face
   features:
     - node: pin-earth
-      top: 12.2
+      top: 15.0
       color: '#c0c5cb'
-      confidence: estimated
+      confidence: drawing
       source: >-
-        std/c14-inlet@1 itself - the SCHURTER 6100-3 datasheet dimensions the panel cutout
-        and the body behind it but NOT the pin length. This contract's own shroud/recess key
-        says 'proportional... NOT dimensioned' and its depth key says 'estimated', so the
-        pin protrusion has no source either. IEC 60320-1 does fix appliance-coupler pin
-        geometry; we do not hold it.
+        Adam Tech drawing S00087C rev D (7/7/20), IEC-A-X series, sheet 1 section view
+        (https://app.adam-tech.com/products/download/data_sheet/203645/iec-a-2-data-sheet.pdf):
+        the pins rise 15.00 +0.50/-0 off the cavity floor, so their tips stand 2.0 behind
+        the shroud face (provenance.pins).
     - node: pin-line
-      top: 12.2
+      top: 15.0
       color: '#c0c5cb'
-      confidence: estimated
+      confidence: drawing
       source: >-
-        std/c14-inlet@1 itself - the SCHURTER 6100-3 datasheet dimensions the panel cutout
-        and the body behind it but NOT the pin length. This contract's own shroud/recess key
-        says 'proportional... NOT dimensioned' and its depth key says 'estimated', so the
-        pin protrusion has no source either. IEC 60320-1 does fix appliance-coupler pin
-        geometry; we do not hold it.
+        Adam Tech drawing S00087C rev D (7/7/20), IEC-A-X series, sheet 1 section view
+        (https://app.adam-tech.com/products/download/data_sheet/203645/iec-a-2-data-sheet.pdf):
+        the pins rise 15.00 +0.50/-0 off the cavity floor, so their tips stand 2.0 behind
+        the shroud face (provenance.pins).
     - node: pin-neutral
-      top: 12.2
+      top: 15.0
       color: '#c0c5cb'
-      confidence: estimated
+      confidence: drawing
       source: >-
-        std/c14-inlet@1 itself - the SCHURTER 6100-3 datasheet dimensions the panel cutout
-        and the body behind it but NOT the pin length. This contract's own shroud/recess key
-        says 'proportional... NOT dimensioned' and its depth key says 'estimated', so the
-        pin protrusion has no source either. IEC 60320-1 does fix appliance-coupler pin
-        geometry; we do not hold it.
+        Adam Tech drawing S00087C rev D (7/7/20), IEC-A-X series, sheet 1 section view
+        (https://app.adam-tech.com/products/download/data_sheet/203645/iec-a-2-data-sheet.pdf):
+        the pins rise 15.00 +0.50/-0 off the cavity floor, so their tips stand 2.0 behind
+        the shroud face (provenance.pins).
 connection-points:
   mate: {at: [14, 10], direction: front}
 skins: [default]

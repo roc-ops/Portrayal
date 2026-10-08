@@ -85,3 +85,11 @@ testpaths = ["spec/tests"]
 # `loadgroup` is `load` for every test without an `xdist_group` mark, and does
 # nothing at all without `-n`.
 addopts = "--dist loadgroup"
+# A PASSING TEST'S tmp_path IS REMOVED WHEN IT FINISHES, and a clean run removes
+# its worker directories; only failures are kept to look at. pytest's default
+# keeps every test's directory for the last three runs, and this suite renders
+# into them: with several checkouts running it on one machine, the user temp
+# directory reached 31 GB and filled the disk mid-run. The shared builds and the
+# lint cache live in the run directory's parent (conftest.py), which this policy
+# does not touch, so no worker loses them while another still reads them.
+tmp_path_retention_policy = "failed"
