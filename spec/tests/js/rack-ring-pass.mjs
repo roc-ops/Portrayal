@@ -102,9 +102,10 @@ test('a ring approached at 90 degrees: the bend is at its face, outside, and it 
 
 test('a route that would enter and leave a ring by one face is a finding, not drawn through, and not counted in fill', () => {
   const r = {...rackOf(), cables: [cableOf([{item: 'i2', via: 'guide-1'}, {lane: 'right-front', ru: 20}, {lane: 'right-front', ru: 30}])]};
-  // The port is 110 mm right of the ring along the run and 55 mm off its line
-  // (the lacer stands 55 mm out): it stands on the ring's right, as does the lane.
-  const ctx = ctxOf([{via: 'guide-1', x: -150, aperture: {w: 32, h: 29.5}}], {i1: -40, i3: 100});
+  // The port is 50 mm right of the ring, level with it in the face: it stands
+  // on the ring's right, as does the lane. (The lacer standing 55 mm out of
+  // the face is not an approach angle, and does not make it neither side.)
+  const ctx = ctxOf([{via: 'guide-1', x: -150, aperture: {w: 32, h: 29.5}}], {i1: -100, i3: 100});
   const path = R.routePath(r, r.cables[0], ctx);
   assert.deepEqual(path.findings, [{kind: 'doubles-back', cable: 'c1', item: 'i2', via: 'guide-1'}]);
   assert.deepEqual(path.points.map(p => p.at), ['a', 'face', 'lane', 'lane', 'b']);
@@ -188,7 +189,7 @@ test('inspect reads a cable\'s rings as routePath measured them; a doubled-back 
   assert.deepEqual(got.route.rings, [{item: 'i2', via: 'guide-1', run: 'x', depth: R.RING_DEPTH, estimated: true, passed: true,
     sense: -1, entry: [-145, Y20r, Z], exit: [-155, Y20r, Z]}]);
   const back = {...r, cables: [cableOf([route[0], {lane: 'right-front', ru: 20}, {lane: 'right-front', ru: 30}])]};
-  const got2 = await inspect(back, 'c1', {chassisOf, route: ctxOf([{via: 'guide-1', x: -150}], {i1: -40, i3: 100})});
+  const got2 = await inspect(back, 'c1', {chassisOf, route: ctxOf([{via: 'guide-1', x: -150}], {i1: -100, i3: 100})});
   assert.deepEqual(got2.route.rings.map(g => [g.passed, g.face]), [[false, [-145, Y20r, Z]]]);
   // no rings on the route: no `rings` key, as before
   const plain = await inspect({...rackOf(), cables: [cableOf([{lane: 'left-front', ru: 20}])]}, 'c1', {chassisOf, route: ctx});
@@ -221,22 +222,83 @@ test('two rings close together: their leads are clamped and never cross', () => 
   assert.ok(xs.includes(105) && xs.includes(109) && xs.filter(x => x > 105 && x < 109).length === 2, `x: ${xs.join(' ')}`);
 });
 
-test('a point beside the ring but far off its line is on neither side: no false double-back', () => {
+test('a point beside the ring but far off its line IN THE FACE is on neither side; the stand-off out of the face does not count', () => {
   const ring = {run: 'x', depth: 10};
   // 6 mm along the run, 80 mm below: it comes up into the ring; the next point is on the same side
   const got = throughRings([[106, -80], [100, 0], [300, 0]], [null, ring, null]);
   assert.deepEqual(got.back, []);
   assert.deepEqual(got.points, [[106, -80], [95, 0], [105, 0], [300, 0]]);
+  // the same 80 mm as the stand-off, z, out of the face: it stands on the right, as the next does
+  const out = throughRings([{x: 106, y: 0, z: 0}, {x: 100, y: 0, z: 80}, {x: 300, y: 0, z: 80}], [null, ring, null]);
+  assert.deepEqual(out.back.map(b => [b.index, b.sense]), [[1, -1]]);
 });
 
-test('an edited route through a ring just behind the port is not a finding (port at 120, ring 4 at 110)', () => {
+test('an edited route through a ring behind the port: a finding when level with it, none when it comes up steeply or from under it', () => {
   const r = rackOf();
   const rings = [-205, -110, 0, 110, 205].map((x, i) => ({via: `guide-${i + 1}`, x}));
-  const ctx = ctxOf(rings, {i1: 120, i3: 120});
   const c = cableOf([{item: 'i2', via: 'guide-4'}, {item: 'i2', via: 'guide-5'}, {lane: 'right-front', ru: 20}, {lane: 'right-front', ru: 30}]);
-  const path = R.routePath(r, c, ctx);
-  assert.deepEqual(path.findings, []);
-  assert.deepEqual(path.rings.map(g => [g.via, g.passed, g.sense]), [['guide-4', true, 1], ['guide-5', true, 1]]);
+  const at = (x, below = 0) => R.routePath(r, c, ctxOf(rings, {i1: x, i3: 120}, below ? {i1: Y20 - below} : {}));
+  // level, 10 mm right of ring 4 (5 past its face), going right: it would double back
+  assert.deepEqual(at(120).findings.map(f => f.via), ['guide-4']);
+  assert.deepEqual(at(120, 8).findings.map(f => f.via), ['guide-4']);       // 10 along, 8 below: still beside it
+  // 30 mm below: steeper than 45 degrees, it comes up into the ring
+  assert.deepEqual(at(120, 30).findings, []);
+  assert.deepEqual(at(120, 30).rings.map(g => [g.via, g.passed, g.sense]), [['guide-4', true, 1], ['guide-5', true, 1]]);
+  // within half the ring's depth of its centre: under it
+  assert.deepEqual(at(112).findings, []);
+});
+
+test('the drawings obey routePath: 2D and 3D draw each ring as routePath decided, over a grid of ports', () => {
+  const r = rackOf();
+  const rings = [-205, -150, -110, 0, 110, 205].map((x, i) => ({via: `guide-${i + 1}`, x}));
+  const route = lane => [{item: 'i2', via: 'guide-2'}, {item: 'i2', via: 'guide-4'}, {lane, ru: 20}, {lane, ru: 30}];
+  let disagreedUnmarked = 0, n = 0;
+  for (const lane of ['left-front', 'right-front']) for (const x of [-230, -160, -150, -147, -140, -120, -110, -100, -60, -10, 0, 10, 50, 120])
+    for (const below of [0, 8, 30, 60]) {
+      const ctx = ctxOf(rings, {i1: x, i3: lane.startsWith('left') ? -100 : 100}, {i1: Y20 - below});
+      const c = cableOf(route(lane));
+      const path = R.routePath(r, c, ctx), marks = R.ringMarks(r, c, ctx);
+      const decided = path.rings.map(g => [g.passed, g.sense]);
+      const centres = R.resolveRoute(r, c, ctx).waypoints.map(w => R.pointOf(r, w, ctx));
+      const a = path.points[0], b = path.points[path.points.length - 1];
+      // 2D: an elevation, y down, no z
+      const flat = p => [p.x, -p.y];
+      const two = throughRings([flat(a), ...centres.map(flat), flat(b)], [null, ...marks, null], {lead: 4});
+      // 3D: out of each connector 40 mm first, the rings at their stand-off,
+      // and this cable spread 6 mm up at each ring it shares (scene3d's SPREAD)
+      const lift = p => ({x: p.x, y: p.y + 6, z: p.z});
+      const outA = {x: a.x, y: a.y, z: a.z + 40}, outB = {x: b.x, y: b.y, z: b.z + 40};
+      const three = throughRings([outA, ...centres.map(lift), outB], [null, ...marks, null], {lead: 30});
+      for (const got of [two, three]) {
+        const drawn = [...got.passes.map(p => [p.index, true, p.sense]), ...got.back.map(p => [p.index, false, p.sense])]
+          .sort((u, v) => u[0] - v[0]).map(([, passed, sense]) => [passed, sense]);
+        assert.deepEqual(drawn, decided, `port ${x}, ${below} below, ${lane}`);
+      }
+      // drawn from the other end (a cross-face cable's tag side): the same path, reversed
+      const pts2 = [flat(a), ...centres.map(flat), flat(b)];
+      const fwd = throughRings(pts2, [null, ...marks, null]).points;
+      const rev = throughRings([...pts2].reverse(), R.reverseMarks([null, ...marks, null])).points;
+      assert.deepEqual(rev, [...fwd].reverse(), `reversed: port ${x}, ${below} below, ${lane}`);
+      // routed2d and routePoints3d take the same marks
+      assert.ok(!/NaN/.test(routed2d([flat(a), ...centres.map(flat), flat(b)], 4, [null, ...marks, null])));
+      // without the decisions, the 3D frame would not always agree with it
+      const free = throughRings([outA, ...centres.map(lift), outB], [null, ...marks.map(m => m && {run: m.run, depth: m.depth}), null]);
+      const undecided = [...free.passes.map(p => [p.index, true, p.sense]), ...free.back.map(p => [p.index, false, p.sense])]
+        .sort((u, v) => u[0] - v[0]).map(([, passed, sense]) => [passed, sense]);
+      if (JSON.stringify(undecided) !== JSON.stringify(decided)) disagreedUnmarked++;
+      n++;
+    }
+  assert.ok(n > 100);
+  assert.ok(disagreedUnmarked > 0, 'the grid reaches cases where a frame left to itself decides otherwise');
+});
+
+test('ringMarks: with no port found there is no decision, only the ring', () => {
+  const r = rackOf();
+  const ctx = ctxOf([{via: 'guide-1', x: -150}], {i3: -100});
+  const c = cableOf([{item: 'i2', via: 'guide-1'}, {lane: 'left-front', ru: 20}]);
+  assert.deepEqual(R.ringMarks(r, c, ctx), [{run: 'x', depth: R.RING_DEPTH}, null]);
+  const ok = ctxOf([{via: 'guide-1', x: -150}], {i1: -100, i3: -100});
+  assert.deepEqual(R.ringMarks(r, c, ok), [{run: 'x', depth: R.RING_DEPTH, sense: -1, back: false}, null]);
 });
 
 test('the automatic route takes only rings that run along the tray', () => {

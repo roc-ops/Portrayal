@@ -205,34 +205,41 @@ export const stockLength = m => STOCK_M.find(s => s >= m - 1e-9) ?? Math.ceil(m 
 
 // THE PATH A CABLE TAKES, in rack coordinates (mm): its a port, every
 // waypoint's point, and its b port, each ring's centre expanded to where the
-// cable enters it and where it leaves (throughRings, #930). The routed
-// length, fill, inspect and ringFindings read this path; the drawings, which
-// place their points from their own pictures, expand them by the same
-// throughRings (routed2d and routePoints3d, given each waypoint's ringOf).
+// cable enters it and where it leaves (throughRings, #930). Each ring's way
+// through (`sense`), and whether the cable goes through it at all, is decided
+// HERE, once, in the rack's frame. The routed length, fill, capacity, inspect
+// and ringFindings read this path; the drawings, which place their points
+// from their own pictures, are handed the same decisions (ringMarks) and
+// obey them, so what is drawn is what is measured and counted.
 // Returns
-//   {points: [{x, y, z, at, item?, via?}], rings, findings}
+//   {points: [{x, y, z, at, item?, via?}], rings, findings, marks}
 // - `at` is 'a' or 'b' (a port), 'entry', 'exit' or 'face' (a ring),
 //   'pathway' (a duct or a pass-through) or 'lane';
 // - `rings`: per ring on the route, {item, via, run, depth, estimated,
 //   passed, sense, entry, exit} (sense +1 or -1 along the run; a ring not
 //   passed has `face` instead of entry and exit);
 // - `findings`: a ring the route would enter and leave by one face, as
-//   {kind: 'doubles-back', cable, item, via}.
+//   {kind: 'doubles-back', cable, item, via};
+// - `marks`: parallel to resolveRoute's waypoints, null for a lane, a duct or
+//   a pass, and for a ring {run, depth, sense, back}: what a drawing passes
+//   to routed2d or routePoints3d (ringMarks).
 // null when either port is not found on its drawing, as for routedLength.
 export function routePath(rack, cable, ctx) {
   const a = portPoint(rack, cable.a, ctx), b = portPoint(rack, cable.b, ctx);
   if (!a || !b) return null;
   const stops = [{p: a, at: 'a'}];
-  for (const w of resolveRoute(rack, cable, ctx).waypoints) {
+  const wps = resolveRoute(rack, cable, ctx).waypoints;
+  const marks = wps.map(() => null);
+  wps.forEach((w, i) => {
     const p = pointOf(rack, w, ctx);
-    if (!p) continue;
+    if (!p) return;
     const g = w.lane ? null : ctx.guidesOf(w.item).find(x => x.via === w.via);
-    stops.push({p, w, ring: ringOf(g)});
-  }
+    stops.push({p, w, i, ring: ringOf(g)});
+  });
   stops.push({p: b, at: 'b'});
-  const {points, passes} = throughRings(stops.map(s => s.p), stops.map(s => s.ring));
+  const {points, passes, back} = throughRings(stops.map(s => s.p), stops.map(s => s.ring));
   // Label each point with what it is: walk the stops, a ring taking two points when passed.
-  const passAt = new Map(passes.map(x => [x.index, x]));
+  const passAt = new Map(passes.map(x => [x.index, x])), backAt = new Map(back.map(x => [x.index, x]));
   const out = [], rings = [], findings = [];
   let n = 0;
   stops.forEach((s, k) => {
@@ -243,13 +250,37 @@ export function routePath(rack, cable, ctx) {
     if (pass) {
       out.push({...points[n++], ...tag, at: 'entry'}, {...points[n++], ...tag, at: 'exit'});
       rings.push({...ring, passed: true, sense: pass.sense, entry: pass.entry, exit: pass.exit});
+      marks[s.i] = {run: s.ring.run, depth: s.ring.depth, sense: pass.sense, back: false};
     } else {
+      const no = backAt.get(k);
       out.push({...points[n++], ...tag, at: 'face'});
-      rings.push({...ring, passed: false, face: points[n - 1]});
+      rings.push({...ring, passed: false, sense: no.sense, face: points[n - 1]});
+      marks[s.i] = {run: s.ring.run, depth: s.ring.depth, sense: no.sense, back: true};
       findings.push({kind: 'doubles-back', cable: cable.id, item: s.w.item, via: s.w.via});
     }
   });
-  return {points: out, rings, findings};
+  return {points: out, rings, findings, marks};
+}
+
+// The marks of a path drawn from its other end, for its points reversed: the
+// list reversed, and each ring passed turned to the other sense. A ring not
+// passed keeps its sense, which names the face both its neighbours are on.
+export const reverseMarks = marks => [...marks].reverse()
+  .map(m => (m && (m.sense === 1 || m.sense === -1) && m.back !== true ? {...m, sense: -m.sense} : m));
+
+// THE RING MARKS A DRAWING PASSES ON, parallel to resolveRoute(rack, cable,
+// ctx).waypoints: null for a lane, a duct or a pass-through, and for a ring
+// routePath's decision, {run, depth, sense, back}. Drop them in step with any
+// waypoint the drawing cannot place. When a port is not found there is no
+// decision, and a ring's mark is {run, depth} alone: the drawing then decides
+// it from its own points.
+export function ringMarks(rack, cable, ctx) {
+  const path = routePath(rack, cable, ctx);
+  if (path) return path.marks;
+  return resolveRoute(rack, cable, ctx).waypoints.map(w => {
+    const g = w.lane ? null : ringOf(ctx.guidesOf(w.item).find(x => x.via === w.via));
+    return g ? {run: g.run, depth: g.depth} : null;
+  });
 }
 
 // A path's length, as routedLength gives it: {measured, value} in metres.

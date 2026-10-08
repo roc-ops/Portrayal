@@ -5,15 +5,19 @@
   the point where it leaves, half the ring's `depth` either side of its centre,
   with a straight run between them. A ring that states no depth is taken as
   `RING_DEPTH`, 10 mm, marked estimated. The new `routePath(rack, cable, ctx)`
-  is that path, and `routedLength`, `fill` and `inspect` (`route.rings`) read
-  it; `routed2d` and `routePoints3d` take the rings as an optional last
-  argument and round their corners outside the ring (`throughRings` in
+  is that path, and it decides each ring once, in the rack's frame: which way
+  through, or not through at all. `routedLength` (`pathLength`), `fill`,
+  `capacityOver` and `inspect` (`route.rings`) read it, and `ringMarks(rack,
+  cable, ctx)` hands its decisions to the drawings: `routed2d` and
+  `routePoints3d` take them as an optional last argument, draw each ring the
+  way it was decided, and round their corners outside it (`throughRings` in
   `rack/route-path.js`). A route that would enter and leave a ring by one face
   is not drawn through it, is counted neither in that ring's fill nor in its
-  manager's capacity, and is reported by `ringFindings(rack, ctx)`; a point
-  steeper than 45 degrees off the run (a port below the ring) stands on
-  neither side. `pathLength(path)` measures a `routePath`. The automatic route takes only the rings on the
-  way from the port to its gutter, no longer a ring behind the port.
+  manager's capacity, and is reported by `ringFindings(rack, ctx)`. A point
+  further off the run in the face than along it (a port well below the ring)
+  stands on neither side; a manager's stand-off out of the face does not
+  count. The automatic route takes only the rings on the way from the port to
+  its gutter, no longer a ring behind the port.
   **Routed lengths change**: a ring adds up to its depth, and a cable whose
   automatic route used to double back through a ring is up to about 100 mm
   shorter. Stored routed lengths are re-measured the next time a page

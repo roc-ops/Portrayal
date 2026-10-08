@@ -1,9 +1,10 @@
 // Pure geometry for a routed cable (kept out of cables.js so node can import it).
 // A ROUTED CABLE: straight runs between its waypoints, each
 // corner rounded by r, so it reads as dressed cable rather than a hang.
-// `rings`, when given, is parallel to `pts`: a ring's {run, depth} at each
-// point that is a ring's centre (throughRings), so the cable passes through
-// it straight and its corners are rounded outside it.
+// `rings`, when given, is parallel to `pts`: null, or a ring's mark at each
+// point that is a ring's centre - route.js ringMarks gives them, with the
+// decision routePath made - so the cable passes through it straight, the way
+// it was measured, and its corners are rounded outside it (throughRings).
 export function routed2d(pts, r = 4, rings = null) {
   if (rings) pts = throughRings(pts, rings, {lead: r}).points;
   let d = `M${pts[0][0]} ${pts[0][1]}`;
@@ -27,19 +28,29 @@ export function routed2d(pts, r = 4, rings = null) {
 //
 // A point is [x, y] or [x, y, z] (the 2D drawing), or {x, y, z} (rack
 // coordinates, or a three.js vector, which is cloned). `rings[k]` is
-// {run: 'x'|'y'|'z', depth} where pts[k] is a ring's centre, and null
-// elsewhere. A run the point has no axis for (z on a 2D point) leaves the
-// point as it is: seen end-on, a ring is where the cable is.
+// {run: 'x'|'y'|'z', depth, sense?, back?} where pts[k] is a ring's centre,
+// and null elsewhere. A run the point has no axis for (z on a 2D point)
+// leaves the point as it is: seen end-on, a ring is where the cable is.
+//
+// THE DECISION, ONCE. Which way a cable goes through a ring, and whether it
+// goes through at all, is decided once, in the rack's own frame, by
+// route.js routePath, and handed on as `sense` (+1 or -1 along the run) and
+// `back` (true: it would enter and leave by one face). A mark that carries
+// them is obeyed, so a drawing, whose points sit in its own frame (a lead out
+// of the connector, an elevation with no z), draws what was measured and
+// counted. A mark without them is decided here, by the same rule:
 //
 // Which way through: the side the point before stands on; else the side the
 // point after goes to; else toward + on the run. A point stands on NEITHER
 // side when it is within half the ring's depth of the centre along the run,
-// or when it is further from the run's line than it is along it (steeper
-// than 45 degrees: a port below the ring, a little to one side, comes up
-// into it, it does not run along to it). Points before and after both
-// standing on the SAME side mean the cable would enter and leave by one face:
-// that ring is not drawn through. The cable is taken to its near face only,
-// and its index is in `back`, for the caller to report.
+// or when it is further off the run's line IN THE FACE than it is along the
+// run (steeper than 45 degrees: a port well below the ring, a little to one
+// side, comes up into it). In the face means the stand-off out of it, z, is
+// not counted for a ring that runs along x or y: how far a lacer stands out
+// of its host is not an approach angle, and every frame agrees on x and y.
+// Points before and after both standing on the SAME side mean the cable
+// would enter and leave by one face: that ring is not drawn through. The
+// cable is taken to that face only, and its index is in `back`.
 //
 // `lead` (mm, default 0) adds a point on the run outside each face, so a
 // drawing that rounds its corners rounds them there and not inside the ring.
@@ -50,8 +61,8 @@ export function routed2d(pts, r = 4, rings = null) {
 // length is measured with lead 0.
 //
 // Returns {points, passes, back}: the points in order; per ring passed,
-// {index, entry, exit, sense} (sense +1 or -1 along the run, entry and exit
-// the points in `points`); and the indexes of the rings not passed.
+// {index, entry, exit, sense} (entry and exit the points in `points`); and
+// per ring not passed, {index, sense, face}.
 const AXIS = {x: 0, y: 1, z: 2};
 const has = (p, a) => (Array.isArray(p) ? AXIS[a] < p.length : typeof p?.[a] === 'number');
 const get = (p, a) => (Array.isArray(p) ? p[AXIS[a]] : p[a]);
@@ -62,13 +73,18 @@ const gap = (p, q) => {
   return Math.hypot(...ks.map(k => (p[k] ?? 0) - (q[k] ?? 0)));
 };
 const EPS = 1e-9;
+// The axes across a run, in the face: for a ring along x or y, the other of
+// the two (the stand-off out of the face, z, is not an approach); along z,
+// both.
+const inFace = a => (a === 'z' ? ['x', 'y'] : a === 'x' ? ['y'] : ['x']);
 
 export function throughRings(pts, rings = [], {lead = 0} = {}) {
   const out = [], passes = [], back = [];
   // which side of the ring centred at o a point q stands on: -1, +1, or 0
   // (within half its depth along the run, or steeper than 45 degrees off it)
   const side = (q, o, a, half) => {
-    const v = get(q, a) - get(o, a), across = Math.sqrt(Math.max(0, gap(q, o) ** 2 - v * v));
+    const v = get(q, a) - get(o, a);
+    const across = Math.hypot(...inFace(a).filter(b => has(q, b) && has(o, b)).map(b => get(q, b) - get(o, b)));
     if (Math.abs(v) <= half + EPS || Math.abs(v) < across) return 0;
     return v > 0 ? 1 : -1;
   };
@@ -78,13 +94,16 @@ export function throughRings(pts, rings = [], {lead = 0} = {}) {
     if (!g || !(g.depth > 0) || !(a in AXIS) || !has(p, a)) { out.push(copy(p)); return; }
     const c = get(p, a), half = g.depth / 2;
     const prev = out.length ? out[out.length - 1] : null, next = pts[k + 1] ?? null;
-    const before = prev ? side(prev, p, a, half) : 0, after = next ? side(next, p, a, half) : 0;
-    if (before && before === after) {
-      out.push(along(p, a, c + before * half));
-      back.push(k);
+    const given = g.sense === 1 || g.sense === -1;
+    const before = given ? 0 : prev ? side(prev, p, a, half) : 0, after = given ? 0 : next ? side(next, p, a, half) : 0;
+    if (given ? g.back === true : before && before === after) {
+      const s = given ? g.sense : -before;
+      const face = along(p, a, c - s * half);
+      out.push(face);
+      back.push({index: k, sense: s, face});
       return;
     }
-    const sense = before ? -before : after || 1;
+    const sense = given ? g.sense : before ? -before : after || 1;
     const entry = along(p, a, c - sense * half), exit = along(p, a, c + sense * half);
     passes.push({index: k, sense, entry, exit, run: a});
     out.push(entry, exit);
