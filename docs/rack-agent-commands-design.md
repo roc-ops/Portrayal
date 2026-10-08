@@ -40,8 +40,9 @@ or "let me look at the code", the kit gave it no way to do what it needed:
 
 ### 3.1 `inspect(rack, id, ctx)`
 
-`id` is an item id (`i3`) or a cable id (`c7`). It returns a plain object for the
-caller to format, or `{error}` (GONE or CABLE_GONE).
+`id` is an item id (`i3`) or a cable id (`c7`). It is async, because a cable's loose
+ends and media come from `cableFacts`. It resolves to a plain object for the caller to
+format, or `{error}` (GONE or CABLE_GONE).
 
 **An item:**
 
@@ -143,10 +144,11 @@ passes `{slotsOf, compByRef}`. The page's own UI calls stay as they are.
     <refs>". The list is cut at 8, then "and n more".
 - Fields of the part it removes are dropped (`<path>-occupant`, or `<path>/module/...`).
 - Findings:
-  - "Removed the cables on <paths>: these ports are not on <new part>." This applies when
-    a bay swap removes ports that cables end on. The cables are kept as loose ends,
-    which is what `remove` does with `cables: 'keep'`.
-  - "c3 now runs <media> into <part>." when `mismatch` applies, given facts.
+  - "Kept the cables on <paths> as loose ends (<ids>): these ports are not on <new part>."
+    This applies when a bay swap removes ports that cables end on. The cables are kept,
+    as `remove` does with `cables: 'keep'`.
+  - "c3 now runs <media> into <part>." when `mismatch` applies, judged from the new
+    part's own `components.json` attributes (commands cannot wait for `cableFacts`).
 - Summary: "Fitted <part name> in <path> on <label>." or "Emptied <path> on <label>."
 
 ### 5.2 `field {id, path, key, value}` (new)
@@ -184,9 +186,13 @@ kept and noted as possibly stale: "c3's route was drawn for its old end."
 
 ## 6. `rack.json`
 
-`rack_index.py` adds `kind` to each device, taken from `devices.json`:
-`capability`, or the portfolio's category where the device has one. Values are plain
-words: `switch`, `router`, `patch panel`, `cable manager`, `server`, `pdu`. It is an
+`rack_index.py` adds `kind` to each device. `capability` turned out to describe how
+far a device is modelled, not what it is, so `devices.json` publishes the manifest's
+`profile` and `kind` maps from it:
+- server becomes `server`; power becomes `pdu`; passive becomes `cable manager`;
+- optical becomes `patch panel` when passive, else `optical`;
+- networking becomes `router` or `switch` from the family or description, else `network device`;
+- anything else becomes `device`. It is an
 additive field, so `format` stays 1, and `docs/format-stability.md` gets one line.
 
 ## 7. Tests (`spec/tests/js/rack-*.mjs`)
