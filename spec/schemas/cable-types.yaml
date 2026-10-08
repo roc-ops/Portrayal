@@ -1,0 +1,276 @@
+# Named cable types, compiled by cable_types_index.py into the published
+# library/dist/cable-types.json (#919, the first slice of #897).
+#
+# WHY HERE. A cable type is vocabulary, like speeds.yaml and connectors.yaml
+# beside it: one closed table that every consumer reads the same way, not a
+# part with geometry of its own. It is not a component, so it does not live
+# under library/components/, and no manifest names it yet.
+#
+# THE ID. A type's id is lower case. The bare ids `os2`, `om3`, `om4`, `om5`,
+# `cat6`, `cat6a`, `dac` and `aoc` are exactly the Rack Builder's cable
+# `media` values (kit/rack/cable-rules.js MEDIA), so a rack cable's media names
+# its type with no mapping. A refinement of one of them (`cat6a-ftp`,
+# `os2-g657a2`) names the bare media it refines in `media`. #897's later named
+# types (pickers, colours, mismatch checks) join this table under new ids and
+# new optional keys.
+#
+# THE RULE, NOT ONE NUMBER. `min_bend_radius` is `{installed, loaded}`:
+# installed is the radius once a cable is in place and unloaded, the one a
+# route or a bundle is checked against; loaded is the radius while it is
+# pulled, kept as data. Each is either `{mm: N}`, a fixed radius, or
+# `{xOD: N}`, a multiple of the cable's outside diameter, which a consumer
+# turns into millimetres with `od_mm`. `loaded` is null where no source gives
+# one.
+#
+# HOW SURE EACH VALUE IS. Every radius says its `basis`: `standard` for a
+# standard or a reliable summary of one (none of the TIA, ISO or ITU texts
+# were read directly; the summaries are cited), `convention` for vendor or
+# field practice. `sources` names entries of the `sources` table below.
+# `unverified: true` marks a figure the research could not confirm; treat it
+# as a placeholder until it is checked.
+#
+# OD. `od_mm` is a typical outside diameter, a sketch for fill and for the
+# xOD rules, not a measurement of any one cable. Where no source gives one it
+# is Portrayal's own estimate (`portrayal-estimate`), the figure the kit's
+# fill sketch already uses where it has one.
+#
+# FIBRE. A fibre cord's installed minimum is TIA-568's cable rule for the
+# cord. Its fibre class's own macrobend test radius (`fiber.min_bend`) is kept
+# as data: larger than the cord rule for standard G.652.D fibre, smaller for a
+# bend-insensitive G.657 class, for a consumer that knows the cord's maker
+# allows the tighter figure.
+#
+# VERSION. `version` is the table's own: a corrected value or a new type is a
+# minor, a removed type or a changed id is a major. `format` is the shape of
+# the published file, and only a removed or renamed key raises it.
+format: 1
+version: 1.0.0
+
+sources:
+  foa-tia568:
+    title: The Fiber Optic Association, a summary of TIA-568 fibre cabling (bend radius and pulling tension)
+    url: https://www.thefoa.org/tech/tia568b3.htm
+  elliott-min-bend:
+    title: Elliott Electric Supply, minimum bending radius table (TIA/EIA-568 and ISO 11801, an older revision)
+    url: https://www.elliottelectric.com/StaticPages/ElectricalReferences/DataComm/minimum_bending.aspx
+  truecable-bend:
+    title: trueCABLE, minimum bend radius of twisted-pair cable and patch cords
+    url: https://www.truecable.com/blogs/cable-academy/minimum-bend-radius
+  ampcom-bend:
+    title: AMPCOM, bend radius against return loss in screened cable
+    url: https://www.ampcom.com/blogs/industry-insights/bend-radius-vs-return-loss
+  hfcl-macrobend:
+    title: HFCL, the macrobend test specifications of each ITU-T fibre grade (G.652.D, G.657.A1, A2)
+    url: https://hfcl.com/insights/blogs/understanding-fiber-macrobending-specifications-and-applications-for-each-grade-of-fiber
+  itu-g652:
+    title: ITU-T Recommendation G.652, characteristics of a single-mode optical fibre and cable
+    url: https://www.itu.int/rec/T-REC-G.652
+  samm-fibre-classes:
+    title: SAMM, a summary of the ITU-T G.652 and G.657 fibre classes and their bend limits
+    url: https://samm.com/?p=4317
+  smartoptics-sfp28-dac:
+    title: Smartoptics SO-SFP28-PCUxM datasheet, SFP28 passive DAC, AWG30 and AWG26
+    url: https://smartoptics.com/wp-content/uploads/2022/12/so-sfp28-pcuxm.pdf
+  oznur-h05vv-f:
+    title: Oznur Kablo, H05VV-F 300/500 V flexible cord, technical data (outer diameters and bending radius)
+    url: https://www.oznurkablo.com.tr/en/products/300-500-V-PVC-Insulated-Multi-Core-Cables-With-Flexible-Copper-Conductors
+  portrayal-estimate:
+    title: Portrayal's own estimate of a typical diameter, a sketch and not a measurement; for a bare media type it is the fill figure in kit/rack/route.js DIAMETERS
+    url: https://github.com/roc-ops/Portrayal/blob/main/kit/rack/route.js
+
+types:
+  # ── fibre ──────────────────────────────────────────────────────────────
+  # A duplex patch cord is a two-fibre inside-plant cable: TIA-568's 25 mm
+  # installed and 50 mm under a 50 lbf (222 N) pull.
+  om3:
+    label: OM3 multimode fibre, duplex cord
+    media: om3
+    family: fiber
+    fiber: {mode: multimode, grade: OM3, core_um: 50}
+    od_mm: 3.0
+    od_sources: [portrayal-estimate]
+    min_bend_radius:
+      installed: {mm: 25, basis: standard, sources: [foa-tia568]}
+      loaded: {mm: 50, basis: standard, sources: [foa-tia568], note: under a 222 N pull}
+  om4:
+    label: OM4 multimode fibre, duplex cord
+    media: om4
+    family: fiber
+    fiber: {mode: multimode, grade: OM4, core_um: 50}
+    od_mm: 3.0
+    od_sources: [portrayal-estimate]
+    min_bend_radius:
+      installed: {mm: 25, basis: standard, sources: [foa-tia568]}
+      loaded: {mm: 50, basis: standard, sources: [foa-tia568], note: under a 222 N pull}
+  om5:
+    label: OM5 wideband multimode fibre, duplex cord
+    media: om5
+    family: fiber
+    fiber: {mode: multimode, grade: OM5, core_um: 50}
+    od_mm: 3.0
+    od_sources: [portrayal-estimate]
+    min_bend_radius:
+      installed: {mm: 25, basis: standard, sources: [foa-tia568]}
+      loaded: {mm: 50, basis: standard, sources: [foa-tia568], note: under a 222 N pull}
+  os2:
+    label: OS2 single-mode fibre (G.652.D), duplex cord
+    media: os2
+    family: fiber
+    fiber:
+      mode: single-mode
+      grade: OS2
+      class: G.652.D
+      min_bend: {mm: 30, basis: standard, sources: [itu-g652, hfcl-macrobend],
+                 note: "the class's macrobend test radius (100 turns, at most 0.1 dB at 1625 nm), not a stated minimum"}
+    od_mm: 3.0
+    od_sources: [portrayal-estimate]
+    min_bend_radius:
+      installed: {mm: 25, basis: standard, sources: [foa-tia568],
+                  note: "the cord's cable rule; the fibre class is tested at 30 mm"}
+      loaded: {mm: 50, basis: standard, sources: [foa-tia568], note: under a 222 N pull}
+  os2-g657a1:
+    label: OS2 single-mode fibre, bend-insensitive G.657.A1, duplex cord
+    media: os2
+    family: fiber
+    fiber:
+      mode: single-mode
+      grade: OS2
+      class: G.657.A1
+      min_bend: {mm: 10, basis: standard, sources: [hfcl-macrobend, samm-fibre-classes], note: the class's 1-turn test radius}
+    od_mm: 3.0
+    od_sources: [portrayal-estimate]
+    min_bend_radius:
+      installed: {mm: 25, basis: standard, sources: [foa-tia568],
+                  note: the cord's cable rule; the fibre alone allows 10 mm}
+      loaded: {mm: 50, basis: standard, sources: [foa-tia568], note: under a 222 N pull}
+  os2-g657a2:
+    label: OS2 single-mode fibre, bend-insensitive G.657.A2, duplex cord
+    media: os2
+    family: fiber
+    fiber:
+      mode: single-mode
+      grade: OS2
+      class: G.657.A2
+      min_bend: {mm: 7.5, basis: standard, sources: [hfcl-macrobend, samm-fibre-classes], note: the class's 1-turn test radius}
+    od_mm: 3.0
+    od_sources: [portrayal-estimate]
+    min_bend_radius:
+      installed: {mm: 25, basis: standard, sources: [foa-tia568],
+                  note: the cord's cable rule; the fibre alone allows 7.5 mm}
+      loaded: {mm: 50, basis: standard, sources: [foa-tia568], note: under a 222 N pull}
+
+  # ── copper twisted pair ────────────────────────────────────────────────
+  # These are patch cords. A stranded cord is 4x OD installed whether it is
+  # screened or not (TIA-568 as trueCABLE summarises it); 8x OD is the figure
+  # for solid screened horizontal cable, and ISO's 8x OD is for pulling during
+  # installation. `-ftp` is F/UTP; `-sftp` is left for S/FTP.
+  cat6:
+    label: Cat 6 U/UTP
+    media: cat6
+    family: copper
+    shield: U/UTP
+    od_mm: 6.0
+    od_sources: [portrayal-estimate]
+    min_bend_radius:
+      installed: {xOD: 4, basis: standard, sources: [elliott-min-bend, truecable-bend]}
+      loaded: {xOD: 8, basis: standard, sources: [elliott-min-bend], note: "ISO 11801, while pulled during installation"}
+  cat6-ftp:
+    label: Cat 6 F/UTP (screened) patch cord
+    media: cat6
+    family: copper
+    shield: F/UTP
+    od_mm: 7.0
+    od_sources: [portrayal-estimate]
+    min_bend_radius:
+      installed: {xOD: 4, basis: standard, sources: [truecable-bend],
+                  note: "a stranded patch cord, screened or not; 8xOD is the solid horizontal-cable figure"}
+      loaded: null
+  cat6a:
+    label: Cat 6A U/UTP
+    media: cat6a
+    family: copper
+    shield: U/UTP
+    od_mm: 7.5
+    od_sources: [portrayal-estimate]
+    min_bend_radius:
+      installed: {xOD: 4, basis: standard, sources: [elliott-min-bend, truecable-bend]}
+      loaded: {xOD: 8, basis: standard, sources: [elliott-min-bend], note: "ISO 11801, while pulled during installation"}
+  cat6a-ftp:
+    label: Cat 6A F/UTP (screened) patch cord
+    media: cat6a
+    family: copper
+    shield: F/UTP
+    od_mm: 7.5
+    od_sources: [ampcom-bend]
+    min_bend_radius:
+      installed: {xOD: 4, basis: standard, sources: [truecable-bend],
+                  note: "a stranded patch cord, screened or not; 8xOD is the solid horizontal-cable figure"}
+      loaded: null
+
+  # ── direct attach and active optical ───────────────────────────────────
+  # A DAC's radius follows its gauge. The bare `dac` is AWG30, the gauge of
+  # the short (up to 3 m) passive cords a rack mostly holds.
+  dac:
+    label: Passive DAC (twinax), AWG30
+    media: dac
+    family: dac
+    awg: 30
+    od_mm: 5.0
+    od_sources: [portrayal-estimate]
+    min_bend_radius:
+      installed: {mm: 23, basis: convention, sources: [smartoptics-sfp28-dac]}
+      loaded: null
+  dac-26awg:
+    label: Passive DAC (twinax), AWG26
+    media: dac
+    family: dac
+    awg: 26
+    od_mm: 5.0
+    od_sources: [portrayal-estimate]
+    min_bend_radius:
+      installed: {mm: 28, basis: convention, sources: [smartoptics-sfp28-dac]}
+      loaded: null
+  # TIA-568 does not cover AOC assemblies. Its rule for other premises fibre
+  # cables (a QSFP AOC carries eight fibres) is applied by analogy, so the
+  # figures are convention; vendor figures quoted for QSFP28 AOCs range from
+  # 30 to 60 mm and are unverified.
+  aoc:
+    label: AOC (active optical cable)
+    media: aoc
+    family: aoc
+    od_mm: 3.0
+    od_sources: [portrayal-estimate]
+    min_bend_radius:
+      installed: {xOD: 10, basis: convention, sources: [foa-tia568], unverified: true,
+                  note: "TIA-568's rule for other premises fibre cables, applied by analogy; vendor figures run 30 to 60 mm"}
+      loaded: {xOD: 15, basis: convention, sources: [foa-tia568], unverified: true,
+               note: "TIA-568's rule under the maximum rated pulling tension, applied by analogy"}
+
+  # ── power ──────────────────────────────────────────────────────────────
+  # No Rack Builder media names power yet; `power` is the media these share.
+  # Makers' figures for H05VV-F cord are not known to agree; this takes the
+  # one sourced figure, and marks it unverified until a second maker confirms it.
+  # A type is one connector pair on one cord (`conductor`), so a North American
+  # SJT cord is a type of its own beside these.
+  power-c13:
+    label: IEC 60320 C13/C14 power cord, H05VV-F 3G1.0
+    media: power
+    family: power
+    conductor: H05VV-F 3G1.0
+    od_mm: 7.1
+    od_sources: [oznur-h05vv-f]
+    min_bend_radius:
+      installed: {xOD: 6, basis: convention, sources: [oznur-h05vv-f], unverified: true,
+                  note: "one maker's figure, not yet confirmed by a second"}
+      loaded: null
+  power-c19:
+    label: IEC 60320 C19/C20 power cord, H05VV-F 3G1.5
+    media: power
+    family: power
+    conductor: H05VV-F 3G1.5
+    od_mm: 7.9
+    od_sources: [oznur-h05vv-f]
+    min_bend_radius:
+      installed: {xOD: 6, basis: convention, sources: [oznur-h05vv-f], unverified: true,
+                  note: "one maker's figure, not yet confirmed by a second"}
+      loaded: null
