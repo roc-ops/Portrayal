@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: tm-7124s-psu-ac
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -18,6 +18,8 @@ attrs:
   inlet: c14
   input-voltage: 100-240 VAC, 50-60 Hz, 2 A (face)
 provenance:
+  positions: >-
+    FIELDS, since 1.1.0 (docs/switch-positions-design.md, #808): `state`, each `off` or `on`. Each rocker is a SEE-SAW: one surface tipped about its centre, so the end it is set to presses in and the other end rises. O (a ring) at the left and I (a bar) at the right, as the stencil master draws them; OFF raises the I end and ON the O end, each a node shown for its position, shaded lighter toward its raised end and built in 3D as a sloped profile. The heights are estimated. The skin draws OFF; nothing held says how a unit ships.
   size: >-
     estimated - the stencil master TM-7124S (F) seats this module in the upper supply bay at
     81.86 x 30.98 (bay 81.7 x 30.97); the 2025 render shows two of them stacked at the same
@@ -31,6 +33,8 @@ provenance:
     4.18), thumbscrews 6.36 across at (4.68, 17.83) and (76.61, 17.83). The render agrees on
     every one; the inlet is upright (unrotated C14), as both draw it.
 states: [absent]
+fields:
+  state: {label: State, type: choice, options: ['off', 'on'], default: 'off'}
 elements:
   thumbscrew-left: {at: [1.5, 14.65], size: [6.36, 6.36], class: fastener}
   thumbscrew-right: {at: [73.43, 14.65], size: [6.36, 6.36], class: fastener}
@@ -39,4 +43,10 @@ parts:
   - {ref: std/c14-inlet@1, id: inlet, at: [13.03, 2.42]}
   - {ref: common/led-rect-sm@1, id: led-ac, at: [56.05, 4.2]}
   - {ref: common/led-rect-sm@1, id: led-12v, at: [62.01, 4.2]}
+relief:
+  features:
+    - {node: rocker-off, out: 2.5, profile: [[0, 1.1], [17.1, 2.5]], confidence: estimated, source: 'the tilt of a see-saw rocker: the raised end at the part''s own estimated rocker height, the low end at 0.45
+    of it, the ratio the GL-12xB GLB rocker shows (common/rocker-switch@1); no source gives this part''s; the rocker''s 2.5 is assumed'}
+    - {node: rocker-on, out: 2.5, profile: [[0, 2.5], [17.1, 1.1]], confidence: estimated, source: 'the tilt of a see-saw rocker: the raised end at the part''s own estimated rocker height, the low end at 0.45
+    of it, the ratio the GL-12xB GLB rocker shows (common/rocker-switch@1); no source gives this part''s; the rocker''s 2.5 is assumed'}
 skins: [default]
