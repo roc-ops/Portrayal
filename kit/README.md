@@ -101,7 +101,7 @@ as `@portrayal/kit/rack/<module>`:
 | `rack/fit.js` | whether a device fits at a unit, on a face, and how a shrink trims a rack |
 | `rack/managers.js` | cable managers: `placement` of a manager onto the device behind it, and moving one |
 | `rack/cable-rules.js` | cables: which two ports may be joined, `withCable`, media and lengths |
-| `rack/route.js`, `rack/route-path.js`, `rack/cable-geometry.js` | where a cable runs: `resolveRoute`, `routePath`, `routedLength`, pathway fill, `ringFindings`, and the geometry under them (`throughRings`) |
+| `rack/route.js`, `rack/route-path.js`, `rack/cable-geometry.js` | where a cable runs: `resolveRoute`, `routePath`, `routedLength`, `pathLength`, pathway fill, `ringFindings`, and the geometry under them (`throughRings`) |
 | `rack/export-data.js` | the rack as rows: `bomRows`, `cableScheduleRows` and the device-import data |
 | `rack/dcim-rules.js` | what a NetBox or Nautobot import needs of a rack |
 | `rack/validate.js` | `validate(schema, value)`, a small JSON Schema validator, and `same` |

@@ -31,17 +31,23 @@ export function routed2d(pts, r = 4, rings = null) {
 // elsewhere. A run the point has no axis for (z on a 2D point) leaves the
 // point as it is: seen end-on, a ring is where the cable is.
 //
-// Which way through: the side the point before stands on, if it stands
-// outside the ring's depth; else the side the point after goes to; else
-// toward + on the run. Points before and after both outside on the SAME side
-// mean the cable would enter and leave by one face: that ring is not drawn
-// through. The cable is taken to its near face only, and its index is in
-// `back`, for the caller to report.
+// Which way through: the side the point before stands on; else the side the
+// point after goes to; else toward + on the run. A point stands on NEITHER
+// side when it is within half the ring's depth of the centre along the run,
+// or when it is further from the run's line than it is along it (steeper
+// than 45 degrees: a port below the ring, a little to one side, comes up
+// into it, it does not run along to it). Points before and after both
+// standing on the SAME side mean the cable would enter and leave by one face:
+// that ring is not drawn through. The cable is taken to its near face only,
+// and its index is in `back`, for the caller to report.
 //
-// `lead` (mm, default 0) adds a point that far outside each face on the run,
-// clamped to half the way to its neighbour, so a drawing that rounds its
-// corners rounds them there and not inside the ring. A length is measured
-// with lead 0.
+// `lead` (mm, default 0) adds a point on the run outside each face, so a
+// drawing that rounds its corners rounds them there and not inside the ring.
+// It is never further out than half the neighbour's own distance beyond that
+// face along the run, so it never hooks back past the neighbour and two rings
+// in a row never cross their leads; a neighbour at or inside the face's
+// plane (a port under the ring) gets none, and the corner is at the face. A
+// length is measured with lead 0.
 //
 // Returns {points, passes, back}: the points in order; per ring passed,
 // {index, entry, exit, sense} (sense +1 or -1 along the run, entry and exit
@@ -59,15 +65,20 @@ const EPS = 1e-9;
 
 export function throughRings(pts, rings = [], {lead = 0} = {}) {
   const out = [], passes = [], back = [];
-  // which side of the ring centre c a point stands on: -1, +1, or 0 inside its depth
-  const side = (p, a, c, half) => { const v = get(p, a) - c; return v > half + EPS ? 1 : v < -half - EPS ? -1 : 0; };
+  // which side of the ring centred at o a point q stands on: -1, +1, or 0
+  // (within half its depth along the run, or steeper than 45 degrees off it)
+  const side = (q, o, a, half) => {
+    const v = get(q, a) - get(o, a), across = Math.sqrt(Math.max(0, gap(q, o) ** 2 - v * v));
+    if (Math.abs(v) <= half + EPS || Math.abs(v) < across) return 0;
+    return v > 0 ? 1 : -1;
+  };
   pts.forEach((p, k) => {
     const g = rings?.[k];
     const a = g?.run ?? 'x';
     if (!g || !(g.depth > 0) || !(a in AXIS) || !has(p, a)) { out.push(copy(p)); return; }
     const c = get(p, a), half = g.depth / 2;
     const prev = out.length ? out[out.length - 1] : null, next = pts[k + 1] ?? null;
-    const before = prev ? side(prev, a, c, half) : 0, after = next ? side(next, a, c, half) : 0;
+    const before = prev ? side(prev, p, a, half) : 0, after = next ? side(next, p, a, half) : 0;
     if (before && before === after) {
       out.push(along(p, a, c + before * half));
       back.push(k);
@@ -79,18 +90,19 @@ export function throughRings(pts, rings = [], {lead = 0} = {}) {
     out.push(entry, exit);
   });
   if (lead > 0) {
-    // A lead point on the run, outside each face, clamped to half the way to
-    // the neighbour, so two rings in a row never cross their leads.
+    // A lead point on the run, outside each face: at most half the
+    // neighbour's distance beyond that face ALONG THE RUN, so it never passes
+    // the neighbour (no hook) and two rings in a row never cross their leads.
     for (const pass of passes) {
       const {entry, exit, sense, run} = pass;
       const i = out.indexOf(entry), j = out.indexOf(exit);
       const prev = out[i - 1], next = out[j + 1];
       if (next) {
-        const l = Math.min(lead, gap(exit, next) / 2);
+        const l = Math.min(lead, Math.max(0, sense * (get(next, run) - get(exit, run))) / 2);
         if (l > EPS) out.splice(j + 1, 0, along(exit, run, get(exit, run) + sense * l));
       }
       if (prev) {
-        const l = Math.min(lead, gap(prev, entry) / 2);
+        const l = Math.min(lead, Math.max(0, sense * (get(entry, run) - get(prev, run))) / 2);
         if (l > EPS) out.splice(i, 0, along(entry, run, get(entry, run) - sense * l));
       }
     }

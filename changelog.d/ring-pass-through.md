@@ -9,11 +9,15 @@
   it; `routed2d` and `routePoints3d` take the rings as an optional last
   argument and round their corners outside the ring (`throughRings` in
   `rack/route-path.js`). A route that would enter and leave a ring by one face
-  is not drawn through it, is not counted in that ring's fill, and is reported
-  by `ringFindings(rack, ctx)`. The automatic route takes only the rings on the
+  is not drawn through it, is counted neither in that ring's fill nor in its
+  manager's capacity, and is reported by `ringFindings(rack, ctx)`; a point
+  steeper than 45 degrees off the run (a port below the ring) stands on
+  neither side. `pathLength(path)` measures a `routePath`. The automatic route takes only the rings on the
   way from the port to its gutter, no longer a ring behind the port.
   **Routed lengths change**: a ring adds up to its depth, and a cable whose
   automatic route used to double back through a ring is up to about 100 mm
   shorter. Stored routed lengths are re-measured the next time a page
   measures them; an entered length is never touched. Ducts and pass-throughs
-  keep a single point.
+  keep a single point. The Rack Builder's half (re-vendoring, passing `run`
+  and the ring marks to the drawings, showing the findings) is listed in
+  `docs/cable-managers-design.md` section 13.

@@ -326,21 +326,57 @@ into two points:
   9.9 mm (the CMH-5DR1U ring) thick along the run.
 - **Run.** A guide's `run`, `x` when the reader gives none: every ring in the library
   runs along `x` except the end ring of the CMH-6DR1U, which runs along `y`.
-- **Direction.** The cable enters from the side its previous point stands on. A previous
-  point within the ring's depth of its centre (a port directly under the ring) stands on
-  neither side, and the side the next point goes to decides; failing both, `+run`.
-- **Doubling back.** If the points before and after both stand outside the ring on the
-  same side, the cable would enter and leave by one face. It is not drawn through: the
-  path goes to that face and back, the ring is not counted in its fill, and
-  `ringFindings` reports it.
-- **The automatic route** takes only the rings on the way from the port toward its
-  gutter, so it never doubles back: a ring behind the port, which the old nearest-ring
-  rule could pick, is left out.
-- **One path for everything.** The routed length, fill, `inspect` (`route.rings`) and
-  the findings read `routePath`. The drawings pass each waypoint's ring to `routed2d`
-  and `routePoints3d`, which add a lead point on the run outside each face (the corner
-  radius, clamped to half the way to the neighbour), so a rounded corner is rounded
-  there and not inside the ring. A length is measured without the leads.
+- **Direction.** The cable enters from the side its previous point stands on. A point
+  stands on neither side when it is within half the ring's depth of the centre along the
+  run, or when it is further from the run's line than it is along it (steeper than 45
+  degrees: a port below the ring and a little to one side comes up into it). Then the
+  side the next point goes to decides; failing both, `+run`.
+- **Doubling back.** If the points before and after both stand on the same side, the
+  cable would enter and leave by one face. It is not drawn through: the path goes to
+  that face and back, the ring counts the cable neither in its fill nor in its
+  manager's capacity, and `ringFindings` reports it.
+- **The automatic route** takes only the rings that run along `x` and lie on the way
+  from the port toward its gutter (a port within half a ring's depth of its centre goes
+  through it), so it never doubles back: a ring behind the port, which the old
+  nearest-ring rule could pick, is left out. This is stricter than the side test above
+  on purpose. The 45 degree rule would let it reach back for any ring within the
+  manager's stand-off behind the port (55 mm on an FHD-CMP5DR), and draw the hook this
+  change removes.
+- **One path for everything.** The routed length (`pathLength`), fill, capacity,
+  `inspect` (`route.rings`) and the findings read `routePath`. The drawings pass each
+  waypoint's ring to `routed2d` and `routePoints3d`, which add a lead point on the run
+  outside each face, the corner radius out, so a rounded corner is rounded there and not
+  inside the ring. A lead is never further out than half the neighbour's own distance
+  beyond that face along the run, so it never hooks back past the neighbour and the
+  leads of two close rings never cross. A neighbour at or inside the face's plane (a
+  port under the ring) gets no lead, and the corner is at the face. A length is measured
+  without the leads.
+
+### What the Rack Builder must change
+
+The page places its 2D and 3D points from its own drawings, so it takes this geometry
+by passing the rings along:
+
+1. Re-vendor `kit/rack` at 0.5.0 (`route.js`, `route-path.js`, `cable-geometry.js`,
+   `queries.js`).
+2. In `route-context.js`, give each ring guide its `run`, from `data-guide-run` on the
+   ring component of the top view (the element `aperturesOf` reads). A `depth` may be
+   given too: the width of the ring's `-end` rect on the elevation, when it runs along
+   `x`, is a drawn figure. Without one the kit's estimate is used.
+3. Add `ringFindings(rack, ctx, nameOf)` to the routing facts and show the findings
+   where fill and capacity are shown.
+4. 2D: beside each link's points, keep each waypoint's `ringOf(guide)` (null for a lane,
+   a duct or a pass), aligned with the points that remain after unresolved ones are
+   dropped, and call `routed2d([a, ...via, b], 4, [null, ...rings, null])`; a cross-face
+   cable drawn from its other end reverses the rings with the points.
+5. 3D: return the same marks with the waypoint positions, and call
+   `routePoints3d(THREE, a, b, wps, 30, rings)`. The spread of cables across a shared
+   ring applies to its centre, before the expansion.
+6. Update the routing checks for the new ring choice and lengths, and add a browser
+   check that a cable's 3D points between a ring's entry and exit share the ring
+   centre's other two coordinates (parallel to `run`).
+7. Stored routed lengths re-measure on the next render (`lengths.routed`); entered ones
+   are never touched.
 
 Ducts and pass-throughs keep a single point. A duct is an open channel with finger gaps
 along its run: a cable enters and leaves it sideways through any gap, and turning inside

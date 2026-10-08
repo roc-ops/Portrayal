@@ -102,7 +102,9 @@ test('a ring approached at 90 degrees: the bend is at its face, outside, and it 
 
 test('a route that would enter and leave a ring by one face is a finding, not drawn through, and not counted in fill', () => {
   const r = {...rackOf(), cables: [cableOf([{item: 'i2', via: 'guide-1'}, {lane: 'right-front', ru: 20}, {lane: 'right-front', ru: 30}])]};
-  const ctx = ctxOf([{via: 'guide-1', x: -150, aperture: {w: 32, h: 29.5}}], {i1: -100, i3: 100});
+  // The port is 110 mm right of the ring along the run and 55 mm off its line
+  // (the lacer stands 55 mm out): it stands on the ring's right, as does the lane.
+  const ctx = ctxOf([{via: 'guide-1', x: -150, aperture: {w: 32, h: 29.5}}], {i1: -40, i3: 100});
   const path = R.routePath(r, r.cables[0], ctx);
   assert.deepEqual(path.findings, [{kind: 'doubles-back', cable: 'c1', item: 'i2', via: 'guide-1'}]);
   assert.deepEqual(path.points.map(p => p.at), ['a', 'face', 'lane', 'lane', 'b']);
@@ -162,8 +164,15 @@ test('routePoints3d with rings: every point inside the ring is on the run, so th
   assert.ok(inside.length >= 2, 'the entry and exit are there');
   assert.ok(inside.every(p => Math.abs(p.y - 30) < 1e-9 && Math.abs(p.z - 55) < 1e-9), JSON.stringify(inside));
   // and the points either side of the faces, on the run, so the curve is tangent to it there
-  // (the lead in: r, clamped to half the way from the point before)
-  assert.ok(pts.some(p => p.x > -145 && p.y === 30 && p.z === 55), 'a lead point outside the entry face');
+  // The point before (out of the port, x -150) is under the ring, not beyond
+  // its entry face: no lead in, so no hook; the corner is at the face.
+  assert.ok(!pts.some(p => p.x > -145 && p.y === 30 && p.z === 55), 'no lead in past the point before');
+  // No hook: along the run, x only rises from the point under the ring to the
+  // entry face (-145), and only falls from there to the lane.
+  const xs = pts.map(p => p.x), e = xs.indexOf(-145);
+  assert.ok(e > 0 && xs.slice(0, e + 1).every((x, k) => k === 0 || x >= xs[k - 1] - 1e-9)
+    && xs.slice(e).every((x, k, l) => k === 0 || x <= l[k - 1] + 1e-9), `x along the path: ${xs.join(' ')}`);
+  assert.equal(Math.max(...xs), -145);
   assert.ok(pts.some(p => p.x < -155 && p.y === 30 && p.z === 55), 'a lead point outside the exit face');
   // without rings, the waypoint itself is a corner, as before
   const plain = routePoints3d(THREE, A, B, wps, 30);
@@ -179,9 +188,90 @@ test('inspect reads a cable\'s rings as routePath measured them; a doubled-back 
   assert.deepEqual(got.route.rings, [{item: 'i2', via: 'guide-1', run: 'x', depth: R.RING_DEPTH, estimated: true, passed: true,
     sense: -1, entry: [-145, Y20r, Z], exit: [-155, Y20r, Z]}]);
   const back = {...r, cables: [cableOf([route[0], {lane: 'right-front', ru: 20}, {lane: 'right-front', ru: 30}])]};
-  const got2 = await inspect(back, 'c1', {chassisOf, route: ctxOf([{via: 'guide-1', x: -150}], {i1: -100, i3: 100})});
+  const got2 = await inspect(back, 'c1', {chassisOf, route: ctxOf([{via: 'guide-1', x: -150}], {i1: -40, i3: 100})});
   assert.deepEqual(got2.route.rings.map(g => [g.passed, g.face]), [[false, [-145, Y20r, Z]]]);
   // no rings on the route: no `rings` key, as before
   const plain = await inspect({...rackOf(), cables: [cableOf([{lane: 'left-front', ru: 20}])]}, 'c1', {chassisOf, route: ctx});
   assert.equal('rings' in plain.route, false);
+});
+
+test('no hook in 2D: a ring approached at 90 degrees gets no lead past the point before, nor past the point after', () => {
+  const ring = {run: 'x', depth: 10};
+  // down onto the ring's centre at x 100, through it to the left, then down again at x -50
+  const {points} = throughRings([[100, 40], [100, 0], [-50, 0], [-50, -200]], [null, ring, null, null], {lead: 30});
+  const xs = points.map(p => p[0]);
+  assert.equal(Math.max(...xs), 105, `x: ${xs.join(' ')}`);       // the entry face, never beyond it
+  assert.equal(Math.min(...xs), -50, `x: ${xs.join(' ')}`);
+  // the exit side has room: a lead point, 30 out along the run
+  assert.ok(points.some(p => p[0] === 65 && p[1] === 0));
+  const d = routed2d([[100, 40], [100, 0], [-50, 0], [-50, -200]], 30, [null, ring, null, null]);
+  for (const x of d.match(/[MLQ ](-?[\d.]+) /g).map(t => +t.slice(1))) assert.ok(x <= 105 && x >= -50, d);
+  // and the mirror: a point after the exit that is under it (in band) gets no lead out
+  const m = throughRings([[0, 0], [100, 0], [100, -40]], [null, ring, null], {lead: 30}).points;
+  assert.deepEqual(m.map(p => p[0]), [0, 65, 95, 105, 100]);
+});
+
+test('two rings close together: their leads are clamped and never cross', () => {
+  const ring = {run: 'x', depth: 10};
+  // centres 14 apart: 4 mm between the first exit (105) and the second entry (109)
+  const {points} = throughRings([[0, 0], [100, 0], [114, 0], [300, 0]], [null, ring, ring, null], {lead: 30});
+  const xs = points.map(p => p[0]);
+  assert.ok(xs.every((x, k) => k === 0 || x >= xs[k - 1]), `x: ${xs.join(' ')}`);
+  // (unclamped, the 30 mm leads would reach 135 and 79, back across each other)
+  assert.ok(xs.includes(105) && xs.includes(109) && xs.filter(x => x > 105 && x < 109).length === 2, `x: ${xs.join(' ')}`);
+});
+
+test('a point beside the ring but far off its line is on neither side: no false double-back', () => {
+  const ring = {run: 'x', depth: 10};
+  // 6 mm along the run, 80 mm below: it comes up into the ring; the next point is on the same side
+  const got = throughRings([[106, -80], [100, 0], [300, 0]], [null, ring, null]);
+  assert.deepEqual(got.back, []);
+  assert.deepEqual(got.points, [[106, -80], [95, 0], [105, 0], [300, 0]]);
+});
+
+test('an edited route through a ring just behind the port is not a finding (port at 120, ring 4 at 110)', () => {
+  const r = rackOf();
+  const rings = [-205, -110, 0, 110, 205].map((x, i) => ({via: `guide-${i + 1}`, x}));
+  const ctx = ctxOf(rings, {i1: 120, i3: 120});
+  const c = cableOf([{item: 'i2', via: 'guide-4'}, {item: 'i2', via: 'guide-5'}, {lane: 'right-front', ru: 20}, {lane: 'right-front', ru: 30}]);
+  const path = R.routePath(r, c, ctx);
+  assert.deepEqual(path.findings, []);
+  assert.deepEqual(path.rings.map(g => [g.via, g.passed, g.sense]), [['guide-4', true, 1], ['guide-5', true, 1]]);
+});
+
+test('the automatic route takes only rings that run along the tray', () => {
+  const r = rackOf();
+  const rings = [{via: 'guide-1', x: -205}, {via: 'up', x: -150, run: 'y'}, {via: 'guide-2', x: -110}];
+  const ctx = ctxOf(rings, {i1: -100, i3: -100});
+  assert.deepEqual(R.autoRoute(r, cableOf(), ctx).filter(w => w.via).map(w => w.via), ['guide-2', 'guide-1']);
+});
+
+test('the automatic route never doubles back at either end, a lacer on each device', () => {
+  // sw at U20 and pp at U30, each with a lacer: B's rings are met in reverse, from the lane to its port
+  let r = add(add(add(add(M.newRack(), 'sw', 20), 'lacer', 20, {on: 'i1', unit: 1}), 'pp', 30), 'lacer', 30, {on: 'i3', unit: 1});
+  const rings = [-205, -110, 0, 110, 205].map((x, i) => ({kind: 'ring', face: 'front', via: `guide-${i + 1}`, x}));
+  for (const xa of [-230, -112, -3, 0, 3, 108, 230]) for (const xb of [-230, -150, -112, -3, 0, 3, 100, 112, 230]) {
+    const ctx = {chassisOf, guidesOf: id => (id === 'i2' || id === 'i4' ? rings : []),
+      portX: end => (end.item === 'i1' ? xa : xb), portY: () => null};
+    const c = {...cableOf(), route: []};
+    const route = R.autoRoute(r, c, ctx);
+    assert.ok(route.some(w => w.item === 'i4') || xb === 230 || xb === -230, `B's lacer used: ${xa} ${xb}`);
+    assert.deepEqual(R.routePath(r, c, ctx).findings, [], `ports at ${xa} and ${xb}`);
+  }
+});
+
+test('capacity, like fill, does not count a cable at a manager it only doubles back from', () => {
+  SIZES.lacer.capacity = {count: 1, basis: 'test'};
+  try {
+    const ring = [{via: 'guide-1', x: -150}];
+    const ctx = ctxOf(ring, {i1: -40, i3: -100});
+    const through = cableOf([{item: 'i2', via: 'guide-1'}, {lane: 'left-front', ru: 20}, {lane: 'left-front', ru: 30}]);
+    // from the port at -40 to the ring at -150 and back to the right-hand lane: a double-back
+    const back = {...cableOf([{item: 'i2', via: 'guide-1'}, {lane: 'right-front', ru: 20}, {lane: 'right-front', ru: 30}]), id: 'c2'};
+    const two = {...rackOf(), cables: [through, {...through, id: 'c2'}]};
+    assert.deepEqual(R.capacityOver(two, ctx), [{item: 'i2', count: 2, capacity: 1}]);
+    const mixed = {...rackOf(), cables: [through, back]};
+    assert.deepEqual(R.routePath(mixed, back, ctx).findings.map(f => f.via), ['guide-1']);
+    assert.deepEqual(R.capacityOver(mixed, ctx), []);
+  } finally { delete SIZES.lacer.capacity; }
 });

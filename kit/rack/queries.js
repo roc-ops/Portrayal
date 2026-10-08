@@ -8,7 +8,7 @@ import {fits, isRackFace, heightOf} from './fit.js';
 import {placement, managersOf} from './managers.js';
 import {uLabel} from './model.js';
 import {portFree, endKey, proposeMedia, mismatch, endName, carriedU, portPathOf, matches, lengthText} from './cable-rules.js';
-import {lanesOf, pathwaysOf, resolveRoute, routedLength, routePath, routeText} from './route.js';
+import {lanesOf, pathwaysOf, resolveRoute, pathLength, routePath, routeText} from './route.js';
 import {catalogEntries} from './catalog.js';
 import {GONE, CABLE_GONE} from './commands.js';
 import {slotEnv, slotTree, partName, partOf} from './slots.js';
@@ -192,14 +192,14 @@ async function cableInfo(rack, cable, ctx) {
   if (ctx.route) {
     try {
       waypoints = resolveRoute(rack, cable, ctx.route).waypoints;
-      const r = routedLength(rack, cable, ctx.route);
-      routed = r ? {metres: Math.round(r.measured * 100) / 100, stock: r.value} : null;
-      // the rings it passes, as routePath measured them (#930): which way
-      // through, the depth (and whether that is estimated), and where it
-      // enters and leaves, in mm; a ring it would enter and leave by one face
-      // is `passed: false`
-      const at = p => [p.x, p.y, p.z].map(v => Math.round(v * 10) / 10);
+      // one path for the length and the rings (#930)
       const path = routePath(rack, cable, ctx.route);
+      const r = pathLength(path);
+      routed = r ? {metres: Math.round(r.measured * 100) / 100, stock: r.value} : null;
+      // the rings it passes: which way through, the depth (and whether that
+      // is estimated), and where it enters and leaves, in mm; a ring it would
+      // enter and leave by one face is `passed: false`
+      const at = p => [p.x, p.y, p.z].map(v => Math.round(v * 10) / 10);
       if (path?.rings.length) rings = path.rings.map(g => ({item: g.item, via: g.via, run: g.run, depth: g.depth,
         estimated: g.estimated, passed: g.passed, ...(g.passed ? {sense: g.sense, entry: at(g.entry), exit: at(g.exit)} : {face: at(g.face)})}));
     } catch { routed = null; rings = null; }

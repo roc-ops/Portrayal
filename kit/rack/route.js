@@ -78,7 +78,12 @@ function through(m, pane, portX, side, crossing, ctx) {
   if (rings.length) {
     // The rings on the way out: from the port toward `side`. A ring behind
     // the port would have the cable enter and leave by one face (#930); a
-    // port within a ring's depth of its centre is under it, and goes through.
+    // port within half a ring's depth of its centre is under it, and goes
+    // through. Stricter than throughRings' side test, which also calls a
+    // point steeper than 45 degrees off the run neither side: that would
+    // let the automatic route reach back for a ring up to the manager's
+    // stand-off behind the port (55 mm on an FHD-CMP5DR), which is the
+    // hook it must not draw; every route chosen here passes that test.
     // A ring that runs along x only: one that runs up or across the face is
     // not on the way along the tray.
     const half = g => ringOf(g).depth / 2;
@@ -247,8 +252,8 @@ export function routePath(rack, cable, ctx) {
   return {points: out, rings, findings};
 }
 
-export function routedLength(rack, cable, ctx) {
-  const path = routePath(rack, cable, ctx);
+// A path's length, as routedLength gives it: {measured, value} in metres.
+export function pathLength(path) {
   if (!path) return null;
   const pts = path.points;
   let mm = 0;
@@ -256,6 +261,7 @@ export function routedLength(rack, cable, ctx) {
   const measured = mm / 1000 + 2 * END_ALLOWANCE_M;
   return {measured, value: stockLength(measured)};
 }
+export const routedLength = (rack, cable, ctx) => pathLength(routePath(rack, cable, ctx));
 
 // Every ring a cable's route would enter and leave by one face, rack-wide,
 // with a sentence for each: what the page and an agent report. A cable whose
@@ -299,12 +305,15 @@ export function fill(rack, ctx) {
   });
 }
 
-// Managers whose stated capacity the cables through them exceed.
+// Managers whose stated capacity the cables through them exceed. As in fill,
+// a ring a cable only doubles back from does not carry it.
 export function capacityOver(rack, ctx) {
   const by = new Map();
-  for (const c of rack.cables || [])
+  for (const c of rack.cables || []) {
+    const notThrough = new Set((routePath(rack, c, ctx)?.findings || []).map(f => `${f.item}|${f.via}`));
     for (const w of resolveRoute(rack, c, ctx).waypoints)
-      if (w.item) (by.get(w.item) || by.set(w.item, new Set()).get(w.item)).add(c.id);
+      if (w.item && !notThrough.has(`${w.item}|${w.via}`)) (by.get(w.item) || by.set(w.item, new Set()).get(w.item)).add(c.id);
+  }
   const out = [];
   for (const [item, set] of by) {
     const cap = ctx.chassisOf(itemOf(rack, item)?.ref)?.capacity?.count;
