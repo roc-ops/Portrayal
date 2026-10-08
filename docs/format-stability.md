@@ -182,6 +182,59 @@ rack-side part across its 45 units, which is wrong and visible, as the
 rack-face case was. A lab that fails its schema or a check (lint L139 to L142,
 L153, L154) is not written, and the build stops.
 
+## The cable types file
+
+`cable-types.json` names the cable types a rack tool can lay: each one's
+media, a typical outside diameter and its minimum bend radius, every figure
+with its source. `cable_types_index.py` writes it from
+`spec/schemas/cable-types.yaml` and refuses a table that fails its checks, so
+the build stops. It is new at `contract: 2` and did not raise it.
+
+```json
+{"format": 1, "version": "1.0.0", "generated-from": "spec/schemas/cable-types.yaml",
+ "sources": {"foa-tia568": {"title": "...", "url": "https://..."}},
+ "types": {"cat6a": {"id": "cat6a", "label": "Cat 6A U/UTP", "media": "cat6a",
+   "family": "copper", "shield": "U/UTP", "od_mm": 7.5, "od_sources": ["portrayal-estimate"],
+   "min_bend_radius": {
+     "installed": {"xOD": 4, "basis": "standard", "sources": ["elliott-min-bend"]},
+     "loaded": {"xOD": 8, "basis": "standard", "sources": ["elliott-min-bend"]}}}}}
+```
+
+`format` is 1 and versions the shape: a removed or renamed key raises it, a
+new key does not. `version` versions the table's contents, so a changed
+figure is deliberate: a corrected value or a new type is a minor, a removed
+type or a changed id is a major.
+
+Each type, keyed by its `id`, always carries:
+
+- `id`, `label`, and `media`: the Rack Builder cable media it is a kind of.
+  The bare ids `os2`, `om3`, `om4`, `om5`, `cat6`, `cat6a`, `dac` and `aoc` are
+  those media values themselves, so a rack cable's media names its type. A
+  refinement (`cat6a-stp`, `os2-g657a2`, `dac-26awg`) has its own id and
+  names the media it refines. `power` is the media of the power cords, which
+  no Rack Builder media names yet.
+- `family`: `fiber`, `copper`, `dac`, `aoc` or `power`.
+- `od_mm` and `od_sources`: a typical outside diameter, a sketch and not a
+  measurement of any one cable.
+- `min_bend_radius`: `{installed, loaded}`. Installed is the radius once the
+  cable is in place and unloaded, which a route or a bundle is checked
+  against; loaded is the radius while it is pulled, and is data only. Each is
+  `{mm}`, a fixed radius, or `{xOD}`, a multiple of `od_mm`, with `basis`
+  (`standard` or `convention`), `sources` (keys of `sources`), and optionally
+  `note` and `unverified: true`, which marks a placeholder. `loaded` is `null`
+  where no source gives one; `installed` is always present.
+
+A type may also carry `fiber` (`mode`, `grade`, `core_um`, and for a named
+class `class` and its own `min_bend`), `shield` or `awg`. A fibre type's
+installed radius is already the larger of its cable rule and its fibre
+class's limit; `fiber.min_bend` is kept for a consumer that knows the cord
+allows the tighter figure.
+
+The kit's `rack/cable-types.js` reads it: `radiusMm(type)` turns a radius into
+millimetres, `bendLookup(types)` gives a cable's installed radius from its
+`type`, else its `media`, and `loadCableTypes(dist)` fetches the file and
+refuses any `format` but 1.
+
 ## The rack catalogue
 
 `rack.json` is the catalogue a rack tool reads in one fetch, so it need not open

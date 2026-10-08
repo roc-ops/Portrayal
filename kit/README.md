@@ -89,7 +89,7 @@ Plain ES modules. No bundler, no build step.
 ## Racks
 
 The `rack/` modules are the Rack Builder's rules, without its page. They read
-no DOM and fetch nothing but the catalogue, so the same rack is checked the
+no DOM and fetch nothing but the catalogue and the cable types, so the same rack is checked the
 same way in a browser, in node and in an agent. Each is imported on its own,
 as `@portrayal/kit/rack/<module>`:
 
@@ -101,6 +101,7 @@ as `@portrayal/kit/rack/<module>`:
 | `rack/fit.js` | whether a device fits at a unit, on a face, and how a shrink trims a rack |
 | `rack/managers.js` | cable managers: `placement` of a manager onto the device behind it, and moving one |
 | `rack/cable-rules.js` | cables: which two ports may be joined, `withCable`, media and lengths |
+| `rack/cable-types.js` | the cable types (`cable-types.json`): `loadCableTypes(dist)`, and `radiusMm`, `installedRadiusMm` and `bendLookup`, a type's or a cable's minimum bend radius in millimetres |
 | `rack/route.js`, `rack/route-path.js`, `rack/cable-geometry.js` | where a cable runs: `resolveRoute`, `routedLength`, pathway fill, and the geometry under them |
 | `rack/export-data.js` | the rack as rows: `bomRows`, `cableScheduleRows` and the device-import data |
 | `rack/dcim-rules.js` | what a NetBox or Nautobot import needs of a rack |
