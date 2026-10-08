@@ -85,15 +85,28 @@ derive a cable's bundle from the bundles (section 5.3).
   only the rack's own cables, items and bundles), so **`parseDoc` runs it** on
   every rack, after reading the cables. A reader that only calls `parseDoc`
   therefore gets the same consistent rack as the editor. It is pure and
-  idempotent, so running it again changes nothing. Each repair is a sentence:
-  `parseDoc(input, {notes})` pushes them onto the `notes` array a caller passes
-  (none is kept in the document), and the editor's `loadDoc` shows them as it
-  shows `settleManagers`' notices. The repairs:
+  idempotent, so running it again changes nothing, and gives no notes. The
+  notes therefore come from the `parseDoc` call and travel with the document:
+  - `parseDoc(input, {notes})` pushes each repair's sentence onto the `notes`
+    array the caller passes. None is kept in the document.
+  - The editor's `loadDoc` gains the same option, `loadDoc(next, {notes})`, and
+    returns those sentences in its `findings`, as notes, ahead of the
+    `settleManagers` notices it already returns. `loadDoc` receives a document
+    that is already parsed, so it does not run `settleBundles` again.
+  - The page passes the array it gave `parseDoc` on to `loadDoc`. A reader that
+    calls only `parseDoc` reads its own array.
+
+  The repairs:
   - a member naming no cable is dropped;
   - a cable named by two bundles stays in the first;
   - a number used twice stays with the first, and the second is renumbered;
-  - a bundle whose id is also an item's or a cable's id gets a fresh `b` id,
-    so an id names one thing (section 5.3).
+  - a bundle whose id is also an item's or a cable's id gets a fresh id, so an
+    id names one thing (section 5.3).
+
+  **A fresh bundle id** is `nextId` with the prefix `b` over every id in the
+  rack: the items', the cables' and the bundles'. `settleBundles` and
+  `bundle.create` both take it that way, so a new bundle can never take an id
+  an item or a cable has.
 
   Nothing else is dropped, and a bundle left with no members is kept
   (section 4.5).
@@ -104,10 +117,16 @@ derive a cable's bundle from the bundles (section 5.3).
   cable go through one helper that does both, and the summary says so.
 - **Ids in use count the bundles.** As `itemIdsInUse` counts the item ids a
   cable end names, a new `cableIdsInUse(rack)` counts every cable id a bundle
-  member names, and `withCable` and the repair in `readCables` take the next
-  id past them. `itemIdsInUse` also counts every item id a bundle's trunk or
-  peel point names (`{item, via}`), so a removed manager's id is not handed to
-  the next device while a trunk still names it (section 4.6).
+  member names, and `withCable` takes the next id past them. `itemIdsInUse`
+  also counts every item id a bundle's trunk or peel point names
+  (`{item, via}`), so a removed manager's id is not handed to the next device
+  while a trunk still names it (section 4.6). The loader's repairs count the
+  same ids, from the file as written:
+  - `readItems`' `taken` list, which already holds the items' ids and the ids
+    cable ends name, also holds the item ids of every trunk and peel point;
+  - `readCables` is passed the bundles as written, `readCables(list,
+    bundles)`, and its repair takes a fresh cable id past the ids their
+    members name.
 
 ### 2.3 The schema, and the document's version
 
@@ -179,12 +198,20 @@ ctx = {chassisOf,   // the editor's own; always present
   render has fetched the faces (the site's `route-context.js`,
   `routeFacts(...).ctx`). The caller passes both through 0.4.0's per-call
   context, `ed.apply(cmds, {ctx: {route, bendOf}})`, and the same way to
-  `preview`, `inspect` and `describe`. **portrayal-site#142 passes the last
+  `preview`. `inspect` and `describe` are module functions in `queries.js`,
+  not editor methods, so their caller builds the whole `{chassisOf, route,
+  bendOf}` itself and passes it. **portrayal-site#142 passes the last
   render's `route` and `bendOf` on every bundle command and query**, from the
   page's own controls and from its WebMCP tools alike. Tests build them from
   fixtures.
 - A reader that throws counts as missing, as in 0.4.0's `inspect`: not
   measured, never an error.
+- **Waypoint checks.** 0.4.0's `waypointError` reads a flat `guidesOf` from the
+  context it is given. The bundle commands call it with `{chassisOf, guidesOf:
+  ctx.route?.guidesOf}`. #921 changes `cable.route` to do the same, reading
+  `ctx.route.guidesOf` and keeping a flat `ctx.guidesOf` as a fallback for
+  0.4.0 callers, so a `cable.route` and a bundle command in one batch check
+  waypoints against the same readers.
 
 What needs the routing readers, and what each command does without them:
 
@@ -194,7 +221,7 @@ What needs the routing readers, and what each command does without them:
 | `bundle.create` with `route` | made; its waypoints are checked as 0.4.0's `cable.route` checks them without `guidesOf` (against the catalogue's pathways) |
 | `bundle.add` | made; membership needs no route |
 | `bundle.peel` with no `at` | made |
-| `bundle.peel` with `at` | `at` is checked against the stored trunk, which needs no readers; `end` is then required, and refused when left out: "Say which end c7 heads for, a or b: the routes are not known here." |
+| `bundle.peel` with `at` | `at` is checked against the stored trunk, which needs no readers. `end` is then required, and refused when left out: "Say which end c7 heads for, a or b: the routes are not known here." Whether `at` is at or past the member's peel point for its other end depends on which way the member runs along the trunk, which needs its route, so when it has one the peel is refused: "c7 already leaves Bundle 2 at pp-1 ring 1 for its a end, and the routes are not known here to check this one against it." |
 | `bundle.update {route: null}` | refused, as `bundle.create` with no `route` |
 | `bundle.update`, any other argument | made |
 | `bundle.remove` | made |
@@ -213,8 +240,10 @@ given, and otherwise ends "not checked" (section 5.3).
 ### 3.2 The five commands
 
 Batches: `resolve` swaps `"@name"` for an id in `id` and in a cable end's
-`item` today. It also swaps the `cable` argument and each entry of `cables`, so
-one batch can add cables and bundle them.
+`item` today. It also swaps the `cable` argument, each entry of `cables`, and
+the `item` of every waypoint in a `route` and in `at`. So one batch can place a
+manager, add cables, and bundle them through the manager's rings. The same
+waypoint swap applies to `cable.route`.
 
 | command | arguments | does |
 |---|---|---|
@@ -268,7 +297,11 @@ to that waypoint and runs on its own from there to one end."*
   the summary names it: "c7 leaves Bundle 2 at left-front U24 for its b end."
   That measure needs `ctx.route`; without it, `end` is required (section 3.1).
 - A peel point that would leave the cable no run in the bundle (its `a` point
-  at or past its `b` point along the trunk) is refused.
+  at or past its `b` point along the trunk, in the direction the member runs)
+  is refused. The direction comes from the member's route, so it needs
+  `ctx.route`; without it, a peel for one end of a member that already has a
+  peel point for its other end is refused (section 3.1). A pair in the wrong
+  order from a file is stale (section 4.6).
 
 ### 3.6 `bundle.update`
 
@@ -327,27 +360,31 @@ Working it out needs `ctx.route` (section 3.1):
    `left-front`, one from U20 and one from U22, both to U30, both use the
    element `left-front` U22-U30.
 3. **Shared elements** are those used by two or more members.
-4. **Direction.** The first cable named sets the direction. Each other member
-   is aligned to it before anything is ordered: it is reversed when the shared
-   elements it has in common with the members already aligned appear in the
-   opposite order. Members are aligned in the order named, each against all
-   the members aligned before it. A member that shares nothing with those yet
-   is aligned after the others.
-5. **One simple path.** Join two shared elements wherever they are next to
-   each other on some aligned member's route, counting only its shared
-   elements. The result must be one simple path: connected, with no element
-   joined to more than two others, and no loop. Each member's shared elements
-   must also be one unbroken stretch of that path, in its order. So members
-   may join the path and leave it anywhere along it: fan-in at a lacer's
-   successive rings, and fan-out to devices along a lane, are both legal.
-   What is refused:
-   - **A fork:** a shared element joined to three others, because some
-     members go on one way and some another. "c1 and c3 part after left-front
-     U30: c1 goes on to pp-1 ring 1, c3 to left-rear U30. Bundle them
-     separately, or give the bundle a route."
-   - **Leaving and rejoining:** a member whose shared elements are not one
-     unbroken stretch. "c5 leaves the others at mgr-1 ring 3 and meets them
-     again at left-front U20. Give the bundle a route."
+4. **The shape.** Join two shared elements wherever they are next to each
+   other on some member's route, counting only its shared elements (a member
+   that passes A, then unshared X, then B joins A to B). The joins have no
+   direction. Add the members' joins in the order the cables were named. The
+   shape is then judged, in this order:
+   - **A loop means leaving and rejoining.** A member that leaves the others
+     and meets them again skips the shared elements between, so its join
+     closes a loop. Refused, naming the member whose join closed it: "c5
+     leaves the others at mgr-1 ring 3 and meets them again at left-front U20.
+     Give the bundle a route."
+   - **A three-way element means a fork,** when there is no loop: some members
+     go on one way and some another, at least two on each branch (a branch
+     with one cable on it shares nothing, so it is just that cable leaving).
+     Refused: "Bundle members part after left-front U30: c1 and c2 go on to
+     pp-1 ring 1, c3 and c4 to left-rear U30. Bundle them separately, or give
+     the bundle a route."
+   - Otherwise the shape is **one simple path**, and each member's shared
+     elements are an unbroken stretch of it by construction (a gap would have
+     made a loop). So members may join the path and leave it anywhere along
+     it: fan-in at a lacer's successive rings, and fan-out to devices along a
+     lane, are both legal.
+5. **Direction.** The path is oriented by the first cable named: it runs the
+   way that cable runs, from its `a` end to its `b` end. Each member's own
+   direction along the trunk is then read off the order in which its route
+   meets the path.
 6. **Disconnected groups are refused.** "c1 and c2 share mgr-1 ring 5, and c3
    and c4 share pp-1 ring 9, but the two groups share nothing. Bundle them
    separately, or give the bundle a route." Joining across the gap would
@@ -370,6 +407,11 @@ bundle with no change of their own. A member's route is:
 > its own route up to where it joins the trunk, then the trunk to where it
 > leaves, then its own route on to its far port.
 
+- **Meeting the trunk** is defined on the elements of section 4.1. A member
+  meets the trunk at a pathway waypoint both pass through, and on a lane where
+  its own run on that lane overlaps the trunk's in U. On a lane, the meeting
+  point is the first overlapping U in the direction the member is running, and
+  it leaves the lane run at the last overlapping U.
 - **Join and leave.** By default, a member joins where its own route first
   meets the trunk and leaves where its own route last does. A member going to a
   device at U24, in a trunk up to U30, therefore leaves at U24 by itself, with
@@ -421,8 +463,17 @@ The size check asks a pathway two things, as the site's routing design says
 `pathwaysOn(rack, trunk, ctx)`, returns each pathway the trunk passes, with its
 `aperture` (`{w, h}`, or none) and a `radius` if it states one. Rings, ducts
 and pass-throughs come from `ctx.route.guidesOf`, as for fill: a ring's
-aperture is its component's, a pass-through's is its rect, and a horizontal
-duct's is the site's estimate, a square on the duct's drawn height.
+aperture is its component's, and a pass-through's is its rect.
+
+A duct's aperture is not stated by any part today, so it is estimated, and an
+estimate must be told apart from a stated aperture. The site's
+`guidesFromRects` (`route-context.js`) gives every duct guide `{w: r.h,
+h: r.h}`, a square on its drawn height. That changes, in portrayal-site#142:
+- each guide also carries its `run` (`x` or `y`), read from `data-guide-run`;
+- an estimated aperture carries `estimated: true`;
+- the square on the drawn height is given only to a duct that runs along `x`
+  (a horizontal duct). A duct that runs along `y` gets no estimate from the
+  site; the kit makes its own (below).
 
 #926 runs a lane through a vertical duct's centre line where a zero-U duct
 stands beside the rails. The lookup then also returns that duct for the lane
@@ -436,8 +487,9 @@ vertical duct's drawn height is its length. Its cross-section is taken as:
   fingers and cover included, so it is an upper bound, and the result is
   marked estimated.
 
-When a duct guide states an aperture, that wins. Until #926 lands, lanes have
-no aperture and do not limit a bundle.
+An aperture without `estimated` is stated by the part, and wins over either
+estimate. A check against an estimated aperture says so in its finding. Until
+#926 lands, lanes have no aperture and do not limit a bundle.
 
 ### 4.5 A bundle of fewer than two cables
 
@@ -448,7 +500,8 @@ so says "Bundle 2 now holds one cable." `describe` and `inspect` show it
 ### 4.6 Edge cases
 
 - **A stale peel point,** one no longer on the trunk (from a hand-edited file,
-  or on a trunk waypoint that no longer resolves), is ignored with a note: "c7's
+  or on a trunk waypoint that no longer resolves), or either of a pair whose
+  `a` point is at or past its `b` point, is ignored with a note: "c7's
   peel point left-front U24 is not on Bundle 2's route, so it rides to the
   end." It is kept in the file, as a waypoint that no longer resolves is kept
   on a cable, and the next `bundle.peel` or `bundle.add` for that cable
@@ -535,9 +588,13 @@ does, in rack coordinates (`route.js pointOf` on `ctx.route`), so it agrees
 with the length and with every view.
 
 1. **The polyline** is the trunk's waypoints, in order, as points.
-2. **Straight passes are merged.** A waypoint where the direction changes by
-   less than 1 degree is a straight pass, not a corner. A row of rings in line,
-   then a turn into a lane, is one straight leg and one corner.
+2. **Straight passes are merged.** Walking the polyline, a waypoint is a
+   straight pass, not a corner, when the next segment's direction is within 1
+   degree of the leg's direction: the direction from the last corner (or the
+   trunk's start) to this waypoint. Measuring against the leg, not the
+   previous segment, means many small turns add up to a corner instead of
+   passing one by one. A row of rings in line, then a turn into a lane, is one
+   straight leg and one corner.
 3. **Corners** are the remaining interior points. θ is the turn angle there,
    from 0 (straight on) to 180 degrees (back on itself).
 4. **Legs.** `L_in` and `L_out` are the distances along the trunk to the
@@ -629,11 +686,24 @@ reading `ctx.route`:
   `(k + 0.5) * L / n` for `k = 0 .. n-1`. Straps are then never more than the
   spacing apart, and none sits on the run's ends. A 30 in run at 12 in gets 3
   straps, 10 in apart (decision 3).
-- **Rings and pass-throughs.** A ring or pass-through takes up the stretch of
-  the trunk covered by its guide's box (the `box` that `ctx.route.guidesOf`
-  already gives each guide), measured along the run and widened each side by
-  half a strap's width (`STRAP_W`, 20 mm, a drawing figure). A strap that
-  falls in that stretch moves to its nearer edge. Straps inside a duct stay.
+- **Rings and pass-throughs.** A ring or pass-through takes up a stretch of
+  the trunk, from its guide's `box` (which `ctx.route.guidesOf` already gives
+  each guide):
+  - The box is in the face's own coordinates. It is mapped to rack
+    coordinates as the guide's `x` already is: offset by half the face's
+    width, and mirrored for a panel seen from the rear, which a turned item
+    swaps.
+  - Its extent along the run is the box's width for a run along `x`, and its
+    height for a run along `y`. A ring drawn as a group has `h: 0` and `y: 0`
+    in its box, so only its width is known: it has an extent on a run along
+    `x` and none otherwise.
+  - A segment in depth (front to rear) passes no ring, so it has no such
+    stretch.
+  - Each stretch is widened each side by half a strap's width (`STRAP_W`,
+    20 mm, a drawing figure). At a lacer's tight ring pitch the widened
+    stretches overlap; overlapping stretches are merged into one first.
+  - A strap that falls in a stretch moves to its nearer edge. Straps inside a
+    duct stay.
 - **A moved strap may widen a gap past the spacing,** by at most that
   stretch's length. The count is not raised for it: the count is what the BOM
   buys, and it stays `ceil(L / every)` whatever the rings do.
@@ -667,7 +737,7 @@ positions (2D at ring ends and gutter centres, 3D at guide anchors and
 | SVG / PNG sheets (#142) | bundles and straps as drawn; a note per bundle, and its warnings |
 | GLB / USDZ (#142) | bundles and straps, as the scene |
 | draw.io | unchanged, as for routes; a note says bundles are not drawn there |
-| NetBox cables file (#923) | membership first in the cable's `description`: "Bundle 2. uplink. Length measured along its route." The export cuts an over-long description from its end (`cutTo`), so the bundle's name is what survives; a name longer than the whole limit is itself cut, with the existing note |
+| NetBox cables file (#923) | membership first in the cable's `description`: "Bundle 2. uplink. Length measured along its route." The export cuts an over-long description from its end (`cutTo`), so the bundle's name is what survives; a name longer than the whole limit is itself cut. The existing over-limit note, which says "its purpose is N characters", is reworded for the whole description: "Cable c3: its description (bundle, purpose and length note) is N characters and NetBox takes M, so the description is shortened to that." |
 | Nautobot cables file (#923) | no column for it, since the file writes no description; the export notes say membership is in the cable schedule |
 
 The kit's import files have no field for a bundle. Membership goes in
@@ -686,10 +756,10 @@ that as its merge danger.
 |---|---|---|
 | #920 | this note | nothing |
 | #919 | `cable-types.json`: per-type `od_mm` and minimum bend radius `{installed, loaded}`, sourced; the kit helper that resolves a type's installed radius in mm | nothing; the first slice of #897 |
-| #921 | the bundle record and schema (version 3, a one-way door), `settleBundles` in `parseDoc`, the context of section 3.1, the five commands, numbering and labels, the bundle-aware `resolveRoute`, the size check, strap positions, and `describe`, `inspect` and `selectCables` for bundles | #920, and kit 0.4.0 merged |
+| #921 | the bundle record and schema (version 3, a one-way door), `settleBundles` in `parseDoc` with its notes through `loadDoc`, the context of section 3.1, the five commands, numbering and labels, the bundle-aware `resolveRoute`, the size check with the kit's vertical-duct estimate, strap positions, and `describe`, `inspect` and `selectCables` for bundles. Until #922 lands, `inspect` returns `bend: null`, and `bundleChecks` gives size findings only | #920, and kit 0.4.0 merged |
 | #922 | the bend check (section 5.2): worst member against trunk corners and stated pathway radii, with unknown types unchecked; tests with mixed copper and fibre | #921 and #919 |
-| portrayal-site#142 | bundles and straps drawn in 2D and 3D, the cable list grouped by bundle, the controls through the commands, size and bend warnings shown, and the bundle commands as WebMCP tools | #921 re-vendored; #922 for the bend warnings |
-| #923 | bundles in the exports: schedule, BOM strap line, sheets notes, DCIM | #921 |
+| portrayal-site#142 | bundles and straps drawn in 2D and 3D, the cable list grouped by bundle, the controls through the commands with the render's `route` and `bendOf` passed on each, size and bend warnings shown, the bundle commands as WebMCP tools, and `route-context.js`'s guides carrying `run` and marking an estimated duct aperture (section 4.4) | #921 re-vendored; #922 for the bend warnings |
+| #923 | bundles in the exports: schedule, BOM strap line, sheets notes, DCIM. The schedule's per-bundle note leaves out the bend radius until #922 and #919 have landed | #921 |
 
 #926 is not a child, but bundles route through what it adds: a lane inside a
 vertical duct is a pathway with an aperture (section 4.4). Whichever of #921
