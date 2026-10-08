@@ -623,7 +623,9 @@ OFFERS = {"cfp": [CFP_LC, CFP_MPO, CFP_SC], "cfp2": [CFP2_LC, CFP2_MPO], "cfp4":
           "cxp": [CXP_MPO]}
 NEW = set(OPTICS)
 # how many cages of each family the library's cards carry today, as a floor
-ON_CARDS = {"cfp": 8, "cfp2": 16, "cfp4": 4, "cxp": 6}
+# #261 removed the MX960 vertical twins: mpc4e-3d-2cge-8xge-v960 took two CFP cages
+# with it and mpc5e-100g10g-v960 two CFP2, and the MX960 now seats the horizontal cards.
+ON_CARDS = {"cfp": 6, "cfp2": 14, "cfp4": 4, "cxp": 6}
 
 
 @pytest.fixture(scope="module")
