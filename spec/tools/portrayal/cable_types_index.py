@@ -27,6 +27,10 @@ def _positive(v):
     return isinstance(v, (int, float)) and not isinstance(v, bool) and v > 0
 
 
+def _known(sid, sources):
+    return isinstance(sid, str) and sid in sources
+
+
 def radius_problems(where, r, sources, nullable):
     """What is wrong with one radius: `{mm}` or `{xOD}`, a basis, sources."""
     if r is None:
@@ -45,7 +49,7 @@ def radius_problems(where, r, sources, nullable):
     if not isinstance(src, list) or not src:
         out.append(f"{where}: no sources")
     else:
-        out += [f"{where}: unknown source {s!r}" for s in src if s not in sources]
+        out += [f"{where}: unknown source {s!r}" for s in src if not _known(s, sources)]
     if "unverified" in r and not isinstance(r["unverified"], bool):
         out.append(f"{where}: unverified must be true or false")
     extra = set(r) - {"mm", "xOD", "basis", "sources", "note", "unverified"}
@@ -55,16 +59,24 @@ def radius_problems(where, r, sources, nullable):
 
 def problems(doc):
     """Every reason the table cannot be published; [] when it can."""
+    if not isinstance(doc, dict):
+        return ["the table is not a mapping"]
     out = []
     if doc.get("format") != FORMAT:
         out.append(f"format must be {FORMAT}")
     if not VERSION.match(str(doc.get("version", ""))):
         out.append("version must be MAJOR.MINOR.PATCH")
     sources = doc.get("sources") or {}
+    if not isinstance(sources, dict):
+        out.append("sources is not a mapping")
+        sources = {}
     for sid, s in sources.items():
         if not isinstance(s, dict) or not s.get("title") or not str(s.get("url", "")).startswith("https://"):
             out.append(f"source {sid}: needs a title and an https url")
     types = doc.get("types") or {}
+    if not isinstance(types, dict):
+        out.append("types is not a mapping")
+        types = {}
     if not types:
         out.append("no types")
     for tid, t in types.items():
@@ -85,7 +97,7 @@ def problems(doc):
         if not isinstance(od_src, list) or not od_src:
             out.append(f"{w}: no od_sources")
         else:
-            out += [f"{w}: unknown source {s!r}" for s in od_src if s not in sources]
+            out += [f"{w}: unknown source {s!r}" for s in od_src if not _known(s, sources)]
         mbr = t.get("min_bend_radius")
         if not isinstance(mbr, dict):
             out.append(f"{w}: no min_bend_radius")
@@ -95,13 +107,16 @@ def problems(doc):
             out += [f"{w}: unknown min_bend_radius key {k!r}"
                     for k in sorted(set(mbr) - {"installed", "loaded"})]
         fib = t.get("fiber")
-        if fib is not None and "min_bend" in fib:
+        if fib is not None and not isinstance(fib, dict):
+            out.append(f"{w}: fiber is not a mapping")
+        elif fib is not None and "min_bend" in fib:
             out += radius_problems(f"{w} fiber.min_bend", fib["min_bend"], sources, False)
         if (fib is not None) != (t.get("family") == "fiber"):
             out.append(f"{w}: a fiber type, and only a fiber type, states `fiber`")
     # Every bare Rack Builder media has to be a type of its own, so a cable's
     # media resolves with no mapping (kit/rack/cable-types.js).
-    for media in sorted({t.get("media") for t in types.values() if isinstance(t, dict)} - {"power", None}):
+    named = {t.get("media") for t in types.values() if isinstance(t, dict) and isinstance(t.get("media"), str)}
+    for media in sorted(named - {"power", ""}):
         if media not in types:
             out.append(f"media {media}: no type has the id {media}")
     return out

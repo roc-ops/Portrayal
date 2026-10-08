@@ -36,17 +36,19 @@ export function radiusMm(type, which = 'installed') {
 // or null for a type that is not in the table.
 export const installedRadiusMm = (types, id) => radiusMm(typeOf(types, id));
 
-// What a cable's type is: its own `type` when it states one (#897's named
-// types), else its `media`.
-const typeIdOf = cable => (typeof cable?.type === 'string' && cable.type ? cable.type : cable?.media);
+// A cable's type: its own `type` when that names a type in this table
+// (#897's named types), else the type its `media` names, else null. A `type`
+// this table does not know - a newer table's, or a hand edit - falls back to
+// the media, so the cable is still checked by the type it is a kind of.
+export const cableTypeOf = (types, cable) => typeOf(types, cable?.type) ?? typeOf(types, cable?.media);
 
 // cable => installed minimum bend radius in mm, or null when the cable has no
 // type or its type has no radius: the bundle checks' `ctx.bendOf`.
-export const bendLookup = types => cable => installedRadiusMm(types, typeIdOf(cable));
+export const bendLookup = types => cable => radiusMm(cableTypeOf(types, cable));
 
 // cable => its type's typical outside diameter in mm, or null.
 export const diameterLookup = types => cable => {
-  const t = typeOf(types, typeIdOf(cable));
+  const t = cableTypeOf(types, cable);
   return positive(t?.od_mm) ? t.od_mm : null;
 };
 

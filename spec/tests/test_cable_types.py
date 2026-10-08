@@ -68,10 +68,11 @@ def _kit_list(path, name):
 
 def test_every_rack_builder_media_is_a_type_of_its_own(built):
     # So a rack cable's media names its type with no mapping.
+    # The bare types (id == media) are exactly the Rack Builder's media: a new
+    # media without a type, or a bare type no media names, fails here.
     media = _kit_list("kit/rack/cable-rules.js", "MEDIA")
-    assert media and set(media) <= set(built["types"])
-    for m in media:
-        assert built["types"][m]["media"] == m
+    bare = {tid for tid, t in built["types"].items() if t["media"] == tid}
+    assert media and bare == set(media)
 
 
 def test_the_bare_types_agree_with_the_kit_s_fill_diameters(built):
@@ -108,6 +109,12 @@ def test_the_bases_say_how_sure_each_figure_is(built):
     assert t["cat6a-stp"]["min_bend_radius"]["installed"]["basis"] == "convention"
     assert t["dac"]["min_bend_radius"]["installed"]["basis"] == "convention"
     assert t["os2-g657a1"]["fiber"]["min_bend"]["mm"] == 10
+    # TIA-568 does not cover AOC assemblies: its rule is applied by analogy
+    for which in ("installed", "loaded"):
+        r = t["aoc"]["min_bend_radius"][which]
+        assert r["basis"] == "convention" and r["unverified"] is True
+    # G.652.D's 30 mm is a test radius, so it cites the Recommendation
+    assert "itu-g652" in t["os2"]["min_bend_radius"]["installed"]["sources"]
 
 
 def _doc():
@@ -136,6 +143,26 @@ def test_a_bad_table_is_refused(break_it, says):
         d["types"]["om4-bi"] = dict(d["types"]["om4"])
     break_it(d)
     assert any(says in p for p in cti.problems(d)), cti.problems(d)
+
+
+@pytest.mark.parametrize("doc,says", [
+    ([], "the table is not a mapping"),
+    ({"format": 1, "version": "1.0.0", "sources": ["foa"], "types": {}}, "sources is not a mapping"),
+    ({"format": 1, "version": "1.0.0", "sources": {}, "types": ["om4"]}, "types is not a mapping"),
+])
+def test_a_malformed_table_gets_a_sentence_not_a_traceback(doc, says):
+    assert says in cti.problems(doc)
+
+
+def test_malformed_entries_inside_a_type_get_sentences():
+    d = _doc()
+    d["types"]["om4"]["fiber"] = "OM4"
+    d["types"]["om3"]["min_bend_radius"]["installed"]["sources"] = [{"not": "an id"}]
+    d["types"]["om5"]["media"] = ["om5"]
+    got = cti.problems(d)
+    assert any("om4: fiber is not a mapping" in p for p in got), got
+    assert any("om3 installed: unknown source" in p for p in got), got
+    assert any("om5: no media" in p for p in got), got
 
 
 def test_build_sh_writes_it():

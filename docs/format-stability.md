@@ -232,7 +232,7 @@ allows the tighter figure.
 
 The kit's `rack/cable-types.js` reads it: `radiusMm(type)` turns a radius into
 millimetres, `bendLookup(types)` gives a cable's installed radius from its
-`type`, else its `media`, and `loadCableTypes(dist)` fetches the file and
+`type` when the table has that type, else from its `media`, and `loadCableTypes(dist)` fetches the file and
 refuses any `format` but 1.
 
 ## The rack catalogue

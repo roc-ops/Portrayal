@@ -55,6 +55,16 @@ test('bendOf reads a cable by its type, else its media; none is null', () => {
   assert.equal(bendOf(null), null);
 });
 
+test('a type this table does not know falls back to the cable\'s media', () => {
+  const bendOf = T.bendLookup(TYPES);
+  assert.equal(bendOf({media: 'cat6', type: 'cat6-from-a-newer-table'}), 24);
+  assert.equal(bendOf({media: 'cat6', type: 'constructor'}), 24);
+  assert.equal(bendOf({media: '', type: 'nope'}), null);
+  assert.equal(T.cableTypeOf(TYPES, {media: 'om4', type: 'cat6a-stp'}).id, 'cat6a-stp');
+  assert.equal(T.cableTypeOf(TYPES, {media: 'om4', type: 'x'}).id, 'om4');
+  assert.equal(T.diameterLookup(TYPES)({media: 'cat6', type: 'x'}), 6.0);
+});
+
 test('diameterOf reads the type\'s typical outside diameter', () => {
   const diameterOf = T.diameterLookup(TYPES);
   assert.equal(diameterOf({media: 'cat6'}), 6.0);
