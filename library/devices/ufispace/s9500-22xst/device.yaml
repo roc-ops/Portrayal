@@ -270,13 +270,14 @@ provenance:
       for the 302 mm depth, 2.54 px/mm, and 111 px for the 43.5 mm height. The two M4 holes of
       Location-1 centre at 97.6 and 137.6 px, y 121 px, so the holes sit 8.3 and 24.1 mm
       behind the front face, 15.76 mm apart, centred 16.2 from the front and 22 from the top.
-      The same accessory lug, read the same way on five UfiSpace flank figures (Figure 22 of
-      the 302 mm S95xx guides and of the M3000-14XC guide, Figure 15 of the S9502-16SMT and
-      S9511-20CT guides), gives 15.6 to 15.9, against about 0.65 mm per pixel of the embedded
-      art: the 5/8 in. two-hole pattern. AXIS: x = 0 is the FRONT on a right view, and the
-      front is the left end of the figure, as on ufispace/s9501-18smt. Formerly two
-      common/ground-lug@1 placements, ground-1 and ground-2, at x 40 and 51 at y 15 (studs
-      11.0 apart, centred 45.5 from the front).
+      The same accessory lug, read the same way on THREE DISTINCT DRAWINGS ACROSS SEVEN GUIDES
+      (one 544 x 266 image shared byte for byte by the S9500-22XST, S9501-28SMT, S9510-28DC
+      and S9510-30XC guides as Figure 22, one shared by the M3000-14XC and S9502-16SMT guides,
+      and Figure 15 of the S9511-20CT guide alone), gives 15.6 to 15.9, against about 0.65 mm
+      per pixel of the embedded art: the 5/8 in. two-hole pattern. AXIS: x = 0 is the FRONT on
+      a right view, and the front is the left end of the figure, as on ufispace/s9501-18smt.
+      Formerly two common/ground-lug@1 placements, ground-1 and ground-2, at x 40 and 51 at y
+      15 (studs 11.0 apart, centred 45.5 from the front).
   ground-stud-size:
     confidence: datasheet
     note: >-
@@ -344,6 +345,16 @@ chassis:
   airflow: front-to-back
 
 gaps:
+- what: second-grounding-location
+  scope: [ground-screws]
+  reason: vendor-silent
+  note: >-
+    HIG section 8 says 'there are two locations on the case in which the grounding lug
+    may be fixed', and Figure 22 draws both on one unlabelled flank: Location-1 just
+    behind the front face, drawn here as one M4 pair, and Location-2 about 194 and 209
+    mm behind it, which is not drawn yet. Which flank the figure shows is not stated;
+    the right is taken from the Figure 5 inset.
+  wanted: a photograph of the real unit flanks, or a figure captioned with the side
 - what: ground-pair-pitch
   scope: [ground-screws]
   reason: vendor-silent

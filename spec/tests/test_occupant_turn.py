@@ -500,7 +500,9 @@ def test_the_four_crossings_the_seat_gave_are_gone(census):
     # plate's first screw, Casa's top stud, the UfiSpace S9600/S9601
     # `ground-1`, and one screw of each two-screw Edgecore plate #830 drew
     # (the AGR560, EPS112 and EPS203 `ground-1`, the DCS500 `ground-0b` and
-    # `ground-1b`) - and the default clears every one
+    # `ground-1b`) - and the default clears every one. Those five are a ring
+    # lug at its seat's own direction lying across the plate's OTHER screw, 16
+    # to 17 away; which screw draws the earth symbol does not move them.
     crossed = {k for k, r in _ring(census).items() if r["hard0"]}
     assert len(crossed) == 17 and not [k for k in crossed if census[k]["hard"]]
 

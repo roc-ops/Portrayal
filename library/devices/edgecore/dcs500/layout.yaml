@@ -180,10 +180,13 @@ provenance:
       so 17.2 and 17.1 mm, at x 49.85 and 67.05 and 370.55 and 387.75 off the plate edges, y
       32.7. THAT IS NOT 5/8 IN.: 15.875 would be 36.2 px, three pixels short of what both
       plates read, and 3/4 in. would be 43.4. No pair host is placed, because each one is
-      built at a lug pitch and this one matches none; the four screws are common/ground-lug@1
-      at rotate 90 as the two were, and a gap records the pitch. Formerly one
-      common/ground-lug@1 per plate, ground-1 and ground-0, each standing for both screws at
-      the middle of its plate.
+      built at a lug pitch and this one matches none, and a gap records the pitch. The first
+      screw of each plate is common/ground-lug@1 at rotate 90 as the one stud was; the second
+      is common/ground-screw@1, the same screw without the earth symbol. THE PLATE IS PLAIN:
+      the datasheet rear shows a light plate, two washered screws and one earth symbol
+      printed above it, so the plates are decor alone and the 14 x 7 cutouts the one stud
+      carried are gone. Formerly one common/ground-lug@1 per plate, ground-1 and ground-0,
+      each standing for both screws at the middle of its plate.
 attrs:
   performance:
     switching-capacity: 6.4 Tbps (12.8 Tbps full duplex)
@@ -492,11 +495,6 @@ views:
       decor:
         - {at: [42.10, 25.60], size: [31.60, 12.30], fill: '#c9cdd1', rx: 0.4}
         - {at: [362.90, 25.60], size: [31.60, 12.30], fill: '#c9cdd1', rx: 0.4}
-      cutouts:
-        - {id: ground-1, at: [45.65, 29.20], size: [14.0, 7.0], shape: rect}
-        - {id: ground-1b, at: [62.85, 29.20], size: [14.0, 7.0], shape: rect}
-        - {id: ground-0, at: [366.35, 29.20], size: [14.0, 7.0], shape: rect}
-        - {id: ground-0b, at: [383.55, 29.20], size: [14.0, 7.0], shape: rect}
     silkscreen:
       - {at: [58.20, 19.00], mark: ground, size: 3.0, fill: '#d8dcdf', for: ground-1}
       - {at: [377.60, 19.00], mark: ground, size: 3.0, fill: '#d8dcdf', for: ground-0}
@@ -518,9 +516,9 @@ views:
         - {ref: common/rack-ear@1, id: rear-ear-left, at: [-14, 0.1], skin: left, optional: ears, group: furniture, rel-pos: 4}
         - {ref: common/rack-ear@1, id: rear-ear-right, at: [438.4, 0.1], skin: right, optional: ears, group: furniture, rel-pos: 5}
         - {ref: common/ground-lug@1, id: ground-1, at: [49.15, 25.70], rotate: 90, group: grounding, rel-pos: 1, attrs: {stud-size: M5}}
-        - {ref: common/ground-lug@1, id: ground-1b, at: [66.35, 25.70], rotate: 90, group: grounding, rel-pos: 3, attrs: {stud-size: M5}}
+        - {ref: common/ground-screw@1, id: ground-1b, at: [64.25, 29.90], group: grounding, rel-pos: 3, attrs: {stud-size: M5}}
         - {ref: common/ground-lug@1, id: ground-0, at: [369.85, 25.70], rotate: 90, group: grounding, rel-pos: 0, attrs: {stud-size: M5}}
-        - {ref: common/ground-lug@1, id: ground-0b, at: [387.05, 25.70], rotate: 90, group: grounding, rel-pos: 2, attrs: {stud-size: M5}}
+        - {ref: common/ground-screw@1, id: ground-0b, at: [384.95, 29.90], group: grounding, rel-pos: 2, attrs: {stud-size: M5}}
     regions:
       - {id: exhaust, at: [88.58, 0], size: {w: 267.96, h: 87.7}, physical-context: Exhaust,
          label: Fan tray exhaust (front-to-back build), members: [fan-0, fan-1, fan-2, fan-3]}
