@@ -37,13 +37,15 @@ test('a rack the browser checks cable validates once parseDoc has read it', () =
   assert.deepEqual(errs(d), []);
 });
 
-test('every fixture rack in spec/tests/fixtures/racks that parseDoc accepts validates', () => {
+// None of the fixtures is a file parseDoc should refuse, so a refusal fails the
+// test, as a missing or empty fixtures directory does: neither is a pass.
+test('every fixture rack in spec/tests/fixtures/racks is read by parseDoc and validates', () => {
   const dir = new URL('../fixtures/racks/', import.meta.url);
-  let files = [];
-  try { files = readdirSync(dir).filter(f => f.endsWith('.json')); } catch { /* no fixtures dir */ }
+  const files = readdirSync(dir).filter(f => f.endsWith('.json'));
+  assert.ok(files.length > 0, 'spec/tests/fixtures/racks holds no .json fixtures');
   for (const f of files) {
     let doc;
-    try { doc = M.parseDoc(readFileSync(new URL(f, dir), 'utf8')); } catch { continue; }
+    assert.doesNotThrow(() => { doc = M.parseDoc(readFileSync(new URL(f, dir), 'utf8')); }, `parseDoc refused ${f}`);
     assert.deepEqual(errs(doc), [], f);
   }
 });
