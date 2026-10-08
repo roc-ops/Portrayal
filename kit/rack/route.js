@@ -1,6 +1,9 @@
 // CABLE ROUTES.
 // Pure: the rack, a cable, and a ctx the page fills from the drawings -
 //   ctx.chassisOf(ref), ctx.guidesOf(itemId) -> [{via, kind, face, x}],
+//     a ring also with its `aperture`, and optionally its `run` ('x', 'y' or
+//     'z'; 'x' when not given) and `depth` (mm along the run; RING_DEPTH when
+//     not given, and then estimated),
 //   ctx.portX(end) -> x or null,
 // with every x in RACK coordinates: mm from the rack's centre line, positive
 // to the right as seen from the FRONT. This file imports no DOM and nothing of
@@ -8,6 +11,7 @@
 
 import {uLabel} from './model.js';
 import {RU, OPENING, RAIL_W} from './rails.js';
+import {throughRings} from './route-path.js';
 
 export const LANE_GAP = 40;          // mm: a lane runs in the middle of a 40 mm gutter outside each rail
 const SHORT = 2;                     // U: a jumper this close, with no manager, just hangs
@@ -29,6 +33,18 @@ export function endPane(rack, end) {
   if (!it) return null;
   const outward = (end.view === 'rear') === !!it.turned;
   return outward ? it.face : (it.face === 'front' ? 'rear' : 'front');
+}
+
+// A RING'S PASS (roc-ops/Portrayal#930): a cable goes through a D-ring along
+// its run, entering one face and leaving the other, the ring's depth apart.
+// RING_DEPTH is the depth taken when a ring states none: ESTIMATED, from the
+// two FS rings measured so far, whose bands are 6.8 mm (fs/d-ring-snap-in)
+// and 9.9 mm (fs/cmh-5dr1u-ring) thick along the run.
+export const RING_DEPTH = 10;
+export function ringOf(g) {
+  if (g?.kind !== 'ring') return null;
+  const stated = typeof g.depth === 'number' && g.depth > 0;
+  return {run: ['x', 'y', 'z'].includes(g.run) ? g.run : 'x', depth: stated ? g.depth : RING_DEPTH, estimated: !stated};
 }
 
 const unitsOf = (ctx, it) => Math.max(1, ctx.chassisOf(it.ref)?.ru ?? 1);
@@ -60,10 +76,16 @@ function through(m, pane, portX, side, crossing, ctx) {
   const gs = ctx.guidesOf(m.id).filter(g => g.face === pane);
   const rings = gs.filter(g => g.kind === 'ring');
   if (rings.length) {
-    const near = rings.reduce((a, b) => (Math.abs(b.x - portX) < Math.abs(a.x - portX) ? b : a));
-    const out = rings.filter(g => (side === 'left' ? g.x <= near.x : g.x >= near.x))
+    // The rings on the way out: from the port toward `side`. A ring behind
+    // the port would have the cable enter and leave by one face (#930); a
+    // port within a ring's depth of its centre is under it, and goes through.
+    // A ring that runs along x only: one that runs up or across the face is
+    // not on the way along the tray.
+    const half = g => ringOf(g).depth / 2;
+    const out = rings.filter(g => ringOf(g).run === 'x'
+                                  && (side === 'left' ? g.x <= portX + half(g) : g.x >= portX - half(g)))
       .sort((a, b) => (side === 'left' ? b.x - a.x : a.x - b.x));
-    return out.map(g => ({item: m.id, via: g.via}));
+    if (out.length) return out.map(g => ({item: m.id, via: g.via}));
   }
   const duct = gs.find(g => g.kind === 'duct');
   if (duct) return [{item: m.id, via: duct.via}];
@@ -176,15 +198,71 @@ export const STOCK_M = [0.5, 1, 1.5, 2, 3, 5, 7, 10, 15, 20, 30];
 export const END_ALLOWANCE_M = 0.15;
 export const stockLength = m => STOCK_M.find(s => s >= m - 1e-9) ?? Math.ceil(m / 5) * 5;
 
-export function routedLength(rack, cable, ctx) {
+// THE PATH A CABLE TAKES, in rack coordinates (mm): its a port, every
+// waypoint's point, and its b port, each ring's centre expanded to where the
+// cable enters it and where it leaves (throughRings, #930). The routed
+// length, fill, inspect and ringFindings read this path; the drawings, which
+// place their points from their own pictures, expand them by the same
+// throughRings (routed2d and routePoints3d, given each waypoint's ringOf).
+// Returns
+//   {points: [{x, y, z, at, item?, via?}], rings, findings}
+// - `at` is 'a' or 'b' (a port), 'entry', 'exit' or 'face' (a ring),
+//   'pathway' (a duct or a pass-through) or 'lane';
+// - `rings`: per ring on the route, {item, via, run, depth, estimated,
+//   passed, sense, entry, exit} (sense +1 or -1 along the run; a ring not
+//   passed has `face` instead of entry and exit);
+// - `findings`: a ring the route would enter and leave by one face, as
+//   {kind: 'doubles-back', cable, item, via}.
+// null when either port is not found on its drawing, as for routedLength.
+export function routePath(rack, cable, ctx) {
   const a = portPoint(rack, cable.a, ctx), b = portPoint(rack, cable.b, ctx);
   if (!a || !b) return null;
-  const mids = resolveRoute(rack, cable, ctx).waypoints.map(w => pointOf(rack, w, ctx)).filter(Boolean);
-  const pts = [a, ...mids, b];
+  const stops = [{p: a, at: 'a'}];
+  for (const w of resolveRoute(rack, cable, ctx).waypoints) {
+    const p = pointOf(rack, w, ctx);
+    if (!p) continue;
+    const g = w.lane ? null : ctx.guidesOf(w.item).find(x => x.via === w.via);
+    stops.push({p, w, ring: ringOf(g)});
+  }
+  stops.push({p: b, at: 'b'});
+  const {points, passes} = throughRings(stops.map(s => s.p), stops.map(s => s.ring));
+  // Label each point with what it is: walk the stops, a ring taking two points when passed.
+  const passAt = new Map(passes.map(x => [x.index, x]));
+  const out = [], rings = [], findings = [];
+  let n = 0;
+  stops.forEach((s, k) => {
+    const tag = s.w ? (s.w.lane ? {at: 'lane'} : {item: s.w.item, via: s.w.via}) : {at: s.at};
+    if (!s.ring) { out.push({...points[n++], ...(s.w && !s.w.lane ? {at: 'pathway'} : {}), ...tag}); return; }
+    const ring = {item: s.w.item, via: s.w.via, ...s.ring};
+    const pass = passAt.get(k);
+    if (pass) {
+      out.push({...points[n++], ...tag, at: 'entry'}, {...points[n++], ...tag, at: 'exit'});
+      rings.push({...ring, passed: true, sense: pass.sense, entry: pass.entry, exit: pass.exit});
+    } else {
+      out.push({...points[n++], ...tag, at: 'face'});
+      rings.push({...ring, passed: false, face: points[n - 1]});
+      findings.push({kind: 'doubles-back', cable: cable.id, item: s.w.item, via: s.w.via});
+    }
+  });
+  return {points: out, rings, findings};
+}
+
+export function routedLength(rack, cable, ctx) {
+  const path = routePath(rack, cable, ctx);
+  if (!path) return null;
+  const pts = path.points;
   let mm = 0;
   for (let k = 1; k < pts.length; k++) mm += dist(pts[k - 1], pts[k]);
   const measured = mm / 1000 + 2 * END_ALLOWANCE_M;
   return {measured, value: stockLength(measured)};
+}
+
+// Every ring a cable's route would enter and leave by one face, rack-wide,
+// with a sentence for each: what the page and an agent report. A cable whose
+// port is not found is not judged.
+export function ringFindings(rack, ctx, nameOf = id => id) {
+  return (rack.cables || []).flatMap(c => (routePath(rack, c, ctx)?.findings || []).map(f => ({...f,
+    text: `${c.id} would enter and leave ${nameOf(f.item)} ${/^guide-(\d+)$/.test(f.via) ? `ring ${f.via.slice(6)}` : f.via} by the same face: route it through the ring, or past it.`})));
 }
 
 // ── fill ──────────────────────────────────────────────────────────────────
@@ -196,11 +274,15 @@ const areaOf = media => Math.PI * ((DIAMETERS[media] ?? UNSET_D) / 2) ** 2;
 
 // Every pathway with an aperture that a cable passes through, filled against
 // FILL_LIMIT of its opening. Lanes have no limit and are not listed.
+// A ring counts the cables that pass through it (routePath): one a route
+// would take to its face and back is a finding (ringFindings), not a member.
 export function fill(rack, ctx) {
   const at = new Map();
   for (const c of rack.cables || []) {
+    const path = routePath(rack, c, ctx);
+    const notThrough = new Set((path?.findings || []).map(f => `${f.item}|${f.via}`));
     for (const w of resolveRoute(rack, c, ctx).waypoints) {
-      if (w.lane) continue;
+      if (w.lane || notThrough.has(`${w.item}|${w.via}`)) continue;
       const g = ctx.guidesOf(w.item).find(x => x.via === w.via);
       if (!g?.aperture) continue;
       const key = `${w.item}|${w.via}`;

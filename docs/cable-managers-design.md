@@ -299,6 +299,57 @@ proves it.
 - In 3D, the composited screenshot of a rack-face manager on a host shows the host's
   ports through the manager. That is what the sheet body is for.
 
+## 13. How a route passes a guide (#930)
+
+A D-ring holds a cable only while the cable passes through it, in at one face and out at
+the other along the ring's `run`. A route that treated a ring as a point drew the cable
+turning at the ring's centre, where nothing holds it. So the kit (`kit/rack/route.js`
+`routePath`, on `kit/rack/route-path.js` `throughRings`) expands every ring waypoint
+into two points:
+
+```
+   previous point                         next point
+        \                                     /
+         \  entry        centre        exit  /
+          *----------|----+----|----------*
+                     |<-depth->|
+                  ring face   ring face
+                        run (x) ->
+```
+
+- **Entry and exit** are half the ring's depth either side of its centre, along `run`,
+  in the order the cable travels. Between them the cable is straight and parallel to
+  `run`; a bend is at a face or outside it, never inside.
+- **Depth.** A guide may state `depth` (mm along the run). None does yet, so
+  `RING_DEPTH`, 10 mm, is taken and the ring is marked `estimated`. It is an estimate
+  from the two FS rings measured so far, whose bands are 6.8 mm (the snap-in ring) and
+  9.9 mm (the CMH-5DR1U ring) thick along the run.
+- **Run.** A guide's `run`, `x` when the reader gives none: every ring in the library
+  runs along `x` except the end ring of the CMH-6DR1U, which runs along `y`.
+- **Direction.** The cable enters from the side its previous point stands on. A previous
+  point within the ring's depth of its centre (a port directly under the ring) stands on
+  neither side, and the side the next point goes to decides; failing both, `+run`.
+- **Doubling back.** If the points before and after both stand outside the ring on the
+  same side, the cable would enter and leave by one face. It is not drawn through: the
+  path goes to that face and back, the ring is not counted in its fill, and
+  `ringFindings` reports it.
+- **The automatic route** takes only the rings on the way from the port toward its
+  gutter, so it never doubles back: a ring behind the port, which the old nearest-ring
+  rule could pick, is left out.
+- **One path for everything.** The routed length, fill, `inspect` (`route.rings`) and
+  the findings read `routePath`. The drawings pass each waypoint's ring to `routed2d`
+  and `routePoints3d`, which add a lead point on the run outside each face (the corner
+  radius, clamped to half the way to the neighbour), so a rounded corner is rounded
+  there and not inside the ring. A length is measured without the leads.
+
+Ducts and pass-throughs keep a single point. A duct is an open channel with finger gaps
+along its run: a cable enters and leaves it sideways through any gap, and turning inside
+it is what it is for. A pass-through is a hole in sheet metal about 1.5 mm thick, much
+larger than the cable, so a cable crossing it at an angle is held, and an entry and exit
+1.5 mm apart change no length. Neither has the ring's fault. A duct's point is its
+centre, though, so a route into a long duct is measured to its middle; where a cable
+enters and leaves a duct is a separate question.
+
 ## Decisions taken
 
 Agreed 2026-10-06:

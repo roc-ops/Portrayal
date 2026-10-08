@@ -101,7 +101,7 @@ as `@portrayal/kit/rack/<module>`:
 | `rack/fit.js` | whether a device fits at a unit, on a face, and how a shrink trims a rack |
 | `rack/managers.js` | cable managers: `placement` of a manager onto the device behind it, and moving one |
 | `rack/cable-rules.js` | cables: which two ports may be joined, `withCable`, media and lengths |
-| `rack/route.js`, `rack/route-path.js`, `rack/cable-geometry.js` | where a cable runs: `resolveRoute`, `routedLength`, pathway fill, and the geometry under them |
+| `rack/route.js`, `rack/route-path.js`, `rack/cable-geometry.js` | where a cable runs: `resolveRoute`, `routePath`, `routedLength`, pathway fill, `ringFindings`, and the geometry under them (`throughRings`) |
 | `rack/export-data.js` | the rack as rows: `bomRows`, `cableScheduleRows` and the device-import data |
 | `rack/dcim-rules.js` | what a NetBox or Nautobot import needs of a rack |
 | `rack/validate.js` | `validate(schema, value)`, a small JSON Schema validator, and `same` |
@@ -191,6 +191,19 @@ The rest of the example takes `chassisOf` and `devices` from either.
 ones that no longer stand for anything (`gone`), and whether the route is the
 automatic one (`auto`). `routedLength` is that route, measured, with the
 nearest stock length above it.
+
+A cable passes through a D-ring along the ring's `run`, not to a point inside
+it: `routePath(rack, cable, ctx)` is the path every measure reads, each ring
+expanded to the point where the cable enters it and the point where it leaves,
+half the ring's `depth` (`RING_DEPTH`, 10 mm, estimated, when the ring states
+none) either side of its centre. A route that would enter and leave a ring by
+one face is not drawn through it; `ringFindings(rack, ctx)` reports it, and
+`fill` does not count it there. `routed2d` and `routePoints3d` take the same
+rings as an optional last argument, so the drawings pass through them
+straight. **Routed lengths changed in 0.5.0**: each ring adds up to its depth,
+and the automatic route no longer takes a ring behind the port, which could
+shorten a length by up to 100 mm. A rack's stored `routed` lengths are
+re-measured the next time a page measures them (`lengths.routed`).
 
 To change a rack by name rather than by function, use the command core:
 `createRackEditor({ doc, chassisOf })` applies `place`, `move`, `patch`,

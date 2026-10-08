@@ -4,6 +4,8 @@
 // passed in where a vector is built, so this imports no three.js either.
 // The site's cables.js draws with these.
 
+import {throughRings} from './route-path.js';
+
 
 // OS2 jackets are yellow; copper is coloured by what it is for.
 export const COLORS = {os2: '#e8c547', copper: {server: '#5aa7ff', management: '#9aa3ad'},
@@ -93,11 +95,16 @@ const startOf = (THREE, e) => e.points.length > 1 ? mergeOf(THREE, e) : e.points
 // does, then taut through every waypoint, each corner rounded by easing r mm
 // either side of it - the CatmullRom tube does the rest. THREE is passed in
 // so this stays free of a three.js import.
-export function routePoints3d(THREE, A, B, wps, r = 30) {
+// `rings`, when given, is parallel to `wps`: {run, depth} where a waypoint is
+// a ring's centre, null elsewhere. The cable then passes through each ring
+// straight along its run, entering from the side nearer the point before it
+// (route-path.js throughRings), with its corners eased r outside the ring.
+export function routePoints3d(THREE, A, B, wps, r = 30, rings = null) {
   const a = startOf(THREE, A), b = startOf(THREE, B);
   const outA = a.clone().addScaledVector(A.normal, A.reach ?? LEAD);
   const outB = b.clone().addScaledVector(B.normal, B.reach ?? LEAD);
-  const path = [outA, ...wps, outB];
+  const path = rings ? throughRings([outA, ...wps, outB], [null, ...rings, null], {lead: r}).points
+    : [outA, ...wps, outB];
   const pts = [a, outA];
   for (let k = 1; k < path.length - 1; k++) {
     const [p, q, s] = [path[k - 1], path[k], path[k + 1]];
