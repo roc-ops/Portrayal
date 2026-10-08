@@ -13,5 +13,6 @@ const cases = {
          fields: {'port-4-occupant': {'latch-color': 'red', label: null}}},
   junk: {v: 9, legend: false, crop: {x: 0, y: 0, w: -1, h: 2}, marks: [null, 'x', {select: 3, lamp: 'red'}],
          swaps: [], fields: {'__proto__': {a: 'b'}, p: 'not an object'}},
+  arrayLegend: {legend: []},
 };
 console.log(JSON.stringify(Object.fromEntries(Object.entries(cases).map(([k, d]) => [k, normalise(d)]))));

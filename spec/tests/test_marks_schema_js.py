@@ -33,9 +33,26 @@ def test_normalise_writes_valid_documents(out, case):
     jsonschema.validate(out[case], SCHEMA)
 
 
-def test_the_schema_refuses_what_normalise_never_writes():
-    bad = {"v": 2, "device": "", "config": "", "view": "", "legend": True, "crop": None,
-           "marks": [{"select": "#a", "color": "", "state": "", "label": "", "lamp": "red"}],
-           "swaps": {}, "fields": {}}
+GOOD = {"v": 1, "device": "", "config": "", "view": "", "legend": True, "crop": None,
+        "marks": [{"id": "", "select": "#a", "color": "", "state": "", "label": "", "lamp": ""}],
+        "swaps": {}, "fields": {}}
+
+
+def test_an_array_legend_reads_as_true(out):
+    assert out["arrayLegend"]["legend"] is True
+
+
+def test_a_valid_document_with_no_crop_passes():
+    jsonschema.validate(GOOD, SCHEMA)
+
+
+@pytest.mark.parametrize("fault", [
+    {"v": 2},
+    {"marks": [{**GOOD["marks"][0], "lamp": "red"}]},
+    {"crop": {"x": 0, "y": 0, "w": 0, "h": 1}},
+    {"extra": 1},
+    {"legend": []},
+], ids=["version", "lamp", "crop-zero-width", "extra-key", "array-legend"])
+def test_the_schema_refuses_what_normalise_never_writes(fault):
     with pytest.raises(jsonschema.ValidationError):
-        jsonschema.validate(bad, SCHEMA)
+        jsonschema.validate({**GOOD, **fault}, SCHEMA)
