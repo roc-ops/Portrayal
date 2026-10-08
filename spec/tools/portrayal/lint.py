@@ -172,12 +172,12 @@ RULES = {
     "L2":  ("any id",     "every id and segment matches ^[a-z0-9]+(-[a-z0-9]+)*$ with no double hyphen", "rename the id; it becomes a DOM id segment in every SVG"),
     "L3":  ("component",  "every contracted element id exists in every declared skin", "add the element to the skin, or remove it from `elements:`"),
     "L4":  ("component",  "each skin's viewBox matches the contract size", "set `viewBox=\"0 0 <w> <h>\"` and mm width/height from `size`"),
-    "L5":  ("device",     "placement refs resolve in the library, and instance ids are unique per view", "fix the `ref` (namespace/name@major) or the duplicate id"),
+    "L5":  ("device",     "placement refs resolve in the library, and instance ids are unique per view; no placement, bay or configuration seats a `kind: kit`, which a device names only from `chassis.kits`", "fix the `ref` (namespace/name@major) or the duplicate id; list a rail kit under `chassis.kits` and place its parts, if anything, by their own refs"),
     "L6":  ("device",     "a bay's default appears in its accepts list", "add the default to `accepts`, or change the default"),
     "L7":  ("device",     "region members reference existing instance ids", "name ids that exist in the same view"),
     "L8":  ("device",     "a configuration seats only what its bays accept, and only in bays that exist in it", "add the occupant to the bay's `accepts`, or seat something the bay takes; for a bay `only-in` scopes out, add the configuration to it or drop the key"),
     "L9":  ("component",  "a conforms-declared size matches spec/schemas/standards.yaml", "take the size from the registry, or drop `conforms` if the part is not the standard aperture"),
-    "L10": ("component",  "composed parts resolve, ids are unique, composition does not cycle (depth <= 4)", "fix the `parts:` refs; a part must not compose itself"),
+    "L10": ("component",  "composed parts resolve, ids are unique, composition does not cycle (depth <= 4), and neither a part nor a bay's `default` or `accepts` is a `kind: kit`", "fix the `parts:` refs; a part must not compose itself; a kit is named from a device's `chassis.kits`, never composed or seated"),
     "L11": ("component",  "interface/mates declarations carry a `mate` connection point, and a wrapper keeps the interface of what it composes", "add `connection-points.mate`; do not change the interface in a wrapper"),
     "L12": ("device",     "mate-to resolves to a receptacle whose interface the occupant mates; a seated part's `rate` is at or below its cage's media", "point `mate-to` at the receptacle id; check `interface` and `mates` agree; seat a part the cage offers"),
     "L13": ("device",     "two placed components do not occupy the same faceplate area", "move one, or declare `for:`/`under:` when one deliberately sits on the other"),
@@ -210,7 +210,7 @@ RULES = {
     "L40": ("device",     "a pluggable cage says which optics run in it, and optics prose names a group that exists", "add the group's optics attrs, or fix the group name in the prose"),
     "L41": ("device",     "a bay or placement scoped to configurations names ones that exist, not all, not none", "fix `only-in`"),
     "L42": ("device",     "a silkscreen mark says what it annotates, or `chassis` for printing about the whole unit", "add `for:`"),
-    "L43": ("device",     "a front or rear view as wide as the rack face still has its ears in it, unless the device is a `rack-face` part, which is its ears, or states `chassis.ears: behind`, whose face is the part", "model the body between the ear folds; record the ear extent in provenance"),
+    "L43": ("device",     "a front or rear view as wide as the rack face still has its ears in it, unless the device is a `rack-face` part, which is its ears, or states `chassis.ears: behind` (or `ears: {behind: true}`), whose face is the part", "model the body between the ear folds; record the ear extent in provenance"),
     "L44": ("device",     "panel decor agrees with the face: a patterned field is not buried under parts, printing does not run off the edge, no decor lies wholly off the face", "move or trim the decor"),
     "L45": ("device",     "a view at `modelled` draws something or declares itself empty", "add content, or an `empty:` sentence of 40+ characters saying where you looked"),
     "L46": ("component",  "composed parts do not collide inside the part", "move a part, or say in provenance that the layering is deliberate"),
@@ -268,7 +268,7 @@ RULES = {
     "L98": ("component",  "a character display says how wide it is, and every reading fits", "add `characters:` to the `class: display` element, and keep each `messages[].text` inside it"),
     "L99": ("component",  "a generic stays generic - no rate, reach, wavelength or wattage under generic/", "move the figure to the vendor wrapper's attrs; a generic/ part stands for every module of its kind"),
     "L100": ("component, device", "no key in an `attrs:` map has a null value", "add the missing colon and a value; in flow style `{a: 1, b}` is TWO keys, the second null"),
-    "L101": ("component",  "a `superseded-by` names a component major that exists and is not the part itself", "fix the ref, or add the successor if it has not landed yet"),
+    "L101": ("component",  "a `superseded-by` names a component major that exists and is not the part itself, and a kit's successor is a kit and a component's is not", "fix the ref, or add the successor if it has not landed yet"),
     "L102": ("component, device", "a device's pluggable media, and a part's `rate` attr, each name a rate spec/schemas/pluggables.yaml actually carries; a part states its rung as `rate`, never as `media`", "fix the media/rate, move a rung from media to rate, or add the missing rate to the family in pluggables.yaml"),
     "L103": ("library",    "a pluggable family's `interface` matches at least one component's `interface`", "model the cage, or leave the family as-is if the vocabulary needs it ahead of the metal (sfp-dd today)"),
     "L104": ("device",     "a port's declared media and its cage's presented interface name the same pluggable family", "the declared media governs the accept list render.py's cages[] builds - check the source and fix whichever of the drawing's aperture or the declared media is wrong"),
@@ -292,7 +292,7 @@ RULES = {
     "L122": ("component, device", "a `cable-od` value is a diameter in millimetres from 2 to 15 - on a field's default, a composing part's attrs, and a device placement's attrs - written as plain ASCII digits and a point, the only number the build and the kit draw", "give the cable's outside diameter in mm as a number, from the product's own document"),
     "L124": ("library",    "under one NOS vendor, no two listings export the same DCIM model, and no alias is claimed by two listings unless each marks it `shared`", "give one listing a configuration `model` or its own SKU; drop the duplicate alias, or mark it `shared: true` in every claimant with a `note`"),
     "L123": ("library",    "one module, one bay size - every bay that accepts a module, in any device or carrier, reserves the same size for it, to within a millimetre", "reserve one figure everywhere - the module's own `insert` or `size`; a difference that is real stays in the baseline, with the reason in the provenance of the chassis that reserves more (the warning is filed on the module, so a chassis `lint.waive` cannot clear it)"),
-    "L125": ("device",     "a device says how it is installed - a rack device (the default `mount`), a `rack-face` part or a `rack-side` part states `ru` (warning), and a device whose `chassis.mount` is `din-rail`, `wall` or `desktop` states none (error); `chassis.full-depth`, `chassis.overhang` and `chassis.ears` appear only on a rack device (error)", "give a rack device its `ru` from the datasheet; for a box that is not racked, state `chassis.mount` and drop `ru`, so its DCIM export says `u_height: 0` rather than an invented rack unit"),
+    "L125": ("device",     "a device says how it is installed - a rack device (the default `mount`), a `rack-face` part or a `rack-side` part states `ru` (warning), and a device whose `chassis.mount` is `din-rail`, `wall` or `desktop` states none (error); `chassis.full-depth`, `chassis.overhang`, `chassis.ears` and `chassis.kits` appear only on a rack device (error)", "give a rack device its `ru` from the datasheet; for a box that is not racked, state `chassis.mount` and drop `ru`, so its DCIM export says `u_height: 0` rather than an invented rack unit"),
     "L126": ("device",     "a bevelled chassis is a solid the box can have - every edge named by two faces that meet, none bevelled twice, no face cut away and no bevel swallowed by its neighbours - its face drawings are the chassis's own size, and every part, bay and cutout on a face lies on the flat face rather than on a bevel", "name edges as two adjacent faces (`front-left`), shrink a bevel that cuts too much, drop a view `size` that differs from the chassis on a bevelled face, or move the part onto the flat face - spec/tools/portrayal/bevel.py says where it is"),
     "L127": ("device",     "a `shell: sheet` body states `chassis.thickness`, between 0 and 10 mm, and a box states none (error)", "give a sheet body the gauge its datasheet states; on a box, drop `thickness`"),
     "L128": ("device, listing", "a part-number key has no stray whitespace - none leading or trailing, none but the plain ASCII space (an error), and none splitting a run of capitals and digits between two hyphens (`-A C-`, a warning)", "retype the SKU as the vendor prints it; a space the vendor really prints inside a hyphenated token is waived with the document that shows it"),
@@ -327,6 +327,10 @@ RULES = {
     "L157": ("kit",        "every depth range of a kit configuration, one `[min, max]` or one per hole type, has min below max (error)", "write the range as `[min, max]` in mm, from the source; a single figure is a `preset`, not a range"),
     "L158": ("kit",        "`travel` appears only on a kit whose `motion` is `sliding` (error)", "drop `travel`, or set `motion: sliding` if the rails really slide out for service"),
     "L159": ("kit",        "every accessory `ref` of a kit resolves to a component in the library that is not a kit (error)", "fix the ref (namespace/name@major), or write the arm's or the bar's contract"),
+    "L160": ("device",     "at most one of a device's `chassis.ears.positions` is the `default` (error)", "keep `default: true` on the position the device ships in, from the installation guide, and drop it from the rest"),
+    "L161": ("device",     "every `chassis.kits[].ref` resolves to a `kind: kit` in the library, and no kit is listed twice (error)", "fix the ref (namespace/name@major), or write the kit's contract; a component that is not a kit is placed, not listed here"),
+    "L162": ("device",     "an ear position's `part: {kit, part}` names a kit the device lists under `chassis.kits` and the `id` of one of that kit's parts (error)", "list the kit under `chassis.kits`, or name the part by the id the kit's `parts` give it"),
+    "L163": ("device",     "a `chassis.kits[].depth` override names a configuration `id` of that kit, and its `range` has the configuration's shape - one `[min, max]`, or the same hole types - with min below max (error)", "name a configuration the kit has, and write the range as the kit writes that configuration's `depth`"),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -1136,6 +1140,10 @@ def device_dependencies(dev_path, lib_roots):
         return {Path(dev_path)}
     files = {Path(dev_path)}
     seen, queue = set(), list(component_refs(dev))
+    # THE KITS IT LISTS, so `--device` lints them and their parts (#906):
+    # configs.json carries each one resolved inline (#907).
+    queue += [k["ref"] for k in ((dev.get("chassis") or {}).get("kits") or [])
+              if isinstance(k, dict) and k.get("ref")]
     while queue:
         ref = queue.pop()
         if ref in seen:
@@ -1151,8 +1159,11 @@ def device_dependencies(dev_path, lib_roots):
             if sp.exists():
                 files.add(sp)
         # a part's ref, every default it ships holding and every face it
-        # names (drawn_refs)
+        # names (drawn_refs); a kit's accessories beside its parts
         queue.extend(drawn_refs(spec))
+        if spec.get("kind") == "kit":
+            queue.extend(a["ref"] for a in spec.get("accessories") or []
+                         if isinstance(a, dict) and a.get("ref"))
     return files
 
 
@@ -3368,9 +3379,22 @@ def lint_component_superseded_by(path, data, lib_roots):
             f"superseded-by: {ref}, which is this part itself - a successor "
             "has to be a different component major")
         return
-    if not resolve_component(ref, lib_roots):
+    found = resolve_component(ref, lib_roots)
+    if not found:
         err(path, "L101",
             f"superseded-by: {ref}, which is not in the library")
+        return
+    # A KIT IS SUCCEEDED BY A KIT (#906). A device lists a kit under
+    # `chassis.kits` and places a component, so a consumer following the
+    # pointer from one to the other would move a name to where it cannot go.
+    was_kit = data.get("kind") == "kit"
+    succ = load_yaml(found)
+    is_kit = isinstance(succ, dict) and succ.get("kind") == "kit"
+    if was_kit != is_kit:
+        err(path, "L101",
+            f"superseded-by: {ref}, which is {'not ' if was_kit else ''}a kit, and "
+            f"this part {'is' if was_kit else 'is not'} - a kit's successor is a kit, "
+            "and a component's is not")
 
 
 def _kit_ranges(depth):
@@ -4389,6 +4413,18 @@ def lint_component_facets(path, data, lib_roots):
                 f"({ex},{ey})-({ex + ew},{ey + eh}) by more than {tol} mm")
 
 
+def lint_component_bay_kits(path, data, lib_roots):
+    """L10 for a component's own bays: a bay that seats or accepts a kit
+    offers something no configuration can draw (#906)."""
+    for bid, bay in (data.get("bays") or {}).items():
+        if not isinstance(bay, dict):
+            continue
+        for ref in [bay.get("default")] + list(bay.get("accepts") or []):
+            if ref and _is_kit(ref, lib_roots):
+                err(path, "L10", f"bay {bid}: {ref} is a `kind: kit` - a bay seats "
+                    "modules; a device names a kit under `chassis.kits`")
+
+
 def lint_component_parts(path, data, lib_roots, depth=0, seen=None):
     seen = seen or set()
     key = f"{data.get('name')}@{data.get('version','')}"
@@ -4405,6 +4441,14 @@ def lint_component_parts(path, data, lib_roots, depth=0, seen=None):
             err(path, "L10", f"unresolvable part ref {part['ref']}")
             continue
         sub = load_yaml(found)
+        # A KIT IS NOT A PART (#905, #906): composed, it passed lint and failed
+        # at render on the skin it does not have. Reported where it is written.
+        if isinstance(sub, dict) and sub.get("kind") == "kit":
+            if depth == 0:
+                err(path, "L10", f"part {part['id']}: {part['ref']} is a `kind: kit` - "
+                    "a kit is named from a device's `chassis.kits`, never composed; "
+                    "compose its parts by their own refs")
+            continue
         if part["ref"] in seen:
             err(path, "L10", f"composition cycle via {part['ref']}")
             continue
@@ -5482,6 +5526,15 @@ RACK_FACE_MM = capability.RACK_FACE_MM
 _seated_in_an_ear = capability.seated_in_an_ear
 
 
+def ears_behind(data):
+    """Whether a device states its ear flanges fold back behind its body: the
+    bare string `ears: behind` (#865) or the object's `behind: true` (#906)."""
+    ears = (data.get("chassis") or {}).get("ears")
+    if isinstance(ears, dict):
+        return ears.get("behind") is True
+    return ears == "behind"
+
+
 def lint_device_rack_ears(path, data):
     """L43: a body as wide as the rack face still has its ears on.
 
@@ -5518,7 +5571,9 @@ def lint_device_rack_ears(path, data):
     # (the FS USCMH-SFDABSB2U) measures 482.6 across its body; there are no
     # ears in that face to subtract. The device says so, and the rule
     # believes it (#865).
-    if (data.get("chassis") or {}).get("ears") == "behind":
+    # `{behind: true}` IS THE SAME STATEMENT, the object spelling #906 added
+    # beside positions; configs.json publishes the bare string that way.
+    if ears_behind(data):
         return
     for vname, view in (data.get("views") or {}).items():
         if vname not in ("front", "rear"):
@@ -7250,11 +7305,116 @@ def lint_device_mount(path, data):
                           "false`; drop it")
     # `overhang` and `ears` are about a rack face - what reaches past it, and
     # whether the face has ears in it at all (#865). A `rack-face` part is its
-    # ears already, and a box that is not racked has no rack face.
-    for key in ("overhang", "ears"):
+    # ears already, and a box that is not racked has no rack face. `kits` are
+    # the rails that hold a box between the posts (#906), which only a rack
+    # device sits between.
+    for key in ("overhang", "ears", "kits"):
         if key in ch and mount != "rack":
             err(path, "L125", f"`chassis.{key}` is for a rack device, and this one "
                               f"mounts {mount!r}; drop it")
+
+
+def _is_kit(ref, lib_roots):
+    """Whether a ref names a `kind: kit` contract. False for a ref that does not
+    resolve - that is L5's or L10's own finding, not this one."""
+    try:
+        contract = libwalk.load_contract(str(ref).split(":")[0], lib_roots)
+    except ValueError:          # a ref with no @major; reported where it is read
+        return False
+    return isinstance(contract, dict) and contract.get("kind") == "kit"
+
+
+def lint_device_kits(path, data, lib_roots):
+    """L160-L163: a device's ear positions and the kits it names hold together
+    (#906; docs/rack-mounting-design.md sections 3 and 5).
+
+    THE SCHEMA HOLDS THE WORDS - a position's `name`, its `racks`, a kit's
+    `supply` and `variant` are enums, and a bad one is an L1 - and these hold
+    what a schema cannot say, which is everything that reads another file or
+    another entry:
+
+      L160  at most one position is the `default`: it is the one the device
+            ships in, and the site sets its setback from it;
+      L161  each listed kit ref resolves to a `kind: kit`, and is listed once -
+            a position's `{kit, part}` names a kit by its ref, so a kit listed
+            twice would make that ambiguous;
+      L162  a position's `{kit, part}` names a listed kit and one of its part ids;
+      L163  a `depth` override names a configuration of its kit, and its range
+            has that configuration's shape, min below max - it replaces the
+            configuration's `depth` whole.
+
+    ERRORS, ALL OF THEM. Nothing in the library states either key yet, so there
+    is no debt for a warning to carry, and each is a reference that points at
+    nothing or a figure that cannot be one.
+    """
+    ch = data.get("chassis") or {}
+    ears = ch.get("ears")
+    positions = (ears.get("positions") or []) if isinstance(ears, dict) else []
+    defaults = [str((pos or {}).get("name")) for pos in positions
+                if (pos or {}).get("default") is True]
+    if len(defaults) > 1:
+        err(path, "L160", f"chassis.ears: {len(defaults)} positions say `default: true` "
+            f"({', '.join(defaults)}) - a device ships in one; keep the one its "
+            "installation guide shows")
+    listed = [(k or {}).get("ref") for k in ch.get("kits") or []]
+    kits = {}
+    for i, kit in enumerate(ch.get("kits") or []):
+        ref = (kit or {}).get("ref")
+        if not ref:
+            continue
+        if ref in listed[:i]:
+            err(path, "L161", f"chassis.kits[{i}]: {ref} is listed twice - list each "
+                "kit once; a position's `part` names a kit by its ref")
+            continue
+        contract = libwalk.load_contract(ref, lib_roots)
+        if contract is None:
+            err(path, "L161", f"chassis.kits[{i}]: {ref}, which is not in the library")
+            continue
+        if not (isinstance(contract, dict) and contract.get("kind") == "kit"):
+            kind = contract.get("kind", "component") if isinstance(contract, dict) else "component"
+            err(path, "L161", f"chassis.kits[{i}]: {ref} is a `kind: {kind}`, not a kit - "
+                "a part is placed in a view; `chassis.kits` names rail, bracket and slide "
+                "kits only")
+            continue
+        kits[ref] = contract
+        over = (kit or {}).get("depth")
+        if not isinstance(over, dict):
+            continue
+        configs = {str((c or {}).get("id")): c for c in contract.get("configurations") or []}
+        cid = over.get("config")
+        if cid not in configs:
+            err(path, "L163", f"chassis.kits[{i}].depth.config: {cid!r} is not a "
+                f"configuration of {ref} (it has {', '.join(sorted(configs)) or 'none'})")
+            continue
+        want, got = (configs[cid] or {}).get("depth"), over.get("range")
+        if isinstance(want, list) != isinstance(got, list) or (
+                isinstance(want, dict) and isinstance(got, dict)
+                and set(want) != set(got)):
+            shape = (f"one range per hole type ({', '.join(sorted(want))})"
+                     if isinstance(want, dict) else "one `[min, max]`")
+            err(path, "L163", f"chassis.kits[{i}].depth.range replaces the depth of "
+                f"{ref} configuration {cid!r}, which is written as {shape} - write the "
+                "override in the same shape")
+        for label, rng in _kit_ranges(got):
+            if isinstance(rng, list) and len(rng) == 2 and not rng[0] < rng[1]:
+                where = label.replace("depth", "range", 1)
+                err(path, "L163", f"chassis.kits[{i}].depth.{where}: {rng} - the "
+                    "minimum has to be below the maximum")
+    for i, pos in enumerate(positions):
+        part = (pos or {}).get("part")
+        if not isinstance(part, dict):
+            continue
+        kref, pid = part.get("kit"), part.get("part")
+        if kref not in listed:
+            err(path, "L162", f"chassis.ears.positions[{i}].part: kit {kref} is not "
+                "listed under `chassis.kits` - list it there, with its supply")
+            continue
+        if kref not in kits:        # listed, and already refused by L161
+            continue
+        ids = {str((q or {}).get("id")) for q in kits[kref].get("parts") or []}
+        if pid not in ids:
+            err(path, "L162", f"chassis.ears.positions[{i}].part: {kref} has no part "
+                f"{pid!r} (its parts: {', '.join(sorted(ids)) or 'none'})")
 
 
 def lint_rack_side_portrait(path, data):
@@ -10820,6 +10980,7 @@ def lint_device(path, validator, lib_roots):
     lint_device_config_scope(path, data)
     lint_device_silkscreen_owner(path, data)
     lint_device_rack_ears(path, data)
+    lint_device_kits(path, data, lib_roots)
     lint_device_overhang(path, data, lib_roots)
     lint_device_bay_pitch(path, data)
     lint_device_empty_views(path, data)
@@ -10876,6 +11037,14 @@ def lint_device(path, validator, lib_roots):
             if not resolve(p["ref"]):
                 err(path, "L5", f"unresolvable ref {p['ref']} ({p['id']})")
                 continue
+            # A KIT IS NAMED, NEVER PLACED (#905, #906). It has no size and no
+            # skin, so placing one passed every rule and failed at render with
+            # "no skin 'default'". Its parts are ordinary components and can be.
+            if _is_kit(p["ref"], lib_roots):
+                err(path, "L5", f"{vname}/{p['id']}: {p['ref']} is a `kind: kit`, which a "
+                    "device names under `chassis.kits` and never places - place the "
+                    "kit's parts by their own refs if the drawing shows them")
+                continue
             cls = contract_class(p["ref"], lib_roots)
             # L18 - a port on an AMBIGUOUS cage has to say which media it is.
             #
@@ -10921,6 +11090,15 @@ def lint_device(path, validator, lib_roots):
             for acc in (b.get("accepts") or []):
                 if not resolve(acc):
                     err(path, "L5", f"unresolvable accepts ref {acc} ({b['id']})")
+                elif _is_kit(acc, lib_roots):
+                    err(path, "L5", f"{vname}/{b['id']}: accepts {acc}, a `kind: kit` - a "
+                        "bay seats modules; a device names a kit under `chassis.kits`")
+            # a default outside `accepts` is L6's; one inside was refused above
+            if b.get("default") and b["default"] not in (b.get("accepts") or []) \
+                    and _is_kit(b["default"], lib_roots):
+                err(path, "L5", f"{vname}/{b['id']}: default {b['default']} is a "
+                    "`kind: kit` - a bay seats modules; a device names a kit under "
+                    "`chassis.kits`")
             if b.get("default") and b["default"] not in (b.get("accepts") or []):
                 err(path, "L6", f"bay {b['id']} default {b['default']} not in accepts")
             # A BAY NOTHING EVER FILLS RENDERS AS A HOLE, and the modelling skill
@@ -12049,6 +12227,7 @@ def main():
                 lint_attrs_null(f, d)
                 _skin_checks(f, d)
                 lint_component_parts(f, d, args.library)
+                lint_component_bay_kits(f, d, args.library)
                 lint_component_collisions(f, d, args.library)
                 lint_component_bays_drawn(f, d, args.library)
                 lint_component_skin_printing(f, d, args.library)
