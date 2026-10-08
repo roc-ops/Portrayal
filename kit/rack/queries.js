@@ -7,7 +7,8 @@
 import {fits, isRackFace, heightOf} from './fit.js';
 import {placement, managersOf} from './managers.js';
 import {uLabel} from './model.js';
-import {portFree, endKey, proposeMedia, mismatch} from './cable-rules.js';
+import {portFree, endKey, proposeMedia, mismatch, endName, carriedU} from './cable-rules.js';
+import {lanesOf, resolveRoute, routedLength, routeText} from './route.js';
 import {catalogEntries} from './catalog.js';
 import {GONE, CABLE_GONE} from './commands.js';
 import {slotEnv, slotTree, partName, partOf} from './slots.js';
@@ -136,8 +137,51 @@ function itemFacts(rack, item, ctx) {
   return out;
 }
 
+// The pathway ids a route may name on a device: its rings and ducts
+// (`guides`) and pass-throughs (`passes`), every view, from rack.json.
+const pathwayIds = c => [...new Set(['guides', 'passes'].flatMap(k => Object.values(c?.[k] || {}).flat()))].sort();
+
+async function cableInfo(rack, cable, ctx) {
+  const uOf = ctx.chassisOf ? heightOf(ctx.chassisOf) : carriedU;
+  const end = e => ({item: e.item, path: e.path, view: e.view, name: endName(rack, e, uOf)});
+  const l = cable.length;
+  const label = id => rack.items.find(i => i.id === id)?.label ?? id;
+  const edited = cable.routeEdited === true;
+  // A route context's readers come from the page's drawings and may throw; a
+  // measure that fails is "not measured", never an error.
+  let routed = null, waypoints = edited ? cable.route || [] : [];
+  if (ctx.route) {
+    try {
+      waypoints = resolveRoute(rack, cable, ctx.route).waypoints;
+      const r = routedLength(rack, cable, ctx.route);
+      routed = r ? {metres: Math.round(r.measured * 100) / 100, stock: r.value} : null;
+    } catch { routed = null; }
+  }
+  // the devices a route through this cable's ends can name: its two, and the
+  // cable managers bolted on them
+  const near = [...new Set([cable.a.item, cable.b.item])].filter(id => rack.items.some(i => i.id === id))
+    .flatMap(id => [id, ...managersOf(rack, id).map(m => m.id)]);
+  const passes = Object.fromEntries(near.map(id => [id, pathwayIds(ctx.chassisOf?.(rack.items.find(i => i.id === id).ref))])
+    .filter(([, ids]) => ids.length));
+  let loose = null, warn = null;
+  if (typeof ctx.cableFacts === 'function') {
+    const facts = await ctx.cableFacts(rack, [cable.a, cable.b]);
+    if (!facts.unchecked) {
+      const at = e => facts.ends.get(endKey(e)) || {};
+      loose = [['a', cable.a], ['b', cable.b]].map(([side, e]) => ({end: side, reason: at(e).reason ?? null})).filter(x => x.reason);
+      warn = mismatch(cable.media, at(cable.a).info || null, at(cable.b).info || null);
+    }
+  }
+  return {kind: 'cable', id: cable.id, a: end(cable.a), b: end(cable.b), media: cable.media, purpose: cable.purpose, label: cable.label,
+    length: l ? {value: l.value, unit: l.unit ?? 'm', source: l.source ?? 'entered'} : null, routed,
+    route: {edited, waypoints, text: routeText(waypoints, label, rack.frame)}, lanes: lanesOf(rack.frame), passes,
+    loose, mismatch: warn};
+}
+
 export async function inspect(rack, id, ctx = {}) {
   const item = rack.items.find(i => i.id === id);
   if (item) return itemFacts(rack, item, ctx);
+  const cable = (rack.cables || []).find(c => c.id === id);
+  if (cable) return cableInfo(rack, cable, ctx);
   return {error: /^c\d+$/.test(String(id)) ? CABLE_GONE : GONE};
 }

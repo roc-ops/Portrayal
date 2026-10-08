@@ -63,3 +63,47 @@ test('inspect: an item whose configuration the parts list no longer has reads as
   assert.equal(got.cfg, 'gone');
   assert.deepEqual(got.cages.map(g => [g.path, g.holds]), [['port-1', 'acme/sr@1'], ['port-2', null]]);
 });
+
+const ROUTE = {chassisOf, guidesOf: () => [], portX: () => -100};
+
+test('inspect: a cable, with its routed length from a route context', async () => {
+  let r = add(add(M.newRack(), 'leaf', 10, {label: 'leaf-1'}), 'leaf', 20, {label: 'leaf-2'});
+  r = add(r, 'mgr', 20, {label: 'ring', on: 'i2', unit: 1});
+  r = {...r, cables: [cable('c1', end('i1'), end('i2'), {media: 'om4', purpose: 'uplink', label: 'A1', length: {value: 2, unit: 'm', source: 'entered'}})]};
+  const got = await inspect(r, 'c1', {chassisOf, route: ROUTE});
+  assert.deepEqual(got, {kind: 'cable', id: 'c1',
+    a: {item: 'i1', path: 'port-1', view: 'front', name: 'leaf-1 (U10) port-1'},
+    b: {item: 'i2', path: 'port-1', view: 'front', name: 'leaf-2 (U20) port-1'},
+    media: 'om4', purpose: 'uplink', label: 'A1', length: {value: 2, unit: 'm', source: 'entered'},
+    routed: {metres: 1.09, stock: 1.5},
+    route: {edited: false, waypoints: [{lane: 'left-front', ru: 10}, {lane: 'left-front', ru: 20}], text: 'left-front U10-U20'},
+    lanes: ['left-front', 'right-front', 'left-rear', 'right-rear'],
+    passes: {i3: ['guide-1', 'guide-2', 'window-1']},
+    loose: null, mismatch: null});
+});
+
+test('inspect: a hand-made route without a route context, and loose ends and media from the cable facts', async () => {
+  let r = add(add(M.newRack(), 'leaf', 10, {label: 'leaf-1'}), 'pp', 20, {label: 'pp-1'});
+  const route = [{lane: 'right-front', ru: 12}, {lane: 'right-front', ru: 18}];
+  r = {...r, cables: [cable('c1', end('i1'), end('i2', 'bay-1/module/lc1'), {media: 'os2', route, routeEdited: true})]};
+  const copper = {family: 'copper', mode: null};
+  const cableFacts = async (_rack, ends) => {
+    assert.deepEqual(ends, [end('i1'), end('i2', 'bay-1/module/lc1')]);
+    return {ends: new Map([['i1|front|port-1', {info: copper, reason: null}],
+                           ['i2|front|bay-1/module/lc1', {info: null, reason: 'bay-1/module/lc1 holds no optic'}]])};
+  };
+  const got = await inspect(r, 'c1', {chassisOf, cableFacts});
+  assert.equal(got.routed, null);
+  assert.deepEqual(got.route, {edited: true, waypoints: route, text: 'right-front U12-U18'});
+  assert.deepEqual(got.passes, {i2: ['guide-1']});
+  assert.deepEqual(got.loose, [{end: 'b', reason: 'bay-1/module/lc1 holds no optic'}]);
+  assert.deepEqual(got.mismatch, ['OS2 single-mode fiber does not suit end A, which is copper.']);
+});
+
+test('inspect: a route context that throws leaves the cable unmeasured', async () => {
+  let r = add(add(M.newRack(), 'leaf', 10), 'leaf', 20);
+  r = {...r, cables: [cable('c1', end('i1'), end('i2'))]};
+  const got = await inspect(r, 'c1', {chassisOf, route: {...ROUTE, portX: () => { throw new Error('no drawing'); }}});
+  assert.equal(got.routed, null);
+  assert.deepEqual(got.route.waypoints, []);
+});
