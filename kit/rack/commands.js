@@ -8,9 +8,12 @@
 import {withItem, updateItem, withoutItem, withFrame, renamed, withDcim, detached, positionOf, isWaypoint} from './model.js';
 import {fits, isRackFace, heightOf, shrinkRack} from './fit.js';
 import {placement, moveItem, managersOf} from './managers.js';
-import {canCable, withCable, updateCable, withoutCable, cablesOf, withoutCablesOf, cableName, MEDIA} from './cable-rules.js';
+import {canCable, withCable, updateCable, withoutCable, cablesOf, withoutCablesOf, cableName,
+        connectorOf, mediaKind, portPathOf, MEDIA, MEDIA_LABELS} from './cable-rules.js';
 import {validate, same} from './validate.js';
 import {withRoutedLengths} from './route.js';
+import {slotsFor, slotEnv, resolverFor, holdsAt, partName, partOf} from './slots.js';
+import {acceptSwaps, underCarrier} from '../swap.js';
 
 export const GONE = 'That device is no longer in the rack.';
 export const CABLE_GONE = 'That cable is no longer in the rack.';
@@ -107,6 +110,90 @@ function detach(rack, {id}) {
   if (!it) return {error: GONE};
   if (!('on' in it)) return unchanged(rack);
   return done({...rack, items: rack.items.map(i => (i.id === id ? detached(i) : i))}, `Detached ${it.label}.`);
+}
+
+// ── parts: one slot, one field (spec rack-agent-commands §5.1, §5.2) ─────
+// A slot as a person lists it: the slots beside it, grouped, a long run of
+// one group as its first and last.
+const own = (o, k) => Object.prototype.hasOwnProperty.call(o || {}, k);
+function slotList(env, R, path) {
+  const cut = path.lastIndexOf('/module/');
+  const carrier = cut < 0 ? null : path.slice(0, cut);
+  const c = carrier == null ? null : partOf(env.compByRef, R.refAt(`${carrier}/module`));
+  const slots = c
+    ? [...Object.entries(c.bays || {}).map(([id, b]) => ({...b, id: `${carrier}/module/${id}`})),
+       ...(Array.isArray(c.cages) ? c.cages : []).map(g => ({...g, id: `${carrier}/module/${g.id}`}))]
+    : [...env.bays, ...env.cages];
+  const groups = new Map();
+  for (const sl of slots) {
+    const g = sl.group || sl.interface || 'other';
+    groups.set(g, [...(groups.get(g) || []), sl.id]);
+  }
+  return [...groups].map(([g, ids]) => `${g}: ${ids.length > 4 ? `${ids[0]} to ${ids.at(-1)} (${ids.length})` : ids.join(', ')}`).join('; ') || 'no bays or cages';
+}
+const firstEight = refs => (refs.length > 8 ? `${refs.slice(0, 8).join(', ')} and ${refs.length - 8} more` : refs.join(', ') || 'nothing');
+
+// The ports a part in a bay has, by their ids on it: its cages, the parts it
+// composes and its own bays.
+const portIds = comp => new Set([...(Array.isArray(comp?.cages) ? comp.cages : []).map(g => g.id),
+  ...(comp?.parts || []).map(q => q.id), ...Object.keys(comp?.bays || {})]);
+
+function fit(rack, {id, path, ref}, ctx) {
+  const it = itemOf(rack, id);
+  if (!it) return {error: GONE};
+  const was = it.swaps || {};
+  // a different part in a carrier is a fresh seat: what was in it goes
+  // (swap.js pruneCarrier, #484 R5), its fields with it
+  const next = Object.fromEntries(Object.entries(was).filter(([k]) => k === path || !underCarrier(k, path)));
+  if (ref === 'default') delete next[path]; else next[path] = ref;
+  if (same(next, was)) return unchanged(rack);
+  const s = slotsFor(ctx, it.ref);
+  if (s?.error) return s;
+  let holds = ref === 'default' ? undefined : ref, isCage = false, view = null;
+  if (s) {
+    const env = slotEnv(it, s, ctx.compByRef);
+    const R = resolverFor(env, next);
+    const target = R.entryAt(path);
+    if (!target) return {error: `${path} is not a bay or cage on ${it.label}. It has: ${slotList(env, R, path)}.`};
+    isCage = !!target.isCage;
+    view = target.view ?? null;
+    if (ref && ref !== 'default' && !(target.accepts || []).includes(ref))
+      return {error: `${path} does not take ${ref}. It takes: ${firstEight(target.accepts || [])}.`};
+    if (ref && ref !== 'default' && acceptSwaps(next, env).ignored.includes(path))
+      return {error: `${path} cannot take ${ref} while the slot it shares a seat with holds something.`};
+    holds = holdsAt(env, next, path, target);
+  }
+  const fields = Object.fromEntries(Object.entries(it.fields || {})
+    .filter(([k]) => k !== `${path}/module` && !underCarrier(k, path)));
+  const name = holds === undefined ? null : partName(ctx.compByRef, holds);
+  const findings = [];
+  // A BAY'S PORTS GO WITH ITS PART: a cable on a port the new part does not
+  // have is kept, as a loose end (remove's cables: 'keep').
+  if (!isCage && holds !== undefined) {
+    const comp = partOf(ctx.compByRef, holds);
+    const known = holds === null || comp;
+    const ports = portIds(comp), under = `${path}/module/`;
+    const cut = known ? (rack.cables || []).flatMap(c => [c.a, c.b].filter(e => e.item === id && e.path.startsWith(under)
+      && !ports.has(e.path.slice(under.length).split('/')[0])).map(e => ({c, e}))) : [];
+    if (cut.length) {
+      const paths = [...new Set(cut.map(x => x.e.path))], ids = [...new Set(cut.map(x => x.c.id))];
+      findings.push(note(`Kept the cables on ${paths.join(', ')} as loose ends (${ids.join(', ')}): ${holds ? `${paths.length === 1 ? 'this port is' : 'these ports are'} not on ${name}` : `${path} is empty`}.`));
+    }
+  }
+  // A CAGE'S NEW PART, against the media of the cables on its port.
+  if (isCage && holds) {
+    const comp = partOf(ctx.compByRef, holds);
+    const conn = comp ? connectorOf({attrs: comp.attrs || {}}) : null;
+    for (const c of (rack.cables || [])) {
+      if (!conn?.family || ![c.a, c.b].some(e => e.item === id && portPathOf(e.path) === path && (view == null || e.view === view))) continue;
+      const m = mediaKind(c.media);
+      if ((m.family && m.family !== conn.family) || (m.family === 'fiber' && m.mode && conn.mode && m.mode !== conn.mode))
+        findings.push(note(`${c.id} now runs ${MEDIA_LABELS[c.media] ?? c.media} into ${name}.`));
+    }
+  }
+  const summary = holds === undefined ? `Put ${path} on ${it.label} back as its configuration builds it.`
+    : holds ? `Fitted ${name} in ${path} on ${it.label}.` : `Emptied ${path} on ${it.label}.`;
+  return {rack: updateItem(rack, id, {swaps: next, fields}), summary, findings};
 }
 
 // ── the rack ────────────────────────────────────────────────────────────
@@ -264,6 +351,10 @@ export const COMMANDS = {
   rename: {run: rename, description: 'Rename the rack.', args: args(['name'], {name: {type: 'string', description: 'The new name.'}})},
   dcim: {run: dcim, step: false, description: 'Set the names a NetBox or Nautobot import needs: the site (or location) and the device role. Not an undo step.',
     args: args([], {site: {type: 'string', description: "NetBox's site, Nautobot's location."}, role: {type: 'string', description: 'The device role.'}})},
+  fit: {run: fit, description: 'Seat one part in one bay or cage of a placed device, empty it, or put back what its configuration builds there. Only that slot changes; a part taken out takes what was seated in it, and its settings, with it. Refused, with what the slot takes, when the part does not fit there.',
+    args: args(['id', 'path', 'ref'], {id: ID('device'),
+      path: {type: 'string', minLength: 1, description: 'The bay or cage, as inspecting the device lists it (e.g. port-1, bay-2/module/lc1).'},
+      ref: {type: ['string', 'null'], minLength: 1, description: 'The part to seat, as the slot lists it; null to empty the slot; "default" for what the configuration builds.'}})},
   'cable.add': {run: cableAdd, description: 'Run a cable between two free ports. Refused when a port already has a cable or a device is gone.',
     args: args(['a', 'b'], {a: END, b: END, ...CABLE_FIELDS, as: AS})},
   'cable.update': {run: cableUpdate, description: "Change a cable's type, purpose, label or length.",
