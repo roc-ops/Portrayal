@@ -729,44 +729,50 @@ def _lint_worker(payload):
     for d in devices:
         argv += ["--device", d]
     sys.argv = argv
+    # THROUGH lint.collecting(), the one sanctioned way to read what a rule
+    # found: it saves and restores the globals, so nothing here writes them.
     with contextlib.redirect_stdout(io.StringIO()):
-        try:
-            lint.main()
-        except SystemExit:
-            pass
+        with lint.collecting() as found:
+            try:
+                lint.main()
+            except SystemExit:
+                pass
         if mode in ("library", "unplaced"):
-            del lint.ERRORS[:], lint.WARNINGS[:]
-            root = Path(library)
-            if mode == "unplaced":
-                lint.lint_unplaced_majors(root)
-            else:
-                from portrayal import libwalk
-                matrix, comp = [], []
-                for f in libwalk.iter_devices([root]):
-                    d = lint.load_yaml(f)
-                    if isinstance(d, dict) and d.get("kind") == "device":
-                        matrix.append((f, d))
-                        waive = (d.get("lint") or {}).get("waive") or {}
-                        if waive:
-                            lint.WAIVED[str(Path(f).resolve())] = dict(waive)
-                for f in libwalk.iter_components([root]):
-                    d = lint.load_yaml(f)
-                    if isinstance(d, dict):
-                        comp.append((f, d))
-                lint.lint_library_comparable_facts([root], matrix)
-                lint.lint_library_aliases(matrix)
-                lint.lint_library_listings([library])
-                lint.lint_library_bay_size_per_module(matrix + comp, [library])
-                lint.lint_vendor_registry(root)
-                lint.lint_pluggable_family_interfaces(root)
-            lint.WARNINGS[:] = [w for w in lint.WARNINGS if not lint._is_waived(w)]
-    counts = lint._warning_counts(lint.WARNINGS, library)
+            # what main found was only its own setup; the rules below are the run
+            with lint.collecting() as found:
+                root = Path(library)
+                if mode == "unplaced":
+                    lint.lint_unplaced_majors(root)
+                else:
+                    from portrayal import libwalk
+                    matrix, comp = [], []
+                    for f in libwalk.iter_devices([root]):
+                        d = lint.load_yaml(f)
+                        if isinstance(d, dict) and d.get("kind") == "device":
+                            matrix.append((f, d))
+                            waive = (d.get("lint") or {}).get("waive") or {}
+                            if waive:
+                                lint.WAIVED[str(Path(f).resolve())] = dict(waive)
+                    for f in libwalk.iter_components([root]):
+                        d = lint.load_yaml(f)
+                        if isinstance(d, dict):
+                            comp.append((f, d))
+                    lint.lint_library_comparable_facts([root], matrix)
+                    lint.lint_library_aliases(matrix)
+                    lint.lint_library_listings([library])
+                    lint.lint_library_bay_size_per_module(matrix + comp, [library])
+                    lint.lint_vendor_registry(root)
+                    lint.lint_pluggable_family_interfaces(root)
+    # lint.main drops waived warnings itself; the library-wide rules did not
+    # run through it, so the same filter is applied to every mode here
+    warnings = [w for w in found.warnings if not lint._is_waived(w)]
+    counts = lint._warning_counts(warnings, library)
     examples = {}
-    for w in lint.WARNINGS:
+    for w in warnings:
         if "[" in w:
             key = f"{lint._rel(w.split(':')[0].strip(), library)}|{w.split('[')[1].split(']')[0]}"
             examples.setdefault(key, w)
-    return {"errors": list(lint.ERRORS), "counts": counts, "examples": examples}
+    return {"errors": list(found.errors), "counts": counts, "examples": examples}
 
 
 def _add(into, counts, combine):
