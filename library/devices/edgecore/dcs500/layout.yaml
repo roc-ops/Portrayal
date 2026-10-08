@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcs500
-version: 2.0.4
+version: 3.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: DCS500
@@ -167,8 +167,26 @@ provenance:
     confidence: datasheet
     note: >-
       the quick start guide's package contents list a grounding kit of one grounding lug, 2 M5 screws
-      and 2 washers: the `stud-size` of ground-1 and ground-0, each of which is drawn once for a
-      grounding plate that carries two screws.
+      and 2 washers: the `stud-size` of all four screws, ground-1 and ground-1b on one plate and
+      ground-0 and ground-0b on the other.
+  ground-pair:
+    confidence: drawing
+    note: >-
+      TWO M5 SCREWS ON EACH GROUNDING PLATE (#830). Each plate above a supply carries two
+      screws side by side, and the guide kit is one grounding lug and 2 M5 screws: a two-hole
+      landing. Read on the datasheet rear (the 1004 x 211 image on page 2, panel x 4 to 1002
+      px, 2.279 px/mm, the scale figure-choice records) the heads centre at x 118.5 and 158 px
+      on the left plate and 848.5 and 887.5 px on the right, y 76.5 px: 39.25 and 39 px apart,
+      so 17.2 and 17.1 mm, at x 49.85 and 67.05 and 370.55 and 387.75 off the plate edges, y
+      32.7. THAT IS NOT 5/8 IN.: 15.875 would be 36.2 px, three pixels short of what both
+      plates read, and 3/4 in. would be 43.4. No pair host is placed, because each one is
+      built at a lug pitch and this one matches none, and a gap records the pitch. All four
+      screws are common/ground-screw@1, the nominal screw without an earth symbol; the first
+      of each plate keeps the rotate 90 the one stud had, which turns only the seat. THE PLATE
+      IS PLAIN: the datasheet rear shows a light plate, two washered screws and one earth
+      symbol printed above it, which is the plate's silkscreen mark, so the 14 x 7 cutouts the
+      one stud carried are gone. Formerly one common/ground-lug@1 per plate, ground-1 and
+      ground-0, each standing for both screws at the middle of its plate.
 attrs:
   performance:
     switching-capacity: 6.4 Tbps (12.8 Tbps full duplex)
@@ -207,6 +225,15 @@ attrs:
 chassis: {width: 438.4, height: 87.7, depth: 580.0, ru: 2, weight-kg: 14.11, color: '#2d2d31',
   airflow: front-to-back, power: ac}
 gaps:
+  - what: ground-pair-pitch
+    scope: [ground-0, ground-0b, ground-1, ground-1b]
+    reason: vendor-silent
+    note: >-
+      No held document dimensions the two screws on each grounding plate. The guide names one
+      grounding lug and 2 M5 screws; the datasheet rear reads the screws 17.1 to 17.2 apart on
+      both plates, which is neither the 5/8 in. nor the 3/4 in. two-hole lug pattern, so the
+      screws are drawn singly at the reading rather than as a pair host.
+    wanted: a drawing that dimensions the grounding screws, or the kit lug part number
   - what: o-series-numbering
     scope: [front, rear]
     reason: sources-disagree
@@ -468,9 +495,6 @@ views:
       decor:
         - {at: [42.10, 25.60], size: [31.60, 12.30], fill: '#c9cdd1', rx: 0.4}
         - {at: [362.90, 25.60], size: [31.60, 12.30], fill: '#c9cdd1', rx: 0.4}
-      cutouts:
-        - {id: ground-1, at: [51.20, 28.70], size: [14.0, 7.0], shape: rect}
-        - {id: ground-0, at: [370.60, 28.70], size: [14.0, 7.0], shape: rect}
     silkscreen:
       - {at: [58.20, 19.00], mark: ground, size: 3.0, fill: '#d8dcdf', for: ground-1}
       - {at: [377.60, 19.00], mark: ground, size: 3.0, fill: '#d8dcdf', for: ground-0}
@@ -491,8 +515,10 @@ views:
       placements:
         - {ref: common/rack-ear@1, id: rear-ear-left, at: [-14, 0.1], skin: left, optional: ears, group: furniture, rel-pos: 4}
         - {ref: common/rack-ear@1, id: rear-ear-right, at: [438.4, 0.1], skin: right, optional: ears, group: furniture, rel-pos: 5}
-        - {ref: common/ground-lug@1, id: ground-1, at: [54.70, 25.20], rotate: 90, group: grounding, rel-pos: 1, attrs: {stud-size: M5}}
-        - {ref: common/ground-lug@1, id: ground-0, at: [374.10, 25.20], rotate: 90, group: grounding, rel-pos: 0, attrs: {stud-size: M5}}
+        - {ref: common/ground-screw@1, id: ground-1, at: [47.05, 29.90], rotate: 90, group: grounding, rel-pos: 1, attrs: {stud-size: M5}}
+        - {ref: common/ground-screw@1, id: ground-1b, at: [64.25, 29.90], group: grounding, rel-pos: 3, attrs: {stud-size: M5}}
+        - {ref: common/ground-screw@1, id: ground-0, at: [367.75, 29.90], rotate: 90, group: grounding, rel-pos: 0, attrs: {stud-size: M5}}
+        - {ref: common/ground-screw@1, id: ground-0b, at: [384.95, 29.90], group: grounding, rel-pos: 2, attrs: {stud-size: M5}}
     regions:
       - {id: exhaust, at: [88.58, 0], size: {w: 267.96, h: 87.7}, physical-context: Exhaust,
          label: Fan tray exhaust (front-to-back build), members: [fan-0, fan-1, fan-2, fan-3]}

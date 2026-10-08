@@ -767,6 +767,8 @@ WITHHELD = {
        for n in (80, 160, 200, 400) for v in ("SE", "TR")},
     "Dell/riser-2s-16g": ["e3s-0", "e3s-1"],      # its slot-1 is given
     "Juniper/MX-MPC1E-3D": ["mic0", "mic1"],
+    # the adapter seats MPCs that also seat directly in an MX240/MX480/MX960 (#261)
+    "Juniper/MX2000-LC-ADAPTER": ["mpc"],
     "Juniper/MX-MPC2E-3D": ["mic0", "mic1"],
     "Juniper/MX-MPC3E-3D": ["mic0", "mic1"],
     "Nokia/IOM4-e": ["mda-1", "mda-2"],
@@ -777,7 +779,7 @@ WITHHELD = {
 # Every module model seated both in a chassis bay and in a module's bay. A new
 # one here is a device seating a nested-only model directly (or the reverse),
 # which renames that model's Nautobot ports back to `{module}/x`.
-MULTI_DEPTH = [
+MULTI_DEPTH = sorted([
     "Cisco/A9K-MPA-1X40GE", "Cisco/A9K-MPA-20X1GE", "Cisco/A9K-MPA-2X10GE",
     "Cisco/A9K-MPA-4X10GE", "Cisco/MPA blank",
     "Dell/e3s-carrier", "Dell/e3s-carrier-blank",
@@ -786,13 +788,23 @@ MULTI_DEPTH = [
     "Juniper/MIC-3D-4OC3OC12-1OC48", "Juniper/MIC-3D-8DS3-E3",
     "Juniper/MIC-3D-8OC3OC12-4OC48", "Juniper/MIC-MACSEC-20GE",
     "Juniper/MS-MIC-16G", "Juniper/mx-mic-blank",
+    # #261: the MX2000 adapter seats the MX240 card, so every MPC is seated at
+    # depth 1 (MX240-MX960) and 2 (in the adapter), and the MICs only an MPC
+    # takes at 2 and 3. Their Nautobot ports went back to `{module}/x`.
+    "Juniper/MIC-3D-4XGE-XFP", "Juniper/MIC3-3D-10XGE-SFPP",
+    "Juniper/MIC3-3D-1X100GE-CFP", "Juniper/MIC3-3D-1X100GE-CXP",
+    "Juniper/MIC3-3D-2X40GE-QSFPP", "Juniper/MPC-3D-16XGE-SFPP",
+    "Juniper/MPC4E-3D-2CGE-8XGE", "Juniper/MPC4E-3D-32XGE-SFPP",
+    "Juniper/MPC5E-100G10G", "Juniper/MPC5E-40G10G", "Juniper/MPC7E-10G",
+    "Juniper/MPC7E-MRATE", "Juniper/MS-MPC", "Juniper/MX-MPC1E-3D",
+    "Juniper/MX-MPC2E-3D", "Juniper/MX-MPC3E-3D",
     "Nokia/ACC - SR-e MDA Impedance Panel", "Nokia/ME-ISA2-MS",
     "Nokia/ME1-100GB-CFP2", "Nokia/ME10-10GB-SFP+", "Nokia/ME12-10/1GB-SFP+",
     "Nokia/ME16-10/25GB-SFP28+2-100GB", "Nokia/ME2-100GB-CFP4",
     "Nokia/ME2-100GB-MS-QSFP28", "Nokia/ME2-100GB-QSFP28",
     "Nokia/ME3-200GB-CFP2-DCO", "Nokia/ME3-400GB-QSFP-DD", "Nokia/ME40-1GB-CSFP",
     "Nokia/ME6-100GB-QSFP28", "Nokia/ME6-10GB-SFP+",
-]
+])
 
 
 def test_the_multi_depth_models_are_the_pinned_ones():

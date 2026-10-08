@@ -17,7 +17,7 @@ picked by reading their contracts:
                         `attrs.media: sfp-plus`, plus two QSFP28 cages;
   - cisco/a9k-40ge-b@2  a vertical card, forty SFP cages alternating rotate
                         270 / 90, declaring no media (no ceiling);
-  - juniper/mic3-3d-10xge-sfpp@1  a MIC, ten SFP+ cages at rotate 0 / 180.
+  - juniper/mic3-3d-10xge-sfpp@2  a MIC, ten SFP+ cages at rotate 0 / 180.
 """
 import json
 import sys
@@ -36,7 +36,7 @@ LIB = SPEC.parent / "library"
 INDEXER = SPEC / "tools/portrayal/components_index.py"
 RENDER = SPEC / "tools/portrayal/render.py"
 
-NAMED = ["casa/smm-300gm@1", "cisco/a9k-40ge-b@2", "juniper/mic3-3d-10xge-sfpp@1"]
+NAMED = ["casa/smm-300gm@1", "cisco/a9k-40ge-b@2", "juniper/mic3-3d-10xge-sfpp@2"]
 
 
 def _ref(entry):
@@ -193,7 +193,7 @@ def test_a_card_cage_accepts_what_a_device_cage_of_its_media_accepts(index, tmp_
     device_cage = next(c for c in dev["cages"]["front"] if c["id"] == "port-0")
     assert (device_cage["interface"], device_cage["media"]) == ("sfp", "sfp-plus")
     assert device_cage["accepts"], "the device cage accepts nothing - vacuous"
-    for ref in ("casa/smm-300gm@1", "juniper/mic3-3d-10xge-sfpp@1"):
+    for ref in ("casa/smm-300gm@1", "juniper/mic3-3d-10xge-sfpp@2"):
         sfpp = [c for c in index[ref]["cages"] if c["media"] == "sfp-plus"]
         assert sfpp, ref
         for c in sfpp:

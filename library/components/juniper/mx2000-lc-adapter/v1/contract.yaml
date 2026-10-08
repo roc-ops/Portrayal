@@ -1,0 +1,84 @@
+format: 1
+kind: module
+name: mx2000-lc-adapter
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX2000 line-card adapter (ADC, MX2000-LC-ADAPTER) - the shell that seats an MX240, MX480 and
+  MX960 form MPC in an MX2008, MX2010 or MX2020 line-card slot. The MPC is the same horizontal card
+  those chassis take, turned 90 in the adapter's one bay; the adapter adds its own frame and ejector
+  handles.
+attrs:
+  model: MX2000-LC-ADAPTER
+  power-draw-max-w: 150
+provenance:
+  size: >-
+    datasheet - MX2010 and MX2020 Hardware Guides, physical specifications table, row 'ADC': width
+    1.7 in (4.31 cm), height 17.71 in (44.98 cm), depth 23.6 in, 26.14 in with the ejector handle; the
+    MX2008 book prints the same row. Drawn 43.18 x 449.8. The MX2010 front photograph agrees: the slot
+    pitch is 41.36 px against an MPC plate of 379.5 px, 43.3 mm on the card's 396.0 (#261), and the
+    adapter's frame and handle blocks run 724 to 1163 px, 448 mm on the chassis scale.
+  power: >-
+    datasheet - the FRU power tables of the MX2008, MX2010 and MX2020 Hardware Guides: '| ADC |
+    MX2000-LC-ADAPTER | 150W |'. The adapter's own figure; the MPC it carries states its own.
+  mpc-bay: >-
+    datasheet - the guides call the ADC 'merely a shell that accepts line cards in the front', and the
+    MPC row of the same physical table is 1.25 x 15.5 in, the MX240 card. The MX2010 photograph shows
+    each adapter holding the horizontal card turned so its left end (OK/FAIL, MIC0) is at the top, the
+    MX960's turn: rotate 90. The card's plate centre (754.0 to 1133.5 px) and the adapter's (724 to 1163
+    px) agree within 0.3 px, so the bay is centred, at the card's 413.5 x 29.5 lever envelope. The hole
+    the skin draws for it (`mpc`, the bay's opening) is the card's 396.0 plate, centred, as the MX960
+    slots' `opening` is: the levers' 8.75 at each end lie over the adapter's frame, not over the hole.
+  accepts: >-
+    the eleven MX240/MX480/MX960 cards the MX2000 slots already listed as `-v2k` twins before #261,
+    from the module matrix of the Interface Module Reference. The MX2010 guide names MPC1E, MPC2E,
+    MPC3E, MPC5E and MPC7E as needing the adapter; the 16x10GE MPC, both MPC4Es and the MS-MPC are the
+    same form factor and the same guides list them for the MX2000.
+  handles: >-
+    estimated - the black handle blocks at the adapter's ends read about 25 mm (top) and 22 mm (bottom)
+    on the MX2010 photograph at about 1 px/mm, measured to where the carried MPC's own levers cross
+    them. Each block is drawn 17.55 long, ending at the MPC bay's edge, because in the photograph the
+    MPC's levers lie IN FRONT of the handle band: drawn to their full length, the blocks painted over
+    the lever tips and, standing proud, buried them in 3D. Their 20 mm stand-off is an estimate: the guide's 2.54 in
+    difference between the depth with and without the ejector handle bounds it from above.
+states: [absent]
+bays:
+  mpc:
+    at: [6.84, 18.15]
+    size: [29.5, 413.5]
+    rotate: 90
+    accepts:
+    - juniper/mpc-3d-16xge-sfpp@2
+    - juniper/mpc1e-3d@3
+    - juniper/mpc2e-3d@3
+    - juniper/mpc3e-3d@3
+    - juniper/mpc4e-3d-2cge-8xge@2
+    - juniper/mpc4e-3d-32xge-sfpp@2
+    - juniper/mpc5e-100g10g@2
+    - juniper/mpc5e-40g10g@2
+    - juniper/mpc7e-10g@2
+    - juniper/mpc7e-mrate@2
+    - juniper/ms-mpc@2
+    default: juniper/mpc4e-3d-32xge-sfpp@2
+relief:
+  features:
+  - node: handle-top
+    out: 20.0
+    color: '#2b2f33'
+    confidence: estimated
+    source: the handle blocks stand proud of the card face; projection not measured (provenance handles)
+  - node: handle-bottom
+    out: 20.0
+    color: '#2b2f33'
+    confidence: estimated
+    source: the handle blocks stand proud of the card face; projection not measured (provenance handles)
+size:
+  w: 43.18
+  h: 449.8
+size-confidence: {w: datasheet, h: datasheet}
+size-notes: >-
+  w and h are the adapter's face as the guides' physical table states it (1.7 x 17.71 in), which is
+  the MX2000 line-card slot pitch: the MX2010, MX2008 and MX2020 front photographs read 43.3, 43.3 and
+  43.4 mm between slots.

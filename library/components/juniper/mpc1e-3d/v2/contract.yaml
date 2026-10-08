@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mpc1e-3d
-version: 2.0.0
+version: 2.0.1
 class: line-card
 behaviour: fills
 profile: networking
@@ -9,6 +9,11 @@ description: >-
   Juniper MPC1E carrier (MX-MPC1E-3D) - two MIC slots. The base SKU and MX-MPC1-3D, which share its wattage
   and its MIC column; the queuing SKUs share the faceplate but not those, and are not this contract. One
   card for the MX240, MX480 and MX960, drawn horizontal; the MX960 seats it turned 90.
+unplaced: >-
+  SUPERSEDED by juniper/mpc1e-3d@3, the MIC plate re-measured at 168.8 x 29.2 and the carriers
+  re-laid to match (#261, part 2). This major is kept and deprecated rather than deleted, so a
+  manifest that pins it still resolves (#448); nothing in this library seats it.
+superseded-by: juniper/mpc1e-3d@3
 attrs:
   model: MX-MPC1E-3D
   model-variants: MX-MPC1-3D

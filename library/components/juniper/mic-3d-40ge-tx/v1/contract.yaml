@@ -1,17 +1,21 @@
 format: 1
 kind: module
 name: mic-3d-40ge-tx
-version: 1.2.1
+version: 1.2.2
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
   Juniper Tri-Rate 40-port RJ45 MIC, dual-wide: it seats across both MIC slots of its MPC, which the bay system cannot express, so it is here for reference and in no accepts list (roc-ops/Portrayal#34). MIC form (168 x 27 window; the earlier 31 mm reading was the bay opening with bezel - a MIC must seat inside the 29.5 mm MPC face, so the window is 27).
 unplaced: >-
-  no MPC in this library accepts it. It is DUAL-WIDE - it seats across both MIC slots of its
-  MPC - and the MPC contracts model two separate single-width bays, so there is no bay shaped
-  like this card to list it in. Seating it needs a way to say that one module fills two bays,
-  which the format does not have.
+  SUPERSEDED by juniper/mic-3d-40ge-tx@2, the MIC plate re-measured at 168.8 x 29.2 and the
+  carriers re-laid to match (#261, part 2). This major is kept and deprecated rather than
+  deleted, so a manifest that pins it still resolves (#448); nothing in this library seats it.
+  Before it was retired: no MPC in this library accepts it. It is DUAL-WIDE - it seats across
+  both MIC slots of its MPC - and the MPC contracts model two separate single-width bays, so
+  there is no bay shaped like this card to list it in. Seating it needs a way to say that one
+  module fills two bays, which the format does not have.
+superseded-by: juniper/mic-3d-40ge-tx@2
 attrs:
   model: MIC-3D-40GE-TX
   power-draw-max-w: 41

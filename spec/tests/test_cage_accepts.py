@@ -150,7 +150,7 @@ def test_an_osfp_cage_accepts_exactly_the_osfp_generics(tmp_path):
     assert cage["accepts"] == ["generic/osfp-lc@1", "generic/osfp-mpo16@1"]
 
 
-CFP2_CARD = LIB / "components/juniper/mic3-100g-dwdm/v1/contract.yaml"
+CFP2_CARD = LIB / "components/juniper/mic3-100g-dwdm/v2/contract.yaml"
 
 
 def test_a_cfp2_cage_on_a_card_accepts_exactly_the_cfp2_generics():

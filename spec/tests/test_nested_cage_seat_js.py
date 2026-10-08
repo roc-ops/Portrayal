@@ -45,6 +45,7 @@ RENDER = SPEC / "tools/portrayal/render.py"
 SCRIPT = SPEC / "tests/js/nested-cage-seat.mjs"
 
 SFP, QSFP, QSFPDD = "generic/sfp-lc@1", "generic/qsfp-lc@1", "generic/qsfp-dd-lc@1"
+XFP = "generic/xfp-lc@1"
 
 # (vendor, device, configuration, bays merged in, occupants, card ref)
 DEVICES = [
@@ -54,6 +55,17 @@ DEVICES = [
      {"front-2/xg0": SFP, "front-2/g0": SFP}, "casa/smm-8x10g@1"),
     ("juniper", "mx304", "dc", {},
      {"lmic0/port-0": QSFPDD, "lmic0/port-1": QSFP}, "juniper/mx304-lmic16@1"),
+    # #261: a card TURNED INSIDE A CARD. The MX2000's adapter seats the MX240
+    # card in a component bay at rotate 90, so the cage's turn comes from a
+    # nested bay, not the device's - at depth 2 (the MPC's own cages) and at
+    # depth 3 (a MIC in the turned MPC).
+    ("juniper", "mx2010", "base",
+     {"fpc0": "juniper/mx2000-lc-adapter@1", "fpc0/mpc": "juniper/mpc4e-3d-32xge-sfpp@2"},
+     {"fpc0/mpc/port-0-0": SFP, "fpc0/mpc/port-0-1": SFP}, "juniper/mpc4e-3d-32xge-sfpp@2"),
+    ("juniper", "mx2020", "base",
+     {"fpc0": "juniper/mx2000-lc-adapter@1", "fpc0/mpc": "juniper/mpc2e-3d@3",
+      "fpc0/mpc/mic0": "juniper/mic-3d-4xge-xfp@3"},
+     {"fpc0/mpc/mic0/port-0-0": XFP, "fpc0/mpc/mic0/port-0-3": XFP}, "juniper/mic-3d-4xge-xfp@3"),
 ]
 
 needs_node = pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
@@ -279,7 +291,7 @@ def test_the_kit_seats_an_optic_on_a_card_where_the_build_does(parity):
             assert want["children"], f"{where}: the build's optic has no children - vacuous"
             assert have["children"] == want["children"], f"{where}: children differ"
             n += 1
-    assert n == sum(len(c["built"]) for c in cases) == 6, n
+    assert n == sum(len(c["built"]) for c in cases) == 10, n
     print(f"nested cage parity: {len(cases)} devices, {n} cages, max error {worst:.3g}")
 
 

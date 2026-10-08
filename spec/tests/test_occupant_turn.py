@@ -387,12 +387,14 @@ def test_l147_fails_a_widening_a_point_that_is_not_presented_and_no_interface():
 # FX-8's and FX-4's single stud each became a pair (+1, +1). Every other
 # converted device keeps its stud count: its studs moved one level into a pair
 # host and are still seats.
-WANT = {"down": 103, "left": 24, "up": 6, "right": 22}
-# THE TWO-HOLE LUG on a pair host: 51 seats on 25 devices - three on each of
+WANT = {"down": 105, "left": 27, "up": 8, "right": 21}
+# THE TWO-HOLE LUG on a pair host: 59 seats on 33 devices - three on each of
 # the eleven Amphenol 300CB08 panels, one on each AIS800, the seven MX, the
-# LMFS-F, two on the FX-16, one on the FX-8 and FX-4, and the SR-1-DC block's
-# four poles (one level in)
-WANT_PAIRS = {"down": 45, "left": 4, "up": 1, "right": 1}
+# LMFS-F, two on the FX-16, one on the FX-8 and FX-4, the SR-1-DC block's
+# four poles (one level in), and one M4 pair on each of eight UfiSpace
+# chassis (#830), every one of which leads its wire left, toward the end of
+# the flank its pair sits at
+WANT_PAIRS = {"down": 45, "left": 12, "up": 1, "right": 1}
 NAMES = {0: "right", 90: "down", 180: "left", 270: "up"}
 LEADS = {"right": 0, "down": 90, "left": 180, "up": 270}
 PAIR_IFACES = ("stud-pair-5-8", "stud-pair-3-4", "stud-pair-1")
@@ -457,7 +459,7 @@ def test_the_default_distribution_is_pinned(census):
     assert dict(collections.Counter(r["dir"] for r in ring.values())) == WANT
     assert len({k[0] for k in ring}) == 63
     assert dict(collections.Counter(r["dir"] for r in pairs.values())) == WANT_PAIRS
-    assert len({k[0] for k in pairs}) == 25
+    assert len({k[0] for k in pairs}) == 33
     # a pair is turned only along itself
     assert {r["turn"] for r in pairs.values()} == {0, 180}
 
@@ -493,12 +495,16 @@ def test_the_four_crossings_the_seat_gave_are_gone(census):
         assert census[k]["hard"] == 0 and census[k]["dir"] != "down", k
     # main's forty-odd were pairs of single studs, the upper lug lying across
     # the lower stud; those pairs are pair hosts now, a two-hole lug's seat.
-    # Twelve ring-lug seats still cross something at their own direction -
+    # Seventeen ring-lug seats still cross something at their own direction -
     # the four above, both studs of the MX240's and MX480's pairs, the MX304
-    # plate's first screw, Casa's top stud and the UfiSpace S9600/S9601
-    # `ground-1` - and the default clears every one
+    # plate's first screw, Casa's top stud, the UfiSpace S9600/S9601
+    # `ground-1`, and one screw of each two-screw Edgecore plate #830 drew
+    # (the AGR560, EPS112 and EPS203 `ground-1`, the DCS500 `ground-0b` and
+    # `ground-1b`) - and the default clears every one. Those five are a ring
+    # lug at its seat's own direction lying across the plate's OTHER screw, 16
+    # to 17 away; which screw draws the earth symbol does not move them.
     crossed = {k for k, r in _ring(census).items() if r["hard0"]}
-    assert len(crossed) == 12 and not [k for k in crossed if census[k]["hard"]]
+    assert len(crossed) == 17 and not [k for k in crossed if census[k]["hard"]]
 
 
 def test_a_barrier_block_pole_is_no_turnable_seat():

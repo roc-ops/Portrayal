@@ -260,6 +260,9 @@ def test_the_census_measured_something():
     """A walk that found nothing would pass every assertion below."""
     rows = _census()
     assert sum(1 for r in rows if r[1] is not None) > 1500
+    # component-owned pairs and columns count every contract, the majors #261
+    # part 2 retired but kept (`superseded-by`, #448) included: 896 pairs and 504
+    # columns measured.
     assert sum(1 for r in rows if r[1] is None) > 800
     assert sum(1 for r in rows if r[2]["kind"] == "column") > 500
 

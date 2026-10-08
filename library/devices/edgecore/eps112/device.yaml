@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: eps112
-version: 1.0.8
+version: 2.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS4625-30P
@@ -194,12 +194,12 @@ provenance:
       even though the guards are drawn as rectangles there and circles here. TWO SUPPLY BAYS, and the
       two modules' silver faces measure IDENTICALLY: x 270.45-343.68 and 354.76-427.99, both 73.23 wide,
       both y 2.55-42.79, both 40.24 tall, on a pitch of 84.31. The photograph puts the handles 83.9 apart
-      and the latches 84.8, which brackets it. THE GROUNDING POINT is two studs and an IEC earth symbol
-      at the far left, x 3.95 to about 22, vertically centred - the datasheet's callout 9 and the guide's
-      callout 7. SILKSCREEN: FAN1, FAN2 and FAN3 under and right of their own fans at x 84.0-90.0, 132.2-138.6
-      and 180.4-186.9 on y 39.5; PSU1 and PSU2 on the black web to the RIGHT of each bay, at x 346.6-352.0
-      and 432.2-438.0, vertically centred. The PSU labels are legible only on the photograph; the elevation
-      blurs them.
+      and the latches 84.8, which brackets it. THE GROUNDING POINT is two screws one above the other at
+      the far left, x 9.5, and an IEC earth symbol in a circle to their right at (23.7, 28.7) - the datasheet's
+      callout 9 and the guide's callout 7 (provenance ground-pair). SILKSCREEN: FAN1, FAN2 and FAN3 under
+      and right of their own fans at x 84.0-90.0, 132.2-138.6 and 180.4-186.9 on y 39.5; PSU1 and PSU2
+      on the black web to the RIGHT of each bay, at x 346.6-352.0 and 432.2-438.0, vertically centred.
+      The PSU labels are legible only on the photograph; the elevation blurs them.
   finish:
     confidence: measured
     note: >-
@@ -219,12 +219,29 @@ provenance:
       own six-page document, its own datasheet, its own port count, its own supply and its own face. What
       it shares with them is the shell - 440 x 350.3 x 44, the same rack kit "RKIT-L-4625 ... for EPS100/AS4625
       series" - and the fan pitch.
+  ground-pair:
+    confidence: photo-measured
+    note: >-
+      TWO SCREWS ON ONE PLATE, ONE ABOVE THE OTHER, AND ONE EARTH SYMBOL TO THEIR RIGHT (#830). The grounding
+      point (datasheet callout 9, guide callout 7) is a plain plate at the far left of the rear carrying
+      two pan-head screws, one above the other. Read on the rear photograph (photos 4-EPS112-B, 960 x
+      700, body x 1 to 958 and y 304 to 398 px, 2.18 and 2.14 px/mm) the heads centre at x 22 px and y
+      329.5 and 364.5 px, 35 px apart: x 9.6, y 11.8 and 28.0, 16.2 apart. On the datasheet rear (fig-0008,
+      3.27 px/mm across, 3.21 down) they centre at x 124.5 px and y 508.5 and 562 px: x 9.3, y 11.7 and
+      28.4, 16.4 to 16.7 apart. Drawn at x 9.5, y 11.85 and 28.15, 16.3 apart. The two screws are both
+      common/ground-screw@1, the nominal unsized screw without an earth symbol, and the symbol the chassis
+      prints is silkscreen where it prints it. THE SYMBOL is a circled IEC earth printed to the RIGHT
+      of the lower screw, at its height: its ring centres at (53.1, 365.5) px on the photograph, (23.9,
+      28.8), and at (171.0, 562.8) px on the datasheet rear, (23.5, 28.7), about 9.4 across on both. Drawn
+      at (23.7, 28.7), ring radius 4.5. NO SIZE IS CLAIMED: neither document names the screw or a lug,
+      so no pair host is placed. Formerly one common/ground-lug@1, ground, whose stud sat on the lower
+      screw (8.05, 28.0) with its own symbol above it.
 attrs:
   environmental: {operating-temp: 0 to 45 C (32 to 113 F) at sea level, storage-temp: -40 to 70 C (-40
       to 158 F), humidity: 'Operating: 5% to 95% non-condensing'}
   physical: {weight-note: '6.42 kg (14.15 lb), includes two PSUs'}
-  power: {power-consumption: Low-line 1150 W max; high-line 1200 W max, input-ac: '100-240
-      VAC, 50/60 Hz, 8.5 A max', poe-budget: '450 W with one PSU, 1000 W with two PSUs'}
+  power: {power-consumption: Low-line 1150 W max; high-line 1200 W max, input-ac: '100-240 VAC, 50/60
+      Hz, 8.5 A max', poe-budget: '450 W with one PSU, 1000 W with two PSUs'}
   features:
     optics-sfp-plus: >-
       Six 1G/10G SFP+ uplinks, ports 25-30. The guide's Install step lists what goes in them - "10GBASE-SR,
@@ -237,8 +254,20 @@ attrs:
       1.65 A max on ports 17-24, at 57 V dc max. 90 W needs Cat 6A cabling, which the datasheet says in
       its own key-features list.
   lifecycle: {eol: none-announced}
-chassis: {width: 440.0, height: 44.0, depth: 350.35, ru: 1, weight-kg: 6.42, color: '#414141', airflow: front-to-back, power: ac}
+chassis: {width: 440.0, height: 44.0, depth: 350.35, ru: 1, weight-kg: 6.42, color: '#414141', airflow: front-to-back,
+  power: ac}
 gaps:
+- what: ground-pair-pitch
+  scope:
+  - ground-1
+  - ground-2
+  reason: vendor-silent
+  note: >-
+    The grounding plate carries two screws for one lug, but no held document dimensions them: the rear
+    photograph and the datasheet rear read the two screws 16.2 to 16.7 apart, and neither document names
+    the screw or a lug. A two-hole lug lands on a pair host built at a lug pattern and a screw size, so
+    both screws stay nominal and unsized, at the reading, until a source gives the size and the spacing.
+  wanted: the grounding screw size and hole spacing, or the part number of the kit lug
 - what: shell-height-disagreement
   scope:
   - front
@@ -1007,6 +1036,16 @@ views:
       decor:
       - {id: rear-plate, at: [0, 0], size: [440.0, 44.0], fill: '#464646'}
     silkscreen:
+    - id: ground-mark
+      at: [23.7, 28.7]
+      path: >-
+        M 0 -4.5 A 4.5 4.5 0 1 0 0.01 -4.5 Z M 0 -2.93 V 0.45 M -3.15 0.45 H 3.15 M -2.02 1.57 H 2.02
+        M -1.12 2.7 H 1.12
+      stroke-width: 0.4
+      fill: '#d8dcdf'
+      for:
+      - ground-1
+      - ground-2
     - {id: fan-label-1, at: [87.0, 40.3], text: FAN1, font-size: 1.9, anchor: middle, fill: '#e8ecef',
       for: fan-1}
     - {id: fan-label-2, at: [135.4, 40.3], text: FAN2, font-size: 1.9, anchor: middle, fill: '#e8ecef',
@@ -1039,7 +1078,8 @@ views:
       - {ref: edgecore/eps112-fan-fixed@1, id: fan-1, at: [57.67, 10.67], group: fans, rel-pos: 1}
       - {ref: edgecore/eps112-fan-fixed@1, id: fan-2, at: [105.36, 10.67], group: fans, rel-pos: 2}
       - {ref: edgecore/eps112-fan-fixed@1, id: fan-3, at: [153.23, 10.67], group: fans, rel-pos: 3}
-      - {ref: common/ground-lug@1, id: ground, at: [4.55, 18.2], group: grounding, rel-pos: 1}
+      - {ref: common/ground-screw@1, id: ground-1, at: [6.7, 9.05], group: grounding, rel-pos: 1}
+      - {ref: common/ground-screw@1, id: ground-2, at: [6.7, 25.35], group: grounding, rel-pos: 2}
       - {ref: common/rack-ear@1, id: rear-ear-left, at: [-14, 0.25], skin: left, optional: ears, group: furniture,
         rel-pos: 1}
       - {ref: common/rack-ear@1, id: rear-ear-right, at: [440, 0.25], skin: right, optional: ears, group: furniture,

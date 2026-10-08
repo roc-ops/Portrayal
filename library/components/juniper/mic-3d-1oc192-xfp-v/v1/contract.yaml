@@ -1,12 +1,18 @@
 format: 1
 kind: module
 name: mic-3d-1oc192-xfp-v
-version: 1.2.2
+version: 1.2.3
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
   Juniper SONET/SDH OC192/STM64 MIC with XFP (one port). Vertical author for the vertical carriers (MX960/MX2000 MPCs stand on end, and their MICs with them).
+unplaced: >-
+  SUPERSEDED by juniper/mic-3d-1oc192-xfp@2: the MX2000 carriers that took this rotated twin
+  are retired in favour of the horizontal MPC seated in juniper/mx2000-lc-adapter@1, which
+  takes the horizontal MIC (#261, part 2). Kept and deprecated rather than deleted, so a
+  manifest that pins it still resolves (#448); nothing in this library seats it.
+superseded-by: juniper/mic-3d-1oc192-xfp@2
 attrs:
   oc192: 1
   model: MIC-3D-1OC192-XFP

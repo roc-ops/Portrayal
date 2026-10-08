@@ -1,12 +1,18 @@
 format: 1
 kind: module
 name: mpc2e-3d-v2k
-version: 1.2.0
+version: 1.2.1
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
   Juniper MPC2E carrier (MX-MPC2E-3D) - two MIC slots. The base SKU and MX-MPC2-3D, which share its wattage and its MIC column; the queuing, P and NG SKUs share the faceplate but not those, and are not this contract. Vertical form for the MX2000 cage.
+unplaced: >-
+  SUPERSEDED by juniper/mpc2e-3d@3, which the MX2000 line-card slots now seat turned 90 inside
+  juniper/mx2000-lc-adapter@1, the adapter card the chassis takes (#261, part 2). This
+  vertical drawing of the same card is kept and deprecated rather than deleted, so a manifest
+  that pins it still resolves (#448); nothing in this library seats it.
+superseded-by: juniper/mpc2e-3d@3
 attrs:
   model: MX-MPC2E-3D
   model-variants: MX-MPC2-3D

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: eps122
-version: 2.0.7
+version: 2.0.8
 maturity: modelled
 manufacturer: Edgecore
 model: AS4625-54P
@@ -12,10 +12,10 @@ description: >-
   48 x 1G RJ-45 PoE plus 6 x 1G/10G SFP+ 1RU access switch, sold as the EPS122 and stamped AS4625-54P.
   All ports on the front in TWO ROWS OF TWENTY-FOUR COLUMNS ganged in three blocks of eight, numbered
   1-48, with the SFP+ uplinks numbered 49-54. THE RJ-45 ROW IS TWO PoE CLASSES AND THE PANEL SAYS WHICH:
-  ports 1-40 at 30 W and ports 41-48 at 90 W, the latter marked with an orange band and legended "0.53A
-  Max/Port1-40, 1.85A Max/Port41-48". An RJ-45 management jack over an RJ-45 console, a Micro-USB storage
-  port, a Reset button and six status lamps. TWO HOT-SWAPPABLE SUPPLIES AND THREE FIXED FANS on the rear.
-  Its sibling edgecore/eps121 is the same chassis without PoE.
+  ports 1-40 at 30 W and ports 41-48 at 90 W, the latter marked with orange bands above and below and
+  legended "0.53A Max/Port1-40, 1.65A Max/Port41-48". An RJ-45 management jack over an RJ-45 console,
+  a Micro-USB storage port, a Reset button and six status lamps. TWO HOT-SWAPPABLE SUPPLIES AND THREE
+  FIXED FANS on the rear. Its sibling edgecore/eps121 is the same chassis without PoE.
 profile: networking
 provenance:
   stack-orientation:
@@ -46,10 +46,13 @@ provenance:
       IN THIS FILE USES THE 44.45 SCALE. On a 44 mm face the difference is half a millimetre at the bottom
       edge, which is the size of the features being measured. `chassis.height` still records the vendor's
       published 44: this is a drawing-scale fact, not a dimension change. WHICH INSTRUMENT FOR WHICH JOB,
-      and this one is the opposite of the DCS520's. The guide's LINE ART is the geometry instrument even
-      at 5.03 px/mm, and the datasheet PHOTOGRAPHS at 9.07 px/mm are for detail and colour - because the
-      ganged-pitch fit below comes out with an rms of 0.082 mm on the line art and 0.74 mm on the photograph.
-      White RJ-45 bezels are soft at 9 px/mm; a drawn edge is not.
+      and this one is the opposite of the DCS520's. The guide's LINE ART is the geometry instrument, and
+      the datasheet PHOTOGRAPHS are for detail and colour - because the ganged-pitch fit below comes out
+      with an rms of 0.082 mm on the line art and 0.74 mm on the photograph. NATIVE RESOLUTIONS, since
+      a page render is not one: the guide's elevations are embedded JPEGs about 1119 px across, about
+      2.5 px/mm (5.03 in a 600 dpi page render), and the datasheet front photograph is embedded at 1004
+      px, 2.29 px/mm (9.07 in a page render, a 4x upsample). White RJ-45 bezels are soft in a photograph;
+      a drawn edge is not.
   the-port-wall:
     confidence: measured
     note: >-
@@ -93,9 +96,33 @@ provenance:
       1850 W for 2 PSUs. High-line: 1050 W for 1 PSU, 1920 W for 2 PSUs". THE PER-SUPPLY OUTPUT IS NOWHERE
       STATED and is not invented - the supplies' own contract omits `power-output-w` rather than guess
       it. THE POE SPLIT IS PRINTED ON THE PANEL. The guide's right-hand enlargement shows the legend "PoE
-      Output: 57V ... Max., 0.53A Max/Port1-40, 1.85A Max/Port41-48", and the Overview callouts match
+      Output: 57V ... Max., 0.53A Max/Port1-40, 1.65A Max/Port41-48", and the Overview callouts match
       it: "40 x 1G RJ-45 PoE ports (30 W per port)" and "8 x 1G RJ-45 PoE ports (90 W per port)". So ports
-      41-48 are the 90 W ones, and the panel marks them with an orange band.
+      41-48 are the 90 W ones, and the panel marks them with an orange band. The guide prints the tilde
+      form "Port1~40" and "Port41~48"; the current reads 1.65 A, not 1.85 - re-read at 600 dpi, and 1.65
+      A at 57 V is 94 W, near the callout's 90 W, where 1.85 A would be 105 W.
+  the-90w-bands:
+    confidence: measured
+    note: >-
+      TWO ORANGE BANDS, NOT ONE: a strip behind the legend row above ports 41-48 and a second behind the
+      lamp row below them. Both elevations of this model draw both - the guide's line art and the datasheet
+      photograph - and the guide's right-hand enlargement shows them carrying the 41-48 legends above
+      and the port lamps below. MEASURED ON THE GUIDE'S FRONT ELEVATION AT ITS NATIVE RESOLUTION, the
+      embedded JPEG of 1119 x 122 px. Calibrated on the centres of the first and third cream RJ-45 bezel
+      blocks (64.485 and 301.545 in this file), x reads 2.52 px/mm, so one source pixel is 0.4 mm and
+      the figures are rounded to that. Both bands start at x 301.7, in the gap between the 39/40 and 41/42
+      columns, which is the third block's own centre, and run 2 to 3 px past the drawn bezel's right end;
+      against this file's bezel, which ends at 357.5, they end at 358.5. y is read on the VERTICAL scale,
+      the face's own 111 px over 44.45, 2.50 px/mm: upper band y 8.4-11.6, lower y 38.6-42.8. The horizontal
+      scale would put both 0.1-0.4 mm higher. The datasheet photograph (embedded at 2.29 px/mm, calibrated
+      on the outer bezel edges) agrees to 1 mm. COLOUR COUNTED, NOT GLANCED AT: a median of (228, 102,
+      31) over 19,502 saturated pixels on the guide's enlargement, the highest-resolution source; (214,
+      97, 33) over 2,382 on the elevation. The datasheet photograph prints it redder, (243, 97, 93), and
+      is not used for colour. Sibling edgecore/eps112 marks its own 90 W ports with #e65919, counted on
+      its own guide at (230, 89, 25). The two counts differ by 13 levels of green across two documents,
+      which is document-to-document variation; this file keeps its own count rather than borrowing a sibling's.
+      The first build carried one band at x 601.74 x 110.81, exactly twice a band at 300.87 x 55.4 - measured
+      in a doubled frame and never halved - so it lay wholly off the 440 mm face and was never seen (roc-ops/Portrayal#878).
   why-this-is-its-own-device:
     confidence: datasheet
     note: >-
@@ -124,18 +151,22 @@ attrs:
       gives them two rates - "SFP+ Port LEDs: Green (10G), Amber (1G)" - and no breakout table is published,
       so none is stated here.
   lifecycle: {eol: none-announced}
-chassis: {width: 440.0, height: 44.45, depth: 350.35, ru: 1, weight-kg: 6.6, color: '#43464a', airflow: front-to-back, power: ac}
+chassis: {width: 440.0, height: 44.45, depth: 350.35, ru: 1, weight-kg: 6.6, color: '#43464a', airflow: front-to-back,
+  power: ac}
 gaps:
 - what: the-row-under-the-ports
   scope:
   - front
   reason: needs-drawing
   wanted: >-
-    WHAT IS PRINTED UNDER EVERY PORT COLUMN. Both instruments show a row of small light marks about 1.5
-    mm across below the RJ-45 block, one per column, and NEITHER RESOLVES THEM - the guide's line art
-    at 5.03 px/mm and the datasheet photograph at 9.07 px/mm both reduce them to blur at nine times magnification.
-    They are either a second port numbering or a second lamp row, and the face is modelled without them
-    rather than with a guess. One enlargement of the lower edge closes this.
+    WHERE EACH PORT LAMP SITS IN THE ROW UNDER THE PORTS. What the row IS is settled: the guide's right-hand
+    enlargement (embedded at about 7 px/mm) shows, under every column, the two port numbers each followed
+    by a small dark window - "41 [] 42 []" - and its callouts 3 and 4 point into that row for the "RJ-45
+    Port LEDs: Green (link), Amber (link with PoE)" and the "SFP+ Port LEDs: Green (10G), Amber (1G)".
+    So it is a per-port lamp row with its numbering, not a second legend. Only the geometry is open: the
+    enlargement covers ports 39-54 alone, and the full elevation at about 2.5 px/mm shows the row but
+    not the windows' size or offset. The lamps are not drawn until a measured window size and offset can
+    be repeated across all fifty-four ports.
 - what: fixed-fan-depth
   scope:
   - rear
@@ -162,7 +193,7 @@ groups:
     index-origin: 1
     description: >-
       ports 41-48, the EIGHT 90 W PoE ports. They are the same jacks in the same ganged row as ports 1-40
-      and differ only in what they may deliver, which the panel prints beside them - "1.85A Max/Port41-48"
+      and differ only in what they may deliver, which the panel prints beside them - "1.65A Max/Port41-48"
       - and marks with an orange band. The Overview callouts list them separately from the other forty
       for the same reason.
     attrs: {media: rj45, speed: 1g, poe: 802.3bt 90 W}
@@ -218,7 +249,8 @@ views:
       - {id: brand-plate, at: [26.0, 1.0], size: [56.0, 8.6], fill: '#17191c'}
       - {id: vent-right, at: [84.0, 0.8], size: [337.3, 8.2], pattern: vent, pattern-pitch: [3.1, 1.8],
         vent: 40}
-      - {id: poe-hi-band, at: [601.74, 10.1], size: [110.81, 1.4], fill: '#e8761f'}
+      - {id: poe-hi-band, at: [301.7, 8.4], size: [56.8, 3.2], fill: '#e4661f'}
+      - {id: poe-hi-band-lower, at: [301.7, 38.6], size: [56.8, 4.2], fill: '#e4661f'}
       - {id: rj45-bezel-1, at: [8.53, 12.82], size: [111.91, 24.2], fill: '#f1eeea'}
       - {id: rj45-bezel-2, at: [127.06, 12.82], size: [111.91, 24.2], fill: '#f1eeea'}
       - {id: rj45-bezel-3, at: [245.59, 12.82], size: [111.91, 24.2], fill: '#f1eeea'}
