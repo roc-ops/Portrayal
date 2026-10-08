@@ -1,0 +1,53 @@
+format: 1
+kind: component
+name: cmv-fds45u5w-finger
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  One finger of the FS steel vertical finger ducts CMV-SFDS45U5W and CMV-DFDS45U5W, seen
+  end-on from the cover side, one rack unit long - the moulded block it stands on, its
+  stem, and the T-shaped head the cover clips over; the same moulding in both ducts
+provenance:
+  size: >-
+    drawing - the side views of the FS Vertical Cable Managers with Finger Ducts datasheet for the steel managers (portal id 6868), pages 3 and 4, at 0.4247 px/mm along the 2000.25:
+    44 stems a row 18.88 px apart, 44.45 - one rack unit; a head 17 px long, about 40, and a
+    stem 4 to 5 px, about 10.6. The head is taken as 39.4 and the stem 10.2, the figures of
+    the FS horizontal steel ducts for what the drawing shows is the same T-shaped moulding.
+    Across the duct a finger is its row, 9.0, as on those ducts: the end view draws the row
+    3 to 4 px thick.
+  relief: >-
+    drawing - the single side view at 0.4247 px/mm, measured from the front of the back
+    plate (1.2 from the rear, the gauge estimated): the block from the end of the steel
+    return to 62.4 (63.6 from the rear), the stem with its fork to 141.3 (142.5), and the
+    head to 148.43, which leaves the 1.2 cover sheet and its clips the rest of the 152.63.
+    The fork of the stem is drawn as the stem. In the dual duct the floor is the face of
+    the spine and the finger stands the same distance from it.
+size: {w: 9, h: 44.45}
+size-confidence: {w: estimated, h: drawing}
+attrs: {material: Plastic}
+elements:
+  root: {at: [0.0, 0.0], size: [9, 44.45], class: bezel}
+  stem: {at: [0.0, 17.13], size: [9, 10.2], class: bezel}
+  head: {at: [0.0, 2.53], size: [9, 39.4], class: bezel}
+relief:
+  features:
+    - node: root
+      lift: 37.7
+      out: 62.4
+      color: '#202123'
+      confidence: drawing
+      source: the side view of the steel datasheet, the block from 38.9 to 63.6 from the rear
+    - node: stem
+      lift: 62.4
+      out: 141.3
+      color: '#28292c'
+      confidence: drawing
+      source: the same view, the stem and its fork to the head at 142.5 from the rear
+    - node: head
+      lift: 141.3
+      out: 148.43
+      color: '#323437'
+      confidence: drawing
+      source: the same view, the T-shaped head up to the cover
+skins: [default]

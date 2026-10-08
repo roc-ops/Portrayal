@@ -108,8 +108,10 @@ export function normalise(doc) {
     // object, and a normalise() that coerced one to `true` would eat those
     // fields silently - the worst way to reject a document. Everything here
     // tests it for truth, so an object reads as "yes, a legend" today and can
-    // grow meaning without a second document shape.
-    legend: d.legend && typeof d.legend === 'object' ? d.legend : d.legend !== false,
+    // grow meaning without a second document shape. An ARRAY is not a legend
+    // object (swaps and fields refuse one the same way), so it reads as true
+    // rather than being carried through as a shape the schema does not allow.
+    legend: d.legend && typeof d.legend === 'object' && !Array.isArray(d.legend) ? d.legend : d.legend !== false,
     crop: rect(d.crop),
     marks: marks.filter(m => m && typeof m === 'object').map(m => ({
       // Optional, never invented. Marks are otherwise positional, so "drop the

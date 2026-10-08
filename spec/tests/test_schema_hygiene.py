@@ -25,6 +25,8 @@ import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 SCHEMAS = ROOT / "spec/schemas"
+# The marks document travels in a URL and has always named its version `v`.
+VERSION_KEY = {"marks.schema.json": "v"}
 
 from portrayal import lint
 
@@ -70,7 +72,10 @@ def test_every_schema_id_names_its_published_home(path):
     doc = json.loads(path.read_text())
     assert doc["$id"] == f"https://portrayal.dev/schemas/v1/{path.name}", doc["$id"]
     assert "(v1)" in doc["title"], doc["title"]
-    assert doc["properties"]["format"] == {"const": 1}, "schema v1 is format 1"
+    if path.name in VERSION_KEY:
+        assert doc["properties"][VERSION_KEY[path.name]]["const"] == 1, "schema v1 is version 1"
+    else:
+        assert doc["properties"]["format"] == {"const": 1}, "schema v1 is format 1"
 
 
 def test_the_id_sweep_is_not_vacuous():

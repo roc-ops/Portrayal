@@ -244,6 +244,15 @@ Establish `chassis.width/height/depth` and each view's `size`.
   Lint L43 warns when a front or rear face lands between 480 and 487 mm.
   A `mount: rack-face` part is the exception: it is a pair of ears and what
   hangs off them, so its ears are drawn and its face is the full 483.
+- **How it mounts is `chassis.mount`:** `rack` (the default), `rack-face` (on
+  the rail face at a rack unit, projecting outward: a lacer panel, a 5U finger
+  bracket), `rack-side` (on the side of an upright, beside the rack, outside
+  the rails: a full-height vertical cable manager), `din-rail`, `wall` or
+  `desktop`. The first three state `ru`; the others do not (L125). A
+  `rack-side` part is drawn as it stands, its front `w` across the rack's face
+  direction and `h` the height it runs, so its front is portrait (L152).
+  Which side of the rack it stands on is the lab placement's to say
+  (docs/vertical-cable-managers-design.md).
 - **Three more cases, each one stated (#865).** Ears that carry parts are
   drawn: the R740xd's front is the 482.6 rack face because its flanges hold a
   VGA and the power button, and L43 stands down when something is seated in
