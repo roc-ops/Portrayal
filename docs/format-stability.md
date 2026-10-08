@@ -194,9 +194,9 @@ configuration's front, rear and top views.
 ```
 
 `format` is 1. Each device, keyed by `name`, always carries `manufacturer`,
-`model`, `family`, `ru`, `h`, `w`, `d`, `airflow`, `default` and `configs`
-(the names of its configurations). Four keys appear only when the device has
-them:
+`model`, `family`, `ru`, `h`, `w`, `d`, `airflow`, `default`, `configs`
+(the names of its configurations) and `kind`. Four keys appear only when the
+device has them:
 
 - `mount`: the device's `chassis.mount`, present only when it is not `rack`.
 - `shell`: `chassis.shell`, `sheet` for a body that is a sheet and not a box.
@@ -207,6 +207,11 @@ them:
 `ru` is `chassis.ru` when stated (0 included, for a zero-U part), else the
 height over 44.45 mm, at least 1. Removing or renaming a key, or changing what
 one means, is a contract change and raises `format`; adding a key is not.
+
+`kind` is a plain word for what the device is, read from the manifest's
+`profile` (which `devices.json` carries) and the vendor's own words: `switch`,
+`router`, `network device`, `server`, `pdu`, `patch panel`, `optical`,
+`cable manager`, or `device` when the profile says no more.
 
 ## What else a consumer holds
 

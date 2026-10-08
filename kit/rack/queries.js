@@ -7,7 +7,7 @@
 import {fits, isRackFace, heightOf} from './fit.js';
 import {placement, managersOf} from './managers.js';
 import {uLabel} from './model.js';
-import {portFree, endKey, proposeMedia, mismatch, endName, carriedU, portPathOf, matches} from './cable-rules.js';
+import {portFree, endKey, proposeMedia, mismatch, endName, carriedU, portPathOf, matches, lengthText} from './cable-rules.js';
 import {lanesOf, pathwaysOf, resolveRoute, routedLength, routeText} from './route.js';
 import {catalogEntries} from './catalog.js';
 import {GONE, CABLE_GONE} from './commands.js';
@@ -22,42 +22,73 @@ export function fitsAt(rack, {ref, face, ru}, {chassisOf}) {
 export const freeUs = (rack, {ref, face}, ctx) =>
   Array.from({length: rack.frame.heightRU}, (_, k) => k + 1).filter(ru => fitsAt(rack, {ref, face, ru}, ctx).ok);
 
-export function catalog(devices, {text, ru, family, mount} = {}) {
+// `text` matches the ref, maker and model, and what the device IS: its kind
+// ("patch panel", "switch", "cable manager", from rack.json) and its family.
+export function catalog(devices, {text, ru, family, mount, kind} = {}) {
   const t = text ? String(text).toLowerCase() : null;
   return catalogEntries(devices)
-    .filter(e => !t || [e.name, e.manufacturer, e.model].some(v => String(v ?? '').toLowerCase().includes(t)))
+    .filter(e => !t || [e.name, e.manufacturer, e.model, e.kind, e.family].some(v => String(v ?? '').toLowerCase().includes(t)))
     .filter(e => ru == null || e.ru === ru)
     .filter(e => family == null || e.family === family)
     .filter(e => mount == null || (e.mount || 'rack') === mount)
+    .filter(e => kind == null || e.kind === kind)
     .map(e => ({ref: e.name, manufacturer: e.manufacturer ?? null, model: e.model ?? null, ru: e.ru,
-                mount: e.mount || 'rack', family: e.family ?? null, configs: e.configs ?? [], default: e.default ?? null}));
+                mount: e.mount || 'rack', family: e.family ?? null, kind: e.kind ?? null, configs: e.configs ?? [], default: e.default ?? null}));
 }
 
 // A SHORT READING OF THE RACK for an agent: the ids it needs to address
 // anything, in about 1.5K characters (WebMCP's guidance for tool output). A
-// long rack loses its labels first, then its tail, and says so.
+// long rack loses its labels first, then its tail, and says so. The first line
+// always gives the totals. A WINDOW (`section`, `offset`, `limit`) reads one
+// stretch of a long rack in full instead, each line with the device's ref and
+// configuration or the cable's purpose and length.
 const LIMIT = 1500;
-export function describe(rack, {chassisOf}) {
+const WINDOW = 20;
+const count = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
+const sideOf = e => `${e.item}/${e.path}${e.view === 'rear' ? ' (rear)' : ''}`;
+
+export function describe(rack, {chassisOf}, {section, offset, limit} = {}) {
   const f = rack.frame;
   const holes = f.holes.style === 'tapped' ? `tapped${f.holes.thread ? ` ${f.holes.thread}` : ''} holes` : 'square holes';
-  const head = `${rack.name}: ${f.heightRU}U ${f.kind}, ${holes}, numbered ${f.numbering}.`;
+  const items = [...rack.items].sort((a, b) => b.ru - a.ru);
+  const cables = rack.cables || [];
+  const totals = `${rack.name} (${rack.id}): ${count(items.length, 'item')}, ${count(cables.length, 'cable')}.`;
+  const frameLine = `${f.heightRU}U ${f.kind}, ${holes}, numbered ${f.numbering}.`;
   const uOf = heightOf(chassisOf);
   const span = i => {
     const [a, b] = [uLabel(f, i.ru), uLabel(f, i.ru + uOf(i) - 1)].sort((x, y) => x - y);
     return a === b ? `U${a}` : `U${a}-U${b}`;
   };
-  const item = (i, short) => {
+  // `full` is a window's line: the ref and configuration, the purpose and length
+  const item = (i, short, full = false) => {
     const ms = managersOf(rack, i.id).map(m => m.id);
     return [`${i.id}${short ? '' : ` ${i.label}`} ${span(i)} ${i.face}${i.turned ? ' turned' : ''}`,
+            ...(full ? [`${i.ref} ${i.cfg || '(no configuration)'}`] : []),
             ...(i.on ? [`on ${i.on} unit ${i.unit}`] : []), ...(ms.length ? [`carries ${ms.join(' ')}`] : [])].join(', ');
   };
-  const side = e => `${e.item}/${e.path}${e.view === 'rear' ? ' (rear)' : ''}`;
-  const cable = c => `${c.id}: ${side(c.a)} <-> ${side(c.b)}${c.media ? `, ${c.media}` : ''}`;
-  const items = [...rack.items].sort((a, b) => b.ru - a.ru);
-  const cables = rack.cables || [];
+  const cable = (c, full = false) => [`${c.id}: ${sideOf(c.a)} <-> ${sideOf(c.b)}`, ...(c.media ? [c.media] : []),
+    ...(full && c.purpose ? [c.purpose] : []), ...(full && lengthText(c.length) ? [lengthText(c.length)] : [])].join(', ');
+
+  if (section != null || offset != null || limit != null) {
+    const from = Number.isInteger(offset) && offset > 0 ? offset : 0;
+    const n = Number.isInteger(limit) && limit > 0 ? limit : WINDOW;
+    const parts = [['items', 'Items', items, i => item(i, false, true)], ['cables', 'Cables', cables, c => cable(c, true)]]
+      .filter(([key]) => !['items', 'cables'].includes(section) || section === key);
+    const shown = [], body = [];
+    for (const [, title, list, line] of parts) {
+      if (!list.length) shown.push(`No ${title.toLowerCase()}.`);
+      else if (from >= list.length) shown.push(`${title} past the end: there are ${list.length}.`);
+      else {
+        shown.push(`${title} ${from + 1}-${Math.min(list.length, from + n)} shown.`);
+        body.push(`${title}:`, ...list.slice(from, from + n).map(line));
+      }
+    }
+    return [`${totals} ${shown.join(' ')}`, frameLine, ...body].join('\n');
+  }
+
   const build = (short, nItems, nCables) => {
-    const lines = [head, items.length ? 'Items:' : 'No items.', ...items.slice(0, nItems).map(i => item(i, short)),
-                   ...(cables.length ? ['Cables:', ...cables.slice(0, nCables).map(cable)] : [])];
+    const lines = [totals, frameLine, items.length ? 'Items:' : 'No items.', ...items.slice(0, nItems).map(i => item(i, short)),
+                   ...(cables.length ? ['Cables:', ...cables.slice(0, nCables).map(c => cable(c))] : [])];
     const more = (items.length - nItems) + (cables.length - nCables);
     if (short) lines.push(more ? `Shortened: labels left out, and ${more} more not listed; ask for them by id.` : 'Shortened: labels left out.');
     return lines.join('\n');
