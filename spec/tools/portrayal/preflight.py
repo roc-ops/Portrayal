@@ -68,13 +68,28 @@ import tempfile
 import time
 from pathlib import Path
 
-# THIS CHECKOUT'S TOOLS, whoever runs it. Run by path, sys.path[0] is this
-# directory and `portrayal` is not importable; an editable install elsewhere
-# would answer instead (#561). Every child process gets the same PYTHONPATH.
 TOOLS = Path(__file__).resolve().parents[1]
-if str(TOOLS) not in sys.path:
-    sys.path.insert(0, str(TOOLS))
 TOOLS_ROOT = TOOLS.parents[1]          # the checkout this file belongs to
+
+
+def _pin_toolchain():
+    """THIS CHECKOUT'S `portrayal`, or start again with it on PYTHONPATH.
+
+    Run by path, `portrayal` is either not importable or is whichever checkout
+    was pip-installed (#561), and a preflight that checked this tree with
+    another tree's lint would pass what it should fail. toolchain.sh pins the
+    shell scripts by exporting PYTHONPATH; this does the same by re-running
+    itself, once, rather than editing sys.path (#178). Children inherit it.
+    """
+    found = importlib.util.find_spec("portrayal")
+    here = TOOLS / "portrayal"
+    if found and found.origin and Path(found.origin).resolve().parent == here:
+        return
+    if os.environ.get("PORTRAYAL_PREFLIGHT_PINNED"):
+        raise SystemExit(f"preflight: cannot import portrayal from {here}")
+    env = _env()
+    env["PORTRAYAL_PREFLIGHT_PINNED"] = "1"
+    os.execve(sys.executable, [sys.executable, __file__, *sys.argv[1:]], env)
 SCHEMAS = TOOLS_ROOT / "spec" / "schemas"
 
 CHECKS = ("exports", "skips", "private", "changelog", "devicelock", "lint", "kit")
@@ -792,4 +807,5 @@ def main(argv=None):
 
 
 if __name__ == "__main__":
+    _pin_toolchain()
     sys.exit(main())
