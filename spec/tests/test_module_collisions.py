@@ -102,7 +102,11 @@ def test_every_other_collision_is_a_real_collapse():
     because the port order stopped depending on which way the card was drawn."""
     collapsing = {k: [r for _d, r in v] for k, v in _groups().items()
                   if len(v) > 1 and k not in KNOWN_DIVERGENT}
-    assert len(collapsing) >= 31, f"only {len(collapsing)} group(s) collapse cleanly"
+    # 31 groups until #261 removed the last twins: every one was a Juniper MX card
+    # drawn twice (MX960 `-v`/`-v960` in part 1, MX2000 `-v2k` and vertical MICs in
+    # part 2). A model has one author now, so none collapse; any that appears again
+    # must still agree, which the loop below holds.
+    assert not set(collapsing) & set(KNOWN_DIVERGENT)
     for key, refs in collapsing.items():
         docs = [dx.dcim_significant(d) for d, _r in _groups()[key]]
         assert all(d == docs[0] for d in docs), f"{key} does not actually agree"
@@ -111,12 +115,16 @@ def test_every_other_collision_is_a_real_collapse():
 def test_a_collapsed_type_names_every_author():
     """The surviving document is a function of the whole group, not of which
     contract `sorted()` happened to reach first. The stamp is where that shows."""
-    p = LIB / "exports/netbox/module-types/Juniper/MPC7E-MRATE.yaml"
-    if not p.exists():
-        pytest.skip("the MPC7E-MRATE export is not in this library")
-    comments = (yaml.safe_load(p.read_text()) or {}).get("comments") or ""
-    for author in ("juniper/mpc7e-mrate)", "juniper/mpc7e-mrate-v2k)"):
-        assert author in comments, f"{author} is not named in the stamp:\n{comments}"
+    # MPC7E-MRATE was the example until #261 removed its `-v2k` twin; any group of
+    # two or more authors that collapse serves, and since #261 there is none.
+    groups = {k: v for k, v in _groups().items() if len(v) > 1 and k not in KNOWN_DIVERGENT}
+    if not groups:
+        pytest.skip("no module model has two authors since #261 removed the MX twins")
+    for (man, model), members in groups.items():
+        p = LIB / "exports/netbox/module-types" / man / (model.replace("/", "-") + ".yaml")
+        comments = (yaml.safe_load(p.read_text()) or {}).get("comments") or ""
+        for _doc, ref in members:
+            assert f"({ref})" in comments, f"{ref} is not named in the stamp:\n{comments}"
 
 
 def test_ports_are_ordered_by_name_not_by_where_they_are_drawn():

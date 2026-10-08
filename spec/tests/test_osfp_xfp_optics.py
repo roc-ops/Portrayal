@@ -490,7 +490,9 @@ def test_every_cage_of_the_family_offers_exactly_the_new_optics(device_cages, co
                 if s["interface"] == family and s["kind"] == "cage"]
     # 128 XFP cages on cards until #261 removed the MX960 vertical twins with eight of
     # them: dpc-r-4xge-xfp-v (4), dpce-2xge-xfp-v960 (2) and dpce-20ge-2xge-v960 (2)
-    floor = {"osfp": (416, 4), "xfp": (4, 120)}[family]
+    # and 120 until #261 part 2 removed the vertical MIC twins with seven more:
+    # mic-3d-4xge-xfp-v (4), mic-3d-2xge-xfp-v (2) and mic-3d-1oc192-xfp-v (1)
+    floor = {"osfp": (416, 4), "xfp": (4, 113)}[family]
     assert len(on_devices) >= floor[0] and len(on_cards) >= floor[1], (len(on_devices), len(on_cards))
     for c in on_devices + on_cards:
         assert c["accepts"] == OFFERS[family], (c["id"], c["accepts"])
