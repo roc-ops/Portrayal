@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: eps122
-version: 2.0.7
+version: 2.0.8
 maturity: modelled
 manufacturer: Edgecore
 model: AS4625-54P
@@ -12,10 +12,10 @@ description: >-
   48 x 1G RJ-45 PoE plus 6 x 1G/10G SFP+ 1RU access switch, sold as the EPS122 and stamped AS4625-54P.
   All ports on the front in TWO ROWS OF TWENTY-FOUR COLUMNS ganged in three blocks of eight, numbered
   1-48, with the SFP+ uplinks numbered 49-54. THE RJ-45 ROW IS TWO PoE CLASSES AND THE PANEL SAYS WHICH:
-  ports 1-40 at 30 W and ports 41-48 at 90 W, the latter marked with an orange band and legended "0.53A
-  Max/Port1-40, 1.85A Max/Port41-48". An RJ-45 management jack over an RJ-45 console, a Micro-USB storage
-  port, a Reset button and six status lamps. TWO HOT-SWAPPABLE SUPPLIES AND THREE FIXED FANS on the rear.
-  Its sibling edgecore/eps121 is the same chassis without PoE.
+  ports 1-40 at 30 W and ports 41-48 at 90 W, the latter marked with orange bands above and below and
+  legended "0.53A Max/Port1-40, 1.65A Max/Port41-48". An RJ-45 management jack over an RJ-45 console,
+  a Micro-USB storage port, a Reset button and six status lamps. TWO HOT-SWAPPABLE SUPPLIES AND THREE
+  FIXED FANS on the rear. Its sibling edgecore/eps121 is the same chassis without PoE.
 profile: networking
 provenance:
   stack-orientation:
@@ -93,9 +93,28 @@ provenance:
       1850 W for 2 PSUs. High-line: 1050 W for 1 PSU, 1920 W for 2 PSUs". THE PER-SUPPLY OUTPUT IS NOWHERE
       STATED and is not invented - the supplies' own contract omits `power-output-w` rather than guess
       it. THE POE SPLIT IS PRINTED ON THE PANEL. The guide's right-hand enlargement shows the legend "PoE
-      Output: 57V ... Max., 0.53A Max/Port1-40, 1.85A Max/Port41-48", and the Overview callouts match
+      Output: 57V ... Max., 0.53A Max/Port1-40, 1.65A Max/Port41-48", and the Overview callouts match
       it: "40 x 1G RJ-45 PoE ports (30 W per port)" and "8 x 1G RJ-45 PoE ports (90 W per port)". So ports
-      41-48 are the 90 W ones, and the panel marks them with an orange band.
+      41-48 are the 90 W ones, and the panel marks them with an orange band. The guide prints the tilde
+      form "Port1~40" and "Port41~48"; the current reads 1.65 A, not 1.85 - re-read at 600 dpi, and 1.65
+      A at 57 V is 94 W, near the callout's 90 W, where 1.85 A would be 105 W.
+  the-90w-bands:
+    confidence: measured
+    note: >-
+      TWO ORANGE BANDS, NOT ONE: a strip behind the legend row above ports 41-48 and a second behind the
+      numeral row below them. Both elevations of this model draw both - the guide's line art and the datasheet
+      photograph - and the guide's right-hand enlargement shows them carrying the "41 (up)(down) 42" legends
+      and the lower numerals. MEASURED ON THE GUIDE'S FRONT ELEVATION rendered at 600 dpi, calibrated
+      on the centres of the first and third cream RJ-45 bezel blocks (64.485 and 301.545 in this file),
+      which gives 5.028 px/mm - the 5.03 the gate-1 note already found: both bands run x 301.76 to about
+      360.0, starting in the gap between the 39/40 and 41/42 columns, which is the third block's own centre.
+      The drawing's bezel ends 1.0 mm before the band does, so against this file's narrower bezel the
+      band ends at 357.50 + 1.0 = 358.5. Height from the face edges at the same scale: upper y 8.35-11.54,
+      lower y 38.39-42.56. The datasheet photograph (embedded at 2.29 px/mm, calibrated on the outer bezel
+      edges) agrees to 1 mm on x and on the lower band, and puts the upper band 0.5 mm lower. The first
+      build carried one band at x 601.74 x 110.81, exactly twice a band at 300.87 x 55.4 - measured in
+      a doubled frame and never halved - so it lay wholly off the 440 mm face and was clipped and never
+      drawn (roc-ops/Portrayal#878).
   why-this-is-its-own-device:
     confidence: datasheet
     note: >-
@@ -124,7 +143,8 @@ attrs:
       gives them two rates - "SFP+ Port LEDs: Green (10G), Amber (1G)" - and no breakout table is published,
       so none is stated here.
   lifecycle: {eol: none-announced}
-chassis: {width: 440.0, height: 44.45, depth: 350.35, ru: 1, weight-kg: 6.6, color: '#43464a', airflow: front-to-back, power: ac}
+chassis: {width: 440.0, height: 44.45, depth: 350.35, ru: 1, weight-kg: 6.6, color: '#43464a', airflow: front-to-back,
+  power: ac}
 gaps:
 - what: the-row-under-the-ports
   scope:
@@ -162,7 +182,7 @@ groups:
     index-origin: 1
     description: >-
       ports 41-48, the EIGHT 90 W PoE ports. They are the same jacks in the same ganged row as ports 1-40
-      and differ only in what they may deliver, which the panel prints beside them - "1.85A Max/Port41-48"
+      and differ only in what they may deliver, which the panel prints beside them - "1.65A Max/Port41-48"
       - and marks with an orange band. The Overview callouts list them separately from the other forty
       for the same reason.
     attrs: {media: rj45, speed: 1g, poe: 802.3bt 90 W}
@@ -218,7 +238,8 @@ views:
       - {id: brand-plate, at: [26.0, 1.0], size: [56.0, 8.6], fill: '#17191c'}
       - {id: vent-right, at: [84.0, 0.8], size: [337.3, 8.2], pattern: vent, pattern-pitch: [3.1, 1.8],
         vent: 40}
-      - {id: poe-hi-band, at: [601.74, 10.1], size: [110.81, 1.4], fill: '#e8761f'}
+      - {id: poe-hi-band, at: [301.76, 8.35], size: [56.74, 3.19], fill: '#e8761f'}
+      - {id: poe-hi-band-lower, at: [301.76, 38.39], size: [56.74, 4.17], fill: '#e8761f'}
       - {id: rj45-bezel-1, at: [8.53, 12.82], size: [111.91, 24.2], fill: '#f1eeea'}
       - {id: rj45-bezel-2, at: [127.06, 12.82], size: [111.91, 24.2], fill: '#f1eeea'}
       - {id: rj45-bezel-3, at: [245.59, 12.82], size: [111.91, 24.2], fill: '#f1eeea'}
