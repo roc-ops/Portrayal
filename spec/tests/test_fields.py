@@ -56,7 +56,7 @@ def test_lint_refuses_a_field_that_prints_nowhere(tmp_path):
     (d / "skins" / "default.svg").write_text('<svg><text data-from="watts">1W</text><text data-from="ghost">?</text></svg>')
     p = d / "contract.yaml"
     hits = _caught("L73", lint.lint_component_fields, p, {"skins": ["default"], "fields": {"watts": {}, "speed": {}}})
-    assert any("speed has no data-from, data-fill-from, data-stroke-from, data-stroke-derive or data-r-from node" in h for h in hits), hits
+    assert any("speed has no data-from, data-fill-from, data-stroke-from, data-stroke-derive, data-r-from, data-move-from or data-show-from node" in h for h in hits), hits
     assert any("ghost" in h for h in hits), hits
     hits = _caught("L73", lint.lint_component_fields, p, {"skins": ["default"], "fields": {"watts": {"type": "choice"}}})
     assert any("no options" in h for h in hits), hits

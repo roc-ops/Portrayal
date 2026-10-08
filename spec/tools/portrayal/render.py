@@ -30,6 +30,7 @@ APPLIED_CLASSES = {"sticker", "label", "marking"}
 from portrayal import attrsections as attrs_mod
 from portrayal.faces import face_ref, rear_place, rear_turn
 from portrayal import libwalk
+from portrayal.manifest import parse_moves
 from portrayal.manifest import (presented_point, back_hosts, back_parts, key_on_back, slot_in_slot_at, slot_in_slot_error,
                                 view_parts, targets, split_target, component_refs,
                       presented_interface, forwarded_part, seat_point, _turn,
@@ -627,6 +628,118 @@ def fill_from_attrs(root, attrs):
         if math.isfinite(d) and d > 0:
             r = d / 2
             node.set("r", str(int(r)) if r.is_integer() else repr(r))
+
+    # A FIELD MAY SET A POSITION (docs/switch-positions-design.md). MOVE carries
+    # a node by the offset its `data-move` table gives the field's value, and
+    # SHOW shows a node only for the values its `data-show` lists. With the
+    # field unset nothing moves and nothing is shown or hidden: the skin draws
+    # the default, as it does for every other field. kit/fields.js applies the
+    # same two rules at runtime (spec/tests/test_switch_positions.py).
+    for node in root.iter():
+        key = node.get("data-move-from")
+        if key is None:
+            continue
+        v = position_value(attrs, key)
+        if v is None:
+            continue
+        move = parse_moves(node.get("data-move") or "").get(v)
+        if move is None:
+            continue
+        drawn = node.get("transform")
+        tf = move_transform(node, move, drawn)
+        if tf != (drawn or ""):
+            # what the skin drew, so the kit can put a node a CONFIGURATION
+            # moved back to the default position at runtime: without it the
+            # moved transform would be all the kit could see, and setting the
+            # default would leave the node where the configuration put it
+            node.set("data-move-base", drawn or "")
+            node.set("transform", tf)
+    for node in root.iter():
+        key = node.get("data-show-from")
+        if key is None:
+            continue
+        v = position_value(attrs, key)
+        if v is None:
+            continue
+        if v in (node.get("data-show") or "").split():
+            if "display" in node.attrib:
+                del node.attrib["display"]
+        else:
+            node.set("display", "none")
+
+
+def check_positions(root, attrs, contract, inst_id):
+    """AN OPTION THE FIELD DOES NOT DECLARE IS NOT A POSITION. A value set on a
+    field that moves or shows a node must be one of that field's `options`, or
+    the build fails: a typo in a configuration would otherwise draw the default
+    and look set (docs/switch-positions-design.md section 5). The kit's
+    `fieldAccepts` refuses the same values from a form or a link."""
+    fields = contract.get("fields") or {}
+    keys = {n.get(a) for n in root.iter() for a in ("data-move-from", "data-show-from")
+            if n.get(a) is not None}
+    for key in sorted(keys):
+        # AN UNQUOTED on OR off IS A BOOLEAN. YAML 1.1 reads `sw-1: on` as True,
+        # which position_value would take for "unset" and draw the default -
+        # the silent typo this check exists to catch. A position is text.
+        if isinstance(attrs.get(key), bool):
+            raise ValueError(f"{inst_id}: {key} = {attrs[key]!r} is a YAML boolean, not a "
+                             f"position - quote it: '{'on' if attrs[key] else 'off'}'")
+        v = position_value(attrs, key)
+        if v is None:
+            continue
+        f = fields.get(key) or {}
+        options = [str(o) for o in f.get("options") or []]
+        if v not in options:
+            raise ValueError(f"{inst_id}: {key} = {v!r} is not a position of "
+                             f"{contract.get('name')}; it takes {', '.join(options) or 'none'}")
+
+
+def position_value(attrs, key):
+    """The option a position field holds, as text, or None when nothing sets
+    it. kit/fields.js compares options as String(), so the build does too."""
+    v = attrs.get(key)
+    if v is None or isinstance(v, bool):
+        return None
+    v = str(v).strip()
+    return v or None
+
+
+def _node_centre(node):
+    """The centre of a node a turn pivots on: rect, circle and ellipse only,
+    the shapes a switch actuator is drawn with. Anything else cannot turn."""
+    tag = node.tag.rsplit("}", 1)[-1]
+    if tag == "rect":
+        return (float(node.get("x", 0)) + float(node.get("width")) / 2,
+                float(node.get("y", 0)) + float(node.get("height")) / 2)
+    if tag in ("circle", "ellipse"):
+        return float(node.get("cx", 0)), float(node.get("cy", 0))
+    raise ValueError(f"data-move turns a <{tag}>; only rect, circle and ellipse can turn")
+
+
+def _num(x):
+    return str(int(x)) if float(x).is_integer() else repr(float(x))
+
+
+def move_transform(node, move, base=None):
+    """The whole transform of a moved node, written the way kit/fields.js writes
+    it, so the build and the kit put the same text on a node.
+
+    `translate(dx dy) <base> rotate(deg cx cy)`: SVG applies a list right to
+    left, so the turn runs first, about the centre of the node's own geometry
+    in its own frame; then the transform the skin drew; then the move's
+    offset, in the frame the node sits in. A turn written before the drawn
+    transform would pivot about the local centre in the parent's frame and
+    swing a drawn-offset node off its place."""
+    dx, dy, deg = move
+    parts = []
+    if dx or dy:
+        parts.append(f"translate({_num(dx)} {_num(dy)})")
+    if base:
+        parts.append(base)
+    if deg:
+        cx, cy = _node_centre(node)
+        parts.append(f"rotate({_num(deg)} {_num(cx)} {_num(cy)})")
+    return " ".join(parts)
 
 
 def _inset_feature(feat, back, group_lift=0.0):
@@ -1867,6 +1980,7 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     # TEXT FROM ATTRS, so one carrier covers a catalogue instead of a file per
     # row. `merged` is the contract's attrs under the placement's, which is
     # already the precedence every other attr consumer uses.
+    check_positions(holder, merged, contract, inst_id)
     fill_from_attrs(holder, merged)
     for child in list(holder):
         g.append(child)
@@ -3705,6 +3819,11 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         # never usable as one; it is still worth carrying, so it travels as prose.
         if p.get("description"):
             g.set("data-description", p["description"])
+        # WHAT A POSITION MEANS ON THIS DEVICE (docs/switch-positions-design.md
+        # section 8), carried as data the way a lamp's meanings are. It sets
+        # nothing: the position itself is a field, set by `attrs`.
+        if p.get("positions"):
+            g.set("data-positions", json.dumps(p["positions"], sort_keys=True, separators=(",", ":")))
         # what this part belongs to - an LED to its port. The tree nests on it and
         # selecting either side highlights both.
         df = data_for(p.get("for"))
@@ -4170,6 +4289,15 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         vw, vh = extents[2] - extents[0], extents[3] - extents[1]
         svg.set("viewBox", f"{extents[0]:g} {extents[1]:g} {vw:g} {vh:g}")
         svg.set("width", f"{vw:g}mm"); svg.set("height", f"{vh:g}mm")
+        # THE FACE THE VIEW DECLARES, once the drawing is bigger than it. A
+        # part beyond the face - an end ring past the ear (#865), a cover
+        # past the flange - grows the viewBox, and its origin can go negative.
+        # The face itself is still 0 0 w h, and a reader that wants the face
+        # rather than everything drawn (the 3D plate, a pick) reads it here
+        # instead of guessing it back out of the viewBox. Written only when
+        # the two differ, so every other drawing is unchanged.
+        svg.set("data-face-w", f"{w:g}")
+        svg.set("data-face-h", f"{h:g}")
     return svg
 
 
@@ -5203,7 +5331,14 @@ def main():
                              "power": ch.get("power"),
                              # a bevelled body, as the polygons the viewer
                              # builds its mesh from; absent on a plain box
-                             **({"solid": _bevel.published(ch)} if ch.get("bevel") else {})},
+                             **({"solid": _bevel.published(ch)} if ch.get("bevel") else {}),
+                             # how far parts reach beyond the rack face each
+                             # side, and where the ear folds are when they are
+                             # behind the body; absent where unstated (#865)
+                             **({"overhang": {"left": float(ch["overhang"].get("left", 0)),
+                                              "right": float(ch["overhang"].get("right", 0))}}
+                                if ch.get("overhang") else {}),
+                             **({"ears": ch["ears"]} if ch.get("ears") else {})},
                  # WHAT THE DEVICE CAN BE BOUGHT WITH - the union over its
                  # orderable and base builds of `configs[].power` and
                  # `configs[].airflow`. The filter an HCL runs ("DC, back-to-

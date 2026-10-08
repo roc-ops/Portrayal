@@ -1,6 +1,6 @@
 # Switch positions: a field that moves what it sets
 
-Status: design, 2026-10-06. Issue #808. Nothing here is built. Builds on fields
+Status: built, 2026-10-07 (#872, with the follow-ups of #874). Issue #808. Builds on fields
 ([`library/components/README.md`](../library/components/README.md), "Skins") and on
 `kit/fields.js`, which paints a field in 2D and 3D.
 
@@ -123,9 +123,13 @@ position needs more: the relief of a moved node is built from the node's box.
 - The build writes each relief node's position from the node as moved, so a scene built
   from a configuration that sets a position is already right.
 - At runtime, a field that carries `data-move-from` or `data-show-from` on a node with
-  relief marks its part as needing a rebuild, and the viewer rebuilds that part the way it
-  rebuilds one after a swap. A field with neither effect keeps today's path: repaint, no
-  rebuild.
+  relief marks its part as needing a rebuild, and the viewer rebuilds the scene the way it
+  rebuilds one after a configuration switch (there is no per-part rebuild). A field with
+  neither effect keeps today's path: repaint, no rebuild.
+- A node a position hides is removed before the face is measured, as a pulled part is. So
+  that a part whose only SHOW node starts hidden still rebuilds when that node should
+  appear, each part group first records the position fields its nodes use, as
+  `data-position-fields`, and the viewer reads that mark as well as the nodes (#874).
 
 ## 7. Lint
 
@@ -133,8 +137,8 @@ position needs more: the relief of a moved node is built from the node's box.
   node a field is kept by.
 - **New: every option of a moving or showing field is answered.** For a `data-move-from`
   node, each key in `data-move` is one of the field's options. For a field with any
-  `data-show-from` node, each option shows at least one node, or the contract says which
-  option is drawn by absence.
+  `data-show-from` node, each option shows at least one node, or the field lists it in
+  `drawn-by-absence` - a breaker that is simply on, with no flag (L148).
 - **New: a moved node stays inside its part.** The box of a node under each of its moves
   lies within the component's `size`, so an actuator cannot be configured off its own
   face.
@@ -162,17 +166,39 @@ are. It sets nothing; the value is set by `attrs`.
    default is the position drawn today.
 2. The eight-way alarm DIP of the 300CB08, with its `populated` and `with-fuses`
    configurations setting the switches of their fitted positions down.
-3. The plug-in breaker's `state`: `on`, `off`, `tripped`, moving the handle and showing a
-   flag.
-4. `common/rocker-switch@1` and `common/power-switch-slide@1`.
+3. The plug-in breaker's `state`: `on`, `off`, `tripped`, moving the handle. BUILT WITHOUT
+   A FLAG: the red-over-green mark beside the handle is a printed I/O legend, not an
+   indicator, and the Airpax datasheet says a trip carries the handle to OFF, so `tripped`
+   is drawn as `off` (`amphenol-ns/breaker-1ru@1`, provenance `state`). SHOW and
+   `drawn-by-absence` wait for a part whose face really changes.
+4. `common/rocker-switch@1`: `off`/`on`, the first SHOW user - a see-saw surface tipped
+   about its centre, one node per position, each a sloped relief `profile`. `common/power-switch-slide@1` is not given
+   positions: no source says which end of its travel is ON or how far its slider moves.
+5. Seven parts that draw their own rocker take the same see-saw, each where the art prints
+   which end is I and which is O: `juniper/jnp10k-pwr-ac2@1` and `juniper/mx80-psu-ac@1`
+   (`state`), `telco-systems/tm-7124s-psu-ac@1` (`state`), `casa/c40g-ac-inlet-panel@1`
+   (`switch-1` to `switch-4`), `casa/pem@1` (`breaker-1` to `breaker-4`),
+   `nokia/sr-7-pem-3@1` (`breaker`) and `nokia/sr-12-pem-3@1` (`power-switch`). The PEM's are
+   rocker breakers; a tripped rocker breaker rests at OFF, so two options cover it. Their
+   heights are estimated: the part's own earlier rocker height raised, 0.45 of it low.
+
+   The rest stay drawn as they are, for these reasons:
+
+   | part | why it has no positions |
+   |---|---|
+   | `nokia/sr-1-dc-terminal-block@1` | its lamp sits on the rocker, and a lamp is one element; drawing it on both tipped surfaces would make two |
+   | `juniper/mx480-psu-ac@1` | the art prints no I or O, so nothing says which end is ON |
+   | `juniper/mx2000-psm-dc-v@1` | the same: no end is marked |
+   | `nokia/lpwr-f@1` | the same: no end is marked |
+   | `cisco/a9k-ac-pem-v3@1` | the same: no end is marked |
 
 Each is a contract minor: a field is added and nothing that exists moves.
 
 ## 10. Open questions
 
-- **Two flags or one painted flag.** A breaker's red and green could be one node whose
-  fill follows the field, if a choice field's option could name a colour. SHOW with two
-  nodes is used here because it needs no mapping from an option to a colour.
+- **Two flags or one painted flag.** Moot for the 1RU breaker, whose red and green are
+  printed. For a part with a real trip flag, SHOW with two nodes still needs no mapping
+  from an option to a colour.
 - **A position that depends on what is seated.** The alarm switch of a position should be
   down when that position holds a breaker. This note leaves that to the configuration,
   which states both. Deriving one from the other would be the first rule that sets a field

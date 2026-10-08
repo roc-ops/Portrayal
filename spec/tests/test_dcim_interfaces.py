@@ -766,9 +766,9 @@ WITHHELD = {
     **{f"Cisco/A9K-MOD{n}-{v}": ["bay-0", "bay-1"]
        for n in (80, 160, 200, 400) for v in ("SE", "TR")},
     "Dell/riser-2s-16g": ["e3s-0", "e3s-1"],      # its slot-1 is given
-    "Juniper/MPC3E": ["mic0", "mic1"],
     "Juniper/MX-MPC1E-3D": ["mic0", "mic1"],
     "Juniper/MX-MPC2E-3D": ["mic0", "mic1"],
+    "Juniper/MX-MPC3E-3D": ["mic0", "mic1"],
     "Nokia/IOM4-e": ["mda-1", "mda-2"],
     "Nokia/IOM4-e-HS": ["mda-1", "mda-2"],
     "Nokia/IOM5-e": ["mda-1", "mda-2"],
@@ -783,9 +783,7 @@ MULTI_DEPTH = [
     "Dell/e3s-carrier", "Dell/e3s-carrier-blank",
     "Juniper/MIC-3D-16CHE1-T1-CE", "Juniper/MIC-3D-1OC192-XFP",
     "Juniper/MIC-3D-20GE-SFP", "Juniper/MIC-3D-2XGE-XFP",
-    "Juniper/MIC-3D-4CHOC3-2CHOC12", "Juniper/MIC-3D-4COC3-1COC12-CE",
-    "Juniper/MIC-3D-4OC3OC12-1OC48", "Juniper/MIC-3D-8CHOC3-4CHOC12",
-    "Juniper/MIC-3D-8DS3-E3", "Juniper/MIC-3D-8OC3-2OC12-ATM",
+    "Juniper/MIC-3D-4OC3OC12-1OC48", "Juniper/MIC-3D-8DS3-E3",
     "Juniper/MIC-3D-8OC3OC12-4OC48", "Juniper/MIC-MACSEC-20GE",
     "Juniper/MS-MIC-16G", "Juniper/mx-mic-blank",
     "Nokia/ACC - SR-e MDA Impedance Panel", "Nokia/ME-ISA2-MS",

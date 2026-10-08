@@ -128,9 +128,9 @@ def test_each_dsub_plug_medium_is_its_cores_and_has_its_label():
 # placement id. Neither key was in the table; the fallback read
 # TERMINAL-BLOCK and DC-TERMINAL.
 TERMINAL_PLUGS = {
-    "generic/terminal-508-2-plug": ("common/terminal-header-508-2", "terminal-block"),
-    "generic/terminal-508-5-plug": ("common/terminal-header-508-5f", "dc-terminal"),
-    "generic/terminal-508-6-plug": ("common/dc-terminal-header-6", "dc-terminal"),
+    "generic/terminal-508-2-plug@1": ("common/terminal-header-508-2@2", "terminal-block"),
+    "generic/terminal-508-5-plug@1": ("common/terminal-header-508-5f@1", "dc-terminal"),
+    "generic/terminal-508-6-plug@1": ("common/dc-terminal-header-6@1", "dc-terminal"),
 }
 
 
@@ -138,7 +138,8 @@ def test_each_terminal_plug_and_header_medium_has_its_label():
     table = media_table()
     for part, (header, header_key) in TERMINAL_PLUGS.items():
         for ref, key in ((part, "terminal-block"), (header, header_key)):
-            text = (LIBRARY / "components" / ref / "v1" / "contract.yaml").read_text()
+            name, major = ref.split("@")
+            text = (LIBRARY / "components" / name / f"v{major}" / "contract.yaml").read_text()
             stated = re.search(r"^attrs:.*\bmedia:\s*([a-z0-9-]+)", text, re.M)
             assert stated and stated.group(1) == key, (ref, stated and stated.group(1))
     assert table.get("terminal-block") == "terminal block"

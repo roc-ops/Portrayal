@@ -1,0 +1,61 @@
+format: 1
+kind: component
+name: uscmh-sfdabsb2u-cover
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  The hinged cover of the FS USCMH-SFDABSB2U finger duct, seen from the front - an ABS
+  channel the full width of the duct whose curved face closes it, its shoulders wrapping
+  over the two finger rows, hinged and clipped at four points near the ends so that it
+  opens upward or downward or lifts off
+provenance:
+  size: >-
+    drawing - the front view of CMH-SFDABSB2U in the FS Horizontal Single Sided Manager
+    datasheet, at 5.379 px/mm across from the 482.6 of the duct and 5.46 down from its
+    88.81 dimension: the cover is the whole face, its shoulders a band 11.5 high at the
+    top and at the bottom, and a clip in each corner 18.4 wide, 24.2 in from the end and
+    5.5 to 8.6 from the edge.
+  relief: >-
+    drawing - the side view, at 3.436 px/mm along the depth from its 168.5: the cover is
+    the first 17.5 mm of the duct, in front of the finger walls. It is placed in the well
+    138.0 deep, so its face stands 136.5 to 138.0 above the floor and its edges 120.5 to
+    138.0. The face is 1.5 thick and the edges 1.5 high, both estimated. THE FACE IS
+    CURVED, about 8 mm proud at the middle of the height in the side view; it is drawn
+    flat.
+  color: >-
+    estimated - "Color: Black" in the datasheet table; the part has no image of its own,
+    and the cover is drawn a shade lighter than the duct, as on the USCMH-SFDABSB1U.
+  logo-zone: >-
+    reserved, not drawn, drawing - the front view prints FS's round mark on the cover
+    near its left end, 28.6 to 38.3 across and 39.7 to 49.3 down at the scales above.
+    The library reproduces no vendor logo.
+size: {w: 482.6, h: 88.81}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: ABS}
+elements:
+  plate: {at: [0.0, 0.0], size: [482.6, 88.81], class: bezel}
+  logo-zone: {at: [28.6, 39.7], size: [9.7, 9.6], class: label}
+  lip-top: {at: [0.0, 0.0], size: [482.6, 1.5], class: bezel}
+  lip-bottom: {at: [0.0, 87.31], size: [482.6, 1.5], class: bezel}
+relief:
+  features:
+    - node: plate
+      lift: 136.5
+      out: 138.0
+      color: '#333639'
+      confidence: estimated
+      source: no view dimensions the cover section; a thin curved moulding in the side view
+    - node: lip-top
+      lift: 120.5
+      out: 138.0
+      color: '#333639'
+      confidence: drawing
+      source: the side view of CMH-SFDABSB2U in the FS Horizontal Single Sided Manager datasheet, the cover over the first 17.5 mm in front of the finger walls
+    - node: lip-bottom
+      lift: 120.5
+      out: 138.0
+      color: '#333639'
+      confidence: drawing
+      source: the side view of CMH-SFDABSB2U in the FS Horizontal Single Sided Manager datasheet, the cover over the first 17.5 mm in front of the finger walls
+skins: [default]

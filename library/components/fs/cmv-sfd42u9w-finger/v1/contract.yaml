@@ -1,0 +1,51 @@
+format: 1
+kind: component
+name: cmv-sfd42u9w-finger
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  One finger of the FS CMV-SFD42U9W vertical finger duct, seen from the front - a moulded
+  T that stands forward from its wall, widening to a V at its root, with a crossbar at
+  its front end that runs along the duct and leaves a neck a cable is pressed through
+provenance:
+  size: >-
+    drawing - the side view of the FS 42U Vertical Cable Managers with Finger Ducts datasheet, page 5: 21 fingers a section, 42 in all, at one rack unit
+    (44.45: the 41 pitches from the first to the last measure 3010 px, 44.39 a pitch at the
+    1.654 px/mm of its printed 1866.9), centred in each section (the first 25.4 below the
+    top, the last 21.4 above the bottom, against 22.2 for both); the stem is 12.7 high
+    (21 px). The crossbar height is estimated at 30, leaving a
+    14.45 neck: the view draws the crossbars as a near-continuous rail, and renders x1,
+    g6 and g8 show a neck about a third of the pitch. The V at the root is drawn as a
+    block 24 high. Across the face it is its wall, 13, estimated.
+  relief: >-
+    drawing - the same side view, as fractions of its printed 152.6: the V root from the
+    wall at 65.2 to 92.2 from the rear (drawn as a block to 77.2, midway), the stem to
+    135.3 and the crossbar from there to 143.4. Measured from the floor of the well, 1.5
+    from the rear.
+size: {w: 13, h: 30}
+size-confidence: {w: estimated, h: estimated}
+attrs: {material: Plastic}
+elements:
+  tip: {at: [0.0, 0.0], size: [13, 30], class: bezel}
+  stem: {at: [0.0, 8.65], size: [13, 12.7], class: bezel}
+  root: {at: [0.0, 3.0], size: [13, 24], class: bezel}
+relief:
+  features:
+    - node: root
+      out: 75.7
+      color: '#202224'
+      confidence: drawing
+      source: the side view of the FS 42U Vertical Cable Managers with Finger Ducts datasheet, page 5, the V root from the wall, drawn to 77.2 from the rear
+    - node: stem
+      out: 133.8
+      color: '#26282a'
+      confidence: drawing
+      source: the same view, the stem to 135.3 from the rear
+    - node: tip
+      lift: 133.8
+      out: 141.9
+      color: '#2a2c2e'
+      confidence: drawing
+      source: the same view, the crossbar from 135.3 to 143.4 from the rear
+skins: [default]

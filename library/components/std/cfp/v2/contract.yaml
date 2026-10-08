@@ -1,0 +1,53 @@
+format: 1
+kind: component
+name: cfp
+version: 2.0.0
+class: port
+profile: networking
+conforms: cfp
+interface: cfp
+description: CFP system panel opening (CFP MSA Mechanical Layout), the opening a CFP module's faceplate passes through
+size: {w: 82.8, h: 14.8, d: 126.15}
+size-confidence: {w: drawing, h: drawing, d: estimated}
+attrs: {media: cfp}
+provenance:
+  size: >-
+    registry - CFP MSA Mechanical Layout, 17 Mar 10, revision 14, section 11.1 Figure
+    25 (page 19): the system panel opening 82.8 +/-0.1 by 14.8 +/-0.1, corners R0.5
+    MAX, in a panel 1 MIN to 3 MAX thick. THIS IS THE PANEL OPENING, as std/sfp@1 and
+    std/qsfp28@1 draw theirs, and the module faceplate (82.00 x 14.00, CFP MSA Module
+    Dimensions drawing 04/07/10, A1 and B1) passes through it. The first major drew
+    82.0 x 13.6, the faceplate width on the body height (#802).
+  depth: >-
+    ESTIMATED, derived from a scaled figure - the bezel to the host connector, taken as
+    the module's F1 144.75 overall (Module Dimensions drawing) less the about 18.6 the
+    Mechanical Layout's Figure 19 (page 14, scaled on its (103.5) reference) puts the
+    faceplate front in front of the panel: 126.15. The MSA prints neither this depth
+    nor the 18.6; the hundredths are the subtraction's, not the figure's. THE CAGE FACE
+    STANDS FOR THE FRONT OF THE HOST'S EXTERNAL BRACKET (section 8, Figure 19, about
+    18 proud of the panel): the library draws no bracket, and a seated optic's
+    14.5 faceplate stands out of this face (the 2026-10-05 decision in
+    docs/pluggables-cfp-cxp-design.md, kept).
+  relief.size: >-
+    registry - the cfp-module envelope, the CFP MSA Module Dimensions drawing's X1
+    77.20 x BB1 13.60 body behind the faceplate, centred: the module runs back through
+    the host's rails at that section. The MSA dimensions the rails, not a recess, so
+    this is the body that fills it rather than a specified cavity.
+elements:
+  opening: {at: [0.0, 0.0], size: [82.8, 14.8], class: cutout}
+relief:
+  wall: '#aab0b7'
+  cavity: cavity
+  size: {w: 77.2, h: 13.6}
+  features:
+    - node: collar
+      out: 1.0
+      color: '#7d848c'
+      confidence: estimated
+      source: >-
+        std/ cage collars - the library's one cage-lip figure, shared by every std/
+        cage; the CFP MSA dimensions the panel opening and the bracket, and nothing
+        about a lip standing proud of the opening.
+connection-points:
+  mate: {at: [41.4, 7.4], direction: front}
+skins: [default]

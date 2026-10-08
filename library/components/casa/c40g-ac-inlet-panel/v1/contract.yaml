@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: c40g-ac-inlet-panel
-version: 1.5.0
+version: 1.6.0
 class: inlet
 behaviour: mounts
 profile: networking
@@ -18,6 +18,8 @@ attrs:
   inlets: '4'
   input: 115VAC or 240VAC auto-adjusting
 provenance:
+  positions: >-
+    FIELDS, since 1.6.0 (docs/switch-positions-design.md, #808): `switch-1`, `switch-2`, `switch-3`, `switch-4`, each `off` or `on`. Each rocker is a SEE-SAW: one surface tipped about its centre, so the end it is set to presses in and the other end rises. I (a bar) at the top and O (a ring) at the bottom of each rocker, as Figure 1-11 draws them; OFF raises the I end and ON the O end, each a node shown for its position, shaded lighter toward its raised end and built in 3D as a sloped profile. The heights are estimated. The skin draws OFF; nothing held says how a unit ships.
   what-it-is: 'drawing - Figure 1-2, "C40G CMTS rear view (AC; non-redundant)",
     and Figure 1-3, its redundant twin. The bottom band of an AC chassis is ONE
     panel spanning the card-region width with screws at its corners and mid-edges
@@ -65,9 +67,10 @@ provenance:
     at its centre. The four C14 inlets carry their own relief through std/c14-inlet@1
     and are not re-declared here.
     HOW FAR: not stated anywhere in the C40G guides - searched "AC power", "receptacle",
-    "On/Off", Appendix A. out 3.0 for a rocker bezel is the SAME number casa/pem carries
-    for its breakers, and it is the same number for the same reason - one estimate for
-    one class of panel-mounted rocker - NOT two independent readings that agreed. cyl 1.6
+    "On/Off", Appendix A. The rockers (a 1.0 bezel under a paddle tipped from 1.35 to
+    3.0, provenance.positions) carry the SAME numbers casa/pem does for its breakers,
+    and for the same reason - one estimate for one class of panel-mounted rocker - NOT
+    two independent readings that agreed. cyl 1.6
     is edgecore/agr-panel-screw@1. The skin gained an id per corner screw so each cyl
     takes its own radius; as one group of six spread over 340 mm it would have been a
     single cylinder the width of the panel.
@@ -101,6 +104,11 @@ provenance:
     one bolted panel here, a DC chassis has two module openings, and they are never
     both present. That also stops the bay picker offering a DC power entry module
     on a chassis that cannot take one'
+fields:
+  switch-1: {label: Switch 1, type: choice, options: ['off', 'on'], default: 'off'}
+  switch-2: {label: Switch 2, type: choice, options: ['off', 'on'], default: 'off'}
+  switch-3: {label: Switch 3, type: choice, options: ['off', 'on'], default: 'off'}
+  switch-4: {label: Switch 4, type: choice, options: ['off', 'on'], default: 'off'}
 parts:
   - {ref: std/c14-inlet@1, id: inlet-psu1, at: [28.60, 24.2]}
   - {ref: std/c14-inlet@1, id: inlet-psu2, at: [115.80, 24.2]}
@@ -109,13 +117,29 @@ parts:
 relief:
   wall: '#4a4f55'
   features:
-    # Four rocker ON/OFF switches, one per PSU. Same bezel treatment and the same
-    # 3.0 as casa/pem's breakers - one number for one kind of hardware, not two
-    # readings that happened to agree.
-    - {node: psu1-switch, out: 3.0, confidence: estimated, source: 'NO PRECEDENT - a panel rocker/breaker bezel. Invented here and reused across casa/pem and casa/c40g-ac-inlet-panel'}
-    - {node: psu2-switch, out: 3.0, confidence: estimated, source: 'NO PRECEDENT - a panel rocker/breaker bezel. Invented here and reused across casa/pem and casa/c40g-ac-inlet-panel'}
-    - {node: psu3-switch, out: 3.0, confidence: estimated, source: 'NO PRECEDENT - a panel rocker/breaker bezel. Invented here and reused across casa/pem and casa/c40g-ac-inlet-panel'}
-    - {node: psu4-switch, out: 3.0, confidence: estimated, source: 'NO PRECEDENT - a panel rocker/breaker bezel. Invented here and reused across casa/pem and casa/c40g-ac-inlet-panel'}
+    - {node: psu1-switch-off, out: 3.0, profile-y: [[0, 3.0], [16.5, 1.35]], confidence: estimated, source: 'the tilt of a see-saw rocker: the raised end at the part''s own estimated rocker height, the low end
+    at 0.45 of it, the ratio the GL-12xB GLB rocker shows (common/rocker-switch@1); no source gives this part''s; the rocker''s 3.0 is the panel''s own earlier estimate'}
+    - {node: psu1-switch-on, out: 3.0, profile-y: [[0, 1.35], [16.5, 3.0]], confidence: estimated, source: 'the tilt of a see-saw rocker: the raised end at the part''s own estimated rocker height, the low end
+    at 0.45 of it, the ratio the GL-12xB GLB rocker shows (common/rocker-switch@1); no source gives this part''s; the rocker''s 3.0 is the panel''s own earlier estimate'}
+    - {node: psu2-switch-off, out: 3.0, profile-y: [[0, 3.0], [16.5, 1.35]], confidence: estimated, source: 'the tilt of a see-saw rocker: the raised end at the part''s own estimated rocker height, the low end
+    at 0.45 of it, the ratio the GL-12xB GLB rocker shows (common/rocker-switch@1); no source gives this part''s; the rocker''s 3.0 is the panel''s own earlier estimate'}
+    - {node: psu2-switch-on, out: 3.0, profile-y: [[0, 1.35], [16.5, 3.0]], confidence: estimated, source: 'the tilt of a see-saw rocker: the raised end at the part''s own estimated rocker height, the low end
+    at 0.45 of it, the ratio the GL-12xB GLB rocker shows (common/rocker-switch@1); no source gives this part''s; the rocker''s 3.0 is the panel''s own earlier estimate'}
+    - {node: psu3-switch-off, out: 3.0, profile-y: [[0, 3.0], [16.5, 1.35]], confidence: estimated, source: 'the tilt of a see-saw rocker: the raised end at the part''s own estimated rocker height, the low end
+    at 0.45 of it, the ratio the GL-12xB GLB rocker shows (common/rocker-switch@1); no source gives this part''s; the rocker''s 3.0 is the panel''s own earlier estimate'}
+    - {node: psu3-switch-on, out: 3.0, profile-y: [[0, 1.35], [16.5, 3.0]], confidence: estimated, source: 'the tilt of a see-saw rocker: the raised end at the part''s own estimated rocker height, the low end
+    at 0.45 of it, the ratio the GL-12xB GLB rocker shows (common/rocker-switch@1); no source gives this part''s; the rocker''s 3.0 is the panel''s own earlier estimate'}
+    - {node: psu4-switch-off, out: 3.0, profile-y: [[0, 3.0], [16.5, 1.35]], confidence: estimated, source: 'the tilt of a see-saw rocker: the raised end at the part''s own estimated rocker height, the low end
+    at 0.45 of it, the ratio the GL-12xB GLB rocker shows (common/rocker-switch@1); no source gives this part''s; the rocker''s 3.0 is the panel''s own earlier estimate'}
+    - {node: psu4-switch-on, out: 3.0, profile-y: [[0, 1.35], [16.5, 3.0]], confidence: estimated, source: 'the tilt of a see-saw rocker: the raised end at the part''s own estimated rocker height, the low end
+    at 0.45 of it, the ratio the GL-12xB GLB rocker shows (common/rocker-switch@1); no source gives this part''s; the rocker''s 3.0 is the panel''s own earlier estimate'}
+    # Four rocker ON/OFF switches, one per PSU: a 1.0 bezel under the tipped paddle
+    # above, the same numbers as casa/pem's breakers - one estimate for one kind of
+    # hardware, not two readings that happened to agree.
+    - {node: psu1-switch, out: 1.0, confidence: estimated, source: 'the bezel or frame the rocker sits in, lowered to 1.0 so the tipped surface stands out of it; estimated'}
+    - {node: psu2-switch, out: 1.0, confidence: estimated, source: 'the bezel or frame the rocker sits in, lowered to 1.0 so the tipped surface stands out of it; estimated'}
+    - {node: psu3-switch, out: 1.0, confidence: estimated, source: 'the bezel or frame the rocker sits in, lowered to 1.0 so the tipped surface stands out of it; estimated'}
+    - {node: psu4-switch, out: 1.0, confidence: estimated, source: 'the bezel or frame the rocker sits in, lowered to 1.0 so the tipped surface stands out of it; estimated'}
     # The captive centre screw and the six edge screws that bolt the panel on.
     - {node: screw-mid, cyl: 1.6, confidence: estimated, source: 'edgecore/agr-panel-screw@1 - the library one figure for a captive screw head. NOT MEASURED: that part own provenance reads estimated - it stands proud but was not measured'}
     - {node: corner-tl, cyl: 1.6, confidence: estimated, source: 'edgecore/agr-panel-screw@1 - the library one figure for a captive screw head. NOT MEASURED: that part own provenance reads estimated - it stands proud but was not measured'}

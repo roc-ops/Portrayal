@@ -233,6 +233,7 @@ def _placement_attrs(doc):
 #   `provenance`             where the fact came from
 #   `physical-context`       the Redfish class, a label
 #   `frames`                 a lint declaration (L13); draws nothing
+#   `positions`              what a switch's positions mean; sets nothing (#808)
 #
 # TOGETHER WITH THE KEYS ALREADY HASHED THESE ARE EXHAUSTIVE OVER THE SCHEMA'S
 # placement AND bay properties, and test_lock_sees_placement_keys.py holds that
@@ -250,7 +251,7 @@ PLACEMENT_GEOMETRY = {"inset", "lift", "in", "under", "only-in", "optional",
                       "interfaces", "opening", "floor", "plan", "rear"}
 PLACEMENT_ADDRESSING = {"for", "rel-pos", "interface", "fed-by", "through"}
 PLACEMENT_SURFACE = {"states", "description", "provenance", "physical-context",
-                     "frames"}
+                     "frames", "positions"}
 
 
 # KEYS THAT NAME A SET, which the schema lets an author spell as one id or a
@@ -492,8 +493,13 @@ CHASSIS_SHAPE = {"width", "height", "depth", "ru", "bevel", "shell"}
 # built from it, so correcting one moves nothing.
 # `full-depth` IS A STATED FACT for the DCIM export, as `mount` is: nothing on
 # the drawing moves when it changes (#854).
+# `ears` IS A STATEMENT about where the folds are, read only by L43: the face
+# is drawn at the size it already states either way (#865).
+# `overhang` IS A STATEMENT, like `mount`: it says how far parts already placed
+# reach past the rack face, and those parts carry their own geometry. Declaring
+# the reach a device already had moves nothing (#865).
 CHASSIS_SURFACE = {"color", "edge", "silk", "weight-kg", "airflow", "power", "mount", "thickness",
-                   "full-depth"}
+                   "full-depth", "ears", "overhang"}
 
 
 def _shape_digest(doc, placed, drop=()):
@@ -1169,7 +1175,7 @@ def check(library: pathlib.Path):
             if "placement-surface" in was and \
                     was["placement-surface"] != now["placement-surface"]:
                 what.append("placement surface (states, description, "
-                            "provenance, physical-context, frames)")
+                            "provenance, physical-context, frames, positions)")
             if was.get("gaps") != now["gaps"]:
                 what.append("gaps")
             # NAME THE COMPOSED CHANGE. The one bucket whose cause is not in

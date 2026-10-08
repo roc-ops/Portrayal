@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: nrgils300cb08
-version: 2.0.0
+version: 2.0.2
 maturity: modelled
 manufacturer: Amphenol Network Solutions
 model: nrgILS300CB08
@@ -818,6 +818,15 @@ views:
         - 20.3
         group: alarm-enable
         rel-pos: 1
+        positions:
+          sw-1: {down: 'circuit A1 under software control, its alarm enabled', up: 'circuit A1 held on, not controlled by software'}
+          sw-2: {down: 'circuit A2 under software control, its alarm enabled', up: 'circuit A2 held on, not controlled by software'}
+          sw-3: {down: 'circuit A3 under software control, its alarm enabled', up: 'circuit A3 held on, not controlled by software'}
+          sw-4: {down: 'circuit A4 under software control, its alarm enabled', up: 'circuit A4 held on, not controlled by software'}
+          sw-5: {down: 'circuit A5 under software control, its alarm enabled', up: 'circuit A5 held on, not controlled by software'}
+          sw-6: {down: 'circuit A6 under software control, its alarm enabled', up: 'circuit A6 held on, not controlled by software'}
+          sw-7: {down: 'circuit A7 under software control, its alarm enabled', up: 'circuit A7 held on, not controlled by software'}
+          sw-8: {down: 'circuit A8 under software control, its alarm enabled', up: 'circuit A8 held on, not controlled by software'}
       - id: dip-b
         for: chassis
         ref: amphenol-ns/alarm-dip-8@1
@@ -826,6 +835,15 @@ views:
         - 20.3
         group: alarm-enable
         rel-pos: 2
+        positions:
+          sw-1: {down: 'circuit B1 under software control, its alarm enabled', up: 'circuit B1 held on, not controlled by software'}
+          sw-2: {down: 'circuit B2 under software control, its alarm enabled', up: 'circuit B2 held on, not controlled by software'}
+          sw-3: {down: 'circuit B3 under software control, its alarm enabled', up: 'circuit B3 held on, not controlled by software'}
+          sw-4: {down: 'circuit B4 under software control, its alarm enabled', up: 'circuit B4 held on, not controlled by software'}
+          sw-5: {down: 'circuit B5 under software control, its alarm enabled', up: 'circuit B5 held on, not controlled by software'}
+          sw-6: {down: 'circuit B6 under software control, its alarm enabled', up: 'circuit B6 held on, not controlled by software'}
+          sw-7: {down: 'circuit B7 under software control, its alarm enabled', up: 'circuit B7 held on, not controlled by software'}
+          sw-8: {down: 'circuit B8 under software control, its alarm enabled', up: 'circuit B8 held on, not controlled by software'}
       - id: led-a-pwr
         for: chassis
         ref: common/led-indicator@1
@@ -1693,6 +1711,9 @@ configurations:
         rating: 20
       breaker-b8:
         rating: 10
+    component-attrs:
+      dip-a: {sw-1: down, sw-2: down, sw-3: down, sw-4: down, sw-5: down, sw-6: down, sw-7: down, sw-8: down}
+      dip-b: {sw-1: down, sw-2: down, sw-3: down, sw-4: down, sw-5: down, sw-6: down, sw-7: down, sw-8: down}
 datasheet:
   title: Amphenol Network Solutions nrgILS300CB08 nrgSMART Intelligent Load Shedding data sheet, 08.10.26 v.5
   url: https://amphenol-ns.com/Assets/P_DS_nrgILS300CB08.pdf

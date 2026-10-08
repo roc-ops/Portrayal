@@ -55,8 +55,8 @@ EACH = pytest.mark.parametrize("ref", PLUGS)
 # INLET's own `size.d`, pinned here so a change to it fails and is carried
 # through the plug. The nose is longer than the cavity on all three.
 FIGURES = {
-    "generic/c13-plug@1": (64.0, 18.0, 13.0, 8.33),
-    "generic/c19-plug@1": (76.0, 20.0, 15.0, 9.65),
+    "generic/c13-plug@1": (64.0, 18.0, 17.0, 8.33),
+    "generic/c19-plug@1": (76.0, 20.0, 19.0, 9.65),
     "generic/saf-d-grid-plug@1": (80.5, 25.5, 17.0, 9.65),
 }
 # plug -> its strain relief: a `cyl` where the section is round, a box where

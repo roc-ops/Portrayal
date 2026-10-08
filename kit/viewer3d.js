@@ -610,6 +610,7 @@ export function createViewer(container, opts = {}) {
                                 faceMM, wells, apertures,
                                 meshes, FRU_GROUPS, FRU_META, BODY_META, D, deep: F.deep(),
                                 bodyBoxMesh, dist: distAt, backSource,
+                                sheet: !!(devIndex && sheetShell(devIndex.chassis)),
                                 restyle: RESTYLE, scope: SCOPE});
       // a face with no drawing falls back to flat colour and contributes no group
       if (meshes.length > before) built[F.view] = meshes[meshes.length - 1];
@@ -731,7 +732,12 @@ export function createViewer(container, opts = {}) {
       scene.add(box);
       box.userData.bodyBox = bodyBox;
       scene.add(bodyBox);
-    } else if (faceMM.front && faceMM.front[0] > W + 0.5) {
+    } else if (faceMM.front && faceMM.front[0] > W + 0.5 &&
+               !(devIndex && sheetShell(devIndex.chassis))) {
+      // (A SHEET BODY'S RACK FACE IS NO PLATE: its ears are the floor of a
+      // well like the rest of its sheet, and the branch below builds nothing
+      // from the faces - a 25.4 mm slab across the CMH-6DR1U's front would
+      // stand where its ears are a 1.2 mm plate 88 mm back, #865.)
       // A RACK FACE IS WIDER THAN THE BODY IT BOLTS TO. Dell builds the mounting
       // flanges into the R740xd's faceplate and puts the VGA, the power button
       // and the health lamp in them, so the front drawing is 482.6 mm over a
@@ -1564,12 +1570,38 @@ export function createViewer(container, opts = {}) {
     for (const [k, vals] of map instanceof Map ? map : Object.entries(map || {}))
       if (vals && Object.keys(vals).length) next[k] = {...vals};
     const changed = new Set();
+    // and which field keys changed on them, for the position check below
+    const keys = new Set();
     for (const k of new Set([...Object.keys(FIELDS), ...Object.keys(next)]))
-      if (JSON.stringify(FIELDS[k]) !== JSON.stringify(next[k])) changed.add(k);
+      if (JSON.stringify(FIELDS[k]) !== JSON.stringify(next[k])) {
+        changed.add(k);
+        for (const f of new Set([...Object.keys(FIELDS[k] || {}), ...Object.keys(next[k] || {})]))
+          if ((FIELDS[k] || {})[f] !== (next[k] || {})[f]) keys.add(f);
+      }
     FIELDS = next;
     if (!changed.size || !box) return 0;
     setNodeFields(FIELDS, SCOPE);
     const touches = text => [...changed].some(p => text.includes(`data-path="${p}"`));
+    // A POSITION RE-SHAPES (docs/switch-positions-design.md section 6). A field
+    // that moves or shows a node changes where relief stands, which a repaint
+    // cannot say, so the scene is rebuilt the way a config switch rebuilds it.
+    // There is no per-part rebuild; a field with neither effect keeps the
+    // repaint below.
+    // the nodes themselves, or the mark their part carries - a hidden SHOW node
+    // was removed from this text before it was kept (relief.js markPositionFields)
+    const marked = text => new Set([...text.matchAll(/data-position-fields="([^"]*)"/g)]
+      .flatMap(m => m[1].split(/\s+/)));
+    const positional = text => { const m = marked(text); return [...keys].some(f =>
+      m.has(f) || text.includes(`data-move-from="${f}"`) || text.includes(`data-show-from="${f}"`)); };
+    if ([...RESTYLE, ...LOD].some(e => touches(e.svgText) && positional(e.svgText))) {
+      await build(CFG);
+      if (DEV) await buildHitIndex(CFG);
+      // what load() does after a rebuild: the selection and the host's marks
+      // went with the old scene
+      if (selected) select(selected, {frame: false});
+      if (MARKS.length) drawMarks();
+      return changed.size;
+    }
     let n = 0;
     for (const e of RESTYLE) {
       if (!touches(e.svgText)) continue;

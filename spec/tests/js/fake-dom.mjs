@@ -59,6 +59,12 @@ export class Node {
     return [...this.descendants()].filter(n => alts.some(a => a(n)));
   }
   querySelector(sel) { return this.querySelectorAll(sel)[0] || null; }
+  // this node or the nearest ancestor that matches, as Element.closest
+  closest(sel) {
+    const alts = sel.split(',').map(s => s.trim()).map(parseSel);
+    for (let n = this; n; n = n.parentNode) if (alts.some(a => a(n))) return n;
+    return null;
+  }
   clone() {
     return new Node(this._attrs, this.children.map(c => c.clone()), this.tagName);
   }

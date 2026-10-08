@@ -402,13 +402,14 @@
     },
     "ru": {
      "type": "number",
-     "description": "rack units, for a device that bolts to the rack - `mount` `rack` (the default) or `rack-face`. For a rack-face part it is the units its ears span, not units it occupies. L125: these two state it, and a device mounted any other way does not."
+     "description": "rack units, for a device that bolts to the rack - `mount` `rack` (the default), `rack-face` or `rack-side`. For a rack-face part it is the units its ears span, and for a rack-side part the units of height it runs beside, not units either occupies. L125: these three state it, and a device mounted any other way does not."
     },
     "mount": {
-     "description": "HOW THE BOX IS INSTALLED, which a DCIM device type has to know and the dimensions do not say. `rack` is the default and needs no statement; a device mounted any other way says so here and states no `ru`, and the DCIM export then writes `u_height: 0` and `is_full_depth: false` rather than inventing a rack unit (#734). `din-rail` is a box that clips onto a rail (IEC 60715), `wall` one that screws to a surface, `desktop` one that stands on its feet. A box that does more than one names the way it is drawn and exported, and its provenance says the rest. `rack-face` is a part that bolts to rack holes at a rack unit ON THE RAIL FACE, with its body projecting outward from the mounting plane rather than in between the posts - a lacer panel in front of a patch panel. It states `ru` (the units its ears span), its `depth` is that outward projection, and it exports `u_height: 0` like the others because it occupies none. It says nothing about front or rear: the same part goes on either face, and that is a placement's to say. The name says where on the rack the part attaches; \"zero-U\" says only what it does not use, and is as true of a vertical power strip. L125 checks it against `ru`.",
+     "description": "HOW THE BOX IS INSTALLED, which a DCIM device type has to know and the dimensions do not say. `rack` is the default and needs no statement; a device mounted any other way says so here and states no `ru`, and the DCIM export then writes `u_height: 0` and `is_full_depth: false` rather than inventing a rack unit (#734). `din-rail` is a box that clips onto a rail (IEC 60715), `wall` one that screws to a surface, `desktop` one that stands on its feet. A box that does more than one names the way it is drawn and exported, and its provenance says the rest. `rack-face` is a part that bolts to rack holes at a rack unit ON THE RAIL FACE, with its body projecting outward from the mounting plane rather than in between the posts - a lacer panel in front of a patch panel. It states `ru` (the units its ears span), its `depth` is that outward projection, and it exports `u_height: 0` like the others because it occupies none. It says nothing about front or rear: the same part goes on either face, and that is a placement's to say. `rack-side` is a part that attaches to the SIDE OF A RACK'S UPRIGHT and runs vertically beside it, outside the rails - a full-height vertical cable manager on its brackets (docs/vertical-cable-managers-design.md). It states `ru`, the rack units of height it spans, and exports `u_height: 0` and `is_full_depth: false` because it occupies none; it is drawn as it stands, so its front is taller than it is wide (L152), and which side of the rack it stands on is a placement's to say. The name says where on the rack the part attaches; \"zero-U\" says only what it does not use, and is as true of a vertical power strip. L125 checks it against `ru`.",
      "enum": [
       "rack",
       "rack-face",
+      "rack-side",
       "din-rail",
       "wall",
       "desktop"
@@ -427,6 +428,22 @@
     "full-depth": {
      "type": "boolean",
      "description": "WHETHER A RACK DEVICE TAKES BOTH FACES of the rack units it spans, the fact NetBox and Nautobot write as `is_full_depth` and use to decide whether the opposite face of those units is free. A `rack` device is full depth unless it says `false` here: a cable manager 87 mm deep in front of the rails leaves the rear face of its unit free for another part. Stated, not derived from `depth`, because a threshold would quietly re-file every shallow box already imported. Only on a `rack` device (L125); any other mount already exports `false` (#854)."
+    },
+    "overhang": {
+     "type": "object",
+     "description": "HOW FAR REAL PARTS REACH BEYOND THE RACK FACE, in millimetres each side (#865). A `rack` device is drawn between its ear folds, and nothing could stand outside them; some rack hardware has parts that do - the FS CMH-6DR1U bolts a steel end ring to the front of each ear, reaching 43 mm past the 482.6 mm rack width to hold a vertical run beside the posts. Such a device draws its front at the rack-face width with the ears drawn, holding what they carry (as the R740xd does), and a part beyond the face is an ordinary placement at negative x or past the view's width. This states the envelope, so the reach is a claim and not an accident of an `at`: L150 refuses a part outside its view that the side's figure does not cover, and L151 warns when no part reaches a stated figure. `left` and `right` are as seen from the front. Only on a `rack` device (L125). Neither DCIM schema has a field for it; the export writes it as a comment.",
+     "additionalProperties": false,
+     "minProperties": 1,
+     "properties": {
+      "left": {"type": "number", "minimum": 0},
+      "right": {"type": "number", "minimum": 0}
+     }
+    },
+    "ears": {
+     "description": "WHERE THE EAR FOLDS ARE, for a rack device whose front is the part itself and not a rack face (#865). `behind`: the mounting flanges sit behind the body, so a front 482.6 mm wide is the body's own width and not ears drawn by mistake - the FS USCMH-SFDABSB2U is a duct as wide as the rack, standing in front of the rails on flanges folded back behind it. L43, which warns that a 480-487 mm face is a rack face with its ears on, stands down when this is stated. Only on a `rack` device (L125).",
+     "enum": [
+      "behind"
+     ]
     },
     "weight-kg": {
      "type": "number"
@@ -1360,6 +1377,18 @@
              }
             }
            ]
+          },
+          "positions": {
+           "description": "what each position of a part's position fields MEANS on this device (docs/switch-positions-design.md section 8): a field key, then each option and its meaning - `sw-3: {on: alarm enabled for breaker position A3, 'off': alarm silenced}`. Documentation carried into the drawing as `data-positions`; it sets nothing, because a position is a field and is set by `attrs`",
+           "type": "object",
+           "minProperties": 1,
+           "additionalProperties": {
+            "type": "object",
+            "minProperties": 1,
+            "additionalProperties": {
+             "type": "string"
+            }
+           }
           },
           "description": {
            "type": "string",

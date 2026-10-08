@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx104
-version: 3.0.0
+version: 3.0.1
 maturity: modelled
 manufacturer: Juniper
 model: MX104
@@ -52,10 +52,16 @@ provenance:
       The fan tray and air filter are SIDE-mounted per the guide (Figure 7/8) and appear on the
       left face as an estimated band
   power:
+    confidence: datasheet
     note: >-
-      guide power table - the 20x1GE MIC row (26 W) was captured; the chassis-level and remaining
-      per-module rows fell outside this extraction's text layer and their L27 warnings stand. Max
-      thermal and draw figures not carried rather than guessed
+      guide power consumption topic, Table 6 - 600 W for the AC router and 625 W for the DC
+      router, measured from the power source (INPUT side) on a system with redundant supplies,
+      redundant Routing Engines and the fan tray, fully loaded with MICs; 325 W AC and 350 W DC
+      without MICs. The guide labels all four rows typical; the MX104 datasheet labels the loaded
+      pair fully loaded (max) and the no-MIC pair typical. Carried as power-max-ac-w and
+      power-max-dc-w with that disagreement in power-max-scope; the no-MIC rows stay here and are
+      not carried. The guide has no per-module power table: the MIC and supply contracts carry
+      their own figures, and the Routing Engine has none (see gaps)
   lifecycle:
     note: >-
       announced - MX104 is EOL (TSB seen in the family tables; image-library page redirects).
@@ -88,6 +94,14 @@ provenance:
 attrs:
   physical:
     weight: 9 kg bare; 14.5 kg with power supplies, fan tray and MICs
+  power:
+    power-max-ac-w: 600
+    power-max-dc-w: 625
+    power-envelope: fully-configured
+    power-max-scope: INPUT side, measured from the power source - redundant
+      supplies and Routing Engines, fan tray, fully loaded with MICs (guide
+      Table 6, which calls both figures typical; the datasheet calls them fully
+      loaded max)
   environmental:
     operating-temp: -40 C to 65 C (datasheet - environmentally hardened)
   lifecycle:
@@ -111,11 +125,14 @@ gaps:
     reason: needs-photo
     wanted: the AC supply face (guide Figure 9 is isometric line art only);
       only the photographed DC variant is modelled.
-  - what: per-module-power
-    scope: [mics, res, psus]
+  - what: routing-engine-power
+    scope: [res]
     reason: vendor-silent
-    wanted: the remaining per-module wattage rows - only the 20x1GE MIC's
-      26 W was inside this extraction's text layer.
+    note: >-
+      The MX104 guide publishes chassis totals only (Table 6) and no per-module table; the MICs
+      and supplies carry figures on their own contracts. No document in the intake rates the
+      RE-S-MX104, which is the module L29 reports.
+    wanted: a power figure for the RE-S-MX104 Routing Engine.
   - what: alarm-connector
     scope: [mgmt]
     reason: needs-drawing

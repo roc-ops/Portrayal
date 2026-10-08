@@ -7,6 +7,7 @@ here and nowhere else.
 """
 import functools
 import math
+import re
 
 import yaml
 from pathlib import Path
@@ -1060,3 +1061,31 @@ def nested_key_host(key, device, cfg, resolve):
                          f"{where!r} - no part {host_id!r}, and no occupant "
                          "seated there produces it")
     return host_ref, ref, path
+
+
+# A POSITION'S MOVES (docs/switch-positions-design.md section 4). render.py
+# applies them and lint L148/L149 checks them, so the table is read in one place;
+# kit/fields.js parseMoves spells the same pattern.
+MOVE_ENTRY = re.compile(r"^\s*([^:,\s]+)\s*:\s*(-?[0-9.]+)\s+(-?[0-9.]+)(?:\s+(-?[0-9.]+))?\s*$")
+
+
+def parse_moves(spec):
+    """`data-move="on: 0 -3.2, off: 0 0"` -> {"on": (0.0, -3.2, 0.0), ...}.
+
+    Each entry is an option, then a translation in millimetres in the skin's
+    own frame, then optionally a turn in degrees about the node's own centre.
+    A malformed entry raises: a table nobody can read moves nothing silently,
+    which is the failure this rule exists to make loud."""
+    out = {}
+    for part in (spec or "").split(","):
+        if not part.strip():
+            continue
+        m = MOVE_ENTRY.match(part)
+        if not m:
+            raise ValueError(f"data-move entry {part.strip()!r} is not 'option: dx dy [deg]'")
+        opt, dx, dy, deg = m.groups()
+        try:
+            out[opt] = (float(dx), float(dy), float(deg or 0))
+        except ValueError:      # '.' and '1.2.3' match the pattern and are not numbers
+            raise ValueError(f"data-move entry {part.strip()!r} is not 'option: dx dy [deg]'") from None
+    return out

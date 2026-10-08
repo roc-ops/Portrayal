@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: cmh-6dr1u
-version: 0.1.0
+version: 1.0.0
 maturity: modelled
 manufacturer: FS.com
 model: CMH-6DR1U
@@ -11,7 +11,7 @@ description: >-
   1U horizontal cable manager with end rings, FS SKU #64184: a flat black steel panel on
   the rack rails with four steel D-rings standing 88 mm out of it for horizontal runs,
   and a larger steel ring bolted to each ear that reaches out past the rack rail for
-  vertical runs. The two end rings stand outside the rack's width and are not drawn.
+  vertical runs, reaching 43 mm past the rack's width on each side.
 profile: passive
 provenance:
   full-depth:
@@ -38,8 +38,9 @@ provenance:
     note: >-
       drawing for 430 x 44, estimated for the 100. The plate is flat over the whole 19 in
       [482.6mm] and its top and bottom edges fold back over 16.9 in [430mm], 1.04 in
-      [26.3mm] in from each end; the flat ends outside the folds are the ears, which this
-      library does not draw, so the body is the 430. The datasheet's 3.46 in (88 mm)
+      [26.3mm] in from each end; the flat ends outside the folds are the ears, so the body
+      is the 430. The front is drawn at the 482.6 rack face with the ears on it, because
+      the ears carry the end rings (#865), as the R740xd's front carries its ports. The datasheet's 3.46 in (88 mm)
       depth is the ring's longer arm from the face of the plate. The renders (gallery
       image 2, the back) show the edges folded back, as on the CMH-5DR1U-N, but this
       part's drawing does not dimension them; they are taken as the CMH-5DR1U-N's 12, and
@@ -64,7 +65,9 @@ provenance:
       plus 2.4 in [62mm] to the first ring's centre and 4 in [102mm] between centres, and
       the four read 102 mm apart, symmetric about the middle. Each ring is 12.4 wide on
       this drawing and 12.7 on the CMH-5DR1U-N one, the same ring; its contract has the
-      rest. FS's mark, printed on the left ear, is outside the body.
+      rest. The face is the 482.6 rack face, the panel 26.3 in from each end and an ear
+      either side of it, with the end rings bolted across the ears and reaching past
+      them. FS's mark, printed on the left ear, is not drawn.
   rings:
     confidence: drawing
     note: >-
@@ -74,17 +77,28 @@ provenance:
       renders (feature image 1, gallery image 5) show the short arm on top hooking down,
       as on the CMH-5DR1U-N, and the renders are taken.
   end-rings:
-    confidence: known-wrong
+    confidence: drawing
     note: >-
-      known-wrong - THE TWO END RINGS ARE NOT DRAWN. Each is a steel loop bolted to the
-      front of an ear, lying flat at mid-height with its strip about 12 mm deep, so that
-      cables run vertically through it beside the rack posts. The datasheet's plan of one
-      dimensions it 3.4 in [86mm] across by 3.1 in [78mm] on one leg and 3.4 in [86mm] on
-      the other, open at one corner with a curled end; its front view puts each 86 mm
-      span from 1.7 in [43mm] outside the end of the 482.6 to 43 mm inside it, which is
-      16.7 mm onto the plate past the fold. So the part is 568.6 mm across with both
-      rings. A `mount: rack` device is drawn between the ear folds and nothing can stand
-      outside that envelope; the rings are recorded here and in `gaps` instead.
+      drawing - a steel loop bolted to the front of each ear, lying flat at mid-height with
+      its strip 12 mm deep, so that cables run vertically through it beside the rack posts
+      (fs/cmh-6dr1u-end-ring@1, whose contract has the plan). The front view puts each
+      86 mm span from 1.7 in [43mm] outside the end of the 482.6 to 43 mm inside it, which
+      is 16.7 mm onto the plate past the fold, so the part is 568.6 mm across with both
+      rings. They stand in the plane of the ears, like the D-rings in the panel's, and the
+      right ring is the left one turned half round. Which side of the plan lies against
+      the ear is not drawn, and is estimated in the ring's contract.
+  overhang:
+    confidence: drawing
+    note: >-
+      drawing - 43 each side: the front view's 1.7 in [43mm] from the end of the 19 in
+      [482.6mm] to the outer leg of each end ring (#865). The rings are placed at x -43 and
+      439.6 on the 482.6 face.
+  ears:
+    confidence: drawing
+    note: >-
+      drawing - the ears are the plate's flat ends outside the folds, 26.3 wide, with an
+      oval rack-screw slot near the top and the bottom of each, read off the front view
+      (fs/cmh-6dr1u-ear@1). They are drawn because they carry the end rings.
   mount:
     confidence: datasheet
     note: >-
@@ -142,21 +156,13 @@ chassis:
   height: 44.0
   depth: 100.0
   ru: 1
+  overhang: {left: 43.0, right: 43.0}
   full-depth: false
   shell: sheet
   thickness: 1.2
   weight-kg: 0.66
   color: '#1b1d20'
 gaps:
-  - what: end-rings
-    scope: [base]
-    reason: needs-drawing
-    note: >-
-      the two end rings are dimensioned by the vendor but cannot be drawn: each stands
-      on the front of an ear, 86 x 78 mm in plan, reaching 43 mm past the end of the 19
-      in width at mid-height, and a rack device is drawn between its ear folds. What is
-      missing is a way to draw a part outside the rails' envelope, not a source.
-    wanted: a way for a rack device to carry parts outside its ears
   - what: flange-depth
     scope: [top, bottom, left, right]
     reason: vendor-silent
@@ -170,21 +176,35 @@ groups:
     role: furniture
     index-origin: 1
     description: the flat steel panel and its folded edges
+  ears:
+    term: Ear
+    role: furniture
+    index-origin: 1
+    description: the plate's two flat ends outside the folds, left first
   guides:
     term: Ring
     role: furniture
     index-origin: 1
     description: four steel D-rings, cables passing through along the panel
+  end-rings:
+    term: End ring
+    role: furniture
+    index-origin: 1
+    description: two steel rings bolted to the ears, cables passing through vertically beside the posts, left first
 views:
   front:
-    size: {w: 430.0, h: 44.0}
+    size: {w: 482.6, h: 44.0}
     components:
       placements:
-        - {ref: fs/cmh-6dr1u-panel@1, id: panel, at: [0.0, 0.0], group: body, rel-pos: 1}
-        - {ref: fs/cmh-5dr1u-n-ring@1, id: guide-1, at: [55.65, 0.0], group: guides, rel-pos: 1, in: panel}
-        - {ref: fs/cmh-5dr1u-n-ring@1, id: guide-2, at: [157.65, 0.0], group: guides, rel-pos: 2, in: panel}
-        - {ref: fs/cmh-5dr1u-n-ring@1, id: guide-3, at: [259.65, 0.0], group: guides, rel-pos: 3, in: panel}
-        - {ref: fs/cmh-5dr1u-n-ring@1, id: guide-4, at: [361.65, 0.0], group: guides, rel-pos: 4, in: panel}
+        - {ref: fs/cmh-6dr1u-ear@1, id: ear-left, at: [0.0, 0.0], group: ears, rel-pos: 1}
+        - {ref: fs/cmh-6dr1u-panel@1, id: panel, at: [26.3, 0.0], group: body, rel-pos: 1}
+        - {ref: fs/cmh-6dr1u-ear@1, id: ear-right, at: [456.3, 0.0], rotate: 180, group: ears, rel-pos: 2}
+        - {ref: fs/cmh-5dr1u-n-ring@1, id: guide-1, at: [81.95, 0.0], group: guides, rel-pos: 1, in: panel}
+        - {ref: fs/cmh-5dr1u-n-ring@1, id: guide-2, at: [183.95, 0.0], group: guides, rel-pos: 2, in: panel}
+        - {ref: fs/cmh-5dr1u-n-ring@1, id: guide-3, at: [285.95, 0.0], group: guides, rel-pos: 3, in: panel}
+        - {ref: fs/cmh-5dr1u-n-ring@1, id: guide-4, at: [387.95, 0.0], group: guides, rel-pos: 4, in: panel}
+        - {ref: fs/cmh-6dr1u-end-ring@1, id: end-ring-left, at: [-43.0, 16.0], group: end-rings, rel-pos: 1, in: ear-left}
+        - {ref: fs/cmh-6dr1u-end-ring@1, id: end-ring-right, at: [439.6, 16.0], rotate: 180, group: end-rings, rel-pos: 2, in: ear-right}
   rear:
     size: {w: 430.0, h: 44.0}
     panel:
@@ -248,7 +268,7 @@ configurations:
   base:
     kind: base
     default: true
-    description: 'The cable manager as FS ships #64184, four D-rings and two end rings fitted; the end rings are not drawn.'
+    description: 'The cable manager as FS ships #64184, four D-rings and two end rings fitted.'
 datasheet:
   title: 'FS Horizontal Cable Managers with D-rings datasheet'
   sha256: 6139a0ad822d496db3b2a66173b744697f90dfbc718ca66e1a705457f527045e

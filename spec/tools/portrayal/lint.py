@@ -209,7 +209,7 @@ RULES = {
     "L40": ("device",     "a pluggable cage says which optics run in it, and optics prose names a group that exists", "add the group's optics attrs, or fix the group name in the prose"),
     "L41": ("device",     "a bay or placement scoped to configurations names ones that exist, not all, not none", "fix `only-in`"),
     "L42": ("device",     "a silkscreen mark says what it annotates, or `chassis` for printing about the whole unit", "add `for:`"),
-    "L43": ("device",     "a front or rear view as wide as the rack face still has its ears in it, unless the device is a `rack-face` part, which is its ears", "model the body between the ear folds; record the ear extent in provenance"),
+    "L43": ("device",     "a front or rear view as wide as the rack face still has its ears in it, unless the device is a `rack-face` part, which is its ears, or states `chassis.ears: behind`, whose face is the part", "model the body between the ear folds; record the ear extent in provenance"),
     "L44": ("device",     "panel decor agrees with the face: a patterned field is not buried under parts, printing does not run off the edge", "move or trim the decor"),
     "L45": ("device",     "a view at `modelled` draws something or declares itself empty", "add content, or an `empty:` sentence of 40+ characters saying where you looked"),
     "L46": ("component",  "composed parts do not collide inside the part", "move a part, or say in provenance that the layering is deliberate"),
@@ -276,7 +276,7 @@ RULES = {
     "L107": ("component, device", "no quoted run in a contract or manifest is longer than 25 words - a vendor's facts are transcribed, its prose is not reproduced", "paraphrase and cite the section (\"the ASR 9903 guide, Power Supply LEDs, says a flashing green lamp means...\"); a state table becomes `state = meaning` pairs, not a quotation"),
     "L109": ("component",  "a declared `optical.polarity` is what the paths actually wire - A straight, AF pair-flipped (and its rows exchanged at 24 fibres), universal - judged at the trunk connector's own width, and only at a width a held source draws (a warning otherwise)", "fix the paths or the polarity; the paths are the evidence, `polarity` is only the claim. For a width no source draws, add it to POLARITY_WIDTHS with the figure that draws it"),
     "L110": ("component, device", "a port's `speed` is one of the closed set in spec/schemas/speeds.yaml - the highest native rate the port runs at, and nothing else", "spell the rate from the set (a 10/100/1000 jack is `1g`); media goes in `media`, a USB generation in `usb`, a PON flavour in `pon`, a caveat in the placement's `description`"),
-    "L108": ("component, device", "a belly-to-belly SFP/QSFP/QSFP-DD cage pair faces the library's way - upper 0 over lower 180, or left 270 beside right 90 on a card drawn on its side - so both bails face outward (OSFP stacks are not checked)", "turn the pair; where a recorded reading says the stack is built otherwise, name the pair in `stack-exceptions:` with that reading as its `reason`"),
+    "L108": ("component, device", "a stacked cage pair faces the library's way - an SFP/QSFP/QSFP-DD pair belly-to-belly, upper 0 over lower 180, or left 270 beside right 90 on a card drawn on its side, so both bails face outward; an OSFP pair the same way up, turned alike - 0 over 0, or 180 over 180 for a cage under the board, or both 90 or both 270 on its side - because a stacked OSFP cage is one connector and the OSFP MSA rev 5.22 draws both its modules heat sink up (section 7.1, Table 7-1, Figures 7-1 and 7-2)", "turn the pair; where a recorded reading says the stack is built otherwise, name the pair in `stack-exceptions:` with that reading as its `reason`"),
     "L111": ("library",    "an alias names one box - no two devices claim the same `aliases[].name` (case-insensitive) unless every claimant marks it `shared: true`, and no alias repeats its own or another device's `model`", "drop or rename the alias; if an OEM name really maps to either of a pair, set `shared: true` on it in EVERY claimant and say why in its `note`"),
     "L112": ("component",  "a connector draws a node 1..N for each of its optical.positions, and a cassette's rear face reuses no front id", "compose a bore with the position's number as its id, or declare an element of class fibre; rename a clashing rear id"),
     "L113": ("device",     "a device port whose effective media carries a network interface (a pluggable cage, or `rj45`) has a `speed` and a group with a `role` - warning at `modelled`, error at `verified`", "add the rate the source states, on the port or its group; a console, timing or alarm jack takes the media that says so (`rj45-serial`, `rj45-tod`, `rj48`) instead of a speed; where no document states a rate, leave it and record the search in `gaps:`"),
@@ -291,7 +291,7 @@ RULES = {
     "L122": ("component, device", "a `cable-od` value is a diameter in millimetres from 2 to 15 - on a field's default, a composing part's attrs, and a device placement's attrs - written as plain ASCII digits and a point, the only number the build and the kit draw", "give the cable's outside diameter in mm as a number, from the product's own document"),
     "L124": ("library",    "under one NOS vendor, no two listings export the same DCIM model, and no alias is claimed by two listings unless each marks it `shared`", "give one listing a configuration `model` or its own SKU; drop the duplicate alias, or mark it `shared: true` in every claimant with a `note`"),
     "L123": ("library",    "one module, one bay size - every bay that accepts a module, in any device or carrier, reserves the same size for it, to within a millimetre", "reserve one figure everywhere - the module's own `insert` or `size`; a difference that is real stays in the baseline, with the reason in the provenance of the chassis that reserves more (the warning is filed on the module, so a chassis `lint.waive` cannot clear it)"),
-    "L125": ("device",     "a device says how it is installed - a rack device (the default `mount`) or a `rack-face` part states `ru` (warning), and a device whose `chassis.mount` is `din-rail`, `wall` or `desktop` states none (error); `chassis.full-depth` appears only on a rack device (error)", "give a rack device its `ru` from the datasheet; for a box that is not racked, state `chassis.mount` and drop `ru`, so its DCIM export says `u_height: 0` rather than an invented rack unit"),
+    "L125": ("device",     "a device says how it is installed - a rack device (the default `mount`), a `rack-face` part or a `rack-side` part states `ru` (warning), and a device whose `chassis.mount` is `din-rail`, `wall` or `desktop` states none (error); `chassis.full-depth`, `chassis.overhang` and `chassis.ears` appear only on a rack device (error)", "give a rack device its `ru` from the datasheet; for a box that is not racked, state `chassis.mount` and drop `ru`, so its DCIM export says `u_height: 0` rather than an invented rack unit"),
     "L126": ("device",     "a bevelled chassis is a solid the box can have - every edge named by two faces that meet, none bevelled twice, no face cut away and no bevel swallowed by its neighbours - its face drawings are the chassis's own size, and every part, bay and cutout on a face lies on the flat face rather than on a bevel", "name edges as two adjacent faces (`front-left`), shrink a bevel that cuts too much, drop a view `size` that differs from the chassis on a bevelled face, or move the part onto the flat face - spec/tools/portrayal/bevel.py says where it is"),
     "L127": ("device",     "a `shell: sheet` body states `chassis.thickness`, between 0 and 10 mm, and a box states none (error)", "give a sheet body the gauge its datasheet states; on a box, drop `thickness`"),
     "L128": ("device, listing", "a part-number key has no stray whitespace - none leading or trailing, none but the plain ASCII space (an error), and none splitting a run of capitals and digits between two hyphens (`-A C-`, a warning)", "retype the SKU as the vendor prints it; a space the vendor really prints inside a hyphenated token is waived with the document that shows it"),
@@ -306,14 +306,21 @@ RULES = {
     "L137": ("device",     "a pass-through whose `cover` is `brush` has a `pattern: brush` decor drawn over the whole of it, and a brush drawn over a pass-through belongs to one whose cover is `brush`", "draw the brush over the opening, or change `cover` to say what the picture shows"),
     "L138": ("component, device", "a guide fits what declares it - a ring's opening inside the part, seen along its run (its size, and its relief or `size.d` out of the face), and a duct inside its view, with a finger gap less than the finger pitch", "measure the clear opening, not the outside of the loop; give the part the relief that holds the opening; move the duct onto its face, or re-read the pitch and the gap off the drawing"),
     "L139": ("lab",        "every placement's `ref` is a library device (and its `cfg` one of that device's configurations), every placement id is unique, and every `on` names another placement in the lab (error)", "name the device by its `name`, e.g. `fhd-1ufce`; give each placement its own id; point `on` at the id of the placement the part sits on"),
-    "L140": ("lab",        "`face`, `on` and `unit` appear only on a device whose `chassis.mount` is `rack-face`; a rack-face device is placed by `on` or by `ru`, not both, and a rack device by `ru` (error)", "drop the key from a rack device; give a rack-face part either `on` (and `unit`) or `ru`"),
+    "L140": ("lab",        "`on` and `unit` appear only on a device whose `chassis.mount` is `rack-face`, and `face` only on a `rack-face` or `rack-side` part; a rack-face device is placed by `on` or by `ru`, not both, and a rack device by `ru` (error)", "drop the key from a rack device; give a rack-face part either `on` (and `unit`) or `ru`"),
     "L141": ("lab",        "a rack-face part's host is a `rack` device, and `unit` is within the host's height, 1 to its `chassis.ru` (error)", "put the part `on` the rack device behind it; count `unit` from 1 at the host's bottom unit"),
-    "L142": ("lab",        "every placement fits inside the rack's `height-ru`, no two rack devices share a rack unit, and no two rack-face parts claim one rack unit on one face (error)", "move one of the two, or put one rack-face part on the other face"),
+    "L142": ("lab",        "every placement fits inside the rack's `height-ru`, no two rack devices share a rack unit, and no two rack-face parts claim one rack unit on one face and side - a part narrower than the rack opening placed at a `side` claims that side, any other claims both (error)", "move one of the two, or put one rack-face part on the other face"),
     "L143": ("lab",        "a rack-face part placed by `ru` over a rack device is reported with that host (warning)", "place it `on` the host with its `unit` so it moves with the host, or leave it by `ru` if it belongs to the rack rather than the device"),
     "L144": ("device",     "members of one group that one configuration draws on one face hold one `rel-pos` each; alternatives (variant views, `only-in` builds) may share one (warning)", "give each member its own position, or move the unlike members - ESD jacks among earthing studs, lane lamps among port lamps - to a group of their own"),
     "L145": ("device",     "a group is not named only for the class of its members - `ports` names no port family (warning)", "name the group for the family it holds (`sfp28`, `rj45-1g`), or a mixed block for the job it does and say so in `mixed:`"),
     "L146": ("device",     "an occupant's `turn` is one its host allows - the host's interface `turns` in connectors.yaml, narrowed by its presented point's own (an error; the build refuses it too)", "choose one of the listed turns, or drop `turn:` to take the default the build computes; a barrier block's terminal screw allows 0 alone"),
     "L147": ("component",  "a connection point's `turns` is a subset of the turns its part's interface allows in connectors.yaml, and only the presented point states one (an error)", "list only turns the interface allows - a point narrows the list, it cannot widen it; move `turns` to the point the interface is presented at, or drop it"),
+    "L148": ("component",  "a node a field moves or shows names a `choice` field the contract declares, and every option its `data-move` or `data-show` lists is one of that field's options; every option of a field with SHOW nodes shows at least one node, or is listed in the field's `drawn-by-absence` (an error)", "declare the field as a choice, or name only its options in the table; spell a move `option: dx dy [deg]`; show a node for the option, or list it in `drawn-by-absence`"),
+    "L149": ("component",  "a node a position moves stays inside its part under every move: its box, translated and turned, lies within `size` (an error)", "shorten the move, or move the node in the skin so its travel stays on the part"),
+    "L150": ("device",     "a placement, bay or cutout whose box lies outside its view's face (beyond 0.5 mm) is covered by that side's `chassis.overhang` - across the width only, the rear and underside mirrored; one beyond the face in height or along a side view is always reported. `optional` placements are exempt, and decor is not checked, since it is clipped and never drawn outside the face (error)", "state `chassis.overhang: {left, right}` with the reach and its source, or move the part onto the face"),
+    "L151": ("device",     "a side of `chassis.overhang` is reached by some part to within 0.5 mm (warning)", "lower the figure to what the parts reach, or drop it when nothing reaches past the face"),
+    "L152": ("device",     "a `rack-side` part's front view is taller than it is wide - it is drawn as it stands beside the rack (warning)", "draw it standing: the front's `w` is the width across the rack's face direction and `h` the height it runs; swap them if the spec line printed them the other way"),
+    "L153": ("lab",        "`side` (left or right) appears only on a `rack-side` part, which states it, and on a `rack-face` part narrower than the rack opening; a rack-side part takes no `on` or `unit` (error)", "give a rack-side part its `side` and place it by `ru`; drop `side` from a full-width part"),
+    "L154": ("lab",        "a rack-side part fits the rack's `height-ru`, and no two rack-side parts on one side of the rack overlap in height (error)", "move one of the two up, or stand it on the other side of the rack"),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -3470,13 +3477,14 @@ def lint_component_fields(path, data, _lib_roots=None):
         if not sp.exists():
             continue
         text = sp.read_text(errors="replace")
-        keys = set(re.findall(r'data-(?:(?:fill-|stroke-|r-)?from|stroke-derive)="([^"]+)"', text))
+        keys = set(re.findall(r'data-(?:(?:fill-|stroke-|r-|move-|show-)?from|stroke-derive)="([^"]+)"', text))
         seen[skin] = keys
         for k in fields:
             if k not in keys and k not in composed:
                 err(path, "L73", f"field {k} has no data-from, data-fill-from, "
-                                 f"data-stroke-from, data-stroke-derive or data-r-from "
-                                 f"node in skin {skin}")
+                                 f"data-stroke-from, data-stroke-derive, data-r-from, "
+                                 f"data-move-from or data-show-from node in skin {skin}")
+        _lint_positions(path, data, fields, skin, text)
         # A FIELD-PAINTED NODE TAKES ITS 3D SIDES FROM ITS ART (#643). relief.js
         # derives a solid's side colour from the node's painted art, and reads
         # it again on every repaint, so a field change recolours the sides -
@@ -3513,6 +3521,108 @@ def lint_component_fields(path, data, _lib_roots=None):
             err(path, "L73", f"field {k} is a choice with no options")
         if (f or {}).get("options") and f.get("default") is not None and f["default"] not in f["options"]:
             err(path, "L73", f"field {k}: default {f['default']!r} is not one of its options")
+
+
+def _shape_box(el):
+    """(x0, y0, x1, y1) of a rect, circle or ellipse in its own frame, or None."""
+    tag = el.tag.rsplit("}", 1)[-1]
+    g = lambda a: float(el.get(a) or 0)
+    if tag == "rect":
+        return g("x"), g("y"), g("x") + g("width"), g("y") + g("height")
+    if tag == "circle":
+        return g("cx") - g("r"), g("cy") - g("r"), g("cx") + g("r"), g("cy") + g("r")
+    if tag == "ellipse":
+        return g("cx") - g("rx"), g("cy") - g("ry"), g("cx") + g("rx"), g("cy") + g("ry")
+    return None
+
+
+def _lint_positions(path, data, fields, skin, text):
+    """L148 and L149: a position field's table is answered by its options, and a
+    moved node stays on its part (docs/switch-positions-design.md section 7).
+
+    L148: a node that moves or shows from a field names a `choice` field the
+    contract declares, every option its `data-move` or `data-show` lists is one
+    of that field's options, and the table parses. A key the field does not
+    have is a position nobody can set, which reads exactly like one that works.
+
+    L149: the box of every moved node, under each of its moves, lies inside the
+    component's `size`. An actuator configured off its own face is drawn on the
+    chassis beside it and extruded there in 3D. Rects, circles and ellipses are
+    measured; a node of another shape is not, and says nothing. THE BOX IS THE
+    NODE'S OWN GEOMETRY: a `transform` drawn on the node or on a group around
+    it is not applied, so a node drawn offset by one is measured where its
+    coordinates say, not where it lands."""
+    if "data-move-from" not in text and "data-show-from" not in text:
+        return
+    try:
+        root = ET.fromstring(text)
+    except ET.ParseError:
+        return
+    size = data.get("size") or {}
+    W, H = float(size.get("w") or 0), float(size.get("h") or 0)
+    # which options of each SHOW field this skin shows some node for
+    shown = {}
+    for el in root.iter():
+        k = el.get("data-show-from")
+        if k is not None:
+            shown.setdefault(k, set()).update((el.get("data-show") or "").split())
+    for k, got in sorted(shown.items()):
+        f = fields.get(k) or {}
+        if f.get("type") != "choice":
+            continue                     # reported below, per node
+        options = [str(o) for o in f.get("options") or []]
+        absent = [str(o) for o in f.get("drawn-by-absence") or []]
+        for o in absent:
+            if o not in options:
+                err(path, "L148", f"{k}: drawn-by-absence names {o!r}, which is not one of its options")
+        for o in options:
+            if o not in got and o not in absent:
+                err(path, "L148", f"skin {skin}: no node is shown for {k}={o} - show one, or "
+                                  f"list {o!r} in the field's drawn-by-absence if nothing is drawn for it")
+    for el in root.iter():
+        for attr, table in (("data-move-from", "data-move"), ("data-show-from", "data-show")):
+            key = el.get(attr)
+            if key is None:
+                continue
+            node = el.get("id") or el.tag.rsplit("}", 1)[-1]
+            f = fields.get(key) or {}
+            if f.get("type") != "choice":
+                err(path, "L148", f"skin {skin}: {node} has {attr}={key!r}, which is not a "
+                                  "choice field the contract declares")
+                continue
+            options = {str(o) for o in f.get("options") or []}
+            if attr == "data-move-from":
+                try:
+                    moves = _manifest.parse_moves(el.get(table) or "")
+                except ValueError as e:
+                    err(path, "L148", f"skin {skin}: {node}: {e}")
+                    continue
+                listed = set(moves)
+            else:
+                moves, listed = {}, set((el.get(table) or "").split())
+            if not listed:
+                err(path, "L148", f"skin {skin}: {node} has {attr}={key!r} and an empty {table}")
+            for o in sorted(listed - options):
+                err(path, "L148", f"skin {skin}: {node}'s {table} names {o!r}, which is not an "
+                                  f"option of {key} ({', '.join(sorted(options))})")
+            box = _shape_box(el) if moves and W and H else None
+            for o, (dx, dy, deg) in sorted(moves.items()):
+                if box is None:
+                    break
+                x0, y0, x1, y1 = box
+                cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
+                pts = [(x0, y0), (x1, y0), (x0, y1), (x1, y1)]
+                if deg:
+                    a = math.radians(deg)
+                    pts = [(cx + (x - cx) * math.cos(a) - (y - cy) * math.sin(a),
+                            cy + (x - cx) * math.sin(a) + (y - cy) * math.cos(a)) for x, y in pts]
+                xs = [x + dx for x, _ in pts]
+                ys = [y + dy for _, y in pts]
+                eps = 0.01
+                if min(xs) < -eps or min(ys) < -eps or max(xs) > W + eps or max(ys) > H + eps:
+                    err(path, "L149", f"skin {skin}: {node} moved for {key}={o} spans "
+                                      f"x {min(xs):.2f}-{max(xs):.2f}, y {min(ys):.2f}-{max(ys):.2f}, "
+                                      f"outside the part's {W:g} x {H:g}")
 
 
 CABLE_OD_RANGE = (2.0, 15.0)
@@ -3813,6 +3923,31 @@ def _paints_over(tag, el, fill):
     return True
 
 
+def _show_conditions(root):
+    """Each element's `data-show` conditions: {field: options}, from every ancestor.
+
+    A position (#808) draws one node per option and shows only the set one, so
+    the I printed on a rocker's OFF surface and the ON surface drawn after it
+    are never on screen together."""
+    out = {}
+    def walk(el, conds):
+        f = el.get("data-show-from")
+        if f:
+            opts = set((el.get("data-show") or "").split())
+            conds = {**conds, f: conds.get(f, opts) & opts}
+        out[el] = conds
+        for ch in el:
+            walk(ch, conds)
+    walk(root, {})
+    return out
+
+
+def _shown_together(a, b):
+    """Whether two elements' show conditions can hold at once."""
+    a, b = a or {}, b or {}
+    return all(a[f] & b[f] for f in a.keys() & b.keys())
+
+
 def lint_component_skin_printing(path, data, lib_roots):
     """L50: printing inside a skin that cannot be read is printing that is not there.
 
@@ -3840,6 +3975,7 @@ def lint_component_skin_printing(path, data, lib_roots):
         except (ET.ParseError, OSError):
             continue          # a malformed skin is already _skin_checks' business
         items = [(t, e, f, _svg_box(t, e)) for t, e, f in _svg_drawables(root)]
+        shows = _show_conditions(root)
         vb = (root.get("viewBox") or "").split()
         face = None
         if len(vb) == 4:
@@ -3868,6 +4004,8 @@ def lint_component_skin_printing(path, data, lib_roots):
                     continue
             for tag2, el2, fill2, b2 in items[i + 1:]:
                 if not b2 or not _paints_over(tag2, el2, fill2):
+                    continue
+                if not _shown_together(shows.get(el), shows.get(el2)):
                     continue
                 ox = min(b[2], b2[2]) - max(b[0], b2[0])
                 oy = min(b[3], b2[3]) - max(b[1], b2[1])
@@ -5282,6 +5420,13 @@ def lint_device_rack_ears(path, data):
     """
     if (data.get("chassis") or {}).get("mount") == "rack-face":
         return
+    # THE EARS ARE BEHIND IT, SO THE FACE IS THE PART. A duct as wide as the
+    # rack that stands in front of the rails on flanges folded back behind it
+    # (the FS USCMH-SFDABSB2U) measures 482.6 across its body; there are no
+    # ears in that face to subtract. The device says so, and the rule
+    # believes it (#865).
+    if (data.get("chassis") or {}).get("ears") == "behind":
+        return
     for vname, view in (data.get("views") or {}).items():
         if vname not in ("front", "rear"):
             continue
@@ -5295,6 +5440,148 @@ def lint_device_rack_ears(path, data):
              "the fold lines and record the ear extent in provenance. If this "
              "device's ears are integral AND carry components, seat them "
              f"within {EAR_ZONE_MM:g}mm of an end and this rule will stand down")
+
+
+# A PART HAS TO BE THIS FAR OUTSIDE ITS FACE BEFORE IT IS BEYOND IT: half a
+# millimetre, the slack a face measured off a figure carries anyway. Two
+# library parts sit a tenth or two past an edge (a fan bay at -0.05) and are
+# the face, not an overhang.
+OVERHANG_TOL = 0.5
+# Views whose x runs the other way to the front's, seen from outside: the rear
+# is seen from behind, and the underside is authored mirrored in both axes
+# (relief.js flips it), so their x 0 is the device's right.
+_MIRRORED_FACES = ("rear", "bottom")
+
+
+def _offface_boxes(data, lib_roots):
+    """Every part drawn on a view, with its box, for L150 and L151.
+
+    Yields (view, face, id, kind, box, optional, (vw, vh)) for placements with an
+    `at`, bays and cutouts. Decor is left out: a decor rect is not a part, and
+    render.py does not grow the drawing for it - outside the face it is clipped
+    and never drawn, so it is a dead rect rather than an overhang (L150's
+    docstring). An occupant seated by `mate-to` is placed by its host and is
+    left out with it.
+    """
+    ch = data.get("chassis") or {}
+    for vname, view in (data.get("views") or {}).items():
+        view = view or {}
+        face = view.get("face") or vname
+        size = view.get("size") or {}
+        vw = size.get("w") or (ch.get("width") if face in ("front", "rear", "top", "bottom")
+                               else None)
+        vh = size.get("h") or (ch.get("height") if face in ("front", "rear") else None)
+        if not vw or not vh:
+            continue
+        vw, vh = float(vw), float(vh)
+        vp = view_parts(view)
+        for q in vp["placements"]:
+            if not q.get("at") or q.get("mate-to") or not q.get("ref"):
+                continue
+            cp = resolve_component(q["ref"], lib_roots)
+            c = (load_yaml(cp) or {}) if cp else {}
+            sz = c.get("size") or {}
+            if "w" not in sz or "h" not in sz:
+                continue
+            w, h = float(sz["w"]), float(sz["h"])
+            x, y = float(q["at"][0]), float(q["at"][1])
+            if q.get("rotate") in (90, 270, -90):
+                cx, cy = x + w / 2, y + h / 2
+                x, y, w, h = cx - h / 2, cy - w / 2, h, w
+            yield (vname, face, q.get("id"), "placement", (x, y, x + w, y + h),
+                   bool(q.get("optional")), (vw, vh))
+        for kind in ("bays", "cutouts"):
+            for b in vp[kind]:
+                bb = _decor_box(b)
+                if bb:
+                    yield (vname, face, b.get("id"), kind[:-1], bb, False, (vw, vh))
+
+
+def lint_device_overhang(path, data, lib_roots):
+    """L150 and L151: a part beyond its face is a stated reach, not a stray `at`.
+
+    A `rack` device is drawn between its ear folds, or at the rack face where
+    its ears carry parts (the R740xd), and until #865 nothing stood outside
+    that. Some rack hardware has real parts that do: the FS CMH-6DR1U bolts an
+    end ring to each ear that reaches 43 mm past the 482.6 mm rack width.
+    `chassis.overhang: {left, right}` states that reach, and the parts are
+    ordinary placements at negative x or past the view's width.
+
+    L150 - A PART OUTSIDE ITS FACE IS COVERED BY THE SIDE'S FIGURE (error).
+    Across the width only: a front or top view's x below 0 is the left, past
+    its width the right; on the rear and the underside the two swap. A part
+    beyond the face in height, or along a side view's depth, has no figure to
+    cover it and is always reported. Without `overhang` the face is the whole
+    device, which is what every drawing meant before this rule.
+
+    WHAT IS LEFT OUT, AND WHY. An `optional` placement is not drawn unless a
+    configuration asks for it: 37 devices carry `optional: ears` brackets at
+    negative x, the ears the library does not draw, and reporting them would
+    accuse a part nobody sees. Decor is left out because render.py does not
+    grow the drawing for it: outside the face a decor rect is clipped and
+    never drawn, so it is a dead rect and not an overhang - the MX204's two
+    flange rects and one EPS122 band are exactly that today, and a rule that
+    reported them as overhang would be asking for the wrong fix.
+
+    L151 - A STATED REACH THAT NO PART REACHES (warning). The figure is a
+    claim about the parts; a side whose figure no part comes within half a
+    millimetre of - optional parts included, since a configuration can draw
+    them - is stale, or overstated.
+    """
+    ch = data.get("chassis") or {}
+    oh = ch.get("overhang") or {}
+    stated = {"left": float(oh.get("left") or 0), "right": float(oh.get("right") or 0)}
+    reach = {"left": 0.0, "right": 0.0}
+    asked = set()
+    for vname, face, pid, kind, (x0, y0, x1, y1), optional, (vw, vh) in \
+            _offface_boxes(data, lib_roots):
+        lo, hi = -x0, x1 - vw
+        across = face in ("front", "rear", "top", "bottom")
+        if across:
+            near, far = (("right", "left") if face in _MIRRORED_FACES
+                         else ("left", "right"))
+            reach[near] = max(reach[near], lo)
+            reach[far] = max(reach[far], hi)
+        if optional:
+            continue
+        where = f"{vname}: {kind} {pid or '(no id)'}"
+        if -y0 > OVERHANG_TOL or y1 - vh > OVERHANG_TOL:
+            err(path, "L150", f"{where} lies outside the face in height "
+                              f"({y0:g} to {y1:g} on a {vh:g} face). `chassis.overhang` "
+                              "states a reach across the width only; move the part onto "
+                              "the face or correct the view's size")
+        if not across:
+            if lo > OVERHANG_TOL or hi > OVERHANG_TOL:
+                err(path, "L150", f"{where} lies outside the face ({x0:g} to {x1:g} on "
+                                  f"a {vw:g} face); a side view's x is the depth, which "
+                                  "`chassis.overhang` does not cover")
+            continue
+        # THE REACH IS MEASURED FROM THE RACK FACE, so a front or rear that a
+        # part reaches past is drawn as one, ears and what they carry included.
+        # Measured off a front drawn at the body between the folds, a part on
+        # an ear would read as overhang and be exported as reaching past the
+        # rack when it is inside it. A face nothing reaches past is not asked.
+        lo_mm, hi_mm = capability.RACK_FACE_MM
+        if (face in ("front", "rear") and max(lo, hi) > OVERHANG_TOL
+                and not lo_mm <= vw <= hi_mm and (vname, face) not in asked):
+            asked.add((vname, face))
+            err(path, "L150", f"{vname}: {kind} {pid or '(no id)'} reaches past a {face} "
+                              f"drawn {vw:g} wide; a part beyond the face is measured from "
+                              f"the rack face, {lo_mm:g}-{hi_mm:g} mm with the ears - draw "
+                              "the ears and what they carry, as the R740xd does")
+        for side, by in ((near, lo), (far, hi)):
+            if by > OVERHANG_TOL and by > stated[side] + OVERHANG_TOL:
+                have = (f"`chassis.overhang.{side}` is {stated[side]:g}" if oh
+                        else "the device states no `chassis.overhang`")
+                err(path, "L150", f"{where} reaches {by:g} mm beyond the {side} of the "
+                                  f"face, and {have}. A part outside the rack face is "
+                                  "stated: give the side its reach, with the source, or "
+                                  "move the part onto the face")
+    for side in ("left", "right"):
+        if stated[side] > OVERHANG_TOL and reach[side] < stated[side] - OVERHANG_TOL:
+            warn(path, "L151", f"`chassis.overhang.{side}` is {stated[side]:g} mm and no "
+                               f"part reaches past {max(reach[side], 0):g} on that side. "
+                               "The figure is stale or overstated")
 
 
 def _decor_box(d):
@@ -6287,12 +6574,12 @@ def lint_listing(path, data, roots):
 
 # THE LAB CODES. The rules are in labs.py, because labs_index.py has to resolve
 # the same placements to write labs.json and the two must not disagree; this is
-# where they are reported. L139-L142 are errors, L143 a warning.
-LAB_CODES = ("L139", "L140", "L141", "L142", "L143")
+# where they are reported. L139-L142, L153 and L154 are errors, L143 a warning.
+LAB_CODES = ("L139", "L140", "L141", "L142", "L143", "L153", "L154")
 
 
 def lint_lab(path, data, roots):
-    """L139-L143: a lab's placements resolve to rack positions that fit.
+    """L139-L143, L153, L154: a lab's placements resolve to rack positions that fit.
 
     A lab names library devices and places them in one rack: a `rack` device by
     `ru`, a `rack-face` part (a cable manager on the rail face) `on` a host or
@@ -6301,7 +6588,12 @@ def lint_lab(path, data, roots):
     units, L142 that nothing overlaps; all errors, because a lab that breaks
     them cannot be drawn and labs_index.py will not compile it. L143 is a
     report, not a fault: a rack-face part placed by `ru` in front of a device
-    is legal, and the warning names the host it would move with.
+    is legal, and the warning names the host it would move with. A `rack-side`
+    part (a full-height vertical manager beside the rack) is placed by `side`
+    and `ru` (docs/vertical-cable-managers-design.md section 3.5): L153 holds
+    which placements may say `side` - it and a rack-face part narrower than
+    the opening, which then claims its unit per face and side under L142 - and
+    L154 that it fits the rack and overlaps nothing on its side.
     """
     found, _placed = labs.check(data, roots)
     for code, sev, msg in found:
@@ -6791,14 +7083,20 @@ def lint_device_mount(path, data):
     mount = ch.get("mount", "rack")
     # `rack-face` BOLTS TO RACK HOLES, so it has rack units to state - the ones
     # its ears span - while occupying none. It is held to `ru` exactly as a
-    # rack device is.
-    bolts_to_rack = mount in ("rack", "rack-face")
+    # rack device is. `rack-side` bolts to the SIDE of an upright and runs
+    # beside the rack, and its height is a rack height - 45U is 2000 mm - so it
+    # states the units it runs beside, again occupying none
+    # (docs/vertical-cable-managers-design.md).
+    bolts_to_rack = mount in ("rack", "rack-face", "rack-side")
     # A MISSING `ru` WARNS; a contradiction refuses. The one rack device left
     # without rack units is an Open Rack v3 tray, sized in a unit `ru` cannot
     # hold, and a waiver - which only a warning can take - is where it says so.
     if mount == "rack-face" and "ru" not in ch:
         warn(path, "L125", "a `rack-face` part states `ru` - the rack units its "
                           "ears span, though it occupies none")
+    elif mount == "rack-side" and "ru" not in ch:
+        warn(path, "L125", "a `rack-side` part states `ru` - the rack units of "
+                          "height it runs beside the rack, though it occupies none")
     elif bolts_to_rack and "ru" not in ch:
         warn(path, "L125", "a rack device states `ru`. If this box is not racked, "
                           "say how it is installed with `chassis.mount` "
@@ -6812,6 +7110,39 @@ def lint_device_mount(path, data):
         err(path, "L125", f"`chassis.full-depth` is for a rack device, and this one "
                           f"mounts {mount!r} - it already exports `is_full_depth: "
                           "false`; drop it")
+    # `overhang` and `ears` are about a rack face - what reaches past it, and
+    # whether the face has ears in it at all (#865). A `rack-face` part is its
+    # ears already, and a box that is not racked has no rack face.
+    for key in ("overhang", "ears"):
+        if key in ch and mount != "rack":
+            err(path, "L125", f"`chassis.{key}` is for a rack device, and this one "
+                              f"mounts {mount!r}; drop it")
+
+
+def lint_rack_side_portrait(path, data):
+    """L152: a `rack-side` part's front is taller than it is wide.
+
+    A rack-side part is drawn as it stands (docs/vertical-cable-managers-design.md
+    section 3.2): its front `w` is its width across the rack's face direction and
+    its `h` the height it runs beside the rack, so a full-height duct 125 wide
+    and 2108 tall has a portrait front. A landscape one is the likeliest
+    authoring error - the duct drawn lying down, its width and height swapped
+    the way a vendor's spec line sometimes prints them. A warning, because a
+    short side part wider than it is tall is not impossible, only unlikely
+    enough to need its waiver.
+    """
+    ch = data.get("chassis") or {}
+    if ch.get("mount") != "rack-side":
+        return
+    front = ((data.get("views") or {}).get("front") or {}).get("size") or {}
+    w, h = front.get("w", ch.get("width")), front.get("h", ch.get("height"))
+    if not isinstance(w, (int, float)) or not isinstance(h, (int, float)):
+        return
+    if h <= w:
+        warn(path, "L152", f"a `rack-side` part stands beside the rack, so its front is "
+                          f"taller than it is wide - this one is {w:g} wide and {h:g} "
+                          "tall. Draw it as it stands: `w` across the rack's face "
+                          "direction, `h` the height it runs")
 
 
 def lint_device_power_outlets(path, data):
@@ -7529,7 +7860,7 @@ def lint_device_pluggable_media(path, data, _lib_roots=None):
 
 
 def _stack_findings(path, data, lib_roots, is_device):
-    """L108: every belly-to-belly cage pair faces the library's way, or says why not.
+    """L108: every stacked cage pair faces the library's way, or says why not.
 
     THE CONVENTION IS ONE MEANING OF `rotate` (docs/pluggables-3d-design.md,
     the stacked-cage decisions of 2026-09-21): 0 is a module seated upright,
@@ -7543,8 +7874,13 @@ def _stack_findings(path, data, lib_roots, is_device):
     THE PAIRING IS stacks.py's, and the tests read the same module - a rule and
     a census that disagreed about what a pair is would each pass on its own.
     Exceptions are per pair, in `stack-exceptions:`, and one that names no
-    checked pair is a finding too. OSFP stacks are skipped, and the message
-    says so, because std/osfp@1's art may follow a different convention.
+    checked pair is a finding too.
+
+    OSFP STACKS ARE HELD TO THE SAME WAY UP, not belly-to-belly (#799): the
+    OSFP MSA rev 5.22 draws its stacked 2x1 cages heat sink up in both rows
+    (section 7.1, Table 7-1, Figures 7-1 and 7-2), so an OSFP row pair is
+    turned alike - 0/0, or 180/180 for a cage on the board's underside.
+    stacks.WANT holds each family's convention.
     """
     def resolve(ref):
         c = _contract(ref.split(":")[0], lib_roots) if ref else {}
@@ -10346,6 +10682,7 @@ def lint_device(path, validator, lib_roots):
     lint_device_config_scope(path, data)
     lint_device_silkscreen_owner(path, data)
     lint_device_rack_ears(path, data)
+    lint_device_overhang(path, data, lib_roots)
     lint_device_bay_pitch(path, data)
     lint_device_empty_views(path, data)
     lint_device_occupants(path, data, lib_roots)
@@ -11648,6 +11985,7 @@ def main():
                 lint_device_airflow_home(f, d)
                 lint_device_power_home(f, d)
                 lint_device_mount(f, d)
+                lint_rack_side_portrait(f, d)
                 lint_device_shell(f, d)
                 lint_device_power_outlets(f, d)
                 lint_device_power_stated(f, d)

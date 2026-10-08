@@ -173,11 +173,23 @@ taken while applying those decisions across the library. All are dated 2026-09-2
   device rule as written - geometry, a major. A part that MOVES an opening or a
   connection point inside its box is a major by the component rule, not this one:
   `common/qsfp-cage` went to v3 for its flange.
-- **S7 - OSFP is out** (implementation ruling; the maintainer's list of skins to
-  redraw included `std/osfp`, and this sets it aside pending the open question below): `std/osfp@1` keeps its skin and every OSFP stack is left
-  as drawn. Its art already draws a latch slot at the BOTTOM of the opening,
-  which a mirrored lip would cover and which may be a different convention,
-  and no OSFP generic exists to seat. L108 skips OSFP and says so.
+- **S7 - OSFP stacks the same way up** (maintainer decision, 2026-10-07, #799,
+  replacing the 2026-09-21 ruling that set OSFP aside; accepting 180 over 180 and
+  the column turns is an implementation ruling): a stacked OSFP cage is
+  one connector seating both modules heat sink up - the OSFP MSA rev 5.22 draws
+  its stacked 2x1 cages so (section 7.1, Figures 7-1 and 7-2), and its Table 7-1
+  puts the 19.9 mm pitch's riding heat sink "on the top side of bottom port". So
+  L108 holds an OSFP pair to cages turned alike: 0 over 0, 180 over 180 where the
+  whole 2x1 cage sits on the underside of the board (the MSA's belly-to-belly
+  application, section 7.6, is cages on both faces of one board), 90/90 or
+  270/270 on a card drawn on its side. A pair turned 0 over 180 is two single
+  cages either side of a board, which the MSA allows but which is not a stacked
+  cage, so it takes a reading in `stack-exceptions:`. `std/osfp@1` keeps its
+  skin. Applying it, the drawings disagreed with the first proposal (every lower
+  row to 0) on four of six faces: the 1RU Celestica faces are single cages either
+  side of a board, and the 2RU and 3RU faces draw their lower bank as the upper
+  turned over; those devices keep their turn under a per-pair exception and a
+  gap until the reading is decided.
 - **S8 - three-high faces** (implementation ruling): six devices carry a two-high stack with a separate
   single row under it. The pairing takes stacks from the top, which each
   device's provenance confirms, even where the separate row sits closer to the
@@ -199,6 +211,3 @@ taken while applying those decisions across the library. All are dated 2026-09-2
   library renders for every device (left/right faces). It would be correct and it is
   cheap once `out` is right; it is also the first time a face would show an occupant
   of another face, which is the `plan:` mechanism's territory.
-- Which way `std/osfp@1`'s art faces (S7): whether its bottom latch slot is the
-  belly-side feature the other cages' lips are, and so whether OSFP stacks take
-  the same convention.

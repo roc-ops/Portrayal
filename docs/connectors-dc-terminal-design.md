@@ -15,7 +15,7 @@ nothing in them.
 | part | class | where it is placed |
 |---|---|---|
 | `common/terminal-header-508-5f@1` | inlet | the power input of 10 AurCore AIS switches |
-| `common/terminal-header-508-2@1` | port | the relay output of the same 10 |
+| `common/terminal-header-508-2@2` | port | the relay output of the same 10 |
 | `common/dc-terminal-header-6@1` | inlet | two on the rear of the ReadyLinks GL-12xB-240D |
 
 None stated an interface or a connection point, and there was no plug.
@@ -94,7 +94,7 @@ the plug drawing dimensions 8.3.
 | header | presents at | models | the drawing gives | mismatch |
 |---|---|---|---|---|
 | `common/terminal-header-508-5f@1` | the mouth of its housing, 2.5 proud (estimated) | a well 1.7 deep (2.5 less a floor at 0.8, both estimated) | 8.2 of nose inside | 6.5 too shallow |
-| `common/terminal-header-508-2@1` | the same | the same | 8.2 | 6.5 too shallow |
+| `common/terminal-header-508-2@2` | the same | the same | 8.2 | 6.5 too shallow |
 | `common/dc-terminal-header-6@1` | its own face, the panel plane | nothing: drawn flat, no depth, the mouth 0.3 behind the panel on the vendor's model | 8.2 | no cavity modelled |
 
 No plug figure is taken from a modelled depth. Each plug starts on the face its header
@@ -109,18 +109,19 @@ is read again when one changes. No header's geometry is changed.
   above its body, and the vendor's photograph shows the scalloped, board side below. The
   two AurCore headers are drawn the same either way up. For the flanged one the vendor's
   video shows the open side toward the POWER legend, which is where its top edge lands as
-  placed. For the two-position one the same video shows the keyed, open side toward the
-  RELAY legend with the two contacts side by side along it, but the header is placed
-  unturned on those devices, with the legend at its right. As placed, the tower of a
-  seated plug is therefore not toward the legend. The header is a quarter turn out (#804);
-  when it is turned the plug follows.
+  placed. For the two-position one the same video (0:34 and 1:02) and the vendor's
+  AIS4001P and AIS2001 product images show the keyed, open side toward the RELAY legend,
+  with the two contacts side by side along it and parallel to the five of the power
+  header. Both headers are placed turned 90, so the tower of each seated plug is toward
+  its legend. The two-position header was first placed unturned, a quarter turn out, and
+  was turned in its second major (#804).
 - **Poles.** `wire-1` is at the left of the unrotated header. The two AurCore headers
   name their contacts `cell-1` and `pin-1` onward from the left and the wires follow them.
   The six-position header names none, so left to right is a convention there. Pole names
   (`+`, `-`, earth, `-48V`) are printed on the panel beside each header, differ by device,
   and are not on the plug.
-- A seat applies the header's turn to the plug. The flanged header is placed turned 90 on
-  every AurCore device and the plug follows it.
+- A seat applies the header's turn to the plug. Both AurCore headers are placed turned 90
+  on every AurCore device and each plug follows its header.
 
 ## 7. What is estimated, and what is not expressible
 
@@ -141,15 +142,19 @@ is read again when one changes. No header's geometry is changed.
 - **Every pole is drawn wired, in one colour.** An unwired pole and a colour per pole are
   not expressible: a field per pole would be six fields on the longest plug here.
 - **The plug covers the header's legend where the real one does.** On the AurCore
-  switches the tower overhangs the POWER legend.
+  switches the tower overhangs the POWER legend, and the two-position plug's the RELAY
+  legend.
 
 ## 8. Out of scope
 
 - Parts drawn with their plug already seated: `common/dc-terminal-plug-2@1` and the two
   Telco Systems DC plugs.
 - Any change to a header's or the jack's geometry, including the depths sections 5 and 9
-  question, the two-position header's 10.16 width and the way the two-position header is
-  turned on the AurCore top face (#804).
+  question. The two-position header's width and its turn on the AurCore top face were
+  settled afterwards, in its second major (#804): 12.16 wide, the Phoenix Contact MSTBA
+  2,5/ 2-G-5,08 (1757242) width, where the first major was photo-measured at 10.16, and
+  placed turned 90. Both AurCore headers are still drawn 12.1 high, the data sheets' `h`,
+  which counts the 3.5 solder pin below the board; the installed height is 8.6 (#873).
 - Plugs with angled wire entry, spring-clamp plugs and cable housings.
 - Devices ship bare. A plug is in a slot's accept list because it mates the slot's
   interface; nothing seats one by default.
@@ -818,5 +823,7 @@ right side out.
   carries a turn in its own `turn=` parameter (#829).
 - 2026-10-07: the P40 receptacle presents a vendor interface, `p40`, citing no standard,
   and gains its mate point and nothing else.
+- 2026-10-07: the two-position AurCore header is 12.16 wide and placed turned 90, as the
+  five-position one beside it is; its height is left for #873 (#804).
 - 2026-10-07: one P40 plug, `amphenol-ns/p40-plug@1`, drawn from the wire side with a stub
   per pole; it seats 22.3 in front of the receptacle's shroud, an estimate.

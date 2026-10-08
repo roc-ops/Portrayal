@@ -1674,6 +1674,18 @@ export function squareFaceplate(text) {
     m => m.replace(/\s(?:rx|ry|stroke|stroke-width)="[^"]*"/g, ''));
 }
 
+// The face a drawing declares on its root when the drawing is bigger than it
+// (render.py writes `data-face-w`/`-h` only then, #865), as [w, h] in mm; null
+// for every drawing whose viewBox is its face.
+export function faceDeclared(text) {
+  const tag = /<svg\b[^>]*>/.exec(text || '');
+  if (!tag) return null;
+  const w = /\sdata-face-w="([\d.eE+-]+)"/.exec(tag[0]);
+  const h = /\sdata-face-h="([\d.eE+-]+)"/.exec(tag[0]);
+  const fw = w ? parseFloat(w[1]) : NaN, fh = h ? parseFloat(h[1]) : NaN;
+  return fw > 0 && fh > 0 ? [fw, fh] : null;
+}
+
 // The root viewBox, width and height set to the box 0 0 w h (mm), when they
 // say anything else; the drawing inside is untouched.
 export function toSizeBox(text, w, h) {
@@ -2037,6 +2049,22 @@ export function nodeTools(svg, {back = false} = {}) {
 // can carry arbitrary shapes (plug-outline apertures, LED holes) via alpha.
 // `back` says the drawing is a module's back, built inside the module's FRU
 // (buildFaceRelief's back pass): nothing on it is a FRU of its own (bodyRole).
+/**
+ * Write on each part group (`[data-path]`) the position fields its own nodes
+ * move or show, as `data-position-fields="sw-1 state"`. Read by viewer3d's
+ * rebuild check, which sees only the text left after hidden nodes are removed.
+ */
+export function markPositionFields(root) {
+  for (const n of root.querySelectorAll('[data-move-from],[data-show-from]')) {
+    const part = n.closest('[data-path]');
+    if (!part) continue;
+    const have = new Set((part.getAttribute('data-position-fields') || '').split(/\s+/).filter(Boolean));
+    for (const a of ['data-move-from', 'data-show-from']) if (n.hasAttribute(a)) have.add(n.getAttribute(a));
+    part.setAttribute('data-position-fields', [...have].sort().join(' '));
+  }
+  return root;
+}
+
 export async function extractRelief(url, scope, {back = false} = {}) {
   const div = document.createElement('div');
   div.style.cssText = 'position:absolute;left:-10000px;top:0;width:1000px;visibility:hidden';
@@ -2067,6 +2095,15 @@ export async function extractRelief(url, scope, {back = false} = {}) {
   // no geometry behind, not a flat one.
   applyPulled(svg, scope);
   for (const el of [...q("[data-portrayal-pulled]")]) el.remove();
+  // AND A NODE A POSITION HIDES, for the same reason (docs/switch-positions-
+  // design.md section 6): a breaker's off flag is not drawn while it is on, and
+  // measured hidden it would extrude a 0x0 feature rather than none. FIRST, the
+  // part it belongs to says which of its fields are positions, on its own
+  // group: the viewer decides to rebuild by reading this text, and a part
+  // whose only SHOW node starts hidden would otherwise carry no sign of it and
+  // never rebuild to show it (#874).
+  markPositionFields(svg);
+  for (const el of [...q('[data-show-from][display="none"]')]) el.remove();
   const {inv, mmRect, shared, liftOf, ownerOf, nodeSvg} = nodeTools(svg, {back});
   // TILTED FACETS (docs/tilted-facets-design.md).
   // A node under a `[data-tilt-on]` group is measured foreshortened; it is
@@ -2631,8 +2668,20 @@ export async function buildFaceRelief(F, ctx) {
     // origin of 0 0 and the face is the part's own w x h, so the 3D module
     // view crops the drawing back to that box, as it was before the preview
     // grew; the head's own relief is built from its node either way.
+    // A DRAWING BIGGER THAN ITS FACE IS CROPPED BACK TO THE FACE, for the
+    // same reason. A part beyond the rack face - the CMH-6DR1U's end rings,
+    // 43 mm past each ear (#865) - grows the viewBox, and its origin goes
+    // negative. Every coordinate here is the drawing's own user unit, so x 0
+    // is the face's left edge whatever the viewBox says; read as the plane,
+    // the wider viewBox put the face's centre half the overhang off and
+    // painted the art that much askew. render.py states the face on the root
+    // (`data-face-w`/`-h`) whenever the two differ, and the face is laid out
+    // on that; a part outside it builds its own relief from its own node, and
+    // stands beyond the plate in the same frame.
+    const declared = faceDeclared(cleanText);
     const faceText = F.sizeBox ? toSizeBox(squareFaceplate(cleanText), fw, fh)
-                               : squareFaceplate(cleanText);
+                   : declared ? toSizeBox(squareFaceplate(cleanText), declared[0], declared[1])
+                   : squareFaceplate(cleanText);
     // THE DRAWING'S OWN SIZE WINS, because the face is not obliged to match the
     // plane it sits on. The R740xd's front is the 482.6 mm rack face - Dell
     // builds the flanges into the faceplate and puts the VGA, the power button
@@ -2655,6 +2704,27 @@ export async function buildFaceRelief(F, ctx) {
     const artCv = document.createElement('canvas');
     artCv.width = cv.width; artCv.height = cv.height;
     artCv.getContext('2d').drawImage(cv, 0, 0);
+    // THE ART BEYOND THE FACE, for a removable part that reaches past it. The
+    // face canvas is the face (cropped above), so a module cut from it past
+    // the edge came out transparent there - the LMFS-F's front cover lost the
+    // 47 mm it reaches over the flange (#865). Such a part is cut from the
+    // whole drawing instead. Only drawn when the drawing is bigger than its
+    // face, and only on an unmirrored face, which is every face a rack device
+    // carries parts beyond.
+    let beyond = null;
+    if (declared && !F.sizeBox && !F.flipLX && !F.flipLY) {
+      const root = /<svg\b[^>]*>/.exec(cleanText);
+      const vb0 = root && /\sviewBox="\s*([-\d.eE+]+)[\s,]+([-\d.eE+]+)[\s,]+([\d.eE+-]+)[\s,]+([\d.eE+-]+)/.exec(root[0]);
+      if (vb0) {
+        const [bx, by, bw, bh] = vb0.slice(1).map(parseFloat);
+        beyond = {x: bx, y: by, w: bw, h: bh,
+                  cv: await rasterize(squareFaceplate(cleanText), bw, bh, PX)};
+      }
+    }
+    const pastFace = r => r.x < -0.01 || r.y < -0.01 || r.x + r.w > fw + 0.01 || r.y + r.h > fh + 0.01;
+    const cropArt = (src, r) => beyond && pastFace(r)
+      ? crop(beyond.cv, {x: r.x - beyond.x, y: r.y - beyond.y, w: r.w, h: r.h}, PX)
+      : crop(src, r, PX);
     faceCv[F.view] = cv;
     faceSvg[F.view] = faceText;   // LOD re-rasterises from this; keep it squared
     facePunch[F.view] = [];
@@ -3337,7 +3407,7 @@ export async function buildFaceRelief(F, ctx) {
       const pf = projOf(f);
       // A TILTED MODULE IS CUT FROM THE PRISTINE ART, like a lifted one: it
       // stands on a facet, and the facet's footprint has been cleared from `cv`.
-      const faceCrop = crop(f.lift || f.openBack || f.tilt ? artCv : cv, pf, PX);
+      const faceCrop = cropArt(f.lift || f.openBack || f.tilt ? artCv : cv, pf);
       // replay one face punch on a canvas whose origin is pf (a facet's is a rect)
       const unpunch = async (ctx2, p) => {
         if (p.kind === 'rect') { ctx2.clearRect(...punchRectPx(p, pf.x, pf.y, PX)); return; }
@@ -3559,5 +3629,24 @@ export async function buildFaceRelief(F, ctx) {
         into.add(m);
       }
     }
+  // WHAT IS DRAWN PAST THE FACE, on the face's plane. A part beyond it that
+  // builds relief stands there already; one that is only paint - the LMFS-F
+  // front cover's plate where it reaches over the flange - had nowhere to be
+  // painted once the face was cropped to itself, so it is painted on a plane
+  // the size of the drawing with the face cut out of it. A sheet body builds
+  // nothing from its faces (sheetShell), and nothing here either.
+  if (beyond && !ctx.sheet) {
+    const wing = document.createElement('canvas');
+    wing.width = beyond.cv.width; wing.height = beyond.cv.height;
+    const wx = wing.getContext('2d');
+    wx.drawImage(beyond.cv, 0, 0);
+    wx.clearRect(Math.round(-beyond.x * PX), Math.round(-beyond.y * PX),
+                 Math.round(fw * PX), Math.round(fh * PX));
+    const plane = new THREE.Mesh(new THREE.PlaneGeometry(beyond.w, beyond.h),
+      new THREE.MeshBasicMaterial({map: canvasTex(wing), transparent: true, alphaTest: 0.1,
+                                   alphaToCoverage: true}));
+    plane.position.set(LX(beyond.x, beyond.w), LY(beyond.y, beyond.h), 0.02);
+    grp.add(plane);
+  }
   meshes.push(grp);
 }

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx10008
-version: 2.0.3
+version: 2.0.6
 maturity: modelled
 manufacturer: Juniper
 model: MX10008
@@ -45,7 +45,11 @@ provenance:
     confidence: datasheet
     note: >-
       datasheet-table - JNP10K-PWR-AC2 5.5 kW each as the MX10004; the guide also lists the AC3
-      unit (gap)
+      unit (gap). The MX10000 and MX10008/MX10016 datasheets both state typical power consumption
+      12 kW, fully loaded, naming no ambient or side - carried as power-typical-w. The guide rates
+      every FRU by ambient (Table 47, including the fan trays: JNP10008-FAN 475 W, -FAN2 1207 W,
+      -FAN3 1620 W) and works an example of 14,110 W for eight MX10K-LC2101 in a redundant
+      configuration (2710 W + 11,400 W) - a sample, not carried
   color:
     note: >-
       photo - dark grey chassis, silver card faces, light-blue levers and accent line (as MX10004)
@@ -58,6 +62,11 @@ attrs:
   physical:
     weight-empty-kg: 65.86
     weight-base-kg: 133
+  power:
+    power-typical-w: 12000
+    power-envelope: fully-configured
+    power-typical-scope: datasheet - typical, fully loaded (MX10000 and
+      MX10008/MX10016 datasheets); no ambient or side named
 chassis:
   width: 442.0
   height: 574.0
@@ -91,10 +100,6 @@ gaps:
     reason: needs-photo
     wanted: LC4800/LC4802 faceplates - named with dimensions and power
       in the guides but with no usable face art in the extraction.
-  - what: fan-tray-power
-    scope: [cooling]
-    reason: vendor-silent
-    wanted: per-tray power draw - not in the extraction's text layer.
 groups:
   res:
     term: Slot

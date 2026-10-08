@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: c19-plug
-version: 1.0.0
+version: 1.1.0
 class: port
 mates: iec-c20
 conforms: c19-plug
@@ -42,19 +42,19 @@ provenance:
   seated-depth: >-
     RULING - THE NOSE SITS ON THE INLET'S MODELLED CAVITY FLOOR, the way
     generic/lc-plug@2 seats in its bore. std/c20-inlet@1 models its cavity
-    15.0 deep, so this plug stands 76 - 15.0 = 61.0 in front of the inlet's
-    face: 5.0 of nose, 26.0 of overmould and 30.0 of strain relief. THE NOSE
+    19.0 deep, so this plug stands 76 - 19.0 = 57.0 in front of the inlet's
+    face: 1.0 of nose, 26.0 of overmould and 30.0 of strain relief. THE NOSE
     IS LONGER THAN THE MODELLED CAVITY. Volex prints it 20 (MIN), and a nose
     that went fully home would leave 76 - 20 = 56 at most standing out. THE
-    INLET'S 15.0 IS THE ESTIMATE TO REVISIT: its own provenance.depth says
-    estimated (a typical receptacle depth). When that depth is measured,
-    every `lift` and `out` below moves by the difference and nothing else
-    changes.
+    INLET'S 19.0 IS THE ESTIMATE TO REVISIT: its own provenance.depth says
+    estimated (the C19 nose less 1, as the C13/C14 pair stands, #793; it was
+    15.0 before). When that depth is measured, every `lift` and `out` below
+    moves by the difference and nothing else changes.
   frame: >-
     THE PLUG'S RELIEF IS MEASURED FROM THE HOST'S PRESENTED LIFT, the frame
     generic/bnc-plug@1 and generic/lc-plug@2 use. std/c20-inlet@1 presents
     at its own face (its `mate` carries no `on:` and no `seat-out`), so 0
-    here is the panel plane the cutout is in. The 15.0 of nose inside the
+    here is the panel plane the cutout is in. The 19.0 of nose inside the
     cavity is not built.
   nose: >-
     drawing - Volex catalogue Aug-2025 p.262: 28 +0/-0.9 on the long side
@@ -62,7 +62,7 @@ provenance:
     1), a plain rounded rectangle, R3.5 (MIN) at all four corners, no
     chamfers. It fits the 29.0 x 21.0 recess std/c20-inlet@1 draws. Seen
     from the cable end the nose is wholly behind the overmould; it is drawn
-    so the 5.0 of it in front of the inlet has a node to build from.
+    so the 1.0 of it in front of the inlet has a node to build from.
   body: >-
     drawing - Volex catalogue Aug-2025 p.262: the overmould is 29 +0/-0.5 on
     the long axis and 24 thick on the face view, and 26.00 long on the side
@@ -86,7 +86,7 @@ provenance:
     and 2.50 four times) are not drawn.
   stub: >-
     estimated - the stub rule, docs/connectors-coax-design.md section 5: a
-    straight run of cord 30 long starting where the strain relief ends (61.0
+    straight run of cord 30 long starting where the strain relief ends (57.0
     in front of the inlet face). The cord's bend is the installation's.
   cable-od: >-
     datasheet - SJT 3 x 14 AWG, the heaviest cord Volex lists against VAC19
@@ -116,18 +116,18 @@ elements: {}
 relief:
   features:
     - node: nose
-      out: 5.0
+      out: 1.0
       shape: true
       color: '#1c1c1c'
       confidence: estimated
       source: >-
         Volex catalogue Aug-2025 p.262, the 20 (MIN) insertion nose, less the
-        15.0 std/c20-inlet@1 models its cavity deep - an estimate in that
-        part. The 5.0 is what the ruling in provenance.seated-depth leaves in
+        19.0 std/c20-inlet@1 models its cavity deep - an estimate in that
+        part. The 1.0 is what the ruling in provenance.seated-depth leaves in
         front of the inlet face.
     - node: lugs
-      lift: 5.0
-      out: 19.0
+      lift: 1.0
+      out: 15.0
       color: '#2c2e32'
       confidence: estimated
       source: >-
@@ -136,8 +136,8 @@ relief:
         Dimensioned; estimated only because their start follows the inlet's
         estimated depth.
     - node: body
-      lift: 5.0
-      out: 31.0
+      lift: 1.0
+      out: 27.0
       shape: true
       color: '#26282b'
       confidence: estimated
@@ -146,7 +146,7 @@ relief:
         26.00 long from the nose shoulder. Estimated only because its start
         follows the inlet's estimated depth.
     - node: relief-boot
-      lift: 31.0
+      lift: 27.0
       cyl: 30.0
       color: '#202225'
       confidence: estimated
@@ -155,7 +155,7 @@ relief:
         +/-0.5 long to the 76 end, about 16 across (scaled). Estimated
         because its start follows the inlet's estimated depth.
     - node: stub
-      lift: 61.0
+      lift: 57.0
       cyl: 30
       confidence: estimated
       source: the stub rule, docs/connectors-coax-design.md section 5
