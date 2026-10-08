@@ -1,21 +1,92 @@
 {
  "$schema": "https://json-schema.org/draft/2020-12/schema",
  "$id": "https://portrayal.dev/schemas/v1/component.schema.json",
- "title": "Portrayal component/module contract (v1)",
+ "title": "Portrayal component/module/kit contract (v1)",
  "type": "object",
  "required": [
   "format",
   "kind",
   "name",
-  "version",
-  "class",
-  "size"
+  "version"
  ],
  "additionalProperties": false,
  "dependentRequired": {
   "interface-at": [
    "interface"
   ]
+ },
+ "$comment": "A KIT IS THE THIRD KIND (roc-ops/Portrayal#905, docs/rack-mounting-design.md section 4): a rail, bracket or slide kit, a set of ordinary components a device names from `chassis.kits` and never places. It has no `class` and no `size` - its parts carry both - and admits only the kit keys. A component or a module still requires `class` and `size` and takes none of the kit keys.",
+ "if": {
+  "required": [
+   "kind"
+  ],
+  "properties": {
+   "kind": {
+    "const": "kit"
+   }
+  }
+ },
+ "then": {
+  "required": [
+   "motion",
+   "parts",
+   "configurations"
+  ],
+  "propertyNames": {
+   "enum": [
+    "format",
+    "kind",
+    "name",
+    "version",
+    "description",
+    "provenance",
+    "unplaced",
+    "superseded-by",
+    "motion",
+    "travel",
+    "install",
+    "parts",
+    "configurations",
+    "accessories"
+   ]
+  },
+  "properties": {
+   "parts": {
+    "minItems": 1,
+    "items": {
+     "required": [
+      "count"
+     ],
+     "propertyNames": {
+      "enum": [
+       "ref",
+       "id",
+       "count"
+      ]
+     }
+    }
+   }
+  }
+ },
+ "else": {
+  "required": [
+   "class",
+   "size"
+  ],
+  "properties": {
+   "motion": false,
+   "travel": false,
+   "install": false,
+   "configurations": false,
+   "accessories": false,
+   "parts": {
+    "items": {
+     "properties": {
+      "count": false
+     }
+    }
+   }
+  }
  },
  "properties": {
   "format": {
@@ -24,8 +95,10 @@
   "kind": {
    "enum": [
     "component",
-    "module"
-   ]
+    "module",
+    "kit"
+   ],
+   "description": "`component` is placed; `module` seats in a bay and can be swapped; `kit` is a rack-mounting kit a device names from `chassis.kits` (no `class`, no `size`, only the kit keys)."
   },
   "name": {
    "$ref": "#/$defs/segment"
@@ -699,13 +772,12 @@
   },
   "parts": {
    "type": "array",
-   "description": "sub-components composed into this component (compile-time flattened); e.g. a std/ cutout core inside a bezel",
+   "description": "sub-components composed into this component (compile-time flattened); e.g. a std/ cutout core inside a bezel. On a `kind: kit` the kit's parts list instead: `{ref, id, count}`, no `at`, each ref a component that is not a kit (L155).",
    "items": {
     "type": "object",
     "required": [
      "ref",
-     "id",
-     "at"
+     "id"
     ],
     "additionalProperties": false,
     "properties": {
@@ -769,6 +841,162 @@
      "on": {
       "$ref": "#/$defs/segment",
       "description": "the relief feature (its `node`) on THIS contract that declares a `facet`, which this part sits on. `at` stays the part's front-view top-left and `size` its TRUE size; the renderer foreshortens it by cos(deg) along the facet's axis, and the 3D viewer builds its cavity along the slope. An occupant seated in it inherits the tilt. L117 checks the facet exists and the projected part lies within it."
+     },
+     "count": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "A KIT PART ONLY (`kind: kit`): how many of this part the kit ships, 2 for a pair of rails. A kit part is `{ref, id, count}` and nothing else - it is a line of the kit's parts list, not a placement, so it has no `at`. A composed part of a component or module never states it."
+     }
+    },
+    "if": {
+     "required": [
+      "count"
+     ]
+    },
+    "then": {
+     "propertyNames": {
+      "enum": [
+       "ref",
+       "id",
+       "count"
+      ]
+     }
+    },
+    "else": {
+     "required": [
+      "at"
+     ]
+    }
+   }
+  },
+  "motion": {
+   "enum": [
+    "fixed",
+    "telescoping",
+    "sliding",
+    "shelf"
+   ],
+   "description": "A KIT ONLY: how the kit holds the device once installed. `fixed` is static rails, ears or a rear support; `telescoping` sets its depth at install and nothing moves after; `sliding` moves out for service; `shelf` is one the device stands on. docs/rack-mounting-design.md section 4."
+  },
+  "travel": {
+   "oneOf": [
+    {
+     "type": "number",
+     "exclusiveMinimum": 0
+    },
+    {
+     "const": "full"
+    }
+   ],
+   "description": "A KIT ONLY, and only with `motion: sliding` (L158): how far the device slides out, in mm, or `full` when the source says only that it extends fully."
+  },
+  "install": {
+   "enum": [
+    "drop-in",
+    "stab-in",
+    "both"
+   ],
+   "description": "A KIT ONLY: how the device goes onto the rails - lowered onto them (`drop-in`), pushed in along them (`stab-in`), or either."
+  },
+  "configurations": {
+   "type": "array",
+   "minItems": 1,
+   "description": "A KIT ONLY: one entry per way the kit can be assembled. A slide has one; a kit of brackets and extensions has one per rack-depth band. A device's `chassis.kits[].depth.config` names one of these by `id`.",
+   "items": {
+    "type": "object",
+    "required": [
+     "id",
+     "racks",
+     "parts",
+     "depth"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "id": {
+      "$ref": "#/$defs/segment",
+      "description": "unique within the kit (L156)"
+     },
+     "racks": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+       "enum": [
+        "4-post",
+        "2-post",
+        "2-post-centre"
+       ]
+      },
+      "description": "the rack types this configuration fits: a four-post rack or cabinet, a two-post frame, or a two-post frame mounted at its centre"
+     },
+     "parts": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+       "$ref": "#/$defs/segment"
+      },
+      "description": "the parts this configuration uses, each the `id` of one of the kit's own `parts` (L156)"
+     },
+     "depth": {
+      "$ref": "#/$defs/kit-depth"
+     },
+     "preset": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "a factory setting the kit ships at, in mm of rack depth (the COR550 rail's 630)"
+     },
+     "tolerance": {
+      "type": "number",
+      "minimum": 0,
+      "description": "a tolerance the source states on the depth, in mm, as the `x` of `±x`"
+     },
+     "rail-depth": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "the depth of the rail itself in this configuration, in mm from the front face of the front flange, with no accessory fitted"
+     }
+    }
+   }
+  },
+  "accessories": {
+   "type": "array",
+   "description": "A KIT ONLY: what can be fitted to the kit. Each `ref` resolves to a component that is not a kit (L159).",
+   "items": {
+    "type": "object",
+    "required": [
+     "kind",
+     "ref"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "kind": {
+      "enum": [
+       "cma",
+       "srb"
+      ],
+      "description": "`cma` is a cable management arm, `srb` a strain-relief bar"
+     },
+     "ref": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+/[a-z0-9-]+@\\d+$"
+     },
+     "rail-depth": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "the depth of the rail with this accessory fitted, in mm, measured as the configuration's `rail-depth` is"
+     },
+     "sides": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+       "enum": [
+        "left",
+        "right"
+       ]
+      },
+      "description": "the sides of the rack, seen from the front, the accessory can be fitted on"
      }
     }
    }
@@ -1276,6 +1504,40 @@
     "known-wrong"
    ],
    "description": "where a NUMBER came from. One vocabulary for the library, shared by relief features and by size-confidence: measured (off this part's own hardware), photo-measured, drawing (off this part's own artwork or a vendor figure of it), datasheet, registry (from standards.yaml), borrowed (another Portrayal part's MEASURED figure for the same class of hardware, reused because nobody publishes one for this part - an estimate, but not a free one, and `source` must name the part), estimated (a plausible figure with no source), and `known-wrong`. KNOWN-WRONG IS THE TERMINAL STATE AND IT IS NOT A CONFIDENCE LEVEL: it says the value is not merely unmeasured but IMPOSSIBLE - contradicted by something checkable - and is being carried only because removing it would break the model and no sourced replacement exists. A value that cannot be true must not sit in the same bucket as one nobody has measured. `source` must say what rules it out. Note the enum omits standards.yaml's `verified`, which answers a different question - whether a CUTOUT matches its governing standard."
+  },
+  "kit-range": {
+   "type": "array",
+   "items": {
+    "type": "number",
+    "minimum": 0
+   },
+   "minItems": 2,
+   "maxItems": 2,
+   "description": "`[min, max]` in mm, min below max (L157). Inches in the source are converted; the figures as printed stay in provenance."
+  },
+  "kit-depth": {
+   "description": "THE RACK DEPTH A KIT CONFIGURATION FITS, front flange to rear flange, in mm: one `[min, max]`, or one range per hole type when the source gives them separately (`square`, `round`, `threaded`). A device's `chassis.kits[].depth.range` overrides it with the same shape.",
+   "oneOf": [
+    {
+     "$ref": "#/$defs/kit-range"
+    },
+    {
+     "type": "object",
+     "minProperties": 1,
+     "additionalProperties": false,
+     "properties": {
+      "square": {
+       "$ref": "#/$defs/kit-range"
+      },
+      "round": {
+       "$ref": "#/$defs/kit-range"
+      },
+      "threaded": {
+       "$ref": "#/$defs/kit-range"
+      }
+     }
+    }
+   ]
   }
  }
 }
