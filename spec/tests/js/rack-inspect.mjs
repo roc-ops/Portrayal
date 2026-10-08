@@ -17,7 +17,7 @@ test('inspect: an item without slots says they were not loaded, and still lists 
   const got = await inspect(r, 'i1', {chassisOf});
   assert.deepEqual(got, {kind: 'item', id: 'i1', ref: 'leaf', model: 'Leaf-48', manufacturer: 'Acme', label: 'leaf-1', cfg: 'base',
     configs: [{name: 'base', description: '', airflow: null}, {name: 'dc', description: '', airflow: null}],
-    ru: 10, u: 1, face: 'front', turned: false, on: null, unit: null, managers: [], slots: 'not loaded',
+    ru: 10, u: 1, face: 'front', turned: false, on: null, unit: null, side: null, managers: [], slots: 'not loaded',
     cables: [{id: 'c1', end: 'a', path: 'port-1', view: 'front', other: 'i2/port-2'}]});
 });
 

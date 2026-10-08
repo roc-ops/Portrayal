@@ -112,7 +112,7 @@ test('describe: a section, offset or limit it cannot read is refused, and a limi
   for (let u = 1; u <= 42; u++) r = add(r, 'as7726-32x', u, {label: `l${u}`});
   r = {...r, cables: Array.from({length: 60}, (_, k) => ({id: `c${k + 1}`, a: {item: 'i1', path: `port-${k + 1}`, view: 'front'},
     b: {item: 'i2', path: `port-${k + 1}`, view: 'front'}, media: '', purpose: '', label: '', route: []}))};
-  assert.deepEqual(Q.describe(r, ctx, {section: 'item'}), {error: 'There is no section item. Ask for items or cables, or leave it out for both.'});
+  assert.deepEqual(Q.describe(r, ctx, {section: 'item'}), {error: 'There is no section item. Ask for items, zeroU or cables, or leave it out for all three.'});
   for (const offset of [-3, 2.5, '3', NaN])
     assert.deepEqual(Q.describe(r, ctx, {section: 'items', offset}), {error: 'An offset is a whole number from 0.'}, String(offset));
   for (const limit of [0, -1, 2.5, 'all'])

@@ -98,7 +98,8 @@ as `@portrayal/kit/rack/<module>`:
 | `rack/catalog.js` | `loadCatalog(dist)`: the rack catalogue, and the `chassisOf(ref)` lookup everything else takes; `loadSlots(dist, refs)`: the bays, cages and parts the commands check against |
 | `rack/model.js` | the rack file: `newDoc`, `parseDoc`, `serialize`, and an edit of an item, frame or name that returns a new rack |
 | `rack/rails.js` | the rack's rails: unit height, opening and where a device sits between them |
-| `rack/fit.js` | whether a device fits at a unit, on a face, and how a shrink trims a rack |
+| `rack/fit.js` | whether a device fits at a unit, on a face and (a narrow part) on one rail; whether a zero-U part fits beside the rack (`fitsZeroU`); how a shrink trims a rack |
+| `rack/zero-u.js` | the parts beside the rack: where each stands, as words (`whereText`) and as x (`zeroUX`), whether the lane beside its upright runs through it, and each placeable entry (`zeroUEntries`) |
 | `rack/managers.js` | cable managers: `placement` of a manager onto the device behind it, and moving one |
 | `rack/cable-rules.js` | cables: which two ports may be joined, `withCable`, media and lengths |
 | `rack/cable-types.js` | the cable types (`cable-types.json`): `loadCableTypes(dist)` fetches them and returns `typeOf`, `bendOf` and `diameterOf` over them; the same lookups are exported to build over a table already in hand (a fixture, a cached copy): `typeOf(types, id)`, `cableTypeOf(types, cable)`, `radiusMm(type, which)`, `installedRadiusMm(types, id)`, `bendLookup(types)` and `diameterLookup(types)`, each radius in millimetres |
@@ -216,7 +217,7 @@ next time a page measures them (`lengths.routed`).
 To change a rack by name rather than by function, use the command core:
 `createRackEditor({ doc, chassisOf })` applies `place`, `move`, `patch`,
 `remove`, `attach`, `detach`, `frame`, `rename`, `dcim`, `fit`, `field`, the
-`cable.*` commands and the page's own `lengths.routed` as all-or-nothing
+`side.*`, `zerou.*` and `cable.*` commands and the page's own `lengths.routed` as all-or-nothing
 batches, with `undo`, `redo` and an `on('change')` event. Each command names
 its arguments in `COMMANDS` (`rack/commands.js`), and `rack/queries.js`
 answers what a command would need to know first.
@@ -247,6 +248,34 @@ rack in full: `section` is `items` or `cables`, and `limit` is capped at
 `MAX_WINDOW` (50). A section, offset or limit it cannot read returns
 `{ error }`. `catalog(devices, { kind })` finds a
 "patch panel" or a "switch" by `rack.json`'s `kind`.
+
+### Beside the rack, and on one rail
+
+A part that stands beside the rack and takes no rack unit (a `rack-side`
+part: a vertical cable manager, and next a zero-U PDU) is an entry of
+`rack.zeroU`, not an item: `{ id, ref, cfg, label, at, offsetMm, between? }`.
+`at` is an attachment point of the frame (`left` or `right` on a two-post,
+`left-front` to `right-rear` on a four-post), `offsetMm` its bottom above the
+bottom of the rails. `zerou.place { ref, at, ru }`, `zerou.update` and
+`zerou.remove` place, move and remove one; it fits by the rack units it states,
+not its drawn height, and never overlaps another on the same upright. A
+`place` of one is refused. A frame change moves each to its own side of the
+new frame, or down to fit, and removes one that no longer fits, saying so.
+The lane beside an upright runs through a duct standing there: `laneXAt`
+(`rack/route.js`) is its centre line, so a routed length is measured through
+it, and `fill` and `capacityOver` count the cables through it (`fill` with
+`ctx.zeroUAperture(entry)`, its channel in mm). **Routed lengths changed in
+0.6.0** beside a duct, by about 49 mm at each end beside a 138.8 mm one.
+
+A rack-face part narrower than the 450 mm opening (a finger bracket) may be on
+one rail: `side.place { ref, face, ru, side }` puts it there, and
+`side.set { id, side }` moves it to the other rail or, with `null`, across
+both. On one rail it takes its units on that face and rail only, so a bracket
+can stand on each rail at one U. Every rack-face part is now judged on every
+unit it spans, not only its bottom one. `describe` lists the parts beside the
+rack and each part's rail, `inspect` reads one (`kind: 'zeroU'`), and the
+export data says where each stands (`zeroUNotes`, `zeroUImportItems` for the
+DCIM device rows, and `rackNotes(rack, { zeroU: false, chassisOf })`).
 
 A rack file is described by
 [`rack.schema.json`](https://portrayal.dev/schemas/v1/rack.schema.json).
