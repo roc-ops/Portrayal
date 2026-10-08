@@ -1,12 +1,19 @@
 format: 1
 kind: module
 name: mic-3d-4choc3-1oc12-v
-version: 1.3.0
+version: 1.3.1
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
   Juniper channelized OC3/STM1 circuit-emulation MIC with SFP - eight cages in two 2x2 PIC groups. Vertical author for the vertical carriers (MX960/MX2000 MPCs stand on end, and their MICs with them).
+unplaced: >-
+  no vertical carrier in this library takes it. Tables 10-12 list it under the queuing (Q, EQ),
+  MPC2E P, MPC2E-3D-NG-Q and MPC3E-3D-NG-Q SKUs only; the carriers in this library that could
+  take it are the base MPC1E, MPC2E and MPC3E SKUs, and roc-ops/Portrayal#417 narrowed each to
+  its own column of the Interface Module Reference MIC/MPC compatibility tables (Tables 10-12),
+  none of which takes it. The horizontal form is still seated by the MX80 and MX104. Modelling
+  one of those carriers as its own part would seat it.
 attrs:
   oc3: 8
   model: MIC-3D-4COC3-1COC12-CE

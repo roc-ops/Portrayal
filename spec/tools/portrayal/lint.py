@@ -3923,6 +3923,31 @@ def _paints_over(tag, el, fill):
     return True
 
 
+def _show_conditions(root):
+    """Each element's `data-show` conditions: {field: options}, from every ancestor.
+
+    A position (#808) draws one node per option and shows only the set one, so
+    the I printed on a rocker's OFF surface and the ON surface drawn after it
+    are never on screen together."""
+    out = {}
+    def walk(el, conds):
+        f = el.get("data-show-from")
+        if f:
+            opts = set((el.get("data-show") or "").split())
+            conds = {**conds, f: conds.get(f, opts) & opts}
+        out[el] = conds
+        for ch in el:
+            walk(ch, conds)
+    walk(root, {})
+    return out
+
+
+def _shown_together(a, b):
+    """Whether two elements' show conditions can hold at once."""
+    a, b = a or {}, b or {}
+    return all(a[f] & b[f] for f in a.keys() & b.keys())
+
+
 def lint_component_skin_printing(path, data, lib_roots):
     """L50: printing inside a skin that cannot be read is printing that is not there.
 
@@ -3950,6 +3975,7 @@ def lint_component_skin_printing(path, data, lib_roots):
         except (ET.ParseError, OSError):
             continue          # a malformed skin is already _skin_checks' business
         items = [(t, e, f, _svg_box(t, e)) for t, e, f in _svg_drawables(root)]
+        shows = _show_conditions(root)
         vb = (root.get("viewBox") or "").split()
         face = None
         if len(vb) == 4:
@@ -3978,6 +4004,8 @@ def lint_component_skin_printing(path, data, lib_roots):
                     continue
             for tag2, el2, fill2, b2 in items[i + 1:]:
                 if not b2 or not _paints_over(tag2, el2, fill2):
+                    continue
+                if not _shown_together(shows.get(el), shows.get(el2)):
                     continue
                 ox = min(b[2], b2[2]) - max(b[0], b2[0])
                 oy = min(b[3], b2[3]) - max(b[1], b2[1])

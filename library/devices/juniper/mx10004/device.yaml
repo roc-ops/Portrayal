@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx10004
-version: 2.0.4
+version: 2.0.6
 maturity: modelled
 manufacturer: Juniper
 model: MX10004
@@ -46,7 +46,12 @@ provenance:
     confidence: datasheet
     note: >-
       datasheet-table - the guide capacity table: two JNP10K-PWR-AC2 at high power deliver 11,000
-      W, three 16,500 W
+      W, three 16,500 W. The MX10000 datasheet states typical power consumption 7.5 kW, fully
+      loaded, naming no ambient or side - carried as power-typical-w. Its footnote calling the
+      figures power supply ratings is attached to the power system rating row, not to this one.
+      The guide rates every FRU by ambient (Table 55, including the fan trays: JNP10004-FAN2
+      651 W, JNP10004-FAN3 880 W) and works an example of 10,082 W for an MX10004-PREMIUM with
+      four MX10K-LC9600 (3002 W + 7080 W) - a sample, not carried
   color:
     note: >-
       photo - dark grey chassis, silver card faces, light-blue levers and accent line under the
@@ -60,6 +65,11 @@ attrs:
   physical:
     weight-base-kg: 99
     weight-premium-kg: 113
+  power:
+    power-typical-w: 7500
+    power-envelope: fully-configured
+    power-typical-scope: datasheet - typical, fully loaded (MX10000
+      datasheet); no ambient or side named
 chassis:
   width: 442.0
   height: 310.0
@@ -99,10 +109,6 @@ gaps:
     reason: vendor-silent
     wanted: a vendor dimension for the RCB face - the FRU table covers
       chassis, cards and PSUs but not the RCB; 389 mm is photo-derived.
-  - what: fan-tray-power
-    scope: [cooling]
-    reason: vendor-silent
-    wanted: per-tray power draw - not in the extraction's text layer.
 groups:
   res:
     term: Slot

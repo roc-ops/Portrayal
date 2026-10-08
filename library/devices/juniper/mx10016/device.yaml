@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx10016
-version: 2.0.4
+version: 2.0.6
 maturity: modelled
 manufacturer: Juniper
 model: MX10016
@@ -46,7 +46,10 @@ provenance:
     confidence: datasheet
     note: >-
       datasheet-table - JNP10K-PWR-AC2 5.5 kW each as the family guides; the AC/AC3/DC variants
-      are gaps
+      are gaps. The MX10008/MX10016 datasheet states typical power consumption 23 kW, fully
+      loaded, naming no ambient or side - carried as power-typical-w. The guide works an example
+      of 28,000 W for sixteen MX10K-LC2101 in a redundant configuration (5200 W + 22,800 W) - a
+      sample, not carried
   color:
     note: >-
       photo - dark grey chassis, silver card faces, light-blue levers (as the family)
@@ -59,6 +62,11 @@ attrs:
   physical:
     weight-empty-kg: 99.79
     weight-base-kg: 236.78
+  power:
+    power-typical-w: 23000
+    power-envelope: fully-configured
+    power-typical-scope: datasheet - typical, fully loaded (MX10008/MX10016
+      datasheet); no ambient or side named
 chassis:
   width: 442.0
   height: 930.0

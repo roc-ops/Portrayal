@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-mod400-tr
-version: 2.0.0
+version: 2.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -178,8 +178,11 @@ provenance:
     with XFP; 8-port 10GE with SFP+; 2-port 40GE with QSFP+; 1-port 40GE with QSFP+;
     20-port 10GE with SFP+; 1-port 100GE with CFP2-DCO and CPAK; 1-port 200GE with
     CFP2-DCO; 2-port 100GE with CFP2-DCO and CPAK; 32-port GE with MACsec. Note the word
-    'only'. `accepts` carries the five of those that exist in this library today, plus
-    the blank. THE DRAWING CONTRADICTS THE TEXT and the text wins: the A9K-MOD400-SE
+    'only'. `accepts` carries the eight of those that exist in this library today, plus
+    the blank. The 1-port and 2-port 100GE MPAs joined both bays for
+    roc-ops/Portrayal#262: they are on this list (p54), and each MPA section says it is
+    supported in both bay 0 and bay 1 of the 400 Gigabit card - the 1-port on p55, the
+    2-port on p59. THE DRAWING CONTRADICTS THE TEXT and the text wins: the A9K-MOD400-SE
     master is drawn with an A9K-MPA-20X1GE seated in its upper bay, and the 20-port
     GIGABIT Ethernet MPA is not on that list - only the 20-port 10-GIGABIT one is. The
     explanation is in the guide itself, which says of the generic modular line card
@@ -238,6 +241,8 @@ bays:
     - 'cisco/a9k-mpa-1x40ge@1'
     - 'cisco/a9k-mpa-2x40ge@1'
     - 'cisco/a9k-mpa-20x10ge@1'
+    - 'cisco/a9k-mpa-1x100ge@1'
+    - 'cisco/a9k-mpa-2x100ge@1'
   bay-1:
     default: cisco/a9k-mpa-blank@1
     at: [6.76, 202.35]
@@ -250,3 +255,5 @@ bays:
     - 'cisco/a9k-mpa-1x40ge@1'
     - 'cisco/a9k-mpa-2x40ge@1'
     - 'cisco/a9k-mpa-20x10ge@1'
+    - 'cisco/a9k-mpa-1x100ge@1'
+    - 'cisco/a9k-mpa-2x100ge@1'

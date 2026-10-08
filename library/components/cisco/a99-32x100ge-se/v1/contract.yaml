@@ -10,10 +10,14 @@ description: >-
   generation. Thirty-two QSFP28/QSFP+ ports in two rows of sixteen; QSFP+ is permitted
   on ports 0 to 20 only. Superseded by the A99-32X100GE-X-SE.
 unplaced: >-
-  no ASR 9000 chassis in this library accepts this card: their slot bays name a different card
-  generation. The card itself is sourced; what is missing is the datasheet's Chassis
-  compatibility row, which says exactly which chassis take it. Tracked in
-  roc-ops/Portrayal#262.
+  no ASR 9000 chassis in this library accepts this card because no Cisco document in the
+  corpus says which chassis take it. Searched: the per-card datasheets with a Chassis
+  compatibility row, the RSP5 and RP3 supported-line-card tables (c78-741128 Table 4,
+  c78-741127 Table 4), the Ethernet Line Card Installation Guide chassis tables (Tables 2 to
+  10), the release notes and the 4th generation line card end-of-life bulletin. The part appears only in documents that do not state
+  chassis support - release notes, the bulletin, the secure boot list and feature lists. Its
+  siblings are not evidence: the -TR has its own row in c78-741101 and the -X-SE and -X-TR in
+  c78-743579, and neither sheet names the plain -SE. Tracked in roc-ops/Portrayal#262.
 size: {w: 41.4, h: 395.7, d: 604.5}
 attrs:
   model: 'A99-32X100GE-SE'

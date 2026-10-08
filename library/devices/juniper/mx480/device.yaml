@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx480
-version: 2.0.1
+version: 2.0.2
 maturity: modelled
 manufacturer: Juniper
 model: MX480
@@ -52,10 +52,16 @@ provenance:
       (right) door strips below, estimated at 12 x 240; earthing studs and ESD placed at the
       MX240's positions and marked estimated - the AC rear photo does not resolve them
   power:
+    confidence: datasheet
     note: >-
-      guide power tables - base system 40 W, cooling 110/160 W normal/high (dedicated tap), SCB
-      and card figures on the shared components. No chassis-level draw is published; the vendor
-      instructs a per-configuration budget
+      guide power tables - base system 40 W, cooling 110/160 W normal/high (Table 91, dedicated
+      tap), SCB and card figures on the shared components. The guide gives no chassis total and
+      instructs a per-configuration budget; the MX Series family datasheet does give one, typical
+      power draw 3470 W AC and 3150 W DC, with no configuration, ambient or side named - carried
+      as power-typical-w (AC) with the DC figure in power-typical-scope, envelope unstated. Table
+      95 is a worked sample by DC zone (1090 W zone 0, 850 W zone 1) and is not carried. Table 89
+      states maximum thermal output AC 11,322 BTU/hour (3,318 W) and DC 9,632 BTU/hour (2,823 W)
+      and marks the figures as estimates - carried under thermal as a provisioning ceiling
   lifecycle:
     note: >-
       announced - same per-SKU M/MX milestones situation as the MX240 (trackers list 2020/2026
@@ -96,8 +102,15 @@ attrs:
   performance:
     throughput: 7.5 Tbps-class (datasheet family table)
   power:
+    power-typical-w: 3470
+    power-envelope: unstated
+    power-typical-scope: AC typical power draw from the MX Series family
+      datasheet, which names no configuration, ambient or side; DC 3150 W
     base-system-w: 40
     cooling-system-w: 160 W high-capacity (110 W normal); dedicated PSU tap
+  thermal:
+    max-thermal-output: AC 11,322 BTU/h (3318 W); DC 9,632 BTU/h (2823 W)
+      (Table 89, which calls them estimates; provisioning ceiling)
   environmental:
     operating-temp: 0 C to 40 C
     storage-temp: -40 C to 70 C

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mx80-psu-ac
-version: 1.1.0
+version: 1.2.0
 class: psu
 behaviour: fills
 profile: networking
@@ -16,6 +16,8 @@ attrs:
   role: ac-power-supply
   redundancy: 1+1
 provenance:
+  positions: >-
+    FIELDS, since 1.2.0 (docs/switch-positions-design.md, #808): `state`, each `off` or `on`. Each rocker is a SEE-SAW: one surface tipped about its centre, so the end it is set to presses in and the other end rises. I on the top half and O on the bottom, as the photograph prints them; OFF raises the I end and ON the O end, each a node shown for its position, shaded lighter toward its raised end and built in 3D as a sloped profile. The heights are estimated. The skin draws OFF; nothing held says how a unit ships.
   l47-is-correct-here: >-
     THIS SUPPLY HAS A LAMP AND THIS DRAWING DOES NOT, so L47's warning on it is right
     and the states stay. MX5, MX10, MX40, and MX80 hardware guide: "Each power supply
@@ -49,3 +51,9 @@ parts:
 size:
   w: 72.0
   h: 44.0
+fields:
+  state: {label: State, type: choice, options: ['off', 'on'], default: 'off'}
+relief:
+  features:
+  - {node: rocker-off, out: 2.5, profile-y: [[0, 2.5], [16.0, 1.1]], confidence: estimated, source: 'the tilt of a see-saw rocker: the raised end at the part''s own estimated rocker height, the low end at 0.45 of it, the ratio the GL-12xB GLB rocker shows (common/rocker-switch@1); no source gives this part''s; the rocker''s 2.5 is assumed'}
+  - {node: rocker-on, out: 2.5, profile-y: [[0, 1.1], [16.0, 2.5]], confidence: estimated, source: 'the tilt of a see-saw rocker: the raised end at the part''s own estimated rocker height, the low end at 0.45 of it, the ratio the GL-12xB GLB rocker shows (common/rocker-switch@1); no source gives this part''s; the rocker''s 2.5 is assumed'}
