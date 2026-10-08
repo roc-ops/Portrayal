@@ -1,7 +1,9 @@
 # Vertical cable managers: rack-side mounting
 
-Status: agreed 2026-10-07, not yet built. Follows docs/cable-managers-design.md, which
-reserved `rack-side` for this. Scope: the FS-made vertical managers; the four
+Status: agreed 2026-10-07. Steps 1 and 2 of section 7 are built: `chassis.mount:
+rack-side` with lint L152, lab placement by `side` with L153 and L154, L142's per-face
+and per-side claim, and the devices `fs/cmv-sfd45u5w` and `fs/cmv-5u3w`. Steps 3 and 4
+are not. Follows docs/cable-managers-design.md, which reserved `rack-side` for this. Scope: the FS-made vertical managers; the four
 resold APC parts wait for their vendor's drawings.
 
 ## 1. What the parts are, and how they mount
@@ -71,6 +73,25 @@ of the opening, not across it.
    (the rail bracket), then the steel pair, the dual ABS duct and the 42U part as
    routine modelling.
 
+As built (steps 1 and 2):
+
+- A `rack-side` placement takes `side` and `ru` (its bottom unit, default 1) and may
+  take `face` (default `front`); `on` and `unit` are refused (L153). It is checked
+  against the rack's height and against the other rack-side parts on its side (L154).
+  It claims no rack unit on a face, so it never meets a rack or rack-face part.
+- "Narrower than the opening" is a `chassis.width` under 450 mm, the clear opening of
+  a 19-inch rack (EIA-310, 17.72 in). Such a rack-face part placed with a `side`
+  claims its units on that face and side only; any other rack-face part, and one with
+  no `side`, claims both sides, so a full-width manager still conflicts with a bracket
+  on the same unit and face (L142). `side` on anything else is an error (L153).
+- `labs.json` gains `side` on every placement (`left`, `right` or `null`), a new field
+  only.
+- The CMV-SFD45U5W is 138.8 wide, its cover, over a 125.4 body, as the
+  CMH-UHD-SFDABS1U's chassis is its cover over the ear; two 1050 covers make 2100
+  against the stated 2108, so each section is drawn as half the 2108 and the gap is a
+  `gaps:` entry. The CMV-5U3W is drawn as it stands on the left rail; on the right
+  rail it is the same part turned end over end, which a placement does not yet turn.
+
 ## 4. Lint
 
 - L125 learns `rack-side`: states `ru` (warning), and `full-depth`, `overhang` and
@@ -79,7 +100,8 @@ of the opening, not across it.
   side is the likeliest authoring error.
 - Lab checks: `side` only on `rack-side` and on a `rack-face` part narrower than the
   opening; two `rack-side` parts on one side overlap in height only if they are
-  stacked sections (error).
+  stacked sections (error). As built: L152 is the portrait check, L153 the `side`
+  check and L154 the height and overlap check; L142 claims per face and side.
 
 ## 5. What is estimated, and what is not expressible
 
