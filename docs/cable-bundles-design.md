@@ -223,7 +223,7 @@ What needs the routing readers, and what each command does without them:
 | `bundle.create` with `route` | made; its waypoints are checked as 0.4.0's `cable.route` checks them without `guidesOf` (against the catalogue's pathways) |
 | `bundle.add` | made; membership needs no route |
 | `bundle.peel` with no `at` | made |
-| `bundle.peel` with `at` | `at` is checked against the stored trunk, which needs no readers. `end` is then required, and refused when left out: "Say which end c7 heads for, a or b: the routes are not known here." Whether `at` is at or past the member's peel point for its other end depends on which way the member runs along the trunk, which needs its route, so when it has one the peel is refused: "c7 already leaves Bundle 2 at pp-1 ring 1 for its a end, and the routes are not known here to check this one against it." |
+| `bundle.peel` with `at` | `at` is checked against the stored trunk, which needs no readers. `end` is then required, and refused when left out: "Say which end c7 heads for, a or b: the routes are not known here." Whether `at` is at or past the member's peel point for its other end depends on which way the member runs along the trunk, which needs its route, so when it has one the peel is refused: "c7 already leaves Bundle 2 at pp-1 ring 1 for its a end; the routes are not known here to check this against it." |
 | `bundle.update {route: null}` | refused, as `bundle.create` with no `route` |
 | `bundle.update`, any other argument | made |
 | `bundle.remove` | made |
@@ -260,9 +260,8 @@ Every command that takes a bundle `id` refuses a missing one with
 
 ### 3.3 `bundle.create`
 
-Description: *"Bundle two or more cables that share part of their route. The
-bundle runs where they run together, unless a route is given, and gets the
-next number. Refused for a cable already in a bundle."*
+Description: *"Bundle two or more cables sharing part of their route. It runs
+where they run together, unless given a route. Refused for a bundled cable."*
 
 - `route` left out: the trunk is worked out from the members' own routes, with
   the refusals section 4.1 lists (a fork, leaving and rejoining, groups that
@@ -286,8 +285,8 @@ bundle again. Refused for a cable in another bundle."*
 
 ### 3.5 `bundle.peel`
 
-Description: *"Take a cable out of a bundle. With at, it stays in the bundle up
-to that waypoint and runs on its own from there to one end."*
+Description: *"Take a cable out of a bundle. With at, it stays bundled up to
+that waypoint, then runs on its own to one end."*
 
 - `at` left out: the cable leaves the bundle and follows its own route again.
 - `at` given: a waypoint on the trunk, or a lane U within a lane run of the
@@ -374,7 +373,8 @@ Working it out needs `ctx.route` (section 3.1):
      between two shared elements leaves the others at the first and meets them
      at the second. Refused, naming it and the other members that pass both elements, directly or through other shared elements:
      "c4 parts from c1, c2 and c3 at mgr-1 ring 3 and meets them again at
-     left-front U20. Bundle them separately, or give the bundle a route." The
+     left-front U20.", then "Bundle them separately, or give the bundle a
+     route." The
      same holds with only two members: with c1 through ring 3, ring 4, ring 5
      and the lane, and c2 from ring 3 straight to the lane, the trunk would be
      c2's straight run and c1 would be pulled off its rings, so it is refused
@@ -397,8 +397,8 @@ Working it out needs `ctx.route` (section 3.1):
    - **A fork:** with no loop, an element joined to three or more others, so
      the members go on different ways from it. Refused, listing the cables on
      each branch as found: "Bundle members part after left-front U30: c1 and c2
-     go on to pp-1 ring 1; c3 and c4 go on to left-rear U30. Bundle them
-     separately, or give the bundle a route."
+     go on to pp-1 ring 1; c3 and c4 go on to left-rear U30.", then "Bundle
+     them separately, or give the bundle a route."
    - Otherwise the shape is **one simple path**, and each member's shared
      elements are an unbroken stretch of it (a gap would have been a detour or
      a loop). Members may join the path and leave it anywhere along it:
@@ -410,8 +410,8 @@ Working it out needs `ctx.route` (section 3.1):
    which its route meets the path. A member that meets the path at one
    element only joins and leaves there.
 6. **Disconnected groups are refused.** "c1 and c2 share mgr-1 ring 5, and c3
-   and c4 share pp-1 ring 9, but the two groups share nothing. Bundle them
-   separately, or give the bundle a route." Joining across the gap would
+   and c4 share pp-1 ring 9, but the two groups share nothing.", then "Bundle
+   them separately, or give the bundle a route." Joining across the gap would
    invent a run that none of these cables takes, which changes their lengths
    and puts straps where no cable goes. Two groups that share nothing are two
    bundles, and the refusal says so. A given `route` remains the way to make
@@ -759,7 +759,7 @@ positions (2D at ring ends and gutter centres, 3D at guide anchors and
 |---|---|
 | Cable list (site, #142) | cables grouped by bundle, with the bundle's name, size and warnings; a peeled cable shows where it leaves |
 | Rack JSON | `bundles` as stored (version 3) |
-| Cable schedule CSV (#923) | a `bundle` column (the bundle's name), straight after `route`; `route` is the route the member follows; one note per bundle: "Bundle 2 (b1): 12 cables; 2.4 m run; 8 straps every 12 in; about 23 mm across, limit 29.5 mm at mgr-1 ring 5; bend radius 25 mm (c7)" and its warnings |
+| Cable schedule CSV (#923) | a `bundle` column (the bundle's name), straight after `route`; `route` is the route the member follows; one note per bundle: "Bundle 2 (b1): 12 cables, 2.4 m, 8 straps every 12 in; 23 mm, limit 29.5 mm at mgr-1 ring 5; bend 25 mm (c7)" and its warnings |
 | BOM (#923) | one line for hook-and-loop straps, with the quantity the sum of every bundle's count; no manufacturer (decision 6) |
 | SVG / PNG sheets (#142) | bundles and straps as drawn; a note per bundle, and its warnings |
 | GLB / USDZ (#142) | bundles and straps, as the scene |
