@@ -6,7 +6,8 @@
   `cable.route` refuses a waypoint the rack lacks and judges only the new ones.
   `inspect` reads one device's bays, cages and part settings, or one cable's
   ends, route, routed length, slack and loose ends; `selectCables` turns "the
-  cables on this device" or "every loose cable" into ids; `describe` takes a
+  cables on this device" or "every loose cable" into ids (saying when some ends
+  could not be checked); `describe` takes a
   window (`section`, `offset`, `limit`); `catalog` filters by `kind`.
   `loadSlots(dist, refs)` in `rack/catalog.js` loads the parts lists that
   `editor.apply(cmds, {ctx})` and `editor.preview(cmds, {ctx})` check against,
