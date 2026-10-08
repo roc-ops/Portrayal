@@ -13,6 +13,7 @@ Run by build.sh after the compiled faces and the indexes it reads exist.
 """
 import argparse
 import json
+import re
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
@@ -43,6 +44,38 @@ def marked(path):
         elif e.get("data-guide") or (e.get("data-group") == "guides" and e.get("data-ref")):
             guides.add(i)
     return sorted(guides), sorted(passes)
+
+
+# WHAT A DEVICE IS, in a plain word an agent can search for: "patch panel",
+# "switch". devices.json's `capability` is how far a device is modelled, not
+# what it is, and a portfolio has no category; the manifest's `profile` (the
+# class spec/schemas/profiles.yaml judges it by) is, and devices.json carries
+# it. `networking` is split by the vendor's own words for the device - its
+# portfolio, else its description - and `optical` by whether the box is
+# passive. A profile this does not know, or none, is "device".
+ROUTER = re.compile(r"\brout(?:er|ers|ing)\b", re.I)
+SWITCH = re.compile(r"\bswitch(?:es)?\b", re.I)
+
+
+def kind_of(d, chassis):
+    profile = d.get("profile")
+    if profile == "server":
+        return "server"
+    if profile == "power":
+        return "pdu"
+    if profile == "passive":
+        return "cable manager"
+    if profile == "optical":
+        return "patch panel" if chassis.get("airflow") == "passive" else "optical"
+    if profile == "networking":
+        p = d.get("portfolio") or {}
+        for text in (" ".join(str(p.get(k) or "") for k in ("family", "line", "series")), d.get("description") or ""):
+            if ROUTER.search(text):
+                return "router"
+            if SWITCH.search(text):
+                return "switch"
+        return "network device"
+    return "device"
 
 
 def face_file(idx, name, config, view):
@@ -78,6 +111,7 @@ def build(dist):
             "h": h, "w": c.get("w"), "d": c.get("d"), "airflow": c.get("airflow"),
             "default": idx.get("default"),
             "configs": [x["name"] for x in idx.get("configs", [])],
+            "kind": kind_of(d, c),
         }
         # only what a device has, so the file barely grows
         if c.get("mount") and c["mount"] != "rack":
