@@ -7,7 +7,7 @@
 import {fits, isRackFace, heightOf} from './fit.js';
 import {placement, managersOf} from './managers.js';
 import {uLabel} from './model.js';
-import {portFree, endKey, proposeMedia, mismatch, endName, carriedU} from './cable-rules.js';
+import {portFree, endKey, proposeMedia, mismatch, endName, carriedU, portPathOf, matches} from './cable-rules.js';
 import {lanesOf, resolveRoute, routedLength, routeText} from './route.js';
 import {catalogEntries} from './catalog.js';
 import {GONE, CABLE_GONE} from './commands.js';
@@ -184,4 +184,39 @@ export async function inspect(rack, id, ctx = {}) {
   const cable = (rack.cables || []).find(c => c.id === id);
   if (cable) return cableInfo(rack, cable, ctx);
   return {error: /^c\d+$/.test(String(id)) ? CABLE_GONE : GONE};
+}
+
+// ── selectCables (D5: a query, not a command argument) ──────────────────
+// The ids of the cables a selector names, for a caller to expand into plain
+// `cable.remove` or `cable.update` commands, so a batch stays one an agent can
+// read back. Every key given narrows: {item, purpose} is that device's cables
+// of that purpose. An empty result is {ids: []}.
+const SELECTOR_KEYS = ['item', 'path', 'view', 'loose', 'purpose', 'media'];
+export const NO_FACTS = 'Which cables are loose is only known once the devices have been read.';
+
+export async function selectCables(rack, selector, ctx = {}) {
+  const s = selector && typeof selector === 'object' && !Array.isArray(selector) ? selector : {};
+  const keys = Object.keys(s);
+  const odd = keys.find(k => !SELECTOR_KEYS.includes(k));
+  if (odd) return {error: `A selector does not take ${odd}.`};
+  if (('path' in s || 'view' in s) && !('item' in s)) return {error: 'A selector with a path needs its item.'};
+  if ('loose' in s && s.loose !== true) return {error: 'A selector takes loose: true, or leaves it out.'};
+  if (!keys.some(k => ['item', 'loose', 'purpose', 'media'].includes(k)))
+    return {error: 'A selector names an item, loose: true, a purpose or a media.'};
+  let list = rack.cables || [];
+  if ('item' in s) {
+    const ends = c => [c.a, c.b].filter(e => e.item === s.item);
+    if (!rack.items.some(i => i.id === s.item) && !list.some(c => ends(c).length)) return {error: GONE};
+    // a port however its path is spelled (a click on a seated optic is a click
+    // on its port: cable-rules.js portPathOf), on one panel or on either
+    const port = e => ('path' in s ? portPathOf(e.path) === portPathOf(s.path) : true) && ('view' in s ? e.view === s.view : true);
+    list = list.filter(c => ends(c).some(port));
+  }
+  if ('purpose' in s || 'media' in s) list = list.filter(c => matches(c, {purpose: s.purpose ?? null, media: s.media ?? null}));
+  if (s.loose === true) {
+    if (typeof ctx.cableFacts !== 'function') return {error: NO_FACTS};
+    const facts = await ctx.cableFacts(rack);
+    list = list.filter(c => [c.a, c.b].some(e => facts.ends.get(endKey(e))?.reason));
+  }
+  return {ids: list.map(c => c.id)};
 }
