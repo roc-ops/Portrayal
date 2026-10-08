@@ -14,6 +14,7 @@ import {validate, same} from './validate.js';
 import {withRoutedLengths} from './route.js';
 import {slotsFor, slotEnv, resolverFor, holdsAt, partName, partOf} from './slots.js';
 import {acceptSwaps, underCarrier} from '../swap.js';
+import {fieldAccepts} from '../fields.js';
 
 export const GONE = 'That device is no longer in the rack.';
 export const CABLE_GONE = 'That cable is no longer in the rack.';
@@ -204,6 +205,39 @@ function fit(rack, {id, path, ref}, ctx) {
   return {rack: updateItem(rack, id, {swaps: next, fields}), summary, findings};
 }
 
+// ONE FIELD of the part drawn at `path` - its part path, `<bay>/module` or
+// `<cage>-occupant`, the key item.fields uses and inspect lists. Merged: the
+// part's other fields, and every other part's, stay as they are.
+function field(rack, {id, path, key, value}, ctx) {
+  const it = itemOf(rack, id);
+  if (!it) return {error: GONE};
+  const s = slotsFor(ctx, it.ref);
+  if (s?.error) return s;
+  if (s && typeof ctx.compByRef === 'function') {
+    const env = slotEnv(it, s, ctx.compByRef);
+    const R = resolverFor(env, it.swaps || {});
+    const slot = R.entryAt(path);
+    if (slot) return {error: `${path} is a ${slot.isCage ? 'cage' : 'bay'}; the part in it is ${path}${slot.isCage ? '-occupant' : '/module'}.`};
+    const ref = R.refAt(path);
+    if (!ref) return {error: `Nothing is seated at ${path} on ${it.label}.`};
+    const name = partName(ctx.compByRef, ref);
+    const decl = partOf(ctx.compByRef, ref)?.fields || {};
+    if (!own(decl, key)) return {error: `${name} has no field ${key}. Its fields: ${Object.keys(decl).join(', ') || 'none'}.`};
+    if (value != null && !fieldAccepts(decl[key], value)) {
+      const f = decl[key];
+      return {error: f.type === 'choice' && Array.isArray(f.options) ? `${key} on ${name} takes one of: ${f.options.join(', ')}.`
+        : f.type === 'number' ? `${key} on ${name} takes a number.` : `${key} on ${name} does not take ${JSON.stringify(String(value))}.`};
+    }
+  }
+  const fields = structuredClone(it.fields || {});
+  const part = {...(own(fields, path) ? fields[path] : {})};
+  if (value == null) delete part[key]; else part[key] = String(value);
+  if (Object.keys(part).length) fields[path] = part; else delete fields[path];
+  if (same(fields, it.fields || {})) return unchanged(rack);
+  return done(updateItem(rack, id, {fields}),
+    value == null ? `Reset ${key} on ${path} of ${it.label}.` : `Set ${key} on ${path} of ${it.label} to ${value}.`);
+}
+
 // ── the rack ────────────────────────────────────────────────────────────
 // A lower height that leaves devices hanging past it packs them down, then
 // trims from the bottom (fit.js shrinkRack); a trimmed device's cables stay,
@@ -363,6 +397,11 @@ export const COMMANDS = {
     args: args(['id', 'path', 'ref'], {id: ID('device'),
       path: {type: 'string', minLength: 1, description: 'The bay or cage, as inspecting the device lists it (e.g. port-1, bay-2/module/lc1).'},
       ref: {type: ['string', 'null'], minLength: 1, description: 'The part to seat, as the slot lists it; null to empty the slot; "default" for what the configuration builds.'}})},
+  field: {run: field, description: "Set one setting of one part seated in a placed device, such as a cassette's latch colour or an optic's label; null puts it back to the part's default. Its other settings stay. Refused, with the part's settings or choices, when the part has no such setting or does not take the value.",
+    args: args(['id', 'path', 'key', 'value'], {id: ID('device'),
+      path: {type: 'string', minLength: 1, description: 'The part, as inspecting the device lists its fields (e.g. bay-1/module, port-1-occupant).'},
+      key: {type: 'string', minLength: 1, description: "The setting, as the part's fields list it (e.g. latch-color)."},
+      value: {type: ['string', 'number', 'null'], description: 'The new value; null for the default.'}})},
   'cable.add': {run: cableAdd, description: 'Run a cable between two free ports. Refused when a port already has a cable or a device is gone.',
     args: args(['a', 'b'], {a: END, b: END, ...CABLE_FIELDS, as: AS})},
   'cable.update': {run: cableUpdate, description: "Change a cable's type, purpose, label or length.",
