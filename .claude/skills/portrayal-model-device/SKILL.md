@@ -10,7 +10,8 @@ equally binding on an agent:
 
 - **`docs/modelling-a-device.md`** - the sources and their roles, the four
   stages in manufacturing order (panel, cutouts, silkscreen, components) with a
-  gate at each, the power-figure rules, the two audits of Gate 5, and the
+  gate at each, the ears-and-kits step that follows the panel, the
+  power-figure rules, the two audits of Gate 5, and the
   canonical shape of `device.yaml`. Read it in full before starting a device.
 - **`docs/modelling-pitfalls.md`** - what has gone wrong before. Read it when
   a figure, a measurement or a lint warning is not behaving as you expect.
@@ -18,6 +19,16 @@ equally binding on an agent:
   the lock check that must run before `--update`.
 - **`library/components/README.md`** - namespaces, naming, the smallest
   complete contract, and what a skin must contain.
+- **`docs/rack-mounting-design.md`** - for a rack device: ear positions,
+  `chassis.kits`, and the `kind: kit` contract a rail kit is written as.
+
+**After Gate 1, before the cutouts,** do the ears and kits for a `rack` device:
+read the rack-mounting section and the rail guide, write `chassis.ears` with
+the positions the guide names (`at` only where a figure or drawing gives it,
+one `default`, the shipped one) and `chassis.kits` with every kit, referencing
+a kit the library already has and writing a `kind: kit` contract for one it
+does not. Ranges come from the newest source, and provenance names the source
+that lost. Never place `common/rack-ear@1` on a new device.
 
 The output is `library/devices/<vendor>/<model>/device.yaml` linting clean at
 `maturity: modelled`, plus the sentence Gate 5 asks for: *I put the render

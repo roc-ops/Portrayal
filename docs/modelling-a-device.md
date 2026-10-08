@@ -236,8 +236,9 @@ never copy a datasheet, stencil, photograph or CAD file into the library.
 Establish `chassis.width/height/depth` and each view's `size`.
 
 - **The rack face is not the chassis.** The modelled body is the metal between
-  the ear fold lines, and ears are never drawn, neither bolt-on ones nor
-  integral flanges. A 19-inch / 482 mm figure includes them; so does a spec table
+  the ear fold lines, and ears are never drawn on the face, neither bolt-on
+  ones nor integral flanges; the renderer adds a generic pair from
+  `chassis.ears` (see the step after this stage). A 19-inch / 482 mm figure includes them; so does a spec table
   that calls the chassis 19 inches, which is how the MX204 came to be modelled
   wearing its flanges and passed every gate. Measure between the folds, record
   the ear extent in provenance, and subtract it before laying anything out.
@@ -305,6 +306,66 @@ feature of known pitch is a ruler already in the picture.
 
 Then render your own panel (`render.py --without silkscreen`) and overlay it. If
 the aspect is wrong, stop; nothing downstream survives a wrong panel.
+
+## After the panel: the ears and the kits
+
+With the body sized, say how it attaches to a rack. This is for a `rack`
+device only (L125), and the design is in
+[rack-mounting-design.md](rack-mounting-design.md).
+
+Read the rack-mounting section of the installation guide, the rail or
+mounting-kit guide, any rail sizing matrix and the accessory table. Then write
+two keys under `chassis`:
+
+```yaml
+chassis:
+  ears:
+    h: 43.5                       # only when the ears do not span the chassis height
+    y: 0.15
+    positions:
+      - {name: flush, at: 0, default: true}
+      - {name: mid, label: mid-mount, racks: [2-post], part: {kit: smartoptics/dcp-rack-kit@1, part: mid}}
+  kits:
+    - {ref: smartoptics/dcp-rack-kit@1, supply: in-box}
+```
+
+- **Name the positions the guide names.** `name` is `flush`, `recessed`,
+  `mid`, `rear` or `proud`; the words of the vendor go in `label`. Write `at`
+  (millimetres from the front of the faceplate back to the ear plane, positive
+  behind it) only when a figure or a chassis drawing gives it. A position the
+  guide names without a number is written without one.
+- **Mark the shipped position `default`,** from the figure that shows the ears
+  as they come in the box. At most one position is the default. Review checks
+  it against that figure, so cite the figure in provenance.
+- **`racks`** restricts a position to `4-post`, `2-post` or `2-post-centre`
+  when the source does. A position that needs a part other than the shipped
+  ears names it as `part: {kit, part}`, the kit ref and the id of the part in
+  that kit, and the kit must be one the device lists.
+- **List every kit the device takes** under `kits`, with `supply: in-box` or
+  `optional`, and `variant: reversed` for a kit that mounts the box ports to
+  the hot aisle. A kit already in the library is referenced, never copied: one
+  rail serves a dozen chassis. A kit that is not yet there is modelled as a
+  `kind: kit` contract under the vendor namespace
+  ([library/components/README.md](../library/components/README.md#rail-kits)),
+  with its parts as ordinary components.
+- **When the matrix gives this device a different range** from the kit, write
+  `depth: {config, range}` on the reference: `config` is the id of the kit
+  configuration it overrides.
+- **Ranges come from the newest source,** converted to millimetres, and the
+  provenance of the kit says which older source disagreed and lost.
+- Do not draw the ears. The face stays the metal between the folds, and the
+  renderer draws a generic ear from `ears.h` and `ears.y` (or the chassis
+  height). Do not place `common/rack-ear@1` on a new device; a device that
+  still places it drops those placements and states `chassis.ears` when it
+  next takes a major (#910).
+
+Screw sizes, torque, install order, load ratings and the racks a vendor tested
+stay in provenance; nothing draws or exports them. A guide that names no
+position and no kit leaves both keys out and opens a gap saying so.
+
+**Gate 1b.** Lint the device: the kit refs resolve, a `part` resolves into a
+listed kit, and a `depth.config` names a configuration of that kit. Then put
+the default position beside the figure it came from.
 
 ## Stage 2: the cutouts
 
@@ -767,7 +828,8 @@ attrs:
   compliance: {...}
   lifecycle: {eol: none-announced}
   other: {...}         # counted, not free
-chassis: {width: , height: , depth: , ru: , color: }
+chassis: {width: , height: , depth: , ru: , color: ,
+          ears: {positions: [...]}, kits: [...]}   # ears and kits: rack devices, after the panel
 groups:
   sfp-plus: {term: Port, role: traffic, index-origin: 1, attrs: {media: sfp-plus, speed: 10g}}
   sfp-plus-leds: {term: LED, role: indicator, index-origin: 1}
