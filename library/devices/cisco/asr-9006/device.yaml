@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9006
-version: 3.0.0
+version: 3.1.0
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9006
@@ -445,6 +445,21 @@ provenance:
       9900-only parts (A99-32X100GE, A99-10X400GE-X and the 16-port Service Edge) name only the
       9900 chassis in their own rows and are deliberately absent here. A card is listed when a
       Cisco document says it fits, not when it would physically go in
+  rsp-chassis-support:
+    confidence: datasheet
+    note: >-
+      datasheet - the RSP pair in slots 0 and 1 takes every route switch processor generation a
+      Cisco document names for this chassis, and each is cited here because the RSP sheets
+      state it in prose and tables rather than a Chassis compatibility row. RSP-880 and
+      RSP880-LT: c78-733763, which names the ASR 9006 in its opening paragraph. A9K-RSP-4G and
+      A9K-RSP-8G: the RSP datasheet c78-500699, Table 3 p4, which gives the router chassis as the
+      ASR 9010 and ASR 9006 and puts dual redundant RSPs in two slots of each - the same sheet
+      that seats the RSP-4G on the ASR 9010. A9K-RSP440-TR and -SE: the RSP440 datasheet
+      c78-674143, Table 3 (p8 of the 2019 revision, p5 of the 2015 one), which lists the ASR
+      9904, ASR 9010 and ASR 9006 chassis. A9K-RSP5-TR and -SE: the System requirements table of
+      the IOS XR 64-Bit datasheet c78-737841 (p5), which names the ASR 9006, 9010 and 9904, and
+      the RSP5 datasheet c78-741128 (p3), whose switch fabric architecture covers the ASR 9010,
+      9006, 9904 and 9906. Added for roc-ops/Portrayal#262
   slot-accepts:
     confidence: datasheet
     note: >-
@@ -753,8 +768,8 @@ views:
         - {id: slot-4, at: [39.38, 153.837], size: {w: 395.7, h: 41.4}, opening: {w: 355.6, h: 41.4}, rotate: 270, accepts: ['cisco/a9k-16x100ge-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-24x10ge-1g-se@1', 'cisco/a9k-2x100ge-se@2', 'cisco/a9k-400g-dwdm-tr@2', 'cisco/a9k-48x10ge-1g-se@1', 'cisco/a9k-4x100ge-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-8x100g-lb-se@1', 'cisco/a9k-8x100ge-se@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 4, default: cisco/a9k-slot-cover@1}
         - {id: slot-3, at: [39.38, 200.442], size: {w: 395.7, h: 41.4}, opening: {w: 355.6, h: 41.4}, rotate: 270, accepts: ['cisco/a9k-16x100ge-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-24x10ge-1g-se@1', 'cisco/a9k-2x100ge-se@2', 'cisco/a9k-400g-dwdm-tr@2', 'cisco/a9k-48x10ge-1g-se@1', 'cisco/a9k-4x100ge-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-8x100g-lb-se@1', 'cisco/a9k-8x100ge-se@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3, default: cisco/a9k-slot-cover@1}
         - {id: slot-2, at: [39.38, 247.047], size: {w: 395.7, h: 41.4}, opening: {w: 355.6, h: 41.4}, rotate: 270, accepts: ['cisco/a9k-16x100ge-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-24x10ge-1g-se@1', 'cisco/a9k-2x100ge-se@2', 'cisco/a9k-400g-dwdm-tr@2', 'cisco/a9k-48x10ge-1g-se@1', 'cisco/a9k-4x100ge-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-8x100g-lb-se@1', 'cisco/a9k-8x100ge-se@1', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2, default: cisco/a9k-slot-cover@1}
-        - {id: slot-1, at: [39.38, 293.652], size: {w: 395.7, h: 41.4}, opening: {w: 355.6, h: 41.4}, rotate: 270, accepts: ['cisco/a9k-rsp880-se@2', 'cisco/a9k-rsp880-tr@2', 'cisco/a9k-rsp880-lt-se@2', 'cisco/a9k-rsp880-lt-tr@2', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1, default: cisco/a9k-slot-cover@1}
-        - {id: slot-0, at: [39.38, 340.257], size: {w: 395.7, h: 41.4}, opening: {w: 355.6, h: 41.4}, rotate: 270, accepts: ['cisco/a9k-rsp880-se@2', 'cisco/a9k-rsp880-tr@2', 'cisco/a9k-rsp880-lt-se@2', 'cisco/a9k-rsp880-lt-tr@2', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0, default: cisco/a9k-slot-cover@1}
+        - {id: slot-1, at: [39.38, 293.652], size: {w: 395.7, h: 41.4}, opening: {w: 355.6, h: 41.4}, rotate: 270, accepts: ['cisco/a9k-rsp880-se@2', 'cisco/a9k-rsp880-tr@2', 'cisco/a9k-rsp880-lt-se@2', 'cisco/a9k-rsp880-lt-tr@2', 'cisco/a9k-rsp@2', 'cisco/a9k-rsp-8g@2', 'cisco/a9k-rsp440-se@2', 'cisco/a9k-rsp440-tr@2', 'cisco/a9k-rsp5-se@2', 'cisco/a9k-rsp5-tr@2', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1, default: cisco/a9k-slot-cover@1}
+        - {id: slot-0, at: [39.38, 340.257], size: {w: 395.7, h: 41.4}, opening: {w: 355.6, h: 41.4}, rotate: 270, accepts: ['cisco/a9k-rsp880-se@2', 'cisco/a9k-rsp880-tr@2', 'cisco/a9k-rsp880-lt-se@2', 'cisco/a9k-rsp880-lt-tr@2', 'cisco/a9k-rsp@2', 'cisco/a9k-rsp-8g@2', 'cisco/a9k-rsp440-se@2', 'cisco/a9k-rsp440-tr@2', 'cisco/a9k-rsp5-se@2', 'cisco/a9k-rsp5-tr@2', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0, default: cisco/a9k-slot-cover@1}
       placements:
         - {id: esd-jack, ref: common/esd-jack@1, at: [30.0, 300.0], for: chassis, group: grounding, rel-pos: 0}
         - {ref: cisco/a9k-fan-tray-door@1, id: fan-tray-door, at: [0, 33.66], group: doors, rel-pos: 0}

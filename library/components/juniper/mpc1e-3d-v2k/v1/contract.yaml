@@ -1,35 +1,44 @@
 format: 1
 kind: module
 name: mpc1e-3d-v2k
-version: 1.1.1
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
-  Juniper MPC1 carrier - two MIC slots; the queuing variants share the faceplate. Vertical form for the MX2000 cage.
+  Juniper MPC1E carrier (MX-MPC1E-3D) - two MIC slots. The base SKU and MX-MPC1-3D, which share its wattage and its MIC column; the queuing SKUs share the faceplate but not those, and are not this contract. Vertical form for the MX2000 cage.
 attrs:
   model: MX-MPC1E-3D
-  model-variants: MX-MPC1-3D, MX-MPC1-3D-Q, MX-MPC1E-3D-Q
-  power-draw-max-w: 175
+  model-variants: MX-MPC1-3D
+  power-draw-max-w: 165
 provenance:
   size: 'registry + layout - the face is the slot geometry of its chassis
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
     drawing. carrier face; the MIC windows dominate it'
   power: >-
-    guide FRU table - MX240 guide Table 93 'FRU Power Requirements', modular MPC section. This contract
-    covers the MPC1 carrier and, by its own description, the queuing variants, and the table gives
-    them different figures:
-    '| MPC1 MPC1E | MX-MPC1-3D MX-MPC1E-3D | 165W With MICs and optics: 239 W at 55 C, 227 at 40, 219 at 25 |'
-    '| MPC1Q MPC1EQ | MX-MPC1-3D-Q MX-MPC1E-3D-Q | 175W With MICs and optics: 249 W at 55 C, 237 at 40, 228 at 25 |'
-    175 W IS THE QUEUING VARIANT'S BARE FIGURE - the worst bare figure across the SKUs this faceplate
-    is said to cover - while attrs.model names MX-MPC1E-3D, whose own bare figure is 165 W. Bare means
-    the carrier alone: the ladders above are with MICs and optics, a different scope, and no bare
-    figure in this table is laddered by temperature.
-    WHETHER A CARRIER CONTRACT MAY CARRY ITS VARIANT'S WATTAGE IS UNRESOLVED - see roc-ops/Portrayal#417,
-    which collects the same question on mpc2e-3d and mpc3e-3d, each of which answered it differently.
-    The figure is left as it stands; this sentence records which row it is, so the choice is visible
-    rather than implied.
+    guide FRU table - MX240 Hardware Guide Table 93 'FRU Power Requirements' (p. 219), modular MPC section:
+    '| MPC1 MPC1E | MX-MPC1-3D MX-MPC1E-3D | 165W With MICs and optics: 239 W at 55 C, 227 at 40, 219 at 25 |'.
+    165 W is the leading, card-alone figure of the base SKU's own row, and attrs.model names that
+    SKU. Bare means the carrier alone: the ladder is with MICs and optics, a different scope, and the
+    MICs seated here are separately modelled parts that answer for themselves. Until roc-ops/Portrayal#417
+    this contract carried 175 W, the queuing row ('| MPC1Q MPC1EQ | MX-MPC1-3D-Q MX-MPC1E-3D-Q | 175W
+    ... |'), because its description claimed the queuing SKUs too. They are not this contract: they
+    differ in wattage and in the MICs they take (Table 10), and will be their own parts.
+    model-variants keeps MX-MPC1-3D only, the one SKU that shares both this row and this column.
+  accepts: >-
+    MX Series Interface Module Reference, 'MIC/MPC Compatibility', Table 10 'MIC/MPC1 Compatibility' (PDF pp. 55-58): the
+    accepts lists are exactly the MPC1E column, restricted to the MICs this library models.
+    REMOVED by roc-ops/Portrayal#417, each an en dash in the MPC1E column:
+    mic-3d-4xge-xfp (row MIC-3D-4XGE-XFP, a dash in every MPC1 column);
+    mic-3d-8oc3-2oc12-atm (row MIC-3D-8OC3-2OC12-ATM; 12.1 and 12.1R4 under MPC1Q and MPC1EQ only);
+    mic-3d-4choc3-1oc12 (row MIC-3D-4COC3-1COC12-CE; 12.2 under the queuing SKUs only);
+    mic-3d-4choc3-2choc12 and mic-3d-8choc3-4choc12 (row MIC-3D-4CHOC3-2CHOC12, MIC-3D-8CHOC3-4CHOC12;
+    11.4 under the queuing SKUs only); and mic-3d-10ge-sfp-e, which has NO ROW in Table 10 at all.
+    ADDED: none. In the column but not listed: MIC-3D-20GE-SFP-E and MIC-3D-8CHDS3-E3-B (not modelled
+    in this library) and MIC-3D-40GE-TX (11.2R4; dual-wide, so no single bay can take it -
+    roc-ops/Portrayal#34). MIC-3D-16CHE1-T1-CE is listed with the table's own note: 'Support for
+    Non-Channelized MIC only'. The MPC1 column takes the same set, differing only in first release.
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'
@@ -45,15 +54,9 @@ bays:
     - juniper/mic-3d-20ge-sfp-v@1
     - juniper/mic-macsec-20ge-v@1
     - juniper/mic-3d-2xge-xfp-v@1
-    - juniper/mic-3d-4xge-xfp-v@1
-    - juniper/mic-3d-10ge-sfp-e-v@1
     - juniper/mic-3d-1oc192-xfp-v@1
-    - juniper/mic-3d-4choc3-1oc12-v@1
-    - juniper/mic-3d-4choc3-2choc12-v@1
-    - juniper/mic-3d-8choc3-4choc12-v@1
     - juniper/mic-3d-4oc3oc12-1oc48-v@1
     - juniper/mic-3d-8oc3oc12-4oc48-v@1
-    - juniper/mic-3d-8oc3-2oc12-atm-v@1
     - juniper/mic-3d-8ds3-e3-v@1
     - juniper/mic-3d-16che1-t1-ce-v@1
     - juniper/ms-mic-16g-v@1
@@ -66,15 +69,9 @@ bays:
     - juniper/mic-3d-20ge-sfp-v@1
     - juniper/mic-macsec-20ge-v@1
     - juniper/mic-3d-2xge-xfp-v@1
-    - juniper/mic-3d-4xge-xfp-v@1
-    - juniper/mic-3d-10ge-sfp-e-v@1
     - juniper/mic-3d-1oc192-xfp-v@1
-    - juniper/mic-3d-4choc3-1oc12-v@1
-    - juniper/mic-3d-4choc3-2choc12-v@1
-    - juniper/mic-3d-8choc3-4choc12-v@1
     - juniper/mic-3d-4oc3oc12-1oc48-v@1
     - juniper/mic-3d-8oc3oc12-4oc48-v@1
-    - juniper/mic-3d-8oc3-2oc12-atm-v@1
     - juniper/mic-3d-8ds3-e3-v@1
     - juniper/mic-3d-16che1-t1-ce-v@1
     - juniper/ms-mic-16g-v@1

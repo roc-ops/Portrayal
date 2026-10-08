@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-mod200-tr
-version: 2.0.0
+version: 2.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -185,8 +185,19 @@ provenance:
     narrows, with an explicit 'only support the following' list, and nothing equivalent
     is written for the 80, 160 or 200. `accepts` therefore carries the general family -
     every MPA in this library plus the blank - which is what the guide's general
-    sentence supports and no more. If a per-card restriction exists in a data sheet not
-    in this intake, this list is the thing it would narrow.
+    sentence supports and no more, with the one narrowing described under
+    hundred-gig-mpas.
+  hundred-gig-mpas: >-
+    install guide + data sheet, added for roc-ops/Portrayal#262. ONE 2-PORT 100GE MPA
+    PER CARD, AND ONLY IN BAY 0. The data sheet c78-735809 (p4) says a 200G modular card
+    takes two 1-port 100GE MPAs, or a single 2-port 100GE or a single 20-port 10GE MPA,
+    for 200 gigabits per slot. The install guide places it: the 2-port 100GE section
+    (p59) supports it on both bays of the 400 Gigabit card and on bay 0 of the
+    200-Gigabit card, and the 1-port 100GE section (p55) supports that one in both bays
+    of both cards. So A9K-MPA-1X100GE is in both bays and A9K-MPA-2X100GE in bay 0 only,
+    and the one-per-card limit holds because bay 1 cannot take it. The data sheet
+    sentence is a bandwidth statement and is not read as a limit on the 20-port 10GE,
+    which stays in both bays as before.
   lifecycle: >-
     searched - no end-of-life notice for this part number is in the intake.
 elements:
@@ -240,6 +251,8 @@ bays:
     - 'cisco/a9k-mpa-2x40ge@1'
     - 'cisco/a9k-mpa-20x1ge@1'
     - 'cisco/a9k-mpa-20x10ge@1'
+    - 'cisco/a9k-mpa-1x100ge@1'
+    - 'cisco/a9k-mpa-2x100ge@1'
   bay-1:
     default: cisco/a9k-mpa-blank@1
     at: [6.82, 202.42]
@@ -253,3 +266,4 @@ bays:
     - 'cisco/a9k-mpa-2x40ge@1'
     - 'cisco/a9k-mpa-20x1ge@1'
     - 'cisco/a9k-mpa-20x10ge@1'
+    - 'cisco/a9k-mpa-1x100ge@1'

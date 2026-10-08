@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx80
-version: 2.0.2
+version: 2.0.3
 maturity: modelled
 manufacturer: Juniper
 model: MX80
@@ -51,9 +51,22 @@ provenance:
       SYNC jacks at x 68/105 (y 75), the two-hole earthing plate and ESD at the right. The jacks
       are drawn as SMB (photograph resolution cannot distinguish SMB from BNC - recorded)
   power:
+    confidence: datasheet
     note: >-
-      NOT STATED at chassis level in the extraction; per-module rows were not captured either. The
-      L27/L29 warnings stand as the record
+      guide power consumption topics - Table 14 (AC) and Table 20 (DC) give the modular chassis
+      "running at high activity, with four 10-Gigabit Ethernet XFPs, two MICs, and fans running at
+      high speed" 310 W on both feeds, which the guide's own worked examples call typical power
+      consumption; carried as power-typical-w, OUTPUT side. Table 14 adds the AC INPUT figure at
+      85% efficiency, 365 W (the family datasheet's "typical power draw (AC)" for the MX80-MX5 is
+      the same 365 W, its DC 310 W); without the two MICs the base is 240 W output, 282 W input.
+      Tables 13 and 19 give the fixed MX80 (not modelled) 320 W. Table 11's 610 W AC system input
+      power and Table 17's 625 W DC system input (13 A at -48 VDC) are provisioning ratings, not
+      draw, and are not carried. Table 32's maximum thermal output, 1705 BTU/hour (500 W), is one
+      supply's maximum output (Table 12, 500 W) times 3.41 - a provisioning ceiling, carried under
+      thermal and flagged so. The guide gives modules only a generalized 35 W per MIC (Table 15)
+      and points at the MX Series Interface Module Reference; 13 of the 14 modules this chassis
+      accepts carry a figure on their contracts, and the fan tray, which no table here rates, is
+      the one L29 reports
   lifecycle:
     note: >-
       announced - the whole MX5-MX80 family is EOL (guide banners and family tables); per-SKU
@@ -87,7 +100,18 @@ provenance:
 
 attrs:
   physical:
-    weight-note: not captured in this extraction (see gaps)
+    weight-note: Table 31 gives 30 lb (13.6 kg) for the modular chassis with fan
+      tray, power supplies and MICs (28 lb, 12.7 kg, for the fixed chassis);
+      not yet carried as a weight figure
+  power:
+    power-typical-w: 310
+    power-envelope: fully-configured
+    power-typical-scope: OUTPUT side, AC and DC alike - modular chassis at high
+      activity with the four fixed XFPs, two MICs and fans at high speed
+      (Tables 14 and 20); AC input 365 W at 85% efficiency
+  thermal:
+    max-thermal-output: 1705 BTU/hour (500 W) (Table 32; provisioning ceiling -
+      one supply's 500 W maximum output times 3.41, not the 310 W draw)
   lifecycle:
     eol: announced
     eol-announcement: https://support.juniper.net/support/eol/product/m_series/
@@ -119,10 +143,6 @@ gaps:
     scope: [psus]
     reason: needs-photo
     wanted: the DC supply face (guide Figure 16 is isometric line art).
-  - what: chassis-weight-and-power
-    reason: vendor-silent
-    wanted: the weight and power tables - outside this extraction's text
-      layer; L27/L29 warnings stand on the modules.
   - what: rear-clock-jack-type
     scope: [timing]
     reason: needs-photo
