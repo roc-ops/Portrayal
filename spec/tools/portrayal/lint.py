@@ -308,7 +308,7 @@ RULES = {
     "L139": ("lab",        "every placement's `ref` is a library device (and its `cfg` one of that device's configurations), every placement id is unique, and every `on` names another placement in the lab (error)", "name the device by its `name`, e.g. `fhd-1ufce`; give each placement its own id; point `on` at the id of the placement the part sits on"),
     "L140": ("lab",        "`face`, `on` and `unit` appear only on a device whose `chassis.mount` is `rack-face`; a rack-face device is placed by `on` or by `ru`, not both, and a rack device by `ru` (error)", "drop the key from a rack device; give a rack-face part either `on` (and `unit`) or `ru`"),
     "L141": ("lab",        "a rack-face part's host is a `rack` device, and `unit` is within the host's height, 1 to its `chassis.ru` (error)", "put the part `on` the rack device behind it; count `unit` from 1 at the host's bottom unit"),
-    "L142": ("lab",        "every placement fits inside the rack's `height-ru`, no two rack devices share a rack unit, and no two rack-face parts claim one rack unit on one face (error)", "move one of the two, or put one rack-face part on the other face"),
+    "L142": ("lab",        "every placement fits inside the rack's `height-ru`, no two rack devices share a rack unit, and no two rack-face parts claim one rack unit on one face and side - a part narrower than the rack opening placed at a `side` claims that side, any other claims both (error)", "move one of the two, or put one rack-face part on the other face"),
     "L143": ("lab",        "a rack-face part placed by `ru` over a rack device is reported with that host (warning)", "place it `on` the host with its `unit` so it moves with the host, or leave it by `ru` if it belongs to the rack rather than the device"),
     "L144": ("device",     "members of one group that one configuration draws on one face hold one `rel-pos` each; alternatives (variant views, `only-in` builds) may share one (warning)", "give each member its own position, or move the unlike members - ESD jacks among earthing studs, lane lamps among port lamps - to a group of their own"),
     "L145": ("device",     "a group is not named only for the class of its members - `ports` names no port family (warning)", "name the group for the family it holds (`sfp28`, `rj45-1g`), or a mixed block for the job it does and say so in `mixed:`"),
@@ -318,6 +318,9 @@ RULES = {
     "L149": ("component",  "a node a position moves stays inside its part under every move: its box, translated and turned, lies within `size` (an error)", "shorten the move, or move the node in the skin so its travel stays on the part"),
     "L150": ("device",     "a placement, bay or cutout whose box lies outside its view's face (beyond 0.5 mm) is covered by that side's `chassis.overhang` - across the width only, the rear and underside mirrored; one beyond the face in height or along a side view is always reported. `optional` placements are exempt, and decor is not checked, since it is clipped and never drawn outside the face (error)", "state `chassis.overhang: {left, right}` with the reach and its source, or move the part onto the face"),
     "L151": ("device",     "a side of `chassis.overhang` is reached by some part to within 0.5 mm (warning)", "lower the figure to what the parts reach, or drop it when nothing reaches past the face"),
+    "L152": ("device",     "a `rack-side` part's front view is taller than it is wide - it is drawn as it stands beside the rack (warning)", "draw it standing: the front's `w` is the width across the rack's face direction and `h` the height it runs; swap them if the spec line printed them the other way"),
+    "L153": ("lab",        "`side` (left or right) appears only on a `rack-side` part, which states it, and on a `rack-face` part narrower than the rack opening; a rack-side part takes no `on` or `unit` (error)", "give a rack-side part its `side` and place it by `ru`; drop `side` from a full-width part"),
+    "L154": ("lab",        "a rack-side part fits the rack's `height-ru`, and no two rack-side parts on one side of the rack overlap in height (error)", "move one of the two up, or stand it on the other side of the rack"),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -6543,12 +6546,12 @@ def lint_listing(path, data, roots):
 
 # THE LAB CODES. The rules are in labs.py, because labs_index.py has to resolve
 # the same placements to write labs.json and the two must not disagree; this is
-# where they are reported. L139-L142 are errors, L143 a warning.
-LAB_CODES = ("L139", "L140", "L141", "L142", "L143")
+# where they are reported. L139-L142, L153 and L154 are errors, L143 a warning.
+LAB_CODES = ("L139", "L140", "L141", "L142", "L143", "L153", "L154")
 
 
 def lint_lab(path, data, roots):
-    """L139-L143: a lab's placements resolve to rack positions that fit.
+    """L139-L143, L153, L154: a lab's placements resolve to rack positions that fit.
 
     A lab names library devices and places them in one rack: a `rack` device by
     `ru`, a `rack-face` part (a cable manager on the rail face) `on` a host or
@@ -6557,7 +6560,12 @@ def lint_lab(path, data, roots):
     units, L142 that nothing overlaps; all errors, because a lab that breaks
     them cannot be drawn and labs_index.py will not compile it. L143 is a
     report, not a fault: a rack-face part placed by `ru` in front of a device
-    is legal, and the warning names the host it would move with.
+    is legal, and the warning names the host it would move with. A `rack-side`
+    part (a full-height vertical manager beside the rack) is placed by `side`
+    and `ru` (docs/vertical-cable-managers-design.md section 3.5): L153 holds
+    which placements may say `side` - it and a rack-face part narrower than
+    the opening, which then claims its unit per face and side under L142 - and
+    L154 that it fits the rack and overlaps nothing on its side.
     """
     found, _placed = labs.check(data, roots)
     for code, sev, msg in found:
@@ -7047,14 +7055,20 @@ def lint_device_mount(path, data):
     mount = ch.get("mount", "rack")
     # `rack-face` BOLTS TO RACK HOLES, so it has rack units to state - the ones
     # its ears span - while occupying none. It is held to `ru` exactly as a
-    # rack device is.
-    bolts_to_rack = mount in ("rack", "rack-face")
+    # rack device is. `rack-side` bolts to the SIDE of an upright and runs
+    # beside the rack, and its height is a rack height - 45U is 2000 mm - so it
+    # states the units it runs beside, again occupying none
+    # (docs/vertical-cable-managers-design.md).
+    bolts_to_rack = mount in ("rack", "rack-face", "rack-side")
     # A MISSING `ru` WARNS; a contradiction refuses. The one rack device left
     # without rack units is an Open Rack v3 tray, sized in a unit `ru` cannot
     # hold, and a waiver - which only a warning can take - is where it says so.
     if mount == "rack-face" and "ru" not in ch:
         warn(path, "L125", "a `rack-face` part states `ru` - the rack units its "
                           "ears span, though it occupies none")
+    elif mount == "rack-side" and "ru" not in ch:
+        warn(path, "L125", "a `rack-side` part states `ru` - the rack units of "
+                          "height it runs beside the rack, though it occupies none")
     elif bolts_to_rack and "ru" not in ch:
         warn(path, "L125", "a rack device states `ru`. If this box is not racked, "
                           "say how it is installed with `chassis.mount` "
@@ -7075,6 +7089,32 @@ def lint_device_mount(path, data):
         if key in ch and mount != "rack":
             err(path, "L125", f"`chassis.{key}` is for a rack device, and this one "
                               f"mounts {mount!r}; drop it")
+
+
+def lint_rack_side_portrait(path, data):
+    """L152: a `rack-side` part's front is taller than it is wide.
+
+    A rack-side part is drawn as it stands (docs/vertical-cable-managers-design.md
+    section 3.2): its front `w` is its width across the rack's face direction and
+    its `h` the height it runs beside the rack, so a full-height duct 125 wide
+    and 2108 tall has a portrait front. A landscape one is the likeliest
+    authoring error - the duct drawn lying down, its width and height swapped
+    the way a vendor's spec line sometimes prints them. A warning, because a
+    short side part wider than it is tall is not impossible, only unlikely
+    enough to need its waiver.
+    """
+    ch = data.get("chassis") or {}
+    if ch.get("mount") != "rack-side":
+        return
+    front = ((data.get("views") or {}).get("front") or {}).get("size") or {}
+    w, h = front.get("w", ch.get("width")), front.get("h", ch.get("height"))
+    if not isinstance(w, (int, float)) or not isinstance(h, (int, float)):
+        return
+    if h <= w:
+        warn(path, "L152", f"a `rack-side` part stands beside the rack, so its front is "
+                          f"taller than it is wide - this one is {w:g} wide and {h:g} "
+                          "tall. Draw it as it stands: `w` across the rack's face "
+                          "direction, `h` the height it runs")
 
 
 def lint_device_power_outlets(path, data):
@@ -11917,6 +11957,7 @@ def main():
                 lint_device_airflow_home(f, d)
                 lint_device_power_home(f, d)
                 lint_device_mount(f, d)
+                lint_rack_side_portrait(f, d)
                 lint_device_shell(f, d)
                 lint_device_power_outlets(f, d)
                 lint_device_power_stated(f, d)
