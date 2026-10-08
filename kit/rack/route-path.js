@@ -1,5 +1,5 @@
 // Pure geometry for a routed cable (kept out of cables.js so node can import it).
-// A ROUTED CABLE (routing spec §7): straight runs between its waypoints, each
+// A ROUTED CABLE: straight runs between its waypoints, each
 // corner rounded by r, so it reads as dressed cable rather than a hang.
 export function routed2d(pts, r = 4) {
   let d = `M${pts[0][0]} ${pts[0][1]}`;

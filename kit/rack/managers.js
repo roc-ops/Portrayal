@@ -1,4 +1,4 @@
-// RACK-FACE MANAGERS (spec docs/superpowers/specs/2026-10-07-rack-face-managers-design.md).
+// RACK-FACE MANAGERS.
 // Pure, like fit.js: the rack, the change, and a chassisOf(ref) lookup. A
 // manager is an item; `on` and `unit` say which device it bolts over, and its
 // `ru` always says where it is. Everything that moves a manager or its host
@@ -24,7 +24,7 @@ export function placement(rack, {face, ru}, chassisOf, {ignoreId = null} = {}) {
   return host ? {face, ru, on: host.id, unit: ru - host.ru + 1} : {face, ru};
 }
 
-// THE RACK AS OPENED, MADE CONSISTENT (spec §4). parseDoc cannot see the
+// THE RACK AS OPENED, MADE CONSISTENT. parseDoc cannot see the
 // catalogue, so this is where a host is checked: every repair is a sentence.
 export function settleManagers(rack, chassisOf) {
   const notices = [];

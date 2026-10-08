@@ -1,8 +1,8 @@
-// WHAT AN EXPORT SAYS, as data (spec §8). Pure: no DOM, no fetch - so
+// WHAT AN EXPORT SAYS, as data. Pure: no DOM, no fetch - so
 // `node --test` covers every rule an export follows: file names, CSV
 // quoting, the title block, which cabinet draws which device, the notes,
-// and (below, Tasks 4-5) DCIM matching and the bill of materials.
-// The Rack Builder's exports (portrayal-site site/rack/exports.js) do the
+// and (below) DCIM matching and the bill of materials.
+// The Rack Builder's exports (the page that builds the files) do the
 // fetching and drawing, and ask here.
 
 import {positionOf, uLabel} from './model.js';
@@ -49,7 +49,7 @@ export function holesText(frame) {
   return `Tapped holes, ${frame.holes.thread || 'thread not stated'}`;
 }
 
-// The sheet's title block (spec §8): rack name, frame, depths, holes, date.
+// The sheet's title block: rack name, frame, depths, holes, date.
 export function titleLines(rack, date) {
   const f = rack.frame;
   const kind = f.kind === 'two-post' ? 'Two-post' : 'Four-post';
@@ -115,7 +115,7 @@ export function exportStatus({notes = [], left = [], leftText = ''} = {}) {
   return left.length ? `${head} ${leftText || `Not in the file: ${left.join(' ')}`}` : head;
 }
 // What a rack holds that an export leaves out. An export that carries the
-// cables passes {cables: false}, and since Phase 2c every export does: the
+// cables passes {cables: false}, and today every export does: the
 // sheet, draw.io, the 3D model, the BOM, the cable schedule and both DCIM
 // import kits. The line is kept for an export that one day does not.
 export function rackNotes(rack, {cables = true} = {}) {
@@ -126,7 +126,7 @@ export function rackNotes(rack, {cables = true} = {}) {
   return out;
 }
 
-// ── CABLES IN THE EXPORTS (spec §9.4) ───────────────────────────────────
+// ── CABLES IN THE EXPORTS ───────────────────────────────────────────────
 // Every export that carries cables reads them through these, so a loose end
 // or a mismatch is worded once. `ends` is cable-plugs.js cableFacts(rack).ends:
 // Map(endKey -> {info, reason}), reason null when the end lands. A cable
@@ -277,7 +277,7 @@ export function mountNotes(items, chassisOf, frame) {
   return out;
 }
 
-// WHERE EACH MANAGER IS (spec §9), for the sheets, draw.io and the BOM.
+// WHERE EACH MANAGER IS, for the sheets, draw.io and the BOM.
 export function managerNotes(items, chassisOf, frame) {
   const byId = new Map(items.map(i => [i.id, i]));
   return items.filter(i => chassisOf(i.ref)?.mount === 'rack-face').map(i => {
@@ -287,7 +287,7 @@ export function managerNotes(items, chassisOf, frame) {
   });
 }
 
-// createRackScene has no fields input yet (the Rack Builder's scene, portrayal-site site/rack/scene3d.js).
+// createRackScene has no fields input yet (the Rack Builder's 3D scene).
 export function threeDNotes(rack) {
   const withFields = rack.items.filter(i => Object.keys(i.fields || {}).length).map(i => i.label);
   return withFields.length ? [`Optic labels and colors are not in the 3D model yet: ${withFields.join(', ')}.`] : [];
@@ -310,7 +310,7 @@ const overlaps = (a, b) => a.ru <= b.ru + b.u - 1 && b.ru <= a.ru + a.u - 1;
 // in one U of a draw.io cabinet overlap, and the 2D pane already draws the
 // mounted one on top.
 export function perFaceItems(items) {
-  // A rack-face manager (spec §6) is drawn last on its own face, never hides
+  // A rack-face manager is drawn last on its own face, never hides
   // anything, and on the other face is hidden by any device spanning its U.
   const isFace = it => it.mount === 'rack-face';
   const out = {front: [], rear: [], hidden: []};
@@ -326,7 +326,7 @@ export function perFaceItems(items) {
   return out;
 }
 
-// DRAW.IO, ONE PAGE (Phase 2b ruling 1). Both cabinets stand on one page so
+// DRAW.IO, ONE PAGE. Both cabinets stand on one page so
 // a front-to-rear cable is one edge, not two stubs on two tabs. vendor/drawio.js
 // lays the racks of ONE group side by side, each drawn once per face the group
 // names; so the group names one face, 'front', and holds two racks: rack 0 is
@@ -412,7 +412,7 @@ export function uniqueEntryIds(entries) {
   });
 }
 
-// DRAW.IO CABLES (Phase 2b ruling 2). The vendor colours an edge by looking
+// DRAW.IO CABLES. The vendor colours an edge by looking
 // its cable's `media` up in a table, so the media handed to it is the key the
 // colour is filed under: the cable's own media, except the showcase's
 // 'copper', which is coloured by purpose and so is keyed with it.
@@ -475,7 +475,7 @@ export function drawioCables(rack, {ends = new Map(), idOf, drawn, hiddenBy = ()
   return {cables, notes};
 }
 
-// ── DCIM (spec §8) ─────────────────────────────────────────────────────
+// ── DCIM ────────────────────────────────────────────────────────────────
 export const stemOf = path => String(path).split('/').pop().replace(/\.ya?ml$/i, '');
 export const vendorOf = path => String(path).split('/').at(-2) ?? '';
 // THE DIRECTORY A MANUFACTURER'S FILES ARE UNDER is not always its name: the
@@ -587,25 +587,25 @@ export function uniqueNames(items) {
   }));
 }
 
-// WHAT A DCIM STORES, one table (Phase 2c fix round). Only the values a row
+// WHAT A DCIM STORES, one table. Only the values a row
 // builder must screen. A value over a limit makes a real instance refuse the
 // row, and NetBox refuses the whole file for one bad row.
-//   Where each comes from: "facts" is rack-2c-facts.md (model fields read from
-//   NetBox 4.7 and Nautobot 3.2 source); "believed" is the model field as
+//   Where each comes from: "facts" is the model field as read from the
+//   NetBox 4.7 and Nautobot 3.2 source; "believed" is the model field as
 //   remembered, confirmed at the boundary by the acceptance run.
 export const DCIM_LIMITS = {
   // NetBox Device.name is a 64-character field, unique ignoring case (believed;
-  // facts line 88 says only "unique per site and tenant"). Nautobot's own limit
-  // is not stated in the facts file, so this NetBox limit is applied to both.
+  // the model source says only "unique per site and tenant"). Nautobot's own limit
+  // is not stated in its model source, so this NetBox limit is applied to both.
   deviceName: 64,
   // Cable.label and Cable.description, NetBox 4.7 (believed). Nautobot's label is
   // held to the same 100 here; its cable file carries no description.
   cableLabel: 100,
   cableDescription: 200,
   // NetBox Cable.length: a decimal of 8 digits and 2 places, so below 1,000,000
-  // (facts line 166 for the two places; the 8 digits are believed).
+  // (the two places are facts; the 8 digits are believed).
   netboxLengthBelow: 1000000,
-  // Nautobot Cable.length: a PositiveSmallIntegerField (facts, cables.py 495).
+  // Nautobot Cable.length: a PositiveSmallIntegerField (facts: Nautobot's cables.py).
   nautobotLengthMax: 32767};
 // What a database counts: characters, not UTF-16 units.
 export const charCount = s => Array.from(String(s)).length;
@@ -615,7 +615,7 @@ export const NETBOX_COLUMNS = ['name', 'role', 'manufacturer', 'device_type', 's
   'position', 'face', 'comments'];
 // rack__location__name pins the rack to the device's own location: rack__name
 // alone matches a rack of that name in ANY location, and rack names repeat
-// from one location to the next (final fix wave, I5).
+// from one location to the next.
 export const NAUTOBOT_COLUMNS = ['name', 'role__name', 'device_type__manufacturer__name', 'device_type__model',
   'status__name', 'location__name', 'rack__name', 'rack__location__name', 'position', 'face', 'comments'];
 export const TARGET_NAME = {netbox: 'NetBox', nautobot: 'Nautobot'};
@@ -637,7 +637,7 @@ export const otherVendorNote = ({label, ref, T, manufacturer, path}) =>
 // targets and are written as given; blank ones stay blank, and the kit's
 // README says the file will be refused until they are filled in.
 //
-// A ROW THE TARGET WOULD REFUSE IS NOT WRITTEN (Phase 2c ruling 3). Both
+// A ROW THE TARGET WOULD REFUSE IS NOT WRITTEN. Both
 // targets take a device file whole or not at all, so one such row would
 // refuse every device. `left` lists each device left out, with the sentence
 // the README carries:
@@ -709,7 +709,7 @@ export function deviceImportRows({rack, items, types, target = 'netbox', dcim = 
   return {columns: target === 'nautobot' ? NAUTOBOT_COLUMNS : NETBOX_COLUMNS, rows, left};
 }
 
-// THE RACK, as NetBox imports one (Phase 2c ruling 2): written from the frame.
+// THE RACK, as NetBox imports one: written from the frame.
 // A device row names its rack, and the device import does not create it.
 // desc_units is NetBox's "units are numbered top-to-bottom".
 export const NETBOX_RACK_COLUMNS = ['site', 'name', 'status', 'width', 'u_height', 'desc_units'];
@@ -718,7 +718,7 @@ export function rackImportRows({rack, dcim = {}}) {
     width: 19, u_height: rack.frame.heightRU, desc_units: rack.frame.numbering === 'top-down' ? 'true' : 'false'}]};
 }
 
-// ── THE BILL OF MATERIALS (spec §8) ─────────────────────────────────────
+// ── THE BILL OF MATERIALS ───────────────────────────────────────────────
 // A part counts when it is SEATED: a bay's module (`…/module`) or a cage's
 // occupant (`…-occupant` - an optic, a cap, a plug). Everything else in a
 // face that carries data-ref is the chassis itself (a door, a jack, every
@@ -780,7 +780,7 @@ export function bomRows({devices = [], parts = [], frame, railUs = []}) {
   return [...rows, ...hardwareRows(frame, railUs)];
 }
 
-// 2 ears x 2 screws x each U a rail item covers (Task 2 draws the same).
+// 2 ears x 2 screws x each U a rail item covers.
 export function hardwareRows(frame, railUs) {
   const qty = 4 * railUs.reduce((s, u) => s + Math.max(1, u), 0);
   if (!qty) return [];
@@ -795,7 +795,7 @@ export function hardwareNotes(frame) {
   return frame.holes.thread ? [] : ['The rail thread is not set under Frame, so the screws are listed without one.'];
 }
 
-// CABLES IN THE BOM (spec §8): one line per media, length and connector, with
+// CABLES IN THE BOM: one line per media, length and connector, with
 // a quantity. A cable with no length - or one whose length the page could not
 // use - is "length not set". The connector is what each end's port takes, as
 // cable-plugs.js read it (`ends`, as for cableFindings); the two ends are

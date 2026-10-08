@@ -1,4 +1,4 @@
-// THE CABLE RULES (spec §9). Pure: no DOM, no fetch, so the page, the side
+// THE CABLE RULES. Pure: no DOM, no fetch, so the page, the side
 // panel and `node --test` all read one definition. A rule that says no gives
 // a sentence, in the style of fit.js.
 //
@@ -44,7 +44,7 @@ export function tagText(rack, end) {
   return clip(`→ ${it ? it.label : 'removed'} ${end.path}`, 32);
 }
 
-// ── one cable per port (spec §9.3) ──────────────────────────────────────
+// ── one cable per port ──────────────────────────────────────────────────
 // `uOf` is endName's: how tall a device is, for the U in the refusal.
 export function portFree(rack, end, {ignoreId = null, uOf} = {}) {
   const k = portKey(end);
@@ -192,7 +192,7 @@ export function proposeMedia(a, b) {
 }
 
 const NAMED = {fiber: 'fiber', copper: 'copper', dac: 'a DAC', aoc: 'an AOC'};
-// A MISMATCH IS A WARNING, never a refusal (spec §9.3): the sentences to show
+// A MISMATCH IS A WARNING, never a refusal: the sentences to show
 // beside the media field, or [] when nothing is known to be wrong.
 export function mismatch(media, a, b) {
   const out = [];
@@ -234,7 +234,7 @@ export function plugSeats(path, slots, swaps = {}) {
 // The swaps a face is drawn with: the item's own, over the derived plugs.
 export const mergeSeats = (swaps, plugs) => ({...(plugs || {}), ...(swaps || {})});
 
-// ── loose ends (spec §9.3) ──────────────────────────────────────────────
+// ── loose ends ──────────────────────────────────────────────────────────
 // The bay a card port's path sits in: 'slot-2/module/p2' -> 'slot-2'.
 export function holderPath(path) {
   const i = String(path).lastIndexOf('/module/');
@@ -259,7 +259,7 @@ export function looseReason(end, facts) {
   return null;
 }
 
-// ── the list's filter (stage 5's two axes) ──────────────────────────────
+// ── the list's filter (two axes) ────────────────────────────────────────
 // {value -> count} for a cable field, in first-seen order.
 export function countsBy(cables, field) {
   const m = new Map();

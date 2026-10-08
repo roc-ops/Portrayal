@@ -116,8 +116,9 @@ as `@portrayal/kit/rack/<module>`:
 `site/rack/`, at that repository's commit `d1a1aa8e`. This repository is now the source of
 truth: edit these modules here. portrayal-site vendors
 `kit/rack/*.js` read-only, and its contract check refuses a copy that has
-drifted. A comment that cites "spec §N" refers to the Rack Builder's design
-documents, in portrayal-site under `docs/superpowers/specs/`.
+drifted. The rules these modules follow are stated in their own comments,
+and the rack file format in [`docs/format-stability.md`](../docs/format-stability.md)
+and `schemas/v1/rack.schema.json`.
 
 ### The catalogue
 
@@ -163,7 +164,7 @@ const ctx = { chassisOf, guidesOf: () => [], portX: () => -100 };
 const route = resolveRoute(rack, cabled.cable, ctx);
 const length = routedLength(rack, cabled.cable, ctx);   // { measured, value }, in metres
 
-const devices = rack.items.filter(i => chassisOf(i.ref).mount !== 'rack-face')
+const devices = rack.items.filter(i => chassisOf(i.ref)?.mount !== 'rack-face')
   .map(i => ({ ref: i.ref, cfg: i.cfg, ...catalog.devices[i.ref] }));
 const bom = bomRows({ devices, frame: rack.frame, railUs: [1, 1] });
 const schedule = cableScheduleRows(rack);

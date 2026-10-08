@@ -1,4 +1,4 @@
-// THE HEADLESS RACK EDITOR (spec §2.4): a document, its history, and the one
+// THE HEADLESS RACK EDITOR: a document, its history, and the one
 // way in for edits. The page draws what it is told by `change`; an agent drives
 // the same object. Selection is the page's, not this.
 
@@ -7,7 +7,7 @@ import {settleManagers} from './managers.js';
 import {createHistory} from './history.js';
 
 // What a command that is not a step owns is kept across an undo or redo: Undo
-// never takes the DCIM settings back (spec §3.3). Routed lengths are measured
+// never takes the DCIM settings back. Routed lengths are measured
 // again by the next render, so they need nothing here.
 const keepDcim = (rack, from) => {
   const {dcim: _old, ...bare} = rack;

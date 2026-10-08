@@ -1,4 +1,4 @@
-// UNDO AND REDO AS SNAPSHOTS (spec §2.3): each step keeps the rack before and
+// UNDO AND REDO AS SNAPSHOTS: each step keeps the rack before and
 // after it whole. Racks are never mutated, so a snapshot costs a reference,
 // not a copy. Past the cap the oldest step is forgotten.
 

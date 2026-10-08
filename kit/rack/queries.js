@@ -1,5 +1,5 @@
 // kit/rack/queries.js
-// QUESTIONS ABOUT A RACK (spec §2.5), for an agent deciding what to send and
+// QUESTIONS ABOUT A RACK, for an agent deciding what to send and
 // for a page that wants to ask before it acts. Pure; the two that read faces
 // are handed their readers in `ctx`, since reading a face needs the network and
 // a DOMParser, which this module never touches.

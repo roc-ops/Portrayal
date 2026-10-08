@@ -1,15 +1,15 @@
-// WHAT A DCIM IMPORT KIT SAYS, as data (spec §8, §9.4; Phase 2c). Pure: no DOM,
+// WHAT A DCIM IMPORT KIT SAYS, as data. Pure: no DOM,
 // no fetch, so `node --test` covers every rule the NetBox and Nautobot kits
 // follow: what a port is called in a type file, which rows a file may hold,
 // and what the README says of the rest. The Rack Builder's exports
-// (portrayal-site site/rack/exports.js) fetch the type files and the faces, and
+// (the page that builds the files) fetch the type files and the faces, and
 // ask here.
 
 import {endName, lengthParts} from './cable-rules.js';
 import {cableFindings, TARGET_NAME, DCIM_LIMITS, charCount, cutTo, isoDate, flat} from './export-data.js';
 export {DCIM_LIMITS, flat};
 
-// ── names a kit can write (final fix wave, M2) ──────────────────────────
+// ── names a kit can write ───────────────────────────────────────────────
 // A rack file is anyone's JSON: a name in it may hold a line break or another
 // control character, which a text field on the page never gives. In a README
 // such a name would start a line of its own ("Step 6: run this"), and in a CSV
@@ -145,7 +145,7 @@ export function resolveEnd({path, device, moduleAt = () => null, consoles = []})
   return {ok: true, name: `${bay.position}/${leaf}`, type: hit.type, bay};
 }
 
-// ── the modules file (Phase 2c ruling 5) ────────────────────────────────
+// ── the modules file ────────────────────────────────────────────────────
 // A card's ports exist in a DCIM only once a module of its type is in its bay,
 // so the modules are imported before the cables. NetBox finds the bay by the
 // device's name and the bay's NAME, and the module type by its model alone (a
@@ -198,7 +198,7 @@ export function moduleImportRows({target = 'netbox', parts, names, kept, deviceO
   return {columns: MODULE_COLUMNS[target === 'nautobot' ? 'nautobot' : 'netbox'], rows, left};
 }
 
-// ── the cables file (Phase 2c rulings 6 and 7) ──────────────────────────
+// ── the cables file ─────────────────────────────────────────────────────
 // The Rack Builder's media as a DCIM's cable type. Both targets accepted each
 // of these and refused "os2". A media this page does not know, or none, is a
 // blank type: the column is optional.
@@ -321,7 +321,7 @@ export function cableImportRows({rack, target = 'netbox', names, kept, resolve, 
   return {columns: CABLE_IMPORT_COLUMNS[nautobot ? 'nautobot' : 'netbox'], rows, left, notes};
 }
 
-// ── README.txt (Phase 2c ruling 1) ──────────────────────────────────────
+// ── README.txt ──────────────────────────────────────────────────────────
 // What to do with each file, in order; what must already exist; and
 // everything the kit could not carry. It replaces NOTES.txt and keeps its
 // content (`notes`).

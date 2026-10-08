@@ -1,5 +1,5 @@
 // kit/rack/commands.js
-// THE RACK COMMANDS (spec docs/superpowers/specs/2026-10-07-rack-command-core-design.md).
+// THE RACK COMMANDS.
 // Every edit of a rack is one of these, run through apply(): the page's own
 // controls and an agent alike. A command is pure - the rack, its arguments
 // and {chassisOf} in, a new rack out - and says no with a sentence. One that
@@ -202,7 +202,7 @@ function lengthsRouted(rack, {routeCtx}) {
   return next === rack ? unchanged(rack) : done(next, 'Measured the routed lengths.');
 }
 
-// ── the table an agent reads (spec §2.1, D4) ────────────────────────────
+// ── the table an agent reads ────────────────────────────────────────────
 const RACK = {type: 'string', description: 'The id of the rack to edit. Only the first rack can be edited today.'};
 const AS = {type: 'string', minLength: 1, description: 'A name for what this creates; later commands in the same batch can use "@name" as its id.'};
 const ID = what => ({type: 'string', minLength: 1, description: `The id of the ${what}, as describe() lists it, or "@name" from earlier in this batch.`});
@@ -281,7 +281,7 @@ export const COMMANDS = {
     args: args(['routeCtx'], {routeCtx: {type: 'object', description: 'The routing context the last render measured with (route-context.js routeFacts().ctx).'}})},
 };
 
-// ── apply (spec §2.2) ───────────────────────────────────────────────────
+// ── apply ───────────────────────────────────────────────────────────────
 const typeWord = s => {
   if (s.enum) return `one of ${s.enum.filter(v => v !== null && v !== '').join(', ')}`;
   const t = [].concat(s.type ?? []).find(x => x !== 'null');

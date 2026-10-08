@@ -1,4 +1,4 @@
-// CABLE GEOMETRY, as data (spec §5). The colour, jacket and plug tables and
+// CABLE GEOMETRY, as data. The colour, jacket and plug tables and
 // the maths that decide where a cable runs: the 2D sag, and the 3D catenary,
 // routed and dangling point lists. No DOM, no relief.js and no SVG: THREE is
 // passed in where a vector is built, so this imports no three.js either.
@@ -86,10 +86,10 @@ export const mergeOf = (THREE, e) => e.points.reduce((s, p) => s.add(p), new THR
 // The main run between two ends, {points, normal} each: from each end's start
 // (a duplex pair's merge, or the one point) LEAD straight out, then hanging
 // between. Ends on opposite faces go round the rack's right-hand side,
-// outside the posts (spec §6).
+// outside the posts.
 // `reach` on an end, when set, replaces LEAD (see reaches).
 const startOf = (THREE, e) => e.points.length > 1 ? mergeOf(THREE, e) : e.points[0].clone();
-// A ROUTED RUN (routing spec 7): straight out of each connector as a hang
+// A ROUTED RUN: straight out of each connector as a hang
 // does, then taut through every waypoint, each corner rounded by easing r mm
 // either side of it - the CatmullRom tube does the rest. THREE is passed in
 // so this stays free of a three.js import.

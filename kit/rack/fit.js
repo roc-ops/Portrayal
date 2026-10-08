@@ -1,4 +1,4 @@
-// WHERE A DEVICE MAY GO (spec §6). Pure: the rack, the candidate, and a
+// WHERE A DEVICE MAY GO. Pure: the rack, the candidate, and a
 // chassisOf(ref) -> {ru, h, d} that the page backs with rack.json, as the kit loads it.
 // Every refusal is a sentence, because the catalogue shows it beside the device
 // it grays out - "no" without a reason is a puzzle.
@@ -13,7 +13,7 @@ import {RU} from './rails.js';
 
 export const REACH_MM = 50;   // within this of the far rail, a device's far panel is visible there
 
-// A RACK-FACE PART (spec §5): bolted to the rail face at a U, projecting
+// A RACK-FACE PART: bolted to the rail face at a U, projecting
 // outward - forward of the front rails, or behind the rear ones. It takes no
 // U, so rack devices never collide with it, except a device deep enough to
 // come out through the far rail into a manager there.
@@ -110,7 +110,7 @@ export function availableDepth(rack, item, chassisOf) {
 }
 
 // Every item with the U height its chassis entry gives it (or 1, unknown or
-// not) - what the elevation, the 3D view and any export (Phase 1b) all need
+// not) - what the elevation, the 3D view and any export all need
 // beside the item's own fields, so each draws the same rack.
 // heightOf(chassisOf) is that height as a lookup by item: what names a device
 // with its U (cable-rules.js endName) asks it.
@@ -124,7 +124,7 @@ export const itemsWithU = (rack, chassisOf) =>
 export const attachPoints = kind => (kind === 'four-post'
   ? ['left-front', 'right-front', 'left-rear', 'right-rear'] : ['left', 'right']);
 
-// SHRINK THE FRAME (feedback round 2 §2): a lower height that leaves devices
+// SHRINK THE FRAME: a lower height that leaves devices
 // hanging past it is no longer refused - it packs them down instead.
 //
 // Items whose U spans overlap (on either face - a front/rear pair sharing a
@@ -204,7 +204,7 @@ export function shrinkRack(rack, newHeight, chassisOf) {
   return {rack: withFrameHeight(packedItems), moved, removed};
 }
 
-// ZERO-U (spec §5.3): along an attachment point, by offset in mm from the
+// ZERO-U: along an attachment point, by offset in mm from the
 // bottom of the rails. The catalogue has none yet; the rules are here so the
 // day it does, placing one is data, not a change to this file.
 export function fitsZeroU(rack, cand, chassisOf, {ignoreId = null} = {}) {

@@ -1,4 +1,4 @@
-// THE RACK FILE (spec §5). Pure data: no DOM, no fetch, no rendering, so the
+// THE RACK FILE. Pure data: no DOM, no fetch, no rendering, so the
 // page, the library, the exports and `node --test` all read one definition.
 //
 // A document holds an ARRAY of racks although the page edits one: rows of
@@ -71,7 +71,7 @@ const endItems = cables => (Array.isArray(cables) ? cables : [])
   .flatMap(c => [c?.a?.item, c?.b?.item]).filter(id => id != null && id !== '').map(id => ({id: String(id)}));
 export const itemIdsInUse = rack => [...rack.items, ...endItems(rack.cables)];
 
-// A RACK-FACE MANAGER'S HOST (spec §4): `on` names the item it bolts over and
+// A RACK-FACE MANAGER'S HOST: `on` names the item it bolts over and
 // `unit` which of that item's units, from 1 at its bottom. Both or neither;
 // settleManagers (managers.js) is what checks them against the catalogue.
 const hostOf = ({on, unit}) => (typeof on === 'string' && on && Number.isInteger(unit) && unit >= 1
@@ -88,14 +88,14 @@ export function withItem(rack, {ref, cfg, ru, face = 'front', turned = false, la
 
 export const updateItem = (rack, id, patch) =>
   ({...rack, items: rack.items.map(i => (i.id === id ? {...i, ...patch} : i))});
-// A manager on the removed item stays where it is, unhosted (spec D3): it
+// A manager on the removed item stays where it is, unhosted: it
 // bolts to the rack, not to the device.
 export const withoutItem = (rack, id) => ({...rack, items: rack.items.filter(i => i.id !== id)
   .map(i => (i.on === id ? detached(i) : i))});
 export const withFrame = (rack, patch) => ({...rack, frame: normalizeFrame({...rack.frame, ...patch})});
 export const renamed = (rack, name) => ({...rack, name: String(name)});
 
-// DCIM IMPORT SETTINGS (Phase 2c ruling 2): the names a NetBox or Nautobot
+// DCIM IMPORT SETTINGS: the names a NetBox or Nautobot
 // import needs and a rack does not otherwise know. `site` is NetBox's site and
 // Nautobot's location; `role` is the device role. An OPTIONAL field of a rack:
 // a rack that was never given them has no `dcim` key at all, so a file written
@@ -154,8 +154,7 @@ function readItems(list, cables) {
   return items;
 }
 
-// A ROUTE (docs/superpowers/specs/2026-10-07-cable-routing-pathways-design.md §4)
-// is waypoints in order: {item, via}, an element of a placed device's drawing,
+// A ROUTE is waypoints in order: {item, via}, an element of a placed device's drawing,
 // or {lane, ru}, a lane beside the rails at a U. An entry of neither shape is
 // not thrown away: the whole route as written moves to `routeAsWritten`, as a
 // length this page cannot use moves to `lengthAsWritten`.
@@ -178,7 +177,7 @@ const routesEqual = (a, b) => a.length === b.length && a.every((w, i) =>
                : 'item' in b[i] && w.item === b[i].item && w.via === b[i].via));
 
 
-// CABLES ARE NEVER DROPPED ON LOAD (spec §9.3: a cable is never silently
+// CABLES ARE NEVER DROPPED ON LOAD (a cable is never silently
 // deleted). A cable that names a missing item, an unknown media or no port at
 // all is kept and shown as a loose end; what is normalized is only its shape:
 // a unique id, two ends, strings where the page reads strings, a length that

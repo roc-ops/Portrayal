@@ -1,4 +1,4 @@
-// CABLE ROUTES (docs/superpowers/specs/2026-10-07-cable-routing-pathways-design.md).
+// CABLE ROUTES.
 // Pure: the rack, a cable, and a ctx the page fills from the drawings -
 //   ctx.chassisOf(ref), ctx.guidesOf(itemId) -> [{via, kind, face, x}],
 //   ctx.portX(end) -> x or null,
