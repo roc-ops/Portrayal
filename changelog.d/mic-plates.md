@@ -32,6 +32,26 @@
   - The MX2010 gains a `photographed` example configuration.
 - `nokia/m2-oc192-xp-xfp` 1.0.1 names `juniper/mic-3d-1oc192-xfp` without
   the major it retires; `nokia/sr-7` and `nokia/sr-12` take the patch.
+- Deprecated, not deleted: each part below stays in the library, marked
+  `superseded-by:` its replacement and given a patch bump, so a manifest
+  that pins it still resolves (#448). No device seats them any more.
+  - The eleven MX2000 vertical card twins, `juniper/<base>-v2k@1` for
+    `mpc-3d-16xge-sfpp`, `mpc1e-3d`, `mpc2e-3d`, `mpc3e-3d`,
+    `mpc4e-3d-2cge-8xge`, `mpc4e-3d-32xge-sfpp`, `mpc5e-100g10g`,
+    `mpc5e-40g10g`, `mpc7e-10g`, `mpc7e-mrate` and `ms-mpc`, each superseded
+    by `juniper/<base>@2` (`@3` for the MPC1E/2E/3E), which the MX2000 slots
+    seat inside `juniper/mx2000-lc-adapter@1`.
+  - The twenty vertical MIC twins, `juniper/<mic>-v@1`
+    (`mic-3d-4xge-xfp-v@2`), each superseded by the horizontal MIC's new
+    major. `juniper/mx-mic-blank-v@1` is live, because the native MPC8E and
+    MPC9E seat it.
+  - The old majors of the 22 MICs, blank included (`@1`;
+    `mic-3d-4xge-xfp@2`), and of the three carriers (`@2`), each superseded
+    by its next major above.
+- The DCIM module export leaves out a contract that carries
+  `superseded-by:`. A retired major shares its successor's model, and
+  exporting both wrote one file twice. `components.json` now carries the
+  `superseded-by` field.
 
 ### Added
 - `juniper/mx2000-lc-adapter@1`, the MX2000-LC-ADAPTER (ADC, 150 W). It
@@ -43,12 +63,11 @@
     also seat directly in the MX240, MX480 and MX960.
 
 ### Removed
-- `juniper/mic-3d-4choc3-1oc12@1` drew eight cages in two PICs, while
-  MIC-3D-4COC3-1COC12-CE has four OC3/STM1 ports, numbered 0 to 3. The
-  module reference states it and the MX104 photograph shows it. `@2` has
-  `port-0-0` to `port-0-3`, so the `MIC-3D-4COC3-1COC12-CE` module type
-  loses `port-1-0` to `port-1-3`. **BREAKING for DCIM data already
-  imported.**
+- `MIC-3D-4COC3-1COC12-CE` loses `port-1-0` to `port-1-3`: `juniper/mic-3d-4choc3-1oc12@1`
+  drew eight cages in two PICs, while the card has four OC3/STM1 ports,
+  numbered 0 to 3. The module reference states it and the MX104 photograph
+  shows it. `@2` has `port-0-0` to `port-0-3`, and the module type is
+  written from it. **BREAKING for DCIM data already imported.**
 - `juniper/mic3-100g-dwdm` leaves the MPC3E's MIC bays: it is dual-wide, and
   no bay can take a module that fills two (`unplaced`, as
   `mic-3d-40ge-tx`).
@@ -60,14 +79,3 @@
   adapter on the MX2000. The exporter writes a model seated at several
   depths with the one-token name. NetBox is unchanged. **BREAKING for DCIM
   data already imported** (Nautobot).
-- The eleven MX2000 vertical card twins, each replaced by
-  `juniper/mx2000-lc-adapter@1` seating `juniper/<base>@2` (or `@3`):
-  `juniper/<base>-v2k@1` for `mpc-3d-16xge-sfpp`, `mpc1e-3d`, `mpc2e-3d`,
-  `mpc3e-3d`, `mpc4e-3d-2cge-8xge`, `mpc4e-3d-32xge-sfpp`, `mpc5e-100g10g`,
-  `mpc5e-40g10g`, `mpc7e-10g`, `mpc7e-mrate` and `ms-mpc`.
-- The twenty vertical MIC twins, each replaced by the horizontal MIC in the
-  turned card: `juniper/<mic>-v@1` (`mic-3d-4xge-xfp-v@2`) for every MIC
-  above. `juniper/mx-mic-blank-v@1` stays, because the native MPC8E and
-  MPC9E seat it.
-- The old majors of the 22 MICs and the three carriers, each replaced by its
-  next major above.

@@ -1,19 +1,24 @@
 format: 1
 kind: module
 name: mic-3d-4choc3-2choc12-v
-version: 1.3.1
+version: 1.3.2
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
   Juniper channelized SONET/SDH OC3/STM1 multirate MIC with SFP (four ports). Vertical author for the vertical carriers (MX960/MX2000 MPCs stand on end, and their MICs with them).
 unplaced: >-
-  no vertical carrier in this library takes it. Tables 10-12 list it under the queuing (Q, EQ)
-  and NG SKUs only; the carriers in this library that could take it are the base MPC1E, MPC2E
-  and MPC3E SKUs, and roc-ops/Portrayal#417 narrowed each to its own column of the Interface
-  Module Reference MIC/MPC compatibility tables (Tables 10-12), none of which takes it. The
-  horizontal form is still seated by the MX80 and MX104. Modelling a queuing or NG carrier as
-  its own part would seat it.
+  SUPERSEDED by juniper/mic-3d-4choc3-2choc12@2: the MX2000 carriers that took this rotated
+  twin are retired in favour of the horizontal MPC seated in juniper/mx2000-lc-adapter@1,
+  which takes the horizontal MIC (#261, part 2). Kept and deprecated rather than deleted, so a
+  manifest that pins it still resolves (#448); nothing in this library seats it. Before it was
+  retired: no vertical carrier in this library takes it. Tables 10-12 list it under the
+  queuing (Q, EQ) and NG SKUs only; the carriers in this library that could take it are the
+  base MPC1E, MPC2E and MPC3E SKUs, and roc-ops/Portrayal#417 narrowed each to its own column
+  of the Interface Module Reference MIC/MPC compatibility tables (Tables 10-12), none of which
+  takes it. The horizontal form is still seated by the MX80 and MX104. Modelling a queuing or
+  NG carrier as its own part would seat it.
+superseded-by: juniper/mic-3d-4choc3-2choc12@2
 attrs:
   oc3: 4
   model: MIC-3D-4CHOC3-2CHOC12

@@ -1,12 +1,18 @@
 format: 1
 kind: module
 name: ms-mic-16g-v
-version: 1.1.0
+version: 1.1.1
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
   Juniper Multiservices MIC (MS-MIC-16G) - a services MIC with no network ports. Vertical author for the vertical carriers (MX960/MX2000 MPCs stand on end, and their MICs with them).
+unplaced: >-
+  SUPERSEDED by juniper/ms-mic-16g@2: the MX2000 carriers that took this rotated twin are
+  retired in favour of the horizontal MPC seated in juniper/mx2000-lc-adapter@1, which takes
+  the horizontal MIC (#261, part 2). Kept and deprecated rather than deleted, so a manifest
+  that pins it still resolves (#448); nothing in this library seats it.
+superseded-by: juniper/ms-mic-16g@2
 attrs:
   model: MS-MIC-16G
   power-draw-max-w: 60

@@ -1,12 +1,18 @@
 format: 1
 kind: module
 name: mpc4e-3d-2cge-8xge-v2k
-version: 1.2.1
+version: 1.2.2
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
   Juniper MPC4E-3D-2CGE-8XGE fixed MPC - two 100GbE CFP ports and eight SFP+ in interleaved PICs. Authored as the MX2000 vertical form, seated through its adapter card (jacks turned on their side - rotate 90, and 270 for the left cage of each belly-to-belly pair).
+unplaced: >-
+  SUPERSEDED by juniper/mpc4e-3d-2cge-8xge@2, which the MX2000 line-card slots now seat turned
+  90 inside juniper/mx2000-lc-adapter@1, the adapter card the chassis takes (#261, part 2).
+  This vertical drawing of the same card is kept and deprecated rather than deleted, so a
+  manifest that pins it still resolves (#448); nothing in this library seats it.
+superseded-by: juniper/mpc4e-3d-2cge-8xge@2
 attrs:
   model: MPC4E-3D-2CGE-8XGE
   power-draw-max-w: 610
