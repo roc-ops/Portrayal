@@ -146,7 +146,7 @@ test('fit: a different part in a cage keeps the sibling cages\' swaps and fields
 });
 
 test('fit: an end stored with -occupant under a swapped cassette that has the port gives no cut note', () => {
-  let r = add(add(M.newRack(), 'pp', 5, {label: 'pp-1'}), 'leaf', 10, {label: 'leaf-1'});
+  let r = add(add(M.newRack(), 'pp', 5, {label: 'pp-1', swaps: {'bay-1': 'acme/mpo2@1'}}), 'leaf', 10, {label: 'leaf-1'});
   r = {...r, cables: [cable('c1', end('i1', 'bay-1/module/lc1-occupant'), end('i2'))]};
   const f = run(r, {id: 'i1', path: 'bay-1', ref: 'acme/lc6@1'});
   assert.deepEqual(f.findings, []);
