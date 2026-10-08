@@ -110,6 +110,15 @@ as `@portrayal/kit/rack/<module>`:
 | `rack/editor.js` | `createRackEditor`: a rack document you edit by commands, with undo, redo and change events |
 | `rack/queries.js` | reading a rack: `fitsAt`, `freeUs`, `catalog`, `describe`, `freePorts`, `suggestMedia`, `looseEnds` |
 
+### Where this came from
+
+`kit/rack/` was moved here from `roc-ops/portrayal-site`, where it was
+`site/rack/`, at that repository's commit `d1a1aa8e`. This repository is now the source of
+truth: edit these modules here. portrayal-site vendors
+`kit/rack/*.js` read-only, and its contract check refuses a copy that has
+drifted. A comment that cites "spec §N" refers to the Rack Builder's design
+documents, in portrayal-site under `docs/superpowers/specs/`.
+
 ### The catalogue
 
 `rack.json` is written by the build beside `devices.json`. For every device it
@@ -119,7 +128,8 @@ through. `loadCatalog(dist)` takes what the other loaders take: a base URL, or
 a function from a path in the build to its URL. It therefore works with
 `flatDist` over a build directory, and with `packageDist`, which serves
 `rack.json` from `@portrayal/index` (a device that is itself named `rack` would
-collide with it there).
+collide with it there). `packageDist` needs an `@portrayal/index` release that
+contains `rack.json`; an earlier one has none, and the load fails.
 
 ```js
 import { loadCatalog } from '@portrayal/kit/rack/catalog';
@@ -129,7 +139,7 @@ import { withCable } from '@portrayal/kit/rack/cable-rules';
 import { resolveRoute, routedLength } from '@portrayal/kit/rack/route';
 import { bomRows, cableScheduleRows } from '@portrayal/kit/rack/export-data';
 
-const catalog = await loadCatalog('/portrayal/dist');   // or a packageDist(), or a flatDist()
+const catalog = await loadCatalog('/portrayal/dist');   // or await packageDist(), or a flatDist()
 const { chassisOf } = catalog;
 
 let rack = newDoc().racks[0];
@@ -158,6 +168,20 @@ const devices = rack.items.filter(i => chassisOf(i.ref).mount !== 'rack-face')
 const bom = bomRows({ devices, frame: rack.frame, railUs: [1, 1] });
 const schedule = cableScheduleRows(rack);
 ```
+
+`loadCatalog` reads through `fetch` and `location`, which a browser has and plain
+node does not. In node, build the same lookup from the file:
+
+```js
+import { readFileSync } from 'node:fs';
+import { chassisLookup, catalogEntries } from '@portrayal/kit/rack/catalog';
+
+const { devices } = JSON.parse(readFileSync('rack.json', 'utf8'));
+const chassisOf = chassisLookup(devices);
+const entries = catalogEntries(devices);
+```
+
+The rest of the example takes `chassisOf` and `devices` from either.
 
 `resolveRoute` returns the waypoints a cable follows (`waypoints`), any stored
 ones that no longer stand for anything (`gone`), and whether the route is the

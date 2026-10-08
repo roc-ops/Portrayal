@@ -1,8 +1,9 @@
 // WHAT A DCIM IMPORT KIT SAYS, as data (spec §8, §9.4; Phase 2c). Pure: no DOM,
 // no fetch, so `node --test` covers every rule the NetBox and Nautobot kits
 // follow: what a port is called in a type file, which rows a file may hold,
-// and what the README says of the rest. site/rack/exports.js fetches the type
-// files and the faces, and asks here.
+// and what the README says of the rest. The Rack Builder's exports
+// (portrayal-site site/rack/exports.js) fetch the type files and the faces, and
+// ask here.
 
 import {endName, lengthParts} from './cable-rules.js';
 import {cableFindings, TARGET_NAME, DCIM_LIMITS, charCount, cutTo, isoDate, flat} from './export-data.js';

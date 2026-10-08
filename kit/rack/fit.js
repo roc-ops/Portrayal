@@ -1,5 +1,5 @@
 // WHERE A DEVICE MAY GO (spec §6). Pure: the rack, the candidate, and a
-// chassisOf(ref) -> {ru, h, d} that the page backs with site/rack/chassis.json.
+// chassisOf(ref) -> {ru, h, d} that the page backs with rack.json, as the kit loads it.
 // Every refusal is a sentence, because the catalogue shows it beside the device
 // it grays out - "no" without a reason is a puzzle.
 //

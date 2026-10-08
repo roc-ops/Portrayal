@@ -1,6 +1,6 @@
 # Format stability: what can change, and what says so
 
-Portrayal has four version numbers, and each answers a different question. This
+Portrayal has six version numbers, and each answers a different question. This
 page says what each one covers, what raises it, and what the project promises
 about it while the package is at 0.x.
 
@@ -9,6 +9,8 @@ about it while the package is at 0.x.
 | `format` | every device manifest, component contract, listing and lab (`format: 1`) | the **file format** a manifest is written in |
 | schema `v1` | the schema `$id`s and titles in `spec/schemas/` (device, component, listing and lab) | the same thing, named: schema v1 *is* format 1 |
 | package | `version` in `pyproject.toml` (0.1.0) | the **tools**: the linter, the compiler, the indexers and the exporter |
+| rack catalogue `format` | `rack.json` (`format: 1`) | the **catalogue** a rack tool reads in one fetch; its own number, apart from the manifests' `format` |
+| rack file `version` | the Rack Builder's file (`format: "portrayal-rack"`, `version: 2`) | the **rack file** a user saves; `parseDoc` migrates an older one on load |
 | `contract` | `devices.json` (`contract: 2` at 0.1.0) | the **published build** a consumer reads from `library/dist/`; `CHANGELOG.md` records each one |
 
 The schemas are published at `https://portrayal.dev/schemas/v1/`, one file
@@ -18,8 +20,9 @@ validator that follows the `$id` finds the schema it names. `rack.schema.json` d
 the Rack Builder's own file (`format: "portrayal-rack"`, its own `version`, now 2), not a
 manifest, so it is published under `/schemas/v1/` as a schema of this repository but does
 not carry format 1. The `/v1/` is its publication label; the rack file's own `version`
-(2 today) is migrated on load by `parseDoc`, so a later rack version is published under a
-new label rather than overwriting `/v1/`. A new format number
+(2 today) is migrated on load by `parseDoc`, so a later rack version is published under the next
+unused label (`/schemas/v2/` if no manifest format has taken it, else the label after) rather than overwriting
+`/v1/`; the label is never a rack version number, and a label once published is not reused. A new format number
 is published beside the old one under its own label (`/schemas/v2/`); a
 published label is never reused for a different format.
 
@@ -170,7 +173,7 @@ them still finds `ru`, and draws a rack-face part as an ordinary device on its
 rack unit. A lab that fails its schema or a check (lint L139 to L142) is not
 written, and the build stops.
 
-## The rack file
+## The rack catalogue
 
 `rack.json` is the catalogue a rack tool reads in one fetch, so it need not open
 every device's index. It is written by `rack_index.py` after the compiled faces

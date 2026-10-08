@@ -46,6 +46,8 @@ test('entries are sorted by manufacturer, then model; chassisOf finds a device o
   assert.deepEqual(c.entries.map(e => e.name), ['tm-280', 'asr-9001', 'asr-9006', 'as7726-32x']);
   assert.equal(c.chassisOf('asr-9006').ru, 10);
   assert.equal(c.chassisOf('nope'), null);
+  assert.equal(c.chassisOf('constructor'), null);
+  assert.equal(c.chassisOf('__proto__'), null);
   assert.equal(chassisLookup(DEVICES)('tm-280'), DEVICES['tm-280']);
   assert.equal(catalogEntries({}).length, 0);
 });

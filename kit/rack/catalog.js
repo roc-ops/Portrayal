@@ -7,7 +7,7 @@ import {jdist} from '../dist.js';
 
 const urlOf = (dist, path) => (typeof dist === 'function' ? dist(path) : `${String(dist).replace(/\/$/, '')}/${path}`);
 
-export const chassisLookup = devices => ref => devices[ref] || null;
+export const chassisLookup = devices => ref => (Object.hasOwn(devices, ref) ? devices[ref] : null);
 
 const cmp = (a, b) => String(a ?? '').localeCompare(String(b ?? ''));
 export const catalogEntries = devices => Object.entries(devices)

@@ -1,4 +1,4 @@
-// site/rack/commands.js
+// kit/rack/commands.js
 // THE RACK COMMANDS (spec docs/superpowers/specs/2026-10-07-rack-command-core-design.md).
 // Every edit of a rack is one of these, run through apply(): the page's own
 // controls and an agent alike. A command is pure - the rack, its arguments

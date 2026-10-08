@@ -45,6 +45,18 @@ def marked(path):
     return sorted(guides), sorted(passes)
 
 
+def face_file(idx, name, config, view):
+    """The file a view of a configuration is drawn in: the one the configs index
+    names (a shared face is named by the configuration that owns it), else
+    `<name>.<config>.<view>.svg`. The same rule as the kit's faceFile."""
+    for c in idx.get("configs", []):
+        if c.get("name") == config:
+            f = (c.get("files") or {}).get(view)
+            if f:
+                return f
+    return f"{name}.{config}.{view}.svg"
+
+
 def build(dist):
     dist = Path(dist)
     devices = json.loads((dist / "devices.json").read_text())["devices"]
@@ -76,7 +88,7 @@ def build(dist):
         if perf.get("cable-capacity") is not None:
             entry["capacity"] = {"count": perf["cable-capacity"], "basis": perf.get("cable-capacity-basis", "")}
         for view in ("top", "front", "rear"):
-            g, ps = marked(dist / f"{d['name']}.{idx.get('default')}.{view}.svg")
+            g, ps = marked(dist / face_file(idx, d["name"], idx.get("default"), view))
             if g:
                 entry.setdefault("guides", {})[view] = g
             if ps:

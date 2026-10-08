@@ -2,9 +2,6 @@
 device's rack units, depth, mount, shell, stated cable capacity, and the ids a
 cable route can pass through, per view of its default configuration."""
 import json
-from pathlib import Path
-
-import pytest
 
 from portrayal import rack_index
 
@@ -55,3 +52,20 @@ def test_a_rack_device_states_no_mount_and_derives_its_units(tmp_path):
 
 def test_the_file_states_its_format(tmp_path):
     assert rack_index.build(_dist(tmp_path, {"h": 44}))["format"] == 1
+
+
+def test_a_shared_face_is_read_from_the_file_the_index_names(tmp_path):
+    d = _dist(tmp_path, {"h": 44})
+    idx = json.loads((d / "mgr.configs.json").read_text())
+    idx["configs"] = [{"name": "base", "files": {"front": "other.base.front.svg"}}]
+    (d / "mgr.configs.json").write_text(json.dumps(idx))
+    (d / "other.base.front.svg").write_text(FACE)
+    e = rack_index.build(d)["devices"]["mgr"]
+    assert e["guides"] == {"front": ["duct", "guide-1", "guide-2", "guide-3"]}
+    assert "rear" not in e["guides"]
+
+
+def test_a_face_the_index_does_not_name_falls_back_to_the_conventional_file(tmp_path):
+    d = _dist(tmp_path, {"h": 44}, faces={"front": FACE})
+    assert rack_index.face_file({"configs": [{"name": "base"}]}, "mgr", "base", "front") == "mgr.base.front.svg"
+    assert rack_index.build(d)["devices"]["mgr"]["guides"]["front"][0] == "duct"

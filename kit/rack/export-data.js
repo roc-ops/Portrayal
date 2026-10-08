@@ -2,7 +2,8 @@
 // `node --test` covers every rule an export follows: file names, CSV
 // quoting, the title block, which cabinet draws which device, the notes,
 // and (below, Tasks 4-5) DCIM matching and the bill of materials.
-// site/rack/exports.js does the fetching and drawing, and asks here.
+// The Rack Builder's exports (portrayal-site site/rack/exports.js) do the
+// fetching and drawing, and ask here.
 
 import {positionOf, uLabel} from './model.js';
 import {routeText} from './route.js';
@@ -286,7 +287,7 @@ export function managerNotes(items, chassisOf, frame) {
   });
 }
 
-// createRackScene has no fields input yet (site/rack/scene3d.js).
+// createRackScene has no fields input yet (the Rack Builder's scene, portrayal-site site/rack/scene3d.js).
 export function threeDNotes(rack) {
   const withFields = rack.items.filter(i => Object.keys(i.fields || {}).length).map(i => i.label);
   return withFields.length ? [`Optic labels and colors are not in the 3D model yet: ${withFields.join(', ')}.`] : [];
