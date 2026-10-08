@@ -459,6 +459,56 @@ def test_the_rocker_raises_the_half_it_is_not_set_to():
     assert prof["rocker-off"] == [[0, 4.9], [17.5, 2.2]] and prof["rocker-on"] == [[0, 2.2], [17.5, 4.9]]
 
 
+
+# part, {field: node}, the axis the rocker tips along, whether I is at the start of it
+OWN_ROCKERS = [
+    ("juniper/jnp10k-pwr-ac2", {"state": "rocker"}, "profile", True),
+    ("juniper/mx80-psu-ac", {"state": "rocker"}, "profile-y", True),
+    ("telco-systems/tm-7124s-psu-ac", {"state": "rocker"}, "profile", False),
+    ("casa/c40g-ac-inlet-panel", {f"switch-{n}": f"psu{n}-switch" for n in range(1, 5)}, "profile-y", True),
+    ("casa/pem", {f"breaker-{n}": f"breaker-{n}" for n in range(1, 5)}, "profile", False),
+    ("nokia/sr-7-pem-3", {"breaker": "breaker"}, "profile", False),
+    ("nokia/sr-12-pem-3", {"power-switch": "power-switch"}, "profile", False),
+]
+
+
+@pytest.mark.parametrize("ref,fields,key,i_first", OWN_ROCKERS, ids=[r[0] for r in OWN_ROCKERS])
+def test_a_drawn_rocker_raises_its_i_end_for_off(ref, fields, key, i_first):
+    """Parts that draw their own rocker take the same see-saw: OFF raises the
+    end printed I, ON the end printed O, whichever side the art puts them."""
+    p = LIB / f"components/{ref}/v1/contract.yaml"
+    c = yaml.safe_load(p.read_text())
+    for code in ("L73", "L148", "L149"):
+        assert not _caught(code, lint.lint_component_fields, p, c), code
+    by = {e.get("id"): e for e in ET.parse(p.parent / "skins/default.svg").getroot().iter()}
+    prof = {f["node"]: f.get(key) for f in c["relief"]["features"]}
+    for field, node in fields.items():
+        assert c["fields"][field] == {"label": c["fields"][field]["label"], "type": "choice",
+                                      "options": ["off", "on"], "default": "off"}
+        off, on = by[f"{node}-off"], by[f"{node}-on"]
+        assert (off.get("data-show-from"), off.get("data-show"), off.get("display")) == (field, "off", None)
+        assert (on.get("data-show-from"), on.get("data-show"), on.get("display")) == (field, "on", "none")
+        (_, a), (_, b) = prof[f"{node}-off"]
+        assert (a > b) == i_first, "OFF raises the I end"
+        assert prof[f"{node}-on"] == [[prof[f"{node}-off"][0][0], b], [prof[f"{node}-off"][1][0], a]]
+
+
+def test_l50_ignores_a_node_never_on_screen_with_the_printing(tmp_path):
+    """The ON surface is drawn after the OFF surface's I, over it, and the two
+    are never shown together."""
+    skin = (f'<svg xmlns="{SVG}" viewBox="0 0 20 10">'
+            '<g id="r-off" data-show-from="state" data-show="off"><rect x="0" y="0" width="20" height="10" fill="#111"/>'
+            '<g id="r-off-silkscreen"><text x="5" y="6" font-size="3">I</text></g></g>'
+            '<g id="r-on" data-show-from="state" data-show="on" display="none"><rect id="on-face" x="0" y="0" width="20" height="10" fill="#111"/></g>'
+            '<g id="r-tab" data-show-from="state" data-show="off on"><rect id="tab-face" x="0" y="0" width="20" height="10" fill="#222"/></g>'
+            '</svg>')
+    (tmp_path / "skins").mkdir()
+    (tmp_path / "skins/default.svg").write_text(skin)
+    hits = _caught("L50", lint.lint_component_skin_printing, tmp_path / "contract.yaml", {}, [LIB])
+    # the ON surface is not reported; a node shown in both positions still is
+    assert len(hits) == 1 and "tab-face" in hits[0], hits
+
+
 def test_a_placement_sets_the_rocker_on(tmp_path):
     def edit(d):
         for v in d["views"].values():

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: sr-12-pem-3
-version: 1.1.0
+version: 1.2.0
 class: power
 behaviour: fills
 profile: networking
@@ -34,6 +34,8 @@ attrs:
   power-output-w: 6480
   weight-kg: 5.06
 provenance:
+  positions: >-
+    FIELDS, since 1.2.0 (docs/switch-positions-design.md, #808): `power-switch`, `off` or `on`. The rocker is a SEE-SAW: one surface tipped about its centre, so the end it is set to presses in and the other end rises. OFF and O at the left and ON and I at the right of the rocker, as Fig 62 prints them. The narrow grey band Fig 62 draws at the right end, the side of a raised end seen face-on, is now the shading of whichever end is raised; OFF raises the I end and ON the O end, each a node shown for its position, shaded lighter toward its raised end and built in 3D as a sloped profile. The heights are estimated. The skin draws OFF; nothing held says how a unit ships.
   sources: >-
     datasheet - 7450 ESS-12 and 7750 SR-12 Chassis Installation Guide 22.7,
     3HE18644AAAATQZZA03 (SR12): p70 Fig 11 / Table 12 (isometric, the named parts), p206
@@ -105,6 +107,8 @@ provenance:
     with black print, as the line art leaves it; a gap.
   logo-zone: 'reserved on the plain metal right of the caution triangle; the figures print no mark'
   lifecycle: 'searched only the staged corpus; still listed in the 22.7 guide'
+fields:
+  power-switch: {label: Power Switch, type: choice, options: ['off', 'on'], default: 'off'}
 elements:
   screw-left: {at: [4.05, 21.35], size: [8.9, 8.9], class: screw}
   screw-right: {at: [412.75, 21.35], size: [8.9, 8.9], class: screw}
@@ -133,6 +137,8 @@ parts:
   - {ref: std/db25@1, id: status, group: monitoring, at: [224.64, 37.75]}
 relief:
   features:
+    - {node: power-switch-off, out: 2.5, profile: [[0, 1.1], [29.3, 2.5]], confidence: estimated, source: 'the tilt of a see-saw rocker: the raised end at an assumed 2.5 and the low end at 0.45 of it, the ratio the GL-12xB GLB rocker shows; no source dimensions it'}
+    - {node: power-switch-on, out: 2.5, profile: [[0, 2.5], [29.3, 1.1]], confidence: estimated, source: 'the tilt of a see-saw rocker: the raised end at an assumed 2.5 and the low end at 0.45 of it, the ratio the GL-12xB GLB rocker shows; no source dimensions it'}
     - node: handle
       uhandle: 25.0
       dia: 8.0
