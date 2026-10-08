@@ -21,8 +21,11 @@ import pytest
 import yaml
 
 from portrayal import components_catalogue as cat
+from portrayal import components_index
+from portrayal import dcim_export as dcim
 from portrayal import devicelock as dl
 from portrayal import lint
+from portrayal import render
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 DEVICE_SCHEMA = json.loads((ROOT / "spec/schemas/device.schema.json").read_text())
@@ -431,10 +434,174 @@ def test_a_devices_dependencies_include_its_kits(lib):
 # --- the one device that states ears today -------------------------------------
 
 def test_the_bare_behind_device_is_unchanged_and_clean():
+    """The three rules ears and kits reach, and the schema, on the real file -
+    not the whole of `lint_device`, which took 5 s to say the same thing."""
     path = ROOT / "library/devices/fs/uscmh-sfdabsb2u/device.yaml"
-    assert yaml.safe_load(path.read_text())["chassis"]["ears"] == "behind"
+    doc = yaml.safe_load(path.read_text())
+    assert doc["chassis"]["ears"] == "behind"
+    assert _schema_errors(doc) == []
     with lint.collecting() as found:
-        lint.lint_device(path, VALIDATOR, [str(ROOT / "library")])
+        lint.lint_device_rack_ears(path, doc)
+        lint.lint_device_mount(path, doc)
+        lint.lint_device_kits(path, doc, [str(ROOT / "library")])
     assert found.errors == []
-    codes = set(_codes(found.warnings))
-    assert not codes & {"L43", "L125", "L160", "L161", "L162", "L163"}
+    assert not set(_codes(found.warnings)) & {"L43", "L125", "L160", "L161", "L162", "L163"}
+
+
+# --- configs.json: ears as an object, kits resolved inline (#907) --------------
+
+@pytest.mark.parametrize("ears,published", [
+    ("behind", {"behind": True}),
+    ({"behind": True}, {"behind": True}),
+    ({"positions": [{"name": "rear"}]}, {"positions": [{"name": "rear"}]}),
+    (EARS, {"h": 43.5, "y": 0.15, "positions": [
+        {"name": "flush", "at": 0.0, "default": True},
+        {"name": "recessed", "at": -25.4, "label": "chassis recessed"},
+        {"name": "mid", "at": 228.0, "racks": ["2-post"],
+         "part": {"kit": KIT_REF, "part": "mid"}}]})])
+def test_configs_json_publishes_ears_as_an_object(ears, published):
+    out = render.published_ears(ears)
+    assert out == published
+    assert json.loads(json.dumps(out)) == published
+    assert all(isinstance(p["at"], float) for p in out.get("positions") or [] if "at" in p)
+
+
+def test_publishing_ears_leaves_the_manifest_alone():
+    ears = copy.deepcopy(EARS)
+    render.published_ears(ears)["positions"][0]["name"] = "proud"
+    assert ears == EARS
+
+
+ROW_KEYS = {"ref", "supply", "variant", "depth", "version", "description", "motion",
+            "travel", "install", "configurations", "parts", "accessories"}
+
+
+def _published(lib, kits):
+    return render.published_kits(kits, render.Library([str(lib)]))
+
+
+def test_configs_json_resolves_each_listed_kit_inline(lib):
+    rows = _published(lib, KITS)
+    assert [r["ref"] for r in rows] == [KIT_REF, "acme/slide-rev@1"]
+    for row in rows:
+        assert set(row) == ROW_KEYS
+    slide, rev = rows
+    assert (slide["supply"], slide["variant"]) == ("in-box", None)
+    assert (rev["supply"], rev["variant"], rev["depth"]) == ("optional", "reversed", None)
+    assert (slide["version"], slide["motion"], slide["travel"], slide["install"]) == \
+        ("1.0.0", "sliding", "full", "drop-in")
+    assert slide["parts"][0] == {"ref": "acme/inner@1", "id": "inner", "count": 2,
+                                 "version": "1.0.0", "class": "bracket",
+                                 "size": {"w": 20, "h": 40}, "body": None}
+    assert slide["accessories"] == [{"kind": "cma", "ref": "acme/cma@1", "version": "1.0.0",
+                                     "class": "bracket", "size": {"w": 20, "h": 40},
+                                     "body": None}]
+    json.dumps(rows)
+
+
+def test_a_depth_override_is_applied_to_the_configuration_it_names(lib):
+    slide, rev = _published(lib, KITS)
+    four, short = slide["configurations"]
+    assert four["depth"] == {"square": [685, 868], "round": [671, 861]}
+    assert slide["depth"] == KITS[0]["depth"]
+    assert short["depth"] == [500, 600]
+    # the unlisted override leaves the kit's own figures, and the contract
+    assert rev["configurations"][0]["depth"] == {"square": [631, 868], "round": [617, 861]}
+    assert render.Library([str(lib)]).resolve(KIT_REF)[0]["configurations"][0]["depth"] \
+        == {"square": [631, 868], "round": [617, 861]}
+
+
+def test_a_published_kit_carries_what_kits_json_says_of_it(lib):
+    """THE SAME KIT IN TWO FILES. kits.json states it once; configs.json
+    resolves it per device. Every fact kits.json carries about the kit itself
+    is in the row, except where it lives (`ns`, `name`, `major`), its
+    succession and its provenance, which are the catalogue's."""
+    entry = components_index.kit_entry(KIT_REF, "acme", "v1", KIT)
+    row = _published(lib, KITS[1:])[0] | {"ref": KIT_REF}
+    kept = set(entry) - {"ns", "name", "major", "kind", "superseded-by", "provenance"}
+    assert kept <= set(row)
+    for key in kept - {"parts", "accessories"}:
+        assert row[key] == entry[key], key
+    assert [{k: p[k] for k in ("ref", "id", "count")} for p in row["parts"]] == entry["parts"]
+    assert [{k: a[k] for k in entry["accessories"][0]} for a in row["accessories"]] == \
+        entry["accessories"]
+
+
+def test_configs_json_reads_exactly_what_the_lock_follows(lib):
+    """#906 put a listed kit, its parts and its accessories into the device's
+    `composed` digest because configs.json resolves them. Held together here:
+    every ref the published row reads is one the lock follows, and nothing the
+    lock follows from the kit goes unpublished."""
+    doc = _device(kits=KITS[:1])
+    row = _published(lib, KITS[:1])[0]
+    read = {row["ref"]} | {p["ref"] for p in row["parts"]} | \
+        {a["ref"] for a in row["accessories"]}
+    composed = set(dl.entry(doc, dl.component_versions(lib))["composed-refs"])
+    assert read == composed
+
+
+def test_an_edited_kit_makes_its_device_stale(lib):
+    """`--if-stale` counts what configs.json is made from: a listed kit, its
+    parts and its accessories."""
+    path = lib / "devices" / "d.yaml"
+    names = {f"{p.parts[-4]}/{p.parts[-3]}"
+             for p in render._inputs(_device(kits=KITS[:1]), path, render.Library([str(lib)]))
+             if p.name == "contract.yaml"}
+    assert names == {"acme/slide", "acme/inner", "acme/outer", "acme/mid", "acme/cma"}
+
+
+def test_render_writes_ears_and_kits_into_configs_json(lib, tmp_path):
+    """End to end: the real duct, given positions and a kit from the tmp
+    library, renders them into its configs.json."""
+    import subprocess
+    import sys
+    src = yaml.safe_load((ROOT / "library/devices/fs/uscmh-sfdabsb2u/device.yaml").read_text())
+    src["chassis"]["ears"] = {"behind": True, **EARS}
+    src["chassis"]["kits"] = KITS[:1]
+    dev = tmp_path / "device.yaml"
+    dev.write_text(yaml.safe_dump(src, sort_keys=False))
+    out = tmp_path / "dist"
+    r = subprocess.run([sys.executable, str(ROOT / "spec/tools/portrayal/render.py"), str(dev),
+                        "--library", str(ROOT / "library"), "--library", str(lib),
+                        "--out", str(out)], capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    ch = json.loads((out / "uscmh-sfdabsb2u.configs.json").read_text())["chassis"]
+    assert ch["ears"] == {"behind": True, **render.published_ears(EARS)}
+    assert ch["kits"] == json.loads(json.dumps(_published(lib, KITS[:1])))
+
+
+# --- the DCIM comments (#907) ---------------------------------------------------
+
+def test_ears_prose_says_both_spellings_of_behind_alike():
+    words = ("The ear flanges fold back behind the body, so the face stands in front "
+             "of the rack posts.")
+    assert dcim.ears_prose("behind") == words
+    assert dcim.ears_prose({"behind": True}) == words
+    assert dcim.ears_prose(None) is None
+    assert dcim.ears_prose({"behind": False}) is None
+
+
+def test_ears_prose_names_each_position():
+    assert dcim.ears_prose(EARS) == (
+        "The ears are 43.5 mm tall, 0.15 mm above the bottom of the chassis. "
+        "Rack mounting positions: flush (ears level with the face; as shipped), "
+        "recessed (\"chassis recessed\"; ears 25.4 mm in front of the face), "
+        "mid (ears 228 mm behind the face; 2-post only; with part mid of acme/slide@1).")
+    assert dcim.ears_prose({"positions": [{"name": "rear"}]}) == \
+        "Rack mounting positions: rear."
+
+
+def test_kits_prose_names_each_kit_and_its_supply():
+    assert dcim.kits_prose(KITS) == ("Rail kits: acme/slide@1 (in the box); "
+                                     "acme/slide-rev@1 (sold separately, for reverse "
+                                     "mounting).")
+    assert dcim.kits_prose(None) is None and dcim.kits_prose([]) is None
+
+
+def test_the_comments_carry_ears_and_kits_beside_the_overhang():
+    doc = _device(ears=EARS, kits=KITS, overhang={"left": 10})
+    body = dcim.comments_for(doc, "base", {})
+    reach = body.index("Parts reach beyond")
+    assert reach < body.index("The ears are 43.5 mm") < body.index("Rail kits: acme/slide@1")
+    plain = dcim.comments_for(_device(), "base", {})
+    assert "Rail kits" not in plain and "The ear" not in plain
