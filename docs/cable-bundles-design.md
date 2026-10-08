@@ -1,6 +1,6 @@
 # Cable bundles: bundles, Velcro straps and bend radius in the rack kit
 
-Status: proposed 2026-10-08 (#920). Nothing is built. Cable management piece 3,
+Status: agreed 2026-10-08 (#920). Nothing is built. Cable management piece 3,
 tracked in roc-ops/portrayal-site#143. Builds on the rack core in `kit/rack/`
 and on two changes in flight that touch the same files: the rack agent commands
 (kit 0.4.0: `inspect`, `selectCables`, `fit`, `field`, a `describe` window and a
@@ -10,8 +10,8 @@ decisions already taken come from two designs in roc-ops/portrayal-site,
 `2026-10-07-cable-routing-pathways-design.md`, and from the bend-radius research
 on #897.
 
-Section 10 lists the questions this note leaves open. Each has a recommended
-answer, so the child issues can start from it.
+Section 10 records the decisions taken on the questions this note left open,
+each with its reasoning.
 
 ## 1. What a bundle is
 
@@ -99,8 +99,7 @@ derive a cable's bundle from the bundles (section 5.3).
 `bundle.route` reuse `$defs/waypoint`. `docs/format-stability.md` gets one
 line.
 
-**The rack document's `version` rises from 2 to 3** (recommended; open
-question 1). The migration from 2 is the identity, as 1 to 2 was. The reasons:
+**The rack document's `version` rises from 2 to 3** (decision 1). The migration from 2 is the identity, as 1 to 2 was. The reasons:
 
 - `parseDoc` rebuilds each rack from the keys it names (`id`, `name`, `frame`,
   `items`, `zeroU`, `cables`, `dcim`). A page from before bundles would open a
@@ -113,14 +112,14 @@ question 1). The migration from 2 is the identity, as 1 to 2 was. The reasons:
   older page refuses the file instead of mishandling it.
 
 Under `docs/format-stability.md`, a new rack version publishes its schema
-under the next unused schema label, and `/v1/` stays as published. That makes
-#921 a one-way door, and its pull request says so.
+under the next unused schema label, and `/v1/` stays as published. **#921 is
+therefore a one-way door**: a version-3 file is refused by every page and kit
+from before it, and the schema label it takes is never reused. Its pull
+request says so.
 
 #926 adds `side` and the zero-U entry without a bump, because no kit release
-has been published yet. If both land before the first release, the owner may
-prefer one ruling for both. In that case `parseDoc` should at least keep
-unknown rack keys from then on, as it keeps unknown cable keys, so that the
-next additive rack key needs no bump.
+has been published yet. Bundles bump anyway: a bundle is a rack key that an
+older `parseDoc` drops, where `side` is an item key.
 
 ## 3. The commands
 
@@ -225,7 +224,7 @@ what it follows afterwards.
 ### 4.1 The trunk
 
 The trunk is **stored**: worked out once, at `bundle.create` or `bundle.update
-{route: null}`, and then kept (open question 7). A bundle is dressed once, and
+{route: null}`, and then kept (decision 7). A bundle is dressed once, and
 should not move when a device does. This matches the site's rule for an edited
 cable route: moving a device never rewrites a stored route.
 
@@ -303,11 +302,11 @@ have no aperture and do not limit a bundle.
 
 It is kept, listed, not drawn, and has no straps. Each command that leaves it
 so says "Bundle 2 now holds one cable." `describe` and `inspect` show it
-(open question 5).
+(decision 5).
 
 ## 5. The checks
 
-Both checks **warn and never refuse** (open question 2). Like fill, they depend
+Both checks **warn and never refuse** (decision 2). Like fill, they depend
 on things outside the bundle commands: a device moving, a cable's media
 changing, or a route being edited can each push a bundle over. So a bundle
 must be able to sit over the limit, and the warnings must be shown. That
@@ -324,14 +323,16 @@ A bundle command's `findings` include the checks for the bundle it changed.
 **The bundle's diameter** at a point is estimated from the members present:
 
 ```
-D = sqrt(sum(d_i^2) / 0.75)
+D = sqrt(sum(d_i^2) / BUNDLE_PACK)        BUNDLE_PACK = 0.8
 ```
 
-`d_i` is each member's outside diameter. 0.75 is the share of a circle that
-tightly packed equal round cables fill. Hexagonal packs of 7, 19 and 37 cables
-fill 7/9, 19/25 and 37/49 of their circle, from 0.78 down to 0.76. So seven
-6 mm cables come to about 18 mm, close to the 18 mm (3d) of the actual pack.
-The 0.75 is open question 4. Diameters come from #919's `od_mm` for the
+`d_i` is each member's outside diameter. `BUNDLE_PACK` is the share of the
+bundle's circle the cables fill, one named constant in `bundles.js` so it can
+be tuned (decision 4). At 0.8 it assumes a tightly combed bundle: slightly
+tighter than a perfect hexagonal pack of equal round cables, which fills 7/9,
+19/25 and 37/49 of its circle for 7, 19 and 37 cables (0.78 down to 0.76). So
+seven 6 mm cables come to about 17.7 mm, against 18 mm (3d) for the perfect
+pack. Diameters come from #919's `od_mm` for the
 member's type once it is published, and until then from `route.js`
 `DIAMETERS`. A member of unknown type counts as 6.0 mm, the value fill uses,
 and the result says it is an estimate and names the cable.
@@ -342,8 +343,9 @@ pathway with no aperture limits only to 63.5 mm. Each pathway is checked with
 the members present there.
 
 Worked example: FS's D-ring opening is 32.0 x 29.5 mm, so a bundle through it
-is held to 29.5 mm, which is about 18 Cat6 cables at 6 mm or 11 Cat6A at
-7.5 mm. The 2.5 in limit alone allows about 84 Cat6.
+is held to 29.5 mm, which is 19 Cat6 cables at 6 mm (29.5^2 x 0.8 / 6^2 =
+19.3) or 12 Cat6A at 7.5 mm (12.4). The 2.5 in limit alone allows 89 Cat6
+(89.6).
 
 A finding: "Bundle 2 is about 31 mm across at mgr-1 ring 5, whose opening is
 29.5 mm across." A bundle over 63.5 mm anywhere also says so on its own line.
@@ -385,7 +387,7 @@ is two corners in depth, and is checked the same way.
 **Pathways.** A pathway that states a radius (`radius` from section 4.4) is
 also checked: a radius a bundle must keep through it, such as a waterfall or
 bend-radius fingers. No guide states one today; the hook is there for when
-one does (open question 8).
+one does (decision 8).
 
 **Unknown types are unchecked, not passed.** At each point:
 
@@ -433,7 +435,7 @@ two or more members ride together:
 - Each such run, of length `L`, gets `n = ceil(L / every)` straps, evenly
   spaced at `(k + 0.5) * L / n` for `k = 0 .. n-1`. Straps are then never more
   than the spacing apart, and none sits on the run's ends. A 30 in run at
-  12 in gets 3 straps, 10 in apart (open question 3).
+  12 in gets 3 straps, 10 in apart (decision 3).
 - A strap that falls inside a ring or a pass-through moves along the run until
   it is clear of it. Straps inside a duct stay.
 - `L` uses the same rack measure as routed length, so the count agrees in
@@ -462,16 +464,16 @@ positions (2D at ring ends and gutter centres, 3D at guide anchors and
 | Cable list (site, #142) | cables grouped by bundle, with the bundle's name, size and warnings; a peeled cable shows where it leaves |
 | Rack JSON | `bundles` as stored (version 3) |
 | Cable schedule CSV (#923) | a `bundle` column (the bundle's name); `route` is the route the member follows; one note per bundle: "Bundle 2 (b1): 12 cables; 2.4 m run; 8 straps every 12 in; about 24 mm across, limit 29.5 mm at mgr-1 ring 5; bend radius 25 mm (c7)" and its warnings |
-| BOM (#923) | one line for hook-and-loop straps, with the quantity the sum of every bundle's count; no manufacturer (open question 6) |
+| BOM (#923) | one line for hook-and-loop straps, with the quantity the sum of every bundle's count; no manufacturer (decision 6) |
 | SVG / PNG sheets (#142) | bundles and straps as drawn; a note per bundle, and its warnings |
 | GLB / USDZ (#142) | bundles and straps, as the scene |
 | draw.io | unchanged, as for routes; a note says bundles are not drawn there |
 | NetBox cables file (#923) | membership in the cable's `description`, after its purpose ("uplink. Bundle 2."), within the length the export already enforces |
 | Nautobot cables file (#923) | no column for it, since the file writes no description; the export notes say membership is in the cable schedule |
 
-The kit's import files have no field for a bundle. #923 checks NetBox's and
-Nautobot's own models before choosing, and records what each one can hold.
-Tags are the other candidate (open question 9).
+The kit's import files have no field for a bundle. Membership goes in
+NetBox's cable description, not in tags (decision 9). #923 checks NetBox's and
+Nautobot's own models and records what each one can hold.
 
 ## 8. The child issues
 
@@ -498,37 +500,38 @@ and #926 lands second takes the other's `pathwaysOn` and `describe` changes.
   follow-up #919 names).
 - #897's type pickers, colours and mismatch checks.
 
-## 10. Open questions for the owner
+## 10. Decisions
 
-1. **Version 3.** Recommended: raise the rack document to version 3, for the
-   reasons in section 2.3. The alternative is to fold bundles under #926's
-   no-bump ruling while no kit release is published, and have `parseDoc` keep
-   unknown rack keys from now on.
-2. **Warn or refuse.** Recommended: both checks only warn. The alternative is
-   for `bundle.create` and `bundle.add` to refuse a bundle that would pass
-   2.5 in, since that limit depends on membership alone. A member's media
-   changing could still push it over, so warnings are needed either way.
-3. **Strap placement.** Recommended: evenly, never more than the spacing
-   apart, none at a run's ends. The alternative is literally every 12 in from
-   the trunk's start, which leaves an odd gap at the far end.
-4. **Packing share.** Recommended: 0.75 in the diameter estimate. Real bundles
-   are looser than a perfect pack, so a lower figure (0.6 to 0.7) would warn
-   sooner.
-5. **A bundle of fewer than two cables.** Recommended: kept, not drawn, and
-   noted. The alternative is to remove it in the same step as the command that
-   empties it, with the summary saying so.
-6. **Straps in the BOM.** Recommended: one generic line with a count. The
-   alternative is a line per strap length, sized from each bundle's diameter.
-7. **The trunk stored or worked out.** Recommended: stored at creation, with
-   `bundle.update {route: null}` to work it out again. The alternative is to
-   work it out on every render, as an unedited cable route is, which follows
-   device moves but can change shape under the user.
-8. **Pathway radius.** The pathway check needs a guide to state a radius
-   (for example `radius` on a `ring` or `duct` guide, or on bend-radius
-   fingers). Should a guide key be proposed upstream now, or wait for a part
-   that needs it?
-9. **DCIM.** Recommended: membership in NetBox's cable description, and a note
-   for Nautobot. Tags would hold it in both, but the import then needs the
-   tags made first. Is that wanted?
-10. **Rack-wide spacing.** Recommended: spacing per bundle only, defaulting to
-    12 in. The alternative adds a rack-level default as well.
+Decided 2026-10-08, on the questions this note first left open.
+
+1. **The rack document goes to version 3.** Decided: yes. An older `parseDoc`
+   drops the `bundles` key and its next autosave erases the bundles, and an
+   older page would route members alone. A refusal is better than silent loss,
+   as for managers at version 2. #921 is therefore a one-way door (section 2.3).
+2. **Over the limits: warn only.** Decided: the size and bend checks warn and
+   never refuse, 2.5 in included. A member's media changing or a device moving
+   can push a bundle over without any bundle command, so a bundle must be able
+   to sit over the limit and say so; this matches fill, which also only warns.
+3. **Straps evenly spaced.** Decided: evenly along each run, never more than
+   the spacing apart, none on the run's ends. Strict 12 in steps from one end
+   would leave an odd gap at the other.
+4. **Packing share 0.8.** Decided: `BUNDLE_PACK = 0.8`, one named constant so it
+   can be tuned. Bundles are drawn and checked as tightly combed; a looser
+   figure would warn sooner (section 5.1).
+5. **A bundle of fewer than two cables is kept, not drawn.** Decided: kept,
+   listed and noted, with no drawing and no straps. Nothing the user made is
+   removed as a side effect of another command.
+6. **One BOM line for straps.** Decided: one generic hook-and-loop strap line
+   with the total count. Strap length and width are left to the buyer.
+7. **The trunk is stored at creation.** Decided: worked out once, at
+   `bundle.create` or `bundle.update {route: null}`, then kept. A bundle is
+   dressed once and should not change shape when a device moves.
+8. **A guide radius key upstream: later.** Decided: not proposed now. The bend
+   check keeps the hook (section 4.4), and the key is added when a part that
+   needs it is modelled.
+9. **DCIM: NetBox's cable description.** Decided: membership is written in
+   NetBox's cable description, not as tags, which would have to be created
+   before the import. Nautobot's file has no description, and its export notes
+   say so.
+10. **Strap spacing per bundle only.** Decided: each bundle has its own
+    spacing, 12 in when unset. There is no rack-wide default.
