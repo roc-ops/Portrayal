@@ -88,7 +88,9 @@ derive a cable's bundle from the bundles (section 5.3).
   idempotent, so running it again changes nothing, and gives no notes. The
   notes therefore come from the `parseDoc` call and travel with the document:
   - `parseDoc(input, {notes})` pushes each repair's sentence onto the `notes`
-    array the caller passes. None is kept in the document.
+    array the caller passes. None is kept in the document. A document can hold
+    several racks, so each sentence names its rack ("Rack 2: c9 is in
+    Bundle 1 and Bundle 3, so it stays in Bundle 1.").
   - The editor's `loadDoc` gains the same option, `loadDoc(next, {notes})`, and
     returns those sentences in its `findings`, as notes, ahead of the
     `settleManagers` notices it already returns. `loadDoc` receives a document
@@ -360,31 +362,51 @@ Working it out needs `ctx.route` (section 3.1):
    `left-front`, one from U20 and one from U22, both to U30, both use the
    element `left-front` U22-U30.
 3. **Shared elements** are those used by two or more members.
-4. **The shape.** Join two shared elements wherever they are next to each
-   other on some member's route, counting only its shared elements (a member
-   that passes A, then unshared X, then B joins A to B). The joins have no
-   direction. Add the members' joins in the order the cables were named. The
-   shape is then judged, in this order:
-   - **A loop means leaving and rejoining.** A member that leaves the others
-     and meets them again skips the shared elements between, so its join
-     closes a loop. Refused, naming the member whose join closed it: "c5
-     leaves the others at mgr-1 ring 3 and meets them again at left-front U20.
-     Give the bundle a route."
-   - **A three-way element means a fork,** when there is no loop: some members
-     go on one way and some another, at least two on each branch (a branch
-     with one cable on it shares nothing, so it is just that cable leaving).
-     Refused: "Bundle members part after left-front U30: c1 and c2 go on to
-     pp-1 ring 1, c3 and c4 to left-rear U30. Bundle them separately, or give
-     the bundle a route."
+4. **Joins.** Two shared elements are joined where they are next to each
+   other on some member's route, counting only its shared elements. The joins
+   are a set with no direction: a join that another member has already made
+   adds nothing, and is never a loop. A member **goes directly** between two
+   joined elements when nothing lies between them on its own route; when
+   unshared elements lie between them (it passes A, then X used by no other
+   member, then B), it **detours**. The shape is judged in this order, and the
+   refusals name no single cable as the culprit when the parting is mutual:
+   - **A detour means parting and meeting again.** A member that detours
+     between two shared elements leaves the others at the first and meets them
+     at the second. Refused, naming it and the members that go directly:
+     "c4 parts from c1, c2 and c3 at mgr-1 ring 3 and meets them again at
+     left-front U20. Bundle them separately, or give the bundle a route." The
+     same holds with only two members: with c1 through ring 3, ring 4, ring 5
+     and the lane, and c2 from ring 3 straight to the lane, the trunk would be
+     c2's straight run and c1 would be pulled off its rings, so it is refused
+     ("c1 parts from c2 at mgr-1 ring 3 ..."). If every member making a join
+     detours, and none goes directly, the join is a run no cable takes, and it
+     is refused for the reason step 6 gives.
+   - **A loop means parting and meeting again without a detour:** a member
+     goes directly between two elements that others reach through further
+     shared elements. Refused, naming the member that makes the loop's join
+     with the fewest members, and those it parts from, so the blame does not
+     depend on the order the cables were named. Example: c1, c2 and c3 run
+     ring 3, ring 4, ring 5, then the lane L; c4 runs ring 3, then straight to
+     L. The loop is ring 3, 4, 5, L and back to ring 3; its join ring 3 to L is
+     made by c4 alone, and every other join by three cables, so the message
+     is "c4 parts from c1, c2 and c3 at mgr-1 ring 3 and meets them again at
+     left-front U20", whichever cable was named first. (If c4 passes an
+     element of its own between ring 3 and L, it is the detour above.)
+   - **A fork:** with no loop, an element joined to three or more others, so
+     the members go on different ways from it. Refused, listing the cables on
+     each branch as found: "Bundle members part after left-front U30: c1 and c2
+     go on to pp-1 ring 1; c3 and c4 go on to left-rear U30. Bundle them
+     separately, or give the bundle a route."
    - Otherwise the shape is **one simple path**, and each member's shared
-     elements are an unbroken stretch of it by construction (a gap would have
-     made a loop). So members may join the path and leave it anywhere along
-     it: fan-in at a lacer's successive rings, and fan-out to devices along a
+     elements are an unbroken stretch of it (a gap would have been a detour or
+     a loop). Members may join the path and leave it anywhere along it:
+     fan-in at a lacer's successive rings, and fan-out to devices along a
      lane, are both legal.
-5. **Direction.** The path is oriented by the first cable named: it runs the
-   way that cable runs, from its `a` end to its `b` end. Each member's own
-   direction along the trunk is then read off the order in which its route
-   meets the path.
+5. **Direction.** The path is oriented by the first cable named that meets
+   two or more of its elements: it runs the way that cable runs, from its `a`
+   end to its `b` end. Each other member's direction is read off the order in
+   which its route meets the path. A member that meets the path at one
+   element only joins and leaves there.
 6. **Disconnected groups are refused.** "c1 and c2 share mgr-1 ring 5, and c3
    and c4 share pp-1 ring 9, but the two groups share nothing. Bundle them
    separately, or give the bundle a route." Joining across the gap would
@@ -692,7 +714,10 @@ reading `ctx.route`:
   - The box is in the face's own coordinates. It is mapped to rack
     coordinates as the guide's `x` already is: offset by half the face's
     width, and mirrored for a panel seen from the rear, which a turned item
-    swaps.
+    swaps. Its height maps as the routing context's `portY` maps a port: the
+    face is drawn centred, unscaled, in the item's U span, so a face `y` is at
+    height `(ru - 1 + u) * RU - ((u * RU - faceH) / 2 + y)` above the floor,
+    where `u` is the item's height in U and `faceH` the face's drawn height.
   - Its extent along the run is the box's width for a run along `x`, and its
     height for a run along `y`. A ring drawn as a group has `h: 0` and `y: 0`
     in its box, so only its width is known: it has an extent on a run along
