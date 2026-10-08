@@ -299,6 +299,122 @@ proves it.
 - In 3D, the composited screenshot of a rack-face manager on a host shows the host's
   ports through the manager. That is what the sheet body is for.
 
+## 13. How a route passes a guide (#930)
+
+A D-ring holds a cable only while the cable passes through it, in at one face and out at
+the other along the ring's `run`. A route that treated a ring as a point drew the cable
+turning at the ring's centre, where nothing holds it. So the kit (`kit/rack/route.js`
+`routePath`, on `kit/rack/route-path.js` `throughRings`) expands every ring waypoint
+into two points:
+
+```
+   previous point                         next point
+        \                                     /
+         \  entry        centre        exit  /
+          *----------|----+----|----------*
+                     |<-depth->|
+                  ring face   ring face
+                        run (x) ->
+```
+
+- **Entry and exit** are half the ring's depth either side of its centre, along `run`,
+  in the order the cable travels. Between them the cable is straight and parallel to
+  `run`; a bend is at a face or outside it, never inside.
+- **Depth.** A guide may state `depth` (mm along the run). None does yet, so
+  `RING_DEPTH`, 10 mm, is taken and the ring is marked `estimated`. It is an estimate
+  from the two FS rings measured so far, whose bands are 6.8 mm (the snap-in ring) and
+  9.9 mm (the CMH-5DR1U ring) thick along the run.
+- **Run.** A guide's `run`, `x` when the reader gives none: every ring in the library
+  runs along `x` except the end ring of the CMH-6DR1U, which runs along `y`.
+- **Decided once.** `routePath` decides every ring in the rack's own frame: which way
+  through (`sense`, +1 or -1 along the run) or not through at all (`back`). The length,
+  fill, capacity, `inspect` and the findings read that path, and `ringMarks` hands the
+  same decisions to the drawings, which obey them and do not decide again. A drawing's
+  points sit in its own frame (a 3D cable leaves its connector 40 mm out and is spread a
+  few mm at a shared ring; the elevation has no depth), and left to itself it could
+  decide a ring near the line differently. A test runs a grid of ports and rings
+  through both drawings' frames and checks that they draw what `routePath` decided.
+- **Direction.** The cable enters from the side its previous point stands on. A point
+  stands on neither side when it is within half the ring's depth of the centre along the
+  run, or when it is further off the run's line IN THE FACE than it is along the run
+  (steeper than 45 degrees: a port well below the ring and a little to one side comes
+  up into it). In the face means that, for a ring along `x` or `y`, the distance out of
+  the face is not counted: how far a lacer stands out from its host (55 mm on an
+  FHD-CMP5DR) is not an approach angle. Then the side the next point goes to decides;
+  failing both, `+run`.
+- **Doubling back.** If the points before and after both stand on the same side, the
+  cable would enter and leave by one face. It is not drawn through: the path goes to
+  that face and back, the ring counts the cable neither in its fill nor in its
+  manager's capacity, and `ringFindings` reports it.
+- **What is not reported.** A cable that stands on neither side still reaches back a
+  little, unreported: one under the ring goes along the run to the face it enters, up to
+  half the ring's depth (5 mm by the estimate), and one that comes up steeply from
+  beside the ring goes back along the run to its entry face by its offset along the run
+  plus half the ring's depth: less than its height below the ring plus that half-depth
+  (a port 29 mm along and 30 mm below reaches back 34 mm). Both are drawn and measured
+  as they are; neither is called a finding. A cable whose port is not found on its
+  drawing has no path, so no marks and no findings: it is counted in every ring on its
+  route, in fill and in capacity, whichever way it would go through.
+- **The automatic route** takes only the rings that run along `x` and lie on the way
+  from the port toward its gutter (a port within half a ring's depth of its centre goes
+  through it), so it never doubles back and never makes either of those reaches past a
+  ring's half-depth: a ring behind the port, which the old nearest-ring rule could
+  pick, is left out. This is stricter than the side test on purpose: with the 45 degree
+  rule it would take a ring behind any port that sits low enough below it, and draw
+  that reach back.
+- **Leads.** `routed2d` and `routePoints3d` add a lead point on the run outside each
+  face, the corner radius out, so a rounded corner is rounded there and not inside the
+  ring. A lead is never further out than half the neighbour's own distance beyond that
+  face along the run, so it never hooks back past the neighbour and the leads of two
+  close rings never cross. A neighbour at or inside the face's plane (a port under the
+  ring) gets no lead, and the corner is at the face. A length is measured without the
+  leads.
+
+### What the Rack Builder must change
+
+The page places its 2D and 3D points from its own drawings. It takes the ring geometry
+by passing each waypoint's ring, with the kit's decision for it, to the kit's drawing
+functions; it never decides a ring itself:
+
+1. Re-vendor `kit/rack` at 0.5.0 (`route.js`, `route-path.js`, `cable-geometry.js`,
+   `queries.js`).
+2. In `route-context.js`, give each ring guide its `run`, from `data-guide-run` on the
+   ring component of the top view (the element `aperturesOf` reads). A `depth` may be
+   given too: the width of the ring's `-end` rect on the elevation, when it runs along
+   `x`, is a drawn figure. Without one the kit's estimate is used.
+3. In `routeFacts`, keep `ringMarks(rack, cable, ctx)` for each cable beside its
+   resolved route: one mark per waypoint, null for a lane, a duct or a pass, and for a
+   ring `{run, depth, sense, back}`. Add `ringFindings(rack, ctx, nameOf)` to the facts
+   and show the findings where fill and capacity are shown.
+4. 2D (`cable-view.js`, `cables.js`): carry the marks with each link's points, dropping
+   a mark whenever its waypoint is dropped (one the pane cannot place). A mark's
+   `sense` is along the rack's axes (x right as seen from the front, y up), and a pane
+   whose axis runs the other way turns it with `orientMarks(marks, flip)`: the front
+   pane flips y (`{y: -1}`, an SVG's y is down); the rear pane, seen mirrored, flips x
+   and y (`{x: -1, y: -1}`). Then call `routed2d([a, ...via, b], 4, [null, ...oriented,
+   null])`. Unturned, a rear ring or a ring that runs up the rack is entered from the
+   wrong face and drawn as the hook this change removes. A cable drawn from its other
+   end reverses its points: pass `reverseMarks(oriented)` with them, which reverses the
+   list and turns the sense of every ring passed (a ring not passed keeps its face).
+5. 3D (`scene3d.js`, `cables.js`): return the marks with the waypoint positions,
+   dropped in step, and call `routePoints3d(THREE, a, b, wps, 30, marks)`. The scene is
+   in the rack's own axes, so its marks pass unchanged. The spread of
+   cables across a shared ring applies to its centre, before the expansion.
+6. Update the routing checks for the new ring choice and lengths, and add a browser
+   check that a cable's 3D points between a ring's entry and exit share the ring
+   centre's other two coordinates (parallel to `run`), and that a doubled-back cable is
+   drawn to the ring's face and not through it.
+7. Stored routed lengths re-measure on the next render (`lengths.routed`); entered ones
+   are never touched.
+
+Ducts and pass-throughs keep a single point. A duct is an open channel with finger gaps
+along its run: a cable enters and leaves it sideways through any gap, and turning inside
+it is what it is for. A pass-through is a hole in sheet metal about 1.5 mm thick, much
+larger than the cable, so a cable crossing it at an angle is held, and an entry and exit
+1.5 mm apart change no length. Neither has the ring's fault. A duct's point is its
+centre, though, so a route into a long duct is measured to its middle; where a cable
+enters and leaves a duct is a separate question.
+
 ## Decisions taken
 
 Agreed 2026-10-06:
