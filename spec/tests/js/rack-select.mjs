@@ -38,6 +38,14 @@ test('selectCables: an empty result is not an error; a removed device with loose
   assert.deepEqual(await selectCables(R, {purpose: 'storage'}), {ids: []});
   assert.deepEqual(await selectCables(R, {item: 'i2', path: 'port-48'}), {ids: []});
   assert.deepEqual(await selectCables(R, {item: 'i9'}), {ids: ['c3']});
+});
+
+test('selectCables: a purpose or media of null, empty or not a string is refused, not a match for every cable', async () => {
+  for (const s of [{media: null}, {purpose: null}, {media: ''}, {purpose: 3}, {media: ['om4']}, {item: null}, {item: 'i1', path: null}]) {
+    const got = await selectCables(R, s);
+    assert.ok(got.error && !got.ids, JSON.stringify(s));
+  }
+  assert.deepEqual(await selectCables(R, {media: null}), {error: "A selector's media is a name; leave it out rather than send null."});
   assert.deepEqual(await selectCables(R, {item: 'i7'}), {error: GONE});
 });
 

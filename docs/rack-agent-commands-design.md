@@ -1,11 +1,10 @@
 # Rack kit: commands and questions an agent can use without reading the code
 
-Status: 2026-10-08, design approved in conversation; spec awaiting review. Builds on
-the rack core in `kit/rack/` (kit 0.3.0, #896), which must be merged first. A companion
-spec in roc-ops/portrayal-site
-(`docs/superpowers/specs/2026-10-08-rack-agent-tools-2-design.md`) covers the site's
-side: the WebMCP tools that call what this spec adds. Named cable and optic types
-(#897) come later and build on `fit`.
+Status: 2026-10-08, built and reviewed; kit 0.4.0. Builds on the rack core in
+`kit/rack/` (kit 0.3.0, #896). The site's side, the WebMCP tools that call what
+this adds, is designed in roc-ops/portrayal-site (tracked in
+roc-ops/portrayal-site#137). Named cable and optic types (#897) come later and
+build on `fit`.
 
 ## 1. Why
 
@@ -69,7 +68,7 @@ format, or `{error}` (GONE or CABLE_GONE).
 {kind: 'cable', id, a: {item, path, view, name}, b: {...}, media, purpose, label,
  length: {value, unit, source} | null, routed: {metres, stock} | null,
  route: {edited: bool, waypoints: [...], text}, lanes: [...], passes: {[itemId]: [ids]},
- loose: [{end, reason}], mismatch: [text]}
+ loose: [{end, reason}], mismatch: [text], unchecked?: true}
 ```
 
 - `routed` comes from `routedLength(rack, cable, ctx)` and `stockLength`, when
@@ -77,7 +76,8 @@ format, or `{error}` (GONE or CABLE_GONE).
 - `lanes` comes from `lanesOf(frame)`. `passes` holds the ring, duct and pass-through
   ids on the cable's two devices, from `rack.json`'s `guides` and `passes`.
 - `loose` and `mismatch` come from `ctx.cableFacts` facts when given, through
-  `looseReason` and `mismatch`.
+  `looseReason` and `mismatch`. A reader that rejects, or facts that say so,
+  leave both null and set `unchecked: true`.
 
 ### 3.2 `selectCables(rack, selector, ctx)`
 
@@ -86,20 +86,24 @@ format, or `{error}` (GONE or CABLE_GONE).
 - `{item}`: every cable with an end on the item.
 - `{item, path}` or `{item, path, view}`: the cable on that port, through `sameEnd` and `portPathOf`.
 - `{loose: true}`: needs `ctx.cableFacts`; it is async for that reason.
-- `{purpose}` or `{media}`.
+- `{purpose}` or `{media}`. Each is a name: `null`, an empty string or a
+  non-string is refused, since it would otherwise match every cable.
 
 It returns `{ids: [...]}` or `{error}`. An empty result is `{ids: []}`, not an error.
 
 ### 3.3 `describe` and `catalog`
 
 - `describe(rack, ctx, {section, offset, limit})`:
-  - `section` is `'items'`, `'cables'` or both.
+  - `section` is `'items'` or `'cables'`; left out, both. Any other section is
+    refused, as is an `offset` that is not a whole number from 0 or a `limit`
+    that is not one from 1; each returns `{error}`.
+  - `limit` defaults to 20 and is capped at `MAX_WINDOW`, 50.
   - The first line always gives the totals and the window shown: `Rack 1 (r1): 6 items,
     40 cables. Cables 21-40 shown.`
   - Item lines add `ref` and `cfg`. Cable lines add purpose and length.
   - With no window given, today's output and its 1,500-character bound stand.
 - `catalog(devices, {text, ru, family, mount, kind})`:
-  - `text` also matches the device's kind and capability words, for example "patch
+  - `text` also matches the device's `kind` and `family`, for example "patch
     panel", "switch" or "cable manager".
   - `kind` filters on the same values.
   - This needs `kind` in `rack.json` (section 6).

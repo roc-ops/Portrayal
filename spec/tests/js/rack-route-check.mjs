@@ -37,7 +37,7 @@ test('cable.route refuses made-up names and says what exists', () => {
   assert.deepEqual(route(r, [{item: 'i9', via: 'guide-1'}]), {error: 'Waypoint 1 names i9, which is not in the rack.'});
   assert.match(route(r, [{lane: 'left-front', ru: 3}, {lane: '?', ru: 9}]).error,
     /^Waypoint 2: there is no gutter called \?\. This rack has: left-front, right-front, left-rear, right-rear\.$/);
-  assert.deepEqual(route(r, [{lane: 'left-front', ru: 99}]), {error: 'Waypoint 1: U99 is not on this 42U rack.'});
+  assert.deepEqual(route(r, [{lane: 'left-front', ru: 99}]), {error: 'Waypoint 1: ru 99 is not on this 42U rack, whose ru runs 1-42 from the bottom.'});
 });
 
 test('cable.route refuses a pathway on a device with none, and checks nothing without a catalogue', () => {

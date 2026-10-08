@@ -109,7 +109,7 @@ as `@portrayal/kit/rack/<module>`:
 | `rack/history.js` | undo and redo as snapshots |
 | `rack/editor.js` | `createRackEditor`: a rack document you edit by commands, with undo, redo and change events |
 | `rack/queries.js` | reading a rack: `fitsAt`, `freeUs`, `catalog`, `describe`, `inspect`, `selectCables`, `freePorts`, `suggestMedia`, `looseEnds` |
-| `rack/slots.js` | what a placed device holds, read without a drawing: its bays and cages, what its configuration builds, and its own swaps |
+| `rack/slots.js` | internal, not exported: what a placed device holds, read without a drawing, for `commands.js` and `queries.js` |
 
 ### Where this came from
 
@@ -125,8 +125,10 @@ and `schemas/v1/rack.schema.json`.
 
 `rack.json` is written by the build beside `devices.json`. For every device it
 holds the rack units, the depth and height, how it mounts, whether its body is
-sheet, the cable capacity its vendor states, and the ids a route can pass
-through. `loadCatalog(dist)` takes what the other loaders take: a base URL, or
+sheet, the cable capacity its vendor states, the ids a route can pass
+through, and its `kind`: a plain word for what it is (`switch`, `patch panel`,
+`cable manager`, ...) that `catalog(devices, { kind })` filters by. `kind` is
+advisory and its words may be refined. `loadCatalog(dist)` takes what the other loaders take: a base URL, or
 a function from a path in the build to its URL. It therefore works with
 `flatDist` over a build directory, and with `packageDist`, which serves
 `rack.json` from `@portrayal/index` (a device that is itself named `rack` would
@@ -216,8 +218,13 @@ cable it reads both ends, the route, the routed length (with `ctx.route`), the
 slack, the pathways it may name, and its loose ends (with `ctx.cableFacts`).
 `selectCables(rack, selector, ctx)` turns `{ item }`, `{ item, path }`,
 `{ loose: true }`, `{ purpose }` or `{ media }` into cable ids, for a caller to
-expand into plain commands (with `{ loose: true }` and some ends unchecked, the result also says `unchecked: true`). `describe(rack, ctx, { section, offset, limit })`
-reads one stretch of a long rack in full. `catalog(devices, { kind })` finds a
+expand into plain commands (with `{ loose: true }` and some ends unchecked, the
+result also says `unchecked: true`); a `purpose` or `media` must be a name, so
+`{ media: null }` is refused rather than matching every cable.
+`describe(rack, ctx, { section, offset, limit })` reads one stretch of a long
+rack in full: `section` is `items` or `cables`, and `limit` is capped at
+`MAX_WINDOW` (50). A section, offset or limit it cannot read returns
+`{ error }`. `catalog(devices, { kind })` finds a
 "patch panel" or a "switch" by `rack.json`'s `kind`.
 
 A rack file is described by

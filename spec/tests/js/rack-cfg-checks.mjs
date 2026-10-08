@@ -32,6 +32,14 @@ test('patch {cfg} alone clears the swaps and fields, and says so', () => {
   assert.equal(run('patch', LEAF, {id: 'i1', cfg: 'base'}, {chassisOf}).rack, LEAF);
 });
 
+test("patch {cfg}: a file's empty cfg is the default, so naming the default changes nothing", () => {
+  const blank = M.withItem(M.newRack(), {ref: 'leaf', cfg: '', ru: 10, label: 'leaf-1', swaps: {'port-2': 'acme/lr@1'}}).rack;
+  assert.equal(run('patch', blank, {id: 'i1', cfg: 'base'}).rack, blank);
+  assert.equal(run('patch', blank, {id: 'i1', cfg: 'base'}, {chassisOf}).rack, blank);
+  const moved = run('patch', blank, {id: 'i1', cfg: 'dc'});
+  assert.deepEqual([moved.rack.items[0].cfg, moved.rack.items[0].swaps], ['dc', {}]);
+});
+
 test('patch {swaps} still replaces the map, but leaves out what the slots refuse', () => {
   const p = run('patch', LEAF, {id: 'i1', swaps: {'port-1': 'acme/dac@1', 'port-48': 'x', 'port-2': 'acme/psu-ac@1'}});
   assert.deepEqual(p.rack.items[0].swaps, {'port-1': 'acme/dac@1'});

@@ -107,9 +107,18 @@ test('describe: the totals line survives the shortening of a long rack', () => {
   assert.match(text, /^Rack 1 \(r1\): 42 items, 0 cables\.\n/);
 });
 
-test('describe: an offset or limit that is not a whole number above 0 falls back to the start and 20', () => {
+test('describe: a section, offset or limit it cannot read is refused, and a limit is capped', () => {
   let r = M.newRack();
-  for (let u = 1; u <= 25; u++) r = add(r, 'as7726-32x', u, {label: `l${u}`});
-  for (const w of [{offset: -3}, {offset: 2.5}, {offset: '3'}, {limit: 0}, {limit: -1}, {limit: 'all'}])
-    assert.equal(Q.describe(r, ctx, {section: 'items', ...w}).split('\n')[0], 'Rack 1 (r1): 25 items, 0 cables. Items 1-20 shown.', JSON.stringify(w));
+  for (let u = 1; u <= 42; u++) r = add(r, 'as7726-32x', u, {label: `l${u}`});
+  r = {...r, cables: Array.from({length: 60}, (_, k) => ({id: `c${k + 1}`, a: {item: 'i1', path: `port-${k + 1}`, view: 'front'},
+    b: {item: 'i2', path: `port-${k + 1}`, view: 'front'}, media: '', purpose: '', label: '', route: []}))};
+  assert.deepEqual(Q.describe(r, ctx, {section: 'item'}), {error: 'There is no section item. Ask for items or cables, or leave it out for both.'});
+  for (const offset of [-3, 2.5, '3', NaN])
+    assert.deepEqual(Q.describe(r, ctx, {section: 'items', offset}), {error: 'An offset is a whole number from 0.'}, String(offset));
+  for (const limit of [0, -1, 2.5, 'all'])
+    assert.deepEqual(Q.describe(r, ctx, {section: 'items', limit}), {error: `A limit is a whole number from 1 to ${Q.MAX_WINDOW}.`}, String(limit));
+  assert.equal(Q.MAX_WINDOW, 50);
+  assert.equal(Q.describe(r, ctx, {section: 'cables', limit: 1000}).split('\n')[0], 'Rack 1 (r1): 42 items, 60 cables. Cables 1-50 shown.');
+  assert.equal(Q.describe(r, ctx, {section: 'items'}).split('\n')[0], 'Rack 1 (r1): 42 items, 60 cables. Items 1-20 shown.');
+  assert.equal(Q.describe(r, ctx, {offset: 0}).split('\n')[0], 'Rack 1 (r1): 42 items, 60 cables. Items 1-20 shown. Cables 1-20 shown.');
 });

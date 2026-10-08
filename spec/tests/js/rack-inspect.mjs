@@ -107,3 +107,15 @@ test('inspect: a route context that throws leaves the cable unmeasured', async (
   assert.equal(got.routed, null);
   assert.deepEqual(got.route.waypoints, []);
 });
+
+test('inspect: a cable-facts reader that rejects leaves the ends unchecked, not an error', async () => {
+  let r = add(add(M.newRack(), 'leaf', 10), 'leaf', 20);
+  r = {...r, cables: [cable('c1', end('i1'), end('i2'))]};
+  const got = await inspect(r, 'c1', {chassisOf, cableFacts: async () => { throw new Error('no drawing'); }});
+  assert.equal(got.kind, 'cable');
+  assert.equal(got.unchecked, true);
+  assert.equal(got.loose, null);
+  assert.equal(got.mismatch, null);
+  const fine = await inspect(r, 'c1', {chassisOf, cableFacts: async () => ({ends: new Map()})});
+  assert.equal('unchecked' in fine, false);
+});

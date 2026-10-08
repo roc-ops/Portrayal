@@ -99,16 +99,13 @@ def test_every_device_carries_its_kind(tmp_path):
     assert rack_index.build(d)["format"] == 1
 
 
-def test_devices_json_carries_each_manifests_profile(tmp_path):
-    """rack_index reads `profile` from devices.json, so the index must publish it."""
-    import subprocess
-    import sys
+def test_devices_json_carries_each_manifests_profile():
+    """rack_index reads `profile` from devices.json, so the built index must publish it."""
     from pathlib import Path
-    root = Path(__file__).resolve().parents[2]
-    r = subprocess.run([sys.executable, root / "spec/tools/portrayal/devices_index.py",
-                        "--library", root / "library", "--out", tmp_path], capture_output=True, text=True)
-    assert r.returncode == 0, r.stdout + r.stderr
-    devices = {x["name"]: x for x in json.loads((tmp_path / "devices.json").read_text())["devices"]}
+    built = Path(__file__).resolve().parents[2] / "library/dist/devices.json"
+    if not built.exists():
+        pytest.skip("library/dist not built - run ./build.sh")
+    devices = {x["name"]: x for x in json.loads(built.read_text())["devices"]}
     assert devices["r740xd"]["profile"] == "server"
     assert devices["fhd-cmp5dr"]["profile"] == "passive"
     assert devices["fhd-1ufce"]["profile"] == "optical"

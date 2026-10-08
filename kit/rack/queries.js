@@ -41,9 +41,14 @@ export function catalog(devices, {text, ru, family, mount, kind} = {}) {
 // long rack loses its labels first, then its tail, and says so. The first line
 // always gives the totals. A WINDOW (`section`, `offset`, `limit`) reads one
 // stretch of a long rack in full instead, each line with the device's ref and
-// configuration or the cable's purpose and length.
+// configuration or the cable's purpose and length. A window is agent-sized
+// too: `limit` defaults to WINDOW and is capped at MAX_WINDOW lines a section.
+// A section other than `items` or `cables`, or an `offset` or `limit` that is
+// not a whole number (from 0, and from 1), is refused as {error}.
 const LIMIT = 1500;
-const WINDOW = 20;
+export const WINDOW = 20;
+export const MAX_WINDOW = 50;
+const SECTIONS = ['items', 'cables'];
 const count = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
 const sideOf = e => `${e.item}/${e.path}${e.view === 'rear' ? ' (rear)' : ''}`;
 
@@ -70,10 +75,13 @@ export function describe(rack, {chassisOf}, {section, offset, limit} = {}) {
     ...(full && c.purpose ? [c.purpose] : []), ...(full && lengthText(c.length) ? [lengthText(c.length)] : [])].join(', ');
 
   if (section != null || offset != null || limit != null) {
-    const from = Number.isInteger(offset) && offset > 0 ? offset : 0;
-    const n = Number.isInteger(limit) && limit > 0 ? limit : WINDOW;
+    if (section != null && !SECTIONS.includes(section)) return {error: `There is no section ${section}. Ask for items or cables, or leave it out for both.`};
+    if (offset != null && !(Number.isInteger(offset) && offset >= 0)) return {error: 'An offset is a whole number from 0.'};
+    if (limit != null && !(Number.isInteger(limit) && limit >= 1)) return {error: `A limit is a whole number from 1 to ${MAX_WINDOW}.`};
+    const from = offset ?? 0;
+    const n = Math.min(limit ?? WINDOW, MAX_WINDOW);
     const parts = [['items', 'Items', items, i => item(i, false, true)], ['cables', 'Cables', cables, c => cable(c, true)]]
-      .filter(([key]) => !['items', 'cables'].includes(section) || section === key);
+      .filter(([key]) => section == null || section === key);
     const shown = [], body = [];
     for (const [, title, list, line] of parts) {
       if (!list.length) shown.push(`No ${title.toLowerCase()}.`);
@@ -199,9 +207,12 @@ async function cableInfo(rack, cable, ctx) {
     .flatMap(id => [id, ...managersOf(rack, id).map(m => m.id)]);
   const passes = Object.fromEntries(near.map(id => [id, pathwayIds(ctx.chassisOf?.(rack.items.find(i => i.id === id).ref))])
     .filter(([, ids]) => ids.length));
-  let loose = null, warn = null;
+  // a reader that fails leaves the ends unchecked, never an error
+  let loose = null, warn = null, unchecked = false;
   if (typeof ctx.cableFacts === 'function') {
-    const facts = await ctx.cableFacts(rack, [cable.a, cable.b]);
+    let facts;
+    try { facts = await ctx.cableFacts(rack, [cable.a, cable.b]); } catch { facts = {unchecked: true}; }
+    unchecked = !!facts.unchecked;
     if (!facts.unchecked) {
       const at = e => facts.ends.get(endKey(e)) || {};
       loose = [['a', cable.a], ['b', cable.b]].map(([side, e]) => ({end: side, reason: at(e).reason ?? null})).filter(x => x.reason);
@@ -211,7 +222,7 @@ async function cableInfo(rack, cable, ctx) {
   return {kind: 'cable', id: cable.id, a: end(cable.a), b: end(cable.b), media: cable.media, purpose: cable.purpose, label: cable.label,
     length: l ? {value: l.value, unit: l.unit ?? 'm', source: l.source ?? 'entered'} : null, routed, slack,
     route: {edited, waypoints, text: routeText(waypoints, label, rack.frame)}, lanes: lanesOf(rack.frame), passes,
-    loose, mismatch: warn};
+    loose, mismatch: warn, ...(unchecked ? {unchecked: true} : {})};
 }
 
 export async function inspect(rack, id, ctx = {}) {
@@ -239,6 +250,9 @@ export async function selectCables(rack, selector, ctx = {}) {
   if ('loose' in s && s.loose !== true) return {error: 'A selector takes loose: true, or leaves it out.'};
   if (!keys.some(k => ['item', 'loose', 'purpose', 'media'].includes(k)))
     return {error: 'A selector names an item, loose: true, a purpose or a media.'};
+  // null or a non-string would match every cable: "no media" is not a selector
+  const bad = ['item', 'path', 'view', 'purpose', 'media'].find(k => k in s && (typeof s[k] !== 'string' || !s[k]));
+  if (bad) return {error: `A selector's ${bad} is a name; leave it out rather than send ${JSON.stringify(s[bad]) ?? String(s[bad])}.`};
   let list = rack.cables || [];
   if ('item' in s) {
     const ends = c => [c.a, c.b].filter(e => e.item === s.item);

@@ -44,6 +44,14 @@ function cfgRefused(ctx, ref, cfg, label) {
   return names.includes(cfg) ? null : {error: `${label} has no configuration ${cfg}. It has: ${names.join(', ') || 'none'}.`};
 }
 
+// A file's empty cfg is the device's default configuration, so a patch to the
+// default's own name is no change.
+function cfgOf(ctx, it) {
+  if (it.cfg) return it.cfg;
+  const s = slotsFor(ctx, it.ref);
+  return (s && !s.error ? s.default : null) ?? ctx.chassisOf?.(it.ref)?.default ?? '';
+}
+
 function place(rack, {ref, cfg, face, ru, label}, ctx) {
   const {chassisOf} = ctx;
   const top = pastTop(rack, ru);
@@ -81,7 +89,7 @@ function move(rack, {id, ru, face}, {chassisOf}) {
 function patch(rack, {id, ...given}, ctx) {
   const it = itemOf(rack, id);
   if (!it) return {error: GONE};
-  const newCfg = 'cfg' in given && given.cfg !== it.cfg;
+  const newCfg = 'cfg' in given && given.cfg !== it.cfg && given.cfg !== cfgOf(ctx, it);
   if (newCfg) { const bad = cfgRefused(ctx, it.ref, given.cfg, it.label); if (bad) return bad; }
   // The rack keeps its own copy, as withItem does: a caller that goes on to
   // change the object it passed changes neither the rack nor its history.
@@ -100,7 +108,7 @@ function patch(rack, {id, ...given}, ctx) {
     }
   }
   const changes = Object.fromEntries(['cfg', 'swaps', 'fields', 'label', 'turned']
-    .filter(k => k in p && !same(p[k], it[k])).map(k => [k, p[k]]));
+    .filter(k => k in p && !same(p[k], it[k]) && !(k === 'cfg' && !newCfg)).map(k => [k, p[k]]));
   if (!Object.keys(changes).length) return findings.length ? {...unchanged(rack), findings} : unchanged(rack);
   const next = {...it, ...changes};
   const had = Object.keys(it.swaps ?? {}).length || Object.keys(it.fields ?? {}).length;
@@ -358,7 +366,9 @@ function waypointError(rack, route, stored, {chassisOf, guidesOf} = {}) {
     if (stored.some(o => same(o, w))) continue;
     if ('lane' in w) {
       if (!lanes.includes(w.lane)) return `Waypoint ${n}: there is no gutter called ${w.lane}. This rack has: ${lanes.join(', ')}.`;
-      if (!Number.isInteger(w.ru) || w.ru < 1 || w.ru > rack.frame.heightRU) return `Waypoint ${n}: U${w.ru} is not on this ${rack.frame.heightRU}U rack.`;
+      if (!Number.isInteger(w.ru) || w.ru < 1 || w.ru > rack.frame.heightRU)
+        // the stored ru, not a U label: past the frame there is no label to give
+        return `Waypoint ${n}: ru ${w.ru} is not on this ${rack.frame.heightRU}U rack, whose ru runs 1-${rack.frame.heightRU} from the bottom.`;
       continue;
     }
     const it = rack.items.find(i => i.id === w.item);
@@ -370,7 +380,7 @@ function waypointError(rack, route, stored, {chassisOf, guidesOf} = {}) {
     } else {
       const ch = chassisOf(it.ref);
       // rack.json lists the default configuration only: a configured item's pathways are unknown here
-      if (!ch || it.cfg !== ch.default || Object.keys(it.swaps || {}).length) continue;
+      if (!ch || (it.cfg || ch.default) !== ch.default || Object.keys(it.swaps || {}).length) continue;
       ids = pathwaysOf(ch);
     }
     if (!ids.length) return `Waypoint ${n}: ${it.label} has no rings, ducts or pass-throughs.`;

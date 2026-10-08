@@ -208,12 +208,16 @@ device has them:
 height over 44.45 mm, at least 1. Removing or renaming a key, or changing what
 one means, is a contract change and raises `format`; adding a key is not.
 
-`kind` is a plain word for what the device is, read from the manifest's
-`profile` (which `devices.json` carries) and the vendor's own words: `switch`,
-`router`, `network device`, `server`, `pdu`, `patch panel`, `optical`,
-`cable manager`, or `device` when the profile says no more.
+`kind` is an advisory word for what the device is, for searching a catalogue,
+read from the manifest's `profile` and the vendor's own words. Today its words
+are `switch`, `router`, `network device`, `server`, `pdu`, `patch panel`,
+`optical`, `cable manager`, and `device` when the profile says no more. The key
+is part of the format; its vocabulary is not. A word may be added, split or
+refined, and a device may move from one word to another, without a format
+change, so a reader should not treat the list above as closed.
 
-`devices.json` gained `profile`, the manifest's device class, for this. It is a new
+`devices.json` gained `profile`, the manifest's device class. It mirrors the
+profiles in `spec/schemas/profiles.yaml` and follows that file. It is a new
 field, so `contract` stays 2: a reader that does not know it still finds every
 field it read before.
 
