@@ -213,6 +213,50 @@ The file is new, and did not raise `contract`, which is still 2. Removing or
 renaming a key, or changing what one means, is a `contract` change; adding a
 key is not.
 
+### Ears and kits on a device
+
+A device manifest names its kits under `chassis.kits` and says where its ears
+can put the faceplate under `chassis.ears` (#906). Both keys are optional and
+both are additive to format 1: `chassis.ears` was the string `behind` (#865),
+which stays valid with its meaning unchanged, and it may now also be an
+object.
+
+```yaml
+chassis:
+  ears:
+    behind: true            # optional; the same statement as the bare string
+    h: 43.5                 # optional; mm the ears span, when not the chassis height
+    y: 0.15                 # optional; mm from the bottom of the chassis to the ears
+    positions:
+      - {name: flush, at: 0, default: true}
+      - {name: mid, at: 228, racks: [2-post], part: {kit: acme/slide@1, part: mid}}
+  kits:
+    - {ref: acme/slide@1, supply: in-box,
+       depth: {config: four-post, range: {square: [685, 868]}}}
+```
+
+- A position's `name` is one of `flush`, `recessed`, `mid`, `rear` and
+  `proud`, and is required. `label` is the vendor's word for it. `at` is
+  millimetres from the front of the faceplate back to the plane the ears bolt
+  to, positive when the ears are behind the faceplate, and is written only
+  when a source gives it. At most one position is `default` (L160). `racks`
+  takes the words a kit configuration's `racks` takes. `part` names a kit the
+  device lists and the `id` of one of that kit's parts (L162).
+- A kit entry's `ref` is a `kind: kit` (L161), listed once. `supply` is
+  `in-box` or `optional`, and `variant: reversed` marks a reverse-mount kit.
+  `depth` replaces the `depth` of one configuration of the kit for this device:
+  `config` names the configuration and `range` has the shape that
+  configuration's `depth` has (L163).
+- Both keys are for a `rack` device only (L125). A kit is never placed,
+  composed or seated in a bay (L5, L10).
+
+Neither key is in a published file of its own yet. `<device>.configs.json`
+carries `chassis.ears` as the manifest writes it, as it has since #865; #907
+publishes it as an object always and adds the kits resolved inline. In the
+device lock both keys are chassis surface, so stating either is a patch, and a
+listed kit, its parts and its accessories join the `composed` digest, so a kit
+edited in place asks each device that lists it for a patch.
+
 ## The cable types file
 
 `cable-types.json` names the cable types a rack tool can lay: each one's

@@ -62,9 +62,17 @@ def size_text(size):
 
 
 def composed_by(library):
-    """ref -> contracts that compose it through `parts:` (or otherwise name it)."""
+    """ref -> contracts that compose it through `parts:` (or otherwise name it).
+
+    A KIT IS NOT A COMPOSER (#906). It lists its rails and brackets as `parts`
+    and names an arm under `accessories`, but it draws none of them into a part:
+    it is a set a device names from `chassis.kits` (#905). Counted, every rail
+    in a kit would read as composed by it, and `composed-by` in components.json
+    would say a part is built into something that is only a box of parts."""
     users = defaultdict(set)
     for contract in sorted(library.glob("components/*/*/v*/contract.yaml")):
+        if (load_yaml(contract) or {}).get("kind") == "kit":
+            continue
         own = f"{contract.parts[-4]}/{contract.parts[-3]}@{contract.parts[-2][1:]}"
         for ns, name, major in set(REF.findall(without_non_use_refs(contract.read_text()))):
             ref = f"{ns}/{name}@{major}"

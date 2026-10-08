@@ -418,6 +418,12 @@ def _children(contract):
     still one a configuration can draw there.
     """
     refs = list(manifest.drawn_refs(contract))
+    # A KIT'S ACCESSORIES ARE PART OF WHAT IT IS (#906): the arm and the bar
+    # are resolved inline with the kit's parts in configs.json (#907), so an
+    # arm redrawn under a kit reaches the devices that list it. `drawn_refs`
+    # already reads a kit's `parts`, which are `{ref, id, count}`.
+    if contract.get("kind") == "kit":
+        refs += [(a or {}).get("ref") for a in contract.get("accessories") or []]
     for bay in (contract.get("bays") or {}).values():
         bay = bay or {}
         refs += [bay.get("default")] + list(bay.get("accepts") or [])
@@ -443,8 +449,20 @@ def _composed(doc, versions):
     rears' MPO openings were redrawn under fs/fhd-1ufce and its lock reported
     nothing. The face list comes from `manifest.drawn_refs`, which reads both
     spellings of `plan` and every direction in `faces.DIRECTIONS`.
+
+    A LISTED KIT IS FOLLOWED TOO, though nothing places it (#906). Its parts
+    draw nothing on the faceplate, but configs.json resolves each kit a device
+    lists inline - motion, configurations, depth ranges and the geometry of its
+    parts (#907) - so a kit edited in place changes what this device publishes,
+    exactly as a redrawn jack does. A shared rail edited under a dozen chassis
+    asks each of them for a patch, and `composed-refs` names the kit that
+    moved. Left out, the lock would close on the kit's author remembering to
+    bump it, which is the gap #405 closed for parts.
     """
     seen, todo = {}, []
+    for kit in ((doc.get("chassis") or {}).get("kits") or []):
+        if isinstance(kit, dict) and kit.get("ref"):
+            todo.append(kit["ref"])
     for view in (doc.get("views") or {}).values():
         for kind in ("bays", "placements"):
             for item in (((view or {}).get("components") or {}).get(kind) or []):
@@ -498,8 +516,14 @@ CHASSIS_SHAPE = {"width", "height", "depth", "ru", "bevel", "shell"}
 # `overhang` IS A STATEMENT, like `mount`: it says how far parts already placed
 # reach past the rack face, and those parts carry their own geometry. Declaring
 # the reach a device already had moves nothing (#865).
+# `ears` AS AN OBJECT IS STILL A STATEMENT (#906): its named positions say
+# where the device can be mounted in a rack, and nothing on the faceplate
+# drawing moves. `kits` names the rail kits the device takes, which are library
+# objects with versions of their own; listing one moves nothing either. Stating
+# either is a patch. What a listed kit CONTAINS is hashed in `composed`, as a
+# part a device places is - see `_composed`.
 CHASSIS_SURFACE = {"color", "edge", "silk", "weight-kg", "airflow", "power", "mount", "thickness",
-                   "full-depth", "ears", "overhang"}
+                   "full-depth", "ears", "overhang", "kits"}
 
 
 def _shape_digest(doc, placed, drop=()):
