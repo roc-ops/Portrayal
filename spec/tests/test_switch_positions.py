@@ -444,16 +444,19 @@ ROCKER = "common/rocker-switch@1"
 
 
 def test_the_rocker_raises_the_half_it_is_not_set_to():
-    """ON presses the I half and raises the O half; OFF the reverse. Each
-    option shows one node, so no option is drawn by absence."""
+    """A see-saw rocker: ON tips the surface so the O end rises, OFF the I
+    end. Each option shows one node, so no option is drawn by absence."""
     p = LIB / "components/common/rocker-switch/v1/contract.yaml"
     c = yaml.safe_load(p.read_text())
     assert c["fields"]["state"] == {"label": "State", "type": "choice", "options": ["off", "on"], "default": "off"}
     for code in ("L73", "L148", "L149"):
         assert not _caught(code, lint.lint_component_fields, p, c), code
     by = {e.get("id"): e for e in ET.parse(p.parent / "skins/default.svg").getroot().iter()}
-    assert by["raised-i"].get("data-show") == "off" and by["raised-i"].get("display") is None
-    assert by["raised-o"].get("data-show") == "on" and by["raised-o"].get("display") == "none"
+    assert by["rocker-off"].get("data-show") == "off" and by["rocker-off"].get("display") is None
+    assert by["rocker-on"].get("data-show") == "on" and by["rocker-on"].get("display") == "none"
+    # a see-saw: one surface tipped each way, high at the end the position does not press
+    prof = {f["node"]: f.get("profile") for f in c["relief"]["features"]}
+    assert prof["rocker-off"] == [[0, 4.9], [17.5, 2.2]] and prof["rocker-on"] == [[0, 2.2], [17.5, 4.9]]
 
 
 def test_a_placement_sets_the_rocker_on(tmp_path):
@@ -466,5 +469,5 @@ def test_a_placement_sets_the_rocker_on(tmp_path):
     assert r.returncode == 0, r.stderr[-800:]
     root = ET.parse(o / f"{name}.rear.svg").getroot()
     disp = {e.get("id"): e.get("display") for e in root.iter() if (e.get("id") or "").startswith("power-switch-")}
-    assert disp["power-switch-1--raised-o"] is None and disp["power-switch-1--raised-i"] == "none"
-    assert disp["power-switch-2--raised-o"] == "none" and disp["power-switch-2--raised-i"] is None
+    assert disp["power-switch-1--rocker-on"] is None and disp["power-switch-1--rocker-off"] == "none"
+    assert disp["power-switch-2--rocker-on"] == "none" and disp["power-switch-2--rocker-off"] is None

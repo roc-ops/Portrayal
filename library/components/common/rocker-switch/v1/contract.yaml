@@ -24,14 +24,14 @@ provenance:
     rocker's raised end; the bezel lip is not separated in the mesh and its 1.5 is
     estimated.
   state: >-
-    A FIELD, since 1.1.0 (docs/switch-positions-design.md): `off` or `on`. A rocker is
-    set by pressing the side marked for the position, so ON presses the I half in and
-    raises the O half, and OFF the reverse; each half is a node shown for the position
-    that raises it, standing the GLB's 4.9 while the pressed half stands at the rocker's
-    own height. That height is ESTIMATED at 3.0 - the GLB's surface across the rocker
-    slopes by about 1.8 between its ends, but which way the mesh's own frame faces is
-    not certain enough to say which half it holds raised. The skin draws OFF, the I half
-    raised; nothing held says how a chassis ships, so OFF is a judgement.
+    A FIELD, since 1.1.0 (docs/switch-positions-design.md): `off` or `on`. A SEE-SAW
+    rocker - one surface that tips about its centre, so the end it is set to presses
+    into the bezel and the other end rises out of it. Each tipped surface is a node
+    shown for its position, the I end raised for `off` and the O end raised for `on`.
+    The raised end stands the GLB's 4.9; the low end 2.2, from the slope of the GLB
+    switch's own surface, which falls about 1.8 over 12 across the rocker (2.7 over
+    its 17.5). The skin draws OFF; nothing held says how a chassis ships, so OFF is a
+    judgement.
 fields:
   state: {label: State, type: choice, options: ['off', 'on'], default: 'off'}
 elements:
@@ -45,23 +45,19 @@ relief:
       source: >-
         common/rocker-switch@1 depth key - the bezel lip is not a separate mesh in the
         GLB; 1.5 is a typical snap-in bezel lip.
-    - node: rocker
-      out: 3.0
+    - node: rocker-off
+      out: 4.9
+      profile: [[0, 4.9], [17.5, 2.2]]
       color: '#26292d'
-      confidence: estimated
-      source: >-
-        the pressed half of the rocker - see provenance.state; no source gives it
-    - node: raised-i
-      out: 4.9
-      color: '#33373c'
       confidence: drawing
       source: >-
-        common/rocker-switch@1 depth key - the GL-12xB GLB switch reaches 4.9 behind the
-        rear panel plane, the rocker's raised end.
-    - node: raised-o
+        the GL-12xB GLB switch: its raised end 4.9 behind the rear panel plane, and its
+        surface falling about 1.8 over 12 across the rocker - see provenance.state
+    - node: rocker-on
       out: 4.9
-      color: '#33373c'
+      profile: [[0, 2.2], [17.5, 4.9]]
+      color: '#26292d'
       confidence: drawing
       source: >-
-        see raised-i
+        rocker-off, tipped the other way
 skins: [default]
