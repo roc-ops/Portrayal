@@ -1476,6 +1476,14 @@ def comments_for(dev, cfg_name, cfg):
     reach = overhang_prose((dev.get("chassis") or {}).get("overhang"))
     if reach:
         lines += [reach, ""]
+    # WHERE THE EARS PUT THE FACE, AND WHAT RAILS HOLD IT (#907): neither schema
+    # has a field for a mounting position or a rail kit, and a rack plan read
+    # from the record is wrong without them - a box mid-mounted on a 2-post
+    # frame stands well forward of where a flush one would.
+    for prose in (ears_prose((dev.get("chassis") or {}).get("ears")),
+                  kits_prose((dev.get("chassis") or {}).get("kits"))):
+        if prose:
+            lines += [prose, ""]
 
     ds = dev.get("datasheet") or {}
     if ds.get("url"):
@@ -1647,6 +1655,72 @@ def overhang_prose(overhang):
         where = f"{mm(left)} on the left and {mm(right)} on the right, seen from the front"
     return ("Parts reach beyond the 19-inch rack width (the rack face, ears included): "
             f"{where}.")
+
+
+def _mm(v):
+    return f"{float(v):g} mm"
+
+
+def ears_prose(ears):
+    """`chassis.ears` as one paragraph, or None where the device states none
+    (#907). Either spelling: the bare string `behind` (#865) says the same as
+    the object's `behind: true` (#906)."""
+    if not ears:
+        return None
+    if isinstance(ears, str):
+        ears = {"behind": ears == "behind"}
+    out = []
+    if ears.get("behind") is True:
+        out.append("The ear flanges fold back behind the body, so the face stands in "
+                   "front of the rack posts.")
+    if ears.get("h") is not None or ears.get("y") is not None:
+        span = f"The ears are {_mm(ears['h'])} tall" if ears.get("h") is not None \
+            else "The ears"
+        if ears.get("y") is not None:
+            span += f", {_mm(ears['y'])} above the bottom of the chassis"
+        out.append(span + ".")
+    words = []
+    for pos in ears.get("positions") or []:
+        pos = pos or {}
+        bits = []
+        if pos.get("label"):
+            bits.append(f"\"{pos['label']}\"")
+        if pos.get("at") is not None:
+            at = float(pos["at"])
+            bits.append("ears level with the face" if at == 0 else
+                        f"ears {_mm(abs(at))} {'behind' if at > 0 else 'in front of'} "
+                        "the face")
+        if pos.get("racks"):
+            bits.append(", ".join(pos["racks"]) + " only")
+        part = pos.get("part")
+        if isinstance(part, dict):
+            bits.append(f"with part {part.get('part')} of {part.get('kit')}")
+        if pos.get("default") is True:
+            bits.append("as shipped")
+        words.append(str(pos.get("name")) + (f" ({'; '.join(bits)})" if bits else ""))
+    if words:
+        out.append("Rack mounting positions: " + ", ".join(words) + ".")
+    return " ".join(out) or None
+
+
+SUPPLY_PROSE = {"in-box": "in the box", "optional": "sold separately"}
+
+
+def kits_prose(kits):
+    """`chassis.kits` as one sentence, or None where the device lists none
+    (#907). Names each kit by its library ref, with how it is supplied; the
+    kit itself, resolved, is in the device's configs.json."""
+    words = []
+    for kit in kits or []:
+        if not isinstance(kit, dict) or not kit.get("ref"):
+            continue
+        bits = [SUPPLY_PROSE.get(kit.get("supply"), str(kit.get("supply")))]
+        if kit.get("variant") == "reversed":
+            bits.append("for reverse mounting")
+        words.append(f"{kit['ref']} ({', '.join(bits)})")
+    if not words:
+        return None
+    return "Rail kits: " + "; ".join(words) + "."
 
 
 def worth_a_file(doc, dev):
