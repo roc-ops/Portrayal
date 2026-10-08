@@ -7053,6 +7053,12 @@ def lint_unplaced_majors(root):
     QSFP pull tab is composed by the QSFP transceiver, and one sentence about
     the transceiver covers both. Requiring a waiver per part would put the
     reason on the sub-part, which is the one place a reader is not looking.
+
+    A KIT A DEVICE LISTS IS REACHED, and so are its parts and accessories
+    (#906). Nothing places a kit - `chassis.kits[].ref` names it - and
+    `_ref_strings` reads every ref string in a manifest whatever key holds it,
+    so the walk needs no kit case: the device reaches the kit, and the kit's
+    `parts` and `accessories` refs reach the rest.
     """
     comp_root = Path(root) / "components"
     if not comp_root.is_dir():
