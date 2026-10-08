@@ -482,8 +482,7 @@ def test_l76_does_not_census_the_family_itself():
 @pytest.mark.parametrize("rel", [
     "components/cisco/spa-8xcht1-e1/v1/contract.yaml",
     "components/cisco/spa-8xcht1-e1-v2/v1/contract.yaml",
-    "components/juniper/mic-3d-16che1-t1-ce/v1/contract.yaml",
-    "components/juniper/mic-3d-16che1-t1-ce-v/v1/contract.yaml",
+    "components/juniper/mic-3d-16che1-t1-ce/v2/contract.yaml",
 ])
 def test_the_t1_e1_cards_ports_are_bare_jacks(rel):
     d = yaml.safe_load((LIB / rel).read_text())

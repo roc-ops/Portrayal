@@ -304,9 +304,9 @@ def test_a_card_traffic_port_is_not_mgmt_only():
 
 def test_an_ungrouped_card_exports_as_it_did():
     """A card with no groups takes no new path: its parts are its parts."""
-    c = _contract("juniper/mic3-3d-10xge-sfpp@1")
+    c = _contract("juniper/mic3-3d-10xge-sfpp@2")
     assert not c.get("groups")
-    doc = _module("juniper/mic3-3d-10xge-sfpp@1")
+    doc = _module("juniper/mic3-3d-10xge-sfpp@2")
     assert doc["interfaces"] and not any(i.get("mgmt_only") for i in doc["interfaces"])
 
 
