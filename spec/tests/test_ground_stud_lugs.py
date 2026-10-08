@@ -105,15 +105,16 @@ OLD_SHIFT = {"stud-tr": (0.0, 0.0), "stud-bl": (-15.3, 15.3), "stud-br": (0.0, 1
 #                                       each), the Nokia FX-16 (2), FX-8 and FX-4
 #   juniper/mx-ground-stud@1  10 -> 0   the MX80, MX104, MX150, MX240 and MX480
 # and 22 devices with them, every one of whose ground studs was in a pair.
-# #830 then moved common/ground-lug@1 55 -> 40 on 35 -> 27 devices: fifteen
+# #830 then moved common/ground-lug@1 55 -> 35 on 35 -> 23 devices: fifteen
 # placements on eight UfiSpace chassis (M3000-14XC, S9500-22XST, S9501-28SMT,
 # S9502-16SMT, S9510-28DC, S9510-30XC, S9511-20CT, S9601-104BC) became one
-# common/ground-stud-pair-5-8-m4@1 each. Where one stud had stood for two holes
-# (Edgecore DCS500 twice, EPS112, EPS203, AGR560) the second screw is the
-# symbol-less common/ground-screw@1, five placements on four devices.
+# common/ground-stud-pair-5-8-m4@1 each, and where one stud had stood for two
+# holes (Edgecore DCS500 twice, EPS112, EPS203, AGR560) both screws are the
+# symbol-less common/ground-screw@1, ten placements on four devices, with the
+# printed earth mark drawn as silkscreen.
 CENSUS = {
-    "common/ground-lug@1": (40, 27),
-    "common/ground-screw@1": (5, 4),
+    "common/ground-lug@1": (35, 23),
+    "common/ground-screw@1": (10, 4),
     "common/ground-stud@1": (3, 3),
     CASA: (1, 1),
 }
@@ -198,7 +199,7 @@ BUILT = {
     # a pair side by side, both seated
     "ufispace/s9501-18smt": ("dc", "right", "common/ground-lug@1", ["ground-1", "ground-2"]),
     # a placement turned 90
-    "edgecore/dcs500": ("base", "rear", "common/ground-lug@1", ["ground-1"]),
+    "edgecore/dcs500": ("base", "rear", "common/ground-screw@1", ["ground-1"]),
 }
 # THE SEATS ASKED FOR AT THE SEAT'S OWN DIRECTION, `turn: 0` (#829). Every
 # other seat in BUILT states no turn and takes the default the build computes

@@ -198,46 +198,55 @@ def test_each_ufispace_pair_records_its_reading_and_its_gap():
 
 # #830 part 3: a two-hole plate drawn as one stud is now its two screws. No
 # pair host fits - the DCS500 pitch reads 17.2, no lug pattern, and the other
-# three state no screw size - so the screw beside the printed earth symbol is
-# common/ground-lug@1, which draws one, and the other common/ground-screw@1,
-# which does not: one symbol per plate, as the photographs show.
-# device -> (rotate of the symbol-bearing screw, {id: (part, stud axis)}, stud-size)
-ONE_LUG, PLAIN = "common/ground-lug@1", "common/ground-screw@1"
+# three state no screw size - so both screws are common/ground-screw@1, the
+# nominal screw WITHOUT an earth symbol, and the one symbol each plate prints
+# is device silkscreen where the chassis prints it (provenance ground-pair).
+# device -> (rotate, {id: stud axis}, stud-size, {mark centre: the ids it is for})
+PLAIN = "common/ground-screw@1"
 TWO_SCREW = {
-    "edgecore/dcs500": (90, {"ground-1": (ONE_LUG, (49.85, 32.7)), "ground-1b": (PLAIN, (67.05, 32.7)),
-                             "ground-0": (ONE_LUG, (370.55, 32.7)), "ground-0b": (PLAIN, (387.75, 32.7))},
-                        "M5"),
-    "edgecore/eps112": (None, {"ground-1": (PLAIN, (9.5, 11.85)), "ground-2": (ONE_LUG, (9.5, 28.15))}, None),
-    "edgecore/eps203": (None, {"ground-1": (PLAIN, (9.3, 11.7)), "ground-2": (ONE_LUG, (9.3, 27.9))}, None),
-    "edgecore/agr560": (None, {"ground-1": (ONE_LUG, (7.3, 39.85)), "ground-2": (PLAIN, (7.3, 55.95))}, None),
+    "edgecore/dcs500": ({"ground-1": 90, "ground-0": 90},
+                        {"ground-1": (49.85, 32.7), "ground-1b": (67.05, 32.7),
+                         "ground-0": (370.55, 32.7), "ground-0b": (387.75, 32.7)}, "M5",
+                        {(58.2, 19.0): "ground-1", (377.6, 19.0): "ground-0"}),
+    "edgecore/eps112": ({}, {"ground-1": (9.5, 11.85), "ground-2": (9.5, 28.15)}, None,
+                        {(23.7, 28.7): ["ground-1", "ground-2"]}),
+    "edgecore/eps203": ({}, {"ground-1": (9.3, 11.7), "ground-2": (9.3, 27.9)}, None,
+                        {(20.2, 20.1): ["ground-1", "ground-2"]}),
+    "edgecore/agr560": ({}, {"ground-1": (7.3, 39.85), "ground-2": (7.3, 55.95)}, None,
+                        {(7.5, 24.9): ["ground-1", "ground-2"]}),
 }
 
 
 @pytest.mark.parametrize("device", sorted(TWO_SCREW))
-def test_a_two_hole_plate_draws_both_screws_and_one_symbol(device):
-    rot, studs, size = TWO_SCREW[device]
-    got = {p["id"]: p for p in _device(device)["views"]["rear"]["components"]["placements"]
-           if p["ref"] in (ONE_LUG, PLAIN)}
-    assert set(got) == set(studs)
-    for pid, (ref, axis) in studs.items():
-        p = got[pid]
-        assert p["ref"] == ref, pid
-        assert p.get("rotate") == (rot if ref == ONE_LUG else None), pid
+def test_a_two_hole_plate_draws_both_screws_and_its_printed_mark(device):
+    rots, studs, size, marks = TWO_SCREW[device]
+    rear = _device(device)["views"]["rear"]
+    placed = {p["id"]: p for p in rear["components"]["placements"]
+              if p["ref"] in (PLAIN, "common/ground-lug@1")}
+    assert set(placed) == set(studs)
+    c = _contract(PLAIN)
+    for pid, axis in studs.items():
+        p = placed[pid]
+        assert p["ref"] == PLAIN, pid
+        assert p.get("rotate") == rots.get(pid), pid
         assert (p.get("attrs") or {}).get("stud-size") == size
-        c = _contract(ref)
         seat = render_mod.seat_point(p["at"], c["size"], p.get("rotate"),
                                      c["connection-points"]["mate"]["at"])
         assert seat == pytest.approx(list(axis), abs=1e-3), pid
-    # one earth symbol for each plate: the DCS500 has two plates
-    assert sum(1 for r, _ in studs.values() if r == ONE_LUG) == (2 if device == "edgecore/dcs500" else 1)
+    # the earth symbol the chassis prints, once per plate, where it prints it
+    got = {tuple(m["at"]): m["for"] for m in rear.get("silkscreen") or []
+           if m.get("for") and set([m["for"]] if isinstance(m["for"], str) else m["for"]) & set(studs)}
+    assert got == {k: v for k, v in marks.items()}
     assert "ground-pair" in _device(device)["provenance"]
 
 
 def test_the_plain_screw_seats_a_ring_lug_where_ground_lug_does():
     """The symbol-less screw is common/ground-lug@1's stud alone: the same
-    interface, presented at the same height."""
+    interface, presented at the same height. Its full geometry - axis, seat,
+    solids - is held beside ground-lug@1's in the SINGLE table of
+    test_ground_stud_lugs.py."""
     from portrayal import manifest
-    lug, screw = _contract(ONE_LUG), _contract(PLAIN)
+    lug, screw = _contract("common/ground-lug@1"), _contract(PLAIN)
     assert screw["interface"] == lug["interface"] == "terminal-stud"
     assert "symbol" not in (screw.get("elements") or {})
     assert manifest.presented_interface(screw, _contract)[2] == \

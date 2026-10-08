@@ -188,8 +188,9 @@ provenance:
       tray and leave the seams where they are. A
       BLANK PLATE from about x 192 to 268 with a single screw. TWO SUPPLY BAYS at x 270.0
       and 354.0, 72.0 wide on a pitch of 84.0, and the chassis prints PS2 and PS1 on the
-      web to the right of each. THE GROUNDING POINT is a plate at the far left, x 4 to 44,
-      with two holes and an IEC earth symbol - the datasheet's callout 11.
+      web to the right of each. THE GROUNDING POINT is a plate at the far left, x 4 to 44, with two holes one above the
+      other at x 9.3 and an IEC earth symbol in a circle to their right, midway between them
+      at (20.2, 20.1) - the datasheet's callout 11 (provenance ground-pair).
   finish-and-airflow:
     confidence: measured
     note: >-
@@ -240,19 +241,21 @@ provenance:
   ground-pair:
     confidence: photo-measured
     note: >-
-      TWO HOLES ON ONE PLATE, ONE ABOVE THE OTHER (#830). The grounding point (datasheet
-      callout 11) is a plate at the far left of the rear with two holes, one above the other,
-      and the earth symbol beside them. Read on the datasheet rear (fig-0010, body x 131 to
-      1568 px for 438 and y 516 to 660 px for 44, 3.28 and 3.27 px/mm) the holes centre at x
-      159 to 161 px and y 554.0 and 607.5 px: x 8.8, y 11.6 and 28.0, 16.4 apart. On the rear
-      photograph (photos 4-EPS203-B, 489 x 357, 1.11 to 1.14 px/mm) at x 12 px and y 166.5 and
-      184.5 px: x 9.9, y 11.9 and 27.7, 15.8 to 16.2 apart. Drawn at x 9.3, y 11.7 and 27.9,
-      16.2 apart. ONE EARTH SYMBOL: the plate prints one, between the holes, so the lower hole is
-      common/ground-lug@1, which draws its own above its stud, and the upper is
-      common/ground-screw@1, the same screw without it. NO SIZE IS CLAIMED: neither document
-      names the screw or a lug, so the parts stay the nominal unsized ground screw and no pair
-      host is placed. Formerly one common/ground-lug@1, ground, whose stud sat between the
-      holes and to their right, at (15.5, 24.8).
+      TWO HOLES ON ONE PLATE, ONE ABOVE THE OTHER, AND ONE EARTH SYMBOL TO THEIR RIGHT (#830).
+      The grounding point (datasheet callout 11) is a plate at the far left of the rear with
+      two holes, one above the other. Read on the datasheet rear (fig-0010, body x 131 to 1568
+      px for 438 and y 516 to 660 px for 44, 3.28 and 3.27 px/mm) the holes centre at x 159 to
+      161 px and y 554.0 and 607.5 px: x 8.8, y 11.6 and 28.0, 16.4 apart. On the rear
+      photograph (photos 4-EPS203-B, 489 x 357, 1.11 px/mm) at x 12 px and y 166.5 and 184.5
+      px: x 9.9, y 11.9 and 27.7, 15.8 to 16.2 apart. Drawn at x 9.3, y 11.7 and 27.9, 16.2
+      apart. The two screws are both common/ground-screw@1, the nominal unsized screw without
+      an earth symbol, and the symbol the chassis prints is silkscreen where it prints it. THE
+      SYMBOL is a circled IEC earth printed to the RIGHT of the holes, midway between them:
+      its ring centres at (196.1, 581.9) px on the datasheet rear, (19.9, 20.1), and at about
+      (24, 175) px on the photograph, (20.7, 19.7), about 11.7 across on both. Drawn at (20.2,
+      20.1), ring radius 5.6. NO SIZE IS CLAIMED: neither document names the screw or a lug,
+      so no pair host is placed. Formerly one common/ground-lug@1, ground, whose stud sat
+      between the holes and to their right, at (15.5, 24.8).
 attrs:
   environmental:
     operating-temp: '0 to 45 C (32 to 113 F)'
@@ -665,6 +668,7 @@ views:
       - {id: rear-plate, at: [0, 0], size: [438.0, 44.0], fill: '#3c3f43'}
       - {id: blank-plate, at: [192.00, 2.50], size: [76.00, 39.50], fill: '#33363a'}
     silkscreen:
+    - {id: ground-mark, at: [20.20, 20.10], path: 'M 0 -5.6 A 5.6 5.6 0 1 0 0.01 -5.6 Z M 0 -3.64 V 0.56 M -3.92 0.56 H 3.92 M -2.52 1.96 H 2.52 M -1.4 3.36 H 1.4', stroke-width: 0.45, fill: '#d8dcdf', for: [ground-1, ground-2]}
     - {id: psu-label-2, at: [344.00, 23.00], text: 'PS2', font-size: 2.0, anchor: start, fill: '#e8ecef', for: psu-2}
     - {id: psu-label-1, at: [428.00, 23.00], text: 'PS1', font-size: 2.0, anchor: start, fill: '#e8ecef', for: psu-1}
     components:
@@ -681,7 +685,7 @@ views:
          accepts: [edgecore/eps200-psu-1200w@1], default: edgecore/eps200-psu-1200w@1}
       placements:
       - {ref: common/ground-screw@1, id: ground-1, at: [6.50, 8.90], group: grounding, rel-pos: 1}
-      - {ref: common/ground-lug@1, id: ground-2, at: [5.80, 18.10], group: grounding, rel-pos: 2}
+      - {ref: common/ground-screw@1, id: ground-2, at: [6.50, 25.10], group: grounding, rel-pos: 2}
       - {ref: common/rack-ear@1, id: rear-ear-left, at: [-14, 0.25], skin: left, optional: ears, group: furniture, rel-pos: 1}
       - {ref: common/rack-ear@1, id: rear-ear-right, at: [438, 0.25], skin: right, optional: ears, group: furniture, rel-pos: 2}
   top:
