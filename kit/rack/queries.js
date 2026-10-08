@@ -9,7 +9,9 @@ import {placement, managersOf} from './managers.js';
 import {uLabel} from './model.js';
 import {portFree, endKey, proposeMedia, mismatch} from './cable-rules.js';
 import {catalogEntries} from './catalog.js';
-import {GONE} from './commands.js';
+import {GONE, CABLE_GONE} from './commands.js';
+import {slotEnv, slotTree, partName, partOf} from './slots.js';
+import {fieldRows} from '../fields.js';
 
 export function fitsAt(rack, {ref, face, ru}, {chassisOf}) {
   const spot = isRackFace(chassisOf(ref)) ? placement(rack, {face, ru}, chassisOf) : {face, ru};
@@ -98,4 +100,44 @@ export async function looseEnds(rack, {cableFacts}) {
     .map(([side, end]) => ({cable: c.id, side, end, reason: facts.ends.get(endKey(end))?.reason ?? null})))
     .filter(x => x.reason);
   return {unchecked: !!facts.unchecked, ends};
+}
+
+// ── inspect (one item or one cable, whole) ──────────────────────────────
+// What an agent needs before it fits a part, sets a field or re-points a
+// cable, as a plain object for the caller to format. Async because a cable's
+// loose ends and media are read through `ctx.cableFacts`, as looseEnds reads
+// them; everything else is answered from the rack and what ctx hands in.
+const offers = (ctx, refs) => refs.map(ref => ({ref, name: partName(ctx.compByRef, ref), kind: partOf(ctx.compByRef, ref)?.class ?? null}));
+
+function itemFacts(rack, item, ctx) {
+  const c = ctx.chassisOf?.(item.ref) || null;
+  const slots = typeof ctx.slotsOf === 'function' ? ctx.slotsOf(item.ref) : null;
+  const configs = slots
+    ? (slots.configs || []).map(k => ({name: k.name, description: k.description ?? '', airflow: k.airflow ?? null}))
+    : (c?.configs || []).map(name => ({name, description: '', airflow: null}));
+  const out = {kind: 'item', id: item.id, ref: item.ref, model: c?.model ?? null, manufacturer: c?.manufacturer ?? null,
+    label: item.label, cfg: item.cfg, configs, ru: item.ru, u: Math.max(1, c?.ru ?? 1), face: item.face, turned: !!item.turned,
+    on: item.on ?? null, unit: item.unit ?? null, managers: managersOf(rack, item.id).map(m => m.id)};
+  if (!slots) out.slots = 'not loaded';
+  else {
+    const env = slotEnv(item, slots, ctx.compByRef);
+    const tree = slotTree(env, item.swaps || {});
+    out.bays = tree.bays.map(b => ({...b, accepts: offers(ctx, b.accepts)}));
+    out.cages = tree.cages.map(g => ({...g, accepts: offers(ctx, g.accepts)}));
+    // the fields of every seated part that declares any, at the part's own
+    // path - what the `field` command takes
+    const parts = [...tree.bays.map(b => [`${b.path}/module`, b.holds]), ...tree.cages.map(g => [`${g.path}-occupant`, g.holds])];
+    out.fields = parts.flatMap(([path, ref]) => fieldRows(partOf(ctx.compByRef, ref)?.fields, item.fields?.[path])
+      .map(r => ({path, key: r.key, type: r.type, value: r.value, default: r.default, ...(r.type === 'choice' ? {choices: r.options} : {})})));
+  }
+  out.cables = (rack.cables || []).flatMap(cb => [['a', cb.a, cb.b], ['b', cb.b, cb.a]]
+    .filter(([, e]) => e.item === item.id)
+    .map(([end, e, o]) => ({id: cb.id, end, path: e.path, view: e.view, other: `${o.item}/${o.path}`})));
+  return out;
+}
+
+export async function inspect(rack, id, ctx = {}) {
+  const item = rack.items.find(i => i.id === id);
+  if (item) return itemFacts(rack, item, ctx);
+  return {error: /^c\d+$/.test(String(id)) ? CABLE_GONE : GONE};
 }
