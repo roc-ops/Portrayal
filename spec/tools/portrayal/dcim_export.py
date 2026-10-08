@@ -2875,7 +2875,9 @@ def seating_depths(dist):
     carriers = []                                # (key, [accepted keys])
     for c in dist.modules():
         bays = c.get("bays")
-        if not isinstance(bays, dict):
+        # A retired major seats nothing: it is not exported (export_modules),
+        # so the depths its bays would pass on describe no document.
+        if not isinstance(bays, dict) or c.get("superseded-by"):
             continue
         under = [key_of(ref) for b in bays.values() for ref in (b or {}).get("accepts") or []]
         carriers.append((module_key(dist, c), [k for k in under if k]))
@@ -2930,7 +2932,16 @@ def export_modules(dist, root, images=None):
     # what the namespace-to-manufacturer join needs and what a checkout used to
     # be opened for.
     built = []                                   # (man, doc, contract)
+    retired = 0
     for contract in sorted(dist.modules(), key=lambda c: (c.get("ns") or "", c.get("name") or "")):
+        # A RETIRED MAJOR IS NOT AN ORDERABLE TYPE. `superseded-by` keeps a
+        # major in the library so a manifest pinning it still resolves (#448),
+        # and says a consumer offering parts must not offer it. Its model is
+        # its successor's model, so exporting it too made the two collide on
+        # one file, and `sorted()` let the OLD document win where they differ.
+        if contract.get("superseded-by"):
+            retired += 1
+            continue
         man = dist.manufacturer_of(contract.get("ns"))
         if not man:
             skipped += 1
@@ -3034,7 +3045,8 @@ def export_modules(dist, root, images=None):
               f"{len(doc.get('power-ports', []))} power ports)")
 
     print(f"module types: {wrote} written from {len(built)} contract(s), "
-          f"{skipped} skipped for having no manufacturer")
+          f"{skipped} skipped for having no manufacturer, {retired} retired "
+          f"(`superseded-by`) and not exported")
     # NAMED, NOT COUNTED. A number here would be the instrument that failed in
     # #183: it cannot tell one part quietly vanishing from forty twins
     # collapsing the way they are meant to.

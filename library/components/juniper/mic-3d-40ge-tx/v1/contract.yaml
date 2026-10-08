@@ -1,0 +1,89 @@
+format: 1
+kind: module
+name: mic-3d-40ge-tx
+version: 1.2.1
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper Tri-Rate 40-port RJ45 MIC, dual-wide: it seats across both MIC slots of its MPC, which the bay system cannot express, so it is here for reference and in no accepts list (roc-ops/Portrayal#34). MIC form (168 x 27 window; the earlier 31 mm reading was the bay opening with bezel - a MIC must seat inside the 29.5 mm MPC face, so the window is 27).
+unplaced: >-
+  no MPC in this library accepts it. It is DUAL-WIDE - it seats across both MIC slots of its
+  MPC - and the MPC contracts model two separate single-width bays, so there is no bay shaped
+  like this card to list it in. Seating it needs a way to say that one module fills two bays,
+  which the format does not have.
+attrs:
+  model: MIC-3D-40GE-TX
+  power-draw-max-w: 41
+provenance:
+  size: 'registry + layout - the face is the slot geometry of its chassis
+    family; positions are laid out from the module reference port
+    description and registry cage sizes, NOT measured from a faceplate
+    drawing. No faceplate figure was usable for this model'
+  power: >-
+    guide FRU table - MX240 guide Table 93 'FRU Power Requirements', MIC section:
+    '| Tri-Rate MIC | MIC-3D-40GE-TX | 41W |', in nine guides. A maximum for the MIC alone, without
+    optics; the row prints no temperature ladder, so there is no ambient to name and none is
+    claimed. The module reference reaches the same number by a second route - 'Power requirement:
+    0.85 A @48 V (41 W)' - which corroborates the value without adding a rung, being an electrical
+    figure at no stated ambient.
+  numbering: 'guide - ports number within each PIC group with an n/ group
+    legend, per the module reference port-numbering figures (g000930,
+    g100786); the exact print positions are layout-derived'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: common/rj45-ganged-eth@1, id: port-0-0, at: [16, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-0-1, at: [16, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-0-2, at: [28.7, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-0-3, at: [28.7, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-0-4, at: [41.4, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-0-5, at: [41.4, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-0-6, at: [54.1, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-0-7, at: [54.1, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-0-8, at: [66.8, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-0-9, at: [66.8, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-0, at: [86.5, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-1, at: [86.5, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-2, at: [99.2, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-3, at: [99.2, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-4, at: [111.9, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-5, at: [111.9, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-6, at: [124.6, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-7, at: [124.6, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-8, at: [137.3, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-9, at: [137.3, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-0, at: [157, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-1, at: [157, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-2, at: [169.7, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-3, at: [169.7, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-4, at: [182.4, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-5, at: [182.4, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-6, at: [195.1, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-7, at: [195.1, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-8, at: [207.8, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-9, at: [207.8, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-0, at: [227.5, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-1, at: [227.5, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-2, at: [240.2, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-3, at: [240.2, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-4, at: [252.9, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-5, at: [252.9, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-6, at: [265.6, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-7, at: [265.6, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-8, at: [278.3, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-9, at: [278.3, 15.8], attrs: {media: rj45}}
+size:
+  w: 343.0
+  h: 27.0
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  w and h are a card slot opening, not the part. Nothing measured the card: provenance/size says
+  so in as many words, and #261 found the same model number drawn at two different sizes because
+  two chassis have two openings. Juniper's hardware guides for the MX240, MX480 and MX960 all
+  state an MPC/DPC/SCB as 17 x 22 x 1.25 in - the MX960's own book included, which is the vendor
+  saying it is ONE card in both orientations - but those figures are rounded to the quarter
+  inch, and 1.25 in is 31.75 mm against a modelled 30.45 mm slot pitch, so they cannot settle a
+  drawing to 0.1 mm. Estimated until a mechanical drawing or a ruler on a real card turns up.

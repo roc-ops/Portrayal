@@ -1,0 +1,68 @@
+format: 1
+kind: module
+name: mic-3d-10ge-sfp-e-v
+version: 1.2.1
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper 1G/10G Ethernet MIC with SFP+ (10 ports, one PIC). Vertical author for the vertical carriers (MX960/MX2000 MPCs stand on end, and their MICs with them).
+unplaced: >-
+  no vertical carrier in this library takes it. Tables 11 and 12 list it (24.2) under
+  MPC2E-3D-NG, MPC2E-3D-NG-Q, MPC3E-3D-NG and MPC3E-3D-NG-Q only, and Table 10 has no row for
+  it; the carriers in this library that could take it are the base MPC1E, MPC2E and MPC3E SKUs,
+  and roc-ops/Portrayal#417 narrowed each to its own column of the Interface Module Reference
+  MIC/MPC compatibility tables (Tables 10-12), none of which takes it. Modelling an NG carrier
+  as its own part would seat it.
+attrs:
+  model: MIC-3D-10GE-SFP-E
+  power-draw-max-w: 45
+provenance:
+  stack-orientation: >-
+    The library's stack convention (docs/pluggables-3d-design.md, S1-S4): on a card
+    drawn on its side a pair sits left and right, the left cage 270 beside the right 90,
+    so both cage lips face the band between the two cages and both bails face outward.
+    Decided by the rule, not an observation, so a photograph of the stack overturns it:
+    the 5 SFP pairs (port-0-1/port-0-0 to port-0-9/port-0-8). Turning a composed cage in
+    place changes no box, id or anything a device places, so it is a minor bump (S6).
+  size: 'registry + layout - the face is the slot geometry of its chassis
+    family; positions are laid out from the module reference port
+    description and registry cage sizes, NOT measured from a faceplate
+    drawing. No faceplate figure was usable for this model'
+  power: >-
+    module reference model section - 'Power requirement: 3.75 A @ 12 V (45 W) ... Model number:
+    MIC-3D-10GE-SFP-E' (mx-module-reference-p0001-0300). An electrical figure, amps times volts,
+    at no stated ambient. This MIC has no row in any chassis guide's Table 93, so there is no
+    ladder to take a rung from and none is claimed - which also means the figure has not been
+    corroborated against a guide, unlike the MICs that do have a row.
+  numbering: 'guide - ports number within each PIC group with an n/ group
+    legend, per the module reference port-numbering figures (g000930,
+    g100786); the exact print positions are layout-derived'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/sfp-ganged@1, id: port-0-1, at: [1.07, 14.73], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-0, at: [12.07, 14.73], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-3, at: [1.07, 30.57], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-2, at: [12.07, 30.57], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-5, at: [1.07, 46.42], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-4, at: [12.07, 46.42], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-7, at: [1.07, 62.27], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-6, at: [12.07, 62.27], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-9, at: [1.07, 78.12], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-8, at: [12.07, 78.12], rotate: 90, attrs: {media: sfp-plus}}
+size:
+  w: 27.0
+  h: 168.0
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  w and h are the MIC window in an MPC face, rotated, not the part. Nothing measured the card:
+  provenance/size says so in as many words, and #261 found the same model number drawn at two
+  different sizes because two chassis have two openings. Juniper's hardware guides for the
+  MX240, MX480 and MX960 all state an MPC/DPC/SCB as 17 x 22 x 1.25 in - the MX960's own book
+  included, which is the vendor saying it is ONE card in both orientations - but those figures
+  are rounded to the quarter inch, and 1.25 in is 31.75 mm against a modelled 30.45 mm slot
+  pitch, so they cannot settle a drawing to 0.1 mm. Estimated until a mechanical drawing or a
+  ruler on a real card turns up.

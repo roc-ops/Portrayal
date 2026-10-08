@@ -1,0 +1,71 @@
+format: 1
+kind: module
+name: mic-3d-16che1-t1-ce-v
+version: 1.2.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper channelized E1/T1 circuit-emulation MIC - sixteen RJ48 jacks in two rows. Vertical author for the vertical carriers (MX960/MX2000 MPCs stand on end, and their MICs with them).
+attrs:
+  model: MIC-3D-16CHE1-T1-CE
+  power-draw-max-w: 29.08
+  model-variants: MIC-3D-16CHE1-T1-CE-H
+provenance:
+  port-jacks-are-bare: >-
+    THE PORT JACKS ARE BARE. port-0-0..15 are RJ48 receptacles carrying channelized E1/T1,
+    not Ethernet, so they take the RJ45 family's bare cell rather than its lamped one
+    (docs/rj45-family-design.md decision 3: the lamped member is for what carries Ethernet).
+    The module reference tables no per-port link or activity lamp for this MIC, and this
+    contract draws none: a lamped jack here would assert two indicators the hardware is not
+    documented to have.
+  size: 'registry + layout - the face is the slot geometry of its chassis
+    family; positions are laid out from the module reference port
+    description and registry cage sizes, NOT measured from a faceplate
+    drawing. No faceplate figure was usable for this model'
+  power: >-
+    guide FRU power table, MX chassis guides: '29.08 Wat 131 F (55 C) 27.84 Wat 40 C 26.55 Wat 77 F (25 C)'. The max at 55 C is
+    carried, because the worst rated case is what a chassis budget needs.
+    Read off the row, with the part number alone in its own cell - the looser
+    extraction that preceded this put the MPC7E's number on the MPC6E and took a
+    25 C figure for a max, so a row only counts here when nothing else in it
+    could be the subject.
+    The note this replaces said the module reference does not carry it. True of
+    the book it named; the chassis guides do.
+  numbering: 'guide - ports number within each PIC group with an n/ group
+    legend, per the module reference port-numbering figures (g000930,
+    g100786); the exact print positions are layout-derived'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/rj45-ganged@2, id: port-0-1, at: [1.85, 13.65], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-0, at: [12.85, 13.65], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-3, at: [1.85, 27.95], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-2, at: [12.85, 27.95], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-5, at: [1.85, 42.25], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-4, at: [12.85, 42.25], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-7, at: [1.85, 56.55], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-6, at: [12.85, 56.55], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-9, at: [1.85, 70.85], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-8, at: [12.85, 70.85], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-11, at: [1.85, 85.15], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-10, at: [12.85, 85.15], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-13, at: [1.85, 99.45], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-12, at: [12.85, 99.45], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-15, at: [1.85, 113.75], rotate: 90, attrs: {media: rj45}}
+- {ref: std/rj45-ganged@2, id: port-0-14, at: [12.85, 113.75], rotate: 90, attrs: {media: rj45}}
+size:
+  w: 27.0
+  h: 168.0
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  w and h are the MIC window in an MPC face, rotated, not the part. Nothing measured the card:
+  provenance/size says so in as many words, and #261 found the same model number drawn at two
+  different sizes because two chassis have two openings. Juniper's hardware guides for the
+  MX240, MX480 and MX960 all state an MPC/DPC/SCB as 17 x 22 x 1.25 in - the MX960's own book
+  included, which is the vendor saying it is ONE card in both orientations - but those figures
+  are rounded to the quarter inch, and 1.25 in is 31.75 mm against a modelled 30.45 mm slot
+  pitch, so they cannot settle a drawing to 0.1 mm. Estimated until a mechanical drawing or a
+  ruler on a real card turns up.

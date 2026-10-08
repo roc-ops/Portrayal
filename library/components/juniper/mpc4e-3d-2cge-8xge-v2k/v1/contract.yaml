@@ -1,0 +1,68 @@
+format: 1
+kind: module
+name: mpc4e-3d-2cge-8xge-v2k
+version: 1.2.1
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MPC4E-3D-2CGE-8XGE fixed MPC - two 100GbE CFP ports and eight SFP+ in interleaved PICs. Authored as the MX2000 vertical form, seated through its adapter card (jacks turned on their side - rotate 90, and 270 for the left cage of each belly-to-belly pair).
+attrs:
+  model: MPC4E-3D-2CGE-8XGE
+  power-draw-max-w: 610
+provenance:
+  stack-orientation: >-
+    The library's stack convention (docs/pluggables-3d-design.md, S1-S4): on a card
+    drawn on its side a pair sits left and right, the left cage 270 beside the right 90,
+    so both cage lips face the band between the two cages and both bails face outward.
+    Decided by the rule, not an observation, so a photograph of the stack overturns it:
+    the 4 SFP pairs (port-0-1/port-0-0 to port-2-3/port-2-2). Turning a composed cage in
+    place changes no box, id or anything a device places, so it is a minor bump (S6).
+  size: 'registry + layout - the face is the slot geometry of its chassis
+    family; positions are laid out from the module reference port
+    description and registry cage sizes, NOT measured from a faceplate
+    drawing. No faceplate figure was usable for this model'
+  power: >-
+    guide FRU table - MX240 guide Table 93 'FRU Power Requirements', fixed-configuration MPC section:
+    2x100GE + 8x10GE MPC4E, MPC4E-3D-2CGE-8XGE = 610W; with optics, 607 W at 131 F (55 C), with SFPP ZR and CFP LR4 optics 584 W at 104 F (40 C), 565 W at 77 F (25 C).
+    THE BARE FIGURE IS CARRIED - the card alone, without optics - and it is unqualified by ambient.
+    The corpus disagrees about the with-optics ladder - 607/584/565 W in mx240, mx480 and mx960;
+    607/590/585 in mx2020-p0001; 610/550/530 in mx2010-p0301 and mx2020-p0301 - and agrees on 610 W
+    bare, which is what is carried.
+    A SECOND ROW IN THE SAME TABLE repeats this card's part number and figure under the Component
+    heading 'ATM MIC with SFP'. That is a Juniper error, and it displaces the real ATM MIC:
+    MIC-3D-8OC3-2OC12-ATM has no entry at all in the MX240, MX480 or MX960 guides. Anyone matching
+    these tables on the Component description rather than the Part Number reads this card's 610 W as
+    a 35 W ATM MIC's.
+  numbering: 'guide - ports number within each PIC group with an n/ group
+    legend, per the module reference port-numbering figures (g000930,
+    g100786); the exact print positions are layout-derived'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/sfp-ganged@1, id: port-0-1, at: [5.38, 26.73], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-0, at: [21.38, 26.73], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-3, at: [5.38, 42.57], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-2, at: [21.38, 42.57], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/cfp@2, id: port-1-0, at: [-20.90, 99.10], rotate: 90, attrs: {media: cfp}}
+- {ref: std/sfp-ganged@1, id: port-2-1, at: [5.38, 160.03], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-2-0, at: [21.38, 160.03], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-2-3, at: [5.38, 175.88], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-2-2, at: [21.38, 175.88], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/cfp@2, id: port-3-0, at: [-20.90, 232.40], rotate: 90, attrs: {media: cfp}}
+size:
+  w: 41.0
+  h: 425.0
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  w and h are the MX2000 vertical card slot opening (the MX2010/MX2020 bays are 41.0 x 425.0),
+  which an MPC reaches through its adapter card, not the part. Nothing measured the card:
+  provenance/size says so in as many words, and #261 found the same model number drawn at two
+  different sizes because two chassis have two openings. Juniper's hardware guides for the
+  MX240, MX480 and MX960 all state an MPC/DPC/SCB as 17 x 22 x 1.25 in - the MX960's own book
+  included, which is the vendor saying it is ONE card in both orientations - but those figures
+  are rounded to the quarter inch, and 1.25 in is 31.75 mm against a modelled 30.45 mm slot
+  pitch, so they cannot settle a drawing to 0.1 mm. Estimated until a mechanical drawing or a
+  ruler on a real card turns up.

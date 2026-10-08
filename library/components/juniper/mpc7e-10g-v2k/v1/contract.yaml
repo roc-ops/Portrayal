@@ -1,0 +1,95 @@
+format: 1
+kind: module
+name: mpc7e-10g-v2k
+version: 1.2.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MPC7E-10G fixed MPC - forty SFP+ in four PIC groups of ten. Authored as the MX2000 vertical form, seated through its adapter card (jacks turned on their side - rotate 90, and 270 for the left cage of each belly-to-belly pair).
+attrs:
+  model: MPC7E-10G
+  power-draw-max-w: 500
+provenance:
+  stack-orientation: >-
+    The library's stack convention (docs/pluggables-3d-design.md, S1-S4): on a card
+    drawn on its side a pair sits left and right, the left cage 270 beside the right 90,
+    so both cage lips face the band between the two cages and both bails face outward.
+    Decided by the rule, not an observation, so a photograph of the stack overturns it:
+    the 20 SFP pairs (port-0-1/port-0-0 to port-3-9/port-3-8). Turning a composed cage
+    in place changes no box, id or anything a device places, so it is a minor bump (S6).
+  size: 'registry + layout - the face is the slot geometry of its chassis
+    family; positions are laid out from the module reference port
+    description and registry cage sizes, NOT measured from a faceplate
+    drawing. No faceplate figure was usable for this model'
+  power: >-
+    MX module reference, the MPC7E-10G section (headed 'Model number: MPC7E-10G', 'Name in
+    the CLI: MPC7E 3D 40XGE'): '| Power requirements | - Typical: 405W - At different
+    temperatures: 55 C: 500W 40 C: 465W 25 C: 430W |'. The 55 C rung is carried as the worst
+    rated case; the typical is 405 W. Found only after widening the search from table ROWS
+    to per-model SECTIONS - this figure is not in a row keyed by part number, it is a spec
+    line eight lines below the section heading, which is why three earlier passes over the
+    same corpus missed it. Distinct from MPC7E-MRATE, the sibling card, which is 545
+    W.
+  numbering: 'guide - ports number within each PIC group with an n/ group
+    legend, per the module reference port-numbering figures (g000930,
+    g100786); the exact print positions are layout-derived'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/sfp-ganged@1, id: port-0-1, at: [5.38, 26.73], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-0, at: [21.38, 26.73], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-3, at: [5.38, 42.57], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-2, at: [21.38, 42.57], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-5, at: [5.38, 58.42], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-4, at: [21.38, 58.42], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-7, at: [5.38, 74.27], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-6, at: [21.38, 74.27], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-9, at: [5.38, 90.12], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-8, at: [21.38, 90.12], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-1-1, at: [5.38, 114.97], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-1-0, at: [21.38, 114.97], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-1-3, at: [5.38, 130.83], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-1-2, at: [21.38, 130.83], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-1-5, at: [5.38, 146.68], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-1-4, at: [21.38, 146.68], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-1-7, at: [5.38, 162.53], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-1-6, at: [21.38, 162.53], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-1-9, at: [5.38, 178.38], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-1-8, at: [21.38, 178.38], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-2-1, at: [5.38, 203.23], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-2-0, at: [21.38, 203.23], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-2-3, at: [5.38, 219.08], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-2-2, at: [21.38, 219.08], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-2-5, at: [5.38, 234.93], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-2-4, at: [21.38, 234.93], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-2-7, at: [5.38, 250.78], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-2-6, at: [21.38, 250.78], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-2-9, at: [5.38, 266.62], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-2-8, at: [21.38, 266.62], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-3-1, at: [5.38, 291.48], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-3-0, at: [21.38, 291.48], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-3-3, at: [5.38, 307.33], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-3-2, at: [21.38, 307.33], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-3-5, at: [5.38, 323.18], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-3-4, at: [21.38, 323.18], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-3-7, at: [5.38, 339.03], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-3-6, at: [21.38, 339.03], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-3-9, at: [5.38, 354.88], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-3-8, at: [21.38, 354.88], rotate: 90, attrs: {media: sfp-plus}}
+size:
+  w: 41.0
+  h: 425.0
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  w and h are the MX2000 vertical card slot opening (the MX2010/MX2020 bays are 41.0 x 425.0),
+  which an MPC reaches through its adapter card, not the part. Nothing measured the card:
+  provenance/size says so in as many words, and #261 found the same model number drawn at two
+  different sizes because two chassis have two openings. Juniper's hardware guides for the
+  MX240, MX480 and MX960 all state an MPC/DPC/SCB as 17 x 22 x 1.25 in - the MX960's own book
+  included, which is the vendor saying it is ONE card in both orientations - but those figures
+  are rounded to the quarter inch, and 1.25 in is 31.75 mm against a modelled 30.45 mm slot
+  pitch, so they cannot settle a drawing to 0.1 mm. Estimated until a mechanical drawing or a
+  ruler on a real card turns up.

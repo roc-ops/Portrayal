@@ -1,0 +1,72 @@
+format: 1
+kind: module
+name: mpc-3d-16xge-sfpp-v2k
+version: 1.1.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MPC-3D-16XGE-SFPP fixed MPC - 16 SFP+ in four PIC groups of four. Authored as the MX2000 vertical form, seated through its adapter card (jacks rotated 90).
+attrs:
+  model: MPC-3D-16XGE-SFPP
+  power-draw-max-w: 440
+provenance:
+  size: 'registry + layout - the face is the slot geometry of its chassis
+    family; positions are laid out from the module reference port
+    description and registry cage sizes, NOT measured from a faceplate
+    drawing. No faceplate figure was usable for this model'
+  power: >-
+    guide power-budget tables, MX960 and MX2020 chassis guides, and NOT a FRU
+    spec row - no chassis guide's FRU power table carries this card. What they
+    carry is Juniper's own per-card figure used in its worked slot budgets:
+    'MPC - Slot 1 | MPC-3D-16XGE-SFPP-R-B | 440W', and then 440W*6=2640W,
+    440W*5=2200W, 440W*10=4400W and 440W*20=8800W across the zone and
+    full-chassis examples. 440 W per card, consistently, in six independent
+    places.
+    NO AMBIENT IS STATED, which is the difference between this and its siblings:
+    the MPC7E row gives 55, 40 and 25 C and this gives one number. It is carried
+    the way dpc-r-4xge-xfp carries its 310 - the vendor's own figure, with the
+    qualification it lacks named here rather than assumed away. A budget built
+    from it is sound; a comparison against a 55 C figure is not like-for-like.
+    THE MODEL ATTR SAID MPC-3D-16XGE-SFP, one P, which appears nowhere in the
+    corpus against 64 occurrences of MPC-3D-16XGE-SFPP - and was contradicted by
+    this contract's own name and description. Fixed here, because a figure
+    attached to a part number that does not exist is worse than no figure.
+  numbering: 'guide - ports number within each PIC group with an n/ group
+    legend, per the module reference port-numbering figures (g000930,
+    g100786); the exact print positions are layout-derived'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/sfp-ganged@1, id: port-0-0, at: [13.38, 26.73], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-1, at: [13.38, 42.57], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-2, at: [13.38, 58.42], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-3, at: [13.38, 74.27], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-1-0, at: [13.38, 99.12], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-1-1, at: [13.38, 114.97], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-1-2, at: [13.38, 130.83], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-1-3, at: [13.38, 146.68], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-2-0, at: [13.38, 171.53], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-2-1, at: [13.38, 187.38], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-2-2, at: [13.38, 203.23], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-2-3, at: [13.38, 219.08], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-3-0, at: [13.38, 243.93], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-3-1, at: [13.38, 259.78], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-3-2, at: [13.38, 275.63], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-3-3, at: [13.38, 291.48], rotate: 90, attrs: {media: sfp-plus}}
+size:
+  w: 41.0
+  h: 425.0
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  w and h are the MX2000 vertical card slot opening (the MX2010/MX2020 bays are 41.0 x 425.0),
+  which an MPC reaches through its adapter card, not the part. Nothing measured the card:
+  provenance/size says so in as many words, and #261 found the same model number drawn at two
+  different sizes because two chassis have two openings. Juniper's hardware guides for the
+  MX240, MX480 and MX960 all state an MPC/DPC/SCB as 17 x 22 x 1.25 in - the MX960's own book
+  included, which is the vendor saying it is ONE card in both orientations - but those figures
+  are rounded to the quarter inch, and 1.25 in is 31.75 mm against a modelled 30.45 mm slot
+  pitch, so they cannot settle a drawing to 0.1 mm. Estimated until a mechanical drawing or a
+  ruler on a real card turns up.

@@ -1,0 +1,71 @@
+format: 1
+kind: module
+name: mic-3d-4choc3-1oc12
+version: 1.3.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper channelized OC3/STM1 circuit-emulation MIC with SFP - eight cages in two 2x2 PIC groups. MIC form (168 x 27 window; the earlier 31 mm reading was the bay opening with bezel - a MIC must seat inside the 29.5 mm MPC face, so the window is 27).
+attrs:
+  oc3: 8
+  model: MIC-3D-4COC3-1COC12-CE
+  power-draw-max-w: 36.48
+provenance:
+  stack-orientation: >-
+    The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is
+    the upper cage upright (rotate 0) over the lower turned 180, so both cage lips face
+    the band between the two cages and both bails face outward. Decided by the rule, not
+    an observation, so a photograph of the stack overturns it: the 4 SFP pairs
+    (port-0-0/port-0-1 to port-1-2/port-1-3). 4 of these were drawn with the upper cage
+    turned before the std cage art moved its lip to the bottom of the opening; turning
+    them keeps the lips in the middle band where they were drawn and seats every optic
+    bail-outward. Turning a composed cage in place changes no box, id or anything a
+    device places, so it is a minor bump (S6).
+  sonet-rate: >-
+    the SONET rate, transcribed from this contract's own description: 'channelized OC3/STM1
+    circuit-emulation MIC with SFP - eight cages'. Without it the SFP cage has no rate to
+    read and the export typed it Gigabit Ethernet, which an OC-3 port is not. Nothing new
+    was measured.
+  size: 'registry + layout - the face is the slot geometry of its chassis
+    family; positions are laid out from the module reference port
+    description and registry cage sizes, NOT measured from a faceplate
+    drawing. No faceplate figure was usable for this model'
+  power: >-
+    guide FRU power table, MX chassis guides: '36.48 Wat 131 F (55 C) 35.04 Wat 40 C 33.96 Wat 77 F (25 C)'. The max at 55 C is
+    carried, because the worst rated case is what a chassis budget needs.
+    Read off the row, with the part number alone in its own cell - the looser
+    extraction that preceded this put the MPC7E's number on the MPC6E and took a
+    25 C figure for a max, so a row only counts here when nothing else in it
+    could be the subject.
+    The note this replaces said the module reference does not carry it. True of
+    the book it named; the chassis guides do.
+  numbering: 'guide - ports number within each PIC group with an n/ group
+    legend, per the module reference port-numbering figures (g000930,
+    g100786); the exact print positions are layout-derived'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/sfp-ganged@1, id: port-0-0, at: [16.00, 3.60], attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-1, at: [16.00, 15.20], rotate: 180, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-2, at: [30.25, 3.60], attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-3, at: [30.25, 15.20], rotate: 180, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-1-0, at: [51.50, 3.60], attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-1-1, at: [51.50, 15.20], rotate: 180, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-1-2, at: [65.75, 3.60], attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-1-3, at: [65.75, 15.20], rotate: 180, attrs: {media: sfp}}
+size:
+  w: 168.0
+  h: 27.0
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  w and h are the MIC window in an MPC face, not the part. Nothing measured the card:
+  provenance/size says so in as many words, and #261 found the same model number drawn at two
+  different sizes because two chassis have two openings. Juniper's hardware guides for the
+  MX240, MX480 and MX960 all state an MPC/DPC/SCB as 17 x 22 x 1.25 in - the MX960's own book
+  included, which is the vendor saying it is ONE card in both orientations - but those figures
+  are rounded to the quarter inch, and 1.25 in is 31.75 mm against a modelled 30.45 mm slot
+  pitch, so they cannot settle a drawing to 0.1 mm. Estimated until a mechanical drawing or a
+  ruler on a real card turns up.

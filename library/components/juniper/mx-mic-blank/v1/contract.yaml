@@ -1,0 +1,31 @@
+format: 1
+kind: module
+name: mx-mic-blank
+version: 1.1.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MIC slot blank cover (horizontal window).
+provenance:
+  states: >-
+    NO LAMP AND NO HEALTH ON A FILLER PANEL. A slot cover is a piece of sheet metal
+    that fills an opening: it has no indicator to light and no condition to report,
+    so `ok` was a state the viewer generated CSS for, offered as a control, and could
+    never show - this part draws no elements at all. `absent` stays, because an empty
+    slot is a real thing to draw. See roc-ops/Portrayal#269.
+  size: 'registry + layout - the MIC window geometry'
+states: [absent]
+size:
+  w: 168.0
+  h: 27.0
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  w and h are the MIC window in an MPC face, not the part. Nothing measured the card:
+  provenance/size says so in as many words, and #261 found the same model number drawn at two
+  different sizes because two chassis have two openings. Juniper's hardware guides for the
+  MX240, MX480 and MX960 all state an MPC/DPC/SCB as 17 x 22 x 1.25 in - the MX960's own book
+  included, which is the vendor saying it is ONE card in both orientations - but those figures
+  are rounded to the quarter inch, and 1.25 in is 31.75 mm against a modelled 30.45 mm slot
+  pitch, so they cannot settle a drawing to 0.1 mm. Estimated until a mechanical drawing or a
+  ruler on a real card turns up.

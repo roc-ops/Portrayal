@@ -1,0 +1,51 @@
+format: 1
+kind: module
+name: mic3-100g-dwdm-v
+version: 1.1.1
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper 100G DWDM OTN MIC3 with CFP2-ACO (one port). Vertical author for the vertical carriers (MX960/MX2000 MPCs stand on end, and their MICs with them).
+attrs:
+  model: MIC3-100G-DWDM
+  power-draw-max-w: 91
+provenance:
+  size: 'registry + layout - the face is the slot geometry of its chassis
+    family; positions are laid out from the module reference port
+    description and registry cage sizes, NOT measured from a faceplate
+    drawing. No faceplate figure was usable for this model'
+  power: >-
+    guide FRU power table, MX chassis guides: 'With optics: 91 Wat 131 F (55 C) 83 Wat 77 F (25 C)'. The max at 55 C is
+    carried, because the worst rated case is what a chassis budget needs.
+    THE FIGURE INCLUDES OPTICS, which the vendor says. The transceivers here 
+    are `common/` generics that L27 deliberately never asks for a wattage, so 
+    nothing else in a total carries them and this does not double count.
+    Read off the row, with the part number alone in its own cell - the looser
+    extraction that preceded this put the MPC7E's number on the MPC6E and took a
+    25 C figure for a max, so a row only counts here when nothing else in it
+    could be the subject.
+    The note this replaces said the module reference does not carry it. True of
+    the book it named; the chassis guides do.
+  numbering: 'guide - ports number within each PIC group with an n/ group
+    legend, per the module reference port-numbering figures (g000930,
+    g100786); the exact print positions are layout-derived'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/cfp2@2, id: port-0-0, at: [-7.25, 26.40], rotate: 90, attrs: {media: cfp2}}
+size:
+  w: 27.0
+  h: 168.0
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  w and h are the MIC window in an MPC face, rotated, not the part. Nothing measured the card:
+  provenance/size says so in as many words, and #261 found the same model number drawn at two
+  different sizes because two chassis have two openings. Juniper's hardware guides for the
+  MX240, MX480 and MX960 all state an MPC/DPC/SCB as 17 x 22 x 1.25 in - the MX960's own book
+  included, which is the vendor saying it is ONE card in both orientations - but those figures
+  are rounded to the quarter inch, and 1.25 in is 31.75 mm against a modelled 30.45 mm slot
+  pitch, so they cannot settle a drawing to 0.1 mm. Estimated until a mechanical drawing or a
+  ruler on a real card turns up.

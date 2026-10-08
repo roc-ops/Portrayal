@@ -1,0 +1,50 @@
+format: 1
+kind: module
+name: mic3-3d-2x40ge-qsfpp
+version: 1.2.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper 40GbE MIC3 with QSFP+ (two ports). MIC form (168 x 27 window; the earlier 31 mm reading was the bay opening with bezel - a MIC must seat inside the 29.5 mm MPC face, so the window is 27).
+attrs:
+  qsfp: 2
+  model: MIC3-3D-2X40GE-QSFPP
+  power-draw-max-w: 18
+provenance:
+  qsfp-rate: >-
+    the cage RATE, transcribed from this contract's own description: '40GbE MIC3 with QSFP+
+    (two ports)'. Without it `cage_type` finds no media attr for the qsfp family and falls
+    through to PART_IFACE's default, which is QSFP28 at 100G - a rate this card does not
+    run. Nothing new was measured.
+  size: 'registry + layout - the face is the slot geometry of its chassis
+    family; positions are laid out from the module reference port
+    description and registry cage sizes, NOT measured from a faceplate
+    drawing. No faceplate figure was usable for this model'
+  power: >-
+    guide FRU power table (Component | Model Number | Maximum Power Requirement), MX chassis
+    guides: '| 40-Gigabit Ethernet MIC with QSFPP | MIC3-3D-2X40GE-QSFPP | 18W |'. Same
+    figure in the MX2008 and MX2010 guides.
+  numbering: 'guide - ports number within each PIC group with an n/ group
+    legend, per the module reference port-numbering figures (g000930,
+    g100786); the exact print positions are layout-derived'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/qsfp28@1, id: port-0-0, at: [16.00, 8.43], attrs: {media: qsfp-plus}}
+- {ref: std/qsfp28@1, id: port-0-1, at: [37.50, 8.43], attrs: {media: qsfp-plus}}
+size:
+  w: 168.0
+  h: 27.0
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  w and h are the MIC window in an MPC face, not the part. Nothing measured the card:
+  provenance/size says so in as many words, and #261 found the same model number drawn at two
+  different sizes because two chassis have two openings. Juniper's hardware guides for the
+  MX240, MX480 and MX960 all state an MPC/DPC/SCB as 17 x 22 x 1.25 in - the MX960's own book
+  included, which is the vendor saying it is ONE card in both orientations - but those figures
+  are rounded to the quarter inch, and 1.25 in is 31.75 mm against a modelled 30.45 mm slot
+  pitch, so they cannot settle a drawing to 0.1 mm. Estimated until a mechanical drawing or a
+  ruler on a real card turns up.

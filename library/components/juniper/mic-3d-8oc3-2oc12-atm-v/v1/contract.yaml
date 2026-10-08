@@ -1,0 +1,73 @@
+format: 1
+kind: module
+name: mic-3d-8oc3-2oc12-atm-v
+version: 1.3.1
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper ATM MIC with SFP (eight ports). Vertical author for the vertical carriers (MX960/MX2000 MPCs stand on end, and their MICs with them).
+unplaced: >-
+  no vertical carrier in this library takes it. Tables 10-12 list it under the queuing (Q, EQ)
+  and NG SKUs only; the carriers in this library that could take it are the base MPC1E, MPC2E
+  and MPC3E SKUs, and roc-ops/Portrayal#417 narrowed each to its own column of the Interface
+  Module Reference MIC/MPC compatibility tables (Tables 10-12), none of which takes it. The
+  horizontal form is still seated by the MX80. Modelling a queuing or NG carrier as its own part
+  would seat it.
+attrs:
+  oc3: 8
+  model: MIC-3D-8OC3-2OC12-ATM
+  power-draw-max-w: 35
+provenance:
+  stack-orientation: >-
+    The library's stack convention (docs/pluggables-3d-design.md, S1-S4): on a card
+    drawn on its side a pair sits left and right, the left cage 270 beside the right 90,
+    so both cage lips face the band between the two cages and both bails face outward.
+    Decided by the rule, not an observation, so a photograph of the stack overturns it:
+    the 4 SFP pairs (port-0-1/port-0-0 to port-0-7/port-0-6). Turning a composed cage in
+    place changes no box, id or anything a device places, so it is a minor bump (S6).
+  sonet-rate: >-
+    the SONET rate, transcribed from this contract's own description: 'ATM MIC with SFP
+    (eight ports)'. Without it the SFP cage has no rate to read and the export typed it
+    Gigabit Ethernet, which an OC-3 port is not. Nothing new was measured.
+  size: 'registry + layout - the face is the slot geometry of its chassis
+    family; positions are laid out from the module reference port
+    description and registry cage sizes, NOT measured from a faceplate
+    drawing. No faceplate figure was usable for this model'
+  power: >-
+    guide FRU table - MX2008 guide FRU power table: '| ATM MIC with SFP | MIC-3D-8OC3-2OC12-ATM | 35W |',
+    repeated in both halves of the mx2010 and mx2020 guides. A maximum for the MIC alone, without
+    optics; the row prints no temperature ladder, so there is no ambient to name and none is claimed.
+    IT IS TAKEN FROM THE MX2000-FAMILY GUIDES BECAUSE THE MX240 GUIDE HAS NO ROW FOR THIS MIC. Table
+    93's row headed 'ATM MIC with SFP' carries the part number MPC4E-3D-2CGE-8XGE and that card's
+    610 W - a Juniper error present in mx240, mx480 and both halves of mx960, which displaces the
+    real ATM MIC entry from all four.
+  numbering: 'guide - ports number within each PIC group with an n/ group
+    legend, per the module reference port-numbering figures (g000930,
+    g100786); the exact print positions are layout-derived'
+states:
+- ok
+- fail
+- absent
+parts:
+- {ref: std/sfp-ganged@1, id: port-0-1, at: [1.07, 14.73], rotate: 270, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-0, at: [12.07, 14.73], rotate: 90, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-3, at: [1.07, 30.57], rotate: 270, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-2, at: [12.07, 30.57], rotate: 90, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-5, at: [1.07, 46.42], rotate: 270, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-4, at: [12.07, 46.42], rotate: 90, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-7, at: [1.07, 62.27], rotate: 270, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-0-6, at: [12.07, 62.27], rotate: 90, attrs: {media: sfp}}
+size:
+  w: 27.0
+  h: 168.0
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  w and h are the MIC window in an MPC face, rotated, not the part. Nothing measured the card:
+  provenance/size says so in as many words, and #261 found the same model number drawn at two
+  different sizes because two chassis have two openings. Juniper's hardware guides for the
+  MX240, MX480 and MX960 all state an MPC/DPC/SCB as 17 x 22 x 1.25 in - the MX960's own book
+  included, which is the vendor saying it is ONE card in both orientations - but those figures
+  are rounded to the quarter inch, and 1.25 in is 31.75 mm against a modelled 30.45 mm slot
+  pitch, so they cannot settle a drawing to 0.1 mm. Estimated until a mechanical drawing or a
+  ruler on a real card turns up.
