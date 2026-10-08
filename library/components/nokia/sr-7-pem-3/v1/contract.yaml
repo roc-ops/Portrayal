@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: sr-7-pem-3
-version: 1.0.0
+version: 1.1.0
 class: power
 behaviour: fills
 profile: networking
@@ -29,6 +29,8 @@ attrs:
   feeds: 1
   weight-kg: 1.5
 provenance:
+  positions: >-
+    FIELDS, since 1.1.0 (docs/switch-positions-design.md, #808): `breaker`, `off` or `on`. The rocker is a SEE-SAW: one surface tipped about its centre, so the end it is set to presses in and the other end rises. OFF and O at the left and ON and I at the right of the rocker, as Fig 13 prints them; OFF raises the I end and ON the O end, each a node shown for its position, shaded lighter toward its raised end and built in 3D as a sloped profile. The heights are estimated. The skin draws OFF; nothing held says how a unit ships.
   sources: >-
     SR7 = 7450 ESS-7 and 7750 SR-7 Chassis Installation Guide 22.7, 3HE18643AAAATQZZA03: Fig 8
     p51 (chassis rear, the only orthographic view of this face), Fig 13 p73 and Table 13
@@ -105,6 +107,8 @@ provenance:
     datasheet - SR7 pp75-76 and 144: AC sites feed these terminals from an external OmniOn
     L21 (3HE20676AA) or Eltek HM34J split shelf, two 5 kW outputs; the shelves are separate
     devices.
+fields:
+  breaker: {label: Breaker, type: choice, options: ['off', 'on'], default: 'off'}
 elements:
   terminal-cover: {at: [1.8, 2.9], size: [105.5, 36.7], class: cover}
   terminal-neg: {at: [41.82, 5.63], size: [29.54, 13.0], class: terminal}
@@ -118,6 +122,8 @@ elements:
   logo-zone: {at: [175, 3], size: [28, 7], class: label}
 relief:
   features:
+    - {node: breaker-off, out: 5.5, profile: [[0, 4.6], [27.7, 5.5]], confidence: estimated, source: 'the tilt of a see-saw rocker: the raised end 1.5 above the breaker frame''s estimated 4.0 and the low end 0.6 above it; no source dimensions it'}
+    - {node: breaker-on, out: 5.5, profile: [[0, 5.5], [27.7, 4.6]], confidence: estimated, source: 'the tilt of a see-saw rocker: the raised end 1.5 above the breaker frame''s estimated 4.0 and the low end 0.6 above it; no source dimensions it'}
     - {node: terminal-neg-stud-1, cyl: 8.0, confidence: estimated, source: 'a stud with its nut and washer (p231, 7/16 in nut); height not dimensioned'}
     - {node: terminal-neg-stud-2, cyl: 8.0, confidence: estimated, source: as terminal-neg-stud-1}
     - {node: terminal-rtn-stud-1, cyl: 8.0, confidence: estimated, source: as terminal-neg-stud-1}
