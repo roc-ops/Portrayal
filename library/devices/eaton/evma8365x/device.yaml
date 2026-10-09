@@ -217,6 +217,11 @@ provenance:
       That is the G4 guide's Managed (MA) row of Table 1, so `metering-scope: outlet`
       and `outlet-switching: true`, the published class `managed`
       (docs/pdu-model-design.md section 2.2), and every outlet declares `[on, off]`.
+      ON EACH OUTLET'S PLACEMENT, NOT ON THE `outlets` GROUP: the build applies a
+      host group's `states` to whatever is seated in it, so the kit declines to seat
+      a cord end in a slot whose group carries them (render.cage_entries
+      `group-states`, pinned at zero by test_cage_accepts), and the 24 C13s are
+      slots for a C14 cord end.
       The SKU page's OUTLET CONTROL: No contradicts the drawing and the product name
       (gaps: outlet-control).
   lifecycle:
@@ -314,7 +319,7 @@ gaps:
     cord's diameter.
   wanted: the cord's jacket type and diameter from Eaton.
 groups:
-  outlets: {term: Outlet, role: traffic, index-origin: 1, states: ['on', 'off'], mixed: 'the PDU''s 42 outlets, numbered 1 to 42 from the cord end as printed - C13 and C39 alternating in six sections of seven, each switchable; each section is a region'}
+  outlets: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the PDU''s 42 outlets, numbered 1 to 42 from the cord end as printed - C13 and C39 alternating in six sections of seven, each switchable; each section is a region'}
   outlet-leds:
     term: LED
     role: indicator
@@ -349,53 +354,53 @@ views:
       bays:
         - {id: network-module, at: [1.45, 761.65], size: {w: 49.15, h: 187.9}, accepts: [eaton/g4-enmc@1], default: eaton/g4-enmc@1, group: network, rel-pos: 1}
       placements:
-        - {id: outlet-a1, ref: std/c13-outlet@1, at: [9.1, 1608.67], group: outlets, rel-pos: 1, fed-by: input, through: breaker-a}
-        - {id: outlet-a2, ref: eaton/c39-outlet@1, at: [6.6, 1580.77], group: outlets, rel-pos: 2, fed-by: input, through: breaker-a}
-        - {id: outlet-a3, ref: std/c13-outlet@1, at: [9.1, 1557.87], group: outlets, rel-pos: 3, fed-by: input, through: breaker-a}
-        - {id: outlet-a4, ref: eaton/c39-outlet@1, at: [6.6, 1529.97], group: outlets, rel-pos: 4, fed-by: input, through: breaker-a}
-        - {id: outlet-a5, ref: std/c13-outlet@1, at: [9.1, 1507.07], group: outlets, rel-pos: 5, fed-by: input, through: breaker-a}
-        - {id: outlet-a6, ref: eaton/c39-outlet@1, at: [6.6, 1479.17], group: outlets, rel-pos: 6, fed-by: input, through: breaker-a}
-        - {id: outlet-a7, ref: std/c13-outlet@1, at: [9.1, 1456.27], group: outlets, rel-pos: 7, fed-by: input, through: breaker-a}
+        - {id: outlet-a1, ref: std/c13-outlet@1, at: [9.1, 1608.67], group: outlets, rel-pos: 1, fed-by: input, through: breaker-a, states: ['on', 'off']}
+        - {id: outlet-a2, ref: eaton/c39-outlet@1, at: [6.6, 1580.77], group: outlets, rel-pos: 2, fed-by: input, through: breaker-a, states: ['on', 'off']}
+        - {id: outlet-a3, ref: std/c13-outlet@1, at: [9.1, 1557.87], group: outlets, rel-pos: 3, fed-by: input, through: breaker-a, states: ['on', 'off']}
+        - {id: outlet-a4, ref: eaton/c39-outlet@1, at: [6.6, 1529.97], group: outlets, rel-pos: 4, fed-by: input, through: breaker-a, states: ['on', 'off']}
+        - {id: outlet-a5, ref: std/c13-outlet@1, at: [9.1, 1507.07], group: outlets, rel-pos: 5, fed-by: input, through: breaker-a, states: ['on', 'off']}
+        - {id: outlet-a6, ref: eaton/c39-outlet@1, at: [6.6, 1479.17], group: outlets, rel-pos: 6, fed-by: input, through: breaker-a, states: ['on', 'off']}
+        - {id: outlet-a7, ref: std/c13-outlet@1, at: [9.1, 1456.27], group: outlets, rel-pos: 7, fed-by: input, through: breaker-a, states: ['on', 'off']}
         - {id: labels-1, ref: eaton/g4-outlet-labels@1, at: [45.5, 1453.11], group: section-labels, rel-pos: 1, attrs: {section-color: '#f4d440', label-1: A1, label-2: A2, label-3: A3, label-4: A4, label-5: A5, label-6: A6, label-7: A7}}
-        - {id: outlet-b8, ref: std/c13-outlet@1, at: [9.1, 1359.57], group: outlets, rel-pos: 8, fed-by: input, through: breaker-b}
-        - {id: outlet-b9, ref: eaton/c39-outlet@1, at: [6.6, 1331.67], group: outlets, rel-pos: 9, fed-by: input, through: breaker-b}
-        - {id: outlet-b10, ref: std/c13-outlet@1, at: [9.1, 1308.77], group: outlets, rel-pos: 10, fed-by: input, through: breaker-b}
-        - {id: outlet-b11, ref: eaton/c39-outlet@1, at: [6.6, 1280.87], group: outlets, rel-pos: 11, fed-by: input, through: breaker-b}
-        - {id: outlet-b12, ref: std/c13-outlet@1, at: [9.1, 1257.97], group: outlets, rel-pos: 12, fed-by: input, through: breaker-b}
-        - {id: outlet-b13, ref: eaton/c39-outlet@1, at: [6.6, 1230.07], group: outlets, rel-pos: 13, fed-by: input, through: breaker-b}
-        - {id: outlet-b14, ref: std/c13-outlet@1, at: [9.1, 1207.17], group: outlets, rel-pos: 14, fed-by: input, through: breaker-b}
+        - {id: outlet-b8, ref: std/c13-outlet@1, at: [9.1, 1359.57], group: outlets, rel-pos: 8, fed-by: input, through: breaker-b, states: ['on', 'off']}
+        - {id: outlet-b9, ref: eaton/c39-outlet@1, at: [6.6, 1331.67], group: outlets, rel-pos: 9, fed-by: input, through: breaker-b, states: ['on', 'off']}
+        - {id: outlet-b10, ref: std/c13-outlet@1, at: [9.1, 1308.77], group: outlets, rel-pos: 10, fed-by: input, through: breaker-b, states: ['on', 'off']}
+        - {id: outlet-b11, ref: eaton/c39-outlet@1, at: [6.6, 1280.87], group: outlets, rel-pos: 11, fed-by: input, through: breaker-b, states: ['on', 'off']}
+        - {id: outlet-b12, ref: std/c13-outlet@1, at: [9.1, 1257.97], group: outlets, rel-pos: 12, fed-by: input, through: breaker-b, states: ['on', 'off']}
+        - {id: outlet-b13, ref: eaton/c39-outlet@1, at: [6.6, 1230.07], group: outlets, rel-pos: 13, fed-by: input, through: breaker-b, states: ['on', 'off']}
+        - {id: outlet-b14, ref: std/c13-outlet@1, at: [9.1, 1207.17], group: outlets, rel-pos: 14, fed-by: input, through: breaker-b, states: ['on', 'off']}
         - {id: labels-2, ref: eaton/g4-outlet-labels@1, at: [45.5, 1204.01], group: section-labels, rel-pos: 2, attrs: {section-color: '#48c2f4', label-1: B8, label-2: B9, label-3: B10, label-4: B11, label-5: B12, label-6: B13, label-7: B14}}
-        - {id: outlet-c15, ref: std/c13-outlet@1, at: [9.1, 1110.47], group: outlets, rel-pos: 15, fed-by: input, through: breaker-c}
-        - {id: outlet-c16, ref: eaton/c39-outlet@1, at: [6.6, 1082.57], group: outlets, rel-pos: 16, fed-by: input, through: breaker-c}
-        - {id: outlet-c17, ref: std/c13-outlet@1, at: [9.1, 1059.67], group: outlets, rel-pos: 17, fed-by: input, through: breaker-c}
-        - {id: outlet-c18, ref: eaton/c39-outlet@1, at: [6.6, 1031.77], group: outlets, rel-pos: 18, fed-by: input, through: breaker-c}
-        - {id: outlet-c19, ref: std/c13-outlet@1, at: [9.1, 1008.87], group: outlets, rel-pos: 19, fed-by: input, through: breaker-c}
-        - {id: outlet-c20, ref: eaton/c39-outlet@1, at: [6.6, 980.97], group: outlets, rel-pos: 20, fed-by: input, through: breaker-c}
-        - {id: outlet-c21, ref: std/c13-outlet@1, at: [9.1, 958.07], group: outlets, rel-pos: 21, fed-by: input, through: breaker-c}
+        - {id: outlet-c15, ref: std/c13-outlet@1, at: [9.1, 1110.47], group: outlets, rel-pos: 15, fed-by: input, through: breaker-c, states: ['on', 'off']}
+        - {id: outlet-c16, ref: eaton/c39-outlet@1, at: [6.6, 1082.57], group: outlets, rel-pos: 16, fed-by: input, through: breaker-c, states: ['on', 'off']}
+        - {id: outlet-c17, ref: std/c13-outlet@1, at: [9.1, 1059.67], group: outlets, rel-pos: 17, fed-by: input, through: breaker-c, states: ['on', 'off']}
+        - {id: outlet-c18, ref: eaton/c39-outlet@1, at: [6.6, 1031.77], group: outlets, rel-pos: 18, fed-by: input, through: breaker-c, states: ['on', 'off']}
+        - {id: outlet-c19, ref: std/c13-outlet@1, at: [9.1, 1008.87], group: outlets, rel-pos: 19, fed-by: input, through: breaker-c, states: ['on', 'off']}
+        - {id: outlet-c20, ref: eaton/c39-outlet@1, at: [6.6, 980.97], group: outlets, rel-pos: 20, fed-by: input, through: breaker-c, states: ['on', 'off']}
+        - {id: outlet-c21, ref: std/c13-outlet@1, at: [9.1, 958.07], group: outlets, rel-pos: 21, fed-by: input, through: breaker-c, states: ['on', 'off']}
         - {id: labels-3, ref: eaton/g4-outlet-labels@1, at: [45.5, 954.91], group: section-labels, rel-pos: 3, attrs: {section-color: '#f49448', label-1: C15, label-2: C16, label-3: C17, label-4: C18, label-5: C19, label-6: C20, label-7: C21}}
-        - {id: outlet-d22, ref: std/c13-outlet@1, at: [9.1, 666.37], group: outlets, rel-pos: 22, fed-by: input, through: breaker-d}
-        - {id: outlet-d23, ref: eaton/c39-outlet@1, at: [6.6, 638.47], group: outlets, rel-pos: 23, fed-by: input, through: breaker-d}
-        - {id: outlet-d24, ref: std/c13-outlet@1, at: [9.1, 615.57], group: outlets, rel-pos: 24, fed-by: input, through: breaker-d}
-        - {id: outlet-d25, ref: eaton/c39-outlet@1, at: [6.6, 587.67], group: outlets, rel-pos: 25, fed-by: input, through: breaker-d}
-        - {id: outlet-d26, ref: std/c13-outlet@1, at: [9.1, 564.77], group: outlets, rel-pos: 26, fed-by: input, through: breaker-d}
-        - {id: outlet-d27, ref: eaton/c39-outlet@1, at: [6.6, 536.87], group: outlets, rel-pos: 27, fed-by: input, through: breaker-d}
-        - {id: outlet-d28, ref: std/c13-outlet@1, at: [9.1, 513.97], group: outlets, rel-pos: 28, fed-by: input, through: breaker-d}
+        - {id: outlet-d22, ref: std/c13-outlet@1, at: [9.1, 666.37], group: outlets, rel-pos: 22, fed-by: input, through: breaker-d, states: ['on', 'off']}
+        - {id: outlet-d23, ref: eaton/c39-outlet@1, at: [6.6, 638.47], group: outlets, rel-pos: 23, fed-by: input, through: breaker-d, states: ['on', 'off']}
+        - {id: outlet-d24, ref: std/c13-outlet@1, at: [9.1, 615.57], group: outlets, rel-pos: 24, fed-by: input, through: breaker-d, states: ['on', 'off']}
+        - {id: outlet-d25, ref: eaton/c39-outlet@1, at: [6.6, 587.67], group: outlets, rel-pos: 25, fed-by: input, through: breaker-d, states: ['on', 'off']}
+        - {id: outlet-d26, ref: std/c13-outlet@1, at: [9.1, 564.77], group: outlets, rel-pos: 26, fed-by: input, through: breaker-d, states: ['on', 'off']}
+        - {id: outlet-d27, ref: eaton/c39-outlet@1, at: [6.6, 536.87], group: outlets, rel-pos: 27, fed-by: input, through: breaker-d, states: ['on', 'off']}
+        - {id: outlet-d28, ref: std/c13-outlet@1, at: [9.1, 513.97], group: outlets, rel-pos: 28, fed-by: input, through: breaker-d, states: ['on', 'off']}
         - {id: labels-4, ref: eaton/g4-outlet-labels@1, at: [45.5, 510.81], group: section-labels, rel-pos: 4, attrs: {section-color: '#f4d440', label-1: D22, label-2: D23, label-3: D24, label-4: D25, label-5: D26, label-6: D27, label-7: D28}}
-        - {id: outlet-e29, ref: std/c13-outlet@1, at: [9.1, 417.27], group: outlets, rel-pos: 29, fed-by: input, through: breaker-e}
-        - {id: outlet-e30, ref: eaton/c39-outlet@1, at: [6.6, 389.37], group: outlets, rel-pos: 30, fed-by: input, through: breaker-e}
-        - {id: outlet-e31, ref: std/c13-outlet@1, at: [9.1, 366.47], group: outlets, rel-pos: 31, fed-by: input, through: breaker-e}
-        - {id: outlet-e32, ref: eaton/c39-outlet@1, at: [6.6, 338.57], group: outlets, rel-pos: 32, fed-by: input, through: breaker-e}
-        - {id: outlet-e33, ref: std/c13-outlet@1, at: [9.1, 315.67], group: outlets, rel-pos: 33, fed-by: input, through: breaker-e}
-        - {id: outlet-e34, ref: eaton/c39-outlet@1, at: [6.6, 287.77], group: outlets, rel-pos: 34, fed-by: input, through: breaker-e}
-        - {id: outlet-e35, ref: std/c13-outlet@1, at: [9.1, 264.87], group: outlets, rel-pos: 35, fed-by: input, through: breaker-e}
+        - {id: outlet-e29, ref: std/c13-outlet@1, at: [9.1, 417.27], group: outlets, rel-pos: 29, fed-by: input, through: breaker-e, states: ['on', 'off']}
+        - {id: outlet-e30, ref: eaton/c39-outlet@1, at: [6.6, 389.37], group: outlets, rel-pos: 30, fed-by: input, through: breaker-e, states: ['on', 'off']}
+        - {id: outlet-e31, ref: std/c13-outlet@1, at: [9.1, 366.47], group: outlets, rel-pos: 31, fed-by: input, through: breaker-e, states: ['on', 'off']}
+        - {id: outlet-e32, ref: eaton/c39-outlet@1, at: [6.6, 338.57], group: outlets, rel-pos: 32, fed-by: input, through: breaker-e, states: ['on', 'off']}
+        - {id: outlet-e33, ref: std/c13-outlet@1, at: [9.1, 315.67], group: outlets, rel-pos: 33, fed-by: input, through: breaker-e, states: ['on', 'off']}
+        - {id: outlet-e34, ref: eaton/c39-outlet@1, at: [6.6, 287.77], group: outlets, rel-pos: 34, fed-by: input, through: breaker-e, states: ['on', 'off']}
+        - {id: outlet-e35, ref: std/c13-outlet@1, at: [9.1, 264.87], group: outlets, rel-pos: 35, fed-by: input, through: breaker-e, states: ['on', 'off']}
         - {id: labels-5, ref: eaton/g4-outlet-labels@1, at: [45.5, 261.71], group: section-labels, rel-pos: 5, attrs: {section-color: '#48c2f4', label-1: E29, label-2: E30, label-3: E31, label-4: E32, label-5: E33, label-6: E34, label-7: E35}}
-        - {id: outlet-f36, ref: std/c13-outlet@1, at: [9.1, 168.17], group: outlets, rel-pos: 36, fed-by: input, through: breaker-f}
-        - {id: outlet-f37, ref: eaton/c39-outlet@1, at: [6.6, 140.27], group: outlets, rel-pos: 37, fed-by: input, through: breaker-f}
-        - {id: outlet-f38, ref: std/c13-outlet@1, at: [9.1, 117.37], group: outlets, rel-pos: 38, fed-by: input, through: breaker-f}
-        - {id: outlet-f39, ref: eaton/c39-outlet@1, at: [6.6, 89.47], group: outlets, rel-pos: 39, fed-by: input, through: breaker-f}
-        - {id: outlet-f40, ref: std/c13-outlet@1, at: [9.1, 66.57], group: outlets, rel-pos: 40, fed-by: input, through: breaker-f}
-        - {id: outlet-f41, ref: eaton/c39-outlet@1, at: [6.6, 38.67], group: outlets, rel-pos: 41, fed-by: input, through: breaker-f}
-        - {id: outlet-f42, ref: std/c13-outlet@1, at: [9.1, 15.77], group: outlets, rel-pos: 42, fed-by: input, through: breaker-f}
+        - {id: outlet-f36, ref: std/c13-outlet@1, at: [9.1, 168.17], group: outlets, rel-pos: 36, fed-by: input, through: breaker-f, states: ['on', 'off']}
+        - {id: outlet-f37, ref: eaton/c39-outlet@1, at: [6.6, 140.27], group: outlets, rel-pos: 37, fed-by: input, through: breaker-f, states: ['on', 'off']}
+        - {id: outlet-f38, ref: std/c13-outlet@1, at: [9.1, 117.37], group: outlets, rel-pos: 38, fed-by: input, through: breaker-f, states: ['on', 'off']}
+        - {id: outlet-f39, ref: eaton/c39-outlet@1, at: [6.6, 89.47], group: outlets, rel-pos: 39, fed-by: input, through: breaker-f, states: ['on', 'off']}
+        - {id: outlet-f40, ref: std/c13-outlet@1, at: [9.1, 66.57], group: outlets, rel-pos: 40, fed-by: input, through: breaker-f, states: ['on', 'off']}
+        - {id: outlet-f41, ref: eaton/c39-outlet@1, at: [6.6, 38.67], group: outlets, rel-pos: 41, fed-by: input, through: breaker-f, states: ['on', 'off']}
+        - {id: outlet-f42, ref: std/c13-outlet@1, at: [9.1, 15.77], group: outlets, rel-pos: 42, fed-by: input, through: breaker-f, states: ['on', 'off']}
         - {id: labels-6, ref: eaton/g4-outlet-labels@1, at: [45.5, 12.61], group: section-labels, rel-pos: 6, attrs: {section-color: '#f49448', label-1: F36, label-2: F37, label-3: F38, label-4: F39, label-5: F40, label-6: F41, label-7: F42}}
         - id: breaker-a
           ref: eaton/g4-breaker-20a-2p@1
