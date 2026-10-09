@@ -1,8 +1,9 @@
 # Cable lay: solid bodies, cables resting on trays, a neat lay, and slack in a tray
 
-Status: proposed 2026-10-09, nothing built. Issue #949. Each section gives a
-recommendation and its reason; the questions the note leaves for a decision
-are listed apart, short, in section 11, and the one-way doors in section 12.
+Status: decided 2026-10-09, nothing built. Issue #949. Each section gives a
+recommendation and its reason; the five questions the note first left open
+were decided as it recommended, and are listed in section 11; the one-way
+doors are in section 12.
 
 Builds on the rack core in `kit/rack/` (rack file `version` 3), on how a route
 passes a ring ([cable-managers-design.md](cable-managers-design.md) section
@@ -28,7 +29,8 @@ length coiled in a tray, in 2D, in 3D and in the numbers.
   length is that polyline plus 0.15 m at each end, rounded up to a stock
   length.
 - **A waypoint is placed coarsely.** `pointOf` puts a guide at its `x`, at the
-  middle of the U span of its item, and, for a rack-face part, half its
+  middle of the bottom U of its item (the middle of the unit for a 1U part;
+  low on a taller one), and, for a rack-face part, half its
   projection out from the rail plane. Nothing says where the opening is in
   height or in depth, so every cable through a ring passes the same point: its
   centre, not its bottom.
@@ -40,8 +42,9 @@ length coiled in a tray, in 2D, in 3D and in the numbers.
 - **The only body check is a drawing patch.** `cable-geometry.js clearOf`
   pushes a 3D control point that falls inside a device box out along z. It
   tests the points and not the tube between them, and the boxes the Rack
-  Builder hands it leave out every sheet-bodied part on purpose ("a sheet
-  manager is open"). So a lacer such as the FHD-CMP5DR is never solid to it,
+  Builder hands it (`deviceBoxes` in the site 3D scene, `site/rack3d.js`,
+  called from `site/rack/cables.js`) leave out every sheet-bodied part on
+  purpose ("a sheet manager is open"). So a lacer such as the FHD-CMP5DR is never solid to it,
   the kit does no check at all, and nothing is reported.
 - **Nothing is a surface.** The FHD-CMP5DR tray is a `well` component
   (`fs/fhd-cmp5dr-tray`, 448.4 x 110, its sheet 41 mm below the top of the
@@ -82,22 +85,37 @@ and what still crosses is a finding.**
 
 - **A box-shelled device** (every `mount: rack` device that is not a sheet) is
   its envelope, `w` by `h` by `d`, where it stands: the kit already knows all
-  three and the item placement.
+  three and the item placement. **Except where the envelope holds cable
+  space.** A device whose stated depth includes room cables run in (the
+  FHD-1UBE: 227 mm overall, of which 107 mm is the front lacer zone ahead of
+  the patch plate and 120 mm the rear lacer bar behind it) is solid as its
+  compiled body, not its envelope: the patch plate (the plane its ports and
+  module faces sit in), the modules behind it, and the plates and bars of its
+  lacers. Its rings, trays and pass-throughs are then openings and floors
+  inside the box, not inside a solid. A device is treated so when it declares
+  any pathway or tray (sections 2 and 6) that lies inside its envelope; a
+  plain box device with pathways only on its faces stays its envelope.
 - **A sheet-bodied part** (`shell: sheet`: the rack-face lacers, the brush and
   finger managers) is its plates, not its envelope: the floor of each well
   (the sheet `thickness` thick), each part that stands proud of a face (the
   ears) and each web, as boxes. Its rings are not solid; they are openings
   (1.2).
-- **A zero-U part** is its envelope, as the fit check already takes it.
+- **A zero-U part that carries a lane** (a vertical duct, #926) is a pathway,
+  not a solid: a lane waypoint at a U it spans runs through its channel, so
+  only its walls and back are solid, derived as a sheet part is. A zero-U part
+  that carries no lane (a PDU) is its envelope, as the fit check already takes
+  it.
 
 The plates are **derived, never stated.** `rack_index.py` writes them into
 `rack.json` per device as `solids: [{part, box: {x, y, z, w, h, d}}]`, in the
 frame the hosts of the rack products note use (x from the left of the device,
 y up from its bottom, z back from its front), from the compiled faces it
 already reads: a sheet well gives a floor plate, a proud placement a plate of
-its own size. A box device carries no `solids`: its envelope is enough. A
-second statement of geometry the drawing already holds is a number that can
-disagree with it, the reason the PDU note derived `mount-points`.
+its own size, a duct its walls, and a device with cable space inside its
+envelope its plate plane and the bodies of what is seated behind it. A plain
+box device carries no `solids`: its envelope is enough. A second statement of
+geometry the drawing already holds is a number that can disagree with it, the
+reason the PDU note derived `mount-points`.
 
 ### 1.2 What a cable may pass
 
@@ -172,7 +190,7 @@ tray:
   lip: 0                          # mm an edge stands up above the floor; 0, a plain edge
   run: x                          # the direction cables lie along it
   ties:                           # where a strap goes through; never a cable
-    - {at: [54.85, 12.0], size: [22.5, 3.0]}
+    - {at: [54.85, 95.0], size: [22.5, 3.0]}
   slack: {kind: area}             # section 5; or {kind: spool, at, diameter}
 ```
 
@@ -185,9 +203,10 @@ tray:
 - **`lip`** is how far an edge stands up. It bounds what a full tray holds
   (4.4). A tray with walls (a finger duct channel) states their height.
 - **`run`** is the direction cables lie along it, as a ring states one.
-- **`ties`** are the tie slots. They are what hook-and-loop straps or cable
-  ties pass through, so they are data for the straps of a cable lying there,
-  never openings (1.2).
+- **`ties`** are the tie slots, in the same frame as `floor` (the part, on
+  the view it is placed on), so each lies inside a floor rectangle. They are
+  what hook-and-loop straps or cable ties pass through, so they are data for
+  the straps of a cable lying there, never openings (1.2).
 - **`slack`** says how the tray holds spare length (section 5).
 
 A tray is compiled as an invisible `data-class="tray"` rect per floor, as
@@ -243,8 +262,8 @@ radius; only a free span sags, and it never sags below a surface under it.**
   (limp: drapes onto a tray within a short span), 0.5 for twisted pair, 0.35
   for DAC and power cords (stiff: a wider curve, landing further along), and
   the installed bend radius as the floor on every corner. It is a kit table and
-  not a library key, so it can be tuned without a door; open question 2 asks
-  whether it should become a per-type key.
+  not a library key, so it can be tuned without a door, and no per-type key is
+  added (decision 2).
 - **Unrouted cables** hang by the same rule, so the 3D sag no longer dips a
   cable into the device below; it rests on top of it.
 
@@ -252,8 +271,7 @@ radius; only a free span sags, and it never sags below a surface under it.**
 cable in a tray runs along the floor line of the tray, not across the middle
 of its unit, and drops to it from the port. They cannot show depth, so where a
 cable lies across the tray (its lane) is not seen there. No plan view is added
-for this; the 3D view shows it. Open question 1 asks whether a plan of each
-tray is wanted.
+for this (decision 1); the 3D view shows it.
 
 ## 4. Lay order
 
@@ -264,17 +282,49 @@ warns.**
 
 ### 4.1 The order
 
-In each pathway, the cables going the same way are ordered by **how far their
-port is from the exit** they take. The one nearest the exit lies nearest the
-host (the back of a tray, at the rail); each one further away lies one lane
-further out. A cable then drops from its port into its lane without passing
-over any cable already laid, because every cable already there comes from
-further along and lies further out. Ties go to the lower U, then to the
-cable id.
+A cable reaches a tray from one of two sides, and the side decides its
+lanes. The lanes are counted from 1 at the host side (the back of a tray, at
+the rail).
 
-The automatic route already sends a port left of the centre line to the left
-gutter and one right of it to the right, so cables going opposite ways start
-from separate halves of the face and meet nowhere.
+- **Rail-side cables** come into the tray from the back: from the host behind
+  it, or down from a device above whose ports are at the rail plane. They take
+  the **inner** lanes, ordered by how far their port is from the exit they
+  take: the one nearest the exit innermost, each one further away one lane
+  further out. A cable then drops from its port into its lane without passing
+  any cable already laid, because every rail-side cable already there comes
+  from further along and lies further out.
+- **Front-edge cables** come over the front edge (section 1.3, rule 1): from a
+  device below the tray. They take the **outer** lanes, the other way round:
+  the one nearest the exit outermost, each one further away one lane further
+  in. A cable coming over the edge then lands in its lane without passing any
+  front-edge cable already laid, since those come from further along and lie
+  further in, and the rail-side group lies inside both.
+
+Cables at the same distance from the exit (one port above another) are ordered
+by U, the lower first, then by cable id.
+
+**Traffic both ways.** Today the automatic route picks the gutter from the x
+of end A alone, and when both ends leave through the same manager it goes out
+to the gutter and back through the same rings (a patch from a switch port at
+x -150 to a panel port at x -20 runs ring 1, left-front U12, U11, ring 1,
+ring 2). **A patch whose two ends share one manager runs along the tray
+directly, port to port, through the rings between them, with no gutter.** It
+is a local patch, and it takes lanes only over its own stretch:
+
+- a local patch with both ends on one side lies nearest that side (innermost
+  for rail-side ends, outermost for front-edge ends), and of two such patches
+  the shorter lies nearer, so patches that nest never meet;
+- through cables (to a gutter) going opposite ways occupy separate stretches,
+  since a port left of the centre line runs left of it and one right of it
+  runs right, so they meet only local patches.
+
+Some meetings no order avoids: a through cable whose port lies between the
+ends of a local patch, a patch from one side to the other, and two patches
+whose ends interleave. In plan these are a cable having to cross a cable that
+lies between it and its lane. **Such a cable passes over, never through:** it
+steps up a layer at the one point where it must and back down after, and the
+kit counts these forced crossings per tray and names them, so a crossing is
+always one the hardware forces and never one the order made.
 
 ### 4.2 Flat and round
 
@@ -305,10 +355,10 @@ from separate halves of the face and meet nowhere.
 - **A turn keeps the order on the same side:** a flat run turning from a tray
   into a gutter keeps its outermost lane outermost, so it never twists over
   itself.
-- **A hand lane** pins one cable in one pathway (section 7); the others are
-  laid round it in order.
+- **A hand lay** pins one cable to one lane in one pathway (`lay`, section
+  7); the others are laid round it in order.
 
-Lanes are computed, not stored, except a hand lane. The lane position is part
+Lanes are computed, not stored, except a hand lay. The lane position is part
 of `routePath`, so it moves the measured length by millimetres and agrees in
 every view.
 
@@ -320,8 +370,8 @@ area of its narrowest opening on the stretch, or of its floor width by its
 its envelope height. Over that, or over the cable count the device states, it
 **warns, and draws the layers as they fall**, above the lip if need be: as for
 rings and bundles, a device moving can fill a tray without a cable command,
-so it must be able to sit over the limit and say so. Open question 4 asks
-whether storing slack into a full tray should be refused instead.
+so it must be able to sit over the limit and say so. Storing slack into a
+full tray warns the same way and is not refused (decision 4).
 
 ## 5. Slack storage
 
@@ -339,9 +389,12 @@ length counts in the routed length; the exports say where it is.**
   FHD enclosures ship two. Its diameter must be at least twice the radius of
   the cable laid on it, which lint and the command both check.
 - How much a tray holds in metres is not stated. It depends on the cable, so
-  it is computed: the free volume (floor area by stack height) at `FILL_LIMIT`
-  over the cable section. That is about 45 m of 3 mm fibre on the FHD-CMP5DR
-  strip, or 11 m of 6 mm Cat6.
+  it is computed: the free volume (the slack area by the stack height) at
+  `FILL_LIMIT` over the cable section. The stack height is the `lip`, or where
+  a ring bounds the stretch, the height of its opening above its sill: 29.5 mm
+  on the FHD-CMP5DR. Its slack area is the 448.4 x 61.2 strip less the five
+  ring bands across it (5 x 6.8 x 61.2), about 25,360 square mm. That holds
+  about 42 m of 3 mm fibre, or 10.6 m of 6 mm Cat6.
 - **A loop that does not fit is refused.** Cat6A is 7.5 mm with a 30 mm
   installed radius, so its loop needs 67.5 mm, and the strip is 61.2 deep:
   `cable.slack` refuses with that sentence. The tray geometry is fixed, so this
@@ -362,7 +415,7 @@ length counts in the routed length; the exports say where it is.**
 - **`value` absent means the rest:** the spare length, an entered length less
   the path, all stored there. A cable with a routed length and no entered one
   has no rest, so it needs a value.
-- `form` is `coil` (the default: least floor along the run), `serpentine`
+- `form` is `coil` (the default, decision 5: least floor along the run), `serpentine`
   (runs along the tray with U-turns at the bend radius, for a narrow floor
   between close rings) or `spool` (for a tray that states one).
 
@@ -383,8 +436,7 @@ may move up a stock size, which is the honest answer: that is the cable to buy.
   leaves at its lane.
 - **2D**: a marked loop, an ellipse in the colour of the cable at the tray,
   with the stored length in its tag ("1.2 m slack"), since an elevation sees a
-  flat coil only edge on. Open question 1 asks whether this, or a plan, is
-  what is wanted.
+  flat coil only edge on (decision 1).
 
 ### 5.5 Exports
 
@@ -402,11 +454,12 @@ Each part takes a minor version when it states a tray or the new ring keys.
 Rule 7 of the modelling guide is narrowed with the first of them: **cable
 management that is part of the product** (a lacer panel, its rings, a tray, a
 slack spool, a bend-radius bracket) **is declared, and drawn where it is a
-part**; accessories added in the field (straps, ties, retainer bails) stay
-undrawn. Without that, the FHD-1UBE rings stay noted and not placed, and a
+part**. Tie slots and tie anchors that are part of a plate are drawn, as the
+plate they are cut in, and declared as `ties` (decision 3); loose ties,
+straps and retainer bails added in the field stay undrawn. Without that, the FHD-1UBE rings stay noted and not placed, and a
 route has nothing to lay slack in.
 
-| part | what it needs | what to measure | staged sources |
+| part | what it needs | what to measure | sources |
 |---|---|---|---|
 | `fs/fhd-cmp5dr-tray` (FHD-CMP5DR) | `tray`: floor, height, ties, `slack: area` | the strip and the two arms as floor rectangles; the floor height (3.0, already read); whether the front edge turns up (the ring-profile view draws none, so `lip: 0`); the sixteen slots, already measured, moved into `ties` | the 0U/1U horizontal manager datasheet three-view (read for the part), seven renders including the underside, the horizontal managers quick start guide |
 | `fs/d-ring-snap-in` | `depth`, `sill`, `aperture.at` | the band along the run (6.8 mm, drawn); the seat under the opening (2 mm, estimated today: wanted from the underside render or a ruler) | the same datasheet, the ring-profile view |
@@ -430,7 +483,7 @@ Two cable keys, read and written by the kit:
 | key | where | what |
 |---|---|---|
 | `slack` | cable | a list of `{item, via, value?, unit?, form?}` (section 5.2) |
-| `lanes` | cable | a list of `{item, via, lane}`: the hand lane in one pathway, counted from 1 at the host side (section 4.3) |
+| `lay` | cable | a list of `{item, via, lane}`: the hand lay in one pathway, its lane counted from 1 at the host side (sections 4.1 and 4.3) |
 
 An older reader **keeps both** (a cable keeps keys `readCables` does not know)
 **and misreads them**: its `withRoutedLengths` measures the path without the
@@ -443,11 +496,14 @@ would mishandle), so a bump is needed.
 gathers for it (frame `width`, `startU`, round holes, `setback`, `options`,
 item `setback` and `heldBy`, zero-U `channel`) and the keys held for it by
 #934 (`states`, `readings`) and #939 (the PDU bracket key): one bump, published
-under `/schemas/v3/`, an identity migration from 3. Both keys are defined in
-the version-4 schema and kept by its `parseDoc` from the first build of
-version 4, even though `lanes` is only consumed later (step 5 of section 10),
-so lay order does not need a version of its own. If version 4 ships before
-slack is built, these keys take the next version on the same terms.
+under `/schemas/v3/`, an identity migration from 3. **Both keys are reserved
+in version 4 whenever it ships**, with the hosting step of the rack products
+note: its schema defines them and its `parseDoc` keeps them from the first
+build of version 4, before anything consumes them. Slack (step 4 of section
+10) and lay order (step 5) then only start reading keys version 4 already
+carries, so neither needs a version 5. The version-4 table of the rack
+products note (section 9 there) gains `states`, `readings`, the PDU bracket
+key, `slack` and `lay` when version 4 lands.
 
 Routed lengths of saved racks change without a file change (section 12): the
 kit re-measures a routed length the next time a page measures it, as it did
@@ -463,7 +519,10 @@ commands are offered with no new tool. The kit gains:
 - **`cable.slack {id, at: {item, via}, value?, unit?, form?}`**, and
   `cable.slack.clear {id, at?}`: store or remove slack, refused where the loop
   does not fit or the tray is not on the route.
-- **`cable.lane {id, at: {item, via}, lane}`**, and `lane: null` to unpin.
+- **`cable.lay {id, at: {item, via}, lane}`**, and `lane: null` to unpin.
+  The name keeps the lay apart from the gutter lanes: a waypoint is already
+  `{lane, ru}`, and `inspect` already returns `lanes`, the gutter lanes of the
+  frame.
 - **Routing into a tray** needs nothing new: `cable.route` takes `{item, via:
   'tray'}` as it takes a ring, and the refusal that lists what exists lists
   trays too.
@@ -471,9 +530,10 @@ commands are offered with no new tool. The kit gains:
 And the reads:
 
 - **`inspect` of a cable**: its route output, which has `rings` today, gains
-  `crosses` (each finding of 1.4, with the two waypoints it lies between),
-  `rests` (each support it lies on, and its lane there) and `slack` (each
-  stored entry beside the spare length it reports now).
+  `crosses` (each finding of 1.4, with the two waypoints it lies between) and
+  `rests` (each support it lies on, and its lane there). `slack` keeps one
+  meaning, the spare length: it stays `{metres}` and gains `stored`, the
+  stored entries of section 5.2, each with the length it holds.
 - **`inspect` of a device**: each tray, with its fill, the cables in it and the
   slack it holds.
 - **`describe`**: one line of totals for the findings ("2 cables cross a
@@ -487,8 +547,8 @@ through the tray floor is told so and told what to do.
 ## 9. What this does not do
 
 - Straps through `ties` are not drawn or counted for single cables; the bundle
-  straps of #921 are unchanged (open question 3).
-- No plan view of the rack (open question 1).
+  straps of #921 are unchanged (decision 3).
+- No plan view of the rack (decision 1).
 - No cable weight, tension or load on a tray.
 - Slack across racks, service loops at a device, and slack in a vertical duct.
 - Routing inside an enclosure from a cassette to a spool is drawn only where
@@ -513,34 +573,41 @@ own step.
    and `aperture.at`, lint, the compiled `data-class="tray"`, `trays` in
    `rack.json`; the FHD-CMP5DR tray and the snap-in ring stated (a minor
    each); rule 7 narrowed in the modelling guide; then resting and `DRAPE` in
-   the kit. Gate: `./build.sh --device fhd-cmp5dr`, `devicelock.py`, a review
+   the kit. Gate: `./build.sh --device fhd-cmp5dr`; `devicelock.py` checked
+   against the lock on main, with the versions bumped, before `--update`; a review
    page of source against render, and kit tests that a cable on the tray runs
    at floor height plus its radius and that no span passes below a surface.
-4. **Slack storage**, which needs rack file version 4 and lands with the
-   version-4 step of the rack products note: the schema with `slack` and
-   `lanes`, `cable.slack`, the length, the 2D loop and 3D coil, the schedule
-   column and BOM note. Gate: a version-4 round trip, a version-3 page refusing
+4. **Slack storage**, on rack file version 4. The `slack` and `lay` keys are
+   reserved in the version-4 schema by the hosting step of the rack products
+   note (section 7); if that step has not landed, this step brings version 4
+   with all its keys. Then `cable.slack`, the length, the 2D loop and 3D coil,
+   the schedule column and BOM note. Gate: a version-4 round trip, a version-3 page refusing
    a version-4 file, the export tests, and the PR naming its one-way doors.
-5. **Lay order**, after #922 and portrayal-site#142 have settled: lanes,
-   layers, bundles as one lane, hand lanes, the full-tray warning. Gate: kit
-   tests that no two cables in a shared pathway cross in plan for a grid of
-   ports, and a browser check of the same in 3D.
+5. **Lay order**, after #922 and portrayal-site#142 have settled: lanes by
+   entry side, local patches along the tray, layers, bundles as one lane,
+   `cable.lay`, the forced-crossing count, the full-tray warning. Gate: kit
+   tests on the fixture of #949 (one FHD panel with an FHD-CMP5DR lacer, a
+   switch above it and a switch below it, cabled to bays 2 to 4) that no two
+   cables cross in plan except the forced crossings counted, and the same for a
+   grid of ports; a browser check of the same in 3D.
 6. **The FHD enclosures and the other FS managers**, as routine modelling
    after step 3, in parallel with 4 and 5: the rows of section 6. Gate: the
    modelling gates per device.
 
-## 11. Open questions for the owner
+## 11. Decisions
 
-1. **2D.** Resting shown as height on the elevations, and slack as a marked
-   loop with its length: enough, or is a plan view of each tray wanted?
-2. **Stiffness.** A kit table by cable family (`DRAPE`), tuned in the kit; or
-   a per-type key in the cable types table, which is a one-way door?
-3. **Tie slots.** They stay drawn on the part and are declared as `ties`.
-   Should a strap be drawn and counted at the ties under single cables, or
-   only on bundles?
-4. **A full tray.** Warn and draw the layers above the lip (recommended); or
-   refuse a slack command that would overfill it?
-5. **Default slack form.** Coil (recommended); or serpentine?
+The five questions this note first left open were each decided on
+2026-10-09 as it recommended:
+
+1. **2D.** Resting is shown as height on the elevations and slack as a marked
+   loop with its length. No plan view is added.
+2. **Stiffness.** A kit table by cable family, `DRAPE`, tuned in the kit. No
+   per-type key in the cable types table.
+3. **Tie slots.** Drawn on the part and declared as `ties`. Straps are not
+   drawn under single cables; bundle straps are unchanged.
+4. **A full tray** warns and draws the layers as they fall, above the lip if
+   need be; storing slack into it is not refused.
+5. **Slack** is stored as a coil by default.
 
 ## 12. One-way items
 
@@ -555,10 +622,13 @@ published file or a saved rack file uses it.
 | `data-class="tray"` | drawings | consumers of the drawing read it |
 | `solids` and `trays` in `rack.json` | the rack catalogue | the kit reads them; additive, so `format` stays 1 |
 | the narrowed rule 7 of the modelling guide | library policy | parts modelled under it carry their cable management |
-| cable `slack` (`item`, `via`, `value`, `unit`, `form` with `coil`, `serpentine`, `spool`) and cable `lanes` (`item`, `via`, `lane`) | rack file version 4 | saved rack files carry them; an older page refuses a version-4 file, and the schema label is never reused |
+| cable `slack` (`item`, `via`, `value`, `unit`, `form` with `coil`, `serpentine`, `spool`) and cable `lay` (`item`, `via`, `lane`) | rack file version 4 | saved rack files carry them; an older page refuses a version-4 file, and the schema label is never reused |
+| lane 1 at the host side, counting outward | rack file (`lay`), kit, `inspect` | a saved hand lay names a lane by this count |
+| the version-4 table of the rack products note gaining `states`, `readings`, the PDU bracket key, `slack` and `lay` | `docs/rack-products-design.md` section 9, rack file version 4 | one bump carries them all; a key left out needs a version 5 |
 | the stored slack counting in the routed length | kit | a saved routed length and stock size depend on it |
 | routed lengths changing on saved racks: detours, cables resting at the floor and at the ring sill, lanes, slack | kit | stored routed lengths and stock sizes move on the next measure; an ordered stock length may no longer match |
 | `crosses-body` and the tray findings, `bodyFindings` | kit API, agent output | agents and pages read the kinds |
-| `cable.slack`, `cable.slack.clear`, `cable.lane` | kit commands, offered to agents | agent sessions and saved prompts call them by name |
+| `cable.slack`, `cable.slack.clear`, `cable.lay` | kit commands, offered to agents | agent sessions and saved prompts call them by name |
+| `inspect` fields: `crosses` and `rests` on a cable route, `slack.stored`, the tray block of a device | kit queries, agent output | agents and the site read them by name |
+| the crossing and tray lines in the export notes | exports | a reader of the notes matches them |
 | the `slack` column of the cable schedule, after the last column | export | a reader takes it by its header |
-| a per-type stiffness key, only if question 2 chooses it | cable types table | a published key of `cable-types.json` |
