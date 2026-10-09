@@ -71,7 +71,7 @@ jsDelivr with `?dist=cdn` (and `&index=<version>`).
 | `bevel.js` | a bevelled chassis body from the polygons the build publishes, triangulated and mapped for the 3D view |
 | `lamps.js` | animated lamps in 3D: each blinking lamp drawn once per keyframe and swapped by the clock (used by `viewer3d.js`, not exported on its own) |
 | `marks.js` | annotation and callouts |
-| `states.js` | state toggling (LEDs, link states) and what a display can read |
+| `states.js` | state toggling (LEDs, link states) and what a display can read; an outlet's state shown on its lamp: the lamps `for:` binds to a part that declares states (`boundLamps`), a `{path: classes}` state map with each bound lamp given its outlet's classes (`expandStates`, which `marks.js`, `relief.js` and `viewer3d.js` apply), and whether an `off` chip sets `state-off` or clears (`offIsSet`) |
 | `share.js` | GLB and USDZ export |
 | `gif.js` | GIF capture |
 | `swap.js` | swapping a component into a bay, or an occupant into a slot at the turn it takes there (`seatTurn`); the `swap=` and `turn=` location strings (`encodeSwaps`, `decodeSwaps`, `encodeTurns`, `decodeTurns`) |

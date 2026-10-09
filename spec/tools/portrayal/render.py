@@ -64,6 +64,12 @@ STATE_CSS = """
     .state-fail  { --led-color: #ef4444; }
     .state-locate { --led-color: #3b82f6; }
     .state-absent { opacity: 0.35; }
+    /* A SWITCHED OUTLET WITH NO LAMP is dimmed when it is off, as absent is but
+       less (docs/pdu-model-design.md section 3.2): every switched PDU in the
+       library has a lamp per outlet, and this is the fallback so the first one
+       without does not invent a lamp. An outlet a lamp is bound to by `for:`
+       carries data-lamped (mark_lamped) and is never dimmed: its lamp says it. */
+    [data-class='inlet'][data-states~='off'].state-off:not([data-lamped]) { opacity: 0.55; }
     /* A state is a colour AND a behaviour. Solid and blinking of the same colour
        are different facts on real hardware: on the S9510-28DC a solid green PWR
        is "system power good" and a blinking green PWR is "power good but BMC
@@ -86,6 +92,43 @@ STATE_CSS = """
     [data-class='region'].portrayal-highlight { stroke: #f59e0b; stroke-width: 0.7; filter: none; }
     .state-fail[data-class='psu'], .state-fail[data-class='fan'] { filter: drop-shadow(0 0 1.4px #ef4444); }
 """
+
+
+_STATE_TOKEN = re.compile(r"^[a-z0-9-]+$")
+
+
+def _declares_states(node):
+    """True when the node carries a state vocabulary kit/states.js statesOfEl
+    would read: a list of tokens, not prose."""
+    toks = (node.get("data-states") or "").split()
+    return bool(toks) and all(_STATE_TOKEN.match(t) for t in toks)
+
+
+def mark_lamped(svg):
+    """`data-lamped="true"` on every element a lamp is bound to (#934).
+
+    The binding is kit/states.js boundLamps's, stated again here so the
+    stylesheet can see it: an element whose `data-path` a lamp's bare
+    `data-for` names, where the lamp declares a state vocabulary AND so does the
+    element - a switched outlet. A seated plug and silkscreen carry `data-for`
+    and declare no states, and a port declares none of its own, so neither
+    marks anything. STATE_CSS dims an outlet that is `off` only when it is not
+    marked: an outlet with a lamp is never dimmed, its lamp says it. A
+    cross-view target (a leading slash) names another drawing, and the first
+    element carrying a path answers for it, as states.js pathIndex does.
+    """
+    by_path = {}
+    for node in svg.iter():
+        p = node.get("data-path")
+        if p and p not in by_path:
+            by_path[p] = node
+    for lamp in svg.iter():
+        if not lamp.get("data-for") or not lamp.get("data-path") or not _declares_states(lamp):
+            continue
+        for t in lamp.get("data-for").split():
+            src = by_path.get(t)
+            if src is not None and src is not lamp and _declares_states(src):
+                src.set("data-lamped", "true")
 
 
 def data_for(value):
@@ -4247,6 +4290,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             enumerate(sorted(inst_palette.items(),
                              key=lambda kv: tuple(str(x) for x in kv[0]))))
         style.text = STATE_CSS + extra + "\n"
+
+    mark_lamped(svg)
 
     # A component's own <g id="silkscreen"> is printed on ITS faceplate, so it
     # travels with the part and is never occluded by it - unlike chassis silkscreen,
