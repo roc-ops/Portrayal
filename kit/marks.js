@@ -69,6 +69,8 @@
 // plain geometry that survives print and greyscale, and the legend names the
 // notation. See "behaviour" below for what the ring means.
 
+import { boundLamps } from './states.js';
+
 const NS = 'http://www.w3.org/2000/svg';
 
 // Every element this module adds carries data-portrayal; every element it
@@ -454,6 +456,41 @@ function behaviorRing(svg, el, mode, color, alt) {
 
 // ------------------------------------------------------------------ apply
 
+// Later marks win on conflict, and so does a mark over a chip: a state is a
+// replacement, not an accumulation. Two state- classes on one element would be
+// settled by stylesheet order, which is nobody's idea of paint order.
+//
+// Only what the DOCUMENT did not put there is stashed for restoring. Two marks
+// over one element - a broad `all LEDs off` then a narrow `this one faulted` -
+// would otherwise have the second stash the first's class as if the user had
+// set it, and clear() would faithfully hand back a state nobody asked for.
+function replaceState(el) {
+  const mine = new Set((el.getAttribute(ADDED) || '').split(' ').filter(Boolean));
+  const present = [...el.classList].filter(c => c.startsWith('state-'));
+  const took = present.filter(c => !mine.has(c));
+  if (present.length) el.classList.remove(...present);
+  if (took.length)
+    el.setAttribute(TOOK, [...new Set(
+      (el.getAttribute(TOOK) || '').split(' ').filter(Boolean).concat(took))].join(' '));
+}
+
+// Add classes and record them, so clear() takes exactly these off again.
+function stamp(el, add) {
+  el.classList.add(...add);
+  el.setAttribute(ADDED, [...new Set(
+    (el.getAttribute(ADDED) || '').split(' ').filter(Boolean).concat(add))].join(' '));
+}
+
+// Put a lamp colour a mark set back to what the drawing had (clear() does the
+// same for every one at once).
+function unlight(el) {
+  const was = el.getAttribute(LIT);
+  if (was) el.style.setProperty('--led-color', was);
+  else el.style.removeProperty('--led-color');
+  el.removeAttribute(LIT);
+  if (!el.getAttribute('style')) el.removeAttribute('style');
+}
+
 /**
  * Apply every mark to a live SVG. Clears first, so calling it on every keystroke
  * is the intended usage.
@@ -472,6 +509,7 @@ export function apply(svgRoot, doc, opts = {}) {
   clear(svgRoot);
   const d = normalise(doc);
   const report = [];
+  let binds = null;           // outlet path -> its lamps, read once if a state needs it
 
   d.marks.forEach((mark, index) => {
     const {els, error} = match(svgRoot, mark);
@@ -496,31 +534,29 @@ export function apply(svgRoot, doc, opts = {}) {
       row.warning = [row.warning, `no match is a lamp: a lamp colour paints ` +
         `--led-color, and nothing here reads it`].filter(Boolean).join('; ');
 
+    const stated = mark.state && STATE_RE.test(mark.state);
     for (const el of parts) {
       const add = ['portrayal-marked', `pm-${index}`];
-      if (mark.state && STATE_RE.test(mark.state)) {
-        const mine = new Set((el.getAttribute(ADDED) || '').split(' ').filter(Boolean));
-        // Later marks win on conflict, and so does a mark over a chip: a state
-        // is a replacement, not an accumulation. Two state- classes on one
-        // element would be settled by stylesheet order, which is nobody's idea
-        // of paint order.
-        //
-        // Only what the DOCUMENT did not put there is stashed for restoring. Two
-        // marks over one element - a broad `all LEDs off` then a narrow `this one
-        // faulted` - would otherwise have the second stash the first's class as
-        // if the user had set it, and clear() would faithfully hand back a state
-        // nobody asked for.
-        const present = [...el.classList].filter(c => c.startsWith('state-'));
-        const took = present.filter(c => !mine.has(c));
-        if (present.length) el.classList.remove(...present);
-        if (took.length)
-          el.setAttribute(TOOK, [...new Set(
-            (el.getAttribute(TOOK) || '').split(' ').filter(Boolean).concat(took))].join(' '));
+      if (stated) {
+        replaceState(el);
         add.push(`state-${mark.state}`);
+        // AN OUTLET'S STATE IS SHOWN ON ITS LAMP (#934): every lamp `for:`
+        // binds to this part takes the same state, by the rule states.js
+        // boundLamps states for the chips and the 3D scene too. The lamp gets
+        // the state and nothing else - no ring, no label, not counted - and is
+        // put back by clear() like any element a mark changed. A later mark
+        // naming the lamp itself still wins, by order, as marks always do.
+        const path = el.getAttribute('data-path');
+        if (path) {
+          binds = binds || boundLamps(svgRoot);
+          for (const lamp of binds.get(path) || []) {
+            if (parts.includes(lamp)) continue;
+            replaceState(lamp);
+            stamp(lamp, [`state-${mark.state}`]);
+          }
+        }
       }
-      el.classList.add(...add);
-      el.setAttribute(ADDED, [...new Set(
-        (el.getAttribute(ADDED) || '').split(' ').filter(Boolean).concat(add))].join(' '));
+      stamp(el, add);
       if (mark.label) el.setAttribute('data-mark-label', mark.label);
       // The skins paint every lamp fill="var(--led-color, <unlit>)" and the
       // state- rules work by setting that property on the part or an ancestor.
@@ -541,6 +577,17 @@ export function apply(svgRoot, doc, opts = {}) {
     if (mark.color) for (const el of parts) halo(svgRoot, el, mark.color);
     report.push(row);
   });
+
+  // A LAMP THAT IS OFF SHOWS NO CUSTOM COLOUR, whichever mark said it was off.
+  // One mark's own `off` already skips its colour (above); this is the same rule
+  // for a colour one mark gave and an `off` another mark - or an outlet's state
+  // reaching its lamp (#934) - put on the same lamp. relief.js reads it the same
+  // way in 3D (applyNodeLampColors asks the expanded state of the lamp), so the
+  // two pictures agree.
+  for (const el of svgRoot.querySelectorAll(`[${LIT}]`)) {
+    if (!el.classList.contains('state-off')) continue;
+    unlight(el);
+  }
 
   // Every behaving lamp in the drawing, not only the ones a mark named. A lamp
   // put into a blinking state by a chip, by a share URL, or by the config the
@@ -570,16 +617,10 @@ export function clear(svgRoot) {
     el.removeAttribute(ADDED);
     el.removeAttribute(TOOK);
     el.removeAttribute('data-mark-label');
-    if (el.hasAttribute(LIT)) {
-      const was = el.getAttribute(LIT);
-      if (was) el.style.setProperty('--led-color', was);
-      else el.style.removeProperty('--led-color');
-      el.removeAttribute(LIT);
-      // An element the drawing gave no style attribute gets none back. The
-      // harness compares outerHTML before and after to prove clear() is exact,
-      // and a leftover style="" is a difference.
-      if (!el.getAttribute('style')) el.removeAttribute('style');
-    }
+    // An element the drawing gave no style attribute gets none back. The
+    // harness compares outerHTML before and after to prove clear() is exact,
+    // and a leftover style="" is a difference (unlight sees to it).
+    if (el.hasAttribute(LIT)) unlight(el);
     if (!el.getAttribute('class')) el.removeAttribute('class');
   }
   // The legend grows all three of viewBox, height and width - a label wider than

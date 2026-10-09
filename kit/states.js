@@ -39,7 +39,9 @@ const TOKEN = /^[a-z0-9-]+$/;
 // that is not a list of tokens gets no states rather than garbage ones.
 /** The state vocabulary one element admits, or [] if it does not carry one. */
 export function statesOfEl(el) {
-  const raw = (el?.dataset?.states || '').trim();
+  // dataset where the element has one (a consumer may hand a plain
+  // {dataset} object, as messagesOfEl takes), the attribute where it does not
+  const raw = (el?.dataset?.states ?? el?.getAttribute?.('data-states') ?? '').trim();
   if (!raw) return [];
   const toks = raw.split(/[\s,]+/);
   return toks.every(t => TOKEN.test(t)) ? toks : [];
@@ -84,9 +86,111 @@ export function firstMatch(svg, sel) {
 export function pathIndex(svg) {
   const byPath = new Map();
   if (!svg) return byPath;
-  for (const e of svg.querySelectorAll('[data-path]'))
-    if (!byPath.has(e.dataset.path)) byPath.set(e.dataset.path, e);
+  for (const e of svg.querySelectorAll('[data-path]')) {
+    const p = e.getAttribute('data-path');
+    if (!byPath.has(p)) byPath.set(p, e);
+  }
   return byPath;
+}
+
+// ------------------------------------------------- an outlet and its lamps
+
+// A STATE SET ON AN OUTLET IS SHOWN ON ITS LAMP (#934, docs/pdu-model-design.md
+// section 3.2). A switched PDU's outlet declares `[on, off]`, and the lamp that
+// says so is a part of its own, placed beside it with `for:` naming the outlet,
+// because the outlet is the plain `std/c13-outlet@1` and contains no lamp. A
+// user switches off A1, not the lamp beside it, and a rack file keys by the
+// outlet's path - so a state applied to the outlet's path has to reach the
+// lamp too, and it has to reach it the same way in every place a state is
+// applied: the marks document (marks.js apply), the Explorer's chips, and the
+// 3D scene (relief.js applyNodeStates, viewer3d.js setStates). This is the one
+// rule they all ask, so the 2D drawing and the 3D scene cannot disagree.
+//
+// THE BINDING. An element follows a path when its `data-for` names that path
+// AND it declares a state vocabulary of its own: a lamp. Other things carry
+// `data-for` too - a seated occupant (a `generic/c14-plug@1` in the outlet
+// names the outlet it occupies) and silkscreen marks - and they declare no
+// states, so they are left alone.
+//
+// AND THE PATH IS AN OUTLET'S: the element named declares a state vocabulary
+// itself. A port names no states (its lamps do), so a state written on a
+// port's path - which already lights the jack's own lamps through the
+// inherited --led-color - does not start reaching the lamps drawn beside it.
+// Across the library on 2026-10-09 no element that declares states had a lamp
+// bound to it, so this rule moves nothing that was already drawn.
+//
+// `for:` is written as a placement id and `data-for` carries it bare; a
+// cross-view target gets a leading slash and names another drawing, which
+// this one cannot apply anything to - and no data-path begins with a slash,
+// so it finds nothing here. So the binding reaches top-level
+// placements in the drawing at hand, which every PDU in scope is.
+/**
+ * Every lamp a drawing binds to an element that declares states.
+ * @param root  an <svg>, or any element whose subtree is the drawing (a
+ *              parsed face in 3D)
+ * @returns {Map<string, Element[]>} the named element's data-path -> its lamps
+ */
+export function boundLamps(root) {
+  const out = new Map();
+  if (!root) return out;
+  let owners = null;
+  for (const lamp of root.querySelectorAll('[data-for][data-states]')) {
+    if (!lamp.getAttribute('data-path') || !statesOfEl(lamp).length) continue;
+    owners = owners || pathIndex(root);
+    for (const t of (lamp.getAttribute('data-for') || '').split(/\s+/)) {
+      const src = owners.get(t);
+      if (!src || src === lamp || !statesOfEl(src).length) continue;
+      if (!out.has(t)) out.set(t, []);
+      if (!out.get(t).includes(lamp)) out.get(t).push(lamp);
+    }
+  }
+  return out;
+}
+
+/**
+ * The outlet-to-lamp expansion: a `{path: classes}` state map in which every
+ * lamp bound to a stated path takes that path's classes - unless the map
+ * states the lamp itself, which then wins. The one function the 2D chips, the
+ * 3D scene and a rack entry's `states` apply a map through.
+ *
+ * @param map       {path: classes} or a Map of the same; empty values are dropped
+ * @param bindings  what boundLamps returns, or a Map of path -> lamp paths
+ * @returns {Object<string, string>} a new map; the input is not touched
+ */
+export function expandStates(map, bindings) {
+  const entries = map instanceof Map ? [...map] : Object.entries(map || {});
+  const out = {};
+  for (const [p, c] of entries) if (c) out[p] = String(c);
+  for (const [p, c] of entries) {
+    if (!c) continue;
+    for (const lamp of bindings?.get(p) || []) {
+      const lp = typeof lamp === 'string' ? lamp : lamp?.getAttribute?.('data-path');
+      if (lp && !(lp in out)) out[lp] = String(c);
+    }
+  }
+  return out;
+}
+
+// WHAT `off` ON A CHIP MEANS (#934). `off` used to be the absence of a state,
+// and a chip for it cleared the element: right while every lamp's off was
+// unlit, and wrong for one whose device declares a colour for it - the G4
+// outlet lamp is red when its outlet is off (the G4 brochure), and a cleared
+// lamp draws unlit. So `off` is set as a state - `state-off` on the element -
+// when that element is an outlet (it has a lamp bound to it, whose declared off
+// colour, if any, then shows; or it is a power outlet with none, which the
+// base stylesheet dims), or when the element declares a colour for `off`
+// itself. Only a lamp or a plain element with no declared off colour is
+// cleared, which is what it always was.
+/**
+ * Does the `off` chip on this element set `state-off` (true) or clear (false)?
+ * @param el     the element the chip is on
+ * @param lamps  the lamps bound to it (boundLamps(svg).get(path))
+ */
+export function offIsSet(el, lamps = []) {
+  if (!el || !statesOfEl(el).includes('off')) return false;
+  if (lamps.length) return true;
+  if (el.getAttribute('data-class') === 'inlet') return true;
+  return declaredHere(el, 'off');
 }
 
 // -------------------------------------------------------------- does it paint
@@ -121,9 +225,13 @@ const PROPS = ['--led-color', '--led-color-alt', 'opacity', 'fill', 'stroke',
 /** True when applying `state-<st>` to this element changes what is drawn. */
 export function paints(el, st) {
   if (!el || !st) return true;
-  // `off` is the absence of a state, not a state with a rule of its own: an
-  // unlit lamp is what the skin's own fill fallback already draws.
-  if (st === 'off') return true;
+  // `off` is unlit unless the device declares a colour for it (#934: the G4
+  // outlet lamp is red when its outlet is off). Undeclared, it has no rule of
+  // its own and needs none - an unlit lamp is what the skin's own fill
+  // fallback already draws - so it is reported as painting without asking. A
+  // declared off is a colour like any other and is measured below, so a red
+  // off is reported as painting because it does.
+  if (st === 'off' && !declaredHere(el, 'off')) return true;
   // Self-scoped rules are keyed on the id, so the id is the cache key wherever
   // there is one. Without an id the answer can only come from inherited scope -
   // `g[data-ref^='ufispace/psu-401-dc@'] .state-fail` - which varies by the

@@ -125,7 +125,7 @@
 <body>
 <script type="module">
 import { createShell, esc } from './shell.js';
-import { statesOfEl, messagesOfEl, charactersOfEl } from './states.js';
+import { statesOfEl, messagesOfEl, charactersOfEl, boundLamps, offIsSet } from './states.js';
 import { encodeSwaps, encodeTurns, searchWith } from './swap.js';
 import { encodeFields } from './fields.js';
 import { flatDist, packageDist, distResolver, faceFile } from './dist.js';
@@ -146,8 +146,25 @@ const state = shell.state;
 // A lamp declares what it can be; until now nothing here could ask it to be one.
 // `statesOfEl` reads the vocabulary - that parsing is states.js's job and this
 // page does not repeat it - and a chip per state sets `state-<name>` on the live
-// element. Clicking the chip that is already on clears it, and `off` always
-// clears, because "off" is the absence of a state rather than one of its own.
+// element. Clicking the chip that is already on clears it.
+//
+// `off` (#934, docs/pdu-model-design.md section 3.2) is a state that can be
+// lit: the G4 outlet lamp is red when its outlet is off. So the `off` chip sets
+// `state-off` where states.js offIsSet says so - on an outlet (it has a lamp
+// bound to it, or it is a power outlet with none, which the stylesheet dims)
+// and on an element that declares a colour for off - and clears only a lamp or
+// a plain element with no declared off colour, as it always did.
+//
+// AN OUTLET'S STATE IS SHOWN ON ITS LAMP. A chip on a switched outlet writes
+// the same class on every lamp `for:` binds to it (states.js boundLamps, the
+// rule marks.js and the 3D scene apply too), so liveStates reads the lamps'
+// paths off the drawing and 2D and 3D agree.
+const CHIPS = new WeakMap();          // element -> its row's chip span
+function syncChips(el) {
+  const span = CHIPS.get(el);
+  if (span) for (const c of span.querySelectorAll('.chip'))
+    c.classList.toggle('on', el.classList.contains('state-' + c.textContent));
+}
 function chips(el) {
   const states = statesOfEl(el);
   if (!states.length) return null;
@@ -160,13 +177,19 @@ function chips(el) {
     chip.onclick = ev => {
       ev.stopPropagation(); ev.preventDefault();
       const was = el.classList.contains('state-' + st);
-      [...el.classList].filter(c => c.startsWith('state-')).forEach(c => el.classList.remove(c));
-      span.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
-      if (st !== 'off' && !was) { el.classList.add('state-' + st); chip.classList.add('on'); }
+      const path = el.getAttribute('data-path');
+      const lamps = (path && state.svg && boundLamps(state.svg).get(path)) || [];
+      const set = !was && (st !== 'off' || offIsSet(el, lamps));
+      for (const t of [el, ...lamps]) {
+        [...t.classList].filter(c => c.startsWith('state-')).forEach(c => t.classList.remove(c));
+        if (set) t.classList.add('state-' + st);
+        syncChips(t);
+      }
       pushStates();
     };
     span.appendChild(chip);
   }
+  CHIPS.set(el, span);
   return span;
 }
 

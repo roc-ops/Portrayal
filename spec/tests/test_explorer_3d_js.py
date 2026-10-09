@@ -690,6 +690,7 @@ def test_a_mutated_body_role_breaks_the_ruling(world, roles, tmp_path, label, ol
     mutant = tmp_path / "relief.js"
     mutant.write_text(src.replace(old, new))
     shutil.copy(RELIEF.parent / "fields.js", tmp_path / "fields.js")   # relief.js imports it
+    shutil.copy(RELIEF.parent / "states.js", tmp_path / "states.js")   # and this
     out = node("roles", {"sets": payload}, relief=mutant)
     broken = set()
     for n in payload:
@@ -1034,6 +1035,7 @@ def test_a_mutated_wall_reading_is_caught(walled, planned, tmp_path, label, old,
     mutant = tmp_path / "relief.js"
     mutant.write_text(src.replace(old, new))
     shutil.copy(RELIEF.parent / "fields.js", tmp_path / "fields.js")
+    shutil.copy(RELIEF.parent / "states.js", tmp_path / "states.js")
     if breaks == "plans":
         cases, _ = planned
         assert _plans_ok(cases, walls(cases, relief=mutant)) != []
