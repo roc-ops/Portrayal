@@ -706,6 +706,128 @@ def device_options(device):
             airflow.add(a)
     return {"power": sorted(power), "airflow": sorted(airflow)}
 
+
+# --- rack PDUs: the capability class and the wiring (#934) -------------------
+#
+# docs/pdu-model-design.md sections 2.2 and 5. A PDU states two facts in
+# `attrs.management` - how far down its metering goes and whether an outlet can
+# be switched - and the class is DERIVED from them, never stated, so no manifest
+# can name a class its two facts contradict. Every combination has a name; the
+# names are ours and say what is metered, so they part from vendor names where
+# a vendor name is loose (the G4 "metered input" EVMI2130X meters each branch
+# too, and is `metered-branch`).
+METERING_SCOPES = ("none", "input", "branch", "outlet")
+PDU_CLASSES = {
+    ("none", False): "basic",
+    ("none", True): "switched",
+    ("input", False): "metered-input",
+    ("input", True): "switched-metered-input",
+    ("branch", False): "metered-branch",
+    ("branch", True): "switched-metered-branch",
+    ("outlet", False): "metered-outlet",
+    ("outlet", True): "managed",
+}
+
+
+def pdu_class(device):
+    """The derived capability class of a rack PDU, or None.
+
+    None unless `attrs.management` states BOTH `metering-scope` (one of
+    METERING_SCOPES) and `outlet-switching` (a boolean); lint L166 holds a
+    device to stating the two together, so a half-stated pair publishes
+    nothing rather than a guess. configs.json and devices.json publish it as
+    `pdu-class`, and the DCIM export writes it in the device type comments.
+    """
+    mgmt = ((device or {}).get("attrs") or {}).get("management") or {}
+    scope, switching = mgmt.get("metering-scope"), mgmt.get("outlet-switching")
+    if not isinstance(switching, bool):
+        return None
+    return PDU_CLASSES.get((scope, switching))
+
+
+# The conductors a protecting placement's `lines` may name (section 5.3): one
+# to three of the three lines and the neutral. `[L1, L2]` is line to line,
+# `[L1, N]` line to neutral.
+LINES = ("L1", "L2", "L3", "N")
+# THE LEG A LINE-TO-NEUTRAL OUTLET IS ON, as NetBox and Nautobot spell
+# PowerOutletFeedLegChoices: L1 is A, L2 B, L3 C (section 5.2).
+FEED_LEGS = {"L1": "A", "L2": "B", "L3": "C"}
+
+
+def device_placements(device):
+    """{placement id: placement} over every view of a device, the first
+    statement of an id winning. `fed-by`, `through` and `lines` cross a face,
+    so they resolve over the whole device, not over the view they stand in."""
+    out = {}
+    for view in ((device or {}).get("views") or {}).values():
+        for p in view_parts(view or {})["placements"]:
+            out.setdefault(p.get("id"), p)
+    return out
+
+
+def outlet_lines(placement, placed):
+    """The `lines` an outlet is wired across, or None where nothing states them.
+
+    The outlet's own `lines` first, for an outlet with no breaker; else the
+    `lines` of the placement its `through` names - a fixed breaker, which
+    states them once for every outlet it protects, so an outlet reaches its
+    lines through its breaker instead of restating them (section 5.3). A
+    `through` naming a bay reaches no lines: a bay carries none."""
+    own = (placement or {}).get("lines")
+    if own:
+        return list(own)
+    via = (placement or {}).get("through")
+    if via is not None and (placed.get(via) or {}).get("lines"):
+        return list(placed[via]["lines"])
+    return None
+
+
+def feed_leg(device, lines):
+    """The DCIM `feed_leg` of an outlet wired across `lines`, or None.
+
+    WRITTEN EXACTLY WHEN THE INPUT IS THREE-PHASE WYE AND THE OUTLET IS WIRED
+    LINE TO NEUTRAL (docs/pdu-model-design.md section 5.2), and it is that
+    line. A line-to-line outlet sits on two legs and has no honest single
+    answer; a single-phase PDU is on whatever leg its plug is on, which is a
+    fact of the installation and not of the device type."""
+    power = ((device or {}).get("attrs") or {}).get("power") or {}
+    if power.get("input-phase") != "three" or power.get("input-wiring") != "wye":
+        return None
+    if not lines or len(lines) != 2 or "N" not in lines:
+        return None
+    line = next(x for x in lines if x != "N")
+    return FEED_LEGS.get(line)
+
+
+def input_rating(device):
+    """The input rating as one sentence, or None where the device states no
+    structured input key: what the export writes on the input power port's
+    `description` and in the comments, since neither DCIM has an input rating
+    on a device type (docs/pdu-model-design.md sections 4.3 and 8).
+
+    Built from the structured keys only - `input-voltage-v`, `input-phase`,
+    `input-wiring`, `input-current-a`, `plug-rating-a` - so it says nothing the
+    numbers do not: '208 V three-phase wye, 24 A input (30 A plug)'."""
+    power = ((device or {}).get("attrs") or {}).get("power") or {}
+    head = []
+    if power.get("input-voltage-v") is not None:
+        head.append(f"{power['input-voltage-v']:g} V")
+    if power.get("input-phase") in ("single", "three"):
+        head.append(f"{power['input-phase']}-phase")
+    if power.get("input-wiring") in ("wye", "delta"):
+        head.append(power["input-wiring"])
+    parts = [" ".join(head)] if head else []
+    amps = power.get("input-current-a")
+    plug = power.get("plug-rating-a")
+    if amps is not None:
+        tail = f"{amps:g} A input"
+        if plug is not None and plug != amps:
+            tail += f" ({plug:g} A plug)"
+        parts.append(tail)
+    elif plug is not None:
+        parts.append(f"{plug:g} A plug")
+    return ", ".join(parts) or None
+
 # --- occupants keyed inside a seated module (#484, R2) -----------------------
 #
 # A configuration's `occupants:` may key a cage on a card seated in a bay by the

@@ -108,9 +108,13 @@
         "side": {
           "enum": [
             "left",
-            "right"
+            "right",
+            "left-front",
+            "left-rear",
+            "right-front",
+            "right-rear"
           ],
-          "description": "which side of the rack, seen from the front. A `rack-side` part states it: the upright it stands beside (L153). A `rack-face` part narrower than the rack opening may: the rail it bolts to, so that one on each rail shares a rack unit and a face (L142, L153). Omitted on a rack-face part means it takes the whole unit on its face"
+          "description": "which side of the rack, seen from the front. A `rack-side` part states it as the kit's attachment point it hangs at: `left` or `right` on a two-post frame, `left-front`, `left-rear`, `right-front` or `right-rear` on a four-post one (L153). The names alone decide: two parts at `left-front` and `left-rear` never meet, two at `left` contend for it, and one side may not mix `left` with a four-post name (L154). labs.json publishes the name as written. A `rack-face` part narrower than the rack opening may state `left` or `right` only: the rail it bolts to, so that one on each rail shares a rack unit and a face (L142, L153). Omitted on a rack-face part means it takes the whole unit on its face. roc-ops/Portrayal#934, docs/pdu-model-design.md section 6.4"
         },
         "on": {
           "type": "string",
