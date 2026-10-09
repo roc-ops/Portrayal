@@ -64,8 +64,8 @@ provenance:
   airflow:
     confidence: datasheet
     note: >-
-      the fans push air DOWN through the rack (datasheet benefits); `chassis.airflow` has no value
-      for a downward flow, so none is stated (see gaps).
+      `top-to-bottom`: the datasheet's benefits list has the pre-installed fans pushing hot air
+      down through the rack, which is air drawn in at the tray's top and pushed out of its bottom.
   attrs:
     confidence: datasheet
     note: >-
@@ -113,18 +113,13 @@ chassis:
   ru: 1
   full-depth: false
   weight-kg: 3.5
+  airflow: top-to-bottom
   power: ac
   color: '#1b1d20'
   ears:
     positions:
     - {name: flush, default: true}
 gaps:
-- what: airflow
-  reason: vendor-silent
-  note: >-
-    the fans blow down through the rack, and `chassis.airflow` offers front-to-back, back-to-front,
-    side and passive; no value is stated.
-  wanted: a downward value in the airflow vocabulary
 - what: face-detail
   reason: needs-photo
   note: >-

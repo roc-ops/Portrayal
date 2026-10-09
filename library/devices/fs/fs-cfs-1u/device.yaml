@@ -10,8 +10,8 @@ aliases:
 description: >-
   1U 19in vented cantilever fixed shelf, FS FS-CFS-1U: a black SGCC steel tray 443.2 mm wide and
   250.2 mm deep, its two side walls sloping from the full 44 mm at the front to the rear and folded
-  out into ears that bolt to the front rails. Fifteen diagonal vent slots in the floor; it carries
-  10 kg on 2- or 4-post racks.
+  out into ears that bolt to the front rails, with a low lip along the front edge. Fifteen diagonal
+  vent slots in the floor; it carries 10 kg on 2- or 4-post racks.
 profile: passive
 provenance:
   chassis:
@@ -125,6 +125,8 @@ views:
       - {id: wall-left, at: [19.9, 0.0], size: [1.2, 44.0], fill: '#1b1d20', kind: wall}
       - {id: wall-right, at: [461.9, 0.0], size: [1.2, 44.0], fill: '#1b1d20', kind: wall}
       - {id: floor-edge, at: [19.9, 42.0], size: [443.2, 2.0], fill: '#2a2d31', kind: floor}
+      - {id: front-lip, at: [21.1, 33.0], size: [440.8, 9.0], fill: '#1b1d20', stroke: '#3a3e43',
+        stroke-width: 0.3, kind: front-lip}
     components:
       placements:
       - {ref: fs/fs-cfs-1u-ear@1, id: ear-left, at: [0.0, 0.0], skin: left, group: ears, rel-pos: 1}
@@ -133,6 +135,7 @@ views:
     size: {w: 483.0, h: 44.0}
     panel:
       decor:
+      - {id: front-lip, at: [21.1, 33.0], size: [440.8, 9.0], fill: '#141618', kind: front-lip}
       - {id: wall-right, at: [19.9, 40.0], size: [1.2, 4.0], fill: '#1b1d20', kind: wall}
       - {id: wall-left, at: [461.9, 40.0], size: [1.2, 4.0], fill: '#1b1d20', kind: wall}
       - {id: floor-edge, at: [19.9, 42.0], size: [443.2, 2.0], fill: '#2a2d31', kind: floor}
@@ -149,6 +152,8 @@ views:
       - {ref: fs/fs-cfs-1u-tray@1, id: tray, at: [19.9, 0.0], group: shelf, rel-pos: 1}
       - {ref: fs/fs-cfs-1u-wall@1, id: wall-left, at: [19.9, 0.0], group: shelf, rel-pos: 2, in: tray}
       - {ref: fs/fs-cfs-1u-wall@1, id: wall-right, at: [461.9, 0.0], group: shelf, rel-pos: 3,
+        in: tray}
+      - {ref: fs/fs-cfs-1u-front-lip@1, id: front-lip, at: [21.1, 249.0], group: shelf, rel-pos: 6,
         in: tray}
   bottom:
     size: {w: 483.0, h: 250.2}

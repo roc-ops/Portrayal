@@ -62,10 +62,10 @@ provenance:
       close-up x5 shows) in a black bezel 18.8 x 23.2, centred 446.0 in and 94.5 down (g1, scaled
       to the 130 mm height). The QSG's last step draws the same switch.
   switch-colour:
-    confidence: known-wrong
+    confidence: photo-measured
     note: >-
-      the rocker is red on every render (g1, x5); it is drawn in the library rocker's dark grey,
-      because common/rocker-switch@1 has no colour field.
+      the rocker is red on every render (g1, x5): its `rocker-color` is #cd2b2a, the median of
+      the 1712 red pixels on the close-up x5.
   cord:
     confidence: drawing
     note: >-
@@ -191,7 +191,7 @@ views:
     components:
       placements:
       - {ref: common/rocker-switch@1, id: power-switch, at: [435.5, 87.0], rotate: 90, group: power-switch,
-        rel-pos: 1, for: chassis}
+        attrs: {rocker-color: '#cd2b2a'}, rel-pos: 1, for: chassis}
       - {ref: fs/fan-grille-120@1, id: fan-1, at: [28.9, 8.0], group: fans, rel-pos: 1}
       - {ref: fs/fan-grille-120@1, id: fan-2, at: [164.8, 8.0], group: fans, rel-pos: 2}
       - {ref: fs/fan-grille-120@1, id: fan-3, at: [300.9, 8.0], group: fans, rel-pos: 3}

@@ -130,7 +130,14 @@ IFACE_TYPE = {
     # 10 Mb/s jack takes that, the type whose label covers it.
     ("rj45", "10m"): "100base-tx",
 }
-AIRFLOW = {"front-to-back": "front-to-rear", "back-to-front": "rear-to-front"}
+# `top-to-bottom` is the same word in NetBox's DeviceAirflowChoices
+# (netbox-community/netbox netbox/dcim/choices.py at f96b3039, AIRFLOW_TOP_TO_BOTTOM)
+# and in the device-type library's airflow enum (schema/generated_schema.json at
+# 7438a8e6). Nautobot's device type has no airflow field at all (nautobot/nautobot
+# at 58ee6186), so there the key is carried for the library and set nothing, as
+# front-to-rear always has been.
+AIRFLOW = {"front-to-back": "front-to-rear", "back-to-front": "rear-to-front",
+           "top-to-bottom": "top-to-bottom"}
 
 # A module's ports are its `parts`. Mapped by component ref, because a cage's
 # ref says what the cage IS while the speed it runs at is a property of the card
