@@ -228,10 +228,12 @@ export const CABLE_COLUMNS = ['id', 'cable', 'a_device', 'a_u', 'a_port', 'b_dev
 // device's U is the device import's position (positionOf). Without a height an
 // item counts as 1U.
 // `routes` is route-context.js's Map<cableId, {waypoints}>; without it no route is written.
+// `bodies` is route.js bodyFindings(rack, ctx, nameOf) for the same render:
+// each finding's sentence joins its cable's notes. Without it none is written.
 // `bundles` is bundleExports(rack, ctx) for the same render: each bundle's note
 // and its warnings join the file's notes. Without it the bundles are read
 // with no routing context, so each is listed as not measured.
-export function cableScheduleRows(rack, ends = new Map(), items = rack.items, routes = null, {bundles = null} = {}) {
+export function cableScheduleRows(rack, ends = new Map(), items = rack.items, routes = null, {bundles = null, bodies = null} = {}) {
   const names = uniqueNames(rack.items);
   const byId = new Map(items.map(i => [i.id, i]));
   const named = new Set();
@@ -246,6 +248,8 @@ export function cableScheduleRows(rack, ends = new Map(), items = rack.items, ro
     const c = f.cable, len = lengthParts(c.length), [aDev, aU, aPort] = side(c.a), [bDev, bU, bPort] = side(c.b);
     const notes = [...f.loose.map(l => `End ${l.side} is not connected: ${l.reason}.`), ...f.warnings];
     if (asWrittenNote(c)) notes.push(asWrittenNote(c));
+    // each solid body its route still crosses (route.js bodyFindings, #949)
+    for (const x of bodies || []) if (x.cable === c.id && x.text) notes.push(x.text);
     return {id: c.id, cable: cableName(c), a_device: aDev, a_u: aU, a_port: aPort, b_device: bDev, b_u: bU, b_port: bPort,
             media: mediaLabel(c.media), purpose: c.purpose, length: len ? len.value : '',
             length_unit: len ? len.unit : '',

@@ -122,7 +122,17 @@ and what still crosses is a finding.**
   not a solid: a lane waypoint at a U it spans runs through its channel, so
   only its walls and back are solid, derived as a sheet part is. A zero-U part
   that carries no lane (a PDU) is its envelope, as the fit check already takes
-  it.
+  it. **It stands in the gutter, so the lane moves outboard of it:** at the
+  units it spans, the lane beside that upright runs in a gutter as wide as the
+  usual one just outside the part, and a cable runs beside it, not through it
+  (1.3). Outboard, because inboard of it is the rail and the ears of every
+  device fixed there, and moving the lane in front of it would take it off the
+  rail plane every port leg and every front-to-back crossing is measured in
+  (and, for a rear PDU, outside the back of the rack). The rule assumes the
+  part stands `where: outside` (against the upright's outer face, as every
+  zero-U part does today; rack products note section 3); a part in a
+  cabinet's `inside` channel, between the posts, needs its own rule, made with
+  the hosting step of that note.
 
 The plates are **derived, never stated.** `rack_index.py` writes them into
 `rack.json` per device as `solids: [{part, box: {x, y, z, w, h, d}}]`, in the
@@ -204,6 +214,21 @@ In order of preference:
    end, into the gutter, which is where the automatic route already goes.
 3. **Front to back by a side lane.** A cable whose ends are on opposite faces
    goes through the lane beside a post, as the automatic route does today.
+
+The lane beside a zero-U part that carries none runs outboard of it (1.1).
+**A zero-U part is gone round on its back first**, the side that faces into
+the rack, where the side channel is; a cable from a port inboard of it turns
+the corner there (along the rack to the gap beside the part, back past it,
+across, and out). That corner's leg into the rack passes through the footprint
+of the upright the part stands against: a known approximation, since the
+uprights are not solid to the router and the part stands against the
+upright's outer face with no gap (`STANDOFF` 0, no source dimensions it).
+4. **Over its outward face**, where a PDU's plugs stand outside the frame, is
+   a fourth way, for a zero-U part only, and the last resort: tried only when
+   the three above do not clear it.
+
+A detour that meets a second body goes round it the same way, to a bounded
+depth, and the result is pulled taut.
 
 A hand route keeps its waypoints; the detours are added between them in the
 same way, and a leg the three rules cannot clear is left as drawn and reported.
@@ -556,13 +581,17 @@ The positions that realise it, in the cases a rack has:
 - **Front-edge through cables** take the **outer** positions, the other way
   round: the one nearest the gutter outermost, each one further away one
   position further in.
-- **Local patches.** Today the automatic route picks the gutter from the x of
-  end A alone (`route.js autoRoute`), and when both ends leave through the
-  same manager it goes out to the gutter and back through the same rings (a
-  patch from a switch port at x -150 to a panel port at x -20 runs ring 1,
-  left-front U12, U11, ring 1, ring 2). **A patch whose two ends share one
-  manager runs along the tray directly, port to port, through the rings
-  between them, with no gutter.** A local patch with both ends rail-side lies
+- **Local patches.** Before kit 0.12.0 the automatic route picked the gutter
+  from the x of end A alone (`route.js autoRoute`), and when both ends left
+  through the same manager it went out to the gutter and back through the
+  same rings (a patch from a switch port at x -150 to a panel port at x -20
+  ran ring 1, left-front U12, U11, ring 1, ring 2). **A patch whose two ends
+  share one manager runs along the tray directly, port to port, through the
+  rings between them, with no gutter** (built early, in kit 0.12.0: a ring is
+  between when its centre is; with none between, the ring nearest the middle
+  of the two ports holds it, never a direct run; a ring just past a port holds
+  a cord that reaches into it without a doubles-back finding,
+  [cable-managers-design.md](cable-managers-design.md) section 13). A local patch with both ends rail-side lies
   in the rail group, inside every through cable that passes its stretch; one
   with both ends front-edge lies in the front group, outside them. Of two such
   patches the shorter lies nearer its side, so patches that nest never meet.
@@ -581,11 +610,12 @@ The positions that realise it, in the cases a rack has:
   lower cable id is the inner.
 
 **Opposite ways.** A through cable has one gutter, and both of its ends use
-it. Step 5 chooses the gutter for each cable from both ends, not from end A
-alone: when both ports stand on the same side of the centre line in their
-trays, that side; when they stand on opposite sides, the side that gives the
-shorter path. Through cables that each run toward their own port side then
-use separate stretches of a tray and never meet. **A through cable whose ends
+it. The automatic route chooses the gutter for each cable from both ends, not
+from end A alone (built early, in kit 0.12.0): when both ports stand on the
+same side of the centre line in their trays, that side; when they stand on
+opposite sides, the side that gives the shorter path. Through cables that
+each run toward their own port side then use separate stretches of a tray and
+never meet. **A through cable whose ends
 sit on opposite sides of the centre in two trays runs against its port in one
 of them**, and there it is a forced category of its own: its gutter end is on
 the far side of every cable it passes, and the interleaving test counts each
@@ -1257,7 +1287,9 @@ published file or a saved rack file uses it.
 | the version-4 table of the rack products note gaining `states`, `readings`, the PDU bracket key, `slack`, `lay` and `roll` | `docs/rack-products-design.md` section 9, rack file version 4 | one bump carries them all; a key left out needs a version 5 |
 | the stored slack counting in the routed length | kit | a saved routed length and stock size depend on it |
 | routed lengths changing on saved racks: detours, cables resting at the floor and at the ring sill, positions in the lay, the face of each tray, slack | kit | stored routed lengths and stock sizes move on the next measure; an ordered stock length may no longer match |
+| the lane moving outboard of a zero-U part that stands in the gutter and carries no lane (a zero-U PDU), and routed lengths changing beside one | kit (`laneXAt`), drawings | every route on that lane is longer, and a saved length moves on the next measure; a drawing that places lanes itself must follow |
 | `crosses-body` (with `part` and, for a held-face stack, `face`), `unheld` and the tray findings, `bodyFindings` | kit API, agent output | agents and pages read the kinds |
+| the public subpath `@portrayal/kit/rack/solids` (`solidsOf`, `legCrossings`, `detour`, `CLEAR`) | kit package exports | a consumer imports it by that path and those names; a rename or removal is a breaking kit release |
 | `cable.slack`, `cable.slack.clear`, `cable.lay` (with `face`), and `roll` on `patch` | kit commands, offered to agents | agent sessions and saved prompts call them by name |
 | `inspect` fields: `crosses` and `rests` (with `face` and the tie slots used) on a cable route, `slack.stored`, the tray block of a device per face, and `roll` on a device | kit queries, agent output | agents and the site read them by name |
 | the crossing and tray lines in the export notes | exports | a reader of the notes matches them |

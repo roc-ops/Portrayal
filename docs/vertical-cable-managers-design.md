@@ -157,7 +157,10 @@ the same way.
   which.
 - **Lanes and fill.** A lane waypoint at a U a duct spans on that upright is at
   the duct's centre line, so a routed length runs through it; only a part that
-  declares guides carries the lane, so a PDU leaves it in the gutter. `fill`
+  declares guides carries the lane. A part that carries no lane and stands in
+  the gutter (a zero-U PDU) moves the lane outboard of it, at the units it
+  spans, so a cable runs beside it and not through it
+  ([cable-lay-design.md](cable-lay-design.md) section 1.3, #949). `fill`
   and `capacityOver` count the cables through it, `fill` against the channel
   a caller measures from the drawing (`ctx.zeroUAperture`).
 - **What each says.** `describe`, `inspect`, the export notes and the DCIM
