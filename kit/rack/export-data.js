@@ -5,9 +5,10 @@
 // The Rack Builder's exports (the page that builds the files) do the
 // fetching and drawing, and ask here.
 
-import {positionOf, uLabel} from './model.js';
+import {positionOf, uLabel, zeroUOf} from './model.js';
 import {routeText} from './route.js';
-import {isRackMount} from './fit.js';
+import {isRackMount, isZeroUPart, railOf} from './fit.js';
+import {zeroUEntries, whereText} from './zero-u.js';
 export {positionOf};
 import {endKey, endName, cableName, paneOf, mismatch, lengthText, lengthParts, MEDIA_LABELS} from './cable-rules.js';
 
@@ -118,9 +119,14 @@ export function exportStatus({notes = [], left = [], leftText = ''} = {}) {
 // cables passes {cables: false}, and today every export does: the
 // sheet, draw.io, the 3D model, the BOM, the cable schedule and both DCIM
 // import kits. The line is kept for an export that one day does not.
-export function rackNotes(rack, {cables = true} = {}) {
+// An export that carries the parts beside the rack (#926) passes
+// {zeroU: false, chassisOf}: then only an entry it cannot place (a shape the
+// kit does not read, or a part the catalogue does not know as zero-U) is
+// counted as left out, and zeroUNotes says where each one it carries stands.
+export function rackNotes(rack, {cables = true, zeroU = true, chassisOf = null} = {}) {
   const out = [];
-  const z = rack.zeroU?.length || 0, c = rack.cables?.length || 0;
+  const placed = zeroU || typeof chassisOf !== 'function' ? new Set() : new Set(zeroUEntries(rack, chassisOf).map(e => e.id));
+  const z = (rack.zeroU || []).filter(e => !placed.has(e?.id)).length, c = rack.cables?.length || 0;
   if (z) out.push(`${count(z, 'zero-U item is', 'zero-U items are')} not in this export yet.`);
   if (cables && c) out.push(`${count(c, 'cable is', 'cables are')} not in this export yet.`);
   return out;
@@ -258,13 +264,16 @@ const MOUNTS = {
   wall: {tag: 'wall mount', what: 'a wall-mount device', where: 'a shelf or bracket'}};
 // A rack-face part (a 0U cable manager) bolts to the rails like a rack device:
 // it needs no shelf, so it has no "needs" sentence - managerNotes says where it is.
-const mountOf = mount => isRackMount({mount}) || mount === 'rack-face' ? null
+// A zero-U part stands beside the rack and needs none either: zeroUNotes says where.
+const mountOf = mount => isRackMount({mount}) || mount === 'rack-face' || isZeroUPart({mount}) ? null
   : MOUNTS[mount] ?? {tag: mount, what: `not a rack-mount device (${mount})`, where: 'a shelf or bracket'};
 export const mountText = mount => { const m = mountOf(mount); return m && `${m.what}, so it needs ${m.where}`; };
 // The picker's words: the list row's tag and the fit line.
 export function mountPick(mount) {
   if (mount === 'rack-face')
     return {tag: '0U, mounts on the rail face', fit: 'Fits here: it mounts on the rail face and takes no U of its own.'};
+  if (isZeroUPart({mount}))
+    return {tag: '0U, stands beside the rack', fit: 'Stands beside the rack at an upright and takes no U of its own.'};
   const m = mountOf(mount);
   return m && {tag: m.tag, fit: `Fits here, on ${m.where}: this is ${m.what}.`};
 }
@@ -277,15 +286,35 @@ export function mountNotes(items, chassisOf, frame) {
   return out;
 }
 
-// WHERE EACH MANAGER IS, for the sheets, draw.io and the BOM.
+// WHERE EACH MANAGER IS, for the sheets, draw.io and the BOM; a narrow part
+// on one rail names its rail (#926).
 export function managerNotes(items, chassisOf, frame) {
   const byId = new Map(items.map(i => [i.id, i]));
   return items.filter(i => chassisOf(i.ref)?.mount === 'rack-face').map(i => {
-    const c = chassisOf(i.ref), host = i.on ? byId.get(i.on) : null;
+    const c = chassisOf(i.ref), host = i.on ? byId.get(i.on) : null, rail = railOf(i, chassisOf);
     const what = [c.manufacturer, c.model].filter(Boolean).join(' ') || i.ref;
-    return `${i.label}: ${what}, 0U, ${host ? `on ${host.label} ` : ''}at U${positionOf(frame, i.ru, 1)}, ${i.face}.`;
+    return `${i.label}: ${what}, 0U, ${host ? `on ${host.label} ` : ''}at U${positionOf(frame, i.ru, 1)}, ${i.face}${rail ? `, ${rail} rail` : ''}.`;
   });
 }
+
+// WHERE EACH PART BESIDE THE RACK STANDS (#926), for the sheets, the BOM and
+// the 3D model: one sentence each, for every part zeroUEntries lists.
+export function zeroUNotes(rack, chassisOf) {
+  const byId = new Map(zeroUOf(rack).map(z => [z.id, z]));
+  return zeroUEntries(rack, chassisOf).map(e => {
+    const c = chassisOf(e.ref);
+    const what = [c.manufacturer, c.model].filter(Boolean).join(' ') || e.ref;
+    return `${e.label}: ${what}, 0U, ${whereText(rack, byId.get(e.id), chassisOf)}` +
+      `${e.between ? '; it serves the next rack too, which this file does not hold' : ''}.`;
+  });
+}
+
+// THE PARTS BESIDE THE RACK AS IMPORT ITEMS (#926): what deviceImportRows
+// takes beside the rack's own items, one per part zeroUEntries lists, with
+// `mount` (rack-side), `at`, `between`, `ru` and `u`, and the text of where
+// it stands. A caller looks its device type up by ref as it does an item's.
+export const zeroUImportItems = (rack, chassisOf) => zeroUEntries(rack, chassisOf).map(e =>
+  ({...e, where: whereText(rack, zeroUOf(rack).find(z => z.id === e.id), chassisOf)}));
 
 // createRackScene has no fields input yet (the Rack Builder's 3D scene).
 export function threeDNotes(rack) {
@@ -665,8 +694,9 @@ export function deviceImportRows({rack, items, types, target = 'netbox', dcim = 
         'Shorten its label and export again.'});
       continue;
     }
-    const clash = target === 'nautobot' || it.mount === 'rack-face' ? null
-      : kept.find(o => o.mount !== 'rack-face' && o.face !== it.face && overlaps(o, it) && (t.isFullDepth || types.get(o.id).isFullDepth));
+    const offRails = m => m === 'rack-face' || isZeroUPart({mount: m});
+    const clash = target === 'nautobot' || offRails(it.mount) ? null
+      : kept.find(o => !offRails(o.mount) && o.face !== it.face && overlaps(o, it) && (t.isFullDepth || types.get(o.id).isFullDepth));
     if (clash) {
       left.push({id: it.id, name, reason: `${name} is not in the devices file: it shares U${positionOf(rack.frame, it.ru, it.u)} ` +
         `with ${names.get(clash.id).name} on the ${clash.face}, and ${T} refuses two devices in one U, front and rear, while ` +
@@ -691,10 +721,16 @@ export function deviceImportRows({rack, items, types, target = 'netbox', dcim = 
     const mt = mountText(it.mount);
     if (mt) notes.push(`${mt[0].toUpperCase()}${mt.slice(1)}.`);
     if (it.turned) notes.push('Mounted turned: its rear panel faces out.');
-    const zeroU = it.mount === 'rack-face';
-    if (zeroU) {
+    // A part beside the rack (zeroUImportItems) and a manager on the rail face
+    // take no position and no face: where each is goes in the comment.
+    const beside = isZeroUPart({mount: it.mount});
+    const zeroU = it.mount === 'rack-face' || beside;
+    if (beside) {
+      notes.push(`0U, ${it.where}${it.between ? ', serving the next rack too' : ''}; ${T} has no field for that.`);
+    } else if (zeroU) {
       const host = it.on ? items.find(o => o.id === it.on) : null;
       notes.push(`0U cable manager on the ${it.face} rail face at U${positionOf(rack.frame, it.ru, 1)}` +
+                 `${it.side === 'left' || it.side === 'right' ? `, ${it.side} rail` : ''}` +
                  `${host ? `, over ${names.get(host.id)?.name ?? host.label}` : ''}; ${T} has no field for that.`);
     }
     const position = positionOf(rack.frame, it.ru, it.u);

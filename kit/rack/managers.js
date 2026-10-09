@@ -4,7 +4,7 @@
 // `ru` always says where it is. Everything that moves a manager or its host
 // comes through here, so the two can never drift apart.
 
-import {fits, isRackFace} from './fit.js';
+import {fits, isRackFace, railOf} from './fit.js';
 import {detached, uLabel} from './model.js';
 
 const unitsOf = (chassisOf, ref) => Math.max(1, chassisOf(ref)?.ru ?? 1);
@@ -18,8 +18,11 @@ export function hostAt(rack, face, ru, chassisOf, {ignoreId = null} = {}) {
 
 export const managersOf = (rack, hostId) => rack.items.filter(i => i.on === hostId);
 
-// Where a manager put at (face, ru) goes: onto the device there, or alone.
-export function placement(rack, {face, ru}, chassisOf, {ignoreId = null} = {}) {
+// Where a manager put at (face, ru) goes: onto the device there, or alone. A
+// part on one rail (`side`, #926) goes alone, with its side: it is not across
+// the device behind it.
+export function placement(rack, {face, ru, side, ref}, chassisOf, {ignoreId = null} = {}) {
+  if (railOf({ref, side}, chassisOf)) return {face, ru, side};
   const host = hostAt(rack, face, ru, chassisOf, {ignoreId});
   return host ? {face, ru, on: host.id, unit: ru - host.ru + 1} : {face, ru};
 }

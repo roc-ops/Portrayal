@@ -65,9 +65,9 @@
     },
     "zeroU": {
      "type": "array",
-     "description": "Side-mounted parts along the attachment points. Reserved: none can be placed yet.",
+     "description": "Parts that stand beside the rack at an attachment point and take no rack unit, such as vertical cable managers. An entry with an id, a ref and an attachment point is placed; any other entry is kept as written.",
      "items": {
-      "type": "object"
+      "$ref": "#/$defs/zeroU"
      }
     },
     "cables": {
@@ -244,6 +244,36 @@
      "type": "integer",
      "minimum": 1,
      "description": "Which of the host's units, from 1 at its bottom."
+    },
+    "side": {
+     "description": "left or right: the rail a part narrower than the rack opening is on, seen from its face. Absent, it is across both rails."
+    }
+   }
+  },
+  "zeroU": {
+   "type": "object",
+   "description": "A part beside the rack. Its keys are described and not constrained, so every entry valid before they were described stays valid; the kit places an entry whose id, ref and at are non-empty strings, and keeps any other as written.",
+   "properties": {
+    "id": {
+     "description": "Unique within the rack's zeroU entries; z1, z2 and so on. The loader gives an entry without one an id."
+    },
+    "ref": {
+     "description": "The part, by its catalog ref."
+    },
+    "cfg": {
+     "description": "Which of the part's configurations."
+    },
+    "label": {
+     "description": "The name shown on the drawing."
+    },
+    "at": {
+     "description": "The attachment point it stands at: left or right on a two-post, left-front, right-front, left-rear or right-rear on a four-post. The lane of that name runs beside it."
+    },
+    "offsetMm": {
+     "description": "A number: its bottom, in millimeters above the bottom of the rails; a whole number of U as the kit writes it."
+    },
+    "between": {
+     "description": "True when it stands between this rack and the next one, serving both."
     }
    }
   },
