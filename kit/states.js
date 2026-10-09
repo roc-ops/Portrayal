@@ -39,7 +39,9 @@ const TOKEN = /^[a-z0-9-]+$/;
 // that is not a list of tokens gets no states rather than garbage ones.
 /** The state vocabulary one element admits, or [] if it does not carry one. */
 export function statesOfEl(el) {
-  const raw = (el?.getAttribute?.('data-states') || '').trim();
+  // dataset where the element has one (a consumer may hand a plain
+  // {dataset} object, as messagesOfEl takes), the attribute where it does not
+  const raw = (el?.dataset?.states ?? el?.getAttribute?.('data-states') ?? '').trim();
   if (!raw) return [];
   const toks = raw.split(/[\s,]+/);
   return toks.every(t => TOKEN.test(t)) ? toks : [];
