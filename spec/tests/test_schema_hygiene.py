@@ -70,13 +70,18 @@ def test_every_schema_id_names_its_published_home(path):
     schemas are published at portrayal.dev under the format's label, and the
     title carries the same label, so `v1` means format 1 in all three places."""
     doc = json.loads(path.read_text())
-    assert doc["$id"] == f"https://portrayal.dev/schemas/v1/{path.name}", doc["$id"]
     if path.name == "rack.schema.json":
         # The rack file is the Rack Builder's own format, not a manifest: it is
         # named by `format: "portrayal-rack"` and counts its own `version`.
+        # Each rack version is published under the next unused label, never
+        # under its version number (docs/format-stability.md): /v1/ described
+        # rack version 2 and stays as published; version 3 (#921, bundles) is /v2/.
+        assert doc["$id"] == f"https://portrayal.dev/schemas/v2/{path.name}", doc["$id"]
         assert doc["properties"]["format"]["const"] == "portrayal-rack"
+        assert doc["properties"]["version"]["const"] == 3
         assert "(v%d)" % doc["properties"]["version"]["const"] in doc["title"], doc["title"]
         return
+    assert doc["$id"] == f"https://portrayal.dev/schemas/v1/{path.name}", doc["$id"]
     assert "(v1)" in doc["title"], doc["title"]
     if path.name in VERSION_KEY:
         assert doc["properties"][VERSION_KEY[path.name]]["const"] == 1, "schema v1 is version 1"

@@ -62,5 +62,25 @@ def test_a_manager_on_unit_0_is_refused():
 
 def test_a_version_the_schema_does_not_describe_is_refused():
     doc = current(ROOT / "spec/tests/fixtures/racks/doc-export-empty.json")
-    doc["version"] = 3
+    doc["version"] = 4
     assert errors(doc)
+
+
+def test_a_bundle_validates_and_a_malformed_one_is_refused():
+    """Version 3 (#921): `bundles` on a rack, checked here by a second validator."""
+    doc = current(ROOT / "spec/tests/fixtures/racks/doc-cable-fixture.json")
+    assert doc["version"] == 3
+    rack = doc["racks"][0]
+    ids = [c["id"] for c in rack["cables"]]
+    assert len(ids) >= 2
+    rack["bundles"] = [{"id": "b1", "number": 1, "label": "", "members": [{"cable": ids[0]},
+                        {"cable": ids[1], "b": {"lane": "left-front", "ru": 4}}],
+                        "route": [{"lane": "left-front", "ru": 2}, {"lane": "left-front", "ru": 8}],
+                        "straps": {"every": {"value": 12, "unit": "in"}}}]
+    assert errors(doc) == []
+    rack["bundles"][0]["straps"] = {"every": None}
+    assert errors(doc) == []
+    rack["bundles"][0]["straps"] = {"every": {"value": 12, "unit": "cm"}}
+    rack["bundles"][0]["number"] = 0
+    bad = errors(doc)
+    assert any("unit" in e for e in bad) and any("number" in e for e in bad), bad

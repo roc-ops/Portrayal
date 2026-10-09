@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: smm-8x10g
-version: 1.9.1
+version: 1.10.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -15,6 +15,18 @@ size-notes: 'd 380.0 is IMPOSSIBLE - a front and a rear card mate at a midplane 
 attrs: {model: 'SMM 8x10G', role: supervisor, power-draw-max-w: 160, sfp-plus: '8',
   sfp: '2', mgmt: 10/100BASE-T, console: RS-232}
 provenance:
+  led-states: >-
+    datasheet - C100G Hardware Installation Guide (rev 07/08/2022) Table 1-2 and Table 6-1,
+    Front-installed module LEDs, and the C40G guide (rev 07/07/2022) Table 1-2, for the SMM, QAM
+    and UPS/DQM modules: STATUS Green (module running normally) or Black/off (no power); ACTIVE
+    Green (processing traffic) or Black/off (redundant standby); ALARM Black (no alarm) or Red
+    (full alarm condition, a critical component has failed). Declared as `off`, `ok`, `active`
+    and `alarm`; the green is the lamp green the photographs show (#39b54a) and the red is not
+    measured. Every lamp is drawn OFF: the skin used to paint STATUS and ACTIVE lit, from the
+    photograph, and no state could change them. No Casa document gives a blink for these three,
+    so none is declared. MANAGEMENT JACK - the 10/100 Fast Ethernet row of the same table gives
+    link and activity in green, so the placement colours common/rj45-eth@1's two lamps green
+    (led-a link, led-b activity blinking, the part's own split).
   depth-known-wrong: 'THE 380.0 IS NOT MERELY UNMEASURED, IT IS IMPOSSIBLE, and this
     contract now says so in a field a tool can read - size-confidence: {d: known-wrong}.
     THE CONSTRAINT. Front and rear cards MEET AT A MIDPLANE, which the owner photographed:
@@ -172,9 +184,9 @@ provenance:
     No Casa document states a depth for any of them. Eleven cards carrying 4.2 is ONE
     estimate written eleven times, not eleven readings that agreed.'
 elements:
-  status: {at: [4.80, 271.10], size: [3.0, 3.0], class: led}
-  active: {at: [4.80, 274.75], size: [3.0, 3.0], class: led}
-  alarm: {at: [4.80, 278.40], size: [3.0, 3.0], class: led}
+  status: {at: [4.80, 271.10], size: [3.0, 3.0], class: led, states: ['off', {name: ok, color: '#39b54a'}]}
+  active: {at: [4.80, 274.75], size: [3.0, 3.0], class: led, states: ['off', {name: active, color: '#39b54a'}]}
+  alarm: {at: [4.80, 278.40], size: [3.0, 3.0], class: led, states: ['off', {name: alarm, color: '#ef4444'}]}
 relief:
   wall: '#4a4f55'
   features:
@@ -190,7 +202,8 @@ relief:
     - {node: active, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
     - {node: alarm, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
 parts:
-  - {ref: common/rj45-eth@1, id: mgmt, at: [7.33, 41.11], rotate: 90}
+  - {ref: common/rj45-eth@1, id: mgmt, at: [7.33, 41.11], rotate: 90,
+     states: {led-a: ['off', {name: link, color: '#39b54a'}], led-b: ['off', {name: activity, color: '#39b54a', behavior: blinking}]}}
   - {ref: common/sfp-plus-cage@2, id: xg0, at: [7.23, 64.33], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
   - {ref: common/sfp-plus-cage@2, id: xg1, at: [7.23, 81.68], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
   - {ref: common/sfp-plus-cage@2, id: xg2, at: [7.23, 101.86], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}

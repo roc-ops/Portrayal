@@ -11,7 +11,10 @@ import {whereText, carriesLane} from './zero-u.js';
 import {portFree, endKey, proposeMedia, mismatch, endName, carriedU, portPathOf, matches, lengthText} from './cable-rules.js';
 import {lanesOf, pathwaysOf, resolveRoute, pathLength, routePath, routeText} from './route.js';
 import {catalogEntries} from './catalog.js';
-import {GONE, CABLE_GONE, ZERO_GONE} from './commands.js';
+import {GONE, CABLE_GONE, ZERO_GONE, BUNDLE_GONE} from './commands.js';
+import {bundlesOf, bundleName} from './model.js';
+import {bundleCheck, bundleOfCable, membersText, spacingText, strapSpacing, straps as strapsOf, trunkLength,
+        layoutOf} from './bundles.js';
 import {slotEnv, slotTree, partName, partOf} from './slots.js';
 import {fieldRows} from '../fields.js';
 
@@ -49,19 +52,37 @@ export function catalog(devices, {text, ru, family, mount, kind} = {}) {
 const LIMIT = 1500;
 export const WINDOW = 20;
 export const MAX_WINDOW = 50;
-const SECTIONS = ['items', 'zeroU', 'cables'];
+const SECTIONS = ['items', 'zeroU', 'cables', 'bundles'];
 const count = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
 const sideOf = e => `${e.item}/${e.path}${e.view === 'rear' ? ' (rear)' : ''}`;
 
-export function describe(rack, {chassisOf}, {section, offset, limit} = {}) {
+// One line for a bundle (#921): its members, its size and warnings when the
+// routes are known (`ctx.route`), its straps.
+function bundleLine(rack, b, ctx) {
+  const ids = b.members.map(m => m.cable);
+  const head = `${b.id} ${bundleName(b)}: ${count(ids.length, 'cable')}${ids.length ? ` (${membersText(ids)})` : ''}`;
+  const spacing = spacingText(strapSpacing(b));
+  if (ids.length < 2) return `${head}, not drawn.`;
+  if (!ctx?.route) return `${head}, ${spacing}, not checked.`;
+  const r = bundleCheck(rack, b, ctx);
+  if (!r.checked) return `${head}, ${spacing}, not checked.`;
+  const size = r.size ? `about ${Math.round(r.size.max_mm)} mm, ` : '';
+  return `${head}, ${size}${spacing}, ${r.warnings.length ? count(r.warnings.length, 'warning') : 'no warnings'}.`;
+}
+
+export function describe(rack, ctx, {section, offset, limit} = {}) {
+  const {chassisOf} = ctx;
   const f = rack.frame;
   const holes = f.holes.style === 'tapped' ? `tapped${f.holes.thread ? ` ${f.holes.thread}` : ''} holes` : 'square holes';
   const items = [...rack.items].sort((a, b) => b.ru - a.ru);
   const cables = rack.cables || [];
   // the parts beside the rack (#926), top down; counted only when there are any
   const beside = [...zeroUOf(rack)].sort((a, b) => zeroUBottom(b) - zeroUBottom(a));
+  // the bundles (#921), in the rack's order; counted only when there are any
+  const bundles = bundlesOf(rack);
   const totals = `${rack.name} (${rack.id}): ${count(items.length, 'item')}, ` +
-    `${beside.length ? `${count(beside.length, 'part')} beside the rack, ` : ''}${count(cables.length, 'cable')}.`;
+    `${beside.length ? `${count(beside.length, 'part')} beside the rack, ` : ''}${count(cables.length, 'cable')}` +
+    `${bundles.length ? `, ${count(bundles.length, 'bundle')}` : ''}.`;
   const frameLine = `${f.heightRU}U ${f.kind}, ${holes}, numbered ${f.numbering}.`;
   const uOf = heightOf(chassisOf);
   const span = i => {
@@ -82,14 +103,14 @@ export function describe(rack, {chassisOf}, {section, offset, limit} = {}) {
     ...(full && c.purpose ? [c.purpose] : []), ...(full && lengthText(c.length) ? [lengthText(c.length)] : [])].join(', ');
 
   if (section != null || offset != null || limit != null) {
-    if (section != null && !SECTIONS.includes(section)) return {error: `There is no section ${section}. Ask for items, zeroU or cables, or leave it out for all three.`};
+    if (section != null && !SECTIONS.includes(section)) return {error: `There is no section ${section}. Ask for items, zeroU, cables or bundles, or leave it out for all of them.`};
     if (offset != null && !(Number.isInteger(offset) && offset >= 0)) return {error: 'An offset is a whole number from 0.'};
     if (limit != null && !(Number.isInteger(limit) && limit >= 1)) return {error: `A limit is a whole number from 1 to ${MAX_WINDOW}.`};
     const from = offset ?? 0;
     const n = Math.min(limit ?? WINDOW, MAX_WINDOW);
     const parts = [['items', 'Items', items, i => item(i, false, true)], ['zeroU', 'Beside the rack', beside, z => part(z, false, true)],
-      ['cables', 'Cables', cables, c => cable(c, true)]]
-      .filter(([key]) => (section == null ? key !== 'zeroU' || beside.length : section === key));
+      ['cables', 'Cables', cables, c => cable(c, true)], ['bundles', 'Bundles', bundles, b => bundleLine(rack, b, ctx)]]
+      .filter(([key]) => (section == null ? (key !== 'zeroU' || beside.length) && (key !== 'bundles' || bundles.length) : section === key));
     const shown = [], body = [];
     for (const [key, title, list, line] of parts) {
       if (!list.length) shown.push(`No ${key === 'zeroU' ? 'parts beside the rack' : title.toLowerCase()}.`);
@@ -102,21 +123,24 @@ export function describe(rack, {chassisOf}, {section, offset, limit} = {}) {
     return [`${totals} ${shown.join(' ')}`, frameLine, ...body].join('\n');
   }
 
-  const build = (short, nItems, nCables) => {
+  const bundleLines = bundles.map(b => bundleLine(rack, b, ctx));
+  const build = (short, nItems, nCables, nBundles) => {
     const lines = [totals, frameLine, items.length ? 'Items:' : 'No items.', ...items.slice(0, nItems).map(i => item(i, short)),
                    ...(beside.length ? ['Beside the rack:', ...beside.map(z => part(z, short))] : []),
-                   ...(cables.length ? ['Cables:', ...cables.slice(0, nCables).map(c => cable(c))] : [])];
-    const more = (items.length - nItems) + (cables.length - nCables);
+                   ...(cables.length ? ['Cables:', ...cables.slice(0, nCables).map(c => cable(c))] : []),
+                   ...(bundles.length ? ['Bundles:', ...bundleLines.slice(0, nBundles)] : [])];
+    const more = (items.length - nItems) + (cables.length - nCables) + (bundles.length - nBundles);
     if (short) lines.push(more ? `Shortened: labels left out, and ${more} more not listed; ask for them by id.` : 'Shortened: labels left out.');
     return lines.join('\n');
   };
-  let out = build(false, items.length, cables.length);
+  let out = build(false, items.length, cables.length, bundles.length);
   if (out.length <= LIMIT) return out;
-  let ni = items.length, nc = cables.length;
-  out = build(true, ni, nc);
-  while (out.length > LIMIT && (ni || nc)) {
-    if (nc >= ni && nc) nc--; else ni--;
-    out = build(true, ni, nc);
+  // the longest list loses its tail first; bundles, whose lines are longest, on a tie
+  let ni = items.length, nc = cables.length, nb = bundles.length;
+  out = build(true, ni, nc, nb);
+  while (out.length > LIMIT && (ni || nc || nb)) {
+    if (nb && nb >= nc && nb >= ni) nb--; else if (nc >= ni && nc) nc--; else ni--;
+    out = build(true, ni, nc, nb);
   }
   return out;
 }
@@ -253,14 +277,48 @@ function zeroUFacts(rack, z, ctx) {
     where: c ? whereText(rack, z, ctx.chassisOf) : null};
 }
 
+// A BUNDLE (#921), `kind: 'bundle'`: its members with where each joins and
+// leaves the trunk, the trunk in words and its length, its size against the
+// pathways it passes, its straps, and its warnings. What needs the routes
+// (`ctx.route`) is null without them, and `checked` is false: not measured,
+// never a pass. The bend is #922's, and null until it lands.
+function bundleFacts(rack, b, ctx) {
+  const label = id => rack.items.find(i => i.id === id)?.label ?? id;
+  const r = bundleCheck(rack, b, ctx);
+  const L = r.layout;
+  // a bundle of fewer than two is not drawn: no member joins or leaves it
+  const at = id => (b.members.length >= 2 ? L?.members.find(m => m.cable === id) : null);
+  const s = r.checked ? strapsOf(rack, b, ctx) : null;
+  return {kind: 'bundle', id: b.id, number: b.number, label: b.label, name: bundleName(b),
+    members: b.members.map(m => ({cable: m.cable, ...('a' in m ? {a: m.a} : {}), ...('b' in m ? {b: m.b} : {}),
+                                  join: at(m.cable)?.join ?? null, leave: at(m.cable)?.leave ?? null})),
+    route: {waypoints: b.route || [], text: routeText(b.route || [], label, rack.frame)},
+    length: r.checked ? trunkLength(rack, b, ctx) : null,
+    size: r.size, bend: null,
+    straps: {every: strapSpacing(b), count: s ? s.count : null},
+    gone: r.gone, warnings: r.warnings, notes: r.notes, checked: r.checked};
+}
+
+// inspect looks an id up as an item, a cable, a part beside the rack, then a
+// bundle: a bundle's id is never another thing's (model.js settleBundles), so
+// only one can match.
 export async function inspect(rack, id, ctx = {}) {
   const item = rack.items.find(i => i.id === id);
   if (item) return itemFacts(rack, item, ctx);
   const cable = (rack.cables || []).find(c => c.id === id);
-  if (cable) return cableInfo(rack, cable, ctx);
+  if (cable) {
+    const out = await cableInfo(rack, cable, ctx);
+    const b = bundleOfCable(rack, id);
+    if (!b) return out;
+    const m = b.members.length >= 2 ? layoutOf(rack, b, ctx)?.members.find(x => x.cable === id) : null;
+    return {...out, bundle: {id: b.id, join: m?.join ?? null, leave: m?.leave ?? null}};
+  }
   const z = zeroUOf(rack).find(x => x.id === id);
   if (z) return zeroUFacts(rack, z, ctx);
-  return {error: /^c\d+$/.test(String(id)) ? CABLE_GONE : /^z\d+$/.test(String(id)) ? ZERO_GONE : GONE};
+  const b = bundlesOf(rack).find(x => x.id === id);
+  if (b) return bundleFacts(rack, b, ctx);
+  const s = String(id);
+  return {error: /^c\d+$/.test(s) ? CABLE_GONE : /^z\d+$/.test(s) ? ZERO_GONE : /^b\d+$/.test(s) ? BUNDLE_GONE : GONE};
 }
 
 // ── selectCables (D5: a query, not a command argument) ──────────────────
@@ -268,7 +326,7 @@ export async function inspect(rack, id, ctx = {}) {
 // `cable.remove` or `cable.update` commands, so a batch stays one an agent can
 // read back. Every key given narrows: {item, purpose} is that device's cables
 // of that purpose. An empty result is {ids: []}.
-const SELECTOR_KEYS = ['item', 'path', 'view', 'loose', 'purpose', 'media'];
+const SELECTOR_KEYS = ['item', 'path', 'view', 'loose', 'purpose', 'media', 'bundle'];
 export const NO_FACTS = 'Which cables are loose is only known once the devices have been read.';
 
 export async function selectCables(rack, selector, ctx = {}) {
@@ -278,12 +336,19 @@ export async function selectCables(rack, selector, ctx = {}) {
   if (odd) return {error: `A selector does not take ${odd}.`};
   if (('path' in s || 'view' in s) && !('item' in s)) return {error: 'A selector with a path needs its item.'};
   if ('loose' in s && s.loose !== true) return {error: 'A selector takes loose: true, or leaves it out.'};
-  if (!keys.some(k => ['item', 'loose', 'purpose', 'media'].includes(k)))
-    return {error: 'A selector names an item, loose: true, a purpose or a media.'};
+  if (!keys.some(k => ['item', 'loose', 'purpose', 'media', 'bundle'].includes(k)))
+    return {error: 'A selector names an item, loose: true, a purpose, a media or a bundle.'};
   // null or a non-string would match every cable: "no media" is not a selector
-  const bad = ['item', 'path', 'view', 'purpose', 'media'].find(k => k in s && (typeof s[k] !== 'string' || !s[k]));
+  const bad = ['item', 'path', 'view', 'purpose', 'media', 'bundle'].find(k => k in s && (typeof s[k] !== 'string' || !s[k]));
   if (bad) return {error: `A selector's ${bad} is a name; leave it out rather than send ${JSON.stringify(s[bad]) ?? String(s[bad])}.`};
   let list = rack.cables || [];
+  // a bundle's members, in combing order (#921)
+  if ('bundle' in s) {
+    const b = bundlesOf(rack).find(x => x.id === s.bundle);
+    if (!b) return {error: BUNDLE_GONE};
+    const byId = new Map(list.map(c => [c.id, c]));
+    list = b.members.map(m => byId.get(m.cable)).filter(Boolean);
+  }
   if ('item' in s) {
     const ends = c => [c.a, c.b].filter(e => e.item === s.item);
     if (!rack.items.some(i => i.id === s.item) && !list.some(c => ends(c).length)) return {error: GONE};

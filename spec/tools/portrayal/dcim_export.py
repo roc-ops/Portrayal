@@ -602,6 +602,19 @@ PART_POWER = {
     # netbox/dcim/choices.py at 2b3f4b48, TYPE_NEMA_L2130P; nautobot/nautobot
     # nautobot/dcim/choices.py at c77e4255, the same).
     "eaton/g4-cord-l21-30p": "nema-l21-30p",
+    # THE GENERIC INPUT PLUGS (#933): the face of the plug at the end of a PDU's
+    # fixed cord, for a device that draws its plug rather than its cord. A device
+    # draws one or the other, never both, or one input exports as two ports. Every
+    # value is a PowerPortTypeChoices value in both targets: netbox-community/netbox
+    # netbox/dcim/choices.py at 64ce9e2d (TYPE_NEMA_L620P 'nema-l6-20p', TYPE_NEMA_L520P
+    # 'nema-l5-20p', TYPE_NEMA_520P 'nema-5-20p', TYPE_CS8365C 'cs8365c') and
+    # nautobot/nautobot nautobot/dcim/choices.py at 3edb1fca (the same four). The C14
+    # and C20 cord ends have no row, as the C13 and C19 ones have none: a jumper's
+    # end is not a port of the device it is drawn on.
+    "generic/nema-l6-20p-plug": "nema-l6-20p",
+    "generic/nema-l5-20p-plug": "nema-l5-20p",
+    "generic/nema-5-20p-plug": "nema-5-20p",
+    "generic/cs8365c-plug": "cs8365c",
 }
 
 # WHERE A DEVICE HANDS POWER ON: a power OUTLET, the other half of PART_POWER
@@ -624,7 +637,13 @@ PART_POWER = {
 # netbox-community/netbox netbox/dcim/choices.py at 2b3f4b48 (TYPE_IEC_C13, and
 # TYPE_EATON_C39 'eaton-c39' labelled "Eaton C39") and nautobot/nautobot
 # nautobot/dcim/choices.py at c77e4255 (the same two).
-OUTLET_TYPES = frozenset({"dc-terminal", "other", "iec-60320-c13", "eaton-c39"})
+#
+# AND THE GENERIC OUTLETS (#933). `iec-60320-c19` and `nema-5-20r` are
+# PowerOutletTypeChoices values in both: netbox-community/netbox
+# netbox/dcim/choices.py at 64ce9e2d (TYPE_IEC_C19, TYPE_NEMA_520R) and
+# nautobot/nautobot nautobot/dcim/choices.py at 3edb1fca (the same two).
+OUTLET_TYPES = frozenset({"dc-terminal", "other", "iec-60320-c13", "eaton-c39",
+                          "iec-60320-c19", "nema-5-20r"})
 PART_OUTLET = {
     # ONE OUTPUT CIRCUIT OF A BREAKER PANEL, a BATT screw over an RTN screw: the
     # two poles of one circuit, so one outlet, as one feed is one power port.
@@ -641,6 +660,10 @@ PART_OUTLET = {
     # name it, so it is `eaton-c39` rather than `other`.
     "std/c13-outlet": "iec-60320-c13",
     "eaton/c39-outlet": "eaton-c39",
+    # A C19 OUTLET, upstream's `iec-60320-c19`, and a NEMA 5-20R, upstream's
+    # `nema-5-20r` (it takes a 5-15P as well; the type names the receptacle).
+    "std/c19-outlet": "iec-60320-c19",
+    "std/nema-5-20r": "nema-5-20r",
 }
 # The label an `other` outlet carries, so it says what to plug into it.
 # test_power_outlets.py holds both tables to OUTLET_TYPES (an assert here would

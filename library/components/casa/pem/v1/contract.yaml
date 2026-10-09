@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: pem
-version: 1.7.0
+version: 1.8.0
 class: power
 behaviour: fills
 profile: networking
@@ -24,6 +24,14 @@ attrs:
 
 size: {w: 207.0, h: 91.6, d: 250.0}
 provenance:
+  led-states: >-
+    datasheet - C100G Hardware Installation Guide (rev 07/08/2022) Table 1-3 and Table 6-2,
+    Power entry module LEDs: Green (PEM running normally) or off (no power); Red (alarm or
+    error, blown fuse or circuit down) or off; Blue, 'Not used'. The table names colours, not
+    the three printed marks, so which lamp is which is read from the marks: the boxed OK is the
+    green, the warning triangle the red, HS the blue. HS is declared `off` and a plain blue
+    `on`, because the guide gives the colour and no meaning. Every lamp is drawn OFF: the skin
+    used to paint OK lit.
   positions: >-
     FIELDS, since 1.7.0 (docs/switch-positions-design.md, #808): `breaker-1`, `breaker-2`, `breaker-3`, `breaker-4`, each `off` or `on`. Each rocker is a SEE-SAW: one surface tipped about its centre, so the end it is set to presses in and the other end rises. O (a ring) at the left and I (a dash) at the right of each paddle, as the PEM drawing prints them; OFF raises the I end and ON the O end, each a node shown for its position, shaded lighter toward its raised end and built in 3D as a sloped profile. The heights are estimated. The skin draws OFF; nothing held says how a unit ships.
   power: >-
@@ -141,9 +149,9 @@ elements:
   branch-3: {at: [44.2, 33.0], size: [10.0, 27.0], class: dc-terminal}
   branch-2: {at: [152.8, 33.0], size: [10.0, 27.0], class: dc-terminal}
   branch-1: {at: [176.9, 33.0], size: [10.0, 27.0], class: dc-terminal}
-  hs: {at: [98.4, 56.6], size: [2.8, 2.8], class: led}
-  alarm: {at: [107.4, 56.6], size: [2.8, 2.8], class: led}
-  ok: {at: [116.4, 56.6], size: [2.8, 2.8], class: led}
+  hs: {at: [98.4, 56.6], size: [2.8, 2.8], class: led, states: ['off', {name: 'on', color: '#3b82f6'}]}
+  alarm: {at: [107.4, 56.6], size: [2.8, 2.8], class: led, states: ['off', {name: alarm, color: '#ef4444'}]}
+  ok: {at: [116.4, 56.6], size: [2.8, 2.8], class: led, states: ['off', {name: ok, color: '#39b54a'}]}
 relief:
   wall: '#4a4f55'
   features:

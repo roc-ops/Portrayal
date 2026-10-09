@@ -1,7 +1,7 @@
 {
  "$schema": "https://json-schema.org/draft/2020-12/schema",
- "$id": "https://portrayal.dev/schemas/v1/rack.schema.json",
- "title": "Portrayal rack file (v2)",
+ "$id": "https://portrayal.dev/schemas/v2/rack.schema.json",
+ "title": "Portrayal rack file (v3)",
  "description": "A Rack Builder document: one or more racks, the devices in them, and the cables between their ports. What kit/rack/model.js parseDoc accepts and serialize writes.",
  "type": "object",
  "required": [
@@ -16,8 +16,8 @@
    "description": "Always portrayal-rack."
   },
   "version": {
-   "const": 2,
-   "description": "The file version. Older files are migrated on load; newer ones are refused."
+   "const": 3,
+   "description": "The file version. Older files are migrated on load; newer ones are refused. Version 3 added bundles."
   },
   "id": {
    "type": "string",
@@ -89,6 +89,13 @@
        "type": "string",
        "description": "The device role."
       }
+     }
+    },
+    "bundles": {
+     "type": "array",
+     "description": "Cable bundles: cables combed into one run and strapped. Optional; a rack with none may leave it out.",
+     "items": {
+      "$ref": "#/$defs/bundle"
      }
     }
    }
@@ -423,6 +430,110 @@
     "routeAsWritten": {
      "type": "array",
      "description": "A route containing an entry the loader could not read, kept whole as it was written. The readable waypoints are in route."
+    }
+   }
+  },
+  "bundle": {
+   "type": "object",
+   "required": [
+    "id",
+    "number",
+    "label",
+    "members",
+    "route"
+   ],
+   "description": "Cables sharing part of their route, combed into one run and held with hook-and-loop straps. Membership is here only: a cable carries no bundle key.",
+   "properties": {
+    "id": {
+     "type": "string",
+     "minLength": 1,
+     "description": "b1, b2 and so on: unique within the rack, and not the id of an item, a part beside the rack or a cable."
+    },
+    "number": {
+     "type": "integer",
+     "minimum": 1,
+     "description": "Unique within the rack. What a tag prints when there is no label."
+    },
+    "label": {
+     "type": "string",
+     "description": "The bundle's name; empty for Bundle <number>."
+    },
+    "members": {
+     "type": "array",
+     "description": "The cables, in combing order. A cable is in at most one bundle.",
+     "items": {
+      "$ref": "#/$defs/member"
+     }
+    },
+    "route": {
+     "type": "array",
+     "description": "The trunk: the run the members share, as waypoints in order.",
+     "items": {
+      "$ref": "#/$defs/waypoint"
+     }
+    },
+    "routeAsWritten": {
+     "type": "array",
+     "description": "A trunk containing an entry the loader could not read, kept whole as it was written. The readable waypoints are in route."
+    },
+    "straps": {
+     "type": "object",
+     "required": [
+      "every"
+     ],
+     "description": "The hook-and-loop straps. Absent means every 12 in.",
+     "properties": {
+      "every": {
+       "$ref": "#/$defs/strapSpacing"
+      }
+     }
+    }
+   }
+  },
+  "member": {
+   "type": "object",
+   "required": [
+    "cable"
+   ],
+   "description": "One cable of a bundle.",
+   "properties": {
+    "cable": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The cable's id."
+    },
+    "a": {
+     "$ref": "#/$defs/waypoint",
+     "description": "The trunk waypoint where it leaves the bundle for its a end. Absent, it joins where its own route first meets the trunk."
+    },
+    "b": {
+     "$ref": "#/$defs/waypoint",
+     "description": "The trunk waypoint where it leaves the bundle for its b end. Absent, it leaves where its own route last meets the trunk."
+    }
+   }
+  },
+  "strapSpacing": {
+   "type": [
+    "object",
+    "null"
+   ],
+   "required": [
+    "value",
+    "unit"
+   ],
+   "description": "How far apart the straps are, a length with its own unit; null for no straps.",
+   "properties": {
+    "value": {
+     "type": "number",
+     "exclusiveMinimum": 0,
+     "description": "Above 0."
+    },
+    "unit": {
+     "enum": [
+      "in",
+      "mm"
+     ],
+     "description": "in or mm."
     }
    }
   }

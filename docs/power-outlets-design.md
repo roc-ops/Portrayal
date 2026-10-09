@@ -200,7 +200,8 @@ outlet's feed and is a major. The three panels went to 1.1.0.
 
 - **AC.** A rack PDU's C13 and C19 outlets have types in both targets and would use the
   same table. Whether a three-phase PDU states `feed_leg` per outlet is a question for
-  the first one modelled.
+  the first one modelled. [pdu-model-design.md](pdu-model-design.md) (#934) proposes
+  the answer: only for an outlet wired line to neutral on a wye input.
 - **An alarm contact.** The panel's Form C alarm relays have no port type in either
   target. They stay in `NOT_A_DCIM_PORT`.
 - **Ratings.** An outlet template in either target carries a type and no current rating.

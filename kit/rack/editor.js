@@ -63,8 +63,11 @@ export function createRackEditor({doc, chassisOf, cap = 100}) {
   return {
     getDoc: () => current,
     rack,
-    loadDoc(next) {
-      const findings = [];
+    // `notes` are the sentences parseDoc gave for the bundles it repaired
+    // (parseDoc(input, {notes})): the document arrives parsed, so they are
+    // handed on here, ahead of what settling the managers says.
+    loadDoc(next, {notes = []} = {}) {
+      const findings = (Array.isArray(notes) ? notes : []).map(text => ({kind: 'note', text: String(text)}));
       const racks = next.racks.map(r => {
         const s = settleManagers(r, chassisOf);
         findings.push(...s.notices.map(text => ({kind: 'note', text})));

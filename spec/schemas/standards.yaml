@@ -633,6 +633,43 @@ standards:
       swallows, so the well is at least that deep, and a C14's shroud (17.00 on
       c14-inlet's Adam Tech S00087C rev D) does not bottom out in it. Neither
       outlet drawing dimensions the well's depth.
+  c19-outlet:
+    registry: IEC 60320-3 sheet J (the C19 outlet, mates a C20 plug), as SCHURTER 4710-5 draws it
+    w: 35.6
+    h: 27.7
+    radius: 5.0
+    confidence: drawing
+    depth: 20.0
+    depth-confidence: estimated
+    source: >-
+      SCHURTER 4710-5 data sheet, "IEC Appliance Outlet J, Snap-in Mounting,
+      Front Side" (https://www.schurter.com/en/datasheet/typ_4710-5.pdf), p.2:
+      the face view is vector, and its flange is dimensioned 42 x 34, which
+      reads 1.804 pt/mm on both axes. The well is read off the paths at that
+      scale as 35.65 x 27.67, R4.98.
+    notes: >-
+      THE WELL A C20 PLUG'S SHROUD ENTERS, not a panel cutout: an outlet on a
+      PDU is moulded, and what a front elevation sees is its well, with the
+      C19 nose (28.0 x 20.85, R4.7) standing in it. The cutout on the same
+      sheet, 35.8 +/-0.1 x 27 +/-0.1 R5 max, is the snap-in body's and not
+      this. Depth 20 is the C19 nose's 20 MIN (Volex VAC19, entry `c19-plug`):
+      the well is at least as deep as the nose that stands in it. No held
+      drawing sections the well. IEC 60320 is not held.
+  nema-5-20r:
+    registry: NEMA WD 6 configuration 5-20R (125 V 20 A, takes 5-15P and 5-20P), as Qualtek 739W-X2/30 draws a snap-in single receptacle
+    w: 27.0
+    h: 27.0
+    confidence: drawing
+    source: >-
+      Qualtek 739W-X2/30, "Snap-in 20 Amp T-slot receptacle", drawn 05-14-07
+      (https://www.qualtekusa.com/images/AC_Receptacles/pdfs/739wx230.pdf):
+      the face 27 x 27, dimensioned, on a 24.5 +/-0.2 square cutout.
+    notes: >-
+      THE RECEPTACLE'S FACE, flat, with three holes; NEMA WD 6 governs the
+      configuration and not the face, and is not held. A duplex or a moulded
+      PDU receptacle has its own face; this is the one dimensioned public
+      drawing found of a single 5-20R. No depth: the holes are pockets on the
+      part, as deep as a 5-20P's blades (Leviton 5366-C).
   saf-d-grid:
     registry: >-
       Anderson Power Products Saf-D-Grid (no IEC or ISO standard governs it;
@@ -2014,6 +2051,102 @@ standards:
       dimensioned. The 12 AWG wide-latch plug (31 x 23.9) and the 300 V keyed
       2300 series plug (31.0 x 24.0) on pp.16-17 are larger bodies and are
       not this entry. No IEC or ISO standard governs the interface.
+  c14-plug:
+    registry: Volex Power Products catalogue, Aug-2025, cat. no. VNBC14S "3-pole Straight Plug Receptacle" (a moulded IEC 60320 C14 plug connector, standard sheet E), p.271
+    w: 29.0
+    h: 21.0
+    confidence: drawing
+    depth: 59.0
+    depth-confidence: drawing
+    source: >-
+      Volex Power Products catalogue, Aug-2025, p.271 (VNBC14S): the shroud
+      29 +0/-0.5 x 21 +0/-0.5 outside on the face view, and the overall length
+      59 on the side view, face to the end of the strain relief. The
+      catalogue gives no drawing number or revision.
+    notes: >-
+      THE END-ON BOX OF THE SHROUD, the widest section of a moulded C14 plug,
+      seen from the cable end. Its inside is 24 +0.5 x 16 +0.5, its two
+      earth-side corners are cut at 45 degrees, and its pins are 14.0 apart
+      with the earth 4.0 off their line. A C14 plug goes into a C13 outlet,
+      shroud first over the C13 nose.
+  c20-plug:
+    registry: Volex Power Products catalogue, Aug-2025, cat. no. VAC20S "3-pole Straight Plug Receptacle" (a moulded IEC 60320 C20 plug connector, standard sheet I), p.283
+    w: 33.75
+    h: 25.75
+    confidence: drawing
+    depth: 83.75
+    depth-confidence: drawing
+    source: >-
+      Volex Power Products catalogue, Aug-2025, p.283 (VAC20S): the body
+      33.75 +/-0.50 on the top view and 25.75 +/-0.50 on the side view, and
+      the overall length 83.75 +/-1.5. The catalogue gives no drawing number
+      or revision. Anderson Power Products DS-SDG REV 19 p.16 draws a moulded
+      C20 plug 34.0 x 26.0 x 86.8.
+    notes: >-
+      THE END-ON BOX OF THE BODY, seen from the cable end. The shroud's
+      inside is 29 +0.5 x 21 +0.5, R3 MAX; the pins are 13 apart with the
+      earth 8 off their line. A plain rounded rectangle, no keying chamfer.
+  nema-l6-20p-plug:
+    registry: NEMA WD 6 configuration L6-20P (250 V 20 A locking), as Leviton CATSTD-02321-00X-D01 rev 1 draws catalogue no. 2321
+    w: 52.8
+    h: 52.8
+    confidence: drawing
+    depth: 62.9
+    depth-confidence: drawing
+    source: >-
+      Leviton CATSTD-02321-00X-D01 rev 1, "2321 20A plug NEMA L6-20 catalog
+      drawing", scale 1:1: the grip 2.08 in [52.8 mm], the face 1.84 in [46.8
+      mm], the body 2.48 in [62.9 mm] long, the blades 0.73 in [18.6 mm] and
+      the earth blade 0.89 in [22.5 mm].
+    notes: >-
+      THE GRIP, face on. NEMA WD 6 governs the blade configuration and not
+      the body, and is not held; this is one maker's body.
+  nema-l5-20p-plug:
+    registry: NEMA WD 6 configuration L5-20P (125 V 20 A locking), on the L6-20P body of Leviton CATSTD-02321-00X-D01 rev 1
+    w: 52.8
+    h: 52.8
+    confidence: estimated
+    depth: 62.9
+    depth-confidence: estimated
+    source: >-
+      BORROWED from `nema-l6-20p-plug`. No dimensioned L5-20P drawing was
+      found; the blade layout is Bryant 70520NP's electrical schematic,
+      calibrated against the L6-20P (generic/nema-l5-20p-plug@1
+      provenance.blades).
+    notes: >-
+      The same 20 A twist-lock body as the L6-20P; the configurations differ
+      in where the blades sit.
+  nema-5-20p-plug:
+    registry: NEMA WD 6 configuration 5-20P (125 V 20 A straight blade), as Leviton CATSTD-05366-00C-D01 rev 1 draws catalogue no. 5366-C
+    w: 38.9
+    h: 38.9
+    confidence: drawing
+    depth: 50.4
+    depth-confidence: drawing
+    source: >-
+      Leviton CATSTD-05366-00C-D01 rev 1, "5366-C 20A plug NEMA 5-20 catalog
+      drawing", scale 1:1: the body 1.53 in [38.9 mm], the face 1.39 in [35.3
+      mm], the body 1.98 in [50.4 mm] long, the blades 0.67 in [17 mm] and
+      the earth pin 0.83 in [21 mm].
+    notes: >-
+      THE BODY, face on. NEMA WD 6 is not held.
+  cs8365c-plug:
+    registry: California Standard CS8365C (250 V 50 A three-phase locking, 3P4W), as Hubbell drawing M-6590 rev 9 dimensions it
+    w: 65.1
+    h: 65.1
+    confidence: drawing
+    depth: 161.9
+    depth-confidence: drawing
+    source: >-
+      Hubbell M-6590 rev 9, "50A Twist-Lock plugs three and four wire",
+      scale 1:1, a scanned sheet: the grip 2.563 in (65.1 mm; the bracket
+      prints [65.7 +/-4], which does not convert) and the length 6.375 in
+      (161.9 mm; the bracket prints [160.5 +/-4]). The inch figures are
+      taken.
+    notes: >-
+      THE GRIP, face on. The California Standard configurations have no
+      public standard document; Hubbell's sheet is the governing drawing
+      held. The earth is the shell's spring contact, not a blade.
   usb-a-plug:
     registry: Universal Serial Bus Specification Revision 2.0 (April 27, 2000), figure 6-9 "USB Series A Plug Interface Drawing", p.99, and figure 6-2, p.87
     w: 16.0

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fan
-version: 1.7.0
+version: 1.8.0
 class: fan
 behaviour: fills
 profile: networking
@@ -15,6 +15,14 @@ description: >-
 attrs: {model: 'Fan Assembly', power-draw-max-w: 100}
 size: {w: 137.25, h: 91.2, d: 150.0}
 provenance:
+  led-states: >-
+    datasheet - C100G Hardware Installation Guide (rev 07/08/2022) Table 1-4 and Table 6-3,
+    System fan module LEDs: Green (running normally, normal cooling speed) or off (no power);
+    Red (one or more fans failed) or off; Blue (fans at high RPM to maintain cooling) or off.
+    The table names colours, not the three printed marks, so which lamp is which is read from
+    the marks: the boxed OK is the green, the warning triangle the red, HS the blue. Declared
+    `ok`, `alarm` and `high-speed`; the green is the lamp green of the Casa photographs, red and
+    blue are not measured. Every lamp is drawn OFF: the skin used to paint OK lit.
   layout: 'drawing - Figure 1-4 of the C100G Hardware Installation Guide, "C100G
     fan module", left panel "Fan tray front view". Measured as percentages of
     that figure''s face and stretched onto this module. The figure''s aspect is
@@ -92,9 +100,9 @@ provenance:
     not papered over here'
   depth: estimated - not measured
 elements:
-  hs: {at: [65.8, 19.5], size: [3.4, 3.4], class: led}
-  alarm: {at: [75.0, 19.5], size: [3.4, 3.4], class: led}
-  ok: {at: [84.1, 19.5], size: [3.4, 3.4], class: led}
+  hs: {at: [65.8, 19.5], size: [3.4, 3.4], class: led, states: ['off', {name: high-speed, color: '#3b82f6'}]}
+  alarm: {at: [75.0, 19.5], size: [3.4, 3.4], class: led, states: ['off', {name: alarm, color: '#ef4444'}]}
+  ok: {at: [84.1, 19.5], size: [3.4, 3.4], class: led, states: ['off', {name: ok, color: '#39b54a'}]}
 relief:
   wall: '#4a4f55'
   features:

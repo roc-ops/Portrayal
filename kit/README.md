@@ -104,6 +104,7 @@ as `@portrayal/kit/rack/<module>`:
 | `rack/cable-rules.js` | cables: which two ports may be joined, `withCable`, media and lengths |
 | `rack/cable-types.js` | the cable types (`cable-types.json`): `loadCableTypes(dist)` fetches them and returns `typeOf`, `bendOf` and `diameterOf` over them; the same lookups are exported to build over a table already in hand (a fixture, a cached copy): `typeOf(types, id)`, `cableTypeOf(types, cable)`, `radiusMm(type, which)`, `installedRadiusMm(types, id)`, `bendLookup(types)` and `diameterLookup(types)`, each radius in millimetres |
 | `rack/route.js`, `rack/route-path.js`, `rack/cable-geometry.js` | where a cable runs: `resolveRoute`, `routePath`, `ringMarks`, `orientMarks`, `reverseMarks`, `routedLength`, `pathLength`, pathway fill, `ringFindings`, and the geometry under them (`throughRings`) |
+| `rack/bundles.js`, `rack/bundle-route.js` | cable bundles: the size check (`bundleCheck`, `bundleChecks`, `pathwaysOn`), strap positions (`straps`), the trunk worked out from the members' routes (`deriveTrunk`) and a member's route along it (`followTrunk`) |
 | `rack/export-data.js` | the rack as rows: `bomRows`, `cableScheduleRows` and the device-import data |
 | `rack/dcim-rules.js` | what a NetBox or Nautobot import needs of a rack |
 | `rack/validate.js` | `validate(schema, value)`, a small JSON Schema validator, and `same` |
@@ -121,7 +122,7 @@ truth: edit these modules here. portrayal-site vendors
 `kit/rack/*.js` read-only, and its contract check refuses a copy that has
 drifted. The rules these modules follow are stated in their own comments,
 and the rack file format in [`docs/format-stability.md`](../docs/format-stability.md)
-and `schemas/v1/rack.schema.json`.
+and `schemas/v2/rack.schema.json`.
 
 ### The catalogue
 
@@ -217,7 +218,7 @@ next time a page measures them (`lengths.routed`).
 To change a rack by name rather than by function, use the command core:
 `createRackEditor({ doc, chassisOf })` applies `place`, `move`, `patch`,
 `remove`, `attach`, `detach`, `frame`, `rename`, `dcim`, `fit`, `field`, the
-`side.*`, `zerou.*` and `cable.*` commands and the page's own `lengths.routed` as all-or-nothing
+`side.*`, `zerou.*`, `cable.*` and `bundle.*` commands and the page's own `lengths.routed` as all-or-nothing
 batches, with `undo`, `redo` and an `on('change')` event. Each command names
 its arguments in `COMMANDS` (`rack/commands.js`), and `rack/queries.js`
 answers what a command would need to know first.
@@ -239,12 +240,12 @@ and cage with what it holds and what it takes, and its parts' settings. For a
 cable it reads both ends, the route, the routed length (with `ctx.route`), the
 slack, the pathways it may name, and its loose ends (with `ctx.cableFacts`).
 `selectCables(rack, selector, ctx)` turns `{ item }`, `{ item, path }`,
-`{ loose: true }`, `{ purpose }` or `{ media }` into cable ids, for a caller to
+`{ loose: true }`, `{ purpose }`, `{ media }` or `{ bundle }` into cable ids, for a caller to
 expand into plain commands (with `{ loose: true }` and some ends unchecked, the
 result also says `unchecked: true`); a `purpose` or `media` must be a name, so
 `{ media: null }` is refused rather than matching every cable.
 `describe(rack, ctx, { section, offset, limit })` reads one stretch of a long
-rack in full: `section` is `items` or `cables`, and `limit` is capped at
+rack in full: `section` is `items`, `zeroU`, `cables` or `bundles`, and `limit` is capped at
 `MAX_WINDOW` (50). A section, offset or limit it cannot read returns
 `{ error }`. `catalog(devices, { kind })` finds a
 "patch panel" or a "switch" by `rack.json`'s `kind`.
@@ -277,8 +278,51 @@ rack and each part's rail, `inspect` reads one (`kind: 'zeroU'`), and the
 export data says where each stands (`zeroUNotes`, `zeroUImportItems` for the
 DCIM device rows, and `rackNotes(rack, { zeroU: false, chassisOf })`).
 
+### Bundles
+
+Cables that share part of their route can be combed into a bundle and held
+with hook-and-loop straps ([`docs/cable-bundles-design.md`](../docs/cable-bundles-design.md)).
+A rack's optional `bundles` holds each one: `{ id, number, label, members:
+[{ cable, a?, b? }], route, straps? }`. Membership lives on the bundle only;
+`route` is the trunk, stored once and kept; a member's `a` or `b` is the trunk
+waypoint where it leaves for that end. `bundle.create`, `bundle.add`,
+`bundle.peel`, `bundle.update` and `bundle.remove` make and change them, each
+one undo step; `cable.remove`, and `remove` with `cables: 'remove'`, take a
+cable out of its bundle in the same step.
+
+What needs the drawings comes in on `ctx.route`, the routing context `route.js`
+takes: `editor.apply(cmds, { ctx: { route } })`, and for `inspect` and
+`describe` the whole `{ chassisOf, route }`. With it, `bundle.create` works the
+trunk out from where its cables run together (refusing a fork, a loop, a
+detour or groups that share nothing, by name), and a command's `findings` carry
+the size check: the bundle's diameter, `sqrt(sum(d^2) / BUNDLE_PACK)` with
+`BUNDLE_PACK` 0.8, against the smaller of 63.5 mm and each pathway's opening.
+It warns and never refuses. Diameters come from `ctx.diameterOf` when given
+(`loadCableTypes(dist).diameterOf`), else from fill's figures. A duct running up
+a rack-face part, and a duct beside the rack (with `ctx.route.zeroUAperture`),
+are estimated from their channel and the part's depth, and say so. Without
+`ctx.route` a bundle is still made and changed, with a route given by hand,
+and is reported not checked.
+
+`resolveRoute` follows the bundle: a member runs its own route to the trunk,
+the trunk, then its own route on, and the result names its `bundle`, `join` and
+`leave`, so routed lengths, fill and the drawings follow with no change of
+their own. `straps(rack, bundle, ctx)` places the straps, every 12 in unless
+the bundle says otherwise, as `{ segment, t, along_mm }` along the trunk, kept
+off rings. `inspect` reads a bundle (`kind: 'bundle'`) and a member's
+`bundle`, `selectCables` takes `{ bundle }`, and `describe` lists them. A
+bundle of fewer than two cables is kept and listed, but not drawn. The bend
+check is not here yet: `inspect` gives `bend: null`.
+
+**The rack file is version 3 from 0.7.0.** `parseDoc` reads version 1 and 2
+files as they were, and every save writes version 3, which a page or kit
+older than 0.7.0 refuses rather than opening and losing its bundles. The
+repairs `parseDoc` makes to bundles come back through
+`parseDoc(input, { notes })`; hand the same array to `editor.loadDoc(doc, { notes })`
+and they are its first `findings`.
+
 A rack file is described by
-[`rack.schema.json`](https://portrayal.dev/schemas/v1/rack.schema.json).
+[`rack.schema.json`](https://portrayal.dev/schemas/v2/rack.schema.json), rack file `version` 3.
 
 ## Exporting to draw.io and OmniGraffle
 
