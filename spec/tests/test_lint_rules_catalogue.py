@@ -64,9 +64,10 @@ def test_a_reserved_code_leaves_reserved_when_its_rule_lands():
     assert not landed, f"in RULES and still RESERVED - delete the reservation: {landed}"
 
 
-def test_every_entry_has_scope_rule_and_fix():
+def test_every_entry_has_scope_rule_fix_why_and_severity():
     for code, entry in lint.RULES.items():
-        assert len(entry) == 3 and all(isinstance(x, str) and x.strip() for x in entry), code
+        assert len(entry) == 5 and all(isinstance(x, str) and x.strip() for x in entry), code
+        assert entry[4] in lint.SEVERITIES, code
 
 
 def test_docs_page_matches_the_generator():
