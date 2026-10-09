@@ -196,7 +196,9 @@ In order of preference:
    running along x, whose rear slot starts 89.7 mm forward of the rail (the
    floor of the strip starts at 48.8 mm and the arms at 15.4 mm, but nothing
    holds a cable there on the held face). A cable that needs more cannot
-   clear, and its leg is left and reported (1.4) with the held face named. This obstacle lands with step 5 of section 10, not step 2:
+   clear, and its leg is left and reported (1.4) with the held face named.
+   The clearance is measured vertically at g; `CLEAR` absorbs the small tilt
+   of the arc there. This obstacle lands with step 5 of section 10, not step 2:
    it needs cables laid on a held face, which step 5 brings.
 2. **Round the end.** A leg that would cross a body side to side goes past its
    end, into the gutter, which is where the automatic route already goes.
@@ -326,8 +328,8 @@ tray declares `ties`.**
   The stack gathers where the straps are: under the pair of slots a strap
   passes through, 89.7 to 98 mm forward of the rail on the FHD-CMP5DR, an
   8.3 mm strapped width, so a held face lays few cables side by side and
-  stacks the rest; a position wider than that, such as a bundle, is centred
-  on it. A
+  stacks the rest; a position wider than that, such as a bundle, starts at
+  the back edge like any other and overhangs forward. A
   stretch of the held face that passes no tie slot cannot be held: the
   automatic route never uses one, and a stretch pinned there by hand warns
   (`unheld`, with the cable and the tray).
@@ -1174,6 +1176,9 @@ own step.
    inside the fill bound of 2.3, so no full-tray warning); b is a Cat6A cord
    (7.5 mm, R 30 mm, four times its diameter) from a port 6 mm below the top
    of S-dn; and S-dn has `setback: -70`, its face 70 mm proud of the rail.
+   Beyond those changes the fixture needs S-dn to have a second row of ports
+   6 mm below its top, of a type a Cat6A cord fits, and twelve ports for the
+   members of d.
    Worked by hand, in mm from the top of S-dn: the strap line is 1.5 - 11.6
    = -10.1; b needs its centre at or below -10.1 - 3.75 - 5 = -18.85, a drop
    of 12.85 from its port at -6; g is 89.7 - 70 = 19.7, so a single arc of
