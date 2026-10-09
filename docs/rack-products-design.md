@@ -173,11 +173,10 @@ outer: {w: 600, h: 2130, d: 747}
 weight-kg: 40.32                    # the frame's own weight (section 5)
 ```
 
-The figures are AR203A's from its FS datasheet and APC manual. Its opening and
-hole centres are not printed, so the example leaves `opening` and
-`hole-centres` out. The examples in
-later sections show the shape of a key, and their figures are illustrative
-unless a product is named beside them.
+The figures are AR203A's from its FS datasheet and APC manual. Its hole
+centres and opening are not printed, so the example leaves `hole-centres` and
+`opening` out. The examples in later sections show the shape of a key, and
+their figures are illustrative unless a product is named beside them.
 
 - **`form`** takes the seven slugs NetBox and Nautobot share
   (`2-post-frame`, `4-post-frame`, `4-post-cabinet`, `wall-frame`,
@@ -209,12 +208,14 @@ unless a product is named beside them.
   which styles it fits (section 7), so a tool-less blank is refused on AR201's
   tapped rail as FS's matrix refuses it.
 - **Width.** 19 in nominal everywhere in the intake; 23 in is an SX Gen2
-  option and the reason the FS-EB extender brackets exist. `opening` (mm clear
-  between the rails) and `hole-centres` (mm, left hole line to right) are
-  written only where a source prints them: AR201's installation sheet
-  (990-6040B) gives 465 and 450, the FS-OR datasheets 465 and 450 to 452, and
-  the FS-DR-8U, FS-HWM-4U and FS-SVWM-4U datasheets 465 and 450 or 451. Where none does, the EIA-310
-  figures are assumed and the product says so in `gaps`.
+  option and the reason the FS-EB extender brackets exist. `hole-centres` (mm,
+  left hole line to right) and `opening` (mm clear between the rails) are
+  written only where a source prints them. Every source that prints them gives
+  hole centres 465: AR201's installation sheet (990-6040B) with opening 450,
+  the FS-OR2P-45U datasheet with opening 452, the FS-OR4P-45U datasheet with
+  opening 450, the FS-DR-8U datasheet with opening 451, and the FS-HWM-4U and
+  FS-SVWM-4U datasheets with opening 450. Where none does, the EIA-310 figures
+  are assumed and the product says so in `gaps`.
 - **`max-device-depth`** is the maker's usable depth, the rack file's
   `usableDepth`. On a cabinet it is what the doors allow, not the rails.
 - A post's profile (AR201's 76 mm channel, the FS-OR2P's 120 mm extrusion) is
@@ -326,17 +327,17 @@ options:
 ## 5. Base and load
 
 ```yaml
+# NetShelter SX Gen2: the SX Gen2 manual's loads and the AR3380B2 bottom view
 base:
   casters: 4
   levellers: 4
   anchors: {holes: 4, dia: 18, rows: 905}   # mm between the front and rear rows
 load: {static-kg: 1818, rolling-kg: 1020}
-weight-kg: 40.32
 ```
 
 - **`weight-kg`** is the rack's own weight, as a device's `chassis.weight-kg`
   is a device's, written only where a source gives it (AR203A 40.32 kg in its
-  APC manual; FS-WMNR-D2P6U 10.95). It is what the DCIM export writes as the
+  APC manual, as section 2's example writes it; FS-WMNR-D2P6U 10.95). It is what the DCIM export writes as the
   rack's `weight` (decision 5), and it is not counted against `load`, which is
   what the rack carries.
 
@@ -518,9 +519,10 @@ products need beyond today's are added in one rack file version, 4.**
 
 - **The catalogue.** `rack.json` gains `frames`, keyed by ref, each row every
   key the Rack Builder needs: identity and listings (so a search by an FS part
-  number finds the APC product), `form`, `ru`, `numbering`, `width`, `holes`,
-  `rails`, `max-device-depth`, `outer`, `points`, `channels`, `enclosure`,
-  `options`, `base` and `load`. A new key; `rack.json` stays `format: 1`.
+  number finds the APC product), `form`, `ru`, `numbering`, `width`,
+  `hole-centres`, `opening`, `holes`, `rails`, `max-device-depth`, `outer`,
+  `weight-kg`, `points`, `channels`, `enclosure`, `options`, `base` and
+  `load`. A new key; `rack.json` stays `format: 1`.
 - **The generic frames stay.** A frame with `ref: null` is edited and fitted
   exactly as today.
 - **Choosing a product** writes `ref: "<vendor>/<name>@<major>"` and copies the
@@ -661,7 +663,7 @@ published file or a saved rack file uses it.
 | a rack's name unique across racks and devices in its vendor | refs | a ref resolves without its kind |
 | the rack ref form `<vendor>/<name>@<major>` in `frame.ref` | rack file | saved files carry it |
 | `form` and its eight values, `desktop-frame` among them | rack products, `rack.json`, DCIM export | published, and mapped to NetBox and Nautobot slugs |
-| `numbering` (`direction`, `start`), `width`, `opening`, `hole-centres`, `holes` (`style` with `round`, `size`, `fixing`), `rails` (`id` with `front` and `rear`, `at`, `depth` as `fixed` or `min`, `max`, `step`, `factory`), `max-device-depth`, `outer`, `posts` | rack products | the frame vocabulary every product writes |
+| `numbering` (`direction`, `start`), `width`, `hole-centres`, `opening`, `holes` (`style` with `round`, `size`, `fixing`), `rails` (`id` with `front` and `rear`, `at`, `depth` as `fixed` or `min`, `max`, `step`, `factory`), `max-device-depth`, `outer`, `posts` | rack products | the frame vocabulary every product writes |
 | `points`, `channels` (`id`, `point`, `where`, `ru`, `slots`, `moves`) | rack products | the rack file names channels by id |
 | `slots` (`interface`, `first`, `pitch`, `count`, `at`) on a product channel | rack products | the PDU fit check reads it |
 | the rack-file key for a PDU hung on brackets | rack file | not defined here; it comes with #939 and is one-way when it does |
