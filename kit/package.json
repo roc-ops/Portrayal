@@ -1,6 +1,6 @@
 {
   "name": "@portrayal/kit",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "Read, draw, inspect and export Portrayal device artifacts. Consumes compiled SVG + JSON; never reads YAML.",
   "license": "Apache-2.0",
   "type": "module",
@@ -20,7 +20,7 @@
   "scripts": {
     "prepack": "cp ../LICENSE ../NOTICE .",
     "postpack": "rm -f LICENSE NOTICE",
-    "test": "node --check shell.js && node --check viewer3d.js && node --check relief.js && node --check lamps.js && node --check marks.js && node --check fields.js && node --check states.js && node --check dist.js && node --check swap.js && node --check share.js && node --check devsel.js && node --check nosnames.js && node --check gif.js && node --check optical.js && node --check zones.js && node --check bevel.js && node --check drawio.js && node --check omnigraffle.js && for f in rack/*.js; do node --check $f || exit 1; done"
+    "test": "node --check shell.js && node --check viewer3d.js && node --check relief.js && node --check lamps.js && node --check marks.js && node --check fields.js && node --check states.js && node --check dist.js && node --check swap.js && node --check share.js && node --check devsel.js && node --check nosnames.js && node --check gif.js && node --check optical.js && node --check zones.js && node --check bevel.js && node --check drawio.js && node --check omnigraffle.js && node --check ears2d.js && for f in rack/*.js; do node --check $f || exit 1; done"
   },
   "exports": {
     "./shell": "./shell.js",
@@ -40,6 +40,7 @@
     "./bevel": "./bevel.js",
     "./drawio": "./drawio.js",
     "./omnigraffle": "./omnigraffle.js",
+    "./ears2d": "./ears2d.js",
     "./rack/cable-geometry": "./rack/cable-geometry.js",
     "./rack/cable-rules": "./rack/cable-rules.js",
     "./rack/cable-types": "./rack/cable-types.js",

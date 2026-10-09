@@ -46,7 +46,13 @@ LEG = 30.0              # how far the side leg runs back along the body (estimat
 MIN_FLANGE = 3.0        # narrower than this is no flange to draw
 SLOT = (8.0, 5.0)       # a rail-hole slot, long across the rack for the tolerance
 EAR_WIDE = 480.0        # L43's lower bound: a face this wide has its ears in it
-FILL, EDGE, HOLE = "#2b2f33", "#171a1d", "#0d0f11"   # common/rack-ear@1's colours
+# SILVER UNLESS THE DEVICE SAYS OTHERWISE (owner, 2026-10-09): most network
+# gear has bare or plated steel ears even when the faceplate is black, so the
+# generic ear is not drawn in the body's colour. `chassis.ears.color` states
+# another. #c8cacc is the light grey the library's silver chassis use most.
+# The edge and the slots are common/rack-ear@1's.
+SILVER = "#c8cacc"
+EDGE, HOLE = "#171a1d", "#0d0f11"
 IDS = ("ear-left", "ear-right")
 
 
@@ -88,7 +94,8 @@ def plan(device):
     spans and its bottom above the chassis bottom; `at` the default position's
     setback (the flange's back face, which bolts to the rail, `at` behind the
     faceplate's front); `slots` each slot's centre above the ear's bottom, and
-    `slot_x` its centre out from the body's side."""
+    `slot_x` its centre out from the body's side; `color` the bracket's fill,
+    `chassis.ears.color` or `SILVER`."""
     ch = device.get("chassis") or {}
     if ch.get("mount", "rack") != "rack" or ch.get("shell"):
         return None
@@ -116,7 +123,8 @@ def plan(device):
     return {"w": w, "h_body": h_body, "d": float(ch.get("depth") or 0),
             "flange": flange, "h": h, "y": y, "at": _default_at(ears),
             "t": THICKNESS, "leg": LEG, "slots": slots,
-            "slot_x": round(slot_x, 4), "slot": [round(sw, 4), SLOT[1]]}
+            "slot_x": round(slot_x, 4), "slot": [round(sw, 4), SLOT[1]],
+            "color": str(ears.get("color") or SILVER)}
 
 
 def leg_span(p):

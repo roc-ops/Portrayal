@@ -417,11 +417,49 @@ test('a cable label over 100 and a description over 200 are shortened to the lim
   for (const n of [199, 200]) { const g = run({purpose: 'p'.repeat(n)}); assert.deepEqual([g.rows[0].description.length, g.notes], [n, []], `${n}`); }
   const d = run({purpose: 'p'.repeat(201)});
   assert.equal(d.rows[0].description, 'p'.repeat(200));
-  assert.deepEqual(d.notes, ['Cable X: its purpose is 201 characters and NetBox takes 200 in a description, so the description is shortened to that.']);
+  assert.deepEqual(d.notes, ['Cable X: its description (purpose) is 201 characters and NetBox takes 200, so the description is shortened to that.']);
   assert.ok(!('description' in run({purpose: 'p'.repeat(201)}, 'nautobot').rows[0]));
   assert.deepEqual(run({purpose: 'p'.repeat(201)}, 'nautobot').notes, []);
   // Counted in characters.
   assert.equal(run({label: '\u{1F600}'.repeat(100)}).notes.length, 0);
+});
+
+// ── bundles (#923, docs/cable-bundles-design.md section 7, decision 9) ──
+// NetBox v4.7.2 (251458b8): Cable.description is PrimaryModel's 200-character
+// field, and a cable's own `bundle` names a CableBundle that must exist first.
+// Nautobot v3.2.6 (3dc554b4): Cable has neither a description nor a bundle.
+test("a bundle's name leads its members' NetBox descriptions; Nautobot's notes list the members", () => {
+  const routed = {value: 3, unit: 'm', source: 'routed', measured: 2.4};
+  const cables = [
+    {id: 'c1', a: end('i2', 'port-1'), b: end('i1', 'slot-2/module/p0'), media: 'os2', purpose: 'uplink', label: 'A1', length: routed, route: []},
+    {id: 'c2', a: end('i2', 'mgmt-eth'), b: end('i3', 'port-2-1'), media: 'cat6a', purpose: '', label: '', route: []},
+    {id: 'c3', a: end('i2', 'port-2'), b: end('i4', 'port-2-1'), media: 'os2', purpose: 'spare', label: '', route: []}];
+  const rack = {...RACK, cables, bundles: [{id: 'b1', number: 2, label: '', members: [{cable: 'c1'}, {cable: 'c2'}], route: []}]};
+  const run = (r, target = 'netbox') => D.cableImportRows({rack: r, target, names: NAMES, kept: ALL, resolve, ends: landed(r.cables)});
+  const nb = run(rack);
+  assert.deepEqual(nb.rows.map(r => r.description),
+    ['Bundle 2. uplink. Length measured along its route.', 'Bundle 2', 'spare']);
+  assert.ok(nb.notes.includes("Each cable in a bundle names its bundle first in its description. NetBox 4.6 and later also has cable bundles of its own, which must be made before a cable can name one, so this file does not fill a cable's bundle field."), nb.notes);
+  // a label is the bundle's name; a full stop it ends with is not doubled
+  const lab = run({...rack, bundles: [{...rack.bundles[0], label: 'Row A.'}]});
+  assert.deepEqual(lab.rows.map(r => r.description).slice(0, 2), ['Row A. uplink. Length measured along its route.', 'Row A.']);
+  // no bundle: the descriptions and the notes are as they were
+  const none = run({...rack, bundles: []});
+  assert.deepEqual(none.rows.map(r => r.description), ['uplink. Length measured along its route.', '', 'spare']);
+  assert.ok(!none.notes.some(n => /bundle/i.test(n)), none.notes);
+  // over the limit: cut from the end, so the bundle's name survives; the note names the parts
+  const long = run({...rack, cables: [{...cables[0], purpose: 'p'.repeat(200)}, ...cables.slice(1)]});
+  assert.equal(long.rows[0].description, `Bundle 2. ${'p'.repeat(190)}`);
+  assert.ok(long.notes.includes('Cable A1: its description (bundle, purpose and length note) is 244 characters and NetBox takes 200, so the description is shortened to that.'), long.notes);
+  // a name longer than the whole limit is itself cut
+  const huge = run({...rack, bundles: [{...rack.bundles[0], label: 'n'.repeat(250)}]});
+  assert.equal(huge.rows[1].description, 'n'.repeat(200));
+  // Nautobot: no description column, and the notes say which cables each bundle holds
+  const nt = run(rack, 'nautobot');
+  assert.ok(nt.rows.every(r => !('description' in r)));
+  assert.ok(nt.notes.includes("Nautobot's cables have no description or bundle, so this file does not say which bundle a cable is in: " +
+    "Bundle 2 holds A1 and c2. The cable schedule lists each cable's bundle."), nt.notes);
+  assert.ok(!run({...rack, bundles: []}, 'nautobot').notes.some(n => /bundle/i.test(n)));
 });
 
 test('a length too large for the target is written as none, and said', () => {
