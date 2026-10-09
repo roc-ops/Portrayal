@@ -165,6 +165,21 @@ def test_feed_leg_only_for_line_to_neutral_on_wye(power, lines, leg):
     assert rows[0]["description"] == f"Through breaker-a, lines {'-'.join(lines)}"
 
 
+@pytest.mark.parametrize("attrs, said", [
+    ({"section": "A", "section-color": "#f4d440"}, "Through breaker A"),  # the G4 tile letter
+    ({"label": "CB1", "section": "A"}, "Through breaker CB1"),            # a printed label first
+    ({"section": "  "}, "Through breaker-a"),                             # blank is unstated
+    ({}, "Through breaker-a"),                                            # nothing printed: the id
+])
+def test_an_outlet_names_its_breaker_as_printed(attrs, said):
+    """Owner decision 2026-10-09: the description names the breaker as the unit
+    prints it, so a reader finds it on the PDU; the id is the fallback."""
+    doc = pdu(WYE)
+    doc["views"]["front"]["components"]["placements"][0]["attrs"] = attrs
+    rows = dx.build(doc, "default", {}, None)["power-outlets"]
+    assert [r["description"] for r in rows] == [f"{said}, lines L1-L2"] * 2
+
+
 def test_an_outlet_with_its_own_lines_and_no_breaker():
     doc = pdu(WYE, breaker_lines=None, lines=["L2", "N"])
     for o in doc["views"]["front"]["components"]["placements"][1:]:
@@ -209,6 +224,9 @@ def test_the_evmi2130x_states_the_model():
                for k, p in outlets.items())
     rows = dx.build(d, "base", d["configurations"]["base"], None)["power-outlets"]
     assert not any("feed_leg" in r for r in rows), "every outlet is line to line"
+    by = {r["name"]: r["description"] for r in rows}
+    assert by["A1"] == "Through breaker A, lines L1-L2"
+    assert by["C42"] == "Through breaker C, lines L3-L1"
 
 
 def test_mount_points_are_derived_from_the_buttons():
