@@ -268,6 +268,24 @@ one when what it reads changes. **Routed lengths change in 0.12.0** wherever the
 two ends share a manager or stand on opposite sides; every change found so
 far is shorter.
 
+A cable leaves the far end of its plug, not the port face (#960). Since
+0.13.0 each path starts and ends at the plug's **reach point**: the port's
+point moved out of the face it is seen from (+z at the front, -z at the
+rear) by the plug's reach, a point `at: 'reach'` with its `end`. The reach is
+`ctx.plugReachOf(end, cable)` in mm when the page gives a number of 0 or more
+(the far end of the plug seated there, an optic's standing-out included: the
+`z` of relief.js `cablePoints`); else `PLUG_REACH` by media, the cable's own
+plug and boot as the library models them: 27.6 for LC fibre, 39.4 for copper
+(and a cable with no media), 68.7 for a DAC or an AOC. `plugReach(cable, end,
+ctx)` and `reachPoint(rack, end, p, mm)` give them. The first and last legs,
+their detours included, run from there, so a cord that has to clear its plug
+before it can turn round a tray's front edge is measured that way, and a
+drawing that starts its tube at the reach point finds nothing more to go
+round. The plug is counted once, in the path: `END_ALLOWANCE_M`, 0.15 m an
+end, is the dressing slack and is unchanged. **Routed lengths change in
+0.13.0** on every routed cable, almost all longer: by about the two plugs,
+and by far more where the reach puts a leg over a tray floor.
+
 To change a rack by name rather than by function, use the command core:
 `createRackEditor({ doc, chassisOf })` applies `place`, `move`, `patch`,
 `remove`, `attach`, `detach`, `frame`, `rename`, `dcim`, `fit`, `field`, the

@@ -85,7 +85,8 @@ test('the same face, different sides: the shorter side is taken, whichever end i
     {item: 'i4', via: 'guide-3'}, {item: 'i4', via: 'guide-4'}];
   assert.deepEqual(R.autoRoute(r, c, ctx), right);
   const mm = route => Math.round(R.routedLength(r, {...c, route, routeEdited: true}, ctx).measured * 10000) / 10;
-  assert.deepEqual([mm(right), mm(left)], [1318.5, 1459.8]);
+  // (1318.5 and 1459.8 from the port faces, before the plug's reach, #960)
+  assert.deepEqual([mm(right), mm(left)], [1361.8, 1472.9]);
   // the same cable written the other way round takes the same side
   const back = cable({item: 'i3', path: 'q'}, {item: 'i1', path: 'p'});
   assert.deepEqual(R.autoRoute(r, back, ctx), right.toReversed());
@@ -210,9 +211,12 @@ test('a routed length measures the path, adds 0.15 m an end, and rounds to stock
   r = add(r, 'pp', 21);
   const ctx = {...ctxFor(r, {'i1|p': -100, 'i2|q': -100}), portY: () => null};
   const got = R.routedLength(r, cable({item: 'i1', path: 'p'}, {item: 'i2', path: 'q'}), ctx);
-  // port -> left lane (|dx| = lane x - 100) at U1, up 20U, back to the port at U21.
-  const dx = OPENING / 2 + RAIL_W + R.LANE_GAP / 2 - 100;
-  const mm = 2 * dx + 20 * RU;
+  // port -> its plug's reach, straight out of the face (a cable with no
+  // media: the copper plug's, 39.4, #960) -> left lane (|dx| = lane x - 100,
+  // back on the rail plane) at U1, up 20U, back to the reach point and the
+  // port at U21.
+  const dx = OPENING / 2 + RAIL_W + R.LANE_GAP / 2 - 100, ra = 39.4;
+  const mm = 2 * (ra + Math.hypot(dx, ra)) + 20 * RU;
   assert.ok(Math.abs(got.measured - (mm / 1000 + 0.3)) < 1e-9, `measured ${got.measured}`);
   assert.equal(got.value, R.stockLength(got.measured));
 });

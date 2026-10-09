@@ -28,7 +28,8 @@ length coiled in a tray, in 2D, in 3D and in the numbers.
 - **A route is waypoints.** `{item, via}` names a ring, a duct or a
   pass-through on a placed device; `{lane, ru}` a lane in the gutter beside a
   post at a U. `route.js routePath` joins the two ports through them, each ring
-  expanded into the faces a cable enters and leaves by (#930). The routed
+  expanded into the faces a cable enters and leaves by (#930), from each
+  plug's reach point since kit 0.13.0 (1.5). The routed
   length is that polyline plus 0.15 m at each end, rounded up to a stock
   length.
 - **A waypoint is placed coarsely.** `pointOf` puts a guide at its `x`, at the
@@ -253,6 +254,72 @@ samples the tube of every routed cable and fails on a point inside a solid,
 so a corner that cuts metal is a drawing fault to fix, not a finding. For a
 routed cable `clearOf` then has nothing to do, and a test holds it to that;
 it stays for the unrouted hangs, which section 3 also brings to rest.
+
+### 1.5 The plug's reach
+
+Decided 2026-10-09 for #960; built in kit 0.13.0.
+
+A cable leaves the far end of its plug, not the port face, and runs straight
+out of the face for the plug's depth before it can turn. Before 0.13.0 the
+kit started each route at the port face, so a cord from a switch below a
+tray rose to the tray's ring straight from its port, behind the floor's
+front edge, while the 3D drawing started its tube at the plug's end, in
+front of that edge, and took it round. Drawn and measured disagreed, and a
+cord measured just under a stock break could be ordered short.
+
+- **Each route's first and last leg starts at the reach point**: the port's
+  point moved out of the face it is seen from, along the face's normal (+z
+  at the front, -z at the rear, whichever rail plane or far panel the port
+  is on), by the plug's reach. `routePath` puts it after the port and before
+  the far port as a point `at: 'reach'`, with its `end`. A reach of 0 adds
+  no point.
+- **The reach** is the page's `ctx.plugReachOf(end, cable)`, in mm, when it
+  gives a number of 0 or more. The page reads it from the seated plug: the
+  `z` of relief.js `cablePoints`, which is the far end of the plug's boot or
+  stub, measured from the face of the part the plug seats in, plus whatever
+  that part stands out (an optic in a cage). Otherwise it is `PLUG_REACH` by
+  media, the cable's own plug and boot as the library models them standing
+  out of the face they seat in: LC fibre 27.6 mm (generic/lc-plug@2 `out`
+  12.5 and common/lc-boot@1 15.1), copper 39.4 (generic/rj45-plug@1 13.0 and
+  common/rj45-boot@1 26.4), a DAC or an AOC 68.7 (generic/sfp-cable@1, whose
+  cable point is the far end of its 30 mm stub, the straight run before the
+  first allowed bend; generic/qsfp-cable@1 is 64.8, and the longer is taken
+  so a default errs long), and a cable with no media the copper figure, as
+  its diameter takes the copper one. The kit does not know what a port
+  holds, so the default leaves out an optic's standing-out; only the page
+  can add it.
+- **Detours and ring passes are measured from there.** The legs out of the
+  reach points are legs like any other: section 1.3 takes them round what
+  they cross, so a cord that must clear its plug and then turn up past a
+  tray's front edge is measured that way, and a ring's pass and hold
+  (section 13 of the managers note) count a reach point as its port, which
+  it shares the x and y of. A leg from a port to its reach point that
+  crosses a body (a plug behind a deep shelf) is a `crosses-body` finding at
+  that port.
+- **The end allowance is the dressing slack, and the plug is counted
+  once.** `END_ALLOWANCE_M`, 0.15 m an end, stays as it is. Before, the path
+  ran from the port face straight to the first waypoint, cutting through the
+  plug, so the plug was in neither the path nor, by any stated rule, the
+  allowance; now it is in the path, as the straight stretch from the port to
+  the reach point. Taking the reach off the allowance instead would count
+  the plug once too, but would leave a cord with a detour round its plug the
+  only one to grow, and leave the allowance meaning a number with a plug of
+  each media inside it. Nothing adds the reach a second time: the length is
+  the path's points and the two allowances, and a test holds it to that.
+- **What a drawing does.** A drawing that starts its routed tube at the
+  kit's reach point, and runs its first and last legs from there, follows
+  the kit's legs; taking those legs round the bodies again finds nothing to
+  add. The site's 3D scene today starts each tube at the plug's own cable
+  point and runs a further `LEAD` (40 mm) and `REACH_STEP` per row straight
+  out before its first bend, and its `clearLegs` takes those legs round the
+  bodies; it is a site follow-up to start the bend at the kit's reach point
+  (path point 1 and the one before last) and pass the page's cable-point `z`
+  as `plugReachOf`, so drawn and measured agree.
+
+On the owner's rack of #949, every automatic route grows by 11 to 28 mm, and
+seven cords pass the 0.5 m break: c7, and c9 to c14 from the lower leaf. With
+a QSFP-LC optic in each leaf port (a reach of 47.6 mm), the lower leaf's
+eight cords go round the tray's front edge and measure 0.63 to 0.67 m.
 
 ## 2. Trays: the library vocabulary
 
@@ -1286,8 +1353,9 @@ published file or a saved rack file uses it.
 | the ranking of `managerOf` (hosted, then a standalone manager, with its tie-break by port row, then a manager on a neighbour, then a neighbour with guides) | kit | automatic routes of saved racks follow it, and their routed lengths with them |
 | the version-4 table of the rack products note gaining `states`, `readings`, the PDU bracket key, `slack`, `lay` and `roll` | `docs/rack-products-design.md` section 9, rack file version 4 | one bump carries them all; a key left out needs a version 5 |
 | the stored slack counting in the routed length | kit | a saved routed length and stock size depend on it |
-| routed lengths changing on saved racks: detours, cables resting at the floor and at the ring sill, positions in the lay, the face of each tray, slack | kit | stored routed lengths and stock sizes move on the next measure; an ordered stock length may no longer match |
+| routed lengths changing on saved racks: detours, the plug's reach (1.5), cables resting at the floor and at the ring sill, positions in the lay, the face of each tray, slack | kit | stored routed lengths and stock sizes move on the next measure; an ordered stock length may no longer match |
 | the lane moving outboard of a zero-U part that stands in the gutter and carries no lane (a zero-U PDU), and routed lengths changing beside one | kit (`laneXAt`), drawings | every route on that lane is longer, and a saved length moves on the next measure; a drawing that places lanes itself must follow |
+| the reach point (`at: 'reach'` with `end`) in `routePath`, `ctx.plugReachOf`, `PLUG_REACH`, `plugReach`, `reachPoint`, and the end allowance as dressing slack with the plug in the path (1.5) | kit API | a page passes `plugReachOf` and reads the points by these names; moving the plug into the allowance later would change every length again |
 | `crosses-body` (with `part` and, for a held-face stack, `face`), `unheld` and the tray findings, `bodyFindings` | kit API, agent output | agents and pages read the kinds |
 | the public subpath `@portrayal/kit/rack/solids` (`solidsOf`, `legCrossings`, `detour`, `CLEAR`) | kit package exports | a consumer imports it by that path and those names; a rename or removal is a breaking kit release |
 | `cable.slack`, `cable.slack.clear`, `cable.lay` (with `face`), and `roll` on `patch` | kit commands, offered to agents | agent sessions and saved prompts call them by name |

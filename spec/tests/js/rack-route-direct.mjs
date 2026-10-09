@@ -16,15 +16,19 @@ const mm = l => Math.round(l.measured * 10000) / 10;
 
 // Per cable of the owner's rack: the rings it runs through, its measured
 // length in mm (the path plus 0.15 m at each end) and its stock length in m.
-// Before this change every one ran out to the right lane and back, measuring
+// Before kit 0.12.0 every one ran out to the right lane and back, measuring
 // 0.67 to 1.04 m (stock 1 or 1.5 m). c1, c2 and c5 to c8 have no ring between
 // their ports and take the nearest ring they pass: c1-c7 ring 4, and c8 ring
 // 5, which holds it (it reaches just past its panel port into the ring).
+// THE PLUG'S REACH (#960, kit 0.13.0): each path now starts and ends 27.6 mm
+// out of the face, where an OM4 cord leaves its LC plug and boot. Measured
+// from the port faces they were 0.433-0.496 m, all 0.5 m stock; seven of
+// them (c7, and c9-c14 from the lower leaf) now pass the 0.5 m break.
 const OWNER = {
-  c1: [[4], 449.2, 0.5], c2: [[4], 433.7, 0.5], c3: [[4], 438.3, 0.5], c4: [[4], 432.8, 0.5],
-  c5: [[4], 453.5, 0.5], c6: [[4], 452.2, 0.5], c7: [[4], 479.3, 0.5], c8: [[5], 447.4, 0.5],
-  c9: [[3], 495.2, 0.5], c10: [[3], 494.0, 0.5], c11: [[3], 494.3, 0.5], c12: [[3], 495.8, 0.5],
-  c13: [[4], 477.4, 0.5], c14: [[4], 478.4, 0.5], c15: [[4], 463.1, 0.5], c16: [[4], 464.9, 0.5],
+  c1: [[4], 467.0, 0.5], c2: [[4], 444.9, 0.5], c3: [[4], 450.8, 0.5], c4: [[4], 444.3, 0.5],
+  c5: [[4], 473.4, 0.5], c6: [[4], 471.3, 0.5], c7: [[4], 505.7, 1], c8: [[5], 461.6, 0.5],
+  c9: [[3], 523.5, 1], c10: [[3], 520.5, 1], c11: [[3], 518.4, 1], c12: [[3], 517.1, 1],
+  c13: [[4], 501.6, 1], c14: [[4], 504.5, 1], c15: [[4], 485.8, 0.5], c16: [[4], 487.6, 0.5],
 };
 
 test('the owner\'s rack: each cord runs along the lacer through a ring, with no lane', () => {
@@ -37,9 +41,10 @@ test('the owner\'s rack: each cord runs along the lacer through a ring, with no 
   assert.deepEqual(got, want);
   // nothing reaches a gutter
   assert.equal(r.cables.flatMap(c => R.autoRoute(r, c, ctx)).filter(w => w.lane).length, 0);
-  // no route is direct, and every one fits the 0.5 m stock
+  // no route is direct, and seven pass the 0.5 m stock break
   assert.equal(r.cables.filter(c => !R.autoRoute(r, c, ctx).length).length, 0);
-  assert.ok(r.cables.every(c => R.routedLength(r, c, ctx).value === 0.5));
+  assert.deepEqual(r.cables.filter(c => R.routedLength(r, c, ctx).value > 0.5).map(c => c.id),
+    ['c7', 'c9', 'c10', 'c11', 'c12', 'c13', 'c14']);
   // every ring taken is passed; only c8's holds a cord that does not turn in it
   for (const c of r.cables) {
     const p = R.routePath(r, c, ctx);
@@ -121,13 +126,13 @@ test('the site-facing outputs: ring marks, inspect and the route text read the r
   const info = await Q.inspect(r, 'c13', {chassisOf: F.chassisOf, route: ctx});
   assert.equal(info.route.text, 'CM-01 ring 4');
   assert.deepEqual(info.route.waypoints, [ring(4)]);
-  assert.deepEqual(info.routed, {metres: 0.48, stock: 0.5});
+  assert.deepEqual(info.routed, {metres: 0.5, stock: 1});
   assert.equal(info.route.rings.length, 1);
   assert.equal(info.route.rings[0].passed, true);
   assert.equal(info.route.crosses, undefined);
   // and the length a page keeps current is this one
   const kept = R.withRoutedLengths(r, ctx);
-  assert.deepEqual(kept.cables.find(c => c.id === 'c13').length, {value: 0.5, unit: 'm', source: 'routed', measured: 0.48});
+  assert.deepEqual(kept.cables.find(c => c.id === 'c13').length, {value: 1, unit: 'm', source: 'routed', measured: 0.5});
 });
 
 // ── a cable whose ends use different managers ─────────────────────────────
@@ -155,7 +160,8 @@ test('ends on two managers still take the lane; on opposite sides, the shorter s
   const right = [ring(4), ring(5), {lane: 'right-front', ru: 40}, {lane: 'right-front', ru: 20}];
   assert.deepEqual(route, left);
   const len = rt => mm(R.routedLength(r, {...c, route: rt, routeEdited: true}, ctx));
-  assert.deepEqual([len(left), len(right)], [1781.4, 1932.6]);
+  // (1781.4 and 1932.6 from the port faces, before the plug's reach, #960)
+  assert.deepEqual([len(left), len(right)], [1828.6, 1970]);
   // written the other way round, the same side
   const back = {...c, a: c.b, b: c.a};
   assert.deepEqual(R.autoRoute(r, back, ctx), left.toReversed());
