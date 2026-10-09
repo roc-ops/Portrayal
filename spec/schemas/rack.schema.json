@@ -2,7 +2,7 @@
  "$schema": "https://json-schema.org/draft/2020-12/schema",
  "$id": "https://portrayal.dev/schemas/v2/rack.schema.json",
  "title": "Portrayal rack file (v3)",
- "description": "A Rack Builder document: one or more racks, the devices in them, and the cables between their ports. What kit/rack/model.js parseDoc accepts and serialize writes.",
+ "description": "A Rack Builder document: one or more racks, the devices in them, and the cables between their ports. What the kit's Rack Builder reads and writes.",
  "type": "object",
  "required": [
   "format",
@@ -17,7 +17,7 @@
   },
   "version": {
    "const": 3,
-   "description": "The file version. Older files are migrated on load; newer ones are refused. Version 3 added bundles."
+   "description": "The file version. Older files are migrated on load; newer ones are refused. Bundles need version 3 or later."
   },
   "id": {
    "type": "string",
@@ -163,19 +163,19 @@
       "null"
      ],
      "exclusiveMinimum": 0,
-     "description": "Millimeters between front and rear rails; null on two posts."
+     "description": "Millimetres between front and rear rails; null on two posts."
     },
     "usableDepth": {
      "type": "number",
      "exclusiveMinimum": 0,
-     "description": "Millimeters from the front rail to the deepest point a device may reach."
+     "description": "Millimetres from the front rail to the deepest point a device may reach."
     },
     "ref": {
      "type": [
       "string",
       "null"
      ],
-     "description": "A catalog rack this frame was taken from, if any."
+     "description": "A catalogue rack this frame was taken from, if any."
     }
    }
   },
@@ -209,7 +209,7 @@
     "ref": {
      "type": "string",
      "minLength": 1,
-     "description": "The device, by its catalog ref."
+     "description": "The device, by its catalogue ref."
     },
     "cfg": {
      "type": "string",
@@ -259,13 +259,13 @@
   },
   "zeroU": {
    "type": "object",
-   "description": "A part beside the rack. Its keys are described and not constrained, so every entry valid before they were described stays valid; the kit places an entry whose id, ref and at are non-empty strings, and keeps any other as written.",
+   "description": "A part beside the rack. Its keys are described but not constrained, so any object is a valid entry; the kit places an entry whose id, ref and at are non-empty strings, and keeps any other as written.",
    "properties": {
     "id": {
      "description": "Unique within the rack's zeroU entries; z1, z2 and so on. The loader gives an entry without one an id."
     },
     "ref": {
-     "description": "The part, by its catalog ref."
+     "description": "The part, by its catalogue ref."
     },
     "cfg": {
      "description": "Which of the part's configurations."
@@ -277,7 +277,7 @@
      "description": "The attachment point it stands at: left or right on a two-post, left-front, right-front, left-rear or right-rear on a four-post. The lane of that name runs beside it."
     },
     "offsetMm": {
-     "description": "A number: its bottom, in millimeters above the bottom of the rails; a whole number of U as the kit writes it."
+     "description": "A number: its bottom, in millimetres above the bottom of the rails; a whole number of U as the kit writes it."
     },
     "between": {
      "description": "True when it stands between this rack and the next one, serving both."
@@ -409,7 +409,7 @@
       "measured": {
        "type": "number",
        "exclusiveMinimum": 0,
-       "description": "Meters along the route, before rounding up to a stock length. Present when the source is routed."
+       "description": "Metres along the route, before rounding up to a stock length. Present when the source is routed."
       }
      }
     },
