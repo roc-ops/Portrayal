@@ -128,6 +128,38 @@ const out = {};
   out.paintsOff = {plain: S.paints(el(f, 'led-plain'), 'off')};
 }
 
+// --- paints() on a declared off: measured, not assumed ------------------------
+// The fake DOM has no stylesheet engine, so getComputedStyle answers from SHEET:
+// the --led-color an element shows with a given state- class on it. lamp-a1
+// declares an off rule (face()'s cssRules), so paints() must measure it - true
+// when the rule changes the colour, false when it does not - where an
+// undeclared off is reported as painting without asking. A fresh face per
+// reading, since paints() caches per drawing.
+{
+  let SHEET = {};
+  globalThis.getComputedStyle = e => ({
+    getPropertyValue: p => {
+      if (p !== '--led-color') return '';
+      const row = SHEET[e.getAttribute('id')] || {};
+      const on = [...e.classList].find(c => row[c]);
+      return on ? row[on] : '';
+    },
+  });
+  SHEET = {'lamp-a1': {'state-off': '#ef4444'}};
+  const red = S.paints(el(face(), 'lamp-a1'), 'off');
+  SHEET = {};
+  const none = S.paints(el(face(), 'lamp-a1'), 'off');
+  out.paintsDeclaredOff = {red, none};
+  delete globalThis.getComputedStyle;
+}
+
+// --- statesOfEl takes a plain {dataset} object as well as an element --------
+out.statesOfDataset = {
+  plain: S.statesOfEl({dataset: {states: 'on off'}}),
+  prose: S.statesOfEl({dataset: {states: 'Green = on'}}),
+  none: S.statesOfEl({dataset: {}}),
+};
+
 // --- 2D: a marks document ---------------------------------------------------
 {
   const f = face();
@@ -148,6 +180,17 @@ const out = {};
                             {select: '[data-path="lamp-a1"]', state: 'on'}]},
           {legend: false, behavior: false});
   out.marksLater = cls(g, 'lamp-a1');
+
+  // a lamp the drawing already shows in a state gives it up for its outlet's
+  // (a state is a replacement, as on any marked element), and clear() hands
+  // the drawing's state back
+  const k = face();
+  el(k, 'lamp-a1').setAttribute('class', 'state-on');
+  M.apply(k, {v: 1, marks: [{select: '[data-path="outlet-a1"]', state: 'off'}]},
+          {legend: false, behavior: false});
+  out.marksReplace = cls(k, 'lamp-a1');
+  M.clear(k);
+  out.marksReplaceCleared = cls(k, 'lamp-a1');
 
   // a custom lamp colour from one mark is not shown while another mark - here
   // the outlet's state reaching it - has the lamp off; on, it is
@@ -185,6 +228,22 @@ const out = {};
   out.threePieceUnbound = cls(piece2, 'lamp-a1');
   R.clearLampBindings(scope);
   out.threeCleared = R.lampBindings(scope).size;
+
+  // bindings noted from several documents in one build add up: a second face
+  // binding another lamp to the same outlet, and a third binding a different
+  // outlet, keep what the first noted
+  const acc = R.createReliefScope();
+  R.noteLampBindings(face(), acc);
+  R.noteLampBindings(build({t: 'svg', c: [
+    {a: {'data-path': 'outlet-a1', 'data-class': 'inlet', 'data-states': 'on off'}},
+    {a: {'data-path': 'lamp-a1-rear', 'data-class': 'led', 'data-states': 'on off',
+         'data-for': 'outlet-a1'}}]}), acc);
+  R.noteLampBindings(build({t: 'svg', c: [
+    {a: {'data-path': 'outlet-b1', 'data-class': 'inlet', 'data-states': 'on off'}},
+    {a: {'data-path': 'lamp-b1', 'data-class': 'led', 'data-states': 'on off',
+         'data-for': 'outlet-b1'}}]}), acc);
+  out.threeMerged = Object.fromEntries([...R.lampBindings(acc)]
+    .map(([k, v]) => [k, [...v].sort()]));
 
   // a custom lamp colour stays off while the lamp's OUTLET is off
   const s2 = R.createReliefScope();
