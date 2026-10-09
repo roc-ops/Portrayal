@@ -36,10 +36,11 @@ provenance:
     confidence: estimated
     note: >-
       `shell: sheet`, 1.5: an open frame of bent steel - two side brackets, a rail panel and a
-      rail - which a solid box would hide. In 3D the side brackets are built from the side views
-      and the panel and rail from the front view, each standing its thickness off its face; the
-      six views are elevations. The panel is built at the front plane; on the real bracket it
-      is set back and slides.
+      rail - which a solid box would hide. In 3D the side brackets are built from the side views,
+      standing their thickness off them; the panel and the rail are built from the top view, standing
+      in a floorless well between the brackets (fs/dinrail2u-frame@1) at the panel's setback,
+      so they sit behind the ears and not in front of them. The six views are elevations: the
+      front still draws the panel and rail face-on, as they are seen through the open front.
   rail:
     confidence: drawing
     note: >-
@@ -48,11 +49,17 @@ provenance:
       at mid-height (the 4U's measures 82.2 down on the 300 dpi render, the 165.1 face's middle
       being 82.55).
   setback:
-    confidence: drawing
+    confidence: estimated
     note: >-
-      the rail panel slides along the two long slots in each 360 mm side bracket ("the adjustable
-      rails can be easily set back"; QSG: adjust the rail panel's position to suit the device),
-      from about 66 to 290 mm behind the ears on the side view. It is drawn at the front.
+      the rail panel's front face is drawn 182 behind the ears, the middle of its slots' travel.
+      It slides along the two long slots in each 360 mm side bracket ("the adjustable rails can
+      be easily set back"; QSG: adjust the rail panel's position to suit the device), which run
+      72 to 292 behind the ears on the datasheet's side view (provenance of fs/dinrail2u-side@1).
+      The gallery renders show it at both ends of that travel: g4 about 85 and g3 about 227 behind
+      the ears, each read along the near side bracket as a fraction of its 360 (a three-quarter
+      render, so to perhaps 10 per cent). The datasheet's own side and top views draw it near
+      the front. With no single photographed position, the middle of the travel is the default;
+      the range is a gap.
   hosting:
     confidence: datasheet
     note: >-
@@ -85,7 +92,8 @@ attrs:
     din-rail-count: 1
     din-rail-length-mm: 400
     din-rail-centre-from-top-mm: 43.75
-    din-rail-setback: adjustable along the 360 mm side brackets, about 66 to 290 mm
+    din-rail-setback-mm: 182.0
+    din-rail-setback-range: 72 to 292 mm behind the ears, along the side brackets' slots
     usable-width-mm: 421.2
   lifecycle:
     eol: none-announced
@@ -110,6 +118,13 @@ gaps:
   note: >-
     FS does not name the rail's profile; TS35 x 7.5 is read off the close-up render.
   wanted: the profile from FS or a ruler on the rail
+- what: setback
+  reason: vendor-silent
+  note: >-
+    the rail panel slides from 72 to 292 mm behind the ears; it is drawn at 182, the middle, and
+    no configuration offers the other positions, because the format has no way to move a part
+    along a slot per configuration.
+  wanted: a setback field or configuration key for adjustable parts
 groups:
   frame:
     term: Bracket
@@ -144,8 +159,8 @@ views:
     size: {w: 424.2, h: 87.5}
     panel:
       decor:
-      - {id: side-left-edge, at: [0.0, 0.0], size: [1.5, 87.5], fill: '#1b1d20', kind: side-bracket}
-      - {id: side-right-edge, at: [422.7, 0.0], size: [1.5, 87.5], fill: '#1b1d20', kind: side-bracket}
+      - {id: side-right-edge, at: [0.0, 0.0], size: [1.5, 87.5], fill: '#1b1d20', kind: side-bracket}
+      - {id: side-left-edge, at: [422.7, 0.0], size: [1.5, 87.5], fill: '#1b1d20', kind: side-bracket}
       - {id: panel-back, at: [12.1, 0.0], size: [400.0, 87.5], fill: '#15171a', kind: rail-panel}
       - {id: cutout-1, at: [324.1, 14.2], size: [73.7, 7.7], fill: '#0a0b0c', kind: cutout}
       - {id: cutout-2, at: [224.3, 14.2], size: [73.7, 7.7], fill: '#0a0b0c', kind: cutout}
@@ -161,14 +176,21 @@ views:
       decor:
       - {id: side-left, at: [0.0, 0.0], size: &id001 [1.5, 360.0], fill: '#1b1d20', kind: side-bracket}
       - {id: side-right, at: [422.7, 0.0], size: &id002 [1.5, 360.0], fill: '#1b1d20', kind: side-bracket}
-      - {id: rail-panel, at: [12.1, 358.5], size: &id003 [400.0, 1.5], fill: '#1b1d20', kind: rail-panel}
+    components:
+      placements:
+      - {ref: fs/dinrail2u-frame@1, id: frame, at: [0.0, 0.0], group: frame, rel-pos: 4}
+      - {ref: fs/dinrail2u-panel-plan@1, id: rail-panel-body, at: [12.1, 176.5], group: frame,
+        rel-pos: 5, in: frame}
+      - {ref: fs/din-rail-ts35-400-plan@1, id: rail-body, at: [12.1, 178.0], group: rails, lift: 24.25,
+        rel-pos: 2, in: frame}
   bottom:
     size: {w: 424.2, h: 360.0}
     panel:
       decor:
       - {id: side-left, at: [422.7, 0.0], size: *id001, fill: '#1b1d20', kind: side-bracket}
       - {id: side-right, at: [0.0, 0.0], size: *id002, fill: '#1b1d20', kind: side-bracket}
-      - {id: rail-panel, at: [12.1, 358.5], size: *id003, fill: '#1b1d20', kind: rail-panel}
+      - {id: rail-panel, at: [12.1, 176.5], size: [400.0, 1.5], fill: '#1b1d20', kind: rail-panel}
+      - {id: rail, at: [12.1, 178.0], size: [400.0, 7.5], fill: '#b9bdc2', kind: din-rail}
   left:
     size: {w: 360.0, h: 87.5}
     components:
