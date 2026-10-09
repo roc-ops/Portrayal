@@ -961,10 +961,10 @@ What the exports settled that section 7 leaves to them:
   could not be read, so its straps are not counted."); the schedule's note
   says its length, straps, size and bend are not given. A bundle of fewer than
   two cables has 0 straps, and one set to `{every: null}` 0 with a note.
-- **The schedule's note** reads "Bundle 2 (b1): 12 cables (c1-c12), 2.4 m,
-  8 straps every 12 in; 23 mm across, limit 29.5 mm at mgr-1 ring 5
-  (estimated); bend radius 25 mm (c7).", then the bundle's warnings (size and
-  bend) and notes. It names the members, which section 7's example leaves
+- **The schedule's note** starts "Bundle 2 (b1): 12 cables (c1-c12), 2.4 m,
+  8 straps every 12 in", goes on with the size ("23 mm across, limit 29.5 mm
+  at mgr-1 ring 5 (estimated)") and the bend ("bend radius 25 mm (c7)"), and
+  is followed by the bundle's warnings (size and bend) and notes. It names the members, which section 7's example leaves
   out, and the size is rounded to a whole millimetre as the warnings round
   it. "bend not checked" stands in for the radius when no member has one.
   `cableScheduleRows` takes the records as `{bundles}`; without them it reads

@@ -344,9 +344,9 @@ limit_at, limit_estimated, bend_mm, bend_by, bend_checked, warnings, notes }`.
 `name` is what a tag prints (the label, else "Bundle N"), and `number` and
 `label` are there on their own for label software. `straps` is the count the
 BOM buys, and null when the route could not be read: never a guess.
-`bundleNotes(bundles)` is one line per bundle ("Bundle 2 (b1): 12 cables
-(c1-c12), 2.4 m, 8 straps every 12 in; 23 mm across, limit 29.5 mm at mgr-1
-ring 5; bend radius 25 mm (c7).") followed by its warnings and notes.
+`bundleNotes(bundles)` is one line per bundle, its members, length, straps,
+size and bend ("Bundle 2 (b1): 12 cables (c1-c12), 2.4 m, 8 straps every
+12 in; ..."), followed by its warnings and notes.
 `strapBomRows(bundles)` is the BOM's one hook-and-loop strap line, every
 bundle's straps summed, and `strapBomNotes(bundles)` says what it could not
 count. `cableScheduleRows(rack, ends, items, routes, { bundles })` has a
