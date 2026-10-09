@@ -180,7 +180,9 @@ export function autoRoute(rack, cable, ctx) {
   if (!mA && !mB && A.pane === B.pane && Math.abs(A.it.ru - B.it.ru) <= SHORT) return [];
   if (mA && mA === mB && A.pane === B.pane) {
     // whether the cord goes through a ring from port to port, as routePath
-    // decides it; unknown (a port not found) counts as through
+    // decides it; unknown (a port not found) counts as through. From the
+    // ports, not their plugs' reach points: a reach moves an end along z
+    // only, which a ring that runs along x does not count (route-path.js)
     const pa = portPoint(rack, cable.a, ctx), pb = portPoint(rack, cable.b, ctx);
     const passes = g => {
       const p = pointOf(rack, {item: mA.id, via: g.via}, ctx);
@@ -350,7 +352,49 @@ export function portPoint(rack, end, ctx) {
 
 const dist = (p, q) => Math.hypot(p.x - q.x, p.y - q.y, p.z - q.z);
 
+// THE PLUG'S REACH (#960, docs/cable-lay-design.md section 1.5). A cable
+// leaves the far end of its plug, not the port face, and runs straight out
+// along the face's normal for the plug's depth before it can turn. So each
+// route's first and last leg starts at the REACH POINT: the port's point moved
+// out of its face by the plug's reach. The reach, in mm out of the face the
+// port is on, is `ctx.plugReachOf(end, cable)` when the page gives a number
+// (the far end of the plug seated there, with whatever it seats in: relief.js
+// cablePoints' `z`, an optic's standing-out included); else PLUG_REACH by the
+// cable's media, the cable's own plug and boot as the library models them
+// standing out of the face they seat in:
+//   - LC fibre (os2, om3, om4, om5): 27.6, generic/lc-plug@2 (relief `out`
+//     12.5) and common/lc-boot@1 (15.1);
+//   - copper (cat6, cat6a): 39.4, generic/rj45-plug@1 (13.0) and
+//     common/rj45-boot@1 (26.4). It assumes the boot abuts the plug's rear;
+//     an overlapping boot reaches less (the boot's 11.9 x 8.13 opening slides
+//     over the 11.68 x 7.93 plug body, so this likely errs long by a few mm);
+//   - a DAC or an AOC: 64.8, generic/qsfp-cable@1, whose cable point is the
+//     far end of its stub (head 19.8, strain relief 15, stub 30: the straight
+//     run before the first allowed bend), the stub from a drawing. Not
+//     generic/sfp-cable@1's 68.7: its stub rests on an estimated reading;
+//   - a cable whose media is not set, the copper figure, as its diameter takes
+//     the copper one (UNSET_D).
+// It does not see an optic in a cage: a port that holds one stands the plug
+// further out, which only the page knows.
+export const PLUG_REACH = {os2: 27.6, om3: 27.6, om4: 27.6, om5: 27.6, cat6: 39.4, cat6a: 39.4, dac: 64.8, aoc: 64.8};
+const UNSET_REACH = 39.4;
+function plugReach(cable, end, ctx) {
+  let v = null;
+  try { v = typeof ctx?.plugReachOf === 'function' ? ctx.plugReachOf(end, cable) : null; } catch { v = null; }
+  if (typeof v === 'number' && Number.isFinite(v) && v >= 0) return v;
+  return (typeof cable?.media === 'string' && Object.hasOwn(PLUG_REACH, cable.media)) ? PLUG_REACH[cable.media] : UNSET_REACH;
+}
+// The reach point of an end whose port is at `p`: out of the face its port is
+// seen from, +z for the front, -z for the rear, by the plug's reach.
+function reachPoint(rack, end, p, mm) {
+  const out = endPane(rack, end) === 'rear' ? -1 : 1;
+  return {x: p.x, y: p.y, z: p.z + out * mm};
+}
+
 export const STOCK_M = [0.5, 1, 1.5, 2, 3, 5, 7, 10, 15, 20, 30];
+// The allowance at each end is the dressing slack a cable is cut with, not
+// its plug: the plug is in the path, from the port face to its reach point
+// (above), and is counted there once (section 1.5).
 export const END_ALLOWANCE_M = 0.15;
 export const stockLength = m => STOCK_M.find(s => s >= m - 1e-9) ?? Math.ceil(m / 5) * 5;
 
@@ -364,7 +408,9 @@ export const stockLength = m => STOCK_M.find(s => s >= m - 1e-9) ?? Math.ceil(m 
 // obey them, so what is drawn is what is measured and counted.
 // Returns
 //   {points: [{x, y, z, at, item?, via?}], rings, findings, marks}
-// - `at` is 'a' or 'b' (a port), 'entry', 'exit' or 'face' (a ring),
+// - `at` is 'a' or 'b' (a port), 'reach' (the far end of that port's plug,
+//   with `end` 'a' or 'b', section 1.5: the route's first and last legs start
+//   there), 'entry', 'exit' or 'face' (a ring),
 //   'pathway' (a duct or a pass-through) or 'lane';
 // - `rings`: per ring on the route, {item, via, run, depth, estimated,
 //   passed, sense, entry, exit} (sense +1 or -1 along the run; a ring not
@@ -394,7 +440,11 @@ export const stockLength = m => STOCK_M.find(s => s >= m - 1e-9) ?? Math.ceil(m 
 export function routePath(rack, cable, ctx) {
   const a = portPoint(rack, cable.a, ctx), b = portPoint(rack, cable.b, ctx);
   if (!a || !b) return null;
+  // each port, then its plug's reach point (section 1.5): the first and last
+  // legs of the route start there; a plug of no reach adds no point
+  const ra = plugReach(cable, cable.a, ctx), rb = plugReach(cable, cable.b, ctx);
   const stops = [{p: a, at: 'a'}];
+  if (ra > 0) stops.push({p: reachPoint(rack, cable.a, a, ra), at: 'reach', end: 'a'});
   const wps = resolveRoute(rack, cable, ctx).waypoints;
   const marks = wps.map(() => null);
   wps.forEach((w, i) => {
@@ -403,11 +453,12 @@ export function routePath(rack, cable, ctx) {
     const g = w.lane ? null : ctx.guidesOf(w.item).find(x => x.via === w.via);
     stops.push({p, w, i, ring: ringOf(g)});
   });
+  if (rb > 0) stops.push({p: reachPoint(rack, cable.b, b, rb), at: 'reach', end: 'b'});
   stops.push({p: b, at: 'b'});
   // a ring holds a cable that reaches just into it (route-path.js, HELD):
   // how near depends on the cable's diameter, and it holds only from a port:
-  // the two port stops (first and last) are the only stops without `w`, so
-  // `!stops[k ± 1].w` says the neighbour is a port (a ring is never first or
+  // the port stops and their reach points are the only stops without `w`, so
+  // `!stops[k ± 1].w` says the neighbour is a port's (a ring is never first or
   // last, so both neighbours exist)
   const held = cableDiameter(cable, ctx);
   const {points, passes, back} = throughRings(stops.map(s => s.p), stops.map((s, k) => (s.ring
@@ -417,7 +468,7 @@ export function routePath(rack, cable, ctx) {
   const out = [], rings = [], findings = [], from = [];
   let n = 0;
   stops.forEach((s, k) => {
-    const tag = s.w ? (s.w.lane ? {at: 'lane'} : {item: s.w.item, via: s.w.via}) : {at: s.at};
+    const tag = s.w ? (s.w.lane ? {at: 'lane'} : {item: s.w.item, via: s.w.via}) : {at: s.at, ...(s.end ? {end: s.end} : {})};
     if (!s.ring) { from.push(k); out.push({...points[n++], ...(s.w && !s.w.lane ? {at: 'pathway'} : {}), ...tag}); return; }
     const ring = {item: s.w.item, via: s.w.via, ...s.ring};
     const pass = passAt.get(k);
@@ -444,7 +495,7 @@ export function routePath(rack, cable, ctx) {
     return [...new Set(lanesOf(rack.frame).map(l => laneXAt(rack, l, ru, ctx?.chassisOf)))];
   };
   const ref = k => (stops[k].w ? (stops[k].w.lane ? {lane: stops[k].w.lane, ru: stops[k].w.ru} : {item: stops[k].w.item, via: stops[k].w.via})
-    : {end: stops[k].at});
+    : {end: stops[k].end ?? stops[k].at});
   const final = [out[0]], legs = [], detours = [];
   for (let k = 1; k < out.length; k++) {
     const between = [ref(from[k - 1]), ref(from[k])];

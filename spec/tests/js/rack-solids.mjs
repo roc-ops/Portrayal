@@ -75,11 +75,13 @@ test('owner\'s fixture: today\'s routes cross the lacer\'s plates; with the deto
     assert.ok(got[c.id].length ? grew > 0.005 : grew === 0, `${c.id} grew ${grew}`);
   }
   // the floor detour of c6 goes over the FRONT edge of the tray (section 1.3
-  // rule 1): out in front of the strip, clear by its radius and CLEAR, up,
-  // and back in to ring 2
+  // rule 1): from its plug's reach point (#960) up and out in front of the
+  // strip, clear by its radius and CLEAR, and back in to ring 2. The point
+  // level with the port is pulled taut: the reach point already stands
+  // 27.6 out, and sees the corner at ring height past the edge.
   const [d6] = R.routePath(rack, rack.cables[5], ctx).detours;
   assert.deepEqual(d6.between, [{end: 'a'}, {item: 'i3', via: 'guide-2'}]);
-  assert.deepEqual(d6.points.map(p => Math.round(p.z * 10) / 10), [110 + 1.5 + S.CLEAR, 110 + 1.5 + S.CLEAR]);
+  assert.deepEqual(d6.points.map(p => Math.round(p.z * 10) / 10), [110 + 1.5 + S.CLEAR]);
   // a detour point is not stored: the cable's route is as written
   assert.deepEqual(rack.cables[5].route, [{item: 'i3', via: 'guide-2'}]);
 });
@@ -94,8 +96,9 @@ test('a tray on the rear rails is gone round by its front edge too, which faces 
   const p = R.routePath({...r, cables: [c]}, c, ctx);
   assert.deepEqual(p.crossings, []);
   const [d] = p.detours;
-  // the rear rail plane is at -740, the tray stands 110 behind it
-  assert.deepEqual(d.points.map(q => Math.round(q.z * 10) / 10), [-740 - 110 - 1.5 - S.CLEAR, -740 - 110 - 1.5 - S.CLEAR]);
+  // the rear rail plane is at -740, the tray stands 110 behind it; from the
+  // plug's reach point, 27.6 behind the rear face (#960), one corner past the edge
+  assert.deepEqual(d.points.map(q => Math.round(q.z * 10) / 10), [-740 - 110 - 1.5 - S.CLEAR]);
 });
 
 test('a cable lying against the plate is not crossing it; a leg through it is, on either face', () => {
@@ -276,9 +279,14 @@ test('a cable to the lane beside a rear PDU goes round it on the rack side, neve
   // both ports run to the lane outboard of the PDU, each round it once
   assert.equal(p.detours.length, 2);
   assert.ok(p.points.some(q => q.at === 'lane' && q.x < box.x0));
-  // and no point of the path lies between the PDU and its outlet side
+  // and no point of the path lies over its outlet face. A plug in a rear
+  // port reaches past the PDU's outlet plane (cat6, 39.4 behind the rail,
+  // #960), so the cable starts behind it: inboard of the PDU, beside it, and
+  // never across its face
+  const over = p.points.filter(q => q.z < box.z0 - 1e-9 && q.x > box.x0 - 1e-9 && q.x < box.x1 + 1e-9);
+  assert.deepEqual(over, [], JSON.stringify(over));
   const behind = p.points.filter(q => q.z < box.z0 - 1e-9);
-  assert.deepEqual(behind, [], JSON.stringify(behind));
+  assert.deepEqual(behind.map(q => [q.at, q.z]), [['reach', -779.4], ['detour', -779.4], ['detour', -779.4], ['reach', -779.4]]);
   // it goes round on the rack side instead, in front of the PDU
   assert.ok(p.detours.every(d => d.points.some(q => q.z > box.z1)), JSON.stringify(p.detours));
 });
@@ -302,9 +310,14 @@ test('the mirror: a front PDU, on a four-post and on a two-post, is gone round b
     assert.deepEqual(p.crossings, [], kind);
     assert.equal(p.detours.length, 2, kind);
     assert.ok(p.points.some(q => q.at === 'lane' && q.x < box.x0), kind);
-    // no point of the path lies in front of its outlet face
+    // no point of the path lies over its outlet face: the plugs reach past
+    // its outlet plane (cat6, 39.4 out, #960), so the cable starts in front
+    // of it, inboard of the PDU, and goes round behind it from there
+    const over = p.points.filter(q => q.z > box.z1 + 1e-9 && q.x > box.x0 - 1e-9 && q.x < box.x1 + 1e-9);
+    assert.deepEqual(over, [], `${kind}: ${JSON.stringify(over)}`);
     const ahead = p.points.filter(q => q.z > box.z1 + 1e-9);
-    assert.deepEqual(ahead, [], `${kind}: ${JSON.stringify(ahead)}`);
+    assert.deepEqual(ahead.map(q => q.at), ['reach', 'detour', 'detour', 'reach'], kind);
+    assert.ok(ahead.every(q => q.z === 39.4 && q.x > box.x1), kind);
     // it goes round behind the PDU, the side facing into the rack
     assert.ok(p.detours.every(d => d.points.some(q => q.z < box.z0)), `${kind}: ${JSON.stringify(p.detours)}`);
   }
@@ -327,12 +340,13 @@ test('what the rules cannot clear is a finding, with its sentence, in inspect, d
   assert.ok(f.every(x => x.kind === 'crosses-body'));
   const by = {};
   for (const x of f) by[x.cable] = (by[x.cable] ?? 0) + 1;
-  // every leg that starts or ends at a ring inside the shelf, and, from the
+  // every leg that starts or ends at a ring inside the shelf; from the
   // switch below to the one at U5, the leg past the web that can no longer
-  // be taken round it
-  assert.deepEqual(by, {c1: 7, c2: 3, c3: 3, c4: 3, c5: 3, c6: 4, c7: 4, c8: 6, c9: 4, c10: 3, c11: 5});
-  assert.equal(f.length, 45);
-  assert.equal(f.filter(x => x.item === 'i6').length, 45 - 3 - 1);
+  // be taken round it; and the plug of each panel port (c1 to c6), which
+  // reaches out of the panel into the shelf (#960)
+  assert.deepEqual(by, {c1: 8, c2: 4, c3: 4, c4: 4, c5: 4, c6: 5, c7: 4, c8: 6, c9: 4, c10: 3, c11: 5});
+  assert.equal(f.length, 51);
+  assert.equal(f.filter(x => x.item === 'i6').length, 51 - 3 - 1);
   const c7 = f.filter(x => x.cable === 'c7');
   assert.deepEqual(c7.slice(0, 4).map(x => [x.item, x.part, x.between]), [
     ['i6', 'envelope', [{end: 'a'}, {item: 'i3', via: 'guide-1'}]],
@@ -366,7 +380,12 @@ test('a leg through the tray floor that cannot be gone round is told to go over 
   const {rack, ctx} = shelved();
   const f = R.bodyFindings(rack, ctx, names).filter(x => x.cable === 'c6');
   // from U5 up to ring 2, inside the shelf: through the shelf and the floor
-  assert.deepEqual(f.map(x => [x.item, x.part]), [['i6', 'envelope'], ['i3', 'tray/floor'], ['i6', 'envelope'], ['i6', 'envelope']]);
+  assert.deepEqual(f.map(x => [x.item, x.part]), [['i6', 'envelope'], ['i3', 'tray/floor'], ['i6', 'envelope'], ['i6', 'envelope'],
+    ['i6', 'envelope']]);
+  // the last: its plug in the panel port, reaching into the shelf (#960)
+  assert.deepEqual(f[4].between, [{end: 'b'}, {end: 'b'}]);
+  assert.equal(f[4].text, 'c6 passes through shelf at its port on fhd-panel: '
+    + 'route it round shelf, or through a ring or a pass-through it fits.');
   assert.equal(f[1].text, 'c6 passes through lacer tray between its port on sw-low and lacer ring 2: '
     + 'route it over the front edge of the tray, or through a ring.');
 });
