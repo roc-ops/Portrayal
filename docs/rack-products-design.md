@@ -637,7 +637,8 @@ cabinets, wall and vertical, and desktop.
    enclosure, base, load, channels with `pdu-button` slots, and the PDU fit
    check (PDU note step 8, #939's FS-GR42U-PDUBK).
 6. **Wall and vertical.** FS-WMNR-D2P6U, FS-HWM-4U, FS-SVWM-1U and -4U, and
-   `roll` with #550.
+   the quarter turns of `roll` with #550 (`roll` itself enters at version 4,
+   section 9).
 7. **Desktop.** FS-DR-8U and `tilt`.
 
 Rows and the room come after, each with its own note.
@@ -700,4 +701,4 @@ published file or a saved rack file uses it.
 | the setback order (item, device default ear position, frame, flush), and a default position with no `at` counting only when it is `flush` | kit fit and drawing | a saved rack's faceplates move if it changes |
 | removing the 30 mm showcase default, so an unstated setback is flush | kit and Rack Builder | every saved rack's faceplates move 30 mm when it lands |
 | NetBox rack types under `library/exports/`, and the Nautobot rack fields | DCIM export | an imported rack type is named by its model |
-| `roll` (#550) and `tilt` | reserved names | later keys built on them; `roll` is proposed for version 4 by the cable lay note (section 9) |
+| `roll` (#550) and `tilt` | reserved names | later keys built on them; `roll` is proposed for version 4 (section 9, and section 7.1 of the cable lay note) |

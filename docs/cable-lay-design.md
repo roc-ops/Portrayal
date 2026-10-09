@@ -153,14 +153,14 @@ slots are 3 mm wide, and a 3 mm fibre cord would otherwise pass the size test
 on paper.
 
 **Lying against a plate is not crossing it.** Both faces of a tray floor are
-pathway surfaces (2.3): a cable on the top lies on the plate, and a cable on
-the underside lies against it from below, strapped up to it. In either case
+pathway surfaces (2.3): a cable on the resting face lies on the plate, and a
+cable on the held face lies against it from below, strapped up to it. In either case
 the centre line of the cable stays its own radius outside the plate box, so
 it never enters the solid and nothing is found. The rule is unchanged: a
 crossing is a leg of the centre line that enters a solid, so a leg that runs
 from one face of the plate to the other inside the footprint of the plate (a
-cable dropping from a device above straight onto the underside, or a lay
-pinned to the underside whose next waypoint is above the tray) passes
+cable dropping from a device above straight onto the held face, or a lay
+pinned to the held face whose next waypoint is above the tray) passes
 through the plate and is a finding, unless the detours of 1.3 take it round
 the front edge first. A point of the tube exactly on a face of the plate is
 not inside it; the browser check of 1.4 tests the inside with the same
@@ -178,11 +178,13 @@ In order of preference:
    `CLEAR` (5 mm, the figure `clearOf` uses), and comes back in from the open
    side. The FHD-CMP5DR case: a port on the switch below comes out, rises in
    front of the tray floor and drops onto it, as a lead is dressed by hand.
-   The wrong side depends on the face the cable lies on (2.3): for the top,
-   below the plate; for the underside, above it, so a cable from a device
-   above that is pinned to the underside goes down past the front edge and
-   back in under the plate. A cable that passes a tray with cables on its
-   underside keeps clear of their strap line too, as of the plate.
+   The wrong side depends on the face the cable lies on (2.3): for the
+   resting face, below the plate; for the held face, above it, so a cable
+   from a device above that is pinned to the held face goes down past the front edge and
+   back in under the plate. For a cable that does not lie in it, the stack on
+   the held face of a tray, from the plate down to its strap line, is solid
+   as the plate is: a cable passing under it keeps below the strap line by
+   its radius and `CLEAR`, dropping first where its port is higher.
 2. **Round the end.** A leg that would cross a body side to side goes past its
    end, into the gutter, which is where the automatic route already goes.
 3. **Front to back by a side lane.** A cable whose ends are on opposite faces
@@ -299,7 +301,10 @@ tray declares `ties`.**
   through a ring standing on it, since a hanging ring holds a cable on its
   lower band (section 3.1). A tray with no tie slots offers no underside. The
   FHD-CMP5DR declares sixteen, so it offers both.
-- **Lying on the held face.** The cable lies against the plate. Between two
+- **Lying on the held face.** On a tray mounted the usual way, the
+  underside, the cable lies against the plate. (On a tray turned over, the
+  held face is its top, and a hanging ring holds the cable on its lower band,
+  about 31.5 mm below the plate on the FHD-CMP5DR: section 3.1.) Between two
   straps it sags a little, by the drape of its type over that span, and never
   below the **strap line**, the bottom of the strapped stack at that point. A
   stretch of the held face that passes no tie slot cannot be held: the
@@ -321,8 +326,8 @@ tray declares `ties`.**
 - **Slack is stored on the resting face only**, which on a tray mounted the
   usual way is the top. A loop on the held face would need straps no count
   could know. `cable.slack` on a tray where the cable lies on the held face
-  is refused with a sentence: "c7 lies on the underside of mgr-1 tray; slack
-  is stored on the top: pin it to the top, or store it in another tray."
+  is refused with a sentence: "c7 lies on the held face of mgr-1 tray; slack
+  is stored on the resting face: pin it there, or use another tray."
 - **Fill** is worked per face (4.4). The held face has no lip, so its stack
   is bounded by the opening the resting face has (the height of the ring
   opening above its sill, or the lip, or the envelope, as 4.4 sets out). That
@@ -381,9 +386,10 @@ radius; only a free span sags, and it never sags below a surface under it.**
 cable in a tray runs along the floor line of the tray, not across the middle
 of its unit, and drops to it from the port. They cannot show depth, so where a
 cable lies across the tray (its position, section 4) is not seen there. No plan view is added
-for this (decision 1); the 3D view shows it. A cable on the underside runs
-along the line just below the plate, at the plate less its radius, so the
-elevation shows which face it is on.
+for this (decision 1); the 3D view shows it. A cable on the held face runs
+below the plate, at the plate less its radius where it lies against it, or at
+the rest line of a hanging ring (3.1), so the elevation shows which face it
+is on.
 
 ### 3.1 In an item turned over
 
@@ -482,26 +488,33 @@ no tie slots, as every tray is today), where a cable with both ends in the
 tray wants both faces (a side-to-side patch, which lies on the resting face),
 and where a face is pinned by hand against its port.
 
-**A cable on the top and a cable on the underside never cross.** They are
+**A cable on the resting face and a cable on the held face never cross.** They are
 chords of two discs, and the discs are the two faces of one plate, which is
 solid (section 1): no chord of one disc meets a chord of the other, because
 the plate lies between every point of the two. What is left is where the two
 discs share an edge, and there:
 
-- **a gutter end** is a single point of each disc; a top cable and an
-  underside cable that leave by the same gutter meet only in the lane beyond
-  it, which is a pathway of its own and not part of either face;
-- **a front-edge end** of one face passes the other face outside its
-  footprint: a cable from below that comes over the front onto the top leaves
-  its port at the height of the port, below the strap line of the underside
-  (2.3), and rises only in front of the plate, clear of it by `CLEAR` (1.3);
-  a cable from above that comes under the front onto the underside drops in
-  front of the top and comes back in below the plate;
+- **a gutter end** is a single point of each disc; two cables, one on
+  each face, that leave by the same gutter meet only in the lane beyond it, which is a pathway of its own and not part of either face;
+- **a front-edge end** of one face is a free span outside the other disc,
+  not a chord in it. A cable from below that comes over the front onto the
+  resting face runs forward from its port and **passes under the footprint of
+  the held face**, below its strap line (2.3), then rises only in front of the
+  plate, clear of it by `CLEAR` (1.3). In plan it can lie across a cable on
+  the held face (b over d in fixture 1 of 4.5); in 3D it passes beneath it.
+  What keeps it clear is the detour rule: the stack on a held face, down to
+  its strap line, is solid to every cable that does not lie in it (1.3, rule
+  1), so a run from a high row of ports drops below the strap line before it
+  runs forward, and one that cannot is a `crosses-body` finding naming the
+  tray and its held face. A cable from above that comes under the front onto
+  the held face drops in front of the resting face and comes back in below
+  the plate, in the same way;
 - **a rail-side end** of one face reaches its own side of the plate from its
-  own side of the rack (the top from above, the underside from below), and
+  own side of the rack (the resting face from above, the held face from below), and
   never passes the edge of the other face at all.
 
-So a pair of cables can be a forced crossing only when both lie on one face,
+So the claim is per disc, in 3D, not in a plan projection: a pair of cables
+can be a forced crossing only when both lie on one face,
 and moving a cable to the other face can only take pairs out of its forced
 set. The worked fixture of 4.5 shows one going.
 
@@ -600,8 +613,8 @@ hand, and named with the cable that was pinned.
 Positions and faces are computed, not stored, except a hand lay. Where each
 position is across the pathway is part of `routePath`, so it moves the
 measured length by millimetres and agrees in every view. The face moves it by
-more, the difference between rising to the underside and coming over the
-front edge onto the top, tens of millimetres a tray.
+more, the difference between rising to the held face and coming over the
+front edge onto the resting face, tens of millimetres a tray.
 
 ### 4.4 A full tray
 
@@ -657,9 +670,10 @@ the underside: three, where it was four.** b-d is gone, because d no longer
 shares a face with b. Pinning d to the top by hand brings b-d back, counted
 as a crossing made by hand and named with d.
 
-**Fixture 2, a manager per device.** The same rack with a rack-face lacer on
-each switch as well: S-up at U14 with lacer M1 on it, P at U13 with T, S-dn
-at U12 with lacer M2 on it. Every cable from a switch to the panel is then a
+**Fixture 2, a manager per device.** Fixture 1 moved up one unit, so that
+U11 is free for the variant below, without P2, which this fixture does not
+use, and with a rack-face lacer on each switch as well: S-up at U14 with
+lacer M1 on it, P at U13 with T, S-dn at U12 with lacer M2 on it. Every cable from a switch to the panel is then a
 through cable: from its port through the rings of the switch lacer, out to a
 side lane, along the lane and into T, then to its port. Every end is
 rail-side on the top of its own tray, since each port is on the device its
@@ -688,21 +702,32 @@ on S-dn and T on P, so each end finds its own lacer, and `autoRoute`, given
 two different managers, already runs manager, lane, manager. **For this
 fixture `managerOf` picks the right managers as it stands.** It does not when
 the manager of a device is a 1U part in a unit of its own and not hosted on
-the device (a D-ring panel such as the CMH-5DR1U at U11, under S-dn at U12,
-with P and T at U13). It then tries the unit above before the unit below, and
+the device. **The variant** is fixture 2 with M1 and M2 removed and two
+D-ring panels such as the CMH-5DR1U added, standing alone: D1 at U15 over
+S-up and D2 at U11 under S-dn, with P and T at U13 between the switches and
+the same five cables. `managerOf` then tries the unit above before the unit below, and
 takes a manager carried by a neighbour device as readily as a neighbour that
-is a manager: S-dn finds P first, takes T, and its cables never reach the
-D-ring panel under it. So the note requires, with step 5 and as a variant of
+is a manager: S-up finds D1 above it, which is right, but S-dn finds P
+first, takes T, and its cables never reach D2 under it. So the note requires, with step 5 and as a variant of
 this fixture, that `managerOf` rank its candidates:
 
 1. a manager hosted on the item of the end, on its face (as today);
 2. an adjacent part that is itself a manager, serving no port of its own (a
-   D-ring panel, a lacer standing alone in its unit), above before below;
+   D-ring panel, a lacer standing alone in its unit); where there is one
+   above and one below, the one nearer the port row of the end (a row in
+   the upper half of the device takes the one above, a row in the lower half
+   the one below), then for a row at the middle the one no other device
+   adjoins on that face, then the one above;
 3. a manager hosted on an adjacent device, above before below;
 4. an adjacent device that declares guides of its own, above before below.
 
-The variant asserts that S-dn takes the D-ring panel at U11 and S-up the one
-over it. Fixture 1 is unchanged by the ranking, since it has no standalone
+The variant asserts that S-up takes D1 and S-dn takes D2, through rank 2
+over the T of rank 3. The tie-break of rank 2 matters in a stack with a
+manager under each switch (Ma at U13, S1 at U14, Mb at U11, S2 at U12): S2
+has a manager on both sides, so its upper row of ports takes Ma, which it
+shares with S1, and its lower row takes Mb; a single row at the middle of S2
+takes Mb, the one only S2 adjoins. Without the tie-break, S2 would take Ma,
+above, for every port. The variant adds that stack and asserts both. Fixture 1 is unchanged by the ranking, since it has no standalone
 manager.
 
 **Fixture 3, a manager pair back to back.** S-up at U14; an FHD-CMP5DR Mu
@@ -808,14 +833,18 @@ may move up a stock size, which is the honest answer: that is the cable to buy.
   ("1.2 m in mgr-1 tray"), so no column a reader takes by position moves.
   #923 moved three columns for `bundle`; this does not need to. After it, a
   `straps` column, appended in the same way, names for a cable on the held
-  face of a tray the tray and the tie slots it passes ("mgr-1 tray underside,
-  ties 1 to 3"). It names slots and not a count, because a strap round the
+  face of a tray the tray, the face it lies on and the tie slots it passes
+  ("mgr-1 tray, held face (underside), ties 1 to 3"; on a tray with
+  `roll: 180`, "held face (top)"). The role says where the cable is in the
+  rack and the name which side of the part, so the text is right on a tray
+  turned over. It names slots and not a count, because a strap round the
   stack serves every cable under its slot, and a count per cable would add up
   to more straps than there are.
 - **BOM**: the cable lines are unchanged in shape; the length bought already
   counts the slack, and a note per cable that stores some says where. A note
   per tray with cables on its held face counts its straps, one per tie slot
-  used ("mgr-1 tray: 3 straps on the underside, ties 1 to 3"). The straps are
+  used ("mgr-1 tray: 3 straps on the held face (underside), ties 1 to 3",
+  with the face named as in the schedule). The straps are
   a note and not a line: no library part describes one, so there is nothing
   to name a line by.
 - **DCIM**: nothing new. The length both targets import is the stock length,
@@ -967,7 +996,8 @@ first; one key with four angles cannot disagree with itself.
   it, so `pointOf` and every ring or tray position are read through the roll,
   and resting and lay order are worked in the frame as mounted (3.1).
 - **Exports.** A rolled item adds a note, as a turned one does ("Mounted
-  upside down." or "Mounted turned 90 degrees."). Neither DCIM has a field for
+  upside down.", or for a quarter turn "Mounted turned 90 degrees
+  clockwise." or "Mounted turned 90 degrees anticlockwise."). Neither DCIM has a field for
   it, so it goes in the comment lines.
 
 Routed lengths of saved racks change without a file change (section 12): the
@@ -1056,9 +1086,9 @@ own step.
    against the lock on main, with the versions bumped, before `--update`; a review
    page of source against render, and kit tests that a cable on the tray runs
    at floor height plus its radius and that no span passes below a surface;
-   that a cable on the underside runs at the plate less its radius, sags
+   that a cable on the held face runs at the plate less its radius, sags
    between two used tie slots and never below the strap line, and crosses no
-   solid; and that a leg from above straight onto the underside is still a
+   solid; and that a leg from above straight onto the held face is still a
    `crosses-body` finding.
 4. **Slack storage**, on rack file version 4. The `slack` and `lay` keys are
    reserved in the version-4 schema by the hosting step of the rack products
@@ -1075,21 +1105,25 @@ own step.
    by entry side, local patches along the tray, side-to-side patches in the
    middle band, the gutter chosen from both ends, layers, bundles as one
    position, `cable.lay` with `face`, the two faces of a tray and the
-   automatic face, the underside straps counted, the forced-crossing count,
+   automatic face, the held-face straps counted, the forced-crossing count,
    the full-tray warning, the ranking of `managerOf` (4.5), and `roll: 180`
    drawn, fitted and routed through, with resting in the frame as mounted
    (3.1), if #550 has not already built it. Gate: kit tests on the three
    fixtures of 4.5 (the fixture of #949, one FHD panel with an FHD-CMP5DR
    lacer, a switch above it and a switch below it, cabled to bays 2 to 4;
-   a lacer on each switch as well, with its variant of a D-ring panel in a
-   unit of its own under the lower switch; and a pair of FHD-CMP5DR back to
+   a lacer on each switch as well, with its variant of D-ring panels
+   standing alone over and under the switches and its stack with a manager
+   under each switch; and a pair of FHD-CMP5DR back to
    back, the lower one with `roll: 180`) and on a grid of ports, in which
    **the test computes the forced set itself**, per face of each pathway,
    from the face each cable lies on and its ends there (rail-side,
    front-edge and gutter) by the interleaving rule of 4.1, without the kit;
    asserts that the kit count and pairs EQUAL that set (for the fixtures, the
    sets 4.5 gives: a-e, b-c and c-f; h-k and i-k; n-o); and asserts that the
-   laid cables cross in plan exactly at those pairs and nowhere else. Every
+   laid cables cross exactly at those pairs and nowhere else, per face: two
+   cables on one face meet only at a forced pair, and in 3D no two tubes on
+   different faces meet. The test does not project to a plan, where a run
+   passing under a held face (b under d in fixture 1) lies across it. Every
    fixture has forced crossings, and the test asserts each count is not zero,
    so an empty count cannot pass. Fixture 1 also asserts that d lies on the
    underside and that pinning it to the top adds b-d as a crossing made by
@@ -1125,7 +1159,11 @@ was amended to carry them:
    cable, a face can be pinned by hand and is saved in `lay`, and each face
    has its own lay order. Underside straps are counted, one per tie slot
    used; top-face straps are still not drawn; slack goes on the top face only
-   (2.3, 3, 4.1, 5, 7 and 8).
+   (2.3, 3, 4.1, 5, 7 and 8). The addition speaks of trays mounted the usual
+   way, so this note reads its top as the face that looks up, the resting
+   face, and its underside as the face that looks down, the held face; on a
+   tray turned over (addition 3) the two names and roles part, and the rules
+   follow the roles.
 2. **A cable manager per device**, one in front of each switch, with cables
    running manager, lane, manager, is a second fixture for the lay order
    beside the fixture of #949 (4.5, and steps 2 and 5 of section 10).
@@ -1154,13 +1192,14 @@ published file or a saved rack file uses it.
 | the forced crossing: a pair whose ends (rail-side, front-edge, gutter) interleave round the pathway, and the count of them per pathway | kit, `inspect`, agent output | agents and tests read the count and the pairs |
 | item `roll` with `90`, `180` and `270`, clockwise as seen in the elevation of its face, applied after `face` and `turned`, fitted by its rolled box (7.1) | rack file version 4, kit fit and drawing | saved rack files carry it; #550 builds its quarter turns on the same key and convention |
 | `top` and `underside` named in the frame of the part, the resting and held roles following the item as mounted, the held face offered only with `ties` or a ring on it, and the automatic face the one nearer the port (2.3) | kit, rack file (`lay`), `inspect` | a saved face pin names a face by this name, and routed lengths depend on the choice |
-| underside straps counted one per tie slot used, the `straps` column of the cable schedule after `slack`, and the strap note per tray in the BOM | exports | a reader takes the column by its header and matches the note |
-| the ranking of `managerOf` (hosted, then a standalone manager, then a manager on a neighbour, then a neighbour with guides) | kit | automatic routes of saved racks follow it, and their routed lengths with them |
+| held-face straps counted one per tie slot used, the face named by role and name in the export text, the `straps` column of the cable schedule after `slack`, and the strap note per tray in the BOM | exports | a reader takes the column by its header and matches the note |
+| the export note and the DCIM comment line of a rolled item ("Mounted upside down.", "Mounted turned 90 degrees clockwise." or "anticlockwise.") | BOM notes, DCIM exports | a reader of the notes and an imported comment match the text |
+| the ranking of `managerOf` (hosted, then a standalone manager, with its tie-break by port row, then a manager on a neighbour, then a neighbour with guides) | kit | automatic routes of saved racks follow it, and their routed lengths with them |
 | the version-4 table of the rack products note gaining `states`, `readings`, the PDU bracket key, `slack`, `lay` and `roll` | `docs/rack-products-design.md` section 9, rack file version 4 | one bump carries them all; a key left out needs a version 5 |
 | the stored slack counting in the routed length | kit | a saved routed length and stock size depend on it |
 | routed lengths changing on saved racks: detours, cables resting at the floor and at the ring sill, positions in the lay, the face of each tray, slack | kit | stored routed lengths and stock sizes move on the next measure; an ordered stock length may no longer match |
 | `crosses-body`, `unheld` and the tray findings, `bodyFindings` | kit API, agent output | agents and pages read the kinds |
 | `cable.slack`, `cable.slack.clear`, `cable.lay` (with `face`), and `roll` on `patch` | kit commands, offered to agents | agent sessions and saved prompts call them by name |
-| `inspect` fields: `crosses` and `rests` (with `face` and the tie slots used) on a cable route, `slack.stored`, the tray block of a device per face | kit queries, agent output | agents and the site read them by name |
+| `inspect` fields: `crosses` and `rests` (with `face` and the tie slots used) on a cable route, `slack.stored`, the tray block of a device per face, and `roll` on a device | kit queries, agent output | agents and the site read them by name |
 | the crossing and tray lines in the export notes | exports | a reader of the notes matches them |
 | the `slack` column of the cable schedule, after the last column | export | a reader takes it by its header |
