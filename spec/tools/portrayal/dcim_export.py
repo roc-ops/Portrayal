@@ -635,10 +635,11 @@ PART_OUTLET = {
     # connector as its label - OTHER_LABEL's treatment of an interface whose
     # form factor upstream does not name.
     "amphenol-ns/output-p40": "other",
-    # A RACK PDU'S OUTLETS. An IEC C13 is upstream's `iec-60320-c13`. Eaton's C39
-    # takes a C14 or a C20 plug and is no IEC sheet - it is Eaton's own, and both
-    # targets name it, so it is `eaton-c39` rather than `other`.
-    "eaton/c13-outlet": "iec-60320-c13",
+    # A RACK PDU'S OUTLETS. An IEC C13 is upstream's `iec-60320-c13`, and it is a
+    # std/ part: its face is the standard's, whoever moulds it. Eaton's C39 takes
+    # a C14 or a C20 plug and is no IEC sheet - it is Eaton's own, and both targets
+    # name it, so it is `eaton-c39` rather than `other`.
+    "std/c13-outlet": "iec-60320-c13",
     "eaton/c39-outlet": "eaton-c39",
 }
 # The label an `other` outlet carries, so it says what to plug into it.
@@ -2056,7 +2057,7 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
         out["power-ports"] = [powers[k] for k in sorted(powers)]
     if outlets:
         out["power-outlets"] = outlet_rows(outlets, powers, bays,
-                                           f"{dev['manufacturer']} {model}")
+                                           f"{dev['manufacturer']} {model}", own)
     if bays:
         out["module-bays"] = sorted(bays, key=bay_order)
 
@@ -2107,13 +2108,19 @@ def bay_order(b):
     return (b["name"].split()[0], _num(b["position"].rsplit("-", 1)[-1]))
 
 
-def outlet_rows(outlets, powers, bays, who):
+def outlet_rows(outlets, powers, bays, who, names=None):
     """A device type's `power-outlets`, from its PART_OUTLET placements (#806).
 
     `outlets` is placement id -> placement, `powers` the device type's power
     ports keyed the same way, and `bays` its built bay rows, whose descriptions
     gain the outlets each one protects. Rows are named by placement id, as
-    every exported port is, and in natural order.
+    every exported port is, and in natural order - UNLESS THE DEVICE'S OWN
+    `interfaces:` NAMES THE OUTLET. `names` is that map (listing_names over the
+    device document), and it renames an outlet exactly as it renames an
+    interface: a rack PDU's outlets are known by the labels printed beside them
+    (the Eaton EVMI2130X's A1 to C42), which an id cannot spell. An outlet no
+    rule names keeps its placement id. Rows stay in the natural order of the
+    placement ids, whatever they are named; neither target reads the order.
 
     `power_port` IS WHAT BOTH TARGETS IMPORT. NetBox's
     PowerOutletTemplateImportForm (netbox/dcim/forms/object_import.py at
@@ -2145,7 +2152,7 @@ def outlet_rows(outlets, powers, bays, who):
     for pid in sorted(outlets, key=_natural):
         p = outlets[pid]
         ref = p["ref"].split("@")[0]
-        row = {"name": pid, "type": PART_OUTLET[ref]}
+        row = {"name": (names or {}).get(pid, (pid, None))[0], "type": PART_OUTLET[ref]}
         if ref in OUTLET_LABEL:
             row["label"] = OUTLET_LABEL[ref]
         fed = p.get("fed-by")
