@@ -405,7 +405,10 @@ export function routePath(rack, cable, ctx) {
   });
   stops.push({p: b, at: 'b'});
   // a ring holds a cable that reaches just into it (route-path.js, HELD):
-  // how near depends on the cable's diameter
+  // how near depends on the cable's diameter, and it holds only from a port:
+  // the two port stops (first and last) are the only stops without `w`, so
+  // `!stops[k ± 1].w` says the neighbour is a port (a ring is never first or
+  // last, so both neighbours exist)
   const held = cableDiameter(cable, ctx);
   const {points, passes, back} = throughRings(stops.map(s => s.p), stops.map((s, k) => (s.ring
     ? {...s.ring, diameter: held, portBefore: !stops[k - 1].w, portAfter: !stops[k + 1].w} : null)));
