@@ -7,7 +7,7 @@ import * as F from '../../../kit/rack/fit.js';
 const SIZES = {
   'r740xd': {ru: 2, h: 86.8, d: 737.5}, 'as7726-32x': {ru: 1, h: 43.5, d: 515.0},
   'fhd-1ufce': {ru: 1, h: 44.0, d: 432.8}, 'tm-280': {ru: 1, h: 43.6, d: 140.5},
-  'mx10004': {ru: 7, h: 311, d: 932.0}, 'pdu-v': {ru: 0, h: 1200, d: 60},
+  'mx10004': {ru: 7, h: 311, d: 932.0}, 'pdu-v': {ru: 0, h: 1200, d: 60, mount: 'rack-side'},
   'fhd-cmp5dr': {ru: 1, h: 44, d: 110, mount: 'rack-face', shell: 'sheet'}, 'deep-1u': {ru: 1, h: 44, d: 800},
 };
 const chassisOf = ref => SIZES[ref] || null;
@@ -93,13 +93,16 @@ test('zero-U: only the frame\'s attachment points, and never overlapping', () =>
   assert.deepEqual(F.attachPoints('two-post'), ['left', 'right']);
   let r = M.newRack();
   assert.equal(F.fitsZeroU(r, {ref: 'pdu-v', at: 'left', offsetMm: 0}, chassisOf).reason,
-    'left is not an attachment point of a four-post frame.');
+    'left is not an attachment point of a four-post frame: use left-front, right-front, left-rear, right-rear.');
   assert.deepEqual(F.fitsZeroU(r, {ref: 'pdu-v', at: 'left-rear', offsetMm: 0}, chassisOf), {ok: true});
   r = {...r, zeroU: [{id: 'z1', ref: 'pdu-v', at: 'left-rear', offsetMm: 0, label: 'PDU A'}]};
   assert.equal(F.fitsZeroU(r, {ref: 'pdu-v', at: 'left-rear', offsetMm: 600}, chassisOf).reason,
     'Overlaps PDU A at left-rear.');
+  // A part that states no U is measured by its height: 1200 mm is 27U, from U21 of 42.
   assert.equal(F.fitsZeroU(r, {ref: 'pdu-v', at: 'right-rear', offsetMm: 900}, chassisOf).reason,
-    '1200 mm long; it runs past the top of the rack.');
+    '27U tall; 22U from U21 to the top of this 42U rack.');
+  assert.equal(F.fitsZeroU(r, {ref: 'r740xd', at: 'right-rear', ru: 1}, chassisOf).reason,
+    'r740xd does not stand beside the rack: it goes on the rails.');
 });
 
 // shrinkRack (feedback round 2 §2): compact, then trim from the bottom.

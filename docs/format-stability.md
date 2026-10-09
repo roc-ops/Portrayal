@@ -303,6 +303,37 @@ changed shape before any release published it, with nothing in the kit
 reading it. From the next release both are under `contract` like every other
 key.
 
+## The rack file: parts beside the rack and on one rail
+
+Two keys were added to rack file `version` 2 in #926, and neither raised it:
+
+- **`zeroU` entries.** The record every rack has always carried, which the
+  schema called reserved, now holds the parts that stand beside the rack:
+  `{id, ref, cfg, label, at, offsetMm, between?}`. `at` is an attachment point
+  of the frame, `offsetMm` the part's bottom above the bottom of the rails (a
+  whole number of U as the kit writes it), and `between: true` a part that
+  serves the next rack too. `parseDoc` keeps the record as written, and gives
+  an entry with no id, or a repeated one, an id of its own.
+- **`side` on an item**: `left` or `right`, the rail a part narrower than the
+  rack opening is on. `parseDoc` keeps it; a reader that drops it puts the
+  part across both rails, which is visible and is what it was before.
+
+The schema describes the new keys and does not constrain them, so every file
+that validated before still validates: an entry of `zeroU` is an object, as it
+always had to be, and the kit places only the entries it can read
+(`id`, `ref` and `at` as non-empty strings) and keeps the others as written.
+Constraining their types, so that a validator refuses `at: 5`, would reject a
+file that validates today, and so would be a format change.
+
+The version stayed 2 because both keys are optional and an older reader of
+version 2 reads the rest of the rack whole: it keeps `zeroU` as written and
+draws nothing beside the rack, and it drops `side`, so its next save puts a
+bracket back across both rails. The 1 to 2 bump made an older page refuse a
+file rather than draw a manager as a device over its host. Here it was decided
+(2026-10-08) to accept the older reader's loss, because no `@portrayal/kit`
+release older than these keys was ever published: the one reader that existed,
+portrayal-site's, already kept both.
+
 ## The cable types file
 
 `cable-types.json` names the cable types a rack tool can lay: each one's

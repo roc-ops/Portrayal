@@ -4,13 +4,14 @@
 // are handed their readers in `ctx`, since reading a face needs the network and
 // a DOMParser, which this module never touches.
 
-import {fits, isRackFace, heightOf} from './fit.js';
+import {fits, isRackFace, heightOf, railOf, isZeroUPart, zeroUUnits} from './fit.js';
 import {placement, managersOf} from './managers.js';
-import {uLabel} from './model.js';
+import {uLabel, zeroUOf, zeroUBottom} from './model.js';
+import {whereText, carriesLane} from './zero-u.js';
 import {portFree, endKey, proposeMedia, mismatch, endName, carriedU, portPathOf, matches, lengthText} from './cable-rules.js';
 import {lanesOf, pathwaysOf, resolveRoute, pathLength, routePath, routeText} from './route.js';
 import {catalogEntries} from './catalog.js';
-import {GONE, CABLE_GONE} from './commands.js';
+import {GONE, CABLE_GONE, ZERO_GONE} from './commands.js';
 import {slotEnv, slotTree, partName, partOf} from './slots.js';
 import {fieldRows} from '../fields.js';
 
@@ -48,7 +49,7 @@ export function catalog(devices, {text, ru, family, mount, kind} = {}) {
 const LIMIT = 1500;
 export const WINDOW = 20;
 export const MAX_WINDOW = 50;
-const SECTIONS = ['items', 'cables'];
+const SECTIONS = ['items', 'zeroU', 'cables'];
 const count = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
 const sideOf = e => `${e.item}/${e.path}${e.view === 'rear' ? ' (rear)' : ''}`;
 
@@ -57,7 +58,10 @@ export function describe(rack, {chassisOf}, {section, offset, limit} = {}) {
   const holes = f.holes.style === 'tapped' ? `tapped${f.holes.thread ? ` ${f.holes.thread}` : ''} holes` : 'square holes';
   const items = [...rack.items].sort((a, b) => b.ru - a.ru);
   const cables = rack.cables || [];
-  const totals = `${rack.name} (${rack.id}): ${count(items.length, 'item')}, ${count(cables.length, 'cable')}.`;
+  // the parts beside the rack (#926), top down; counted only when there are any
+  const beside = [...zeroUOf(rack)].sort((a, b) => zeroUBottom(b) - zeroUBottom(a));
+  const totals = `${rack.name} (${rack.id}): ${count(items.length, 'item')}, ` +
+    `${beside.length ? `${count(beside.length, 'part')} beside the rack, ` : ''}${count(cables.length, 'cable')}.`;
   const frameLine = `${f.heightRU}U ${f.kind}, ${holes}, numbered ${f.numbering}.`;
   const uOf = heightOf(chassisOf);
   const span = i => {
@@ -67,24 +71,28 @@ export function describe(rack, {chassisOf}, {section, offset, limit} = {}) {
   // `full` is a window's line: the ref and configuration, the purpose and length
   const item = (i, short, full = false) => {
     const ms = managersOf(rack, i.id).map(m => m.id);
-    return [`${i.id}${short ? '' : ` ${i.label}`} ${span(i)} ${i.face}${i.turned ? ' turned' : ''}`,
+    const rail = railOf(i, chassisOf);
+    return [`${i.id}${short ? '' : ` ${i.label}`} ${span(i)} ${i.face}${rail ? ` ${rail} rail` : ''}${i.turned ? ' turned' : ''}`,
             ...(full ? [`${i.ref} ${i.cfg || '(no configuration)'}`] : []),
             ...(i.on ? [`on ${i.on} unit ${i.unit}`] : []), ...(ms.length ? [`carries ${ms.join(' ')}`] : [])].join(', ');
   };
+  const part = (z, short, full = false) => [`${z.id}${short ? '' : ` ${z.label}`} ${whereText(rack, z, chassisOf)}`,
+    ...(full ? [`${z.ref} ${z.cfg || '(no configuration)'}`] : [])].join(', ');
   const cable = (c, full = false) => [`${c.id}: ${sideOf(c.a)} <-> ${sideOf(c.b)}`, ...(c.media ? [c.media] : []),
     ...(full && c.purpose ? [c.purpose] : []), ...(full && lengthText(c.length) ? [lengthText(c.length)] : [])].join(', ');
 
   if (section != null || offset != null || limit != null) {
-    if (section != null && !SECTIONS.includes(section)) return {error: `There is no section ${section}. Ask for items or cables, or leave it out for both.`};
+    if (section != null && !SECTIONS.includes(section)) return {error: `There is no section ${section}. Ask for items, zeroU or cables, or leave it out for all three.`};
     if (offset != null && !(Number.isInteger(offset) && offset >= 0)) return {error: 'An offset is a whole number from 0.'};
     if (limit != null && !(Number.isInteger(limit) && limit >= 1)) return {error: `A limit is a whole number from 1 to ${MAX_WINDOW}.`};
     const from = offset ?? 0;
     const n = Math.min(limit ?? WINDOW, MAX_WINDOW);
-    const parts = [['items', 'Items', items, i => item(i, false, true)], ['cables', 'Cables', cables, c => cable(c, true)]]
-      .filter(([key]) => section == null || section === key);
+    const parts = [['items', 'Items', items, i => item(i, false, true)], ['zeroU', 'Beside the rack', beside, z => part(z, false, true)],
+      ['cables', 'Cables', cables, c => cable(c, true)]]
+      .filter(([key]) => (section == null ? key !== 'zeroU' || beside.length : section === key));
     const shown = [], body = [];
-    for (const [, title, list, line] of parts) {
-      if (!list.length) shown.push(`No ${title.toLowerCase()}.`);
+    for (const [key, title, list, line] of parts) {
+      if (!list.length) shown.push(`No ${key === 'zeroU' ? 'parts beside the rack' : title.toLowerCase()}.`);
       else if (from >= list.length) shown.push(`${title} past the end: there are ${list.length}.`);
       else {
         shown.push(`${title} ${from + 1}-${Math.min(list.length, from + n)} shown.`);
@@ -96,6 +104,7 @@ export function describe(rack, {chassisOf}, {section, offset, limit} = {}) {
 
   const build = (short, nItems, nCables) => {
     const lines = [totals, frameLine, items.length ? 'Items:' : 'No items.', ...items.slice(0, nItems).map(i => item(i, short)),
+                   ...(beside.length ? ['Beside the rack:', ...beside.map(z => part(z, short))] : []),
                    ...(cables.length ? ['Cables:', ...cables.slice(0, nCables).map(c => cable(c))] : [])];
     const more = (items.length - nItems) + (cables.length - nCables);
     if (short) lines.push(more ? `Shortened: labels left out, and ${more} more not listed; ask for them by id.` : 'Shortened: labels left out.');
@@ -157,7 +166,8 @@ function itemFacts(rack, item, ctx) {
     : (c?.configs || []).map(name => ({name, description: '', airflow: null}));
   const out = {kind: 'item', id: item.id, ref: item.ref, model: c?.model ?? null, manufacturer: c?.manufacturer ?? null,
     label: item.label, cfg: item.cfg, configs, ru: item.ru, u: Math.max(1, c?.ru ?? 1), face: item.face, turned: !!item.turned,
-    on: item.on ?? null, unit: item.unit ?? null, managers: managersOf(rack, item.id).map(m => m.id)};
+    on: item.on ?? null, unit: item.unit ?? null, side: railOf(item, ctx.chassisOf ?? (() => null)),
+    managers: managersOf(rack, item.id).map(m => m.id)};
   if (!slots) out.slots = 'not loaded';
   else {
     const env = slotEnv(item, slots, ctx.compByRef);
@@ -233,12 +243,24 @@ async function cableInfo(rack, cable, ctx) {
     loose, mismatch: warn, ...(unchecked ? {unchecked: true} : {})};
 }
 
+// A part beside the rack (#926): where it stands, and whether the lane beside
+// that upright runs through it. `kind` is 'zeroU'.
+function zeroUFacts(rack, z, ctx) {
+  const c = ctx.chassisOf?.(z.ref) || null;
+  return {kind: 'zeroU', id: z.id, ref: z.ref, model: c?.model ?? null, manufacturer: c?.manufacturer ?? null,
+    label: z.label ?? null, cfg: z.cfg ?? '', at: z.at, ru: zeroUBottom(z), u: isZeroUPart(c) ? zeroUUnits(c) : null,
+    between: z.between === true, mount: c?.mount ?? null, lane: carriesLane(c) ? z.at : null,
+    where: c ? whereText(rack, z, ctx.chassisOf) : null};
+}
+
 export async function inspect(rack, id, ctx = {}) {
   const item = rack.items.find(i => i.id === id);
   if (item) return itemFacts(rack, item, ctx);
   const cable = (rack.cables || []).find(c => c.id === id);
   if (cable) return cableInfo(rack, cable, ctx);
-  return {error: /^c\d+$/.test(String(id)) ? CABLE_GONE : GONE};
+  const z = zeroUOf(rack).find(x => x.id === id);
+  if (z) return zeroUFacts(rack, z, ctx);
+  return {error: /^c\d+$/.test(String(id)) ? CABLE_GONE : /^z\d+$/.test(String(id)) ? ZERO_GONE : GONE};
 }
 
 // ── selectCables (D5: a query, not a command argument) ──────────────────
