@@ -274,6 +274,7 @@ chassis:
     behind: true            # optional; the same statement as the bare string
     h: 43.5                 # optional; mm the ears span, when not the chassis height
     y: 0.15                 # optional; mm from the bottom of the chassis to the ears
+    color: "#1b1e21"        # optional; the ears' colour, when they are not silver
     positions:
       - {name: flush, at: 0, default: true}
       - {name: mid, at: 228, racks: [2-post], part: {kit: acme/slide@1, part: mid}}
@@ -301,7 +302,7 @@ In the device lock both keys are chassis surface, so stating either is a
 patch, and a listed kit, its parts and its accessories join the `composed`
 digest, so a kit edited in place asks each device that lists it for a patch.
 Those are the refs `<device>.configs.json` reads to resolve each kit, below.
-`h` and `y` stay surface now that the generic ear (below) is drawn from them:
+`h`, `y` and `color` stay surface now that the generic ear (below) is drawn from them:
 that ear is drawn only when asked for and never in a published face, an
 elements file or an export, so changing either moves nothing a consumer
 caches a coordinate from. If the ears ever join the default build, `h` and `y`
@@ -316,7 +317,10 @@ face, with a slot over each rail hole, and a 30 mm leg back along the body.
 It is `chassis.ears.h` tall, its bottom `chassis.ears.y` above the chassis's
 (the chassis's full height from `y`, and 0, where they are absent), and its
 flange's back face is on the plane the default position's `at` names (0, flush,
-where there is none). The library still draws devices without their ears, so
+where there is none). It is silver (`#c8cacc`, `SILVER` in ears.py, `EAR.SILVER`
+in relief.js) unless `chassis.ears.color` states another, because most network
+gear has bare or plated steel ears even when its faceplate is black; the plan
+carries the colour as `color`. The library still draws devices without their ears, so
 the default build is unchanged:
 
 - `render.py --with ears` draws it on all six faces, as the groups `ear-left`
@@ -326,6 +330,11 @@ the default build is unchanged:
 - The kit's viewer builds it when a host asks: `createViewer(el, {ears: true})`
   or `viewer.setEars(true)`; `viewer.ears()` returns the plan drawn, or `null`.
   relief.js `genericEars(chassis, faceW)` makes the plan from configs.json.
+- A page draws it over a published face in 2D with the kit's `ears2d.js`
+  (`drawEars`, `clearEars`): the shapes, ids and colours `render.py --with
+  ears` writes, in a `<g data-overlay="ears" pointer-events="none">` that is no
+  part (no `data-path`), with the viewBox grown the same way. The Explorer
+  offers it as a toggle, off by default.
 
 A device gets none when it is not a `rack` device, states `ears: behind`, has
 a front as wide as the rack face (its ears are in the drawing), or still places
@@ -360,8 +369,9 @@ states neither (#907):
 
 - **`ears` is an object, always.** The bare string `ears: behind` is
   published as `{"behind": true}`; an object is published with the keys it
-  states (`behind`, `h`, `y`, `positions`) and no others, so a reader asks
-  `ears.behind === true` and reads `ears.positions || []`. `h`, `y` and each
+  states (`behind`, `h`, `y`, `color`, `positions`) and no others, so a reader
+  asks `ears.behind === true` and reads `ears.positions || []`. `color` is the
+  string the manifest writes, and absent means silver. `h`, `y` and each
   position's `at` are floats. A position keeps every key the manifest writes.
   From #865 to #907 the bare string was published as the string, on main
   only; no release carried it, though the site once vendored a build that

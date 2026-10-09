@@ -531,7 +531,8 @@ CHASSIS_SHAPE = {"width", "height", "depth", "ru", "bevel", "shell"}
 # objects with versions of their own; listing one moves nothing either. Stating
 # either is a patch. What a listed kit CONTAINS is hashed in `composed`, as a
 # part a device places is - see `_composed`.
-# `ears.h` AND `ears.y` STAY SURFACE NOW THAT AN EAR IS DRAWN FROM THEM (#909).
+# `ears.h`, `ears.y` AND `ears.color` STAY SURFACE NOW THAT AN EAR IS DRAWN
+# FROM THEM (#909; `color` from the owner's silver default, 2026-10-09).
 # The generic L-bracket ear is sized from them, but it is drawn only when asked
 # for - `render.py --with ears`, the viewer's `ears` option - and never in a
 # published face, an elements file or a DCIM export, so changing either moves

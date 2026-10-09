@@ -2552,7 +2552,7 @@ def _generic_ears(svg, plan, view_name, w, h):
             el = ET.SubElement(g, f"{{{SVG_NS}}}rect")
             for k, v in (("x", x), ("y", y), ("width", bw), ("height", bh)):
                 el.set(k, f"{round(v, 4):g}")
-            el.set("fill", ears_mod.FILL)
+            el.set("fill", plan["color"])
             el.set("stroke", ears_mod.EDGE)
             el.set("stroke-width", "0.4")
         el.set("id", f"{side}--{kind}" if kind != "slot"
@@ -4412,7 +4412,7 @@ def published_ears(ears):
     added the object beside it; a reader that had to branch on the type to ask
     one question would branch on it for ever, so the string is published as
     `{behind: true}` and the object as the keys it states - `behind`, `h`, `y`,
-    `positions` - and no more. Lengths are floats, as `overhang`'s are; a
+    `color`, `positions` - and no more. Lengths are floats, as `overhang`'s are; a
     position keeps every key it writes (`name`, `label`, `at`, `default`,
     `racks`, `part`)."""
     if isinstance(ears, str):
@@ -4423,6 +4423,8 @@ def published_ears(ears):
     for key in ("h", "y"):
         if ears.get(key) is not None:
             out[key] = float(ears[key])
+    if ears.get("color") is not None:
+        out["color"] = str(ears["color"])
     if "positions" in ears:
         out["positions"] = []
         for pos in ears.get("positions") or []:

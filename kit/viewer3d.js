@@ -876,7 +876,8 @@ export function createViewer(container, opts = {}) {
       ? genericEars(devIndex.chassis, (FACE_MM.front || [])[0]) : null;
     if (!earPlan) return 0;
     const p = earPlan, half = p.w / 2, y0 = -H / 2 + p.y, front = D / 2;
-    const metal = new THREE.MeshLambertMaterial({color: EAR.FILL});
+    // silver unless the device states otherwise (the plan's `color`)
+    const metal = new THREE.MeshLambertMaterial({color: p.color || EAR.SILVER});
     const hole = new THREE.MeshLambertMaterial({color: EAR.HOLE});
     earGroup = new THREE.Group();
     earGroup.name = 'generic-ears';
