@@ -236,7 +236,7 @@ def test_a_csfp_card_exports_every_port_it_numbers(target, model, ports):
 @pytest.mark.parametrize("part,kind", [
     ({"ref": "std/rj45@2", "id": "bits-in", "attrs": {"function": "bits"}}, "timing"),
     ({"ref": "std/smb@1", "id": "ref-in"}, "rf"),
-    ({"ref": "std/usb-a@1", "id": "con"}, "console"),
+    ({"ref": "std/usb-a@1", "id": "con", "attrs": {"role": "console"}}, "console"),
 ])
 def test_a_part_the_export_files_as_something_else_may_not_present_interfaces(part, kind):
     assert dx.route_part(part, {})[0] == kind

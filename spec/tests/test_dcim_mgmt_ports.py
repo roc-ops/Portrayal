@@ -204,3 +204,106 @@ def test_usb_micro_b_is_a_console_type_in_both_targets():
     cites (netbox 64ce9e2d, nautobot 3edb1fca); this pins the spelling."""
     assert dx.device_console_row({"ref": "std/micro-usb@1", "id": "console"}, {})["type"] \
         == "usb-micro-b"
+
+
+# --- a card's USB jack, through route_part ----------------------------------
+#
+# route_part used to file every std/usb-a part on a card as a `usb-a` console
+# from the ref alone, and had no micro-USB or USB-C console row, so a card's
+# USB storage port exported as a console and its micro-USB console exported
+# nothing. It now asks device_console_row, the device path's own answer.
+
+def _card(parts, groups=None):
+    return {"name": "card", "kind": "module", "attrs": {"model": "CARD"},
+            "parts": parts, "groups": groups or {}}
+
+
+def _library_card(vendor, name, major):
+    cf = LIB / "components" / vendor / name / f"v{major}" / "contract.yaml"
+    return yaml.safe_load(cf.read_text())
+
+
+@pytest.mark.parametrize("part", [
+    {"ref": "std/usb-a@1", "id": "usb", "attrs": {"role": "sensor"}},
+    {"ref": "std/usb-a@1", "id": "usb", "attrs": {"role": "storage"}},
+    {"ref": "std/usb-a@1", "id": "usb", "attrs": {"function": "USB service port"}},
+    {"ref": "std/usb-a@1", "id": "usb"},
+    {"ref": "std/micro-usb@1", "id": "usb", "attrs": {"function": "debug"}},
+    {"ref": "std/usb-c@1", "id": "usb-1", "attrs": {"role": "storage"}},
+])
+def test_a_card_usb_port_that_is_not_a_console_exports_no_console(part):
+    doc = dx.build_module(_card([part]), "T")
+    assert "console-ports" not in doc, doc
+    assert dx.route_part(part, {})[0] is None
+
+
+@pytest.mark.parametrize("part,row", [
+    ({"ref": "std/micro-usb@1", "id": "usb", "attrs": {"role": "console"}},
+     {"name": "usb", "type": "usb-micro-b"}),
+    ({"ref": "std/micro-usb@1", "id": "console-usb"},
+     {"name": "console-usb", "type": "usb-micro-b"}),
+    ({"ref": "std/usb-a@1", "id": "con", "attrs": {"role": "console"}},
+     {"name": "con", "type": "usb-a"}),
+    ({"ref": "std/usb-c@1", "id": "usb-0", "attrs": {"role": "console"}},
+     {"name": "usb-0", "type": "usb-c"}),
+])
+def test_a_card_usb_console_exports_one_console(part, row):
+    assert dx.build_module(_card([part]), "T")["console-ports"] == [row]
+
+
+def test_a_card_usb_console_role_can_come_from_its_group():
+    """route_part reads the EFFECTIVE part, so a group's role counts."""
+    card = _card([{"ref": "std/micro-usb@1", "id": "usb", "group": "mgmt"}],
+                 {"mgmt": {"role": "management", "attrs": {"role": "console"}}})
+    assert dx.build_module(card, "T")["console-ports"] == [{"name": "usb", "type": "usb-micro-b"}]
+
+
+def test_card_and_device_agree_on_every_usb_console():
+    """One decision, two paths: route_part files a USB part as a console exactly
+    when device_console_row lists the same placement as one."""
+    cases = [{"ref": f"{r}@1", "id": i, "attrs": a}
+             for r in sorted(dx.USB_CONSOLE_REFS)
+             for i in ("usb", "console", "con")
+             for a in ({}, {"role": "console"}, {"role": "storage"}, {"function": "console"},
+                       {"function": "debug"}, {"role": "sensor"})]
+    consoles = 0
+    for p in cases:
+        is_con = dx.route_part(p, {})[0] == "console"
+        assert is_con == bool(dx.device_console_row(p, p["attrs"])), p
+        consoles += is_con
+    assert 0 < consoles < len(cases), "both answers must occur, or this proves nothing"
+
+
+def test_commscope_ps3248n_exports_its_micro_usb_console():
+    """PINNED BEFORE AND AFTER on a real card. Before: no console-ports at all,
+    because the PS3248N's role-console micro-USB craft port matched no
+    route_part branch. After: the one console its faceplate carries."""
+    doc = dx.build_module(_library_card("commscope", "ps3248n", 1), "CommScope")
+    assert doc["console-ports"] == [{"name": "usb", "type": "usb-micro-b"}]
+
+
+@pytest.mark.parametrize("name", ["cx3003c", "cx3033n"])
+def test_a_factory_use_micro_usb_exports_no_console(name):
+    """The CX3003C and CX3033N datasheets reserve their RS-232 and micro-USB
+    for factory use, so neither is a console a DCIM should offer - the
+    micro-USB exports nothing, as the RS-232 element beside it does not."""
+    doc = dx.build_module(_library_card("commscope", name, 1), "CommScope")
+    assert "console-ports" not in doc, doc["console-ports"]
+    assert doc.get("interfaces"), "the card must still export its Ethernet ports"
+
+
+def test_cisco_rsp_usb_storage_port_is_not_a_console():
+    """Before: the A9K-RSP5-SE exported `usb` as a usb-a console beside its
+    real RJ-45 console and AUX. Its USB-A is external storage and states no role."""
+    doc = dx.build_module(_library_card("cisco", "a9k-rsp5-se", 2), "Cisco")
+    assert doc["console-ports"] == [{"name": "aux", "type": "rj-45"},
+                                    {"name": "console", "type": "rj-45"}]
+
+
+def test_the_device_path_still_exports_a_usb_a_console():
+    """The device path is untouched: the XM-8424H's role-console USB-A still
+    exports beside its RJ45 console."""
+    dev = load_yaml(LIB / "devices" / "telco-systems" / "xm-8424h" / "device.yaml")
+    name, cfg = next(iter((dev.get("configurations") or {"default": {}}).items()))
+    types = sorted(c["type"] for c in dx.build(dev, name, cfg, None)["console-ports"])
+    assert types == ["rj-45", "usb-a"]

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: cx3033n
-version: 1.0.0
+version: 1.0.1
 class: supervisor
 behaviour: fills
 profile: optical
@@ -68,7 +68,7 @@ groups:
 parts:
   - {ref: common/rj45-eth@1, id: eth-out, group: mgmt, at: [9.50, 27.50], attrs: {media: rj45, speed: 1g}}
   - {ref: common/rj45-eth@1, id: eth-in, group: mgmt, at: [27.00, 27.50], attrs: {media: rj45, speed: 1g}}
-  - {ref: std/micro-usb@1, id: usb, group: mgmt, at: [40.55, 17.73], attrs: {role: console}}
+  - {ref: std/micro-usb@1, id: usb, group: mgmt, at: [40.55, 17.73], attrs: {function: factory use}}
   - {ref: common/led-dot@1, id: led-status-1, at: [5.1, 10.0], attrs: {function: status}}
   - {ref: common/led-dot@1, id: led-status-2, at: [5.1, 12.4], attrs: {function: status}}
   - {ref: common/led-dot@1, id: led-status-3, at: [5.1, 15.5], attrs: {function: status}}

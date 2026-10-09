@@ -95,7 +95,8 @@ core's type" look like the general fix. Run against the corpus it is wrong on
 half the cases it would touch: `common/rj45-ganged-eth` composes
 `std/rj45-ganged`, which the console table maps to `rj-45`, so inheriting would
 file **every Ethernet jack in the library as a console port**. `common/usb-a`
-composes a console and is a storage port. `casa/c40g-ac-inlet-panel` composes
+composed what was then a console row and is a storage port (a USB jack is now
+a console only when its placement says so). `casa/c40g-ac-inlet-panel` composes
 four inlets and would inherit one. The rule was replaced by three named rows.
 
 ## What replaced the silence
