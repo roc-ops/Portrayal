@@ -192,7 +192,7 @@ state is drawn on the real lamp:
   whatever the colour of its declared `off`.
 
 **What the kit must change.** Following an outlet state to its lamp is not one
-change; the state passes through four places that each key by one path.
+change; the state passes through five places that each key by one path.
 
 1. **The 2D marks path** (`kit/marks.js apply`) puts `state-<name>` only on
    what a selector matches. Applying a state to an outlet path must also apply
@@ -214,8 +214,11 @@ change; the state passes through four places that each key by one path.
 3. **The Explorer chips** (`kit/index.html chips`) treat `off` as clearing
    every state, and never set `state-off`. That was right while `off` meant
    unlit; with a declared off colour it cannot show the G4 red, and the cleared
-   state is what `pushStates` sends to 3D. The chip must set `state-off` when
-   the element declares a colour for it, and clear only when it does not.
+   state is what `pushStates` sends to 3D. The chip sets `state-off` when the
+   clicked element OR ANY LAMP BOUND TO IT declares a colour for `off`, and an
+   outlet that declares the state vocabulary always takes `state-off` (so its
+   lamps show red, or a lamp-less outlet dims); only a lamp, or a plain
+   element, with no declared off colour clears.
    The chips also bypass `kit/marks.js`: `chips` writes `state-<name>` on the
    clicked element itself, `liveStates` reads the classes back off the 2D
    drawing, and `pushStates` hands them to `viewer.setStates`. So a chip on an
@@ -496,16 +499,19 @@ one:
 
 - a rack-side `side` takes any of the six names, `left`, `right`,
   `left-front`, `left-rear`, `right-front` and `right-rear`, and `labs.json`
-  publishes the name as written;
+  publishes the name as written; `side` is shared with narrow rack-face parts
+  (L142, L153), and a rack-face `side` stays `left` or `right`, so the six
+  names apply only to rack-side placements;
 - L154 checks overlap per point, as `fitsZeroU` does, so `left-front` and
-  `left-rear` never meet and two placements at `left` still stack;
+  `left-rear` never meet, and two placements at `left` still contend for it,
+  so they must stand one above the other;
 - a lab that uses a two-post name (`left`) and a four-post name (`left-front`
   or `left-rear`) on the same side is a lint error, since the two describe
   different racks and their overlap cannot be judged;
 - no library lab places anything with `side` today, so nothing migrates.
 
-When channels arrive, both claim per channel. Duct sections that stack keep
-stacking, since they share a point.
+When channels arrive, both claim per channel. Duct sections of one duct still
+share a point and contend for it, so they stand one above the other as today.
 
 ## 7. A 1U or 2U PDU (PDUMH20NET)
 
