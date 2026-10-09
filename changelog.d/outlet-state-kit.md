@@ -1,5 +1,5 @@
 ### Added
-- `@portrayal/kit` 0.9.0: an outlet's state is shown on its lamp (#934;
+- `@portrayal/kit` 0.10.0: an outlet's state is shown on its lamp (#934;
   `docs/pdu-model-design.md` section 3.2). A state set on the path of an
   element that declares states - a switched PDU outlet - is applied to every
   lamp `for:` binds to it as well: by a marks document (`marks.js` apply), by
