@@ -562,7 +562,8 @@ device has them:
   its front. Each hole is `{"via", "box", "size": [w, h]}`, a declared
   pass-through that cuts that box. Derived from the same faces
   (`rack_solids.py`), never stated in a manifest. A device without it is its
-  envelope, `w` by `h` by `d`, unless it is a sheet part, which is then open.
+  envelope, `w` by `h` by `d`, unless it is a sheet part or a zero-U part that
+  carries a lane, which is then open.
 
 `ru` is `chassis.ru` when stated (0 included, for a zero-U part), else the
 height over 44.45 mm, at least 1. Removing or renaming a key, or changing what

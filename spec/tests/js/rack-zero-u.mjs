@@ -183,7 +183,7 @@ test('a narrow part with no side, placed or moved, is judged on every unit it sp
   assert.equal(run(r, {op: 'place', ref: BRACKET, face: 'front', ru: 40}).error, '5U tall; 3U from U40 to the top of this 42U rack.');
 });
 
-test('a lane runs through a duct: its centre line where it stands, the gutter elsewhere; a PDU leaves it in the gutter', () => {
+test('a lane runs through a duct: its centre line where it stands, the gutter elsewhere; a PDU pushes it outboard (#949)', () => {
   const r = run(rackOf('two-post', 48), {op: 'zerou.place', ref: DUCT, at: 'left', ru: 2}).rack;
   const x = -(OPENING / 2 + RAIL_W + SIZES[DUCT].w / 2);
   assert.equal(Z.zeroUX(r.zeroU[0], chassisOf), x);
@@ -194,7 +194,12 @@ test('a lane runs through a duct: its centre line where it stands, the gutter el
   assert.equal(Z.zeroUOnLane(r, 'left', 46, chassisOf)?.id, 'z1');
   assert.equal(R.pointOf(r, {lane: 'left', ru: 10}, ctx).x, x);
   const pdu = run(rackOf('four-post', 42), {op: 'zerou.place', ref: 'pdu-0u', at: 'left-front', ru: 1}).rack;
-  assert.equal(R.laneXAt(pdu, 'left-front', 10, chassisOf), R.laneX('left'));
+  // a PDU stands in the gutter and carries no lane: the lane runs in a gutter
+  // as wide as the usual one just outboard of it, where it stands, and in the
+  // gutter above it (route.js laneXAt)
+  const w = SIZES['pdu-0u'].w;
+  assert.equal(R.laneXAt(pdu, 'left-front', 10, chassisOf), -(OPENING / 2 + RAIL_W + w + R.LANE_GAP / 2));
+  assert.equal(R.laneXAt(pdu, 'right-front', 10, chassisOf), R.laneX('right'));
 });
 
 test('a routed length runs through the duct, about 49 mm further out at each end than the gutter', () => {

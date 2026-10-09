@@ -8,12 +8,18 @@ import * as R from '../../../kit/rack/route.js';
 import * as S from '../../../kit/rack/solids.js';
 import * as Q from '../../../kit/rack/queries.js';
 import {cableScheduleRows} from '../../../kit/rack/export-data.js';
-import {RU} from '../../../kit/rack/rails.js';
+import {RU, OPENING, RAIL_W} from '../../../kit/rack/rails.js';
 import * as F from './cable-solids-fixture.mjs';
 
 const raw = path => path.points.filter(p => p.at !== 'detour');
-const before = (rack, c, ctx) => S.pathCrossings(raw(R.routePath(rack, c, ctx)), S.solidsOf(rack, ctx),
-  {diameter: R.cableDiameter(c, ctx)});
+const diameterOf = c => R.DIAMETERS[c.media];
+// what a path's legs cross, without the detours: the route as it was drawn
+// before solids
+const before = (rack, c, ctx) => {
+  const pts = raw(R.routePath(rack, c, ctx)), s = S.solidsOf(rack, ctx), out = [];
+  for (let k = 1; k < pts.length; k++) out.push(...S.legCrossings(pts[k - 1], pts[k], s, {diameter: diameterOf(c)}));
+  return out;
+};
 const tag = x => `${x.solid.item}:${x.solid.part}`;
 
 // The owner's rack, with a switch far below (U5) whose cable is routed by hand
@@ -25,10 +31,10 @@ function owner() {
   return {rack: {...r, cables: [...F.OWNER_CABLES, c6]}, ctx: F.ctxOf({ports: {i5: {p100: -100}}})};
 }
 
-test('the solids of the owner\'s rack: four envelopes and the lacer\'s seventeen plates, placed', () => {
+test('the solids of the owner\'s rack: four envelopes and the lacer\'s fifteen plates, placed', () => {
   const {rack, ctx} = owner();
   const s = S.solidsOf(rack, ctx);
-  assert.equal(s.length, 4 + 17);
+  assert.equal(s.length, 4 + 15);
   assert.deepEqual(s.filter(x => x.part === 'envelope').map(x => x.item), ['i1', 'i2', 'i4', 'i5']);
   // the strip of the tray floor: 3 mm up U12, the sheet (1.5) thick, from 48.8
   // to 110 out of the front rail plane, across the 448.4 between the ears
@@ -49,26 +55,39 @@ test('owner\'s fixture: today\'s routes cross the lacer\'s plates; with the deto
   // rises through the tray floor to ring 2. From the switch above, nothing.
   assert.deepEqual(got, {c1: ['i3:web-a/plate'], c2: ['i3:web-a/plate'], c3: ['i3:web-a/plate'],
     c4: [], c5: [], c6: ['i3:tray/floor']});
-  const crossing = Object.values(got).filter(x => x.length).length;
-  assert.equal(crossing, 4);
+  assert.equal(Object.values(got).filter(x => x.length).length, 4);
   // after the detours: no finding at all
   assert.deepEqual(R.bodyFindings(rack, ctx), []);
   for (const c of rack.cables) {
     const p = R.routePath(rack, c, ctx);
     assert.deepEqual(p.crossings, [], c.id);
-    // each detour is two points, counted in the length and only where it crossed
+    // one detour where it crossed, counted in the length; none elsewhere
     assert.equal(p.detours.length, got[c.id].length, c.id);
-    assert.equal(p.points.filter(x => x.at === 'detour').length, 2 * got[c.id].length, c.id);
     const grew = R.pathLength(p).measured - R.pathLength({points: raw(p)}).measured;
     assert.ok(got[c.id].length ? grew > 0.005 : grew === 0, `${c.id} grew ${grew}`);
   }
-  // the floor detour of c6 goes over the near edge: up behind the strip, in
-  // the 48.8 mm the arms leave open, clear by its radius and CLEAR
+  // the floor detour of c6 goes over the FRONT edge of the tray (section 1.3
+  // rule 1): out in front of the strip, clear by its radius and CLEAR, up,
+  // and back in to ring 2
   const [d6] = R.routePath(rack, rack.cables[5], ctx).detours;
   assert.deepEqual(d6.between, [{end: 'a'}, {item: 'i3', via: 'guide-2'}]);
-  assert.deepEqual(d6.points.map(p => Math.round(p.z * 10) / 10), [48.8 - 1.5 - S.CLEAR, 48.8 - 1.5 - S.CLEAR]);
+  assert.deepEqual(d6.points.map(p => Math.round(p.z * 10) / 10), [110 + 1.5 + S.CLEAR, 110 + 1.5 + S.CLEAR]);
   // a detour point is not stored: the cable's route is as written
   assert.deepEqual(rack.cables[5].route, [{item: 'i3', via: 'guide-2'}]);
+});
+
+test('a tray on the rear rails is gone round by its front edge too, which faces the rear', () => {
+  let r = F.add({...F.ownerRack(), items: []}, 'panel', 12, {face: 'rear'});
+  r = F.add(r, 'fhd-cmp5dr', 12, {on: 'i1', unit: 1, face: 'rear'});
+  r = F.add(r, 'sw', 5, {face: 'rear'});
+  const c = F.cable('c1', F.end('i3', 'p'), F.end('i1', 'q'), 'om4', {route: [{item: 'i2', via: 'guide-2'}], routeEdited: true});
+  const ctx = F.ctxOf({guides: {i2: F.RINGS.map(g => ({...g, face: 'rear'}))}, ports: {i3: {p: 100}, i1: {q: 30}}});
+  ctx.guidesOf = id => (id === 'i2' ? F.RINGS.map(g => ({...g, face: 'rear'})) : []);
+  const p = R.routePath({...r, cables: [c]}, c, ctx);
+  assert.deepEqual(p.crossings, []);
+  const [d] = p.detours;
+  // the rear rail plane is at -740, the tray stands 110 behind it
+  assert.deepEqual(d.points.map(q => Math.round(q.z * 10) / 10), [-740 - 110 - 1.5 - S.CLEAR, -740 - 110 - 1.5 - S.CLEAR]);
 });
 
 test('a cable lying against the plate is not crossing it; a leg through it is, on either face', () => {
@@ -101,7 +120,7 @@ test('a tie slot is never an opening: a leg through one crosses the floor', () =
   assert.deepEqual(hit.map(h => h.solid.part), ['tray/floor']);
 });
 
-// ── a vertical duct ───────────────────────────────────────────────────────
+// ── ducts ──────────────────────────────────────────────────────────────────
 function ducted() {
   const {rack, ctx} = owner();
   return {rack: {...rack, zeroU: [{id: 'z1', ref: 'cmv-sfd45u5w', cfg: 'base', at: 'left-front', offsetMm: 0}]}, ctx};
@@ -110,18 +129,17 @@ function ducted() {
 test('a vertical duct is its walls and back, and an automatic route through its lane finds nothing', () => {
   const {rack, ctx} = ducted();
   const duct = S.solidsOf(rack, ctx).filter(x => x.item === 'z1');
-  assert.deepEqual(duct.map(x => x.part), ['base/floor', 'base--seam', 'wall-left/root', 'wall-right/root']);
-  // its back is behind the rail plane, its walls stand forward of it, and its
-  // channel is where the lane runs: the lane point (z 0) is inside it, clear of both
+  assert.deepEqual(duct.map(x => x.part), ['base/floor', 'wall-left/root', 'wall-right/root']);
+  // its back is behind the rail plane, and its channel is where the lane
+  // runs: the lane point (z 0) is inside it, clear of the back and the walls
   const lane = R.laneXAt(rack, 'left-front', 11, ctx.chassisOf);
   const back = duct[0].box;
   assert.ok(back.z1 < 0 && back.x0 < lane && lane < back.x1, JSON.stringify(back));
   let through = 0;
   for (const c of rack.cables.filter(c => c.routeEdited !== true)) {
     const p = R.routePath(rack, c, ctx);
-    const inDuct = p.points.filter(q => q.at === 'lane' && Math.abs(q.x - lane) < 1e-9);
-    through += inDuct.length ? 1 : 0;
-    // into the channel through its open front: no detour, nothing crossed
+    through += p.points.some(q => q.at === 'lane' && Math.abs(q.x - lane) < 1e-9) ? 1 : 0;
+    // into the channel through its open front: nothing of the duct crossed
     assert.deepEqual(before(rack, c, ctx).filter(x => x.solid.item === 'z1'), [], c.id);
     assert.deepEqual(p.crossings, [], c.id);
   }
@@ -132,14 +150,35 @@ test('a vertical duct is its walls and back, and an automatic route through its 
   assert.deepEqual(hit.map(h => h.solid.part), ['base/floor']);
 });
 
-// ── a closed enclosure with cable space ────────────────────────────────────
-// The synthetic FHD enclosure of test_rack_solids.py: 448 x 44 x 432.8, shell
-// walls 1 mm, one 40 x 24 grommet in the rear wall at device x 50 to 90 (rack
-// x -174 to -134) and y 10 to 34.
+test('a duct whose fingers are its own body (CMV-5U3W): a route through its channel goes straight through', () => {
+  // the 5U finger duct on the left rail beside the panel, U12 to U16
+  const r = F.add(F.ownerRack(), 'cmv-5u3w', 12, {side: 'left', label: 'duct'});
+  const s = S.solidsOf(r, F.ctxOf()).filter(x => x.item === 'i5');
+  // only its flange, behind the channel: its spine, bars and finger tips
+  // stand inside the duct's footprint and are left open
+  assert.deepEqual(s.map(x => x.part), ['flange/floor']);
+  const flange = s[0].box;
+  const x = flange.x0 + 7.3;            // the middle of the 14.6 channel
+  const ctx = F.ctxOf({guides: {i5: [{via: 'duct', kind: 'duct', face: 'front', run: 'y', x}]}});
+  const c = F.cable('c1', F.end('i4', 'p150'), F.end('i2', 'bay2'), 'om4',
+    {route: [{item: 'i5', via: 'duct'}], routeEdited: true});
+  const p = R.routePath({...r, cables: [c]}, c, ctx);
+  const at = p.points.find(q => q.at === 'pathway');
+  assert.ok(at.z > flange.z1, `the duct point stands in front of its flange: ${at.z} > ${flange.z1}`);
+  assert.deepEqual(p.crossings, []);
+  assert.deepEqual(p.detours.filter(d => d.between.some(w => w.item === 'i5')), []);
+});
+
+// ── a closed enclosure ─────────────────────────────────────────────────────
+// fhd-encl in the fixture catalogue is written by hand: 448 x 44 x 432.8,
+// shell walls 1 mm, a patch plate at the front, one 40 x 24 grommet in the
+// rear wall at device x 50 to 90 (rack x -174 to -134) and y 10 to 34. The
+// library derives no such entry yet (step 6 of the note); this holds the
+// kit's reading of walls and holes, which the sheet parts' pass-throughs use.
 function enclosure(grommet = null) {
   let r = F.add(F.add({...F.ownerRack(), items: []}, 'sw', 9, {label: 'sw-9'}), 'fhd-encl', 10, {label: 'encl'});
   r = F.add(r, 'rear', 10, {face: 'rear', label: 'rear-10'});
-  const ctx = F.ctxOf({ports: {i1: {r: -154}, i2: {f: 100, g: -154}, i3: {p: 100, q: -154}}});
+  const ctx = F.ctxOf();
   if (grommet) {
     const encl = structuredClone(F.CAT['fhd-encl']);
     encl.solids[4].holes[0].size = grommet;
@@ -156,8 +195,7 @@ test('a closed enclosure: through its floor or its rear wall is found, through i
   assert.deepEqual(s.filter(x => x.item === 'i2').map(x => x.part),
     ['shell/top', 'shell/bottom', 'shell/left', 'shell/right', 'shell/rear', 'plate']);
   const parts = (a, b, d = 3) => S.legCrossings(a, b, s, {diameter: d}).map(x => x.solid.part);
-  // from the rear of the switch below up into the enclosure, to its grommet:
-  // through the floor, then out by the grommet
+  // from below up into the enclosure, to its grommet: through the floor
   assert.deepEqual(parts({x: -154, y: U9, z: -300}, {x: -154, y: U10, z: -432.8}), ['shell/bottom']);
   // from behind, straight in through the rear wall to the front: the wall,
   // then the patch plate from inside
@@ -177,68 +215,121 @@ test('a grommet too small for the cable is no opening; one it fits is (the fit r
   }
 });
 
-// ── a leg the rules cannot clear ───────────────────────────────────────────
-// A zero-U PDU standing on a lane is its envelope (section 1.1), and the lane
-// beside that upright runs through it: a lane point inside a solid cannot be
-// gone round, so the route is left as drawn and reported.
-function pdu() {
+// ── a zero-U PDU over the gutter ───────────────────────────────────────────
+function pdu(at = 'left-front') {
   const {rack, ctx} = owner();
-  return {rack: {...rack, zeroU: [{id: 'z2', ref: 'pdu', cfg: 'base', at: 'left-front', offsetMm: 0}]}, ctx};
+  return {rack: {...rack, zeroU: [{id: 'z2', ref: 'pdu', cfg: 'base', at, offsetMm: 0}]}, ctx};
 }
 
-test('what the rules cannot clear is a finding, with its sentence, in inspect, describe and the schedule', async () => {
+test('a zero-U PDU standing in the gutter pushes the lane outboard of it, and routes beside it find nothing', () => {
   const {rack, ctx} = pdu();
-  const f = R.bodyFindings(rack, ctx, id => ({i1: 'sw-dn', i2: 'fhd-panel', i3: 'lacer', i4: 'sw-up', z2: 'pdu-1'}[id] ?? id));
-  // every automatic route runs the left-front lane, which runs through the
-  // PDU, on each of its three legs there; the hand-routed c6 does not. From
-  // the switch below, the leg past the web can no longer be taken round it
-  // either: the detour would end in the lane, inside the PDU.
-  assert.deepEqual([...new Set(f.map(x => x.cable))], ['c1', 'c2', 'c3', 'c4', 'c5']);
+  // the PDU (56 wide) stands against the upright's outer face; the lane runs
+  // in a gutter as wide as the usual one just outboard of it, at the units it spans
+  const out = -(OPENING / 2 + RAIL_W + 56 + R.LANE_GAP / 2);
+  assert.equal(R.laneXAt(rack, 'left-front', 11, ctx.chassisOf), out);
+  assert.equal(R.laneXAt(rack, 'left-front', 40, ctx.chassisOf), R.laneX('left'));   // above it (U1-U39)
+  assert.equal(R.laneXAt(rack, 'right-front', 11, ctx.chassisOf), R.laneX('right'));
+  // the PDU is its envelope, and the lane points are clear of it
+  const box = S.solidsOf(rack, ctx).find(x => x.item === 'z2').box;
+  assert.ok(out < box.x0, `${out} < ${box.x0}`);
+  let beside = 0;
+  for (const c of rack.cables) {
+    const p = R.routePath(rack, c, ctx);
+    beside += p.points.some(q => q.at === 'lane' && q.x === out) ? 1 : 0;
+    assert.deepEqual(p.crossings, [], c.id);
+  }
+  assert.equal(beside, 5);
+  assert.deepEqual(R.bodyFindings(rack, ctx), []);
+  // a rear PDU on a four-post pushes the rear lane only
+  const rear = pdu('left-rear');
+  assert.equal(R.laneXAt(rear.rack, 'left-rear', 11, rear.ctx.chassisOf), out);
+  assert.equal(R.laneXAt(rear.rack, 'left-front', 11, rear.ctx.chassisOf), R.laneX('left'));
+});
+
+// ── what the rules cannot clear ────────────────────────────────────────────
+// Contrived: a deep shelf standing out of the rails over the lacer's own
+// unit, so ring 1, where every automatic route here goes, is inside it. A leg
+// that ends inside a body cannot be taken round it; the route is left as
+// drawn and reported.
+function shelved() {
+  const {rack, ctx} = owner();
+  return {rack: F.add(rack, 'shelf', 12, {label: 'shelf'}), ctx};
+}
+const names = id => ({i1: 'sw-dn', i2: 'fhd-panel', i3: 'lacer', i4: 'sw-up', i5: 'sw-low', i6: 'shelf'}[id] ?? id);
+
+test('what the rules cannot clear is a finding, with its sentence, in inspect, describe and the schedule', async () => {
+  const {rack, ctx} = shelved();
+  const f = R.bodyFindings(rack, ctx, names);
   assert.ok(f.every(x => x.kind === 'crosses-body'));
   const by = {};
-  for (const x of f) by[`${x.item}:${x.part}`] = (by[`${x.item}:${x.part}`] ?? 0) + 1;
-  assert.deepEqual(by, {'z2:envelope': 15, 'i3:web-a/plate': 3});
+  for (const x of f) by[x.cable] = (by[x.cable] ?? 0) + 1;
+  // every leg that starts or ends at a ring inside the shelf, and, from the
+  // switch below, the leg past the web that can no longer be taken round it
+  assert.deepEqual(by, {c1: 12, c2: 11, c3: 8, c4: 7, c5: 10, c6: 4});
+  assert.equal(f.length, 52);
+  assert.equal(f.filter(x => x.item === 'i6').length, 52 - 3 - 1);
   const c1 = f.filter(x => x.cable === 'c1');
-  assert.deepEqual(c1.map(x => [x.item, x.between]), [
-    ['i3', [{item: 'i3', via: 'guide-1'}, {lane: 'left-front', ru: 11}]],
-    ['z2', [{item: 'i3', via: 'guide-1'}, {lane: 'left-front', ru: 11}]],
-    ['z2', [{lane: 'left-front', ru: 11}, {lane: 'left-front', ru: 12}]],
-    ['z2', [{lane: 'left-front', ru: 12}, {item: 'i3', via: 'guide-1'}]]]);
-  assert.equal(c1[1].text, 'c1 passes through pdu-1 between lacer ring 1 and left-front U11: '
-    + 'route it round pdu-1, or through a ring or a pass-through it fits.');
-  assert.equal(c1[0].text, 'c1 passes through lacer web a between lacer ring 1 and left-front U11: '
-    + 'route it round lacer, or through a ring or a pass-through it fits.');
+  assert.deepEqual(c1.slice(0, 4).map(x => [x.item, x.part, x.between]), [
+    ['i6', 'envelope', [{end: 'a'}, {item: 'i3', via: 'guide-1'}]],
+    ['i6', 'envelope', [{item: 'i3', via: 'guide-1'}, {item: 'i3', via: 'guide-1'}]],
+    ['i6', 'envelope', [{item: 'i3', via: 'guide-1'}, {lane: 'left-front', ru: 11}]],
+    ['i3', 'web-a/plate', [{item: 'i3', via: 'guide-1'}, {lane: 'left-front', ru: 11}]]]);
+  assert.equal(c1[2].text, 'c1 passes through shelf between lacer ring 1 and left-front U11: '
+    + 'route it round shelf, or through a ring or a pass-through it fits.');
+  assert.equal(c1[1].text, 'c1 passes through shelf at lacer ring 1: '
+    + 'route it round shelf, or through a ring or a pass-through it fits.');
+  assert.equal(c1[0].text.slice(0, 50), 'c1 passes through shelf between its port on sw-dn ');
   assert.equal(c1[1].at.length, 3);
   // the route output of inspect: `crosses`
   const route = {...ctx};
   const info = await Q.inspect(rack, 'c1', {chassisOf: ctx.chassisOf, route});
-  assert.deepEqual(info.route.crosses.map(x => [x.item, x.part]),
-    [['i3', 'web-a/plate'], ['z2', 'envelope'], ['z2', 'envelope'], ['z2', 'envelope']]);
-  assert.deepEqual(info.route.crosses[1].between, c1[1].between);
-  assert.deepEqual(info.route.crosses[1].at, c1[1].at);
+  assert.deepEqual(info.route.crosses.map(x => [x.item, x.part]), c1.map(x => [x.item, x.part]));
+  assert.deepEqual(info.route.crosses[2].between, c1[2].between);
+  assert.deepEqual(info.route.crosses[2].at, c1[2].at);
   // describe: one line of totals
   const text = Q.describe(rack, {chassisOf: ctx.chassisOf, route});
-  assert.match(text, /^Findings: 5 cables cross a body\.$/m);
+  assert.match(text, /^Findings: 6 cables cross a body\.$/m);
   // the cable schedule's notes
   const {rows} = cableScheduleRows(rack, new Map(), rack.items, null, {bodies: f});
-  assert.ok(rows.find(x => x.id === 'c1').notes.includes(c1[0].text));
-  assert.ok(!rows.find(x => x.id === 'c6').notes.includes('passes through'));
+  assert.ok(rows.find(x => x.id === 'c1').notes.includes(c1[2].text));
+  // and without the shelf, nothing
+  const {rack: clean} = owner();
+  assert.ok(!Q.describe(clean, {chassisOf: ctx.chassisOf, route}).includes('Findings:'));
 });
 
 test('a leg through the tray floor that cannot be gone round is told to go over its front edge onto its resting face', () => {
-  const {rack, ctx} = pdu();
-  // by hand from the switch far below, up the lane inside the PDU, then
-  // straight to ring 1: that leg starts inside the PDU, so no detour clears
-  // it, and it rises through the floor of the tray as well
-  const c7 = F.cable('c7', F.end('i5', 'p100'), F.end('i2', 'bay2'), 'om4',
-    {route: [{lane: 'left-front', ru: 5}, {item: 'i3', via: 'guide-1'}], routeEdited: true});
-  const only = {...rack, cables: [c7]};
-  const f = R.bodyFindings(only, ctx, id => ({i2: 'fhd-panel', i3: 'lacer', i5: 'sw-low', z2: 'pdu-1'}[id] ?? id));
-  assert.deepEqual(f.map(x => [x.item, x.part]), [['z2', 'envelope'], ['z2', 'envelope'], ['i3', 'tray/floor']]);
-  assert.equal(f[2].text, 'c7 passes through lacer tray between left-front U5 and lacer ring 1: '
+  const {rack, ctx} = shelved();
+  const f = R.bodyFindings(rack, ctx, names).filter(x => x.cable === 'c6');
+  // from U5 up to ring 2, inside the shelf: through the shelf and the floor
+  assert.deepEqual(f.map(x => [x.item, x.part]), [['i6', 'envelope'], ['i3', 'tray/floor'], ['i6', 'envelope'], ['i6', 'envelope']]);
+  assert.equal(f[1].text, 'c6 passes through lacer tray between its port on sw-low and lacer ring 2: '
     + 'route it over the front edge of the tray onto its resting face, or through a ring.');
-  assert.equal(S.partText('shell/rear'), 'rear wall');
-  assert.equal(S.partText('envelope'), '');
+});
+
+// ── a leg that meets two bodies ────────────────────────────────────────────
+test('a way round one body that meets a second is itself gone round, and the result is pulled taut', () => {
+  const box = (x0, x1, y0, y1, z0, z1, part) => ({item: part, part, box: {x0, x1, y0, y1, z0, z1}, away: 1});
+  const A = box(40, 60, -10, 10, -10, 10, 'A');
+  // every plane round A but one is blocked: z below by C, y both ways by D and
+  // E; the plane above, z 15, is crossed by B, a small post that can itself be
+  // gone round
+  const B = box(20, 30, -5, 5, 12, 18, 'B');
+  const C = box(-50, 150, -100, 100, -40, -12, 'C');
+  const D = box(-50, 150, 12, 40, -11, 11, 'D');
+  const E = box(-50, 150, -40, -12, -11, 11, 'E');
+  const a = {x: 0, y: 0, z: 0}, b = {x: 100, y: 0, z: 0};
+  const pts = S.detour(a, b, [A, B, C, D, E], {diameter: 0});
+  assert.ok(Array.isArray(pts), JSON.stringify(pts));
+  // over A by the one plane left, z 15, and over B on the way: B's top (18)
+  // and CLEAR at the start, A's top (10) and CLEAR at the end, pulled taut
+  assert.deepEqual(pts, [{x: 0, y: 0, z: 18 + S.CLEAR}, {x: 100, y: 0, z: 10 + S.CLEAR}]);
+  const all = [a, ...pts, b];
+  for (let k = 1; k < all.length; k++) assert.deepEqual(S.legCrossings(all[k - 1], all[k], [A, B, C, D, E]), [], `leg ${k}`);
+  // pulled taut: no point can be dropped
+  for (let k = 1; k < all.length - 1; k++)
+    assert.ok(S.legCrossings(all[k - 1], all[k + 1], [A, B, C, D, E]).length, `point ${k} could be dropped`);
+  // and an end inside a body cannot be cleared at all
+  assert.equal(S.detour({x: 50, y: 0, z: 0}, b, [A]), null);
 });
 
 test('a part with no width or no depth, or a sheet part from a catalogue without solids, is not solid', () => {

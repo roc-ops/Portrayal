@@ -1,5 +1,33 @@
 {
  "devices": {
+  "cmv-5u3w": {
+   "d": 84.0,
+   "guides": {
+    "front": [
+     "duct"
+    ]
+   },
+   "h": 222.0,
+   "manufacturer": "FS.com",
+   "model": "CMV-5U3W",
+   "mount": "rack-face",
+   "ru": 5,
+   "shell": "sheet",
+   "solids": [
+    {
+     "box": {
+      "d": 4.8,
+      "h": 222.0,
+      "w": 26.0,
+      "x": 0.0,
+      "y": 0.0,
+      "z": 79.2
+     },
+     "part": "flange/floor"
+    }
+   ],
+   "w": 26.0
+  },
   "cmv-sfd45u5w": {
    "d": 165.1,
    "guides": {
@@ -161,17 +189,6 @@
     },
     {
      "box": {
-      "d": 1.5,
-      "h": 0.6,
-      "w": 125.4,
-      "x": 6.7,
-      "y": 1053.7,
-      "z": 138.2
-     },
-     "part": "base--seam"
-    },
-    {
-     "box": {
       "d": 16.5,
       "h": 2108.0,
       "w": 16.0,
@@ -227,28 +244,6 @@
    "ru": 1,
    "shell": "sheet",
    "solids": [
-    {
-     "box": {
-      "d": 1.5,
-      "h": 44.0,
-      "w": 17.3,
-      "x": 0.0,
-      "y": 0.0,
-      "z": 108.5
-     },
-     "part": "ear-left-edge"
-    },
-    {
-     "box": {
-      "d": 1.5,
-      "h": 44.0,
-      "w": 17.3,
-      "x": 465.7,
-      "y": 0.0,
-      "z": 108.5
-     },
-     "part": "ear-right-edge"
-    },
     {
      "box": {
       "d": 33.4,
@@ -521,5 +516,5 @@
    "w": 448
   }
  },
- "note": "rack.json entries for spec/tests/js/rack-solids.mjs: fhd-cmp5dr and cmv-sfd45u5w copied from a build of the library, fhd-encl derived from the synthetic enclosure of test_rack_solids.py, which holds all three to what rack_index.py derives."
+ "note": "rack.json entries for spec/tests/js/rack-solids.mjs. fhd-cmp5dr, cmv-sfd45u5w and cmv-5u3w are copied from a build of the library, and test_rack_solids.py holds them to what rack_index.py derives. fhd-encl is written by hand: a closed enclosure in the shape the catalogue's `solids` take (shell walls, a patch plate, a rear grommet as a hole), which nothing in the library derives yet (step 6 of docs/cable-lay-design.md), so the kit's reading of walls and holes is tested on it."
 }

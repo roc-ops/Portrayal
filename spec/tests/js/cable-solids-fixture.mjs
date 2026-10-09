@@ -3,9 +3,9 @@
 import {readFileSync} from 'node:fs';
 import * as M from '../../../kit/rack/model.js';
 
-// rack.json entries: two copied from a build of the library, one from a
-// synthetic enclosure; test_rack_solids.py holds all three to what
-// rack_index.py derives today.
+// rack.json entries: three copied from a build of the library, which
+// test_rack_solids.py holds to what rack_index.py derives today, and one
+// enclosure written by hand in the same shape (the file's `note` says why).
 export const CAT = JSON.parse(readFileSync(new URL('./cable-solids-catalogue.json', import.meta.url))).devices;
 
 // The owner's fixture of #949: an FHD panel with an FHD-CMP5DR lacer on it at
@@ -17,9 +17,13 @@ export const SIZES = {
   panel: {ru: 1, w: 448, h: 44, d: 227},
   'fhd-cmp5dr': CAT['fhd-cmp5dr'],
   'cmv-sfd45u5w': CAT['cmv-sfd45u5w'],
+  'cmv-5u3w': CAT['cmv-5u3w'],
   'fhd-encl': CAT['fhd-encl'],
   pdu: {ru: 30, w: 56, h: 1700, d: 60, mount: 'rack-side'},
   rear: {ru: 1, w: 440, h: 44, d: 100},
+  // a deep shelf standing out of the rails over a whole unit, for the case the
+  // rules cannot clear: a ring inside it
+  shelf: {ru: 1, w: 482, h: 44.45, d: 400, mount: 'rack-face'},
 };
 export const chassisOf = ref => SIZES[ref] || null;
 const add = (rack, ref, ru, extra = {}) => M.withItem(rack, {ref, cfg: 'base', ru, label: ref, ...extra}).rack;

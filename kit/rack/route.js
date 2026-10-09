@@ -13,8 +13,9 @@ import {uLabel, zeroUOf, bundlesOf} from './model.js';
 import {followTrunk} from './bundle-route.js';
 import {RU, OPENING, RAIL_W} from './rails.js';
 import {throughRings} from './route-path.js';
-import {zeroUOnLane, zeroUX, carriesLane, runsThrough} from './zero-u.js';
-import {solidsOf, detour, legCrossings, partText, isFloor} from './solids.js';
+import {zeroUOnLane, zeroUX, carriesLane, runsThrough, STANDOFF} from './zero-u.js';
+import {isZeroUPart, zeroUSpan} from './fit.js';
+import {solidsOf, detour, legCrossings} from './solids.js';
 
 export const LANE_GAP = 40;          // mm: a lane runs in the middle of a 40 mm gutter outside each rail
 const SHORT = 2;                     // U: a jumper this close, with no manager, just hangs
@@ -201,12 +202,34 @@ export function routeText(route, nameOf = id => id, frame = null) {
 const railDepthOf = f => (f.kind === 'two-post' ? 0 : f.railDepth);
 export const laneX = side => (side === 'left' ? -1 : 1) * (OPENING / 2 + RAIL_W + LANE_GAP / 2);
 // WHERE A LANE IS ACROSS THE RACK at a U (#926): the centre line of a zero-U
-// part that carries the lane there (a duct standing at that upright), else the
-// middle of the gutter. The route stays {lane, ru}; only where the lane runs
-// changes, so a length is measured through the duct the drawing shows.
+// part that carries the lane there (a duct standing at that upright); else,
+// beside a zero-U part that stands in the gutter and carries no lane (a
+// zero-U PDU, #949), the middle of a gutter as wide as the usual one just
+// outboard of it; else the middle of the gutter. The route stays {lane, ru};
+// only where the lane runs changes, so a length is measured where the cable
+// runs.
+// WHY OUTBOARD of a PDU, and not inboard or in front: inboard of it is the
+// rail and the ears of every device fixed there, so there is no room; in
+// front of it (along z) would take the lane off the rail plane every port
+// leg and every front-to-back crossing is measured in, and out past the back
+// of a rear PDU, outside the rack. Outboard keeps the lane in its own plane,
+// beside the PDU, where a cable dresses down the side channel of a real rack.
+// A zero-U part standing at that upright at that U that carries no lane: it
+// stands in the gutter (against the upright's outer face, STANDOFF 0).
+const besideLane = (rack, lane, ru, chassisOf) => zeroUOf(rack).find(z => {
+  const c = chassisOf(z.ref);
+  if (z.at !== lane || !isZeroUPart(c) || carriesLane(c) || !(Number(c.w) > 0)) return false;
+  const [lo, hi] = zeroUSpan(z, chassisOf);
+  return ru >= lo && ru <= hi;
+}) ?? null;
 export function laneXAt(rack, lane, ru, chassisOf) {
-  const z = typeof chassisOf === 'function' ? zeroUOnLane(rack, lane, ru, chassisOf) : null;
-  return z ? zeroUX(z, chassisOf) : laneX(String(lane).split('-')[0]);
+  if (typeof chassisOf !== 'function') return laneX(String(lane).split('-')[0]);
+  const z = zeroUOnLane(rack, lane, ru, chassisOf);
+  if (z) return zeroUX(z, chassisOf);
+  const p = besideLane(rack, lane, ru, chassisOf);
+  if (!p) return laneX(String(lane).split('-')[0]);
+  const s = Math.sign(zeroUX(p, chassisOf)) || -1;
+  return s * (OPENING / 2 + RAIL_W + STANDOFF + (Number(chassisOf(p.ref)?.w) || 0) + LANE_GAP / 2);
 }
 const planeZ = (f, pane) => (pane === 'rear' ? -railDepthOf(f) : 0);
 
@@ -324,12 +347,17 @@ export function routePath(rack, cable, ctx) {
   // Round the solid bodies (section 1.3), then what still crosses one (1.4).
   const solids = solidsOf(rack, ctx);
   const diameter = cableDiameter(cable, ctx);
+  // the side lanes at a height, where laneXAt puts them (rule 3 of 1.3)
+  const lanesAt = y => {
+    const ru = Math.max(1, Math.min(rack.frame.heightRU, Math.floor(y / RU) + 1));
+    return [...new Set(lanesOf(rack.frame).map(l => laneXAt(rack, l, ru, ctx?.chassisOf)))];
+  };
   const ref = k => (stops[k].w ? (stops[k].w.lane ? {lane: stops[k].w.lane, ru: stops[k].w.ru} : {item: stops[k].w.item, via: stops[k].w.via})
     : {end: stops[k].at});
   const final = [out[0]], legs = [], detours = [];
   for (let k = 1; k < out.length; k++) {
     const between = [ref(from[k - 1]), ref(from[k])];
-    const extra = solids.length ? detour(out[k - 1], out[k], solids, {diameter, lanes: [laneX('left'), laneX('right')]}) : [];
+    const extra = solids.length ? detour(out[k - 1], out[k], solids, {diameter, lanes: lanesAt}) : [];
     if (extra?.length) {
       detours.push({between, points: extra.map(p => ({x: p.x, y: p.y, z: p.z}))});
       for (const p of extra) { legs.push(between); final.push({x: p.x, y: p.y, z: p.z, at: 'detour'}); }
@@ -351,9 +379,9 @@ export function routePath(rack, cable, ctx) {
 }
 
 // A cable's outside diameter in mm, for what it must fit and keep clear by:
-// the page's `ctx.diameterOf(cable)` (the cable types table, #919), else its
-// media's typical one.
-export const cableDiameter = (cable, ctx) => {
+// the page's `ctx.diameterOf(cable)` (the cable types table, #919: its
+// diameterLookup), else its media's typical one.
+const cableDiameter = (cable, ctx) => {
   const d = typeof ctx?.diameterOf === 'function' ? ctx.diameterOf(cable) : null;
   return typeof d === 'number' && d > 0 ? d : DIAMETERS[cable?.media] ?? UNSET_D;
 };
@@ -408,6 +436,15 @@ export function ringFindings(rack, ctx, nameOf = id => id) {
     text: `${c.id} would enter and leave ${nameOf(f.item)} ${/^guide-(\d+)$/.test(f.via) ? `ring ${f.via.slice(6)}` : f.via} by the same face: route it through the ring, or past it.`})));
 }
 
+// A word for a part of a body, as a finding names it.
+function partText(part) {
+  const p = String(part || '');
+  if (p === 'envelope' || p === 'body' || !p) return '';
+  return p.split('/')[0].replace(/--.*$/, '').replace(/-/g, ' ');
+}
+// A plate a cable meets from above or below: thinner in y than across.
+const isFloor = box => (box.y1 - box.y0) <= Math.min(box.x1 - box.x0, box.z1 - box.z0);
+
 // EVERY BODY A CABLE'S PATH STILL CROSSES (#949, docs/cable-lay-design.md
 // section 1.4), rack-wide, after the detours: routePath's `crossings`, each
 // with a sentence. It warns and never refuses, as fill, size and bend do: a
@@ -430,7 +467,8 @@ export function bodyFindings(rack, ctx, nameOf = id => id) {
       ? `route it over the front edge of the ${partText(f.part) || 'plate'} onto its resting face, or through a ring`
       : holes.length ? `route it round ${nameOf(f.item)}, or through ${holes.join(' or ')} if the cable fits`
       : `route it round ${nameOf(f.item)}, or through a ring or a pass-through it fits`;
-    return {...f, text: `${c.id} passes through ${body} between ${a} and ${b}: ${advice}.`};
+    const where = a === b ? `at ${a}` : `between ${a} and ${b}`;
+    return {...f, text: `${c.id} passes through ${body} ${where}: ${advice}.`};
   }));
 }
 

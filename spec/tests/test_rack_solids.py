@@ -1,9 +1,8 @@
 """The `solids` rack.json carries (docs/cable-lay-design.md section 1.1, #949),
 derived by rack_solids.py from the compiled faces and never stated: a sheet
-part is its plates, a zero-U duct its walls and back, a device with cable space
-inside its envelope its shell, plate and what is inside, with its declared
-pass-throughs as the only openings. A plain box device carries none: the kit
-takes its envelope."""
+part is its plates, a zero-U duct its walls and back, each with its declared
+pass-throughs as holes. Any other device carries none: the kit takes its
+envelope."""
 import json
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -18,16 +17,6 @@ FIXTURE = Path(__file__).resolve().parent / "js" / "cable-solids-catalogue.json"
 CAT = json.loads(FIXTURE.read_text())["devices"]
 
 SVG = 'xmlns="http://www.w3.org/2000/svg"'
-# A closed enclosure with cable space: a ring on its plan (inside the body),
-# one grommet in its rear wall, 40 x 24 at rear-view x 358 (device x 50 to 90).
-ENCL = {
-    "chassis": {"w": 448, "h": 44, "d": 432.8, "ru": 1, "mount": "rack"},
-    "faces": {
-        "front": f'<svg {SVG}><rect id="chassis-faceplate" data-class="chassis" x="0" y="0" width="448" height="44"/></svg>',
-        "rear": f'<svg {SVG}><rect id="pass--grommet-1" data-class="pass" data-pass="grommet-1" x="358" y="10" width="40" height="24"/></svg>',
-        "top": f'<svg {SVG}><g id="guide-1" data-guide="ring" data-ref="fs/d-ring-snap-in@1:1.1.0"/></svg>',
-    },
-}
 
 
 def _dist(tmp_path, name, chassis, faces, device=None):
@@ -40,26 +29,13 @@ def _dist(tmp_path, name, chassis, faces, device=None):
     return tmp_path
 
 
-def _roots(faces):
-    return {v: ET.fromstring(t) for v, t in faces.items()}
-
-
-def test_the_enclosure_fixture_is_what_rack_index_derives(tmp_path):
-    e = rack_index.build(_dist(tmp_path, "fhd-encl", ENCL["chassis"], ENCL["faces"]))["devices"]["fhd-encl"]
-    assert e["solids"] == CAT["fhd-encl"]["solids"]
-    parts = [s["part"] for s in e["solids"]]
-    # five shell walls and the patch plate, and nothing for the ring: it is an opening
-    assert parts == ["shell/top", "shell/bottom", "shell/left", "shell/right", "shell/rear", "plate"]
-    rear = e["solids"][4]
-    assert rear["holes"] == [{"via": "grommet-1", "box": {"x": 50.0, "y": 10.0, "z": 431.8, "w": 40.0, "h": 24.0, "d": 1.0},
-                              "size": [40.0, 24.0]}]
-    # the grommet cuts the rear wall only, never the plate at the front
-    assert all("holes" not in s for s in e["solids"] if s["part"] != "shell/rear")
-
-
-def test_a_box_device_whose_pathways_are_only_on_its_faces_is_its_envelope(tmp_path):
-    faces = dict(ENCL["faces"], top=f'<svg {SVG}/>')
-    e = rack_index.build(_dist(tmp_path, "encl", ENCL["chassis"], faces))["devices"]["encl"]
+def test_a_box_device_is_its_envelope_whatever_its_plan_marks(tmp_path):
+    """A device with cable space inside its envelope waits for step 6 of the
+    note: until then a box device carries no solids, even with a ring on its
+    plan and a grommet in its back."""
+    faces = {"rear": f'<svg {SVG}><rect id="pass--grommet-1" data-class="pass" x="358" y="10" width="40" height="24"/></svg>',
+             "top": f'<svg {SVG}><g id="guide-1" data-guide="ring" data-ref="fs/d-ring-snap-in@1:1.1.0"/></svg>'}
+    e = rack_index.build(_dist(tmp_path, "encl", {"w": 448, "h": 44, "d": 432.8}, faces))["devices"]["encl"]
     assert "solids" not in e and e["passes"] == {"rear": ["grommet-1"]}
 
 
@@ -68,13 +44,13 @@ def test_a_plain_box_device_carries_no_solids(tmp_path):
     assert "solids" not in e
 
 
-def test_seated_modules_are_solid_behind_the_plate():
-    faces = dict(ENCL["faces"], front=f'''<svg {SVG}>
-      <g id="bay-1" data-class="bay"><g id="bay-1--module" data-body-depth="117.86" transform="translate(60.5,22) translate(-54.5,-17.5)">
-        <rect x="0" y="0" width="109" height="35"/></g></g></svg>''')
-    out = rack_solids.solids(_roots(faces), {"w": 448, "h": 44, "d": 432.8})
-    mod = [s for s in out if s["part"] == "bay-1--module"]
-    assert mod == [{"part": "bay-1--module", "box": {"x": 6.0, "y": 4.5, "z": 1.0, "w": 109.0, "h": 35.0, "d": 117.86}}]
+def test_a_sheet_part_through_rack_index(tmp_path):
+    top = f'''<svg {SVG}><g id="tray" data-ref="t@1" data-depth="41">
+      <rect id="tray--floor" data-class="bezel" x="0" y="0" width="100" height="50"/></g></svg>'''
+    rear = f'<svg {SVG}><rect id="pass--window-1" data-class="pass" x="10" y="5" width="30" height="20"/></svg>'
+    e = rack_index.build(_dist(tmp_path, "mgr", {"w": 100, "h": 44, "d": 50, "shell": "sheet", "thickness": 1.5},
+                               {"top": top, "rear": rear}))["devices"]["mgr"]
+    assert e["solids"] == [{"part": "tray--floor", "box": {"x": 0.0, "y": 1.5, "z": 0.0, "w": 100.0, "h": 1.5, "d": 50.0}}]
 
 
 def test_the_cmp5dr_floor_outline_is_cut_into_its_strip_and_two_arms():
@@ -91,10 +67,12 @@ def test_an_outline_that_is_not_rectilinear_is_its_bounding_box():
     assert rack_solids.rect_pieces([(0, 0), (10, 0), (5, 8)]) is None
 
 
-def test_a_ring_is_never_a_plate_and_a_tie_slot_never_an_opening():
+def test_a_ring_is_never_a_plate_a_tie_slot_never_an_opening_and_decor_never_a_plate():
     top = f'''<svg {SVG}>
+      <rect id="ear-left-edge" data-kind="ear" x="0" y="0" width="17.3" height="1.5"/>
       <g id="tray" data-ref="t@1" data-depth="41" transform="translate(17.3,0)">
-        <path id="tray--floor" d="M0,0 H448.4 V110 H0 Z M54.85,95 h22.5 v3 h-22.5 Z"/></g>
+        <path id="tray--floor" data-class="bezel" d="M0,0 H448.4 V110 H0 Z M54.85,95 h22.5 v3 h-22.5 Z"/>
+        <rect id="tray--seam" x="0" y="50" width="448.4" height="0.6"/></g>
       <g id="guide-1" data-ref="r@1" data-guide="ring" data-z-lift="-41" transform="translate(19.55,66.4)">
         <rect id="guide-1--band" x="0" y="0" width="6.8" height="40" data-z-out="0"/></g></svg>'''
     out = rack_solids.solids({"top": ET.fromstring(top)}, {"w": 483, "h": 44, "d": 110, "shell": "sheet", "thickness": 1.5})
@@ -114,7 +92,8 @@ def test_a_proud_node_steps_along_its_profile():
 def test_a_ducts_fingers_and_clips_are_not_plates():
     front = f'''<svg {SVG}>
       <rect id="guide--duct" data-class="guide" data-guide="duct" x="22.7" y="0" width="93.4" height="2108"/>
-      <g id="base" data-ref="b@1" data-depth="138.2"><rect id="base--floor" x="6.7" y="0" width="125.4" height="2108"/></g>
+      <g id="base" data-ref="b@1" data-depth="138.2"><rect id="base--floor" data-class="bezel" x="6.7" y="0" width="125.4" height="2108"/>
+        <rect id="base--seam" x="6.7" y="1053.7" width="125.4" height="0.6"/></g>
       <g id="wall-left" data-ref="w@1" data-z-lift="-138.2"><rect id="wall-left--root" x="6.7" y="0" width="16" height="2108" data-z-out="-121.7"/></g>
       <g id="finger-1" data-ref="f@1" data-behaviour="mounts" data-z-lift="-138.2"><rect id="finger-1--arm" x="6.7" y="0" width="16" height="20" data-z-out="-21"/></g>
     </svg>'''
@@ -123,17 +102,39 @@ def test_a_ducts_fingers_and_clips_are_not_plates():
     assert [s["part"] for s in out] == ["base--floor", "wall-left--root"]
 
 
-@pytest.mark.parametrize("name", ["fhd-cmp5dr", "cmv-sfd45u5w"])
-def test_the_library_fixture_is_what_rack_index_derives_from_the_build(name):
-    """The kit test's FHD-CMP5DR and vertical duct are copies of rack.json; the
-    build must still derive exactly them."""
+def test_anything_inside_a_duct_guides_footprint_is_open_whatever_its_behaviour():
+    """The CMV-5U3W: its fingers are part of its own body, not mounted on it,
+    and stand inside the duct's footprint; they bound the channel, so a cable
+    through the duct does not go round them. The flange behind, wider than the
+    duct, stays a plate."""
+    front = f'''<svg {SVG}>
+      <rect id="guide--duct" data-class="guide" data-guide="duct" x="0" y="0" width="14.6" height="222"/>
+      <g id="flange" data-ref="b@1" data-depth="79.2"><rect id="flange--floor" data-class="bezel" x="0" y="0" width="26" height="222"/></g>
+      <g id="fingers" data-ref="f@1" data-z-lift="-79.2"><rect id="fingers--spine" x="0" y="0" width="3.6" height="222" data-z-out="-71.1"/>
+        <rect id="fingers--bar-1" x="3.6" y="0" width="11" height="17.1" data-z-out="-3.7"/></g>
+    </svg>'''
+    out = rack_solids.solids({"front": ET.fromstring(front)}, {"w": 26, "h": 222, "d": 84, "mount": "rack-face", "shell": "sheet"})
+    assert [s["part"] for s in out] == ["flange--floor"]
+
+
+@pytest.mark.parametrize("name, count", [("fhd-cmp5dr", 15), ("cmv-sfd45u5w", 3), ("cmv-5u3w", 1)])
+def test_the_library_fixture_is_what_rack_index_derives_from_the_build(name, count):
+    """The kit test's FHD-CMP5DR and ducts are copies of rack.json; the build
+    must still derive exactly them, and they are not vacuous."""
     rack = DIST / "rack.json"
     assert rack.is_file(), "no library/dist/rack.json: run ./build.sh first (the suite reads the build)"
     built = json.loads(rack.read_text())["devices"].get(name)
     assert built is not None, f"{name} is not in library/dist/rack.json: run ./build.sh"
     assert built["solids"] == CAT[name]["solids"]
-    # and they are not vacuous: the counts measured when the fixture was taken
-    assert len(built["solids"]) == {"fhd-cmp5dr": 17, "cmv-sfd45u5w": 4}[name]
+    assert len(built["solids"]) == count
+
+
+def test_no_decor_is_a_plate_anywhere_in_the_build():
+    rack = DIST / "rack.json"
+    assert rack.is_file(), "no library/dist/rack.json: run ./build.sh first (the suite reads the build)"
+    parts = [(n, s["part"]) for n, e in json.loads(rack.read_text())["devices"].items() for s in e.get("solids", [])]
+    assert len(parts) > 50
+    assert not [p for p in parts if any(w in p[1] for w in ("seam", "window", "-edge", "keyhole"))]
 
 
 def test_the_cmp5dr_floor_sits_3_mm_up_its_envelope_and_the_sheet_thick():
