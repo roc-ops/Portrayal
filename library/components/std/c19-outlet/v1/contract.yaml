@@ -51,10 +51,12 @@ provenance:
     to the face, and the well is at least that deep: 20, the figure
     eaton/c39-outlet@1 takes for the same reason. No held drawing sections a
     C19 outlet; SCHURTER 4710-5 draws the face and the panel cutout.
-  well: >-
-    THE WELL FOLLOWS ITS OUTLINE IN 3D: `relief.cavity` names the `well` path,
-    the R5 rounded rectangle, so relief.js walls the cavity along it
-    (outlineWalls) rather than along its bounding box.
+  relief: >-
+    registry - THE WELL IS THE OUTLINE, NOT ITS BOX, as on std/c13-outlet@1.
+    `relief.cavity` names the `recess` path, the R5 outline with the C19 nose
+    cut out of it (evenodd), so the 3D walls follow the rounded corners and
+    the nose, which stands 20 from the floor to the face (kit/relief.js
+    outlineWalls). Its contact slots are painted on its top, not sunk.
   orientation: >-
     drawing - SCHURTER 4710-5 draws the earth slot up and the line and neutral
     below. A placement turns the part for an outlet mounted the other way up.
@@ -63,19 +65,10 @@ provenance:
     the plug's relief starts at the face and its shroud is modelled inside the
     20 deep well.
 elements:
-  opening: {at: [0, 0], size: [35.6, 27.7], class: cutout}
+  recess: {at: [0, 0], size: [35.6, 27.7], class: inlet}
 relief:
   wall: '#1a1b1d'
-  cavity: well
-  features:
-    - node: nose
-      top: 20
-      color: '#26282a'
-      confidence: registry
-      source: >-
-        the `c19-plug` entry of spec/schemas/standards.yaml, nose 20 (MIN) (Volex
-        VAC19): the C19 island rises from the floor of the 20 deep well back to
-        the face.
+  cavity: recess
 connection-points:
   mate: {at: [17.8, 13.85], direction: front}
 skins: [default]

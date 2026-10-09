@@ -105,8 +105,8 @@ provenance:
       drawing - the rear view of 9001-22301: the two mounting buttons on the width's
       centre line (the 1.02 [26.00] dimension), 72.00 from the cord end and 1555.8
       apart, and a 5.4 threaded hole 55.80 beyond each, at 127.8 and 1683.6, where
-      the buttons can be moved. COVERAGE.md read the second hole as inboard of its
-      button; it is outboard, towards the far end, at the same 55.8. The view is
+      the buttons can be moved. Both holes lie towards the far end of their
+      buttons, so the second is outboard, not inboard. The view is
       symmetric about its centre line, so the rear is the view unmirrored.
   sides:
     confidence: drawing
@@ -158,7 +158,11 @@ provenance:
       L1-L2, B on L2-L3, C on L3-L1, from the one-line diagram) and a DCIM outlet's
       feed_leg names one leg. NO `through` IS WRITTEN: it names a bay, and the
       breakers are fixed parts; each breaker's description names its two sections,
-      and the six section regions name their breaker.
+      and the six section regions name their breaker. THE OUTLETS ARE NAMED AS THE
+      UNIT PRINTS THEM, A1 to C42 (the maintainer's decision, 2026-10-08): an id
+      cannot spell A1, so the `interfaces:` rules map each `outlet-<letter><n>` to
+      its printed label, and the export names the power outlet by it. The labels
+      are read off the EVMI2130X outlet close-ups and the drawing.
   lifecycle:
     confidence: datasheet
     note: >-
@@ -253,53 +257,53 @@ views:
       bays:
         - {id: network-module, at: [1.45, 623.25], size: {w: 49.15, h: 187.9}, accepts: [eaton/g4-enmc@1], default: eaton/g4-enmc@1, group: network, rel-pos: 1}
       placements:
-        - {id: outlet-a1, ref: eaton/c13-outlet@1, at: [9.1, 1509.66], group: outlets, rel-pos: 1, fed-by: input}
+        - {id: outlet-a1, ref: std/c13-outlet@1, at: [9.1, 1509.66], group: outlets, rel-pos: 1, fed-by: input}
         - {id: outlet-a2, ref: eaton/c39-outlet@1, at: [6.6, 1481.76], group: outlets, rel-pos: 2, fed-by: input}
-        - {id: outlet-a3, ref: eaton/c13-outlet@1, at: [9.1, 1458.86], group: outlets, rel-pos: 3, fed-by: input}
+        - {id: outlet-a3, ref: std/c13-outlet@1, at: [9.1, 1458.86], group: outlets, rel-pos: 3, fed-by: input}
         - {id: outlet-a4, ref: eaton/c39-outlet@1, at: [6.6, 1430.96], group: outlets, rel-pos: 4, fed-by: input}
-        - {id: outlet-a5, ref: eaton/c13-outlet@1, at: [9.1, 1408.06], group: outlets, rel-pos: 5, fed-by: input}
+        - {id: outlet-a5, ref: std/c13-outlet@1, at: [9.1, 1408.06], group: outlets, rel-pos: 5, fed-by: input}
         - {id: outlet-a6, ref: eaton/c39-outlet@1, at: [6.6, 1380.16], group: outlets, rel-pos: 6, fed-by: input}
-        - {id: outlet-a7, ref: eaton/c13-outlet@1, at: [9.1, 1357.26], group: outlets, rel-pos: 7, fed-by: input}
+        - {id: outlet-a7, ref: std/c13-outlet@1, at: [9.1, 1357.26], group: outlets, rel-pos: 7, fed-by: input}
         - {id: labels-1, ref: eaton/g4-outlet-labels@1, at: [45.5, 1354.11], group: section-labels, rel-pos: 1, attrs: {section-color: '#f4d440', label-1: A1, label-2: A2, label-3: A3, label-4: A4, label-5: A5, label-6: A6, label-7: A7}}
-        - {id: outlet-b8, ref: eaton/c13-outlet@1, at: [9.1, 1247.46], group: outlets, rel-pos: 8, fed-by: input}
+        - {id: outlet-b8, ref: std/c13-outlet@1, at: [9.1, 1247.46], group: outlets, rel-pos: 8, fed-by: input}
         - {id: outlet-b9, ref: eaton/c39-outlet@1, at: [6.6, 1219.56], group: outlets, rel-pos: 9, fed-by: input}
-        - {id: outlet-b10, ref: eaton/c13-outlet@1, at: [9.1, 1196.66], group: outlets, rel-pos: 10, fed-by: input}
+        - {id: outlet-b10, ref: std/c13-outlet@1, at: [9.1, 1196.66], group: outlets, rel-pos: 10, fed-by: input}
         - {id: outlet-b11, ref: eaton/c39-outlet@1, at: [6.6, 1168.76], group: outlets, rel-pos: 11, fed-by: input}
-        - {id: outlet-b12, ref: eaton/c13-outlet@1, at: [9.1, 1145.86], group: outlets, rel-pos: 12, fed-by: input}
+        - {id: outlet-b12, ref: std/c13-outlet@1, at: [9.1, 1145.86], group: outlets, rel-pos: 12, fed-by: input}
         - {id: outlet-b13, ref: eaton/c39-outlet@1, at: [6.6, 1117.96], group: outlets, rel-pos: 13, fed-by: input}
-        - {id: outlet-b14, ref: eaton/c13-outlet@1, at: [9.1, 1095.06], group: outlets, rel-pos: 14, fed-by: input}
+        - {id: outlet-b14, ref: std/c13-outlet@1, at: [9.1, 1095.06], group: outlets, rel-pos: 14, fed-by: input}
         - {id: labels-2, ref: eaton/g4-outlet-labels@1, at: [45.5, 1091.91], group: section-labels, rel-pos: 2, attrs: {section-color: '#48c2f4', label-1: B8, label-2: B9, label-3: B10, label-4: B11, label-5: B12, label-6: B13, label-7: B14}}
-        - {id: outlet-c15, ref: eaton/c13-outlet@1, at: [9.1, 985.16], group: outlets, rel-pos: 15, fed-by: input}
+        - {id: outlet-c15, ref: std/c13-outlet@1, at: [9.1, 985.16], group: outlets, rel-pos: 15, fed-by: input}
         - {id: outlet-c16, ref: eaton/c39-outlet@1, at: [6.6, 957.26], group: outlets, rel-pos: 16, fed-by: input}
-        - {id: outlet-c17, ref: eaton/c13-outlet@1, at: [9.1, 934.36], group: outlets, rel-pos: 17, fed-by: input}
+        - {id: outlet-c17, ref: std/c13-outlet@1, at: [9.1, 934.36], group: outlets, rel-pos: 17, fed-by: input}
         - {id: outlet-c18, ref: eaton/c39-outlet@1, at: [6.6, 906.46], group: outlets, rel-pos: 18, fed-by: input}
-        - {id: outlet-c19, ref: eaton/c13-outlet@1, at: [9.1, 883.56], group: outlets, rel-pos: 19, fed-by: input}
+        - {id: outlet-c19, ref: std/c13-outlet@1, at: [9.1, 883.56], group: outlets, rel-pos: 19, fed-by: input}
         - {id: outlet-c20, ref: eaton/c39-outlet@1, at: [6.6, 855.66], group: outlets, rel-pos: 20, fed-by: input}
-        - {id: outlet-c21, ref: eaton/c13-outlet@1, at: [9.1, 832.76], group: outlets, rel-pos: 21, fed-by: input}
+        - {id: outlet-c21, ref: std/c13-outlet@1, at: [9.1, 832.76], group: outlets, rel-pos: 21, fed-by: input}
         - {id: labels-3, ref: eaton/g4-outlet-labels@1, at: [45.5, 829.61], group: section-labels, rel-pos: 3, attrs: {section-color: '#f49448', label-1: C15, label-2: C16, label-3: C17, label-4: C18, label-5: C19, label-6: C20, label-7: C21}}
-        - {id: outlet-a22, ref: eaton/c13-outlet@1, at: [9.1, 574.06], group: outlets, rel-pos: 22, fed-by: input}
+        - {id: outlet-a22, ref: std/c13-outlet@1, at: [9.1, 574.06], group: outlets, rel-pos: 22, fed-by: input}
         - {id: outlet-a23, ref: eaton/c39-outlet@1, at: [6.6, 546.16], group: outlets, rel-pos: 23, fed-by: input}
-        - {id: outlet-a24, ref: eaton/c13-outlet@1, at: [9.1, 523.26], group: outlets, rel-pos: 24, fed-by: input}
+        - {id: outlet-a24, ref: std/c13-outlet@1, at: [9.1, 523.26], group: outlets, rel-pos: 24, fed-by: input}
         - {id: outlet-a25, ref: eaton/c39-outlet@1, at: [6.6, 495.36], group: outlets, rel-pos: 25, fed-by: input}
-        - {id: outlet-a26, ref: eaton/c13-outlet@1, at: [9.1, 472.46], group: outlets, rel-pos: 26, fed-by: input}
+        - {id: outlet-a26, ref: std/c13-outlet@1, at: [9.1, 472.46], group: outlets, rel-pos: 26, fed-by: input}
         - {id: outlet-a27, ref: eaton/c39-outlet@1, at: [6.6, 444.56], group: outlets, rel-pos: 27, fed-by: input}
-        - {id: outlet-a28, ref: eaton/c13-outlet@1, at: [9.1, 421.66], group: outlets, rel-pos: 28, fed-by: input}
+        - {id: outlet-a28, ref: std/c13-outlet@1, at: [9.1, 421.66], group: outlets, rel-pos: 28, fed-by: input}
         - {id: labels-4, ref: eaton/g4-outlet-labels@1, at: [45.5, 418.51], group: section-labels, rel-pos: 4, attrs: {section-color: '#f4d440', label-1: A22, label-2: A23, label-3: A24, label-4: A25, label-5: A26, label-6: A27, label-7: A28}}
-        - {id: outlet-b29, ref: eaton/c13-outlet@1, at: [9.1, 371.06], group: outlets, rel-pos: 29, fed-by: input}
+        - {id: outlet-b29, ref: std/c13-outlet@1, at: [9.1, 371.06], group: outlets, rel-pos: 29, fed-by: input}
         - {id: outlet-b30, ref: eaton/c39-outlet@1, at: [6.6, 343.16], group: outlets, rel-pos: 30, fed-by: input}
-        - {id: outlet-b31, ref: eaton/c13-outlet@1, at: [9.1, 320.26], group: outlets, rel-pos: 31, fed-by: input}
+        - {id: outlet-b31, ref: std/c13-outlet@1, at: [9.1, 320.26], group: outlets, rel-pos: 31, fed-by: input}
         - {id: outlet-b32, ref: eaton/c39-outlet@1, at: [6.6, 292.36], group: outlets, rel-pos: 32, fed-by: input}
-        - {id: outlet-b33, ref: eaton/c13-outlet@1, at: [9.1, 269.46], group: outlets, rel-pos: 33, fed-by: input}
+        - {id: outlet-b33, ref: std/c13-outlet@1, at: [9.1, 269.46], group: outlets, rel-pos: 33, fed-by: input}
         - {id: outlet-b34, ref: eaton/c39-outlet@1, at: [6.6, 241.56], group: outlets, rel-pos: 34, fed-by: input}
-        - {id: outlet-b35, ref: eaton/c13-outlet@1, at: [9.1, 218.66], group: outlets, rel-pos: 35, fed-by: input}
+        - {id: outlet-b35, ref: std/c13-outlet@1, at: [9.1, 218.66], group: outlets, rel-pos: 35, fed-by: input}
         - {id: labels-5, ref: eaton/g4-outlet-labels@1, at: [45.5, 215.51], group: section-labels, rel-pos: 5, attrs: {section-color: '#48c2f4', label-1: B29, label-2: B30, label-3: B31, label-4: B32, label-5: B33, label-6: B34, label-7: B35}}
-        - {id: outlet-c36, ref: eaton/c13-outlet@1, at: [9.1, 168.16], group: outlets, rel-pos: 36, fed-by: input}
+        - {id: outlet-c36, ref: std/c13-outlet@1, at: [9.1, 168.16], group: outlets, rel-pos: 36, fed-by: input}
         - {id: outlet-c37, ref: eaton/c39-outlet@1, at: [6.6, 140.26], group: outlets, rel-pos: 37, fed-by: input}
-        - {id: outlet-c38, ref: eaton/c13-outlet@1, at: [9.1, 117.36], group: outlets, rel-pos: 38, fed-by: input}
+        - {id: outlet-c38, ref: std/c13-outlet@1, at: [9.1, 117.36], group: outlets, rel-pos: 38, fed-by: input}
         - {id: outlet-c39, ref: eaton/c39-outlet@1, at: [6.6, 89.46], group: outlets, rel-pos: 39, fed-by: input}
-        - {id: outlet-c40, ref: eaton/c13-outlet@1, at: [9.1, 66.56], group: outlets, rel-pos: 40, fed-by: input}
+        - {id: outlet-c40, ref: std/c13-outlet@1, at: [9.1, 66.56], group: outlets, rel-pos: 40, fed-by: input}
         - {id: outlet-c41, ref: eaton/c39-outlet@1, at: [6.6, 38.66], group: outlets, rel-pos: 41, fed-by: input}
-        - {id: outlet-c42, ref: eaton/c13-outlet@1, at: [9.1, 15.76], group: outlets, rel-pos: 42, fed-by: input}
+        - {id: outlet-c42, ref: std/c13-outlet@1, at: [9.1, 15.76], group: outlets, rel-pos: 42, fed-by: input}
         - {id: labels-6, ref: eaton/g4-outlet-labels@1, at: [45.5, 12.61], group: section-labels, rel-pos: 6, attrs: {section-color: '#f49448', label-1: C36, label-2: C37, label-3: C38, label-4: C39, label-5: C40, label-6: C41, label-7: C42}}
         - id: breaker-a
           ref: eaton/g4-breaker-20a-2p@1
@@ -385,6 +389,13 @@ views:
       - {id: screw-torx-far-end, at: [17, 29.1], size: [6, 6], rx: 3, fill: '#565b60', kind: screw-head}
       - {id: screw-cap-cord-end, at: [29.65, 1720.15], size: [5.7, 5.7], rx: 2.85, fill: '#565b60', kind: screw-head}
       - {id: screw-cap-far-end, at: [29.55, 4.15], size: [5.7, 5.7], rx: 2.85, fill: '#565b60', kind: screw-head}
+interfaces:
+- {physical: 'outlet-a{n}', name: 'A{n}', range: '1-7'}
+- {physical: 'outlet-b{n}', name: 'B{n}', range: '8-14'}
+- {physical: 'outlet-c{n}', name: 'C{n}', range: '15-21'}
+- {physical: 'outlet-a{n}', name: 'A{n}', range: '22-28'}
+- {physical: 'outlet-b{n}', name: 'B{n}', range: '29-35'}
+- {physical: 'outlet-c{n}', name: 'C{n}', range: '36-42'}
 configurations:
   base:
     kind: base

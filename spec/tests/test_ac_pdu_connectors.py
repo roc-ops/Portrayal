@@ -58,16 +58,16 @@ def test_size_is_the_registry_entry(ref):
 
 
 def test_the_c19_well_is_walled_along_its_outline():
-    """relief.cavity names a <path>, so relief.js builds outlineWalls from it
-    rather than a box; a rect node would keep the box."""
+    """relief.cavity names an evenodd <path>, the R5 outline with the nose cut
+    out, so relief.js builds outlineWalls along it - std/c13-outlet@1's
+    pattern - rather than a box; a rect node would keep the box."""
     c = contract("std/c19-outlet")
-    node = c["relief"]["cavity"]
     root = ET.parse(COMP / "std/c19-outlet/v1/skins/default.svg").getroot()
-    el = next(e for e in root.iter() if e.get("id") == node)
-    assert el.tag == f"{SVG}path" and " A " in el.get("d")
-    # the well is as deep as the C19 nose that stands in it
-    nose = next(f for f in c["relief"]["features"] if f["node"] == "nose")
-    assert nose["top"] == c["size"]["d"] == 20
+    el = next(e for e in root.iter() if e.get("id") == c["relief"]["cavity"])
+    assert el.tag == f"{SVG}path" and el.get("fill-rule") == "evenodd"
+    assert el.get("d").count("M ") == 2 and " A " in el.get("d")
+    # the well is as deep as the C19 nose that stands in it (Volex VAC19)
+    assert c["size"]["d"] == 20
 
 
 def test_a_flat_receptacle_face_has_no_pit():
@@ -93,6 +93,10 @@ def test_the_c20_plug_stands_its_length_less_the_well_in_front_of_the_outlet():
 def test_the_c14_plug_stands_its_length_less_the_c13_well():
     """The C13 outlet's well is 18 (the C13 nose's 18 MIN); pinned here so the
     plug follows if that part's depth moves."""
+    plug = contract("generic/c14-plug")
+    outlet = contract("std/c13-outlet")
+    assert plug["mates"] == outlet["interface"] == "iec-c13"
+    assert outlet["size"]["d"] == 18
     feats = {f["node"]: f for f in contract("generic/c14-plug")["relief"]["features"]}
     boot = feats["relief-boot"]
     assert boot["lift"] + boot["cyl"] == pytest.approx(std()["c14-plug"]["depth"] - 18)

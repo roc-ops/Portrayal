@@ -48,6 +48,8 @@ def test_the_connector_registry_is_not_vacuous():
     # f-type/sma/smb/mcx: the existing coax jacks, made slots (#650)
     # bnc/din-1-0-2-3: the two new coax jacks, std/bnc@1 and std/din-1-0-2-3@1 (#650)
     # iec-c14/iec-c20/saf-d-grid: the AC inlets, made slots for their cord ends (#785)
+    # iec-c13: the C13 outlet of a rack PDU, std/c13-outlet@1 (the Eaton EVMI2130X);
+    # generic/c14-plug@1 is the cord end that mates it
     # iec-c19: the C19 outlet of a PDU, a slot for a C20 jumper end (#933)
     # usb-a/micro-usb-b/usb-c: the USB receptacles, made slots for their cable plugs (#786)
     # db9/hd15/da15/db25: the D-sub and VGA connectors, made slots for their hooded plugs (#787)
@@ -69,7 +71,7 @@ def test_the_connector_registry_is_not_vacuous():
     # spanning two terminal-stud seats, the pitch in the key (#828)
     assert set(reg) == {"lc", "lc-duplex", "sc", "mpo", "mpo16", "rj45",
                          "f-type", "sma", "smb", "mcx", "bnc", "din-1-0-2-3",
-                         "iec-c14", "iec-c20", "iec-c19", "saf-d-grid",
+                         "iec-c13", "iec-c14", "iec-c20", "iec-c19", "saf-d-grid",
                          "usb-a", "micro-usb-b", "usb-c",
                          "db9", "hd15", "da15", "db25",
                          "terminal-508-2", "terminal-508-5", "terminal-508-6",
@@ -88,7 +90,7 @@ def test_every_connector_presenting_part_is_a_connector_slot(comps):
     assert len(entries) > 0, "measured no connector slot at all"
     assert all(c["interface"] in {"lc", "lc-duplex", "sc", "mpo", "mpo16", "rj45",
                                    "f-type", "sma", "smb", "mcx", "bnc", "din-1-0-2-3",
-                                   "iec-c14", "iec-c20", "iec-c19", "saf-d-grid",
+                                   "iec-c13", "iec-c14", "iec-c20", "iec-c19", "saf-d-grid",
                                    "usb-a", "micro-usb-b", "usb-c",
                                    "db9", "hd15", "da15", "db25",
                                    "terminal-508-2", "terminal-508-5", "terminal-508-6",

@@ -3,6 +3,7 @@ kind: component
 name: c14-plug
 version: 1.0.0
 class: port
+mates: iec-c13
 conforms: c14-plug
 profile: networking
 description: >-
@@ -10,17 +11,15 @@ description: >-
   jumper that goes into a PDU's C13 outlet, seen from the cable end as a front
   elevation sees it seated: the shroud, keyed by the two cut corners on its
   earth side, the overmould, the strain relief and a short straight stub of
-  cord whose diameter is the cable-od field.
+  cord whose diameter is the cable-od field. Seats in an `iec-c13` outlet at
+  its own mate point.
 size: {w: 29.0, h: 21.0}
 size-confidence: {w: drawing, h: drawing}
 attrs: {media: c14, connector: c14}
 fields:
   cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 8.33}
   jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
-unplaced: >-
-  seated by configurations downstream of this library (docs/pluggables-design.md
-  decision 2), once a C13 outlet presents `iec-c13`; until then nothing offers it,
-  see provenance.mates
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
 provenance:
   size: >-
     drawing - registry `c14-plug`. Volex Power Products catalogue, Aug-2025,
@@ -31,21 +30,18 @@ provenance:
     their line. The side view dimensions the overall length 59. The
     catalogue gives no drawing number or revision.
   mates: >-
-    NO `mates:` YET, ON PURPOSE. The interface this plug mates is a C13
-    OUTLET, `iec-c13`, and the C13 outlet is being made a std/ part with that
-    interface on the Eaton EVMI2130X branch (eaton/c13-outlet becomes
-    std/c13-outlet). Naming an interface the registry does not list fails
-    lint, so the key is added when that lands; nothing else here moves.
+    `iec-c13`, the C13 outlet std/c13-outlet@1 presents. The plug seats at
+    that part's `mate`, the centre of its well.
   no-depth: >-
     NO `size.d`, DELIBERATELY, as on generic/c13-plug@1.
   orientation: >-
-    DRAWN IN THE OUTLET'S UNROTATED CONVENTION: eaton/c13-outlet@1 draws its
+    DRAWN IN THE OUTLET'S UNROTATED CONVENTION: std/c13-outlet@1 draws its
     chamfered end up, so the shroud's cut corners are at the top. The Volex
     face view is drawn with the long axis vertical and the earth to the
     right; it is turned a quarter here.
   seated-depth: >-
     RULING - THE SHROUD GOES TO THE FLOOR OF THE WELL THE OUTLET MODELS, as on
-    generic/c20-plug@1. The C13 outlet's well is 18 deep (eaton/c13-outlet@1,
+    generic/c20-plug@1. The C13 outlet's well is 18 deep (std/c13-outlet@1,
     from the C13 nose's 18 MIN, Volex V1625), so the plug stands 59 - 18 = 41
     in front of the outlet's face: 0.3 of shroud, 24.0 of overmould and 16.7
     of strain relief.

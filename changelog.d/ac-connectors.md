@@ -4,8 +4,8 @@
   follows its R5 outline) and `std/nema-5-20r@1` (the T-slot receptacle, from
   Qualtek 739W-X2/30). Two jumper ends, drawn from the cable end like the C13 and
   C19 ones: `generic/c20-plug@1`, which mates the new `iec-c19` interface, and
-  `generic/c14-plug@1`, which gains `mates: iec-c13` when the C13 outlet presents
-  it. Four input plug faces: `generic/nema-l6-20p-plug@1`,
+  `generic/c14-plug@1`, which mates `iec-c13`, the interface `std/c13-outlet@1`
+  presents. Four input plug faces: `generic/nema-l6-20p-plug@1`,
   `generic/nema-l5-20p-plug@1`, `generic/nema-5-20p-plug@1` (Leviton catalog
   drawings) and `generic/cs8365c-plug@1` (Hubbell M-6590).
 - Registry entries for all eight parts, and the `iec-c19` connector interface.
