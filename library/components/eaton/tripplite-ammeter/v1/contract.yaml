@@ -1,0 +1,76 @@
+format: 1
+kind: component
+name: tripplite-ammeter
+version: 1.0.0
+class: display
+profile: power
+description: >-
+  The digital load meter of a 1U Eaton Tripp Lite series switched PDU - a
+  two-digit green seven-segment readout of the total output load in amps, in a
+  black window with a thin bezel and no button.
+size: {w: 25.3, h: 18.55}
+size-confidence: {w: photo-measured, h: photo-measured}
+provenance:
+  size: >-
+    photo-measured - PDUMH20NET_DT01 (the 3000 px Eaton master, a near straight-on
+    front) at 5.676 px per mm, the PDU's 444 mm across the 2520 px it spans, read
+    off a 2.2x enlargement with a millimetre grid: the bezel 387.8 to 413.1
+    across the PDU face and 10.65 to 29.2 down it, the window inside it 0.6 in
+    and 0.55 down. Good to about 0.3 mm.
+  digits: >-
+    photo - DT01 shows two seven-segment digits lit green reading 20, the unlit
+    segments faintly visible, about 10 wide and 15.2 tall; the owner's manual
+    (933687 rev A, Features) draws the meter as two cells of 8 and no decimal
+    point, and DT01 shows none. The photographed digits lean; they are drawn
+    upright, 9.6 by 15.2 on an 11.1 pitch, as the library's other seven-segment
+    cells are.
+  colour: >-
+    photo-measured - the lit segments of DT01 have a median of #63bc46 (3564 px
+    of the 11700 in the window); the window reads near black.
+  semantics: >-
+    datasheet - the spec sheet: "Digital display continuously reports total
+    output load level in amps"; the owner's manual: "The total electrical current
+    drawn by connected equipment is displayed on the meter in amperes." So the
+    readout is a whole number of amps, and each cell carries the seven-segment
+    glyph set. Unlike the Tripp Lite 0U strip's meter, nothing held says this one
+    turns over or shows an address, and it has no button to do either.
+  relief: >-
+    none built - the photograph shows a flush window, and no source gives a
+    standoff.
+elements:
+  window:
+    at: [0.6, 0.55]
+    size: [24.0, 17.5]
+    class: display
+    characters: 2
+    description: >-
+      the readout window, two seven-segment cells showing the total output load in
+      whole amps; each cell's glyph set is on its digit.
+  digit-1:
+    at: [2.7, 1.75]
+    size: [9.6, 15.2]
+    class: display
+    characters: 1
+    description: >-
+      the left digit. Its states are the characters a seven-segment cell can form, each naming the segments it lights - a top, b top-right, c bottom-right, d bottom, e bottom-left, f top-left, g middle.
+    states: &digit-states
+      - {name: '0', lights: [a, b, c, d, e, f]}
+      - {name: '1', lights: [b, c]}
+      - {name: '2', lights: [a, b, g, e, d]}
+      - {name: '3', lights: [a, b, g, c, d]}
+      - {name: '4', lights: [f, g, b, c]}
+      - {name: '5', lights: [a, f, g, c, d]}
+      - {name: '6', lights: [a, f, g, e, c, d]}
+      - {name: '7', lights: [a, b, c]}
+      - {name: '8', lights: [a, b, c, d, e, f, g]}
+      - {name: '9', lights: [a, b, c, d, f, g]}
+      - {name: 'blank', lights: []}
+  digit-2:
+    at: [13.8, 1.75]
+    size: [9.6, 15.2]
+    class: display
+    characters: 1
+    description: >-
+      the right digit. Its states are the characters a seven-segment cell can form, each naming the segments it lights - a top, b top-right, c bottom-right, d bottom, e bottom-left, f top-left, g middle.
+    states: *digit-states
+skins: [default]

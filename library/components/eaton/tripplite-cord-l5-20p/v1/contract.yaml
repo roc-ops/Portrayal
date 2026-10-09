@@ -1,0 +1,41 @@
+format: 1
+kind: component
+name: tripplite-cord-l5-20p
+version: 1.0.0
+class: inlet
+profile: power
+description: >-
+  The fixed input cord of a 1U Eaton Tripp Lite series 20 A PDU - 12 ft of cord
+  ending in a NEMA L5-20P locking plug, leaving the rear face through a black
+  strain-relief bushing with a round top and a square collar. Drawn as the rear
+  face shows it; the cord and plug beyond it are not.
+size: {w: 19.8, h: 18.3}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs: {plug: nema-l5-20p, cord-length-ft: 12}
+provenance:
+  size: >-
+    photo-measured - PDUMH20NET_BK (the 3000 px Eaton master, a near straight-on
+    rear) at 5.676 px per mm, the PDU's 444 mm across the 2520 px it spans, read
+    off a 4x enlargement: the bushing 107.3 to 127.1 across the rear face (from
+    its left) and 7.7 to 26.0 down it, a rounded top over a square collar that
+    starts about 5 down.
+  cord: >-
+    estimated - the cord leaves the bushing face on and bends down and left,
+    about 11 across where the photograph sees it side on. It is drawn as its
+    end, a circle 10.8 across in the bushing's upper half. No held source gives
+    its diameter or gauge.
+  plug: >-
+    datasheet - the spec sheet: "Attached NEMA L5-20P input with NEMA 5-20P plug
+    adapter, 12 ft. / 3.6m input cable"; the owner's manual (933687 rev A,
+    Features): "The cord is permanently attached to the PDU and has a NEMA
+    L5-20P locking plug." The L5-20R to 5-20P adapter in the box is not part of
+    the PDU. The plug's face is generic/nema-l5-20p-plug@1, which a device draws
+    INSTEAD of this cord, never beside it, or one input exports as two power
+    ports.
+  not-drawn: >-
+    THE CORD BEYOND THE BUSHING AND THE PLUG ARE NOT DRAWN: the far end of a cord
+    is not a part (docs/connectors-power-design.md section 7). This part stands for
+    the power input a DCIM records, a `nema-l5-20p` power port.
+elements:
+  bushing: {at: [0, 0], size: [19.8, 18.3], class: inlet}
+skins: [default]
