@@ -1,6 +1,7 @@
 // THE RACK CATALOGUE (rack.json, written by rack_index.py beside devices.json):
-// every device's rack units, depth, mount, shell, stated cable capacity and the
-// ids a cable route can pass through. Loaded once per page through `dist`, the
+// every device's rack units, depth, mount, shell, stated cable capacity, the
+// ids a cable route can pass through and, where a device is not simply its
+// envelope, the `solids` a route may not (solids.js). Loaded once per page through `dist`, the
 // same build every other kit module reads.
 
 import {jdist} from '../dist.js';

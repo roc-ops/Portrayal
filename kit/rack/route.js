@@ -14,6 +14,7 @@ import {followTrunk} from './bundle-route.js';
 import {RU, OPENING, RAIL_W} from './rails.js';
 import {throughRings} from './route-path.js';
 import {zeroUOnLane, zeroUX, carriesLane, runsThrough} from './zero-u.js';
+import {solidsOf, detour, legCrossings, partText, isFloor} from './solids.js';
 
 export const LANE_GAP = 40;          // mm: a lane runs in the middle of a 40 mm gutter outside each rail
 const SHORT = 2;                     // U: a jumper this close, with no manager, just hangs
@@ -266,7 +267,22 @@ export const stockLength = m => STOCK_M.find(s => s >= m - 1e-9) ?? Math.ceil(m 
 //   {kind: 'doubles-back', cable, item, via};
 // - `marks`: parallel to resolveRoute's waypoints, null for a lane, a duct or
 //   a pass, and for a ring {run, depth, sense, back}: what a drawing passes
-//   to routed2d or routePoints3d (ringMarks).
+//   to routed2d or routePoints3d (ringMarks);
+// - `crossings`: each solid body a leg of the path still crosses (#949,
+//   docs/cable-lay-design.md section 1), as {kind: 'crosses-body', cable,
+//   item, part, between: [from, to], at: [x, y, z]}: `from` and `to` are the
+//   waypoints the leg lies between ({end: 'a'} or 'b' for a port), `at` where
+//   it enters the body, in mm;
+// - `detours`: per leg that was taken round a body, {between: [from, to],
+//   points}.
+// DETOURS (section 1.3): where a straight leg between two points would cross
+// a solid (solids.js solidsOf), points are added that take it round, over the
+// near edge first, then round the end, then by a side lane (solids.js
+// detour). They are computed, never stored, and they are in `points`
+// (`at: 'detour'`), so the length counts them. A leg the rules cannot clear
+// is left as drawn and is in `crossings`. The cable's diameter, which a
+// pass-through must fit and a detour keeps clear by, is `ctx.diameterOf(cable)`
+// when the page gives it, else its media's typical one (DIAMETERS).
 // null when either port is not found on its drawing, as for routedLength.
 export function routePath(rack, cable, ctx) {
   const a = portPoint(rack, cable.a, ctx), b = portPoint(rack, cable.b, ctx);
@@ -284,27 +300,63 @@ export function routePath(rack, cable, ctx) {
   const {points, passes, back} = throughRings(stops.map(s => s.p), stops.map(s => s.ring));
   // Label each point with what it is: walk the stops, a ring taking two points when passed.
   const passAt = new Map(passes.map(x => [x.index, x])), backAt = new Map(back.map(x => [x.index, x]));
-  const out = [], rings = [], findings = [];
+  const out = [], rings = [], findings = [], from = [];
   let n = 0;
   stops.forEach((s, k) => {
     const tag = s.w ? (s.w.lane ? {at: 'lane'} : {item: s.w.item, via: s.w.via}) : {at: s.at};
-    if (!s.ring) { out.push({...points[n++], ...(s.w && !s.w.lane ? {at: 'pathway'} : {}), ...tag}); return; }
+    if (!s.ring) { from.push(k); out.push({...points[n++], ...(s.w && !s.w.lane ? {at: 'pathway'} : {}), ...tag}); return; }
     const ring = {item: s.w.item, via: s.w.via, ...s.ring};
     const pass = passAt.get(k);
     if (pass) {
+      from.push(k, k);
       out.push({...points[n++], ...tag, at: 'entry'}, {...points[n++], ...tag, at: 'exit'});
       rings.push({...ring, passed: true, sense: pass.sense, entry: pass.entry, exit: pass.exit});
       marks[s.i] = {run: s.ring.run, depth: s.ring.depth, sense: pass.sense, back: false};
     } else {
       const no = backAt.get(k);
+      from.push(k);
       out.push({...points[n++], ...tag, at: 'face'});
       rings.push({...ring, passed: false, sense: no.sense, face: points[n - 1]});
       marks[s.i] = {run: s.ring.run, depth: s.ring.depth, sense: no.sense, back: true};
       findings.push({kind: 'doubles-back', cable: cable.id, item: s.w.item, via: s.w.via});
     }
   });
-  return {points: out, rings, findings, marks};
+  // Round the solid bodies (section 1.3), then what still crosses one (1.4).
+  const solids = solidsOf(rack, ctx);
+  const diameter = cableDiameter(cable, ctx);
+  const ref = k => (stops[k].w ? (stops[k].w.lane ? {lane: stops[k].w.lane, ru: stops[k].w.ru} : {item: stops[k].w.item, via: stops[k].w.via})
+    : {end: stops[k].at});
+  const final = [out[0]], legs = [], detours = [];
+  for (let k = 1; k < out.length; k++) {
+    const between = [ref(from[k - 1]), ref(from[k])];
+    const extra = solids.length ? detour(out[k - 1], out[k], solids, {diameter, lanes: [laneX('left'), laneX('right')]}) : [];
+    if (extra?.length) {
+      detours.push({between, points: extra.map(p => ({x: p.x, y: p.y, z: p.z}))});
+      for (const p of extra) { legs.push(between); final.push({x: p.x, y: p.y, z: p.z, at: 'detour'}); }
+    }
+    legs.push(between);
+    final.push(out[k]);
+  }
+  const crossings = [];
+  const r1 = v => Math.round(v * 10) / 10;
+  for (let k = 1; k < final.length && solids.length; k++) {
+    for (const x of legCrossings(final[k - 1], final[k], solids, {diameter})) {
+      const dup = crossings.some(c => c.item === x.solid.item && c.part === x.solid.part
+        && JSON.stringify(c.between) === JSON.stringify(legs[k - 1]));
+      if (!dup) crossings.push({kind: 'crosses-body', cable: cable.id, item: x.solid.item, part: x.solid.part,
+        between: legs[k - 1], at: [r1(x.at.x), r1(x.at.y), r1(x.at.z)]});
+    }
+  }
+  return {points: final, rings, findings, marks, crossings, detours};
 }
+
+// A cable's outside diameter in mm, for what it must fit and keep clear by:
+// the page's `ctx.diameterOf(cable)` (the cable types table, #919), else its
+// media's typical one.
+export const cableDiameter = (cable, ctx) => {
+  const d = typeof ctx?.diameterOf === 'function' ? ctx.diameterOf(cable) : null;
+  return typeof d === 'number' && d > 0 ? d : DIAMETERS[cable?.media] ?? UNSET_D;
+};
 
 // The marks of a path drawn from its other end, for its points reversed: the
 // list reversed, and each ring passed turned to the other sense. A ring not
@@ -354,6 +406,32 @@ export const routedLength = (rack, cable, ctx) => pathLength(routePath(rack, cab
 export function ringFindings(rack, ctx, nameOf = id => id) {
   return (rack.cables || []).flatMap(c => (routePath(rack, c, ctx)?.findings || []).map(f => ({...f,
     text: `${c.id} would enter and leave ${nameOf(f.item)} ${/^guide-(\d+)$/.test(f.via) ? `ring ${f.via.slice(6)}` : f.via} by the same face: route it through the ring, or past it.`})));
+}
+
+// EVERY BODY A CABLE'S PATH STILL CROSSES (#949, docs/cable-lay-design.md
+// section 1.4), rack-wide, after the detours: routePath's `crossings`, each
+// with a sentence. It warns and never refuses, as fill, size and bend do: a
+// device moving can make a route cross something without any cable command.
+// A cable whose port is not found is not judged. `nameOf(itemId)` names an
+// item or a zero-U part.
+export function bodyFindings(rack, ctx, nameOf = id => id) {
+  const solids = solidsOf(rack, ctx);
+  const lab = (w, c) => (w.end ? `its port on ${nameOf((w.end === 'a' ? c.a : c.b).item)}`
+    : w.lane ? `${w.lane} U${uLabel(rack.frame, w.ru)}`
+    : `${nameOf(w.item)} ${/^guide-(\d+)$/.test(w.via) ? `ring ${w.via.slice(6)}` : w.via}`);
+  return (rack.cables || []).flatMap(c => (routePath(rack, c, ctx)?.crossings || []).map(f => {
+    const s = solids.find(x => x.item === f.item && x.part === f.part);
+    const body = [nameOf(f.item), partText(f.part)].filter(Boolean).join(' ');
+    const [a, b] = f.between.map(w => lab(w, c));
+    const holes = (s?.holes || []).map(h => h.via);
+    // a plate met from above or below: the way round is over its front edge,
+    // onto the face the cable rests on
+    const advice = s && isFloor(s.box) && f.part !== 'envelope'
+      ? `route it over the front edge of the ${partText(f.part) || 'plate'} onto its resting face, or through a ring`
+      : holes.length ? `route it round ${nameOf(f.item)}, or through ${holes.join(' or ')} if the cable fits`
+      : `route it round ${nameOf(f.item)}, or through a ring or a pass-through it fits`;
+    return {...f, text: `${c.id} passes through ${body} between ${a} and ${b}: ${advice}.`};
+  }));
 }
 
 // ── fill ──────────────────────────────────────────────────────────────────
