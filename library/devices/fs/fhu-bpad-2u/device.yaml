@@ -59,13 +59,27 @@ provenance:
     note: >-
       the back (g3, g5) carries, per unit, a straight rib along the middle of the unit and a wave
       rib crossing it, from about 18 mm in from each end: the wave is drawn as a cosine of 6.5
-      mm amplitude and 152 mm period, lowest at 86 mm from the left end, in 6 mm steps: the straight-on
-      rear render (g3, 2.73 px/mm) has its low runs centred near 86, 247 and 390 and swings about
-      6.5 either side of the straight rib - an estimate of the shape, not a measurement of it.
+      mm amplitude and 152 mm period, lowest at 86 mm from the left end (the part fs/bpad-wave-rib@1,
+      a stroked curve): the straight-on rear render (g3, 2.73 px/mm) has its low runs centred
+      near 86, 247 and 390 and swings about 6.5 either side of the straight rib - an estimate
+      of the shape, not a measurement of it.
   mark:
     confidence: drawing
     note: >-
       FS's mark in each badge is a logo and is not drawn.
+  pin-mark:
+    confidence: photo-measured
+    note: >-
+      a small round mark in the middle of each unit's face, at 241 across and 21.7 down the unit
+      on the front render g2 (x6 shows it close up), drawn as a 1.8 mm dot. FS does not say what
+      it is; it reads as a moulding pin mark, not a hole.
+  packs:
+    confidence: datasheet
+    note: >-
+      FHU-BPAD-2U-5 is five of this panel in one box (datasheet columns; QSG note 1), so it is
+      a vendor alias and not a configuration part number: `part-numbers` carries no quantity,
+      and a second part number on the base configuration would rename the DCIM export after the
+      first-sorted SKU.
   color:
     confidence: photo-measured
     note: >-
@@ -111,6 +125,12 @@ gaps:
   note: >-
     the wave rib's amplitude and period are read off an angled render, not dimensioned.
   wanted: a square-on rear photograph with a scale
+groups:
+  ribs:
+    term: Rib
+    role: furniture
+    index-origin: 1
+    description: the wave rib across the back of each unit, top unit first
 views:
   front:
     size: {w: 482.6, h: 88.0}
@@ -118,11 +138,13 @@ views:
       decor:
       - {id: plate, at: [0.0, 0.0], size: [482.6, 88.0], fill: '#1e2023', kind: plate}
       - {id: badge-1, at: [19.7, 5.1], size: [34.8, 9.2], fill: '#17191b', rx: 2, sink: 0.3, kind: logo-badge}
+      - {id: pin-mark-1, at: [240.4, 20.8], size: [1.8, 1.8], fill: '#101112', rx: 0.9, kind: pin-mark}
       - {id: clip-head-l1, at: [0.0, 10.1], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
       - {id: clip-head-r1, at: [478.0, 10.1], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
       - {id: score-1, at: [0.0, 43.8], size: [482.6, 0.4], fill: '#0f1011', sink: 0.3, kind: score}
       - {id: badge-2, at: [19.7, 49.1], size: [34.8, 9.2], fill: '#17191b', rx: 2, sink: 0.3,
         kind: logo-badge}
+      - {id: pin-mark-2, at: [240.4, 64.8], size: [1.8, 1.8], fill: '#101112', rx: 0.9, kind: pin-mark}
       - {id: clip-head-l2, at: [0.0, 54.1], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
       - {id: clip-head-r2, at: [478.0, 54.1], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
   rear:
@@ -130,169 +152,25 @@ views:
     panel:
       decor:
       - {id: plate, at: [0.0, 0.0], size: [482.6, 88.0], fill: '#1e2023', kind: plate}
-      - {id: clip-head-r1, at: [478.0, 10.1], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
-      - {id: clip-head-l1, at: [0.0, 10.1], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
+      - {id: clip-head-l1, at: [478.0, 10.1], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
+      - {id: clip-head-r1, at: [0.0, 10.1], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
       - {id: rib-1, at: [18.0, 21.3], size: [446.6, 1.4], fill: '#3a3e43', kind: rib}
-      - {id: wave-1-1, at: [18.0, 15.36], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-2, at: [24.0, 16.24], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-3, at: [30.0, 17.423], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-4, at: [36.0, 18.837], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-5, at: [42.0, 20.396], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-6, at: [48.0, 22.004], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-7, at: [54.0, 23.563], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-8, at: [60.0, 24.977], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-9, at: [66.0, 26.16], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-10, at: [72.0, 27.04], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-11, at: [78.0, 27.562], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-12, at: [84.0, 27.694], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-13, at: [90.0, 27.43], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-14, at: [96.0, 26.784], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-15, at: [102.0, 25.796], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-16, at: [108.0, 24.527], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-17, at: [114.0, 23.055], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-18, at: [120.0, 21.469], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-19, at: [126.0, 19.866], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-20, at: [132.0, 18.345], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-21, at: [138.0, 16.999], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-22, at: [144.0, 15.91], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-23, at: [150.0, 15.145], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-24, at: [156.0, 14.75], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-25, at: [162.0, 14.75], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-26, at: [168.0, 15.145], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-27, at: [174.0, 15.91], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-28, at: [180.0, 16.999], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-29, at: [186.0, 18.345], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-30, at: [192.0, 19.866], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-31, at: [198.0, 21.469], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-32, at: [204.0, 23.055], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-33, at: [210.0, 24.527], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-34, at: [216.0, 25.796], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-35, at: [222.0, 26.784], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-36, at: [228.0, 27.43], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-37, at: [234.0, 27.694], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-38, at: [240.0, 27.562], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-39, at: [246.0, 27.04], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-40, at: [252.0, 26.16], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-41, at: [258.0, 24.977], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-42, at: [264.0, 23.563], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-43, at: [270.0, 22.004], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-44, at: [276.0, 20.396], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-45, at: [282.0, 18.837], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-46, at: [288.0, 17.423], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-47, at: [294.0, 16.24], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-48, at: [300.0, 15.36], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-49, at: [306.0, 14.838], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-50, at: [312.0, 14.706], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-51, at: [318.0, 14.97], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-52, at: [324.0, 15.616], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-53, at: [330.0, 16.604], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-54, at: [336.0, 17.873], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-55, at: [342.0, 19.345], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-56, at: [348.0, 20.931], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-57, at: [354.0, 22.534], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-58, at: [360.0, 24.055], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-59, at: [366.0, 25.401], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-60, at: [372.0, 26.49], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-61, at: [378.0, 27.255], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-62, at: [384.0, 27.65], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-63, at: [390.0, 27.65], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-64, at: [396.0, 27.255], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-65, at: [402.0, 26.49], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-66, at: [408.0, 25.401], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-67, at: [414.0, 24.055], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-68, at: [420.0, 22.534], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-69, at: [426.0, 20.931], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-70, at: [432.0, 19.345], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-71, at: [438.0, 17.873], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-72, at: [444.0, 16.604], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-73, at: [450.0, 15.616], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-1-74, at: [456.0, 14.97], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
       - {id: clip-l1, at: [5.0, 19.0], size: [4.0, 6.0], fill: '#141618', kind: clip}
       - {id: pin-l1, at: [6.0, 21.0], size: [2.0, 2.0], fill: '#9ea3a8', shape: circle, kind: pin}
       - {id: clip-r1, at: [473.6, 19.0], size: [4.0, 6.0], fill: '#141618', kind: clip}
       - {id: pin-r1, at: [474.6, 21.0], size: [2.0, 2.0], fill: '#9ea3a8', shape: circle, kind: pin}
       - {id: score-1, at: [0.0, 43.8], size: [482.6, 0.4], fill: '#0f1011', kind: score}
-      - {id: clip-head-r2, at: [478.0, 54.1], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
-      - {id: clip-head-l2, at: [0.0, 54.1], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
+      - {id: clip-head-l2, at: [478.0, 54.1], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
+      - {id: clip-head-r2, at: [0.0, 54.1], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
       - {id: rib-2, at: [18.0, 65.3], size: [446.6, 1.4], fill: '#3a3e43', kind: rib}
-      - {id: wave-2-1, at: [18.0, 59.36], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-2, at: [24.0, 60.24], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-3, at: [30.0, 61.423], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-4, at: [36.0, 62.837], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-5, at: [42.0, 64.396], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-6, at: [48.0, 66.004], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-7, at: [54.0, 67.563], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-8, at: [60.0, 68.977], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-9, at: [66.0, 70.16], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-10, at: [72.0, 71.04], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-11, at: [78.0, 71.562], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-12, at: [84.0, 71.694], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-13, at: [90.0, 71.43], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-14, at: [96.0, 70.784], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-15, at: [102.0, 69.796], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-16, at: [108.0, 68.527], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-17, at: [114.0, 67.055], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-18, at: [120.0, 65.469], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-19, at: [126.0, 63.866], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-20, at: [132.0, 62.345], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-21, at: [138.0, 60.999], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-22, at: [144.0, 59.91], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-23, at: [150.0, 59.145], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-24, at: [156.0, 58.75], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-25, at: [162.0, 58.75], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-26, at: [168.0, 59.145], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-27, at: [174.0, 59.91], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-28, at: [180.0, 60.999], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-29, at: [186.0, 62.345], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-30, at: [192.0, 63.866], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-31, at: [198.0, 65.469], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-32, at: [204.0, 67.055], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-33, at: [210.0, 68.527], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-34, at: [216.0, 69.796], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-35, at: [222.0, 70.784], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-36, at: [228.0, 71.43], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-37, at: [234.0, 71.694], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-38, at: [240.0, 71.562], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-39, at: [246.0, 71.04], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-40, at: [252.0, 70.16], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-41, at: [258.0, 68.977], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-42, at: [264.0, 67.563], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-43, at: [270.0, 66.004], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-44, at: [276.0, 64.396], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-45, at: [282.0, 62.837], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-46, at: [288.0, 61.423], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-47, at: [294.0, 60.24], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-48, at: [300.0, 59.36], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-49, at: [306.0, 58.838], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-50, at: [312.0, 58.706], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-51, at: [318.0, 58.97], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-52, at: [324.0, 59.616], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-53, at: [330.0, 60.604], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-54, at: [336.0, 61.873], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-55, at: [342.0, 63.345], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-56, at: [348.0, 64.931], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-57, at: [354.0, 66.534], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-58, at: [360.0, 68.055], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-59, at: [366.0, 69.401], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-60, at: [372.0, 70.49], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-61, at: [378.0, 71.255], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-62, at: [384.0, 71.65], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-63, at: [390.0, 71.65], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-64, at: [396.0, 71.255], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-65, at: [402.0, 70.49], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-66, at: [408.0, 69.401], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-67, at: [414.0, 68.055], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-68, at: [420.0, 66.534], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-69, at: [426.0, 64.931], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-70, at: [432.0, 63.345], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-71, at: [438.0, 61.873], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-72, at: [444.0, 60.604], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-73, at: [450.0, 59.616], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
-      - {id: wave-2-74, at: [456.0, 58.97], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
       - {id: clip-l2, at: [5.0, 63.0], size: [4.0, 6.0], fill: '#141618', kind: clip}
       - {id: pin-l2, at: [6.0, 65.0], size: [2.0, 2.0], fill: '#9ea3a8', shape: circle, kind: pin}
       - {id: clip-r2, at: [473.6, 63.0], size: [4.0, 6.0], fill: '#141618', kind: clip}
       - {id: pin-r2, at: [474.6, 65.0], size: [2.0, 2.0], fill: '#9ea3a8', shape: circle, kind: pin}
+    components:
+      placements:
+      - {ref: fs/bpad-wave-rib@1, id: wave-rib-1, at: [18.0, 14.0], group: ribs, rel-pos: 1}
+      - {ref: fs/bpad-wave-rib@1, id: wave-rib-2, at: [18.0, 58.0], group: ribs, rel-pos: 2}
   top:
     size: {w: 482.6, h: 14.0}
     panel:
