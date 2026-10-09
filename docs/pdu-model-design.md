@@ -1,11 +1,12 @@
 # Rack PDUs: capability, outlet state, input, phases and mounting
 
-Status: proposed, 2026-10-08. Issue #934. Extends
+Status: decided 2026-10-08, not yet built. Issue #934. Extends
 [power-outlets-design.md](power-outlets-design.md) (#806), which made a power
 outlet an export, and builds on
 [vertical-cable-managers-design.md](vertical-cable-managers-design.md) section 8
 (#926, zero-U parts in the kit), the rack mounting note of #904 (ears and
-kits) and the AC connectors of #933.
+kits) and the AC connectors of #933. The decisions are listed with their dates
+in section 11.
 
 The first rack PDU, the Eaton EVMI2130X, is built. It answered several of the
 questions this note was opened for, and its answers are taken here as precedent
@@ -21,17 +22,17 @@ unless a section argues otherwise. Three more PDUs follow it (section 9).
 | phases | the one-line diagram in prose, on the breaker descriptions and region labels | kept as prose, and stated once as data (section 5) |
 | `feed_leg` | not written: every outlet is line to line | kept, and made a rule (section 5) |
 | outlet names | as printed (A1 to C42), through the device `interfaces:` rules | kept |
-| mounting | `mount: rack-side`, `ru: 39`, two `eaton/g4-mounting-button@1` on the rear | kept for now (section 6) |
+| mounting | `mount: rack-side`, `ru: 39`, two `eaton/g4-mounting-button@1` on the rear | kept (section 6) |
 | the C39 | `eaton/c39-outlet@1`, an Eaton part, exported as `eaton-c39` | kept |
 | input | a fixed-cord part (`eaton/g4-cord-l21-30p@1`) exported as a `nema-l21-30p` power port | kept |
-| input rating | `attrs.power` prose and four numbers | given structured keys (section 4) |
+| input rating | `attrs.power`: `input-plug` and `input-voltage` as prose, and three numbers (`input-current-a`, `plug-rating-a`, `capacity-kw`) | given structured keys; `input-plug` becomes a slug (section 4) |
 
 The pilot also left two findings that this note has to answer. Its capability
 assessment reports `specified: false`, because the `power` profile asks for
 `input-ac` and for a draw figure, and the pilot states neither (section 4). And
-the EVMI2130X is a metered-input PDU, so none of its outlets can be switched:
-the outlet state #934 asks for is a question for the next
-three devices, not for the pilot (section 3).
+the EVMI2130X meters its input and branches and switches nothing, so none of
+its outlets has an on/off state: the outlet state #934 asks for is a question
+for the next three devices, not for the pilot (section 3).
 
 ## 2. Capability
 
@@ -49,9 +50,10 @@ names six topologies by what they meter and whether they switch:
 | Switched (SW) | yes | yes | - | yes |
 | Managed (MA) | yes | yes | yes | yes |
 
-The Tripp Lite series sells basic, metered, monitored and switched PDUs. Its
-switched units meter the input and each bank and switch each outlet, which is
-the G4 SW row.
+The Tripp Lite series sells basic, metered, monitored and switched PDUs. The
+PDUMV20HVNETLX meters its input and each bank and switches each outlet, which
+is the G4 SW row; the PDUMH20NET meters its input only and switches each
+outlet, which no G4 row describes.
 
 So a capability is two facts and not one ladder: how far down the metering
 goes, and whether an outlet can be switched. Switched and metered outlet are not
@@ -71,10 +73,24 @@ attrs:
 - `metering-scope` is the finest level metered. Every vendor in scope meters
   each level above the one it names, so one word carries the three columns.
 - `outlet-switching` is a boolean.
-- The class (`basic`, `metered-input`, `metered-outlet`, `switched`,
-  `managed`) is DERIVED and published in `configs.json` and `devices.json`, so a
-  catalogue can filter on it and no manifest can state a class that its two
-  facts contradict. `in-line` is `metering-scope: input`.
+- **The class is DERIVED** and published in `configs.json` and `devices.json`,
+  so a catalogue can filter on it and no manifest can state a class that its
+  two facts contradict. Every combination has a name:
+
+| `metering-scope` | `outlet-switching: false` | `outlet-switching: true` |
+|---|---|---|
+| `none` | `basic` | `switched` |
+| `input` | `metered-input` | `switched-metered-input` |
+| `branch` | `metered-branch` | `switched-metered-branch` |
+| `outlet` | `metered-outlet` | `managed` |
+
+  The names are ours and say what is metered, so they part from vendor names
+  where a vendor name is loose: the G4 "metered input" (MI) meters each branch
+  too, so the EVMI2130X is `metered-branch`; the G4 "in-line metered" (IL) is
+  `metered-input`; the G4 and Tripp Lite "switched" units are
+  `switched-metered-branch` (the PDUMV20HVNETLX) and `switched-metered-input`
+  (the PDUMH20NET); `managed` is the G4 MA, the EVMA8365X. The vendor name
+  stays in the description and the provenance.
 - **Per outlet, the vocabulary is the statement.** An outlet that can be
   switched carries the outlet state vocabulary (section 3.3); one that cannot
   carries none. Lint ties the two: with `outlet-switching: true` every outlet
@@ -124,12 +140,15 @@ about the model. Three homes were weighed.
 2. **A marks document sets one,** as it sets a lamp state today:
    `{select: "[data-path='outlet-a1']", state: off}`. No new key.
 3. **A rack entry sets many.** A rack item gains `states`, a map of part path
-   to state name, beside its `swaps` and `fields`, with the same entry-by-entry
-   normalising that `fields` has; a `zeroU` entry gains `swaps`, `fields` and
-   `states` together, because a zero-U PDU has a network module to swap and
-   section labels to fill as much as a rack item does. The kit applies the map
-   with one function shared by the marks document and the rack file, as
-   `shell.setFields` is shared today.
+   to state name, beside its `swaps` and `fields`; a `zeroU` entry gains
+   `swaps`, `fields` and `states` together, because a zero-U PDU has a network
+   module to swap and section labels to fill as much as a rack item does. The
+   loader normalises the map entry by entry, as `kit/marks.js fieldsOf`
+   normalises a field map (the rack loader, `kit/rack/model.js readItem`, clones
+   `fields` whole today and would not do for a state map). No kit/rack code
+   applies a rack entry to a drawing yet (nothing there calls
+   `shell.setFields`), so applying `states` from a rack entry is new code, and
+   it is shared with the marks document path (section 3.2).
 4. **An instance export maps it:** `on` to NetBox `enabled` and `off` to
    `disabled`, when a rack export writes power outlet instances. The device type
    export writes nothing.
@@ -145,44 +164,72 @@ The sources settle more than the question assumed.
 - The Tripp Lite switched manuals (the multi-model monitored and switched
   manual, and the PDUMH15NET/PDUMH20NET manual) say each outlet has an LED that
   lights when the outlet is live, and say nothing of a second colour.
-- The metered-input EVMI2130X has no outlet LED because it has no outlet
-  switching: there is no state to show.
+- The EVMI2130X has no outlet LED because it has no outlet switching: there is
+  no state to show.
 
 So **every PDU that can switch an outlet in scope has a lamp for it**, and the
 state is drawn on the real lamp:
 
 - **The lamp is its own part, placed beside the outlet with `for:`** naming
   the outlet: `eaton/g4-outlet-led@1` on the G4, a Tripp Lite lamp part on the
-  other two. `for:` already means "this lamp annotates that", L76 already
-  exempts a lamp drawn beside its jack, and the outlet stays the plain
-  `std/c13-outlet@1` that `PART_OUTLET` exports. A composed outlet-with-lamp
-  part was rejected: it would make a standard C13 an Eaton part, with a
-  `PART_OUTLET` row of its own, to carry a lamp the outlet does not contain.
+  other two. `for:` already means "this lamp annotates that", and the outlet
+  stays the plain `std/c13-outlet@1` that `PART_OUTLET` exports. A composed
+  outlet-with-lamp part was rejected: it would make a standard C13 an Eaton
+  part, with a `PART_OUTLET` row of its own, to carry a lamp the outlet does
+  not contain. (L76, the RJ45 census, is not a precedent here: it asks every
+  Ethernet jack whether it has lamps and says nothing of power outlets.)
 - **The state is addressed by the outlet, and follows `for:` to the lamp.** A
   user switches off A1, not the lamp beside it, and the rack file keys by the
-  outlet path. The kit, applying `state-off` to a path, also applies it to each
-  element whose `data-for` names that path. This is the one kit change outlet
-  state needs; today a mark reaches only what its selector matches.
+  outlet path.
 - **The colours are the device statement:** `states: [{name: on, color:
   '#22c55e'}, {name: off, color: '#ef4444'}]` on the G4 lamps, and on and an
   unlit off on the Tripp Lite lamps, unless a photograph shows otherwise. An
-  `off` that is LIT (red) is new: `kit/states.js` treats `off` as the absence of
-  a state and `kit/marks.js` skips a custom lamp colour on `off`. Both still
-  work, since a declared off colour reaches the drawing as a scoped rule; the
-  comment in `states.js` that says `off` is unlit becomes "unlit unless the
-  device declares a colour".
+  `off` that is LIT (red) is new to the library.
+- **A lamp with no state set draws unlit,** as every lamp in the library does,
+  whatever the colour of its declared `off`.
+
+**What the kit must change.** Following an outlet state to its lamp is not one
+change; the state passes through four places that each key by one path.
+
+1. **The 2D marks path** (`kit/marks.js apply`) puts `state-<name>` only on
+   what a selector matches. Applying a state to an outlet path must also apply
+   it to every element whose `data-for` names that path. A `for:` value is
+   written as a placement id, and `data-for` carries it bare (a cross-view
+   target gets a leading slash), so the binding reaches top-level placements
+   only: an outlet inside a module bay would need its full path, and no PDU in
+   scope has one.
+2. **The 3D path** keys by path too: `viewer3d.js applyStatesNow` hands its map
+   to `relief.js setNodeStates`, which keys each class by `data-path`, and
+   re-renders only faces whose text contains a changed path. A lamp at its own
+   path does not follow the outlet. The fix is one expansion, from an outlet
+   path to the outlet and its `for:` lamps, run before both the 2D and the 3D
+   application, so the two cannot disagree.
+3. **The Explorer chips** (`kit/index.html chips`) treat `off` as clearing
+   every state, and never set `state-off`. That was right while `off` meant
+   unlit; with a declared off colour it cannot show the G4 red, and the cleared
+   state is what `pushStates` sends to 3D. The chip must set `state-off` when
+   the element declares a colour for it, and clear only when it does not.
+4. **`kit/states.js`** says `off` is the absence of a state (its `paints`
+   answers true for `off` without asking). The comment and the shortcut become
+   "unlit unless the device declares a colour for it", so a declared red off is
+   reported as painting. `kit/marks.js` keeps skipping a custom lamp colour on
+   `off`, which is still right: a custom colour is for a lamp nobody documented.
+5. **The rack file** carries `states` on items and `zeroU` entries, and the
+   kit applies them through the same expansion (section 3.1, point 3).
 
 **A switched outlet with no lamp** is not in scope, and the fallback is stated
-so the first one does not invent a lamp: the base stylesheet dims an outlet
-whose state is `off` (as `absent` does, at a different opacity) and draws `on`
-as shipped. Nothing is drawn that the hardware does not have.
+so the first one does not invent a lamp: for an outlet that declares the state
+vocabulary and has no lamp bound to it by `for:`, the base stylesheet dims the
+outlet when it is `off` (as `absent` does, at a different opacity) and draws
+`on` as shipped. An outlet with a lamp is never dimmed; its lamp says it.
 
 **A dead outlet behind an open breaker** is the state a metered-input PDU does
 have. The G4 breaker already declares `states: [on, off]` on its rocker. With
 `through` naming the breaker (section 5), the kit can dim every outlet whose
 breaker is `off`, which is the true picture of a tripped branch on any PDU,
-switched or not. This needs `through` emitted as `data-through` (it is not
-emitted today) and is a second, optional kit step.
+switched or not. This needs `through` emitted into the drawing as a new
+`data-through` attribute (it is not emitted today), and is an optional kit
+step after the five above.
 
 ### 3.3 The state vocabulary
 
@@ -196,17 +243,24 @@ Load is a reading, not a state: a number that changes, with a unit. It is not
 printed on the hardware, so it is not a field; it is not a choice among names,
 so it is not a state.
 
-**Decision: a `readings` map, carried as `fields` and `states` are.**
+**Decision: `readings` on a rack entry,** beside `states`. The marks document
+does not take it yet; whether and how it does is a later decision of its own.
 
 ```yaml
 readings:
-  outlet-a1: {current-a: 1.8, power-w: 372}
-  breaker-a: {current-a: 11.2}
-  input: {current-a: 19.6}
+  source: SNMP poll of the PDU network module   # what the figures came from
+  at: '2026-10-08T14:05:00Z'                    # when
+  values:
+    outlet-a1: {current-a: 1.8, power-w: 372}
+    breaker-a: {current-a: 11.2}
+    input: {current-a: 19.6}
 ```
 
-- The key is a part path, so the same map reads a branch (a breaker path) and
-  the input (the cord) as well as an outlet.
+- **`source` and `at` are required.** A reading without its source and its time
+  is a number a reader cannot weigh, and every drawing or export that shows a
+  reading states both.
+- The `values` key is a part path, so the same map reads a branch (a breaker
+  path) and the input (the cord) as well as an outlet.
 - Three reading names to start: `current-a`, `power-w` and `energy-kwh`, each a
   number. They are the three quantities the G4 MA and MO models meter per
   outlet.
@@ -215,15 +269,14 @@ readings:
   `outlet` on every outlet. The kit refuses a reading where the PDU meters
   nothing, with a sentence, as it refuses a swap a slot does not accept.
 - **The kit draws a reading as an annotation,** a small badge beside the part
-  in the legend ink and not in the hardware palette, with the reading time in
-  the legend. A static export says what it shows and when.
+  in the legend ink and not in the hardware palette, and the legend names the
+  source and the time.
 - A PDU display that shows a load (the Tripp Lite ammeter) can show the input
   reading; it is a display with `characters` (section 9), and the kit writes
   the rounded figure into it.
 
-Carried by a marks document (a new top-level key, beside `fields`) and by a
-rack entry. Rejected: a mark `label` (prose, not typed, and drawn only in the
-legend), and a field (section 3.1).
+Rejected: a mark `label` (prose, not typed, and drawn only in the legend), and
+a field (section 3.1).
 
 ## 4. Input rating
 
@@ -231,8 +284,8 @@ legend), and a field (section 3.1).
 
 `spec/schemas/profiles.yaml` gives the `power` profile two `attrs.power`
 requirements: one of `input-dc` or `input-ac`, and one of the `power-max-w`
-spellings, the unit's own draw, with the warning that the power it carries is
-not a draw. The pilot states `input-voltage`, `input-current-a`,
+spellings, the draw of the unit itself, with the warning that the power it carries is
+not a draw. The pilot states `input-plug`, `input-voltage`, `input-current-a`,
 `plug-rating-a` and `capacity-kw`, which match neither, so `specified` is
 false.
 
@@ -241,7 +294,7 @@ false.
 ```yaml
 attrs:
   power:
-    input-ac: '200-240 V three-phase delta, 3W+PE, 40 A, 50/60 Hz'  # prose, as 70 devices write it
+    input-ac: '200-240 V three-phase delta, 3W+PE, 40 A, 50/60 Hz'  # prose, as 80 devices write it
     input-plug: cs8365c            # the input power port type: a PART_POWER value
     input-cord: fixed              # fixed | detachable
     input-phase: three             # single | three
@@ -252,13 +305,21 @@ attrs:
     capacity-kw: 14.4              # the load it can hand on; never a draw
 ```
 
-- **`input-ac` stays the prose key.** Seventy devices write it, the profile
+- **`input-ac` stays the prose key.** Eighty devices write it, the profile
   reads it, and it holds what no number can (a range, a frequency). Every PDU
   states it; the pilot gains one.
-- **`input-plug` is a slug, not prose,** and it is the type the input part
+- **`input-plug` changes from prose to a slug,** the type the input part
   exports: lint checks that it equals the `PART_POWER` value of the part the
-  outlets are `fed-by`. The pilot prose (`NEMA L21-30P on a fixed 10 ft cord`)
-  splits into `input-plug`, `input-cord` and the provenance.
+  outlets are `fed-by`. The pilot prose (a NEMA L21-30P on a fixed 10 ft cord,
+  10 AWG, five conductors) splits into `input-plug: nema-l21-30p`,
+  `input-cord: fixed` and the provenance. Only the pilot writes `input-plug`
+  today, so the change of meaning reaches one device.
+- **`input-voltage` stays where it is and a PDU does not write it.** It is the
+  prose voltage key of 40 devices and 31 component contracts, most of them
+  boxes with an AC and a DC build, and it is not moved. A PDU states its
+  voltage in `input-ac` (prose) and `input-voltage-v` (the number); the pilot
+  moves its `input-voltage` prose into `input-ac`. Lint warns on a device of
+  the `power` profile that states `input-voltage` beside `input-voltage-v`.
 - **`input-current-a` and `plug-rating-a` are both kept,** because the SKU
   titles give the plug rating (30 A, 50 A) and the drawings the input rating
   (24 A, 40 A), and a reader who sees one figure will assume the other.
@@ -266,17 +327,19 @@ attrs:
   `capacity-scope` sentence where a source qualifies it.
 - **The draw requirement is not weakened.** A PDU with a network module does
   draw power; no held source states how much. The unstated draw stays the
-  visible `specified` gap it is. Accepting `capacity-kw` in its place would be
-  the carried-for-drawn confusion the profile warns against.
+  visible `specified` gap it is, and the G4 PDUs stay `specified: false` until
+  a source gives the figure. Accepting `capacity-kw` in its place would be the
+  carried-for-drawn confusion the profile warns against.
 
 ### 4.3 What DCIM can carry
 
-Neither target has an input rating on a device type: a power port template
-carries a type and two draws in watts, and the amperes, volts and phase are
-fields of a power FEED, an instance. The export writes the rating into the
-input power port `description` (NetBox keeps it; whether a Nautobot import
-keeps a power port description is to be checked as #806 checked the outlet)
-and into the device type comments, and leaves `maximum_draw` empty.
+Neither target has an input rating on a device type. A power port template
+carries a type and draws in watts (`maximum_draw` and `allocated_draw` in both;
+Nautobot adds `power_factor`), and the amperes, volts and phase are fields of a
+power FEED, an instance. The export writes the rating into the input power
+port `description` (NetBox keeps it; whether a Nautobot import keeps a power
+port description is to be checked as #806 checked the outlet) and into the
+device type comments, and leaves the draws and the power factor empty.
 
 ## 5. Phases, breakers, sections and `feed_leg`
 
@@ -315,13 +378,13 @@ it as data, and so will the Rack Builder when it sums load per line.
   `[L1, N]` is line to neutral. The pilot breaker A says `lines: [L1, L2]`.
 - **`through` may name a fixed breaker.** #806 made `through` the bay a circuit
   runs through and the pilot did not write it, because its breakers are fixed
-  parts. Widening it costs little and buys three things: the outlet description
-  in both targets says which breaker protects it (as the 300CB08 outlets do), an
-  outlet reaches its `lines` through its breaker instead of restating them, and
-  the kit can dim the outlets of an open breaker (section 3.2). L133 then
-  accepts a bay OR a placement of class `breaker`, and L135 (one position, one
-  circuit) applies only when `through` names a bay, since a PDU breaker feeds
-  fourteen outlets by design.
+  parts. Widening it buys three things: the outlet description in both targets
+  says which breaker protects it (as the 300CB08 outlets do), an outlet reaches
+  its `lines` through its breaker instead of restating them, and the kit can
+  dim the outlets of an open breaker (section 3.2). L133 then accepts a bay OR
+  a placement of class `breaker`, and L135 (one position, one circuit) applies
+  only when `through` names a bay, since a PDU breaker feeds fourteen outlets
+  by design.
 - **Sections stay regions.** A region is a drawing grouping and carries no
   power semantics; the export does not read it.
 - **Without either key,** an outlet takes its lines from the input: single-phase
@@ -329,7 +392,8 @@ it as data, and so will the Rack Builder when it sums load per line.
   a warning that the wiring is unstated.
 
 Stating `through` or `lines` is a minor version, as `fed-by` is, and changing
-one is a major: both move an imported outlet description or `feed_leg`.
+one is a major: both move an imported outlet description or `feed_leg`. The
+EVMI2130X takes a minor bump when it states them.
 
 ## 6. Mounting a zero-U PDU
 
@@ -341,38 +405,48 @@ attachment point (`left`, `right`, or the four `left-front` to `right-rear` of a
 four-post), fits it by `ru`, and declares no guides, so no cable lane runs
 through it. This stays the mount until racks are products (#935).
 
-### 6.2 The mounting interface: a proposed vocabulary
+### 6.2 The mounting interface: mount point, slot and pitch
 
 #939 (a bracket the PDU hangs on) and #935 (a cabinet zero-U channel) both need
 to check a PDU against what it hangs on, and #939 says whichever lands first
-sets the vocabulary. This note proposes it.
+sets the vocabulary. This note sets it.
 
 - **A mount point** is a feature of the hanging part that engages the frame:
   a button, a stud. On the PDU it is already a placement, so its position is
   data the drawing holds.
-- **A slot** is the feature that takes it: a keyhole in a bracket or a channel.
-- **A mounting interface** names the pair, as a connector interface names a
-  plug and its socket, in a `mounting:` block of
-  `spec/schemas/connectors.yaml`, so the turns and `mates` machinery is not
-  reinvented. The G4 guide (2.11) gives the first: a shoulder button for
-  keyhole slots 11.5 to 12.5 wide in 1.5 to 2 mm sheet, or 14 wide in 3 mm.
-  Proposed id: `pdu-button`. The Tripp Lite buttons are checked against it
-  when that PDU is modelled.
+- **A slot** is the feature that takes it: a keyhole in a bracket or in a
+  channel.
+- **A mounting interface** names the pair, through the mechanism every
+  connector already uses. A component `interface` says the part IS a receptacle
+  that accepts parts naming that interface in `mates:`
+  (`spec/schemas/component.schema.json`), so **the slot carries `interface`
+  and the button carries `mates`**:
+  - the keyhole part of a bracket (#939) or a channel (#935) declares
+    `interface: pdu-button`;
+  - `eaton/g4-mounting-button@1` declares `mates: pdu-button`;
+  - `pdu-button` is an entry of `interfaces:` in
+    `spec/schemas/connectors.yaml`, where every interface resolves, with a note
+    citing the G4 guide (2.11): a shoulder button for keyhole slots 11.5 to
+    12.5 wide in 1.5 to 2 mm sheet, or 14 wide in 3 mm. Whether it also needs a
+    `standards.yaml` entry follows that file's own rules for an interface no
+    standard governs, as `saf-d-grid` does. The Tripp Lite buttons are checked
+    against it when that PDU is modelled.
 - **Pitch** is the centre-to-centre distance of two mount points along the
   length, in millimetres: 1555.8 on both G4 PDUs (each drawing dimensions it),
   1556 on the PDUMV20HVNETLX. The pitch is NOT a new manifest key. It is
   derived from the button placements, which already sit 1555.8 apart on the
   EVMI2130X rear view, and published per configuration in `configs.json` as
-  `mount-points: [{interface: pdu-button, at: <mm from the bottom>}, ...]`. A
+  `mount-points: [{mates: pdu-button, at: <mm from the bottom>}, ...]`. A
   second statement of a number the drawing already holds is a number that can
   disagree with it.
-- **The button part declares the interface:** `eaton/g4-mounting-button@1`
-  gains `interface: pdu-button`, a patch.
-- **The other side** (#939 bracket, #935 channel) declares its slots with the
-  same interface and either their positions or a slot spacing. The kit refusal
-  `fitsZeroU` does not make yet (#926 section 8) is then: every mount point
-  lands on a slot of its interface, within a stated tolerance, or the placement
-  is refused with a sentence naming the point that misses.
+- **The button gains `mates`, which is a minor version of it, not a patch:**
+  the part newly offers itself to every slot that presents `pdu-button`. No
+  device that places it moves, and the devicelock check settles what the four
+  devices that compose it take.
+- **The fit check.** The refusal `fitsZeroU` does not make yet (#926 section 8)
+  is: every mount point lands on a slot whose interface it mates, within a
+  stated tolerance, or the placement is refused with a sentence naming the
+  point that misses.
 
 ### 6.3 The zero-U channel against rack-side
 
@@ -395,12 +469,14 @@ part says which way its working face looks, not which upright it is on. Two
 already more permissive: two parts on different attachment points (`left-front`
 and `left-rear`) never meet.
 
-**Decision:** a lab rack-side placement takes the kit attachment point names,
-and L154 claims per attachment point, as `fitsZeroU` does. On a two-post rack
-there is one point a side and the rule is unchanged; on a four-post, front and
-rear are two points. When channels arrive, both claim per channel. Duct sections
-that stack keep stacking, since they share a point. This changes the lab format
-(`labs.json` gains the point), so it is a step of its own, after the devices.
+**Decision:** a lab rack-side placement names its point with the kit
+attachment point names: its `side` takes `left` or `right` on a two-post rack,
+and `left-front`, `left-rear`, `right-front` or `right-rear` on a four-post,
+and `labs.json` publishes the point. L154 claims per attachment point, as
+`fitsZeroU` does. On a two-post rack there is one point a side and the rule is
+unchanged; on a four-post, front and rear are two points. When channels
+arrive, both claim per channel. Duct sections that stack keep stacking, since
+they share a point.
 
 ## 7. A 1U or 2U PDU (PDUMH20NET)
 
@@ -461,8 +537,8 @@ Needs new:
 - `lines` on six breakers and `through` on 42 outlets, from the one-line
   diagram read at zoom: the pairing of A to F onto L1, L2 and L3 is not yet
   stated by any held text;
-- `metering-scope: outlet`, `outlet-switching: true`, so the outlets group
-  declares `[on, off]` and the outlets admit readings.
+- `metering-scope: outlet`, `outlet-switching: true` (`managed`), so the
+  outlets group declares `[on, off]` and the outlets admit readings.
 
 Its gallery is mostly the shared CHASSIS_424 shots and close-ups of its
 metered-input sibling; cite those as sibling evidence.
@@ -475,10 +551,9 @@ RJ45, USB and lamp parts for the LX interface.
 
 Needs new:
 
-- the Tripp Lite namespace and its vendor entry (the vendor registry deferred
-  it to the first Tripp Lite part); whether these parts are `eaton/` or a
-  `tripplite/` namespace is an open question (section 11);
-- a mounting button (1556 pitch, 134.01 from the top) with `interface:
+- its parts in the `eaton/` namespace (section 11), named for the series where
+  a name would otherwise collide with a G4 part;
+- a mounting button (1556 pitch, 134.01 from the top) with `mates:
   pdu-button` if it fits the interface, and the removable brackets of drawing
   details A to E as decor or parts;
 - an outlet lamp part, `on` lit and `off` unlit;
@@ -488,7 +563,7 @@ Needs new:
   `gaps:` entry until the manual figures or a photograph place them;
 - `input-cord: detachable`, `input-plug: iec-60320-c20` with the L6-20P cord
   in the provenance and prose, `metering-scope: branch`, `outlet-switching:
-  true`.
+  true` (`switched-metered-branch`).
 
 ### 9.3 PDUMH20NET (Tripp Lite series switched, 1U)
 
@@ -497,49 +572,64 @@ port, the outlet lamp and mounting vocabulary of 9.2, and #904 ears.
 
 Needs new:
 
-- a fixed L5-20P cord part on the rear (`nema-l5-20p`);
+- a fixed L5-20P cord part on the rear (`nema-l5-20p`), in `eaton/`;
 - the WEBCARDLX network card as a module, in a bay;
 - the two-digit ammeter as a display;
 - every position from photographs (a front and a rear, both near straight-on),
   each checked as orthographic before it is measured, and stated as
   `photo-measured`;
-- `metering-scope: input`, `outlet-switching: true`.
+- `metering-scope: input`, `outlet-switching: true`
+  (`switched-metered-input`).
 
 ## 10. Order of work
 
-1. This note, and the one-way items of section 12 settled.
+1. This note.
 2. Schema and lint: `metering-scope`, `outlet-switching` and the input keys
-   (section 4), with the lint that ties `outlet-switching` to outlet states and
-   `input-plug` to `PART_POWER`; `lines`; `through` widened (L133, L135).
-3. The pilot brought up to it: `input-ac` and the structured input keys,
-   `lines` on three breakers, `through` on 42 outlets. A minor version.
-4. Export: the `feed_leg` rule, the descriptions, the comments; `mount-points`
-   in `configs.json`.
-5. Kit: state follows `for:` to the lamp; `states` and `readings` on rack
-   entries and `readings` in the marks document; `zeroU` entries gain `swaps`,
-   `fields` and `states`; the reading badge.
-6. EVMA8365X, then PDUMV20HVNETLX, then PDUMH20NET.
-7. Later, with #939 and #935: `pdu-button` slots on brackets and channels, the
-   fit check, and L154 per attachment point.
+   (section 4), with the lint that ties `outlet-switching` to outlet states,
+   `input-plug` to `PART_POWER`, and warns on `input-voltage` beside
+   `input-voltage-v`; `lines`; `through` widened (L133, L135). `lines` is a
+   placement key, so devicelock must fingerprint it: it joins
+   `PLACEMENT_ADDRESSING` beside `fed-by` and `through`, and
+   `test_lock_sees_placement_keys` holds the sets to the schema.
+3. The pilot brought up to it: `input-ac`, the structured input keys,
+   `input-plug` as a slug, `lines` on three breakers, `through` on 42 outlets.
+   A minor version.
+4. Export: the `feed_leg` rule, the descriptions, the comments, the derived
+   class; `mount-points` in `configs.json`.
+5. Kit: the five outlet-state changes of section 3.2; `states` and `readings`
+   on rack entries; `zeroU` entries gain `swaps`, `fields` and `states`; the
+   reading badge with its source and time.
+6. Lab format and lint: attachment points in rack-side lab placements and
+   `labs.json`, and L154 per point.
+7. EVMA8365X, then PDUMV20HVNETLX, then PDUMH20NET.
+8. With #939 and #935: `pdu-button` in the connectors registry, slots on
+   brackets and channels, `mates` on the buttons, and the fit check.
+9. Later and separately: whether the marks document takes `readings`.
 
-## 11. Open questions
+## 11. Decisions
 
-- **Outlet state home.** This note puts the vocabulary in the device and the
-  value in the marks document and the rack entry. A live source (SNMP or the
-  vendor API) writing the rack entry is the obvious next step and is not
-  designed here.
-- **Off colour.** The G4 off lamp is lit red. Whether a drawing of a PDU with
-  no state set shows its lamps as shipped (unlit) or as a powered unit would
-  (green) is a presentation choice; this note says unlit, the default for every
-  lamp in the library.
-- **Readings in a static export.** A badge carries a time; whether an export
-  that has readings must state their source as well is open.
-- **Tripp Lite namespace.** `eaton/` (the seller) or `tripplite/` (the series
-  name on the unit and on the manuals).
-- **Two PDUs a side.** Whether L154 moves to attachment points before #935, or
-  waits for channels.
-- **The G4 draw.** No held source gives the PDU own draw; until one does, the
-  pilot and the EVMA8365X stay `specified: false`.
+Each was decided 2026-10-08, as this note recommended.
+
+1. **Outlet state:** the vocabulary is the device statement and the value lives
+   in documents; `on` and `off` map to NetBox `enabled` and `disabled`.
+2. **A lamp with no state set draws unlit.**
+3. **`readings` goes in the rack file first;** the marks document is a later,
+   separate decision.
+4. **An export that shows readings states their source and time.**
+5. **`through` widens to fixed breakers, with a `lines` key;** the EVMI2130X
+   takes a minor bump.
+6. **The mounting vocabulary is mount point, slot and pitch,** with the pitch
+   derived and published as `mount-points` (the mechanism is section 6.2).
+7. **L154 moves to attachment points now.**
+8. **The Tripp Lite series models and their parts go under `eaton/`.**
+9. **The G4 PDUs stay `specified: false`** until a source gives their draw.
+
+Still open:
+
+- whether a Nautobot import keeps a power port `description` (section 4.3);
+- the pairing of the EVMA8365X breakers onto L1, L2 and L3 (section 9.1);
+- a live source (SNMP or the vendor API) writing a rack entry `states` and
+  `readings`, which is the obvious next step and is not designed here.
 
 ## 12. One-way items
 
@@ -548,13 +638,18 @@ export or a saved document uses it.
 
 | item | where | why it is one-way |
 |---|---|---|
-| `metering-scope`, `outlet-switching` | `attrs.management` | attrs are flattened to `data-*` on every drawing; a rename moves every consumer |
-| `input-ac` (prose), `input-plug`, `input-cord`, `input-phase`, `input-wiring`, `input-voltage-v`, `input-current-a`, `plug-rating-a`, `capacity-kw` | `attrs.power` | the same |
-| the derived class names `basic`, `metered-input`, `metered-outlet`, `switched`, `managed` | `configs.json`, `devices.json`, DCIM comments | published for filtering |
+| `metering-scope` (`none`, `input`, `branch`, `outlet`), `outlet-switching` | `attrs.management` | attrs are flattened to `data-*` on every drawing; a rename moves every consumer |
+| the eight class names: `basic`, `switched`, `metered-input`, `switched-metered-input`, `metered-branch`, `switched-metered-branch`, `metered-outlet`, `managed` | `configs.json`, `devices.json`, DCIM comments | published for filtering |
+| `input-ac` on a PDU, `input-cord`, `input-phase`, `input-wiring`, `input-voltage-v`, `input-current-a`, `plug-rating-a`, `capacity-kw` | `attrs.power` | flattened, as above |
+| `input-plug` changing from prose to a slug | `attrs.power` | a consumer that read the prose reads a slug |
 | `lines`, and `through` naming a fixed breaker | placement keys | they change an imported outlet description and `feed_leg`; changing one is a major |
+| `data-through` | a new drawing attribute | consumers of the drawing read it |
 | the `feed_leg` rule (section 5.2) | DCIM export | a DCIM that imported a leg holds it |
 | outlet states `on`, `off`, and their map to NetBox `enabled`, `disabled` | device `states`, rack file, marks documents | saved documents and share URLs carry the names |
-| `readings` and the reading names `current-a`, `power-w`, `energy-kwh` | marks document (`additionalProperties: false` at v1, so a v1 validator refuses the key) and rack entries | saved documents carry them |
+| the Explorer meaning of `off`: a state that can be lit, not the absence of one | `kit/index.html`, `kit/states.js` | a saved state set as `off` reads differently |
+| `readings`, its `source`, `at` and `values`, and the reading names `current-a`, `power-w`, `energy-kwh` | rack file entries | saved rack files carry them |
+| a share-URL codec slot for readings, if the marks document takes them | `kit/marks.js` encode and decode | a slot, once given out, is held by every link written with it |
 | `states` on rack items; `swaps`, `fields`, `states` on `zeroU` entries | rack file | saved rack files carry them |
-| `pdu-button`, the `mounting:` block, `mount-points` | connectors registry, `configs.json` | #939 and #935 build on the names |
+| attachment-point names in rack-side lab placements | lab `side`, `labs.json` | saved labs and the published index carry them |
+| `pdu-button` as an interface, and `mount-points` | connectors registry, `configs.json` | #939 and #935 build on the names |
 | outlet names as printed (already shipped by the pilot) | DCIM export | a renamed outlet is a new outlet to a DCIM |
