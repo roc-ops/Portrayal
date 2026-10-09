@@ -10,6 +10,7 @@
 // passes through, so there a U is never shared.
 
 import {RU} from './rails.js';
+import {uLabel, zeroUOf, zeroUBottom, zeroUOffset, SIDES} from './model.js';
 
 export const REACH_MM = 50;   // within this of the far rail, a device's far panel is visible there
 
@@ -19,16 +20,56 @@ export const REACH_MM = 50;   // within this of the far rail, a device's far pan
 // come out through the far rail into a manager there.
 export const isRackFace = c => c?.mount === 'rack-face';
 
+// A NARROW RACK-FACE PART (#926): narrower than the 450 mm clear opening of a
+// 19-inch rack, such as a finger bracket. Placed with `side` it claims its
+// units on that face and that rail only, so one can stand on each rail at the
+// same U; any other rack-face part, and a narrow one with no side, claims both.
+export const NARROW_MM = 450;
+export const isNarrow = c => isRackFace(c) && Number(c?.w) > 0 && Number(c.w) < NARROW_MM;
+// The rail an item is on: its `side` when its part is narrow, else null (both).
+export const railOf = (item, chassisOf) => (SIDES.includes(item?.side) && isNarrow(chassisOf(item.ref)) ? item.side : null);
+
+// A ZERO-U PART (#926) stands beside the rack at an attachment point and takes
+// no rack unit (model.js zeroUOf). The mounts that are zero-U parts, in one
+// place: a later mount (an in-cabinet channel) joins the list.
+export const ZERO_U_MOUNTS = ['rack-side'];
+export const isZeroUPart = c => ZERO_U_MOUNTS.includes(c?.mount);
+// How many U it runs beside: its stated `ru`, not its drawn height (the 45U
+// FS ducts are drawn 2108 mm, cover included, beside 2000 mm of rail). A part
+// that states none, or 0, is measured by its height.
+export const zeroUUnits = c => (Number(c?.ru) >= 1 ? Math.round(c.ru)
+  : Math.max(1, Math.ceil(Number(c?.h) / RU - 1e-6) || 1));
+export const zeroUSpan = (z, chassisOf) => {
+  const lo = zeroUBottom(z);
+  return [lo, lo + zeroUUnits(chassisOf(z.ref)) - 1];
+};
+const uSpanText = (frame, lo, hi) => {
+  const [a, b] = [uLabel(frame, lo), uLabel(frame, hi)].sort((x, y) => x - y);
+  return a === b ? `U${a}` : `U${a}-U${b}`;
+};
+export const zeroUSpanText = (frame, z, chassisOf) => uSpanText(frame, ...zeroUSpan(z, chassisOf));
+const no = reason => ({ok: false, reason});
+const nameOf = (c, ref) => c?.model ?? ref;
+// A part too tall for the rack from its bottom unit.
+const tooTall = (f, u, lo) =>
+  no(`${u}U tall; ${f.heightRU - lo + 1}U from U${uLabel(f, lo)} to the top of this ${f.heightRU}U rack.`);
+
 // NOT RACK-MOUNT. The catalogue states `mount` only when it is not "rack".
 export const isRackMount = chassis => !chassis?.mount || chassis.mount === 'rack';
 // The depth between the rails a body must exceed to come out of the far one:
 // two-post rails are one plane, so any body does.
 const between = f => (f.kind === 'two-post' ? 0 : f.railDepth);
 
+// Every unit the part spans is judged, on its face and, for a narrow part on
+// one rail, on that rail only (#926). A `side` on a part that is not narrow is
+// no rail (railOf): it is judged across both, as it is drawn.
 function fitsRackFace(rack, cand, c, chassisOf, {ignoreId = null} = {}) {
   const f = rack.frame, rd = between(f);
+  const side = railOf(cand, () => c);
+  const u = Math.max(1, c.ru ?? 1), lo = cand.ru, hi = cand.ru + u - 1;
   if (cand.ru < 1) return {ok: false, reason: 'Below U1.'};
   if (cand.ru > f.heightRU) return {ok: false, reason: `U${cand.ru} is past the top of this ${f.heightRU}U rack.`};
+  if (hi > f.heightRU) return tooTall(f, u, lo);
   if (cand.face === 'rear' && rd + c.d > f.usableDepth)
     return {ok: false, reason: `${mm(c.d)} mm out from the rear rail; this rack allows ${mm(f.usableDepth - rd)} mm there.`};
   if (cand.on != null) {
@@ -43,9 +84,11 @@ function fitsRackFace(rack, cand, c, chassisOf, {ignoreId = null} = {}) {
   for (const o of rack.items) {
     if (o.id === ignoreId) continue;
     const oc = chassisOf(o.ref);
-    if (!oc || !overlaps([cand.ru, cand.ru], span(o, chassisOf))) continue;
+    if (!oc || !overlaps([lo, hi], span(o, chassisOf))) continue;
     if (isRackFace(oc)) {
-      if (o.face === cand.face) return {ok: false, reason: `Taken by ${o.label} on the ${o.face}.`};
+      const rail = railOf(o, chassisOf);
+      if (o.face === cand.face && !(side && rail && rail !== side))
+        return {ok: false, reason: `Taken by ${o.label} on the ${o.face}${rail ? `, ${rail} rail` : ''}.`};
       continue;
     }
     if (o.face !== cand.face && oc.d > rd)
@@ -65,6 +108,7 @@ const overlaps = (a, b) => a[0] <= b[1] && b[0] <= a[1];
 export function fits(rack, cand, chassisOf, {ignoreId = null} = {}) {
   const f = rack.frame, c = chassisOf(cand.ref);
   if (!c) return {ok: false, reason: `No size is known for ${cand.ref}.`};
+  if (isZeroUPart(c)) return no(`${nameOf(c, cand.ref)} stands beside the rack, not on its rails: place it with zerou.place.`);
   if (isRackFace(c)) return fitsRackFace(rack, cand, c, chassisOf, {ignoreId});
   const lo = cand.ru, hi = cand.ru + Math.max(1, c.ru) - 1;
   if (lo < 1) return {ok: false, reason: 'Below U1.'};
@@ -115,10 +159,13 @@ export function availableDepth(rack, item, chassisOf) {
 // heightOf(chassisOf) is that height as a lookup by item: what names a device
 // with its U (cable-rules.js endName) asks it.
 export const heightOf = chassisOf => item => Math.max(1, chassisOf(item.ref)?.ru ?? 1);
+// A `side` is kept only where it is a rail (railOf), so a drawing or an export
+// that reads it never puts a part across the opening on one rail.
 export const itemsWithU = (rack, chassisOf) =>
-  rack.items.map(i => {
+  rack.items.map(({side, ...i}) => {
     const mount = chassisOf(i.ref)?.mount;      // stated only when it is not a rack's
-    return {...i, u: heightOf(chassisOf)(i), ...(isRackMount({mount}) ? {} : {mount})};
+    const rail = railOf({...i, side}, chassisOf);
+    return {...i, u: heightOf(chassisOf)(i), ...(isRackMount({mount}) ? {} : {mount}), ...(rail ? {side: rail} : {})};
   });
 
 export const attachPoints = kind => (kind === 'four-post'
@@ -204,22 +251,55 @@ export function shrinkRack(rack, newHeight, chassisOf) {
   return {rack: withFrameHeight(packedItems), moved, removed};
 }
 
-// ZERO-U: along an attachment point, by offset in mm from the
-// bottom of the rails. The catalogue has none yet; the rules are here so the
-// day it does, placing one is data, not a change to this file.
+// ZERO-U (#926): a zero-U part on an attachment point of this frame, its
+// bottom level with a U (`ru`, or the `offsetMm` a file stores), within the
+// rack's height by the units it states (zeroUUnits), and never overlapping
+// another zero-U part on the same attachment point. Parts on two attachment
+// points never meet, whatever their height.
 export function fitsZeroU(rack, cand, chassisOf, {ignoreId = null} = {}) {
-  const f = rack.frame;
-  if (!attachPoints(f.kind).includes(cand.at))
-    return {ok: false, reason: `${cand.at} is not an attachment point of a ${f.kind} frame.`};
-  const len = chassisOf(cand.ref)?.h;
-  if (!len) return {ok: false, reason: `No size is known for ${cand.ref}.`};
-  if (cand.offsetMm < 0 || cand.offsetMm + len > f.heightRU * RU)
-    return {ok: false, reason: `${mm(len)} mm long; it runs past the top of the rack.`};
-  for (const o of rack.zeroU) {
-    if (o.id === ignoreId || o.at !== cand.at) continue;
-    const ol = chassisOf(o.ref)?.h ?? 0;
-    if (cand.offsetMm < o.offsetMm + ol && o.offsetMm < cand.offsetMm + len)
-      return {ok: false, reason: `Overlaps ${o.label ?? o.ref} at ${o.at}.`};
+  const f = rack.frame, c = chassisOf(cand.ref);
+  if (!c) return no(`No size is known for ${cand.ref}.`);
+  if (!isZeroUPart(c)) return no(`${nameOf(c, cand.ref)} does not stand beside the rack: it goes on the rails.`);
+  const points = attachPoints(f.kind);
+  if (!points.includes(cand.at)) return no(`${cand.at} is not an attachment point of a ${f.kind} frame: use ${points.join(', ')}.`);
+  const lo = cand.ru ?? zeroUBottom(cand);
+  if (!Number.isInteger(lo) || lo < 1) return no('Below U1.');
+  if (lo > f.heightRU) return no(`U${lo} is past the top of this ${f.heightRU}U rack.`);
+  const u = zeroUUnits(c), hi = lo + u - 1;
+  if (hi > f.heightRU) return tooTall(f, u, lo);
+  for (const o of zeroUOf(rack)) {
+    if (o.id === ignoreId || o.at !== cand.at || !isZeroUPart(chassisOf(o.ref))) continue;
+    if (overlaps([lo, hi], zeroUSpan(o, chassisOf))) return no(`Overlaps ${o.label || o.ref} at ${o.at}.`);
   }
   return {ok: true};
+}
+
+// THE ZERO-U PARTS AFTER A FRAME CHANGE (#926). A new kind moves each part to
+// the attachment point on its own side of the new frame (left-front and
+// left-rear to left; left to left-front), a lower height moves a part that now
+// runs past the top down until it fits, and a part that still does not fit -
+// taller than the rack, or overlapping one kept before it - is removed. Parts
+// are judged in the order the rack lists them. Returns the rack with `moved`
+// and `removed`, each a list of entries as they were.
+export function settleZeroU(rack, chassisOf) {
+  const points = attachPoints(rack.frame.kind);
+  const placeable = new Set(zeroUOf(rack).filter(z => isZeroUPart(chassisOf(z.ref))));
+  const moved = [], removed = [], gone = new Set();
+  let kept = {...rack, zeroU: (rack.zeroU || []).filter(z => !placeable.has(z))};
+  const out = (rack.zeroU || []).map(z => {
+    if (!placeable.has(z)) return z;
+    const side = String(z.at).startsWith('right') ? 'right' : 'left';
+    const at = points.includes(z.at) ? z.at : points.find(p => p.startsWith(side));
+    const u = zeroUUnits(chassisOf(z.ref));
+    const lo = Math.max(1, Math.min(zeroUBottom(z), rack.frame.heightRU - u + 1));
+    const next = at === z.at && lo === zeroUBottom(z) ? z : {...z, at, offsetMm: zeroUOffset(lo)};
+    if (!fitsZeroU(kept, {ref: z.ref, at, ru: lo}, chassisOf, {ignoreId: z.id}).ok) {
+      removed.push(z); gone.add(z);
+      return z;
+    }
+    if (next !== z) moved.push(z);
+    kept = {...kept, zeroU: [...kept.zeroU, next]};
+    return next;
+  }).filter(z => !gone.has(z));
+  return {rack: moved.length || removed.length ? {...rack, zeroU: out} : rack, moved, removed};
 }

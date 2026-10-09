@@ -129,3 +129,70 @@ As built (steps 1 and 2):
 2. `side` on `rack-face` placements, L142's per-side claim, and CMV-5U3W.
 3. The remaining four FS ducts.
 4. The site: `zeroU` drawn in the elevation and in 3D, and the lanes through the duct.
+
+## 8. In the rack file and the kit (#926)
+
+Step 4 was built in portrayal-site first (#141), with the commands and fit
+rules in the site. They are the kit's now, written for any part that stands
+beside the rack rather than for ducts alone, so that a zero-U PDU is placed
+the same way.
+
+- **The file.** The site's shape is the kit's, unchanged: an entry of
+  `rack.zeroU` is `{id, ref, cfg, label, at, offsetMm, between?}`, and a narrow
+  rack-face item carries `side`. `parseDoc` keeps `side` (it used to drop it)
+  and gives a zero-U entry with no id, or a repeated one, an id of its own.
+  The version stays 2 (`docs/format-stability.md`).
+- **What is a zero-U part.** `fit.js ZERO_U_MOUNTS`, `rack-side` today. It is
+  fitted by the units it states (`chassis.ru`), so a 45U duct drawn 2108 mm
+  long fits 45U of rail; a part that states none is measured by its height.
+  Two never overlap on one attachment point; on two they never meet.
+- **The commands.** `zerou.place`, `zerou.update` and `zerou.remove`, and
+  `side.place` and `side.set` for a narrow part, are in the kit's command
+  table, validated and undoable like the others. `place` of a zero-U part is
+  refused, and `move` of a part on one rail is judged on that rail. Every
+  rack-face part is judged on every unit it spans.
+- **A frame change** moves each part to the attachment point on its own side
+  of the new frame (left-front and left-rear to left, and left to left-front),
+  or down to fit a lower rack, and removes one that then does not fit, saying
+  which.
+- **Lanes and fill.** A lane waypoint at a U a duct spans on that upright is at
+  the duct's centre line, so a routed length runs through it; only a part that
+  declares guides carries the lane, so a PDU leaves it in the gutter. `fill`
+  and `capacityOver` count the cables through it, `fill` against the channel
+  a caller measures from the drawing (`ctx.zeroUAperture`).
+- **What each says.** `describe`, `inspect`, the export notes and the DCIM
+  device rows (no position and no face, where it stands in the comment) know
+  zero-U parts and a part's rail.
+
+**For portrayal-site.** The site's `zeroU` entries and `side` keys read as
+they are, so its follow-up deletes its command layer: `zerou.*` and `side.*`
+go through the kit's editor, and `keepSiteFields`, `withZeroUEditor`,
+`applySite` and `needsSite` go. Its other helpers map onto the kit's:
+`fitsZeroUSide` to `fitsZeroU`, `fitsSided` and `fitsItem` to `fits` (an item
+with its `side`), `ruOfZ` and `offsetOf` to `zeroUBottom` and `zeroUOffset`,
+`zSpan` to `zeroUSpan`, `isRackSide` to `isZeroUPart`, `isNarrowFace` to
+`isNarrow`, `laneXAt` to `route.js laneXAt`, `ductOnLane` to `zeroUOnLane`,
+`zeroUFill` to `fill` and `capacityOver` with `ctx.zeroUAperture`,
+`zeroULines` to `describe`, `zeroUNotes` and `zeroUEntries` to the kit's of
+the same name, `zeroUComment` to `deviceImportRows` over `zeroUImportItems`,
+`withoutZeroU` to `rackNotes(rack, {zeroU: false, chassisOf})`, and
+`railNotes` and `railComment` to `managerNotes` and `deviceImportRows`, which
+name the rail. One wording changes: the DCIM comment of a part beside the rack
+no longer calls it a vertical cable manager, since a PDU stands there too.
+
+**For a zero-U PDU (#934) and rack products (#935).** A PDU with
+`mount: rack-side` is placed, moved, drawn and exported by all of the above
+without a change, and declares no guides, so no lane runs through it. Three
+things are left for them:
+- a PDU stands in a cabinet's zero-U channel, inside the side panel, not
+  against an upright's outer face, so a duct outside and a PDU inside on one
+  attachment point do not meet. Today two zero-U parts on one attachment point
+  always overlap; a channel named on the entry, from a product frame's
+  channels, is the key that would tell them apart, and the overlap rule would
+  then be per channel;
+- the mounting interface (button or keyhole pitch) a product frame's channel
+  takes, checked against the part's when it is placed, is a refusal
+  `fitsZeroU` does not make yet;
+- a PDU that states `ru: 0` is fitted by its height (1730 mm is 39U); stating
+  the rack height it is sold for, as the ducts do, fits it the way its maker
+  means.

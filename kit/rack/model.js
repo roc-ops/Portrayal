@@ -6,7 +6,12 @@
 // edit here returns a new object - the page autosaves whatever it last
 // committed, and a shared, mutated rack is how a save would catch half an edit.
 
+import {RU} from './rails.js';
+
 export const FORMAT = 'portrayal-rack';
+// Zero-U parts and `side` (#926) did not raise it: both are optional keys a
+// version-2 reader keeps (`zeroU` as written) or drops (`side`), and no reader
+// older than this kit was ever published.
 export const VERSION = 2;
 export const THREADS = ['12-24', '10-32', 'M6'];
 // MIGRATIONS[n - 1] takes a version-n document to version n + 1.
@@ -77,14 +82,40 @@ export const itemIdsInUse = rack => [...rack.items, ...endItems(rack.cables)];
 const hostOf = ({on, unit}) => (typeof on === 'string' && on && Number.isInteger(unit) && unit >= 1
   ? {on, unit} : {});
 export const detached = ({on, unit, ...rest}) => rest;
+// ONE RAIL (#926): `side: left | right` on a narrow rack-face part (a finger
+// bracket narrower than the 450 mm opening) says which rail it is on, seen
+// from its face. Without it the part is across both. fit.js railOf says
+// whether the catalogue agrees the part is narrow; the file keeps what it has.
+export const SIDES = ['left', 'right'];
+const sideOf = side => (SIDES.includes(side) ? {side} : {});
 
 export function withItem(rack, {ref, cfg, ru, face = 'front', turned = false, label = ref,
-                                swaps = {}, fields = {}, on, unit}) {
+                                swaps = {}, fields = {}, on, unit, side}) {
   const item = {id: nextId(itemIdsInUse(rack), 'i'), ref, cfg, label, ru,
                 face: face === 'rear' ? 'rear' : 'front', turned: !!turned,
-                swaps: {...swaps}, fields: structuredClone(fields), ...hostOf({on, unit})};
+                swaps: {...swaps}, fields: structuredClone(fields), ...hostOf({on, unit}), ...sideOf(side)};
   return {rack: {...rack, items: [...rack.items, item]}, item};
 }
+
+// ZERO-U PARTS (#926): what stands beside the rack and takes no rack unit (a
+// vertical cable manager today, a zero-U PDU next) lives in `rack.zeroU`,
+// never in `items`, as
+//   {id: 'z1', ref, cfg, label, at, offsetMm, between?}
+// `at` is an attachment point of the frame (fit.js attachPoints: left or right
+// on a two-post, left-front ... right-rear on a four-post), and also names the
+// cable lane beside that upright. `offsetMm` is its bottom, in mm above the
+// bottom of the rails; the kit always writes a whole number of U. `between:
+// true` says it stands between this rack and the next one, serving both; a
+// document holds one rack, so it is drawn and exported beside this one.
+// An entry of any other shape is kept as written and left alone: zeroUOf is
+// what the kit places, moves, draws and exports.
+const plainObject = v => !!v && typeof v === 'object' && !Array.isArray(v);
+export const zeroUOf = rack => (Array.isArray(rack?.zeroU) ? rack.zeroU : []).filter(z => plainObject(z)
+  && typeof z.id === 'string' && z.id && typeof z.ref === 'string' && z.ref && typeof z.at === 'string' && z.at);
+export const zeroUById = (rack, id) => zeroUOf(rack).find(z => z.id === id) ?? null;
+// A part's bottom U and its offset, each from the other: U1 is offset 0.
+export const zeroUOffset = ru => Math.round((ru - 1) * RU * 100) / 100;
+export const zeroUBottom = z => Math.max(1, Math.round((Number(z?.offsetMm) || 0) / RU) + 1);
 
 export const updateItem = (rack, id, patch) =>
   ({...rack, items: rack.items.map(i => (i.id === id ? {...i, ...patch} : i))});
@@ -131,7 +162,22 @@ function readItem(i, n) {
   return {id: String(i.id ?? ''), ref: i.ref, cfg: String(i.cfg ?? ''), label: String(i.label ?? i.ref),
           ru: i.ru, face: i.face === 'rear' ? 'rear' : 'front', turned: !!i.turned,
           swaps: {...(i.swaps || {})}, fields: structuredClone(i.fields || {}),
-          ...hostOf({on: i.on == null ? undefined : String(i.on), unit: i.unit})};
+          ...hostOf({on: i.on == null ? undefined : String(i.on), unit: i.unit}), ...sideOf(i.side)};
+}
+
+// The zero-U record as written, with an id given to each object entry that
+// has none, or one an earlier entry took (as items are repaired), past every
+// id the record declares. Anything else is kept as it is.
+function readZeroU(list) {
+  const taken = list.filter(z => plainObject(z) && typeof z.id === 'string' && z.id).map(z => ({id: z.id}));
+  const seen = new Set();
+  return list.map(raw => {
+    const z = structuredClone(raw);
+    if (!plainObject(z)) return z;
+    if (typeof z.id !== 'string' || !z.id || seen.has(z.id)) z.id = nextId([...taken, ...[...seen].map(id => ({id}))], 'z');
+    seen.add(z.id);
+    return z;
+  });
 }
 
 // Every item needs an id unique within its rack: a missing one (an older
@@ -259,7 +305,7 @@ export function parseDoc(input) {
       id: String(r.id ?? `r${k + 1}`), name: String(r.name ?? 'Rack'),
       frame: normalizeFrame(r.frame),
       items: readItems(r.items || [], r.cables),
-      zeroU: Array.isArray(r.zeroU) ? structuredClone(r.zeroU) : [],
+      zeroU: readZeroU(Array.isArray(r.zeroU) ? r.zeroU : []),
       cables: readCables(Array.isArray(r.cables) ? r.cables : []),
       // Optional, and only when the file has it (dcimOf): no version bump, since a
       // page that does not know the field reads the rack whole and loses two names.

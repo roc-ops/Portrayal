@@ -74,6 +74,10 @@ breaker in one position can be said in words and not as a relation.
    bay's.
 4. **`feed_leg` is not written** for a two-feed DC panel.
 5. **An outlet is named by its placement id**, as every exported port is: `output-a1`.
+   A device's own `interfaces:` rules name its power outlets as they name its
+   interfaces, so an outlet a rule names takes its printed label (the Eaton
+   EVMI2130X's `outlet-a1` exports as `A1`); an outlet no rule names keeps its
+   placement id.
 6. **Outlets are a table row per part, as power ports are.** A part exports outlets
    because `PART_OUTLET` lists it, not because of its class.
 7. **A connectorized output is `other`, labelled.** The 300CB08-C and -SC outputs are
