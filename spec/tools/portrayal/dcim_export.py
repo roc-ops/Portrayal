@@ -54,6 +54,7 @@ import yaml
 from portrayal.artifacts import Dist, face_file
 
 from portrayal.manifest import view_parts, alias_names, config_airflow
+from portrayal import manifest as _manifest
 from portrayal import optical_ports
 
 # Portrayal media/speed -> DCIM interface type. Every value here is valid in
@@ -1526,6 +1527,18 @@ def comments_for(dev, cfg_name, cfg):
                   kits_prose((dev.get("chassis") or {}).get("kits"))):
         if prose:
             lines += [prose, ""]
+    # A RACK PDU'S CAPABILITY AND INPUT RATING (#934): a device type has no
+    # capability field and no input rating in either target, so the derived
+    # class, the two facts it is derived from and the rating go where a reader
+    # of the record sees them (docs/pdu-model-design.md sections 2.3 and 4.3).
+    klass = _manifest.pdu_class(dev)
+    if klass:
+        mgmt = (dev.get("attrs") or {}).get("management") or {}
+        lines += [f"PDU class: {klass} (metering-scope {mgmt['metering-scope']}, "
+                  f"outlet-switching {str(mgmt['outlet-switching']).lower()}).", ""]
+    rating = _manifest.input_rating(dev)
+    if rating:
+        lines += [f"Input rating: {rating}.", ""]
 
     ds = dev.get("datasheet") or {}
     if ds.get("url"):
@@ -1538,7 +1551,9 @@ def comments_for(dev, cfg_name, cfg):
     for section, vals in (dev.get("attrs") or {}).items():
         flat = flatten(vals)
         for k, v in flat.items():
-            if isinstance(v, (str, int, float)) and str(v).strip():
+            if isinstance(v, bool):
+                facts.append(f"- {section}.{k}: {str(v).lower()}")
+            elif isinstance(v, (str, int, float)) and str(v).strip():
                 facts.append(f"- {section}.{k}: {v}")
     if facts:
         lines.append("Facts carried in the model that this schema has no field for:")
@@ -2082,7 +2097,17 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
         out["power-ports"] = [powers[k] for k in sorted(powers)]
     if outlets:
         out["power-outlets"] = outlet_rows(outlets, powers, bays,
-                                           f"{dev['manufacturer']} {model}", own)
+                                           f"{dev['manufacturer']} {model}", own,
+                                           dev=dev)
+        # THE INPUT RATING ON THE INPUT IT RATES (#934). Neither target has an
+        # input rating on a device type: a power port template carries a type
+        # and draws, and amperes, volts and phase are fields of a power FEED,
+        # an instance. So the rating is a sentence on each power port an outlet
+        # is fed by, which NetBox keeps (docs/pdu-model-design.md section 4.3).
+        rating = _manifest.input_rating(dev)
+        if rating:
+            for fed in {o.get("fed-by") for o in outlets.values()} & set(powers):
+                powers[fed]["description"] = fit(rating)
     if bays:
         out["module-bays"] = sorted(bays, key=bay_order)
 
@@ -2133,7 +2158,7 @@ def bay_order(b):
     return (b["name"].split()[0], _num(b["position"].rsplit("-", 1)[-1]))
 
 
-def outlet_rows(outlets, powers, bays, who, names=None):
+def outlet_rows(outlets, powers, bays, who, names=None, dev=None):
     """A device type's `power-outlets`, from its PART_OUTLET placements (#806).
 
     `outlets` is placement id -> placement, `powers` the device type's power
@@ -2161,19 +2186,31 @@ def outlet_rows(outlets, powers, bays, who, names=None):
     and fails there is the outcome NotExpressible exists to prevent. An outlet
     with no `fed-by` is written without one - importable, and L134 counts it.
 
-    `feed_leg` IS NOT WRITTEN. It is a phase of a three-phase supply (A, B, C
-    in both targets); a DC panel's side A and side B are two feeds, not two
-    legs of one, and would collide with it by spelling alone.
+    `feed_leg` IS WRITTEN EXACTLY WHEN THE INPUT IS THREE-PHASE WYE AND THE
+    OUTLET IS WIRED LINE TO NEUTRAL (#934, docs/pdu-model-design.md section
+    5.2), and it is that line: L1 is A, L2 B, L3 C (manifest.feed_leg, reading
+    `dev`'s `attrs.power` and the outlet's `lines`). Nothing else writes one: a
+    line-to-line outlet sits on two legs, a single-phase PDU is on whatever leg
+    its plug is, and a DC panel's side A and side B are two feeds, not two legs
+    of one, and would collide with it by spelling alone.
+
+    `lines` ARE THE OUTLET'S OWN, OR ITS BREAKER'S (manifest.outlet_lines): a
+    fixed breaker that `through` names states them once for every outlet it
+    protects. Where any resolve, the description names them.
 
     THE POSITION IS A SENTENCE, TWICE. Neither target relates an outlet to a
     module bay, so `through` is written on the outlet's description - which
     NetBox keeps and Nautobot's outlet import form drops - and appended to the
     bay's description, which Nautobot's module-bay import keeps. A bay's
     description is a sentence about the drawing to `dcim_significant`, so the
-    collision check is not moved by it.
+    collision check is not moved by it. A `through` that names a FIXED
+    BREAKER rather than a bay (#934) is a sentence on the outlet alone - there
+    is no bay row to append it to - naming the breaker by its placement id.
     """
     rows = []
     protects = {}
+    placed = _manifest.device_placements(dev) if dev else {}
+    positions = {b["position"] for b in bays}
     for pid in sorted(outlets, key=_natural):
         p = outlets[pid]
         ref = p["ref"].split("@")[0]
@@ -2189,9 +2226,20 @@ def outlet_rows(outlets, powers, bays, who, names=None):
                     f"nothing (lint L132)")
             row["power_port"] = powers[fed]["name"]
         via = p.get("through")
-        if via is not None:
-            row["description"] = fit(f"Through breaker position {via}")
+        lines = _manifest.outlet_lines(p, placed) if dev else None
+        said = []
+        if via is not None and via in placed and via not in positions:
+            said.append(f"Through {via}")       # a fixed breaker (#934)
+        elif via is not None:
+            said.append(f"Through breaker position {via}")
             protects.setdefault(via, []).append(pid)
+        if lines:
+            said.append(("lines " if said else "Lines ") + "-".join(lines))
+        if said:
+            row["description"] = fit(", ".join(said))
+        leg = _manifest.feed_leg(dev, lines) if dev else None
+        if leg:
+            row["feed_leg"] = leg
         rows.append(row)
     for bay in bays:
         held = protects.get(bay["position"])

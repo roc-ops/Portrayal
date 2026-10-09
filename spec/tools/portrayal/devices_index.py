@@ -13,7 +13,7 @@ import yaml
 
 from portrayal import attrsections as attrs_mod
 from portrayal import capability
-from portrayal.manifest import view_parts, load_yaml, alias_names, device_options
+from portrayal.manifest import view_parts, load_yaml, alias_names, device_options, pdu_class
 from portrayal import libwalk
 
 SCHEMAS = Path(__file__).resolve().parents[2] / "schemas"
@@ -199,6 +199,10 @@ def main():
                 # before it has loaded the device
                 "capability": cap["capability"],
                 "gaps": cap["gaps"],
+                # A RACK PDU'S CLASS (#934), derived from `metering-scope` and
+                # `outlet-switching`, so a catalogue filters on it before it
+                # loads anything; null where the device states neither
+                "pdu-class": pdu_class(d),
                 "model": d.get("model", d["name"]),
                 # the box's other names, `model` excluded (#514)
                 "aliases": alias_names(d),
