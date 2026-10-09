@@ -15,7 +15,10 @@ const chassisOf = ref => SIZES[ref] || null;
 const add = (rack, ref, ru, extra = {}) => M.withItem(rack, {ref, cfg: 'x', ru, label: ref, ...extra}).rack;
 // sw at U20 (i1), a lacer on it (i2), a patch panel at U30 (i3).
 const rackOf = () => add(add(add(M.newRack(), 'sw', 20), 'lacer', 20, {on: 'i1', unit: 1}), 'pp', 30);
-const ctxOf = (rings, ports, portY = {}) => ({chassisOf,
+// A cable too stiff to sag (bendOf: a bend radius no span can take): these
+// tests hold the taut geometry of a ring's pass, worked by hand; how a free
+// span hangs and rests (#949 step 3) is rack-resting.mjs's.
+const ctxOf = (rings, ports, portY = {}) => ({chassisOf, bendOf: () => 1e12,
   guidesOf: id => (id === 'i2' ? rings.map(g => ({kind: 'ring', face: 'front', ...g})) : []),
   portX: end => ports[end.item] ?? null,
   portY: end => portY[end.item] ?? null});

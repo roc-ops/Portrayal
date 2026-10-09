@@ -105,7 +105,7 @@ as `@portrayal/kit/rack/<module>`:
 | `rack/cable-rules.js` | cables: which two ports may be joined, `withCable`, media and lengths |
 | `rack/cable-types.js` | the cable types (`cable-types.json`): `loadCableTypes(dist)` fetches them and returns `typeOf`, `bendOf` and `diameterOf` over them; the same lookups are exported to build over a table already in hand (a fixture, a cached copy): `typeOf(types, id)`, `cableTypeOf(types, cable)`, `radiusMm(type, which)`, `installedRadiusMm(types, id)`, `bendLookup(types)` and `diameterLookup(types)`, each radius in millimetres |
 | `rack/route.js`, `rack/route-path.js`, `rack/cable-geometry.js` | where a cable runs: `resolveRoute`, `routePath`, `ringMarks`, `orientMarks`, `reverseMarks`, `routedLength`, `pathLength`, pathway fill, `ringFindings`, `bodyFindings`, and the geometry under them (`throughRings`) |
-| `rack/solids.js` | the solid bodies a route may not pass through: `solidsOf(rack, ctx)` places every device's envelope or derived `solids` in rack coordinates; `legCrossings` tests a leg against them; `detour` takes a leg round them; `CLEAR`, the clearance a detour keeps |
+| `rack/solids.js` | the solid bodies a route may not pass through: `solidsOf(rack, ctx)` places every device's envelope or derived `solids` in rack coordinates; `legCrossings` tests a leg against them; `detour` takes a leg round them; `CLEAR`, the clearance a detour keeps; `traysOf(rack, ctx)` places every device's `trays`, the floors a cable lies on |
 | `rack/bundles.js`, `rack/bundle-route.js` | cable bundles: the size and bend checks (`bundleCheck`, `bundleChecks`, `pathwaysOn`, `bendCheck`, `cornersOf`), strap positions (`straps`), the trunk worked out from the members' routes (`deriveTrunk`) and a member's route along it (`followTrunk`) |
 | `rack/export-data.js` | the rack as rows: `bomRows`, `cableScheduleRows` and the device-import data, and the bundles as the exports read them (`bundleExports`, `bundleNotes`, `strapBomRows`) |
 | `rack/dcim-rules.js` | what a NetBox or Nautobot import needs of a rack |
@@ -114,6 +114,7 @@ as `@portrayal/kit/rack/<module>`:
 | `rack/history.js` | undo and redo as snapshots |
 | `rack/editor.js` | `createRackEditor`: a rack document you edit by commands, with undo, redo and change events |
 | `rack/queries.js` | reading a rack: `fitsAt`, `freeUs`, `catalog`, `describe`, `inspect`, `selectCables`, `freePorts`, `suggestMedia`, `looseEnds` |
+| `rack/resting.js` | internal, not exported: how a cable rests, for `route.js` (`DRAPE`, the free span's hang and landing, the held face) |
 | `rack/slots.js` | internal, not exported: what a placed device holds, read without a drawing, for `commands.js` and `queries.js` |
 
 ### Where this came from
@@ -286,6 +287,36 @@ into a dog-leg rather than adding the plug again, so `END_ALLOWANCE_M`, 0.15
 m an end, the dressing slack, is unchanged. **Routed lengths change in
 0.13.0** on every routed cable, almost all longer: by what the dog-leg out of each plug adds,
 and by far more where the reach puts a leg over a tray floor.
+
+A cable rests on what holds it up (#949 step 3, docs/cable-lay-design.md
+sections 2 and 3). A tray is a pathway with a floor: rack.json lists each
+device's `trays` (its floor, the height of its top, its plate, its tie slots
+and the openings of the rings standing on it), `solidsOf`'s sibling
+`traysOf(rack, ctx)` places them, and a route names one by its id as it names
+a ring (`{item, via: 'tray'}`; `pathwaysOf` and the `cable.route` refusal list
+them). Since 0.14.0 a ring on a tray holds the cable on its sill, the cable's
+radius above the opening's lowest inside edge, at the side of the opening
+nearer the rail; a tray waypoint lays the cable along the floor at its radius
+between its neighbours, or, where the page pins the held face
+(`ctx.trayFaceOf(cable, {item, via})` returns `top` or `underside`, named in
+the frame of the part, and the tray has tie slots along the stretch),
+strapped under the plate at the plate less its radius, sagging between two
+straps no lower than the strap line. Every other leg that is not held is a
+**free span**: it hangs by the catenary the 3D drawing uses, scaled by the
+`DRAPE` of its family (fibre and AOC 1, twisted pair 0.5, DAC and power 0.35)
+and no tighter than its installed bend radius over its drape
+(`ctx.bendOf(cable)` when given, else its media's; the family is its type's
+when the page gives the cable types lookup as `ctx.typeOf`, else its
+media's), and where it would pass
+below a surface (a tray's floor, the top of any body) it drops onto it in two
+bends of that radius and lies there. A leg into or out of a detour, a
+lane's run along the frame, a plug and a ring's inside are not free spans,
+and a sag that would carry the cable into a body is not laid. The new points
+are `at: 'tray'` and `at: 'rest'`, and `path.rests` (and `inspect`'s
+`route.rests`) lists what the cable lies on. **Routed lengths change in
+0.14.0** on every routed cable through a ring on a tray, which now rests
+lower and further out (a cord from the device below a lacer goes round its
+front edge to reach it), and on every cable with a free span, by its hang.
 
 To change a rack by name rather than by function, use the command core:
 `createRackEditor({ doc, chassisOf })` applies `place`, `move`, `patch`,

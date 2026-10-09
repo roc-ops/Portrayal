@@ -494,17 +494,21 @@ function waypointError(rack, route, stored, {chassisOf, guidesOf} = {}) {
     const it = rack.items.find(i => i.id === w.item);
     if (!it) return `Waypoint ${n} names ${w.item}, which is not in the rack.`;
     let ids;
+    const ch = typeof chassisOf === 'function' ? chassisOf(it.ref) : null;
+    // rack.json lists the default configuration only: a configured item's pathways are unknown there
+    const asListed = !!ch && (it.cfg || ch.default) === ch.default && !Object.keys(it.swaps || {}).length;
     if (typeof guidesOf === 'function') {
-      // the configured face, as the page draws it
-      ids = [...new Set((guidesOf(it.id) || []).map(g => g.via))].sort();
+      // the configured face, as the page draws it, and the trays the
+      // catalogue lists (docs/cable-lay-design.md section 8: a tray is named
+      // as a ring is)
+      const trays = asListed && Array.isArray(ch.trays) ? ch.trays.map(t => t?.id).filter(v => typeof v === 'string') : [];
+      ids = [...new Set([...(guidesOf(it.id) || []).map(g => g.via), ...trays])].sort();
     } else {
-      const ch = chassisOf(it.ref);
-      // rack.json lists the default configuration only: a configured item's pathways are unknown here
-      if (!ch || (it.cfg || ch.default) !== ch.default || Object.keys(it.swaps || {}).length) continue;
+      if (!asListed) continue;
       ids = pathwaysOf(ch);
     }
-    if (!ids.length) return `Waypoint ${n}: ${it.label} has no rings, ducts or pass-throughs.`;
-    if (!ids.includes(w.via)) return `Waypoint ${n}: ${it.label} has no ring, duct or pass-through called ${w.via}. It has: ${ids.join(', ')}.`;
+    if (!ids.length) return `Waypoint ${n}: ${it.label} has no rings, ducts, pass-throughs or trays.`;
+    if (!ids.includes(w.via)) return `Waypoint ${n}: ${it.label} has no ring, duct, pass-through or tray called ${w.via}. It has: ${ids.join(', ')}.`;
   }
   return null;
 }

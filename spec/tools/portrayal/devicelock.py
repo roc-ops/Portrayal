@@ -679,6 +679,12 @@ def buckets(doc, versions=None):
             **({"guides": guides} if (guides := {v: (w or {}).get("guides")
                                                   for v, w in (doc.get("views") or {}).items()
                                                   if (w or {}).get("guides")}) else {}),
+            # A TRAY IS THE SAME KIND OF CLAIM, a floor cables lie on, read by
+            # whatever routes them (docs/cable-lay-design.md section 2.1).
+            # Conditional for the same reason: no device is rehashed for it.
+            **({"trays": trays} if (trays := {v: (w or {}).get("trays")
+                                               for v, w in (doc.get("views") or {}).items()
+                                               if (w or {}).get("trays")}) else {}),
             **({"placement-skins": skins} if skins else {}),
             # CONDITIONAL, ONE KEY AT A TIME, FOR THE REASON `placement-skins`
             # IS. Written unconditionally, `airflow: None` is still a new key in

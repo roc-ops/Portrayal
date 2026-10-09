@@ -158,6 +158,57 @@ export function solidsOf(rack, ctx) {
   return out;
 }
 
+// EVERY TRAY IN THE RACK, placed (docs/cable-lay-design.md sections 2 and 3):
+// [{item, via, top, under, thickness, flipped, run, lip, slack?, floors,
+// ties, rings}], from each item's rack.json `trays`, through the same placing
+// as its solids. In rack mm:
+// - `top` is the height of the face that looks up (the resting face) and
+//   `under` of the face that looks down (the held face), so `top - under` is
+//   the plate's thickness; `flipped` says the part's own top is the one that
+//   looks down (a part turned end over end in its face, as a narrow part on
+//   the right rail is), so the names `top` and `underside` of the part swap
+//   roles;
+// - `run` is the axis cables lie along, 'x' or 'z';
+// - `floors` and `ties` are plan rectangles {x0, x1, z0, z1};
+// - `rings` are the openings of the rings standing on the floor, {via, run,
+//   box: {x0, x1, y0, y1, z0, z1}}: a cable resting in one lies on y0, the
+//   inside edge that is lowest as mounted.
+// A zero-U part carries no tray today; a catalogue without `trays` gives none.
+const trayMemo = new WeakMap();
+export function traysOf(rack, ctx) {
+  const chassisOf = ctx?.chassisOf;
+  if (typeof chassisOf !== 'function') return [];
+  let per = trayMemo.get(rack);
+  if (!per) trayMemo.set(rack, per = new WeakMap());
+  if (per.has(ctx)) return per.get(ctx);
+  const out = [];
+  for (const it of rack.items || []) {
+    const c = chassisOf(it.ref);
+    if (!c || !Array.isArray(c.trays) || !(pos(c.w) && pos(c.h) && pos(c.d)) || isZeroUPart(c)) continue;
+    const place = itemPlacer(rack, it, c);
+    const plan = b => { const p = place(b); return {x0: p.x0, x1: p.x1, z0: p.z0, z1: p.z1, y0: p.y0, y1: p.y1}; };
+    for (const t of c.trays) {
+      const floors = (t.floor || []).filter(b => b && pos(b.w) && pos(b.d)).map(plan);
+      if (!floors.length) continue;
+      const th = pos(t.thickness) ? num(t.thickness) : 1;
+      // the plate, placed: its upper side rests, its lower side is held
+      const plate = place({x: 0, y: num(t.top) - th, z: 0, w: 1, h: th, d: 1});
+      // a part's own y up is down in the rack when its plate's own top is placed below its own bottom
+      const probe = place({x: 0, y: 0, z: 0, w: 1, h: 1, d: 1}), up = place({x: 0, y: 1, z: 0, w: 1, h: 1, d: 1});
+      const flipped = up.y0 < probe.y0;
+      // the axis cables lie along, as placed: the part's x stays the rack's x
+      // (a turn in the face of 180 degrees keeps it), its z is the rack's z
+      const run = t.run === 'z' || t.run === 'y' ? 'z' : 'x';
+      out.push({item: it.id, via: t.id, top: plate.y1, under: plate.y0, thickness: th, flipped, run,
+        lip: Number(t.lip) || 0, ...(t.slack ? {slack: t.slack} : {}), floors,
+        ties: (t.ties || []).filter(b => b && pos(b.w) && pos(b.d)).map(plan),
+        rings: (t.rings || []).filter(r => r?.box).map(r => ({via: r.via, run: r.run === 'z' ? 'z' : 'x', box: place(r.box)}))});
+    }
+  }
+  per.set(ctx, out);
+  return out;
+}
+
 // ── a leg against a box ────────────────────────────────────────────────
 const AX = ['x', 'y', 'z'];
 const lerp = (a, b, t) => ({x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t, z: a.z + (b.z - a.z) * t});

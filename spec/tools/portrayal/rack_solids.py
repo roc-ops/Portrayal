@@ -341,6 +341,126 @@ def solids(faces, chassis, *, lane=False):
     return out or None
 
 
+# ── trays (docs/cable-lay-design.md sections 2 and 3) ───────────────────────
+def _attr_nums(el, key):
+    raw = el.get(key)
+    if raw is None:
+        return None
+    try:
+        return [float(v) for v in raw.split()]
+    except ValueError:
+        return None
+
+
+def _ring_openings(root, fr):
+    """Every ring on a plan whose contract places its opening (`sill` and
+    `aperture.at`), as {via, run, base, box}: `base` the height, up from the
+    device's bottom, of what it stands on (the envelope's top less the depth
+    it is lifted down by); `box` its opening in the device frame."""
+    out = []
+    for el, m, lift, _guide, _mounts in _walk(root):
+        if not el.get("data-guide") == "ring" or not el.get("id"):
+            continue
+        run = el.get("data-guide-run") or "x"
+        ap, at = _attr_nums(el, "data-guide-aperture"), _attr_nums(el, "data-guide-aperture-at")
+        sill, depth = _attr_nums(el, "data-guide-sill"), _attr_nums(el, "data-guide-depth")
+        if not (ap and at and sill) or run not in ("x", "y"):
+            continue
+        depth = depth[0] if depth else 0.0
+        (aw, ah), (ax, ay) = ap[:2], at[:2]
+        fw, fh = (depth, aw) if run == "x" else (aw, depth)
+        corners = [_apply(m, ax, ay), _apply(m, ax + fw, ay), _apply(m, ax, ay + fh), _apply(m, ax + fw, ay + fh)]
+        fx, fy, fw2, fh2 = _bbox(corners)
+        # its run as drawn, turned by the placement: along the face's x or y
+        ux, uy = _apply(m, 1.0, 0.0), _apply(m, 0.0, 0.0)
+        along_x = abs(ux[0] - uy[0]) >= abs(ux[1] - uy[1])
+        drawn_run = run if along_x else ("y" if run == "x" else "x")
+        base = fr.h + lift
+        lo, hi = base + sill[0], base + sill[0] + ah
+        out.append({"via": el.get("id"), "run": "x" if drawn_run == "x" else "z", "base": _r(base),
+                    "box": fr.box("top", fx, fy, fw2, fh2, fr.h - hi, fr.h - lo)})
+    return out
+
+
+def trays(faces, chassis):
+    """The `trays` of one device, for rack.json, or None: each tray drawn on
+    its plan (a part's `tray:` under its instance, or the view's own `trays`),
+    from the unpainted rects render.py compiles them to. Per tray, in the
+    device frame of `solids`:
+
+    - `id`, the placement's or the view's id, which a route names;
+    - `top`, the height of the floor's surface above the device's bottom, and
+      `thickness`, the plate's (`chassis.thickness`, else DEFAULT_T), so its
+      underside is `top - thickness`;
+    - `run`, `x` across the device or `z` front to back; `lip`; `slack`;
+    - `floor` and `ties`, each a box through the plate;
+    - `rings`: each ring standing on the floor whose opening its contract
+      places, `{via, run, box}`, its box the clear opening, so a cable resting
+      in it lies on the bottom of the box.
+
+    Only the plan is read: a floor seen from above is where `height` gives the
+    third axis."""
+    root = faces.get("top")
+    if root is None:
+        return None
+    w, h, d = (_num(chassis.get(k)) for k in ("w", "h", "d"))
+    if not (w > 0 and h > 0 and d > 0):
+        return None
+    t = _num(chassis.get("thickness")) or DEFAULT_T
+    fr = _Frame(w, h, d)
+    by = {}
+    for el, m, _lift, _guide, _mounts in _walk(root):
+        cls, tid = el.get("data-class"), el.get("data-tray")
+        if cls not in ("tray", "tie") or not tid:
+            continue
+        e = by.setdefault(tid, {"id": tid, "floor": [], "ties": []})
+        if cls == "tray":
+            top = _num(el.get("data-tray-height"))
+            e["top"], e["thickness"] = _r(top), _r(t)
+            e["lip"] = _r(_num(el.get("data-tray-lip")))
+            # the run as drawn, through the placement's turn: across the plan
+            # is x, down it is the depth, z
+            ux, uy = _apply(m, 1.0, 0.0), _apply(m, 0.0, 0.0)
+            along_x = abs(ux[0] - uy[0]) >= abs(ux[1] - uy[1])
+            drawn = el.get("data-tray-run") or "x"
+            e["run"] = "x" if (drawn == "x") == along_x else "z"
+            slack = (el.get("data-tray-slack") or "").split()
+            if slack[:1] == ["area"]:
+                e["slack"] = {"kind": "area"}
+            elif slack[:1] == ["spool"] and len(slack) == 4:
+                sx, sy = _apply(m, float(slack[1]), float(slack[2]))
+                e["slack"] = {"kind": "spool", "x": _r(sx), "z": _r(fr.d - sy), "diameter": _r(float(slack[3]))}
+        for fx, fy, fw, fh in _shapes(el, m):
+            e["floor" if cls == "tray" else "ties"].append(("pending", fx, fy, fw, fh))
+    out = []
+    rings = _ring_openings(root, fr)
+    for tid in sorted(by):
+        e = by[tid]
+        if "top" not in e:
+            continue
+        top = e["top"]
+        plate = lambda fx, fy, fw, fh: fr.box("top", fx, fy, fw, fh, h - top, h - top + e["thickness"])
+        foot = [(fx, fy, fw, fh) for _, fx, fy, fw, fh in e["floor"]]
+        e["floor"] = [plate(*f) for f in foot]
+        e["ties"] = [plate(fx, fy, fw, fh) for _, fx, fy, fw, fh in e["ties"]]
+        # a ring stands on this floor when its base is the floor's top and the
+        # middle of its opening's footprint is over a floor rectangle
+        on = []
+        for r in rings:
+            b = r["box"]
+            cx, cz = b["x"] + b["w"] / 2, b["z"] + b["d"] / 2
+            if abs(r["base"] - top) <= 0.1 and any(
+                    f["x"] - 1e-6 <= cx <= f["x"] + f["w"] + 1e-6 and f["z"] - 1e-6 <= cz <= f["z"] + f["d"] + 1e-6
+                    for f in e["floor"]):
+                on.append({"via": r["via"], "run": r["run"], "box": b})
+        if on:
+            e["rings"] = sorted(on, key=lambda r: (r["box"]["x"], r["box"]["z"]))
+        if not e["ties"]:
+            del e["ties"]
+        out.append(e)
+    return out or None
+
+
 def read_faces(paths):
     """{view: parsed root} for the face files that exist."""
     out = {}

@@ -234,7 +234,7 @@ async function cableInfo(rack, cable, ctx) {
   const edited = cable.routeEdited === true;
   // A route context's readers come from the page's drawings and may throw; a
   // measure that fails is "not measured", never an error.
-  let routed = null, waypoints = edited ? cable.route || [] : [], rings = null, crosses = null;
+  let routed = null, waypoints = edited ? cable.route || [] : [], rings = null, crosses = null, rests = null;
   if (ctx.route) {
     try {
       waypoints = resolveRoute(rack, cable, ctx.route).waypoints;
@@ -251,7 +251,11 @@ async function cableInfo(rack, cable, ctx) {
       // each solid body it still crosses after the detours (#949): the part,
       // the two waypoints the leg lies between, and where it enters, in mm
       if (path?.crossings?.length) crosses = path.crossings.map(f => ({item: f.item, part: f.part, between: f.between, at: f.at}));
-    } catch { routed = null; rings = null; crosses = null; }
+      // what it lies on (#949 step 3): each ring whose sill holds it, each
+      // tray (the face it lies on, its role there, and on a held face the tie
+      // slots it uses) and each body a free span comes to rest on
+      if (path?.rests?.length) rests = path.rests.map(x => ({...x, ...(x.ties ? {ties: [...x.ties]} : {})}));
+    } catch { routed = null; rings = null; crosses = null; rests = null; }
   }
   // slack: the cable's own length less the routed one, in metres
   // (only metres and feet convert; any other unit leaves slack unknown)
@@ -278,7 +282,7 @@ async function cableInfo(rack, cable, ctx) {
   }
   return {kind: 'cable', id: cable.id, a: end(cable.a), b: end(cable.b), media: cable.media, purpose: cable.purpose, label: cable.label,
     length: l ? {value: l.value, unit: l.unit ?? 'm', source: l.source ?? 'entered'} : null, routed, slack,
-    route: {edited, waypoints, text: routeText(waypoints, label, rack.frame), ...(rings ? {rings} : {}), ...(crosses ? {crosses} : {})}, lanes: lanesOf(rack.frame), passes,
+    route: {edited, waypoints, text: routeText(waypoints, label, rack.frame), ...(rings ? {rings} : {}), ...(crosses ? {crosses} : {}), ...(rests ? {rests} : {})}, lanes: lanesOf(rack.frame), passes,
     loose, mismatch: warn, ...(unchecked ? {unchecked: true} : {})};
 }
 
