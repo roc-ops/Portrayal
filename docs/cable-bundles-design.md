@@ -850,8 +850,18 @@ What the build settled that the sections above leave to it:
   each pathway and wherever a lane run starts, stops, turns or jumps.
 - **A bundle of fewer than two cables** does not change its member's route:
   it is not drawn, so its cable is drawn and measured on its own route.
-- **A peel point past the far end** of a member's run, not only a pair out of
-  order, is stale and ignored with the same note.
+- **A peel point at or past the far end** of a member's run, not only a pair
+  out of order, is stale and ignored with the same note, and `bundle.peel`
+  refuses to set one when the routes are known: it would leave no run in the
+  bundle (section 3.5). A peel point in a file that is no waypoint at all is
+  dropped on load, as a shape repair, without a note.
+- **A trunk kept as written** (`routeAsWritten`) stays kept across a save and
+  a reload while its readable waypoints are still the trunk, as a cable's
+  route does.
+- **Cables in two groups.** When the groups that share nothing are joined only
+  by members that take different ways between them, the refusal says they
+  run together at each and apart between them, rather than naming one cable
+  in two groups.
 - **Diameters.** `ctx.diameterOf` (`loadCableTypes(dist).diameterOf`, #919's
   `od_mm`) is read when the caller passes it; without it the figures are
   `route.js DIAMETERS`, then 6 mm, named as an estimate.
@@ -866,7 +876,12 @@ What the build settled that the sections above leave to it:
   `y` from (section 6). Its extent is the box's width on a run along x and its
   height on one along y, each side from its own segment.
 - **`describe`** keeps #926's `zeroU` section: `SECTIONS` is `items`, `zeroU`,
-  `cables` and `bundles`, and the totals line counts bundles only when the rack
-  has any, as it counts parts beside the rack.
+  `cables` and `bundles`, so the refusal for any other section reads "There is
+  no section X. Ask for items, zeroU, cables or bundles, or leave it out for
+  all of them." The totals line counts bundles only when the rack has any, as
+  it counts parts beside the rack, and a shortened reading trims bundle lines
+  and counts them among those not listed.
+- **A bundle of one or none** reports no `join` or `leave` for its member, in
+  `inspect` of the bundle and of the cable, since it is not drawn.
 - **A reader that throws** during a bundle command's waypoint check falls back
   to the catalogue's pathways, as a command without the readers does.

@@ -382,17 +382,43 @@ function readBundles(list, others) {
   let top = Math.max(0, ...objs.map(b => b.number).filter(whole));
   const seen = new Set(), out = [];
   for (const raw of objs) {
-    const {straps, routeAsWritten: _w, ...b} = structuredClone(raw);
+    const {straps, routeAsWritten: incoming, ...b} = structuredClone(raw);
     let id = typeof b.id === 'string' && b.id ? b.id : '';
     if (!id || seen.has(id)) id = freshBundleId([...others, ...declared, ...out]);
     seen.add(id);
-    const members = (Array.isArray(b.members) ? b.members : []).filter(m => plainObj(m) && typeof m.cable === 'string' && m.cable);
+    // A peel point that is no waypoint is dropped: the member then rides to
+    // that end, as it does past a stale one.
+    const members = (Array.isArray(b.members) ? b.members : []).filter(m => plainObj(m) && typeof m.cable === 'string' && m.cable)
+      .map(m => { const out = {...m}; for (const k of ['a', 'b']) if (k in out && !isWaypoint(out[k])) delete out[k];
+        else if (k in out) out[k] = 'lane' in out[k] ? {lane: out[k].lane, ru: out[k].ru} : {item: out[k].item, via: out[k].via};
+        return out; });
     const r = readRoute(b.route);
+    // A trunk kept as written stays kept while its readable waypoints are
+    // still the trunk, as a cable's route does, so a save and a reload keep it.
+    const asWritten = r.routeAsWritten
+      ?? (Array.isArray(incoming) && routesEqual(readableFromRouteAsWritten(incoming), r.route) ? incoming : null);
     const strapsOk = plainObj(straps) && (straps.every === null || isStrapSpacing(straps.every));
     out.push({...b, id, number: whole(b.number) ? b.number : ++top, label: String(b.label ?? ''), members, route: r.route,
-              ...(r.routeAsWritten ? {routeAsWritten: r.routeAsWritten} : {}), ...(strapsOk ? {straps} : {})});
+              ...(asWritten ? {routeAsWritten: asWritten} : {}), ...(strapsOk ? {straps} : {})});
   }
   return out;
+}
+
+// THE ONE WAY A CABLE LEAVES ITS BUNDLE when the cable leaves the rack: every
+// edit that drops cables (cable-rules.js withoutCable, withoutCablesOf, and
+// bundles.js withoutCables, which also says so) takes them out of their
+// bundles here, so a bundle never names a cable that is gone and a later cable
+// handed its id never picks up its membership.
+export function withoutMembers(rack, ids) {
+  if (!Array.isArray(rack.bundles)) return rack;
+  const gone = new Set(ids);
+  let changed = false;
+  const bundles = rack.bundles.map(b => {
+    if (!b.members.some(m => gone.has(m.cable))) return b;
+    changed = true;
+    return {...b, members: b.members.filter(m => !gone.has(m.cable))};
+  });
+  return changed ? {...rack, bundles} : rack;
 }
 
 // THE REFERENCES. Pure and idempotent; it reads only the rack's own items,

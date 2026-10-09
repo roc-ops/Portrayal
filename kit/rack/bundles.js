@@ -9,7 +9,7 @@
 // Pure: what reads a drawing comes in on `ctx.route`, the routing context
 // route.js takes (`{chassisOf, guidesOf, portX, portY?, zeroUAperture?}`).
 
-import {bundlesOf, bundleName, isWaypoint, uLabel} from './model.js';
+import {bundlesOf, bundleName, isWaypoint, uLabel, withoutMembers} from './model.js';
 import {ownRoute, trunkRoute, pointOf, portPoint, routeText, DIAMETERS} from './route.js';
 import {elementsOf, elementText, waypointKey, followTrunk, andList} from './bundle-route.js';
 import {zeroUOnLane, carriesLane} from './zero-u.js';
@@ -70,16 +70,11 @@ export function onTrunk(b, w) {
 // and the sentence to add to the summary ('' when no bundle held them).
 export function withoutCables(rack, ids) {
   const gone = new Set(ids);
-  const next = {...rack, cables: (rack.cables || []).filter(c => !gone.has(c.id))};
-  if (!Array.isArray(rack.bundles)) return {rack: next, said: ''};
-  const left = [];
-  next.bundles = rack.bundles.map(b => {
-    const out = b.members.filter(m => !gone.has(m.cable));
-    if (out.length === b.members.length) return b;
-    left.push({b, ids: b.members.filter(m => gone.has(m.cable)).map(m => m.cable), n: out.length});
-    return {...b, members: out};
+  const next = withoutMembers({...rack, cables: (rack.cables || []).filter(c => !gone.has(c.id))}, ids);
+  const said = bundlesOf(rack).filter(b => b.members.some(m => gone.has(m.cable))).map(b => {
+    const out = b.members.filter(m => gone.has(m.cable)).map(m => m.cable), n = b.members.length - out.length;
+    return `${andList(out)} ${out.length === 1 ? 'is' : 'are'} out of ${bundleName(b)}${n < 2 ? `, which now holds ${n === 1 ? 'one cable' : 'no cables'}` : ''}.`;
   });
-  const said = left.map(({b, ids, n}) => `${andList(ids)} ${ids.length === 1 ? 'is' : 'are'} out of ${bundleName(b)}${n < 2 ? `, which now holds ${n === 1 ? 'one cable' : 'no cables'}` : ''}.`);
   return {rack: next, said: said.join(' ')};
 }
 

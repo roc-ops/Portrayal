@@ -124,22 +124,23 @@ export function describe(rack, ctx, {section, offset, limit} = {}) {
   }
 
   const bundleLines = bundles.map(b => bundleLine(rack, b, ctx));
-  const build = (short, nItems, nCables) => {
+  const build = (short, nItems, nCables, nBundles) => {
     const lines = [totals, frameLine, items.length ? 'Items:' : 'No items.', ...items.slice(0, nItems).map(i => item(i, short)),
                    ...(beside.length ? ['Beside the rack:', ...beside.map(z => part(z, short))] : []),
                    ...(cables.length ? ['Cables:', ...cables.slice(0, nCables).map(c => cable(c))] : []),
-                   ...(bundles.length ? ['Bundles:', ...bundleLines] : [])];
-    const more = (items.length - nItems) + (cables.length - nCables);
+                   ...(bundles.length ? ['Bundles:', ...bundleLines.slice(0, nBundles)] : [])];
+    const more = (items.length - nItems) + (cables.length - nCables) + (bundles.length - nBundles);
     if (short) lines.push(more ? `Shortened: labels left out, and ${more} more not listed; ask for them by id.` : 'Shortened: labels left out.');
     return lines.join('\n');
   };
-  let out = build(false, items.length, cables.length);
+  let out = build(false, items.length, cables.length, bundles.length);
   if (out.length <= LIMIT) return out;
-  let ni = items.length, nc = cables.length;
-  out = build(true, ni, nc);
-  while (out.length > LIMIT && (ni || nc)) {
-    if (nc >= ni && nc) nc--; else ni--;
-    out = build(true, ni, nc);
+  // the longest list loses its tail first; bundles, whose lines are longest, on a tie
+  let ni = items.length, nc = cables.length, nb = bundles.length;
+  out = build(true, ni, nc, nb);
+  while (out.length > LIMIT && (ni || nc || nb)) {
+    if (nb && nb >= nc && nb >= ni) nb--; else if (nc >= ni && nc) nc--; else ni--;
+    out = build(true, ni, nc, nb);
   }
   return out;
 }
@@ -285,7 +286,8 @@ function bundleFacts(rack, b, ctx) {
   const label = id => rack.items.find(i => i.id === id)?.label ?? id;
   const r = bundleCheck(rack, b, ctx);
   const L = r.layout;
-  const at = id => L?.members.find(m => m.cable === id);
+  // a bundle of fewer than two is not drawn: no member joins or leaves it
+  const at = id => (b.members.length >= 2 ? L?.members.find(m => m.cable === id) : null);
   const s = r.checked ? strapsOf(rack, b, ctx) : null;
   return {kind: 'bundle', id: b.id, number: b.number, label: b.label, name: bundleName(b),
     members: b.members.map(m => ({cable: m.cable, ...('a' in m ? {a: m.a} : {}), ...('b' in m ? {b: m.b} : {}),
@@ -308,7 +310,7 @@ export async function inspect(rack, id, ctx = {}) {
     const out = await cableInfo(rack, cable, ctx);
     const b = bundleOfCable(rack, id);
     if (!b) return out;
-    const m = layoutOf(rack, b, ctx)?.members.find(x => x.cable === id);
+    const m = b.members.length >= 2 ? layoutOf(rack, b, ctx)?.members.find(x => x.cable === id) : null;
     return {...out, bundle: {id: b.id, join: m?.join ?? null, leave: m?.leave ?? null}};
   }
   const z = zeroUOf(rack).find(x => x.id === id);

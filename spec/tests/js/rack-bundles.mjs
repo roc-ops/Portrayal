@@ -14,7 +14,7 @@ import {createRackEditor} from '../../../kit/rack/editor.js';
 import {fillNotes} from '../../../kit/rack/export-data.js';
 import {validate} from '../../../kit/rack/validate.js';
 import {RU} from '../../../kit/rack/rails.js';
-import {withCable} from '../../../kit/rack/cable-rules.js';
+import {withCable, withoutCable, withoutCablesOf} from '../../../kit/rack/cable-rules.js';
 
 const SCHEMA = JSON.parse(readFileSync(new URL('../../schemas/rack.schema.json', import.meta.url)));
 const RINGS = ['guide-1', 'guide-2', 'guide-3', 'guide-4', 'guide-5'];
@@ -542,6 +542,96 @@ test('a routing reader that throws counts as missing: not measured, never an err
   const f = await inspect(made.rack, 'b1', {chassisOf, route: broken});
   assert.deepEqual([f.checked, f.size, f.length], [false, null, null]);
   assert.match(describe(made.rack, {chassisOf, route: broken}), /b1 Bundle 1: 2 cables \(c1-c2\), straps every 12 in, not checked\./);
+});
+
+// ── round 1 review ───────────────────────────────────────────────────────
+
+test('a trunk kept as written survives a save and a reload; a junk peel point is dropped', () => {
+  const r = rackWith([UP, UP]);
+  const raw = {...M.newDoc(), racks: [{...r, bundles: [{id: 'b1', number: 1, label: '',
+    members: [{cable: 'c1', a: 'garbage', b: {lane: 'left-front', ru: 20, extra: 1}}, {cable: 'c2'}],
+    route: [{lane: 'left-front', ru: 10}, 'bad']}]}]};
+  const once = M.parseDoc(raw);
+  const b = once.racks[0].bundles[0];
+  assert.deepEqual(b.routeAsWritten, [{lane: 'left-front', ru: 10}, 'bad']);
+  assert.deepEqual(b.members[0], {cable: 'c1', b: {lane: 'left-front', ru: 20}});
+  const twice = M.parseDoc(M.serialize(once));
+  assert.deepEqual(twice.racks[0], once.racks[0]);
+  assert.deepEqual(M.parseDoc(M.serialize(twice)).racks[0], once.racks[0]);
+  // the readable part no longer the trunk: the old writing goes
+  const edited = JSON.parse(M.serialize(once));
+  edited.racks[0].bundles[0].route = [{lane: 'left-front', ru: 12}];
+  assert.equal('routeAsWritten' in M.parseDoc(edited).racks[0].bundles[0], false);
+  // what is written validates, the junk peel point dropped
+  assert.deepEqual(validate(SCHEMA, JSON.parse(M.serialize(M.parseDoc(raw)))), []);
+});
+
+test('every way a cable leaves the rack takes it out of its bundle', () => {
+  const r = run(rackWith([UP, UP, UP]), {op: 'bundle.create', cables: ['c1', 'c2', 'c3'], route: TRUNK}).rack;
+  assert.deepEqual(withoutCable(r, 'c2').bundles[0].members.map(m => m.cable), ['c1', 'c3']);
+  assert.deepEqual(withoutCablesOf(r, 'i1').bundles[0].members, []);
+  assert.equal(withoutCable(rackWith([UP]), 'c1').bundles, undefined);
+});
+
+test('a peel point that leaves no run is refused, and one in a file rides to the end', () => {
+  let r = run(rackWith([UP, UP, UP]), [{op: 'bundle.create', cables: ['c1', 'c2', 'c3'], route: TRUNK},
+    {op: 'bundle.peel', id: 'b1', cable: 'c3', at: {lane: 'left-front', ru: 24}, end: 'b'}]).rack;
+  const rc = routeCtx(r);
+  // a and b at one point: no run
+  assert.equal(run(r, {op: 'bundle.peel', id: 'b1', cable: 'c3', at: {lane: 'left-front', ru: 24}, end: 'a'}, {route: rc}).error,
+    'left-front U24 is at or past where c3 leaves Bundle 1 for its b end, so it would have no run in the bundle.');
+  // b at the far end of its run (where it joins): no run
+  assert.equal(run(r, {op: 'bundle.peel', id: 'b1', cable: 'c2', at: TRUNK[0], end: 'b'}, {route: rc}).error,
+    'mgr-1 ring 1 is at or past where c2 leaves Bundle 1 for its a end, so it would have no run in the bundle.');
+  // the same from a file: stale, ignored with a note, and it rides to the end
+  const file = {...r, bundles: [{...r.bundles[0], members: [{cable: 'c1', b: TRUNK[0]}, {cable: 'c2'}, {cable: 'c3'}]}]};
+  const L = B.layoutOf(file, file.bundles[0], {route: rc});
+  assert.deepEqual(L.members[0].stale, ['b']);
+  assert.deepEqual(R.resolveRoute(file, file.cables[0], rc).leave, TRUNK.at(-1));
+  assert.ok(B.bundleCheck(file, file.bundles[0], {route: rc}).notes.includes(
+    "c1's peel point mgr-1 ring 1 is out of order with its other end on Bundle 1, so it rides to the end."));
+});
+
+test('a bundle of one is not drawn: its cable follows its own route, and joins nothing', async () => {
+  const away = RT(['right-front', 10], ['right-front', 30]);
+  let r = run(rackWith([away, UP]), {op: 'bundle.create', cables: ['c1', 'c2'], route: TRUNK}).rack;
+  const rc = routeCtx(r);
+  assert.deepEqual(R.resolveRoute(r, r.cables[0], rc).waypoints, TRUNK);     // two: drawn, along the trunk
+  r = run(r, {op: 'bundle.peel', id: 'b1', cable: 'c2'}).rack;
+  const got = R.resolveRoute(r, r.cables[0], rc);
+  assert.deepEqual([got.waypoints, got.bundle], [away, undefined]);
+  const f = await inspect(r, 'b1', {chassisOf, route: rc});
+  assert.deepEqual(f.members, [{cable: 'c1', join: null, leave: null}]);
+  assert.deepEqual((await inspect(r, 'c1', {chassisOf, route: rc})).bundle, {id: 'b1', join: null, leave: null});
+});
+
+test('size: over 2.5 in with no opening on the way warns at 63.5 mm, not past it', () => {
+  const lane = RT(['left-front', 10], ['left-front', 30]);
+  const big = rackWith(Array.from({length: 100}, () => lane));        // sqrt(100 x 36 / 0.8) = 67.1 mm
+  const w = run(big, {op: 'bundle.create', cables: big.cables.map(c => c.id), route: lane}, {route: routeCtx(big)}).findings;
+  assert.deepEqual(w, [{kind: 'warning', text: 'Bundle 1 is about 67 mm across at left-front U10, more than the 63.5 mm (2.5 in) a bundle may be.'}]);
+  const ok = rackWith(Array.from({length: 80}, () => lane));          // 60 mm
+  assert.deepEqual(run(ok, {op: 'bundle.create', cables: ok.cables.map(c => c.id), route: lane}, {route: routeCtx(ok)}).findings, []);
+  assert.equal(B.MAX_BUNDLE_MM, 63.5);
+});
+
+test('cables that run together at two places and apart between are refused in words', () => {
+  const r = rackWith([RT('i2:guide-1', 'i2:guide-2', 'i2:guide-5'), RT('i2:guide-1', 'i2:guide-3', 'i2:guide-5')]);
+  assert.equal(run(r, {op: 'bundle.create', cables: ['c1', 'c2']}, {route: routeCtx(r)}).error,
+    'c1 and c2 run together at mgr-1 ring 1 and mgr-1 ring 5, but apart between them. Bundle them separately, or give the bundle a route.');
+});
+
+test('a shortened reading trims bundle lines and counts them', () => {
+  let r = rackWith(Array.from({length: 40}, () => UP));
+  for (let k = 0; k < 20; k++)
+    r = run(r, {op: 'bundle.create', cables: [`c${2 * k + 1}`, `c${2 * k + 2}`], route: TRUNK, label: `a fairly long bundle label ${k}`}).rack;
+  const text = describe(r, {chassisOf});
+  assert.ok(text.length <= 1500, text.length);
+  const shown = text.split('\n').filter(l => /^b\d+ /.test(l)).length;
+  assert.ok(shown < 20, `${shown} bundle lines`);
+  const more = Number(/and (\d+) more not listed/.exec(text)[1]);
+  const listedCables = text.split('\n').filter(l => /^c\d+: /.test(l)).length;
+  assert.equal(more, (40 - listedCables) + (20 - shown));
 });
 
 test('the five commands are in the table, described as the design says', () => {

@@ -167,6 +167,13 @@ export function deriveTrunk(members, {nameOf = id => id, frame = null} = {}) {
       const first = who[0].sh.find(x => find(x.k) === r).k;
       return {who: who.map(s => s.id), first, at: seqs.indexOf(who[0])};
     }).sort((a, b) => a.at - b.at);
+    // A cable in two groups runs with the others at both, and only detours join
+    // them: they run together there and apart between, so nothing joins them.
+    const all = groups.flatMap(g => g.who);
+    if (new Set(all).size < all.length) {
+      const who = seqs.map(s => s.id).filter(id => all.includes(id));
+      return {error: `${andList(who)} run together at ${andList(groups.map(g => txt(el.get(g.first))))}, but apart between them. ${SEPARATELY}`};
+    }
     const said = groups.map(g => `${andList(g.who)} share ${txt(el.get(g.first))}`);
     return {error: `${said.slice(0, -1).join(', ')}, and ${said.at(-1)}, but the ${groups.length === 2 ? 'two groups share' : 'groups share'} nothing. ${SEPARATELY}`};
   }
@@ -245,11 +252,11 @@ export function followTrunk(own, trunk, member, {aNearStart = () => true} = {}) 
     dir = aNearStart() ? 1 : -1;
     [i0, i1] = dir > 0 ? [0, last] : [last, 0];
   }
-  // A pair in the wrong order is stale; so is one peel point past the other
+  // A pair in the wrong order is stale; so is one peel point at or past the other
   // end of the member's run.
   if (pa != null && pb != null && (pb - pa) * dir <= 0) { stale.push('a', 'b'); pa = pb = null; }
-  if (pa != null && (i1 - pa) * dir < 0) { stale.push('a'); pa = null; }
-  if (pb != null && (pb - i0) * dir < 0) { stale.push('b'); pb = null; }
+  if (pa != null && (i1 - pa) * dir <= 0) { stale.push('a'); pa = null; }
+  if (pb != null && (pb - i0) * dir <= 0) { stale.push('b'); pb = null; }
   const join = pa ?? i0, leave = pb ?? i1;
   const slice = [];
   for (let i = join; ; i += dir || 1) { slice.push(T[i]); if (i === leave) break; }

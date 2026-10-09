@@ -359,11 +359,15 @@ no `bundles` key and saves as it was.
   which a version-2 page drops. This is a one-way door: there is no way back
   to version 2 for a file a newer page has saved, and the `/v2/` label is
   never reused.
-- **The repairs** are `parseDoc`'s, so every reader gets the same rack:
-  a bundle with no usable id or a repeated one, one whose id another thing in
-  the rack has, a member naming no cable, a cable in two bundles and a number
-  used twice are each repaired, and `parseDoc(input, {notes})` says so, one
-  sentence per repair naming its rack. No note is kept in the file.
+- **The repairs** are `parseDoc`'s, so every reader gets the same rack. The
+  shapes are repaired silently, as a cable's are: a bundle with no usable id
+  or a repeated one gets a fresh id, a member that is not `{cable}` and a peel
+  point that is no waypoint are dropped, and a number that is not a whole
+  number from 1 is renumbered. The references are repaired with a note: a
+  bundle whose id another thing in the rack has, a member naming no cable, a
+  cable in two bundles and a number used twice are each repaired, and
+  `parseDoc(input, {notes})` says so, one sentence per repair naming its
+  rack. No note is kept in the file.
 
 ## The cable types file
 

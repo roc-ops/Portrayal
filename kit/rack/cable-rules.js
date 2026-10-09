@@ -6,7 +6,7 @@
 // {item, path, view}: the item's id, the port's data-path, and the device's
 // OWN panel ('front' or 'rear') the port is on - not the pane that shows it.
 
-import {nextId, positionOf, cableIdsInUse} from './model.js';
+import {nextId, positionOf, cableIdsInUse, withoutMembers} from './model.js';
 
 // ── ends ────────────────────────────────────────────────────────────────
 export const endKey = end => `${end.item}|${end.view}|${end.path}`;
@@ -82,11 +82,14 @@ export function updateCable(rack, id, patch) {
     return next;
   })};
 }
-export const withoutCable = (rack, id) => ({...rack, cables: (rack.cables || []).filter(c => c.id !== id)});
+// A removed cable leaves its bundle too (model.js withoutMembers).
+export const withoutCable = (rack, id) =>
+  withoutMembers({...rack, cables: (rack.cables || []).filter(c => c.id !== id)}, [id]);
 export const cablesOf = (rack, itemId) =>
   (rack.cables || []).filter(c => c.a.item === itemId || c.b.item === itemId);
 export const withoutCablesOf = (rack, itemId) =>
-  ({...rack, cables: (rack.cables || []).filter(c => c.a.item !== itemId && c.b.item !== itemId)});
+  withoutMembers({...rack, cables: (rack.cables || []).filter(c => c.a.item !== itemId && c.b.item !== itemId)},
+                 cablesOf(rack, itemId).map(c => c.id));
 
 // ── length ──────────────────────────────────────────────────────────────
 export const UNITS = ['m', 'ft'];
