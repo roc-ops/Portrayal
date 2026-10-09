@@ -205,6 +205,94 @@ Three layers:
     `namespace/name@major`. Toolchain takes a library search path; reserved
     `local/` namespace for private listings and devices.
 
+## Why some schema fields are shaped as they are
+
+The descriptions in `spec/schemas/*.schema.json` say what a field is, what it
+takes and what it does; they are published, and a reader of the schema page
+cannot follow a reference into this repository. The reasons below are how some
+of those fields came to be shaped as they are. They are kept here rather than
+in the descriptions because they are history, not definition.
+
+- **`maturity` is required.** Absent used to mean `draft`, and twelve finished
+  devices were reading as drafts on that default: the Edgecore AS7726-32X, all
+  five Smartoptics DCPs and the FS enclosure among them. A default that
+  silently mislabels the work is worse than a field somebody has to fill in.
+- **`profile` is required.** While it was optional, 67 of 89 devices had none,
+  so `capability._specified` returned `cannot evaluate` for them while the
+  flag read as a fact about the other 22.
+- **The datasheet's `archive` field was removed (#274).** It was in the schema
+  from the start, no entry used it, no tool read it and no document said what
+  it was for: a field nobody knew the rule for. At the time `url` was absent on
+  43 of 96 document entries, which is not a defect: documents read behind a
+  login or received directly have none. Every one of the 37 hashes resolved to
+  a held file - the rule `sha256` now states.
+- **Provenance entries are objects.** L15 (`verified` means no dimension may be
+  estimated) was implemented as `str(value).startswith("estimated")` against a
+  corpus where 42 entries opened with the word and 80 more said it somewhere in
+  a long paragraph. The prose moved into `note` and the word into `confidence`.
+  744 of 1688 entries were migrated with no `confidence`, because reading 744
+  paragraphs and deciding measured-or-estimated by eye is how an estimate
+  becomes a measurement; L93 counts them so the number falls. A `source` key is
+  still wanted, and waits on ids for the `datasheet` and `references` entries
+  (#274).
+- **A component's provenance keys are field names.** The library reached 579
+  distinct keys across 584 contracts, 495 of them used fewer than five times
+  and some of them whole sentences. L52 had to be loosened to accept any
+  power-named key after convicting eighteen contracts that had done the work,
+  and nothing could ask about `size` at all. Hence the core keys and the rule
+  that a more specific key starts with one.
+- **Airflow lives on the chassis.** It varies by build in 7 of the 48 devices
+  that stated it when this was decided; in the rest, repeating it per
+  configuration gave one fact two homes. The renderer had always read the
+  configuration first and fallen back to the chassis, so the division matched
+  what it already did.
+- **Configurations say what kind they are.** The field carried four meanings at
+  once, and a consumer could not tell an orderable SKU from an illustration: the
+  C40G exported a DCIM device type called `C40G bdm-3plus1`, named after
+  whichever redundancy drawing happened to be listed second. A `base` is the
+  default because four devices opened on an illustration, which made `default`
+  mean whatever the drawing happened to be populated with.
+- **Group roles name the control plane.** `management` is its own bucket
+  because on five devices the management block is written first in the
+  manifest, so leaving it with the traffic ports still opened the tree with a
+  console socket. Control-plane cards are named under `service` because the
+  convention drifted both ways while they were unnamed: nine devices had routing
+  engines in `service` and two in `management`, and the ASR 9912 and 9922 had
+  their route processors in `traffic`, so the first base configuration built
+  for a 9922 emptied both of them.
+- **A device's lamp state has the component's shape.** When `rate` and
+  `sequence` were added they went into the component schema only, and a device
+  that stated a blink frequency on a placement was rejected by a rule nobody had
+  thought about: two definitions of one concept, drifting. An omitted `rate`
+  means once a second because that is what every state written before `rate`
+  existed meant by `blinking`; an omitted `power-draw-scope` means `module` for
+  the same reason, so no earlier figure changed meaning.
+- **Component classes are not an enum in the schema.** The vocabulary lives in
+  `spec/schemas/power-roles.yaml` alone, because the same list in two files
+  drifts and only one would be the one lint reads. Synonyms were merged in
+  #173: `cooling` became `fan`, `fastener` became `screw`, `panel` became
+  `display` and `connector` became `inlet`, because each pair was one kind of
+  part split by who happened to model it.
+- **A component's `bays` are typed.** The key was `additionalProperties: true`
+  and described as unused while 51 bays across 25 components relied on it, so a
+  malformed bay validated and was found, if at all, by a tree that read wrong.
+  `accepts` is required on them because the four SPA bays of
+  `a9k-sip-700-8g` sat empty for want of one while its 4 GB twin listed 22
+  cards in each.
+- **`optical.front-order` is stated, not guessed, on a multi-row face.**
+  Guessing a numbering rule from the one multi-row sample the library held is
+  how the 12.90-versus-13.2 pitch confusion started.
+- **`lift` on decor and on a placement** exists because `relief.features` had
+  carried `lift` all along and composed `parts:` gained it; the others not
+  having it was an asymmetry in the vocabulary rather than a decision, and it
+  forced second copies of parts with fattened numbers.
+- **The device `lint:` block** was written for the Casa C40G, which keeps a rear
+  vent field that L44 reports as 100% buried: the PEMs or the AC panel cover it
+  in 2D, and it is what punches the rear panel in 3D when a PEM is pulled. Its
+  provenance said so at length, in prose no tool reads.
+- **`chassis.edge` is hashed as surface.** Its schema entry carried no
+  description, and for as long as that lasted it read as geometry (#271).
+
 ## First device (historical)
 
 The scope the project started with, kept as the record of where it began; the
