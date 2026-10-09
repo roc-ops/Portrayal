@@ -302,9 +302,9 @@ RULES = {
     "L130": ("component",  "every leg of a module whose glass is projected runs between the front and the trunk (a rear-face connector or an `optical.trunk` position)", "fix the path, or the trunk; a front-to-front or trunk-to-trunk leg has no row in the fibre map and would be dropped"),
     "L131": ("component",  "a module with `optical.paths` has a trunk - a rear face carrying its common end, or `optical.trunk` (error)", "add `optical.trunk` naming the common, network-side positions, from the vendor's own port roles, and say in provenance where they were read"),
     "L132": ("device",     "a placement's `fed-by` names a placement on this device, in any view, whose part exports a power port (`dcim_export.PART_POWER`), and it stands on a part that exports a power outlet (`dcim_export.PART_OUTLET`) - an error, because both DCIMs refuse an outlet whose `power_port` names nothing", "name the input this output hands on, by its placement id; drop a `fed-by` on a part that is not an outlet"),
-    "L133": ("device",     "a placement's `through` names a bay on this device, in any view - the breaker or fuse position the circuit runs through (an error)", "name the bay by its id, as the front face spells it"),
+    "L133": ("device",     "a placement's `through` names a bay on this device, in any view - the breaker or fuse position the circuit runs through - or a placement of a part of class `breaker`, a breaker fixed to the unit (an error)", "name the bay or the breaker placement by its id, as the face spells it"),
     "L134": ("device",     "every placement of a part in `dcim_export.PART_OUTLET` states `fed-by` - a warning at `draft` and `modelled`, an error at `verified`: an outlet with no feed imports, and names no power port", "state `fed-by: <input id>` on each output, read from the panel's own wiring or datasheet"),
-    "L135": ("device",     "one position, one circuit - no two placements name the same `through` (a warning)", "correct the `through` that names the wrong position; if two outputs really are paralleled behind one breaker, waive with the document that says so"),
+    "L135": ("device",     "one position, one circuit - no two placements name the same `through` bay (a warning); a fixed breaker placement feeds many outlets by design and is not counted", "correct the `through` that names the wrong position; if two outputs really are paralleled behind one breaker, waive with the document that says so"),
     "L136": ("device",     "a declared pass-through (`passes:`) lies inside its face and overlaps no component - except a well that holds it whole, the plate it is cut through - and no two in a view share an id", "move the pass-through off the part, or onto the face; a window punched in a part's floor is declared over that well"),
     "L137": ("device",     "a pass-through whose `cover` is `brush` has a `pattern: brush` decor drawn over the whole of it, and a brush drawn over a pass-through belongs to one whose cover is `brush`", "draw the brush over the opening, or change `cover` to say what the picture shows"),
     "L138": ("component, device", "a guide fits what declares it - a ring's opening inside the part, seen along its run (its size, and its relief or `size.d` out of the face), and a duct inside its view, with a finger gap less than the finger pitch", "measure the clear opening, not the outside of the loop; give the part the relief that holds the opening; move the duct onto its face, or re-read the pitch and the gap off the drawing"),
@@ -322,8 +322,8 @@ RULES = {
     "L150": ("device",     "a placement, bay or cutout whose box lies outside its view's face (beyond 0.5 mm) is covered by that side's `chassis.overhang` - across the width only, the rear and underside mirrored; one beyond the face in height or along a side view is always reported. `optional` placements are exempt, and decor is not checked, since it is clipped and never drawn outside the face (error)", "state `chassis.overhang: {left, right}` with the reach and its source, or move the part onto the face"),
     "L151": ("device",     "a side of `chassis.overhang` is reached by some part to within 0.5 mm (warning)", "lower the figure to what the parts reach, or drop it when nothing reaches past the face"),
     "L152": ("device",     "a `rack-side` part's front view is taller than it is wide - it is drawn as it stands beside the rack (warning)", "draw it standing: the front's `w` is the width across the rack's face direction and `h` the height it runs; swap them if the spec line printed them the other way"),
-    "L153": ("lab",        "`side` (left or right) appears only on a `rack-side` part, which states it, and on a `rack-face` part narrower than the rack opening; a rack-side part takes no `on` or `unit` (error)", "give a rack-side part its `side` and place it by `ru`; drop `side` from a full-width part"),
-    "L154": ("lab",        "a rack-side part fits the rack's `height-ru`, and no two rack-side parts on one side of the rack overlap in height (error)", "move one of the two up, or stand it on the other side of the rack"),
+    "L153": ("lab",        "`side` appears only on a `rack-side` part, which states it as an attachment point (`left`, `right`, `left-front`, `left-rear`, `right-front`, `right-rear`), and on a `rack-face` part narrower than the rack opening, as `left` or `right`; a rack-side part takes no `on` or `unit` (error)", "give a rack-side part its `side` and place it by `ru`; drop `side` from a full-width part; a rack-face part's side is a rail, left or right"),
+    "L154": ("lab",        "a rack-side part fits the rack's `height-ru`; no two rack-side parts at one attachment point overlap in height; and one side of the rack does not mix the two-post name (`left`) with a four-post name (`left-front`, `left-rear`) (error)", "move one of the two up, or stand it at another attachment point; name every part on a side with the same rack's points"),
     "L155": ("kit",        "every part `ref` of a `kind: kit` resolves to a component in the library that is not itself a kit, and no two parts share an `id` (error)", "fix the ref (namespace/name@major) or write the part's contract; a kit lists ordinary rails, brackets and ears, never another kit"),
     "L156": ("kit",        "every configuration of a kit has its own `id`, and names in `parts` only ids of the kit's own `parts` (error)", "list the part ids the configuration uses, as the kit's `parts` spell them; give each configuration an id of its own"),
     "L157": ("kit",        "every depth range of a kit configuration, one `[min, max]` or one per hole type, has min below max (error)", "write the range as `[min, max]` in mm, from the source; a single figure is a `preset`, not a range"),
@@ -335,6 +335,10 @@ RULES = {
     "L163": ("device",     "a `chassis.kits[].depth` override names a configuration `id` of that kit, and its `range` has the configuration's shape - one `[min, max]`, or the same hole types - with min below max (error)", "name a configuration the kit has, and write the range as the kit writes that configuration's `depth`"),
     "L164": ("device",     "the span `chassis.ears` states fits the chassis: `y + h` is not above its top (warning)", "measure the ears again against the chassis height; leave `h` and `y` out when the ears span the whole chassis, which is what is drawn without them"),
     "L165": ("device",     "no two of a device's `chassis.ears.positions` are the same position - the same `name` with the same `label`, or no label on either (warning)", "give each a `label` in the vendor's own words (\"chassis flush\", \"transponder flush\"), or drop the duplicate"),
+    "L166": ("device",     "a rack PDU states `attrs.management.metering-scope` and `outlet-switching` together (error); with `outlet-switching: true` every power outlet declares the `[on, off]` states (warning), and without it none declares any (error)", "state both keys, from the vendor's topology table; declare `states: [on, off]` on the outlets group of a switched PDU, and none on an unswitched one"),
+    "L167": ("device",     "a rack PDU's `attrs.power.input-plug` is the `dcim_export.PART_POWER` slug of the input its outlets are `fed-by`, and `input-wiring` is stated exactly when `input-phase` is `three` (error)", "write the plug as the slug the input part exports, with the cord in `input-cord` and the provenance; state `wye` or `delta` on a three-phase input only"),
+    "L168": ("device",     "a device of the `power` profile that states `input-voltage-v` does not also state `input-voltage` (warning)", "move the voltage prose into `input-ac` and keep the number in `input-voltage-v`"),
+    "L169": ("device",     "`lines` stands on a placement of class `breaker` or on a power outlet (error), and on a three-phase input every outlet's lines resolve, on itself or on the breaker it runs `through` (warning)", "state `lines` once, on the breaker that protects the circuit, and `through: <breaker>` on each outlet it feeds"),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -1472,6 +1476,9 @@ def _load_port_speeds(schemas):
 
 
 PORT_SPEEDS = _load_port_speeds(Path(__file__).resolve().parents[2] / "schemas")
+# THE LIBRARY A RULE RESOLVES REFS IN when its caller names none - a test that
+# hands a rule one document, as test_power_outlet_lint does.
+DEFAULT_LIBRARY = Path(__file__).resolve().parents[3] / "library"
 
 
 def _pluggable_rates():
@@ -7506,7 +7513,7 @@ def lint_rack_side_portrait(path, data):
                           "direction, `h` the height it runs")
 
 
-def lint_device_power_outlets(path, data):
+def lint_device_power_outlets(path, data, lib_roots=None):
     """L132-L135: a power outlet names its feed, and its position resolves.
 
     `fed-by` and `through` cross a face - the output is on the rear and its
@@ -7517,13 +7524,17 @@ def lint_device_power_outlets(path, data):
     that exports an outlet: both targets import an outlet's `power_port` by
     name within the same type and refuse one that names nothing, so this is
     an error. L133 `through` names a bay - the position whose occupant protects
-    the circuit. L134 every outlet states a feed: an outlet with none imports,
-    and is the incomplete model #806 exists to end, so a warning below
-    `verified` and an error at it. L135 one position, one circuit: two outputs
-    paralleled behind one breaker are possible, so a warning that can carry
-    the waiver saying so.
+    the circuit - or, since #934, a placement of a part of class `breaker`: a
+    breaker fixed to the unit, as a rack PDU's branch breakers are
+    (docs/pdu-model-design.md section 5.3). L134 every outlet states a feed: an
+    outlet with none imports, and is the incomplete model #806 exists to end,
+    so a warning below `verified` and an error at it. L135 one position, one
+    circuit: two outputs paralleled behind one breaker are possible, so a
+    warning that can carry the waiver saying so. IT READS BAYS ONLY: a fixed
+    PDU breaker feeds fourteen outlets by design.
     """
     loud = err if data.get("maturity") == "verified" else warn
+    roots = lib_roots or [DEFAULT_LIBRARY]
     placed, bays = {}, set()
     for vname, view in (data.get("views") or {}).items():
         vp = view_parts(view or {})
@@ -7554,17 +7565,167 @@ def lint_device_power_outlets(path, data):
             via = p.get("through")
             if via is None:
                 continue
-            if via not in bays:
-                err(path, "L133", f"{vname}/{pid}: `through: {via}` names no bay on this "
-                                  "device - it is the breaker or fuse position the "
-                                  "circuit runs through")
-            through.setdefault(via, []).append(f"{vname}/{pid}")
+            if via in bays:
+                through.setdefault(via, []).append(f"{vname}/{pid}")
+            elif not _is_breaker(via, placed, roots):
+                err(path, "L133", f"{vname}/{pid}: `through: {via}` names no bay and no "
+                                  "breaker on this device - it is the breaker or fuse "
+                                  "position the circuit runs through, or a placement of a "
+                                  "part of class `breaker` fixed to the unit")
     for via, who in sorted(through.items()):
         if len(who) > 1:
             warn(path, "L135", f"{', '.join(who)} all run `through: {via}`. One position "
                                "protects one circuit; if these outputs really are "
                                "paralleled behind one breaker, waive with the document "
                                "that says so")
+
+
+def _is_breaker(pid, placed, roots):
+    """True when `pid` is a placement on this device whose part is of class
+    `breaker` - a breaker fixed to the unit, which `through` may name (#934)."""
+    return any((_contract(p["ref"], roots) or {}).get("class") == "breaker"
+               for _v, p in placed.get(pid) or [])
+
+
+def _outlet_placements(data):
+    """[(view, placement)] for every placement of a PART_OUTLET part."""
+    out = []
+    for vname, view in (data.get("views") or {}).items():
+        for p in view_parts(view or {})["placements"]:
+            if p["ref"].split("@")[0] in dcim_export.PART_OUTLET:
+                out.append((vname, p))
+    return out
+
+
+def _state_names(states):
+    """The state names a `states` list declares, strings and objects alike."""
+    if not isinstance(states, list):
+        return set()
+    return {s if isinstance(s, str) else (s or {}).get("name") for s in states} - {None}
+
+
+def lint_device_pdu_capability(path, data):
+    """L166: a rack PDU's capability is two facts stated together, and its
+    outlets' state vocabulary agrees with them.
+
+    docs/pdu-model-design.md section 2.2. `metering-scope` and
+    `outlet-switching` in `attrs.management` derive the published class
+    (manifest.pdu_class), so stating one without the other publishes nothing -
+    an error, because the half that is there reads as a capability.
+
+    PER OUTLET, THE VOCABULARY IS THE STATEMENT. An outlet that can be switched
+    declares the `[on, off]` states (on its placement or its group); one that
+    cannot declares none. With `outlet-switching: true` an outlet declaring no
+    `on` and `off` is a WARNING naming each, because a PDU with a few
+    unswitched outlets exists. An outlet declaring states where the device does
+    not say `outlet-switching: true` is an ERROR: the vocabulary would offer a
+    switch the hardware does not have.
+    """
+    mgmt = (data.get("attrs") or {}).get("management") or {}
+    stated = [k for k in ("metering-scope", "outlet-switching") if k in mgmt]
+    if len(stated) == 1:
+        other = ({"metering-scope", "outlet-switching"} - set(stated)).pop()
+        err(path, "L166", f"`attrs.management.{stated[0]}` is stated without `{other}`. "
+                          "The PDU class is derived from the two together, so state "
+                          "both (docs/pdu-model-design.md section 2.2)")
+    switching = mgmt.get("outlet-switching") is True
+    groups = data.get("groups") or {}
+    bare, stray = [], []
+    for vname, p in _outlet_placements(data):
+        names = _state_names(p.get("states")) or \
+            _state_names((groups.get(p.get("group")) or {}).get("states"))
+        if switching and not {"on", "off"} <= names:
+            bare.append(f"{vname}/{p['id']}")
+        elif not switching and names:
+            stray.append(f"{vname}/{p['id']}")
+    if bare:
+        warn(path, "L166", f"`outlet-switching: true`, and {len(bare)} outlet(s) declare "
+                           f"no `[on, off]` states: {', '.join(bare[:8])}"
+                           f"{' ...' if len(bare) > 8 else ''}. A switchable outlet "
+                           "declares the vocabulary, on its placement or its group")
+    if stray:
+        err(path, "L166", f"{len(stray)} outlet(s) declare states - {', '.join(stray[:8])}"
+                          f"{' ...' if len(stray) > 8 else ''} - and the device does not "
+                          "state `outlet-switching: true`. Only a switchable outlet "
+                          "carries the outlet state vocabulary")
+
+
+def lint_device_input_rating(path, data):
+    """L167 and L168: a rack PDU's structured input rating is consistent.
+
+    docs/pdu-model-design.md section 4.2. L167 (errors): `input-plug` is the
+    slug of the input power port the outlets are `fed-by` - the
+    `dcim_export.PART_POWER` value of that part - so the attr and the export
+    cannot name two plugs; `input-wiring` is stated exactly when
+    `input-phase` is `three`. L168 (a warning): a device of the `power` profile
+    that states `input-voltage-v` states its voltage in prose in `input-ac`,
+    not in `input-voltage` beside it - the same fact written twice.
+    """
+    power = (data.get("attrs") or {}).get("power") or {}
+    plug = power.get("input-plug")
+    if plug is not None:
+        placed = _manifest.device_placements(data)
+        fed = sorted({p.get("fed-by") for _v, p in _outlet_placements(data)
+                      if p.get("fed-by")})
+        types = {f: dcim_export.PART_POWER.get(((placed.get(f) or {}).get("ref") or "")
+                                               .split("@")[0]) for f in fed}
+        if not fed:
+            err(path, "L167", f"`input-plug: {plug}` is stated and no outlet is `fed-by` an "
+                              "input, so there is no input power port for it to name")
+        for f, slug in sorted(types.items()):
+            if slug is not None and slug != plug:
+                err(path, "L167", f"`input-plug: {plug}`, and the outlets are fed by {f}, "
+                                  f"which exports a `{slug}` power port. `input-plug` is "
+                                  "that port's type, as dcim_export.PART_POWER spells it")
+    phase, wiring = power.get("input-phase"), power.get("input-wiring")
+    if wiring is not None and phase != "three":
+        err(path, "L167", f"`input-wiring: {wiring}` is the wiring of a three-phase input, "
+                          f"and `input-phase` is {phase!r}. Drop it, or state "
+                          "`input-phase: three`")
+    elif phase == "three" and wiring is None:
+        err(path, "L167", "`input-phase: three` and no `input-wiring`. State `wye` or "
+                          "`delta`: a line-to-neutral outlet's `feed_leg` depends on it")
+    if data.get("profile") == "power" and "input-voltage" in power \
+            and "input-voltage-v" in power:
+        warn(path, "L168", "`attrs.power` states `input-voltage` beside `input-voltage-v`. "
+                           "A PDU states its voltage in `input-ac` (prose) and "
+                           "`input-voltage-v` (the number); move the prose into `input-ac`")
+
+
+def lint_device_lines(path, data, lib_roots=None):
+    """L169: `lines` stands on the placement that protects a circuit, and a
+    three-phase PDU states its wiring.
+
+    docs/pdu-model-design.md section 5.3. `lines` belongs on a part of class
+    `breaker`, or on an outlet that has no breaker (an error elsewhere: no
+    other placement protects a circuit). An outlet reaches its lines through
+    the breaker it runs `through` (manifest.outlet_lines), its own `lines`
+    first. On a device whose `input-phase` is `three`, an outlet whose lines
+    resolve to nothing exports no `feed_leg` because the wiring is unstated,
+    which is a warning naming them.
+    """
+    roots = lib_roots or [DEFAULT_LIBRARY]
+    placed = _manifest.device_placements(data)
+    for vname, view in (data.get("views") or {}).items():
+        for p in view_parts(view or {})["placements"]:
+            if not p.get("lines"):
+                continue
+            ref = p["ref"].split("@")[0]
+            outlet = ref in dcim_export.PART_OUTLET
+            if not outlet and (_contract(p["ref"], roots) or {}).get("class") != "breaker":
+                err(path, "L169", f"{vname}/{p['id']}: states `lines`, and {ref} is neither "
+                                  "a breaker nor a power outlet. `lines` stands on the "
+                                  "placement that protects the circuit")
+    power = (data.get("attrs") or {}).get("power") or {}
+    if power.get("input-phase") != "three":
+        return
+    unstated = [f"{v}/{p['id']}" for v, p in _outlet_placements(data)
+                if not _manifest.outlet_lines(p, placed)]
+    if unstated:
+        warn(path, "L169", f"a three-phase input, and {len(unstated)} outlet(s) state no "
+                           f"`lines`, on themselves or their breaker: {', '.join(unstated[:8])}"
+                           f"{' ...' if len(unstated) > 8 else ''}. The wiring is unstated, "
+                           "so no `feed_leg` can be decided for them")
 
 
 def lint_device_shell(path, data):
@@ -12379,7 +12540,10 @@ def main():
                 lint_device_mount(f, d)
                 lint_rack_side_portrait(f, d)
                 lint_device_shell(f, d)
-                lint_device_power_outlets(f, d)
+                lint_device_power_outlets(f, d, args.library)
+                lint_device_pdu_capability(f, d)
+                lint_device_input_rating(f, d)
+                lint_device_lines(f, d, args.library)
                 lint_device_power_stated(f, d)
                 lint_device_provenance_confidence(f, d)
                 lint_quoted_prose(f, d)

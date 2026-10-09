@@ -39,7 +39,7 @@ from portrayal.manifest import (presented_point, back_hosts, back_parts, key_on_
                       occupant_spec, nested_key_host, slot_default, drawn_refs,
                       spanned_slots, spanning_axis, summed_rotate, presented_turn,
                       allowed_turns, text_extent, alias_names, config_airflow,
-                      config_power, device_options)
+                      config_power, device_options, pdu_class)
 from portrayal import capability
 from portrayal import ears as ears_mod
 from portrayal import bevel as _bevel
@@ -64,6 +64,12 @@ STATE_CSS = """
     .state-fail  { --led-color: #ef4444; }
     .state-locate { --led-color: #3b82f6; }
     .state-absent { opacity: 0.35; }
+    /* A SWITCHED OUTLET WITH NO LAMP is dimmed when it is off, as absent is but
+       less (docs/pdu-model-design.md section 3.2): every switched PDU in the
+       library has a lamp per outlet, and this is the fallback so the first one
+       without does not invent a lamp. An outlet a lamp is bound to by `for:`
+       carries data-lamped (mark_lamped) and is never dimmed: its lamp says it. */
+    [data-class='inlet'][data-states~='off'].state-off:not([data-lamped]) { opacity: 0.55; }
     /* A state is a colour AND a behaviour. Solid and blinking of the same colour
        are different facts on real hardware: on the S9510-28DC a solid green PWR
        is "system power good" and a blinking green PWR is "power good but BMC
@@ -86,6 +92,43 @@ STATE_CSS = """
     [data-class='region'].portrayal-highlight { stroke: #f59e0b; stroke-width: 0.7; filter: none; }
     .state-fail[data-class='psu'], .state-fail[data-class='fan'] { filter: drop-shadow(0 0 1.4px #ef4444); }
 """
+
+
+_STATE_TOKEN = re.compile(r"^[a-z0-9-]+$")
+
+
+def _declares_states(node):
+    """True when the node carries a state vocabulary kit/states.js statesOfEl
+    would read: a list of tokens, not prose."""
+    toks = (node.get("data-states") or "").split()
+    return bool(toks) and all(_STATE_TOKEN.match(t) for t in toks)
+
+
+def mark_lamped(svg):
+    """`data-lamped="true"` on every element a lamp is bound to (#934).
+
+    The binding is kit/states.js boundLamps's, stated again here so the
+    stylesheet can see it: an element whose `data-path` a lamp's bare
+    `data-for` names, where the lamp declares a state vocabulary AND so does the
+    element - a switched outlet. A seated plug and silkscreen carry `data-for`
+    and declare no states, and a port declares none of its own, so neither
+    marks anything. STATE_CSS dims an outlet that is `off` only when it is not
+    marked: an outlet with a lamp is never dimmed, its lamp says it. A
+    cross-view target (a leading slash) names another drawing, and the first
+    element carrying a path answers for it, as states.js pathIndex does.
+    """
+    by_path = {}
+    for node in svg.iter():
+        p = node.get("data-path")
+        if p and p not in by_path:
+            by_path[p] = node
+    for lamp in svg.iter():
+        if not lamp.get("data-for") or not lamp.get("data-path") or not _declares_states(lamp):
+            continue
+        for t in lamp.get("data-for").split():
+            src = by_path.get(t)
+            if src is not None and src is not lamp and _declares_states(src):
+                src.set("data-lamped", "true")
 
 
 def data_for(value):
@@ -2552,7 +2595,7 @@ def _generic_ears(svg, plan, view_name, w, h):
             el = ET.SubElement(g, f"{{{SVG_NS}}}rect")
             for k, v in (("x", x), ("y", y), ("width", bw), ("height", bh)):
                 el.set(k, f"{round(v, 4):g}")
-            el.set("fill", ears_mod.FILL)
+            el.set("fill", plan["color"])
             el.set("stroke", ears_mod.EDGE)
             el.set("stroke-width", "0.4")
         el.set("id", f"{side}--{kind}" if kind != "slot"
@@ -2603,8 +2646,11 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     # sections existed - re-filing a key between sections must not change a
     # single byte of a compiled drawing. attrs.flatten is shared with the search
     # index and the exporters so they cannot disagree about what the bag holds.
+    # A BOOLEAN IS SPELLED AS JSON SPELLS IT, `true` or `false`: the first
+    # device-level boolean (#934's `outlet-switching`) would otherwise reach a
+    # browser as Python's `False`.
     for ak, av in attrs_mod.flatten(device.get("attrs")).items():
-        svg.set(f"data-{ak}", str(av))
+        svg.set(f"data-{ak}", str(av).lower() if isinstance(av, bool) else str(av))
     airflow = config_airflow(device, config)
     if airflow:
         svg.set("data-airflow", airflow)
@@ -4245,6 +4291,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                              key=lambda kv: tuple(str(x) for x in kv[0]))))
         style.text = STATE_CSS + extra + "\n"
 
+    mark_lamped(svg)
+
     # A component's own <g id="silkscreen"> is printed on ITS faceplate, so it
     # travels with the part and is never occluded by it - unlike chassis silkscreen,
     # which the part covers. Both come out together under --without silkscreen, which
@@ -4409,7 +4457,7 @@ def published_ears(ears):
     added the object beside it; a reader that had to branch on the type to ask
     one question would branch on it for ever, so the string is published as
     `{behind: true}` and the object as the keys it states - `behind`, `h`, `y`,
-    `positions` - and no more. Lengths are floats, as `overhang`'s are; a
+    `color`, `positions` - and no more. Lengths are floats, as `overhang`'s are; a
     position keeps every key it writes (`name`, `label`, `at`, `default`,
     `racks`, `part`)."""
     if isinstance(ears, str):
@@ -4420,6 +4468,8 @@ def published_ears(ears):
     for key in ("h", "y"):
         if ears.get(key) is not None:
             out[key] = float(ears[key])
+    if ears.get("color") is not None:
+        out["color"] = str(ears["color"])
     if "positions" in ears:
         out["positions"] = []
         for pos in ears.get("positions") or []:
@@ -4428,6 +4478,40 @@ def published_ears(ears):
                 pos["at"] = float(pos["at"])
             out["positions"].append(pos)
     return out
+
+
+def mount_points(device, cfg_name, cfg, lib):
+    """`configs[].mount-points` (#934, docs/pdu-model-design.md section 6.2):
+    each mount point one configuration draws, as `{mates, at}`, `at` ascending.
+
+    A MOUNT POINT is a placement of a `class: mount` part that declares `mates`
+    - a button that seats in a slot presenting that interface, `pdu-button` on
+    a zero-U PDU. `at` is millimetres from the bottom of the view it is placed
+    on to its `mate` point, which is how a PDU's pitch is read: the EVMI2130X's
+    two buttons stand at 72.0 and 1627.8, the 1555.8 the drawing dimensions.
+    THE PITCH IS DERIVED, NEVER STATED: a second statement of a number the
+    drawing already holds is a number that can disagree with it.
+
+    Read over the views this configuration draws (resolve_views) and the
+    placements it has (`only-in`), so a configuration that drops a button
+    publishes one point fewer. A device with none publishes an empty list."""
+    out = []
+    for _face, (_name, view) in resolve_views(device, cfg).items():
+        h = ((view or {}).get("size") or {}).get("h")
+        if h is None:
+            continue
+        for p in view_parts(view)["placements"]:
+            if p.get("only-in") and cfg_name not in p["only-in"]:
+                continue
+            contract, _ = lib.resolve(p["ref"])
+            mate = ((contract.get("connection-points") or {}).get("mate") or {}).get("at")
+            if contract.get("class") != "mount" or not contract.get("mates") or not mate:
+                continue
+            size = contract.get("size") or {}
+            at = seat_point(p["at"], {"w": size.get("w", 0), "h": size.get("h", 0)},
+                            p.get("rotate", 0), mate)
+            out.append({"mates": contract["mates"], "at": round(float(h) - at[1], 2)})
+    return sorted(out, key=lambda m: (m["at"], m["mates"]))
 
 
 def _published_part(ref, lib):
@@ -5451,6 +5535,10 @@ def main():
                  # the canonical one and is never repeated here.
                  "aliases": alias_names(device),
                  "capability": cap["capability"], "gaps": cap["gaps"],
+                 # A RACK PDU'S CLASS (#934), derived from `attrs.management`
+                 # `metering-scope` and `outlet-switching` (manifest.pdu_class),
+                 # never stated; null where the device states neither.
+                 "pdu-class": pdu_class(device),
                  # FACES ONLY. A view carrying `face:` is a VARIANT - the
                  # 12 x 3.5in front is drawn when a configuration redirects the
                  # front to it, never on its own - and listing it here offered
@@ -5573,7 +5661,12 @@ def main():
                               # configuration that draws it identically, so the
                               # file is looked up here, never built from the
                               # configuration's name (#665).
-                              "files": files.get(n, {})}
+                              "files": files.get(n, {}),
+                              # WHERE THIS BUILD HANGS (#934): each mount point
+                              # it draws, `{mates, at}` with `at` in mm from
+                              # the bottom of its view, derived from the button
+                              # placements; `[]` on a device with none
+                              "mount-points": mount_points(device, n, c, lib)}
                              for n, c in sorted(configs.items())],
                  # what each bay will take, so a viewer can offer the swap rather
                  # than guessing from component class

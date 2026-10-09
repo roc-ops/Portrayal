@@ -263,6 +263,51 @@
         "fully-configured",
         "unstated"
        ]
+      },
+      "input-plug": {
+       "$ref": "#/$defs/segment",
+       "description": "THE INPUT POWER PORT TYPE of a rack PDU, as a slug: the `dcim_export.PART_POWER` value of the part its outlets are `fed-by` (`nema-l21-30p`, `cs8365c`, `iec-60320-c20`). Lint L167 holds the two equal. The cord, its length and gauge go in `input-cord` and the provenance. Before roc-ops/Portrayal#934 this key was prose on the one device that wrote it. docs/pdu-model-design.md section 4.2"
+      },
+      "input-cord": {
+       "enum": [
+        "fixed",
+        "detachable"
+       ],
+       "description": "whether a rack PDU's input cord is fixed to it or plugs into an inlet. docs/pdu-model-design.md section 4.2"
+      },
+      "input-phase": {
+       "enum": [
+        "single",
+        "three"
+       ],
+       "description": "a rack PDU's input, single-phase or three-phase. With `three`, an outlet's `lines` decide its DCIM `feed_leg` (lint L169 warns where they are unstated). docs/pdu-model-design.md sections 4.2 and 5"
+      },
+      "input-wiring": {
+       "enum": [
+        "wye",
+        "delta"
+       ],
+       "description": "a three-phase input's wiring; absent when single-phase (lint L167). A line-to-neutral outlet on a `wye` input is the only outlet that exports a `feed_leg`. docs/pdu-model-design.md section 5.2"
+      },
+      "input-voltage-v": {
+       "type": "number",
+       "exclusiveMinimum": 0,
+       "description": "a rack PDU's nominal input voltage as a number, as a source states it; line to line when three-phase. A PDU states its voltage here and in the prose `input-ac`, and not in `input-voltage` (lint L168 warns on both). docs/pdu-model-design.md section 4.2"
+      },
+      "input-current-a": {
+       "type": "number",
+       "exclusiveMinimum": 0,
+       "description": "a rack PDU's rated input current, derated, in amperes - the figure the drawings give (24 A on a 30 A plug). docs/pdu-model-design.md section 4.2"
+      },
+      "plug-rating-a": {
+       "type": "number",
+       "exclusiveMinimum": 0,
+       "description": "what a rack PDU's input plug is rated for, in amperes, where it differs from `input-current-a` - the figure the SKU titles give. docs/pdu-model-design.md section 4.2"
+      },
+      "capacity-kw": {
+       "type": "number",
+       "exclusiveMinimum": 0,
+       "description": "the load a rack PDU can hand on, in kilowatts - NEVER a draw: the profile's draw requirement is not met by it. A `capacity-scope` sentence qualifies it where a source does. docs/pdu-model-design.md section 4.2"
       }
      },
      "additionalProperties": {
@@ -320,6 +365,21 @@
     "management": {
      "type": "object",
      "description": "how it is operated and observed: management ports, firmware bundles, telemetry the box exposes about itself",
+     "properties": {
+      "metering-scope": {
+       "enum": [
+        "none",
+        "input",
+        "branch",
+        "outlet"
+       ],
+       "description": "A RACK PDU'S METERING, the finest level it meters: `none`, `input`, `branch` (each breaker or bank, and the input) or `outlet` (each outlet, each branch and the input). Every vendor in scope meters each level above the one named, so one word carries three columns. Stated with `outlet-switching`, never alone (lint L166); the two derive the published class (`pdu-class` in configs.json and devices.json, manifest.PDU_CLASSES), which is never stated. docs/pdu-model-design.md section 2.2, roc-ops/Portrayal#934"
+      },
+      "outlet-switching": {
+       "type": "boolean",
+       "description": "A RACK PDU'S OUTLET SWITCHING: true when an outlet can be switched on and off. Stated with `metering-scope` (lint L166). With true every outlet declares the `[on, off]` state vocabulary (a warning naming each that does not); with false no outlet declares one (an error). docs/pdu-model-design.md section 2.2, roc-ops/Portrayal#934"
+      }
+     },
      "additionalProperties": {
       "type": [
        "string",
@@ -465,6 +525,10 @@
          "type": "number",
          "minimum": 0,
          "description": "millimetres, the bottom of the ears above the bottom of the chassis, when `h` is less than the chassis height; 0 when absent"
+        },
+        "color": {
+         "type": "string",
+         "description": "the ears' colour, a fill as `chassis.color` is written, when they are not silver. The generic L-bracket ear (#909) is drawn in it; absent, it is silver (#c8cacc, ears.py SILVER), because most network gear has bare or plated steel ears even when its faceplate is black. A colour and not a dimension: devicelock hashes it with the rest of `ears` under chassis surface, so stating or changing it is a patch."
         },
         "positions": {
          "type": "array",
@@ -1558,7 +1622,22 @@
           },
           "through": {
            "$ref": "#/$defs/segment",
-           "description": "THE POSITION THIS CIRCUIT RUNS THROUGH: the id of a bay on this device, in any view, whose occupant protects it - a breaker or fuse position. It crosses a face (the output is on the rear, the breaker on the front), which `for:` cannot say: `for:` is a UI binding emitted as data-for that waives L13's overlap check, and these two are not near each other. The DCIM export writes it as a sentence, on the outlet's description and on the bay's, because neither target relates an outlet to a module bay. Optional; a panel with fixed, unprotected outputs has none. Lint L133 (it resolves) and L135 (one position, one circuit). roc-ops/Portrayal#806"
+           "description": "THE POSITION THIS CIRCUIT RUNS THROUGH: the id of a bay on this device, in any view, whose occupant protects it - a breaker or fuse position - OR of a placement of a part of class `breaker`, a breaker fixed to the unit (a rack PDU's branch breaker, roc-ops/Portrayal#934). It crosses a face (the output is on the rear, the breaker on the front), which `for:` cannot say: `for:` is a UI binding emitted as data-for that waives L13's overlap check, and these two are not near each other. The DCIM export writes it as a sentence on the outlet's description, and on a bay's, because neither target relates an outlet to a module bay; an outlet through a fixed breaker takes that breaker's `lines`. Optional; a panel with fixed, unprotected outputs has none. Stating one is a minor version, changing one a major. Lint L133 (it resolves) and L135 (one bay position, one circuit; a fixed PDU breaker feeds many outlets by design, so L135 reads bays only). roc-ops/Portrayal#806, docs/pdu-model-design.md section 5.3"
+          },
+          "lines": {
+           "type": "array",
+           "minItems": 1,
+           "maxItems": 3,
+           "uniqueItems": true,
+           "items": {
+            "enum": [
+             "L1",
+             "L2",
+             "L3",
+             "N"
+            ]
+           },
+           "description": "THE CONDUCTORS A CIRCUIT IS WIRED ACROSS, on the placement that protects it: a part of class `breaker`, or an outlet that has no breaker. `[L1, L2]` is line to line, `[L1, N]` line to neutral. An outlet `through` a fixed breaker takes the breaker's lines instead of restating them. The DCIM export writes them on the outlet's description, and writes `feed_leg` only for a line-to-neutral outlet on a three-phase wye input (L1 is A, L2 B, L3 C). Stating them is a minor version, changing them a major: both move an imported outlet description or `feed_leg`. Lint L169. docs/pdu-model-design.md section 5, roc-ops/Portrayal#934"
           },
           "frames": {
            "oneOf": [

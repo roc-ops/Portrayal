@@ -25,7 +25,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { toGLB, toUSDZ } from './share.js';
 import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, svgSource, setSvgOverride, clearSvgOverrides,
-         setNodeStates, nodeStates, setNodeFields, restyleText,
+         setNodeStates, nodeStates, clearLampBindings, lampBindings, setNodeFields, restyleText,
          setNodeLampColors, nodeLampColors, markHex,
          setPulled as setReliefPulled, pulledPaths,
          buildFaceRelief, bodyBoxes, pieceMesh, pieceArt, fruFor,
@@ -33,6 +33,7 @@ import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, sv
          faceFrame, ventWellWalls, genericEars, EAR } from './relief.js';
 import { seatViews, seatBack, refusalReason } from './swap.js';
 import { bevelledArrays } from './bevel.js';
+import { expandStates } from './states.js';
 import { jdist, faceFile, distResolver } from './dist.js';
 import { createLamps } from './lamps.js';
 
@@ -535,7 +536,10 @@ export function createViewer(container, opts = {}) {
     await applyBayOverrides(cfg);
     // the states go in BEFORE anything is extracted, so the faces and the relief
     // are cut from a document that already carries them; a rebuild that dropped
-    // them would put out every lamp the user had lit
+    // them would put out every lamp the user had lit. The lamp bindings (#934)
+    // are read afresh off the faces this build parses: another configuration
+    // can bind other lamps.
+    clearLampBindings(SCOPE);
     setNodeStates(STATES, SCOPE);
     // and what is off stays off, for the same reason and at the same moment: the
     // faces and the relief are both cut from a document that already knows
@@ -876,7 +880,8 @@ export function createViewer(container, opts = {}) {
       ? genericEars(devIndex.chassis, (FACE_MM.front || [])[0]) : null;
     if (!earPlan) return 0;
     const p = earPlan, half = p.w / 2, y0 = -H / 2 + p.y, front = D / 2;
-    const metal = new THREE.MeshLambertMaterial({color: EAR.FILL});
+    // silver unless the device states otherwise (the plan's `color`)
+    const metal = new THREE.MeshLambertMaterial({color: p.color || EAR.SILVER});
     const hole = new THREE.MeshLambertMaterial({color: EAR.HOLE});
     earGroup = new THREE.Group();
     earGroup.name = 'generic-ears';
@@ -1589,9 +1594,16 @@ export function createViewer(container, opts = {}) {
     const next = {};
     for (const [k, v] of map instanceof Map ? map : Object.entries(map || {}))
       if (v) next[k] = String(v);
+    // AN OUTLET'S LAMP CHANGES WITH IT (#934): the change is measured on the
+    // expanded maps, so a lamp bound to a switched outlet is a changed path
+    // and the relief piece that holds it - which does not contain the
+    // outlet's path - is repainted too. STATES itself stays as the host gave
+    // it; relief.js expands it again wherever it is applied.
+    const binds = lampBindings(SCOPE);
+    const was = expandStates(STATES, binds), now = expandStates(next, binds);
     const changed = new Set();
-    for (const k of new Set([...Object.keys(STATES), ...Object.keys(next)]))
-      if (STATES[k] !== next[k]) changed.add(k);
+    for (const k of new Set([...Object.keys(was), ...Object.keys(now)]))
+      if (was[k] !== now[k]) changed.add(k);
     STATES = next;
     if (!changed.size || !box) return 0;
     setNodeStates(STATES, SCOPE);

@@ -174,9 +174,14 @@ placement keeps every key its lab wrote, and carries six more:
   it, whether the lab placed it `on` that device or by `ru`; otherwise `null`.
 - `unit`: which of the host's rack units, from 1 at the host's bottom; `null`
   without a host.
-- `side`: `left` or `right`, seen from the front, for a `rack-side` part (the
-  upright it stands beside) and for a `rack-face` part narrower than the rack
-  opening that states one (the rail it bolts to); otherwise `null`.
+- `side`: for a `rack-side` part, the attachment point it stands at, as the
+  lab wrote it: `left` or `right` on a two-post frame, or `left-front`,
+  `left-rear`, `right-front` or `right-rear` on a four-post one (#934). For a
+  `rack-face` part narrower than the rack opening that states one, the rail it
+  bolts to, `left` or `right`, seen from the front. Otherwise `null`. The four
+  four-post names are new with #934 and did not raise `contract`: a reader
+  that knows only `left` and `right` can read the side of the rack as the
+  word before the hyphen.
 
 They are new fields and did not raise `contract`, which is still 2. A reader that knows none of
 them still finds `ru`, and draws a rack-face part as an ordinary device on its
@@ -184,6 +189,65 @@ rack unit; one that knows `mount` but not `rack-side` or `side` draws a
 rack-side part across its 45 units, which is wrong and visible, as the
 rack-face case was. A lab that fails its schema or a check (lint L139 to L142,
 L153, L154) is not written, and the build stops.
+
+## Rack PDUs
+
+A rack PDU (#934, [`pdu-model-design.md`](pdu-model-design.md)) adds keys in
+five places. None raised `contract`, which is still 2: each is new, and a
+reader that does not know it finds every field it read before.
+
+- **`pdu-class`**, at the top of `<device>.configs.json` and on each entry of
+  `devices.json`: one of `basic`, `switched`, `metered-input`,
+  `switched-metered-input`, `metered-branch`, `switched-metered-branch`,
+  `metered-outlet` and `managed`, or `null` where the device is no PDU. It is
+  DERIVED from `attrs.management.metering-scope` (`none`, `input`, `branch`,
+  `outlet`) and `outlet-switching` (a boolean), and never stated. The names
+  and the two keys are published for filtering, so renaming one is a format
+  change.
+- **`configs[].mount-points`** in `<device>.configs.json`: each mount point a
+  configuration draws, `{"mates": "pdu-button", "at": 72.0}`, ascending by
+  `at`, which is millimetres from the bottom of its view to the point's
+  `mate`. A mount point is a placement of a `class: mount` part that declares
+  `mates`. The pitch is the difference of two `at`s and is stated nowhere
+  else. Always a list; `[]` on a device with none.
+- **`attrs.power`** gains `input-plug` (now a `PART_POWER` slug, which on the
+  one device that wrote it was prose), `input-cord`, `input-phase`,
+  `input-wiring`, `input-voltage-v`, `input-current-a`, `plug-rating-a` and
+  `capacity-kw`; attrs are flattened to `data-*` on every drawing, so these
+  names are held as attribute names too.
+- **The DCIM export** writes the input rating on the input power port's
+  `description` and in the comments, with the derived class; an outlet's
+  description names the breaker it runs `through` and its `lines`
+  (`Through breaker A, lines L1-L2`); and `feed_leg` is written only for a
+  line-to-neutral outlet on a three-phase wye input (L1 `A`, L2 `B`, L3 `C`).
+  A DCIM that imported a leg holds it.
+- **A fixed breaker is named as the unit prints it** (owner decision,
+  2026-10-09): the description reads `Through breaker <name>`, where the name
+  is the first of the breaker placement's `attrs.label` and `attrs.section`
+  (the letter on the Eaton G4 section tile) that is set, and the placement id
+  only when neither is (`dcim_export.breaker_name`). A field's contract default
+  is never read: an unset letter is unstated. The name is part of an imported
+  description, so changing the rule moves every PDU's outlets.
+
+- **Outlet state in the drawing and the kit** (the kit half, section 3.2 of
+  the note). An element a lamp is bound to by `for:` - where the lamp and the
+  element both declare `data-states`, a switched outlet - carries
+  `data-lamped="true"`; the base stylesheet dims a power outlet
+  (`data-class='inlet'`) that declares `off`, is `state-off` and is not
+  `data-lamped`. In the kit a state set on such an element's path is applied
+  to its bound lamps too (`@portrayal/kit/states` `boundLamps` and
+  `expandStates`, in `marks.js` apply, the Explorer chips and the 3D scene),
+  and `off` is a state that can be lit, not only the absence of one: the
+  Explorer's `off` chip sets `state-off` on an outlet and on an element that
+  declares a colour for `off`, and clears anything else. The attribute name
+  and that meaning of `off` are held as format: a saved state set as `off`
+  reads differently after the change.
+
+The placement key `lines`, and `through` naming a fixed breaker placement, are
+manifest keys: stating either is a minor version of the device, and changing
+one a major. `pdu-button` is a mounting interface in
+`spec/schemas/connectors.yaml`; a slot that presents it and the fit check are
+#939's and #935's.
 
 ## The kits file
 
@@ -231,6 +295,7 @@ chassis:
     behind: true            # optional; the same statement as the bare string
     h: 43.5                 # optional; mm the ears span, when not the chassis height
     y: 0.15                 # optional; mm from the bottom of the chassis to the ears
+    color: "#1b1e21"        # optional; the ears' colour, when they are not silver
     positions:
       - {name: flush, at: 0, default: true}
       - {name: mid, at: 228, racks: [2-post], part: {kit: acme/slide@1, part: mid}}
@@ -258,7 +323,7 @@ In the device lock both keys are chassis surface, so stating either is a
 patch, and a listed kit, its parts and its accessories join the `composed`
 digest, so a kit edited in place asks each device that lists it for a patch.
 Those are the refs `<device>.configs.json` reads to resolve each kit, below.
-`h` and `y` stay surface now that the generic ear (below) is drawn from them:
+`h`, `y` and `color` stay surface now that the generic ear (below) is drawn from them:
 that ear is drawn only when asked for and never in a published face, an
 elements file or an export, so changing either moves nothing a consumer
 caches a coordinate from. If the ears ever join the default build, `h` and `y`
@@ -273,7 +338,10 @@ face, with a slot over each rail hole, and a 30 mm leg back along the body.
 It is `chassis.ears.h` tall, its bottom `chassis.ears.y` above the chassis's
 (the chassis's full height from `y`, and 0, where they are absent), and its
 flange's back face is on the plane the default position's `at` names (0, flush,
-where there is none). The library still draws devices without their ears, so
+where there is none). It is silver (`#c8cacc`, `SILVER` in ears.py, `EAR.SILVER`
+in relief.js) unless `chassis.ears.color` states another, because most network
+gear has bare or plated steel ears even when its faceplate is black; the plan
+carries the colour as `color`. The library still draws devices without their ears, so
 the default build is unchanged:
 
 - `render.py --with ears` draws it on all six faces, as the groups `ear-left`
@@ -283,6 +351,11 @@ the default build is unchanged:
 - The kit's viewer builds it when a host asks: `createViewer(el, {ears: true})`
   or `viewer.setEars(true)`; `viewer.ears()` returns the plan drawn, or `null`.
   relief.js `genericEars(chassis, faceW)` makes the plan from configs.json.
+- A page draws it over a published face in 2D with the kit's `ears2d.js`
+  (`drawEars`, `clearEars`): the shapes, ids and colours `render.py --with
+  ears` writes, in a `<g data-overlay="ears" pointer-events="none">` that is no
+  part (no `data-path`), with the viewBox grown the same way. The Explorer
+  offers it as a toggle, off by default.
 
 A device gets none when it is not a `rack` device, states `ears: behind`, has
 a front as wide as the rack face (its ears are in the drawing), or still places
@@ -317,8 +390,9 @@ states neither (#907):
 
 - **`ears` is an object, always.** The bare string `ears: behind` is
   published as `{"behind": true}`; an object is published with the keys it
-  states (`behind`, `h`, `y`, `positions`) and no others, so a reader asks
-  `ears.behind === true` and reads `ears.positions || []`. `h`, `y` and each
+  states (`behind`, `h`, `y`, `color`, `positions`) and no others, so a reader
+  asks `ears.behind === true` and reads `ears.positions || []`. `color` is the
+  string the manifest writes, and absent means silver. `h`, `y` and each
   position's `at` are floats. A position keeps every key the manifest writes.
   From #865 to #907 the bare string was published as the string, on main
   only; no release carried it, though the site once vendored a build that

@@ -34,9 +34,11 @@
 -->
 <style>
   #mode { display: inline-flex; gap: 2px; margin-right: 8px; }
-  #mode button { font: inherit; padding: 2px 10px; border: 1px solid #555; background: #222; color: #ddd; cursor: pointer; }
-  #mode button.on { background: #f59e0b; color: #111; border-color: #f59e0b; }
+  #mode button, #earsbar button { font: inherit; padding: 2px 10px; border: 1px solid #555; background: #222; color: #ddd; cursor: pointer; }
+  #mode button.on, #earsbar button.on { background: #f59e0b; color: #111; border-color: #f59e0b; }
   #mode button:disabled { opacity: .45; cursor: not-allowed; }
+  #earsbar { display: inline-flex; margin-right: 8px; }
+  #earsbar[hidden] { display: none; }     /* inline-flex outranks the hidden attribute */
   #stage-3d { position: absolute; inset: 0; }
   /* The tree row's state chips. Sized and coloured from the shell's own
      variables so they read as part of its tree rather than as this page's. */
@@ -123,10 +125,11 @@
 <body>
 <script type="module">
 import { createShell, esc } from './shell.js';
-import { statesOfEl, messagesOfEl, charactersOfEl } from './states.js';
+import { statesOfEl, messagesOfEl, charactersOfEl, boundLamps, offIsSet } from './states.js';
 import { encodeSwaps, encodeTurns, searchWith } from './swap.js';
 import { encodeFields } from './fields.js';
-import { flatDist, packageDist } from './dist.js';
+import { flatDist, packageDist, distResolver, faceFile } from './dist.js';
+import { drawEars, clearEars, earPlan, faceSize, frontWidthOfText } from './ears2d.js';
 
 // WHERE THE FILES COME FROM. The build directory by default; the npm packages
 // (#528) on `?dist=packages` (a local npm_packages.py run) or `?dist=cdn`.
@@ -143,8 +146,25 @@ const state = shell.state;
 // A lamp declares what it can be; until now nothing here could ask it to be one.
 // `statesOfEl` reads the vocabulary - that parsing is states.js's job and this
 // page does not repeat it - and a chip per state sets `state-<name>` on the live
-// element. Clicking the chip that is already on clears it, and `off` always
-// clears, because "off" is the absence of a state rather than one of its own.
+// element. Clicking the chip that is already on clears it.
+//
+// `off` (#934, docs/pdu-model-design.md section 3.2) is a state that can be
+// lit: the G4 outlet lamp is red when its outlet is off. So the `off` chip sets
+// `state-off` where states.js offIsSet says so - on an outlet (it has a lamp
+// bound to it, or it is a power outlet with none, which the stylesheet dims)
+// and on an element that declares a colour for off - and clears only a lamp or
+// a plain element with no declared off colour, as it always did.
+//
+// AN OUTLET'S STATE IS SHOWN ON ITS LAMP. A chip on a switched outlet writes
+// the same class on every lamp `for:` binds to it (states.js boundLamps, the
+// rule marks.js and the 3D scene apply too), so liveStates reads the lamps'
+// paths off the drawing and 2D and 3D agree.
+const CHIPS = new WeakMap();          // element -> its row's chip span
+function syncChips(el) {
+  const span = CHIPS.get(el);
+  if (span) for (const c of span.querySelectorAll('.chip'))
+    c.classList.toggle('on', el.classList.contains('state-' + c.textContent));
+}
 function chips(el) {
   const states = statesOfEl(el);
   if (!states.length) return null;
@@ -157,13 +177,19 @@ function chips(el) {
     chip.onclick = ev => {
       ev.stopPropagation(); ev.preventDefault();
       const was = el.classList.contains('state-' + st);
-      [...el.classList].filter(c => c.startsWith('state-')).forEach(c => el.classList.remove(c));
-      span.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
-      if (st !== 'off' && !was) { el.classList.add('state-' + st); chip.classList.add('on'); }
+      const path = el.getAttribute('data-path');
+      const lamps = (path && state.svg && boundLamps(state.svg).get(path)) || [];
+      const set = !was && (st !== 'off' || offIsSet(el, lamps));
+      for (const t of [el, ...lamps]) {
+        [...t.classList].filter(c => c.startsWith('state-')).forEach(c => t.classList.remove(c));
+        if (set) t.classList.add('state-' + st);
+        syncChips(t);
+      }
       pushStates();
     };
     span.appendChild(chip);
   }
+  CHIPS.set(el, span);
   return span;
 }
 
@@ -607,6 +633,77 @@ shell.el.stage.appendChild(host3d);
 
 let mode = '2d', viewer = null, loading = null, loadedKey = '', gpuLost = false;
 
+// ---------------------------------------------------------------- rack ears
+// THE GENERIC EAR IS A CHOICE HERE, AND OFF UNTIL THE READER MAKES IT (#909).
+// Ears built into the face - a blanking panel, a full-width patch panel, the
+// R740xd's 482.6 mm front - are part of the drawing and always shown. A device
+// modelled between its ear folds gets a generic L-bracket only on request:
+// the 3D scene builds it (viewer3d `setEars`), and the drawing, whose
+// published face has none, gets it as an overlay from ears2d.js - the plan
+// the scene builds from, drawn as render.py `--with ears` draws it. The
+// button is there only for a device that gets one.
+//
+// A VIEWING PREFERENCE, NOT A FACT ABOUT THE DEVICE, so it is remembered per
+// viewer as the selection and stage colours are, and not written into the
+// location with the swaps: a link shares a device, not how its reader likes
+// to look at one.
+const EARS_KEY = 'portrayal.ears';
+let earsOn = false;
+try { earsOn = localStorage.getItem(EARS_KEY) === '1'; } catch (e) { /* private mode */ }
+const earsBar = document.createElement('span');
+earsBar.id = 'earsbar';
+earsBar.hidden = true;
+earsBar.innerHTML = '<button type="button" aria-pressed="false">Rack ears</button>';
+const earsBtn = earsBar.querySelector('button');
+shell.el.fit.before(earsBar);
+
+// The front's declared width is what says an ear is built in, so a device is
+// judged on its front even while another face is on screen: the mounted
+// front, else the front the merged tree holds, else the front file itself.
+const distAt = distResolver(DIST, '../library/dist');
+const frontW = {};
+async function frontWidth() {
+  const key = `${state.device}.${state.cfg}`;
+  if (state.view === 'front' && state.svg) return faceSize(state.svg)?.[0];
+  if (state.faces?.front && state.facesFor === key) return faceSize(state.faces.front)?.[0];
+  if (!(key in frontW)) {
+    frontW[key] = fetch(distAt(faceFile(state.meta, state.cfg, 'front')))
+      .then(r => (r.ok ? r.text() : '')).then(frontWidthOfText).catch(() => null);
+  }
+  return frontW[key];
+}
+
+let earsPlan = null;
+async function syncEars() {
+  const svg = state.svg;
+  const plan = (state.module || !state.meta) ? null : earPlan(state.meta, await frontWidth());
+  if (svg !== state.svg) return;           // another face arrived while this one asked
+  earsPlan = plan;
+  earsBar.hidden = !plan;
+  earsBtn.classList.toggle('on', earsOn);
+  earsBtn.setAttribute('aria-pressed', String(earsOn));
+  earsBtn.title = earsOn ? 'Hide the generic rack ears (not part of this face)'
+                         : 'Show generic rack ears: an L-bracket each side, to the 482.6 mm rack face';
+  if (!svg) return;
+  const vb = svg.getAttribute('viewBox');
+  if (plan && earsOn) drawEars(svg, plan, state.view);
+  else clearEars(svg);
+  // the stage is sized from the viewBox: refit when the ears grew or shrank
+  // it, and only then, so a swap redrawing them keeps the reader's zoom
+  if (svg.getAttribute('viewBox') !== vb) shell.fit();
+}
+earsBtn.onclick = () => {
+  earsOn = !earsOn;
+  try { localStorage.setItem(EARS_KEY, earsOn ? '1' : '0'); } catch (e) { /* private mode */ }
+  syncEars().catch(err => console.warn('[portrayal] rack ears', err));
+  if (viewer) Promise.resolve(viewer.setEars(earsOn))
+    .catch(err => console.warn('[portrayal] 3D rack ears', err));
+};
+// every face mounted (a device, a configuration, a view, a module), and every
+// swap, which can append to the drawing after the overlay
+shell.on('load', () => { syncEars().catch(err => console.warn('[portrayal] rack ears', err)); });
+shell.on('change', () => { syncEars().catch(err => console.warn('[portrayal] rack ears', err)); });
+
 // WHY 3D IS NOT SHOWING, in words a reader can act on. A browser keeps only
 // about sixteen WebGL contexts alive and, after repeated GPU resets, refuses
 // new ones until it restarts; three.js reports either as "Error creating WebGL
@@ -624,7 +721,8 @@ async function ensureViewer() {
   if (viewer) return viewer;
   if (!loading) loading = (async () => {
     const { createViewer } = await import('./viewer3d.js');
-    const v = createViewer(host3d, { dist: DIST, background: shell.stage() });
+    // the ears as the reader left them; the viewer keeps them across loads
+    const v = createViewer(host3d, { dist: DIST, background: shell.stage(), ears: earsOn });
     shell.on('stage', c => v.setBackground(c));
     v.on('select', p => {
       if (!p) return;

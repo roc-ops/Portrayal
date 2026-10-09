@@ -50,6 +50,8 @@ const UP = RT('i2:guide-2', 'i2:guide-1', ['left-front', 10], ['left-front', 30]
 const UP1 = RT('i2:guide-1', ['left-front', 10], ['left-front', 30], 'i4:guide-1');
 const TRUNK = RT('i2:guide-1', ['left-front', 10], ['left-front', 30], 'i4:guide-1');
 const run = (rack, cmds, ctx = {}) => apply(rack, cmds, {chassisOf, ...ctx});
+// ctx.bendOf for a rack of Cat 6 only: 4 x 6 mm installed (#919)
+const CAT6 = () => 24;
 
 // ── the record ───────────────────────────────────────────────────────────
 
@@ -384,23 +386,24 @@ test('size: a bundle over a ring\'s opening, and over 2.5 in, warns and is never
   let r = rackWith(many);
   const ids = r.cables.map(c => c.id);
   const rc = routeCtx(r);
-  const res = run(r, {op: 'bundle.create', cables: ids, route: TRUNK}, {route: rc});
+  // with the cable types (Cat 6 at 4 x 6 mm), so the bend is checked too, and passes
+  const res = run(r, {op: 'bundle.create', cables: ids, route: TRUNK}, {route: rc, bendOf: CAT6});
   assert.ok(!res.error);
   assert.deepEqual(res.findings, [
     {kind: 'warning', text: 'Bundle 1 is about 34 mm across at mgr-1 ring 1, whose opening is 29.5 mm across.'},
     {kind: 'warning', text: 'Bundle 1 is about 34 mm across at mgr-2 ring 1, whose opening is 29.5 mm across.'}]);
   r = res.rack;
-  const f = await inspect(r, 'b1', {chassisOf, route: rc});
+  const f = await inspect(r, 'b1', {chassisOf, route: rc, bendOf: CAT6});
   assert.equal(f.kind, 'bundle');
   assert.equal(f.size.max_mm, 33.5);
   assert.equal(f.size.limit_mm, 29.5);
   assert.equal(f.size.limitBy.text, 'mgr-1 ring 1');
-  assert.equal(f.bend, null);
+  assert.deepEqual([f.bend.radius_mm, f.bend.violations], [24, []]);
   assert.equal(f.checked, true);
   assert.deepEqual(f.warnings, res.findings.map(x => x.text));
   // 19 pass (29.5^2 x 0.8 / 36 = 19.3)
   const fits = rackWith(Array.from({length: 19}, () => UP));
-  assert.deepEqual(run(fits, {op: 'bundle.create', cables: fits.cables.map(c => c.id), route: TRUNK}, {route: routeCtx(fits)}).findings, []);
+  assert.deepEqual(run(fits, {op: 'bundle.create', cables: fits.cables.map(c => c.id), route: TRUNK}, {route: routeCtx(fits), bendOf: CAT6}).findings, []);
   // 100 Cat6A at 7.5 mm: about 84 mm, over 2.5 in anywhere
   const huge = rackWith(Array.from({length: 100}, () => UP), 'cat6a');
   const w = run(huge, {op: 'bundle.create', cables: huge.cables.map(c => c.id), route: TRUNK}, {route: routeCtx(huge)}).findings.map(x => x.text);
@@ -608,10 +611,10 @@ test('a bundle of one is not drawn: its cable follows its own route, and joins n
 test('size: over 2.5 in with no opening on the way warns at 63.5 mm, not past it', () => {
   const lane = RT(['left-front', 10], ['left-front', 30]);
   const big = rackWith(Array.from({length: 100}, () => lane));        // sqrt(100 x 36 / 0.8) = 67.1 mm
-  const w = run(big, {op: 'bundle.create', cables: big.cables.map(c => c.id), route: lane}, {route: routeCtx(big)}).findings;
+  const w = run(big, {op: 'bundle.create', cables: big.cables.map(c => c.id), route: lane}, {route: routeCtx(big), bendOf: CAT6}).findings;
   assert.deepEqual(w, [{kind: 'warning', text: 'Bundle 1 is about 67 mm across at left-front U10, more than the 63.5 mm (2.5 in) a bundle may be.'}]);
   const ok = rackWith(Array.from({length: 80}, () => lane));          // 60 mm
-  assert.deepEqual(run(ok, {op: 'bundle.create', cables: ok.cables.map(c => c.id), route: lane}, {route: routeCtx(ok)}).findings, []);
+  assert.deepEqual(run(ok, {op: 'bundle.create', cables: ok.cables.map(c => c.id), route: lane}, {route: routeCtx(ok), bendOf: CAT6}).findings, []);
   assert.equal(B.MAX_BUNDLE_MM, 63.5);
 });
 

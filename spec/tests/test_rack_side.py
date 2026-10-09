@@ -243,3 +243,56 @@ def test_the_bracket_is_narrower_than_the_opening_and_the_manager_is_not():
     assert b["mount"] == "rack-face" and b["width"] < labs.RACK_OPENING_MM
     m = yaml.safe_load((LIB / "devices/fs/fhd-cmp5dr/device.yaml").read_text())["chassis"]
     assert m["width"] >= labs.RACK_OPENING_MM
+
+
+# --- attachment points (#934, docs/pdu-model-design.md section 6.4) ------------
+
+def _four(**changes):
+    return lab(**{"duct_l": {"id": "duct-l", "ref": "cmv-sfd45u5w", "side": "left-front"},
+                  "duct_r": {"id": "duct-r", "ref": "cmv-sfd45u5w", "side": "left-rear"},
+                  **changes})
+
+
+def test_front_and_rear_points_on_one_side_never_meet():
+    """Two 45U parts a side, one at each four-post point: the names alone decide."""
+    d = _four()
+    assert labs.schema_errors(d) == [] and codes(d) == []
+    _, p = run(d)
+    assert (p["duct-l"]["side"], p["duct-r"]["side"]) == ("left-front", "left-rear")
+
+
+@pytest.mark.parametrize("case, code, d", [
+    ("two parts at one four-post point", "L154",
+     _four(duct_r={"id": "duct-r", "ref": "cmv-sfd45u5w", "side": "left-front"})),
+    ("a side mixing the two-post and a four-post name", "L154",
+     _four(duct_r={"id": "duct-r", "ref": "cmv-sfd45u5w", "side": "left", "ru": 1})),
+    ("a rack-face bracket at a four-post point", "L153",
+     lab(bkt_l={"id": "bkt-l", "ref": "cmv-5u3w", "ru": 10, "side": "left-front"})),
+])
+def test_attachment_point_checks(case, code, d):
+    assert labs.schema_errors(d) == []
+    assert code in codes(d), (case, run(d)[0])
+
+
+def test_the_mixed_side_names_both_kinds():
+    d = _four(duct_r={"id": "duct-r", "ref": "cmv-sfd45u5w", "side": "left"})
+    msgs = [m for c, _, m in run(d)[0] if c == "L154"]
+    assert any("two-post" in m and "duct-r" in m and "duct-l" in m for m in msgs), msgs
+
+
+def test_the_right_side_is_judged_apart_from_the_left():
+    d = lab(duct_l={"id": "duct-l", "ref": "cmv-sfd45u5w", "side": "left"},
+            duct_r={"id": "duct-r", "ref": "cmv-sfd45u5w", "side": "right-rear"})
+    assert codes(d) == []
+
+
+def test_labs_json_publishes_the_point_as_written(tmp_path, monkeypatch):
+    (tmp_path / "lib/labs/t").mkdir(parents=True)
+    (tmp_path / "lib/labs/t/lab.yaml").write_text(json.dumps(_four()))
+    out = tmp_path / "dist"
+    monkeypatch.setattr(sys, "argv", ["labs_index", "--library", str(tmp_path / "lib"),
+                                      "--library", str(LIB), "--out", str(out)])
+    assert labs_index.main() == 0
+    got = {l["name"]: l for l in json.loads((out / "labs.json").read_text())["labs"]}
+    p = {q["id"]: q for q in got["vertical-managers"]["devices"]}
+    assert (p["duct-l"]["side"], p["duct-r"]["side"]) == ("left-front", "left-rear")

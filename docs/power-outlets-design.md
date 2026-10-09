@@ -109,6 +109,13 @@ views:
 - **`through`** names the bay that the circuit runs through: its breaker or fuse
   position. It is optional; a panel with fixed, unprotected outputs has none.
 
+Where `through` names a FIXED breaker placement rather than a bay (#934, a rack
+PDU's branch breaker), the outlet description names that breaker as the unit prints
+it, `Through breaker A`, and not by its placement id: the first of the placement's
+`attrs.label` and `attrs.section` (the Eaton G4 tile letter) that is set, the id only
+when neither is (owner decision, 2026-10-09; `dcim_export.breaker_name`). A bay
+position keeps `Through breaker position <id>`, since a bay prints nothing of its own.
+
 Both are bare ids resolved over the whole device, because both cross a face: the output
 is on the rear and the position it runs through is on the front. A `for:` cannot say
 this. `for:` is a UI binding, emitted as `data-for`, saying "this mark or lamp annotates
@@ -161,12 +168,15 @@ each row's `power_port` tokenised as its name is.
 
 - **L132, `fed-by` resolves.** It names a placement on this device whose part is in
   `PART_POWER`, and stands on a part in `PART_OUTLET`. An error.
-- **L133, `through` resolves.** It names a bay on this device. An error.
+- **L133, `through` resolves.** It names a bay on this device, or, since #934, a
+  placement of a part of class `breaker` fixed to the unit (a rack PDU's branch
+  breaker, [pdu-model-design.md](pdu-model-design.md) section 5.3). An error.
 - **L134, a part in `PART_OUTLET` is fed.** Every placement of one states `fed-by`. A
   warning below `verified` and an error at it: an outlet with no feed is importable, and
   is the incomplete model this work exists to end.
 - **L135, one position, one circuit.** Two placements do not name the same `through`. A
-  warning, because a panel that parallels two outputs behind one breaker is possible.
+  warning, because a panel that parallels two outputs behind one breaker is possible. It
+  reads bays only: a fixed PDU breaker feeds many outlets by design (#934).
 
 ## 8. Device locks
 

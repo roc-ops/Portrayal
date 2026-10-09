@@ -12,6 +12,14 @@ narrower than the opening (a 5U finger bracket on one rail) may say which side
 of the opening it bolts to, so two of them share a unit and a face
 (docs/vertical-cable-managers-design.md sections 3.4 and 3.5).
 
+A RACK-SIDE `side` IS AN ATTACHMENT POINT (#934, docs/pdu-model-design.md
+section 6.4): the kit's names, `left` and `right` on a two-post frame and
+`left-front`, `left-rear`, `right-front` and `right-rear` on a four-post one.
+The names alone decide - a lab states no post count - so two parts at
+`left-front` and `left-rear` never meet, two at `left` contend for it, and a
+side that mixes `left` with `left-front` describes two different racks and is
+an error. A rack-face part's `side` is a rail, and stays `left` or `right`.
+
 Two callers, one answer. `labs_index.py` resolves every placement into the
 absolute rack unit, face and host that labs.json carries, and refuses to write a
 lab it cannot resolve; `lint.py` reports the same findings under their codes
@@ -34,6 +42,11 @@ SCHEMA = Path(__file__).resolve().parents[2] / "schemas" / "lab.schema.json"
 RACK_FACE = "rack-face"
 RACK_SIDE = "rack-side"
 SIDES = ("left", "right")
+# THE ATTACHMENT POINTS A RACK-SIDE PART MAY NAME: the two-post names, which
+# are SIDES, and the four-post names, front and rear of each upright. The side
+# of the rack a point is on is its first word.
+FOUR_POST_SIDES = ("left-front", "left-rear", "right-front", "right-rear")
+RACK_SIDE_POINTS = SIDES + FOUR_POST_SIDES
 # THE CLEAR OPENING BETWEEN A 19-INCH RACK'S RAILS, 17.72 in (EIA-310). A
 # rack-face part as wide as this or wider lies across the opening - a
 # horizontal manager, its ears on both rails - and takes the whole unit on its
@@ -99,8 +112,8 @@ def check(lab, roots):
     `ru` (the lowest absolute rack unit), `face` (front or rear), `mount`
     (rack, rack-face or rack-side), `host` (the id of the rack device behind
     it, or None), `unit` (which of the host's units, or None without a host)
-    and `side` (left or right for a rack-side part and a sided rack-face part,
-    else None). A position that cannot be resolved is None, and there is an
+    and `side` (the attachment point for a rack-side part, one of
+    RACK_SIDE_POINTS; left or right for a sided rack-face part; else None). A position that cannot be resolved is None, and there is an
     error saying why.
     """
     found = []
@@ -177,13 +190,17 @@ def check(lab, roots):
             if "side" not in p:
                 error("L153", f"{pid}: a rack-side part stands beside the rack on one side "
                       "of it, and this states no `side`. Say `side: left` or `side: right`, "
-                      "seen from the front")
+                      "seen from the front, or a four-post point such as `left-front`")
             stray = [k for k in ("on", "unit") if k in p]
             if stray:
                 error("L153", f"{pid}: {', '.join(f'`{k}`' for k in stray)} "
                       f"{'names' if len(stray) == 1 else 'name'} a host, and a rack-side "
                       "part has none: it bolts to the side of an upright. Place it by "
                       "`ru`, its bottom unit")
+        elif p.get("side") in FOUR_POST_SIDES:
+            error("L153", f"{pid}: `side: {p['side']}` is an attachment point beside the "
+                  "rack, for a rack-side part. A rack-face part's side is the rail it "
+                  "bolts to, `left` or `right`")
         elif "side" in p and not _sided(dev):
             if mount == RACK_FACE:
                 error("L153", f"{pid}: `side` is for a rack-face part narrower than the "
@@ -204,7 +221,8 @@ def check(lab, roots):
         q["face"] = p.get("face") or "front"
         q["host"] = None
         q["unit"] = None
-        q["side"] = p.get("side") if p.get("side") in SIDES else None
+        points = RACK_SIDE_POINTS if q["mount"] == RACK_SIDE else SIDES
+        q["side"] = p.get("side") if p.get("side") in points else None
         on_host = q["mount"] == RACK_FACE and "on" in p
         q["ru"] = p.get("ru") if _int(p.get("ru")) and not on_host else None
         if q["mount"] == RACK_SIDE and "ru" not in p:
@@ -276,9 +294,23 @@ def check(lab, roots):
             for c in claims:
                 c[u] = q.get("id")
 
-    # L154 - a rack-side part fits the rack's height, and two on one side of the
-    # rack do not overlap: each runs beside the units from its `ru` up
+    # L154 - a rack-side part fits the rack's height, and two at one attachment
+    # point do not overlap: each runs beside the units from its `ru` up. The
+    # names alone decide (#934): `left-front` and `left-rear` never meet, and
+    # one side naming both `left` and a four-post point is an error, since the
+    # two describe different racks and their overlap cannot be judged
     side_units = {}
+    named = {}
+    for q in out:
+        if q["mount"] == RACK_SIDE and q["side"] is not None:
+            named.setdefault(q["side"].split("-")[0], {}).setdefault(
+                q["side"] in SIDES, []).append(q.get("id"))
+    for rack_side, kinds in sorted(named.items()):
+        if len(kinds) > 1:
+            error("L154", f"the {rack_side} side of the rack names both the two-post point "
+                  f"`{rack_side}` ({', '.join(kinds[True])}) and four-post points "
+                  f"({', '.join(kinds[False])}). They describe different racks; name every "
+                  "part on one side with the same rack's points")
     for q in out:
         dev = devs.get(q.get("id"))
         if dev is None or q["mount"] != RACK_SIDE or q["ru"] is None:
@@ -292,8 +324,8 @@ def check(lab, roots):
         claim = side_units.setdefault(q["side"], {})
         other = next((claim[u] for u in range(lo, hi + 1) if u in claim), None)
         if other is not None:
-            error("L154", f"{q.get('id')}: overlaps {other} on the {q['side']} side of the "
-                  "rack. Two rack-side parts on one side stand one above the other")
+            error("L154", f"{q.get('id')}: overlaps {other} at the {q['side']} attachment "
+                  "point. Two rack-side parts at one point stand one above the other")
             continue
         for u in range(lo, hi + 1):
             claim[u] = q.get("id")

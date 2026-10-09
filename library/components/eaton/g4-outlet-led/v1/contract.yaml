@@ -1,0 +1,60 @@
+format: 1
+kind: component
+name: g4-outlet-led
+version: 1.0.0
+class: led
+profile: power
+description: >-
+  The outlet status lamp of an Eaton Rack PDU G4 that meters or switches each
+  outlet - a small clear dome on the edge of the outlet moulding, one at the far
+  end of every outlet, lit green while the outlet is powered and red while it is
+  off. Placed beside its outlet and bound to it with `for:`.
+size: {w: 2.94, h: 4.0}
+size-confidence: {w: drawing, h: drawing}
+provenance:
+  method: >-
+    drawing - Eaton drawing 9001-22312 (EVMA8365X, first issue 18-Aug-2023, D size,
+    scale 0.400) is vector, so the lamp was read from its path geometry at 1.133858
+    pt/mm; the 1829, 1555.8, 124.00 and 55.80 dimensions on the same sheet land
+    within 0.05 mm at that scale. The drawing lies the PDU down, cord end left; this
+    part is drawn as the PDU stands, cord end down.
+  size: >-
+    drawing - the front view of 9001-22312 draws a bump on the moulding's outer edge
+    at the far end of each of the 42 outlets: 4.0 along the PDU (x 216.14 to 220.14
+    for outlet A1, in drawing mm from the cord end) and 2.94 across (y 1.58 to 4.52
+    from the face's top edge), a straight-sided bump with a rounded crown towards the
+    PDU's edge. Inside it, a D-shaped edge 2.69 by 1.73 (y 2.49 to 4.22), drawn here
+    as a line on the lamp.
+  position: >-
+    drawing - each bump's centre stands 2.2 to 2.3 before the far end of an outlet
+    recess (A1's C13 ends at x 220.34, its bump is centred at 218.14), seven to a
+    section and 42 in all, so every bump belongs to the outlet it sits at the end
+    of; nothing else on the face repeats 42 times.
+  identity: >-
+    datasheet - the G4 installation and setup guide P-164001156 rev 3, section 1.3:
+    "Metered Outlet, Switched, and Managed models contain LEDs to indicate outlet
+    status". The G4 brochure BR155056EN, beside its outlet switching panel: green
+    indicates power on and red indicates power off to the outlet.
+  colour: >-
+    photo - CHASSIS_424_HRZ (the 3000 px master shared by the EVMA8365X and
+    EVMI8365X) shows the 42 bumps unlit: a clear dome over the dark moulding, about
+    #55595e with a specular highlight, read off 12 px per lamp. The lit colours are
+    the device's statement (docs/pdu-model-design.md section 3.2); this part says
+    only that the lamp has an on and an off.
+  relief: >-
+    drawing - the side view of 9001-22312 draws each bump 5.0 off the face and the
+    outlet moulding under it 3.96, so the dome stands 1.04 above the moulding. The
+    moulding is not built (a raised box over the outlets would bury their wells),
+    so the dome is built 1.0 off the face, which keeps the lamp's standing over
+    what is around it.
+elements:
+  lamp: {at: [0, 0], size: [2.94, 4.0], class: led, states: ['on', 'off']}
+relief:
+  features:
+    - node: lamp
+      dome: 1.0
+      confidence: drawing
+      source: >-
+        9001-22312 side view: the bump's crown 5.0 off the face against the outlet
+        moulding's 3.96, at 1.133858 pt/mm.
+skins: [default]

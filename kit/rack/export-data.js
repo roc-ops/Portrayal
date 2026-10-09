@@ -9,6 +9,7 @@ import {positionOf, uLabel, zeroUOf, bundlesOf, bundleName} from './model.js';
 import {routeText, trunkRoute} from './route.js';
 import {isRackMount, isZeroUPart, railOf} from './fit.js';
 import {zeroUEntries, whereText} from './zero-u.js';
+import {bundleCheck, straps as strapsOf, trunkLength, strapSpacing, membersText, bundleOfCable} from './bundles.js';
 export {positionOf};
 import {endKey, endName, cableName, paneOf, mismatch, lengthText, lengthParts, MEDIA_LABELS} from './cable-rules.js';
 
@@ -219,13 +220,18 @@ const asWrittenNote = c => (c.lengthAsWritten != null ? `Length as written in th
 // lengthAsWritten) is quoted in the notes, never put in the numeric column.
 // `id` is the cable's own id, which the 3D model's nodes and draw.io's edges
 // carry; `cable` is its label, or its id when it has none.
+// `bundle` (#923) is the name of the bundle the cable is in, as its tag prints
+// it (model.js bundleName: its label, else "Bundle N"), blank for none.
 export const CABLE_COLUMNS = ['id', 'cable', 'a_device', 'a_u', 'a_port', 'b_device', 'b_u', 'b_port', 'media', 'purpose',
-  'length', 'length_unit', 'route', 'length_source', 'status', 'notes'];
+  'length', 'length_unit', 'route', 'bundle', 'length_source', 'status', 'notes'];
 // `items` are the rack's items with their height `u` (fit.js itemsWithU), so a
 // device's U is the device import's position (positionOf). Without a height an
 // item counts as 1U.
 // `routes` is route-context.js's Map<cableId, {waypoints}>; without it no route is written.
-export function cableScheduleRows(rack, ends = new Map(), items = rack.items, routes = null) {
+// `bundles` is bundleExports(rack, ctx) for the same render: each bundle's note
+// and its warnings join the file's notes. Without it the bundles are read
+// with no routing context, so each is listed as not measured.
+export function cableScheduleRows(rack, ends = new Map(), items = rack.items, routes = null, {bundles = null} = {}) {
   const names = uniqueNames(rack.items);
   const byId = new Map(items.map(i => [i.id, i]));
   const named = new Set();
@@ -244,6 +250,7 @@ export function cableScheduleRows(rack, ends = new Map(), items = rack.items, ro
             media: mediaLabel(c.media), purpose: c.purpose, length: len ? len.value : '',
             length_unit: len ? len.unit : '',
             route: routes?.get(c.id) ? routeText(routes.get(c.id).waypoints, id => names.get(id)?.name ?? id, rack.frame) : '',
+            bundle: bundleOfCable(rack, c.id) ? flat(bundleName(bundleOfCable(rack, c.id))) : '',
             length_source: c.length ? (c.length.source || 'entered') : '',
             status: !f.checked ? 'not checked' : f.loose.length ? 'loose end' : 'connected', notes: notes.join(' ')};
   });
@@ -251,7 +258,86 @@ export function cableScheduleRows(rack, ends = new Map(), items = rack.items, ro
   if (!rows.length) notes.push('This rack has no cables, so there is nothing to list.');
   if (findings.some(f => !f.checked)) notes.push(UNCHECKED_NOTE);
   if (named.size) notes.push(`Devices that share a label are named as the device import names them: ${[...named].join(', ')}.`);
+  notes.push(...bundleNotes(bundles ?? bundleExports(rack)));
   return {columns: CABLE_COLUMNS, rows, notes};
+}
+
+// ── BUNDLES IN THE EXPORTS (#923, docs/cable-bundles-design.md section 7) ─
+// Each bundle as the exports read it, measured once with the routing context
+// of the render (`ctx`: {route, diameterOf?, bendOf?}, as bundleCheck takes
+// it). One record per bundle, in the rack's order:
+//   {id, number, label, name, members: [cable ids], drawn, checked,
+//    length_m, every: {value, unit} | null, straps, size_mm, limit_mm,
+//    limit_at, limit_estimated, bend_mm, bend_by, bend_checked, warnings, notes}
+// `name` is what a tag prints (the label, else "Bundle N"), with control
+// characters as spaces; `number` and `label` are the bundle's own, for label
+// software to lay out as it likes. `straps` is the count the BOM buys
+// (straps()), 0 for a bundle that is not drawn or has no spacing, and null
+// when the route could not be read: never a guess. `length_m`, the size and
+// the bend are null when not measured. `bend_checked` is false when the bend
+// was not checked for every member (the notes say which).
+export function bundleExports(rack, ctx = {}) {
+  return bundlesOf(rack).map(b => {
+    let check, st = null, len = null;
+    try { check = bundleCheck(rack, b, ctx); } catch { check = {checked: false, size: null, bend: null, warnings: [], notes: []}; }
+    const drawn = b.members.length >= 2;
+    try { st = check.checked ? strapsOf(rack, b, ctx) : null; } catch { st = null; }
+    try { len = check.checked && drawn ? trunkLength(rack, b, ctx) : null; } catch { len = null; }
+    const size = check.size, bend = check.bend;
+    return {id: b.id, number: b.number, label: b.label || '', name: flat(bundleName(b)),
+            members: b.members.map(m => m.cable), drawn, checked: !!check.checked,
+            length_m: len ? len.metres : null, every: strapSpacing(b),
+            straps: !check.checked ? null : drawn ? (st ? st.count : null) : 0,
+            size_mm: size && size.max_mm > 0 ? size.max_mm : null, limit_mm: size ? size.limit_mm : null,
+            limit_at: size?.limitBy?.text ?? null, limit_estimated: !!size?.limitBy?.estimated,
+            bend_mm: bend?.radius_mm ?? null, bend_by: bend?.by ?? null,
+            bend_checked: !!bend && !bend.unchecked?.length,
+            warnings: [...check.warnings], notes: [...check.notes]};
+  });
+}
+
+const strapsText = (n, e) => (e ? `${count(n, 'strap', 'straps')} every ${e.value} ${e.unit}` : 'no straps');
+// ONE LINE PER BUNDLE, then its warnings and its notes, for the cable
+// schedule and any other export that lists the bundles: "Bundle 2 (b1): 12
+// cables (c1-c12), 2.4 m, 8 straps every 12 in; 23 mm across, limit 29.5 mm
+// at mgr-1 ring 5; bend radius 25 mm (c7)." `bundles` is bundleExports'.
+export function bundleNote(e) {
+  const n = e.members.length;
+  const head = `${e.name} (${e.id}): ${count(n, 'cable', 'cables')}${n ? ` (${membersText(e.members)})` : ''}`;
+  if (!e.drawn) return `${head}, no straps.`;
+  if (!e.checked) return `${head}; its route could not be read, so its length, straps, size and bend are not given.`;
+  const run = [e.length_m != null ? `${e.length_m} m` : null,
+               e.straps != null ? strapsText(e.straps, e.every) : 'straps not counted'].filter(Boolean).join(', ');
+  const size = e.size_mm != null ? `${Math.round(e.size_mm)} mm across, limit ${e.limit_mm} mm${e.limit_at ? ` at ${e.limit_at}${e.limit_estimated ? ' (estimated)' : ''}` : ''}` : null;
+  const bend = e.bend_mm != null ? `bend radius ${e.bend_mm} mm (${e.bend_by})` : 'bend not checked';
+  return `${head}, ${[run, size, bend].filter(Boolean).join('; ')}.`;
+}
+export const bundleNotes = (bundles = []) => bundles.flatMap(e => [bundleNote(e), ...e.warnings, ...e.notes]);
+
+// THE BOM'S STRAP LINE (decision 6): one generic hook-and-loop strap line,
+// its quantity every bundle's straps added up; no manufacturer, and length and
+// width left to the buyer. No line when no bundle has a strap. `bundles` is
+// bundleExports'.
+export function strapBomRows(bundles = []) {
+  const qty = bundles.reduce((a, e) => a + (e.straps || 0), 0);
+  if (!qty) return [];
+  const used = bundles.filter(e => e.straps > 0);
+  const every = uniq(used.map(e => `${e.every.value} ${e.every.unit}`));
+  return [{section: 'Cables', qty, manufacturer: '', model: 'Hook-and-loop cable strap',
+           description: `For ${count(used.length, 'bundle', 'bundles')}, one strap every ${andWords(every)} along each; length and width to suit`,
+           ref: ''}];
+}
+const andWords = xs => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} or ${xs.at(-1)}`);
+// What the strap line cannot count: a drawn bundle whose route could not be
+// read (its straps are left out, never guessed), and one set to no straps.
+export function strapBomNotes(bundles = []) {
+  const out = [];
+  for (const e of bundles) {
+    if (!e.drawn) continue;
+    if (e.straps == null) out.push(`${e.name}: its route could not be read, so its straps are not counted.`);
+    else if (!e.every) out.push(`${e.name} is set to no straps, so none are counted for it.`);
+  }
+  return out;
 }
 
 // NOT RACK-MOUNT. The chassis index states `mount` only when it is not
@@ -501,6 +587,11 @@ export function drawioCables(rack, {ends = new Map(), idOf, drawn, hiddenBy = ()
     cables.push({id: c.id, a, b, media: drawioMediaKey(c), purpose: c.purpose, label: c.label,
                  ...(c.length ? {length: c.length} : {})});
   }
+  // draw.io draws each cable as its own edge, as it draws no routes (#923).
+  const drawnBundles = bundlesOf(rack).filter(b => b.members.length >= 2);
+  if (drawnBundles.length)
+    notes.push(`Bundles are not drawn in draw.io, so their cables are drawn one by one: ${
+      drawnBundles.map(b => `${flat(bundleName(b))} holds ${membersText(b.members.map(m => m.cable))}`).join('; ')}.`);
   return {cables, notes};
 }
 
@@ -627,8 +718,10 @@ export const DCIM_LIMITS = {
   // the model source says only "unique per site and tenant"). Nautobot's own limit
   // is not stated in its model source, so this NetBox limit is applied to both.
   deviceName: 64,
-  // Cable.label and Cable.description, NetBox 4.7 (believed). Nautobot's label is
-  // held to the same 100 here; its cable file carries no description.
+  // Cable.label (100) and Cable.description (200, PrimaryModel), NetBox v4.7.2
+  // (facts: 251458b8, dcim/models/cables.py and netbox/models/__init__.py).
+  // Nautobot's label is held to the same 100 here; its cable has no
+  // description (v3.2.6, 3dc554b4), so its cable file carries none.
   cableLabel: 100,
   cableDescription: 200,
   // NetBox Cable.length: a decimal of 8 digits and 2 places, so below 1,000,000
