@@ -26,7 +26,12 @@ provenance:
       THE EARS ARE BUILT IN: each is the side wall's front end folded out flat, one piece with
       the tray (the renders g1 and g4 of SKU 175749), so under the owner's rule of 2026-10-09
       they are part of the face and always drawn - 20.6 each side, the face the full 482.6, with
-      their slots.
+      their slots. THE SAME TABS STAND AT THE REAR: the renders g1 and g4 and the datasheet's
+      top view (p3) show a tab with two slots folded out at both ends of each side wall, so the
+      shelf can also bolt to rear rails; the rear pair is drawn on the rear face and seen edge-on
+      at y=0 on the top view. The front is the end with the low slotted wall (g1, the datasheet's
+      application figure on p2, where it faces the viewer); the lip stands along the rear edge,
+      between the full-height ends of the walls.
   sheet:
     confidence: estimated
     note: >-
@@ -123,7 +128,7 @@ groups:
     term: Ear
     role: furniture
     index-origin: 1
-    description: the two mounting ears, the side walls folded out flat against the rails
+    description: the four mounting tabs, the side walls folded out at both ends, front pair first
 views:
   front:
     size: {w: 482.6, h: 44.0}
@@ -145,14 +150,21 @@ views:
       - {id: wall-right, at: [20.6, 0.0], size: [1.2, 44.0], fill: '#1b1d20', kind: wall}
       - {id: wall-left, at: [460.8, 0.0], size: [1.2, 44.0], fill: '#1b1d20', kind: wall}
       - {id: floor-edge, at: [20.6, 42.0], size: [441.4, 2.0], fill: '#2a2d31', kind: floor}
-      - {id: ear-left-edge, at: [462.0, 0.0], size: [20.6, 44.0], fill: '#2a2d31', kind: ear}
-      - {id: ear-right-edge, at: [0.0, 0.0], size: [20.6, 44.0], fill: '#2a2d31', kind: ear}
+    components:
+      placements:
+      - {ref: fs/iwep1u550-ear@1, id: tab-rear-left, at: [462.0, 0.0], skin: right, group: ears,
+        rel-pos: 3}
+      - {ref: fs/iwep1u550-ear@1, id: tab-rear-right, at: [0.0, 0.0], skin: left, group: ears,
+        rel-pos: 4}
   top:
     size: {w: 482.6, h: 550.0}
     panel:
       decor:
-      - &id001 {id: ear-left-edge, at: [0.0, 548.8], size: [20.6, 1.2], fill: '#1b1d20', kind: ear}
-      - &id002 {id: ear-right-edge, at: [462.0, 548.8], size: [20.6, 1.2], fill: '#1b1d20', kind: ear}
+      - {id: ear-left-edge, at: [0.0, 548.8], size: &id001 [20.6, 1.2], fill: '#1b1d20', kind: ear}
+      - {id: ear-right-edge, at: [462.0, 548.8], size: &id002 [20.6, 1.2], fill: '#1b1d20', kind: ear}
+      - {id: tab-rear-left-edge, at: [0.0, 0.0], size: &id003 [20.6, 1.2], fill: '#1b1d20', kind: ear}
+      - {id: tab-rear-right-edge, at: [462.0, 0.0], size: &id004 [20.6, 1.2], fill: '#1b1d20',
+        kind: ear}
     components:
       placements:
       - {ref: fs/iwep1u550-tray@1, id: tray, at: [20.6, 0.0], group: shelf, rel-pos: 1}
@@ -164,9 +176,13 @@ views:
     size: {w: 482.6, h: 550.0}
     panel:
       decor:
-      - {id: floor, at: [20.6, 0.0], size: [441.4, 550.0], fill: '#1b1d20', kind: floor}
-      - *id001
-      - *id002
+      - {id: ear-left-edge, at: [462.0, 548.8], size: *id001, fill: '#1b1d20', kind: ear}
+      - {id: ear-right-edge, at: [0.0, 548.8], size: *id002, fill: '#1b1d20', kind: ear}
+      - {id: tab-rear-left-edge, at: [462.0, 0.0], size: *id003, fill: '#1b1d20', kind: ear}
+      - {id: tab-rear-right-edge, at: [0.0, 0.0], size: *id004, fill: '#1b1d20', kind: ear}
+    components:
+      placements:
+      - {ref: fs/iwep1u550-underside@1, id: underside, at: [20.6, 0.0], group: shelf, rel-pos: 7}
   left:
     size: {w: 550.0, h: 44.0}
     components:

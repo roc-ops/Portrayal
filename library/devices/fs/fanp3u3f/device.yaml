@@ -32,23 +32,23 @@ provenance:
   height:
     confidence: photo-measured
     note: >-
-      the straight-on render g1 measures the plate 132.3 tall at its 2.888 px/mm across the 483;
-      the dimensioned render x2 prints 5.12 in (130 mm), and a 3U opening is 133.35. 130 is drawn;
-      see gaps.
+      130: the product page and the dimensioned render x2 print 5.12 in (130 mm), and the straight-on
+      render g1 agrees - its plate runs 613.5 to 988 px down at 2.884 px/mm, 129.9 mm; the grey
+      band below it is the plate's shadow, not metal. A 3U opening is 133.35.
   grilles:
     confidence: photo-measured
     note: >-
       three stamped grilles 114 across, centred 85.9, 221.8 and 357.9 in from the left end on
       the plate's middle (g1 at 2.888 px/mm, each centre the midpoint of a pair of opposite spokes;
-      pitch 136.0), the fans' four screws 105 apart each way around each. The library's `grille`
-      vent pattern stands in for FS's concentric slots and spokes.
+      pitch 136.0), each drawn as fs/fan-grille-120@1; the fans' four screws 105 apart each way
+      around each.
   slots:
     confidence: photo-measured
     note: >-
-      four slots 10.4 x 6.6, 8.9 in from each end (g1). Their heights are EIA-310's top hole of
-      the upper unit and bottom hole of the lower unit; on the render they stand 5.7 below the
-      top and 8.2 above the bottom, an asymmetry a 130 mm plate cannot have and still meet the
-      rail holes, so the render is not taken for the heights.
+      four slots 10.4 x 6.6, 8.9 in from each end and centred 5.55 below the top and 5.7 above
+      the bottom (g1 at 2.884 px/mm) - near-symmetric, and within a millimetre of EIA-310's top
+      hole of the upper unit and bottom hole of the lower unit on a 130 mm plate centred in its
+      3U.
   eia:
     confidence: registry
     note: >-
@@ -75,9 +75,11 @@ provenance:
   rear:
     confidence: photo-measured
     note: >-
-      the rear render g5: the plate's back, three fans in square frames with wire finger guards,
-      the terminal block and the cord at the switch end. Drawn seen from behind, so the switch
-      end is at the left.
+      the rear render g5 (2.88 px/mm): the plate's back, three fans in square frames with wire
+      finger guards, the terminal block 21.9 to 48.6 across and 26.4 to 45.8 down, and the cord
+      at the switch end. Drawn seen from behind, so the switch end is at the left. The guards
+      are wire rings with an X; they are drawn as a ringed vent field, as no library part draws
+      a wire guard (see gaps).
   airflow:
     confidence: datasheet
     note: >-
@@ -137,12 +139,13 @@ chassis:
   power: ac
   color: '#1b1d20'
 gaps:
-- what: height
-  reason: sources-disagree
+- what: rear-guards
+  scope: [rear]
+  reason: needs-drawing
   note: >-
-    the product page and the dimensioned render give 130 mm (5.12 in); the straight-on render
-    measures 132.3 at its own width scale, and the slot heights on it fit neither. 130 is drawn.
-  wanted: a ruler on a real unit
+    the three rear finger guards are wire rings crossed by an X (g5); the library has no wire-guard
+    part, so they are drawn as a ringed vent field.
+  wanted: a wire fan-guard part
 groups:
   fans:
     term: Fan
@@ -165,27 +168,27 @@ views:
     panel:
       decor:
       - {id: plate, at: [0.0, 0.0], size: [483.0, 130.0], fill: '#1b1d20', kind: plate}
-      - {id: fan-1-screw-1, at: [31.4, 11.7], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
-      - {id: fan-1-screw-2, at: [136.4, 11.7], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
-      - {id: fan-1-screw-3, at: [31.4, 114.3], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
-      - {id: fan-1-screw-4, at: [136.4, 114.3], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
-      - {id: fan-2-screw-1, at: [167.3, 11.7], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
-      - {id: fan-2-screw-2, at: [272.3, 11.7], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
-      - {id: fan-2-screw-3, at: [167.3, 114.3], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
-      - {id: fan-2-screw-4, at: [272.3, 114.3], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
-      - {id: fan-3-screw-1, at: [303.4, 11.7], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
-      - {id: fan-3-screw-2, at: [408.4, 11.7], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
-      - {id: fan-3-screw-3, at: [303.4, 114.3], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
-      - {id: fan-3-screw-4, at: [408.4, 114.3], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
+      - {id: fan-1-screw-1, at: [31.4, 10.5], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
+      - {id: fan-1-screw-2, at: [136.4, 10.5], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
+      - {id: fan-1-screw-3, at: [31.4, 115.5], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
+      - {id: fan-1-screw-4, at: [136.4, 115.5], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
+      - {id: fan-2-screw-1, at: [167.3, 10.5], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
+      - {id: fan-2-screw-2, at: [272.3, 10.5], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
+      - {id: fan-2-screw-3, at: [167.3, 115.5], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
+      - {id: fan-2-screw-4, at: [272.3, 115.5], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
+      - {id: fan-3-screw-1, at: [303.4, 10.5], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
+      - {id: fan-3-screw-2, at: [408.4, 10.5], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
+      - {id: fan-3-screw-3, at: [303.4, 115.5], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
+      - {id: fan-3-screw-4, at: [408.4, 115.5], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
       - {id: switch-screw-1, at: [438.8, 32.7], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
       - {id: switch-screw-2, at: [448.8, 32.7], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
-      - {id: slot-l1, at: [3.7, 1.375], size: [10.4, 6.6], fill: '#0a0b0c', rx: 3.3, vent: 1.5,
+      - {id: slot-l1, at: [3.7, 2.25], size: [10.4, 6.6], fill: '#0a0b0c', rx: 3.3, vent: 1.5,
         kind: slot}
-      - {id: slot-l2, at: [3.7, 122.025], size: [10.4, 6.6], fill: '#0a0b0c', rx: 3.3, vent: 1.5,
+      - {id: slot-l2, at: [3.7, 121.0], size: [10.4, 6.6], fill: '#0a0b0c', rx: 3.3, vent: 1.5,
         kind: slot}
-      - {id: slot-r1, at: [468.9, 1.375], size: [10.4, 6.6], fill: '#0a0b0c', rx: 3.3, vent: 1.5,
+      - {id: slot-r1, at: [468.9, 2.25], size: [10.4, 6.6], fill: '#0a0b0c', rx: 3.3, vent: 1.5,
         kind: slot}
-      - {id: slot-r2, at: [468.9, 122.025], size: [10.4, 6.6], fill: '#0a0b0c', rx: 3.3, vent: 1.5,
+      - {id: slot-r2, at: [468.9, 121.0], size: [10.4, 6.6], fill: '#0a0b0c', rx: 3.3, vent: 1.5,
         kind: slot}
       - {id: switch-bezel, at: [436.6, 82.9], size: [18.8, 23.2], fill: '#141618', rx: 1.0, kind: switch-bezel}
     components:
@@ -200,13 +203,13 @@ views:
     panel:
       decor:
       - {id: plate, at: [0.0, 0.0], size: [483.0, 130.0], fill: '#1b1d20', kind: plate}
-      - {id: slot-l1, at: [468.9, 1.375], size: [10.4, 6.6], fill: '#0a0b0c', rx: 3.3, vent: 1.5,
+      - {id: slot-l1, at: [468.9, 2.25], size: [10.4, 6.6], fill: '#0a0b0c', rx: 3.3, vent: 1.5,
         kind: slot}
-      - {id: slot-l2, at: [468.9, 122.025], size: [10.4, 6.6], fill: '#0a0b0c', rx: 3.3, vent: 1.5,
+      - {id: slot-l2, at: [468.9, 121.0], size: [10.4, 6.6], fill: '#0a0b0c', rx: 3.3, vent: 1.5,
         kind: slot}
-      - {id: slot-r1, at: [3.7, 1.375], size: [10.4, 6.6], fill: '#0a0b0c', rx: 3.3, vent: 1.5,
+      - {id: slot-r1, at: [3.7, 2.25], size: [10.4, 6.6], fill: '#0a0b0c', rx: 3.3, vent: 1.5,
         kind: slot}
-      - {id: slot-r2, at: [3.7, 122.025], size: [10.4, 6.6], fill: '#0a0b0c', rx: 3.3, vent: 1.5,
+      - {id: slot-r2, at: [3.7, 121.0], size: [10.4, 6.6], fill: '#0a0b0c', rx: 3.3, vent: 1.5,
         kind: slot}
       - {id: fan-1-frame, at: [337.1, 5.0], size: [120.0, 120.0], fill: '#151719', rx: 4, kind: fan-frame}
       - {id: fan-1-guard-back, at: [340.1, 8.0], size: [114.0, 114.0], fill: '#0a0b0c', rx: 57.0,
@@ -223,7 +226,7 @@ views:
         kind: fan-opening}
       - {id: fan-3-guard, at: [68.1, 8.0], size: [114.0, 114.0], rx: 57.0, pattern: grille, vent: 1.5,
         kind: finger-guard}
-      - {id: terminal-block, at: [38.8, 28.7], size: [26.4, 19.7], fill: '#d6d6d2', kind: terminal-block}
+      - {id: terminal-block, at: [21.9, 26.4], size: [26.7, 19.4], fill: '#d6d6d2', kind: terminal-block}
     components:
       placements:
       - {ref: fs/fan-cord-5-15p@1, id: power-cord, at: [14.0, 60.0], group: power, rel-pos: 1}

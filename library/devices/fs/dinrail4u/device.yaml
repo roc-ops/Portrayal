@@ -49,24 +49,28 @@ provenance:
       at mid-height (the 4U's measures 82.2 down on the 300 dpi render, the 165.1 face's middle
       being 82.55).
   setback:
-    confidence: estimated
+    confidence: drawing
     note: >-
-      the rail panel's front face is drawn 178.5 behind the ears, the middle of its slots' travel.
-      It slides along the two long slots in each 360 mm side bracket ("the adjustable rails can
-      be easily set back"; QSG: adjust the rail panel's position to suit the device), which run
-      66 to 291 behind the ears on the datasheet's side view (provenance of fs/dinrail4u-side@1).
-      The gallery renders show it at both ends of that travel: g3 about 62 and g4 about 284 behind
-      the ears, each read along the near side bracket as a fraction of its 360 (a three-quarter
-      render, so to perhaps 10 per cent). The datasheet's own side and top views draw it near
-      the front. With no single photographed position, the middle of the travel is the default;
-      the range is a gap.
+      the rail panel's front face can stand from 50.5 to 269.4 mm behind the ears, and is drawn
+      at 159.9, the middle of that travel; the rail's face stands 7.5 in front of the panel's.
+      The panel slides along the two long slots in each 360 mm side bracket ("the adjustable rails
+      can be easily set back"; QSG: adjust the rail panel's position to suit the device). On the
+      datasheet's side view (p3, vector, read at 600 dpi, 3.258 px/mm along the 360) the slots
+      run 65.7 to 289.8 and are about 5.2 wide, so a screw's centre travels from 68.3 to 287.2;
+      the panel's tab spans 128.6 to 164.8 with its screw at 146.4, so the panel face stands 17.8
+      in front of the screw. The face travel is the screw travel less that. The gallery renders
+      show it at both ends of that travel: g3 about 62 and g4 about 284 behind the ears, each
+      read along the near side bracket as a fraction of its 360 (a three-quarter render, so to
+      perhaps 10 per cent). With no single photographed position, the middle of the travel is
+      the default; the range is in attrs and the format cannot offer the other positions (see
+      gaps).
   hosting:
     confidence: datasheet
     note: >-
       for #935: one TS35 x 7.5 rail, 400 mm long, centred 82.55 mm below the top of the 165.1
-      mm face, set back adjustably along the 360 mm side brackets; the width between the side
-      brackets is 419.7; the space available behind the rail runs to the 360 mm depth. FS states
-      no load rating. Recorded in `attrs.physical`.
+      mm face, its panel's face 50.5 to 269.4 behind the ears; the width between the side brackets
+      is 419.7; the space available behind the rail runs to the 360 mm depth. FS states no load
+      rating. Recorded in `attrs.physical`.
   eia:
     confidence: registry
     note: >-
@@ -92,8 +96,9 @@ attrs:
     din-rail-count: 1
     din-rail-length-mm: 400
     din-rail-centre-from-top-mm: 82.55
-    din-rail-setback-mm: 178.5
-    din-rail-setback-range: 66 to 291 mm behind the ears, along the side brackets' slots
+    din-rail-setback-mm: 159.9
+    din-rail-setback-min-mm: 50.5
+    din-rail-setback-max-mm: 269.4
     usable-width-mm: 419.7
   lifecycle:
     eol: none-announced
@@ -121,9 +126,9 @@ gaps:
 - what: setback
   reason: vendor-silent
   note: >-
-    the rail panel slides from 66 to 291 mm behind the ears; it is drawn at 178.5, the middle,
-    and no configuration offers the other positions, because the format has no way to move a part
-    along a slot per configuration.
+    the rail panel's face can stand from 50.5 to 269.4 mm behind the ears; it is drawn at 159.9,
+    the middle, and no configuration offers the other positions, because the format has no way
+    to move a part along a slot per configuration.
   wanted: a setback field or configuration key for adjustable parts
 - what: height
   reason: vendor-silent
@@ -186,9 +191,9 @@ views:
     components:
       placements:
       - {ref: fs/dinrail4u-frame@1, id: frame, at: [0.0, 0.0], group: frame, rel-pos: 4}
-      - {ref: fs/dinrail4u-panel-plan@1, id: rail-panel-body, at: [11.35, 180.0], group: frame,
+      - {ref: fs/dinrail4u-panel-plan@1, id: rail-panel-body, at: [11.35, 198.6], group: frame,
         rel-pos: 5, in: frame}
-      - {ref: fs/din-rail-ts35-400-plan@1, id: rail-body, at: [11.35, 181.5], group: rails, lift: 63.05,
+      - {ref: fs/din-rail-ts35-400-plan@1, id: rail-body, at: [11.35, 200.1], group: rails, lift: 63.05,
         rel-pos: 2, in: frame}
   bottom:
     size: {w: 422.7, h: 360.0}
@@ -196,8 +201,8 @@ views:
       decor:
       - {id: side-left, at: [421.2, 0.0], size: *id001, fill: '#1b1d20', kind: side-bracket}
       - {id: side-right, at: [0.0, 0.0], size: *id002, fill: '#1b1d20', kind: side-bracket}
-      - {id: rail-panel, at: [11.35, 180.0], size: [400.0, 1.5], fill: '#1b1d20', kind: rail-panel}
-      - {id: rail, at: [11.35, 181.5], size: [400.0, 7.5], fill: '#b9bdc2', kind: din-rail}
+      - {id: rail-panel, at: [11.35, 198.6], size: [400.0, 1.5], fill: '#1b1d20', kind: rail-panel}
+      - {id: rail, at: [11.35, 200.1], size: [400.0, 7.5], fill: '#b9bdc2', kind: din-rail}
   left:
     size: {w: 360.0, h: 165.1}
     components:

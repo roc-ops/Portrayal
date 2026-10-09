@@ -76,8 +76,8 @@ provenance:
     confidence: datasheet
     note: >-
       the quick start guide's note: a device on the shelf should weigh under 10 kg and be under
-      10 in deep, and its own mounting ears need not be fixed to the rack. The product page adds
-      that it holds only devices narrower than 440 mm.
+      10 in (254 mm) deep, and its own mounting ears need not be fixed to the rack. The product
+      page adds that it holds only devices narrower than 440 mm.
 attrs:
   physical:
     material: SGCC
@@ -88,7 +88,7 @@ attrs:
     usable-depth-mm: 250.2
     load-static-kg: 10
     max-device-width-mm: 440
-    max-device-depth-in: 10
+    max-device-depth-mm: 254
   lifecycle:
     eol: none-announced
 chassis:
@@ -125,7 +125,7 @@ views:
       - {id: wall-left, at: [19.9, 0.0], size: [1.2, 44.0], fill: '#1b1d20', kind: wall}
       - {id: wall-right, at: [461.9, 0.0], size: [1.2, 44.0], fill: '#1b1d20', kind: wall}
       - {id: floor-edge, at: [19.9, 42.0], size: [443.2, 2.0], fill: '#2a2d31', kind: floor}
-      - {id: front-lip, at: [21.1, 33.0], size: [440.8, 9.0], fill: '#1b1d20', stroke: '#3a3e43',
+      - {id: front-lip, at: [21.1, 32.5], size: [440.8, 9.5], fill: '#1b1d20', rx: 1.5, stroke: '#3a3e43',
         stroke-width: 0.3, kind: front-lip}
     components:
       placements:
@@ -135,7 +135,7 @@ views:
     size: {w: 483.0, h: 44.0}
     panel:
       decor:
-      - {id: front-lip, at: [21.1, 33.0], size: [440.8, 9.0], fill: '#141618', kind: front-lip}
+      - {id: front-lip, at: [21.1, 32.5], size: [440.8, 9.5], fill: '#141618', kind: front-lip}
       - {id: wall-right, at: [19.9, 40.0], size: [1.2, 4.0], fill: '#1b1d20', kind: wall}
       - {id: wall-left, at: [461.9, 40.0], size: [1.2, 4.0], fill: '#1b1d20', kind: wall}
       - {id: floor-edge, at: [19.9, 42.0], size: [443.2, 2.0], fill: '#2a2d31', kind: floor}
@@ -145,8 +145,8 @@ views:
     size: {w: 483.0, h: 250.2}
     panel:
       decor:
-      - &id001 {id: ear-left-edge, at: [0.0, 249.0], size: [19.9, 1.2], fill: '#1b1d20', kind: ear}
-      - &id002 {id: ear-right-edge, at: [463.1, 249.0], size: [19.9, 1.2], fill: '#1b1d20', kind: ear}
+      - {id: ear-left-edge, at: [0.0, 249.0], size: &id001 [19.9, 1.2], fill: '#1b1d20', kind: ear}
+      - {id: ear-right-edge, at: [463.1, 249.0], size: &id002 [19.9, 1.2], fill: '#1b1d20', kind: ear}
     components:
       placements:
       - {ref: fs/fs-cfs-1u-tray@1, id: tray, at: [19.9, 0.0], group: shelf, rel-pos: 1}
@@ -159,9 +159,11 @@ views:
     size: {w: 483.0, h: 250.2}
     panel:
       decor:
-      - {id: floor, at: [19.9, 0.0], size: [443.2, 250.2], fill: '#1b1d20', kind: floor}
-      - *id001
-      - *id002
+      - {id: ear-left-edge, at: [463.1, 249.0], size: *id001, fill: '#1b1d20', kind: ear}
+      - {id: ear-right-edge, at: [-0.0, 249.0], size: *id002, fill: '#1b1d20', kind: ear}
+    components:
+      placements:
+      - {ref: fs/fs-cfs-1u-underside@1, id: underside, at: [19.9, 0.0], group: shelf, rel-pos: 7}
   left:
     size: {w: 250.2, h: 44.0}
     components:
