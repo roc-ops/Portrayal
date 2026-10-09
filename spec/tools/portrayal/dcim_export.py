@@ -631,6 +631,10 @@ PART_POWER = {
     # The EVMA8365X's fixed cord ends in a CS8365C: `cs8365c`, TYPE_CS8365C in both
     # targets at the commits the generic plugs below cite.
     "eaton/g4-cord-cs8365c": "cs8365c",
+    # The Tripp Lite series PDUMH20NET's fixed 12 ft cord ends in a NEMA L5-20P:
+    # `nema-l5-20p`, TYPE_NEMA_L520P in both targets at the commits the generic
+    # plugs below cite.
+    "eaton/tripplite-cord-l5-20p": "nema-l5-20p",
     # THE GENERIC INPUT PLUGS (#933): the face of the plug at the end of a PDU's
     # fixed cord, for a device that draws its plug rather than its cord. A device
     # draws one or the other, never both, or one input exports as two ports. Every
