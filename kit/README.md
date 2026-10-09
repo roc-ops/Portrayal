@@ -104,7 +104,8 @@ as `@portrayal/kit/rack/<module>`:
 | `rack/managers.js` | cable managers: `placement` of a manager onto the device behind it, and moving one |
 | `rack/cable-rules.js` | cables: which two ports may be joined, `withCable`, media and lengths |
 | `rack/cable-types.js` | the cable types (`cable-types.json`): `loadCableTypes(dist)` fetches them and returns `typeOf`, `bendOf` and `diameterOf` over them; the same lookups are exported to build over a table already in hand (a fixture, a cached copy): `typeOf(types, id)`, `cableTypeOf(types, cable)`, `radiusMm(type, which)`, `installedRadiusMm(types, id)`, `bendLookup(types)` and `diameterLookup(types)`, each radius in millimetres |
-| `rack/route.js`, `rack/route-path.js`, `rack/cable-geometry.js` | where a cable runs: `resolveRoute`, `routePath`, `ringMarks`, `orientMarks`, `reverseMarks`, `routedLength`, `pathLength`, pathway fill, `ringFindings`, and the geometry under them (`throughRings`) |
+| `rack/route.js`, `rack/route-path.js`, `rack/cable-geometry.js` | where a cable runs: `resolveRoute`, `routePath`, `ringMarks`, `orientMarks`, `reverseMarks`, `routedLength`, `pathLength`, pathway fill, `ringFindings`, `bodyFindings`, and the geometry under them (`throughRings`) |
+| `rack/solids.js` | the solid bodies a route may not pass through: `solidsOf(rack, ctx)` places every device's envelope or derived `solids` in rack coordinates; `legCrossings` tests a leg against them; `detour` takes a leg round them; `CLEAR`, the clearance a detour keeps |
 | `rack/bundles.js`, `rack/bundle-route.js` | cable bundles: the size and bend checks (`bundleCheck`, `bundleChecks`, `pathwaysOn`, `bendCheck`, `cornersOf`), strap positions (`straps`), the trunk worked out from the members' routes (`deriveTrunk`) and a member's route along it (`followTrunk`) |
 | `rack/export-data.js` | the rack as rows: `bomRows`, `cableScheduleRows` and the device-import data, and the bundles as the exports read them (`bundleExports`, `bundleNotes`, `strapBomRows`) |
 | `rack/dcim-rules.js` | what a NetBox or Nautobot import needs of a rack |
@@ -218,6 +219,33 @@ its marks unchanged. `reverseMarks` is for a path drawn from its other end.
 automatic route no longer takes a ring behind the port, which could shorten a
 length by up to 100 mm. A rack's stored `routed` lengths are re-measured the
 next time a page measures them (`lengths.routed`).
+
+Every body in the rack is solid to a route (`rack/solids.js`, #949). A box
+device is its envelope; a part whose rack.json entry carries `solids` (a
+sheet part's plates, a vertical duct's walls and back) is those boxes, each
+with the pass-throughs that cut it as `holes`; a sheet part, or a zero-U part
+that carries a lane, without them is open. A cable crosses a body only through a ring, a duct's finger
+gap, or a pass-through whose smaller side fits its diameter
+(`ctx.diameterOf(cable)` when given, else its media's). Where a straight leg
+would cross one, `routePath` adds detour points (`at: 'detour'`): over the
+body's near edge (a tray's front edge first), else round its end, else by a
+side lane, going round a second body the same way when a detour meets one.
+They count in the length and are never stored; `path.detours` lists them. A
+zero-U part that stands in the gutter and carries no lane (a zero-U PDU)
+moves the lane beside its upright outboard of it, where it stands
+(`laneXAt`), and a zero-U part is gone round on its back, the side facing
+into the rack, before its outward face. A leg the rules
+cannot clear is left as drawn, and `path.crossings` and
+`bodyFindings(rack, ctx, nameOf)` report it as `crosses-body`, with a
+sentence. It warns and never refuses. `inspect` of a cable gives them as
+`route.crosses`, `describe` adds a `Findings:` line when a route context is
+given, and `cableScheduleRows(..., { bodies })` writes each sentence into its
+cable's notes. **Routed lengths change in 0.11.0** wherever a detour is added,
+and beside a zero-U PDU. Most of the change is a cable from a port on a
+device's far panel: it now goes round its own device to the lane instead of
+through it. On a two-post rack, where every rear port is the depth of its
+device behind the one rail plane, that is most rear routes; on a four-post,
+few.
 
 To change a rack by name rather than by function, use the command core:
 `createRackEditor({ doc, chassisOf })` applies `place`, `move`, `patch`,
