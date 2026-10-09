@@ -581,13 +581,17 @@ The positions that realise it, in the cases a rack has:
 - **Front-edge through cables** take the **outer** positions, the other way
   round: the one nearest the gutter outermost, each one further away one
   position further in.
-- **Local patches.** Today the automatic route picks the gutter from the x of
-  end A alone (`route.js autoRoute`), and when both ends leave through the
-  same manager it goes out to the gutter and back through the same rings (a
-  patch from a switch port at x -150 to a panel port at x -20 runs ring 1,
-  left-front U12, U11, ring 1, ring 2). **A patch whose two ends share one
-  manager runs along the tray directly, port to port, through the rings
-  between them, with no gutter.** A local patch with both ends rail-side lies
+- **Local patches.** Before kit 0.12.0 the automatic route picked the gutter
+  from the x of end A alone (`route.js autoRoute`), and when both ends left
+  through the same manager it went out to the gutter and back through the
+  same rings (a patch from a switch port at x -150 to a panel port at x -20
+  ran ring 1, left-front U12, U11, ring 1, ring 2). **A patch whose two ends
+  share one manager runs along the tray directly, port to port, through the
+  rings between them, with no gutter** (built early, in kit 0.12.0: a ring is
+  between when its centre is; with none between, the ring nearest the middle
+  of the two ports holds it, never a direct run; a ring just past a port holds
+  a cord that reaches into it without a doubles-back finding,
+  [cable-managers-design.md](cable-managers-design.md) section 13). A local patch with both ends rail-side lies
   in the rail group, inside every through cable that passes its stretch; one
   with both ends front-edge lies in the front group, outside them. Of two such
   patches the shorter lies nearer its side, so patches that nest never meet.
@@ -606,11 +610,12 @@ The positions that realise it, in the cases a rack has:
   lower cable id is the inner.
 
 **Opposite ways.** A through cable has one gutter, and both of its ends use
-it. Step 5 chooses the gutter for each cable from both ends, not from end A
-alone: when both ports stand on the same side of the centre line in their
-trays, that side; when they stand on opposite sides, the side that gives the
-shorter path. Through cables that each run toward their own port side then
-use separate stretches of a tray and never meet. **A through cable whose ends
+it. The automatic route chooses the gutter for each cable from both ends, not
+from end A alone (built early, in kit 0.12.0): when both ports stand on the
+same side of the centre line in their trays, that side; when they stand on
+opposite sides, the side that gives the shorter path. Through cables that
+each run toward their own port side then use separate stretches of a tray and
+never meet. **A through cable whose ends
 sit on opposite sides of the centre in two trays runs against its port in one
 of them**, and there it is a forced category of its own: its gutter end is on
 the far side of every cable it passes, and the interleaving test counts each

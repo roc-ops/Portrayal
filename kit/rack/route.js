@@ -102,21 +102,52 @@ function through(m, pane, portX, side, crossing, ctx) {
   return pass ? [{item: m.id, via: pass.via}] : [];
 }
 
+// A PATCH ALONG ONE MANAGER (#949, docs/cable-lay-design.md section 4.1,
+// "Local patches"): both ends leave through the same manager on the same face,
+// so the cable runs along it port to port, through the rings BETWEEN the two
+// ports in order from end a, and never out to a gutter and back. A ring is
+// between when its centre is, the ends included: not the half-depth reach of
+// `through`, which takes a ring whose centre is just behind a port on the way
+// out to a gutter. Here the cable turns toward the other port at once, and a
+// ring behind it is a step back the patch does not need (on the owner's rack
+// of #949, a leaf port 3.1 mm short of a ring's centre, cabled away from it,
+// measured 5.5 cm longer through it, and a stock size). A ring outside the
+// stretch is left alone; with no ring between, the cord goes through the one
+// ring nearest the middle of its two ports (below), so a manager with a ring
+// along x never gives an empty route. A manager with no ring that runs along
+// x, but a duct, runs in the duct.
+function along(m, pane, ax, bx, ctx, passes = null) {
+  const gs = ctx.guidesOf(m.id).filter(g => g.face === pane);
+  const rings = gs.filter(g => g.kind === 'ring' && ringOf(g).run === 'x');
+  if (rings.length) {
+    const lo = Math.min(ax, bx), hi = Math.max(ax, bx);
+    const between = rings.filter(g => g.x >= lo && g.x <= hi)
+      .sort((p, q) => (ax <= bx ? p.x - q.x : q.x - p.x));
+    if (between.length) return between.map(g => ({item: m.id, via: g.via}));
+    // NO RING BETWEEN (owner's decision, 2026-10-09): a ring holds the cord
+    // even where it does not turn it, so the route is never direct: the ring
+    // nearest the middle of the two ports, of two as near the one on end a's
+    // side. A ring outside the stretch can be one the cord would enter and
+    // leave by one face (#930: both ports on its one side, not steep enough
+    // to be under it), which ringFindings reports; so the nearest ring the
+    // cord passes through is taken (`passes`, the test routePath makes), and
+    // only when none passes, the nearest.
+    const mid = (ax + bx) / 2, aSide = Math.sign(ax - mid);
+    const order = [...rings].sort((p, q) => Math.abs(p.x - mid) - Math.abs(q.x - mid)
+      || aSide * (q.x - p.x));
+    const near = order.find(g => passes?.(g)) ?? order[0];
+    return [{item: m.id, via: near.via}];
+  }
+  const duct = gs.find(g => g.kind === 'duct');
+  return duct ? [{item: m.id, via: duct.via}] : [];
+}
+
 const sameWp = (a, b) => (a.lane ? a.lane === b.lane && a.ru === b.ru : a.item === b.item && a.via === b.via);
 const dedupe = list => list.filter((w, i) => i === 0 || !sameWp(w, list[i - 1]));
 
-export function autoRoute(rack, cable, ctx) {
-  const ends = [cable.a, cable.b].map(e => {
-    const it = itemOf(rack, e.item), pane = it && endPane(rack, e);
-    // A port not found only defaults the SIDE (to the left, as a port at the centre does);
-    // no length is ever measured from it (portPoint).
-    return it && pane ? {e, it, pane, x: ctx.portX(e) ?? 0} : null;
-  });
-  if (ends.some(x => !x)) return [];
-  const [A, B] = ends;
-  const mA = managerOf(rack, A.it, A.pane, ctx), mB = managerOf(rack, B.it, B.pane, ctx);
-  if (!mA && !mB && A.pane === B.pane && Math.abs(A.it.ru - B.it.ru) <= SHORT) return [];
-  const side = A.x <= 0 ? 'left' : 'right';
+// The route by the gutter on `side`: out through end a's manager, along the
+// lane (across the top when the ends are on two faces), in through end b's.
+function byGutter(rack, A, B, mA, mB, side, ctx) {
   const crossing = A.pane !== B.pane;
   const f = rack.frame;
   const laneA = laneFor(f, side, A.pane), laneB = laneFor(f, side, B.pane);
@@ -128,6 +159,58 @@ export function autoRoute(rack, cable, ctx) {
   const outB = through(mB, B.pane, B.x, side, crossing, ctx).reverse();
   return dedupe([...outA, ...lanes, ...outB]);
 }
+
+// THE AUTOMATIC ROUTE. Two ends that leave through one manager on one face
+// run along it (`along`). Any other route takes a gutter, chosen from BOTH
+// ends (section 4.1, "Opposite ways"): when both ports stand on the same side
+// of the centre line, that side (a port at the centre counts as left);
+// when they stand on opposite sides, the side whose path (routePath, with its
+// detours) is the shorter, end a's side on a tie or when either port is not
+// found and so cannot be measured.
+export function autoRoute(rack, cable, ctx) {
+  const ends = [cable.a, cable.b].map(e => {
+    const it = itemOf(rack, e.item), pane = it && endPane(rack, e);
+    // A port not found only defaults the SIDE (to the left, as a port at the centre does);
+    // no length is ever measured from it (portPoint).
+    return it && pane ? {e, it, pane, x: ctx.portX(e) ?? 0} : null;
+  });
+  if (ends.some(x => !x)) return [];
+  const [A, B] = ends;
+  const mA = managerOf(rack, A.it, A.pane, ctx), mB = managerOf(rack, B.it, B.pane, ctx);
+  if (!mA && !mB && A.pane === B.pane && Math.abs(A.it.ru - B.it.ru) <= SHORT) return [];
+  if (mA && mA === mB && A.pane === B.pane) {
+    // whether the cord goes through a ring from port to port, as routePath
+    // decides it; unknown (a port not found) counts as through
+    const pa = portPoint(rack, cable.a, ctx), pb = portPoint(rack, cable.b, ctx);
+    const passes = g => {
+      const p = pointOf(rack, {item: mA.id, via: g.via}, ctx);
+      return !(pa && pb && p) || !throughRings([pa, p, pb],
+        [null, {...ringOf(g), diameter: cableDiameter(cable, ctx), portBefore: true, portAfter: true}, null]).back.length;
+    };
+    return along(mA, A.pane, A.x, B.x, ctx, passes);
+  }
+  const sideOf = x => (x <= 0 ? 'left' : 'right');
+  const sA = sideOf(A.x), sB = sideOf(B.x);
+  if (sA === sB) return byGutter(rack, A, B, mA, mB, sA, ctx);
+  const routes = {[sA]: byGutter(rack, A, B, mA, mB, sA, ctx), [sB]: byGutter(rack, A, B, mA, mB, sB, ctx)};
+  // The detours are part of the path (a gutter beside a zero-U PDU can cost
+  // the one side 25 cm round it), and measuring them is the dear part, so the
+  // side is decided once per rack, context and cable, as solidsOf reads its
+  // bodies once per rack and context.
+  let per = sideMemo.get(rack);
+  if (!per) sideMemo.set(rack, per = new WeakMap());
+  let byCable = per.get(ctx);
+  if (!byCable) per.set(ctx, byCable = new WeakMap());
+  if (!byCable.has(cable)) {
+    // Measured as a route edited by hand, so the measure does not come back
+    // here; and under an id no bundle holds, so it is the cable's own path.
+    const measure = route => pathLength(routePath(rack, {...cable, id: Symbol('side'), route, routeEdited: true}, ctx))?.measured;
+    const la = measure(routes[sA]), lb = measure(routes[sB]);
+    byCable.set(cable, la == null || lb == null || la <= lb ? sA : sB);
+  }
+  return routes[byCable.get(cable)];
+}
+const sideMemo = new WeakMap();
 
 // Does a waypoint still stand for something in this rack?
 function resolves(rack, w, ctx) {
@@ -285,7 +368,8 @@ export const stockLength = m => STOCK_M.find(s => s >= m - 1e-9) ?? Math.ceil(m 
 //   'pathway' (a duct or a pass-through) or 'lane';
 // - `rings`: per ring on the route, {item, via, run, depth, estimated,
 //   passed, sense, entry, exit} (sense +1 or -1 along the run; a ring not
-//   passed has `face` instead of entry and exit);
+//   passed has `face` instead of entry and exit; one that holds a cable
+//   reaching just into it, route-path.js HELD, is passed and `held: true`);
 // - `findings`: a ring the route would enter and leave by one face, as
 //   {kind: 'doubles-back', cable, item, via};
 // - `marks`: parallel to resolveRoute's waypoints, null for a lane, a duct or
@@ -320,7 +404,14 @@ export function routePath(rack, cable, ctx) {
     stops.push({p, w, i, ring: ringOf(g)});
   });
   stops.push({p: b, at: 'b'});
-  const {points, passes, back} = throughRings(stops.map(s => s.p), stops.map(s => s.ring));
+  // a ring holds a cable that reaches just into it (route-path.js, HELD):
+  // how near depends on the cable's diameter, and it holds only from a port:
+  // the two port stops (first and last) are the only stops without `w`, so
+  // `!stops[k ± 1].w` says the neighbour is a port (a ring is never first or
+  // last, so both neighbours exist)
+  const held = cableDiameter(cable, ctx);
+  const {points, passes, back} = throughRings(stops.map(s => s.p), stops.map((s, k) => (s.ring
+    ? {...s.ring, diameter: held, portBefore: !stops[k - 1].w, portAfter: !stops[k + 1].w} : null)));
   // Label each point with what it is: walk the stops, a ring taking two points when passed.
   const passAt = new Map(passes.map(x => [x.index, x])), backAt = new Map(back.map(x => [x.index, x]));
   const out = [], rings = [], findings = [], from = [];
@@ -333,7 +424,7 @@ export function routePath(rack, cable, ctx) {
     if (pass) {
       from.push(k, k);
       out.push({...points[n++], ...tag, at: 'entry'}, {...points[n++], ...tag, at: 'exit'});
-      rings.push({...ring, passed: true, sense: pass.sense, entry: pass.entry, exit: pass.exit});
+      rings.push({...ring, passed: true, ...(pass.held ? {held: true} : {}), sense: pass.sense, entry: pass.entry, exit: pass.exit});
       marks[s.i] = {run: s.ring.run, depth: s.ring.depth, sense: pass.sense, back: false};
     } else {
       const no = backAt.get(k);

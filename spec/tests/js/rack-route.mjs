@@ -69,15 +69,30 @@ test('a rack with no managers: lanes only, and nothing throws', () => {
     [{lane: 'right-front', ru: 5}, {lane: 'right-front', ru: 30}]);
 });
 
-test('the same face, different sides: the A side is taken, and B crosses its own rings to it', () => {
+test('the same face, different sides: the shorter side is taken, whichever end is a (#949)', () => {
   let r = add(M.newRack(), 'sw', 20);
   r = add(r, 'fhd-cmp5dr', 20, {on: 'i1', unit: 1});
   r = add(r, 'pp', 30);
   r = add(r, 'fhd-cmp5dr', 30, {on: 'i3', unit: 1});
-  const route = R.autoRoute(r, cable({item: 'i1', path: 'p'}, {item: 'i3', path: 'q'}), ctxFor(r, {'i1|p': -100, 'i3|q': 150}));
-  assert.equal(route.filter(w => w.lane).every(w => w.lane === 'left-front'), true);
-  // B's rings, in the order the cable meets them from the lane: outermost left first, to the one nearest its port.
-  assert.deepEqual(route.slice(-4), [{item: 'i4', via: 'guide-1'}, {item: 'i4', via: 'guide-2'}, {item: 'i4', via: 'guide-3'}, {item: 'i4', via: 'guide-4'}]);
+  const ctx = ctxFor(r, {'i1|p': -100, 'i3|q': 150});
+  const c = cable({item: 'i1', path: 'p'}, {item: 'i3', path: 'q'});
+  // a at -100, b at 150: by the right, a crosses three rings and b one; by
+  // the left (end a's side, which was the rule) a crosses two and b four
+  const right = [{item: 'i2', via: 'guide-3'}, {item: 'i2', via: 'guide-4'}, {item: 'i2', via: 'guide-5'},
+    {lane: 'right-front', ru: 20}, {lane: 'right-front', ru: 30}, {item: 'i4', via: 'guide-5'}];
+  const left = [{item: 'i2', via: 'guide-2'}, {item: 'i2', via: 'guide-1'}, {lane: 'left-front', ru: 20},
+    {lane: 'left-front', ru: 30}, {item: 'i4', via: 'guide-1'}, {item: 'i4', via: 'guide-2'},
+    {item: 'i4', via: 'guide-3'}, {item: 'i4', via: 'guide-4'}];
+  assert.deepEqual(R.autoRoute(r, c, ctx), right);
+  const mm = route => Math.round(R.routedLength(r, {...c, route, routeEdited: true}, ctx).measured * 10000) / 10;
+  assert.deepEqual([mm(right), mm(left)], [1318.5, 1459.8]);
+  // the same cable written the other way round takes the same side
+  const back = cable({item: 'i3', path: 'q'}, {item: 'i1', path: 'p'});
+  assert.deepEqual(R.autoRoute(r, back, ctx), right.toReversed());
+  // a tie keeps end a's side: ports at -100 and 100 are as far from either gutter
+  const tie = ctxFor(r, {'i1|p': -100, 'i3|q': 100});
+  assert.equal(R.autoRoute(r, c, tie).find(w => w.lane).lane, 'left-front');
+  assert.equal(R.autoRoute(r, back, tie).find(w => w.lane).lane, 'right-front');
 });
 
 test('opposite faces: front lane to rear lane on the A side, joined at the higher U', () => {
@@ -137,6 +152,35 @@ test('managers both above and below: the one above is used', () => {
   r = add(r, 'pp', 30);
   const route = R.autoRoute(r, cable({item: 'i2', path: 'p'}, {item: 'i4', path: 'q'}), ctxFor(r, {}));
   assert.deepEqual(route[0], {item: 'i3', via: 'duct'});
+});
+
+test('two ends beside one duct manager run in the duct, with no lane (#949)', () => {
+  let r = add(M.newRack(), 'sw', 20);
+  r = add(r, 'cmh-sfd1u', 21);
+  r = add(r, 'pp', 22);
+  const route = R.autoRoute(r, cable({item: 'i1', path: 'p'}, {item: 'i3', path: 'q'}), ctxFor(r, {'i1|p': -50, 'i3|q': 120}));
+  assert.deepEqual(route, [{item: 'i2', via: 'duct'}]);
+});
+
+test('two ends on one ring manager run through the rings between them, in order from end a, else the nearest (#949)', () => {
+  let r = add(M.newRack(), 'sw', 20);
+  r = add(r, 'fhd-cmp5dr', 20, {on: 'i1', unit: 1});
+  r = add(r, 'pp', 21);
+  const c = cable({item: 'i3', path: 'q'}, {item: 'i1', path: 'p'});
+  // a at 150 on the panel above, b at -150 on the switch: rings 4, 3 and 2, leftward
+  assert.deepEqual(R.autoRoute(r, c, ctxFor(r, {'i1|p': -150, 'i3|q': 150})),
+    [{item: 'i2', via: 'guide-4'}, {item: 'i2', via: 'guide-3'}, {item: 'i2', via: 'guide-2'}]);
+  // a ring at a port's own x is between
+  assert.deepEqual(R.autoRoute(r, c, ctxFor(r, {'i1|p': 0, 'i3|q': 110})), [{item: 'i2', via: 'guide-4'}, {item: 'i2', via: 'guide-3'}]);
+  // no ring between (1 to 109): never direct, but the ring nearest the middle
+  // (55), rings 3 and 4 being as near, the one on end a's side
+  assert.deepEqual(R.autoRoute(r, c, ctxFor(r, {'i1|p': 1, 'i3|q': 109})), [{item: 'i2', via: 'guide-4'}]);
+  const swapped = cable({item: 'i1', path: 'p'}, {item: 'i3', path: 'q'});
+  assert.deepEqual(R.autoRoute(r, swapped, ctxFor(r, {'i1|p': 1, 'i3|q': 109})), [{item: 'i2', via: 'guide-3'}]);
+  // and not a tie: 20 to 60, the middle 40, ring 3
+  assert.deepEqual(R.autoRoute(r, c, ctxFor(r, {'i1|p': 20, 'i3|q': 60})), [{item: 'i2', via: 'guide-3'}]);
+  // the middle, not end a: a at 15 is nearer ring 3, but the middle (60) is nearer ring 4
+  assert.deepEqual(R.autoRoute(r, swapped, ctxFor(r, {'i1|p': 15, 'i3|q': 105})), [{item: 'i2', via: 'guide-4'}]);
 });
 
 test('endPane: face, turned, and the end view', () => {

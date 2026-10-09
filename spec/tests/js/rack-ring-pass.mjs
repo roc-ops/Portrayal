@@ -229,18 +229,62 @@ test('a point beside the ring but far off its line IN THE FACE is on neither sid
   assert.deepEqual(got.back, []);
   assert.deepEqual(got.points, [[106, -80], [95, 0], [105, 0], [300, 0]]);
   // the same 80 mm as the stand-off, z, out of the face: it stands on the right, as the next does
-  const out = throughRings([{x: 106, y: 0, z: 0}, {x: 100, y: 0, z: 80}, {x: 300, y: 0, z: 80}], [null, ring, null]);
+  // (25 mm along, the ring's near face 20 past it: further than the ring's
+  // depth, so not held, and it would double back)
+  const out = throughRings([{x: 125, y: 0, z: 0}, {x: 100, y: 0, z: 80}, {x: 300, y: 0, z: 80}], [null, ring, null]);
   assert.deepEqual(out.back.map(b => [b.index, b.sense]), [[1, -1]]);
 });
 
-test('an edited route through a ring behind the port: a finding when level with it, none when it comes up steeply or from under it', () => {
+test('held or hooked (#949): a ring whose near face is within its depth plus the cable\'s diameter past the nearer PORT holds it', () => {
+  const ring = (d, extra = {}) => ({run: 'x', depth: 10, portBefore: true, portAfter: true, ...(d ? {diameter: d} : {}), ...extra});
+  const backOf = (x, d, extra) => throughRings([[x, 0], [100, 0], [300, 0]], [null, ring(d, extra), null]);
+  // a 3 mm cord: the near face (105) may be 13 past the port, 118 at most
+  assert.deepEqual(backOf(118, 3).back, []);
+  assert.deepEqual(backOf(118, 3).passes.map(p => [p.sense, p.held]), [[-1, true]]);
+  assert.deepEqual(backOf(118.01, 3).back.map(b => b.index), [1]);
+  // no diameter given: the ring's depth alone, 115
+  assert.deepEqual(backOf(115).back, []);
+  assert.deepEqual(backOf(115.01).back.map(b => b.index), [1]);
+  // a cable fatter than the ring is deep counts only the depth: a 15 mm
+  // cable in a 10 mm ring may reach 20 past the port to the near face, not 25
+  assert.deepEqual(backOf(125, 15).back, []);
+  assert.deepEqual(backOf(125.01, 15).back.map(b => b.index), [1]);
+  // the NEARER neighbour is measured, whichever end it is
+  assert.deepEqual(throughRings([[300, 0], [100, 0], [118, 0]], [null, ring(3), null]).back, []);
+  // only from a port: the same reach from another ring's exit, or with
+  // nothing said, is a hook
+  assert.deepEqual(backOf(110, 3, {portBefore: false}).back.map(b => b.index), [1]);
+  assert.deepEqual(throughRings([[110, 0], [100, 0], [300, 0]], [null, {run: 'x', depth: 10, diameter: 3}, null]).back.map(b => b.index), [1]);
+  // the far neighbour being a port does not help the near one
+  assert.deepEqual(backOf(110, 3, {portBefore: false, portAfter: true}).back.map(b => b.index), [1]);
+  // held, it reaches in and comes back: through to the far face and out again
+  assert.deepEqual(backOf(118, 3).points, [[118, 0], [105, 0], [95, 0], [300, 0]]);
+  // a ring passed in the ordinary way is not `held`
+  assert.equal(throughRings([[0, 0], [100, 0], [300, 0]], [null, ring(3), null]).passes[0].held, undefined);
+});
+
+test('a turn-back at a ring just past another ring is a hook, not held, however close the rings', () => {
+  // two rings 12 mm apart (closer than a ring's depth plus the cord), a port
+  // far to the left: through ring 1 (100), then back at ring 2 (112) to a
+  // port at 0. Ring 2's nearer neighbour is ring 1's exit, not a port.
+  const r = rackOf();
+  const ctx = ctxOf([{via: 'guide-1', x: 100, depth: 10}, {via: 'guide-2', x: 112, depth: 10}], {i1: 0, i3: 0}, {i3: Y20});
+  const c = cableOf([{item: 'i2', via: 'guide-1'}, {item: 'i2', via: 'guide-2'}]);
+  assert.deepEqual(R.routePath(r, c, ctx).findings.map(f => f.via), ['guide-2']);
+});
+
+test('an edited route through a ring behind the port: a finding when level with it, none when it comes up steeply, from under it, or just into it', () => {
   const r = rackOf();
   const rings = [-205, -110, 0, 110, 205].map((x, i) => ({via: `guide-${i + 1}`, x}));
   const c = cableOf([{item: 'i2', via: 'guide-4'}, {item: 'i2', via: 'guide-5'}, {lane: 'right-front', ru: 20}, {lane: 'right-front', ru: 30}]);
   const at = (x, below = 0) => R.routePath(r, c, ctxOf(rings, {i1: x, i3: 120}, below ? {i1: Y20 - below} : {}));
-  // level, 10 mm right of ring 4 (5 past its face), going right: it would double back
-  assert.deepEqual(at(120).findings.map(f => f.via), ['guide-4']);
-  assert.deepEqual(at(120, 8).findings.map(f => f.via), ['guide-4']);       // 10 along, 8 below: still beside it
+  // level, 40 mm right of ring 4 (35 past its face), going right: it hooks back through it
+  assert.deepEqual(at(150).findings.map(f => f.via), ['guide-4']);
+  assert.deepEqual(at(150, 8).findings.map(f => f.via), ['guide-4']);       // 40 along, 8 below: still beside it
+  // 10 mm right (5 past its face): it only reaches into the ring to be held
+  // (#949): within the ring's depth (10, estimated) and the Cat6's 6 mm
+  assert.deepEqual(at(120).findings, []);
+  assert.deepEqual(at(120).rings.map(g => [g.via, g.passed, g.held, g.sense]), [['guide-4', true, true, -1], ['guide-5', true, undefined, 1]]);
   // 30 mm below: steeper than 45 degrees, it comes up into the ring
   assert.deepEqual(at(120, 30).findings, []);
   assert.deepEqual(at(120, 30).rings.map(g => [g.via, g.passed, g.sense]), [['guide-4', true, 1], ['guide-5', true, 1]]);

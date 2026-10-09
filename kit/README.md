@@ -206,7 +206,11 @@ expanded to the point where the cable enters it and the point where it leaves,
 half the ring's `depth` (`RING_DEPTH`, 10 mm, estimated, when the ring states
 none) either side of its centre. A route that would enter and leave a ring by
 one face is not drawn through it; `ringFindings(rack, ctx)` reports it, and
-neither `fill` nor `capacityOver` counts it there. `routePath` decides each
+neither `fill` nor `capacityOver` counts it there; since 0.12.0, not when the
+ring stands right past the nearer of its neighbours and that neighbour is a
+port (its near face within the ring's depth plus the cable's diameter of it,
+the diameter capped at the depth): the cable only reaches in to be held, passes
+(`held: true` on the path's ring) and is counted, with no finding. `routePath` decides each
 ring once; `ringMarks(rack, cable, ctx)` gives those decisions, one per
 waypoint, and `routed2d` and `routePoints3d` take them as an optional last
 argument, so the drawings pass through each ring straight and the way it was
@@ -246,6 +250,23 @@ device's far panel: it now goes round its own device to the lane instead of
 through it. On a two-post rack, where every rear port is the depth of its
 device behind the one rail plane, that is most rear routes; on a four-post,
 few.
+
+The automatic route (`autoRoute`) runs a patch whose two ends leave through
+one manager along it, port to port, through the rings whose centres lie
+between the two ports, in order from end a, and never out to a gutter and
+back. With no ring between, it goes through the ring nearest the middle of the
+two ports (end a's side of two as near), the nearest one it passes through
+when one does, so it is never direct; a cord that can pass none is reported
+by `ringFindings`. A manager with no ring along its run, but a duct, runs it
+in the duct. Any
+other route takes a gutter chosen from both ends: the side both ports stand
+on, or, when they stand on opposite sides of the centre line, the side whose
+path (`routePath`, detours included) is the shorter, end a's on a tie or
+when a port is not found. The side is decided once per rack, route context
+and cable, so a page must not change a route context in place: build a new
+one when what it reads changes. **Routed lengths change in 0.12.0** wherever the
+two ends share a manager or stand on opposite sides; every change found so
+far is shorter.
 
 To change a rack by name rather than by function, use the command core:
 `createRackEditor({ doc, chassisOf })` applies `place`, `move`, `patch`,
