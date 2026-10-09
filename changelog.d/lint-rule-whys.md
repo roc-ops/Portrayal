@@ -5,6 +5,7 @@
   `maturity: verified`.
 - `lint-rules.json` in the dist: the rule table as data for the site's rule
   page, written by `lint.py --list-rules --json` from the same table as the
-  page. Each rule carries its code, scope, rule, why, fix, severity, and
+  page. Each rule carries its code, scope, rule, why, fix, a severity token
+  (`error`, `warning`, `at-verified`, `mixed` or `mixed-at-verified`), and
   `fails`, `warns` and `fails-at-verified` (#952). It ships in
   `@portrayal/index`.

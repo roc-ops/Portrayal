@@ -543,21 +543,38 @@ refuses any `format` but 1.
 
 ```json
 {"format": 1,
- "severities": ["error", "warning", "warning, error at verified", "error or warning",
-                "error, or warning that is an error at verified"],
+ "severities": ["error", "warning", "at-verified", "mixed", "mixed-at-verified"],
  "rules": [{"code": "L53", "scope": "device", "rule": "...", "why": "...", "fix": "...",
-            "severity": "warning, error at verified",
+            "severity": "at-verified",
             "fails": false, "warns": true, "fails-at-verified": true}],
  "retired": [{"code": "L..", "note": "..."}]}
 ```
 
 `format` is 1 and versions the shape: a removed or renamed key raises it, a
-new key does not. `rules` is in code order. `severity` is one of
-`severities`; the three booleans say the same thing for a reader that only
-filters: `fails` when some finding fails the lint at any maturity, `warns`
-when some finding only warns, and `fails-at-verified` when a warning becomes
-an error on a device that claims `maturity: verified`. `retired` lists codes
-whose rule is gone; a code is never reissued.
+new key does not. `rules` is in code order. `severity` is one of the tokens
+in `severities`:
+
+- `error`: every finding fails the lint.
+- `warning`: every finding warns, and the lint passes.
+- `at-verified`: a finding warns on a device still being drawn and fails on a
+  device that claims `maturity: verified`.
+- `mixed`: some findings fail and others only warn; the rule's text says
+  which.
+- `mixed-at-verified`: some findings always fail, and others warn until the
+  device claims `maturity: verified`.
+
+The token describes the rule, not each finding. A rule is `at-verified` when
+any of its warnings becomes an error at `verified`, and it may raise other
+findings that stay warnings there: L37's group with no members is one. A
+consumer that needs a finding's own severity reads it from the lint run, not
+from this file.
+
+The three booleans say the same thing for a reader that only filters:
+`fails` when some finding fails the lint at any maturity, `warns` when some
+finding only warns, and `fails-at-verified` when a warning becomes an error
+on a device that claims `maturity: verified`. `retired` lists codes whose
+rule is gone; a code is never reissued. A new token is a new key's worth of
+change and does not raise `format`; a token renamed or removed does.
 
 ## The rack catalogue
 

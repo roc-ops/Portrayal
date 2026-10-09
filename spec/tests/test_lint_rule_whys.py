@@ -110,7 +110,7 @@ def test_the_page_and_the_json_list_the_same_codes_and_whys():
     assert sorted(codes, key=lambda c: int(c[1:])) == sorted(rows, key=lambda c: int(c[1:]))
     for r in data["rules"]:
         assert f"| {r['why']} |" in rows[r["code"]], r["code"]
-        assert rows[r["code"]].endswith(f"| {r['severity']} |"), r["code"]
+        assert rows[r["code"]].endswith(f"| {lint.SEVERITIES[r['severity']]} |"), r["code"]
 
 
 def test_the_json_carries_every_field():

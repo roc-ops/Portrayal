@@ -70,7 +70,7 @@ WARNINGS = []
 #
 # Each entry is (scope, rule, fix, why, severity).
 #
-# Scope is what the rule reads: a component contract, a device manifest, an
+# Scope is what the rule reads: a component contract, a device manifest, a
 # listing, any YAML file, or the library as a whole. L53 is listed because a
 # reader meets the code; it is enforced by devicelock.py rather than here.
 #
@@ -82,15 +82,21 @@ WARNINGS = []
 #
 # SEVERITY is what a finding does to the run, read off the err()/warn() calls
 # that raise the code, and a test reads them again and fails when the two
-# disagree. A warning passes the lint; an error fails it; `at verified` means a
+# disagree. A warning passes the lint; an error fails it; `at-verified` means a
 # device that claims `maturity: verified` gets an error where a device still
-# being drawn gets a warning.
+# being drawn gets a warning; `mixed` means some findings of the rule fail and
+# others only warn. The token is what lint-rules.json carries; the page shows
+# the sentence beside it.
 ERROR = "error"
 WARNING = "warning"
-AT_VERIFIED = "warning, error at verified"
-MIXED = "error or warning"
-MIXED_AT_VERIFIED = "error, or warning that is an error at verified"
-SEVERITIES = (ERROR, WARNING, AT_VERIFIED, MIXED, MIXED_AT_VERIFIED)
+AT_VERIFIED = "at-verified"
+MIXED = "mixed"
+MIXED_AT_VERIFIED = "mixed-at-verified"
+SEVERITIES = {ERROR: "error",
+              WARNING: "warning",
+              AT_VERIFIED: "warning, error at verified",
+              MIXED: "error or warning",
+              MIXED_AT_VERIFIED: "error, or warning that is an error at verified"}
 RULES = {
     "L0":  ("any yaml",   "the file parses as YAML", "fix the syntax the message points at; a `#` after a space inside an unquoted string starts a comment",
             "A file that does not parse cannot be drawn, exported or checked at all, so the fault is reported at its own line rather than as an unexplained failure further on.",
@@ -111,7 +117,7 @@ RULES = {
             "A placement that resolves to nothing, or two parts sharing one id in a view, leave a missing part or an ambiguous address in the drawing, and a rail kit placed like a module draws something no build contains.",
             ERROR),
     "L6":  ("device",     "a bay's default appears in its accepts list", "add the default to `accepts`, or change the default",
-            "A bay whose default it does not accept draws a module the vendor says does not fit there.",
+            "A bay whose default it does not accept draws a module the vendor says does not fit there, and a bay nothing ever fills draws as an empty frame in every drawing of the device.",
             MIXED),
     "L7":  ("device",     "region members reference existing instance ids", "name ids that exist in the same view",
             "A region framing an id that is not in its view frames nothing, so a reader sees a labelled block whose members the drawing cannot find.",
@@ -207,7 +213,7 @@ RULES = {
             "Without a role nothing reading the drawing can tell the bays the box exists for from the ones that keep it running, and a group with no members promises parts that are not there.",
             AT_VERIFIED),
     "L38": ("component",  "printed text in a skin sits in `<g id=\"silkscreen\">` unless the part is applied over the panel", "wrap the text nodes in the silkscreen group",
-            "Printing kept in its own layer keeps its paint order, so a legend is never drawn behind the surface it is printed on, and can be told apart from the metal by anything reading the skin.",
+            "Printing grouped as silkscreen is a layer of its own, so a drawing without the printing drops every legend and keeps the metal, and anything reading the skin can tell what is printed from what is cut.",
             ERROR),
     "L39": ("device",     "the panel's holes agree with what goes in them: no overlap, standard sizes, no legend on a hole, every port has one where cutouts are declared", "fix the cutout size/position, or the placement; one wrong `ref` shows as many overlaps",
             "A hole that disagrees with its part draws metal the hardware does not have, misleading anyone checking the drawing against the real panel.",
@@ -216,13 +222,13 @@ RULES = {
             "A cage's shape says which optics fit, not which ones work, so someone fitting an optic to a port would have nothing to go on.",
             WARNING),
     "L41": ("device",     "a bay or placement scoped to configurations names ones that exist, not all, not none", "fix `only-in`",
-            "A typo in `only-in` silently removes a bay or part from every configuration, and scoping to every configuration leaves the part out of one added later.",
+            "A typo in `only-in` drops a bay or part from the configuration it was meant for, and scoping to every configuration leaves the part out of one added later.",
             WARNING),
     "L42": ("device",     "a silkscreen mark says what it annotates, or `chassis` for printing about the whole unit", "add `for:`",
             "A legend with no owner cannot be checked for sitting beside its part or hidden by the module that covers it, and nothing reading the drawing can say what is printed next to a given port.",
             AT_VERIFIED),
     "L43": ("device",     "a front or rear view as wide as the rack face still has its ears in it, unless the device is a `rack-face` part, which is its ears, states `chassis.ears: behind` (or `ears: {behind: true}`), whose face is the part, or has a body as wide as the rack (a blanking plate, whose ears are built into the face)", "model the body between the ear folds; record the ear extent in provenance",
-            "A face drawn without its ears misstates the width of the unit, and a reader of the drawing loses the flanges that hold it in the rack.",
+            "The library draws the metal between the ear folds, and the ears are added from the chassis, so a face measured across the ears puts every port off by an ear's width and gives the rack a body wider than the opening it fits.",
             WARNING),
     "L44": ("device",     "panel decor agrees with the face: a patterned field is not buried under parts, printing does not run off the edge, no decor lies wholly off the face", "move or trim the decor",
             "Decor that is buried under parts, runs off the face, or lies wholly off it shows vents or printing the real panel does not have, and usually means something was mismeasured.",
@@ -243,7 +249,7 @@ RULES = {
             "Uneven spacing among same-size members of one group is nearly always a misreading, and drawn as found it puts modules where the hardware does not.",
             WARNING),
     "L50": ("component",  "printing inside a skin is legible at the size it is set", "raise the font size or drop the text",
-            "Text too small to read is printing the reader cannot see while the drawing claims it is there.",
+            "Printing that runs off the edge of the part, or is covered by something drawn after it, is printing the reader cannot see while the drawing claims it is there.",
             WARNING),
     "L51": ("component",  "a class has a power role in spec/schemas/power-roles.yaml", "add the class under `draw`, `supply` or `passive` in power-roles.yaml",
             "A class with no power role is never asked for a figure, so a power total quietly counts an unknown part as zero and presents a lower bound as the total.",
@@ -252,7 +258,7 @@ RULES = {
             "Vendor power figures vary with conditions, so a number with no source cannot be rechecked or tied to the row it came from.",
             WARNING),
     "L53": ("device",     "content changed without the version bump the change requires (see devicelock)", "bump `version`: patch for wording, minor for additions, major for geometry or ids",
-            "So a drawing someone has cached or imported never silently goes stale: a moved slot breaks a saved coordinate just as a renamed id breaks a saved reference.",
+            "Without it, a drawing someone has cached or imported goes stale without notice: a moved slot breaks a saved coordinate just as a renamed id breaks a saved reference.",
             AT_VERIFIED),
     "L54": ("device",     "a gap's scope names a group, view, configuration, id or attribute the device has", "fix the `scope`, or drop it",
             "A gap scoped to something renamed or never declared would be read as applying to a part of the device that does not exist.",
@@ -270,7 +276,7 @@ RULES = {
             "When the two points disagree, a cable drawn to the declared point and a module seated on the aperture's point end up in different places.",
             WARNING),
     "L59": ("device",     "SKUs live on configurations, not at the top level", "move `part-numbers` into the configuration they belong to",
-            "The DCIM export reads part numbers per configuration, so SKUs left at the top level are ignored and the device type exports under a name nobody can order.",
+            "The DCIM export reads part numbers per configuration, so SKUs left at the top level are ignored by it and are a second copy to go stale beside the ones it reads.",
             WARNING),
     "L60": ("device",     "a face that declares itself empty is actually bare", "remove the `empty:` or the content; not both",
             "A face declared empty counts as finished without drawing anything, so a stale claim would contradict the drawing and pass the face on false grounds.",
@@ -336,7 +342,7 @@ RULES = {
             "A fibre position nothing reaches cannot otherwise be told from a deliberate dead end, so a missed path would pass as a design choice.",
             ERROR),
     "L81": ("component",  "a composed pitch respects the standard the part conforms to - equal for a target, no narrower for a floor", "move a target onto the standard's pitch, widen a floor to at least it, or say in provenance why this part differs. Where the placements share an x, make their `rotate` agree so a rotated column can be told from a stacked pair",
-            "Connectors at a spacing other than the standard's draw a port array a mating plug or neighbouring module would not line up with, and leave the library holding two figures for one standard.",
+            "Connectors set closer than their standard allows, or off its fixed pitch, draw a port array a mating plug or neighbouring module would not line up with.",
             ERROR),
     "L82": ("component",  "a part names its plan drawing one way or the other, never both", "keep `plan:` or `faces.plan`, not both - they mean the same thing",
             "Two copies of one plan reference agree only until someone edits one and misses the other, and then every reader has to guess which copy counts.",
@@ -348,7 +354,7 @@ RULES = {
             "An endpoint qualified with a face the part does not declare resolves to nothing, and its fibre drops out of the map.",
             ERROR),
     "L85": ("component",  "only a face that is another side of the module draws fibres of its own", "move the connector onto the face that really carries it, or extend `faces.OPTICAL_FACES` if this direction genuinely is another side",
-            "A connector drawn on a face that is only another view of the same module would count one physical port as two endpoints, or drop a fibre from the count.",
+            "A connector drawn on a face that is only another view of the same module is left out of the fibre count, so a port the hardware has goes missing from the fibre map.",
             ERROR),
     "L86": ("component",  "a module composing a connector the enum spells two ways states its polish", "add `optical.polish: upc` or `apc`, and say in provenance where it came from",
             "Without a stated polish a module of LC or similar adapters has no port type a DCIM import can take, because the type is spelled UPC or APC.",
@@ -360,7 +366,7 @@ RULES = {
             "On a face with more than one row of connectors, numbering by position alone guesses the vendor's printed order, so DCIM front ports could be numbered differently from the silkscreen.",
             ERROR),
     "L89": ("library",    "every component major is reachable from a device, or says why it is not", "seat it in a device or in a seated part's bay, or add `unplaced:` saying what would seat it and what is missing",
-            "A part nothing seats would look in the catalogue exactly like one in use, so a reader could choose a part no device can hold.",
+            "A part nothing seats would look in the catalogue exactly like one in use, so a reader could choose a part no drawing has ever shown in place.",
             ERROR),
     "L90": ("device",     "a manifest's top-level keys read in the canonical order", "reorder them; the message prints the order, and docs/device-template.yaml is written in it",
             "Keys in one order across every manifest let a reviewer compare two devices line by line, and a contributor copying a neighbour copies the canonical layout rather than an accident.",
@@ -399,7 +405,7 @@ RULES = {
              "A successor that dangles, points back at the part, or crosses between kit and component sends anyone following it to nothing, round a loop, or to something that cannot replace what it supersedes.",
              ERROR),
     "L102": ("component, device", "a device's pluggable media, and a part's `rate` attr, each name a rate spec/schemas/pluggables.yaml actually carries; a part states its rung as `rate`, never as `media`", "fix the media/rate, move a rung from media to rate, or add the missing rate to the family in pluggables.yaml",
-             "A media or rate the pluggables registry does not carry gives a port an empty accept list, and a rate written as media offers the optic in every cage of its family, so a 10G cable appears in a 1G cage.",
+             "A media no pluggables family carries leaves its cage offering every optic of its shape with no rate limit, and a rate written as media offers the optic in every cage of its family, so a 10G cable appears in a 1G cage.",
              ERROR),
     "L103": ("library",    "a pluggable family's `interface` matches at least one component's `interface`", "model the cage, or leave the family as-is if the vocabulary needs it ahead of the metal (sfp-dd today)",
              "A pluggable family no component presents is vocabulary with no hardware behind it, so the registry and the library would drift apart unnoticed.",
@@ -408,7 +414,7 @@ RULES = {
              "A port whose declared media and drawn cage disagree would be offered optics of one family through an aperture shaped for another.",
              WARNING),
     "L105": ("component, device", "a placement's or part's `interfaces:` are held by a port the export files as a switch interface, named once in the view or component, and never the id of a placement, part, element or bay", "rename the colliding placement or interface - both are real and a DCIM needs a name for each - or move `interfaces:` onto the cage that presents them",
-             "A DCIM import would otherwise list one interface twice, give two real connectors the same name, or file a switch interface on a lamp, filler or console jack that has none.",
+             "A DCIM import would otherwise list one interface twice or give two real connectors the same name, and interfaces declared on a lamp, filler, console or timing jack are dropped from the export without a word.",
              ERROR),
     "L106": ("component",  "`interface-at` names a declared connection point, and a connection point's `on:` names a `relief.features[]` node that carries an `out`, or a `cyl` whose far end (`lift + cyl`) is its rear; a numeric `seat-out` is a number at or above 0, never beside `on:`, and only on the presented point (`interface-at`, default `mate`)", "fix the name, or give the feature the `out` (or `cyl`) a part seated on it stands off by; a point on the part's own face needs no `on:`; move a `seat-out` to the presented point; quote the key (`'on':`) - a bare `on` is YAML boolean true",
              "A seat point that names nothing falls back silently, so a plug or boot is drawn standing at the wrong depth, often inside the part it wraps, and nothing reports it.",
@@ -462,7 +468,7 @@ RULES = {
              "A wrong unit or a typo in a cable's diameter draws a cable stub as big as a fan, in the build and in the kit.",
              ERROR),
     "L124": ("library",    "under one NOS vendor, no two listings export the same DCIM model, and no alias is claimed by two listings unless each marks it `shared`", "give one listing a configuration `model` or its own SKU; drop the duplicate alias, or mark it `shared: true` in every claimant with a `note`",
-             "Two listings exporting the same DCIM model write one device type file twice and quietly keep only the second, and a shared name sends a lookup to an arbitrary box.",
+             "Two listings exporting the same DCIM model would write one device type file twice, which stops the export, and a shared name sends a lookup to an arbitrary box.",
              ERROR),
     "L123": ("library",    "one module, one bay size - every bay that accepts a module, in any device or carrier, reserves the same size for it, to within a millimetre", "reserve one figure everywhere - the module's own `insert` or `size`; a difference that is real stays in the baseline, with the reason in the provenance of the chassis that reserves more (the warning is filed on the module, so a chassis `lint.waive` cannot clear it)",
              "A module is the same metal in every chassis, so two bays reserving different sizes for it show the card not fitting its slot in one of them.",
@@ -507,13 +513,13 @@ RULES = {
              "The picture and the data have to agree: a pass-through declared as brushed shows a brush, and a brush drawn on the face really is a pass-through's cover.",
              ERROR),
     "L138": ("component, device", "a guide fits what declares it - a ring's opening inside the part, seen along its run (its size, and its relief or `size.d` out of the face), and a duct inside its view, with a finger gap less than the finger pitch", "measure the clear opening, not the outside of the loop; give the part the relief that holds the opening; move the duct onto its face, or re-read the pitch and the gap off the drawing",
-             "Cable routing reads a guide's opening and fingers, so an opening bigger than its loop, a duct off its face, or fingers with no width would route cables through space that does not exist.",
+             "Cable routing reads a guide's opening, so an opening bigger than its loop or a duct off its face would route cables through space that does not exist, and fingers with no width describe a duct that cannot be built.",
              ERROR),
     "L139": ("lab",        "every placement's `ref` is a library device (and its `cfg` one of that device's configurations), every placement id is unique, and every `on` names another placement in the lab (error)", "name the device by its `name`, e.g. `fhd-1ufce`; give each placement its own id; point `on` at the id of the placement the part sits on",
              "A lab that names a device or configuration the library does not have, reuses an id, or hangs a part on a placement that is not there cannot be resolved into a rack, so it cannot be drawn or published at all.",
              ERROR),
     "L140": ("lab",        "`on` and `unit` appear only on a device whose `chassis.mount` is `rack-face`, and `face` only on a `rack-face` or `rack-side` part; a rack-face device is placed by `on` or by `ru`, not both, and a rack device by `ru` (error)", "drop the key from a rack device; give a rack-face part either `on` (and `unit`) or `ru`",
-             "Host and face keys on the wrong kind of mount, or a rack-face part given both a host and a rack unit, leave its position ambiguous, so the rack view could draw it in either place.",
+             "A rack-face part with no host and no rack unit, or a rack device with no rack unit, has no position to draw, and one given both a host and a rack unit, or host keys on the wrong kind of mount, could be drawn in either place.",
              ERROR),
     "L141": ("lab",        "a rack-face part's host is a `rack` device, and `unit` is within the host's height, 1 to its `chassis.ru` (error)", "put the part `on` the rack device behind it; count `unit` from 1 at the host's bottom unit",
              "A cable manager or lacer bar hung on something that is not a rack device, or on a unit its host does not have, would be drawn floating where nothing holds it.",
@@ -525,10 +531,10 @@ RULES = {
              "A rack-face part pinned to a rack unit rather than to the device behind it stays put when that device moves, and ends up over the wrong equipment.",
              WARNING),
     "L144": ("device",     "members of one group that one configuration draws on one face hold one `rel-pos` each; alternatives (variant views, `only-in` builds) may share one (warning)", "give each member its own position, or move the unlike members - ESD jacks among earthing studs, lane lamps among port lamps - to a group of their own",
-             "Two members of a group at one position leave its numbering ambiguous: the tree, the DCIM export and an ENTITY-MIB walk cannot tell which member comes first.",
+             "Two members of a group at one position leave its numbering ambiguous, so the tree and an ENTITY-MIB walk cannot tell which member comes first.",
              WARNING),
     "L145": ("device",     "a group is not named only for the class of its members - `ports` names no port family (warning)", "name the group for the family it holds (`sfp28`, `rj45-1g`), or a mixed block for the job it does and say so in `mixed:`",
-             "A group named only `ports` says nothing about which port family it holds, so a reader or an exporter cannot tell what kind of ports are in it.",
+             "A group named only `ports` says nothing about which port family it holds, so a reader cannot tell what kind of ports are in it.",
              WARNING),
     "L146": ("device",     "an occupant's `turn` is one its host allows - the host's interface `turns` in connectors.yaml, narrowed by its presented point's own (an error; the build refuses it too)", "choose one of the listed turns, or drop `turn:` to take the default the build computes; a barrier block's terminal screw allows 0 alone",
              "A plug or lug seated at a turn its socket does not allow would be drawn in an orientation the hardware cannot take, and the build refuses to seat it.",
@@ -573,7 +579,7 @@ RULES = {
              "An accessory ref that points at nothing, or at another kit, leaves a cable arm or bar the kit promises and cannot draw.",
              ERROR),
     "L160": ("device",     "at most one of a device's `chassis.ears.positions` is the `default` (error)", "keep `default: true` on the position the device ships in, from the installation guide, and drop it from the rest",
-             "A device ships in one ear position and the rack builder starts from the default, so two defaults leave it no single position to start from.",
+             "A device ships in one ear position and the drawing sets the ears at the default, taking the first one it finds, so a second default is silently ignored.",
              ERROR),
     "L161": ("device",     "every `chassis.kits[].ref` resolves to a `kind: kit` in the library, and no kit is listed twice (error)", "fix the ref (namespace/name@major), or write the kit's contract; a component that is not a kit is placed, not listed here",
              "A mounting kit that points at nothing, or at a part that is not a kit, cannot be offered, and a kit listed twice makes an ear position that names it ambiguous.",
@@ -591,10 +597,10 @@ RULES = {
              "Two identical ear positions are one position written twice, and anything offering the positions would offer it twice.",
              WARNING),
     "L166": ("device",     "a rack PDU states `attrs.management.metering-scope` and `outlet-switching` together (error); with `outlet-switching: true` every power outlet declares the `[on, off]` states (warning), and without it none declares any (error)", "state both keys, from the vendor's topology table; declare `states: [on, off]` on the outlets group of a switched PDU, and none on an unswitched one",
-             "A PDU's published class is derived from its metering and switching together, so half of the pair publishes a capability that is not there, and on/off states on an unswitched PDU offer a switch the hardware does not have.",
+             "A PDU's class is derived from its metering and switching together, so stating only one publishes no class at all, and on/off states on an unswitched PDU offer a switch the hardware does not have.",
              MIXED),
     "L167": ("device",     "a rack PDU's `attrs.power.input-plug` is the `dcim_export.PART_POWER` slug of the input its outlets are `fed-by`, and `input-wiring` is stated exactly when `input-phase` is `three` (error)", "write the plug as the slug the input part exports, with the cord in `input-cord` and the provenance; state `wye` or `delta` on a three-phase input only",
-             "An input plug that differs from the power port the outlets are fed by sends two different plugs into a DCIM, and a three-phase input without its wye or delta wiring leaves each outlet's feed leg unknown.",
+             "An input plug that differs from the power port the outlets are fed by gives the device two answers for its plug, and a three-phase input without its wye or delta wiring leaves each outlet's feed leg unknown.",
              ERROR),
     "L168": ("device",     "a device of the `power` profile that states `input-voltage-v` does not also state `input-voltage` (warning)", "move the voltage prose into `input-ac` and keep the number in `input-voltage-v`",
              "Stating the voltage in two keys writes one fact twice, and the two copies can disagree.",
@@ -634,7 +640,7 @@ def rules_text(markdown=False):
         for c in order:
             scope, rule, fix, why, severity = RULES[c]
             out.append(f"{c:<4} {scope:<18} {rule}\n     why: {why}\n     fix: {fix}\n"
-                       f"     severity: {severity}")
+                       f"     severity: {SEVERITIES[severity]}")
         out += [f"{c:<4} {'retired':<18} {RETIRED[c]}\n     fix: drop any waiver that names it"
                 for c in retired]
         return "\n".join(out)
@@ -652,7 +658,7 @@ def rules_text(markdown=False):
              "|---|---|---|---|---|---|"]
     for c in order:
         scope, rule, fix, why, severity = RULES[c]
-        lines.append(f"| {c} | {scope} | {rule} | {why} | {fix} | {severity} |")
+        lines.append(f"| {c} | {scope} | {rule} | {why} | {fix} | {SEVERITIES[severity]} |")
     for c in retired:
         lines.append(f"| {c} | retired | {RETIRED[c]} | | drop any waiver that names it | |")
     return "\n".join(lines) + "\n"
