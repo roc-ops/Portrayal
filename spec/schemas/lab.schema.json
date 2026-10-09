@@ -75,7 +75,7 @@
         "ref"
       ],
       "additionalProperties": false,
-      "description": "ONE DEVICE IN THE RACK. A `rack` device is placed by `ru`. A `rack-face` part - one that bolts to the rail face over a rack unit it shares, docs/cable-managers-design.md section 6 - is placed on a host (`on`, with `unit`) or at a rack unit (`ru`), never both, and says which `face`; one narrower than the rack opening may say which `side` of it. A `rack-side` part - one that stands beside the rack on the side of an upright, docs/vertical-cable-managers-design.md section 3.5 - says which `side`, and is placed by `ru`, its bottom unit (default 1), on a `face`. `on` and `unit` are for rack-face parts only, `face` for rack-face and rack-side parts (L140, L153).",
+      "description": "ONE DEVICE IN THE RACK. A `rack` device is placed by `ru`. A `rack-face` part - one that bolts to the rail face over a rack unit it shares - is placed on a host (`on`, with `unit`) or at a rack unit (`ru`), never both, and says which `face`; one narrower than the rack opening may say which `side` of it. A `rack-side` part - one that stands beside the rack on the side of an upright - says which `side`, and is placed by `ru`, its bottom unit (default 1), on a `face`. `on` and `unit` are for rack-face parts only, `face` for rack-face and rack-side parts (L140, L153).",
       "properties": {
         "id": {
           "type": "string",
@@ -114,7 +114,7 @@
             "right-front",
             "right-rear"
           ],
-          "description": "which side of the rack, seen from the front. A `rack-side` part states it as the kit's attachment point it hangs at: `left` or `right` on a two-post frame, `left-front`, `left-rear`, `right-front` or `right-rear` on a four-post one (L153). The names alone decide: two parts at `left-front` and `left-rear` never meet, two at `left` contend for it, and one side may not mix `left` with a four-post name (L154). labs.json publishes the name as written. A `rack-face` part narrower than the rack opening may state `left` or `right` only: the rail it bolts to, so that one on each rail shares a rack unit and a face (L142, L153). Omitted on a rack-face part means it takes the whole unit on its face. roc-ops/Portrayal#934, docs/pdu-model-design.md section 6.4"
+          "description": "which side of the rack, seen from the front. A `rack-side` part states it as the kit's attachment point it hangs at: `left` or `right` on a two-post frame, `left-front`, `left-rear`, `right-front` or `right-rear` on a four-post one (L153). The names alone decide: two parts at `left-front` and `left-rear` never meet, two at `left` contend for it, and one side may not mix `left` with a four-post name (L154). labs.json publishes the name as written. A `rack-face` part narrower than the rack opening may state `left` or `right` only: the rail it bolts to, so that one on each rail shares a rack unit and a face (L142, L153). Omitted on a rack-face part means it takes the whole unit on its face."
         },
         "on": {
           "type": "string",

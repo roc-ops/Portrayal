@@ -28,7 +28,7 @@
     "version": {
       "type": "string",
       "pattern": "^\\d+\\.\\d+\\.\\d+$",
-      "description": "semver, held to devicelock like a device's: a changed interface name, model or part number is what a DCIM import keys on, so it is major; a new configuration override is minor; wording is a patch"
+      "description": "semver, checked against its own lock, as a device's version is: a changed interface name, model or part number is what a DCIM import keys on, so it is major; a new configuration override is minor; wording is a patch"
     },
     "model": {
       "type": "string",
@@ -129,7 +129,7 @@
             "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
           },
           "reason": {
-            "description": "why it is missing, because that decides who can close it. `sources-disagree` is the one that is NOT an absence: two documents we hold state different values for one fact, and picking the bigger number and saying nothing loses a real finding. It is the normal case rather than the exceptional one - the AGR400's datasheet says 527 W max where its own QSG says 638 W at 25 C, and the C100G guide gives the fan assemblies 100 W each in prose and 330 W for the three of them in Table A-2. The `note` carries both figures with their sources",
+            "description": "why it is missing, because that decides who can close it. `sources-disagree` is the one that is NOT an absence: two documents we hold state different values for one fact. It is common rather than exceptional - a datasheet's maximum power and the same product's quick-start guide, or a figure in a guide's prose and another in its table - and picking the bigger number and saying nothing loses a real finding. The `note` carries both figures with their sources",
             "enum": [
               "vendor-silent",
               "sources-disagree",
