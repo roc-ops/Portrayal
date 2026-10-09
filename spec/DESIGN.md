@@ -223,9 +223,9 @@ in the descriptions because they are history, not definition.
 - **The datasheet's `archive` field was removed (#274).** It was in the schema
   from the start, no entry used it, no tool read it and no document said what
   it was for: a field nobody knew the rule for. At the time `url` was absent on
-  43 of 96 document entries, all of them read behind a login or received
-  directly, and every one of the 37 hashes resolved to a held file - the rule
-  `sha256` now states.
+  43 of 96 document entries, which is not a defect: documents read behind a
+  login or received directly have none. Every one of the 37 hashes resolved to
+  a held file - the rule `sha256` now states.
 - **Provenance entries are objects.** L15 (`verified` means no dimension may be
   estimated) was implemented as `str(value).startswith("estimated")` against a
   corpus where 42 entries opened with the word and 80 more said it somewhere in

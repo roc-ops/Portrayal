@@ -37,8 +37,12 @@ SHAPE = pathlib.Path(__file__).resolve().parent / "fixtures/schema-shape.json"
 NAMES = ("component", "device", "lab", "listing", "marks", "rack")
 
 # The forms a description may not use. `#\d+\b` is an issue number; a hex
-# colour (`#c8cacc`, `#22262a`) has a letter in it and is not matched.
-CITES = re.compile(r"\.md\b|\bspec/|\bdocs/|\bsections? \d|\bsteps? \d|(?<!&)#\d+\b", re.I)
+# colour (`#c8cacc`, `#22262a`) has a letter in it and is not matched. `§`
+# only before a number: "datasheet §Physical" names a vendor's own heading.
+CITES = re.compile(
+    r"\.md\b|\bspec/|\bdocs/|\bsections? \d|\bsteps? \d|(?<!&)#\d+\b|§\s*\d"
+    r"|\bissues? #?\d|\bPRs? #?\d|\bpull requests? #?\d|\bGH-\d"
+    r"|github\.com/[^\s]*/(?:issues|pull)/", re.I)
 
 
 def _strip(node):
@@ -122,7 +126,10 @@ def test_no_description_cites_the_repository():
 @pytest.mark.parametrize("text", [
     "see docs/pdu-model-design.md", "spec/DESIGN.md carries it", "README.md",
     "spec/tools/portrayal/bevel.py builds it", "section 4.2", "sections 4.2 and 5",
-    "CONTRIBUTING step 5", "(#865)", "roc-ops/Portrayal#934", "Section 9"])
+    "CONTRIBUTING step 5", "(#865)", "roc-ops/Portrayal#934", "Section 9",
+    "DESIGN §9", "§ 4.2", "issue 274", "issue #274", "issues 271", "PR 893", "PR #893",
+    "pull request 896", "GH-951", "https://github.com/roc-ops/Portrayal/issues/951",
+    "github.com/roc-ops/Portrayal/pull/896"])
 def test_each_citation_form_is_caught(text):
     assert CITES.search(text), text
 
@@ -130,7 +137,8 @@ def test_each_citation_form_is_caught(text):
 @pytest.mark.parametrize("text", [
     "silver (#c8cacc)", "defaulting to #22262a", "lint L53 fails", "Table 11's x8",
     "TE 114-40010 Figure 3", "the cross-section", "steps down", "a markdown file",
-    "&#160;"])
+    "&#160;", "datasheet §Physical", "an open issue", "the PR body", "a pull request",
+    "github.com/roc-ops/Portrayal"])
 def test_ordinary_prose_is_not_caught(text):
     assert not CITES.search(text), text
 

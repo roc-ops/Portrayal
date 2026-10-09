@@ -549,7 +549,7 @@
   "unplaced": {
    "type": "string",
    "minLength": 40,
-   "description": "WHY NOTHING SEATS THIS PART. A component nothing references is either work in progress or dead weight, and from the outside the two look identical. Saying which, here, is what lets L89 fail on a part that says neither. The sentence is for a reader who has just found the part and is deciding whether to use it, extend it or delete it: say what would seat it and what is missing, and name the issue if the work is tracked. Not a waiver and not a silence - a part that IS seated must not carry this."
+   "description": "WHY NOTHING SEATS THIS PART. A component nothing references is either work in progress or dead weight, and from the outside the two look identical. Saying which, here, is what lets L89 fail on an unreferenced part that carries no `unplaced`. The sentence is for a reader who has just found the part and is deciding whether to use it, extend it or delete it: say what would seat it and what is missing, and name the issue if the work is tracked. Not a waiver and not a silence - a part that IS seated must not carry this."
   },
   "superseded-by": {
    "type": "string",
@@ -762,7 +762,7 @@
   },
   "groups": {
    "type": "object",
-   "description": "THE PORT GROUPS OF THIS COMPONENT, declared once, in the same shape as a device's `groups:` (term, role, index-origin, mixed, attrs, states, description; the same shape as a device's group, held equal to it). A part joins one with `group:`. Names are LOCAL to the component: `mgmt` on a routing engine and `mgmt` on the chassis it seats in are different groups, and a device never overrides a card's. When the card is drawn inside a device - at any depth, a device bay's module or a module in a nested bay - every grouped part carries exactly what a device placement in that group carries (`data-group`, `data-group-role`, the group's attrs and description; the part's own attrs win), and a cage in the group publishes the same map as its `occupant-attrs`. Lint L17, L22, L23 and L37 read these as they read a device's, as warnings",
+   "description": "THE PORT GROUPS OF THIS COMPONENT, declared once, in the same shape as a device's `groups:` (term, role, index-origin, mixed, attrs, states, description; held equal to it by a test). A part joins one with `group:`. Names are LOCAL to the component: `mgmt` on a routing engine and `mgmt` on the chassis it seats in are different groups, and a device never overrides a card's. When the card is drawn inside a device - at any depth, a device bay's module or a module in a nested bay - every grouped part carries exactly what a device placement in that group carries (`data-group`, `data-group-role`, the group's attrs and description; the part's own attrs win), and a cage in the group publishes the same map as its `occupant-attrs`. Lint L17, L22, L23 and L37 read these as they read a device's, as warnings",
    "propertyNames": {
     "$ref": "#/$defs/segment"
    },

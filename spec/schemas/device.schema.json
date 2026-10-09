@@ -29,7 +29,7 @@
   "version": {
    "type": "string",
    "pattern": "^\\d+\\.\\d+\\.\\d+$",
-   "description": "Semver. The bump a change needs is set by the device's lock (`device.lock.json` beside the manifest), which fingerprints shape, names, surface and gaps: a surface-only change is a patch; ids added with nothing moved or removed is a minor; any other change to shape or names is a major, because a moved slot invalidates a cached coordinate as a renamed id invalidates a held reference. Check the bump against the lock before regenerating the lock, or the change it would have reported is lost. Lint L53 fails when content changed and the version did not."
+   "description": "Semver. The bump a change needs is set by the device's lock (`device.lock.json` beside the manifest), which fingerprints shape, names, surface and gaps: a surface-only change is a patch; ids added with nothing moved or removed is a minor; any other change to shape or names is a major, because a moved slot invalidates a cached coordinate as a renamed id invalidates a held reference. Check the bump against the lock before regenerating the lock, or the change it would have reported is lost. Lint L53 reports content that changed when the version did not: a warning while the device is `draft` or `modelled`, an error once it is `verified`."
   },
   "maturity": {
    "enum": [
@@ -110,7 +110,7 @@
       },
     "sha256": {
        "type": "string",
-       "description": "SHA-256 of the file AS HELD IN THE LOCAL CORPUS. Present exactly when the document is held locally, absent when it was read but is not held, which is what makes a hash checkable rather than decorative. A hash for a document nobody holds is a claim nobody can test, so do not add one from a vendor page."
+       "description": "SHA-256 of the copy of the file the project holds. Present exactly when the project holds a copy, absent when the document was read but not kept, which is what makes a hash checkable rather than decorative. A hash for a document nobody holds is a claim nobody can test, so do not add one from a vendor page."
       }
    }
   },
@@ -131,7 +131,7 @@
      },
      "sha256": {
       "type": "string",
-      "description": "SHA-256 of the file AS HELD IN THE LOCAL CORPUS. Present exactly when the document is held locally, absent when it was read but is not held, which is what makes a hash checkable rather than decorative. A hash for a document nobody holds is a claim nobody can test, so do not add one from a vendor page."
+      "description": "SHA-256 of the copy of the file the project holds. Present exactly when the project holds a copy, absent when the document was read but not kept, which is what makes a hash checkable rather than decorative. A hash for a document nobody holds is a claim nobody can test, so do not add one from a vendor page."
      }
     }
    }
@@ -373,7 +373,7 @@
         "branch",
         "outlet"
        ],
-       "description": "A RACK PDU'S METERING, the finest level it meters: `none`, `input`, `branch` (each breaker or bank, and the input) or `outlet` (each outlet, each branch and the input). Every vendor in scope meters each level above the one named, so one word carries three columns. Stated with `outlet-switching`, never alone (lint L166); the two derive the published class (`pdu-class` in configs.json and devices.json), which is never stated."
+       "description": "A RACK PDU'S METERING, the finest level it meters: `none`, `input`, `branch` (each breaker or bank, and the input) or `outlet` (each outlet, each branch and the input). Each level includes every level above it, so one word carries three columns. Stated with `outlet-switching`, never alone (lint L166); the two derive the published class (`pdu-class` in configs.json and devices.json), which is never stated."
       },
       "outlet-switching": {
        "type": "boolean",
@@ -519,7 +519,7 @@
         "h": {
          "type": "number",
          "exclusiveMinimum": 0,
-         "description": "millimetres, the height the ears span, when it is not the chassis height (a 13U box with 10U ears). The device still occupies its `ru`. Absent, the ears run from `y` to the top of the chassis. The generic L-bracket ear is drawn this tall; lint L164 fails when `y + h` reaches above the chassis."
+         "description": "millimetres, the height the ears span, when it is not the chassis height (a 13U box with 10U ears). The device still occupies its `ru`. Absent, the ears run from `y` to the top of the chassis. The generic L-bracket ear is drawn this tall; lint L164 warns when `y + h` reaches above the chassis."
         },
         "y": {
          "type": "number",
@@ -700,7 +700,7 @@
   },
   "configurations": {
    "type": "object",
-   "description": "renderable variants: bay population, skin choices, airflow/region context. EACH ONE SAYS WHAT KIND OF THING IT IS (`kind`), so a consumer can tell an orderable SKU from an illustration, and only an orderable one exports as a DCIM device type.",
+   "description": "renderable variants: bay population, skin choices, airflow/region context. EACH ONE SAYS WHAT KIND OF THING IT IS (`kind`), so a consumer can tell an orderable SKU from an illustration, and an illustration (`example`) never exports as a DCIM device type.",
    "propertyNames": {
     "$ref": "#/$defs/segment"
    },
@@ -948,7 +948,7 @@
      "empty": {
       "type": "string",
       "minLength": 40,
-      "description": "this face was LOOKED FOR AND IS NOT DOCUMENTED, and this says where you looked. Without it a face with nothing on it is indistinguishable from a face nobody got to, and the capability check counts it as unfinished. Prose rather than a boolean, and long enough that a bare `empty: yes` will not validate, because the claim being made is about a search rather than about the drawing. A view declaring this must actually be bare (L60); if a source turns up, the sentence goes and the feature is drawn."
+      "description": "this face was LOOKED FOR AND IS NOT DOCUMENTED, and this says where you looked. Without it a face with nothing on it is indistinguishable from a face nobody got to, so the capability check counts it as unfinished and the only way to pass would be to draw something - which on an undocumented face means inventing it. Prose rather than a boolean, and long enough that a bare `empty: yes` will not validate, because the claim being made is about a search rather than about the drawing. A view declaring this must actually be bare (L60); if a source turns up, the sentence goes and the feature is drawn."
      },
      "size": {
       "type": "object",
@@ -1618,11 +1618,11 @@
           },
           "fed-by": {
            "$ref": "#/$defs/segment",
-           "description": "THE POWER INPUT THIS OUTPUT HANDS ON, for a power outlet on a distribution panel: the id of a placement on this device, in any view, whose part exports a power port. The DCIM export writes it as the outlet's `power_port`, which both NetBox and Nautobot import by name within the same device type. Stated on each placement and never inferred from an `-a`/`-b` in a name. Lint L132 fails when it does not resolve, and L134 when an outlet states none. Stating one is a minor version; changing one re-files an imported outlet's feed and is a major."
+           "description": "THE POWER INPUT THIS OUTPUT HANDS ON, for a power outlet on a distribution panel: the id of a placement on this device, in any view, whose part exports a power port. The DCIM export writes it as the outlet's `power_port`, which both NetBox and Nautobot import by name within the same device type. Stated on each placement and never inferred from an `-a`/`-b` in a name. Lint L132 fails when it does not resolve. L134 reports an outlet that states none: a warning at `draft` and `modelled`, an error at `verified`. Stating one is a minor version; changing one re-files an imported outlet's feed and is a major."
           },
           "through": {
            "$ref": "#/$defs/segment",
-           "description": "THE POSITION THIS CIRCUIT RUNS THROUGH: the id of a bay on this device, in any view, whose occupant protects it - a breaker or fuse position - OR of a placement of a part of class `breaker`, a breaker fixed to the unit (a rack PDU's branch breaker). It crosses a face (the output is on the rear, the breaker on the front), which `for:` cannot say: `for:` is a UI binding emitted as data-for that waives L13's overlap check, and these two are not near each other. The DCIM export writes it as a sentence on the outlet's description, and on a bay's, because neither target relates an outlet to a module bay; an outlet through a fixed breaker takes that breaker's `lines`. Optional; a panel with fixed, unprotected outputs has none. Stating one is a minor version, changing one a major. Lint L133 fails when it does not resolve, and L135 when one bay position protects more than one circuit; a fixed PDU breaker feeds many outlets by design, so L135 reads bays only."
+           "description": "THE POSITION THIS CIRCUIT RUNS THROUGH: the id of a bay on this device, in any view, whose occupant protects it - a breaker or fuse position - OR of a placement of a part of class `breaker`, a breaker fixed to the unit (a rack PDU's branch breaker). It crosses a face (the output is on the rear, the breaker on the front), which `for:` cannot say: `for:` is a UI binding emitted as data-for that waives L13's overlap check, and these two are not near each other. The DCIM export writes it as a sentence on the outlet's description, and on a bay's, because neither target relates an outlet to a module bay; an outlet through a fixed breaker takes that breaker's `lines`. Optional; a panel with fixed, unprotected outputs has none. Stating one is a minor version, changing one a major. Lint L133 fails when it does not resolve. L135 warns when one bay position protects more than one circuit; a fixed PDU breaker feeds many outlets by design, so L135 reads bays only."
           },
           "lines": {
            "type": "array",
