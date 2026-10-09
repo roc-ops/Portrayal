@@ -274,12 +274,22 @@ def test_card_and_device_agree_on_every_usb_console():
     assert 0 < consoles < len(cases), "both answers must occur, or this proves nothing"
 
 
-def test_commscope_cx3003c_exports_its_micro_usb_console():
+def test_commscope_ps3248n_exports_its_micro_usb_console():
     """PINNED BEFORE AND AFTER on a real card. Before: no console-ports at all,
-    because the CX3003C's role-console micro-USB jack matched no route_part
-    branch. After: the one console its faceplate carries."""
-    doc = dx.build_module(_library_card("commscope", "cx3003c", 1), "CommScope")
+    because the PS3248N's role-console micro-USB craft port matched no
+    route_part branch. After: the one console its faceplate carries."""
+    doc = dx.build_module(_library_card("commscope", "ps3248n", 1), "CommScope")
     assert doc["console-ports"] == [{"name": "usb", "type": "usb-micro-b"}]
+
+
+@pytest.mark.parametrize("name", ["cx3003c", "cx3033n"])
+def test_a_factory_use_micro_usb_exports_no_console(name):
+    """The CX3003C and CX3033N datasheets reserve their RS-232 and micro-USB
+    for factory use, so neither is a console a DCIM should offer - the
+    micro-USB exports nothing, as the RS-232 element beside it does not."""
+    doc = dx.build_module(_library_card("commscope", name, 1), "CommScope")
+    assert "console-ports" not in doc, doc["console-ports"]
+    assert doc.get("interfaces"), "the card must still export its Ethernet ports"
 
 
 def test_cisco_rsp_usb_storage_port_is_not_a_console():

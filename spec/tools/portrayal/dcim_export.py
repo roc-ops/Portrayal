@@ -448,10 +448,12 @@ PART_CONSOLE = {"std/rj45-ganged": "rj-45", "common/rj45-shielded": "rj-45"}
 # every USB-A part on a card as a `usb-a` console port without reading its role:
 # the ASR 9000 RSP and RP storage ports, the Juniper RE service ports and the
 # Dell rear I/O board's USB all exported as consoles. And a card had no
-# micro-USB or USB-C console path at all, so the ten CommScope CH3000 modules'
-# role-console micro-USB jacks exported nothing. A device placement has asked
+# micro-USB or USB-C console path at all, so the CommScope CH3000 modules'
+# micro-USB craft consoles exported nothing. A device placement has asked
 # device_console_row since #384; route_part now asks the same function for
-# these refs, so the two paths cannot disagree about what a USB console is.
+# these refs, so the two paths cannot disagree about what a USB console is:
+# a USB-A or USB-C jack needs `role: console` exactly, and a micro-USB one is a
+# console when its id, role or function says `console` (DB9_CONSOLE).
 USB_CONSOLE_REFS = {"std/usb-a", "std/usb-c", "std/micro-usb"}
 
 # The RJ45 family (sweep_rj45.py / docs/rj45-family-design.md), keyed
@@ -840,7 +842,8 @@ PART_RF = {
     # `common/rj45-ganged-eth` composes `std/rj45-ganged`, which PART_CONSOLE
     # calls a console, and inheriting that would file every Ethernet jack in the
     # library as a console port - #27 and #29, for a third time. `common/usb-a`
-    # composes a console and is a storage port. `casa/c40g-ac-inlet-panel`
+    # composed what was then a console row and is a storage port (a USB jack is
+    # now a console only when its placement says so). `casa/c40g-ac-inlet-panel`
     # composes FOUR inlets and would inherit one.
     "common/smb-jack": ("other", "SMB"),
     "common/sma-jack": ("other", "SMA"),
