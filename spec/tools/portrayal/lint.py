@@ -54,7 +54,8 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L42 device: a silkscreen mark says what it annotates - a part, or `chassis`
       for printing about the whole unit
   L43 device: a front or rear view as wide as the 19-inch rack face still has
-      its mounting ears in it; the modelled body is the metal between the folds
+      its mounting ears in it; the modelled body is the metal between the folds,
+      unless the body itself is that wide (a plate whose ears are built in)
   L44 device: panel decor agrees with what is on the face - a patterned field is
       not buried under the parts, printing does not run off the edge, and no decor
       lies wholly off the face where it is clipped and never drawn
@@ -129,6 +130,7 @@ from portrayal import libwalk
 from portrayal import capability
 from portrayal import dcim_export
 from portrayal import devicelock
+from portrayal import ears as ears_mod
 from portrayal import manifest as _manifest
 from portrayal import optical
 from portrayal import optical_ports
@@ -210,7 +212,7 @@ RULES = {
     "L40": ("device",     "a pluggable cage says which optics run in it, and optics prose names a group that exists", "add the group's optics attrs, or fix the group name in the prose"),
     "L41": ("device",     "a bay or placement scoped to configurations names ones that exist, not all, not none", "fix `only-in`"),
     "L42": ("device",     "a silkscreen mark says what it annotates, or `chassis` for printing about the whole unit", "add `for:`"),
-    "L43": ("device",     "a front or rear view as wide as the rack face still has its ears in it, unless the device is a `rack-face` part, which is its ears, or states `chassis.ears: behind` (or `ears: {behind: true}`), whose face is the part", "model the body between the ear folds; record the ear extent in provenance"),
+    "L43": ("device",     "a front or rear view as wide as the rack face still has its ears in it, unless the device is a `rack-face` part, which is its ears, states `chassis.ears: behind` (or `ears: {behind: true}`), whose face is the part, or has a body as wide as the rack (a blanking plate, whose ears are built into the face)", "model the body between the ear folds; record the ear extent in provenance"),
     "L44": ("device",     "panel decor agrees with the face: a patterned field is not buried under parts, printing does not run off the edge, no decor lies wholly off the face", "move or trim the decor"),
     "L45": ("device",     "a view at `modelled` draws something or declares itself empty", "add content, or an `empty:` sentence of 40+ characters saying where you looked"),
     "L46": ("component",  "composed parts do not collide inside the part", "move a part, or say in provenance that the layering is deliberate"),
@@ -5576,6 +5578,16 @@ def lint_device_rack_ears(path, data):
     # `{behind: true}` IS THE SAME STATEMENT, the object spelling #906 added
     # beside positions; configs.json publishes the bare string that way.
     if ears_behind(data):
+        return
+    # THE FRONT IS THE WHOLE PLATE (the owner's rule of 2026-10-09: ears built
+    # into the face are part of the face). A blanking panel has no body between
+    # ear folds - it is one plate, 482.6 mm across, with its mounting slots or
+    # clips at the ends - so its chassis is as wide as the rack and there is no
+    # narrower body to have drawn instead. The test is the generic ear's own
+    # (ears.EAR_WIDE: a face that wide already has its ears in the drawing),
+    # applied to the BODY, so the two can never disagree and a 430 mm body drawn
+    # with a 482.6 mm front and nothing in its ears still warns.
+    if float((data.get("chassis") or {}).get("width") or 0) >= ears_mod.EAR_WIDE:
         return
     for vname, view in (data.get("views") or {}).items():
         if vname not in ("front", "rear"):
