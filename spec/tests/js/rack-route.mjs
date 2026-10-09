@@ -162,7 +162,7 @@ test('two ends beside one duct manager run in the duct, with no lane (#949)', ()
   assert.deepEqual(route, [{item: 'i2', via: 'duct'}]);
 });
 
-test('two ends on one ring manager run through the rings between them, in order from end a (#949)', () => {
+test('two ends on one ring manager run through the rings between them, in order from end a, else the nearest (#949)', () => {
   let r = add(M.newRack(), 'sw', 20);
   r = add(r, 'fhd-cmp5dr', 20, {on: 'i1', unit: 1});
   r = add(r, 'pp', 21);
@@ -170,9 +170,15 @@ test('two ends on one ring manager run through the rings between them, in order 
   // a at 150 on the panel above, b at -150 on the switch: rings 4, 3 and 2, leftward
   assert.deepEqual(R.autoRoute(r, c, ctxFor(r, {'i1|p': -150, 'i3|q': 150})),
     [{item: 'i2', via: 'guide-4'}, {item: 'i2', via: 'guide-3'}, {item: 'i2', via: 'guide-2'}]);
-  // a ring at a port's own x is between; one just past either port is not
+  // a ring at a port's own x is between
   assert.deepEqual(R.autoRoute(r, c, ctxFor(r, {'i1|p': 0, 'i3|q': 110})), [{item: 'i2', via: 'guide-4'}, {item: 'i2', via: 'guide-3'}]);
-  assert.deepEqual(R.autoRoute(r, c, ctxFor(r, {'i1|p': 1, 'i3|q': 109})), []);
+  // no ring between (1 to 109): never direct, but the ring nearest the middle
+  // (55), rings 3 and 4 being as near, the one on end a's side
+  assert.deepEqual(R.autoRoute(r, c, ctxFor(r, {'i1|p': 1, 'i3|q': 109})), [{item: 'i2', via: 'guide-4'}]);
+  const swapped = cable({item: 'i1', path: 'p'}, {item: 'i3', path: 'q'});
+  assert.deepEqual(R.autoRoute(r, swapped, ctxFor(r, {'i1|p': 1, 'i3|q': 109})), [{item: 'i2', via: 'guide-3'}]);
+  // and not a tie: 20 to 60, the middle 40, ring 3
+  assert.deepEqual(R.autoRoute(r, c, ctxFor(r, {'i1|p': 20, 'i3|q': 60})), [{item: 'i2', via: 'guide-3'}]);
 });
 
 test('endPane: face, turned, and the end view', () => {

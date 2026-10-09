@@ -112,17 +112,31 @@ function through(m, pane, portX, side, crossing, ctx) {
 // ring behind it is a step back the patch does not need (on the owner's rack
 // of #949, a leaf port 3.1 mm short of a ring's centre, cabled away from it,
 // measured 5.5 cm longer through it, and a stock size). A ring outside the
-// stretch is left alone, so no ring is entered and left by one face; with no
-// ring between, the run is direct (an empty route). A manager with no ring
-// that runs along x, but a duct, runs in the duct.
-function along(m, pane, ax, bx, ctx) {
+// stretch is left alone; with no ring between, the cord goes through the one
+// ring nearest the middle of its two ports (below), so a manager with a ring
+// along x never gives an empty route. A manager with no ring that runs along
+// x, but a duct, runs in the duct.
+function along(m, pane, ax, bx, ctx, passes = null) {
   const gs = ctx.guidesOf(m.id).filter(g => g.face === pane);
   const rings = gs.filter(g => g.kind === 'ring' && ringOf(g).run === 'x');
   if (rings.length) {
     const lo = Math.min(ax, bx), hi = Math.max(ax, bx);
-    return rings.filter(g => g.x >= lo && g.x <= hi)
-      .sort((p, q) => (ax <= bx ? p.x - q.x : q.x - p.x))
-      .map(g => ({item: m.id, via: g.via}));
+    const between = rings.filter(g => g.x >= lo && g.x <= hi)
+      .sort((p, q) => (ax <= bx ? p.x - q.x : q.x - p.x));
+    if (between.length) return between.map(g => ({item: m.id, via: g.via}));
+    // NO RING BETWEEN (owner's decision, 2026-10-09): a ring holds the cord
+    // even where it does not turn it, so the route is never direct: the ring
+    // nearest the middle of the two ports, of two as near the one on end a's
+    // side. A ring outside the stretch can be one the cord would enter and
+    // leave by one face (#930: both ports on its one side, not steep enough
+    // to be under it), which ringFindings reports; so the nearest ring the
+    // cord passes through is taken (`passes`, the test routePath makes), and
+    // only when none passes, the nearest.
+    const mid = (ax + bx) / 2, aSide = Math.sign(ax - mid);
+    const order = [...rings].sort((p, q) => Math.abs(p.x - mid) - Math.abs(q.x - mid)
+      || aSide * (q.x - p.x));
+    const near = order.find(g => passes?.(g)) ?? order[0];
+    return [{item: m.id, via: near.via}];
   }
   const duct = gs.find(g => g.kind === 'duct');
   return duct ? [{item: m.id, via: duct.via}] : [];
@@ -164,7 +178,16 @@ export function autoRoute(rack, cable, ctx) {
   const [A, B] = ends;
   const mA = managerOf(rack, A.it, A.pane, ctx), mB = managerOf(rack, B.it, B.pane, ctx);
   if (!mA && !mB && A.pane === B.pane && Math.abs(A.it.ru - B.it.ru) <= SHORT) return [];
-  if (mA && mA === mB && A.pane === B.pane) return along(mA, A.pane, A.x, B.x, ctx);
+  if (mA && mA === mB && A.pane === B.pane) {
+    // whether the cord goes through a ring from port to port, as routePath
+    // decides it; unknown (a port not found) counts as through
+    const pa = portPoint(rack, cable.a, ctx), pb = portPoint(rack, cable.b, ctx);
+    const passes = g => {
+      const p = pointOf(rack, {item: mA.id, via: g.via}, ctx);
+      return !(pa && pb && p) || !throughRings([pa, p, pb], [null, ringOf(g), null]).back.length;
+    };
+    return along(mA, A.pane, A.x, B.x, ctx, passes);
+  }
   const sideOf = x => (x <= 0 ? 'left' : 'right');
   const sA = sideOf(A.x), sB = sideOf(B.x);
   if (sA === sB) return byGutter(rack, A, B, mA, mB, sA, ctx);

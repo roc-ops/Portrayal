@@ -250,8 +250,11 @@ few.
 The automatic route (`autoRoute`) runs a patch whose two ends leave through
 one manager along it, port to port, through the rings whose centres lie
 between the two ports, in order from end a, and never out to a gutter and
-back; with no ring between, the route is empty and the cable runs direct. A
-manager with no ring along its run, but a duct, runs it in the duct. Any
+back. With no ring between, it goes through the ring nearest the middle of the
+two ports (end a's side of two as near), the nearest one it passes through
+when one does, so it is never direct; a cord that can pass none is reported
+by `ringFindings`. A manager with no ring along its run, but a duct, runs it
+in the duct. Any
 other route takes a gutter chosen from both ends: the side both ports stand
 on, or, when they stand on opposite sides of the centre line, the side whose
 path (`routePath`, detours included) is the shorter, end a's on a tie or
