@@ -19,7 +19,8 @@ const mm = l => Math.round(l.measured * 10000) / 10;
 // Before kit 0.12.0 every one ran out to the right lane and back, measuring
 // 0.67 to 1.04 m (stock 1 or 1.5 m). c1, c2 and c5 to c8 have no ring between
 // their ports and take the nearest ring they pass: c1-c7 ring 4, and c8 ring
-// 5, which holds it (it reaches just past its panel port into the ring).
+// 5, just past its panel port (it held the cord, reaching just into it, until
+// the cord rested on the ring's sill, below; now it passes it).
 // THE PLUG'S REACH (#960, kit 0.13.0): each path now starts and ends 27.6 mm
 // out of the face, where an OM4 cord leaves its LC plug and boot. Measured
 // from the port faces they were 0.433-0.496 m, all 0.5 m stock; seven of
@@ -50,7 +51,7 @@ test('the owner\'s rack: each cord runs along the lacer through a ring, with no 
   assert.deepEqual(got, want);
   // nothing reaches a gutter
   assert.equal(r.cables.flatMap(c => R.autoRoute(r, c, ctx)).filter(w => w.lane).length, 0);
-  // no route is direct, and twelve pass the 0.5 m stock break
+  // no route is direct, and thirteen pass the 0.5 m stock break
   assert.equal(r.cables.filter(c => !R.autoRoute(r, c, ctx).length).length, 0);
   assert.deepEqual(r.cables.filter(c => R.routedLength(r, c, ctx).value > 0.5).map(c => c.id),
     ['c1', 'c5', 'c6', 'c7', 'c8', ...LOWER]);
@@ -85,7 +86,7 @@ test('the owner\'s rack: no ring is entered and left by one face, and no route c
   assert.deepEqual(s.filter(x => x.part === 'envelope').map(x => x.item), ['i1', 'i2', 'i3']);
 });
 
-test('c8: no ring between its ports; ring 5, just past its panel port, holds it with no finding; a hook still warns', () => {
+test('c8: no ring between its ports; ring 5, just past its panel port, passes it with no finding; a hook still warns', () => {
   const r = F.rack(), ctx = F.ctxOf(r);
   const c8 = r.cables.find(c => c.id === 'c8');
   // ports at 147.3 (LEAF-A port 56, lower row) and 195.81 (bay 4 lc6), the

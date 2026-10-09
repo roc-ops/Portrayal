@@ -585,6 +585,14 @@ the build chose as follows; each is in `kit/rack/resting.js` or
   along the run are the ones long along it, a strap going down one of a pair
   and up the other; a cable on its own is its own stack, so between two
   straps it sags at most its own radius.
+- **Configurations.** rack.json reads trays off the default configuration's
+  plan, as it reads `solids`, so `traysOf` places those trays for every item
+  whatever its configuration, as `solidsOf` places its solids; a
+  configuration whose top face is drawn as a differently named view cannot
+  declare `trays`, and `cable.route` refuses a tray waypoint on a configured
+  item when the page gives its guides (rack.json lists no pathway of a
+  configuration but the default; without the page's guides such a waypoint
+  is not judged, as no pathway of a configured item is).
 - **What `inspect` says.** A cable's route gains `rests` (section 8): each
   ring whose sill holds it, each tray it runs along or lands on (with the
   face, its role, and on a held face the tie slots it uses) and each body a
