@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: pdumv20hvnetlx
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: Eaton
 model: PDUMV20HVNETLX
@@ -143,7 +143,13 @@ provenance:
       44, so depths are scaled to the 44. The left side is drawn as the right
       mirrored front to back, which DT01 supports for the grilles at 547, 1245
       and 1546 (it sees the left side edge-on); the grilles' colour, #6f7173, is
-      DT01's reading on the left side.
+      DT01's reading on the left side, and it is the frames' fill: a `slots`
+      field paints its slots over the frame and takes no fill of its own. The
+      left side also prints an EATON wordmark, upside down as DT08 shows that
+      side face-up (reading top to bottom on the standing PDU), about 829 to 895
+      from the top end and centred on the depth (DT08's side band at 0.744 mm
+      a pixel, the strip's 1776.44 across it). It is a `logo-zone` region on
+      the left view and is not drawn.
   rear:
     confidence: drawing
     note: >-
@@ -176,7 +182,10 @@ provenance:
       from the left edge), and left of the lamp above a C13 (about 34.4 across).
       Positions are DT01's at about 1.39 px per mm against the drawing's slot
       positions in the same outlets; the numeral's height, about 3.6, is
-      estimated from the blurred glyphs. The drawing prints no legends.
+      estimated from the blurred glyphs. The drawing prints no legends. The
+      face's EATON wordmark, reading bottom to top, stands about 19 to 33 across
+      and 677 to 724 down on DT01 (the side band left of the face excluded); it
+      is the front view's `logo-zone` and is not drawn.
   interface:
     confidence: photo-measured
     note: >-
@@ -548,7 +557,7 @@ views:
         - {id: input, ref: std/c20-inlet@1, at: [12.0, 1731.5], rotate: 270, group: power-input, rel-pos: 1, description: 'the C20 power inlet; the detachable 10 ft NEMA L6-20P cord in the box plugs into it'}
     regions:
       - {id: bank-1, label: 'Load bank 1 - outlets 1 to 12 (two C19, ten C13), on its own breaker', members: [outlet-1, outlet-2, outlet-3, outlet-4, outlet-5, outlet-6, outlet-7, outlet-8, outlet-9, outlet-10, outlet-11, outlet-12, led-1, led-2, led-3, led-4, led-5, led-6, led-7, led-8, led-9, led-10, led-11, led-12]}
-      - {id: logo-zone, at: [15.0, 676.0], size: {w: 13.0, h: 47.0}, label: 'EATON wordmark (DT01), reading bottom to top; not drawn'}
+      - {id: logo-zone, at: [19.0, 677.0], size: {w: 13.0, h: 47.0}, label: 'EATON wordmark (DT01), reading bottom to top; not drawn'}
       - {id: bank-2, label: 'Load bank 2 - outlets 13 to 24 (two C19, ten C13), on its own breaker', members: [outlet-13, outlet-14, outlet-15, outlet-16, outlet-17, outlet-18, outlet-19, outlet-20, outlet-21, outlet-22, outlet-23, outlet-24, led-13, led-14, led-15, led-16, led-17, led-18, led-19, led-20, led-21, led-22, led-23, led-24]}
   rear:
     size: {w: 56, h: 1776.44}
@@ -580,23 +589,23 @@ views:
     panel:
       decor:
       - {id: vent-1-frame, at: [11.9, 18.3], size: [22.3, 30.0], rx: 4.0, fill: '#6f7173', kind: vent-frame}
-      - {id: vent-1-1, at: [12.9, 19.5], size: [20.3, 13.2], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 20.53], pattern-offset: [12.87, 15.83], vent: 1.0}
-      - {id: vent-1-2, at: [12.9, 33.9], size: [20.3, 13.2], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 20.53], pattern-offset: [12.87, 30.23], vent: 1.0}
+      - {id: vent-1-1, at: [12.9, 19.5], size: [20.3, 13.2], pattern: slots, pattern-pitch: [1.6, 20.53], pattern-offset: [12.87, 15.83], vent: 1.0}
+      - {id: vent-1-2, at: [12.9, 33.9], size: [20.3, 13.2], pattern: slots, pattern-pitch: [1.6, 20.53], pattern-offset: [12.87, 30.23], vent: 1.0}
       - {id: vent-1-screw-1, at: [20.85, 13.5], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
       - {id: vent-1-screw-2, at: [20.85, 48.7], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
       - {id: vent-2-frame, at: [11.9, 552.0], size: [22.3, 55.6], rx: 4.0, fill: '#6f7173', kind: vent-frame}
-      - {id: vent-2-1, at: [12.9, 553.2], size: [20.3, 26.0], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 40.44], pattern-offset: [12.87, 545.98], vent: 1.0}
-      - {id: vent-2-2, at: [12.9, 580.4], size: [20.3, 26.0], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 40.44], pattern-offset: [12.87, 573.18], vent: 1.0}
+      - {id: vent-2-1, at: [12.9, 553.2], size: [20.3, 26.0], pattern: slots, pattern-pitch: [1.6, 40.44], pattern-offset: [12.87, 545.98], vent: 1.0}
+      - {id: vent-2-2, at: [12.9, 580.4], size: [20.3, 26.0], pattern: slots, pattern-pitch: [1.6, 40.44], pattern-offset: [12.87, 573.18], vent: 1.0}
       - {id: vent-2-screw-1, at: [20.85, 547.2], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
       - {id: vent-2-screw-2, at: [20.85, 608.0], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
       - {id: vent-3-frame, at: [11.9, 1250.7], size: [22.3, 55.7], rx: 4.0, fill: '#6f7173', kind: vent-frame}
-      - {id: vent-3-1, at: [12.9, 1251.9], size: [20.3, 26.05], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 40.52], pattern-offset: [12.87, 1244.66], vent: 1.0}
-      - {id: vent-3-2, at: [12.9, 1279.15], size: [20.3, 26.05], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 40.52], pattern-offset: [12.87, 1271.91], vent: 1.0}
+      - {id: vent-3-1, at: [12.9, 1251.9], size: [20.3, 26.05], pattern: slots, pattern-pitch: [1.6, 40.52], pattern-offset: [12.87, 1244.66], vent: 1.0}
+      - {id: vent-3-2, at: [12.9, 1279.15], size: [20.3, 26.05], pattern: slots, pattern-pitch: [1.6, 40.52], pattern-offset: [12.87, 1271.91], vent: 1.0}
       - {id: vent-3-screw-1, at: [20.85, 1245.9], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
       - {id: vent-3-screw-2, at: [20.85, 1306.8], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
       - {id: vent-4-frame, at: [11.9, 1551.7], size: [22.3, 55.4], rx: 4.0, fill: '#6f7173', kind: vent-frame}
-      - {id: vent-4-1, at: [12.9, 1552.9], size: [20.3, 25.9], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 40.29], pattern-offset: [12.87, 1545.71], vent: 1.0}
-      - {id: vent-4-2, at: [12.9, 1580.0], size: [20.3, 25.9], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 40.29], pattern-offset: [12.87, 1572.81], vent: 1.0}
+      - {id: vent-4-1, at: [12.9, 1552.9], size: [20.3, 25.9], pattern: slots, pattern-pitch: [1.6, 40.29], pattern-offset: [12.87, 1545.71], vent: 1.0}
+      - {id: vent-4-2, at: [12.9, 1580.0], size: [20.3, 25.9], pattern: slots, pattern-pitch: [1.6, 40.29], pattern-offset: [12.87, 1572.81], vent: 1.0}
       - {id: vent-4-screw-1, at: [20.85, 1546.9], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
       - {id: vent-4-screw-2, at: [20.85, 1607.5], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
       - {id: screw-1, at: [3.2, 12.1], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
@@ -613,23 +622,23 @@ views:
     panel:
       decor:
       - {id: vent-1-frame, at: [9.8, 18.3], size: [22.3, 30.0], rx: 4.0, fill: '#6f7173', kind: vent-frame}
-      - {id: vent-1-1, at: [10.8, 19.5], size: [20.3, 13.2], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 20.53], pattern-offset: [10.77, 15.83], vent: 1.0}
-      - {id: vent-1-2, at: [10.8, 33.9], size: [20.3, 13.2], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 20.53], pattern-offset: [10.77, 30.23], vent: 1.0}
+      - {id: vent-1-1, at: [10.8, 19.5], size: [20.3, 13.2], pattern: slots, pattern-pitch: [1.6, 20.53], pattern-offset: [10.77, 15.83], vent: 1.0}
+      - {id: vent-1-2, at: [10.8, 33.9], size: [20.3, 13.2], pattern: slots, pattern-pitch: [1.6, 20.53], pattern-offset: [10.77, 30.23], vent: 1.0}
       - {id: vent-1-screw-1, at: [18.75, 13.5], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
       - {id: vent-1-screw-2, at: [18.75, 48.7], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
       - {id: vent-2-frame, at: [9.8, 552.0], size: [22.3, 55.6], rx: 4.0, fill: '#6f7173', kind: vent-frame}
-      - {id: vent-2-1, at: [10.8, 553.2], size: [20.3, 26.0], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 40.44], pattern-offset: [10.77, 545.98], vent: 1.0}
-      - {id: vent-2-2, at: [10.8, 580.4], size: [20.3, 26.0], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 40.44], pattern-offset: [10.77, 573.18], vent: 1.0}
+      - {id: vent-2-1, at: [10.8, 553.2], size: [20.3, 26.0], pattern: slots, pattern-pitch: [1.6, 40.44], pattern-offset: [10.77, 545.98], vent: 1.0}
+      - {id: vent-2-2, at: [10.8, 580.4], size: [20.3, 26.0], pattern: slots, pattern-pitch: [1.6, 40.44], pattern-offset: [10.77, 573.18], vent: 1.0}
       - {id: vent-2-screw-1, at: [18.75, 547.2], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
       - {id: vent-2-screw-2, at: [18.75, 608.0], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
       - {id: vent-3-frame, at: [9.8, 1250.7], size: [22.3, 55.7], rx: 4.0, fill: '#6f7173', kind: vent-frame}
-      - {id: vent-3-1, at: [10.8, 1251.9], size: [20.3, 26.05], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 40.52], pattern-offset: [10.77, 1244.66], vent: 1.0}
-      - {id: vent-3-2, at: [10.8, 1279.15], size: [20.3, 26.05], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 40.52], pattern-offset: [10.77, 1271.91], vent: 1.0}
+      - {id: vent-3-1, at: [10.8, 1251.9], size: [20.3, 26.05], pattern: slots, pattern-pitch: [1.6, 40.52], pattern-offset: [10.77, 1244.66], vent: 1.0}
+      - {id: vent-3-2, at: [10.8, 1279.15], size: [20.3, 26.05], pattern: slots, pattern-pitch: [1.6, 40.52], pattern-offset: [10.77, 1271.91], vent: 1.0}
       - {id: vent-3-screw-1, at: [18.75, 1245.9], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
       - {id: vent-3-screw-2, at: [18.75, 1306.8], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
       - {id: vent-4-frame, at: [9.8, 1551.7], size: [22.3, 55.4], rx: 4.0, fill: '#6f7173', kind: vent-frame}
-      - {id: vent-4-1, at: [10.8, 1552.9], size: [20.3, 25.9], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 40.29], pattern-offset: [10.77, 1545.71], vent: 1.0}
-      - {id: vent-4-2, at: [10.8, 1580.0], size: [20.3, 25.9], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 40.29], pattern-offset: [10.77, 1572.81], vent: 1.0}
+      - {id: vent-4-1, at: [10.8, 1552.9], size: [20.3, 25.9], pattern: slots, pattern-pitch: [1.6, 40.29], pattern-offset: [10.77, 1545.71], vent: 1.0}
+      - {id: vent-4-2, at: [10.8, 1580.0], size: [20.3, 25.9], pattern: slots, pattern-pitch: [1.6, 40.29], pattern-offset: [10.77, 1572.81], vent: 1.0}
       - {id: vent-4-screw-1, at: [18.75, 1546.9], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
       - {id: vent-4-screw-2, at: [18.75, 1607.5], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
       - {id: screw-1, at: [36.4, 12.1], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
@@ -641,6 +650,8 @@ views:
       - {id: screw-7, at: [36.4, 1760.0], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
       - {id: end-screw-1, at: [28.4, 4.5], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
       - {id: end-screw-2, at: [28.4, 1767.7], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+    regions:
+      - {id: logo-zone, at: [15.5, 829.0], size: {w: 13.0, h: 66.0}, label: 'EATON wordmark (DT08), reading top to bottom; not drawn'}
 interfaces:
 - {physical: 'outlet-{n}', name: '{n}', range: '1-24'}
 configurations:
