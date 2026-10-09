@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: csc-8x10g
-version: 1.5.1
+version: 1.6.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -20,6 +20,21 @@ attrs:
   sfp-plus: '8'
   power-draw-max-w: 250
 provenance:
+  led-states: >-
+    datasheet - C100G Hardware Installation Guide (rev 07/08/2022) Table 1-2 and Table 6-1,
+    Front-installed module LEDs, and the C40G guide (rev 07/07/2022) Table 1-2, for the SMM, QAM
+    and UPS/DQM modules: STATUS Green (module running normally) or Black/off (no power); ACTIVE
+    Green (processing traffic) or Black/off (redundant standby); ALARM Black (no alarm) or Red
+    (full alarm condition, a critical component has failed). Declared as `off`, `ok`, `active`
+    and `alarm`; the green is the lamp green the photographs show (#39b54a) and the red is not
+    measured. Every lamp is drawn OFF: the skin used to paint STATUS and ACTIVE lit, from the
+    photograph, and no state could change them. No Casa document gives a blink for these three,
+    so none is declared. The CSC 8x10G is not named in the table's module column; its lamps
+    carry the same three labels, so the table is applied by label. PORT LAMPS - the same table's
+    GigE/10GigE/10/100 rows: Link status Green (link up) or Black (down); Activity Green
+    blinking (transmitting or receiving) or Black. Which of a port's two lamps is link and which
+    activity is not stated in any document held, so each lamp admits both, `link` and `activity`
+    (blinking), as the eNMC jacks do; no blink rate is published.
   depth-known-wrong: 'THE 380.0 IS NOT MERELY UNMEASURED, IT IS IMPOSSIBLE, and this
     contract now says so in a field a tool can read - size-confidence: {d: known-wrong}.
     THE CONSTRAINT. Front and rear cards MEET AT A MIDPLANE, which the owner photographed:
@@ -91,8 +106,8 @@ provenance:
     starts at 81.1 and block B at 142.4, both photo-measured
   port-lamps: photo-measured - two lamps per port, on either side of the port legend,
     in a bank BELOW the cages rather than beside them. The photograph resolves the
-    dots and the XG0-XG7 legends; no document held here gives their colour vocabulary,
-    so no states are declared
+    dots and the XG0-XG7 legends; the colours and meanings are
+    in the C100G guide Table 1-2, which led-states cites
   stripes: photo-measured - five stripes below the lamp cluster, thick to thin downward.
     The lower two measure under 0.2mm, which is the photograph's resolution limit,
     and are drawn at 0.35
@@ -146,25 +161,25 @@ provenance:
     No Casa document states a depth for any of them. Eleven cards carrying 4.2 is ONE
     estimate written eleven times, not eleven readings that agreed.'
 elements:
-  status: {at: [4.8, 254.3], size: [3.0, 3.0], class: led}
-  active: {at: [4.8, 260.3], size: [3.0, 3.0], class: led}
-  alarm: {at: [4.8, 266.2], size: [3.0, 3.0], class: led}
-  xg0-led-a: {at: [9.9, 197.3], size: [1.4, 1.4], class: led}
-  xg0-led-b: {at: [14.600000000000001, 197.3], size: [1.4, 1.4], class: led}
-  xg1-led-a: {at: [9.9, 203.35], size: [1.4, 1.4], class: led}
-  xg1-led-b: {at: [14.600000000000001, 203.35], size: [1.4, 1.4], class: led}
-  xg2-led-a: {at: [9.9, 209.4], size: [1.4, 1.4], class: led}
-  xg2-led-b: {at: [14.600000000000001, 209.4], size: [1.4, 1.4], class: led}
-  xg3-led-a: {at: [9.9, 215.45], size: [1.4, 1.4], class: led}
-  xg3-led-b: {at: [14.600000000000001, 215.45], size: [1.4, 1.4], class: led}
-  xg4-led-a: {at: [9.9, 226.5], size: [1.4, 1.4], class: led}
-  xg4-led-b: {at: [14.600000000000001, 226.5], size: [1.4, 1.4], class: led}
-  xg5-led-a: {at: [9.9, 232.57], size: [1.4, 1.4], class: led}
-  xg5-led-b: {at: [14.600000000000001, 232.57], size: [1.4, 1.4], class: led}
-  xg6-led-a: {at: [9.9, 238.64], size: [1.4, 1.4], class: led}
-  xg6-led-b: {at: [14.600000000000001, 238.64], size: [1.4, 1.4], class: led}
-  xg7-led-a: {at: [9.9, 244.71], size: [1.4, 1.4], class: led}
-  xg7-led-b: {at: [14.600000000000001, 244.71], size: [1.4, 1.4], class: led}
+  status: {at: [4.8, 254.3], size: [3.0, 3.0], class: led, states: ['off', {name: ok, color: '#39b54a'}]}
+  active: {at: [4.8, 260.3], size: [3.0, 3.0], class: led, states: ['off', {name: active, color: '#39b54a'}]}
+  alarm: {at: [4.8, 266.2], size: [3.0, 3.0], class: led, states: ['off', {name: alarm, color: '#ef4444'}]}
+  xg0-led-a: {at: [9.9, 197.3], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  xg0-led-b: {at: [14.600000000000001, 197.3], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  xg1-led-a: {at: [9.9, 203.35], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  xg1-led-b: {at: [14.600000000000001, 203.35], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  xg2-led-a: {at: [9.9, 209.4], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  xg2-led-b: {at: [14.600000000000001, 209.4], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  xg3-led-a: {at: [9.9, 215.45], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  xg3-led-b: {at: [14.600000000000001, 215.45], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  xg4-led-a: {at: [9.9, 226.5], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  xg4-led-b: {at: [14.600000000000001, 226.5], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  xg5-led-a: {at: [9.9, 232.57], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  xg5-led-b: {at: [14.600000000000001, 232.57], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  xg6-led-a: {at: [9.9, 238.64], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  xg6-led-b: {at: [14.600000000000001, 238.64], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  xg7-led-a: {at: [9.9, 244.71], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
+  xg7-led-b: {at: [14.600000000000001, 244.71], size: [1.4, 1.4], class: led, states: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}
 relief:
   wall: '#4a4f55'
   features:
