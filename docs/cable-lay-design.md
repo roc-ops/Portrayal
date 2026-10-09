@@ -11,8 +11,9 @@ passes a ring ([cable-managers-design.md](cable-managers-design.md) section
 ([cable-bundles-design.md](cable-bundles-design.md), #921, #922 and #923), on
 the cable types table (#919), on the hosts and the rack file version 4 of
 [rack-products-design.md](rack-products-design.md) (sections 7 and 9), on the
-`states` and `readings` held for version 4 by
-[pdu-model-design.md](pdu-model-design.md) (#934), and on
+rack entry `states` and `readings` of
+[pdu-model-design.md](pdu-model-design.md) (#934), which names no rack file
+version for them and which this note proposes for version 4, and on
 [format-stability.md](format-stability.md). It is read with #939 (PDU
 brackets) and portrayal-site#142 (bundles drawn, and the packing of members).
 
@@ -72,7 +73,7 @@ length coiled in a tray, in 2D, in 3D and in the numbers.
 The four faults #949 names follow from these: a run from a port below a lacer
 to its ring goes straight up through the tray floor (no solid); every cable
 floats at the middle of the unit (no surface); cables through one ring cross
-(no lane); and slack has nowhere to go (no tray, and the FHD panel declares
+(no lay); and slack has nowhere to go (no tray, and the FHD panel declares
 nothing).
 
 ## 1. Solid bodies
@@ -86,15 +87,30 @@ and what still crosses is a finding.**
 - **A box-shelled device** (every `mount: rack` device that is not a sheet) is
   its envelope, `w` by `h` by `d`, where it stands: the kit already knows all
   three and the item placement. **Except where the envelope holds cable
-  space.** A device whose stated depth includes room cables run in (the
-  FHD-1UBE: 227 mm overall, of which 107 mm is the front lacer zone ahead of
-  the patch plate and 120 mm the rear lacer bar behind it) is solid as its
-  compiled body, not its envelope: the patch plate (the plane its ports and
-  module faces sit in), the modules behind it, and the plates and bars of its
-  lacers. Its rings, trays and pass-throughs are then openings and floors
-  inside the box, not inside a solid. A device is treated so when it declares
-  any pathway or tray (sections 2 and 6) that lies inside its envelope; a
-  plain box device with pathways only on its faces stays its envelope.
+  space.** A device whose envelope includes room cables run in (an FHD
+  enclosure drawer with its spools; the FHD-1UBE, 227 mm overall, of which
+  107 mm is the front lacer zone ahead of the patch plate and 120 mm the rear
+  lacer bar behind it) is solid as its compiled body and its shell, not as one
+  block:
+  - **the shell walls:** a plate on every face of the envelope (top and
+    bottom covers, both sides, the rear wall), of the `thickness` it states
+    or 1 mm where it states none, since only the plane of a wall matters to a
+    crossing;
+  - **its openings:** the pass-throughs it declares on those faces are the
+    only way through a wall (the rear grommets of an FHD-1UFCE, its open back
+    behind each slot). A face that is open as a whole is declared as one
+    pass-through the size of the face: the FHD-1UBE has no cover, no sides
+    and no back, so it simply has fewer walls, and every one of its open
+    faces says so;
+  - **inside:** the patch plate (the plane its ports and module faces sit
+    in), the bodies of the modules seated behind it, and the plates and bars
+    of its lacers.
+
+  Its rings, trays and spools are then openings and floors inside the shell,
+  not inside a solid, and a cable reaches them only through a declared
+  opening. A device is treated so when it declares any pathway or tray
+  (sections 2 and 6) that lies inside its envelope; a plain box device with
+  pathways only on its faces stays its envelope.
 - **A sheet-bodied part** (`shell: sheet`: the rack-face lacers, the brush and
   finger managers) is its plates, not its envelope: the floor of each well
   (the sheet `thickness` thick), each part that stands proud of a face (the
@@ -112,7 +128,8 @@ frame the hosts of the rack products note use (x from the left of the device,
 y up from its bottom, z back from its front), from the compiled faces it
 already reads: a sheet well gives a floor plate, a proud placement a plate of
 its own size, a duct its walls, and a device with cable space inside its
-envelope its plate plane and the bodies of what is seated behind it. A plain
+envelope its shell walls less their declared pass-throughs, its plate plane
+and the bodies of what is seated behind it. A plain
 box device carries no `solids`: its envelope is enough. A second statement of
 geometry the drawing already holds is a number that can disagree with it, the
 reason the PDU note derived `mount-points`.
@@ -270,97 +287,149 @@ radius; only a free span sags, and it never sags below a surface under it.**
 **What 2D shows.** The front and rear elevations show resting as height: a
 cable in a tray runs along the floor line of the tray, not across the middle
 of its unit, and drops to it from the port. They cannot show depth, so where a
-cable lies across the tray (its lane) is not seen there. No plan view is added
+cable lies across the tray (its position, section 4) is not seen there. No plan view is added
 for this (decision 1); the 3D view shows it.
 
 ## 4. Lay order
 
-**Recommendation: cables that share a tray, ring or duct get lanes, assigned
-by port order so that none crosses another; flat in a tray, round in a
-bundle; kept through the run; stacked when a layer is full, and a full tray
-warns.**
+**Recommendation: cables that share a tray, ring or duct each get a position
+across it, chosen so that two cables cross only where their ends force it;
+flat in a tray, round in a bundle; kept through the run; stacked when a layer
+is full, and a full tray warns.**
+
+**A position** is a place across a pathway in the lay: the slot one cable (or
+one bundle) takes side by side with the others, counted from 1. The word is
+kept apart from a **lane**, which in this note and in the rack file is only
+the gutter beside a post (`{lane, ru}`).
+
+**Where position 1 is.** Positions are counted outward from the part the
+pathway is fixed to:
+
+- a tray running along x (a lacer, the floor of an enclosure drawer): from
+  the host side, the back of the tray at the rail, toward the front edge;
+- a ring with no tray under it, on a vertical plate (the 1U D-ring panels):
+  from the plate outward, along the side of its opening that stands out of the
+  plate;
+- a ring that runs along y (the CMH-6DR1U end ring): from the plate outward in
+  the same way; its cables run along gravity, so they do not rest, and a
+  second layer is the next row across x, starting from the side nearer the
+  centre line of the rack;
+- a duct: from its base plate outward, across the channel.
 
 ### 4.1 The order
 
-A cable reaches a tray from one of two sides, and the side decides its
-lanes. The lanes are counted from 1 at the host side (the back of a tray, at
-the rail).
+**In plan a pathway is a disc and each cable a chord.** Walk round the edge of
+a tray seen from above: its left end (the left gutter), its back edge from
+left to right, its right end, its front edge from right to left. Every cable
+in the tray has two ends on that edge:
 
-- **Rail-side cables** come into the tray from the back: from the host behind
-  it, or down from a device above whose ports are at the rail plane. They take
-  the **inner** lanes, ordered by how far their port is from the exit they
-  take: the one nearest the exit innermost, each one further away one lane
-  further out. A cable then drops from its port into its lane without passing
-  any cable already laid, because every rail-side cable already there comes
-  from further along and lies further out.
-- **Front-edge cables** come over the front edge (section 1.3, rule 1): from a
-  device below the tray. They take the **outer** lanes, the other way round:
-  the one nearest the exit outermost, each one further away one lane further
-  in. A cable coming over the edge then lands in its lane without passing any
-  front-edge cable already laid, since those come from further along and lie
-  further in, and the rail-side group lies inside both.
+- a **rail-side end**, where it drops in from the back: from the host behind
+  the tray, or down from a device above whose ports are at the rail plane;
+- a **front-edge end**, where it comes over the front edge (section 1.3, rule
+  1): from a device below;
+- a **gutter end**, at the left or right end of the tray, for a cable that
+  runs on to a gutter (a through cable).
 
-Cables at the same distance from the exit (one port above another) are ordered
-by U, the lower first, then by cable id.
+Two chords in a disc must cross exactly when their ends **interleave** round
+the edge (one end of each between the two ends of the other), and any set of
+chords no two of which interleave can be laid with no crossing. So the rule
+is: **two cables cross only when their ends interleave, and then once.** That
+pair is a **forced crossing**. Two ends at one point (two through cables
+leaving by the same gutter) do not interleave.
 
-**Traffic both ways.** Today the automatic route picks the gutter from the x
-of end A alone, and when both ends leave through the same manager it goes out
-to the gutter and back through the same rings (a patch from a switch port at
-x -150 to a panel port at x -20 runs ring 1, left-front U12, U11, ring 1,
-ring 2). **A patch whose two ends share one manager runs along the tray
-directly, port to port, through the rings between them, with no gutter.** It
-is a local patch, and it takes lanes only over its own stretch:
+The positions that realise it, in the cases a rack has:
 
-- a local patch with both ends on one side lies nearest that side (innermost
-  for rail-side ends, outermost for front-edge ends), and of two such patches
-  the shorter lies nearer, so patches that nest never meet;
-- through cables (to a gutter) going opposite ways occupy separate stretches,
-  since a port left of the centre line runs left of it and one right of it
-  runs right, so they meet only local patches.
+- **Rail-side through cables** take the **inner** positions, ordered by how
+  far their port is from the gutter they take: the one nearest the gutter
+  innermost, each one further away one position further out. A cable then
+  drops into its position without passing any cable already laid, because
+  every rail-side cable already there comes from further along and lies
+  further out.
+- **Front-edge through cables** take the **outer** positions, the other way
+  round: the one nearest the gutter outermost, each one further away one
+  position further in.
+- **Local patches.** Today the automatic route picks the gutter from the x of
+  end A alone (`route.js autoRoute`), and when both ends leave through the
+  same manager it goes out to the gutter and back through the same rings (a
+  patch from a switch port at x -150 to a panel port at x -20 runs ring 1,
+  left-front U12, U11, ring 1, ring 2). **A patch whose two ends share one
+  manager runs along the tray directly, port to port, through the rings
+  between them, with no gutter.** A local patch with both ends rail-side lies
+  in the rail group, inside every through cable that passes its stretch; one
+  with both ends front-edge lies in the front group, outside them. Of two such
+  patches the shorter lies nearer its side, so patches that nest never meet.
+- **Side-to-side patches** (one end rail-side, the other front-edge: a switch
+  below cabled to the panel) take a **middle band**, between the rail group
+  and the front group. Two of them interleave only when their port orders
+  disagree; in consistent order (the switch ports in the same order as the
+  panel ports they reach) they interleave with nothing in the band. Within the
+  band, a patch whose rail-side drop falls inside the stretch of another
+  takes the inner position, so it drops in behind the one already there.
+- **Equal distances.** Cables at the same distance from their gutter, or at
+  the same x on the same edge (one port above another), take the lower U at
+  the inner position, in every group: the kit already sends a higher row of
+  ports further out from its face (`cable-geometry.js reaches`, `REACH_STEP`),
+  so the higher cable is the outer one where both turn into the tray. Then the
+  lower cable id is the inner.
 
-Some meetings no order avoids: a through cable whose port lies between the
-ends of a local patch, a patch from one side to the other, and two patches
-whose ends interleave. In plan these are a cable having to cross a cable that
-lies between it and its lane. **Such a cable passes over, never through:** it
-steps up a layer at the one point where it must and back down after, and the
-kit counts these forced crossings per tray and names them, so a crossing is
-always one the hardware forces and never one the order made.
+**Opposite ways.** A through cable has one gutter, and both of its ends use
+it. Step 5 chooses the gutter for each cable from both ends, not from end A
+alone: when both ports stand on the same side of the centre line in their
+trays, that side; when they stand on opposite sides, the side that gives the
+shorter path. Through cables that each run toward their own port side then
+use separate stretches of a tray and never meet. **A through cable whose ends
+sit on opposite sides of the centre in two trays runs against its port in one
+of them**, and there it is a forced category of its own: its gutter end is on
+the far side of every cable it passes, and the interleaving test counts each
+crossing that makes.
+
+**The forced crossings, exactly.** A forced crossing is a pair of cables in
+one pathway whose ends, taken as above (rail-side, front-edge, and the gutter
+end of a through cable), interleave round its edge. That covers a through
+cable whose port lies inside a local patch, a side-to-side patch against a
+through cable from further along, two patches whose ends interleave, and a
+cable running against its port. **Such a cable passes over, never through:**
+it steps up a layer at the one point where it must and back down after. The
+kit counts the forced crossings per pathway and names each pair, and the order
+above makes no other crossing: every crossing drawn is one the ends force. A
+hand lay (4.3) can make more; those are counted apart, as crossings made by
+hand, and named with the cable that was pinned.
 
 ### 4.2 Flat and round
 
-- **Single cables lie flat**, side by side across the floor, each lane as wide
-  as its cable. The layer is as wide as the narrowest opening on the shared
-  stretch: through an FHD-CMP5DR ring that is the 32.0 mm across the opening,
-  not the 61.2 mm of the strip.
+- **Single cables lie flat**, side by side across the floor, each position as
+  wide as its cable. The layer is as wide as the narrowest opening on the
+  shared stretch: through an FHD-CMP5DR ring that is the 32.0 mm across the
+  opening, not the 61.2 mm of the strip.
 - **A layer that is full starts the next** on top of it, in the same order.
   For the snap-in ring that is five 6 mm Cat6 cords a layer and four layers
   under its 29.5 mm, twenty cables, against the theoretical 30 the datasheet
   states for the panel: the figure the vendor gives assumes a pack tighter
   than square layers.
-- **A bundle is one lane.** Its members pack round inside it, as the bundle
-  model (#922) and the member packing of portrayal-site#142 already draw them,
-  and the bundle takes a lane of its own diameter among the single cables, in
-  the order of its first member.
+- **A bundle takes one position.** Its members pack round inside it, as the
+  bundle model (#922) and the member packing of portrayal-site#142 already
+  draw them, and the bundle takes a position of its own diameter among the
+  single cables, as one chord, in the order of its first member.
 
 ### 4.3 Across a run
 
-- A lane is **kept along the shared stretch**: it is assigned where the cable
-  first shares a pathway and held through every pathway it shares with the
-  same neighbours.
-- **A cable joining** takes the lane its port order gives; the cables already
+- A position is **kept along the shared stretch**: it is assigned where the
+  cable first shares a pathway and held through every pathway it shares with
+  the same neighbours.
+- **A cable joining** takes the position its order gives; the cables already
   there do not move, which is what the order of 4.1 guarantees.
 - **A cable leaving** (at its own pathway, or at a bundle peel point) gives up
-  its lane, and the lanes outside it close up only after the next support, so
-  no cable is drawn sliding sideways inside a ring.
+  its position, and the positions outside it close up only after the next
+  support, so no cable is drawn sliding sideways inside a ring.
 - **A turn keeps the order on the same side:** a flat run turning from a tray
-  into a gutter keeps its outermost lane outermost, so it never twists over
+  into a gutter keeps its outermost cable outermost, so it never twists over
   itself.
-- **A hand lay** pins one cable to one lane in one pathway (`lay`, section
+- **A hand lay** pins one cable to one position in one pathway (`lay`, section
   7); the others are laid round it in order.
 
-Lanes are computed, not stored, except a hand lay. The lane position is part
-of `routePath`, so it moves the measured length by millimetres and agrees in
-every view.
+Positions are computed, not stored, except a hand lay. Where each position is
+across the pathway is part of `routePath`, so it moves the measured length by
+millimetres and agrees in every view.
 
 ### 4.4 A full tray
 
@@ -433,7 +502,7 @@ may move up a stock size, which is the honest answer: that is the cable to buy.
 - **3D**: a coil is loops of the cable lying flat on the floor, concentric and
   stacked, each at least the bend radius; a serpentine is runs along the run
   joined by half-turns; a spool winds round its drum. The cable enters and
-  leaves at its lane.
+  leaves at its position.
 - **2D**: a marked loop, an ellipse in the colour of the cable at the tray,
   with the stored length in its tag ("1.2 m slack"), since an elevation sees a
   flat coil only edge on (decision 1).
@@ -483,7 +552,7 @@ Two cable keys, read and written by the kit:
 | key | where | what |
 |---|---|---|
 | `slack` | cable | a list of `{item, via, value?, unit?, form?}` (section 5.2) |
-| `lay` | cable | a list of `{item, via, lane}`: the hand lay in one pathway, its lane counted from 1 at the host side (sections 4.1 and 4.3) |
+| `lay` | cable | a list of `{item, via, position}`: the hand lay in one pathway, its position counted from 1 as section 4 sets out |
 
 An older reader **keeps both** (a cable keeps keys `readCables` does not know)
 **and misreads them**: its `withRoutedLengths` measures the path without the
@@ -494,16 +563,37 @@ would mishandle), so a bump is needed.
 
 **They join rack file version 4,** with the keys the rack products note
 gathers for it (frame `width`, `startU`, round holes, `setback`, `options`,
-item `setback` and `heldBy`, zero-U `channel`) and the keys held for it by
-#934 (`states`, `readings`) and #939 (the PDU bracket key): one bump, published
+item `setback` and `heldBy`, zero-U `channel`), with the rack entry `states`
+and `readings` of #934, which the PDU note gives no version and this note
+proposes for version 4 with section 9 of the rack products note, and with the
+PDU bracket key of #939: one bump, published
 under `/schemas/v3/`, an identity migration from 3. **Both keys are reserved
 in version 4 whenever it ships**, with the hosting step of the rack products
 note: its schema defines them and its `parseDoc` keeps them from the first
 build of version 4, before anything consumes them. Slack (step 4 of section
 10) and lay order (step 5) then only start reading keys version 4 already
-carries, so neither needs a version 5. The version-4 table of the rack
-products note (section 9 there) gains `states`, `readings`, the PDU bracket
-key, `slack` and `lay` when version 4 lands.
+carries, so neither needs a version 5. Section 9 of the rack products note
+now lists these keys as proposed for version 4, and its version-4 table gains
+`states`, `readings`, the PDU bracket key, `slack` and `lay` when version 4
+lands.
+
+**Reserving `slack` is not enough on its own.** A version-4 reader that keeps
+the key without understanding it would still load the file, re-measure the
+routed length without the slack, drop a stock size and save. So **the first
+version-4 reader**, the version-4 step itself, wherever it lands, must, for a
+cable that carries `slack` it does not yet act on:
+
+- keep the stored routed length and stock size as written, and not
+  re-measure them (`withRoutedLengths` leaves the cable alone), saying once
+  that its slack is not yet read by this page;
+- refuse a route edit that takes off the route a tray the slack names, with a
+  sentence naming the tray.
+
+This is a requirement of the version-4 step here and of the version-4 plan of
+the rack products note, which section 9 there now states. A `lay` that a reader does not act on is harmless: the
+cable is laid in its computed position instead of the pinned one, which moves
+it across the pathway and its length by millimetres, and the key is kept for
+the next page that reads it.
 
 Routed lengths of saved racks change without a file change (section 12): the
 kit re-measures a routed length the next time a page measures it, as it did
@@ -519,10 +609,10 @@ commands are offered with no new tool. The kit gains:
 - **`cable.slack {id, at: {item, via}, value?, unit?, form?}`**, and
   `cable.slack.clear {id, at?}`: store or remove slack, refused where the loop
   does not fit or the tray is not on the route.
-- **`cable.lay {id, at: {item, via}, lane}`**, and `lane: null` to unpin.
-  The name keeps the lay apart from the gutter lanes: a waypoint is already
-  `{lane, ru}`, and `inspect` already returns `lanes`, the gutter lanes of the
-  frame.
+- **`cable.lay {id, at: {item, via}, position}`**, and `position: null` to
+  unpin. The names keep the lay apart from the gutter lanes: a waypoint is
+  already `{lane, ru}`, and `inspect` already returns `lanes`, the gutter
+  lanes of the frame.
 - **Routing into a tray** needs nothing new: `cable.route` takes `{item, via:
   'tray'}` as it takes a ring, and the refusal that lists what exists lists
   trays too.
@@ -531,7 +621,7 @@ And the reads:
 
 - **`inspect` of a cable**: its route output, which has `rings` today, gains
   `crosses` (each finding of 1.4, with the two waypoints it lies between) and
-  `rests` (each support it lies on, and its lane there). `slack` keeps one
+  `rests` (each support it lies on, and its position there). `slack` keeps one
   meaning, the spare length: it stays `{metres}` and gains `stored`, the
   stored entries of section 5.2, each with the length it holds.
 - **`inspect` of a device**: each tray, with its fill, the cables in it and the
@@ -581,15 +671,25 @@ own step.
    reserved in the version-4 schema by the hosting step of the rack products
    note (section 7); if that step has not landed, this step brings version 4
    with all its keys. Then `cable.slack`, the length, the 2D loop and 3D coil,
-   the schedule column and BOM note. Gate: a version-4 round trip, a version-3 page refusing
+   the schedule column and BOM note. If version 4 has already landed, its
+   guard of section 7 (stored length kept, tray removal refused) is replaced
+   here by the real reading. Gate: a version-4 round trip, a version-3 page refusing
    a version-4 file, the export tests, and the PR naming its one-way doors.
-5. **Lay order**, after #922 and portrayal-site#142 have settled: lanes by
-   entry side, local patches along the tray, layers, bundles as one lane,
-   `cable.lay`, the forced-crossing count, the full-tray warning. Gate: kit
-   tests on the fixture of #949 (one FHD panel with an FHD-CMP5DR lacer, a
-   switch above it and a switch below it, cabled to bays 2 to 4) that no two
-   cables cross in plan except the forced crossings counted, and the same for a
-   grid of ports; a browser check of the same in 3D.
+5. **Lay order**, after #922 and portrayal-site#142 have settled: positions
+   by entry side, local patches along the tray, side-to-side patches in the
+   middle band, the gutter chosen from both ends, layers, bundles as one
+   position, `cable.lay`, the forced-crossing count, the full-tray warning.
+   Gate: kit tests on the fixture of #949 (one FHD panel with an FHD-CMP5DR
+   lacer, a switch above it and a switch below it, cabled to bays 2 to 4) and
+   on a grid of ports, in which **the test computes the forced set itself**,
+   from the ends of each cable in each pathway (rail-side, front-edge and
+   gutter) by the interleaving rule of 4.1, without the kit; asserts that the
+   kit count and pairs EQUAL that set; and asserts that the laid cables cross
+   in plan exactly at those pairs and nowhere else. One fixture is built to
+   have forced crossings (a through cable whose port lies inside a local
+   patch, and a cable whose ends sit on opposite sides of the centre in two
+   trays), and the test asserts its count is not zero, so an empty count
+   cannot pass. A browser check does the same in 3D.
 6. **The FHD enclosures and the other FS managers**, as routine modelling
    after step 3, in parallel with 4 and 5: the rows of section 6. Gate: the
    modelling gates per device.
@@ -622,11 +722,12 @@ published file or a saved rack file uses it.
 | `data-class="tray"` | drawings | consumers of the drawing read it |
 | `solids` and `trays` in `rack.json` | the rack catalogue | the kit reads them; additive, so `format` stays 1 |
 | the narrowed rule 7 of the modelling guide | library policy | parts modelled under it carry their cable management |
-| cable `slack` (`item`, `via`, `value`, `unit`, `form` with `coil`, `serpentine`, `spool`) and cable `lay` (`item`, `via`, `lane`) | rack file version 4 | saved rack files carry them; an older page refuses a version-4 file, and the schema label is never reused |
-| lane 1 at the host side, counting outward | rack file (`lay`), kit, `inspect` | a saved hand lay names a lane by this count |
+| cable `slack` (`item`, `via`, `value`, `unit`, `form` with `coil`, `serpentine`, `spool`) and cable `lay` (`item`, `via`, `position`) | rack file version 4 | saved rack files carry them; an older page refuses a version-4 file, and the schema label is never reused |
+| the word position, and position 1 counted outward from the part a pathway is fixed to (the host side of a tray, the plate of a ring or a duct; for a ring along y, a second layer from the side nearer the rack centre line) | rack file (`lay`), kit, `inspect` | a saved hand lay names a position by this count |
+| the forced crossing: a pair whose ends (rail-side, front-edge, gutter) interleave round the pathway, and the count of them per pathway | kit, `inspect`, agent output | agents and tests read the count and the pairs |
 | the version-4 table of the rack products note gaining `states`, `readings`, the PDU bracket key, `slack` and `lay` | `docs/rack-products-design.md` section 9, rack file version 4 | one bump carries them all; a key left out needs a version 5 |
 | the stored slack counting in the routed length | kit | a saved routed length and stock size depend on it |
-| routed lengths changing on saved racks: detours, cables resting at the floor and at the ring sill, lanes, slack | kit | stored routed lengths and stock sizes move on the next measure; an ordered stock length may no longer match |
+| routed lengths changing on saved racks: detours, cables resting at the floor and at the ring sill, positions in the lay, slack | kit | stored routed lengths and stock sizes move on the next measure; an ordered stock length may no longer match |
 | `crosses-body` and the tray findings, `bodyFindings` | kit API, agent output | agents and pages read the kinds |
 | `cable.slack`, `cable.slack.clear`, `cable.lay` | kit commands, offered to agents | agent sessions and saved prompts call them by name |
 | `inspect` fields: `crosses` and `rests` on a cable route, `slack.stored`, the tray block of a device | kit queries, agent output | agents and the site read them by name |
