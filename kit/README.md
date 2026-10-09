@@ -104,7 +104,7 @@ as `@portrayal/kit/rack/<module>`:
 | `rack/cable-rules.js` | cables: which two ports may be joined, `withCable`, media and lengths |
 | `rack/cable-types.js` | the cable types (`cable-types.json`): `loadCableTypes(dist)` fetches them and returns `typeOf`, `bendOf` and `diameterOf` over them; the same lookups are exported to build over a table already in hand (a fixture, a cached copy): `typeOf(types, id)`, `cableTypeOf(types, cable)`, `radiusMm(type, which)`, `installedRadiusMm(types, id)`, `bendLookup(types)` and `diameterLookup(types)`, each radius in millimetres |
 | `rack/route.js`, `rack/route-path.js`, `rack/cable-geometry.js` | where a cable runs: `resolveRoute`, `routePath`, `ringMarks`, `orientMarks`, `reverseMarks`, `routedLength`, `pathLength`, pathway fill, `ringFindings`, and the geometry under them (`throughRings`) |
-| `rack/bundles.js`, `rack/bundle-route.js` | cable bundles: the size check (`bundleCheck`, `bundleChecks`, `pathwaysOn`), strap positions (`straps`), the trunk worked out from the members' routes (`deriveTrunk`) and a member's route along it (`followTrunk`) |
+| `rack/bundles.js`, `rack/bundle-route.js` | cable bundles: the size and bend checks (`bundleCheck`, `bundleChecks`, `pathwaysOn`, `bendCheck`, `cornersOf`), strap positions (`straps`), the trunk worked out from the members' routes (`deriveTrunk`) and a member's route along it (`followTrunk`) |
 | `rack/export-data.js` | the rack as rows: `bomRows`, `cableScheduleRows` and the device-import data |
 | `rack/dcim-rules.js` | what a NetBox or Nautobot import needs of a rack |
 | `rack/validate.js` | `validate(schema, value)`, a small JSON Schema validator, and `same` |
@@ -311,8 +311,27 @@ their own. `straps(rack, bundle, ctx)` places the straps, every 12 in unless
 the bundle says otherwise, as `{ segment, t, along_mm }` along the trunk, kept
 off rings. `inspect` reads a bundle (`kind: 'bundle'`) and a member's
 `bundle`, `selectCables` takes `{ bundle }`, and `describe` lists them. A
-bundle of fewer than two cables is kept and listed, but not drawn. The bend
-check is not here yet: `inspect` gives `bend: null`.
+bundle of fewer than two cables is kept and listed, but not drawn.
+
+**The bend check (0.8.0).** Pass `ctx.bendOf` as well
+(`loadCableTypes(dist).bendOf`, each cable's installed minimum bend radius in
+mm) and a bundle's findings also carry its bend: at each corner of the trunk,
+and at each pathway whose guide states a `radius`, the bundle needs the
+largest radius among the members present there, so one fibre makes it as
+strict as fibre. A member at its own join or peel point makes its own turn and
+is not counted there. A pathway's stated radius is the room it has; a corner's
+is worked out from its legs, `min(a_in, a_out) / tan(theta / 2)`, each leg half
+the way to the next corner or all the way to the trunk's end, and is marked
+`estimated`. A trunk that doubles back has no room at all. It warns and never
+refuses: "Bundle 2 turns at left-front U10 with room for a 24.5 mm bend; c2
+(om4) needs 25 mm, 0.5 mm short." A member with no radius (no type, or no
+`bendOf`) is listed as unchecked, never passed. `inspect` gives
+`bend: { radius_mm, by, unchecked, points, violations }`, each point
+`{ kind: 'corner' | 'pathway', at, waypoint, angle_deg?, legs_mm?, room_mm,
+source: 'legs' | 'guide', estimated, need_mm, by, members, unchecked, ok,
+short_mm }`, `ok` null where nothing present has a radius; `cornersOf(points)`
+is the geometry on its own. A cable outside a bundle, and a member's lead to
+its port, are not checked for bend.
 
 **The rack file is version 3 from 0.7.0.** `parseDoc` reads version 1 and 2
 files as they were, and every save writes version 3, which a page or kit
