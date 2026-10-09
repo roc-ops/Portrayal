@@ -163,3 +163,14 @@ def test_the_exporter_falls_back_to_the_chassis():
     if asr.exists():
         assert "airflow" in yaml.safe_load(asr.read_text()), \
             "the ASR 9010 states airflow on its chassis and must export it"
+
+
+def test_a_fan_tray_blowing_down_exports_top_to_bottom():
+    """`top-to-bottom` is the chassis answer for a rack fan tray that draws air in
+    at the top and pushes it out of the bottom. NetBox and the device-type
+    library call it the same; the FS FANS1U2F states it."""
+    from portrayal import dcim_export
+    assert dcim_export.AIRFLOW["top-to-bottom"] == "top-to-bottom"
+    tray = LIB / "exports/netbox/device-types/FS.com/FANS1U2F.yaml"
+    assert tray.exists(), "the FS FANS1U2F export is where top-to-bottom is first used"
+    assert yaml.safe_load(tray.read_text()).get("airflow") == "top-to-bottom"

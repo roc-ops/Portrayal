@@ -650,7 +650,7 @@ def config_airflow(device, cfg):
     and the DCIM export all read it here, so the drawing, the index and the
     export cannot come to disagree about which way a build breathes. The value
     is the library's own vocabulary - front-to-back, back-to-front, side,
-    passive - and None where the device states nothing.
+    passive, top-to-bottom - and None where the device states nothing.
     """
     return ((cfg or {}).get("airflow")
             or ((device or {}).get("chassis") or {}).get("airflow")

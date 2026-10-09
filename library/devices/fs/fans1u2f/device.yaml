@@ -1,0 +1,212 @@
+format: 1
+kind: device
+name: fans1u2f
+version: 0.1.0
+maturity: modelled
+manufacturer: FS.com
+model: FANS1U2F
+description: >-
+  1U 19in rack fan tray, FS FANS1U2F: a black aluminium box 170 mm deep with 2 120 mm fans that
+  blow down through the rack, a temperature controller with a two-digit display, LOAD and SET
+  lamps and four keys on the front, a power switch, and a fixed mains cord out of the back; 110-120
+  V, 15 W, 160 CFM. Mounting ears bolt to each end.
+profile: passive
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      the FS Cooling Fan datasheet (portal 6624) for the figures; the FANS1U2F/FANS1U4F Quick
+      Start Guide V2.0 (portal 6672) for the face - its labelled front view (fig-0011, the 2F
+      drawn) and its overview of both trays (fig-0003) - and the controller's user manual (portal
+      6761). FS has no product page for FANS1U2F and no render or photograph of it; the guide's
+      line drawings are the only images. The FANS1U2F is portal-only and probably discontinued.
+  chassis:
+    confidence: drawing
+    note: >-
+      44 x 170: the datasheet's "483x170x44 mm" read as width over the ears, depth and height
+      (its HxWxD heading is scrambled). THE EARS ARE SEPARATE BRACKETS: the guide's front view
+      draws an L bracket with three oblong holes bolted to each end of a narrower box, so the
+      body between them is modelled and the ears are optional (`chassis.ears`, drawn by the generic
+      ear). On fig-0011 the tray spans 627 px over its ears for the 483 (1.298 px/mm) and the
+      ears' inner fold lines stand 38.5 px from each end, 29.6 mm, which leaves a body of 424
+      (the figure's 58 px height reads 44.7 at that scale, so it is orthographic to 1.5 per cent).
+  ears:
+    confidence: drawing
+    note: >-
+      two L brackets with three oblong holes each, 29.6 mm wide outside the body (fig-0011); the
+      datasheet's 483 is over them. Not drawn by default; the generic ear (#909) draws them on
+      request.
+  controller:
+    confidence: drawing
+    note: >-
+      fs/fan-temp-controller@1 at 173.4 in and 5.0 down: fig-0011's bezel spans 267.5 to 368.75
+      px and 10.5 to 55.5 px, measured from the body's left fold at 42.5 px and its top edge at
+      4 px.
+  switch:
+    confidence: drawing
+    note: >-
+      the power switch in its square bezel, 383.3 to 409.9 in and 6.2 to 37.8 down (fig-0011),
+      the rocker inside it drawn as common/rocker-switch@1 turned upright; the guide calls it
+      the Power Switch. The rocker's 15 x 21 is the library part's, a little smaller than the
+      guide's 19.3 square window.
+  fans:
+    confidence: estimated
+    note: >-
+      2 fans of 120 mm, blowing down ("Pre-installed Fans Push Hot Air Down through Rack"): fig-0003
+      draws two grilles side by side on the lid, at about a quarter and three quarters of the
+      width. They are drawn there, on the lid's middle, and on the base below them; no figure
+      dimensions them, and the base is not drawn anywhere.
+  rear:
+    confidence: estimated
+    note: >-
+      the datasheet and guide put the power cord and the controller's ambient sensor lead at the
+      back; no figure shows the back, so both are placed at the switch end, estimated.
+  airflow:
+    confidence: datasheet
+    note: >-
+      `top-to-bottom`: the datasheet's benefits list has the pre-installed fans pushing hot air
+      down through the rack, which is air drawn in at the tray's top and pushed out of its bottom.
+  attrs:
+    confidence: datasheet
+    note: >-
+      the FS Cooling Fan datasheet (portal 6624), one table for FANS1U2F, FANS1U4F and FANP3U3F,
+      and the FANP3U3F product page. The datasheet prints every model's dimensions as "HxWxD 483x170x44"
+      and the like, its axes scrambled. The 15 W is "Input Power 15W" with no qualifier, filed
+      as the maximum.
+  sides:
+    confidence: estimated
+    note: >-
+      plain painted aluminium; no figure shows a side.
+  color:
+    confidence: estimated
+    note: >-
+      "Die-Cast Aluminum Painted"; drawn black as the FANP3U3F, the one fan part FS photographs.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      checked 2026-10-09 against what the intake holds: the FS documentation portal's Accessories
+      tree, read on 2026-10-08, carries no end-of-sale notice for this part. FS publishes no product
+      page for it; fs.com search finds nothing. No web search beyond FS's own pages was made.
+attrs:
+  physical:
+    frame-material: Die-Cast Aluminum Painted
+    blade-material: Thermoplastic PBT
+    mounting-hardware: M6 screw kit x4
+  performance:
+    airflow-cfm: 160
+  power:
+    power-max-w: 15
+    input-voltage: 110~120 V, 50 Hz
+  thermal:
+    fan-speed: 2300 +/-10% RPM
+    noise: 54.6 dB(A)
+    bearing: Sleeve
+  environmental:
+    operating-temp: -20 to 80 C
+    operating-humidity: 20% to 80% (non-condensing)
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 424.0
+  height: 44.0
+  depth: 170.0
+  ru: 1
+  full-depth: false
+  weight-kg: 3.5
+  airflow: top-to-bottom
+  power: ac
+  color: '#1b1d20'
+  ears:
+    positions:
+    - {name: flush, default: true}
+gaps:
+- what: face-detail
+  reason: needs-photo
+  note: >-
+    FS has no product page or render for FANS1U2F; the face is the quick start guide's line drawing,
+    and the top, bottom, rear and sides are not drawn anywhere.
+  wanted: a photograph of the tray
+groups:
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    description: the fans in the lid, each behind its stamped guard
+  controller:
+    term: Controller
+    role: management
+    index-origin: 1
+    description: the temperature controller that switches the fans
+  power:
+    term: Cord
+    role: service
+    index-origin: 1
+    description: the fixed mains cord, NEMA 5-15P
+  power-switch:
+    term: Switch
+    role: service
+    index-origin: 1
+    description: the power switch beside the controller
+views:
+  front:
+    size: {w: 424.0, h: 44.0}
+    panel:
+      decor:
+      - {id: plate, at: [0.0, 0.0], size: [424.0, 44.0], fill: '#1b1d20', kind: plate}
+      - {id: switch-bezel, at: [383.3, 6.2], size: [26.6, 31.6], fill: '#2b2e31', rx: 1.0, kind: switch-bezel}
+    components:
+      placements:
+      - {ref: fs/fan-temp-controller@1, id: controller, at: [173.4, 5.0], group: controller, rel-pos: 1}
+      - {ref: common/rocker-switch@1, id: power-switch, at: [386.1, 14.5], rotate: 90, group: power-switch,
+        rel-pos: 1, for: chassis}
+  rear:
+    size: {w: 424.0, h: 44.0}
+    panel:
+      decor:
+      - {id: plate, at: [0.0, 0.0], size: [424.0, 44.0], fill: '#1b1d20', kind: plate}
+      - {id: sensor-grommet, at: [362.0, 18.0], size: [8.0, 8.0], fill: '#16181a', shape: circle,
+        kind: sensor-lead}
+    components:
+      placements:
+      - {ref: fs/fan-cord-5-15p@1, id: power-cord, at: [384.0, 16.0], group: power, rel-pos: 1}
+  top:
+    size: {w: 424.0, h: 170.0}
+    panel:
+      decor:
+      - {id: lid, at: [0.0, 0.0], size: [424.0, 170.0], fill: '#1b1d20', kind: lid}
+    components:
+      placements:
+      - {ref: fs/fan-grille-120@1, id: fan-1, at: [49.0, 28.0], group: fans, rel-pos: 1}
+      - {ref: fs/fan-grille-120@1, id: fan-2, at: [261.0, 28.0], group: fans, rel-pos: 2}
+  bottom:
+    size: {w: 424.0, h: 170.0}
+    panel:
+      decor:
+      - {id: base, at: [0.0, 0.0], size: [424.0, 170.0], fill: '#1b1d20', kind: base}
+      - {id: guard-1-back, at: [261.0, 28.0], size: [114.0, 114.0], fill: '#0a0b0c', rx: 57.0,
+        kind: fan-opening}
+      - {id: guard-1, at: [261.0, 28.0], size: [114.0, 114.0], rx: 57.0, pattern: grille, vent: 1.5,
+        kind: finger-guard}
+      - {id: guard-2-back, at: [49.0, 28.0], size: [114.0, 114.0], fill: '#0a0b0c', rx: 57.0,
+        kind: fan-opening}
+      - {id: guard-2, at: [49.0, 28.0], size: [114.0, 114.0], rx: 57.0, pattern: grille, vent: 1.5,
+        kind: finger-guard}
+  left:
+    size: {w: 170.0, h: 44.0}
+    panel:
+      decor: &id001
+      - {id: side, at: [0.0, 0.0], size: [170.0, 44.0], fill: '#1b1d20', kind: side}
+  right:
+    size: {w: 170.0, h: 44.0}
+    panel:
+      decor: *id001
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The fan tray as FS ships FANS1U2F, ears and cord fitted.
+datasheet: {title: 'FS Cooling Fan Datasheet (FANS1U2F, FANS1U4F, FANP3U3F)', sha256: 62203e3a791cc86c35ac6913aa86843978af622e4f8f08b0b65f62cc63290b60}
+references:
+- {title: FS FANS1U2F/FANS1U4F Quick Start Guide V2.0 (portal 6672), sha256: 3426d839c716499093aa6b4fcf7db40a2d46fc29a9271f7f2424671dde6aff9b}
+- {title: FS FANS1U2F/FANS1U4F temperature controller user manual (portal 6761), sha256: 803097381ca8397b3bfa15585cd70239e7981d296f412d59e2554142f70d27ee}

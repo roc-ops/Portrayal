@@ -1,0 +1,29 @@
+format: 1
+kind: component
+name: fs-cfs-1u-wall
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  A side wall of the FS FS-CFS-1U cantilever shelf seen from above: the sheet folded up from the
+  floor along each side, its top edge following the profile the shelf's side view draws. Its front
+  end folds out into the mounting ear.
+provenance:
+  size: >-
+    estimated - 1.2, the sheet; FS states the material and not its gauge.
+  relief: >-
+    drawing - the datasheet's side view: the wall is the full 1.73 in [44.0 mm] at the front and
+    slopes straight down to about 15 mm near the rear, where its end rounds down to the floor;
+    heights above the 2 mm floor. The side view's own scale is 4 per cent off the 250.2 depth,
+    so the slope is taken as fractions of it.
+size: {w: 1.2, h: 250.2}
+size-confidence: {w: estimated, h: datasheet}
+elements:
+  plate: {at: [0.0, 0.0], size: [1.2, 250.2], class: bezel}
+relief:
+  features:
+  - {node: plate, out: 42.0, profile-y: [[0, 2.0], [4.0, 9.0], [12.9, 13.3], [250.2, 42.0]], color: '#1b1d20',
+    confidence: drawing, source: "drawing - the datasheet's side view: the wall is the full 1.73\
+      \ in [44.0 mm] at the front and slopes straight down to about 15 mm near the rear, where\
+      \ its end rounds down to the floor; heights above th"}
+skins: [default]

@@ -3,8 +3,10 @@
 
 What a rack tool needs of every device without opening it: its rack units,
 depth, how it mounts, whether its body is sheet, the cable capacity its vendor
-states, and the ids a cable route can pass through on each view of its default
-configuration. The kit's rack/catalog.js reads it through `dist`, so a rack is
+states, the ids a cable route can pass through on each view of its default
+configuration, and, where a device is not simply its envelope, the `solids` a
+cable may not pass through (rack_solids.py, docs/cable-lay-design.md section
+1.1). The kit's rack/catalog.js reads it through `dist`, so a rack is
 checked against the same numbers wherever it is built.
 
 Run by build.sh after the compiled faces and the indexes it reads exist.
@@ -16,6 +18,8 @@ import json
 import re
 import xml.etree.ElementTree as ET
 from pathlib import Path
+
+from portrayal import rack_solids
 
 RU = 44.45
 FORMAT = 1
@@ -127,6 +131,16 @@ def build(dist):
                 entry.setdefault("guides", {})[view] = g
             if ps:
                 entry.setdefault("passes", {})[view] = ps
+        # what a cable may not pass through, where that is not the envelope:
+        # derived from the same faces, never stated (cable-lay-design 1.1).
+        # A zero-U part with a pathway carries a lane (the kit's zero-u.js
+        # carriesLane), so only its walls and back are solid.
+        faces = rack_solids.read_faces({v: dist / face_file(idx, d["name"], idx.get("default"), v)
+                                        for v in ("top", "front", "rear")})
+        lane = c.get("mount") == "rack-side" and bool(entry.get("guides"))
+        solid = rack_solids.solids(faces, c, lane=lane)
+        if solid:
+            entry["solids"] = solid
         out[d["name"]] = entry
     return {"format": FORMAT,
             "generated-from": "devices.json and <name>.configs.json, by rack_index.py",

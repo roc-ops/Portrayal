@@ -672,12 +672,13 @@
      }
     },
     "airflow": {
-     "description": "WHERE AIRFLOW LIVES. The chassis is the home; a configuration states `airflow` only when it DIFFERS from this, and the build reads the configuration first and falls back here. The enums differ on purpose: `side` and `passive` are chassis answers a configuration cannot give, because a fanless enclosure and a side-breathing modular chassis offer no airflow option to choose between. L91 checks the division.",
+     "description": "WHERE AIRFLOW LIVES. The chassis is the home; a configuration states `airflow` only when it DIFFERS from this, and the build reads the configuration first and falls back here. `top-to-bottom` is air drawn in at the top face and pushed out of the bottom, as a rack fan tray blowing down through the rack does. The enums differ on purpose: `side`, `passive` and `top-to-bottom` are chassis answers a configuration cannot give, because a fanless enclosure, a side-breathing modular chassis and a fan tray offer no airflow option to choose between. L91 checks the division.",
      "enum": [
       "front-to-back",
       "back-to-front",
       "side",
-      "passive"
+      "passive",
+      "top-to-bottom"
      ]
     },
     "power": {

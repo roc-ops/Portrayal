@@ -547,7 +547,7 @@ configuration's front, rear and top views.
 
 `format` is 1. Each device, keyed by `name`, always carries `manufacturer`,
 `model`, `family`, `ru`, `h`, `w`, `d`, `airflow`, `default`, `configs`
-(the names of its configurations) and `kind`. Four keys appear only when the
+(the names of its configurations) and `kind`. Five keys appear only when the
 device has them:
 
 - `mount`: the device's `chassis.mount`, present only when it is not `rack`.
@@ -555,6 +555,15 @@ device has them:
 - `capacity`: `{"count", "basis"}`, the cable capacity the vendor states.
 - `guides` and `passes`: per view (`top`, `front`, `rear`), the sorted ids a
   cable route can pass through on the default configuration's drawing.
+- `solids`: what a cable may not pass through, where that is not the
+  device's envelope (docs/cable-lay-design.md section 1.1): a list of
+  `{"part", "box": {"x", "y", "z", "w", "h", "d"}, "holes"?}`, in mm, x from
+  the device's left as seen from its front, y up from its bottom, z back from
+  its front. Each hole is `{"via", "box", "size": [w, h]}`, a declared
+  pass-through that cuts that box. Derived from the same faces
+  (`rack_solids.py`), never stated in a manifest. A device without it is its
+  envelope, `w` by `h` by `d`, unless it is a sheet part or a zero-U part that
+  carries a lane, which is then open.
 
 `ru` is `chassis.ru` when stated (0 included, for a zero-U part), else the
 height over 44.45 mm, at least 1. Removing or renaming a key, or changing what

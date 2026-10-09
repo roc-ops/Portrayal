@@ -1,0 +1,34 @@
+format: 1
+kind: component
+name: din-rail-ts35-400
+version: 1.0.0
+class: mount
+behaviour: mounts
+description: >-
+  A 400 mm length of slotted TS35 x 7.5 top-hat DIN rail (IEC/EN 60715) in zinc-plated steel,
+  seen face-on: the 27 mm crown between two 4 mm flanges, an 18 x 6.3 slot every 25 mm. The rail
+  of the FS DINRAIL2U and DINRAIL4U brackets.
+attrs: {din-profile: ts35x7.5, rail-length-mm: 400.0}
+provenance:
+  size: >-
+    drawing and registry - 400 long: the FS DIN Rail Bracket datasheet's front views dimension
+    the rail panel 400.00 and draw the rail its full length. 35 wide and 7.5 deep, a 27 mm crown,
+    slots 18 x 6.3 on a 25 mm pitch from half a pitch in: TS35 x 7.5 to IEC/EN 60715 as the AutomationDirect,
+    Entrelec and ITC drawings agree (working/intake/standards/din-rail, #736).
+  profile: >-
+    photo-measured - FS does not name the profile. The close-up render (SKU 178163, x4) shows
+    a slotted top-hat rail whose depth is about a fifth of its width, which is the 7.5 rather
+    than the 15 mm deep TS35; FS's own DIN-rail products are TS35 (the AurCore switches this library
+    seats on one declare ts35x7.5 and ts35x15).
+  relief: >-
+    registry - the rail stands 7.5 off what it is fixed to (TS35 x 7.5), built as one box with
+    the face art - flanges, crown and slots - on its front. The slots are painted, not cut.
+size: {w: 400.0, h: 35.0}
+size-confidence: {w: drawing, h: registry}
+elements:
+  rail: {at: [0.0, 0.0], size: [400.0, 35.0], class: bezel}
+relief:
+  features:
+  - {node: rail, out: 7.5, color: '#8e9399', confidence: registry, source: 'TS35 x 7.5 (IEC/EN
+      60715): 7.5 deep'}
+skins: [default]

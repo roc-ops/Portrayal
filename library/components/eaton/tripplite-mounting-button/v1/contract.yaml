@@ -1,0 +1,70 @@
+format: 1
+kind: component
+name: tripplite-mounting-button
+version: 1.0.0
+class: mount
+mates: pdu-button
+profile: power
+description: >-
+  The toolless mounting button on the back of an Eaton Tripp Lite series
+  zero-U PDU - a black head 17.67 across on a short shaft, screwed through a
+  round base plate, that drops into a rack's button-mount slot and slides down
+  into the slot's narrow end. Seen here from behind the PDU.
+size: {w: 24.7, h: 24.7}
+size-confidence: {w: drawing, h: drawing}
+provenance:
+  size: >-
+    drawing - the rear view of the PDUMV20HVNETLX submittal drawing (17-08-067,
+    page 2, vector, read at 0.3225 pt/mm) draws the button as three concentric
+    circles centred on the PDU's width: 26.0, 18.6 and 9.3 across at their
+    outer edges with a stroke about 1.3 thick, so 24.7, 17.3 and 8.0 at the
+    stroke centre. The middle circle is the head, which DETAIL B and the 90
+    degree bracket detail dimension as 17.67 [0.69]; the head is drawn at that
+    figure. The outer circle is the base plate, the inner the screw's washer.
+  relief: >-
+    drawing, at a detail scale - DETAIL B draws the button in profile, not to
+    the sheet's scale; read against its own 17.67 head (170 px at 1200 dpi),
+    the base plate stands 2.6 off the back, a narrower shaft 2.4 and the head
+    2.1, about 7.1 in all. The shaft is not built, as on
+    eaton/g4-mounting-button@1.
+  finish: >-
+    photo - PDUMV20HVNETLX_DT04 shows the button on the PDU's back: a black
+    head about 17 across and a bright washer and screw about 9 across in its
+    centre. The base plate is black on black and not resolved; it is drawn a
+    shade lighter than the head so the two read apart.
+  alternative: >-
+    drawing - the note beside DETAIL B: the installed 17.67 mm buttons can be
+    replaced with included 14.17 mm buttons for additional compatibility. The
+    smaller buttons are an accessory and are not drawn.
+  mates: >-
+    `pdu-button` (spec/schemas/connectors.yaml), the interface a keyhole slot
+    presents. The owner's manual (933666 rev B, step 1-1) installs the PDU by
+    inserting the rear buttons into the rack's button-mount slots and sliding
+    it down until the buttons engage the slots' narrow section, which is the
+    mechanism the interface names; the Eaton G4 installation guide (2.11) gives
+    Tripp Lite racks' slots as 14 mm in 3 mm sheet. No held source gives this
+    button's shaft diameter, so the fit is stated by mechanism and not checked
+    by dimension (the device records the gap). It seats at `mate`, the head's
+    axis.
+elements:
+  head: {at: [3.515, 3.515], size: [17.67, 17.67], class: mount}
+relief:
+  features:
+    - node: base
+      cyl: 2.6
+      color: '#26282b'
+      confidence: drawing
+      source: >-
+        17-08-067 DETAIL B, the base plate 2.6 off the back, read against the
+        detail's own 17.67 head.
+    - node: head
+      cyl: 2.1
+      lift: 5.0
+      color: '#18191b'
+      confidence: drawing
+      source: >-
+        17-08-067 DETAIL B: the head 2.1 thick, its far face about 7.1 off the
+        back; the 2.4 shaft between plate and head is not built.
+connection-points:
+  mate: {at: [12.35, 12.35], direction: front}
+skins: [default]
