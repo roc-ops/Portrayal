@@ -7,9 +7,9 @@ manufacturer: FS.com
 model: FHU-BPS-1U-10
 aliases:
 - {name: '72753', kind: vendor, note: FS shop product ID}
-- {name: USFHU-BPS-1U-10, kind: variant, note: "FS SKU 317019, the US 10-pack of 1U steel blanks:\
-    \ the same 44 x 482.6 SPCC plate and slots per its own datasheet (7873) and stencil; FS does\
-    \ not say how it differs"}
+- {name: USFHU-BPS-1U-10, kind: variant, note: "FS SKU 317019, the US-warehouse 10-pack: the same\
+    \ 44 x 482.6 SPCC plate with the same slots per its own datasheet (7873) and stencil; its\
+    \ renders differ from 72753 only in the FS mark printed on the face"}
 description: >-
   1U 19in steel blanking panel, FS FHU-BPS-1U-10: one flat black SPCC plate 44 x 482.6 mm, screwed
   to the front rails through two slots at each end, its top and bottom edges folded back between
@@ -82,6 +82,11 @@ provenance:
     confidence: datasheet
     note: >-
       the FS Blanking Panel Datasheet: 2.588 kg for the pack of ten, so 0.259 a panel (derived)
+  packs:
+    confidence: datasheet
+    note: >-
+      FS sells the 1U panel only as this ten-pack, so the model is the pack's SKU and the base
+      configuration is one panel of it.
   rear:
     confidence: drawing
     note: >-
@@ -152,13 +157,13 @@ views:
       - {id: plate, at: [0.0, 0.0], size: [482.6, 44.0], fill: '#1b1d20', kind: plate}
       - {id: return-top, at: [26.5, 0.0], size: [429.6, 1.0], fill: '#2a2d31', kind: return}
       - {id: return-bottom, at: [26.5, 43.0], size: [429.6, 1.0], fill: '#2a2d31', kind: return}
-      - {id: slot-r1, at: [468.21, 2.625], size: [11.0, 7.0], fill: '#0a0b0c', rx: 3.5, vent: 1.0,
+      - {id: slot-l1, at: [468.21, 2.625], size: [11.0, 7.0], fill: '#0a0b0c', rx: 3.5, vent: 1.0,
         kind: slot}
-      - {id: slot-r2, at: [468.21, 34.375], size: [11.0, 7.0], fill: '#0a0b0c', rx: 3.5, vent: 1.0,
+      - {id: slot-l2, at: [468.21, 34.375], size: [11.0, 7.0], fill: '#0a0b0c', rx: 3.5, vent: 1.0,
         kind: slot}
-      - {id: slot-l1, at: [3.39, 2.625], size: [11.0, 7.0], fill: '#0a0b0c', rx: 3.5, vent: 1.0,
+      - {id: slot-r1, at: [3.39, 2.625], size: [11.0, 7.0], fill: '#0a0b0c', rx: 3.5, vent: 1.0,
         kind: slot}
-      - {id: slot-l2, at: [3.39, 34.375], size: [11.0, 7.0], fill: '#0a0b0c', rx: 3.5, vent: 1.0,
+      - {id: slot-r2, at: [3.39, 34.375], size: [11.0, 7.0], fill: '#0a0b0c', rx: 3.5, vent: 1.0,
         kind: slot}
   top:
     size: {w: 482.6, h: 9.8}
