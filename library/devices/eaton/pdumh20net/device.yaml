@@ -26,16 +26,22 @@ provenance:
       faces, and no submittal drawing is published (the address the PDUMV20HVNETLX's
       follows returns 404). PDUMH20NET_DT01 (front) and PDUMH20NET_BK (rear) are
       3000 px masters, each spanning the PDU's 444 mm (the spec sheet's 17.5 in,
-      44.4 cm) in 2520 px: 5.676 px per mm across. Each face is 251 px high against
-      the spec sheet's 44.4 mm, 5.65 px per mm, so the two axes agree within half a
-      percent and the images are measured as orthographic (the rear is turned 0.18
-      degrees, 8 px over its length, and was read against its local top edge). THE
+      44.4 cm) in 2520 px: 5.676 px per mm across. Each face is about 251 px high
+      against the spec sheet's 44.4 mm, 5.65 px per mm, so the two axes agree within
+      half a percent at the middle. THE PHOTOGRAPHS ARE NOT QUITE ORTHOGRAPHIC: DT01's
+      face tapers from 252 px high at its left end to 248 at its right, and the
+      repeated features bow by about 1 mm at mid-length against a straight-line fit
+      (about 0.5 mm on BK, which is also turned 0.18 degrees, 8 px over its length,
+      and was read against its local top edge). THE
       SCALE IS PROVED BY TWO FEATURES OF KNOWN SIZE, independent of the body: the
       rear DE-9's jackscrew standoffs sit 25.1 apart against the 24.99 of the
       D-subminiature shell (TE C-747905), and the outlets' square faces read 27.0
       to 27.6 across (mean 27.3, six read) against the 27.0 of the NEMA 5-20R face
       std/nema-5-20r@1 carries, so the scale holds within about one percent. Edges
-      are soft at this scale; positions are good to about 0.3 mm.
+      are soft and the faces bow, so a position is good to about 0.5 mm near the
+      ends and about 1 mm at mid-length, not better. THE OUTLET PITCH IS UNIFORM ON
+      PURPOSE: the bow is the camera's and not the hardware's, so a straight-line
+      fit is drawn rather than each outlet where the photograph puts it.
   chassis:
     confidence: datasheet
     note: >-
@@ -65,9 +71,10 @@ provenance:
     note: >-
       photo-measured - DT01, mm from the face's left and top. Eight 5-20R
       outlets, numbered 8 to 1 left to right as printed, their square faces 27
-      across (the part's) with their tops at 5.6 and their centres at 17.6 and
-      then every 36.05: the outlet faces' edges give 36.1, their numerals 36.06
-      and their lamps 36.02. Each is turned 90 degrees, so its U earth hole is on
+      across (the part's) with their tops at 5.6 and their centres at 18.1 and
+      then every 35.95, the pitch common to both faces (see `rear`); read alone,
+      this face's outlet edges give 36.1, its numerals 36.06 and its lamps 36.02,
+      and the bow (see `method`) leaves the fit's residuals within 0.9. Each is turned 90 degrees, so its U earth hole is on
       the right with its round side toward the slots, the plain line slot at the
       top left and the T neutral slot below it, as DT01 shows. Under each, its
       numeral (bold white, about 3.1 high, baseline 36.7) and below that a round
@@ -89,16 +96,19 @@ provenance:
       "Config. Port" centred under it at 28.7, baseline 39.0; the Eaton wordmark
       from 51.3 to 98.5 across and 16.4 to 28.2 down; and the cord's bushing
       from 107.3 to 127.1 across. Then eight outlets numbered 16 to 9 left to
-      right, faces 27 across centred at 174.6 and every 36.0 (their edges give
-      36.03, their lamps 35.88), turned 90 as on the front, their tops at 4.4;
+      right, faces 27 across centred at 174.5 and every 35.95 (read alone, their
+      edges give 36.03 and their lamps 35.88), turned 90 as on the front, their
+      tops at 4.4;
       numerals on a baseline at 36.4; lamps at 39.3. Holes about 3 across at
       (121.1, 38.6) and (436.1, 39.4). THE REAR OUTLETS SIT ABOUT 1.2 HIGHER than
       the front ones: the faces' top edges read 4.6 against 5.5, the line slots'
       lit edges 10.4 against 11.8 and the T slots' 28.1 against 29.7, each read at
       three outlets on each face, while the numerals and lamps of the two faces
-      agree within 0.3. It is drawn as measured. The outlets stand back to back:
-      outlet 9's centre is 17.4 from the PDU's left end seen from the front, and
-      outlet 8's 17.6.
+      agree within 0.3. It is drawn as measured. THE OUTLETS STAND BACK TO BACK,
+      so both faces take one pitch: a least-squares fit of the sixteen lamps with
+      one pitch and an offset per face gives 35.94, drawn 35.95, and puts outlet
+      9's centre 17.85 and outlet 8's 18.1 from the PDU's left end seen from the
+      front.
   outlets:
     confidence: datasheet
     note: >-
@@ -268,10 +278,13 @@ gaps:
   scope: [config-port]
   reason: vendor-silent
   note: >-
-    the rear's Config. Port is a female DE-9 (BK at 4x: nine socket holes in a grey
-    insert), and the library has only the male half (std/db9@1, composed by
-    common/db9-receptacle@1), so it is drawn male. Its place, size and standoffs
-    are right; its gender is not.
+    THE SOURCE IS CLEAR AND THE LIBRARY IS SHORT: BK at 4x shows the rear's
+    Config. Port as a female DE-9 (nine socket holes in a grey insert), and the
+    vendor is not silent about it. What is missing is a part - the library has
+    only the male half (std/db9@1, composed by common/db9-receptacle@1) - so it
+    is drawn male. Its place, size and standoffs are right; its gender is not.
+    The reason is the nearest the vocabulary has; none names a missing library
+    part.
   wanted: a female DE-9 receptacle part (sockets in a flush insert, as std/vga@1 draws its own), to replace the male one here.
 - what: outlet-lamp-colour
   scope: [outlet-leds]
@@ -335,35 +348,35 @@ views:
       decor:
       - {id: hole-front, at: [6.1, 37.8], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: hole}
     silkscreen:
-      - {at: [17.6, 36.7], text: '8', font-size: 4.3, anchor: middle, for: outlet-8}
-      - {at: [53.65, 36.7], text: '7', font-size: 4.3, anchor: middle, for: outlet-7}
-      - {at: [89.7, 36.7], text: '6', font-size: 4.3, anchor: middle, for: outlet-6}
-      - {at: [125.75, 36.7], text: '5', font-size: 4.3, anchor: middle, for: outlet-5}
-      - {at: [161.8, 36.7], text: '4', font-size: 4.3, anchor: middle, for: outlet-4}
+      - {at: [18.1, 36.7], text: '8', font-size: 4.3, anchor: middle, for: outlet-8}
+      - {at: [54.05, 36.7], text: '7', font-size: 4.3, anchor: middle, for: outlet-7}
+      - {at: [90.0, 36.7], text: '6', font-size: 4.3, anchor: middle, for: outlet-6}
+      - {at: [125.95, 36.7], text: '5', font-size: 4.3, anchor: middle, for: outlet-5}
+      - {at: [161.9, 36.7], text: '4', font-size: 4.3, anchor: middle, for: outlet-4}
       - {at: [197.85, 36.7], text: '3', font-size: 4.3, anchor: middle, for: outlet-3}
-      - {at: [233.9, 36.7], text: '2', font-size: 4.3, anchor: middle, for: outlet-2}
-      - {at: [269.95, 36.7], text: '1', font-size: 4.3, anchor: middle, for: outlet-1}
+      - {at: [233.8, 36.7], text: '2', font-size: 4.3, anchor: middle, for: outlet-2}
+      - {at: [269.75, 36.7], text: '1', font-size: 4.3, anchor: middle, for: outlet-1}
       - {at: [400.45, 32.4], text: 'LOAD (AMPS)', font-size: 2.6, anchor: middle, for: meter}
     components:
       bays:
         - {id: card, at: [289.6, 4.4], size: {w: 85.8, h: 29.1}, opening: {w: 67.3, h: 29.1}, accepts: [eaton/webcardlx@1], default: eaton/webcardlx@1, group: network, rel-pos: 1}
       placements:
-        - {id: outlet-8, ref: std/nema-5-20r@1, at: [4.1, 5.6], rotate: 90, group: outlets, rel-pos: 8, fed-by: input, states: ['on', 'off']}
-        - {id: outlet-7, ref: std/nema-5-20r@1, at: [40.15, 5.6], rotate: 90, group: outlets, rel-pos: 7, fed-by: input, states: ['on', 'off']}
-        - {id: outlet-6, ref: std/nema-5-20r@1, at: [76.2, 5.6], rotate: 90, group: outlets, rel-pos: 6, fed-by: input, states: ['on', 'off']}
-        - {id: outlet-5, ref: std/nema-5-20r@1, at: [112.25, 5.6], rotate: 90, group: outlets, rel-pos: 5, fed-by: input, states: ['on', 'off']}
-        - {id: outlet-4, ref: std/nema-5-20r@1, at: [148.3, 5.6], rotate: 90, group: outlets, rel-pos: 4, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-8, ref: std/nema-5-20r@1, at: [4.6, 5.6], rotate: 90, group: outlets, rel-pos: 8, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-7, ref: std/nema-5-20r@1, at: [40.55, 5.6], rotate: 90, group: outlets, rel-pos: 7, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-6, ref: std/nema-5-20r@1, at: [76.5, 5.6], rotate: 90, group: outlets, rel-pos: 6, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-5, ref: std/nema-5-20r@1, at: [112.45, 5.6], rotate: 90, group: outlets, rel-pos: 5, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-4, ref: std/nema-5-20r@1, at: [148.4, 5.6], rotate: 90, group: outlets, rel-pos: 4, fed-by: input, states: ['on', 'off']}
         - {id: outlet-3, ref: std/nema-5-20r@1, at: [184.35, 5.6], rotate: 90, group: outlets, rel-pos: 3, fed-by: input, states: ['on', 'off']}
-        - {id: outlet-2, ref: std/nema-5-20r@1, at: [220.4, 5.6], rotate: 90, group: outlets, rel-pos: 2, fed-by: input, states: ['on', 'off']}
-        - {id: outlet-1, ref: std/nema-5-20r@1, at: [256.45, 5.6], rotate: 90, group: outlets, rel-pos: 1, fed-by: input, states: ['on', 'off']}
-        - {id: led-8, ref: common/led-dot@1, at: [16.6, 38.6], group: outlet-leds, rel-pos: 8, for: outlet-8}
-        - {id: led-7, ref: common/led-dot@1, at: [52.65, 38.6], group: outlet-leds, rel-pos: 7, for: outlet-7}
-        - {id: led-6, ref: common/led-dot@1, at: [88.7, 38.6], group: outlet-leds, rel-pos: 6, for: outlet-6}
-        - {id: led-5, ref: common/led-dot@1, at: [124.75, 38.6], group: outlet-leds, rel-pos: 5, for: outlet-5}
-        - {id: led-4, ref: common/led-dot@1, at: [160.8, 38.6], group: outlet-leds, rel-pos: 4, for: outlet-4}
+        - {id: outlet-2, ref: std/nema-5-20r@1, at: [220.3, 5.6], rotate: 90, group: outlets, rel-pos: 2, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-1, ref: std/nema-5-20r@1, at: [256.25, 5.6], rotate: 90, group: outlets, rel-pos: 1, fed-by: input, states: ['on', 'off']}
+        - {id: led-8, ref: common/led-dot@1, at: [17.1, 38.6], group: outlet-leds, rel-pos: 8, for: outlet-8}
+        - {id: led-7, ref: common/led-dot@1, at: [53.05, 38.6], group: outlet-leds, rel-pos: 7, for: outlet-7}
+        - {id: led-6, ref: common/led-dot@1, at: [89.0, 38.6], group: outlet-leds, rel-pos: 6, for: outlet-6}
+        - {id: led-5, ref: common/led-dot@1, at: [124.95, 38.6], group: outlet-leds, rel-pos: 5, for: outlet-5}
+        - {id: led-4, ref: common/led-dot@1, at: [160.9, 38.6], group: outlet-leds, rel-pos: 4, for: outlet-4}
         - {id: led-3, ref: common/led-dot@1, at: [196.85, 38.6], group: outlet-leds, rel-pos: 3, for: outlet-3}
-        - {id: led-2, ref: common/led-dot@1, at: [232.9, 38.6], group: outlet-leds, rel-pos: 2, for: outlet-2}
-        - {id: led-1, ref: common/led-dot@1, at: [268.95, 38.6], group: outlet-leds, rel-pos: 1, for: outlet-1}
+        - {id: led-2, ref: common/led-dot@1, at: [232.8, 38.6], group: outlet-leds, rel-pos: 2, for: outlet-2}
+        - {id: led-1, ref: common/led-dot@1, at: [268.75, 38.6], group: outlet-leds, rel-pos: 1, for: outlet-1}
         - {id: meter, ref: eaton/tripplite-ammeter@1, at: [387.8, 10.65], group: meter, rel-pos: 1, for: chassis}
   rear:
     size: {w: 444, h: 44.4}
@@ -374,35 +387,35 @@ views:
     silkscreen:
       - {id: earth-symbol, at: [19.2, 7.6], path: 'M 0 0 L 0 2.0 M -2.0 2.0 L 2.0 2.0 M -1.3 3.2 L 1.3 3.2 M -0.6 4.4 L 0.6 4.4', stroke-width: 0.35, for: ground}
       - {at: [28.35, 39.0], text: 'Config. Port', font-size: 3.6, anchor: middle, for: config-port}
-      - {at: [174.6, 36.4], text: '16', font-size: 4.3, anchor: middle, for: outlet-16}
-      - {at: [210.6, 36.4], text: '15', font-size: 4.3, anchor: middle, for: outlet-15}
-      - {at: [246.6, 36.4], text: '14', font-size: 4.3, anchor: middle, for: outlet-14}
-      - {at: [282.6, 36.4], text: '13', font-size: 4.3, anchor: middle, for: outlet-13}
-      - {at: [318.6, 36.4], text: '12', font-size: 4.3, anchor: middle, for: outlet-12}
-      - {at: [354.6, 36.4], text: '11', font-size: 4.3, anchor: middle, for: outlet-11}
-      - {at: [390.6, 36.4], text: '10', font-size: 4.3, anchor: middle, for: outlet-10}
-      - {at: [426.6, 36.4], text: '9', font-size: 4.3, anchor: middle, for: outlet-9}
+      - {at: [174.5, 36.4], text: '16', font-size: 4.3, anchor: middle, for: outlet-16}
+      - {at: [210.45, 36.4], text: '15', font-size: 4.3, anchor: middle, for: outlet-15}
+      - {at: [246.4, 36.4], text: '14', font-size: 4.3, anchor: middle, for: outlet-14}
+      - {at: [282.35, 36.4], text: '13', font-size: 4.3, anchor: middle, for: outlet-13}
+      - {at: [318.3, 36.4], text: '12', font-size: 4.3, anchor: middle, for: outlet-12}
+      - {at: [354.25, 36.4], text: '11', font-size: 4.3, anchor: middle, for: outlet-11}
+      - {at: [390.2, 36.4], text: '10', font-size: 4.3, anchor: middle, for: outlet-10}
+      - {at: [426.15, 36.4], text: '9', font-size: 4.3, anchor: middle, for: outlet-9}
     components:
       placements:
         - {id: ground, ref: common/ground-screw-washer@1, at: [4.5, 5.7], group: grounding, rel-pos: 1}
         - {id: config-port, ref: common/db9-receptacle@1, at: [12.95, 21.95], group: config, rel-pos: 1, attrs: {media: db9, function: factory configuration}, description: 'Config. Port, the Factory Port of the owner''s manual: reserved for factory authorised personnel; connect nothing to it'}
         - {id: input, ref: eaton/tripplite-cord-l5-20p@1, at: [107.3, 7.7], group: power-input, rel-pos: 1, description: 'the fixed 12 ft input cord, ending in a NEMA L5-20P locking plug (a 5-20P adapter is in the box)'}
-        - {id: outlet-16, ref: std/nema-5-20r@1, at: [161.1, 4.4], rotate: 90, group: outlets, rel-pos: 16, fed-by: input, states: ['on', 'off']}
-        - {id: outlet-15, ref: std/nema-5-20r@1, at: [197.1, 4.4], rotate: 90, group: outlets, rel-pos: 15, fed-by: input, states: ['on', 'off']}
-        - {id: outlet-14, ref: std/nema-5-20r@1, at: [233.1, 4.4], rotate: 90, group: outlets, rel-pos: 14, fed-by: input, states: ['on', 'off']}
-        - {id: outlet-13, ref: std/nema-5-20r@1, at: [269.1, 4.4], rotate: 90, group: outlets, rel-pos: 13, fed-by: input, states: ['on', 'off']}
-        - {id: outlet-12, ref: std/nema-5-20r@1, at: [305.1, 4.4], rotate: 90, group: outlets, rel-pos: 12, fed-by: input, states: ['on', 'off']}
-        - {id: outlet-11, ref: std/nema-5-20r@1, at: [341.1, 4.4], rotate: 90, group: outlets, rel-pos: 11, fed-by: input, states: ['on', 'off']}
-        - {id: outlet-10, ref: std/nema-5-20r@1, at: [377.1, 4.4], rotate: 90, group: outlets, rel-pos: 10, fed-by: input, states: ['on', 'off']}
-        - {id: outlet-9, ref: std/nema-5-20r@1, at: [413.1, 4.4], rotate: 90, group: outlets, rel-pos: 9, fed-by: input, states: ['on', 'off']}
-        - {id: led-16, ref: common/led-dot@1, at: [173.6, 38.3], group: outlet-leds, rel-pos: 16, for: outlet-16}
-        - {id: led-15, ref: common/led-dot@1, at: [209.6, 38.3], group: outlet-leds, rel-pos: 15, for: outlet-15}
-        - {id: led-14, ref: common/led-dot@1, at: [245.6, 38.3], group: outlet-leds, rel-pos: 14, for: outlet-14}
-        - {id: led-13, ref: common/led-dot@1, at: [281.6, 38.3], group: outlet-leds, rel-pos: 13, for: outlet-13}
-        - {id: led-12, ref: common/led-dot@1, at: [317.6, 38.3], group: outlet-leds, rel-pos: 12, for: outlet-12}
-        - {id: led-11, ref: common/led-dot@1, at: [353.6, 38.3], group: outlet-leds, rel-pos: 11, for: outlet-11}
-        - {id: led-10, ref: common/led-dot@1, at: [389.6, 38.3], group: outlet-leds, rel-pos: 10, for: outlet-10}
-        - {id: led-9, ref: common/led-dot@1, at: [425.6, 38.3], group: outlet-leds, rel-pos: 9, for: outlet-9}
+        - {id: outlet-16, ref: std/nema-5-20r@1, at: [161.0, 4.4], rotate: 90, group: outlets, rel-pos: 16, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-15, ref: std/nema-5-20r@1, at: [196.95, 4.4], rotate: 90, group: outlets, rel-pos: 15, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-14, ref: std/nema-5-20r@1, at: [232.9, 4.4], rotate: 90, group: outlets, rel-pos: 14, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-13, ref: std/nema-5-20r@1, at: [268.85, 4.4], rotate: 90, group: outlets, rel-pos: 13, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-12, ref: std/nema-5-20r@1, at: [304.8, 4.4], rotate: 90, group: outlets, rel-pos: 12, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-11, ref: std/nema-5-20r@1, at: [340.75, 4.4], rotate: 90, group: outlets, rel-pos: 11, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-10, ref: std/nema-5-20r@1, at: [376.7, 4.4], rotate: 90, group: outlets, rel-pos: 10, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-9, ref: std/nema-5-20r@1, at: [412.65, 4.4], rotate: 90, group: outlets, rel-pos: 9, fed-by: input, states: ['on', 'off']}
+        - {id: led-16, ref: common/led-dot@1, at: [173.5, 38.3], group: outlet-leds, rel-pos: 16, for: outlet-16}
+        - {id: led-15, ref: common/led-dot@1, at: [209.45, 38.3], group: outlet-leds, rel-pos: 15, for: outlet-15}
+        - {id: led-14, ref: common/led-dot@1, at: [245.4, 38.3], group: outlet-leds, rel-pos: 14, for: outlet-14}
+        - {id: led-13, ref: common/led-dot@1, at: [281.35, 38.3], group: outlet-leds, rel-pos: 13, for: outlet-13}
+        - {id: led-12, ref: common/led-dot@1, at: [317.3, 38.3], group: outlet-leds, rel-pos: 12, for: outlet-12}
+        - {id: led-11, ref: common/led-dot@1, at: [353.25, 38.3], group: outlet-leds, rel-pos: 11, for: outlet-11}
+        - {id: led-10, ref: common/led-dot@1, at: [389.2, 38.3], group: outlet-leds, rel-pos: 10, for: outlet-10}
+        - {id: led-9, ref: common/led-dot@1, at: [425.15, 38.3], group: outlet-leds, rel-pos: 9, for: outlet-9}
     regions:
       - {id: logo-zone, at: [51.3, 16.4], size: {w: 47.2, h: 11.8}, label: 'Eaton wordmark; not drawn'}
   top:
