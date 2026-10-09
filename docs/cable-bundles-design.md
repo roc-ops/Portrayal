@@ -1,8 +1,9 @@
 # Cable bundles: bundles, Velcro straps and bend radius in the rack kit
 
 Status: agreed 2026-10-08 (#920). #921 built the record, the commands, the
-size check and the straps in kit 0.7.0 (section 11 says how); the bend check
-(#922), the drawings (portrayal-site#142) and the exports (#923) are to come. Cable management piece 3,
+size check and the straps in kit 0.7.0 (section 11 says how), and #922 the
+bend check in kit 0.8.0 (section 12); the drawings (portrayal-site#142) and
+the exports (#923) are to come. Cable management piece 3,
 tracked in roc-ops/portrayal-site#143. Builds on the rack core in `kit/rack/`
 and on two changes in flight that touch the same files: the rack agent commands
 (kit 0.4.0: `inspect`, `selectCables`, `fit`, `field`, a `describe` window and a
@@ -885,3 +886,58 @@ What the build settled that the sections above leave to it:
   `inspect` of the bundle and of the cable, since it is not drawn.
 - **A reader that throws** during a bundle command's waypoint check falls back
   to the catalogue's pathways, as a command without the readers does.
+
+## 12. As built in #922
+
+What the bend check settled that section 5.2 leaves to it:
+
+- **Where the room comes from.** A pathway whose guide states a `radius` has
+  that radius as its room, from the part (`source: 'guide'`, not estimated),
+  whether the trunk turns there or passes straight through. A corner on such a
+  pathway is the pathway's, and is not also judged from its legs. No guide
+  states a radius today (decision 8), so in practice every room is a corner's
+  `r_max` from its legs (`source: 'legs'`), which is marked `estimated: true`:
+  it is worked out from the rack's own sketch of where rings and lanes are,
+  not from a measured bend.
+- **The polyline is the trunk's waypoints at `pointOf`**, a ring at its
+  centre, as `trunkLength` and `straps` measure the trunk. It is not #930's
+  `routePath`, which splits a ring into the faces a cable enters and leaves
+  by: that path runs from port to port, and a trunk has no ports. Treating a
+  ring's inside as straight cable would also turn the stand-off of a lacer
+  (the bend from its rings out to the lane) into a corner at the ring's face
+  with no room on one side, on the strength of a ring depth that is itself an
+  estimate (`RING_DEPTH`). The cost: where a ring sits at a leg's end, the
+  room can be overstated by up to half the ring's depth, 5 mm at the
+  estimated depth.
+- **A point is judged** only where two or more members are present, as the
+  size check counts a bundle, and where at least one of them bends with it
+  there (not at its own join or peel point, section 4.3). A point where none
+  of those has a radius is unchecked (`ok: null`), never a pass.
+- **Rounding.** Angles, legs and room are given to 0.1 (mm or degree), and a
+  point passes when its need is at most its room as given, so a reader who
+  compares the two numbers it is shown agrees with the verdict.
+- **The unchecked note** says "no cable type with a bend radius", not "no cable
+  type": `ctx.bendOf` is null for a type that states no radius too. Every type
+  #919 publishes states one, so today the two are the same. Without
+  `ctx.bendOf` the note is "the cable types are not loaded" (section 3.1).
+- **A trunk that doubles back** has no room. Its warning says so rather than
+  giving a shortfall: "Bundle 2 doubles back at mgr-2 ring 2, with no room for
+  a bend; c1 (dac) needs 23 mm." The member is named with its type id, as the
+  rack stores it (`c7 (om4)`).
+- **What the site reads** (portrayal-site#142). `inspect` gives
+  `bend: {radius_mm, by, unchecked, points, violations}`: the bundle's radius
+  and the member that sets it, over every member riding it; the members with
+  no radius; every point judged; and the points that miss. Each point, and so
+  each violation, is
+  `{kind: 'corner' | 'pathway', at, waypoint, angle_deg?, legs_mm?, room_mm,
+  source: 'legs' | 'guide', estimated, need_mm, by, members, unchecked, ok,
+  short_mm}`: `at` the place in words, `waypoint` the trunk waypoint it is at
+  (a `{lane, ru}` or an `{item, via}`, to draw it from), `angle_deg` and
+  `legs_mm` (in, out) for a corner, `need_mm` and `by` the largest radius
+  present and the cable that sets it, `members` those counted there,
+  `unchecked` those present with no radius, and `short_mm` the miss (0 when
+  none). `bend` is null when the routes are not known or there is no bundle to
+  bend (fewer than two cables, or no trunk).
+- **Single cables, and members' leads, are not checked** (sections 5.2 and 9).
+  `cornersOf(points)` is exported, so the per-cable follow-up #919 names can
+  reuse the same geometry.
