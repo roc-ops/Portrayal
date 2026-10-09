@@ -106,7 +106,7 @@ as `@portrayal/kit/rack/<module>`:
 | `rack/cable-types.js` | the cable types (`cable-types.json`): `loadCableTypes(dist)` fetches them and returns `typeOf`, `bendOf` and `diameterOf` over them; the same lookups are exported to build over a table already in hand (a fixture, a cached copy): `typeOf(types, id)`, `cableTypeOf(types, cable)`, `radiusMm(type, which)`, `installedRadiusMm(types, id)`, `bendLookup(types)` and `diameterLookup(types)`, each radius in millimetres |
 | `rack/route.js`, `rack/route-path.js`, `rack/cable-geometry.js` | where a cable runs: `resolveRoute`, `routePath`, `ringMarks`, `orientMarks`, `reverseMarks`, `routedLength`, `pathLength`, pathway fill, `ringFindings`, and the geometry under them (`throughRings`) |
 | `rack/bundles.js`, `rack/bundle-route.js` | cable bundles: the size and bend checks (`bundleCheck`, `bundleChecks`, `pathwaysOn`, `bendCheck`, `cornersOf`), strap positions (`straps`), the trunk worked out from the members' routes (`deriveTrunk`) and a member's route along it (`followTrunk`) |
-| `rack/export-data.js` | the rack as rows: `bomRows`, `cableScheduleRows` and the device-import data |
+| `rack/export-data.js` | the rack as rows: `bomRows`, `cableScheduleRows` and the device-import data, and the bundles as the exports read them (`bundleExports`, `bundleNotes`, `strapBomRows`) |
 | `rack/dcim-rules.js` | what a NetBox or Nautobot import needs of a rack |
 | `rack/validate.js` | `validate(schema, value)`, a small JSON Schema validator, and `same` |
 | `rack/commands.js` | every edit as a named, validated command, and `apply` for a batch of them |
@@ -175,6 +175,9 @@ const devices = rack.items.filter(i => chassisOf(i.ref)?.mount !== 'rack-face')
   .map(i => ({ ref: i.ref, cfg: i.cfg, ...catalog.devices[i.ref] }));
 const bom = bomRows({ devices, frame: rack.frame, railUs: [1, 1] });
 const schedule = cableScheduleRows(rack);
+// With the routes, each bundle's length, straps, size and bend:
+// const bundles = bundleExports(rack, { route: ctx });
+// cableScheduleRows(rack, ends, items, routes, { bundles }); strapBomRows(bundles)
 ```
 
 `loadCatalog` reads through `fetch` and `location`, which a browser has and plain
@@ -333,6 +336,25 @@ source: 'legs' | 'guide', estimated, need_mm, by, members, unchecked, ok,
 short_mm }`, `ok` null where nothing present has a radius; `cornersOf(points)`
 is the geometry on its own. A cable outside a bundle, and a member's lead to
 its port, are not checked for bend.
+
+**Bundles in the exports (0.9.0).** `bundleExports(rack, ctx)` in
+`@portrayal/kit/rack/export-data` measures each bundle once, with the same
+`ctx` as `bundleCheck`, and gives one record per bundle: `{ id, number, label,
+name, members, drawn, checked, length_m, every, straps, size_mm, limit_mm,
+limit_at, limit_estimated, bend_mm, bend_by, bend_checked, warnings, notes }`.
+`name` is what a tag prints (the label, else "Bundle N"), and `number` and
+`label` are there on their own for label software. `straps` is the count the
+BOM buys, and null when the route could not be read: never a guess.
+`bundleNotes(bundles)` is one line per bundle, its members, length, straps,
+size and bend ("Bundle 2 (b1): 12 cables (c1-c12), 2.4 m, 8 straps every
+12 in; ..."), followed by its warnings and notes.
+`strapBomRows(bundles)` is the BOM's one hook-and-loop strap line, every
+bundle's straps summed, and `strapBomNotes(bundles)` says what it could not
+count. `cableScheduleRows(rack, ends, items, routes, { bundles })` has a
+`bundle` column straight after `route` and carries the bundle notes. NetBox's
+cables file names a member's bundle first in its description; Nautobot's
+cable has no description, so its notes list each bundle's cables. draw.io
+draws members one by one and says so.
 
 **The rack file is version 3 from 0.7.0.** `parseDoc` reads version 1 and 2
 files as they were, and every save writes version 3, which a page or kit
