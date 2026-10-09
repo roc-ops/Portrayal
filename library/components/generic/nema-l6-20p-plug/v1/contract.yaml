@@ -1,0 +1,80 @@
+format: 1
+kind: component
+name: nema-l6-20p-plug
+version: 1.0.0
+class: inlet
+conforms: nema-l6-20p-plug
+profile: power
+description: >-
+  A NEMA L6-20P locking plug (20 A 250 V, two pole, three wire, grounding),
+  face on: the grip, the face and its three curved blades, the earth blade
+  with its bent tab. The input plug at the end of a PDU's cord, which is what
+  identifies the PDU's power input.
+size: {w: 52.8, h: 52.8}
+size-confidence: {w: drawing, h: drawing}
+attrs: {plug: nema-l6-20p, rating-a: 20, rating-v: 250}
+unplaced: >-
+  No device in the library places it yet. It is for a PDU whose fixed input cord ends in
+  an L6-20P. The Eaton (Tripp Lite) PDUMV20HVNETLX ships a detachable C19-to-L6-20P cord,
+  but its own input is a C20 inlet (std/c20-inlet@1), so it does not place this part (#933).
+provenance:
+  size: >-
+    drawing - registry `nema-l6-20p-plug`. Leviton CATSTD-02321-00X-D01 rev 1
+    "2321 20A plug NEMA L6-20 catalog drawing", scale 1:1, third-angle
+    (https://frpublish.leviton.com/content/dam/leviton/commercial-industrial/product_documents/dimensional_drawing/CATSTD-02321-00X-D01.pdf):
+    the grip 2.08 in [52.8 mm] across, dimensioned. NEMA WD 6, which governs
+    the configuration, is not held.
+  method: >-
+    drawing - the sheet is vector and drawn 1:1, and its face view reads
+    52.78 across at 2.835 pt/mm, the printed 52.8. Every figure below is read
+    off the paths at that scale.
+  face: >-
+    drawing - the front housing 46.81 across (the side view dimensions it
+    1.84 in [46.8 mm]), an insulator ring 42.8 inside it, and three assembly
+    screw heads 5.8 across at the top and the two lower corners.
+  blades: >-
+    drawing - the blades are arcs between radii 10.35 and 11.88 of the face
+    centre (1.5 thick). In the drawing's own orientation, angles measured
+    clockwise from three o'clock: X from 177 to 229 degrees, Y from 65 to 102,
+    and the earth blade from -50 to -13 with its bent tab at the upper end.
+    The drawing's face view is kept as drawn; Bryant 70520NP/70620NP
+    (AutomationDirect electrical schematics, cdn.automationdirect.com/static/drawings/)
+    draw the same configuration turned 35 degrees.
+  blade-length: >-
+    drawing - the side view: the X and Y blades 0.73 in [18.6 mm] and the
+    earth blade 0.89 in [22.5 mm] proud of the face.
+  no-text: >-
+    The moulded legends on the face (the maker's name, 20A-250V GRDG, NEMA
+    L6-20) are not drawn: printing of one maker on a generic part.
+  no-depth: >-
+    NO `size.d`, as on every generic plug: the body behind the face, 2.48 in
+    [62.9 mm] long, is not built. This part is the face, drawn where a cord's
+    plug is drawn; nothing seats it.
+  dcim: >-
+    PART_POWER maps it to `nema-l6-20p`, the power-port type the plug of a
+    fixed cord gives a device. A device draws either its cord (as
+    eaton/g4-cord-l21-30p@1 is drawn) or its plug, not both, or it exports two
+    power ports for one input.
+elements:
+  face: {at: [0, 0], size: [52.8, 52.8], class: inlet}
+relief:
+  features:
+    - node: blade-x
+      out: 18.6
+      shape: true
+      color: '#b08d57'
+      confidence: drawing
+      source: Leviton CATSTD-02321-00X-D01 rev 1 side view, the blade 0.73 in [18.6 mm]
+    - node: blade-y
+      out: 18.6
+      shape: true
+      color: '#b08d57'
+      confidence: drawing
+      source: Leviton CATSTD-02321-00X-D01 rev 1 side view, the blade 0.73 in [18.6 mm]
+    - node: blade-g
+      out: 22.5
+      shape: true
+      color: '#b08d57'
+      confidence: drawing
+      source: Leviton CATSTD-02321-00X-D01 rev 1 side view, the earth blade 0.89 in [22.5 mm]
+skins: [default]

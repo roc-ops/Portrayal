@@ -50,8 +50,8 @@ test('selectCables: a purpose or media of null, empty or not a string is refused
 });
 
 test('selectCables: a selector it cannot read is refused with a sentence', async () => {
-  assert.deepEqual(await selectCables(R, {}), {error: 'A selector names an item, loose: true, a purpose or a media.'});
-  assert.deepEqual(await selectCables(R, null), {error: 'A selector names an item, loose: true, a purpose or a media.'});
+  assert.deepEqual(await selectCables(R, {}), {error: 'A selector names an item, loose: true, a purpose, a media or a bundle.'});
+  assert.deepEqual(await selectCables(R, null), {error: 'A selector names an item, loose: true, a purpose, a media or a bundle.'});
   assert.deepEqual(await selectCables(R, {label: 'A1'}), {error: 'A selector does not take label.'});
   assert.deepEqual(await selectCables(R, {path: 'port-1'}), {error: 'A selector with a path needs its item.'});
   assert.deepEqual(await selectCables(R, {loose: false}), {error: 'A selector takes loose: true, or leaves it out.'});

@@ -241,14 +241,14 @@ test('fill: every cable whose lane run passes through the duct, once, against 40
   assert.deepEqual(X.fillNotes(r, {fill, over: [], routes: new Map()}, nameOf), [`duct on CMV-SFD45U5W: 2 cables, ${fill[0].percent}% of a 40% fill.`]);
 });
 
-test('a rack file with zero-U parts and sided items reads back whole, validates, and stays version 2', () => {
+test('a rack file with zero-U parts and sided items reads back whole and validates, at version 3', () => {
   let r = rackOf('two-post', 45);
   r = run(r, [{op: 'zerou.place', ref: DUCT, at: 'left', ru: 1, between: true},
               {op: 'side.place', ref: BRACKET, face: 'front', ru: 10, side: 'right'}]).rack;
   const doc = {...M.newDoc(), racks: [r]};
   const text = M.serialize(doc);
   assert.deepEqual(M.parseDoc(text).racks[0], r);
-  assert.equal(JSON.parse(text).version, 2);
+  assert.equal(JSON.parse(text).version, 3);   // bundles raised it (#921); zero-U parts did not
   assert.deepEqual(validate(SCHEMA, JSON.parse(text)), []);
   // An entry with no id, or one an earlier entry took, gets one past the ids in use; other entries stay as written.
   const raw = JSON.parse(text);
@@ -273,7 +273,7 @@ test('the site\'s zero-U data maps onto the kit\'s without loss', () => {
             {id: 'z2', ref: 'cmv-sfd42u9w', cfg: 'base', label: 'vcm-2', at: 'left', offsetMm: 133.35}],
     cables: []}]};
   const doc = M.parseDoc(JSON.stringify(site));
-  assert.deepEqual(JSON.parse(M.serialize(doc)), site);
+  assert.deepEqual(JSON.parse(M.serialize(doc)), {...site, version: 3});   // migrated, nothing else changed
   assert.deepEqual(F.zeroUSpan(doc.racks[0].zeroU[1], chassisOf), [4, 45]);
 });
 

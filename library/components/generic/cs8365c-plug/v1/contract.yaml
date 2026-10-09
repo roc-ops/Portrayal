@@ -1,0 +1,84 @@
+format: 1
+kind: component
+name: cs8365c-plug
+version: 1.0.0
+class: inlet
+conforms: cs8365c-plug
+profile: power
+description: >-
+  A California Standard CS8365C locking plug (50 A 250 V three phase, three
+  pole, four wire), face on: the grip, the face, three curved blades (two with
+  a bent tab) round a grounding rivet. The earth contact is a spring on the
+  metal shell, not a blade. The input plug at the end of a three-phase PDU's
+  cord.
+size: {w: 65.1, h: 65.1}
+size-confidence: {w: drawing, h: drawing}
+attrs: {plug: cs8365c, rating-a: 50, rating-v: 250, phases: 3}
+unplaced: >-
+  No device in the library places it yet. The Eaton EVMA8365X's fixed 10 ft input cord
+  ends in one; that PDU will draw this plug or, as the EVMI2130X does, a cord part mapped to
+  the same `cs8365c` type, but not both (#933).
+provenance:
+  size: >-
+    drawing - registry `cs8365c-plug`. Hubbell drawing M-6590 rev 9 "50A
+    Twist-Lock plugs three and four wire" (dimension sheet for the
+    CS6361C-HBL7765C family, CS8365C among them; scale 1:1; revised
+    5/19/16), from the distributor copy at
+    https://do1jvmih5t6vs.cloudfront.net/userfiles/ad/documents/hubbell_wiring_device-kellems_cs8365c_full_engineering_drawing.pdf:
+    the grip 2.563 in across, the overall length 6.375 in. The bracketed
+    metric reads [65.7 +/-4], which is not 2.563 in (65.1 mm); the inch figure
+    is taken.
+  method: >-
+    photo-measured - M-6590 is a 200 ppi bilevel scan of a 1:1 sheet (7.87
+    px/mm). The face view's outline reads 66.4 high on it, within the
+    printed tolerance, so the figures below are read off it at 7.87 px/mm.
+    They are good to about 0.5.
+  face: >-
+    ESTIMATED - the front face is about 54 across inside the grip, and the
+    grounding contact rivet is 11.8 across with a 5.0 bore.
+  blades: >-
+    photo-measured, BORROWED FROM A SIBLING'S FACE. M-6590 draws one face
+    view, a CS6365C's (it says so on the face), for all nine plugs on the
+    sheet. Its CONFIGURATION column draws CS6365C and CS8365C with their
+    three blades in the same three places (Y top, X right, the third lower
+    left, earth on the shell). The large face view is that icon turned 180
+    degrees. The blades are read off the face view: arcs between radii 11.5
+    and 14.5. In its orientation, angles clockwise from three o'clock: the
+    plain blade (Z on a CS8365C) from -80 to -28 degrees, X from -205 to
+    -152 with a tab at its upper end reaching radius 16.6, and Y from 38 to
+    86 with a tab at its lower end reaching 17.6. The two families' hooks
+    differ in detail in the icons, and that difference is not drawn.
+  blade-length: >-
+    ESTIMATED - 22, about 7/8 in. M-6590's side view does not show the
+    blades.
+  no-text: >-
+    The moulded legends and marks on the face are not drawn.
+  no-depth: >-
+    NO `size.d`, as on every generic plug: the body behind the face, 6.375 in
+    long, is not built.
+  dcim: >-
+    PART_POWER maps it to `cs8365c`. A device draws either its cord or its
+    plug, not both.
+elements:
+  face: {at: [0, 0], size: [65.1, 65.1], class: inlet}
+relief:
+  features:
+    - node: blade-x
+      out: 22
+      shape: true
+      color: '#b08d57'
+      confidence: estimated
+      source: about 7/8 in; Hubbell M-6590 rev 9 does not show the blades side on
+    - node: blade-y
+      out: 22
+      shape: true
+      color: '#b08d57'
+      confidence: estimated
+      source: about 7/8 in; Hubbell M-6590 rev 9 does not show the blades side on
+    - node: blade-z
+      out: 22
+      shape: true
+      color: '#b08d57'
+      confidence: estimated
+      source: about 7/8 in; Hubbell M-6590 rev 9 does not show the blades side on
+skins: [default]

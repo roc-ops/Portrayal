@@ -1,0 +1,75 @@
+format: 1
+kind: component
+name: c19-outlet
+version: 1.0.0
+class: inlet
+profile: power
+conforms: c19-outlet
+interface: iec-c19
+description: >-
+  An IEC 60320 C19 outlet (IEC 60320-3 sheet J), the 16 A socket a rack PDU
+  carries: the rounded well a C20 plug's shroud enters, with the C19 nose and
+  its three contact slots standing in it, earth slot up. Mates C20 cords.
+size: {w: 35.6, h: 27.7, d: 20}
+size-confidence: {w: drawing, h: drawing, d: estimated}
+attrs: {outlet: iec-60320-c19, rating-a: 16}
+unplaced: >-
+  No device in the library places it yet. The Eaton (Tripp Lite) PDUMV20HVNETLX's four C19
+  outlets are the first that will, when that PDU is modelled (#933).
+provenance:
+  method: >-
+    drawing - SCHURTER 4710-5 data sheet ("IEC Appliance Outlet J, Snap-in
+    Mounting, Front Side", https://www.schurter.com/en/datasheet/typ_4710-5.pdf,
+    p.2 Dimensions) is vector. Its face view dimensions the flange 42 x 34; the
+    path geometry reads 75.77 x 61.37 pt for it, 1.804 pt/mm on both axes, and
+    every figure below is read off the paths at that scale rather than off a
+    raster. The part is marked for phase-out; the outlet it draws is the IEC
+    sheet, which has not changed.
+  size: >-
+    drawing - the well on SCHURTER 4710-5: a rounded rectangle 35.65 x 27.67
+    with R4.98 corners, centred on the 42 x 34 flange, taken as 35.6 x 27.7 R5
+    (registry `c19-outlet`). The sheet draws two panel cutouts: 35.8 +/-0.1
+    x 27 +/-0.1 with a 4.2 hole at each corner, and 37.6 +0.2 x 29.5 +0.2,
+    R5 max. The well is the moulding's mouth, inside both. A
+    C20 plug's shroud, 33.75 +/-0.5 x 25.75 +/-0.5 (Volex catalogue Aug-2025,
+    VAC20S, p.283), enters it with about 1 to spare each side.
+  nose: >-
+    drawing - the island in the well, 28.03 x 20.85, R4.66, centred: the C19
+    nose. Volex VAC19 (p.262, the C19 cord connector, generic/c19-plug@1)
+    dimensions the same nose 28 +0/-0.9 x 20 +0/-0.7, R3.5 MIN, from the other
+    side of the mating pair.
+  slots: >-
+    drawing - the three contact slots on SCHURTER 4710-5: earth 7.23 x 2.64 at
+    the top centre, line and neutral 6.24 x 2.64 below it. Their centres are
+    12.96 apart, and the earth's centre is 7.98 above their line. That is the 13
+    and 8 that Volex VAC20S prints for a C20's pins (p.283), so the pins land
+    in the slots. Which of the lower pair is line and which is neutral is not
+    printed.
+  depth: >-
+    estimated, from the registry - the `c19-plug` entry of spec/schemas/standards.yaml (Volex VAC19,
+    Aug-2025 catalogue p.262) gives a C19's nose as 20 (MIN) long. The nose is
+    what a C20's shroud swallows, so on an outlet it stands up out of the well
+    to the face, and the well is at least that deep: 20, the figure
+    eaton/c39-outlet@1 takes for the same reason. No held drawing sections a
+    C19 outlet; SCHURTER 4710-5 draws the face and the panel cutout.
+  relief: >-
+    registry - THE WELL IS THE OUTLINE, NOT ITS BOX, as on std/c13-outlet@1.
+    `relief.cavity` names the `recess` path, the R5 outline with the C19 nose
+    cut out of it (evenodd), so the 3D walls follow the rounded corners and
+    the nose, which stands 20 from the floor to the face (kit/relief.js
+    outlineWalls). Its contact slots are painted on its top, not sunk.
+  orientation: >-
+    drawing - SCHURTER 4710-5 draws the earth slot up and the line and neutral
+    below. A placement turns the part for an outlet mounted the other way up.
+  seated-plug: >-
+    generic/c20-plug@1 mates `iec-c19`. The outlet presents at its own face, so
+    the plug's relief starts at the face and its shroud is modelled inside the
+    20 deep well.
+elements:
+  recess: {at: [0, 0], size: [35.6, 27.7], class: inlet}
+relief:
+  wall: '#1a1b1d'
+  cavity: recess
+connection-points:
+  mate: {at: [17.8, 13.85], direction: front}
+skins: [default]
