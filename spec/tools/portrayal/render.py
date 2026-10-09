@@ -41,6 +41,7 @@ from portrayal.manifest import (presented_point, back_hosts, back_parts, key_on_
                       allowed_turns, text_extent, alias_names, config_airflow,
                       config_power, device_options)
 from portrayal import capability
+from portrayal import ears as ears_mod
 from portrayal import bevel as _bevel
 from portrayal import elements as elements_mod
 from portrayal import facets as _facets
@@ -2523,6 +2524,42 @@ def _shift_heights(node, by):
                 for t, o in (pair.split(":") for pair in node.get(k).split(","))))
 
 
+def _generic_ears(svg, plan, view_name, w, h):
+    """Draw the generic ear's outlines on one face (ears.py), and yield each
+    box drawn so the caller can grow the viewBox round it. One group per ear,
+    `ear-left` and `ear-right`, the ids `common/rack-ear@1` is placed under, so
+    a reader addressing a device's ears finds them by the same path either way.
+    """
+    if not plan:
+        return
+    groups = {}
+    for side, kind, x, y, bw, bh in ears_mod.rects(plan, view_name, w, h):
+        g = groups.get(side)
+        if g is None:
+            g = groups[side] = ET.SubElement(svg, f"{{{SVG_NS}}}g")
+            g.set("id", side)
+            g.set("data-path", side)
+            g.set("data-class", "ear")
+            g.set("data-behaviour", "mounts")
+            g.set("data-generic", "ear")
+            g.set("data-description", "generic L-bracket rack ear, sized from "
+                  "chassis.ears or the chassis height (#909)")
+        if kind == "slot":
+            el = ET.SubElement(g, f"{{{SVG_NS}}}path")
+            el.set("d", _slot_path(x, y, bw, bh))
+            el.set("fill", ears_mod.HOLE)
+        else:
+            el = ET.SubElement(g, f"{{{SVG_NS}}}rect")
+            for k, v in (("x", x), ("y", y), ("width", bw), ("height", bh)):
+                el.set(k, f"{round(v, 4):g}")
+            el.set("fill", ears_mod.FILL)
+            el.set("stroke", ears_mod.EDGE)
+            el.set("stroke-width", "0.4")
+        el.set("id", f"{side}--{kind}" if kind != "slot"
+               else f"{side}--slot-{sum(1 for c in g if c.tag.endswith('path'))}")
+        yield x, y, x + bw, y + bh
+
+
 def render_view(device, view_name, view, lib, include=(), config_name="default", config=None,
                 silkscreen=True):
     config = config or {}
@@ -4241,6 +4278,17 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                               or n.get("data-class") == "silkscreen"
                               or n.tag == f"{{{SVG_NS}}}text")]:
                 parent.remove(node)
+
+    # A GENERIC RACK EAR, ONLY WHEN ASKED FOR (#909). `--with ears` has always
+    # drawn the ears a device places under that tag (`common/rack-ear@1`); a
+    # rack device that places none gets an L-bracket sized from `chassis.ears`
+    # - its height and offset, the chassis height where it states none - and
+    # reaching out to the 482.6 mm rack face. ears.py says which devices get
+    # one and what it is; the default build draws no ears, as before.
+    if "ears" in include:
+        for x0, y0, x1, y1 in _generic_ears(svg, ears_mod.plan(device), view_name, w, h):
+            extents[0] = min(extents[0], x0); extents[1] = min(extents[1], y0)
+            extents[2] = max(extents[2], x1); extents[3] = max(extents[3], y1)
 
     # WHERE CABLES CAN CROSS THIS FACE (docs/cable-managers-design.md section
     # 5). A declaration, not a picture: the brush or the open hole is drawn by

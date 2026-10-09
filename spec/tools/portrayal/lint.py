@@ -331,6 +331,8 @@ RULES = {
     "L161": ("device",     "every `chassis.kits[].ref` resolves to a `kind: kit` in the library, and no kit is listed twice (error)", "fix the ref (namespace/name@major), or write the kit's contract; a component that is not a kit is placed, not listed here"),
     "L162": ("device",     "an ear position's `part: {kit, part}` names a kit the device lists under `chassis.kits` and the `id` of one of that kit's parts (error)", "list the kit under `chassis.kits`, or name the part by the id the kit's `parts` give it"),
     "L163": ("device",     "a `chassis.kits[].depth` override names a configuration `id` of that kit, and its `range` has the configuration's shape - one `[min, max]`, or the same hole types - with min below max (error)", "name a configuration the kit has, and write the range as the kit writes that configuration's `depth`"),
+    "L164": ("device",     "the span `chassis.ears` states fits the chassis: `y + h` is not above its top (warning)", "measure the ears again against the chassis height; leave `h` and `y` out when the ears span the whole chassis, which is what is drawn without them"),
+    "L165": ("device",     "no two of a device's `chassis.ears.positions` are the same position - the same `name` with the same `label`, or no label on either (warning)", "give each a `label` in the vendor's own words (\"chassis flush\", \"transponder flush\"), or drop the duplicate"),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -7423,6 +7425,49 @@ def lint_device_kits(path, data, lib_roots):
                 f"{pid!r} (its parts: {', '.join(sorted(ids)) or 'none'})")
 
 
+def lint_device_ear_span(path, data):
+    """L164-L165: what `chassis.ears` says of the ears themselves is possible.
+
+      L164  `h` and `y` describe ears on this chassis: `y + h` at or below its
+            top (the schema already holds `h` above zero and `y` not below
+            the bottom). The generic ear
+            (#909) is drawn from them, so a figure past the chassis draws an
+            ear hanging off it. A WARNING, not an error: an ear taller than a
+            box is not impossible (a 1U shelf on 2U ears), only unlikely enough
+            to need its waiver. 0.05 mm of slack, the rounding of a figure
+            read off a drawing.
+      L165  no two positions are the same: the same `name` and the same
+            `label` (or neither labelled). Two of one name is ordinary - the
+            Smartoptics DCP's "chassis flush" and "transponder flush" are both
+            `flush` - and the label is what tells them apart, so two with the
+            same label are one position written twice, and a reader offering
+            the positions offers it twice.
+    """
+    ch = data.get("chassis") or {}
+    ears = ch.get("ears")
+    if not isinstance(ears, dict):
+        return
+    height = ch.get("height")
+    h, y = ears.get("h"), ears.get("y")
+    if isinstance(height, (int, float)) and (h is not None or y is not None):
+        span = (h if isinstance(h, (int, float)) else height - (y or 0)) + (
+            y if isinstance(y, (int, float)) else 0)
+        if span > height + 0.05:
+            warn(path, "L164", f"chassis.ears: y {y if y is not None else 0:g} + h "
+                 f"{h if h is not None else height:g} = {span:g}, above the "
+                 f"{height:g} mm chassis - the ears are drawn from these")
+    seen = {}
+    for i, pos in enumerate(ears.get("positions") or []):
+        key = ((pos or {}).get("name"), (pos or {}).get("label"))
+        if key in seen:
+            label = f" labelled {key[1]!r}" if key[1] else " with no label"
+            warn(path, "L165", f"chassis.ears.positions[{i}] is `{key[0]}`{label}, as "
+                 f"positions[{seen[key]}] is - label each in the vendor's words, or "
+                 "drop the duplicate")
+        else:
+            seen[key] = i
+
+
 def lint_rack_side_portrait(path, data):
     """L152: a `rack-side` part's front is taller than it is wide.
 
@@ -10987,6 +11032,7 @@ def lint_device(path, validator, lib_roots):
     lint_device_silkscreen_owner(path, data)
     lint_device_rack_ears(path, data)
     lint_device_kits(path, data, lib_roots)
+    lint_device_ear_span(path, data)
     lint_device_overhang(path, data, lib_roots)
     lint_device_bay_pitch(path, data)
     lint_device_empty_views(path, data)

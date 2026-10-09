@@ -207,7 +207,8 @@ build. While the library holds no kit the file is `{"kits": []}`.
 
 Rows are sorted by `ref`, and every row carries every key above. A key the
 contract leaves out is `null` (`travel`, `install`, `superseded-by`), an empty
-list (`accessories`) or an empty object (`provenance`). `parts`,
+string (`description`), an empty list (`accessories`) or an empty object
+(`provenance`). `parts`,
 `configurations` and `accessories` are as the contract writes them; the
 component schema describes each key. A part is a ref, not geometry: the
 geometry of a kit's parts is read from `components.json` by their refs.
@@ -257,6 +258,39 @@ In the device lock both keys are chassis surface, so stating either is a
 patch, and a listed kit, its parts and its accessories join the `composed`
 digest, so a kit edited in place asks each device that lists it for a patch.
 Those are the refs `<device>.configs.json` reads to resolve each kit, below.
+`h` and `y` stay surface now that the generic ear (below) is drawn from them:
+that ear is drawn only when asked for and never in a published face, an
+elements file or an export, so changing either moves nothing a consumer
+caches a coordinate from. If the ears ever join the default build, `h` and `y`
+become geometry, and moving them is itself a major for each device that
+states them.
+
+### The generic ear
+
+A `rack` device that places no ears of its own has a generic L-bracket ear
+(#909): a flange each side reaching from the body out to the 482.6 mm rack
+face, with a slot over each rail hole, and a 30 mm leg back along the body.
+It is `chassis.ears.h` tall, its bottom `chassis.ears.y` above the chassis's
+(the chassis's full height from `y`, and 0, where they are absent), and its
+flange's back face is on the plane the default position's `at` names (0, flush,
+where there is none). The library still draws devices without their ears, so
+the default build is unchanged:
+
+- `render.py --with ears` draws it on all six faces, as the groups `ear-left`
+  and `ear-right` (`data-class="ear"`, `data-generic="ear"`), the ids and the
+  tag `common/rack-ear@1` is drawn under; the viewBox grows round it and the
+  root carries `data-face-w` and `data-face-h`, as for any part beyond its face.
+- The kit's viewer builds it when a host asks: `createViewer(el, {ears: true})`
+  or `viewer.setEars(true)`; `viewer.ears()` returns the plan drawn, or `null`.
+  relief.js `genericEars(chassis, faceW)` makes the plan from configs.json.
+
+A device gets none when it is not a `rack` device, states `ears: behind`, has
+a front as wide as the rack face (its ears are in the drawing), or still places
+`common/rack-ear@1` or anything under `optional: ears`. That last check is
+2D only: those ears are never in a published face, so the 3D scene, which is
+built from the published faces, gives such a device the generic pair. L164
+warns when `y + h` is above the chassis, and L165 when two positions have the
+same `name` and `label`.
 
 ### Ears and kits in configs.json
 
@@ -287,13 +321,15 @@ states neither (#907):
   `ears.behind === true` and reads `ears.positions || []`. `h`, `y` and each
   position's `at` are floats. A position keeps every key the manifest writes.
   From #865 to #907 the bare string was published as the string, on main
-  only; no release carried it. The one device that states it,
+  only; no release carried it, though the site once vendored a build that
+  did. The one device that states it,
   `fs/uscmh-sfdabsb2u`, now publishes the object.
 - **Each listed kit is resolved inline**, in the order the device lists them.
   A row carries every key above: the device's `ref`, `supply`, `variant` and
   `depth` override (`null` where absent), then the kit's `version`,
   `description`, `motion`, `travel`, `install` (`null` where the kit leaves
-  them out), `configurations`, `parts` and `accessories`. A part keeps `ref`,
+  them out; `description` is an empty string where the kit has none),
+  `configurations`, `parts` and `accessories`. A part keeps `ref`,
   `id` and `count`, and an accessory every key the kit writes; each gains its
   contract's `version`, `class`, `size` and `body` (`null` where absent).
 - **The override is applied.** A `depth` override replaces the `depth` of the

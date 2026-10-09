@@ -11,8 +11,8 @@
   `mount`: the parts that reach past the face carry their own geometry.
 - `chassis.ears: behind` states that a rack device's ear folds are behind its
   body, so a 482.6 mm front is the part and L43 stands down (#865).
-  `<device>.configs.json` carries it as `chassis.ears`; devicelock files it
-  as surface.
+  `<device>.configs.json` carries the statement under `chassis.ears`, in the
+  object form #907 publishes; devicelock files it as surface.
 - `fs/uscmh-sfdabsb2u` 0.1.0, the FS USCMH-SFDABSB2U 2U ABS finger duct, the
   width of the rack in front of its rails, from the FS Horizontal Single Sided
   Manager datasheet, with its parts `fs/uscmh-sfdabsb2u-base@1`, `-finger@1`,

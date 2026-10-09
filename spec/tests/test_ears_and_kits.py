@@ -466,6 +466,22 @@ def test_configs_json_publishes_ears_as_an_object(ears, published):
     assert all(isinstance(p["at"], float) for p in out.get("positions") or [] if "at" in p)
 
 
+@pytest.mark.parametrize("ears,published", [
+    ({"h": 44, "y": 0}, {"h": 44.0, "y": 0.0}),
+    ({"h": 44, "positions": [{"name": "flush", "at": 0}]},
+     {"h": 44.0, "positions": [{"name": "flush", "at": 0.0}]})])
+def test_an_integer_h_or_y_is_published_as_a_float(ears, published):
+    """`h`, `y` and `at` are floats in configs.json whatever the manifest wrote:
+    an integer `h: 44` must not reach a reader as the int 44 (#907 r1)."""
+    out = render.published_ears(ears)
+    assert out == published
+    for key in ("h", "y"):
+        if key in out:
+            assert type(out[key]) is float, key
+    text = json.dumps(out)
+    assert '"h": 44.0' in text and '"h": 44,' not in text
+
+
 def test_publishing_ears_leaves_the_manifest_alone():
     ears = copy.deepcopy(EARS)
     render.published_ears(ears)["positions"][0]["name"] = "proud"

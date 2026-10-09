@@ -522,6 +522,16 @@ CHASSIS_SHAPE = {"width", "height", "depth", "ru", "bevel", "shell"}
 # objects with versions of their own; listing one moves nothing either. Stating
 # either is a patch. What a listed kit CONTAINS is hashed in `composed`, as a
 # part a device places is - see `_composed`.
+# `ears.h` AND `ears.y` STAY SURFACE NOW THAT AN EAR IS DRAWN FROM THEM (#909).
+# The generic L-bracket ear is sized from them, but it is drawn only when asked
+# for - `render.py --with ears`, the viewer's `ears` option - and never in a
+# published face, an elements file or a DCIM export, so changing either moves
+# nothing a consumer caches a coordinate from; configs.json publishes the two
+# numbers themselves, which is a statement like `overhang`. So a patch. (A
+# placed `common/rack-ear@1` is different: it is a placement, hashed in `shape`
+# like any other, so moving one is a major.) IF THE EARS EVER JOIN
+# THE DEFAULT BUILD, `h` and `y` become geometry and move into `shape`, and
+# that change is itself a major for every device that states them.
 CHASSIS_SURFACE = {"color", "edge", "silk", "weight-kg", "airflow", "power", "mount", "thickness",
                    "full-depth", "ears", "overhang", "kits"}
 
