@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: bdm
-version: 1.6.1
+version: 1.7.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -24,6 +24,17 @@ attrs:
   upstream: up to 85 MHz, 1 OFDMA and 6 ATDMA channels
   pairs-with: casa/io-6p12
 provenance:
+  led-states: >-
+    datasheet - C100G Hardware Installation Guide (rev 07/08/2022) Table 1-2 and Table 6-1,
+    Front-installed module LEDs, and the C40G guide (rev 07/07/2022) Table 1-2, for the SMM, QAM
+    and UPS/DQM modules: STATUS Green (module running normally) or Black/off (no power); ACTIVE
+    Green (processing traffic) or Black/off (redundant standby); ALARM Black (no alarm) or Red
+    (full alarm condition, a critical component has failed). Declared as `off`, `ok`, `active`
+    and `alarm`; the green is the lamp green the photographs show (#39b54a) and the red is not
+    measured. Every lamp is drawn OFF: the skin used to paint STATUS and ACTIVE lit, from the
+    photograph, and no state could change them. No Casa document gives a blink for these three,
+    so none is declared. The BDM family is not named in the table's module column; its lamps
+    carry the same three labels, so the table is applied by label.
   depth-known-wrong: 'THE 380.0 IS NOT MERELY UNMEASURED, IT IS IMPOSSIBLE, and this
     contract now says so in a field a tool can read - size-confidence: {d: known-wrong}.
     THE CONSTRAINT. Front and rear cards MEET AT A MIDPLANE, which the owner photographed:
@@ -210,9 +221,9 @@ provenance:
     WHAT WOULD SETTLE IT: a caliper on any one C100G or C40G card. One measurement fixes
     the whole family, which is the other reason to keep the family on one number.'
 elements:
-  status: {at: [4.80, 194.66], size: [3.0, 3.0], class: led}
-  alarm: {at: [4.80, 198.68], size: [3.0, 3.0], class: led}
-  active: {at: [4.80, 202.70], size: [3.0, 3.0], class: led}
+  status: {at: [4.80, 194.66], size: [3.0, 3.0], class: led, states: ['off', {name: ok, color: '#39b54a'}]}
+  alarm: {at: [4.80, 198.68], size: [3.0, 3.0], class: led, states: ['off', {name: alarm, color: '#ef4444'}]}
+  active: {at: [4.80, 202.70], size: [3.0, 3.0], class: led, states: ['off', {name: active, color: '#39b54a'}]}
 relief:
   wall: '#4a4f55'
   features:

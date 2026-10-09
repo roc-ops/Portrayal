@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: c40g-psu-ac
-version: 1.4.1
+version: 1.5.0
 class: psu
 behaviour: fills
 profile: networking
@@ -19,6 +19,13 @@ attrs:
   input: 115VAC or 240VAC auto-adjusting
   redundancy: 'up to four, concurrent; the C40G-20 needs at least two'
 provenance:
+  led-states: >-
+    datasheet - C40G Hardware Installation Guide (rev 07/07/2022) Table 1-3, Power supply LEDs:
+    Green (PSU running normally), Red (alarm or error condition), off (no power). Figure 1-10
+    labels one lamp, 'Status LED - ON / FAIL', so the one lamp takes both colours: `off`, `ok`
+    and `alarm`. The lamp is now a declared element (`status`, the id the skin and the relief
+    already used); before, it was art drawn permanently green that no state could reach. It is
+    drawn OFF.
   what-it-is: 'The guide gives the C40G up to four removable 1100W AC power supply units
     (PSUs), all running at once; if one fails, the PSUs left (up to two) carry the power
     the system needs to keep running. The warning beside it is worth keeping: "The
@@ -109,6 +116,8 @@ provenance:
     to the band Figure 1-1 does carry: the PSU row occupies the snap-on covers footprint,
     y 226.7 to 264.9 and x 44.0 to 386.6, and the four read as about 81.0 wide on
     an 87.2 pitch within it. The depth is ESTIMATED'
+elements:
+  status: {at: [39.09, 20.98], size: [2.6, 2.6], class: led, states: ['off', {name: ok, color: '#39b54a'}, {name: alarm, color: '#ef4444'}]}
 relief:
   wall: '#4a4f55'
   features:
