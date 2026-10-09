@@ -346,18 +346,21 @@ into two points:
   cable would enter and leave by one face. It is not drawn through: the path goes to
   that face and back, the ring counts the cable neither in its fill nor in its
   manager's capacity, and `ringFindings` reports it.
-- **Held, not hooked (#949, kit 0.12.0).** Except when the ring stands right past the
-  nearer of the two points: its near face no further beyond that point, along the run,
-  than the ring's own depth plus the cable's diameter (`ctx.diameterOf`, else its
-  media's). Then the cable only reaches into the ring to be held. It passes, away from
+- **Held, not hooked (#949, kit 0.12.0).** Except when the nearer of the two points
+  along the run is a PORT and the ring stands right past it: its near face no further
+  beyond the port, along the run, than the ring's own depth plus the cable's diameter
+  (`ctx.diameterOf`, else its media's), the diameter counted at most up to the ring's
+  depth. Then the cable only reaches into the ring to be held. It passes, away from
   both points, turns back beyond the far face, counts in fill and capacity like any
-  cable through the ring, and is not reported; `routePath` marks the ring `held`. The
-  bound is the ring and one cable's lay beyond it: an OM4 cord in a 6.8 mm FHD-CMP5DR
-  ring may reach 9.8 mm past its port to the near face (16.6 mm to the far face). A
-  ring further off is a hook-back and stays a finding. The test is in `throughRings`,
-  so a hand route gets the same answer as an automatic one. On a sample of 8850 hand
-  routes through one lacer ring each, 78 of 1520 findings went (5 %), each route 8 to
-  13.5 mm longer for the reach through the ring.
+  cable through the ring, and is not reported; `routePath` marks the ring `held`. An
+  OM4 cord in a 6.8 mm FHD-CMP5DR ring may reach 9.8 mm past its port to the near face
+  (16.6 mm to the far face). The cap keeps the bound at twice the ring's depth for any
+  cable: a fat, stiff cable bends wider, so a longer reach is more of a hook, not less.
+  A turn-back at a ring just past another ring's exit or a lane point is never held,
+  however close the rings stand, and a ring further off is a hook-back: both stay
+  findings. The test is in `throughRings`, so a hand route gets the same answer as an
+  automatic one. A route that was a finding and is now held is longer by its reach
+  through the ring, about 8 to 14 mm on the FHD-CMP5DR.
 - **What is not reported.** A cable that stands on neither side still reaches back a
   little, unreported: one under the ring goes along the run to the face it enters, up to
   half the ring's depth (5 mm by the estimate), and one that comes up steeply from

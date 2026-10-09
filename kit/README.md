@@ -207,10 +207,10 @@ half the ring's `depth` (`RING_DEPTH`, 10 mm, estimated, when the ring states
 none) either side of its centre. A route that would enter and leave a ring by
 one face is not drawn through it; `ringFindings(rack, ctx)` reports it, and
 neither `fill` nor `capacityOver` counts it there; since 0.12.0, not when the
-ring stands right past the nearer of its neighbours (its near face within the
-ring's depth plus the cable's diameter of it): the cable only reaches in to be
-held, passes (`held: true` on the path's ring) and is counted, with no
-finding. `routePath` decides each
+ring stands right past the nearer of its neighbours and that neighbour is a
+port (its near face within the ring's depth plus the cable's diameter of it,
+the diameter capped at the depth): the cable only reaches in to be held, passes
+(`held: true` on the path's ring) and is counted, with no finding. `routePath` decides each
 ring once; `ringMarks(rack, cable, ctx)` gives those decisions, one per
 waypoint, and `routed2d` and `routePoints3d` take them as an optional last
 argument, so the drawings pass through each ring straight and the way it was
@@ -262,7 +262,9 @@ in the duct. Any
 other route takes a gutter chosen from both ends: the side both ports stand
 on, or, when they stand on opposite sides of the centre line, the side whose
 path (`routePath`, detours included) is the shorter, end a's on a tie or
-when a port is not found. **Routed lengths change in 0.12.0** wherever the
+when a port is not found. The side is decided once per rack, route context
+and cable, so a page must not change a route context in place: build a new
+one when what it reads changes. **Routed lengths change in 0.12.0** wherever the
 two ends share a manager or stand on opposite sides; every change found so
 far is shorter.
 

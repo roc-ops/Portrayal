@@ -96,6 +96,22 @@ test('c8: no ring between its ports; ring 5, just past its panel port, holds it 
   }
 });
 
+test('a cross-connect on the panel with no ring it can pass takes the nearest anyway, and the finding says so', () => {
+  // bay 3 lc2 (34.86) to lc5 (73.89), both on PP-01 behind the lacer: no ring
+  // between (ring 3 at 0, ring 4 at 110.4), the middle 54.4 is 54.4 from ring
+  // 3 and 56.0 from ring 4. Level with both ports, neither is passed, and
+  // neither is held: ring 3's near face is 31.5 past lc2. Never direct, so
+  // ring 3, and the automatic route carries a doubles-back finding.
+  const r0 = F.rack();
+  const x = {id: 'x1', a: {item: 'i2', path: 'bay-3/module/lc2', view: 'front'}, b: {item: 'i2', path: 'bay-3/module/lc5', view: 'front'},
+    media: 'om4', route: []};
+  const r = {...r0, cables: [x]}, ctx = F.ctxOf(r);
+  assert.deepEqual(R.autoRoute(r, x, ctx), [ring(3)]);
+  assert.deepEqual(R.ringFindings(r, ctx).map(f => [f.cable, f.via]), [['x1', 'guide-3']]);
+  const [g] = R.routePath(r, x, ctx).rings;
+  assert.deepEqual([g.passed, g.held], [false, undefined]);
+});
+
 test('the site-facing outputs: ring marks, inspect and the route text read the route along the lacer', async () => {
   const r = F.rack(), ctx = F.ctxOf(r);
   const c13 = r.cables.find(c => c.id === 'c13');

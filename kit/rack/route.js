@@ -184,7 +184,8 @@ export function autoRoute(rack, cable, ctx) {
     const pa = portPoint(rack, cable.a, ctx), pb = portPoint(rack, cable.b, ctx);
     const passes = g => {
       const p = pointOf(rack, {item: mA.id, via: g.via}, ctx);
-      return !(pa && pb && p) || !throughRings([pa, p, pb], [null, {...ringOf(g), diameter: cableDiameter(cable, ctx)}, null]).back.length;
+      return !(pa && pb && p) || !throughRings([pa, p, pb],
+        [null, {...ringOf(g), diameter: cableDiameter(cable, ctx), portBefore: true, portAfter: true}, null]).back.length;
     };
     return along(mA, A.pane, A.x, B.x, ctx, passes);
   }
@@ -406,7 +407,8 @@ export function routePath(rack, cable, ctx) {
   // a ring holds a cable that reaches just into it (route-path.js, HELD):
   // how near depends on the cable's diameter
   const held = cableDiameter(cable, ctx);
-  const {points, passes, back} = throughRings(stops.map(s => s.p), stops.map(s => (s.ring ? {...s.ring, diameter: held} : null)));
+  const {points, passes, back} = throughRings(stops.map(s => s.p), stops.map((s, k) => (s.ring
+    ? {...s.ring, diameter: held, portBefore: !stops[k - 1].w, portAfter: !stops[k + 1].w} : null)));
   // Label each point with what it is: walk the stops, a ring taking two points when passed.
   const passAt = new Map(passes.map(x => [x.index, x])), backAt = new Map(back.map(x => [x.index, x]));
   const out = [], rings = [], findings = [], from = [];
