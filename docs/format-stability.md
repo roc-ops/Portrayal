@@ -534,6 +534,50 @@ millimetres, `bendLookup(types)` gives a cable's installed radius from its
 `type` when the table has that type, else from its `media`, and `loadCableTypes(dist)` fetches the file and
 refuses any `format` but 1.
 
+## The lint rules file
+
+`lint-rules.json` is the linter's rule table, for a page that lists the rules.
+`lint.py --list-rules --json` writes it from the same table as
+`docs/lint-rules.md`, so the two always list the same codes. It is new at
+`contract: 2` and did not raise it.
+
+```json
+{"format": 1,
+ "severities": ["error", "warning", "at-verified", "mixed", "mixed-at-verified"],
+ "rules": [{"code": "L53", "scope": "device", "rule": "...", "why": "...", "fix": "...",
+            "severity": "at-verified",
+            "fails": false, "warns": true, "fails-at-verified": true}],
+ "retired": [{"code": "L..", "note": "..."}]}
+```
+
+`format` is 1 and versions the shape: a removed or renamed key raises it, a
+new key does not. `rules` is in code order. `severity` is one of the tokens
+in `severities`:
+
+- `error`: every finding fails the lint.
+- `warning`: every finding warns, and the lint passes.
+- `at-verified`: a finding warns on a device still being drawn and fails on a
+  device that claims `maturity: verified`.
+- `mixed`: some findings fail and others only warn; the finding's own
+  message, in the lint run, says which.
+- `mixed-at-verified`: some findings always fail, and others warn until the
+  device claims `maturity: verified`.
+
+The token describes the rule, not each finding. A rule is `at-verified` when
+any of its warnings becomes an error at `verified`, and it may raise other
+findings that stay warnings there: L37's group with no members is one. A
+consumer that needs a finding's own severity reads it from the lint run, not
+from this file.
+
+The three booleans say the same thing for a reader that only filters:
+`fails` when some finding fails the lint at any maturity, `warns` when some
+finding only warns, and `fails-at-verified` when a warning becomes an error
+on a device that claims `maturity: verified`. `retired` lists codes whose
+rule is gone; a code is never reissued. A new token is a new key's worth of
+change and does not raise `format`; a token renamed or removed does. A consumer should
+treat a token it does not know as it would an unknown key: show the rule
+and its booleans, and not fail on it.
+
 ## The rack catalogue
 
 `rack.json` is the catalogue a rack tool reads in one fetch, so it need not open

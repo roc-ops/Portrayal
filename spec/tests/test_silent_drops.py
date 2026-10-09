@@ -86,6 +86,8 @@ def _module_exports(part, attrs, fibre):
         return True
     if ref in dx.PART_POWER or ref in dx.PART_CONSOLE or ref in dx.PART_RF:
         return True
+    if ref in dx.USB_CONSOLE_REFS:                  # a USB console, as on a device
+        return bool(dx.device_console_row(part, part.get("attrs") or {}))
     if ref in dx.PART_IFACE:
         return dx.cage_type(ref, attrs) is not None
     return bool(fibre)

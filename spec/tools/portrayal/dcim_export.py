@@ -448,8 +448,20 @@ def cage_type(ref, attrs):
     return PART_IFACE.get(ref)
 
 
-PART_CONSOLE = {"std/rj45-ganged": "rj-45", "common/rj45-shielded": "rj-45",
-                "std/usb-a": "usb-a"}
+PART_CONSOLE = {"std/rj45-ganged": "rj-45", "common/rj45-shielded": "rj-45"}
+
+# A USB JACK IS A CONSOLE ONLY WHEN THE PLACEMENT SAYS SO, on a card as on a
+# chassis. `std/usb-a` used to sit in PART_CONSOLE above, so route_part filed
+# every USB-A part on a card as a `usb-a` console port without reading its role:
+# the ASR 9000 RSP and RP storage ports, the Juniper RE service ports and the
+# Dell rear I/O board's USB all exported as consoles. And a card had no
+# micro-USB or USB-C console path at all, so the CommScope CH3000 modules'
+# micro-USB craft consoles exported nothing. A device placement has asked
+# device_console_row since #384; route_part now asks the same function for
+# these refs, so the two paths cannot disagree about what a USB console is:
+# a USB-A or USB-C jack needs `role: console` exactly, and a micro-USB one is a
+# console when its id, role or function says `console` (DB9_CONSOLE).
+USB_CONSOLE_REFS = {"std/usb-a", "std/usb-c", "std/micro-usb"}
 
 # The RJ45 family (sweep_rj45.py / docs/rj45-family-design.md), keyed
 # by the FULL ref including @major because a version bump inside this family
@@ -619,6 +631,10 @@ PART_POWER = {
     # The EVMA8365X's fixed cord ends in a CS8365C: `cs8365c`, TYPE_CS8365C in both
     # targets at the commits the generic plugs below cite.
     "eaton/g4-cord-cs8365c": "cs8365c",
+    # The Tripp Lite series PDUMH20NET's fixed 12 ft cord ends in a NEMA L5-20P:
+    # `nema-l5-20p`, TYPE_NEMA_L520P in both targets at the commits the generic
+    # plugs below cite.
+    "eaton/tripplite-cord-l5-20p": "nema-l5-20p",
     # THE GENERIC INPUT PLUGS (#933): the face of the plug at the end of a PDU's
     # fixed cord, for a device that draws its plug rather than its cord. A device
     # draws one or the other, never both, or one input exports as two ports. Every
@@ -843,7 +859,8 @@ PART_RF = {
     # `common/rj45-ganged-eth` composes `std/rj45-ganged`, which PART_CONSOLE
     # calls a console, and inheriting that would file every Ethernet jack in the
     # library as a console port - #27 and #29, for a third time. `common/usb-a`
-    # composes a console and is a storage port. `casa/c40g-ac-inlet-panel`
+    # composed what was then a console row and is a storage port (a USB jack is
+    # now a console only when its placement says so). `casa/c40g-ac-inlet-panel`
     # composes FOUR inlets and would inherit one.
     "common/smb-jack": ("other", "SMB"),
     "common/sma-jack": ("other", "SMA"),
@@ -898,13 +915,13 @@ NOT_A_DCIM_PORT = {
     # --- USB: real ports, no device-type field to put them in ----------------
     # A DCIM device type has console ports, power ports and interfaces. A USB
     # data port is none of those unless it is a console, which std/usb-a is on
-    # the 26 placements PART_CONSOLE catches. The rest are storage, maintenance
+    # the placements device_console_row catches. The rest are storage, maintenance
     # and iDRAC Direct, and there is nowhere honest to put them.
     # `std/micro-usb` WAS HERE, as "USB maintenance port (iDRAC Direct); not a
     # console". That was true of the two Dell servers and false of 31 devices
     # whose micro-USB jack is labelled Console; #384 gave those a console-port
     # path (device_console_row), and iDRAC Direct moved to MGMT_NOT_A_DCIM_PORT.
-    "common/usb-a": "USB storage/maintenance port; not a console - std/usb-a's console placements type via PART_CONSOLE",
+    "common/usb-a": "USB storage/maintenance port; not a console - std/usb-a's console placements type via device_console_row",
     "common/usb-a-bezel": "the same USB storage/maintenance port as common/usb-a, in a taller panel bezel; split out of that name's @3 in #264 and it needs its own entry because this register keys on the NAME, not the major",
     # `std/usb-c` WAS HERE, as the GL-8xEP's USB-C power input. It was stale: the
     # DS6000, DS6001 and AS7326-56X have exported a USB-C console all along, and
@@ -986,7 +1003,7 @@ NOT_A_DCIM_PORT = {
 # know about, so the test refuses an exemption for them outright: a management
 # jack, an SFP management port or a console that does not export is a defect,
 # never an entry. What is left is USB storage and service ports, which no
-# device-type field holds - PART_CONSOLE and device_console_row take a USB jack
+# device-type field holds - device_console_row takes a USB jack, on a card too,
 # only when the device says it is a console, and that is the existing line,
 # drawn in NOT_A_DCIM_PORT's USB block before this register - and three jacks
 # whose job is not one a DCIM has a type for.
@@ -1372,6 +1389,14 @@ def route_part(part, attrs, defaulted=None):
         return "power", {"name": pid or "Inlet", "type": PART_POWER[ref]}
     if ref in PART_CONSOLE:
         return "console", {"name": pid or "Console", "type": PART_CONSOLE[ref]}
+    if ref in USB_CONSOLE_REFS:
+        # device_console_row decides; the card keeps its own part id as the
+        # name, as every other row here does. A USB jack it turns away is a
+        # storage or service port, which no module-type field holds either.
+        con = device_console_row(part, part.get("attrs") or {})
+        if con:
+            return "console", {"name": pid or con["name"], "type": con["type"]}
+        return None, None
     if ref in PART_RF:
         t, connector = PART_RF[ref]
         # The type says what the signal is; the label keeps the connector,

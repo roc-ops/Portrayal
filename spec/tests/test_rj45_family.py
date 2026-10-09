@@ -1347,7 +1347,9 @@ def test_jnp10003_rcb_exports_no_console_named_bits_or_tod():
     ifaces = {i["name"]: i for i in out["interfaces"]}
     assert ifaces["tod"] == {"name": "tod", "type": "other", "label": "TOD"}
     assert ifaces["bits"] == {"name": "bits", "type": "other", "label": "BITS"}
-    assert names == {"usb", "con"}
+    # `usb` is the RCB's USB service port, not a console: it states no console
+    # role, and route_part asks device_console_row for a USB part now.
+    assert names == {"con"}
 
 
 # An id like "contact-1" or a group like "topology" must not be read as a
