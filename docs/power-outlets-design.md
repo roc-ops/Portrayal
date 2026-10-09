@@ -77,8 +77,9 @@ breaker in one position can be said in words and not as a relation.
    placement id**, as every exported port is: `output-a1`. The rules name power
    outlets as they name interfaces, so an outlet a rule names takes its printed
    label (the Eaton EVMI2130X's `outlet-a1` exports as `A1`); an outlet no rule
-   names keeps its placement id, and so does every outlet in a NOS listing's
-   export, which does not apply the hardware's own rules.
+   names keeps its placement id. A NOS listing that states its own
+   `interfaces` does not apply these rules, so its export keeps every outlet's
+   placement id.
 6. **Outlets are a table row per part, as power ports are.** A part exports outlets
    because `PART_OUTLET` lists it, not because of its class.
 7. **A connectorized output is `other`, labelled.** The 300CB08-C and -SC outputs are
