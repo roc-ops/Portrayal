@@ -534,6 +534,31 @@ millimetres, `bendLookup(types)` gives a cable's installed radius from its
 `type` when the table has that type, else from its `media`, and `loadCableTypes(dist)` fetches the file and
 refuses any `format` but 1.
 
+## The lint rules file
+
+`lint-rules.json` is the linter's rule table, for a page that lists the rules.
+`lint.py --list-rules --json` writes it from the same table as
+`docs/lint-rules.md`, so the two always list the same codes. It is new at
+`contract: 2` and did not raise it.
+
+```json
+{"format": 1,
+ "severities": ["error", "warning", "warning, error at verified", "error or warning",
+                "error, or warning that is an error at verified"],
+ "rules": [{"code": "L53", "scope": "device", "rule": "...", "why": "...", "fix": "...",
+            "severity": "warning, error at verified",
+            "fails": false, "warns": true, "fails-at-verified": true}],
+ "retired": [{"code": "L..", "note": "..."}]}
+```
+
+`format` is 1 and versions the shape: a removed or renamed key raises it, a
+new key does not. `rules` is in code order. `severity` is one of
+`severities`; the three booleans say the same thing for a reader that only
+filters: `fails` when some finding fails the lint at any maturity, `warns`
+when some finding only warns, and `fails-at-verified` when a warning becomes
+an error on a device that claims `maturity: verified`. `retired` lists codes
+whose rule is gone; a code is never reissued.
+
 ## The rack catalogue
 
 `rack.json` is the catalogue a rack tool reads in one fetch, so it need not open

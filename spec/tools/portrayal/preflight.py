@@ -392,7 +392,8 @@ BUILD_OUTPUTS = ("library/dist", "library/exports", "dist", "dist/",
                  # the indexes build.sh writes into the dist, by name
                  "devices.json", "components.json", "components-detail.json",
                  "labs.json", "gaps.json", "vendors.json", "listings.json",
-                 "comparable-facts.json", "rack.json", "devices.lock.json")
+                 "comparable-facts.json", "rack.json", "devices.lock.json",
+                 "lint-rules.json")
 PREREQUISITES = tuple(re.compile(p) for p in (
     r"(node|npm) not installed",
     r"(" + "|".join(re.escape(o) for o in BUILD_OUTPUTS) + r") not built"
