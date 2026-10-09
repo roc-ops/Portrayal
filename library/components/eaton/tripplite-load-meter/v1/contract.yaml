@@ -1,0 +1,114 @@
+format: 1
+kind: component
+name: tripplite-load-meter
+version: 1.0.0
+class: display
+profile: power
+description: >-
+  The digital load meter of an Eaton Tripp Lite series 20 A rack PDU - a
+  two-digit green seven-segment readout of the load in amps, printed LOAD
+  (AMPS) above it upside down and below it upright so it reads either way up,
+  with the round Select / Rotate push button beside it.
+size: {w: 48.2, h: 30.3}
+size-confidence: {w: drawing, h: drawing}
+provenance:
+  size: >-
+    drawing - the front view of the PDUMV20HVNETLX submittal drawing (17-08-067,
+    page 2) is vector and was read at 0.32252 pt/mm, the 1776.44 overall
+    between the end lines' centres; its C20 inlet's pins land 12.98 and 8.19
+    apart against the 13 and 8 of the standard, which checks the scale on both
+    axes. The meter's outline reads 48.2 by 30.3 at the stroke centre (the
+    strokes are about 1.3 thick at this scale), the window 20.6 by 16.9 with
+    its left edge 13.7 in and its top 3.1 down, and the button a circle 11.0
+    across centred 40.7 in and 20.5 down.
+  digits: >-
+    photo - PDUMV20HVNETLX_DT02 (3000 px master): two italic seven-segment
+    digits lit green, the unlit segments faintly visible, and a decimal point
+    after each digit (the owner's manual's Features art prints the meter as
+    ". 8 . 8"). The digits are drawn upright, not italic, and sized to the
+    window; neither source dimensions them.
+  colour: >-
+    photo-measured - the lit segments of PDUMV20HVNETLX_DT02 have a median of
+    #70be44; the window reads near black.
+  legends: >-
+    photo - PDUMV20HVNETLX_DT02 prints LOAD (AMPS) upright below the window and
+    upside down above it, and Select / Rotate across the button reading bottom
+    to top. The owner's manual (933666 rev B, Features) says the 20 A models'
+    switch is pressed one second to scroll the IP address and two seconds to
+    rotate the display; the spec sheet's 'push button to rotate digital
+    display and view IP address' is the same button. The photo's legend,
+    Select / Rotate, is the 30 A models' name for it in the manual; it is
+    drawn as photographed.
+  semantics: >-
+    datasheet - the spec sheet: the digital ammeter 'reports load level on
+    each bank and total PDU output' and shows the IP address two characters at
+    a time (manual). So the readout is a load in amps or two characters of an
+    address; it has no fixed message vocabulary, and the digits carry the
+    seven-segment glyph set.
+  relief: >-
+    none built - the button is a raised dome in DT02, but no held source gives
+    its height.
+elements:
+  window:
+    at: [13.7, 3.1]
+    size: [20.6, 16.9]
+    class: display
+    characters: 2
+    description: >-
+      the readout window, two seven-segment cells. It shows the load in amps,
+      total or per bank, or the IP address two characters at a time; each
+      cell's glyph set is on its digit.
+  digit-1:
+    at: [16.0, 5.8]
+    size: [7.0, 11.5]
+    class: display
+    characters: 1
+    description: >-
+      the left digit. Its states are the characters a seven-segment cell can form, each naming the segments it lights - a top, b top-right, c bottom-right, d bottom, e bottom-left, f top-left, g middle.
+    states: &digit-states
+      - {name: '0', lights: [a, b, c, d, e, f]}
+      - {name: '1', lights: [b, c]}
+      - {name: '2', lights: [a, b, g, e, d]}
+      - {name: '3', lights: [a, b, g, c, d]}
+      - {name: '4', lights: [f, g, b, c]}
+      - {name: '5', lights: [a, f, g, c, d]}
+      - {name: '6', lights: [a, f, g, e, c, d]}
+      - {name: '7', lights: [a, b, c]}
+      - {name: '8', lights: [a, b, c, d, e, f, g]}
+      - {name: '9', lights: [a, b, c, d, f, g]}
+      - {name: 'blank', lights: []}
+  digit-2:
+    at: [25.0, 5.8]
+    size: [7.0, 11.5]
+    class: display
+    characters: 1
+    description: >-
+      the right digit. Its states are the characters a seven-segment cell can form, each naming the segments it lights - a top, b top-right, c bottom-right, d bottom, e bottom-left, f top-left, g middle.
+    states: *digit-states
+  point-1:
+    at: [23.3, 16.4]
+    size: [0.9, 0.9]
+    class: display
+    characters: 1
+    description: the left digit's decimal point, driven separately from the digit.
+    states:
+      - {name: 'on', lights: [dp]}
+      - {name: 'off', lights: []}
+  point-2:
+    at: [32.3, 16.4]
+    size: [0.9, 0.9]
+    class: display
+    characters: 1
+    description: the right digit's decimal point, driven separately from the digit.
+    states:
+      - {name: 'on', lights: [dp]}
+      - {name: 'off', lights: []}
+  select-rotate:
+    at: [35.2, 15.0]
+    size: [11.0, 11.0]
+    class: button
+    description: >-
+      the Select / Rotate push button: pressed one second it scrolls the IP
+      address, two seconds it turns the readout over (owner's manual 933666
+      rev B, Features).
+skins: [default]
