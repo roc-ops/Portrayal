@@ -8,8 +8,8 @@ description: >-
   An IEC 60320 C13 outlet as Eaton moulds it into a Rack PDU G4 outlet section - the
   recess a C14 plug's shroud enters, with the C13 nose and its three contacts standing
   in it. Drawn as the PDU stands, cord end down, its chamfered end uppermost.
-size: {w: 30.4, h: 22}
-size-confidence: {w: drawing, h: drawing}
+size: {w: 30.4, h: 22, d: 18}
+size-confidence: {w: drawing, h: drawing, d: registry}
 attrs: {outlet: iec-60320-c13, rating-a: 10}
 provenance:
   method: >-
@@ -28,9 +28,16 @@ provenance:
   rating: >-
     drawing - 9001-22301 OUTPUT RATING: 10A PER C13.
   depth: >-
-    not modelled. No document held dimensions how deep the recess or the contacts
-    run, so the part has no `d` and builds flat; a C14 plug's shroud depth would be
-    a borrowed figure for a different part.
+    registry - the `c13-plug` entry of spec/schemas/standards.yaml (Volex V1625,
+    Aug-2025 catalogue p.240) gives a moulded C13's nose as 18 MIN long. The nose is
+    the part of a C13 that a C14's shroud swallows, so on an outlet it is the island
+    standing out of the well, and the well is at least that deep: 18. The check
+    from the other side is the C14 itself - std/c14-inlet@1's cavity is 17.00 shroud
+    face to floor (Adam Tech S00087C rev D), so a C14 plug's shroud, the same sheet
+    of IEC 60320, goes 17 into this well and does not bottom out. No outlet drawing
+    held dimensions the well: Eaton's 9001-22301 draws only its face, and the one
+    public panel-mount C13 strip drawing found (SCHURTER 4751) dimensions the body
+    behind the panel, not the well. IEC 60320-1 sheet C13 is not held.
   interface: >-
     NO `interface:` YET. The library has cord ends that seat in inlets (C13 and C19
     plugs into C14 and C20 inlets, docs/connectors-power-design.md); it has no C14
@@ -40,4 +47,14 @@ provenance:
     part is drawn that way and every placement is unrotated.
 elements:
   recess: {at: [0, 0], size: [30.4, 22], class: inlet}
+relief:
+  wall: '#1a1b1d'
+  features:
+    - node: nose
+      top: 18
+      color: '#26282a'
+      confidence: registry
+      source: >-
+        the `c13-plug` entry of spec/schemas/standards.yaml, nose 18 MIN (Volex V1625): the C13 island
+        rises from the floor of the 18 deep well back to the face.
 skins: [default]

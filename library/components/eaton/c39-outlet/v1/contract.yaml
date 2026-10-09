@@ -8,8 +8,8 @@ description: >-
   Eaton's C39 outlet on a Rack PDU G4 - a proprietary combination of the C13 and
   C19 outlets that takes either a C14 or a C20 plug, with high retention. A rounded
   recess with a cross-shaped nose and three contacts.
-size: {w: 35.4, h: 26.6}
-size-confidence: {w: drawing, h: drawing}
+size: {w: 35.4, h: 26.6, d: 20}
+size-confidence: {w: drawing, h: drawing, d: registry}
 attrs: {outlet: eaton-c39, rating-a: 16, accepts: 'C14, C20'}
 provenance:
   method: >-
@@ -34,10 +34,26 @@ provenance:
   rating: >-
     drawing - 9001-22301 OUTPUT RATING: 16A PER C39.
   depth: >-
-    not modelled, as on eaton/c13-outlet@1: no document held dimensions the recess.
+    registry - the `c19-plug` entry of spec/schemas/standards.yaml (Volex VAC19,
+    Aug-2025 catalogue p.262) gives a C19's nose as 20 (MIN) long. The C39 takes a
+    C20 plug, whose shroud swallows a C19's nose, so its well is at least that deep:
+    20. The check from the other side is std/c20-inlet@1's cavity, 19.0 (itself
+    estimated from the same nose less 1), which goes 19 into this well and does not
+    bottom out; a C14 plug, 17, goes less far. No Eaton drawing or photograph held
+    shows the C39 in section.
   interface: >-
     NO `interface:` YET, as on eaton/c13-outlet@1: nothing in the library is a C14 or
     C20 plug.
 elements:
   recess: {at: [0, 0], size: [35.4, 26.6], class: inlet}
+relief:
+  wall: '#1a1b1d'
+  features:
+    - node: nose
+      top: 20
+      color: '#26282a'
+      confidence: registry
+      source: >-
+        the `c19-plug` entry of spec/schemas/standards.yaml, nose 20 (MIN) (Volex VAC19): the combination
+        nose rises from the floor of the 20 deep well back to the face.
 skins: [default]
