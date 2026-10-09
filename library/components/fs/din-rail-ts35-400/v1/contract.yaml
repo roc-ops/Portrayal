@@ -21,11 +21,14 @@ provenance:
     than the 15 mm deep TS35; FS's own DIN-rail products are TS35 (the AurCore switches this library
     seats on one declare ts35x7.5 and ts35x15).
   relief: >-
-    deliberately FLAT: this is the rail seen face-on in the bracket's front elevation. Its solid
-    is fs/din-rail-ts35-400-plan@1, built from the top view at the panel's setback, because a
-    front-view part of a sheet body can only stand forward of the ears.
+    registry - the rail stands 7.5 off what it is fixed to (TS35 x 7.5), built as one box with
+    the face art - flanges, crown and slots - on its front. The slots are painted, not cut.
 size: {w: 400.0, h: 35.0}
 size-confidence: {w: drawing, h: registry}
 elements:
   rail: {at: [0.0, 0.0], size: [400.0, 35.0], class: bezel}
+relief:
+  features:
+  - {node: rail, out: 7.5, color: '#8e9399', confidence: registry, source: 'TS35 x 7.5 (IEC/EN
+      60715): 7.5 deep'}
 skins: [default]

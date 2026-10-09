@@ -37,10 +37,9 @@ provenance:
     note: >-
       `shell: sheet`, 1.5: an open frame of bent steel - two side brackets, a rail panel and a
       rail - which a solid box would hide. In 3D the side brackets are built from the side views,
-      standing their thickness off them; the panel and the rail are built from the top view, standing
-      in a floorless well between the brackets (fs/dinrail2u-frame@1) at the panel's setback,
-      so they sit behind the ears and not in front of them. The six views are elevations: the
-      front still draws the panel and rail face-on, as they are seen through the open front.
+      standing their thickness off them. The panel is a well on the front view whose floor is
+      the plate at its setback, black with its cut-outs open, and the rail stands 7.5 off that
+      floor with its face art - flanges, crown, slots - on its front. The six views are elevations.
   rail:
     confidence: drawing
     note: >-
@@ -155,9 +154,8 @@ views:
       - {id: side-right-edge, at: [452.6, 0.0], size: [1.5, 87.5], fill: '#1b1d20', kind: side-bracket}
     components:
       placements:
-      - {ref: fs/dinrail2u-panel@1, id: rail-panel, at: [42.0, 0.0], group: frame, under: rail,
-        rel-pos: 1}
-      - {ref: fs/din-rail-ts35-400@1, id: rail, at: [42.0, 26.25], group: rails, rel-pos: 1}
+      - {ref: fs/dinrail2u-panel@1, id: rail-panel, at: [42.0, 0.0], group: frame, rel-pos: 1}
+      - {ref: fs/din-rail-ts35-400@1, id: rail, at: [42.0, 26.25], group: rails, rel-pos: 1, in: rail-panel}
       - {ref: fs/dinrail2u-ear@1, id: ear-left, at: [0.0, 0.0], skin: left, group: ears, rel-pos: 1}
       - {ref: fs/dinrail2u-ear@1, id: ear-right, at: [454.1, 0.0], skin: right, group: ears, rel-pos: 2}
   rear:
@@ -181,21 +179,16 @@ views:
       decor:
       - {id: side-left, at: [0.0, 0.0], size: &id001 [1.5, 360.0], fill: '#1b1d20', kind: side-bracket}
       - {id: side-right, at: [422.7, 0.0], size: &id002 [1.5, 360.0], fill: '#1b1d20', kind: side-bracket}
-    components:
-      placements:
-      - {ref: fs/dinrail2u-frame@1, id: frame, at: [0.0, 0.0], group: frame, rel-pos: 4}
-      - {ref: fs/dinrail2u-panel-plan@1, id: rail-panel-body, at: [12.1, 197.3], group: frame,
-        rel-pos: 5, in: frame}
-      - {ref: fs/din-rail-ts35-400-plan@1, id: rail-body, at: [12.1, 198.8], group: rails, lift: 24.25,
-        rel-pos: 2, in: frame}
+      - {id: rail-panel, at: [12.1, 197.3], size: &id003 [400.0, 1.5], fill: '#1b1d20', kind: rail-panel}
+      - {id: rail, at: [12.1, 198.8], size: &id004 [400.0, 7.5], fill: '#b9bdc2', kind: din-rail}
   bottom:
     size: {w: 424.2, h: 360.0}
     panel:
       decor:
       - {id: side-left, at: [422.7, 0.0], size: *id001, fill: '#1b1d20', kind: side-bracket}
       - {id: side-right, at: [0.0, 0.0], size: *id002, fill: '#1b1d20', kind: side-bracket}
-      - {id: rail-panel, at: [12.1, 197.3], size: [400.0, 1.5], fill: '#1b1d20', kind: rail-panel}
-      - {id: rail, at: [12.1, 198.8], size: [400.0, 7.5], fill: '#b9bdc2', kind: din-rail}
+      - {id: rail-panel, at: [12.1, 197.3], size: *id003, fill: '#1b1d20', kind: rail-panel}
+      - {id: rail, at: [12.1, 198.8], size: *id004, fill: '#b9bdc2', kind: din-rail}
   left:
     size: {w: 360.0, h: 87.5}
     components:
