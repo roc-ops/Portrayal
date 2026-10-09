@@ -1,0 +1,177 @@
+format: 1
+kind: device
+name: fhu-bpa-1u-10
+version: 0.1.0
+maturity: modelled
+manufacturer: FS.com
+model: FHU-BPA-1U-10
+aliases:
+- {name: '133347', kind: vendor, note: FS shop product ID}
+description: >-
+  1U 19in tool-less ABS blanking panel, FS FHU-BPA-1U-10: one black moulded plate 44 x 482 mm
+  with a raised panel across its face and a channel 22 mm deep behind it, held to the rails by
+  pegs and magnets at each end (FS's "self-attaching, magnetic design"). Sold ten to a pack.
+profile: passive
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      the FS Blanking Panel Datasheet (portal 2125), FHU-BPA-1U-10 column, and the product page
+      for the size, material and weight; the face from the FS Blanking Panel Visio stencil, master
+      FHU-BPA-1U-10, checked against the straight-on gallery render of SKU 133347 (g3); the depth
+      and the back from the dimensioned render (x8), the close-up (x9) and the quick start guide
+      (QSG V1.0, portal 422).
+  chassis:
+    confidence: datasheet
+    note: >-
+      the plate is the part: "1.73 x 19.00 in (44 x 482 mm)", one moulded ABS plate the width
+      of the rack, its ends carrying the pegs and magnets that hold it, so the face is drawn at
+      482 (the owner's rule of 2026-10-09; lint L43 stands down for a body this wide).
+  depth:
+    confidence: drawing
+    note: >-
+      22: FS's dimensioned render (x8) prints 22 mm for the moulding's depth and 482 and 44 for
+      its length and height. The 3D body is that box across the full width; the real ends are
+      only the plate.
+  walls:
+    confidence: photo-measured
+    note: >-
+      the moulding's top and bottom walls run 20.9 to 461.1: the straight-on render (g3) at 2.97
+      px/mm puts their ends 20.9 in from each end of the plate. Their 2 mm thickness, and the
+      plate's, are estimated.
+  face:
+    confidence: drawing
+    note: >-
+      the moulded panel on the face - wide at the ends, narrowing over the middle third - is the
+      stencil's outline (16.0 to 466.3 across; 8.4 to 37.7 high at the ends, 14.2 to 32.3 over
+      the middle), drawn as three fields without the slanted transitions; the render (g3) shows
+      the same shape in relief.
+  fixing:
+    confidence: drawing
+    note: >-
+      the quick start guide draws two pegs at each end of the back entering the rail's square
+      holes from the front, on the unit's top and bottom holes (EIA-310); the close-up (x9) shows
+      a round metal disc at each end, which is the "Magnetic Design" of the product page title.
+      The datasheet calls the part tool-less and says nothing of magnets. The pegs are drawn 5
+      mm and the magnets 10 mm across, both estimated, the magnets centred on the end of the plate's
+      back.
+  eia:
+    confidence: registry
+    note: >-
+      EIA-310 hole positions: the rail holes of each rack unit stand 6.35, 22.225 and 38.1 mm
+      up from its bottom, and the two rails' holes are 465.1 mm apart across the rack. The plate
+      is taken as centred in the rack units it fills, so a hole's height on the plate is its height
+      in the units less half the difference between the units and the plate.
+  mark:
+    confidence: drawing
+    note: >-
+      FS's mark is moulded into the left of the panel; it is a logo and is not drawn.
+  color:
+    confidence: photo-measured
+    note: >-
+      black textured ABS ("Fine Texture Design"), slightly lighter on the moulded panel in the
+      render.
+  weight:
+    confidence: datasheet
+    note: >-
+      the datasheet and product page: 1.108 kg for the pack of ten, so 0.111 a panel (derived).
+  sides:
+    confidence: estimated
+    note: >-
+      the plate's end edge-on, the moulding's walls and the open channel between them, as the
+      render x8 shows the end.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      searched 2026-10-09: the FS product page for this SKU was live and orderable when the intake
+      read it on 2026-10-08, and no FS end-of-sale notice for it was found in the intake's portal
+      tree or by name.
+attrs:
+  physical:
+    material: ABS
+    color: Black
+    mounting: 19" Rack Mount
+    fixing: tool-less, pegs into square rail holes, magnetic
+    package: 10pcs/pack
+  environmental:
+    storage-temp: -40 to 60 C
+  compliance:
+    flammability: UL 94V-0
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 482.0
+  height: 44.0
+  depth: 22.0
+  ru: 1
+  full-depth: false
+  weight-kg: 0.111
+  color: '#1e2023'
+gaps:
+- what: fixing
+  scope: [rear]
+  reason: sources-disagree
+  note: >-
+    the product page calls the part "Magnetic Design" and the datasheet tool-less; the renders
+    show both pegs and a metal disc at each end. Which of the two holds it in a round-hole rail
+    is not said.
+  wanted: a rear photograph or the QSG text
+views:
+  front:
+    size: {w: 482.0, h: 44.0}
+    panel:
+      decor:
+      - {id: plate, at: [0.0, 0.0], size: [482.0, 44.0], fill: '#1e2023', kind: plate}
+      - {id: panel-left, at: [16.0, 8.5], size: [164.0, 29.0], fill: '#24272a', kind: moulded-panel}
+      - {id: panel-middle, at: [180.0, 14.2], size: [122.0, 18.1], fill: '#24272a', kind: moulded-panel}
+      - {id: panel-right, at: [302.0, 8.5], size: [164.0, 29.0], fill: '#24272a', kind: moulded-panel}
+  rear:
+    size: {w: 482.0, h: 44.0}
+    panel:
+      decor:
+      - {id: plate, at: [0.0, 0.0], size: [482.0, 44.0], fill: '#1e2023', kind: plate}
+      - {id: channel, at: [20.9, 2.0], size: [440.2, 40.0], fill: '#0d0e0f', kind: channel}
+      - {id: wall-top, at: [20.9, 0.0], size: [440.2, 2.0], fill: '#2a2d31', kind: wall}
+      - {id: wall-bottom, at: [20.9, 42.0], size: [440.2, 2.0], fill: '#2a2d31', kind: wall}
+      - {id: magnet-1, at: [5.45, 17.0], size: [10.0, 10.0], fill: '#9ea3a8', shape: circle, kind: magnet}
+      - {id: peg-11, at: [7.95, 3.625], size: [5.0, 5.0], fill: '#141618', kind: peg}
+      - {id: peg-12, at: [7.95, 35.375], size: [5.0, 5.0], fill: '#141618', kind: peg}
+      - {id: magnet-2, at: [466.55, 17.0], size: [10.0, 10.0], fill: '#9ea3a8', shape: circle,
+        kind: magnet}
+      - {id: peg-21, at: [469.05, 3.625], size: [5.0, 5.0], fill: '#141618', kind: peg}
+      - {id: peg-22, at: [469.05, 35.375], size: [5.0, 5.0], fill: '#141618', kind: peg}
+  top:
+    size: {w: 482.0, h: 22.0}
+    panel:
+      decor:
+      - {id: plate-edge, at: [0.0, 20.0], size: &id001 [482.0, 2.0], fill: '#2a2d31', kind: plate-edge}
+      - {id: return, at: [20.9, 0.0], size: &id002 [440.2, 20.0], fill: '#1e2023', kind: return}
+  bottom:
+    size: {w: 482.0, h: 22.0}
+    panel:
+      decor:
+      - {id: plate-edge, at: [0.0, 20.0], size: *id001, fill: '#2a2d31', kind: plate-edge}
+      - {id: return, at: [20.9, 0.0], size: *id002, fill: '#1e2023', kind: return}
+  left:
+    size: {w: 22.0, h: 44.0}
+    panel:
+      decor:
+      - {id: open-end, at: [0.0, 2.0], size: &id003 [20.0, 40.0], fill: '#0d0e0f', kind: open-end}
+      - {id: plate-edge, at: [20.0, 0.0], size: &id004 [2.0, 44.0], fill: '#2a2d31', kind: plate-edge}
+      - {id: return-top, at: [0.0, 0.0], size: &id005 [20.0, 2.0], fill: '#2a2d31', kind: return}
+      - {id: return-bottom, at: [0.0, 42.0], size: &id006 [20.0, 2.0], fill: '#2a2d31', kind: return}
+  right:
+    size: {w: 22.0, h: 44.0}
+    panel:
+      decor:
+      - {id: open-end, at: [2.0, 2.0], size: *id003, fill: '#0d0e0f', kind: open-end}
+      - {id: plate-edge, at: [0.0, 0.0], size: *id004, fill: '#2a2d31', kind: plate-edge}
+      - {id: return-top, at: [2.0, 0.0], size: *id005, fill: '#2a2d31', kind: return}
+      - {id: return-bottom, at: [2.0, 42.0], size: *id006, fill: '#2a2d31', kind: return}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      One FHU-BPA-1U-10 panel as FS ships it, one of the ten in the pack.
+datasheet: {title: 'FS Blanking Panel Datasheet (FHU-BPS-1U-10, FHU-BPA-1U-10)', sha256: 3b23e232bd2fe0784996ab0a5eebe4bb5b4de35e29082b5e7707c122134c8267}

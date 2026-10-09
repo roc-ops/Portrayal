@@ -1,0 +1,199 @@
+format: 1
+kind: device
+name: fhu-bps-4u
+version: 0.1.0
+maturity: modelled
+manufacturer: FS.com
+model: FHU-BPS-4U
+aliases:
+- {name: '168825', kind: vendor, note: FS shop product ID}
+description: >-
+  4U 19in steel blanking panel, FS FHU-BPS-4U: one flat black SPCC plate 177 x 482.6 mm, screwed
+  to the front rails through two slots at each end, its top and bottom edges folded back between
+  the ends. It fills an unused rack space so cold air is not drawn round the equipment.
+profile: passive
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      the FS Blanking Panel Datasheet (portal 2125) is the 1U sheet; the "2U/4U Blanking Panel
+      Datasheet" the portal serves (4737) is byte-identical to it, so this part has NO datasheet
+      of its own and its figures are the product page's. Height and width are the specification
+      ("Dimensions (HxW) 177 x 482.6 mm"); the layout of the face is the FS Blanking Panel Visio
+      stencil, master FHU-BPS-4U, rendered at 10 px/mm against its 482.6 width, checked against
+      the straight-on gallery render of SKU 168825 (g4) and the dimensioned render (x3); the slot
+      positions are EIA-310's, which both agree with.
+  chassis:
+    confidence: datasheet
+    note: >-
+      the plate is the part: 177 x 482.6 per the specification, one steel plate the full width
+      of the rack with its two mounting ends (the ears) in the same sheet, so the face is drawn
+      at 482.6 with its slots (the owner's rule of 2026-10-09: ears built into the face are part
+      of the face; lint L43 stands down for a body this wide). Behind the middle of the plate
+      its top and bottom edges are folded back into short returns, which is the depth.
+  depth:
+    confidence: estimated
+    note: >-
+      9.8: no FS document states the returns' depth for the screw-on blanks. The tool-less steel
+      blanks (FHU-BPSTL) dimension theirs 0.39 in (9.8 mm) and the gallery renders of the two
+      families show returns of the same proportion, so 9.8 is drawn. The 3D body is the plate
+      and its returns as one 9.8-deep box across the full width; the real ends are a single 1
+      mm sheet.
+  returns:
+    confidence: photo-measured
+    note: >-
+      the returns run 26.5 to 456.1 across the plate: the straight-on gallery render of SKU 72753
+      (g4) at 3.18 px/mm puts the return edge 25.8 and 456.7 in from the left end, the stencil's
+      outline notches 27.1 and 457; the mean, made symmetric.
+  thickness:
+    confidence: estimated
+    note: >-
+      1 mm sheet, drawn as the slots' `vent` depth and the plate edge; FS states the material
+      (SPCC) and not its gauge.
+  slots:
+    confidence: drawing
+    note: >-
+      2 slots at each end, 11 x 7 with round ends, centred 8.89 in from each end: FS's dimensioned
+      render (SKU 72753 x3) prints 18.3 in (464.82 mm) between the slot centres across and 1.24
+      in (31.5 mm) between the 1U plate's two slots, EIA-310's 465.1 and 31.75 to within 0.3.
+      The slot size is the gallery renders' (11.0 x 7.2 on the 1U, 10.6 x 6.8 on the 2U and 4U)
+      and the stencil's (11.4 x 7.1). Heights are EIA's, the top and bottom rail holes of the
+      units the plate fills; the renders put them within 0.5 of those.
+  eia:
+    confidence: registry
+    note: >-
+      EIA-310 hole positions: the rail holes of each rack unit stand 6.35, 22.225 and 38.1 mm
+      up from its bottom, and the two rails' holes are 465.1 mm apart across the rack. The plate
+      is taken as centred in the rack units it fills, so a hole's height on the plate is its height
+      in the units less half the difference between the units and the plate.
+  mark:
+    confidence: drawing
+    note: >-
+      FS prints its mark near the left end of the face (the stencil and every render); it is a
+      logo and is not drawn.
+  color:
+    confidence: photo-measured
+    note: >-
+      black powder-coated steel, "Color: Black" in the specification; drawn in the shade of the
+      FS cable managers.
+  weight:
+    confidence: datasheet
+    note: >-
+      the product page specification: 1.98 lbs (0.9 kg)
+  rear:
+    confidence: drawing
+    note: >-
+      the back of the plate as the rear three-quarter renders (g5) show it: plain, the two returns
+      seen edge-on along its top and bottom between the ends, and the slots through it.
+  sides:
+    confidence: estimated
+    note: >-
+      the plate's end edge-on at the front, the two returns behind it, and the open channel between
+      them; drawn from the renders' profile, which no document dimensions.
+  hardware:
+    confidence: datasheet
+    note: >-
+      the product page: "Mounting Hardware is Included for Easy Installation" (2U, 4U; the 1U
+      page's description says the same). The cage nuts and screws (render x4) are not drawn; they
+      are not part of the plate.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      searched 2026-10-09: the FS product page for this SKU was live and orderable when the intake
+      read it on 2026-10-08, and no FS end-of-sale notice for it was found in the intake's portal
+      tree or by name.
+attrs:
+  physical:
+    material: SPCC
+    color: Black
+    mounting: 19" Rack Mount
+    mounting-option: Front
+    fixing: screw-on, M6 cage nuts and screws
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 482.6
+  height: 177.0
+  depth: 9.8
+  ru: 4
+  full-depth: false
+  weight-kg: 0.9
+  color: '#1b1d20'
+gaps:
+- what: return-depth
+  scope: [top, left, right]
+  reason: vendor-silent
+  note: >-
+    no FS document dimensions how far the plate's folded top and bottom edges reach back; 9.8
+    is the tool-less family's figure.
+  wanted: a side view dimensioned, or a ruler on the part
+- what: datasheet
+  reason: vendor-silent
+  note: >-
+    FS's "2U/4U Blanking Panel Datasheet" (portal 4737) is byte-identical to the 1U sheet (2125)
+    and states nothing for this part; its figures are the product page's.
+  wanted: the 2U/4U datasheet from FS
+views:
+  front:
+    size: {w: 482.6, h: 177.0}
+    panel:
+      decor:
+      - {id: plate, at: [0.0, 0.0], size: [482.6, 177.0], fill: '#1b1d20', kind: plate}
+      - {id: slot-l1, at: [3.39, 2.45], size: [11.0, 7.0], fill: '#0a0b0c', rx: 3.5, vent: 1.0,
+        kind: slot}
+      - {id: slot-l2, at: [3.39, 167.55], size: [11.0, 7.0], fill: '#0a0b0c', rx: 3.5, vent: 1.0,
+        kind: slot}
+      - {id: slot-r1, at: [468.21, 2.45], size: [11.0, 7.0], fill: '#0a0b0c', rx: 3.5, vent: 1.0,
+        kind: slot}
+      - {id: slot-r2, at: [468.21, 167.55], size: [11.0, 7.0], fill: '#0a0b0c', rx: 3.5, vent: 1.0,
+        kind: slot}
+  rear:
+    size: {w: 482.6, h: 177.0}
+    panel:
+      decor:
+      - {id: plate, at: [0.0, 0.0], size: [482.6, 177.0], fill: '#1b1d20', kind: plate}
+      - {id: return-top, at: [26.5, 0.0], size: [429.6, 1.0], fill: '#2a2d31', kind: return}
+      - {id: return-bottom, at: [26.5, 176.0], size: [429.6, 1.0], fill: '#2a2d31', kind: return}
+      - {id: slot-r1, at: [468.21, 2.45], size: [11.0, 7.0], fill: '#0a0b0c', rx: 3.5, vent: 1.0,
+        kind: slot}
+      - {id: slot-r2, at: [468.21, 167.55], size: [11.0, 7.0], fill: '#0a0b0c', rx: 3.5, vent: 1.0,
+        kind: slot}
+      - {id: slot-l1, at: [3.39, 2.45], size: [11.0, 7.0], fill: '#0a0b0c', rx: 3.5, vent: 1.0,
+        kind: slot}
+      - {id: slot-l2, at: [3.39, 167.55], size: [11.0, 7.0], fill: '#0a0b0c', rx: 3.5, vent: 1.0,
+        kind: slot}
+  top:
+    size: {w: 482.6, h: 9.8}
+    panel:
+      decor:
+      - {id: plate-edge, at: [0.0, 8.8], size: &id001 [482.6, 1.0], fill: '#2a2d31', kind: plate-edge}
+      - {id: return, at: [26.5, 0.0], size: &id002 [429.6, 8.8], fill: '#1b1d20', kind: return}
+  bottom:
+    size: {w: 482.6, h: 9.8}
+    panel:
+      decor:
+      - {id: plate-edge, at: [0.0, 8.8], size: *id001, fill: '#2a2d31', kind: plate-edge}
+      - {id: return, at: [26.5, 0.0], size: *id002, fill: '#1b1d20', kind: return}
+  left:
+    size: {w: 9.8, h: 177.0}
+    panel:
+      decor:
+      - {id: open-end, at: [0.0, 1.0], size: &id003 [8.8, 175.0], fill: '#0d0e0f', kind: open-end}
+      - {id: plate-edge, at: [8.8, 0.0], size: &id004 [1.0, 177.0], fill: '#2a2d31', kind: plate-edge}
+      - {id: return-top, at: [0.0, 0.0], size: &id005 [8.8, 1.0], fill: '#2a2d31', kind: return}
+      - {id: return-bottom, at: [0.0, 176.0], size: &id006 [8.8, 1.0], fill: '#2a2d31', kind: return}
+  right:
+    size: {w: 9.8, h: 177.0}
+    panel:
+      decor:
+      - {id: open-end, at: [1.0, 1.0], size: *id003, fill: '#0d0e0f', kind: open-end}
+      - {id: plate-edge, at: [0.0, 0.0], size: *id004, fill: '#2a2d31', kind: plate-edge}
+      - {id: return-top, at: [1.0, 0.0], size: *id005, fill: '#2a2d31', kind: return}
+      - {id: return-bottom, at: [1.0, 176.0], size: *id006, fill: '#2a2d31', kind: return}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      One FHU-BPS-4U panel as FS ships it.
+datasheet: {title: 'FS Blanking Panel Datasheet (FHU-BPS-1U-10, FHU-BPA-1U-10)', sha256: 3b23e232bd2fe0784996ab0a5eebe4bb5b4de35e29082b5e7707c122134c8267}

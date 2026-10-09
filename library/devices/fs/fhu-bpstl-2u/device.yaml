@@ -1,0 +1,191 @@
+format: 1
+kind: device
+name: fhu-bpstl-2u
+version: 0.1.0
+maturity: modelled
+manufacturer: FS.com
+model: FHU-BPSTL-2U
+aliases:
+- {name: '181855', kind: vendor, note: FS shop product ID}
+description: >-
+  2U 19in tool-less steel blanking panel, FS FHU-BPSTL-2U: one black SPCC plate 88.25 x 482.6
+  mm with an ABS clip at each end whose hooks snap into the rail holes, so it fits without screws;
+  its top and bottom edges fold back 9.8 mm between the ends.
+profile: passive
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      the FS Tool-less Blanking Panel Datasheet (portal 5057), FHU-BPSTL-2U column, for the height,
+      width, material and weight; the layout of the face from the FS Blanking Panel Visio stencil,
+      master FHU-BPSTL-2U, rendered at 10 px/mm against its 482.6 width, checked against the straight-on
+      gallery render of SKU 181855 (g4) and the dimensioned render (x3), which agree on the number
+      and places of the clips.
+  chassis:
+    confidence: datasheet
+    note: >-
+      the plate is the part: "Dimensions (HxW) 88.25 x 482.6 mm" (datasheet and product page),
+      one steel plate the width of the rack with its ends in the same sheet, so the face is drawn
+      at 482.6 with its clips (the owner's rule of 2026-10-09; lint L43 stands down for a body
+      this wide). Behind the middle of the plate its top and bottom edges fold back into returns,
+      which is the depth.
+  depth:
+    confidence: drawing
+    note: >-
+      9.8: FS's dimensioned render of SKU 181854 (x3) prints 0.39 in (9.8 mm) for the return,
+      and that of 181856 the same. The 3D body is the plate and its returns as one box across
+      the full width; the real ends are a single sheet.
+  returns:
+    confidence: photo-measured
+    note: >-
+      the returns run 17.9 to 464.7: the straight-on render of SKU 181854 (g4) at 3.13 px/mm puts
+      the return's top edge 16.9 to 18.9 in from the left end and 463.4 to 465.3 from it on the
+      right; the middle, symmetric.
+  thickness:
+    confidence: estimated
+    note: >-
+      1 mm sheet; FS states the material (SPCC) and not its gauge.
+  clips:
+    confidence: drawing
+    note: >-
+      1 ABS clip(s) at each end (fs/bpstl-clip@1), the bezel 16.8 in from the end: the stencil's
+      left clip at 16.8, its right at 435.3, 0.5 off symmetric, drawn symmetric. Each sits on
+      the middle rail hole of its rack unit (EIA-310), where the stencil and the renders put it;
+      the right-hand clip is the part turned 180, its point and arrow toward the middle as drawn.
+  hooks:
+    confidence: photo-measured
+    note: >-
+      a 6.7 x 8.1 window centred 9.5 in from each end at the height of each rail hole the clip
+      engages, the clip's hook showing grey in it. The straight-on render of SKU 181855 (g4, 3.104
+      px/mm, its aspect within 0.1 per cent of the stated 88.25 x 482.6) centres both windows
+      9.5 from their ends, near the rail hole's 8.75; the stencil draws them 11.95 in, and is
+      not taken. The size is the stencil's. On the 2U the one clip sits between two windows, at
+      the middle holes of the upper and lower unit.
+  eia:
+    confidence: registry
+    note: >-
+      EIA-310 hole positions: the rail holes of each rack unit stand 6.35, 22.225 and 38.1 mm
+      up from its bottom, and the two rails' holes are 465.1 mm apart across the rack. The plate
+      is taken as centred in the rack units it fills, so a hole's height on the plate is its height
+      in the units less half the difference between the units and the plate.
+  mark:
+    confidence: drawing
+    note: >-
+      FS prints its mark beside the left clip; it is a logo and is not drawn.
+  color:
+    confidence: photo-measured
+    note: >-
+      black steel, black ABS clips with a grey slider, as every render shows; "Color: Black".
+  weight:
+    confidence: datasheet
+    note: >-
+      the datasheet: 1.28 lbs (0.58 kg)
+  rear:
+    confidence: estimated
+    note: >-
+      the back of the plate with the two returns edge-on between the ends and the back of each
+      clip behind its window; no render shows the back square-on and the clips' backs are drawn
+      as plain blocks.
+  sides:
+    confidence: estimated
+    note: >-
+      the plate's end edge-on, the returns behind it and the open channel between them.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      searched 2026-10-09: the FS product page for this SKU was live and orderable when the intake
+      read it on 2026-10-08, and no FS end-of-sale notice for it was found in the intake's portal
+      tree or by name.
+attrs:
+  physical:
+    material: SPCC, ABS
+    color: Black
+    mounting: 19" Rack Mount
+    mounting-option: Front
+    fixing: tool-less, snaps into square or round punched rail holes
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 482.6
+  height: 88.25
+  depth: 9.8
+  ru: 2
+  full-depth: false
+  weight-kg: 0.58
+  color: '#1b1d20'
+gaps:
+- what: clip-back
+  scope: [rear]
+  reason: needs-photo
+  note: >-
+    no render shows the back of the panel square-on, so the clips' backs are plain blocks of the
+    bezel's size.
+  wanted: a rear view of the panel
+groups:
+  clips:
+    term: Clip
+    role: furniture
+    index-origin: 1
+    description: the ABS mounting clips, left end first, top to bottom
+views:
+  front:
+    size: {w: 482.6, h: 88.25}
+    panel:
+      decor:
+      - {id: plate, at: [0.0, 0.0], size: [482.6, 88.25], fill: '#1b1d20', kind: plate}
+      - {id: hook-l1, at: [6.15, 17.85], size: [6.7, 8.1], fill: '#0a0b0c', vent: 1.0, kind: hook-window}
+      - {id: hook-l1-tongue, at: [8.25, 18.45], size: [2.5, 6.9], fill: '#3a3d41', kind: hook}
+      - {id: hook-l2, at: [6.15, 62.3], size: [6.7, 8.1], fill: '#0a0b0c', vent: 1.0, kind: hook-window}
+      - {id: hook-l2-tongue, at: [8.25, 62.9], size: [2.5, 6.9], fill: '#3a3d41', kind: hook}
+      - {id: hook-r1, at: [469.75, 17.85], size: [6.7, 8.1], fill: '#0a0b0c', vent: 1.0, kind: hook-window}
+      - {id: hook-r1-tongue, at: [471.85, 18.45], size: [2.5, 6.9], fill: '#3a3d41', kind: hook}
+      - {id: hook-r2, at: [469.75, 62.3], size: [6.7, 8.1], fill: '#0a0b0c', vent: 1.0, kind: hook-window}
+      - {id: hook-r2-tongue, at: [471.85, 62.9], size: [2.5, 6.9], fill: '#3a3d41', kind: hook}
+    components:
+      placements:
+      - {ref: fs/bpstl-clip@1, id: clip-1, at: [16.8, 33.575], group: clips, rel-pos: 1}
+      - {ref: fs/bpstl-clip@1, id: clip-2, at: [435.8, 33.575], rotate: 180, group: clips, rel-pos: 2}
+  rear:
+    size: {w: 482.6, h: 88.25}
+    panel:
+      decor:
+      - {id: plate, at: [0.0, 0.0], size: [482.6, 88.25], fill: '#1b1d20', kind: plate}
+      - {id: return-top, at: [17.9, 0.0], size: [446.8, 1.0], fill: '#2a2d31', kind: return}
+      - {id: return-bottom, at: [17.9, 87.25], size: [446.8, 1.0], fill: '#2a2d31', kind: return}
+      - {id: clip-back-1, at: [441.8, 36.125], size: [24.0, 16.0], fill: '#141618', kind: clip-back}
+      - {id: clip-back-2, at: [22.8, 36.125], size: [24.0, 16.0], fill: '#141618', kind: clip-back}
+  top:
+    size: {w: 482.6, h: 9.8}
+    panel:
+      decor:
+      - {id: plate-edge, at: [0.0, 8.8], size: &id001 [482.6, 1.0], fill: '#2a2d31', kind: plate-edge}
+      - {id: return, at: [17.9, 0.0], size: &id002 [446.8, 8.8], fill: '#1b1d20', kind: return}
+  bottom:
+    size: {w: 482.6, h: 9.8}
+    panel:
+      decor:
+      - {id: plate-edge, at: [0.0, 8.8], size: *id001, fill: '#2a2d31', kind: plate-edge}
+      - {id: return, at: [17.9, 0.0], size: *id002, fill: '#1b1d20', kind: return}
+  left:
+    size: {w: 9.8, h: 88.25}
+    panel:
+      decor:
+      - {id: open-end, at: [0.0, 1.0], size: &id003 [8.8, 86.25], fill: '#0d0e0f', kind: open-end}
+      - {id: plate-edge, at: [8.8, 0.0], size: &id004 [1.0, 88.25], fill: '#2a2d31', kind: plate-edge}
+      - {id: return-top, at: [0.0, 0.0], size: &id005 [8.8, 1.0], fill: '#2a2d31', kind: return}
+      - {id: return-bottom, at: [0.0, 87.25], size: &id006 [8.8, 1.0], fill: '#2a2d31', kind: return}
+  right:
+    size: {w: 9.8, h: 88.25}
+    panel:
+      decor:
+      - {id: open-end, at: [1.0, 1.0], size: *id003, fill: '#0d0e0f', kind: open-end}
+      - {id: plate-edge, at: [0.0, 0.0], size: *id004, fill: '#2a2d31', kind: plate-edge}
+      - {id: return-top, at: [1.0, 0.0], size: *id005, fill: '#2a2d31', kind: return}
+      - {id: return-bottom, at: [1.0, 87.25], size: *id006, fill: '#2a2d31', kind: return}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      One FHU-BPSTL-2U panel as FS ships it.
+datasheet: {title: 'FS Tool-less Blanking Panel Datasheet (FHU-BPSTL-1U-10, -2U, -4U)', sha256: 44782ba1f7bcf4af9c50076bf24b7f1002ddf7fb8fe0b7711cbabe02c6a94f72}

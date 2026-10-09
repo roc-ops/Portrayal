@@ -1,0 +1,327 @@
+format: 1
+kind: device
+name: fhu-bpad-2u
+version: 0.1.0
+maturity: modelled
+manufacturer: FS.com
+model: FHU-BPAD-2U
+aliases:
+- {name: '284589', kind: vendor, note: FS shop product ID}
+- {name: FHU-BPAD-2U-5, kind: vendor, note: 'the five-pack of this panel (datasheet, QSG note
+    1)'}
+description: >-
+  2U 19in tool-less ABS blanking panel, FS FHU-BPAD-2U: one black moulded plate 88 x 482.6 mm,
+  scored into 1U strips that snap apart, with a straight and a wave rib across the back of each
+  unit and an E-shaped clip at each end that pushes into the rail holes. Also sold as the five-pack
+  FHU-BPAD-2U-5.
+profile: passive
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      the FS Plastic Blanking Panel Datasheet (portal 7735), FHU-BPAD-2U and FHU-BPAD-2U-5 columns,
+      and the product page, for the size, material and weight; the face from the FS Blanking Panel
+      Visio stencil, master FHU-BPAD-2U, and the straight-on gallery renders of SKU 284589 (g2
+      front, g3 back); the depth from the dimensioned render (x3); the quick start guide (portal
+      7736) for the packs and the snapping apart.
+  chassis:
+    confidence: datasheet
+    note: >-
+      the plate is the part: "88 x 482.6 mm", one moulded ABS plate the width of the rack with
+      its clips at the ends of its back, so the face is drawn at 482.6 (the owner's rule of 2026-10-09;
+      lint L43 stands down for a body this wide).
+  depth:
+    confidence: drawing
+    note: >-
+      14: FS's dimensioned render (x3) prints about 14 mm at the end of the plate, which is the
+      plate and the ribs behind it. The 3D body is one box that deep across the full width.
+  units:
+    confidence: datasheet
+    note: >-
+      the plate snaps apart into 1U strips (datasheet: "Snappable Design"; QSG: "you can manually
+      take the blanking panels apart"); the score lines between the units are drawn at every 44
+      mm, the stencil's and the render's single line on the 2U.
+  badge:
+    confidence: photo-measured
+    note: >-
+      a recessed badge near the left end of each unit carries FS's mark: 19.7 to 54.5 across and
+      5.1 to 14.3 down the unit on the render g2 at 2.74 px/mm. The recess is drawn; the mark
+      in it is a logo and is not.
+  clips:
+    confidence: photo-measured
+    note: >-
+      each unit carries an E-shaped ABS clip at each end of its back (render x4), whose rounded
+      head shows past the plate's end at the middle of the unit, 23.8 tall and about 4.6 across
+      on g2; the clip's body behind the plate and its metal pin (g3) are drawn 4 x 6 and 2 across,
+      estimated.
+  ribs:
+    confidence: photo-measured
+    note: >-
+      the back (g3, g5) carries, per unit, a straight rib along the middle of the unit and a wave
+      rib crossing it, from about 18 mm in from each end: the wave is drawn as a cosine of 6.5
+      mm amplitude and 152 mm period, lowest at 86 mm from the left end, in 6 mm steps: the straight-on
+      rear render (g3, 2.73 px/mm) has its low runs centred near 86, 247 and 390 and swings about
+      6.5 either side of the straight rib - an estimate of the shape, not a measurement of it.
+  mark:
+    confidence: drawing
+    note: >-
+      FS's mark in each badge is a logo and is not drawn.
+  color:
+    confidence: photo-measured
+    note: >-
+      black textured ABS, as the renders and "Color: Black".
+  weight:
+    confidence: datasheet
+    note: >-
+      the datasheet: 142 g a panel, 710 g the five-pack FHU-BPAD-2U-5.
+  sides:
+    confidence: estimated
+    note: >-
+      the plate's end edge-on and the ends of the ribs behind it.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      searched 2026-10-09: the FS product page for this SKU was live and orderable when the intake
+      read it on 2026-10-08, and no FS end-of-sale notice for it was found in the intake's portal
+      tree or by name.
+attrs:
+  physical:
+    material: ABS
+    color: Black
+    mounting: 19" Rack Mount
+    mounting-option: Front
+    fixing: tool-less, E-shape clips push into the rail holes; snaps apart into 1U strips
+  compliance:
+    flammability: UL 94V-0
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 482.6
+  height: 88.0
+  depth: 14.0
+  ru: 2
+  full-depth: false
+  weight-kg: 0.142
+  color: '#1e2023'
+gaps:
+- what: rib-shape
+  scope: [rear]
+  reason: needs-photo
+  note: >-
+    the wave rib's amplitude and period are read off an angled render, not dimensioned.
+  wanted: a square-on rear photograph with a scale
+views:
+  front:
+    size: {w: 482.6, h: 88.0}
+    panel:
+      decor:
+      - {id: plate, at: [0.0, 0.0], size: [482.6, 88.0], fill: '#1e2023', kind: plate}
+      - {id: badge-1, at: [19.7, 5.1], size: [34.8, 9.2], fill: '#17191b', rx: 2, sink: 0.3, kind: logo-badge}
+      - {id: clip-head-l1, at: [0.0, 10.1], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
+      - {id: clip-head-r1, at: [478.0, 10.1], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
+      - {id: score-1, at: [0.0, 43.8], size: [482.6, 0.4], fill: '#0f1011', sink: 0.3, kind: score}
+      - {id: badge-2, at: [19.7, 49.1], size: [34.8, 9.2], fill: '#17191b', rx: 2, sink: 0.3,
+        kind: logo-badge}
+      - {id: clip-head-l2, at: [0.0, 54.1], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
+      - {id: clip-head-r2, at: [478.0, 54.1], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
+  rear:
+    size: {w: 482.6, h: 88.0}
+    panel:
+      decor:
+      - {id: plate, at: [0.0, 0.0], size: [482.6, 88.0], fill: '#1e2023', kind: plate}
+      - {id: clip-head-r1, at: [478.0, 10.1], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
+      - {id: clip-head-l1, at: [0.0, 10.1], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
+      - {id: rib-1, at: [18.0, 21.3], size: [446.6, 1.4], fill: '#3a3e43', kind: rib}
+      - {id: wave-1-1, at: [18.0, 15.36], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-2, at: [24.0, 16.24], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-3, at: [30.0, 17.423], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-4, at: [36.0, 18.837], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-5, at: [42.0, 20.396], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-6, at: [48.0, 22.004], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-7, at: [54.0, 23.563], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-8, at: [60.0, 24.977], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-9, at: [66.0, 26.16], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-10, at: [72.0, 27.04], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-11, at: [78.0, 27.562], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-12, at: [84.0, 27.694], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-13, at: [90.0, 27.43], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-14, at: [96.0, 26.784], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-15, at: [102.0, 25.796], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-16, at: [108.0, 24.527], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-17, at: [114.0, 23.055], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-18, at: [120.0, 21.469], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-19, at: [126.0, 19.866], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-20, at: [132.0, 18.345], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-21, at: [138.0, 16.999], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-22, at: [144.0, 15.91], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-23, at: [150.0, 15.145], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-24, at: [156.0, 14.75], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-25, at: [162.0, 14.75], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-26, at: [168.0, 15.145], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-27, at: [174.0, 15.91], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-28, at: [180.0, 16.999], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-29, at: [186.0, 18.345], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-30, at: [192.0, 19.866], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-31, at: [198.0, 21.469], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-32, at: [204.0, 23.055], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-33, at: [210.0, 24.527], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-34, at: [216.0, 25.796], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-35, at: [222.0, 26.784], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-36, at: [228.0, 27.43], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-37, at: [234.0, 27.694], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-38, at: [240.0, 27.562], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-39, at: [246.0, 27.04], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-40, at: [252.0, 26.16], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-41, at: [258.0, 24.977], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-42, at: [264.0, 23.563], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-43, at: [270.0, 22.004], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-44, at: [276.0, 20.396], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-45, at: [282.0, 18.837], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-46, at: [288.0, 17.423], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-47, at: [294.0, 16.24], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-48, at: [300.0, 15.36], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-49, at: [306.0, 14.838], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-50, at: [312.0, 14.706], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-51, at: [318.0, 14.97], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-52, at: [324.0, 15.616], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-53, at: [330.0, 16.604], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-54, at: [336.0, 17.873], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-55, at: [342.0, 19.345], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-56, at: [348.0, 20.931], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-57, at: [354.0, 22.534], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-58, at: [360.0, 24.055], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-59, at: [366.0, 25.401], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-60, at: [372.0, 26.49], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-61, at: [378.0, 27.255], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-62, at: [384.0, 27.65], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-63, at: [390.0, 27.65], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-64, at: [396.0, 27.255], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-65, at: [402.0, 26.49], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-66, at: [408.0, 25.401], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-67, at: [414.0, 24.055], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-68, at: [420.0, 22.534], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-69, at: [426.0, 20.931], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-70, at: [432.0, 19.345], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-71, at: [438.0, 17.873], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-72, at: [444.0, 16.604], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-73, at: [450.0, 15.616], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-1-74, at: [456.0, 14.97], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: clip-l1, at: [5.0, 19.0], size: [4.0, 6.0], fill: '#141618', kind: clip}
+      - {id: pin-l1, at: [6.0, 21.0], size: [2.0, 2.0], fill: '#9ea3a8', shape: circle, kind: pin}
+      - {id: clip-r1, at: [473.6, 19.0], size: [4.0, 6.0], fill: '#141618', kind: clip}
+      - {id: pin-r1, at: [474.6, 21.0], size: [2.0, 2.0], fill: '#9ea3a8', shape: circle, kind: pin}
+      - {id: score-1, at: [0.0, 43.8], size: [482.6, 0.4], fill: '#0f1011', kind: score}
+      - {id: clip-head-r2, at: [478.0, 54.1], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
+      - {id: clip-head-l2, at: [0.0, 54.1], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
+      - {id: rib-2, at: [18.0, 65.3], size: [446.6, 1.4], fill: '#3a3e43', kind: rib}
+      - {id: wave-2-1, at: [18.0, 59.36], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-2, at: [24.0, 60.24], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-3, at: [30.0, 61.423], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-4, at: [36.0, 62.837], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-5, at: [42.0, 64.396], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-6, at: [48.0, 66.004], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-7, at: [54.0, 67.563], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-8, at: [60.0, 68.977], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-9, at: [66.0, 70.16], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-10, at: [72.0, 71.04], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-11, at: [78.0, 71.562], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-12, at: [84.0, 71.694], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-13, at: [90.0, 71.43], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-14, at: [96.0, 70.784], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-15, at: [102.0, 69.796], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-16, at: [108.0, 68.527], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-17, at: [114.0, 67.055], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-18, at: [120.0, 65.469], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-19, at: [126.0, 63.866], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-20, at: [132.0, 62.345], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-21, at: [138.0, 60.999], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-22, at: [144.0, 59.91], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-23, at: [150.0, 59.145], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-24, at: [156.0, 58.75], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-25, at: [162.0, 58.75], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-26, at: [168.0, 59.145], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-27, at: [174.0, 59.91], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-28, at: [180.0, 60.999], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-29, at: [186.0, 62.345], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-30, at: [192.0, 63.866], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-31, at: [198.0, 65.469], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-32, at: [204.0, 67.055], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-33, at: [210.0, 68.527], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-34, at: [216.0, 69.796], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-35, at: [222.0, 70.784], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-36, at: [228.0, 71.43], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-37, at: [234.0, 71.694], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-38, at: [240.0, 71.562], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-39, at: [246.0, 71.04], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-40, at: [252.0, 70.16], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-41, at: [258.0, 68.977], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-42, at: [264.0, 67.563], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-43, at: [270.0, 66.004], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-44, at: [276.0, 64.396], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-45, at: [282.0, 62.837], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-46, at: [288.0, 61.423], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-47, at: [294.0, 60.24], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-48, at: [300.0, 59.36], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-49, at: [306.0, 58.838], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-50, at: [312.0, 58.706], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-51, at: [318.0, 58.97], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-52, at: [324.0, 59.616], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-53, at: [330.0, 60.604], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-54, at: [336.0, 61.873], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-55, at: [342.0, 63.345], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-56, at: [348.0, 64.931], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-57, at: [354.0, 66.534], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-58, at: [360.0, 68.055], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-59, at: [366.0, 69.401], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-60, at: [372.0, 70.49], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-61, at: [378.0, 71.255], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-62, at: [384.0, 71.65], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-63, at: [390.0, 71.65], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-64, at: [396.0, 71.255], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-65, at: [402.0, 70.49], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-66, at: [408.0, 69.401], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-67, at: [414.0, 68.055], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-68, at: [420.0, 66.534], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-69, at: [426.0, 64.931], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-70, at: [432.0, 63.345], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-71, at: [438.0, 61.873], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-72, at: [444.0, 60.604], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-73, at: [450.0, 59.616], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: wave-2-74, at: [456.0, 58.97], size: [6.0, 1.6], fill: '#3a3e43', kind: wave-rib}
+      - {id: clip-l2, at: [5.0, 63.0], size: [4.0, 6.0], fill: '#141618', kind: clip}
+      - {id: pin-l2, at: [6.0, 65.0], size: [2.0, 2.0], fill: '#9ea3a8', shape: circle, kind: pin}
+      - {id: clip-r2, at: [473.6, 63.0], size: [4.0, 6.0], fill: '#141618', kind: clip}
+      - {id: pin-r2, at: [474.6, 65.0], size: [2.0, 2.0], fill: '#9ea3a8', shape: circle, kind: pin}
+  top:
+    size: {w: 482.6, h: 14.0}
+    panel:
+      decor:
+      - {id: plate-edge, at: [0.0, 12.0], size: &id001 [482.6, 2.0], fill: '#2a2d31', kind: plate-edge}
+      - {id: ribs, at: [18.0, 0.0], size: &id002 [446.6, 12.0], fill: '#16181a', kind: rib}
+  bottom:
+    size: {w: 482.6, h: 14.0}
+    panel:
+      decor:
+      - {id: plate-edge, at: [0.0, 12.0], size: *id001, fill: '#2a2d31', kind: plate-edge}
+      - {id: ribs, at: [18.0, 0.0], size: *id002, fill: '#16181a', kind: rib}
+  left:
+    size: {w: 14.0, h: 88.0}
+    panel:
+      decor:
+      - {id: plate-edge, at: [12.0, 0.0], size: &id003 [2.0, 88.0], fill: '#2a2d31', kind: plate-edge}
+      - {id: rib-end-1, at: [0.0, 17.4], size: &id004 [12.0, 9.2], fill: '#16181a', kind: rib}
+      - {id: rib-end-2, at: [0.0, 61.4], size: &id005 [12.0, 9.2], fill: '#16181a', kind: rib}
+  right:
+    size: {w: 14.0, h: 88.0}
+    panel:
+      decor:
+      - {id: plate-edge, at: [0.0, 0.0], size: *id003, fill: '#2a2d31', kind: plate-edge}
+      - {id: rib-end-1, at: [2.0, 17.4], size: *id004, fill: '#16181a', kind: rib}
+      - {id: rib-end-2, at: [2.0, 61.4], size: *id005, fill: '#16181a', kind: rib}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      One FHU-BPAD-2U panel as FS ships it, whole.
+datasheet: {title: 'FS Plastic Blanking Panel Datasheet (FHU-BPAD-2U, -2U-5, -4U, -4U-5)', sha256: e0bf845457db4c3d949186a99f5c26e95eb5e9a7e8668b4af43318c649ae9756}
