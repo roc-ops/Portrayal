@@ -400,7 +400,8 @@ Ears built into the face (a blanking panel, a full-width patch panel, any front
 480 mm or wider) are part of the drawing and always shown. Every other rack
 device can be shown with a generic L-bracket ear each side, reaching the
 482.6 mm rack face, sized from `chassis.ears` in `<device>.configs.json` (the
-chassis height where it states none). It is a viewing choice: the Explorer and
+chassis height where it states none), and silver unless `chassis.ears.color`
+states another colour (the plan's `color`). It is a viewing choice: the Explorer and
 Annotate start with it off, the Rack Builder with it on.
 
 ```js

@@ -39,11 +39,12 @@ def _doc(name, ears_=None):
 
 # a 1U switch; a 2U router whose sizes are not round numbers; and the 1U with
 # its ears stated - a part-height ear lifted off the bottom, its flange set
-# back - so the leg and the edge views move off the front
+# back, and a colour that is not the default silver - so the leg and the edge
+# views move off the front and the fill comes from the device
 DEVICES = {
     "dcs240": ("edgecore/dcs240", None),
     "asr-9901": ("cisco/asr-9901", None),
-    "dcs240-stated": ("edgecore/dcs240", {"h": 40.0, "y": 2.5, "positions": [
+    "dcs240-stated": ("edgecore/dcs240", {"h": 40.0, "y": 2.5, "color": "#1b1e21", "positions": [
         {"name": "flush", "at": 0}, {"name": "proud", "at": 25.4, "default": True}]}),
 }
 
@@ -147,9 +148,20 @@ def test_the_overlay_is_no_part_and_comes_off_cleanly(drawn, case):
 
 
 def test_the_stated_ear_moved_the_side_views():
-    """The third case is not the first again: its leg starts at the setback."""
+    """The third case is not the first again: its leg starts at the setback,
+    and it is drawn in its own colour where the others are silver."""
     p = ears.plan(_doc(*DEVICES["dcs240-stated"]))
-    assert (p["at"], p["h"], p["y"]) == (25.4, 40.0, 2.5)
+    assert (p["at"], p["h"], p["y"], p["color"]) == (25.4, 40.0, 2.5, "#1b1e21")
+    assert ears.plan(_doc(*DEVICES["dcs240"]))["color"] == ears.SILVER
+
+
+@pytest.mark.parametrize("key,fill", [("dcs240", ears.SILVER), ("asr-9901", ears.SILVER),
+                                      ("dcs240-stated", "#1b1e21")])
+def test_the_overlay_fills_the_bracket_in_the_ears_colour(drawn, key, fill):
+    got, _want, _bare = drawn
+    fills = {k["a"]["fill"] for g in _overlay(got[f"{key}/front"]["drawn"]) for k in g["c"]
+             if k["t"] == "rect"}
+    assert fills == {fill}
 
 
 def test_a_device_without_a_generic_ear_gets_no_overlay():

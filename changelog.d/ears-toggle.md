@@ -12,3 +12,15 @@
   carries no `data-path`, takes no pointer events, and an export of the live
   drawing carries it as picture. relief.js `EAR` gains `EDGE`, the outline
   colour ears.py draws with.
+- `chassis.ears.color` (optional, additive): the colour the generic ear is
+  drawn in. configs.json publishes it in `ears` where it is stated, and the
+  plan from ears.py and relief.js `genericEars` carries it as `color`.
+  devicelock hashes it with the rest of `ears` as chassis surface, so stating
+  it is a patch.
+
+### Changed
+- The generic rack ear is silver (`#c8cacc`, ears.py `SILVER`, relief.js
+  `EAR.SILVER`) unless the device states otherwise, in `render.py --with
+  ears`, the 3D viewer and the 2D overlay alike; it was drawn in
+  `common/rack-ear@1`'s near-black, which relief.js `EAR.FILL` still names.
+  Nothing published moves: no published face draws the ear.

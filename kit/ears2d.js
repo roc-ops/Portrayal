@@ -123,7 +123,7 @@ export function earShapes(plan, view, vw, vh) {
     } else {
       shape = {tag: 'rect', attrs: {x: fmtG(round4(x)), y: fmtG(round4(y)),
                                     width: fmtG(round4(w)), height: fmtG(round4(h)),
-                                    fill: EAR.FILL, stroke: EAR.EDGE, 'stroke-width': '0.4',
+                                    fill: plan.color || EAR.SILVER, stroke: EAR.EDGE, 'stroke-width': '0.4',
                                     id: `${side}--${kind}`}};
     }
     g.shapes.push(shape);

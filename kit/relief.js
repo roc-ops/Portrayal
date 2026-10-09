@@ -158,7 +158,7 @@ export function sheetShell(chassis) {
 // where the device gets none: not a `rack` device, a sheet body, ears stated
 // `behind`, a face as wide as the rack, or a flange too narrow to draw.
 // The numbers are ears.py's, and spec/tests/test_generic_ears.py holds the two
-// to the same plan for the same chassis. ears2d.js draws this plan over a
+// to the same plan for the same chassis, colour included. ears2d.js draws this plan over a
 // published face in 2D, as render.py `--with ears` would have drawn it.
 //
 // ONE THING THIS CANNOT SEE: whether a device places `common/rack-ear@1`.
@@ -167,7 +167,10 @@ export function sheetShell(chassis) {
 // is the device's only pair.
 export const EAR = {RACK_FACE: 482.6, HOLE_SPAN: 465.1, U: 44.45, HOLES_IN_U: [6.35, 38.1],
                     THICKNESS: 2.0, LEG: 30.0, MIN_FLANGE: 3.0, SLOT: [8.0, 5.0], EAR_WIDE: 480.0,
-                    FILL: '#2b2f33', EDGE: '#171a1d', HOLE: '#0d0f11'};
+                    SILVER: '#c8cacc', EDGE: '#171a1d', HOLE: '#0d0f11',
+                    // common/rack-ear@1's flange colour, the default before
+                    // the ear went silver; kept for a host that read it
+                    FILL: '#2b2f33'};
 const r4 = v => Math.round(v * 1e4) / 1e4;
 export function genericEars(chassis, faceW) {
   if (!chassis || (chassis.mount || 'rack') !== 'rack' || chassis.shell) return null;
@@ -188,7 +191,9 @@ export function genericEars(chassis, faceW) {
   const sw = Math.min(EAR.SLOT[0], flange - 1);
   const slotX = Math.min(Math.max(EAR.HOLE_SPAN / 2 - w / 2, sw / 2 + 0.5), flange - sw / 2 - 0.5);
   return {w, h_body: hBody, d: Number(chassis.d) || 0, flange, h, y, at: def ? Number(def.at) : 0,
-          t: EAR.THICKNESS, leg: EAR.LEG, slots, slot_x: r4(slotX), slot: [r4(sw), EAR.SLOT[1]]};
+          t: EAR.THICKNESS, leg: EAR.LEG, slots, slot_x: r4(slotX), slot: [r4(sw), EAR.SLOT[1]],
+          // silver unless the device states its ears' colour (ears.py SILVER)
+          color: ears.color != null ? String(ears.color) : EAR.SILVER};
 }
 
 // WHERE A PROUD FEATURE STARTS: the summed lift of what it stands in, so a

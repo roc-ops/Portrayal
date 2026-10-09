@@ -69,6 +69,21 @@ def test_a_device_placing_rack_ear_gets_no_second_pair():
     assert ears.plan(_real("edgecore/as5912-54x")) is None
 
 
+def test_the_ear_is_silver_unless_the_device_says_otherwise():
+    """Owner, 2026-10-09: most gear has silver ears even on a black face."""
+    assert ears.plan(_device(color="#1b1e21"))["color"] == ears.SILVER == "#c8cacc"
+    assert ears.plan(_device(ears={"color": "#2a2c2e"}))["color"] == "#2a2c2e"
+    assert render.published_ears({"color": "#2a2c2e", "h": 40})["color"] == "#2a2c2e"
+    assert "color" not in render.published_ears({"h": 40})
+
+
+def test_changing_the_ears_colour_is_a_patch():
+    before = dl.entry(_device(ears={"h": 43.5}))
+    after = dl.entry(_device(ears={"h": 43.5, "color": "#1b1e21"}))
+    assert before["shape"] == after["shape"]
+    assert dl.required_bump(before, after) == "patch"
+
+
 def test_stated_h_and_y_size_the_ear():
     p = ears.plan(_device(h=88.9, ru=2, ears={"h": 43.5, "y": 0.15}))
     assert (p["h"], p["y"]) == (43.5, 0.15)
@@ -165,7 +180,7 @@ CASES = [_device(), _device(w=220.0), _device(h=88.9, ru=2, ears={"h": 43.5, "y"
          _device(h=87.0, ru=2), _device(ears={"y": 4}),
          _device(ears={"positions": [{"name": "mid", "at": 228, "default": True}]}),
          _device(w=482.6), _device(ears="behind"), _device(mount="wall"),
-         _device(w=478.0)]
+         _device(w=478.0), _device(ears={"color": "#1b1e21", "y": 2})]
 
 
 @pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
@@ -183,13 +198,18 @@ def test_the_kit_draws_the_same_ear_as_ears_py():
     got = json.loads(p.stdout.strip().splitlines()[-1])
     want = [ears.plan(d) for d in CASES]
     assert [g is None for g in got] == [w is None for w in want]
-    assert sum(w is not None for w in want) == 6     # the comparison compares something
+    assert sum(w is not None for w in want) == 7     # the comparison compares something
+    # the colour too: silver by default, the stated one where there is one
+    assert [w["color"] for w in want if w] == [ears.SILVER] * 6 + ["#1b1e21"]
     for g, w in zip(got, want):
         if w is None:
             continue
         assert set(g) == set(w)
         for k in w:
-            assert g[k] == pytest.approx(w[k]), k
+            if isinstance(w[k], str):
+                assert g[k] == w[k], k
+            else:
+                assert g[k] == pytest.approx(w[k]), k
 
 
 def _code(name):
