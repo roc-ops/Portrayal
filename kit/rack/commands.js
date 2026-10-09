@@ -6,11 +6,15 @@
 // changes nothing hands back the very rack it was given, so a caller can tell.
 
 import {withItem, updateItem, withoutItem, withFrame, renamed, withDcim, detached, positionOf, isWaypoint,
-        nextId, zeroUById, zeroUOffset, zeroUBottom} from './model.js';
+        nextId, zeroUById, zeroUOffset, zeroUBottom, bundlesOf, bundleName, bundleIdFor} from './model.js';
+import {withoutCables, bundleOfCable, bundleCheck, layoutOf, onTrunk, trunkText, waypointText, strapEveryMm,
+        spacingText, DEFAULT_STRAPS} from './bundles.js';
+import {deriveTrunk, andList} from './bundle-route.js';
+import {ownRoute, pointOf, portPoint} from './route.js';
 import {fits, fitsZeroU, isRackFace, isNarrow, railOf, heightOf, shrinkRack, settleZeroU} from './fit.js';
 import {whereText, zeroUName} from './zero-u.js';
 import {placement, moveItem, managersOf} from './managers.js';
-import {canCable, withCable, updateCable, withoutCable, cablesOf, withoutCablesOf, cableName, endName, endKey,
+import {canCable, withCable, updateCable, cablesOf, cableName, endName, endKey,
         connectorOf, mediaKind, portPathOf, MEDIA, MEDIA_LABELS} from './cable-rules.js';
 import {validate, same} from './validate.js';
 import {withRoutedLengths, pathwaysOf, lanesOf} from './route.js';
@@ -23,6 +27,7 @@ export const CABLE_GONE = 'That cable is no longer in the rack.';
 export const NOT_ADDED = 'The cable was not added because a device it ran to was removed.';
 export const CLEARED = 'Its swaps and fields were for the old configuration, so they were cleared.';
 export const ZERO_GONE = 'That part is no longer beside the rack.';
+export const BUNDLE_GONE = 'That bundle is no longer in the rack.';
 
 const itemOf = (rack, id) => rack.items.find(i => i.id === id) || null;
 // An item command given the id of a part beside the rack: say which command
@@ -130,8 +135,11 @@ function remove(rack, {id, cables = 'keep'}) {
   const k = cablesOf(rack, id).length, n = count(k, 'cable');
   const ms = managersOf(rack, id);
   const stay = ms.length ? ` Its cable manager${ms.length === 1 ? '' : 's'} ${ms.map(m => m.label).join(', ')} stay${ms.length === 1 ? 's' : ''} on the rack.` : '';
-  if (cables === 'remove')
-    return done(withoutCablesOf(withoutItem(rack, id), id), (k ? `Removed ${it.label} and its ${n}.` : `Removed ${it.label}.`) + stay);
+  if (cables === 'remove') {
+    // through withoutCables, so a bundle never names a cable that is gone
+    const {rack: next, said} = withoutCables(withoutItem(rack, id), cablesOf(rack, id).map(c => c.id));
+    return done(next, (k ? `Removed ${it.label} and its ${n}.` : `Removed ${it.label}.`) + stay + (said ? ` ${said}` : ''));
+  }
   return done(withoutItem(rack, id),
     (k ? `Removed ${it.label}. Its ${n} ${k === 1 ? 'is a loose end' : 'are loose ends'}.` : `Removed ${it.label}.`) + stay);
 }
@@ -450,13 +458,20 @@ function cableUpdate(rack, {id, a, b, ...p}, {chassisOf}) {
   const next = updateCable(rack, id, {...want, ...Object.fromEntries(moved.map(k => [k, ends[k]]))});
   const name = cableName(cableOf(next, id));
   const said = moved.map(k => `Moved end ${k.toUpperCase()} of cable ${name} to ${endName(next, ends[k], uOf)}.`);
+  // A bundled cable stays in its bundle; an end now on another device is said.
+  const bun = bundleOfCable(rack, id);
+  const away = bun ? moved.filter(k => ends[k].item !== c[k].item) : [];
   return {rack: next, summary: said.length ? said.join(' ') : `Edited cable ${name}.`,
-          findings: moved.length && c.routeEdited === true ? [note(`${c.id}'s route was drawn for its old end.`)] : []};
+          findings: [...(moved.length && c.routeEdited === true ? [note(`${c.id}'s route was drawn for its old end.`)] : []),
+                     ...away.map(k => note(`${c.id} stays in ${bundleName(bun)}; its ${k} end is now on another device.`))]};
 }
 
+// Through withoutCables: a cable leaves its bundle in the same step.
 function cableRemove(rack, {id}) {
   const c = cableOf(rack, id);
-  return c ? done(withoutCable(rack, id), `Deleted cable ${cableName(c)}.`) : {error: CABLE_GONE};
+  if (!c) return {error: CABLE_GONE};
+  const {rack: next, said} = withoutCables(rack, [id]);
+  return done(next, `Deleted cable ${cableName(c)}.${said ? ` ${said}` : ''}`);
 }
 
 // A waypoint must name something the rack has. Checked only when the catalogue
@@ -496,15 +511,29 @@ function waypointError(rack, route, stored, {chassisOf, guidesOf} = {}) {
 // A route by hand is the whole list of waypoints, in order, as route.js stores
 // them. The page names each edit its own way ("Waypoint added."), so it may
 // give the summary; an agent gets the plain one.
+// The readers a waypoint is checked against: the routing context's guides
+// (`ctx.route.guidesOf`, as the bundle commands take them), else a flat
+// `ctx.guidesOf` as 0.4.0's callers pass it, else the catalogue's pathways.
+const wpCtx = ctx => ({chassisOf: ctx?.chassisOf, guidesOf: ctx?.route?.guidesOf ?? ctx?.guidesOf});
 function cableRoute(rack, {id, route, summary}, ctx) {
   const c = cableOf(rack, id);
   if (!c) return {error: CABLE_GONE};
   const bad = route.findIndex(w => !isWaypoint(w));
   if (bad >= 0) return {error: `Waypoint ${bad + 1} is neither a pathway nor a gutter.`};
-  const wrong = waypointError(rack, route, c.route ?? [], ctx);
+  const wrong = waypointError(rack, route, c.route ?? [], wpCtx(ctx));
   if (wrong) return {error: wrong};
   if (c.routeEdited === true && same(c.route ?? [], route) && !('routeAsWritten' in c)) return unchanged(rack);
-  return done(updateCable(rack, id, {route: structuredClone(route), routeEdited: true}), summary ?? `Routed cable ${cableName(c)} by hand.`);
+  const next = updateCable(rack, id, {route: structuredClone(route), routeEdited: true});
+  // A member's own route decides only its lead-in and lead-out.
+  const b = bundleOfCable(rack, id);
+  const findings = [];
+  if (b) {
+    const m = layoutOf(next, b, ctx)?.members.find(x => x.cable === id);
+    const [from, to] = m?.join && m?.leave ? [m.join, m.leave] : [b.route[0], b.route.at(-1)];
+    findings.push(note(from && to ? `${id} follows ${bundleName(b)} from ${waypointText(rack, from)} to ${waypointText(rack, to)}; this route applies outside it.`
+      : `${id} is in ${bundleName(b)}; this route applies outside it.`));
+  }
+  return {...done(next, summary ?? `Routed cable ${cableName(c)} by hand.`), findings};
 }
 function cableRouteReset(rack, {id, summary}) {
   const c = cableOf(rack, id);
@@ -523,6 +552,209 @@ function lengthsRouted(rack, {routeCtx}) {
   let next;
   try { next = withRoutedLengths(rack, routeCtx); } catch { return {error: 'The routed lengths could not be measured.'}; }
   return next === rack ? unchanged(rack) : done(next, 'Measured the routed lengths.');
+}
+
+// ── bundles (#921, docs/cable-bundles-design.md section 3) ──────────────
+// Cables combed into one run along a stored trunk. Membership lives on the
+// bundle (model.js); the trunk is worked out once, from the members' own
+// routes, or given by hand, and kept. What needs the routing readers comes on
+// `ctx.route` (route.js's context, from the page's last render); without it a
+// bundle is made and changed but not measured, and a command that would need
+// to measure is refused with the reason.
+const NO_ROUTES = "The cables' routes are not known here, so the bundle needs a route.";
+const bundleAt = (rack, id) => bundlesOf(rack).find(b => b.id === id) ?? null;
+const putBundle = (rack, b) => ({...rack, bundles: bundlesOf(rack).map(x => (x.id === b.id ? b : x))});
+const labelOf = rack => id => rack.items.find(i => i.id === id)?.label ?? id;
+// A spacing under 50 mm or over 1 m is taken, and said: either is more likely
+// a unit slip than intent.
+function spacingNote(straps) {
+  const e = straps?.every;
+  if (!e) return [];
+  const mm = strapEveryMm({straps});
+  return mm < 50 ? [note(`Straps every ${e.value} ${e.unit} is under 50 mm apart; check the unit.`)]
+    : mm > 1000 ? [note(`Straps every ${e.value} ${e.unit} is over 1 m apart; check the unit.`)] : [];
+}
+// The checks for the bundle a command changed (bundles.js bundleCheck), as
+// findings; without the routes, one note in their place.
+function checksOf(rack, b, ctx) {
+  const name = bundleName(b);
+  if (b.members.length < 2) return [note(`${name} now holds ${b.members.length === 1 ? 'one cable' : 'no cables'}.`)];
+  if (!ctx?.route) return [note(`${name} is not checked for size or bend: the routes are not known here.`)];
+  const r = bundleCheck(rack, b, ctx);
+  if (!r.checked) return [note(`${name} is not checked for size or bend: the routes could not be read.`)];
+  return [...r.warnings.map(text => ({kind: 'warning', text})), ...r.notes.map(note)];
+}
+// A trunk by hand: the shapes, then each waypoint as cable.route checks it.
+function trunkError(rack, route, stored, ctx) {
+  if (!route.length) return "A bundle's route needs at least one waypoint.";
+  const bad = route.findIndex(w => !isWaypoint(w));
+  if (bad >= 0) return `Waypoint ${bad + 1} is neither a pathway nor a gutter.`;
+  // a reader that throws counts as missing: checked against the catalogue
+  try { return waypointError(rack, route, stored, wpCtx(ctx)); } catch { return waypointError(rack, route, stored, {chassisOf: ctx?.chassisOf}); }
+}
+// The trunk worked out from the cables' own routes (bundle-route.js).
+function workedOut(rack, ids, ctx) {
+  if (!ctx?.route) return {error: NO_ROUTES};
+  let members;
+  try {
+    members = ids.map(id => ({id, waypoints: ownRoute(rack, cableOf(rack, id), ctx.route).waypoints}));
+  } catch { return {error: NO_ROUTES}; }
+  return deriveTrunk(members, {nameOf: labelOf(rack), frame: rack.frame});
+}
+// Cables a bundle command is given: each in the rack, named once, and in no
+// other bundle than `into`.
+function cablesError(rack, ids, into = null) {
+  for (const id of ids) if (!cableOf(rack, id)) return CABLE_GONE;
+  const twice = ids.find((id, k) => ids.indexOf(id) !== k);
+  if (twice) return `${twice} is named twice.`;
+  for (const id of ids) {
+    const b = bundleOfCable(rack, id);
+    if (b && b.id !== into) return `${id} is already in ${bundleName(b)}. Peel it off first.`;
+  }
+  return null;
+}
+const numberTaken = (rack, n, self = null) => bundlesOf(rack).find(b => b.number === n && b.id !== self) ?? null;
+
+function bundleCreate(rack, {cables, label = '', number, route, straps}, ctx) {
+  const bad = cablesError(rack, cables);
+  if (bad) return {error: bad};
+  const taken = number != null ? numberTaken(rack, number) : null;
+  if (taken) return {error: `Bundle ${number} is already ${taken.id}'s number.`};
+  let trunk;
+  if (route != null) {
+    const wrong = trunkError(rack, route, [], ctx);
+    if (wrong) return {error: wrong};
+    trunk = structuredClone(route);
+  } else {
+    const t = workedOut(rack, cables, ctx);
+    if (t.error) return {error: t.error};
+    trunk = t.route;
+  }
+  const b = {id: bundleIdFor(rack), number: number ?? Math.max(0, ...bundlesOf(rack).map(x => x.number)) + 1,
+             label: String(label), members: cables.map(cable => ({cable})), route: trunk,
+             ...(straps ? {straps: structuredClone(straps)} : {})};
+  const next = {...rack, bundles: [...bundlesOf(rack), b]};
+  return {rack: next, summary: `Bundled ${cables.length} cables as ${bundleName(b)}.`, created: {id: b.id},
+          findings: [...spacingNote(straps), ...checksOf(next, b, ctx)]};
+}
+
+// A cable already in the bundle has its peel points cleared, and rides the
+// whole trunk again. The trunk is not rerouted.
+function bundleAdd(rack, {id, cables}, ctx) {
+  const b = bundleAt(rack, id);
+  if (!b) return {error: BUNDLE_GONE};
+  const bad = cablesError(rack, cables, b.id);
+  if (bad) return {error: bad};
+  const named = new Set(cables);
+  const again = b.members.filter(m => named.has(m.cable) && ('a' in m || 'b' in m)).map(m => m.cable);
+  const fresh = cables.filter(c => !b.members.some(m => m.cable === c));
+  if (!again.length && !fresh.length) return unchanged(rack);
+  const members = [...b.members.map(m => { if (!named.has(m.cable)) return m; const {a: _a, b: _b, ...bare} = m; return bare; }),
+                   ...fresh.map(cable => ({cable}))];
+  const nb = {...b, members}, next = putBundle(rack, nb), name = bundleName(b);
+  const said = [fresh.length ? `Added ${andList(fresh)} to ${name}.` : '',
+                again.length ? `${andList(again)} ${again.length === 1 ? 'rides' : 'ride'} the whole of ${name} again.` : ''].filter(Boolean);
+  return {rack: next, summary: said.join(' '), findings: checksOf(next, nb, ctx)};
+}
+
+// Out of the bundle (no `at`), or out from a waypoint on toward one end.
+function bundlePeel(rack, {id, cable, at: where, end}, ctx) {
+  const b = bundleAt(rack, id);
+  if (!b) return {error: BUNDLE_GONE};
+  const name = bundleName(b);
+  const m = b.members.find(x => x.cable === cable);
+  if (!m) return {error: cableOf(rack, cable) ? `${cable} is not in ${name}.` : CABLE_GONE};
+  if (where == null) {
+    const nb = {...b, members: b.members.filter(x => x !== m)}, next = putBundle(rack, nb);
+    return {rack: next, summary: `Took ${cable} out of ${name}; it follows its own route again.`, findings: checksOf(next, nb, ctx)};
+  }
+  if (!isWaypoint(where)) return {error: 'at is neither a pathway nor a gutter.'};
+  const w = 'lane' in where ? {lane: where.lane, ru: where.ru} : {item: where.item, via: where.via};
+  if (!onTrunk(b, w)) return {error: `${waypointText(rack, w)} is not on ${name}'s route, which runs ${trunkText(rack, b)}.`};
+  let toward = end;
+  if (toward == null) {
+    if (!ctx?.route) return {error: `Say which end ${cable} heads for, a or b: the routes are not known here.`};
+    const c = cableOf(rack, cable);
+    let pa = null, pb = null, pw = null;
+    try { pa = portPoint(rack, c.a, ctx.route); pb = portPoint(rack, c.b, ctx.route); pw = pointOf(rack, w, ctx.route); } catch { /* not measured */ }
+    if (!pa || !pb || !pw) return {error: `Say which end ${cable} heads for, a or b: its ports are not found on the drawings.`};
+    const d = p => Math.hypot(p.x - pw.x, p.y - pw.y, p.z - pw.z);
+    toward = d(pa) < d(pb) ? 'a' : 'b';
+  }
+  const other = toward === 'a' ? 'b' : 'a';
+  if (!ctx?.route && m[other] != null)
+    return {error: `${cable} already leaves ${name} at ${waypointText(rack, m[other])} for its ${other} end; the routes are not known here to check this against it.`};
+  const nm = {...m, [toward]: w};
+  if (same(nm, m)) return unchanged(rack);
+  const nb = {...b, members: b.members.map(x => (x === m ? nm : x))}, next = putBundle(rack, nb);
+  if (ctx?.route) {
+    const L = layoutOf(next, nb, ctx);
+    if (L?.members.find(x => x.cable === cable)?.stale.includes(toward))
+      return {error: `${waypointText(rack, w)} is at or past where ${cable} leaves ${name} for its ${other} end, so it would have no run in the bundle.`};
+  }
+  return {rack: next, summary: `${cable} leaves ${name} at ${waypointText(rack, w)} for its ${toward} end.`, findings: checksOf(next, nb, ctx)};
+}
+
+function bundleUpdate(rack, {id, label, number, straps, summary, ...rest}, ctx) {
+  const b = bundleAt(rack, id);
+  if (!b) return {error: BUNDLE_GONE};
+  const name = bundleName(b);
+  const patch = {}, said = [], findings = [];
+  if (label != null && String(label) !== b.label) patch.label = String(label);
+  if (number != null && number !== b.number) {
+    const taken = numberTaken(rack, number, b.id);
+    if (taken) return {error: `Bundle ${number} is already ${taken.id}'s number.`};
+    patch.number = number;
+  }
+  if (straps !== undefined && !same(straps, b.straps ?? {every: DEFAULT_STRAPS})) {
+    patch.straps = structuredClone(straps);
+    findings.push(...spacingNote(straps));
+  }
+  let cleared = [];
+  if ('route' in rest) {
+    let trunk;
+    if (rest.route === null) {
+      if (b.members.length < 2) return {error: `${name} needs two or more cables to work its route out from them.`};
+      const t = workedOut(rack, b.members.map(m => m.cable), ctx);
+      if (t.error) return {error: t.error};
+      trunk = t.route;
+    } else {
+      const wrong = trunkError(rack, rest.route, b.route || [], ctx);
+      if (wrong) return {error: wrong};
+      trunk = structuredClone(rest.route);
+    }
+    if (!same(trunk, b.route) || 'routeAsWritten' in b) {
+      patch.route = trunk;
+      // the peel points the new trunk does not hold go with the old trunk
+      const nt = {route: trunk};
+      const members = b.members.map(m => {
+        const drop = ['a', 'b'].filter(k => k in m && !onTrunk(nt, m[k]));
+        if (!drop.length) return m;
+        cleared.push(m.cable);
+        const out = {...m};
+        for (const k of drop) delete out[k];
+        return out;
+      });
+      if (cleared.length) patch.members = members;
+    }
+  }
+  if (!Object.keys(patch).length) return unchanged(rack);
+  const {routeAsWritten: _w, ...kept} = b;
+  const nb = {...('route' in patch ? kept : b), ...patch}, next = putBundle(rack, nb);
+  if ('label' in patch || 'number' in patch) said.push(`Renamed ${name} to ${bundleName(nb)}.`);
+  if ('straps' in patch) said.push(`${bundleName(nb)} now has ${spacingText(nb.straps.every)}.`);
+  if ('route' in patch) said.push(`Rerouted ${bundleName(nb)}.`);
+  if (cleared.length) findings.push(note(`Cleared the peel points of ${andList(cleared)}: they are not on the new route.`));
+  return {rack: next, summary: summary ?? said.join(' '), findings: [...findings, ...checksOf(next, nb, ctx)]};
+}
+
+// The cables stay as they are, and follow their own routes again.
+function bundleRemove(rack, {id}) {
+  const b = bundleAt(rack, id);
+  if (!b) return {error: BUNDLE_GONE};
+  const n = b.members.length;
+  return done({...rack, bundles: bundlesOf(rack).filter(x => x !== b)},
+    `Dissolved ${bundleName(b)}${n ? `; ${n === 1 ? 'its cable follows its own route' : `its ${n} cables follow their own routes`} again` : ''}.`);
 }
 
 // ── the table an agent reads ────────────────────────────────────────────
@@ -556,6 +788,14 @@ const SUMMARY = {type: 'string', description: 'How the step is described in Undo
 const AT = {type: 'string', minLength: 1, description: 'Its upright: left or right (two-post); left-front, right-front, left-rear or right-rear (four-post).'};
 const BOTTOM = {type: 'integer', minimum: 1, description: 'The U its bottom is level with, counted from 1 at the bottom of the rails.'};
 const BETWEEN = {type: 'boolean', description: 'true when it stands between this rack and the next one, serving both.'};
+const BUNDLE_CABLES = (min, description) => ({type: 'array', minItems: min, description,
+  items: {type: 'string', minLength: 1, description: 'A cable id, or "@name" from earlier in this batch.'}});
+const STRAPS = {type: 'object', required: ['every'], additionalProperties: false,
+  description: 'Its hook-and-loop straps: {every: {value, unit}}, or {every: null} for none. Every 12 in when left out.',
+  properties: {every: {type: ['object', 'null'], required: ['value', 'unit'], additionalProperties: false,
+    description: 'The spacing, {value, unit}, or null for no straps.',
+    properties: {value: {type: 'number', exclusiveMinimum: 0, description: 'How far apart, above 0.'},
+                 unit: {enum: ['in', 'mm'], description: 'Inches (in) or millimetres (mm).'}}}}};
 const args = (required, properties) => ({type: 'object', required, additionalProperties: false,
                                          properties: {...properties, rack: RACK}});
 
@@ -628,6 +868,27 @@ export const COMMANDS = {
       summary: SUMMARY})},
   'cable.route.reset': {run: cableRouteReset, description: 'Drop a hand-made route; the cable takes its own route again.',
     args: args(['id'], {id: ID('cable'), summary: SUMMARY})},
+  'bundle.create': {run: bundleCreate, description: 'Bundle two or more cables sharing part of their route. It runs where they run together, unless given a route. Refused for a bundled cable.',
+    args: args(['cables'], {cables: BUNDLE_CABLES(2, 'The cables to bundle, two or more, by id, in combing order.'),
+      label: {type: 'string', description: 'The name on its tags; "Bundle <number>" is used when there is none. Empty when left out.'},
+      number: {type: 'integer', minimum: 1, description: 'Its number, unique in the rack; one past the highest in use when left out.'},
+      route: {type: 'array', description: 'Its route by hand, in order: {item, via} or {lane, ru}. Worked out from where its cables run together when left out.',
+        items: WAYPOINT},
+      straps: STRAPS, as: AS})},
+  'bundle.add': {run: bundleAdd, description: 'Add cables to a bundle. A cable already in it rides the whole bundle again. Refused for a cable in another bundle.',
+    args: args(['id', 'cables'], {id: ID('bundle'), cables: BUNDLE_CABLES(1, 'The cables to add, by id.')})},
+  'bundle.peel': {run: bundlePeel, description: 'Take a cable out of a bundle. With at, it stays bundled up to that waypoint, then runs on its own to one end.',
+    args: args(['id', 'cable'], {id: ID('bundle'), cable: ID('cable'),
+      at: {...WAYPOINT, description: 'A waypoint on the bundle\'s route where the cable leaves it; when left out, the cable leaves the bundle altogether.'},
+      end: {enum: ['a', 'b'], description: 'The end it heads for after it leaves at that waypoint; the end whose port is nearer when left out.'}})},
+  'bundle.update': {run: bundleUpdate, description: "Change a bundle's label, number or strap spacing, or route it by hand. A route of null works the route out again from its cables.",
+    args: args(['id'], {id: ID('bundle'), label: {type: 'string', description: 'The name on its tags; empty for "Bundle <number>". Kept when left out.'},
+      number: {type: 'integer', minimum: 1, description: 'Its number, unique in the rack. Kept when left out.'},
+      straps: STRAPS,
+      route: {type: ['array', 'null'], description: 'Its route by hand, in order, or null to work it out again from its cables. Kept when left out.', items: WAYPOINT},
+      summary: SUMMARY})},
+  'bundle.remove': {run: bundleRemove, description: 'Dissolve a bundle. Its cables are kept and follow their own routes again.',
+    args: args(['id'], {id: ID('bundle')})},
   'lengths.routed': {run: lengthsRouted, step: false, system: true,
     description: 'Store the routed lengths the page measured. Not an undo step; the page sends it.',
     args: args(['routeCtx'], {routeCtx: {type: 'object', description: 'The routing context the last render measured with (route-context.js routeFacts().ctx).'}})},
@@ -647,11 +908,14 @@ function sentence(op, e) {
     return `${op} needs ${[...e.path, e.missing].join('.')}, ${typeWord(s)}.`;
   }
   if (e.keyword === 'additionalProperties') return `${op} does not take ${e.path.join('.')}.`;
+  if (e.keyword === 'minItems') return `${op} needs ${e.path.join('.')} to list at least ${e.schema.minItems}.`;
   return `${op} needs ${e.path.join('.')}, ${typeWord(e.schema)}.`;
 }
 
-// Only ids are names: `id`, and the item of a cable end. A label that reads
-// "@srv" is a label.
+// Only ids are names: `id`, `cable` and each of `cables`, the item of a cable
+// end, and the item of each waypoint of a `route` and of `at`. So one batch can
+// place a manager, add cables and bundle them through its rings. A label that
+// reads "@srv" is a label.
 function resolve(cmd, bound) {
   const name = v => (typeof v === 'string' && v.startsWith('@') ? v.slice(1) : null);
   const swap = v => {
@@ -660,9 +924,22 @@ function resolve(cmd, bound) {
     return bound.has(n) ? {v: bound.get(n)} : {error: `Nothing earlier in this batch is called ${n}.`};
   };
   const out = {...cmd};
-  for (const k of ['id']) if (k in out) { const s = swap(out[k]); if (s.error) return s; out[k] = s.v; }
-  for (const k of ['a', 'b']) if (out[k]?.item != null) {
+  for (const k of ['id', 'cable']) if (k in out) { const s = swap(out[k]); if (s.error) return s; out[k] = s.v; }
+  if (Array.isArray(out.cables)) {
+    const list = [];
+    for (const v of out.cables) { const s = swap(v); if (s.error) return s; list.push(s.v); }
+    out.cables = list;
+  }
+  for (const k of ['a', 'b', 'at']) if (out[k]?.item != null) {
     const s = swap(out[k].item); if (s.error) return s; out[k] = {...out[k], item: s.v};
+  }
+  if (Array.isArray(out.route)) {
+    const list = [];
+    for (const w of out.route) {
+      if (w?.item == null) { list.push(w); continue; }
+      const s = swap(w.item); if (s.error) return s; list.push({...w, item: s.v});
+    }
+    out.route = list;
   }
   return {cmd: out};
 }

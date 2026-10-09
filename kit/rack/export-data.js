@@ -5,8 +5,8 @@
 // The Rack Builder's exports (the page that builds the files) do the
 // fetching and drawing, and ask here.
 
-import {positionOf, uLabel, zeroUOf} from './model.js';
-import {routeText} from './route.js';
+import {positionOf, uLabel, zeroUOf, bundlesOf, bundleName} from './model.js';
+import {routeText, trunkRoute} from './route.js';
 import {isRackMount, isZeroUPart, railOf} from './fit.js';
 import {zeroUEntries, whereText} from './zero-u.js';
 export {positionOf};
@@ -872,6 +872,14 @@ export function fillNotes(rack, facts, nameOf = id => id) {
   for (const c of rack.cables || [])
     for (const w of facts.routes?.get(c.id)?.gone || [])
       out.push(`Cable ${cableName(c)}: waypoint ${w.lane ? `${w.lane} U${uLabel(rack.frame, w.ru)}` : `${w.via} on ${nameOf(w.item)}`} is gone, so the route skips it.`);
+  // A bundle's trunk (#921), read with the routing context the facts came
+  // from: a trunk waypoint past a lower top, or on a removed device, is skipped.
+  if (facts.ctx) for (const b of bundlesOf(rack)) {
+    let gone = [];
+    try { gone = trunkRoute(rack, b, facts.ctx).gone; } catch { gone = []; }
+    for (const w of gone)
+      out.push(`${bundleName(b)}: waypoint ${w.lane ? `${w.lane} U${uLabel(rack.frame, w.ru)}` : `${w.via} on ${nameOf(w.item)}`} is gone, so the route skips it.`);
+  }
   return out;
 }
 export function cableBomRows(rack, ends = new Map()) {
