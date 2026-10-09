@@ -69,6 +69,21 @@ def test_a_device_placing_rack_ear_gets_no_second_pair():
     assert ears.plan(_real("edgecore/as5912-54x")) is None
 
 
+@pytest.mark.parametrize("placement", [
+    {"ref": "common/blank@1", "id": "x", "optional": "ears"},   # the include tag alone
+    {"ref": "common/rack-ear@1", "id": "x"},                     # the ref alone
+    {"ref": "common/blank@1", "id": "ear-right"},                # the id alone
+])
+def test_each_sign_of_its_own_ears_is_enough_alone(placement):
+    """_places_own_ears answers yes to any ONE of the three signs, wherever in
+    the views it sits; a placement with none of them leaves the generic pair."""
+    doc = _device()
+    doc["views"]["rear"] = {"components": {"placements": [placement]}}
+    assert ears.plan(doc) is None
+    doc["views"]["rear"]["components"]["placements"] = [{"ref": "common/blank@1", "id": "x"}]
+    assert ears.plan(doc) is not None
+
+
 def test_the_ear_is_silver_unless_the_device_says_otherwise():
     """Owner, 2026-10-09: most gear has silver ears even on a black face."""
     assert ears.plan(_device(color="#1b1e21"))["color"] == ears.SILVER == "#c8cacc"
@@ -137,6 +152,26 @@ def test_the_sides_show_the_leg_at_the_front_end():
     assert right["edge"] == (-2.0, 2.0)         # the flange, edge on, ahead of the plane
 
 
+def test_the_top_and_underside_are_mirrored():
+    """The underside is authored mirrored, so the device's left ear is at the
+    drawing's right there, and at its left on the top."""
+    p = ears.plan(_device())
+    top = {(s, k): x for s, k, x, _y, _w, _h in ears.rects(p, "top", 440, 500)}
+    bottom = {(s, k): x for s, k, x, _y, _w, _h in ears.rects(p, "bottom", 440, 500)}
+    assert top[("ear-left", "leg")] == -2.0 and top[("ear-left", "edge")] == pytest.approx(-21.3)
+    assert top[("ear-right", "leg")] == 440 and top[("ear-right", "edge")] == 440
+    assert bottom[("ear-left", "leg")] == 440 and bottom[("ear-left", "edge")] == 440
+    assert bottom[("ear-right", "leg")] == -2.0
+
+
+def test_a_narrow_flange_narrows_the_slot():
+    """A slot never runs off a flange narrower than the 8 mm slot plus a
+    millimetre: a 470 mm face leaves 6.3 mm a side, so the slot is 5.3 wide."""
+    p = ears.plan(_device(w=470.0))
+    assert p["flange"] == pytest.approx(6.3)
+    assert p["slot"] == [pytest.approx(5.3), 5.0]
+
+
 def test_stated_y_lifts_the_ear_on_every_face():
     p = ears.plan(_device(h=88.9, ru=2, ears={"h": 43.5, "y": 0.15}))
     for view in ("front", "rear", "left", "right"):
@@ -180,7 +215,9 @@ CASES = [_device(), _device(w=220.0), _device(h=88.9, ru=2, ears={"h": 43.5, "y"
          _device(h=87.0, ru=2), _device(ears={"y": 4}),
          _device(ears={"positions": [{"name": "mid", "at": 228, "default": True}]}),
          _device(w=482.6), _device(ears="behind"), _device(mount="wall"),
-         _device(w=478.0), _device(ears={"color": "#1b1e21", "y": 2})]
+         _device(w=478.0), _device(ears={"color": "#1b1e21", "y": 2}),
+         # a flange narrower than a slot (the slot-width clamp), and a shell
+         _device(w=470.0), _device(shell="sheet")]
 
 
 @pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
@@ -198,9 +235,9 @@ def test_the_kit_draws_the_same_ear_as_ears_py():
     got = json.loads(p.stdout.strip().splitlines()[-1])
     want = [ears.plan(d) for d in CASES]
     assert [g is None for g in got] == [w is None for w in want]
-    assert sum(w is not None for w in want) == 7     # the comparison compares something
+    assert sum(w is not None for w in want) == 8     # the comparison compares something
     # the colour too: silver by default, the stated one where there is one
-    assert [w["color"] for w in want if w] == [ears.SILVER] * 6 + ["#1b1e21"]
+    assert [w["color"] for w in want if w] == [ears.SILVER] * 6 + ["#1b1e21", ears.SILVER]
     for g, w in zip(got, want):
         if w is None:
             continue
