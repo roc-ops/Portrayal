@@ -11,6 +11,7 @@
 // same code that has been running in the device viewer.
 
 import { paintFields, unpaintFields } from './fields.js';
+import { boundLamps, expandStates } from './states.js';
 
 let THREE, renderer, PXMM, FRU_PATHS;
 
@@ -1425,7 +1426,7 @@ const SVG_CACHE = new Map();
 // Passing no scope uses the default one, which is what every existing caller
 // does and what this module did before - so nothing had to change to keep working.
 export function createReliefScope(deps = {}) {
-  return {overrides: new Map(), states: new Map(), pulled: new Set(),
+  return {overrides: new Map(), states: new Map(), pulled: new Set(), lampBinds: new Map(),
           pxmm: deps.PXMM, fruPaths: deps.FRU_PATHS};
 }
 const DEFAULT_SCOPE = createReliefScope();
@@ -1501,6 +1502,34 @@ export function setNodeStates(map, scope) {
 }
 export function clearNodeStates(scope) { _sc(scope).states.clear(); }
 
+// AN OUTLET'S STATE REACHES ITS LAMP IN 3D TOO (#934). The registry keys by
+// path, and a lamp placed beside an outlet with `for:` is at a path of its own,
+// so a state set on the outlet would light nothing. The rule is states.js's
+// (boundLamps, expandStates), shared with the 2D drawing, and it runs here at
+// the one place the registry meets a document. The bindings are read off each
+// whole face as it is parsed - a relief piece cut from it holds the lamp and not
+// the outlet, so it could not find them itself - and kept per scope until the
+// next build clears them (a configuration change can bind different lamps).
+/** Note the lamp bindings a parsed document states, for the expansion. */
+export function noteLampBindings(root, scope) {
+  const sc = _sc(scope);
+  const binds = sc.lampBinds || (sc.lampBinds = new Map());
+  for (const [path, lamps] of boundLamps(root)) {
+    if (!binds.has(path)) binds.set(path, new Set());
+    for (const l of lamps) binds.get(path).add(l.getAttribute('data-path'));
+  }
+  return binds;
+}
+/** Forget every binding noted (a build starts over). */
+export function clearLampBindings(scope) { _sc(scope).lampBinds = new Map(); }
+/** The bindings noted so far: outlet path -> Set of lamp paths. */
+export function lampBindings(scope) { return new Map(_sc(scope).lampBinds || []); }
+/** The registry with every bound lamp given its outlet's classes, as a Map. */
+export function expandedNodeStates(scope) {
+  const sc = _sc(scope);
+  return new Map(Object.entries(expandStates(sc.states, sc.lampBinds)));
+}
+
 // WHAT A VIEWER HAS WRITTEN ON A PART. A field is a node the part declares
 // (`fields` in its contract, carried in components.json) and its skin is wired
 // to: a `data-from` node's text, a `data-fill-from` node's fill, a
@@ -1550,9 +1579,11 @@ export function nodeStates(scope) { return new Map(_sc(scope).states); }
 // rule is marks.js's HEX_RE, repeated (and held equal by a test) so relief
 // does not import the 2D marks module.
 //
-// OFF STAYS OFF, as in 2D (`mark.state !== 'off'`): a lamp whose registered
-// state is `state-off` keeps its drawing, so a custom colour never lights a
-// lamp that is out.
+// OFF STAYS OFF, as in 2D (marks.js apply): a lamp whose state is `state-off`
+// - registered on it, or reaching it from the outlet it is bound to (#934) -
+// keeps its drawing, so a custom colour never lights a lamp that is out. Still
+// right with a declared off colour: a custom colour is for a lamp nobody
+// documented, and a declared red off is a documented one.
 export const LAMP_HEX = /^#(?:[0-9a-f]{3}|[0-9a-f]{4}|[0-9a-f]{6}|[0-9a-f]{8})$/i;
 
 // A MARK'S COLOUR FOR A MATERIAL (#667). A 3D mark takes the same hex a lamp
@@ -1604,7 +1635,9 @@ export function applyNodeLampColors(root, scope) {
   }
   const st = _sc(scope).lampColors;
   if (!st || !st.size) return root;
-  const states = _sc(scope).states;
+  // the EXPANDED states, so a lamp whose outlet is off is off (#934), as
+  // marks.js reads it in 2D
+  const states = expandedNodeStates(scope);
   for (const [path, colour] of st) {
     if (/(^|\s)state-off(\s|$)/.test(states.get(path) || '')) continue;
     for (const el of root.querySelectorAll(`[data-path="${CSS.escape(path)}"]`)) {
@@ -1683,7 +1716,8 @@ export function applyNodeStates(root, scope) {
   if (!root) return root;
   for (const el of root.querySelectorAll('[data-path][class]'))
     for (const c of [...el.classList]) if (c.startsWith('state-')) el.classList.remove(c);
-  for (const [path, cls] of _sc(scope).states)
+  noteLampBindings(root, scope);
+  for (const [path, cls] of expandedNodeStates(scope))
     for (const el of root.querySelectorAll(`[data-path="${CSS.escape(path)}"]`))
       el.classList.add(...cls.split(/\s+/).filter(Boolean));
   return root;
