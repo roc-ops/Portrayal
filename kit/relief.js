@@ -158,7 +158,8 @@ export function sheetShell(chassis) {
 // where the device gets none: not a `rack` device, a sheet body, ears stated
 // `behind`, a face as wide as the rack, or a flange too narrow to draw.
 // The numbers are ears.py's, and spec/tests/test_generic_ears.py holds the two
-// to the same plan for the same chassis.
+// to the same plan for the same chassis. ears2d.js draws this plan over a
+// published face in 2D, as render.py `--with ears` would have drawn it.
 //
 // ONE THING THIS CANNOT SEE: whether a device places `common/rack-ear@1`.
 // Those ears are drawn only under the `ears` include tag, which no published
@@ -166,7 +167,7 @@ export function sheetShell(chassis) {
 // is the device's only pair.
 export const EAR = {RACK_FACE: 482.6, HOLE_SPAN: 465.1, U: 44.45, HOLES_IN_U: [6.35, 38.1],
                     THICKNESS: 2.0, LEG: 30.0, MIN_FLANGE: 3.0, SLOT: [8.0, 5.0], EAR_WIDE: 480.0,
-                    FILL: '#2b2f33', HOLE: '#0d0f11'};
+                    FILL: '#2b2f33', EDGE: '#171a1d', HOLE: '#0d0f11'};
 const r4 = v => Math.round(v * 1e4) / 1e4;
 export function genericEars(chassis, faceW) {
   if (!chassis || (chassis.mount || 'rack') !== 'rack' || chassis.shell) return null;

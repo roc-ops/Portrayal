@@ -83,6 +83,7 @@ jsDelivr with `?dist=cdn` (and `&index=<version>`).
 | `zones.js` | the ports and bays of a compiled face, each with its box in millimetres - what the diagram exports put a connectable shape over |
 | `drawio.js` | draw.io: a shape library, a rack elevation, or one live drawing as a `.drawio` (`toDrawio`), with a named connection point per port |
 | `omnigraffle.js` | OmniGraffle: a `.gstencil` with a named, magnetised shape per port, or one live drawing as a stencil (`toGraffle`) |
+| `ears2d.js` | generic rack ears over a published face in 2D (`drawEars`, `clearEars`), from the plan the 3D viewer builds (`earPlan`); see [Rack ears](#rack-ears) |
 
 Plain ES modules. No bundler, no build step.
 
@@ -391,6 +392,42 @@ const { text, notes: n } = toDrawio(shell.state.svg, doc, { cables });
   as `portrayal-cable`, `portrayal-media`, `portrayal-purpose` and
   `portrayal-length` attributes, so a cable can still be identified after the
   file is edited and saved in draw.io. The same input writes the same bytes.
+
+## Rack ears
+
+A device is modelled between its ear folds, and a published face has no ears.
+Ears built into the face (a blanking panel, a full-width patch panel, any front
+480 mm or wider) are part of the drawing and always shown. Every other rack
+device can be shown with a generic L-bracket ear each side, reaching the
+482.6 mm rack face, sized from `chassis.ears` in `<device>.configs.json` (the
+chassis height where it states none). It is a viewing choice: the Explorer and
+Annotate start with it off, the Rack Builder with it on.
+
+```js
+import { earPlan, drawEars, clearEars, faceSize, frontWidthOfText } from '@portrayal/kit/ears2d';
+
+// the front's declared width says whether the ears are built in
+const plan = earPlan(meta, faceSize(frontSvg)[0]);  // or frontWidthOfText(text)
+drawEars(shell.state.svg, plan, shell.state.view);   // shapes drawn, 0 for none
+clearEars(shell.state.svg);                          // the face as published
+
+const viewer = createViewer(el, { dist, ears: true });   // 3D, the same plan
+viewer.setEars(false);
+```
+
+`plan` is null where the device gets no generic ear: not a `rack` device, a
+sheet body, ears stated `behind`, or a front as wide as the rack face. The
+overlay is drawn the way `render.py --with ears` draws the ear (the same
+shapes, ids and colours, and the viewBox grown to hold them, with
+`data-face-w`/`-h` naming the face), as one
+`<g data-overlay="ears" pointer-events="none">` after the drawing. It carries
+no `data-path` or `data-class`, so it is never picked, selected, listed or
+offered as a port. An export of the live drawing (`toDrawio`, `toGraffle`)
+carries it as picture, because exports capture what is on screen; so does a
+GLB taken while the 3D viewer's ears are on. `drawEars` replaces what it drew
+before, so a host calls it again after anything that changes the drawing.
+The kit cannot see a device that still places `common/rack-ear@1` of its own,
+which no published face draws, so that device gets the generic pair here too.
 
 ## three.js
 
