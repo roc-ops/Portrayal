@@ -1,0 +1,44 @@
+format: 1
+kind: component
+name: g4-cord-cs8365c
+version: 1.0.0
+class: inlet
+profile: power
+description: >-
+  The fixed input cord of an Eaton Rack PDU G4 with a CS8365C plug - 10 ft of 6 AWG
+  four-conductor cord (three lines and earth, no neutral) leaving the end cap through
+  a grommet and a toothed strain-relief clamp. Drawn as the end cap shows it; the
+  cord and plug beyond it are not.
+size: {w: 36.9, h: 36.9}
+size-confidence: {w: drawing, h: drawing}
+attrs: {plug: cs8365c, cord-length-ft: 10, cord-gauge: 6 AWG / 4C}
+provenance:
+  method: >-
+    drawing - Eaton drawing 9001-22312 (EVMA8365X, first issue 18-Aug-2023, D size,
+    scale 0.400) is vector, read from its path geometry at 1.133858 pt/mm; its 1829
+    and 65.00 land within 0.05 at that scale.
+  size: >-
+    drawing - the end view of 9001-22312: a grommet 36.9 across (41.86 pt),
+    centred on the width (26.0) and 24.5 behind the face, and inside it a bore 30.1
+    across holding a strain-relief clamp with teeth on one side. The grommet is the
+    EVMI2130X's (eaton/g4-cord-l21-30p@1, 36.9, also 24.5 behind the face); the
+    bore is wider because the cord is.
+  cord: >-
+    estimated - the drawing does not draw the cord in the end view, only the clamp
+    that grips it, so the cord is drawn filling the clamp's bore. A 6 AWG
+    four-conductor cord of the usual jacketed types is some 25 to 30 across, which
+    is consistent with it; no Eaton source gives the cord's diameter.
+  plug: >-
+    drawing and datasheet - 9001-22312 INPUT: CS8365, 6AWG / 4C, 10FT POWERCORD,
+    INPUT RATING 200-240V DELTA, 3W+PE; the EVMA8365X SKU page INPUT CONNECTION and
+    PDU PLUG TYPE CS8365, CORD LENGTH 10 ft. The drawing draws the plug beside the
+    side view and its face (X, Y, Z and the earth on the shell); the CS8365C face is
+    generic/cs8365c-plug@1, which a device draws INSTEAD of this cord, never beside
+    it, or one input exports as two power ports.
+  not-drawn: >-
+    THE CORD BEYOND THE END CAP AND THE PLUG ARE NOT DRAWN: the far end of a cord is
+    not a part (docs/connectors-power-design.md section 7). This part stands for the
+    power input a DCIM records, a `cs8365c` power port.
+elements:
+  grommet: {at: [0, 0], size: [36.9, 36.9], class: inlet}
+skins: [default]
