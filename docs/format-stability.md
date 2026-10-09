@@ -253,12 +253,58 @@ chassis:
 - Both keys are for a `rack` device only (L125). A kit is never placed,
   composed or seated in a bay (L5, L10).
 
-Neither key is in a published file of its own yet. `<device>.configs.json`
-carries `chassis.ears` as the manifest writes it, as it has since #865; #907
-publishes it as an object always and adds the kits resolved inline. In the
-device lock both keys are chassis surface, so stating either is a patch, and a
-listed kit, its parts and its accessories join the `composed` digest, so a kit
-edited in place asks each device that lists it for a patch.
+In the device lock both keys are chassis surface, so stating either is a
+patch, and a listed kit, its parts and its accessories join the `composed`
+digest, so a kit edited in place asks each device that lists it for a patch.
+Those are the refs `<device>.configs.json` reads to resolve each kit, below.
+
+### Ears and kits in configs.json
+
+`<device>.configs.json` carries both under `chassis`, absent where the device
+states neither (#907):
+
+```json
+{"chassis": {"...": "...",
+  "ears": {"h": 43.5, "y": 0.15, "positions": [
+    {"name": "flush", "at": 0.0, "default": true},
+    {"name": "mid", "at": 228.0, "racks": ["2-post"],
+     "part": {"kit": "acme/slide@1", "part": "mid"}}]},
+  "kits": [{"ref": "acme/slide@1", "supply": "in-box", "variant": null,
+    "depth": {"config": "four-post", "range": {"square": [685, 868]}},
+    "version": "1.0.0", "description": "...",
+    "motion": "sliding", "travel": "full", "install": "drop-in",
+    "configurations": [{"id": "four-post", "racks": ["4-post"],
+                        "parts": ["inner"], "depth": {"square": [685, 868]}}],
+    "parts": [{"ref": "acme/inner@1", "id": "inner", "count": 2, "version": "1.0.0",
+               "class": "bracket", "size": {"w": 20, "h": 40}, "body": null}],
+    "accessories": [{"kind": "cma", "ref": "acme/cma@1", "version": "1.0.0",
+                     "class": "bracket", "size": {"w": 30, "h": 40}, "body": null}]}]}}
+```
+
+- **`ears` is an object, always.** The bare string `ears: behind` is
+  published as `{"behind": true}`; an object is published with the keys it
+  states (`behind`, `h`, `y`, `positions`) and no others, so a reader asks
+  `ears.behind === true` and reads `ears.positions || []`. `h`, `y` and each
+  position's `at` are floats. A position keeps every key the manifest writes.
+  From #865 to #907 the bare string was published as the string, on main
+  only; no release carried it. The one device that states it,
+  `fs/uscmh-sfdabsb2u`, now publishes the object.
+- **Each listed kit is resolved inline**, in the order the device lists them.
+  A row carries every key above: the device's `ref`, `supply`, `variant` and
+  `depth` override (`null` where absent), then the kit's `version`,
+  `description`, `motion`, `travel`, `install` (`null` where the kit leaves
+  them out), `configurations`, `parts` and `accessories`. A part keeps `ref`,
+  `id` and `count`, and an accessory every key the kit writes; each gains its
+  contract's `version`, `class`, `size` and `body` (`null` where absent).
+- **The override is applied.** A `depth` override replaces the `depth` of the
+  configuration it names, so `configurations` are what this device can do; the
+  row's `depth` says that one was overridden. The kit's own figures are in
+  `kits.json`.
+
+Neither raised `contract`, which is still 2: `kits` is a new key, and `ears`
+changed shape before any release published it, with nothing in the kit
+reading it. From the next release both are under `contract` like every other
+key.
 
 ## The rack file: parts beside the rack and on one rail
 

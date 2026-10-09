@@ -172,7 +172,7 @@ RULES = {
     "L2":  ("any id",     "every id and segment matches ^[a-z0-9]+(-[a-z0-9]+)*$ with no double hyphen", "rename the id; it becomes a DOM id segment in every SVG"),
     "L3":  ("component",  "every contracted element id exists in every declared skin", "add the element to the skin, or remove it from `elements:`"),
     "L4":  ("component",  "each skin's viewBox matches the contract size", "set `viewBox=\"0 0 <w> <h>\"` and mm width/height from `size`"),
-    "L5":  ("device",     "placement refs resolve in the library, and instance ids are unique per view; no placement, bay or configuration seats a `kind: kit`, which a device names only from `chassis.kits`", "fix the `ref` (namespace/name@major) or the duplicate id; list a rail kit under `chassis.kits` and place its parts, if anything, by their own refs"),
+    "L5":  ("device",     "placement refs resolve in the library, and instance ids are unique per view; no placement ref, and no bay's `accepts` or `default`, is a `kind: kit`, which a device names only from `chassis.kits`", "fix the `ref` (namespace/name@major) or the duplicate id; list a rail kit under `chassis.kits` and place its parts, if anything, by their own refs"),
     "L6":  ("device",     "a bay's default appears in its accepts list", "add the default to `accepts`, or change the default"),
     "L7":  ("device",     "region members reference existing instance ids", "name ids that exist in the same view"),
     "L8":  ("device",     "a configuration seats only what its bays accept, and only in bays that exist in it", "add the occupant to the bay's `accepts`, or seat something the bay takes; for a bay `only-in` scopes out, add the configuration to it or drop the key"),

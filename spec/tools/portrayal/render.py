@@ -4315,7 +4315,10 @@ def _inputs(device, device_yaml, lib):
     files = {Path(device_yaml), Path(__file__),
              Path(__file__).with_name("manifest.py"),
              Path(__file__).with_name("elements.py")}
-    seen, queue = set(), list(component_refs(device))
+    # THE KITS IT LISTS, with their parts and accessories: configs.json
+    # resolves each inline (#907), so a kit edited in place rebuilds the device
+    # that lists it, as devicelock's `composed` asks it for a patch.
+    seen, queue = set(), list(component_refs(device)) + _listed_kit_refs(device)
     while queue:
         ref = queue.pop()
         if ref in seen:
@@ -4329,9 +4332,110 @@ def _inputs(device, device_yaml, lib):
             files.add(Path(skins).parent / "contract.yaml")
             files.update(Path(skins).glob("*.svg"))
         # a part's ref, every default it ships holding and every face it
-        # names (drawn_refs) - a redrawn rear must rebuild its device
+        # names (drawn_refs) - a redrawn rear must rebuild its device; a
+        # kit's accessories beside its parts
         queue.extend(drawn_refs(contract))
+        if contract.get("kind") == "kit":
+            queue.extend(a["ref"] for a in contract.get("accessories") or []
+                         if isinstance(a, dict) and a.get("ref"))
     return {f for f in files if f.exists()}
+
+
+def _listed_kit_refs(device):
+    """The refs of the kits a device lists under `chassis.kits` (#906)."""
+    return [k["ref"] for k in ((device.get("chassis") or {}).get("kits") or [])
+            if isinstance(k, dict) and k.get("ref")]
+
+
+# --- ears and kits in configs.json (#907) -------------------------------------
+#
+# docs/rack-mounting-design.md section 9: the site's Rack Builder reads where a
+# device's ears can put its faceplate, and which kits hold it, from
+# configs.json alone. docs/format-stability.md records the shape.
+
+
+def published_ears(ears):
+    """`chassis.ears` as configs.json publishes it: an object, always.
+
+    THE BARE STRING IS THE OBJECT'S `behind`. #865 wrote `ears: behind` and #906
+    added the object beside it; a reader that had to branch on the type to ask
+    one question would branch on it for ever, so the string is published as
+    `{behind: true}` and the object as the keys it states - `behind`, `h`, `y`,
+    `positions` - and no more. Lengths are floats, as `overhang`'s are; a
+    position keeps every key it writes (`name`, `label`, `at`, `default`,
+    `racks`, `part`)."""
+    if isinstance(ears, str):
+        return {"behind": ears == "behind"}
+    out = {}
+    if "behind" in ears:
+        out["behind"] = ears["behind"] is True
+    for key in ("h", "y"):
+        if ears.get(key) is not None:
+            out[key] = float(ears[key])
+    if "positions" in ears:
+        out["positions"] = []
+        for pos in ears.get("positions") or []:
+            pos = copy.deepcopy(pos or {})
+            if pos.get("at") is not None:
+                pos["at"] = float(pos["at"])
+            out["positions"].append(pos)
+    return out
+
+
+def _published_part(ref, lib):
+    """What configs.json says of a kit's part or accessory beyond its ref: the
+    version it was resolved at, its class and its geometry - `size` and `body`
+    as its contract writes them, null where it writes none."""
+    contract, _ = lib.resolve(ref)
+    return {"version": contract.get("version"), "class": contract.get("class"),
+            "size": contract.get("size"), "body": contract.get("body")}
+
+
+def published_kits(kits, lib):
+    """`chassis.kits`, each kit resolved inline, in the order the device lists
+    them (#907).
+
+    ONE FILE FOR THE SITE. A row is the device's own entry - `ref`, `supply`,
+    `variant` and the `depth` override as written, null where absent - and the
+    kit as its contract states it: `version`, `description`, `motion`, `travel`,
+    `install`, `configurations` and the `parts` and `accessories`, each part
+    and accessory with its geometry beside its ref.
+
+    THE OVERRIDE IS APPLIED. A device's `depth: {config, range}` replaces the
+    `depth` of the configuration it names (#906, L163), so `configurations`
+    here are what this device can do; the row's `depth` still says that one was
+    overridden. The kit's own figure stays in kits.json.
+
+    THE SAME REFS AS THE LOCK. Every ref read here - the kit, its parts and its
+    accessories - is one devicelock's `composed` follows from `chassis.kits`,
+    so a kit edited in place asks each device that lists it for a patch, and a
+    test holds the two together."""
+    out = []
+    for kit in kits:
+        ref = kit["ref"]
+        contract, _ = lib.resolve(ref)
+        over = kit.get("depth")
+        configurations = []
+        for c in contract.get("configurations") or []:
+            c = copy.deepcopy(c)
+            if over and c.get("id") == over.get("config"):
+                c["depth"] = copy.deepcopy(over["range"])
+            configurations.append(c)
+        out.append({
+            "ref": ref, "supply": kit.get("supply"), "variant": kit.get("variant"),
+            "depth": copy.deepcopy(over),
+            "version": contract.get("version"),
+            "description": contract.get("description", ""),
+            "motion": contract.get("motion"), "travel": contract.get("travel"),
+            "install": contract.get("install"),
+            "configurations": configurations,
+            "parts": [{**{k: p[k] for k in ("ref", "id", "count") if k in p},
+                       **_published_part(p["ref"], lib)}
+                      for p in contract.get("parts") or []],
+            "accessories": [{**copy.deepcopy(a), **_published_part(a["ref"], lib)}
+                            for a in contract.get("accessories") or []],
+        })
+    return out
 
 
 def source_bytes(device):
@@ -5338,7 +5442,14 @@ def main():
                              **({"overhang": {"left": float(ch["overhang"].get("left", 0)),
                                               "right": float(ch["overhang"].get("right", 0))}}
                                 if ch.get("overhang") else {}),
-                             **({"ears": ch["ears"]} if ch.get("ears") else {})},
+                             # where the ears put the faceplate, ALWAYS an
+                             # object (#907): a bare `behind` is
+                             # {behind: true}; absent where unstated (#865)
+                             **({"ears": published_ears(ch["ears"])} if ch.get("ears") else {}),
+                             # each rail kit the device lists, resolved inline
+                             # so the site reads one file (#907)
+                             **({"kits": published_kits(ch["kits"], lib)}
+                                if ch.get("kits") else {})},
                  # WHAT THE DEVICE CAN BE BOUGHT WITH - the union over its
                  # orderable and base builds of `configs[].power` and
                  # `configs[].airflow`. The filter an HCL runs ("DC, back-to-
