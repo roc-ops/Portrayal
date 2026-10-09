@@ -459,17 +459,17 @@
         "h": {
          "type": "number",
          "exclusiveMinimum": 0,
-         "description": "millimetres, the height the ears span, when it is not the chassis height (a 13U box with 10U ears). The device still occupies its `ru`."
+         "description": "millimetres, the height the ears span, when it is not the chassis height (a 13U box with 10U ears). The device still occupies its `ru`. Absent, the ears run from `y` to the top of the chassis. The generic L-bracket ear (#909) is drawn this tall; `y + h` above the chassis is L164."
         },
         "y": {
          "type": "number",
          "minimum": 0,
-         "description": "millimetres, the bottom of the ears above the bottom of the chassis, when `h` is less than the chassis height"
+         "description": "millimetres, the bottom of the ears above the bottom of the chassis, when `h` is less than the chassis height; 0 when absent"
         },
         "positions": {
          "type": "array",
          "minItems": 1,
-         "description": "THE NAMED PLACES THE EARS CAN PUT THE FACEPLATE. Manuals name positions far more often than they measure them, so `name` is required and `at` is not: a figure the source does not state is not written. At most one position is the `default` (L160).",
+         "description": "THE NAMED PLACES THE EARS CAN PUT THE FACEPLATE. Manuals name positions far more often than they measure them, so `name` is required and `at` is not: a figure the source does not state is not written. At most one position is the `default` (L160), and no two have the same `name` and `label` (L165): two of one name are told apart by their labels.",
          "items": {
           "type": "object",
           "required": [

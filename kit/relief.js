@@ -150,6 +150,46 @@ export function sheetShell(chassis) {
   return !!chassis && chassis.shell === 'sheet';
 }
 
+// A GENERIC L-BRACKET RACK EAR (#909), the plan spec/tools/portrayal/ears.py
+// draws in 2D, from what configs.json says of the chassis: its width, height,
+// mount and `ears` (`h`, `y`, `behind`, the default position's `at`). `faceW`
+// is the width the front DRAWING declares, which is how an ear-wide face is
+// known here - the R740xd's 482.6 mm front has its ears in it already. Null
+// where the device gets none: not a `rack` device, a sheet body, ears stated
+// `behind`, a face as wide as the rack, or a flange too narrow to draw.
+// The numbers are ears.py's, and spec/tests/test_generic_ears.py holds the two
+// to the same plan for the same chassis.
+//
+// ONE THING THIS CANNOT SEE: whether a device places `common/rack-ear@1`.
+// Those ears are drawn only under the `ears` include tag, which no published
+// face is built with, so the 3D scene never holds them and a generic pair here
+// is the device's only pair.
+export const EAR = {RACK_FACE: 482.6, HOLE_SPAN: 465.1, U: 44.45, HOLES_IN_U: [6.35, 38.1],
+                    THICKNESS: 2.0, LEG: 30.0, MIN_FLANGE: 3.0, SLOT: [8.0, 5.0], EAR_WIDE: 480.0,
+                    FILL: '#2b2f33', HOLE: '#0d0f11'};
+const r4 = v => Math.round(v * 1e4) / 1e4;
+export function genericEars(chassis, faceW) {
+  if (!chassis || (chassis.mount || 'rack') !== 'rack' || chassis.shell) return null;
+  const ears = chassis.ears && typeof chassis.ears === 'object' ? chassis.ears
+             : chassis.ears === 'behind' ? {behind: true} : {};
+  if (ears.behind === true) return null;
+  const w = Number(faceW || chassis.w), hBody = Number(chassis.h);
+  if (!w || !hBody || w >= EAR.EAR_WIDE) return null;
+  const flange = r4((EAR.RACK_FACE - w) / 2);
+  if (flange < EAR.MIN_FLANGE) return null;
+  const y = ears.y != null ? Number(ears.y) : 0;
+  const h = ears.h != null ? Number(ears.h) : hBody - y;
+  const def = (ears.positions || []).find(p => p && p.default === true && p.at != null);
+  const units = Math.max(1, Math.round(h / EAR.U)), unit = h / units;
+  const slots = [];
+  for (let i = 0; i < units; i++)
+    for (const hole of EAR.HOLES_IN_U) slots.push(r4(i * unit + hole * unit / EAR.U));
+  const sw = Math.min(EAR.SLOT[0], flange - 1);
+  const slotX = Math.min(Math.max(EAR.HOLE_SPAN / 2 - w / 2, sw / 2 + 0.5), flange - sw / 2 - 0.5);
+  return {w, h_body: hBody, d: Number(chassis.d) || 0, flange, h, y, at: def ? Number(def.at) : 0,
+          t: EAR.THICKNESS, leg: EAR.LEG, slots, slot_x: r4(slotX), slot: [r4(sw), EAR.SLOT[1]]};
+}
+
 // WHERE A PROUD FEATURE STARTS: the summed lift of what it stands in, so a
 // handle `in:` a well rises from the well's floor. `out`, `cyl` and `bar`
 // always read it; `uhandle` was built from the face plane whatever it stood
