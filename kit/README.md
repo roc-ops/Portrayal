@@ -276,14 +276,15 @@ rear) by the plug's reach, a point `at: 'reach'` with its `end`. The reach is
 (the far end of the plug seated there, an optic's standing-out included: the
 `z` of relief.js `cablePoints`); else `PLUG_REACH` by media, the cable's own
 plug and boot as the library models them: 27.6 for LC fibre, 39.4 for copper
-(and a cable with no media), 68.7 for a DAC or an AOC. `plugReach(cable, end,
-ctx)` and `reachPoint(rack, end, p, mm)` give them. The first and last legs,
+(and a cable with no media; it assumes the boot abuts the plug, so it may err
+long by a few mm), 64.8 for a DAC or an AOC. The first and last legs,
 their detours included, run from there, so a cord that has to clear its plug
 before it can turn round a tray's front edge is measured that way, and a
 drawing that starts its tube at the reach point finds nothing more to go
-round. The plug is counted once, in the path: `END_ALLOWANCE_M`, 0.15 m an
-end, is the dressing slack and is unchanged. **Routed lengths change in
-0.13.0** on every routed cable, almost all longer: by about the two plugs,
+round. The plug was always along the first leg; the reach turns that leg
+into a dog-leg rather than adding the plug again, so `END_ALLOWANCE_M`, 0.15
+m an end, the dressing slack, is unchanged. **Routed lengths change in
+0.13.0** on every routed cable, almost all longer: by what the dog-leg out of each plug adds,
 and by far more where the reach puts a leg over a tray floor.
 
 To change a rack by name rather than by function, use the command core:

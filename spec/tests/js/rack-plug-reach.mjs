@@ -21,23 +21,32 @@ const QSFP_LC = 20.0 + R.PLUG_REACH.om4;
 const optics = ctx => ({...ctx, plugReachOf: e => (e.item === 'i2' ? null : QSFP_LC)});
 
 test('the defaults are the library\'s plug and boot, per media', () => {
-  assert.deepEqual(R.PLUG_REACH, {os2: 27.6, om3: 27.6, om4: 27.6, om5: 27.6, cat6: 39.4, cat6a: 39.4, dac: 68.7, aoc: 68.7});
-  const e = {item: 'i1', path: 'p', view: 'front'};
-  assert.equal(R.plugReach({media: 'om4'}, e, {}), 27.6);
-  assert.equal(R.plugReach({media: 'cat6a'}, e, {}), 39.4);
-  assert.equal(R.plugReach({media: 'dac'}, e, null), 68.7);
+  assert.deepEqual(R.PLUG_REACH, {os2: 27.6, om3: 27.6, om4: 27.6, om5: 27.6, cat6: 39.4, cat6a: 39.4, dac: 64.8, aoc: 64.8});
+  // the reach of end a, read off routePath: its reach point's distance out
+  // of the face, or 0 when it has none
+  const r = F.rack(), base = F.ctxOf(r), c1 = r.cables[0];
+  const reachOf = (cable, extra = {}) => {
+    const [a, q] = R.routePath(r, cable, {...base, ...extra}).points;
+    return q.at === 'reach' ? Math.round((q.z - a.z) * 1000) / 1000 : 0;
+  };
+  assert.equal(reachOf(c1), 27.6);
+  assert.equal(reachOf({...c1, media: 'cat6a'}), 39.4);
+  assert.equal(reachOf({...c1, media: 'dac'}), 64.8);
   // no media, or one named like something every object has: the copper figure
-  for (const media of [undefined, 'constructor', '__proto__', 'nope']) assert.equal(R.plugReach({media}, e, {}), 39.4, String(media));
+  for (const media of [undefined, 'constructor', '__proto__', 'nope']) assert.equal(reachOf({...c1, media}), 39.4, String(media));
   // the page's own figure wins, 0 included; one it cannot give falls back
-  assert.equal(R.plugReach({media: 'om4'}, e, {plugReachOf: () => 47.6}), 47.6);
-  assert.equal(R.plugReach({media: 'om4'}, e, {plugReachOf: () => 0}), 0);
+  assert.equal(reachOf(c1, {plugReachOf: () => 47.6}), 47.6);
+  assert.equal(reachOf(c1, {plugReachOf: () => 0}), 0);
   for (const bad of [null, undefined, -1, NaN, Infinity, '30'])
-    assert.equal(R.plugReach({media: 'om4'}, e, {plugReachOf: () => bad}), 27.6, String(bad));
-  assert.equal(R.plugReach({media: 'om4'}, e, {plugReachOf: () => { throw new Error('no face'); }}), 27.6);
+    assert.equal(reachOf(c1, {plugReachOf: () => bad}), 27.6, String(bad));
+  assert.equal(reachOf(c1, {plugReachOf: () => { throw new Error('no face'); }}), 27.6);
   // it is asked per end, with the cable
   const asked = [];
-  R.plugReach({id: 'c', media: 'om4'}, e, {plugReachOf: (end, cable) => { asked.push([end.item, cable.id]); return 1; }});
-  assert.deepEqual(asked, [['i1', 'c']]);
+  R.routePath(r, c1, {...base, plugReachOf: (end, cable) => { asked.push([end.item, cable.id]); return 1; }});
+  assert.deepEqual(asked, [['i1', 'c1'], ['i2', 'c1']]);
+  // the helpers that compute it are not part of the kit's API
+  assert.equal(R.plugReach, undefined);
+  assert.equal(R.reachPoint, undefined);
 });
 
 test('the reach point is out of the face the port is seen from: +z at the front, -z at the rear', () => {
@@ -121,7 +130,10 @@ test('a cord that must clear its plug goes round the tray\'s front edge, and is 
 // reach points through the waypoints' centres, each leg taken round the
 // bodies, then each ring passed by its mark - is as long as the kit measures,
 // the plugs added, within a few mm (the drawing turns at a ring's centre
-// where the kit turns at its face).
+// where the kit turns at its face). This checks the kit's own consistency:
+// the path a drawing would build from the kit's points and rules. It does
+// not run or check the site's drawing, which still starts its bend further
+// out (the site follow-up of section 1.5).
 test('the drawn path and the measured length agree within a few mm', () => {
   const r = F.rack();
   for (const [name, ctx] of [['default', F.ctxOf(r)], ['optics', optics(F.ctxOf(r))]]) {
@@ -144,7 +156,7 @@ test('the drawn path and the measured length agree within a few mm', () => {
         pts.push(q);
         mk.push(k === 0 || k === legs.length - 1 ? null : marks[k - 1]);
       });
-      const drawn = len(throughRings(pts, mk).points) + (A.z - p.points[0].z) + (B.z - p.points.at(-1).z);
+      const drawn = len(throughRings(pts, mk).points) + Math.abs(A.z - p.points[0].z) + Math.abs(B.z - p.points.at(-1).z);
       const measured = (R.pathLength(p).measured - 2 * R.END_ALLOWANCE_M) * 1000;
       assert.ok(Math.abs(drawn - measured) <= 4, `${name} ${c.id}: drawn ${drawn}, measured ${measured}`);
     }

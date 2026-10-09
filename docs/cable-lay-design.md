@@ -281,10 +281,14 @@ cord measured just under a stock break could be ordered short.
   media, the cable's own plug and boot as the library models them standing
   out of the face they seat in: LC fibre 27.6 mm (generic/lc-plug@2 `out`
   12.5 and common/lc-boot@1 15.1), copper 39.4 (generic/rj45-plug@1 13.0 and
-  common/rj45-boot@1 26.4), a DAC or an AOC 68.7 (generic/sfp-cable@1, whose
-  cable point is the far end of its 30 mm stub, the straight run before the
-  first allowed bend; generic/qsfp-cable@1 is 64.8, and the longer is taken
-  so a default errs long), and a cable with no media the copper figure, as
+  common/rj45-boot@1 26.4; it assumes the boot abuts the plug's rear, and an
+  overlapping boot reaches less: the boot's 11.9 x 8.13 opening slides over
+  the 11.68 x 7.93 plug body, so the figure likely errs long by a few mm), a
+  DAC or an AOC 64.8 (generic/qsfp-cable@1, whose cable point is the far end
+  of its 30 mm stub, the straight run before the first allowed bend, a
+  drawing figure; generic/sfp-cable@1 gives 68.7, but its stub is an
+  estimated reading, a gap to re-read before it is relied on), and a cable
+  with no media the copper figure, as
   its diameter takes the copper one. The kit does not know what a port
   holds, so the default leaves out an optic's standing-out; only the page
   can add it.
@@ -297,14 +301,15 @@ cord measured just under a stock break could be ordered short.
   crosses a body (a plug behind a deep shelf) is a `crosses-body` finding at
   that port.
 - **The end allowance is the dressing slack, and the plug is counted
-  once.** `END_ALLOWANCE_M`, 0.15 m an end, stays as it is. Before, the path
-  ran from the port face straight to the first waypoint, cutting through the
-  plug, so the plug was in neither the path nor, by any stated rule, the
-  allowance; now it is in the path, as the straight stretch from the port to
-  the reach point. Taking the reach off the allowance instead would count
-  the plug once too, but would leave a cord with a detour round its plug the
-  only one to grow, and leave the allowance meaning a number with a plug of
-  each media inside it. Nothing adds the reach a second time: the length is
+  once.** `END_ALLOWANCE_M`, 0.15 m an end, stays as it is. The plug was
+  always in the path: before, the first leg ran straight from the port face
+  to the first waypoint, and the plug lay along the start of it. The reach
+  does not add the plug's length; it bends that leg into a dog-leg, straight
+  out of the face for the plug and only then toward the waypoint, so a
+  length grows by what the dog-leg adds over the straight leg (11 to 28 mm
+  a cord on the owner's rack, not two whole plugs), and by any detour the
+  new leg needs. Taking the reach off the allowance as well would count the
+  plug as missing when it never was, and shorten every cord by it. Nothing adds the reach a second time: the length is
   the path's points and the two allowances, and a test holds it to that.
 - **What a drawing does.** A drawing that starts its routed tube at the
   kit's reach point, and runs its first and last legs from there, follows
@@ -1355,7 +1360,7 @@ published file or a saved rack file uses it.
 | the stored slack counting in the routed length | kit | a saved routed length and stock size depend on it |
 | routed lengths changing on saved racks: detours, the plug's reach (1.5), cables resting at the floor and at the ring sill, positions in the lay, the face of each tray, slack | kit | stored routed lengths and stock sizes move on the next measure; an ordered stock length may no longer match |
 | the lane moving outboard of a zero-U part that stands in the gutter and carries no lane (a zero-U PDU), and routed lengths changing beside one | kit (`laneXAt`), drawings | every route on that lane is longer, and a saved length moves on the next measure; a drawing that places lanes itself must follow |
-| the reach point (`at: 'reach'` with `end`) in `routePath`, `ctx.plugReachOf`, `PLUG_REACH`, `plugReach`, `reachPoint`, and the end allowance as dressing slack with the plug in the path (1.5) | kit API | a page passes `plugReachOf` and reads the points by these names; moving the plug into the allowance later would change every length again |
+| the reach point (`at: 'reach'` with `end`) in `routePath`, `ctx.plugReachOf` and `PLUG_REACH` (the helpers that compute them stay internal), and the end allowance as dressing slack with the plug in the path (1.5) | kit API | a page passes `plugReachOf` and reads the points by these names; moving the plug into the allowance later would change every length again |
 | `crosses-body` (with `part` and, for a held-face stack, `face`), `unheld` and the tray findings, `bodyFindings` | kit API, agent output | agents and pages read the kinds |
 | the public subpath `@portrayal/kit/rack/solids` (`solidsOf`, `legCrossings`, `detour`, `CLEAR`) | kit package exports | a consumer imports it by that path and those names; a rename or removal is a breaking kit release |
 | `cable.slack`, `cable.slack.clear`, `cable.lay` (with `face`), and `roll` on `patch` | kit commands, offered to agents | agent sessions and saved prompts call them by name |

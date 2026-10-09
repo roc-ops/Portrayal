@@ -7,10 +7,12 @@
   reach is the page's `ctx.plugReachOf(end, cable)` when it gives one, else
   `PLUG_REACH` by media: 27.6 mm for LC fibre (generic/lc-plug@2 and
   common/lc-boot@1), 39.4 for copper and a cable with no media
-  (generic/rj45-plug@1 and common/rj45-boot@1), 68.7 for a DAC or an AOC
-  (generic/sfp-cable@1). The 0.15 m end allowance is unchanged: it is the
-  dressing slack, and the plug is counted once, in the path. Almost every
-  routed length grows, by about the two plugs (median about 43 mm on a
+  (generic/rj45-plug@1 and common/rj45-boot@1, with the boot taken to abut
+  the plug, so it may err long by a few mm), 64.8 for a DAC or an AOC
+  (generic/qsfp-cable@1). The 0.15 m end allowance is unchanged: it is the
+  dressing slack, and the plug was always along the first leg, which the
+  reach turns into a dog-leg rather than lengthening by a plug. Almost every
+  routed length grows, by what the dog-leg out of each plug adds (median about 43 mm on a
   780-cable sample) and by up to about 0.33 m where the reach puts a leg over
   a tray floor, so it goes round the tray's front edge; one cable in six
   to eight moves up a stock size. On the owner's rack of #949, c7 and c9 to c14

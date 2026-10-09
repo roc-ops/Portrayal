@@ -365,18 +365,20 @@ const dist = (p, q) => Math.hypot(p.x - q.x, p.y - q.y, p.z - q.z);
 //   - LC fibre (os2, om3, om4, om5): 27.6, generic/lc-plug@2 (relief `out`
 //     12.5) and common/lc-boot@1 (15.1);
 //   - copper (cat6, cat6a): 39.4, generic/rj45-plug@1 (13.0) and
-//     common/rj45-boot@1 (26.4);
-//   - a DAC or an AOC: 68.7, generic/sfp-cable@1, whose cable point is the far
-//     end of its stub (head 10.8, strain relief 27.9, stub 30.0: the straight
-//     run before the first allowed bend); the longer of the two generic cable
-//     ends, generic/qsfp-cable@1 being 64.8, so a default errs long;
+//     common/rj45-boot@1 (26.4). It assumes the boot abuts the plug's rear;
+//     an overlapping boot reaches less (the boot's 11.9 x 8.13 opening slides
+//     over the 11.68 x 7.93 plug body, so this likely errs long by a few mm);
+//   - a DAC or an AOC: 64.8, generic/qsfp-cable@1, whose cable point is the
+//     far end of its stub (head 19.8, strain relief 15, stub 30: the straight
+//     run before the first allowed bend), the stub from a drawing. Not
+//     generic/sfp-cable@1's 68.7: its stub rests on an estimated reading;
 //   - a cable whose media is not set, the copper figure, as its diameter takes
 //     the copper one (UNSET_D).
 // It does not see an optic in a cage: a port that holds one stands the plug
 // further out, which only the page knows.
-export const PLUG_REACH = {os2: 27.6, om3: 27.6, om4: 27.6, om5: 27.6, cat6: 39.4, cat6a: 39.4, dac: 68.7, aoc: 68.7};
+export const PLUG_REACH = {os2: 27.6, om3: 27.6, om4: 27.6, om5: 27.6, cat6: 39.4, cat6a: 39.4, dac: 64.8, aoc: 64.8};
 const UNSET_REACH = 39.4;
-export function plugReach(cable, end, ctx) {
+function plugReach(cable, end, ctx) {
   let v = null;
   try { v = typeof ctx?.plugReachOf === 'function' ? ctx.plugReachOf(end, cable) : null; } catch { v = null; }
   if (typeof v === 'number' && Number.isFinite(v) && v >= 0) return v;
@@ -384,7 +386,7 @@ export function plugReach(cable, end, ctx) {
 }
 // The reach point of an end whose port is at `p`: out of the face its port is
 // seen from, +z for the front, -z for the rear, by the plug's reach.
-export function reachPoint(rack, end, p, mm) {
+function reachPoint(rack, end, p, mm) {
   const out = endPane(rack, end) === 'rear' ? -1 : 1;
   return {x: p.x, y: p.y, z: p.z + out * mm};
 }
