@@ -19,6 +19,7 @@ from portrayal.manifest import load_yaml
 ROOT = Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
 EVMI = LIB / "devices/eaton/evmi2130x/device.yaml"
+EVMA = LIB / "devices/eaton/evma8365x/device.yaml"
 
 C13 = "std/c13-outlet@1"
 CORD = "eaton/g4-cord-l21-30p@1"
@@ -227,6 +228,26 @@ def test_the_evmi2130x_states_the_model():
     by = {r["name"]: r["description"] for r in rows}
     assert by["A1"] == "Through breaker A, lines L1-L2"
     assert by["C42"] == "Through breaker C, lines L3-L1"
+
+
+@pytest.mark.parametrize("target", dx.TARGETS)
+def test_the_evma8365x_outlets_say_which_breaker_and_lines(target):
+    """The delta G4: 42 outlets named by their printed labels, seven behind
+    each of six two-pole breakers, A to F round the delta twice. B8 is the
+    first outlet behind the second breaker and F42 the last behind the sixth;
+    their sentences are written out here, not derived."""
+    d = load_yaml(EVMA)
+    built = dx.build(d, "base", d["configurations"]["base"], None)
+    rows = dx.for_target(copy.deepcopy(built), target)["power-outlets"]
+    by = {r["name"]: r for r in rows}
+    assert len(rows) == 42
+    assert by["B8"]["description"] == "Through breaker B, lines L2-L3"
+    assert by["F42"]["description"] == "Through breaker F, lines L3-L1"
+    assert by["A7"]["description"] == "Through breaker A, lines L1-L2"
+    for name in ("B8", "F42"):
+        assert by[name]["type"] == "iec-60320-c13"
+        assert by[name]["power_port"] == "input"
+    assert not any("feed_leg" in r for r in rows), "every outlet is line to line"
 
 
 def test_mount_points_are_derived_from_the_buttons():

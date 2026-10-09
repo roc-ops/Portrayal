@@ -214,8 +214,9 @@ their figures are illustrative unless a product is named beside them.
   hole centres 465: AR201's installation sheet (990-6040B) with opening 450,
   the FS-OR2P-45U datasheet with opening 452, the FS-OR4P-45U datasheet with
   opening 450, the FS-DR-8U datasheet with opening 451, and the FS-HWM-4U and
-  FS-SVWM-4U datasheets with opening 450. Where none does, the EIA-310 figures
-  are assumed and the product says so in `gaps`.
+  FS-SVWM-4U datasheets with opening 450. The FS-WMNR-D2P6U datasheet prints
+  only an opening, 452, and no hole centres. Where none does, the EIA-310
+  figures are assumed and the product says so in `gaps`.
 - **`max-device-depth`** is the maker's usable depth, the rack file's
   `usableDepth`. On a cabinet it is what the doors allow, not the rails.
 - A post's profile (AR201's 76 mm channel, the FS-OR2P's 120 mm extrusion) is
@@ -337,9 +338,9 @@ load: {static-kg: 1818, rolling-kg: 1020}
 
 - **`weight-kg`** is the rack's own weight, as a device's `chassis.weight-kg`
   is a device's, written only where a source gives it (AR203A 40.32 kg in its
-  APC manual, as section 2's example writes it; FS-WMNR-D2P6U 10.95). It is what the DCIM export writes as the
-  rack's `weight` (decision 5), and it is not counted against `load`, which is
-  what the rack carries.
+  APC manual, as section 2's example writes it; FS-WMNR-D2P6U 10.95). It is
+  what the DCIM export writes as the rack's `weight` (decision 5), and it is
+  not counted against `load`, which is what the rack carries.
 
 - **`load`** is the maker's static and rolling rating. A rating not stated is
   not written (the FS-OR4P-45U has casters and no rolling figure), and the

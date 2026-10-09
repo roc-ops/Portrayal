@@ -717,7 +717,7 @@
       "description": "the configuration a viewer opens with. Where a `base` exists it is the default and nothing else may claim it, so `default` never means 'whatever the drawing happens to be populated with'."
      },
      "airflow": {
-      "description": "ONLY WHEN THIS BUILD DIFFERS FROM THE CHASSIS. A front-to-back and a back-to-front SKU of one switch are two configurations of one chassis, and that is what this is for; a chassis whose airflow does not depend on the build states it once under `chassis.airflow` instead. Restating the chassis value here is what L91 reports. Narrower than the chassis enum on purpose: `side` and `passive` are not options a buyer picks between.",
+      "description": "ONLY WHEN THIS BUILD DIFFERS FROM THE CHASSIS. A front-to-back and a back-to-front SKU of one switch are two configurations of one chassis, and that is what this is for; a chassis whose airflow does not depend on the build states it once under `chassis.airflow` instead. Restating the chassis value here is what L91 reports. Narrower than the chassis enum on purpose: `side`, `passive` and `top-to-bottom` are not options a buyer picks between.",
       "enum": [
        "front-to-back",
        "back-to-front"
@@ -1852,7 +1852,7 @@
   "interfaces": {
    "type": "array",
    "minItems": 1,
-   "description": "WHAT THE VENDOR'S OWN OPERATING SYSTEM CALLS EACH PORT, for a box that ships with one. The same rules a NOS vendor's listing states: `physical` is a placement id or an id a placement presents, with `{n}` over `range`; `name` is the interface name, with `{n}` or arithmetic on it. The DCIM export of the hardware's own device type names each interface by the rule that names its id, and by the faceplate id where no rule does. Two connectors of one interface take one name and export once. A listing's own `interfaces` still decide that listing's document. The same rules also name the device's power outlets by their printed labels - a rack PDU's `outlet-a1` exports as `A1` - and an outlet no rule names keeps its placement id. Changing a name is a major bump: a DCIM that imported the type holds the old one.",
+   "description": "WHAT THE VENDOR'S OWN OPERATING SYSTEM CALLS EACH PORT, for a box that ships with one. The same rules a NOS vendor's listing states: `physical` is a placement id or an id a placement presents, with `{n}` over `range`; `name` is the interface name, with `{n}` or arithmetic on it. The DCIM export of the hardware's own device type names each interface by the rule that names its id, and by the faceplate id where no rule does. Two connectors of one interface take one name and export once. A listing's own `interfaces` still decide that listing's document. The same rules also name the device's power outlets by their printed labels - a rack PDU's `outlet-a1` exports as `A1` - and an outlet no rule names keeps its placement id. A NOS listing that states its own `interfaces` does not apply these rules, so its export keeps every outlet's placement id. Changing a name is a major bump: a DCIM that imported the type holds the old one.",
    "items": {
     "type": "object",
     "required": [

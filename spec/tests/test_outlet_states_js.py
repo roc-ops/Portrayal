@@ -63,6 +63,19 @@ def test_the_off_chip_sets_a_state_on_an_outlet_and_a_declared_off(out):
     assert out["paintsOff"]["plain"] is True
 
 
+def test_a_declared_off_is_measured_not_assumed(out):
+    """paints() skips the measurement only for an UNDECLARED off. lamp-a1
+    declares an off rule, so whether it paints is the stylesheet's answer:
+    yes where the rule changes the lamp's colour, no where it does not."""
+    assert out["paintsDeclaredOff"] == {"red": True, "none": False}
+
+
+def test_states_of_a_plain_dataset_object(out):
+    """statesOfEl reads `dataset.states` where a consumer hands a plain
+    {dataset} object with no getAttribute, and still refuses prose."""
+    assert out["statesOfDataset"] == {"plain": ["on", "off"], "prose": [], "none": []}
+
+
 # --- 2D ------------------------------------------------------------------------
 
 def test_a_mark_on_an_outlet_reaches_its_lamp_and_nothing_else(out):
@@ -75,6 +88,13 @@ def test_a_mark_on_an_outlet_reaches_its_lamp_and_nothing_else(out):
     assert m["counts"] == [1, 1, 1], "a lamp reached by expansion is not counted as marked"
     assert out["marksClearExact"], "clear() did not put the drawing back exactly"
     assert "state-on" in out["marksLater"].split() and "state-off" not in out["marksLater"]
+
+
+def test_a_lamp_gives_up_the_drawings_state_for_its_outlets(out):
+    """A lamp the drawing shows `state-on` takes its outlet's `state-off` in
+    place of it, not beside it, and clear() hands `state-on` back."""
+    assert out["marksReplace"] == "state-off"
+    assert out["marksReplaceCleared"] == "state-on"
 
 
 def test_a_custom_lamp_colour_is_not_shown_on_a_lamp_that_is_off(out):
@@ -92,6 +112,13 @@ def test_the_scene_applies_the_same_expansion(out):
         "a relief piece holding only the lamp was not lit from the face's bindings"
     assert out["threePieceUnbound"] == ""
     assert out["threeCleared"] == 0
+
+
+def test_lamp_bindings_from_several_documents_add_up(out):
+    """noteLampBindings merges: a second document binding another lamp to
+    the same outlet, or a lamp to another outlet, keeps the first's."""
+    assert out["threeMerged"] == {"outlet-a1": ["lamp-a1", "lamp-a1-rear"],
+                                  "relay-1": ["lamp-r1"], "outlet-b1": ["lamp-b1"]}
 
 
 def test_a_custom_lamp_colour_stays_off_in_3d_when_its_outlet_is_off(out):
