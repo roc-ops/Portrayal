@@ -1551,7 +1551,9 @@ def comments_for(dev, cfg_name, cfg):
     for section, vals in (dev.get("attrs") or {}).items():
         flat = flatten(vals)
         for k, v in flat.items():
-            if isinstance(v, (str, int, float)) and str(v).strip():
+            if isinstance(v, bool):
+                facts.append(f"- {section}.{k}: {str(v).lower()}")
+            elif isinstance(v, (str, int, float)) and str(v).strip():
                 facts.append(f"- {section}.{k}: {v}")
     if facts:
         lines.append("Facts carried in the model that this schema has no field for:")

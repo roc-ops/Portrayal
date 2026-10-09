@@ -181,6 +181,8 @@ def test_the_input_port_carries_the_rating():
                                    "description": "208 V three-phase wye, 24 A input (30 A plug)"}]
     assert "PDU class: metered-branch (metering-scope branch, outlet-switching false)." \
         in out["comments"]
+    # a boolean fact is spelled as JSON spells it, as the drawing's data-* is
+    assert "- management.outlet-switching: false" in out["comments"]
 
 
 @pytest.mark.parametrize("before, after, need", [

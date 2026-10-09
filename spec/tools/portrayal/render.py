@@ -2603,8 +2603,11 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     # sections existed - re-filing a key between sections must not change a
     # single byte of a compiled drawing. attrs.flatten is shared with the search
     # index and the exporters so they cannot disagree about what the bag holds.
+    # A BOOLEAN IS SPELLED AS JSON SPELLS IT, `true` or `false`: the first
+    # device-level boolean (#934's `outlet-switching`) would otherwise reach a
+    # browser as Python's `False`.
     for ak, av in attrs_mod.flatten(device.get("attrs")).items():
-        svg.set(f"data-{ak}", str(av))
+        svg.set(f"data-{ak}", str(av).lower() if isinstance(av, bool) else str(av))
     airflow = config_airflow(device, config)
     if airflow:
         svg.set("data-airflow", airflow)
