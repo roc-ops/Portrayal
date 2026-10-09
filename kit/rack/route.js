@@ -464,7 +464,7 @@ export function bodyFindings(rack, ctx, nameOf = id => id) {
     // a plate met from above or below: the way round is over its front edge,
     // onto the face the cable rests on
     const advice = s && isFloor(s.box) && f.part !== 'envelope'
-      ? `route it over the front edge of the ${partText(f.part) || 'plate'} onto its resting face, or through a ring`
+      ? `route it over the front edge of the ${partText(f.part) || 'plate'}, or through a ring`
       : holes.length ? `route it round ${nameOf(f.item)}, or through ${holes.join(' or ')} if the cable fits`
       : `route it round ${nameOf(f.item)}, or through a ring or a pass-through it fits`;
     const where = a === b ? `at ${a}` : `between ${a} and ${b}`;

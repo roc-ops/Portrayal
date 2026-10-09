@@ -9,6 +9,7 @@ import * as S from '../../../kit/rack/solids.js';
 import * as Q from '../../../kit/rack/queries.js';
 import {cableScheduleRows} from '../../../kit/rack/export-data.js';
 import {RU, OPENING, RAIL_W} from '../../../kit/rack/rails.js';
+import * as M from '../../../kit/rack/model.js';
 import * as F from './cable-solids-fixture.mjs';
 
 const raw = path => path.points.filter(p => p.at !== 'detour');
@@ -275,6 +276,33 @@ test('a cable to the lane beside a rear PDU goes round it on the rack side, neve
   assert.ok(p.detours.every(d => d.points.some(q => q.z > box.z1)), JSON.stringify(p.detours));
 });
 
+test('the mirror: a front PDU, on a four-post and on a two-post, is gone round behind it, never in front of its outlet face', () => {
+  for (const [kind, at] of [['four-post', 'left-front'], ['two-post', 'left']]) {
+    // two switches on the front rails, a zero-U PDU on the left upright
+    // looking out of the front of the rack, and a cable between their front
+    // ports by the left lane
+    let r = F.add({...M.newRack({kind}), items: []}, 'sw', 10, {label: 'sw-10'});
+    r = F.add(r, 'sw', 20, {label: 'sw-20'});
+    r = {...r, zeroU: [{id: 'z2', ref: 'pdu', cfg: 'base', at, offsetMm: 0}]};
+    const ctx = F.ctxOf({ports: {i1: {p: -200}, i2: {q: -180}}});
+    const c = F.cable('c1', F.end('i1', 'p'), F.end('i2', 'q'), 'cat6');
+    const rack = {...r, cables: [c]};
+    const box = S.solidsOf(rack, ctx).find(x => x.item === 'z2').box;
+    // centred on the 34 mm post behind the front rail: its outlet face is in
+    // front of the rail plane
+    assert.ok(box.z1 > 0 && box.z0 < 0, `${kind}: ${JSON.stringify(box)}`);
+    const p = R.routePath(rack, c, ctx);
+    assert.deepEqual(p.crossings, [], kind);
+    assert.equal(p.detours.length, 2, kind);
+    assert.ok(p.points.some(q => q.at === 'lane' && q.x < box.x0), kind);
+    // no point of the path lies in front of its outlet face
+    const ahead = p.points.filter(q => q.z > box.z1 + 1e-9);
+    assert.deepEqual(ahead, [], `${kind}: ${JSON.stringify(ahead)}`);
+    // it goes round behind the PDU, the side facing into the rack
+    assert.ok(p.detours.every(d => d.points.some(q => q.z < box.z0)), `${kind}: ${JSON.stringify(p.detours)}`);
+  }
+});
+
 // ── what the rules cannot clear ────────────────────────────────────────────
 // Contrived: a deep shelf standing out of the rails over the lacer's own
 // unit, so ring 1, where every automatic route here goes, is inside it. A leg
@@ -326,13 +354,13 @@ test('what the rules cannot clear is a finding, with its sentence, in inspect, d
   assert.ok(!Q.describe(clean, {chassisOf: ctx.chassisOf, route}).includes('Findings:'));
 });
 
-test('a leg through the tray floor that cannot be gone round is told to go over its front edge onto its resting face', () => {
+test('a leg through the tray floor that cannot be gone round is told to go over its front edge', () => {
   const {rack, ctx} = shelved();
   const f = R.bodyFindings(rack, ctx, names).filter(x => x.cable === 'c6');
   // from U5 up to ring 2, inside the shelf: through the shelf and the floor
   assert.deepEqual(f.map(x => [x.item, x.part]), [['i6', 'envelope'], ['i3', 'tray/floor'], ['i6', 'envelope'], ['i6', 'envelope']]);
   assert.equal(f[1].text, 'c6 passes through lacer tray between its port on sw-low and lacer ring 2: '
-    + 'route it over the front edge of the tray onto its resting face, or through a ring.');
+    + 'route it over the front edge of the tray, or through a ring.');
 });
 
 // ── a leg that meets two bodies ────────────────────────────────────────────
