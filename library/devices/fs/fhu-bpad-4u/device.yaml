@@ -1,0 +1,244 @@
+format: 1
+kind: device
+name: fhu-bpad-4u
+version: 0.1.0
+maturity: modelled
+manufacturer: FS.com
+model: FHU-BPAD-4U
+aliases:
+- {name: '284593', kind: vendor, note: FS shop product ID}
+- {name: FHU-BPAD-4U-5, kind: vendor, note: 'the five-pack of this panel (datasheet, QSG note
+    1)'}
+description: >-
+  4U 19in tool-less ABS blanking panel, FS FHU-BPAD-4U: one black moulded plate 177 x 482.6 mm,
+  scored into 1U strips that snap apart, with a straight and a wave rib across the back of each
+  unit and an E-shaped clip at each end that pushes into the rail holes. Also sold as the five-pack
+  FHU-BPAD-4U-5.
+profile: passive
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      the FS Plastic Blanking Panel Datasheet (portal 7735), FHU-BPAD-4U and FHU-BPAD-4U-5 columns,
+      and the product page, for the size, material and weight; the face from the FS Blanking Panel
+      Visio stencil, master FHU-BPAD-4U, and the straight-on gallery renders of SKU 284593 (g2
+      front, g3 back); the depth from the dimensioned render (x3); the quick start guide (portal
+      7736) for the packs and the snapping apart.
+  chassis:
+    confidence: datasheet
+    note: >-
+      the plate is the part: "177 x 482.6 mm", one moulded ABS plate the width of the rack with
+      its clips at the ends of its back, so the face is drawn at 482.6 (the owner's rule of 2026-10-09;
+      lint L43 stands down for a body this wide).
+  depth:
+    confidence: drawing
+    note: >-
+      14: FS's dimensioned render (x3) prints about 14 mm at the end of the plate, which is the
+      plate and the ribs behind it. The 3D body is one box that deep across the full width.
+  units:
+    confidence: datasheet
+    note: >-
+      the plate snaps apart into 1U strips (datasheet: "Snappable Design"; QSG: "you can manually
+      take the blanking panels apart"); the score lines between the units are drawn at every 44.25
+      mm, the stencil's and the render's single line on the 2U.
+  badge:
+    confidence: photo-measured
+    note: >-
+      a recessed badge near the left end of each unit carries FS's mark: 19.7 to 54.5 across and
+      5.1 to 14.3 down the unit on the render g2 at 2.74 px/mm. The recess is drawn; the mark
+      in it is a logo and is not.
+  clips:
+    confidence: photo-measured
+    note: >-
+      each unit carries an E-shaped ABS clip at each end of its back (render x4), whose rounded
+      head shows past the plate's end at the middle of the unit, 23.8 tall and about 4.6 across
+      on g2; the clip's body behind the plate and its metal pin (g3) are drawn 4 x 6 and 2 across,
+      estimated.
+  ribs:
+    confidence: photo-measured
+    note: >-
+      the back (g3, g5) carries, per unit, a straight rib along the middle of the unit and a wave
+      rib crossing it, from about 18 mm in from each end: the wave is drawn as a cosine of 6.5
+      mm amplitude and 152 mm period, lowest at 86 mm from the left end (the part fs/bpad-wave-rib@1,
+      a stroked curve): the straight-on rear render (g3, 2.73 px/mm) has its low runs centred
+      near 86, 247 and 390 (161 and 143 apart, so not evenly spaced) and swings about 6.5 either
+      side of the straight rib; the cosine puts its lows at 86, 238 and 390, the middle one 9
+      mm left of the render's - an estimate of the shape, not a measurement of it.
+  mark:
+    confidence: drawing
+    note: >-
+      FS's mark in each badge is a logo and is not drawn.
+  pin-mark:
+    confidence: photo-measured
+    note: >-
+      a small round mark in the middle of each unit's face, at 241 across and 21.7 down the unit
+      on the front render g2 (x6 shows it close up), 7 to 8 px across at 2.74 px/mm, about 2.6
+      to 2.9 mm; drawn 2.7. FS does not say what it is; it reads as a moulding pin mark, not a
+      hole.
+  packs:
+    confidence: datasheet
+    note: >-
+      FHU-BPAD-4U-5 is five of this panel in one box (datasheet columns; QSG note 1), so it is
+      a vendor alias and not a configuration part number: `part-numbers` carries no quantity,
+      and a second part number on the base configuration would rename the DCIM export after the
+      first-sorted SKU.
+  color:
+    confidence: photo-measured
+    note: >-
+      black textured ABS, as the renders and "Color: Black".
+  weight:
+    confidence: datasheet
+    note: >-
+      the datasheet: 284 g a panel, 1420 g the five-pack FHU-BPAD-4U-5.
+  sides:
+    confidence: estimated
+    note: >-
+      the plate's end edge-on and the ends of the ribs behind it.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      checked 2026-10-09 against what the intake holds: the FS product page for this SKU was live
+      when the intake read it on 2026-10-08, and the FS documentation portal's Accessories tree,
+      read the same day, carries no end-of-sale notice for it. No web search beyond FS's own pages
+      was made.
+attrs:
+  physical:
+    material: ABS
+    color: Black
+    mounting: 19" Rack Mount
+    mounting-option: Front
+    fixing: tool-less, E-shape clips push into the rail holes; snaps apart into 1U strips
+  compliance:
+    flammability: UL 94V-0
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 482.6
+  height: 177.0
+  depth: 14.0
+  ru: 4
+  full-depth: false
+  weight-kg: 0.284
+  color: '#1e2023'
+gaps:
+- what: rib-shape
+  scope: [rear]
+  reason: needs-photo
+  note: >-
+    the wave rib's amplitude and period are read off an angled render, not dimensioned.
+  wanted: a square-on rear photograph with a scale
+groups:
+  ribs:
+    term: Rib
+    role: furniture
+    index-origin: 1
+    description: the wave rib across the back of each unit, top unit first
+views:
+  front:
+    size: {w: 482.6, h: 177.0}
+    panel:
+      decor:
+      - {id: plate, at: [0.0, 0.0], size: [482.6, 177.0], fill: '#1e2023', kind: plate}
+      - {id: badge-1, at: [19.7, 5.1], size: [34.8, 9.2], fill: '#17191b', rx: 2, sink: 0.3, kind: logo-badge}
+      - {id: pin-mark-1, at: [239.95, 20.35], size: [2.7, 2.7], fill: '#101112', rx: 1.35, kind: pin-mark}
+      - {id: clip-head-l1, at: [0.0, 10.225], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
+      - {id: clip-head-r1, at: [478.0, 10.225], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
+      - {id: score-1, at: [0.0, 44.05], size: [482.6, 0.4], fill: '#0f1011', sink: 0.3, kind: score}
+      - {id: badge-2, at: [19.7, 49.35], size: [34.8, 9.2], fill: '#17191b', rx: 2, sink: 0.3,
+        kind: logo-badge}
+      - {id: pin-mark-2, at: [239.95, 64.6], size: [2.7, 2.7], fill: '#101112', rx: 1.35, kind: pin-mark}
+      - {id: clip-head-l2, at: [0.0, 54.475], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
+      - {id: clip-head-r2, at: [478.0, 54.475], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
+      - {id: score-2, at: [0.0, 88.3], size: [482.6, 0.4], fill: '#0f1011', sink: 0.3, kind: score}
+      - {id: badge-3, at: [19.7, 93.6], size: [34.8, 9.2], fill: '#17191b', rx: 2, sink: 0.3,
+        kind: logo-badge}
+      - {id: pin-mark-3, at: [239.95, 108.85], size: [2.7, 2.7], fill: '#101112', rx: 1.35, kind: pin-mark}
+      - {id: clip-head-l3, at: [0.0, 98.725], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
+      - {id: clip-head-r3, at: [478.0, 98.725], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
+      - {id: score-3, at: [0.0, 132.55], size: [482.6, 0.4], fill: '#0f1011', sink: 0.3, kind: score}
+      - {id: badge-4, at: [19.7, 137.85], size: [34.8, 9.2], fill: '#17191b', rx: 2, sink: 0.3,
+        kind: logo-badge}
+      - {id: pin-mark-4, at: [239.95, 153.1], size: [2.7, 2.7], fill: '#101112', rx: 1.35, kind: pin-mark}
+      - {id: clip-head-l4, at: [0.0, 142.975], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
+      - {id: clip-head-r4, at: [478.0, 142.975], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3,
+        kind: clip-head}
+  rear:
+    size: {w: 482.6, h: 177.0}
+    panel:
+      decor:
+      - {id: plate, at: [0.0, 0.0], size: [482.6, 177.0], fill: '#1e2023', kind: plate}
+      - {id: clip-head-l1, at: [478.0, 10.225], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
+      - {id: clip-head-r1, at: [0.0, 10.225], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
+      - {id: rib-1, at: [18.0, 21.425], size: [446.6, 1.4], fill: '#3a3e43', kind: rib}
+      - {id: clip-r1, at: [5.0, 19.125], size: [4.0, 6.0], fill: '#141618', kind: clip}
+      - {id: pin-r1, at: [6.0, 21.125], size: [2.0, 2.0], fill: '#9ea3a8', rx: 1.0, kind: pin}
+      - {id: clip-l1, at: [473.6, 19.125], size: [4.0, 6.0], fill: '#141618', kind: clip}
+      - {id: pin-l1, at: [474.6, 21.125], size: [2.0, 2.0], fill: '#9ea3a8', rx: 1.0, kind: pin}
+      - {id: score-1, at: [0.0, 44.05], size: [482.6, 0.4], fill: '#0f1011', kind: score}
+      - {id: clip-head-l2, at: [478.0, 54.475], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
+      - {id: clip-head-r2, at: [0.0, 54.475], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
+      - {id: rib-2, at: [18.0, 65.675], size: [446.6, 1.4], fill: '#3a3e43', kind: rib}
+      - {id: clip-r2, at: [5.0, 63.375], size: [4.0, 6.0], fill: '#141618', kind: clip}
+      - {id: pin-r2, at: [6.0, 65.375], size: [2.0, 2.0], fill: '#9ea3a8', rx: 1.0, kind: pin}
+      - {id: clip-l2, at: [473.6, 63.375], size: [4.0, 6.0], fill: '#141618', kind: clip}
+      - {id: pin-l2, at: [474.6, 65.375], size: [2.0, 2.0], fill: '#9ea3a8', rx: 1.0, kind: pin}
+      - {id: score-2, at: [0.0, 88.3], size: [482.6, 0.4], fill: '#0f1011', kind: score}
+      - {id: clip-head-l3, at: [478.0, 98.725], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
+      - {id: clip-head-r3, at: [0.0, 98.725], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
+      - {id: rib-3, at: [18.0, 109.925], size: [446.6, 1.4], fill: '#3a3e43', kind: rib}
+      - {id: clip-r3, at: [5.0, 107.625], size: [4.0, 6.0], fill: '#141618', kind: clip}
+      - {id: pin-r3, at: [6.0, 109.625], size: [2.0, 2.0], fill: '#9ea3a8', rx: 1.0, kind: pin}
+      - {id: clip-l3, at: [473.6, 107.625], size: [4.0, 6.0], fill: '#141618', kind: clip}
+      - {id: pin-l3, at: [474.6, 109.625], size: [2.0, 2.0], fill: '#9ea3a8', rx: 1.0, kind: pin}
+      - {id: score-3, at: [0.0, 132.55], size: [482.6, 0.4], fill: '#0f1011', kind: score}
+      - {id: clip-head-l4, at: [478.0, 142.975], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3,
+        kind: clip-head}
+      - {id: clip-head-r4, at: [0.0, 142.975], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
+      - {id: rib-4, at: [18.0, 154.175], size: [446.6, 1.4], fill: '#3a3e43', kind: rib}
+      - {id: clip-r4, at: [5.0, 151.875], size: [4.0, 6.0], fill: '#141618', kind: clip}
+      - {id: pin-r4, at: [6.0, 153.875], size: [2.0, 2.0], fill: '#9ea3a8', rx: 1.0, kind: pin}
+      - {id: clip-l4, at: [473.6, 151.875], size: [4.0, 6.0], fill: '#141618', kind: clip}
+      - {id: pin-l4, at: [474.6, 153.875], size: [2.0, 2.0], fill: '#9ea3a8', rx: 1.0, kind: pin}
+    components:
+      placements:
+      - {ref: fs/bpad-wave-rib@1, id: wave-rib-1, at: [18.0, 14.125], group: ribs, rel-pos: 1}
+      - {ref: fs/bpad-wave-rib@1, id: wave-rib-2, at: [18.0, 58.375], group: ribs, rel-pos: 2}
+      - {ref: fs/bpad-wave-rib@1, id: wave-rib-3, at: [18.0, 102.625], group: ribs, rel-pos: 3}
+      - {ref: fs/bpad-wave-rib@1, id: wave-rib-4, at: [18.0, 146.875], group: ribs, rel-pos: 4}
+  top:
+    size: {w: 482.6, h: 14.0}
+    panel:
+      decor:
+      - {id: plate-edge, at: [0.0, 12.0], size: &id001 [482.6, 2.0], fill: '#2a2d31', kind: plate-edge}
+      - {id: ribs, at: [18.0, 0.0], size: &id002 [446.6, 12.0], fill: '#16181a', kind: rib}
+  bottom:
+    size: {w: 482.6, h: 14.0}
+    panel:
+      decor:
+      - {id: plate-edge, at: [0.0, 12.0], size: *id001, fill: '#2a2d31', kind: plate-edge}
+      - {id: ribs, at: [18.0, 0.0], size: *id002, fill: '#16181a', kind: rib}
+  left:
+    size: {w: 14.0, h: 177.0}
+    panel:
+      decor:
+      - {id: plate-edge, at: [12.0, 0.0], size: &id003 [2.0, 177.0], fill: '#2a2d31', kind: plate-edge}
+      - {id: rib-end-1, at: [0.0, 17.525], size: &id004 [12.0, 9.2], fill: '#16181a', kind: rib}
+      - {id: rib-end-2, at: [0.0, 61.775], size: &id005 [12.0, 9.2], fill: '#16181a', kind: rib}
+      - {id: rib-end-3, at: [0.0, 106.025], size: &id006 [12.0, 9.2], fill: '#16181a', kind: rib}
+      - {id: rib-end-4, at: [0.0, 150.275], size: &id007 [12.0, 9.2], fill: '#16181a', kind: rib}
+  right:
+    size: {w: 14.0, h: 177.0}
+    panel:
+      decor:
+      - {id: plate-edge, at: [0.0, 0.0], size: *id003, fill: '#2a2d31', kind: plate-edge}
+      - {id: rib-end-1, at: [2.0, 17.525], size: *id004, fill: '#16181a', kind: rib}
+      - {id: rib-end-2, at: [2.0, 61.775], size: *id005, fill: '#16181a', kind: rib}
+      - {id: rib-end-3, at: [2.0, 106.025], size: *id006, fill: '#16181a', kind: rib}
+      - {id: rib-end-4, at: [2.0, 150.275], size: *id007, fill: '#16181a', kind: rib}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      One FHU-BPAD-4U panel as FS ships it, whole.
+datasheet: {title: 'FS Plastic Blanking Panel Datasheet (FHU-BPAD-2U, -2U-5, -4U, -4U-5)', sha256: e0bf845457db4c3d949186a99f5c26e95eb5e9a7e8668b4af43318c649ae9756}

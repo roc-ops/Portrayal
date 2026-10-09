@@ -156,8 +156,8 @@ def _l43(doc):
 
 def test_L43_stands_down_when_the_ears_are_behind():
     views = {"front": {"size": {"w": 482.6, "h": 88.81}}}
-    assert _l43({"chassis": {"width": 482.6, "ru": 2}, "views": views})
-    assert not _l43({"chassis": {"width": 482.6, "ru": 2, "ears": "behind"}, "views": views})
+    assert _l43({"chassis": {"width": 440.0, "ru": 2}, "views": views})
+    assert not _l43({"chassis": {"width": 440.0, "ru": 2, "ears": "behind"}, "views": views})
 
 
 # --- the export and the lock -------------------------------------------------

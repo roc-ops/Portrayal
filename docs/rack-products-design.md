@@ -568,6 +568,16 @@ every version-3 file is a valid version-4 file and an older page refuses a
 version-4 file rather than erase or misread what it cannot read. One bump, not seven: each
 key alone would need it, and a rack file version is a one-way door.
 
+**Proposed for the same version** by
+[cable-lay-design.md](cable-lay-design.md) section 7 (#949): the rack entry
+`states` and `readings` of the PDU note (#934), the PDU bracket key of #939,
+and the cable keys `slack` and `lay`, so that none of them needs a version 5.
+The version-4 step reserves `slack` and `lay` even before anything acts on
+them, and its reader must not misread `slack`: for a cable that carries it,
+the stored routed length and stock size are kept as written and not
+re-measured, and a route edit that takes off a tray the slack names is
+refused.
+
 ## 10. Later: designed for, not built
 
 - **Wall-mount.** `wall-frame` and `wall-cabinet` products (FS-WMNR-D2P6U,
