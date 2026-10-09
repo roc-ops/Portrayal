@@ -102,9 +102,32 @@ def test_every_outlet_type_is_one_both_targets_list():
     new type joins OUTLET_TYPES - and this set - only with both SHAs cited."""
     assert dx.PART_OUTLET
     assert set(dx.PART_OUTLET.values()) <= dx.OUTLET_TYPES
-    assert dx.OUTLET_TYPES == {"dc-terminal", "other"}
+    # iec-60320-c13 and eaton-c39: NetBox choices.py at 2b3f4b48, Nautobot at
+    # c77e4255 (the Eaton EVMI2130X, the first rack PDU).
+    assert dx.OUTLET_TYPES == {"dc-terminal", "other", "iec-60320-c13", "eaton-c39"}
+    # the C13 is the standard's face, a std/ part; the C39 is Eaton's own
+    assert dx.PART_OUTLET["std/c13-outlet"] == "iec-60320-c13"
+    assert dx.PART_OUTLET["eaton/c39-outlet"] == "eaton-c39"
     assert all(dx.PART_OUTLET.get(r) == "other" for r in dx.OUTLET_LABEL), \
         "OUTLET_LABEL labels an outlet that is not `other`"
+
+
+def test_a_rule_names_an_outlet_by_its_printed_label():
+    """A device's own `interfaces:` rules rename a power outlet as they rename an
+    interface (the Eaton EVMI2130X's outlet-a1 is A1); an outlet no rule names
+    keeps its placement id."""
+    outlets = {"outlet-a1": {"ref": "std/c13-outlet@1", "fed-by": "input"},
+               "outlet-a2": {"ref": "eaton/c39-outlet@1", "fed-by": "input"}}
+    powers = {"input": {"name": "input", "type": "nema-l21-30p"}}
+    names = dx.listing_names({"interfaces": [
+        {"physical": "outlet-a{n}", "name": "A{n}", "range": "1-1"}]})
+    rows = dx.outlet_rows(outlets, powers, [], "test PDU", names)
+    assert [r["name"] for r in rows] == ["A1", "outlet-a2"]
+    assert [r["type"] for r in rows] == ["iec-60320-c13", "eaton-c39"]
+    assert all(r["power_port"] == "input" for r in rows)
+    # with no rules at all, every outlet keeps its id
+    assert [r["name"] for r in dx.outlet_rows(outlets, powers, [], "test PDU")] == \
+        ["outlet-a1", "outlet-a2"]
 
 
 @pytest.mark.parametrize("target", dx.TARGETS)

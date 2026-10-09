@@ -1,0 +1,108 @@
+format: 1
+kind: module
+name: g4-enmc
+version: 1.0.0
+class: nic
+behaviour: fills
+profile: power
+description: >-
+  The Eaton Rack PDU G4 network module (eNMC, the Gigabit Network Module) - two
+  gigabit Ethernet ports, the PDU+1 power-redundancy port and the environmental
+  probe port, two USB-C ports, a pixel LCD with four keys, and a recessed restart
+  button. Hot-swappable in the PDU's communication slot.
+size: {w: 49.15, h: 187.9, d: 40}
+size-confidence: {w: drawing, h: drawing, d: estimated}
+attrs: {module: G4 eNMC}
+provenance:
+  method: >-
+    drawing - Eaton drawing 9001-22301 (EVMI2130X, first issue 18-Aug-2023, D size,
+    scale 0.400) is vector, so the outlets were read from its path geometry at
+    1.133858 pt/mm rather than off a raster; the 1730, 1555.8, 72.00 and 55.80
+    dimensions on the same sheet all land within 0.02 mm at that scale. The drawing
+    lies the PDU down, cord end left; this part is drawn as the PDU stands, cord end
+    down, so the drawing's length runs up the part and its width across it.
+  identity: >-
+    datasheet - the G4 GNM firmware user guide, section 2.2: "The Network Module is
+    hot-swappable"; it slides along alignment channels in the communication slot and
+    is held by two screws, and the slot takes a cover plate when it is out. So it is
+    a module in a bay. 9001-22301 COMMUNICATION: G4 eNMC, DUAL GIGABIT ETHERNET WITH
+    NETWORK CASCADING, POWER REDUNDANCY PORT, EMP PORT, 2xUSB-C, MENU PIXEL LCD.
+  size: >-
+    drawing - the faceplate on 9001-22301 is 187.9 along the PDU by 49.15 across (x
+    918.85 to 1106.75, y 1.45 to 50.6 in drawing mm). Every feature below is read
+    off the same view: the two jack pairs centred 955.55 and 980.1 along, each jack
+    16.45 across; the USB-C openings centred 1006.35 along and 13.6 and 38.4
+    across; the LCD 30.9 by 31.1; four keys 12.3 square; screws 6.0 across.
+  jacks: >-
+    drawing and photo - each jack's two lamp windows are on its latch side, which
+    faces the cord end, so the jacks are common/rj45-eth@1 unrotated (keyway down)
+    on the standing module, centred on the drawn jack. The drawn jack is 16.45 by
+    17.3 including its lamp margin; the part is the 15.8 by 13.2 housing.
+  l76: >-
+    PDU+1 AND SENSOR ARE LAMPED AND ARE NOT ETHERNET. L76 asks for the bare
+    std/rj45@2 on a jack that is not Ethernet, and these two carry two lamps each
+    (the guide's 2.3.1.1 and 7.1, and EVMI2130X_DT5 lit), so the lamped part is the
+    only one that draws them. Their `media: rj45-telemetry` is what keeps them out
+    of the Ethernet interfaces in the export. The warning stays, in the lint
+    baseline.
+  lamps: >-
+    datasheet and photo - the GNM firmware user guide section 7.1 and 2.3.1.1 give
+    each jack a yellow and a green lamp: Ethernet, link and activity (yellow) and
+    speed in green flashes (1, 2 or 3 for 10, 100 and 1000 Mb/s); PDU+1, powered by
+    the peer module (yellow) and peer connected (green); EMP, activity (yellow) and
+    probe powered (green). EVMI2130X_DT5 shows the yellow lamp on the side of each
+    jack nearer the module's PDU+1 edge, the green on the other, which is led-a and
+    led-b of the standing part. No blink rate is published.
+  ports: >-
+    datasheet - GNM firmware user guide section 7.1: USB/0 is the configuration port
+    (the web interface over RNDIS and the console over an emulated serial port);
+    USB/0 and USB/1 are accessory ports. PDU+1 interconnects two network modules so
+    either can power the other (section 2.3); the sensor port takes the EMP
+    environmental probe. Network 10/100/1000 Mb/s.
+  lcd: >-
+    photo-measured - "MENU PIXEL LCD" on 9001-22301; a pixel display has no
+    character cells, so `characters` records the longest line seen, 19, in
+    EVMI2130X_DT5, the line giving the eth0 address. It reads upright with the PDU
+    standing.
+  keys: >-
+    datasheet and drawing - the guide names Up, Down, Enter and Escape. The drawing
+    prints them for the module lying down, so standing the < key is Down and the >
+    key is Up; EVMI2130X_C5 shows them so.
+  wordmark: >-
+    EATON is set as plain text: the vendor's stylised wordmark is not reproduced.
+  relief: >-
+    drawing - the side view puts the module's face about 9.0 off the PDU's face, the
+    LCD at 10.65 and the keys at 11.0. NOT BUILT: a full-face out on a module buries
+    the parts it composes (docs/modelling-pitfalls.md, Relief and 3D), so the module
+    is flat in 3D.
+  depth: >-
+    estimated - no document or photograph held shows the module out of its slot, so
+    its depth is not known; 40 is chosen to sit inside the PDU's 53 mm body, leaving
+    the back wall and the wiring behind the slot. It matters in 3D: with no `d` the
+    viewer gives a module a 60 mm bay, which stood 7 mm out of the back of this 53 mm
+    body as an open box.
+  power: >-
+    no document held states the module's own draw; L27 stands as the record.
+groups:
+  ethernet: {term: Port, role: management, index-origin: 0, attrs: {media: rj45, speed: 1g}, description: 'network ports 0 and 1, eth0 and eth1 on the LCD'}
+  peripheral: {term: Port, role: management, index-origin: 1, mixed: 'the module''s service connections - the PDU+1 power-redundancy link, the environmental probe and the two USB-C ports'}
+  controls: {term: Button, role: management, index-origin: 1}
+elements:
+  lcd: {at: [8.95, 52.15], size: [31.1, 30.9], class: display, characters: 19}
+  key-up: {at: [10.95, 18.75], size: [12.3, 12.3], class: button}
+  key-enter: {at: [25.75, 18.75], size: [12.3, 12.3], class: button}
+  key-down: {at: [10.95, 33.25], size: [12.3, 12.3], class: button}
+  key-esc: {at: [25.75, 33.25], size: [12.3, 12.3], class: button}
+parts:
+  - {ref: common/rj45-eth@1, id: pdu-plus-1, at: [8.35, 144.6], group: peripheral, attrs: {media: rj45-telemetry, function: power-redundancy},
+     states: {led-a: ['off', {name: powered-by-peer, color: '#f5c518'}], led-b: ['off', {name: peer-connected, color: '#22c55e'}]}}
+  - {ref: common/rj45-eth@1, id: sensor, at: [24.9, 144.6], group: peripheral, attrs: {media: rj45-telemetry, function: environmental-probe},
+     states: {led-a: ['off', {name: activity, color: '#f5c518', behavior: blinking}], led-b: ['off', {name: probe-powered, color: '#22c55e'}]}}
+  - {ref: common/rj45-eth@1, id: eth0, at: [8.4, 120.05], group: ethernet, attrs: {media: rj45, speed: 1g},
+     states: {led-a: ['off', {name: link, color: '#f5c518'}, {name: activity, color: '#f5c518', behavior: blinking}], led-b: ['off', {name: speed, color: '#22c55e', behavior: blinking}]}}
+  - {ref: common/rj45-eth@1, id: eth1, at: [24.85, 120.05], group: ethernet, attrs: {media: rj45, speed: 1g},
+     states: {led-a: ['off', {name: link, color: '#f5c518'}, {name: activity, color: '#f5c518', behavior: blinking}], led-b: ['off', {name: speed, color: '#22c55e', behavior: blinking}]}}
+  - {ref: std/usb-c@1, id: usb-0, at: [7.98, 99.12], rotate: 90, group: peripheral, attrs: {role: console}}
+  - {ref: std/usb-c@1, id: usb-1, at: [32.78, 99.12], rotate: 90, group: peripheral, attrs: {role: storage}}
+  - {ref: common/reset-button@1, id: restart, at: [22.55, 161.5], group: controls}
+skins: [default]

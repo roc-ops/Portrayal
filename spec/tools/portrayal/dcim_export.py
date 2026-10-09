@@ -595,6 +595,13 @@ PART_POWER = {
     # netbox-community/netbox (netbox/dcim/choices.py at 9bcfd739) or nautobot/nautobot
     # (at f9cdca3d). A clip is not a screw terminal, so it is `other`, as the barrel is.
     "common/orv3-busbar-connector": "other",
+    # A RACK PDU'S FIXED INPUT CORD. The Eaton G4 EVMI2130X has no inlet: its feed
+    # is a 10 ft cord ending in a NEMA L21-30P twist-lock plug, and the part that
+    # stands for it is the cord leaving the end cap. `nema-l21-30p` is a
+    # PowerPortTypeChoices value in both targets (netbox-community/netbox
+    # netbox/dcim/choices.py at 2b3f4b48, TYPE_NEMA_L2130P; nautobot/nautobot
+    # nautobot/dcim/choices.py at c77e4255, the same).
+    "eaton/g4-cord-l21-30p": "nema-l21-30p",
 }
 
 # WHERE A DEVICE HANDS POWER ON: a power OUTLET, the other half of PART_POWER
@@ -611,7 +618,13 @@ PART_POWER = {
 # shared list, and the test holding PART_OUTLET to it is not decoration: Nautobot's
 # component import form turns an unknown type into `other` without a word, so
 # a typo here would import as a different, valid-looking answer.
-OUTLET_TYPES = frozenset({"dc-terminal", "other"})
+#
+# AND THE AC OUTLETS OF A RACK PDU (the Eaton G4 EVMI2130X, the first PDU here).
+# `iec-60320-c13` and `eaton-c39` are PowerOutletTypeChoices values in both:
+# netbox-community/netbox netbox/dcim/choices.py at 2b3f4b48 (TYPE_IEC_C13, and
+# TYPE_EATON_C39 'eaton-c39' labelled "Eaton C39") and nautobot/nautobot
+# nautobot/dcim/choices.py at c77e4255 (the same two).
+OUTLET_TYPES = frozenset({"dc-terminal", "other", "iec-60320-c13", "eaton-c39"})
 PART_OUTLET = {
     # ONE OUTPUT CIRCUIT OF A BREAKER PANEL, a BATT screw over an RTN screw: the
     # two poles of one circuit, so one outlet, as one feed is one power port.
@@ -622,6 +635,12 @@ PART_OUTLET = {
     # connector as its label - OTHER_LABEL's treatment of an interface whose
     # form factor upstream does not name.
     "amphenol-ns/output-p40": "other",
+    # A RACK PDU'S OUTLETS. An IEC C13 is upstream's `iec-60320-c13`, and it is a
+    # std/ part: its face is the standard's, whoever moulds it. Eaton's C39 takes
+    # a C14 or a C20 plug and is no IEC sheet - it is Eaton's own, and both targets
+    # name it, so it is `eaton-c39` rather than `other`.
+    "std/c13-outlet": "iec-60320-c13",
+    "eaton/c39-outlet": "eaton-c39",
 }
 # The label an `other` outlet carries, so it says what to plug into it.
 # test_power_outlets.py holds both tables to OUTLET_TYPES (an assert here would
@@ -1846,7 +1865,9 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
     # under NX-OS whoever sells it. These RENAME and decide nothing: which
     # placement is an interface is still the hardware document's own rule below,
     # and an id no rule names keeps its faceplate id. A listing's names win, as
-    # they always have - its document is about that NOS and not this one.
+    # they always have - its document is about that NOS and not this one. The
+    # same rules name the device's POWER OUTLETS by their printed labels (a rack
+    # PDU's outlet-a1 is A1, outlet_rows); an outlet no rule names keeps its id.
     own = listing_names(dev) if names is None and dev.get("interfaces") else {}
 
     console, mgmt_sfp, bays, powers, timing = [], [], [], {}, {}
@@ -2038,7 +2059,7 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
         out["power-ports"] = [powers[k] for k in sorted(powers)]
     if outlets:
         out["power-outlets"] = outlet_rows(outlets, powers, bays,
-                                           f"{dev['manufacturer']} {model}")
+                                           f"{dev['manufacturer']} {model}", own)
     if bays:
         out["module-bays"] = sorted(bays, key=bay_order)
 
@@ -2089,13 +2110,19 @@ def bay_order(b):
     return (b["name"].split()[0], _num(b["position"].rsplit("-", 1)[-1]))
 
 
-def outlet_rows(outlets, powers, bays, who):
+def outlet_rows(outlets, powers, bays, who, names=None):
     """A device type's `power-outlets`, from its PART_OUTLET placements (#806).
 
     `outlets` is placement id -> placement, `powers` the device type's power
     ports keyed the same way, and `bays` its built bay rows, whose descriptions
     gain the outlets each one protects. Rows are named by placement id, as
-    every exported port is, and in natural order.
+    every exported port is, and in natural order - UNLESS THE DEVICE'S OWN
+    `interfaces:` NAMES THE OUTLET. `names` is that map (listing_names over the
+    device document), and it renames an outlet exactly as it renames an
+    interface: a rack PDU's outlets are known by the labels printed beside them
+    (the Eaton EVMI2130X's A1 to C42), which an id cannot spell. An outlet no
+    rule names keeps its placement id. Rows stay in the natural order of the
+    placement ids, whatever they are named; neither target reads the order.
 
     `power_port` IS WHAT BOTH TARGETS IMPORT. NetBox's
     PowerOutletTemplateImportForm (netbox/dcim/forms/object_import.py at
@@ -2127,7 +2154,7 @@ def outlet_rows(outlets, powers, bays, who):
     for pid in sorted(outlets, key=_natural):
         p = outlets[pid]
         ref = p["ref"].split("@")[0]
-        row = {"name": pid, "type": PART_OUTLET[ref]}
+        row = {"name": (names or {}).get(pid, (pid, None))[0], "type": PART_OUTLET[ref]}
         if ref in OUTLET_LABEL:
             row["label"] = OUTLET_LABEL[ref]
         fed = p.get("fed-by")

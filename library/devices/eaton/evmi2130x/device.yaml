@@ -1,0 +1,417 @@
+format: 1
+kind: device
+name: evmi2130x
+version: 0.1.0
+maturity: modelled
+manufacturer: Eaton
+model: EVMI2130X
+description: >-
+  Eaton Rack PDU G4, metered input, 0U: a 1730 mm black aluminium strip that hangs
+  on two mounting buttons in a rack's vertical channel and hands a three-phase 120/208 V
+  wye feed (a fixed 10 ft cord with a NEMA L21-30P plug, 24 A, 8.6 kW) on to 42
+  outlets - 24 IEC C13 and 18 Eaton C39 - in six colour-coded sections of seven. Three
+  20 A two-pole breakers, A, B and C, each line to line, each feed two sections. A
+  hot-swappable network module with two gigabit Ethernet ports, a pixel LCD and four
+  keys sits between the two halves.
+profile: power
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE VENDOR'S VECTOR DRAWING. Eaton drawing 9001-22301
+      (EVMI2130X G4 METERED INPUT, first issue 18-Aug-2023, D size, SCALE 0.400) draws
+      the PDU lying down, cord end at the left, in a front view, a side view below it
+      and a rear view below that, with an end view of the cord end and a one-line
+      diagram. Its views are paths, not a raster, so every position here was read off
+      the PDF's geometry with PyMuPDF at 1.133858 pt per mm (0.4 x 72 / 25.4). The
+      check on that scale is the drawing's own dimensions: 1730 overall lands at
+      1961.58 pt (1730.0), the 1555.8 between buttons at 1764.06 pt (1555.8), the
+      72.00 and both 55.80 to within 0.02. The library draws the PDU STANDING, cord end
+      down, as the EVMI2130X_C5 photograph stands it, so a drawing x along the length
+      becomes 1730 minus that, and a drawing y across becomes x. The 3000 px masters
+      staged with the drawing (EVMI2130X_C5, _BK5, _SD5, _DT5 and the outlet, breaker,
+      button and plug close-ups) are the second reading, for colour, the lamps and
+      the printing.
+  mount:
+    confidence: drawing
+    note: >-
+      `rack-side`, which is the library's one way to say a part stands vertically
+      beside the rack's opening, on a post, takes no rack unit and exports u_height 0
+      and is_full_depth false (docs/vertical-cable-managers-design.md). The G4
+      installation and setup guide P-164001156 rev 3 says every 0U G4 is "mounted
+      vertically inside rack structures" (2.2): its two factory buttons go into the
+      keyhole slots on the rack post (2.11.2), one or two PDUs a side (2.9, Fig. 7),
+      in an enclosure's zero-U channel or on a Tripp Lite two- or four-post rack
+      (2.11). `ru: 39` is the height it runs, the SKU title's 39U; 1730 is 38.9 units.
+      Which side, and front or rear, is a lab placement's to say. The design note that
+      made `rack-side` scoped the in-cabinet zero-U channel out (section 6); this
+      device uses the device-level meaning, which fits, and not that channel.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - 9001-22301 MECHANICAL: 68.11 in (1730 mm) length, 2.05 in (52 mm)
+      width, 2.09 in (53 mm) depth, aluminium chassis, black. The 53 is the body from
+      the face to the back (523.86 to 583.95 pt on the side view); the outlet
+      mouldings stand 3.96 off the face, the breaker plates 7.5, the network module
+      about 9 and its keys 11.0, and the buttons 9.4 off the back, none of it in the
+      53. The SKU page's PRODUCT HEIGHT 53 mm and WIDTH 52 mm say the same with the
+      axes renamed; the brochure's 68.1 x 2.1 x 2.1 in agrees. Weight 8.3 kg is the SKU
+      page's.
+  front:
+    confidence: drawing
+    note: >-
+      drawing - the front view of 9001-22301, read in drawing mm (x from the cord end,
+      y from the edge drawn at the top). Six outlet mouldings 181.29 long by 36.1 (y
+      6.0 to 42.1) start at x 195.1, 457.3, 719.6, 1130.7, 1333.7 and 1536.6; each
+      carries seven outlets at a 25.4 pitch (a C13 recess starting 3.24, 54.04, 104.84
+      and 155.64 into the moulding, a C39 26.54, 77.34 and 128.14) and a printed strip
+      at y 45.5 to 49.5. The breaker plates (60 by 48) start at 131.0, 393.2 and 655.5,
+      the network module's faceplate spans 918.85 to 1106.75 and y 1.45 to 50.6. At
+      the cord end, an M6 ground screw (12.5 across at 52.05, 38.05), a screw 6.0 across
+      at 14.0, 26.0 and a round boss 8.2 across at 92.0, 36.0; a second 6.0 screw at
+      1723.0, 26.0. End caps 2 thick at both ends.
+  outlet-pitch:
+    confidence: drawing
+    note: >-
+      drawing - NOT DIMENSIONED, MEASURED FROM THE PATHS. The C13 noses of section A
+      stand at x 201.7, 252.5, 303.3 and 354.1 (50.8 apart, two outlets) and the C39
+      recesses at 221.64, 272.44 and 323.24, so the outlet pitch is 25.40, one inch,
+      and the same 50.8 holds in every section. The span checks against something
+      dimensioned: the two buttons are 1555.8 apart on the same sheet at the same
+      scale.
+  sections:
+    confidence: drawing
+    note: >-
+      drawing and photo - 9001-22301 labels the six SECTION A (YELLOW), B (BLUE), C
+      (ORANGE), then the network module, then A, B, C again; the outlet close-ups
+      number them A1-A7, B8-B14, C15-C21, A22-A28, B29-B35 and C36-C42, as the drawing
+      prints them. The one-line diagram puts breaker A across L1 and L2, B across L2
+      and L3 and C across L3 and L1, each feeding a SECTION box; there are three
+      breakers (CIRCUIT BREAKERS: (3) 20A 2-POLE LISTED) at the head of the first A,
+      B and C, and the second A, B and C have none, so each breaker feeds the two
+      sections of its letter. That reading is the drawing's colour and letter
+      labels; no sentence held says it in words.
+  colours:
+    confidence: photo-measured
+    note: >-
+      photo-measured - the section colours are the modal saturated pixels of the
+      EVMI2130X-OUTLET-BANK_C5, _C6 and _C7 masters, a FIELD on the strip and breaker
+      parts that each placement sets (library/components/README.md, #177). The body is
+      the modal dark grey of the same masters, about #303030; the outlet mouldings are
+      a shade darker in every photograph.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the rear view of 9001-22301: the two mounting buttons on the width's
+      centre line (the 1.02 [26.00] dimension), 72.00 from the cord end and 1555.8
+      apart, and a 5.4 threaded hole 55.80 beyond each, at 127.8 and 1683.6, where
+      the buttons can be moved. Both holes lie towards the far end of their
+      buttons, so the second is outboard, not inboard. The view is
+      symmetric about its centre line, so the rear is the view unmirrored.
+  sides:
+    confidence: drawing
+    note: >-
+      drawing - the side view of 9001-22301, the long side at the strip's edge (third
+      angle, below the front view), which is the standing PDU's right; x = 0 is the
+      front. Hex threaded inserts 6.6 across at 72.0, 127.8, 1627.8 and 1683.6, 20.0
+      behind the face (the 1.30 [33.00] dimension, from the back), are the side-mount
+      positions for the buttons; a Torx screw 6.0 across 20.0 behind the face at 31.9
+      and 1697.9, and an end-cap screw 5.7 across 32.5 behind the face, 7.0 from each
+      end. A seam runs the length 13.2 to 14.8 behind the face.
+  left:
+    confidence: estimated
+    note: >-
+      estimated - no view draws the other long side. It is drawn as the right side
+      mirrored front to back, which EVMI2130X_SD5 (that side, front to the right)
+      supports in the band it resolves: small fasteners about a third of the depth
+      back at the cord end and the far end. The photograph cannot resolve the hex
+      inserts, so they are carried over from the drawn side.
+  ends:
+    confidence: drawing
+    note: >-
+      drawing - the end view of 9001-22301 is the cord end: a grommet 36.9 across,
+      centred on the width and 28.5 from the back, and the cord 18.2 across 31.1 from
+      the back, beside the button standing off the back. Top and bottom views have y = 0
+      at the rear. No view draws the far end; it is drawn as its end cap alone.
+  lamps-and-module:
+    confidence: drawing
+    note: >-
+      drawing and datasheet - the network module is eaton/g4-enmc@1, in a bay, because
+      the GNM firmware user guide 2.2 calls it hot-swappable; its jacks, lamps, LCD and
+      keys are read off the same front view and the guide's section 7.1. Its two
+      Ethernet ports are eth0 and eth1, the names the module's LCD shows in
+      EVMI2130X_DT5. The PDU face carries no lamp of its own.
+  relief:
+    confidence: drawing
+    note: >-
+      drawing - the side view of 9001-22301 puts the outlet mouldings 3.96 proud of the
+      face (0.5 at their lip). They are drawn flat: a raised decor box would bury the
+      outlets placed on it in 3D. The outlets are wells, 18 and 20 deep, from their
+      own contracts, and the breaker plates are built 7.5 proud from theirs. The
+      network module is 40 deep (estimated), inside the 53 mm body.
+  dcim:
+    confidence: datasheet
+    note: >-
+      the input is one NEMA L21-30P power port and each outlet a power outlet fed by
+      it, `iec-60320-c13` or `eaton-c39` (both types in NetBox and Nautobot,
+      dcim/choices.py). NO feed_leg IS WRITTEN: every outlet is line to line (A on
+      L1-L2, B on L2-L3, C on L3-L1, from the one-line diagram) and a DCIM outlet's
+      feed_leg names one leg. NO `through` IS WRITTEN: it names a bay, and the
+      breakers are fixed parts; each breaker's description names its two sections,
+      and the six section regions name their breaker. THE OUTLETS ARE NAMED AS THE
+      UNIT PRINTS THEM, A1 to C42 (the maintainer's decision, 2026-10-08): an id
+      cannot spell A1, so the `interfaces:` rules map each `outlet-<letter><n>` to
+      its printed label, and the export names the power outlet by it. The labels
+      are read off the EVMI2130X outlet close-ups and the drawing.
+  lifecycle:
+    confidence: datasheet
+    note: >-
+      searched 2026-10-08 (web, "Eaton EVMI2130X end of life OR discontinued") and
+      found nothing; the product is from 2023 (the drawing's first issue). The G4 grid
+      lists an EOL notification document under a /secure/ path, which was not fetched
+      and may not concern this SKU.
+attrs:
+  physical:
+    length-mm: 1730
+    weight-kg: 8.3
+    construction: aluminium chassis, black
+  power:
+    input-plug: NEMA L21-30P on a fixed 10 ft cord, 10 AWG 5-conductor
+    input-voltage: 120/208 V three-phase wye, 3W+N+PE (drawing 100-127/173-240 V)
+    input-current-a: 24
+    plug-rating-a: 30
+    capacity-kw: 8.6
+    capacity-scope: >-
+      the load the PDU can hand on (24 A at 208 V three phase), from the SKU title and
+      the brochure table; it is not what the PDU draws itself, which no document held
+      states
+    output-voltage: 173-240 V, line to line
+    output-rating: 10 A per C13, 16 A per C39, 16 A per section, 24 A per phase
+    breakers: three 20 A two-pole, UL listed
+    frequency: 50/60 Hz
+  environmental:
+    operating-temp: 0 to 60 C (32 to 140 F)
+  management:
+    metering: current, power and energy for the input; current for each branch
+    network-module: G4 eNMC, dual gigabit Ethernet with network cascading
+  compliance:
+    emc: FCC part 15 class A, CAN ICES-003 class A
+    safety: UL 62368-1; cTUVus on the drawing
+    cybersecurity: UL 2900-1
+    regulatory-model: EMIF-PDXJ-E27K
+  lifecycle:
+    eol: none-announced
+chassis: {width: 52, height: 1730, depth: 53, ru: 39, mount: rack-side, color: '#2e3033', airflow: passive, weight-kg: 8.3}
+gaps:
+- what: outlet-depth
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    the outlet wells are built 18 (C13) and 20 (C39) deep from the plug side: the
+    mating nose lengths in the registry (Volex V1625 and VAC19), cross-checked
+    against the C14 and C20 shroud depths. No outlet drawing held dimensions the
+    wells themselves. The mouldings' 3.96 standoff, which the drawing's side view
+    does give, is not built: a raised box over the outlets would bury their wells.
+  wanted: a section through an Eaton G4 outlet moulding, or a measured unit.
+- what: boss-at-cord-end
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    9001-22301 draws a round boss 8.2 across at the cord end, between the ground
+    screw and breaker A, and EVMI2130X_C5 shows it; nothing held names it. It is
+    drawn as decor.
+  wanted: the part's name from Eaton, or the unit.
+- what: ground-symbol
+  scope: [front]
+  reason: needs-photo
+  note: >-
+    the installation guide 2.11.4 says the ground symbol is marked in the chassis
+    beside the M6 bonding screw; neither the drawing nor EVMI2130X_C5 resolves it, so
+    it is not drawn.
+  wanted: a close-up of the cord end of the face.
+groups:
+  outlets: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the PDU''s 42 outlets, numbered 1 to 42 from the cord end as printed - C13 and C39 alternating in six sections of seven; each section is a region'}
+  section-labels: {term: Label, role: furniture, index-origin: 1}
+  breakers: {term: Breaker, role: service, index-origin: 1, description: 'A, B and C, each 20 A two-pole and each feeding the two sections of its letter'}
+  network: {term: Slot, role: management, index-origin: 1}
+  grounding: {term: Ground, role: furniture, index-origin: 1}
+  power-input: {term: Input, role: service, index-origin: 1}
+  mounting: {term: Button, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 52, h: 1730}
+    panel:
+      decor:
+      - {id: end-cap-top, at: [0, 0], size: [52, 2], fill: '#26282b', kind: end-cap}
+      - {id: end-cap-cord, at: [0, 1728], size: [52, 2], fill: '#26282b', kind: end-cap}
+      - {id: section-1-moulding, at: [6, 1353.61], size: [36.1, 181.29], rx: 2.5, fill: '#1e1f21', kind: outlet-moulding}
+      - {id: section-2-moulding, at: [6, 1091.41], size: [36.1, 181.29], rx: 2.5, fill: '#1e1f21', kind: outlet-moulding}
+      - {id: section-3-moulding, at: [6, 829.11], size: [36.1, 181.29], rx: 2.5, fill: '#1e1f21', kind: outlet-moulding}
+      - {id: section-4-moulding, at: [6, 418.01], size: [36.1, 181.29], rx: 2.5, fill: '#1e1f21', kind: outlet-moulding}
+      - {id: section-5-moulding, at: [6, 215.01], size: [36.1, 181.29], rx: 2.5, fill: '#1e1f21', kind: outlet-moulding}
+      - {id: section-6-moulding, at: [6, 12.11], size: [36.1, 181.29], rx: 2.5, fill: '#1e1f21', kind: outlet-moulding}
+      - {id: screw-cord-end, at: [23, 1713], size: [6, 6], rx: 3, fill: '#565b60', kind: screw-head}
+      - {id: screw-far-end, at: [23, 4], size: [6, 6], rx: 3, fill: '#565b60', kind: screw-head}
+      - {id: boss, at: [31.9, 1633.9], size: [8.2, 8.2], rx: 4.1, fill: '#25272a', kind: boss}
+    components:
+      bays:
+        - {id: network-module, at: [1.45, 623.25], size: {w: 49.15, h: 187.9}, accepts: [eaton/g4-enmc@1], default: eaton/g4-enmc@1, group: network, rel-pos: 1}
+      placements:
+        - {id: outlet-a1, ref: std/c13-outlet@1, at: [9.1, 1509.66], group: outlets, rel-pos: 1, fed-by: input}
+        - {id: outlet-a2, ref: eaton/c39-outlet@1, at: [6.6, 1481.76], group: outlets, rel-pos: 2, fed-by: input}
+        - {id: outlet-a3, ref: std/c13-outlet@1, at: [9.1, 1458.86], group: outlets, rel-pos: 3, fed-by: input}
+        - {id: outlet-a4, ref: eaton/c39-outlet@1, at: [6.6, 1430.96], group: outlets, rel-pos: 4, fed-by: input}
+        - {id: outlet-a5, ref: std/c13-outlet@1, at: [9.1, 1408.06], group: outlets, rel-pos: 5, fed-by: input}
+        - {id: outlet-a6, ref: eaton/c39-outlet@1, at: [6.6, 1380.16], group: outlets, rel-pos: 6, fed-by: input}
+        - {id: outlet-a7, ref: std/c13-outlet@1, at: [9.1, 1357.26], group: outlets, rel-pos: 7, fed-by: input}
+        - {id: labels-1, ref: eaton/g4-outlet-labels@1, at: [45.5, 1354.11], group: section-labels, rel-pos: 1, attrs: {section-color: '#f4d440', label-1: A1, label-2: A2, label-3: A3, label-4: A4, label-5: A5, label-6: A6, label-7: A7}}
+        - {id: outlet-b8, ref: std/c13-outlet@1, at: [9.1, 1247.46], group: outlets, rel-pos: 8, fed-by: input}
+        - {id: outlet-b9, ref: eaton/c39-outlet@1, at: [6.6, 1219.56], group: outlets, rel-pos: 9, fed-by: input}
+        - {id: outlet-b10, ref: std/c13-outlet@1, at: [9.1, 1196.66], group: outlets, rel-pos: 10, fed-by: input}
+        - {id: outlet-b11, ref: eaton/c39-outlet@1, at: [6.6, 1168.76], group: outlets, rel-pos: 11, fed-by: input}
+        - {id: outlet-b12, ref: std/c13-outlet@1, at: [9.1, 1145.86], group: outlets, rel-pos: 12, fed-by: input}
+        - {id: outlet-b13, ref: eaton/c39-outlet@1, at: [6.6, 1117.96], group: outlets, rel-pos: 13, fed-by: input}
+        - {id: outlet-b14, ref: std/c13-outlet@1, at: [9.1, 1095.06], group: outlets, rel-pos: 14, fed-by: input}
+        - {id: labels-2, ref: eaton/g4-outlet-labels@1, at: [45.5, 1091.91], group: section-labels, rel-pos: 2, attrs: {section-color: '#48c2f4', label-1: B8, label-2: B9, label-3: B10, label-4: B11, label-5: B12, label-6: B13, label-7: B14}}
+        - {id: outlet-c15, ref: std/c13-outlet@1, at: [9.1, 985.16], group: outlets, rel-pos: 15, fed-by: input}
+        - {id: outlet-c16, ref: eaton/c39-outlet@1, at: [6.6, 957.26], group: outlets, rel-pos: 16, fed-by: input}
+        - {id: outlet-c17, ref: std/c13-outlet@1, at: [9.1, 934.36], group: outlets, rel-pos: 17, fed-by: input}
+        - {id: outlet-c18, ref: eaton/c39-outlet@1, at: [6.6, 906.46], group: outlets, rel-pos: 18, fed-by: input}
+        - {id: outlet-c19, ref: std/c13-outlet@1, at: [9.1, 883.56], group: outlets, rel-pos: 19, fed-by: input}
+        - {id: outlet-c20, ref: eaton/c39-outlet@1, at: [6.6, 855.66], group: outlets, rel-pos: 20, fed-by: input}
+        - {id: outlet-c21, ref: std/c13-outlet@1, at: [9.1, 832.76], group: outlets, rel-pos: 21, fed-by: input}
+        - {id: labels-3, ref: eaton/g4-outlet-labels@1, at: [45.5, 829.61], group: section-labels, rel-pos: 3, attrs: {section-color: '#f49448', label-1: C15, label-2: C16, label-3: C17, label-4: C18, label-5: C19, label-6: C20, label-7: C21}}
+        - {id: outlet-a22, ref: std/c13-outlet@1, at: [9.1, 574.06], group: outlets, rel-pos: 22, fed-by: input}
+        - {id: outlet-a23, ref: eaton/c39-outlet@1, at: [6.6, 546.16], group: outlets, rel-pos: 23, fed-by: input}
+        - {id: outlet-a24, ref: std/c13-outlet@1, at: [9.1, 523.26], group: outlets, rel-pos: 24, fed-by: input}
+        - {id: outlet-a25, ref: eaton/c39-outlet@1, at: [6.6, 495.36], group: outlets, rel-pos: 25, fed-by: input}
+        - {id: outlet-a26, ref: std/c13-outlet@1, at: [9.1, 472.46], group: outlets, rel-pos: 26, fed-by: input}
+        - {id: outlet-a27, ref: eaton/c39-outlet@1, at: [6.6, 444.56], group: outlets, rel-pos: 27, fed-by: input}
+        - {id: outlet-a28, ref: std/c13-outlet@1, at: [9.1, 421.66], group: outlets, rel-pos: 28, fed-by: input}
+        - {id: labels-4, ref: eaton/g4-outlet-labels@1, at: [45.5, 418.51], group: section-labels, rel-pos: 4, attrs: {section-color: '#f4d440', label-1: A22, label-2: A23, label-3: A24, label-4: A25, label-5: A26, label-6: A27, label-7: A28}}
+        - {id: outlet-b29, ref: std/c13-outlet@1, at: [9.1, 371.06], group: outlets, rel-pos: 29, fed-by: input}
+        - {id: outlet-b30, ref: eaton/c39-outlet@1, at: [6.6, 343.16], group: outlets, rel-pos: 30, fed-by: input}
+        - {id: outlet-b31, ref: std/c13-outlet@1, at: [9.1, 320.26], group: outlets, rel-pos: 31, fed-by: input}
+        - {id: outlet-b32, ref: eaton/c39-outlet@1, at: [6.6, 292.36], group: outlets, rel-pos: 32, fed-by: input}
+        - {id: outlet-b33, ref: std/c13-outlet@1, at: [9.1, 269.46], group: outlets, rel-pos: 33, fed-by: input}
+        - {id: outlet-b34, ref: eaton/c39-outlet@1, at: [6.6, 241.56], group: outlets, rel-pos: 34, fed-by: input}
+        - {id: outlet-b35, ref: std/c13-outlet@1, at: [9.1, 218.66], group: outlets, rel-pos: 35, fed-by: input}
+        - {id: labels-5, ref: eaton/g4-outlet-labels@1, at: [45.5, 215.51], group: section-labels, rel-pos: 5, attrs: {section-color: '#48c2f4', label-1: B29, label-2: B30, label-3: B31, label-4: B32, label-5: B33, label-6: B34, label-7: B35}}
+        - {id: outlet-c36, ref: std/c13-outlet@1, at: [9.1, 168.16], group: outlets, rel-pos: 36, fed-by: input}
+        - {id: outlet-c37, ref: eaton/c39-outlet@1, at: [6.6, 140.26], group: outlets, rel-pos: 37, fed-by: input}
+        - {id: outlet-c38, ref: std/c13-outlet@1, at: [9.1, 117.36], group: outlets, rel-pos: 38, fed-by: input}
+        - {id: outlet-c39, ref: eaton/c39-outlet@1, at: [6.6, 89.46], group: outlets, rel-pos: 39, fed-by: input}
+        - {id: outlet-c40, ref: std/c13-outlet@1, at: [9.1, 66.56], group: outlets, rel-pos: 40, fed-by: input}
+        - {id: outlet-c41, ref: eaton/c39-outlet@1, at: [6.6, 38.66], group: outlets, rel-pos: 41, fed-by: input}
+        - {id: outlet-c42, ref: std/c13-outlet@1, at: [9.1, 15.76], group: outlets, rel-pos: 42, fed-by: input}
+        - {id: labels-6, ref: eaton/g4-outlet-labels@1, at: [45.5, 12.61], group: section-labels, rel-pos: 6, attrs: {section-color: '#f49448', label-1: C36, label-2: C37, label-3: C38, label-4: C39, label-5: C40, label-6: C41, label-7: C42}}
+        - id: breaker-a
+          ref: eaton/g4-breaker-20a-2p@1
+          at: [2, 1539]
+          group: breakers
+          rel-pos: 1
+          description: 'Breaker A, 20 A two-pole on L1-L2: protects both A sections, outlets A1-A7 and A22-A28'
+          attrs: {section-color: '#f4d440', section: A}
+        - id: breaker-b
+          ref: eaton/g4-breaker-20a-2p@1
+          at: [2, 1276.8]
+          group: breakers
+          rel-pos: 2
+          description: 'Breaker B, 20 A two-pole on L2-L3: protects both B sections, outlets B8-B14 and B29-B35'
+          attrs: {section-color: '#48c2f4', section: B}
+        - id: breaker-c
+          ref: eaton/g4-breaker-20a-2p@1
+          at: [2, 1014.5]
+          group: breakers
+          rel-pos: 3
+          description: 'Breaker C, 20 A two-pole on L3-L1: protects both C sections, outlets C15-C21 and C36-C42'
+          attrs: {section-color: '#f49448', section: C}
+        - {id: ground, ref: common/ground-screw-m6@1, at: [32.05, 1671.95], group: grounding, rel-pos: 1}
+    regions:
+      - {id: section-1, label: 'Section A (yellow) - outlets A1 to A7 on breaker A, line to line L1-L2', members: [outlet-a1, outlet-a2, outlet-a3, outlet-a4, outlet-a5, outlet-a6, outlet-a7, labels-1, breaker-a]}
+      - {id: section-2, label: 'Section B (blue) - outlets B8 to B14 on breaker B, line to line L2-L3', members: [outlet-b8, outlet-b9, outlet-b10, outlet-b11, outlet-b12, outlet-b13, outlet-b14, labels-2, breaker-b]}
+      - {id: section-3, label: 'Section C (orange) - outlets C15 to C21 on breaker C, line to line L3-L1', members: [outlet-c15, outlet-c16, outlet-c17, outlet-c18, outlet-c19, outlet-c20, outlet-c21, labels-3, breaker-c]}
+      - {id: section-4, label: 'Section A (yellow) - outlets A22 to A28 on breaker A, line to line L1-L2', members: [outlet-a22, outlet-a23, outlet-a24, outlet-a25, outlet-a26, outlet-a27, outlet-a28, labels-4]}
+      - {id: section-5, label: 'Section B (blue) - outlets B29 to B35 on breaker B, line to line L2-L3', members: [outlet-b29, outlet-b30, outlet-b31, outlet-b32, outlet-b33, outlet-b34, outlet-b35, labels-5]}
+      - {id: section-6, label: 'Section C (orange) - outlets C36 to C42 on breaker C, line to line L3-L1', members: [outlet-c36, outlet-c37, outlet-c38, outlet-c39, outlet-c40, outlet-c41, outlet-c42, labels-6]}
+  rear:
+    size: {w: 52, h: 1730}
+    panel:
+      decor:
+      - {id: end-cap-top, at: [0, 0], size: [52, 2], fill: '#26282b', kind: end-cap}
+      - {id: end-cap-cord, at: [0, 1728], size: [52, 2], fill: '#26282b', kind: end-cap}
+      - {id: button-hole-1, at: [23.3, 1599.5], size: [5.4, 5.4], rx: 2.7, fill: '#141516', kind: hole}
+      - {id: button-hole-2, at: [23.3, 43.7], size: [5.4, 5.4], rx: 2.7, fill: '#141516', kind: hole}
+    components:
+      placements:
+        - {id: button-1, ref: eaton/g4-mounting-button@1, at: [13.3, 1645.3], group: mounting, rel-pos: 1}
+        - {id: button-2, ref: eaton/g4-mounting-button@1, at: [13.3, 89.5], group: mounting, rel-pos: 2}
+  top:
+    size: {w: 52, h: 53}
+    panel:
+      decor:
+      - {id: end-cap, at: [0, 0], size: [52, 53], fill: '#26282b', kind: end-cap}
+  bottom:
+    size: {w: 52, h: 53}
+    panel:
+      decor:
+      - {id: end-cap, at: [0, 0], size: [52, 53], fill: '#26282b', kind: end-cap}
+    components:
+      placements:
+        - {id: input, ref: eaton/g4-cord-l21-30p@1, at: [7.55, 10.05], group: power-input, rel-pos: 1}
+  left:
+    size: {w: 53, h: 1730}
+    panel:
+      decor:
+      - {id: seam, at: [38.2, 0], size: [1.6, 1730], fill: '#232528', kind: seam}
+      - {id: end-cap-top, at: [0, 0], size: [53, 2], fill: '#26282b', kind: end-cap}
+      - {id: end-cap-cord, at: [0, 1728], size: [53, 2], fill: '#26282b', kind: end-cap}
+      - {id: insert-1, at: [29.7, 1654.7], size: [6.6, 6.6], rx: 3.3, fill: '#8d9298', kind: threaded-insert}
+      - {id: insert-2, at: [29.7, 1598.9], size: [6.6, 6.6], rx: 3.3, fill: '#8d9298', kind: threaded-insert}
+      - {id: insert-3, at: [29.7, 98.9], size: [6.6, 6.6], rx: 3.3, fill: '#8d9298', kind: threaded-insert}
+      - {id: insert-4, at: [29.7, 43.1], size: [6.6, 6.6], rx: 3.3, fill: '#8d9298', kind: threaded-insert}
+      - {id: screw-torx-cord-end, at: [29.9, 1695.1], size: [6, 6], rx: 3, fill: '#565b60', kind: screw-head}
+      - {id: screw-torx-far-end, at: [30, 29.1], size: [6, 6], rx: 3, fill: '#565b60', kind: screw-head}
+      - {id: screw-cap-cord-end, at: [17.65, 1720.15], size: [5.7, 5.7], rx: 2.85, fill: '#565b60', kind: screw-head}
+      - {id: screw-cap-far-end, at: [17.75, 4.15], size: [5.7, 5.7], rx: 2.85, fill: '#565b60', kind: screw-head}
+  right:
+    size: {w: 53, h: 1730}
+    panel:
+      decor:
+      - {id: seam, at: [13.2, 0], size: [1.6, 1730], fill: '#232528', kind: seam}
+      - {id: end-cap-top, at: [0, 0], size: [53, 2], fill: '#26282b', kind: end-cap}
+      - {id: end-cap-cord, at: [0, 1728], size: [53, 2], fill: '#26282b', kind: end-cap}
+      - {id: insert-1, at: [16.7, 1654.7], size: [6.6, 6.6], rx: 3.3, fill: '#8d9298', kind: threaded-insert}
+      - {id: insert-2, at: [16.7, 1598.9], size: [6.6, 6.6], rx: 3.3, fill: '#8d9298', kind: threaded-insert}
+      - {id: insert-3, at: [16.7, 98.9], size: [6.6, 6.6], rx: 3.3, fill: '#8d9298', kind: threaded-insert}
+      - {id: insert-4, at: [16.7, 43.1], size: [6.6, 6.6], rx: 3.3, fill: '#8d9298', kind: threaded-insert}
+      - {id: screw-torx-cord-end, at: [17.1, 1695.1], size: [6, 6], rx: 3, fill: '#565b60', kind: screw-head}
+      - {id: screw-torx-far-end, at: [17, 29.1], size: [6, 6], rx: 3, fill: '#565b60', kind: screw-head}
+      - {id: screw-cap-cord-end, at: [29.65, 1720.15], size: [5.7, 5.7], rx: 2.85, fill: '#565b60', kind: screw-head}
+      - {id: screw-cap-far-end, at: [29.55, 4.15], size: [5.7, 5.7], rx: 2.85, fill: '#565b60', kind: screw-head}
+interfaces:
+- {physical: 'outlet-a{n}', name: 'A{n}', range: '1-7'}
+- {physical: 'outlet-b{n}', name: 'B{n}', range: '8-14'}
+- {physical: 'outlet-c{n}', name: 'C{n}', range: '15-21'}
+- {physical: 'outlet-a{n}', name: 'A{n}', range: '22-28'}
+- {physical: 'outlet-b{n}', name: 'B{n}', range: '29-35'}
+- {physical: 'outlet-c{n}', name: 'C{n}', range: '36-42'}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The PDU as it ships, the network module in its slot.
+    bays:
+      network-module: eaton/g4-enmc@1
+    part-numbers:
+      EVMI2130X: {}
+datasheet:
+  title: 'Eaton EVMI2130X SKU specifications (skuPage.EVMI2130X.pdf)'
+  url: https://www.eaton.com/us/en-us/skuPage.EVMI2130X.pdf
+  sha256: 244f64fb29724407edd1ca742942f753e6bfb5e0e09139cb3acba4733d0be5ae
+references:
+  - {title: 'Eaton drawing 9001-22301, EVMI2130X G4 metered input, first issue 18-Aug-2023', url: 'https://www.eaton.com/content/dam/eaton/products/backup-power-ups-surge-it-power-distribution/power-distribution-for-it-equipment/eaton-rack-pdu-g4/drawings/eaton-rack-pdu-g4-EVMI2130X-drawing.pdf', sha256: 7e24ad6ca4eab9ba8ea66d916312477b4668d2c039f1522759f014f67102f4d3}
+  - {title: 'Eaton Rack PDU G4 installation and setup guide, P-164001156 rev 3', url: 'https://www.eaton.com/content/dam/eaton/products/backup-power-ups-surge-it-power-distribution/power-distribution-for-it-equipment/eaton-rack-pdu-g4/user-guides/eaton-rack-pdu-g4-installation-and-setup-guide.pdf', sha256: 26d4bfcd41edb524e2fb4877852e4963054bfda678fcc80f377947473e4269a0}
+  - {title: 'Eaton Rack PDU G4 Gigabit Network Module (GNM) firmware user guide', url: 'https://www.eaton.com/content/dam/eaton/products/backup-power-ups-surge-it-power-distribution/power-distribution-for-it-equipment/eaton-rack-pdu-g4/user-guides/eaton-rack-pdu-g4-gnm-firmware-user-guide.pdf', sha256: 336d1042d2a4b8dbd3ca8d0a3fac3ca1f40acbd250811f3fa18ee829eb2e510c}
+  - {title: 'Eaton Rack PDU G4 brochure BR155056EN', url: 'https://www.eaton.com/content/dam/eaton/products/backup-power-ups-surge-it-power-distribution/power-distribution-for-it-equipment/eaton-rack-pdu-g4/resources/eaton-rack-pdu-g4-brochure-br155056en.pdf', sha256: 8325d41c2dcad9df264a369173f8cbb8b347239a362fd161275b7068130d077d}

@@ -573,6 +573,12 @@ a DCIM holds after import, so changing one is a major bump. A white box that
 runs other vendors' systems has no block; each NOS vendor's listing names its
 ports.
 
+The same rules also name a device's power outlets by their printed labels. A
+placement id cannot spell `A1`, so a rack PDU maps each outlet to the label
+printed beside it - `{physical: 'outlet-a{n}', name: 'A{n}', range: '1-7'}` on
+the Eaton EVMI2130X - and the power outlet exports under that name. An outlet
+no rule names keeps its placement id.
+
 A line card says the same thing on a part. The FELT-B numbers its 18 cages'
 ports 1 to 36, with a CSFP taking both of a cage's pair and an SFP only the odd
 one, so each cage part carries `interfaces: [port-1, port-2]` and the module

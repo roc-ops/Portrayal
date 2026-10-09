@@ -1,0 +1,51 @@
+format: 1
+kind: component
+name: c13-outlet
+version: 1.0.0
+class: inlet
+profile: power
+conforms: c13-outlet
+interface: iec-c13
+description: >-
+  An IEC 60320 C13 outlet as a PDU moulds it - the well a C14 plug's shroud enters,
+  rounded at one end and chamfered at the other, with the C13 nose and its three
+  contacts standing in it to the face. Drawn with its chamfered end uppermost.
+size: {w: 30.4, h: 22, d: 18}
+size-confidence: {w: registry, h: registry, d: estimated}
+attrs: {outlet: iec-60320-c13, rating-a: 10}
+provenance:
+  size: >-
+    registry - the `c13-outlet` entry of spec/schemas/standards.yaml: the well 30.4
+    by 22.0, R5.5 at one end and 5.4 chamfers at the other, the nose 22.9 by 15.7
+    with the same two corners chamfered (4.5) and its contact slots 6.2 by 3.6. The
+    outline is traced off the vector geometry of Eaton drawing 9001-22301 (the
+    EVMI2130X, scale 0.400, read at 1.133858 pt/mm); the SCHURTER 4751 strip
+    block's drawing gives the same nose and a well within 0.5.
+  depth: >-
+    estimated - the registry's 18.0, the C13 nose length (c13-plug, Volex V1625, 18
+    MIN): the nose is what a C14's shroud swallows, so the well is at least that
+    deep, and a C14 shroud, 17.00 on std/c14-inlet@1's Adam Tech S00087C rev D,
+    goes in without bottoming out. Neither outlet drawing dimensions the depth.
+  relief: >-
+    registry - THE WELL IS THE OUTLINE, NOT ITS BOX. `relief.cavity` names the
+    `recess` path, the well's outline with the nose cut out of it (evenodd), so the
+    3D walls follow the rounded end, the two chamfers and the nose, which stands 18
+    from the floor to the face (kit/relief.js outlineWalls). Its contact slots are
+    painted on its top, not sunk.
+  rating: >-
+    datasheet - 10 A, the IEC C13 coupler's rating; Eaton's 9001-22301 prints 10A
+    PER C13 for its G4 outlets.
+  interface: >-
+    `iec-c13` in spec/schemas/connectors.yaml, standard `c13-outlet`: a C14 cord
+    end (generic/c14-plug@1) mates it, seating at `mate`, the centre of the well.
+  orientation: >-
+    the part is drawn with its chamfered end up, as on the standing Eaton G4; a
+    placement turns it where a panel holds it otherwise.
+elements:
+  recess: {at: [0, 0], size: [30.4, 22], class: inlet}
+relief:
+  wall: '#1a1b1d'
+  cavity: recess
+connection-points:
+  mate: {at: [15.2, 11], direction: front}
+skins: [default]
