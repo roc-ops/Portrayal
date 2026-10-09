@@ -81,7 +81,7 @@ simpler model:
 | source | what it showed |
 |---|---|
 | APC AR203A (FS datasheet, APC manual) | four-post, 44U, square 9.5 mm holes for M6 cage nuts, a FIXED 740 mm rail depth from its side brackets; static load only; numbered every third hole at mid-U, and one manual figure that may show labels both ways |
-| APC AR201 (FS datasheet, Schneider sheet) | two-post, 45U, #12-24 tapped holes, devices centre-mounted to 1048 mm deep; tool-less blanks do not fit it (FS blanking matrix) |
+| APC AR201 (FS datasheet, Schneider installation sheet 990-6040B) | two-post, 45U, #12-24 tapped holes, devices centre-mounted to 1048 mm deep; tool-less blanks do not fit it (FS blanking matrix) |
 | FS-OR4P-45U (FS datasheet and QSG, discontinued) | an ADJUSTABLE rail depth, 22 to 40 in in 1 in steps, set by index pairs; casters and levelling feet but no rolling rating |
 | FS-OR2P-45U (FS datasheet, discontinued) | keyhole slots on the side of each upright at 311 mm pitch, the pitch the 42U FS vertical duct's brackets use |
 | APC NetShelter SV, SX Gen2, SX Advanced (installation manuals, submittal drawings) | rail depth adjustable in steps (10 mm SV, 6 mm SX Gen2, 13 mm SX Advanced) about a factory setting; front door-to-rail wiring clearance (14.0, 60.96 and 101.8 to 103.6 mm); front door single and perforated, rear door split; side panels one or two per side; roof cable openings; zero-U accessory channels for tool-less PDUs, two or four, movable; casters and levelling feet; static AND rolling loads (SX Gen2 1818 and 1020 kg); joining brackets at 600 mm centres |
@@ -170,6 +170,7 @@ rails:
   - {id: rear, depth: {fixed: 740}}   # mm, front rail to rear rail
 max-device-depth: 740
 outer: {w: 600, h: 2130, d: 747}
+weight-kg: 40.32                    # the frame's own weight (section 5)
 ```
 
 The figures are AR203A's from its FS datasheet and APC manual. Its opening and
@@ -210,8 +211,9 @@ unless a product is named beside them.
 - **Width.** 19 in nominal everywhere in the intake; 23 in is an SX Gen2
   option and the reason the FS-EB extender brackets exist. `opening` (mm clear
   between the rails) and `hole-centres` (mm, left hole line to right) are
-  written only where a source prints them: the AR201 manual gives 465 and 450,
-  and the FS-OR datasheets 465 and 450 to 452. Where none does, the EIA-310
+  written only where a source prints them: AR201's installation sheet
+  (990-6040B) gives 465 and 450, the FS-OR datasheets 465 and 450 to 452, and
+  the FS-DR-8U, FS-HWM-4U and FS-SVWM-4U datasheets 465 and 450 or 451. Where none does, the EIA-310
   figures are assumed and the product says so in `gaps`.
 - **`max-device-depth`** is the maker's usable depth, the rack file's
   `usableDepth`. On a cabinet it is what the doors allow, not the rails.
@@ -329,7 +331,14 @@ base:
   levellers: 4
   anchors: {holes: 4, dia: 18, rows: 905}   # mm between the front and rear rows
 load: {static-kg: 1818, rolling-kg: 1020}
+weight-kg: 40.32
 ```
+
+- **`weight-kg`** is the rack's own weight, as a device's `chassis.weight-kg`
+  is a device's, written only where a source gives it (AR203A 40.32 kg in its
+  APC manual; FS-WMNR-D2P6U 10.95). It is what the DCIM export writes as the
+  rack's `weight` (decision 5), and it is not counted against `load`, which is
+  what the rack carries.
 
 - **`load`** is the maker's static and rolling rating. A rating not stated is
   not written (the FS-OR4P-45U has casters and no rolling figure), and the
@@ -439,9 +448,12 @@ bundles, swaps and fields work as every item's do:
   a `rack-face` part, and a `rack-face` part is never held (7.3). An item that
   carries both is kept as written, never repaired, and refused by fit until one
   is removed.
-- **`ru` is kept, and is the host's bottom U.** The kit writes it and keeps it
-  in step when the host moves, as managers on a host are settled today. Every
-  reader that sorts or labels by U goes on working, and `heldBy` is what decides.
+- **`ru` is kept.** A held item that is not `mount: rack` (a DIN rail
+  switch, a desktop box, something in a drawer) has its host's bottom U as its
+  `ru`: the kit writes it and keeps it in step when the host moves, as managers
+  on a host are settled today, so every reader that sorts or labels by U goes
+  on working, and `heldBy` is what decides. A `mount: rack` device standing on
+  a shelf keeps its own U and claims its units (7.3).
 - **`face`** is the host's face.
 - **A host removed** leaves its items where they were, unhosted and refused by
   fit until they are placed again, said with a note; it never deletes them, as
@@ -513,10 +525,12 @@ products need beyond today's are added in one rack file version, 4.**
   exactly as today.
 - **Choosing a product** writes `ref: "<vendor>/<name>@<major>"` and copies the
   product's numbers into the frame: `kind` from `form`, `heightRU`,
-  `numbering`, `holes`, `railDepth` (the factory or fixed depth) and
-  `usableDepth` (`max-device-depth`). The file still stands alone, so a page
-  without the catalogue draws the same frame. Product-only data (channels,
-  doors, points, load) is read from the catalogue by `ref`.
+  `numbering` (and `startU` from version 4), `holes` (`style` and `thread`),
+  `railDepth` (the factory or fixed depth), `usableDepth`
+  (`max-device-depth`), and from version 4 `width` and the `options` the rack
+  takes. The file still stands alone, so a page without the catalogue draws
+  the same frame. Product-only data (channels, doors, points, load, weight, and
+  a hole's `size` and `fixing`) is read from the catalogue by `ref`.
 - **While `ref` is set**, a number the product fixes is not edited; the rail
   depth is edited within the product's range and step. Customising a product
   sets `ref` to `null` and keeps the numbers: it becomes a generic frame.
@@ -529,9 +543,10 @@ products need beyond today's are added in one rack file version, 4.**
 existing key, so a product whose numbers today's frame can hold needs no format
 change: AR203A (four-post, square, fixed 740) and AR201 (two-post, tapped
 12-24) are such products. Seven keys do not fit version 3, and an older reader
-mishandles each. Six it drops (frame keys through `normalizeFrame`, item keys
+mishandles each. Five it drops (frame keys through `normalizeFrame`, item keys
 through `readItem`) and erases on its next save, which is the case #921 bumped
-for. The seventh, `channel`, it keeps, since `readZeroU` keeps a zero-U entry
+for. One it rewrites: `normalizeFrame` turns `holes.style: round` into
+`square`, and saves that. The seventh, `channel`, it keeps, since `readZeroU` keeps a zero-U entry
 whole, but it misreads it: it stands the part outside at its point, as the 1 to
 2 bump was for a manager an older page would misdraw:
 
@@ -619,8 +634,10 @@ The five questions this note left open were each decided as it recommended:
    NetShelter cabinets go under it, and FS lists them through #936.
 3. **The setback order** is the item's own `setback`, then the device's
    default ear position, then the rack's default, then 0, flush (section 8).
-4. **A hosted item keeps `ru`,** its host's bottom U, written by the kit and
-   kept in step with the host; `heldBy` is what decides (section 7.2).
+4. **A hosted item keeps `ru`.** One that is not `mount: rack` has its host's
+   bottom U, written by the kit and kept in step with the host, and `heldBy` is
+   what decides; a `mount: rack` device on a shelf keeps its own U and claims
+   its units (sections 7.2 and 7.3).
 5. **The DCIM rack type export** is built with the open frames (step 2): NetBox
    rack types under `library/exports/`, writing `weight_unit: kg` beside
    `weight` and `max_weight` (the static load), and leaving the cooling fields
@@ -644,16 +661,17 @@ published file or a saved rack file uses it.
 | a rack's name unique across racks and devices in its vendor | refs | a ref resolves without its kind |
 | the rack ref form `<vendor>/<name>@<major>` in `frame.ref` | rack file | saved files carry it |
 | `form` and its eight values, `desktop-frame` among them | rack products, `rack.json`, DCIM export | published, and mapped to NetBox and Nautobot slugs |
-| `numbering` (`direction`, `start`), `width`, `opening`, `hole-centres`, `holes` (`style` with `round`, `size`, `fixing`), `rails` (`at`, `depth` as `fixed` or `min`, `max`, `step`, `factory`), `max-device-depth`, `outer`, `posts` | rack products | the frame vocabulary every product writes |
+| `numbering` (`direction`, `start`), `width`, `opening`, `hole-centres`, `holes` (`style` with `round`, `size`, `fixing`), `rails` (`id` with `front` and `rear`, `at`, `depth` as `fixed` or `min`, `max`, `step`, `factory`), `max-device-depth`, `outer`, `posts` | rack products | the frame vocabulary every product writes |
 | `points`, `channels` (`id`, `point`, `where`, `ru`, `slots`, `moves`) | rack products | the rack file names channels by id |
 | `slots` (`interface`, `first`, `pitch`, `count`, `at`) on a product channel | rack products | the PDU fit check reads it |
 | the rack-file key for a PDU hung on brackets | rack file | not defined here; it comes with #939 and is one-way when it does |
 | `vcm-keyhole`, proposed | connectors registry | once given, ducts and uprights carry it |
-| `enclosure`: `doors` (`face`, `leaves`, `kind` with `perforated`, `solid`, `glass`, `mesh`, `open-area`, `hinge`, `reversible`, `swing`, `clearance`, `lock`), `panels` (`per-side`, `split`, `removable`, `lock`), `roof`, `entries` (`where`, `kind` with `brush`, `knockout`, `cutout`, `open`, `box`) | rack products | read by fit and the catalogue |
+| `enclosure`: `doors` (`face`, `leaves`, `kind` with `perforated`, `solid`, `glass`, `mesh`, `open-area`, `hinge`, `reversible`, `swing`, `clearance`, `lock`), `panels` (`per-side`, `split`, `removable`, `lock`), `roof` (`removable`), `entries` (`where`, `kind` with `brush`, `knockout`, `cutout`, `open`, `box`) | rack products | read by fit and the catalogue |
 | `options` (`id`, and the numbers an option changes), and a depth range's `with` | rack products, rack file | a rack file names the options it takes |
-| `base` (`casters`, `levellers`, `anchors`), `load` (`static-kg`, `rolling-kg`), `baying` (`centres`, `brackets`, `trim`) | rack products | read by checks and later rows |
+| `base` (`casters`, `levellers`, `anchors`), `load` (`static-kg`, `rolling-kg`), `weight-kg`, `baying` (`centres`, `brackets`, `trim`) | rack products | read by checks and later rows |
 | `hosts:` with `surface`, `cavity`, `rail`, its `box` frame of reference, `support`, `opens`, `rail` profiles (`ts35-7.5`, `ts35-15`), `set-back`, `load-kg` | device manifests | a saved rack names host ids; the frame of reference places items |
 | `heldBy` (`item`, `at`, `x`, `z`, `turn`), its name chosen apart from the manager's host, and the rule that `on` and `heldBy` never share an item | rack file | saved rack files carry it |
+| a held item's `ru`: its host's bottom U, written by the kit, unless it is `mount: rack`, when it keeps its own | rack file, kit | readers sort and label by it |
 | a held item's DCIM rows: in the rack with no position and no face, and a comment line saying what holds it | DCIM export | an imported device keeps where it was put |
 | `chassis.ears.holes` | device manifests | fit refuses on it |
 | `data-class="host"` | drawings | consumers of the drawing read it |
