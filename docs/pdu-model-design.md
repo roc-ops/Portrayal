@@ -623,6 +623,8 @@ Each was decided 2026-10-08, as this note recommended.
 7. **L154 moves to attachment points now.**
 8. **The Tripp Lite series models and their parts go under `eaton/`.**
 9. **The G4 PDUs stay `specified: false`** until a source gives their draw.
+10. **The eight class names of section 2.2 are accepted as tabled,** including
+    where they part from vendor names (the EVMI2130X is `metered-branch`).
 
 Still open:
 
