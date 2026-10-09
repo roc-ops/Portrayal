@@ -104,7 +104,10 @@ def test_every_outlet_type_is_one_both_targets_list():
     assert set(dx.PART_OUTLET.values()) <= dx.OUTLET_TYPES
     # iec-60320-c13 and eaton-c39: NetBox choices.py at 2b3f4b48, Nautobot at
     # c77e4255 (the Eaton EVMI2130X, the first rack PDU).
-    assert dx.OUTLET_TYPES == {"dc-terminal", "other", "iec-60320-c13", "eaton-c39"}
+    # iec-60320-c19 and nema-5-20r: NetBox choices.py at 64ce9e2d, Nautobot at
+    # 3edb1fca (#933, std/c19-outlet and std/nema-5-20r).
+    assert dx.OUTLET_TYPES == {"dc-terminal", "other", "iec-60320-c13", "eaton-c39",
+                               "iec-60320-c19", "nema-5-20r"}
     assert all(dx.PART_OUTLET.get(r) == "other" for r in dx.OUTLET_LABEL), \
         "OUTLET_LABEL labels an outlet that is not `other`"
 

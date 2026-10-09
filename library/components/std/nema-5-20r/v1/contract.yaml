@@ -1,0 +1,86 @@
+format: 1
+kind: component
+name: nema-5-20r
+version: 1.0.0
+class: inlet
+profile: power
+conforms: nema-5-20r
+description: >-
+  A NEMA 5-20R single receptacle face, 20 A 125 V, as a rack PDU carries it: a
+  flat face with the U earth hole up, the line slot on the left and the T
+  neutral slot on the right. The T is the 5-20 key, and it takes a 5-15P or a
+  5-20P.
+size: {w: 27.0, h: 27.0}
+size-confidence: {w: drawing, h: drawing}
+attrs: {outlet: nema-5-20r, rating-a: 20, accepts: '5-15P, 5-20P'}
+unplaced: >-
+  No device in the library places it yet. The Eaton (Tripp Lite) PDUMH20NET's sixteen
+  5-15/20R outlets are the first that will, when that PDU is modelled (#933).
+provenance:
+  size: >-
+    drawing - Qualtek 739W-X2/30 "Snap-in 20 Amp T-slot receptacle", drawn
+    05-14-07 (https://www.qualtekusa.com/images/AC_Receptacles/pdfs/739wx230.pdf),
+    face view: 27 x 27, dimensioned. The receptacle snaps into a 24.5 +/-0.2
+    square cutout behind it. NEMA WD 6, which governs the configuration, is
+    not held; the registry entry `nema-5-20r` is this drawing's face.
+  method: >-
+    drawing - the face view on 739W-X2/30 is vector (Adobe Illustrator). The
+    dimensioned 27 reads 79.68 pt across and 79.74 pt down, 2.951 pt/mm, and
+    the holes below are read off the paths at that scale.
+  holes: >-
+    drawing, with one estimate. The earth hole is a U with a flat top and a
+    round bottom, 5.28 x 5.31 at the top centre, inside a lead-in 6.51 x 6.49.
+    The line slot is 2.22 x 6.99, on the left. The T neutral slot is drawn only
+    as its lead-in outline: a stem 3.39 x 9.80 and an arm 5.20 x 3.41 to the
+    right. ITS WIDTH IS ESTIMATED: it is taken as the line slot's 2.22, centred
+    in that outline, so the stem is 2.22 x 8.6 and the arm 2.2 high. The holes
+    are drawn at the size of the hole, not the lead-in.
+  config: >-
+    drawing - the 5-20R configuration: the neutral slot is the T, so a 5-20P's
+    turned neutral blade and a 5-15P's straight one both enter it. The plug
+    face is the mirror image: generic/nema-5-20p-plug@1 has its turned blade
+    on the left when seen face on.
+  depth: >-
+    estimated - each hole is a `pocket` as deep as the blade a seated plug
+    pushes into it: 17 for the two slots and 21 for the earth hole, the 0.67
+    in [17 mm] blades and the 0.83 in [21 mm] earth pin that Leviton
+    CATSTD-05366-00C-D01 rev 1 (5366-C, 5-20P) dimensions. The receptacle body
+    behind the face (5 + 15 on 739W-X2/30) is not built: a face part has no
+    `size.d`, which would sink a pit behind the whole 27 square
+    (size-d-on-a-fixed-part).
+  known-3d-simplification: >-
+    A KNOWN 3D SIMPLIFICATION. relief.js punches each pocket's mouth in the
+    hole's own shape, so the U and the T read correctly face on. It walls the
+    pocket along the node's bounding box, though, because outline walls are
+    built only for a part's `relief.cavity`, and a part has one. Behind the T's
+    mouth, then, is a box 7.4 x 8.6. Walling a `shape: true` pocket along its
+    own outline is a relief.js change, proposed separately; when it lands,
+    these three pockets take `shape: true` and nothing else moves.
+  interface: >-
+    NO `interface:` YET. No plug in the library seats here as a cord end:
+    generic/nema-5-20p-plug@1 is the face of a PDU's input plug, drawn face on,
+    not a cord end seen from its cable.
+elements:
+  face: {at: [0, 0], size: [27.0, 27.0], class: inlet}
+relief:
+  wall: '#1a1b1d'
+  features:
+    - node: hole-earth
+      pocket: 21
+      confidence: estimated
+      source: >-
+        Leviton CATSTD-05366-00C-D01 rev 1, the 5-20P earth pin 0.83 in [21 mm]
+        long: as deep as a seated pin reaches.
+    - node: slot-line
+      pocket: 17
+      confidence: estimated
+      source: >-
+        Leviton CATSTD-05366-00C-D01 rev 1, the 5-20P blades 0.67 in [17 mm]
+        long: as deep as a seated blade reaches.
+    - node: slot-neutral
+      pocket: 17
+      confidence: estimated
+      source: >-
+        Leviton CATSTD-05366-00C-D01 rev 1, the 5-20P blades 0.67 in [17 mm]
+        long: as deep as a seated blade reaches.
+skins: [default]

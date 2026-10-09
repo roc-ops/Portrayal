@@ -31,6 +31,9 @@ interfaces:
   # that mates each is a generic plug; the far end of the cord is not a part.
   iec-c14: {standard: c14-inlet, note: 'IEC 60320-1 C14 appliance inlet; generic/c13-plug@1 mates it. A C15 or C17 connector is a different interface'}
   iec-c20: {standard: c20-inlet, note: 'IEC 60320-1 C20 appliance inlet; generic/c19-plug@1 mates it. A C21 connector is a different interface'}
+  # The PDU side (#933): an outlet is a slot for the plug end of a jumper. The C13
+  # outlet's `iec-c13` arrives with std/c13-outlet (the Eaton EVMI2130X branch).
+  iec-c19: {standard: c19-outlet, note: 'IEC 60320-3 sheet J C19 outlet, a PDU socket; generic/c20-plug@1 mates it. Eaton C39 also takes a C20 and is its own part'}
   saf-d-grid: {standard: saf-d-grid, note: 'Anderson Power Products Saf-D-Grid receptacle (drawing 115171S1 rev 12; no IEC standard governs it); it sits in a C14 cutout but a C13 does not mate it'}
   # USB receptacles (#786, docs/connectors-usb-design.md). The cable plug that
   # mates each is a generic plug; the far end of the cable is not a part. An

@@ -1,0 +1,118 @@
+format: 1
+kind: component
+name: c20-plug
+version: 1.0.0
+class: port
+mates: iec-c19
+conforms: c20-plug
+profile: networking
+description: >-
+  A moulded straight IEC C20 plug connector on its cord, the end of a rack
+  jumper that goes into a PDU's C19 outlet, seen from the cable end as a front
+  elevation sees it seated: the overmould, the strain relief and a short
+  straight stub of cord whose diameter is the cable-od field. Seats in an
+  `iec-c19` outlet at its own mate point.
+size: {w: 33.75, h: 25.75}
+size-confidence: {w: drawing, h: drawing}
+attrs: {media: c20, connector: c20}
+fields:
+  cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 9.65}
+  jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    drawing - registry `c20-plug`. Volex Power Products catalogue, Aug-2025,
+    cat. no. VAC20S "3-pole Straight Plug Receptacle", p.283: the body
+    33.75 +/-0.50 on the top view and 25.75 +/-0.50 on the side view, and the
+    overall length 83.75 +/-1.5. The face view dimensions the shroud's inside
+    as 29 +0.5/-0 x 21 +0.5/-0 (R3 MAX) and the pins 13 +/-0.2 apart with the
+    earth 8 +/-0.2 off their line. The catalogue gives no drawing number or
+    revision. Anderson Power Products DS-SDG REV 19 p.16 draws a moulded C20
+    plug 34.0 x 26.0 x 86.8, which agrees to 0.3 across.
+  no-depth: >-
+    NO `size.d`, DELIBERATELY, as on generic/c19-plug@1: a `size.d` on a part
+    with no `behaviour` is built as a pit behind its box. The length is in the
+    registry entry and in the relief.
+  orientation: >-
+    DRAWN IN THE OUTLET'S UNROTATED CONVENTION, long axis across, as
+    std/c19-outlet@1 draws it. A C20 has no keying chamfer; polarity is by the
+    pins, which are on the face inside the outlet and not drawn.
+  seated-depth: >-
+    RULING - THE SHROUD GOES TO THE FLOOR OF THE WELL THE OUTLET MODELS, the
+    rule generic/c19-plug@1 follows in an inlet, turned round: here the plug's
+    shroud is the hollow part and the outlet's nose fills it.
+    std/c19-outlet@1's well is 20 deep, so the plug stands 83.75 - 20 = 63.75
+    in front of the outlet's face: 1.3 of shroud, 32.8 of overmould and 29.65
+    of strain relief.
+  shroud: >-
+    scaled - the front block of VAC20S's top view, 21.3 long, calibrated on
+    the printed 83.75 (5.73 px/mm). Its outer corner radius, 4, is
+    estimated; the drawing dimensions only the inside's R3 MAX.
+  body: >-
+    scaled - the overmould holds the full 33.75 for 32.8 behind the shroud on
+    the same view, with ribs that are not built.
+  relief-boot: >-
+    scaled - the strain relief, 29.65 to the dimensioned end, tapering from
+    about 19 to about 11 across. It is built as one cylinder 15 across.
+  stub: >-
+    estimated - the stub rule, docs/connectors-coax-design.md section 5: a
+    straight run of cord 30 long starting where the strain relief ends.
+  cable-od: >-
+    datasheet - SJT 3 x 14 AWG, the cord generic/c19-plug@1 defaults to and
+    one VAC20S lists (p.283, SJT + H05VV-F, 3 x AWG 14). Belden 19354
+    technical data sheet, revision 0.525, 09-07-2025, p.1, 0.380 in (9.65 mm)
+    nominal. A placement sets the cord it carries.
+  jacket-colour: >-
+    a FIELD, black by default, as on generic/c13-plug@1.
+  contacts: >-
+    NOT DRAWN, ON PURPOSE: the pins are on the plug's front, inside the
+    outlet; a front elevation of a seated plug looks at the cable end.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract
+    (spec/tests/test_behaviour.py).
+  axis: >-
+    derived - `mate` and `cable` share one point, the centre of the body
+    (16.875, 12.875).
+  dcim: >-
+    NO DCIM ROW, as generic/c13-plug@1 and generic/c19-plug@1 have none: a
+    cord end is the far end of a jumper, not a port of the device it is drawn
+    on. A PDU whose own input is a fixed cord ending in a C20 states that with
+    its cord part.
+elements: {}
+relief:
+  features:
+    - node: shroud
+      out: 1.3
+      shape: true
+      color: '#1c1c1c'
+      confidence: estimated
+      source: >-
+        Volex catalogue Aug-2025 p.283 (VAC20S), the shroud 21.3 long (scaled),
+        less the 20 std/c19-outlet@1 models its well deep. The 1.3 is what the
+        ruling in provenance.seated-depth leaves in front of the outlet face.
+    - node: body
+      lift: 1.3
+      out: 34.1
+      shape: true
+      color: '#26282b'
+      confidence: estimated
+      source: >-
+        Volex catalogue Aug-2025 p.283 top view, scaled on the printed 83.75:
+        the overmould at its full 33.75 for 32.8 behind the shroud.
+    - node: relief-boot
+      lift: 34.1
+      cyl: 29.65
+      color: '#202225'
+      confidence: estimated
+      source: >-
+        Volex catalogue Aug-2025 p.283 top view: the strain relief, to the
+        dimensioned 83.75 end, built as one 15 cylinder over a 19 to 11 taper.
+    - node: stub
+      lift: 63.75
+      cyl: 30
+      confidence: estimated
+      source: the stub rule, docs/connectors-coax-design.md section 5
+connection-points:
+  mate: {at: [16.875, 12.875], direction: front}
+  cable: {at: [16.875, 12.875], direction: front, 'on': stub}
+skins: [default]

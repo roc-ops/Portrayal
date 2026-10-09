@@ -1,0 +1,131 @@
+format: 1
+kind: component
+name: c14-plug
+version: 1.0.0
+class: port
+conforms: c14-plug
+profile: networking
+description: >-
+  A moulded straight IEC C14 plug connector on its cord, the end of a rack
+  jumper that goes into a PDU's C13 outlet, seen from the cable end as a front
+  elevation sees it seated: the shroud, keyed by the two cut corners on its
+  earth side, the overmould, the strain relief and a short straight stub of
+  cord whose diameter is the cable-od field.
+size: {w: 29.0, h: 21.0}
+size-confidence: {w: drawing, h: drawing}
+attrs: {media: c14, connector: c14}
+fields:
+  cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 8.33}
+  jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
+unplaced: >-
+  seated by configurations downstream of this library (docs/pluggables-design.md
+  decision 2), once a C13 outlet presents `iec-c13`; until then nothing offers it,
+  see provenance.mates
+provenance:
+  size: >-
+    drawing - registry `c14-plug`. Volex Power Products catalogue, Aug-2025,
+    cat. no. VNBC14S "3-pole Straight Plug Receptacle", face view on the
+    catalogue's p.271: the shroud 29 +0/-0.5 x 21 +0/-0.5 outside and
+    24 +0.5/-0 x 16 +0.5/-0 inside, its earth-side corners cut at 45 degrees
+    (+0/-3), and the pins 14.0 +/-0.2 apart with the earth 4.0 +/-0.2 off
+    their line. The side view dimensions the overall length 59. The
+    catalogue gives no drawing number or revision.
+  mates: >-
+    NO `mates:` YET, ON PURPOSE. The interface this plug mates is a C13
+    OUTLET, `iec-c13`, and the C13 outlet is being made a std/ part with that
+    interface on the Eaton EVMI2130X branch (eaton/c13-outlet becomes
+    std/c13-outlet). Naming an interface the registry does not list fails
+    lint, so the key is added when that lands; nothing else here moves.
+  no-depth: >-
+    NO `size.d`, DELIBERATELY, as on generic/c13-plug@1.
+  orientation: >-
+    DRAWN IN THE OUTLET'S UNROTATED CONVENTION: eaton/c13-outlet@1 draws its
+    chamfered end up, so the shroud's cut corners are at the top. The Volex
+    face view is drawn with the long axis vertical and the earth to the
+    right; it is turned a quarter here.
+  seated-depth: >-
+    RULING - THE SHROUD GOES TO THE FLOOR OF THE WELL THE OUTLET MODELS, as on
+    generic/c20-plug@1. The C13 outlet's well is 18 deep (eaton/c13-outlet@1,
+    from the C13 nose's 18 MIN, Volex V1625), so the plug stands 59 - 18 = 41
+    in front of the outlet's face: 0.3 of shroud, 24.0 of overmould and 16.7
+    of strain relief.
+  shroud: >-
+    scaled - the shroud is 18.3 long on the VNBC14S side view, calibrated on
+    the printed 59 (11.15 px/mm on a 4x enlargement of the catalogue raster,
+    which is 2.8 px/mm as embedded; good to about 0.4). The cut corners' leg,
+    5.0, is estimated: the drawing gives their angle and not their size.
+    The two other corners take R3, the R3.0 MAX the drawing prints.
+  body: >-
+    scaled - the overmould is 26.6 across the long axis for 8.3 behind the
+    shroud and then tapers over 15.7 to the strain relief. It is built as two
+    steps, as generic/c13-plug@1's is: 26.6 x 19.3 for the first 8.3, then
+    18.9 x 13.7 for the taper. The short-axis figures (19.3, 13.7) are
+    estimated in the long axis's proportion; no view held dimensions them.
+  relief-boot: >-
+    scaled - the strain relief, 16.7 to the dimensioned 59 end and about
+    11.2 across, with a collar at its end that is not built.
+  stub: >-
+    estimated - the stub rule, docs/connectors-coax-design.md section 5.
+  cable-od: >-
+    datasheet - SJT 3 x 18 AWG, which VNBC14S lists (catalogue p.270), the
+    cord generic/c13-plug@1 defaults to: Belden 19348 technical data sheet,
+    revision 0.388, 09-07-2025, p.1, 0.328 in nominal (8.33 mm converted).
+  jacket-colour: >-
+    a FIELD, black by default, as on generic/c13-plug@1.
+  contacts: >-
+    NOT DRAWN, ON PURPOSE: the pins are inside the outlet.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract.
+  axis: >-
+    derived - `mate` and `cable` share one point, the centre of the shroud
+    (14.5, 10.5).
+  dcim: >-
+    NO DCIM ROW, as generic/c13-plug@1 has none: a cord end is the far end of
+    a jumper, not a port of the device it is drawn on.
+elements: {}
+relief:
+  features:
+    - node: shroud
+      out: 0.3
+      shape: true
+      color: '#1c1c1c'
+      confidence: estimated
+      source: >-
+        Volex catalogue Aug-2025 p.271 (VNBC14S), the shroud 18.3 long
+        (scaled), less the 18 the C13 outlet models its well deep. The 0.3 is
+        what the ruling in provenance.seated-depth leaves in front of the
+        outlet face.
+    - node: body
+      lift: 0.3
+      out: 8.6
+      shape: true
+      color: '#26282b'
+      confidence: estimated
+      source: >-
+        Volex catalogue Aug-2025 p.271 side view, scaled on the printed 59:
+        the overmould at its full 26.6 for 8.3 behind the shroud.
+    - node: body-rear
+      lift: 8.6
+      out: 24.3
+      color: '#2c2e32'
+      confidence: estimated
+      source: >-
+        Volex catalogue Aug-2025 p.271 side view, scaled: the 15.7 taper to
+        the strain relief, built at its middle section (provenance.body).
+    - node: relief-boot
+      lift: 24.3
+      cyl: 16.7
+      color: '#202225'
+      confidence: estimated
+      source: >-
+        Volex catalogue Aug-2025 p.271 side view, scaled: the strain relief,
+        16.7 to the dimensioned 59 end, about 11.2 across.
+    - node: stub
+      lift: 41.0
+      cyl: 30
+      confidence: estimated
+      source: the stub rule, docs/connectors-coax-design.md section 5
+connection-points:
+  mate: {at: [14.5, 10.5], direction: front}
+  cable: {at: [14.5, 10.5], direction: front, 'on': stub}
+skins: [default]

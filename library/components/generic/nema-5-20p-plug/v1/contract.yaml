@@ -1,0 +1,71 @@
+format: 1
+kind: component
+name: nema-5-20p-plug
+version: 1.0.0
+class: inlet
+conforms: nema-5-20p-plug
+profile: power
+description: >-
+  A NEMA 5-20P straight-blade plug (20 A 125 V, two pole, three wire,
+  grounding), face on: the grip, the face, the round earth pin, the line blade
+  and the neutral blade turned a quarter - the 5-20 key. The input plug at the
+  end of a 120 V 20 A PDU's cord.
+size: {w: 38.9, h: 38.9}
+size-confidence: {w: drawing, h: drawing}
+attrs: {plug: nema-5-20p, rating-a: 20, rating-v: 125}
+unplaced: >-
+  No device in the library places it yet. The Eaton (Tripp Lite) PDUMH20NET ships an
+  L5-20R-to-5-20P adapter for its L5-20P cord; a PDU whose own cord ends in a 5-20P is the
+  first that will place it (#933).
+provenance:
+  size: >-
+    drawing - registry `nema-5-20p-plug`. Leviton CATSTD-05366-00C-D01 rev 1
+    "5366-C 20A plug NEMA 5-20 catalog drawing", scale 1:1
+    (https://frpublish.leviton.com/content/dam/leviton/commercial-industrial/product_documents/dimensional_drawing/CATSTD-05366-00C-D01.pdf):
+    the body 1.53 in [38.9 mm] across, the face 1.39 in [35.3 mm],
+    dimensioned. NEMA WD 6 is not held.
+  method: >-
+    drawing - the sheet is vector and 1:1; the face view reads 38.88 across at
+    2.835 pt/mm, the printed 38.9, and the figures below are read off it.
+  pins: >-
+    drawing, with one estimate. The earth pin is 4.76 across, its centre 8.7
+    above the face centre. The line blade is 1.55 x 6.35, upright, 6.3 right
+    of centre and 3.2 below. The neutral blade's outline is not separable
+    from the moulded legend beside it on the face view, so it is ESTIMATED.
+    It is the line blade turned a quarter, 12.65 left of the line blade's
+    centre: the 1/2 in that a 5-15's two blades are apart. The plug face is
+    the mirror of the receptacle's, so the turned blade is on the left here
+    and the T is on the right on std/nema-5-20r@1.
+  blade-length: >-
+    drawing - the side view: the blades 0.67 in [17 mm] and the earth pin
+    0.83 in [21 mm].
+  no-text: >-
+    The moulded maker's name on the face is not drawn.
+  no-depth: >-
+    NO `size.d`, as on every generic plug: the body behind the face, 1.98 in
+    [50.4 mm] long, is not built.
+  dcim: >-
+    PART_POWER maps it to `nema-5-20p`. A device draws either its cord or
+    its plug, not both.
+elements:
+  face: {at: [0, 0], size: [38.9, 38.9], class: inlet}
+relief:
+  features:
+    - node: pin-g
+      cyl: 21
+      color: '#b08d57'
+      confidence: drawing
+      source: Leviton CATSTD-05366-00C-D01 rev 1 side view, the earth pin 0.83 in [21 mm]
+    - node: blade-line
+      out: 17
+      color: '#b08d57'
+      confidence: drawing
+      source: Leviton CATSTD-05366-00C-D01 rev 1 side view, the blade 0.67 in [17 mm]
+    - node: blade-neutral
+      out: 17
+      color: '#b08d57'
+      confidence: estimated
+      source: >-
+        Leviton CATSTD-05366-00C-D01 rev 1 side view, the blade 0.67 in [17 mm];
+        estimated only because the blade's place on the face is (provenance.pins)
+skins: [default]
