@@ -166,6 +166,9 @@ The sources settle more than the question assumed.
   lights when the outlet is live, and say nothing of a second colour.
 - The EVMI2130X has no outlet LED because it has no outlet switching: there is
   no state to show.
+- A metered-outlet (MO) model has outlet LEDs but no switching, so its outlets
+  declare no state vocabulary and what its lamps show is undecided. None of
+  the four devices is MO; the first one settles it.
 
 So **every PDU that can switch an outlet in scope has a lamp for it**, and the
 state is drawn on the real lamp:
@@ -193,7 +196,11 @@ change; the state passes through four places that each key by one path.
 
 1. **The 2D marks path** (`kit/marks.js apply`) puts `state-<name>` only on
    what a selector matches. Applying a state to an outlet path must also apply
-   it to every element whose `data-for` names that path. A `for:` value is
+   it to every element whose `data-for` names that path AND that declares a
+   state vocabulary (`data-states`): a lamp. Other elements carry `data-for`
+   too, a seated occupant (a `generic/c14-plug@1` in the outlet) and silkscreen
+   marks among them, and the expansion leaves them alone; "an outlet with a
+   bound lamp" below means exactly this test. A `for:` value is
    written as a placement id, and `data-for` carries it bare (a cross-view
    target gets a leading slash), so the binding reaches top-level placements
    only: an outlet inside a module bay would need its full path, and no PDU in
@@ -209,11 +216,20 @@ change; the state passes through four places that each key by one path.
    unlit; with a declared off colour it cannot show the G4 red, and the cleared
    state is what `pushStates` sends to 3D. The chip must set `state-off` when
    the element declares a colour for it, and clear only when it does not.
+   The chips also bypass `kit/marks.js`: `chips` writes `state-<name>` on the
+   clicked element itself, `liveStates` reads the classes back off the 2D
+   drawing, and `pushStates` hands them to `viewer.setStates`. So a chip on an
+   outlet with bound lamps applies the same outlet-to-lamp expansion in 2D,
+   writing the class on each lamp as well, and `liveStates` then picks up the
+   lamp paths; without it a chip on A1 would light nothing, or 2D and 3D would
+   disagree.
 4. **`kit/states.js`** says `off` is the absence of a state (its `paints`
    answers true for `off` without asking). The comment and the shortcut become
    "unlit unless the device declares a colour for it", so a declared red off is
    reported as painting. `kit/marks.js` keeps skipping a custom lamp colour on
-   `off`, which is still right: a custom colour is for a lamp nobody documented.
+   `off`, and so does `kit/relief.js` where it writes custom lamp colours into
+   the 3D textures, which is still right: a custom colour is for a lamp nobody
+   documented.
 5. **The rack file** carries `states` on items and `zeroU` entries, and the
    kit applies them through the same expansion (section 3.1, point 3).
 
@@ -439,8 +455,12 @@ sets the vocabulary. This note sets it.
   `mount-points: [{mates: pdu-button, at: <mm from the bottom>}, ...]`. A
   second statement of a number the drawing already holds is a number that can
   disagree with it.
-- **The button gains `mates`, which is a minor version of it, not a patch:**
-  the part newly offers itself to every slot that presents `pdu-button`. No
+- **Both sides gain a `mate` connection point,** because L11 asks for one
+  beside every `interface` or `mates`: the button on its axis, the keyhole at
+  the point the button seats.
+- **The button gains `mates` and `mate`, which is a minor version of it, not a
+  patch:** both are additive, and the part newly offers itself to every slot
+  that presents `pdu-button`. No
   device that places it moves, and the devicelock check settles what the four
   devices that compose it take.
 - **The fit check.** The refusal `fitsZeroU` does not make yet (#926 section 8)
@@ -470,13 +490,22 @@ already more permissive: two parts on different attachment points (`left-front`
 and `left-rear`) never meet.
 
 **Decision:** a lab rack-side placement names its point with the kit
-attachment point names: its `side` takes `left` or `right` on a two-post rack,
-and `left-front`, `left-rear`, `right-front` or `right-rear` on a four-post,
-and `labs.json` publishes the point. L154 claims per attachment point, as
-`fitsZeroU` does. On a two-post rack there is one point a side and the rule is
-unchanged; on a four-post, front and rear are two points. When channels
-arrive, both claim per channel. Duct sections that stack keep stacking, since
-they share a point.
+attachment point names, and **the names alone decide.** A lab `rack` states
+only `height-ru` and `rails-only` and no post count, and no key is added for
+one:
+
+- a rack-side `side` takes any of the six names, `left`, `right`,
+  `left-front`, `left-rear`, `right-front` and `right-rear`, and `labs.json`
+  publishes the name as written;
+- L154 checks overlap per point, as `fitsZeroU` does, so `left-front` and
+  `left-rear` never meet and two placements at `left` still stack;
+- a lab that uses a two-post name (`left`) and a four-post name (`left-front`
+  or `left-rear`) on the same side is a lint error, since the two describe
+  different racks and their overlap cannot be judged;
+- no library lab places anything with `side` today, so nothing migrates.
+
+When channels arrive, both claim per channel. Duct sections that stack keep
+stacking, since they share a point.
 
 ## 7. A 1U or 2U PDU (PDUMH20NET)
 
@@ -620,7 +649,10 @@ Each was decided 2026-10-08, as this note recommended.
    takes a minor bump.
 6. **The mounting vocabulary is mount point, slot and pitch,** with the pitch
    derived and published as `mount-points` (the mechanism is section 6.2).
-7. **L154 moves to attachment points now.**
+7. **L154 moves to attachment points now,** and within that the
+   attachment-point names alone decide: all six are accepted, a side may not
+   mix two-post and four-post names, and no post-count key is added to a lab
+   (section 6.4).
 8. **The Tripp Lite series models and their parts go under `eaton/`.**
 9. **The G4 PDUs stay `specified: false`** until a source gives their draw.
 10. **The eight class names of section 2.2 are accepted as tabled,** including
@@ -652,6 +684,6 @@ export or a saved document uses it.
 | `readings`, its `source`, `at` and `values`, and the reading names `current-a`, `power-w`, `energy-kwh` | rack file entries | saved rack files carry them |
 | a share-URL codec slot for readings, if the marks document takes them | `kit/marks.js` encode and decode | a slot, once given out, is held by every link written with it |
 | `states` on rack items; `swaps`, `fields`, `states` on `zeroU` entries | rack file | saved rack files carry them |
-| attachment-point names in rack-side lab placements | lab `side`, `labs.json` | saved labs and the published index carry them |
+| the six rack-side `side` names `left`, `right`, `left-front`, `left-rear`, `right-front`, `right-rear`, and the rule that a side may not mix two-post and four-post names | lab placements, published in `labs.json` | saved labs and the published index carry them |
 | `pdu-button` as an interface, and `mount-points` | connectors registry, `configs.json` | #939 and #935 build on the names |
 | outlet names as printed (already shipped by the pilot) | DCIM export | a renamed outlet is a new outlet to a DCIM |
