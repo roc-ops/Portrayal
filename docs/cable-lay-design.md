@@ -184,13 +184,19 @@ In order of preference:
    back in under the plate. For a cable that does not lie in it, the stack on
    the held face of a tray, from the plate down to its strap line, is solid
    as the plate is: a cable passing under it keeps below the strap line by
-   its radius and `CLEAR`, dropping first where its port is higher. The drop
-   is bounded by the installed bend radius R of the cable in the gap g
-   between its port and the back edge of the stack: an S-bend of two arcs
-   falls at most 2R(1 - sqrt(1 - (g/2R)^2)) in that gap, for g up to 2R (a
-   longer gap allows any drop, with a straight run between the arcs). A cable that needs
-   more cannot clear, and its leg is left and reported (1.4) with the held
-   face named. This obstacle lands with step 5 of section 10, not step 2:
+   its radius and `CLEAR`, dropping first where its port is higher. It need
+   only be below the strap line by the back edge of the stack, so the drop
+   is bounded by a single arc: a cable leaving its port level can drop
+   R - sqrt(R^2 - g^2) over a gap g up to R, and any amount when g is more
+   than R, where R is its installed bend radius (`installedRadiusMm` in
+   `kit/rack/cable-types.js`). R 30 mm over g 20 mm allows 7.6 mm. **g is
+   measured from the port face to the back edge of the rear tie slot of the
+   pair that straps the stack**, since the strap passes down through that
+   slot: on the FHD-CMP5DR, the pairs across the tray that hold a cable
+   running along x, whose rear slot starts 89.7 mm forward of the rail (the
+   floor of the strip starts at 48.8 mm and the arms at 15.4 mm, but nothing
+   holds a cable there on the held face). A cable that needs more cannot
+   clear, and its leg is left and reported (1.4) with the held face named. This obstacle lands with step 5 of section 10, not step 2:
    it needs cables laid on a held face, which step 5 brings.
 2. **Round the end.** A leg that would cross a body side to side goes past its
    end, into the gutter, which is where the automatic route already goes.
@@ -316,7 +322,12 @@ tray declares `ties`.**
   held face is its top, and a hanging ring holds the cable on its lower band,
   about 31.5 mm below the plate on the FHD-CMP5DR: section 3.1.) Between two
   straps it sags a little, by the drape of its type over that span, and never
-  below the **strap line**, the bottom of the strapped stack at that point. A
+  below the **strap line**, the bottom of the strapped stack at that point.
+  The stack gathers where the straps are: under the pair of slots a strap
+  passes through, 89.7 to 98 mm forward of the rail on the FHD-CMP5DR, an
+  8.3 mm strapped width, so a held face lays few cables side by side and
+  stacks the rest; a position wider than that, such as a bundle, is centred
+  on it. A
   stretch of the held face that passes no tie slot cannot be held: the
   automatic route never uses one, and a stretch pinned there by hand warns
   (`unheld`, with the cable and the tray).
@@ -459,8 +470,11 @@ pathway is fixed to:
 - a duct: from its base plate outward, across the channel.
 
 Each face of a tray (2.3) counts its own positions, both from the host side
-toward the front edge; on the held face position 1 is the cable nearest the
-rail, against the plate.
+toward the front edge. On the held face the cables lie only within the
+strapped width (2.3), so position 1 there is the cable at the back edge of
+that width, the one nearest the rail of those the strap holds (89.7 mm
+forward of the rail on the FHD-CMP5DR), against the plate; it is not at the
+back edge of the floor.
 
 ### 4.1 The order
 
@@ -511,8 +525,8 @@ discs share an edge, and there:
   resting face runs forward from its port and **passes under the footprint of
   the held face**, below its strap line (2.3), then rises only in front of the
   plate, clear of it by `CLEAR` (1.3). In plan it can lie across a cable on
-  the held face (b under d in fixture 1 of 4.5, in plan); in 3D it passes
-  beneath it.
+  the held face (b across d in plan, in fixture 1 of 4.5); in 3D b passes
+  under d.
   What keeps it clear is the detour rule: the stack on a held face, down to
   its strap line, is solid to every cable that does not lie in it (1.3, rule
   1), so a run from a high row of ports drops below the strap line before it
@@ -676,12 +690,12 @@ one end in T, from below, so it lies on the underside, rail-side at -120, and
 uses the tie slots between its port and the left end (the first at part x
 54.85), one strap each in the BOM note. **The heights that keep b clear of
 d.** S-dn has one row of ports at the middle of its unit, port centres 22.2
-mm below its top, and b, c and d are 3 mm fibre cords. The floor top of T is
-3.0 mm above the bottom of U12, so its underside is at most 3.0 mm above the
-top of S-dn, and d, one layer, puts the strap line at most 0 mm, level with
-the top of S-dn. b passes under it with its centre at -22.2 mm, where it
-needs no more than -6.5 mm (its 1.5 mm radius and `CLEAR` below the strap
-line): clear by 15.7 mm with no drop at all. So fixture 1 has **no
+mm below its top, and b, c and d are 3 mm fibre cords. Heights are in mm
+from the top of S-dn, which is the bottom of U12. The floor top of T is at
+3.0 and its sheet is 1.5 thick, so its underside is at 1.5; d, one 3 mm
+layer, puts the strap line at -1.5. b must pass with its centre at or below
+-8.0 (the strap line, less its 1.5 radius and the 5 of `CLEAR`). Its port
+centre is at -22.2, so it clears by 14.2 with no drop at all. So fixture 1 has **no
 `crosses-body` finding**, and b runs below the strap line of d. Round the top: L (e, f), a -150,
 e -100, a -60, c 30, f 60, b 120, R, c -100, b -140; round the underside:
 d -120 and L. **The forced set is a-e, b-c and c-f on the top and none on
@@ -1020,7 +1034,8 @@ first; one key with four angles cannot disagree with itself.
   and resting and lay order are worked in the frame as mounted (3.1).
 - **Exports.** A rolled item adds a note, as a turned one does ("Mounted
   upside down.", or for a quarter turn "Mounted rotated 90 degrees
-  clockwise." or "Mounted rotated 90 degrees anticlockwise."), worded apart
+  clockwise, as seen from its face." or "Mounted rotated 90 degrees
+  anticlockwise, as seen from its face."), worded apart
   from the existing note for a turned item, which says it is mounted
   turned. Neither DCIM has a field for
   it, so it goes in the comment lines.
@@ -1148,20 +1163,26 @@ own step.
    laid cables cross exactly at those pairs and nowhere else, per face: two
    cables on one face meet only at a forced pair, and in 3D no two tubes on
    different faces meet. The test does not project to a plan, where a run
-   passing under a held face (b under d in fixture 1) lies across it. Every
+   passing under a held face lies across it (b across d in plan, in fixture 1). Every
    fixture has forced crossings, and the test asserts each count is not zero,
    so an empty count cannot pass. Fixture 1 also asserts that d lies on the
    underside, that pinning it to the top adds b-d as a crossing made by
    hand, that it gives no `crosses-body` finding, and that b runs below the
-   strap line of d by its radius and `CLEAR`; a copy of it in which the held
-   stack under T is deepened, and b made a stiff cord from a port nearer the
-   top of S-dn, until the drop needed exceeds the drop 1.3 allows in the gap
-   by at least 5 mm (the test computes both from the part data), asserts
-   exactly one `crosses-body` finding for b, with T as `part` and
-   `underside` as `face`, so the new obstacle is exercised. Fixture 2
+   strap line of d by its radius and `CLEAR`. **The case that cannot drop**
+   is a copy of fixture 1 with three changes: d is a bundle of twelve 3 mm
+   cords taking one position (11.6 mm across at `BUNDLE_PACK` 0.8, well
+   inside the fill bound of 2.3, so no full-tray warning); b is a Cat6A cord
+   (7.5 mm, R 30 mm, four times its diameter) from a port 6 mm below the top
+   of S-dn; and S-dn has `setback: -70`, its face 70 mm proud of the rail.
+   Worked by hand, in mm from the top of S-dn: the strap line is 1.5 - 11.6
+   = -10.1; b needs its centre at or below -10.1 - 3.75 - 5 = -18.85, a drop
+   of 12.85 from its port at -6; g is 89.7 - 70 = 19.7, so a single arc of
+   R 30 allows 30 - sqrt(900 - 388.1) = 7.37. It falls 5.48 short, so the
+   test asserts exactly one `crosses-body` finding for b, with T as `part`
+   and `underside` as `face`, and the new obstacle is exercised. Fixture 2
    asserts that each end takes its own manager; its variant that S-up takes
    D1 and S-dn takes D2; and its stack that the upper row of S2 takes Ma,
-   the lower row Mb, and a middle row Mb. Fixture 3 the resting in
+   the lower row Mb, and a middle row Mb. Fixture 3 asserts the resting in
    the hanging rings and the fit of the rolled manager in its one U. A
    browser check does the same in 3D.
 6. **The FHD enclosures and the other FS managers**, as routine modelling
@@ -1226,7 +1247,7 @@ published file or a saved rack file uses it.
 | item `roll` with `90`, `180` and `270`, clockwise as seen in the elevation of its face, applied after `face` and `turned`, fitted by its rolled box (7.1) | rack file version 4, kit fit and drawing | saved rack files carry it; #550 builds its quarter turns on the same key and convention |
 | `top` and `underside` named in the frame of the part, the resting and held roles following the item as mounted, the held face offered only with `ties` or a ring on it, and the automatic face the one nearer the port (2.3) | kit, rack file (`lay`), `inspect` | a saved face pin names a face by this name, and routed lengths depend on the choice |
 | held-face straps counted one per tie slot used, the face named by role and name in the export text, the `straps` column of the cable schedule after `slack`, and the strap note per tray in the BOM | exports | a reader takes the column by its header and matches the note |
-| the export note and the DCIM comment line of a rolled item ("Mounted upside down.", "Mounted rotated 90 degrees clockwise." or "anticlockwise.") | BOM notes, DCIM exports | a reader of the notes and an imported comment match the text |
+| the export note and the DCIM comment line of a rolled item ("Mounted upside down.", "Mounted rotated 90 degrees clockwise, as seen from its face." or the same with anticlockwise) | BOM notes, DCIM exports | a reader of the notes and an imported comment match the text |
 | the ranking of `managerOf` (hosted, then a standalone manager, with its tie-break by port row, then a manager on a neighbour, then a neighbour with guides) | kit | automatic routes of saved racks follow it, and their routed lengths with them |
 | the version-4 table of the rack products note gaining `states`, `readings`, the PDU bracket key, `slack`, `lay` and `roll` | `docs/rack-products-design.md` section 9, rack file version 4 | one bump carries them all; a key left out needs a version 5 |
 | the stored slack counting in the routed length | kit | a saved routed length and stock size depend on it |
