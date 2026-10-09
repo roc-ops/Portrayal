@@ -56,7 +56,7 @@ test('on without unit, a bad face and a bad version are refused', () => {
   assert.ok(errs(d).some(e => e.startsWith('dependentRequired')));
   d.racks[0].items[0] = {...d.racks[0].items[0], unit: 1, face: 'side'};
   assert.ok(errs(d).some(e => e.startsWith('enum')));
-  assert.ok(errs({...M.newDoc(), version: 3}).some(e => e.startsWith('const')));
+  assert.ok(errs({...M.newDoc(), version: 4}).some(e => e.startsWith('const')));
 });
 
 test('a waypoint is both halves of one shape', () => {

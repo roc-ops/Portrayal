@@ -6,7 +6,7 @@
 // {item, path, view}: the item's id, the port's data-path, and the device's
 // OWN panel ('front' or 'rear') the port is on - not the pane that shows it.
 
-import {nextId, positionOf} from './model.js';
+import {nextId, positionOf, cableIdsInUse} from './model.js';
 
 // ── ends ────────────────────────────────────────────────────────────────
 export const endKey = end => `${end.item}|${end.view}|${end.path}`;
@@ -60,7 +60,7 @@ export function canCable(rack, a, b, opts = {}) {
 // ── edits: each returns a new rack ──────────────────────────────────────
 const endOf = e => ({item: e.item, path: e.path, view: e.view === 'rear' ? 'rear' : 'front'});
 export function withCable(rack, {a, b, media = '', purpose = '', label = '', length = null}) {
-  const cable = {id: nextId(rack.cables || [], 'c'), a: endOf(a), b: endOf(b), media, purpose, label,
+  const cable = {id: nextId(cableIdsInUse(rack), 'c'), a: endOf(a), b: endOf(b), media, purpose, label,
                  ...(length ? {length} : {}), route: []};
   return {rack: {...rack, cables: [...(rack.cables || []), cable]}, cable};
 }

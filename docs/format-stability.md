@@ -7,24 +7,27 @@ about it while the package is at 0.x.
 | Number | Where it appears | What it versions |
 |---|---|---|
 | `format` | every device manifest, component contract, listing and lab (`format: 1`) | the **file format** a manifest is written in |
-| schema `v1` | the schema `$id`s and titles in `spec/schemas/` (device, component, listing and lab; the marked-up drawing; and the rack file) | for the manifest schemas, the same thing, named: schema v1 *is* format 1. `marks.schema.json` is v1 of the marked-up drawing, whose own key is `v` (1). `rack.schema.json` is also published under `/v1/`, as its first publication label, but describes rack file `version` 2; a later rack schema is published under the next unused label, never under its rack version number (below) |
+| schema `v1` | the schema `$id`s and titles in `spec/schemas/` (device, component, listing and lab; the marked-up drawing; and the rack file) | for the manifest schemas, the same thing, named: schema v1 *is* format 1. `marks.schema.json` is v1 of the marked-up drawing, whose own key is `v` (1). `rack.schema.json` was first published under `/v1/`, describing rack file `version` 2; it now describes `version` 3 and is published under `/v2/`, the next unused label, never under its rack version number (below) |
 | package | `version` in `pyproject.toml` (0.1.0) | the **tools**: the linter, the compiler, the indexers and the exporter |
 | rack catalogue `format` | `rack.json` (`format: 1`) | the **catalogue** a rack tool reads in one fetch; its own number, apart from the manifests' `format` |
-| rack file `version` | the Rack Builder's file (`format: "portrayal-rack"`, `version: 2`) | the **rack file** a user saves; `parseDoc` migrates an older one on load |
+| rack file `version` | the Rack Builder's file (`format: "portrayal-rack"`, `version: 3`) | the **rack file** a user saves; `parseDoc` migrates an older one on load |
 | `contract` | `devices.json` (`contract: 2` at 0.1.0) | the **published build** a consumer reads from `library/dist/`; `CHANGELOG.md` records each one |
 
 The schemas are published at `https://portrayal.dev/schemas/v1/`, one file
 per schema (`device.schema.json`, `component.schema.json`,
 `listing.schema.json`, `lab.schema.json`, `rack.schema.json`), and that URL is each schema's `$id`, so an editor or a
 validator that follows the `$id` finds the schema it names. `rack.schema.json` describes
-the Rack Builder's own file (`format: "portrayal-rack"`, its own `version`, now 2), not a
-manifest, so it is published under `/schemas/v1/` as a schema of this repository but does
-not carry format 1. The `/v1/` is its publication label; the rack file's own `version`
-(2 today) is migrated on load by `parseDoc`, so a later rack version is published under the next
-unused label (`/schemas/v2/` if no manifest format has taken it, else the label after) rather than overwriting
-`/v1/`; the label is never a rack version number, and a label once published is not reused. A new format number
-is published beside the old one under its own label (`/schemas/v2/`); a
-published label is never reused for a different format.
+the Rack Builder's own file (`format: "portrayal-rack"`, its own `version`, now 3), not a
+manifest, so it is published as a schema of this repository but does not carry
+format 1. Its label is a publication label only; the rack file's own `version` is
+migrated on load by `parseDoc`, so each rack version is published under the next
+unused label rather than overwriting the one before: version 2 under `/v1/`, which
+stays as published, and version 3 (#921) under `/schemas/v2/rack.schema.json`,
+since no manifest format had taken `/v2/`. The label is never a rack version
+number, and a label once published is not reused. A new manifest format number is
+published beside the old one under the next label no schema has taken (`/schemas/v3/`
+now that the rack file holds `/v2/`); a published label is never reused for a
+different format.
 
 Each device and component also carries its own semantic version and lock, which
 records what changed in *that hardware's drawing*. That is a separate system,
@@ -287,6 +290,34 @@ file rather than draw a manager as a device over its host. Here it was decided
 (2026-10-08) to accept the older reader's loss, because no `@portrayal/kit`
 release older than these keys was ever published: the one reader that existed,
 portrayal-site's, already kept both.
+
+## The rack file: bundles, version 3
+
+Cable bundles (#921, [`cable-bundles-design.md`](cable-bundles-design.md))
+raised the rack file to `version` 3, and its schema is published under
+`/schemas/v2/` (above). A rack gains an optional `bundles` array, each bundle
+`{id, number, label, members: [{cable, a?, b?}], route, straps?}`, described
+by `$defs` `bundle`, `member` and `strapSpacing`; `member.a`, `member.b` and
+`bundle.route` are `$defs/waypoint`. A rack that was never given a bundle has
+no `bundles` key and saves as it was.
+
+- **Migration.** 2 to 3 is the identity, as 1 to 2 was: every version-2 file is
+  a valid version-3 file. `parseDoc` migrates whatever it opens and `serialize`
+  writes 3, so a page with this kit saves every document it opens as version 3.
+- **An older reader refuses a version-3 file.** Every page and kit from before
+  #921 reads up to version 2, so it refuses the file with its "this page reads
+  up to version 2" sentence rather than opening it. That is the point of the
+  bump: an older `parseDoc` rebuilds a rack from the keys it names, so it
+  would drop `bundles` and erase them on its next save, and an older page
+  would edit a member's route alone. The refusal also protects `side` (#926),
+  which a version-2 page drops. This is a one-way door: there is no way back
+  to version 2 for a file a newer page has saved, and the `/v2/` label is
+  never reused.
+- **The repairs** are `parseDoc`'s, so every reader gets the same rack:
+  a bundle with no usable id or a repeated one, one whose id another thing in
+  the rack has, a member naming no cable, a cable in two bundles and a number
+  used twice are each repaired, and `parseDoc(input, {notes})` says so, one
+  sentence per repair naming its rack. No note is kept in the file.
 
 ## The cable types file
 

@@ -9,7 +9,8 @@
 // to the right as seen from the FRONT. This file imports no DOM and nothing of
 // the site's pages, so the rack kit can take it as it is.
 
-import {uLabel, zeroUOf} from './model.js';
+import {uLabel, zeroUOf, bundlesOf} from './model.js';
+import {followTrunk} from './bundle-route.js';
 import {RU, OPENING, RAIL_W} from './rails.js';
 import {throughRings} from './route-path.js';
 import {zeroUOnLane, zeroUX, carriesLane, runsThrough} from './zero-u.js';
@@ -132,14 +133,48 @@ function resolves(rack, w, ctx) {
   return !!itemOf(rack, w.item) && ctx.guidesOf(w.item).some(g => g.via === w.via);
 }
 
-// THE ROUTE A CABLE FOLLOWS: the stored one once edited, else the automatic
-// one. A stored waypoint that no longer resolves is skipped, and reported.
-export function resolveRoute(rack, cable, ctx) {
+// A CABLE'S OWN ROUTE: the stored one once edited, else the automatic one. A
+// stored waypoint that no longer resolves is skipped, and reported.
+export function ownRoute(rack, cable, ctx) {
   const auto = cable.routeEdited !== true;
   const list = auto ? autoRoute(rack, cable, ctx) : (cable.route || []);
   const waypoints = [], gone = [];
   for (const w of list) (resolves(rack, w, ctx) ? waypoints : gone).push(w);
   return {waypoints, gone, auto};
+}
+
+// A BUNDLE'S TRUNK as it resolves today: its stored waypoints, less those that
+// no longer stand for anything (reported as `gone`, and skipped).
+export function trunkRoute(rack, bundle, ctx) {
+  const waypoints = [], gone = [];
+  for (const w of bundle.route || []) (resolves(rack, w, ctx) ? waypoints : gone).push(w);
+  return {waypoints, gone};
+}
+
+// The bundle a cable is drawn in: one holding it and at least one other cable
+// (a bundle of fewer is kept and listed, but not drawn: #921 decision 5).
+export function drawnBundleOf(rack, cableId) {
+  return bundlesOf(rack).find(b => b.members.length >= 2 && b.members.some(m => m.cable === cableId)) ?? null;
+}
+
+// THE ROUTE A CABLE FOLLOWS. A member of a bundle (#921) follows its own route
+// up to where it joins the trunk, the trunk to where it leaves, then its own
+// route on to its far port (bundle-route.js followTrunk); the result then also
+// names its `bundle`, `join` and `leave`, so a drawing can tell the bundled
+// part from the leads. `gone` is the cable's own; a trunk's is the bundle's
+// (trunkRoute). Any other cable follows its own route.
+export function resolveRoute(rack, cable, ctx) {
+  const own = ownRoute(rack, cable, ctx);
+  const b = drawnBundleOf(rack, cable.id);
+  if (!b) return own;
+  const trunk = trunkRoute(rack, b, ctx).waypoints;
+  if (!trunk.length) return own;
+  const aNearStart = () => {
+    const p = portPoint(rack, cable.a, ctx), s = pointOf(rack, trunk[0], ctx), e = pointOf(rack, trunk.at(-1), ctx);
+    return !(p && s && e) || dist(p, s) <= dist(p, e);
+  };
+  const f = followTrunk(own.waypoints, trunk, b.members.find(m => m.cable === cable.id), {aNearStart});
+  return {...own, waypoints: f.waypoints, bundle: b.id, join: f.join, leave: f.leave};
 }
 
 // The route as a line of text: "mgr-1 ring 3 > left-front U12-U24 > ...".

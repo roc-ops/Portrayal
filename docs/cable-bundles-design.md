@@ -1,6 +1,8 @@
 # Cable bundles: bundles, Velcro straps and bend radius in the rack kit
 
-Status: agreed 2026-10-08 (#920). Nothing is built. Cable management piece 3,
+Status: agreed 2026-10-08 (#920). #921 built the record, the commands, the
+size check and the straps in kit 0.7.0 (section 11 says how); the bend check
+(#922), the drawings (portrayal-site#142) and the exports (#923) are to come. Cable management piece 3,
 tracked in roc-ops/portrayal-site#143. Builds on the rack core in `kit/rack/`
 and on two changes in flight that touch the same files: the rack agent commands
 (kit 0.4.0: `inspect`, `selectCables`, `fit`, `field`, a `describe` window and a
@@ -837,3 +839,34 @@ Decided 2026-10-08, on the questions this note first left open.
    say so.
 10. **Strap spacing per bundle only.** Decided: each bundle has its own
     spacing, 12 in when unset. There is no rack-wide default.
+
+## 11. As built in #921
+
+What the build settled that the sections above leave to it:
+
+- **Elements.** A lane run is cut at every U (a node at each U and a segment
+  between each two), which shares exactly what cutting at every member's start
+  and stop shares (section 4.1). The trunk is written back as a waypoint at
+  each pathway and wherever a lane run starts, stops, turns or jumps.
+- **A bundle of fewer than two cables** does not change its member's route:
+  it is not drawn, so its cable is drawn and measured on its own route.
+- **A peel point past the far end** of a member's run, not only a pair out of
+  order, is stale and ignored with the same note.
+- **Diameters.** `ctx.diameterOf` (`loadCableTypes(dist).diameterOf`, #919's
+  `od_mm`) is read when the caller passes it; without it the figures are
+  `route.js DIAMETERS`, then 6 mm, named as an estimate.
+- **`pathwaysOn(rack, trunk, ctx)`** takes the trunk's resolved waypoints. A
+  duct beside the rack is estimated from the channel width
+  `ctx.route.zeroUAperture(entry)` reports and the part's catalogue depth,
+  always marked estimated, since no zero-U part states an aperture today. A
+  duct guide on a rack-face part with `run: 'y'` is estimated from its `box.w`
+  and the part's depth.
+- **Straps on rings.** A ring's stretch is centred on its waypoint's point
+  (`route.js pointOf`), since a guide carries no face height to map its box's
+  `y` from (section 6). Its extent is the box's width on a run along x and its
+  height on one along y, each side from its own segment.
+- **`describe`** keeps #926's `zeroU` section: `SECTIONS` is `items`, `zeroU`,
+  `cables` and `bundles`, and the totals line counts bundles only when the rack
+  has any, as it counts parts beside the rack.
+- **A reader that throws** during a bundle command's waypoint check falls back
+  to the catalogue's pathways, as a command without the readers does.
