@@ -1,0 +1,31 @@
+format: 1
+kind: component
+name: iwep1u550-wall
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  A side wall of the FS IWEP1U550 cantilever shelf seen from above:
+               the sheet folded up from the floor along each side, its top edge following the
+               profile the shelf's side view draws. Its front end folds out into the mounting
+               ear.
+provenance:
+  size: >-
+    estimated - 1.2, the sheet; FS states the material and not its gauge.
+  relief: >-
+    drawing - the datasheet's side view (p3), drawn on end: the wall is 28 mm high (dimensioned)
+    over the front half, where its three slots are, and steps up by a short slope at about mid-depth
+    to the full 44 at the rear; the front end stands 44 where it folds into the ear. Heights above
+    the 2 mm floor; the step's position is a fraction of the view, estimated.
+size: {w: 1.2, h: 550.0}
+size-confidence: {w: estimated, h: datasheet}
+elements:
+  plate: {at: [0.0, 0.0], size: [1.2, 550.0], class: bezel}
+relief:
+  features:
+  - {node: plate, out: 42.0, profile-y: [[0, 42.0], [258.5, 42.0], [291.5, 26.0], [540.0, 26.0],
+      [540.0, 42.0], [550.0, 42.0]], color: '#1b1d20', confidence: drawing, source: "drawing -\
+      \ the datasheet's side view (p3), drawn on end: the wall is 28 mm high (dimensioned) over\
+      \ the front half, where its three slots are, and steps up by a short slope at about mid-depth\
+      \ to the ful"}
+skins: [default]

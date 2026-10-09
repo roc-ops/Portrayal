@@ -1,0 +1,31 @@
+format: 1
+kind: component
+name: iwep1u550-tray
+version: 1.0.0
+class: mechanical
+description: >-
+  The floor of the FS IWEP1U550 cantilever shelf seen from above,
+               with its vent slots - drawn as the well the shelf's walls stand in
+provenance:
+  size: >-
+    photo-measured - the plan render shared by IWEP1U350 and IWEP1U550 (SKU 175749 and 175750,
+    g2, byte-identical): the tray spans 1163 px across and 1016 px down including its ear tabs,
+    the tray alone 922 px from rear to front; with the stated 350 deep that is 2.635 px/mm, which
+    makes the body 441.4 between the walls (the 482.6 over the ears less 20.6 a side). The render
+    is of the 350; the 550 is taken as the same width.
+  size-slots: >-
+    drawing - the IWEP1U550 datasheet's top view (p3, 300 dpi): twenty-five slots in five rows
+    of five, the rows about 95 apart, 85 from the rear and the front; the columns as the 350's
+    plan render. Each slot is about 46 x 6 at 45 degrees, estimated.
+  depth: >-
+    drawing - 42: the floor is the bottom of the shelf, so the
+                                well is as deep as the 44 mm envelope less the sheet; the sheet
+                                body builds a well no deeper than 2 mm short of the far face
+                                (docs/cable-managers-design.md section 4), so the floor is built
+                                2 mm thick where the real sheet is about 1.2.
+size: {w: 441.4, h: 550.0, d: 42}
+size-confidence: {w: drawing, h: datasheet, d: drawing}
+relief: {wall: '#1b1d20'}
+elements:
+  floor: {at: [0.0, 0.0], size: [441.4, 550.0], class: bezel}
+skins: [default]

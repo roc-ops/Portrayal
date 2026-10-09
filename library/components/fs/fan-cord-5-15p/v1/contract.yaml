@@ -1,0 +1,32 @@
+format: 1
+kind: component
+name: fan-cord-5-15p
+version: 1.0.0
+class: inlet
+profile: power
+description: >-
+  The fixed mains cord of an FS rack fan panel or fan tray, ending in a US NEMA 5-15P
+  plug - the cord leaving the back of the unit through a strain-relief grommet. Drawn
+  as the back shows it; the cord beyond the grommet and the plug are not.
+size: {w: 12.0, h: 12.0}
+size-confidence: {w: estimated, h: estimated}
+attrs: {plug: nema-5-15p}
+provenance:
+  size: >-
+    estimated - a grommet 12 mm across, the size the FANP3U3F's rear gallery render
+    (SKU 173817, g5) shows the cord's strain relief at about 3 px/mm; no document
+    dimensions it.
+  plug: >-
+    datasheet - the FANP3U3F product page: "Power Supply 110V~120V, 50Hz (American
+    Standard)"; the FS Cooling Fan datasheet gives 110~120 V for all three fan models,
+    and the quick start guides of the 3U panel (portal 5035) and the 1U trays (portal
+    6672) each picture a power cord with a two-blade, grounded US plug as an accessory.
+    That is a NEMA 5-15P; the datasheet does not name the plug.
+  not-drawn: >-
+    THE CORD BEYOND THE GROMMET AND THE PLUG ARE NOT DRAWN: the far end of a cord is not
+    a part (docs/connectors-power-design.md section 7). This part stands for the power
+    input a DCIM records, a NEMA 5-15P power port, as eaton/g4-cord-l21-30p@1 does for a
+    PDU's cord.
+elements:
+  grommet: {at: [0, 0], size: [12.0, 12.0], class: inlet}
+skins: [default]

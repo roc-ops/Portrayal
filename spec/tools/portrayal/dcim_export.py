@@ -602,6 +602,12 @@ PART_POWER = {
     # netbox/dcim/choices.py at 2b3f4b48, TYPE_NEMA_L2130P; nautobot/nautobot
     # nautobot/dcim/choices.py at c77e4255, the same).
     "eaton/g4-cord-l21-30p": "nema-l21-30p",
+    # AN FS FAN PANEL'S OR FAN TRAY'S FIXED CORD, ending in a US NEMA 5-15P plug,
+    # for the same reason as the Eaton cord: the part stands for the cord leaving
+    # the back. `nema-5-15p` is TYPE_NEMA_515P in both targets
+    # (netbox-community/netbox netbox/dcim/choices.py at 84e19368;
+    # nautobot/nautobot nautobot/dcim/choices.py at c77e4255).
+    "fs/fan-cord-5-15p": "nema-5-15p",
     # THE GENERIC INPUT PLUGS (#933): the face of the plug at the end of a PDU's
     # fixed cord, for a device that draws its plug rather than its cord. A device
     # draws one or the other, never both, or one input exports as two ports. Every

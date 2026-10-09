@@ -1,0 +1,265 @@
+format: 1
+kind: device
+name: fanp3u3f
+version: 0.1.0
+maturity: modelled
+manufacturer: FS.com
+model: FANP3U3F
+aliases:
+- {name: '173817', kind: vendor, note: FS shop product ID}
+description: >-
+  3U 19in rack fan panel, FS FANP3U3F: one black die-cast plate 130 x 483 mm carrying three 120
+  mm fans behind stamped grilles, a red rocker switch, and a fixed mains cord with a US plug out
+  of the back. Mounted low in the rack, it moves 240 CFM from front to back; 110-120 V, 15 W.
+profile: passive
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      the FS Cooling Fan datasheet (portal 6624) and the product page (SKU 173817) for every figure;
+      the straight-on gallery renders g1 (front) and g5 (rear) for the layout; the quick start
+      guide V1.0 (portal 5035) for the cord, the plug and the screw kit. FS publishes no drawing
+      of the part and no Visio stencil.
+  chassis:
+    confidence: datasheet
+    note: >-
+      130 x 483 x 44, the product page's HxWxD (the datasheet prints 483x130x44 under the same
+      heading, axes scrambled). THE FACE IS ONE DIE-CAST PLATE WITH ITS EARS IN IT: the slots
+      at the four corners are in the same sheet as the grilles (g1, x3), so the face is drawn
+      at its full 483 (the owner's rule of 2026-10-09; lint L43 stands down for a body this wide).
+      The 44 is the fans' depth behind the plate; the 3D body is one 483 x 130 x 44 box, where
+      the real fans are three 120 mm boxes behind the plate.
+  height:
+    confidence: photo-measured
+    note: >-
+      the straight-on render g1 measures the plate 132.3 tall at its 2.888 px/mm across the 483;
+      the dimensioned render x2 prints 5.12 in (130 mm), and a 3U opening is 133.35. 130 is drawn;
+      see gaps.
+  grilles:
+    confidence: photo-measured
+    note: >-
+      three stamped grilles 114 across, centred 85.9, 221.8 and 357.9 in from the left end on
+      the plate's middle (g1 at 2.888 px/mm, each centre the midpoint of a pair of opposite spokes;
+      pitch 136.0), the fans' four screws 105 apart each way around each. The library's `grille`
+      vent pattern stands in for FS's concentric slots and spokes.
+  slots:
+    confidence: photo-measured
+    note: >-
+      four slots 10.4 x 6.6, 8.9 in from each end (g1). Their heights are EIA-310's top hole of
+      the upper unit and bottom hole of the lower unit; on the render they stand 5.7 below the
+      top and 8.2 above the bottom, an asymmetry a 130 mm plate cannot have and still meet the
+      rail holes, so the render is not taken for the heights.
+  eia:
+    confidence: registry
+    note: >-
+      EIA-310 hole positions: the rail holes of each rack unit stand 6.35, 22.225 and 38.1 mm
+      up from its bottom, and the two rails' holes are 465.1 mm apart across the rack. The part
+      is taken as centred in the rack units it fills.
+  switch:
+    confidence: photo-measured
+    note: >-
+      a red rocker switch (common/rocker-switch@1, turned 90 so its I end is at the top as the
+      close-up x5 shows) in a black bezel 18.8 x 23.2, centred 446.0 in and 94.5 down (g1, scaled
+      to the 130 mm height). The QSG's last step draws the same switch.
+  switch-colour:
+    confidence: known-wrong
+    note: >-
+      the rocker is red on every render (g1, x5); it is drawn in the library rocker's dark grey,
+      because common/rocker-switch@1 has no colour field.
+  cord:
+    confidence: drawing
+    note: >-
+      the quick start guide draws the power cord leaving the back of the panel at its switch end
+      and ending in a two-blade grounded US plug (fs/fan-cord-5-15p@1, NEMA 5-15P); the rear render
+      g5 shows it leaving a white terminal block at that end. Its position on the back is estimated.
+  rear:
+    confidence: photo-measured
+    note: >-
+      the rear render g5: the plate's back, three fans in square frames with wire finger guards,
+      the terminal block and the cord at the switch end. Drawn seen from behind, so the switch
+      end is at the left.
+  airflow:
+    confidence: datasheet
+    note: >-
+      the product page: "Air Flow 240CFM, Front-to-Back" and "The fans move hot air out of the
+      rack at 240 CFM from the front to the rear".
+  attrs:
+    confidence: datasheet
+    note: >-
+      the FS Cooling Fan datasheet (portal 6624), one table for FANS1U2F, FANS1U4F and FANP3U3F,
+      and the FANP3U3F product page. The datasheet prints every model's dimensions as "HxWxD 483x170x44"
+      and the like, its axes scrambled. The 15 W is "Input Power 15W" with no qualifier, filed
+      as the maximum.
+  mark:
+    confidence: drawing
+    note: >-
+      FS prints its mark beside the switch; it is a logo and is not drawn.
+  color:
+    confidence: photo-measured
+    note: >-
+      black painted die-cast aluminium, as every render shows.
+  sides:
+    confidence: estimated
+    note: >-
+      the plate's edge and the end fan's body behind it; no image shows a side square-on.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      searched 2026-10-09: no FS end-of-sale notice for this part was found in the intake's portal
+      tree or by name. The product page (SKU 173817) was live on 2026-10-08.
+attrs:
+  physical:
+    frame-material: Die-Cast Aluminum Painted
+    blade-material: Thermoplastic PBT
+  performance:
+    airflow-cfm: 240
+  power:
+    power-max-w: 15
+    input-voltage: 110~120 V, 50 Hz
+  thermal:
+    fan-speed: 2300 +/-10% RPM
+    noise: 56.9 dB(A)
+    bearing: Sleeve
+  environmental:
+    operating-temp: -20 to 80 C
+    operating-humidity: 20% to 80% (non-condensing)
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 483.0
+  height: 130.0
+  depth: 44.0
+  ru: 3
+  full-depth: false
+  weight-kg: 3.2
+  airflow: front-to-back
+  power: ac
+  color: '#1b1d20'
+gaps:
+- what: height
+  reason: sources-disagree
+  note: >-
+    the product page and the dimensioned render give 130 mm (5.12 in); the straight-on render
+    measures 132.3 at its own width scale, and the slot heights on it fit neither. 130 is drawn.
+  wanted: a ruler on a real unit
+groups:
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    description: the three 120 mm fans, each behind its stamped guard, left first
+  power:
+    term: Cord
+    role: service
+    index-origin: 1
+    description: the fixed mains cord, NEMA 5-15P
+  power-switch:
+    term: Switch
+    role: service
+    index-origin: 1
+    description: the rocker that switches the three fans
+views:
+  front:
+    size: {w: 483.0, h: 130.0}
+    panel:
+      decor:
+      - {id: plate, at: [0.0, 0.0], size: [483.0, 130.0], fill: '#1b1d20', kind: plate}
+      - {id: fan-1-screw-1, at: [31.4, 11.7], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
+      - {id: fan-1-screw-2, at: [136.4, 11.7], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
+      - {id: fan-1-screw-3, at: [31.4, 114.3], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
+      - {id: fan-1-screw-4, at: [136.4, 114.3], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
+      - {id: fan-2-screw-1, at: [167.3, 11.7], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
+      - {id: fan-2-screw-2, at: [272.3, 11.7], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
+      - {id: fan-2-screw-3, at: [167.3, 114.3], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
+      - {id: fan-2-screw-4, at: [272.3, 114.3], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
+      - {id: fan-3-screw-1, at: [303.4, 11.7], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
+      - {id: fan-3-screw-2, at: [408.4, 11.7], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
+      - {id: fan-3-screw-3, at: [303.4, 114.3], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
+      - {id: fan-3-screw-4, at: [408.4, 114.3], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
+      - {id: switch-screw-1, at: [438.8, 32.7], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
+      - {id: switch-screw-2, at: [448.8, 32.7], size: [4.0, 4.0], fill: '#3a3d41', rx: 2.0, kind: screw}
+      - {id: slot-l1, at: [3.7, 1.375], size: [10.4, 6.6], fill: '#0a0b0c', rx: 3.3, vent: 1.5,
+        kind: slot}
+      - {id: slot-l2, at: [3.7, 122.025], size: [10.4, 6.6], fill: '#0a0b0c', rx: 3.3, vent: 1.5,
+        kind: slot}
+      - {id: slot-r1, at: [468.9, 1.375], size: [10.4, 6.6], fill: '#0a0b0c', rx: 3.3, vent: 1.5,
+        kind: slot}
+      - {id: slot-r2, at: [468.9, 122.025], size: [10.4, 6.6], fill: '#0a0b0c', rx: 3.3, vent: 1.5,
+        kind: slot}
+      - {id: switch-bezel, at: [436.6, 82.9], size: [18.8, 23.2], fill: '#141618', rx: 1.0, kind: switch-bezel}
+    components:
+      placements:
+      - {ref: common/rocker-switch@1, id: power-switch, at: [435.5, 87.0], rotate: 90, group: power-switch,
+        rel-pos: 1, for: chassis}
+      - {ref: fs/fan-grille-120@1, id: fan-1, at: [28.9, 8.0], group: fans, rel-pos: 1}
+      - {ref: fs/fan-grille-120@1, id: fan-2, at: [164.8, 8.0], group: fans, rel-pos: 2}
+      - {ref: fs/fan-grille-120@1, id: fan-3, at: [300.9, 8.0], group: fans, rel-pos: 3}
+  rear:
+    size: {w: 483.0, h: 130.0}
+    panel:
+      decor:
+      - {id: plate, at: [0.0, 0.0], size: [483.0, 130.0], fill: '#1b1d20', kind: plate}
+      - {id: slot-r1, at: [468.9, 1.375], size: [10.4, 6.6], fill: '#0a0b0c', rx: 3.3, vent: 1.5,
+        kind: slot}
+      - {id: slot-r2, at: [468.9, 122.025], size: [10.4, 6.6], fill: '#0a0b0c', rx: 3.3, vent: 1.5,
+        kind: slot}
+      - {id: slot-l1, at: [3.7, 1.375], size: [10.4, 6.6], fill: '#0a0b0c', rx: 3.3, vent: 1.5,
+        kind: slot}
+      - {id: slot-l2, at: [3.7, 122.025], size: [10.4, 6.6], fill: '#0a0b0c', rx: 3.3, vent: 1.5,
+        kind: slot}
+      - {id: fan-1-frame, at: [337.1, 5.0], size: [120.0, 120.0], fill: '#151719', rx: 4, kind: fan-frame}
+      - {id: fan-1-guard-back, at: [340.1, 8.0], size: [114.0, 114.0], fill: '#0a0b0c', rx: 57.0,
+        kind: fan-opening}
+      - {id: fan-1-guard, at: [340.1, 8.0], size: [114.0, 114.0], rx: 57.0, pattern: grille, vent: 1.5,
+        kind: finger-guard}
+      - {id: fan-2-frame, at: [201.2, 5.0], size: [120.0, 120.0], fill: '#151719', rx: 4, kind: fan-frame}
+      - {id: fan-2-guard-back, at: [204.2, 8.0], size: [114.0, 114.0], fill: '#0a0b0c', rx: 57.0,
+        kind: fan-opening}
+      - {id: fan-2-guard, at: [204.2, 8.0], size: [114.0, 114.0], rx: 57.0, pattern: grille, vent: 1.5,
+        kind: finger-guard}
+      - {id: fan-3-frame, at: [65.1, 5.0], size: [120.0, 120.0], fill: '#151719', rx: 4, kind: fan-frame}
+      - {id: fan-3-guard-back, at: [68.1, 8.0], size: [114.0, 114.0], fill: '#0a0b0c', rx: 57.0,
+        kind: fan-opening}
+      - {id: fan-3-guard, at: [68.1, 8.0], size: [114.0, 114.0], rx: 57.0, pattern: grille, vent: 1.5,
+        kind: finger-guard}
+      - {id: terminal-block, at: [38.8, 28.7], size: [26.4, 19.7], fill: '#d6d6d2', kind: terminal-block}
+    components:
+      placements:
+      - {ref: fs/fan-cord-5-15p@1, id: power-cord, at: [14.0, 60.0], group: power, rel-pos: 1}
+  top:
+    size: {w: 483.0, h: 44.0}
+    panel:
+      decor:
+      - {id: plate-edge, at: [0.0, 42.5], size: &id001 [483.0, 1.5], fill: '#2a2d31', kind: plate-edge}
+      - {id: fan-1-body, at: [25.9, 0.0], size: &id002 [120.0, 42.5], fill: '#151719', kind: fan-body}
+      - {id: fan-2-body, at: [161.8, 0.0], size: &id003 [120.0, 42.5], fill: '#151719', kind: fan-body}
+      - {id: fan-3-body, at: [297.9, 0.0], size: &id004 [120.0, 42.5], fill: '#151719', kind: fan-body}
+  bottom:
+    size: {w: 483.0, h: 44.0}
+    panel:
+      decor:
+      - {id: plate-edge, at: [0.0, 42.5], size: *id001, fill: '#2a2d31', kind: plate-edge}
+      - {id: fan-1-body, at: [337.1, 0.0], size: *id002, fill: '#151719', kind: fan-body}
+      - {id: fan-2-body, at: [201.2, 0.0], size: *id003, fill: '#151719', kind: fan-body}
+      - {id: fan-3-body, at: [65.1, 0.0], size: *id004, fill: '#151719', kind: fan-body}
+  left:
+    size: {w: 44.0, h: 130.0}
+    panel:
+      decor:
+      - {id: plate-edge, at: [42.5, 0.0], size: &id005 [1.5, 130.0], fill: '#2a2d31', kind: plate-edge}
+      - {id: fan-body, at: [0.0, 5.0], size: &id006 [42.5, 120.0], fill: '#151719', kind: fan-body}
+  right:
+    size: {w: 44.0, h: 130.0}
+    panel:
+      decor:
+      - {id: plate-edge, at: [0.0, 0.0], size: *id005, fill: '#2a2d31', kind: plate-edge}
+      - {id: fan-body, at: [1.5, 5.0], size: *id006, fill: '#151719', kind: fan-body}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The fan panel as FS ships SKU 173817, with its cord.
+datasheet: {title: 'FS Cooling Fan Datasheet (FANS1U2F, FANS1U4F, FANP3U3F)', sha256: 62203e3a791cc86c35ac6913aa86843978af622e4f8f08b0b65f62cc63290b60}
+references:
+- {title: FS FANP3U3F Quick Start Guide V1.0 (portal 5035), sha256: 3b2baf9bbf7a29f0c261a84b591648f909e3e3ccb82d4a2c4e77fd63ef882a43}
