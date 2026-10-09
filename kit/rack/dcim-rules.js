@@ -7,6 +7,8 @@
 
 import {endName, lengthParts} from './cable-rules.js';
 import {cableFindings, TARGET_NAME, DCIM_LIMITS, charCount, cutTo, isoDate, flat} from './export-data.js';
+import {bundleOfCable, bundleName, bundlesOf} from './bundles.js';
+import {andList} from './bundle-route.js';
 export {DCIM_LIMITS, flat};
 
 // ── names a kit can write ───────────────────────────────────────────────
@@ -262,7 +264,7 @@ export const CABLE_IMPORT_COLUMNS = {
 // `notes` are about rows that ARE written: a type left blank, a length changed.
 export function cableImportRows({rack, target = 'netbox', names, kept, resolve, ends = new Map(), unchecked = false, uOf}) {
   const T = TARGET_NAME[target] || 'NetBox', nautobot = target === 'nautobot';
-  const rows = [], left = [], notes = [], used = new Map();
+  const rows = [], left = [], notes = [], used = new Map(), inBundle = new Map();
   let dac = false;
   for (const f of cableFindings(rack, ends)) {
     const c = f.cable;
@@ -299,15 +301,22 @@ export function cableImportRows({rack, target = 'netbox', names, kept, resolve, 
     if (len.note) notes.push(`Cable ${f.name}: ${len.note}.`);
     // A label or a description over the field's length is cut to it, not the cable dropped.
     const along = c.length?.source === 'routed' && len.value !== '';
-    let label = flat(c.label || c.id), description = c.purpose || '';
-    if (along && !nautobot) description = description ? `${description}. Length measured along its route.` : 'Length measured along its route.';
-    else if (along) notes.push(`Cable ${f.name}: length measured along its route.`);
+    let label = flat(c.label || c.id);
+    // NetBox's description: the bundle first (decision 9), so that a cut from
+    // the end keeps it, then the purpose, then the length note.
+    const bundle = bundleOfCable(rack, c.id);
+    if (bundle) inBundle.set(bundle.id, [...(inBundle.get(bundle.id) || []), f.name]);
+    const parts = nautobot ? [] : [['bundle', bundle ? flat(bundleName(bundle)) : ''], ['purpose', c.purpose || ''],
+      ['length note', along ? 'Length measured along its route.' : '']].filter(([, t]) => t);
+    // Each part but the last ends in a full stop: "Bundle 2. uplink. Length measured along its route."
+    let description = parts.map(([, t], k) => (k + 1 < parts.length && !t.endsWith('.') ? `${t}.` : t)).join(' ');
+    if (along && nautobot) notes.push(`Cable ${f.name}: length measured along its route.`);
     if (charCount(label) > DCIM_LIMITS.cableLabel) {
       notes.push(`Cable ${f.name}: its label is ${charCount(label)} characters and ${T} takes ${DCIM_LIMITS.cableLabel}, so the label is shortened to that.`);
       label = cutTo(label, DCIM_LIMITS.cableLabel);
     }
     if (!nautobot && charCount(description) > DCIM_LIMITS.cableDescription) {
-      notes.push(`Cable ${f.name}: its purpose is ${charCount(description)} characters and ${T} takes ${DCIM_LIMITS.cableDescription} in a description, so the description is shortened to that.`);
+      notes.push(`Cable ${f.name}: its description (${andList(parts.map(([k]) => k))}) is ${charCount(description)} characters and ${T} takes ${DCIM_LIMITS.cableDescription}, so the description is shortened to that.`);
       description = cutTo(description, DCIM_LIMITS.cableDescription);
     }
     rows.push(nautobot
@@ -318,6 +327,19 @@ export function cableImportRows({rack, target = 'netbox', names, kept, resolve, 
          length_unit: len.unit, description});
   }
   if (dac) notes.push('A DAC is written as dac-passive. Change the type of one that is active.');
+  // THE BUNDLES (#923, decision 9). NetBox: each cable names its bundle first
+  // in its description. NetBox 4.6 and later also has cable bundles of its own
+  // (dcim.CableBundle, and the cable import's `bundle` column, by name: NetBox
+  // v4.7.2 251458b8, dcim/models/cables.py and dcim/forms/bulk_import.py), but
+  // a bundle must exist before a cable can name it, as a tag must, so the kit
+  // leaves that column out and says so. Nautobot's cable has no description and no
+  // bundle (v3.2.6 3dc554b4, dcim/models/cables.py), so membership is listed here and in the cable schedule.
+  const held = bundlesOf(rack).filter(b => inBundle.has(b.id))
+    .map(b => `${flat(bundleName(b))} holds ${andList(inBundle.get(b.id))}`);
+  if (held.length && nautobot)
+    notes.push(`Nautobot's cables have no description or bundle, so this file does not say which bundle a cable is in: ${held.join('; ')}. The cable schedule lists each cable's bundle.`);
+  else if (held.length)
+    notes.push("Each cable in a bundle names its bundle first in its description. NetBox 4.6 and later also has cable bundles of its own, which must be made before a cable can name one, so this file does not fill a cable's bundle field.");
   return {columns: CABLE_IMPORT_COLUMNS[nautobot ? 'nautobot' : 'netbox'], rows, left, notes};
 }
 

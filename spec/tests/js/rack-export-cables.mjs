@@ -59,14 +59,14 @@ test('the notes a drawn export carries name the cable, the end as the page names
 test('the cable schedule: one row per cable, devices named as the device import names them', () => {
   const {columns, rows, notes} = X.cableScheduleRows(RACK, ENDS);
   assert.deepEqual(columns, ['id', 'cable', 'a_device', 'a_u', 'a_port', 'b_device', 'b_u', 'b_port', 'media', 'purpose',
-    'length', 'length_unit', 'route', 'length_source', 'status', 'notes']);
+    'length', 'length_unit', 'route', 'bundle', 'length_source', 'status', 'notes']);
   assert.equal(columns, X.CABLE_COLUMNS);
   assert.deepEqual(rows[0], {id: 'c1', cable: 'A1', a_device: 'leaf-1', a_u: 14, a_port: 'port-1', b_device: 'core-1', b_u: 2,
     b_port: 'slot-2/module/p0', media: 'OS2 single-mode fiber', purpose: 'uplink', length: 2, length_unit: 'm',
-    route: '', length_source: 'entered', status: 'connected', notes: ''});
+    route: '', bundle: '', length_source: 'entered', status: 'connected', notes: ''});
   assert.deepEqual(rows[1], {id: 'c2', cable: 'c2', a_device: 'leaf-1', a_u: 14, a_port: 'mgmt-eth', b_device: 'demarc-i3',
     b_u: 14, b_port: 'port-2-1', media: 'Cat 6A copper', purpose: 'management', length: '', length_unit: '',
-    route: '', length_source: '', status: 'connected', notes: ''});
+    route: '', bundle: '', length_source: '', status: 'connected', notes: ''});
   assert.equal(rows[2].status, 'loose end');
   assert.equal(rows[2].b_device, 'demarc-i4');
   assert.equal(rows[2].notes,
@@ -105,7 +105,7 @@ test('a schedule cell that opens as a formula is guarded, as the BOM guards it',
   const rack = {...RACK, cables: [{...RACK.cables[0], label: '=A1', purpose: '-x'}]};
   const {columns, rows} = X.cableScheduleRows(rack, ENDS);
   const csv = X.toCsv(columns, rows, [], {cell: X.bomCell});
-  assert.match(csv, /\r\nc1,'=A1,leaf-1,14,port-1,core-1,2,slot-2\/module\/p0,OS2 single-mode fiber,'-x,2,m,,entered,connected,\r\n$/);
+  assert.match(csv, /\r\nc1,'=A1,leaf-1,14,port-1,core-1,2,slot-2\/module\/p0,OS2 single-mode fiber,'-x,2,m,,,entered,connected,\r\n$/);
 });
 
 test('the BOM lists cables by media, length and connector, with "length not set" where there is none', () => {
@@ -514,8 +514,8 @@ test('the schedule carries the route and where the length came from', () => {
   const r = {...RACK, cables: [c]};
   const routes = new Map([[c.id, {waypoints: [{lane: 'left-front', ru: 12}, {lane: 'left-front', ru: 24}]}]]);
   const {columns, rows} = X.cableScheduleRows(r, new Map(), r.items, routes);
-  assert.deepEqual(columns.slice(columns.indexOf('length'), columns.indexOf('length') + 4),
-    ['length', 'length_unit', 'route', 'length_source']);
+  assert.deepEqual(columns.slice(columns.indexOf('length'), columns.indexOf('length') + 5),
+    ['length', 'length_unit', 'route', 'bundle', 'length_source']);
   assert.equal(rows[0].route, 'left-front U12-U24');
   assert.equal(rows[0].length_source, 'routed');
 });
