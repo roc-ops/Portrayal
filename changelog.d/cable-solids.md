@@ -40,5 +40,9 @@
 - **A zero-U part that stands in the gutter and carries no lane** (a zero-U
   PDU) moves the cable lane beside its upright outboard of it, at the units it
   spans (`laneXAt`): the lane runs in a gutter as wide as the usual one just
-  outside the PDU, so a cable runs beside it and not through it. Routes on
-  that lane are longer by about twice the PDU's width.
+  outside the PDU, so a cable runs beside it and not through it, and a port
+  leg to that lane goes round the PDU on its back, the side facing into the
+  rack, never over its outlet face. On a sample 42U rack with a 52 x 65 mm
+  zero-U PDU, a route on that lane grew by 13 to 164 mm (median 63) on a
+  four-post with the PDU on a rear upright, and by up to 421 mm (median 202)
+  on a two-post.

@@ -227,7 +227,10 @@ test('a zero-U PDU standing in the gutter pushes the lane outboard of it, and ro
   // in a gutter as wide as the usual one just outboard of it, at the units it spans
   const out = -(OPENING / 2 + RAIL_W + 56 + R.LANE_GAP / 2);
   assert.equal(R.laneXAt(rack, 'left-front', 11, ctx.chassisOf), out);
-  assert.equal(R.laneXAt(rack, 'left-front', 40, ctx.chassisOf), R.laneX('left'));   // above it (U1-U39)
+  // it spans U1-U30 (1700 mm, ru 30): outboard at its top unit, the gutter above it
+  assert.equal(R.laneXAt(rack, 'left-front', 1, ctx.chassisOf), out);
+  assert.equal(R.laneXAt(rack, 'left-front', 30, ctx.chassisOf), out);
+  assert.equal(R.laneXAt(rack, 'left-front', 31, ctx.chassisOf), R.laneX('left'));
   assert.equal(R.laneXAt(rack, 'right-front', 11, ctx.chassisOf), R.laneX('right'));
   // the PDU is its envelope, and the lane points are clear of it
   const box = S.solidsOf(rack, ctx).find(x => x.item === 'z2').box;
@@ -244,6 +247,32 @@ test('a zero-U PDU standing in the gutter pushes the lane outboard of it, and ro
   const rear = pdu('left-rear');
   assert.equal(R.laneXAt(rear.rack, 'left-rear', 11, rear.ctx.chassisOf), out);
   assert.equal(R.laneXAt(rear.rack, 'left-front', 11, rear.ctx.chassisOf), R.laneX('left'));
+});
+
+test('a cable to the lane beside a rear PDU goes round it on the rack side, never over its outlet face', () => {
+  // a four-post: the switch's rear ports at the rear rail plane (-740), a
+  // zero-U PDU on the left-rear upright, its outlet face looking out of the
+  // back of the rack
+  let r = F.add({...F.ownerRack(), items: []}, 'rear', 10, {face: 'rear', label: 'rear-10'});
+  r = F.add(r, 'rear', 20, {face: 'rear', label: 'rear-20'});
+  r = {...r, zeroU: [{id: 'z2', ref: 'pdu', cfg: 'base', at: 'left-rear', offsetMm: 0}]};
+  const ctx = F.ctxOf({ports: {i1: {p: -200}, i2: {q: -180}}});
+  const c = F.cable('c1', F.end('i1', 'p', 'front'), F.end('i2', 'q', 'front'), 'cat6');
+  const rack = {...r, cables: [c]};
+  const box = S.solidsOf(rack, ctx).find(x => x.item === 'z2').box;
+  // centred on the 34 mm post behind the rear rail: its outlet face is behind
+  // the rail plane, outside the frame
+  assert.ok(box.z0 < -740 && box.z1 > -740, JSON.stringify(box));
+  const p = R.routePath(rack, c, ctx);
+  assert.deepEqual(p.crossings, []);
+  // both ports run to the lane outboard of the PDU, each round it once
+  assert.equal(p.detours.length, 2);
+  assert.ok(p.points.some(q => q.at === 'lane' && q.x < box.x0));
+  // and no point of the path lies between the PDU and its outlet side
+  const behind = p.points.filter(q => q.z < box.z0 - 1e-9);
+  assert.deepEqual(behind, [], JSON.stringify(behind));
+  // it goes round on the rack side instead, in front of the PDU
+  assert.ok(p.detours.every(d => d.points.some(q => q.z > box.z1)), JSON.stringify(p.detours));
 });
 
 // ── what the rules cannot clear ────────────────────────────────────────────

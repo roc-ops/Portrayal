@@ -233,7 +233,8 @@ side lane, going round a second body the same way when a detour meets one.
 They count in the length and are never stored; `path.detours` lists them. A
 zero-U part that stands in the gutter and carries no lane (a zero-U PDU)
 moves the lane beside its upright outboard of it, where it stands
-(`laneXAt`). A leg the rules
+(`laneXAt`), and a zero-U part is gone round on its back, the side facing
+into the rack, before its outward face. A leg the rules
 cannot clear is left as drawn, and `path.crossings` and
 `bodyFindings(rack, ctx, nameOf)` report it as `crosses-body`, with a
 sentence. It warns and never refuses. `inspect` of a cable gives them as

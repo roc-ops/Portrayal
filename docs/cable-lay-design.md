@@ -120,7 +120,13 @@ and what still crosses is a finding.**
   not a solid: a lane waypoint at a U it spans runs through its channel, so
   only its walls and back are solid, derived as a sheet part is. A zero-U part
   that carries no lane (a PDU) is its envelope, as the fit check already takes
-  it.
+  it. **It stands in the gutter, so the lane moves outboard of it:** at the
+  units it spans, the lane beside that upright runs in a gutter as wide as the
+  usual one just outside the part, and a cable runs beside it, not through it
+  (1.3). Outboard, because inboard of it is the rail and the ears of every
+  device fixed there, and moving the lane in front of it would take it off the
+  rail plane every port leg and every front-to-back crossing is measured in
+  (and, for a rear PDU, outside the back of the rack).
 
 The plates are **derived, never stated.** `rack_index.py` writes them into
 `rack.json` per device as `solids: [{part, box: {x, y, z, w, h, d}}]`, in the
@@ -166,6 +172,14 @@ In order of preference:
    end, into the gutter, which is where the automatic route already goes.
 3. **Front to back by a side lane.** A cable whose ends are on opposite faces
    goes through the lane beside a post, as the automatic route does today.
+
+The lane beside a zero-U part that carries none runs outboard of it (1.1).
+**A zero-U part is gone round on its back first**, the side that faces into
+the rack, where the side channel is; a cable from a port inboard of it turns
+the corner there (along the rack to the gap beside the part, back past it,
+across, and out). Over its outward face, where a PDU's plugs stand outside
+the frame, is the last way tried. A detour that meets a second body goes round
+it the same way, to a bounded depth, and the result is pulled taut.
 
 A hand route keeps its waypoints; the detours are added between them in the
 same way, and a leg the three rules cannot clear is left as drawn and reported.
@@ -728,6 +742,7 @@ published file or a saved rack file uses it.
 | the version-4 table of the rack products note gaining `states`, `readings`, the PDU bracket key, `slack` and `lay` | `docs/rack-products-design.md` section 9, rack file version 4 | one bump carries them all; a key left out needs a version 5 |
 | the stored slack counting in the routed length | kit | a saved routed length and stock size depend on it |
 | routed lengths changing on saved racks: detours, cables resting at the floor and at the ring sill, positions in the lay, slack | kit | stored routed lengths and stock sizes move on the next measure; an ordered stock length may no longer match |
+| the lane moving outboard of a zero-U part that stands in the gutter and carries no lane (a zero-U PDU), and routed lengths changing beside one | kit (`laneXAt`), drawings | every route on that lane is longer, and a saved length moves on the next measure; a drawing that places lanes itself must follow |
 | `crosses-body` and the tray findings, `bodyFindings` | kit API, agent output | agents and pages read the kinds |
 | `cable.slack`, `cable.slack.clear`, `cable.lay` | kit commands, offered to agents | agent sessions and saved prompts call them by name |
 | `inspect` fields: `crosses` and `rests` on a cable route, `slack.stored`, the tray block of a device | kit queries, agent output | agents and the site read them by name |

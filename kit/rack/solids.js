@@ -218,18 +218,34 @@ const gap = (p, q) => Math.hypot(p.x - q.x, p.y - q.y, p.z - q.z);
 //   2. round the end: past either end along x, into the gutter;
 //   3. front to back by a side lane (`lanes`, the x of each lane at that
 //      height), when the leg's ends are on opposite faces of the body.
-// Every plane is clear of the body by the cable's radius and CLEAR.
+// A ZERO-U PART is gone round on the side that faces into the rack first (its
+// back, toward the rails: the side channel a cable runs down), and over its
+// outward face, where a PDU's plugs stand outside the frame, only when
+// nothing else clears it. Going round its back, a cable from a port inboard
+// of it turns the corner: along x to the gap beside the part, into the rack
+// past its back, across, and out again on the far side (a corner way).
+// Every plane is clear of the body by the cable's radius and CLEAR. Each way
+// is the list of points it adds between a and b.
+const plane = (p, k, v) => set(p, k, v);
 function waysRound(a, b, solid, {diameter, lanes}) {
   const box = solid.box, m = diameter / 2 + CLEAR;
   const across = crossAxis(a, b, box);
   const edge = across === 'z' ? 'y' : 'z';
   const end = across === 'x' ? 'y' : 'x';
-  const both = k => [[k, box[`${k}0`] - m], [k, box[`${k}1`] + m]];
+  const flat = (k, v) => [plane(a, k, v), plane(b, k, v)];
+  const both = k => [flat(k, box[`${k}0`] - m), flat(k, box[`${k}1`] + m)];
+  // the plane on a point's side of the body along an axis
+  const near = (p, k) => (p[k] <= (box[`${k}0`] + box[`${k}1`]) / 2 ? box[`${k}0`] - m : box[`${k}1`] + m);
+  const corner = (k, v) => { const pa = plane(a, across, near(a, across)), pb = plane(b, across, near(b, across));
+    return [pa, plane(pa, k, v), plane(pb, k, v), pb]; };
   const front = solid.away === -1 ? box.z0 - m : box.z1 + m, back = solid.away === -1 ? box.z1 + m : box.z0 - m;
   const opposite = (a.z <= box.z0 && b.z >= box.z1) || (b.z <= box.z0 && a.z >= box.z1);
-  const tiers = edge === 'z' && across === 'y' ? [[['z', front]], [['z', back]]] : [both(edge)];
+  const zeroU = solid.zeroU === true && edge === 'z';
+  const tiers = edge === 'z' && across === 'y' ? [[flat('z', front)], [flat('z', back)]]
+    : zeroU ? [[flat('z', back), corner('z', back)]] : [both(edge)];
   tiers.push(both(end));
-  if (opposite) tiers.push([...new Set(lanes)].map(v => ['x', v]));
+  if (opposite) tiers.push([...new Set(lanes)].map(v => flat('x', v)));
+  if (zeroU) tiers.push([flat('z', front), corner('z', front)]);
   return tiers;
 }
 
@@ -254,13 +270,13 @@ export function detour(a, b, solids, {diameter = 0, lanes = []} = {}) {
     if (!first) return [];
     for (const tier of waysRound(p, q, first.solid, {diameter, lanes: lanesAt((p.y + q.y) / 2)})) {
       let best = null;
-      for (const [k, v] of tier) {
-        const p1 = set(p, k, v), p2 = set(q, k, v), legs = [[p, p1], [p1, p2], [p2, q]];
+      for (const way of tier) {
+        const chain = [p, ...way, q], legs = chain.slice(1).map((w, i) => [chain[i], w]);
         let pts = null;
-        if (legs.every(([u, w]) => clear(u, w))) pts = [p1, p2];
+        if (legs.every(([u, w]) => clear(u, w))) pts = way;
         else if (depth > 0 && legs.every(([u, w]) => clear(u, w, first.solid))) {
           const parts = legs.map(([u, w]) => (gap(u, w) < 1e-9 ? [] : go(u, w, depth - 1)));
-          if (!parts.some(x => x === null)) pts = [...parts[0], p1, ...parts[1], p2, ...parts[2]];
+          if (!parts.some(x => x === null)) pts = parts.flatMap((part, i) => (i < way.length ? [...part, way[i]] : part));
         }
         if (!pts) continue;
         pts = pts.filter((x, i, all) => gap(x, i ? all[i - 1] : p) > 1e-9 && gap(x, q) > 1e-9);
