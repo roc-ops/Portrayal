@@ -28,6 +28,9 @@ const Y20r = Math.round(Y20 * 10) / 10;               // as inspect rounds it, t
 const Z = 55;                                         // the lacer's guides: half its 110 depth out
 const near = (got, want, what) => assert.ok(Math.abs(got - want) < 1e-9, `${what}: ${got}, want ${want}`);
 const lengthMm = (r, c, ctx) => (R.routedLength(r, c, ctx).measured - 2 * R.END_ALLOWANCE_M) * 1000;
+// The plug's reach (#960): a cat6 cord leaves its RJ45 plug and boot this far
+// out of the face, so each path starts and ends with that straight stretch.
+const RA = R.PLUG_REACH.cat6;
 
 test('throughRings: a ring centre becomes its entry and exit, half its depth either side, in travel order', () => {
   const got = throughRings([[0, 0], [100, 0], [200, 0]], [null, {run: 'x', depth: 10}, null]);
@@ -42,20 +45,24 @@ test('one ring: the cable enters on the side of the port, passes straight along 
   const ctx = ctxOf([{via: 'guide-1', x: -150, aperture: {w: 32, h: 29.5}}], {i1: -100, i3: -100});
   const c = cableOf([{item: 'i2', via: 'guide-1'}, {lane: 'left-front', ru: 20}, {lane: 'left-front', ru: 30}]);
   const path = R.routePath(r, c, ctx);
-  const [a, entry, exit, l1, l2, b] = path.points;
-  assert.deepEqual([a.at, entry.at, exit.at, l1.at, l2.at, b.at], ['a', 'entry', 'exit', 'lane', 'lane', 'b']);
+  const [a, ra, entry, exit, l1, l2, rb, b] = path.points;
+  assert.deepEqual([a.at, ra.at, entry.at, exit.at, l1.at, l2.at, rb.at, b.at], ['a', 'reach', 'entry', 'exit', 'lane', 'lane', 'reach', 'b']);
+  assert.deepEqual([ra.end, ra.z - a.z, rb.end, rb.z - b.z], ['a', RA, 'b', RA]);
   // the default depth, estimated: the ring states none
   assert.deepEqual(path.rings.map(g => [g.depth, g.estimated, g.sense]), [[R.RING_DEPTH, true, -1]]);
   assert.deepEqual([entry.x, exit.x], [-150 + R.RING_DEPTH / 2, -150 - R.RING_DEPTH / 2]);
   assert.deepEqual([entry.y, entry.z], [exit.y, exit.z]);
-  // a(-100, Y20, 0) -> entry(-145, Y20, 55) -> exit(-155) -> lane(-LANE, Y20, 0) -> up 10U -> b(-100, Y30, 0)
+  // a(-100, Y20, 0) -> its reach (z RA) -> entry(-145, Y20, 55) -> exit(-155) -> lane(-LANE, Y20, 0) -> up 10U
+  // -> b's reach(-100, Y30, RA) -> b(-100, Y30, 0)
   const h = R.RING_DEPTH / 2;
-  const want = Math.hypot(50 - h, Z) + R.RING_DEPTH + Math.hypot(LANE - 150 - h, Z) + 10 * RU + (LANE - 100);
+  const want = RA + Math.hypot(50 - h, Z - RA) + R.RING_DEPTH + Math.hypot(LANE - 150 - h, Z) + 10 * RU
+    + Math.hypot(LANE - 100, RA) + RA;
   near(lengthMm(r, c, ctx), want, 'one ring');
   // and the ring states its depth: that is used, and not estimated
   const stated = ctxOf([{via: 'guide-1', x: -150, depth: 6.8}], {i1: -100, i3: -100});
   assert.deepEqual(R.routePath(r, c, stated).rings.map(g => [g.depth, g.estimated]), [[6.8, false]]);
-  near(lengthMm(r, c, stated), Math.hypot(50 - 3.4, Z) + 6.8 + Math.hypot(LANE - 153.4, Z) + 10 * RU + (LANE - 100), 'stated depth');
+  near(lengthMm(r, c, stated), RA + Math.hypot(50 - 3.4, Z - RA) + 6.8 + Math.hypot(LANE - 153.4, Z) + 10 * RU
+    + Math.hypot(LANE - 100, RA) + RA, 'stated depth');
 });
 
 test('collinear rings: one straight pass through all of them', () => {
@@ -65,7 +72,7 @@ test('collinear rings: one straight pass through all of them', () => {
   const c = cableOf([{item: 'i2', via: 'guide-3'}, {item: 'i2', via: 'guide-2'}, {item: 'i2', via: 'guide-1'},
     {lane: 'left-front', ru: 20}, {lane: 'left-front', ru: 30}]);
   const path = R.routePath(r, c, ctx);
-  const inRings = path.points.slice(1, 7);
+  const inRings = path.points.slice(2, 8);
   assert.deepEqual(inRings.map(p => p.at), ['entry', 'exit', 'entry', 'exit', 'entry', 'exit']);
   // one line: the same y and z all the way, x falling from the first entry to the last exit
   assert.ok(inRings.every(p => p.y === Y20 && p.z === Z));
@@ -73,8 +80,9 @@ test('collinear rings: one straight pass through all of them', () => {
   assert.deepEqual(xs, [h, -h, -110 + h, -110 - h, -205 + h, -205 - h]);
   assert.ok(xs.every((x, k) => k === 0 || x < xs[k - 1]), 'never turns back');
   assert.deepEqual(path.findings, []);
-  // a(50, Y20, 0) -> first entry -> straight to the last exit -> lane -> up -> b(-100, Y30, 0)
-  const want = Math.hypot(50 - h, Z) + (205 + 2 * h) + Math.hypot(LANE - 205 - h, Z) + 10 * RU + (LANE - 100);
+  // a(50, Y20, 0) -> its reach -> first entry -> straight to the last exit -> lane -> up -> b's reach -> b(-100, Y30, 0)
+  const want = RA + Math.hypot(50 - h, Z - RA) + (205 + 2 * h) + Math.hypot(LANE - 205 - h, Z) + 10 * RU
+    + Math.hypot(LANE - 100, RA) + RA;
   near(lengthMm(r, c, ctx), want, 'collinear rings');
 });
 
@@ -85,18 +93,19 @@ test('a ring approached at 90 degrees: the bend is at its face, outside, and it 
   const ctx = ctxOf([{via: 'guide-1', x: -150}], {i1: -150, i3: -100}, {i1: Y20 - 30});
   const c = cableOf([{item: 'i2', via: 'guide-1'}, {lane: 'left-front', ru: 20}, {lane: 'left-front', ru: 30}]);
   const path = R.routePath(r, c, ctx), h = R.RING_DEPTH / 2;
-  const [a, entry, exit] = path.points;
+  const [a, ra, entry, exit] = path.points;
   assert.deepEqual([entry.x, exit.x], [-150 + h, -150 - h]);
   // nothing between entry and exit but the straight run along x
   // (the port below it stands in the same x band, but not in the ring)
-  assert.ok(path.points.every(p => p.at === 'a' || !(p.x < -150 + h && p.x > -150 - h)));
+  assert.ok(path.points.every(p => p.at === 'a' || (p.at === 'reach' && p.end === 'a') || !(p.x < -150 + h && p.x > -150 - h)));
   assert.deepEqual([exit.y - entry.y, exit.z - entry.z], [0, 0]);
-  // the turn is at the entry: the cable rises from the port to it, then runs along x
-  assert.ok(entry.y - a.y === 30 && entry.z - a.z === Z);
-  const want = Math.hypot(h, 30, Z) + R.RING_DEPTH + Math.hypot(LANE - 150 - h, Z) + 10 * RU + (LANE - 100);
+  // the turn is at the entry: the cable leaves its plug, rises from the reach point to it, then runs along x
+  assert.ok(ra.z - a.z === RA && entry.y - ra.y === 30 && entry.z - ra.z === Z - RA);
+  const ends = RA + Math.hypot(LANE - 100, RA) + RA;
+  const want = Math.hypot(h, 30, Z - RA) + R.RING_DEPTH + Math.hypot(LANE - 150 - h, Z) + 10 * RU + ends;
   near(lengthMm(r, c, ctx), want, '90 degree approach');
   // The old point-in-the-ring measure was shorter: the length grows by a few mm.
-  const old = Math.hypot(30, Z) + Math.hypot(LANE - 150, Z) + 10 * RU + (LANE - 100);
+  const old = Math.hypot(30, Z - RA) + Math.hypot(LANE - 150, Z) + 10 * RU + ends;
   assert.ok(want > old && want - old < R.RING_DEPTH);
 });
 
@@ -108,8 +117,8 @@ test('a route that would enter and leave a ring by one face is a finding, not dr
   const ctx = ctxOf([{via: 'guide-1', x: -150, aperture: {w: 32, h: 29.5}}], {i1: -100, i3: 100});
   const path = R.routePath(r, r.cables[0], ctx);
   assert.deepEqual(path.findings, [{kind: 'doubles-back', cable: 'c1', item: 'i2', via: 'guide-1'}]);
-  assert.deepEqual(path.points.map(p => p.at), ['a', 'face', 'lane', 'lane', 'b']);
-  assert.equal(path.points[1].x, -150 + R.RING_DEPTH / 2);
+  assert.deepEqual(path.points.map(p => p.at), ['a', 'reach', 'face', 'lane', 'lane', 'reach', 'b']);
+  assert.equal(path.points[2].x, -150 + R.RING_DEPTH / 2);
   assert.deepEqual(R.fill(r, ctx), []);
   const [f] = R.ringFindings(r, ctx, id => (id === 'i2' ? 'lacer-1' : id));
   assert.match(f.text, /^c1 would enter and leave lacer-1 ring 1 by the same face/);
@@ -414,7 +423,7 @@ test('a ring that runs up the rack, in an elevation whose y is down: orientMarks
   const c = cableOf([{item: 'i2', via: 'end'}, {lane: 'left-front', ru: 20}, {lane: 'left-front', ru: 30}]);
   const path = R.routePath(r, c, ctx), marks = R.ringMarks(r, c, ctx);
   assert.deepEqual(path.rings.map(g => [g.run, g.passed, g.sense]), [['y', true, 1]]);   // upward
-  const [a, entry, exit] = path.points;
+  const [a, , entry, exit] = path.points;
   assert.deepEqual([entry.y, exit.y], [Y20 - R.RING_DEPTH / 2, Y20 + R.RING_DEPTH / 2]);
   // the elevation: y down
   const centres = R.resolveRoute(r, c, ctx).waypoints.map(w => R.pointOf(r, w, ctx));

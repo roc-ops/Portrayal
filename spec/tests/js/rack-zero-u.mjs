@@ -215,7 +215,12 @@ test('a routed length runs through the duct, about 49 mm further out at each end
   const through = R.routedLength(ducted, cable, rc).measured;
   const out = Math.abs(Z.zeroUX(ducted.zeroU[0], chassisOf) - R.laneX('left'));
   assert.ok(Math.abs(out - 49.4) < 0.1, `${out}`);
-  assert.ok(Math.abs((through - bare) * 1000 - 2 * out) < 0.5, `${through} ${bare}`);
+  // each end's leg runs from its plug's reach point, 39.4 out of the face for
+  // cat6 (#960), to the lane on the rail plane: it grows by a little less
+  // than the 49.4 the lane moves out
+  const ra = R.PLUG_REACH.cat6, dx = Math.abs(R.laneX('left')) - 150;
+  const grew = 2 * (Math.hypot(dx + out, ra) - Math.hypot(dx, ra));
+  assert.ok(Math.abs((through - bare) * 1000 - grew) < 0.5 && grew < 2 * out && grew > 2 * out - 10, `${through} ${bare} ${grew}`);
 });
 
 test('fill: every cable whose lane run passes through the duct, once, against 40% of its channel and its capacity', () => {
