@@ -247,6 +247,18 @@ through it. On a two-post rack, where every rear port is the depth of its
 device behind the one rail plane, that is most rear routes; on a four-post,
 few.
 
+The automatic route (`autoRoute`) runs a patch whose two ends leave through
+one manager along it, port to port, through the rings whose centres lie
+between the two ports, in order from end a, and never out to a gutter and
+back; with no ring between, the route is empty and the cable runs direct. A
+manager with no ring along its run, but a duct, runs it in the duct. Any
+other route takes a gutter chosen from both ends: the side both ports stand
+on, or, when they stand on opposite sides of the centre line, the side whose
+path (`routePath`, detours included) is the shorter, end a's on a tie or
+when a port is not found. **Routed lengths change in 0.12.0** wherever the
+two ends share a manager or stand on opposite sides; every change found so
+far is shorter.
+
 To change a rack by name rather than by function, use the command core:
 `createRackEditor({ doc, chassisOf })` applies `place`, `move`, `patch`,
 `remove`, `attach`, `detach`, `frame`, `rename`, `dcim`, `fit`, `field`, the

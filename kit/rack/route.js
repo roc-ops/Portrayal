@@ -102,21 +102,38 @@ function through(m, pane, portX, side, crossing, ctx) {
   return pass ? [{item: m.id, via: pass.via}] : [];
 }
 
+// A PATCH ALONG ONE MANAGER (#949, docs/cable-lay-design.md section 4.1,
+// "Local patches"): both ends leave through the same manager on the same face,
+// so the cable runs along it port to port, through the rings BETWEEN the two
+// ports in order from end a, and never out to a gutter and back. A ring is
+// between when its centre is, the ends included: not the half-depth reach of
+// `through`, which takes a ring whose centre is just behind a port on the way
+// out to a gutter. Here the cable turns toward the other port at once, and a
+// ring behind it is a step back the patch does not need (on the owner's rack
+// of #949, a leaf port 3.1 mm short of a ring's centre, cabled away from it,
+// measured 5.5 cm longer through it, and a stock size). A ring outside the
+// stretch is left alone, so no ring is entered and left by one face; with no
+// ring between, the run is direct (an empty route). A manager with no ring
+// that runs along x, but a duct, runs in the duct.
+function along(m, pane, ax, bx, ctx) {
+  const gs = ctx.guidesOf(m.id).filter(g => g.face === pane);
+  const rings = gs.filter(g => g.kind === 'ring' && ringOf(g).run === 'x');
+  if (rings.length) {
+    const lo = Math.min(ax, bx), hi = Math.max(ax, bx);
+    return rings.filter(g => g.x >= lo && g.x <= hi)
+      .sort((p, q) => (ax <= bx ? p.x - q.x : q.x - p.x))
+      .map(g => ({item: m.id, via: g.via}));
+  }
+  const duct = gs.find(g => g.kind === 'duct');
+  return duct ? [{item: m.id, via: duct.via}] : [];
+}
+
 const sameWp = (a, b) => (a.lane ? a.lane === b.lane && a.ru === b.ru : a.item === b.item && a.via === b.via);
 const dedupe = list => list.filter((w, i) => i === 0 || !sameWp(w, list[i - 1]));
 
-export function autoRoute(rack, cable, ctx) {
-  const ends = [cable.a, cable.b].map(e => {
-    const it = itemOf(rack, e.item), pane = it && endPane(rack, e);
-    // A port not found only defaults the SIDE (to the left, as a port at the centre does);
-    // no length is ever measured from it (portPoint).
-    return it && pane ? {e, it, pane, x: ctx.portX(e) ?? 0} : null;
-  });
-  if (ends.some(x => !x)) return [];
-  const [A, B] = ends;
-  const mA = managerOf(rack, A.it, A.pane, ctx), mB = managerOf(rack, B.it, B.pane, ctx);
-  if (!mA && !mB && A.pane === B.pane && Math.abs(A.it.ru - B.it.ru) <= SHORT) return [];
-  const side = A.x <= 0 ? 'left' : 'right';
+// The route by the gutter on `side`: out through end a's manager, along the
+// lane (across the top when the ends are on two faces), in through end b's.
+function byGutter(rack, A, B, mA, mB, side, ctx) {
   const crossing = A.pane !== B.pane;
   const f = rack.frame;
   const laneA = laneFor(f, side, A.pane), laneB = laneFor(f, side, B.pane);
@@ -128,6 +145,48 @@ export function autoRoute(rack, cable, ctx) {
   const outB = through(mB, B.pane, B.x, side, crossing, ctx).reverse();
   return dedupe([...outA, ...lanes, ...outB]);
 }
+
+// THE AUTOMATIC ROUTE. Two ends that leave through one manager on one face
+// run along it (`along`). Any other route takes a gutter, chosen from BOTH
+// ends (section 4.1, "Opposite ways"): when both ports stand on the same side
+// of the centre line, that side (a port at the centre counts as left);
+// when they stand on opposite sides, the side whose path (routePath, with its
+// detours) is the shorter, end a's side on a tie or when either port is not
+// found and so cannot be measured.
+export function autoRoute(rack, cable, ctx) {
+  const ends = [cable.a, cable.b].map(e => {
+    const it = itemOf(rack, e.item), pane = it && endPane(rack, e);
+    // A port not found only defaults the SIDE (to the left, as a port at the centre does);
+    // no length is ever measured from it (portPoint).
+    return it && pane ? {e, it, pane, x: ctx.portX(e) ?? 0} : null;
+  });
+  if (ends.some(x => !x)) return [];
+  const [A, B] = ends;
+  const mA = managerOf(rack, A.it, A.pane, ctx), mB = managerOf(rack, B.it, B.pane, ctx);
+  if (!mA && !mB && A.pane === B.pane && Math.abs(A.it.ru - B.it.ru) <= SHORT) return [];
+  if (mA && mA === mB && A.pane === B.pane) return along(mA, A.pane, A.x, B.x, ctx);
+  const sideOf = x => (x <= 0 ? 'left' : 'right');
+  const sA = sideOf(A.x), sB = sideOf(B.x);
+  if (sA === sB) return byGutter(rack, A, B, mA, mB, sA, ctx);
+  const routes = {[sA]: byGutter(rack, A, B, mA, mB, sA, ctx), [sB]: byGutter(rack, A, B, mA, mB, sB, ctx)};
+  // The detours are part of the path (a gutter beside a zero-U PDU can cost
+  // the one side 25 cm round it), and measuring them is the dear part, so the
+  // side is decided once per rack, context and cable, as solidsOf reads its
+  // bodies once per rack and context.
+  let per = sideMemo.get(rack);
+  if (!per) sideMemo.set(rack, per = new WeakMap());
+  let byCable = per.get(ctx);
+  if (!byCable) per.set(ctx, byCable = new WeakMap());
+  if (!byCable.has(cable)) {
+    // Measured as a route edited by hand, so the measure does not come back
+    // here; and under an id no bundle holds, so it is the cable's own path.
+    const measure = route => pathLength(routePath(rack, {...cable, id: Symbol('side'), route, routeEdited: true}, ctx))?.measured;
+    const la = measure(routes[sA]), lb = measure(routes[sB]);
+    byCable.set(cable, la == null || lb == null || la <= lb ? sA : sB);
+  }
+  return routes[byCable.get(cable)];
+}
+const sideMemo = new WeakMap();
 
 // Does a waypoint still stand for something in this rack?
 function resolves(rack, w, ctx) {
