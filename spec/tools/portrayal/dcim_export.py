@@ -1865,7 +1865,9 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
     # under NX-OS whoever sells it. These RENAME and decide nothing: which
     # placement is an interface is still the hardware document's own rule below,
     # and an id no rule names keeps its faceplate id. A listing's names win, as
-    # they always have - its document is about that NOS and not this one.
+    # they always have - its document is about that NOS and not this one. The
+    # same rules name the device's POWER OUTLETS by their printed labels (a rack
+    # PDU's outlet-a1 is A1, outlet_rows); an outlet no rule names keeps its id.
     own = listing_names(dev) if names is None and dev.get("interfaces") else {}
 
     console, mgmt_sfp, bays, powers, timing = [], [], [], {}, {}

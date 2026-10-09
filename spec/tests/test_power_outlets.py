@@ -112,6 +112,24 @@ def test_every_outlet_type_is_one_both_targets_list():
         "OUTLET_LABEL labels an outlet that is not `other`"
 
 
+def test_a_rule_names_an_outlet_by_its_printed_label():
+    """A device's own `interfaces:` rules rename a power outlet as they rename an
+    interface (the Eaton EVMI2130X's outlet-a1 is A1); an outlet no rule names
+    keeps its placement id."""
+    outlets = {"outlet-a1": {"ref": "std/c13-outlet@1", "fed-by": "input"},
+               "outlet-a2": {"ref": "eaton/c39-outlet@1", "fed-by": "input"}}
+    powers = {"input": {"name": "input", "type": "nema-l21-30p"}}
+    names = dx.listing_names({"interfaces": [
+        {"physical": "outlet-a{n}", "name": "A{n}", "range": "1-1"}]})
+    rows = dx.outlet_rows(outlets, powers, [], "test PDU", names)
+    assert [r["name"] for r in rows] == ["A1", "outlet-a2"]
+    assert [r["type"] for r in rows] == ["iec-60320-c13", "eaton-c39"]
+    assert all(r["power_port"] == "input" for r in rows)
+    # with no rules at all, every outlet keeps its id
+    assert [r["name"] for r in dx.outlet_rows(outlets, powers, [], "test PDU")] == \
+        ["outlet-a1", "outlet-a2"]
+
+
 @pytest.mark.parametrize("target", dx.TARGETS)
 def test_both_targets_get_the_same_outlets(target):
     """Both import `power_port` by name, so for_target leaves the block alone."""
