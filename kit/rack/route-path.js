@@ -57,6 +57,17 @@ export function routed2d(pts, r = 4, rings = null) {
 // would enter and leave by one face: that ring is not drawn through. The
 // cable is taken to that face only, and its index is in `back`.
 //
+// HELD, NOT HOOKED (#949, the owner's decision of 2026-10-09). A cable that
+// only reaches a short way past its nearer neighbour into a ring just beyond
+// it is held by the ring, not hooked back through it: it passes, toward the
+// ring and away from both neighbours, and turns back beyond its far face. Short means
+// the ring's near face is no further past the nearer neighbour, along the
+// run, than the ring's own depth plus the cable's diameter (`diameter` on the
+// mark, 0 when not given): the ring stands right at the port, one ring and one
+// cable's lay further on. Measured to the far face, that is an overshoot of at
+// most twice the depth plus the diameter. A ring further off is a hook-back,
+// and stays in `back`. The pass carries `held: true`.
+//
 // `lead` (mm, default 0) adds a point on the run outside each face, so a
 // drawing that rounds its corners rounds them there and not inside the ring.
 // It is never further out than half the neighbour's own distance beyond that
@@ -67,7 +78,8 @@ export function routed2d(pts, r = 4, rings = null) {
 //
 // Returns {points, passes, back}: the points in order; per ring passed,
 // {index, entry, exit, sense} (entry and exit the points in `points`); and
-// per ring not passed, {index, sense, face}.
+// per ring not passed, {index, sense, face}. A ring that holds a cable
+// reaching just into it (above) is a pass with `held: true`.
 const AXIS = {x: 0, y: 1, z: 2};
 const has = (p, a) => (Array.isArray(p) ? AXIS[a] < p.length : typeof p?.[a] === 'number');
 const get = (p, a) => (Array.isArray(p) ? p[AXIS[a]] : p[a]);
@@ -101,7 +113,10 @@ export function throughRings(pts, rings = [], {lead = 0} = {}) {
     const prev = out.length ? out[out.length - 1] : null, next = pts[k + 1] ?? null;
     const given = g.sense === 1 || g.sense === -1;
     const before = given ? 0 : prev ? side(prev, p, a, half) : 0, after = given ? 0 : next ? side(next, p, a, half) : 0;
-    if (given ? g.back === true : before && before === after) {
+    // a ring just past the nearer neighbour holds the cable (above)
+    const held = !given && before && before === after
+      && Math.min(Math.abs(get(prev, a) - c), Math.abs(get(next, a) - c)) - half <= g.depth + (g.diameter > 0 ? g.diameter : 0) + EPS;
+    if (!held && (given ? g.back === true : before && before === after)) {
       const s = given ? g.sense : -before;
       const face = along(p, a, c - s * half);
       out.push(face);
@@ -110,7 +125,7 @@ export function throughRings(pts, rings = [], {lead = 0} = {}) {
     }
     const sense = given ? g.sense : before ? -before : after || 1;
     const entry = along(p, a, c - sense * half), exit = along(p, a, c + sense * half);
-    passes.push({index: k, sense, entry, exit, run: a});
+    passes.push({index: k, sense, entry, exit, run: a, ...(held ? {held: true} : {})});
     out.push(entry, exit);
   });
   if (lead > 0) {
@@ -131,5 +146,5 @@ export function throughRings(pts, rings = [], {lead = 0} = {}) {
       }
     }
   }
-  return {points: out, passes: passes.map(({index, sense, entry, exit}) => ({index, sense, entry, exit})), back};
+  return {points: out, passes: passes.map(({index, sense, entry, exit, held}) => ({index, sense, entry, exit, ...(held ? {held} : {})})), back};
 }

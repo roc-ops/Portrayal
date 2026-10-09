@@ -206,7 +206,11 @@ expanded to the point where the cable enters it and the point where it leaves,
 half the ring's `depth` (`RING_DEPTH`, 10 mm, estimated, when the ring states
 none) either side of its centre. A route that would enter and leave a ring by
 one face is not drawn through it; `ringFindings(rack, ctx)` reports it, and
-neither `fill` nor `capacityOver` counts it there. `routePath` decides each
+neither `fill` nor `capacityOver` counts it there; since 0.12.0, not when the
+ring stands right past the nearer of its neighbours (its near face within the
+ring's depth plus the cable's diameter of it): the cable only reaches in to be
+held, passes (`held: true` on the path's ring) and is counted, with no
+finding. `routePath` decides each
 ring once; `ringMarks(rack, cable, ctx)` gives those decisions, one per
 waypoint, and `routed2d` and `routePoints3d` take them as an optional last
 argument, so the drawings pass through each ring straight and the way it was

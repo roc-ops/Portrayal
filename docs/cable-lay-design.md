@@ -589,7 +589,9 @@ The positions that realise it, in the cases a rack has:
   share one manager runs along the tray directly, port to port, through the
   rings between them, with no gutter** (built early, in kit 0.12.0: a ring is
   between when its centre is; with none between, the ring nearest the middle
-  of the two ports holds it, never a direct run). A local patch with both ends rail-side lies
+  of the two ports holds it, never a direct run; a ring just past a port holds
+  a cord that reaches into it without a doubles-back finding,
+  [cable-managers-design.md](cable-managers-design.md) section 13). A local patch with both ends rail-side lies
   in the rail group, inside every through cable that passes its stretch; one
   with both ends front-edge lies in the front group, outside them. Of two such
   patches the shorter lies nearer its side, so patches that nest never meet.

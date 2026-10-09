@@ -346,6 +346,18 @@ into two points:
   cable would enter and leave by one face. It is not drawn through: the path goes to
   that face and back, the ring counts the cable neither in its fill nor in its
   manager's capacity, and `ringFindings` reports it.
+- **Held, not hooked (#949, kit 0.12.0).** Except when the ring stands right past the
+  nearer of the two points: its near face no further beyond that point, along the run,
+  than the ring's own depth plus the cable's diameter (`ctx.diameterOf`, else its
+  media's). Then the cable only reaches into the ring to be held. It passes, away from
+  both points, turns back beyond the far face, counts in fill and capacity like any
+  cable through the ring, and is not reported; `routePath` marks the ring `held`. The
+  bound is the ring and one cable's lay beyond it: an OM4 cord in a 6.8 mm FHD-CMP5DR
+  ring may reach 9.8 mm past its port to the near face (16.6 mm to the far face). A
+  ring further off is a hook-back and stays a finding. The test is in `throughRings`,
+  so a hand route gets the same answer as an automatic one. On a sample of 8850 hand
+  routes through one lacer ring each, 78 of 1520 findings went (5 %), each route 8 to
+  13.5 mm longer for the reach through the ring.
 - **What is not reported.** A cable that stands on neither side still reaches back a
   little, unreported: one under the ring goes along the run to the face it enters, up to
   half the ring's depth (5 mm by the estimate), and one that comes up steeply from
@@ -355,13 +367,16 @@ into two points:
   as they are; neither is called a finding. A cable whose port is not found on its
   drawing has no path, so no marks and no findings: it is counted in every ring on its
   route, in fill and in capacity, whichever way it would go through.
-- **The automatic route** takes only the rings that run along `x` and lie on the way
+- **The automatic route** to a gutter takes only the rings that run along `x` and lie on the way
   from the port toward its gutter (a port within half a ring's depth of its centre goes
   through it), so it never doubles back and never makes either of those reaches past a
   ring's half-depth: a ring behind the port, which the old nearest-ring rule could
   pick, is left out. This is stricter than the side test on purpose: with the 45 degree
   rule it would take a ring behind any port that sits low enough below it, and draw
-  that reach back.
+  that reach back. A patch whose two ends share a manager runs along it instead
+  (kit 0.12.0, [cable-lay-design.md](cable-lay-design.md) section 4.1): through the
+  rings between its ports, else the ring nearest their middle that it passes or is
+  held by, else the nearest.
 - **Leads.** `routed2d` and `routePoints3d` add a lead point on the run outside each
   face, the corner radius out, so a rounded corner is rounded there and not inside the
   ring. A lead is never further out than half the neighbour's own distance beyond that

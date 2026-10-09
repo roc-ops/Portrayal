@@ -16,3 +16,15 @@
   quarter change, every one shorter. A saved rack's routed lengths and stock
   sizes are re-measured the next time a page measures them; an entered
   length and a route edited by hand are never touched.
+- **Fewer doubles-back ring findings** (#949, #930's rule): a cable whose
+  route reaches only a short way past a port, or any neighbour, into a ring
+  just beyond it is held by the ring and not reported. Short means the ring's
+  near face is no further past the nearer neighbour, along the run, than the
+  ring's depth plus the cable's diameter; further is a hook-back and is still
+  reported. Such a cable now passes the ring (`held: true` on `routePath`'s
+  ring, `back: false` on its mark), is drawn through it, counts in its fill and
+  its manager's capacity, and measures 8 to 13.5 mm longer. The rule is in
+  `throughRings`, so hand routes and automatic ones agree. On a sample of 8850
+  hand routes through one lacer ring each, 78 of 1520 findings went (5 %), 8
+  of those routes moving a stock size; the automatic routes gave none before
+  or after, and the owner's saved routes on the rack of #949 none either way.

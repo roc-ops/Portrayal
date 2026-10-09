@@ -179,6 +179,8 @@ test('two ends on one ring manager run through the rings between them, in order 
   assert.deepEqual(R.autoRoute(r, swapped, ctxFor(r, {'i1|p': 1, 'i3|q': 109})), [{item: 'i2', via: 'guide-3'}]);
   // and not a tie: 20 to 60, the middle 40, ring 3
   assert.deepEqual(R.autoRoute(r, c, ctxFor(r, {'i1|p': 20, 'i3|q': 60})), [{item: 'i2', via: 'guide-3'}]);
+  // the middle, not end a: a at 15 is nearer ring 3, but the middle (60) is nearer ring 4
+  assert.deepEqual(R.autoRoute(r, swapped, ctxFor(r, {'i1|p': 15, 'i3|q': 105})), [{item: 'i2', via: 'guide-4'}]);
 });
 
 test('endPane: face, turned, and the end view', () => {
