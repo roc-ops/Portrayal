@@ -60,8 +60,11 @@ provenance:
       bracket on the front and 60.75 [2.39] over the C20 inlet and its cord
       bracket at the bottom. The spec sheet and page 1 of the drawing give 70 x
       2.19 x 2.65 in (1778 x 56 x 67); the 1778 is the 70 in rounded, and the 67
-      matches no dimension on page 2 (it may be the body with the 17.67 buttons,
-      61.67, or with the inlet, 60.75, and is recorded as a conflict in gaps).
+      matches no dimension on page 2. The likeliest sum is the 60.75 (the inlet's
+      front to the body's back, side view) plus about 7 of mounting button
+      standing off the back (DETAIL B; its 17.67 is the head's diameter, not
+      its stand-off), about 67.8 against the 67.3 of 2.65 in; it is recorded as
+      a conflict in gaps, and the body stays the dimensioned 44.
       Weight 3.86 kg (8.5 lb), spec sheet; the drawing's page 1 says 3.9 kg.
       Colour: the face reads #2f2f2f in DT01, the side about #4d4c47 under the
       studio light; drawn #2e2f31.
@@ -114,25 +117,33 @@ provenance:
       submittal drawing's three views and five details, the owner's manual's 50
       figures as converted (its one breaker figure is a generic rocker with four
       screws in the Features section, for "select models"), the spec sheet and the
-      SKU page, and the nine Eaton photographs. The drawing's side view draws four
-      black rounded plates 22.3 deep, each with a screw above and below, at 12.8,
-      546.5, 1245.2 and 1546.2 down the right side, and DT01 shows light grey
-      features at three of the same heights on the left side; they are drawn as
-      decor and NOT read as the breakers, because there are four of them and no
-      source names them.
+      SKU page, and the nine Eaton photographs. Page 1 of the drawing names the
+      face's features A to O in callouts and none of them is a breaker. The four
+      features on each side are vent grilles, not breakers (sides): page 1's
+      isometric draws them slotted, with two screws each where the manual's
+      breaker rocker has four.
   sides:
     confidence: drawing
     note: >-
       drawing - the side view of 17-08-067 (third angle, the standing PDU's
-      right; x = 0 is the front): the four rounded plates of `breakers` above,
-      11.9 to 34.2 behind the face, centred on the depth, a screw at each end of
-      each, and seven small screws 5.4 behind the face at 14.3, 202.9, 514.8, 826.6,
+      right; x = 0 is the front) draws four rounded features filled black,
+      11.9 to 34.2 behind the face and centred on the depth, at 12.8 to 53.8,
+      546.5 to 613.1, 1245.2 to 1311.9 and 1546.2 to 1612.6 down the side, each
+      with a screw at each end. THEY ARE LOUVRED VENT GRILLES: page 1's isometric
+      (around page coordinates 190-230, 415-445 and 375-420, 280-320) draws each
+      as two fields of fine slots running along the length, a divider across the
+      middle and a Phillips screw at each end, and DT08 shows two of them on the
+      up-facing side about 188 and 489 from the bottom end, which are the fourth
+      and third. Each is drawn as a frame (a backing rect, since a vent field
+      paints only its slots) and two `slots` fields declared `vent: 1.0`, about
+      1.6 apart (the slot pitch is not dimensioned; page 1 resolves the fields,
+      not a count). The side also carries seven small screws 5.4 behind the face at 14.3, 202.9, 514.8, 826.6,
       1138.5, 1450.3 and 1762.2, a pitch of about 312; a screw at each end 13.4
       behind the face. The drawing's depth axis reads 42.6 for the dimensioned
       44, so depths are scaled to the 44. The left side is drawn as the right
-      mirrored front to back, which DT01 supports for the plates at 547, 1245 and
-      1546 (it sees the left side edge-on); the plates' colour, #6f7173, is
-      DT01's reading on the left side; the drawing fills them black.
+      mirrored front to back, which DT01 supports for the grilles at 547, 1245
+      and 1546 (it sees the left side edge-on); the grilles' colour, #6f7173, is
+      DT01's reading on the left side.
   rear:
     confidence: drawing
     note: >-
@@ -302,8 +313,9 @@ gaps:
     (searched: the submittal drawing's views and details, the owner's manual's
     figures, the spec sheet, the SKU page and the nine photographs). So no
     breaker is placed, no outlet states `through`, and the DCIM breaker name as
-    printed cannot be written. The four rounded plates the drawing's side view
-    puts on the right side (decor, `side-plate-*`) are candidates, unconfirmed.
+    printed cannot be written. Page 1's callouts A to O name no breaker, and the
+    four features on each side are vent grilles (provenance.sides), not
+    breakers.
   wanted: a photograph of the PDU's sides, or Tripp Lite's word on where the two bank breakers are and how they are marked.
 - what: outlet-lamp-colour
   scope: [front]
@@ -321,7 +333,9 @@ gaps:
     the spec sheet and the drawing's page 1 give the depth as 2.65 in (67 mm);
     the drawing's page 2 dimensions the body 44 [1.73], 60.75 [2.39] over the C20
     inlet and its cord bracket and 82.10 [3.23] over the cord retention bracket.
-    The body is modelled 44, the dimensioned figure.
+    The likeliest reading of the 67 is the 60.75 plus about 7 of mounting button
+    off the back (DETAIL B), about 67.8; no source says so. The body is modelled
+    44, the dimensioned figure.
   wanted: the figure the 67 measures, from Tripp Lite.
 - what: inlet-standoff
   scope: [front]
@@ -394,38 +408,38 @@ views:
       - {id: c13-moulding-18, at: [17.0, 1123.61], size: [35.2, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
       - {id: c13-moulding-19, at: [17.0, 1159.23], size: [35.2, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
       - {id: c13-moulding-20, at: [17.0, 1194.84], size: [35.2, 28.4], rx: 1.0, fill: '#262729', kind: outlet-moulding}
-      - {id: screw-1, at: [7.4, 7.03], size: [5.0, 5.0], rx: 2.5, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-2, at: [43.98, 7.03], size: [5.0, 5.0], rx: 2.5, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-3, at: [9.0, 59.07], size: [5.2, 5.2], rx: 2.6, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-4, at: [43.46, 130.79], size: [5.2, 5.2], rx: 2.6, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-5, at: [26.2, 327.2], size: [5.2, 5.2], rx: 2.6, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-6, at: [26.2, 469.4], size: [5.2, 5.2], rx: 2.6, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-7, at: [7.42, 509.7], size: [5.0, 5.0], rx: 2.5, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-8, at: [43.88, 509.8], size: [5.0, 5.0], rx: 2.5, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-9, at: [8.8, 521.55], size: [5.6, 5.6], rx: 2.8, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-10, at: [7.08, 576.97], size: [5.4, 5.4], rx: 2.7, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-11, at: [43.78, 576.97], size: [5.4, 5.4], rx: 2.7, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-12, at: [25.41, 611.39], size: [5.4, 5.4], rx: 2.7, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-13, at: [7.08, 710.82], size: [5.4, 5.4], rx: 2.7, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-14, at: [43.78, 710.82], size: [5.4, 5.4], rx: 2.7, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-15, at: [7.4, 725.43], size: [5.0, 5.0], rx: 2.5, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-16, at: [43.98, 725.43], size: [5.0, 5.0], rx: 2.5, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-17, at: [9.0, 777.47], size: [5.2, 5.2], rx: 2.6, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-18, at: [43.46, 849.19], size: [5.2, 5.2], rx: 2.6, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-19, at: [26.2, 1045.6], size: [5.2, 5.2], rx: 2.6, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-20, at: [26.2, 1187.8], size: [5.2, 5.2], rx: 2.6, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-21, at: [7.42, 1228.1], size: [5.0, 5.0], rx: 2.5, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-22, at: [43.88, 1228.2], size: [5.0, 5.0], rx: 2.5, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-23, at: [41.5, 1258.51], size: [5.4, 5.4], rx: 2.7, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-24, at: [8.52, 1304.59], size: [5.6, 5.6], rx: 2.8, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-25, at: [42.1, 1304.59], size: [5.6, 5.6], rx: 2.8, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-26, at: [25.17, 1478.39], size: [5.6, 5.6], rx: 2.8, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-27, at: [8.52, 1579.09], size: [5.6, 5.6], rx: 2.8, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-28, at: [42.1, 1579.09], size: [5.6, 5.6], rx: 2.8, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-29, at: [25.17, 1697.82], size: [5.6, 5.6], rx: 2.8, fill: '#3a3c3f', kind: screw-head}
+      - {id: screw-1, at: [7.4, 7.03], size: [5.0, 5.0], rx: 2.5, fill: '#1f2022', kind: screw-head}
+      - {id: screw-2, at: [43.98, 7.03], size: [5.0, 5.0], rx: 2.5, fill: '#1f2022', kind: screw-head}
+      - {id: screw-3, at: [9.0, 59.07], size: [5.2, 5.2], rx: 2.6, fill: '#1f2022', kind: screw-head}
+      - {id: screw-4, at: [43.46, 130.79], size: [5.2, 5.2], rx: 2.6, fill: '#1f2022', kind: screw-head}
+      - {id: screw-5, at: [26.2, 327.2], size: [5.2, 5.2], rx: 2.6, fill: '#1f2022', kind: screw-head}
+      - {id: screw-6, at: [26.2, 469.4], size: [5.2, 5.2], rx: 2.6, fill: '#1f2022', kind: screw-head}
+      - {id: screw-7, at: [7.42, 509.7], size: [5.0, 5.0], rx: 2.5, fill: '#1f2022', kind: screw-head}
+      - {id: screw-8, at: [43.88, 509.8], size: [5.0, 5.0], rx: 2.5, fill: '#1f2022', kind: screw-head}
+      - {id: screw-9, at: [8.8, 521.55], size: [5.6, 5.6], rx: 2.8, fill: '#1f2022', kind: screw-head}
+      - {id: screw-10, at: [7.08, 576.97], size: [5.4, 5.4], rx: 2.7, fill: '#1f2022', kind: screw-head}
+      - {id: screw-11, at: [43.78, 576.97], size: [5.4, 5.4], rx: 2.7, fill: '#1f2022', kind: screw-head}
+      - {id: screw-12, at: [25.41, 611.39], size: [5.4, 5.4], rx: 2.7, fill: '#1f2022', kind: screw-head}
+      - {id: screw-13, at: [7.08, 710.82], size: [5.4, 5.4], rx: 2.7, fill: '#1f2022', kind: screw-head}
+      - {id: screw-14, at: [43.78, 710.82], size: [5.4, 5.4], rx: 2.7, fill: '#1f2022', kind: screw-head}
+      - {id: screw-15, at: [7.4, 725.43], size: [5.0, 5.0], rx: 2.5, fill: '#1f2022', kind: screw-head}
+      - {id: screw-16, at: [43.98, 725.43], size: [5.0, 5.0], rx: 2.5, fill: '#1f2022', kind: screw-head}
+      - {id: screw-17, at: [9.0, 777.47], size: [5.2, 5.2], rx: 2.6, fill: '#1f2022', kind: screw-head}
+      - {id: screw-18, at: [43.46, 849.19], size: [5.2, 5.2], rx: 2.6, fill: '#1f2022', kind: screw-head}
+      - {id: screw-19, at: [26.2, 1045.6], size: [5.2, 5.2], rx: 2.6, fill: '#1f2022', kind: screw-head}
+      - {id: screw-20, at: [26.2, 1187.8], size: [5.2, 5.2], rx: 2.6, fill: '#1f2022', kind: screw-head}
+      - {id: screw-21, at: [7.42, 1228.1], size: [5.0, 5.0], rx: 2.5, fill: '#1f2022', kind: screw-head}
+      - {id: screw-22, at: [43.88, 1228.2], size: [5.0, 5.0], rx: 2.5, fill: '#1f2022', kind: screw-head}
+      - {id: screw-23, at: [41.5, 1258.51], size: [5.4, 5.4], rx: 2.7, fill: '#1f2022', kind: screw-head}
+      - {id: screw-24, at: [8.52, 1304.59], size: [5.6, 5.6], rx: 2.8, fill: '#1f2022', kind: screw-head}
+      - {id: screw-25, at: [42.1, 1304.59], size: [5.6, 5.6], rx: 2.8, fill: '#1f2022', kind: screw-head}
+      - {id: screw-26, at: [25.17, 1478.39], size: [5.6, 5.6], rx: 2.8, fill: '#1f2022', kind: screw-head}
+      - {id: screw-27, at: [8.52, 1579.09], size: [5.6, 5.6], rx: 2.8, fill: '#1f2022', kind: screw-head}
+      - {id: screw-28, at: [42.1, 1579.09], size: [5.6, 5.6], rx: 2.8, fill: '#1f2022', kind: screw-head}
+      - {id: screw-29, at: [25.17, 1697.82], size: [5.6, 5.6], rx: 2.8, fill: '#1f2022', kind: screw-head}
       - {id: inlet-flange, at: [14.3, 1725.3], size: [27.9, 36.3], rx: 2.0, fill: '#1d1e20', kind: inlet-flange}
-      - {id: inlet-bracket-screw-1, at: [26.1, 1716.6], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: inlet-bracket-screw-2, at: [26.1, 1765.0], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
+      - {id: inlet-bracket-screw-1, at: [26.1, 1716.6], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: inlet-bracket-screw-2, at: [26.1, 1765.0], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
       - {id: boss, at: [3.85, 1763.0], size: [10.2, 10.2], rx: 5.1, fill: '#8a8d90', kind: boss}
     silkscreen:
       - {at: [6.3, 39.63], text: '1', font-size: 5.0, anchor: middle, rotate: 270, for: outlet-1}
@@ -534,6 +548,7 @@ views:
         - {id: input, ref: std/c20-inlet@1, at: [12.0, 1731.5], rotate: 270, group: power-input, rel-pos: 1, description: 'the C20 power inlet; the detachable 10 ft NEMA L6-20P cord in the box plugs into it'}
     regions:
       - {id: bank-1, label: 'Load bank 1 - outlets 1 to 12 (two C19, ten C13), on its own breaker', members: [outlet-1, outlet-2, outlet-3, outlet-4, outlet-5, outlet-6, outlet-7, outlet-8, outlet-9, outlet-10, outlet-11, outlet-12, led-1, led-2, led-3, led-4, led-5, led-6, led-7, led-8, led-9, led-10, led-11, led-12]}
+      - {id: logo-zone, at: [15.0, 676.0], size: {w: 13.0, h: 47.0}, label: 'EATON wordmark (DT01), reading bottom to top; not drawn'}
       - {id: bank-2, label: 'Load bank 2 - outlets 13 to 24 (two C19, ten C13), on its own breaker', members: [outlet-13, outlet-14, outlet-15, outlet-16, outlet-17, outlet-18, outlet-19, outlet-20, outlet-21, outlet-22, outlet-23, outlet-24, led-13, led-14, led-15, led-16, led-17, led-18, led-19, led-20, led-21, led-22, led-23, led-24]}
   rear:
     size: {w: 56, h: 1776.44}
@@ -564,52 +579,68 @@ views:
     size: {w: 44, h: 1776.44}
     panel:
       decor:
-      - {id: side-plate-1, at: [11.9, 18.3], size: [22.3, 30.0], rx: 4.0, fill: '#6f7173', kind: side-plate}
-      - {id: side-plate-1-screw-1, at: [20.85, 13.5], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: side-plate-1-screw-2, at: [20.85, 48.7], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: side-plate-2, at: [11.9, 552.0], size: [22.3, 55.6], rx: 4.0, fill: '#6f7173', kind: side-plate}
-      - {id: side-plate-2-screw-1, at: [20.85, 547.2], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: side-plate-2-screw-2, at: [20.85, 608.0], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: side-plate-3, at: [11.9, 1250.7], size: [22.3, 55.7], rx: 4.0, fill: '#6f7173', kind: side-plate}
-      - {id: side-plate-3-screw-1, at: [20.85, 1245.9], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: side-plate-3-screw-2, at: [20.85, 1306.8], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: side-plate-4, at: [11.9, 1551.7], size: [22.3, 55.4], rx: 4.0, fill: '#6f7173', kind: side-plate}
-      - {id: side-plate-4-screw-1, at: [20.85, 1546.9], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: side-plate-4-screw-2, at: [20.85, 1607.5], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-1, at: [3.2, 12.1], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-2, at: [3.2, 200.7], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-3, at: [3.2, 512.6], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-4, at: [3.2, 824.4], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-5, at: [3.2, 1136.3], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-6, at: [3.2, 1448.1], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-7, at: [3.2, 1760.0], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: end-screw-1, at: [11.2, 4.5], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: end-screw-2, at: [11.2, 1767.7], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
+      - {id: vent-1-frame, at: [11.9, 18.3], size: [22.3, 30.0], rx: 4.0, fill: '#6f7173', kind: vent-frame}
+      - {id: vent-1-1, at: [12.9, 19.5], size: [20.3, 13.2], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 20.53], pattern-offset: [12.87, 15.83], vent: 1.0}
+      - {id: vent-1-2, at: [12.9, 33.9], size: [20.3, 13.2], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 20.53], pattern-offset: [12.87, 30.23], vent: 1.0}
+      - {id: vent-1-screw-1, at: [20.85, 13.5], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: vent-1-screw-2, at: [20.85, 48.7], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: vent-2-frame, at: [11.9, 552.0], size: [22.3, 55.6], rx: 4.0, fill: '#6f7173', kind: vent-frame}
+      - {id: vent-2-1, at: [12.9, 553.2], size: [20.3, 26.0], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 40.44], pattern-offset: [12.87, 545.98], vent: 1.0}
+      - {id: vent-2-2, at: [12.9, 580.4], size: [20.3, 26.0], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 40.44], pattern-offset: [12.87, 573.18], vent: 1.0}
+      - {id: vent-2-screw-1, at: [20.85, 547.2], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: vent-2-screw-2, at: [20.85, 608.0], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: vent-3-frame, at: [11.9, 1250.7], size: [22.3, 55.7], rx: 4.0, fill: '#6f7173', kind: vent-frame}
+      - {id: vent-3-1, at: [12.9, 1251.9], size: [20.3, 26.05], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 40.52], pattern-offset: [12.87, 1244.66], vent: 1.0}
+      - {id: vent-3-2, at: [12.9, 1279.15], size: [20.3, 26.05], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 40.52], pattern-offset: [12.87, 1271.91], vent: 1.0}
+      - {id: vent-3-screw-1, at: [20.85, 1245.9], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: vent-3-screw-2, at: [20.85, 1306.8], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: vent-4-frame, at: [11.9, 1551.7], size: [22.3, 55.4], rx: 4.0, fill: '#6f7173', kind: vent-frame}
+      - {id: vent-4-1, at: [12.9, 1552.9], size: [20.3, 25.9], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 40.29], pattern-offset: [12.87, 1545.71], vent: 1.0}
+      - {id: vent-4-2, at: [12.9, 1580.0], size: [20.3, 25.9], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 40.29], pattern-offset: [12.87, 1572.81], vent: 1.0}
+      - {id: vent-4-screw-1, at: [20.85, 1546.9], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: vent-4-screw-2, at: [20.85, 1607.5], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: screw-1, at: [3.2, 12.1], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: screw-2, at: [3.2, 200.7], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: screw-3, at: [3.2, 512.6], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: screw-4, at: [3.2, 824.4], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: screw-5, at: [3.2, 1136.3], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: screw-6, at: [3.2, 1448.1], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: screw-7, at: [3.2, 1760.0], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: end-screw-1, at: [11.2, 4.5], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: end-screw-2, at: [11.2, 1767.7], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
   left:
     size: {w: 44, h: 1776.44}
     panel:
       decor:
-      - {id: side-plate-1, at: [9.8, 18.3], size: [22.3, 30.0], rx: 4.0, fill: '#6f7173', kind: side-plate}
-      - {id: side-plate-1-screw-1, at: [18.75, 13.5], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: side-plate-1-screw-2, at: [18.75, 48.7], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: side-plate-2, at: [9.8, 552.0], size: [22.3, 55.6], rx: 4.0, fill: '#6f7173', kind: side-plate}
-      - {id: side-plate-2-screw-1, at: [18.75, 547.2], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: side-plate-2-screw-2, at: [18.75, 608.0], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: side-plate-3, at: [9.8, 1250.7], size: [22.3, 55.7], rx: 4.0, fill: '#6f7173', kind: side-plate}
-      - {id: side-plate-3-screw-1, at: [18.75, 1245.9], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: side-plate-3-screw-2, at: [18.75, 1306.8], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: side-plate-4, at: [9.8, 1551.7], size: [22.3, 55.4], rx: 4.0, fill: '#6f7173', kind: side-plate}
-      - {id: side-plate-4-screw-1, at: [18.75, 1546.9], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: side-plate-4-screw-2, at: [18.75, 1607.5], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-1, at: [36.4, 12.1], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-2, at: [36.4, 200.7], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-3, at: [36.4, 512.6], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-4, at: [36.4, 824.4], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-5, at: [36.4, 1136.3], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-6, at: [36.4, 1448.1], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: screw-7, at: [36.4, 1760.0], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: end-screw-1, at: [28.4, 4.5], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
-      - {id: end-screw-2, at: [28.4, 1767.7], size: [4.4, 4.4], rx: 2.2, fill: '#3a3c3f', kind: screw-head}
+      - {id: vent-1-frame, at: [9.8, 18.3], size: [22.3, 30.0], rx: 4.0, fill: '#6f7173', kind: vent-frame}
+      - {id: vent-1-1, at: [10.8, 19.5], size: [20.3, 13.2], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 20.53], pattern-offset: [10.77, 15.83], vent: 1.0}
+      - {id: vent-1-2, at: [10.8, 33.9], size: [20.3, 13.2], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 20.53], pattern-offset: [10.77, 30.23], vent: 1.0}
+      - {id: vent-1-screw-1, at: [18.75, 13.5], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: vent-1-screw-2, at: [18.75, 48.7], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: vent-2-frame, at: [9.8, 552.0], size: [22.3, 55.6], rx: 4.0, fill: '#6f7173', kind: vent-frame}
+      - {id: vent-2-1, at: [10.8, 553.2], size: [20.3, 26.0], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 40.44], pattern-offset: [10.77, 545.98], vent: 1.0}
+      - {id: vent-2-2, at: [10.8, 580.4], size: [20.3, 26.0], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 40.44], pattern-offset: [10.77, 573.18], vent: 1.0}
+      - {id: vent-2-screw-1, at: [18.75, 547.2], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: vent-2-screw-2, at: [18.75, 608.0], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: vent-3-frame, at: [9.8, 1250.7], size: [22.3, 55.7], rx: 4.0, fill: '#6f7173', kind: vent-frame}
+      - {id: vent-3-1, at: [10.8, 1251.9], size: [20.3, 26.05], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 40.52], pattern-offset: [10.77, 1244.66], vent: 1.0}
+      - {id: vent-3-2, at: [10.8, 1279.15], size: [20.3, 26.05], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 40.52], pattern-offset: [10.77, 1271.91], vent: 1.0}
+      - {id: vent-3-screw-1, at: [18.75, 1245.9], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: vent-3-screw-2, at: [18.75, 1306.8], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: vent-4-frame, at: [9.8, 1551.7], size: [22.3, 55.4], rx: 4.0, fill: '#6f7173', kind: vent-frame}
+      - {id: vent-4-1, at: [10.8, 1552.9], size: [20.3, 25.9], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 40.29], pattern-offset: [10.77, 1545.71], vent: 1.0}
+      - {id: vent-4-2, at: [10.8, 1580.0], size: [20.3, 25.9], fill: '#6f7173', pattern: slots, pattern-pitch: [1.6, 40.29], pattern-offset: [10.77, 1572.81], vent: 1.0}
+      - {id: vent-4-screw-1, at: [18.75, 1546.9], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: vent-4-screw-2, at: [18.75, 1607.5], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: screw-1, at: [36.4, 12.1], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: screw-2, at: [36.4, 200.7], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: screw-3, at: [36.4, 512.6], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: screw-4, at: [36.4, 824.4], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: screw-5, at: [36.4, 1136.3], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: screw-6, at: [36.4, 1448.1], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: screw-7, at: [36.4, 1760.0], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: end-screw-1, at: [28.4, 4.5], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
+      - {id: end-screw-2, at: [28.4, 1767.7], size: [4.4, 4.4], rx: 2.2, fill: '#1f2022', kind: screw-head}
 interfaces:
 - {physical: 'outlet-{n}', name: '{n}', range: '1-24'}
 configurations:
