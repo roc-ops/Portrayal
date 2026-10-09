@@ -5616,7 +5616,7 @@ def main():
                               # configurations - nothing is invented for it.
                               "kind": c.get("kind"),
                               # WHICH WAY THIS BUILD BREATHES - front-to-back,
-                              # back-to-front, side or passive, the library's
+                              # back-to-front, side, passive or top-to-bottom, the library's
                               # own words - resolved exactly as the drawing's
                               # `data-airflow` is (config_airflow: the
                               # configuration's value, else the chassis's), so

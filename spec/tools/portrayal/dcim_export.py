@@ -130,7 +130,14 @@ IFACE_TYPE = {
     # 10 Mb/s jack takes that, the type whose label covers it.
     ("rj45", "10m"): "100base-tx",
 }
-AIRFLOW = {"front-to-back": "front-to-rear", "back-to-front": "rear-to-front"}
+# `top-to-bottom` is the same word in NetBox's DeviceAirflowChoices
+# (netbox-community/netbox netbox/dcim/choices.py at f96b3039, AIRFLOW_TOP_TO_BOTTOM)
+# and in the device-type library's airflow enum (schema/generated_schema.json at
+# 7438a8e6). Nautobot's device type has no airflow field at all (nautobot/nautobot
+# at 58ee6186), so there the key is carried for the library and set nothing, as
+# front-to-rear always has been.
+AIRFLOW = {"front-to-back": "front-to-rear", "back-to-front": "rear-to-front",
+           "top-to-bottom": "top-to-bottom"}
 
 # A module's ports are its `parts`. Mapped by component ref, because a cage's
 # ref says what the cage IS while the speed it runs at is a property of the card
@@ -603,6 +610,12 @@ PART_POWER = {
     # netbox/dcim/choices.py at 2b3f4b48, TYPE_NEMA_L2130P; nautobot/nautobot
     # nautobot/dcim/choices.py at c77e4255, the same).
     "eaton/g4-cord-l21-30p": "nema-l21-30p",
+    # AN FS FAN PANEL'S OR FAN TRAY'S FIXED CORD, ending in a US NEMA 5-15P plug,
+    # for the same reason as the Eaton cord: the part stands for the cord leaving
+    # the back. `nema-5-15p` is TYPE_NEMA_515P in both targets
+    # (netbox-community/netbox netbox/dcim/choices.py at 84e19368;
+    # nautobot/nautobot nautobot/dcim/choices.py at c77e4255).
+    "fs/fan-cord-5-15p": "nema-5-15p",
     # The EVMA8365X's fixed cord ends in a CS8365C: `cs8365c`, TYPE_CS8365C in both
     # targets at the commits the generic plugs below cite.
     "eaton/g4-cord-cs8365c": "cs8365c",
