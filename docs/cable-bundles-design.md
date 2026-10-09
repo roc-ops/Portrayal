@@ -2,8 +2,8 @@
 
 Status: agreed 2026-10-08 (#920). #921 built the record, the commands, the
 size check and the straps in kit 0.7.0 (section 11 says how), and #922 the
-bend check in kit 0.8.0 (section 12); the drawings (portrayal-site#142) and
-the exports (#923) are to come. Cable management piece 3,
+bend check in kit 0.8.0 (section 12), and #923 the exports in kit 0.9.0
+(section 13); the drawings (portrayal-site#142) are to come. Cable management piece 3,
 tracked in roc-ops/portrayal-site#143. Builds on the rack core in `kit/rack/`
 and on two changes in flight that touch the same files: the rack agent commands
 (kit 0.4.0: `inspect`, `selectCables`, `fit`, `field`, a `describe` window and a
@@ -941,3 +941,57 @@ What the bend check settled that section 5.2 leaves to it:
 - **Single cables, and members' leads, are not checked** (sections 5.2 and 9).
   `cornersOf(points)` is exported, so the per-cable follow-up #919 names can
   reuse the same geometry.
+
+## 13. As built in #923
+
+What the exports settled that section 7 leaves to them:
+
+- **One record per bundle.** `bundleExports(rack, ctx)` in `export-data.js`
+  measures each bundle once (`bundleCheck`, `straps`, `trunkLength`) and every
+  export reads that record: `{id, number, label, name, members, drawn,
+  checked, length_m, every, straps, size_mm, limit_mm, limit_at,
+  limit_estimated, bend_mm, bend_by, bend_checked, warnings, notes}`. `name`
+  is what a tag prints, `bundleName` with control characters as spaces; the
+  bundle's own `number` and `label` sit beside it, so label software can be
+  given the fields without parsing a sentence. A record is not a new file:
+  no export lists bundles on their own yet.
+- **Not measured is never zero.** Without `ctx.route`, or when a reader
+  throws, `straps`, `length_m`, the size and the bend are null. The BOM then
+  counts no straps for that bundle and its notes say so ("Bundle 2: its route
+  could not be read, so its straps are not counted."); the schedule's note
+  says its length, straps, size and bend are not given. A bundle of fewer than
+  two cables has 0 straps, and one set to `{every: null}` 0 with a note.
+- **The schedule's note** reads "Bundle 2 (b1): 12 cables (c1-c12), 2.4 m,
+  8 straps every 12 in; 23 mm across, limit 29.5 mm at mgr-1 ring 5
+  (estimated); bend radius 25 mm (c7).", then the bundle's warnings (size and
+  bend) and notes. It names the members, which section 7's example leaves
+  out, and the size is rounded to a whole millimetre as the warnings round
+  it. "bend not checked" stands in for the radius when no member has one.
+  `cableScheduleRows` takes the records as `{bundles}`; without them it reads
+  the bundles with no routing context, so the column is filled and each note
+  says the route was not read.
+- **The strap line** is in the BOM's Cables section, model "Hook-and-loop
+  cable strap", no manufacturer and no ref, its description naming how many
+  bundles and each spacing in use ("For 2 bundles, one strap every 12 in or
+  300 mm along each; length and width to suit").
+- **NetBox.** The description is the bundle's name, the purpose and the
+  length note, each but the last ending in a full stop: "Bundle 2. uplink.
+  Length measured along its route." The over-limit note names the parts the
+  description has: "its description (bundle, purpose and length note) is 244
+  characters and NetBox takes 200". NetBox has had cable bundles of its own
+  since 4.6 (`dcim.CableBundle`, a `name` unique across the instance, and
+  `bundle` on the cable import, by name; v4.7.2, 251458b8,
+  `dcim/models/cables.py` and `dcim/forms/bulk_import.py`). Decision 9 holds:
+  a bundle has to exist before a cable can name it, as a tag does, and a
+  bundle's name in one rack is not unique across an instance. The kit leaves
+  that column out and its notes say so. Writing a bundles file ahead of the
+  cables file is a later change.
+- **Nautobot.** Its cable has no description, no comments and no bundle
+  (v3.2.6, 3dc554b4, `dcim/models/cables.py`), so the cables file is
+  unchanged and its notes list each bundle's cables, by the names the file
+  uses, and point to the cable schedule.
+- **draw.io** gets one note: "Bundles are not drawn in draw.io, so their
+  cables are drawn one by one: Bundle 1 holds c1-c2; uplinks holds c3-c4."
+- **The sheets** keep their own bundle notes (portrayal-site#142);
+  `bundleNotes` is the same wording in the kit, for the site to adopt.
+
