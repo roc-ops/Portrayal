@@ -603,6 +603,9 @@ PART_POWER = {
     # netbox/dcim/choices.py at 2b3f4b48, TYPE_NEMA_L2130P; nautobot/nautobot
     # nautobot/dcim/choices.py at c77e4255, the same).
     "eaton/g4-cord-l21-30p": "nema-l21-30p",
+    # The EVMA8365X's fixed cord ends in a CS8365C: `cs8365c`, TYPE_CS8365C in both
+    # targets at the commits the generic plugs below cite.
+    "eaton/g4-cord-cs8365c": "cs8365c",
     # THE GENERIC INPUT PLUGS (#933): the face of the plug at the end of a PDU's
     # fixed cord, for a device that draws its plug rather than its cord. A device
     # draws one or the other, never both, or one input exports as two ports. Every
@@ -2158,6 +2161,33 @@ def bay_order(b):
     return (b["name"].split()[0], _num(b["position"].rsplit("-", 1)[-1]))
 
 
+# THE FIELDS THAT CARRY A FIXED BREAKER'S PRINTED NAME, in the order they are
+# read off its placement's `attrs` (where a placement sets its part's fields).
+# `label` is a name printed beside the breaker; `section` is the letter on the
+# Eaton G4 breaker's section tile (eaton/g4-breaker-20a-2p@1), which is the
+# breaker's name on the unit and in the vendor's one-line diagram.
+BREAKER_NAME_FIELDS = ("label", "section")
+
+
+def breaker_name(pid, placement):
+    """How an outlet description names the fixed breaker it runs `through`.
+
+    THE NAME PRINTED ON THE UNIT, NOT THE PLACEMENT ID (owner decision,
+    2026-10-09): a reader of a DCIM outlet looks for "breaker A" on the PDU,
+    and an id such as `breaker-a` is the library's spelling, not the
+    vendor's. The first of BREAKER_NAME_FIELDS the placement sets in its
+    `attrs` gives "breaker <value>"; a breaker that sets none falls back to
+    its placement id, as before. A field's contract DEFAULT is never read:
+    an unset letter is not the default letter, it is unstated.
+    """
+    attrs = (placement or {}).get("attrs") or {}
+    for key in BREAKER_NAME_FIELDS:
+        val = attrs.get(key)
+        if isinstance(val, (str, int)) and not isinstance(val, bool) and str(val).strip():
+            return f"breaker {str(val).strip()}"
+    return pid
+
+
 def outlet_rows(outlets, powers, bays, who, names=None, dev=None):
     """A device type's `power-outlets`, from its PART_OUTLET placements (#806).
 
@@ -2205,7 +2235,8 @@ def outlet_rows(outlets, powers, bays, who, names=None, dev=None):
     description is a sentence about the drawing to `dcim_significant`, so the
     collision check is not moved by it. A `through` that names a FIXED
     BREAKER rather than a bay (#934) is a sentence on the outlet alone - there
-    is no bay row to append it to - naming the breaker by its placement id.
+    is no bay row to append it to - naming the breaker AS IT IS PRINTED
+    (breaker_name): "Through breaker A", not "Through breaker-a".
     """
     rows = []
     protects = {}
@@ -2229,7 +2260,7 @@ def outlet_rows(outlets, powers, bays, who, names=None, dev=None):
         lines = _manifest.outlet_lines(p, placed) if dev else None
         said = []
         if via is not None and via in placed and via not in positions:
-            said.append(f"Through {via}")       # a fixed breaker (#934)
+            said.append(f"Through {breaker_name(via, placed[via])}")   # fixed (#934)
         elif via is not None:
             said.append(f"Through breaker position {via}")
             protects.setdefault(via, []).append(pid)

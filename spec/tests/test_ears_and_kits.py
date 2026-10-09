@@ -197,8 +197,10 @@ def test_a_kit_edited_in_place_asks_the_device_for_a_patch(lib, ref, edit):
 # --- L43 and L125 ---------------------------------------------------------------
 
 def _wide(**chassis):
+    """A 440 mm body drawn with a 482.6 mm front: ears in the drawing that the
+    body does not need, which is what L43 is for."""
     doc = _device(**chassis)
-    doc["chassis"]["width"] = 482.6
+    doc["chassis"]["width"] = 440.0
     doc["views"]["front"]["size"]["w"] = 482.6
     return doc
 
@@ -621,3 +623,40 @@ def test_the_comments_carry_ears_and_kits_beside_the_overhang():
     assert reach < body.index("The ears are 43.5 mm") < body.index("Rail kits: acme/slide@1")
     plain = dcim.comments_for(_device(), "base", {})
     assert "Rail kits" not in plain and "The ear" not in plain
+
+
+# --- L43 and a plate whose ears are built into its face (2026-10-09) -------------
+
+def _plate(body, front, at=200.0):
+    """A face `front` wide on a body `body` wide, with one part well inside the
+    ears so nothing is seated in them."""
+    doc = _device()
+    doc["chassis"]["width"] = body
+    doc["views"]["front"]["size"]["w"] = front
+    doc["views"]["front"]["components"] = {"placements": [{"id": "p", "at": [at, 10.0]}]}
+    return doc
+
+
+@pytest.mark.parametrize("body,front,fires", [
+    (482.6, 482.6, False),   # a blanking plate: the face IS the part, ears and all
+    (482.0, 482.0, False),   # an ABS plate FS states at 482
+    (440.0, 482.6, True),    # a narrow body drawn wearing ears it does not need
+    (479.9, 482.6, True),    # just under the generic ear's own threshold
+])
+def test_L43_a_face_that_is_the_whole_plate_is_its_own_ears(tmp_path, body, front, fires):
+    """The owner's rule of 2026-10-09: ears built into the face are part of the
+    face. A body as wide as the rack has no narrower body to have drawn instead,
+    and the threshold is ears.EAR_WIDE, the one the generic ear uses to decide
+    that a face already has its ears in it, so L43 and the ear cannot disagree."""
+    with lint.collecting() as found:
+        lint.lint_device_rack_ears(tmp_path / "d.yaml", _plate(body, front))
+    assert ("L43" in _codes(found.warnings)) is fires
+
+
+def test_L43_plate_threshold_is_the_generic_ears():
+    from portrayal import ears
+    doc = _plate(ears.EAR_WIDE, 482.6)
+    with lint.collecting() as found:
+        lint.lint_device_rack_ears("d.yaml", doc)
+    assert "L43" not in _codes(found.warnings)
+    assert ears.plan(doc) is None    # and the generic ear draws no second pair

@@ -1,0 +1,43 @@
+format: 1
+kind: component
+name: bpstl-clip
+version: 1.0.0
+class: latch
+behaviour: mounts
+description: >-
+  One ABS mounting clip of an FS FHU-BPSTL tool-less steel blanking panel, seen from the
+  front - a black moulded bezel set in a window near the end of the plate, with a slider
+  in it and an arrow showing which way the slider moves. Its hook passes through the
+  plate beside it and into the rack's square hole, so the panel needs no screws. Drawn
+  for the left end, the bezel's pointed end and the arrow toward the middle of the plate;
+  the right end's clip is the same part turned 180.
+provenance:
+  size: >-
+    drawing - the FS Blanking Panel Visio stencil, masters FHU-BPSTL-1U-10, -2U and -4U,
+    rendered at 10 px/mm against the stencil's 482.6 width: the bezel 30.0 x 21.1, the
+    slider 17.4 x 14.1 inside it 3.5 from its square end and 3.7 from its top, the arrow
+    4.0 x 5.0 at 22.0 across, the same in all three masters. The stencil is a diagram
+    symbol, so it was checked against the straight-on gallery renders of SKU 181854,
+    181855 and 181856 (g4), which show the same window, the slider half dark and half
+    grey, the arrow and the pointed end toward the middle.
+  relief: >-
+    estimated - the bezel stands proud of the steel face in the gallery's three-quarter
+    renders (181854.g2, 181856.g2); no document gives a figure, 1.0 is drawn. The
+    `bezel` node is the group holding the whole clip, slider and arrow included, so the
+    slider rises with the bezel rather than being buried behind it.
+size: {w: 30.0, h: 21.1}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: ABS}
+elements:
+  bezel: {at: [0.0, 0.0], size: [30.0, 21.1], class: bezel}
+  slider: {at: [3.5, 3.7], size: [17.4, 14.1], class: bezel}
+relief:
+  features:
+    - node: bezel
+      out: 1.0
+      color: '#141618'
+      confidence: estimated
+      source: >-
+        fs/bpstl-clip@1 provenance relief - proud of the face in the gallery's three-quarter
+        renders, no figure stated
+skins: [default]

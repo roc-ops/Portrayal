@@ -568,6 +568,22 @@ every version-3 file is a valid version-4 file and an older page refuses a
 version-4 file rather than erase or misread what it cannot read. One bump, not seven: each
 key alone would need it, and a rack file version is a one-way door.
 
+**Proposed for the same version** by
+[cable-lay-design.md](cable-lay-design.md) section 7 (#949): the rack entry
+`states` and `readings` of the PDU note (#934), the PDU bracket key of #939,
+the cable keys `slack` and `lay` (each `lay` entry `{item, via, position?,
+face?}`, with `position` and `face` each optional), and the item key `roll`
+with `90`, `180` and `270` (section 10 reserves the name for #550; the cable
+lay note adds `180`, a manager mounted upside down, and fixes the convention:
+clockwise as seen in the elevation of the face, applied after `face` and
+`turned`), so that none of them needs a version 5.
+The version-4 step reserves `slack` and `lay` even before anything acts on
+them, fits an item with `roll` by its rolled box, and its reader must not
+misread `slack`: for a cable that carries it,
+the stored routed length and stock size are kept as written and not
+re-measured, and a route edit that takes off a tray the slack names is
+refused.
+
 ## 10. Later: designed for, not built
 
 - **Wall-mount.** `wall-frame` and `wall-cabinet` products (FS-WMNR-D2P6U,
@@ -581,7 +597,9 @@ key alone would need it, and a rack file version is a one-way door.
   for the baffles and the facts that differ (lug size, cable exit). A
   `wall-frame-vertical` product (FS-SVWM-1U and -4U) hangs every device face
   down; the frame states it and the elevation is drawn from above. `roll` is
-  reserved by this note and built with #550.
+  reserved by this note; the cable lay note proposes it for version 4 with a
+  third value, `180`, for a manager mounted upside down (its section 7.1),
+  and the quarter turns are built with #550.
 - **The tilted desktop rack.** `desktop-frame` with `tilt: 9` (degrees back
   from vertical, FS-DR-8U's 81 degrees to its base). The 3D scene leans the
   rail plane; the 2D elevation is face on and unchanged.
@@ -619,7 +637,8 @@ cabinets, wall and vertical, and desktop.
    enclosure, base, load, channels with `pdu-button` slots, and the PDU fit
    check (PDU note step 8, #939's FS-GR42U-PDUBK).
 6. **Wall and vertical.** FS-WMNR-D2P6U, FS-HWM-4U, FS-SVWM-1U and -4U, and
-   `roll` with #550.
+   the quarter turns of `roll` with #550 (`roll` itself enters at version 4,
+   section 9).
 7. **Desktop.** FS-DR-8U and `tilt`.
 
 Rows and the room come after, each with its own note.
@@ -682,4 +701,4 @@ published file or a saved rack file uses it.
 | the setback order (item, device default ear position, frame, flush), and a default position with no `at` counting only when it is `flush` | kit fit and drawing | a saved rack's faceplates move if it changes |
 | removing the 30 mm showcase default, so an unstated setback is flush | kit and Rack Builder | every saved rack's faceplates move 30 mm when it lands |
 | NetBox rack types under `library/exports/`, and the Nautobot rack fields | DCIM export | an imported rack type is named by its model |
-| `roll` (#550) and `tilt` | reserved names | later keys built on them |
+| `roll` (#550) and `tilt` | reserved names | later keys built on them; `roll` is proposed for version 4 (section 9, and section 7.1 of the cable lay note) |

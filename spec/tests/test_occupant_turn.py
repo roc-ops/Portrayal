@@ -380,15 +380,16 @@ def test_l147_fails_a_widening_a_point_that_is_not_presented_and_no_interface():
 # devices they are on, for each lug. 2026-10-07, after the grounding batch
 # (#828, #830) joined #829.
 #
-# THE RING LUG: 156 seats on 64 devices since the Eaton EVMI2130X (below); 155 on 63 before it. On main (796eb08) the same census read
+# THE RING LUG: 157 seats on 65 devices since the Eaton EVMA8365X (below); 156 on 64 before it, 155 on 63 before the EVMI2130X. On main (796eb08) the same census read
 # 147 on 61; the pair hosts added eight stud seats and two devices: the MX204
 # and MX304 plates now compose two screws each that a ring lug lands on (+4,
 # two devices), the FX-16's two single studs became two pairs (+2), and the
 # FX-8's and FX-4's single stud each became a pair (+1, +1). Every other
 # converted device keeps its stud count: its studs moved one level into a pair
 # host and are still seats. The Eaton EVMI2130X's M6 bonding screw, the first
-# common/ground-screw-m6@1 placed on a face of its own, adds one more (down).
-WANT = {"down": 106, "left": 27, "up": 8, "right": 21}
+# common/ground-screw-m6@1 placed on a face of its own, adds one more (down), and the
+# EVMA8365X's, the same screw at the same place on its sibling's face, one more (down).
+WANT = {"down": 107, "left": 27, "up": 8, "right": 21}
 # THE TWO-HOLE LUG on a pair host: 59 seats on 33 devices - three on each of
 # the eleven Amphenol 300CB08 panels, one on each AIS800, the seven MX, the
 # LMFS-F, two on the FX-16, one on the FX-8 and FX-4, the SR-1-DC block's
@@ -458,7 +459,7 @@ def _pairs(census):
 def test_the_default_distribution_is_pinned(census):
     ring, pairs = _ring(census), _pairs(census)
     assert dict(collections.Counter(r["dir"] for r in ring.values())) == WANT
-    assert len({k[0] for k in ring}) == 64   # 63, and the Eaton EVMI2130X
+    assert len({k[0] for k in ring}) == 65   # 63, and the Eaton EVMI2130X and EVMA8365X
     assert dict(collections.Counter(r["dir"] for r in pairs.values())) == WANT_PAIRS
     assert len({k[0] for k in pairs}) == 33
     # a pair is turned only along itself

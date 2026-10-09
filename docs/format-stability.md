@@ -193,7 +193,7 @@ L153, L154) is not written, and the build stops.
 ## Rack PDUs
 
 A rack PDU (#934, [`pdu-model-design.md`](pdu-model-design.md)) adds keys in
-four places. None raised `contract`, which is still 2: each is new, and a
+five places. None raised `contract`, which is still 2: each is new, and a
 reader that does not know it finds every field it read before.
 
 - **`pdu-class`**, at the top of `<device>.configs.json` and on each entry of
@@ -218,9 +218,30 @@ reader that does not know it finds every field it read before.
 - **The DCIM export** writes the input rating on the input power port's
   `description` and in the comments, with the derived class; an outlet's
   description names the breaker it runs `through` and its `lines`
-  (`Through breaker-a, lines L1-L2`); and `feed_leg` is written only for a
+  (`Through breaker A, lines L1-L2`); and `feed_leg` is written only for a
   line-to-neutral outlet on a three-phase wye input (L1 `A`, L2 `B`, L3 `C`).
   A DCIM that imported a leg holds it.
+- **A fixed breaker is named as the unit prints it** (owner decision,
+  2026-10-09): the description reads `Through breaker <name>`, where the name
+  is the first of the breaker placement's `attrs.label` and `attrs.section`
+  (the letter on the Eaton G4 section tile) that is set, and the placement id
+  only when neither is (`dcim_export.breaker_name`). A field's contract default
+  is never read: an unset letter is unstated. The name is part of an imported
+  description, so changing the rule moves every PDU's outlets.
+
+- **Outlet state in the drawing and the kit** (the kit half, section 3.2 of
+  the note). An element a lamp is bound to by `for:` - where the lamp and the
+  element both declare `data-states`, a switched outlet - carries
+  `data-lamped="true"`; the base stylesheet dims a power outlet
+  (`data-class='inlet'`) that declares `off`, is `state-off` and is not
+  `data-lamped`. In the kit a state set on such an element's path is applied
+  to its bound lamps too (`@portrayal/kit/states` `boundLamps` and
+  `expandStates`, in `marks.js` apply, the Explorer chips and the 3D scene),
+  and `off` is a state that can be lit, not only the absence of one: the
+  Explorer's `off` chip sets `state-off` on an outlet and on an element that
+  declares a colour for `off`, and clears anything else. The attribute name
+  and that meaning of `off` are held as format: a saved state set as `off`
+  reads differently after the change.
 
 The placement key `lines`, and `through` naming a fixed breaker placement, are
 manifest keys: stating either is a minor version of the device, and changing
