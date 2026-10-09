@@ -174,9 +174,14 @@ placement keeps every key its lab wrote, and carries six more:
   it, whether the lab placed it `on` that device or by `ru`; otherwise `null`.
 - `unit`: which of the host's rack units, from 1 at the host's bottom; `null`
   without a host.
-- `side`: `left` or `right`, seen from the front, for a `rack-side` part (the
-  upright it stands beside) and for a `rack-face` part narrower than the rack
-  opening that states one (the rail it bolts to); otherwise `null`.
+- `side`: for a `rack-side` part, the attachment point it stands at, as the
+  lab wrote it: `left` or `right` on a two-post frame, or `left-front`,
+  `left-rear`, `right-front` or `right-rear` on a four-post one (#934). For a
+  `rack-face` part narrower than the rack opening that states one, the rail it
+  bolts to, `left` or `right`, seen from the front. Otherwise `null`. The four
+  four-post names are new with #934 and did not raise `contract`: a reader
+  that knows only `left` and `right` can read the side of the rack as the
+  word before the hyphen.
 
 They are new fields and did not raise `contract`, which is still 2. A reader that knows none of
 them still finds `ru`, and draws a rack-face part as an ordinary device on its
@@ -184,6 +189,44 @@ rack unit; one that knows `mount` but not `rack-side` or `side` draws a
 rack-side part across its 45 units, which is wrong and visible, as the
 rack-face case was. A lab that fails its schema or a check (lint L139 to L142,
 L153, L154) is not written, and the build stops.
+
+## Rack PDUs
+
+A rack PDU (#934, [`pdu-model-design.md`](pdu-model-design.md)) adds keys in
+four places. None raised `contract`, which is still 2: each is new, and a
+reader that does not know it finds every field it read before.
+
+- **`pdu-class`**, at the top of `<device>.configs.json` and on each entry of
+  `devices.json`: one of `basic`, `switched`, `metered-input`,
+  `switched-metered-input`, `metered-branch`, `switched-metered-branch`,
+  `metered-outlet` and `managed`, or `null` where the device is no PDU. It is
+  DERIVED from `attrs.management.metering-scope` (`none`, `input`, `branch`,
+  `outlet`) and `outlet-switching` (a boolean), and never stated. The names
+  and the two keys are published for filtering, so renaming one is a format
+  change.
+- **`configs[].mount-points`** in `<device>.configs.json`: each mount point a
+  configuration draws, `{"mates": "pdu-button", "at": 72.0}`, ascending by
+  `at`, which is millimetres from the bottom of its view to the point's
+  `mate`. A mount point is a placement of a `class: mount` part that declares
+  `mates`. The pitch is the difference of two `at`s and is stated nowhere
+  else. Always a list; `[]` on a device with none.
+- **`attrs.power`** gains `input-plug` (now a `PART_POWER` slug, which on the
+  one device that wrote it was prose), `input-cord`, `input-phase`,
+  `input-wiring`, `input-voltage-v`, `input-current-a`, `plug-rating-a` and
+  `capacity-kw`; attrs are flattened to `data-*` on every drawing, so these
+  names are held as attribute names too.
+- **The DCIM export** writes the input rating on the input power port's
+  `description` and in the comments, with the derived class; an outlet's
+  description names the breaker it runs `through` and its `lines`
+  (`Through breaker-a, lines L1-L2`); and `feed_leg` is written only for a
+  line-to-neutral outlet on a three-phase wye input (L1 `A`, L2 `B`, L3 `C`).
+  A DCIM that imported a leg holds it.
+
+The placement key `lines`, and `through` naming a fixed breaker placement, are
+manifest keys: stating either is a minor version of the device, and changing
+one a major. `pdu-button` is a mounting interface in
+`spec/schemas/connectors.yaml`; a slot that presents it and the fit check are
+#939's and #935's.
 
 ## The kits file
 

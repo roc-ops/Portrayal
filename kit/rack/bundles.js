@@ -5,7 +5,8 @@
 // settleBundles); the trunk and a member's route along it are
 // bundle-route.js's, and route.js resolveRoute follows them. This file holds
 // the rest: what a bundle is called, which pathways its trunk passes, the size
-// check, where its straps go, and the sentences the commands and queries use.
+// and bend checks, where its straps go, and the sentences the commands and
+// queries use.
 // Pure: what reads a drawing comes in on `ctx.route`, the routing context
 // route.js takes (`{chassisOf, guidesOf, portX, portY?, zeroUAperture?}`).
 
@@ -165,10 +166,12 @@ export const bundleDiameter = ds => Math.sqrt(ds.reduce((a, d) => a + d * d, 0) 
 
 // THE CHECKS FOR ONE BUNDLE. Warn, never refuse (decision 2). Returns
 //   {checked, size: {max_mm, at, limit_mm, limitBy, estimated} | null,
-//    bend: null, warnings: [text], notes: [text], gone: [waypoint], layout}
+//    bend: {radius_mm, by, unchecked, points, violations} | null,
+//    warnings: [text], notes: [text], gone: [waypoint], layout}
 // `checked` is false without `ctx.route` (or when a reader throws): then
-// nothing is measured and nothing is said to pass. The bend check is #922's;
-// until it lands `bend` is null.
+// nothing is measured and nothing is said to pass. `bend` is bendCheck's
+// (#922), null when there is no bundle to bend (fewer than two cables, or no
+// trunk).
 export function bundleCheck(rack, b, ctx = {}) {
   const name = bundleName(b);
   const notes = [], warnings = [];
@@ -192,7 +195,8 @@ export function bundleCheck(rack, b, ctx = {}) {
   let max = 0, maxAt = 0;
   L.T.forEach((e, i) => { if (e.kind === 's') return; const D = sizeAt(i); if (D > max) { max = D; maxAt = i; } });
   let limit = MAX_BUNDLE_MM, limitBy = null;
-  for (const p of pathwaysOn(rack, L.trunk, ctx)) {
+  const pathways = pathwaysOn(rack, L.trunk, ctx);
+  for (const p of pathways) {
     const where = p.zeroU ? `${p.label} beside the rack` : `${nameOf(p.item)} ${/^guide-(\d+)$/.test(p.via) ? `ring ${p.via.slice(6)}` : p.via}`;
     const cap = p.aperture ? Math.min(MAX_BUNDLE_MM, p.aperture.w, p.aperture.h) : MAX_BUNDLE_MM;
     if (cap < limit) { limit = cap; limitBy = {item: p.item, via: p.via, text: where, estimated: !!p.aperture?.estimated}; }
@@ -207,8 +211,149 @@ export function bundleCheck(rack, b, ctx = {}) {
   const estimated = b.members.map(m => m.cable).filter(id => unknown.has(id));
   if (estimated.length)
     notes.push(`${name}'s size is an estimate: ${andList(estimated)} ${estimated.length === 1 ? 'has' : 'have'} no cable type, so ${estimated.length === 1 ? 'it counts' : 'each counts'} as 6 mm.`);
-  return {checked: true, bend: null, warnings, notes, gone: L.gone, layout: L,
+  const bend = bendCheck(rack, b, L, pathways, ctx);
+  warnings.push(...bend.warnings);
+  notes.push(...bend.notes);
+  return {checked: true, bend: bend.bend, warnings, notes, gone: L.gone, layout: L,
           size: {max_mm: round1(max), at: txt(L.T[maxAt]), limit_mm: round1(limit), limitBy, estimated}};
+}
+
+// ── bend radius (section 5.2) ────────────────────────────────────────────
+// A waypoint is a straight pass, not a corner, when the next segment runs
+// within this many degrees of the leg it is on.
+export const STRAIGHT_DEG = 1;
+const sub = (p, q) => ({x: p.x - q.x, y: p.y - q.y, z: p.z - q.z});
+const norm = v => Math.hypot(v.x, v.y, v.z);
+const turnDeg = (u, v) => {
+  const c = (u.x * v.x + u.y * v.y + u.z * v.z) / (norm(u) * norm(v));
+  return (Math.acos(Math.max(-1, Math.min(1, c))) * 180) / Math.PI;
+};
+
+// THE CORNERS OF A POLYLINE, in rack coordinates (mm), with the largest bend
+// each has room for. A point is a straight pass when the next segment runs
+// within STRAIGHT_DEG of the leg from the last corner (or the start), so many
+// small turns add up to a corner. Each corner's legs run to the next corner
+// on each side, through straight passes, or to the polyline's end; a leg
+// between two corners is shared, so each may use half of it, and a leg to an
+// end all of it. The room is
+//   r_max = min(a_in, a_out) / tan(theta / 2),
+// 0 for a polyline that doubles back on itself. A point on top of the one
+// before it is skipped. Returns [{k, angle_deg, legs_mm: [in, out], room_mm}],
+// `k` the index into `pts` of the corner.
+export function cornersOf(pts) {
+  const P = [];
+  pts.forEach((p, k) => { if (p && (!P.length || norm(sub(p, P.at(-1).p)) > 1e-6)) P.push({p, k}); });
+  const cum = [0];
+  for (let i = 1; i < P.length; i++) cum.push(cum[i - 1] + norm(sub(P[i].p, P[i - 1].p)));
+  const at = [];
+  let last = 0;
+  for (let i = 1; i + 1 < P.length; i++) {
+    const theta = turnDeg(sub(P[i].p, P[last].p), sub(P[i + 1].p, P[i].p));
+    if (theta <= STRAIGHT_DEG) continue;
+    at.push({i, theta});
+    last = i;
+  }
+  return at.map((c, j) => {
+    const inMm = cum[c.i] - (j ? cum[at[j - 1].i] : 0);
+    const outMm = (j + 1 < at.length ? cum[at[j + 1].i] : cum.at(-1)) - cum[c.i];
+    const a = Math.min(j ? inMm / 2 : inMm, j + 1 < at.length ? outMm / 2 : outMm);
+    const room = c.theta >= 180 - 1e-6 ? 0 : a / Math.tan((c.theta * Math.PI) / 360);
+    return {k: P[c.i].k, angle_deg: round1(c.theta), legs_mm: [round1(inMm), round1(outMm)], room_mm: round1(room)};
+  });
+}
+
+// A member's installed minimum bend radius in mm (`ctx.bendOf`, cable-types.js
+// bendLookup), or null: no type, a type with no radius, no types loaded, or a
+// reader that throws.
+function bendMm(cable, ctx) {
+  let r = null;
+  try { r = typeof ctx.bendOf === 'function' ? ctx.bendOf(cable) : null; } catch { r = null; }
+  return typeof r === 'number' && Number.isFinite(r) && r > 0 ? r : null;
+}
+// "an 18 mm bend", "a 25 mm bend": the article for a number said aloud.
+const an = t => (/^(8|1[18](\.|$))/.test(t) ? 'an' : 'a');
+
+// THE BEND CHECK (#922). A bundle needs, at each point, the largest installed
+// radius among the members present there, so one fibre makes it as strict as
+// fibre; a member at its own join or peel point makes its own turn there and
+// does not count (section 4.3). The points are:
+// - each pathway on the trunk that states a radius (`radius` on its guide,
+//   pathwaysOn): it holds the bundle to that radius, so that is the room, and
+//   it is the part's own figure (`source: 'guide'`). No guide states one yet
+//   (decision 8);
+// - each corner of the trunk, measured as routed length and the straps
+//   measure the trunk (pointOf at each resolved waypoint), the room r_max
+//   from its legs (cornersOf). That is the rack's own sketch of where things
+//   are, not a measured bend, so it is `source: 'legs'`, `estimated: true`.
+//   A corner on a pathway that states a radius is the pathway's.
+// A point is checked against the members present that have a radius. One
+// where none has is unchecked (`ok: null`), never a pass; the members with no
+// radius are listed, at the point and for the bundle. Returns
+//   {bend: {radius_mm, by, unchecked, points, violations}, warnings, notes}
+// where each point (and each violation, a point with `ok: false`) is
+//   {kind: 'corner' | 'pathway', at, waypoint, angle_deg?, legs_mm?,
+//    room_mm, source, estimated, need_mm, by, members, unchecked, ok,
+//    short_mm}
+// with `at` the point in words, `waypoint` the trunk waypoint it is at,
+// `need_mm` and `by` the largest radius present and the cable that sets it
+// (null when none is known), and `short_mm` how far the room misses (0 when
+// it does not).
+export function bendCheck(rack, b, L, pathways, ctx = {}) {
+  const name = bundleName(b), nameOf = labelOf(rack), txt = e => elementText(e, nameOf, rack.frame);
+  const byId = new Map((rack.cables || []).map(c => [c.id, c]));
+  const loaded = typeof ctx.bendOf === 'function';
+  const riding = L.members.filter(m => m.ji != null && m.li != null);
+  const rOf = new Map(riding.map(m => [m.cable, loaded ? bendMm(byId.get(m.cable), ctx) : null]));
+  const needOf = ms => {
+    let need = null, by = null;
+    for (const m of ms) { const r = rOf.get(m.cable); if (r != null && (need == null || r > need)) { need = r; by = m.cable; } }
+    return {need, by, unchecked: ms.filter(m => rOf.get(m.cable) == null).map(m => m.cable)};
+  };
+  const all = needOf(riding);
+  const points = [];
+  const judge = (i, head) => {
+    if (present(L, i).length < 2) return;
+    const ms = present(L, i, {bend: true});
+    if (!ms.length) return;
+    const {need, by, unchecked} = needOf(ms);
+    const ok = need == null ? null : need <= head.room_mm + 1e-9;
+    points.push({...head, need_mm: need, by, members: ms.map(m => m.cable), unchecked, ok,
+                 short_mm: ok === false ? round1(need - head.room_mm) : 0});
+  };
+  // the pathways that state a radius
+  const stated = new Set();
+  for (const p of pathways) {
+    if (!(typeof p.radius === 'number' && p.radius > 0)) continue;
+    for (const i of p.at) stated.add(i);
+    judge(p.at[0], {kind: 'pathway', at: txt(L.T[p.at[0]]), waypoint: {item: p.item, via: p.via},
+                    room_mm: round1(p.radius), source: 'guide', estimated: false});
+  }
+  // the corners: each at a resolved trunk waypoint, element `seg` with t 0
+  const elAt = new Map();
+  L.T.forEach((e, i) => { if (e.kind !== 's' && e.t === 0 && !elAt.has(e.seg)) elAt.set(e.seg, i); });
+  const pts = L.trunk.map(w => pointOf(rack, w, ctx.route));
+  for (const c of cornersOf(pts)) {
+    const i = elAt.get(c.k);
+    if (i == null || stated.has(i)) continue;
+    judge(i, {kind: 'corner', at: txt(L.T[i]), waypoint: L.trunk[c.k], angle_deg: c.angle_deg, legs_mm: c.legs_mm,
+              room_mm: c.room_mm, source: 'legs', estimated: true});
+  }
+  const violations = points.filter(p => p.ok === false);
+  const kind = id => { const c = byId.get(id); const t = c?.type || c?.media; return t ? `${id} (${t})` : id; };
+  const warnings = violations.map(p => {
+    const needs = `${kind(p.by)} needs ${round1(p.need_mm)} mm`;
+    if (p.kind === 'pathway')
+      return `${name} passes ${p.at}, which holds it to ${an(String(p.room_mm))} ${p.room_mm} mm bend; ${needs}, ${p.short_mm} mm short.`;
+    if (p.room_mm === 0) return `${name} doubles back at ${p.at}, with no room for a bend; ${needs}.`;
+    return `${name} turns at ${p.at} with room for ${an(String(p.room_mm))} ${p.room_mm} mm bend; ${needs}, ${p.short_mm} mm short.`;
+  });
+  const notes = [];
+  const un = all.unchecked, has = un.length === 1 ? 'has' : 'have';
+  if (!loaded && riding.length) notes.push(`${name}'s bend is not checked: the cable types are not loaded.`);
+  else if (un.length && un.length === riding.length)
+    notes.push(`${name}'s bend is not checked: ${andList(un)} ${has} no cable type with a bend radius.`);
+  else if (un.length) notes.push(`${name}'s bend is not checked for ${andList(un)}, which ${has} no cable type with a bend radius.`);
+  return {bend: {radius_mm: all.need, by: all.by, unchecked: un, points, violations}, warnings, notes};
 }
 
 // EVERY BUNDLE'S CHECKS, as findings {kind: 'warning' | 'note', bundle, text}.

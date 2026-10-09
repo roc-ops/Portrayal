@@ -39,7 +39,7 @@ from portrayal.manifest import (presented_point, back_hosts, back_parts, key_on_
                       occupant_spec, nested_key_host, slot_default, drawn_refs,
                       spanned_slots, spanning_axis, summed_rotate, presented_turn,
                       allowed_turns, text_extent, alias_names, config_airflow,
-                      config_power, device_options)
+                      config_power, device_options, pdu_class)
 from portrayal import capability
 from portrayal import ears as ears_mod
 from portrayal import bevel as _bevel
@@ -2603,8 +2603,11 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     # sections existed - re-filing a key between sections must not change a
     # single byte of a compiled drawing. attrs.flatten is shared with the search
     # index and the exporters so they cannot disagree about what the bag holds.
+    # A BOOLEAN IS SPELLED AS JSON SPELLS IT, `true` or `false`: the first
+    # device-level boolean (#934's `outlet-switching`) would otherwise reach a
+    # browser as Python's `False`.
     for ak, av in attrs_mod.flatten(device.get("attrs")).items():
-        svg.set(f"data-{ak}", str(av))
+        svg.set(f"data-{ak}", str(av).lower() if isinstance(av, bool) else str(av))
     airflow = config_airflow(device, config)
     if airflow:
         svg.set("data-airflow", airflow)
@@ -4432,6 +4435,40 @@ def published_ears(ears):
     return out
 
 
+def mount_points(device, cfg_name, cfg, lib):
+    """`configs[].mount-points` (#934, docs/pdu-model-design.md section 6.2):
+    each mount point one configuration draws, as `{mates, at}`, `at` ascending.
+
+    A MOUNT POINT is a placement of a `class: mount` part that declares `mates`
+    - a button that seats in a slot presenting that interface, `pdu-button` on
+    a zero-U PDU. `at` is millimetres from the bottom of the view it is placed
+    on to its `mate` point, which is how a PDU's pitch is read: the EVMI2130X's
+    two buttons stand at 72.0 and 1627.8, the 1555.8 the drawing dimensions.
+    THE PITCH IS DERIVED, NEVER STATED: a second statement of a number the
+    drawing already holds is a number that can disagree with it.
+
+    Read over the views this configuration draws (resolve_views) and the
+    placements it has (`only-in`), so a configuration that drops a button
+    publishes one point fewer. A device with none publishes an empty list."""
+    out = []
+    for _face, (_name, view) in resolve_views(device, cfg).items():
+        h = ((view or {}).get("size") or {}).get("h")
+        if h is None:
+            continue
+        for p in view_parts(view)["placements"]:
+            if p.get("only-in") and cfg_name not in p["only-in"]:
+                continue
+            contract, _ = lib.resolve(p["ref"])
+            mate = ((contract.get("connection-points") or {}).get("mate") or {}).get("at")
+            if contract.get("class") != "mount" or not contract.get("mates") or not mate:
+                continue
+            size = contract.get("size") or {}
+            at = seat_point(p["at"], {"w": size.get("w", 0), "h": size.get("h", 0)},
+                            p.get("rotate", 0), mate)
+            out.append({"mates": contract["mates"], "at": round(float(h) - at[1], 2)})
+    return sorted(out, key=lambda m: (m["at"], m["mates"]))
+
+
 def _published_part(ref, lib):
     """What configs.json says of a kit's part or accessory beyond its ref: the
     version it was resolved at, its class and its geometry - `size` and `body`
@@ -5453,6 +5490,10 @@ def main():
                  # the canonical one and is never repeated here.
                  "aliases": alias_names(device),
                  "capability": cap["capability"], "gaps": cap["gaps"],
+                 # A RACK PDU'S CLASS (#934), derived from `attrs.management`
+                 # `metering-scope` and `outlet-switching` (manifest.pdu_class),
+                 # never stated; null where the device states neither.
+                 "pdu-class": pdu_class(device),
                  # FACES ONLY. A view carrying `face:` is a VARIANT - the
                  # 12 x 3.5in front is drawn when a configuration redirects the
                  # front to it, never on its own - and listing it here offered
@@ -5575,7 +5616,12 @@ def main():
                               # configuration that draws it identically, so the
                               # file is looked up here, never built from the
                               # configuration's name (#665).
-                              "files": files.get(n, {})}
+                              "files": files.get(n, {}),
+                              # WHERE THIS BUILD HANGS (#934): each mount point
+                              # it draws, `{mates, at}` with `at` in mm from
+                              # the bottom of its view, derived from the button
+                              # placements; `[]` on a device with none
+                              "mount-points": mount_points(device, n, c, lib)}
                              for n, c in sorted(configs.items())],
                  # what each bay will take, so a viewer can offer the swap rather
                  # than guessing from component class

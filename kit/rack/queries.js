@@ -281,7 +281,10 @@ function zeroUFacts(rack, z, ctx) {
 // leaves the trunk, the trunk in words and its length, its size against the
 // pathways it passes, its straps, and its warnings. What needs the routes
 // (`ctx.route`) is null without them, and `checked` is false: not measured,
-// never a pass. The bend is #922's, and null until it lands.
+// never a pass. `bend` is the bend check's (#922, bundles.js bendCheck): the
+// bundle's radius and the cable that sets it, the members with no radius, and
+// each corner and stated-radius pathway with the room there and what it needs;
+// null when the routes are not known or there is no bundle to bend.
 function bundleFacts(rack, b, ctx) {
   const label = id => rack.items.find(i => i.id === id)?.label ?? id;
   const r = bundleCheck(rack, b, ctx);
@@ -294,7 +297,7 @@ function bundleFacts(rack, b, ctx) {
                                   join: at(m.cable)?.join ?? null, leave: at(m.cable)?.leave ?? null})),
     route: {waypoints: b.route || [], text: routeText(b.route || [], label, rack.frame)},
     length: r.checked ? trunkLength(rack, b, ctx) : null,
-    size: r.size, bend: null,
+    size: r.size, bend: r.bend,
     straps: {every: strapSpacing(b), count: s ? s.count : null},
     gone: r.gone, warnings: r.warnings, notes: r.notes, checked: r.checked};
 }

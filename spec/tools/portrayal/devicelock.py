@@ -226,7 +226,15 @@ def _placement_attrs(doc):
 #                     description, so a DCIM that imported the type holds them:
 #                     changing or dropping one re-files an imported outlet's
 #                     feed (major); stating one where there was none is the
-#                     export gaining a fact and losing nothing (minor).
+#                     export gaining a fact and losing nothing (minor). Since
+#                     #934 `through` may name a fixed breaker placement too.
+#   `lines`           (placement) the conductors a breaker, or an outlet with
+#                     no breaker, is wired across (#934). The export writes
+#                     them on each outlet's description and decides `feed_leg`
+#                     from them, so they are addressing as `through` is:
+#                     stating them is a minor, changing or dropping a major.
+#                     Kept in the order written, not sorted as a set: the
+#                     description spells them in that order.
 # SURFACE - what a reader sees and nothing computes a coordinate or an address
 # from. Patch.
 #   `states`, `description`  what a lamp's colours mean, and the vendor's words
@@ -249,7 +257,8 @@ BAY_HASHED = {"id", "at", "size", "rotate", "mirror", "default", "accepts",
               "group"}
 PLACEMENT_GEOMETRY = {"inset", "lift", "in", "under", "only-in", "optional",
                       "interfaces", "opening", "floor", "plan", "rear"}
-PLACEMENT_ADDRESSING = {"for", "rel-pos", "interface", "fed-by", "through"}
+PLACEMENT_ADDRESSING = {"for", "rel-pos", "interface", "fed-by", "through",
+                        "lines"}
 PLACEMENT_SURFACE = {"states", "description", "provenance", "physical-context",
                      "frames", "positions"}
 
@@ -734,8 +743,8 @@ def entry(doc, versions=None):
 
 
 def _addressing_bump(old, new):
-    """What `for`, `rel-pos`, a bay's `interface` and an outlet's `fed-by` and
-    `through` demand: major when a value a placement stated changes or goes,
+    """What `for`, `rel-pos`, a bay's `interface`, an outlet's `fed-by` and
+    `through` and a breaker's `lines` demand: major when a value a placement stated changes or goes,
     minor when any of them but `rel-pos` is stated where there was none.
 
     STATING A `rel-pos` WHERE THERE WAS NONE ASKS FOR NOTHING, which is the
@@ -755,7 +764,7 @@ def _addressing_bump(old, new):
         if any(now.get(key) != value for key, value in was.items()
                if key in still_here):
             return "major"              # rebound, renumbered or unstated
-    for field in ("for", "interface", "fed-by", "through"):
+    for field in ("for", "interface", "fed-by", "through", "lines"):
         if set(now_all.get(field) or {}) - set(was_all.get(field) or {}):
             return "minor"              # bound, opened or fed where it was not
     return None
@@ -1206,7 +1215,7 @@ def check(library: pathlib.Path):
                             "plan, rear)")
             if _addressing_bump(was, now) is not None:
                 what.append("placement addressing (for, rel-pos, interface, "
-                            "fed-by, through)")
+                            "fed-by, through, lines)")
             if "placement-surface" in was and \
                     was["placement-surface"] != now["placement-surface"]:
                 what.append("placement surface (states, description, "
