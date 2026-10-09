@@ -128,11 +128,9 @@ def test_the_library_fixture_is_what_rack_index_derives_from_the_build(name):
     """The kit test's FHD-CMP5DR and vertical duct are copies of rack.json; the
     build must still derive exactly them."""
     rack = DIST / "rack.json"
-    if not rack.is_file():
-        pytest.skip("no library/dist/rack.json: run ./build.sh first")
+    assert rack.is_file(), "no library/dist/rack.json: run ./build.sh first (the suite reads the build)"
     built = json.loads(rack.read_text())["devices"].get(name)
-    if built is None:
-        pytest.skip(f"{name} is not in this build")
+    assert built is not None, f"{name} is not in library/dist/rack.json: run ./build.sh"
     assert built["solids"] == CAT[name]["solids"]
     # and they are not vacuous: the counts measured when the fixture was taken
     assert len(built["solids"]) == {"fhd-cmp5dr": 17, "cmv-sfd45u5w": 4}[name]
