@@ -571,9 +571,15 @@ key alone would need it, and a rack file version is a one-way door.
 **Proposed for the same version** by
 [cable-lay-design.md](cable-lay-design.md) section 7 (#949): the rack entry
 `states` and `readings` of the PDU note (#934), the PDU bracket key of #939,
-and the cable keys `slack` and `lay`, so that none of them needs a version 5.
+the cable keys `slack` and `lay` (each `lay` entry `{item, via, position?,
+face?}`, with `position` and `face` each optional), and the item key `roll`
+with `90`, `180` and `270` (section 10 reserves the name for #550; the cable
+lay note adds `180`, a manager mounted upside down, and fixes the convention:
+clockwise as seen in the elevation of the face, applied after `face` and
+`turned`), so that none of them needs a version 5.
 The version-4 step reserves `slack` and `lay` even before anything acts on
-them, and its reader must not misread `slack`: for a cable that carries it,
+them, fits an item with `roll` by its rolled box, and its reader must not
+misread `slack`: for a cable that carries it,
 the stored routed length and stock size are kept as written and not
 re-measured, and a route edit that takes off a tray the slack names is
 refused.
@@ -591,7 +597,9 @@ refused.
   for the baffles and the facts that differ (lug size, cable exit). A
   `wall-frame-vertical` product (FS-SVWM-1U and -4U) hangs every device face
   down; the frame states it and the elevation is drawn from above. `roll` is
-  reserved by this note and built with #550.
+  reserved by this note; the cable lay note proposes it for version 4 with a
+  third value, `180`, for a manager mounted upside down (its section 7.1),
+  and the quarter turns are built with #550.
 - **The tilted desktop rack.** `desktop-frame` with `tilt: 9` (degrees back
   from vertical, FS-DR-8U's 81 degrees to its base). The 3D scene leans the
   rail plane; the 2D elevation is face on and unchanged.
@@ -692,4 +700,4 @@ published file or a saved rack file uses it.
 | the setback order (item, device default ear position, frame, flush), and a default position with no `at` counting only when it is `flush` | kit fit and drawing | a saved rack's faceplates move if it changes |
 | removing the 30 mm showcase default, so an unstated setback is flush | kit and Rack Builder | every saved rack's faceplates move 30 mm when it lands |
 | NetBox rack types under `library/exports/`, and the Nautobot rack fields | DCIM export | an imported rack type is named by its model |
-| `roll` (#550) and `tilt` | reserved names | later keys built on them |
+| `roll` (#550) and `tilt` | reserved names | later keys built on them; `roll` is proposed for version 4 by the cable lay note (section 9) |
