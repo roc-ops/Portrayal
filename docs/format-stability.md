@@ -558,8 +558,8 @@ in `severities`:
 - `warning`: every finding warns, and the lint passes.
 - `at-verified`: a finding warns on a device still being drawn and fails on a
   device that claims `maturity: verified`.
-- `mixed`: some findings fail and others only warn; the rule's text says
-  which.
+- `mixed`: some findings fail and others only warn; the finding's own
+  message, in the lint run, says which.
 - `mixed-at-verified`: some findings always fail, and others warn until the
   device claims `maturity: verified`.
 
@@ -574,7 +574,9 @@ The three booleans say the same thing for a reader that only filters:
 finding only warns, and `fails-at-verified` when a warning becomes an error
 on a device that claims `maturity: verified`. `retired` lists codes whose
 rule is gone; a code is never reissued. A new token is a new key's worth of
-change and does not raise `format`; a token renamed or removed does.
+change and does not raise `format`; a token renamed or removed does. A consumer should
+treat a token it does not know as it would an unknown key: show the rule
+and its booleans, and not fail on it.
 
 ## The rack catalogue
 
