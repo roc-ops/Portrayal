@@ -1,0 +1,28 @@
+format: 1
+kind: component
+name: dinrail2u-side
+version: 1.0.0
+class: bracket
+behaviour: mounts
+description: >-
+  One side bracket of the FS DINRAIL2U, seen from outside the bracket - front at the left on the
+  `right` skin, at the right on the mirrored `left` skin: a steel plate 360 mm deep with two long
+  slots the rail panel's screws slide in and a window between them; its front end folds out into
+  the mounting ear.
+provenance:
+  size: >-
+    drawing - the datasheet's DINRAIL2U side view, dimensioned 360 deep, read on the vector page
+    rendered at 600 dpi (3.342 px/mm along the 360): two long slots near the top and bottom edges
+    running from 64.4 to 292 mm behind the ears, and a window between them, read as fractions
+    of the view.
+  relief: >-
+    estimated - the plate, 1.5 thick.
+size: {w: 360.0, h: 87.5}
+size-confidence: {w: datasheet, h: datasheet}
+elements:
+  plate: {at: [0.0, 0.0], size: [360.0, 87.5], class: bezel}
+relief:
+  features:
+  - {node: plate, out: 1.5, color: '#1b1d20', confidence: estimated, source: 'the plate, 1.5,
+      estimated'}
+skins: [right, left]

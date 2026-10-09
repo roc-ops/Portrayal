@@ -1,0 +1,83 @@
+format: 1
+kind: component
+name: fan-temp-controller
+version: 1.0.0
+class: control-panel
+profile: power
+description: >-
+  The panel-mount temperature controller on the front of the FS FANS1U2F and FANS1U4F
+  fan trays: a two-digit red LED display with the LOAD and SET lamps beside its digits,
+  SET and POWER keys at its left and UP and DOWN keys at its right. It switches the fans
+  on above a set temperature read by an NTC sensor on a lead out of the back of the tray.
+size: {w: 78.0, h: 34.7}
+size-confidence: {w: drawing, h: drawing}
+attrs: {power-draw-max-w: 3, sensor: one NTC, output: 'one relay, 10 A / 220 VAC', range: '-40 to 99 C'}
+provenance:
+  size: >-
+    drawing - the front view in the FANS1U2F/FANS1U4F Quick Start Guide V2.0 (portal 6672,
+    the labelled front, fig-0011), a 635 px line drawing whose tray measures 627 px over
+    its 483 mm ears, 1.298 px/mm, and 58 px over its 44 mm height, 1.32 px/mm, so the
+    figure is orthographic to 1.5 per cent. The controller's bezel is 101 x 45 px there,
+    78.0 x 34.7. The user manual's own specification gives the panel cut-out as 71 x 29,
+    which the bezel covers.
+  layout: >-
+    drawing - the same figure at 4x: the display window 41.0 x 18.1, 18.3 in from the
+    bezel's left edge and 8.1 down; the two lamps 2 mm dots inside the window's left end,
+    11.9 and 22.0 down; the SET and POWER keys 9.2 x 4.2 centred 11.6 in and 11.8 and
+    22.7 down, the UP and DOWN keys the same at 66.4 in. The key names are the guide's
+    callouts (SET, Power, UP, DOWN); the manual's photograph of the controller shows the
+    same arrangement with a power symbol on the lower left key and chevrons on the right.
+  lamps: >-
+    datasheet - the quick start guide's LED table: LOAD on, the fan is working; LOAD
+    blinking, the fan is in the waiting state (the manual: the output's start delay);
+    LOAD off, the fan is not working; SET blinking, the device is in the setting state;
+    SET off, it is not. The lamp ids take the guide's word, LOAD; the printing on the
+    bezel is the user manual's photograph of the controller, WORK over the window and SET
+    under it, the only image in which the legends can be read. NO DOCUMENT GIVES THE LAMPS' COLOUR; they
+    are drawn the display's red, an estimate.
+  display: >-
+    datasheet - the user manual: the current temperature, -40 to 99 C at 1 degree; HH when
+    the sensor reads above 99 C or is shorted, LL below -40 C, '_ _' flashing when the
+    sensor is open; HC and the other menu codes while setting. Two characters, as the
+    manual's photograph shows.
+  power: >-
+    datasheet - the user manual's parameter table: "Consumption <=3W". The fan tray's own
+    15 W input figure includes it.
+  keys: >-
+    datasheet - SET shows and sets the set point (held 3 s, the maintenance menu); UP and
+    DOWN adjust; POWER switches the controller on, and held 5 s off (manual section 5).
+  relief: >-
+    deliberately FLAT: the bezel stands proud of the tray's face in the guide's drawing, but
+    raising the whole face would bury the keys and lamps drawn on it, and no figure states
+    how far it stands.
+elements:
+  display:
+    at: [18.3, 8.1]
+    size: [41.0, 18.1]
+    class: display
+    characters: 2
+    messages:
+      - {text: HH, meaning: 'the sensor reads above 99 C, or is shorted'}
+      - {text: LL, meaning: 'the sensor reads below -40 C'}
+      - {text: __, meaning: 'flashing: the sensor is open-circuit; the fans run 15 minutes on, 15 off'}
+      - {text: HC, meaning: 'the first maintenance parameter, the cool or heat mode'}
+  lamp-load:
+    at: [24.0, 10.9]
+    size: [2.0, 2.0]
+    class: led
+    states:
+      - 'off'
+      - {name: working, color: '#e5242b'}
+      - {name: waiting, behavior: blinking, color: '#e5242b'}
+  lamp-set:
+    at: [24.0, 21.0]
+    size: [2.0, 2.0]
+    class: led
+    states:
+      - 'off'
+      - {name: setting, behavior: blinking, color: '#e5242b'}
+  key-set: {at: [7.0, 9.7], size: [9.2, 4.2], class: button}
+  key-power: {at: [7.0, 20.6], size: [9.2, 4.2], class: button}
+  key-up: {at: [61.8, 9.7], size: [9.2, 4.2], class: button}
+  key-down: {at: [61.8, 20.6], size: [9.2, 4.2], class: button}
+skins: [default]

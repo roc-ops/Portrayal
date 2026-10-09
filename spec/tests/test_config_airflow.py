@@ -44,7 +44,7 @@ SIDE = LIB / "devices/cisco/asr-9001/device.yaml"
 # no configurations and no airflow anywhere: the synthesised `default` build
 BARE = LIB / "devices/juniper/mx150/device.yaml"
 
-VOCAB = {"front-to-back", "back-to-front", "side", "passive", None}
+VOCAB = {"front-to-back", "back-to-front", "side", "passive", "top-to-bottom", None}
 AIRFLOW_ATTR = re.compile(r'<svg\b[^>]*?\sdata-airflow="([^"]*)"')
 SVG_ROOT = re.compile(r"<svg\b[^>]*>")
 

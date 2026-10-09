@@ -1,0 +1,202 @@
+format: 1
+kind: device
+name: iwep1u550
+version: 0.1.0
+maturity: modelled
+manufacturer: FS.com
+model: IWEP1U550
+aliases:
+- {name: '175750', kind: vendor, note: FS shop product ID}
+description: >-
+  1U 19in vented cantilever shelf with a rear lip, FS IWEP1U550: a black SPCC steel tray 441.4
+  mm wide reaching 550 mm behind the front rails, its side walls 28 mm high at the front and full
+  height at the rear and folded out into ears that bolt to the front rails, with a lip along the
+  back that stops equipment sliding off. Twenty-five diagonal vent slots; it carries 60 kg on
+  2- or 4-post racks.
+profile: passive
+provenance:
+  chassis:
+    confidence: datasheet
+    note: >-
+      the specification gives 44.0 x 482.6 x 550 mm over the ears, which is the part: the ears
+      are built in (provenance.ears). The tray between them is 441.4 (see provenance.tray-width).
+  ears:
+    confidence: drawing
+    note: >-
+      THE EARS ARE BUILT IN: each is the side wall's front end folded out flat, one piece with
+      the tray (the renders g1 and g4 of SKU 175749), so under the owner's rule of 2026-10-09
+      they are part of the face and always drawn - 20.6 each side, the face the full 482.6, with
+      their slots. THE SAME TABS STAND AT THE REAR: the renders g1 and g4 and the datasheet's
+      top view (p3) show a tab with two slots folded out at both ends of each side wall, so the
+      shelf can also bolt to rear rails; the rear pair is drawn on the rear face and seen edge-on
+      at y=0 on the top view. The front is the end with the low slotted wall (g1, the datasheet's
+      application figure on p2, where it faces the viewer); the lip stands along the rear edge,
+      between the full-height ends of the walls.
+  sheet:
+    confidence: estimated
+    note: >-
+      `shell: sheet`, 1.2: the shelf is bent sheet steel and open air (docs/cable-managers-design.md
+      section 4); FS states the material and not its gauge. Its solid in 3D is the floor (a well
+      on the top view, 42 deep in the 44 envelope - the deepest a sheet body builds, so the floor
+      is drawn 2 thick where the sheet is about 1.2), the two side walls standing on it to their
+      profile, and any rear lip; the six views are elevations.
+  hosting:
+    confidence: datasheet
+    note: >-
+      the surface a device stands on is the floor between the two walls, 439.0 x 550 mm (the body
+      less two 1.2 walls), recorded in `attrs.physical` as usable-width-mm and usable-depth-mm;
+      the load is the datasheet's "Weight Capacity - Stationary" 60 kg. Hosting devices on it
+      is #935's.
+  mount-depth:
+    confidence: datasheet
+    note: >-
+      cantilever: the shelf bolts to the FRONT rails only through its two ears (2 or 4 post racks)
+      and nothing supports its rear; its depth is the tray's reach behind the front rails, not
+      a rail-to-rail span.
+  eia:
+    confidence: registry
+    note: >-
+      EIA-310 hole positions: the rail holes of each rack unit stand 6.35, 22.225 and 38.1 mm
+      up from its bottom, and the two rails' holes are 465.1 mm apart across the rack. The part
+      is taken as centred in the rack units it fills.
+  color:
+    confidence: photo-measured
+    note: >-
+      black powder-coated steel, as every render shows.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      checked 2026-10-09 against what the intake holds: the FS documentation portal's Accessories
+      tree, read on 2026-10-08, carries no end-of-sale notice for this part. The product page
+      (SKU 175750) was live on 2026-10-08. No web search beyond FS's own pages was made.
+  method:
+    confidence: drawing
+    note: >-
+      the IWEP1U550 datasheet (portal 4869) for the figures and its three-view drawing in mm;
+      the gallery renders, which IWEP1U350 and IWEP1U550 share byte for byte (so no render tells
+      the two apart; depth comes only from the datasheets); FS's Visio stencil (master IWEP1U550).
+      There is no quick start guide.
+  tray-width:
+    confidence: photo-measured
+    note: >-
+      441.4 between the walls: the datasheet's top view is not to scale across (its tray reads
+      wider than the 482.6 front view), so the width is taken from the plan render at the scale
+      its stated 350 depth gives.
+  datasheet-header:
+    confidence: datasheet
+    note: >-
+      the IWEP1U550 datasheet's third page is headed "IWEP1U350 Vented Shelf Datasheet", an FS
+      copy error; its drawing dimensions 550.
+attrs:
+  physical:
+    material: SPCC
+    color: Black
+    mounting-hardware: M6x12 screw x4, M6 cage nut x4
+    rack-type: 2 or 4 post
+    usable-width-mm: 439.0
+    usable-depth-mm: 550.0
+    load-static-kg: 60
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 482.6
+  height: 44.0
+  depth: 550.0
+  ru: 1
+  full-depth: false
+  shell: sheet
+  thickness: 1.2
+  color: '#1b1d20'
+gaps:
+- what: weight
+  reason: vendor-silent
+  note: >-
+    no FS document states the shelf's own weight.
+  wanted: the product page weight
+- what: rear-lip
+  reason: needs-drawing
+  note: >-
+    the baffle along the rear is named and rendered but not dimensioned; it is drawn 28 high.
+  wanted: a dimensioned rear or side view
+groups:
+  shelf:
+    term: Shelf
+    role: furniture
+    index-origin: 1
+    description: the floor, its side walls and its rear lip
+  ears:
+    term: Ear
+    role: furniture
+    index-origin: 1
+    description: the four mounting tabs, the side walls folded out at both ends, front pair first
+views:
+  front:
+    size: {w: 482.6, h: 44.0}
+    panel:
+      decor:
+      - {id: rear-lip, at: [21.8, 16.0], size: [439.0, 26.0], fill: '#141618', kind: rear-lip}
+      - {id: wall-left, at: [20.6, 0.0], size: [1.2, 44.0], fill: '#1b1d20', kind: wall}
+      - {id: wall-right, at: [460.8, 0.0], size: [1.2, 44.0], fill: '#1b1d20', kind: wall}
+      - {id: floor-edge, at: [20.6, 42.0], size: [441.4, 2.0], fill: '#2a2d31', kind: floor}
+    components:
+      placements:
+      - {ref: fs/iwep1u550-ear@1, id: ear-left, at: [0.0, 0.0], skin: left, group: ears, rel-pos: 1}
+      - {ref: fs/iwep1u550-ear@1, id: ear-right, at: [462.0, 0.0], skin: right, group: ears, rel-pos: 2}
+  rear:
+    size: {w: 482.6, h: 44.0}
+    panel:
+      decor:
+      - {id: rear-lip, at: [21.8, 16.0], size: [439.0, 26.0], fill: '#1b1d20', kind: rear-lip}
+      - {id: wall-right, at: [20.6, 0.0], size: [1.2, 44.0], fill: '#1b1d20', kind: wall}
+      - {id: wall-left, at: [460.8, 0.0], size: [1.2, 44.0], fill: '#1b1d20', kind: wall}
+      - {id: floor-edge, at: [20.6, 42.0], size: [441.4, 2.0], fill: '#2a2d31', kind: floor}
+    components:
+      placements:
+      - {ref: fs/iwep1u550-ear@1, id: tab-rear-left, at: [462.0, 0.0], skin: right, group: ears,
+        rel-pos: 3}
+      - {ref: fs/iwep1u550-ear@1, id: tab-rear-right, at: [0.0, 0.0], skin: left, group: ears,
+        rel-pos: 4}
+  top:
+    size: {w: 482.6, h: 550.0}
+    panel:
+      decor:
+      - {id: ear-left-edge, at: [0.0, 548.8], size: &id001 [20.6, 1.2], fill: '#1b1d20', kind: ear}
+      - {id: ear-right-edge, at: [462.0, 548.8], size: &id002 [20.6, 1.2], fill: '#1b1d20', kind: ear}
+      - {id: tab-rear-left-edge, at: [0.0, 0.0], size: &id003 [20.6, 1.2], fill: '#1b1d20', kind: ear}
+      - {id: tab-rear-right-edge, at: [462.0, 0.0], size: &id004 [20.6, 1.2], fill: '#1b1d20',
+        kind: ear}
+    components:
+      placements:
+      - {ref: fs/iwep1u550-tray@1, id: tray, at: [20.6, 0.0], group: shelf, rel-pos: 1}
+      - {ref: fs/iwep1u550-wall@1, id: wall-left, at: [20.6, 0.0], group: shelf, rel-pos: 2, in: tray}
+      - {ref: fs/iwep1u550-wall@1, id: wall-right, at: [460.8, 0.0], group: shelf, rel-pos: 3,
+        in: tray}
+      - {ref: fs/iwep1u550-lip@1, id: rear-lip, at: [21.8, 0.0], group: shelf, rel-pos: 4, in: tray}
+  bottom:
+    size: {w: 482.6, h: 550.0}
+    panel:
+      decor:
+      - {id: ear-left-edge, at: [462.0, 548.8], size: *id001, fill: '#1b1d20', kind: ear}
+      - {id: ear-right-edge, at: [0.0, 548.8], size: *id002, fill: '#1b1d20', kind: ear}
+      - {id: tab-rear-left-edge, at: [462.0, 0.0], size: *id003, fill: '#1b1d20', kind: ear}
+      - {id: tab-rear-right-edge, at: [0.0, 0.0], size: *id004, fill: '#1b1d20', kind: ear}
+    components:
+      placements:
+      - {ref: fs/iwep1u550-underside@1, id: underside, at: [20.6, 0.0], group: shelf, rel-pos: 7}
+  left:
+    size: {w: 550.0, h: 44.0}
+    components:
+      placements:
+      - {ref: fs/iwep1u550-side@1, id: side, at: [0.0, 0.0], skin: left, group: shelf, rel-pos: 5}
+  right:
+    size: {w: 550.0, h: 44.0}
+    components:
+      placements:
+      - {ref: fs/iwep1u550-side@1, id: side, at: [0.0, 0.0], skin: right, group: shelf, rel-pos: 5}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The shelf as FS ships IWEP1U550, with its M6 screws and cage nuts.
+datasheet: {title: FS IWEP1U550 Vented Shelf Datasheet (portal 4869), sha256: 83f2672fc69f92db5ca13e23bdcbc447cc290fce96167a950c036911e2978c53}
