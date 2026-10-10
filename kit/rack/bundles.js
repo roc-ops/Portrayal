@@ -14,6 +14,7 @@ import {bundlesOf, bundleName, isWaypoint, uLabel, withoutMembers} from './model
 import {ownRoute, trunkRoute, pointOf, portPoint, routeText, DIAMETERS} from './route.js';
 import {elementsOf, elementText, waypointKey, followTrunk, andList} from './bundle-route.js';
 import {zeroUOnLane, carriesLane} from './zero-u.js';
+import {cornersOf, STRAIGHT_DEG} from './route-path.js';
 
 export {bundlesOf, bundleName, settleBundles} from './model.js';
 export {deriveTrunk, followTrunk, elementsOf} from './bundle-route.js';
@@ -219,48 +220,10 @@ export function bundleCheck(rack, b, ctx = {}) {
 }
 
 // ── bend radius (section 5.2) ────────────────────────────────────────────
-// A waypoint is a straight pass, not a corner, when the next segment runs
-// within this many degrees of the leg it is on.
-export const STRAIGHT_DEG = 1;
-const sub = (p, q) => ({x: p.x - q.x, y: p.y - q.y, z: p.z - q.z});
-const norm = v => Math.hypot(v.x, v.y, v.z);
-const turnDeg = (u, v) => {
-  const c = (u.x * v.x + u.y * v.y + u.z * v.z) / (norm(u) * norm(v));
-  return (Math.acos(Math.max(-1, Math.min(1, c))) * 180) / Math.PI;
-};
-
-// THE CORNERS OF A POLYLINE, in rack coordinates (mm), with the largest bend
-// each has room for. A point is a straight pass when the next segment runs
-// within STRAIGHT_DEG of the leg from the last corner (or the start), so many
-// small turns add up to a corner. Each corner's legs run to the next corner
-// on each side, through straight passes, or to the polyline's end; a leg
-// between two corners is shared, so each may use half of it, and a leg to an
-// end all of it. The room is
-//   r_max = min(a_in, a_out) / tan(theta / 2),
-// 0 for a polyline that doubles back on itself. A point on top of the one
-// before it is skipped. Returns [{k, angle_deg, legs_mm: [in, out], room_mm}],
-// `k` the index into `pts` of the corner.
-export function cornersOf(pts) {
-  const P = [];
-  pts.forEach((p, k) => { if (p && (!P.length || norm(sub(p, P.at(-1).p)) > 1e-6)) P.push({p, k}); });
-  const cum = [0];
-  for (let i = 1; i < P.length; i++) cum.push(cum[i - 1] + norm(sub(P[i].p, P[i - 1].p)));
-  const at = [];
-  let last = 0;
-  for (let i = 1; i + 1 < P.length; i++) {
-    const theta = turnDeg(sub(P[i].p, P[last].p), sub(P[i + 1].p, P[i].p));
-    if (theta <= STRAIGHT_DEG) continue;
-    at.push({i, theta});
-    last = i;
-  }
-  return at.map((c, j) => {
-    const inMm = cum[c.i] - (j ? cum[at[j - 1].i] : 0);
-    const outMm = (j + 1 < at.length ? cum[at[j + 1].i] : cum.at(-1)) - cum[c.i];
-    const a = Math.min(j ? inMm / 2 : inMm, j + 1 < at.length ? outMm / 2 : outMm);
-    const room = c.theta >= 180 - 1e-6 ? 0 : a / Math.tan((c.theta * Math.PI) / 360);
-    return {k: P[c.i].k, angle_deg: round1(c.theta), legs_mm: [round1(inMm), round1(outMm)], room_mm: round1(room)};
-  });
-}
+// The corners of a polyline and the room each has (`cornersOf`, with
+// `STRAIGHT_DEG`) are route-path.js's since #973, where route.js reads them
+// for a single cable's path too; they are exported from here as before.
+export {cornersOf, STRAIGHT_DEG};
 
 // A member's installed minimum bend radius in mm (`ctx.bendOf`, cable-types.js
 // bendLookup), or null: no type, a type with no radius, no types loaded, or a
