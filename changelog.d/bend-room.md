@@ -22,13 +22,17 @@
   behind it is led square to it through a lead point; each move to a
   detour's plane is two bend radii long; and a cable whose first turn needs
   more leg than its plug gives runs on straight out of it. None of the 86 is
-  left. What a rack has no room for is still routed, and reported.
+  left. What the kit's rules find no room for is still routed, and reported.
   **ONE-WAY: routed lengths change on saved racks.** On the owner's rack
-  every cord is 20.6 to 179.2 mm longer and seven of the sixteen move from
+  every cord is 10.9 to 179.2 mm longer and seven of the sixteen move from
   0.5 m to 1 m (c1 to c3 and c5 to c8; c4 stays 0.5 m, the lower leaf's
-  eight stay 1 m). On 60 generated racks (1,803 cables of mixed media) a
-  length moves by 113 mm shorter to 218 mm longer, median 19 mm longer, 92
-  stock sizes up and 29 down, and the corners short of their radius fall
-  from 22,886 to 1,201, each a bend the parts leave no room for. A saved
+  eight stay 1 m). On one sample of 60 generated racks (1,803 cables of
+  mixed media, `spec/tests/js/bend-room-sample.mjs`) a length moves by 113
+  mm shorter to 297 mm longer, median 14 mm longer, 92 stock sizes up and 34
+  down, and the corners short of their radius fall from 22,886 to 913, each
+  a bend the kit's rules found no room for. A cable written the other way
+  round does not always lay the same: 37 of those 1,803 measure differently
+  from the other end (21 before), and 7 report a different number of bends.
+  A saved
   rack's routed lengths and stock sizes are re-measured the next time a page
   measures them; an entered length is never touched.

@@ -812,7 +812,13 @@ came from where the kit put its points.
 5.2), which now lives in `rack/route-path.js`: a point is a corner where the
 path turns by more than 1 degree from the leg it is on, a bend of radius r
 uses `r tan(θ / 2)` of each leg, and a corner's room is the largest radius
-its legs leave it. A leg between two corners is shared. The bundle check
+its legs leave it. The walk starts at end a and measures each turn against
+the leg from the last corner, so that many slight turns add up; which point
+of a slow curve becomes the corner therefore depends on the end it starts
+from, and the same points read the other way round can give other corners.
+Room is given to 0.1 mm and compared as given (as in the bundle check), so
+a corner with 24.96 mm of room passes at 25. A leg between two corners is
+shared. The bundle check
 gives each corner half of it, which is safe and coarse: a slight turn takes
 half of a leg it needs a tenth of. A cable's own path is judged with the leg
 shared **by need** (`cornersOf(points, {share: 'need'})`): the largest
@@ -840,8 +846,8 @@ is a point of:
 | a plug's end (beside a rest sample) | 19 | 7 | 0 | follows from the three above |
 | all | 86 | 87 | 0 | |
 
-By halves 24 corners of the new paths are still short (16 at an approach
-point, 3 at a lead point, 5 at a plug's end): each is a turn that shares a
+By halves 23 corners of the new paths are still short (16 at an approach
+point, 2 at a lead point, 5 at a plug's end): each is a turn that shares a
 leg with a slighter one. That is the difference between the two ways of
 sharing, and why a path is judged by need.
 
@@ -860,7 +866,9 @@ sharing, and why a path is judged by need.
   offered at its full sag, a half and a quarter, each sampled at 15 mm, at
   the bend radius and at twice it, and the first that fits is laid; where
   none fits the span is straight. A cable with no room to turn where it is
-  held does not also sag. Where two spans meet at a point, each fits alone
+  held does not also sag. A landing is laid only where the stretch that lies
+  level reaches the surface it lands on: a span is not said to rest on a rib
+  it only passes over. Where two spans meet at a point, each fits alone
   and together they leave the point short, neither hangs.
 - **Approach points.** The radius and `CLEAR` of 3.3 (6.5 mm for an OM4
   cord) left a turn onto a ring's run a fifth of the leg it needs. On each
@@ -888,6 +896,11 @@ sharing, and why a path is judged by need.
 - **The stretch through a ring** is the leg its two approach turns share.
   Where they need more of it than it is, the other side's approach point
   moves out by what is missing.
+- **Back at the radius and `CLEAR`.** A stop that stands almost over the
+  approach point turns onto the run with its own leg for room, and a point
+  moved out past it would make the cable come back for it: the approach
+  point may go back to the radius and `CLEAR` where that leaves the corners
+  less short.
 - **A plug.** Where a cable's first turn has too little of the plug's reach
   for a leg (a fibre cord's 27.6 mm, turning back past a right angle to a
   lane on the rail plane), it runs on straight out of the plug, half a bend
@@ -902,8 +915,12 @@ is taken only if it leaves them less short than they were, puts no leg newly
 through a body or in front of a zero-U part (below), and either gives the
 stretch it is for its room or makes the path no longer: a cable is not sent
 a longer way round to make a short corner less short. The best of all the
-offers is taken each round, whichever end of the cable it is nearer, and
-the result is kept per rack, context and cable, as the side of a route is.
+offers is taken each round, whichever end of the cable it is nearer, for at
+most six rounds; a path still short after six keeps what it has, and its
+corners are findings. The result is kept per rack, context and cable, as
+the side of a route is, so a page builds a new context when what the
+context reads changes: one changed in place can give a path placed for what
+it read before.
 
 **A radius no lay is opened out for.** Points are placed for a bend radius
 up to 100 mm (`ROOM_MAX`, internal: twice a power cord's 42.6). A cable that
@@ -914,36 +931,42 @@ for the last way round it, but only a leg that would graze the part is taken
 behind it; one that clears it by more than the cable's tube is not a
 crossing. An approach point 18 mm further out freed the leg from a lacer's
 end ring to the lane beside a PDU to run across the outlet face, a fraction
-of a millimetre clear of the part. So no change made for room may put a leg
-through that space that was not there with every approach point at the
-radius and `CLEAR`: where one would, that side of the ring keeps the radius
+of a millimetre clear of the part. So no point moved for room (an approach
+point, a lead point, a run-out, a detour's plane) may put a leg through
+that space that was not there with every approach point at the radius and
+`CLEAR`: where one would, that side of the ring keeps the radius
 and `CLEAR`, and its corner is a finding. The rule of 1.3 itself is no
 stronger than it was.
 
-**The finding.** What the rack leaves no room for is still routed, and is
-said: `routePath` returns `bends`, each corner of the path with less room
+**The finding.** What the kit's rules find no room for is still routed, and
+is said: `routePath` returns `bends`, each corner of the path with less room
 than the cable's radius, as `{kind: 'tight-bend', cable, point, between:
 [from, to], at: [x, y, z], angle_deg, legs_mm: [in, out], room_mm, need_mm,
 short_mm}` (`point` the path point's `at`, `between` as for a crossing), and
 `bendFindings(rack, ctx, nameOf)`, beside `bodyFindings`, gives them
 rack-wide with a sentence in the words of the bundle check. It says where
-("c9 turns 138.3 degrees between its port on LEAF-B and CM-01 ring 3") and
-then by how much ("with room for a 16.5 mm bend; the cable (aoc) needs 30
-mm, 13.5 mm short."). It warns and never refuses. A page that draws the kit's points can show these as they are.
+("c9 turns 129.7 degrees between its port on LEAF-B and CM-01 ring 3") and
+then by how much ("with room for a 19.2 mm bend; the cable (aoc) needs 30
+mm, 10.8 mm short."). It warns and never refuses. A page that draws the kit's points can show these as they are.
 `inspect`, `describe` and the export notes do not carry them yet.
 
-**What is left, and why it is real.** On the owner's rack, nothing. On 60
+**What is left.** On the owner's rack, nothing. On one sample of 60
 generated racks (1,803 cables of mixed media, four-post and two-post, with
-and without a zero-U PDU, panels with an FHD-CMP5DR lacer between switches)
-the corners short of room fall from 22,886 to 1,201, on 421 cables: 18 of
-883 fibre cords, 13 of 242 Cat 6, 101 of 204 Cat 6A, 93 of 248 DACs and 196
-of 226 AOCs. Each is one of these:
+and without a zero-U PDU, panels with an FHD-CMP5DR lacer between switches;
+`spec/tests/js/bend-room-sample.mjs` builds them from a fixed seed and
+prints every figure here) the corners short of room fall from 22,886 to
+913, on 342 cables: 18 of 883 fibre cords, 5 of 242 Cat 6, 57 of 204 Cat
+6A, 91 of 248 DACs and 171 of 226 AOCs. A finding is a bend the kit's rules
+found no room for. It is not proof that no lay has room: the rules are the
+ones above and no more, and a cable can be clean read from one end and
+report a bend read from the other (below). Those looked at were of these
+kinds:
 
 - **a plug that reaches almost to the ring's line.** A DAC's or an AOC's
   head ends 64.8 mm out of the face and the lacer's rings stand 73.7 mm
   out: 9 mm to turn onto the run at a radius of 23 or 30. A Cat 6A boot ends
   39.4 out, 36.6 short of the line, for a turn that needs 30 each way. No
-  point can be moved to make that room; it is the part;
+  rule here moves a point to make that room;
 - **a detour that comes back beside itself with no room to the side.** A
   port 32 mm below a tray and between two of its rings: the approach point
   cannot stand two radii to either side without standing in the next ring;
@@ -968,13 +991,23 @@ of 226 AOCs. Each is one of these:
   face, coming round the tray's edge to a port above, can still report
   bends.
 - **The same cable written the other way round** measures the same on the
-  owner's rack. It does not everywhere: the way through a ring that both
-  ports stand to one side of, and which body a detour meets first, were
-  already read from end a, and on 30 of the generated racks 23 of 908
-  cables measure differently reversed (11 before).
+  owner's rack. It does not everywhere, and this change adds to that. Two
+  causes were there before: the way through a ring that both ports stand to
+  one side of, and which body a detour meets first, are read from end a.
+  Two are new: the measure reads a path from end a (above), so the corners
+  an offer or a hang is judged by can differ with the end; and a span at a
+  plug's end can hang read one way and not the other. On the generated
+  racks 37 of 1,803 cables measure differently from the other end (21
+  before), and 7 report a different number of bends, some none from one end
+  and up to three from the other. Making `cornersOf` read the same from
+  both ends is a follow-up; it changes the bundle check's corners too.
+- **A lead point can mark no turn.** c8 runs on out of its panel plug to a
+  lead point that its detour then reaches in line, so the path passes
+  straight through it. It is left in: the path is the kit's stops and its
+  detours between them, and a drawing rebuilds the detour from that point.
 
 **Lengths change on saved racks.** On the owner's rack every cord is longer,
-by 20.6 to 179.2 mm, none shorter, and seven of the sixteen change stock
+by 10.9 to 179.2 mm, none shorter, and seven of the sixteen change stock
 size: the upper leaf's c1 to c3 and c5 to c8 pass the 0.5 m break again and
 are 1 m cords (c2 by 0.02 mm), c4 is still a 0.5 m cord, and the lower
 leaf's eight are still 1 m cords.
@@ -987,7 +1020,7 @@ leaf's eight are still 1 m cords.
 | c4 | 422.2 | 491.6 | +69.4 | 0.5 |
 | c5 | 465.0 | 522.2 | +57.2 | 0.5 to 1 |
 | c6 | 470.3 | 515.2 | +44.9 | 0.5 to 1 |
-| c7 | 495.0 | 550.3 | +55.3 | 0.5 to 1 |
+| c7 | 495.0 | 505.9 | +10.9 | 0.5 to 1 |
 | c8 | 440.2 | 619.4 | +179.2 | 0.5 to 1 |
 | c9 | 590.5 | 611.1 | +20.6 | 1 |
 | c10 | 589.3 | 613.2 | +23.9 | 1 |
@@ -1001,8 +1034,8 @@ leaf's eight are still 1 m cords.
 c8 grows most: it leaves ring 5 and comes straight back to a panel port 13.4
 mm short of the ring, with the lacer's web between, so it goes round the
 front of the tray and straight in to its plug. On the generated racks a
-length moves by -113 to +218 mm, median +19; 92 cables move up a stock size
-and 29 down. 626 of the 1,803 are shorter: a span that hung to its full
+length moves by -113 to +297 mm, median +14; 92 cables move up a stock size
+and 34 down. 662 of the 1,803 are shorter: a span that hung to its full
 depth whatever held its ends now hangs only as deep as the corners beside
 it have room for. No path crosses a body it did not cross before (none
 does, before or after). A stored routed length and stock size move the next
