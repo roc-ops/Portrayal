@@ -473,8 +473,8 @@ const UNSET_ALLOWANCE = 0.0345;
 // a measured figure and has no maker's source: it is there by decision
 // (2026-10-10, #962), so that a routed cord is not bought with nothing to
 // dress it by while no tray can hold its slack. It is kept out of
-// END_ALLOWANCE_BY_MEDIA so that the table stays what the sources say; step 4 removes
-// this constant and its one use in endAllowance, and nothing else.
+// END_ALLOWANCE_BY_MEDIA so that the table stays what the sources say; step
+// 4 removes this constant and its one use in endAllowance, and nothing else.
 const DRESSING_ALLOWANCE = 0.1;
 // What a routed length adds at each end of a cable: its media's figure from
 // the table (the copper cord's for a cable with no media, or none the table

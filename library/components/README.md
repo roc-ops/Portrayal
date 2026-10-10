@@ -121,14 +121,15 @@ a minor bump. The precedent is `fs/d-ring-snap-in@1` 1.3.0: `leg-front` and
 5.8, as `leg-rear` did. The part kept its 32.3 x 43.6 size, and the new keys
 were additive.
 
-A skin redrawn so that its outline changes, inside an unchanged `size` and
+A skin redrawn, in its outline or its interior, inside an unchanged `size` and
 with no element moved, renamed or added, is art and takes a patch. The
-precedents are `std/c20-inlet` 1.3.1, whose blades were redrawn along the
-long side of the recess with ids, size and connection point unchanged, and
-`fs/dinrail2u-side@1` and `fs/dinrail4u-side@1` 1.0.1, whose top and bottom
-edges were lowered between their ends (#971). The minor above is for elements
-the contract lists that changed place; here the contract's elements stay as
-they were and only the drawing differs.
+precedents are `std/c20-inlet` 1.3.1, whose recess and blades were redrawn
+inside an unchanged opening, with ids, size and connection point unchanged (an
+interior redraw), and `fs/dinrail2u-side@1` and `fs/dinrail4u-side@1` 1.0.1,
+whose top and bottom edges were lowered between their ends (#971, an outline
+change). The minor above is for elements the contract lists that changed
+place; here the contract's elements stay as they were and only the drawing
+differs.
 
 What keeps a retired major alive is
 something still naming it: a gap arguing from its figure, say. `common/psu-550w@1`
