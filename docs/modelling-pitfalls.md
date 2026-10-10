@@ -6,6 +6,13 @@ anyone noticed. Read this when a figure, a measurement or a lint warning is not
 behaving the way you expect; the answer is very often here. You do not need it
 to start a device: [modelling-a-device.md](modelling-a-device.md) is the method.
 
+**How an entry is written.** The bold sentence is the rule, stated as a
+mechanism that holds on any hardware. What follows says how to check it. A
+device is named only where the case is evidence the rule needs, and then it
+comes last and is marked *Illustration*. A measurement keeps its numbers and
+its source. An entry that needs you to know a particular product to follow it
+is not finished; rewrite it before adding it here.
+
 ## Reading figures
 
 - **A rotated crop reads bottom-to-top.** Check the frame before reading port
@@ -30,26 +37,27 @@ to start a device: [modelling-a-device.md](modelling-a-device.md) is the method.
   feature that repeats once per port (the lamp above it, the numeral, the
   cutout edge) and check the total span against the panel width.
 - **Two figures can describe different things that look like the same thing.**
-  The ASR 9006 has three "NEBS bonding and grounding points" in one figure and
-  one "grounding receptacle", a kit part with its own location, in another.
-  Read together they look like one fact contradicted; they are two facts about
-  two things. Before recording a disagreement, check both sources are talking
-  about the same object; the words to look for are the ones that differ
-  (`point` versus `receptacle`), not the ones that match.
+  Before recording a disagreement, check both sources are talking about the
+  same object; the words to look for are the ones that differ, not the ones
+  that match. *Illustration.* The ASR 9006 has three "NEBS bonding and
+  grounding points" in one figure and one "grounding receptacle", a kit part
+  with its own location, in another. Read together they look like one fact
+  contradicted; they are two facts about two things, and the words that
+  separate them are `point` and `receptacle`.
 - **Where two sources disagree, carry both numbers.** One datasheet said
   480 mm deep and 16 kg; its own quick start guide said 524 mm and 14.5 kg.
   Record the disagreement in provenance and say which you used.
-- **Where a bay and a component disagree, the answer may be in neither.** Both
-  C40G PEM figures were wrong, and what settled it was the card slot next door,
-  whose bottom edge made one candidate physically impossible. Look at what
-  constrains two disagreeing numbers from outside rather than re-reading each
-  harder.
+- **Where a bay and a component disagree, the answer may be in neither.** Look
+  at what constrains two disagreeing numbers from outside rather than
+  re-reading each harder. Both figures for one power module were wrong, and
+  what settled it was the card slot next door, whose bottom edge made one
+  candidate physically impossible.
 - **Two sources agreeing is evidence only if they were derived independently.**
-  The C40G's device provenance and its PEM's both said the band starts at
-  y 194, and it was one sentence copied from the other, both wrong by two
-  millimetres. When you copy a provenance sentence between files, say where it
-  came from in the sentence itself, so the next reader can tell corroboration
-  from an echo.
+  A device and the module seated in it can state the same coordinate because
+  one provenance sentence was copied from the other, and then both are wrong
+  together (by two millimetres, the time it happened here). When you copy a
+  provenance sentence between files, say where it came from in the sentence
+  itself, so the next reader can tell corroboration from an echo.
 - **Reconciling a bay and a module silences the only check that can see
   them.** A fit check compares two numbers to each other and neither to the
   world. If the reconciliation was a judgement rather than a measurement, file a
@@ -91,8 +99,8 @@ to start a device: [modelling-a-device.md](modelling-a-device.md) is the method.
   right view x = 0 is the front; on a left view x = 0 is the rear (derived from
   how `viewer3d.js` orients each face, front at +z). Mirroring one from the
   other by copying x is exactly wrong; the correct mirror is
-  `depth - x - width`. Two ASR 9000 chassis had seven features wrong this way,
-  including two grounding pads sitting in each other's places.
+  `depth - x - width`. Two chassis of one family had seven features wrong this
+  way, including two grounding pads sitting in each other's places.
 - **A feature that is symmetric about an axis cannot be at the wrong end of
   it, which is why this class of error is discovered late.** When a face
   carries only symmetric content, say so in provenance: it records that the
@@ -183,7 +191,9 @@ to start a device: [modelling-a-device.md](modelling-a-device.md) is the method.
   or `common/` port emits its own `data-depth` regardless of the parent's relief
   block, so a line card with 48 composed cages already has 48 recessed ports in
   3D. Before writing "renders flat" or adding a feature to fix a flatness that
-  is not there, compile the component and count `data-depth` in the output.
+  is not there, compile the component (`instance_group` in `render.py`) and
+  count `data-depth` in the output. Do not reason about it; it has been
+  reasoned wrongly in both directions.
 - **A raised feature is textured from its own node, and uses that node's
   bounding rect.** Put `out` on a group holding the part and all its detail,
   never on a bare rect or path: on a bare path it gave a rectangular shadow with
@@ -234,7 +244,7 @@ kept in `working/` beside your notes:
 
 A test that asserts something is missing from a live manifest is pinned to that
 model's incompleteness. Three tests broke in one session because a device got
-better: two used the C100G as their "stuck at level 2" fixture and failed the
+better: two used one chassis as their "stuck at level 2" fixture and failed the
 day it grew its side faces. Build the fixture instead of borrowing it: load a
 real device and remove exactly what the assertion is about. And check how the
 code under test reads the manifest before choosing where to build it; a function

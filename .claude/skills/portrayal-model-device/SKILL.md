@@ -26,39 +26,72 @@ that cannot produce that sentence is not finished, and when you delegate a
 device you require the sentence back, because "lint clean, six views" is exactly
 what an interrupted attempt leaves behind.
 
+## The gates, and what each one proves
+
+You do not start a stage until the gate before it has passed. The guide has
+the detail; this is the order and the question each gate answers.
+
+| gate | after | the question | how you answer it |
+|---|---|---|---|
+| 1 | the panel | Can this figure be measured at all, and is the panel the right shape? | Compare the figure's pixel aspect with the datasheet width and height, then overlay your panel rendered `--without silkscreen`. |
+| 2 | the cutouts | Is every hole there, on the right pitch? | Overlay again and count. L39 checks fit, overlap and empty openings. |
+| 3 | the silkscreen | Is every printed legend present, spelled as printed, beside what it names? | Render with silkscreen and compare. L14 passes. |
+| 4 | the components | Does the whole file hold together? | `./build.sh --device <model>` clean at `maturity: modelled`; read the tree and the capability level. |
+| 5 | everything | Is it the device, and is it finished? | Walk the callouts and the spec table by name, then put the render beside the reference at matched scale, for every face that has one. |
+
+## How the method is written
+
+The guide and the pitfalls page hold three kinds of text, and each is read
+differently.
+
+- **A rule with its check.** This is nearly all of it. The rule is stated as a
+  mechanism that holds on any hardware (a rotated placement pivots on its own
+  centre before rotation, so recompute `at` and look at the render). You do not
+  need to have met the device that taught it.
+- **A measured table, kept with its sources.** The figure-aspect calibration
+  and the per-ambient power figures name the vendor and the part because the
+  number is only usable if it can be traced. Do not strip the names from these.
+- **An example marked *Illustration*.** A few rules would read as over-caution
+  without the case behind them. The rule comes first and the case after it, and
+  the rule stands if you skip the case.
+
+When you add a lesson, write it in the first form: say what the mechanism is
+and how to check for it, and leave the device out. Name a device only if the
+entry is a measurement, or if the rule is not believable without the case, and
+then mark it. A lesson that only makes sense to someone who knows the product
+is not finished.
+
 ## What is specific to working as an agent here
 
 These are not in the docs because they are about the working tree rather than
-the hardware.
+the hardware. Each is a rule and the check that holds it.
 
-- **`git add -A` is a snapshot of every agent's work, not yours.** With other
-  agents writing devices in the same tree, a broad add swept an unverified
-  device into a commit whose message named a different one, so the log asserted
-  a file had been reviewed when it had not. Stage the explicit paths you
-  verified (`git add library/devices/<vendor>/<model>`), and if you catch one
-  late, amend the message to name what the commit actually holds.
-- **A commit is atomic; the working tree is not.** With more than one agent in
-  the repo, a test run is a photograph of whatever was half-written when it
-  started. An agent saw four failures seconds after its own lint run came back
-  clean, because another agent was writing files underneath it. Re-run before
-  believing a failure you cannot explain, and never commit a fix for one until
-  you have seen it twice. Paired edits (a contract and its skin) belong in one
-  write, or behind a check that both landed.
+- **Stage the paths you verified, never the whole tree.** Other agents may be
+  writing devices in the same checkout, and `git add -A` commits their
+  unverified work under your message. Use `git add
+  library/devices/<vendor>/<model>` and the components you touched. Check:
+  `git show --stat HEAD` lists only what the message names. If it does not and
+  the commit is not pushed, amend the message to say what the commit holds.
 - **Use a worktree.** `git worktree add .claude/worktrees/<name>` keeps your
-  device's half-written state out of everyone else's lint run. The directory is
-  gitignored.
-- **A check you propose must be run against the real corpus before it is
-  believed.** A rule to catch `borrowed` confidence claiming an ancestry that
-  does not exist was proposed twice and run by nobody; when run, it passed five
-  of the six false claims it existed to catch, because it searched prose and the
-  clearest false claim's only use of the word was inside its own denial. Test
-  the structure (resolve the reference, read the origin's declared token), never
-  the sentence. Searching prose measures the searcher's expectations.
-- **Do not run Python from `/tmp`.** A stray `bisect.py` there shadows the
-  standard library and every import breaks in a way that looks like your code.
-  Use the session's scratchpad directory.
-- **Before writing "renders flat", compile and count.** `render.py` emits
-  `data-depth` for every composed aperture regardless of the parent's `relief`
-  block. Compile the component through `instance_group` and count `data-depth`
-  in the output; this has been reasoned about wrongly three times in a day in
-  both directions.
+  half-written device out of every other lint run, and theirs out of yours. The
+  directory is gitignored.
+- **A failure you cannot explain is re-run before it is believed.** A commit is
+  atomic and a shared working tree is not, so a test run can photograph another
+  writer's half-finished file. Check: the failure appears twice, on a tree
+  `git status` shows as yours alone, before you commit a fix for it. Write
+  paired edits (a contract and its skin) together, or check that both landed.
+- **A check you propose is run against the real library before anyone
+  believes it.** Test the structure (resolve the reference, read the declared
+  token), never the sentence: a search over prose passes a false claim whose
+  only use of the word is inside its own denial. Check: say what the rule finds
+  on the library today, and plant one fault it must catch. This is also a line
+  in [`docs/review-standards.md`](../../../docs/review-standards.md).
+- **Run scripts from a directory that holds only your files.** In a shared
+  temporary directory, a stray file named like a standard-library module
+  shadows it, and every import fails in a way that looks like your code. Use
+  the session's scratch directory. Check, when imports break for no reason:
+  `python3 -c "import bisect; print(bisect.__file__)"` names the standard
+  library.
+- **A claim about how something renders is counted, not reasoned.** The
+  pitfalls page, under Relief and 3D, has the case that prompted this: whether
+  a part "renders flat" is answered by compiling it and counting `data-depth`.
