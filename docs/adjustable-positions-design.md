@@ -694,7 +694,8 @@ device in the tests, so no library device changes before step 5.
    so every configuration has it with the same range, and lint rule 2 keeps
    the carrier in every configuration, so the path always names a part. The
    kept value wins over a position the new configuration sets, as a field
-   wins over a built value today. Every other field is cleared as today. This changes the rule of the rack
+   wins over a built value today. Every other field is cleared as today. This
+   changes the rule of the rack
    core for one kind of key, so it is a part of step 6 with a test of its own.
 
 ## 14. Points to weigh before building
