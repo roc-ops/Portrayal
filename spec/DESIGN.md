@@ -285,6 +285,11 @@ in the descriptions because they are history, not definition.
 - **`optical.front-order` is stated, not guessed, on a multi-row face.**
   Guessing a numbering rule from the one multi-row sample the library held is
   how the 12.90-versus-13.2 pitch confusion started.
+- **A combine is declared, with `combine` on the path.** Two strands in one
+  bore stay an error everywhere else, and a destination that is a list
+  already means a split, so the opposite shape gets its own keyword. A path
+  records the way the light travels; the fibre map is a binding and does not
+  (#246).
 - **`lift` on decor and on a placement** exists because `relief.features` had
   carried `lift` all along and composed `parts:` gained it; the others not
   having it was an asymmetry in the vocabulary rather than a decision, and it

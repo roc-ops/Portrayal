@@ -151,3 +151,77 @@ def test_the_adapters_bore_pitch_matches_the_verified_standard():
     centres = sorted(x + bore_w / 2 for x in xs)
     assert round(centres[1] - centres[0], 4) == want, (
         f"bores are {centres[1] - centres[0]:.2f} apart; the standard says {want}")
+
+
+# --- combine ----------------------------------------------------------------
+
+COMBINE = {"combine": [{"at": "osc.2", "band": {"centre-nm": 1511, "width-nm": 13}},
+                       {"at": "edfa.2"}],
+           "to": "line.1"}
+
+
+def test_a_combine_yields_its_destination_then_every_source():
+    assert optical.endpoints(COMBINE) == [
+        ("line.1", None), ("osc.2", None), ("edfa.2", None)]
+
+
+def test_a_combines_legs_run_from_each_source_and_carry_its_band():
+    assert optical.legs(COMBINE) == [
+        {"from": "osc.2", "to": "line.1", "ratio": None,
+         "band": {"centre-nm": 1511, "width-nm": 13}},
+        {"from": "edfa.2", "to": "line.1", "ratio": None, "band": None}]
+
+
+def test_a_power_combines_legs_carry_each_sources_ratio():
+    p = {"combine": [{"at": "a.1", "ratio": 70}, {"at": "a.2", "ratio": 30}], "to": "b.1"}
+    assert [(leg["from"], leg["ratio"]) for leg in optical.legs(p)] == [("a.1", 70), ("a.2", 30)]
+    assert optical.endpoints(p) == [("b.1", None), ("a.1", 70), ("a.2", 30)]
+
+
+def test_a_splits_legs_run_from_its_source_and_carry_each_ratio():
+    p = {"from": "common.1",
+         "to": [{"at": "split.1", "ratio": 97}, {"at": "split.2", "ratio": 3}]}
+    assert optical.legs(p) == [
+        {"from": "common.1", "to": "split.1", "ratio": 97, "band": None},
+        {"from": "common.1", "to": "split.2", "ratio": 3, "band": None}]
+
+
+def test_a_two_ended_paths_one_leg_carries_the_paths_band():
+    p = {"from": "line.2", "to": "osc.1", "band": {"centre-nm": 1511}}
+    assert optical.legs(p) == [
+        {"from": "line.2", "to": "osc.1", "ratio": None, "band": {"centre-nm": 1511}}]
+
+
+def test_reached_includes_a_combines_sources():
+    assert optical.reached({"optical": {"paths": [COMBINE]}}) == {
+        "line.1", "osc.2", "edfa.2"}
+
+
+def test_endpoints_and_legs_agree_on_every_path_in_the_library():
+    """`endpoints` is built on `legs`. Every shipped path's endpoints are its
+    single end, then the far end of each leg with that leg's ratio."""
+    n = 0
+    for f in sorted((ROOT / "library/components").glob("*/*/v*/contract.yaml")):
+        doc = yaml.safe_load(f.read_text()) or {}
+        for p in ((doc.get("optical") or {}).get("paths") or []):
+            eps, legs = optical.endpoints(p), optical.legs(p)
+            if optical.is_combine(p):
+                assert eps == [(p["to"], None)] + [(g["from"], g["ratio"]) for g in legs], f
+            else:
+                assert eps == [(p["from"], None)] + [(g["to"], g["ratio"]) for g in legs], f
+            assert len(eps) == len(legs) + 1, f
+            n += 1
+    assert n > 1000, n            # it measured the library, not an empty glob
+
+
+def test_a_malformed_fan_entry_is_skipped_not_raised_on():
+    """A fan entry that is not a mapping, or has no `at`, yields no leg, so a
+    lint rule can walk the path and report it."""
+    split = {"from": "a.1", "to": ["b.1", {"ratio": 50}, {"at": "b.2", "ratio": 50}]}
+    assert optical.legs(split) == [
+        {"from": "a.1", "to": "b.2", "ratio": 50, "band": None}]
+    assert optical.endpoints(split) == [("a.1", None), ("b.2", 50)]
+    join = {"combine": ["a.1", {"ratio": 50}, {"at": "a.2"}], "to": "b.1"}
+    assert optical.legs(join) == [
+        {"from": "a.2", "to": "b.1", "ratio": None, "band": None}]
+    assert optical.endpoints(join) == [("b.1", None), ("a.2", None)]

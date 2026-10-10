@@ -271,6 +271,7 @@ ISSUED = {
     "L168": "device",
     "L169": "device",
     "L170": "component, device",
+    "L171": "component",
 }
 
 
