@@ -65,7 +65,7 @@ jsDelivr with `?dist=cdn` (and `&index=<version>`).
 
 | module | what it does |
 |---|---|
-| `shell.js` | the explorer shell — device picker, view switching, tree. The newest `loadDevice`/`loadStage` call holds the stage: one that a newer load overtook writes nothing and rejects with an error `isSuperseded(err)` recognises |
+| `shell.js` | the explorer shell — device picker, view switching, tree. The newest `loadDevice`/`loadStage` call holds the stage: one that a newer load overtook writes nothing and rejects with an error `isSuperseded(err)` recognises. It reads the page's own query string at start-up: `device`, `listing`, `config`, `view`, `swap`, `turn` and `fields`, so an embedding page that uses one of those names for something else collides. A `fields=` entry for a part drawn only on a face the link does not open is judged once the other faces are fetched, and kept |
 | `viewer3d.js` | 2D→3D: rasterises each face onto a chassis-sized box, adds relief meshes; a host can hold coloured marks on many parts (`setMarks`) and paint a lamp its own colour (`setLampColors`) |
 | `relief.js` | turns `data-depth` / `data-z-*` annotations into geometry |
 | `bevel.js` | a bevelled chassis body from the polygons the build publishes, triangulated and mapped for the 3D view |

@@ -19,11 +19,17 @@ export class El {
     this.parentElement = null;
     this.style = {setProperty() {}};
     this.classList = new ClassList();
-    this.dataset = {};
     this.value = '';
     this.hidden = false;
     this.viewBox = {baseVal: {width: 100, height: 50}};
     this.byQuery = null;          // set on the mount: what the shell's $() finds
+  }
+  // data-* attributes, camel-cased, as a browser's dataset reads them
+  get dataset() {
+    const out = {};
+    for (const [k, v] of Object.entries(this.attrs))
+      if (k.startsWith('data-')) out[k.slice(5).replace(/-([a-z])/g, (_, c) => c.toUpperCase())] = v;
+    return out;
   }
   get firstChild() { return this.children[0] || null; }
   get childNodes() { return [...this.children]; }
@@ -46,11 +52,24 @@ export class El {
   getBoundingClientRect() { return {left: 0, top: 0, width: 0, height: 0}; }
   closest() { return null; }
   contains(n) { for (; n; n = n.parentElement) if (n === this) return true; return false; }
+  *descendants() { for (const c of this.children) { yield c; yield* c.descendants(); } }
+  // the mount answers the shell's $() with an element per selector; a drawing
+  // answers attribute selectors only - `[a="v"][b]`, in a comma list - which
+  // is every query the field path makes, and finds nothing for anything else
   querySelector(sel) {
     if (this.byQuery) return (this.byQuery[sel] ||= new El('div'));
-    return null;
+    return this.querySelectorAll(sel)[0] || null;
   }
-  querySelectorAll() { return []; }
+  querySelectorAll(sel) {
+    const alts = String(sel).split(',').map(s => s.trim()).map(attrTest);
+    if (alts.some(a => !a)) return [];
+    return [...this.descendants()].filter(n => alts.some(a => a(n)));
+  }
+}
+function attrTest(sel) {
+  const parts = [...sel.matchAll(/\[([\w-]+)(?:="([^"]*)")?\]/g)];
+  if (!parts.length || parts.map(m => m[0]).join('') !== sel) return null;
+  return n => parts.every(([, k, v]) => (v === undefined ? n.hasAttribute(k) : n.getAttribute(k) === v));
 }
 
 // `fetch` answers from `routes`: {url suffix: url => text | Promise<text>}, the
@@ -72,8 +91,15 @@ export function install(routes) {
   globalThis.addEventListener = () => {};
   globalThis.localStorage = {getItem: () => null, setItem() {}};
   globalThis.CSS = {escape: s => String(s)};
+  // a drawing's text is its name, or JSON {src, parts: [{path, ref}]} for one
+  // that draws parts
   globalThis.DOMParser = class {
-    parseFromString(txt) { return {documentElement: new El('svg', {'data-src': txt})}; }
+    parseFromString(txt) {
+      const d = txt.startsWith('{') ? JSON.parse(txt) : {src: txt, parts: []};
+      const svg = new El('svg', {'data-src': d.src});
+      for (const {path, ref} of d.parts) svg.appendChild(new El('g', {'data-path': path, 'data-ref': ref}));
+      return {documentElement: svg};
+    }
   };
   globalThis.fetch = async url => {
     const hit = Object.keys(routes).filter(k => String(url).endsWith(k))

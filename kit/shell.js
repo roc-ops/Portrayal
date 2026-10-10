@@ -1976,6 +1976,21 @@ export function createShell(opts = {}) {
     }
     // AFTER THE SWAPS: a field names a part, and the part may be one a swap seated
     if (Object.keys(fields).length) {
+      // A PART ON ANOTHER FACE (#818). Only the `view=` face is held at load,
+      // and a part carries its ref only on a face that draws it, so a field set
+      // on the rear and carried to a link that opens on the front named nothing
+      // held, was ignored, and fell out of the location. Which component a
+      // device placement is, no index publishes (configs.json's cages and bays
+      // carry no ref for one), so the faces are fetched - with the swaps above
+      // applied, as loadFaces always applies them - and the entry is judged on
+      // them. repaintFields paints it on whichever face is mounted later.
+      const held = path => faceDocs().some(d => d.querySelector(
+        `[data-path="${CSS.escape(path)}"][data-ref]`));
+      if (!state.module && Object.keys(fields).some(p => !held(p))) {
+        const gen = loadGen;
+        await loadFaces().catch(() => {});
+        if (gen !== loadGen) return;            // a newer load owns the stage (#929)
+      }
       const {ignored} = applyFields(fields);
       if (ignored.length) console.warn('[portrayal] fields naming nothing on', start.name, ignored);
     }
