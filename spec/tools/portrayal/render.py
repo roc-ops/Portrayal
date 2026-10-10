@@ -1798,9 +1798,10 @@ def _inherited_fields(lib, contract, merged, part):
     the default the composed part declares for the same field.
 
     The second half is what lets a host choose a default colour for a part it
-    composes without pinning it. generic/qsfp-mpo@1 defaults `latch-color` to
-    beige and composes common/qsfp-pull-tab@2, whose own default is grey: with
-    no value set the tab has to wear the host default, and a `parts:` entry
+    composes without pinning it. Take a host that defaults `latch-color` to beige
+    (generic/qsfp-mpo@1 did, until #773) and composes common/qsfp-pull-tab@2,
+    whose own default is grey: with no value set the tab has to wear the host
+    default, and a `parts:` entry
     `attrs` would do that only by overriding every wrapper. A default equal to
     the composed part's is not handed down, so nothing that agreed before
     carries a new attribute."""

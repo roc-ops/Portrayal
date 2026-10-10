@@ -62,8 +62,9 @@ def _host_default(lib, default):
 
 
 def test_a_hosts_own_default_reaches_the_part_when_it_differs(tmp_path):
-    """generic/qsfp-mpo@1 defaults its tab to beige; the composed tab's own
-    default is grey. Unset, the tab wears the host default."""
+    """A host that defaults its tab to beige composes a tab whose own default
+    is grey (generic/qsfp-mpo@1 did, until #773). Unset, the tab wears the
+    host default."""
     lib = _host_default(_lib(tmp_path, FIELD), "#d9cba3")
     assert grip_fill(lib, None) == "#d9cba3"
 

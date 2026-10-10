@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: terminal-508-2-plug
-version: 1.0.1
+version: 1.0.2
 class: port
 mates: terminal-508-2
 conforms: terminal-508-2-plug
@@ -43,7 +43,7 @@ provenance:
     bodies and are not this part.
   orientation: >-
     DRAWN IN THE UNROTATED CONVENTION OF THE HEADER,
-    common/terminal-header-508-2@2: THE BOARD SIDE OF THE HEADER DOWN, so the
+    common/terminal-header-508-2@3: THE BOARD SIDE OF THE HEADER DOWN, so the
     clamp-screw tower rises above the header, and pole 1 at the left. The
     header is drawn the same either way up and states no board side. The
     vendor's video of the AurCore AIS4001P shows the keyed, open side of the
@@ -57,7 +57,7 @@ provenance:
     the rotated header.
   poles: >-
     NUMBERED 1 TO 2 FROM THE LEFT of the unrotated header, as this view sees
-    it. common/terminal-header-508-2@2 names its own contacts `cell-1` to
+    it. common/terminal-header-508-2@3 names its own contacts `cell-1` to
     `cell-2` and `pin-1` to `pin-2` from the left, and `wire-1` to `wire-2`
     are over them in that order. The pole NAMES are the device's: they are
     printed on the panel beside the header, differ by device, and are not on
@@ -72,7 +72,7 @@ provenance:
     the mouth of the header. The plug is 18.2 long (Phoenix Contact MSTB 2,5/
     2-ST-5,08 data sheet (order no. 1757019, 28.01.2005), p.4), so 18.2 - 10 =
     8.2 of it is inside the header, of a nose the same drawing dimensions 8.3.
-    THE HEADER AS MODELLED DISAGREES. common/terminal-header-508-2@2 builds
+    THE HEADER AS MODELLED DISAGREES. common/terminal-header-508-2@3 builds
     its housing 2.5 proud of the face it is on with a well floor at 0.8, so it
     models a well 1.7 deep, both figures estimates by its own relief; the nose
     that enters a real header is 8.2 of an 8.3 nose, 6.5 more than the
@@ -83,7 +83,7 @@ provenance:
     they are.
   frame: >-
     THE RELIEF IS MEASURED FROM THE LIFT THE HOST PRESENTS, the frame
-    generic/usb-a-plug@1 documents. common/terminal-header-508-2@2 presents at
+    generic/usb-a-plug@1 documents. common/terminal-header-508-2@3 presents at
     the mouth of its housing, so 0 here is that mouth. The 8.2 of nose inside
     the header is not built.
   axis: >-
@@ -96,6 +96,10 @@ provenance:
     The wires and are drawn on the same line. SCALED on the 130 ppi figure of
     the plug, good to about 0.3: the middle of the clamp opening a wire enters
     reads 10.6 below the top of the plug.
+    THE HEADER NOW AGREES (#873): its own `mate` is at 4.3, the middle of the 8.6
+    it is drawn at since common/terminal-header-508-2@3 and
+    common/terminal-header-508-5f@2; the 12.1 header before them put it at 6.05,
+    1.75 off this axis.
   body: >-
     drawing - the body is built as ONE box 10.16 by 15 standing 10 in front of
     the header (provenance.seated-depth). The drawing's side view steps the
@@ -131,7 +135,7 @@ provenance:
     PER POLE IS NOT EXPRESSIBLE in this part: a field per pole would be 2
     fields here and more on a longer plug.
   body-colour: >-
-    a FIELD. The default is the green common/terminal-header-508-2@2 draws its
+    a FIELD. The default is the green common/terminal-header-508-2@3 draws its
     housing in, #4fb548. Phoenix Contact MSTB 2,5/ 2-ST-5,08 is green; the
     same plug is made in other colours.
   behaviour: >-

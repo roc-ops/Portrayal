@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: qsfp-lc
-version: 2.2.2
+version: 2.2.3
 class: transceiver
 behaviour: occupies
 mates: qsfp
@@ -160,8 +160,9 @@ provenance:
     table: not beige, not blue, not white. A vendor wrapper, which
     knows which module it is, sets `latch-color` to the colour its wavelength
     calls for. Decided 2026-09-21. An LC duplex face is used at all three
-    wavelengths, so the code picks no default here; generic/qsfp-mpo@1, whose
-    face is the 850 nm one, defaults to beige. The documents are held locally
+    wavelengths, so the code picks no default here; generic/qsfp-mpo@1 and
+    generic/qsfp-dd-mpo16@1 default to this grey too since #773, because an MPO
+    face is single-mode PSM4, DR4 and DR8 as well as 850 nm SR. The documents are held locally
     in the maintainer's gitignored corpus. THE OUTLINE FOLLOWS THE FILL. The composed tab's nodes carry
     `data-stroke-derive: latch-color`, so their stroke is a fixed darker shade of
     whatever colour the field is given - each channel x 61/100, rounded half

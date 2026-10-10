@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: exp100-32x
-version: 1.0.3
+version: 2.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: EXP100-32X
@@ -93,6 +93,22 @@ provenance:
       6 mm gold feature is not an SMA nut. common/smb-jack@1 is seated at 7.0 with a 4.83 aperture because
       it is the part that fits what is drawn, and the `timing` group's description carries the vendor's
       word so a reader is not told the vendor said SMB. A caliper on the real jack settles it.
+  port-strip:
+    confidence: drawing
+    note: >-
+      RE-READ FOR #396, on the datasheet's front elevation, whose embedded image is 1000 px across the
+      442 mm face - 2.26 px/mm, which the 600 dpi page render only upsamples - so every figure here is
+      good to about half a millimetre. The panel prints `N (up) WORD (down) N+1` under each column and
+      carries four dark triangular windows below it, as edgecore/exp800-16o's quick start shows and names
+      for the same face; the white arrows are ink, the AIS800 ruling, and are now silkscreen (`silk-arrow-N`),
+      and the windows stay common/led-arrow@1 lamps. In mm from each cage's left edge: upper numeral 3.45,
+      its arrow 5.1; lower arrow 15.5, its numeral 16.5; windows at about 1.8, 7.0, 12.2 and 17.4, centred
+      36.25 down the face. Until #396 the numerals sat at 4.6 and 13.9, where the arrows are, and the
+      lamps at 6.8 and 15.3, 2 mm low. The drawn lamp is each port's left window (1.8 upper, 12.2 lower).
+      WHICH WAY EACH WINDOW POINTS IS NOT RESOLVED at this scale; the row's skin (up above, down below)
+      is kept as it was, and the EXP800's enlargement, which does resolve it, is the same family's convention
+      and not a reading of this box. The word between the arrows stays undrawn (the-port-legend-word).
+      ▲ and ▼ do not rasterise in cairosvg; look at the SVG in a browser.
   the-system-lamps:
     confidence: drawing
     note: >-
@@ -160,7 +176,8 @@ attrs:
       The datasheet's transceiver list names the modules and cables it is qualified with; more are referred
       to the vendor's site.
   lifecycle: {eol: none-announced}
-chassis: {width: 442.0, height: 44.0, depth: 509.0, ru: 1, weight-kg: 10.005, color: '#3f4348', airflow: front-to-back, power: ac}
+chassis: {width: 442.0, height: 44.0, depth: 509.0, ru: 1, weight-kg: 10.005, color: '#3f4348', airflow: front-to-back,
+  power: ac}
 gaps:
 - what: the-four-undrawn-faces
   scope:
@@ -287,69 +304,69 @@ views:
       - {id: mgmt-eth, at: [411.3, 11.0], size: [15.8, 13.2], shape: rect}
       - {id: usb-a, at: [413.2, 26.3], size: [12.0, 4.5], shape: rect}
       - {id: port-1, at: [45.3, 4.1], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-1, at: [50.3, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-1, at: [45.3, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-2, at: [45.3, 22.5], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-2, at: [58.8, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-2, at: [55.7, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-3, at: [64.3, 4.1], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-3, at: [69.3, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-3, at: [64.3, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-4, at: [64.3, 22.5], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-4, at: [77.8, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-4, at: [74.7, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-5, at: [90.0, 4.1], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-5, at: [95.0, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-5, at: [90.0, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-6, at: [90.0, 22.5], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-6, at: [103.5, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-6, at: [100.4, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-7, at: [109.0, 4.1], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-7, at: [114.0, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-7, at: [109.0, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-8, at: [109.0, 22.5], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-8, at: [122.5, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-8, at: [119.4, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-9, at: [134.7, 4.1], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-9, at: [139.7, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-9, at: [134.7, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-10, at: [134.7, 22.5], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-10, at: [148.2, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-10, at: [145.1, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-11, at: [153.7, 4.1], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-11, at: [158.7, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-11, at: [153.7, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-12, at: [153.7, 22.5], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-12, at: [167.2, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-12, at: [164.1, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-13, at: [179.4, 4.1], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-13, at: [184.4, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-13, at: [179.4, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-14, at: [179.4, 22.5], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-14, at: [192.9, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-14, at: [189.8, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-15, at: [198.4, 4.1], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-15, at: [203.4, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-15, at: [198.4, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-16, at: [198.4, 22.5], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-16, at: [211.9, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-16, at: [208.8, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-17, at: [224.1, 4.1], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-17, at: [229.1, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-17, at: [224.1, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-18, at: [224.1, 22.5], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-18, at: [237.6, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-18, at: [234.5, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-19, at: [243.1, 4.1], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-19, at: [248.1, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-19, at: [243.1, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-20, at: [243.1, 22.5], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-20, at: [256.6, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-20, at: [253.5, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-21, at: [268.8, 4.1], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-21, at: [273.8, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-21, at: [268.8, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-22, at: [268.8, 22.5], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-22, at: [282.3, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-22, at: [279.2, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-23, at: [287.8, 4.1], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-23, at: [292.8, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-23, at: [287.8, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-24, at: [287.8, 22.5], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-24, at: [301.3, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-24, at: [298.2, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-25, at: [313.5, 4.1], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-25, at: [318.5, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-25, at: [313.5, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-26, at: [313.5, 22.5], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-26, at: [327.0, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-26, at: [323.9, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-27, at: [332.5, 4.1], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-27, at: [337.5, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-27, at: [332.5, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-28, at: [332.5, 22.5], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-28, at: [346.0, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-28, at: [342.9, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-29, at: [358.2, 4.1], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-29, at: [363.2, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-29, at: [358.2, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-30, at: [358.2, 22.5], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-30, at: [371.7, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-30, at: [368.6, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-31, at: [377.2, 4.1], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-31, at: [382.2, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-31, at: [377.2, 34.65], size: [3.6, 3.2], shape: circle}
       - {id: port-32, at: [377.2, 22.5], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-32, at: [390.7, 36.7], size: [3.6, 3.2], shape: circle}
+      - {id: led-port-32, at: [387.6, 34.65], size: [3.6, 3.2], shape: circle}
     silkscreen:
     - {id: silk-console, at: [16.99, 34.6], text: CONSOLE, font-size: 1.5, anchor: middle, fill: '#e4e8eb',
       for: console}
@@ -364,38 +381,97 @@ views:
     - {id: silk-usb, at: [424.5, 8.6], text: USB, font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: usb-a}
     - {id: silk-model, at: [419.4, 39.4], text: EXP100-32X, font-size: 2.0, anchor: middle, fill: '#e4e8eb',
       for: chassis}
-    - {at: [49.9, 34.3], text: '1', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-1}
-    - {at: [59.2, 34.3], text: '2', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-2}
-    - {at: [68.9, 34.3], text: '3', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-3}
-    - {at: [78.2, 34.3], text: '4', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-4}
-    - {at: [94.6, 34.3], text: '5', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-5}
-    - {at: [103.9, 34.3], text: '6', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-6}
-    - {at: [113.6, 34.3], text: '7', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-7}
-    - {at: [122.9, 34.3], text: '8', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-8}
-    - {at: [139.3, 34.3], text: '9', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-9}
-    - {at: [148.6, 34.3], text: '10', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-10}
-    - {at: [158.3, 34.3], text: '11', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-11}
-    - {at: [167.6, 34.3], text: '12', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-12}
-    - {at: [184.0, 34.3], text: '13', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-13}
-    - {at: [193.3, 34.3], text: '14', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-14}
-    - {at: [203.0, 34.3], text: '15', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-15}
-    - {at: [212.3, 34.3], text: '16', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-16}
-    - {at: [228.7, 34.3], text: '17', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-17}
-    - {at: [238.0, 34.3], text: '18', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-18}
-    - {at: [247.7, 34.3], text: '19', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-19}
-    - {at: [257.0, 34.3], text: '20', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-20}
-    - {at: [273.4, 34.3], text: '21', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-21}
-    - {at: [282.7, 34.3], text: '22', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-22}
-    - {at: [292.4, 34.3], text: '23', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-23}
-    - {at: [301.7, 34.3], text: '24', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-24}
-    - {at: [318.1, 34.3], text: '25', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-25}
-    - {at: [327.4, 34.3], text: '26', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-26}
-    - {at: [337.1, 34.3], text: '27', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-27}
-    - {at: [346.4, 34.3], text: '28', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-28}
-    - {at: [362.8, 34.3], text: '29', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-29}
-    - {at: [372.1, 34.3], text: '30', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-30}
-    - {at: [381.8, 34.3], text: '31', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-31}
-    - {at: [391.1, 34.3], text: '32', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-32}
+    - {id: silk-arrow-1, at: [50.4, 34.3], text: ▲, font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-1}
+    - {id: silk-arrow-2, at: [60.8, 34.3], text: ▼, font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-2}
+    - {id: silk-arrow-3, at: [69.4, 34.3], text: ▲, font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-3}
+    - {id: silk-arrow-4, at: [79.8, 34.3], text: ▼, font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-4}
+    - {id: silk-arrow-5, at: [95.1, 34.3], text: ▲, font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-5}
+    - {id: silk-arrow-6, at: [105.5, 34.3], text: ▼, font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: port-6}
+    - {id: silk-arrow-7, at: [114.1, 34.3], text: ▲, font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: port-7}
+    - {id: silk-arrow-8, at: [124.5, 34.3], text: ▼, font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: port-8}
+    - {id: silk-arrow-9, at: [139.8, 34.3], text: ▲, font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: port-9}
+    - {id: silk-arrow-10, at: [150.2, 34.3], text: ▼, font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: port-10}
+    - {id: silk-arrow-11, at: [158.8, 34.3], text: ▲, font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: port-11}
+    - {id: silk-arrow-12, at: [169.2, 34.3], text: ▼, font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: port-12}
+    - {id: silk-arrow-13, at: [184.5, 34.3], text: ▲, font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: port-13}
+    - {id: silk-arrow-14, at: [194.9, 34.3], text: ▼, font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: port-14}
+    - {id: silk-arrow-15, at: [203.5, 34.3], text: ▲, font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: port-15}
+    - {id: silk-arrow-16, at: [213.9, 34.3], text: ▼, font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: port-16}
+    - {id: silk-arrow-17, at: [229.2, 34.3], text: ▲, font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: port-17}
+    - {id: silk-arrow-18, at: [239.6, 34.3], text: ▼, font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: port-18}
+    - {id: silk-arrow-19, at: [248.2, 34.3], text: ▲, font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: port-19}
+    - {id: silk-arrow-20, at: [258.6, 34.3], text: ▼, font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: port-20}
+    - {id: silk-arrow-21, at: [273.9, 34.3], text: ▲, font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: port-21}
+    - {id: silk-arrow-22, at: [284.3, 34.3], text: ▼, font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: port-22}
+    - {id: silk-arrow-23, at: [292.9, 34.3], text: ▲, font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: port-23}
+    - {id: silk-arrow-24, at: [303.3, 34.3], text: ▼, font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: port-24}
+    - {id: silk-arrow-25, at: [318.6, 34.3], text: ▲, font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: port-25}
+    - {id: silk-arrow-26, at: [329.0, 34.3], text: ▼, font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: port-26}
+    - {id: silk-arrow-27, at: [337.6, 34.3], text: ▲, font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: port-27}
+    - {id: silk-arrow-28, at: [348.0, 34.3], text: ▼, font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: port-28}
+    - {id: silk-arrow-29, at: [363.3, 34.3], text: ▲, font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: port-29}
+    - {id: silk-arrow-30, at: [373.7, 34.3], text: ▼, font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: port-30}
+    - {id: silk-arrow-31, at: [382.3, 34.3], text: ▲, font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: port-31}
+    - {id: silk-arrow-32, at: [392.7, 34.3], text: ▼, font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: port-32}
+    - {at: [48.75, 34.3], text: '1', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-1}
+    - {at: [61.8, 34.3], text: '2', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-2}
+    - {at: [67.75, 34.3], text: '3', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-3}
+    - {at: [80.8, 34.3], text: '4', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-4}
+    - {at: [93.45, 34.3], text: '5', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-5}
+    - {at: [106.5, 34.3], text: '6', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-6}
+    - {at: [112.45, 34.3], text: '7', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-7}
+    - {at: [125.5, 34.3], text: '8', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-8}
+    - {at: [138.15, 34.3], text: '9', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-9}
+    - {at: [151.2, 34.3], text: '10', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-10}
+    - {at: [157.15, 34.3], text: '11', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-11}
+    - {at: [170.2, 34.3], text: '12', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-12}
+    - {at: [182.85, 34.3], text: '13', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-13}
+    - {at: [195.9, 34.3], text: '14', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-14}
+    - {at: [201.85, 34.3], text: '15', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-15}
+    - {at: [214.9, 34.3], text: '16', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-16}
+    - {at: [227.55, 34.3], text: '17', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-17}
+    - {at: [240.6, 34.3], text: '18', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-18}
+    - {at: [246.55, 34.3], text: '19', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-19}
+    - {at: [259.6, 34.3], text: '20', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-20}
+    - {at: [272.25, 34.3], text: '21', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-21}
+    - {at: [285.3, 34.3], text: '22', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-22}
+    - {at: [291.25, 34.3], text: '23', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-23}
+    - {at: [304.3, 34.3], text: '24', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-24}
+    - {at: [316.95, 34.3], text: '25', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-25}
+    - {at: [330.0, 34.3], text: '26', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-26}
+    - {at: [335.95, 34.3], text: '27', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-27}
+    - {at: [349.0, 34.3], text: '28', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-28}
+    - {at: [361.65, 34.3], text: '29', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-29}
+    - {at: [374.7, 34.3], text: '30', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-30}
+    - {at: [380.65, 34.3], text: '31', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-31}
+    - {at: [393.7, 34.3], text: '32', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-32}
     components:
       placements:
       - ref: std/rj45@2
@@ -506,7 +582,7 @@ views:
       - {ref: std/qsfp-ganged@1, id: port-32, at: [377.2, 22.5], rotate: 180, group: qsfp28, rel-pos: 32}
       - ref: common/led-arrow@1
         id: led-port-1
-        at: [50.3, 36.7]
+        at: [45.3, 34.65]
         skin: up
         states: &id001
         - 'off'
@@ -519,7 +595,7 @@ views:
         rel-pos: 1
       - ref: common/led-arrow@1
         id: led-port-2
-        at: [58.8, 36.7]
+        at: [55.7, 34.65]
         skin: down
         states: *id001
         for: port-2
@@ -527,7 +603,7 @@ views:
         rel-pos: 2
       - ref: common/led-arrow@1
         id: led-port-3
-        at: [69.3, 36.7]
+        at: [64.3, 34.65]
         skin: up
         states: *id001
         for: port-3
@@ -535,7 +611,7 @@ views:
         rel-pos: 3
       - ref: common/led-arrow@1
         id: led-port-4
-        at: [77.8, 36.7]
+        at: [74.7, 34.65]
         skin: down
         states: *id001
         for: port-4
@@ -543,7 +619,7 @@ views:
         rel-pos: 4
       - ref: common/led-arrow@1
         id: led-port-5
-        at: [95.0, 36.7]
+        at: [90.0, 34.65]
         skin: up
         states: *id001
         for: port-5
@@ -551,7 +627,7 @@ views:
         rel-pos: 5
       - ref: common/led-arrow@1
         id: led-port-6
-        at: [103.5, 36.7]
+        at: [100.4, 34.65]
         skin: down
         states: *id001
         for: port-6
@@ -559,7 +635,7 @@ views:
         rel-pos: 6
       - ref: common/led-arrow@1
         id: led-port-7
-        at: [114.0, 36.7]
+        at: [109.0, 34.65]
         skin: up
         states: *id001
         for: port-7
@@ -567,7 +643,7 @@ views:
         rel-pos: 7
       - ref: common/led-arrow@1
         id: led-port-8
-        at: [122.5, 36.7]
+        at: [119.4, 34.65]
         skin: down
         states: *id001
         for: port-8
@@ -575,7 +651,7 @@ views:
         rel-pos: 8
       - ref: common/led-arrow@1
         id: led-port-9
-        at: [139.7, 36.7]
+        at: [134.7, 34.65]
         skin: up
         states: *id001
         for: port-9
@@ -583,7 +659,7 @@ views:
         rel-pos: 9
       - ref: common/led-arrow@1
         id: led-port-10
-        at: [148.2, 36.7]
+        at: [145.1, 34.65]
         skin: down
         states: *id001
         for: port-10
@@ -591,7 +667,7 @@ views:
         rel-pos: 10
       - ref: common/led-arrow@1
         id: led-port-11
-        at: [158.7, 36.7]
+        at: [153.7, 34.65]
         skin: up
         states: *id001
         for: port-11
@@ -599,7 +675,7 @@ views:
         rel-pos: 11
       - ref: common/led-arrow@1
         id: led-port-12
-        at: [167.2, 36.7]
+        at: [164.1, 34.65]
         skin: down
         states: *id001
         for: port-12
@@ -607,7 +683,7 @@ views:
         rel-pos: 12
       - ref: common/led-arrow@1
         id: led-port-13
-        at: [184.4, 36.7]
+        at: [179.4, 34.65]
         skin: up
         states: *id001
         for: port-13
@@ -615,7 +691,7 @@ views:
         rel-pos: 13
       - ref: common/led-arrow@1
         id: led-port-14
-        at: [192.9, 36.7]
+        at: [189.8, 34.65]
         skin: down
         states: *id001
         for: port-14
@@ -623,7 +699,7 @@ views:
         rel-pos: 14
       - ref: common/led-arrow@1
         id: led-port-15
-        at: [203.4, 36.7]
+        at: [198.4, 34.65]
         skin: up
         states: *id001
         for: port-15
@@ -631,7 +707,7 @@ views:
         rel-pos: 15
       - ref: common/led-arrow@1
         id: led-port-16
-        at: [211.9, 36.7]
+        at: [208.8, 34.65]
         skin: down
         states: *id001
         for: port-16
@@ -639,7 +715,7 @@ views:
         rel-pos: 16
       - ref: common/led-arrow@1
         id: led-port-17
-        at: [229.1, 36.7]
+        at: [224.1, 34.65]
         skin: up
         states: *id001
         for: port-17
@@ -647,7 +723,7 @@ views:
         rel-pos: 17
       - ref: common/led-arrow@1
         id: led-port-18
-        at: [237.6, 36.7]
+        at: [234.5, 34.65]
         skin: down
         states: *id001
         for: port-18
@@ -655,7 +731,7 @@ views:
         rel-pos: 18
       - ref: common/led-arrow@1
         id: led-port-19
-        at: [248.1, 36.7]
+        at: [243.1, 34.65]
         skin: up
         states: *id001
         for: port-19
@@ -663,7 +739,7 @@ views:
         rel-pos: 19
       - ref: common/led-arrow@1
         id: led-port-20
-        at: [256.6, 36.7]
+        at: [253.5, 34.65]
         skin: down
         states: *id001
         for: port-20
@@ -671,7 +747,7 @@ views:
         rel-pos: 20
       - ref: common/led-arrow@1
         id: led-port-21
-        at: [273.8, 36.7]
+        at: [268.8, 34.65]
         skin: up
         states: *id001
         for: port-21
@@ -679,7 +755,7 @@ views:
         rel-pos: 21
       - ref: common/led-arrow@1
         id: led-port-22
-        at: [282.3, 36.7]
+        at: [279.2, 34.65]
         skin: down
         states: *id001
         for: port-22
@@ -687,7 +763,7 @@ views:
         rel-pos: 22
       - ref: common/led-arrow@1
         id: led-port-23
-        at: [292.8, 36.7]
+        at: [287.8, 34.65]
         skin: up
         states: *id001
         for: port-23
@@ -695,7 +771,7 @@ views:
         rel-pos: 23
       - ref: common/led-arrow@1
         id: led-port-24
-        at: [301.3, 36.7]
+        at: [298.2, 34.65]
         skin: down
         states: *id001
         for: port-24
@@ -703,7 +779,7 @@ views:
         rel-pos: 24
       - ref: common/led-arrow@1
         id: led-port-25
-        at: [318.5, 36.7]
+        at: [313.5, 34.65]
         skin: up
         states: *id001
         for: port-25
@@ -711,7 +787,7 @@ views:
         rel-pos: 25
       - ref: common/led-arrow@1
         id: led-port-26
-        at: [327.0, 36.7]
+        at: [323.9, 34.65]
         skin: down
         states: *id001
         for: port-26
@@ -719,7 +795,7 @@ views:
         rel-pos: 26
       - ref: common/led-arrow@1
         id: led-port-27
-        at: [337.5, 36.7]
+        at: [332.5, 34.65]
         skin: up
         states: *id001
         for: port-27
@@ -727,7 +803,7 @@ views:
         rel-pos: 27
       - ref: common/led-arrow@1
         id: led-port-28
-        at: [346.0, 36.7]
+        at: [342.9, 34.65]
         skin: down
         states: *id001
         for: port-28
@@ -735,7 +811,7 @@ views:
         rel-pos: 28
       - ref: common/led-arrow@1
         id: led-port-29
-        at: [363.2, 36.7]
+        at: [358.2, 34.65]
         skin: up
         states: *id001
         for: port-29
@@ -743,7 +819,7 @@ views:
         rel-pos: 29
       - ref: common/led-arrow@1
         id: led-port-30
-        at: [371.7, 36.7]
+        at: [368.6, 34.65]
         skin: down
         states: *id001
         for: port-30
@@ -751,7 +827,7 @@ views:
         rel-pos: 30
       - ref: common/led-arrow@1
         id: led-port-31
-        at: [382.2, 36.7]
+        at: [377.2, 34.65]
         skin: up
         states: *id001
         for: port-31
@@ -759,7 +835,7 @@ views:
         rel-pos: 31
       - ref: common/led-arrow@1
         id: led-port-32
-        at: [390.7, 36.7]
+        at: [387.6, 34.65]
         skin: down
         states: *id001
         for: port-32

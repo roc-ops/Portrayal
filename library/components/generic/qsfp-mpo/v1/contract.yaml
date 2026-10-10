@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: qsfp-mpo
-version: 1.0.1
+version: 1.0.2
 class: transceiver
 behaviour: occupies
 mates: qsfp
@@ -27,7 +27,7 @@ fields:
   latch-color:
     label: Latch colour
     type: text
-    default: '#d9cba3'
+    default: '#6f6f6f'
   label:
     label: Module label
     type: text
@@ -102,16 +102,20 @@ provenance:
     SR4 module. FS p10 prints 118.22 overall (45.98 forward of its 72.24) and
     an 18.29 tab width; Gigalight Figure 9 prints 120.80 +/-0.30 overall.
   tab-colour: >-
-    A FIELD, and the default is BEIGE because the code says so for this face.
+    A FIELD, and the default is the NEUTRAL GREY (#6f6f6f) of
+    generic/qsfp-lc@2, because a chromatic default is a claim about a
+    wavelength and this generic stands for modules of more than one (#773).
     SFF-8679 Rev 1.9 section 7.2 requires an exposed feature of the module to
     be colour coded, and unless an industry specification applies: beige for
-    850 nm, blue for 1310 nm, white for 1550 nm. SFF-8436 Rev 4.9 section 5.5
-    says the same. An MPO face on a QSFP is the multimode parallel face, and
-    the photographed SR4 has a beige tab. The standard names the colour and
-    not a value: #d9cba3 is a representative beige, estimated. A vendor
-    wrapper for a parallel single-mode module sets `latch-color` to the colour
-    its wavelength calls for. The outline follows the fill
-    (`data-stroke-derive` on the composed tab).
+    850 nm, blue for 1310 nm, white for 1550 nm; SFF-8436 Rev 4.9 section 5.5
+    says the same. An MPO-12 face is the face of the multimode SR4 parallel
+    optics, and the photographed SR4 has a beige tab, but it is also the face
+    of single-mode PSM4 and DR4 modules at 1310 nm, so a beige default drew
+    every one of those as 850 nm until a wrapper said otherwise. Defaulted to
+    beige in 1.0.0 and 1.0.1. The wavelength is the wrapper's fact (L99), so
+    the wrapper states the colour its wavelength calls for: beige for an SR4,
+    blue for a PSM4 or DR4. The outline follows the fill (`data-stroke-derive`
+    on the composed tab).
 parts:
   - {ref: std/mpo-module-receptacle@1, id: mpo, at: [2.725, 0.5], lift: 20.0}
   - {ref: common/qsfp-pull-tab@2, id: tab, at: [-0.325, -1.23], lift: 20.0}
