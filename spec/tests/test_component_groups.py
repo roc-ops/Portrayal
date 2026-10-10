@@ -41,8 +41,8 @@ RENDER = SPEC / "tools/portrayal/render.py"
 # The step-A components: the routing engines and control boards whose
 # ports are management, and the AMX sled whose ports are traffic.
 MIGRATED = [
-    "juniper/jnp10k-re1@2", "juniper/re-s-1300@1",
-    "juniper/mx2000-cb-re-v@1", "juniper/mx2008-rcb-v@1", "juniper/jnp10003-rcb@1",
+    "juniper/jnp10k-re1@2", "juniper/re-s-1300@2",
+    "juniper/mx2000-cb-re-v@2", "juniper/mx2008-rcb-v@2", "juniper/jnp10003-rcb@1",
     "juniper/jnp304-re@1", "juniper/mx104-re@1", "cisco/a99-rp-f@1",
     "edgecore/amx-3200-sled400@1",
 ]

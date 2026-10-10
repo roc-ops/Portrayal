@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx960
-version: 3.0.0
+version: 5.0.1
 maturity: modelled
 manufacturer: Juniper
 model: MX960
@@ -32,6 +32,17 @@ provenance:
       411.7-414.6 mm. The slot pitch is 31.0: the gaps between the plates sit 64.25-64.5 px
       apart, 30.8-31.1 mm, so the fourteen slots span 434.0 of the 441.1 width, centred. Until
       2.0.0 the slots were 30.1 x 405.0 on a 30.1 pitch.
+  slot-pitch:
+    confidence: photo-measured
+    note: >-
+      WHY THE THREE CHASSIS READ DIFFERENT PITCHES FOR ONE CARD (#899). The MX240, MX480 and MX960
+      photographs read 30.7-30.9, 31.2-31.5 and 30.8-31.1 mm between plates, each on its own photograph's
+      scale, and each chassis carries its own reading (31.0, 31.3, 31.0). The spread is the photographs',
+      not a stated difference between the chassis: no document dimensions a slot pitch, and the readings
+      overlap within each photograph's own scale uncertainty (0.1-0.8% across against down). The guides'
+      1.25 in (31.75 mm) is Table 88's HEIGHT of the card, its envelope, and is not a pitch: fourteen
+      slots at 31.75 would need 444.5 mm, more than the MX960's 441.1 width, and eight would need 254.0
+      where the MX480 photograph spans 250.2. Settled only by a drawing that dimensions the cage.
   sources:
     note: >-
       MX960 Hardware Guide (868 pages), the MX portfolio datasheet, and the studio front and rear
@@ -106,9 +117,19 @@ gaps:
     scope: [fpcs]
     reason: needs-photo
     wanted: the rest of the MX960 card range - the slots seat the shared
-      MX240/MX480 card catalogue turned 90, and the photographed unit also
-      shows a 4-port tunnel-services card that is not identified in the
-      extraction.
+      MX240/MX480 card catalogue turned 90. The shared cards it seats took the MX240 and MX480
+      photographs' corrections at 4.0.0 (DPC-R-4XGE ports, SCB-MX Routing
+      Engine bay, DPCE-R-40GE OK/FAIL lamp) in issue 891; none was re-read on
+      this chassis's own photograph.
+  - what: slot-7-9-card-identity
+    scope: [fpcs]
+    reason: needs-photo
+    wanted: the exact part in slots 7 and 9 of the photographed unit. At zoom
+      the cards print DPC 4x10GE, a bare 0/0 (not PORT 0/0) and TUNNEL and
+      LINK over each XFP, which is the four-XFP DPC layout but does not say
+      whether the part is DPC-R-4XGE-XFP or DPCE-R-4XGE-XFP. The `ac`
+      configuration seats juniper/dpc-r-4xge-xfp@3 as a stand-in with the
+      same layout, not as an identification (#899).
   - what: fan-trays
     reason: needs-photo
     wanted: the two horizontal fan trays - they sit behind the front
@@ -169,49 +190,49 @@ views:
     components:
       bays:
         - {id: craft, at: [0.05, 8.0], size: {w: 441.0, h: 48.0},
-           accepts: [juniper/mx960-craft@1], default: juniper/mx960-craft@1,
+           accepts: [juniper/mx960-craft@2], default: juniper/mx960-craft@2,
            for: chassis, group: craft, rel-pos: 0}
         - {id: fpc0, at: [4.3, 146.4], size: {w: 29.5, h: 413.5}, opening: {w: 29.5, h: 396}, rotate: 90,
-           accepts: [juniper/dpc-r-4xge-xfp@2, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@3, juniper/mpc2e-3d@3, juniper/mpc3e-3d@3, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx960-blank@1],
+           accepts: [juniper/dpc-r-4xge-xfp@3, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@3, juniper/mpc2e-3d@3, juniper/mpc3e-3d@3, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx960-blank@1],
            default: juniper/dpce-r-40ge-sfp@2, group: fpcs, rel-pos: 0}
         - {id: fpc1, at: [35.3, 146.4], size: {w: 29.5, h: 413.5}, opening: {w: 29.5, h: 396}, rotate: 90,
-           accepts: [juniper/dpc-r-4xge-xfp@2, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@3, juniper/mpc2e-3d@3, juniper/mpc3e-3d@3, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx960-blank@1],
+           accepts: [juniper/dpc-r-4xge-xfp@3, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@3, juniper/mpc2e-3d@3, juniper/mpc3e-3d@3, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx960-blank@1],
            default: juniper/dpce-r-40ge-sfp@2, group: fpcs, rel-pos: 1}
         - {id: fpc2, at: [66.3, 146.4], size: {w: 29.5, h: 413.5}, opening: {w: 29.5, h: 396}, rotate: 90,
-           accepts: [juniper/dpc-r-4xge-xfp@2, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@3, juniper/mpc2e-3d@3, juniper/mpc3e-3d@3, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx960-blank@1],
+           accepts: [juniper/dpc-r-4xge-xfp@3, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@3, juniper/mpc2e-3d@3, juniper/mpc3e-3d@3, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx960-blank@1],
            default: juniper/mx960-blank@1, group: fpcs, rel-pos: 2}
         - {id: fpc3, at: [97.3, 146.4], size: {w: 29.5, h: 413.5}, opening: {w: 29.5, h: 396}, rotate: 90,
-           accepts: [juniper/dpc-r-4xge-xfp@2, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@3, juniper/mpc2e-3d@3, juniper/mpc3e-3d@3, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx960-blank@1],
+           accepts: [juniper/dpc-r-4xge-xfp@3, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@3, juniper/mpc2e-3d@3, juniper/mpc3e-3d@3, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx960-blank@1],
            default: juniper/mx960-blank@1, group: fpcs, rel-pos: 3}
         - {id: fpc4, at: [128.3, 146.4], size: {w: 29.5, h: 413.5}, opening: {w: 29.5, h: 396}, rotate: 90,
-           accepts: [juniper/dpc-r-4xge-xfp@2, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@3, juniper/mpc2e-3d@3, juniper/mpc3e-3d@3, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx960-blank@1],
+           accepts: [juniper/dpc-r-4xge-xfp@3, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@3, juniper/mpc2e-3d@3, juniper/mpc3e-3d@3, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx960-blank@1],
            default: juniper/mx960-blank@1, group: fpcs, rel-pos: 4}
         - {id: fpc5, at: [159.3, 146.4], size: {w: 29.5, h: 413.5}, opening: {w: 29.5, h: 396}, rotate: 90,
-           accepts: [juniper/dpc-r-4xge-xfp@2, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@3, juniper/mpc2e-3d@3, juniper/mpc3e-3d@3, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx960-blank@1],
+           accepts: [juniper/dpc-r-4xge-xfp@3, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@3, juniper/mpc2e-3d@3, juniper/mpc3e-3d@3, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx960-blank@1],
            default: juniper/mx960-blank@1, group: fpcs, rel-pos: 5}
         - {id: scb0, at: [190.3, 146.4], size: {w: 29.5, h: 413.5}, opening: {w: 29.5, h: 396}, rotate: 90,
-           accepts: [juniper/scb-mx@2], default: juniper/scb-mx@2,
+           accepts: [juniper/scb-mx@3], default: juniper/scb-mx@3,
            group: scbs, rel-pos: 0}
         - {id: scb1, at: [221.3, 146.4], size: {w: 29.5, h: 413.5}, opening: {w: 29.5, h: 396}, rotate: 90,
-           accepts: [juniper/scb-mx@2], default: juniper/scb-mx@2,
+           accepts: [juniper/scb-mx@3], default: juniper/scb-mx@3,
            group: scbs, rel-pos: 1}
         - {id: fpc6, at: [252.3, 146.4], size: {w: 29.5, h: 413.5}, opening: {w: 29.5, h: 396}, rotate: 90,
-           accepts: [juniper/dpc-r-4xge-xfp@2, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@3, juniper/mpc2e-3d@3, juniper/mpc3e-3d@3, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx960-blank@1, juniper/scb-mx@2],
-           default: juniper/dpc-r-4xge-xfp@2, group: fpcs, rel-pos: 6}
+           accepts: [juniper/dpc-r-4xge-xfp@3, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@3, juniper/mpc2e-3d@3, juniper/mpc3e-3d@3, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx960-blank@1, juniper/scb-mx@3],
+           default: juniper/dpc-r-4xge-xfp@3, group: fpcs, rel-pos: 6}
         - {id: fpc7, at: [283.3, 146.4], size: {w: 29.5, h: 413.5}, opening: {w: 29.5, h: 396}, rotate: 90,
-           accepts: [juniper/dpc-r-4xge-xfp@2, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@3, juniper/mpc2e-3d@3, juniper/mpc3e-3d@3, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx960-blank@1],
-           default: juniper/dpc-r-4xge-xfp@2, group: fpcs, rel-pos: 7}
+           accepts: [juniper/dpc-r-4xge-xfp@3, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@3, juniper/mpc2e-3d@3, juniper/mpc3e-3d@3, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx960-blank@1],
+           default: juniper/dpc-r-4xge-xfp@3, group: fpcs, rel-pos: 7}
         - {id: fpc8, at: [314.3, 146.4], size: {w: 29.5, h: 413.5}, opening: {w: 29.5, h: 396}, rotate: 90,
-           accepts: [juniper/dpc-r-4xge-xfp@2, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@3, juniper/mpc2e-3d@3, juniper/mpc3e-3d@3, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx960-blank@1],
+           accepts: [juniper/dpc-r-4xge-xfp@3, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@3, juniper/mpc2e-3d@3, juniper/mpc3e-3d@3, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx960-blank@1],
            default: juniper/mx960-blank@1, group: fpcs, rel-pos: 8}
         - {id: fpc9, at: [345.3, 146.4], size: {w: 29.5, h: 413.5}, opening: {w: 29.5, h: 396}, rotate: 90,
-           accepts: [juniper/dpc-r-4xge-xfp@2, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@3, juniper/mpc2e-3d@3, juniper/mpc3e-3d@3, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx960-blank@1],
+           accepts: [juniper/dpc-r-4xge-xfp@3, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@3, juniper/mpc2e-3d@3, juniper/mpc3e-3d@3, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx960-blank@1],
            default: juniper/mx960-blank@1, group: fpcs, rel-pos: 9}
         - {id: fpc10, at: [376.3, 146.4], size: {w: 29.5, h: 413.5}, opening: {w: 29.5, h: 396}, rotate: 90,
-           accepts: [juniper/dpc-r-4xge-xfp@2, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@3, juniper/mpc2e-3d@3, juniper/mpc3e-3d@3, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx960-blank@1],
+           accepts: [juniper/dpc-r-4xge-xfp@3, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@3, juniper/mpc2e-3d@3, juniper/mpc3e-3d@3, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx960-blank@1],
            default: juniper/mx960-blank@1, group: fpcs, rel-pos: 10}
         - {id: fpc11, at: [407.3, 146.4], size: {w: 29.5, h: 413.5}, opening: {w: 29.5, h: 396}, rotate: 90,
-           accepts: [juniper/dpc-r-4xge-xfp@2, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@3, juniper/mpc2e-3d@3, juniper/mpc3e-3d@3, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx960-blank@1],
+           accepts: [juniper/dpc-r-4xge-xfp@3, juniper/dpce-20ge-2xge@2, juniper/dpce-2xge-xfp@2, juniper/dpce-40ge-tx@2, juniper/dpce-q-20ge-sfp@2, juniper/dpce-r-40ge-sfp@2, juniper/mpc-3d-16xge-sfpp@2, juniper/mpc10e-10c-mrate@2, juniper/mpc10e-15c-mrate@2, juniper/mpc1e-3d@3, juniper/mpc2e-3d@3, juniper/mpc3e-3d@3, juniper/mpc4e-3d-2cge-8xge@2, juniper/mpc4e-3d-32xge-sfpp@2, juniper/mpc5e-100g10g@2, juniper/mpc5e-40g10g@2, juniper/mpc7e-10g@2, juniper/mpc7e-mrate@2, juniper/ms-dpc@2, juniper/ms-mpc@2, juniper/mx960-blank@1],
            default: juniper/mx960-blank@1, group: fpcs, rel-pos: 11}
   rear:
     size:
@@ -333,6 +354,27 @@ configurations:
       fpc7: juniper/mx960-blank@1
       fpc8: juniper/mx960-blank@1
       fpc9: juniper/mx960-blank@1
+      fpc10: juniper/mx960-blank@1
+      fpc11: juniper/mx960-blank@1
+  ac:
+    kind: orderable
+    description: >-
+      AC-powered chassis as photographed - four AC supplies, SCB-MX with RE-S-1300 in both SCB
+      slots, DPC 40xGE in slots 1 and 3, a four-XFP DPC in slots 7 and 9 (it prints DPC
+      4x10GE and a bare 0/0 over TUNNEL and LINK; juniper/dpc-r-4xge-xfp@3 stands in for it with the
+      same layout, and whether the part is DPC-R- or DPCE-R-4XGE-XFP is unsettled - gaps), blanks in the other eight line slots. Every
+      card stands turned 90, so this is the configuration that renders a seated vertical card (#899).
+    bays:
+      fpc0: juniper/mx960-blank@1
+      fpc1: juniper/dpce-r-40ge-sfp@2
+      fpc2: juniper/mx960-blank@1
+      fpc3: juniper/dpce-r-40ge-sfp@2
+      fpc4: juniper/mx960-blank@1
+      fpc5: juniper/mx960-blank@1
+      fpc6: juniper/mx960-blank@1
+      fpc7: juniper/dpc-r-4xge-xfp@3
+      fpc8: juniper/mx960-blank@1
+      fpc9: juniper/dpc-r-4xge-xfp@3
       fpc10: juniper/mx960-blank@1
       fpc11: juniper/mx960-blank@1
 datasheet:
