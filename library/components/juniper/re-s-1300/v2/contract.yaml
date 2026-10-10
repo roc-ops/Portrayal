@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: re-s-1300
-version: 1.2.1
+version: 2.0.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -11,10 +11,6 @@ description: >-
   the HDD/MASTER and OK-FAIL/ONLINE lamp block, the recessed ONLINE/OFFLINE
   button and RESET pinhole, and the USB, AUX, CONSOLE and ETHERNET ports;
   the ETHERNET jack is the fxp0 out-of-band management port.
-unplaced: >-
-  SUPERSEDED by juniper/re-s-1300@2: the plate is 271.9 wide, to the right end the MX240 and MX480 photographs put it at, with its right captive screw (#891). Kept and deprecated rather than deleted, so a
-  manifest that pins it still resolves (#448); nothing in this library seats it.
-superseded-by: juniper/re-s-1300@2
 attrs:
   model: RE-S-1300-2048
   power-draw-max-w: 90
@@ -23,6 +19,13 @@ attrs:
   lifecycle-note: EOL per TSB16556; modelled because it is the RE the
     reference photograph carries
 provenance:
+  width: >-
+    photo-measured (#891) - the plate runs card x 91.0-362.7 on the MX240 front photograph (3.372
+    px/mm) and 91.4-363.9 on the MX480's (3.230), both seated in SCB-MX; it is drawn from the SCB bay's
+    left edge, card x 91.44, to the mean right edge, 363.3: 271.9 wide. The right captive screw centres
+    at card x 357.9 and 357.7 in the two photographs, y 11.5 on the MX240 (10.5 below the bay top), about
+    7 mm across: drawn at plate x 266.4, y 10.5. Until 2.0.0 the plate stopped at card x 353.2, 9.5 mm
+    short, and drew no right screw. Everything placed from the left edge is unchanged.
   speed: SOURCES DISAGREE, so no speed is stated. The MX240, MX480 and MX960 guides list one
     10/100/1000-Mbps Ethernet port on each Routing Engine family they describe, but their RJ-45
     pinout section calls the port labeled ETHERNET an autosensing 10/100-Mbps receptacle, and
@@ -69,5 +72,6 @@ elements:
     size: [5.0, 16.0]
     class: latch
 size:
-  w: 261.8
+  w: 271.9
   h: 27.5
+size-confidence: {w: photo-measured, h: photo-measured}

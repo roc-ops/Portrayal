@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: re-s-2000
-version: 1.1.1
+version: 2.0.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -10,10 +10,6 @@ description: >-
   Face layout is the RE-S-1300 family faceplate: HDD/MASTER and
   OK-FAIL/ONLINE lamps, ONLINE/OFFLINE button, RESET, USB, AUX, CONSOLE and
   ETHERNET (fxp0). Photographed in the MX480's SCB 1.
-unplaced: >-
-  SUPERSEDED by juniper/re-s-2000@2: the plate is 271.9 wide, to the right end the MX240 and MX480 photographs put it at, with its right captive screw (#891). Kept and deprecated rather than deleted, so a
-  manifest that pins it still resolves (#448); nothing in this library seats it.
-superseded-by: juniper/re-s-2000@2
 attrs:
   model: RE-S-2000-4096
   power-draw-max-w: 90
@@ -22,6 +18,13 @@ attrs:
   lifecycle-note: EOL per TSB16735; modelled because the MX480 reference
     photograph carries it
 provenance:
+  width: >-
+    photo-measured (#891) - the plate runs card x 91.0-362.7 on the MX240 front photograph (3.372
+    px/mm) and 91.4-363.9 on the MX480's (3.230), both seated in SCB-MX; it is drawn from the SCB bay's
+    left edge, card x 91.44, to the mean right edge, 363.3: 271.9 wide. The right captive screw centres
+    at card x 357.9 and 357.7 in the two photographs, y 11.5 on the MX240 (10.5 below the bay top), about
+    7 mm across: drawn at plate x 266.4, y 10.5. Until 2.0.0 the plate stopped at card x 353.2, 9.5 mm
+    short, and drew no right screw. Everything placed from the left edge is unchanged.
   size: 'photo - same 261.8 x 27.5 mm SCB-bay plate as re-s-1300; the two
     faces are identical at photo resolution except the model legend, so the
     geometry is re-s-1300''s (an echo of that measurement, not a second one)'
@@ -45,5 +48,6 @@ elements:
     size: [5.0, 16.0]
     class: latch
 size:
-  w: 261.8
+  w: 271.9
   h: 27.5
+size-confidence: {w: photo-measured, h: photo-measured}

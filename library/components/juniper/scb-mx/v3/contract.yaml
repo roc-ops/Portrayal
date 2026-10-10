@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: scb-mx
-version: 2.0.1
+version: 3.0.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -11,10 +11,6 @@ description: >-
   the Routing Engine slides into the SCB's own horizontal bay. The face
   carries the OK/FAIL, FABRIC ONLY and FABRIC ACTIVE lamps at the left with
   rotated legends, and extraction levers at both ends.
-unplaced: >-
-  SUPERSEDED by juniper/scb-mx@3: its Routing Engine bay is 271.9 wide, to the right end the MX240 and MX480 photographs show, and its panel screws are where they show them (#891). Kept and deprecated rather than deleted, so a
-  manifest that pins it still resolves (#448); nothing in this library seats it.
-superseded-by: juniper/scb-mx@3
 attrs:
   model: SCB-MX
   power-draw-max-w: 185
@@ -32,10 +28,16 @@ provenance:
   power: 'guide Table 92 (Maximum Power Consumption for SCB Models): SCB-MX 185 W at 55 C, 160 at 40 C,
     155 at 25 C. Max takes 55 C; typical carries the 25 C figure of the same table, not a vendor "typical"'
   re-bay: >-
-    photo - the Routing Engine bay spans card x 91.6-354.2 (261.8 mm), measured off the seated RE-S-1300's
-    plate edges and re-enveloped with the rest at 2.0.0 (1.x: 108.6-370.4 of the 420.9 face); the MX240
-    photograph puts the RE plate's left edge at card x 92. "Each Routing Engine must be installed directly
+    photo-measured (#891) - the Routing Engine bay spans card x 91.44-363.3 (271.9 mm). The seated RE's
+    plate edges read card x 91.0-362.7 on the MX240 front photograph (3.372 px/mm) and 91.4-363.9 on the
+    MX480's (3.230); the left edge stays where 2.x put it and the right is the mean. Until 3.0.0 the bay
+    ended at 353.2, 9.5 mm short of both photographs. "Each Routing Engine must be installed directly
     into an SCB" (guide RE description) - the bay is the SCB's, not the chassis's
+  panel-screws: >-
+    photo-measured (#891) - the SCB plate's own two screws, either side of the RE: card (85.1, 9.3) and
+    (369.4, 8.0) on the MX240 photograph and x 85.5 and 370.0 on the MX480 photograph, about 6.3 mm across
+    on both; drawn at (85.3, 9.3) and (369.7, 8.0), r 3.0. Until 3.0.0 they were at (78.8, 6.4) and
+    (379.68, 24.0), r 1.8.
   lamps: >-
     photo + guide SCB LED table - OK/FAIL, FABRIC ONLY, FABRIC ACTIVE in a row at the left with vertically-printed
     legends; re-enveloped to card x 34.0/41.2/48.4, where the MX240 photograph reads 33.0/40.4
@@ -66,9 +68,9 @@ elements:
 bays:
   re:
     at: [91.44, 1.0]
-    size: [261.8, 27.5]
-    accepts: [juniper/re-s-1300@1, juniper/re-s-2000@1]
-    default: juniper/re-s-1300@1
+    size: [271.9, 27.5]
+    accepts: [juniper/re-s-1300@2, juniper/re-s-2000@2]
+    default: juniper/re-s-1300@2
 size:
   w: 413.5
   h: 29.5

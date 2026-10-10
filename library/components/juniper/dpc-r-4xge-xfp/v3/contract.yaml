@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dpc-r-4xge-xfp
-version: 2.0.1
+version: 3.0.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -9,11 +9,6 @@ description: >-
   Juniper DPC-R-4XGE-XFP (10-Gigabit Ethernet DPC, EOL) - four 10GbE XFP
   ports, each with rotated PORT n/0 / TUNNEL / LINK legends and lamp pair,
   photographed in MX240 slot 1 with the XFP dust covers seated.
-unplaced: >-
-  SUPERSEDED by juniper/dpc-r-4xge-xfp@3, whose XFP ports, lamps and legends are re-placed off the
-  MX240 and MX480 photographs on a 76.1 mm pitch (#891). Kept and deprecated rather than deleted, so a
-  manifest that pins it still resolves (#448); nothing in this library seats it.
-superseded-by: juniper/dpc-r-4xge-xfp@3
 attrs:
   xfp-10g: 4
   model: DPC-R-4XGE-XFP
@@ -57,21 +52,35 @@ provenance:
     32.3, y 7.9-17.5, just right of the lever's end, with its lamp BELOW it at (32.3, 21.5). 1.x drew
     the lamp above the legend at old x 31.0, which the re-envelope would have put under the new lever.
   size-ports: >-
-    known-wrong - XFP port centres re-enveloped from 1.x's card x 112.7/166.1/217.4/270.8, which 1.x
-    said were measured off the metal dust covers (the cage aperture underneath is the registry xfp),
-    y 13.9. The side-by-side for #261 does not bear that out: on the MX240 front photograph the four
-    covers centre at px 454/711/968/1224, card x 105.4/181.6/257.8/333.8 on a 76.1 mm pitch, where
-    these ports sit on a 53.4 pitch from 95.5. Carried unmoved because this change re-envelopes the
-    card and does not redraw it; re-placing the ports is its own change.
+    photo-measured, two photographs (#891). The XFP cages centre at card x 105.55, 181.7, 257.8 and
+    333.8, a 76.1 mm pitch, y 18.85. The MX480 front photograph seats this card bare in slot 4 (card x =
+    8.75 + (px - 155) / 3.230, plate top at y px 399.5, 3.206 down): the four dark openings run x
+    96.4-114.9, 172.5-191.1, 248.4-267.3 and 324.5-343.1, centres 105.65/181.82/257.82/333.83, y
+    13.6-24.0. The MX240 photograph seats it with dust covers (card x = px / 3.372 from the envelope's
+    left end at px 98): covers 95.0-116.0 wide by 13.4-24.4, centres 105.45/181.6/257.8/333.8. Drawn at
+    the mean, the registry xfp opening centred there. Until 3.0.0 the ports sat at x 95.5-263.8 on a
+    53.4 pitch, y 13.9, carried from 1.x's dust-cover reading, which neither photograph bears out.
+  port-lamps: >-
+    photo-measured - each port's TUNNEL and LINK lamps sit side by side LEFT of its cage, not stacked
+    as 2.x drew them. MX240 lamp centres (dark discs about 3.3 mm across): 83.66/88.77,
+    159.85/164.89, 236.03/241.08, 312.14/317.26, y 20.3 - each pair 21.8 and 16.75 left of its cage
+    centre. The MX480 photograph puts the last two pairs at 236.73/241.56 and 311.90/316.81, y 20.2-20.4,
+    which agrees to 0.7 mm. Drawn at the MX240 values, r 1.5.
+  port-legends: >-
+    photo-measured - the MX240 photograph prints the legends vertically, reading upward: PORT n/0 at
+    25.05 left of its cage centre from y 22.6 up to about 10.2, and TUNNEL and LINK each directly above
+    its lamp from y 17.9 up (to about 7.1 and 12.0). Set at 2.6 mm, the size the printed lengths give
+    (PORT 0/0 12.4 mm, TUNNEL 10.8, LINK 5.9). The MX480's later DPC 4x10GE prints 0/0 rather than
+    PORT 0/0 on the same layout; this card is the MX240's.
 states:
 - ok
 - fail
 - absent
 parts:
-- {ref: std/xfp@1, id: port-0, at: [85.77, 9.05]}
-- {ref: std/xfp@1, id: port-1, at: [139.33, 9.05]}
-- {ref: std/xfp@1, id: port-2, at: [190.78, 9.05]}
-- {ref: std/xfp@1, id: port-3, at: [244.33, 9.05]}
+- {ref: std/xfp@1, id: port-0, at: [95.80, 14.00]}
+- {ref: std/xfp@1, id: port-1, at: [171.95, 14.00]}
+- {ref: std/xfp@1, id: port-2, at: [248.05, 14.00]}
+- {ref: std/xfp@1, id: port-3, at: [324.05, 14.00]}
 elements:
   lever-left:
     at: [0.0, 11.05]
