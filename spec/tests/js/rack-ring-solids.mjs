@@ -91,27 +91,36 @@ test('the owner\'s rack: no point of any cord comes within its radius of a ring'
   near(closest, r15, 'nearest approach');
 });
 
-test('without the ring solids the same check finds cords in the rings', () => {
-  // the check is not vacuous: with a catalogue whose rings are open, the
-  // approach points alone still take thirteen cords in through the opening,
-  // but c1, c2 and c7, whose ring stands past their port, come down to it
-  // from behind and above and run through its rear leg and bar, as every
-  // upper cord did before #968
+test('the same check finds cords in the rings when they come to a ring any other way', () => {
+  // the check is not vacuous. Before #973 a catalogue whose rings are open
+  // showed it: the approach points, 6.5 mm from the band, still took thirteen
+  // cords in through the opening, but c1, c2 and c7 came down from behind
+  // and above through the rear leg and bar. Now each approach point stands
+  // the bend radius from the band, and a cord from behind is led square to
+  // it, so even with open rings none touches a ring
   const r = F.rack(), ctx = F.ctxOf(r);
   const rings = S.solidsOf(r, ctx).filter(isRing);
   const open = withoutRingSolids(ctx);
   assert.equal(S.solidsOf(r, open).filter(isRing).length, 0);
-  const hit = r.cables.filter(c => clips(R.routePath(r, c, open).points, rings).out.length).map(c => c.id);
-  assert.deepEqual(hit, ['c1', 'c2', 'c7']);
-  const parts = new Set(r.cables.flatMap(c => clips(R.routePath(r, c, open).points, rings).out.map(x => x.part.split('/')[2])));
+  assert.deepEqual(r.cables.filter(c => clips(R.routePath(r, c, open).points, rings).out.length).map(c => c.id), []);
+  // so the cords are taken to their rings as they were before a ring was
+  // solid: each path with its approach, lead, detour and rest points left
+  // out, the plug's end straight to the ring's face. All sixteen then run
+  // through a ring's parts, the rear leg among them
+  const bare = c => R.routePath(r, c, ctx).points.filter(q => !['approach', 'lead', 'detour', 'rest'].includes(q.at));
+  const hit = r.cables.filter(c => clips(bare(c), rings).out.length).map(c => c.id);
+  assert.deepEqual(hit, r.cables.map(c => c.id));
+  const parts = new Set(r.cables.flatMap(c => clips(bare(c), rings).out.map(x => x.part.split('/')[2])));
   assert.ok(parts.has('rear-leg'), [...parts].join());
 });
 
 // THE APPROACH. Every pass through a ring whose opening is placed comes from
-// a point on the run outside the band, clear of it by the cord's radius and
-// CLEAR, at the opening's height and across position, and leaves to another
-// past its far face; no detour ends at the ring or inside its band.
-function approachFaults(p, t, r = r15) {
+// a point on the run outside the band, clear of it by at least the cord's
+// radius and CLEAR (the bend radius where the route turns there, #973;
+// `offs` collects how far each stands), at the opening's height and across
+// position, and leaves to another past its far face; no detour ends at the
+// ring or inside its band.
+function approachFaults(p, t, r = r15, offs = []) {
   const faults = [];
   let passes = 0;
   const pts = p.points;
@@ -121,8 +130,9 @@ function approachFaults(p, t, r = r15) {
     const o = t.rings.find(x => x.via === q.via), run = o.run === 'z' ? 'z' : 'x';
     const exit = pts[k + 1], before = pts[k - 1], after = pts[k + 2];
     for (const [ap, face, what] of [[before, q, 'in'], [after, exit, 'out']]) {
+      if (ap?.at === 'approach') offs.push(Math.abs(ap[run] - face[run]));
       const ok = ap?.at === 'approach' && ap.via === q.via
-        && Math.abs(Math.abs(ap[run] - face[run]) - (r + S.CLEAR)) < 1e-6
+        && Math.abs(ap[run] - face[run]) >= r + S.CLEAR - 1e-6
         && Math.abs(ap.y - face.y) < 1e-9 && ['x', 'z'].filter(a => a !== run).every(a => Math.abs(ap[a] - face[a]) < 1e-9)
         && (ap[run] < o.box[`${run}0`] || ap[run] > o.box[`${run}1`]);
       if (!ok) faults.push(`${q.via} ${what}`);
@@ -146,19 +156,36 @@ test('every ring is entered from an approach point, and no detour ends at the ri
   const r = F.rack(), ctx = F.ctxOf(r);
   const [t] = S.traysOf(r, ctx);
   let passes = 0, detoured = 0;
+  const offs = [];
   for (const c of r.cables) {
     const p = R.routePath(r, c, ctx);
-    const got = approachFaults(p, t);
+    const got = approachFaults(p, t, r15, offs);
     assert.deepEqual(got.faults, [], c.id);
     passes += got.passes;
     detoured += p.detours.length;
-    // the leg into the approach point is where a detour ends: the lower
-    // leaf's round the tray's front edge, straight in front of it
-    const ap = p.points.find(q => q.at === 'approach');
-    for (const d of p.detours) assert.equal(d.points.at(-1).x, ap.x, c.id);
+    // a detour ends, or starts, straight in front of an approach point: the
+    // lower leaf's round the tray's front edge to the one before the ring,
+    // and c8's from the one after ring 5 back to its panel port
+    const [first, second] = p.points.filter(q => q.at === 'approach');
+    for (const d of p.detours) {
+      if (d.between[0].end === 'a') assert.equal(d.points.at(-1).x, first.x, c.id);
+      else assert.equal(d.points[0].x, second.x, c.id);
+    }
   }
   assert.equal(passes, 16);
-  assert.equal(detoured, 13);
+  // every cord turns onto its ring's run and off it, so each of the 32
+  // approach points stands the bend radius (25 mm) from the band or more;
+  // but for two before ring 4: c7's, 6.5 mm from it, which the cord comes
+  // down to from over the ring with 50 mm of leg (at 25 mm it would be led
+  // 65 mm back along the leaf's face to reach it); and c16's, 12 mm from it,
+  // where the detour round the tray's edge has its room with the point 21.5
+  // mm to the ring's side of the port, and would need it 55 mm out on the other
+  assert.equal(offs.length, 32);
+  assert.deepEqual(offs.filter(v => v < 25 - 1e-6).map(v => Math.round(v * 10) / 10), [6.5, 12]);
+  // ten detours (thirteen before #973, when five upper cords went over
+  // their ring: four are led square to its approach point now, and c7
+  // still goes over it)
+  assert.equal(detoured, 10);
 });
 
 test('a detour that ends at the ring\'s centre, or its face, is a fault', () => {

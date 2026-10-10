@@ -300,13 +300,30 @@ const gap = (p, q) => Math.hypot(p.x - q.x, p.y - q.y, p.z - q.z);
 // past its back, across, and out again on the far side (a corner way).
 // Every plane is clear of the body by the cable's radius and CLEAR. Each way
 // is the list of points it adds between a and b.
+// ROOM FOR THE BENDS (#973): a way turns the cable where each end's move
+// meets the plane, and where that move starts when the end is itself a
+// corner, so a move shorter than `room` (route.js gives twice the cable's
+// installed bend radius, the two corners' share of one leg) leaves neither
+// turn its radius. With `room`, a plane that an end reaches by a shorter move
+// stands further out, `room` from that end; an end that is already beyond the
+// plane is left alone, and so is a plane a lane sets. The plane only moves
+// away from the body, so what it cleared it still clears.
 const plane = (p, k, v) => set(p, k, v);
-function waysRound(a, b, solid, {diameter, lanes}) {
+function waysRound(a, b, solid, {diameter, lanes, room = 0}) {
   const box = met(solid, diameter), m = diameter / 2 + CLEAR;
+  const out = (k, v) => {
+    if (!(room > 0)) return v;
+    const s = v >= (box[`${k}0`] + box[`${k}1`]) / 2 ? 1 : -1;
+    for (const p of [a, b, a]) {
+      const d = s * (v - p[k]);
+      if (d > 1e-6 && d < room - 1e-6) v = p[k] + s * room;
+    }
+    return v;
+  };
   const across = crossAxis(a, b, box);
   const edge = across === 'z' ? 'y' : 'z';
   const end = across === 'x' ? 'y' : 'x';
-  const flat = (k, v) => [plane(a, k, v), plane(b, k, v)];
+  const flat = (k, v, lane = false) => { const u = lane ? v : out(k, v); return [plane(a, k, u), plane(b, k, u)]; };
   const both = k => [flat(k, box[`${k}0`] - m), flat(k, box[`${k}1`] + m)];
   // the plane on a point's side of the body along an axis
   const near = (p, k) => (p[k] <= (box[`${k}0`] + box[`${k}1`]) / 2 ? box[`${k}0`] - m : box[`${k}1`] + m);
@@ -318,7 +335,7 @@ function waysRound(a, b, solid, {diameter, lanes}) {
   const tiers = edge === 'z' && across === 'y' ? [[flat('z', front)], [flat('z', back)]]
     : zeroU ? [[flat('z', back), corner('z', back)]] : [both(edge)];
   tiers.push(both(end));
-  if (opposite) tiers.push([...new Set(lanes)].map(v => flat('x', v)));
+  if (opposite) tiers.push([...new Set(lanes)].map(v => flat('x', v, true)));
   if (zeroU) tiers.push([flat('z', front), corner('z', front)]);
   return tiers;
 }
@@ -335,14 +352,21 @@ const lengthOf = pts => pts.reduce((s, p, i) => (i ? s + gap(pts[i - 1], p) : 0)
 // to the plane, so the two moves never enter the body (each end is outside it
 // on another axis) and the run between them is outside it on this one.
 // `lanes` is a function of the leg's height, y, giving the x of each side
-// lane there (route.js laneXAt), or a list.
-export function detour(a, b, solids, {diameter = 0, lanes = []} = {}) {
+// lane there (route.js laneXAt), or a list. `room` (mm, #973) asks for each
+// end's move to a plane to be that long (waysRound): in each tier the ways
+// with room are tried first, and the ways as they were without it only when
+// none of those resolves, so a body that leaves no room is still gone round
+// the same preferred way, and the short leg is left for the bend check.
+export function detour(a, b, solids, {diameter = 0, lanes = [], room = 0} = {}) {
   const lanesAt = typeof lanes === 'function' ? lanes : () => lanes;
   const clear = (u, w, only = null) => gap(u, w) < 1e-9 || !legCrossings(u, w, only ? [only] : solids, {diameter}).length;
   const go = (p, q, depth) => {
     const first = legCrossings(p, q, solids, {diameter})[0];
     if (!first) return [];
-    for (const tier of waysRound(p, q, first.solid, {diameter, lanes: lanesAt((p.y + q.y) / 2)})) {
+    const opts = {diameter, lanes: lanesAt((p.y + q.y) / 2)};
+    const plain = waysRound(p, q, first.solid, opts);
+    const roomy = room > 0 ? waysRound(p, q, first.solid, {...opts, room}) : null;
+    for (let t = 0; t < plain.length; t++) for (const tier of roomy ? [roomy[t], plain[t]] : [plain[t]]) {
       let best = null;
       for (const way of tier) {
         const chain = [p, ...way, q], legs = chain.slice(1).map((w, i) => [chain[i], w]);

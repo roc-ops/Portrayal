@@ -79,19 +79,21 @@ test('owner\'s fixture: today\'s routes cross the lacer\'s plates; with the deto
   // cord crossed the floor's end as well as the web it crossed before. Since
   // each ring is solid (#968) the cord leaves ring 1 from an approach point
   // 6.5 mm past its band, and from there down to the lane it reaches the
-  // floor's end before it has dropped through the floor, so it crosses the
-  // web alone. From the switch above, nothing.
+  // floor's end before it has dropped through the floor, so it crossed the
+  // web alone. Since #973 that approach point stands the bend radius past
+  // the band, 10 mm beyond the web and the floor's end, and the leg down to
+  // the lane crosses nothing. From the switch above, nothing.
   const floor = 'i3:tray/floor';
   assert.deepEqual(got, {c1: [floor], c2: [floor], c3: [floor], c4: [], c5: [], c6: [floor],
-    c7: [floor, 'i3:web-a/plate'], c8: [floor, 'i3:web-a/plate'], c9: [floor, 'i3:web-a/plate'],
-    c10: [], c11: []});
+    c7: [floor], c8: [floor], c9: [floor], c10: [], c11: []});
   assert.equal(Object.values(got).filter(x => x.length).length, 7);
-  // after the detours: no finding at all
+  // after the detours: no finding at all, and no corner short of its room
   assert.deepEqual(R.bodyFindings(rack, ctx), []);
+  assert.deepEqual(R.bendFindings(rack, ctx), []);
   // one detour per leg that crossed, counted in the length; none elsewhere:
-  // round the floor's front edge from the switch below, and behind its back
-  // edge from ring 1 down to the lane
-  const DETOURS = {c1: 1, c2: 1, c3: 1, c4: 0, c5: 0, c6: 1, c7: 2, c8: 2, c9: 2, c10: 0, c11: 0};
+  // round the floor's front edge from the switch below (and, before #973,
+  // behind its back edge from ring 1 down to the lane)
+  const DETOURS = {c1: 1, c2: 1, c3: 1, c4: 0, c5: 0, c6: 1, c7: 1, c8: 1, c9: 1, c10: 0, c11: 0};
   for (const c of rack.cables) {
     const p = R.routePath(rack, c, ctx);
     assert.deepEqual(p.crossings, [], c.id);
@@ -103,12 +105,18 @@ test('owner\'s fixture: today\'s routes cross the lacer\'s plates; with the deto
   }
   // the floor detour of c6 goes over the FRONT edge of the tray (section 1.3
   // rule 1): from its plug's reach point (#960) up and out in front of the
-  // strip, clear by its radius and CLEAR, and back in to ring 2. The point
-  // level with the port is pulled taut: the reach point already stands
-  // 27.6 out, and sees the corner at ring height past the edge.
+  // strip, and back in to ring 2. The point level with the port is pulled
+  // taut: the reach point already stands 27.6 out, and sees the corner at
+  // ring height past the edge. It stood clear of the edge by the cord's
+  // radius and CLEAR, 116.5 out; since #973 it stands two bend radii in
+  // front of the ring's line, and here two and a half, 62.5 mm: pulled taut,
+  // the cord turns 107.7 degrees there, not a right angle, and that turn
+  // and the right angle at the approach point need 59.2 mm of the leg
+  // between them (136.2 = 73.7 + 62.5)
   const [d6] = R.routePath(rack, rack.cables[5], ctx).detours;
   assert.deepEqual(d6.between, [{end: 'a'}, {item: 'i3', via: 'guide-2'}]);
-  assert.deepEqual(d6.points.map(p => Math.round(p.z * 10) / 10), [110 + 1.5 + S.CLEAR]);
+  assert.deepEqual(d6.points.map(p => Math.round(p.z * 10) / 10), [136.2]);
+  assert.ok(136.2 > 110 + 1.5 + S.CLEAR);
   // a detour point is not stored: the cable's route is as written
   assert.deepEqual(rack.cables[5].route, [{item: 'i3', via: 'guide-2'}]);
 });
@@ -124,8 +132,13 @@ test('a tray on the rear rails is gone round by its front edge too, which faces 
   assert.deepEqual(p.crossings, []);
   const [d] = p.detours;
   // the rear rail plane is at -740, the tray stands 110 behind it; from the
-  // plug's reach point, 27.6 behind the rear face (#960), one corner past the edge
-  assert.deepEqual(d.points.map(q => Math.round(q.z * 10) / 10), [-740 - 110 - 1.5 - S.CLEAR]);
+  // plug's reach point, 27.6 behind the rear face (#960), one corner past
+  // the edge: two and a half bend radii behind the ring's line, 73.7 behind
+  // the rail, the room its turn there needs, wider than a right angle once
+  // pulled taut (#973; the cord's radius and CLEAR past the edge, -856.5, before)
+  assert.deepEqual(d.points.map(q => Math.round(q.z * 10) / 10), [-740 - 73.7 - 2.5 * 25]);
+  assert.ok(-740 - 73.7 - 2.5 * 25 < -740 - 110 - 1.5 - S.CLEAR);
+  assert.deepEqual(p.bends, []);
 });
 
 test('a cable lying against the plate is not crossing it; a leg through it is, on either face', () => {
@@ -409,21 +422,21 @@ test('what the rules cannot clear is a finding, with its sentence, in inspect, d
   for (const x of f) by[x.cable] = (by[x.cable] ?? 0) + 1;
   // every leg that starts or ends at a ring inside the shelf; every rise from
   // the switch below to a ring on its sill, through the floor it can no
-  // longer be taken round; from ring 1 down to the lane at U11, the floor's
-  // end (since the cords rest on the sill, #949 step 3) or the web (c7's,
-  // since it leaves ring 1 from its approach point, #968); and the
-  // plug of each panel port (c1 to c6), which reaches out of the panel into
-  // the shelf (#960)
-  assert.deepEqual(by, {c1: 9, c2: 5, c3: 5, c4: 4, c5: 4, c6: 5, c7: 5, c8: 7, c9: 5, c10: 3, c11: 5});
-  assert.equal(f.length, 57);
+  // longer be taken round; and the plug of each panel port (c1 to c6), which
+  // reaches out of the panel into the shelf (#960). From ring 1 down to the
+  // lane at U11 c7 to c9 crossed the floor's end (since the cords rest on the
+  // sill, #949 step 3) or the web (since they leave ring 1 from its approach
+  // point, #968); since #973 that point stands the bend radius past the
+  // band, beyond both, and the leg crosses the shelf alone
+  assert.deepEqual(by, {c1: 9, c2: 5, c3: 5, c4: 4, c5: 4, c6: 5, c7: 4, c8: 6, c9: 4, c10: 3, c11: 5});
+  assert.equal(f.length, 54);
   assert.equal(f.filter(x => x.item === 'i6').length, 47);
   const c7 = f.filter(x => x.cable === 'c7');
   assert.deepEqual(c7.map(x => [x.item, x.part, x.between]), [
     ['i6', 'envelope', [{end: 'a'}, {item: 'i3', via: 'guide-1'}]],
     ['i3', 'tray/floor', [{end: 'a'}, {item: 'i3', via: 'guide-1'}]],
     ['i6', 'envelope', [{item: 'i3', via: 'guide-1'}, {item: 'i3', via: 'guide-1'}]],
-    ['i6', 'envelope', [{item: 'i3', via: 'guide-1'}, {lane: 'left-front', ru: 11}]],
-    ['i3', 'web-a/plate', [{item: 'i3', via: 'guide-1'}, {lane: 'left-front', ru: 11}]]]);
+    ['i6', 'envelope', [{item: 'i3', via: 'guide-1'}, {lane: 'left-front', ru: 11}]]]);
   assert.equal(c7[3].text, 'c7 passes through shelf between lacer ring 1 and left-front U11: '
     + 'route it round shelf, or through a ring or a pass-through it fits.');
   assert.equal(c7[2].text, 'c7 passes through shelf at lacer ring 1: '

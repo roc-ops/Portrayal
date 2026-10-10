@@ -89,15 +89,31 @@ test('the same face, different sides: the shorter side is taken, whichever end i
   // 1361.8 and 1472.9 taut, before each free span hung by its drape, #949
   // step 3: the right still the shorter; 1387.4 and 1502.7 before #962's
   // end allowance, 134.5 mm an end for a cable with no media (34.5 from the
-  // table and the temporary 100 of dressing), not 150: 31 shorter each)
-  assert.deepEqual([mm(right), mm(left)], [1356.4, 1471.7]);
+  // table and the temporary 100 of dressing), not 150: 31 shorter each;
+  // 1356.4 and 1471.7 before #973: each is some 26 mm shorter, its spans
+  // from the end rings to the lane sagging less deep than a hang that left
+  // their corners short of room, by more than its approach points add)
+  assert.deepEqual([mm(right), mm(left)], [1330.8, 1445.9]);
   // the same cable written the other way round takes the same side
   const back = cable({item: 'i3', path: 'q'}, {item: 'i1', path: 'p'});
   assert.deepEqual(R.autoRoute(r, back, ctx), right.toReversed());
-  // a tie keeps end a's side: ports at -100 and 100 are as far from either gutter
-  const tie = ctxFor(r, {'i1|p': -100, 'i3|q': 100});
-  assert.equal(R.autoRoute(r, c, tie).find(w => w.lane).lane, 'left-front');
-  assert.equal(R.autoRoute(r, back, tie).find(w => w.lane).lane, 'right-front');
+  // ports at -100 and 100 are as far from either gutter, and until #973 the
+  // two sides measured the same to a micron, a tie, which keeps end a's side.
+  // They are the same legs still, but a span now hangs only as deep as the
+  // corners beside it have room for, and the two sides meet their short legs
+  // at different heights: the right measures 0.8 mm shorter, and is taken
+  // whichever end is a
+  const near = ctxFor(r, {'i1|p': -100, 'i3|q': 100});
+  const sides = [R.autoRoute(r, c, near), R.autoRoute(r, back, near)].map(rt => rt.find(w => w.lane).lane);
+  assert.deepEqual(sides, ['right-front', 'right-front']);
+  const by = side => {
+    const pick = (a, b) => (side === 'left' ? a : b);
+    return [...pick([2, 1], [3, 4, 5]).map(n => ({item: 'i2', via: `guide-${n}`})), {lane: `${side}-front`, ru: 20}, {lane: `${side}-front`, ru: 30},
+      ...pick([1, 2, 3], [5, 4]).map(n => ({item: 'i4', via: `guide-${n}`}))];
+  };
+  const len = side => Math.round(R.routedLength(r, {...c, route: by(side), routeEdited: true}, near).measured * 1e5) / 100;
+  assert.deepEqual(R.autoRoute(r, c, near), by('right'));
+  assert.deepEqual([len('left'), len('right')], [1393.52, 1392.74]);
 });
 
 test('opposite faces: front lane to rear lane on the A side, joined at the higher U', () => {

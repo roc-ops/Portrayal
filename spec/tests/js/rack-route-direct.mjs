@@ -54,11 +54,27 @@ const mm = l => Math.round(l.measured * 10000) / 10;
 // before). The upper leaf's eight are 0.5 m cords again (seven were 1 m; c7
 // by 5 mm, with the 200 of dressing in its measure), and the lower leaf's
 // eight stay 1 m cords.
+// ROOM FOR THE BENDS (#973): each turn of a cord is given the leg its
+// installed bend radius (25 mm for OM4) needs. An approach point stands the
+// bend radius from its ring's band, not 6.5 mm; a cord whose port stands
+// behind that point along the run is led square to it (c1, c2, c5, c6), or
+// the point stands two radii past the port (c3, c4), or stays at 6.5 mm with
+// the cord over the ring to it as before (c7, whose port stands 47 mm past
+// the ring: led square it would run 65 mm back along its own plugs); the detour round the
+// tray's front edge stands two radii in front of the ring's line, and the
+// approach point of c13-c16 far enough to the side of the port for the leg
+// between the detour's two turns; c8, which leaves ring 5 and comes straight
+// back to a panel port 13.4 mm short of it, goes round the front of the tray
+// and straight in to its plug. No hang is laid that leaves a corner short.
+// Every cord is longer, by 10.9 to 179.2 mm (460.5, 451.3, 430.1, 422.2,
+// 465, 470.3, 495, 440.2, 590.5, 589.3, 591.2, 592, 558.1, 564.8, 546.9 and
+// 552.6 before), and seven of the upper leaf's eight pass the 0.5 m break
+// again (c2 by 0.02 mm): only c4 is still a 0.5 m cord.
 const OWNER = {
-  c1: [[4], 460.5, 0.5], c2: [[4], 451.3, 0.5], c3: [[4], 430.1, 0.5], c4: [[4], 422.2, 0.5],
-  c5: [[4], 465, 0.5], c6: [[4], 470.3, 0.5], c7: [[4], 495, 0.5], c8: [[5], 440.2, 0.5],
-  c9: [[3], 590.5, 1], c10: [[3], 589.3, 1], c11: [[3], 591.2, 1], c12: [[3], 592, 1],
-  c13: [[4], 558.1, 1], c14: [[4], 564.8, 1], c15: [[4], 546.9, 1], c16: [[4], 552.6, 1],
+  c1: [[4], 514.8, 1], c2: [[4], 500, 1], c3: [[4], 502.9, 1], c4: [[4], 491.6, 0.5],
+  c5: [[4], 522.2, 1], c6: [[4], 515.2, 1], c7: [[4], 505.9, 1], c8: [[5], 619.4, 1],
+  c9: [[3], 611.1, 1], c10: [[3], 613.2, 1], c11: [[3], 616.1, 1], c12: [[3], 623.4, 1],
+  c13: [[4], 645.7, 1], c14: [[4], 617.4, 1], c15: [[4], 648.2, 1], c16: [[4], 575.8, 1],
 };
 const LOWER = ['c9', 'c10', 'c11', 'c12', 'c13', 'c14', 'c15', 'c16'];
 
@@ -72,10 +88,14 @@ test('the owner\'s rack: each cord runs along the lacer through a ring, with no 
   assert.deepEqual(got, want);
   // nothing reaches a gutter
   assert.equal(r.cables.flatMap(c => R.autoRoute(r, c, ctx)).filter(w => w.lane).length, 0);
-  // no route is direct, and the lower leaf's eight pass the 0.5 m stock
-  // break (fifteen did before #962's end allowance, thirteen before #968)
+  // no route is direct, and every cord but c4 passes the 0.5 m stock break
+  // (the lower leaf's eight before #973, fifteen before #962's end
+  // allowance, thirteen before #968)
   assert.equal(r.cables.filter(c => !R.autoRoute(r, c, ctx).length).length, 0);
-  assert.deepEqual(r.cables.filter(c => R.routedLength(r, c, ctx).value > 0.5).map(c => c.id), LOWER);
+  assert.deepEqual(r.cables.filter(c => R.routedLength(r, c, ctx).value > 0.5).map(c => c.id),
+    r.cables.map(c => c.id).filter(id => id !== 'c4'));
+  // and no corner of any is short of its 25 mm (#973)
+  assert.deepEqual(r.cables.flatMap(c => R.routePath(r, c, ctx).bends), []);
   // every ring taken is passed. None now holds a cord that does not turn in
   // it: c8's panel port stands 12.1 mm above ring 5's sill and 10 mm short
   // of its centre, steeper than 45 degrees, so the cord comes down into the
@@ -95,19 +115,28 @@ test('the owner\'s rack: no ring is entered and left by one face, and no route c
     const p = R.routePath(r, c, ctx);
     assert.deepEqual(p.crossings, [], c.id);
     // the upper leaf's cords come down onto the tray; those whose ring stands
-    // past their port along the run go over the ring first (#968), 6.5 mm
-    // over its top (1822, the top of U41, 44 above its floor), and come down
-    // its far side to the approach point; the lower leaf's go round the tray's
-    // front edge first, from their reach point to the approach point
+    // past their port along the run went over the ring first (#968), and
+    // since #973 are led square to its approach point, which stands clear of
+    // the ring: level with the plug's end along the run to a lead point
+    // beside the approach point, and down to it; the lower leaf's go round
+    // the tray's front edge first, from their reach point to the approach point
     const ap = p.points.find(q => q.at === 'approach');
     assert.ok(p.detours.length <= 1, c.id);
-    if (p.detours.length) assert.deepEqual(p.detours[0].between[0], {end: 'a'}, c.id);
     if (!LOWER.includes(c.id)) {
-      assert.equal(p.detours.length, ['c1', 'c2', 'c5', 'c6', 'c7'].includes(c.id) ? 1 : 0, c.id);
-      for (const d of p.detours) assert.deepEqual(d.points.map(q => [q.x, q.y, q.z]), [[ap.x, 1822 + 1.5 + 6.5, ap.z]], c.id);
+      const lead = p.points.filter(q => q.at === 'lead' && q.via);
+      assert.equal(lead.length, ['c1', 'c2', 'c5', 'c6'].includes(c.id) ? 1 : 0, c.id);
+      const reach = p.points[1];
+      for (const q of lead) assert.deepEqual([q.x, q.y, q.z], [ap.x, reach.y, reach.z], c.id);
+      // c7 goes over ring 4 to its approach point, 6.5 mm past the band on
+      // the far side, by one detour point 50 mm above it; c8 has a detour
+      // back from ring 5 to its panel port; no other upper cord has one
+      const want = {c7: [[{end: 'a'}, ring(4)]], c8: [[ring(5), {end: 'b'}]]}[c.id] ?? [];
+      assert.deepEqual(p.detours.map(d => d.between), want, c.id);
+      if (c.id === 'c7') assert.deepEqual(p.detours[0].points.map(q => [q.x, q.y, q.z]), [[ap.x, ap.y + 50, ap.z]]);
       continue;
     }
     assert.equal(p.detours.length, 1, c.id);
+    assert.deepEqual(p.detours[0].between[0], {end: 'a'}, c.id);
     assert.ok(p.detours[0].points.every(q => q.z > 110), `${c.id}: in front of the tray's front edge`);
     // and it ends straight in front of the approach point, not the ring
     assert.equal(p.detours[0].points.at(-1).x, ap.x, c.id);
@@ -181,14 +210,15 @@ test('the site-facing outputs: ring marks, inspect and the route text read the r
   const info = await Q.inspect(r, 'c13', {chassisOf: F.chassisOf, route: ctx});
   assert.equal(info.route.text, 'CM-01 ring 4');
   assert.deepEqual(info.route.waypoints, [ring(4)]);
-  // 0.56 m, still a 1 m cord, since #962's end allowance (0.63 m before)
-  assert.deepEqual(info.routed, {metres: 0.56, stock: 1});
+  // 0.65 m, still a 1 m cord, since its turns have room (#973; 0.56 m
+  // since #962's end allowance, 0.63 m before)
+  assert.deepEqual(info.routed, {metres: 0.65, stock: 1});
   assert.equal(info.route.rings.length, 1);
   assert.equal(info.route.rings[0].passed, true);
   assert.equal(info.route.crosses, undefined);
   // and the length a page keeps current is this one
   const kept = R.withRoutedLengths(r, ctx);
-  assert.deepEqual(kept.cables.find(c => c.id === 'c13').length, {value: 1, unit: 'm', source: 'routed', measured: 0.56});
+  assert.deepEqual(kept.cables.find(c => c.id === 'c13').length, {value: 1, unit: 'm', source: 'routed', measured: 0.65});
 });
 
 // ── a cable whose ends use different managers ─────────────────────────────
@@ -224,8 +254,10 @@ test('ends on two managers still take the lane; on opposite sides, the shorter s
   // leaves each ring from an approach point past its band, and its detour
   // round the tray's front edge ends there, not at the first ring's face;
   // 1986.9 and 2193.8 before #962's end allowance, 113.1 mm an end for this
-  // OM4 cord, not 150: 73.8 shorter each, and the left still the shorter)
-  assert.deepEqual([len(left), len(right)], [1913.1, 2120]);
+  // OM4 cord, not 150: 73.8 shorter each, and the left still the shorter;
+  // 1913.1 and 2120 before its turns were given room, #973: 13.4 and 70.3
+  // longer, the right by more for the wider turn it makes to end a's ring)
+  assert.deepEqual([len(left), len(right)], [1926.5, 2190.3]);
   // written the other way round, the same side
   const back = {...c, a: c.b, b: c.a};
   assert.deepEqual(R.autoRoute(r, back, ctx), left.toReversed());
