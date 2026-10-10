@@ -46,6 +46,11 @@ allowance (0.16.0) and bend room (0.17.0). Each entry measures its change
 against the kit before it. None of them reaches a consumer of 0.1.0: the
 rack modules and the rack file are new in this release.
 
+The kit versions this section names are versions of `kit/package.json` in
+this repository. `@portrayal/kit` on npm is 0.2.0, which has no rack module.
+`@portrayal/index` is not on npm at this tag, so `packageDist` and
+`?dist=cdn` have no index to read until it is.
+
 ### Added
 - `components.json` carries the catalogue's derived columns on each entry
   (one entry per component major, one row of `library/components/CATALOGUE.md`):
@@ -378,7 +383,7 @@ rack modules and the rack file are new in this release.
   trees under `library/exports/*/module-types` are no longer the same text:
   Nautobot writes a bay's position as given and cannot fill `{module}` in it
   (roc-ops/Portrayal#765). Superseded by the Nautobot entry under Changed:
-  most Nautobot module types carry their bays today, written plain, with the
+  most Nautobot module types carry their bays at 0.2.0, written plain, with the
   parent in the port names. The bays that entry lists as withheld (a carrier
   whose modules also seat directly in a chassis) are still not given.
 - Five generic optics, a plug and a pull handle: `generic/qsfp-mpo@1` (a QSFP
@@ -668,7 +673,7 @@ rack modules and the rack file are new in this release.
   A lab placement of a `rack-face` device takes `face` (`front` or `rear`)
   and is placed `on` a host placement at its `unit` (from 1 at the host's
   bottom unit), or at a rack unit by `ru`. Labs have a schema,
-  `spec/schemas/lab.schema.json` (published as
+  `spec/schemas/lab.schema.json` (its `$id` is
   `https://portrayal.dev/schemas/v1/lab.schema.json`), checked by lint (L1)
   and by the build, and five rules: L139 (refs, ids and `on` resolve), L140
   (`face`/`on`/`unit` only on a rack-face part, placed by `on` or `ru` and
@@ -815,7 +820,7 @@ rack modules and the rack file are new in this release.
   - The riser slots accept the cards the R740xd slots accept: the generic
     brackets and cards and the NVIDIA ConnectX adapters, and on the
     full-height risers 1P and 4P the UfiSpace N3100-4C.
-- The `dell/` parts the R660 needs, 71 component majors on main today, among
+- The `dell/` parts the R660 needs, 71 component majors at 0.2.0, among
   them: the 60 mm AC supplies
   (`dell/psu-700w-ac-60mm@1`, `-800w-`, `-1100w-`, `-1400w-`); six OCP NIC
   3.0 cards and a blank (`dell/ocp3-*`); the LOM card, the MIC card and the
@@ -1047,7 +1052,7 @@ rack modules and the rack file are new in this release.
   the orderable `sff8`, and five examples. The NetBox and Nautobot device
   types are named for the two chassis option numbers, `878972-B21` and
   `878973-B21`.
-- The `hpe/` component namespace, 42 parts today (#759, #761, #778, #780):
+- The `hpe/` component namespace, 42 parts at 0.2.0 (#759, #761, #778, #780):
   - drive carriers and blanks for both fronts, the 500 W and 800 W Flex Slot
     supplies and their blank, the fan, heatsink, system board and access
     panel;
@@ -1124,7 +1129,7 @@ rack modules and the rack file are new in this release.
   `library/packages/`) and `?dist=cdn`, with `&index=<version>` to pin one.
   Its default is the build directory, as before. The per-namespace components
   packages of the npm entry in this section are what `packageDist` reads
-  today.
+  at 0.2.0.
 - `rackDiagram` in `@portrayal/kit/drawio` takes three optional keys (#724).
   A group may carry its own `faces`, so a page draws only the faces it names
   and a rack builder can make one page per face. A mounted device may carry
@@ -1177,7 +1182,7 @@ rack modules and the rack file are new in this release.
     `fpcN/mpc/...`.
   - Nautobot is not given the adapter's `mpc` bay, because the same MPCs
     also seat directly in the MX240, MX480 and MX960. Superseded by the
-    Nautobot entry under Fixed (#917): Nautobot has the bay today, with a
+    Nautobot entry under Fixed (#917): Nautobot has the bay at 0.2.0, with a
     blank position.
 - A configuration can turn a seated occupant: an `occupants:` mapping takes
   `turn:`, in degrees, relative to the seat, one of the turns its host allows.
@@ -1505,8 +1510,8 @@ rack modules and the rack file are new in this release.
   (`fs/cmv-5u3w-base@1`, `-fingers@1`).
 - `@portrayal/kit` 0.6.0: parts beside the rack and parts on one rail are the
   rack kit's (#926; `docs/vertical-cable-managers-design.md` section 8). A
-  zero-U part (`mount: rack-side`, a vertical cable manager today and a zero-U
-  PDU next) is an entry of `rack.zeroU`, `{id, ref, cfg, label, at, offsetMm,
+  zero-U part (`mount: rack-side`, a vertical cable manager or a zero-U
+  PDU) is an entry of `rack.zeroU`, `{id, ref, cfg, label, at, offsetMm,
   between?}`, placed, moved and removed by `zerou.place`, `zerou.update` and
   `zerou.remove`, and fitted by the rack units it states, not its drawn height.
   A narrow rack-face part (under the 450 mm opening) goes on one rail with
@@ -1616,7 +1621,8 @@ rack modules and the rack file are new in this release.
   selection halo, and restore them after. A GLB or USDZ is the model; the marks
   stay on screen.
 - **BREAKING for DCIM data already imported.** The DCIM exports no longer
-  call every device without `ru` a 1U full-depth rack device. A box that is not racked exports `u_height: 0`, not full depth,
+  call every device without `ru` a 1U full-depth rack device. A box that is
+  not racked exports `u_height: 0`, not full depth,
   with its mounting in the comments (ReadyLinks GL-8XEP, Halny HLX-TGV), and
   the Dell R740xd exports at its real 2U. A DCIM that imported these types
   holds the old height until they are re-imported (roc-ops/Portrayal#734).
@@ -1900,7 +1906,7 @@ rack modules and the rack file are new in this release.
   render_name_template leaves a token deeper than the bay chain as written,
   so its ports read `{module.parent}/slot1/x`. NetBox exports and fibre maps
   do not change (roc-ops/Portrayal#765, roc-ops/Portrayal#834).
-- `dell/r660` took five majors between its first merge and today, none of
+- `dell/r660` took five majors between its first merge and 0.2.0, none of
   them in a release. Each is listed for a consumer of main or of the npm
   packages:
   - 1.0.0: riser 3 starts at x 270.6, where the cage of riser 2 ends, and
@@ -2026,9 +2032,9 @@ rack modules and the rack file are new in this release.
   `allowance` or `endAllowance(cable)`; `END_ALLOWANCE_BY_MEDIA[media]` is
   the table alone, and would leave the result 0.2 m long.
 - **The per-media table is `END_ALLOWANCE_BY_MEDIA`** (`@portrayal/kit`
-  0.18.0, #962). In 0.16.0 and 0.17.0, neither of them published, its name
-  differed from `endAllowance(cable)` only by case, for figures 100 mm
-  apart. The table is the sourced part alone; `endAllowance(cable)` and a
+  0.18.0, #962). In 0.16.0 and 0.17.0 its name differed from
+  `endAllowance(cable)` only by case, for figures 100 mm apart. No kit
+  version after 0.2.0 is on npm, so no published kit carried that name. The table is the sourced part alone; `endAllowance(cable)` and a
   path's `allowance` are what a length adds an end, the table's figure and
   the dressing allowance. The old name is not kept as an alias. No figure
   and no routed length changes.
@@ -2625,7 +2631,7 @@ rack modules and the rack file are new in this release.
   Element ids are unchanged; `vent-field` moved and grew.
 - `common/terminal-header-508-2@1`, which nothing places any more. Use
   `common/terminal-header-508-2@2` (#804). Superseded: `@2` was removed in turn
-  (#873, below), and the major to pin today is `common/terminal-header-508-2@3`.
+  (#873, below), and the major to pin at 0.2.0 is `common/terminal-header-508-2@3`.
 - `std/cxp@1`, the 27.0 x 10.0 x 92.0 estimate; use `std/cxp@2` (#802).
 - `std/cfp@1`, the 82.0 x 13.6 faceplate-on-body envelope; use `std/cfp@2`
   (#802).
@@ -2667,12 +2673,12 @@ rack modules and the rack file are new in this release.
   **BREAKING for DCIM data already imported** (Nautobot). Superseded for the
   first five by the Nautobot entry under Fixed (#917), which gives them
   `{module.parent}/{module}/port-...` again. Of the six, only
-  `MIC3-100G-DWDM` keeps the one-token name today.
+  `MIC3-100G-DWDM` keeps the one-token name at 0.2.0.
 - `juniper/mic-3d-4xge-xfp@1` and `juniper/mic-3d-4xge-xfp-v@1`, whose cages
   were laid out from registry sizes rather than measured (#238). Pin
   `juniper/mic-3d-4xge-xfp@2` and `juniper/mic-3d-4xge-xfp-v@2` instead.
   Superseded: both of those are now kept only as deprecated majors
-  (`superseded-by`, #448), and the major to pin today is
+  (`superseded-by`, #448), and the major to pin at 0.2.0 is
   `juniper/mic-3d-4xge-xfp@4` (#887).
 - The MX960 vertical card twins, each replaced by the horizontal card at
   `rotate: 90`: `juniper/dpc-r-4xge-xfp-v@1` by `juniper/dpc-r-4xge-xfp@2`,
@@ -2687,19 +2693,19 @@ rack modules and the rack file are new in this release.
   `juniper/scb-mx@2` were removed in turn for `@3` (#891, below), and
   `mpc1e-3d@2`, `mpc2e-3d@2` and `mpc3e-3d@2` are kept only as deprecated
   majors whose replacement is `@3` (#448). Those five `@3` are the majors
-  to pin today.
+  to pin at 0.2.0.
 - `juniper/re-s-1300-v@1`, which only `scb-mx960-v` seated, is replaced by
   `juniper/re-s-1300@1` in `juniper/scb-mx@2`. Superseded: both were removed
-  in turn (#891, below), and today it is `juniper/re-s-1300@2` in
+  in turn (#891, below), and at 0.2.0 it is `juniper/re-s-1300@2` in
   `juniper/scb-mx@3`.
 - `juniper/mx960-blank-v@1` is replaced by `juniper/mx960-blank@1`, drawn
   horizontally with the MX960 blank's own knobs. Its DCIM module type is
   renamed from `mx960-blank-v` to `mx960-blank`, so the export files
   `mx960-blank-v.yaml` are replaced by `mx960-blank.yaml`. **BREAKING for DCIM
   data already imported.** Superseded: the module type was renamed again, and
-  today it is `DPC-SCB-BLANK`, in `DPC-SCB-BLANK.yaml` (#899, under Changed).
+  at 0.2.0 it is `DPC-SCB-BLANK`, in `DPC-SCB-BLANK.yaml` (#899, under Changed).
 - The 22 horizontal card majors at @1, each replaced by its @2 above. The
-  major to pin today is `@3` for `dpc-r-4xge-xfp`, `scb-mx`, `mpc1e-3d`,
+  major to pin at 0.2.0 is `@3` for `dpc-r-4xge-xfp`, `scb-mx`, `mpc1e-3d`,
   `mpc2e-3d` and `mpc3e-3d`, and `@2` for the other seventeen.
 - `juniper/dpc-r-4xge-xfp@2`, replaced by `juniper/dpc-r-4xge-xfp@3`;
   `juniper/scb-mx@2`, replaced by `juniper/scb-mx@3`; `juniper/re-s-1300@1` and
@@ -2736,8 +2742,8 @@ rack modules and the rack file are new in this release.
 - `@portrayal/kit`: the README's links to the Portrayal README and to the
   artifact contract are absolute GitHub URLs, so they work on the npm package
   page, where a relative link resolved against npmjs.com and broke. The
-  package also names its `homepage` and where to report `bugs`. Both reach
-  npm with the next kit release (#716).
+  package also names its `homepage` and where to report `bugs`. Both are on
+  npm from kit 0.2.0 (#716).
 - `edgecore/ais800-psu-dc@2`: the vent lattice is 23.46 tall from y 13.56,
   measured module edge to module edge on the quick start's Connect Power
   figure, where 1.x drew it 20.12 from 15.01 (#397). `edgecore/ais800-32d`
@@ -2996,7 +3002,7 @@ rack modules and the rack file are new in this release.
   `fpc3/port-0-0`, the names the same MPC takes in an MX960's `fpc3`. NetBox
   is unchanged and still says `fpc3/mpc/port-0-0`. A carrier's only bay that
   accepts a module also seated directly in a chassis bay is given this way;
-  the adapter is the only one today.
+  the adapter is the only one at 0.2.0.
 - Nautobot: the MICs that only an MPC takes (`MIC-3D-4XGE-XFP` and the four
   `MIC3-3D-*`) name their ports `{module.parent}/{module}/x` again, as before
   #261 made the adapter count as a second depth for every MPC. **BREAKING for

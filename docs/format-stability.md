@@ -13,10 +13,14 @@ about it while the package is at 0.x.
 | rack file `version` | the Rack Builder's file (`format: "portrayal-rack"`, `version: 3`) | the **rack file** a user saves; `parseDoc` migrates an older one on load |
 | `contract` | `devices.json` (`contract: 2` at 0.1.0 and at 0.2.0) | the **published build** a consumer reads from `library/dist/`; `CHANGELOG.md` records each one |
 
-The schemas are published at `https://portrayal.dev/schemas/v1/`, one file
-per schema (`device.schema.json`, `component.schema.json`,
-`listing.schema.json`, `lab.schema.json`, `rack.schema.json`), and that URL is each schema's `$id`, so an editor or a
-validator that follows the `$id` finds the schema it names. `rack.schema.json` describes
+Each schema's `$id` is a URL under `https://portrayal.dev/schemas/`, one file
+per schema: `device.schema.json`, `component.schema.json`,
+`listing.schema.json`, `lab.schema.json` and `marks.schema.json` under `/v1/`,
+and `rack.schema.json` under `/v2/`. A schema is served at its `$id`, so an
+editor or a validator that follows the `$id` finds the schema it names. The
+device, component, listing and rack schemas are served there. The lab and
+marks schemas are new in 0.2.0 and are served from the site publish that
+follows the 0.2.0 tag; until then their `$id`s do not resolve. `rack.schema.json` describes
 the Rack Builder's own file (`format: "portrayal-rack"`, its own `version`, now 3), not a
 manifest, so it is published as a schema of this repository but does not carry
 format 1. Its label is a publication label only; the rack file's own `version` is

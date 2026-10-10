@@ -357,7 +357,7 @@ would double back at is gone to as far as that point. `bodyFindings` names a
 ring's part ("c9 passes through CM-01 ring 3 front leg ...: route it into the
 ring along its run, through its opening."). **Routed lengths change in
 0.15.0** on every routed cable through a ring on a tray, and beside a zero-U
-PDU. On the owner's rack of #949 they grow 2 to 38 mm. On generated racks
+PDU. On the reference rack of #949 they grow 2 to 38 mm. On generated racks
 they move by up to about a tenth of a metre either way, and the figures
 depend on the layout: one sample of 3,120 cables (one layout and seed) gave
 89 mm shorter to 131 mm longer, median 10 mm longer, 67 stock sizes up and
@@ -399,7 +399,7 @@ path placed for what it read before. A path is read from end a, and a cable
 written the other way round does not always lay the same or report the same
 bends. **Routed lengths change in 0.17.0** on
 every routed cable that turns at a ring, goes round a body or hangs. On the
-owner's rack of #949 each of the sixteen cords is 10.9 to 179.2 mm longer
+reference rack of #949 each of the sixteen cords is 10.9 to 179.2 mm longer
 and seven pass the 0.5 m break (c1 to c3 and c5 to c8 are 1 m cords again).
 On one sample of 60 generated racks (1,803 cables,
 `spec/tests/js/bend-room-sample.mjs`) a length moves by 113 mm shorter to
