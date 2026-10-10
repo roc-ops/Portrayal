@@ -27,8 +27,8 @@ Read this one when you review, not while you build:
 
 `.claude/skills/*/SKILL.md` are written for Claude Code, but they are plain
 Markdown instructions and you can follow them by hand.
-`portrayal-model-device` points at the documents above, lists the five gates
-in order, and says how a lesson is written: as a rule with its check, not as
+`portrayal-model-device` points at the documents above, lists the gates in
+order, and says how a lesson is written: as a rule with its check, not as
 the story of the device that taught it.
 `portrayal-vendor-intake` stages a vendor's datasheets and guides and converts
 the PDFs with docling. It assumes the conversion runs on a separate machine

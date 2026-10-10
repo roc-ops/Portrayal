@@ -49,9 +49,9 @@ is not finished; rewrite it before adding it here.
   Record the disagreement in provenance and say which you used.
 - **Where a bay and a component disagree, the answer may be in neither.** Look
   at what constrains two disagreeing numbers from outside rather than
-  re-reading each harder. Both figures for one power module were wrong, and
-  what settled it was the card slot next door, whose bottom edge made one
-  candidate physically impossible.
+  re-reading each harder. *Illustration.* Both figures for one power module
+  were wrong, and what settled it was the card slot next door, whose bottom
+  edge made one candidate physically impossible.
 - **Two sources agreeing is evidence only if they were derived independently.**
   A device and the module seated in it can state the same coordinate because
   one provenance sentence was copied from the other, and then both are wrong
@@ -99,8 +99,9 @@ is not finished; rewrite it before adding it here.
   right view x = 0 is the front; on a left view x = 0 is the rear (derived from
   how `viewer3d.js` orients each face, front at +z). Mirroring one from the
   other by copying x is exactly wrong; the correct mirror is
-  `depth - x - width`. Two chassis of one family had seven features wrong this
-  way, including two grounding pads sitting in each other's places.
+  `depth - x - width`. *Illustration.* Two chassis of one family had seven
+  features wrong this way, including two grounding pads sitting in each
+  other's places.
 - **A feature that is symmetric about an axis cannot be at the wrong end of
   it, which is why this class of error is discovered late.** When a face
   carries only symmetric content, say so in provenance: it records that the

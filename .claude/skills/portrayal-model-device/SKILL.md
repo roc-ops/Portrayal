@@ -36,7 +36,7 @@ the detail; this is the order and the question each gate answers.
 | 1 | the panel | Can this figure be measured at all, and is the panel the right shape? | Compare the figure's pixel aspect with the datasheet width and height, then overlay your panel rendered `--without silkscreen`. |
 | 2 | the cutouts | Is every hole there, on the right pitch? | Overlay again and count. L39 checks fit, overlap and empty openings. |
 | 3 | the silkscreen | Is every printed legend present, spelled as printed, beside what it names? | Render with silkscreen and compare. L14 passes. |
-| 4 | the components | Does the whole file hold together? | `./build.sh --device <model>` clean at `maturity: modelled`; read the tree and the capability level. |
+| 4 | the components | Does the whole file hold together? | Lint clean (`./build.sh --device <model>`); render with and without silkscreen; open the viewer and read the tree; set `maturity: modelled` and lint again; read the capability level and its `blocked:` reason. |
 | 5 | everything | Is it the device, and is it finished? | Walk the callouts and the spec table by name, then put the render beside the reference at matched scale, for every face that has one. |
 
 ## How the method is written

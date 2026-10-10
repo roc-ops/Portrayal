@@ -338,11 +338,19 @@ panel:
   measured pitch, not one rectangle.
 - Standard openings come from the registry; `conforms:` on the component you
   will place there tells you the size. Do not eyeball an SFP aperture.
-- The pitch of a ganged block is a lookup too. `spec/schemas/standards.yaml`
-  states it in one of two ways: a standard whose cages share a wall carries an
-  explicit `pitch` beside its narrower opening, and one with no `pitch` key
-  abuts at its own `w`. Read it there before measuring a ganged pitch off an
-  image, and use the image only to count and to anchor the block.
+- The pitch of a ganged block is a lookup too. Read the entry in
+  `spec/schemas/standards.yaml` before measuring a pitch off an image, and use
+  the image only to count and to anchor the block. The entry says it in one of
+  three ways:
+  - An explicit `pitch` is read with its `pitch-kind`. `target` is the value
+    to use (`qsfp-ganged`, 19.0). `floor` is a minimum to clear, not a value
+    to place at (`xfp`, `cfp`, `cfp2`, `cxp`, `mpo-adapter`,
+    `keystone-opening`); the pitch itself still comes from the device.
+  - With no `pitch` key, read the notes of the entry. `sfp-ganged` abuts at
+    its `w` of 14.25. `rj45-ganged` has a `w` of 12.7 and states its pitch,
+    13.97, in its notes.
+  - Stacked rows read `row-pitch` where the entry has one (`sfp-ganged`,
+    15.0).
 - Positions come from the mechanical drawing. If you only have a guide figure,
   derive pitch and count from it and anchor to a datasheet dimension.
 - Name a cutout after the thing that goes in it. That identity is what ties the
