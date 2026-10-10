@@ -2314,8 +2314,19 @@ def outlet_rows(outlets, powers, bays, who, names=None, dev=None):
         held = protects.get(bay["position"])
         if held:
             said = bay.get("description")
-            bay["description"] = fit_items(
-                (f"{said}; protects " if said else "Protects "), held)
+            whole = f"{said}; protects {', '.join(held)}" if said else None
+            if whole is None or len(whole) <= LIMIT:
+                bay["description"] = fit_items(
+                    (f"{said}; protects " if said else "Protects "), held)
+            else:
+                # THE CLAUSE COMES FIRST WHEN BOTH DO NOT FIT (#857). It is the
+                # only place Nautobot keeps the breaker-to-outlet link - its
+                # outlet import drops the outlet's own description - and a long
+                # `Accepts:` list as the prefix left fit_items no room for any
+                # item, so the whole string was cut and the clause with it.
+                head = fit_items("Protects ", held)
+                room = LIMIT - len(head) - len("; ")
+                bay["description"] = head + (f"; {fit(said, room)}" if room > len(MORE) else "")
     return rows
 
 

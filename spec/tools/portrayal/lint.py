@@ -485,7 +485,7 @@ RULES = {
     "L128": ("device, listing", "a part-number key has no stray whitespace - none leading or trailing, none but the plain ASCII space (an error), and none splitting a run of capitals and digits between two hyphens (`-A C-`, a warning)", "retype the SKU as the vendor prints it; a space the vendor really prints inside a hyphenated token is waived with the document that shows it",
              "A part number is the DCIM model, its slug and the export file name, so one stray space exports the build under a model nobody can order, and can change which name the device type is exported under.",
              MIXED),
-    "L129": ("component",  "`optical.trunk` is for a single-faced module - not one whose rear face carries fibre - and a position it names by number is not also declared `unused`", "drop `trunk` where the rear face already is the trunk; name a part bare when it carries a dead position, or route the position",
+    "L129": ("component",  "`optical.trunk` is for a single-faced module - not one whose rear face carries fibre - a position it names by number is not also declared `unused`, and it names a multi-position front connector that exports as one port (an MPO adapter) whole, never one of its positions", "drop `trunk` where the rear face already is the trunk; name a part bare when it carries a dead position, or route the position; name an MPO front connector bare",
              "Saying where the trunk is in two ways, or listing a dead position as part of it, gives the fibre export two conflicting answers about where the common end is.",
              ERROR),
     "L130": ("component",  "every leg of a module whose glass is projected runs between the front and the trunk (a rear-face connector or an `optical.trunk` position)", "fix the path, or the trunk; a front-to-front or trunk-to-trunk leg has no row in the fibre map and would be dropped",
@@ -494,7 +494,7 @@ RULES = {
     "L131": ("component",  "a module with `optical.paths` has a trunk - a rear face carrying its common end, or `optical.trunk` (error)", "add `optical.trunk` naming the common, network-side positions, from the vendor's own port roles, and say in provenance where they were read",
              "Without a trunk the export has nowhere to put the common end, so it drops the module's whole fibre map and no DCIM sees how the glass is wired.",
              ERROR),
-    "L132": ("device",     "a `fed-by` stands only on a placement whose part exports a power outlet (`dcim_export.PART_OUTLET`), and names a placement on this device, in any view, whose part exports a power port (`dcim_export.PART_POWER`)", "name the input this output hands on, by its placement id; drop a `fed-by` on a part that is not an outlet, or add the part to `dcim_export.PART_OUTLET`",
+    "L132": ("device",     "a `fed-by` stands only on a placement whose part exports a power outlet (`dcim_export.PART_OUTLET`), and names a placement on this device, in any view, whose part exports a power port (`dcim_export.PART_POWER`) - one that every configuration having the output also has", "name the input this output hands on, by its placement id; drop a `fed-by` on a part that is not an outlet, or add the part to `dcim_export.PART_OUTLET`; scope an output with `only-in` to the configurations that have its input",
              "Both NetBox and Nautobot refuse an outlet whose power port names nothing, so a broken feed reference fails the device's import; and a feed stated on a part that exports no outlet is carried by nothing, so the link it records is lost.",
              ERROR),
     "L133": ("device",     "a placement's `through` names a bay on this device, in any view - the breaker or fuse position the circuit runs through - or a placement of a part of class `breaker`, a breaker fixed to the unit (an error)", "name the bay or the breaker placement by its id, as the face spells it",
@@ -3185,6 +3185,22 @@ def lint_component_optical_trunk(path, data, lib_roots):
             err(path, "L129", f"optical.trunk names {item}, which `unused` declares "
                               "terminates nothing - name the part bare if one of its "
                               "positions is dead, or route the position")
+    # A MULTI-POSITION FRONT CONNECTOR IS TRUNKED WHOLE OR NOT AT ALL (#857).
+    # The export writes an MPO front as one port of the positions the trunk
+    # leaves, renumbered from 1, while the fibre map keeps each leg's original
+    # `front_position`: `trunk: [mpo.1]` gave an 11-position port and a leg at
+    # position 12, which both DCIMs refuse. Every trunk in the library names a
+    # whole part or one position of a duplex adapter, so this refuses the shape
+    # rather than teaching the fibre map to renumber.
+    fronts = {pid: ref for _x, pid, ref in optical_ports._front_parts(data)}
+    for item in trunk:
+        pid, pos = optical_ports.split_order_item(item)
+        if (pos is not None and pid in fronts and (caps.get(pid) or 0) > 1
+                and optical_ports.family_of(fronts[pid]) in optical_ports.GROUPED_FRONT):
+            err(path, "L129", f"optical.trunk names {item}, one position of {pid}, a "
+                              f"{caps[pid]}-position front connector that exports as one "
+                              f"port - name {pid} bare to make the whole connector the "
+                              "trunk, or leave it off")
     if not paths:
         return
     if not (face_ref(data, "rear") or trunk):
@@ -7888,6 +7904,31 @@ def lint_device_power_outlets(path, data, lib_roots=None):
                                "protects one circuit; if these outputs really are "
                                "paralleled behind one breaker, waive with the document "
                                "that says so")
+    # ONE CONFIGURATION AT A TIME, AS THE EXPORT READS IT (#857). Above, a feed
+    # is any power placement anywhere on the device; dcim_export.build resolves
+    # `fed-by` against the power ports of the configuration it is writing - its
+    # bound views (views_for) and the placements `only-in` keeps (scoped). An
+    # input that exists only in a `dual-feed` configuration, named by an output
+    # every configuration has, passed here and stopped ./publish.sh with
+    # NotExpressible on the single-feed one. A feed missing from the whole
+    # device was reported above, so only one that some configuration lacks is.
+    names = {id(v): n for n, v in (data.get("views") or {}).items()}
+    for cname in sorted(data.get("configurations") or {}):
+        have, cfg_feeds = [], set()
+        for view in dcim_export.views_for(data, cname):
+            for p in dcim_export.scoped(view_parts(view or {})["placements"], cname):
+                have.append((names.get(id(view), "?"), p))
+                if p["ref"].split("@")[0] in dcim_export.PART_POWER:
+                    cfg_feeds.add(p["id"])
+        for vname, p in have:
+            fed = p.get("fed-by")
+            if (fed is None or fed not in feeds or fed in cfg_feeds
+                    or p["ref"].split("@")[0] not in dcim_export.PART_OUTLET):
+                continue
+            err(path, "L132", f"{vname}/{p['id']}: `fed-by: {fed}` names an input that "
+                              f"configuration {cname!r} does not have, so its export "
+                              "stops there. Scope the output to the configurations that "
+                              f"have {fed} (`only-in`), or give it an input each one has")
 
 
 def _is_breaker(pid, placed, roots):

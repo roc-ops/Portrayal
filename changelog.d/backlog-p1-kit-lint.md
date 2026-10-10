@@ -10,6 +10,19 @@
   reload: the shell fetches the other faces before judging the entry, as
   `applySwaps` already does for a slot on another face, and paints it when that
   face is mounted. It used to be ignored and dropped from the location (#818).
+- L132 resolves `fed-by` per configuration, as the export does: an output
+  every configuration has, fed by an input that only some configurations have
+  (`only-in`), is an error naming the configuration that lacks it, where it
+  used to lint clean and stop `./publish.sh` with `NotExpressible` (#857).
+- A breaker bay whose description is too long for its `; protects <outlet>`
+  clause now leads with `Protects <outlet>; ` and shortens what it accepts
+  after it. The clause is the only place Nautobot keeps the breaker-to-outlet
+  link, and it used to be cut off. No bay in the library is that long, so no
+  committed export changes (#857).
+- L129 refuses an `optical.trunk` that names one position of a multi-position
+  front connector exported as one port (an MPO adapter): the export shrank the
+  port and kept each leg's original `front_position`, which both DCIMs refuse.
+  Name the connector bare (#857).
 
 ### Changed
 - `kit/rack` no longer speaks as portrayal.dev's page (#895). A rack file newer
