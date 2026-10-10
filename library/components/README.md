@@ -107,7 +107,20 @@ label), **additive is a minor** (a new element, a new state, a new skin),
 renamed), because a device that placed the part may now be wrong. A major bump
 is a new `v<N+1>/` directory, and **the old major is deleted once nothing
 references it** - that is what pays for the level, and L89 fails on a dead major
-left behind an `unplaced:` sentence. What keeps a retired major alive is
+left behind an `unplaced:` sentence. While the package is at 0.x that removal
+needs nothing more, and every removal is listed in `CHANGELOG.md` with the ref
+that replaces it, for a manifest outside this repository that pins the old
+major. From 1.0 a retired major is deprecated before it is removed. That
+mechanism is required before 1.0 is cut: `superseded-by:`, a support window,
+and L89 telling a deprecated major from a dead one (`spec/DESIGN.md` §9,
+roc-ops/Portrayal#448).
+
+Moving decoration that nothing addresses, inside an unchanged part outline, is
+a minor bump. The precedent is `fs/d-ring-snap-in@1` 1.3.0: `leg-front` and
+`hook`, which nothing names, moved 1 mm, the part kept its size, and the new
+keys were additive.
+
+What keeps a retired major alive is
 something still naming it: a gap arguing from its figure, say. `common/psu-550w@1`
 was kept for exactly that - the PBC-2000's `psu-module-width` gap argued from its
 84.0 mm against the 73.5 mm of `@2` - and was deleted the day a square-on
