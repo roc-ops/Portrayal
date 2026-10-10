@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx2008
-version: 2.0.0
+version: 2.0.1
 maturity: modelled
 manufacturer: Juniper
 model: MX2008
@@ -27,7 +27,7 @@ provenance:
       face and the body is drawn at 440 mm. Ears NOT MODELLED by convention
   front:
     note: >-
-      photo - the studio front photograph at ~1.39 px/mm: craft at y 48, the short upper cage (RCB
+      photo - the studio front photograph at 1.264 px/mm: craft at y 48, the short upper cage (RCB
       0, SFB 0-7, RCB 1) at y 109-291 on the 1.264 px/mm scale, ten 43.18 mm slots over the line-card
       slots (#902; it was at y 143 over ~170 mm), the double label strip, ten MPC slots at y 352
       over ~425 mm, the LC strip, the cable-manager panel and the intake grille. The photographed
@@ -103,6 +103,16 @@ gaps:
       photographed front carries blanks in every LC slot. Since roc-ops/Portrayal#261 the
       MX240-form MPCs seat through the adapter card
       (juniper/mx2000-lc-adapter@1), as on the MX2010.
+  - what: upper-cage-height
+    scope: [res, sfbs]
+    reason: sources-disagree
+    note: >-
+      The MX2008 front photograph (1.264 px/mm, isotropic) puts the upper cage at chassis y 109-291,
+      182 mm, and the RCB and SFB bays are drawn at that height. The hardware guide's Table 98 gives
+      the MX2008 RCB as 16.225 in (41.21 cm) high and the MX2008 SFB2 as 16.23 in, the MX2010's board
+      heights, with both rows' kilogram figures blank; a 412 mm board cannot stand in the
+      photographed cage (#902).
+    wanted: an MX2008 drawing or a corrected physical table that dimensions the RCB and SFB2 faces.
   - what: rcb-face-detail
     scope: [res]
     reason: needs-photo

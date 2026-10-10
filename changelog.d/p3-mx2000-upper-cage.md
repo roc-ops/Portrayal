@@ -4,8 +4,9 @@
   412.1 mm slots (1.7 x 16.225 in, the guides' physical tables) over the
   line-card slots, as the front photographs show; they were 55- and 40-wide
   estimates, 405 high. `juniper/mx2008` 2.0.0 does the same at the photograph's
-  182 mm height, y 109-291 (it was 170 high at y 143); its guide's SFB2 row reads
-  16.23 in, the MX2010's figure, and is recorded as a disagreement.
+  182 mm height, y 109-291 (it was 170 high at y 143); its guide's Table 98 rows
+  for the MX2008 RCB (16.225 in) and SFB2 (16.23 in) carry the MX2010's heights,
+  and the disagreement is recorded as a gap.
 - New majors at the new size:
   `juniper/mx2000-cb-re-v@2`, `mx2000-cb-re-128g-v@2`, `mx2000-cb-re-1800-v@2`,
   `mx2000-sfb-v@2`, `mx2008-sfb-v@2` and `mx2008-rcb-v@2`. Their faces are

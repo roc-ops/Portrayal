@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx960
-version: 5.0.0
+version: 5.0.1
 maturity: modelled
 manufacturer: Juniper
 model: MX960
@@ -117,13 +117,19 @@ gaps:
     scope: [fpcs]
     reason: needs-photo
     wanted: the rest of the MX960 card range - the slots seat the shared
-      MX240/MX480 card catalogue turned 90. The photographed unit's two
-      4-port cards (slots 7 and 9) print DPC 4x10GE, PORT n/0, TUNNEL and
-      LINK, the MX480's slot-4 card, and are seated as
-      juniper/dpc-r-4xge-xfp@3 in the `ac` configuration (#899). The shared cards it seats took the MX240 and MX480
+      MX240/MX480 card catalogue turned 90. The shared cards it seats took the MX240 and MX480
       photographs' corrections at 4.0.0 (DPC-R-4XGE ports, SCB-MX Routing
       Engine bay, DPCE-R-40GE OK/FAIL lamp) in issue 891; none was re-read on
       this chassis's own photograph.
+  - what: slot-7-9-card-identity
+    scope: [fpcs]
+    reason: needs-photo
+    wanted: the exact part in slots 7 and 9 of the photographed unit. At zoom
+      the cards print DPC 4x10GE, a bare 0/0 (not PORT 0/0) and TUNNEL and
+      LINK over each XFP, which is the four-XFP DPC layout but does not say
+      whether the part is DPC-R-4XGE-XFP or DPCE-R-4XGE-XFP. The `ac`
+      configuration seats juniper/dpc-r-4xge-xfp@3 as a stand-in with the
+      same layout, not as an identification (#899).
   - what: fan-trays
     reason: needs-photo
     wanted: the two horizontal fan trays - they sit behind the front
@@ -354,8 +360,9 @@ configurations:
     kind: orderable
     description: >-
       AC-powered chassis as photographed - four AC supplies, SCB-MX with RE-S-1300 in both SCB
-      slots, DPC 40xGE in slots 1 and 3, DPC 4x10GE in slots 7 and 9 (it prints PORT n/0,
-      TUNNEL and LINK as juniper/dpc-r-4xge-xfp does), blanks in the other eight line slots. Every
+      slots, DPC 40xGE in slots 1 and 3, a four-XFP DPC in slots 7 and 9 (it prints DPC
+      4x10GE and a bare 0/0 over TUNNEL and LINK; juniper/dpc-r-4xge-xfp@3 stands in for it with the
+      same layout, and whether the part is DPC-R- or DPCE-R-4XGE-XFP is unsettled - gaps), blanks in the other eight line slots. Every
       card stands turned 90, so this is the configuration that renders a seated vertical card (#899).
     bays:
       fpc0: juniper/mx960-blank@1
