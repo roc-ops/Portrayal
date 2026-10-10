@@ -1,4 +1,4 @@
-"""L171: what is named for a logo is a reserved place, and paints nothing.
+"""L172: what is named for a logo is a reserved place, and paints nothing.
 
 A vendor mark is never reproduced; its place is reserved as `logo-zone` - an
 empty rect in a part's skin, a region on a device. The rule reads NAMES, so
@@ -31,14 +31,14 @@ def part(tmp_path, body, elements=None):
     path.write_text(yaml.safe_dump(doc))
     with L.collecting() as found:
         L.lint_component_logo_zone(path, doc)
-    assert not [w for w in found.warnings if "L171" in w], "L171 is an error, never a warning"
-    return [e for e in found.errors if "L171" in e]
+    assert not [w for w in found.warnings if "L172" in w], "L172 is an error, never a warning"
+    return [e for e in found.errors if "L172" in e]
 
 
 def device(front):
     with L.collecting() as found:
         L.lint_device_logo_zone("t", {"kind": "device", "views": {"front": front}})
-    return [e for e in found.errors if "L171" in e]
+    return [e for e in found.errors if "L172" in e]
 
 
 ZONE = {"logo-zone": {"at": [18.8, 7.9], "size": [11.6, 9.8], "class": "logo-zone"}}
@@ -106,7 +106,7 @@ def test_a_skin_the_contract_does_not_list_is_read_too(tmp_path):
     path = d.parent / "contract.yaml"
     with L.collecting() as found:
         L.lint_component_logo_zone(path, {"kind": "component", "skins": ["default"]})
-    hits = [e for e in found.errors if "L171" in e]
+    hits = [e for e in found.errors if "L172" in e]
     assert len(hits) == 1 and "body-top.svg" in hits[0], hits
 
 
@@ -167,7 +167,7 @@ def test_the_library_is_clean_and_the_rule_read_something():
             regions += sum(1 for v in (doc.get("views") or {}).values() if isinstance(v, dict)
                            for r in v.get("regions") or [] if L._names_a_logo(r.get("id")))
             L.lint_device_logo_zone(f, doc)
-    hits = [e for e in found.errors if "L171" in e]
+    hits = [e for e in found.errors if "L172" in e]
     assert not hits, "\n".join(hits)
     # not vacuous: the rule had reserved places to read on both sides
     assert zones >= 100 and regions >= 25, (zones, regions)

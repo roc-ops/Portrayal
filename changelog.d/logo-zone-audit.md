@@ -1,5 +1,5 @@
 ### Added
-- Lint L171 (error): whatever is named for a logo is a reserved place and
+- Lint L172 (error): whatever is named for a logo is a reserved place and
   paints nothing (#964). A contract element, a skin node or a device region
   whose id has the word `logo` in it is `logo-zone` (or `logo-zone-<n>`); the
   skin node is an empty `rect` with `fill="none"` and no stroke; the region

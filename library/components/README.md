@@ -312,7 +312,7 @@ A skin is a hand-written SVG at `skins/<name>.svg`, drawn in millimetres:
   `logo-zone` element instead, drawn in the skin as an empty
   `<rect id="logo-zone" fill="none"/>` over the box the mark covers. A device
   reserves the same box as a region `logo-zone` with `at` and `size`. Nothing
-  named for a logo paints (L171); a product name in plain text is fine.
+  named for a logo paints (L172); a product name in plain text is fine.
 
 
 ## Adding an optic

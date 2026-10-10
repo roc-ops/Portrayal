@@ -611,7 +611,7 @@ RULES = {
     "L170": ("component, device", "a tray fits what declares it: every floor rectangle inside its part or its view, every tie slot inside a floor rectangle, its id unique among the guides, pass-throughs and trays of the device, and a part's tray placed, and a view's `trays` declared, on the plan (`top`) only (error); a part's tray placed on the plan stands at the height its `size.d` gives, and, for a placement that is not rotated, its tie slots are the slots the device draws on its bottom view, where it draws any (warning; a rotated placement's slots are not compared)", "re-read the floor and the slots off the plan; give the tray its own id; declare the tray on the top view; state the height as the envelope less the depth of the well; draw each tie slot on the bottom view, or declare it",
              "A route lies a cable on a tray's floor and straps it through its tie slots, so a floor off its part, a slot off its floor, a height that disagrees with the drawing, or a slot drawn and not declared would put cables and straps where the hardware has no metal, and a second pathway under one id leaves a route naming it ambiguous.",
              MIXED),
-    "L171": ("component, device", "whatever is named for a logo is a reserved place and paints nothing: a contract element, a skin node or a device region whose id has the word `logo` in it is `logo-zone` (or `logo-zone-<n>`), the skin node is an empty `rect` with `fill=\"none\"` and no stroke, the region states `at` and `size`, and no decor, cutout, silkscreen mark, bay or placement of a device carries the word (error)", "reserve the box the mark covers: an element `logo-zone` with an empty `<rect id=\"logo-zone\" fill=\"none\"/>` in the skin of a part, a region `logo-zone` with `at` and `size` on a device, and delete the drawn mark or the box that stood for it",
+    "L172": ("component, device", "whatever is named for a logo is a reserved place and paints nothing: a contract element, a skin node or a device region whose id has the word `logo` in it is `logo-zone` (or `logo-zone-<n>`), the skin node is an empty `rect` with `fill=\"none\"` and no stroke, the region states `at` and `size`, and no decor, cutout, silkscreen mark, bay or placement of a device carries the word (error)", "reserve the box the mark covers: an element `logo-zone` with an empty `<rect id=\"logo-zone\" fill=\"none\"/>` in the skin of a part, a region `logo-zone` with `at` and `size` on a device, and delete the drawn mark or the box that stood for it",
              "A vendor mark is never reproduced, and a filled box standing where one sits reads as a blank plate on the face; the reserved place is what lets a reader ask what is there without the drawing answering with artwork.",
              ERROR),
 }
@@ -622,6 +622,9 @@ RULES = {
 # counts these as present, and fails once a reserved code is also in RULES -
 # whichever branch lands second deletes its line.
 RESERVED = {
+    # the optical trunk branch takes L171 for `combine`; the logo-zone rule
+    # was written beside it and took L172. Whichever lands second deletes this.
+    "L171": "a rule landing on another branch (optical `combine`)",
 }
 
 # A CODE THAT NAMED A RULE WHICH IS GONE. A device manifest waives a rule by its
@@ -5001,7 +5004,7 @@ def _names_a_logo(ident):
 
 
 def lint_component_logo_zone(path, data):
-    """L171, a part: what is named for a logo is `logo-zone` and paints nothing.
+    """L172, a part: what is named for a logo is `logo-zone` and paints nothing.
 
     A vendor mark is not reproduced, and its place is reserved instead. The two
     ways that rule has been broken are both a NAMED thing that draws: a `logo`
@@ -5019,7 +5022,7 @@ def lint_component_logo_zone(path, data):
     about them."""
     for el in (data.get("elements") or {}):
         if _names_a_logo(el) and not _LOGO_ZONE_ID.match(el):
-            err(path, "L171", f"elements/{el}: an element named for a logo is "
+            err(path, "L172", f"elements/{el}: an element named for a logo is "
                               "`logo-zone` (or `logo-zone-<n>`) - a reserved place, not a drawing")
     skins_dir = Path(path).parent / "skins"
     for sp in sorted(skins_dir.glob("*.svg")) if skins_dir.exists() else []:
@@ -5032,7 +5035,7 @@ def lint_component_logo_zone(path, data):
             if not _names_a_logo(nid):
                 continue
             if not _LOGO_ZONE_ID.match(nid):
-                err(sp, "L171", f"node {nid!r} is named for a logo and is not `logo-zone` - "
+                err(sp, "L172", f"node {nid!r} is named for a logo and is not `logo-zone` - "
                                 "a mark is not drawn; reserve its box as an empty "
                                 "`<rect id=\"logo-zone\" fill=\"none\"/>`")
                 continue
@@ -5049,12 +5052,12 @@ def lint_component_logo_zone(path, data):
             if len(node):
                 painted.append(f"has {len(node)} child node(s)")
             if painted:
-                err(sp, "L171", f"node {nid!r} " + "; ".join(painted) + " - a reserved "
+                err(sp, "L172", f"node {nid!r} " + "; ".join(painted) + " - a reserved "
                                 "place is an empty rect that paints nothing")
 
 
 def lint_device_logo_zone(path, data):
-    """L171, a device: a logo is a region with an extent, and nothing drawn.
+    """L172, a device: a logo is a region with an extent, and nothing drawn.
 
     On a device the reserved place is a REGION, which is addressable and never
     painted, so the rule is the same one turned round: nothing a view DRAWS
@@ -5072,7 +5075,7 @@ def lint_device_logo_zone(path, data):
         for kind, items in drawn:
             for item in items or []:
                 if isinstance(item, dict) and _names_a_logo(item.get("id")):
-                    err(path, "L171", f"{vname}: {kind} {item['id']!r} is named for a logo - "
+                    err(path, "L172", f"{vname}: {kind} {item['id']!r} is named for a logo - "
                                       "a mark is not drawn, and a box in its place reads as "
                                       "a blank plate; reserve it as a region `logo-zone` "
                                       "with `at` and `size`")
@@ -5081,10 +5084,10 @@ def lint_device_logo_zone(path, data):
             if not _names_a_logo(rid):
                 continue
             if not _LOGO_ZONE_ID.match(rid):
-                err(path, "L171", f"{vname}: region {rid!r} is named for a logo - the "
+                err(path, "L172", f"{vname}: region {rid!r} is named for a logo - the "
                                   "reserved place is `logo-zone` (or `logo-zone-<n>`)")
             elif not (region.get("at") and region.get("size")):
-                err(path, "L171", f"{vname}: region {rid!r} states no `at` and `size` - "
+                err(path, "L172", f"{vname}: region {rid!r} states no `at` and `size` - "
                                   "a reserved place says where the mark sits")
 
 
