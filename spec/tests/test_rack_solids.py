@@ -117,7 +117,7 @@ def test_anything_inside_a_duct_guides_footprint_is_open_whatever_its_behaviour(
     assert [s["part"] for s in out] == ["flange--floor"]
 
 
-@pytest.mark.parametrize("name, count", [("fhd-cmp5dr", 15), ("cmv-sfd45u5w", 3), ("cmv-5u3w", 1)])
+@pytest.mark.parametrize("name, count", [("fhd-cmp5dr", 40), ("cmv-sfd45u5w", 3), ("cmv-5u3w", 1)])
 def test_the_library_fixture_is_what_rack_index_derives_from_the_build(name, count):
     """The kit test's FHD-CMP5DR and ducts are copies of rack.json; the build
     must still derive exactly them, and they are not vacuous."""

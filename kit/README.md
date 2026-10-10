@@ -105,7 +105,7 @@ as `@portrayal/kit/rack/<module>`:
 | `rack/cable-rules.js` | cables: which two ports may be joined, `withCable`, media and lengths |
 | `rack/cable-types.js` | the cable types (`cable-types.json`): `loadCableTypes(dist)` fetches them and returns `typeOf`, `bendOf` and `diameterOf` over them; the same lookups are exported to build over a table already in hand (a fixture, a cached copy): `typeOf(types, id)`, `cableTypeOf(types, cable)`, `radiusMm(type, which)`, `installedRadiusMm(types, id)`, `bendLookup(types)` and `diameterLookup(types)`, each radius in millimetres |
 | `rack/route.js`, `rack/route-path.js`, `rack/cable-geometry.js` | where a cable runs: `resolveRoute`, `routePath`, `trayOf`, `ringMarks`, `orientMarks`, `reverseMarks`, `routedLength`, `pathLength`, pathway fill, `ringFindings`, `bodyFindings`, and the geometry under them (`throughRings`) |
-| `rack/solids.js` | the solid bodies a route may not pass through: `solidsOf(rack, ctx)` places every device's envelope or derived `solids` in rack coordinates; `legCrossings` tests a leg against them; `detour` takes a leg round them; `CLEAR`, the clearance a detour keeps; `traysOf(rack, ctx)` places every device's `trays`, the floors a cable lies on |
+| `rack/solids.js` | the solid bodies a route may not pass through: `solidsOf(rack, ctx)` places every device's envelope or derived `solids` in rack coordinates; `legCrossings` tests a leg against them; `detour` takes a leg round them; `CLEAR`, the clearance a detour keeps; `traysOf(rack, ctx)` places every device's `trays`, the floors a cable lies on; a ring's solid parts (`ring/<id>/<part>`) are met by the cable's tube |
 | `rack/bundles.js`, `rack/bundle-route.js` | cable bundles: the size and bend checks (`bundleCheck`, `bundleChecks`, `pathwaysOn`, `bendCheck`, `cornersOf`), strap positions (`straps`), the trunk worked out from the members' routes (`deriveTrunk`) and a member's route along it (`followTrunk`) |
 | `rack/export-data.js` | the rack as rows: `bomRows`, `cableScheduleRows` and the device-import data, and the bundles as the exports read them (`bundleExports`, `bundleNotes`, `strapBomRows`) |
 | `rack/dcim-rules.js` | what a NetBox or Nautobot import needs of a rack |
@@ -317,6 +317,35 @@ are `at: 'tray'` and `at: 'rest'`, and `path.rests` (and `inspect`'s
 0.14.0** on every routed cable through a ring on a tray, which now rests
 lower and further out (a cord from the device below a lacer goes round its
 front edge to reach it), and on every cable with a free span, by its hang.
+
+A ring is solid round its opening (#968, docs/cable-lay-design.md section
+3.3). Where a ring's contract says what of its loop is solid (`wall`,
+`height`, `slit`, with `sill`, `depth` and `aperture.at`), rack.json's
+`solids` carry its legs, its bar, its seat and, over a slit, its hook, named
+`ring/<id>/<part>` (`rear-leg`, `front-leg`, `hook`, `bar`, `seat`), and
+`solidsOf` places them with the other solids. A cable passes a ring close by
+on purpose, so `legCrossings` and `detour` meet a ring's part with the
+cable's tube, the part grown by its radius; so is a zero-U part (a PDU
+standing in the gutter), whose corner a leg to the lane beside it passes close
+by, so that no leg runs across its outlet face. Every other body is met by its
+centre line. Since 0.15.0 every pass through a ring whose opening is
+placed starts and ends at an **approach point** on the run outside the ring's
+band, the cable's radius and `CLEAR` past it, at the opening's height and
+across position (`at: 'approach'`); a detour or a leg from behind or below
+ends there, so the cable enters through the opening, and a ring the route
+would double back at is gone to as far as that point. `bodyFindings` names a
+ring's part ("c9 passes through CM-01 ring 3 front leg ...: route it into the
+ring along its run, through its opening."). **Routed lengths change in
+0.15.0** on every routed cable through a ring on a tray, and beside a zero-U
+PDU. On the owner's rack of #949 they grow 2 to 38 mm. On generated racks
+they move by up to about a tenth of a metre either way, and the figures
+depend on the layout: one sample of 3,120 cables (one layout and seed) gave
+89 mm shorter to 131 mm longer, median 10 mm longer, 67 stock sizes up and
+67 down; an independent sample of 3,962 cables gave 94 mm shorter to 94 mm
+longer, median 4.5 mm longer, 67 up and 27 down. A route is longer where a cable
+now goes over a ring to its approach point, or round a PDU it grazed, and
+shorter where a detour that went round a tray's
+front edge to a ring's face can end at the approach point by a shorter way.
 
 To change a rack by name rather than by function, use the command core:
 `createRackEditor({ doc, chassisOf })` applies `place`, `move`, `patch`,

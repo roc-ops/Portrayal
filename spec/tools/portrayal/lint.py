@@ -512,7 +512,7 @@ RULES = {
     "L137": ("device",     "a pass-through whose `cover` is `brush` has a `pattern: brush` decor drawn over the whole of it, and a brush drawn over a pass-through belongs to one whose cover is `brush`", "draw the brush over the opening, or change `cover` to say what the picture shows",
              "The picture and the data have to agree: a pass-through declared as brushed shows a brush, and a brush drawn on the face really is a pass-through's cover.",
              ERROR),
-    "L138": ("component, device", "a guide fits what declares it - a ring's opening inside the part, seen along its run (its size, and its relief or `size.d` out of the face), its `depth` and `aperture.at` inside the part, its `sill` only on a ring whose run lies in the face and with the opening above it still inside the part's reach; and a duct inside its view, with a finger gap less than the finger pitch", "measure the clear opening, not the outside of the loop; give the part the relief that holds the opening; move the duct onto its face, or re-read the pitch and the gap off the drawing",
+    "L138": ("component, device", "a guide fits what declares it - a ring's opening inside the part, seen along its run (its size, and its relief or `size.d` out of the face), its `depth` and `aperture.at` inside the part, its `sill` only on a ring whose run lies in the face and with the opening above it still inside the part's reach, and the loop's `wall` legs, `height` and `slit` inside the part, the height over the opening and the slit between the sill and the top; and a duct inside its view, with a finger gap less than the finger pitch", "measure the clear opening, not the outside of the loop; give the part the relief that holds the opening; move the duct onto its face, or re-read the pitch and the gap off the drawing",
              "Cable routing reads a guide's opening, so an opening bigger than its loop or a duct off its face would route cables through space that does not exist, and fingers with no width describe a duct that cannot be built.",
              ERROR),
     "L139": ("lab",        "every placement's `ref` is a library device (and its `cfg` one of that device's configurations), every placement id is unique, and every `on` names another placement in the lab (error)", "name the device by its `name`, e.g. `fhd-1ufce`; give each placement its own id; point `on` at the id of the placement the part sits on",
@@ -8245,6 +8245,36 @@ def lint_component_guide(path, data):
             if lo < -0.05 or (num(bound) and lo + span > bound + 0.05):
                 err(path, "L138", f"guide: the opening at {at[0]:g},{at[1]:g} runs off the part - "
                                   f"{'xy'[k]} {lo:g} to {lo + span:g}, and {name} is {bound}")
+    # WHAT OF THE LOOP IS SOLID (#968): its legs beside the opening, its height
+    # over the base and the slit in its far leg, each inside the part, so the
+    # loop a router may not pass through is the loop that is drawn.
+    wall, height, slit = g.get("wall"), g.get("height"), g.get("slit")
+    if run == "z" and (wall is not None or height is not None or slit is not None):
+        err(path, "L138", "guide: `wall`, `height` and `slit` describe a loop standing out of "
+                          "the face, and this ring runs out of the face")
+        return
+    if num(wall) and isinstance(at, list) and len(at) == 2 and all(num(v) for v in at):
+        k = 1 if run == "x" else 0
+        bound, name = (h, "size.h") if run == "x" else (w, "size.w")
+        lo, hi = at[k] - wall, at[k] + ap["w"] + wall
+        if lo < -0.05 or (num(bound) and hi > bound + 0.05):
+            err(path, "L138", f"guide: legs {wall:g} thick either side of the opening run off the "
+                              f"part - {'xy'[k]} {lo:g} to {hi:g}, and {name} is {bound}")
+    if num(height):
+        if num(sill) and height < sill + ap["h"] - 0.05:
+            err(path, "L138", f"guide: a loop {height:g} high is below the top of its opening, "
+                              f"{sill:g} + {ap['h']:g} = {sill + ap['h']:g}")
+        if reach is not None and height > reach + 0.05:
+            err(path, "L138", f"guide: a loop {height:g} high stands further out of the face "
+                              f"than the part, which reaches {reach:g}")
+    if slit is not None:
+        if not (num(wall) and num(height)):
+            err(path, "L138", "guide: a `slit` is a gap in a leg, and the guide states no "
+                              "`wall` and `height` to make the legs of")
+        elif len(slit) == 2 and all(num(v) for v in slit) and not (
+                slit[0] < slit[1] <= height + 0.05 and (not num(sill) or slit[0] >= sill - 0.05)):
+            err(path, "L138", f"guide: the slit {slit[0]:g} to {slit[1]:g} is not a gap in the leg "
+                              f"between the sill and the top of the loop, {height:g}")
 
 
 def lint_device_guides(path, data):

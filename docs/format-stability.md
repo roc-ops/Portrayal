@@ -607,7 +607,13 @@ device has them:
   pass-through that cuts that box. Derived from the same faces
   (`rack_solids.py`), never stated in a manifest. A device without it is its
   envelope, `w` by `h` by `d`, unless it is a sheet part or a zero-U part that
-  carries a lane, which is then open.
+  carries a lane, which is then open. A sheet part's `solids` include the
+  loop of each ring on its plan whose contract says what of it is solid
+  (docs/cable-lay-design.md section 3.3): up to five boxes a ring, `part`
+  `ring/<id>/<name>` with `<id>` the placement's id and `<name>` one of
+  `rear-leg`, `front-leg`, `left-leg`, `right-leg`, `hook`, `bar` and `seat`.
+  A reader that routes cables meets these with the cable's tube, not its
+  centre line.
 - `trays`: the floors a cable lies on (docs/cable-lay-design.md section 2.1),
   read from the default configuration's plan, a list of `{"id", "top",
   "thickness", "lip", "run", "floor", "ties"?, "slack"?, "rings"?}` in the
@@ -650,7 +656,10 @@ that routes cables may read them itself, so they are part of the format too:
   and, where the contract states them, `data-guide-depth` (mm along the run),
   `data-guide-sill` (mm from the base it stands on to the opening's lowest
   inside edge) and `data-guide-aperture-at` (`"x y"`, the opening's corner in
-  the part's frame).
+  the part's frame); and `data-guide-wall` (mm, each leg's thickness beside
+  the opening), `data-guide-height` (mm from the base to the top of the loop)
+  and `data-guide-slit` (`"from to"`, mm from the base, the gap in the far
+  leg), from which rack.json derives the ring's solids.
 - A tray (docs/cable-lay-design.md section 2.1): one unpainted `<rect
   data-class="tray">` per floor rectangle and one `<rect data-class="tie">`
   per tie slot, each naming its tray by `data-tray` (the placement's id, or

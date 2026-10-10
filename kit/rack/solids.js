@@ -2,7 +2,9 @@
 // SOLID BODIES (docs/cable-lay-design.md section 1, #949). Pure, like fit.js.
 //
 // Every body in the rack is solid to a route. A cable crosses one only through
-// a declared opening: a ring (not solid at all), a duct (whose fingers and
+// a declared opening: a ring (through its opening; since #968 a ring whose
+// contract says what of its loop is solid is solid round it, its legs, bar
+// and seat in rack.json's `solids` as `ring/<id>/<part>`), a duct (whose fingers and
 // clips are not solid, so a cable enters its channel through a finger gap), or
 // a pass-through whose smaller side fits the cable's diameter. A tie slot is
 // never an opening: it is cut in a plate, and the plate stays whole.
@@ -232,13 +234,34 @@ function inside(a, b, box, eps = EPS) {
 
 const within = (p, box) => AX.every(k => p[k] >= box[`${k}0`] - EPS && p[k] <= box[`${k}1`] + EPS);
 
+// A PART OF A RING'S SOLID LOOP (#968, docs/cable-lay-design.md section 3.3):
+// rack.json names each `ring/<id>/<part>`. A cable passes a ring close by on
+// purpose, through its opening and on its sill, so a ring's parts are met by
+// the cable's tube and not its centre line: each is taken grown by the
+// cable's radius, and a leg that would graze one crosses it. A cable lying in
+// the opening, on the sill and against a leg, runs along the faces of the
+// grown parts and crosses nothing.
+// A ZERO-U PART (`zeroU` on the solid, solidsOf) is met by the tube as well:
+// a cable going to the lane beside a zero-U PDU passes its corner close by,
+// and one whose centre line clears the corner by a fraction of a millimetre
+// would otherwise run across the PDU's outlet face, which section 1.3 rule 4
+// keeps for the last resort. Every other plate or envelope is met by the
+// centre line, as before: a cable lies against those at its radius.
+const RING_PART = /^ring\/[^/]+\/./;
+const met = (s, diameter) => {
+  if (!(RING_PART.test(String(s?.part ?? '')) || s?.zeroU === true) || !(diameter > 0)) return s.box;
+  const r = diameter / 2, b = s.box;
+  return {x0: b.x0 - r, x1: b.x1 + r, y0: b.y0 - r, y1: b.y1 + r, z0: b.z0 - r, z1: b.z1 + r};
+};
+
 // Every solid the leg a-b crosses, in the order it meets them: [{solid, t0,
 // t1, at}], `at` where it enters. A stretch that lies within a hole the
 // cable's `diameter` (mm) fits is through that pass-through, and is left out.
+// A ring's part is crossed where the cable's tube would touch it (`met`).
 export function legCrossings(a, b, solids, {diameter = 0} = {}) {
   const out = [];
   for (const s of solids) {
-    const span = inside(a, b, s.box);
+    const span = inside(a, b, met(s, diameter));
     if (!span) continue;
     const p = lerp(a, b, span[0]), q = lerp(a, b, span[1]);
     const through = (s.holes || []).some(h => within(p, h.box) && within(q, h.box)
@@ -279,7 +302,7 @@ const gap = (p, q) => Math.hypot(p.x - q.x, p.y - q.y, p.z - q.z);
 // is the list of points it adds between a and b.
 const plane = (p, k, v) => set(p, k, v);
 function waysRound(a, b, solid, {diameter, lanes}) {
-  const box = solid.box, m = diameter / 2 + CLEAR;
+  const box = met(solid, diameter), m = diameter / 2 + CLEAR;
   const across = crossAxis(a, b, box);
   const edge = across === 'z' ? 'y' : 'z';
   const end = across === 'x' ? 'y' : 'x';
