@@ -344,7 +344,7 @@ panel:
   three ways:
   - An explicit `pitch` is read with its `pitch-kind`. `target` is the value
     to use (`qsfp-ganged`, 19.0). `floor` is a minimum to clear, not a value
-    to place at (`xfp`, `cfp`, `cfp2`, `cxp`, `mpo-adapter`,
+    to place at (for example `xfp`, `cfp2`, `mpo-adapter` and
     `keystone-opening`); the pitch itself still comes from the device.
   - With no `pitch` key, read the notes of the entry. `sfp-ganged` abuts at
     its `w` of 14.25. `rj45-ganged` has a `w` of 12.7 and states its pitch,
