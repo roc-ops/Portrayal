@@ -95,7 +95,8 @@ def is_combine(path):
 def legs(path):
     """A path as its legs: `[{"from", "to", "ratio", "band"}]`, light's way round.
 
-    THE ONE PLACE THAT KNOWS THE THREE PATH SHAPES. A two-ended path is one
+    THE ONE PLACE THAT READS THE THREE PATH SHAPES; `endpoints` is built on
+    it. A two-ended path is one
     leg. A split is one leg per destination, each carrying its `ratio`. A
     combine is one leg per source, each carrying that source's `ratio` or
     `band`. A path-level `band` is every leg's band. Consumers that only want
@@ -103,9 +104,11 @@ def legs(path):
     shape they came from, which is what keeps a combine from being a special
     case anywhere but here and in the rule that checks its form.
 
-    A malformed entry - a source that is not a mapping, a missing `at` - is
-    skipped, not raised on: lint reports the shape, and the exporter must not
-    fall over on a contract lint has already failed.
+    A fan entry that is not a mapping, or has no `at`, is skipped, so the
+    lint rules can walk a malformed path and report it. That is all the
+    leniency there is: a `to` that is missing or the wrong shape comes back as
+    written, and the exporter is not made safe against it. L78 and L171 fail
+    such a contract before anything is exported.
     """
     band = path.get("band")
     out = []
@@ -137,20 +140,15 @@ def endpoints(path):
     split's destinations or a combine's sources, each with its ratio if it
     states one. Callers that need to know which way the light runs ask `legs`.
     """
+    fan = legs(path)
     if is_combine(path):
         to = path.get("to")
         if isinstance(to, list):            # malformed; L171 reports it
             head = [(d.get("at"), None) for d in to if isinstance(d, dict)]
         else:
             head = [(to, None)]
-        return head + [(leg["from"], leg["ratio"]) for leg in legs(path)]
-    out = [(path["from"], None)]
-    to = path["to"]
-    if isinstance(to, str):
-        out.append((to, None))
-    else:
-        out += [(d["at"], d["ratio"]) for d in to]
-    return out
+        return head + [(leg["from"], leg["ratio"]) for leg in fan]
+    return [(path["from"], None)] + [(leg["to"], leg["ratio"]) for leg in fan]
 
 
 def reached(contract):

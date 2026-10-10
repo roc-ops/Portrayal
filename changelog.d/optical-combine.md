@@ -9,15 +9,19 @@
   one. The DCIM projection writes one fibre-map row per source, carrying its
   `band` or `ratio`, exactly as it writes one per destination of a split, so
   a combine onto a trunk position and banded legs off it export the same
-  rows. A contract written before this key reads as it did.
+  rows. A contract written before this key reads as it did. A published
+  build carries the shape: an entry of `optical.paths` in
+  `library/dist/components.json` may now hold `combine` and no `from`, so a
+  consumer that reads `from` on every path must allow for it.
 - Lint **L171**, on components: a `combine` has one destination and no
   path-level `band`, names each source once, and its sources either all carry
   a `ratio` summing to 100 or carry bands, no two the same, with at most one
   source carrying what the bands leave. L78, L80 and L130 read a combine's
   sources as they read any other endpoint, and L79 allows several sources on
   one destination only inside a declared combine.
-- `optical.legs` in the tools: one reader for the three path shapes, which the
-  fibre map, the fibre-ends index and the lint rules now share.
+- `optical.legs` in the tools: the reader for the three path shapes.
+  `optical.endpoints` is built on it, so the fibre map, the fibre-ends index
+  and every lint rule that walks a path read the shapes in one place.
 
 ### Changed
 - `smartoptics/ppm-ad1-1510@2` and `ppm-ad1-1625@2` (2.2.0 to 2.3.0) state

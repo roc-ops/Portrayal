@@ -3125,6 +3125,12 @@ def lint_component_optical_conflicts(path, data, _lib_roots=None):
               and sum(1 for q in ps if not q.get("band")) <= 1
               and len({_band_key(q["band"]) for q in ps if q.get("band")})
               == sum(1 for q in ps if q.get("band"))}
+    # A COMBINE SOURCE STARTS THAT ONE PATH, WHICHEVER IS WRITTEN FIRST. The
+    # banded exception is for a source's own drop legs; a position that also
+    # feeds a combine is a second use of the glass, and it is refused whether
+    # the combine comes before the other paths or after them.
+    joins = {leg["from"] for p in paths if optical.is_combine(p)
+             for leg in optical.legs(p)}
     for i, p in enumerate(paths):
         legs = optical.legs(p)
         combine = optical.is_combine(p)
@@ -3138,7 +3144,7 @@ def lint_component_optical_conflicts(path, data, _lib_roots=None):
                                  "list, not two paths")
             seen[ep] = i
         for src in dict.fromkeys(leg["from"] for leg in legs):
-            if src in sources and (combine or src not in banded):
+            if src in sources and (src in joins or src not in banded):
                 err(path, "L79", f"{src} is the source of two paths "
                                  f"({sources[src]} and {i}) - splitting a source "
                                  "across two paths hides its ratios from this "

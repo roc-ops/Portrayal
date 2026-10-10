@@ -195,3 +195,20 @@ def test_a_two_ended_paths_one_leg_carries_the_paths_band():
 def test_reached_includes_a_combines_sources():
     assert optical.reached({"optical": {"paths": [COMBINE]}}) == {
         "line.1", "osc.2", "edfa.2"}
+
+
+def test_endpoints_and_legs_agree_on_every_path_in_the_library():
+    """`endpoints` is built on `legs`. Every shipped path's endpoints are its
+    single end, then the far end of each leg with that leg's ratio."""
+    n = 0
+    for f in sorted((ROOT / "library/components").glob("*/*/v*/contract.yaml")):
+        doc = yaml.safe_load(f.read_text()) or {}
+        for p in ((doc.get("optical") or {}).get("paths") or []):
+            eps, legs = optical.endpoints(p), optical.legs(p)
+            if optical.is_combine(p):
+                assert eps == [(p["to"], None)] + [(g["from"], g["ratio"]) for g in legs], f
+            else:
+                assert eps == [(p["from"], None)] + [(g["to"], g["ratio"]) for g in legs], f
+            assert len(eps) == len(legs) + 1, f
+            n += 1
+    assert n > 1000, n            # it measured the library, not an empty glob

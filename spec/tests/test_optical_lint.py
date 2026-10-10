@@ -497,3 +497,45 @@ def test_both_add_drop_filters_state_their_add_direction_as_a_combine():
         assert {s["at"] for s in combines[0]["combine"]} == branches, n
         assert sum(1 for s in combines[0]["combine"] if s.get("band")) == 1, n
         assert run(L.lint_component_optical_combine, doc) == [], n
+
+
+def _drop_reusing_a_combine_source(combine_first):
+    """Banded drop legs off `line.2`, and a combine that also names `line.2`
+    as a source. L79's band exception would pass the drop legs on their own."""
+    drop = [{"from": "line.2", "to": "osc.1", "band": BAND},
+            {"from": "line.2", "to": "edfa.1"}]
+    join = [{"combine": [{"at": "line.2", "band": {"centre-nm": 1625}}, {"at": "osc.2"}],
+             "to": "edfa.2"}]
+    return three(join + drop if combine_first else drop + join, trunk=["line"])
+
+
+def test_banded_legs_do_not_excuse_reusing_a_combine_source_written_after_them():
+    hits = run(L.lint_component_optical_conflicts,
+               _drop_reusing_a_combine_source(combine_first=False), "L79")
+    assert hits and all("line.2 is the source of two paths" in h for h in hits), hits
+
+
+def test_banded_legs_do_not_excuse_reusing_a_combine_source_written_before_them():
+    """The same glass with the combine first. The finding must not depend on
+    the order the paths are written in."""
+    hits = run(L.lint_component_optical_conflicts,
+               _drop_reusing_a_combine_source(combine_first=True), "L79")
+    assert hits and all("line.2 is the source of two paths" in h for h in hits), hits
+
+
+def test_l171_is_reachable_from_a_real_lint_run(tmp_path):
+    """The rule fires from the command line, not only when a test calls it:
+    a rule left out of the per-component loop is dead code with green tests."""
+    import subprocess
+    d = tmp_path / "components" / "t" / "joiner" / "v1"
+    d.mkdir(parents=True)
+    (d / "contract.yaml").write_text(
+        "format: 1\nkind: module\nname: joiner\nversion: 1.0.0\n"
+        "class: filter\nsize: {w: 40, h: 20}\n"
+        "optical:\n  media: os2\n  trunk: [b]\n  paths:\n"
+        "    - combine: [{at: a.1}, {at: a.2}]\n      to: b.1\n")
+    out = subprocess.run(
+        [sys.executable, str(ROOT / "spec/tools/portrayal/lint.py"),
+         "--schemas", str(ROOT / "spec/schemas"), "--library", str(tmp_path)],
+        capture_output=True, text=True).stdout
+    assert "[L171]" in out and "neither" in out, out
