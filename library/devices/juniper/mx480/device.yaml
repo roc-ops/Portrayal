@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx480
-version: 4.0.0
+version: 5.0.0
 maturity: modelled
 manufacturer: Juniper
 model: MX480
@@ -54,9 +54,23 @@ provenance:
       front photograph is isotropic to 0.8% (x 3.230 px/mm over the 443 mm body, px 35-1466; y
       3.203 to 355.6). Until 3.0.0 this note called it 5.1% anisotropic, anchored at x 3.379 px/mm:
       that took the ear-inclusive 1500 px as the body, so the front's x positions placed before
-      3.0.0 (the vent band, the ESD point) are compressed about 4.5%; the card slots were re-placed
-      at 3.0.0 (card-slots), the rest awaits its own pass. Feature sizes come from the registry and
-      the shared card family
+      3.0.0 (the vent band, the ESD point) were compressed about 4.5%; the card slots were re-placed
+      at 3.0.0 (card-slots) and the vent band and ESD point at 5.0.0 (front-vent-esd). Feature sizes
+      come from the registry and the shared card family
+  front-vent-esd:
+    confidence: photo-measured
+    note: >-
+      the MX480 front photograph on the body scale (x px 35-1466 = 443 mm, 3.230 px/mm; top edge
+      at y px 4, 3.206 px/mm down). The hex vent field's holes run x px 98-1384 and y px 19-102:
+      chassis x 19.5-417.6, y 4.7-30.6. The front ESD point is the round hole at the left end of
+      that plate, below and left of the first hex column: a dark disc x px 77-97, y px 85-104,
+      centre (87.1, 94.5), chassis (16.1, 28.2), about 6.3 mm across, so the 5.8 mm
+      common/esd-jack@1 bezel is centred there. The hardware guide's Figure 3 (g004200, the
+      front view) calls the same hole out as the ESD point and draws an "ESD" label directly above
+      it; the photograph shows no printing there (its craft-panel legends resolve at the same
+      scale, so that is a reading of this unit), and the ESD mark is kept above the hole where the
+      figure prints it. Until 5.0.0 the band was 310 x 30 at x 20 and the point centred at (8, 20),
+      laid on the ear-inclusive 3.379 px/mm scale (#892)
   front-rows:
     note: >-
       photo - vent band 0-38.6, craft 38.6-80.6, card cage 92.2-340.8 as eight 31.3 mm slots, top
@@ -156,8 +170,8 @@ gaps:
     wanted: a mechanical drawing - the DAM front photo reads 0.8%
       anisotropic against the nominal 355.6 mm height, which leaves the
       slot pitch a range, 31.2-31.5 mm (31.3 modelled on the better-anchored
-      x scale), and the front's x positions placed before 3.0.0 (vent band,
-      ESD point) were laid at a scale 4.5% off and are not yet re-placed.
+      x scale). The vent band and the front ESD point were re-placed on the
+      body scale at 5.0.0 (provenance.front-vent-esd).
   - what: weight-and-max-config
     reason: vendor-silent
     wanted: a clean Table 88-equivalent weight row - the extraction carries
@@ -226,7 +240,8 @@ views:
       h: 355.6
     panel:
       decor:
-        - {at: [20.0, 4.0], size: [310.0, 30.0], pattern: vent, vent: 40}
+        - {at: [19.5, 4.7], size: [398.1, 25.9], pattern: vent, vent: 40, confidence: photo-measured,
+           source: 'photo - the hex field, x px 98-1384 and y px 19-102 on the body scale; see provenance front-vent-esd'}
         - {at: [12.1, 91.3], size: [22.3, 250.4], fill: '#7b7c80', confidence: photo-measured,
            source: 'photo - the grey slot-number tab strip the card plates no longer cover; see provenance slot-tabs'}
         - {at: [17, 103.35], size: [11, 7.2], rx: 3.0, fill: '#e8e9eb', confidence: photo-measured,
@@ -246,9 +261,9 @@ views:
         - {at: [17, 322.45], size: [11, 7.2], rx: 3.0, fill: '#8fcbeb', confidence: photo-measured,
            source: 'photo - slot-number tab; see provenance slot-tabs'}
       cutouts:
-        - {id: esd-front, at: [6.0, 18.0], size: [4.0, 4.0], shape: circle}
+        - {id: esd-front, at: [14.1, 26.2], size: [4.0, 4.0], shape: circle}
     silkscreen:
-      - {at: [8.0, 27.4], path: 'M -1.4 1.2 L 0 -1.2 L 1.4 1.2 Z M -2.1 2.2
+      - {at: [16.1, 21.6], path: 'M -1.4 1.2 L 0 -1.2 L 1.4 1.2 Z M -2.1 2.2
           L -0.9 2.2 M 0.9 2.2 L 2.1 2.2', fill: '#c7ccd1', for: chassis}
       - {at: [22.8, 107.85], text: '5', font-size: 2.6, anchor: middle, fill: '#3a3e43', for: dpc5}
       - {at: [22.8, 139.15], text: '4', font-size: 2.6, anchor: middle, fill: '#3a3e43', for: dpc4}
@@ -288,7 +303,7 @@ views:
            accepts: [juniper/scb-mx@2], default: juniper/scb-mx@2,
            group: scbs, rel-pos: 0}
       placements:
-        - {id: esd-front-jack, ref: common/esd-jack@1, at: [5.0, 17.0], for: chassis, group: esd, rel-pos: 0}
+        - {id: esd-front-jack, ref: common/esd-jack@1, at: [13.1, 25.2], for: chassis, group: esd, rel-pos: 0}
   rear:
     size:
       w: 443.0
