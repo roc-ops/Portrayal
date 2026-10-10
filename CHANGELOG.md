@@ -26,6 +26,26 @@ names the ref that replaces it.
 
 ## 0.2.0 - power, rack furniture and cable lay
 
+What does not move from 0.1.0: manifests are still **`format: 1`** and the
+published build is still **`contract: 2`**. No lint code was renumbered or
+reused; L125 to L172 are new. What a reader coming from 0.1.0 has to act on
+is marked **BREAKING** or **ONE-WAY** in its entry, and every component major
+that was removed is under Removed with the ref that replaces it.
+
+The entries were written as each change merged, so some describe a state
+that a later change in this release overtook. Such an entry is kept, and a
+**Superseded** clause in it says what is true at 0.2.0.
+
+Routed lengths on a saved rack changed in steps, and the entries under
+Changed list them out of order. In order they are: through a D-ring
+(`@portrayal/kit` 0.5.0), beside a duct (0.6.0), along a bundle's trunk
+(0.7.0), round solid bodies and a zero-U PDU (0.11.0), along one manager
+(0.12.0), from the plug's reach (0.13.0), at rest on trays and sills
+(0.14.0), into a ring through its opening (0.15.0), the per-media end
+allowance (0.16.0) and bend room (0.17.0). Each entry measures its change
+against the kit before it. None of them reaches a consumer of 0.1.0: the
+rack modules and the rack file are new in this release.
+
 ### Added
 - `components.json` carries the catalogue's derived columns on each entry
   (one entry per component major, one row of `library/components/CATALOGUE.md`):
@@ -109,7 +129,9 @@ names the ref that replaces it.
   38.1 and 95.2 mm behind a 367.0 mm deep panel, #860). Front, top, bottom
   and sides are the 300CB08. In
   the DCIM exports each has two `dc-terminal` power ports, one per feed, and
-  its outputs are not exported yet. No existing device or export changes.
+  its outputs are not exported yet. Superseded: the power outlets entry in
+  this section exports them, sixteen outlets labelled `P40` on each (PR
+  #849). No existing device or export changes.
 - The two monitored panels of the Amphenol Network Solutions 300CB08 family
   with the plain rear: `amphenol-ns/nrg300cb08-ctrl` (integrated nrgSMART
   controller: front display `amphenol-ns/nrg-oled@1`, MGMT and LAN RJ45s,
@@ -164,7 +186,11 @@ names the ref that replaces it.
   `spec/schemas/connectors.yaml`. `common/terminal-header-508-2@1`,
   `common/terminal-header-508-5f@1` and `common/dc-terminal-header-6@1` (1.0.1,
   the five-position header 1.0.2) gain their interface and a `mate` point; no drawing changed, and the
-  11 devices that draw one take a patch. `generic/terminal-508-2-plug@1`,
+  11 devices that draw one take a patch. Superseded for two of the three
+  headers: `@1` of each was removed later in this release, and the majors to
+  pin at 0.2.0 are `common/terminal-header-508-2@3` and
+  `common/terminal-header-508-5f@2` (under Removed).
+  `generic/terminal-508-2-plug@1`,
   `generic/terminal-508-5-plug@1` and `generic/terminal-508-6-plug@1` are the
   plugs that mate them, drawn from the wire side with one 30 mm stub of wire
   per pole and a `wire-1` to `wire-N` point on each. `wire-od` sizes every
@@ -233,7 +259,13 @@ names the ref that replaces it.
   protector. In the DCIM exports each feed is one `dc-terminal` power port
   (`input-a`, `input-b`) and each position is a module bay; the sixteen output circuits and
   the alarm contacts are not exported yet. No existing device or export
-  changes.
+  changes. Superseded for the outputs: the power outlets entry in this
+  section exports them as sixteen `dc-terminal` power outlets (PR #849). The
+  alarm contacts are still not exported.
+  The family is eleven panels at 0.2.0, seven of them with P40 outputs, and
+  each exports sixteen power outlets. An entry in this section that counts
+  ten panels, or six with P40 outputs, counts the family before the
+  nrgILS300CB08-SC joined it.
 - CFP, CFP2, CFP4 and CXP cages offer optics. `generic/cfp-lc@1`,
   `generic/cfp-sc@1`, `generic/cfp-mpo@1`, `generic/cfp2-lc@1`,
   `generic/cfp2-mpo@1`, `generic/cfp4-lc@1`, `generic/cfp4-mpo@1` and
@@ -569,6 +601,8 @@ names the ref that replaces it.
   `bend: {radius_mm, by, unchecked, points, violations}` where it gave `null`,
   and `cornersOf` and `bendCheck` are exported from
   `@portrayal/kit/rack/bundles`. Cables outside a bundle are not checked.
+  Superseded by kit 0.17.0 in this section: `routePath` reports the tight
+  bends of every routed cable.
 - `@portrayal/kit` 0.9.0: cable bundles in the exports (#923,
   `docs/cable-bundles-design.md` sections 7 and 13). `bundleExports(rack, ctx)`
   in `@portrayal/kit/rack/export-data` gives one record per bundle (number,
@@ -623,7 +657,11 @@ names the ref that replaces it.
   Lint L138: a ring's opening fits inside its part, seen along its run, and a
   duct lies inside its view with a gap less than its pitch.
   Nothing consumes passes or guides yet, and the DCIM exports ignore both; the
-  device lock fingerprints them only where they are declared.
+  device lock fingerprints them only where they are declared. Superseded for
+  the first half: `rack.json` lists each device's guides and passes, and
+  `@portrayal/kit/rack/route` routes cables through them. At 0.2.0, 30 devices
+  declare at least one: 18 state passes, 24 a duct guide, and 6 place a ring
+  that carries a guide. The DCIM exports still ignore both.
   `attrs.performance.cable-capacity` and `cable-capacity-basis` hold the
   vendor's one capacity figure per manager with its cable and fill basis
   (decision 9).
@@ -797,7 +835,10 @@ names the ref that replaces it.
   plane. `chassis.kits` lists the rail kits a device takes:
   `[{ref, supply: in-box|optional, variant?: reversed, depth?: {config,
   range}}]`. Both are optional, for a rack device only (L125), and documented
-  in `docs/format-stability.md`. No device states either yet.
+  in `docs/format-stability.md`. No device states either yet. Superseded
+  for `chassis.ears`: four devices state it at 0.2.0, `eaton/pdumh20net`,
+  `fs/fans1u2f`, `fs/fans1u4f` and `fs/uscmh-sfdabsb2u`. No device lists a
+  kit, and no `kind: kit` contract is in the library.
 - Lint L160 to L163 check them: at most one default position; each listed kit
   ref is a `kind: kit`, listed once; a position's `{kit, part}` names a listed
   kit and one of its part ids; a `depth` override names a configuration of the
@@ -1213,7 +1254,8 @@ names the ref that replaces it.
 - A drawing marks an element a lamp is bound to with `data-lamped="true"`,
   and the base stylesheet dims a power outlet that is `off` and has no lamp
   (opacity 0.55); one with a lamp is never dimmed. No device in the library
-  has a switched outlet yet.
+  has a switched outlet yet. Superseded: three do at 0.2.0,
+  `eaton/evma8365x`, `eaton/pdumh20net` and `eaton/pdumv20hvnetlx`.
 - A rack PDU states its capability as two facts, `attrs.management.metering-scope`
   (`none`, `input`, `branch`, `outlet`) and `outlet-switching`, and the class is
   derived from them and published as `pdu-class` in `<device>.configs.json` and
@@ -1264,7 +1306,7 @@ names the ref that replaces it.
   `WARN` as well as `PASS` or `FAIL`. `CONTRIBUTING.md` states the rule: new
   and changed prose follows Simplified Technical English, and existing text
   is not rewritten.
-- `@portrayal/kit` 0.4.0: `@portrayal/kit/rack` has commands and questions
+- `@portrayal/kit` 0.4.0: `@portrayal/kit/rack/*` has commands and questions
   an agent can use without reading the code
   (`docs/rack-agent-commands-design.md`). `fit` seats, empties
   or restores one bay or cage; `field` sets one setting of one seated part;
@@ -1303,7 +1345,9 @@ names the ref that replaces it.
 - `spec/schemas/rack.schema.json`, published at
   `https://portrayal.dev/schemas/v1/rack.schema.json`: the schema of a rack file
   (`format: "portrayal-rack"`, `version` 2). It is the Rack Builder's file
-  format, not a manifest, so it does not carry format 1.
+  format, not a manifest, so it does not carry format 1. Superseded: a 0.2.0
+  rack file is `version` 3 and its schema is at `/schemas/v2/` (the rack
+  file entry under Changed).
 - `chassis.overhang: {left, right}` states how far a `rack` device's real parts
   reach beyond its rack face, in millimetres (#865). Such a device draws its
   front at the rack face with its ears, and a part beyond it is an ordinary
@@ -1475,342 +1519,27 @@ names the ref that replaces it.
 - `rack.schema.json` describes the `zeroU` entry and `side` on an item, and no
   longer calls `zeroU` reserved. Both keys are optional and unconstrained, so
   every file that validated still does; the rack file stays `version` 2
-  (`docs/format-stability.md`).
-
-### Fixed
-- 3D kit: a `uhandle` standing `in:` a well rises from the well's floor, as
-  `out`, `cyl` and `bar` already did, rather than from the face plane.
-- `amphenol-ns/tpa-fuse-holder-307492@1` (1.0.1) keeps its fuse rating out of
-  the drawing once the rating is set in a viewer. The rating is carried by the
-  part and never printed, because the fuse is inside the holder; its text node
-  was hidden by its own `display`, which `kit/fields.js` removes from a node it
-  writes a value to. The node now sits in a group that is not displayed. The
-  300CB08 takes a patch, 1.0.1.
-- 3D kit (`swap.js` `viewsToRewrite`): a swap into a slot on a placed part
-  that composes several slots and is no cage itself, such as a pole of a
-  barrier terminal block (`psu1-input/lug-2`), now reaches the 3D scene. No
-  bay and no cage of any view claims such a key, so no view was named, the
-  face was never rewritten and the occupant showed in 2D only, with no
-  warning. Every view is rewritten for such a key (#814).
-- `@portrayal/kit`: the README's links to the Portrayal README and to the
-  artifact contract are absolute GitHub URLs, so they work on the npm package
-  page, where a relative link resolved against npmjs.com and broke. The
-  package also names its `homepage` and where to report `bugs`. Both reach
-  npm with the next kit release (#716).
-- `edgecore/ais800-psu-dc@2`: the vent lattice is 23.46 tall from y 13.56,
-  measured module edge to module edge on the quick start's Connect Power
-  figure, where 1.x drew it 20.12 from 15.01 (#397). `edgecore/ais800-32d`
-  2.0.0 and `edgecore/ais800-32o` 3.0.0 accept it.
-- The -C panels of the Amphenol Network Solutions 300CB08 family
-  (`amphenol-ns/300cb08-c`, `nrg300cb08-ctrl-c`, `nrg300cb08-sens-c`) are
-  367.0 deep, front of the metal to the tops of the output receptacles, as
-  their own bottom view (installation guide Fig. 3-13) measures, not the stud
-  panel's 330.8; their bottom is re-read off that view. Their busbar landings
-  (`amphenol-ns/input-feed-busbar@1`, 1.0.1) now stand 38.1 and 95.2 behind
-  that, the two lengths the drawing dimensions, where both stood 147, a figure
-  that subtracted a depth without the front guards from one with them (#860).
-  Each of the three panels takes a major (2.0.0): its geometry moved, though
-  no id or slot did. Their DCIM exports change in the drawing version line
-  only.
-- The kit's `loadDevice` and `loadStage` (`kit/shell.js`) take a generation each
-  call, and one that a newer load overtook stops after its await: it writes no
-  device, configuration or view, mounts no drawing and emits no `load`, and its
-  promise rejects with an error `isSuperseded(err)` (exported) recognises. The
-  stage holds exactly one drawing after any overlap. A host that awaited a load
-  sees the rejection instead of carrying on with a stale target (#929).
-- A `fields=` entry for a part drawn only on a face other than the one the link
-  opens (a supply's wattage on the rear, a link opening on the front) is kept on
-  reload: the shell fetches the other faces before judging the entry, as
-  `applySwaps` already does for a slot on another face, and paints it when that
-  face is mounted. It used to be ignored and dropped from the location (#818).
-- L132 resolves `fed-by` per configuration, as the export does: an output
-  every configuration has, fed by an input that only some configurations have
-  (`only-in`), is an error naming the configuration that lacks it, where it
-  used to lint clean and stop `./publish.sh` with `NotExpressible` (#857).
-- A breaker bay whose description is too long for its `; protects <outlet>`
-  clause now leads with `Protects <outlet>; ` and shortens what it accepts
-  after it. The clause is the only place Nautobot keeps the breaker-to-outlet
-  link, and it used to be cut off. No bay in the library is that long, so no
-  committed export changes (#857).
-- L129 refuses an `optical.trunk` that names one position of a multi-position
-  front connector exported as one port (an MPO adapter): the export shrank the
-  port and kept each leg's original `front_position`, which both DCIMs refuse.
-  Name the connector bare (#857).
-- L39 asks each window a multi-window lamp declares to be more than half
-  punched, where it summed them: a four-window lamp with three windows punched
-  passed, and the missing window was never reported. Nothing in the library
-  changes. Tests now pin the windows' turn at 90, 180 and 270 degrees on a part
-  that is not symmetric (#845).
-- L39 reads a composed leaf with no registry entry (no `conforms`, no parts of
-  its own, a size, and not a lamp, latch or printing) as the opening of the
-  part that composes it, as `_aperture_of` already did, so the C100G's strap
-  plate is checked against its jack's cutout rather than reported 4.5 mm off
-  it (#413).
-- Every Casa lamp now declares the states it can show and is drawn off (#940).
-  The STATUS, ACTIVE and ALARM lamps on the line cards (BDM, BDM2, BDM2m,
-  DS 8x8/8x96/8x192, US 16x4/16x8, CSC 8x10G) and the SMMs (2x10G, 8x10G,
-  300G, 300GM) take `ok`, `active` and `alarm`, from the front-installed module
-  LED tables of the C100G and C40G installation guides; STATUS and ACTIVE are
-  no longer painted permanently green. The port lamps on the CSC 8x10G and
-  SMM300G/GM take `link` and `activity` (blinking), and the SMMs' management
-  jacks colour their lamps green. The C100G fan and PEM lamps take `ok`,
-  `alarm` and a blue `high-speed` (fan) or `on` (PEM, which the guide marks
-  "Not used"). The C40G AC PSU's status lamp is now a declared element,
-  `casa/c40g-psu-ac@1` `status`, with `ok` and `alarm`; it was art painted
-  green that no state reached. No element id changed. Each of the sixteen
-  components takes a minor, and the C100G and C40G a patch.
-- `fs/dinrail2u` and `fs/dinrail4u` 0.1.1: the setback notes say the datasheet
-  side views are embedded rasters (461 x 212 and 435 x 279 px, about 1.1 and
-  1.2 mm a pixel) read on an upsampled render, not vectors; the 2U note says the
-  slot's front end is hidden under the screw head drawn at 69.4, which is where
-  the front stop is taken (64.4 + 2.6 would be 67.0). The 51.2 mm front setback
-  stands. The configuration-level `airflow` description in the device schema
-  and the `configs.json` airflow list in `library/README.md` name
-  `top-to-bottom`.
-- `eaton/pdumv20hvnetlx` 0.1.1: the front `logo-zone` moves to (19.0, 677.0),
-  over the wordmark DT01 shows, and the left view gains a `logo-zone` for the
-  upside-down EATON wordmark DT08 and DT01 show about 864 to 930 mm from the top end
-  (the mark is not drawn). The side vent fields no longer carry a fill their
-  `slots` pattern replaces; the drawing is unchanged.
-- The device schema's `interfaces` description and power-outlets-design
-  decision 5 say that a NOS listing that states its own `interfaces` keeps
-  every outlet's placement id, since it does not apply the hardware's own
-  naming rules.
-- `generic/nema-5-20p-plug@1` 1.0.1: `provenance.pins` gives the blade
-  centres 15.45 apart, as the Leviton drawing places them (6.31 + 9.14), not
-  15.49. The drawing is unchanged.
-- `components.json` publishes a turned bay with its `rotate` (#718). Each
-  component entry lists its own bays with `at`, `size`, `accepts` and
-  `default`, and left out the turn, so a consumer placing a card by the index
-  landed it wrong in a turned slot. The two slots of `dell/riser-3a-14g@2`
-  carry `rotate: 180`. A bay that is not turned states nothing, as before.
-  Additive; the `contract` number does not move.
-- DCIM exports: a micro-USB console reaches the device type as a console port,
-  `Console (Micro-USB)`, type `usb-micro-b`, beside the RJ45 `Console` the
-  panel labels apart from it; and an RJ45 AUX serial port on a chassis is a
-  console port named `AUX`, as a card's already was. 96 device types in each
-  of `library/exports/netbox` and `nautobot` gain ports (31 devices with a
-  micro-USB console, plus the ASR 9001, ASR 9901 and MX80 with AUX), and
-  nothing already exported is renamed, retyped or removed. A USB storage or
-  service port is still not exported, by the existing rule that a USB data
-  port is not a console; every management-cluster port that is not exported is
-  now named, with its reason, in `MGMT_NOT_A_DCIM_PORT`, and a test asks the
-  exporter about each one (roc-ops/Portrayal#384).
-- `edgecore/eps122` 2.0.8 draws the orange bands that mark its 90 W ports 41-48: one
-  behind the legend row above them and one behind the lamp row below, measured on the
-  guide's front elevation at its native resolution and coloured from a pixel count. The
-  single band it carried sat at x 601.74 on a 440 mm face, so it was never seen. The
-  panel legend is transcribed as "1.65A Max/Port41-48", not 1.85 A, and the row under
-  the ports is identified as the per-port lamp row (#878).
-- `juniper/mx204` 4.0.2 no longer carries four ear-flange rects beside its front and
-  rear faces. They lay wholly outside the drawing and were never seen, and the device's
-  own provenance says the ears are not modelled (#878).
-- `edgecore/exp800-16o` and `edgecore/exp100-32x` (2.0.0) print the white
-  arrow beside each port numeral as silkscreen (`silk-arrow-N`), as the AIS800
-  review ruled for the same glyph, and keep the dark triangular windows under
-  it as lamps: the EXP800 quick start calls them out as the OSFP LEDs (#396).
-  Both port strips were re-measured on their elevations: the numerals, which
-  sat where the arrows are or past the windows, and the lamps, which sat
-  between the two pairs of windows, now stand where the drawings put them; each
-  lamp is its port's left window.
-- The covers of the FS HD and UHD finger ducts show their four latches in 3D
-  (#869): the plate and its clips are one raised group, so the clips are
-  drawn on the face instead of left behind it, and the hinge rails end 0.1 mm
-  behind the face. `fs/cmh-uhd-sfdabs1u-cover`, `-2u-cover`, `-3u-cover`,
-  `fs/cmh-hd-sfdabs3u-cover` and `-4u-cover` 1.0.1; the five devices 0.1.1.
-  The 2D drawings are unchanged.
-- `fs/cmh-sfds1u` cites the FS quick start guide it takes its fixings from as a
-  reference, and its capacity note and those of `fs/cmh-sfds2u`,
-  `fs/cmh-dfds1u` and `fs/cmh-dfds2u` no longer label a missing figure
-  `datasheet` (#869).
-- Four FS finger-duct covers reserve a `logo-zone` where FS prints its mark
-  (#869), so a renderer has the box without the library drawing a vendor
-  logo. Measured on FS's straight-on renders for `fs/cmh-sfds1u-cover` and
-  `fs/cmh-dfds2u-cover`, estimated from an angled close-up for
-  `fs/cmh-sfd1u-cover`, and borrowed from the SFDS1U for
-  `fs/cmh-bs-sfds1u-cover`, of which no image exists; all four 1.1.0.
-  `fs/cmh-sfds2u-cover` and `fs/cmh-dfds1u-cover` claimed a mark that no
-  render or drawing shows; their provenance now says so, 1.0.1. The devices
-  cmh-sfds1u, cmh-sfds2u and cmh-bs-sfds1u 0.1.1, cmh-dfds1u, cmh-dfds2u and
-  cmh-dfd1u 0.1.2, cmh-sfd1u 0.1.3. The 2D drawings are unchanged.
-- `fs/cmh-sfd1u` 0.1.2: the back of the base is built inside the 87 mm
-  envelope. 0.1.1 built its five rear plates 11.3 mm outward from the rear
-  face, so in 3D the duct was 98.3 mm deep with an air gap behind the well
-  floor; the plates and the base's side walls are now sunk just inside the
-  faces. The 2D views and the DCIM exports are unchanged apart from the
-  version.
-- `devicelock` no longer calls a change minor because it added an id while
-  something already there moved: the added placements are taken back out and
-  the rest must still hash to the old shape, or the change is a major (#828).
-- The faces of the HPE FlexibleLOM adapters are read from their own
-  photographs (#764). `hpe/flom-817721-b21@1`, the 535FLR-T, was a copy of
-  the 562FLR-T face: its P2 legend is between the jacks and it has no right
-  vent field. The 640FLR-SFP28 has its features 1.0 mm further right, with
-  ACT lamps that show activity only and LNK lamps that show link only.
-- The IEC inlets' cavities are as deep as the cord ends that enter them.
-  `std/c14-inlet@1` (1.4.0) is 17.0 deep, shroud face to cavity floor, with
-  its pins rising 15.0, both dimensioned on Adam Tech drawing S00087C rev D,
-  where it was 13.0 and 12.2 estimated. `std/c20-inlet@1` (1.4.0) is 19.0 deep
-  with 17.0 pins, still estimated (the C19 nose less 1, as the C13/C14 pair
-  stands; no held drawing sections a C20 cavity), where it was 15.0. The cord
-  ends seated in them, `generic/c13-plug@1` and `generic/c19-plug@1` (1.1.0),
-  stand 4.0 less proud: 47.0 and 57.0 in front of the inlet face. The 126
-  devices whose supplies or chassis carry one of these inlets take a patch
-  (97 C14, 30 C20, `dell/r740xd` both); their DCIM exports change in the
-  drawing version line only (#793).
-- `common/rj11-jack@1` (1.2.0) is drawn as the six-position jack it is: the
-  opening is 9.88 wide (TE C-1775675 rev C) in three tiers (body, latch
-  shoulder, latch slot) recessed into a solid housing, as `std/rj45@2` draws
-  its own, where it was the 11.6 RJ45 width; two contacts are loaded (6P2C);
-  and it is 20.57 deep with a built cavity, where it stated no depth. Its
-  body is unchanged; its `mate` and `tel` points move from (7.0, 6.75) and
-  (7.0, 6.7) to (7.0, 4.925), the centre of the 9.88 x 6.85 body tier, so a
-  seated `generic/rj11-plug@1` (1.0.1, provenance only) sits centred in the
-  tier and clears the opening by about 0.12 a side, where at the old point it
-  stood 1.8 off it. Nothing on a device addresses either point, so
-  `halny/hlx-tgv` takes a patch (#837).
-- `dcim_export` refuses a listing name pattern that does not parse, by name,
-  where it raised a bare `SyntaxError` (#719).
-- The 3D viewer survives a lost WebGL context (#746). The view went blank
-  with no message and never came back. The viewer now lets the browser
-  restore the context, then rebuilds the loaded device or component with its
-  configuration, overrides, states, pulled parts, selection and marks, and
-  leaves the camera where it was. While the context is lost the explorer says
-  that 3D is paused, and when the browser refuses a new context it says to
-  reload the page or close other tabs with 3D open.
-- Lint L109 judges a declared `optical.polarity` against the pattern for the
-  trunk connector's own fibre count, read from its `optical.positions` as L80
-  reads it, and compares only the ports actually wired (roc-ops/Portrayal#524).
-  It used to count the paths, so an MTP-24 Type AF cassette with fibres
-  declared `unused`, or wired to twelve ports, was judged as a narrower
-  connector: its correct row-exchanged paths failed and the plain pair swap
-  passed. A module whose trunk is stated in `optical.trunk` (#246) is now
-  judged too; it used to be skipped without a word.
-- L39 centres a part's composed opening on its cutout, not the part's whole
-  footprint (#248). `common/qsfp28-cage@3` carries the chassis lamp band above
-  the cage, so its `std/qsfp-ganged@1` opening sits 4.2 mm below its top edge;
-  the TE 2322551-4 drawing has the cage itself centred on that opening. Every
-  correctly punched AS7726-32X port, and its USB beside a printed symbol, read
-  as 1.5 to 1.74 mm off. The 33 baselined warnings are gone and no component
-  or device changed.
-- L46 measures what composed parts draw, not their boxes (#684). A pair whose
-  boxes collide is measured again on each part's skin shapes (rects, circles,
-  ellipses, polygons, text; a skin with a path or a transformed group counts as
-  its whole box), so the open middle of `common/qsfp-pull-tab@2` and
-  `common/qsfp-dd-pull-tab-type2@1` no longer reads as covering the bores and
-  inserts it frames. Seven baselined warnings are gone, and the provenance
-  sentences that explained them are removed from `generic/qsfp-lc@2` 2.2.2,
-  `generic/qsfp-dd-lc@2` 2.2.1, `generic/qsfp-lc-simplex@1` 1.0.1,
-  `generic/qsfp-mpo@1` 1.0.1 and `generic/qsfp-dd-mpo16@1` 1.0.1.
-- Vendor marks are reserved, not drawn or boxed, on fifteen devices and one
-  component (#964). No DCIM export changes and nothing is renamed.
-  - Edgecore: `edgecore/dcs240` 1.1.9 drops the grey `brand-badge` box that
-    stood for the logotype and reserves its measured box as the region
-    `logo-zone`; `edgecore/dcs511` 2.0.9, `edgecore/eps121` 2.0.8 and
-    `edgecore/eps122` 2.0.9 gain the region where the logotype sits.
-  - FS blanking panels: `fs/fhu-bps-1u-10`, `fhu-bps-2u`, `fhu-bps-4u`,
-    `fhu-bpstl-1u-10`, `fhu-bpstl-2u`, `fhu-bpstl-4u` and `fhu-bpa-1u-10`
-    (each 0.1.1) gain a `logo-zone` region at the mark measured on the
-    straight-on render; `fs/fhu-bpad-2u` and `fs/fhu-bpad-4u` 0.1.1 gain one
-    region per unit, `logo-zone-1` upward, inside the recess each unit
-    already draws.
-  - Casa: `casa/chassis-label@1` 1.4.0 no longer draws a black triangle where
-    the vendor mark sits; the skin node `logo` is gone and the measured box is
-    the element `logo-zone`, left empty. `casa/c100g` 1.0.2 and `casa/c40g`
-    0.5.20 take the patch for the part they place.
-- A card's USB jack is a console port only when its placement says so, as on a
-  device. The module export filed every `std/usb-a` part as a `usb-a` console
-  from the ref alone, and had no micro-USB or USB-C console row; it now asks
-  the device path's own decision (`device_console_row`): a USB-A or USB-C jack
-  needs `role: console`, and a micro-USB jack is a console when its id, role or
-  function says so. The USB storage and service ports on 14 Cisco ASR 9000
-  RSP/RP cards, 10 Juniper RE/RCB cards and the two Dell 16G rear I/O boards no
-  longer export as consoles; eight CommScope CH3000 modules gain their
-  micro-USB console (`usb-micro-b`), and the Eaton G4 ENMC its USB-C console.
-  **BREAKING for DCIM data already imported.**
-- The CommScope CX3003C and CX3033N (1.0.1; CH3000 3.2.4) no longer call their
-  micro-USB a console: both datasheets reserve it, with the RS-232 jack beside
-  it, for factory use, so it exports nothing.
-- The MX chassis state the power their vendor publishes (roc-ops/Portrayal#113).
-  `power-typical-w` on the MX80 (310 W, output side, Tables 14 and 20),
-  MX240 (1860 W), MX480 (3470 W) and MX960 (6520 W) - the last three from
-  the family datasheet with the DC figure in `power-typical-scope` and
-  `power-envelope: unstated` - and on the MX10004 (7.5 kW), MX10008 (12 kW)
-  and MX10016 (23 kW), typical and fully loaded per their datasheets.
-  `power-max-ac-w` 600 and `power-max-dc-w` 625 on the MX104 (input side,
-  Table 6); 1520 W typical and 4420 W at 55 C on the MX2008 for the base
-  system only (`power-envelope: bare`); the MX10003's `typical-draw-w` is
-  now `power-typical-w` 1676 beside `power-max-w` 2110 (Tables 24 and 25).
-  Provisioning ceilings go under `thermal.max-thermal-output`, flagged as
-  ceilings (MX80, MX480, MX960). The MX2010 and MX2020 carry no figure: their
-  guides contradict themselves, recorded as a `sources-disagree` gap scoped
-  to both power facts. Five records that called the vendor silent or the
-  tables unextracted are corrected (MX80, MX104, MX960, MX10004, MX10008).
-  Each device is a patch version; the DCIM device-type exports change only in
-  their comments.
-- Nautobot: the MX2000 line-card adapter (`MX2000-LC-ADAPTER`) exports its
-  `mpc` bay, so an MPC can be installed in it in an MX2008, MX2010 or MX2020
-  slot (#917). The bay has a blank position: Nautobot skips a blank position
-  when it names ports, so an MPC in the adapter in `fpc3` names its ports
-  `fpc3/port-0-0`, the names the same MPC takes in an MX960's `fpc3`. NetBox
-  is unchanged and still says `fpc3/mpc/port-0-0`. A carrier's only bay that
-  accepts a module also seated directly in a chassis bay is given this way;
-  the adapter is the only one today.
-- Nautobot: the MICs that only an MPC takes (`MIC-3D-4XGE-XFP` and the four
-  `MIC3-3D-*`) name their ports `{module.parent}/{module}/x` again, as before
-  #261 made the adapter count as a second depth for every MPC. **BREAKING for
-  DCIM data already imported** from an export taken since #261 merged: those
-  five module types need re-importing. Their bays on the MPC1E, MPC2E and
-  MPC3E are still withheld from Nautobot (nautobot/nautobot#5823), as in an
-  MX240, MX480 or MX960.
-  This is where the three Nautobot entries of this section end up (#765,
-  #261 and this one). Against an export taken at 0.1.0, those five types
-  move from `{module}/x` to `{module.parent}/{module}/x`, once. On
-  `MIC-3D-4XGE-XFP` the third and fourth ports are also renamed, in NetBox
-  as in Nautobot: `port-0-2` and `port-0-3` are `port-1-0` and `port-1-1`
-  (#887, under Changed).
-- `juniper/mx480` 5.0.1: the weight comes from the hardware guide's Table 88,
-  29.7 kg for the chassis with midplane, fan tray, air filter and cable
-  management brackets and 100.26 kg for the maximum configuration
-  (`weight-base-kg`, `weight-max-kg`). The "up to 163.5 kg" it carried was the
-  guide's rack text, 163.5 lb (74.2 kg), read as kilograms; the false
-  `weight-and-max-config` gap is gone (#886).
-- The 300CB08-C, 300CB08-SC and the four nrg300CB08 connectorized panels
-  (1.1.2) no longer list an `output-plug` gap: their P40 receptacles are
-  connector slots and `amphenol-ns/p40-plug@1` seats in them. Their DCIM
-  exports change in the drawing version line and the gaps comment only.
-- The 3D front of `nokia/lmfs-f`'s front-cover configuration was laid out on
-  the 528 mm drawing rather than its 481 mm face, so every part sat 23.5 mm
-  left of where it is and the face was textured over a plate 528 wide (#865).
-- **The snap-in ring's relief agrees with its guide**: each leg was built
-  6.8 mm thick in the plane of the loop, which narrowed the drawn opening to
-  30.0 mm against the guide's 32.0 and stood a route's sill point 1 mm inside
-  the rear leg. The legs are 5.8, as the plan's 43.6 less the opening gives
-  and the ring-profile view reads to a pixel. The slit, re-read, is 2.2 mm
-  where 3.8 had been read, in the relief and in fs/fhd-cmp5dr-profile@1
-  1.0.1's side view.
-- L50 no longer reports printing as painted over by a node that is never on
-  screen with it: a position's other option, drawn after it (#808).
-- The craft interface bays of `juniper/mx960` (1.1.0), `mx2008`, `mx2010`
-  and `mx2020` (0.3.0) state `for: chassis`, and their `craft` group's role
-  is `management`, as it already was on the MX240 and MX480: the craft
-  interface is where an operator reads and acts on the router's state, with
-  LEDs for its components, buttons and an alarm cut-off. `dell/r660` (5.1.0) does the same for its left
-  control panel, which the R660 Installation and Service Manual describes as
-  holding the system health, system ID and status lamps (#414).
-- In 3D, a part whose only SHOW node is hidden by default now rebuilds when
-  that node should appear: each part group records its position fields as
-  `data-position-fields` before hidden nodes are removed, and the viewer's
-  rebuild check reads it (#874).
-- A `data-move` entry whose number is not one (`.`, `1.2.3`) is refused by the
-  kit as the build refuses it, instead of writing `NaN` (#874).
-- The 3D viewer draws a part's fields on its first scene. `setFields` called
-  before the first `load` - a host handing over a link's latch colour as it
-  creates the viewer - was kept and never painted: the latch came up grey,
-  and the same map again changed nothing. `build()` now loads the fields
-  beside the lamp states and pulled parts, before any face is cut (#850).
+  (`docs/format-stability.md`). Superseded: it stayed 2 for this change
+  only. Bundles made it `version` 3 (the rack file entry under Changed).
 
 ### Changed
+- **Schemas: the device schema types ten keys that took any scalar at 0.1.0.
+  BREAKING for a manifest outside this library** that already used one of
+  these names with another spelling of the value: the schema refuses it now.
+  Under `attrs.power`: `input-plug` (a lowercase slug, as `nema-l21-30p`),
+  `input-cord` (`fixed` or `detachable`), `input-phase` (`single` or
+  `three`), `input-wiring` (`wye` or `delta`), and `input-voltage-v`,
+  `input-current-a`, `plug-rating-a` and `capacity-kw` (each a number above
+  0). Under `attrs.management`: `metering-scope` (`none`, `input`, `branch`
+  or `outlet`) and `outlet-switching` (a boolean). These are the keys the two
+  rack PDU entries under Added introduce. At 0.1.0 `attrs.power` and
+  `attrs.management` took any key with a string, number or boolean value,
+  and they still do for every other key. No key was removed from any
+  schema. All 1,226 manifests of the 0.1.0 library (170 devices, 1,027
+  component majors and 29 listings) validate under the 0.1.0 schemas and
+  under these. The component and listing schemas refuse nothing they
+  accepted. `format` stays 1, and each schema keeps its `$id` under
+  `/schemas/v1/`.
 - `relief.profile` and `profile-y` now move with `out` when their part stands
   `in:` a well or is seated in a lifted bay, so the heights stay heights
   above what the part stands on. The schema used to say a profile was not
@@ -1886,8 +1615,8 @@ names the ref that replaces it.
   `download()` hide every mark halo for the export, as they always hid the
   selection halo, and restore them after. A GLB or USDZ is the model; the marks
   stay on screen.
-- The DCIM exports no longer call every device without `ru` a 1U full-depth
-  rack device. A box that is not racked exports `u_height: 0`, not full depth,
+- **BREAKING for DCIM data already imported.** The DCIM exports no longer
+  call every device without `ru` a 1U full-depth rack device. A box that is not racked exports `u_height: 0`, not full depth,
   with its mounting in the comments (ReadyLinks GL-8XEP, Halny HLX-TGV), and
   the Dell R740xd exports at its real 2U. A DCIM that imported these types
   holds the old height until they are re-imported (roc-ops/Portrayal#734).
@@ -1957,6 +1686,9 @@ names the ref that replaces it.
   2-G-5,08 (1757242) width, with the contacts and the `mate` point (6.08, 6.05) 1.0 further
   in. Each of the ten devices takes a major, 0.1.x to 1.0.0. The header is still drawn 12.1
   high, which counts the solder pin; #873 asks whether it should be the installed 8.6 (#804).
+  Superseded: #873 was answered in this release. `@2` is removed, and the ten switches seat
+  `common/terminal-header-508-2@3`, drawn 8.6 high, at 2.0.0 (the entry on the two headers
+  in this section).
 - `kit/rack` no longer speaks as portrayal.dev's page (#895). A rack file newer
   than the kit is refused with "this reader supports up to version N" (no
   "Reload to get the newer page"); a system command sent without origin
@@ -2027,6 +1759,11 @@ names the ref that replaces it.
   `rack.schema.json` describes version 3 and is published at
   `https://portrayal.dev/schemas/v2/rack.schema.json`; the `/v1/` schema, which
   describes version 2, stays as published (`docs/format-stability.md`).
+  This is the net result for 0.2.0: a rack file this release writes is
+  `version` 3, and the schema that describes it is the one at
+  `/schemas/v2/`. The two entries under Added that say `version` 2 and
+  `/schemas/v1/` describe the file before bundles. No rack file existed at
+  0.1.0.
 - **Routed lengths change for a bundled cable**: it is measured along its
   bundle's trunk, not its own route, between where it joins and leaves.
 - `cable.remove`, and `remove` with `cables: 'remove'`, take a cable out of its
@@ -2531,7 +2268,8 @@ names the ref that replaces it.
   photograph is isotropic to 0.8%, not 5.1% anisotropic.
 - `juniper/mx960` 2.0.0: its fourteen slots seat the same horizontal cards at
   `rotate: 90`, footprint 29.5 x 413.5 with a 29.5 x 396.0 `opening`, on a 31.0
-  pitch (was 30.1). The SCB slots take `juniper/scb-mx@2`, so an MX960 SCB now
+  pitch (was 30.1). The SCB slots take `juniper/scb-mx@2` (superseded: `@3`
+  at 0.2.0, #891), so an MX960 SCB now
   offers the RE-S-2000 as well as the RE-S-1300. The MX960 device type's `Accepts:`
   descriptions name the horizontal cards. Each module type's export comments
   now name one fewer author.
@@ -2974,6 +2712,339 @@ names the ref that replaces it.
 - `common/terminal-header-508-2@2`, replaced by `common/terminal-header-508-2@3`,
   and `common/terminal-header-508-5f@1`, replaced by
   `common/terminal-header-508-5f@2` (#873). Element ids are unchanged.
+
+### Fixed
+- 3D kit: a `uhandle` standing `in:` a well rises from the well's floor, as
+  `out`, `cyl` and `bar` already did, rather than from the face plane.
+- `amphenol-ns/tpa-fuse-holder-307492@1` (1.0.1) keeps its fuse rating out of
+  the drawing once the rating is set in a viewer. The rating is carried by the
+  part and never printed, because the fuse is inside the holder; its text node
+  was hidden by its own `display`, which `kit/fields.js` removes from a node it
+  writes a value to. The node now sits in a group that is not displayed. The
+  300CB08 takes a patch, 1.0.1.
+- 3D kit (`swap.js` `viewsToRewrite`): a swap into a slot on a placed part
+  that composes several slots and is no cage itself, such as a pole of a
+  barrier terminal block (`psu1-input/lug-2`), now reaches the 3D scene. No
+  bay and no cage of any view claims such a key, so no view was named, the
+  face was never rewritten and the occupant showed in 2D only, with no
+  warning. Every view is rewritten for such a key (#814).
+- `@portrayal/kit`: the README's links to the Portrayal README and to the
+  artifact contract are absolute GitHub URLs, so they work on the npm package
+  page, where a relative link resolved against npmjs.com and broke. The
+  package also names its `homepage` and where to report `bugs`. Both reach
+  npm with the next kit release (#716).
+- `edgecore/ais800-psu-dc@2`: the vent lattice is 23.46 tall from y 13.56,
+  measured module edge to module edge on the quick start's Connect Power
+  figure, where 1.x drew it 20.12 from 15.01 (#397). `edgecore/ais800-32d`
+  2.0.0 and `edgecore/ais800-32o` 3.0.0 accept it.
+- The -C panels of the Amphenol Network Solutions 300CB08 family
+  (`amphenol-ns/300cb08-c`, `nrg300cb08-ctrl-c`, `nrg300cb08-sens-c`) are
+  367.0 deep, front of the metal to the tops of the output receptacles, as
+  their own bottom view (installation guide Fig. 3-13) measures, not the stud
+  panel's 330.8; their bottom is re-read off that view. Their busbar landings
+  (`amphenol-ns/input-feed-busbar@1`, 1.0.1) now stand 38.1 and 95.2 behind
+  that, the two lengths the drawing dimensions, where both stood 147, a figure
+  that subtracted a depth without the front guards from one with them (#860).
+  Each of the three panels takes a major (2.0.0): its geometry moved, though
+  no id or slot did. Their DCIM exports change in the drawing version line
+  only.
+- The kit's `loadDevice` and `loadStage` (`kit/shell.js`) take a generation each
+  call, and one that a newer load overtook stops after its await: it writes no
+  device, configuration or view, mounts no drawing and emits no `load`, and its
+  promise rejects with an error `isSuperseded(err)` (exported) recognises. The
+  stage holds exactly one drawing after any overlap. A host that awaited a load
+  sees the rejection instead of carrying on with a stale target (#929).
+- A `fields=` entry for a part drawn only on a face other than the one the link
+  opens (a supply's wattage on the rear, a link opening on the front) is kept on
+  reload: the shell fetches the other faces before judging the entry, as
+  `applySwaps` already does for a slot on another face, and paints it when that
+  face is mounted. It used to be ignored and dropped from the location (#818).
+- L132 resolves `fed-by` per configuration, as the export does: an output
+  every configuration has, fed by an input that only some configurations have
+  (`only-in`), is an error naming the configuration that lacks it, where it
+  used to lint clean and stop `./publish.sh` with `NotExpressible` (#857).
+- A breaker bay whose description is too long for its `; protects <outlet>`
+  clause now leads with `Protects <outlet>; ` and shortens what it accepts
+  after it. The clause is the only place Nautobot keeps the breaker-to-outlet
+  link, and it used to be cut off. No bay in the library is that long, so no
+  committed export changes (#857).
+- L129 refuses an `optical.trunk` that names one position of a multi-position
+  front connector exported as one port (an MPO adapter): the export shrank the
+  port and kept each leg's original `front_position`, which both DCIMs refuse.
+  Name the connector bare (#857).
+- L39 asks each window a multi-window lamp declares to be more than half
+  punched, where it summed them: a four-window lamp with three windows punched
+  passed, and the missing window was never reported. Nothing in the library
+  changes. Tests now pin the windows' turn at 90, 180 and 270 degrees on a part
+  that is not symmetric (#845).
+- L39 reads a composed leaf with no registry entry (no `conforms`, no parts of
+  its own, a size, and not a lamp, latch or printing) as the opening of the
+  part that composes it, as `_aperture_of` already did, so the C100G's strap
+  plate is checked against its jack's cutout rather than reported 4.5 mm off
+  it (#413).
+- Every Casa lamp now declares the states it can show and is drawn off (#940).
+  The STATUS, ACTIVE and ALARM lamps on the line cards (BDM, BDM2, BDM2m,
+  DS 8x8/8x96/8x192, US 16x4/16x8, CSC 8x10G) and the SMMs (2x10G, 8x10G,
+  300G, 300GM) take `ok`, `active` and `alarm`, from the front-installed module
+  LED tables of the C100G and C40G installation guides; STATUS and ACTIVE are
+  no longer painted permanently green. The port lamps on the CSC 8x10G and
+  SMM300G/GM take `link` and `activity` (blinking), and the SMMs' management
+  jacks colour their lamps green. The C100G fan and PEM lamps take `ok`,
+  `alarm` and a blue `high-speed` (fan) or `on` (PEM, which the guide marks
+  "Not used"). The C40G AC PSU's status lamp is now a declared element,
+  `casa/c40g-psu-ac@1` `status`, with `ok` and `alarm`; it was art painted
+  green that no state reached. No element id changed. Each of the sixteen
+  components takes a minor, and the C100G and C40G a patch.
+- `fs/dinrail2u` and `fs/dinrail4u` 0.1.1: the setback notes say the datasheet
+  side views are embedded rasters (461 x 212 and 435 x 279 px, about 1.1 and
+  1.2 mm a pixel) read on an upsampled render, not vectors; the 2U note says the
+  slot's front end is hidden under the screw head drawn at 69.4, which is where
+  the front stop is taken (64.4 + 2.6 would be 67.0). The 51.2 mm front setback
+  stands. The configuration-level `airflow` description in the device schema
+  and the `configs.json` airflow list in `library/README.md` name
+  `top-to-bottom`.
+- `eaton/pdumv20hvnetlx` 0.1.1: the front `logo-zone` moves to (19.0, 677.0),
+  over the wordmark DT01 shows, and the left view gains a `logo-zone` for the
+  upside-down EATON wordmark DT08 and DT01 show about 864 to 930 mm from the top end
+  (the mark is not drawn). The side vent fields no longer carry a fill their
+  `slots` pattern replaces; the drawing is unchanged.
+- The device schema's `interfaces` description and power-outlets-design
+  decision 5 say that a NOS listing that states its own `interfaces` keeps
+  every outlet's placement id, since it does not apply the hardware's own
+  naming rules.
+- `generic/nema-5-20p-plug@1` 1.0.1: `provenance.pins` gives the blade
+  centres 15.45 apart, as the Leviton drawing places them (6.31 + 9.14), not
+  15.49. The drawing is unchanged.
+- `components.json` publishes a turned bay with its `rotate` (#718). Each
+  component entry lists its own bays with `at`, `size`, `accepts` and
+  `default`, and left out the turn, so a consumer placing a card by the index
+  landed it wrong in a turned slot. The two slots of `dell/riser-3a-14g@2`
+  carry `rotate: 180`. A bay that is not turned states nothing, as before.
+  Additive; the `contract` number does not move.
+- DCIM exports: a micro-USB console reaches the device type as a console port,
+  `Console (Micro-USB)`, type `usb-micro-b`, beside the RJ45 `Console` the
+  panel labels apart from it; and an RJ45 AUX serial port on a chassis is a
+  console port named `AUX`, as a card's already was. 96 device types in each
+  of `library/exports/netbox` and `nautobot` gain ports (31 devices with a
+  micro-USB console, plus the ASR 9001, ASR 9901 and MX80 with AUX), and
+  nothing already exported is renamed, retyped or removed. A USB storage or
+  service port is still not exported, by the existing rule that a USB data
+  port is not a console; every management-cluster port that is not exported is
+  now named, with its reason, in `MGMT_NOT_A_DCIM_PORT`, and a test asks the
+  exporter about each one (roc-ops/Portrayal#384).
+- `edgecore/eps122` 2.0.8 draws the orange bands that mark its 90 W ports 41-48: one
+  behind the legend row above them and one behind the lamp row below, measured on the
+  guide's front elevation at its native resolution and coloured from a pixel count. The
+  single band it carried sat at x 601.74 on a 440 mm face, so it was never seen. The
+  panel legend is transcribed as "1.65A Max/Port41-48", not 1.85 A, and the row under
+  the ports is identified as the per-port lamp row (#878).
+- `juniper/mx204` 4.0.2 no longer carries four ear-flange rects beside its front and
+  rear faces. They lay wholly outside the drawing and were never seen, and the device's
+  own provenance says the ears are not modelled (#878).
+- `edgecore/exp800-16o` and `edgecore/exp100-32x` (2.0.0) print the white
+  arrow beside each port numeral as silkscreen (`silk-arrow-N`), as the AIS800
+  review ruled for the same glyph, and keep the dark triangular windows under
+  it as lamps: the EXP800 quick start calls them out as the OSFP LEDs (#396).
+  Both port strips were re-measured on their elevations: the numerals, which
+  sat where the arrows are or past the windows, and the lamps, which sat
+  between the two pairs of windows, now stand where the drawings put them; each
+  lamp is its port's left window.
+- The covers of the FS HD and UHD finger ducts show their four latches in 3D
+  (#869): the plate and its clips are one raised group, so the clips are
+  drawn on the face instead of left behind it, and the hinge rails end 0.1 mm
+  behind the face. `fs/cmh-uhd-sfdabs1u-cover`, `-2u-cover`, `-3u-cover`,
+  `fs/cmh-hd-sfdabs3u-cover` and `-4u-cover` 1.0.1; the five devices 0.1.1.
+  The 2D drawings are unchanged.
+- `fs/cmh-sfds1u` cites the FS quick start guide it takes its fixings from as a
+  reference, and its capacity note and those of `fs/cmh-sfds2u`,
+  `fs/cmh-dfds1u` and `fs/cmh-dfds2u` no longer label a missing figure
+  `datasheet` (#869).
+- Four FS finger-duct covers reserve a `logo-zone` where FS prints its mark
+  (#869), so a renderer has the box without the library drawing a vendor
+  logo. Measured on FS's straight-on renders for `fs/cmh-sfds1u-cover` and
+  `fs/cmh-dfds2u-cover`, estimated from an angled close-up for
+  `fs/cmh-sfd1u-cover`, and borrowed from the SFDS1U for
+  `fs/cmh-bs-sfds1u-cover`, of which no image exists; all four 1.1.0.
+  `fs/cmh-sfds2u-cover` and `fs/cmh-dfds1u-cover` claimed a mark that no
+  render or drawing shows; their provenance now says so, 1.0.1. The devices
+  cmh-sfds1u, cmh-sfds2u and cmh-bs-sfds1u 0.1.1, cmh-dfds1u, cmh-dfds2u and
+  cmh-dfd1u 0.1.2, cmh-sfd1u 0.1.3. The 2D drawings are unchanged.
+- `fs/cmh-sfd1u` 0.1.2: the back of the base is built inside the 87 mm
+  envelope. 0.1.1 built its five rear plates 11.3 mm outward from the rear
+  face, so in 3D the duct was 98.3 mm deep with an air gap behind the well
+  floor; the plates and the base's side walls are now sunk just inside the
+  faces. The 2D views and the DCIM exports are unchanged apart from the
+  version.
+- `devicelock` no longer calls a change minor because it added an id while
+  something already there moved: the added placements are taken back out and
+  the rest must still hash to the old shape, or the change is a major (#828).
+- The faces of the HPE FlexibleLOM adapters are read from their own
+  photographs (#764). `hpe/flom-817721-b21@1`, the 535FLR-T, was a copy of
+  the 562FLR-T face: its P2 legend is between the jacks and it has no right
+  vent field. The 640FLR-SFP28 has its features 1.0 mm further right, with
+  ACT lamps that show activity only and LNK lamps that show link only.
+- The IEC inlets' cavities are as deep as the cord ends that enter them.
+  `std/c14-inlet@1` (1.4.0) is 17.0 deep, shroud face to cavity floor, with
+  its pins rising 15.0, both dimensioned on Adam Tech drawing S00087C rev D,
+  where it was 13.0 and 12.2 estimated. `std/c20-inlet@1` (1.4.0) is 19.0 deep
+  with 17.0 pins, still estimated (the C19 nose less 1, as the C13/C14 pair
+  stands; no held drawing sections a C20 cavity), where it was 15.0. The cord
+  ends seated in them, `generic/c13-plug@1` and `generic/c19-plug@1` (1.1.0),
+  stand 4.0 less proud: 47.0 and 57.0 in front of the inlet face. The 126
+  devices whose supplies or chassis carry one of these inlets take a patch
+  (97 C14, 30 C20, `dell/r740xd` both); their DCIM exports change in the
+  drawing version line only (#793).
+- `common/rj11-jack@1` (1.2.0) is drawn as the six-position jack it is: the
+  opening is 9.88 wide (TE C-1775675 rev C) in three tiers (body, latch
+  shoulder, latch slot) recessed into a solid housing, as `std/rj45@2` draws
+  its own, where it was the 11.6 RJ45 width; two contacts are loaded (6P2C);
+  and it is 20.57 deep with a built cavity, where it stated no depth. Its
+  body is unchanged; its `mate` and `tel` points move from (7.0, 6.75) and
+  (7.0, 6.7) to (7.0, 4.925), the centre of the 9.88 x 6.85 body tier, so a
+  seated `generic/rj11-plug@1` (1.0.1, provenance only) sits centred in the
+  tier and clears the opening by about 0.12 a side, where at the old point it
+  stood 1.8 off it. Nothing on a device addresses either point, so
+  `halny/hlx-tgv` takes a patch (#837).
+- `dcim_export` refuses a listing name pattern that does not parse, by name,
+  where it raised a bare `SyntaxError` (#719).
+- The 3D viewer survives a lost WebGL context (#746). The view went blank
+  with no message and never came back. The viewer now lets the browser
+  restore the context, then rebuilds the loaded device or component with its
+  configuration, overrides, states, pulled parts, selection and marks, and
+  leaves the camera where it was. While the context is lost the explorer says
+  that 3D is paused, and when the browser refuses a new context it says to
+  reload the page or close other tabs with 3D open.
+- Lint L109 judges a declared `optical.polarity` against the pattern for the
+  trunk connector's own fibre count, read from its `optical.positions` as L80
+  reads it, and compares only the ports actually wired (roc-ops/Portrayal#524).
+  It used to count the paths, so an MTP-24 Type AF cassette with fibres
+  declared `unused`, or wired to twelve ports, was judged as a narrower
+  connector: its correct row-exchanged paths failed and the plain pair swap
+  passed. A module whose trunk is stated in `optical.trunk` (#246) is now
+  judged too; it used to be skipped without a word.
+- L39 centres a part's composed opening on its cutout, not the part's whole
+  footprint (#248). `common/qsfp28-cage@3` carries the chassis lamp band above
+  the cage, so its `std/qsfp-ganged@1` opening sits 4.2 mm below its top edge;
+  the TE 2322551-4 drawing has the cage itself centred on that opening. Every
+  correctly punched AS7726-32X port, and its USB beside a printed symbol, read
+  as 1.5 to 1.74 mm off. The 33 baselined warnings are gone and no component
+  or device changed.
+- L46 measures what composed parts draw, not their boxes (#684). A pair whose
+  boxes collide is measured again on each part's skin shapes (rects, circles,
+  ellipses, polygons, text; a skin with a path or a transformed group counts as
+  its whole box), so the open middle of `common/qsfp-pull-tab@2` and
+  `common/qsfp-dd-pull-tab-type2@1` no longer reads as covering the bores and
+  inserts it frames. Seven baselined warnings are gone, and the provenance
+  sentences that explained them are removed from `generic/qsfp-lc@2` 2.2.2,
+  `generic/qsfp-dd-lc@2` 2.2.1, `generic/qsfp-lc-simplex@1` 1.0.1,
+  `generic/qsfp-mpo@1` 1.0.1 and `generic/qsfp-dd-mpo16@1` 1.0.1.
+- Vendor marks are reserved, not drawn or boxed, on fifteen devices and one
+  component (#964). No DCIM export changes and nothing is renamed.
+  - Edgecore: `edgecore/dcs240` 1.1.9 drops the grey `brand-badge` box that
+    stood for the logotype and reserves its measured box as the region
+    `logo-zone`; `edgecore/dcs511` 2.0.9, `edgecore/eps121` 2.0.8 and
+    `edgecore/eps122` 2.0.9 gain the region where the logotype sits.
+  - FS blanking panels: `fs/fhu-bps-1u-10`, `fhu-bps-2u`, `fhu-bps-4u`,
+    `fhu-bpstl-1u-10`, `fhu-bpstl-2u`, `fhu-bpstl-4u` and `fhu-bpa-1u-10`
+    (each 0.1.1) gain a `logo-zone` region at the mark measured on the
+    straight-on render; `fs/fhu-bpad-2u` and `fs/fhu-bpad-4u` 0.1.1 gain one
+    region per unit, `logo-zone-1` upward, inside the recess each unit
+    already draws.
+  - Casa: `casa/chassis-label@1` 1.4.0 no longer draws a black triangle where
+    the vendor mark sits; the skin node `logo` is gone and the measured box is
+    the element `logo-zone`, left empty. `casa/c100g` 1.0.2 and `casa/c40g`
+    0.5.20 take the patch for the part they place.
+- A card's USB jack is a console port only when its placement says so, as on a
+  device. The module export filed every `std/usb-a` part as a `usb-a` console
+  from the ref alone, and had no micro-USB or USB-C console row; it now asks
+  the device path's own decision (`device_console_row`): a USB-A or USB-C jack
+  needs `role: console`, and a micro-USB jack is a console when its id, role or
+  function says so. The USB storage and service ports on 14 Cisco ASR 9000
+  RSP/RP cards, 10 Juniper RE/RCB cards and the two Dell 16G rear I/O boards no
+  longer export as consoles; eight CommScope CH3000 modules gain their
+  micro-USB console (`usb-micro-b`), and the Eaton G4 ENMC its USB-C console.
+  **BREAKING for DCIM data already imported.**
+- The CommScope CX3003C and CX3033N (1.0.1; CH3000 3.2.4) no longer call their
+  micro-USB a console: both datasheets reserve it, with the RS-232 jack beside
+  it, for factory use, so it exports nothing.
+- The MX chassis state the power their vendor publishes (roc-ops/Portrayal#113).
+  `power-typical-w` on the MX80 (310 W, output side, Tables 14 and 20),
+  MX240 (1860 W), MX480 (3470 W) and MX960 (6520 W) - the last three from
+  the family datasheet with the DC figure in `power-typical-scope` and
+  `power-envelope: unstated` - and on the MX10004 (7.5 kW), MX10008 (12 kW)
+  and MX10016 (23 kW), typical and fully loaded per their datasheets.
+  `power-max-ac-w` 600 and `power-max-dc-w` 625 on the MX104 (input side,
+  Table 6); 1520 W typical and 4420 W at 55 C on the MX2008 for the base
+  system only (`power-envelope: bare`); the MX10003's `typical-draw-w` is
+  now `power-typical-w` 1676 beside `power-max-w` 2110 (Tables 24 and 25).
+  Provisioning ceilings go under `thermal.max-thermal-output`, flagged as
+  ceilings (MX80, MX480, MX960). The MX2010 and MX2020 carry no figure: their
+  guides contradict themselves, recorded as a `sources-disagree` gap scoped
+  to both power facts. Five records that called the vendor silent or the
+  tables unextracted are corrected (MX80, MX104, MX960, MX10004, MX10008).
+  Each device is a patch version; the DCIM device-type exports change only in
+  their comments.
+- Nautobot: the MX2000 line-card adapter (`MX2000-LC-ADAPTER`) exports its
+  `mpc` bay, so an MPC can be installed in it in an MX2008, MX2010 or MX2020
+  slot (#917). The bay has a blank position: Nautobot skips a blank position
+  when it names ports, so an MPC in the adapter in `fpc3` names its ports
+  `fpc3/port-0-0`, the names the same MPC takes in an MX960's `fpc3`. NetBox
+  is unchanged and still says `fpc3/mpc/port-0-0`. A carrier's only bay that
+  accepts a module also seated directly in a chassis bay is given this way;
+  the adapter is the only one today.
+- Nautobot: the MICs that only an MPC takes (`MIC-3D-4XGE-XFP` and the four
+  `MIC3-3D-*`) name their ports `{module.parent}/{module}/x` again, as before
+  #261 made the adapter count as a second depth for every MPC. **BREAKING for
+  DCIM data already imported** from an export taken since #261 merged: those
+  five module types need re-importing. Their bays on the MPC1E, MPC2E and
+  MPC3E are still withheld from Nautobot (nautobot/nautobot#5823), as in an
+  MX240, MX480 or MX960.
+  This is where the three Nautobot entries of this section end up (#765,
+  #261 and this one). Against an export taken at 0.1.0, those five types
+  move from `{module}/x` to `{module.parent}/{module}/x`, once. On
+  `MIC-3D-4XGE-XFP` the third and fourth ports are also renamed, in NetBox
+  as in Nautobot: `port-0-2` and `port-0-3` are `port-1-0` and `port-1-1`
+  (#887, under Changed).
+- `juniper/mx480` 5.0.1: the weight comes from the hardware guide's Table 88,
+  29.7 kg for the chassis with midplane, fan tray, air filter and cable
+  management brackets and 100.26 kg for the maximum configuration
+  (`weight-base-kg`, `weight-max-kg`). The "up to 163.5 kg" it carried was the
+  guide's rack text, 163.5 lb (74.2 kg), read as kilograms; the false
+  `weight-and-max-config` gap is gone (#886).
+- The 300CB08-C, 300CB08-SC and the four nrg300CB08 connectorized panels
+  (1.1.2) no longer list an `output-plug` gap: their P40 receptacles are
+  connector slots and `amphenol-ns/p40-plug@1` seats in them. Their DCIM
+  exports change in the drawing version line and the gaps comment only.
+- The 3D front of `nokia/lmfs-f`'s front-cover configuration was laid out on
+  the 528 mm drawing rather than its 481 mm face, so every part sat 23.5 mm
+  left of where it is and the face was textured over a plate 528 wide (#865).
+- **The snap-in ring's relief agrees with its guide**: each leg was built
+  6.8 mm thick in the plane of the loop, which narrowed the drawn opening to
+  30.0 mm against the guide's 32.0 and stood a route's sill point 1 mm inside
+  the rear leg. The legs are 5.8, as the plan's 43.6 less the opening gives
+  and the ring-profile view reads to a pixel. The slit, re-read, is 2.2 mm
+  where 3.8 had been read, in the relief and in fs/fhd-cmp5dr-profile@1
+  1.0.1's side view.
+- L50 no longer reports printing as painted over by a node that is never on
+  screen with it: a position's other option, drawn after it (#808).
+- The craft interface bays of `juniper/mx960` (1.1.0), `mx2008`, `mx2010`
+  and `mx2020` (0.3.0) state `for: chassis`, and their `craft` group's role
+  is `management`, as it already was on the MX240 and MX480: the craft
+  interface is where an operator reads and acts on the router's state, with
+  LEDs for its components, buttons and an alarm cut-off. `dell/r660` (5.1.0) does the same for its left
+  control panel, which the R660 Installation and Service Manual describes as
+  holding the system health, system ID and status lamps (#414).
+- In 3D, a part whose only SHOW node is hidden by default now rebuilds when
+  that node should appear: each part group records its position fields as
+  `data-position-fields` before hidden nodes are removed, and the viewer's
+  rebuild check reads it (#874).
+- A `data-move` entry whose number is not one (`.`, `1.2.3`) is refused by the
+  kit as the build refuses it, instead of writing `NaN` (#874).
+- The 3D viewer draws a part's fields on its first scene. `setFields` called
+  before the first `load` - a host handing over a link's latch colour as it
+  creates the viewer - was kept and never painted: the latch came up grey,
+  and the same map again changed nothing. `build()` now loads the fields
+  beside the lamp states and pulled parts, before any face is cut (#850).
 
 ## 0.1.0 - the first public release
 
