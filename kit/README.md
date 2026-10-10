@@ -65,7 +65,7 @@ jsDelivr with `?dist=cdn` (and `&index=<version>`).
 
 | module | what it does |
 |---|---|
-| `shell.js` | the explorer shell — device picker, view switching, tree |
+| `shell.js` | the explorer shell — device picker, view switching, tree. The newest `loadDevice`/`loadStage` call holds the stage: one that a newer load overtook writes nothing and rejects with an error `isSuperseded(err)` recognises |
 | `viewer3d.js` | 2D→3D: rasterises each face onto a chassis-sized box, adds relief meshes; a host can hold coloured marks on many parts (`setMarks`) and paint a lamp its own colour (`setLampColors`) |
 | `relief.js` | turns `data-depth` / `data-z-*` annotations into geometry |
 | `bevel.js` | a bevelled chassis body from the polygons the build publishes, triangulated and mapped for the 3D view |

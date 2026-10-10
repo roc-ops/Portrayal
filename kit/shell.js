@@ -167,6 +167,13 @@ const SHELL_HTML = `
 // ever one, but caching them keeps a re-mount cheap.
 let DEVICES = [], COMPONENTS = [], LISTINGS = {};
 
+// A LOAD THAT A NEWER ONE OVERTOOK (#929) rejects with this, so a caller can
+// tell "another load replaced mine" from a fetch that failed.
+export function superseded() {
+  return Object.assign(new Error('superseded by a newer load'), {name: 'Superseded', superseded: true});
+}
+export const isSuperseded = err => !!err?.superseded;
+
 export function createShell(opts = {}) {
   let picker = null;
   // a build directory's base, or a path -> URL function (dist.js)
@@ -1217,7 +1224,8 @@ export function createShell(opts = {}) {
     if (!onView && !state.module) { await loadFaces().catch(() => {}); onView = find(); }
     if (onView && onView !== state.view && !state.merge) {
       state.view = onView; el.view.value = onView;
-      await loadStage();
+      // a load that overtook this one owns the stage now: select nothing on it
+      try { await loadStage(); } catch (err) { if (isSuperseded(err)) return; throw err; }
     }
     select(to);
   }
@@ -1608,7 +1616,7 @@ export function createShell(opts = {}) {
     return turnOverrides({cfgTurns: state.cfgTurns, built: builtTurnsOf(cfg)});
   }
 
-  function openModule(ref) { state.module = ref; loadStage(); }
+  function openModule(ref) { state.module = ref; quiet(loadStage()); }
 
   // ---------------------------------------------------------------- loading
 
@@ -1742,7 +1750,27 @@ export function createShell(opts = {}) {
     refreshPulled();
   }
 
+  // ONE LOAD AT A TIME HOLDS THE STAGE (#929). A load is a fetch and then a
+  // reseat, and a newer one can start before an older one comes back: a
+  // device picked while the last one's manifest is still on the wire, a
+  // configuration changed while its face loads, a host's setDoc after one
+  // that is stuck. Each loadDevice/loadStage call takes the next generation,
+  // and after every await one that is no longer the newest stops where it
+  // is: it writes no state, mounts no drawing and announces nothing, and its
+  // promise rejects with a `superseded` error (`isSuperseded` tells it from a
+  // real failure) so a caller that awaited it does not carry on as if it had
+  // loaded. Without it the late load wrote its device, configuration and view
+  // over the newer ones - a combination that may not exist - stacked a second
+  // drawing on the stage, and emitted `load` for the stale target.
+  let loadGen = 0;
+  const claimLoad = () => ++loadGen;
+  const stillNewest = gen => { if (gen !== loadGen) throw superseded(); };
+  // what the shell's own handlers start and nobody awaits: a superseded load
+  // is the expected end of one, and anything else is still reported
+  const quiet = p => p.catch(err => { if (!isSuperseded(err)) throw err; });
+
   async function loadStage() {
+    const gen = claimLoad();
     el.svgHost.innerHTML = '';
     let file;
     if (state.module) {
@@ -1752,10 +1780,15 @@ export function createShell(opts = {}) {
     } else {
       file = distAt(faceFile(state.meta, state.cfg, state.view));
     }
-    const txt = await (await fetch(file)).text();
+    const res = await fetch(file);
+    stillNewest(gen);
+    const txt = await res.text();
+    stillNewest(gen);
     const doc = new DOMParser().parseFromString(txt, 'image/svg+xml');
     const svg = document.importNode(doc.documentElement, true);
-    el.svgHost.appendChild(svg);
+    // EXACTLY ONE DRAWING: the host was emptied when this load started, and
+    // anything a load since then mounted is not this one's to keep
+    el.svgHost.replaceChildren(svg);
     state.svg = svg;
     state.sel = null;
     state.far = [];
@@ -1769,7 +1802,7 @@ export function createShell(opts = {}) {
     const key = `${state.device}.${state.cfg}`;
     if (state.facesFor !== key) { state.faces = {}; state.facesFor = key; }
     state.faces[state.view] = svg;
-    if (!state.module) await reseat();
+    if (!state.module) { await reseat(); stillNewest(gen); }
     // Clicking the selected thing again clears it, and clicking away from any
     // part clears it too. A selection you cannot revoke is a halo painted over
     // the hardware for the rest of the session - and on the annotate tab, one
@@ -1805,7 +1838,7 @@ export function createShell(opts = {}) {
     const c = el.crumb;
     if (state.module) {
       c.innerHTML = `<button id="back">← chassis</button> <b>${state.module}</b>`;
-      c.querySelector('#back').onclick = () => { state.module = null; loadStage(); };
+      c.querySelector('#back').onclick = () => { state.module = null; quiet(loadStage()); };
     } else {
       c.innerHTML = `<b>${esc(state.meta.model)}</b> · ${esc(state.cfg)} · ${esc(state.view)}`;
     }
@@ -1815,6 +1848,11 @@ export function createShell(opts = {}) {
   // URL - and is honoured only where this device has it; anything else falls
   // back to the device's default configuration and first view.
   async function loadDevice(name, want = {}) {
+    // NOTHING IS WRITTEN UNTIL THE MANIFEST IS IN and this is still the newest
+    // load (#929): a superseded call must leave the state as the newer one set it
+    const gen = claimLoad();
+    const meta = await j(`${name}.configs.json`);
+    stillNewest(gen);
     // WHOSE BOX THIS IS goes with the box. A caller that names a listing sets
     // it; any other load keeps the current one only if it still lists this
     // device - the tab shell switching boxes must not leave "Arrcus" behind.
@@ -1825,7 +1863,7 @@ export function createShell(opts = {}) {
     }
     state.device = name;
     state.module = null;
-    state.meta = await j(`${name}.configs.json`);
+    state.meta = meta;
     const has = (list, v) => v && list.includes(v);
     state.cfg = has(state.meta.configs.map(c => c.name), want.config) ? want.config : state.meta.default;
     state.view = has(state.meta.views, want.view) ? want.view : state.meta.views[0];
@@ -1864,8 +1902,8 @@ export function createShell(opts = {}) {
     for (const k of Object.keys(builtFields)) delete builtFields[k];
   }
 
-  el.cfg.onchange = e => { state.cfg = e.target.value; state.module = null; syncCfgBays(); loadStage(); };
-  el.view.onchange = e => { state.view = e.target.value; state.module = null; loadStage(); };
+  el.cfg.onchange = e => { state.cfg = e.target.value; state.module = null; syncCfgBays(); quiet(loadStage()); };
+  el.view.onchange = e => { state.view = e.target.value; state.module = null; quiet(loadStage()); };
   addEventListener('resize', fit);
 
   const ready = (async () => {
@@ -1909,7 +1947,7 @@ export function createShell(opts = {}) {
                                        emit('change');
                                        return;
                                      }
-                                     loadDevice(name, {listing: state.listing});
+                                     quiet(loadDevice(name, {listing: state.listing}));
                                    }});
     } else {
       el.dev.hidden = true;
@@ -1923,7 +1961,11 @@ export function createShell(opts = {}) {
     const fields = same ? decodeFields(rawParam(location.search, 'fields')) : {};
     // `turn=` (#829), read raw for the same reason, applied after the swaps
     const turns = same ? decodeTurns(rawParam(location.search, 'turn')) : {};
-    await loadDevice(start.name, same ? {config: q.get('config'), view: q.get('view')} : {});
+    // A HOST THAT LOADED SOMETHING ELSE MEANWHILE (#929) owns the stage, and
+    // the link's swaps, turns and fields belong to the load it overtook
+    try {
+      await loadDevice(start.name, same ? {config: q.get('config'), view: q.get('view')} : {});
+    } catch (err) { if (isSuperseded(err)) return; throw err; }
     if (Object.keys(swaps).length) {
       const {ignored} = await applySwaps(swaps);
       if (ignored.length) console.warn('[portrayal] swaps naming nothing on', start.name, ignored);
