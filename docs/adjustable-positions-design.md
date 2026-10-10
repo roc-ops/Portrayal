@@ -34,9 +34,11 @@ view, the rack and its cables all follow.
 The FS DINRAIL2U and DINRAIL4U carry a DIN rail on a panel. The panel bolts
 through two slots in each side bracket, and slides along them. As #971 models
 them, the front face of the panel can stand 51.2 to 271.2 mm behind the ears on
-the 2U, and 50.5 to 269.4 on the 4U. The issue quotes the slot positions (72 to
-292, 66 to 291); the device records the panel face, which is what a reader
-sets. The maker photographs the part at both ends of the travel.
+the 2U, and 50.5 to 269.4 on the 4U. The issue quotes other figures (72 to 292,
+66 to 291): they are slot ends from an earlier reading of the side view. The
+device records the panel face, which is what a reader sets. The two differ by
+20.8 on the 2U, and by 15.5 and 21.6 on the 4U. The maker photographs the part
+at both ends of the travel.
 
 Each device draws one position, the middle (161.2 and 159.9). The range is in
 three `attrs.physical` keys (`din-rail-setback-mm`, `-min-mm`, `-max-mm`) and in
@@ -93,8 +95,12 @@ along depth, and nothing in the 2D face moves.
 - **Cleared** when an item takes a new configuration (`commands.js`, `CLEARED`).
 - **Not drawn in the rack 3D scene**: `kit/rack/export-data.js` `threeDNotes`
   says so in a note.
-- **Exported** nowhere. `dcim_export.py` writes no field value, and a rack
-  export names the items that carry fields only in that 3D note.
+- **Exported** nowhere as a field value: `dcim_export.py` writes none, and a
+  rack export names the items that carry fields only in that 3D note. The range
+  does reach the exports today by another road. Every device-type export lists
+  the `attrs` of the device in its comments, so the DINRAIL files carry three
+  fact lines, `physical.din-rail-setback-mm`, `-min-mm` and `-max-mm`. The same
+  comments print the drawing version and one line for each configuration.
 
 ### 1.3 Switch positions (#808)
 
@@ -165,10 +171,10 @@ None of these moves one part INSIDE a device. This note adds that, and section
    on the carrier, and the Explorer says which views show it.
 6. **In a rack, the solids of the device move with the field.** The envelope
    does not. Routed lengths are measured again; entered lengths are not touched.
-7. **Stating an adjustment on an existing device is a minor.** Nothing a reader
-   holds moves.
-8. **The DCIM device types do not change.** A rack export gains one note line
-   for each item that is not at its default.
+7. **Stating an adjustment on an existing device is a minor.** No coordinate
+   and no id a reader holds moves.
+8. **No DCIM schema field changes; the export comments do.** A rack export
+   gains one note line for each item that is not at its default.
 
 ## 3. The declaration
 
@@ -214,8 +220,10 @@ views:
   no `range`. Then only the stops are positions: a row of tapped holes, not a
   slot.
 - **`datum`** says in words which point of the part the number measures. It is
-  required. Without it two readers measure two points 18 mm apart, as the issue
-  and the device did.
+  required. One joint has several points a number could mean. On the 2U the
+  screw centre is 18.2 behind the panel face, the slot end is further back
+  again, and the rail face is 7.5 in front. A range with no datum is a range
+  of one of them, and the reader cannot tell which.
 - **`carrier`** is the id of one placement that moves with this adjustment. Its
   path is where the value is held (section 4).
 - **`moves-with`** is a key of a placement, a bay and a decor entry. Everything
@@ -258,7 +266,14 @@ for a number, and a setter turns the name into the number before it is kept.**
   the spelling that exists today.
 - **With a `range`**, any number from min to max is a position, both ends
   included. **With stops and no range**, only the stop values are.
-- **A value is kept to 0.1 mm.** No source here is better than that.
+- **A value is kept as a string**, as every field value is (`commands.js`
+  writes `String(value)`; the marks file takes a string or null). It has one
+  spelling: the number rounded to 0.1 mm, in decimal, with no exponent, no
+  sign, and no trailing `.0`. So `120` and `271.2`, never `120.0` or `271.20`.
+  `encodeFields` promises that one state is one string, and two spellings of
+  one position would break that. `adjustmentAccepts` answers with this
+  spelling, and every setter keeps what it answers.
+- **0.1 mm** is enough: no source here is better than that.
 - **A stop name is input, not storage.** A rack that says `271.2` still says it
   after the library renames `rear`. A rack that said `rear` would move when the
   number behind the name changed, with no word to its owner.
@@ -386,20 +401,22 @@ The Rack Builder opens the item in the Explorer with the `fields` of the item,
 and takes back the map the Explorer holds. The rack schema already describes
 `swaps` and `fields` as what the Explorer set, and a position is one more entry
 of that map. The item keeps it under the carrier path. The Rack Builder is in
-the site repository; this note states what it must do, not how it does it today. No key is added and the file stays at its version. The
-description of `fields` in `rack.schema.json` ("Editable text the Explorer
-set.") is reworded; that changes no file.
+the site repository; this note states what it must do, not how it does it
+today. No key is added and the file stays at its version. The description of
+`fields` in `rack.schema.json` ("Editable text the Explorer set.") is reworded;
+that changes no file.
 
 The kit rack core learns three things:
 
 - **The `field` command takes an adjustment.** Today it refuses the path of a
   fixed placement (1.2). It accepts `{path: <carrier>, key: <id>}`, tests the
-  value with `adjustmentAccepts`, and keeps the number. An agent can set a
+  value with `adjustmentAccepts`, and keeps the string it answers. An agent can
+  set a
   position without a browser; a person still has one control.
 - **`inspect` lists each adjustment** among the fields of the item, with its
   range, its stops and its value.
-- **A new configuration clears it**, as it clears every field of the item
-  today. The sentence that says so is the one that exists.
+- **A new configuration clears it today**, as it clears every field of the
+  item. Question 9 recommends that a position be kept.
 
 ### 8.2 The catalogue
 
@@ -446,8 +463,9 @@ Three numbers place a DIN rail in a rack, and each is said once:
 | the kit depth range | `kind: kit`, `chassis.kits[].depth` | nothing: it says which racks fit |
 | the adjustment | `adjustments`, `item.fields` | one set of parts inside the device |
 
-The rail stands behind the rail plane by the item setback plus the adjustment.
-Neither key restates the other.
+The datum stands behind the rail plane of the rack by the item setback plus
+the adjustment. On DINRAIL that datum is the panel face; the face of the DIN
+rail is 7.5 in front of it. Neither key restates the other.
 
 A rail `hosts:` entry (rack products note, 7.1) is drawn with `set-back: {min,
 max}`. That would be a second statement of this range. When hosts are built,
@@ -466,7 +484,9 @@ Codes are given when the rules are built. Each rule and its reason:
    default is one of them; no two stops share a value. *A default outside its
    own range draws a position the part cannot take.*
 2. **The carrier is a member placement with a `ref`.** *The value is held at
-   its path, and a path with no part is one no reader can find.*
+   its path, and a path with no part is one no reader can find.* So a motion
+   made only of decor cannot be declared. That is accepted: decor that slides
+   is a part, and is modelled as one.
 3. **Membership resolves.** Each `moves-with` names an adjustment of this
    device; each adjustment has a member; a node names one adjustment at most.
    *A typo would leave a part behind with no error.*
@@ -485,8 +505,12 @@ Codes are given when the rules are built. Each rule and its reason:
    the members moved: a member does not land on a part that is not a member,
    and a pair one of which is `under` the other still overlaps. *A panel pushed
    through a bracket is a wrong drawing that the default hides.*
-8. **The id is not a field of the carrier component.** *Both would be
-   `data-<key>` on one group.*
+8. **The id is free on the carrier group.** It is not a field of the carrier
+   component, and it is not a name the build writes there as `data-<name>`:
+   `depth`, `path`, `ref`, `in`, `under`, `group` and the rest of that list,
+   which the rule reads from the build and does not copy. *The value is
+   written as `data-<id>` on that group. An adjustment called `depth` would
+   overwrite `data-depth`, and the well would be built at the wrong floor.*
 9. **A position a configuration sets is one the adjustment takes**: a number in
    the range, or a stop name. *The build would draw a position the hardware
    does not have.*
@@ -499,24 +523,51 @@ position without change: a moved panel keeps its width.
 ### Devicelock
 
 `adjustments` is a new top-level key and `moves-with` a new key of a placement,
-a bay and a decor entry. Each must be sorted into a bucket when it is added;
-`test_lock_sees_placement_keys.py` fails until `moves-with` is.
+a bay and a decor entry. The lock as it is would record them badly, in three
+ways, and step 1 must mend each:
+
+- `test_lock_sees_placement_keys.py` guards the keys of a placement and a bay
+  only. It fails until `moves-with` is sorted there, which is the guard doing
+  its work.
+- Decor is hashed whole inside the bucket a patch answers for. A `moves-with`
+  on a decor entry would read as a patch. Step 1 takes decor membership out of
+  that hash.
+- No guard covers a new top-level key, so `adjustments` would be hashed
+  nowhere. Step 1 adds it, with a test that fails when it is not recorded.
+
+So the lock records, for each adjustment, its declaration and the set of its
+members (view and id, of placements, bays and decor alike), the way it records
+placement addressing today. The table below is asked of that record.
 
 | change | bump | why |
 |---|---|---|
-| an adjustment is stated, with its members, at the position already drawn | minor | additive: no coordinate, id or export a reader holds moves, as stating a `for` |
+| an adjustment is stated, with its members, at the position already drawn | minor | additive: no coordinate and no id a reader holds moves, as stating a `for`. The export comments do change (Exports, below) |
 | a wider range, or a stop added | minor | every value kept before is still a position |
-| an id renamed or removed; the carrier, the axis or the default changed; a range made narrower; a stop removed or its value changed; a member dropped or moved to another adjustment | major | a saved rack or a link holds a value this would move or refuse |
-| a member added to an adjustment that exists | major | a part that stood still for a kept value now moves |
-| `label`, `datum`, a stop renamed, provenance | patch | surface: values are kept as numbers |
+| a member added to an adjustment that exists | minor | the ruling for a `for` stated where there was none: nothing drawn at the default moves, and a forgotten member is a fault to mend, not a new shape |
+| an id renamed or removed; the carrier, the axis or the default changed; a range made narrower; a stop removed, renamed, or its value changed; a member dropped or moved to another adjustment | major | a saved rack or a link holds a value this would move or refuse, or a caller holds a name this would refuse |
+| `label`, `datum`, provenance | patch | surface |
+
+A stop name is addressing, though a rack never keeps one. It is published in
+`data-adjustments`, `configs.json` and `rack.json`, and `setFields` and the
+`field` command take it as input. A caller that says `rear` must not be
+refused after a patch.
 
 So DINRAIL2U and DINRAIL4U take a minor each. The lock is checked against the
 main branch before any version is written, as for every device change.
 
 ### Exports
 
-- **DCIM device types: nothing.** Neither NetBox nor Nautobot has a field. The
-  files under `library/exports/` stay byte for byte as they are.
+- **DCIM device types: no schema field, and no new kind of line.** Neither
+  NetBox nor Nautobot has a field for a position. Steps 1 to 4 change no file
+  under `library/exports/`. Step 5 does change the comments of the DINRAIL2U
+  and DINRAIL4U files, in up to three ways:
+  - the drawing version line, always, because each device takes a minor;
+  - the three `physical.din-rail-setback` fact lines, if those attrs are
+    removed (question 5);
+  - one more configuration line, if a configuration is added that sets a
+    position (question 6).
+
+  A changed export file is a one-way door (section 10).
 - **The rack exports of the kit** (`kit/rack/export-data.js`): one note line for
   each item that is not at its default, in the notes a CSV and a drawn export
   already carry: "DINRAIL2U (i4) at U12: rail setback 271.2 mm (rear)." The stop
@@ -534,12 +585,13 @@ The note opens none. The build steps would open these:
 | what a value means: mm, the frame, the datum, the sign of each axis | the schema description and the build | every saved rack and every shared link that holds a value. A change moves parts with no edit to those files |
 | `data-adjustments`, `data-moves-with`, `data-moves-by`; `adjustments` in `configs.json` and `rack.json`; the two keys of a member in the elements file | the build | new fields, so `contract` is not raised. From that release they are under it: the kit, the site and any other reader of the build |
 | kit API: `adjustmentRows`, `adjustmentAccepts`; `setFields` moving parts for an adjustment key; the `field` command and `inspect` rows of the rack core | the kit, published on npm | a kit minor. Hosts that call them |
-| saved racks: `item.fields[<carrier>][<id>]` as a number in mm | the Rack Builder | every rack saved after it lands. Renaming an id or a carrier in the library is a major for that reason |
+| saved racks: `item.fields[<carrier>][<id>]`, a number in mm kept as a string in its one spelling (section 4) | the Rack Builder | every rack saved after it lands. Renaming an id or a carrier in the library is a major for that reason |
 | routed lengths that follow the position | the rack core | only racks that set a position, so none when it lands. Later, a change to how solids shift moves the lengths, and can move a stock size, in every such rack |
 | the note line in rack exports | the rack core | text a person reads; a script that parses notes sees one more line |
 | a minor on DINRAIL2U and DINRAIL4U | the first use | two devices and their locks |
+| the DCIM export comments of DINRAIL2U and DINRAIL4U: the version line, and the three setback fact lines if the attrs go | the first use | four files under `library/exports/` (NetBox and Nautobot). A DCIM that imported the type holds the old comment text; no schema field moves |
 
-Not opened: the rack file version, the DCIM device types and the `format`
+Not opened: the rack file version, any DCIM schema field and the `format`
 number.
 
 ## 11. Build plan
@@ -567,7 +619,9 @@ device in the tests, so no library device changes before step 5.
    the repaint path and the rebuild path both tested.
 5. **The Explorer control**, then **DINRAIL2U and DINRAIL4U**, once #971 is on
    the main branch: the adjustment, `moves-with` on the members, a minor each,
-   the `gaps` entry removed.
+   the `gaps` entry removed. The four DCIM export files of the two devices
+   change in their comments (section 9), so the change says so as a one-way
+   door.
    *Gate:* `./build.sh --device` for each; the panel test of #971 at both ends;
    a review page that sets each end beside the maker photograph of that end;
    the lock check before the bump.
@@ -591,7 +645,7 @@ device in the tests, so no library device changes before step 5.
 | a DIN rail host on those brackets (#935) | yes | the host as a member, in place of its `set-back` (question 2) |
 | a shelf or a bracket with a rear support bolted through a slot at a position a person picks | yes | nothing new: `axis: z`, a range, members |
 | a part on a row of tapped holes | yes | stops and no range |
-| FS-1USSH, the sliding shelf with telescopic rails, 650 to 950 mm | no, not as a field | its rails reach from the front posts to the rear posts, so the RACK sets their length. That is a depth range in the words of a kit (`motion: telescoping`, `depth: [650, 950]`), and fit refuses a rack outside it. Its rails are built in and not a kit, so it needs that range on the device (question 3). Its slide for service is `opens`, a motion nobody stores |
+| FS-1USSH, the sliding shelf with telescopic rails, 650 to 950 mm | no, not as a field | its rails reach from the front posts to the rear posts, so the RACK sets their length. The rack products note already models it so (sections 7.1 and 11, step 4): the shelf lists a sliding kit, four-post, 650 to 950 mm, and fit refuses a rack outside that range. It needs nothing from this note. Its slide for service is the travel of that kit, a motion nobody stores |
 | the faceplate setback of #908, and ear positions | no | it moves the whole device, it is already `chassis.ears.positions` and the item `setback` of rack file version 4, and a position can have a name and no number. It needs nothing from this note. The stop buttons of the Explorer can show ear positions too, as one widget for two kinds of data |
 | a drawer or a sliding kit pulled out | no | a service state, not a kept position. It could share `data-moves-with` and `data-moves-by` in the drawing when it is built (question 4) |
 | the rails of a rack frame, adjustable in steps | later | `adjustments` on `kind: rack`, and a `step` key; both wait for that kind |
@@ -603,15 +657,21 @@ device in the tests, so no library device changes before step 5.
 2. **Does a rail host restate the range?** Recommended: no. When `hosts` is
    built, a rail host says `moves-with` and drops `set-back`; section 7.1 of the
    rack products note is amended in that change.
-3. **How does a device with built-in telescopic rails state its depth range?**
-   Recommended: a depth range on the device in the kit vocabulary, decided with
-   step 4 of the rack products note, and not an adjustment.
+3. **If a device turns up whose telescopic rails are part of it and not a kit,
+   how does it state its depth range?** None is known: the rack products note
+   models FS-1USSH with a kit. Recommended, should one appear: a depth range in
+   the kit vocabulary, and not an adjustment, because the rack sets it.
 4. **Does a service motion (a drawer, a sliding kit) share the drawing
    attributes?** Recommended: yes for the two node attributes, when it is
    built; no field and nothing stored.
 5. **Do the three `din-rail-setback` attrs stay on DINRAIL?** They restate the
-   adjustment. Recommended: remove them in step 5 if the lock asks no more than
-   the minor the step already takes; else at the next major.
+   adjustment, and they are how the range reaches the DCIM export comments
+   today. The lock is not what decides: it files attrs as surface, a patch. The
+   export is: removing them removes three fact lines from each export file, and
+   nothing else would say the range there. Recommended: keep them, so the
+   export keeps the range, and add a lint rule that they equal the adjustment.
+   Remove them only if the export learns to write the range from the
+   adjustment in the same change.
 6. **May a configuration set a position?** Recommended: yes. It is how a device
    ships "rail forward" as a named configuration, and the build must draw a
    moved position anyway.
@@ -620,3 +680,34 @@ device in the tests, so no library device changes before step 5.
    `fieldAccepts` then.
 8. **Does the rack export carry the note line?** Recommended: yes, one line for
    each item not at its default; the DCIM rows stay as they are.
+9. **Does a chosen position survive a change of configuration?** Today it does
+   not: a new configuration clears every field of the item. A position is a
+   physical setting of the bracket in the rack, not a property of what is
+   fitted. Recommended: keep it, when the new configuration has the same
+   adjustment and takes the value; clear it with a sentence when it does not.
+   Every other field is cleared as today. This changes the rule of the rack
+   core for one kind of key, so it is a part of step 6 with a test of its own.
+
+## 14. Points to weigh before building
+
+1. **Step 5 changes DCIM export files.** The version line of four files
+   moves, and more if the setback attrs go (section 9, question 5). A changed
+   export is a one-way door, and it is in section 10.
+2. **The value sits in `fields`, and it is not a component field.** Every
+   reader that tests a value against a component declaration needs a second
+   source, the adjustments of the device:
+   - `applyFields` in `kit/shell.js`, which takes a `fields=` entry only where
+     the component declares the key;
+   - the `field` command of the rack core;
+   - `inspect` in `kit/rack/queries.js`, which lists the fields of seated
+     parts only;
+   - the 3D rebuild in `kit/viewer3d.js`.
+
+   A kit from before this work, or a copy a host has vendored, does not fail.
+   It drops the entry and draws the default, with no word. A rack that looks
+   right in one reader and wrong in another is the cost of reusing `fields`.
+3. **The default is stated twice.** The depth of the well is `size.d` on the
+   component, and the default is on the adjustment. Only lint rule 5 holds
+   them together, and only for the case it can see. A second device that
+   reuses the panel at another default cannot: the component would need its
+   depth from the device.
