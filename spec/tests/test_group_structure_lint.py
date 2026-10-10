@@ -98,7 +98,7 @@ def test_L19_a_bay_in_an_indicator_group_declares_for(tmp_path):
     doc = {"groups": {"craft": {"term": "Panel", "role": "indicator", "index-origin": 0}},
            "views": {"front": {"size": {"w": 100, "h": 50}, "components": {"bays": [
                {"id": "craft", "at": [0, 0], "size": {"w": 100, "h": 20},
-                "accepts": ["juniper/mx960-craft@1"], "default": "juniper/mx960-craft@1",
+                "accepts": ["juniper/mx960-craft@2"], "default": "juniper/mx960-craft@2",
                 "group": "craft", "rel-pos": 0}]}}}}
     path = tmp_path / "device.yaml"
 
