@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx104
-version: 4.0.0
+version: 5.0.0
 maturity: modelled
 manufacturer: Juniper
 model: MX104
@@ -31,16 +31,27 @@ provenance:
       ears NOT MODELLED (19.2 in is over the brackets)
   scale:
     note: >-
-      photo - the front photograph is isotropic at 3.087 px/mm once the brackets are excluded
-      (aspect with brackets matches the 48.7 cm over-brackets figure). Rows: fixed panel 0-44.4,
-      MIC rows 44.4-76.5 and 76.5-108.5, PSU/RE band to 154.7. A FIRST READING put the RE rows at
+      photo - the front photograph is isotropic, 3.090 px/mm across (body px 74.5-1425.0) and
+      3.067 down (px 8.5-483.0), cross-checked on the ganged-SFP pitch (#261, #901). Rows: fixed
+      panel 0-42.4, the MIC rows (mic-bays), and the PSU/RE band from 105.5 (pem-re-band). A FIRST READING put the RE rows at
       13.9 mm - too thin to hold their photographed RJ45s - and the row boundary was re-derived;
       positions are single-pass and approximate to ~2 mm throughout
   fixed-panel:
+    confidence: photo-measured
     note: >-
-      photo - ALARM DB-15 at the left, four fixed XE SFP+ cages at centres 97.8-140.6 silkscreened
-      2/0/0-2/0/3, SYS OK lamp and ONLINE/OFFLINE button, EXT REF CLOCK and ToD RJ45s at
-      269.9/285.5, the 1PPS / 10 MHz IN-OUT SMB quad inline at 311.5-334.2, and the junos badge
+      the MX104 front photograph on the checked scale (#901): x = (px - 74.5) / 3.090 over the 437.0
+      mm body, y = (px - 8.5) / 3.067 down the 154.7 mm height (the issue's 3.061 is the same reading
+      from a different edge pixel). The panel's lower edge meets the upper MIC plates at y 42.4. ALARM
+      DB-15 shell 36.0-55.4 x 21.6-32.4. The four XE SFP+ cages are DISCRETE cages on a 17.2 mm pitch,
+      each in its own bezel, not a ganged row: centres 98.0, 115.3, 132.4, 149.5 at y 28.2 (bezels
+      90.4-157.1 by 22.9-33.5), legends 2/0/0-2/0/3 above each and XE over a bracket at 123.8, so they
+      are std/sfp, not std/sfp-ganged. ONLINE/OFFLINE button at (166.8, 30.0) with its legend under it,
+      SYS OK lamp at (176.5, 24.6) under its legend. EXT REF CLOCK and TOD RJ45s centred at 271.0 and
+      286.9, y 12.3. The 1PPS and 10 MHz SMBs at 307.8, 315.7, 323.9, 331.7, y 13.2. Until 5.0.0 the
+      cages were ganged at 14.25 from 97.8 (the last 8.9 mm left of the photograph's) at y 25.2, and
+      the button and lamp sat about 11 and 20 mm left of where the photograph puts them.
+      NOT DRAWN, and seen at the panel's right end: an ESD jack at about (379, 5) and a two-hole
+      plate at about (406-422, 5) - follow-ups, not part of this re-placement
   populated-with:
     note: >-
       photo - slot 1/0 and 0/1 carry MIC-3D-20GE-SFP, slot 1/1 the MIC-3D-4CHOC3-1OC12-CE, slot
@@ -91,6 +102,18 @@ provenance:
       The two studs were drawn 16.0 apart; they moved symmetrically about the
       midpoint the photograph placed, (205.0, 136.0), side by side, so a lug's wire leaves to the right, and their cutouts with them.
 
+  pem-re-band:
+    confidence: photo-measured
+    note: >-
+      the MX104 front photograph on the scale above (#901). The band starts at y 105.5 (the issue read
+      105.2). The supply plates run x 7.0-113.8 and 114.7-221.5, y 105.5-153.7; the 103.7 x 45.0 supply
+      contract is centred on each (pem0 at 8.55, pem1 at 116.25, y 107.1), which leaves the contract
+      about 3 mm smaller than the photographed plate each way - a matter for juniper/mx104-psu-dc, not
+      the bays. The Routing Engines run x 222.2-363.9 (141.7 against the 145.0 contract, centred at
+      220.55), RE1 from y 105.6 and RE0 from 129.0, RE legends at x 366.5 beside them; the plain side
+      cover takes the rest of the right end, x 365.5-437.0 from the fixed panel down. Until 5.0.0 pem1
+      sat 8 mm right of its plate, both REs 36 mm right of theirs (over the side cover), and the band
+      started at 108.7.
   mic-bays:
     confidence: photo-measured
     note: >-
@@ -127,6 +150,12 @@ chassis:
   ru: 3.5
   color: '#8b8f94'
 gaps:
+  - what: fixed-panel-right-end
+    reason: needs-photo
+    wanted: a close photograph of the fixed panel's right end - the front
+      photograph shows an ESD jack at about (379, 5) and a two-hole plate at
+      about x 406-422, y 5, neither drawn; the fixed panel was otherwise
+      re-placed at 5.0.0 (provenance.fixed-panel, #901).
   - what: vendor-table-axes
     reason: sources-disagree
     wanted: a corrected MX104 physical table - the module rows scramble
@@ -210,51 +239,51 @@ views:
       h: 154.7
     panel:
       decor:
-        - {at: [0.0, 0.0], size: [437.0, 44.4], rx: 0.0, fill: '#84888d'}
-        - {at: [370.0, 44.4], size: [67.0, 64.1], rx: 0.8, fill: '#84888d'}
+        - {at: [0.0, 0.0], size: [437.0, 42.4], rx: 0.0, fill: '#84888d'}
+        - {at: [365.5, 42.4], size: [71.5, 112.3], rx: 0.8, fill: '#84888d'}
       cutouts:
-        - {id: alarm, at: [33.0, 18.5], size: [18.0, 9.0]}
-        - {id: xe-0, at: [90.68, 20.0], size: [14.25, 10.4]}
-        - {id: xe-1, at: [104.93, 20.0], size: [14.25, 10.4]}
-        - {id: xe-2, at: [119.18, 20.0], size: [14.25, 10.4]}
-        - {id: xe-3, at: [133.43, 20.0], size: [14.25, 10.4]}
-        - {id: led-sys-ok, at: [154.8, 20.8], size: [2.4, 2.4], shape: circle}
-        - {id: btn-online, at: [153.8, 28.0], size: [3.6, 3.6], shape: circle}
-        - {id: ext-ref-clock, at: [261, 8.4], size: [15.8, 13.2]}
-        - {id: tod, at: [278, 8.4], size: [15.8, 13.2]}
-        - {id: clk-1pps-in, at: [309.09, 10.09], size: [4.83, 4.83], shape: circle}
-        - {id: clk-1pps-out, at: [316.29, 10.09], size: [4.83, 4.83], shape: circle}
-        - {id: clk-10mhz-in, at: [324.59, 10.09], size: [4.83, 4.83], shape: circle}
-        - {id: clk-10mhz-out, at: [331.79, 10.09], size: [4.83, 4.83], shape: circle}
+        - {id: alarm, at: [36.0, 21.6], size: [19.4, 10.8]}
+        - {id: xe-0, at: [90.75, 23.2], size: [14.5, 10.0]}
+        - {id: xe-1, at: [108.05, 23.2], size: [14.5, 10.0]}
+        - {id: xe-2, at: [125.15, 23.2], size: [14.5, 10.0]}
+        - {id: xe-3, at: [142.25, 23.2], size: [14.5, 10.0]}
+        - {id: led-sys-ok, at: [175.3, 23.4], size: [2.4, 2.4], shape: circle}
+        - {id: btn-online, at: [165.0, 28.2], size: [3.6, 3.6], shape: circle}
+        - {id: ext-ref-clock, at: [263.1, 5.7], size: [15.8, 13.2]}
+        - {id: tod, at: [279.0, 5.7], size: [15.8, 13.2]}
+        - {id: clk-1pps-in, at: [305.38, 10.79], size: [4.83, 4.83], shape: circle}
+        - {id: clk-1pps-out, at: [313.28, 10.79], size: [4.83, 4.83], shape: circle}
+        - {id: clk-10mhz-in, at: [321.48, 10.79], size: [4.83, 4.83], shape: circle}
+        - {id: clk-10mhz-out, at: [329.28, 10.79], size: [4.83, 4.83], shape: circle}
     silkscreen:
-      - {at: [12.0, 10.0], text: JUNIPER, font-size: 3.8, anchor: start, fill: '#f0f1f2', for: chassis}
+      - {at: [7.4, 11.5], text: JUNIPER, font-size: 3.8, anchor: start, fill: '#f0f1f2', for: chassis}
       - {at: [27.0, 12.6], text: NETWORKS, font-size: 1.3, anchor: middle, fill: '#d7dadd', for: chassis}
-      - {at: [44.0, 10.0], text: MX104, font-size: 3.0, anchor: start, fill: '#f0f1f2', for: chassis}
-      - {at: [42.0, 32.5], text: ALARM, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: chassis}
-      - {at: [115.5, 13.0], text: XE, font-size: 1.8, anchor: middle, fill: '#e8eaec', for: chassis}
-      - {at: [97.8, 16.6], text: 2/0/0, font-size: 1.5, anchor: middle, fill: '#e8eaec', for: xe-0}
-      - {at: [112.1, 16.6], text: 2/0/1, font-size: 1.5, anchor: middle, fill: '#e8eaec', for: xe-1}
-      - {at: [126.3, 16.6], text: 2/0/2, font-size: 1.5, anchor: middle, fill: '#e8eaec', for: xe-2}
-      - {at: [140.6, 16.6], text: 2/0/3, font-size: 1.5, anchor: middle, fill: '#e8eaec', for: xe-3}
-      - {at: [162, 22.46], text: SYS OK, font-size: 1.5, anchor: start, fill: '#e8eaec', for: led-sys-ok}
-      - {at: [160.0, 31.5], text: ONLINE, font-size: 1.4, anchor: start, fill: '#e8eaec', for: btn-online}
-      - {at: [160.0, 33.6], text: OFFLINE, font-size: 1.4, anchor: start, fill: '#e8eaec', for: btn-online}
-      - {at: [269.9, 26.6], text: EXT REF, font-size: 1.4, anchor: middle, fill: '#e8eaec', for: ext-ref-clock}
-      - {at: [269.9, 28.7], text: CLOCK, font-size: 1.4, anchor: middle, fill: '#e8eaec', for: ext-ref-clock}
-      - {at: [285.9, 27.6], text: ToD, font-size: 1.4, anchor: middle, fill: '#e8eaec', for: tod}
-      - {at: [315.1, 6.4], text: 1PPS, font-size: 1.5, anchor: middle, fill: '#e8eaec', for: [clk-1pps-in, clk-1pps-out]}
-      - {at: [330.61, 6.4], text: 10MHz, font-size: 1.5, anchor: middle, fill: '#e8eaec', for: [clk-10mhz-in, clk-10mhz-out]}
-      - {at: [311.5, 19.0], text: IN, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: clk-1pps-in}
-      - {at: [318.7, 19.0], text: OUT, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: clk-1pps-out}
-      - {at: [327.0, 19.0], text: IN, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: clk-10mhz-in}
-      - {at: [334.2, 19.0], text: OUT, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: clk-10mhz-out}
-      - {at: [365.0, 10.0], text: junos, font-size: 3.0, anchor: middle, fill: '#f0f1f2', for: chassis}
+      - {at: [40.3, 11.8], text: MX104, font-size: 3.0, anchor: start, fill: '#f0f1f2', for: chassis}
+      - {at: [45.5, 36.0], text: ALARM, font-size: 1.6, anchor: middle, fill: '#e8eaec', for: chassis}
+      - {at: [123.8, 17.0], text: XE, font-size: 1.8, anchor: middle, fill: '#e8eaec', for: chassis}
+      - {at: [98.0, 21.0], text: 2/0/0, font-size: 1.5, anchor: middle, fill: '#e8eaec', for: xe-0}
+      - {at: [115.3, 21.0], text: 2/0/1, font-size: 1.5, anchor: middle, fill: '#e8eaec', for: xe-1}
+      - {at: [132.4, 21.0], text: 2/0/2, font-size: 1.5, anchor: middle, fill: '#e8eaec', for: xe-2}
+      - {at: [149.5, 21.0], text: 2/0/3, font-size: 1.5, anchor: middle, fill: '#e8eaec', for: xe-3}
+      - {at: [176.5, 21.3], text: SYS OK, font-size: 1.5, anchor: middle, fill: '#e8eaec', for: led-sys-ok}
+      - {at: [167, 34.6], text: ONLINE, font-size: 1.4, anchor: middle, fill: '#e8eaec', for: btn-online}
+      - {at: [167, 36.9], text: OFFLINE, font-size: 1.4, anchor: middle, fill: '#e8eaec', for: btn-online}
+      - {at: [271.0, 21.0], text: EXT REF, font-size: 1.4, anchor: middle, fill: '#e8eaec', for: ext-ref-clock}
+      - {at: [271.0, 23.9], text: CLOCK, font-size: 1.4, anchor: middle, fill: '#e8eaec', for: ext-ref-clock}
+      - {at: [286.9, 21.0], text: ToD, font-size: 1.4, anchor: middle, fill: '#e8eaec', for: tod}
+      - {at: [311.75, 6.6], text: 1PPS, font-size: 1.5, anchor: middle, fill: '#e8eaec', for: [clk-1pps-in, clk-1pps-out]}
+      - {at: [327.79, 6.6], text: 10MHz, font-size: 1.5, anchor: middle, fill: '#e8eaec', for: [clk-10mhz-in, clk-10mhz-out]}
+      - {at: [307.8, 18.7], text: IN, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: clk-1pps-in}
+      - {at: [315.7, 18.7], text: OUT, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: clk-1pps-out}
+      - {at: [323.9, 18.7], text: IN, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: clk-10mhz-in}
+      - {at: [331.7, 18.7], text: OUT, font-size: 1.3, anchor: middle, fill: '#e8eaec', for: clk-10mhz-out}
+      - {at: [361.0, 11.7], text: junos, font-size: 3.0, anchor: middle, fill: '#f0f1f2', for: chassis}
       - {at: [8.0, 44.6], text: '1/0', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: mic-1-0}
       - {at: [430.0, 44.6], text: '1/1', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: mic-1-1}
       - {at: [8.0, 80.4], text: '0/0', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: mic-0-0}
       - {at: [430.0, 80.4], text: '0/1', font-size: 2.0, anchor: middle, fill: '#e8eaec', for: mic-0-1}
-      - {at: [430.0, 118.0], text: RE1, font-size: 1.8, anchor: middle, fill: '#e8eaec', for: re1}
-      - {at: [430.0, 141.0], text: RE0, font-size: 1.8, anchor: middle, fill: '#e8eaec', for: re0}
+      - {at: [366.5, 124.4], text: RE1, font-size: 1.8, anchor: start, fill: '#e8eaec', for: re1}
+      - {at: [366.5, 144.0], text: RE0, font-size: 1.8, anchor: start, fill: '#e8eaec', for: re0}
     components:
       bays:
         - {id: mic-1-0, at: [17.8, 42.6], size: {w: 168.8, h: 29.2},
@@ -269,40 +298,40 @@ views:
         - {id: mic-0-1, at: [187.1, 74.1], size: {w: 168.8, h: 29.2},
            accepts: [juniper/mic-3d-16che1-t1-ce@2, juniper/mic-3d-1oc192-xfp@2, juniper/mic-3d-20ge-sfp@2, juniper/mic-3d-2xge-xfp@2, juniper/mic-3d-4choc3-1oc12@2, juniper/mic-3d-4choc3-2choc12@2, juniper/mic-3d-4oc3oc12-1oc48@2, juniper/mic-3d-8choc3-4choc12@2, juniper/mic-3d-8oc3oc12-4oc48@2, juniper/mic-macsec-20ge@2, juniper/ms-mic-16g@2, juniper/mx-mic-blank@2],
            default: juniper/mic-3d-20ge-sfp@2, group: mics, rel-pos: 1}
-        - {id: pem0, at: [9.7, 108.7], size: {w: 103.7, h: 45.0},
+        - {id: pem0, at: [8.55, 107.1], size: {w: 103.7, h: 45.0},
            accepts: [juniper/mx104-psu-dc@1], default: juniper/mx104-psu-dc@1,
            group: psus, rel-pos: 0}
-        - {id: pem1, at: [123.1, 108.7], size: {w: 103.7, h: 45.0},
+        - {id: pem1, at: [116.25, 107.1], size: {w: 103.7, h: 45.0},
            accepts: [juniper/mx104-psu-dc@1], default: juniper/mx104-psu-dc@1,
            group: psus, rel-pos: 1}
-        - {id: re1, at: [258.0, 108.2], size: {w: 145.0, h: 22.5},
+        - {id: re1, at: [220.55, 105.6], size: {w: 145.0, h: 22.5},
            accepts: [juniper/mx104-re@1], default: juniper/mx104-re@1,
            group: res, rel-pos: 1}
-        - {id: re0, at: [258.0, 131.2], size: {w: 145.0, h: 22.5},
+        - {id: re0, at: [220.55, 129.0], size: {w: 145.0, h: 22.5},
            accepts: [juniper/mx104-re@1], default: juniper/mx104-re@1,
            group: res, rel-pos: 0}
       placements:
-        - {id: xe-0, ref: std/sfp-ganged@1, at: [90.68, 20.0], group: xe, rel-pos: 0}
-        - {id: xe-1, ref: std/sfp-ganged@1, at: [104.93, 20.0], group: xe, rel-pos: 1}
-        - {id: xe-2, ref: std/sfp-ganged@1, at: [119.18, 20.0], group: xe, rel-pos: 2}
-        - {id: xe-3, ref: std/sfp-ganged@1, at: [133.43, 20.0], group: xe, rel-pos: 3}
-        - {id: ext-ref-clock, ref: std/rj45@2, at: [261, 8.4], group: timing, rel-pos: 0,
+        - {id: xe-0, ref: std/sfp@1, at: [90.75, 23.2], group: xe, rel-pos: 0}
+        - {id: xe-1, ref: std/sfp@1, at: [108.05, 23.2], group: xe, rel-pos: 1}
+        - {id: xe-2, ref: std/sfp@1, at: [125.15, 23.2], group: xe, rel-pos: 2}
+        - {id: xe-3, ref: std/sfp@1, at: [142.25, 23.2], group: xe, rel-pos: 3}
+        - {id: ext-ref-clock, ref: std/rj45@2, at: [263.1, 5.7], group: timing, rel-pos: 0,
            attrs: {media: rj48, function: external reference clock}}
-        - {id: tod, ref: std/rj45@2, at: [278, 8.4], group: timing, rel-pos: 1,
+        - {id: tod, ref: std/rj45@2, at: [279.0, 5.7], group: timing, rel-pos: 1,
            attrs: {media: rj45-tod, function: time of day}}
-        - {id: clk-1pps-in, ref: std/smb@1, at: [309.09, 10.09], group: timing, rel-pos: 2,
+        - {id: clk-1pps-in, ref: std/smb@1, at: [305.38, 10.79], group: timing, rel-pos: 2,
            attrs: {function: 1PPS input}}
-        - {id: clk-1pps-out, ref: std/smb@1, at: [316.29, 10.09], group: timing, rel-pos: 3,
+        - {id: clk-1pps-out, ref: std/smb@1, at: [313.28, 10.79], group: timing, rel-pos: 3,
            attrs: {function: 1PPS output}}
-        - {id: clk-10mhz-in, ref: std/smb@1, at: [324.59, 10.09], group: timing, rel-pos: 4,
+        - {id: clk-10mhz-in, ref: std/smb@1, at: [321.48, 10.79], group: timing, rel-pos: 4,
            attrs: {function: 10 MHz input}}
-        - {id: clk-10mhz-out, ref: std/smb@1, at: [331.79, 10.09], group: timing, rel-pos: 5,
+        - {id: clk-10mhz-out, ref: std/smb@1, at: [329.28, 10.79], group: timing, rel-pos: 5,
            attrs: {function: 10 MHz output}}
-        - {id: led-sys-ok, ref: common/led-dot@1, at: [155.0, 21.0], for: chassis,
+        - {id: led-sys-ok, ref: common/led-dot@1, at: [175.5, 23.6], for: chassis,
            group: status-leds, rel-pos: 0,
            states: ['off', {name: ok, color: '#22c55e'}],
            description: SYS OK - green when the system is up (guide table)}
-        - {id: btn-online, ref: common/reset-button@1, at: [153.8, 28.0], for: chassis,
+        - {id: btn-online, ref: common/reset-button@1, at: [165.0, 28.2], for: chassis,
            group: mgmt, rel-pos: 0, attrs: {function: online/offline}}
   rear:
     size:
