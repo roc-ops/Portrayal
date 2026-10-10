@@ -415,7 +415,8 @@ hosts:
   only when a device needs them), its length `w`, and the range it can be set
   back (DINRAIL2U and DINRAIL4U adjust it;
   [adjustable-positions-design.md](adjustable-positions-design.md), #950,
-  proposes that the host follow an adjustment and not restate the range). A
+  decided 2026-10-10: the host follows an adjustment and does not restate
+  the range). A
   `mount: din-rail` device is the only thing it takes. The AurCore switches are
   the first such devices.
 - **`load-kg`** is the maker's rating for the host, warned about as the rack's
