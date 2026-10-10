@@ -37,3 +37,6 @@
 - `juniper/mic-3d-4xge-xfp@1` and `juniper/mic-3d-4xge-xfp-v@1`, whose cages
   were laid out from registry sizes rather than measured (#238). Pin
   `juniper/mic-3d-4xge-xfp@2` and `juniper/mic-3d-4xge-xfp-v@2` instead.
+  Superseded: both of those are now kept only as deprecated majors
+  (`superseded-by`, #448), and the major to pin today is
+  `juniper/mic-3d-4xge-xfp@4` (#887).

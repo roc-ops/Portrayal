@@ -58,7 +58,8 @@ names the ref that replaces it.
   24-adapter LC and LC/APC variants, and its drawer's slots accept all twenty
   holders. **As with the SC holders, these seat in bays of the drawer's module
   type, which NetBox takes (4.5.7 or later) and Nautobot is not given: none of
-  their ports can be placed in Nautobot yet** (roc-ops/Portrayal#834). The 12-port LC
+  their ports can be placed in Nautobot yet** (roc-ops/Portrayal#834; superseded by
+  the Nautobot entry under Changed, which gives the drawer its bays). The 12-port LC
   holders are the first modules to state `optical.front-order` by position:
   their lower row is turned over, and its ports still count left to right.
 - `optical.front-order` may name one position of a part (`lc07.2`) as well
@@ -102,7 +103,9 @@ names the ref that replaces it.
   `amphenol-ns/300cb08-c` (horizontal busbar inputs). Each replaces the screw
   terminal outputs with sixteen `amphenol-ns/output-p40@1` receptacles; the -C
   takes its feeds on `amphenol-ns/input-feed-busbar@1`, whose landings stand
-  147 mm behind the chassis. Front, top, bottom and sides are the 300CB08. In
+  147 mm behind the chassis (superseded: the -C panels under Fixed put them
+  38.1 and 95.2 mm behind a 367.0 mm deep panel, #860). Front, top, bottom
+  and sides are the 300CB08. In
   the DCIM exports each has two `dc-terminal` power ports, one per feed, and
   its outputs are not exported yet. No existing device or export changes.
 - The two monitored panels of the Amphenol Network Solutions 300CB08 family
@@ -124,7 +127,9 @@ names the ref that replaces it.
   the holders seat in bays of the drawer's module type, which NetBox takes
   (4.5.7 or later) and Nautobot is not given: the Nautobot drawer has no bays,
   so the holders and their 48 ports cannot be placed there yet**
-  (roc-ops/Portrayal#834). Nautobot states `u_height: 1` for this 0.5U panel.
+  (roc-ops/Portrayal#834; superseded by the Nautobot entry under Changed, which
+  gives the drawer its four bays). Nautobot states `u_height: 1` for this
+  0.5U panel.
 - The explorer edits a part's fields. Selecting a part whose component
   declares `fields:` - a supply's wattage, a latch colour, a filter's channel
   numbers - shows one control per field in the inspector: a list for a
@@ -338,7 +343,10 @@ names the ref that replaces it.
   Nautobot module types are not given these bays**, so from here the two
   trees under `library/exports/*/module-types` are no longer the same text:
   Nautobot writes a bay's position as given and cannot fill `{module}` in it
-  (roc-ops/Portrayal#765).
+  (roc-ops/Portrayal#765). Superseded by the Nautobot entry under Changed:
+  most Nautobot module types carry their bays today, written plain, with the
+  parent in the port names. The bays that entry lists as withheld (a carrier
+  whose modules also seat directly in a chassis) are still not given.
 - Five generic optics, a plug and a pull handle: `generic/qsfp-mpo@1` (a QSFP
   with one MPO receptacle), `generic/qsfp-dd-mpo16@1` (a QSFP-DD with one
   MPO-16 receptacle in a Type 2 nose), `generic/qsfp-lc-simplex@1` (a QSFP

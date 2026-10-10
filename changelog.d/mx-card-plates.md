@@ -38,11 +38,21 @@
   `mpc10e-10c-mrate`, `mpc10e-15c-mrate`, `mpc1e-3d`, `mpc2e-3d`, `mpc3e-3d`,
   `mpc4e-3d-2cge-8xge`, `mpc4e-3d-32xge-sfpp`, `mpc5e-100g10g`,
   `mpc5e-40g10g`, `mpc7e-10g`, `mpc7e-mrate`, `ms-dpc` and `ms-mpc` (#261).
+  Superseded for five of them: `juniper/dpc-r-4xge-xfp@2` and
+  `juniper/scb-mx@2` were removed in turn for `@3` (#891, below), and
+  `mpc1e-3d@2`, `mpc2e-3d@2` and `mpc3e-3d@2` are kept only as deprecated
+  majors whose replacement is `@3` (#448). Those five `@3` are the majors
+  to pin today.
 - `juniper/re-s-1300-v@1`, which only `scb-mx960-v` seated, is replaced by
-  `juniper/re-s-1300@1` in `juniper/scb-mx@2`.
+  `juniper/re-s-1300@1` in `juniper/scb-mx@2`. Superseded: both were removed
+  in turn (#891, below), and today it is `juniper/re-s-1300@2` in
+  `juniper/scb-mx@3`.
 - `juniper/mx960-blank-v@1` is replaced by `juniper/mx960-blank@1`, drawn
   horizontally with the MX960 blank's own knobs. Its DCIM module type is
   renamed from `mx960-blank-v` to `mx960-blank`, so the export files
   `mx960-blank-v.yaml` are replaced by `mx960-blank.yaml`. **BREAKING for DCIM
-  data already imported.**
-- The 22 horizontal card majors at @1, each replaced by its @2 above.
+  data already imported.** Superseded: the module type was renamed again, and
+  today it is `DPC-SCB-BLANK`, in `DPC-SCB-BLANK.yaml` (#899, under Changed).
+- The 22 horizontal card majors at @1, each replaced by its @2 above. The
+  major to pin today is `@3` for `dpc-r-4xge-xfp`, `scb-mx`, `mpc1e-3d`,
+  `mpc2e-3d` and `mpc3e-3d`, and `@2` for the other seventeen.
