@@ -1,0 +1,77 @@
+format: 1
+kind: module
+name: re-s-1300
+version: 2.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Juniper RE-S-1300 Routing Engine (RE-S-1300-2048, EOL) as photographed in
+  the MX240's SCB-MX bays. 1.3 GHz processor, 2 GB memory. The face carries
+  the HDD/MASTER and OK-FAIL/ONLINE lamp block, the recessed ONLINE/OFFLINE
+  button and RESET pinhole, and the USB, AUX, CONSOLE and ETHERNET ports;
+  the ETHERNET jack is the fxp0 out-of-band management port.
+attrs:
+  model: RE-S-1300-2048
+  power-draw-max-w: 90
+  cpu: 1.3 GHz
+  memory: 2 GB
+  lifecycle-note: EOL per TSB16556; modelled because it is the RE the
+    reference photograph carries
+provenance:
+  width: >-
+    photo-measured (#891) - the plate runs card x 91.0-362.7 on the MX240 front photograph (3.372
+    px/mm) and 91.4-363.9 on the MX480's (3.230), both seated in SCB-MX; it is drawn from the SCB bay's
+    left edge, card x 91.44, to the mean right edge, 363.3: 271.9 wide. The right captive screw centres
+    at card x 357.9 and 357.7 in the two photographs, y 11.5 on the MX240 (10.5 below the bay top), about
+    7 mm across: drawn at plate x 266.4, y 10.5. Until 2.0.0 the plate stopped at card x 353.2, 9.5 mm
+    short, and drew no right screw. Everything placed from the left edge is unchanged.
+  speed: SOURCES DISAGREE, so no speed is stated. The MX240, MX480 and MX960 guides list one
+    10/100/1000-Mbps Ethernet port on each Routing Engine family they describe, but their RJ-45
+    pinout section calls the port labeled ETHERNET an autosensing 10/100-Mbps receptacle, and
+    neither passage is scoped to the RE-S-1300. The media is rj45; the rate waits for an RE-S-1300
+    document
+  media: 'the RJ-45 jacks are typed by what runs through them rather than by the housing: console
+    and auxiliary ports are rj45-serial (RS-232), a time-of-day port is rj45-tod and a BITS
+    port is rj48, the media the library devices already use for the same jacks'
+  size: 'photo - 271.9 x 27.5 mm (width - see width), the plate between the SCB bay edges off the
+    orthographic front photograph. No vendor RE dimension exists in the
+    intake - searched the physical-specification tables'
+  power: >-
+    guide FRU power table (Component | Model Number | Maximum Power Requirement), MX chassis
+    guides: '| | RE-S-1300-2048 (EOL'd) RE-S-2000-4096 (EOL'd) RE-S-1800 (all variants) |
+    ... | 90W |'. Table 93 'FRU Power Requirements'. One row covers three Routing Engines
+    and states a single 90 W; it is the same in the MX480 and MX960 guides.
+  face: 'photo - lamps, buttons and the four ports placed off the photograph
+    at 3.386 px/mm: lamp block at x 42.7/47.6, ONLINE/OFFLINE button 87.4,
+    RESET 97.0, USB 170.0, AUX 187.9, CONSOLE 205.3, ETHERNET 222.8 (all
+    centres). AUX/CONSOLE/ETHERNET are RJ45 (registry), USB vertical'
+  leds: 'guide RE LED table (RE-S-1300 family): HDD green blinking =
+    disk activity; MASTER green = primary; OK/FAIL green ok / red fault;
+    ONLINE green = online'
+states:
+- ok
+- fail
+- absent
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: the Routing Engine management cluster - the out-of-band Ethernet jack, the RJ-45
+      serial ports and the USB service port. One job (reaching and disciplining the box),
+      several media
+parts:
+- {ref: std/usb-a@1, id: usb, group: mgmt, at: [164.0, 11.5], rotate: 90, attrs: {function: USB service port}}
+- {ref: std/rj45@2, id: aux, group: mgmt, at: [180, 7.15], attrs: {media: rj45-serial, function: auxiliary console}}
+- {ref: std/rj45@2, id: console, group: mgmt, at: [197.4, 7.15], attrs: {media: rj45-serial, function: serial console}}
+- {ref: common/rj45-eth@1, id: ethernet, group: mgmt, at: [214.9, 7.15], attrs: {media: rj45, function: fxp0 out-of-band management}}
+elements:
+  latch:
+    at: [1.0, 6.0]
+    size: [5.0, 16.0]
+    class: latch
+size:
+  w: 271.9
+  h: 27.5
+size-confidence: {w: photo-measured, h: photo-measured}
