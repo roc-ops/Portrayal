@@ -667,8 +667,12 @@ A finding: "Bundle 2 turns at mgr-1 ring 1 with room for an 18 mm bend; c7
 needed, the room there, the shortfall, and the member that sets the need.
 
 Single cables, and members' lead-ins and lead-outs, are not checked here. That
-is the per-cable bend warning #919 leaves to a follow-up in the Rack Builder,
-which can reuse `r_max`.
+was the per-cable bend warning #919 left to a follow-up; since #973 (kit
+0.17.0) the kit judges each cable's own path, with the same corners and a
+leg shared by what each corner needs of it, not by halves
+([cable-lay-design.md](cable-lay-design.md) section 3.4). The bundle check
+and its error bound are as they were: a trunk is a sketch through waypoint
+centres, and the halves stay.
 
 ### 5.3 What an agent reads
 
@@ -940,7 +944,10 @@ What the bend check settled that section 5.2 leaves to it:
   bend (fewer than two cables, or no trunk).
 - **Single cables, and members' leads, are not checked** (sections 5.2 and 9).
   `cornersOf(points)` is exported, so the per-cable follow-up #919 names can
-  reuse the same geometry.
+  reuse the same geometry. It did, in #973: `cornersOf` and `STRAIGHT_DEG`
+  moved to `rack/route-path.js` (`rack/bundles.js` still exports both), and
+  `cornersOf(points, {share: 'need'})` shares a leg by need for a cable's
+  own path. Without the option it is the function this section describes.
 
 ## 13. As built in #923
 

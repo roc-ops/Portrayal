@@ -104,8 +104,8 @@ as `@portrayal/kit/rack/<module>`:
 | `rack/managers.js` | cable managers: `placement` of a manager onto the device behind it, and moving one |
 | `rack/cable-rules.js` | cables: which two ports may be joined, `withCable`, media and lengths |
 | `rack/cable-types.js` | the cable types (`cable-types.json`): `loadCableTypes(dist)` fetches them and returns `typeOf`, `bendOf` and `diameterOf` over them; the same lookups are exported to build over a table already in hand (a fixture, a cached copy): `typeOf(types, id)`, `cableTypeOf(types, cable)`, `radiusMm(type, which)`, `installedRadiusMm(types, id)`, `bendLookup(types)` and `diameterLookup(types)`, each radius in millimetres |
-| `rack/route.js`, `rack/route-path.js`, `rack/cable-geometry.js` | where a cable runs: `resolveRoute`, `routePath`, `trayOf`, `ringMarks`, `orientMarks`, `reverseMarks`, `routedLength`, `pathLength`, pathway fill, `ringFindings`, `bodyFindings`, and the geometry under them (`throughRings`) |
-| `rack/solids.js` | the solid bodies a route may not pass through: `solidsOf(rack, ctx)` places every device's envelope or derived `solids` in rack coordinates; `legCrossings` tests a leg against them; `detour` takes a leg round them; `CLEAR`, the clearance a detour keeps; `traysOf(rack, ctx)` places every device's `trays`, the floors a cable lies on; a ring's solid parts (`ring/<id>/<part>`) are met by the cable's tube |
+| `rack/route.js`, `rack/route-path.js`, `rack/cable-geometry.js` | where a cable runs: `resolveRoute`, `routePath`, `trayOf`, `ringMarks`, `orientMarks`, `reverseMarks`, `routedLength`, `pathLength`, pathway fill, `ringFindings`, `bodyFindings`, `bendFindings`, and the geometry under them (`throughRings`, `cornersOf`) |
+| `rack/solids.js` | the solid bodies a route may not pass through: `solidsOf(rack, ctx)` places every device's envelope or derived `solids` in rack coordinates; `legCrossings` tests a leg against them; `detour` takes a leg round them (with `room`, far enough out for the bends at each end); `CLEAR`, the clearance a detour keeps; `traysOf(rack, ctx)` places every device's `trays`, the floors a cable lies on; a ring's solid parts (`ring/<id>/<part>`) are met by the cable's tube |
 | `rack/bundles.js`, `rack/bundle-route.js` | cable bundles: the size and bend checks (`bundleCheck`, `bundleChecks`, `pathwaysOn`, `bendCheck`, `cornersOf`), strap positions (`straps`), the trunk worked out from the members' routes (`deriveTrunk`) and a member's route along it (`followTrunk`) |
 | `rack/export-data.js` | the rack as rows: `bomRows`, `cableScheduleRows` and the device-import data, and the bundles as the exports read them (`bundleExports`, `bundleNotes`, `strapBomRows`) |
 | `rack/dcim-rules.js` | what a NetBox or Nautobot import needs of a rack |
@@ -114,7 +114,7 @@ as `@portrayal/kit/rack/<module>`:
 | `rack/history.js` | undo and redo as snapshots |
 | `rack/editor.js` | `createRackEditor`: a rack document you edit by commands, with undo, redo and change events |
 | `rack/queries.js` | reading a rack: `fitsAt`, `freeUs`, `catalog`, `describe`, `inspect`, `selectCables`, `freePorts`, `suggestMedia`, `looseEnds` |
-| `rack/resting.js` | internal, not exported: how a cable rests, for `route.js` (`DRAPE`, the free span's hang and landing, the held face) |
+| `rack/resting.js` | internal, not exported: how a cable rests, for `route.js` (`DRAPE`, the free span's hang and landing, laid only where it leaves every corner its bend radius, the held face) |
 | `rack/slots.js` | internal, not exported: what a placed device holds, read without a drawing, for `commands.js` and `queries.js` |
 
 ### Where this came from
@@ -363,6 +363,43 @@ now goes over a ring to its approach point, or round a PDU it grazed, and
 shorter where a detour that went round a tray's
 front edge to a ring's face can end at the approach point by a shorter way.
 
+A path leaves every turn room for its cable's bend radius (#973,
+docs/cable-lay-design.md section 3.4). The path is the cable, so its corners
+are its bends, and since 0.17.0 `routePath` places its points for the
+cable's own installed bend radius (`ctx.bendOf(cable)`, else its media's),
+judged by `cornersOf(points, {share: 'need'})` from
+`@portrayal/kit/rack/route-path`: the room a corner's legs leave it, a leg
+between two corners shared by what each turn uses of it (`cornersOf(points)`
+alone shares it by halves, as the bundle check does, and
+`@portrayal/kit/rack/bundles` still exports it). Where the route turns onto
+a ring's run its **approach point** stands the bend radius from the band,
+not the cable's radius and `CLEAR`; a cable whose port stands behind that
+point is led square to it through a **lead point** (`at: 'lead'`, with the
+ring's `item` and `via`), and one whose first turn needs more leg than its
+plug gives runs on straight out of it to a lead point with its `end`. A
+detour's planes stand two bend radii from each end (`detour`'s new `room`
+option), and a free span is sampled evenly along its arc and hangs only as
+deep as the corners beside it have room for, so `at: 'rest'` points are
+fewer and further apart. What the rack leaves no room for is still routed,
+and is said: the path's `bends` lists each corner short of the radius, `{
+kind: 'tight-bend', cable, point, between: [from, to], at: [x, y, z],
+angle_deg, legs_mm, room_mm, need_mm, short_mm }`, and `bendFindings(rack,
+ctx, nameOf)` gives them rack-wide with a sentence ("c9 turns 138.3 degrees
+between its port on LEAF-B and CM-01 ring 3 with room for a 16.5 mm bend;
+the cable (aoc) needs 30 mm, 13.5 mm short."), as `bodyFindings` does for
+crossings. A page that draws the kit's points can show them as they are;
+`inspect` and `describe` do not carry them yet. What is decided for a cable
+is kept per rack, context and cable, so, as for a route's side, build a new
+context when what it reads changes. **Routed lengths change in 0.17.0** on
+every routed cable that turns at a ring, goes round a body or hangs. On the
+owner's rack of #949 each of the sixteen cords is 20.6 to 179.2 mm longer
+and seven pass the 0.5 m break (c1 to c3 and c5 to c8 are 1 m cords again).
+On 60 generated racks (1,803 cables) a length moves by 113 mm shorter to 218
+mm longer, median 19 mm longer, 92 stock sizes up and 29 down; the corners
+short of their radius fall from 22,886 to 1,201, each a bend the parts leave
+no room for (a DAC's or an AOC's head, or a Cat 6A boot, that ends beside
+the ring's line).
+
 To change a rack by name rather than by function, use the command core:
 `createRackEditor({ doc, chassisOf })` applies `place`, `move`, `patch`,
 `remove`, `attach`, `detach`, `frame`, `rename`, `dcim`, `fit`, `field`, the
@@ -479,7 +516,8 @@ refuses: "Bundle 2 turns at left-front U10 with room for a 24.5 mm bend; c2
 source: 'legs' | 'guide', estimated, need_mm, by, members, unchecked, ok,
 short_mm }`, `ok` null where nothing present has a radius; `cornersOf(points)`
 is the geometry on its own. A cable outside a bundle, and a member's lead to
-its port, are not checked for bend.
+its port, are not checked here: each cable's own path is, since 0.17.0, by
+`routePath`'s `bends` and `bendFindings` (above).
 
 **Bundles in the exports (0.9.0).** `bundleExports(rack, ctx)` in
 `@portrayal/kit/rack/export-data` measures each bundle once, with the same
