@@ -108,7 +108,10 @@ def legs(path):
     lint rules can walk a malformed path and report it. That is all the
     leniency there is: a `to` that is missing or the wrong shape comes back as
     written, and the exporter is not made safe against it. L78 and L171 fail
-    such a contract before anything is exported.
+    such a contract before anything is exported. `endpoints` inherits this, so
+    it no longer raises on a split entry with no `ratio` (the ratio is None)
+    or on a missing or null `to` (the far end is None); the schema and L78
+    fail those first.
     """
     band = path.get("band")
     out = []

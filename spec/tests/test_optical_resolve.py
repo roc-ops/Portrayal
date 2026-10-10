@@ -212,3 +212,16 @@ def test_endpoints_and_legs_agree_on_every_path_in_the_library():
             assert len(eps) == len(legs) + 1, f
             n += 1
     assert n > 1000, n            # it measured the library, not an empty glob
+
+
+def test_a_malformed_fan_entry_is_skipped_not_raised_on():
+    """A fan entry that is not a mapping, or has no `at`, yields no leg, so a
+    lint rule can walk the path and report it."""
+    split = {"from": "a.1", "to": ["b.1", {"ratio": 50}, {"at": "b.2", "ratio": 50}]}
+    assert optical.legs(split) == [
+        {"from": "a.1", "to": "b.2", "ratio": 50, "band": None}]
+    assert optical.endpoints(split) == [("a.1", None), ("b.2", 50)]
+    join = {"combine": ["a.1", {"ratio": 50}, {"at": "a.2"}], "to": "b.1"}
+    assert optical.legs(join) == [
+        {"from": "a.2", "to": "b.1", "ratio": None, "band": None}]
+    assert optical.endpoints(join) == [("b.1", None), ("a.2", None)]
