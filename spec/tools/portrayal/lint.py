@@ -5698,7 +5698,7 @@ def lint_device_cutouts(path, view_name, view, lib_roots, seen_through=()):
     #    punch. Now the overlap of every hole is unioned (so a hole and the
     #    port drawn in it are not counted twice), and a lamp that declares
     #    several windows is also covered when the holes cover more than half
-    #    of THOSE - four round windows in a post leave most of the column's
+    #    of EACH OF THOSE (#845) - four round windows in a post leave most of the column's
     #    bounding box as metal, and that metal is the drawing being right.
     #    Auto-punching keeps the one-opening rule (`_single_opening`): what
     #    windows a multi-window lamp has is read off the metal by a person.
@@ -5714,9 +5714,13 @@ def lint_device_cutouts(path, view_name, view, lib_roots, seen_through=()):
         windows = _lamp_windows(q, fb, lib_roots) if q else []
         if len(windows) < 2:
             return False
-        want = sum((w[2] - w[0]) * (w[3] - w[1]) for w in windows)
-        got = sum(_union_overlap(w, holes) for w in windows)
-        return bool(want) and got / want > 0.5
+        # EVERY WINDOW, EACH MORE THAN HALF OPEN (#845). Summed over the
+        # windows, three punched of four passed, so a window left in the
+        # metal was never reported; each declared window is a hole in the
+        # faceplate, and one missing is a missing hole.
+        return all((w[2] - w[0]) * (w[3] - w[1]) > 0
+                   and _union_overlap(w, holes) / ((w[2] - w[0]) * (w[3] - w[1])) > 0.5
+                   for w in windows)
 
     for q in placements:
         cp = resolve_component(q.get("ref", ""), lib_roots)
@@ -6909,8 +6913,9 @@ def lint_device_top_level_skus(path, data):
 # (`7750 SR-12 (pre-2016 chassis)`) have no hyphen on both sides of the space.
 _PN_SPLIT_TOKEN = re.compile(r"-([A-Z0-9]+(?:\s+[A-Z0-9]+)+)(?=-)")
 # Zero-width characters are not whitespace to str.isspace(), and are as
-# invisible in a diff as an NBSP.
-_PN_ZERO_WIDTH = {"​", "‌", "‍", "⁠", "﻿"}
+# invisible in a diff as an NBSP - so they are written as escapes (#845):
+# zero width space, non-joiner and joiner, word joiner, and the BOM.
+_PN_ZERO_WIDTH = {"\u200b", "\u200c", "\u200d", "\u2060", "\ufeff"}
 
 
 def lint_part_number_keys(path, data):

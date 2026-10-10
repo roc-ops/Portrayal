@@ -23,6 +23,11 @@
   front connector exported as one port (an MPO adapter): the export shrank the
   port and kept each leg's original `front_position`, which both DCIMs refuse.
   Name the connector bare (#857).
+- L39 asks each window a multi-window lamp declares to be more than half
+  punched, where it summed them: a four-window lamp with three windows punched
+  passed, and the missing window was never reported. Nothing in the library
+  changes. Tests now pin the windows' turn at 90, 180 and 270 degrees on a part
+  that is not symmetric (#845).
 
 ### Changed
 - `kit/rack` no longer speaks as portrayal.dev's page (#895). A rack file newer
