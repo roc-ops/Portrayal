@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mx960-craft
-version: 1.1.1
+version: 2.0.0
 class: display
 behaviour: fills
 profile: networking
@@ -11,11 +11,6 @@ description: >-
   alarm lamps with the ACO/LT button and the yellow/red alarm relay
   blocks, and one OK/FAIL/ONLINE cluster above each of the fourteen
   slots (SCB positions print blue).
-unplaced: >-
-  SUPERSEDED by juniper/mx960-craft@2, whose fourteen slot clusters sit where the MX960 photograph puts
-  them, on a 31.40 pitch from x 16.65 (#899). Kept and deprecated rather than deleted, so a manifest
-  that pins it still resolves (#448); nothing in this library seats it.
-superseded-by: juniper/mx960-craft@2
 attrs:
   model: MX960 Craft Interface
   power-absent: not-published
@@ -58,6 +53,16 @@ provenance:
     line cards, the two SCBs (indices 6 and 7, the blue buttons) and six more line
     cards, which is the arrangement the slot silkscreen prints: 0-5, 0-1, 6-11.
   size: 'photo - full chassis width; ~48 mm tall at 2.07 px/mm'
+  slot-clusters: >-
+    photo-measured (#899) - the fourteen OK/FAIL/ONLINE clusters sit on their own pitch, not the
+    slots'. On the MX960 front photograph the white ONLINE buttons centre at x px 77.4, 143.0, 207.9,
+    ... 923.7, a 65.10 px pitch, while the card plates below them repeat every 64.28 px (gaps at 307,
+    372, 436, 500, 565, 629, 692, 757, 822, 886, 950 at y 700); the buttons sit over slots 4-7 and
+    drift outward to 2.8 mm past the outer slot centres at either end, symmetric on the panel (26.4 px
+    in from its left edge, 25.0 from its right). Mapped through the slots (slot 4's centre, px 339.5,
+    is chassis x 143.05; 31.0 mm per 64.28 px) the clusters centre at 16.65 + 31.40 k, k = 0-13. Until
+    2.0.0 they sat at 25.05 + 30.1 k, the old 30.1 slot pitch, 6 mm right of slot 0 and 5.7 mm left of
+    slot 11. Each cluster keeps its own layout, OK and FAIL lamps 5.0 either side of the button.
   power: >-
     NOT PUBLISHED. The chassis guide for this part is staged and converted, its FRU power
     requirements table is present, and THIS PART IS NOT IN IT - which is a stronger
@@ -65,7 +70,7 @@ provenance:
     budgets for and did not tabulate this one. Searched beyond that table as well - all 573 converted documents, for this part, with a twelve-line window either side and a
     thirty-line window against any line introducing a power requirement or consumption. No
     wattage falls near a mention anywhere.
-  face: 'photo - the studio front photograph at ~2.07 px/mm: the card cage is ~405 mm tall and fourteen slots share the 441 mm width on a ~30.1 mm pitch; positions approximate to ~2 mm. No vendor card dimension in the extraction'
+  face: 'photo - the studio front photograph at ~2.07 px/mm: the card cage is ~405 mm tall and fourteen slots share the 441 mm width (the slot clusters: slot-clusters); positions approximate to ~2 mm. No vendor card dimension in the extraction'
 states: [absent]
 elements:
   led-pem-0:
@@ -165,7 +170,7 @@ elements:
     - {name: red, color: '#d0021b'}
     - 'off'
   led-ok-0:
-    at: [19.25, 31.2]
+    at: [10.85, 31.2]
     size: [1.6, 1.6]
     class: led
     states:
@@ -173,14 +178,14 @@ elements:
     - {name: blinking, behavior: blinking, color: '#39b54a'}
     - 'off'
   led-fail-0:
-    at: [29.25, 31.2]
+    at: [20.85, 31.2]
     size: [1.6, 1.6]
     class: led
     states:
     - {name: red, color: '#d0021b'}
     - 'off'
   led-ok-1:
-    at: [49.35, 31.2]
+    at: [42.25, 31.2]
     size: [1.6, 1.6]
     class: led
     states:
@@ -188,14 +193,14 @@ elements:
     - {name: blinking, behavior: blinking, color: '#39b54a'}
     - 'off'
   led-fail-1:
-    at: [59.35, 31.2]
+    at: [52.25, 31.2]
     size: [1.6, 1.6]
     class: led
     states:
     - {name: red, color: '#d0021b'}
     - 'off'
   led-ok-2:
-    at: [79.45, 31.2]
+    at: [73.65, 31.2]
     size: [1.6, 1.6]
     class: led
     states:
@@ -203,14 +208,14 @@ elements:
     - {name: blinking, behavior: blinking, color: '#39b54a'}
     - 'off'
   led-fail-2:
-    at: [89.45, 31.2]
+    at: [83.65, 31.2]
     size: [1.6, 1.6]
     class: led
     states:
     - {name: red, color: '#d0021b'}
     - 'off'
   led-ok-3:
-    at: [109.55, 31.2]
+    at: [105.05, 31.2]
     size: [1.6, 1.6]
     class: led
     states:
@@ -218,14 +223,14 @@ elements:
     - {name: blinking, behavior: blinking, color: '#39b54a'}
     - 'off'
   led-fail-3:
-    at: [119.55, 31.2]
+    at: [115.05, 31.2]
     size: [1.6, 1.6]
     class: led
     states:
     - {name: red, color: '#d0021b'}
     - 'off'
   led-ok-4:
-    at: [139.65, 31.2]
+    at: [136.45, 31.2]
     size: [1.6, 1.6]
     class: led
     states:
@@ -233,14 +238,14 @@ elements:
     - {name: blinking, behavior: blinking, color: '#39b54a'}
     - 'off'
   led-fail-4:
-    at: [149.65, 31.2]
+    at: [146.45, 31.2]
     size: [1.6, 1.6]
     class: led
     states:
     - {name: red, color: '#d0021b'}
     - 'off'
   led-ok-5:
-    at: [169.75, 31.2]
+    at: [167.85, 31.2]
     size: [1.6, 1.6]
     class: led
     states:
@@ -248,14 +253,14 @@ elements:
     - {name: blinking, behavior: blinking, color: '#39b54a'}
     - 'off'
   led-fail-5:
-    at: [179.75, 31.2]
+    at: [177.85, 31.2]
     size: [1.6, 1.6]
     class: led
     states:
     - {name: red, color: '#d0021b'}
     - 'off'
   led-ok-6:
-    at: [199.85, 31.2]
+    at: [199.25, 31.2]
     size: [1.6, 1.6]
     class: led
     states:
@@ -263,14 +268,14 @@ elements:
     - {name: blinking, behavior: blinking, color: '#39b54a'}
     - 'off'
   led-fail-6:
-    at: [209.85, 31.2]
+    at: [209.25, 31.2]
     size: [1.6, 1.6]
     class: led
     states:
     - {name: red, color: '#d0021b'}
     - 'off'
   led-ok-7:
-    at: [229.95, 31.2]
+    at: [230.65, 31.2]
     size: [1.6, 1.6]
     class: led
     states:
@@ -278,14 +283,14 @@ elements:
     - {name: blinking, behavior: blinking, color: '#39b54a'}
     - 'off'
   led-fail-7:
-    at: [239.95, 31.2]
+    at: [240.65, 31.2]
     size: [1.6, 1.6]
     class: led
     states:
     - {name: red, color: '#d0021b'}
     - 'off'
   led-ok-8:
-    at: [260.05, 31.2]
+    at: [262.05, 31.2]
     size: [1.6, 1.6]
     class: led
     states:
@@ -293,14 +298,14 @@ elements:
     - {name: blinking, behavior: blinking, color: '#39b54a'}
     - 'off'
   led-fail-8:
-    at: [270.05, 31.2]
+    at: [272.05, 31.2]
     size: [1.6, 1.6]
     class: led
     states:
     - {name: red, color: '#d0021b'}
     - 'off'
   led-ok-9:
-    at: [290.15, 31.2]
+    at: [293.45, 31.2]
     size: [1.6, 1.6]
     class: led
     states:
@@ -308,14 +313,14 @@ elements:
     - {name: blinking, behavior: blinking, color: '#39b54a'}
     - 'off'
   led-fail-9:
-    at: [300.15, 31.2]
+    at: [303.45, 31.2]
     size: [1.6, 1.6]
     class: led
     states:
     - {name: red, color: '#d0021b'}
     - 'off'
   led-ok-10:
-    at: [320.25, 31.2]
+    at: [324.85, 31.2]
     size: [1.6, 1.6]
     class: led
     states:
@@ -323,14 +328,14 @@ elements:
     - {name: blinking, behavior: blinking, color: '#39b54a'}
     - 'off'
   led-fail-10:
-    at: [330.25, 31.2]
+    at: [334.85, 31.2]
     size: [1.6, 1.6]
     class: led
     states:
     - {name: red, color: '#d0021b'}
     - 'off'
   led-ok-11:
-    at: [350.35, 31.2]
+    at: [356.25, 31.2]
     size: [1.6, 1.6]
     class: led
     states:
@@ -338,14 +343,14 @@ elements:
     - {name: blinking, behavior: blinking, color: '#39b54a'}
     - 'off'
   led-fail-11:
-    at: [360.35, 31.2]
+    at: [366.25, 31.2]
     size: [1.6, 1.6]
     class: led
     states:
     - {name: red, color: '#d0021b'}
     - 'off'
   led-ok-12:
-    at: [380.45, 31.2]
+    at: [387.65, 31.2]
     size: [1.6, 1.6]
     class: led
     states:
@@ -353,14 +358,14 @@ elements:
     - {name: blinking, behavior: blinking, color: '#39b54a'}
     - 'off'
   led-fail-12:
-    at: [390.45, 31.2]
+    at: [397.65, 31.2]
     size: [1.6, 1.6]
     class: led
     states:
     - {name: red, color: '#d0021b'}
     - 'off'
   led-ok-13:
-    at: [410.55, 31.2]
+    at: [419.05, 31.2]
     size: [1.6, 1.6]
     class: led
     states:
@@ -368,7 +373,7 @@ elements:
     - {name: blinking, behavior: blinking, color: '#39b54a'}
     - 'off'
   led-fail-13:
-    at: [420.55, 31.2]
+    at: [429.05, 31.2]
     size: [1.6, 1.6]
     class: led
     states:
@@ -377,3 +382,4 @@ elements:
 size:
   w: 441.0
   h: 48.0
+size-confidence: {w: photo-measured, h: photo-measured}

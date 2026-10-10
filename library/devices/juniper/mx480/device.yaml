@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx480
-version: 6.0.0
+version: 6.0.1
 maturity: modelled
 manufacturer: Juniper
 model: MX480
@@ -38,6 +38,17 @@ provenance:
       slot-number tab beside each slot (x 17.0-28.0), white for the DPC/MPC slots and blue for
       SCB 1 and SCB 0. The slot numbers are printed on those tabs, at x 22.8; until 3.0.0 they
       were drawn at x 5.6 on the dark side rail.
+  slot-pitch:
+    confidence: photo-measured
+    note: >-
+      WHY THE THREE CHASSIS READ DIFFERENT PITCHES FOR ONE CARD (#899). The MX240, MX480 and MX960
+      photographs read 30.7-30.9, 31.2-31.5 and 30.8-31.1 mm between plates, each on its own photograph's
+      scale, and each chassis carries its own reading (31.0, 31.3, 31.0). The spread is the photographs',
+      not a stated difference between the chassis: no document dimensions a slot pitch, and the readings
+      overlap within each photograph's own scale uncertainty (0.1-0.8% across against down). The guides'
+      1.25 in (31.75 mm) is Table 88's HEIGHT of the card, its envelope, and is not a pitch: fourteen
+      slots at 31.75 would need 444.5 mm, more than the MX960's 441.1 width, and eight would need 254.0
+      where the MX480 photograph spans 250.2. Settled only by a drawing that dimensions the cage.
   sources:
     note: >-
       MX480 Universal Routing Platform Hardware Guide, HPE datasheet a00150825enw, and the Juniper
