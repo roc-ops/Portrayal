@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ppm-ad1-1510
-version: 2.2.0
+version: 2.3.0
 class: filter
 behaviour: fills
 profile: optical
@@ -106,9 +106,12 @@ provenance:
     reading the four DCMs take of the same adapter.
     LINE IS THE TRUNK: it is the line-fibre side and the one port every path passes
     through, which is what the projection puts on rear port LINE-1 (roc-ops/Portrayal
-    #246). THE ADD DIRECTION IS A COMBINE - two inputs onto Line Tx - and the
-    vocabulary has no combine yet (docs/optical-paths-design.md, Open questions), so
-    it is written as banded legs off line.1: the same glass, read from the other end.
+    #246). THE ADD DIRECTION IS A COMBINE - two inputs onto Line Tx - and is
+    written as one: the figure draws OSC Rx and EDFA Rx joining onto Line Tx, the OSC
+    input on the 1511nm pass band and the EDFA input on the reflection band, so the
+    OSC source carries the `band` and the EDFA source carries the rest. It was banded
+    legs off line.1 until the vocabulary gained `combine`; the glass and the exported
+    rows are the same.
     `media: os2` is the family's, as on the OCUs and DCMs; the datasheet says only
     1260-1620nm and LC/UPC, which is single-mode territory but not the word OS2.
 elements:
@@ -122,8 +125,8 @@ parts:
 optical:
   # WHAT THE PART DOES, WHICH USED TO BE AN ATTR. `channel-nm` stays for a
   # reader; this is the same fact as glass. Bore 1 is Tx and bore 2 is Rx on all
-  # three adapters - see provenance/optical, which also says why the add
-  # direction (a combine) is written from the line side.
+  # three adapters - see provenance/optical. The drop direction is banded legs
+  # off Line Rx; the add direction is a declared combine onto Line Tx.
   media: os2
   polish: upc
   trunk: [line]
@@ -131,9 +134,11 @@ optical:
     # drop: Line Rx in, the 1511nm OSC channel out by osc Tx, the rest out by edfa Tx
     - {from: line.2, to: osc.1, band: {centre-nm: 1511, width-nm: 13}}
     - {from: line.2, to: edfa.1}
-    # add: osc Rx and edfa Rx in, out by Line Tx - written off line.1
-    - {from: line.1, to: osc.2, band: {centre-nm: 1511, width-nm: 13}}
-    - {from: line.1, to: edfa.2}
+    # add: osc Rx and edfa Rx in, joined and out by Line Tx
+    - combine:
+        - {at: osc.2, band: {centre-nm: 1511, width-nm: 13}}
+        - {at: edfa.2}
+      to: line.1
 relief:
   wall: '#22262a'
   features:
