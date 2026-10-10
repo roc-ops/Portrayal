@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ais800-32o
-version: 2.0.0
+version: 3.0.1
 maturity: modelled
 manufacturer: Edgecore
 model: AIS800-32O
@@ -551,7 +551,7 @@ views:
     components:
       bays:
       - {id: psu-1, at: [4.74, 1.40], size: {w: 53.7, h: 40.6}, group: psus, rel-pos: 1,
-         accepts: ['edgecore/ais800-psu-ac@1', 'edgecore/ais800-psu-dc@1'], default: 'edgecore/ais800-psu-ac@1'}
+         accepts: ['edgecore/ais800-psu-ac@1', 'edgecore/ais800-psu-dc@2'], default: 'edgecore/ais800-psu-ac@1'}
       - {id: fan-1, at: [63.16, 1.40], size: {w: 41.65, h: 40.6}, group: fans, rel-pos: 1,
          accepts: ['edgecore/ais800-fan@1'], default: 'edgecore/ais800-fan@1'}
       - {id: fan-2, at: [108.17, 1.40], size: {w: 41.65, h: 40.6}, group: fans, rel-pos: 2,
@@ -567,7 +567,7 @@ views:
       - {id: fan-7, at: [333.19, 1.40], size: {w: 41.65, h: 40.6}, group: fans, rel-pos: 7,
          accepts: ['edgecore/ais800-fan@1'], default: 'edgecore/ais800-fan@1'}
       - {id: psu-2, at: [379.20, 1.40], size: {w: 53.7, h: 40.6}, group: psus, rel-pos: 2,
-         accepts: ['edgecore/ais800-psu-ac@1', 'edgecore/ais800-psu-dc@1'], default: 'edgecore/ais800-psu-ac@1'}
+         accepts: ['edgecore/ais800-psu-ac@1', 'edgecore/ais800-psu-dc@2'], default: 'edgecore/ais800-psu-ac@1'}
     regions:
     - {id: power, at: [4.0, 1.0], size: {w: 55.0, h: 42.0}, label: 'Power supply 1',
        members: [psu-1]}
@@ -635,7 +635,7 @@ configurations:
     description: >-
       Dual 2400 W DC PSUs, front-to-back airflow - red bails. The DC supply lands -40 to -72 VDC
       on a two-pole screw block with a separate ground stud; no power cord ships.
-    bays: {psu-1: 'edgecore/ais800-psu-dc@1', psu-2: 'edgecore/ais800-psu-dc@1'}
+    bays: {psu-1: 'edgecore/ais800-psu-dc@2', psu-2: 'edgecore/ais800-psu-dc@2'}
     part-numbers:
       AIS800-32O-DF: {part: FP6EC9632004Z}
   dc-b2f:
@@ -644,7 +644,7 @@ configurations:
     description: 'Dual 2400 W DC PSUs, back-to-front airflow - blue bails'
     airflow: back-to-front
     region-context: {exhaust: Intake}
-    bays: {psu-1: 'edgecore/ais800-psu-dc@1', psu-2: 'edgecore/ais800-psu-dc@1'}
+    bays: {psu-1: 'edgecore/ais800-psu-dc@2', psu-2: 'edgecore/ais800-psu-dc@2'}
     component-attrs:
       ais800-fan: {handle-finish: '#3d7bd6'}
       ais800-psu-dc: {handle-finish: '#3d7bd6', latch-finish: '#8fb4e8'}

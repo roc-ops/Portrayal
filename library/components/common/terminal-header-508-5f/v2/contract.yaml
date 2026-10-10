@@ -1,10 +1,11 @@
 format: 1
 kind: component
 name: terminal-header-508-5f
-version: 1.0.1
+version: 2.0.0
 class: inlet
 behaviour: mounts
 profile: networking
+conforms: terminal-508-5-header
 interface: terminal-508-5
 description: >-
   Five-position pluggable terminal HEADER on a 5.08 mm pitch with a threaded flange at
@@ -12,14 +13,19 @@ description: >-
   to. The power input of the AurCore AIS industrial switches, wired `+ - earth + -` for
   two redundant DC feeds. Drawn empty, as the vendor photographs it: the plug ships in
   the box. Pole names are printed on the housing beside it, so the part carries none.
-size: {w: 35.56, h: 12.1, d: 12.0}
+size: {w: 35.56, h: 8.6, d: 12.0}
 size-confidence: {w: datasheet, h: datasheet, d: datasheet}
 attrs: {media: dc-terminal, positions: 5, pitch-mm: 5.08}
 provenance:
   size: >-
     DATASHEET - Phoenix Contact MSTB 2,5/ 5-GF-5,08 (1776537), the 5.08 mm threaded-flange
-    PCB header family this part is: width [w] 35.56 mm, height [h] 12.1 mm, length [l]
-    12 mm. Checked against the AurCore AIS4001P top face in the vendor video (1:02, 1920 px):
+    PCB header family this part is: width [w] 35.56 mm, length [l] 12 mm, and the
+    INSTALLED HEIGHT 8.6 (#873). The sheet's [h] is 12.1, which counts the 3.5 solder pin
+    under the board; the face is the mating face, board to housing top, so it is drawn
+    8.6, as the registry's `terminal-508-5-header` now records and this part claims. 1.x
+    drew 12.1. The depth 12.0 is the [l], checked and unchanged. The cells, contacts and
+    inserts keep the fractions of the height 1.x drew, an estimate of the openings rather
+    than a reading. Checked against the AurCore AIS4001P top face in the vendor video (1:02, 1920 px):
     the housing is 559 px across five contacts on a 78 px pitch, a ratio of 7.17 against
     the family's 35.56 / 5.08 = 7.0 on an oblique view.
   the-face: >-
@@ -28,14 +34,14 @@ provenance:
     how this one looks: green housing, brass inserts, open cells with a contact visible in
     each.
   mate: >-
-    derived - the centre of the row of five contacts, which is the centre of the housing,
+    derived - (17.78, 4.3), the centre of the row of five contacts, which is the centre of the housing,
     on the mouth of the housing (`on: body`): a plug seated here stands off by the 2.5 the
     housing is built proud, and starts where the housing ends. The interface,
     `terminal-508-5`, is the five-position mating face and says nothing of the flanges: a
     plain header presents it too. The data sheet above lists seventeen mating plugs
     (pp.16-25) and every one has screw flanges.
 elements:
-  body: {at: [0.0, 0.0], size: [35.56, 12.1], class: connector}
+  body: {at: [0.0, 0.0], size: [35.56, 8.6], class: connector}
 relief:
   wall: '#245c21'
   features:
@@ -45,79 +51,79 @@ relief:
       color: '#4fb548'
       confidence: estimated
       source: >-
-        ESTIMATED - the vendor video (1:00-1:02) shows the housing standing a few millimetres proud of the top face with its cells open and a contact in each; no figure gives the height. common/terminal-header-508-5f@1's own 3D-form key.
+        ESTIMATED - the vendor video (1:00-1:02) shows the housing standing a few millimetres proud of the top face with its cells open and a contact in each; no figure gives the height. common/terminal-header-508-5f@2's own 3D-form key.
     - node: cell-1
       out: 0.8
       color: '#2f6e2a'
       confidence: estimated
       source: >-
-        common/terminal-header-508-5f@1's own 3D-form key - see `body`. The well floor, below the housing top.
+        common/terminal-header-508-5f@2's own 3D-form key - see `body`. The well floor, below the housing top.
     - node: pin-1
       out: 1.6
       color: '#c9cdd2'
       confidence: estimated
       source: >-
-        common/terminal-header-508-5f@1's own 3D-form key - see `body`. The contact standing in the well.
+        common/terminal-header-508-5f@2's own 3D-form key - see `body`. The contact standing in the well.
     - node: cell-2
       out: 0.8
       color: '#2f6e2a'
       confidence: estimated
       source: >-
-        common/terminal-header-508-5f@1's own 3D-form key - see `body`. The well floor, below the housing top.
+        common/terminal-header-508-5f@2's own 3D-form key - see `body`. The well floor, below the housing top.
     - node: pin-2
       out: 1.6
       color: '#c9cdd2'
       confidence: estimated
       source: >-
-        common/terminal-header-508-5f@1's own 3D-form key - see `body`. The contact standing in the well.
+        common/terminal-header-508-5f@2's own 3D-form key - see `body`. The contact standing in the well.
     - node: cell-3
       out: 0.8
       color: '#2f6e2a'
       confidence: estimated
       source: >-
-        common/terminal-header-508-5f@1's own 3D-form key - see `body`. The well floor, below the housing top.
+        common/terminal-header-508-5f@2's own 3D-form key - see `body`. The well floor, below the housing top.
     - node: pin-3
       out: 1.6
       color: '#c9cdd2'
       confidence: estimated
       source: >-
-        common/terminal-header-508-5f@1's own 3D-form key - see `body`. The contact standing in the well.
+        common/terminal-header-508-5f@2's own 3D-form key - see `body`. The contact standing in the well.
     - node: cell-4
       out: 0.8
       color: '#2f6e2a'
       confidence: estimated
       source: >-
-        common/terminal-header-508-5f@1's own 3D-form key - see `body`. The well floor, below the housing top.
+        common/terminal-header-508-5f@2's own 3D-form key - see `body`. The well floor, below the housing top.
     - node: pin-4
       out: 1.6
       color: '#c9cdd2'
       confidence: estimated
       source: >-
-        common/terminal-header-508-5f@1's own 3D-form key - see `body`. The contact standing in the well.
+        common/terminal-header-508-5f@2's own 3D-form key - see `body`. The contact standing in the well.
     - node: cell-5
       out: 0.8
       color: '#2f6e2a'
       confidence: estimated
       source: >-
-        common/terminal-header-508-5f@1's own 3D-form key - see `body`. The well floor, below the housing top.
+        common/terminal-header-508-5f@2's own 3D-form key - see `body`. The well floor, below the housing top.
     - node: pin-5
       out: 1.6
       color: '#c9cdd2'
       confidence: estimated
       source: >-
-        common/terminal-header-508-5f@1's own 3D-form key - see `body`. The contact standing in the well.
+        common/terminal-header-508-5f@2's own 3D-form key - see `body`. The contact standing in the well.
     - node: insert-1
       out: 2.55
       color: '#c9a24a'
       confidence: estimated
       source: >-
-        common/terminal-header-508-5f@1's own 3D-form key - see `body`. The brass insert, flush with the flange.
+        common/terminal-header-508-5f@2's own 3D-form key - see `body`. The brass insert, flush with the flange.
     - node: insert-2
       out: 2.55
       color: '#c9a24a'
       confidence: estimated
       source: >-
-        common/terminal-header-508-5f@1's own 3D-form key - see `body`. The brass insert, flush with the flange.
+        common/terminal-header-508-5f@2's own 3D-form key - see `body`. The brass insert, flush with the flange.
 connection-points:
-  mate: {at: [17.78, 6.05], direction: front, 'on': body}
+  mate: {at: [17.78, 4.3], direction: front, 'on': body}
 skins: [default]

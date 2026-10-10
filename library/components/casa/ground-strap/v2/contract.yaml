@@ -1,18 +1,23 @@
 format: 1
 kind: component
 name: ground-strap
-version: 1.2.0
+version: 2.0.0
 class: ground
 behaviour: mounts
 profile: networking
 description: >-
-  Casa C100G ESD strap receptacle. A marked plate carrying a 4 mm jack and a
-  chassis-ground symbol - you plug the wrist strap in rather than bolting to it. Appears on both faces, on the same physical
+  Casa C100G ESD strap receptacle. A marked plate carrying a 4 mm jack - the
+  library's common/esd-jack@1, composed - and a chassis-ground symbol: you plug
+  the wrist strap in rather than bolting to it. Appears on both faces, on the same physical
   side of the chassis - which reads as the RIGHT of the front view and the LEFT
   of the rear view.
 attrs: {model: 'Ground Strap Point'}
 size: {w: 15.0, h: 7.9}
 provenance:
+  size: >-
+    drawing - 15.0 x 7.9, the groundStrapLocation outline in the maintainer's
+    hand-built SVGs, the drawing the `layout` key below traces;
+    docs/casa-modular-chassis.md carries the same figure for both faces.
   what-the-hole-is: >-
     CORRECTED BY THE OWNER, from the hardware. The `layout` note below reads
     this feature as a BOLT HOLE, and the `relief` note names the photograph that
@@ -23,10 +28,10 @@ provenance:
     geometry agreed with the correction before it arrived.
     The class moves from `mechanical` to `ground`, joining common/esd-jack and
     common/ground-lug, because what it is for is now known.
-    THE SKIN'S ELEMENT IS STILL CALLED `bolt-hole` AND SHOULD NOT BE, but an
-    element id is addressable and DESIGN.md puts an id change at major - which
-    means a v2 directory for a renamed circle. Recorded here instead, to be
-    taken at the next major this part needs for another reason.
+    THE JACK IS COMPOSED IN 2.0.0 (#413). 1.x drew its own 3.3 mm white
+    circle and called it `bolt-hole`; it is now common/esd-jack@1 as the
+    `jack` part, so the misnamed circle is gone rather than renamed, and the
+    plate draws only what is Casa's: the marked plate and the earth symbol.
   layout: 'drawing - the maintainer''s hand-built SVGs, `groundStrapLocation` on both
     faces, 6.58 x 3.81 in a 190.26-wide frame. Traced from its children - a bolt
     hole at 16 percent of the width, a stem at 61 percent dropping to a bar
@@ -41,13 +46,25 @@ provenance:
     nothing in it, or in either guide, says whether the marking is printed on the sheet
     metal or carried on a separate plate, nor how far the bolt head stands off. Both
     readings are open and picking one would be an assertion, so the part stays flat.
-    The BOLT HOLE is the one thing that could be modelled as a cavity, and it is not,
-    because its depth is the thickness of a piece of metal nobody has measured and a
-    guessed hole depth is a guessed number with a hole around it.
+    The jack, which 1.x drew as a bolt hole, is common/esd-jack@1 since 2.0.0 and
+    carries whatever 3D that part declares, which today is none.
     WHAT WOULD SETTLE IT: one photograph of the C100G rear corner. If the marking turns
     out to be a plate, {node: plate, out: 1.5} is the entry to add, matching
     edgecore/agr-ground-plate@1.'
   hand: 'drawing - front at x 153.78, rear at x 3.42. Both are the same corner of
     the real chassis; walking round the box swaps left for right, which is the
     same reason the rear slot order mirrors'
+  jack: >-
+    common/esd-jack@1, composed at [0.0, 1.1], so its centre is at (3.0, 4.1).
+    The traced bore centre is (2.4, 4.1), the `layout` reading's 16 percent of
+    the width; the jack's 6.0 bezel centred there would reach 0.6 past the
+    plate's left edge, so it is moved right by that 0.6 and its left edge sits
+    on the plate's. The 6.0 is that part's own figure, the largest ESD opening
+    in the library (the ASR 9006), not a reading of this chassis; the traced
+    3.3 circle is the bore it surrounds, which esd-jack draws at 4.0. The
+    bezel's right edge at 6.0 covers the first 0.7 of the earth symbol's bar,
+    which the tracing starts at 5.3; the bar was not shortened, because
+    nothing measured it.
+parts:
+  - {ref: common/esd-jack@1, id: jack, at: [0.0, 1.1]}
 skins: [default]

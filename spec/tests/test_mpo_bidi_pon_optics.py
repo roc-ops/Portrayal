@@ -1,4 +1,4 @@
-"""Four generic optics and the MPO-16 plug (docs/pluggables-mpo-bidi-pon-design.md).
+"""Five generic optics and the MPO-16 plug (docs/pluggables-mpo-bidi-pon-design.md).
 
     generic/qsfp-mpo@1         a QSFP with one MPO receptacle
     generic/qsfp-dd-mpo16@1    a QSFP-DD with one MPO-16 receptacle
@@ -74,7 +74,6 @@ HEADS = {
     SFP_SC: (2.1, 1.4, 20.0, 14.0),
     SFP_SC_UP: (2.1, 1.4, 20.0, 14.0),
 }
-BEIGE = "#d9cba3"
 GREY = "#6f6f6f"
 
 # optic -> (the agr560 cage it is seated in, the plug chained in it). Two of
@@ -313,9 +312,11 @@ def test_the_sc_bail_is_a_field_painted_bar_at_the_bottom(ref):
     assert feat["lift"] == d["head"]["size"]["d"] and feat["bar"] == pytest.approx(h)
 
 
-def test_the_mpo_faces_default_to_beige_and_the_others_to_grey():
-    assert doc(QSFP_MPO)["fields"]["latch-color"]["default"] == BEIGE
-    assert doc(QDD_MPO16)["fields"]["latch-color"]["default"] == BEIGE
+def test_every_generic_tab_defaults_to_grey():
+    """#773: an MPO face is multimode SR4/SR8 AND single-mode PSM4/DR4/DR8,
+    so beige (850 nm under SFF-8679 7.2) is a wrapper's claim, not a generic's."""
+    assert doc(QSFP_MPO)["fields"]["latch-color"]["default"] == GREY
+    assert doc(QDD_MPO16)["fields"]["latch-color"]["default"] == GREY
     assert doc(QSFP_BIDI)["fields"]["latch-color"]["default"] == GREY
     assert doc(SFP_SC)["fields"]["latch-color"]["default"] == GREY
     assert doc(SFP_SC_UP)["fields"]["latch-color"]["default"] == GREY
@@ -476,11 +477,11 @@ def test_it_seats_in_a_real_cage_with_its_plug_in_it(seated, ref):
     assert float(occ.get("data-z-lift")) == pytest.approx(lift)
 
 
-def test_the_seated_mpo_tabs_are_beige_and_the_bidi_tab_is_grey(seated):
-    """A host's own default reaches the tab it composes: the pull tab's own
-    default is grey, and nothing on the two MPO optics pins a colour."""
+def test_the_seated_tabs_are_grey(seated):
+    """No generic pins a colour, so every seated tab wears the neutral grey
+    (#773); a wrapper that states a wavelength states its colour."""
     root, _ = seated
-    for ref, want in ((QSFP_MPO, BEIGE), (QDD_MPO16, BEIGE), (QSFP_BIDI, GREY)):
+    for ref, want in ((QSFP_MPO, GREY), (QDD_MPO16, GREY), (QSFP_BIDI, GREY)):
         tab = by_path(root, f"{SEATS[ref][0]}-occupant/tab")
         grip = [e for e in tab.iter() if (e.get("id") or "").endswith("--grip")]
         assert len(grip) == 1 and grip[0].get("fill") == want, (ref, grip[0].get("fill"))
