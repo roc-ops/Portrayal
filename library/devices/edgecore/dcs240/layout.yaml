@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcs240
-version: 1.1.8
+version: 1.1.9
 maturity: modelled
 manufacturer: Edgecore
 model: AS9726-32DB
@@ -144,6 +144,19 @@ provenance:
       edgecore/dcs511 where it was dropped: this library cannot set a logo into a decor, so it
       is a blank grey box either way, and whether that is worth drawing is a judgement this
       change does not make for a device it is only passing through.
+  logo:
+    confidence: photo-measured
+    note: >-
+      THE BRAND BADGE IS A LOGO, SO ITS PLACE IS RESERVED AND NOTHING IS DRAWN THERE. What the
+      quick start draws above the model number is the vendor logotype: a row of nine outlined
+      tiles, the first and last red. Measured on the Overview elevation as embedded in the
+      quick start (2000 x 356 px), calibrated on the chassis outline at 4.318 px/mm across and
+      4.276 down, the row runs x 406.9 to 432.1 and y 6.1 to 10.5. The green tab is the check:
+      the same calibration puts it at x 414.1 to 429.6, against the 414.00 to 429.74 this file
+      already holds. The grey `brand-badge` box at [409, 5], 22 x 9, stood in for the logotype
+      and the model number together and read as a blank plate; it is removed, and the region
+      `logo-zone` holds the measured box of the logotype alone. The model number under it is
+      still not drawn.
   the-rear:
     confidence: measured
     note: >-
@@ -332,7 +345,6 @@ views:
       - {id: vent-right, at: [433.00, 1.00], size: [4.20, 41.50], pattern: slots, pattern-pitch: [1.80, 3.30], vent: 20}
       - {id: vent-top, at: [38.00, 1.20], size: [348.00, 8.20], pattern: slots, pattern-pitch: [4.40, 4.60], vent: 18}
       - {id: vent-bottom, at: [38.00, 39.60], size: [348.00, 2.90], pattern: slots, pattern-pitch: [4.40, 3.20], vent: 18}
-      - {id: brand-badge, at: [409.00, 5.00], size: [22.00, 9.00], fill: '#d7dbdf'}
       cutouts:
       - {id: led-loc, at: [6.80, 3.30], size: [2.0, 2.0], shape: circle}
       - {id: led-diag, at: [10.10, 3.50], size: [2.8, 1.6], shape: rect}
@@ -420,6 +432,7 @@ views:
       - {ref: common/led-dot@1, id: led-tengig-2, at: [405.30, 27.80], group: port-leds, rel-pos: 34, for: tengig-2,
          states: ['off', {name: link, color: '#22c55e'}, {name: '10g', color: '#22c55e'}, {name: '1g', color: '#f59e0b'}]}
     regions:
+    - {id: logo-zone, at: [406.9, 6.1], size: {w: 25.2, h: 4.4}, label: 'Vendor logotype; not drawn'}
     - {id: optics, at: [38.0, 11.5], size: {w: 348.0, h: 26.0}, label: '32 x 400G QSFP56-DD',
        members: [port-1, port-2, port-3, port-4, port-5, port-6, port-7, port-8, port-9, port-10, port-11, port-12, port-13, port-14, port-15, port-16, port-17, port-18, port-19, port-20, port-21, port-22, port-23, port-24, port-25, port-26, port-27, port-28, port-29, port-30, port-31, port-32]}
     - {id: sfp-pair, at: [387.0, 11.5], size: {w: 20.0, h: 26.0}, label: '2 x 10G SFP+',

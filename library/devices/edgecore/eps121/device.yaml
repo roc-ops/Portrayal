@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: eps121
-version: 2.0.7
+version: 2.0.8
 maturity: modelled
 manufacturer: Edgecore
 model: AS4625-54T
@@ -88,6 +88,18 @@ provenance:
       not match your particular model". Six are drawn here because six is what this model's own elevation
       shows; whether the sixth is really legended PoE on a switch that cannot do PoE is not something
       either document settles.
+  logo:
+    confidence: photo-measured
+    note: >-
+      THE LOGOTYPE ON THE STATUS PLATE IS RESERVED, NOT DRAWN. The guide's Status LEDs enlargement prints
+      the vendor logotype - a row of nine outlined tiles, the first and last red - at the left of the
+      black plate, over the model number. Measured on that enlargement as embedded in the quick start
+      (1034 x 280 px), calibrated on the six port legends it draws (`1 (up)(down) 2` through `11 (up)(down)
+      12`) at 11.12 px/mm: the row runs x 28.1 to 43.2 and y 3.1 to 4.9. The Reset button is the check:
+      the same calibration puts its centre at x 45.3, against the 45.4 this file already holds. The enlargement
+      is captioned AS4625-54P; the shared elevation draws the same plate for this model, and the region
+      is carried on that basis. The black plate is the real plate the lamps sit on and stays drawn; the
+      region `logo-zone` holds the box of the logotype and nothing is drawn in it.
   power:
     confidence: datasheet
     note: >-
@@ -113,15 +125,16 @@ attrs:
       5% to 95% non-condensing'}
   physical:
     weight-note: 'AS4625-54T: 5.8 kg, includes two PSUs (the guide gives both models in one line)'
-  power: {power-consumption: 'AS4625-54T: 150 W max at 25 C', input-ac: 100-120 VAC
-      4 A max; 200-240 VAC 2 A max}
+  power: {power-consumption: 'AS4625-54T: 150 W max at 25 C', input-ac: 100-120 VAC 4 A max; 200-240 VAC
+      2 A max}
   features:
     optics-sfp-plus: >-
       Six 1G/10G SFP+ uplinks, ports 49-54, which both documents call uplinks. The guide's lamp legend
       gives them two rates - "SFP+ Port LEDs: Green (10G), Amber (1G)" - and no breakout table is published,
       so none is stated here.
   lifecycle: {eol: none-announced}
-chassis: {width: 440.0, height: 44.45, depth: 350.35, ru: 1, weight-kg: 5.8, color: '#43464a', airflow: front-to-back, power: ac}
+chassis: {width: 440.0, height: 44.45, depth: 350.35, ru: 1, weight-kg: 5.8, color: '#43464a', airflow: front-to-back,
+  power: ac}
 gaps:
 - what: the-row-under-the-ports
   scope:
@@ -710,6 +723,11 @@ views:
         rel-pos: 1}
       - {ref: common/rack-ear@1, id: ear-right, at: [440, 0.25], skin: right, optional: ears, group: furniture,
         rel-pos: 2}
+    regions:
+    - id: logo-zone
+      at: [28.1, 3.1]
+      size: {w: 15.1, h: 1.8}
+      label: Vendor logotype; not drawn
   rear:
     size: {w: 440.0, h: 44.45}
     panel:
