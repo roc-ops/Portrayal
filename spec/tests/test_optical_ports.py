@@ -536,3 +536,71 @@ def test_stating_front_order_silences_l88():
 
 def test_a_module_with_no_paths_is_not_l88s_business():
     assert run88({"parts": TWO_ROW_PARTS}) == []
+
+
+# --- combine in the projection ----------------------------------------------
+
+def _filter(add):
+    return {"parts": [{"id": "osc", "ref": "common/lc-duplex-adapter@6", "at": [0, 0]},
+                      {"id": "edfa", "ref": "common/lc-duplex-adapter@6", "at": [13, 0]},
+                      {"id": "line", "ref": "common/lc-duplex-adapter@6", "at": [26, 0]}],
+            "optical": {"polish": "upc", "trunk": ["line"], "paths": add}}
+
+
+_BAND = {"centre-nm": 1511, "width-nm": 13}
+
+
+def test_a_combine_onto_the_trunk_is_one_row_per_source():
+    """Two front ports against one rear position, the banded source carrying
+    its band. Without the combine reader there are no rows at all."""
+    entry = _filter([{"combine": [{"at": "osc.2", "band": _BAND}, {"at": "edfa.2"}],
+                      "to": "line.1"}])
+    assert P.fibre_map(entry, KNOWN.get, "AD")["rows"] == [
+        {"front": "2", "front_position": 1, "rear": "LINE-1", "rear_position": 1,
+         "band": _BAND},
+        {"front": "4", "front_position": 1, "rear": "LINE-1", "rear_position": 1}]
+
+
+def test_a_combine_writes_the_rows_the_same_glass_writes_as_legs_off_the_trunk():
+    """A row is a binding, not a direction: a published fibre map does not
+    move when a part restates its add side as a combine."""
+    as_combine = _filter([{"combine": [{"at": "osc.2", "band": _BAND}, {"at": "edfa.2"}],
+                           "to": "line.1"}])
+    as_legs = _filter([{"from": "line.1", "to": "osc.2", "band": _BAND},
+                       {"from": "line.1", "to": "edfa.2"}])
+    assert (P.fibre_map(as_combine, KNOWN.get, "AD")
+            == P.fibre_map(as_legs, KNOWN.get, "AD"))
+    assert P.ports(as_combine, KNOWN.get) == P.ports(as_legs, KNOWN.get)
+
+
+def test_a_power_combine_carries_each_sources_ratio_into_the_map():
+    entry = _filter([{"combine": [{"at": "osc.2", "ratio": 70}, {"at": "edfa.2", "ratio": 30}],
+                      "to": "line.1"}])
+    rows = P.fibre_map(entry, KNOWN.get, "AD")["rows"]
+    assert [(r["front"], r["rear"], r["rear_position"], r["ratio"]) for r in rows] == [
+        ("2", "LINE-1", 1, 70), ("4", "LINE-1", 1, 30)]
+
+
+def test_a_combine_of_trunk_positions_onto_a_front_port_is_two_rear_positions():
+    """The fan may sit on the trunk side: one front port, two rear positions."""
+    entry = _filter([{"combine": [{"at": "line.1", "ratio": 50}, {"at": "line.2", "ratio": 50}],
+                      "to": "osc.1"}])
+    rows = P.fibre_map(entry, KNOWN.get, "AD")["rows"]
+    assert [(r["front"], r["rear_position"]) for r in rows] == [("1", 1), ("1", 2)]
+
+
+def test_the_real_add_drop_filter_maps_both_directions_onto_line():
+    """ppm-ad1-1510 from the library: drop as banded legs, add as a combine,
+    four rows, two on each Line position, one banded on each."""
+    doc = yaml.safe_load((ROOT / "library/components/smartoptics/ppm-ad1-1510/v2/"
+                          "contract.yaml").read_text())
+    assert any("combine" in p for p in doc["optical"]["paths"])
+
+    def load(ref):
+        ns_name, major = ref.split("@")
+        f = ROOT / "library/components" / ns_name / f"v{major}" / "contract.yaml"
+        return yaml.safe_load(f.read_text()) if f.exists() else None
+    rows = P.fibre_map(doc, load, "PPM-AD1-1510-2F")["rows"]
+    assert [(r["front"], r["rear"], r["rear_position"], "band" in r) for r in rows] == [
+        ("2", "LINE-1", 1, True), ("4", "LINE-1", 1, False),
+        ("1", "LINE-1", 2, True), ("3", "LINE-1", 2, False)]

@@ -335,7 +335,7 @@ RULES = {
     "L78": ("component",  "an optical endpoint names a composed connector and a position it has; a front order that names a part's positions names each once, together; a trunk entry names a connector on this face and a position it has", "fix the part id or the position number; list every position of the part, or name it bare",
             "An optical endpoint, front order or trunk entry that names a missing part or position describes a fibre that does not exist, so ports are left unnumbered or numbered twice.",
             ERROR),
-    "L79": ("component",  "no fibre position is claimed twice, and a split's ratios sum to 100; a source starts one path, unless every path it starts but one carries a `band` (an add/drop filter)", "remove the duplicate path, or fix the ratios; write a split as one path with a ratio list",
+    "L79": ("component",  "no fibre position is claimed twice, and a split's ratios sum to 100; a source starts one path, unless every path it starts but one carries a `band` (an add/drop filter); several sources reach one destination only as a declared `combine`", "remove the duplicate path, or fix the ratios; write a split as one path with a ratio list, and sources that join as one path with a `combine` list",
             "Two paths into one bore describe something no ferrule allows, and ratios that do not add to 100 describe a split that cannot exist.",
             ERROR),
     "L80": ("component",  "every fibre position is reached by a path or declared unused with a reason", "route it, or add an `optical.unused` entry saying why it terminates nothing",
@@ -611,6 +611,9 @@ RULES = {
     "L170": ("component, device", "a tray fits what declares it: every floor rectangle inside its part or its view, every tie slot inside a floor rectangle, its id unique among the guides, pass-throughs and trays of the device, and a part's tray placed, and a view's `trays` declared, on the plan (`top`) only (error); a part's tray placed on the plan stands at the height its `size.d` gives, and, for a placement that is not rotated, its tie slots are the slots the device draws on its bottom view, where it draws any (warning; a rotated placement's slots are not compared)", "re-read the floor and the slots off the plan; give the tray its own id; declare the tray on the top view; state the height as the envelope less the depth of the well; draw each tie slot on the bottom view, or declare it",
              "A route lies a cable on a tray's floor and straps it through its tie slots, so a floor off its part, a slot off its floor, a height that disagrees with the drawing, or a slot drawn and not declared would put cables and straps where the hardware has no metal, and a second pathway under one id leaves a route naming it ambiguous.",
              MIXED),
+    "L171": ("component",  "a `combine` is well formed: it stands in place of `from`, has one destination and no path-level `band`, names each source once, and its sources either all carry a `ratio` summing to 100 (a power combine) or carry no ratio and all but at most one a `band`, no two the same (a wavelength combine)", "give the combine one `to` endpoint; move a `band` onto the source it belongs to; give every source a `ratio`, or every source but one a different `band`",
+             "A combine whose sources do not say how they join cannot be told from two strands pushed into one bore, and one with mixed or unbalanced shares describes a part that cannot exist.",
+             ERROR),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -3080,12 +3083,12 @@ def lint_component_optical_conflicts(path, data, _lib_roots=None):
     counting sources as conflicts would reject the parts this vocabulary exists
     for. The check is therefore on destinations only.
 
-    A COMBINE - two sources landing on one destination - is not expressible
-    today. The vocabulary has no syntax for it, so two paths whose destinations
-    collide are always an error here, with no declared-combine escape hatch the
-    way a declared split has one. `ppm-ad1-1510`'s combine direction (plan 6)
-    will need one and none exists yet; see this rule's TODO and the design
-    doc's open questions.
+    A COMBINE - several sources landing on one destination - IS DECLARED, as
+    one path with a `combine` list (roc-ops/Portrayal#246). That is the escape
+    hatch a declared split always had: the destination is then claimed once,
+    by the one path that says the glass joins behind it. Two paths whose
+    destinations collide are still an error here, and so is a second path into
+    a combine's destination. A combine's own form is L171's to check.
 
     Ratios are checked here rather than in the schema because the schema can say
     a ratio is a number and cannot say two of them add up. 70/40 validates and
@@ -3095,12 +3098,14 @@ def lint_component_optical_conflicts(path, data, _lib_roots=None):
     genuine split that way hides it from the ratio check entirely. A source
     is therefore a `from` in one path only - a part that splits says so with
     the ratio list, which is the one form this rule can verify - with one
-    exception, an add/drop filter: several single-destination paths from one
-    source, every one but at most one carrying a `band`, and no two carrying
-    the same band. Two legs on one band would be a power split wearing a
-    wavelength's name, so they are refused like two plain paths.
+    exception, the drop side of an add/drop filter: several single-destination
+    paths from one source, every one but at most one carrying a `band`, and no
+    two carrying the same band. Two legs on one band would be a power split
+    wearing a wavelength's name, so they are refused like two plain paths. A
+    source of a combine is a source like any other: it starts that one path.
     """
-    paths = (data.get("optical") or {}).get("paths") or []
+    paths = [p for p in ((data.get("optical") or {}).get("paths") or [])
+             if isinstance(p, dict)]
     seen = {}
     sources = {}
     # A WAVELENGTH SPLIT IS NOT A HIDDEN POWER SPLIT. An add/drop filter is
@@ -3111,7 +3116,8 @@ def lint_component_optical_conflicts(path, data, _lib_roots=None):
     # most one carry a `band` (roc-ops/Portrayal#246, ppm-ad1-1510/-1625).
     starts = {}
     for p in paths:
-        starts.setdefault(p.get("from"), []).append(p)
+        if not optical.is_combine(p):
+            starts.setdefault(p.get("from"), []).append(p)
     def _band_key(b):
         return tuple(sorted(b.items())) if isinstance(b, dict) else b
     banded = {src for src, ps in starts.items()
@@ -3119,30 +3125,112 @@ def lint_component_optical_conflicts(path, data, _lib_roots=None):
               and sum(1 for q in ps if not q.get("band")) <= 1
               and len({_band_key(q["band"]) for q in ps if q.get("band")})
               == sum(1 for q in ps if q.get("band"))}
+    # A COMBINE SOURCE STARTS THAT ONE PATH, WHICHEVER IS WRITTEN FIRST. The
+    # banded exception is for a source's own drop legs; a position that also
+    # feeds a combine is a second use of the glass, and it is refused whether
+    # the combine comes before the other paths or after them.
+    joins = {leg["from"] for p in paths if optical.is_combine(p)
+             for leg in optical.legs(p)}
     for i, p in enumerate(paths):
-        eps = optical.endpoints(p)
-        for ep, _r in eps[1:]:
+        legs = optical.legs(p)
+        combine = optical.is_combine(p)
+        for ep in dict.fromkeys(leg["to"] for leg in legs
+                                if isinstance(leg["to"], str)):
             if ep in seen:
                 err(path, "L79", f"{ep} is the destination of two paths "
                                  f"({seen[ep]} and {i}) - a fibre position "
-                                 "takes one ferrule")
+                                 "takes one ferrule; sources that join behind "
+                                 "one position are ONE path with a `combine` "
+                                 "list, not two paths")
             seen[ep] = i
-        src = p.get("from")
-        if src in sources and src not in banded:
-            err(path, "L79", f"{src} is the source of two paths "
-                             f"({sources[src]} and {i}) - splitting a source "
-                             "across two paths hides its ratios from this "
-                             "check, so a split is written as ONE path with "
-                             "a ratio list, not two plain paths (paths that "
-                             "each carry a different `band`, all but one, are "
-                             "an add/drop filter and are allowed)")
-        sources[src] = i
-        ratios = [r for _e, r in eps[1:] if r is not None]
+        for src in dict.fromkeys(leg["from"] for leg in legs):
+            if src in sources and (src in joins or src not in banded):
+                err(path, "L79", f"{src} is the source of two paths "
+                                 f"({sources[src]} and {i}) - splitting a source "
+                                 "across two paths hides its ratios from this "
+                                 "check, so a split is written as ONE path with "
+                                 "a ratio list, not two plain paths (paths that "
+                                 "each carry a different `band`, all but one, are "
+                                 "an add/drop filter and are allowed)")
+            sources[src] = i
+        ratios = [] if combine else [leg["ratio"] for leg in legs
+                                     if leg["ratio"] is not None]
         if ratios:
             total = round(sum(ratios), 6)
             if total != 100:
-                err(path, "L79", f"path {i} from {p['from']} splits into ratios "
+                err(path, "L79", f"path {i} from {p.get('from')} splits into ratios "
                                  f"summing to {total:g}, not 100")
+
+
+def lint_component_optical_combine(path, data, _lib_roots=None):
+    """L171: a `combine` says how its sources join, and says it one way.
+
+    A COMBINE IS THE ONE PLACE TWO STRANDS MAY SHARE A POSITION, so it has to
+    carry what makes that true. There are two ways glass joins. By WAVELENGTH,
+    in a filter: each source owns a band and at most one carries whatever is
+    left, so no two may own the same band and none states a power share. By
+    POWER, in a coupler run backwards: every source states its share and the
+    shares sum to 100. A list that mixes the two, or states neither, is a
+    collision with a keyword on it.
+
+    THE REST IS SHAPE. One destination, because several sources onto several
+    destinations is a mesh and is written as paths. No path-level `band`,
+    because a band belongs to the source that carries it. No source twice.
+    The schema refuses `from` beside `combine`; it is repeated here because
+    lint reports only the first schema error and still runs every rule.
+    """
+    def _band_key(b):
+        return tuple(sorted(b.items())) if isinstance(b, dict) else b
+    for i, p in enumerate((data.get("optical") or {}).get("paths") or []):
+        if not optical.is_combine(p):
+            continue
+        srcs = [x for x in (p.get("combine") or []) if isinstance(x, dict)]
+        if "from" in p:
+            err(path, "L171", f"path {i} states both `from` and `combine` - a "
+                              "combine's sources are its `combine` list")
+        if not isinstance(p.get("to"), str):
+            err(path, "L171", f"path {i} is a combine and its `to` is not one "
+                              "endpoint - a combine has one destination; a "
+                              "source that also splits is two paths")
+        if p.get("band"):
+            err(path, "L171", f"path {i} is a combine with a path-level `band` - "
+                              "put the band on the source that carries it")
+        if len(srcs) < 2:
+            err(path, "L171", f"path {i} is a combine of fewer than two sources - "
+                              "one source onto one destination is a plain path")
+            continue
+        ats = [x.get("at") for x in srcs]
+        for at in sorted({a for a in ats if a and ats.count(a) > 1}):
+            err(path, "L171", f"path {i} names {at} twice in its combine - a "
+                              "position is one source")
+        if isinstance(p.get("to"), str) and p["to"] in ats:
+            err(path, "L171", f"path {i} combines {p['to']} onto itself")
+        ratios = [x["ratio"] for x in srcs if x.get("ratio") is not None]
+        bands = [x["band"] for x in srcs if x.get("band")]
+        if ratios and bands:
+            err(path, "L171", f"path {i} mixes `ratio` and `band` in one combine - "
+                              "sources join by power (every one a ratio) or by "
+                              "wavelength (bands), not both")
+        elif ratios:
+            if len(ratios) != len(srcs):
+                err(path, "L171", f"path {i} gives a `ratio` to {len(ratios)} of "
+                                  f"its {len(srcs)} combine sources - a power "
+                                  "combine states every share")
+            else:
+                total = round(sum(ratios), 6)
+                if total != 100:
+                    err(path, "L171", f"path {i} combines ratios summing to "
+                                      f"{total:g}, not 100")
+        else:
+            if len(srcs) - len(bands) > 1:
+                err(path, "L171", f"path {i} has {len(srcs) - len(bands)} combine "
+                                  "sources with neither a `band` nor a `ratio` - "
+                                  "at most one source carries what the bands "
+                                  "leave; say how the others join")
+            if len({_band_key(b) for b in bands}) != len(bands):
+                err(path, "L171", f"path {i} gives two combine sources the same "
+                                  "`band` - two legs on one wavelength are a "
+                                  "power combine and state ratios")
 
 
 def lint_component_optical_trunk(path, data, lib_roots):
@@ -3210,13 +3298,12 @@ def lint_component_optical_trunk(path, data, lib_roots):
                           "State `optical.trunk` from the vendor's own port roles")
         return
     for i, p in enumerate(paths):
-        legs = optical.endpoints(p)
-        src = legs[0][0]
-        for dst, _ratio in legs[1:]:
+        for leg in optical.legs(p):
+            src, dst = leg["from"], leg["to"]
             try:
                 a, b = optical_ports.is_trunk(data, src), optical_ports.is_trunk(data, dst)
-            except ValueError:
-                continue                 # L78's error to report, not this one's
+            except (ValueError, TypeError):
+                continue                 # L78's or L171's error to report
             if a == b:
                 where = "the trunk" if a else "the front"
                 err(path, "L130", f"path {i} runs {src} -> {dst}, both on {where}; "
@@ -13084,6 +13171,7 @@ def main():
                 lint_component_optical_rear_kind(f, d)
                 lint_component_optical_front_order(f, d)
                 lint_component_optical_conflicts(f, d)
+                lint_component_optical_combine(f, d)
                 lint_component_optical_trunk(f, d, args.library)
                 lint_component_optical_coverage(f, d, args.library)
                 lint_component_optical_polarity(f, d, args.library)

@@ -107,6 +107,35 @@ couplers the same kind of object as a breakout:
     - {from: line.1, to: edfa.1}        # no band: carries the rest
 ```
 
+**A path may combine**, which is the opposite of a split: several sources
+landing on one destination. It is declared, with `combine` in place of `from`,
+so that two strands in one bore stay an error everywhere else:
+
+```yaml
+    - combine:
+        - {at: osc.2, band: {centre-nm: 1511, width-nm: 13}}
+        - {at: edfa.2}                  # no band: carries the rest
+      to: line.1
+```
+
+A combine is one of two kinds, and each source says which. A WAVELENGTH
+combine is a filter: every source but at most one carries a `band`, and no two
+carry the same one. A POWER combine is a coupler run backwards: every source
+carries a `ratio`, the share of the coupler that leg owns, and the ratios sum
+to 100. The two do not mix in one path. A combine has one destination, no
+path-level `band`, and names no source twice (L171).
+
+**A path states the way the light travels, and the glass does not care.** A
+passive part is reciprocal. A split read from its far end is a power combine
+with the same shares, and a wavelength combine read from its far end is the
+banded legs of a drop. So `from`/`to` and `combine`/`to` record the direction
+the vendor draws, and nothing downstream depends on it: every consumer asks
+`optical.legs` for a path's legs and gets the same undirected pairs either way.
+What direction decides is only which form is honest. One input feeding many
+outputs is a split; many inputs feeding one output is a combine; an add/drop
+filter is one of each, because its two line fibres carry light in opposite
+directions.
+
 **A position with no path is a declared dead end**, not a silence:
 
 ```yaml
@@ -221,6 +250,29 @@ So:
   could have answered this: a cassette's paths run from the front and a
   coupler's from the trunk. L129-L131 hold it (#246).
 
+  **That list is the endpoint role, and there are two roles.** A position is a
+  TRUNK when a rear face carries it or `optical.trunk` names it, and a BRANCH
+  otherwise. There is no per-endpoint role key and no `branch` list: a second
+  spelling of one fact is two answers waiting to disagree. The vendor's own
+  words map onto the two, and the part's source decides how: a coupler's
+  `common` port is its trunk and its `split` legs are branches, and a filter's
+  line port is its trunk and its add, drop and express ports are branches. A
+  tap lid that prints `IN`, `OUT` and `TAP` is read the same way when one is
+  modelled, from the lid. A module with a rear face states nothing and
+  projects as it always has.
+
+- **C4. A combine exports as a split does.** Each source of a combine is one
+  leg to its destination, so it is one row of the fibre map, carrying that
+  source's `band` or `ratio`. A row is a binding between a front port and a
+  rear position, not a direction, so a combine onto a trunk position and
+  banded legs off it write the same rows. NetBox gets several front ports
+  against one rear position, as for a split. Nautobot cannot spell that, so
+  its type states no ports and points at the NetBox type and the fibre map.
+  A combine's legs obey L130 like any other: each runs between the front and
+  the trunk. Its fan may sit on either side. Sources on the front and the
+  destination on the trunk is an add filter. Sources on the trunk and the
+  destination on the front puts several rear positions on one front port.
+
 ### The mapping is a third export
 
 **The device-type YAML this project writes does not carry the front-to-rear
@@ -277,7 +329,8 @@ reason to prefer it:
 | rule | what it catches |
 |---|---|
 | endpoints are real | `mtp-1.13` on an MPO-12, instead of a silently ignored row |
-| no position claimed twice | two strands landing on one bore, unless a declared split. A COMBINE HAS NO SYNTAX YET - two sources into one destination is an error today, full stop; see Open questions |
+| no position claimed twice | two strands landing on one bore, unless a declared split or a declared `combine`; two plain paths into one destination are still an error |
+| a combine is well formed | a combine with a ratio list for a destination, a source named twice, shares that do not sum to 100, or bands and ratios mixed |
 | every position reached or declared `unused` | the OCU dead bore, in both directions |
 | fibre counts balance | what arrives at the rear equals what leaves at the front, allowing declared taps and terminations |
 | declared polarity agrees with the paths | a transposition inside a 24-fibre cassette |
@@ -329,7 +382,8 @@ way to name which optical endpoint is a trunk. **The trunk is designed and built
 argued: the eight path-bearing PPMs state one and export front and rear ports,
 including both AD1 add/drop filters, retrofitted with their glass in the same
 change, and the 19 single-faced TAP cassettes have the vocabulary they were
-waiting on. `combine` is still open; see below.
+waiting on. `combine` followed it (section A, C4, L171), and the two AD1
+filters now write their add direction as one.
 
 ## Open questions
 
@@ -350,18 +404,18 @@ datasheet, but it is unexplained.
 **Which end is the trunk was the other open question, and it is settled**
 (section C3, #246).
 
-**Combines are undesigned.** The vocabulary can express a split - one path,
-one `from`, a ratio list of destinations - and L79 can verify its ratios. It
-cannot express the opposite: two sources landing on one destination, which is
-what `ppm-ad1-1510`'s add/drop direction and the add/drop filters of plan 6
-will need. Today's parts dodge this by writing add/drop as banded legs off the
-line port instead - `ppm-ad1-1510` and `-1625` do exactly that, one banded and
-one unbanded path off each line bore, which L79 allows for paths that carry a
-`band` - and L79 treats any real collision on a destination as a flat error
-with no declared-combine escape hatch the way a declared split has one. What the syntax should look like - a ratio list on the destination side,
-a distinct `combine` keyword, something else - needs plan 6's own evidence
-before it is worth deciding; recorded here so it is not mistaken for settled
-by section D's table, which used to claim it.
+**Combines were the last undesigned piece, and they are settled** (section A,
+C4, #246). The form is a distinct `combine` keyword on the path, beside the
+ratio list a split uses. A ratio list on the destination side was the other
+candidate. It was passed over because a destination that is a list already
+means a split, and a reader could not tell the two apart by shape.
+`ppm-ad1-1510` and `-1625` used to write their add direction as banded legs
+off the line port, which was the same glass read from the wrong end. They now
+state it as a combine onto Line Tx, and their exports did not move.
+
+**The single-faced TAP cassettes are not built.** They have the vocabulary: a
+trunk for the live input, a split for the tap, and nothing further to design.
+What they lack is parts. None of the 19 is in the library yet.
 
 ## Sources
 
