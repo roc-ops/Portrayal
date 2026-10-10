@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: d-ring-snap-in
-version: 1.2.0
+version: 1.3.0
 class: mechanical
 behaviour: mounts
 description: >-
@@ -17,12 +17,13 @@ provenance:
     the ring's.
   relief: >-
     drawing - the ring-profile view of the same drawing: the loop is 44.3 deep and stands
-    about 41 mm above the tray, with a wall about 5.3 mm in the plane of the loop and 6.8
-    across it. THE LOOP IS OPEN: the top bar turns down at the front into a hooked end 9 mm
-    long, and the front leg stops 3.8 mm below it, which is the slit a cable is laid in
-    through without being threaded. Built as round tube, legs 6.8 and bar 6, which is
-    neither of the wall's two figures, and with square corners where the real ring's are
-    radiused. The seat's 2 mm is estimated; no view dimensions it.
+    about 41 mm above the tray, with a wall 8 px (6.0 mm) thick in the plane of the loop
+    and 6.8 across it. THE LOOP IS OPEN: the top bar turns down at the front into a hooked
+    end, and the front leg stops just below it, which is the slit a cable is pressed in
+    through without being threaded. Built as round tube, the bar 6 and each leg 6.8 across
+    the loop and 5.8 in its plane, the wall of `guide-wall`, with the slit where
+    `guide-slit` reads it and square corners where the real ring's are radiused. The
+    seat's 2 mm is estimated; no view dimensions it.
   relief-not-drawn: >-
     known-wrong - the plan and the front view both draw each leg flaring to a foot about
     18 mm wide where it meets the seat. The legs here are straight.
@@ -52,18 +53,44 @@ provenance:
     bar, so in 3D a cable resting on the sill stands above what is drawn under it.
   guide-aperture-at: >-
     drawing - the opening centred across the ring, as the ring-profile view draws it
-    (8.5 px of wall either side): (43.6 - 32.0) / 2 = 5.8 from the ring's rear end,
+    (8 px of wall either side, as `guide-wall` reads it): (43.6 - 32.0) / 2 = 5.8 from the ring's rear end,
     and along the tray the band, 12.75 to 19.55 across the 32.3 seat.
+  guide-wall: >-
+    drawing - the ring-profile view at 1.331 px/mm: from the outer line of each leg to
+    its inner line is 8 px, rear and front alike, so 6.0 mm to the drawing's 0.75. The
+    plan's 43.6 less the 32.0 opening leaves 5.8 a side, which is the figure stated: it
+    is the one that keeps the loop, the opening and the plan's length in agreement. The
+    relief drew each leg 6.8 in the plane of the loop until 1.3.0, which narrowed the
+    opening it drew to 30.0 and put each leg 1.0 mm into the opening `guide` states.
+    1.3.0 IS A MINOR although `leg-front` and `hook` moved 1 mm and all three legs
+    shrank to 5.8 in the elements: the rule that a moved element is a major exists
+    because a device may place against it, and these are unaddressed bezel art inside
+    the part, which no device, bay or port names. The part's size is unchanged, and
+    the new keys are additive.
+  guide-height: >-
+    drawing - the ring-profile view at 1.331 px/mm: the top of the loop is 54 px (40.6
+    mm) above the top line of the tray's sheet, and on the row of the ear's top, which
+    the tray's `depth` puts 41 mm above the sheet. Stated as 41.0. A second quantity
+    agrees: the bar over the opening is then 41.0 - 5.6 - 29.5 = 5.9 thick, and the
+    view draws it 8 px (6.0 mm) from its top line to its underside.
+  guide-slit: >-
+    drawing - the ring-profile view at 1.331 px/mm, re-read for #968: the front leg's
+    rounded tip and the hook's are 3 px apart, their outlines 38 and 41 px above the top
+    line of the tray's sheet, so the slit runs from 28.6 to 30.8 mm, 2.2 mm, each end to
+    the drawing's 0.75. It had been read as 3.8 (28.2 to 32.0) and the relief was built
+    to that until 1.3.0. Narrower than a 3 mm cord, so a cable is pressed in through it
+    by flexing the hook, and never routed along it.
 size: {w: 32.3, h: 43.6}
 size-confidence: {w: drawing, h: drawing}
 attrs: {material: PC, flammability: UL 94V-2}
-guide: {kind: ring, aperture: {w: 32.0, h: 29.5, at: [12.75, 5.8]}, run: x, depth: 6.8, sill: 5.6}
+guide: {kind: ring, aperture: {w: 32.0, h: 29.5, at: [12.75, 5.8]}, run: x, depth: 6.8, sill: 5.6,
+  wall: 5.8, height: 41.0, slit: [28.6, 30.8]}
 elements:
   seat: {at: [0.0, 5.65], size: [32.3, 32.3], class: bezel}
   top: {at: [12.75, 0.0], size: [6.8, 43.6], class: bezel}
-  leg-rear: {at: [12.75, 0.0], size: [6.8, 6.8], class: bezel}
-  leg-front: {at: [12.75, 36.8], size: [6.8, 6.8], class: bezel}
-  hook: {at: [12.75, 36.8], size: [6.8, 6.8], class: bezel}
+  leg-rear: {at: [12.75, 0.0], size: [6.8, 5.8], class: bezel}
+  leg-front: {at: [12.75, 37.8], size: [6.8, 5.8], class: bezel}
+  hook: {at: [12.75, 37.8], size: [6.8, 5.8], class: bezel}
 relief:
   features:
     - node: seat
@@ -83,14 +110,14 @@ relief:
       confidence: drawing
       source: the same view, the top bar's upper edge about 41 mm above the tray
     - node: hook
-      cyl: 9.0
-      lift: 32.0
+      cyl: 10.2
+      lift: 30.8
       color: '#0c0d0f'
       confidence: drawing
-      source: the same view, the hooked end coming 9 mm down from the top of the loop
+      source: the same view, the hooked end coming down from the top of the loop to 30.8 mm above the tray
     - node: leg-front
-      cyl: 28.2
+      cyl: 28.6
       color: '#0c0d0f'
       confidence: drawing
-      source: the same view, the front leg ending 3.8 mm below the hooked end - the slit
+      source: the same view, the front leg ending 28.6 mm above the tray, 2.2 mm below the hooked end - the slit
 skins: [default]

@@ -106,7 +106,11 @@ test('the reach is in the length once, as path, and the end allowance is unchang
 // is lower and further out, the default plug goes round the edge as well, to
 // the same detour points, so the optic's longer plug only moves the reach
 // point along the leg it would run anyway and the lengths are the default's.
-const OVER_THE_EDGE = {c9: 662.3, c10: 659.7, c11: 662.3, c12: 661, c13: 627, c14: 632.5, c15: 617.6, c16: 620.8};
+// Since each ring is solid (#968) the detour ends straight in front of the
+// ring's approach point, 6.5 mm past its band, not its face, and the cord
+// comes in to it from there: 1.9 to 6.1 mm longer (662.3, 659.7, 662.3,
+// 661, 627, 632.5, 617.6 and 620.8 before).
+const OVER_THE_EDGE = {c9: 664.3, c10: 663.1, c11: 665, c12: 665.8, c13: 631.9, c14: 638.6, c15: 620.7, c16: 626.4};
 
 test('a cord that must clear its plug goes round the tray\'s front edge, and is measured that way', () => {
   const r = F.rack(), ctx = optics(F.ctxOf(r));
@@ -131,8 +135,11 @@ test('a cord that must clear its plug goes round the tray\'s front edge, and is 
     assert.equal(face.detours.length, 1, id);
     assert.deepEqual(face.crossings, [], id);
   }
-  // the upper leaf's cords drop onto the tray from above and need none
-  for (const id of ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8']) assert.deepEqual(got[id].detours, [], id);
+  // the upper leaf's cords drop onto the tray from above; since each ring is
+  // solid (#968), those whose ring stands past their port along the run go
+  // over it first, and the rest need no detour
+  for (const id of ['c3', 'c4', 'c8']) assert.deepEqual(got[id].detours, [], id);
+  for (const id of ['c1', 'c2', 'c5', 'c6', 'c7']) assert.equal(got[id].detours.length, 1, id);
   assert.deepEqual(R.bodyFindings(r, ctx), []);
   assert.deepEqual(R.ringFindings(r, ctx), []);
 });
@@ -148,11 +155,13 @@ test('a cord that must clear its plug goes round the tray\'s front edge, and is 
 // the path a drawing would build from the kit's points and rules. It does
 // not run or check the site's drawing, which still starts its bend further
 // out (the site follow-up of section 1.5).
-// SINCE THE CORDS REST (#949 step 3) a drawing takes each ring where the kit
-// rests the cord in it (the middle of its entry and exit, on the sill), and
-// the comparison is of the taut path, a cord too stiff to sag: a drawing that
-// hangs its spans by the kit's points follows them, which the first check
-// holds.
+// SINCE THE CORDS REST (#949 step 3) the comparison is of the taut path, a
+// cord too stiff to sag: a drawing that hangs its spans by the kit's points
+// follows them, which the first check holds. SINCE EACH RING IS SOLID (#968)
+// a drawing takes a ring the kit rests the cord in by its two approach
+// points, straight through the opening between them, where it took the
+// ring's centre: a leg to the centre of a solid ring meets its legs, and
+// going round them is not the way through the opening.
 test('the drawn path and the measured length agree within a few mm', () => {
   const r = F.rack();
   for (const [name, loose] of [['default', F.ctxOf(r)], ['optics', optics(F.ctxOf(r))]]) {
@@ -170,28 +179,34 @@ test('the drawn path and the measured length agree within a few mm', () => {
       // the kit's points: nothing left for a drawing to go round
       for (let k = 1; k < p.points.length; k++)
         assert.deepEqual(S.detour(p.points[k - 1], p.points[k], solids, {diameter: 3}), [], `${name} ${c.id} leg ${k}`);
-      // built the drawing's way
+      // built the drawing's way: each ring the cord rests in by its two
+      // approach points, any other waypoint by its centre, each ring passed
+      // by its mark
       const A = p.points[1], B = p.points.at(-2);
-      const rested = [...p.rings];
-      const centres = R.resolveRoute(r, c, ctx).waypoints.map(w => {
-        const g = !w.lane && rested[0]?.item === w.item && rested[0]?.via === w.via ? rested.shift() : null;
-        return g ? {x: (g.entry.x + g.exit.x) / 2, y: g.entry.y, z: g.entry.z} : R.pointOf(r, w, ctx);
-      });
+      const approach = p.points.filter(q => q.at === 'approach');
       const marks = R.ringMarks(r, c, ctx);
-      const legs = [A, ...centres, B], pts = [], mk = [];
+      const legs = [A], mk = [null];
+      R.resolveRoute(r, c, ctx).waypoints.forEach((w, i) => {
+        const ap = approach.filter(q => !w.lane && q.item === w.item && q.via === w.via);
+        if (ap.length === 2) { legs.push(...ap); mk.push(null, null); } else { legs.push(R.pointOf(r, w, ctx)); mk.push(marks[i]); }
+      });
+      legs.push(B); mk.push(null);
+      const pts = [], pm = [];
       legs.forEach((q, k) => {
         const round = k ? S.detour(legs[k - 1], q, solids, {diameter: 3}) : [];
         if (round.length) detoured++;
-        for (const d of round) { pts.push(d); mk.push(null); }
+        for (const d of round) { pts.push(d); pm.push(null); }
         pts.push(q);
-        mk.push(k === 0 || k === legs.length - 1 ? null : marks[k - 1]);
+        pm.push(mk[k]);
       });
-      const drawn = len(throughRings(pts, mk).points) + Math.abs(A.z - p.points[0].z) + Math.abs(B.z - p.points.at(-1).z);
+      const drawn = len(throughRings(pts, pm).points) + Math.abs(A.z - p.points[0].z) + Math.abs(B.z - p.points.at(-1).z);
       const measured = (R.pathLength(p).measured - 2 * R.END_ALLOWANCE_M) * 1000;
       assert.ok(Math.abs(drawn - measured) <= 4, `${name} ${c.id}: drawn ${drawn}, measured ${measured}`);
     }
     // the lower cords go round the edge, in the drawing too: one leg of each
-    // (before the cords rested on the sill, only with the optics' longer plug)
-    assert.equal(detoured, 8, name);
+    // (before the cords rested on the sill, only with the optics' longer plug);
+    // and since each ring is solid (#968) the five upper cords whose ring is
+    // past their port go over it
+    assert.equal(detoured, 8 + 5, name);
   }
 });

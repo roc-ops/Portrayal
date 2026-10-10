@@ -1221,7 +1221,7 @@
     "run"
    ],
    "additionalProperties": false,
-   "description": "SOMETHING CABLES RUN THROUGH, declared on the part so that every placement of it inherits it. `ring` is a loop - a D-ring, a lacing bar's hook - with the opening a bundle passes through and the direction it passes. It compiles to `data-guide`, `data-guide-run` and `data-guide-aperture` on every instance of the part, and to `data-guide-depth`, `data-guide-sill` and `data-guide-aperture-at` where those are stated, so that cable routing has something to read; the DCIM exports ignore it. L138 holds the opening inside the part.",
+   "description": "SOMETHING CABLES RUN THROUGH, declared on the part so that every placement of it inherits it. `ring` is a loop - a D-ring, a lacing bar's hook - with the opening a bundle passes through and the direction it passes. It compiles to `data-guide`, `data-guide-run` and `data-guide-aperture` on every instance of the part, and to `data-guide-depth`, `data-guide-sill`, `data-guide-aperture-at`, `data-guide-wall`, `data-guide-height` and `data-guide-slit` where those are stated, so that cable routing has something to read; the DCIM exports ignore it. L138 holds the opening inside the part.",
    "properties": {
     "kind": {
      "enum": [
@@ -1268,6 +1268,26 @@
      "type": "number",
      "minimum": 0,
      "description": "millimetres out of the face, from the base the part stands on (the floor it is seated on, or the face it is fixed to) to the near inside edge of the opening: where a cable through an upright ring comes to rest. For a ring whose run lies in the face, `x` or `y`. L138 holds `sill` plus `aperture.h` inside how far the part stands out of the face."
+    },
+    "wall": {
+     "type": "number",
+     "exclusiveMinimum": 0,
+     "description": "millimetres, how thick each leg of the loop is beside the opening, across the run in the plane of the loop: the near leg ends where the opening begins (`aperture.at`) and the far leg starts where it ends, each this thick. For a ring whose run lies in the face, `x` or `y`. With `height`, `sill`, `depth` and `aperture.at` it makes the loop solid to a router: its legs, the bar over the opening and the seat under it, so a cable passes the ring only through its opening. L138 holds both legs inside the part."
+    },
+    "height": {
+     "type": "number",
+     "exclusiveMinimum": 0,
+     "description": "millimetres out of the face, from the base the part stands on to the top of the loop, the outside of its bar: the bar over the opening is `height` less `sill` and `aperture.h` thick. For a ring whose run lies in the face. L138 holds it above the opening and inside how far the part stands out of the face."
+    },
+    "slit": {
+     "type": "array",
+     "items": {
+      "type": "number",
+      "minimum": 0
+     },
+     "minItems": 2,
+     "maxItems": 2,
+     "description": "millimetres out of the face, from the base the part stands on, `[from, to]`: the gap in the far leg of an open loop (the leg past the opening's far edge, away from `aperture.at`), where a cable is pressed in by flexing the loop. It is a way of putting a cable into the ring, not a way through it: a router leaves the gap open in the solid loop and never routes a cable along it. Needs `wall` and `height`; L138 holds it inside the leg."
     }
    }
   },

@@ -15,7 +15,7 @@ import {RU, OPENING, RAIL_W} from './rails.js';
 import {throughRings} from './route-path.js';
 import {zeroUOnLane, zeroUX, carriesLane, runsThrough, STANDOFF} from './zero-u.js';
 import {isZeroUPart, zeroUSpan} from './fit.js';
-import {solidsOf, traysOf, detour, legCrossings} from './solids.js';
+import {solidsOf, traysOf, detour, legCrossings, CLEAR} from './solids.js';
 import {surfacesOf, hang, heldStretch, drapeOf, bendOf, newCrossing} from './resting.js';
 
 export const LANE_GAP = 40;          // mm: a lane runs in the middle of a 40 mm gutter outside each rail
@@ -429,13 +429,16 @@ export const stockLength = m => STOCK_M.find(s => s >= m - 1e-9) ?? Math.ceil(m 
 //   {points: [{x, y, z, at, item?, via?}], rings, findings, marks}
 // - `at` is 'a' or 'b' (a port), 'reach' (the far end of that port's plug,
 //   with `end` 'a' or 'b', section 1.5: the route's first and last legs start
-//   there), 'entry', 'exit' or 'face' (a ring),
+//   there), 'entry', 'exit' or 'face' (a ring), 'approach' (outside a ring
+//   whose opening is placed, where a pass starts and ends, #968),
 //   'pathway' (a duct or a pass-through), 'tray' (a point of a tray's
 //   stretch, #949 step 3), 'lane', 'detour' or 'rest' (a point of a free
 //   span as it hangs, or as it lands on a surface);
 // - `rings`: per ring on the route, {item, via, run, depth, estimated,
 //   passed, sense, entry, exit} (sense +1 or -1 along the run; a ring not
-//   passed has `face` instead of entry and exit; one that holds a cable
+//   passed has `face` instead of entry and exit: the ring's own face, where
+//   the path's `face` point of a ring whose opening is placed stands back
+//   from it at its approach point, #968; one that holds a cable
 //   reaching just into it, route-path.js HELD, is passed and `held: true`);
 // - `findings`: a ring the route would enter and leave by one face, as
 //   {kind: 'doubles-back', cable, item, via};
@@ -514,7 +517,7 @@ export function routePath(rack, cable, ctx) {
         : {x: (open.box.x0 + open.box.x1) / 2})};
       rested({kind: 'ring', item: w.item, via: w.via});
     }
-    stops.push({p, w, i, ring, ...(w.lane ? {lane: true} : {})});
+    stops.push({p, w, i, ring, ...(open ? {open} : {}), ...(w.lane ? {lane: true} : {})});
   });
   if (rb > 0) stops.push({p: reachPoint(rack, cable.b, b, rb), at: 'reach', end: 'b'});
   stops.push({p: b, at: 'b', hold: rb > 0});
@@ -558,20 +561,38 @@ export function routePath(rack, cable, ctx) {
     const ring = {item: s.w.item, via: s.w.via, ...s.ring};
     const pass = passAt.get(k);
     if (pass) {
+      const entry = points[n++], exit = points[n++];
+      // A RING WHOSE OPENING IS PLACED IS SOLID ROUND IT (#968): the cable
+      // comes to it along its run from an APPROACH POINT outside the band, at
+      // the opening's height and across position, and leaves to another past
+      // its far face, each clear of the band by the cable's radius and CLEAR,
+      // so whatever reaches the ring (a detour, a hang, a leg from behind or
+      // below) ends there and enters through the opening, never through a leg
+      const a = s.ring.run, off = r + CLEAR;
+      const approach = s.open && a in entry ? [{...entry, [a]: entry[a] - pass.sense * off}, {...exit, [a]: exit[a] + pass.sense * off}] : null;
+      if (approach) { from.push(k); out.push({...approach[0], ...tag, at: 'approach'}); }
       from.push(k, k);
-      out.push({...points[n++], ...tag, at: 'entry'}, {...points[n++], ...tag, at: 'exit', hold: true});
+      out.push({...entry, ...tag, at: 'entry', ...(approach ? {hold: true} : {})}, {...exit, ...tag, at: 'exit', hold: true});
+      if (approach) { from.push(k); out.push({...approach[1], ...tag, at: 'approach', hold: true}); }
       rings.push({...ring, passed: true, ...(pass.held ? {held: true} : {}), sense: pass.sense, entry: pass.entry, exit: pass.exit});
       marks[s.i] = {run: s.ring.run, depth: s.ring.depth, sense: pass.sense, back: false};
     } else {
       const no = backAt.get(k);
+      // a cable taken to a solid ring's face and back (a finding) stops at
+      // the approach point before that face, not on it: the face is the
+      // mouth of the opening, and a leg that turned there would graze the
+      // ring's legs and seat (#968)
+      const a = s.ring.run, at = points[n++];
+      const face = s.open && a in at ? {...at, [a]: at[a] - no.sense * (r + CLEAR)} : at;
       from.push(k);
-      out.push({...points[n++], ...tag, at: 'face'});
-      rings.push({...ring, passed: false, sense: no.sense, face: points[n - 1]});
+      out.push({...face, ...tag, at: 'face'});
+      rings.push({...ring, passed: false, sense: no.sense, face: at});
       marks[s.i] = {run: s.ring.run, depth: s.ring.depth, sense: no.sense, back: true};
       findings.push({kind: 'doubles-back', cable: cable.id, item: s.w.item, via: s.w.via});
     }
   });
   // Round the solid bodies (section 1.3), then what still crosses one (1.4).
+  // A ring's parts are met by the cable's tube (solids.js legCrossings, #968).
   const solids = solidsOf(rack, ctx);
   // the side lanes at a height, where laneXAt puts them (rule 3 of 1.3)
   const lanesAt = y => {
@@ -681,10 +702,16 @@ function alongTray(rack, t, prev, next, cable, ctx, r) {
   const points = [pt(a, floorY)], hold = [false];
   const between = opens.filter(o => Math.min(o.box[`${run}1`], Math.max(a, b)) > Math.max(o.box[`${run}0`], Math.min(a, b)) + 1e-6)
     .sort((p, q) => (a <= b ? p.box[`${run}0`] - q.box[`${run}0`] : q.box[`${run}0`] - p.box[`${run}0`]));
+  // each ring from its approach point, clear of its band (#968), through its
+  // opening on its sill, to the approach point past its far face. The
+  // approach points are not clamped to the floor: they stand at the sill,
+  // and a ring at the floor's end would have one pulled back into its band
+  const dir = a <= b ? 1 : -1, off = r + CLEAR;
   for (const o of between) {
     const [near, far] = a <= b ? [o.box[`${run}0`], o.box[`${run}1`]] : [o.box[`${run}1`], o.box[`${run}0`]];
-    points.push(pt(clamp(near), o.box.y0 + r), pt(clamp(far), o.box.y0 + r));
-    hold.push(false, true);
+    const y = o.box.y0 + r;
+    points.push(pt(near - dir * off, y), pt(clamp(near), y), pt(clamp(far), y), pt(far + dir * off, y));
+    hold.push(false, true, true, true);
   }
   if (Math.abs(b - a) > 1e-6 || points.length > 1) { points.push(pt(b, floorY)); hold.push(false); }
   return {points, hold, face: restName, role: 'resting'};
@@ -752,6 +779,9 @@ export function ringFindings(rack, ctx, nameOf = id => id) {
 function partText(part) {
   const p = String(part || '');
   if (p === 'envelope' || p === 'body' || !p) return '';
+  // a part of a ring's solid loop (#968): `ring/guide-3/front-leg` is "ring 3 front leg"
+  const ring = /^ring\/([^/]+)\/(.+)$/.exec(p);
+  if (ring) return `${/^guide-(\d+)$/.test(ring[1]) ? `ring ${ring[1].slice(6)}` : ring[1]} ${ring[2].replace(/-/g, ' ')}`;
   return p.split('/')[0].replace(/--.*$/, '').replace(/-/g, ' ');
 }
 // A plate a cable meets from above or below: thinner in y than across.
@@ -775,7 +805,8 @@ export function bodyFindings(rack, ctx, nameOf = id => id) {
     const holes = (s?.holes || []).map(h => h.via);
     // a plate met from above or below: the way round is over its front edge,
     // onto the face the cable rests on
-    const advice = s && isFloor(s.box) && f.part !== 'envelope'
+    const advice = /^ring\//.test(String(f.part)) ? 'route it into the ring along its run, through its opening'
+      : s && isFloor(s.box) && f.part !== 'envelope'
       ? `route it over the front edge of the ${partText(f.part) || 'plate'}, or through a ring`
       : holes.length ? `route it round ${nameOf(f.item)}, or through ${holes.join(' or ')} if the cable fits`
       : `route it round ${nameOf(f.item)}, or through a ring or a pass-through it fits`;

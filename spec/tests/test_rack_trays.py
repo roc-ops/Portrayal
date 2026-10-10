@@ -72,11 +72,13 @@ def test_the_snap_in_ring_places_its_opening():
     assert g["aperture"]["at"][0] + g["depth"] == pytest.approx(doc["elements"]["top"]["at"][0] + doc["elements"]["top"]["size"][0])
     for k in ("guide-depth", "guide-sill", "guide-aperture-at"):
         assert doc["provenance"][k].startswith("drawing - "), k
-    assert doc["version"] == "1.2.0"
+    # 1.2.0 placed the opening; 1.3.0 made the loop solid round it (#968)
+    assert doc["version"] == "1.3.0"
 
 
 def test_the_cmp5dr_takes_a_minor_for_its_tray():
-    assert _load(CMP5DR)["version"] == "1.1.0"
+    # 1.1.0 took the tray; 1.1.1 is the patch for its ring's 1.3.0 (#968)
+    assert _load(CMP5DR)["version"] == "1.1.1"
 
 
 # --- the schema -------------------------------------------------------------------

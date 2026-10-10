@@ -1929,6 +1929,17 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         if (_guide.get("aperture") or {}).get("at") is not None:
             ax, ay = _guide["aperture"]["at"]
             g.set("data-guide-aperture-at", f"{ax:g} {ay:g}")
+        # WHAT OF THE LOOP IS SOLID (#968): the legs' wall beside the
+        # opening, the loop's height over its base, and the slit an open
+        # loop takes a cable in by. rack.json derives the loop's solids from
+        # them, so a route passes the ring only through its opening.
+        if _guide.get("wall") is not None:
+            g.set("data-guide-wall", f"{_guide['wall']:g}")
+        if _guide.get("height") is not None:
+            g.set("data-guide-height", f"{_guide['height']:g}")
+        if _guide.get("slit") is not None:
+            s0, s1 = _guide["slit"]
+            g.set("data-guide-slit", f"{s0:g} {s1:g}")
     # A cavity is a hole you look INTO - a port aperture, a cage. A MODULE is a
     # solid body that fills its bay, and its depth says how far it reaches into
     # the chassis, not that the face has an N-mm hole in it. Emitting data-depth

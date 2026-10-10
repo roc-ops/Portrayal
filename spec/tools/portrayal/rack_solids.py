@@ -12,8 +12,11 @@ configuration, never stated in a manifest:
   sheet `thickness` thick; and each node that stands proud of the body
   (`data-z-out`), between the floor it is lifted onto and its `out`, stepped
   along a `profile-y` or `profile`. Drawn decor (a seam line, a window, the
-  edge of an ear on the plan) is never a plate. A ring (a node inside a
-  `data-guide` placement) is an opening, never a plate. A duct's channel is
+  edge of an ear on the plan) is never a plate. A ring's own nodes (inside a
+  `data-guide` placement) are never plates either: a ring whose contract says
+  what of it is solid (`wall`, `height`, `sill`, `depth`, `aperture.at`) is
+  solid as its legs, bar and seat, derived from those keys (`ring_solids`), so
+  its opening is the one way through it; any other ring is open. A duct's channel is
   open: anything whose footprint lies inside a duct guide's footprint on that
   face is not a plate, whatever its behaviour; and on a part that carries a
   duct, what is mounted on its base (`data-behaviour="mounts"`: the fingers
@@ -328,16 +331,80 @@ def _with_holes(solids, holes):
     return solids
 
 
+def ring_solids(root, fr):
+    """The solid loop of every ring on a plan whose contract says what of it is
+    solid (#968): its `wall`, `height`, `sill`, `depth` and `aperture.at`, and
+    its `slit` where it has one. Each ring is five boxes at most, all as thick
+    as its band along the run: the leg either side of the opening (`wall`
+    thick, the full `height`), the bar over the opening (from the opening's top
+    to `height`), the seat under it (from the base to `sill`), and, where the
+    far leg has a slit, the leg below it and the `hook` above it. Each is named
+    `ring/<id>/<part>`; a leg is the `rear-leg` or `front-leg` by where it
+    stands in the device (further back, or nearer the front), or the
+    `left-leg` or `right-leg` when the loop stands across the device. The gap
+    of a slit is left open: it is narrower than a cable, and a route never
+    passes along it. A ring that does not state all five keys is open, as
+    every ring was before."""
+    out = []
+    for el, m, lift, _guide, _mounts in _walk(root):
+        if not el.get("data-guide") == "ring" or not el.get("id"):
+            continue
+        run = el.get("data-guide-run") or "x"
+        ap, at = _attr_nums(el, "data-guide-aperture"), _attr_nums(el, "data-guide-aperture-at")
+        sill, depth = _attr_nums(el, "data-guide-sill"), _attr_nums(el, "data-guide-depth")
+        wall, height = _attr_nums(el, "data-guide-wall"), _attr_nums(el, "data-guide-height")
+        slit = _attr_nums(el, "data-guide-slit")
+        if not (ap and at and sill and depth and wall and height) or run not in ("x", "y"):
+            continue
+        (aw, ah), (ax, ay) = ap[:2], at[:2]
+        depth, sill, wall, height = depth[0], sill[0], wall[0], height[0]
+        base = fr.h + lift
+
+        def piece(lo, hi, h0, h1):
+            # [lo, hi] across the run, the band along it, in the part's frame;
+            # [h0, h1] up from the base
+            x, y, w, hh = (ax, lo, depth, hi - lo) if run == "x" else (lo, ay, hi - lo, depth)
+            corners = [_apply(m, x, y), _apply(m, x + w, y), _apply(m, x, y + hh), _apply(m, x + w, y + hh)]
+            fx, fy, fw, fh = _bbox(corners)
+            return fr.box("top", fx, fy, fw, fh, fr.h - (base + h1), fr.h - (base + h0))
+
+        ac = ay if run == "x" else ax
+        near, far = (ac - wall, ac), (ac + aw, ac + aw + wall)
+        parts = [("near", piece(*near, 0.0, height))]
+        if slit and len(slit) == 2:
+            parts += [("far", piece(*far, 0.0, slit[0])), ("hook", piece(*far, slit[1], height))]
+        else:
+            parts += [("far", piece(*far, 0.0, height))]
+        parts += [("bar", piece(ac, ac + aw, sill + ah, height)), ("seat", piece(ac, ac + aw, 0.0, sill))]
+        # which leg is which, as the ring stands in the device
+        legs = {k: b for k, b in parts if k in ("near", "far")}
+        across_z = abs(legs["near"]["z"] - legs["far"]["z"]) >= abs(legs["near"]["x"] - legs["far"]["x"])
+        key = "z" if across_z else "x"
+        # the leg further along z is further back; along x, further right
+        hi = "near" if legs["near"][key] > legs["far"][key] else "far"
+        names = {hi: "rear-leg" if across_z else "right-leg",
+                 ("far" if hi == "near" else "near"): "front-leg" if across_z else "left-leg"}
+        rid = el.get("id")
+        for k, b in parts:
+            out.append({"part": f"ring/{rid}/{names.get(k, k)}", "box": b})
+    return out
+
+
 def solids(faces, chassis, *, lane=False):
     """The `solids` of one device, or None when its envelope is enough.
     `faces` maps a view to the parsed root of its compiled face; `lane` says the
-    device is a zero-U part that carries a lane."""
+    device is a zero-U part that carries a lane. A sheet part's rings that say
+    what of them is solid (`ring_solids`) are solid with its plates."""
     w, h, d = (_num(chassis.get(k)) for k in ("w", "h", "d"))
     if not (w > 0 and h > 0 and d > 0):
         return None
     if chassis.get("shell") != "sheet" and not lane:
         return None
-    out = _with_holes(sheet_solids(faces, chassis), _passes(faces, _Frame(w, h, d)))
+    fr = _Frame(w, h, d)
+    plates = sheet_solids(faces, chassis)
+    if faces.get("top") is not None:
+        plates += ring_solids(faces["top"], fr)
+    out = _with_holes(plates, _passes(faces, fr))
     return out or None
 
 
