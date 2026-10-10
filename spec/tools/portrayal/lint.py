@@ -152,7 +152,7 @@ RULES = {
     "L17": ("component, device", "a placement's or part's group is declared under `groups:`, and a component that declares groups puts every port part in one", "declare the group with term, role and index-origin; join the loose port to a group",
             "A group used but never declared carries no vendor term, role or numbering origin, and on a card, ports half inside and half outside groups read as two kinds of port where there is one.",
             MIXED),
-    "L18": ("device",     "a port inherits media from its group rather than restating it", "drop the per-port media, or fix the group's `attrs.media`",
+    "L18": ("device",     "a port whose component names only a family of media (an `sfp` cage, which SFP, SFP+ and SFP28 share) states its own media, on the placement or on its group", "declare the media the datasheet gives under the placement's or the group's `attrs.media`",
             "A port that takes its media from a cage covering a whole family shows only the family, so an SFP28 port reads as SFP and the model looks complete when it is not.",
             WARNING),
     "L19": ("device",     "an indicator declares `for:` the thing it indicates - a lamp, button or display placement, and a bay in a group whose role is `indicator`", "add `for:` to the lamp placement or the bay; a panel that reports on the whole box is `for: chassis`",
@@ -191,7 +191,7 @@ RULES = {
     "L30": ("device",     "a card whose figure covers its paired module does not sit beside a module that also states its own", "decide which figure carries the pair and say so",
             "When a card's figure already includes its paired module and that module states its own, a sum over the bays counts the pair twice and gives a plausible over-count.",
             WARNING),
-    "L31": ("device",     "a region's label matches the group or id it frames", "fix the label text or the region's members",
+    "L31": ("device",     "a distance a side or top view's region label states along the depth (\"5.73 in from the front\") lands on something drawn there", "correct the distance in the label, or the depth of what it points at",
             "A region label that disagrees with what the drawing puts there tells a reader a part is somewhere it is not.",
             WARNING),
     "L32": ("any yaml",   "no mapping declares the same key twice", "remove the duplicate; YAML keeps the last silently",
@@ -233,7 +233,7 @@ RULES = {
     "L44": ("device",     "panel decor agrees with the face: a patterned field is not buried under parts, printing does not run off the edge, no decor lies wholly off the face", "move or trim the decor",
             "Decor that is buried under parts, runs off the face, or lies wholly off it shows vents or printing the real panel does not have, and usually means something was mismeasured.",
             WARNING),
-    "L45": ("device",     "a view at `modelled` draws something or declares itself empty", "add content, or an `empty:` sentence of 40+ characters saying where you looked",
+    "L45": ("device",     "a face of a device at `modelled` or above draws something, unless a gap's `scope` names the face", "draw the face's content, estimated and marked where it must be, or open a gap whose `scope` names it; an `empty:` sentence records where you looked and does not clear this",
             "A face that only declares a size is not drawn, so the device would claim more than it shows unless the author records why the face stays empty.",
             WARNING),
     "L46": ("component",  "composed parts do not collide inside the part", "move a part, or say in provenance that the layering is deliberate",
@@ -248,7 +248,7 @@ RULES = {
     "L49": ("device",     "members of one group, cut to one size, sit on one pitch", "re-measure; an uneven pitch is usually a mis-read, not a finding",
             "Uneven spacing among same-size members of one group is nearly always a misreading, and drawn as found it puts modules where the hardware does not.",
             WARNING),
-    "L50": ("component",  "printing inside a skin is legible at the size it is set", "raise the font size or drop the text",
+    "L50": ("component",  "printing inside a skin lands at least half on the part, and nothing drawn after it covers half of it or more", "move or shorten the text so it stays on the part, or move what is drawn over it",
             "Printing that runs off the edge of the part, or is covered by something drawn after it, is printing the reader cannot see while the drawing claims it is there.",
             WARNING),
     "L51": ("component",  "a class has a power role in spec/schemas/power-roles.yaml", "add the class under `draw`, `supply` or `passive` in power-roles.yaml",
@@ -485,7 +485,7 @@ RULES = {
     "L128": ("device, listing", "a part-number key has no stray whitespace - none leading or trailing, none but the plain ASCII space (an error), and none splitting a run of capitals and digits between two hyphens (`-A C-`, a warning)", "retype the SKU as the vendor prints it; a space the vendor really prints inside a hyphenated token is waived with the document that shows it",
              "A part number is the DCIM model, its slug and the export file name, so one stray space exports the build under a model nobody can order, and can change which name the device type is exported under.",
              MIXED),
-    "L129": ("component",  "`optical.trunk` is for a single-faced module - not one whose rear face carries fibre - and a position it names by number is not also declared `unused`", "drop `trunk` where the rear face already is the trunk; name a part bare when it carries a dead position, or route the position",
+    "L129": ("component",  "`optical.trunk` is for a single-faced module - not one whose rear face carries fibre - a position it names by number is not also declared `unused`, and it names a multi-position front connector that exports as one port (an MPO adapter) whole, never one of its positions", "drop `trunk` where the rear face already is the trunk; name a part bare when it carries a dead position, or route the position; name an MPO front connector bare",
              "Saying where the trunk is in two ways, or listing a dead position as part of it, gives the fibre export two conflicting answers about where the common end is.",
              ERROR),
     "L130": ("component",  "every leg of a module whose glass is projected runs between the front and the trunk (a rear-face connector or an `optical.trunk` position)", "fix the path, or the trunk; a front-to-front or trunk-to-trunk leg has no row in the fibre map and would be dropped",
@@ -494,8 +494,8 @@ RULES = {
     "L131": ("component",  "a module with `optical.paths` has a trunk - a rear face carrying its common end, or `optical.trunk` (error)", "add `optical.trunk` naming the common, network-side positions, from the vendor's own port roles, and say in provenance where they were read",
              "Without a trunk the export has nowhere to put the common end, so it drops the module's whole fibre map and no DCIM sees how the glass is wired.",
              ERROR),
-    "L132": ("device",     "a placement's `fed-by` names a placement on this device, in any view, whose part exports a power port (`dcim_export.PART_POWER`), and it stands on a part that exports a power outlet (`dcim_export.PART_OUTLET`) - an error, because both DCIMs refuse an outlet whose `power_port` names nothing", "name the input this output hands on, by its placement id; drop a `fed-by` on a part that is not an outlet",
-             "Both NetBox and Nautobot refuse an outlet whose power port names nothing, so a broken feed reference fails the device's import.",
+    "L132": ("device",     "a `fed-by` stands only on a placement whose part exports a power outlet (`dcim_export.PART_OUTLET`), and names a placement on this device, in any view, whose part exports a power port (`dcim_export.PART_POWER`) - one that every configuration having the output also has", "name the input this output hands on, by its placement id; drop a `fed-by` on a part that is not an outlet, or add the part to `dcim_export.PART_OUTLET`; scope an output with `only-in` to the configurations that have its input",
+             "Both NetBox and Nautobot refuse an outlet whose power port names nothing, so a broken feed reference fails the device's import; and a feed stated on a part that exports no outlet is carried by nothing, so the link it records is lost.",
              ERROR),
     "L133": ("device",     "a placement's `through` names a bay on this device, in any view - the breaker or fuse position the circuit runs through - or a placement of a part of class `breaker`, a breaker fixed to the unit (an error)", "name the bay or the breaker placement by its id, as the face spells it",
              "An outlet's breaker or fuse reference that points at nothing leaves nobody able to tell which position protects the circuit.",
@@ -3185,6 +3185,22 @@ def lint_component_optical_trunk(path, data, lib_roots):
             err(path, "L129", f"optical.trunk names {item}, which `unused` declares "
                               "terminates nothing - name the part bare if one of its "
                               "positions is dead, or route the position")
+    # A MULTI-POSITION FRONT CONNECTOR IS TRUNKED WHOLE OR NOT AT ALL (#857).
+    # The export writes an MPO front as one port of the positions the trunk
+    # leaves, renumbered from 1, while the fibre map keeps each leg's original
+    # `front_position`: `trunk: [mpo.1]` gave an 11-position port and a leg at
+    # position 12, which both DCIMs refuse. Every trunk in the library names a
+    # whole part or one position of a duplex adapter, so this refuses the shape
+    # rather than teaching the fibre map to renumber.
+    fronts = {pid: ref for _x, pid, ref in optical_ports._front_parts(data)}
+    for item in trunk:
+        pid, pos = optical_ports.split_order_item(item)
+        if (pos is not None and pid in fronts and (caps.get(pid) or 0) > 1
+                and optical_ports.family_of(fronts[pid]) in optical_ports.GROUPED_FRONT):
+            err(path, "L129", f"optical.trunk names {item}, one position of {pid}, a "
+                              f"{caps[pid]}-position front connector that exports as one "
+                              f"port - name {pid} bare to make the whole connector the "
+                              "trunk, or leave it off")
     if not paths:
         return
     if not (face_ref(data, "rear") or trunk):
@@ -5682,7 +5698,7 @@ def lint_device_cutouts(path, view_name, view, lib_roots, seen_through=()):
     #    punch. Now the overlap of every hole is unioned (so a hole and the
     #    port drawn in it are not counted twice), and a lamp that declares
     #    several windows is also covered when the holes cover more than half
-    #    of THOSE - four round windows in a post leave most of the column's
+    #    of EACH OF THOSE (#845) - four round windows in a post leave most of the column's
     #    bounding box as metal, and that metal is the drawing being right.
     #    Auto-punching keeps the one-opening rule (`_single_opening`): what
     #    windows a multi-window lamp has is read off the metal by a person.
@@ -5698,9 +5714,13 @@ def lint_device_cutouts(path, view_name, view, lib_roots, seen_through=()):
         windows = _lamp_windows(q, fb, lib_roots) if q else []
         if len(windows) < 2:
             return False
-        want = sum((w[2] - w[0]) * (w[3] - w[1]) for w in windows)
-        got = sum(_union_overlap(w, holes) for w in windows)
-        return bool(want) and got / want > 0.5
+        # EVERY WINDOW, EACH MORE THAN HALF OPEN (#845). Summed over the
+        # windows, three punched of four passed, so a window left in the
+        # metal was never reported; each declared window is a hole in the
+        # faceplate, and one missing is a missing hole.
+        return all((w[2] - w[0]) * (w[3] - w[1]) > 0
+                   and _union_overlap(w, holes) / ((w[2] - w[0]) * (w[3] - w[1])) > 0.5
+                   for w in windows)
 
     for q in placements:
         cp = resolve_component(q.get("ref", ""), lib_roots)
@@ -6893,8 +6913,9 @@ def lint_device_top_level_skus(path, data):
 # (`7750 SR-12 (pre-2016 chassis)`) have no hyphen on both sides of the space.
 _PN_SPLIT_TOKEN = re.compile(r"-([A-Z0-9]+(?:\s+[A-Z0-9]+)+)(?=-)")
 # Zero-width characters are not whitespace to str.isspace(), and are as
-# invisible in a diff as an NBSP.
-_PN_ZERO_WIDTH = {"​", "‌", "‍", "⁠", "﻿"}
+# invisible in a diff as an NBSP - so they are written as escapes (#845):
+# zero width space, non-joiner and joiner, word joiner, and the BOM.
+_PN_ZERO_WIDTH = {"\u200b", "\u200c", "\u200d", "\u2060", "\ufeff"}
 
 
 def lint_part_number_keys(path, data):
@@ -7888,6 +7909,31 @@ def lint_device_power_outlets(path, data, lib_roots=None):
                                "protects one circuit; if these outputs really are "
                                "paralleled behind one breaker, waive with the document "
                                "that says so")
+    # ONE CONFIGURATION AT A TIME, AS THE EXPORT READS IT (#857). Above, a feed
+    # is any power placement anywhere on the device; dcim_export.build resolves
+    # `fed-by` against the power ports of the configuration it is writing - its
+    # bound views (views_for) and the placements `only-in` keeps (scoped). An
+    # input that exists only in a `dual-feed` configuration, named by an output
+    # every configuration has, passed here and stopped ./publish.sh with
+    # NotExpressible on the single-feed one. A feed missing from the whole
+    # device was reported above, so only one that some configuration lacks is.
+    names = {id(v): n for n, v in (data.get("views") or {}).items()}
+    for cname in sorted(data.get("configurations") or {}):
+        have, cfg_feeds = [], set()
+        for view in dcim_export.views_for(data, cname):
+            for p in dcim_export.scoped(view_parts(view or {})["placements"], cname):
+                have.append((names.get(id(view), "?"), p))
+                if p["ref"].split("@")[0] in dcim_export.PART_POWER:
+                    cfg_feeds.add(p["id"])
+        for vname, p in have:
+            fed = p.get("fed-by")
+            if (fed is None or fed not in feeds or fed in cfg_feeds
+                    or p["ref"].split("@")[0] not in dcim_export.PART_OUTLET):
+                continue
+            err(path, "L132", f"{vname}/{p['id']}: `fed-by: {fed}` names an input that "
+                              f"configuration {cname!r} does not have, so its export "
+                              "stops there. Scope the output to the configurations that "
+                              f"have {fed} (`only-in`), or give it an input each one has")
 
 
 def _is_breaker(pid, placed, roots):

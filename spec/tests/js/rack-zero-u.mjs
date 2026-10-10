@@ -307,7 +307,7 @@ test('the editor takes zero-U commands as undo steps, and a side survives undo',
   assert.match(ed.apply({op: 'zerou.place', ref: DUCT, at: 'right', ru: 1}).error, /Overlaps/);
   assert.ok(!ed.preview({op: 'zerou.remove', id: 'z1'}).error);
   assert.equal(ed.rack().zeroU.length, 1);
-  assert.match(ed.apply([{op: 'zerou.remove', id: 'z1'}, {op: 'lengths.routed', routeCtx: {}}]).error, /page's own command/);
+  assert.match(ed.apply([{op: 'zerou.remove', id: 'z1'}, {op: 'lengths.routed', routeCtx: {}}]).error, /is a system command/);
   ed.apply({op: 'side.place', ref: BRACKET, face: 'front', ru: 4, side: 'right'});
   ed.apply({op: 'patch', id: 'i1', label: 'fb-1'});
   assert.deepEqual([ed.rack().items[0].side, ed.rack().items[0].label], ['right', 'fb-1']);

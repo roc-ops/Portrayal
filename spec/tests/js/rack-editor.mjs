@@ -71,7 +71,7 @@ test('replaceRack is one step with its summary', () => {
 test('a system command is refused unless the system sends it', () => {
   const {ed, evs} = fresh();
   assert.deepEqual(ed.apply([P(10), {op: 'lengths.routed', routeCtx: {}}], {origin: 'agent'}),
-                   {error: "lengths.routed is the page's own command.", index: 1});
+                   {error: "lengths.routed is a system command, sent only by the caller with origin 'system'.", index: 1});
   assert.deepEqual([ed.rack().items.length, evs.length], [0, 0]);
   assert.equal(ed.apply({op: 'lengths.routed', routeCtx: {}}, {origin: 'system'}).noop, true);
 });

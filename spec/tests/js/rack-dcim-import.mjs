@@ -524,7 +524,7 @@ test("the NetBox kit's README: what must exist, each file in import order with i
     manufacturers: ['BATM/Telco Systems', 'Cisco', 'Edgecore'], rows: {rack: 1, devices: 3, modules: 1, cables: 1},
     left: ['demarc-i3 is not in the devices file: because.', 'Cable c2 is not in the cables file: why.'], notes: ['A best guess.'], ...WHOLE});
   assert.equal(got.text, [
-    'NetBox import kit for Cable test, from the Portrayal Rack Builder, 2026-10-04.',
+    'NetBox import kit for Cable test, from Portrayal, 2026-10-04.',
     '',
     'Before you import, NetBox must already have:',
     '- the site "Lab 1"',
@@ -576,8 +576,8 @@ test('a README is wrapped at 78 columns with a hanging indent, in sentence case,
 test('blank settings: the first lines say the devices file will be refused, and name the columns', () => {
   const nb = D.kitReadme({target: 'netbox', rack: README_RACK, date: DAY, dcim: {}, typeFiles: 1, rows: {rack: 1, devices: 1, modules: 0, cables: 0}, ...WHOLE});
   const warn = "2-devices.csv will be refused as it is: its site and role columns are blank, and NetBox requires both. 1-rack.csv's site " +
-    'column is blank too. Set the site and the device role under Export, DCIM import settings, and export again; or fill those columns in by hand.';
-  assert.deepEqual(nb.text.split('\n').slice(0, 4), ['NetBox import kit for Cable test, from the Portrayal Rack Builder, 2026-10-04.', '', `Read this first: ${warn}`, '']);
+    "column is blank too. Set the site and the device role in the rack's DCIM import settings (dcim.site, dcim.role), and export again; or fill those columns in by hand.";
+  assert.deepEqual(nb.text.split('\n').slice(0, 4), ['NetBox import kit for Cable test, from Portrayal, 2026-10-04.', '', `Read this first: ${warn}`, '']);
   assert.deepEqual(nb.notes, [warn]);
   assert.ok(nb.text.includes('- a site (none is set in this kit)\n- a device role (none is set in this kit)\n'));
   // A file with no rows is still in the kit, and the README says it is empty.
@@ -587,12 +587,12 @@ test('blank settings: the first lines say the devices file will be refused, and 
   assert.ok(!nb.text.includes('Notes:'));
   // One blank column: only that one is named.
   assert.equal(D.kitReadme({target: 'netbox', rack: README_RACK, date: DAY, dcim: {site: 'Lab 1'}, rows: {}, ...WHOLE}).text.split('\n')[2],
-    'Read this first: 2-devices.csv will be refused as it is: its role column is blank, and NetBox requires it. Set the device role under Export, ' +
-    'DCIM import settings, and export again; or fill that column in by hand.');
+    'Read this first: 2-devices.csv will be refused as it is: its role column is blank, and NetBox requires it. Set the device role in the rack\'s ' +
+    'DCIM import settings (dcim.site, dcim.role), and export again; or fill that column in by hand.');
   const nt = D.kitReadme({target: 'nautobot', rack: README_RACK, date: DAY, dcim: {role: 'R'}, rows: {}, ...WHOLE});
   assert.equal(nt.text.split('\n')[2],
-    'Read this first: 1-devices.csv will be refused as it is: its location__name column is blank, and Nautobot requires it. Set the location under Export, ' +
-    'DCIM import settings, and export again; or fill that column in by hand.');
+    'Read this first: 1-devices.csv will be refused as it is: its location__name column is blank, and Nautobot requires it. Set the location in the rack\'s ' +
+    'DCIM import settings (dcim.site, dcim.role), and export again; or fill that column in by hand.');
 });
 
 test("the Nautobot kit's README: the rack and the Planned status must exist, the types step is plain, the cables go through the script", () => {
@@ -600,7 +600,7 @@ test("the Nautobot kit's README: the rack and the Planned status must exist, the
   const got = D.kitReadme({target: 'nautobot', rack: down, date: DAY, dcim: {site: 'Lab 1', role: 'R'}, typeFiles: 2,
     manufacturers: ['Cisco'], rows: {devices: 4, modules: 1, cables: 2}, ...WHOLE});
   for (const line of [
-    'Nautobot import kit for Cable test, from the Portrayal Rack Builder, 2026-10-04.',
+    'Nautobot import kit for Cable test, from Portrayal, 2026-10-04.',
     '- the location "Lab 1", of a location type that allows devices and racks',
     '- the role "R", for devices',
     '- a status named Planned, for devices, modules and cables',
@@ -622,9 +622,9 @@ test("the Nautobot kit's README: the rack and the Planned status must exist, the
   assert.ok(!/verified/i.test(got.text), 'the types step was imported through Nautobot 3.2.6 on 2026-10-04: the README no longer calls it unverified');
   assert.deepEqual(got.notes, []);
   assert.ok(!got.text.includes('1-rack.csv'));
-  // The script could not be fetched: the kit comes without it, and says where it is.
+  // The script could not be fetched: the kit comes without it.
   const bare = D.kitReadme({target: 'nautobot', rack: README_RACK, date: DAY, dcim: {site: 'L', role: 'R'}, rows: {}, script: false, ...WHOLE});
-  const gone = 'import_cables.py could not be fetched, so it is not in this zip. It is at https://portrayal.dev/site/rack/nautobot/import_cables.py.';
+  const gone = 'import_cables.py could not be fetched, so it is not in this zip.';
   assert.deepEqual(bare.notes, [gone]);
   assert.ok(bare.text.includes(`Not in this kit:\n- ${gone}\n`) && !bare.text.includes('python3 import_cables.py'));
 });
@@ -772,12 +772,22 @@ test('a Nautobot kit with no cable rows shows no script commands and no warning 
     assert.ok(!got.text.includes(gone), gone);
 });
 
-test("the README says where the script is on the page's own site, or on portrayal.dev when there is none", () => {
+test("the README says where the script is when the caller says, and names no site of its own (#895)", () => {
   const args = {target: 'nautobot', rack: README_RACK, date: DAY, dcim: {site: 'L', role: 'R'}, rows: {}, script: false, ...WHOLE};
-  const gone = url => `import_cables.py could not be fetched, so it is not in this zip. It is at ${url}.`;
+  const gone = 'import_cables.py could not be fetched, so it is not in this zip.';
   assert.deepEqual(D.kitReadme({...args, scriptUrl: 'http://127.0.0.1:8932/site/rack/nautobot/import_cables.py'}).notes,
-    [gone('http://127.0.0.1:8932/site/rack/nautobot/import_cables.py')]);
-  assert.deepEqual(D.kitReadme(args).notes, [gone('https://portrayal.dev/site/rack/nautobot/import_cables.py')]);
+    [`${gone} It is at http://127.0.0.1:8932/site/rack/nautobot/import_cables.py.`]);
+  assert.deepEqual(D.kitReadme(args).notes, [gone]);
+  assert.ok(!D.kitReadme(args).text.includes('portrayal.dev'));
+});
+
+test('a host names itself and its own settings control in the README (#895)', () => {
+  const got = D.kitReadme({target: 'netbox', rack: README_RACK, date: DAY, dcim: {site: 'Lab 1'}, rows: {}, ...WHOLE,
+                           source: 'the Portrayal Rack Builder', settingsAt: 'under Export, DCIM import settings'});
+  assert.deepEqual(got.text.split('\n').slice(0, 3), [
+    'NetBox import kit for Cable test, from the Portrayal Rack Builder, 2026-10-04.', '',
+    'Read this first: 2-devices.csv will be refused as it is: its role column is blank, and NetBox requires it. ' +
+    'Set the device role under Export, DCIM import settings, and export again; or fill that column in by hand.']);
 });
 
 test("a device's own line says why its type is missing when a file or the index could not be read", () => {

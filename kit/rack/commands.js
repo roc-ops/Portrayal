@@ -788,7 +788,7 @@ const WAYPOINT = {type: 'object', additionalProperties: false,
                lane: {type: 'string', minLength: 1, description: 'The gutter beside the rails, with ru.'},
                ru: {type: 'integer', description: 'The U the gutter is crossed at, with lane.'}},
   dependentRequired: {item: ['via'], via: ['item'], lane: ['ru'], ru: ['lane']}};
-const SUMMARY = {type: 'string', description: 'How the step is described in Undo and the notice; the page sets it.'};
+const SUMMARY = {type: 'string', description: 'How the step is described in Undo and the notice; set by the caller.'};
 const AT = {type: 'string', minLength: 1, description: 'Its upright: left or right (two-post); left-front, right-front, left-rear or right-rear (four-post).'};
 const BOTTOM = {type: 'integer', minimum: 1, description: 'The U its bottom is level with, counted from 1 at the bottom of the rails.'};
 const BETWEEN = {type: 'boolean', description: 'true when it stands between this rack and the next one, serving both.'};
@@ -894,7 +894,7 @@ export const COMMANDS = {
   'bundle.remove': {run: bundleRemove, description: 'Dissolve a bundle. Its cables are kept and follow their own routes again.',
     args: args(['id'], {id: ID('bundle')})},
   'lengths.routed': {run: lengthsRouted, step: false, system: true,
-    description: 'Store the routed lengths the page measured. Not an undo step; the page sends it.',
+    description: 'Store the routed lengths the caller measured. Not an undo step; sent by the caller.',
     args: args(['routeCtx'], {routeCtx: {type: 'object', description: 'The routing context the last render measured with (route-context.js routeFacts().ctx).'}})},
 };
 

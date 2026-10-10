@@ -68,6 +68,24 @@ def test_the_bay_says_which_output_it_protects():
     assert bays["breaker-a1"]["description"] == "Accepts: breaker-1ru"
 
 
+def test_a_long_bay_description_does_not_cut_the_protects_clause():
+    """#857: an `Accepts:` list near the limit used to leave fit_items no room
+    for an item, and the clause - Nautobot's only record of the link - was cut.
+    It now leads, and what the bay accepts is shortened after it."""
+    bay = {"position": "breaker-a2", "description": "Accepts: " + ", ".join(
+        f"acme/breaker-{n:02d}a-long" for n in range(8))}
+    assert 190 <= len(bay["description"]) <= 200
+    outlets = {"output-a2": {"id": "output-a2", "ref": OUT, "through": "breaker-a2"}}
+    dx.outlet_rows(outlets, {}, [bay], "test panel")
+    got = bay["description"]
+    assert got.startswith("Protects output-a2; Accepts: acme/breaker-00a-long"), got
+    assert len(got) <= dx.LIMIT
+    # a short one keeps the order it always had
+    short = {"position": "breaker-a2", "description": "Accepts: breaker-1ru"}
+    dx.outlet_rows(outlets, {}, [short], "test panel")
+    assert short["description"] == "Accepts: breaker-1ru; protects output-a2"
+
+
 def test_a_bay_with_no_accepts_sentence_still_says_it():
     dev = panel(**FED)
     for b in dev["views"]["front"]["components"]["bays"]:

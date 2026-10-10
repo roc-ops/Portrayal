@@ -62,7 +62,7 @@ test('the rack file is version 3, and a version-2 file opens as it was', () => {
   const d = M.parseDoc(v2);
   assert.equal(d.version, 3);
   assert.equal('bundles' in d.racks[0], false);          // a rack never given a bundle saves as it was
-  assert.throws(() => M.parseDoc({...v2, version: 4}), /version 4; this page reads up to version 3/);
+  assert.throws(() => M.parseDoc({...v2, version: 4}), /version 4; this reader supports up to version 3/);
 });
 
 test('a rack with bundles reads back whole and validates; the schema refuses a malformed bundle', () => {
