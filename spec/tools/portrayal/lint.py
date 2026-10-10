@@ -614,6 +614,9 @@ RULES = {
     "L171": ("component",  "a `combine` is well formed: it stands in place of `from`, has one destination and no path-level `band`, names each source once, and its sources either all carry a `ratio` summing to 100 (a power combine) or carry no ratio and all but at most one a `band`, no two the same (a wavelength combine)", "give the combine one `to` endpoint; move a `band` onto the source it belongs to; give every source a `ratio`, or every source but one a different `band`",
              "A combine whose sources do not say how they join cannot be told from two strands pushed into one bore, and one with mixed or unbalanced shares describes a part that cannot exist.",
              ERROR),
+    "L172": ("component, device", "whatever is named for a logo is a reserved place and paints nothing: a contract element, a skin node or a device region whose id has the word `logo` in it is `logo-zone` (or `logo-zone-<n>`), the skin node is an empty `rect` with `fill=\"none\"` and no stroke, the region states `at` and `size`, and no decor, cutout, silkscreen mark, bay or placement of a device carries the word (error)", "reserve the box the mark covers: an element `logo-zone` with an empty `<rect id=\"logo-zone\" fill=\"none\"/>` in the skin of a part, a region `logo-zone` with `at` and `size` on a device, and delete the drawn mark or the box that stood for it",
+             "A vendor mark is never reproduced, and a filled box standing where one sits reads as a blank plate on the face; the reserved place is what lets a reader ask what is there without the drawing answering with artwork.",
+             ERROR),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -5073,6 +5076,108 @@ def _turn_check(path, where, spec, host_ref, lib_roots):
         err(path, "L146", f"{where}: turn {spec['turn']} is not one {host_ref} allows "
                           f"({', '.join(str(t) for t in allowed)}) - its interface's "
                           "`turns` in connectors.yaml, narrowed by its presented point")
+
+
+_LOGO_ZONE_ID = re.compile(r"^logo-zone(-\d+)?$")
+
+
+def _names_a_logo(ident):
+    """Whether an id has the WORD logo in it - `logo`, `logo-zone`, `front-logo`
+    - and not merely the letters, which `analogous` and `catalogo` also have.
+
+    WHOLE TOKENS ONLY, split on `-` and `_`. So `logotype`, `logos`, `logo1`
+    and `vendorLogo` are not matched and slip through; that is the price of not
+    firing on `catalogo`. A token `logo` that names something else has no
+    exemption here: a device says so under `lint.waive`."""
+    return isinstance(ident, str) and "logo" in re.split(r"[-_]", ident.lower())
+
+
+def lint_component_logo_zone(path, data):
+    """L172, a part: what is named for a logo is `logo-zone` and paints nothing.
+
+    A vendor mark is not reproduced, and its place is reserved instead. The two
+    ways that rule has been broken are both a NAMED thing that draws: a `logo`
+    path standing in for the mark, and a filled rect on the reserved box. So the
+    rule reads the name - an element key or a skin node id with the word in it -
+    and holds it to the one shape that reserves and does not paint: `logo-zone`,
+    an empty rect, `fill="none"`, no stroke.
+
+    EVERY FILE UNDER skins/, as L38 reads them and for its reason: a body skin
+    reached only through the relief body is drawn all the same.
+
+    WHAT IT DOES NOT READ. A box standing for a mark under another name (a
+    `badge`, a `brand-plate`) is not caught: those words also name real metal -
+    a recessed badge, a label plate - and a rule that guessed would be wrong
+    about them."""
+    for el in (data.get("elements") or {}):
+        if _names_a_logo(el) and not _LOGO_ZONE_ID.match(el):
+            err(path, "L172", f"elements/{el}: an element named for a logo is "
+                              "`logo-zone` (or `logo-zone-<n>`) - a reserved place, not a drawing")
+    skins_dir = Path(path).parent / "skins"
+    for sp in sorted(skins_dir.glob("*.svg")) if skins_dir.exists() else []:
+        try:
+            _, root = skin_ids(sp)
+        except Exception:
+            continue          # L3 reports an unparseable skin
+        for node in root.iter():
+            nid = node.get("id")
+            if not _names_a_logo(nid):
+                continue
+            if not _LOGO_ZONE_ID.match(nid):
+                err(sp, "L172", f"node {nid!r} is named for a logo and is not `logo-zone` - "
+                                "a mark is not drawn; reserve its box as an empty "
+                                "`<rect id=\"logo-zone\" fill=\"none\"/>`")
+                continue
+            tag = node.tag.rsplit("}", 1)[-1]
+            painted = []
+            if tag != "rect":
+                painted.append(f"is a <{tag}>, not a <rect>")
+            if node.get("fill") != "none":
+                painted.append(f"has fill={node.get('fill')!r}, not \"none\"")
+            if node.get("stroke") not in (None, "none"):
+                painted.append(f"has stroke={node.get('stroke')!r}")
+            if node.get("style"):
+                painted.append("carries a `style`, which can paint it")
+            if len(node):
+                painted.append(f"has {len(node)} child node(s)")
+            if painted:
+                err(sp, "L172", f"node {nid!r} " + "; ".join(painted) + " - a reserved "
+                                "place is an empty rect that paints nothing")
+
+
+def lint_device_logo_zone(path, data):
+    """L172, a device: a logo is a region with an extent, and nothing drawn.
+
+    On a device the reserved place is a REGION, which is addressable and never
+    painted, so the rule is the same one turned round: nothing a view DRAWS
+    (decor, a cutout, a silkscreen mark, a bay, a placement) is named for a
+    logo, and the region that is named for one is `logo-zone` and says where it
+    is. A region with no box reserves nothing - the viewer cannot point at it."""
+    for vname, view in (data.get("views") or {}).items():
+        if not isinstance(view, dict):
+            continue
+        panel = view.get("panel") or {}
+        comps = view.get("components") or {}
+        drawn = [("decor", panel.get("decor")), ("cutout", panel.get("cutouts")),
+                 ("silkscreen", view.get("silkscreen")), ("bay", comps.get("bays")),
+                 ("placement", comps.get("placements"))]
+        for kind, items in drawn:
+            for item in items or []:
+                if isinstance(item, dict) and _names_a_logo(item.get("id")):
+                    err(path, "L172", f"{vname}: {kind} {item['id']!r} is named for a logo - "
+                                      "a mark is not drawn, and a box in its place reads as "
+                                      "a blank plate; reserve it as a region `logo-zone` "
+                                      "with `at` and `size`")
+        for region in view.get("regions") or []:
+            rid = (region or {}).get("id")
+            if not _names_a_logo(rid):
+                continue
+            if not _LOGO_ZONE_ID.match(rid):
+                err(path, "L172", f"{vname}: region {rid!r} is named for a logo - the "
+                                  "reserved place is `logo-zone` (or `logo-zone-<n>`)")
+            elif not (region.get("at") and region.get("size")):
+                err(path, "L172", f"{vname}: region {rid!r} states no `at` and `size` - "
+                                  "a reserved place says where the mark sits")
 
 
 def lint_component_point_turns(path, data):
@@ -13188,6 +13293,7 @@ def main():
                 lint_component_part_interfaces(f, d, args.library)
                 lint_component_guide(f, d)
                 lint_component_tray(f, d)
+                lint_component_logo_zone(f, d)
                 lint_quoted_prose(f, d)
             n += 1
         for f in sorted(root.glob("devices/**/device.yaml")):
@@ -13226,6 +13332,7 @@ def main():
                 lint_device_spanned_exclusion(f, d, args.library)
                 lint_device_bevel(f, d, args.library)
                 lint_device_passes(f, d, args.library)
+                lint_device_logo_zone(f, d)
                 try:
                     dev_maturity[str(f.parent.relative_to(root / "devices"))] = \
                         d.get("maturity", "draft")

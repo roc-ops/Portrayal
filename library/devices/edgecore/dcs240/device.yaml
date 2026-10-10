@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcs240
-version: 1.1.8
+version: 1.1.9
 maturity: modelled
 manufacturer: Edgecore
 model: AS9726-32DB
@@ -123,10 +123,21 @@ provenance:
       that differ in their silkscreen, which is why each is read on its own art. ONE RENAME FALLS OUT
       OF THE TAB. The white rectangle at [409.00, 5.00] was called `product-label`, and callout 6 on this
       elevation gives that name to the TAB. It carries the Edge-corE wordmark and is the brand badge,
-      so it is renamed `brand-badge` and the model stops using one name for two things. It is still drawn
-      here, unlike on edgecore/dcs511 where it was dropped: this library cannot set a logo into a decor,
-      so it is a blank grey box either way, and whether that is worth drawing is a judgement this change
-      does not make for a device it is only passing through.
+      so it is renamed `brand-badge` and the model stops using one name for two things. SUPERSEDED: that
+      pass left the box drawn, as a blank grey rectangle. It is no longer drawn; `logo` below says what
+      replaced it.
+  logo:
+    confidence: photo-measured
+    note: >-
+      THE BRAND BADGE IS A LOGO, SO ITS PLACE IS RESERVED AND NOTHING IS DRAWN THERE. What the quick start
+      draws above the model number is the vendor logotype: a row of nine outlined tiles, the first and
+      last red. Measured on the Overview elevation as embedded in the quick start (2000 x 356 px), calibrated
+      on the chassis outline at 4.318 px/mm across and 4.276 down, the row runs x 406.9 to 432.1 and y
+      6.1 to 10.5. The green tab is the check: the same calibration puts it at x 414.1 to 429.6, against
+      the 414.00 to 429.74 this file already holds. The grey `brand-badge` box at [409, 5], 22 x 9, stood
+      in for the logotype and the model number together and read as a blank plate; it is removed, and
+      the region `logo-zone` holds the measured box of the logotype alone. The model number under it is
+      still not drawn.
   the-rear:
     confidence: measured
     note: >-
@@ -314,7 +325,6 @@ views:
         vent: 18}
       - {id: vent-bottom, at: [38.0, 39.6], size: [348.0, 2.9], pattern: slots, pattern-pitch: [4.4, 3.2],
         vent: 18}
-      - {id: brand-badge, at: [409.0, 5.0], size: [22.0, 9.0], fill: '#d7dbdf'}
       cutouts:
       - {id: led-loc, at: [6.8, 3.3], size: [2.0, 2.0], shape: circle}
       - {id: led-diag, at: [10.1, 3.5], size: [2.8, 1.6], shape: rect}
@@ -822,6 +832,10 @@ views:
         group: port-leds
         rel-pos: 32
     regions:
+    - id: logo-zone
+      at: [406.9, 6.1]
+      size: {w: 25.2, h: 4.4}
+      label: Vendor logotype; not drawn
     - id: optics
       at: [38.0, 11.5]
       size: {w: 348.0, h: 26.0}
