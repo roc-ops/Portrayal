@@ -1,5 +1,6 @@
 """preflight.py: every check FAILS on a violation planted for it, and passes on
-a clean tree (#924).
+a clean tree (#924). The one advisory check, `prose`, WARNS on its planted
+sentence and never fails (#114).
 
 A preflight that passes everything is indistinguishable from one whose checks
 stopped looking, so each check here is shown a seeded fault first. The diff is
@@ -429,3 +430,140 @@ def test_lint_fails_on_a_component_no_device_places(fresh):
     res = preflight.check_lint(ctx)
     assert not res.ok
     assert any("[L89]" in d and "zz-preflight-probe" in d for d in res.details), res.details
+
+
+# --------------------------------------------------------------------- prose ---
+# The one check that WARNS (#114): a sentence over 25 words that the diff adds
+# or changes in the prose an export carries. Each case is a repository with a
+# base commit and an edit, as above. The sentences are built from a word list,
+# so their length is stated and not counted by eye.
+
+PROSE_DEVICE = "library/devices/acme/box/device.yaml"
+PROSE_PART = "library/components/acme/card/v1/contract.yaml"
+
+
+def _sentence(n, word="word"):
+    """A sentence of exactly `n` words."""
+    return "The " + " ".join([word] * (n - 1)) + "."
+
+
+def _device(description, extra=""):
+    return f"kind: device\nname: box\ndescription: >\n  {description}\n{extra}"
+
+
+def test_prose_warns_on_an_added_long_sentence_and_does_not_fail(tmp_path):
+    base = make_repo(tmp_path, {PROSE_DEVICE: _device(_sentence(8))})
+    (tmp_path / PROSE_DEVICE).write_text(_device(_sentence(8) + " " + _sentence(26, "added")))
+    res = preflight.check_prose(ctx_of(tmp_path, base))
+    assert res.ok, "a long sentence is advice, never a failure"
+    assert res.as_dict()["status"] == "WARN"
+    assert res.details == [f"{PROSE_DEVICE}: description: 26 words: "
+                           "The added added added added added added added ..."], res.details
+    assert res.fix
+
+
+def test_prose_is_silent_at_exactly_the_limit(tmp_path):
+    base = make_repo(tmp_path, {PROSE_DEVICE: _device(_sentence(8))})
+    (tmp_path / PROSE_DEVICE).write_text(_device(_sentence(25, "added")))
+    res = preflight.check_prose(ctx_of(tmp_path, base))
+    assert res.as_dict()["status"] == "PASS", res.details
+    assert "1 changed manifest" in res.summary
+
+
+def test_prose_is_silent_on_a_long_sentence_the_base_already_has(tmp_path):
+    """The existing text is left alone: the file changes, around a sentence of
+    forty words that was there before, and nothing is reported. The same
+    sentence is then reported once a word of it changes."""
+    old = _sentence(40, "old")
+    base = make_repo(tmp_path, {PROSE_DEVICE: _device(old)})
+    path = tmp_path / PROSE_DEVICE
+    path.write_text(_device(old + " " + _sentence(9, "new"), "version: 1.0.1\n"))
+    ctx = ctx_of(tmp_path, base)
+    assert PROSE_DEVICE in ctx.changed                 # the file was read, not skipped
+    res = preflight.check_prose(ctx)
+    assert res.as_dict()["status"] == "PASS", res.details
+    path.write_text(_device(old.replace("old.", "changed.")))
+    res = preflight.check_prose(ctx_of(tmp_path, base))
+    assert res.as_dict()["status"] == "WARN"
+    assert len(res.details) == 1 and "40 words" in res.details[0], res.details
+
+
+def test_prose_is_silent_on_a_long_sentence_that_only_moved_lines(tmp_path):
+    """Re-wrapping a folded block changes every line and no sentence."""
+    words = _sentence(30, "old").split()
+    base = make_repo(tmp_path, {PROSE_DEVICE: _device(" ".join(words))})
+    wrapped = " ".join(words[:11]) + "\n  " + " ".join(words[11:])
+    (tmp_path / PROSE_DEVICE).write_text(_device(wrapped))
+    ctx = ctx_of(tmp_path, base)
+    assert ctx.added[PROSE_DEVICE], "the lines did change"
+    assert preflight.check_prose(ctx).as_dict()["status"] == "PASS"
+
+
+def test_prose_does_not_count_a_quoted_vendor_sentence(tmp_path):
+    """Nine words of ours around twenty quoted from a vendor is a nine-word
+    sentence. Without the quote marks it is twenty-nine, and is reported."""
+    quote = " ".join(["vendor"] * 20)
+    base = make_repo(tmp_path, {PROSE_DEVICE: _device(_sentence(8))})
+    path = tmp_path / PROSE_DEVICE
+    path.write_text(_device(f'The guide says "{quote}" and the plate agrees with it.'))
+    assert preflight.check_prose(ctx_of(tmp_path, base)).as_dict()["status"] == "PASS"
+    path.write_text(_device(f"The guide says {quote} and the plate agrees with it."))
+    res = preflight.check_prose(ctx_of(tmp_path, base))
+    assert res.as_dict()["status"] == "WARN" and "29 words" in res.details[0], res.details
+
+
+def test_prose_reads_the_fields_an_export_carries_and_no_others(tmp_path):
+    """A configuration's description, an attrs string and a component's
+    description are read. A gap note, provenance and a file that is not a
+    manifest or a contract are not."""
+    long = _sentence(27, "long")
+    base = make_repo(tmp_path, {PROSE_DEVICE: _device(_sentence(8)),
+                                PROSE_PART: "kind: component\nname: card\n",
+                                "docs/x.md": "doc\n"})
+    (tmp_path / PROSE_DEVICE).write_text(_device(_sentence(8), textwrap.dedent(f"""\
+        configurations:
+          ac:
+            description: {long.replace("long", "config")}
+        attrs:
+          power:
+            note: {long.replace("long", "attr")}
+        gaps:
+          - id: g
+            note: {long.replace("long", "gap")}
+        provenance:
+          size: {long.replace("long", "prov")}
+        """)))
+    (tmp_path / PROSE_PART).write_text(f"kind: component\nname: card\ndescription: {long}\n")
+    (tmp_path / "docs/x.md").write_text(long + "\n")
+    res = preflight.check_prose(ctx_of(tmp_path, base))
+    assert sorted(d.split(": 27 words")[0] for d in res.details) == [
+        f"{PROSE_PART}: description",
+        f"{PROSE_DEVICE}: attrs.power.note",
+        f"{PROSE_DEVICE}: configurations.ac.description"], res.details
+
+
+def test_prose_is_silent_on_a_new_major_that_copies_the_old_text(tmp_path):
+    """A major bump is a new directory, so the whole file is added. Its
+    sentences are compared with the majors the base holds."""
+    old = _sentence(33, "old")
+    v1 = f"kind: component\nname: card\ndescription: {old}\n"
+    base = make_repo(tmp_path, {PROSE_PART: v1})
+    v2 = tmp_path / PROSE_PART.replace("/v1/", "/v2/")
+    v2.parent.mkdir(parents=True)
+    v2.write_text(v1 + "attrs:\n  note: " + _sentence(28, "fresh") + "\n")
+    res = preflight.check_prose(ctx_of(tmp_path, base))
+    assert len(res.details) == 1 and "attrs.note: 28 words" in res.details[0], res.details
+
+
+def test_a_warn_shows_in_the_report_and_leaves_the_exit_status_alone(tmp_path, capsys):
+    base = make_repo(tmp_path, {PROSE_DEVICE: _device(_sentence(8))})
+    (tmp_path / PROSE_DEVICE).write_text(_device(_sentence(26, "added")))
+    args = ["--root", str(tmp_path), "--base", base, "--only", "prose"]
+    assert preflight.main(args + ["--json"]) == 0
+    doc = json.loads(capsys.readouterr().out)
+    assert doc["ok"] is True
+    assert [(c["name"], c["status"]) for c in doc["checks"]] == [("prose", "WARN")]
+    assert preflight.main(args) == 0
+    text = capsys.readouterr().out
+    assert "WARN  prose" in text and "fix: split each" in text
+    assert text.splitlines()[-1].startswith("preflight: PASS, with advice (prose)")

@@ -9,7 +9,8 @@ exports not regenerated after a device change, a new skip reason missing from
 `spec/allowed-skips.txt`, a local path in committed text. Each one is a line
 a tool could have printed, and each round re-ran a full suite and a publish on
 a shared machine. This runs the cheap half of those gates against the diff and
-says PASS or FAIL per check, with the command that fixes it.
+says PASS or FAIL per check, with the command that fixes it. One check, `prose`,
+is advice and says PASS or WARN: a WARN never changes the exit status.
 
 WHAT IT IS NOT. It runs no build and no suite. It is the step before asking for
 review; CI is still the gate.
@@ -54,8 +55,15 @@ THE CHECKS
              itself - gets the full lint instead.
   kit        `npm test` in `kit/` when `kit/` changed, and the `spec/tests/*_js.py`
              files that name a changed kit module.
+  prose      WARN ONLY (#114). A sentence of more than 25 words that the diff
+             adds or changes in the prose a DCIM export carries: a device's
+             `description`, a configuration's `description`, a component's
+             `description`, and the string values under `attrs`. A sentence
+             the merge base already has, word for word, is never reported,
+             so the text that was there before the rule is left alone. A
+             vendor's quoted words are not counted.
 
-Exit status is 1 when any check fails. `--json` prints one document for an
+Exit status is 1 when any check fails. A WARN is not a failure. `--json` prints one document for an
 agent to read instead of the table.
 """
 import argparse
@@ -78,7 +86,8 @@ TOOLS = Path(__file__).resolve().parents[1]
 TOOLS_ROOT = TOOLS.parents[1]          # the checkout this file belongs to
 SCHEMAS = TOOLS_ROOT / "spec" / "schemas"
 
-CHECKS = ("exports", "skips", "private", "changelog", "devicelock", "lint", "kit")
+CHECKS = ("exports", "skips", "private", "changelog", "devicelock", "lint", "kit",
+          "prose")
 
 
 def _pin_toolchain():
@@ -104,13 +113,18 @@ def _pin_toolchain():
 # ------------------------------------------------------------------ results ---
 
 class Result:
-    def __init__(self, name, ok, summary, details=(), fix=None):
+    def __init__(self, name, ok, summary, details=(), fix=None, warn=False):
         self.name, self.ok, self.summary = name, ok, summary
         self.details, self.fix = list(details), fix
+        self.warn = bool(warn and ok)       # advice on a check that passed
         self.seconds = 0.0
 
+    @property
+    def status(self):
+        return "FAIL" if not self.ok else "WARN" if self.warn else "PASS"
+
     def as_dict(self):
-        return {"name": self.name, "status": "PASS" if self.ok else "FAIL",
+        return {"name": self.name, "status": self.status,
                 "summary": self.summary, "details": self.details, "fix": self.fix,
                 "seconds": round(self.seconds, 1)}
 
@@ -121,6 +135,11 @@ def passed(name, summary, details=()):
 
 def failed(name, summary, details=(), fix=None):
     return Result(name, False, summary, details, fix)
+
+
+def warned(name, summary, details=(), fix=None):
+    """Advice: the check passes, the exit status is unchanged, the lines show."""
+    return Result(name, True, summary, details, fix, warn=True)
 
 
 # --------------------------------------------------------------------- git ---
@@ -542,6 +561,134 @@ def check_changelog(ctx):
     return passed(name, f"fragment {', '.join(frags)}; every fragment well formed")
 
 
+# ------------------------------------------------------------------- prose ---
+
+# WHY HERE AND NOT IN LINT (#114). The rule is for new and changed text only,
+# and lint reads a tree, not a diff: a lint rule would fire on about two
+# thousand sentences the day it landed, or need a baseline that large. This
+# file already has the merge base, so the check compares each sentence with
+# the text the base holds and stays silent on the rest. It is a WARN because
+# sentence length is advice: a count cannot tell a long sentence that is clear
+# from one that is not.
+PROSE_MAX_WORDS = 25
+PROSE_FILE = re.compile(r"^library/(?:devices/[^/]+/[^/]+/device\.yaml"
+                        r"|components/[^/]+/[^/]+/v\d+/contract\.yaml)$")
+_SENTENCE_END = re.compile(r"""(?<=[.!?])["')\]]*\s+(?=[A-Z`"'(\[…])""")
+_PARAGRAPH = re.compile(r"\n\s*\n")
+
+
+def prose_fields(data):
+    """(key path, text) for the prose a DCIM export carries in `comments`:
+    the `description`, each configuration's `description`, and every string
+    under `attrs`. Gap notes and provenance are not read."""
+    if not isinstance(data, dict):
+        return
+    if isinstance(data.get("description"), str):
+        yield "description", data["description"]
+    configs = data.get("configurations")
+    for cname, cfg in (configs.items() if isinstance(configs, dict) else ()):
+        if isinstance(cfg, dict) and isinstance(cfg.get("description"), str):
+            yield f"configurations.{cname}.description", cfg["description"]
+
+    def strings(node, key):
+        if isinstance(node, str):
+            yield key, node
+        elif isinstance(node, dict):
+            for k, v in node.items():
+                yield from strings(v, f"{key}.{k}")
+        elif isinstance(node, list):
+            for i, v in enumerate(node):
+                yield from strings(v, f"{key}[{i}]")
+    yield from strings(data.get("attrs"), "attrs")
+
+
+def sentences(text):
+    """The sentences of `text`, whitespace collapsed, with every quoted run
+    replaced by an ellipsis. A quotation is a vendor's words, kept verbatim
+    (L107 holds its length), so it adds nothing to the count of ours. The
+    quote shapes are L107's."""
+    from portrayal import lint
+
+    def cut(m):
+        return "…" + (m.group(1)[-1:] if m.group(1)[-1:] in ".!?" else "")
+    for rx in lint._QUOTED:
+        text = rx.sub(cut, text)
+    out = []
+    for para in _PARAGRAPH.split(text):
+        for s in _SENTENCE_END.split(" ".join(para.split())):
+            if s:
+                out.append(s)
+    return out
+
+
+def word_count(sentence):
+    return sum(1 for w in sentence.split() if any(c.isalnum() for c in w))
+
+
+def _prose_at_base(ctx, rel):
+    """Every sentence the merge base holds for `rel`. A new major of a
+    component is compared with the majors the base has, so a `v2/` that copies
+    the `v1/` text does not report sentences nobody wrote in this change."""
+    import yaml
+    paths = {rel}
+    m = COMPONENT_DIR.match(rel)
+    if m and rel not in ctx.base_files:
+        stem = f"library/components/{m.group(1)}/{m.group(2)}/"
+        paths |= {p for p in ctx.base_files
+                  if p.startswith(stem) and p.endswith("/contract.yaml")}
+    known = set()
+    for p in paths & ctx.base_files:
+        try:
+            data = yaml.safe_load(git(ctx.root, "show", f"{ctx.mbase}:{p}"))
+        except yaml.YAMLError:
+            continue
+        for _, text in prose_fields(data):
+            known.update(sentences(text))
+    return known
+
+
+def long_sentences(ctx):
+    """(path, key, words, sentence) for each sentence over the limit that the
+    working tree has and the merge base does not."""
+    import yaml
+    out = []
+    for rel in ctx.changed:
+        if not PROSE_FILE.match(rel) or not (ctx.root / rel).is_file():
+            continue
+        try:
+            data = yaml.safe_load((ctx.root / rel).read_text(encoding="utf-8"))
+        except (yaml.YAMLError, UnicodeDecodeError):
+            continue                        # lint reports a file it cannot read
+        known, seen = None, set()
+        for key, text in prose_fields(data):
+            for s in sentences(text):
+                n = word_count(s)
+                if n <= PROSE_MAX_WORDS or s in seen:
+                    continue
+                if known is None:
+                    known = _prose_at_base(ctx, rel)
+                seen.add(s)
+                if s not in known:
+                    out.append((rel, key, n, s))
+    return out
+
+
+def check_prose(ctx):
+    name = "prose"
+    files = [p for p in ctx.changed if PROSE_FILE.match(p)]
+    found = long_sentences(ctx)
+    if found:
+        lines = [f"{rel}: {key}: {n} words: {' '.join(s.split()[:8])} ..."
+                 for rel, key, n, s in found]
+        return warned(name, f"{len(found)} new or changed sentence(s) over "
+                            f"{PROSE_MAX_WORDS} words", lines,
+                      f"split each into sentences of {PROSE_MAX_WORDS} words or fewer; "
+                      "a quoted vendor sentence stays as it is - CONTRIBUTING.md, "
+                      "'Preflight, before you ask for review'")
+    return passed(name, f"{len(files)} changed manifest(s) and contract(s) read, no new "
+                        f"or changed sentence over {PROSE_MAX_WORDS} words")
+
+
 # -------------------------------------------------------------- devicelock ---
 
 LOCK = re.compile(r"^library/devices/([^/]+/[^/]+)/device\.lock\.json$")
@@ -887,7 +1034,8 @@ def check_kit(ctx):
 
 RUNNERS = {"exports": check_exports, "skips": check_skips, "private": check_private,
            "changelog": check_changelog, "devicelock": check_devicelock,
-           "lint": check_lint, "kit": check_kit}
+           "lint": check_lint, "kit": check_kit,
+           "prose": check_prose}
 
 
 def run(ctx, only=CHECKS):
@@ -907,7 +1055,7 @@ def run(ctx, only=CHECKS):
 def render_text(results, base, mbase, n_changed, seconds):
     lines = [f"preflight: {n_changed} changed file(s) against {base} ({mbase[:12]})"]
     for r in results:
-        lines.append(f"{'PASS' if r.ok else 'FAIL'}  {r.name:<10}  {r.summary}  "
+        lines.append(f"{r.status}  {r.name:<10}  {r.summary}  "
                      f"({r.seconds:.1f}s)")
         # a FAIL's details are the findings; a PASS carries details only when
         # it has something to declare (the kit's skipped tests)
@@ -915,11 +1063,14 @@ def render_text(results, base, mbase, n_changed, seconds):
             lines.append(f"        {d}")
         if len(r.details) > 25:
             lines.append(f"        ... and {len(r.details) - 25} more")
-        if not r.ok and r.fix:
+        if (not r.ok or r.warn) and r.fix:
             lines.append(f"        fix: {r.fix}")
     bad = [r.name for r in results if not r.ok]
-    lines.append(f"preflight: {'FAIL (' + ', '.join(bad) + ')' if bad else 'PASS'} "
-                 f"in {seconds:.1f}s")
+    soft = [r.name for r in results if r.warn]
+    verdict = "FAIL (" + ", ".join(bad) + ")" if bad else "PASS"
+    if soft:
+        verdict += f", with advice ({', '.join(soft)})"
+    lines.append(f"preflight: {verdict} in {seconds:.1f}s")
     return "\n".join(lines)
 
 
