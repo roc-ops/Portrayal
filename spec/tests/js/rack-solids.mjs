@@ -22,6 +22,20 @@ const before = (rack, c, ctx) => {
   return out;
 };
 const tag = x => `${x.solid.item}:${x.solid.part}`;
+// Every point 0.5 mm apart along every leg of a path: what a check of the
+// cable, and not only its corners, reads (#968: a leg whose two ends were
+// clear ran across a PDU's outlet face between them).
+function samples(points, step = 0.5) {
+  const out = [];
+  for (let k = 1; k < points.length; k++) {
+    const p = points[k - 1], q = points[k];
+    const n = Math.max(1, Math.ceil(Math.hypot(q.x - p.x, q.y - p.y, q.z - p.z) / step));
+    for (let j = 0; j <= n; j++) out.push({x: p.x + (q.x - p.x) * j / n, y: p.y + (q.y - p.y) * j / n, z: p.z + (q.z - p.z) * j / n});
+  }
+  return out;
+}
+const distTo = (p, b) => Math.hypot(Math.max(b.x0 - p.x, 0, p.x - b.x1), Math.max(b.y0 - p.y, 0, p.y - b.y1),
+  Math.max(b.z0 - p.z, 0, p.z - b.z1));
 
 // The owner's rack, with a switch far below (U5) whose cable is routed by hand
 // through ring 2 of the lacer. Since the automatic route runs a patch along
@@ -296,8 +310,13 @@ test('a cable to the lane beside a rear PDU goes round it on the rack side, neve
   // port reaches past the PDU's outlet plane (cat6, 39.4 behind the rail,
   // #960), so the cable starts behind it: inboard of the PDU, beside it, and
   // never across its face
-  const over = p.points.filter(q => q.z < box.z0 - 1e-9 && q.x > box.x0 - 1e-9 && q.x < box.x1 + 1e-9);
-  assert.deepEqual(over, [], JSON.stringify(over));
+  // (every sample of every leg, not only its corners, #968; and none within
+  // the cable's radius of the PDU)
+  const all = samples(p.points), rad = R.DIAMETERS.cat6 / 2;
+  assert.ok(all.length > 1000, `${all.length} samples`);
+  const over = all.filter(q => q.z < box.z0 - 1e-9 && q.x > box.x0 - rad && q.x < box.x1 + rad);
+  assert.deepEqual(over, [], JSON.stringify(over.slice(0, 3)));
+  assert.deepEqual(all.filter(q => distTo(q, box) < rad - 1e-6), []);
   const behind = p.points.filter(q => q.z < box.z0 - 1e-9);
   assert.deepEqual(behind.map(q => [q.at, q.z]), [['reach', -779.4], ['detour', -779.4], ['detour', -779.4], ['reach', -779.4]]);
   // it goes round on the rack side instead, in front of the PDU
@@ -326,14 +345,47 @@ test('the mirror: a front PDU, on a four-post and on a two-post, is gone round b
     // no point of the path lies over its outlet face: the plugs reach past
     // its outlet plane (cat6, 39.4 out, #960), so the cable starts in front
     // of it, inboard of the PDU, and goes round behind it from there
-    const over = p.points.filter(q => q.z > box.z1 + 1e-9 && q.x > box.x0 - 1e-9 && q.x < box.x1 + 1e-9);
-    assert.deepEqual(over, [], `${kind}: ${JSON.stringify(over)}`);
+    // (every sample of every leg, not only its corners, #968; and none
+    // within the cable's radius of the PDU)
+    const all = samples(p.points), rad = R.DIAMETERS.cat6 / 2;
+    assert.ok(all.length > 1000, `${kind}: ${all.length} samples`);
+    const over = all.filter(q => q.z > box.z1 + 1e-9 && q.x > box.x0 - rad && q.x < box.x1 + rad);
+    assert.deepEqual(over, [], `${kind}: ${JSON.stringify(over.slice(0, 3))}`);
+    assert.deepEqual(all.filter(q => distTo(q, box) < rad - 1e-6), [], kind);
     const ahead = p.points.filter(q => q.z > box.z1 + 1e-9);
     assert.deepEqual(ahead.map(q => q.at), ['reach', 'detour', 'detour', 'reach'], kind);
     assert.ok(ahead.every(q => q.z === 39.4 && q.x > box.x1), kind);
     // it goes round behind the PDU, the side facing into the rack
     assert.ok(p.detours.every(d => d.points.some(q => q.z < box.z0)), `${kind}: ${JSON.stringify(p.detours)}`);
   }
+});
+
+test('a cord from the lacer\'s end ring to the lane beside a front PDU never runs in front of its outlet face', () => {
+  // #968: the owner's rack with a zero-U PDU on the left-front upright,
+  // standing in the gutter beside the lacer's ring 1 (-209.2 to -202.4). c7
+  // to c11 leave ring 1 from its approach point (-215.7, 73.7 out) for the
+  // lane outboard of the PDU (U11). A straight leg from there to the lane
+  // cleared the PDU's front corner by a fraction of a millimetre with its
+  // centre line and ran its tube across the outlet face; a zero-U part is met
+  // by the cable's tube, so the leg goes round behind it
+  const {rack, ctx} = pdu('left-front');
+  const box = S.solidsOf(rack, ctx).find(x => x.item === 'z2').box;
+  assert.ok(box.z1 > 0, JSON.stringify(box));
+  let read = 0, viaRing1 = 0;
+  for (const c of rack.cables.filter(x => ['c7', 'c8', 'c9', 'c10', 'c11'].includes(x.id))) {
+    const p = R.routePath(rack, c, ctx), r = R.DIAMETERS[c.media] / 2;
+    assert.deepEqual(p.crossings, [], c.id);
+    viaRing1 += p.points.some(q => q.at === 'approach' && q.via === 'guide-1') && p.points.some(q => q.at === 'lane') ? 1 : 0;
+    const all = samples(p.points);
+    read += all.length;
+    const ahead = all.filter(q => q.z > box.z1 + 1e-9 && q.x > box.x0 - r && q.x < box.x1 + r);
+    assert.deepEqual(ahead, [], `${c.id}: ${JSON.stringify(ahead.slice(0, 3))}`);
+    const near = all.filter(q => distTo(q, box) < r - 1e-6);
+    assert.deepEqual(near, [], `${c.id}: ${JSON.stringify(near.slice(0, 3))}`);
+  }
+  // it looked: all five pass ring 1 to the lane, and every leg was sampled
+  assert.equal(viaRing1, 5);
+  assert.ok(read > 5000, `${read} samples`);
 });
 
 // ── what the rules cannot clear ────────────────────────────────────────────

@@ -325,8 +325,10 @@ A ring is solid round its opening (#968, docs/cable-lay-design.md section
 `ring/<id>/<part>` (`rear-leg`, `front-leg`, `hook`, `bar`, `seat`), and
 `solidsOf` places them with the other solids. A cable passes a ring close by
 on purpose, so `legCrossings` and `detour` meet a ring's part with the
-cable's tube, the part grown by its radius, where every other body is met by
-its centre line. Since 0.15.0 every pass through a ring whose opening is
+cable's tube, the part grown by its radius; so is a zero-U part (a PDU
+standing in the gutter), whose corner a leg to the lane beside it passes close
+by, so that no leg runs across its outlet face. Every other body is met by its
+centre line. Since 0.15.0 every pass through a ring whose opening is
 placed starts and ends at an **approach point** on the run outside the ring's
 band, the cable's radius and `CLEAR` past it, at the opening's height and
 across position (`at: 'approach'`); a detour or a leg from behind or below
@@ -334,10 +336,13 @@ ends there, so the cable enters through the opening, and a ring the route
 would double back at is gone to as far as that point. `bodyFindings` names a
 ring's part ("c9 passes through CM-01 ring 3 front leg ...: route it into the
 ring along its run, through its opening."). **Routed lengths change in
-0.15.0** on every routed cable through a ring on a tray: a few mm where the
-cable already came to the ring along its run, and up to some 40 mm where it
-came down into the ring past its port and now goes over the ring to the
-approach point on its far side.
+0.15.0** on every routed cable through a ring on a tray, and beside a zero-U
+PDU. On the owner's rack of #949 they grow 2 to 38 mm. On a sample of 3,120
+generated cables they move from 89 mm shorter to 131 mm longer (median 10
+mm longer): longer where a cable now goes over a ring to its approach point,
+or round a PDU it grazed; shorter where a detour that went round a tray's
+front edge to a ring's face can end at the approach point by a shorter way.
+67 change stock size up and 67 down.
 
 To change a rack by name rather than by function, use the command core:
 `createRackEditor({ doc, chassisOf })` applies `place`, `move`, `patch`,

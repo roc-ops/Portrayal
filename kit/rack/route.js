@@ -703,12 +703,14 @@ function alongTray(rack, t, prev, next, cable, ctx, r) {
   const between = opens.filter(o => Math.min(o.box[`${run}1`], Math.max(a, b)) > Math.max(o.box[`${run}0`], Math.min(a, b)) + 1e-6)
     .sort((p, q) => (a <= b ? p.box[`${run}0`] - q.box[`${run}0`] : q.box[`${run}0`] - p.box[`${run}0`]));
   // each ring from its approach point, clear of its band (#968), through its
-  // opening on its sill, to the approach point past its far face
+  // opening on its sill, to the approach point past its far face. The
+  // approach points are not clamped to the floor: they stand at the sill,
+  // and a ring at the floor's end would have one pulled back into its band
   const dir = a <= b ? 1 : -1, off = r + CLEAR;
   for (const o of between) {
     const [near, far] = a <= b ? [o.box[`${run}0`], o.box[`${run}1`]] : [o.box[`${run}1`], o.box[`${run}0`]];
     const y = o.box.y0 + r;
-    points.push(pt(clamp(near - dir * off), y), pt(clamp(near), y), pt(clamp(far), y), pt(clamp(far + dir * off), y));
+    points.push(pt(near - dir * off, y), pt(clamp(near), y), pt(clamp(far), y), pt(far + dir * off, y));
     hold.push(false, true, true, true);
   }
   if (Math.abs(b - a) > 1e-6 || points.length > 1) { points.push(pt(b, floorY)); hold.push(false); }

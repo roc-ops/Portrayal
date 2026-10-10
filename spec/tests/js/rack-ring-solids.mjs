@@ -224,3 +224,26 @@ test('a ring a route would double back at is gone to as far as its approach poin
   assert.deepEqual(clips(p.points, S.solidsOf(r, ctx).filter(isRing)).out, []);
   assert.deepEqual(R.ringFindings(r, ctx).map(f => f.via), ['guide-3']);
 });
+
+test('a ring at the end of the tray keeps its approach point outside its band', () => {
+  // the lacer with its floor cut back to start at ring 1's band (device x
+  // 32.3, rack -209.2), and a cord along the tray from the upper leaf's port
+  // 49 (88.3) to a panel port far to the left (-300): the stretch ends at the
+  // floor's end, which is ring 1's near face as the cord passes it, and the
+  // approach point past its far face stands 6.5 mm (the radius and CLEAR)
+  // beyond it, off the floor, not pulled back onto the band
+  const r = F.rack(), base = F.ctxOf(r);
+  const cut = ch => ({...ch, trays: ch.trays.map(t => ({...t, floor: t.floor.map(f => (f.w > 400 ? {...f, x: 32.3, w: f.w - 15} : f))
+    .filter(f => f.w > 400)}))});
+  const ctx = {...base, chassisOf: ref => (ref === 'fhd-cmp5dr' ? cut(base.chassisOf(ref)) : base.chassisOf(ref)),
+    portX: e => (e.item === 'i2' ? -300 : base.portX(e))};
+  const [t] = S.traysOf(r, ctx);
+  near(Math.min(...t.floors.map(f => f.x0)), -209.2, 'the floor starts at ring 1');
+  const c = {...r.cables[0], route: [{item: 'i4', via: 'tray'}], routeEdited: true};
+  const p = R.routePath(r, c, ctx);
+  const tray = p.points.filter(q => q.at === 'tray');
+  const sill = tray.filter(q => Math.abs(q.y - (t.rings[0].box.y0 + r15)) < 1e-9).map(q => Math.round(q.x * 10) / 10);
+  // rings 3, 2 and 1, each from approach to approach
+  assert.deepEqual(sill.slice(-4), [-195.9, -202.4, -209.2, -215.7]);
+  assert.equal(sill.length, 12);
+});

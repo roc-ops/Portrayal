@@ -634,8 +634,16 @@ front edge to the ring's face, ran along the face and grazed both legs.
   purpose, so `legCrossings` takes each part grown by the cable's radius, and
   a leg that would graze one crosses it; `detour` goes round the grown part.
   A cable on the sill against the rail-side leg runs along the faces of the
-  grown parts and crosses nothing. Every other body is met by the centre line,
-  as in 1.2.
+  grown parts and crosses nothing. A zero-U part is met by the tube as well:
+  with the approach point a few mm further along than the ring's face, a leg
+  from a lacer's end ring to the lane beside a zero-U PDU cleared the PDU's
+  corner by a fraction of a millimetre with its centre line and ran its tube
+  across the outlet face, which rule 4 of 1.3 keeps for the last resort.
+  Every other body is met by the centre line, as in 1.2. Meeting every body
+  by the tube was measured on a sample of 3,120 generated cables: it
+  lengthened routes on racks with no PDU by up to 276 mm, and reported every
+  cable as crossing a body, since a plug leaves its port on the face of the
+  device it is plugged into.
 - **The approach point.** Every pass through a ring whose opening is placed
   starts from a point on the run outside the band, the cable's radius and
   `CLEAR` past it, at the opening's height and across position, and ends at
@@ -645,7 +653,10 @@ front edge to the ring's face, ran along the face and grazed both legs.
   ring or round it, as the detours of 1.3 find, and enters through the
   opening along the run. A tray stretch through a ring takes the same two
   points, and a ring a route would double back at (a finding) is gone to as
-  far as its approach point, not its face.
+  far as its approach point, not its face: the path's `face` point stands
+  back from the ring's own `face` (in `rings`), which stays on the band. On a
+  tray stretch the approach points are not clamped to the floor, so a ring at
+  the floor's end keeps its approach point outside its band.
 - **The relief agrees with the guide.** The snap-in ring's relief drew each
   leg 6.8 mm thick in the plane of the loop, so its opening was 30.0 where the
   guide's is 32.0, and the sill point stood 1 mm inside the rear leg. The
@@ -1463,7 +1474,9 @@ published file or a saved rack file uses it.
 | ring `guide.depth`, `guide.sill`, `guide.aperture.at` | component contracts | parts state them; the kit and compiled drawings read them |
 | ring `guide.wall`, `guide.height`, `guide.slit`, and `data-guide-wall`, `data-guide-height`, `data-guide-slit` (#968) | component contracts, drawings | parts state them; rack.json derives a ring's solids from the compiled attributes |
 | a ring's solids in rack.json `solids`, named `ring/<id>/<part>` with `rear-leg`, `front-leg`, `left-leg`, `right-leg`, `hook`, `bar`, `seat` (#968) | the rack catalogue, kit, findings | the kit reads them, findings and pages name the parts by them |
-| a ring's part met by the cable's tube in `legCrossings` and `detour`, the approach point (`at: 'approach'`) clear of the band by the radius and `CLEAR` (#968) | kit API | a page checking its tubes and the routed lengths of saved racks follow it |
+| a ring's part, and a zero-U part, met by the cable's tube in `legCrossings` and `detour`, the approach point (`at: 'approach'`) clear of the band by the radius and `CLEAR` (#968) | kit API | a page checking its tubes and the routed lengths of saved racks follow it |
+| a doubled-back ring's path `face` point at its approach point, apart from the ring's own `rings[].face` on the band (#968) | kit API | a page that draws the face point, or compares the two, reads them by these names |
+| the ring advice in `bodyFindings`, "route it into the ring along its run, through its opening", and a ring's part named as "ring N front leg" (#968) | kit API, agent output, exports | agents and the export notes match the sentence |
 | `data-class="tray"` | drawings | consumers of the drawing read it |
 | `solids` and `trays` in `rack.json` | the rack catalogue | the kit reads them; additive, so `format` stays 1 |
 | the narrowed rule 7 of the modelling guide | library policy | parts modelled under it carry their cable management |
@@ -1477,7 +1490,7 @@ published file or a saved rack file uses it.
 | the ranking of `managerOf` (hosted, then a standalone manager, with its tie-break by port row, then a manager on a neighbour, then a neighbour with guides) | kit | automatic routes of saved racks follow it, and their routed lengths with them |
 | the version-4 table of the rack products note gaining `states`, `readings`, the PDU bracket key, `slack`, `lay` and `roll` | `docs/rack-products-design.md` section 9, rack file version 4 | one bump carries them all; a key left out needs a version 5 |
 | the stored slack counting in the routed length | kit | a saved routed length and stock size depend on it |
-| routed lengths changing on saved racks: detours, the plug's reach (1.5), cables resting at the floor and at the ring sill, positions in the lay, the face of each tray, slack | kit | stored routed lengths and stock sizes move on the next measure; an ordered stock length may no longer match |
+| routed lengths changing on saved racks: detours, the plug's reach (1.5), cables resting at the floor and at the ring sill, ring passes from approach points and solid rings and zero-U parts met by the tube (3.3), positions in the lay, the face of each tray, slack | kit | stored routed lengths and stock sizes move on the next measure; an ordered stock length may no longer match |
 | the lane moving outboard of a zero-U part that stands in the gutter and carries no lane (a zero-U PDU), and routed lengths changing beside one | kit (`laneXAt`), drawings | every route on that lane is longer, and a saved length moves on the next measure; a drawing that places lanes itself must follow |
 | the reach point (`at: 'reach'` with `end`) in `routePath`, `ctx.plugReachOf` and `PLUG_REACH` (the helpers that compute them stay internal), and the end allowance as dressing slack with the plug in the path (1.5) | kit API | a page passes `plugReachOf` and reads the points by these names; moving the plug into the allowance later would change every length again |
 | `crosses-body` (with `part` and, for a held-face stack, `face`), `unheld` and the tray findings, `bodyFindings` | kit API, agent output | agents and pages read the kinds |

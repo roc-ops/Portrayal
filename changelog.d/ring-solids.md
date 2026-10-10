@@ -15,16 +15,20 @@
   (`@portrayal/kit` 0.15.0, #968). `solidsOf` places a ring's parts with the
   other solids; `legCrossings` and `detour` meet them with the cable's tube,
   the part grown by its radius, so a leg that would graze a leg or the bar is
-  gone round. Every pass through a ring whose opening is placed starts and
+  gone round. A zero-U part (a PDU in the gutter) is met by the tube too, so
+  a leg to the lane beside it never runs across its outlet face. Every pass through a ring whose opening is placed starts and
   ends at an approach point on the run outside the band, the cable's radius
   and `CLEAR` past it (`at: 'approach'`), so a detour or a leg from behind or
   below ends there and the cable enters along the run; a ring a route would
-  double back at is gone to as far as that point. `bodyFindings` names the
-  part ("ring 3 front leg") and says to route the cable into the ring along
-  its run. **ONE-WAY: routed lengths change on saved racks.** On the owner's
-  rack of #949 the upper leaf's cords grow 10 to 38 mm (five now go over
-  their ring to the approach point on its far side) and the lower leaf's 2 to
-  6 mm; c2 and c3 pass the 0.5 m stock break. A saved rack's routed lengths
+  double back at is gone to as far as that point (the path's `face` point,
+  where the ring's own `face` stays on the band). `bodyFindings` names the
+  part ("ring 3 front leg") and says to "route it into the ring along its
+  run, through its opening". **ONE-WAY: routed lengths change on saved
+  racks.** On the owner's rack of #949 the upper leaf's cords grow 10 to 38
+  mm (five now go over their ring to the approach point on its far side) and
+  the lower leaf's 2 to 6 mm; c2 and c3 pass the 0.5 m stock break. On a
+  sample of 3,120 generated cables, lengths move from 89 mm shorter to 131
+  mm longer (median 10 mm longer), 67 stock sizes up and 67 down. A saved rack's routed lengths
   and stock sizes are re-measured the next time a page measures them; an
   entered length is never touched.
 
