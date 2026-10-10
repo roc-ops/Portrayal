@@ -14,6 +14,7 @@ import * as Rest from '../../../kit/rack/resting.js';
 import * as B from '../../../kit/rack/bundles.js';
 import {cornersOf, STRAIGHT_DEG} from '../../../kit/rack/route-path.js';
 import * as F from './route-direct-fixture.mjs';
+import * as G from './cable-solids-fixture.mjs';
 import {tightCorners, byCause} from './bend-corners-probe.mjs';
 
 const P = (x, y, z = 0) => ({x, y, z});
@@ -178,6 +179,51 @@ test('a detour leaves each end\'s move to its plane room for two bends', () => {
   const wall = {item: 'w', part: 'body', box: {x0: -50, x1: 50, y0: -40, y1: 60, z0: 112, z1: 140}, holes: []};
   const kept = S.detour(a, b, [plate, wall], {diameter: 3, room: 50});
   assert.deepEqual(kept.map(q => q.z), [106.5, 106.5]);
+});
+
+test('an approach point does not move out where that would free its leg to run in front of a zero-U part', () => {
+  // the rack of rack-solids.mjs: a switch at U5 with no manager, so c7 runs
+  // from the switch below the lacer out through ring 1 to the left lane and
+  // down. With no PDU its approach point past ring 1 stands 25 mm from the
+  // band. With a zero-U PDU on that upright the lane runs outboard of it,
+  // and a leg from there to the lane clears the PDU's corner by a fraction
+  // of a millimetre and runs across its outlet face, which section 1.3 keeps
+  // for the last way round: so the point keeps the radius and CLEAR, and the
+  // leg from it, which meets the PDU, is taken behind it as before
+  const base = G.add(G.ownerRack(), 'sw', 5, {label: 'sw-low'});
+  const c7 = G.cable('c7', G.OWNER_CABLES[0].a, G.end('i5', 'p100'));
+  const ctx = () => G.ctxOf({ports: {i5: {p100: -100}}});
+  const past = (rack, cx) => {
+    const p = R.routePath(rack, c7, cx), k = p.points.findIndex(q => q.at === 'exit' && q.via === 'guide-1');
+    return [p, r1(Math.abs(p.points[k + 1].x - p.points[k].x))];
+  };
+  const [open, off] = past({...base, cables: [c7]}, ctx());
+  assert.equal(off, 25);
+  assert.deepEqual([open.crossings, open.bends], [[], []]);
+  const rack = {...base, cables: [c7], zeroU: [{id: 'z2', ref: 'pdu', cfg: 'base', at: 'left-front', offsetMm: 0}]}, cx = ctx();
+  const [p, kept] = past(rack, cx);
+  assert.equal(kept, 6.5);
+  assert.deepEqual([p.crossings, p.bends], [[], []]);
+  // no point of the cord, every half millimetre along it, stands in front
+  // of the PDU's outlet face
+  const box = S.solidsOf(rack, cx).find(x => x.item === 'z2').box;
+  let read = 0;
+  for (let k = 1; k < p.points.length; k++) {
+    const u = p.points[k - 1], v = p.points[k], n = Math.max(1, Math.ceil(gap(u, v) / 0.5));
+    for (let j = 0; j <= n; j++) {
+      const q = {x: u.x + (v.x - u.x) * j / n, z: u.z + (v.z - u.z) * j / n};
+      read++;
+      assert.ok(!(q.z > box.z1 + 1e-9 && q.x > box.x0 - 1.5 && q.x < box.x1 + 1.5), `leg ${k}: ${JSON.stringify(q)}`);
+    }
+  }
+  assert.ok(read > 2000, `${read} samples`);
+  // and it is the guard that keeps it so: the leg from a point 25 mm out
+  // does pass in front of the face, clear of the part
+  const exit = p.points.find(q => q.at === 'exit' && q.via === 'guide-1'), lane = p.points.find(q => q.at === 'lane');
+  const from = {...exit, x: exit.x - 25};
+  assert.deepEqual(S.legCrossings(from, lane, S.solidsOf(rack, cx), {diameter: 3}), []);
+  const t = (box.x1 - from.x) / (lane.x - from.x);
+  assert.ok(from.z + (lane.z - from.z) * t > box.z1, 'in front of the face');
 });
 
 // ── a hang ───────────────────────────────────────────────────────────────
