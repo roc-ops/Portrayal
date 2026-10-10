@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: qsfp-dd-mpo16
-version: 1.0.1
+version: 1.0.2
 class: transceiver
 behaviour: occupies
 mates: qsfp-dd
@@ -29,7 +29,7 @@ fields:
   latch-color:
     label: Latch colour
     type: text
-    default: '#d9cba3'
+    default: '#6f6f6f'
   label:
     label: Module label
     type: text
@@ -109,12 +109,17 @@ provenance:
     where FluxLight differs. generic/qsfp-dd-lc@2 keeps the Type 1 handle on
     its Type 1 head.
   tab-colour: >-
-    A FIELD, and the default is BEIGE because the code says so for this face.
-    QSFP-DD HW Rev 6.3 section 6.3 recommends colour coding the pull tab by
-    wavelength - beige for 850 nm, blue for 1310 nm, white for 1550 nm - and
-    a single-row MPO-16 face is the multimode parallel face. The document
-    names the colour and not a value: #d9cba3 is a representative beige,
-    estimated. A vendor wrapper sets `latch-color` where its module differs.
+    A FIELD, and the default is the NEUTRAL GREY (#6f6f6f) the composed
+    common/qsfp-dd-pull-tab-type2@1 and generic/osfp-mpo16@1 already carry,
+    because a chromatic default is a claim about a wavelength and this generic
+    stands for modules of more than one (#773). QSFP-DD HW Rev 6.3 section 6.3
+    recommends colour coding the pull tab by wavelength - beige for 850 nm,
+    blue for 1310 nm, white for 1550 nm. A single-row MPO-16 face is the face
+    of the multimode SR8 parallel optics, and also of single-mode DR8 modules
+    at 1310 nm, so the beige default 1.0.0 and 1.0.1 carried drew every DR8 as
+    850 nm until a wrapper said otherwise. The wavelength is the wrapper's
+    fact (L99), so the wrapper states the colour: beige for an SR8, blue for a
+    DR8.
 parts:
   - {ref: std/mpo16-module-receptacle@1, id: mpo16, at: [2.725, 0.25], lift: 31.9}
   - {ref: common/qsfp-dd-pull-tab-type2@1, id: tab, at: [0.0, -3.13], lift: 31.9}
