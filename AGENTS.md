@@ -50,7 +50,9 @@ python3 spec/tools/portrayal/preflight.py --json               # seconds, no bui
 Preflight checks the diff against `origin/main` for what review rounds keep
 finding: stale exports, an unallowed skip reason, private paths, a missing
 changelog fragment, lock and lint findings, and `kit` tests. Every FAIL line
-names the command that fixes it. CONTRIBUTING.md has the table.
+names the command that fixes it. A WARN line is advice and does not fail: the
+`prose` check warns on a new or changed sentence over 25 words in a
+description or an `attrs` string. CONTRIBUTING.md has the table.
 
 Run them from the checkout you changed. `build.sh` and `publish.sh` make the
 tools import this checkout's `portrayal`. When you call a tool directly, put

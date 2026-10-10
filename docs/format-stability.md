@@ -687,7 +687,8 @@ major is deprecated for at least one release before it is removed. The
 deprecation is the `superseded-by:` key the schema already has, on the
 retired major's contract, naming the ref that replaces it. L89 telling a
 superseded major that still ships from a dead one is pending
-(roc-ops/Portrayal#448).
+(roc-ops/Portrayal#448). The whole mechanism is required before 1.0: the
+marker, a stated support window, and the L89 distinction.
 DESIGN §9 has the reasoning.
 
 **A lint code.** A device manifest waives a rule by its code (`lint.waive`),
