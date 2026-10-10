@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: fhu-bpad-4u
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: FS.com
 model: FHU-BPAD-4U
@@ -65,9 +65,15 @@ provenance:
       side of the straight rib; the cosine puts its lows at 86, 238 and 390, the middle one 9
       mm left of the render's - an estimate of the shape, not a measurement of it.
   mark:
-    confidence: drawing
+    confidence: photo-measured
     note: >-
-      FS's mark in each badge is a logo and is not drawn.
+      FS's mark in each badge is a logo and is not drawn. Its place is reserved as one region per
+      unit, `logo-zone-1` to `logo-zone-4`, inside the drawn recess. On the straight-on render g2,
+      calibrated on the plate at 2.75 px/mm across and 2.77 down, the four marks read y 5.4, 49.8,
+      94.1 and 138.1, each 8.7 tall, and x 27.3 to 46.2 across the four (the render leans by about a
+      millimetre top to bottom). They are placed at 0.3 below the top of each recess this file
+      already draws, at the x and size read on the render of the 2U sibling, where the same moulding is
+      larger in the frame: 27.8 to 45.8 across and 8.6 tall.
   pin-mark:
     confidence: photo-measured
     note: >-
@@ -162,6 +168,11 @@ views:
       - {id: clip-head-l4, at: [0.0, 142.975], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
       - {id: clip-head-r4, at: [478.0, 142.975], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3,
         kind: clip-head}
+    regions:
+    - {id: logo-zone-1, at: [27.8, 5.4], size: {w: 18.0, h: 8.6}, label: 'FS mark; not drawn'}
+    - {id: logo-zone-2, at: [27.8, 49.65], size: {w: 18.0, h: 8.6}, label: 'FS mark; not drawn'}
+    - {id: logo-zone-3, at: [27.8, 93.9], size: {w: 18.0, h: 8.6}, label: 'FS mark; not drawn'}
+    - {id: logo-zone-4, at: [27.8, 138.15], size: {w: 18.0, h: 8.6}, label: 'FS mark; not drawn'}
   rear:
     size: {w: 482.6, h: 177.0}
     panel:

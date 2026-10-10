@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: fhu-bpstl-1u-10
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: FS.com
 model: FHU-BPSTL-1U-10
@@ -69,9 +69,13 @@ provenance:
       is taken as centred in the rack units it fills, so a hole's height on the plate is its height
       in the units less half the difference between the units and the plate.
   mark:
-    confidence: drawing
+    confidence: photo-measured
     note: >-
-      FS prints its mark beside the left clip; it is a logo and is not drawn.
+      FS prints its mark beside the left clip; it is a logo and is not drawn. Its place is reserved
+      as the region `logo-zone`: on the straight-on gallery render of SKU 181854 (g4), calibrated on
+      the plate at 3.13 px/mm across and 3.17 down, the mark runs x 55.3 to 67.4 and y 20.5 to 26.5.
+      The two scales agree to 1.4 percent, which is the only check this face offers; the mark is
+      printed grey on black and its edge is read at 25 levels over the plate.
   color:
     confidence: photo-measured
     note: >-
@@ -148,6 +152,8 @@ views:
       placements:
       - {ref: fs/bpstl-clip@1, id: clip-1, at: [16.8, 11.35], group: clips, rel-pos: 1}
       - {ref: fs/bpstl-clip@1, id: clip-2, at: [435.8, 11.35], rotate: 180, group: clips, rel-pos: 2}
+    regions:
+    - {id: logo-zone, at: [55.3, 20.5], size: {w: 12.1, h: 6.1}, label: 'FS mark; not drawn'}
   rear:
     size: {w: 482.6, h: 43.8}
     panel:

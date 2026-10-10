@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: eps122
-version: 2.0.8
+version: 2.0.9
 maturity: modelled
 manufacturer: Edgecore
 model: AS4625-54P
@@ -93,6 +93,22 @@ provenance:
       THE ENLARGEMENT IS OF THIS MODEL - it is captioned AS4625-54P - so the six lamps and
       their legends are read rather than inherited. Its sibling the EPS121 is the one with
       the doubt: it has no PoE, and no enlargement of its own.
+  logo:
+    confidence: photo-measured
+    note: >-
+      THE LOGOTYPE ON THE STATUS PLATE IS RESERVED, NOT DRAWN. The guide's Status LEDs
+      enlargement prints the vendor logotype - a row of nine outlined tiles, the first and
+      last red - at the left of the black plate, over the model number. Measured on that
+      enlargement as embedded in the quick start (1034 x 280 px), calibrated on the six port
+      legends it draws (`1 (up)(down) 2` through `11 (up)(down) 12`) at 11.12 px/mm, with the
+      chassis top edge at px 7.5: the row runs px 319 to 487 across and 32 to 61 down, which is
+      x 28.1 to 43.2 and y 2.2 to 4.8. The Reset button is the check both ways: the same
+      calibration puts its centre at x 45.4 and y 5.8, against the 45.4 and 6.1 this file
+      already holds. The row is 5.8 times as wide as it is tall, as it is on the DCS240
+      elevation (5.7).
+      The enlargement is captioned AS4625-54P, which is this model.
+      The black plate is the real plate the lamps sit on and stays drawn; the region
+      `logo-zone` holds the box of the logotype and nothing is drawn in it.
   power:
     confidence: datasheet
     note: >-
@@ -387,6 +403,8 @@ views:
       - {ref: common/led-rect-sm@1, id: led-poe, at: [67.5, 7.1], group: leds, rel-pos: 6, for: chassis, states: ['off', {name: ok, color: '#22c55e'}, {name: near-budget, color: '#f59e0b'}]}
       - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.25], skin: left, optional: ears, group: furniture, rel-pos: 1}
       - {ref: common/rack-ear@1, id: ear-right, at: [440, 0.25], skin: right, optional: ears, group: furniture, rel-pos: 2}
+    regions:
+    - {id: logo-zone, at: [28.1, 2.2], size: {w: 15.1, h: 2.6}, label: 'Vendor logotype; not drawn'}
   rear:
     size: {w: 440.0, h: 44.45}
     panel:

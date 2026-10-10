@@ -131,7 +131,10 @@ Three layers:
    schema already has, on the retired major's contract, naming the ref that
    replaces it: one key for the fact, not a second marker beside it. L89
    telling a superseded major that still ships from a dead one is pending
-   (roc-ops/Portrayal#448). Inside the repository, L89 still fails on a
+   (roc-ops/Portrayal#448). The 0.x rule was chosen on 2026-10-10 over
+   building the deprecation first. The whole mechanism is required before 1.0:
+   the marker, a stated support window, and the L89 distinction. 1.0 is not cut
+   without the three. Inside the repository, L89 still fails on a
    superseded major that nothing references — it will not accept
    an `unplaced:` sentence from a major that a newer live major supersedes.
    There is one exception, and it is the reason the check asks whether anything
@@ -282,6 +285,11 @@ in the descriptions because they are history, not definition.
 - **`optical.front-order` is stated, not guessed, on a multi-row face.**
   Guessing a numbering rule from the one multi-row sample the library held is
   how the 12.90-versus-13.2 pitch confusion started.
+- **A combine is declared, with `combine` on the path.** Two strands in one
+  bore stay an error everywhere else, and a destination that is a list
+  already means a split, so the opposite shape gets its own keyword. A path
+  records the way the light travels; the fibre map is a binding and does not
+  (#246).
 - **`lift` on decor and on a placement** exists because `relief.features` had
   carried `lift` all along and composed `parts:` gained it; the others not
   having it was an asymmetry in the vocabulary rather than a decision, and it

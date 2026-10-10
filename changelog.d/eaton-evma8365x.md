@@ -17,5 +17,5 @@
 - A DCIM outlet description names the fixed breaker it runs `through` as the unit
   prints it, `Through breaker A, lines L1-L2`, not by its placement id: the breaker
   placement's `attrs.label`, else its `attrs.section` (the G4 tile letter), else
-  the id (owner decision, 2026-10-09). The EVMI2130X re-exports with its outlet
+  the id (decided 2026-10-09). The EVMI2130X re-exports with its outlet
   descriptions changed and takes a patch, 0.2.1.

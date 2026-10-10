@@ -60,7 +60,9 @@
   - In NetBox an MPC installed under the adapter names its components
     `fpcN/mpc/...`.
   - Nautobot is not given the adapter's `mpc` bay, because the same MPCs
-    also seat directly in the MX240, MX480 and MX960.
+    also seat directly in the MX240, MX480 and MX960. Superseded by the
+    Nautobot entry under Fixed (#917): Nautobot has the bay today, with a
+    blank position.
 
 ### Removed
 - `MIC-3D-4COC3-1COC12-CE` loses `port-1-0` to `port-1-3`: `juniper/mic-3d-4choc3-1oc12@1`
@@ -79,4 +81,7 @@
   now seated at two depths: in an MPC on the MX240 to MX960, and in an MPC
   inside the adapter on the MX2000. `MIC3-100G-DWDM` is seated nowhere,
   because no bay can take a dual-wide MIC (above). NetBox is unchanged.
-  **BREAKING for DCIM data already imported** (Nautobot).
+  **BREAKING for DCIM data already imported** (Nautobot). Superseded for the
+  first five by the Nautobot entry under Fixed (#917), which gives them
+  `{module.parent}/{module}/port-...` again. Of the six, only
+  `MIC3-100G-DWDM` keeps the one-token name today.

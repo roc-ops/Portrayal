@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: chassis-label
-version: 1.3.0
+version: 1.4.0
 class: sticker
 behaviour: mounts
 profile: networking
@@ -39,6 +39,18 @@ provenance:
   artwork: 'placeholder blocks, deliberately. The vendor''s own figure prints
     Serial # 00, but transcribing any real identifier into artwork is a rule this
     library keeps regardless. The rectangle is a stand-in for the printed fields'
+  logo-zone: >-
+    drawing - Figure 1-3 again, as embedded in the C100G guide (1555 x 765 px, the label
+    edge to edge, so 12.96 px/mm across the 120 and 13.42 down the 57). The vendor mark - a
+    triangle over a bar with CASA between them - runs px 244 to 394 across and 106 to 238
+    down, which is x 18.8 to 30.4 and y 7.9 to 17.7 here. It is a logo, so it is NOT DRAWN
+    and that box is reserved as `logo-zone` and left empty. Up to 1.3.0 a black triangle
+    stood at x 6 to 22 as a stand-in for it, which was a drawn mark in all but detail; it
+    is removed. The placeholder blocks around it are not positioned from the figure and
+    are left where they were, so the reserved box sits to the right of the block that
+    stands for the CASA SYSTEMS wordmark and not above it as on the label.
+elements:
+  logo-zone: {at: [18.8, 7.9], size: [11.6, 9.8], class: logo-zone}
 relief:
   wall: '#8a8d90'
   features:

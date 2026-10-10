@@ -354,7 +354,8 @@ python3 spec/tools/portrayal/preflight.py --base <ref> --json   # for an agent
 
 It compares the working tree, untracked files included, with the merge base and
 prints PASS or FAIL per check, with the command that fixes each failure. It
-exits non-zero if any check fails.
+exits non-zero if any check fails. The last check, `prose`, is advice: it
+prints PASS or WARN, and a WARN does not change the exit status.
 
 | Check | Fails when |
 |---|---|
@@ -365,6 +366,19 @@ exits non-zero if any check fails.
 | `devicelock` | `devicelock.py` has findings, or a lock you re-recorded no longer matches the bump against the lock on the base |
 | `lint` | lint on the devices you touched and every device that seats a component you touched, plus the library-wide rules a `--device` run skips (L89 when what reaches a component major can have changed), has an error or a warning `library/lint-baseline.json` does not carry |
 | `kit` | `kit/` changed and `npm test` fails, or a `spec/tests/*_js.py` test that names a changed kit module fails |
+| `prose` | never. It warns when a `device.yaml` or `contract.yaml` you changed has a sentence of more than 25 words that the merge base does not have, in a `description` (device, configuration or component) or a string under `attrs` |
+
+**New prose follows Simplified Technical English.** A `description` and the
+strings under `attrs` are copied into the DCIM exports, where someone who never
+saw the drawing reads them. Write new and changed text in the manner of
+ASD-STE100: one topic to a sentence, the active voice, and no sentence over 25
+words. The `prose` check counts only the last of those. A sentence the base
+already holds, word for word, is not reported, so nobody is asked to rewrite
+the text that was there first. Words quoted from a vendor stay verbatim and
+are not counted (L107 already limits a quotation to 25 words). Gap notes and
+`provenance` are not read. The count is approximate. An abbreviation such as
+"e.g." can end a sentence early, a block of lines with no full stops reads as
+one sentence, and a renamed component reports again the text it copied.
 
 A change lint cannot scope to devices (a schema, a listing, a lab, lint
 itself) gets the full lint, which takes about a minute longer. Preflight is
