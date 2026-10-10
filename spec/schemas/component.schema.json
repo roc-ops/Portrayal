@@ -146,7 +146,7 @@
   "optical": {
    "type": "object",
    "additionalProperties": false,
-   "description": "THE GLASS. A connector states `positions` - how many fibre positions it presents, 2 for an LC duplex, 12 for an MPO-12 - and states nothing else. A module that CONTAINS fibre states `paths` between `<part-id>.<n>` endpoints, and `unused` for any position no path reaches. Strands are modelled rather than a port-to-port table because a table cannot express a tap, a splice, a conversion or a mesh.",
+   "description": "THE GLASS. A connector states `positions` - how many fibre positions it presents, 2 for an LC duplex, 12 for an MPO-12 - and states nothing else. A module that CONTAINS fibre states `paths` between `<part-id>.<n>` endpoints, and `unused` for any position no path reaches. A path runs `from` one endpoint `to` one, splits `to` a ratio list, or joins a `combine` list `to` one. Strands are modelled rather than a port-to-port table because a table cannot express a tap, a splice, a conversion or a mesh.",
    "properties": {
     "positions": {
      "type": "integer",
@@ -187,9 +187,25 @@
      "items": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["from", "to"],
+      "required": ["to"],
+      "oneOf": [{"required": ["from"]}, {"required": ["combine"]}],
       "properties": {
        "from": {"$ref": "#/$defs/optical-endpoint"},
+       "combine": {
+        "type": "array",
+        "minItems": 2,
+        "description": "A COMBINE: SEVERAL SOURCES LANDING ON ONE DESTINATION, the opposite of a split, written in place of `from`. `to` is then one endpoint. Each source says how it joins: a `band` (a wavelength combine, the add side of a filter - every source but at most one carries one, and no two the same) or a `ratio` (a power combine, a coupler run backwards - every source carries one and they sum to 100). The two do not mix, no source is named twice, and the path carries no `band` of its own (L171). DECLARED RATHER THAN INFERRED: two plain paths into one position are still an error (L79), because a bore takes one ferrule and only a stated combine says the glass joins behind it. A path records the way the light travels and nothing downstream depends on it; each source is one leg and one row of the fibre map, exactly as each destination of a split is.",
+        "items": {
+         "type": "object",
+         "additionalProperties": false,
+         "required": ["at"],
+         "properties": {
+          "at": {"$ref": "#/$defs/optical-endpoint"},
+          "ratio": {"type": "number", "exclusiveMinimum": 0, "maximum": 100, "description": "this source's share of a power combine; every source states one and they sum to 100"},
+          "band": {"$ref": "#/$defs/optical-band"}
+         }
+        }
+       },
        "to": {
         "oneOf": [
          {"$ref": "#/$defs/optical-endpoint"},
@@ -207,18 +223,12 @@
           }
          }
         ],
-        "description": "one endpoint, or a list of endpoints with ratios summing to 100 - which is what a tap or a coupler is"
+        "description": "one endpoint, or a list of endpoints with ratios summing to 100 - which is what a tap or a coupler is. One endpoint only on a path that states `combine`."
        },
        "media": {"$ref": "#/$defs/segment"},
        "band": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": ["centre-nm"],
-        "description": "this path carries only this band; absent means it carries whatever is left. An add/drop filter is two paths off one endpoint, one banded and one not.",
-        "properties": {
-         "centre-nm": {"type": "number", "exclusiveMinimum": 0},
-         "width-nm": {"type": "number", "exclusiveMinimum": 0}
-        }
+        "$ref": "#/$defs/optical-band",
+        "description": "this path carries only this band; absent means it carries whatever is left. The drop side of an add/drop filter is two paths off one endpoint, one banded and one not; its add side is a `combine`, whose sources carry the band."
        }
       }
      }
@@ -1485,6 +1495,16 @@
   "segment": {
    "type": "string",
    "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+  },
+  "optical-band": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": ["centre-nm"],
+   "description": "a wavelength band: its centre, and its width where the source states one",
+   "properties": {
+    "centre-nm": {"type": "number", "exclusiveMinimum": 0},
+    "width-nm": {"type": "number", "exclusiveMinimum": 0}
+   }
   },
   "optical-endpoint": {
    "type": "string",

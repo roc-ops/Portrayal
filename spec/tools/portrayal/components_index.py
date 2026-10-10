@@ -175,15 +175,19 @@ def fibre_ends(data, load_ref):
     explorer can show for it. Dropping this shape read as `optical.ends: {}`
     on a real, DCIM-exported part - wrong, not merely incomplete.
 
-    A LIST `from` IS NOT A SHAPE THIS SCHEMA HAS: `optical.endpoints` reads
-    `path["from"]` as a single string unconditionally, and L79 (`lint.py`)
-    checks a path's source the same way - a fan-IN combiner has no syntax
-    here, so one is treated as an unresolved endpoint and skipped, the same
-    as any other value `split_endpoint` cannot parse.
+    A COMBINE IS THE SAME FAN SEEN FROM ITS OTHER END: `optical.endpoints`
+    answers its destination first and its sources after, so the destination
+    reaches every source and each source reaches the destination, exactly as
+    a split's source and legs do. A list `from` is still not a shape this
+    schema has, and is skipped like any other value `split_endpoint` cannot
+    parse.
     """
     ends = {}
     for p in data["optical"]["paths"]:
-        if not isinstance(p.get("from"), str) or not p.get("to"):
+        if optical.is_combine(p):
+            if not isinstance(p.get("to"), str):
+                continue
+        elif not isinstance(p.get("from"), str) or not p.get("to"):
             continue
         eps = [ep for ep, _ratio in optical.endpoints(p)]
         if len(eps) < 2 or not all(isinstance(ep, str) for ep in eps):

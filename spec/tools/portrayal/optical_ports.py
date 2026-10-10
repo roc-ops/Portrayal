@@ -364,15 +364,19 @@ def fibre_map(entry, load_ref, model):
 
     rows = []
     for path in (opt.get("paths") or []):
-        legs = optical.endpoints(path)
-        src, _ = legs[0]
-        for dst, ratio in legs[1:]:
-            row = _row(entry, src, dst, ratio, rear_name, load_ref, trunk)
+        # ONE ROW PER LEG, WHATEVER THE PATH'S SHAPE. `optical.legs` answers a
+        # two-ended path, a split and a combine alike, and a row is a binding,
+        # not a direction: a combine onto a trunk position writes the rows the
+        # same glass would write as legs off it.
+        for leg in optical.legs(path):
+            row = _row(entry, leg["from"], leg["to"], leg["ratio"], rear_name,
+                       load_ref, trunk)
             # A BANDED LEG SAYS WHICH BAND, the way a split leg says its ratio:
             # an add/drop filter puts two front ports on one rear position, and
             # without the band the map would read as a split of no stated ratio.
-            if row and path.get("band"):
-                row["band"] = dict(path["band"])
+            # A combine's band is its source's own.
+            if row and leg["band"]:
+                row["band"] = dict(leg["band"])
             rows.append(row)
     rows = [r for r in rows if r]
     rows.sort(key=lambda r: (r["rear"], r["rear_position"]))
