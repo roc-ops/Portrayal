@@ -57,20 +57,22 @@ const mm = l => Math.round(l.measured * 10000) / 10;
 // ROOM FOR THE BENDS (#973): each turn of a cord is given the leg its
 // installed bend radius (25 mm for OM4) needs. An approach point stands the
 // bend radius from its ring's band, not 6.5 mm; a cord whose port stands
-// behind that point along the run is led square to it (c1, c2, c5-c7), or
-// the point stands two radii past the port (c3, c4); the detour round the
+// behind that point along the run is led square to it (c1, c2, c5, c6), or
+// the point stands two radii past the port (c3, c4), or stays at 6.5 mm with
+// the cord over the ring to it as before (c7, whose port stands 47 mm past
+// the ring: led square it would run 65 mm back along its own plugs); the detour round the
 // tray's front edge stands two radii in front of the ring's line, and the
 // approach point of c13-c16 far enough to the side of the port for the leg
 // between the detour's two turns; c8, which leaves ring 5 and comes straight
 // back to a panel port 13.4 mm short of it, goes round the front of the tray
 // and straight in to its plug. No hang is laid that leaves a corner short.
-// Every cord is longer, by 20.6 to 179.2 mm (460.5, 451.3, 430.1, 422.2,
+// Every cord is longer, by 10.9 to 179.2 mm (460.5, 451.3, 430.1, 422.2,
 // 465, 470.3, 495, 440.2, 590.5, 589.3, 591.2, 592, 558.1, 564.8, 546.9 and
 // 552.6 before), and seven of the upper leaf's eight pass the 0.5 m break
 // again (c2 by 0.02 mm): only c4 is still a 0.5 m cord.
 const OWNER = {
   c1: [[4], 514.8, 1], c2: [[4], 500, 1], c3: [[4], 502.9, 1], c4: [[4], 491.6, 0.5],
-  c5: [[4], 522.2, 1], c6: [[4], 515.2, 1], c7: [[4], 550.3, 1], c8: [[5], 619.4, 1],
+  c5: [[4], 522.2, 1], c6: [[4], 515.2, 1], c7: [[4], 505.9, 1], c8: [[5], 619.4, 1],
   c9: [[3], 611.1, 1], c10: [[3], 613.2, 1], c11: [[3], 616.1, 1], c12: [[3], 623.4, 1],
   c13: [[4], 645.7, 1], c14: [[4], 617.4, 1], c15: [[4], 648.2, 1], c16: [[4], 575.8, 1],
 };
@@ -122,11 +124,15 @@ test('the owner\'s rack: no ring is entered and left by one face, and no route c
     assert.ok(p.detours.length <= 1, c.id);
     if (!LOWER.includes(c.id)) {
       const lead = p.points.filter(q => q.at === 'lead' && q.via);
-      assert.equal(lead.length, ['c1', 'c2', 'c5', 'c6', 'c7'].includes(c.id) ? 1 : 0, c.id);
+      assert.equal(lead.length, ['c1', 'c2', 'c5', 'c6'].includes(c.id) ? 1 : 0, c.id);
       const reach = p.points[1];
       for (const q of lead) assert.deepEqual([q.x, q.y, q.z], [ap.x, reach.y, reach.z], c.id);
-      // c8 alone has a detour: back from ring 5 to its panel port
-      assert.deepEqual(p.detours.map(d => d.between), c.id === 'c8' ? [[ring(5), {end: 'b'}]] : [], c.id);
+      // c7 goes over ring 4 to its approach point, 6.5 mm past the band on
+      // the far side, by one detour point 50 mm above it; c8 has a detour
+      // back from ring 5 to its panel port; no other upper cord has one
+      const want = {c7: [[{end: 'a'}, ring(4)]], c8: [[ring(5), {end: 'b'}]]}[c.id] ?? [];
+      assert.deepEqual(p.detours.map(d => d.between), want, c.id);
+      if (c.id === 'c7') assert.deepEqual(p.detours[0].points.map(q => [q.x, q.y, q.z]), [[ap.x, ap.y + 50, ap.z]]);
       continue;
     }
     assert.equal(p.detours.length, 1, c.id);

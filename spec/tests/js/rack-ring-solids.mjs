@@ -175,14 +175,17 @@ test('every ring is entered from an approach point, and no detour ends at the ri
   assert.equal(passes, 16);
   // every cord turns onto its ring's run and off it, so each of the 32
   // approach points stands the bend radius (25 mm) from the band or more;
-  // but for c16's before ring 4, 12 mm from it, where the detour round the
-  // tray's edge has its room with the point 21.5 mm to the ring's side of
-  // the port, and would need it 55 mm out on the other
+  // but for two before ring 4: c7's, 6.5 mm from it, which the cord comes
+  // down to from over the ring with 50 mm of leg (at 25 mm it would be led
+  // 65 mm back along the leaf's face to reach it); and c16's, 12 mm from it,
+  // where the detour round the tray's edge has its room with the point 21.5
+  // mm to the ring's side of the port, and would need it 55 mm out on the other
   assert.equal(offs.length, 32);
-  assert.deepEqual(offs.filter(v => v < 25 - 1e-6).map(v => Math.round(v * 10) / 10), [12]);
-  // nine detours (thirteen before #973, when five upper cords went over
-  // their ring: they are led square to its approach point now)
-  assert.equal(detoured, 9);
+  assert.deepEqual(offs.filter(v => v < 25 - 1e-6).map(v => Math.round(v * 10) / 10), [6.5, 12]);
+  // ten detours (thirteen before #973, when five upper cords went over
+  // their ring: four are led square to its approach point now, and c7
+  // still goes over it)
+  assert.equal(detoured, 10);
 });
 
 test('a detour that ends at the ring\'s centre, or its face, is a fault', () => {

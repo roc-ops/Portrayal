@@ -380,25 +380,29 @@ plug gives runs on straight out of it to a lead point with its `end`. A
 detour's planes stand two bend radii from each end (`detour`'s new `room`
 option), and a free span is sampled evenly along its arc and hangs only as
 deep as the corners beside it have room for, so `at: 'rest'` points are
-fewer and further apart. What the rack leaves no room for is still routed,
+fewer and further apart. What the kit's rules find no room for is still routed,
 and is said: the path's `bends` lists each corner short of the radius, `{
 kind: 'tight-bend', cable, point, between: [from, to], at: [x, y, z],
 angle_deg, legs_mm, room_mm, need_mm, short_mm }`, and `bendFindings(rack,
 ctx, nameOf)` gives them rack-wide with a sentence, as `bodyFindings` does
-for crossings: where ("c9 turns 138.3 degrees between its port on LEAF-B and
-CM-01 ring 3") and by how much ("with room for a 16.5 mm bend; the cable
-(aoc) needs 30 mm, 13.5 mm short."). A page that draws the kit's points can show them as they are;
+for crossings: where ("c9 turns 129.7 degrees between its port on LEAF-B and
+CM-01 ring 3") and by how much ("with room for a 19.2 mm bend; the cable
+(aoc) needs 30 mm, 10.8 mm short."). A page that draws the kit's points can show them as they are;
 `inspect` and `describe` do not carry them yet. What is decided for a cable
 is kept per rack, context and cable, so, as for a route's side, build a new
-context when what it reads changes. **Routed lengths change in 0.17.0** on
+context when what it reads changes: a context changed in place can give a
+path placed for what it read before. A path is read from end a, and a cable
+written the other way round does not always lay the same or report the same
+bends. **Routed lengths change in 0.17.0** on
 every routed cable that turns at a ring, goes round a body or hangs. On the
-owner's rack of #949 each of the sixteen cords is 20.6 to 179.2 mm longer
+owner's rack of #949 each of the sixteen cords is 10.9 to 179.2 mm longer
 and seven pass the 0.5 m break (c1 to c3 and c5 to c8 are 1 m cords again).
-On 60 generated racks (1,803 cables) a length moves by 113 mm shorter to 218
-mm longer, median 19 mm longer, 92 stock sizes up and 29 down; the corners
-short of their radius fall from 22,886 to 1,201, each a bend the parts leave
-no room for (a DAC's or an AOC's head, or a Cat 6A boot, that ends beside
-the ring's line).
+On one sample of 60 generated racks (1,803 cables,
+`spec/tests/js/bend-room-sample.mjs`) a length moves by 113 mm shorter to
+297 mm longer, median 14 mm longer, 92 stock sizes up and 34 down; the
+corners short of their radius fall from 22,886 to 913, each a bend the kit's
+rules found no room for (most at a DAC's or an AOC's head, or a Cat 6A boot,
+that ends beside the ring's line).
 
 To change a rack by name rather than by function, use the command core:
 `createRackEditor({ doc, chassisOf })` applies `place`, `move`, `patch`,

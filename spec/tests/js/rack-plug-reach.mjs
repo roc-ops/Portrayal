@@ -201,11 +201,14 @@ test('a cord that must clear its plug goes round the tray\'s front edge, and is 
   // over it by a detour; since #973 the approach point stands clear of the
   // ring, and each of them (and c4, whose longer plug here ends beside the
   // approach point) is led square to it instead: along the run, level with
-  // its plug's end, to a lead point beside the approach point, then down
-  for (const id of ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7']) assert.deepEqual(got[id].detours, [], id);
+  // its plug's end, to a lead point beside the approach point, then down.
+  // c7, whose port stands furthest past the ring, still goes over it, to an
+  // approach point that stays 6.5 mm from the band
+  for (const id of ['c1', 'c2', 'c3', 'c4', 'c5', 'c6']) assert.deepEqual(got[id].detours, [], id);
   const led = id => got[id].points.filter(q => q.at === 'lead').map(q => [q.item, q.via]);
-  for (const id of ['c1', 'c2', 'c4', 'c5', 'c6', 'c7']) assert.deepEqual(led(id), [['i4', 'guide-4']], id);
-  assert.deepEqual(led('c3'), []);
+  for (const id of ['c1', 'c2', 'c4', 'c5', 'c6']) assert.deepEqual(led(id), [['i4', 'guide-4']], id);
+  assert.deepEqual([led('c3'), led('c7')], [[], []]);
+  assert.deepEqual(got.c7.detours.map(d => d.between), [[{end: 'a'}, {item: 'i4', via: 'guide-4'}]]);
   // c8 leaves ring 5 and comes straight back to a panel port 13.4 mm short
   // of it: round the front of the tray, and straight in to its plug
   assert.deepEqual(got.c8.detours.map(d => d.between), [[{item: 'i4', via: 'guide-5'}, {end: 'b'}]]);
@@ -253,9 +256,9 @@ test('the drawn path is the measured one: nothing to go round again, and each de
       assert.deepEqual(xyz(built), xyz(taut), `${name} ${c.id}`);
       assert.equal(p.detours.reduce((n, d) => n + d.points.length, 0), taut.length - stops.length, `${name} ${c.id}`);
     }
-    // it looked: the lower leaf's eight go round the tray's front edge, and
-    // c8 round its front on the way back to its panel port
-    assert.equal(detoured, 8 + 1, name);
+    // it looked: the lower leaf's eight go round the tray's front edge, c8
+    // round its front on the way back to its panel port, and c7 over ring 4
+    assert.equal(detoured, 8 + 2, name);
     assert.ok(legs > 100, `${name}: ${legs} legs`);
   }
 });

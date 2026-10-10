@@ -531,7 +531,8 @@ export const stockLength = m => STOCK_M.find(s => s >= m - 1e-9) ?? Math.ceil(m 
 //   radius (`ctx.bendOf(cable)`, else its media's) and `short_mm` the miss.
 //   The path is laid to leave none (the approach points, lead points and
 //   detours below, and no hang that would make one), so what is here is a
-//   bend the rack leaves no room for;
+//   bend the kit's rules found no room for: often the parts leave none, but
+//   a finding does not prove that no other lay would have it;
 // - `rests`: what the cable lies on (docs/cable-lay-design.md section 3):
 //   {kind: 'ring', item, via} for a ring on a tray whose sill holds it;
 //   {kind: 'tray', item, via, face, role, ties?} for a tray it runs along or
@@ -653,7 +654,8 @@ export function routePath(rack, cable, ctx) {
   // one that clears it by more than the tube is not a crossing, so nothing
   // there stops a point moved for a bend's room (#973) from freeing a leg to
   // run across that face. `aheadOf` gives the legs of a run of points that
-  // pass through that space; no change made for room may add one.
+  // pass through that space; no point moved for room may add one (a hang
+  // moves a span up and down only, and is not asked).
   const fronts = solids.filter(x => x.zeroU === true).map(x => ({item: x.item, part: 'front', holes: [],
     box: {x0: x.box.x0 - r, x1: x.box.x1 + r, y0: x.box.y0 - r, y1: x.box.y1 + r,
       z0: x.away === -1 ? -1e6 : x.box.z1, z1: x.away === -1 ? x.box.z0 : 1e6}}));
@@ -770,7 +772,9 @@ export function routePath(rack, cable, ctx) {
   //   two turns, and there it may stand nearer the band than the bend radius
   //   (never nearer than the radius and CLEAR);
   // - the two turns at the ring need more of the stretch through it than it
-  //   is: the other side's approach point moves out by what is missing.
+  //   is: the other side's approach point moves out by what is missing;
+  // - the approach point back at the radius and CLEAR: a stop that stands
+  //   almost over it turns onto the run with its own leg for room.
   // What a ring has no room for (the stop less than two radii from the run,
   // across it; a plug that reaches almost to the run; the next ring in the
   // way) is left as it is, and the corner is in `bends`.
@@ -886,6 +890,10 @@ export function routePath(rack, cable, ctx) {
             for (const v of [d - step, d + step]) if (step > 0 && v >= base && v <= f.free[side] + 1e-9) list.push({o: put(offs, k, side, v), region});
           }
         }
+        // the approach point back at the radius and CLEAR: a stop that stands
+        // almost over it turns onto the run with its own leg for room, and a
+        // point moved out past it would make the cable come back for it
+        if (cur > base + 1e-9) list.push({o: put(offs, k, side, base), region});
         // the two turns' share of the stretch through the ring: what they
         // need of it over what it is, given to the other side
         const cs = cornersOf(L.taut, {share: 'need'}), tanAt = i => { const c = cs.find(x => x.k === i); return c ? Math.tan(c.angle_deg * Math.PI / 360) : 0; };
@@ -914,9 +922,13 @@ export function routePath(rack, cable, ctx) {
       return list;
     };
     // The best change on offer is made, and the offers are drawn up again,
-    // until none helps: the best of all of them each time, whichever end of
-    // the cable they are nearer, so a cable written the other way round is
-    // laid the same.
+    // until none helps or six have been made: the best of all of them each
+    // time, whichever end of the cable they are nearer. That takes the order
+    // of the ends out of the choice; it does not make a cable written the
+    // other way round lay the same. What each offer is judged by still reads
+    // the path from end a (cornersOf merges slight turns from its start, a
+    // detour goes round the first body it meets), and two offers can differ
+    // by less than that.
     for (let round = 0; round < 6 && short > 0; round++) {
       let best = null;
       for (const c of offers()) best = better(c, best);
@@ -940,9 +952,11 @@ export function routePath(rack, cable, ctx) {
   // not laid, and nor is one that would leave a corner of the path, the
   // span's own or where it meets what holds it, less room than the straight
   // span leaves it (#973, resting.js hang `fits`). Each span is judged with
-  // every other span straight, so which end the cable is read from does not
-  // matter; and where two spans that meet at a point each fit alone and
-  // together leave that point short, neither hangs.
+  // every other span straight, so no span's hang waits on another's; and
+  // where two spans that meet at a point each fit alone and together leave
+  // that point short, neither hangs. Which end the cable is read from can
+  // still matter: the corners a hang is judged by are counted from end a
+  // (cornersOf), so the same span can hang read one way and not the other.
   const surfaces = surfacesOf(rack, ctx);
   const drape = drapeOf(cable, ctx);
   const hung = taut.map(() => null);
@@ -958,7 +972,6 @@ export function routePath(rack, cable, ctx) {
     // than it needs, where it has more)
     const fits = pts => {
       if (newCrossing(p, q, pts, solids, diameter)) return false;
-      if (fronts.length && aheadOf([p, ...pts, q]).length && !aheadOf([p, q]).length) return false;
       const i0 = head.length, i1 = head.length + pts.length;
       return cornersOf([...head, ...pts, ...tail], {share: 'need'}).every(c => (c.k >= i0 && c.k < i1 ? c.room_mm >= need - 1e-9
         : c.room_mm >= kept(c.k < i0 ? c.k : c.k - pts.length) - 1e-9));

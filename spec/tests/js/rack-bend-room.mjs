@@ -1,7 +1,7 @@
 // Room for a cable's bends (#973, docs/cable-lay-design.md section 3.4). A
 // routed path is laid so that no corner of it has less room than the cable's
 // installed bend radius, by the kit's own measure (route-path.js cornersOf),
-// and what the rack leaves no room for is a finding and not a silence. Every
+// and what its rules find no room for is a finding and not a silence. Every
 // count here was measured on these fixtures and is asserted exactly, and each
 // check asserts it measured something, so a rule that found nothing cannot
 // pass.
@@ -14,6 +14,7 @@ import * as Rest from '../../../kit/rack/resting.js';
 import * as B from '../../../kit/rack/bundles.js';
 import {cornersOf, STRAIGHT_DEG} from '../../../kit/rack/route-path.js';
 import * as F from './route-direct-fixture.mjs';
+import {sampleRack, bothWays} from './bend-room-sample.mjs';
 import * as G from './cable-solids-fixture.mjs';
 import {tightCorners, byCause} from './bend-corners-probe.mjs';
 
@@ -78,17 +79,17 @@ test('the owner\'s rack: no corner of any cord is short of its 25 mm (86 were, b
   assert.deepEqual(tightCorners(r, ctx, 'need'), []);
   assert.deepEqual(r.cables.flatMap(c => R.routePath(r, c, ctx).bends), []);
   assert.deepEqual(R.bendFindings(r, ctx), []);
-  // it looked: the sixteen paths have 98 corners between them, and the
+  // it looked: the sixteen paths have 97 corners between them, and the
   // tightest has 25 mm
   const all = r.cables.flatMap(c => cornersOf(R.routePath(r, c, ctx).points, {share: 'need'}));
-  assert.equal(all.length, 98);
+  assert.equal(all.length, 97);
   assert.equal(Math.min(...all.map(c => c.room_mm)), 25);
   // by halves, the only measure there was before, 86 corners were short: 22
   // at a rest sample, 32 at a ring's approach, 13 at a detour and 19 at a
-  // plug's end beside a rest sample. 24 are still short by halves, none at
+  // plug's end beside a rest sample. 23 are still short by halves, none at
   // a rest sample or a detour: each is a turn that shares a leg with a
   // slighter one, which takes half of it and needs a fraction
-  assert.deepEqual(byCause(tightCorners(r, ctx, 'half')), {rest: 0, approach: 16, detour: 0, other: 8});
+  assert.deepEqual(byCause(tightCorners(r, ctx, 'half')), {rest: 0, approach: 16, detour: 0, other: 7});
   // and nothing was bought with a body: no path crosses one
   assert.deepEqual(R.bodyFindings(r, ctx), []);
   assert.deepEqual(R.ringFindings(r, ctx), []);
@@ -266,14 +267,15 @@ test('a hang is laid only where it leaves every corner its room, and is offered 
 
 // ── what stays tight ─────────────────────────────────────────────────────
 
-test('a bend the rack leaves no room for is found, and the route still exists', () => {
+test('a bend the kit\'s rules find no room for is found, and the route still exists', () => {
   const r = F.rack(), ctx = F.ctxOf(r);
   // c9 as an AOC from the leaf below: its head ends 64.8 mm out of the port,
   // and to reach ring 3 it goes out past the tray's front edge and back in
   // to the approach point, 60 mm (two radii of 30) in front of the ring's
-  // line. Pulled taut it turns 138.3 degrees at the edge, and that turn and
-  // the right angle at the approach point need 30 (tan 69.2 + tan 45) = 109
-  // mm of the 60 between them: each has room for 16.5 mm
+  // line. Pulled taut it turns 129.7 degrees at the edge, and that turn and
+  // the right angle at the approach point need 30 (tan 64.85 + tan 45) = 94
+  // mm of the 60 between them: each has room for 19.2 mm. The kit's rules
+  // found no more room; that is what a finding says, not that none exists
   const aoc = {...r.cables.find(c => c.id === 'c9'), media: 'aoc'};
   const rack = {...r, cables: [aoc]};
   const p = R.routePath(rack, aoc, ctx);
@@ -281,7 +283,7 @@ test('a bend the rack leaves no room for is found, and the route still exists', 
   assert.deepEqual(p.crossings, []);
   assert.ok(R.pathLength(p).measured > 0.5);
   assert.deepEqual(p.bends.map(b => [b.point, b.angle_deg, b.legs_mm[1], b.room_mm, b.short_mm]),
-    [['detour', 138.3, 60, 16.5, 13.5], ['approach', 90, 66.8, 16.5, 13.5]]);
+    [['detour', 129.7, 60, 19.2, 10.8], ['approach', 90, 43.3, 19.2, 10.8]]);
   for (const b of p.bends) {
     assert.deepEqual([b.kind, b.cable, b.need_mm, b.between], ['tight-bend', 'c9', 30, [{end: 'a'}, {item: 'i4', via: 'guide-3'}]]);
     assert.equal(b.at.length, 3);
@@ -292,13 +294,13 @@ test('a bend the rack leaves no room for is found, and the route still exists', 
   assert.deepEqual(p.bends.map(b => [b.angle_deg, b.room_mm]), corners.filter(c => c.room_mm < 30).map(c => [c.angle_deg, c.room_mm]));
   const f = R.bendFindings(rack, ctx, id => ({i2: 'PP-01', i3: 'LEAF-B', i4: 'CM-01'}[id] ?? id));
   assert.deepEqual(f.map(x => x.text), [
-    'c9 turns 138.3 degrees between its port on LEAF-B and CM-01 ring 3 with room for a 16.5 mm bend; the cable (aoc) needs 30 mm, 13.5 mm short.',
-    'c9 turns 90 degrees between its port on LEAF-B and CM-01 ring 3 with room for a 16.5 mm bend; the cable (aoc) needs 30 mm, 13.5 mm short.']);
+    'c9 turns 129.7 degrees between its port on LEAF-B and CM-01 ring 3 with room for a 19.2 mm bend; the cable (aoc) needs 30 mm, 10.8 mm short.',
+    'c9 turns 90 degrees between its port on LEAF-B and CM-01 ring 3 with room for a 19.2 mm bend; the cable (aoc) needs 30 mm, 10.8 mm short.']);
   // the same cord as OM4 has room everywhere; and held to a radius no lacer
   // gives, 80 mm, the turns it makes are found, each against that radius
   assert.deepEqual(R.bendFindings(r, ctx).filter(x => x.cable === 'c9'), []);
   const stiff = R.bendFindings(r, {...ctx, bendOf: () => 80}).filter(x => x.cable === 'c9');
-  assert.deepEqual(stiff.map(x => x.room_mm), [13.9, 10.1, 10.1, 28.8, 28.8]);
+  assert.deepEqual(stiff.map(x => x.room_mm), [13.9, 10.1, 10.1, 67, 60.8]);
   assert.ok(stiff.every(x => x.need_mm === 80 && x.short_mm === r1(80 - x.room_mm)));
 });
 
@@ -314,4 +316,98 @@ test('a cable stiffer than a lay is opened out for is laid as one of 100 mm, and
     read++;
   }
   assert.equal(read, 16);
+});
+
+test('a corner with more room than a lay is opened out for, and less than the cable needs, is still found', () => {
+  // two switches twenty units apart, ports on the centre line, no manager:
+  // out to the lane, up it, and in. At a radius of 100 mm the path has room
+  // everywhere (each plug runs on to a lead point). A cable that needs 150 is
+  // laid no wider than one of 100, and its turns onto and off the lane, with
+  // 123.1 mm of room, are found against 150: judged against the 100 it was
+  // laid for, they would pass
+  let r = M.withItem(M.newRack(), {ref: 'leaf', cfg: 'x', ru: 10, label: 'a'}).rack;
+  r = M.withItem(r, {ref: 'leaf', cfg: 'x', ru: 30, label: 'b'}).rack;
+  const c = {id: 'c1', a: {item: 'i1', path: 'p', view: 'front'}, b: {item: 'i2', path: 'p', view: 'front'}, media: 'dac', route: []};
+  const ctx = need => ({chassisOf: () => ({ru: 1, w: 440, h: 44, d: 400}), guidesOf: () => [], portX: () => 0, bendOf: () => need});
+  assert.deepEqual(R.routePath(r, c, ctx(100)).bends, []);
+  const got = R.routePath(r, c, ctx(150)).bends;
+  assert.deepEqual(got.map(b => [b.point, b.angle_deg, b.room_mm, b.need_mm, b.short_mm]),
+    [['reach', 103.4, 51.2, 150, 98.8], ['lane', 90, 123.1, 150, 26.9], ['lane', 90, 123.1, 150, 26.9], ['reach', 103.4, 51.2, 150, 98.8]]);
+  assert.ok(got.some(b => b.room_mm > 100 && b.room_mm < 150));
+});
+
+test('no change made for room puts a leg in front of a zero-U part: the offer is refused, and the bend is a finding', () => {
+  // rack 57 of the generated sample (bend-room-sample.mjs): a two-post with
+  // a zero-U PDU at its left upright, and c15, an AOC. One of the changes on
+  // offer for its short corners would run a leg across the PDU's outlet
+  // face, clear of the part, and leave no corner short; it is refused
+  // (route.js `better`), so the cord keeps two findings and no point of it,
+  // every half millimetre along it, stands in front of the face. Without
+  // that refusal 162 of its samples do, and it reports no bend
+  const {rack, ctx} = sampleRack(M, G, 57);
+  assert.deepEqual([rack.frame.kind, rack.zeroU.map(z => z.at)], ['two-post', ['left']]);
+  const c = rack.cables.find(x => x.id === 'c15');
+  assert.equal(c.media, 'aoc');
+  const p = R.routePath(rack, c, ctx), z = S.solidsOf(rack, ctx).find(x => x.item === 'z1'), rr = 1.5;
+  let read = 0, ahead = 0;
+  for (let k = 1; k < p.points.length; k++) {
+    const u = p.points[k - 1], v = p.points[k], n = Math.max(1, Math.ceil(gap(u, v) / 0.5));
+    for (let j = 0; j <= n; j++) {
+      const q = {x: u.x + (v.x - u.x) * j / n, y: u.y + (v.y - u.y) * j / n, z: u.z + (v.z - u.z) * j / n};
+      read++;
+      if (q.z > z.box.z1 + 1e-9 && q.x > z.box.x0 - rr && q.x < z.box.x1 + rr && q.y > z.box.y0 - rr && q.y < z.box.y1 + rr) ahead++;
+    }
+  }
+  assert.ok(read > 2000, `${read} samples`);
+  assert.equal(ahead, 0);
+  assert.equal(p.bends.length, 2);
+  assert.deepEqual(p.crossings, []);
+});
+
+test('a route context is read once: changed in place it may give the old path, and a new context gives the new one', () => {
+  // what the kit decides for a cable it keeps per rack, context and cable
+  // (as it keeps the side of a route), so a page builds a new context when
+  // what the context reads changes. Here the plugs grow from the default
+  // 27.6 mm to 47.6 on ONE context object: the paths asked for again are a
+  // mixture, the points placed for the short plug kept and the new reach
+  // used; a new context with the same answers gives the path for the long
+  // plug, and it differs from the stale one
+  const r = F.rack();
+  let reach = null;
+  const base = F.ctxOf(r), live = {...base, plugReachOf: () => reach};
+  const lengths = cx => r.cables.map(c => Math.round(R.routedLength(r, c, cx).measured * 1e4) / 10);
+  const short = lengths(live);
+  assert.deepEqual(short, lengths(base));
+  reach = 47.6;
+  const stale = lengths(live), fresh = lengths({...base, plugReachOf: () => 47.6});
+  assert.deepEqual(fresh, lengths({...base, plugReachOf: () => 47.6}));
+  const differ = stale.filter((v, k) => Math.abs(v - fresh[k]) > 0.05).length;
+  assert.ok(differ >= 5, `${differ} of 16 differ: stale ${stale}, fresh ${fresh}`);
+  // and the stale answer is not the short plug's either: nothing to rely on
+  assert.notDeepEqual(stale, short);
+});
+
+test('the measure reads a path from its start: the same points the other way round can give other corners', () => {
+  // cornersOf calls a point a straight pass when the next leg runs within
+  // STRAIGHT_DEG of the direction FROM THE LAST CORNER, so that many small
+  // turns add up. Which point of a slow curve becomes the corner therefore
+  // depends on the end the walk starts from. Three turns of 0.7 degrees
+  // between legs of 100, 40, 40 and 10 mm: from the long end the corner is
+  // the third point, from the short end the second
+  const d = t => ({x: Math.cos(t * Math.PI / 180), y: Math.sin(t * Math.PI / 180)});
+  const pts = [P(0, 0)];
+  for (const [t, len] of [[0, 100], [0.7, 40], [1.4, 40], [2.1, 10]]) pts.push(P(pts.at(-1).x + len * d(t).x, pts.at(-1).y + len * d(t).y));
+  for (const share of ['half', 'need']) {
+    const fwd = cornersOf(pts, {share}).map(c => c.k), back = cornersOf([...pts].reverse(), {share}).map(c => pts.length - 1 - c.k);
+    assert.deepEqual([fwd, back], [[2], [1]], share);
+  }
+  // on the owner's rack every cord has the same short corners (none) and the
+  // same length from either end; on the generated racks not every cable
+  // does, and a cable can be clean from one end and report a bend from the
+  // other: 37 of the 1,803 measure differently and 7 report a different
+  // number of bends (bend-room-sample.mjs prints both). Rack 7's c26 is one
+  // that measures differently
+  const {rack, ctx} = sampleRack(M, G, 7);
+  const [as, rev] = bothWays(R, rack, rack.cables.find(x => x.id === 'c26'), ctx).map(c => R.routedLength(rack, c, ctx).measured);
+  assert.ok(Math.abs(as - rev) > 0.01, `${as} and ${rev}`);
 });

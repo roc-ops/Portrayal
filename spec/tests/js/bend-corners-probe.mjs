@@ -17,11 +17,17 @@
 // check's rule, and the only one before #973), and `need`, the leg shared by
 // what each corner's turn uses of it (what routePath's `bends` reports).
 //
+// ON A REVISION BEFORE #973 this file does not run as it is: cornersOf was in
+// bundles.js and had no `share`. The `before` figures (86 by halves, 87 by
+// need) were measured by bend-room-sample.mjs --base <dir>, which lays the
+// owner's rack with that revision's kit and counts its paths with this
+// revision's cornersOf.
+//
 // THE CAUSE is read off the path's own labels (route.js routePath `at`):
 //   rest      a sample of a free span as it hangs or lands;
 //   approach  an approach point of a ring, its entry, its exit or its face;
 //   detour    a point taken round a body;
-//   other     a port, a plug's reach point, a lane, a tray's stretch.
+//   other     a port, a plug's reach point, a lead point, a lane, a tray's stretch.
 import {pathToFileURL} from 'node:url';
 import * as R from '../../../kit/rack/route.js';
 import {cornersOf} from '../../../kit/rack/route-path.js';
