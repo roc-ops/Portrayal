@@ -1,4 +1,4 @@
-"""Four generic optics and the MPO-16 plug (docs/pluggables-mpo-bidi-pon-design.md).
+"""Five generic optics and the MPO-16 plug (docs/pluggables-mpo-bidi-pon-design.md).
 
     generic/qsfp-mpo@1         a QSFP with one MPO receptacle
     generic/qsfp-dd-mpo16@1    a QSFP-DD with one MPO-16 receptacle
