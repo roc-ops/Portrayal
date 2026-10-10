@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: fhu-bpa-1u-10
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: FS.com
 model: FHU-BPA-1U-10
@@ -63,9 +63,15 @@ provenance:
       is taken as centred in the rack units it fills, so a hole's height on the plate is its height
       in the units less half the difference between the units and the plate.
   mark:
-    confidence: drawing
+    confidence: photo-measured
     note: >-
-      FS's mark is moulded into the left of the panel; it is a logo and is not drawn.
+      FS's mark is moulded into the left of the panel; it is a logo and is not drawn. Its place is
+      reserved as the region `logo-zone`. The mark is tone on tone, so it is read by eye on a
+      contrast-stretched crop of the straight-on gallery render of SKU 133347 (g3) under a
+      millimetre grid at 2.975 px/mm, not segmented: x 27.5 to 40.5 and y 11.0 to 17.5, good to
+      about a millimetre. The left moulded panel is the check: the same grid puts its corner at x 16
+      and y 9.5, against the 16.0 and 8.5 this file draws, and the reading down is shifted by that
+      millimetre.
   color:
     confidence: photo-measured
     note: >-
@@ -126,6 +132,8 @@ views:
       - {id: panel-left, at: [16.0, 8.5], size: [164.0, 29.0], fill: '#24272a', kind: moulded-panel}
       - {id: panel-middle, at: [180.0, 14.2], size: [122.0, 18.1], fill: '#24272a', kind: moulded-panel}
       - {id: panel-right, at: [302.0, 8.5], size: [164.0, 29.0], fill: '#24272a', kind: moulded-panel}
+    regions:
+    - {id: logo-zone, at: [27.5, 11.0], size: {w: 13.0, h: 6.5}, label: 'FS mark; not drawn'}
   rear:
     size: {w: 482.0, h: 44.0}
     panel:
