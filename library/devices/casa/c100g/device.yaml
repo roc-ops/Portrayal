@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: c100g
-version: 0.5.15
+version: 1.0.0
 maturity: modelled
 manufacturer: Casa Systems
 model: C100G
@@ -143,6 +143,14 @@ provenance:
       A/PEM B, which a rear panel plausibly does print. Owner confirmed 2026-08-25 that they are
       NOT printed, so they are regions too. PEM A and PEM B stay in silkscreen: they were not part
       of that question and nothing says they are absent from the metal
+  esd-strap-cutout:
+    note: >-
+      THE HOLE IS THE JACK'S, NOT THE PLATE'S (#413). Since casa/ground-strap@2 composes
+      common/esd-jack@1, each strap's cutout is that jack's 6.0 opening at the part's [0.0, 1.1],
+      where 1.x punched the whole 15 x 7.9 marked plate as a hole. The plate is printed on the
+      metal around the jack. L39 measures a part that composes no registry-sized opening by its
+      footprint, so it reports the plate sitting off-centre over the jack's hole; those two
+      warnings are in the baseline and describe the part, not an error in either number.
   side-faces:
     confidence: drawing
     note: >-
@@ -415,7 +423,7 @@ views:
         - {at: [12.8, 539.3], size: [72.2, 11.6], fill: '#a7a9ac'}
         - {at: [348, 539.3], size: [72.2, 11.6], fill: '#a7a9ac'}
       cutouts:
-        - {id: ground-strap-front, at: [348.4, 530.4], size: [15, 7.9], shape: rect}
+        - {id: ground-strap-front, at: [348.4, 531.5], size: [6.0, 6.0], shape: circle}
     silkscreen:
       - {at: [26, 30], text: casa systems, font-size: 13, fill: '#d7dbdf', anchor: start, for: chassis}
       - {at: [417.9, 30], text: C100G, font-size: 13, fill: '#d7dbdf', anchor: end, for: chassis}
@@ -454,7 +462,7 @@ views:
         - {id: brand-swoop, ref: casa/brand-swoop@1, at: [109.2, 8.2], group: furniture, rel-pos: 2}
         - {id: cable-mgr-l, ref: casa/cable-manager@1, at: [13.2, 539.7], group: furniture, rel-pos: 0}
         - {id: cable-mgr-r, ref: casa/cable-manager@1, at: [348.4, 539.7], group: furniture, rel-pos: 1}
-        - {id: ground-strap-front, ref: casa/ground-strap@1, at: [348.4, 530.4], group: grounding, rel-pos: 0}
+        - {id: ground-strap-front, ref: casa/ground-strap@2, at: [348.4, 530.4], group: grounding, rel-pos: 0}
     regions:
       - {id: cable-managers, label: Cable managers, members: [cable-mgr-l, cable-mgr-r]}
       - {id: esd-strap-front, label: ESD strap receptacle, members: [ground-strap-front]}
@@ -466,7 +474,7 @@ views:
       decor:
         - {at: [0, 470.0], size: [432.95, 101.0], fill: '#4a4f55'}
       cutouts:
-        - {id: ground-strap-rear, at: [6.3, 461.9], size: [15, 7.9], shape: rect}
+        - {id: ground-strap-rear, at: [6.3, 463.0], size: [6.0, 6.0], shape: circle}
     silkscreen:
       - {at: [109.5, 475.7], text: PEM B, for: pem-b}
       - {at: [323.45, 475.7], text: PEM A, for: pem-a}
@@ -492,7 +500,7 @@ views:
         - {id: pem-b, at: [6.0, 476.7], size: {w: 207.0, h: 91.6}, accepts: [casa/pem@1], group: power, rel-pos: 0, default: casa/pem@1}
         - {id: pem-a, at: [219.95, 476.7], size: {w: 207.0, h: 91.6}, accepts: [casa/pem@1], group: power, rel-pos: 1, default: casa/pem@1}
       placements:
-        - {id: ground-strap-rear, ref: casa/ground-strap@1, at: [6.3, 461.9], group: grounding, rel-pos: 0}
+        - {id: ground-strap-rear, ref: casa/ground-strap@2, at: [6.3, 461.9], group: grounding, rel-pos: 0}
         - {id: ground-bolts-rear, ref: casa/ground-bolts@1, at: [393.2, 460.2], group: grounding, rel-pos: 1}
     regions:
       - {id: esd-strap-rear, label: ESD strap receptacle, members: [ground-strap-rear]}
