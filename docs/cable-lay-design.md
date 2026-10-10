@@ -29,7 +29,8 @@ length coiled in a tray, in 2D, in 3D and in the numbers.
   pass-through on a placed device; `{lane, ru}` a lane in the gutter beside a
   post at a U. `route.js routePath` joins the two ports through them, each ring
   expanded into the faces a cable enters and leaves by (#930), from each
-  plug's reach point since kit 0.13.0 (1.5). The routed
+  plug's reach point since kit 0.13.0 (1.5), and since kit 0.17.0 with room
+  at each turn for the cable's bend radius (3.4). The routed
   length is that polyline plus the end allowance of its media at each end
   (1.6; 0.15 m for every cable before kit 0.16.0), rounded up to a stock
   length.
@@ -233,6 +234,23 @@ upright's outer face with no gap (`STANDOFF` 0, no source dimensions it).
 A detour that meets a second body goes round it the same way, to a bounded
 depth, and the result is pulled taut.
 
+**A detour leaves its turns room (#973, kit 0.17.0).** A way round turns the
+cable where each end's move meets the plane, and where that move starts when
+the end is itself a corner, so a move shorter than two bend radii leaves
+neither turn its radius: on the reference rack the cord came back in from in
+front of the tray's edge to its ring's approach point along 42.8 mm, shared
+by two right angles that need 25 mm each. So a plane an end reaches by a
+shorter move stands two installed bend radii from that end (`detour`'s
+`room`), further out than the cable's radius and `CLEAR`; an end already
+beyond the plane, and a plane a side lane sets, are left alone. Where a
+detour is pulled taut its turn can be wider than a right angle, and a corner
+at a detour point still short of room is offered two and a half and three
+radii (3.4). The plane only moves away from the body, so what it cleared it
+still clears; and in each tier the ways with room are tried first and the
+ways as they were only when none resolves, so a body that leaves no room is
+still gone round by the same preferred way, and the short leg is a finding
+(3.4), not a different route.
+
 A hand route keeps its waypoints; the detours are added between them in the
 same way, and a leg the three rules cannot clear is left as drawn and reported.
 
@@ -294,6 +312,10 @@ cord measured just under a stock break could be ordered short.
   its diameter takes the copper one. The kit does not know what a port
   holds, so the default leaves out an optic's standing-out; only the page
   can add it.
+- **A cable can run on past it.** The reach is the least a cable runs
+  straight out of a face. Where its first turn needs more of a leg than the
+  plug gives (3.4), it runs on straight to a lead point, `at: 'lead'` with
+  its `end`, and turns there; the reach point stays where the plug ends.
 - **Detours and ring passes are measured from there.** The legs out of the
   reach points are legs like any other: section 1.3 takes them round what
   they cross, so a cord that must clear its plug and then turn up past a
@@ -672,14 +694,21 @@ the build chose as follows; each is in `kit/rack/resting.js` or
   where the drop is deeper than twice the radius) and lies on it, and so a
   stiff cable lands further along. A span shorter than the two drops leaves
   room for keeps its catenary, clipped onto the surface where it would pass
-  below it, and there the bend bound is not kept: the clip can turn tighter
-  than the radius.
+  below it. **Since kit 0.17.0 (3.4) no hang is laid tighter than the cable
+  may bend**: the catenary is sampled evenly along its arc, a drop is laid
+  as the two points where its bends' tangents meet, with a level lead before
+  it, and a hang that would leave a corner short of the bend radius, one of
+  its own or one where the span meets what holds it, is offered shallower
+  and then not laid. Until then the clip could turn tighter than the radius,
+  and the samples, evenly spaced across the face, stood 0.3 to 15 mm apart
+  along the cable.
 - **What is not a free span.** A plug (port to reach point), a ring's inside,
   a lane's run along the frame (lane point to lane point), a tray's stretch,
   and a leg into or out of a detour point: a cable taken round an edge is
   dressed round it by hand (1.3) and stays taut, clear by what the detour
   keeps. A sag that would carry a cable into a body its straight leg did not
-  cross is not laid; the leg keeps its chord.
+  cross is not laid; since kit 0.17.0 a shallower one that clears the body
+  is, and only where none does the leg keeps its chord.
 - **The held face in this step.** Nothing in a version-3 rack file can pin a
   face, and the automatic face is step 5, so a cable lies on the held face
   only where the page pins it, through `ctx.trayFaceOf(cable, {item, via})`,
@@ -747,8 +776,9 @@ front edge to the ring's face, ran along the face and grazed both legs.
   device it is plugged into.
 - **The approach point.** Every pass through a ring whose opening is placed
   starts from a point on the run outside the band, the cable's radius and
-  `CLEAR` past it, at the opening's height and across position, and ends at
-  another past the far face (`at: 'approach'`). The legs between them and the
+  `CLEAR` past it (since kit 0.17.0 at least that: the installed bend radius
+  where the route turns there, 3.4), at the opening's height and across
+  position, and ends at another past the far face (`at: 'approach'`). The legs between them and the
   ring are not free spans. A detour, a hang or a leg from behind or below ends
   at the approach point, so a cable reaching a ring from behind goes over the
   ring or round it, as the detours of 1.3 find, and enters through the
@@ -769,6 +799,256 @@ front edge to the ring's face, ran along the face and grazed both legs.
   ring, is drawn 2 mm high, an estimate, and is not solid: only the band's
   seat under the opening is. A cable lying on the floor across it would rest
   2 mm higher than the kit lays it.
+
+### 3.4 Room for the bends (#973)
+
+Built in kit 0.17.0. With a drawing that follows the kit's own points, the
+path is the cable, and its corners are its bends. On the reference rack 86
+corners of the sixteen paths had less room than the 25 mm an OM4 cord may be
+bent to once installed, and almost none was a bend a hand would make: they
+came from where the kit put its points.
+
+**The measure** is the one the bundle check uses, `cornersOf` (bundles note
+5.2), which now lives in `rack/route-path.js`: a point is a corner where the
+path turns by more than 1 degree from the leg it is on, a bend of radius r
+uses `r tan(θ / 2)` of each leg, and a corner's room is the largest radius
+its legs leave it. The walk starts at end a and measures each turn against
+the leg from the last corner, so that many slight turns add up; which point
+of a slow curve becomes the corner therefore depends on the end it starts
+from, and the same points read the other way round can give other corners.
+Room is given to 0.1 mm and compared as given (as in the bundle check), so
+a corner with 24.96 mm of room passes at 25. A leg between two corners is
+shared. The bundle check
+gives each corner half of it, which is safe and coarse: a slight turn takes
+half of a leg it needs a tenth of. A cable's own path is judged with the leg
+shared **by need** (`cornersOf(points, {share: 'need'})`): the largest
+radius both corners of a leg L can take is `L / (tan(θ1 / 2) + tan(θ2 /
+2))`, and a corner's room is the smaller of its two legs' figures. It is the
+same model worked exactly, never stricter than the halves (what passes at a
+radius by halves passes by need), and no looser where the halves are right:
+two right angles on one leg take half each either way. A leg
+to the path's end, the plug included, is all the corner's, as in the bundle
+check: the reach of a plug counts as the leg its first turn bends in.
+
+**The radius** is the cable's own, never a constant: `ctx.bendOf(cable)`
+where the page gives it (the installed radius of its named type, #919),
+else its media's (`resting.js BEND`, held to the cable types table).
+
+**What made the corners, and what was done.** Counted on the reference rack by
+`spec/tests/js/bend-corners-probe.mjs`, before and after, by what the corner
+is a point of:
+
+| cause | before, by halves | before, by need | after, by need | what changed |
+|---|---|---|---|---|
+| a rest sample of a free span | 22 | 32 | 0 | spans sampled evenly along the arc; drops as tangent points; no hang that leaves a corner short |
+| a ring's approach, entry or exit | 32 | 32 | 0 | the approach point stands the bend radius out; the cable is led square where it comes from behind |
+| a detour point | 13 | 16 | 0 | each move to a detour's plane is two bend radii long; the approach point stands to the side of the port |
+| a plug's end (beside a rest sample) | 19 | 7 | 0 | follows from the three above |
+| all | 86 | 87 | 0 | |
+
+By halves 23 corners of the new paths are still short (16 at an approach
+point, 2 at a lead point, 5 at a plug's end): each is a turn that shares a
+leg with a slighter one. That is the difference between the two ways of
+sharing, and why a path is judged by need.
+
+- **Free spans.** A span's samples stood evenly across the face, so along a
+  steep end they were several times closer than in the middle, and where a
+  span landed a sample and a break of its profile could fall a quarter of a
+  millimetre apart. Any curve through such points turns tighter than the
+  span does. The catenary is now sampled evenly along its arc, and points
+  nearer than 1 mm are one. A drop onto a surface is laid as the two points
+  where the tangents of its two bends meet, so the line through them
+  touches each arc and has exactly the bend radius of room, with a level
+  lead of nothing, one radius or two before it. And a hang is judged before
+  it is laid: with every other span straight, it may leave none of its own
+  points short of the bend radius, and no corner of the path less room than
+  the straight span leaves it (or than it needs, where it has more). It is
+  offered at its full sag, a half and a quarter, each sampled at 15 mm, at
+  the bend radius and at twice it, and the first that fits is laid; where
+  none fits the span is straight. A cable with no room to turn where it is
+  held does not also sag. A landing is laid only where the stretch that lies
+  level reaches the surface it lands on: a span is not said to rest on a rib
+  it only passes over. Where two spans meet at a point, each fits alone
+  and together they leave the point short, neither hangs.
+- **Approach points.** The radius and `CLEAR` of 3.3 (6.5 mm for an OM4
+  cord) left a turn onto a ring's run a fifth of the leg it needs. On each
+  side of a ring where the route turns, the approach point now stands the
+  installed bend radius from the band; a side the route passes straight
+  through keeps the radius and `CLEAR`, and no approach point stands in or
+  past the band of another ring of the same part (where two rings of a
+  route follow each other on one run, no further than half way between).
+- **Coming from behind.** A stop that stands back along the run from the
+  approach point, on the ring's side of it, makes the cable turn back on
+  itself to face the ring: two bends, which share a leg. Where a corner
+  there is short of room the approach point is moved out to stand two bend
+  radii past that stop along the run, and where the leg then runs straight
+  to it the cable is **led square**: along the run, level with that stop,
+  to a lead point (`at: 'lead'`, with the ring's `item` and `via`) beside
+  the approach point, and from there square onto the run, so that one turn
+  of more than a right angle is two right angles, each with its leg.
+- **Detours.** 1.3 gives each move to a detour's plane two bend radii. Where
+  a detour comes back beside itself (out past a tray's edge, up and back
+  in), the leg between its two turns is as long as the port and the approach
+  point are apart, along the run and across it, and needs two radii: the
+  approach point stands just far enough along the run to one side of the
+  port, and there it may stand nearer the band than the bend radius, never
+  nearer than the radius and `CLEAR`.
+- **The stretch through a ring** is the leg its two approach turns share.
+  Where they need more of it than it is, the other side's approach point
+  moves out by what is missing.
+- **Back at the radius and `CLEAR`.** A stop that stands almost over the
+  approach point turns onto the run with its own leg for room, and a point
+  moved out past it would make the cable come back for it: the approach
+  point may go back to the radius and `CLEAR` where that leaves the corners
+  less short.
+- **A plug.** Where a cable's first turn has too little of the plug's reach
+  for a leg (a fibre cord's 27.6 mm, turning back past a right angle to a
+  lane on the rail plane), it runs on straight out of the plug, half a bend
+  radius, one or one and a half, to a lead point (`at: 'lead'`, with its
+  `end`), and turns there.
+
+**How a change is chosen.** Each path starts with its approach points at the
+bend radius. While a corner is short, every change the rules above offer is
+tried by laying the path with it, and the best is made: the one that leaves
+the path's corners least short of room in all, then the shortest. A change
+is taken only if it leaves them less short than they were, puts no leg newly
+through a body or in front of a zero-U part (below), and either gives the
+stretch it is for its room or makes the path no longer: a cable is not sent
+a longer way round to make a short corner less short. The best of all the
+offers is taken each round, whichever end of the cable it is nearer, for at
+most six rounds; a path still short after six keeps what it has, and its
+corners are findings. The result is kept per rack, context and cable, as
+the side of a route is, so a page builds a new context when what the
+context reads changes: one changed in place can give a path placed for what
+it read before.
+
+**A radius no lay is opened out for.** Points are placed for a bend radius
+up to 100 mm (`ROOM_MAX`, internal: twice a power cord's 42.6). A cable that
+needs more is laid as one of 100 mm and judged by its own.
+
+**In front of a zero-U part.** 1.3 keeps the space a PDU's outlets look into
+for the last way round it, but only a leg that would graze the part is taken
+behind it; one that clears it by more than the cable's tube is not a
+crossing. An approach point 18 mm further out freed the leg from a lacer's
+end ring to the lane beside a PDU to run across the outlet face, a fraction
+of a millimetre clear of the part. So no point moved for room (an approach
+point, a lead point, a run-out, a detour's plane) may put a leg through
+that space that was not there with every approach point at the radius and
+`CLEAR`, and no hang may sag into it. The space is as high as the part: a
+span that passes just over a short PDU's top, in front of its face, is
+clear of it straight and would hang down into it (22 mm over the top, 83 mm
+of cable in front of the outlets, on one generated rack), and only the
+hang's own check sees that, since every other check reads the taut path.
+For a point moved: where one would, that side of the ring keeps the radius
+and `CLEAR`, and its corner is a finding. The rule of 1.3 itself is no
+stronger than it was.
+
+**The finding.** What the kit's rules find no room for is still routed, and
+is said: `routePath` returns `bends`, each corner of the path with less room
+than the cable's radius, as `{kind: 'tight-bend', cable, point, between:
+[from, to], at: [x, y, z], angle_deg, legs_mm: [in, out], room_mm, need_mm,
+short_mm}` (`point` the path point's `at`, `between` as for a crossing), and
+`bendFindings(rack, ctx, nameOf)`, beside `bodyFindings`, gives them
+rack-wide with a sentence in the words of the bundle check. It says where
+("c9 turns 129.7 degrees between its port on LEAF-B and CM-01 ring 3") and
+then by how much ("with room for a 19.2 mm bend; the cable (aoc) needs 30
+mm, 10.8 mm short."). It warns and never refuses. A page that draws the kit's points can show these as they are.
+`inspect`, `describe` and the export notes do not carry them yet.
+
+**What is left.** On the reference rack, nothing. On one sample of 60
+generated racks (1,803 cables of mixed media, four-post and two-post, with
+and without a zero-U PDU 200 to 1700 mm tall and up to 20 units off the
+floor, panels with an FHD-CMP5DR lacer between switches;
+`spec/tests/js/bend-room-sample.mjs` builds them from a fixed seed and
+prints every figure here) the corners short of room fall from 22,910 to
+959, on 361 cables: 25 of 883 fibre cords, 9 of 242 Cat 6, 57 of 204 Cat
+6A, 97 of 248 DACs and 173 of 226 AOCs. A finding is a bend the kit's rules
+found no room for. It is not proof that no lay has room: the rules are the
+ones above and no more, and a cable can be clean read from one end and
+report a bend read from the other (below). Those looked at were of these
+kinds:
+
+- **a plug that reaches almost to the ring's line.** A DAC's or an AOC's
+  head ends 64.8 mm out of the face and the lacer's rings stand 73.7 mm
+  out: 9 mm to turn onto the run at a radius of 23 or 30. A Cat 6A boot ends
+  39.4 out, 36.6 short of the line, for a turn that needs 30 each way. No
+  rule here moves a point to make that room;
+- **a detour that comes back beside itself with no room to the side.** A
+  port 32 mm below a tray and between two of its rings: the approach point
+  cannot stand two radii to either side without standing in the next ring;
+- **a cord that leaves a ring and comes straight back** to a port beside
+  it, where the next ring or a wall of the part (the lacer's web) leaves no
+  way round with room;
+- **a lane a unit long between two turns**: a jumper to the next unit by
+  the gutter, 44.45 mm for two right angles;
+- **a ring a route doubles back at** (already a `doubles-back` finding).
+
+**What this does not do.**
+
+- **A lane has no depth.** It runs on the rail plane, so a cable from a plug
+  to a lane turns back toward the rail. The run-out gives that turn its
+  leg; it does not put the lane where a gutter's cables are.
+- **A plug is a leg.** The measure gives a corner at a plug's end the whole
+  reach to bend in, as the bundle check gives a leg to a trunk's end. A boot
+  bends, a plug body does not, and the kit does not tell them apart.
+- **A tray stretch** (2.1) keeps its rings' approach points at the radius
+  and `CLEAR`: a cable along a tray passes its rings straight, and rises
+  onto each sill by a drop's tangent points. A stretch pinned to the held
+  face, coming round the tray's edge to a port above, can still report
+  bends.
+- **The same cable written the other way round** measures the same on the
+  reference rack. It does not everywhere, and this change adds to that. Two
+  causes were there before: the way through a ring that both ports stand to
+  one side of, and which body a detour meets first, are read from end a.
+  Two are new: the measure reads a path from end a (above), so the corners
+  an offer or a hang is judged by can differ with the end; and a span at a
+  plug's end can hang read one way and not the other. On the generated
+  racks 38 of 1,803 cables measure differently from the other end (19
+  before), and 9 report a different number of bends, some none from one end
+  and up to three from the other. Making `cornersOf` read the same from
+  both ends is a follow-up; it changes the bundle check's corners too.
+- **A lead point can mark no turn.** c8 runs on out of its panel plug to a
+  lead point that its detour then reaches in line, so the path passes
+  straight through it. It is left in: the path is the kit's stops and its
+  detours between them, and a drawing rebuilds the detour from that point.
+
+**Lengths change on saved racks.** On the reference rack every cord is longer,
+by 10.9 to 179.2 mm, none shorter, and seven of the sixteen change stock
+size: the upper leaf's c1 to c3 and c5 to c8 pass the 0.5 m break again and
+are 1 m cords (c2 by 0.02 mm), c4 is still a 0.5 m cord, and the lower
+leaf's eight are still 1 m cords.
+
+| cord | before, mm | after, mm | change | stock, m |
+|---|---|---|---|---|
+| c1 | 460.5 | 514.8 | +54.3 | 0.5 to 1 |
+| c2 | 451.3 | 500.0 | +48.7 | 0.5 to 1 |
+| c3 | 430.1 | 502.9 | +72.8 | 0.5 to 1 |
+| c4 | 422.2 | 491.6 | +69.4 | 0.5 |
+| c5 | 465.0 | 522.2 | +57.2 | 0.5 to 1 |
+| c6 | 470.3 | 515.2 | +44.9 | 0.5 to 1 |
+| c7 | 495.0 | 505.9 | +10.9 | 0.5 to 1 |
+| c8 | 440.2 | 619.4 | +179.2 | 0.5 to 1 |
+| c9 | 590.5 | 611.1 | +20.6 | 1 |
+| c10 | 589.3 | 613.2 | +23.9 | 1 |
+| c11 | 591.2 | 616.1 | +24.9 | 1 |
+| c12 | 592.0 | 623.4 | +31.4 | 1 |
+| c13 | 558.1 | 645.7 | +87.6 | 1 |
+| c14 | 564.8 | 617.4 | +52.6 | 1 |
+| c15 | 546.9 | 648.2 | +101.3 | 1 |
+| c16 | 552.6 | 575.8 | +23.2 | 1 |
+
+c8 grows most: it leaves ring 5 and comes straight back to a panel port 13.4
+mm short of the ring, with the lacer's web between, so it goes round the
+front of the tray and straight in to its plug. On the generated racks a
+length moves by -113 to +297 mm, median +14; 93 cables move up a stock size
+and 34 down. 668 of the 1,803 are shorter: a span that hung to its full
+depth whatever held its ends now hangs only as deep as the corners beside
+it have room for. No path crosses a body it did not cross before (none
+does, before or after). No cable has a point in front of a zero-U part's
+outward face that had none before: eight do, the same eight before and
+after, each where a lane's own run comes to the end of a short PDU and is
+taken over its face, the last way round of 1.3. A stored routed length and stock size move the next
+time a page measures them; an entered length is never touched.
 
 ## 4. Lay order
 
@@ -1413,6 +1693,8 @@ And the reads:
 - **`describe`**: one line of totals for the findings ("2 cables cross a
   body; 1 tray is full"), so an agent that only describes the rack still
   sees fault 1, as the session behind #949 did not.
+- **Bends** (3.4) are read from the kit, `bendFindings` and a path's
+  `bends`; `inspect` and `describe` do not carry them yet.
 
 The site prints these in `cableText`, as it prints `routed` and `slack`; that
 is the site check of step 2, a test that an agent reading `inspect` on a cable
@@ -1575,7 +1857,10 @@ published file or a saved rack file uses it.
 | ring `guide.depth`, `guide.sill`, `guide.aperture.at` | component contracts | parts state them; the kit and compiled drawings read them |
 | ring `guide.wall`, `guide.height`, `guide.slit`, and `data-guide-wall`, `data-guide-height`, `data-guide-slit` (#968) | component contracts, drawings | parts state them; rack.json derives a ring's solids from the compiled attributes |
 | a ring's solids in rack.json `solids`, named `ring/<id>/<part>` with `rear-leg`, `front-leg`, `left-leg`, `right-leg`, `hook`, `bar`, `seat` (#968) | the rack catalogue, kit, findings | the kit reads them, findings and pages name the parts by them |
-| a ring's part, and a zero-U part, met by the cable's tube in `legCrossings` and `detour`, the approach point (`at: 'approach'`) clear of the band by the radius and `CLEAR` (#968) | kit API | a page checking its tubes and the routed lengths of saved racks follow it |
+| a ring's part, and a zero-U part, met by the cable's tube in `legCrossings` and `detour`, the approach point (`at: 'approach'`) clear of the band by at least the radius and `CLEAR` (#968; the installed bend radius where the route turns there, #973) | kit API | a page checking its tubes and the routed lengths of saved racks follow it |
+| room for the bends (3.4, #973): the measure a path is judged by (`cornersOf` with `share: 'need'`, the plug's reach a leg), the approach point at the bend radius, the lead point (`at: 'lead'`, with a ring's `item` and `via` or a plug's `end`), a detour's `room` of two bend radii, the evenly sampled hang that leaves no corner short, and `ROOM_MAX` | kit API, routed lengths | a page reads the points by these names, and every routed length and stock size of a saved rack follows the rules; changing one moves them again |
+| `tight-bend` in a path's `bends` (`point`, `between`, `at`, `angle_deg`, `legs_mm`, `room_mm`, `need_mm`, `short_mm`), `bendFindings`, and its sentence ("turns N degrees between A and B with room for an R mm bend; the cable (type) needs M mm, S mm short.") | kit API, agent output | a page and an agent read the kind and the fields, and match the sentence |
+| `cornersOf` and `STRAIGHT_DEG` in `rack/route-path.js` (still exported from `rack/bundles.js`), and `cornersOf`'s `share` option with `half` (the default, the bundle check's) and `need` | kit API | a consumer imports them by these names from either path |
 | a doubled-back ring's path `face` point at its approach point, apart from the ring's own `rings[].face` on the band (#968) | kit API | a page that draws the face point, or compares the two, reads them by these names |
 | the ring advice in `bodyFindings`, "route it into the ring along its run, through its opening", and a ring's part named as "ring N front leg" (#968) | kit API, agent output, exports | agents and the export notes match the sentence |
 | `data-class="tray"` | drawings | consumers of the drawing read it |
@@ -1591,12 +1876,12 @@ published file or a saved rack file uses it.
 | the ranking of `managerOf` (hosted, then a standalone manager, with its tie-break by port row, then a manager on a neighbour, then a neighbour with guides) | kit | automatic routes of saved racks follow it, and their routed lengths with them |
 | the version-4 table of the rack products note gaining `states`, `readings`, the PDU bracket key, `slack`, `lay` and `roll` | `docs/rack-products-design.md` section 9, rack file version 4 | one bump carries them all; a key left out needs a version 5 |
 | the stored slack counting in the routed length | kit | a saved routed length and stock size depend on it |
-| routed lengths changing on saved racks: detours, the plug's reach (1.5), cables resting at the floor and at the ring sill, ring passes from approach points and solid rings and zero-U parts met by the tube (3.3), the end allowance by media (1.6), positions in the lay, the face of each tray, slack | kit | stored routed lengths and stock sizes move on the next measure; an ordered stock length may no longer match |
+| routed lengths changing on saved racks: detours, the plug's reach (1.5), cables resting at the floor and at the ring sill, ring passes from approach points and solid rings and zero-U parts met by the tube (3.3), room for the bends (3.4), the end allowance by media (1.6), positions in the lay, the face of each tray, slack | kit | stored routed lengths and stock sizes move on the next measure; an ordered stock length may no longer match |
 | the lane moving outboard of a zero-U part that stands in the gutter and carries no lane (a zero-U PDU), and routed lengths changing beside one | kit (`laneXAt`), drawings | every route on that lane is longer, and a saved length moves on the next measure; a drawing that places lanes itself must follow |
 | the reach point (`at: 'reach'` with `end`) in `routePath`, `ctx.plugReachOf` and `PLUG_REACH` (the helpers that compute them stay internal), with the plug outside the face in the path (1.5) | kit API | a page passes `plugReachOf` and reads the points by these names; moving the plug into the allowance later would change every length again |
 | the end allowance by media, `END_ALLOWANCE` (the table: the plug inside the port and the maker's short tolerance, never slack), `endAllowance(cable)` and the path's `allowance` (what a length adds an end: the table's figure and, until #949 step 4, the temporary dressing allowance of 0.1 m, which is not exported) (1.6); `END_ALLOWANCE_M` is gone | kit API | a page reads the table by these names, and every routed length and stock size depends on the figures; removing the dressing allowance shortens every routed length by 0.2 m |
 | `crosses-body` (with `part` and, for a held-face stack, `face`), `unheld` and the tray findings, `bodyFindings` | kit API, agent output | agents and pages read the kinds |
-| the public subpath `@portrayal/kit/rack/solids` (`solidsOf`, `legCrossings`, `detour`, `CLEAR`) | kit package exports | a consumer imports it by that path and those names; a rename or removal is a breaking kit release |
+| the public subpath `@portrayal/kit/rack/solids` (`solidsOf`, `legCrossings`, `detour` with its `room`, `CLEAR`) | kit package exports | a consumer imports it by that path and those names; a rename or removal is a breaking kit release |
 | `cable.slack`, `cable.slack.clear`, `cable.lay` (with `face`), and `roll` on `patch` | kit commands, offered to agents | agent sessions and saved prompts call them by name |
 | `inspect` fields: `crosses` and `rests` (with `face` and the tie slots used) on a cable route, `slack.stored`, the tray block of a device per face, and `roll` on a device | kit queries, agent output | agents and the site read them by name |
 | the crossing and tray lines in the export notes | exports | a reader of the notes matches them |

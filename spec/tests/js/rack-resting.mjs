@@ -14,6 +14,7 @@ import * as R from '../../../kit/rack/route.js';
 import * as S from '../../../kit/rack/solids.js';
 import * as Q from '../../../kit/rack/queries.js';
 import * as Rest from '../../../kit/rack/resting.js';
+import {cornersOf} from '../../../kit/rack/route-path.js';
 import {RU} from '../../../kit/rack/rails.js';
 import * as F from './route-direct-fixture.mjs';
 import * as G from './cable-solids-fixture.mjs';
@@ -126,10 +127,10 @@ test('the owner\'s rack: no point of any cord lies below a support it is over', 
     // and no leg enters a body
     for (let k = 1; k < p.points.length; k++) assert.deepEqual(S.legCrossings(p.points[k - 1], p.points[k], solids, {diameter: 3}), [], c.id);
   }
-  // it looked: the cords pass over the floor, some come to rest on it, and
-  // every one is inside a ring's band
+  // it looked: the cords pass over the floor, two come to rest on it (below),
+  // and every one is inside a ring's band
   assert.ok(overFloor > 500, `over the floor: ${overFloor}`);
-  assert.ok(onFloor > 20, `on the floor: ${onFloor}`);
+  assert.equal(onFloor, 2, `on the floor: ${onFloor}`);
   assert.ok(inRing >= 16, `in a ring: ${inRing}`);
 });
 
@@ -137,11 +138,17 @@ test('a free span that would sag below the floor lands on it and is supported th
   const r = F.rack(), ctx = F.ctxOf(r);
   // c6, from the upper leaf at 128.3 through ring 4 on to the panel at
   // 169.9: from the ring it would hang below the floor, so it lands on it.
-  // Seven cords land (nine before #968: c5 and c10 now leave their ring from
-  // an approach point 6.5 mm further on, and their shorter span clears it)
+  // Seven cords landed before #973 (nine before #968). A cord leaves its
+  // ring from an approach point the bend radius past the band, so the span on
+  // to its plug is 48 to 68 mm long, and to drop the 5.6 mm from the sill to
+  // the floor and rise the 17.7 to the plug in bends of 25 mm takes 61 mm
+  // along and the turn at each end besides: only c7 and c14, whose panel
+  // ports stand furthest from their ring (44.1 and 47.1 mm along the run),
+  // have a span that touches the floor, and no hang is laid that leaves a
+  // corner less room than the bend radius. The rest span straight.
   const lands = r.cables.map(c => [c.id, R.routePath(r, c, ctx)])
     .filter(([, p]) => p.rests.some(x => x.kind === 'tray'));
-  assert.deepEqual(lands.map(x => x[0]), ['c6', 'c7', 'c9', 'c13', 'c14', 'c15', 'c16']);
+  assert.deepEqual(lands.map(x => x[0]), ['c7', 'c14']);
   for (const [id, p] of lands) {
     assert.deepEqual(p.rests.find(x => x.kind === 'tray'), {kind: 'tray', item: 'i4', via: 'tray', face: 'top', role: 'resting'}, id);
     assert.ok(p.points.some(q => q.at === 'rest' && Math.abs(q.y - (TOP + r15)) < 1e-6), `${id} lies on the floor`);
@@ -302,22 +309,28 @@ test('a span from a support to a surface below drops onto it in two bends of the
   const floor = [{x0: -1, x1: 401, z0: -1, z1: 1, y: 100}];
   const onFloor = pts => pts.filter(x => Math.abs(x.y - 100) < 1e-9).map(x => x.x);
   // a 40 mm drop at R 25, no deeper than 2R: a bend down and a bend back,
-  // each turning acos(1 - 40 / 50), landing 2R sin of that along
+  // each turning acos(1 - 40 / 50), the drop 2R sin of that along. It is laid
+  // as the two points where the bends' tangents meet (#973): R tan(theta / 2)
+  // along at the start's height, and as far before the drop's end on the floor
   const p = {x: 0, y: 140, z: 0}, q = {x: 400, y: 140, z: 0};
   const a = Rest.hang(p, q, {r: 0, drape: 1, bend: 25, surfaces: floor});
   assert.equal(a.lands.length, 1);
-  const e = 50 * Math.sin(Math.acos(1 - 40 / 50));
-  near(Math.min(...onFloor(a.points)), e, 'lands 2R sin(theta) along');
-  near(Math.max(...onFloor(a.points)), 400 - e, 'and leaves as far before the end');
-  // the two bends meet mid-drop, half-way down
-  const mid = a.points.find(x => Math.abs(x.x - e / 2) < 1e-6);
-  near(mid.y, 120, 'half-way down at the middle of the drop');
+  assert.equal(a.points.length, 4);
+  const th = Math.acos(1 - 40 / 50), e = 50 * Math.sin(th), T = 25 * Math.tan(th / 2);
+  near(a.points[0].x, T, 'the first point, R tan(theta / 2) along'); near(a.points[0].y, 140, 'at the start\'s height');
+  near(Math.min(...onFloor(a.points)), e - T, 'on the floor from as far before the drop\'s end');
+  near(Math.max(...onFloor(a.points)), 400 - (e - T), 'and leaves as far after the rise begins');
+  // the line between the two passes where the bends meet: mid-drop, half-way down
+  near((a.points[0].x + a.points[1].x) / 2, e / 2, 'the middle of the drop');
+  near((a.points[0].y + a.points[1].y) / 2, 120, 'half-way down');
+  // and each of its four corners has room for the radius, by the kit's measure
+  const rooms = cornersOf([p, ...a.points, q], {share: 'need'}).map(c => c.room_mm);
+  assert.deepEqual(rooms, [25, 25, 25, 25]);
   // a 70 mm drop, deeper than 2R: two quarter bends and a straight fall
-  // between, 25 along, from 25 below the start to 25 above the floor
+  // between, 25 along: the two corners of the square they round
   const deep = Rest.hang({x: 0, y: 170, z: 0}, {x: 400, y: 170, z: 0}, {r: 0, drape: 1, bend: 25, surfaces: floor});
-  near(Math.min(...onFloor(deep.points)), 50, 'lands 2R along');
-  const fall = deep.points.filter(x => Math.abs(x.x - 25) < 1e-6).map(x => Math.round(x.y * 1000) / 1000);
-  assert.deepEqual(fall, [145, 125]);
+  assert.deepEqual(deep.points.map(x => [Math.round(x.x * 1000) / 1000, Math.round(x.y * 1000) / 1000]),
+    [[25, 170], [25, 100], [375, 100], [375, 170]]);
 });
 
 test('a span that is a fall or a rise is straight; a sag that would enter a body is not laid', () => {
@@ -391,7 +404,7 @@ test('traysOf: a catalogue without trays gives none, and a narrow part turned en
   near(o.box.y0, top - 8.6 - 29.5, 'the far band, below: where a cable rests');
 });
 
-test('a sag that would cut through a body its chord passes over is not laid: the span keeps its chord', () => {
+test('a sag that would cut through a body its chord passes over is not laid: a shallower one that clears it is', () => {
   // a sheet part at U13 whose only plate is a 4 mm rib, 60 out of the rail,
   // 1 mm in from one end of a jumper between two ports of the switch above,
   // 90 apart and 4 above the rib: the catenary from that end would cut
@@ -407,11 +420,18 @@ test('a sag that would cut through a body its chord passes over is not laid: the
     portY: () => top + 4};
   const p = R.routePath(r, c, ctx);
   assert.deepEqual(p.crossings, []);
-  // the span between the two reach points is straight: no point of it hung
-  assert.deepEqual(p.points.map(q => q.at), ['a', 'reach', 'reach', 'b']);
-  // and what it would have laid does enter the rib
-  const [ra, rb] = [p.points[1], p.points[2]];
-  const hung = Rest.hang(ra, rb, {r: r15, drape: 1, bend: 25, surfaces: Rest.surfacesOf(r, ctx)}).points;
-  assert.ok(hung.length > 2);
+  // the span's catenary at its full sag does enter the rib
+  const [ra, rb] = [p.points[1], p.points.at(-2)];
+  const full = Rest.sagOf(90, 1, 25);
+  const hung = Array.from({length: 89}, (_, k) => ({x: ra.x + (k + 1), y: ra.y + full * Rest.cat((k + 1) / 90), z: ra.z}));
   assert.equal(Rest.newCrossing(ra, rb, hung, S.solidsOf(r, ctx), 3), true);
+  // so that is not laid. Before #973 the span then kept its chord; now the
+  // hang is offered again at a half and a quarter of the sag, and the first
+  // that clears the rib (and leaves every corner its room) is laid
+  const laid = p.points.slice(2, -2);
+  assert.ok(laid.length >= 1 && laid.every(q => q.at === 'rest'), JSON.stringify(p.points.map(q => q.at)));
+  assert.equal(Rest.newCrossing(ra, rb, laid, S.solidsOf(r, ctx), 3), false);
+  assert.deepEqual(p.rests, []);
+  const sag = v => ra.y - Math.min(...v.map(q => q.y));
+  assert.ok(sag(laid) > 0 && sag(laid) < sag(hung), `${sag(laid)} of ${sag(hung)}`);
 });

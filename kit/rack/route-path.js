@@ -160,3 +160,69 @@ export function throughRings(pts, rings = [], {lead = 0} = {}) {
   }
   return {points: out, passes: passes.map(({index, sense, entry, exit, held}) => ({index, sense, entry, exit, ...(held ? {held} : {})})), back};
 }
+
+const round1 = v => Math.round(v * 10) / 10;
+// ── corners (cable bundles note section 5.2; #922, #973) ─────────────────
+// A point is a straight pass, not a corner, when the next segment runs
+// within this many degrees of the leg it is on.
+export const STRAIGHT_DEG = 1;
+const sub = (p, q) => ({x: p.x - q.x, y: p.y - q.y, z: p.z - q.z});
+const norm = v => Math.hypot(v.x, v.y, v.z);
+const turnDeg = (u, v) => {
+  const c = (u.x * v.x + u.y * v.y + u.z * v.z) / (norm(u) * norm(v));
+  return (Math.acos(Math.max(-1, Math.min(1, c))) * 180) / Math.PI;
+};
+
+// THE CORNERS OF A POLYLINE, in rack coordinates (mm), with the largest bend
+// each has room for. A point is a straight pass when the next segment runs
+// within STRAIGHT_DEG of the leg from the last corner (or the start), so many
+// small turns add up to a corner. Each corner's legs run to the next corner
+// on each side, through straight passes, or to the polyline's end; a leg
+// between two corners is shared, so each may use half of it, and a leg to an
+// end all of it. The room is
+//   r_max = min(a_in, a_out) / tan(theta / 2),
+// 0 for a polyline that doubles back on itself. A point on top of the one
+// before it is skipped. Returns [{k, angle_deg, legs_mm: [in, out], room_mm}],
+// `k` the index into `pts` of the corner.
+//
+// `share: 'need'` (#973) shares a leg between its two corners by what each
+// needs, not half and half. A bend of radius r uses r tan(theta / 2) of each
+// leg, so the largest radius both corners of a leg L can take is
+//   L / (tan(theta_1 / 2) + tan(theta_2 / 2)),
+// and a corner's room is the smaller of its two legs' figures (a leg to an
+// end is all the corner's, as before). It is the same model worked exactly:
+// whatever passes at a radius by halves passes by need, and a slight turn
+// beside a right angle no longer takes half the leg it needs a tenth of. A
+// leg whose other corner doubles back is still halved, so one fold does not
+// take all the room of its neighbours. A cable's own path is judged this way
+// (route.js routePath `bends`), since the kit lays it point by point; a
+// bundle's trunk, a sketch through waypoint centres, keeps the halves
+// (bundles.js bendCheck).
+export function cornersOf(pts, {share = 'half'} = {}) {
+  const P = [];
+  pts.forEach((p, k) => { if (p && (!P.length || norm(sub(p, P.at(-1).p)) > 1e-6)) P.push({p, k}); });
+  const cum = [0];
+  for (let i = 1; i < P.length; i++) cum.push(cum[i - 1] + norm(sub(P[i].p, P[i - 1].p)));
+  const at = [];
+  let last = 0;
+  for (let i = 1; i + 1 < P.length; i++) {
+    const theta = turnDeg(sub(P[i].p, P[last].p), sub(P[i + 1].p, P[i].p));
+    if (theta <= STRAIGHT_DEG) continue;
+    at.push({i, theta});
+    last = i;
+  }
+  const back = c => c.theta >= 180 - 1e-6;
+  const tan = c => Math.tan((c.theta * Math.PI) / 360);
+  return at.map((c, j) => {
+    const prev = j ? at[j - 1] : null, next = j + 1 < at.length ? at[j + 1] : null;
+    const inMm = cum[c.i] - (prev ? cum[prev.i] : 0);
+    const outMm = (next ? cum[next.i] : cum.at(-1)) - cum[c.i];
+    let room;
+    if (back(c)) room = 0;
+    else if (share === 'need') {
+      const leg = (mm, other) => (!other ? mm / tan(c) : back(other) ? mm / 2 / tan(c) : mm / (tan(c) + tan(other)));
+      room = Math.min(leg(inMm, prev), leg(outMm, next));
+    } else room = Math.min(prev ? inMm / 2 : inMm, next ? outMm / 2 : outMm) / tan(c);
+    return {k: P[c.i].k, angle_deg: round1(c.theta), legs_mm: [round1(inMm), round1(outMm)], room_mm: round1(room)};
+  });
+}

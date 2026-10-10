@@ -78,8 +78,12 @@ test('inspect: a cable, with its routed length from a route context', async () =
     // its free spans hang by the drape of fibre (#949 step 3): 1.15 m taut;
     // 1.27 m, 1.5 m stock and 0.73 slack before #962's end allowance (113.1
     // mm an end for an OM4 cord, not 150: 13.1 of plug in the port and the
-    // temporary 100 of dressing): 1.1962 m now
-    routed: {metres: 1.2, stock: 1.5}, slack: {metres: 0.8},
+    // temporary 100 of dressing): 1.1962 m then. 1.169 m since #973: the cord
+    // runs on 12.5 mm straight out of each plug for its turn toward the lane,
+    // and where it leaves the top of the lane for its port it sags a quarter
+    // as deep, a span that hung to its full depth there turning back on the
+    // lane too tightly
+    routed: {metres: 1.17, stock: 1.5}, slack: {metres: 0.83},
     route: {edited: false, waypoints: [{lane: 'left-front', ru: 10}, {lane: 'left-front', ru: 20}], text: 'left-front U10-U20'},
     lanes: ['left-front', 'right-front', 'left-rear', 'right-rear'],
     passes: {i3: ['guide-1', 'guide-2', 'window-1']},

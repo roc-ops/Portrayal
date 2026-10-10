@@ -113,23 +113,52 @@ export function groundAt(surfaces, x, z, y) {
 // THE DROP from a support onto a surface below it, h mm, as a cable lays it:
 // leaving level, a bend down and a bend back to level, each of radius R, so
 // it lands level; deeper than 2R, a straight fall between two quarter bends.
-// Returns its horizontal extent and its height (down from the start) at a
-// distance s along it.
+// It is laid as the TANGENT POLYGON of those bends (#973): the two points
+// where the tangents at the bends' ends meet, so the line through them
+// touches each arc and no corner of it has less room than R by the kit's own
+// measure (route-path.js cornersOf). Returns its horizontal extent and the
+// two points as [distance along, height down from the start].
 function dropOf(h, R) {
-  if (!(h > EPS)) return {extent: 0, at: () => 0, breaks: []};
+  if (!(h > 0.01)) return {extent: 0, points: []};
   if (h <= 2 * R) {
-    const th = Math.acos(1 - h / (2 * R)), e = 2 * R * Math.sin(th);
-    return {extent: e, breaks: [e / 2],
-      at: s => (s <= e / 2 ? R - Math.sqrt(Math.max(0, R * R - s * s))
-        : h - (R - Math.sqrt(Math.max(0, R * R - (e - s) * (e - s)))))};
+    const th = Math.acos(1 - h / (2 * R)), e = 2 * R * Math.sin(th), T = R * Math.tan(th / 2);
+    return {extent: e, points: [[T, 0], [e - T, h]]};
   }
-  // two quarter bends with a straight fall between, at s = R
-  return {extent: 2 * R, breaks: [R], fall: true,
-    at: s => (s < R ? R - Math.sqrt(Math.max(0, R * R - s * s))
-      : h - (R - Math.sqrt(Math.max(0, R * R - (2 * R - s) * (2 * R - s)))))};
+  // two quarter bends with a straight fall between, at R along
+  return {extent: 2 * R, points: [[R, 0], [R, h]]};
 }
 
 const lerp = (p, q, t) => ({x: p.x + (q.x - p.x) * t, y: p.y + (q.y - p.y) * t, z: p.z + (q.z - p.z) * t});
+const gap3 = (p, q) => Math.hypot(p.x - q.x, p.y - q.y, p.z - q.z);
+// Two points of a span nearer than this are one (mm): where a span lands, a
+// sample and a break of the profile can fall a fraction of a millimetre
+// apart, and any curve through both turns tighter than the span does.
+const NEAR = 1;
+// A span's points with every near-duplicate dropped, its ends p and q counted.
+function apart(p, q, pts) {
+  const out = [];
+  for (const pt of pts) if (gap3(pt, out.length ? out[out.length - 1] : p) >= NEAR) out.push(pt);
+  while (out.length && gap3(out[out.length - 1], q) < NEAR) out.pop();
+  return out;
+}
+// How finely the curve is worked before it is sampled evenly along its arc.
+const FINE = 48;
+// A curve given as fine points from p to q, as n - 1 points evenly spaced
+// along its arc (none for n < 2).
+function evenly(fine, n) {
+  if (n < 2) return [];
+  const cum = [0];
+  for (let i = 1; i < fine.length; i++) cum.push(cum[i - 1] + gap3(fine[i - 1], fine[i]));
+  const total = cum[cum.length - 1], out = [];
+  let i = 1;
+  for (let k = 1; k < n; k++) {
+    const want = (k / n) * total;
+    while (i < fine.length - 1 && cum[i] < want) i++;
+    const span = cum[i] - cum[i - 1];
+    out.push(lerp(fine[i - 1], fine[i], span > 0 ? (want - cum[i - 1]) / span : 0));
+  }
+  return out;
+}
 
 // A FREE SPAN from p to q (rack mm, cable centres), as the points to add
 // between them, and what it lands on: {points, lands}. `r` is the cable's
@@ -140,60 +169,100 @@ const lerp = (p, q, t) => ({x: p.x + (q.x - p.x) * t, y: p.y + (q.y - p.y) * t, 
 // on it between; a span too short to lay that way keeps the catenary, raised
 // to the surface wherever it would pass below it. A span that is mostly a
 // fall or a rise (less than MIN_SPAN across the face) is straight.
-export function hang(p, q, {r = 0, drape = 1, bend = 25, surfaces = []} = {}) {
+//
+// NO SPAN IS LAID TIGHTER THAN IT MAY BEND (#973). The points are the hang's
+// own corners and its ends are corners too, where the span meets what holds
+// it, so whether a hang leaves every one of them room is not the span's alone
+// to say: `fits(points)`, when given (route.js routePath), says whether the
+// path with these points between p and q has no more corners short of the
+// bend radius than the straight span has. The hang is offered from the
+// fullest to the least, and the first that fits is laid:
+//   - on a surface, the drops' tangent polygons with a level lead of nothing,
+//     the bend radius or twice it before each (a span leaves a ring or a plug
+//     along it, and the turn there needs its leg before the drop begins);
+//   - the catenary at its full sag, at a half and at a quarter of it, each
+//     sampled evenly along its arc (and not along the chord, which spaces the
+//     samples of a steep end several times closer than the middle's), at 15
+//     mm, at the bend radius and at twice it;
+//   - straight, when nothing else fits: a cable with no room to turn where it
+//     is held does not also sag.
+// Near-duplicate points are dropped (NEAR). Without `fits` the first of each
+// is laid, as before #973.
+export function hang(p, q, {r = 0, drape = 1, bend = 25, surfaces = [], fits = null} = {}) {
   const L = Math.hypot(q.x - p.x, q.z - p.z);
   if (L < MIN_SPAN) return {points: [], lands: []};
+  const ok = pts => typeof fits !== 'function' || fits(pts);
   const R = bend / Math.max(drape, EPS);
   const S = sagOf(L, drape, R);
-  const n = Math.max(4, Math.min(24, Math.ceil(L / 15)));
-  // the ground under each sample: surfaces no higher than the chord less the
-  // cable's radius (a surface above the chord is a roof, not ground)
-  const groundOf = (t, chordY) => {
-    const c = lerp(p, q, t);
-    return groundAt(surfaces, c.x, c.z, chordY - r);
-  };
-  const ts = Array.from({length: n - 1}, (_, k) => (k + 1) / n);
-  const samples = ts.map(t => {
-    const chord = lerp(p, q, t);
-    const g = groundOf(t, Math.max(chord.y, p.y, q.y));
-    return {t, chord, y: chord.y + S * cat(t), g};
+  // the ground under a point of the chord: surfaces no higher than the chord
+  // less the cable's radius (a surface above the chord is a roof, not ground)
+  const top = Math.max(p.y, q.y);
+  const fineOf = sag => Array.from({length: FINE + 1}, (_, k) => {
+    const t = k / FINE, chord = lerp(p, q, t);
+    return {t, chord, y: chord.y + sag * cat(t), g: groundAt(surfaces, chord.x, chord.z, Math.max(chord.y, top) - r)};
   });
-  const below = samples.filter(s => s.g && s.y < s.g.y + r - EPS);
+  const full = fineOf(S);
+  const below = full.filter(s => s.t > 0 && s.t < 1 && s.g && s.y < s.g.y + r - EPS);
   // a span that sags less than a hundredth of a millimetre and lands on
   // nothing is straight: there is nothing to lay
-  if (!below.length) return {points: S < 0.01 ? [] : samples.map(s => ({...s.chord, y: s.y})), lands: []};
-  // it lands: on the highest surface it would pass below
-  const land = below.reduce((m, s) => (s.g.y > m.g.y ? s : m), below[0]).g;
-  const G = land.y + r;
-  const da = dropOf(p.y - G, R), db = dropOf(q.y - G, R);
-  const fits = da.extent + db.extent <= L + EPS && p.y >= G - EPS && q.y >= G - EPS;
-  const lands = [land];
-  if (!fits) {
-    // too short to lay down and pick up again: the catenary, raised onto
-    // whatever it would pass below
-    return {points: samples.map(s => ({...s.chord, y: s.g ? Math.max(s.y, s.g.y + r) : s.y})), lands};
+  if (!below.length && S < 0.01) return {points: [], lands: []};
+  if (below.length) {
+    // it lands: on the highest surface it would pass below
+    const land = below.reduce((m, s) => (s.g.y > m.g.y ? s : m), below[0]).g;
+    const G = land.y + r;
+    const da = dropOf(p.y - G, R), db = dropOf(q.y - G, R);
+    if (p.y >= G - EPS && q.y >= G - EPS) {
+      // the profile: a level lead, a drop from p, the surface, a rise to q
+      // and a level lead; never below any surface under it
+      const leads = [0, R, 2 * R];
+      const pairs = leads.flatMap(a => leads.map(b => [a, b])).sort((x, y) => (x[0] + x[1]) - (y[0] + y[1]));
+      // where along the span that surface is under it: the stretch the cable
+      // lies level must reach it, or it would be said to rest on what it
+      // only passes over (a rib a few mm wide near one end)
+      const under = full.filter(s => s.g === land).map(s => s.t * L);
+      const [u0, u1] = [Math.min(...under), Math.max(...under)];
+      for (const [la, lb] of pairs) {
+        const s0 = (da.extent ? la : 0) + da.extent, s1 = L - (db.extent ? lb : 0) - db.extent;
+        if (s0 > s1 + EPS || s0 > u1 + EPS || s1 < u0 - EPS) continue;
+        const prof = [...da.points.map(([s, h]) => [la + s, p.y - h]),
+          ...[...db.points].reverse().map(([s, h]) => [L - lb - s, q.y - h])];
+        const pts = prof.map(([s, y]) => ({...lerp(p, q, s / L), y}));
+        for (const pt of pts) {
+          const g = groundAt(surfaces, pt.x, pt.z, pt.y - r);
+          if (g && pt.y < g.y + r) pt.y = g.y + r;
+        }
+        const out = apart(p, q, pts);
+        if (out.length && ok(out)) return {points: out, lands: [land]};
+        if (typeof fits !== 'function') break;
+      }
+    }
   }
-  // the profile: a drop from p, the surface, a rise to q; sampled on the grid
-  // and at every break, and never below any surface under it
-  const ss = new Set(ts.map(t => t * L));
-  for (const b of [...da.breaks, da.extent]) if (b > EPS && b < L - EPS) ss.add(b);
-  for (const b of [...db.breaks, db.extent]) if (b > EPS && b < L - EPS) ss.add(L - b);
-  const yAt = s => (s <= da.extent ? p.y - da.at(s) : s >= L - db.extent ? q.y - db.at(L - s) : G);
-  const out = [];
-  for (const s of [...ss].sort((a, b) => a - b)) {
-    const c = lerp(p, q, s / L);
-    const fallA = da.fall && Math.abs(s - da.breaks[0]) < EPS, fallB = db.fall && Math.abs(L - s - db.breaks[0]) < EPS;
-    // a straight fall: both ends of it, at the one distance along, a quarter
-    // bend below the start and a quarter bend above the surface
-    if (fallA) out.push({...c, y: p.y - R}, {...c, y: G + R});
-    else if (fallB) out.push({...c, y: G + R}, {...c, y: q.y - R});
-    else out.push({...c, y: yAt(s)});
+  // the catenary, raised onto whatever it would pass below (a span too short
+  // to lay down and pick up again lands so), evenly along its arc
+  // the spacings a hang is offered at, finest first: a sample's legs are the
+  // room its neighbours have, so a span that turns sharply where it is held
+  // needs them longer (the radius no larger than a lay is opened out for,
+  // route.js ROOM_MAX)
+  const steps = [15, Math.min(bend, 100), 2 * Math.min(bend, 100)];
+  for (const sag of S < 0.01 ? [] : [S, S / 2, S / 4]) {
+    const fine = sag === S ? full : fineOf(sag);
+    const raised = fine.map(s => ({...s.chord, y: s.g ? Math.max(s.y, s.g.y + r) : s.y}));
+    // what it lands on: each surface a point of it, as sampled, lies on
+    const landsOf = pts => { const on = []; for (const pt of pts) { const g = groundAt(surfaces, pt.x, pt.z, pt.y - r + 1e-3);
+      if (g && Math.abs(pt.y - (g.y + r)) < 1e-6 && !on.includes(g)) on.push(g); } return on; };
+    const len = raised.reduce((m, pt, i) => (i ? m + gap3(raised[i - 1], pt) : 0), 0);
+    let last = null;
+    for (const step of steps) {
+      const n = Math.min(24, Math.round(len / step));
+      if (n < 2 || n === last) continue;
+      last = n;
+      const out = apart(p, q, evenly(raised, n));
+      if (out.length && ok(out)) return {points: out, lands: landsOf(out)};
+      if (typeof fits !== 'function') break;
+    }
+    if (typeof fits !== 'function') break;
   }
-  for (const pt of out) {
-    const g = groundAt(surfaces, pt.x, pt.z, pt.y - r);
-    if (g && pt.y < g.y + r) pt.y = g.y + r;
-  }
-  return {points: out, lands};
+  return {points: [], lands: []};
 }
 
 // THE HELD FACE OF A TRAY (section 2.3): a cable strapped up against the
