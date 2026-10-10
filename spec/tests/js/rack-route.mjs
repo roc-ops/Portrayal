@@ -85,8 +85,10 @@ test('the same face, different sides: the shorter side is taken, whichever end i
     {item: 'i4', via: 'guide-3'}, {item: 'i4', via: 'guide-4'}];
   assert.deepEqual(R.autoRoute(r, c, ctx), right);
   const mm = route => Math.round(R.routedLength(r, {...c, route, routeEdited: true}, ctx).measured * 10000) / 10;
-  // (1318.5 and 1459.8 from the port faces, before the plug's reach, #960)
-  assert.deepEqual([mm(right), mm(left)], [1361.8, 1472.9]);
+  // (1318.5 and 1459.8 from the port faces, before the plug's reach, #960;
+  // 1361.8 and 1472.9 taut, before each free span hung by its drape, #949
+  // step 3: the right still the shorter)
+  assert.deepEqual([mm(right), mm(left)], [1387.4, 1502.7]);
   // the same cable written the other way round takes the same side
   const back = cable({item: 'i3', path: 'q'}, {item: 'i1', path: 'p'});
   assert.deepEqual(R.autoRoute(r, back, ctx), right.toReversed());
@@ -209,7 +211,9 @@ test('a lane point sits in its gutter at the U middle, on its face\'s rail plane
 test('a routed length measures the path, adds 0.15 m an end, and rounds to stock', () => {
   let r = add(M.newRack(), 'sw', 1);
   r = add(r, 'pp', 21);
-  const ctx = {...ctxFor(r, {'i1|p': -100, 'i2|q': -100}), portY: () => null};
+  // a cable too stiff to sag (bendOf: no span can take the bend), so the
+  // path is the taut one worked below; resting is rack-resting.mjs's
+  const ctx = {...ctxFor(r, {'i1|p': -100, 'i2|q': -100}), portY: () => null, bendOf: () => 1e12};
   const got = R.routedLength(r, cable({item: 'i1', path: 'p'}, {item: 'i2', path: 'q'}), ctx);
   // port -> its plug's reach, straight out of the face (a cable with no
   // media: the copper plug's, 39.4, #960) -> left lane (|dx| = lane x - 100,

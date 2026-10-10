@@ -419,7 +419,7 @@ tray declares `ties`.**
 - **Lying on the held face.** On a tray mounted the usual way, the
   underside, the cable lies against the plate. (On a tray turned over, the
   held face is its top, and a hanging ring holds the cable on its lower band,
-  about 31.5 mm below the plate on the FHD-CMP5DR: section 3.1.) Between two
+  35.1 mm below the plate on the FHD-CMP5DR: section 3.1.) Between two
   straps it sags a little, by the drape of its type over that span, and never
   below the **strap line**, the bottom of the strapped stack at that point.
   The stack gathers where the straps are: under the pair of slots a strap
@@ -541,6 +541,66 @@ an item that is not turned over nothing changes.
   depth axis does not move the back of a tray to the front. The turn mirrors
   left and right across the item, and the interleaving test does not change
   under a mirror, so the forced set is the same whichever frame it is read in.
+
+### 3.2 As built
+
+Step 3 of section 10 is built in kit 0.14.0. Where this note did not say how,
+the build chose as follows; each is in `kit/rack/resting.js` or
+`route.js routePath`.
+
+- **Where the kit reads a ring's opening.** rack.json carries the openings of
+  the rings that stand on a tray's floor under that tray, as `rings` (each
+  `{via, run, box}`, the clear opening in the frame of `solids`), derived
+  from the compiled plan as the floor is: a ring's `sill` and `aperture.at`
+  compile to `data-guide-sill` and `data-guide-aperture-at`, and the height
+  it stands on is the floor's. A ring that stands on no tray (the 1U D-ring
+  panels of section 6) carries no opening yet and keeps the point its drawing
+  gives; placing those is for step 6, with their data.
+- **Across the opening.** A cable on its own lies at the side of the opening
+  nearer the rail the part is fixed to, position 1 of section 4, and on the
+  held face at the rail side of the strapped width. The positions of several
+  cables are step 5.
+- **How far a free span sags.** The 3D drawing's catenary, `20 + 0.3 L` for a
+  span L mm across the face, scaled by `DRAPE`, and no deeper than
+  `CURVE L^2 / (R / DRAPE)`, with R the installed bend radius and `CURVE` the
+  catenary's own (0.078): the tightest bend of the curve, at its ends, is
+  then no tighter than R over the drape, so a stiff cable takes a wider
+  curve. Where it would pass below a surface it drops onto it from each end
+  in two bends of that radius (a straight fall between two quarter bends
+  where the drop is deeper than twice the radius) and lies on it, and so a
+  stiff cable lands further along. A span shorter than the two drops leaves
+  room for keeps its catenary, clipped onto the surface where it would pass
+  below it, and there the bend bound is not kept: the clip can turn tighter
+  than the radius.
+- **What is not a free span.** A plug (port to reach point), a ring's inside,
+  a lane's run along the frame (lane point to lane point), a tray's stretch,
+  and a leg into or out of a detour point: a cable taken round an edge is
+  dressed round it by hand (1.3) and stays taut, clear by what the detour
+  keeps. A sag that would carry a cable into a body its straight leg did not
+  cross is not laid; the leg keeps its chord.
+- **The held face in this step.** Nothing in a version-3 rack file can pin a
+  face, and the automatic face is step 5, so a cable lies on the held face
+  only where the page pins it, through `ctx.trayFaceOf(cable, {item, via})`,
+  and the tray has a tie slot along the stretch. The slots that hold a cable
+  along the run are the ones long along it, a strap going down one of a pair
+  and up the other; a cable on its own is its own stack, so between two
+  straps it sags at most its own radius.
+- **Configurations.** rack.json reads trays off the default configuration's
+  plan, as it reads `solids`, so `traysOf` places those trays for every item
+  whatever its configuration, as `solidsOf` places its solids; a
+  configuration whose top face is drawn as a differently named view cannot
+  declare `trays`, and `cable.route` refuses a tray waypoint on a configured
+  item when the page gives its guides (rack.json lists no pathway of a
+  configuration but the default; without the page's guides such a waypoint
+  is not judged, as no pathway of a configured item is).
+- **What `inspect` says.** A cable's route gains `rests` (section 8): each
+  ring whose sill holds it, each tray it runs along or lands on (with the
+  face, its role, and on a held face the tie slots it uses) and each body a
+  free span comes to rest on. Positions are step 5's.
+- **The snap-in ring's sill** was read off the ring-profile view at 5.6 mm,
+  where 2 mm had been estimated: a cable in a ring hanging from the
+  FHD-CMP5DR rests 5.6 + 29.5 = 35.1 mm below the plate, 38.1 below the top
+  of U12, the figures section 2.3 and fixture 3 of 4.5 now give.
 
 ## 4. Lay order
 
@@ -894,8 +954,8 @@ leave left, o 150 leaves right). Read in the frame of Md, mirrored, every x
 changes sign and L and R swap; the pair is the same, since interleaving does
 not change under a mirror. The test also asserts the resting of 3.1: in each
 hanging ring of Md a cable rests on the lower band, the sill plus the 29.5 mm
-opening below the plate (with the estimated 2 mm sill of the snap-in ring,
-34.5 mm below the top of U12), its centre a radius above that, its layers
+opening below the plate (with the snap-in ring's 5.6 mm sill, 35.1 mm below
+the plate and 38.1 mm below the top of U12), its centre a radius above that, its layers
 stacking up toward the plate, and no cable between two rings below that line
 where a tie slot holds it. The upward face of Md, its underside, is a resting
 face with 3 mm of its envelope above it, so slack stored there warns at once
@@ -1005,7 +1065,7 @@ route has nothing to lay slack in.
 | part | what it needs | what to measure | sources |
 |---|---|---|---|
 | `fs/fhd-cmp5dr-tray` (FHD-CMP5DR) | `tray`: floor, height, ties, `slack: area` | the strip and the two arms as floor rectangles; the floor height (3.0, already read); whether the front edge turns up (the ring-profile view draws none, so `lip: 0`); the sixteen slots, already measured, moved into `ties` | the 0U/1U horizontal manager datasheet three-view (read for the part), seven renders including the underside, the horizontal managers quick start guide |
-| `fs/d-ring-snap-in` | `depth`, `sill`, `aperture.at` | the band along the run (6.8 mm, drawn); the seat under the opening (2 mm, estimated today: wanted from the underside render or a ruler) | the same datasheet, the ring-profile view |
+| `fs/d-ring-snap-in` | `depth`, `sill`, `aperture.at` | the band along the run (6.8 mm, drawn); the sill under the opening (5.6 mm, read off the ring-profile view in step 3; 2 mm had been estimated) | the same datasheet, the ring-profile view |
 | the 1U D-ring panels: CMH-5DR1U, CMH-5DR1U-N, USCMH-5DR1U, CMH-4DRB1U, CMH-6DR1U | ring `depth`, `sill`, `aperture.at`; the plate is a solid, derived | each ring band along its run and the height of the lower leg of its opening in the face; the CMH-6DR1U end ring, which runs along y | the D-ring managers datasheet, the CMH-5DR1U quick start guide, the CMH-4DRB1U datasheet and dimensioned render, renders of each; CMH-6DR1U has renders only |
 | the finger ducts: CMH-SFD1U and 2U, CMH-DFD1U, the SFDS and DFDS models, USCMH-SFDABS and SFDABSB, CMH-BS, CMH-HD and CMH-UHD | `trays` on the view, each channel a floor with walls as `lip`, `slack: area` | the channel floor height in the face, its depth front to back, the finger height, and the clearance under the cover | the finger duct datasheets (ABS and steel) and the high-capacity and single-sided manager datasheets; renders for most, none for the CMH-BS, HD and UHD lines |
 | FHD-1UBE | its five front D-rings placed, a lacer floor, the rear lacer bar | ring positions along the panel (107 mm in front of the plate is read), the lacer floor, the bar | its datasheet and assembly illustration, the FHD cabling system guide |

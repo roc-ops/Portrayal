@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: fhd-cmp5dr-tray
-version: 1.0.0
+version: 1.1.0
 class: mechanical
 description: >-
   The steel tray of the FS FHD-CMP5DR lacer panel seen from above - a strip across
@@ -39,6 +39,16 @@ provenance:
     known-wrong - the slots' ends are round in the drawing and FS's close-up render and
     square here; and the underside carries five round twist-lock bosses, in the drawing
     and in FS's render of the underside, that are not drawn.
+  tray: >-
+    drawing - the plan view, as `size-outline` and `size-slots` read it, stated as the
+    surface cables lie on. The floor is the strip, 448.4 x 61.2 from the front edge
+    (48.8 to 110 from the rail), and each arm, 10.5 wide from 15.4 to 48.8 from the
+    rail; the fillets where an arm meets the strip are left out, a few square mm. Its
+    `height`, 3.0, is the 44 mm envelope less the 41 of `depth`. `lip: 0`: the
+    ring-profile view draws the front edge flat, with no upturn. The sixteen `ties`
+    are the slots of `size-slots`, the same rectangles the skin cuts and the device's
+    bottom view draws; they take a strap, never a cable. `slack: area` is the floor
+    less the rings on it; nothing states how much it holds, which depends on the cable.
   color: >-
     estimated - FS states "Steel, Powder-coated Black". Every image of the part is a
     render, so the value is FS's render material and not a photograph of a finish.
@@ -47,4 +57,30 @@ size-confidence: {w: drawing, h: drawing, d: drawing}
 relief: {wall: '#1b1d20'}
 elements:
   floor: {at: [0.0, 0.0], size: [448.4, 110], class: bezel}
+tray:
+  floor:
+    - {at: [0.0, 48.8], size: [448.4, 61.2]}
+    - {at: [0.0, 15.4], size: [10.5, 33.4]}
+    - {at: [437.9, 15.4], size: [10.5, 33.4]}
+  height: 3.0
+  lip: 0
+  run: x
+  ties:
+    - {at: [54.85, 95], size: [22.5, 3]}
+    - {at: [54.85, 89.7], size: [22.5, 3]}
+    - {at: [60.85, 55.2], size: [3, 23.3]}
+    - {at: [68.35, 55.2], size: [3, 23.3]}
+    - {at: [157.75, 95], size: [22.5, 3]}
+    - {at: [157.75, 89.7], size: [22.5, 3]}
+    - {at: [163.75, 55.2], size: [3, 23.3]}
+    - {at: [171.25, 55.2], size: [3, 23.3]}
+    - {at: [268.15, 95], size: [22.5, 3]}
+    - {at: [268.15, 89.7], size: [22.5, 3]}
+    - {at: [274.15, 55.2], size: [3, 23.3]}
+    - {at: [281.65, 55.2], size: [3, 23.3]}
+    - {at: [371.05, 95], size: [22.5, 3]}
+    - {at: [371.05, 89.7], size: [22.5, 3]}
+    - {at: [377.05, 55.2], size: [3, 23.3]}
+    - {at: [384.55, 55.2], size: [3, 23.3]}
+  slack: {kind: area}
 skins: [default]

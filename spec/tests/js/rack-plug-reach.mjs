@@ -69,13 +69,17 @@ test('the reach point is out of the face the port is seen from: +z at the front,
   t = M.withItem(t, {ref: 'sw', cfg: 'x', ru: 20, label: 'b', face: 'rear'}).rack;
   assert.deepEqual(at(t, front), [['a', null, 0], ['reach', 'a', 39.4], ['reach', 'b', -39.4], ['b', null, 0]]);
   // a plug of no reach adds no point: the path is as it was from the faces
+  // (and the free spans hang between them, #949 step 3)
   const none = {...ctx, plugReachOf: () => 0};
-  assert.deepEqual(R.routePath(r, front, none).points.map(p => p.at), ['a', 'lane', 'lane', 'lane', 'b']);
+  assert.deepEqual(R.routePath(r, front, none).points.map(p => p.at).filter(a => a !== 'rest'), ['a', 'lane', 'lane', 'lane', 'b']);
 });
 
 test('the reach is in the length once, as path, and the end allowance is unchanged', () => {
   const r = F.rack(), ctx = F.ctxOf(r);
-  const zero = {...ctx, plugReachOf: () => 0};
+  // how much the reach adds is the taut path's: a cord too stiff to sag
+  // (bendOf: no span can take the bend), so a span's hang, which the reach
+  // also moves (#949 step 3), is not counted as the plug's
+  const rigid = {...ctx, bendOf: () => 1e12}, zero = {...rigid, plugReachOf: () => 0};
   for (const c of r.cables) {
     const p = R.routePath(r, c, ctx);
     // the measured length is the kit's points and 0.15 m an end, no more
@@ -84,9 +88,11 @@ test('the reach is in the length once, as path, and the end allowance is unchang
     const [a, ra] = p.points, [rb, b] = p.points.slice(-2);
     assert.deepEqual([ra.at, ra.end, ra.z - a.z, ra.x - a.x, ra.y - a.y], ['reach', 'a', 27.6, 0, 0], c.id);
     assert.deepEqual([rb.at, rb.end, rb.z - b.z, rb.x - b.x, rb.y - b.y], ['reach', 'b', 27.6, 0, 0], c.id);
-    // it grows by at most the two plugs, and by more than nothing
-    const grew = R.routedLength(r, c, ctx).measured - R.routedLength(r, c, zero).measured;
-    assert.ok(grew > 0.01 && grew <= 2 * 0.0276 + 1e-12, `${c.id} grew ${grew}`);
+    // it grows by at most the two plugs, and by more than nothing (1.8 to
+    // 20.1 mm here since the cords rest on the ring sills, #949 step 3; 11 to
+    // 28 before)
+    const grew = R.routedLength(r, c, rigid).measured - R.routedLength(r, c, zero).measured;
+    assert.ok(grew > 0.001 && grew <= 2 * 0.0276 + 1e-12, `${c.id} grew ${grew}`);
   }
 });
 
@@ -94,8 +100,13 @@ test('the reach is in the length once, as path, and the end allowance is unchang
 // 47.6 in front of the leaf, a straight rise to the ring would cross the
 // tray floor, so each goes up in front of its front edge and back in. Their
 // lengths, the path plus 0.15 m an end, in mm; from the port faces they were
-// 494.0-495.8 (c9-c12) and 463.1-478.4 (c13-c16), all 0.5 m stock.
-const OVER_THE_EDGE = {c9: 670.0, c10: 667.3, c11: 665.4, c12: 664.3, c13: 643.9, c14: 648.9, c15: 629.4, c16: 632.5};
+// 494.0-495.8 (c9-c12) and 463.1-478.4 (c13-c16), all 0.5 m stock. Since the
+// cords rest (#949 step 3: on each ring's sill, at the side of its opening
+// nearer the rail) they were 664.3-670.0 and 629.4-648.9; and since the ring
+// is lower and further out, the default plug goes round the edge as well, to
+// the same detour points, so the optic's longer plug only moves the reach
+// point along the leg it would run anyway and the lengths are the default's.
+const OVER_THE_EDGE = {c9: 662.3, c10: 659.7, c11: 662.3, c12: 661, c13: 627, c14: 632.5, c15: 617.6, c16: 620.8};
 
 test('a cord that must clear its plug goes round the tray\'s front edge, and is measured that way', () => {
   const r = F.rack(), ctx = optics(F.ctxOf(r));
@@ -112,10 +123,13 @@ test('a cord that must clear its plug goes round the tray\'s front edge, and is 
     assert.deepEqual(p.detours[0].between, [{end: 'a'}, {item: 'i4', via: ring}], id);
     assert.ok(p.detours[0].points.every(q => Math.abs(q.z - (110 + 1.5 + S.CLEAR)) < 1e-9), id);
     assert.deepEqual(p.crossings, [], id);
-    // the same leg from the leaf's face, not its plug, needs no detour: the
-    // plug is what puts it over the floor
+    // the same leg from the leaf's face, not its plug, goes round too: a
+    // straight rise from the face to a ring on its sill, 73.7 out, meets the
+    // floor's back edge at 48.8 below the plate (before the cords rested on
+    // the sill it did not, and only the plug put it over the floor)
     const face = R.routePath(r, r.cables.find(c => c.id === id), {...ctx, plugReachOf: () => 0});
-    assert.deepEqual(face.detours, [], id);
+    assert.equal(face.detours.length, 1, id);
+    assert.deepEqual(face.crossings, [], id);
   }
   // the upper leaf's cords drop onto the tray from above and need none
   for (const id of ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8']) assert.deepEqual(got[id].detours, [], id);
@@ -134,9 +148,21 @@ test('a cord that must clear its plug goes round the tray\'s front edge, and is 
 // the path a drawing would build from the kit's points and rules. It does
 // not run or check the site's drawing, which still starts its bend further
 // out (the site follow-up of section 1.5).
+// SINCE THE CORDS REST (#949 step 3) a drawing takes each ring where the kit
+// rests the cord in it (the middle of its entry and exit, on the sill), and
+// the comparison is of the taut path, a cord too stiff to sag: a drawing that
+// hangs its spans by the kit's points follows them, which the first check
+// holds.
 test('the drawn path and the measured length agree within a few mm', () => {
   const r = F.rack();
-  for (const [name, ctx] of [['default', F.ctxOf(r)], ['optics', optics(F.ctxOf(r))]]) {
+  for (const [name, loose] of [['default', F.ctxOf(r)], ['optics', optics(F.ctxOf(r))]]) {
+    // the kit's points, sag and all: nothing left for a drawing to go round
+    for (const c of r.cables) {
+      const p = R.routePath(r, c, loose), solids = S.solidsOf(r, loose);
+      for (let k = 1; k < p.points.length; k++)
+        assert.deepEqual(S.detour(p.points[k - 1], p.points[k], solids, {diameter: 3}), [], `${name} ${c.id} hung leg ${k}`);
+    }
+    const ctx = {...loose, bendOf: () => 1e12};
     const solids = S.solidsOf(r, ctx);
     let detoured = 0;
     for (const c of r.cables) {
@@ -146,7 +172,11 @@ test('the drawn path and the measured length agree within a few mm', () => {
         assert.deepEqual(S.detour(p.points[k - 1], p.points[k], solids, {diameter: 3}), [], `${name} ${c.id} leg ${k}`);
       // built the drawing's way
       const A = p.points[1], B = p.points.at(-2);
-      const centres = R.resolveRoute(r, c, ctx).waypoints.map(w => R.pointOf(r, w, ctx));
+      const rested = [...p.rings];
+      const centres = R.resolveRoute(r, c, ctx).waypoints.map(w => {
+        const g = !w.lane && rested[0]?.item === w.item && rested[0]?.via === w.via ? rested.shift() : null;
+        return g ? {x: (g.entry.x + g.exit.x) / 2, y: g.entry.y, z: g.entry.z} : R.pointOf(r, w, ctx);
+      });
       const marks = R.ringMarks(r, c, ctx);
       const legs = [A, ...centres, B], pts = [], mk = [];
       legs.forEach((q, k) => {
@@ -160,7 +190,8 @@ test('the drawn path and the measured length agree within a few mm', () => {
       const measured = (R.pathLength(p).measured - 2 * R.END_ALLOWANCE_M) * 1000;
       assert.ok(Math.abs(drawn - measured) <= 4, `${name} ${c.id}: drawn ${drawn}, measured ${measured}`);
     }
-    // the optics case does go round the edge, in the drawing too: one leg of each lower cord
-    assert.equal(detoured, name === 'optics' ? 8 : 0, name);
+    // the lower cords go round the edge, in the drawing too: one leg of each
+    // (before the cords rested on the sill, only with the optics' longer plug)
+    assert.equal(detoured, 8, name);
   }
 });

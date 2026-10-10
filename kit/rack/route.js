@@ -15,17 +15,21 @@ import {RU, OPENING, RAIL_W} from './rails.js';
 import {throughRings} from './route-path.js';
 import {zeroUOnLane, zeroUX, carriesLane, runsThrough, STANDOFF} from './zero-u.js';
 import {isZeroUPart, zeroUSpan} from './fit.js';
-import {solidsOf, detour, legCrossings} from './solids.js';
+import {solidsOf, traysOf, detour, legCrossings} from './solids.js';
+import {surfacesOf, hang, heldStretch, drapeOf, bendOf, newCrossing} from './resting.js';
 
 export const LANE_GAP = 40;          // mm: a lane runs in the middle of a 40 mm gutter outside each rail
 const SHORT = 2;                     // U: a jumper this close, with no manager, just hangs
 
 export const lanesOf = frame => (frame.kind === 'two-post'
   ? ['left', 'right'] : ['left-front', 'right-front', 'left-rear', 'right-rear']);
-// The rings, ducts and pass-throughs a device offers a route, as rack.json lists
-// them per view: one sorted list of ids, whatever the view.
+// The rings, ducts, pass-throughs and trays a device offers a route, as
+// rack.json lists them (guides and passes per view, trays by id): one sorted
+// list of ids, whatever the view. A tray's id shares the namespace of the
+// others (docs/cable-lay-design.md section 2.1), so `{item, via}` names it.
 export const pathwaysOf = chassis =>
-  [...new Set(['guides', 'passes'].flatMap(k => Object.values(chassis?.[k] || {}).flat()))].sort();
+  [...new Set([...['guides', 'passes'].flatMap(k => Object.values(chassis?.[k] || {}).flat()),
+    ...(Array.isArray(chassis?.trays) ? chassis.trays.map(t => t?.id).filter(v => typeof v === 'string') : [])])].sort();
 const laneFor = (frame, side, pane) => (frame.kind === 'two-post' ? side : `${side}-${pane}`);
 const itemOf = (rack, id) => rack.items.find(i => i.id === id) || null;
 
@@ -208,17 +212,26 @@ export function autoRoute(rack, cable, ctx) {
     // here; and under an id no bundle holds, so it is the cable's own path.
     const measure = route => pathLength(routePath(rack, {...cable, id: Symbol('side'), route, routeEdited: true}, ctx))?.measured;
     const la = measure(routes[sA]), lb = measure(routes[sB]);
-    byCable.set(cable, la == null || lb == null || la <= lb ? sA : sB);
+    // within a micron is a tie: a mirrored pair of paths that sag (#949 step
+    // 3) can measure apart in the last bits of a float
+    byCable.set(cable, la == null || lb == null || la <= lb + 1e-6 ? sA : sB);
   }
   return routes[byCable.get(cable)];
 }
 const sideMemo = new WeakMap();
 
-// Does a waypoint still stand for something in this rack?
+// Does a waypoint still stand for something in this rack? A guide the page
+// reads off the drawings, or a tray the catalogue lists.
 function resolves(rack, w, ctx) {
   if (w.lane) return lanesOf(rack.frame).includes(w.lane) && w.ru >= 1 && w.ru <= rack.frame.heightRU;
-  return !!itemOf(rack, w.item) && ctx.guidesOf(w.item).some(g => g.via === w.via);
+  return !!itemOf(rack, w.item) && (ctx.guidesOf(w.item).some(g => g.via === w.via) || !!trayOf(rack, w, ctx));
 }
+
+// THE TRAY A WAYPOINT NAMES (docs/cable-lay-design.md section 2.1), placed
+// (solids.js traysOf), or null. A ring or a duct of the same id wins: the
+// namespace is one, and lint holds an id to one pathway (L170).
+export const trayOf = (rack, w, ctx) => (w?.item && !w.lane
+  ? traysOf(rack, ctx).find(t => t.item === w.item && t.via === w.via) ?? null : null);
 
 // A CABLE'S OWN ROUTE: the stored one once edited, else the automatic one. A
 // stored waypoint that no longer resolves is skipped, and reported.
@@ -325,7 +338,13 @@ export function pointOf(rack, w, ctx) {
     return {x: laneXAt(rack, w.lane, w.ru, ctx?.chassisOf), y: (w.ru - 0.5) * RU, z: planeZ(f, pane)};
   }
   const it = itemOf(rack, w.item), g = it && ctx.guidesOf(it.id).find(x => x.via === w.via);
-  if (!g) return null;
+  if (!g) {
+    // a tray: the middle of its largest floor rectangle, on its upward face
+    const t = it && trayOf(rack, w, ctx);
+    if (!t) return null;
+    const f = t.floors.reduce((m, b) => ((b.x1 - b.x0) * (b.z1 - b.z0) > (m.x1 - m.x0) * (m.z1 - m.z0) ? b : m));
+    return {x: (f.x0 + f.x1) / 2, y: t.top, z: (f.z0 + f.z1) / 2};
+  }
   // A rack-face part stands out from its rail plane by half its depth; a rack
   // device's guide is on its face, at the rail plane.
   const c = ctx.chassisOf(it.ref) || {};
@@ -411,7 +430,9 @@ export const stockLength = m => STOCK_M.find(s => s >= m - 1e-9) ?? Math.ceil(m 
 // - `at` is 'a' or 'b' (a port), 'reach' (the far end of that port's plug,
 //   with `end` 'a' or 'b', section 1.5: the route's first and last legs start
 //   there), 'entry', 'exit' or 'face' (a ring),
-//   'pathway' (a duct or a pass-through) or 'lane';
+//   'pathway' (a duct or a pass-through), 'tray' (a point of a tray's
+//   stretch, #949 step 3), 'lane', 'detour' or 'rest' (a point of a free
+//   span as it hangs, or as it lands on a surface);
 // - `rings`: per ring on the route, {item, via, run, depth, estimated,
 //   passed, sense, entry, exit} (sense +1 or -1 along the run; a ring not
 //   passed has `face` instead of entry and exit; one that holds a cable
@@ -427,7 +448,30 @@ export const stockLength = m => STOCK_M.find(s => s >= m - 1e-9) ?? Math.ceil(m 
 //   waypoints the leg lies between ({end: 'a'} or 'b' for a port), `at` where
 //   it enters the body, in mm;
 // - `detours`: per leg that was taken round a body, {between: [from, to],
-//   points}.
+//   points};
+// - `rests`: what the cable lies on (docs/cable-lay-design.md section 3):
+//   {kind: 'ring', item, via} for a ring on a tray whose sill holds it;
+//   {kind: 'tray', item, via, face, role, ties?} for a tray it runs along or
+//   lands on, `face` 'top' or 'underside' in the frame of the part, `role`
+//   'resting' (the face that looks up) or 'held' (the face that looks down,
+//   strapped: `ties`, the indices of the tie slots it uses); and {kind:
+//   'body', item, part} for a body a free span comes to rest on.
+// RESTING (section 3): a ring on a tray whose catalogue entry places its
+// opening holds the cable on its sill, its centre the cable's radius above
+// the opening's lowest inside edge, at the side of the opening nearer the
+// rail (a cable on its own; the lay of several is step 5); a tray named as a
+// waypoint is laid along its run between its neighbours, on the floor at the
+// cable's radius, or on the held face where the page pins it there
+// (`ctx.trayFaceOf(cable, {item, via})` gives the face, `top` or
+// `underside`, and the tray offers it: it has tie slots); and every leg that
+// is not held - not a plug, not inside a ring, not a lane's run along the
+// frame, not a tray's stretch, not into or out of a detour - is a free span,
+// and hangs by the drape of the cable's family (resting.js), landing on any
+// surface it would otherwise pass below. `ctx.bendOf(cable)`, when the page
+// gives it, is the installed bend radius no curve of a span is tighter than
+// (over its drape); else its media's (resting.js BEND). The drape is the
+// family's: its type's when the page gives `ctx.typeOf(id)` (cable-types.js),
+// else its media's.
 // DETOURS (section 1.3): where a straight leg between two points would cross
 // a solid (solids.js solidsOf), points are added that take it round, over the
 // near edge first, then round the end, then by a side lane (solids.js
@@ -440,41 +484,82 @@ export const stockLength = m => STOCK_M.find(s => s >= m - 1e-9) ?? Math.ceil(m 
 export function routePath(rack, cable, ctx) {
   const a = portPoint(rack, cable.a, ctx), b = portPoint(rack, cable.b, ctx);
   if (!a || !b) return null;
+  const diameter = cableDiameter(cable, ctx), r = diameter / 2;
   // each port, then its plug's reach point (section 1.5): the first and last
-  // legs of the route start there; a plug of no reach adds no point
+  // legs of the route start there; a plug of no reach adds no point. The leg
+  // from a port to its reach point is the plug: straight, and not a span.
   const ra = plugReach(cable, cable.a, ctx), rb = plugReach(cable, cable.b, ctx);
   const stops = [{p: a, at: 'a'}];
-  if (ra > 0) stops.push({p: reachPoint(rack, cable.a, a, ra), at: 'reach', end: 'a'});
+  if (ra > 0) stops.push({p: reachPoint(rack, cable.a, a, ra), at: 'reach', end: 'a', hold: true});
   const wps = resolveRoute(rack, cable, ctx).waypoints;
   const marks = wps.map(() => null);
+  const rests = [];
+  const rested = (o) => { if (!rests.some(x => x.kind === o.kind && x.item === o.item && (x.via ?? x.part) === (o.via ?? o.part))) rests.push(o); };
   wps.forEach((w, i) => {
-    const p = pointOf(rack, w, ctx);
+    let p = pointOf(rack, w, ctx);
     if (!p) return;
     const g = w.lane ? null : ctx.guidesOf(w.item).find(x => x.via === w.via);
-    stops.push({p, w, i, ring: ringOf(g)});
+    const tray = !w.lane && !g ? trayOf(rack, w, ctx) : null;
+    if (tray) { stops.push({p, w, i, tray}); return; }
+    const ring = ringOf(g);
+    // A RING ON A TRAY HOLDS THE CABLE ON ITS SILL (section 3): its centre
+    // comes down to the lowest inside edge of its opening as mounted, plus
+    // the cable's radius, and across its run to the side of the opening
+    // nearer the rail the part is fixed to, where a cable on its own lies
+    // (position 1, section 4; the lay of several is step 5); a ring whose
+    // contract does not place its opening stays where its drawing puts it.
+    const open = ring && ringOpening(rack, w, ctx);
+    if (open) {
+      p = {...p, y: open.box.y0 + r, ...(open.run === 'x' ? {z: railSide(open.box.z0, open.box.z1, railZOf(rack, w.item), r)}
+        : {x: (open.box.x0 + open.box.x1) / 2})};
+      rested({kind: 'ring', item: w.item, via: w.via});
+    }
+    stops.push({p, w, i, ring, ...(w.lane ? {lane: true} : {})});
   });
   if (rb > 0) stops.push({p: reachPoint(rack, cable.b, b, rb), at: 'reach', end: 'b'});
-  stops.push({p: b, at: 'b'});
+  stops.push({p: b, at: 'b', hold: rb > 0});
+  // A TRAY a route names is laid along its run between its neighbours (section
+  // 2.1): from where the point before it comes onto the tray to where the
+  // point after it leaves, each taken square onto the floor. On the face that
+  // looks up it lies on the floor and through the rings standing on it; on
+  // the held face, strapped under the plate (heldStretch). The face is the
+  // one the page pins (`ctx.trayFaceOf(cable, waypoint)`, `top` or
+  // `underside`, named in the frame of the part), where the tray offers it;
+  // otherwise the face that looks up. The automatic face is step 5.
+  for (let k = stops.length - 1; k >= 0; k--) {
+    const s = stops[k];
+    if (!s.tray) continue;
+    const prev = stops[k - 1]?.p ?? s.p, next = stops[k + 1]?.p ?? s.p;
+    const laid = alongTray(rack, s.tray, prev, next, cable, ctx, r);
+    rested({kind: 'tray', item: s.w.item, via: s.w.via, face: laid.face, role: laid.role, ...(laid.ties ? {ties: laid.ties} : {})});
+    stops.splice(k, 1, ...laid.points.map((p, j) => ({p, w: s.w, i: s.i, trayAt: true, hold: j > 0 && laid.hold[j]})));
+  }
   // a ring holds a cable that reaches just into it (route-path.js, HELD):
   // how near depends on the cable's diameter, and it holds only from a port:
   // the port stops and their reach points are the only stops without `w`, so
   // `!stops[k ± 1].w` says the neighbour is a port's (a ring is never first or
   // last, so both neighbours exist)
-  const held = cableDiameter(cable, ctx);
   const {points, passes, back} = throughRings(stops.map(s => s.p), stops.map((s, k) => (s.ring
-    ? {...s.ring, diameter: held, portBefore: !stops[k - 1].w, portAfter: !stops[k + 1].w} : null)));
+    ? {...s.ring, diameter, portBefore: !stops[k - 1].w, portAfter: !stops[k + 1].w} : null)));
   // Label each point with what it is: walk the stops, a ring taking two points when passed.
+  // `hold` on a point says the leg into it is not a free span: the plug, the
+  // stretch inside a ring, a lane's run along the frame, a tray's stretch.
   const passAt = new Map(passes.map(x => [x.index, x])), backAt = new Map(back.map(x => [x.index, x]));
   const out = [], rings = [], findings = [], from = [];
   let n = 0;
   stops.forEach((s, k) => {
     const tag = s.w ? (s.w.lane ? {at: 'lane'} : {item: s.w.item, via: s.w.via}) : {at: s.at, ...(s.end ? {end: s.end} : {})};
-    if (!s.ring) { from.push(k); out.push({...points[n++], ...(s.w && !s.w.lane ? {at: 'pathway'} : {}), ...tag}); return; }
+    const hold = s.hold === true || (s.lane && stops[k - 1]?.lane === true);
+    if (!s.ring) {
+      from.push(k);
+      out.push({...points[n++], ...(s.w && !s.w.lane ? {at: s.trayAt ? 'tray' : 'pathway'} : {}), ...tag, ...(hold ? {hold} : {})});
+      return;
+    }
     const ring = {item: s.w.item, via: s.w.via, ...s.ring};
     const pass = passAt.get(k);
     if (pass) {
       from.push(k, k);
-      out.push({...points[n++], ...tag, at: 'entry'}, {...points[n++], ...tag, at: 'exit'});
+      out.push({...points[n++], ...tag, at: 'entry'}, {...points[n++], ...tag, at: 'exit', hold: true});
       rings.push({...ring, passed: true, ...(pass.held ? {held: true} : {}), sense: pass.sense, entry: pass.entry, exit: pass.exit});
       marks[s.i] = {run: s.ring.run, depth: s.ring.depth, sense: pass.sense, back: false};
     } else {
@@ -488,7 +573,6 @@ export function routePath(rack, cable, ctx) {
   });
   // Round the solid bodies (section 1.3), then what still crosses one (1.4).
   const solids = solidsOf(rack, ctx);
-  const diameter = cableDiameter(cable, ctx);
   // the side lanes at a height, where laneXAt puts them (rule 3 of 1.3)
   const lanesAt = y => {
     const ru = Math.max(1, Math.min(rack.frame.heightRU, Math.floor(y / RU) + 1));
@@ -496,17 +580,41 @@ export function routePath(rack, cable, ctx) {
   };
   const ref = k => (stops[k].w ? (stops[k].w.lane ? {lane: stops[k].w.lane, ru: stops[k].w.ru} : {item: stops[k].w.item, via: stops[k].w.via})
     : {end: stops[k].end ?? stops[k].at});
-  const final = [out[0]], legs = [], detours = [];
+  const taut = [out[0]], tautLegs = [], detours = [];
   for (let k = 1; k < out.length; k++) {
     const between = [ref(from[k - 1]), ref(from[k])];
     const extra = solids.length ? detour(out[k - 1], out[k], solids, {diameter, lanes: lanesAt}) : [];
     if (extra?.length) {
       detours.push({between, points: extra.map(p => ({x: p.x, y: p.y, z: p.z}))});
-      for (const p of extra) { legs.push(between); final.push({x: p.x, y: p.y, z: p.z, at: 'detour'}); }
+      for (const p of extra) { tautLegs.push(between); taut.push({x: p.x, y: p.y, z: p.z, at: 'detour'}); }
     }
-    legs.push(between);
-    final.push(out[k]);
+    tautLegs.push(between);
+    taut.push(out[k]);
   }
+  // RESTING (section 3): every leg that is not held is a free span, and hangs
+  // by the drape of the cable's family, landing on whatever surface it would
+  // otherwise pass below (resting.js hang). A leg into or out of a detour
+  // point is not: a cable taken round an edge is dressed round it by hand
+  // (section 1.3), taut, so it stays clear by what the detour keeps. A sag
+  // that would carry the cable into a body its straight leg did not cross is
+  // not laid.
+  const surfaces = surfacesOf(rack, ctx);
+  const drape = drapeOf(cable, ctx), bend = bendOf(cable, ctx);
+  const final = [taut[0]], legs = [];
+  for (let k = 1; k < taut.length; k++) {
+    const p = taut[k - 1], q = taut[k];
+    if (!q.hold && p.at !== 'detour' && q.at !== 'detour') {
+      const h = hang(p, q, {r, drape, bend, surfaces});
+      if (h.points.length && !newCrossing(p, q, h.points, solids, diameter)) {
+        for (const pt of h.points) { legs.push(tautLegs[k - 1]); final.push({x: pt.x, y: pt.y, z: pt.z, at: 'rest'}); }
+        for (const g of h.lands) rested(g.tray ? {kind: 'tray', item: g.item, via: g.via, face: 'top', role: 'resting'}
+          : {kind: 'body', item: g.item, part: g.part});
+      }
+    }
+    legs.push(tautLegs[k - 1]);
+    final.push(q);
+  }
+  for (const p of final) delete p.hold;
   const crossings = [];
   const r1 = v => Math.round(v * 10) / 10;
   for (let k = 1; k < final.length && solids.length; k++) {
@@ -517,7 +625,69 @@ export function routePath(rack, cable, ctx) {
         between: legs[k - 1], at: [r1(x.at.x), r1(x.at.y), r1(x.at.z)]});
     }
   }
-  return {points: final, rings, findings, marks, crossings, detours};
+  return {points: final, rings, findings, marks, crossings, detours, rests};
+}
+
+// The rail plane an item is fixed to, as a z: the front rail's 0, or the
+// rear rail's.
+const railZOf = (rack, id) => planeZ(rack.frame, itemOf(rack, id)?.face === 'rear' ? 'rear' : 'front');
+// A cable of radius r lying across [lo, hi] at the side nearer `rail`.
+const railSide = (lo, hi, rail, r) => (Math.abs(lo - rail) <= Math.abs(hi - rail) ? lo + r : hi - r);
+
+// The opening of a ring a waypoint names, where it stands on a tray whose
+// catalogue entry places it ({run, box} in rack mm, solids.js traysOf), or null.
+function ringOpening(rack, w, ctx) {
+  for (const t of traysOf(rack, ctx)) {
+    if (t.item !== w.item) continue;
+    const o = t.rings.find(x => x.via === w.via);
+    if (o) return o;
+  }
+  return null;
+}
+
+// A CABLE ALONG A TRAY (section 2.1), from `prev` to `next`: the points it is
+// laid at, and which of them it reaches held (`hold[j]`: the leg into point j
+// is part of the tray's stretch, not a free span), with the face it lies on.
+// The stretch runs along the tray's run from the floor's square below `prev`
+// to the square below `next`, each clamped to the floor.
+function alongTray(rack, t, prev, next, cable, ctx, r) {
+  const run = t.run, across = run === 'x' ? 'z' : 'x';
+  const lo = Math.min(...t.floors.map(f => f[`${run}0`])), hi = Math.max(...t.floors.map(f => f[`${run}1`]));
+  const clamp = v => Math.min(hi, Math.max(lo, v));
+  const a = clamp(prev[run]), b = clamp(next[run]);
+  // which face: the page's pin, where the tray offers it (a held face needs
+  // tie slots along the stretch: heldStretch is null without one), else the
+  // face that looks up
+  let asked = null;
+  try { asked = typeof ctx?.trayFaceOf === 'function' ? ctx.trayFaceOf(cable, {item: t.item, via: t.via}) : null; } catch { asked = null; }
+  const heldName = t.flipped ? 'top' : 'underside', restName = t.flipped ? 'underside' : 'top';
+  const rail = railZOf(rack, t.item);
+  if (asked === heldName) {
+    const opts = {r, drape: drapeOf(cable, ctx), bend: bendOf(cable, ctx), rail};
+    const h = heldStretch(t, a, b, opts);
+    if (h) return {points: h.points, hold: h.points.map(() => true), face: heldName, role: 'held', ties: h.ties};
+  }
+  // the face that looks up: on the floor at the cable's radius, across the
+  // tray at the side nearer the rail (position 1) of its rings' openings,
+  // else of its largest floor rectangle; and through each ring standing
+  // between the two ends, on its sill
+  const opens = t.rings.filter(o => o.run === run);
+  const f0 = t.floors.reduce((m, f) => ((f.x1 - f.x0) * (f.z1 - f.z0) > (m.x1 - m.x0) * (m.z1 - m.z0) ? f : m));
+  const span = opens.length ? [Math.max(...opens.map(o => o.box[`${across}0`])), Math.min(...opens.map(o => o.box[`${across}1`]))]
+    : [f0[`${across}0`], f0[`${across}1`]];
+  const at = across === 'z' ? railSide(span[0], span[1], rail, r) : (span[0] + span[1]) / 2;
+  const pt = (v, y) => (run === 'x' ? {x: v, y, z: at} : {x: at, y, z: v});
+  const floorY = t.top + r;
+  const points = [pt(a, floorY)], hold = [false];
+  const between = opens.filter(o => Math.min(o.box[`${run}1`], Math.max(a, b)) > Math.max(o.box[`${run}0`], Math.min(a, b)) + 1e-6)
+    .sort((p, q) => (a <= b ? p.box[`${run}0`] - q.box[`${run}0`] : q.box[`${run}0`] - p.box[`${run}0`]));
+  for (const o of between) {
+    const [near, far] = a <= b ? [o.box[`${run}0`], o.box[`${run}1`]] : [o.box[`${run}1`], o.box[`${run}0`]];
+    points.push(pt(clamp(near), o.box.y0 + r), pt(clamp(far), o.box.y0 + r));
+    hold.push(false, true);
+  }
+  if (Math.abs(b - a) > 1e-6 || points.length > 1) { points.push(pt(b, floorY)); hold.push(false); }
+  return {points, hold, face: restName, role: 'resting'};
 }
 
 // A cable's outside diameter in mm, for what it must fit and keep clear by:

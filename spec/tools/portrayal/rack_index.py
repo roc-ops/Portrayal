@@ -4,9 +4,9 @@
 What a rack tool needs of every device without opening it: its rack units,
 depth, how it mounts, whether its body is sheet, the cable capacity its vendor
 states, the ids a cable route can pass through on each view of its default
-configuration, and, where a device is not simply its envelope, the `solids` a
+configuration, where a device is not simply its envelope, the `solids` a
 cable may not pass through (rack_solids.py, docs/cable-lay-design.md section
-1.1). The kit's rack/catalog.js reads it through `dist`, so a rack is
+1.1), and the `trays` a cable lies on (section 2.1). The kit's rack/catalog.js reads it through `dist`, so a rack is
 checked against the same numbers wherever it is built.
 
 Run by build.sh after the compiled faces and the indexes it reads exist.
@@ -141,6 +141,12 @@ def build(dist):
         solid = rack_solids.solids(faces, c, lane=lane)
         if solid:
             entry["solids"] = solid
+        # the floors a cable lies on, from the same plan (cable-lay-design
+        # section 2.1): a route names a tray by its id, and the kit rests a
+        # cable on it (section 3)
+        tray = rack_solids.trays(faces, c)
+        if tray:
+            entry["trays"] = tray
         out[d["name"]] = entry
     return {"format": FORMAT,
             "generated-from": "devices.json and <name>.configs.json, by rack_index.py",

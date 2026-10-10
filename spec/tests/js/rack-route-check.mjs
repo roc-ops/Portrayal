@@ -33,7 +33,7 @@ test('cable.route accepts real pathways and gutters', () => {
 test('cable.route refuses made-up names and says what exists', () => {
   const r = rackWith();
   assert.deepEqual(route(r, [{item: 'i2', via: '?'}]),
-    {error: 'Waypoint 1: cm-1 has no ring, duct or pass-through called ?. It has: guide-1, guide-2, window-1.'});
+    {error: 'Waypoint 1: cm-1 has no ring, duct, pass-through or tray called ?. It has: guide-1, guide-2, window-1.'});
   assert.deepEqual(route(r, [{item: 'i9', via: 'guide-1'}]), {error: 'Waypoint 1 names i9, which is not in the rack.'});
   assert.match(route(r, [{lane: 'left-front', ru: 3}, {lane: '?', ru: 9}]).error,
     /^Waypoint 2: there is no gutter called \?\. This rack has: left-front, right-front, left-rear, right-rear\.$/);
@@ -44,7 +44,7 @@ test('cable.route refuses a pathway on a device with none, and checks nothing wi
   const r = rackWith();
   const noGuides = ref => ({...chassisOf(ref), guides: undefined, passes: undefined});
   assert.deepEqual(route(r, [{item: 'i2', via: 'guide-1'}], {chassisOf: noGuides}),
-    {error: 'Waypoint 1: cm-1 has no rings, ducts or pass-throughs.'});
+    {error: 'Waypoint 1: cm-1 has no rings, ducts, pass-throughs or trays.'});
   assert.equal(route(r, [{item: 'i2', via: 'anything'}], {}).error, undefined);
 });
 
@@ -64,9 +64,10 @@ test('inspect gives a cable its slack: its own length less the routed length', a
   const measured = rack => Math.round(routedLength(rack, rack.cables[0], ROUTE_CTX).measured * 100) / 100;
   const slack = async rack => (await inspect(rack, 'c1', {chassisOf, route: ROUTE_CTX})).slack;
   const m = measured(base);
-  // 1.09 m from the port faces; 1.15 from each plug's reach (#960)
-  assert.equal(m, 1.15);
-  assert.deepEqual(await slack(withLength({value: 2, unit: 'm', source: 'entered'})), {metres: 0.85});
+  // 1.09 m from the port faces; 1.15 from each plug's reach (#960); 1.27
+  // with each span out to the lane hanging by the drape of fibre (#949 step 3)
+  assert.equal(m, 1.27);
+  assert.deepEqual(await slack(withLength({value: 2, unit: 'm', source: 'entered'})), {metres: 0.73});
   assert.deepEqual(await slack(withLength({value: 10, unit: 'ft', source: 'entered'})), {metres: Math.round((3.048 - m) * 100) / 100});
   assert.equal(await slack(withLength({value: 2, unit: 'm', source: 'routed'})), null);
   assert.equal(await slack(base), null);
@@ -81,7 +82,7 @@ test('cable.route judges only waypoints the cable does not already store', () =>
   assert.equal(s.error, undefined);
   assert.equal(route(r, [{item: 'i9', via: 'x'}, {lane: 'left-front', ru: 5}]).error, undefined);
   assert.deepEqual(route(r, [...stale, {item: 'i2', via: '?'}]),
-    {error: 'Waypoint 4: cm-1 has no ring, duct or pass-through called ?. It has: guide-1, guide-2, window-1.'});
+    {error: 'Waypoint 4: cm-1 has no ring, duct, pass-through or tray called ?. It has: guide-1, guide-2, window-1.'});
 });
 
 test('cable.route reads a configured face from guidesOf, and skips a configured item without it', () => {
@@ -89,7 +90,7 @@ test('cable.route reads a configured face from guidesOf, and skips a configured 
   const guidesOf = () => [{via: 'extra-ring'}, {via: 'guide-1'}];
   assert.equal(route(r, [{item: 'i2', via: 'extra-ring'}], {chassisOf, guidesOf}).error, undefined);
   assert.deepEqual(route(r, [{item: 'i2', via: '?'}], {chassisOf, guidesOf}),
-    {error: 'Waypoint 1: cm-1 has no ring, duct or pass-through called ?. It has: extra-ring, guide-1.'});
+    {error: 'Waypoint 1: cm-1 has no ring, duct, pass-through or tray called ?. It has: extra-ring, guide-1.'});
   const odd = {...r, items: r.items.map(i => (i.id === 'i2' ? {...i, swaps: {'bay-1': 'x'}} : i))};
   assert.equal(route(odd, [{item: 'i2', via: '?'}]).error, undefined);
   const other = {...r, items: r.items.map(i => (i.id === 'i1' ? {...i, cfg: 'dc'} : i))};

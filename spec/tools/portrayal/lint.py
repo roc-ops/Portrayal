@@ -512,7 +512,7 @@ RULES = {
     "L137": ("device",     "a pass-through whose `cover` is `brush` has a `pattern: brush` decor drawn over the whole of it, and a brush drawn over a pass-through belongs to one whose cover is `brush`", "draw the brush over the opening, or change `cover` to say what the picture shows",
              "The picture and the data have to agree: a pass-through declared as brushed shows a brush, and a brush drawn on the face really is a pass-through's cover.",
              ERROR),
-    "L138": ("component, device", "a guide fits what declares it - a ring's opening inside the part, seen along its run (its size, and its relief or `size.d` out of the face), and a duct inside its view, with a finger gap less than the finger pitch", "measure the clear opening, not the outside of the loop; give the part the relief that holds the opening; move the duct onto its face, or re-read the pitch and the gap off the drawing",
+    "L138": ("component, device", "a guide fits what declares it - a ring's opening inside the part, seen along its run (its size, and its relief or `size.d` out of the face), its `depth` and `aperture.at` inside the part, its `sill` only on a ring whose run lies in the face and with the opening above it still inside the part's reach; and a duct inside its view, with a finger gap less than the finger pitch", "measure the clear opening, not the outside of the loop; give the part the relief that holds the opening; move the duct onto its face, or re-read the pitch and the gap off the drawing",
              "Cable routing reads a guide's opening, so an opening bigger than its loop or a duct off its face would route cables through space that does not exist, and fingers with no width describe a duct that cannot be built.",
              ERROR),
     "L139": ("lab",        "every placement's `ref` is a library device (and its `cfg` one of that device's configurations), every placement id is unique, and every `on` names another placement in the lab (error)", "name the device by its `name`, e.g. `fhd-1ufce`; give each placement its own id; point `on` at the id of the placement the part sits on",
@@ -607,6 +607,9 @@ RULES = {
              WARNING),
     "L169": ("device",     "`lines` stands on a placement of class `breaker` or on a power outlet (error), and on a three-phase input every outlet's lines resolve, on itself or on the breaker it runs `through` (warning)", "state `lines` once, on the breaker that protects the circuit, and `through: <breaker>` on each outlet it feeds",
              "Lines on a part that protects no circuit say nothing true, and on a three-phase PDU an outlet with no lines exports no feed leg to the DCIM.",
+             MIXED),
+    "L170": ("component, device", "a tray fits what declares it: every floor rectangle inside its part or its view, every tie slot inside a floor rectangle, its id unique among the guides, pass-throughs and trays of the device, and a part's tray placed, and a view's `trays` declared, on the plan (`top`) only (error); a part's tray placed on the plan stands at the height its `size.d` gives, and, for a placement that is not rotated, its tie slots are the slots the device draws on its bottom view, where it draws any (warning; a rotated placement's slots are not compared)", "re-read the floor and the slots off the plan; give the tray its own id; declare the tray on the top view; state the height as the envelope less the depth of the well; draw each tie slot on the bottom view, or declare it",
+             "A route lies a cable on a tray's floor and straps it through its tie slots, so a floor off its part, a slot off its floor, a height that disagrees with the drawing, or a slot drawn and not declared would put cables and straps where the hardware has no metal, and a second pathway under one id leaves a route naming it ambiguous.",
              MIXED),
 }
 
@@ -8215,6 +8218,33 @@ def lint_component_guide(path, data):
         elif ap.get(side) is not None and ap[side] > bound + 0.05:
             err(path, "L138", f"guide: the opening's {side} {ap[side]:g} is wider than the "
                               f"part that holds it - {what} is {bound:g}")
+    # WHERE THE OPENING IS (docs/cable-lay-design.md section 2.2): its band
+    # along the run, its corner on the drawing and its sill out of the face,
+    # each inside the part, so a cable resting on it rests inside the loop.
+    num = lambda v: isinstance(v, (int, float)) and not isinstance(v, bool)
+    run, depth, sill, at = g["run"], g.get("depth"), g.get("sill"), ap.get("at")
+    w, h = size.get("w"), size.get("h")
+    if num(depth):
+        along = {"x": (w, "size.w"), "y": (h, "size.h"), "z": (reach, "its reach out of the face")}[run]
+        if num(along[0]) and depth > along[0] + 0.05:
+            err(path, "L138", f"guide: a depth of {depth:g} along the run is longer than the "
+                              f"part - {along[1]} is {along[0]:g}")
+    if num(sill):
+        if run == "z":
+            err(path, "L138", "guide: `sill` stands out of the face, and this ring runs out of "
+                              "the face: a ring seen end-on rests a cable on its opening's lower "
+                              "edge, which `aperture.at` places")
+        elif reach is not None and sill + ap["h"] > reach + 0.05:
+            err(path, "L138", f"guide: the opening stands {sill:g} + {ap['h']:g} = "
+                              f"{sill + ap['h']:g} out of the face, and the part reaches {reach:g}")
+    if isinstance(at, list) and len(at) == 2 and all(num(v) for v in at):
+        d0 = depth if num(depth) else 0.0
+        ext = {"x": (d0, ap["w"]), "y": (ap["w"], d0), "z": (ap["w"], ap["h"])}[run]
+        for k, (lo, span, bound, name) in enumerate(((at[0], ext[0], w, "size.w"),
+                                                     (at[1], ext[1], h, "size.h"))):
+            if lo < -0.05 or (num(bound) and lo + span > bound + 0.05):
+                err(path, "L138", f"guide: the opening at {at[0]:g},{at[1]:g} runs off the part - "
+                                  f"{'xy'[k]} {lo:g} to {lo + span:g}, and {name} is {bound}")
 
 
 def lint_device_guides(path, data):
@@ -8247,6 +8277,152 @@ def lint_device_guides(path, data):
             if pitch is not None and pitch > along + 0.05:
                 err(path, "L138", f"{vname}/{gid}: a finger pitch of {pitch:g} is longer than "
                                   f"the duct, {along:g} along its run")
+
+
+def _rect_in(r, box, tol=0.05):
+    """A rectangle {at, size} inside a box (x, y, w, h), to `tol` mm."""
+    (x, y), (w, h) = r["at"], r["size"]
+    bx, by, bw, bh = box
+    return x >= bx - tol and y >= by - tol and x + w <= bx + bw + tol and y + h <= by + bh + tol
+
+
+def _rect_box(r):
+    (x, y), (w, h) = r["at"], r["size"]
+    return (x, y, w, h)
+
+
+def _tray_shape(path, where, tray, bound, what):
+    """L170, the geometry every tray answers: each floor rectangle inside
+    `bound` (x, y, w, h), and each tie slot inside one floor rectangle."""
+    floors = [f for f in (tray.get("floor") or []) if isinstance(f, dict) and f.get("at") and f.get("size")]
+    for f in floors:
+        if bound is not None and not _rect_in(f, bound):
+            (x, y), (fw, fh) = f["at"], f["size"]
+            err(path, "L170", f"{where}: the floor ({x:g},{y:g})-({x + fw:g},{y + fh:g}) runs "
+                              f"off {what}, {bound[2]:g} x {bound[3]:g}")
+    for t in tray.get("ties") or []:
+        if not (isinstance(t, dict) and t.get("at") and t.get("size")):
+            continue
+        if not any(_rect_in(t, _rect_box(f)) for f in floors):
+            (x, y), (tw, th) = t["at"], t["size"]
+            err(path, "L170", f"{where}: the tie slot ({x:g},{y:g})-({x + tw:g},{y + th:g}) lies "
+                              "on no floor rectangle: a strap passes through the floor it holds "
+                              "a cable to")
+
+
+def lint_component_tray(path, data):
+    """L170: a part's tray lies on the part.
+
+    docs/cable-lay-design.md section 2.1. A route lies a cable on the floor
+    and straps it through the tie slots, so both are held to the part that
+    declares them; the device half of the rule (lint_device_trays) holds the
+    rest, which needs to know where the part is placed.
+    """
+    tray = data.get("tray")
+    if not isinstance(tray, dict):
+        return
+    size = data.get("size") or {}
+    w, h = size.get("w"), size.get("h")
+    bound = (0.0, 0.0, w, h) if isinstance(w, (int, float)) and isinstance(h, (int, float)) else None
+    _tray_shape(path, "tray", tray, bound, "the part")
+
+
+def lint_device_trays(path, data, lib_roots=None):
+    """L170: a tray fits its device, and its id names one pathway.
+
+    The view's own `trays` lie inside the view. A part's tray (its contract's
+    `tray:`) is named by the placement's id, which must name no other guide,
+    pass-through or tray of the device, since a route names it by that id
+    alone. Two warnings hold a part's tray to what the device draws: placed on
+    the top view, the floor of its well is `size.d` below the top of the
+    envelope, which is where `height` must put it; and the tie slots the
+    device draws on its bottom view (decor of `kind: slot` under the tray's
+    footprint) are the tray's `ties`, moved by the placement, or the same
+    mirrored across the view, since the underside is seen from below. A
+    rotated placement's slots are not compared (the rule text says so). A
+    tray is read from the plan only, so `trays` on another view, or a part
+    carrying a tray placed on one, is an error.
+    """
+    roots = lib_roots or [DEFAULT_LIBRARY]
+    ch = data.get("chassis") or {}
+    views = data.get("views") or {}
+    names = {}
+
+    def claim(vname, tid, what):
+        if tid in names and names[tid] != (vname, what):
+            err(path, "L170", f"{vname}/{tid}: the tray's id names {names[tid][1]} on the "
+                              f"{names[tid][0]} view as well; a route names a tray by its id alone")
+        names.setdefault(tid, (vname, what))
+
+    for vname, view in views.items():
+        vp = view_parts(view or {})
+        for gd in vp["guides"]:
+            names.setdefault(gd.get("id"), (vname, "a duct"))
+        for ps in vp["passes"]:
+            names.setdefault(ps.get("id"), (vname, "a pass-through"))
+        for p in vp["placements"]:
+            c = _contract(p["ref"], roots) or {}
+            if c.get("guide"):
+                names.setdefault(p.get("id"), (vname, "a ring"))
+    for vname, view in views.items():
+        vp = view_parts(view or {})
+        size = (view or {}).get("size") or {}
+        vw, vh = size.get("w"), size.get("h")
+        bound = (0.0, 0.0, vw, vh) if vw is not None and vh is not None else None
+        if vp["trays"] and vname != "top":
+            err(path, "L170", f"{vname}: `trays` is declared on the plan, the top view, only: "
+                              "rack.json reads a floor's height off the plan")
+        for t in vp["trays"]:
+            claim(vname, t.get("id"), "a tray of the view")
+            _tray_shape(path, f"{vname}/{t.get('id')}", t, bound, "its view")
+        for p in vp["placements"]:
+            c = _contract(p["ref"], roots) or {}
+            tray = c.get("tray")
+            if not isinstance(tray, dict):
+                continue
+            claim(vname, p.get("id"), f"the tray {p['ref']} carries")
+            if vname != "top":
+                err(path, "L170", f"{vname}/{p['id']}: {p['ref']} carries a tray, and is placed off the "
+                                  "plan: a tray is read from the top view only")
+                continue
+            d = (c.get("size") or {}).get("d")
+            H = ch.get("height")
+            if (isinstance(d, (int, float)) and isinstance(H, (int, float))
+                    and isinstance(tray.get("height"), (int, float))
+                    and abs((H - d) - tray["height"]) > 0.1):
+                warn(path, "L170", f"top/{p['id']}: {p['ref']}'s tray stands {tray['height']:g} "
+                                   f"above the bottom, and its well is {d:g} deep in a "
+                                   f"{H:g} mm envelope, which puts its floor at {H - d:g}")
+            bottom = views.get("bottom") or {}
+            bw = ((bottom.get("size") or {}).get("w"))
+            slots = [s_ for s_ in view_parts(bottom)["decor"] if s_.get("kind") == "slot"]
+            if not slots or bw is None or p.get("rotate"):
+                continue
+            ox, oy = p["at"]
+            cw, chh = (c.get("size") or {}).get("w"), (c.get("size") or {}).get("h")
+            foot = (ox, oy, cw or 0, chh or 0)
+            near = lambda a, b: abs(a - b) <= 0.05
+            mine = [s_ for s_ in slots if _rect_in(s_, foot) or _rect_in(
+                {"at": [bw - s_["at"][0] - s_["size"][0], s_["at"][1]], "size": s_["size"]}, foot)]
+            ties = [{"at": [ox + t["at"][0], oy + t["at"][1]], "size": t["size"]}
+                    for t in tray.get("ties") or []]
+
+            # the underside drawn as it is, or mirrored as seen from below:
+            # one reading for the whole view, the one that matches more
+            def same(a, b, mirror):
+                ax = bw - a["at"][0] - a["size"][0] if mirror else a["at"][0]
+                return (near(a["at"][1], b["at"][1]) and near(a["size"][0], b["size"][0])
+                        and near(a["size"][1], b["size"][1]) and near(ax, b["at"][0]))
+            mirror = max((False, True), key=lambda m: sum(any(same(s_, t, m) for t in ties) for s_ in mine))
+            undeclared = [s_.get("id") for s_ in mine if not any(same(s_, t, mirror) for t in ties)]
+            undrawn = [f"{t['at'][0]:g},{t['at'][1]:g}" for t in ties if not any(same(s_, t, mirror) for s_ in mine)]
+            if undeclared:
+                warn(path, "L170", f"top/{p['id']}: the bottom view draws slot(s) "
+                                   f"{', '.join(map(str, undeclared[:6]))} under the tray that its "
+                                   "`ties` do not declare")
+            if undrawn:
+                warn(path, "L170", f"top/{p['id']}: the tray declares tie slot(s) at "
+                                   f"{', '.join(undrawn[:6])} that the bottom view does not draw")
 
 
 def _inside(pt, poly, tol=0.05):
@@ -11519,6 +11695,7 @@ def lint_device(path, validator, lib_roots):
     lint_device_occupants(path, data, lib_roots)
     lint_device_cable_od(path, data)
     lint_device_guides(path, data)
+    lint_device_trays(path, data, lib_roots)
     # Every id each view offers, indexed by view name. A `for:` may name a target
     # in ANOTHER view of the same device (`rear/psu-0`), so the check below cannot
     # be answered from the view it is standing in.
@@ -12825,6 +13002,7 @@ def main():
                 lint_component_groups(f, d, args.library)
                 lint_component_part_interfaces(f, d, args.library)
                 lint_component_guide(f, d)
+                lint_component_tray(f, d)
                 lint_quoted_prose(f, d)
             n += 1
         for f in sorted(root.glob("devices/**/device.yaml")):

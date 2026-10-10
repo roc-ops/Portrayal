@@ -468,8 +468,16 @@ Now populate. Reuse before building.
     into the plate, such as teeth behind a window or in a recess, is a sunk
     facet: give it a negative `lift` (its root that far below the plate) and
     declare the recess around it as a `pocket` at least that deep (L117).
-7. **Cable-management accessories are not drawn**: cord-retainer bails, tie
-   anchors, straps. They are not panel facts. Note them in provenance instead.
+7. **Cable management that is part of the product is declared, and drawn
+   where it is a part**: a lacer panel and its rings, a tray, a slack spool, a
+   bend-radius bracket. A ring declares where cables pass (`guide:` on its
+   contract, with its opening's `depth`, `sill` and `aperture.at`), a floor
+   declares where they lie (`tray:` on the part's contract, or `trays:` on
+   the view), and the tie slots cut in a plate are drawn as the plate they
+   are cut in and declared as the tray's `ties`. **Accessories added in the
+   field are not drawn**: loose ties, hook-and-loop straps, cord-retainer
+   bails. They are not panel facts. Note them in provenance instead.
+   (docs/cable-lay-design.md section 6.)
 8. **A row of indicators and buttons sharing one baseline on the real device is
    modelled on one centreline.** A schematic's few-millimetre scatter is
    noise. Record the deviation if you align them, and the drawing's scatter if

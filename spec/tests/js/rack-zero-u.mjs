@@ -209,7 +209,9 @@ test('a routed length runs through the duct, about 49 mm further out at each end
   const cable = {id: 'c1', a: {item: 'i1', path: 'p1', view: 'front'}, b: {item: 'i2', path: 'p1', view: 'front'}, media: 'cat6',
                  route: [{lane: 'left', ru: 5}, {lane: 'left', ru: 30}], routeEdited: true};
   r = {...r, cables: [cable]};
-  const rc = {chassisOf, guidesOf: () => [], portX: () => -150};
+  // a cable too stiff to sag (bendOf: no span can take the bend), so the
+  // growth is the taut legs' worked below; how a span hangs is rack-resting.mjs's
+  const rc = {chassisOf, guidesOf: () => [], portX: () => -150, bendOf: () => 1e12};
   const bare = R.routedLength(r, cable, rc).measured;
   const ducted = run(r, {op: 'zerou.place', ref: DUCT, at: 'left', ru: 1}).rack;
   const through = R.routedLength(ducted, cable, rc).measured;

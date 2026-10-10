@@ -220,9 +220,9 @@ test('bundle.create refuses what it cannot make, and makes what it is given with
   assert.equal(run(two, {op: 'bundle.create', cables: ['c3', 'c4'], route: TRUNK}).rack.bundles[1].number, 5);
   // a route by hand is checked as cable.route checks one
   assert.equal(run(r, {op: 'bundle.create', cables: ['c1', 'c2'], route: RT('i2:guide-9')}).error,
-    'Waypoint 1: mgr-1 has no ring, duct or pass-through called guide-9. It has: guide-1, guide-2, guide-3, guide-4, guide-5.');
+    'Waypoint 1: mgr-1 has no ring, duct, pass-through or tray called guide-9. It has: guide-1, guide-2, guide-3, guide-4, guide-5.');
   assert.equal(run(r, {op: 'bundle.create', cables: ['c1', 'c2'], route: RT('i2:guide-9')}, {route: routeCtx(r)}).error,
-    'Waypoint 1: mgr-1 has no ring, duct or pass-through called guide-9. It has: guide-1, guide-2, guide-3, guide-4, guide-5.');
+    'Waypoint 1: mgr-1 has no ring, duct, pass-through or tray called guide-9. It has: guide-1, guide-2, guide-3, guide-4, guide-5.');
   assert.equal(run(r, {op: 'bundle.create', cables: ['c1', 'c2'], route: []}).error, "A bundle's route needs at least one waypoint.");
 });
 

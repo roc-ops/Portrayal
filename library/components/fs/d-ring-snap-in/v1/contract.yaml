@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: d-ring-snap-in
-version: 1.1.0
+version: 1.2.0
 class: mechanical
 behaviour: mounts
 description: >-
@@ -38,10 +38,26 @@ provenance:
     drawing's 0.75 mm. Seen looking along the tray, which is the run: `w` lies along
     the plan's depth and `h` stands out of the tray. The slit is not counted as
     opening; a cable is laid in through it and then held.
+  guide-depth: >-
+    drawing - the plan view: each ring's band is a pair of lines 6.8 mm apart along
+    the tray, as `size` reads it, and the front view draws the same 6.8 end-on. A
+    cable enters and leaves the ring that far apart.
+  guide-sill: >-
+    drawing - the ring-profile view at 1.331 px/mm: the loop is closed at the bottom
+    by a bar standing on the seat, and the inner line of that bar is 7.5 px (5.6 mm)
+    above the top line of the tray's sheet. FS's close-up render of a ring lifted out
+    shows the same bar on its round seat. Read to one pixel, 0.75 mm. A second
+    quantity agrees: the sill plus the 29.5 opening is 35.1, against the 35.0 the
+    relief lifts the top bar to. The relief draws the seat 2 mm high and no bottom
+    bar, so in 3D a cable resting on the sill stands above what is drawn under it.
+  guide-aperture-at: >-
+    drawing - the opening centred across the ring, as the ring-profile view draws it
+    (8.5 px of wall either side): (43.6 - 32.0) / 2 = 5.8 from the ring's rear end,
+    and along the tray the band, 12.75 to 19.55 across the 32.3 seat.
 size: {w: 32.3, h: 43.6}
 size-confidence: {w: drawing, h: drawing}
 attrs: {material: PC, flammability: UL 94V-2}
-guide: {kind: ring, aperture: {w: 32.0, h: 29.5}, run: x}
+guide: {kind: ring, aperture: {w: 32.0, h: 29.5, at: [12.75, 5.8]}, run: x, depth: 6.8, sill: 5.6}
 elements:
   seat: {at: [0.0, 5.65], size: [32.3, 32.3], class: bezel}
   top: {at: [12.75, 0.0], size: [6.8, 43.6], class: bezel}
