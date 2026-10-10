@@ -283,10 +283,20 @@ their detours included, run from there, so a cord that has to clear its plug
 before it can turn round a tray's front edge is measured that way, and a
 drawing that starts its tube at the reach point finds nothing more to go
 round. The plug was always along the first leg; the reach turns that leg
-into a dog-leg rather than adding the plug again, so `END_ALLOWANCE_M`, 0.15
-m an end, the dressing slack, is unchanged. **Routed lengths change in
+into a dog-leg rather than adding the plug again. **Routed lengths change in
 0.13.0** on every routed cable, almost all longer: by what the dog-leg out of each plug adds,
 and by far more where the reach puts a leg over a tray floor.
+
+A routed length is the path plus an **end allowance** at each end, by the
+cable's media (#962, docs/cable-lay-design.md section 1.6): only what is
+physically there and not in the path, the part of the plug inside the port
+and half the maker's short tolerance. `END_ALLOWANCE`, in metres an end:
+0.0131 for LC fibre, 0.0345 for copper and a cable with no media, 0.025 for
+a DAC and 0.0524 for an AOC; `endAllowance(cable)` reads it, and
+`routePath` returns its cable's as `allowance`, which `pathLength` adds.
+Service loops and dressing slack are explicit slack held in a tray, never
+part of it. **Routed lengths change in 0.16.0** on every routed cable, all
+shorter, where it was 0.15 m an end (`END_ALLOWANCE_M`, gone).
 
 A cable rests on what holds it up (#949 step 3, docs/cable-lay-design.md
 sections 2 and 3). A tray is a pathway with a floor: rack.json lists each

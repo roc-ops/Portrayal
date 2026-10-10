@@ -15,7 +15,8 @@ const ring = n => ({item: 'i4', via: `guide-${n}`});
 const mm = l => Math.round(l.measured * 10000) / 10;
 
 // Per cable of the owner's rack: the rings it runs through, its measured
-// length in mm (the path plus 0.15 m at each end) and its stock length in m.
+// length in mm (the path plus the end allowance at each end, 13.1 mm for an
+// OM4 cord since #962; 0.15 m before) and its stock length in m.
 // Before kit 0.12.0 every one ran out to the right lane and back, measuring
 // 0.67 to 1.04 m (stock 1 or 1.5 m). c1, c2 and c5 to c8 have no ring between
 // their ports and take the nearest ring they pass: c1-c7 ring 4, and c8 ring
@@ -44,11 +45,17 @@ const mm = l => Math.round(l.measured * 10000) / 10;
 // 2 to 6 mm: the detour round the tray's front edge ends at the approach
 // point, not the ring's face. c2 and c3 pass the 0.5 m break (0.487 -> 0.525,
 // 0.493 -> 0.504); fifteen of sixteen now do.
+// THE END ALLOWANCE (#962): 13.1 mm an end for an OM4 cord, the LC plug
+// inside its port (the FS fibre cords are +x/-0, never short), where it was
+// 0.15 m of dressing slack. Every cord is 273.8 mm shorter (534.3, 525.1,
+// 503.9, 496, 538.8, 544.1, 568.8, 514, 664.3, 663.1, 665, 665.8, 631.9,
+// 638.6, 620.7 and 626.4 before) and every one is a 0.5 m cord again (fifteen
+// were 1 m). The spare length is slack a tray holds (#949 step 4).
 const OWNER = {
-  c1: [[4], 534.3, 1], c2: [[4], 525.1, 1], c3: [[4], 503.9, 1], c4: [[4], 496, 0.5],
-  c5: [[4], 538.8, 1], c6: [[4], 544.1, 1], c7: [[4], 568.8, 1], c8: [[5], 514, 1],
-  c9: [[3], 664.3, 1], c10: [[3], 663.1, 1], c11: [[3], 665, 1], c12: [[3], 665.8, 1],
-  c13: [[4], 631.9, 1], c14: [[4], 638.6, 1], c15: [[4], 620.7, 1], c16: [[4], 626.4, 1],
+  c1: [[4], 260.5, 0.5], c2: [[4], 251.3, 0.5], c3: [[4], 230.1, 0.5], c4: [[4], 222.2, 0.5],
+  c5: [[4], 265, 0.5], c6: [[4], 270.3, 0.5], c7: [[4], 295, 0.5], c8: [[5], 240.2, 0.5],
+  c9: [[3], 390.5, 0.5], c10: [[3], 389.3, 0.5], c11: [[3], 391.2, 0.5], c12: [[3], 392, 0.5],
+  c13: [[4], 358.1, 0.5], c14: [[4], 364.8, 0.5], c15: [[4], 346.9, 0.5], c16: [[4], 352.6, 0.5],
 };
 const LOWER = ['c9', 'c10', 'c11', 'c12', 'c13', 'c14', 'c15', 'c16'];
 
@@ -62,11 +69,10 @@ test('the owner\'s rack: each cord runs along the lacer through a ring, with no 
   assert.deepEqual(got, want);
   // nothing reaches a gutter
   assert.equal(r.cables.flatMap(c => R.autoRoute(r, c, ctx)).filter(w => w.lane).length, 0);
-  // no route is direct, and fifteen pass the 0.5 m stock break (thirteen
-  // before #968; c2 and c3 joined them)
+  // no route is direct, and none passes the 0.5 m stock break (fifteen did
+  // before #962's end allowance, thirteen before #968)
   assert.equal(r.cables.filter(c => !R.autoRoute(r, c, ctx).length).length, 0);
-  assert.deepEqual(r.cables.filter(c => R.routedLength(r, c, ctx).value > 0.5).map(c => c.id),
-    ['c1', 'c2', 'c3', 'c5', 'c6', 'c7', 'c8', ...LOWER]);
+  assert.deepEqual(r.cables.filter(c => R.routedLength(r, c, ctx).value > 0.5).map(c => c.id), []);
   // every ring taken is passed. None now holds a cord that does not turn in
   // it: c8's panel port stands 12.1 mm above ring 5's sill and 10 mm short
   // of its centre, steeper than 45 degrees, so the cord comes down into the
@@ -172,13 +178,14 @@ test('the site-facing outputs: ring marks, inspect and the route text read the r
   const info = await Q.inspect(r, 'c13', {chassisOf: F.chassisOf, route: ctx});
   assert.equal(info.route.text, 'CM-01 ring 4');
   assert.deepEqual(info.route.waypoints, [ring(4)]);
-  assert.deepEqual(info.routed, {metres: 0.63, stock: 1});
+  // 0.36 m, a 0.5 m cord, since #962's end allowance (0.63 m, 1 m before)
+  assert.deepEqual(info.routed, {metres: 0.36, stock: 0.5});
   assert.equal(info.route.rings.length, 1);
   assert.equal(info.route.rings[0].passed, true);
   assert.equal(info.route.crosses, undefined);
   // and the length a page keeps current is this one
   const kept = R.withRoutedLengths(r, ctx);
-  assert.deepEqual(kept.cables.find(c => c.id === 'c13').length, {value: 1, unit: 'm', source: 'routed', measured: 0.63});
+  assert.deepEqual(kept.cables.find(c => c.id === 'c13').length, {value: 0.5, unit: 'm', source: 'routed', measured: 0.36});
 });
 
 // ── a cable whose ends use different managers ─────────────────────────────
@@ -212,8 +219,10 @@ test('ends on two managers still take the lane; on opposite sides, the shorter s
   // and on the floor between them, and hangs from the lane to the far port;
   // 1967.2 and 2171.1 before each ring was solid, #968: it now comes to and
   // leaves each ring from an approach point past its band, and its detour
-  // round the tray's front edge ends there, not at the first ring's face)
-  assert.deepEqual([len(left), len(right)], [1986.9, 2193.8]);
+  // round the tray's front edge ends there, not at the first ring's face;
+  // 1986.9 and 2193.8 before #962's end allowance, 13.1 mm an end for this
+  // OM4 cord, not 150: 273.8 shorter each, and the left still the shorter)
+  assert.deepEqual([len(left), len(right)], [1713.1, 1920]);
   // written the other way round, the same side
   const back = {...c, a: c.b, b: c.a};
   assert.deepEqual(R.autoRoute(r, back, ctx), left.toReversed());
