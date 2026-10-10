@@ -11163,6 +11163,12 @@ def _aperture_of(ref, lib_roots, depth=0):
     return ((sz["w"], sz["h"]), (0.0, 0.0)) if sz.get("w") else None
 
 
+# Classes a composed leaf can have without being an opening in the panel: a
+# lamp, a latch, and printing. `_composed_aperture` reads any other leaf with a
+# size as the hole the composing part is cut around.
+NOT_AN_OPENING = frozenset({"led", "latch", "sticker", "marking", "silkscreen"})
+
+
 def _composed_aperture(ref, lib_roots):
     """The opening a part COMPOSES, as ((w, h), (x, y)) in the part's own frame,
     or None.
@@ -11171,13 +11177,28 @@ def _composed_aperture(ref, lib_roots):
     parts hold exactly one that does - a cage bezel around a std/ core. A part
     that conforms is its own opening, and one that composes no standard opening
     (a lamp, a label, a latch) has nothing to measure but its footprint; both
-    are None, and the caller keeps measuring the footprint."""
+    are None, and the caller keeps measuring the footprint.
+
+    A LEAF WITH NO STANDARD IS AN OPENING TOO, when it is the kind of part a
+    hole is cut for: no `conforms`, no `parts` of its own, a `size`, and a class
+    that is not a lamp, a latch or printing. casa/ground-strap@2 composes
+    common/esd-jack@1, a 6.0 jack with no registry entry, off-centre on a
+    marked plate; its cutout is the jack's (#413). `_aperture_of`, which
+    test_cutout_derivation mirrors, already took that leaf's size, and this
+    took the plate's footprint, so the two disagreed about the same hole."""
     def sized(ct):
         conf = ct.get("conforms")
         st = STANDARDS.get(conf) if isinstance(conf, str) else None
         if st and st.get("w") is not None and st.get("h") is not None:
             return st["w"], st["h"]
         return None
+
+    def leaf(ct):
+        sz = ct.get("size") or {}
+        if (ct.get("conforms") or ct.get("parts") or ct.get("class") in NOT_AN_OPENING
+                or sz.get("w") is None or sz.get("h") is None):
+            return None
+        return sz["w"], sz["h"]
 
     def walk(ct, ox, oy, depth):
         out = []
@@ -11189,7 +11210,7 @@ def _composed_aperture(ref, lib_roots):
             if part.get("rotate"):
                 out.append(None)          # a turned core: not worth guessing
                 continue
-            wh = sized(sub)
+            wh = sized(sub) or leaf(sub)
             if wh:
                 out.append((wh, (ox + o[0], oy + o[1])))
             elif depth < 3:
