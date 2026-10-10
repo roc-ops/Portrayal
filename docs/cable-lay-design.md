@@ -117,8 +117,9 @@ and what still crosses is a finding.**
 - **A sheet-bodied part** (`shell: sheet`: the rack-face lacers, the brush and
   finger managers) is its plates, not its envelope: the floor of each well
   (the sheet `thickness` thick), each part that stands proud of a face (the
-  ears) and each web, as boxes. Its rings are not solid; they are openings
-  (1.2).
+  ears) and each web, as boxes. A cable passes its rings through their
+  openings (1.2); since #968 the loop round an opening is solid where the
+  ring's contract says what of it is (3.3).
 - **A zero-U part that carries a lane** (a vertical duct, #926) is a pathway,
   not a solid: a lane waypoint at a U it spans runs through its channel, so
   only its walls and back are solid, derived as a sheet part is. A zero-U part
@@ -601,6 +602,61 @@ the build chose as follows; each is in `kit/rack/resting.js` or
   where 2 mm had been estimated: a cable in a ring hanging from the
   FHD-CMP5DR rests 5.6 + 29.5 = 35.1 mm below the plate, 38.1 below the top
   of U12, the figures section 2.3 and fixture 3 of 4.5 now give.
+
+### 3.3 Rings are solid (#968)
+
+Built in kit 0.15.0. Until then a ring was an opening and nothing else: its
+legs, hook and bar were in no list of solids, so a route could run through
+them and nothing saw it. On the owner's rack every upper cord came down into
+its ring through the rear leg, and every lower cord, taken round the tray's
+front edge to the ring's face, ran along the face and grazed both legs.
+
+- **What of a ring is solid.** A ring's `guide` gains three optional keys,
+  read off the ring-profile view: `wall`, how thick each leg is beside the
+  opening in the plane of the loop; `height`, the top of the loop over its
+  base; and `slit`, `[from, to]` out of the base, the gap in the far leg of
+  an open loop. They compile to `data-guide-wall`, `data-guide-height` and
+  `data-guide-slit`, and L138 holds each inside the part. Where a ring states
+  them with `sill`, `depth` and `aperture.at`, rack.json's `solids` carry its
+  loop as up to five boxes, each the band along the run: the leg either side
+  of the opening, the bar over it, the seat under it up to the sill, and,
+  where the far leg has a slit, the leg below it and the hook above it. Each
+  is named `ring/<id>/<part>` (`rear-leg`, `front-leg`, `hook`, `bar`,
+  `seat`; `left-leg` and `right-leg` for a loop that stands across the
+  device), so a finding says which part was hit. A ring that does not state
+  them is open, as before. Only a sheet part's rings are added: a box
+  device's envelope is solid whole until step 6.
+- **The slit is not a way through.** On the snap-in ring it is 2.2 mm, less
+  than a cord: a cable is pressed in through it by flexing the hook, and
+  then lies in the opening. The solids leave the gap open, as drawn; no
+  route is laid along it.
+- **A ring's parts are met by the tube.** A cable passes a ring close by on
+  purpose, so `legCrossings` takes each part grown by the cable's radius, and
+  a leg that would graze one crosses it; `detour` goes round the grown part.
+  A cable on the sill against the rail-side leg runs along the faces of the
+  grown parts and crosses nothing. Every other body is met by the centre line,
+  as in 1.2.
+- **The approach point.** Every pass through a ring whose opening is placed
+  starts from a point on the run outside the band, the cable's radius and
+  `CLEAR` past it, at the opening's height and across position, and ends at
+  another past the far face (`at: 'approach'`). The legs between them and the
+  ring are not free spans. A detour, a hang or a leg from behind or below ends
+  at the approach point, so a cable reaching a ring from behind goes over the
+  ring or round it, as the detours of 1.3 find, and enters through the
+  opening along the run. A tray stretch through a ring takes the same two
+  points, and a ring a route would double back at (a finding) is gone to as
+  far as its approach point, not its face.
+- **The relief agrees with the guide.** The snap-in ring's relief drew each
+  leg 6.8 mm thick in the plane of the loop, so its opening was 30.0 where the
+  guide's is 32.0, and the sill point stood 1 mm inside the rear leg. The
+  drawing reads the wall 8 px, 6.0 mm, and the plan's 43.6 less the 32.0
+  opening leaves 5.8 a side: the relief's legs are 5.8 since
+  fs/d-ring-snap-in 1.3.0. The slit, re-read at the same time, is 2.2 mm
+  (28.6 to 30.8 over the tray), where 3.8 had been read.
+- **Open question.** The round twist-lock seat, 32.3 mm across under each
+  ring, is drawn 2 mm high, an estimate, and is not solid: only the band's
+  seat under the opening is. A cable lying on the floor across it would rest
+  2 mm higher than the kit lays it.
 
 ## 4. Lay order
 
@@ -1405,6 +1461,9 @@ published file or a saved rack file uses it.
 | `tray` on a contract and `trays` on a device view, with `floor`, `height`, `lip`, `run`, `ties`, `slack` (`kind: area`, `kind: spool` with `at` and `diameter`) | library manifests | every part that states a tray is written in these names; a rename moves every one |
 | a tray id sharing the pathway namespace, named by `{item, via}` | library and rack file | saved routes and slack name trays by it |
 | ring `guide.depth`, `guide.sill`, `guide.aperture.at` | component contracts | parts state them; the kit and compiled drawings read them |
+| ring `guide.wall`, `guide.height`, `guide.slit`, and `data-guide-wall`, `data-guide-height`, `data-guide-slit` (#968) | component contracts, drawings | parts state them; rack.json derives a ring's solids from the compiled attributes |
+| a ring's solids in rack.json `solids`, named `ring/<id>/<part>` with `rear-leg`, `front-leg`, `left-leg`, `right-leg`, `hook`, `bar`, `seat` (#968) | the rack catalogue, kit, findings | the kit reads them, findings and pages name the parts by them |
+| a ring's part met by the cable's tube in `legCrossings` and `detour`, the approach point (`at: 'approach'`) clear of the band by the radius and `CLEAR` (#968) | kit API | a page checking its tubes and the routed lengths of saved racks follow it |
 | `data-class="tray"` | drawings | consumers of the drawing read it |
 | `solids` and `trays` in `rack.json` | the rack catalogue | the kit reads them; additive, so `format` stays 1 |
 | the narrowed rule 7 of the modelling guide | library policy | parts modelled under it carry their cable management |

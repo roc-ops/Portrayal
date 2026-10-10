@@ -135,11 +135,13 @@ test('the owner\'s rack: no point of any cord lies below a support it is over', 
 
 test('a free span that would sag below the floor lands on it and is supported there', () => {
   const r = F.rack(), ctx = F.ctxOf(r);
-  // c1, from the upper leaf at 88.3 through ring 4 back to the panel: from
-  // the ring's exit it would hang below the floor, so it lands on it
+  // c6, from the upper leaf at 128.3 through ring 4 on to the panel at
+  // 169.9: from the ring it would hang below the floor, so it lands on it.
+  // Seven cords land (nine before #968: c5 and c10 now leave their ring from
+  // an approach point 6.5 mm further on, and their shorter span clears it)
   const lands = r.cables.map(c => [c.id, R.routePath(r, c, ctx)])
     .filter(([, p]) => p.rests.some(x => x.kind === 'tray'));
-  assert.ok(lands.length >= 8, lands.map(x => x[0]).join());
+  assert.deepEqual(lands.map(x => x[0]), ['c6', 'c7', 'c9', 'c13', 'c14', 'c15', 'c16']);
   for (const [id, p] of lands) {
     assert.deepEqual(p.rests.find(x => x.kind === 'tray'), {kind: 'tray', item: 'i4', via: 'tray', face: 'top', role: 'resting'}, id);
     assert.ok(p.points.some(q => q.at === 'rest' && Math.abs(q.y - (TOP + r15)) < 1e-6), `${id} lies on the floor`);
@@ -154,10 +156,12 @@ test('a route through the tray: on the floor at its radius, through each ring be
   const c = {...r.cables[0], b: {item: 'i2', path: 'bay-2/module/lc3', view: 'front'}, route: [{item: 'i4', via: 'tray'}], routeEdited: true};
   const p = R.routePath(r, c, ctx);
   const tray = p.points.filter(q => q.at === 'tray');
-  // on the floor at each end, through ring 3 (at 0) on its sill between
-  assert.deepEqual(tray.map(q => Math.round(q.x * 10) / 10), [88.3, 3.4, -3.4, -61.2]);
+  // on the floor at each end, through ring 3 (at 0) on its sill between,
+  // from the approach point 6.5 mm (the cord's radius and CLEAR) before its
+  // band to the one 6.5 mm past it (#968; 88.3, 3.4, -3.4, -61.2 before)
+  assert.deepEqual(tray.map(q => Math.round(q.x * 10) / 10), [88.3, 9.9, 3.4, -3.4, -9.9, -61.2]);
   near(tray[0].y, TOP + r15, 'enters on the floor'); near(tray.at(-1).y, TOP + r15, 'leaves on the floor');
-  near(tray[1].y, SILL + r15, 'ring 3, entering'); near(tray[2].y, SILL + r15, 'ring 3, leaving');
+  for (const k of [1, 2, 3, 4]) near(tray[k].y, SILL + r15, `ring 3, point ${k}`);
   assert.ok(tray.every(q => Math.abs(q.z - (72.2 + r15)) < 1e-9));
   assert.deepEqual(p.rests, [{kind: 'tray', item: 'i4', via: 'tray', face: 'top', role: 'resting'}]);
   assert.deepEqual(p.crossings, []);
