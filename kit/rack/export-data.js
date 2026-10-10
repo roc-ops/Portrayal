@@ -51,8 +51,9 @@ export function holesText(frame) {
   return `Tapped holes, ${frame.holes.thread || 'thread not stated'}`;
 }
 
-// The sheet's title block: rack name, frame, depths, holes, date.
-export function titleLines(rack, date) {
+// The sheet's title block: rack name, frame, depths, holes, date, and what it
+// was drawn with - `source`, which a host names itself by (#895).
+export function titleLines(rack, date, {source = 'Portrayal'} = {}) {
   const f = rack.frame;
   const kind = f.kind === 'two-post' ? 'Two-post' : 'Four-post';
   const numbering = f.numbering === 'top-down' ? 'U1 at the top' : 'U1 at the bottom';
@@ -60,7 +61,7 @@ export function titleLines(rack, date) {
     ? `Usable depth ${Math.round(f.usableDepth)} mm`
     : `Rail depth ${Math.round(f.railDepth)} mm · usable depth ${Math.round(f.usableDepth)} mm`;
   return [rack.name, `${kind} frame, ${f.heightRU}U, ${numbering}`, depth, holesText(f),
-          `Drawn ${isoDate(date)} with the Portrayal Rack Builder`];
+          `Drawn ${isoDate(date)} with ${source}`];
 }
 
 export function wrapText(text, width) {

@@ -277,6 +277,24 @@ def test_a_trunk_position_declared_unused_is_l129_but_a_bare_part_may_hold_one()
     assert run(L.lint_component_optical_trunk, doc, "L129") == []
 
 
+def test_one_position_of_a_front_mpo_as_the_trunk_is_l129():
+    """#857: the export shrinks an MPO front port to the positions the trunk
+    leaves, and the fibre map keeps the leg's original front_position, so
+    `trunk: [mpo.1]` wrote an 11-position port with a leg at position 12."""
+    doc = module([{"from": f"mpo.{i}", "to": "mpo.1"} for i in range(2, 13)],
+                 parts=[{"ref": "common/mpo-adapter@2", "id": "mpo"}])
+    doc["optical"]["trunk"] = ["mpo.1"]
+    hits = run(L.lint_component_optical_trunk, doc, "L129")
+    assert len(hits) == 1 and "mpo.1" in hits[0] and "front connector" in hits[0], hits
+    # the whole connector is a trunk the export can write
+    doc["optical"]["trunk"] = ["mpo"]
+    assert run(L.lint_component_optical_trunk, doc, "L129") == []
+    # and one position of a duplex adapter - the PPMs' shape - is still fine
+    duplex = module([{"from": "common.1", "to": "split.1"}])
+    duplex["optical"]["trunk"] = ["common.1"]
+    assert run(L.lint_component_optical_trunk, duplex, "L129") == []
+
+
 def test_a_trunk_naming_no_connector_or_no_position_is_l78():
     doc = module([{"from": "common.1", "to": "split.1"}])
     doc["optical"]["trunk"] = ["ghost", "common.3"]

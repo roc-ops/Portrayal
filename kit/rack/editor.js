@@ -37,11 +37,12 @@ export function createRackEditor({doc, chassisOf, cap = 100}) {
 
   function apply(cmds, {origin = 'ui', ctx: extra = null} = {}) {
     const commands = list(cmds), before = rack();
-    // A SYSTEM COMMAND is the page's own (routed lengths it measured): an agent
-    // or a control that sends one is refused like any other bad command.
+    // A SYSTEM COMMAND is the caller's own (routed lengths it measured), sent
+    // with origin 'system': an agent or a control that sends one is refused
+    // like any other bad command.
     if (origin !== 'system') {
       const index = commands.findIndex(c => typeof c?.op === 'string' && Object.hasOwn(COMMANDS, c.op) && COMMANDS[c.op].system);
-      if (index >= 0) return {error: `${commands[index].op} is the page's own command.`, index};
+      if (index >= 0) return {error: `${commands[index].op} is a system command, sent only by the caller with origin 'system'.`, index};
     }
     const res = applyCommands(before, commands, withCtx(extra));
     if (res.error || res.noop) return res;

@@ -150,8 +150,10 @@ def test_nothing_exported_is_cut_mid_word(component_names):
         # ellipsis, a list ends with how many entries it did not name.
         # A BAY THAT PROTECTS AN OUTLET says so after its list (#806,
         # dcim_export.outlet_rows): `Accepts: ...; protects output-a1`. The
-        # list is the part asked about here, so the clause is read off first.
+        # list is the part asked about here, so the clause is read off first -
+        # from the front, where it goes when both do not fit (#857).
         t = re.sub(r"; protects [^;]*$", "", t)
+        t = re.sub(r"^Protects [^;]*; ", "", t)
         says_so = t.endswith(dx.MORE) or re.search(r"\(\+\d+ more\)$", t)
         if says_so or not t.startswith("Accepts: "):
             continue

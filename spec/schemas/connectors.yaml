@@ -3,6 +3,19 @@
 # (B3, docs/pluggables-caps-design.md): it accepts every part whose `mates:`
 # names the interface - dust caps and plugs alike. No ladder: a connector
 # either intermates or it does not.
+#
+# AN ENTRY is {standard, note, spans, cover}, every key optional:
+#   standard  the standards.yaml entry that holds the interface's figures
+#   note      what the interface is, for a reader
+#   spans     {interface, count}: this connector fills `count` slots of
+#             `interface` at once (a duplex over two bores; see lc-duplex)
+#   cover     true for an entry that is NOT a connector but a COVER MOUNT: the
+#             place on a part where a cover that ships on it and comes off is
+#             fixed (a breaker's touch guard). It seats as a connector slot
+#             does - one slot, one occupant, a default - and states no
+#             `standard`, because no published interface governs it.
+#             Whether cover mounts belong here or in a registry of their own
+#             is open (#822); there is one today, breaker-1ru-guard.
 format: 1
 interfaces:
   lc: {standard: lc-duplex-receptacle, note: one LC bore}

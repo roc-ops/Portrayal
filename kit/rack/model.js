@@ -319,7 +319,7 @@ export function parseDoc(input, {notes} = {}) {
   if (!d || d.format !== FORMAT) throw new Error('This is not a Portrayal rack file.');
   if (!Number.isInteger(d.version) || d.version < 1) throw new Error('This rack file has no valid version.');
   if (d.version > VERSION)
-    throw new Error(`This rack file is version ${d.version}; this page reads up to version ${VERSION}. Reload to get the newer page.`);
+    throw new Error(`This rack file is version ${d.version}; this reader supports up to version ${VERSION}.`);
   for (let v = d.version; v < VERSION; v++) d = MIGRATIONS[v - 1](d);
   if (!Array.isArray(d.racks) || !d.racks.length) throw new Error('This rack file holds no rack.');
   return {

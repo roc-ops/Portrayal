@@ -60,8 +60,13 @@ def test_two_windows_of_four_are_not_more_than_half():
     assert len(got) == 1, got
 
 
-def test_three_windows_of_four_are():
-    assert lamp_warnings([column()], windows(10.0, 5.0, lanes=(1, 2, 3))) == []
+def test_three_windows_of_four_are_not():
+    """#845: each declared window is a hole; one left in the metal is reported,
+    however many of the others are punched. Summed, three of four passed."""
+    for missing in (1, 2, 3, 4):
+        lanes = tuple(k for k in (1, 2, 3, 4) if k != missing)
+        got = lamp_warnings([column()], windows(10.0, 5.0, lanes=lanes))
+        assert len(got) == 1, (missing, got)
 
 
 def test_the_windows_turn_with_the_lamp():
@@ -69,6 +74,47 @@ def test_the_windows_turn_with_the_lamp():
     places; a lane spacing that is symmetric about the centre lands them on
     the same holes."""
     assert lamp_warnings([column(rotate=180)], windows(10.0, 5.0)) == []
+
+
+# A ROW THAT IS NOT SYMMETRIC (#845): common/qsfp-lane-leds is 19.5 x 3.4 with
+# four 2.4 x 2.6 windows at x 2.2, 6.6, 11.0, 15.4 (y 0.4), so the first
+# window's centre is 6.35 left of the part's centre and the last one's 6.85
+# right of it. Placed at (10, 10) its centre is (19.75, 11.7).
+ROW = "common/qsfp-lane-leds@1"
+
+
+def row(rotate=None):
+    q = {"ref": ROW, "id": "led-port-1", "at": [10.0, 10.0], "for": "port-1"}
+    if rotate is not None:
+        q["rotate"] = rotate
+    return q
+
+
+def boxes(q):
+    return [tuple(round(v, 3) for v in b)
+            for b in L._lamp_windows(q, L._footprint(q, LIB), LIB)]
+
+
+def test_window_boxes_by_hand_at_0_90_180_and_270():
+    """Worked by hand: a window's centre offset (dx, dy) from the part's
+    centre turns to (-dy, dx) at 90, (-dx, -dy) at 180 and (dy, -dx) at 270,
+    and a quarter turn swaps the window's width and height."""
+    assert boxes(row())[0] == (12.2, 10.4, 14.6, 13.0)
+    assert boxes(row(180))[0] == (24.9, 10.4, 27.3, 13.0)      # dx -6.35 -> +6.35
+    assert boxes(row(90))[0] == (18.45, 4.15, 21.05, 6.55)     # y centre 11.7 - 6.35
+    assert boxes(row(270))[0] == (18.45, 16.85, 21.05, 19.25)  # y centre 11.7 + 6.35
+    assert boxes(row(90))[3] == (18.45, 17.35, 21.05, 19.75)   # y centre 11.7 + 6.85
+
+
+def test_a_quarter_turned_lamp_is_covered_by_holes_where_its_windows_turned_to():
+    turned = [{"id": f"w{k}", "at": [b[0], b[1]],
+               "size": [round(b[2] - b[0], 3), round(b[3] - b[1], 3)], "shape": "rect"}
+              for k, b in enumerate(boxes(row(90)))]
+    assert lamp_warnings([row(90)], turned) == []
+    # the same holes under the unturned row cover none of its windows
+    assert len(lamp_warnings([row()], turned)) == 1
+    # and three of the four turned windows are not enough
+    assert len(lamp_warnings([row(90)], turned[:3])) == 1
 
 
 def test_a_single_window_lamp_counts_the_union_of_two_holes():
