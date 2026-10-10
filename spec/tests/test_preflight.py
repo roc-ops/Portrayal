@@ -542,6 +542,43 @@ def test_prose_reads_the_fields_an_export_carries_and_no_others(tmp_path):
         f"{PROSE_DEVICE}: configurations.ac.description"], res.details
 
 
+def test_prose_is_silent_on_long_attrs_text_the_base_already_has(tmp_path):
+    """The base is read through the same fields as the tree: a long sentence
+    under `attrs`, and one inside a list there, are known and stay silent."""
+    attrs = ("attrs:\n  power:\n    note: " + _sentence(30, "old") + "\n"
+             "    notes:\n      - " + _sentence(31, "listed") + "\n")
+    base = make_repo(tmp_path, {PROSE_DEVICE: _device(_sentence(8), attrs)})
+    (tmp_path / PROSE_DEVICE).write_text(_device(_sentence(9, "new"), attrs))
+    res = preflight.check_prose(ctx_of(tmp_path, base))
+    assert res.as_dict()["status"] == "PASS", res.details
+    # and the list is walked at all: the same sentence, changed, is reported
+    (tmp_path / PROSE_DEVICE).write_text(_device(_sentence(8),
+                                                 attrs.replace("listed.", "changed.")))
+    res = preflight.check_prose(ctx_of(tmp_path, base))
+    assert [d.split(": 31 words")[0] for d in res.details] == [
+        f"{PROSE_DEVICE}: attrs.power.notes[0]"], res.details
+
+
+def test_a_quotation_that_ends_a_sentence_still_ends_it(tmp_path):
+    """Fifteen words, a quotation with its own full stop, then fifteen more:
+    two sentences, neither long. Merged they would be thirty."""
+    base = make_repo(tmp_path, {PROSE_DEVICE: _device(_sentence(8))})
+    text = (_sentence(15, "before")[:-1] + ' "it is the vendor sentence." '
+            + _sentence(15, "after"))
+    (tmp_path / PROSE_DEVICE).write_text(_device(text))
+    assert len(preflight.sentences(text)) == 2
+    assert preflight.check_prose(ctx_of(tmp_path, base)).as_dict()["status"] == "PASS"
+
+
+def test_the_pass_summary_counts_only_the_files_that_were_read(tmp_path):
+    base = make_repo(tmp_path, {PROSE_DEVICE: _device(_sentence(8)),
+                                PROSE_PART: "kind: component\nname: card\n"})
+    (tmp_path / PROSE_DEVICE).write_text(_device(_sentence(9)))
+    (tmp_path / PROSE_PART).write_text("kind: [unclosed\n")       # not YAML
+    res = preflight.check_prose(ctx_of(tmp_path, base))
+    assert res.summary.startswith("1 changed manifest"), res.summary
+
+
 def test_prose_is_silent_on_a_new_major_that_copies_the_old_text(tmp_path):
     """A major bump is a new directory, so the whole file is added. Its
     sentences are compared with the majors the base holds."""

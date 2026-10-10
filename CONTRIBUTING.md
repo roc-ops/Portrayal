@@ -376,7 +376,9 @@ words. The `prose` check counts only the last of those. A sentence the base
 already holds, word for word, is not reported, so nobody is asked to rewrite
 the text that was there first. Words quoted from a vendor stay verbatim and
 are not counted (L107 already limits a quotation to 25 words). Gap notes and
-`provenance` are not read.
+`provenance` are not read. The count is approximate. An abbreviation such as
+"e.g." can end a sentence early, a block of lines with no full stops reads as
+one sentence, and a renamed component reports again the text it copied.
 
 A change lint cannot scope to devices (a schema, a listing, a lab, lint
 itself) gets the full lint, which takes about a minute longer. Preflight is

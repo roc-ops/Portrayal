@@ -103,8 +103,8 @@ the measurement that decision was made on.
 
 The bump rules, from DESIGN.md: **art is a patch** (a skin redrawn, a colour, a
 label), **additive is a minor** (a new element, a new state, a new skin),
-**geometry or ids are a major** (the size changed, an element moved or was
-renamed), because a device that placed the part may now be wrong. A major bump
+**geometry or ids are a major** (the size changed, an element something
+addresses moved or was renamed), because a device that placed the part may now be wrong. A major bump
 is a new `v<N+1>/` directory, and **the old major is deleted once nothing
 references it** - that is what pays for the level, and L89 fails on a dead major
 left behind an `unplaced:` sentence. While the package is at 0.x that removal
@@ -117,8 +117,9 @@ roc-ops/Portrayal#448).
 
 Moving decoration that nothing addresses, inside an unchanged part outline, is
 a minor bump. The precedent is `fs/d-ring-snap-in@1` 1.3.0: `leg-front` and
-`hook`, which nothing names, moved 1 mm, the part kept its size, and the new
-keys were additive.
+`hook`, which nothing outside the contract names, moved 1 mm and narrowed to
+5.8, as `leg-rear` did. The part kept its 32.3 x 43.6 size, and the new keys
+were additive.
 
 What keeps a retired major alive is
 something still naming it: a gap arguing from its figure, say. `common/psu-550w@1`

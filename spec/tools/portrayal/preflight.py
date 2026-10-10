@@ -647,9 +647,10 @@ def _prose_at_base(ctx, rel):
     return known
 
 
-def long_sentences(ctx):
+def long_sentences(ctx, read=None):
     """(path, key, words, sentence) for each sentence over the limit that the
-    working tree has and the merge base does not."""
+    working tree has and the merge base does not. `read`, a list, is given
+    each path that was loaded."""
     import yaml
     out = []
     for rel in ctx.changed:
@@ -659,6 +660,8 @@ def long_sentences(ctx):
             data = yaml.safe_load((ctx.root / rel).read_text(encoding="utf-8"))
         except (yaml.YAMLError, UnicodeDecodeError):
             continue                        # lint reports a file it cannot read
+        if read is not None:
+            read.append(rel)
         known, seen = None, set()
         for key, text in prose_fields(data):
             for s in sentences(text):
@@ -675,8 +678,8 @@ def long_sentences(ctx):
 
 def check_prose(ctx):
     name = "prose"
-    files = [p for p in ctx.changed if PROSE_FILE.match(p)]
-    found = long_sentences(ctx)
+    files = []
+    found = long_sentences(ctx, files)
     if found:
         lines = [f"{rel}: {key}: {n} words: {' '.join(s.split()[:8])} ..."
                  for rel, key, n, s in found]
