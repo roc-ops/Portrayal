@@ -2585,6 +2585,11 @@ rack modules and the rack file are new in this release.
 - `describe`'s totals line counts the parts beside the rack when there are
   any, and a window takes `section: 'zeroU'`; `inspect` of an item carries
   `side`.
+- The tools are 0.2.0: `version` in `pyproject.toml`, and the `generator`
+  version the compiler stamps into the metadata of every compiled face and
+  into each elements file. Nothing else in a face moves with it. Every device
+  package on npm takes an update at the next release run for that stamp.
+  `docs/maintainers.md` lists the strings that move at a release.
 
 ### Removed
 - `nokia/3fe54221ah` 1.0.0: the `front-open` view is gone, with its two placements
