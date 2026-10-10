@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ais800-psu-dc
-version: 1.0.0
+version: 2.0.0
 class: psu
 behaviour: fills
 profile: networking
@@ -30,6 +30,18 @@ provenance:
     re-deriving it from a figure that carries no dimension of its own.
     So the ENVELOPE is the rear elevation's, at photo-measured, and everything INSIDE it is
     this figure's, scaled by that envelope to 14.62 px/mm.
+  vent-field: >-
+    photo-measured (#397), MODULE EDGE TO MODULE EDGE IN ONE FRAME, as the AC supply's lattice
+    was corrected in review. On the Connect Power figure at 600 dpi the module's top and bottom
+    edges read rows 110 and 688 of the figure's crop, 578 px for the 40.6 the envelope carries,
+    so 14.24 px/mm down the face; the lattice plate's top edge is the line the terminal housing's
+    top shares, row 303, and its bottom edge row 637, where the plate meets the dark band the
+    release latch sits in. That is y 13.56 to 37.02, 23.46 tall. 1.x drew it 15.01 to 35.13, 20.12
+    tall, about 1.5 short at the top and 1.9 at the bottom. The holes themselves run rows 343 to
+    609, 16.4 to 35.1, inside the plate's margin, which the pattern does not reproduce. The x
+    extent was not re-read and is unchanged. Read on the same frame, the terminal housing's top
+    and bottom are 13.6 and 35.1 against the 14.32 and 35.47 drawn: the bottom agrees, and the
+    top is the next figure to revisit.
   power: >-
     2400 W, FROM THE DATASHEET, AND THE INPUT FROM THE QUICK START GUIDE. The datasheet's
     feature list reads "Hot-swappable, load-sharing, redundant 2400 W AC/DC PSUs" - one figure
@@ -105,7 +117,7 @@ elements:
   ground: {at: [3.08, 4.43], size: [7.52, 7.85], class: stud}
   vent-top: {at: [18.47, 8.87], size: [26.67, 3.75], class: vent}
   terminal: {at: [1.03, 14.32], size: [35.91, 21.15], class: terminal}
-  vent-field: {at: [37.62, 15.01], size: [13.68, 20.12], class: vent}
+  vent-field: {at: [37.62, 13.56], size: [13.68, 23.46], class: vent}
   status: {at: [46.85, 16.75], size: [2.70, 2.70], class: led}
   latch: {at: [43.77, 35.81], size: [7.53, 4.79], class: latch}
 fields:
@@ -129,7 +141,7 @@ relief:
       pocket: 3.2
       confidence: estimated
       source: >-
-        edgecore/ais800-psu-dc@1's own elements key. The figure draws the two lug pockets
+        edgecore/ais800-psu-dc@2's own elements key. The figure draws the two lug pockets
         RECESSED behind the block's face - their side walls are visible and the screw heads
         sit below the barriers - so it is the pockets that sink and the frame around them
         that stands, which is what keeps two lugs from touching. How deep is not stated.
@@ -137,7 +149,7 @@ relief:
       pocket: 3.2
       confidence: estimated
       source: >-
-        edgecore/ais800-psu-dc@1 - as terminal-pocket-1.
+        edgecore/ais800-psu-dc@2 - as terminal-pocket-1.
     - node: ground
       out: 2.6
       confidence: estimated
@@ -148,13 +160,13 @@ relief:
       vent: 24
       confidence: estimated
       source: >-
-        edgecore/ais800-psu-dc@1's own elements key - the slots' extent is drawn and the depth
+        edgecore/ais800-psu-dc@2's own elements key - the slots' extent is drawn and the depth
         of the cavity behind them is not stated.
     - node: vent-field
       vent: 24
       confidence: estimated
       source: >-
-        edgecore/ais800-psu-dc@1's own elements key - the lattice's extent is drawn and the
+        edgecore/ais800-psu-dc@2's own elements key - the lattice's extent is drawn and the
         depth of the cavity behind it is not stated.
     - node: status
       dome: 0.3

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ais800-32d
-version: 1.1.0
+version: 2.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: AIS800-32D
@@ -998,7 +998,7 @@ views:
         rel-pos: 1
         accepts:
         - edgecore/ais800-psu-ac@1
-        - edgecore/ais800-psu-dc@1
+        - edgecore/ais800-psu-dc@2
         default: edgecore/ais800-psu-ac@1
       - id: fan-1
         at: [63.16, 1.4]
@@ -1063,7 +1063,7 @@ views:
         rel-pos: 2
         accepts:
         - edgecore/ais800-psu-ac@1
-        - edgecore/ais800-psu-dc@1
+        - edgecore/ais800-psu-dc@2
         default: edgecore/ais800-psu-ac@1
     regions:
     - id: power
@@ -1147,7 +1147,7 @@ configurations:
     description: >-
       Dual 2400 W DC PSUs, front-to-back airflow - red bails. The DC supply lands -40 to -72 VDC on a
       two-pole screw block with a separate ground stud; no power cord ships.
-    bays: {psu-1: edgecore/ais800-psu-dc@1, psu-2: edgecore/ais800-psu-dc@1}
+    bays: {psu-1: edgecore/ais800-psu-dc@2, psu-2: edgecore/ais800-psu-dc@2}
     part-numbers:
       AIS800-32D-DF: {part: FP6EC9632008Z}
   dc-b2f:
@@ -1156,7 +1156,7 @@ configurations:
     description: Dual 2400 W DC PSUs, back-to-front airflow - blue bails
     airflow: back-to-front
     region-context: {exhaust: Intake}
-    bays: {psu-1: edgecore/ais800-psu-dc@1, psu-2: edgecore/ais800-psu-dc@1}
+    bays: {psu-1: edgecore/ais800-psu-dc@2, psu-2: edgecore/ais800-psu-dc@2}
     component-attrs:
       ais800-fan: {handle-finish: '#3d7bd6'}
       ais800-psu-dc: {handle-finish: '#3d7bd6', latch-finish: '#8fb4e8'}
