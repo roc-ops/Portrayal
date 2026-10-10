@@ -384,10 +384,10 @@ fewer and further apart. What the rack leaves no room for is still routed,
 and is said: the path's `bends` lists each corner short of the radius, `{
 kind: 'tight-bend', cable, point, between: [from, to], at: [x, y, z],
 angle_deg, legs_mm, room_mm, need_mm, short_mm }`, and `bendFindings(rack,
-ctx, nameOf)` gives them rack-wide with a sentence ("c9 turns 138.3 degrees
-between its port on LEAF-B and CM-01 ring 3 with room for a 16.5 mm bend;
-the cable (aoc) needs 30 mm, 13.5 mm short."), as `bodyFindings` does for
-crossings. A page that draws the kit's points can show them as they are;
+ctx, nameOf)` gives them rack-wide with a sentence, as `bodyFindings` does
+for crossings: where ("c9 turns 138.3 degrees between its port on LEAF-B and
+CM-01 ring 3") and by how much ("with room for a 16.5 mm bend; the cable
+(aoc) needs 30 mm, 13.5 mm short."). A page that draws the kit's points can show them as they are;
 `inspect` and `describe` do not carry them yet. What is decided for a cable
 is kept per rack, context and cable, so, as for a route's side, build a new
 context when what it reads changes. **Routed lengths change in 0.17.0** on

@@ -926,10 +926,10 @@ than the cable's radius, as `{kind: 'tight-bend', cable, point, between:
 [from, to], at: [x, y, z], angle_deg, legs_mm: [in, out], room_mm, need_mm,
 short_mm}` (`point` the path point's `at`, `between` as for a crossing), and
 `bendFindings(rack, ctx, nameOf)`, beside `bodyFindings`, gives them
-rack-wide with a sentence in the words of the bundle check: "c9 turns 138.3
-degrees between its port on LEAF-B and CM-01 ring 3 with room for a 16.5 mm
-bend; the cable (aoc) needs 30 mm, 13.5 mm short." It warns and never
-refuses. A page that draws the kit's points can show these as they are.
+rack-wide with a sentence in the words of the bundle check. It says where
+("c9 turns 138.3 degrees between its port on LEAF-B and CM-01 ring 3") and
+then by how much ("with room for a 16.5 mm bend; the cable (aoc) needs 30
+mm, 13.5 mm short."). It warns and never refuses. A page that draws the kit's points can show these as they are.
 `inspect`, `describe` and the export notes do not carry them yet.
 
 **What is left, and why it is real.** On the owner's rack, nothing. On 60
