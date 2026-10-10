@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: exp800-16o
-version: 1.0.2
+version: 2.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: EXP800-16O
@@ -157,6 +157,28 @@ provenance:
       that is the one that says what the port is doing. The gap below records the other.
       THE LAMPS ARE TRIANGLES, not dots: up-pointing for the upper row and down for the lower,
       which is what common/led-arrow@1's two skins are for.
+  port-strip:
+    confidence: measured
+    note: >-
+      RE-READ FOR #396, and the triangles are BOTH: printed and lit. Under each column the panel
+      prints `N (up) ... (down) N+1` in white, the numeral hugging its arrow, AND carries four
+      dark triangular windows below that line, two pointing up for the upper port and two down
+      for the lower. The quick start's System LEDs enlargement calls out the windows as the OSFP
+      LEDs (callout 4), and names their colours; the white arrows are the same ink as the
+      numerals, which is the AIS800 ruling for the same glyph. So the windows stay
+      common/led-arrow@1 lamps and the white arrows are silkscreen, `silk-arrow-N`.
+      READ ON TWO RENDERINGS OF THE ONE ARTWORK, the Overview elevation at 600 dpi (5.0 px/mm)
+      and the enlargement (about 21 px/mm), in mm from each opening's left edge: upper numeral
+      3.65, its arrow 5.3; lower arrow 15.2, its numeral 16.8; windows 1.7, 7.2, 12.8 and 18.4.
+      The numerals' baseline is 35.1 and the windows' centres 36.9. Until #396 the numerals sat
+      at 2.6 and 20.5 and the lamps between the two pairs of windows, at 9.0 and 15.6, where
+      neither rendering has anything; and both were about 1.2 and 3.4 mm low. The drawn lamp is
+      each port's LEFT window (1.7 upper, 12.8 lower), the rate lamp, per provenance.lamps.
+      The windows read about 2.4 mm across against the lamp part's 3.6, a shape compromise.
+      THE ODD PORTS' LAMPS SIT 1.25 RIGHT OF THEIR CAGE'S CENTRE because the window does, so
+      L61 reports them; its eight warnings are in the baseline, as L61's always are, and are
+      not to be fixed by centring a lamp where no window is.
+      ▲ and ▼ do not rasterise in cairosvg; look at the SVG in a browser.
   the-rear:
     confidence: measured
     note: >-
@@ -246,7 +268,8 @@ gaps:
     and it carries the LEFT lamp's vocabulary, because that is the one that says what the port
     is doing. Drawing both would be 32 placements and 32 cutouts, and edgecore/dcs240,
     edgecore/dcs201 and edgecore/as5912-54x all make the same simplification on the same kind
-    of cluster.
+    of cluster. The undrawn right windows are at 7.2 and 18.4 from each opening's left edge
+    (provenance.port-strip).
 - what: chassis-dimensions-disagree
   scope: [front, rear]
   reason: sources-disagree
@@ -362,6 +385,22 @@ views:
     - {id: silk-rst, at: [92.00, 31.97], text: RST, font-size: 1.2, anchor: start, fill: '#c7ccd1', for: reset}
     - {id: silk-mgmt, at: [353.60, 18.10], text: MGMT, font-size: 1.2, anchor: middle, rotate: -90, fill: '#c7ccd1', for: mgmt-eth}
     - {id: silk-usb, at: [353.60, 28.75], text: USB, font-size: 1.2, anchor: middle, rotate: -90, fill: '#c7ccd1', for: usb-a}
+    - {id: silk-arrow-0, at: [103.46, 35.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-0}
+    - {id: silk-arrow-1, at: [113.36, 35.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-1}
+    - {id: silk-arrow-2, at: [135.45, 35.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-2}
+    - {id: silk-arrow-3, at: [145.35, 35.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-3}
+    - {id: silk-arrow-4, at: [167.44, 35.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-4}
+    - {id: silk-arrow-5, at: [177.34, 35.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-5}
+    - {id: silk-arrow-6, at: [199.43, 35.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-6}
+    - {id: silk-arrow-7, at: [209.33, 35.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-7}
+    - {id: silk-arrow-8, at: [231.42, 35.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-8}
+    - {id: silk-arrow-9, at: [241.32, 35.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-9}
+    - {id: silk-arrow-10, at: [263.41, 35.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-10}
+    - {id: silk-arrow-11, at: [273.31, 35.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-11}
+    - {id: silk-arrow-12, at: [295.40, 35.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-12}
+    - {id: silk-arrow-13, at: [305.30, 35.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-13}
+    - {id: silk-arrow-14, at: [327.39, 35.10], text: '▲', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-14}
+    - {id: silk-arrow-15, at: [337.29, 35.10], text: '▼', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-15}
     components:
       blocks:
       - id: osfp
@@ -373,13 +412,13 @@ views:
         row-pitch: 15.07
         number-from: 0
         cutouts: true
-        numerals: {dx-by-row: [2.60, 20.50], dy-top: 33.20, dy-bottom: 18.13, font-size: 1.5, anchor: middle, fill: '#e4e8eb'}
+        numerals: {dx-by-row: [3.65, 16.80], dy-top: 31.96, dy-bottom: 16.89, font-size: 1.5, anchor: middle, fill: '#e4e8eb'}
         led:
           ref: common/led-arrow@1
           id-format: 'led-port-{n}'
-          dx-by-row: [7.20, 13.80]
-          dy-top: 35.60
-          dy-bottom: 20.53
+          dx-by-row: [-0.10, 11.00]
+          dy-top: 32.16
+          dy-bottom: 17.09
           skin-top: up
           skin-bottom: down
           group: port-leds
