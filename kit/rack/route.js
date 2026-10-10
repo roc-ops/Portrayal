@@ -411,10 +411,66 @@ function reachPoint(rack, end, p, mm) {
 }
 
 export const STOCK_M = [0.5, 1, 1.5, 2, 3, 5, 7, 10, 15, 20, 30];
-// The allowance at each end is the dressing slack a cable is cut with, not
-// its plug: the plug is in the path, from the port face to its reach point
-// (above), and is counted there once (section 1.5).
-export const END_ALLOWANCE_M = 0.15;
+// THE END ALLOWANCE (#962, docs/cable-lay-design.md section 1.6). This
+// table is its sourced part, in metres an end, by media: only what is
+// physically there and not in the path.
+// A routed path runs from port face to port face, the plug outside the face
+// included (PLUG_REACH, above), while a stock cord's nominal length takes in
+// its plugs, tip to tip, unless its maker measures it otherwise. So each end
+// adds
+//   - the part of the plug INSIDE the port, when the nominal length includes
+//     it: the plug's length less its reach out of the face, from the library
+//     parts PLUG_REACH reads; and
+//   - half of how much SHORTER than its nominal length the maker allows a
+//     cord to be (its minus tolerance). A plus tolerance only adds slack, so
+//     it adds nothing here.
+// Service loops and dressing slack are not in this table: they are explicit
+// slack held in a tray (#949 step 4), where they can be seen. Until that is
+// built, DRESSING_ALLOWANCE (below) stands in for them, apart from the table.
+//   - LC fibre (os2, om3, om4, om5): 13.1 mm, the plug inside. generic/lc-plug@2:
+//     its rear stands 25.6 behind the housing's front, 12.5 of it out of the
+//     bore (an estimate in the bracket 12.2 to 13.97 that SENKO's
+//     DS-LC-000004 drawing allows). Nothing short: FS's patch cable
+//     datasheet for fibre cords, its Cable Length Tolerances table, states
+//     every duplex and simplex length +x/-0 (+10 cm/-0 cm from 0.5 m, +15 cm/-0 cm from 5 m).
+//   - copper (cat6, cat6a), and a cable with no media: 34.5 mm. 9.5 inside,
+//     generic/rj45-plug@1 (22.48 long, CommScope 2843005, 13.0 of it out of
+//     the jack, an estimate resting on the latch); plus 25, half of 1 per
+//     cent of a 5 m cord. FS, Panduit and Siemon state no copper cord
+//     tolerance; Belden's CAT6+ modular cord (C601106001, Overall Length
+//     Tolerances) states +0.2/-0 m to 2 m, Brand-Rex's 10GPlus Cat6A
+//     patchcord (GD056534v18) a bracketed length of +/- 1%. The two disagree,
+//     and the one that allows a short cord is taken, at 5 m, the longest
+//     cord a rack's own routes come to as a rule.
+//   - DAC: 25 mm, half of the +/-5 cm the FS 10G SFP+ DAC datasheet states
+//     for lengths to 5 m (section VII, the L / TOLERANCE table). Its drawing
+//     dimensions L between the two heads, so the heads, the part in the cage
+//     included, come with the cord and add nothing; the head's 19.8 out of
+//     the cage, which the path counts, is left as margin.
+//   - AOC: 52.4 mm, the plug inside: generic/qsfp-cable@1 (SFF-8661 Figure
+//     5-1, the head's stop in the cage), the same head PLUG_REACH reads. No
+//     maker held says how it measures an AOC (FS's AOC drawing gives no L),
+//     so tip to tip is assumed; nothing short: L-com's AOCQSP28100 drawing,
+//     OVERALL CABLE LENGTH TOLERANCE, is +x/-0 at every length.
+// The kit does not know what a port holds: an LC cord into an optic's
+// receptacle enters it as it would an adapter's, and an AOC's head enters
+// the cage; an SFP head (47.5 inside, SFF-8432) is taken at the QSFP figure.
+export const END_ALLOWANCE = {os2: 0.0131, om3: 0.0131, om4: 0.0131, om5: 0.0131,
+  cat6: 0.0345, cat6a: 0.0345, dac: 0.025, aoc: 0.0524};
+const UNSET_ALLOWANCE = 0.0345;
+// TEMPORARY, until #949 step 4 (explicit tray slack) is built: a dressing
+// allowance of 0.1 m an end, for every media, on top of the table. It is not
+// a measured figure and has no maker's source: it is there by decision
+// (2026-10-10, #962), so that a routed cord is not bought with nothing to
+// dress it by while no tray can hold its slack. It is kept out of
+// END_ALLOWANCE so that the table stays what the sources say; step 4 removes
+// this constant and its one use in endAllowance, and nothing else.
+const DRESSING_ALLOWANCE = 0.1;
+// What a routed length adds at each end of a cable: its media's figure from
+// the table (the copper cord's for a cable with no media, or none the table
+// knows) and, for now, the dressing allowance.
+export const endAllowance = cable => ((typeof cable?.media === 'string' && Object.hasOwn(END_ALLOWANCE, cable.media))
+  ? END_ALLOWANCE[cable.media] : UNSET_ALLOWANCE) + DRESSING_ALLOWANCE;
 export const stockLength = m => STOCK_M.find(s => s >= m - 1e-9) ?? Math.ceil(m / 5) * 5;
 
 // THE PATH A CABLE TAKES, in rack coordinates (mm): its a port, every
@@ -646,7 +702,7 @@ export function routePath(rack, cable, ctx) {
         between: legs[k - 1], at: [r1(x.at.x), r1(x.at.y), r1(x.at.z)]});
     }
   }
-  return {points: final, rings, findings, marks, crossings, detours, rests};
+  return {points: final, rings, findings, marks, crossings, detours, rests, allowance: endAllowance(cable)};
 }
 
 // The rail plane an item is fixed to, as a z: the front rail's 0, or the
@@ -756,13 +812,17 @@ export function ringMarks(rack, cable, ctx) {
   });
 }
 
-// A path's length, as routedLength gives it: {measured, value} in metres.
+// A path's length, as routedLength gives it: {measured, value} in metres:
+// its points and its cable's end allowance at each end (routePath's
+// `allowance`, endAllowance's figure; a path built by hand without one takes
+// a cable with no media's).
 export function pathLength(path) {
   if (!path) return null;
   const pts = path.points;
   let mm = 0;
   for (let k = 1; k < pts.length; k++) mm += dist(pts[k - 1], pts[k]);
-  const measured = mm / 1000 + 2 * END_ALLOWANCE_M;
+  const end = typeof path.allowance === 'number' ? path.allowance : endAllowance(null);
+  const measured = mm / 1000 + 2 * end;
   return {measured, value: stockLength(measured)};
 }
 export const routedLength = (rack, cable, ctx) => pathLength(routePath(rack, cable, ctx));

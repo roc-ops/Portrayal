@@ -87,8 +87,10 @@ test('the same face, different sides: the shorter side is taken, whichever end i
   const mm = route => Math.round(R.routedLength(r, {...c, route, routeEdited: true}, ctx).measured * 10000) / 10;
   // (1318.5 and 1459.8 from the port faces, before the plug's reach, #960;
   // 1361.8 and 1472.9 taut, before each free span hung by its drape, #949
-  // step 3: the right still the shorter)
-  assert.deepEqual([mm(right), mm(left)], [1387.4, 1502.7]);
+  // step 3: the right still the shorter; 1387.4 and 1502.7 before #962's
+  // end allowance, 134.5 mm an end for a cable with no media (34.5 from the
+  // table and the temporary 100 of dressing), not 150: 31 shorter each)
+  assert.deepEqual([mm(right), mm(left)], [1356.4, 1471.7]);
   // the same cable written the other way round takes the same side
   const back = cable({item: 'i3', path: 'q'}, {item: 'i1', path: 'p'});
   assert.deepEqual(R.autoRoute(r, back, ctx), right.toReversed());
@@ -208,7 +210,7 @@ test('a lane point sits in its gutter at the U middle, on its face\'s rail plane
   assert.deepEqual(p, {x: -(OPENING / 2 + RAIL_W + R.LANE_GAP / 2), y: 9.5 * RU, z: -r.frame.railDepth});
 });
 
-test('a routed length measures the path, adds 0.15 m an end, and rounds to stock', () => {
+test('a routed length measures the path, adds the end allowance at each end, and rounds to stock', () => {
   let r = add(M.newRack(), 'sw', 1);
   r = add(r, 'pp', 21);
   // a cable too stiff to sag (bendOf: no span can take the bend), so the
@@ -221,7 +223,9 @@ test('a routed length measures the path, adds 0.15 m an end, and rounds to stock
   // port at U21.
   const dx = OPENING / 2 + RAIL_W + R.LANE_GAP / 2 - 100, ra = 39.4;
   const mm = 2 * (ra + Math.hypot(dx, ra)) + 20 * RU;
-  assert.ok(Math.abs(got.measured - (mm / 1000 + 0.3)) < 1e-9, `measured ${got.measured}`);
+  // and a cable with no media's end allowance at each end: the copper
+  // cord's 34.5 mm and the temporary 100 of dressing (#962; 0.15 m before)
+  assert.ok(Math.abs(got.measured - (mm / 1000 + 2 * (0.0345 + 0.1))) < 1e-9, `measured ${got.measured}`);
   assert.equal(got.value, R.stockLength(got.measured));
 });
 
