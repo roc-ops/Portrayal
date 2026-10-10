@@ -26,9 +26,12 @@
   run, through its opening". **ONE-WAY: routed lengths change on saved
   racks.** On the owner's rack of #949 the upper leaf's cords grow 10 to 38
   mm (five now go over their ring to the approach point on its far side) and
-  the lower leaf's 2 to 6 mm; c2 and c3 pass the 0.5 m stock break. On a
-  sample of 3,120 generated cables, lengths move from 89 mm shorter to 131
-  mm longer (median 10 mm longer), 67 stock sizes up and 67 down. A saved rack's routed lengths
+  the lower leaf's 2 to 6 mm; c2 and c3 pass the 0.5 m stock break. On
+  generated racks lengths move by up to about a tenth of a metre either way,
+  depending on the layout: one sample of 3,120 cables (one layout and seed)
+  gave -89 to +131 mm, median +10, 67 stock sizes up and 67 down; an
+  independent sample of 3,962 cables gave -94 to +94 mm, median +4.5, 67 up
+  and 27 down. A saved rack's routed lengths
   and stock sizes are re-measured the next time a page measures them; an
   entered length is never touched.
 

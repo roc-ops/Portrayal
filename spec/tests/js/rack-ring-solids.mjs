@@ -246,4 +246,13 @@ test('a ring at the end of the tray keeps its approach point outside its band', 
   // rings 3, 2 and 1, each from approach to approach
   assert.deepEqual(sill.slice(-4), [-195.9, -202.4, -209.2, -215.7]);
   assert.equal(sill.length, 12);
+  // the same cord written the other way round: the stretch now starts at
+  // the floor's end, and the approach point before ring 1's near face stands
+  // 6.5 mm off the floor too, not clamped back onto the face (-209.2)
+  const back = {...c, a: c.b, b: c.a};
+  const pb = R.routePath(r, back, ctx);
+  const sillB = pb.points.filter(q => q.at === 'tray' && Math.abs(q.y - (t.rings[0].box.y0 + r15)) < 1e-9)
+    .map(q => Math.round(q.x * 10) / 10);
+  assert.deepEqual(sillB.slice(0, 4), [-215.7, -209.2, -202.4, -195.9]);
+  assert.equal(sillB.length, 12);
 });

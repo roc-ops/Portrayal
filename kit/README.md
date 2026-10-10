@@ -337,12 +337,15 @@ would double back at is gone to as far as that point. `bodyFindings` names a
 ring's part ("c9 passes through CM-01 ring 3 front leg ...: route it into the
 ring along its run, through its opening."). **Routed lengths change in
 0.15.0** on every routed cable through a ring on a tray, and beside a zero-U
-PDU. On the owner's rack of #949 they grow 2 to 38 mm. On a sample of 3,120
-generated cables they move from 89 mm shorter to 131 mm longer (median 10
-mm longer): longer where a cable now goes over a ring to its approach point,
-or round a PDU it grazed; shorter where a detour that went round a tray's
+PDU. On the owner's rack of #949 they grow 2 to 38 mm. On generated racks
+they move by up to about a tenth of a metre either way, and the figures
+depend on the layout: one sample of 3,120 cables (one layout and seed) gave
+89 mm shorter to 131 mm longer, median 10 mm longer, 67 stock sizes up and
+67 down; an independent sample of 3,962 cables gave 94 mm shorter to 94 mm
+longer, median 4.5 mm longer, 67 up and 27 down. A route is longer where a cable
+now goes over a ring to its approach point, or round a PDU it grazed, and
+shorter where a detour that went round a tray's
 front edge to a ring's face can end at the approach point by a shorter way.
-67 change stock size up and 67 down.
 
 To change a rack by name rather than by function, use the command core:
 `createRackEditor({ doc, chassisOf })` applies `place`, `move`, `patch`,
