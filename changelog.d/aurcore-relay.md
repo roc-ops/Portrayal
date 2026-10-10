@@ -12,4 +12,5 @@
 
 ### Removed
 - `common/terminal-header-508-2@1`, which nothing places any more. Use
-  `common/terminal-header-508-2@2` (#804).
+  `common/terminal-header-508-2@2` (#804). Superseded: `@2` was removed in turn
+  (#873, below), and the major to pin today is `common/terminal-header-508-2@3`.

@@ -10,7 +10,7 @@
   on, or, when they stand on opposite sides of the centre line, the side
   whose path is the shorter (end a's side on a tie, or when a port is not
   found); before, the side was end a's alone. On
-  the owner's rack of #949 every one of its sixteen cords changes, from 0.67
+  the reference rack of #949 every one of its sixteen cords changes, from 0.67
   to 1.04 m by the lane to 0.43 to 0.50 m along the lacer (stock 1 or 1.5 m
   to 0.5 m); on a sample of 780 cables between six devices, a fifth to a
   quarter change, every one shorter. A saved rack's routed lengths and stock
@@ -27,8 +27,8 @@
   through it, counts in its fill and its manager's capacity, and measures its
   reach through the ring longer (about 8 to 14 mm on the FHD-CMP5DR). The
   rule is in `throughRings`, so hand routes and automatic ones agree. Saved
-  hand routes that were findings can lose them; the owner's saved routes on
-  the rack of #949 had none before or after.
+  hand routes that were findings can lose them; the saved routes on
+  the reference rack of #949 had none before or after.
 - **An automatic route can carry a doubles-back finding.** A patch along one
   manager with no ring between its ports goes through the nearest ring even
   when it cannot pass it or be held by it: a cross-connect on one panel from

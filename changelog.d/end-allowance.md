@@ -20,7 +20,7 @@
   which `pathLength` adds (a path without one takes the copper figure);
   both, with `END_ALLOWANCE`, replace `END_ALLOWANCE_M`. A routed length is
   73.8 mm shorter for LC fibre, 31 for copper and 50 for a DAC, and 4.8 mm
-  longer for an AOC. On the owner's rack of #949 seven of the sixteen cords
+  longer for an AOC. On the reference rack of #949 seven of the sixteen cords
   move from 1 m to 0.5 m; on a 3,120-cable generated sample 221 move down a
   stock size and one moves up. A saved rack's routed lengths and stock sizes
   are re-measured the next time a page measures them; an entered length is

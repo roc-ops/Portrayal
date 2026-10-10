@@ -24,7 +24,7 @@
   where the ring's own `face` stays on the band). `bodyFindings` names the
   part ("ring 3 front leg") and says to "route it into the ring along its
   run, through its opening". **ONE-WAY: routed lengths change on saved
-  racks.** On the owner's rack of #949 the upper leaf's cords grow 10 to 38
+  racks.** On the reference rack of #949 the upper leaf's cords grow 10 to 38
   mm (five now go over their ring to the approach point on its far side) and
   the lower leaf's 2 to 6 mm; c2 and c3 pass the 0.5 m stock break. On
   generated racks lengths move by up to about a tenth of a metre either way,
