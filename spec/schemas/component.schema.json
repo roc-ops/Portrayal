@@ -1221,7 +1221,7 @@
     "run"
    ],
    "additionalProperties": false,
-   "description": "SOMETHING CABLES RUN THROUGH, declared on the part so that every placement of it inherits it. `ring` is a loop - a D-ring, a lacing bar's hook - with the opening a bundle passes through and the direction it passes. Nothing consumes it yet: it compiles to `data-guide`, `data-guide-run` and `data-guide-aperture` on every instance of the part, so that cable routing has something to read, and the DCIM exports ignore it. L138 holds the opening inside the part.",
+   "description": "SOMETHING CABLES RUN THROUGH, declared on the part so that every placement of it inherits it. `ring` is a loop - a D-ring, a lacing bar's hook - with the opening a bundle passes through and the direction it passes. It compiles to `data-guide`, `data-guide-run` and `data-guide-aperture` on every instance of the part, and to `data-guide-depth`, `data-guide-sill` and `data-guide-aperture-at` where those are stated, so that cable routing has something to read; the DCIM exports ignore it. L138 holds the opening inside the part.",
    "properties": {
     "kind": {
      "enum": [
@@ -1244,6 +1244,10 @@
       "h": {
        "type": "number",
        "exclusiveMinimum": 0
+      },
+      "at": {
+       "$ref": "#/$defs/xy",
+       "description": "millimetres, where the opening is on the drawing the part is placed on, in the part's own frame: the corner with the least x and y. Along the run the opening spans `depth` from there and across it `w`; where the run is `z` it spans `w` by `h` on the face. With `sill` this places the opening in all three axes."
       }
      }
     },
@@ -1254,8 +1258,22 @@
       "z"
      ],
      "description": "the direction cables pass through it, in the frame of the face the part is drawn on: `x` across the drawing, `y` down it, `z` out of the face"
+    },
+    "depth": {
+     "type": "number",
+     "exclusiveMinimum": 0,
+     "description": "millimetres along `run`, the thickness of the band a cable passes through: where it enters the ring and where it leaves are this far apart. Without it a router takes an estimate."
+    },
+    "sill": {
+     "type": "number",
+     "minimum": 0,
+     "description": "millimetres out of the face, from the base the part stands on (the floor it is seated on, or the face it is fixed to) to the near inside edge of the opening: where a cable through an upright ring comes to rest. For a ring whose run lies in the face, `x` or `y`. L138 holds `sill` plus `aperture.h` inside how far the part stands out of the face."
     }
    }
+  },
+  "tray": {
+   "$ref": "#/$defs/tray",
+   "description": "A FLOOR CABLES LIE ON, declared on the part so that every placement of it inherits it: a lacer's tray, a drawer's floor. A route names it by the placement's id, as it names a ring. It compiles to an unpainted `data-class=\"tray\"` rect per floor rectangle and a `data-class=\"tie\"` rect per tie slot, under the instance, and the DCIM exports ignore it. L170 holds every floor inside the part and every tie slot inside a floor."
   },
   "presents": {
    "enum": [
@@ -1452,6 +1470,128 @@
    "type": "string",
    "pattern": "^(?:[a-z0-9-]+:)?[a-z0-9-]+\\.[1-9][0-9]*$",
    "description": "`<part-id>.<n>`, or `<face>:<part-id>.<n>` - a composed part's id and a 1-based fibre position within it. The optional face prefix names a key of this component's `faces:`, so a module's paths can reach a part drawn on its rear: a cassette's rear MTP is a part of the rear face component, not of the cassette's own `parts:`. Unprefixed means this face."
+  },
+  "tray": {
+   "type": "object",
+   "required": [
+    "floor",
+    "height",
+    "run"
+   ],
+   "additionalProperties": false,
+   "description": "a floor cables lie on, in the frame of the drawing it is declared on",
+   "properties": {
+    "floor": {
+     "type": "array",
+     "minItems": 1,
+     "description": "where a cable can lie: one or more rectangles on the drawing the tray is declared on (the top view, for a tray seen from above), so a tray of a strip and two arms lists each",
+     "items": {
+      "type": "object",
+      "required": [
+       "at",
+       "size"
+      ],
+      "additionalProperties": false,
+      "properties": {
+       "at": {
+        "$ref": "#/$defs/xy"
+       },
+       "size": {
+        "$ref": "#/$defs/xy"
+       }
+      }
+     }
+    },
+    "height": {
+     "type": "number",
+     "minimum": 0,
+     "description": "millimetres, the top of the floor above the bottom of the device's envelope: the third axis, which the drawing of the floor does not show. A cable resting on the tray lies with its centre this high plus its own radius."
+    },
+    "lip": {
+     "type": "number",
+     "minimum": 0,
+     "description": "millimetres an edge of the floor stands up above it; 0 is a plain edge. A channel with walls states their height. It bounds how much the tray holds."
+    },
+    "run": {
+     "enum": [
+      "x",
+      "y"
+     ],
+     "description": "the direction cables lie along the floor, across (`x`) or down (`y`) the drawing"
+    },
+    "ties": {
+     "type": "array",
+     "description": "the tie slots cut in the floor, each a rectangle in the same frame as `floor` and inside one of its rectangles: where a strap passes through to hold a cable to the floor, never an opening a cable passes through, whatever its size. A tray that states none holds cables on its upward face only.",
+     "items": {
+      "type": "object",
+      "required": [
+       "at",
+       "size"
+      ],
+      "additionalProperties": false,
+      "properties": {
+       "at": {
+        "$ref": "#/$defs/xy"
+       },
+       "size": {
+        "$ref": "#/$defs/xy"
+       }
+      }
+     }
+    },
+    "slack": {
+     "type": "object",
+     "required": [
+      "kind"
+     ],
+     "additionalProperties": false,
+     "description": "how the tray holds a cable's spare length. `area`: coiled on the floor, less what stands on it. `spool`: wound round a drum of `diameter` millimetres centred at `at`, in the frame of `floor`.",
+     "properties": {
+      "kind": {
+       "enum": [
+        "area",
+        "spool"
+       ]
+      },
+      "at": {
+       "$ref": "#/$defs/xy"
+      },
+      "diameter": {
+       "type": "number",
+       "exclusiveMinimum": 0
+      }
+     },
+     "if": {
+      "properties": {
+       "kind": {
+        "const": "spool"
+       }
+      }
+     },
+     "then": {
+      "required": [
+       "at",
+       "diameter"
+      ]
+     },
+     "else": {
+      "not": {
+       "anyOf": [
+        {
+         "required": [
+          "at"
+         ]
+        },
+        {
+         "required": [
+          "diameter"
+         ]
+        }
+       ]
+      }
+     }
+    }
+   }
   },
   "xy": {
    "type": "array",

@@ -175,6 +175,13 @@ The rest earns its place:
   to the component. When the card is drawn in a device, every grouped part
   carries `data-group`, `data-group-role` and the group's attrs, as a device
   placement does. Lint L17, L22, L23 and L37 check them, as warnings.
+- `guide` for a ring a cable passes through (its opening, the direction it
+  runs and, where the drawing places it, the opening's `depth` along the run,
+  its `sill` above the base and its corner `aperture.at`), and `tray` for a
+  floor a cable lies on: its floor rectangles, the `height` of its top above
+  the bottom of the envelope, its `lip`, its `run`, the tie slots cut in it
+  (`ties`) and how it holds slack. Both travel with every placement of the
+  part; L138 and L170 hold them inside it. See `docs/cable-lay-design.md`.
 - `facet` on a relief feature, and `on` on a part, for connectors on a
   surface angled off the panel. See
   `docs/tilted-facets-design.md`.

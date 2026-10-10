@@ -75,7 +75,8 @@ test('inspect: a cable, with its routed length from a route context', async () =
     a: {item: 'i1', path: 'port-1', view: 'front', name: 'leaf-1 (U10) port-1'},
     b: {item: 'i2', path: 'port-1', view: 'front', name: 'leaf-2 (U20) port-1'},
     media: 'om4', purpose: 'uplink', label: 'A1', length: {value: 2, unit: 'm', source: 'entered'},
-    routed: {metres: 1.15, stock: 1.5}, slack: {metres: 0.85},
+    // its free spans hang by the drape of fibre (#949 step 3): 1.15 m taut
+    routed: {metres: 1.27, stock: 1.5}, slack: {metres: 0.73},
     route: {edited: false, waypoints: [{lane: 'left-front', ru: 10}, {lane: 'left-front', ru: 20}], text: 'left-front U10-U20'},
     lanes: ['left-front', 'right-front', 'left-rear', 'right-rear'],
     passes: {i3: ['guide-1', 'guide-2', 'window-1']},

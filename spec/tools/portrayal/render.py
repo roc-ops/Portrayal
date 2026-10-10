@@ -1918,6 +1918,17 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         g.set("data-guide-run", _guide["run"])
         g.set("data-guide-aperture",
               f"{_guide['aperture']['w']:g} {_guide['aperture']['h']:g}")
+        # WHERE THE OPENING IS, when the contract says (docs/cable-lay-design.md
+        # section 2.2): how thick its band is along the run, how far its near
+        # inside edge stands out of the base, and its corner on the drawing.
+        # What a cable through it rests on; absent, a router estimates.
+        if _guide.get("depth") is not None:
+            g.set("data-guide-depth", f"{_guide['depth']:g}")
+        if _guide.get("sill") is not None:
+            g.set("data-guide-sill", f"{_guide['sill']:g}")
+        if (_guide.get("aperture") or {}).get("at") is not None:
+            ax, ay = _guide["aperture"]["at"]
+            g.set("data-guide-aperture-at", f"{ax:g} {ay:g}")
     # A cavity is a hole you look INTO - a port aperture, a cage. A MODULE is a
     # solid body that fills its bay, and its depth says how far it reaches into
     # the chassis, not that the face has an N-mm hole in it. Emitting data-depth
@@ -2494,7 +2505,44 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         # marker must stay invisible to every relief query (see above).
         if cp.get("on"):
             mk.set("data-cp-on", f"{inst_id}--{cp['on']}")
+    # A TRAY TRAVELS WITH THE PART, as a ring does (docs/cable-lay-design.md
+    # section 2.1): one unpainted rect per floor rectangle and per tie slot, in
+    # this part's own frame under the instance, so the group's transform places
+    # them. Inert like the connection-point markers above and for the same
+    # reasons - no id, no data-path, no data-ref, no data-z-* - so the 3D
+    # build, the elements file and the face tree never see them, and emitted
+    # last for the same reason too. rack_index.py reads them into rack.json.
+    if contract.get("tray"):
+        tray_marks(g, contract["tray"], inst_id)
     return g, contract
+
+
+def tray_marks(parent, tray, tray_id):
+    """The unpainted rects a tray compiles to, appended to `parent`: one
+    `data-class="tray"` rect per floor rectangle, carrying the tray's height,
+    lip, run and slack, and one `data-class="tie"` rect per tie slot, each
+    naming its tray by `data-tray`."""
+    def rect(cls, r):
+        e = ET.SubElement(parent, f"{{{SVG_NS}}}rect")
+        e.set("data-class", cls)
+        e.set("data-tray", tray_id)
+        (x, y), (w, h) = r["at"], r["size"]
+        e.set("x", f"{x:g}"); e.set("y", f"{y:g}")
+        e.set("width", f"{w:g}"); e.set("height", f"{h:g}")
+        e.set("fill", "none"); e.set("stroke", "none")
+        e.set("pointer-events", "none")
+        return e
+    for r in tray.get("floor") or []:
+        e = rect("tray", r)
+        e.set("data-tray-height", f"{tray['height']:g}")
+        e.set("data-tray-lip", f"{tray.get('lip', 0):g}")
+        e.set("data-tray-run", tray["run"])
+        slack = tray.get("slack")
+        if slack:
+            e.set("data-tray-slack", slack["kind"] if slack["kind"] != "spool" else
+                  f"spool {slack['at'][0]:g} {slack['at'][1]:g} {slack['diameter']:g}")
+    for r in tray.get("ties") or []:
+        rect("tie", r)
 
 
 def text_el(x, y, s, size=2.2, anchor="middle", fill="#c7ccd1"):
@@ -3269,6 +3317,15 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         r.set("width", f"{gw:g}"); r.set("height", f"{gh:g}")
         r.set("fill", "none"); r.set("stroke", "none")
         r.set("pointer-events", "none")
+
+    # TRAYS declared on the view (docs/cable-lay-design.md section 2.1): the
+    # floors cables lie on along this face, unpainted like a duct guide. A
+    # tray a part carries is compiled under its instance (tray_marks above).
+    if parts.get("trays"):
+        tg = ET.SubElement(svg, f"{{{SVG_NS}}}g")
+        tg.set("data-class", "trays")
+        for t in parts["trays"]:
+            tray_marks(tg, t, t["id"])
 
     # CUTOUTS. The panel is punched before anything is printed on it or put into
     # it, so the holes paint first. A hole with nothing in it shows the dark inside

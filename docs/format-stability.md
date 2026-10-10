@@ -591,7 +591,7 @@ configuration's front, rear and top views.
 
 `format` is 1. Each device, keyed by `name`, always carries `manufacturer`,
 `model`, `family`, `ru`, `h`, `w`, `d`, `airflow`, `default`, `configs`
-(the names of its configurations) and `kind`. Five keys appear only when the
+(the names of its configurations) and `kind`. Six keys appear only when the
 device has them:
 
 - `mount`: the device's `chassis.mount`, present only when it is not `rack`.
@@ -608,6 +608,20 @@ device has them:
   (`rack_solids.py`), never stated in a manifest. A device without it is its
   envelope, `w` by `h` by `d`, unless it is a sheet part or a zero-U part that
   carries a lane, which is then open.
+- `trays`: the floors a cable lies on (docs/cable-lay-design.md section 2.1),
+  read from the default configuration's plan, a list of `{"id", "top",
+  "thickness", "lip", "run", "floor", "ties"?, "slack"?, "rings"?}` in the
+  frame of `solids`. `id` is the placement's id (or the view's tray id),
+  which a route names as it names a ring. `top` is the height of the floor's
+  surface above the device's bottom and `thickness` its plate's, so the
+  underside is `top - thickness`; `run` is `x` (across the device) or `z`
+  (front to back); `lip` is in mm. `floor` and `ties` are boxes through the
+  plate, `{"x", "y", "z", "w", "h", "d"}`, a tie slot being where a strap
+  passes and never an opening. `slack` is `{"kind": "area"}` or `{"kind":
+  "spool", "x", "z", "diameter"}`. `rings` are the rings standing on the
+  floor whose contracts place their openings, `{"via", "run", "box"}`, the
+  box the clear opening, so a cable resting in one lies on its bottom.
+  Derived from the compiled plan (`rack_solids.trays`), never restated.
 
 `ru` is `chassis.ru` when stated (0 included, for a zero-U part), else the
 height over 44.45 mm, at least 1. Removing or renaming a key, or changing what
@@ -625,6 +639,31 @@ change, so a reader should not treat the list above as closed.
 profiles in `spec/schemas/profiles.yaml` and follows that file. It is a new
 field, so `contract` stays 2: a reader that does not know it still finds every
 field it read before.
+
+### What a compiled face says about rings and trays
+
+rack.json is derived from these attributes of the compiled faces, and a page
+that routes cables may read them itself, so they are part of the format too:
+
+- A ring, on every instance of a part whose contract declares `guide:`:
+  `data-guide` (`ring`), `data-guide-run`, `data-guide-aperture` (`"w h"`),
+  and, where the contract states them, `data-guide-depth` (mm along the run),
+  `data-guide-sill` (mm from the base it stands on to the opening's lowest
+  inside edge) and `data-guide-aperture-at` (`"x y"`, the opening's corner in
+  the part's frame).
+- A tray (docs/cable-lay-design.md section 2.1): one unpainted `<rect
+  data-class="tray">` per floor rectangle and one `<rect data-class="tie">`
+  per tie slot, each naming its tray by `data-tray` (the placement's id, or
+  the view tray's). A part's tray is under its instance, in the part's
+  frame; a view's `trays` are under a root `<g data-class="trays">`. A floor
+  rect carries `data-tray-height`, `data-tray-lip`, `data-tray-run` and,
+  where stated, `data-tray-slack` (`area`, or `spool x y diameter`). The
+  rects carry no id, `data-path`, `data-ref` or `data-z-*`: they are not
+  elements, the elements file does not list them, and nothing is built of
+  them in 3D. Only the plan (`top`) carries them.
+
+Renaming one, or changing what it means, is a format change as a rack.json
+key is; adding one is not.
 
 ## What else a consumer holds
 
