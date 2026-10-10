@@ -241,7 +241,8 @@ export function hang(p, q, {r = 0, drape = 1, bend = 25, surfaces = [], fits = n
   // to lay down and pick up again lands so), evenly along its arc
   // the spacings a hang is offered at, finest first: a sample's legs are the
   // room its neighbours have, so a span that turns sharply where it is held
-  // needs them longer
+  // needs them longer (the radius no larger than a lay is opened out for,
+  // route.js ROOM_MAX)
   const steps = [15, Math.min(bend, 100), 2 * Math.min(bend, 100)];
   for (const sag of S < 0.01 ? [] : [S, S / 2, S / 4]) {
     const fine = sag === S ? full : fineOf(sag);

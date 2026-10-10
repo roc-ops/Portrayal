@@ -945,7 +945,7 @@ export function routePath(rack, cable, ctx) {
   // together leave that point short, neither hangs.
   const surfaces = surfacesOf(rack, ctx);
   const drape = drapeOf(cable, ctx);
-  const straight = shortOf(taut), hung = taut.map(() => null);
+  const hung = taut.map(() => null);
   // the room each point of the taut path has as a corner (none: all it needs)
   const roomAt = new Map(cornersOf(taut, {share: 'need'}).map(c => [c.k, c.room_mm]));
   const kept = i => Math.min(roomAt.get(i) ?? Infinity, need);
