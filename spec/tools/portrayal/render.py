@@ -4717,8 +4717,13 @@ def _pluggable_families():
 
 @functools.lru_cache(maxsize=1)
 def _connector_registry():
-    """interface -> {standard, note, spans}, from spec/schemas/connectors.yaml,
-    or {} if the checkout is broken.
+    """interface -> {standard, note, spans, cover}, from
+    spec/schemas/connectors.yaml, or {} if the checkout is broken.
+
+    Most entries are connectors. One with `cover: true` is a COVER MOUNT
+    instead - where a cover that ships on a part and comes off is fixed, a
+    breaker's touch guard - and is seated the same way, with no `standard`
+    (#822; the file's header lists the keys).
 
     Cached because the seating path asks for it once per drawn instance now
     (`_seat_nested_occupants`), and the file is a fact of the checkout.
