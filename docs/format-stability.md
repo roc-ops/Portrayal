@@ -16,11 +16,12 @@ about it while the package is at 0.x.
 Each schema's `$id` is a URL under `https://portrayal.dev/schemas/`, one file
 per schema: `device.schema.json`, `component.schema.json`,
 `listing.schema.json`, `lab.schema.json` and `marks.schema.json` under `/v1/`,
-and `rack.schema.json` under `/v2/`. A schema is served at its `$id`, so an
-editor or a validator that follows the `$id` finds the schema it names. The
-device, component, listing and rack schemas are served there. The lab and
-marks schemas are new in 0.2.0 and are served from the site publish that
-follows the 0.2.0 tag; until then their `$id`s do not resolve. `rack.schema.json` describes
+and `rack.schema.json` under `/v2/`. A schema is served at its `$id` once the
+site has published it, so an editor or a validator that follows the `$id`
+finds the schema it names. The device, component, listing and rack schemas
+are served there. The lab and marks schemas are new in 0.2.0 and are served
+from the site publish that follows the 0.2.0 tag; until then their `$id`s do
+not resolve. `rack.schema.json` describes
 the Rack Builder's own file (`format: "portrayal-rack"`, its own `version`, now 3), not a
 manifest, so it is published as a schema of this repository but does not carry
 format 1. Its label is a publication label only; the rack file's own `version` is

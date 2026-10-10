@@ -2034,10 +2034,11 @@ this repository. `@portrayal/kit` on npm is 0.2.0, which has no rack module.
 - **The per-media table is `END_ALLOWANCE_BY_MEDIA`** (`@portrayal/kit`
   0.18.0, #962). In 0.16.0 and 0.17.0 its name differed from
   `endAllowance(cable)` only by case, for figures 100 mm apart. No kit
-  version after 0.2.0 is on npm, so no published kit carried that name. The table is the sourced part alone; `endAllowance(cable)` and a
-  path's `allowance` are what a length adds an end, the table's figure and
-  the dressing allowance. The old name is not kept as an alias. No figure
-  and no routed length changes.
+  version after 0.2.0 is on npm, so no published kit carried that name. The
+  table is the sourced part alone; `endAllowance(cable)` and a path's
+  `allowance` are what a length adds an end, the table's figure and the
+  dressing allowance. The old name is not kept as an alias. No figure and no
+  routed length changes.
 - L44 also reports decor whose box lies wholly outside its view's drawing - the face
   plus every placement the default build draws beyond it - where it is never seen (#878).
 - Lint L43 stands down when the body itself is as wide as the rack face
@@ -2742,8 +2743,9 @@ this repository. `@portrayal/kit` on npm is 0.2.0, which has no rack module.
 - `@portrayal/kit`: the README's links to the Portrayal README and to the
   artifact contract are absolute GitHub URLs, so they work on the npm package
   page, where a relative link resolved against npmjs.com and broke. The
-  package also names its `homepage` and where to report `bugs`. Both are on
-  npm from kit 0.2.0 (#716).
+  package also names its `homepage` and where to report `bugs`. Neither is
+  in kit 0.2.0 on npm, which was published before this change; both reach
+  npm with the next kit publish (#716).
 - `edgecore/ais800-psu-dc@2`: the vent lattice is 23.46 tall from y 13.56,
   measured module edge to module edge on the quick start's Connect Power
   figure, where 1.x drew it 20.12 from 15.01 (#397). `edgecore/ais800-32d`
