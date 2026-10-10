@@ -30,7 +30,10 @@ const Y20 = 19.5 * RU;                                // the U middle of U20
 const Y20r = Math.round(Y20 * 10) / 10;               // as inspect rounds it, to 0.1 mm
 const Z = 55;                                         // the lacer's guides: half its 110 depth out
 const near = (got, want, what) => assert.ok(Math.abs(got - want) < 1e-9, `${what}: ${got}, want ${want}`);
-const lengthMm = (r, c, ctx) => (R.routedLength(r, c, ctx).measured - 2 * R.END_ALLOWANCE_M) * 1000;
+// the path alone: the routed length less a cat6 cord's end allowance, 134.5
+// mm an end (#962: 34.5 from the table and the temporary 100 of dressing;
+// 0.15 m before)
+const lengthMm = (r, c, ctx) => (R.routedLength(r, c, ctx).measured - 2 * 0.1345) * 1000;
 // The plug's reach (#960): a cat6 cord leaves its RJ45 plug and boot this far
 // out of the face, so each path starts and ends with that straight stretch.
 const RA = R.PLUG_REACH.cat6;

@@ -65,9 +65,12 @@ test('inspect gives a cable its slack: its own length less the routed length', a
   const slack = async rack => (await inspect(rack, 'c1', {chassisOf, route: ROUTE_CTX})).slack;
   const m = measured(base);
   // 1.09 m from the port faces; 1.15 from each plug's reach (#960); 1.27
-  // with each span out to the lane hanging by the drape of fibre (#949 step 3)
-  assert.equal(m, 1.27);
-  assert.deepEqual(await slack(withLength({value: 2, unit: 'm', source: 'entered'})), {metres: 0.73});
+  // with each span out to the lane hanging by the drape of fibre (#949 step
+  // 3); 1.20 (1.1962) with #962's end allowance, 113.1 mm an end for this
+  // OM4 cord (13.1 of plug in the port and the temporary 100 of dressing)
+  // where it was 0.15 m
+  assert.equal(m, 1.2);
+  assert.deepEqual(await slack(withLength({value: 2, unit: 'm', source: 'entered'})), {metres: 0.8});
   assert.deepEqual(await slack(withLength({value: 10, unit: 'ft', source: 'entered'})), {metres: Math.round((3.048 - m) * 100) / 100});
   assert.equal(await slack(withLength({value: 2, unit: 'm', source: 'routed'})), null);
   assert.equal(await slack(base), null);

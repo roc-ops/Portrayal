@@ -96,7 +96,9 @@ test('owner\'s fixture: today\'s routes cross the lacer\'s plates; with the deto
     const p = R.routePath(rack, c, ctx);
     assert.deepEqual(p.crossings, [], c.id);
     assert.equal(p.detours.length, DETOURS[c.id], c.id);
-    const grew = R.pathLength(p).measured - R.pathLength({points: raw(p)}).measured;
+    // the same cable's path without its detours: its end allowance too, which
+    // is the cable's media's since #962
+    const grew = R.pathLength(p).measured - R.pathLength({points: raw(p), allowance: p.allowance}).measured;
     assert.ok(DETOURS[c.id] ? grew > 0.005 : grew === 0, `${c.id} grew ${grew}`);
   }
   // the floor detour of c6 goes over the FRONT edge of the tray (section 1.3
