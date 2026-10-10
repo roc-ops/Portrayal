@@ -399,8 +399,8 @@ owner's rack of #949 each of the sixteen cords is 10.9 to 179.2 mm longer
 and seven pass the 0.5 m break (c1 to c3 and c5 to c8 are 1 m cords again).
 On one sample of 60 generated racks (1,803 cables,
 `spec/tests/js/bend-room-sample.mjs`) a length moves by 113 mm shorter to
-297 mm longer, median 14 mm longer, 92 stock sizes up and 34 down; the
-corners short of their radius fall from 22,886 to 913, each a bend the kit's
+297 mm longer, median 14 mm longer, 93 stock sizes up and 34 down; the
+corners short of their radius fall from 22,910 to 959, each a bend the kit's
 rules found no room for (most at a DAC's or an AOC's head, or a Cat 6A boot,
 that ends beside the ring's line).
 

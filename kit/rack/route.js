@@ -654,8 +654,9 @@ export function routePath(rack, cable, ctx) {
   // one that clears it by more than the tube is not a crossing, so nothing
   // there stops a point moved for a bend's room (#973) from freeing a leg to
   // run across that face. `aheadOf` gives the legs of a run of points that
-  // pass through that space; no point moved for room may add one (a hang
-  // moves a span up and down only, and is not asked).
+  // pass through that space; no point moved for room may add one, and no
+  // hang may: the space is as high as the part, so a span that passes just
+  // over the part's top, in front of its face, would sag down into it.
   const fronts = solids.filter(x => x.zeroU === true).map(x => ({item: x.item, part: 'front', holes: [],
     box: {x0: x.box.x0 - r, x1: x.box.x1 + r, y0: x.box.y0 - r, y1: x.box.y1 + r,
       z0: x.away === -1 ? -1e6 : x.box.z1, z1: x.away === -1 ? x.box.z0 : 1e6}}));
@@ -972,6 +973,9 @@ export function routePath(rack, cable, ctx) {
     // than it needs, where it has more)
     const fits = pts => {
       if (newCrossing(p, q, pts, solids, diameter)) return false;
+      // nor may it sag into the space in front of a zero-U part that the
+      // straight span passes over: that space ends at the part's top
+      if (fronts.length && aheadOf([p, ...pts, q]).length && !aheadOf([p, q]).length) return false;
       const i0 = head.length, i1 = head.length + pts.length;
       return cornersOf([...head, ...pts, ...tail], {share: 'need'}).every(c => (c.k >= i0 && c.k < i1 ? c.room_mm >= need - 1e-9
         : c.room_mm >= kept(c.k < i0 ? c.k : c.k - pts.length) - 1e-9));

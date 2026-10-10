@@ -28,11 +28,13 @@
   0.5 m to 1 m (c1 to c3 and c5 to c8; c4 stays 0.5 m, the lower leaf's
   eight stay 1 m). On one sample of 60 generated racks (1,803 cables of
   mixed media, `spec/tests/js/bend-room-sample.mjs`) a length moves by 113
-  mm shorter to 297 mm longer, median 14 mm longer, 92 stock sizes up and 34
-  down, and the corners short of their radius fall from 22,886 to 913, each
+  mm shorter to 297 mm longer, median 14 mm longer, 93 stock sizes up and 34
+  down, and the corners short of their radius fall from 22,910 to 959, each
   a bend the kit's rules found no room for. A cable written the other way
-  round does not always lay the same: 37 of those 1,803 measure differently
-  from the other end (21 before), and 7 report a different number of bends.
+  round does not always lay the same: 38 of those 1,803 measure differently
+  from the other end (19 before), and 9 report a different number of bends.
+  No cable runs in front of a zero-U part's outward face that did not
+  before.
   A saved
   rack's routed lengths and stock sizes are re-measured the next time a page
   measures them; an entered length is never touched.

@@ -934,7 +934,12 @@ end ring to the lane beside a PDU to run across the outlet face, a fraction
 of a millimetre clear of the part. So no point moved for room (an approach
 point, a lead point, a run-out, a detour's plane) may put a leg through
 that space that was not there with every approach point at the radius and
-`CLEAR`: where one would, that side of the ring keeps the radius
+`CLEAR`, and no hang may sag into it. The space is as high as the part: a
+span that passes just over a short PDU's top, in front of its face, is
+clear of it straight and would hang down into it (22 mm over the top, 83 mm
+of cable in front of the outlets, on one generated rack), and only the
+hang's own check sees that, since every other check reads the taut path.
+For a point moved: where one would, that side of the ring keeps the radius
 and `CLEAR`, and its corner is a finding. The rule of 1.3 itself is no
 stronger than it was.
 
@@ -952,11 +957,12 @@ mm, 10.8 mm short."). It warns and never refuses. A page that draws the kit's po
 
 **What is left.** On the owner's rack, nothing. On one sample of 60
 generated racks (1,803 cables of mixed media, four-post and two-post, with
-and without a zero-U PDU, panels with an FHD-CMP5DR lacer between switches;
+and without a zero-U PDU 200 to 1700 mm tall and up to 20 units off the
+floor, panels with an FHD-CMP5DR lacer between switches;
 `spec/tests/js/bend-room-sample.mjs` builds them from a fixed seed and
-prints every figure here) the corners short of room fall from 22,886 to
-913, on 342 cables: 18 of 883 fibre cords, 5 of 242 Cat 6, 57 of 204 Cat
-6A, 91 of 248 DACs and 171 of 226 AOCs. A finding is a bend the kit's rules
+prints every figure here) the corners short of room fall from 22,910 to
+959, on 361 cables: 25 of 883 fibre cords, 9 of 242 Cat 6, 57 of 204 Cat
+6A, 97 of 248 DACs and 173 of 226 AOCs. A finding is a bend the kit's rules
 found no room for. It is not proof that no lay has room: the rules are the
 ones above and no more, and a cable can be clean read from one end and
 report a bend read from the other (below). Those looked at were of these
@@ -997,8 +1003,8 @@ kinds:
   Two are new: the measure reads a path from end a (above), so the corners
   an offer or a hang is judged by can differ with the end; and a span at a
   plug's end can hang read one way and not the other. On the generated
-  racks 37 of 1,803 cables measure differently from the other end (21
-  before), and 7 report a different number of bends, some none from one end
+  racks 38 of 1,803 cables measure differently from the other end (19
+  before), and 9 report a different number of bends, some none from one end
   and up to three from the other. Making `cornersOf` read the same from
   both ends is a follow-up; it changes the bundle check's corners too.
 - **A lead point can mark no turn.** c8 runs on out of its panel plug to a
@@ -1034,11 +1040,14 @@ leaf's eight are still 1 m cords.
 c8 grows most: it leaves ring 5 and comes straight back to a panel port 13.4
 mm short of the ring, with the lacer's web between, so it goes round the
 front of the tray and straight in to its plug. On the generated racks a
-length moves by -113 to +297 mm, median +14; 92 cables move up a stock size
-and 34 down. 662 of the 1,803 are shorter: a span that hung to its full
+length moves by -113 to +297 mm, median +14; 93 cables move up a stock size
+and 34 down. 668 of the 1,803 are shorter: a span that hung to its full
 depth whatever held its ends now hangs only as deep as the corners beside
 it have room for. No path crosses a body it did not cross before (none
-does, before or after). A stored routed length and stock size move the next
+does, before or after). No cable has a point in front of a zero-U part's
+outward face that had none before: eight do, the same eight before and
+after, each where a lane's own run comes to the end of a short PDU and is
+taken over its face, the last way round of 1.3. A stored routed length and stock size move the next
 time a page measures them; an entered length is never touched.
 
 ## 4. Lay order

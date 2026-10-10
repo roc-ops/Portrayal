@@ -14,7 +14,7 @@ import * as Rest from '../../../kit/rack/resting.js';
 import * as B from '../../../kit/rack/bundles.js';
 import {cornersOf, STRAIGHT_DEG} from '../../../kit/rack/route-path.js';
 import * as F from './route-direct-fixture.mjs';
-import {sampleRack, bothWays} from './bend-room-sample.mjs';
+import {sampleRack, bothWays, inFrontOfZeroU} from './bend-room-sample.mjs';
 import * as G from './cable-solids-fixture.mjs';
 import {tightCorners, byCause} from './bend-corners-probe.mjs';
 
@@ -95,7 +95,7 @@ test('the owner\'s rack: no corner of any cord is short of its 25 mm (86 were, b
   assert.deepEqual(R.ringFindings(r, ctx), []);
 });
 
-test('a path is the same however often it is asked for, and from either end', () => {
+test('on the owner\'s rack a path is the same however often it is asked for, and from either end', () => {
   const r = F.rack(), ctx = F.ctxOf(r);
   let read = 0;
   for (const c of r.cables) {
@@ -364,6 +364,37 @@ test('no change made for room puts a leg in front of a zero-U part: the offer is
   assert.deepEqual(p.crossings, []);
 });
 
+test('no span hangs down into the space in front of a zero-U part that it passes over', () => {
+  // that space is as high as the part. Rack 4 of the generated sample with a
+  // PDU 610 mm tall at its left-front upright: c6 leaves ring 1 of a lacer
+  // from its approach point (-234.2, 632.4, 73.7) for the lane (-327.4,
+  // 644.5, 0), 22 mm over the PDU's top and in front of its face. The
+  // straight span passes over the space; hung, it would sag into it, 167
+  // points every half millimetre (some 83 mm of cable in front of the
+  // outlets). Only a hang's own check can refuse that: every other check
+  // reads the taut path. So the span hangs less deep or stays straight
+  const {rack: plain, ctx: base} = sampleRack(M, G, 4);
+  assert.deepEqual(plain.zeroU, []);
+  const rack = {...plain, zeroU: [{id: 'z1', ref: 'pdu', cfg: 'base', at: 'left-front', offsetMm: 0}]};
+  const ctx = {...base, chassisOf: ref => (ref === 'pdu' ? {...G.chassisOf('pdu'), h: 610} : base.chassisOf(ref))};
+  const c6 = rack.cables.find(c => c.id === 'c6');
+  assert.equal(c6.media, 'om4');
+  const p = R.routePath(rack, c6, ctx), solids = S.solidsOf(rack, ctx), top = solids.find(x => x.zeroU).box.y1;
+  assert.equal(top, 610);
+  // the span it is about: from ring 1's approach point to the lane, over the top
+  const k = p.points.findIndex((q, i) => q.at === 'approach' && q.via === 'guide-1' && p.points[i - 1]?.at === 'exit');
+  const lane = p.points.findIndex((q, i) => i > k && q.at === 'lane');
+  assert.ok(k > 0 && lane > k, JSON.stringify(p.points.map(q => q.at)));
+  assert.deepEqual([p.points[k].x, p.points[k].y, p.points[k].z].map(r1), [-234.2, 632.4, 73.7]);
+  assert.ok(p.points[k].y - top > 20 && p.points[k].y - top < 25);
+  assert.equal(inFrontOfZeroU(p.points, solids, 1.5), 0);
+  // the check is not vacuous: the same span at its full hang does stand in
+  // front of the face
+  const hung = Rest.hang(p.points[k], p.points[lane], {r: 1.5, drape: 1, bend: 25, surfaces: Rest.surfacesOf(rack, ctx)}).points;
+  assert.ok(inFrontOfZeroU([p.points[k], ...hung, p.points[lane]], solids, 1.5) > 100);
+  assert.equal(inFrontOfZeroU([p.points[k], p.points[lane]], solids, 1.5), 0);
+});
+
 test('a route context is read once: changed in place it may give the old path, and a new context gives the new one', () => {
   // what the kit decides for a cable it keeps per rack, context and cable
   // (as it keeps the side of a route), so a page builds a new context when
@@ -404,7 +435,7 @@ test('the measure reads a path from its start: the same points the other way rou
   // on the owner's rack every cord has the same short corners (none) and the
   // same length from either end; on the generated racks not every cable
   // does, and a cable can be clean from one end and report a bend from the
-  // other: 37 of the 1,803 measure differently and 7 report a different
+  // other: 38 of the 1,803 measure differently and 9 report a different
   // number of bends (bend-room-sample.mjs prints both). Rack 7's c26 is one
   // that measures differently
   const {rack, ctx} = sampleRack(M, G, 7);

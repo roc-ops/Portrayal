@@ -18,7 +18,10 @@
 // three, filled from U2 up with six to eleven blocks, each a switch (twelve
 // ports), a switch under a panel that hosts an FHD-CMP5DR lacer, a panel
 // with its lacer, or a gap of one to three units; where the seed is one more
-// than a multiple of four, a zero-U PDU stands at an upright; and 20 to 49
+// than a multiple of four, a zero-U PDU stands at an upright, 200, 400, 610,
+// 900 or 1700 mm tall and 0, 5, 12 or 20 units up from the bottom, by turns
+// (so that some end below the devices, and a span can pass over one's top);
+// and 20 to 49
 // cables join ports of two different devices, their media drawn from om4
 // (three in eight), os2, cat6, cat6a, dac and aoc. Every number comes from
 // `rng(seed)` below (mulberry32), so the racks are the same on every run. The
@@ -60,7 +63,11 @@ export function sampleRack(M, F, seed) {
       ru += 1 + (rnd() < 0.3 ? 1 : 0);
     } else { ru += 1 + Math.floor(rnd() * 3); }
   }
-  if (seed % 4 === 1) rack = {...rack, zeroU: [{id: 'z1', ref: 'pdu', cfg: 'base', at: kind === 'two-post' ? 'left' : pick(['left-front', 'right-front', 'left-rear']), offsetMm: 0}]};
+  // the PDU's height and how far up it stands go by the seed, not by `rnd`,
+  // so the rest of each rack is as it was before they varied
+  const turn = (seed - 1) / 4, pduH = [200, 400, 610, 900, 1700][turn % 5];
+  const pduUp = pduH === 1700 ? 0 : [0, 5, 12, 20][Math.floor(turn / 5) % 4] * 44.45;
+  if (seed % 4 === 1) rack = {...rack, zeroU: [{id: 'z1', ref: 'pdu', cfg: 'base', at: kind === 'two-post' ? 'left' : pick(['left-front', 'right-front', 'left-rear']), offsetMm: pduUp}]};
   const media = ['om4', 'om4', 'om4', 'os2', 'cat6', 'cat6a', 'dac', 'aoc'];
   const cables = [];
   const n = 20 + Math.floor(rnd() * 30);
@@ -70,8 +77,27 @@ export function sampleRack(M, F, seed) {
     cables.push(F.cable(`c${i + 1}`, F.end(a.id, pick(Object.keys(ports[a.id]))), F.end(b.id, pick(Object.keys(ports[b.id]))), pick(media)));
   }
   rack = {...rack, cables};
-  const ctx = {chassisOf: F.chassisOf, guidesOf: id => guides[id] ?? [], portX: e => ports[e.item]?.[e.path] ?? null};
+  const pdu = {...F.chassisOf('pdu'), h: pduH};
+  const ctx = {chassisOf: ref => (ref === 'pdu' ? pdu : F.chassisOf(ref)), guidesOf: id => guides[id] ?? [], portX: e => ports[e.item]?.[e.path] ?? null};
   return {rack, ctx};
+}
+
+// How many points of a path, every half millimetre along it, stand in the
+// space a zero-U part's outward face looks into (docs/cable-lay-design.md
+// section 1.3, rule 4): in front of the face, within the part's width and
+// height grown by the cable's radius. `solids` is solidsOf(rack, ctx).
+export function inFrontOfZeroU(points, solids, r) {
+  let n = 0;
+  const parts = solids.filter(x => x.zeroU === true);
+  for (let k = 1; parts.length && k < points.length; k++) {
+    const u = points[k - 1], v = points[k], m = Math.max(1, Math.ceil(Math.hypot(v.x - u.x, v.y - u.y, v.z - u.z) / 0.5));
+    for (let j = 0; j <= m; j++) {
+      const q = {x: u.x + (v.x - u.x) * j / m, y: u.y + (v.y - u.y) * j / m, z: u.z + (v.z - u.z) * j / m};
+      if (parts.some(({box: b, away}) => (away === -1 ? q.z < b.z0 - 1e-9 : q.z > b.z1 + 1e-9)
+        && q.x > b.x0 - r && q.x < b.x1 + r && q.y > b.y0 - r && q.y < b.y1 + r)) n++;
+    }
+  }
+  return n;
 }
 
 // A cable written the other way round, on the route it resolves to: [as
@@ -87,7 +113,7 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
   const racks = Number(arg('--racks') ?? 60);
   const load = async root => ({
     R: await import(pathToFileURL(`${root}/kit/rack/route.js`)), M: await import(pathToFileURL(`${root}/kit/rack/model.js`)),
-    Rest: await import(pathToFileURL(`${root}/kit/rack/resting.js`)),
+    Rest: await import(pathToFileURL(`${root}/kit/rack/resting.js`)), S: await import(pathToFileURL(`${root}/kit/rack/solids.js`)),
     F: await import(pathToFileURL(`${root}/spec/tests/js/cable-solids-fixture.mjs`)),
     O: await import(pathToFileURL(`${root}/spec/tests/js/route-direct-fixture.mjs`))});
   const {cornersOf} = await import('../../../kit/rack/route-path.js');
@@ -109,7 +135,7 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
   }
 
   // the generated racks
-  const tot = {cables: 0, crossings: 0, half: 0, need: 0, withBend: 0}, baseTot = {crossings: 0, half: 0, need: 0};
+  const tot = {cables: 0, crossings: 0, half: 0, need: 0, withBend: 0, front: 0, frontCables: 0}, baseTot = {crossings: 0, half: 0, need: 0, front: 0, frontCables: 0};
   const perFam = {}, deltas = [];
   let up = 0, down = 0, shorter = 0, reversed = 0, reversedShort = 0, reversedBase = 0, tested = 0;
   for (let seed = 1; seed <= racks; seed++) {
@@ -119,6 +145,8 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
       if (!p) return;
       const need = This.Rest.bendOf(c, t.ctx);
       tot.cables++; tot.crossings += p.crossings.length;
+      const radius = This.R.DIAMETERS[c.media] / 2, ahead = inFrontOfZeroU(p.points, This.S.solidsOf(t.rack, t.ctx), radius);
+      tot.front += ahead; if (ahead) tot.frontCables++;
       tot.half += shortOf(p.points, need, 'half').length; tot.need += shortOf(p.points, need, 'need').length;
       (perFam[fam(c)] ||= [0, 0])[0]++;
       if (p.bends.length) { tot.withBend++; perFam[fam(c)][1]++; }
@@ -130,6 +158,8 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
       if (b) {
         const cb = b.rack.cables[i], q = Base.R.routePath(b.rack, cb, b.ctx);
         baseTot.crossings += q.crossings.length;
+        const was = inFrontOfZeroU(q.points, Base.S.solidsOf(b.rack, b.ctx), radius);
+        baseTot.front += was; if (was) baseTot.frontCables++;
         baseTot.half += shortOf(q.points, need, 'half').length; baseTot.need += shortOf(q.points, need, 'need').length;
         const la = Base.R.pathLength(q), lb = This.R.pathLength(p), d = (lb.measured - la.measured) * 1000;
         deltas.push(d); if (d < -0.05) shorter++;
@@ -143,6 +173,7 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
   console.log(`  corners short of the cable's radius: ${tot.need} by need, ${tot.half} by halves${Base ? ` (base: ${baseTot.need} by need, ${baseTot.half} by halves)` : ''}`);
   console.log(`  cables with a bend finding: ${tot.withBend}; by family [cables, with one]: ${JSON.stringify(perFam)}`);
   console.log(`  legs through a body: ${tot.crossings}${Base ? ` (base: ${baseTot.crossings})` : ''}`);
+  console.log(`  points in front of a zero-U part's outward face, every 0.5 mm: ${tot.front} on ${tot.frontCables} cables${Base ? ` (base: ${baseTot.front} on ${baseTot.frontCables})` : ''}`);
   console.log(`  written the other way round, of ${tested}: ${reversed} measure differently${Base ? ` (base: ${reversedBase})` : ''}, ${reversedShort} report a different number of bends`);
   if (Base) {
     deltas.sort((x, y) => x - y);
