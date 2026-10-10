@@ -428,9 +428,9 @@ export const STOCK_M = [0.5, 1, 1.5, 2, 3, 5, 7, 10, 15, 20, 30];
 //   - LC fibre (os2, om3, om4, om5): 13.1 mm, the plug inside. generic/lc-plug@2:
 //     its rear stands 25.6 behind the housing's front, 12.5 of it out of the
 //     bore (an estimate in the bracket 12.2 to 13.97 that SENKO's
-//     DS-LC-000004 drawing allows). Nothing short: the FS "Fiber Patch Cables
-//     Datasheet", Cable Length Tolerances, states every duplex and simplex
-//     length +x/-0 (+10 cm/-0 cm from 0.5 m, +15 cm/-0 cm from 5 m).
+//     DS-LC-000004 drawing allows). Nothing short: FS's patch cable
+//     datasheet for fibre cords, its Cable Length Tolerances table, states
+//     every duplex and simplex length +x/-0 (+10 cm/-0 cm from 0.5 m, +15 cm/-0 cm from 5 m).
 //   - copper (cat6, cat6a), and a cable with no media: 34.5 mm. 9.5 inside,
 //     generic/rj45-plug@1 (22.48 long, CommScope 2843005, 13.0 of it out of
 //     the jack, an estimate resting on the latch); plus 25, half of 1 per
