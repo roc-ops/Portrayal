@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx480
-version: 5.0.0
+version: 5.0.1
 maturity: modelled
 manufacturer: Juniper
 model: MX480
@@ -136,8 +136,16 @@ provenance:
 
 attrs:
   physical:
-    weight: up to 163.5 kg maximum configuration (guide rack text, five per
-      48U rack at 371 kg combined for two - transcribed loosely; see gaps)
+    weight-base-kg: 29.7
+    weight-max-kg: 100.26
+    weight-note: Table 88 (physical specifications) gives 65.5 lb (29.7 kg) for the
+      chassis with midplane, fan tray, air filter and cable management brackets,
+      and 221.03 lb (100.26 kg) for the maximum configuration. The guide's own
+      prose disagrees with the table and is not carried - the rack-requirements
+      and lift text give "up to 163.5 lb (74.2 kg) depending on the
+      configuration" (the source of the 163.5 this file used to carry, where it
+      was misread as kilograms), and the mounting-shelf note gives 128 lb
+      (58.1 kg), which is the MX240's Table 88 maximum.
   performance:
     throughput: 7.5 Tbps-class (datasheet family table)
   power:
@@ -172,11 +180,6 @@ gaps:
       slot pitch a range, 31.2-31.5 mm (31.3 modelled on the better-anchored
       x scale). The vent band and the front ESD point were re-placed on the
       body scale at 5.0.0 (provenance.front-vent-esd).
-  - what: weight-and-max-config
-    reason: vendor-silent
-    wanted: a clean Table 88-equivalent weight row - the extraction carries
-      the rack-planning prose (five routers > 371 kg combined) but the
-      per-chassis maximum row fell outside the text layer.
   - what: current-generation-frus
     scope: [slots]
     reason: needs-photo
