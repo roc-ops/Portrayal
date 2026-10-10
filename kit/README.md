@@ -288,10 +288,11 @@ into a dog-leg rather than adding the plug again. **Routed lengths change in
 and by far more where the reach puts a leg over a tray floor.
 
 A routed length is the path plus an **end allowance** at each end, by the
-cable's media (#962, docs/cable-lay-design.md section 1.6). `END_ALLOWANCE`
-is the sourced table, in metres an end: only what is physically there and
-not in the path, the part of the plug inside the port and half the maker's
-short tolerance. It is 0.0131 for LC fibre, 0.0345 for copper and a cable
+cable's media (#962, docs/cable-lay-design.md section 1.6).
+`END_ALLOWANCE_BY_MEDIA` is the sourced table, in metres an end (its name
+since 0.18.0; no figure changed): only what is physically there and not in
+the path, the part of the plug inside the port and half the maker's short
+tolerance. It is 0.0131 for LC fibre, 0.0345 for copper and a cable
 with no media, 0.025 for a DAC and 0.0524 for an AOC. Service loops and
 dressing slack are explicit slack held in a tray, never part of the table.
 Four of its inputs are estimates, not maker's figures (the LC and RJ45 plug
