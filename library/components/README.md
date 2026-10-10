@@ -295,7 +295,10 @@ A skin is a hand-written SVG at `skins/<name>.svg`, drawn in millimetres:
   frames, and L71 checks them.
 - No raster images, no editor metadata, no external references. A skin is
   geometry and fills. Vendor logos are not reproduced; contracts reserve a
-  `logo-zone` element instead.
+  `logo-zone` element instead, drawn in the skin as an empty
+  `<rect id="logo-zone" fill="none"/>` over the box the mark covers. A device
+  reserves the same box as a region `logo-zone` with `at` and `size`. Nothing
+  named for a logo paints (L171); a product name in plain text is fine.
 
 
 ## Adding an optic
