@@ -24,3 +24,11 @@
   portrayal.dev default. A host that wants its own sentences passes them; the
   Rack Builder passes `source: 'the Portrayal Rack Builder'`, its own
   `settingsAt` and its script URL to keep its README as it was.
+- The rule and fix text of L18, L31, L45, L50 and L132 (`--list-rules`,
+  `docs/lint-rules.md`, `lint-rules.json`) now say what each rule checks (#959).
+  L18 asks a port on a family cage to state its media; L31 checks a distance a
+  side or top region label states; L45 is cleared by drawing the face or by a
+  gap whose `scope` names it, not by an `empty:` sentence (whose 40-character
+  floor the schema holds); L50 is about printing off the part or covered by
+  something drawn after it, not font size; L132 names both of its branches.
+  What the rules raise is unchanged.
