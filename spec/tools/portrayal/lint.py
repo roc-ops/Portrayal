@@ -5083,7 +5083,12 @@ _LOGO_ZONE_ID = re.compile(r"^logo-zone(-\d+)?$")
 
 def _names_a_logo(ident):
     """Whether an id has the WORD logo in it - `logo`, `logo-zone`, `front-logo`
-    - and not merely the letters, which `analogous` and `catalogo` also have."""
+    - and not merely the letters, which `analogous` and `catalogo` also have.
+
+    WHOLE TOKENS ONLY, split on `-` and `_`. So `logotype`, `logos`, `logo1`
+    and `vendorLogo` are not matched and slip through; that is the price of not
+    firing on `catalogo`. A token `logo` that names something else has no
+    exemption here: a device says so under `lint.waive`."""
     return isinstance(ident, str) and "logo" in re.split(r"[-_]", ident.lower())
 
 

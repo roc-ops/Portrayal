@@ -76,15 +76,25 @@ def test_a_reserved_box_with_no_fill_stated_is_caught(tmp_path):
     assert len(hits) == 1 and "fill=None" in hits[0], hits
 
 
-def test_a_stroked_or_styled_reserved_box_is_caught(tmp_path):
+def test_a_stroked_reserved_box_is_caught(tmp_path):
+    """One fault per fixture, and the assertion reads the message's own words:
+    the pytest tmp path carries this test's name, so a bare word from it would
+    pass with the clause deleted."""
     hits = part(tmp_path, '<rect id="logo-zone" x="1" y="1" width="5" height="5" '
-                          'fill="none" stroke="#fff" style="fill:#000"/>', ZONE)
-    assert len(hits) == 1 and "stroke" in hits[0] and "style" in hits[0], hits
+                          'fill="none" stroke="#abcdef"/>', ZONE)
+    assert len(hits) == 1 and "has stroke='#abcdef'" in hits[0], hits
+
+
+def test_a_reserved_box_that_carries_css_is_caught(tmp_path):
+    hits = part(tmp_path, '<rect id="logo-zone" x="1" y="1" width="5" height="5" '
+                          'fill="none" style="fill:#000"/>', ZONE)
+    assert len(hits) == 1 and "which can paint it" in hits[0], hits
 
 
 def test_a_group_of_shapes_under_the_reserved_name_is_caught(tmp_path):
     hits = part(tmp_path, '<g id="logo-zone" fill="none"><circle r="3"/></g>', ZONE)
-    assert len(hits) == 1 and "<g>" in hits[0] and "child" in hits[0], hits
+    assert len(hits) == 1 and "is a <g>, not a <rect>" in hits[0] \
+        and "has 1 child node(s)" in hits[0], hits
 
 
 def test_an_element_named_for_a_logo_is_logo_zone(tmp_path):
