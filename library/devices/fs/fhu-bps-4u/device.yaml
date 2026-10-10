@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: fhu-bps-4u
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: FS.com
 model: FHU-BPS-4U
@@ -67,10 +67,13 @@ provenance:
       is taken as centred in the rack units it fills, so a hole's height on the plate is its height
       in the units less half the difference between the units and the plate.
   mark:
-    confidence: drawing
+    confidence: photo-measured
     note: >-
-      FS prints its mark near the left end of the face (the stencil and every render); it is a
-      logo and is not drawn.
+      FS prints its mark near the left end of the face (the stencil and every render); it is a logo
+      and is not drawn. Its place is reserved as the region `logo-zone`: on the straight-on gallery
+      render of SKU 168825 (g4), calibrated on the plate at 3.11 px/mm across and 3.12 down, the
+      mark runs x 20.6 to 42.2 and y 16.7 to 27.0. The mounting slots are the check: the same
+      calibration puts the upper left one at x 3.5 to 14.2, against the slot this file draws there.
   color:
     confidence: photo-measured
     note: >-
@@ -153,6 +156,8 @@ views:
         kind: slot}
       - {id: slot-r2, at: [468.21, 167.55], size: [11.0, 7.0], fill: '#0a0b0c', rx: 3.5, vent: 1.0,
         kind: slot}
+    regions:
+    - {id: logo-zone, at: [20.6, 16.7], size: {w: 21.6, h: 10.3}, label: 'FS mark; not drawn'}
   rear:
     size: {w: 482.6, h: 177.0}
     panel:

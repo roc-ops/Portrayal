@@ -69,3 +69,27 @@ def test_a_rear_cutout_carries_its_slot_and_occupant():
     # explorer misread the cutout as one.
     assert cut.get("data-media") is None
     assert cut.get("data-group-role") == "service"
+
+
+def test_a_combine_fans_in_instead_of_being_dropped(tmp_path):
+    """The add side of an add/drop filter is a declared combine: its
+    destination names BOTH sources and each source names the destination."""
+    ends = _index(tmp_path)["smartoptics/ppm-ad1-1510"]["optical"]["ends"]
+    assert set(ends["line.1"]["to"]) == {"osc.2", "edfa.2"}
+    assert ends["osc.2"]["to"] == "line.1" and ends["edfa.2"]["to"] == "line.1"
+    assert ends["line.1"]["label"] and ends["osc.2"]["label"] and ends["edfa.2"]["label"]
+
+
+def test_fibre_ends_reads_a_combine_as_a_fan():
+    """Unit form, so it does not lean on the library keeping the shape."""
+    from portrayal import components_index as C
+    known = {"common/lc-duplex-adapter@6": {"optical": {"positions": 2}}}
+    doc = {"parts": [{"id": "a", "ref": "common/lc-duplex-adapter@6", "at": [0, 0]},
+                     {"id": "b", "ref": "common/lc-duplex-adapter@6", "at": [13, 0]}],
+           "optical": {"trunk": ["b"], "paths": [
+               {"combine": [{"at": "a.1", "ratio": 50}, {"at": "a.2", "ratio": 50}],
+                "to": "b.1"}]}}
+    ends = C.fibre_ends(doc, known.get)
+    assert ends["b.1"]["to"] == ["a.1", "a.2"]
+    assert ends["a.1"] == {"to": "b.1", "label": "1"}
+    assert ends["a.2"] == {"to": "b.1", "label": "2"}

@@ -48,7 +48,9 @@ For each thing that went wrong, or went slowly, ask which of these it is.
   covers, or that has caught nothing.
 - **A pitfall.** A misreading of a figure or a tool that the next modeller
   will repeat belongs in [`docs/modelling-pitfalls.md`](../../../docs/modelling-pitfalls.md),
-  under the heading it fits.
+  under the heading it fits. Propose it in the form that page asks for: the
+  mechanism as a rule, then the check, and the device left out unless the
+  entry is a measurement or the rule is not believable without the case.
 - **Navigation.** Did the work spend a long time finding a file, a command or
   a convention? Propose a pointer in [`AGENTS.md`](../../../AGENTS.md), which
   holds pointers and nothing else.
