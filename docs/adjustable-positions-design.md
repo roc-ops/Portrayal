@@ -308,7 +308,8 @@ for a number, and a setter turns the name into the number before it is kept.**
 
 The kit moves the part from the drawing alone.
 
-- **On the root of every face**, `data-adjustments`: the map as JSON, keys
+- **On the root of every face of a device that states any**,
+  `data-adjustments`: the map as JSON, keys
   sorted, the way `render.py` writes `data-positions` on a placement. For each
   id: `axis`, `carrier`, `range`, `default`, `stops`, `label`, `datum`, and
   `at`, the position this file was built at.
@@ -327,8 +328,10 @@ The kit moves the part from the drawing alone.
   | right | `1 0 0` (the front is at the left) |
   | left | `-1 0 0` |
 
-- **On the carrier**, `data-<id>` with the built value, when a configuration set
-  one. That is what `fill_from_attrs` writes for every field.
+- **On the carrier**, `data-<id>` with the built value, only when a
+  configuration set one. That is what `fill_from_attrs` writes for every field.
+  A host does not read the position from it: `at` in `data-adjustments` is the
+  built position on every face, set or not.
 - **A configuration that sets a position is built moved.** Its members are drawn
   where that value puts them, and `at` in `data-adjustments` says the value. The
   kit moves a node by `(value - at)` times its `data-moves-by`.
@@ -336,8 +339,10 @@ The kit moves the part from the drawing alone.
   for a moved node. A member entry also needs `moves-with` and `moves-by`, so a
   reader that holds only that file can move a hit box. The build step decides
   the spelling inside the rules of that file.
-- **`<device>.configs.json`** carries `adjustments` at the top, and each
-  configuration lists the positions it sets. A host builds its control from
+- **`<device>.configs.json`** of a device that states any carries
+  `adjustments` at the top, and each configuration lists the positions it
+  sets. A device with no adjustment gains no attribute and no key, so its
+  build stays byte for byte the same. A host builds its control from
   this file, without opening a face.
 
 ### A face that cannot show it
@@ -345,8 +350,8 @@ The kit moves the part from the drawing alone.
 From the front, a panel 51 mm back and a panel 271 mm back are the same
 elevation. **The face is drawn the same, and nothing is added to it.**
 
-- The carrier still takes `data-rail-setback`, so a host reads the value off any
-  face.
+- The root still carries `data-adjustments`, so a host reads the built
+  position (`at`) off any face, this one included.
 - A face shows the motion when a member on it has a `dx` or a `dy` that is not
   0. The Explorer reads that, and beside the control it names the views that
   show the motion (section 7).
@@ -483,7 +488,9 @@ Codes are given when the rules are built. Each rule and its reason:
    each stop is in the range; with no range there are two stops or more and the
    default is one of them; no two stops share a value. *A default outside its
    own range draws a position the part cannot take.*
-2. **The carrier is a member placement with a `ref`.** *The value is held at
+2. **The carrier is a member placement with a `ref`, and it is not `only-in`.**
+   It exists in every configuration; any other member may be scoped. *The
+   value is held at
    its path, and a path with no part is one no reader can find.* So a motion
    made only of decor cannot be declared. That is accepted: decor that slides
    is a part, and is modelled as one.
@@ -683,9 +690,11 @@ device in the tests, so no library device changes before step 5.
 9. **Does a chosen position survive a change of configuration?** Today it does
    not: a new configuration clears every field of the item. A position is a
    physical setting of the bracket in the rack, not a property of what is
-   fitted. Recommended: keep it, when the new configuration has the same
-   adjustment and takes the value; clear it with a sentence when it does not.
-   Every other field is cleared as today. This changes the rule of the rack
+   fitted. Recommended: keep it, always. An adjustment is stated on the device,
+   so every configuration has it with the same range, and lint rule 2 keeps
+   the carrier in every configuration, so the path always names a part. The
+   kept value wins over a position the new configuration sets, as a field
+   wins over a built value today. Every other field is cleared as today. This changes the rule of the rack
    core for one kind of key, so it is a part of step 6 with a test of its own.
 
 ## 14. Points to weigh before building
@@ -704,7 +713,8 @@ device in the tests, so no library device changes before step 5.
    - the 3D rebuild in `kit/viewer3d.js`.
 
    A kit from before this work, or a copy a host has vendored, does not fail.
-   It drops the entry and draws the default, with no word. A rack that looks
+   It drops the entry and draws the default, with no word on the page (the
+   Explorer logs a console warning for an entry it ignores). A rack that looks
    right in one reader and wrong in another is the cost of reusing `fields`.
 3. **The default is stated twice.** The depth of the well is `size.d` on the
    component, and the default is on the adjustment. Only lint rule 5 holds
