@@ -1,16 +1,12 @@
 format: 1
 kind: module
 name: mic-3d-4xge-xfp
-version: 3.0.1
+version: 4.0.0
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
   Juniper 4-port 10GbE MIC with XFP (one PIC of four). MIC form: the MIC's own 168.8 x 29.2 plate, photo-measured (#261).
-  RETIRED in favour of juniper/mic-3d-4xge-xfp@4, whose port ids follow the module reference's
-  pic/port numbering and which carries the four LINK lamps (#887); juniper/mpc2e-3d@3 still accepts
-  this major so a configuration that seats it keeps resolving.
-superseded-by: juniper/mic-3d-4xge-xfp@4
 attrs:
   xfp-10g: 4
   model: MIC-3D-4XGE-XFP
@@ -49,6 +45,20 @@ provenance:
     both figures; the alignment self-checks, 2-port 29 W against 4-port 37 W. NO AMBIENT IS
     STATED for this row - unlike most of the tables around it, which give a 25/40/55 C
     ladder - so none is recorded rather than invented.
+  port-ids: >-
+    the module reference, 10-Gigabit Ethernet MICs with XFP: interfaces are xe-fpc/pic/port with
+    pic 0 or 1 in MIC slot 0 (2 or 3 in slot 1) and port 0 or 1, and Figure 31 (g100580) labels
+    the four ports [0/2]0, [0/2]1, [1/3]0 and [1/3]1. The ids follow that pic/port split,
+    port-0-0, port-0-1, port-1-0, port-1-1, as juniper/mic-3d-2xge-xfp names its two port-0-0
+    and port-1-0. Until 4.0.0 they ran port-0-0 to port-0-3, which named the third and fourth
+    ports as PIC 0's (#887).
+  link-lamps: >-
+    the module reference, same section: 'LINK LED, one green per port: Off-No link. On
+    steadily-Link is up with or without activity.' Figure 31 draws one beside each cage, right
+    of it, under a vertical LINK legend. Placed as common/led-dot@1 centred where 3.x's skin drew
+    them as unaddressed circles (card x 44.3, 78.4, 112.3, 146.2 at y 18.35, the MX2010
+    photograph's lamp positions per `layout`), each named for its port: led-link-<pic>-<port>
+    (#887).
   numbering: >-
     photo-measured - the legends are printed as the photographs show them on this family: a vertical
     'PORT [n/m]p' left of each cage, read off the MX104 photograph's 2-port card ('PORT [0/2]0', 'PORT
@@ -61,8 +71,12 @@ states:
 parts:
 - {ref: std/xfp@1, id: port-0-0, at: [22.05, 13.50], attrs: {media: xfp}}
 - {ref: std/xfp@1, id: port-0-1, at: [56.15, 13.50], attrs: {media: xfp}}
-- {ref: std/xfp@1, id: port-0-2, at: [90.05, 13.50], attrs: {media: xfp}}
-- {ref: std/xfp@1, id: port-0-3, at: [123.95, 13.50], attrs: {media: xfp}}
+- {ref: std/xfp@1, id: port-1-0, at: [90.05, 13.50], attrs: {media: xfp}}
+- {ref: std/xfp@1, id: port-1-1, at: [123.95, 13.50], attrs: {media: xfp}}
+- {ref: common/led-dot@1, id: led-link-0-0, at: [43.30, 17.35], states: {lamp: ['off', {name: link, color: '#22c55e'}]}}
+- {ref: common/led-dot@1, id: led-link-0-1, at: [77.40, 17.35], states: {lamp: ['off', {name: link, color: '#22c55e'}]}}
+- {ref: common/led-dot@1, id: led-link-1-0, at: [111.30, 17.35], states: {lamp: ['off', {name: link, color: '#22c55e'}]}}
+- {ref: common/led-dot@1, id: led-link-1-1, at: [145.20, 17.35], states: {lamp: ['off', {name: link, color: '#22c55e'}]}}
 size:
   w: 168.8
   h: 29.2
