@@ -344,8 +344,9 @@ names the ref that replaces it.
   trees under `library/exports/*/module-types` are no longer the same text:
   Nautobot writes a bay's position as given and cannot fill `{module}` in it
   (roc-ops/Portrayal#765). Superseded by the Nautobot entry under Changed:
-  Nautobot module types carry their bays today, written plain, with the
-  parent in the port names.
+  most Nautobot module types carry their bays today, written plain, with the
+  parent in the port names. The bays that entry lists as withheld (a carrier
+  whose modules also seat directly in a chassis) are still not given.
 - Five generic optics, a plug and a pull handle: `generic/qsfp-mpo@1` (a QSFP
   with one MPO receptacle), `generic/qsfp-dd-mpo16@1` (a QSFP-DD with one
   MPO-16 receptacle in a Type 2 nose), `generic/qsfp-lc-simplex@1` (a QSFP

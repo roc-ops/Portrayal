@@ -5,8 +5,9 @@
   caller is unchanged. `@portrayal/kit/dist` exports the three that make one:
   - `flatDist(base)`, a build directory;
   - `distResolver(dist, fallback)`, which accepts either form;
-  - `packageDist({at, index})`, the published packages. A device file comes
-    from that device package, a component skin from its components package,
+  - `await packageDist({at, index})`, the published packages. A device file
+    comes from that device package, a component skin from its components
+    package,
     and every other file from `@portrayal/index`. Each is read at the exact
     version `packages.json` names, and `latest` is resolved to an exact index
     version first, so a page never mixes two releases. `at(name, version)`

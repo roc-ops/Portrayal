@@ -83,5 +83,5 @@
   because no bay can take a dual-wide MIC (above). NetBox is unchanged.
   **BREAKING for DCIM data already imported** (Nautobot). Superseded for the
   first five by the Nautobot entry under Fixed (#917), which gives them
-  `{module.parent}/{module}/port-...` again. Only `MIC3-100G-DWDM` keeps the
-  one-token name today.
+  `{module.parent}/{module}/port-...` again. Of the six, only
+  `MIC3-100G-DWDM` keeps the one-token name today.
