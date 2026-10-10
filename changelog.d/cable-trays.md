@@ -37,7 +37,7 @@
   any surface it would pass below. `routePath` gains points `at: 'tray'` and
   `at: 'rest'` and a list of `rests`, which `inspect` gives as
   `route.rests`; `solids.js` gains `traysOf`. **ONE-WAY: routed lengths
-  change on saved racks.** On the owner's rack of #949 the upper leaf's cords
+  change on saved racks.** On the reference rack of #949 the upper leaf's cords
   grow 34 to 42 mm and the lower leaf's 125 to 144 mm (they now go round the
   tray's front edge to reach a ring on its sill), and thirteen of sixteen
   measure past the 0.5 m stock break where seven did; a free span to a

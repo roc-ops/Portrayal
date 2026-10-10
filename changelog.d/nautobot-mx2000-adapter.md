@@ -14,3 +14,9 @@
   five module types need re-importing. Their bays on the MPC1E, MPC2E and
   MPC3E are still withheld from Nautobot (nautobot/nautobot#5823), as in an
   MX240, MX480 or MX960.
+  This is where the three Nautobot entries of this section end up (#765,
+  #261 and this one). Against an export taken at 0.1.0, those five types
+  move from `{module}/x` to `{module.parent}/{module}/x`, once. On
+  `MIC-3D-4XGE-XFP` the third and fourth ports are also renamed, in NetBox
+  as in Nautobot: `port-0-2` and `port-0-3` are `port-1-0` and `port-1-1`
+  (#887, under Changed).
