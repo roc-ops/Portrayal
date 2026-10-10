@@ -88,9 +88,9 @@ test('the same face, different sides: the shorter side is taken, whichever end i
   // (1318.5 and 1459.8 from the port faces, before the plug's reach, #960;
   // 1361.8 and 1472.9 taut, before each free span hung by its drape, #949
   // step 3: the right still the shorter; 1387.4 and 1502.7 before #962's
-  // end allowance, 34.5 mm an end for a cable with no media, not 150: 231
-  // shorter each)
-  assert.deepEqual([mm(right), mm(left)], [1156.4, 1271.7]);
+  // end allowance, 134.5 mm an end for a cable with no media (34.5 from the
+  // table and the temporary 100 of dressing), not 150: 31 shorter each)
+  assert.deepEqual([mm(right), mm(left)], [1356.4, 1471.7]);
   // the same cable written the other way round takes the same side
   const back = cable({item: 'i3', path: 'q'}, {item: 'i1', path: 'p'});
   assert.deepEqual(R.autoRoute(r, back, ctx), right.toReversed());
@@ -223,9 +223,9 @@ test('a routed length measures the path, adds the end allowance at each end, and
   // port at U21.
   const dx = OPENING / 2 + RAIL_W + R.LANE_GAP / 2 - 100, ra = 39.4;
   const mm = 2 * (ra + Math.hypot(dx, ra)) + 20 * RU;
-  // and a cable with no media's end allowance, the copper cord's 34.5 mm,
-  // at each end (#962; 0.15 m before)
-  assert.ok(Math.abs(got.measured - (mm / 1000 + 2 * 0.0345)) < 1e-9, `measured ${got.measured}`);
+  // and a cable with no media's end allowance at each end: the copper
+  // cord's 34.5 mm and the temporary 100 of dressing (#962; 0.15 m before)
+  assert.ok(Math.abs(got.measured - (mm / 1000 + 2 * (0.0345 + 0.1))) < 1e-9, `measured ${got.measured}`);
   assert.equal(got.value, R.stockLength(got.measured));
 });
 

@@ -411,9 +411,10 @@ function reachPoint(rack, end, p, mm) {
 }
 
 export const STOCK_M = [0.5, 1, 1.5, 2, 3, 5, 7, 10, 15, 20, 30];
-// THE END ALLOWANCE (#962, docs/cable-lay-design.md section 1.6), in metres
-// an end, by media: only what is physically there and not in the path. A
-// routed path runs from port face to port face, the plug outside the face
+// THE END ALLOWANCE (#962, docs/cable-lay-design.md section 1.6). This
+// table is its sourced part, in metres an end, by media: only what is
+// physically there and not in the path.
+// A routed path runs from port face to port face, the plug outside the face
 // included (PLUG_REACH, above), while a stock cord's nominal length takes in
 // its plugs, tip to tip, unless its maker measures it otherwise. So each end
 // adds
@@ -423,8 +424,9 @@ export const STOCK_M = [0.5, 1, 1.5, 2, 3, 5, 7, 10, 15, 20, 30];
 //   - half of how much SHORTER than its nominal length the maker allows a
 //     cord to be (its minus tolerance). A plus tolerance only adds slack, so
 //     it adds nothing here.
-// Service loops and dressing slack are not in it: they are explicit slack
-// held in a tray (#949 step 4), where they can be seen.
+// Service loops and dressing slack are not in this table: they are explicit
+// slack held in a tray (#949 step 4), where they can be seen. Until that is
+// built, DRESSING_ALLOWANCE (below) stands in for them, apart from the table.
 //   - LC fibre (os2, om3, om4, om5): 13.1 mm, the plug inside. generic/lc-plug@2:
 //     its rear stands 25.6 behind the housing's front, 12.5 of it out of the
 //     bore (an estimate in the bracket 12.2 to 13.97 that SENKO's
@@ -456,8 +458,19 @@ export const STOCK_M = [0.5, 1, 1.5, 2, 3, 5, 7, 10, 15, 20, 30];
 export const END_ALLOWANCE = {os2: 0.0131, om3: 0.0131, om4: 0.0131, om5: 0.0131,
   cat6: 0.0345, cat6a: 0.0345, dac: 0.025, aoc: 0.0524};
 const UNSET_ALLOWANCE = 0.0345;
+// TEMPORARY, until #949 step 4 (explicit tray slack) is built: a dressing
+// allowance of 0.1 m an end, for every media, on top of the table. It is not
+// a measured figure and has no maker's source: it is there by decision
+// (2026-10-10, #962), so that a routed cord is not bought with nothing to
+// dress it by while no tray can hold its slack. It is kept out of
+// END_ALLOWANCE so that the table stays what the sources say; step 4 removes
+// this constant and its one use in endAllowance, and nothing else.
+const DRESSING_ALLOWANCE = 0.1;
+// What a routed length adds at each end of a cable: its media's figure from
+// the table (the copper cord's for a cable with no media, or none the table
+// knows) and, for now, the dressing allowance.
 export const endAllowance = cable => ((typeof cable?.media === 'string' && Object.hasOwn(END_ALLOWANCE, cable.media))
-  ? END_ALLOWANCE[cable.media] : UNSET_ALLOWANCE);
+  ? END_ALLOWANCE[cable.media] : UNSET_ALLOWANCE) + DRESSING_ALLOWANCE;
 export const stockLength = m => STOCK_M.find(s => s >= m - 1e-9) ?? Math.ceil(m / 5) * 5;
 
 // THE PATH A CABLE TAKES, in rack coordinates (mm): its a port, every
@@ -801,14 +814,14 @@ export function ringMarks(rack, cable, ctx) {
 
 // A path's length, as routedLength gives it: {measured, value} in metres:
 // its points and its cable's end allowance at each end (routePath's
-// `allowance`; a path built by hand without one takes a cable with no
-// media's).
+// `allowance`, endAllowance's figure; a path built by hand without one takes
+// a cable with no media's).
 export function pathLength(path) {
   if (!path) return null;
   const pts = path.points;
   let mm = 0;
   for (let k = 1; k < pts.length; k++) mm += dist(pts[k - 1], pts[k]);
-  const end = typeof path.allowance === 'number' ? path.allowance : UNSET_ALLOWANCE;
+  const end = typeof path.allowance === 'number' ? path.allowance : endAllowance(null);
   const measured = mm / 1000 + 2 * end;
   return {measured, value: stockLength(measured)};
 }

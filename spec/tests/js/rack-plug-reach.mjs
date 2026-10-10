@@ -80,7 +80,12 @@ test('the reach point is out of the face the port is seen from: +z at the front,
 // FS fibre cords +x/-0; RJ45 22.48 - 13.0 = 9.48, taken as 9.5, plus half of
 // 1 per cent of 5 m; a DAC's heads come with the cord (FS measures L between
 // them), so half of +/-5 cm; an AOC's QSFP head 52.4 inside, +x/-0.
-test('the end allowance is the plug inside the port and the maker\'s short tolerance, per media', () => {
+// THE DRESSING ALLOWANCE (temporary, until #949 step 4 holds slack in a
+// tray): 0.1 m an end on top of the table, for every media, by decision and
+// with no maker's source. It is not in END_ALLOWANCE; endAllowance(cable)
+// and a path's `allowance` carry the two together, what a length adds an end.
+const DRESSING = 0.1;
+test('the end allowance is the plug inside the port and the maker\'s short tolerance, per media, and 0.1 m of dressing for now', () => {
   assert.deepEqual(R.END_ALLOWANCE, {os2: 0.0131, om3: 0.0131, om4: 0.0131, om5: 0.0131,
     cat6: 0.0095 + 0.025, cat6a: 0.0095 + 0.025, dac: 0.025, aoc: 0.0524});
   const r = F.rack(), ctx = F.ctxOf(r), c1 = r.cables[0];
@@ -88,15 +93,23 @@ test('the end allowance is the plug inside the port and the maker\'s short toler
     const p = R.routePath(r, {...c1, media}, ctx);
     return [p.allowance, Math.round((R.pathLength(p).measured - len(p.points) / 1000) * 1e6) / 1e6];
   };
-  assert.deepEqual(per('om4'), [0.0131, 0.0262]);
-  assert.deepEqual(per('cat6'), [0.0345, 0.069]);
-  assert.deepEqual(per('dac'), [0.025, 0.05]);
-  assert.deepEqual(per('aoc'), [0.0524, 0.1048]);
+  assert.deepEqual(per('om4'), [0.1131, 0.2262]);
+  assert.deepEqual(per('cat6'), [0.1345, 0.269]);
+  assert.deepEqual(per('dac'), [0.125, 0.25]);
+  assert.deepEqual(per('aoc'), [0.1524, 0.3048]);
+  // each is its table figure and the dressing allowance, the same for all
+  for (const [media, table] of Object.entries(R.END_ALLOWANCE)) {
+    assert.ok(Math.abs(R.endAllowance({media}) - (table + DRESSING)) < 1e-12, media);
+    assert.ok(Math.abs(per(media)[0] - R.endAllowance({media})) < 1e-12, media);
+  }
+  // the table itself carries none of it: no figure reaches 0.1 m
+  assert.ok(Object.values(R.END_ALLOWANCE).every(v => v < DRESSING));
   // no media, or one named like something every object has: the copper figure
-  for (const media of [undefined, 'constructor', '__proto__', 'nope']) assert.equal(per(media)[0], 0.0345, String(media));
+  for (const media of [undefined, 'constructor', '__proto__', 'nope']) assert.equal(per(media)[0], 0.1345, String(media));
+  assert.equal(R.endAllowance(null), 0.1345);
   // a path built by hand, with no allowance, takes the same
   const p = R.routePath(r, c1, ctx);
-  assert.ok(Math.abs(R.pathLength({points: p.points}).measured - (len(p.points) / 1000 + 0.069)) < 1e-12);
+  assert.ok(Math.abs(R.pathLength({points: p.points}).measured - (len(p.points) / 1000 + 0.269)) < 1e-12);
 });
 
 test('the reach is in the length once, as path, and the end allowance is the OM4 cord\'s', () => {
@@ -108,10 +121,10 @@ test('the reach is in the length once, as path, and the end allowance is the OM4
   for (const c of r.cables) {
     const p = R.routePath(r, c, ctx);
     // the measured length is the kit's points and the end allowance, no
-    // more: 13.1 mm an end for an OM4 cord, the LC plug inside its port
-    // (#962; 0.15 m an end before)
-    assert.equal(p.allowance, 0.0131, c.id);
-    assert.ok(Math.abs(R.pathLength(p).measured - (len(p.points) / 1000 + 2 * 0.0131)) < 1e-12, c.id);
+    // more: 113.1 mm an end for an OM4 cord, the 13.1 of LC plug inside its
+    // port and the temporary 100 of dressing (#962; 0.15 m an end before)
+    assert.equal(p.allowance, 0.1131, c.id);
+    assert.ok(Math.abs(R.pathLength(p).measured - (len(p.points) / 1000 + 2 * 0.1131)) < 1e-12, c.id);
     // the port to its reach point: the plug's 27.6, straight out
     const [a, ra] = p.points, [rb, b] = p.points.slice(-2);
     assert.deepEqual([ra.at, ra.end, ra.z - a.z, ra.x - a.x, ra.y - a.y], ['reach', 'a', 27.6, 0, 0], c.id);
@@ -138,17 +151,18 @@ test('the reach is in the length once, as path, and the end allowance is the OM4
 // ring's approach point, 6.5 mm past its band, not its face, and the cord
 // comes in to it from there: 1.9 to 6.1 mm longer (662.3, 659.7, 662.3,
 // 661, 627, 632.5, 617.6 and 620.8 before).
-// THE END ALLOWANCE (#962): 13.1 mm an end for an OM4 cord, not 150, so each
-// is 273.8 mm shorter (664.3, 663.1, 665, 665.8, 631.9, 638.6, 620.7 and
-// 626.4 before), and each fits a 0.5 m cord (1 m before).
-const OVER_THE_EDGE = {c9: 390.5, c10: 389.3, c11: 391.2, c12: 392, c13: 358.1, c14: 364.8, c15: 346.9, c16: 352.6};
+// THE END ALLOWANCE (#962): 113.1 mm an end for an OM4 cord (13.1 of plug in
+// the port and the temporary 100 of dressing), not 150, so each is 73.8 mm
+// shorter (664.3, 663.1, 665, 665.8, 631.9, 638.6, 620.7 and 626.4 before),
+// and each is still a 1 m cord.
+const OVER_THE_EDGE = {c9: 590.5, c10: 589.3, c11: 591.2, c12: 592, c13: 558.1, c14: 564.8, c15: 546.9, c16: 552.6};
 
 test('a cord that must clear its plug goes round the tray\'s front edge, and is measured that way', () => {
   const r = F.rack(), ctx = optics(F.ctxOf(r));
   const got = Object.fromEntries(r.cables.map(c => [c.id, R.routePath(r, c, ctx)]));
   const lower = Object.keys(OVER_THE_EDGE);
   assert.deepEqual(Object.fromEntries(lower.map(id => [id, mm(R.pathLength(got[id]))])), OVER_THE_EDGE);
-  assert.ok(lower.every(id => R.pathLength(got[id]).value === 0.5));
+  assert.ok(lower.every(id => R.pathLength(got[id]).value === 1));
   for (const id of lower) {
     const p = got[id];
     // one detour, from the leaf end's reach point to its first ring, over
