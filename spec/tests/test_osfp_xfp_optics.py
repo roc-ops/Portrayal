@@ -518,7 +518,7 @@ def test_no_other_family_offers_them_and_the_pool_is_the_family(device_cages, co
 AIS = "edgecore/ais800-32o"       # port-1 over port-2, both rotate 0 - the same way up (#799)
 MX80 = "juniper/mx80"
 MX960 = "juniper/mx960"           # fpc6 seats the horizontal card turned 90 by its bay (#261)
-CARD = "juniper/dpc-r-4xge-xfp@2"
+CARD = "juniper/dpc-r-4xge-xfp@3"
 # the turn a cage inherits from its card's bay: on the MX960 the quarter turn is
 # the card's, and its XFP cages are drawn upright inside it
 CARD_TURN = {MX960: 90}

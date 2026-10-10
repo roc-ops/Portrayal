@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dpce-r-40ge-sfp
-version: 2.0.0
+version: 2.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -33,18 +33,13 @@ provenance:
     bail-outward. Turning a composed cage in place changes no box, id or anything a
     device places, so it is a minor bump (S6).
   states: >-
-    NO HEALTH LAMP ON THIS CARD - IT IS ON THE CRAFT INTERFACE, which is the same
-    answer #212 found for the MX240's fans. MX240 hardware guide, "DPC and MPC LEDs
-    on the Craft Interface": every DPC or MPC shows its status on LEDs on the craft
-    interface, labelled 1/0, 1, 2 and onward, in a row along the bottom of the craft
-    interface. Table 10 gives them OK green and FAIL red, and juniper/mx240-craft@1 now
-    draws and lights them.
-    WHAT THIS CARD DOES DRAW IS PER-PORT, NOT PER-CARD. The `indicator-panels` group
-    is the dot-matrix link clusters between the block pairs - eighty of them - and
-    `indicator-panels` above records why they carry no individual ids: the
-    lamp-to-port mapping is not legible at photo resolution. They are link lamps for
-    forty ports, not a health lamp for the card, so they were never what `ok` and
-    `fail` were about.
+    the module reference, Gigabit Ethernet Enhanced DPC with SFP: 'OK/FAIL LED, one bicolor: Steady
+    green-DPC is functioning normally. Blinking green-DPC is transitioning online or offline. Red-DPC
+    has failed.' The card carries its own health lamp, `led-ok-fail` under the OK/FAIL legend (provenance
+    status-group), and states ok, fail and absent as juniper/dpc-r-4xge-xfp does. Until 2.1.0 this read
+    the craft interface's per-slot lamps as the only health lamp and stated [absent] (#212); the craft
+    lamps exist too, and the card's own is in the module reference and the photograph (#891, #899).
+    The dot-matrix clusters between the block pairs are the per-port link lamps (`indicator-panels`).
   size: >-
     photo-measured - the plate is 396.0 x 29.5 centred in a 413.5 lever envelope. Plate edges off the
     MX240 front photograph (body px 2.5-1496.5 = 443 mm, 3.372 px/mm; SFF-8433 ganged-SFP pitch cross-checks
@@ -73,13 +68,16 @@ provenance:
     the same position as the family's.
   status-group: >-
     photo-measured - the MX240 front photograph, slot 2: the OK/FAIL legend runs vertically at card x
-    32.3, y 11.7-19.9, just right of the lever's end (1.x drew it at old x 62). The photograph also shows
-    a lamp under the legend at (32.3, 21.4); this card draws none, by the states ruling above, and that
-    disagreement is left for its own change.
+    32.3, y 11.7-19.9, just right of the lever's end (1.x drew it at old x 62). The lamp is under the
+    legend: a dark disc at card (32.6, 21.3) on the MX240 photograph, drawn at (32.3, 21.4), on the
+    legend's axis, at the size juniper/dpc-r-4xge-xfp draws its own (#891).
   size-ports: >-
     photo - cage blocks re-enveloped from 1.x's card x 76.8/151.2/249.6/323.7, each five sfp-ganged columns
     (registry 14.25 pitch; photo reads 14.3), two rows belly-to-belly at y 4.5 and 16.5 (rotate 180)
-states: [absent]
+states:
+- ok
+- fail
+- absent
 parts:
 - {ref: std/sfp-ganged@1, id: port-0-0, at: [59.55, 4.5]}
 - {ref: std/sfp-ganged@1, id: port-0-2, at: [73.84, 4.5]}
