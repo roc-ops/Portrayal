@@ -13,7 +13,7 @@
 
 ### Changed
 - **A routed path leaves every turn room for the cable's bend radius**
-  (`@portrayal/kit` 0.17.0, #973). On the owner's rack of #949, 86 corners of
+  (`@portrayal/kit` 0.17.0, #973). On the reference rack of #949, 86 corners of
   the sixteen paths had less room than OM4's 25 mm, and almost none was a
   real bend. A free span is now sampled evenly along its arc, a landing is
   laid as the tangent points of its two bends, and no hang is laid that
@@ -23,7 +23,7 @@
   detour's plane is two bend radii long; and a cable whose first turn needs
   more leg than its plug gives runs on straight out of it. None of the 86 is
   left. What the kit's rules find no room for is still routed, and reported.
-  **ONE-WAY: routed lengths change on saved racks.** On the owner's rack
+  **ONE-WAY: routed lengths change on saved racks.** On the reference rack
   every cord is 10.9 to 179.2 mm longer and seven of the sixteen move from
   0.5 m to 1 m (c1 to c3 and c5 to c8; c4 stays 0.5 m, the lower leaf's
   eight stay 1 m). On one sample of 60 generated racks (1,803 cables of

@@ -237,7 +237,7 @@ depth, and the result is pulled taut.
 **A detour leaves its turns room (#973, kit 0.17.0).** A way round turns the
 cable where each end's move meets the plane, and where that move starts when
 the end is itself a corner, so a move shorter than two bend radii leaves
-neither turn its radius: on the owner's rack the cord came back in from in
+neither turn its radius: on the reference rack the cord came back in from in
 front of the tray's edge to its ring's approach point along 42.8 mm, shared
 by two right angles that need 25 mm each. So a plane an end reaches by a
 shorter move stands two installed bend radii from that end (`detour`'s
@@ -803,7 +803,7 @@ front edge to the ring's face, ran along the face and grazed both legs.
 ### 3.4 Room for the bends (#973)
 
 Built in kit 0.17.0. With a drawing that follows the kit's own points, the
-path is the cable, and its corners are its bends. On the owner's rack 86
+path is the cable, and its corners are its bends. On the reference rack 86
 corners of the sixteen paths had less room than the 25 mm an OM4 cord may be
 bent to once installed, and almost none was a bend a hand would make: they
 came from where the kit put its points.
@@ -834,7 +834,7 @@ check: the reach of a plug counts as the leg its first turn bends in.
 where the page gives it (the installed radius of its named type, #919),
 else its media's (`resting.js BEND`, held to the cable types table).
 
-**What made the corners, and what was done.** Counted on the owner's rack by
+**What made the corners, and what was done.** Counted on the reference rack by
 `spec/tests/js/bend-corners-probe.mjs`, before and after, by what the corner
 is a point of:
 
@@ -955,7 +955,7 @@ then by how much ("with room for a 19.2 mm bend; the cable (aoc) needs 30
 mm, 10.8 mm short."). It warns and never refuses. A page that draws the kit's points can show these as they are.
 `inspect`, `describe` and the export notes do not carry them yet.
 
-**What is left.** On the owner's rack, nothing. On one sample of 60
+**What is left.** On the reference rack, nothing. On one sample of 60
 generated racks (1,803 cables of mixed media, four-post and two-post, with
 and without a zero-U PDU 200 to 1700 mm tall and up to 20 units off the
 floor, panels with an FHD-CMP5DR lacer between switches;
@@ -997,7 +997,7 @@ kinds:
   face, coming round the tray's edge to a port above, can still report
   bends.
 - **The same cable written the other way round** measures the same on the
-  owner's rack. It does not everywhere, and this change adds to that. Two
+  reference rack. It does not everywhere, and this change adds to that. Two
   causes were there before: the way through a ring that both ports stand to
   one side of, and which body a detour meets first, are read from end a.
   Two are new: the measure reads a path from end a (above), so the corners
@@ -1012,7 +1012,7 @@ kinds:
   straight through it. It is left in: the path is the kit's stops and its
   detours between them, and a drawing rebuilds the detour from that point.
 
-**Lengths change on saved racks.** On the owner's rack every cord is longer,
+**Lengths change on saved racks.** On the reference rack every cord is longer,
 by 10.9 to 179.2 mm, none shorter, and seven of the sixteen change stock
 size: the upper leaf's c1 to c3 and c5 to c8 pass the 0.5 m break again and
 are 1 m cords (c2 by 0.02 mm), c4 is still a 0.5 m cord, and the lower
