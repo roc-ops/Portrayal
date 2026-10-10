@@ -24,4 +24,8 @@
   move from 1 m to 0.5 m; on a 3,120-cable generated sample 221 move down a
   stock size and one moves up. A saved rack's routed lengths and stock sizes
   are re-measured the next time a page measures them; an entered length is
-  never touched. BREAKING for a page that imports `END_ALLOWANCE_M`.
+  never touched. BREAKING for a page that imports `END_ALLOWANCE_M`. Code
+  that took the allowance back off a length, `measured - 2 *
+  END_ALLOWANCE_M`, must subtract twice the path's `allowance` or
+  `endAllowance(cable)`; `END_ALLOWANCE[media]` is the table alone, and would
+  leave the result 0.2 m long.

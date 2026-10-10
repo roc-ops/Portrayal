@@ -293,8 +293,11 @@ is the sourced table, in metres an end: only what is physically there and
 not in the path, the part of the plug inside the port and half the maker's
 short tolerance. It is 0.0131 for LC fibre, 0.0345 for copper and a cable
 with no media, 0.025 for a DAC and 0.0524 for an AOC. Service loops and
-dressing slack are explicit slack held in a tray, never part of the table;
-until a tray can hold slack (#949 step 4) the kit adds a **temporary
+dressing slack are explicit slack held in a tray, never part of the table.
+Four of its inputs are estimates, not maker's figures (the LC and RJ45 plug
+depths, the AOC's tip-to-tip reading and the copper tolerance), and section
+1.6 lists them.
+Until a tray can hold slack (#949 step 4) the kit adds a **temporary
 dressing allowance** of 0.1 m an end on top, for every media. It has no
 maker's source, it is not exported, and it goes when step 4 lands.
 `endAllowance(cable)` is the two together, what a length adds an end

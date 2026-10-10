@@ -84,7 +84,16 @@ provenance:
       views the tab reaches 15.6 in from the bracket's inner face and overhangs its outer
       face by 8.9 (the top view, 1.116 mm a pixel); the overhang lies outside the plan views,
       which stop at the brackets, so only the 3D tab on the side views (standing 10.4 off the
-      side, the plate's 1.5 and the overhang) carries it.
+      side, the plate's 1.5 and the overhang) carries it. The screw heads are drawn over the
+      bracket, whole, on its outer face over the slot, as render g4 shows them (the bracket is
+      `under` them), standing the plate's 1.5 off the face.
+      WHAT IS ESTIMATED in this note, the rest being read from the drawings: the tab's 3.9
+      height on the side views, which no view dimensions (it is drawn to end on the lowered
+      edge, inside the 6.1 step); the flange's depth along the bracket, taken as the tab's,
+      and its height, taken as the whole span between the two tabs; the tab's 15.6 reach and
+      8.9 overhang, each about 14 and 8 pixels of a raster at 1.1 mm a pixel, so good to a
+      millimetre or so at best; and the 6.1 of the lowered edge, 5.5 pixels of the
+      side view's raster at 1.1 mm a pixel.
   hosting:
     confidence: datasheet
     note: >-
@@ -157,7 +166,8 @@ gaps:
     the rail panel's flange, folded back along each bracket's inner face, is drawn as long as the
     tab above it, and the tab's inward reach is read off one coarse top view (about 1.1 mm a
     pixel); no view shows the flange whole, and the tab's 8.9 overhang outside the bracket is
-    built in 3D but lies outside the plan views.
+    built in 3D but lies outside the plan views. The tab's 3.9 height on the side views is
+    estimated too: no view dimensions it.
   wanted: a photograph of the panel's end from inside the bracket, or the panel's flat pattern
 groups:
   frame:
@@ -239,9 +249,10 @@ views:
       - {id: tab-bottom, at: [162.9, 81.4], size: [35.9, 3.9], fill: '#1b1d20', kind: panel-tab, out: 10.4}
     components:
       placements:
-      - {ref: fs/dinrail2u-side@1, id: side-left, at: [0.0, 0.0], skin: left, group: frame, rel-pos: 2}
-      - {ref: common/pan-screw-m5@1, id: screw-upper, at: [175.85, 13.25], group: screws, rel-pos: 1, under: [side-left], lift: 1.5}
-      - {ref: common/pan-screw-m5@1, id: screw-lower, at: [175.85, 64.75], group: screws, rel-pos: 2, under: [side-left], lift: 1.5}
+      - {ref: fs/dinrail2u-side@1, id: side-left, at: [0.0, 0.0], skin: left, group: frame, rel-pos: 2,
+        under: [screw-upper, screw-lower]}
+      - {ref: common/pan-screw-m5@1, id: screw-upper, at: [175.85, 13.25], group: screws, rel-pos: 1, lift: 1.5}
+      - {ref: common/pan-screw-m5@1, id: screw-lower, at: [175.85, 64.75], group: screws, rel-pos: 2, lift: 1.5}
   right:
     size: {w: 360.0, h: 87.5}
     panel:
@@ -252,9 +263,9 @@ views:
     components:
       placements:
       - {ref: fs/dinrail2u-side@1, id: side-right, at: [0.0, 0.0], skin: right, group: frame,
-        rel-pos: 3}
-      - {ref: common/pan-screw-m5@1, id: screw-upper, at: [174.65, 13.25], group: screws, rel-pos: 3, under: [side-right], lift: 1.5}
-      - {ref: common/pan-screw-m5@1, id: screw-lower, at: [174.65, 64.75], group: screws, rel-pos: 4, under: [side-right], lift: 1.5}
+        rel-pos: 3, under: [screw-upper, screw-lower]}
+      - {ref: common/pan-screw-m5@1, id: screw-upper, at: [174.65, 13.25], group: screws, rel-pos: 3, lift: 1.5}
+      - {ref: common/pan-screw-m5@1, id: screw-lower, at: [174.65, 64.75], group: screws, rel-pos: 4, lift: 1.5}
 configurations:
   base:
     kind: base
