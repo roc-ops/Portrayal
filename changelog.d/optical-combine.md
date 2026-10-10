@@ -23,11 +23,12 @@
 - `smartoptics/ppm-ad1-1510@2` and `ppm-ad1-1625@2` (2.2.0 to 2.3.0) state
   their add direction as a `combine` onto Line Tx, from the signal-flow
   figures of ds-ppm-r4.0. It was written as banded legs off the line port
-  while the vocabulary had no combine. The glass is the same and no export
-  changes: the NetBox and Nautobot types and both fibre maps are byte for
-  byte what they were. `smartoptics/dcp-2` composes both and takes the patch
-  the lock asks for (2.1.2 to 2.1.3); the drawing version in its two device
-  types' comments is the only line of any export that moves.
+  while the vocabulary had no combine. The glass is the same: every port and
+  every fibre-map row is what it was, and the fibre maps do not change at
+  all. `smartoptics/dcp-2` composes both and takes the patch the lock asks
+  for (2.1.2 to 2.1.3). The only lines of any export that move are the
+  version sentences in `comments`: the contract version on the two filters'
+  module types and the drawing version on the DCP-2 device types.
 - `docs/optical-paths-design.md` records the combine form, how a path reads
   in both directions, and that `optical.trunk` is the statement of an
   endpoint's role: a position it names, or a rear face carries, is a trunk,
