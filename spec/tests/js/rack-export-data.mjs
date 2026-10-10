@@ -79,7 +79,10 @@ test('CSV cells are quoted only when they must be, RFC 4180 style', () => {
 test('the title block names the rack, frame, depths, holes and date', () => {
   assert.deepEqual(X.titleLines(M.newRack({name: 'Lab'}), DAY), ['Lab',
     'Four-post frame, 42U, U1 at the bottom', 'Rail depth 740 mm · usable depth 1000 mm',
-    'Square holes (cage nuts)', 'Drawn 2026-09-27 with the Portrayal Rack Builder']);
+    'Square holes (cage nuts)', 'Drawn 2026-09-27 with Portrayal']);
+  // a host names itself (#895)
+  assert.equal(X.titleLines(M.newRack({name: 'Lab'}), DAY, {source: 'the Portrayal Rack Builder'})[4],
+    'Drawn 2026-09-27 with the Portrayal Rack Builder');
   const edge = M.withFrame(M.newRack({name: 'Edge', kind: 'two-post'}),
     {heightRU: 12, numbering: 'top-down', holes: {style: 'tapped', thread: '10-32'}});
   assert.deepEqual(X.titleLines(edge, DAY).slice(1, 4),

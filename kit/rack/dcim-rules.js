@@ -353,6 +353,11 @@ export function cableImportRows({rack, target = 'netbox', names, kept, resolve, 
 //   notes     what the types and the written rows need said (a best-guess type,
 //             a length that was rounded)
 //   script    whether import_cables.py is in the zip (Nautobot)
+//   scriptUrl where the script is when it is not; named only when given (#895)
+//   source    what made the kit, as the first line names it: a host names
+//             itself ("the Portrayal Rack Builder"); 'Portrayal' otherwise
+//   settingsAt where the reader sets a blank site or role, after "Set the
+//             site ..." - a host names its own control for it
 // Returns {text, notes}: `notes` are the lines the file carries beyond its
 // instructions, which is what the page's status line counts.
 export const KIT_FILES = {
@@ -380,7 +385,8 @@ function wrap(text, first, hang, width) {
 }
 
 export function kitReadme({target = 'netbox', rack, date, dcim = {}, typeFiles = 0, manufacturers = [], rows = {},
-                           left = [], notes = [], script = true, scriptUrl = null, width = README_WIDTH}) {
+                           left = [], notes = [], script = true, scriptUrl = null, width = README_WIDTH,
+                           source = 'Portrayal', settingsAt = "in the rack's DCIM import settings (dcim.site, dcim.role)"}) {
   const nautobot = target === 'nautobot', T = TARGET_NAME[nautobot ? 'nautobot' : 'netbox'];
   const F = KIT_FILES[nautobot ? 'nautobot' : 'netbox'];
   const site = String(dcim?.site ?? '').trim(), role = String(dcim?.role ?? '').trim();
@@ -389,14 +395,14 @@ export function kitReadme({target = 'netbox', rack, date, dcim = {}, typeFiles =
   const warning = blank.length
     ? `${F.devices} will be refused as it is: its ${blank.join(' and ')} ${blank.length === 1 ? 'column is' : 'columns are'} blank, and ` +
       `${T} requires ${blank.length === 1 ? 'it' : 'both'}.${!nautobot && !site ? ` ${F.rack}'s site column is blank too.` : ''} ` +
-      `Set the ${[!site && place, !role && 'device role'].filter(Boolean).join(' and the ')} under Export, DCIM import settings, ` +
+      `Set the ${[!site && place, !role && 'device role'].filter(Boolean).join(' and the ')} ${settingsAt}, ` +
       `and export again; or fill ${blank.length === 1 ? 'that column' : 'those columns'} in by hand.`
     : '';
   const numbered = rack.frame.numbering === 'top-down' ? 'numbered from the top' : 'numbered from the bottom';
   const out = [];
   // No paragraph holds a line break of its own, whatever it was handed (kitNames, above).
   const para = (text, first = '', hang = '  ') => out.push(...wrap(flat(text), first, hang, width));
-  para(`${T} import kit for ${rack.name}, from the Portrayal Rack Builder, ${isoDate(date)}.`);
+  para(`${T} import kit for ${rack.name}, from ${source}, ${isoDate(date)}.`);
   out.push('');
   const item = text => para(text, '- ', '  ');
   if (warning) { para(warning, 'Read this first: '); out.push(''); }
@@ -469,7 +475,7 @@ export function kitReadme({target = 'netbox', rack, date, dcim = {}, typeFiles =
   out.push('');
 
   const missing = nautobot && !script
-    ? [`${KIT_SCRIPT} could not be fetched, so it is not in this zip. It is at ${scriptUrl || `https://portrayal.dev/site/rack/nautobot/${KIT_SCRIPT}`}.`] : [];
+    ? [`${KIT_SCRIPT} could not be fetched, so it is not in this zip.${scriptUrl ? ` It is at ${scriptUrl}.` : ''}`] : [];
   const gone = [...missing, ...left];
   out.push('Not in this kit:');
   if (gone.length) gone.forEach(item); else item('Nothing: every device, card and cable in this rack is in the files.');
