@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mx2000-sfb-v
-version: 1.0.1
+version: 2.0.0
 class: fabric
 behaviour: fills
 profile: networking
@@ -10,16 +10,19 @@ description: >-
   the centre of the upper cage between the two CB-REs. The faceplate is
   a full-height air grille with an OK/FAIL lamp; the online/offline
   buttons print on the chassis beside each slot.
-unplaced: >-
-  SUPERSEDED by juniper/mx2000-sfb-v@2, 43.18 x 412.1, the guides' 1.7 in slot width (#902). Kept and
-  deprecated rather than deleted, so a manifest that pins it still resolves (#448); nothing in this
-  library seats it.
-superseded-by: juniper/mx2000-sfb-v@2
 attrs:
   model: MX2000-SFB-S
   power-draw-max-w: 220
 provenance:
-  size: 'photo - the MX2010 studio photographs at ~1.1 px/mm; positions approximate to ~3 mm, and no vendor module dimension is in the extraction'
+  size: >-
+    guide + photo (#902). The MX2010 and MX2020 hardware guides' physical-specification tables give the
+    SFB, the SFB2 and both CB-REs (RE-MX2000-1800X4-S, REMX2K-X8-64G) as 1.7 in (4.31 cm) wide and 16.225
+    in (41.21 cm) high: 43.18 x 412.1. The MX2010 front photograph (about 0.96 px/mm) puts the ten
+    upper-cage slots on the line-card pitch, every SFB's left rail (x px 120, 162, 204, 246, 288, 328, 370,
+    412) over a line-card gap (122, 162, 204, 244, 286, 328, 368, 410), so a CB-RE is as wide as an SFB;
+    its upper cage reads 0.893 of the line-card cage's height against the guides' 0.916, which at that
+    resolution does not overrule a vendor dimension. Until 2.0.0 this was 40 x 405, read off that photograph
+    at ~3 mm. Everything on the face moved +1.59 mm across to stay centred; nothing moved down.
   power: >-
     guide FRU power table (Component | Model Number | Maximum Power Requirement), MX chassis
     guides: '| SFB-slots 0 through 7 | MX2000-SFB-S | 220W*8=1760W |'. The row states the
@@ -32,5 +35,6 @@ states:
 - fail
 - absent
 size:
-  w: 40.0
-  h: 405.0
+  w: 43.18
+  h: 412.1
+size-confidence: {w: datasheet, h: datasheet}
