@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: fhu-bpad-2u
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: FS.com
 model: FHU-BPAD-2U
@@ -65,9 +65,13 @@ provenance:
       side of the straight rib; the cosine puts its lows at 86, 238 and 390, the middle one 9
       mm left of the render's - an estimate of the shape, not a measurement of it.
   mark:
-    confidence: drawing
+    confidence: photo-measured
     note: >-
-      FS's mark in each badge is a logo and is not drawn.
+      FS's mark in each badge is a logo and is not drawn. Its place is reserved as one region per
+      unit, `logo-zone-1` and `logo-zone-2`, inside the drawn recess: on the straight-on render g2,
+      calibrated on the plate at 2.73 px/mm across and 2.78 down, the upper mark runs x 27.8 to 45.8
+      and y 5.4 to 14.0 and the lower one sits 44.0 below it, which is the pitch between the two
+      recesses this file already draws.
   pin-mark:
     confidence: photo-measured
     note: >-
@@ -149,6 +153,9 @@ views:
       - {id: pin-mark-2, at: [239.95, 64.35], size: [2.7, 2.7], fill: '#101112', rx: 1.35, kind: pin-mark}
       - {id: clip-head-l2, at: [0.0, 54.1], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
       - {id: clip-head-r2, at: [478.0, 54.1], size: [4.6, 23.8], fill: '#0e0f10', rx: 2.3, kind: clip-head}
+    regions:
+    - {id: logo-zone-1, at: [27.8, 5.4], size: {w: 18.0, h: 8.6}, label: 'FS mark; not drawn'}
+    - {id: logo-zone-2, at: [27.8, 49.4], size: {w: 18.0, h: 8.6}, label: 'FS mark; not drawn'}
   rear:
     size: {w: 482.6, h: 88.0}
     panel:

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcs511
-version: 2.0.8
+version: 2.0.9
 maturity: modelled
 manufacturer: Edgecore
 model: AS9737-32DB
@@ -254,6 +254,16 @@ provenance:
       below it is drawn larger in the space, which is the part of that corner a reader can actually use.
       The same green bar is on the DCS240's front photograph at 413.3-430.3, so this reading applies to
       that device too, which does not draw it.
+  logo:
+    confidence: photo-measured
+    note: >-
+      THE BADGE IS A LOGO AND ITS PLACE IS RESERVED. The quick start draws the vendor logotype above the
+      model number as a row of nine outlined tiles, the first and last red. Measured on the Overview elevation
+      as embedded in the quick start (1162 x 119 px), calibrated on the chassis outline at 2.628 px/mm
+      across and 2.621 down, which agree to 0.3 percent: the row runs x 407.7 to 433.3 and y 6.4 to 10.9.
+      At that resolution one pixel is 0.4 mm, and the right vent column starts at 432.8, so the region
+      stops there. The same shell on edgecore/dcs240, read at 4.3 px/mm, gives 406.9 to 432.1 and 6.1
+      to 10.5. Nothing is drawn in the region; it is `logo-zone` on the front view.
   power:
     confidence: datasheet
     note: >-
@@ -940,6 +950,10 @@ views:
         group: port-leds
         rel-pos: 32
     regions:
+    - id: logo-zone
+      at: [407.7, 6.4]
+      size: {w: 25.1, h: 4.5}
+      label: Vendor logotype; not drawn
     - id: optics
       at: [38.0, 11.5]
       size: {w: 348.0, h: 26.0}

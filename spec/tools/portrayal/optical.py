@@ -83,19 +83,75 @@ def capacities(contract, load_ref):
     return out
 
 
-def endpoints(path):
-    """Every endpoint a path touches, source first, as `(endpoint, ratio)`.
+def is_combine(path):
+    """Does this path declare a combine - several sources onto one destination?
 
-    The source carries ratio None because it is not a share of anything; a
-    two-ended path's destination carries None for the same reason.
+    `combine` stands in place of `from`. A path that somehow carries both is a
+    combine here; the schema refuses the pair, and L171 says so.
     """
-    out = [(path["from"], None)]
-    to = path["to"]
-    if isinstance(to, str):
-        out.append((to, None))
+    return isinstance(path, dict) and "combine" in path
+
+
+def legs(path):
+    """A path as its legs: `[{"from", "to", "ratio", "band"}]`, light's way round.
+
+    THE ONE PLACE THAT READS THE THREE PATH SHAPES; `endpoints` is built on
+    it. A two-ended path is one
+    leg. A split is one leg per destination, each carrying its `ratio`. A
+    combine is one leg per source, each carrying that source's `ratio` or
+    `band`. A path-level `band` is every leg's band. Consumers that only want
+    pairs - the fibre map, L130 - read `from` and `to` and never ask which
+    shape they came from, which is what keeps a combine from being a special
+    case anywhere but here and in the rule that checks its form.
+
+    A fan entry that is not a mapping, or has no `at`, is skipped, so the
+    lint rules can walk a malformed path and report it. That is all the
+    leniency there is: a `to` that is missing or the wrong shape comes back as
+    written, and the exporter is not made safe against it. L78 and L171 fail
+    such a contract before anything is exported. `endpoints` inherits this, so
+    it no longer raises on a split entry with no `ratio` (the ratio is None)
+    or on a missing or null `to` (the far end is None); the schema and L78
+    fail those first.
+    """
+    band = path.get("band")
+    out = []
+    to = path.get("to")
+    if is_combine(path):
+        for src in (path.get("combine") or []):
+            if isinstance(src, dict) and src.get("at"):
+                out.append({"from": src["at"], "to": to,
+                            "ratio": src.get("ratio"),
+                            "band": src.get("band") or band})
+        return out
+    if isinstance(to, list):
+        for d in to:
+            if isinstance(d, dict) and d.get("at"):
+                out.append({"from": path.get("from"), "to": d["at"],
+                            "ratio": d.get("ratio"), "band": band})
     else:
-        out += [(d["at"], d["ratio"]) for d in to]
+        out.append({"from": path.get("from"), "to": to, "ratio": None, "band": band})
     return out
+
+
+def endpoints(path):
+    """Every endpoint a path touches, its single end first, as `(endpoint, ratio)`.
+
+    The single end is the source of a two-ended path or a split, and the
+    DESTINATION of a combine: the one position every leg shares. It carries
+    ratio None because it is not a share of anything; a two-ended path's
+    other end carries None for the same reason. The fan follows it - a
+    split's destinations or a combine's sources, each with its ratio if it
+    states one. Callers that need to know which way the light runs ask `legs`.
+    """
+    fan = legs(path)
+    if is_combine(path):
+        to = path.get("to")
+        if isinstance(to, list):            # malformed; L171 reports it
+            head = [(d.get("at"), None) for d in to if isinstance(d, dict)]
+        else:
+            head = [(to, None)]
+        return head + [(leg["from"], leg["ratio"]) for leg in fan]
+    return [(path["from"], None)] + [(leg["to"], leg["ratio"]) for leg in fan]
 
 
 def reached(contract):
