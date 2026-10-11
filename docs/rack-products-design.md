@@ -12,8 +12,9 @@ Builds on the rack file and the kit's rack core (`kit/rack/`, rack file
 [vertical-cable-managers-design.md](vertical-cable-managers-design.md) section 8
 (zero-U parts and attachment points in the kit, #926), on
 [pdu-model-design.md](pdu-model-design.md) section 6 (mount point, slot,
-`pdu-button`, pitch and `mount-points`), on rail kits and ears (#904, #905,
-#906, #907, #908, #909) and on [format-stability.md](format-stability.md). It
+`pdu-button`, pitch and `mount-points`), on rail kits and ears
+([rack-mounting-design.md](rack-mounting-design.md), #904, #905, #906, #907,
+#908, #909) and on [format-stability.md](format-stability.md). It
 is read with #936 (reseller listings), #939 (PDU brackets) and #550 (vertical
 mounting).
 
@@ -46,7 +47,8 @@ building blocks first, with shelves, drawers and DIN rail able to hold things.
   it (a keyhole in a bracket or a channel) carries `interface: pdu-button`; the
   pitch is derived from the placements and published per configuration as
   `mount-points: [{mates, at}]`.
-- **Rail kits and ears** (#905, #906): `kind: kit` beside `component` and
+- **Rail kits and ears** ([rack-mounting-design.md](rack-mounting-design.md),
+  #905, #906): `kind: kit` beside `component` and
   `module`, published in `kits.json`; `chassis.kits` and `chassis.ears` on a
   device, with named ear positions and their `at`. `rack.json` does not yet
   carry a device's default ear position (#908, open).
