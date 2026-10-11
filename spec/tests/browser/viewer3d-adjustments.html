@@ -179,7 +179,7 @@ async function run() {
   for (const [x, y] of [[22, 5], [92, 35], [30, 20]])
     await step(`the block at x ${x} and the shelf at y ${y}`, 60,
                () => V.setFields({block: {'block-offset': String(x)}, shelf: {'shelf-height': String(y)}}),
-               x === 22 ? null : true, {x, y});
+               true, {x, y});
   const result = {device: DEVICE, pass: steps.every(s => s.pass), steps};
   out.textContent = JSON.stringify({pass: result.pass,
     steps: steps.map(({name, position, rebuilt, pass, why, boxes}) => ({name, position, rebuilt, pass, why, boxes}))}, null, 1);

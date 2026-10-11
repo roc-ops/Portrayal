@@ -82,7 +82,9 @@ def accepts(adj, value, aid, on=None):
     stops = adj.get("stops") or {}
     rng = adj.get("range")
     named = _stops_by_value(adj)
-    text = "" if value is None or isinstance(value, bool) else str(value).strip()
+    # the four blanks kit/fields.js takes off, and no others: `strip()` alone
+    # would take a unit separator the kit keeps, and keep a BOM the kit takes
+    text = "" if value is None or isinstance(value, bool) else str(value).strip(" \t\n\r")
     n = None
     if text in stops:
         n = float(stops[text])
@@ -221,6 +223,12 @@ def moved(device, deltas):
     return out
 
 
+# THE WORDS THAT NAME AN END OF A RANGE in the name of an attr, and the end
+# each names. These four and no others: `lower`, `upper`, `from` and `to` are
+# not read, and a name that uses them is read as the default.
+_ENDS = {"min": "min", "minimum": "min", "max": "max", "maximum": "max"}
+
+
 def restating_attrs(aid, flat_attrs):
     """The attrs that restate adjustment `aid`, by their names: `{key: what}`
     with `what` one of `default`, `min` and `max`.
@@ -231,7 +239,8 @@ def restating_attrs(aid, flat_attrs):
     whole words. So `rail-setback` is restated by `rail-setback-mm`, by
     `din-rail-setback-mm` and by `din-rail-setback-max-mm`, and by no key that
     does not end in the id. `min` or `max` among the words before the id names
-    the same end (`max-rail-setback-mm`). No key of the adjustment names the attr, and no
+    the same end (`max-rail-setback-mm`), and `minimum` and `maximum` are read
+    as `min` and `max` in either place. A name that says both ends is not paired. No key of the adjustment names the attr, and no
     name of any maker is written here.
     """
     out = {}
@@ -240,9 +249,11 @@ def restating_attrs(aid, flat_attrs):
         if not key.endswith("-mm"):
             continue
         stem, ends = key[:-3], set()
-        for suffix in ("min", "max"):
-            if stem.endswith("-" + suffix):
-                stem, ends = stem[:-len(suffix) - 1], {suffix}
+        # every end the name says after the id, in whatever order: both are
+        # collected, so `-max-min-mm` and `-min-max-mm` are judged alike
+        while "-" in stem and stem.rsplit("-", 1)[1] in _ENDS:
+            stem, word = stem.rsplit("-", 1)
+            ends.add(_ENDS[word])
         if stem != aid and not stem.endswith("-" + aid):
             continue
         # `min` OR `max` MAY STAND BEFORE THE ID TOO: `max-rail-setback-mm` is
@@ -250,7 +261,7 @@ def restating_attrs(aid, flat_attrs):
         # default. A name that says both ends, or one end twice over in two
         # places that disagree, says nothing a rule can hold, and is not paired.
         before = stem[:-len(aid)].strip("-").split("-") if stem != aid else []
-        ends |= {w for w in before if w in ("min", "max")}
+        ends |= {_ENDS[w] for w in before if w in _ENDS}
         if len(ends) > 1:
             continue
         out[key] = ends.pop() if ends else "default"

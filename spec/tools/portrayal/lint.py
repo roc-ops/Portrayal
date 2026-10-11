@@ -618,7 +618,7 @@ RULES = {
     "L172": ("component, device", "whatever is named for a logo is a reserved place and paints nothing: a contract element, a skin node or a device region whose id has the word `logo` in it is `logo-zone` (or `logo-zone-<n>`), the skin node is an empty `rect` with `fill=\"none\"` and no stroke, the region states `at` and `size`, and no decor, cutout, silkscreen mark, bay or placement of a device carries the word (error)", "reserve the box the mark covers: an element `logo-zone` with an empty `<rect id=\"logo-zone\" fill=\"none\"/>` in the skin of a part, a region `logo-zone` with `at` and `size` on a device, and delete the drawn mark or the box that stood for it",
              "A vendor mark is never reproduced, and a filled box standing where one sits reads as a blank plate on the face; the reserved place is what lets a reader ask what is there without the drawing answering with artwork.",
              ERROR),
-    "L173": ("device",     "an adjustment is well formed: its `range` runs from a smaller number to a larger one and holds the `default` and every stop; with no `range` it has two stops or more and the `default` is one of them; no two stops share a position, and no stop is named with a number", "correct the range, the default or the stop the message names; give a part on a row of holes one stop for each hole",
+    "L173": ("device",     "an adjustment is well formed: its `range` runs from a smaller number to a larger one and holds the `default` and every stop; with no `range` it has two stops or more and the `default` is one of them; no two stops share a position, and no stop is named with a number, a sign or an exponent included (`100`, `1e2`)", "correct the range, the default or the stop the message names; give a part on a row of holes one stop for each hole",
              "A default outside its own range draws a position the part cannot take, and two stops at one position, or a stop named with a number, leave a reader unable to say which position a value means.",
              ERROR),
     "L174": ("device",     "the `carrier` of an adjustment is a placement of the device with a `ref`, that says `moves-with` the adjustment and is neither `only-in` nor `optional`", "name a placed part that every configuration has and that moves with the adjustment; a motion made only of decor is modelled as a part",
@@ -648,7 +648,7 @@ RULES = {
     "L182": ("device",     "each adjustment has a `provenance` entry under its own id", "add `provenance.<id>` with a confidence and a note that gives the source of each end of the range and of the default",
              "A range with no source is a guess that reads as a fact.",
              ERROR),
-    "L183": ("device",     "an attr that restates an adjustment equals it: an attr whose name is the id of the adjustment, with any words before it, followed by `-mm` holds the default, and one followed by `-min-mm` or `-max-mm`, or with `min` or `max` among the words before the id, holds that end of the range; an adjustment with stops and no range has no end to restate", "correct the attr or the adjustment so that the two agree, or rename an attr that measures something else",
+    "L183": ("device",     "an attr that restates an adjustment equals it: an attr whose name is the id of the adjustment, with any words before it, followed by `-mm` holds the default, and one followed by `-min-mm` or `-max-mm`, or with `min` or `max` among the words before the id, holds that end of the range (`minimum` and `maximum` are read as `min` and `max`, and no other word names an end); a name that says both ends is not paired; an adjustment with stops and no range has no end to restate", "correct the attr or the adjustment so that the two agree, or rename an attr that measures something else",
              "The attrs are how a range reaches the DCIM export comments, and two statements of one number drift apart.",
              ERROR),
 }
@@ -8859,7 +8859,7 @@ def lint_device_adjustments(path, data, lib_roots):
                                   "with no `range` only a stop is a position")
         seen = {}
         for name, v in stops.items():
-            if _adjust._NUMBER.match(str(name)):
+            if _adjust._NUMBER.match(str(name)) or _adjust._SIGNED.match(str(name)):
                 err(path, "L173", f"{where}: stop {name!r} is named with a number, so a reader "
                                   "who types it cannot say whether it means the name or the mm")
             other = seen.setdefault(_adjust.round01(v), name)

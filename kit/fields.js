@@ -327,7 +327,10 @@ export function adjustmentAccepts(adjustment, value, who = {}) {
   const on = who.on ?? a.on ?? '';
   const name = on ? `${id} on ${on}` : String(id);
   const named = stopsByValue(a);
-  const text = value == null || typeof value === 'boolean' ? '' : String(value).trim();
+  // the four blanks adjustments.py takes off, and no others: trim() would take
+  // a BOM the build keeps, and keep a unit separator the build takes
+  const text = value == null || typeof value === 'boolean' ? ''
+    : String(value).replace(/^[ \t\n\r]+|[ \t\n\r]+$/g, '');
   let n = null;
   if (Object.hasOwn(a.stops || {}, text)) n = Number(a.stops[text]);
   else if (POSITION_NUMBER.test(text)) n = Number(text);

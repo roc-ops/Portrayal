@@ -120,6 +120,27 @@ def test_l173_refuses_a_malformed_adjustment(edit, words):
     assert any(all(w in m for w in words) for m in found.get("L173", [])), found
 
 
+@pytest.mark.parametrize("name", ["1e2", "100", "5e-1"])
+def test_l173_refuses_a_stop_named_with_a_number_in_any_spelling(name):
+    """`1e2` is a segment, so the schema lets it through, and it is a number
+    to whoever types it."""
+    if name == "5e-1":
+        # not a segment: the schema refuses it first, and the rule would too
+        doc = fx.device()
+        doc["adjustments"][AID]["stops"][name] = 100.0
+        del doc["adjustments"][AID]["stops"]["middle"]
+        with lint.collecting() as got:
+            lint.lint_device_adjustments(fx.DEVICE, doc, fx.ROOTS)
+        assert any("[L173]" in m and "named with a number" in m for m in got.errors)
+        return
+
+    def edit(a):
+        del a["stops"]["middle"]
+        a["stops"][name] = 100.0
+    found = broken(lambda d: edit(d["adjustments"][AID]))
+    only(found, "L173", f"stop '{name}'", "named with a number")
+
+
 def _stops_only(d, default=20.0, stops=None):
     a = d["adjustments"][AID]
     del a["range"]
@@ -465,6 +486,11 @@ def test_l174_asks_the_carrier_for_a_ref():
     ("max-panel-setback-mm", "max"), ("min-panel-setback-mm", "min"),
     ("slide-max-panel-setback-mm", "max"), ("panel-setback-max-mm", "max"),
     ("max-panel-setback-max-mm", "max"), ("slide-panel-setback-mm", "default"),
+    # one end said twice is that end; `minimum` and `maximum` are read as `min` and `max`
+    ("panel-setback-min-min-mm", "min"), ("panel-setback-max-max-mm", "max"),
+    ("minimum-panel-setback-mm", "min"), ("panel-setback-maximum-mm", "max"),
+    # and no other word names an end
+    ("upper-panel-setback-mm", "default"), ("minimal-panel-setback-mm", "default"),
 ])
 def test_l183_reads_min_and_max_before_the_id_as_after_it(key, what):
     """`max-rail-setback-mm` is the top of the range, as `rail-setback-max-mm`
@@ -472,7 +498,9 @@ def test_l183_reads_min_and_max_before_the_id_as_after_it(key, what):
     assert adj.restating_attrs("panel-setback", {key: 1}) == {key: what}
 
 
-@pytest.mark.parametrize("key", ["min-panel-setback-max-mm", "max-min-panel-setback-mm"])
+@pytest.mark.parametrize("key", [
+    "min-panel-setback-max-mm", "max-min-panel-setback-mm", "panel-setback-max-min-mm",
+    "panel-setback-min-max-mm", "maximum-panel-setback-min-mm", "panel-setback-minimum-max-mm"])
 def test_l183_does_not_pair_a_name_that_says_both_ends(key):
     assert adj.restating_attrs("panel-setback", {key: 1}) == {}
 

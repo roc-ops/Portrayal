@@ -455,6 +455,11 @@ def _stands(attrs):
     for k in ("data-depth", "data-z-lift", "data-z-out"):
         if k in attrs:
             out[k] = round(float(attrs[k]), 3)
+    # a profile is `t:height,...`: every height is a depth key too
+    for k in ("data-z-profile", "data-z-profile-y"):
+        if k in attrs:
+            out[k] = [tuple(round(float(v), 3) for v in pair.split(":"))
+                      for pair in attrs[k].split(",")]
     return out
 
 
@@ -488,6 +493,11 @@ def test_the_kit_moves_the_default_build_to_where_the_build_draws_it(built, tmp_
         was = {e.get("id"): _stands(e.attrib) for e in face(built, "base", view).iter() if e.get("id")}
         moved += sum(1 for i in want if want[i] != was[i])
     assert moved >= 4, "nothing moved: the comparison measured nothing"
+    if cfg in ("forward", "back"):
+        # the rail's lip is a profile, and its heights went with the floor
+        s = BUILT[cfg]
+        lip = _stands(kit["front"]["nodes"]["rail--lip"])
+        assert lip["data-z-profile"] == [(0.0, 3.0 - s), (80.0, 1.0 - s)], cfg
 
 
 # --- two things the build promises, each with a drawing that breaks it ---------------------------

@@ -808,13 +808,16 @@ Each is an error.
 
 ### What an author may write: lint
 
-7. **L173 refuses a stop named with a number** (`'100': 100`). A reader who
-   types it cannot say whether it means the name or the millimetres.
+7. **L173 refuses a stop named with a number**, in any spelling (`'100':
+   100`, `1e2`). A reader who types it cannot say whether it means the name or
+   the millimetres.
 8. **L174 refuses a carrier that is `optional`**, as it refuses one that is
    `only-in`, for the same reason: some build has no part at that path.
 9. **L174 asks every placement that has the carrier's id** to be a member, on
    whichever views it is. An id may be placed on several views, and all of
-   them are the one path.
+   them are the one path. It asks each for a `ref` too, as rule 2 does; the
+   schema already asks every placement for one, so the clause is reached only
+   by a document the schema has not seen.
 10. **L175 refuses a member on a view that is not one of the six faces** (or a
     variant that names one with `face:`). The build cannot say which way it
     moves there.
@@ -840,8 +843,10 @@ Each is an error.
     the id of the adjustment, with any words before it, followed by `-mm`. It
     is the default, unless `min` or `max` stands just before `-mm`
     (`rail-setback-max-mm`) or among the words before the id
-    (`max-rail-setback-mm`): then it is that end of the range. A name that
-    says both ends is not paired. The id ends the name as whole words, so
+    (`max-rail-setback-mm`): then it is that end of the range. Four words
+    name an end, and no others: `min`, `minimum`, `max` and `maximum`. A name
+    with `lower` or `upper` in it is read as the default. A name that says
+    both ends, in either order and in either place, is not paired. The id ends the name as whole words, so
     `rail-setback` pairs with `din-rail-setback-mm` and with no key that does
     not end in it.
 16. **L183 never requires the attr**, and **refuses an attr that restates an
@@ -942,8 +947,11 @@ alternatives:
 ### The gates
 
 38. **The gate of step 4 is met in part by hand.** The suite holds the
-    documents a scene is built from, the repaint through `restyleText`, and
-    the decision to rebuild, each by what it does. WebGL and layout do not run
+    documents a scene is built from and the repaint through `restyleText`,
+    each by what it does. The decision to rebuild is a function,
+    `positionsChanged`, held by what it answers; that `viewer3d.js` calls it,
+    and with which maps, is held only by a test that reads the source. WebGL
+    and layout do not run
     under node, so the vertex positions of the built scene, at the default and
     at both ends of each axis, by the rebuild path and by the repaint path,
     are read in a browser by `spec/tests/browser/viewer3d-adjustments.html`.

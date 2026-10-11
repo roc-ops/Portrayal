@@ -31,7 +31,11 @@ ADJUSTMENTS = {
 VALUES = ["60", "20", "180", "19.9", "180.1", "300", "0", "120", "120.0", "120.04", "120.05",
           "120.06", " 271.20 ", "271.2", "271.24", "271.26", "51.2", "51.15", "51.14", ".5", "100.",
           "front", "middle", "rear", "Rear", " rear ", "back", "", " ", "-20", "+20", "1e2",
-          "1_0", "0x10", "inf", "NaN", "12mm", "1,5", "100", "99.96", "99.94", "20.04", None]
+          "1_0", "0x10", "inf", "NaN", "12mm", "1,5", "100", "99.96", "99.94", "20.04", None,
+          # blanks: the four both halves take off, and two that neither does - a
+          # BOM, which String.trim() takes and str.strip() keeps, and a unit
+          # separator, the other way round
+          "\t20\r\n", "\ufeff20", "20\x1f", "\u00a020", " rear\n", "rear\x1f"]
 
 
 @pytest.fixture(scope="module")
@@ -82,6 +86,18 @@ def test_what_is_kept_has_one_spelling(out):
                 assert isinstance(a["value"], str)
                 assert not a["value"].endswith(".0") and "e" not in a["value"].lower()
                 assert float(a["value"]) >= 0
+
+
+def test_both_halves_take_off_the_same_blanks(out):
+    """Space, tab, newline and carriage return, and nothing else: a value one
+    half accepts and the other refuses would be a link that works and a
+    configuration that fails the build, for the same text."""
+    assert _answer(out, "ranged", "\t20\r\n") == {"ok": True, "value": "20"}
+    assert _answer(out, "ranged", " rear\n") == {"ok": True, "value": "180"}
+    for value in ("\ufeff20", "20\x1f", "\u00a020", "rear\x1f"):
+        assert _answer(out, "ranged", value)["ok"] is False, repr(value)
+        ok, _ = adj.accepts(ADJUSTMENTS["ranged"], value, "panel-setback", "SLIDER")
+        assert ok is False, repr(value)
 
 
 def test_a_stop_name_is_input_and_the_number_is_kept(out):
