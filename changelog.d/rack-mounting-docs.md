@@ -23,7 +23,8 @@
 - The ear cases of Stage 1 in `docs/modelling-a-device.md` are written as
   rules with their checks, each device a marked illustration, and a fourth is
   added: a plate as wide as the rack is drawn whole, with its ears (#911).
-- `library/README.md` lists `kits.json` and `rack.json` among the files of a
-  build. `docs/adjustable-positions-design.md`, `docs/rack-products-design.md`
+- `library/README.md` and `kit/README.md` list `kits.json` and `rack.json`
+  among the files of a build (a README line only; no kit version change).
+  `AGENTS.md` lists the rack mounting note among the documents to read. `docs/adjustable-positions-design.md`, `docs/rack-products-design.md`
   and `docs/pdu-model-design.md` link the rack mounting note where they cited
   it by issue number (#911).

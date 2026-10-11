@@ -363,7 +363,7 @@ chassis:
     - {ref: acme/rack-kit@1, supply: in-box}
 ```
 
-Each rule below has its check.
+Each of the twelve rules below has its check.
 
 - **A position is written as the guide names it, and `at` only when a source
   measures it.** `name` is `flush`, `recessed`, `mid`, `rear` or `proud`, and
@@ -412,11 +412,14 @@ Each rule below has its check.
   device.** The face stays the metal between the folds. A generic ear is
   drawn from `ears.h`, `ears.y` and `ears.color`, or from the chassis height,
   only when a viewer asks for it. Check: `./build.sh --device <model>` output
-  has no ears, and `render.py --with ears` shows one pair. A device that
+  has no ears, and `render.py --with ears` shows one pair for a device that
+  gets one. A device that
   still places `common/rack-ear@1` drops those placements, and states
   `chassis.ears`, in the change that next takes it to a major (#910).
 - **What nothing draws or exports stays in provenance:** screw sizes, torque,
-  install order, load ratings and the racks a vendor tested.
+  install order, load ratings and the racks a vendor tested. Check: none of
+  them is a key under `ears`, under `kits` or in a kit contract; the schema
+  admits no such key, so L1 refuses one.
 - **A guide that names no position and no kit leaves both keys out,** and the
   device opens a gap saying where you looked. Check: the gap names the
   document and the section.

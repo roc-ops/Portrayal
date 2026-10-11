@@ -65,7 +65,7 @@ Three things were true everywhere:
 - `chassis.full-depth`: the DCIM `is_full_depth` flag, stated by hand.
 - `common/rack-ear@1`: a decorative 14 x 43.5 ear, placed outside the chassis
   under `optional: ears`, sized from EIA-310 proportions and not from any
-  device. 36 devices place it, 188 placements in all.
+  device. 36 devices place it, 114 placements in all.
 - Provenance prose on a handful of devices names a rail kit. Nothing
   structured.
 
@@ -153,7 +153,8 @@ none. A generic L-bracket ear is drawn **only when asked for** (#909):
 So no published face, export or device lock holds a generic ear.
 
 The ear is a flange each side, from the body out to the 482.6 mm rack face,
-with a slot over each rail hole and a leg back along the body. It is `ears.h`
+with two slots in each rack unit (the outer two of its three rail holes) and
+a leg back along the body. It is `ears.h`
 tall and `ears.y` up, or the chassis height from the bottom when they are
 absent. The back of its flange is on the plane the `at` of the default
 position names, or flush when there is none. The sheet thickness (2 mm) and
@@ -165,9 +166,14 @@ A device gets no generic ear when:
   sheet body (`chassis.shell`);
 - it says `ears: behind` in either spelling;
 - its front is 480 mm wide or more, so its ears are already in the drawing;
-- it still places `common/rack-ear@1`, or anything under `optional: ears`.
-  This last check is 2D only. Those ears are never in a published face, so
-  the 3D scene cannot see them and gives such a device the generic pair.
+- its flange would be narrower than 3 mm, which is a front wider than
+  476.6 mm and under 480;
+- it still places ears of its own: a `common/rack-ear@1`, anything under
+  `optional: ears`, or a placement whose id is `ear-left` or `ear-right`.
+  This last check is in `render.py --with ears` only. The kit reads
+  `configs.json` and a published face, and neither holds those ears. So both
+  its 2D overlay (`ears2d.js`) and its 3D scene give such a device the
+  generic pair.
 
 [format-stability.md](format-stability.md) records the shapes and ids.
 
@@ -415,8 +421,9 @@ Taken 2026-10-08, when the design was agreed:
 2. **Generic ears replace the decorative stopgap.** `common/rack-ear@1` was a
    placeholder until ears were modelled. A generic L-bracket ear, sized from
    `ears.h` and `ears.y` (the chassis height when those are absent), is drawn
-   wherever a device does not name its own ears or kit, so every rack device
-   has drawable ears in the Rack Builder and in 3D. Section 3 lists the
+   wherever a device does not draw its own ears, so every rack device
+   has drawable ears in the Rack Builder and in 3D. Listing a kit does not
+   change that. Section 3 lists the
    devices that get none.
 3. **Fit belongs to the site.** Whether a device and its kit fit a given rack
    (range, rail depth plus accessories, door clearance) is computed in the Rack
