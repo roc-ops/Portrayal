@@ -27,6 +27,7 @@ import yaml
 # not ask them to group text they were never meant to group.
 APPLIED_CLASSES = {"sticker", "label", "marking"}
 
+from portrayal import adjustments as _adjust
 from portrayal import attrsections as attrs_mod
 from portrayal.faces import face_ref, rear_place, rear_turn
 from portrayal import libwalk
@@ -2627,6 +2628,28 @@ def _shift_heights(node, by):
                 for t, o in (pair.split(":") for pair in node.get(k).split(","))))
 
 
+def _check_members(svg):
+    """A MEMBER MOVES IN THE FRAME OF ITS FACE, AND ONCE. `data-moves-by` is
+    written for the face, so a member inside a group that is itself turned or
+    scaled would move the wrong way; and a member inside another member would
+    move twice, because a reader moves every node the drawing marks. Neither
+    is drawn by anything the build does today. If either ever is, the build
+    stops here and does not publish a drawing that moves wrongly."""
+    up = {child: parent for parent in svg.iter() for child in parent}
+    for node in svg.iter():
+        if node.get("data-moves-with") is None:
+            continue
+        n = up.get(node)
+        while n is not None:
+            if n.get("data-moves-with") is not None:
+                raise ValueError(f"{node.get('id')}: moves with {node.get('data-moves-with')} "
+                                 f"inside {n.get('id')}, which moves too - it would move twice")
+            if n.get("transform"):
+                raise ValueError(f"{node.get('id')}: moves with {node.get('data-moves-with')} "
+                                 f"inside {n.get('id')}, which is not in the frame of the face")
+            n = up.get(n)
+
+
 def _generic_ears(svg, plan, view_name, w, h):
     """Draw the generic ear's outlines on one face (ears.py), and yield each
     box drawn so the caller can grow the viewBox round it. One group per ear,
@@ -2666,6 +2689,69 @@ def _generic_ears(svg, plan, view_name, w, h):
 def render_view(device, view_name, view, lib, include=(), config_name="default", config=None,
                 silkscreen=True):
     config = config or {}
+    # A PART THAT SLIDES (docs/adjustable-positions-design.md). A device that
+    # declares `adjustments:` has a position for each, in mm: its default, or
+    # the one this configuration sets. A configuration that sets one is BUILT
+    # MOVED: every member is drawn where that value puts it, from a copy of
+    # the manifest whose members stand there (adjustments.moved), so the
+    # elements file, the extents and everything else read off `at` agree with
+    # the drawing. `adj` is None for a device that declares none, and every
+    # line below that reads it then does nothing: such a device builds byte
+    # for byte as it did.
+    src_device = device
+    adj = None
+    if _adjust.declared(device):
+        adj_pos = _adjust.positions(device, config)
+        config = _adjust.canonical_config(device, config)
+        face = _adjust.face_of(view_name, view)
+        adj = {
+            "published": _adjust.published(device, adj_pos),
+            "delta": {aid: value - float(device["adjustments"][aid]["default"])
+                      for aid, (value, _set) in adj_pos.items()},
+            "by": {aid: _adjust.moves_by(a["axis"], face)
+                   for aid, a in device["adjustments"].items()},
+        }
+        moved = _adjust.moved(device, adj["delta"])
+        if moved is not device:
+            key = next((k for k, v in device["views"].items() if v is view), None)
+            if key is not None:
+                view = moved["views"][key]
+            device = moved
+
+    def mark_member(node, aid, flat=False):
+        """Say on a member what moves it and by how much per mm of position
+        (section 5), and build it at the depth this configuration sets
+        (section 6): a well's floor is its `data-depth`; any other member
+        stands `data-z-lift` off its face, the sign reversed, and its absolute
+        heights go with it as they do for a part sunk in a well. `flat` is a
+        projection, which carries no depth."""
+        by = adj["by"].get(aid) if adj and aid in adj["by"] else None
+        if by is None:
+            return
+        node.set("data-moves-with", aid)
+        node.set("data-moves-by", " ".join(f"{v:g}" for v in by))
+        dz = by[2] * adj["delta"][aid]
+        if not dz or flat:
+            return
+        if node.get("data-depth") is not None:
+            node.set("data-depth", f"{float(node.get('data-depth')) + dz:g}")
+            return
+        node.set("data-z-lift", f"{float(node.get('data-z-lift') or 0) - dz:g}")
+        for n in node.iter():
+            _shift_heights(n, -dz)
+
+    def carried(b, at, target_view):
+        """A member bay's projection lands moved with it. Its `plan` is
+        already where the manifest copy puts it; a `rear` projection is placed
+        from the hole it is seen through, so it is moved here."""
+        aid = b.get("moves-with")
+        delta = adj["delta"].get(aid) if adj and aid else None
+        by = _adjust.moves_by(device["adjustments"][aid]["axis"],
+                              _adjust.face_of(target_view, view)) if delta else None
+        if not by:
+            return at
+        return [round(at[0] + by[0] * delta, 4), round(at[1] + by[1] * delta, 4)]
+
     ch = device["chassis"]
     # A group carries the facts its members share - the media and speed of a
     # homogeneous port block, declared once instead of forty-eight times. Lint
@@ -2720,6 +2806,13 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     power = config_power(device, config)
     if power:
         svg.set("data-power", " ".join(power))
+    # THE ADJUSTMENTS OF THE DEVICE, ON EVERY FACE OF A DEVICE THAT STATES ANY:
+    # the map as JSON, keys sorted, with `at`, the position this file was
+    # built at. A host reads the built position off any face, one that
+    # cannot show the motion included.
+    if adj:
+        svg.set("data-adjustments", json.dumps(adj["published"], sort_keys=True,
+                                               separators=(",", ":")))
     skin_overrides = config.get("skins") or {}
     attr_overrides = config.get("component-attrs") or {}
 
@@ -3003,9 +3096,11 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                            if c.get("id") == pl["cutout"])
                 pose = rear_place(b, cut, oc or {}, (lib.resolve(pref)[0] or {}).get("size") or {})
                 parts["placements"].append({
-                    "ref": pref, "id": f"{b['id']}-rear", "at": pose["at"],
+                    "ref": pref, "id": f"{b['id']}-rear",
+                    "at": carried(b, pose["at"], view_name),
                     **({"rotate": pose["rotate"]} if pose["rotate"] else {}),
                     "projection-of": f"{b['id']}/module",
+                    **({"moves-with": b["moves-with"]} if b.get("moves-with") else {}),
                     "cutout": pl["cutout"]})
                 continue
             pc, _ = lib.resolve(pref)
@@ -3024,6 +3119,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             common = {k: pl[k] for k in ("in", "under") if pl.get(k)}
             if turn:
                 common["rotate"] = 180
+            if b.get("moves-with"):
+                common["moves-with"] = b["moves-with"]
             parts["placements"].append({
                 "ref": pref, "id": f"{b['id']}-plan", "at": [X, Y], "mirror": mirror,
                 "projection-of": f"{b['id']}/module", **common})
@@ -3051,6 +3148,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                     "mirror": mirror, "projection-of": f"{b['id']}/module/{slot}/module",
                     "under": [f"{b['id']}-plan"] + list(common.get("under") or []),
                     **({"rotate": 180} if turn else {}),
+                    **({"moves-with": common["moves-with"]} if common.get("moves-with") else {}),
                     **({"in": common["in"]} if common.get("in") else {})})
 
     used_patterns = {d.get("pattern") for d in parts["decor"] if d.get("pattern")}
@@ -3238,6 +3336,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             r.set("data-z-lift", f"{d['lift']:g}")
         if d.get("sink"):
             r.set("data-groove", f"{d['sink']:g}")
+        if d.get("moves-with"):
+            mark_member(r, d["moves-with"])
 
     # A REGION WITH NO EXTENT USED TO RENDER AS A 0x0 RECT AT THE ORIGIN, which is
     # a click target that can never highlight anything: selecting it in the tree
@@ -3782,6 +3882,18 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                 if not k.startswith(prefix + "/")
                 or k[len(prefix) + 1:].split("/")[0] in on_back}
 
+    # WHAT MOVES WITH WHICH ADJUSTMENT, by placement id. A part says so itself
+    # (`moves-with`); a part seated on a member moves with it, whether a
+    # configuration seated it or a `mate-to` did, so that the kit moves what
+    # the drawing marks and never works out who follows whom.
+    member_of = {q["id"]: q["moves-with"] for q in parts["placements"] if q.get("moves-with")}
+    for _ in range(len(parts["placements"]) if member_of else 0):
+        grew = {q["id"]: member_of[q["mate-to"]] for q in parts["placements"]
+                if q.get("mate-to") in member_of and q["id"] not in member_of}
+        if not grew:
+            break
+        member_of.update(grew)
+
     def draw_placement(p):
         # How far off the face the SEAT is - the aperture's own protrusion,
         # nothing the author wrote. Kept separate from `p["lift"]` on purpose;
@@ -3995,6 +4107,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         du = data_for(p.get("under"))
         if du:
             g.set("data-under", du)
+        if p["id"] in member_of:
+            mark_member(g, member_of[p["id"]], flat=bool(p.get("projection-of")))
         svg.append(g)
         cw, chh_ = contract["size"]["w"], contract["size"]["h"]
         if p.get("rotate") in (90, 270, -90):
@@ -4247,6 +4361,10 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         if bay_lift:
             for node in bay_g.iter():
                 _shift_heights(node, bay_lift)
+        # AFTER the bay's own lift, so the two displacements sum: the module
+        # seated in a member bay is inside this group and moves with it
+        if b.get("moves-with"):
+            mark_member(bay_g, b["moves-with"])
 
     # FIRST PASS: the wells and the openings, interleaved by `under:`. Bays
     # paint after placements by default - a cage draws before the drives it
@@ -4447,7 +4565,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         # the R740xd's 252 faces. It is written once, as <device>.source.json,
         # and a face carries the digest of those exact bytes, so one SVG on its
         # own still says which source it was drawn from and can be checked.
-        "source-sha256": hashlib.sha256(source_bytes(device)).hexdigest(),
+        # of the manifest as written, never of the copy a set position moved
+        "source-sha256": hashlib.sha256(source_bytes(src_device)).hexdigest(),
     }
     meta.text = json.dumps(meta_payload, sort_keys=True, separators=(",", ":"))
     if extents != [0.0, 0.0, w, h]:
@@ -4463,6 +4582,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         # the two differ, so every other drawing is unchanged.
         svg.set("data-face-w", f"{w:g}")
         svg.set("data-face-h", f"{h:g}")
+    if adj:
+        _check_members(svg)
     return svg
 
 
@@ -5678,6 +5799,16 @@ def main():
                  "attrs": device.get("attrs") or {},
                  "provenance": device.get("provenance") or {},
                  "default": default_cfg,
+                 # THE PARTS THAT SLIDE (docs/adjustable-positions-design.md
+                 # section 5), only on a device that declares any: for each id
+                 # its `axis`, `carrier`, `range`, `default`, `stops`, `label`
+                 # and `datum`, so a host builds its control from this file
+                 # without opening a face. Where each configuration stands is
+                 # `configs[].positions`.
+                 **({"adjustments": {aid: {k: v for k, v in row.items() if k != "at"}
+                                     for aid, row in _adjust.published(
+                                         device, _adjust.positions(device, {})).items()}}
+                    if _adjust.declared(device) else {}),
                  "configs": [{"name": n, "description": c.get("description", ""),
                               # WHAT KIND OF CONFIGURATION THIS IS - `base`,
                               # `orderable`, `example` or `model` (#51). Without
@@ -5740,7 +5871,16 @@ def main():
                               # it draws, `{mates, at}` with `at` in mm from
                               # the bottom of its view, derived from the button
                               # placements; `[]` on a device with none
-                              "mount-points": mount_points(device, n, c, lib)}
+                              "mount-points": mount_points(device, n, c, lib),
+                              # THE POSITIONS THIS CONFIGURATION SETS, in mm,
+                              # by adjustment id; {} for one that sets none,
+                              # which is drawn at each default. Only on a
+                              # device that declares adjustments.
+                              **({"positions": {
+                                  aid: float(_adjust.spell(value))
+                                  for aid, (value, was_set)
+                                  in _adjust.positions(device, c).items() if was_set}}
+                                 if _adjust.declared(device) else {})}
                              for n, c in sorted(configs.items())],
                  # what each bay will take, so a viewer can offer the swap rather
                  # than guessing from component class

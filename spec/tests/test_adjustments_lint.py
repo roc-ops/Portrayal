@@ -303,7 +303,7 @@ def _rename(d, new):
     d["attrs"] = {}
 
 
-@pytest.mark.parametrize("name", ["depth", "path", "ref", "in", "under", "group"])
+@pytest.mark.parametrize("name", ["depth", "path", "ref", "in", "under", "group", "moves-with"])
 def test_l180_refuses_a_name_the_build_writes(name):
     only(broken(lambda d: _rename(d, name)), "L180", f"`data-{name}`", "the build")
 
@@ -311,7 +311,8 @@ def test_l180_refuses_a_name_the_build_writes(name):
 def test_l180_reads_the_names_from_the_build():
     """Not a list kept here: every `data-` name render.py spells."""
     names = lint.build_data_names()
-    assert {"depth", "path", "ref", "in", "under", "group", "z-lift"} <= names
+    assert {"depth", "path", "ref", "in", "under", "group", "z-lift", "moves-with",
+            "moves-by", "adjustments"} <= names
     src = (ROOT / "spec/tools/portrayal/render.py").read_text()
     assert all(f'"data-{n}"' in src for n in names) and len(names) > 60
 

@@ -524,6 +524,17 @@ def face_elements(svg, config, view, configs=()):
                 row[key] = [t for t in v.split(" ") if t]
         if el.get("data-inner"):
             row["inner"] = True
+        # A PART THAT SLIDES, AND EVERYTHING DRAWN INSIDE ONE: which adjustment
+        # moves this row's box, and the mm it moves for each mm of position,
+        # so a reader that holds only this file can move a hit box
+        # (docs/adjustable-positions-design.md section 5). Read from the
+        # member itself or the nearest member it sits inside.
+        mover = el
+        while mover is not None and mover.get("data-moves-with") is None:
+            mover = parent.get(mover)
+        if mover is not None:
+            row["moves-with"] = mover.get("data-moves-with")
+            row["moves-by"] = [_num(v) for v in (mover.get("data-moves-by") or "").split()]
         cps = _cps(el, ctm)
         if cps:
             row["connection-points"] = cps
