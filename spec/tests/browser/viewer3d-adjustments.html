@@ -1,0 +1,168 @@
+<!doctype html>
+<!--
+  A browser harness for a part that slides, in 3D
+  (docs/adjustable-positions-design.md section 6). WebGL does not run under
+  node, so this is driven by hand or from a browser tool. It needs a build of
+  the adjustments fixture (spec/tests/fixtures/adjustments), which no gate
+  builds into library/dist:
+
+    F=spec/tests/fixtures/adjustments/lib; D=working/adjust-dist
+    python3 spec/tools/portrayal/render.py $F/devices/fixture/slider/device.yaml \
+        --library $F --library library --out $D
+    python3 spec/tools/portrayal/devices_index.py --library $F --out $D
+    python3 spec/tools/portrayal/components_index.py --library $F --out $D
+    python3 tools/serve.py 8931          # from the repository root
+    open "http://localhost:8931/spec/tests/browser/viewer3d-adjustments.html?dist=/working/adjust-dist/"
+
+  The page builds the scene at the default, sets the position to each end
+  through setFields (the REBUILD path), repaints another part's field with the
+  position set (the REPAINT path), clears it, and then loads the two
+  configurations the build drew moved. After each step it reads the VERTEX
+  POSITIONS of the scene, as the box of each part's meshes in the frame of the
+  device (x from its left, y up from its bottom, z back from its front, mm),
+  and writes the results as JSON into #out; `window.harness.done` resolves
+  with the same object. `pass` is true when every step put every part where
+  the position says. Look at the canvas as well: a screenshot of what the
+  compositor shows is the other half of the check.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>viewer3d adjustments harness</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #16181c; color: #d8dce2; font: 12px/1.4 system-ui, sans-serif; }
+  #stage { position: absolute; inset: 0 380px 0 0; }
+  #side { position: absolute; top: 0; right: 0; width: 380px; bottom: 0; overflow: auto; padding: 8px; box-sizing: border-box; }
+  pre { white-space: pre-wrap; font-size: 11px; }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://unpkg.com/three@0.161.0/build/three.module.js",
+  "three/addons/": "https://unpkg.com/three@0.161.0/examples/jsm/"
+}}
+</script>
+</head>
+<body>
+<div id="stage"></div>
+<div id="side"><b>viewer3d adjustments harness</b><pre id="out">loading...</pre></div>
+<script type="module">
+import { createViewer } from '../../../kit/viewer3d.js';
+
+const params = new URLSearchParams(location.search);
+const DIST = params.get('dist') || '../../../working/adjust-dist/';
+const DEVICE = params.get('device') || 'slider';
+const ID = 'panel-setback', CARRIER = 'panel';
+const V = createViewer(document.getElementById('stage'), {dist: DIST});
+window.V = V;
+const out = document.getElementById('out');
+const round = v => Math.round(v * 100) / 100;
+
+// THE VERTEX POSITIONS OF THE SCENE, as one box per part and side of the
+// device: every vertex of every mesh a part built, in world millimetres, then
+// in the frame of the device. The scene stands the device with its centre at
+// the origin and its front at +z.
+function measure() {
+  const {THREE, scene} = V.three;
+  const {w, h, d} = V.info.chassis;
+  scene.updateMatrixWorld(true);
+  const boxes = {};
+  let meshes = 0;
+  scene.traverse(o => {
+    const path = o.userData && o.userData.portrayalPath;
+    const pos = o.isMesh && o.geometry && o.geometry.attributes.position;
+    if (!path || !pos || o.visible === false) return;
+    meshes++;
+    const b = new THREE.Box3();
+    const p = new THREE.Vector3();
+    for (let i = 0; i < pos.count; i++) b.expandByPoint(p.fromBufferAttribute(pos, i).applyMatrix4(o.matrixWorld));
+    // a part drawn on both side faces has one path: tell the two apart
+    const side = b.max.x < -w / 2 + 0.01 ? 'left' : b.min.x > w / 2 - 0.01 ? 'right' : 'in';
+    const key = `${path}@${side}`;
+    (boxes[key] ||= new THREE.Box3()).union(b);
+  });
+  const frame = {};
+  for (const [key, b] of Object.entries(boxes))
+    frame[key] = {x: [round(b.min.x + w / 2), round(b.max.x + w / 2)],
+                  y: [round(b.min.y + h / 2), round(b.max.y + h / 2)],
+                  z: [round(d / 2 - b.max.z), round(d / 2 - b.min.z)]};
+  return {meshes, boxes: frame};
+}
+// one mesh's identity: a rebuild makes every mesh again, a repaint keeps them
+const sceneId = () => {
+  let id = null;
+  V.three.scene.traverse(o => { if (!id && o.isMesh && o.userData && o.userData.portrayalPath === 'rail') id = o.uuid; });
+  return id;
+};
+
+// WHERE EACH PART IS WITH THE PANEL AT `s`. The floor of the well is `s`
+// behind the front; the rail stands on it and rises 7.5 toward the front; a
+// stud is 3 to 9 behind the panel face on each side plate, and reaches 3.5
+// off it (its 1.5 lift and its 2 of head).
+const near = (a, b, tol = 0.6) => Math.abs(a - b) <= tol;
+function judge(m, s) {
+  const b = m.boxes, why = [];
+  const need = (key, axis, lo, hi) => {
+    const got = b[key] && b[key][axis];
+    if (!got || !near(got[0], lo) || !near(got[1], hi)) why.push(`${key}.${axis} is ${JSON.stringify(got)}, not [${lo}, ${hi}]`);
+  };
+  need('rail@in', 'z', s - 7.5, s);
+  need('rail@in', 'x', 20, 100);
+  need('stud@right', 'z', s + 3, s + 9);
+  need('stud@left', 'z', s + 3, s + 9);
+  need('stud@right', 'x', 120, 123.5);
+  need('stud@left', 'x', -3.5, 0);
+  // the floor of the well: the deepest vertex the panel builds
+  const floor = b['panel@in'] && b['panel@in'].z[1];
+  if (!near(floor ?? NaN, s, 1.6)) why.push(`panel floor is at ${floor}, not ${s}`);
+  // what does not move
+  need('side-right@right', 'z', 0, 200);
+  need('side-left@left', 'z', 0, 200);
+  return why;
+}
+
+const steps = [];
+async function step(name, s, run, expectRebuild) {
+  const before = sceneId();
+  const answer = await run();
+  await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+  const m = measure();
+  const rebuilt = sceneId() !== before;
+  const why = judge(m, s);
+  if (expectRebuild !== null && rebuilt !== expectRebuild)
+    why.push(`the scene was ${rebuilt ? '' : 'not '}rebuilt, and should ${expectRebuild ? '' : 'not '}have been`);
+  steps.push({name, position: s, rebuilt, answer: answer ?? null, pass: !why.length, why, ...m});
+  out.textContent = JSON.stringify(steps.map(({name, position, rebuilt, pass, why}) => ({name, position, rebuilt, pass, why})), null, 1);
+}
+const set = v => ({[CARRIER]: {[ID]: v}});
+
+async function run() {
+  await V.load({device: DEVICE, config: 'base'});
+  await step('built at the default', 60, async () => null, null);
+  // THE REBUILD PATH: a position set on a scene that stands
+  await step('set to the front end', 20, () => V.setFields(set('20')), true);
+  await step('set to the rear end', 180, () => V.setFields(set('180')), true);
+  // THE REPAINT PATH: another part's field, with the position as it was
+  await step('a stud repainted at the rear end', 180,
+             () => V.setFields({...set('180'), stud: {finish: '#c22f2f'}}), false);
+  await step('a value that is not a position', 60, () => V.setFields(set('300')), true);
+  await step('set by a stop name', 180, () => V.setFields(set('rear')), true);
+  await step('cleared', 60, () => V.setFields({}), true);
+  // A CONFIGURATION THE BUILD DREW MOVED needs no field
+  await step('the configuration built at the front stop', 20,
+             () => V.load({device: DEVICE, config: 'forward'}), true);
+  await step('the configuration built at the rear end', 180,
+             () => V.load({device: DEVICE, config: 'back'}), true);
+  // and a field moves it from where it was built
+  await step('built at the rear end, set to the default', 60, () => V.setFields(set('60')), true);
+  const result = {device: DEVICE, pass: steps.every(s => s.pass), steps};
+  out.textContent = JSON.stringify({pass: result.pass,
+    steps: steps.map(({name, position, rebuilt, pass, why, boxes}) => ({name, position, rebuilt, pass, why, boxes}))}, null, 1);
+  return result;
+}
+window.harness = {measure, steps, done: run().catch(err => {
+  out.textContent = `failed: ${err && err.stack || err}`;
+  return {pass: false, error: String(err && err.stack || err), steps};
+})};
+</script>
+</body>
+</html>

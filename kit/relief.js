@@ -10,7 +10,7 @@
 // rather than threaded through every signature, so the function bodies are the
 // same code that has been running in the device viewer.
 
-import { paintFields, unpaintFields } from './fields.js';
+import { paintFields, unpaintFields, paintAdjustments } from './fields.js';
 import { boundLamps, expandStates } from './states.js';
 
 let THREE, renderer, PXMM, FRU_PATHS;
@@ -1566,6 +1566,20 @@ export function applyNodeFields(root, scope) {
       paintFields(el, vals);
   return root;
 }
+// A PART THAT SLIDES (docs/adjustable-positions-design.md section 6). A position
+// is a field at the path of its carrier, so it is in the registry above, and
+// the move is fields.js's, shared with the 2D drawing: every member the
+// document marks stands where the registry says, in the plane of its face and
+// along its depth - a well's `data-depth`, any other member's `data-z-lift`
+// and the heights that go with it. Those are what the relief is built from, so
+// this runs BEFORE a document is measured. It needs the face's own root, which
+// carries the adjustments: a fragment cut from a face has none, is already
+// where it was built, and is left alone.
+export function applyNodeAdjustments(root, scope) {
+  if (!root) return root;
+  paintAdjustments(root, _sc(scope).fields || new Map());
+  return root;
+}
 export function nodeStates(scope) { return new Map(_sc(scope).states); }
 
 // A LAMP COLOUR THE HOST CHOOSES (#664). In 2D a mark's `lamp` is any hex,
@@ -1733,6 +1747,8 @@ export function restyleText(text, scope) {
   div.innerHTML = text;
   applyNodeStates(div, scope);
   applyNodeFields(div, scope);
+  // a face keeps its members where the registry puts them through a repaint
+  applyNodeAdjustments(div, scope);
   applyNodeLampColors(div, scope);
   applyPulled(div, scope);
   return div.innerHTML;
@@ -2165,6 +2181,9 @@ export async function extractRelief(url, scope, {back = false} = {}) {
   // while the registry still said the value was set, and a repeated setFields
   // would see nothing changed and never put it back
   applyNodeFields(svg, scope);
+  // and the position of each part that slides, before anything is measured:
+  // the depth of a well and the lift of what stands in it are read below
+  applyNodeAdjustments(svg, scope);
   // and the host's lamp colours (#664), so a rebuild paints a custom-coloured
   // lamp the colour the registry says rather than its stylesheet default
   applyNodeLampColors(svg, scope);

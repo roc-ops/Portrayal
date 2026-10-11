@@ -26,6 +26,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { toGLB, toUSDZ } from './share.js';
 import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, svgSource, setSvgOverride, clearSvgOverrides,
          setNodeStates, nodeStates, clearLampBindings, lampBindings, setNodeFields, restyleText,
+         applyNodeAdjustments,
          setNodeLampColors, nodeLampColors, markHex,
          setPulled as setReliefPulled, pulledPaths,
          buildFaceRelief, bodyBoxes, pieceMesh, pieceArt, fruFor,
@@ -932,6 +933,10 @@ export function createViewer(container, opts = {}) {
       document.body.appendChild(div);
       const svg = div.querySelector('svg');
       if (!svg) { div.remove(); continue; }
+      // a part that slides is picked and haloed where it stands
+      // (docs/adjustable-positions-design.md): the same move the scene was
+      // built with, before a box is read
+      applyNodeAdjustments(svg, SCOPE);
       const inv = svg.getScreenCTM().inverse();
       // A PART ON A FACET carries its tilt (relief.js tiltTools), so the halo
       // can stand in the same frame its relief was built in
@@ -1657,7 +1662,14 @@ export function createViewer(container, opts = {}) {
       .flatMap(m => m[1].split(/\s+/)));
     const positional = text => { const m = marked(text); return [...keys].some(f =>
       m.has(f) || text.includes(`data-move-from="${f}"`) || text.includes(`data-show-from="${f}"`)); };
-    if ([...RESTYLE, ...LOD].some(e => touches(e.svgText) && positional(e.svgText))) {
+    // AND SO DOES A PART THAT SLIDES (docs/adjustable-positions-design.md
+    // section 6). Its position is a field at the path of its carrier, under
+    // the id of the adjustment, and what it moves is every member on every
+    // face: the depth of a well, the lift of what stands in it. configs.json
+    // says which path and key that is, so nothing is read off a texture.
+    const slides = Object.entries((devIndex && devIndex.adjustments) || {})
+      .some(([id, a]) => a && changed.has(a.carrier) && keys.has(id));
+    if (slides || [...RESTYLE, ...LOD].some(e => touches(e.svgText) && positional(e.svgText))) {
       await build(CFG);
       if (DEV) await buildHitIndex(CFG);
       // what load() does after a rebuild: the selection and the host's marks
