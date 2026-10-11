@@ -11,6 +11,7 @@ import json
 import pathlib
 
 import pytest
+import yaml
 from jsonschema import Draft202012Validator
 
 import adjustfixture as fx
@@ -50,10 +51,15 @@ def test_the_fixture_is_measured_and_not_skipped():
     """A rule that returns early passes every test above. The fixture states
     one adjustment with members on five views, and the rules walk them."""
     doc = fx.device()
-    assert adj.members(doc) == {AID: [
-        "bottom/decor/panel", "bottom/decor/rail", "front/placements/panel",
-        "front/placements/rail", "left/decor/flange", "left/placements/stud",
-        "right/decor/flange", "right/placements/stud", "top/decor/panel", "top/decor/rail"]}
+    assert adj.members(doc) == {
+        AID: ["bottom/decor/panel", "bottom/decor/rail", "front/placements/panel",
+              "front/placements/rail", "left/decor/flange", "left/placements/stud",
+              "right/decor/flange", "right/placements/stud", "top/decor/panel", "top/decor/rail"],
+        # one part along x and one along y, on every view that shows the move
+        "block-offset": ["bottom/decor/block", "front/placements/block", "rear/decor/block-back",
+                         "top/decor/block"],
+        "shelf-height": ["front/placements/shelf", "left/decor/shelf", "rear/decor/shelf-back",
+                         "right/decor/shelf"]}
 
 
 # --- the schema -----------------------------------------------------------------------
@@ -329,7 +335,8 @@ def test_l180_refuses_an_attr_of_the_carrier():
 @pytest.mark.parametrize("value, sentence", [
     ("300", "panel-setback on SLIDER takes 20 to 180 mm. 300 is outside it."),
     ("back", "panel-setback on SLIDER takes a number in mm, or one of: front, middle, rear."),
-    ("-20", "panel-setback on SLIDER takes a number in mm, or one of: front, middle, rear."),
+    ("-20", "panel-setback on SLIDER takes a number in mm written with digits and a point only. "
+            "-20 is not."),
 ])
 def test_l181_refuses_a_value_that_is_not_a_position(value, sentence):
     def edit(d):
@@ -390,3 +397,120 @@ def test_each_rule_has_a_fixture_that_fails_as_written():
         assert code in lint.RULES and lint.RULES[code][0] == "device", code
         assert lint.RULES[code][4] == lint.ERROR
         assert f'"{code}"' in src, f"{code} has no failing fixture in this file"
+
+
+# --- the rules run where lint runs ------------------------------------------------------
+
+def _through_lint(tmp_path, edit):
+    """The codes `lint.lint_device` raises for the fixture after `edit`: the
+    whole of a device's lint, from a file, as `lint.py` and `build.sh` run it."""
+    doc = fx.device()
+    edit(doc)
+    path = tmp_path / "device.yaml"
+    path.write_text(yaml.safe_dump(doc, sort_keys=False, allow_unicode=True))
+    with lint.collecting() as got:
+        lint.lint_device(path, Draft202012Validator(SCHEMA), fx.ROOTS)
+    return sorted({m.split("[", 1)[1].split("]", 1)[0] for m in got.errors})
+
+
+def test_lint_itself_raises_the_rules_and_not_only_this_file(tmp_path):
+    """THE WIRING. Every test above calls the rules directly; this one asks
+    lint. A `moves-with` that names nothing, a default outside its range (which
+    also draws the part outside its view) and a missing provenance entry,
+    planted in the fixture, come back from `lint_device` under their own codes. With the call to
+    `lint_device_adjustments` taken out of `lint_device`, this fails."""
+    def edit(d):
+        fx.decor(d, "top", "rail")["moves-with"] = "panel-setbak"
+        d["adjustments"]["shelf-height"]["default"] = 50.0
+        del d["provenance"]["block-offset"]
+    assert _through_lint(tmp_path, edit) == ["L173", "L175", "L178", "L182"]
+    assert _through_lint(tmp_path, lambda d: None) == []
+
+
+def test_the_command_line_raises_them_too(tmp_path):
+    """And from the command line, over a library root: the fixture root with
+    one fault planted exits 1 and prints the code."""
+    import shutil
+    import subprocess
+    import sys
+    root = tmp_path / "lib"
+    shutil.copytree(fx.FIXTURE_LIB, root)
+    dev = root / "devices/fixture/slider/device.yaml"
+    dev.write_text(dev.read_text().replace("carrier: shelf", "carrier: nothing"))
+    p = subprocess.run([sys.executable, str(ROOT / "spec/tools/portrayal/lint.py"),
+                        "--schemas", str(ROOT / "spec/schemas"), "--library", str(root),
+                        "--library", str(fx.LIB), "--device", "fixture/slider"],
+                       capture_output=True, text=True,
+                       env={**__import__("os").environ, "PYTHONPATH": str(ROOT / "spec/tools")})
+    assert p.returncode != 0, p.stdout[-800:]
+    assert "[L174]" in p.stdout + p.stderr, (p.stdout + p.stderr)[-1500:]
+
+
+# --- more of L174 and L183 ------------------------------------------------------------------
+
+def test_l174_asks_the_carrier_for_a_ref():
+    """The schema asks every placement for a `ref`, so this reaches the rule
+    only on a document the schema has not seen; the rule holds it all the same."""
+    doc = fx.device()
+    fx.placement(doc, "front", "panel").pop("ref")
+    with lint.collecting() as got:
+        try:
+            lint.lint_device_adjustments(fx.DEVICE, doc, fx.ROOTS)
+        except KeyError:
+            pass        # L13, asked again further on, reads the `ref` the schema promises
+    assert any("[L174]" in m and "has no `ref`" in m for m in got.errors), got.errors
+
+
+@pytest.mark.parametrize("key, what", [
+    ("max-panel-setback-mm", "max"), ("min-panel-setback-mm", "min"),
+    ("slide-max-panel-setback-mm", "max"), ("panel-setback-max-mm", "max"),
+    ("max-panel-setback-max-mm", "max"), ("slide-panel-setback-mm", "default"),
+])
+def test_l183_reads_min_and_max_before_the_id_as_after_it(key, what):
+    """`max-rail-setback-mm` is the top of the range, as `rail-setback-max-mm`
+    is. Read as the default it would be held to the wrong number."""
+    assert adj.restating_attrs("panel-setback", {key: 1}) == {key: what}
+
+
+@pytest.mark.parametrize("key", ["min-panel-setback-max-mm", "max-min-panel-setback-mm"])
+def test_l183_does_not_pair_a_name_that_says_both_ends(key):
+    assert adj.restating_attrs("panel-setback", {key: 1}) == {}
+
+
+def test_l183_holds_a_prefixed_end_to_the_range():
+    found = broken(lambda d: d["attrs"]["physical"].update({"max-panel-setback-mm": 60}))
+    only(found, "L183", "max-panel-setback-mm", "the max of panel-setback is 180")
+    assert "L183" not in broken(lambda d: d["attrs"]["physical"].update({"max-panel-setback-mm": 180}))
+
+
+# --- one rule for a well, in the build and in lint ---------------------------------------------
+
+def test_lint_and_the_build_agree_on_what_a_well_is():
+    """L177 and L178 ask whether the carrier is a well; the build sinks what
+    stands in one by its depth (render.py well_floor). The two read the rule
+    apart, so they are held together here over every kind of part."""
+    from portrayal import render
+
+    class Lib:
+        def __init__(self, contract):
+            self.contract = contract
+
+        def resolve(self, _ref):
+            return self.contract, None
+
+    seen = set()
+    for kind in (None, "module"):
+        for behaviour in (None, "mounts", "occupies"):
+            for cavity in (None, True):
+                for d in (None, 12.5):
+                    c = {"size": {"w": 10, "h": 10, **({"d": d} if d else {})}}
+                    if kind:
+                        c["kind"] = kind
+                    if behaviour:
+                        c["behaviour"] = behaviour
+                    if cavity:
+                        c["relief"] = {"cavity": True}
+                    floor = render.well_floor([{"id": "w", "ref": "x/y@1"}], Lib(c), "w")
+                    assert lint._is_well(c) == (floor > 0), c
+                    seen.add(floor > 0)
+    assert seen == {True, False}

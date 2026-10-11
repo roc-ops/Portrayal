@@ -2,17 +2,30 @@
 <!--
   A browser harness for a part that slides, in 3D
   (docs/adjustable-positions-design.md section 6). WebGL does not run under
-  node, so this is driven by hand or from a browser tool. It needs a build of
-  the adjustments fixture (spec/tests/fixtures/adjustments), which no gate
-  builds into library/dist:
+  node, so this is driven by hand or from a browser tool.
 
-    F=spec/tests/fixtures/adjustments/lib; D=working/adjust-dist
+  WHEN TO RUN IT. The suite holds the documents a scene is built from, the
+  repaint and the decision to rebuild (spec/tests/test_adjustments_3d_js.py).
+  It cannot hold the scene itself. Run this page, and read `pass`, after a
+  change to how relief.js measures or builds a well, a lift or an `out`
+  (extractRelief, buildFaceRelief), to how viewer3d.js builds, rebuilds or
+  repaints a scene (build, applyFieldsNow), to the move in fields.js
+  (paintAdjustments), or to what render.py writes on a member; and before a
+  kit release that touches any of them.
+
+  It needs a build of the adjustments fixture
+  (spec/tests/fixtures/adjustments), which no gate builds into library/dist.
+  Build it into a directory outside the checkout, and serve that directory
+  with the kit and this page linked into it. From the repository root:
+
+    F=spec/tests/fixtures/adjustments/lib; S=$(mktemp -d)
     python3 spec/tools/portrayal/render.py $F/devices/fixture/slider/device.yaml \
-        --library $F --library library --out $D
-    python3 spec/tools/portrayal/devices_index.py --library $F --out $D
-    python3 spec/tools/portrayal/components_index.py --library $F --out $D
-    python3 tools/serve.py 8931          # from the repository root
-    open "http://localhost:8931/spec/tests/browser/viewer3d-adjustments.html?dist=/working/adjust-dist/"
+        --library $F --library library --out $S/dist
+    python3 spec/tools/portrayal/devices_index.py --library $F --out $S/dist
+    python3 spec/tools/portrayal/components_index.py --library $F --out $S/dist
+    ln -s "$PWD/kit" $S/kit; ln -s "$PWD/spec" $S/spec
+    python3 tools/serve.py 8931 $S
+    open "http://localhost:8931/spec/tests/browser/viewer3d-adjustments.html"
 
   The page builds the scene at the default, sets the position to each end
   through setFields (the REBUILD path), repaints another part's field with the
@@ -49,7 +62,7 @@
 import { createViewer } from '../../../kit/viewer3d.js';
 
 const params = new URLSearchParams(location.search);
-const DIST = params.get('dist') || '../../../working/adjust-dist/';
+const DIST = params.get('dist') || '/dist/';
 const DEVICE = params.get('device') || 'slider';
 const ID = 'panel-setback', CARRIER = 'panel';
 const V = createViewer(document.getElementById('stage'), {dist: DIST});
@@ -121,13 +134,19 @@ function judge(m, s) {
 }
 
 const steps = [];
-async function step(name, s, run, expectRebuild) {
+async function step(name, s, run, expectRebuild, xy = {x: 30, y: 20}) {
   const before = sceneId();
   const answer = await run();
   await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
   const m = measure();
   const rebuilt = sceneId() !== before;
   const why = judge(m, s);
+  // the block's left edge is `x` from the left of the device, and the shelf
+  // stud's centre `y` above its bottom; each head is 5.8 across
+  const got = (key, axis) => m.boxes[key] && m.boxes[key][axis];
+  const bx = got('block@in', 'x'), sy = got('shelf@in', 'y');
+  if (!bx || !near(bx[0], xy.x + 0.1) || !near(bx[1], xy.x + 5.9)) why.push(`block.x is ${JSON.stringify(bx)}, not from ${xy.x}`);
+  if (!sy || !near(sy[0], xy.y - 2.9) || !near(sy[1], xy.y + 2.9)) why.push(`shelf.y is ${JSON.stringify(sy)}, not about ${xy.y}`);
   if (expectRebuild !== null && rebuilt !== expectRebuild)
     why.push(`the scene was ${rebuilt ? '' : 'not '}rebuilt, and should ${expectRebuild ? '' : 'not '}have been`);
   steps.push({name, position: s, rebuilt, answer: answer ?? null, pass: !why.length, why, ...m});
@@ -154,6 +173,13 @@ async function run() {
              () => V.load({device: DEVICE, config: 'back'}), true);
   // and a field moves it from where it was built
   await step('built at the rear end, set to the default', 60, () => V.setFields(set('60')), true);
+  // THE OTHER TWO AXES, each at both ends: a block along x and a shelf stud
+  // along y, on the front. The panel stays at 60 behind them.
+  await V.load({device: DEVICE, config: 'base'});
+  for (const [x, y] of [[22, 5], [92, 35], [30, 20]])
+    await step(`the block at x ${x} and the shelf at y ${y}`, 60,
+               () => V.setFields({block: {'block-offset': String(x)}, shelf: {'shelf-height': String(y)}}),
+               x === 22 ? null : true, {x, y});
   const result = {device: DEVICE, pass: steps.every(s => s.pass), steps};
   out.textContent = JSON.stringify({pass: result.pass,
     steps: steps.map(({name, position, rebuilt, pass, why, boxes}) => ({name, position, rebuilt, pass, why, boxes}))}, null, 1);

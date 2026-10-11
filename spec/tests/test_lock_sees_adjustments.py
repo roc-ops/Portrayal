@@ -89,7 +89,12 @@ def test_a_key_the_lock_says_it_reads_moves_the_lock():
 
 def test_the_record_names_each_adjustment_and_its_members():
     e = dl.entry(fx.device())
-    assert e["adjustments"] == {AID: {
+    assert set(e["adjustments"]) == {AID, "block-offset", "shelf-height"}
+    assert e["adjustments"]["block-offset"] == {
+        "axis": "x", "carrier": "block", "default": 30, "range": [22, 92],
+        "members": ["bottom/decor/block", "front/placements/block", "rear/decor/block-back",
+                    "top/decor/block"]}
+    assert {AID: e["adjustments"][AID]} == {AID: {
         "axis": "z", "carrier": "panel", "default": 60, "range": [20, 180],
         "stops": {"front": 20, "middle": 100, "rear": 180},
         "members": ["bottom/decor/panel", "bottom/decor/rail", "front/placements/panel",

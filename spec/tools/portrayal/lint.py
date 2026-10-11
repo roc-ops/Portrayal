@@ -621,7 +621,7 @@ RULES = {
     "L173": ("device",     "an adjustment is well formed: its `range` runs from a smaller number to a larger one and holds the `default` and every stop; with no `range` it has two stops or more and the `default` is one of them; no two stops share a position, and no stop is named with a number", "correct the range, the default or the stop the message names; give a part on a row of holes one stop for each hole",
              "A default outside its own range draws a position the part cannot take, and two stops at one position, or a stop named with a number, leave a reader unable to say which position a value means.",
              ERROR),
-    "L174": ("device",     "the `carrier` of an adjustment is a placement of the device that says `moves-with` the adjustment and is neither `only-in` nor `optional`", "name a placed part that every configuration has and that moves with the adjustment; a motion made only of decor is modelled as a part",
+    "L174": ("device",     "the `carrier` of an adjustment is a placement of the device with a `ref`, that says `moves-with` the adjustment and is neither `only-in` nor `optional`", "name a placed part that every configuration has and that moves with the adjustment; a motion made only of decor is modelled as a part",
              "The chosen position is held at the path of the carrier, and a path that some build has no part at is one no reader can find.",
              ERROR),
     "L175": ("device",     "membership resolves: each `moves-with` names an adjustment of the device, on a view that is one of the six faces, and each adjustment has at least one member", "correct the id, or declare the adjustment under `adjustments:`; add `moves-with` to each part that slides",
@@ -648,7 +648,7 @@ RULES = {
     "L182": ("device",     "each adjustment has a `provenance` entry under its own id", "add `provenance.<id>` with a confidence and a note that gives the source of each end of the range and of the default",
              "A range with no source is a guess that reads as a fact.",
              ERROR),
-    "L183": ("device",     "an attr that restates an adjustment equals it: an attr whose name is the id of the adjustment, with any words before it, followed by `-mm` holds the default, and one followed by `-min-mm` or `-max-mm` holds that end of the range; an adjustment with stops and no range has no end to restate", "correct the attr or the adjustment so that the two agree, or rename an attr that measures something else",
+    "L183": ("device",     "an attr that restates an adjustment equals it: an attr whose name is the id of the adjustment, with any words before it, followed by `-mm` holds the default, and one followed by `-min-mm` or `-max-mm`, or with `min` or `max` among the words before the id, holds that end of the range; an adjustment with stops and no range has no end to restate", "correct the attr or the adjustment so that the two agree, or rename an attr that measures something else",
              "The attrs are how a range reaches the DCIM export comments, and two statements of one number drift apart.",
              ERROR),
 }
@@ -8875,6 +8875,9 @@ def lint_device_adjustments(path, data, lib_roots):
                               "position has no path to be held at")
         for vname, _view, item in carriers:
             at = f"{where}: carrier {vname}/{carrier}"
+            if not item.get("ref"):
+                err(path, "L174", f"{at} has no `ref`, so no component is drawn at the path "
+                                  "that holds the position")
             if item.get("moves-with") != aid:
                 err(path, "L174", f"{at} does not say `moves-with: {aid}`")
             for key in ("only-in", "optional"):

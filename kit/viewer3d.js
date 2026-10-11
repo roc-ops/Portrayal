@@ -33,6 +33,7 @@ import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, sv
          nodeTools, tiltOf, tiltTools, tiltGroupIn, unproject, openFrameFaces, sheetShell,
          faceFrame, ventWellWalls, genericEars, EAR } from './relief.js';
 import { seatViews, seatBack, refusalReason } from './swap.js';
+import { positionsChanged } from './fields.js';
 import { bevelledArrays } from './bevel.js';
 import { expandStates } from './states.js';
 import { jdist, faceFile, distResolver } from './dist.js';
@@ -1647,6 +1648,7 @@ export function createViewer(container, opts = {}) {
         for (const f of new Set([...Object.keys(FIELDS[k] || {}), ...Object.keys(next[k] || {})]))
           if ((FIELDS[k] || {})[f] !== (next[k] || {})[f]) keys.add(f);
       }
+    const was = FIELDS;
     FIELDS = next;
     if (!changed.size || !box) return 0;
     setNodeFields(FIELDS, SCOPE);
@@ -1667,8 +1669,7 @@ export function createViewer(container, opts = {}) {
     // the id of the adjustment, and what it moves is every member on every
     // face: the depth of a well, the lift of what stands in it. configs.json
     // says which path and key that is, so nothing is read off a texture.
-    const slides = Object.entries((devIndex && devIndex.adjustments) || {})
-      .some(([id, a]) => a && changed.has(a.carrier) && keys.has(id));
+    const slides = positionsChanged(devIndex && devIndex.adjustments, was, FIELDS);
     if (slides || [...RESTYLE, ...LOD].some(e => touches(e.svgText) && positional(e.svgText))) {
       await build(CFG);
       if (DEV) await buildHitIndex(CFG);

@@ -39,6 +39,8 @@ EXTENT = {"x": "width", "y": "height", "z": "depth"}
 # what a typed number may look like: digits and one point, as kit/fields.js
 # reads it. No sign and no exponent, so the two halves refuse the same text.
 _NUMBER = re.compile(r"^[ \t\n\r]*(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)[ \t\n\r]*$")
+# a number all the same, written with a sign or an exponent: refused, and told so
+_SIGNED = re.compile(r"^[+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?$")
 
 
 def face_of(view_name, view):
@@ -87,6 +89,10 @@ def accepts(adj, value, aid, on=None):
     elif _NUMBER.match(text):
         n = float(text)
     if rng:
+        if n is None and _SIGNED.match(text):
+            # `-20`, `+20`, `1e2`: a number, in a spelling a position never has
+            return False, (f"{who} takes a number in mm written with digits and a point "
+                           f"only. {text} is not.")
         if n is None:
             tail = f", or one of: {', '.join(k for k, _ in named)}" if named else ""
             return False, f"{who} takes a number in mm{tail}."
@@ -224,7 +230,8 @@ def restating_attrs(aid, flat_attrs):
     `-min` or `-max`; and what is left ends with the id of the adjustment, as
     whole words. So `rail-setback` is restated by `rail-setback-mm`, by
     `din-rail-setback-mm` and by `din-rail-setback-max-mm`, and by no key that
-    does not end in the id. No key of the adjustment names the attr, and no
+    does not end in the id. `min` or `max` among the words before the id names
+    the same end (`max-rail-setback-mm`). No key of the adjustment names the attr, and no
     name of any maker is written here.
     """
     out = {}
@@ -232,10 +239,19 @@ def restating_attrs(aid, flat_attrs):
         key = str(key)
         if not key.endswith("-mm"):
             continue
-        stem, what = key[:-3], "default"
+        stem, ends = key[:-3], set()
         for suffix in ("min", "max"):
             if stem.endswith("-" + suffix):
-                stem, what = stem[:-len(suffix) - 1], suffix
-        if stem == aid or stem.endswith("-" + aid):
-            out[key] = what
+                stem, ends = stem[:-len(suffix) - 1], {suffix}
+        if stem != aid and not stem.endswith("-" + aid):
+            continue
+        # `min` OR `max` MAY STAND BEFORE THE ID TOO: `max-rail-setback-mm` is
+        # the top of the range as `rail-setback-max-mm` is, and never the
+        # default. A name that says both ends, or one end twice over in two
+        # places that disagree, says nothing a rule can hold, and is not paired.
+        before = stem[:-len(aid)].strip("-").split("-") if stem != aid else []
+        ends |= {w for w in before if w in ("min", "max")}
+        if len(ends) > 1:
+            continue
+        out[key] = ends.pop() if ends else "default"
     return out

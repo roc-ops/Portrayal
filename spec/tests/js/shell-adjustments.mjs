@@ -146,6 +146,29 @@ test('clearing the fields of the carrier puts it back too', () => {
   assert.equal(on('front', 'panel').getAttribute('data-depth'), '60');
 });
 
+for (const empty of ['', null]) test(`setting the position to ${JSON.stringify(empty)} is a reset, and nothing is kept`, () => {
+  shell.setFields('panel', {'panel-setback': '180'});
+  assert.equal(tf('top', 'panel'), 'translate(0 -120)');
+  const events = [];
+  const off = shell.on('fields', e => events.push(plain(e)));
+  assert.deepEqual(shell.setFields('panel', {'panel-setback': empty}), {refused: []});
+  // not an empty string in the map, which a link would carry
+  assert.equal(shell.state.cfgFields.panel, undefined);
+  assert.equal(encodeFields(shell.state.cfgFields), '');
+  assert.equal(tf('top', 'panel'), null);
+  assert.equal(on('front', 'panel').getAttribute('data-depth'), '60');
+  assert.equal(events.at(-1).fields, null);
+  if (typeof off === 'function') off();
+});
+
+test('an empty position beside another field resets one and sets the other', () => {
+  shell.setFields('panel', {'panel-setback': '180', note: 'a'});
+  shell.setFields('panel', {'panel-setback': '', note: 'b'});
+  assert.deepEqual(plain(shell.state.cfgFields.panel), {note: 'b'});
+  assert.equal(tf('top', 'panel'), null);
+  shell.setFields('panel', null);
+});
+
 test('a face fetched after the position was set is drawn at it', async () => {
   shell.setFields('panel', {'panel-setback': '180'});
   shell.state.view = 'right';

@@ -2034,7 +2034,11 @@ export function createShell(opts = {}) {
       vals = {...vals};
       for (const a of mine) {
         const v = vals[a.id];
-        if (!Object.hasOwn(vals, a.id) || v == null || v === '') continue;   // empty: as built
+        if (!Object.hasOwn(vals, a.id)) continue;
+        // AN EMPTY VALUE IS A RESET: the position goes back to where the
+        // drawing was built, and nothing is kept for it - not an empty string,
+        // which a link would carry and a saved rack would hold
+        if (v == null || v === '') { delete vals[a.id]; resetField(path, a.id); continue; }
         const got = adjustmentAccepts(a, v);
         if (got.ok) { vals[a.id] = got.value; continue; }
         delete vals[a.id];

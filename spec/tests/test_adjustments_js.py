@@ -113,10 +113,24 @@ def test_the_sentence_for_stops_alone(out):
 
 def test_the_sentence_for_what_is_neither_a_number_nor_a_stop(out):
     want = "panel-setback on SLIDER takes a number in mm, or one of: front, middle, rear."
-    for value in ("back", "Rear", "", "-20", "+20", "1e2", "12mm", "NaN", None):
+    for value in ("back", "Rear", "", "12mm", "NaN", "1_0", "0x10", "inf", "1,5", None):
         assert _answer(out, "ranged", value) == {"ok": False, "reason": want}, value
     # with no stop to offer, the sentence offers none
     assert _answer(out, "bare", "back")["reason"] == "panel-setback on SLIDER takes a number in mm."
+
+
+def test_the_sentence_for_a_number_with_a_sign_or_an_exponent(out):
+    """`-20` is a number, and no position is written so. Told that the
+    adjustment takes a number, a reader who typed one learns nothing: the
+    sentence says what is wrong with the value."""
+    for value in ("-20", "+20", "1e2"):
+        assert _answer(out, "ranged", value) == {"ok": False, "reason": (
+            "panel-setback on SLIDER takes a number in mm written with digits and a point "
+            f"only. {value} is not.")}, value
+        assert _answer(out, "bare", value)["reason"].endswith(f"only. {value} is not.")
+        # with stops alone there is no number to type at all: the stops are named
+        assert _answer(out, "holes", value)["reason"].startswith(
+            "panel-setback on SLIDER takes one of: front (20)")
 
 
 def test_the_sentence_names_the_device_when_the_adjustment_knows_it(out):

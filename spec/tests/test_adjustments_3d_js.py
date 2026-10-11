@@ -12,12 +12,16 @@ a face from its own last output when something else on it changes
 (restyleText), and must leave a moved part where it stands: not back at its
 default, and not moved a second time.
 
-WebGL does not run under node. The documents the scene is built from are
-exercised here on the fake DOM through the real modules, and the order
-viewer3d.js applies things in is read from its source, as
-test_viewer3d_build_registries.py reads it. The built scene itself - vertex
-positions at the default and at both ends, by both paths - is measured in a
-browser by spec/tests/browser/viewer3d-adjustments.html.
+WHAT RUNS HERE, AND WHAT DOES NOT. WebGL does not run under node, and
+neither does the layout extractRelief measures with. So this suite holds:
+the documents a scene is built from, moved through the real registry; the
+repaint, through relief.js's own restyleText; and the decision between the
+two paths, as the function viewer3d.js asks (fields.js positionsChanged), by
+what it answers. It reads from source only that viewer3d.js and extractRelief
+call those in the right place. The built scene itself - vertex positions at
+the default and at both ends, by both paths - is measured in a browser by
+spec/tests/browser/viewer3d-adjustments.html, which is run by hand: its
+header says when.
 """
 import json
 import re
@@ -151,13 +155,24 @@ def test_a_repaint_applies_the_position_too():
     assert body.index("applyNodeFields(div, scope);") < body.index("applyNodeAdjustments(div, scope);")
 
 
+def test_a_change_of_position_is_told_from_any_other_change(out):
+    """THE DECISION, BY WHAT IT ANSWERS. A position set, moved or cleared at
+    the path of its carrier moves a part; the same position, another part's
+    field, the id at another path and another key of the carrier do not."""
+    c = out["changed"]
+    assert (c["set"], c["moved"], c["cleared"], c["second"]) == (True, True, True, True)
+    assert (c["same"], c["sameWithOthers"], c["otherPart"], c["notTheCarrier"],
+            c["carrierOtherKey"], c["emptyMaps"]) == (False,) * 6
+    assert c["noAdjustments"] == [False, False, False]
+
+
 def test_a_changed_position_rebuilds_the_scene():
     """A position is a field of no component: the viewer learns which path and
-    key it is from configs.json, and rebuilds as it does for a switch."""
+    key it is from configs.json, asks fields.js whether the change moves a
+    part (the test above), and rebuilds as it does for a switch."""
     body = _body(VIEWER, "async function applyFieldsNow(map) {", "\n  }\n")
-    slides = body.index("const slides = ")
-    assert "devIndex.adjustments" in body[slides:slides + 200]
-    assert "changed.has(a.carrier) && keys.has(id)" in body[slides:slides + 300]
+    assert "const slides = positionsChanged(devIndex && devIndex.adjustments, was, FIELDS);" in body
+    assert body.index("const was = FIELDS;") < body.index("FIELDS = next;")
     rebuild = re.search(r"if \(slides \|\| .*positional\(e\.svgText\)\)\) \{\s+await build\(CFG\);",
                         body)
     assert rebuild, "a changed position no longer reaches build()"

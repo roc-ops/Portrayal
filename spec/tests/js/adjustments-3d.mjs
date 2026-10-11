@@ -9,7 +9,17 @@ import { build, toSpec, install } from './fake-dom.mjs';
 
 install();
 globalThis.location = { search: '' };
+// restyleText parses a face's text into a <div> and serialises it back. The
+// fake DOM's text is its JSON tree, so the div reads and writes that.
+globalThis.document = {createElement: () => {
+  const div = build({t: 'div', c: []});
+  Object.defineProperty(div, 'innerHTML', {
+    set(text) { for (const c of [...div.children]) c.remove(); div.appendChild(build(JSON.parse(text))); },
+    get() { return JSON.stringify(toSpec(div.children[0])); }});
+  return div;
+}};
 const R = await import('../../../kit/relief.js');
+const F = await import('../../../kit/fields.js');
 
 const DECL = {axis: 'z', carrier: 'panel', range: [20, 180], default: 60,
               stops: {front: 20, rear: 180}, label: 'Panel setback', datum: 'the panel face'};
@@ -36,8 +46,9 @@ const stashed = root => [root, ...root.descendants()].some(n =>
   n.attributes.some(a => a.name.startsWith('data-portrayal-adjust')));
 // what extractRelief does to a face before it measures it
 const extract = (doc, scope) => { R.applyNodeFields(doc, scope); R.applyNodeAdjustments(doc, scope); return doc; };
-// what restyleText does to a face's own last output: through text and back
-const repaint = (doc, scope) => extract(build(JSON.parse(JSON.stringify(toSpec(doc)))), scope);
+// A REPAINT IS relief.js's own restyleText, on the face's own last output:
+// the text goes in and the repainted text comes out, as viewer3d.js calls it
+const repaint = (doc, scope) => build(JSON.parse(R.restyleText(JSON.stringify(toSpec(doc)), scope)));
 
 const out = {};
 const scope = R.createReliefScope();
@@ -89,5 +100,27 @@ const other = R.createReliefScope();
 R.setNodeFields({panel: {'panel-setback': '20'}}, other);
 out.scopes = [find(extract(front(), scope), 'panel').getAttribute('data-depth'),
               find(extract(front(), other), 'panel').getAttribute('data-depth')];
+
+// --- does a change of fields move a part that slides? -------------------------------------
+// What viewer3d.js asks to tell a rebuild from a repaint. `A` is the
+// adjustments of a device's configs.json.
+const A = {'panel-setback': DECL, 'shelf-height': {...DECL, carrier: 'shelf'}};
+const P = v => ({panel: {'panel-setback': v}});
+out.changed = {
+  set: F.positionsChanged(A, {}, P('20')),
+  moved: F.positionsChanged(A, P('20'), P('180')),
+  cleared: F.positionsChanged(A, P('20'), {}),
+  same: F.positionsChanged(A, P('20'), P('20')),
+  sameWithOthers: F.positionsChanged(A, {...P('20'), stud: {finish: '#111'}}, {...P('20'), stud: {finish: '#222'}}),
+  otherPart: F.positionsChanged(A, {}, {stud: {finish: '#222'}}),
+  // the id at a path that is not its carrier is an ordinary key
+  notTheCarrier: F.positionsChanged(A, {}, {rail: {'panel-setback': '20'}}),
+  // a field of the carrier that is no position
+  carrierOtherKey: F.positionsChanged(A, {}, {panel: {tint: '#222'}}),
+  second: F.positionsChanged(A, P('20'), {...P('20'), shelf: {'shelf-height': '5'}}),
+  noAdjustments: [F.positionsChanged(undefined, {}, P('20')), F.positionsChanged({}, {}, P('20')),
+                  F.positionsChanged(null, P('1'), {})],
+  emptyMaps: F.positionsChanged(A, undefined, null),
+};
 
 console.log(JSON.stringify(out));

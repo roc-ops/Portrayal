@@ -280,6 +280,8 @@ export function fieldAccepts(field, value) {
 // exponent, as adjustments.py reads it, so the build and the kit refuse the
 // same text. Not \s, for the reason R_FROM_NUMBER gives.
 const POSITION_NUMBER = /^[ \t\n\r]*(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)[ \t\n\r]*$/;
+// a number all the same, written with a sign or an exponent: refused, and told so
+const POSITION_SIGNED = /^[+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?$/;
 // 0.1 mm, rounded half up: adjustments.py round01, the same arithmetic
 const round01 = x => Math.floor(Number(x) * 10 + 0.5) / 10;
 // THE ONE SPELLING OF A POSITION: `120` and `271.2`, never `120.0` or `271.20`
@@ -330,6 +332,10 @@ export function adjustmentAccepts(adjustment, value, who = {}) {
   if (Object.hasOwn(a.stops || {}, text)) n = Number(a.stops[text]);
   else if (POSITION_NUMBER.test(text)) n = Number(text);
   if (Array.isArray(a.range) && a.range.length === 2) {
+    // `-20`, `+20`, `1e2`: a number, in a spelling a position never has
+    if (n === null && POSITION_SIGNED.test(text))
+      return {ok: false, reason: `${name} takes a number in mm written with digits and a point `
+                                 + `only. ${text} is not.`};
     if (n === null || !Number.isFinite(n)) {
       const tail = named.length ? `, or one of: ${named.map(s => s.name).join(', ')}` : '';
       return {ok: false, reason: `${name} takes a number in mm${tail}.`};
@@ -356,12 +362,12 @@ export function adjustmentAccepts(adjustment, value, who = {}) {
  * Positions are strings in the one spelling; `stops` is in order of position,
  * and `stop` names the stop the row stands at, or is ''.
  */
-export function adjustmentRows(adjustments, current = {}, who = {}) {
+export function adjustmentRows(adjustments, current = {}) {
   return Object.keys(adjustments || {}).sort().map(id => {
     const a = adjustments[id] || {};
     const built = spell(a.at ?? a.default ?? 0);
     const held = current?.[a.carrier]?.[id];
-    const got = held == null || held === '' ? null : adjustmentAccepts(a, held, {id, ...who});
+    const got = held == null || held === '' ? null : adjustmentAccepts(a, held, {id});
     const value = got?.ok ? got.value : built;
     const stops = stopsByValue(a).map(s => ({name: s.name, value: spell(s.value)}));
     const ranged = Array.isArray(a.range) && a.range.length === 2;
@@ -380,6 +386,20 @@ export function adjustmentRows(adjustments, current = {}, who = {}) {
       stop: stops.find(s => s.value === value)?.name || '',
     };
   });
+}
+
+/**
+ * Does going from one fields map to another move a part that slides? True
+ * when, for some adjustment, the value at the path of its carrier under its
+ * id is not the same string in `was` and in `now` (both `{path: {key:
+ * value}}`). `adjustments` is `adjustmentsOf(face)` or the `adjustments` of a
+ * device's configs.json. The 3D viewer asks this to tell a change it must
+ * rebuild the scene for from one it can repaint.
+ */
+export function positionsChanged(adjustments, was, now) {
+  const held = (map, a, id) => { const v = map?.[a?.carrier]?.[id]; return v == null ? '' : String(v); };
+  return Object.entries(adjustments || {})
+    .some(([id, a]) => !!a && typeof a === 'object' && !!a.carrier && held(was, a, id) !== held(now, a, id));
 }
 
 const ADJUST = {transform: 'data-portrayal-adjust-transform', depth: 'data-portrayal-adjust-depth',

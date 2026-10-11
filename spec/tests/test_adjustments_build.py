@@ -14,6 +14,7 @@ adjustment gains no attribute and no key.
 import hashlib
 import json
 import shutil
+import subprocess
 import sys
 import xml.etree.ElementTree as ET
 
@@ -28,12 +29,23 @@ AID = fx.AID
 SVG = "{http://www.w3.org/2000/svg}"
 # configuration -> the position it is built at
 BUILT = {"base": 60.0, "forward": 20.0, "back": 180.0}
+# configuration -> (adjustment, position): the ends of the part along x and along y
+XY = {"x-min": ("block-offset", 22.0), "x-max": ("block-offset", 92.0),
+      "y-min": ("shelf-height", 5.0), "y-max": ("shelf-height", 35.0)}
 VIEWS = ("front", "rear", "top", "bottom", "left", "right")
 
 
 @pytest.fixture(scope="module")
 def built(tmp_path_factory):
-    out, r = fx.render(tmp_path_factory.mktemp("adjust-build"))
+    def edit(d):
+        # four more configurations, one at each end of the part along x and of
+        # the part along y, so every axis is built at both ends
+        for name, (aid, value) in XY.items():
+            carrier = d["adjustments"][aid]["carrier"]
+            d["configurations"][name] = {
+                "kind": "example", "description": f"The same frame with {aid} at {value:g}.",
+                "component-attrs": {carrier: {aid: f"{value:g}"}}}
+    out, r = fx.render(tmp_path_factory.mktemp("adjust-build"), edit)
     assert r.returncode == 0, r.stderr[-2000:]
     return out
 
@@ -58,7 +70,10 @@ def test_every_face_carries_the_map_and_where_it_was_built(built):
         for view in VIEWS:
             raw = face(built, cfg, view).get("data-adjustments")
             got = json.loads(raw)
-            assert got == {AID: {
+            assert set(got) == {AID, "block-offset", "shelf-height"}
+            assert {k: v["at"] for k, v in got.items() if k != AID} == \
+                {"block-offset": 30.0, "shelf-height": 20.0}
+            assert {AID: got[AID]} == {AID: {
                 "axis": "z", "carrier": "panel", "range": [20.0, 180.0], "default": 60.0,
                 "stops": {"front": 20.0, "middle": 100.0, "rear": 180.0},
                 "label": "Panel setback",
@@ -86,13 +101,55 @@ def test_each_member_says_what_moves_it_and_by_how_much(built):
         for view, (by, ids) in MEMBERS.items():
             root = face(built, cfg, view)
             marked = {e.get("id"): e.get("data-moves-by") for e in root.iter()
-                      if e.get("data-moves-with") is not None}
+                      if e.get("data-moves-with") == AID}
             assert marked == {i: by for i in ids}, (cfg, view)
             assert all(node(root, i).get("data-moves-with") == AID for i in ids)
-        # the rear view has no member: nothing on it moves, and it still has the map
+        # the rear view has no member of this adjustment, and it still has the map
         rear = face(built, cfg, "rear")
-        assert not [e for e in rear.iter() if e.get("data-moves-with")]
+        assert not [e for e in rear.iter() if e.get("data-moves-with") == AID]
         assert rear.get("data-adjustments")
+
+
+# EVERY ROW OF THE TABLE, WRITTEN OUT, WITH WHY. The sign of each axis on each
+# face is what every saved position rests on: a flipped row moves parts the
+# wrong way in every link and every rack that holds a value, with no edit to
+# them. So the table is not derived here, it is stated, and the fixture is
+# built along every axis below to hold the build to it.
+# A face is drawn from outside the device, x to the right and y down the page.
+TABLE = {
+    # x runs from the left of the device as seen from its front
+    ("x", "front"): ((1, 0, 0), "seen from the front, the left of the device is at the left"),
+    ("x", "rear"): ((-1, 0, 0), "seen from behind, the left of the device is at the right"),
+    ("x", "top"): ((1, 0, 0), "a plan has the rear at its top edge, so left is at the left"),
+    ("x", "bottom"): ((-1, 0, 0), "seen from below with the rear at the top edge, left and right swap"),
+    ("x", "left"): ((0, 0, 1), "the left face is at x = 0: further along x is deeper behind it"),
+    ("x", "right"): ((0, 0, -1), "the right face is at the far end of x: further along is nearer it"),
+    # y runs up from the bottom of the device
+    ("y", "front"): ((0, -1, 0), "up the device is up the page, and y on a page runs down"),
+    ("y", "rear"): ((0, -1, 0), "up is up from behind too"),
+    ("y", "left"): ((0, -1, 0), "up is up on a side view"),
+    ("y", "right"): ((0, -1, 0), "up is up on a side view"),
+    ("y", "top"): ((0, 0, -1), "the top face is at the far end of y: higher is nearer it"),
+    ("y", "bottom"): ((0, 0, 1), "the bottom face is at y = 0: higher is deeper behind it"),
+    # z runs back from the front of the device
+    ("z", "front"): ((0, 0, 1), "the front face is at z = 0: further back is deeper behind it"),
+    ("z", "rear"): ((0, 0, -1), "the rear face is at the far end of z: further back is nearer it"),
+    ("z", "top"): ((0, -1, 0), "a plan has the rear at its top edge (y = 0), so back is up the page"),
+    ("z", "bottom"): ((0, -1, 0), "the plan from below keeps the rear at its top edge"),
+    ("z", "right"): ((1, 0, 0), "the right view has the front at its left, so back is to the right"),
+    ("z", "left"): ((-1, 0, 0), "the left view has the front at its right, so back is to the left"),
+}
+
+
+@pytest.mark.parametrize("axis, view", sorted(TABLE))
+def test_each_row_of_the_table_is_as_stated(axis, view):
+    want, why = TABLE[(axis, view)]
+    assert adj.moves_by(axis, view) == want, why
+
+
+def test_the_stated_table_is_the_whole_table():
+    assert {(a, f) for a, faces in adj.MOVES_BY.items() for f in faces} == set(TABLE)
+    assert len(TABLE) == 18
 
 
 def test_the_table_covers_every_axis_and_face():
@@ -180,12 +237,13 @@ def test_the_elements_file_says_which_rows_move(built):
 
 def test_configs_json_carries_the_map_and_each_configuration_positions(built):
     cfg = json.loads((built / "slider.configs.json").read_text())
-    assert cfg["adjustments"] == {AID: {
+    assert {AID: cfg["adjustments"][AID]} == {AID: {
         "axis": "z", "carrier": "panel", "range": [20.0, 180.0], "default": 60.0,
         "stops": {"front": 20.0, "middle": 100.0, "rear": 180.0}, "label": "Panel setback",
         "datum": "the front face of the panel, behind the front of the frame"}}
     assert {c["name"]: c["positions"] for c in cfg["configs"]} == \
-        {"base": {}, "forward": {AID: 20.0}, "back": {AID: 180.0}}
+        {"base": {}, "forward": {AID: 20.0}, "back": {AID: 180.0},
+         **{name: {aid: value} for name, (aid, value) in XY.items()}}
 
 
 def test_every_face_names_the_manifest_as_written(built):
@@ -326,3 +384,186 @@ def test_the_back_of_a_module_in_a_member_bay_moves_with_it(tmp_path):
         # the bay beside it is not a member, and its back is not marked
         assert node(rear, "bay-2-rear").get("data-moves-with") is None
     assert at["raised"] == [at["populated"][0], at["populated"][1] - 2.0], at
+
+
+# --- a part that moves along x, and one along y ------------------------------------------------
+
+
+
+def test_a_part_along_x_is_drawn_at_both_ends_on_every_view_that_shows_it(built):
+    """`v` is the left edge of the block from the left of the frame. The front
+    and the plan show it at x = v; the rear and the plan from below are seen
+    the other way round, at 120 - v - 6. The side views show x as depth, and
+    nothing on them moves in the plane."""
+    for cfg, v in (("base", 30.0), ("x-min", 22.0), ("x-max", 92.0)):
+        assert rows(built, cfg, "front")["block"]["box"] == \
+            pytest.approx({"x": v + 0.1, "y": 30.1, "w": 5.8, "h": 5.8}), cfg
+        assert _rect(face(built, cfg, "top"), "block") == [v, 194, 6, 4], cfg
+        assert _rect(face(built, cfg, "rear"), "block-back") == [120 - v - 6, 30, 6, 6], cfg
+        assert _rect(face(built, cfg, "bottom"), "block") == [120 - v - 6, 194, 6, 4], cfg
+    by = {view: node(face(built, "base", view), nid).get("data-moves-by")
+          for view, nid in (("front", "block"), ("top", "block"), ("rear", "block-back"),
+                            ("bottom", "block"))}
+    assert by == {"front": "1 0 0", "top": "1 0 0", "rear": "-1 0 0", "bottom": "-1 0 0"}
+    # and the block alone moved: the panel and the shelf stand where they were
+    for cfg in ("x-min", "x-max"):
+        assert rows(built, cfg, "front")["shelf"]["box"] == rows(built, "base", "front")["shelf"]["box"]
+        assert _rect(face(built, cfg, "top"), "panel") == _rect(face(built, "base", "top"), "panel")
+
+
+def test_a_part_along_y_is_drawn_at_both_ends_on_every_view_that_shows_it(built):
+    """`v` is the centre of the shelf stud above the bottom of the frame. Up
+    the device is up the page on the front, the rear and both sides: the top
+    of the 6 mm stud is at y = 40 - v - 3 on each. The plans show y as depth."""
+    for cfg, v in (("base", 20.0), ("y-min", 5.0), ("y-max", 35.0)):
+        y = 40 - v - 3
+        assert rows(built, cfg, "front")["shelf"]["box"] == \
+            pytest.approx({"x": 2.1, "y": y + 0.1, "w": 5.8, "h": 5.8}), cfg
+        assert _rect(face(built, cfg, "rear"), "shelf-back") == [112, y, 6, 6], cfg
+        assert _rect(face(built, cfg, "left"), "shelf") == [190, y, 4, 6], cfg
+        assert _rect(face(built, cfg, "right"), "shelf") == [6, y, 4, 6], cfg
+    by = {view: node(face(built, "base", view), nid).get("data-moves-by")
+          for view, nid in (("front", "shelf"), ("rear", "shelf-back"), ("left", "shelf"),
+                            ("right", "shelf"))}
+    assert by == {view: "0 -1 0" for view in ("front", "rear", "left", "right")}
+    for cfg in ("y-min", "y-max"):
+        assert rows(built, cfg, "front")["block"]["box"] == rows(built, "base", "front")["block"]["box"]
+
+
+def test_each_configuration_moves_only_its_own_adjustment(built):
+    for cfg, (aid, value) in XY.items():
+        got = json.loads(face(built, cfg, "front").get("data-adjustments"))
+        want = {AID: 60.0, "block-offset": 30.0, "shelf-height": 20.0, aid: value}
+        assert {k: v["at"] for k, v in got.items()} == want, cfg
+
+
+# --- the kit's move and the build's are one move -----------------------------------------------
+
+def _spec(el):
+    """An SVG element as the fake DOM's JSON tree (spec/tests/js/fake-dom.mjs)."""
+    return {"t": el.tag.rsplit("}", 1)[-1], "a": dict(el.attrib),
+            "c": [_spec(c) for c in el if isinstance(c.tag, str)]}
+
+
+def _stands(attrs):
+    """Where a node stands and how deep: the point its own `x`,`y` (or its
+    origin) lands at through its transform, and its depth keys as numbers."""
+    from portrayal.elements import _apply, parse_transform
+    x, y = _apply(parse_transform(attrs.get("transform")), float(attrs.get("x", 0)),
+                  float(attrs.get("y", 0)))
+    out = {"at": (round(x, 3), round(y, 3))}
+    for k in ("data-depth", "data-z-lift", "data-z-out"):
+        if k in attrs:
+            out[k] = round(float(attrs[k]), 3)
+    return out
+
+
+PARITY = [("forward", {"panel": {AID: "20"}}), ("back", {"panel": {AID: "rear"}}),
+          ("x-min", {"block": {"block-offset": "22"}}), ("x-max", {"block": {"block-offset": "92"}}),
+          ("y-min", {"shelf": {"shelf-height": "5"}}), ("y-max", {"shelf": {"shelf-height": "35"}})]
+
+
+@pytest.mark.parametrize("cfg, fields", PARITY, ids=[c for c, _ in PARITY])
+def test_the_kit_moves_the_default_build_to_where_the_build_draws_it(built, tmp_path, cfg, fields):
+    """ONE MOVE, WRITTEN TWICE: `mark_member` in render.py draws a
+    configuration moved, and `moveMember` in kit/fields.js moves a drawing a
+    reader holds. The faces built at the default, moved by the kit to a
+    position, stand exactly where the build draws that position: every node,
+    on every face, in the plane and in depth."""
+    if shutil.which("node") is None:
+        pytest.skip("node not installed")
+    faces = {view: _spec(face(built, "base", view)) for view in VIEWS}
+    arg = tmp_path / "parity.json"
+    arg.write_text(json.dumps({"faces": faces, "fields": fields}))
+    script = fx.ROOT / "spec/tests/js/adjustments-parity.mjs"
+    p = subprocess.run(["node", str(script), str(arg)], capture_output=True, text=True,
+                       cwd=str(script.parent), timeout=60)
+    assert p.returncode == 0, p.stderr
+    kit = json.loads(p.stdout.strip().splitlines()[-1])
+    moved = 0
+    for view in VIEWS:
+        want = {e.get("id"): _stands(e.attrib) for e in face(built, cfg, view).iter() if e.get("id")}
+        got = {i: _stands(a) for i, a in kit[view]["nodes"].items()}
+        assert got == want, (cfg, view)
+        was = {e.get("id"): _stands(e.attrib) for e in face(built, "base", view).iter() if e.get("id")}
+        moved += sum(1 for i in want if want[i] != was[i])
+    assert moved >= 4, "nothing moved: the comparison measured nothing"
+
+
+# --- two things the build promises, each with a drawing that breaks it ---------------------------
+
+def _svg(text):
+    return ET.fromstring(f'<svg xmlns="http://www.w3.org/2000/svg">{text}</svg>')
+
+
+def test_the_build_refuses_a_member_inside_a_member():
+    from portrayal import render
+    with pytest.raises(ValueError, match="would move twice"):
+        render._check_members(_svg(
+            '<g id="outer" data-moves-with="a" data-moves-by="1 0 0">'
+            '<g id="inner" data-moves-with="a" data-moves-by="1 0 0"/></g>'))
+
+
+def test_the_build_refuses_a_member_under_a_group_that_is_turned():
+    from portrayal import render
+    with pytest.raises(ValueError, match="not in the frame of the face"):
+        render._check_members(_svg(
+            '<g id="turned" transform="rotate(90)">'
+            '<g id="inner" data-moves-with="a" data-moves-by="1 0 0"/></g>'))
+    # a member with a transform of its own, under plain groups, is what every
+    # placement is
+    render._check_members(_svg(
+        '<g id="--decor"><rect id="d" data-moves-with="a" data-moves-by="1 0 0"/></g>'
+        '<g id="p" transform="translate(1,2)" data-moves-with="a" data-moves-by="1 0 0"/>'))
+
+
+def test_every_face_of_a_device_that_slides_is_checked(monkeypatch):
+    """And the build asks: with the check made to refuse everything, drawing a
+    face of the fixture stops; a device that declares no adjustment is not asked."""
+    from portrayal import render
+    lib = render.Library([str(fx.FIXTURE_LIB), str(fx.LIB)])
+
+    def refuse(_svg):
+        raise ValueError("checked")
+    monkeypatch.setattr(render, "_check_members", refuse)
+    doc = fx.device()
+    with pytest.raises(ValueError, match="checked"):
+        render.render_view(doc, "top", doc["views"]["top"], lib, config_name="base",
+                           config=doc["configurations"]["base"])
+    del doc["adjustments"]
+    for view in doc["views"].values():
+        for _kind, item in adj._items(view):
+            item.pop("moves-with", None)
+    render.render_view(doc, "top", doc["views"]["top"], lib, config_name="base",
+                       config=doc["configurations"]["base"])
+
+
+def test_a_part_seated_on_a_member_moves_with_it(tmp_path):
+    """NOT A MODEL OF THIS ROUTER: it has a cage a configuration can seat an
+    optic in. The optic is a placement the build makes, with no entry to say
+    `moves-with` on, so the build marks it as a member of its cage's
+    adjustment and draws it moved with the cage."""
+    def edit(d):
+        d["adjustments"] = {"slide": {"label": "Slide", "carrier": "port-0", "axis": "y",
+                                      "range": [0.0, 1.0], "default": 0.0, "datum": "a test"}}
+        next(p for p in d["views"]["front"]["components"]["placements"]
+             if p["id"] == "port-0")["moves-with"] = "slide"
+        base = d["configurations"]["ac"]
+        d["configurations"] = {
+            "ac": {**base, "occupants": {"port-0": "generic/sfp-lc@1", "port-1": "generic/sfp-lc@1"}},
+            "up": {**base, "default": False, "kind": "example",
+                   "occupants": {"port-0": "generic/sfp-lc@1", "port-1": "generic/sfp-lc@1"},
+                   "component-attrs": {"port-0": {"slide": "1"}}}}
+    name, out, r = _library_copy(tmp_path, "edgecore/agr110", edit)
+    assert r.returncode == 0, r.stderr[-1500:]
+    at = {}
+    for cfg in ("ac", "up"):
+        front = ET.parse(out / f"{name}.{cfg}.front.svg").getroot()
+        for nid in ("port-0", "port-0-occupant"):
+            g = node(front, nid)
+            assert (g.get("data-moves-with"), g.get("data-moves-by")) == ("slide", "0 -1 0"), nid
+            at[cfg, nid] = _translate(g)
+        # the optic in the cage beside it is no member
+        assert node(front, "port-1-occupant").get("data-moves-with") is None
+    for nid in ("port-0", "port-0-occupant"):
+        assert at["up", nid] == pytest.approx([at["ac", nid][0], at["ac", nid][1] - 1.0]), nid

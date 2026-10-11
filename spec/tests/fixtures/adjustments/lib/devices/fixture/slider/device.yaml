@@ -19,6 +19,16 @@ provenance:
     note: >-
       a test fixture: the front face of the panel stands 20 to 180 behind the front of the frame
       and is drawn at 60. The ends are where the stud meets the ends of the slot in the side plate.
+  block-offset:
+    confidence: estimated
+    note: >-
+      a test fixture: the left edge of the block stands 22 to 92 from the left of the frame and is
+      drawn at 30. It is here so that a test moves a part along x.
+  shelf-height:
+    confidence: estimated
+    note: >-
+      a test fixture: the centre of the shelf stud stands 5 to 35 above the bottom of the frame and
+      is drawn at 20. It is here so that a test moves a part along y.
 attrs:
   physical:
     slide-panel-setback-mm: 60
@@ -47,7 +57,7 @@ groups:
     term: Stud
     role: furniture
     index-origin: 1
-    description: the studs that hold the panel to the side plates
+    description: the studs that hold the panel to the side plates, and the two that slide on the front
 adjustments:
   panel-setback:
     label: Panel setback
@@ -57,6 +67,20 @@ adjustments:
     default: 60.0
     stops: {front: 20.0, middle: 100.0, rear: 180.0}
     datum: the front face of the panel, behind the front of the frame
+  block-offset:
+    label: Block offset
+    carrier: block
+    axis: x
+    range: [22.0, 92.0]
+    default: 30.0
+    datum: the left edge of the block, from the left of the frame seen from its front
+  shelf-height:
+    label: Shelf height
+    carrier: shelf
+    axis: y
+    range: [5.0, 35.0]
+    default: 20.0
+    datum: the centre of the shelf stud, above the bottom of the frame
 views:
   front:
     size: {w: 120.0, h: 40.0}
@@ -65,11 +89,15 @@ views:
       - {ref: fixture/slide-well@1, id: panel, at: [10.0, 0.0], group: frame, rel-pos: 1, moves-with: panel-setback}
       - {ref: fixture/slide-rail@1, id: rail, at: [20.0, 15.0], group: rails, rel-pos: 1, in: panel,
         moves-with: panel-setback}
+      - {ref: fixture/slide-stud@1, id: block, at: [30.0, 30.0], group: studs, rel-pos: 3, moves-with: block-offset}
+      - {ref: fixture/slide-stud@1, id: shelf, at: [2.0, 17.0], group: studs, rel-pos: 4, moves-with: shelf-height}
   rear:
     size: {w: 120.0, h: 40.0}
     panel:
       decor:
       - {id: panel-back, at: [10.0, 0.0], size: [100.0, 40.0], fill: '#15171a', kind: slide-panel}
+      - {id: block-back, at: [84.0, 30.0], size: [6.0, 6.0], fill: '#d0d3d6', kind: slide-block, moves-with: block-offset}
+      - {id: shelf-back, at: [112.0, 17.0], size: [6.0, 6.0], fill: '#d0d3d6', kind: slide-shelf, moves-with: shelf-height}
   top:
     size: {w: 120.0, h: 200.0}
     panel:
@@ -78,6 +106,7 @@ views:
       - {id: side-right, at: [118.5, 0.0], size: [1.5, 200.0], fill: '#3a3f45', kind: side-plate}
       - {id: panel, at: [10.0, 138.5], size: [100.0, 1.5], fill: '#2a2d31', kind: slide-panel, moves-with: panel-setback}
       - {id: rail, at: [20.0, 140.0], size: [80.0, 7.5], fill: '#b9bdc2', kind: slide-rail, moves-with: panel-setback}
+      - {id: block, at: [30.0, 194.0], size: [6.0, 4.0], fill: '#d0d3d6', kind: slide-block, moves-with: block-offset}
   bottom:
     size: {w: 120.0, h: 200.0}
     panel:
@@ -86,11 +115,13 @@ views:
       - {id: side-right, at: [0.0, 0.0], size: [1.5, 200.0], fill: '#3a3f45', kind: side-plate}
       - {id: panel, at: [10.0, 138.5], size: [100.0, 1.5], fill: '#2a2d31', kind: slide-panel, moves-with: panel-setback}
       - {id: rail, at: [20.0, 140.0], size: [80.0, 7.5], fill: '#b9bdc2', kind: slide-rail, moves-with: panel-setback}
+      - {id: block, at: [84.0, 194.0], size: [6.0, 4.0], fill: '#d0d3d6', kind: slide-block, moves-with: block-offset}
   left:
     size: {w: 200.0, h: 40.0}
     panel:
       decor:
       - {id: flange, at: [128.0, 4.0], size: [12.0, 32.0], fill: '#15171a', kind: panel-flange, moves-with: panel-setback}
+      - {id: shelf, at: [190.0, 17.0], size: [4.0, 6.0], fill: '#d0d3d6', kind: slide-shelf, moves-with: shelf-height}
     components:
       placements:
       - {ref: fixture/slide-side@1, id: side-left, at: [0.0, 0.0], group: frame, rel-pos: 2, under: [stud]}
@@ -101,6 +132,7 @@ views:
     panel:
       decor:
       - {id: flange, at: [60.0, 4.0], size: [12.0, 32.0], fill: '#15171a', kind: panel-flange, moves-with: panel-setback}
+      - {id: shelf, at: [6.0, 17.0], size: [4.0, 6.0], fill: '#d0d3d6', kind: slide-shelf, moves-with: shelf-height}
     components:
       placements:
       - {ref: fixture/slide-side@1, id: side-right, at: [0.0, 0.0], group: frame, rel-pos: 3, under: [stud]}
