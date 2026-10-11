@@ -22,14 +22,6 @@ equally binding on an agent:
 - **`docs/rack-mounting-design.md`** - for a rack device: ear positions,
   `chassis.kits`, and the `kind: kit` contract a rail kit is written as.
 
-**After Gate 1, before the cutouts,** do the ears and kits for a `rack` device:
-read the rack-mounting section and the rail guide, write `chassis.ears` with
-the positions the guide names (`at` only where a figure or drawing gives it,
-one `default`, the shipped one) and `chassis.kits` with every kit, referencing
-a kit the library already has and writing a `kind: kit` contract for one it
-does not. Ranges come from the newest source, and provenance names the source
-that lost. Never place `common/rack-ear@1` on a new device.
-
 The output is `library/devices/<vendor>/<model>/device.yaml` linting clean at
 `maturity: modelled`, plus the sentence Gate 5 asks for: *I put the render
 beside the reference at matched scale, and here is what it showed.* A model
@@ -45,10 +37,24 @@ the detail; this is the order and the question each gate answers.
 | gate | after | the question | how you answer it |
 |---|---|---|---|
 | 1 | the panel | Can this figure be measured at all, and is the panel the right shape? | Compare the figure's pixel aspect with the datasheet width and height, then overlay your panel rendered `--without silkscreen`. |
+| 1b | the ears and the kits (a `rack` device only) | Does the device ship in the position marked `default`, and is every kit it takes listed with the newest range? | Lint: L125 and L160 to L165 clean, and L155 to L159 for a kit you wrote. Put the `default` position beside the rack-mounting figure, and each kit range beside the newest source that gives it. |
 | 2 | the cutouts | Is every hole there, on the right pitch? | Overlay again and count. L39 checks fit, overlap and empty openings. |
 | 3 | the silkscreen | Is every printed legend present, spelled as printed, beside what it names? | Render with silkscreen and compare. L14 passes. |
 | 4 | the components | Does the whole file hold together? | Lint clean (`./build.sh --device <model>`); render with and without silkscreen; open the viewer and read the tree; set `maturity: modelled` and lint again; read the capability level and its `blocked:` reason. |
 | 5 | everything | Is it the device, and is it finished? | Walk the callouts and the spec table by name, then put the render beside the reference at matched scale, for every face that has one. |
+
+The step behind gate 1b comes after the panel and before the cutouts. Three
+of its rules are the ones most often broken, each with its check:
+
+- **`at` is written only when a figure or a drawing gives it.** A position the
+  guide only names keeps its name and has no number. Check: each `at` cites
+  its figure in provenance.
+- **A kit is referenced, never copied, and never placed.** Search the library
+  for the kit before writing a `kind: kit` contract. Check: L161 passes, and
+  L5 and L10 pass.
+- **Ears are not drawn and `common/rack-ear@1` is not placed on a new device.**
+  A generic ear is drawn from `chassis.ears` only when a viewer asks. Check:
+  the default build shows no ears.
 
 ## How the method is written
 

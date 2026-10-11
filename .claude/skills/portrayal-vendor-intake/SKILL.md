@@ -70,15 +70,31 @@ is the finding.
 | **accessory table** (in the datasheet, ordering guide or HIG) | the kit SKUs, whether each ships in the box or is sold separately, normal or reversed mounting, and the cable management arm and strain-relief bar | 1 per family |
 | **rack-mounting figures** (in the HIG) | the named ear positions (flush, recessed, mid-mount) and the one the box ships in; the reviewer checks the default against this figure | 1-4 per HIG |
 
-**Stage the mounting sources even when the faceplate is all you came for.**
-`chassis.ears` and `chassis.kits` are written right after the panel
-(docs/rack-mounting-design.md), and a rail guide is a separate download that
-nobody fetches later. Stage every version you find, with its date in
-SOURCES.md: rail ranges change between editions, and review checks the kit
-against the newest and names the one that lost. A rail document is a
-document, so it is converted with the rest. A rail guide shared across a whole
-line is staged once and listed against every model it covers in COVERAGE.md,
-under the rail guide column.
+**The four mounting sources are staged with the rest, each as a rule with
+its check.** `chassis.ears` and `chassis.kits` are written right after the
+panel (docs/rack-mounting-design.md), and they are read from these four.
+
+- **A rail or mounting-kit guide is staged for every kit the accessory table
+  names,** even when the faceplate is all you came for: it is a separate
+  download, and one not fetched at intake is not fetched later. Check: every
+  kit SKU in the accessory table has a guide in the corpus, or a named miss
+  in COVERAGE.md.
+- **Every edition of a rail document is staged, with its date.** Ranges
+  change between editions, and review holds a kit to the newest source and
+  names the one that lost. Check: `SOURCES.md` gives a date or a revision
+  for each, and two editions of one document are both there.
+- **A sizing matrix is staged whenever the line has one.** It is what gives
+  one rail a different range on another chassis, which becomes an override on
+  the device. Check: the matrix is in the corpus, or COVERAGE.md says the
+  vendor publishes none and where you looked.
+- **A rail document is a document.** It is converted with the rest and passes
+  the same proof of conversion. Check: its range table reads correctly in the
+  converted text, beside the page it came from.
+- **A guide shared across a line is staged once.** Check: COVERAGE.md lists it
+  against every model it covers, under the rail guide column.
+- **The rack-mounting figures are found before modelling starts.** They name
+  the ear positions and show the one the box ships in. Check: the page of
+  each figure is noted against its model, or the miss is.
 
 ## Finding them: probe, don't browse
 

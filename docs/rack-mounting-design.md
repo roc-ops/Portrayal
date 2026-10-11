@@ -1,14 +1,27 @@
 # Rack mounting: ear positions and rail kits
 
-Status: agreed 2026-10-08, with the five follow-up decisions in section 11.
-Tracked in #904. The device keys (`chassis.ears` as an object, `chassis.kits`)
-and `kind: kit` are in the schemas and lint (#905, #906). The exports (#907),
-the default setback in `rack.json` (#908), the generic ear (#909), the move off
-`common/rack-ear@1` (#910) and the worked examples (#912 to #915) follow.
-Follows #865, which added `chassis.ears: behind` and `chassis.overhang`.
+Status: decided 2026-10-08, with the five follow-up decisions in section 11.
+Tracked in #904. Follows #865, which added `chassis.ears: behind` and
+`chassis.overhang`.
 
-The site's Rack Builder is the first reader. It places every device with its
-faceplate 30 mm behind the rails, and most gear mounts flush.
+| piece | state |
+|---|---|
+| `kind: kit` in the component schema, `kits.json`, lint L155 to L159 (#905) | built |
+| `chassis.ears` as an object, `chassis.kits`, lint L160 to L163 (#906) | built |
+| ears and kits in `configs.json` and the DCIM exports (#907) | built |
+| the generic L-bracket ear, drawn only when asked for (#909) | built |
+| the default position in `rack.json` (#908) | not built |
+| the move off `common/rack-ear@1` (#910) | open: 36 devices still place it |
+| the worked examples (#912 to #915) | not built |
+
+**No kit is in the library yet,** and no device lists one. Every kit and every
+kit ref in this note is an example. The examples use the made-up namespace
+`acme`, as [format-stability.md](format-stability.md) does. Four devices state
+`chassis.ears`.
+
+The Rack Builder of the site is the first reader. When this was drawn up it
+placed every device with its faceplate 30 mm behind the rails, and most gear
+mounts flush.
 
 Scope: how a rack device attaches to a rack. That is where its ears put the
 faceplate, which rail kits it takes and what those kits allow, recorded at
@@ -73,45 +86,90 @@ plane the ears bolt to, positive when the ears are behind the faceplate.
 | mid-mount | 228 | 228 in front of a 2-post frame |
 | rear ears | about `chassis.depth` | the site bolts it to the rear rails |
 
+An example. Every key under `ears` is optional, and an object states at least
+one:
+
 ```yaml
 chassis:
   ears:
     behind: true            # the #865 statement, now a key (the bare string stays valid)
-    h: 43.5                 # ear height
-    y: 0.15                 # bottom of the ear above the bottom of the chassis
+    h: 43.5                 # mm the ears span, when it is not the chassis height
+    y: 0.15                 # mm, bottom of the ears above the bottom of the chassis
+    color: "#1b1e21"        # the colour of the ears, when they are not silver
     positions:
       - {name: flush, at: 0, default: true}
       - {name: recessed, at: -25.4}
-      - {name: mid, at: 228, racks: [2-post], part: {kit: smartoptics/dcp-rack-kit@1, part: mid}}
+      - {name: mid, at: 228, racks: [2-post], part: {kit: acme/rack-kit@1, part: mid}}
   kits:
-    - {ref: smartoptics/dcp-rack-kit@1, supply: in-box}
+    - {ref: acme/rack-kit@1, supply: in-box}     # an example ref: no such kit exists
 ```
+
+(The example shows every key at once. A real device that says `behind: true`
+gets no generic ear, so it would have no use for `h`, `y` or `color`.)
 
 - **`name` is required, `at` is not.** Manuals name positions; a figure that is
   not stated is not written. `name` is one of `flush`, `recessed`, `mid`,
   `rear` or `proud`, and `label` carries the words the vendor uses
   ("transponder flush"). The site may fall back on the name when `at` is
-  absent.
-- **`default`** is the position as shipped. At most one position says it.
+  absent. Two positions with one name are told apart by their labels; L165
+  warns when two share both.
+- **`default`** is the position as shipped. At most one position says it
+  (L160).
 - **`racks`**: any of `4-post`, `2-post` and `2-post-centre`, when the source
-  restricts the position.
+  restricts the position. Absent, any rack.
 - **`part`**: the kit part a position needs when it is not the ears that ship
   (the Smartoptics mid-mount part). It is written `{kit, part}`: `kit` is the
-  ref of a kit the device lists under `chassis.kits`, and `part` is the `id` of
-  one of that kit's parts. Lint refuses a pair that does not resolve.
+  ref of a kit the device lists under `chassis.kits`, written as
+  `chassis.kits[].ref` writes it, and `part` is the `id` of a part of that
+  kit. L162 refuses a pair that does not resolve.
 - **`h` and `y`** say what the ears span when they are not the chassis height
-  (a 13U box with 10U ears). The device still occupies its `ru`.
+  (a 13U box with 10U ears). The device still occupies its `ru`. With no `h`
+  the ears run from `y` to the top of the chassis, and with no `y` they start
+  at its bottom. L164 warns when `y + h` is above the chassis.
+- **`color`** is the colour of the ears, a fill written as `chassis.color` is.
+  Absent, the generic ear is silver (`#c8cacc`): most network gear has bare or
+  plated steel ears even when its faceplate is black.
 - **`behind`** keeps the meaning #865 gave it. A device file may still say
   `ears: behind` as a bare string, so `fs/uscmh-sfdabsb2u` does not move, and
   L43 stands down for `{behind: true}` as it does for the string.
 - `ears` and `kits` are for a `rack` device only (L125).
 
+The [rack products note](rack-products-design.md) (section 7.1) proposes one
+more key, `ears.holes`, for a part that clips into rail holes. It is not in
+the schema.
+
+### The generic ear
+
 The faceplate drawing does not include the ears (Stage 1 of
-[modelling-a-device.md](modelling-a-device.md)). The renderer draws a generic
-L-bracket ear beside it in 2D and builds it in 3D, sized from `ears.h` and
-`ears.y`, or from the chassis height when they are absent (#909). It skips a
-device whose face already includes its ears and a device that still places
-`common/rack-ear@1`, so no device gets two pairs.
+[modelling-a-device.md](modelling-a-device.md)), and the default build draws
+none. A generic L-bracket ear is drawn **only when asked for** (#909):
+
+- `render.py --with ears` draws it on a face in 2D;
+- the 3D viewer of the kit builds it when a host asks
+  (`createViewer(el, {ears: true})`, `viewer.setEars(true)`);
+- a page draws it over a published face with `ears2d.js` of the kit. The
+  Explorer has a "Rack ears" toggle, off by default.
+
+So no published face, export or device lock holds a generic ear.
+
+The ear is a flange each side, from the body out to the 482.6 mm rack face,
+with a slot over each rail hole and a leg back along the body. It is `ears.h`
+tall and `ears.y` up, or the chassis height from the bottom when they are
+absent. The back of its flange is on the plane the `at` of the default
+position names, or flush when there is none. The sheet thickness (2 mm) and
+the leg (30 mm) are estimates, the same in 2D and 3D.
+
+A device gets no generic ear when:
+
+- it is not a `rack` device (a `rack-face` part is its ears), or it is a
+  sheet body (`chassis.shell`);
+- it says `ears: behind` in either spelling;
+- its front is 480 mm wide or more, so its ears are already in the drawing;
+- it still places `common/rack-ear@1`, or anything under `optional: ears`.
+  This last check is 2D only. Those ears are never in a published face, so
+  the 3D scene cannot see them and gives such a device the generic pair.
+
+[format-stability.md](format-stability.md) records the shapes and ids.
 
 ## 4. Rail kits are library objects
 
@@ -122,22 +180,28 @@ versioning, namespaces and devicelock as they are. Its parts are ordinary
 components (rails, brackets, ears), so a part can carry placements (the
 Smartoptics earth stud) and the site can draw it.
 
+A kit is named from `chassis.kits` and from nowhere else. It is never placed
+in a view, seated in a bay or composed into a part (L5, L10).
+
 ```
 library/components/<vendor>/<kit>/v1/contract.yaml
 ```
 
+An example of the shape. The kit, its parts and its sources are made up; the
+ranges are the kind a sliding rail prints.
+
 ```yaml
 format: 1
 kind: kit
-name: b6-readyrails-ii
+name: slide
 version: 1.0.0
-description: ReadyRails II sliding rails (B6)
+description: Example sliding rails
 motion: sliding                  # fixed | telescoping | sliding | shelf
 travel: full                     # mm, or `full` when the source says only that
 install: drop-in                 # drop-in | stab-in | both
 parts:
-  - {ref: dell/readyrails-ii-inner@1, id: inner, count: 2}
-  - {ref: dell/readyrails-ii-outer@1, id: outer, count: 2}
+  - {ref: acme/slide-inner@1, id: inner, count: 2}
+  - {ref: acme/slide-outer@1, id: outer, count: 2}
 configurations:
   - id: four-post
     racks: [4-post]
@@ -146,61 +210,82 @@ configurations:
       square: [631, 868]
       round: [617, 861]
       threaded: [631, 883]
-    rail-depth: 714              # from the front face of the front flange, no CMA
+    rail-depth: 714              # from the front face of the front flange, no accessory
 accessories:
-  - {kind: cma, ref: dell/cma-2u@1, rail-depth: 845, sides: [left, right]}
-  - {kind: srb, ref: dell/srb-2u@1}
+  - {kind: cma, ref: acme/cma@1, rail-depth: 845, sides: [left, right]}
+  - {kind: srb, ref: acme/srb@1}
 provenance:
-  depth: Dell Rail Sizing and Rack Compatibility Matrix v4.7 (Dec 2023), Table 2;
-    the R740/R740xd Technical Guide (July 2019) gives 676-868 in Table 19 and lost
+  depth: the rail sizing matrix, v4.7 (2023), Table 2; the technical guide
+    (2019) gives 676-868 in its Table 19 and lost
 ```
 
-- **A kit has no `class` and no `size`.** It is a set of parts, and the parts
-  carry both. It admits only the kit keys below.
+- **A kit has no `class`, no `size` and no skin.** It is a set of parts, and
+  the parts carry all three. It admits only `format`, `kind`, `name`,
+  `version`, `description`, `provenance`, `unplaced`, `superseded-by` and the
+  kit keys below. There is no `title`; the words go in `description`.
+- **Required**: `format`, `kind`, `name`, `version`, `motion`, `parts` and
+  `configurations`. `travel`, `install` and `accessories` are optional.
 - **`motion`**: `fixed` (static rails, ears, a rear support); `telescoping`
   (depth set at install, nothing moves after: Smartoptics, the two-piece
   Edgecore kits); `sliding` (moves out for service); `shelf` (the device
-  stands on it). `travel` is allowed only with `sliding`.
-- **`parts`**: `{ref, id, count}`. Each `ref` is an ordinary component, never
-  another kit.
-- **`configurations`**: each has an `id` and names its parts (ids from the
-  kit's own `parts`), its rack types and its depth range. A slide kit has one;
-  Smartoptics has seven, one per depth band, and the AMX3200 two. `depth` is
-  one `[min, max]` or one range per hole type, and every range has
-  `min < max`. `preset` records a factory setting (the 630 of the COR550),
-  `tolerance` a stated `±`, and `rail-depth` the depth of the rail itself.
+  stands on it). `travel` is allowed only with `sliding` (L158).
+- **`parts`**: at least one, each `{ref, id, count}` and nothing else, so no
+  `at`. All three are required, and `count` is an integer of at least 1. Each
+  `ref` is an ordinary component, never another kit, and no two parts share an
+  `id` (L155).
+- **`configurations`**: at least one. Each needs `id`, `racks`, `parts` and
+  `depth`, and may add `preset`, `tolerance` and `rail-depth`. The ids are
+  distinct, and `parts` names only ids from the `parts` of the kit (L156). A
+  slide kit has one configuration; Smartoptics has seven, one per depth band,
+  and the AMX3200 two. `depth` is the rack depth, front flange to rear flange:
+  one `[min, max]`, or one range for each of `square`, `round` and `threaded`
+  that the source gives. Every range has min below max (L157). `preset`
+  records a factory setting in mm of rack depth (the 630 of the COR550),
+  `tolerance` the `x` of a stated `±x`, and `rail-depth` the depth of the rail
+  itself, from the front face of the front flange, with no accessory fitted.
 - **`accessories`**: `{kind, ref}` with `kind` one of `cma` (cable management
-  arm) and `srb` (strain-relief bar), plus the `rail-depth` with that
-  accessory fitted and the `sides` it fits. Each `ref` resolves.
+  arm) and `srb` (strain-relief bar). Each may add the `rail-depth` with that
+  accessory fitted and the `sides` it fits. Each `ref` resolves to a component
+  that is not a kit (L159).
+- **`unplaced` and `superseded-by`** work as on any contract. A kit no device
+  lists says why in `unplaced` (L89); a kit a device lists is reached, and so
+  are its parts and accessories. The successor of a kit is a kit (L101).
 - Inches are converted to millimetres, and the figures of the source stay in
   provenance.
 - What a kit says about rack brands (Dell Titan racks, the third-party
   compatibility table of the matrix) stays in provenance. It is a statement
   about racks, and the library models none.
 - Kits are published in their own `kits.json`, beside `components.json` and not
-  in it.
+  in it. The component catalogue lists them in a table of their own, "Rail
+  kits", once the library has one.
 
 ## 5. The device names its kits
+
+An example, with the made-up kit of section 4 and a second one:
 
 ```yaml
 chassis:
   kits:
-    - {ref: dell/b6-readyrails-ii@1, supply: optional}
-    - {ref: dell/b13-stab-in-drop-in@1, supply: optional}
-    - {ref: dell/b4-readyrails-static@1, supply: optional,
-       depth: {config: four-post, range: [685, 868]}}
+    - {ref: acme/brackets@1, supply: in-box}
+    - {ref: acme/slide@1, supply: optional,
+       depth: {config: four-post,
+               range: {square: [685, 868], round: [685, 861], threaded: [685, 883]}}}
 ```
 
-- **`ref`** resolves to a `kind: kit`.
+- **`ref`** resolves to a `kind: kit`, and a kit is listed once (L161). `ref`
+  and `supply` are required.
 - **`supply`**: `in-box` or `optional`. A box can ship brackets in the box and
   sell a slide (DCS240), or ship a slide and sell a reversed one (AIS800-64D).
   The site defaults to the in-box kit, then to the first listed.
 - **`variant: reversed`** marks a kit for reverse mounting (ports to the hot
   aisle).
 - **`depth` overrides one configuration of the kit for this device.** `config`
-  names a configuration `id` of that kit, and `range` replaces its depth: the
-  matrix gives B6 a 685 mm minimum on one chassis group and 631 on another.
-  Lint refuses a `config` the kit does not have.
+  names a configuration `id` of that kit, and `range` replaces the `depth` of
+  that configuration whole. So `range` has the shape that `depth` has: one
+  `[min, max]`, or a range for each hole type the configuration gives. The
+  Dell matrix gives B6 a 685 mm minimum on one chassis group and 631 on
+  another. L163 refuses a `config` the kit does not have, a `range` of another
+  shape, and a range whose min is not below its max.
 - `chassis.full-depth` stays stated. A later lint can check it against the
   kits.
 
@@ -213,33 +298,58 @@ draws or exports them.
 
 ## 7. Exports, lock and lint
 
-- `<device>.configs.json` always publishes `chassis.ears` as an object: a
-  device file that says `ears: behind` publishes `{behind: true}`. It carries
-  `chassis.kits` with each kit resolved inline (motion, travel, install,
-  configurations, accessories and the geometry of its parts), so the site
-  reads one file (#907).
-- `kits.json` publishes every kit, beside `components.json` (#905).
-- `rack.json` carries the default position and the motion and depth range of
-  the default kit, so the Rack Builder places a device without fetching its
-  `configs.json` (#908).
-- The DCIM exports gain a comment line for each, as `overhang` does: neither
-  NetBox nor Nautobot has a field. A kit as an inventory item or a module is
-  left for later; the trial of optics as modules is the precedent.
+[format-stability.md](format-stability.md) records each shape below, key by
+key.
+
+- `<device>.configs.json` carries `chassis.ears` and `chassis.kits`, each
+  absent where the device does not state it (#907).
+  - `ears` is always an object: a device file that says `ears: behind`
+    publishes `{behind: true}`. An object publishes the keys it states
+    (`behind`, `h`, `y`, `color`, `positions`) and no others.
+  - `kits` has one row for each listed kit, in the order listed, with the kit
+    resolved inline. A row is the entry of the device (`ref`, `supply`,
+    `variant`, `depth`) and then `version`, `description`, `motion`, `travel`,
+    `install`, `configurations`, `parts` and `accessories`. Each part and each
+    accessory carries the `version`, `class`, `size` and `body` of its
+    contract, so the site reads one file. Provenance is not in the row.
+  - A `depth` override is applied: `configurations` in the row are what this
+    device can do. The figures of the kit itself are in `kits.json`.
+- `kits.json` publishes every kit as its contract states it, with its
+  provenance, beside `components.json` (#905). Its parts are refs, not
+  geometry. With no kit in the library the file is `{"kits": []}`.
+- `rack.json` does not carry ears or kits. #908 is to add the default
+  position and the motion and depth range of the default kit, so the Rack
+  Builder can place a device without fetching its `configs.json`.
+- The DCIM exports say both in `comments`, one paragraph for the ears and one
+  sentence for the kits, as `overhang` does: neither NetBox nor Nautobot has a
+  field. A kit as an inventory item or a module is left for later; the trial
+  of optics as modules is the precedent.
 - devicelock files `ears` and `kits` as chassis surface, so stating either on
-  a device is a patch: the faceplate drawing does not move. A kit takes its
-  own version by the component rules (#906).
-- Lint, as built in #905 and #906 (the codes are in
-  [lint-rules.md](lint-rules.md)):
-  - `ears` and `kits` only on a `rack` device (L125).
-  - At most one `default` position, and `racks` from the enum.
-  - A position `{kit, part}` resolves into a kit the device lists.
-  - A kit `ref` on a device resolves to a `kind: kit`, and a `depth.config`
-    names a configuration of that kit.
-  - In a kit: each part `ref` resolves to a component that is not a kit; a
-    configuration lists only the ids of the kit parts; every range has
-    `min < max`; `travel` only with `motion: sliding`; accessory refs resolve.
-  - L89 counts a kit reached through `chassis.kits` as placed, and its parts
-    as reached.
+  a device is a patch: the faceplate drawing does not move. That holds for
+  `h`, `y` and `color` too, because the generic ear is never in a published
+  face. A kit takes its own version by the component rules. A listed kit, its
+  parts and its accessories are hashed with what the device composes, so a
+  kit edited in place asks each device that lists it for a patch (#906).
+- Lint (each rule is in [lint-rules.md](lint-rules.md)):
+  - L125: `ears` and `kits` only on a `rack` device.
+  - L43: stands down for `behind` in either spelling.
+  - L160: at most one `default` position. The schema holds the words of
+    `name` and `racks`.
+  - L161: a kit `ref` on a device resolves to a `kind: kit`, listed once.
+  - L162: a position `{kit, part}` names a listed kit and a part id of it.
+  - L163: a `depth` override names a configuration of the kit, in the shape
+    of that configuration, with min below max.
+  - L164 (warning): `y + h` is not above the chassis.
+  - L165 (warning): no two positions share a `name` and a `label`.
+  - L155 to L159, in a kit: part refs resolve to components that are not
+    kits, with distinct ids; configuration ids are distinct and list only
+    part ids of the kit; every range has min below max; `travel` only with
+    `motion: sliding`; accessory refs resolve to components that are not
+    kits.
+  - L5 and L10: a kit is never placed, seated in a bay or composed.
+  - L101: the successor of a kit is a kit.
+  - L89: a kit a device lists is reached, and so are its parts and
+    accessories. A kit nothing lists says why in `unplaced`.
 
 ## 8. Intake and modelling
 
@@ -259,18 +369,26 @@ draws or exports them.
 ## 9. What the site reads
 
 From `configs.json`: the positions (name, `at`, `racks`, `default`), the
-`h` and `y` of the ears, and for each kit its motion, travel,
+`h`, `y` and `color` of the ears, and for each kit its motion, travel,
 configurations, depth ranges, rail depth with and without each accessory, and
-the geometry of its parts. From `rack.json`: the default position and the
-default kit, enough to place a device in a rack. With that the Rack Builder can
-default the setback to the shipped position, offer only the positions a device
-has, slide a `sliding` kit out by its travel, warn when a rack is outside the
-range of a kit or a device plus its CMA is deeper than the rack, and draw the
-rails. A device with no `ears` keeps the site default.
+the geometry of its parts. With that the Rack Builder can default the setback
+to the shipped position, offer only the positions a device has, slide a
+`sliding` kit out by its travel, warn when a rack is outside the range of a
+kit or a device plus its CMA is deeper than the rack, and draw the rails.
+
+`rack.json` will carry the default position and the default kit once #908 is
+built, enough to place a device in a rack from one file.
+
+The setback of an item in a rack is the mm its faceplate stands behind the
+rail plane, so the setback of a position is `-at`. The
+[rack products note](rack-products-design.md) (section 8) settles the order in
+which a setback is found, and what a device with no `ears` gets.
+[adjustable-positions-design.md](adjustable-positions-design.md) (section 8.4)
+says how an adjustment inside a device adds to it.
 
 ## 10. Worked examples
 
-These are the first four to model, one per kit shape.
+These are the first four to model, one per kit shape. None is modelled yet.
 
 1. **Dell R740xd** with B6, B13 and B4 and the CMA and SRB (#912): hole-type
    ranges, accessories, a static kit with `2-post` and `2-post-centre`.
@@ -298,18 +416,21 @@ Taken 2026-10-08, when the design was agreed:
    placeholder until ears were modelled. A generic L-bracket ear, sized from
    `ears.h` and `ears.y` (the chassis height when those are absent), is drawn
    wherever a device does not name its own ears or kit, so every rack device
-   has drawable ears in the Rack Builder and in 3D.
+   has drawable ears in the Rack Builder and in 3D. Section 3 lists the
+   devices that get none.
 3. **Fit belongs to the site.** Whether a device and its kit fit a given rack
    (range, rail depth plus accessories, door clearance) is computed in the Rack
    Builder, from the data here. The library computes nothing about racks.
 
 Settled when the work was split into issues:
 
-4. **The renderer draws the generic ears** from `chassis.ears` (#909). The 36
-   devices that place `common/rack-ear@1` move over when each next takes a
-   major, not in one sweep that would cost 36 majors at once (#910). When the
-   last reference is gone the part is marked `superseded-by` the generic ear,
-   not deleted.
+4. **The renderer draws the generic ears** from `chassis.ears`, and only when
+   asked for, so no published face moves (#909). The 36 devices that place
+   `common/rack-ear@1` move over when each next takes a major, not in one
+   sweep that would cost 36 majors at once (#910). When the last reference is
+   gone the part is kept and marked retired, not deleted. How it is marked is
+   for #910: `superseded-by` names a component, and the generic ear is not
+   one.
 5. **`configs.json` always publishes `ears` as an object.** A device file may
    still say `ears: behind`; a consumer reads one shape.
 6. **Kits are published in their own `kits.json`**, not in `components.json`.
@@ -317,5 +438,5 @@ Settled when the work was split into issues:
    count it as one.
 7. **A device-level `depth` override names a kit configuration id**, since a
    kit with seven depth bands has no single range to override.
-8. **A position's `part` is written `{kit, part}`**, so a part id that two
+8. **The `part` of a position is written `{kit, part}`**, so a part id that two
    listed kits share is not ambiguous.

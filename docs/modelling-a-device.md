@@ -253,8 +253,9 @@ Establish `chassis.width/height/depth` and each view's `size`.
 
 - **The rack face is not the chassis.** The modelled body is the metal between
   the ear fold lines, and ears are never drawn on the face, neither bolt-on
-  ones nor integral flanges; the renderer adds a generic pair from
-  `chassis.ears` (see the step after this stage). A 19-inch / 482 mm figure includes them; so does a spec table
+  ones nor integral flanges. A viewer that wants ears asks for a generic pair,
+  which is sized from `chassis.ears` (see the step after this stage). A
+  19-inch / 482 mm figure includes them; so does a spec table
   that calls the chassis 19 inches, and a body modelled wearing its flanges
   passes every other gate. Measure between the folds, record
   the ear extent in provenance, and subtract it before laying anything out.
@@ -270,19 +271,34 @@ Establish `chassis.width/height/depth` and each view's `size`.
   direction and `h` the height it runs, so its front is portrait (L152).
   Which side of the rack it stands on is the lab placement's to say
   (docs/vertical-cable-managers-design.md).
-- **Three more cases, each one stated (#865).** Ears that carry parts are
-  drawn: the R740xd's front is the 482.6 rack face because its flanges hold a
-  VGA and the power button, and L43 stands down when something is seated in
-  the outer 25 mm. Parts that reach BEYOND the rack face - the CMH-6DR1U's end
-  rings, 43 mm past each ear - are ordinary placements at negative x or past
-  the view's width on that rack-face front, and `chassis.overhang: {left,
-  right}` states the reach: L150 refuses a part outside its face that the
-  figure does not cover, and L151 warns when no part reaches it. Optional
-  placements are not checked, and decor never is, since the renderer clips it
-  to the face. And a body that really is the rack's width, with its flanges
-  folded back BEHIND it (the USCMH-SFDABSB2U duct), says `chassis.ears:
-  behind`: its 482.6 is the part, its `chassis.width` says so, and L43 stands
-  down.
+- **Ears that carry parts are drawn.** When a flange holds a connector, a
+  button or a lamp, the front is the 482.6 rack face and the flanges are part
+  of it (#865). Check: a part is seated in the outer 25 mm of that face, which
+  is what stands L43 down, and no generic ear is drawn for a front 480 mm wide
+  or more.
+  *Illustration.* The front of the Dell R740xd is the rack face, because its
+  flanges hold a VGA connector and the power button.
+- **A part that reaches beyond the rack face is a placement, and the reach is
+  stated.** Place it at negative x, or past the width of the view, on a
+  rack-face front, and state the reach as `chassis.overhang: {left, right}`
+  (#865). Check: L150 refuses a part outside its face that the figure does not
+  cover, and L151 warns when no part reaches it. Optional placements are not
+  checked, and decor never is, since the renderer clips it to the face.
+  *Illustration.* The end rings of the FS CMH-6DR1U cable manager reach 43 mm
+  past each ear.
+- **A body as wide as the rack, with its flanges folded back behind it, says
+  `chassis.ears: behind`** (or `ears: {behind: true}`). Its 482.6 is the part,
+  and `chassis.width` says so (#865). Check: L43 stands down, and the device
+  gets no generic ear.
+  *Illustration.* The FS USCMH-SFDABSB2U is a duct as wide as the rack, standing
+  in front of the rails on flanges folded back behind it.
+- **A plate whose ears are built into its face is drawn whole.** When the
+  body itself is as wide as the rack (`chassis.width` of 480 mm or more), there
+  is no narrower body to draw, so the front is the full plate with its rail
+  holes. Check: L43 stands down only when `chassis.width` is that wide; a
+  narrow body under a 482.6 front still warns.
+  *Illustration.* A 1U blanking panel is one sheet, 482.6 mm wide, and its
+  ears are the ends of that sheet.
 - Take proportions from a figure only as fractions of a dimension you know from
   the datasheet. Two figures in one guide can disagree by twelve percent on
   absolute scale.
@@ -326,13 +342,14 @@ the aspect is wrong, stop; nothing downstream survives a wrong panel.
 
 ## After the panel: the ears and the kits
 
-With the body sized, say how it attaches to a rack. This is for a `rack`
-device only (L125), and the design is in
+With the body sized, say how it attaches to a rack. This step is for a `rack`
+device only (L125). The keys and what reads them are in
 [rack-mounting-design.md](rack-mounting-design.md).
 
 Read the rack-mounting section of the installation guide, the rail or
 mounting-kit guide, any rail sizing matrix and the accessory table. Then write
-two keys under `chassis`:
+two keys under `chassis`. This is an example, and `acme/rack-kit@1` is a
+made-up ref: the library holds no kit yet.
 
 ```yaml
 chassis:
@@ -341,48 +358,74 @@ chassis:
     y: 0.15
     positions:
       - {name: flush, at: 0, default: true}
-      - {name: mid, label: mid-mount, racks: [2-post], part: {kit: smartoptics/dcp-rack-kit@1, part: mid}}
+      - {name: mid, label: mid-mount, racks: [2-post], part: {kit: acme/rack-kit@1, part: mid}}
   kits:
-    - {ref: smartoptics/dcp-rack-kit@1, supply: in-box}
+    - {ref: acme/rack-kit@1, supply: in-box}
 ```
 
-- **Name the positions the guide names.** `name` is `flush`, `recessed`,
-  `mid`, `rear` or `proud`; the words of the vendor go in `label`. Write `at`
-  (millimetres from the front of the faceplate back to the ear plane, positive
-  behind it) only when a figure or a chassis drawing gives it. A position the
-  guide names without a number is written without one.
-- **Mark the shipped position `default`,** from the figure that shows the ears
-  as they come in the box. At most one position is the default. Review checks
-  it against that figure, so cite the figure in provenance.
-- **`racks`** restricts a position to `4-post`, `2-post` or `2-post-centre`
-  when the source does. A position that needs a part other than the shipped
-  ears names it as `part: {kit, part}`, the kit ref and the id of the part in
-  that kit, and the kit must be one the device lists.
-- **List every kit the device takes** under `kits`, with `supply: in-box` or
-  `optional`, and `variant: reversed` for a kit that mounts the box ports to
-  the hot aisle. A kit already in the library is referenced, never copied: one
-  rail serves a dozen chassis. A kit that is not yet there is modelled as a
-  `kind: kit` contract under the vendor namespace
+Each rule below has its check.
+
+- **A position is written as the guide names it, and `at` only when a source
+  measures it.** `name` is `flush`, `recessed`, `mid`, `rear` or `proud`, and
+  the words of the vendor go in `label`. `at` is millimetres from the front of
+  the faceplate back to the plane the ears bolt to, positive when the ears are
+  behind the faceplate. Check: every `at` has a figure or a chassis drawing
+  behind it, cited in provenance. A position the guide names without a number
+  is written without one.
+- **Two positions with the same name are told apart by `label`.** Check: L165
+  is quiet.
+- **The shipped position is the `default`, and there is at most one.** Take it
+  from the figure that shows the ears as they come in the box, and cite that
+  figure in provenance. Check: L160 passes, and the default sits beside that
+  figure at Gate 1b.
+- **A restriction the source states is written; one it does not state is not.**
+  `racks` limits a position to `4-post`, `2-post` or `2-post-centre`. A
+  position that needs a part other than the shipped ears names it as
+  `part: {kit, part}`: the ref of a kit the device lists, and the id of a part
+  of that kit. Check: L162 passes.
+- **`h` and `y` are written only when the ears do not span the chassis
+  height.** Without them the generic ear runs the full height. `color` is
+  written only when the ears are not silver. Check: L164 is quiet, and the
+  photograph shows ears shorter than the body, or of another colour.
+- **Every kit the device takes is listed, and a kit is modelled once.** Each
+  entry under `kits` has a `ref` and `supply: in-box` or `optional`, and
+  `variant: reversed` for a kit that mounts the box ports to the hot aisle.
+  A kit already in the library is referenced, never copied, because one rail
+  serves many chassis. A kit that is not there is written as a `kind: kit`
+  contract under the vendor namespace
   ([library/components/README.md](../library/components/README.md#rail-kits)),
-  with its parts as ordinary components.
-- **When the matrix gives this device a different range** from the kit, write
-  `depth: {config, range}` on the reference: `config` is the id of the kit
-  configuration it overrides.
-- **Ranges come from the newest source,** converted to millimetres, and the
-  provenance of the kit says which older source disagreed and lost.
-- Do not draw the ears. The face stays the metal between the folds, and the
-  renderer draws a generic ear from `ears.h` and `ears.y` (or the chassis
-  height). Do not place `common/rack-ear@1` on a new device; a device that
-  still places it drops those placements and states `chassis.ears` when it
-  next takes a major (#910).
+  with its parts as ordinary components. Check: the accessory table has no
+  kit SKU that `kits` lacks, L161 passes, and a search of the library for the
+  kit SKU and its ranges finds no second copy.
+- **A kit is listed, never placed.** It does not go in a view, a bay or a
+  `parts:` list. Check: L5 and L10 pass.
+- **A range that differs for this device is an override, not a second kit.**
+  When the matrix gives this chassis another range, write
+  `depth: {config, range}` on the reference. `config` is the id of the kit
+  configuration, and `range` replaces its `depth` whole, so it has the same
+  shape: one `[min, max]`, or the same hole types. Check: L163 passes.
+- **A range comes from the newest source that gives it.** Convert inches to
+  millimetres and keep the printed figures in provenance. Check: the
+  provenance of the kit names every source that gives the range, with its
+  date, and says which one lost.
+- **The ears are not drawn, and `common/rack-ear@1` is not placed on a new
+  device.** The face stays the metal between the folds. A generic ear is
+  drawn from `ears.h`, `ears.y` and `ears.color`, or from the chassis height,
+  only when a viewer asks for it. Check: `./build.sh --device <model>` output
+  has no ears, and `render.py --with ears` shows one pair. A device that
+  still places `common/rack-ear@1` drops those placements, and states
+  `chassis.ears`, in the change that next takes it to a major (#910).
+- **What nothing draws or exports stays in provenance:** screw sizes, torque,
+  install order, load ratings and the racks a vendor tested.
+- **A guide that names no position and no kit leaves both keys out,** and the
+  device opens a gap saying where you looked. Check: the gap names the
+  document and the section.
 
-Screw sizes, torque, install order, load ratings and the racks a vendor tested
-stay in provenance; nothing draws or exports them. A guide that names no
-position and no kit leaves both keys out and opens a gap saying so.
-
-**Gate 1b.** Lint the device: the kit refs resolve, a `part` resolves into a
-listed kit, and a `depth.config` names a configuration of that kit. Then put
-the default position beside the figure it came from.
+**Gate 1b: the default position is the one in the figure.** Lint the device
+(`./build.sh --device <model>`); L125 and L160 to L165 are clean, and so are
+L155 to L159 for a kit you wrote. Then put the `default` position beside the
+rack-mounting figure it came from, and each kit range beside the newest
+source that gives it.
 
 ## Stage 2: the cutouts
 
