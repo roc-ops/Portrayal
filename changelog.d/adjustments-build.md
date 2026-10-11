@@ -25,7 +25,8 @@
   end of the travel; the id is free on the carrier; a position a configuration
   sets is one the adjustment takes; the range has a `provenance` entry; and an
   attr that restates the adjustment (`<id>-mm`, `<id>-min-mm`, `<id>-max-mm`,
-  with any words before the id) equals it. All are errors.
+  with any words before the id; `min` or `max` may stand before the id too)
+  equals it. All are errors.
 - **The lock records each adjustment with its members.** Stating one at the
   position drawn, a wider range, a stop added or a member added is a minor. An
   id renamed or removed, a changed carrier, axis or default, a narrower range,
@@ -34,10 +35,10 @@
 - **`@portrayal/kit` 0.19.0 takes a position as a field.** `fields.js` gains
   `adjustmentAccepts` (a value is a position, with the one spelling to keep,
   or a sentence saying what the adjustment takes), `adjustmentRows` (the rows
-  of a control), `adjustmentsOf` and `paintAdjustments`. `setFields` on the
+  of a control), `adjustmentsOf`, `paintAdjustments` and `positionsChanged`. `setFields` on the
   shell moves every member on every face when the field at a carrier's path
-  is set, keeps the number for a stop name, and now returns
-  `{refused: [...]}`; a `fields=` link carries a position there and back. The
+  is set, keeps the number for a stop name, takes an empty value as a reset,
+  and now returns `{refused: [...]}`; a `fields=` link carries a position there and back. The
   3D viewer rebuilds the scene at the position: a well at the depth it gives,
   and what stands in it on that floor (`relief.js` `applyNodeAdjustments`).
   The Explorer has no control for a position yet.

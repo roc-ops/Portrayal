@@ -120,8 +120,10 @@ shell.setFields('rail-panel', {'rail-setback': '300'});
 ```
 
 `setFields` returned nothing before 0.19.0; it now returns `{refused: []}` for
-every call. `resetField(path, key)` and `setFields(path, null)` put the
-members back where the drawing was built. `applyFields` takes a `fields=`
+every call. A number is digits and one point: `-20`, `+20` and `1e2` are
+refused. An empty value is a reset: `setFields(path, {[id]: ''})` puts the
+members back where the drawing was built and keeps nothing, as
+`resetField(path, key)` and `setFields(path, null)` do. `applyFields` takes a `fields=`
 entry for a position, which no component declares, and ignores one that is not
 a position.
 
@@ -129,14 +131,22 @@ a position.
 |---|---|
 | `adjustmentsOf(root)` | the adjustments a face declares, `{id: {axis, carrier, range, default, stops, label, datum, at, id, on}}`, or `{}`. `at` is the position the file was built at, and `on` the model the face names |
 | `adjustmentAccepts(adjustment, value, who)` | `{ok: true, value}` with the one spelling to keep, or `{ok: false, reason}` with a sentence. `who` (`{id, on}`) names the adjustment and the device where the adjustment does not carry them |
-| `adjustmentRows(adjustments, current, who)` | the rows of a control, in id order. `adjustments` is what `adjustmentsOf` answers, or `adjustments` from a device's `configs.json`; `current` is the fields map, `{path: {key: value}}`. A row has `id`, `label`, `carrier`, `axis`, `datum`, `unit`, `type` (`range` or `stops`), `min`, `max`, `stops` (`[{name, value}]` in order of position), `default`, `built`, `value` and `stop`, positions as strings |
+| `adjustmentRows(adjustments, current)` | the rows of a control, in id order. `adjustments` is what `adjustmentsOf` answers, or `adjustments` from a device's `configs.json`; `current` is the fields map, `{path: {key: value}}`. An entry from `configs.json` has no `at`, so its row shows the default as `built`: for a configuration that sets a position, give the entry `at` from that configuration's `positions` first (`{...a, at: config.positions[id] ?? a.default}`). A row has `id`, `label`, `carrier`, `axis`, `datum`, `unit`, `type` (`range` or `stops`), `min`, `max`, `stops` (`[{name, value}]` in order of position), `default`, `built`, `value` and `stop`, positions as strings |
 | `paintAdjustments(root, fields)` | moves every member under `root` to the position `fields` holds, and back as built when it holds none. Answers `{id: position}` |
+| `positionsChanged(adjustments, was, now)` | whether going from one fields map to another moves a part that slides: true when the value at some carrier's path, under its adjustment's id, differs |
 
 **In 3D** the position is in the same map: `viewer.setFields(map)` rebuilds
 the scene when a position changes, as it does for a switch position. A well is
 built at the depth the position gives, and what stands in it on that floor.
 `relief.js` exports `applyNodeAdjustments(root, scope)`, the same move applied
 from a viewer's field registry before a face is measured.
+
+The built scene cannot be measured under node.
+[`spec/tests/browser/viewer3d-adjustments.html`](../spec/tests/browser/viewer3d-adjustments.html)
+reads its vertex positions in a browser, at the default and at both ends of
+each axis, after a rebuild and after a repaint. Run it after a change to
+`relief.js`, `viewer3d.js` or the move in `fields.js`, and before a release
+that touches them; its header has the commands.
 
 ## Racks
 
